@@ -43,6 +43,16 @@ Eigen::Matrix4d poseToMatrix(const Eigen::Vector3d &p, const Eigen::Matrix3d &R)
   return T;
 }
 
+Eigen::Matrix3d rpyDegToRot(const std::vector<double> &rpy_deg)
+{
+  const double roll = rpy_deg[0] * M_PI / 180.0;
+  const double pitch = rpy_deg[1] * M_PI / 180.0;
+  const double yaw = rpy_deg[2] * M_PI / 180.0;
+  return (Eigen::AngleAxisd(yaw, Eigen::Vector3d::UnitZ()) *
+          Eigen::AngleAxisd(pitch, Eigen::Vector3d::UnitY()) *
+          Eigen::AngleAxisd(roll, Eigen::Vector3d::UnitX())).toRotationMatrix();
+}
+
 double rotationAngleDeg(const Eigen::Matrix3d &R)
 {
   Eigen::AngleAxisd angle_axis(R);
@@ -92,6 +102,11 @@ public:
     publish_filtered_points_ = getParam<bool>("output/publish_filtered_points", true);
     publish_diagnostics_ = getParam<bool>("output/publish_diagnostics", true);
 
+    const std::vector<double> init_p = getParamVec("filter/initial_position", {0.0, 0.0, 0.0});
+    const std::vector<double> init_rpy = getParamVec("filter/initial_rpy_deg", {0.0, 0.0, 0.0});
+    p_ = Eigen::Vector3d(init_p[0], init_p[1], init_p[2]);
+    R_ = rpyDegToRot(init_rpy);
+
     loadMap();
 
     pub_odom_ = nh_.advertise<nav_msgs::Odometry>(ndt_odom_topic_, 20);
@@ -128,6 +143,14 @@ private:
     T value;
     if (nh_.getParam(name, value)) return value;
     if (pnh_.getParam(name, value)) return value;
+    return default_value;
+  }
+
+  std::vector<double> getParamVec(const std::string &name, const std::vector<double> &default_value)
+  {
+    std::vector<double> value;
+    if (nh_.getParam(name, value) && value.size() >= default_value.size()) return value;
+    if (pnh_.getParam(name, value) && value.size() >= default_value.size()) return value;
     return default_value;
   }
 
