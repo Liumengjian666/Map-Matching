@@ -202,6 +202,26 @@ anchor_relocalization:
   max_correction: 0.45         # 单次最多拉回距离，防止错误锚点把轨迹拉飞
   apply_ratio: 0.35            # 对通过验证的锚点不硬跳，只应用部分修正
 
+loop_relocalization:
+  enable: false                # split NDT节点的轻量Scan-Context式位置识别；默认关闭，验证有效后再打开
+  method: "scan_context"       # 用当前帧点云描述子查询loop2建图位姿附近的先验地图关键帧
+  pose_path: "/home/jian/rosbag/loop2/loop2mapping/pcd/lidar_poses.txt" # FAST-LIVO2建图时的雷达位姿，用于离线生成关键帧库
+  query_period_sec: 1.0        # 每隔多久查询一次，避免低算力端每帧做全局检索
+  keyframe_spacing_m: 1.0      # loop2地图关键帧间隔；越小越密但启动建库更慢
+  context_radius: 20.0         # 构建Scan Context描述子的局部地图半径，室内场景不宜过大
+  context_max_points: 2500     # 每个关键帧最多采样多少地图点生成描述子
+  num_rings: 20                # Scan Context径向分桶数量
+  num_sectors: 60              # Scan Context角向分桶数量，也决定yaw粗搜索分辨率
+  max_candidates: 5            # 每次最多拿几个候选关键帧做NDT精配准
+  min_similarity: 0.15         # 描述子相似度下限；太低容易错误回环，太高可能找不到候选
+  accept_max_fitness_score: 1.0 # 候选NDT精配准分数上限
+  accept_max_translation: 8.0  # 候选结果与当前位姿差异上限；中段误吸附可能已偏多米，不能过小
+  accept_max_yaw_deg: 25.0     # 候选结果与当前yaw差异上限
+  require_consecutive_accepts: 2 # 连续同一候选通过后才应用，防止单帧误回环
+  apply_ratio: 0.5             # 通过验证后只应用部分修正，不硬跳
+  max_position_correction: 1.0 # 单次最大平移修正，避免错误候选拉飞
+  max_yaw_correction_deg: 5.0  # 单次最大yaw修正
+
 camera_update:
   enable: true
   mode: "quality_gate"          # 当前原型：只评估图像质量；后续视觉残差独立进EKF

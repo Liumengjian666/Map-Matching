@@ -1,7 +1,9 @@
 #include <algorithm>
 #include <cmath>
+#include <fstream>
 #include <limits>
 #include <mutex>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -17,6 +19,7 @@
 #include <nav_msgs/Path.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/registration/ndt.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <ros/ros.h>
@@ -51,6 +54,23 @@ Eigen::Matrix3d rpyDegToRot(const std::vector<double> &rpy_deg)
   return (Eigen::AngleAxisd(yaw, Eigen::Vector3d::UnitZ()) *
           Eigen::AngleAxisd(pitch, Eigen::Vector3d::UnitY()) *
           Eigen::AngleAxisd(roll, Eigen::Vector3d::UnitX())).toRotationMatrix();
+}
+
+Eigen::Matrix3d yawToRot(double yaw)
+{
+  return Eigen::AngleAxisd(yaw, Eigen::Vector3d::UnitZ()).toRotationMatrix();
+}
+
+double wrapPi(double angle)
+{
+  while (angle > M_PI) angle -= 2.0 * M_PI;
+  while (angle < -M_PI) angle += 2.0 * M_PI;
+  return angle;
+}
+
+double yawFromRot(const Eigen::Matrix3d &R)
+{
+  return std::atan2(R(1, 0), R(0, 0));
 }
 
 double rotationAngleDeg(const Eigen::Matrix3d &R)
@@ -102,6 +122,23 @@ public:
     use_external_initial_guess_ = getParam<bool>("lidar_update/ndt_use_external_initial_guess", false);
     initial_guess_max_age_sec_ = getParam<double>("lidar_update/ndt_initial_guess_max_age_sec", 0.20);
     initial_guess_blend_ = getParam<double>("lidar_update/ndt_initial_guess_blend", 1.0);
+    loop_relocalization_enable_ = getParam<bool>("loop_relocalization/enable", false);
+    loop_pose_path_ = getParam<std::string>("loop_relocalization/pose_path", "");
+    loop_query_period_sec_ = getParam<double>("loop_relocalization/query_period_sec", 1.0);
+    loop_keyframe_spacing_m_ = getParam<double>("loop_relocalization/keyframe_spacing_m", 1.0);
+    loop_context_radius_ = getParam<double>("loop_relocalization/context_radius", 20.0);
+    loop_context_max_points_ = getParam<int>("loop_relocalization/context_max_points", 2500);
+    loop_num_rings_ = getParam<int>("loop_relocalization/num_rings", 20);
+    loop_num_sectors_ = getParam<int>("loop_relocalization/num_sectors", 60);
+    loop_max_candidates_ = getParam<int>("loop_relocalization/max_candidates", 5);
+    loop_min_similarity_ = getParam<double>("loop_relocalization/min_similarity", 0.15);
+    loop_accept_max_fitness_score_ = getParam<double>("loop_relocalization/accept_max_fitness_score", 1.0);
+    loop_accept_max_translation_ = getParam<double>("loop_relocalization/accept_max_translation", 8.0);
+    loop_accept_max_yaw_deg_ = getParam<double>("loop_relocalization/accept_max_yaw_deg", 25.0);
+    loop_require_consecutive_accepts_ = getParam<int>("loop_relocalization/require_consecutive_accepts", 2);
+    loop_apply_ratio_ = getParam<double>("loop_relocalization/apply_ratio", 0.5);
+    loop_max_position_correction_ = getParam<double>("loop_relocalization/max_position_correction", 1.0);
+    loop_max_yaw_correction_deg_ = getParam<double>("loop_relocalization/max_yaw_correction_deg", 5.0);
     publish_tf_ = getParam<bool>("output/ndt_publish_tf", false);
     publish_path_ = getParam<bool>("output/publish_path", false);
     publish_filtered_points_ = getParam<bool>("output/publish_filtered_points", true);
@@ -113,6 +150,10 @@ public:
     R_ = rpyDegToRot(init_rpy);
 
     loadMap();
+    if (loop_relocalization_enable_)
+    {
+      buildLoopDatabase();
+    }
 
     pub_odom_ = nh_.advertise<nav_msgs::Odometry>(ndt_odom_topic_, 20);
     pub_pose_ = nh_.advertise<geometry_msgs::PoseStamped>(ndt_pose_topic_, 20);
@@ -189,6 +230,212 @@ private:
     ndt_.setStepSize(ndt_step_size_);
     ndt_.setTransformationEpsilon(ndt_transformation_epsilon_);
     ndt_.setMaximumIterations(ndt_max_iterations_);
+  }
+
+  struct LoopKeyframe
+  {
+    int id = -1;
+    Eigen::Vector3d p = Eigen::Vector3d::Zero();
+    Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
+    std::vector<float> descriptor;
+  };
+
+  struct LoopCandidate
+  {
+    int index = -1;
+    int yaw_shift = 0;
+    double similarity = 0.0;
+  };
+
+  void buildLoopDatabase()
+  {
+    if (loop_pose_path_.empty())
+    {
+      ROS_WARN("[DogPriorMap NDT] loop_relocalization enabled but pose_path is empty.");
+      loop_relocalization_enable_ = false;
+      return;
+    }
+    std::ifstream fin(loop_pose_path_);
+    if (!fin.is_open())
+    {
+      ROS_WARN("[DogPriorMap NDT] failed to open loop pose path: %s", loop_pose_path_.c_str());
+      loop_relocalization_enable_ = false;
+      return;
+    }
+
+    pcl::KdTreeFLANN<pcl::PointXYZ> kdtree;
+    kdtree.setInputCloud(map_cloud_);
+
+    std::string line;
+    Eigen::Vector3d last_key_p = Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
+    int raw_id = 0;
+    while (std::getline(fin, line))
+    {
+      std::istringstream iss(line);
+      double stamp = 0.0;
+      double x = 0.0;
+      double y = 0.0;
+      double z = 0.0;
+      double qx = 0.0;
+      double qy = 0.0;
+      double qz = 0.0;
+      double qw = 1.0;
+      if (!(iss >> stamp >> x >> y >> z >> qx >> qy >> qz >> qw)) continue;
+      (void)stamp;
+      Eigen::Vector3d p(x, y, z);
+      if (last_key_p.allFinite() && (p - last_key_p).norm() < loop_keyframe_spacing_m_)
+      {
+        ++raw_id;
+        continue;
+      }
+
+      pcl::PointXYZ search_pt;
+      search_pt.x = static_cast<float>(x);
+      search_pt.y = static_cast<float>(y);
+      search_pt.z = static_cast<float>(z);
+      std::vector<int> indices;
+      std::vector<float> distances;
+      kdtree.radiusSearch(search_pt, loop_context_radius_, indices, distances);
+      if (indices.empty())
+      {
+        ++raw_id;
+        continue;
+      }
+
+      Eigen::Quaterniond q(qw, qx, qy, qz);
+      if (q.norm() < 1e-9)
+      {
+        ++raw_id;
+        continue;
+      }
+      const Eigen::Matrix3d R = q.normalized().toRotationMatrix();
+      pcl::PointCloud<pcl::PointXYZ>::Ptr local(new pcl::PointCloud<pcl::PointXYZ>());
+      local->reserve(std::min(static_cast<int>(indices.size()), std::max(loop_context_max_points_, 1)));
+      const int stride = std::max(1, static_cast<int>(indices.size()) / std::max(loop_context_max_points_, 1));
+      for (size_t i = 0; i < indices.size(); i += static_cast<size_t>(stride))
+      {
+        const auto &map_pt = map_cloud_->points[static_cast<size_t>(indices[i])];
+        const Eigen::Vector3d pw(map_pt.x, map_pt.y, map_pt.z);
+        const Eigen::Vector3d pl = R.transpose() * (pw - p);
+        local->push_back(pcl::PointXYZ(pl.x(), pl.y(), pl.z()));
+        if (static_cast<int>(local->size()) >= loop_context_max_points_) break;
+      }
+      finalizeCloud(local);
+
+      LoopKeyframe key;
+      key.id = raw_id;
+      key.p = p;
+      key.R = R;
+      key.descriptor = makeScanContext(local);
+      loop_database_.push_back(key);
+      last_key_p = p;
+      ++raw_id;
+    }
+
+    if (loop_database_.empty())
+    {
+      ROS_WARN("[DogPriorMap NDT] loop database is empty; disable relocalization.");
+      loop_relocalization_enable_ = false;
+      return;
+    }
+    ROS_INFO("[DogPriorMap NDT] loop database built: %zu keyframes from %s",
+             loop_database_.size(), loop_pose_path_.c_str());
+  }
+
+  std::vector<float> makeScanContext(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud) const
+  {
+    const int rings = std::max(loop_num_rings_, 1);
+    const int sectors = std::max(loop_num_sectors_, 1);
+    std::vector<float> descriptor(static_cast<size_t>(rings * sectors), 0.0f);
+    if (!cloud) return descriptor;
+    const double max_radius = std::max(loop_context_radius_, 1.0);
+    for (const auto &pt : cloud->points)
+    {
+      if (!std::isfinite(pt.x) || !std::isfinite(pt.y) || !std::isfinite(pt.z)) continue;
+      const double r = std::sqrt(pt.x * pt.x + pt.y * pt.y);
+      if (r < 0.5 || r > max_radius) continue;
+      double theta = std::atan2(pt.y, pt.x);
+      if (theta < 0.0) theta += 2.0 * M_PI;
+      const int ring = std::min(rings - 1, std::max(0, static_cast<int>(std::floor(r / max_radius * rings))));
+      const int sector = std::min(sectors - 1, std::max(0, static_cast<int>(std::floor(theta / (2.0 * M_PI) * sectors))));
+      const size_t idx = static_cast<size_t>(ring * sectors + sector);
+      descriptor[idx] = std::max(descriptor[idx], static_cast<float>(pt.z + 3.0));
+    }
+    return descriptor;
+  }
+
+  double scanContextSimilarity(const std::vector<float> &a,
+                               const std::vector<float> &b,
+                               int shift,
+                               int &valid_columns) const
+  {
+    const int rings = std::max(loop_num_rings_, 1);
+    const int sectors = std::max(loop_num_sectors_, 1);
+    if (static_cast<int>(a.size()) != rings * sectors || static_cast<int>(b.size()) != rings * sectors) return 0.0;
+
+    double sum = 0.0;
+    valid_columns = 0;
+    for (int sector = 0; sector < sectors; ++sector)
+    {
+      const int shifted_sector = (sector + shift + sectors) % sectors;
+      double dot = 0.0;
+      double norm_a = 0.0;
+      double norm_b = 0.0;
+      for (int ring = 0; ring < rings; ++ring)
+      {
+        const float va = a[static_cast<size_t>(ring * sectors + sector)];
+        const float vb = b[static_cast<size_t>(ring * sectors + shifted_sector)];
+        dot += static_cast<double>(va) * static_cast<double>(vb);
+        norm_a += static_cast<double>(va) * static_cast<double>(va);
+        norm_b += static_cast<double>(vb) * static_cast<double>(vb);
+      }
+      if (norm_a > 1e-6 && norm_b > 1e-6)
+      {
+        sum += dot / (std::sqrt(norm_a) * std::sqrt(norm_b));
+        ++valid_columns;
+      }
+    }
+    if (valid_columns <= 0) return 0.0;
+    return sum / static_cast<double>(valid_columns);
+  }
+
+  std::vector<LoopCandidate> queryLoopCandidates(const std::vector<float> &descriptor) const
+  {
+    std::vector<LoopCandidate> candidates;
+    for (size_t i = 0; i < loop_database_.size(); ++i)
+    {
+      int best_shift = 0;
+      int best_valid = 0;
+      double best_similarity = 0.0;
+      const int sectors = std::max(loop_num_sectors_, 1);
+      for (int shift = 0; shift < sectors; ++shift)
+      {
+        int valid_columns = 0;
+        const double similarity = scanContextSimilarity(descriptor, loop_database_[i].descriptor, shift, valid_columns);
+        if (valid_columns >= sectors / 6 && similarity > best_similarity)
+        {
+          best_similarity = similarity;
+          best_shift = shift;
+          best_valid = valid_columns;
+        }
+      }
+      if (best_valid > 0 && best_similarity >= loop_min_similarity_)
+      {
+        LoopCandidate candidate;
+        candidate.index = static_cast<int>(i);
+        candidate.yaw_shift = best_shift;
+        candidate.similarity = best_similarity;
+        candidates.push_back(candidate);
+      }
+    }
+    std::sort(candidates.begin(), candidates.end(), [](const LoopCandidate &lhs, const LoopCandidate &rhs) {
+      return lhs.similarity > rhs.similarity;
+    });
+    if (static_cast<int>(candidates.size()) > loop_max_candidates_)
+    {
+      candidates.resize(static_cast<size_t>(loop_max_candidates_));
+    }
+    return candidates;
   }
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr voxelDown(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
@@ -324,6 +571,12 @@ private:
     Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
     std::string reject_reason = "accepted";
     const bool accepted = acceptNdtResult(converged, score, iterations, result, reject_reason);
+    bool loop_used = false;
+    std::string loop_reason = "disabled";
+    double loop_similarity = 0.0;
+    double loop_fitness = std::numeric_limits<double>::quiet_NaN();
+    double loop_correction_norm = 0.0;
+    double loop_yaw_correction_deg = 0.0;
 
     if (accepted)
     {
@@ -342,6 +595,20 @@ private:
       publishPose(stamp);
       publishAlignedCloud(aligned, stamp);
     }
+    if (loop_relocalization_enable_)
+    {
+      loop_used = tryLoopRelocalization(source,
+                                        stamp,
+                                        loop_reason,
+                                        loop_similarity,
+                                        loop_fitness,
+                                        loop_correction_norm,
+                                        loop_yaw_correction_deg);
+      if (loop_used)
+      {
+        publishPose(stamp);
+      }
+    }
 
     publishDiagnostics(stamp,
                        converged,
@@ -351,11 +618,143 @@ private:
                        static_cast<int>(source->size()),
                        target_cloud_->size(),
                        score,
-                       iterations);
+                       iterations,
+                       loop_used,
+                       loop_reason,
+                       loop_similarity,
+                       loop_fitness,
+                       loop_correction_norm,
+                       loop_yaw_correction_deg);
     ROS_INFO_THROTTLE(1.0,
                       "[DogPriorMap NDT] conv=%d accept=%d reason=%s source=%zu target=%zu align=%.2fms score=%.4f iter=%d p=(%.2f %.2f %.2f)",
                       converged ? 1 : 0, accepted ? 1 : 0, reject_reason.c_str(), source->size(), target_cloud_->size(),
                       align_ms, score, iterations, p_.x(), p_.y(), p_.z());
+  }
+
+  bool tryLoopRelocalization(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
+                             const ros::Time &stamp,
+                             std::string &reason,
+                             double &best_similarity,
+                             double &best_fitness,
+                             double &correction_norm,
+                             double &yaw_correction_deg)
+  {
+    reason = "period_skip";
+    best_similarity = 0.0;
+    best_fitness = std::numeric_limits<double>::quiet_NaN();
+    correction_norm = 0.0;
+    yaw_correction_deg = 0.0;
+    if (!source || source->empty() || loop_database_.empty()) return false;
+    if (last_loop_query_time_ > 0.0 && stamp.toSec() - last_loop_query_time_ < loop_query_period_sec_) return false;
+    last_loop_query_time_ = stamp.toSec();
+
+    const std::vector<float> descriptor = makeScanContext(source);
+    const std::vector<LoopCandidate> candidates = queryLoopCandidates(descriptor);
+    if (candidates.empty())
+    {
+      reason = "no_candidate";
+      loop_consecutive_accepts_ = 0;
+      return false;
+    }
+
+    bool refined_ok = false;
+    Eigen::Matrix4d best_result = Eigen::Matrix4d::Identity();
+    LoopCandidate best_candidate = candidates.front();
+    best_fitness = std::numeric_limits<double>::infinity();
+    const int sectors = std::max(loop_num_sectors_, 1);
+    for (const auto &candidate : candidates)
+    {
+      const LoopKeyframe &key = loop_database_[static_cast<size_t>(candidate.index)];
+      const double shift_yaw = static_cast<double>(candidate.yaw_shift) * 2.0 * M_PI / static_cast<double>(sectors);
+      for (double sign : {1.0, -1.0})
+      {
+        Eigen::Matrix4d guess = Eigen::Matrix4d::Identity();
+        guess.block<3, 3>(0, 0) = key.R * yawToRot(sign * shift_yaw);
+        guess.block<3, 1>(0, 3) = key.p;
+
+        pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt_check;
+        ndt_check.setInputTarget(target_cloud_);
+        ndt_check.setInputSource(source);
+        ndt_check.setResolution(ndt_resolution_);
+        ndt_check.setStepSize(ndt_step_size_);
+        ndt_check.setTransformationEpsilon(ndt_transformation_epsilon_);
+        ndt_check.setMaximumIterations(std::max(10, ndt_max_iterations_ / 2));
+        pcl::PointCloud<pcl::PointXYZ> aligned_candidate;
+        ndt_check.align(aligned_candidate, guess.cast<float>());
+        if (!ndt_check.hasConverged()) continue;
+        const double fitness = ndt_check.getFitnessScore();
+        if (fitness < best_fitness)
+        {
+          best_fitness = fitness;
+          best_similarity = candidate.similarity;
+          best_result = ndt_check.getFinalTransformation().cast<double>();
+          best_candidate = candidate;
+          refined_ok = true;
+        }
+      }
+    }
+    if (!refined_ok)
+    {
+      reason = "refine_failed";
+      loop_consecutive_accepts_ = 0;
+      return false;
+    }
+
+    const Eigen::Vector3d p_loop = best_result.block<3, 1>(0, 3);
+    const Eigen::Matrix3d R_loop = best_result.block<3, 3>(0, 0);
+    const Eigen::Vector3d dp = p_loop - p_;
+    const double yaw_delta = wrapPi(yawFromRot(R_loop) - yawFromRot(R_));
+    correction_norm = dp.norm();
+    yaw_correction_deg = std::abs(yaw_delta) * 180.0 / M_PI;
+
+    if (best_fitness > loop_accept_max_fitness_score_)
+    {
+      reason = "fitness_reject";
+      loop_consecutive_accepts_ = 0;
+      return false;
+    }
+    if (loop_accept_max_translation_ > 0.0 && correction_norm > loop_accept_max_translation_)
+    {
+      reason = "translation_reject";
+      loop_consecutive_accepts_ = 0;
+      return false;
+    }
+    if (loop_accept_max_yaw_deg_ > 0.0 && yaw_correction_deg > loop_accept_max_yaw_deg_)
+    {
+      reason = "yaw_reject";
+      loop_consecutive_accepts_ = 0;
+      return false;
+    }
+
+    if (best_candidate.index == last_loop_candidate_index_)
+    {
+      ++loop_consecutive_accepts_;
+    }
+    else
+    {
+      loop_consecutive_accepts_ = 1;
+      last_loop_candidate_index_ = best_candidate.index;
+    }
+    if (loop_consecutive_accepts_ < std::max(loop_require_consecutive_accepts_, 1))
+    {
+      reason = "waiting_consecutive";
+      return false;
+    }
+
+    const double ratio = std::max(0.0, std::min(1.0, loop_apply_ratio_));
+    Eigen::Vector3d limited_dp = dp;
+    if (loop_max_position_correction_ > 0.0 && limited_dp.norm() > loop_max_position_correction_)
+    {
+      limited_dp = limited_dp.normalized() * loop_max_position_correction_;
+    }
+    const double max_yaw = loop_max_yaw_correction_deg_ * M_PI / 180.0;
+    const double limited_yaw = std::max(-max_yaw, std::min(max_yaw, yaw_delta));
+
+    p_ += ratio * limited_dp;
+    R_ = yawToRot(ratio * limited_yaw) * R_;
+    previous_pose_ = poseToMatrix(p_, R_);
+    reason = "accepted";
+    return true;
   }
 
   bool acceptNdtResult(bool converged,
@@ -489,7 +888,13 @@ private:
                           int scan_points,
                           size_t map_points,
                           double score,
-                          int iterations)
+                          int iterations,
+                          bool loop_used = false,
+                          const std::string &loop_reason = "disabled",
+                          double loop_similarity = 0.0,
+                          double loop_fitness = std::numeric_limits<double>::quiet_NaN(),
+                          double loop_correction_norm = 0.0,
+                          double loop_yaw_correction_deg = 0.0)
   {
     if (!publish_diagnostics_ || !pub_diagnostics_) return;
     diagnostic_msgs::DiagnosticArray array;
@@ -508,6 +913,14 @@ private:
     addDiagnosticValue(status, "map_points", std::to_string(map_points));
     addDiagnosticValue(status, "fitness_score", std::to_string(score));
     addDiagnosticValue(status, "iterations", std::to_string(iterations));
+    addDiagnosticValue(status, "loop_relocalization_enabled", loop_relocalization_enable_ ? "true" : "false");
+    addDiagnosticValue(status, "loop_relocalization_used", loop_used ? "true" : "false");
+    addDiagnosticValue(status, "loop_relocalization_rejected_reason", loop_reason);
+    addDiagnosticValue(status, "loop_similarity", std::to_string(loop_similarity));
+    addDiagnosticValue(status, "loop_refine_fitness", std::to_string(loop_fitness));
+    addDiagnosticValue(status, "loop_correction_norm", std::to_string(loop_correction_norm));
+    addDiagnosticValue(status, "loop_yaw_correction_deg", std::to_string(loop_yaw_correction_deg));
+    addDiagnosticValue(status, "loop_database_keyframes", std::to_string(loop_database_.size()));
     addDiagnosticValue(status, "pose_xyz", std::to_string(p_.x()) + "," +
                                   std::to_string(p_.y()) + "," +
                                   std::to_string(p_.z()));
@@ -551,6 +964,7 @@ private:
   std::string points_aligned_topic_;
   std::string initial_guess_odom_topic_;
   std::string map_pcd_path_;
+  std::string loop_pose_path_;
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud_;
   pcl::PointCloud<pcl::PointXYZ>::Ptr target_cloud_;
@@ -568,6 +982,26 @@ private:
   Eigen::Matrix4d latest_initial_guess_pose_ = Eigen::Matrix4d::Identity();
   double initial_guess_max_age_sec_ = 0.20;
   double initial_guess_blend_ = 1.0;
+  bool loop_relocalization_enable_ = false;
+  double loop_query_period_sec_ = 1.0;
+  double loop_keyframe_spacing_m_ = 1.0;
+  double loop_context_radius_ = 20.0;
+  int loop_context_max_points_ = 2500;
+  int loop_num_rings_ = 20;
+  int loop_num_sectors_ = 60;
+  int loop_max_candidates_ = 5;
+  double loop_min_similarity_ = 0.15;
+  double loop_accept_max_fitness_score_ = 1.0;
+  double loop_accept_max_translation_ = 8.0;
+  double loop_accept_max_yaw_deg_ = 25.0;
+  int loop_require_consecutive_accepts_ = 2;
+  double loop_apply_ratio_ = 0.5;
+  double loop_max_position_correction_ = 1.0;
+  double loop_max_yaw_correction_deg_ = 5.0;
+  double last_loop_query_time_ = -1.0;
+  int last_loop_candidate_index_ = -1;
+  int loop_consecutive_accepts_ = 0;
+  std::vector<LoopKeyframe> loop_database_;
 
   double map_voxel_size_ = 0.30;
   double target_voxel_size_ = 0.30;
