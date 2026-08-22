@@ -76,6 +76,8 @@ public:
     ndt_pose_topic_ = getParam<std::string>("topics/ndt_pose", "/dog_livo/ndt_pose");
     ndt_path_topic_ = getParam<std::string>("topics/ndt_path", "/dog_livo/ndt_path");
     points_aligned_topic_ = getParam<std::string>("topics/points_aligned", "/dog_livo/points_aligned");
+    initial_guess_odom_topic_ =
+        getParam<std::string>("topics/ndt_initial_guess_odom", "/dog_livo/odom_high_rate");
 
     map_pcd_path_ = getParam<std::string>("map/pcd_fallback_path", "");
     map_voxel_size_ = getParam<double>("map/voxel_size", 0.30);
@@ -97,6 +99,9 @@ public:
     ndt_reject_zero_iteration_ = getParam<bool>("lidar_update/ndt_reject_zero_iteration", true);
     ndt_accept_max_translation_ = getParam<double>("lidar_update/ndt_accept_max_translation", 1.20);
     ndt_accept_max_rotation_deg_ = getParam<double>("lidar_update/ndt_accept_max_rotation_deg", 12.0);
+    use_external_initial_guess_ = getParam<bool>("lidar_update/ndt_use_external_initial_guess", false);
+    initial_guess_max_age_sec_ = getParam<double>("lidar_update/ndt_initial_guess_max_age_sec", 0.20);
+    initial_guess_blend_ = getParam<double>("lidar_update/ndt_initial_guess_blend", 1.0);
     publish_tf_ = getParam<bool>("output/ndt_publish_tf", false);
     publish_path_ = getParam<bool>("output/publish_path", false);
     publish_filtered_points_ = getParam<bool>("output/publish_filtered_points", true);
@@ -130,6 +135,11 @@ public:
     else
     {
       sub_livox_ = nh_.subscribe(lidar_topic_, 5, &DogPriorMapNdtNode::livoxCallback, this);
+    }
+    if (use_external_initial_guess_)
+    {
+      sub_initial_guess_odom_ =
+          nh_.subscribe(initial_guess_odom_topic_, 50, &DogPriorMapNdtNode::initialGuessOdomCallback, this);
     }
 
     ROS_INFO("[DogPriorMap NDT] started: map=%s target=%zu lidar=%s output=%s",
@@ -252,6 +262,22 @@ private:
     handleCloud(cloud, msg->header.stamp);
   }
 
+  void initialGuessOdomCallback(const nav_msgs::OdometryConstPtr &msg)
+  {
+    std::lock_guard<std::mutex> lock(mutex_);
+    Eigen::Vector3d p_guess(msg->pose.pose.position.x,
+                            msg->pose.pose.position.y,
+                            msg->pose.pose.position.z);
+    Eigen::Quaterniond q_guess(msg->pose.pose.orientation.w,
+                               msg->pose.pose.orientation.x,
+                               msg->pose.pose.orientation.y,
+                               msg->pose.pose.orientation.z);
+    if (!p_guess.allFinite() || q_guess.norm() < 1e-9) return;
+    latest_initial_guess_pose_ = poseToMatrix(p_guess, q_guess.normalized().toRotationMatrix());
+    latest_initial_guess_stamp_ = msg->header.stamp;
+    has_latest_initial_guess_ = true;
+  }
+
   void handleCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud, const ros::Time &stamp)
   {
     if (!cloud || cloud->empty()) return;
@@ -277,6 +303,14 @@ private:
     if (has_previous_pose_)
     {
       initial_guess = previous_pose_ * delta_pose_;
+    }
+    if (use_external_initial_guess_ && has_latest_initial_guess_)
+    {
+      const double age = std::abs((stamp - latest_initial_guess_stamp_).toSec());
+      if (age <= initial_guess_max_age_sec_)
+      {
+        initial_guess = blendInitialGuess(initial_guess, latest_initial_guess_pose_);
+      }
     }
 
     ndt_.setInputSource(source);
@@ -363,6 +397,24 @@ private:
       }
     }
     return true;
+  }
+
+  Eigen::Matrix4d blendInitialGuess(const Eigen::Matrix4d &motion_guess, const Eigen::Matrix4d &external_guess) const
+  {
+    const double blend = std::max(0.0, std::min(1.0, initial_guess_blend_));
+    if (blend <= 0.0) return motion_guess;
+    if (blend >= 1.0) return external_guess;
+
+    Eigen::Matrix4d blended = Eigen::Matrix4d::Identity();
+    const Eigen::Vector3d p_motion = motion_guess.block<3, 1>(0, 3);
+    const Eigen::Vector3d p_external = external_guess.block<3, 1>(0, 3);
+    Eigen::Quaterniond q_motion(motion_guess.block<3, 3>(0, 0));
+    Eigen::Quaterniond q_external(external_guess.block<3, 3>(0, 0));
+    q_motion.normalize();
+    q_external.normalize();
+    blended.block<3, 1>(0, 3) = (1.0 - blend) * p_motion + blend * p_external;
+    blended.block<3, 3>(0, 0) = q_motion.slerp(blend, q_external).toRotationMatrix();
+    return blended;
   }
 
   void publishPose(const ros::Time &stamp)
@@ -477,6 +529,7 @@ private:
   ros::NodeHandle pnh_;
   ros::Subscriber sub_livox_;
   ros::Subscriber sub_pc2_;
+  ros::Subscriber sub_initial_guess_odom_;
   ros::Publisher pub_odom_;
   ros::Publisher pub_pose_;
   ros::Publisher pub_path_;
@@ -496,6 +549,7 @@ private:
   std::string ndt_pose_topic_;
   std::string ndt_path_topic_;
   std::string points_aligned_topic_;
+  std::string initial_guess_odom_topic_;
   std::string map_pcd_path_;
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud_;
@@ -508,6 +562,12 @@ private:
   bool has_previous_pose_ = false;
   Eigen::Matrix4d previous_pose_ = Eigen::Matrix4d::Identity();
   Eigen::Matrix4d delta_pose_ = Eigen::Matrix4d::Identity();
+  bool use_external_initial_guess_ = false;
+  bool has_latest_initial_guess_ = false;
+  ros::Time latest_initial_guess_stamp_;
+  Eigen::Matrix4d latest_initial_guess_pose_ = Eigen::Matrix4d::Identity();
+  double initial_guess_max_age_sec_ = 0.20;
+  double initial_guess_blend_ = 1.0;
 
   double map_voxel_size_ = 0.30;
   double target_voxel_size_ = 0.30;
