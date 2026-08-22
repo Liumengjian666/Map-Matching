@@ -1,0 +1,257 @@
+# 机器狗端低算力先验地图定位配置
+# 目标：FAST-LIVO2 离线建图，机器狗端加载地图后，用 IMU 高频传播 + 低频地图/雷达/相机约束进行 EKF 定位。
+
+frames:
+  map_frame: "map"          # 先验地图坐标系
+  odom_frame: "odom"        # 高频传播坐标系
+  base_frame: "base_link"   # 机器狗本体坐标系
+  lidar_frame: "livox_frame"
+  camera_frame: "hikrobot_camera"
+
+topics:
+  imu: "/livox/imu"                    # MID360 自带 IMU，通常约 200 Hz
+  lidar: "/livox/lidar"                # livox_ros_driver2/CustomMsg 或 PointCloud2
+  lidar_msg_type: "livox"              # C++版可选 livox / pointcloud2；同一节点不能同时按两种类型订阅同一话题
+  image: "/image_left/image_rect"      # 可选；当前原型先做低频视觉质量门控
+  camera_info: "/image_left/camera_info_rect"
+  external_odom: "/kiss_odom"           # KISS-ICP轻量雷达前端输出，作为机器狗端低算力初值
+  initial_pose: "/initialpose"         # RViz 2D Pose Estimate 或外部初值
+  odom_high_rate: "/dog_livo/odom_high_rate"
+  odom_corrected: "/dog_livo/odom_corrected"
+  path_high_rate: "/dog_livo/path_high_rate"
+  path_corrected: "/dog_livo/path_corrected"
+  debug_cloud: "/dog_livo/matched_scan"
+
+map:
+  # 推荐先用 pcd_to_npz_map.py 把 PCD 转成 npz，机器狗端加载更快、内存更低。
+  npz_path: "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_prior_map_voxel_0p30.npz"
+  pcd_fallback_path: "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd"
+  voxel_size: 0.15              # 地图体素；完整loop3/loop4验证中0.15m比0.30m首尾/同点误差更小
+  local_radius: 6.0             # 室内重复走廊用小半径，避免跨走廊/跨楼层找相似结构导致误匹配
+  local_radius_max: 10.0        # 局部点数不足时逐级放宽，但绝不退回全图
+  local_radius_step: 2.0
+  max_map_points: 18000         # 局部地图最多点数
+  local_submap_enable: true     # 像FASTLIO2Location一样，只取当前位置附近子地图做匹配
+  local_submap_max_points: 18000 # 半径收紧后减少候选点，降低错误最近邻和CPU压力
+  local_submap_min_points: 800  # 6m内地图点不够时放宽到8/10m，避免后段修正直接断掉
+
+extrinsic:
+  # 雷达到机体系外参：p_base = R_bl * p_lidar + t_bl
+  # 如果机器狗 base_link 和 MID360 坐标系暂时近似重合，可先用单位阵和零平移。
+  T_base_lidar: [0.0, 0.0, 0.0]
+  R_base_lidar: [1.0, 0.0, 0.0,
+                 0.0, 1.0, 0.0,
+                 0.0, 0.0, 1.0]
+  # 相机到机体系外参，来自FAST-LIVO2 ours_config.yaml里的Rcl/Pcl取逆：
+  # FAST-LIVO2: X_camera = Rcl * X_lidar + Pcl；这里近似base=lidar，所以X_base = Rcl^T * X_camera - Rcl^T * Pcl。
+  T_base_camera: [0.108050122829, -0.00442391041245, -0.1043500639]
+  R_base_camera: [0.008746632885, 0.3925737708, 0.9196789281,
+                  -0.9995229208, -0.02381193512, 0.01967034435,
+                  0.02962139622, -0.9194122178, 0.3921782078]
+
+camera_intrinsic:
+  # 来自FAST-LIVO2 config/camera_ours.yaml；当前订阅/image_left/image_rect，因此畸变设为0，只用Pinhole K。
+  width: 720
+  height: 540
+  fx: 404.61956787109375
+  fy: 404.0733337402344
+  cx: 352.0961769179812
+  cy: 268.1299251892142
+
+imu:
+  gravity: 9.80665
+  initialize_gravity_from_imu: true  # 启动前静止几秒，用IMU平均加速度对齐roll/pitch，避免Z轴自由漂
+  init_imu_samples: 200              # MID360约200Hz，相当于用约1秒静止数据估计重力方向
+  use_acc_for_position: false         # 机器狗低算力定位默认不裸积分加速度位置，避免IMU零偏导致Z轴快速漂移
+  velocity_damping: 1.0               # 不做速度阻尼，避免人为压缩真实三维运动；漂移交给雷达/视觉/地图观测处理
+  continuous_gravity_correction_enable: true # 连续用加速度计方向修正roll/pitch，不直接固定Z位置
+  gravity_correction_expected_acc_norm: 1.0 # MID360驱动里的加速度常见为g单位；若是m/s^2再改成9.80665
+  gravity_correction_gain: 0.02       # 每帧只吃少量重力方向修正，避免运动加速度污染姿态
+  gravity_correction_max_angle_deg: 0.5 # 单帧最大姿态修正角
+  gravity_correction_acc_tolerance: 0.25 # 加速度模长接近静止重力值才认为主要是重力
+  gravity_correction_gyro_max: 0.8    # 角速度过大时跳过，避免快速转动时误修正
+  acc_noise: 2.0                # 与当前 FAST-LIVO2 稳定建图配置保持一致
+  gyro_noise: 0.1
+  acc_bias_noise: 0.0001
+  gyro_bias_noise: 0.0001
+  max_dt: 0.05                  # IMU 时间间隔异常时跳过，防止积分爆炸
+  history_keep_sec: 2.0         # 为LiDAR点云去畸变保留最近IMU角速度
+  publish_high_rate: true       # 每帧 IMU 都发布高频传播位姿
+
+lidar_odometry:
+  enable: true                    # 打开自研滑窗局部雷达前端：保存近期走过点云，当前帧先匹配局部地图，再匹配先验地图
+  method: "local_map_ekf"         # 默认使用走过点云的滑窗局部地图前端；prior_map_tracking可作先验地图实时跟踪实验
+  voxel_size: 0.35               # 局部LIO地图体素；MID360稀疏点云先用0.35兼顾精度和算力
+  max_points: 800                # 当前帧最多参与局部LIO的点数；比650略密，避免4线雷达信息不足
+  min_points: 80                 # 点太少时跳过帧间里程计
+  max_iterations: 2              # 局部前端只做小步短时跟踪，不能替代先验地图全局纠偏
+  max_correspondence_distance: 0.50 # 局部最近邻距离门控；收紧可减少帧间ICP在重复走廊中误吸附
+  max_fitness_score: 0.18        # 保留给loose_icp/prior_map_tracking分支；local_map_ekf主要看先验一致性
+  min_fitness_improvement: 0.0   # 保留给ICP实验分支；当前LIO前端不用
+  max_frame_translation: 0.8     # 单帧相对位移上限，防止错误ICP跳变
+  max_frame_rotation_deg: 1.5    # 单帧相对旋转上限，长廊里不能让前端大幅改角度
+  max_initial_correction: 0.08   # 第一层每帧只允许小步跟踪，避免同一先验地图被重复强拉
+  apply_ratio: 0.45              # 保留给滚动局部地图分支；prior_map_tracking使用匹配内部小步限幅
+  velocity_blend: 0.45           # 用先验地图实时跟踪速度辅助IMU高频传播
+  local_radius: 6.0              # 滚动局部子地图半径；机器狗室内建议6~12m
+  local_max_points: 9000         # 局部LIO子地图最多点数，限制内存和KDTree耗时
+  update_every_n_scans: 1        # 每帧把修正后的雷达点加入滚动局部子地图
+  prior_consistency_enable: true # 局部里程计候选必须不破坏先验地图残差，防止长距离后慢慢带偏
+  prior_max_worse_ratio: 1.02    # 局部前端不能明显破坏先验地图残差，防止把滑窗局部地图越滚越歪
+  prior_min_points: 80           # 快速一致性评分至少要有的先验地图近邻数量
+
+external_odometry:
+  enable: true                  # 验证阶段仍可接入KISS作弱辅助；机器狗部署时可关闭，只保留自研局部LIO+IMU+先验地图
+  apply_ratio: 0.12              # KISS只给非常弱的运动趋势，防止其长廊漂移把初值拉离先验地图
+  z_apply_ratio: 0.35            # 不是锁Z：保留Z趋势但降低KISS高度漂移权重，Z主要由三维雷达地图匹配修正
+  roll_pitch_apply_ratio: 0.1    # roll/pitch主要由IMU重力约束，外部前端只给少量姿态趋势
+  max_translation_correction: 0.35 # 单次外部初值最大平移修正，防止轻量前端错误位移直接拉飞
+  max_rotation_correction_deg: 4.0 # 单次外部初值最大旋转修正
+  velocity_blend: 0.12           # KISS速度只弱融合，避免把KISS长廊漂移重新灌入状态
+
+filter:
+  initial_position: [0.0, 0.0, 0.0]
+  initial_rpy_deg: [0.0, 0.0, 0.0]
+  initial_velocity: [0.0, 0.0, 0.0]
+  init_pos_std: 0.5
+  init_rot_std_deg: 5.0
+  init_vel_std: 0.5
+  init_bias_std: 0.05
+
+lidar_update:
+  enable: true
+  prior_map_update_enable: true # 必须显式打开先验地图匹配；避免ROS参数服务器残留false导致只跑局部里程计
+  deskew_enable: true           # 使用Livox点级offset_time和IMU做帧内去畸变
+  deskew_translation_enable: true # 对帧内平移也做补偿；雷达点是主约束，默认打开
+  offset_time_scale: 0.000000001 # livox_ros_driver2里offset_time单位为ns；老驱动若为us才改成0.000001
+  registration_method: "fastlio_hybrid" # 点到面主约束 + 弱点到点约束，抑制长走廊沿平面滑移
+  update_every_n_scans: 1       # 每帧雷达都做低频地图更新，避免轨迹被速度阻尼压缩
+  scan_voxel_size: 0.30         # 当前帧点云降采样，轻量部署先用0.30降低CPU
+  max_scan_points: 650          # 当前帧最多参与匹配点数；控制算力，后续完整验证再调
+  scan_min_range: 0.6           # 去除车体/机器狗附近自遮挡和近距离毛刺点
+  scan_max_range: 45.0          # 室内先不用超远稀疏点，减少错误最近邻和动态远点
+  scan_min_z: -2.5              # 去除明显低于机器人附近楼层的离群点
+  scan_max_z: 3.5               # 去除天花板以上/反射造成的异常高点；楼梯场景可适当放宽
+  scan_radius_outlier_enable: true
+  scan_radius_outlier_radius: 0.80
+  scan_radius_outlier_min_neighbors: 2
+  max_match_distance: 0.35      # 最近邻超过此距离拒绝；收紧可减少重复走廊中的远距离误吸附
+  min_effective_points: 50
+  point_to_point_noise: 0.20    # 匹配残差噪声，越大越保守
+  hybrid_point_noise: 0.60      # hybrid里点到点弱约束噪声，防止沿平面滑移但不强拉
+  point_to_plane_noise: 0.12    # 点到面残差噪声，通常比点到点更小
+  plane_neighbor_k: 5           # FAST-LIO式5近邻平面拟合
+  plane_min_eigen_ratio: 0.08   # PCA平面质量阈值，越小越严格
+  fastlio_plane_threshold: 0.10 # FAST-LIO式平面拟合内点阈值
+  fastlio_residual_gate: 0.90   # FAST-LIO式 s=1-0.9*|pd|/sqrt(range)，大于该值才保留
+  fastlivo_outlier_reject_enable: true # 借鉴FAST-LIVO2：平面半径门控+sigma门控+概率权重，剔除错误局部平面
+  plane_radius_gate_scale: 5.0  # 点在平面切向上不能离平面中心太远；MID360点少，门控要比FAST-LIVO2原始体素平面更宽
+  plane_sigma_gate: 5.0         # 点到面残差小于sigma_gate*sqrt(局部平面不确定度)才作为内点
+  plane_min_radius: 0.10        # 防止近邻点过密时平面半径过小导致误删
+  plane_min_sigma: 0.08         # 最小点到面sigma，避免不确定度估计过小
+  range_noise_per_meter: 0.006  # 简化雷达测距噪声模型，随距离增加而增大
+  fastlivo_body_cov_enable: true # 学FAST-LIVO2，把雷达测距/角度噪声投影到平面法向参与sigma门控
+  lidar_depth_noise: 0.05        # FAST-LIVO2 lio/dept_err默认量级，单位m
+  lidar_beam_noise_deg: 0.02     # FAST-LIVO2 lio/beam_err默认量级，单位deg
+  horizontal_plane_z_observation_enable: false # 关闭单独Z方向增权，避免人为把轨迹压到某个高度层；保留普通点到面三维匹配
+  horizontal_plane_normal_z_min: 0.85         # 局部平面法向|nz|超过该值，才认为它主要约束高度
+  horizontal_plane_weight_scale: 1.5          # 水平面点到面残差增权倍率；过大可能被错误楼层吸附
+  horizontal_plane_residual_gate: 0.30        # 只有残差足够小的水平面内点才增权，避免错误最近邻拉Z
+  huber_threshold: 0.30
+  max_iterations: 2             # 地图匹配EKF迭代，部署版先用2次控制耗时
+  max_translation_update: 0.20  # 单次更新最大平移修正，防错误匹配拉飞
+  max_rotation_update_deg: 1.5
+  max_update_time_ms: 60.0      # 单帧地图匹配软预算；机器狗端优先保证实时性
+  match_accept_gate_enable: true
+  match_accept_max_mean_residual: 0.22        # 候选位姿最近邻平均误差太大就拒绝
+  match_accept_max_residual_increase_ratio: 1.02 # 地图匹配不能比预测残差明显更差
+  match_accept_min_improvement_ratio: 0.00    # 当前先保守：不要求明显变好，但不允许变差
+  match_accept_min_effective_ratio: 0.08      # 有效匹配点比例过低时拒绝，防走廊局部误吸附
+  match_accept_max_translation: 0.20          # 单帧地图匹配最多修正20cm，避免形状对但整体被拉到旁边走廊
+  match_accept_max_rotation_deg: 1.5
+  match_accept_degenerate_max_translation: 0.08 # 雷达退化时只允许小步修正，避免重复走廊误吸附
+  match_accept_degenerate_max_rotation_deg: 0.6
+  ndt_enable: false             # NDT在loop3实测约200ms/帧且失败率高，默认关闭，仅作离线对比
+  ndt_source_voxel_size: 0.35
+  ndt_target_voxel_size: 0.30
+  ndt_max_source_points: 900
+  ndt_max_target_points: 25000
+  ndt_max_iterations: 12
+  ndt_resolution: 1.0
+  ndt_step_size: 0.1
+  ndt_transformation_epsilon: 0.01
+  ndt_max_fitness_score: 0.60
+  gicp_enable: false            # GICP在loop3实测约200ms/帧且更易被重复走廊误吸附，默认关闭
+  gicp_source_voxel_size: 0.35  # 当前帧GICP体素；越小越精但越耗CPU
+  gicp_target_voxel_size: 0.25  # 局部地图GICP体素；室内稀疏MID360不宜过大
+  gicp_max_source_points: 900   # 限制当前帧点数，面向机器狗低算力部署
+  gicp_max_target_points: 25000 # 限制局部地图点数，防止长廊局部地图过大
+  gicp_max_iterations: 6
+  gicp_max_correspondence_distance: 0.7
+  gicp_max_fitness_score: 0.30
+  gicp_transformation_epsilon: 0.0001
+  multires_icp_enable: false    # 实测当前ICP易被室内重复结构拉偏；代码保留，默认关闭
+  icp_coarse_voxel_size: 0.80   # 粗层体素，负责快速拉近
+  icp_fine_voxel_size: 0.35     # 细层体素，负责精调
+  icp_coarse_iterations: 8
+  icp_fine_iterations: 5
+  icp_max_correspondence_distance: 1.5
+  icp_max_fitness_score: 0.8
+  degeneracy_check_enable: true       # 检测长廊/平面等LiDAR退化，不削弱雷达主约束
+  degeneracy_min_eigenvalue: 0.001    # 信息矩阵最小特征值过小，说明存在弱约束方向
+  degeneracy_max_condition_number: 100000.0 # 条件数过大，说明不同方向约束强弱悬殊
+  degeneracy_geometry_ratio: 0.08     # 匹配点PCA最小/最大特征值过小，认为几何分布退化
+  degeneracy_project_update_enable: true  # 长廊退化时把LiDAR弱约束方向投影降权，避免错误最近邻强行修正
+  degeneracy_project_eigen_ratio: 0.05   # 特征值小于max_eigen的该比例，认为该组合方向LiDAR约束弱
+  degeneracy_project_min_scale: 0.08      # 最弱方向仍保留少量地图修正，避免完全锁死真实运动
+
+anchor_relocalization:
+  enable: false                # 小范围锚点重定位在loop3重复结构中会误吸附，默认关闭
+  period_sec: 5.0              # 最快每隔几秒触发一次，避免低算力端每帧全局搜索
+  trigger_residual: 0.20       # 当前地图匹配残差偏高时，认为可能累积漂移
+  trigger_degeneracy_score: 0.55 # 雷达明显退化时才触发，避免普通区域浪费算力
+  search_radius: 1.5           # XY只做局部搜索；不做全局硬匹配，降低重复走廊误吸附风险
+  search_step: 0.3             # 30cm网格先粗找局部低残差候选
+  yaw_search_deg: 3.0          # 额外搜索yaw扰动范围
+  yaw_step_deg: 1.5
+  min_effective_points: 120    # 候选位置至少要有足够地图近邻点
+  accept_residual: 0.14        # 候选平均残差足够低，才允许作为锚点
+  improve_ratio: 0.85          # 候选残差需要优于当前残差，避免重复长廊误匹配
+  max_correction: 0.6          # 单次最多拉回60cm，分多次修正累计误差
+  apply_ratio: 0.5             # 对通过验证的锚点不硬跳，只应用一半修正
+
+vertical_relocalization:
+  enable: false                # 单独Z搜索在重复楼层/长廊中残差歧义明显，默认关闭，避免误吸附
+  period_sec: 1.0              # 每秒最多一次，控制低算力平台开销
+  search_radius: 8.0           # loop3末尾约6m高度漂移，搜索范围需覆盖该量级
+  search_step: 0.5
+  max_points: 350              # 当前帧用于Z评分的最大点数，避免全点云暴力最近邻
+  min_effective_points: 70
+  accept_residual: 0.18
+  improve_ratio: 0.80          # 候选高度必须明显优于当前高度，避免楼层/天花板误吸附
+  max_correction: 0.8          # 单次最大Z修正，防错误候选一把拉飞
+  apply_ratio: 0.6
+
+camera_update:
+  enable: true
+  mode: "quality_gate"          # 当前原型：只评估图像质量；后续视觉残差独立进EKF
+  feature_update_enable: true   # LiDAR退化且角点稳定时，用稀疏角点光流给姿态弱约束
+  min_gradient_mean: 2.5
+  max_over_exposure_ratio: 0.25
+  max_under_exposure_ratio: 0.35
+  max_features: 300             # 每帧最多角点数；越大越稳但更耗CPU
+  min_tracked_features: 40      # LK跟踪成功角点少于该值，则跳过视觉更新
+  min_feature_ratio: 0.15       # 有效角点占比过低，认为视觉不可用
+  max_yaw_update_deg: 0.5       # 单帧视觉最多修正yaw角，防止视觉误匹配拉飞
+  good_image_weight_scale: 1.0        # 图像正常时，视觉约束默认权重
+  bad_image_weight_scale: 0.4         # 图像过曝/欠曝时，只降低视觉约束自身权重
+  degenerate_weight_scale: 2.0        # LiDAR退化且图像正常时，后续视觉约束增权
+  min_degeneracy_score_for_visual: 0.15 # 雷达退化分数超过该值，才启用视觉弱修正
+
+output:
+  path_max_length: 5000
+  publish_path: true            # 验证阶段打开路径；真正部署可改false降低RViz/消息开销
+  publish_tf: true
+  print_debug: true
+  debug_interval_sec: 2.0       # 每隔几秒打印一次实时性统计
+  runtime_csv_path: "/home/jian/dog_prior_map_livo_ws/validation/deploy_light_odom_latest_runtime.csv"

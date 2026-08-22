@@ -1,0 +1,50 @@
+<launch>
+  <arg name="config" default="$(find dog_prior_map_localization)/config/dog_prior_map_localization_ndt.yaml" />
+  <arg name="rviz" default="false" />
+  <arg name="runtime_csv_path" default="" />
+
+  <rosparam command="load" file="$(arg config)" />
+
+  <!--
+    拆分版结构：
+    1) dog_prior_map_ndt：只负责当前帧点云预处理 + NDT先验地图匹配，输出低频绝对位姿/dog_livo/ndt_odom。
+    2) dog_prior_map_ekf：只负责IMU高频传播 + 接收NDT低频观测修正，输出高频位姿/dog_livo/odom_high_rate。
+    原来的 dog_prior_map_localization.launch 不改，仍可运行一体化节点。
+  -->
+
+  <param name="external_odometry/enable" value="true" />
+  <param name="external_odometry/same_map_frame" value="true" />
+  <param name="external_odometry/apply_ratio" value="1.0" />
+  <param name="external_odometry/z_apply_ratio" value="1.0" />
+  <param name="external_odometry/roll_pitch_apply_ratio" value="1.0" />
+  <param name="external_odometry/max_translation_correction" value="2.0" />
+  <param name="external_odometry/max_rotation_correction_deg" value="20.0" />
+  <param name="topics/external_odom" value="/dog_livo/ndt_odom" />
+  <param name="lidar_update/enable" value="false" />
+  <param name="lidar_odometry/enable" value="false" />
+  <param name="output/runtime_csv_path" value="$(arg runtime_csv_path)" />
+
+  <node pkg="dog_prior_map_localization"
+        type="dog_prior_map_ndt_node_cpp"
+        name="dog_prior_map_ndt"
+        output="screen">
+    <!-- MVS SDK会把/opt/MVS/lib/64放进LD_LIBRARY_PATH，其中旧版libusb会导致PCL/NDT启动时报
+         symbol lookup error: libpcl_io.so.1.10: undefined symbol: libusb_set_option。
+         这里只让定位节点优先使用系统libusb，不修改全局环境，也不影响相机驱动。 -->
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+
+  <node pkg="dog_prior_map_localization"
+        type="dog_prior_map_ekf_node_cpp"
+        name="dog_prior_map_ekf"
+        output="screen">
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+
+  <group if="$(arg rviz)">
+    <node pkg="rviz"
+          type="rviz"
+          name="dog_prior_map_rviz"
+          args="-d $(find dog_prior_map_localization)/rviz/dog_prior_map_localization.rviz" />
+  </group>
+</launch>

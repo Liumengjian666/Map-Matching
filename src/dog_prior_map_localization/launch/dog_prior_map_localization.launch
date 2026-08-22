@@ -1,0 +1,23 @@
+<launch>
+  <arg name="config" default="$(find dog_prior_map_localization)/config/dog_prior_map_localization.yaml" />
+  <arg name="rviz" default="false" />
+  <arg name="use_cpp" default="true" />
+  <arg name="runtime_csv_path" default="" />
+
+  <rosparam command="load" file="$(arg config)" />
+  <param name="output/runtime_csv_path" value="$(arg runtime_csv_path)" />
+
+  <node if="$(arg use_cpp)" pkg="dog_prior_map_localization" type="dog_prior_map_ekf_node_cpp"
+        name="dog_prior_map_ekf" output="screen">
+    <!-- 避免MVS SDK里的旧libusb覆盖系统libusb，导致PCL/NDT相关代码启动失败。 -->
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+
+  <node unless="$(arg use_cpp)" pkg="dog_prior_map_localization" type="dog_prior_map_ekf_node.py"
+        name="dog_prior_map_ekf" output="screen" />
+
+  <group if="$(arg rviz)">
+    <node pkg="rviz" type="rviz" name="dog_prior_map_rviz"
+          args="-d $(find dog_prior_map_localization)/rviz/dog_prior_map_localization.rviz" />
+  </group>
+</launch>

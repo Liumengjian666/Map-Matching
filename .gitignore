@@ -1,0 +1,14 @@
+build/
+devel/
+install/
+logs/
+*.bag
+*.bag.active
+*.pcd
+*.ply
+*.bin
+*.npz
+*.o
+*.so
+*.a
+.cache/
