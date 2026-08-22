@@ -151,7 +151,7 @@ lidar_update:
   ndt_absolute_pose_mode: true  # 关闭全局绝对位姿NDT；长廊/重复结构下容易误吸附到错误全局姿态
   ndt_use_full_map_target: true # 使用局部子地图/当前估计而非整张全局地图作为target，避免重复几何误匹配
   ndt_source_voxel_size: 0.35        # 当前帧扫描点云降采样体素；越小越细但越耗CPU
-  ndt_target_voxel_size: 0.30        # 全局地图target体素；越小越能区分重复结构，但匹配更慢
+  ndt_target_voxel_size: 0.25        # 全局地图target体素；loop3完整验证中0.25m比0.30m更能抑制中段误吸附
   ndt_max_source_points: 900         # 当前帧参与NDT的最大点数，控制单帧计算量
   ndt_max_target_points: 0           # 全局地图target不截断；避免只拿前一小段地图导致全程误匹配
   ndt_max_iterations: 30             # NDT最大迭代次数；太大可能增加耗时但更容易收敛
