@@ -17,6 +17,7 @@
 #include <nav_msgs/Path.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/registration/ndt.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <ros/ros.h>
@@ -79,6 +80,10 @@ public:
 
     map_pcd_path_ = getParam<std::string>("map/pcd_fallback_path", "");
     map_voxel_size_ = getParam<double>("map/voxel_size", 0.30);
+    local_submap_enable_ = getParam<bool>("map/local_submap_enable", false);
+    local_radius_ = getParam<double>("map/local_radius", 18.0);
+    local_submap_max_points_ = getParam<int>("map/local_submap_max_points", 30000);
+    local_submap_min_points_ = getParam<int>("map/local_submap_min_points", 500);
     scan_voxel_size_ = getParam<double>("lidar_update/ndt_source_voxel_size", 0.35);
     max_scan_points_ = getParam<int>("lidar_update/ndt_max_source_points", 900);
     target_voxel_size_ = getParam<double>("lidar_update/ndt_target_voxel_size", 0.30);
@@ -173,6 +178,7 @@ private:
     finalizeCloud(xyz);
     map_cloud_ = voxelDown(xyz, map_voxel_size_, 0);
     target_cloud_ = voxelDown(map_cloud_, target_voxel_size_, max_target_points_);
+    map_kdtree_.setInputCloud(map_cloud_);
 
     ndt_.setInputTarget(target_cloud_);
     ndt_.setResolution(ndt_resolution_);
@@ -280,6 +286,12 @@ private:
     }
 
     ndt_.setInputSource(source);
+    pcl::PointCloud<pcl::PointXYZ>::Ptr active_target = target_cloud_;
+    if (local_submap_enable_)
+    {
+      active_target = buildLocalTarget(initial_guess.block<3, 1>(0, 3));
+      ndt_.setInputTarget(active_target);
+    }
     pcl::PointCloud<pcl::PointXYZ> aligned;
     const ros::WallTime align_start = ros::WallTime::now();
     ndt_.align(aligned, initial_guess.cast<float>());
@@ -315,13 +327,35 @@ private:
                        reject_reason,
                        align_ms,
                        static_cast<int>(source->size()),
-                       target_cloud_->size(),
+                       active_target->size(),
                        score,
                        iterations);
     ROS_INFO_THROTTLE(1.0,
                       "[DogPriorMap NDT] conv=%d accept=%d reason=%s source=%zu target=%zu align=%.2fms score=%.4f iter=%d p=(%.2f %.2f %.2f)",
-                      converged ? 1 : 0, accepted ? 1 : 0, reject_reason.c_str(), source->size(), target_cloud_->size(),
+                      converged ? 1 : 0, accepted ? 1 : 0, reject_reason.c_str(), source->size(), active_target->size(),
                       align_ms, score, iterations, p_.x(), p_.y(), p_.z());
+  }
+
+  pcl::PointCloud<pcl::PointXYZ>::Ptr buildLocalTarget(const Eigen::Vector3d &center)
+  {
+    if (!center.allFinite() || local_radius_ <= 0.0) return target_cloud_;
+
+    pcl::PointXYZ query(center.x(), center.y(), center.z());
+    std::vector<int> indices;
+    std::vector<float> distances;
+    if (map_kdtree_.radiusSearch(query, local_radius_, indices, distances) < local_submap_min_points_)
+    {
+      return target_cloud_;
+    }
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr local(new pcl::PointCloud<pcl::PointXYZ>());
+    local->reserve(indices.size());
+    for (int idx : indices)
+    {
+      local->push_back(map_cloud_->points[static_cast<size_t>(idx)]);
+    }
+    finalizeCloud(local);
+    return voxelDown(local, target_voxel_size_, local_submap_max_points_);
   }
 
   bool acceptNdtResult(bool converged,
@@ -500,6 +534,7 @@ private:
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud_;
   pcl::PointCloud<pcl::PointXYZ>::Ptr target_cloud_;
+  pcl::KdTreeFLANN<pcl::PointXYZ> map_kdtree_;
   pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt_;
   nav_msgs::Path path_;
 
@@ -510,6 +545,10 @@ private:
   Eigen::Matrix4d delta_pose_ = Eigen::Matrix4d::Identity();
 
   double map_voxel_size_ = 0.30;
+  bool local_submap_enable_ = false;
+  double local_radius_ = 18.0;
+  int local_submap_max_points_ = 30000;
+  int local_submap_min_points_ = 500;
   double target_voxel_size_ = 0.30;
   double scan_voxel_size_ = 0.35;
   int max_scan_points_ = 900;
