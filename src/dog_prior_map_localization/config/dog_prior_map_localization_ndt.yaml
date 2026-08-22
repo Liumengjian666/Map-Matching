@@ -159,6 +159,9 @@ lidar_update:
   ndt_step_size: 0.1                 # 优化步长；影响NDT搜索和收敛速度
   ndt_transformation_epsilon: 0.001 # 变换增量收敛阈值；越小越难判定收敛
   ndt_acceptance_enable: false      # 独立NDT节点轻量验收门控；本次完整loop3验证会卡住漂移，默认关闭
+  ndt_use_external_initial_guess: false # 实验项：用EKF高频位姿作为NDT初值；loop3实测会放大误匹配，默认关闭
+  ndt_initial_guess_max_age_sec: 0.20   # EKF初值最大时间差，超过则不用
+  ndt_initial_guess_blend: 1.0          # EKF初值与NDT恒速初值混合比例；0=不用外部，1=完全使用外部
   ndt_reject_zero_iteration: true   # 0次迭代通常表示没有真实优化，直接拒绝
   ndt_max_fitness_score: 3.0        # NDT分数上限；明显错误吸附时分数会升高，过严会拒绝有效帧
   ndt_accept_max_translation: 1.20  # 单帧NDT平移跳变上限；温和门控，避免瞬间拉飞
