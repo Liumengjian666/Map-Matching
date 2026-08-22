@@ -43,6 +43,12 @@ Eigen::Matrix4d poseToMatrix(const Eigen::Vector3d &p, const Eigen::Matrix3d &R)
   return T;
 }
 
+double rotationAngleDeg(const Eigen::Matrix3d &R)
+{
+  Eigen::AngleAxisd angle_axis(R);
+  return std::abs(angle_axis.angle()) * 180.0 / M_PI;
+}
+
 }  // namespace
 
 class DogPriorMapNdtNode
@@ -76,6 +82,11 @@ public:
     ndt_step_size_ = getParam<double>("lidar_update/ndt_step_size", 0.1);
     ndt_transformation_epsilon_ = getParam<double>("lidar_update/ndt_transformation_epsilon", 0.001);
     ndt_max_iterations_ = getParam<int>("lidar_update/ndt_max_iterations", 30);
+    ndt_acceptance_enable_ = getParam<bool>("lidar_update/ndt_acceptance_enable", false);
+    ndt_max_fitness_score_ = getParam<double>("lidar_update/ndt_max_fitness_score", 3.0);
+    ndt_reject_zero_iteration_ = getParam<bool>("lidar_update/ndt_reject_zero_iteration", true);
+    ndt_accept_max_translation_ = getParam<double>("lidar_update/ndt_accept_max_translation", 1.20);
+    ndt_accept_max_rotation_deg_ = getParam<double>("lidar_update/ndt_accept_max_rotation_deg", 12.0);
     publish_tf_ = getParam<bool>("output/ndt_publish_tf", false);
     publish_path_ = getParam<bool>("output/publish_path", false);
     publish_filtered_points_ = getParam<bool>("output/publish_filtered_points", true);
@@ -227,7 +238,15 @@ private:
     publishCloud(source, stamp, base_frame_, pub_filtered_);
     if (static_cast<int>(source->size()) < min_effective_points_)
     {
-      publishDiagnostics(stamp, false, 0.0, static_cast<int>(source->size()), target_cloud_->size(), 0.0, 0);
+      publishDiagnostics(stamp,
+                         false,
+                         false,
+                         "too_few_points",
+                         0.0,
+                         static_cast<int>(source->size()),
+                         target_cloud_->size(),
+                         0.0,
+                         0);
       return;
     }
 
@@ -242,13 +261,15 @@ private:
     const ros::WallTime align_start = ros::WallTime::now();
     ndt_.align(aligned, initial_guess.cast<float>());
     const double align_ms = (ros::WallTime::now() - align_start).toSec() * 1000.0;
-    const bool ok = ndt_.hasConverged();
+    const bool converged = ndt_.hasConverged();
     const double score = ndt_.getFitnessScore();
     const int iterations = ndt_.getFinalNumIteration();
+    Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
+    std::string reject_reason = "accepted";
+    const bool accepted = acceptNdtResult(converged, score, iterations, result, reject_reason);
 
-    if (ok)
+    if (accepted)
     {
-      Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
       if (has_previous_pose_)
       {
         delta_pose_ = previous_pose_.inverse() * result;
@@ -265,10 +286,60 @@ private:
       publishAlignedCloud(aligned, stamp);
     }
 
-    publishDiagnostics(stamp, ok, align_ms, static_cast<int>(source->size()), target_cloud_->size(), score, iterations);
+    publishDiagnostics(stamp,
+                       converged,
+                       accepted,
+                       reject_reason,
+                       align_ms,
+                       static_cast<int>(source->size()),
+                       target_cloud_->size(),
+                       score,
+                       iterations);
     ROS_INFO_THROTTLE(1.0,
-                      "[DogPriorMap NDT] conv=%d source=%zu target=%zu align=%.2fms score=%.4f iter=%d p=(%.2f %.2f %.2f)",
-                      ok ? 1 : 0, source->size(), target_cloud_->size(), align_ms, score, iterations, p_.x(), p_.y(), p_.z());
+                      "[DogPriorMap NDT] conv=%d accept=%d reason=%s source=%zu target=%zu align=%.2fms score=%.4f iter=%d p=(%.2f %.2f %.2f)",
+                      converged ? 1 : 0, accepted ? 1 : 0, reject_reason.c_str(), source->size(), target_cloud_->size(),
+                      align_ms, score, iterations, p_.x(), p_.y(), p_.z());
+  }
+
+  bool acceptNdtResult(bool converged,
+                       double score,
+                       int iterations,
+                       const Eigen::Matrix4d &result,
+                       std::string &reject_reason) const
+  {
+    if (!converged)
+    {
+      reject_reason = "not_converged";
+      return false;
+    }
+    if (!ndt_acceptance_enable_) return true;
+    if (ndt_reject_zero_iteration_ && iterations <= 0)
+    {
+      reject_reason = "zero_iteration";
+      return false;
+    }
+    if (std::isfinite(ndt_max_fitness_score_) && ndt_max_fitness_score_ > 0.0 && score > ndt_max_fitness_score_)
+    {
+      reject_reason = "fitness_score";
+      return false;
+    }
+    if (has_previous_pose_)
+    {
+      const Eigen::Matrix4d step = previous_pose_.inverse() * result;
+      const double translation = step.block<3, 1>(0, 3).norm();
+      const double rotation_deg = rotationAngleDeg(step.block<3, 3>(0, 0));
+      if (ndt_accept_max_translation_ > 0.0 && translation > ndt_accept_max_translation_)
+      {
+        reject_reason = "translation_jump";
+        return false;
+      }
+      if (ndt_accept_max_rotation_deg_ > 0.0 && rotation_deg > ndt_accept_max_rotation_deg_)
+      {
+        reject_reason = "rotation_jump";
+        return false;
+      }
+    }
+    return true;
   }
 
   void publishPose(const ros::Time &stamp)
@@ -337,6 +408,8 @@ private:
 
   void publishDiagnostics(const ros::Time &stamp,
                           bool converged,
+                          bool accepted,
+                          const std::string &reject_reason,
                           double align_ms,
                           int scan_points,
                           size_t map_points,
@@ -349,10 +422,12 @@ private:
     diagnostic_msgs::DiagnosticStatus status;
     status.name = "dog_prior_map_ndt";
     status.hardware_id = base_frame_;
-    status.level = converged ? diagnostic_msgs::DiagnosticStatus::OK : diagnostic_msgs::DiagnosticStatus::WARN;
-    status.message = converged ? "NDT converged" : "NDT not converged";
+    status.level = accepted ? diagnostic_msgs::DiagnosticStatus::OK : diagnostic_msgs::DiagnosticStatus::WARN;
+    status.message = accepted ? "NDT accepted" : "NDT rejected";
 
     addDiagnosticValue(status, "ndt_converged", converged ? "true" : "false");
+    addDiagnosticValue(status, "ndt_accepted", accepted ? "true" : "false");
+    addDiagnosticValue(status, "ndt_reject_reason", reject_reason);
     addDiagnosticValue(status, "align_time_ms", std::to_string(align_ms));
     addDiagnosticValue(status, "scan_points", std::to_string(scan_points));
     addDiagnosticValue(status, "map_points", std::to_string(map_points));
@@ -425,6 +500,11 @@ private:
   double ndt_resolution_ = 1.0;
   double ndt_step_size_ = 0.1;
   double ndt_transformation_epsilon_ = 0.001;
+  bool ndt_acceptance_enable_ = false;
+  bool ndt_reject_zero_iteration_ = true;
+  double ndt_max_fitness_score_ = 3.0;
+  double ndt_accept_max_translation_ = 1.20;
+  double ndt_accept_max_rotation_deg_ = 12.0;
   bool publish_tf_ = true;
   bool publish_path_ = false;
   bool publish_filtered_points_ = true;

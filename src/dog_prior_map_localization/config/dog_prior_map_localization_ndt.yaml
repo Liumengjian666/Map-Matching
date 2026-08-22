@@ -158,9 +158,11 @@ lidar_update:
   ndt_resolution: 1.0        # NDT网格分辨率；数值越小越细，越容易识别局部几何
   ndt_step_size: 0.1                 # 优化步长；影响NDT搜索和收敛速度
   ndt_transformation_epsilon: 0.001 # 变换增量收敛阈值；越小越难判定收敛
-  ndt_max_fitness_score: 3.0        # 主EKF地图匹配使用；NDT独立节点只输出NDT收敛结果
-  ndt_accept_max_translation: 1.20  # 主EKF地图匹配使用；NDT独立节点当前不读取
-  ndt_accept_max_rotation_deg: 12.0 # 主EKF地图匹配使用；NDT独立节点当前不读取
+  ndt_acceptance_enable: true       # 独立NDT节点轻量验收门控；防止长廊错误收敛直接发布/融合
+  ndt_reject_zero_iteration: true   # 0次迭代通常表示没有真实优化，直接拒绝
+  ndt_max_fitness_score: 3.0        # NDT分数上限；明显错误吸附时分数会升高，过严会拒绝有效帧
+  ndt_accept_max_translation: 1.20  # 单帧NDT平移跳变上限；温和门控，避免瞬间拉飞
+  ndt_accept_max_rotation_deg: 12.0 # 单帧NDT旋转跳变上限；温和门控，避免重复走廊错误转向
   gicp_enable: false            # NDT试验版关闭GICP，避免多种匹配同时修正
   gicp_source_voxel_size: 0.35  # 当前帧GICP体素；越小越精但越耗CPU
   gicp_target_voxel_size: 0.25  # 局部地图GICP体素；室内稀疏MID360不宜过大
