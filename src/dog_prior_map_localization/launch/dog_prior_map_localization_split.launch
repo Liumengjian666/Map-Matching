@@ -2,6 +2,7 @@
   <arg name="config" default="$(find dog_prior_map_localization)/config/dog_prior_map_localization_ndt.yaml" />
   <arg name="rviz" default="false" />
   <arg name="runtime_csv_path" default="" />
+  <arg name="ndt_diagnostics_csv_path" default="" />
   <arg name="loop_closure" default="false" />
 
   <rosparam command="load" file="$(arg config)" />
@@ -24,6 +25,7 @@
   <param name="lidar_update/enable" value="false" />
   <param name="lidar_odometry/enable" value="false" />
   <param name="output/runtime_csv_path" value="$(arg runtime_csv_path)" />
+  <param name="output/ndt_diagnostics_csv_path" value="$(arg ndt_diagnostics_csv_path)" />
 
   <node pkg="dog_prior_map_localization"
         type="dog_prior_map_ndt_node_cpp"

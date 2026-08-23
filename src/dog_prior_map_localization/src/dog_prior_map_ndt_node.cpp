@@ -148,6 +148,24 @@ public:
     publish_path_ = getParam<bool>("output/publish_path", false);
     publish_filtered_points_ = getParam<bool>("output/publish_filtered_points", true);
     publish_diagnostics_ = getParam<bool>("output/publish_diagnostics", true);
+    ndt_diagnostics_csv_path_ = getParam<std::string>("output/ndt_diagnostics_csv_path", "");
+    if (!ndt_diagnostics_csv_path_.empty())
+    {
+      ndt_diagnostics_csv_.open(ndt_diagnostics_csv_path_, std::ios::out);
+      if (ndt_diagnostics_csv_)
+      {
+        ndt_diagnostics_csv_
+            << "stamp,converged,accepted,reject_reason,align_ms,scan_points,map_points,fitness_score,iterations,"
+            << "initial_x,initial_y,initial_z,result_x,result_y,result_z,used_x,used_y,used_z,"
+            << "initial_to_result_translation,previous_to_result_translation,previous_to_result_rotation_deg,"
+            << "previous_to_used_translation,previous_to_used_rotation_deg\n";
+      }
+      else
+      {
+        ROS_WARN("[DogPriorMap NDT] failed to open ndt diagnostics CSV: %s",
+                 ndt_diagnostics_csv_path_.c_str());
+      }
+    }
 
     const std::vector<double> init_p = getParamVec("filter/initial_position", {0.0, 0.0, 0.0});
     const std::vector<double> init_rpy = getParamVec("filter/initial_rpy_deg", {0.0, 0.0, 0.0});
@@ -608,6 +626,8 @@ private:
         initial_guess = blendInitialGuess(initial_guess, latest_initial_guess_pose_);
       }
     }
+    const Eigen::Matrix4d pose_before_update = poseToMatrix(p_, R_);
+    const bool had_previous_pose_before_update = has_previous_pose_;
 
     ndt_.setInputSource(source);
     pcl::PointCloud<pcl::PointXYZ> aligned;
@@ -658,6 +678,21 @@ private:
         publishPose(stamp);
       }
     }
+
+    writeNdtDiagnosticsCsv(stamp,
+                           converged,
+                           accepted,
+                           reject_reason,
+                           align_ms,
+                           static_cast<int>(source->size()),
+                           target_cloud_->size(),
+                           score,
+                           iterations,
+                           initial_guess,
+                           result,
+                           pose_before_update,
+                           poseToMatrix(p_, R_),
+                           had_previous_pose_before_update);
 
     publishDiagnostics(stamp,
                        converged,
@@ -855,6 +890,69 @@ private:
     return true;
   }
 
+  void writeNdtDiagnosticsCsv(const ros::Time &stamp,
+                              bool converged,
+                              bool accepted,
+                              const std::string &reject_reason,
+                              double align_ms,
+                              int scan_points,
+                              size_t map_points,
+                              double score,
+                              int iterations,
+                              const Eigen::Matrix4d &initial_guess,
+                              const Eigen::Matrix4d &result,
+                              const Eigen::Matrix4d &pose_before_update,
+                              const Eigen::Matrix4d &used_pose,
+                              bool had_previous_pose_before_update)
+  {
+    if (!ndt_diagnostics_csv_) return;
+
+    const Eigen::Vector3d initial_p = initial_guess.block<3, 1>(0, 3);
+    const Eigen::Vector3d result_p = result.block<3, 1>(0, 3);
+    const Eigen::Vector3d used_p = used_pose.block<3, 1>(0, 3);
+    const double initial_to_result_translation = (result_p - initial_p).norm();
+
+    double previous_to_result_translation = 0.0;
+    double previous_to_result_rotation_deg = 0.0;
+    double previous_to_used_translation = 0.0;
+    double previous_to_used_rotation_deg = 0.0;
+    if (had_previous_pose_before_update)
+    {
+      const Eigen::Matrix4d previous_to_result = pose_before_update.inverse() * result;
+      previous_to_result_translation = previous_to_result.block<3, 1>(0, 3).norm();
+      previous_to_result_rotation_deg = rotationAngleDeg(previous_to_result.block<3, 3>(0, 0));
+
+      const Eigen::Matrix4d previous_to_used = pose_before_update.inverse() * used_pose;
+      previous_to_used_translation = previous_to_used.block<3, 1>(0, 3).norm();
+      previous_to_used_rotation_deg = rotationAngleDeg(previous_to_used.block<3, 3>(0, 0));
+    }
+
+    ndt_diagnostics_csv_ << std::fixed << std::setprecision(6)
+                         << stamp.toSec() << ","
+                         << (converged ? 1 : 0) << ","
+                         << (accepted ? 1 : 0) << ","
+                         << reject_reason << ","
+                         << align_ms << ","
+                         << scan_points << ","
+                         << map_points << ","
+                         << score << ","
+                         << iterations << ","
+                         << initial_p.x() << ","
+                         << initial_p.y() << ","
+                         << initial_p.z() << ","
+                         << result_p.x() << ","
+                         << result_p.y() << ","
+                         << result_p.z() << ","
+                         << used_p.x() << ","
+                         << used_p.y() << ","
+                         << used_p.z() << ","
+                         << initial_to_result_translation << ","
+                         << previous_to_result_translation << ","
+                         << previous_to_result_rotation_deg << ","
+                         << previous_to_used_translation << ","
+                         << previous_to_used_rotation_deg << "\n";
+  }
+
   Eigen::Matrix4d blendInitialGuess(const Eigen::Matrix4d &motion_guess, const Eigen::Matrix4d &external_guess) const
   {
     const double blend = std::max(0.0, std::min(1.0, initial_guess_blend_));
@@ -1022,6 +1120,8 @@ private:
   std::string initial_guess_odom_topic_;
   std::string map_pcd_path_;
   std::string loop_pose_path_;
+  std::string ndt_diagnostics_csv_path_;
+  std::ofstream ndt_diagnostics_csv_;
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud_;
   pcl::PointCloud<pcl::PointXYZ>::Ptr target_cloud_;

@@ -278,6 +278,7 @@ camera_update:
   min_degeneracy_score_for_visual: 0.15 # 雷达退化分数超过该值，才启用视觉弱修正
 
 output:
+  ndt_diagnostics_csv_path: ""  # NDT逐帧诊断CSV；为空则关闭，只记录不干预定位，用于分析中段误匹配
   path_max_length: 200000       # 保持完整历史轨迹，不截断成最近几秒
   publish_path: true            # RViz 展示路径时必须打开
   publish_tf: true
