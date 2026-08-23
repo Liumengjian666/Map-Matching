@@ -340,13 +340,15 @@ private:
   }
 
   std::vector<Candidate> retrieveVisualCandidates(const Keyframe &query,
+                                                  int query_index,
                                                   const std::vector<Keyframe> &snapshot) const
   {
     std::vector<Candidate> candidates;
     if (query.descriptors.empty()) return candidates;
     cv::BFMatcher matcher(cv::NORM_HAMMING, false);
-    const int current_index = static_cast<int>(snapshot.size()) - 1;
-    for (int i = 0; i < current_index - exclude_recent_keyframes_; ++i)
+    const int search_end = std::min(query_index - exclude_recent_keyframes_,
+                                    static_cast<int>(snapshot.size()));
+    for (int i = 0; i < search_end; ++i)
     {
       const Keyframe &hist = snapshot[static_cast<size_t>(i)];
       if (hist.descriptors.empty()) continue;
@@ -377,6 +379,23 @@ private:
       candidates.resize(static_cast<size_t>(visual_top_k_));
     }
     return candidates;
+  }
+
+  bool hasLoopEdgeUnlocked() const
+  {
+    return std::any_of(edges_.begin(), edges_.end(), [](const Edge &edge) {
+      return edge.loop;
+    });
+  }
+
+  void updateAndPublishGraph(const ros::Time &stamp)
+  {
+    std::lock_guard<std::mutex> lock(mutex_);
+    if (hasLoopEdgeUnlocked())
+    {
+      optimizePoseGraph2d();
+    }
+    publishCorrectedTrajectory(stamp);
   }
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr buildCandidateSubmap(const std::vector<Keyframe> &snapshot,
@@ -637,9 +656,10 @@ private:
       }
       if (index < 0 || index >= static_cast<int>(snapshot.size())) continue;
       const Keyframe current = snapshot[static_cast<size_t>(index)];
-      std::vector<Candidate> candidates = retrieveVisualCandidates(current, snapshot);
+      std::vector<Candidate> candidates = retrieveVisualCandidates(current, index, snapshot);
       if (candidates.empty())
       {
+        updateAndPublishGraph(current.stamp);
         publishDiagnostics(current.stamp, "no_visual_candidate", -1, 0.0,
                            std::numeric_limits<double>::quiet_NaN(), false);
         continue;
@@ -697,6 +717,7 @@ private:
       }
       else
       {
+        updateAndPublishGraph(current.stamp);
         publishDiagnostics(current.stamp, last_reason, candidates.front().index,
                            candidates.front().visual_score,
                            std::numeric_limits<double>::quiet_NaN(), false);
