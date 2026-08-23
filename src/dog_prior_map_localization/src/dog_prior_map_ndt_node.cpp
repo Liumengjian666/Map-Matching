@@ -238,6 +238,7 @@ private:
     Eigen::Vector3d p = Eigen::Vector3d::Zero();
     Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
     std::vector<float> descriptor;
+    pcl::PointCloud<pcl::PointXYZ>::Ptr local_map_world;
   };
 
   struct LoopCandidate
@@ -309,24 +310,29 @@ private:
         continue;
       }
       const Eigen::Matrix3d R = q.normalized().toRotationMatrix();
-      pcl::PointCloud<pcl::PointXYZ>::Ptr local(new pcl::PointCloud<pcl::PointXYZ>());
-      local->reserve(std::min(static_cast<int>(indices.size()), std::max(loop_context_max_points_, 1)));
+      pcl::PointCloud<pcl::PointXYZ>::Ptr local_body(new pcl::PointCloud<pcl::PointXYZ>());
+      pcl::PointCloud<pcl::PointXYZ>::Ptr local_world(new pcl::PointCloud<pcl::PointXYZ>());
+      local_body->reserve(std::min(static_cast<int>(indices.size()), std::max(loop_context_max_points_, 1)));
+      local_world->reserve(std::min(static_cast<int>(indices.size()), std::max(loop_context_max_points_, 1)));
       const int stride = std::max(1, static_cast<int>(indices.size()) / std::max(loop_context_max_points_, 1));
       for (size_t i = 0; i < indices.size(); i += static_cast<size_t>(stride))
       {
         const auto &map_pt = map_cloud_->points[static_cast<size_t>(indices[i])];
         const Eigen::Vector3d pw(map_pt.x, map_pt.y, map_pt.z);
         const Eigen::Vector3d pl = R.transpose() * (pw - p);
-        local->push_back(pcl::PointXYZ(pl.x(), pl.y(), pl.z()));
-        if (static_cast<int>(local->size()) >= loop_context_max_points_) break;
+        local_body->push_back(pcl::PointXYZ(pl.x(), pl.y(), pl.z()));
+        local_world->push_back(map_pt);
+        if (static_cast<int>(local_body->size()) >= loop_context_max_points_) break;
       }
-      finalizeCloud(local);
+      finalizeCloud(local_body);
+      finalizeCloud(local_world);
 
       LoopKeyframe key;
       key.id = raw_id;
       key.p = p;
       key.R = R;
-      key.descriptor = makeScanContext(local);
+      key.descriptor = makeScanContext(local_body);
+      key.local_map_world = voxelDown(local_world, map_voxel_size_, loop_context_max_points_);
       loop_database_.push_back(key);
       last_key_p = p;
       ++raw_id;
@@ -665,6 +671,7 @@ private:
     for (const auto &candidate : candidates)
     {
       const LoopKeyframe &key = loop_database_[static_cast<size_t>(candidate.index)];
+      if (!key.local_map_world || key.local_map_world->empty()) continue;
       const double shift_yaw = static_cast<double>(candidate.yaw_shift) * 2.0 * M_PI / static_cast<double>(sectors);
       for (double sign : {1.0, -1.0})
       {
@@ -673,7 +680,7 @@ private:
         guess.block<3, 1>(0, 3) = key.p;
 
         pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt_check;
-        ndt_check.setInputTarget(target_cloud_);
+        ndt_check.setInputTarget(key.local_map_world);
         ndt_check.setInputSource(source);
         ndt_check.setResolution(ndt_resolution_);
         ndt_check.setStepSize(ndt_step_size_);
