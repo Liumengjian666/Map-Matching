@@ -2,6 +2,7 @@
   <arg name="config" default="$(find dog_prior_map_localization)/config/dog_prior_map_localization_ndt.yaml" />
   <arg name="rviz" default="false" />
   <arg name="runtime_csv_path" default="" />
+  <arg name="loop_closure" default="false" />
 
   <rosparam command="load" file="$(arg config)" />
 
@@ -40,6 +41,16 @@
         output="screen">
     <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
   </node>
+
+  <group if="$(arg loop_closure)">
+    <param name="visual_lidar_loop_closure/enable" value="true" />
+    <node pkg="dog_prior_map_localization"
+          type="visual_lidar_loop_closure_node_cpp"
+          name="visual_lidar_loop_closure"
+          output="screen">
+      <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+    </node>
+  </group>
 
   <group if="$(arg rviz)">
     <node pkg="rviz"
