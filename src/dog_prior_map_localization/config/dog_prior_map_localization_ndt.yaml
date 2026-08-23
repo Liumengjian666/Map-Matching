@@ -221,6 +221,7 @@ loop_relocalization:
   accept_max_translation: 8.0  # 候选结果与当前位姿差异上限；中段误吸附可能已偏多米，不能过小
   accept_max_yaw_deg: 25.0     # 候选结果与当前yaw差异上限
   require_consecutive_accepts: 2 # 连续同一候选通过后才应用，防止单帧误回环
+  consecutive_candidate_radius: 3.0 # 连续验证允许同一区域不同关键帧通过；室内关键帧密集时比强制同ID更稳
   apply_ratio: 0.5             # 通过验证后只应用部分修正，不硬跳
   max_position_correction: 1.0 # 单次最大平移修正，避免错误候选拉飞
   max_yaw_correction_deg: 5.0  # 单次最大yaw修正

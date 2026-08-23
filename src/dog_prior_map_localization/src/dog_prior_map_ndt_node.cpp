@@ -136,6 +136,8 @@ public:
     loop_accept_max_translation_ = getParam<double>("loop_relocalization/accept_max_translation", 8.0);
     loop_accept_max_yaw_deg_ = getParam<double>("loop_relocalization/accept_max_yaw_deg", 25.0);
     loop_require_consecutive_accepts_ = getParam<int>("loop_relocalization/require_consecutive_accepts", 2);
+    loop_consecutive_candidate_radius_ =
+        getParam<double>("loop_relocalization/consecutive_candidate_radius", 3.0);
     loop_apply_ratio_ = getParam<double>("loop_relocalization/apply_ratio", 0.5);
     loop_max_position_correction_ = getParam<double>("loop_relocalization/max_position_correction", 1.0);
     loop_max_yaw_correction_deg_ = getParam<double>("loop_relocalization/max_yaw_correction_deg", 5.0);
@@ -733,15 +735,21 @@ private:
       return false;
     }
 
-    if (best_candidate.index == last_loop_candidate_index_)
+    const LoopKeyframe &accepted_key = loop_database_[static_cast<size_t>(best_candidate.index)];
+    const bool same_candidate_region =
+        last_loop_candidate_index_ == best_candidate.index ||
+        (last_loop_candidate_position_.allFinite() &&
+         (accepted_key.p - last_loop_candidate_position_).norm() <= loop_consecutive_candidate_radius_);
+    if (same_candidate_region)
     {
       ++loop_consecutive_accepts_;
     }
     else
     {
       loop_consecutive_accepts_ = 1;
-      last_loop_candidate_index_ = best_candidate.index;
     }
+    last_loop_candidate_index_ = best_candidate.index;
+    last_loop_candidate_position_ = accepted_key.p;
     if (loop_consecutive_accepts_ < std::max(loop_require_consecutive_accepts_, 1))
     {
       reason = "waiting_consecutive";
@@ -1002,11 +1010,14 @@ private:
   double loop_accept_max_translation_ = 8.0;
   double loop_accept_max_yaw_deg_ = 25.0;
   int loop_require_consecutive_accepts_ = 2;
+  double loop_consecutive_candidate_radius_ = 3.0;
   double loop_apply_ratio_ = 0.5;
   double loop_max_position_correction_ = 1.0;
   double loop_max_yaw_correction_deg_ = 5.0;
   double last_loop_query_time_ = -1.0;
   int last_loop_candidate_index_ = -1;
+  Eigen::Vector3d last_loop_candidate_position_ =
+      Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
   int loop_consecutive_accepts_ = 0;
   std::vector<LoopKeyframe> loop_database_;
 
