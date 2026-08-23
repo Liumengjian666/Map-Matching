@@ -116,6 +116,15 @@ public:
     ndt_transformation_epsilon_ = getParam<double>("lidar_update/ndt_transformation_epsilon", 0.001);
     ndt_max_iterations_ = getParam<int>("lidar_update/ndt_max_iterations", 30);
     ndt_acceptance_enable_ = getParam<bool>("lidar_update/ndt_acceptance_enable", false);
+    ndt_ambiguity_check_enable_ = getParam<bool>("lidar_update/ndt_ambiguity_check_enable", false);
+    ndt_ambiguity_period_sec_ = getParam<double>("lidar_update/ndt_ambiguity_period_sec", 1.0);
+    ndt_ambiguity_search_radius_ = getParam<double>("lidar_update/ndt_ambiguity_search_radius", 2.0);
+    ndt_ambiguity_search_step_ = getParam<double>("lidar_update/ndt_ambiguity_search_step", 1.0);
+    ndt_ambiguity_yaw_search_deg_ = getParam<double>("lidar_update/ndt_ambiguity_yaw_search_deg", 8.0);
+    ndt_ambiguity_yaw_step_deg_ = getParam<double>("lidar_update/ndt_ambiguity_yaw_step_deg", 4.0);
+    ndt_ambiguity_max_points_ = getParam<int>("lidar_update/ndt_ambiguity_max_points", 300);
+    ndt_ambiguity_near_best_ratio_ = getParam<double>("lidar_update/ndt_ambiguity_near_best_ratio", 1.25);
+    ndt_ambiguity_near_best_margin_ = getParam<double>("lidar_update/ndt_ambiguity_near_best_margin", 0.03);
     ndt_max_fitness_score_ = getParam<double>("lidar_update/ndt_max_fitness_score", 3.0);
     ndt_reject_zero_iteration_ = getParam<bool>("lidar_update/ndt_reject_zero_iteration", true);
     ndt_accept_max_translation_ = getParam<double>("lidar_update/ndt_accept_max_translation", 1.20);
@@ -158,7 +167,9 @@ public:
             << "stamp,converged,accepted,reject_reason,align_ms,scan_points,map_points,fitness_score,iterations,"
             << "initial_x,initial_y,initial_z,result_x,result_y,result_z,used_x,used_y,used_z,"
             << "initial_to_result_translation,previous_to_result_translation,previous_to_result_rotation_deg,"
-            << "previous_to_used_translation,previous_to_used_rotation_deg\n";
+            << "previous_to_used_translation,previous_to_used_rotation_deg,"
+            << "ambiguity_checked,ambiguity_best_mean_residual,ambiguity_current_mean_residual,"
+            << "ambiguity_near_best_count,ambiguity_best_dx,ambiguity_best_dy,ambiguity_best_yaw_deg\n";
       }
       else
       {
@@ -247,6 +258,7 @@ private:
     finalizeCloud(xyz);
     map_cloud_ = voxelDown(xyz, map_voxel_size_, 0);
     target_cloud_ = voxelDown(map_cloud_, target_voxel_size_, max_target_points_);
+    map_kdtree_.setInputCloud(target_cloud_);
 
     ndt_.setInputTarget(target_cloud_);
     ndt_.setResolution(ndt_resolution_);
@@ -679,6 +691,12 @@ private:
       }
     }
 
+    AmbiguityStats ambiguity;
+    if (accepted)
+    {
+      ambiguity = evaluateNdtAmbiguity(source, result, stamp);
+    }
+
     writeNdtDiagnosticsCsv(stamp,
                            converged,
                            accepted,
@@ -692,7 +710,8 @@ private:
                            result,
                            pose_before_update,
                            poseToMatrix(p_, R_),
-                           had_previous_pose_before_update);
+                           had_previous_pose_before_update,
+                           ambiguity);
 
     publishDiagnostics(stamp,
                        converged,
@@ -890,6 +909,132 @@ private:
     return true;
   }
 
+  struct AmbiguityStats
+  {
+    bool checked = false;
+    double best_mean_residual = std::numeric_limits<double>::quiet_NaN();
+    double current_mean_residual = std::numeric_limits<double>::quiet_NaN();
+    int near_best_count = 0;
+    double best_dx = 0.0;
+    double best_dy = 0.0;
+    double best_yaw_deg = 0.0;
+  };
+
+  pcl::PointCloud<pcl::PointXYZ>::Ptr sampleForAmbiguity(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source) const
+  {
+    if (!source) return pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>());
+    if (ndt_ambiguity_max_points_ <= 0 || static_cast<int>(source->size()) <= ndt_ambiguity_max_points_) return source;
+    pcl::PointCloud<pcl::PointXYZ>::Ptr sampled(new pcl::PointCloud<pcl::PointXYZ>());
+    sampled->reserve(ndt_ambiguity_max_points_);
+    const double step = static_cast<double>(source->size() - 1) /
+                        static_cast<double>(std::max(ndt_ambiguity_max_points_ - 1, 1));
+    for (int i = 0; i < ndt_ambiguity_max_points_; ++i)
+    {
+      sampled->push_back(source->points[static_cast<size_t>(std::round(i * step))]);
+    }
+    finalizeCloud(sampled);
+    return sampled;
+  }
+
+  double meanNearestMapResidual(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
+                                const Eigen::Matrix4d &pose) const
+  {
+    if (!source || source->empty() || !target_cloud_ || target_cloud_->empty()) return std::numeric_limits<double>::infinity();
+    const Eigen::Matrix3d R = pose.block<3, 3>(0, 0);
+    const Eigen::Vector3d p = pose.block<3, 1>(0, 3);
+    double sum = 0.0;
+    int used = 0;
+    std::vector<int> indices(1);
+    std::vector<float> distances(1);
+    for (const auto &pt : source->points)
+    {
+      const Eigen::Vector3d local(pt.x, pt.y, pt.z);
+      const Eigen::Vector3d world = R * local + p;
+      pcl::PointXYZ query;
+      query.x = static_cast<float>(world.x());
+      query.y = static_cast<float>(world.y());
+      query.z = static_cast<float>(world.z());
+      if (map_kdtree_.nearestKSearch(query, 1, indices, distances) > 0)
+      {
+        sum += std::sqrt(static_cast<double>(distances[0]));
+        ++used;
+      }
+    }
+    return used > 0 ? sum / static_cast<double>(used) : std::numeric_limits<double>::infinity();
+  }
+
+  AmbiguityStats evaluateNdtAmbiguity(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
+                                      const Eigen::Matrix4d &pose,
+                                      const ros::Time &stamp)
+  {
+    AmbiguityStats stats;
+    if (!ndt_ambiguity_check_enable_) return stats;
+    if (last_ambiguity_check_time_ > 0.0 &&
+        stamp.toSec() - last_ambiguity_check_time_ < ndt_ambiguity_period_sec_)
+    {
+      return stats;
+    }
+    last_ambiguity_check_time_ = stamp.toSec();
+    stats.checked = true;
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr sampled = sampleForAmbiguity(source);
+    if (!sampled || sampled->empty()) return stats;
+
+    const Eigen::Vector3d base_p = pose.block<3, 1>(0, 3);
+    const Eigen::Matrix3d base_R = pose.block<3, 3>(0, 0);
+    const double yaw_step = std::max(ndt_ambiguity_yaw_step_deg_, 0.1);
+    const double xy_step = std::max(ndt_ambiguity_search_step_, 0.1);
+    const double radius = std::max(ndt_ambiguity_search_radius_, 0.0);
+    const int xy_steps = static_cast<int>(std::floor(radius / xy_step));
+    const int yaw_steps = static_cast<int>(std::floor(std::max(ndt_ambiguity_yaw_search_deg_, 0.0) / yaw_step));
+
+    struct CandidateScore
+    {
+      double mean = std::numeric_limits<double>::infinity();
+      double dx = 0.0;
+      double dy = 0.0;
+      double yaw_deg = 0.0;
+    };
+    std::vector<CandidateScore> scores;
+    scores.reserve(static_cast<size_t>((2 * xy_steps + 1) * (2 * xy_steps + 1) * (2 * yaw_steps + 1)));
+
+    for (int ix = -xy_steps; ix <= xy_steps; ++ix)
+    {
+      for (int iy = -xy_steps; iy <= xy_steps; ++iy)
+      {
+        for (int iz = -yaw_steps; iz <= yaw_steps; ++iz)
+        {
+          const double dx = static_cast<double>(ix) * xy_step;
+          const double dy = static_cast<double>(iy) * xy_step;
+          const double yaw_deg = static_cast<double>(iz) * yaw_step;
+          Eigen::Matrix4d candidate = Eigen::Matrix4d::Identity();
+          candidate.block<3, 3>(0, 0) =
+              yawToRot(yaw_deg * M_PI / 180.0) * base_R;
+          candidate.block<3, 1>(0, 3) = base_p + Eigen::Vector3d(dx, dy, 0.0);
+          scores.push_back({meanNearestMapResidual(sampled, candidate), dx, dy, yaw_deg});
+        }
+      }
+    }
+    if (scores.empty()) return stats;
+    const auto best_it = std::min_element(scores.begin(), scores.end(),
+                                          [](const CandidateScore &a, const CandidateScore &b) {
+                                            return a.mean < b.mean;
+                                          });
+    stats.best_mean_residual = best_it->mean;
+    stats.best_dx = best_it->dx;
+    stats.best_dy = best_it->dy;
+    stats.best_yaw_deg = best_it->yaw_deg;
+    stats.current_mean_residual = meanNearestMapResidual(sampled, pose);
+    const double near_threshold =
+        stats.best_mean_residual * std::max(ndt_ambiguity_near_best_ratio_, 1.0) +
+        std::max(ndt_ambiguity_near_best_margin_, 0.0);
+    for (const auto &score : scores)
+    {
+      if (score.mean <= near_threshold) ++stats.near_best_count;
+    }
+    return stats;
+  }
+
   void writeNdtDiagnosticsCsv(const ros::Time &stamp,
                               bool converged,
                               bool accepted,
@@ -903,7 +1048,8 @@ private:
                               const Eigen::Matrix4d &result,
                               const Eigen::Matrix4d &pose_before_update,
                               const Eigen::Matrix4d &used_pose,
-                              bool had_previous_pose_before_update)
+                              bool had_previous_pose_before_update,
+                              const AmbiguityStats &ambiguity)
   {
     if (!ndt_diagnostics_csv_) return;
 
@@ -950,7 +1096,14 @@ private:
                          << previous_to_result_translation << ","
                          << previous_to_result_rotation_deg << ","
                          << previous_to_used_translation << ","
-                         << previous_to_used_rotation_deg << "\n";
+                         << previous_to_used_rotation_deg << ","
+                         << (ambiguity.checked ? 1 : 0) << ","
+                         << ambiguity.best_mean_residual << ","
+                         << ambiguity.current_mean_residual << ","
+                         << ambiguity.near_best_count << ","
+                         << ambiguity.best_dx << ","
+                         << ambiguity.best_dy << ","
+                         << ambiguity.best_yaw_deg << "\n";
   }
 
   Eigen::Matrix4d blendInitialGuess(const Eigen::Matrix4d &motion_guess, const Eigen::Matrix4d &external_guess) const
@@ -1125,6 +1278,7 @@ private:
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud_;
   pcl::PointCloud<pcl::PointXYZ>::Ptr target_cloud_;
+  pcl::KdTreeFLANN<pcl::PointXYZ> map_kdtree_;
   pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt_;
   nav_msgs::Path path_;
 
@@ -1180,6 +1334,16 @@ private:
   double ndt_step_size_ = 0.1;
   double ndt_transformation_epsilon_ = 0.001;
   bool ndt_acceptance_enable_ = false;
+  bool ndt_ambiguity_check_enable_ = false;
+  double ndt_ambiguity_period_sec_ = 1.0;
+  double ndt_ambiguity_search_radius_ = 2.0;
+  double ndt_ambiguity_search_step_ = 1.0;
+  double ndt_ambiguity_yaw_search_deg_ = 8.0;
+  double ndt_ambiguity_yaw_step_deg_ = 4.0;
+  int ndt_ambiguity_max_points_ = 300;
+  double ndt_ambiguity_near_best_ratio_ = 1.25;
+  double ndt_ambiguity_near_best_margin_ = 0.03;
+  double last_ambiguity_check_time_ = -1.0;
   bool ndt_reject_zero_iteration_ = true;
   double ndt_max_fitness_score_ = 3.0;
   double ndt_accept_max_translation_ = 1.20;

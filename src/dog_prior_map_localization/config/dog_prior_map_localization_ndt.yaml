@@ -162,6 +162,15 @@ lidar_update:
   ndt_step_size: 0.1                 # 优化步长；影响NDT搜索和收敛速度
   ndt_transformation_epsilon: 0.001 # 变换增量收敛阈值；越小越难判定收敛
   ndt_acceptance_enable: false      # 独立NDT节点轻量验收门控；本次完整loop3验证会卡住漂移，默认关闭
+  ndt_ambiguity_check_enable: false # NDT歧义诊断；只记录局部候选残差，不干预定位，实验时再打开
+  ndt_ambiguity_period_sec: 1.0     # 歧义诊断最小间隔；越小越密但越耗CPU
+  ndt_ambiguity_search_radius: 2.0  # 围绕当前NDT结果在XY平面搜索的半径，用于判断是否存在相似错误位置
+  ndt_ambiguity_search_step: 1.0    # XY候选间隔；越小越细但候选数量更多
+  ndt_ambiguity_yaw_search_deg: 8.0 # 围绕当前yaw额外搜索角度范围
+  ndt_ambiguity_yaw_step_deg: 4.0   # yaw候选间隔
+  ndt_ambiguity_max_points: 300     # 参与歧义诊断的当前帧点数上限，控制额外算力
+  ndt_ambiguity_near_best_ratio: 1.25 # 残差接近最优候选的比例阈值；数量越多说明重复结构越强
+  ndt_ambiguity_near_best_margin: 0.03 # 残差接近最优候选的绝对余量，避免残差很小时过严
   ndt_use_external_initial_guess: false # 实验项：用EKF高频位姿作为NDT初值；loop3实测会放大误匹配，默认关闭
   ndt_initial_guess_max_age_sec: 0.20   # EKF初值最大时间差，超过则不用
   ndt_initial_guess_blend: 1.0          # EKF初值与NDT恒速初值混合比例；0=不用外部，1=完全使用外部
