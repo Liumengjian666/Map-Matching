@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cmath>
 #include <fstream>
+#include <iomanip>
 #include <limits>
 #include <mutex>
 #include <sstream>
@@ -124,8 +125,10 @@ public:
     initial_guess_blend_ = getParam<double>("lidar_update/ndt_initial_guess_blend", 1.0);
     loop_relocalization_enable_ = getParam<bool>("loop_relocalization/enable", false);
     loop_pose_path_ = getParam<std::string>("loop_relocalization/pose_path", "");
+    loop_scan_dir_ = getParam<std::string>("loop_relocalization/scan_dir", "");
     loop_query_period_sec_ = getParam<double>("loop_relocalization/query_period_sec", 1.0);
     loop_keyframe_spacing_m_ = getParam<double>("loop_relocalization/keyframe_spacing_m", 1.0);
+    loop_prior_submap_half_width_ = getParam<int>("loop_relocalization/prior_submap_half_width", 3);
     loop_context_radius_ = getParam<double>("loop_relocalization/context_radius", 20.0);
     loop_context_max_points_ = getParam<int>("loop_relocalization/context_max_points", 2500);
     loop_num_rings_ = getParam<int>("loop_relocalization/num_rings", 20);
@@ -335,6 +338,27 @@ private:
       key.R = R;
       key.descriptor = makeScanContext(local_body);
       key.local_map_world = voxelDown(local_world, map_voxel_size_, loop_context_max_points_);
+      if (!loop_scan_dir_.empty())
+      {
+        std::ostringstream pcd_name;
+        pcd_name << loop_scan_dir_ << "/key_" << std::setw(6) << std::setfill('0') << raw_id << ".pcd";
+        pcl::PointCloud<pcl::PointXYZ>::Ptr scan_body(new pcl::PointCloud<pcl::PointXYZ>());
+        if (pcl::io::loadPCDFile<pcl::PointXYZ>(pcd_name.str(), *scan_body) == 0 && !scan_body->empty())
+        {
+          scan_body = voxelDown(scan_body, scan_voxel_size_, loop_context_max_points_);
+          pcl::PointCloud<pcl::PointXYZ>::Ptr scan_world(new pcl::PointCloud<pcl::PointXYZ>());
+          scan_world->reserve(scan_body->size());
+          for (const auto &pt : scan_body->points)
+          {
+            const Eigen::Vector3d pb(pt.x, pt.y, pt.z);
+            const Eigen::Vector3d pw = R * pb + p;
+            scan_world->push_back(pcl::PointXYZ(pw.x(), pw.y(), pw.z()));
+          }
+          finalizeCloud(scan_world);
+          key.descriptor = makeScanContext(scan_body);
+          key.local_map_world = voxelDown(scan_world, map_voxel_size_, loop_context_max_points_);
+        }
+      }
       loop_database_.push_back(key);
       last_key_p = p;
       ++raw_id;
@@ -348,6 +372,23 @@ private:
     }
     ROS_INFO("[DogPriorMap NDT] loop database built: %zu keyframes from %s",
              loop_database_.size(), loop_pose_path_.c_str());
+  }
+
+  pcl::PointCloud<pcl::PointXYZ>::Ptr buildLoopPriorSubmap(int candidate_index) const
+  {
+    pcl::PointCloud<pcl::PointXYZ>::Ptr target(new pcl::PointCloud<pcl::PointXYZ>());
+    if (candidate_index < 0 || candidate_index >= static_cast<int>(loop_database_.size())) return target;
+    const int half_width = std::max(0, loop_prior_submap_half_width_);
+    const int begin = std::max(0, candidate_index - half_width);
+    const int end = std::min(static_cast<int>(loop_database_.size()) - 1, candidate_index + half_width);
+    for (int i = begin; i <= end; ++i)
+    {
+      const auto &key = loop_database_[static_cast<size_t>(i)];
+      if (!key.local_map_world || key.local_map_world->empty()) continue;
+      *target += *key.local_map_world;
+    }
+    finalizeCloud(target);
+    return voxelDown(target, map_voxel_size_, loop_context_max_points_);
   }
 
   std::vector<float> makeScanContext(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud) const
@@ -673,7 +714,8 @@ private:
     for (const auto &candidate : candidates)
     {
       const LoopKeyframe &key = loop_database_[static_cast<size_t>(candidate.index)];
-      if (!key.local_map_world || key.local_map_world->empty()) continue;
+      pcl::PointCloud<pcl::PointXYZ>::Ptr candidate_target = buildLoopPriorSubmap(candidate.index);
+      if (!candidate_target || candidate_target->empty()) continue;
       const double shift_yaw = static_cast<double>(candidate.yaw_shift) * 2.0 * M_PI / static_cast<double>(sectors);
       for (double sign : {1.0, -1.0})
       {
@@ -682,7 +724,7 @@ private:
         guess.block<3, 1>(0, 3) = key.p;
 
         pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt_check;
-        ndt_check.setInputTarget(key.local_map_world);
+        ndt_check.setInputTarget(candidate_target);
         ndt_check.setInputSource(source);
         ndt_check.setResolution(ndt_resolution_);
         ndt_check.setStepSize(ndt_step_size_);
@@ -998,8 +1040,10 @@ private:
   double initial_guess_max_age_sec_ = 0.20;
   double initial_guess_blend_ = 1.0;
   bool loop_relocalization_enable_ = false;
+  std::string loop_scan_dir_;
   double loop_query_period_sec_ = 1.0;
   double loop_keyframe_spacing_m_ = 1.0;
+  int loop_prior_submap_half_width_ = 3;
   double loop_context_radius_ = 20.0;
   int loop_context_max_points_ = 2500;
   int loop_num_rings_ = 20;

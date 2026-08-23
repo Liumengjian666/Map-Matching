@@ -90,6 +90,7 @@ catkin_install_python(PROGRAMS
   scripts/pcd_to_npz_map.py
   scripts/make_initial_pose_yaml.py
   scripts/evaluate_runtime_and_accuracy.py
+  scripts/build_livox_keyframe_scan_db.py
   scripts/run_dataset_evaluation.sh
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

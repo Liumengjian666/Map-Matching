@@ -209,8 +209,10 @@ loop_relocalization:
   enable: false                # split NDT节点的轻量Scan-Context式位置识别；默认关闭，验证有效后再打开
   method: "scan_context"       # 用当前帧点云描述子查询loop2建图位姿附近的先验地图关键帧
   pose_path: "/home/jian/rosbag/loop2/loop2mapping/pcd/lidar_poses.txt" # FAST-LIVO2建图时的雷达位姿，用于离线生成关键帧库
+  scan_dir: ""                 # 可选：真实loop2关键帧雷达扫描目录；为空时退化为从PCD地图裁剪局部子图
   query_period_sec: 1.0        # 每隔多久查询一次，避免低算力端每帧做全局检索
   keyframe_spacing_m: 1.0      # loop2地图关键帧间隔；越小越密但启动建库更慢
+  prior_submap_half_width: 3   # NDT验证时取候选关键帧前后多少帧拼局部先验子图
   context_radius: 20.0         # 构建Scan Context描述子的局部地图半径，室内场景不宜过大
   context_max_points: 2500     # 每个关键帧最多采样多少地图点生成描述子
   num_rings: 20                # Scan Context径向分桶数量
