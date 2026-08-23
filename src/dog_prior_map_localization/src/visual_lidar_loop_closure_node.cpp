@@ -141,10 +141,14 @@ public:
     max_descriptor_distance_ = getParam<double>("visual_lidar_loop_closure/max_descriptor_distance", 60.0);
     ratio_test_ = getParam<double>("visual_lidar_loop_closure/ratio_test", 0.75);
 
+    current_submap_history_width_ =
+        getParam<int>("visual_lidar_loop_closure/current_submap_history_width", 4);
     candidate_submap_half_width_ = getParam<int>("visual_lidar_loop_closure/candidate_submap_half_width", 8);
     ndt_source_voxel_size_ = getParam<double>("visual_lidar_loop_closure/ndt_source_voxel_size", 0.35);
     ndt_target_voxel_size_ = getParam<double>("visual_lidar_loop_closure/ndt_target_voxel_size", 0.25);
     ndt_max_source_points_ = getParam<int>("visual_lidar_loop_closure/ndt_max_source_points", 900);
+    ndt_max_multiframe_source_points_ =
+        getParam<int>("visual_lidar_loop_closure/ndt_max_multiframe_source_points", 2500);
     ndt_max_target_points_ = getParam<int>("visual_lidar_loop_closure/ndt_max_target_points", 25000);
     ndt_resolution_ = getParam<double>("visual_lidar_loop_closure/ndt_resolution", 1.0);
     ndt_step_size_ = getParam<double>("visual_lidar_loop_closure/ndt_step_size", 0.1);
@@ -316,20 +320,32 @@ private:
     orb_->detectAndCompute(latest_gray_, cv::Mat(), key.keypoints, key.descriptors);
     if (key.descriptors.empty() || key.cloud_body->empty()) return;
 
+    Edge odom_edge;
+    bool has_odom_edge = false;
     if (!keyframes_.empty())
     {
       const Keyframe &prev = keyframes_.back();
-      Edge odom_edge;
       odom_edge.i = static_cast<int>(keyframes_.size()) - 1;
       odom_edge.j = static_cast<int>(keyframes_.size());
       odom_edge.z = pose2dBetween(prev.p, prev.yaw, key.p, key.yaw);
       odom_edge.weight = pose_graph_odom_weight_;
       odom_edge.loop = false;
       edges_.push_back(odom_edge);
+      has_odom_edge = true;
     }
 
     keyframes_.push_back(key);
-    optimized_xy_yaw_.push_back(Eigen::Vector3d(key.p.x(), key.p.y(), key.yaw));
+    Eigen::Vector3d optimized_state(key.p.x(), key.p.y(), key.yaw);
+    if (has_odom_edge && hasLoopEdgeUnlocked())
+    {
+      const Eigen::Vector3d &prev_opt = optimized_xy_yaw_.back();
+      const Eigen::Matrix2d R_prev = Eigen::Rotation2Dd(prev_opt.z()).toRotationMatrix();
+      const Eigen::Vector2d d_world = R_prev * odom_edge.z.head<2>();
+      optimized_state.x() = prev_opt.x() + d_world.x();
+      optimized_state.y() = prev_opt.y() + d_world.y();
+      optimized_state.z() = wrapPi(prev_opt.z() + odom_edge.z.z());
+    }
+    optimized_xy_yaw_.push_back(optimized_state);
     pending_indices_.push_back(static_cast<int>(keyframes_.size()) - 1);
     if (static_cast<int>(keyframes_.size()) > max_keyframes_)
     {
@@ -391,11 +407,31 @@ private:
   void updateAndPublishGraph(const ros::Time &stamp)
   {
     std::lock_guard<std::mutex> lock(mutex_);
-    if (hasLoopEdgeUnlocked())
-    {
-      optimizePoseGraph2d();
-    }
     publishCorrectedTrajectory(stamp);
+  }
+
+  pcl::PointCloud<pcl::PointXYZ>::Ptr buildCurrentSourceSubmap(const std::vector<Keyframe> &snapshot,
+                                                               int current_index) const
+  {
+    pcl::PointCloud<pcl::PointXYZ>::Ptr source(new pcl::PointCloud<pcl::PointXYZ>());
+    if (current_index < 0 || current_index >= static_cast<int>(snapshot.size())) return source;
+
+    const Keyframe &current = snapshot[static_cast<size_t>(current_index)];
+    const Eigen::Matrix4d T_current = poseToMatrix(current.p, current.R);
+    const Eigen::Matrix4d T_current_inv = T_current.inverse();
+    const int begin = std::max(0, current_index - current_submap_history_width_);
+    for (int i = begin; i <= current_index; ++i)
+    {
+      const Keyframe &kf = snapshot[static_cast<size_t>(i)];
+      if (!kf.cloud_body) continue;
+      const Eigen::Matrix4d T_i = poseToMatrix(kf.p, kf.R);
+      const Eigen::Matrix4f T_current_i = (T_current_inv * T_i).cast<float>();
+      pcl::PointCloud<pcl::PointXYZ> transformed;
+      pcl::transformPointCloud(*kf.cloud_body, transformed, T_current_i);
+      *source += transformed;
+    }
+    finalizeCloud(source);
+    return voxelDown(source, ndt_source_voxel_size_, ndt_max_multiframe_source_points_);
   }
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr buildCandidateSubmap(const std::vector<Keyframe> &snapshot,
@@ -419,6 +455,7 @@ private:
   }
 
   bool verifyCandidateByNdt(const Keyframe &current,
+                            int current_index,
                             const std::vector<Keyframe> &snapshot,
                             const Candidate &candidate,
                             Eigen::Matrix4d &verified_pose,
@@ -426,7 +463,11 @@ private:
                             std::string &reject_reason) const
   {
     pcl::PointCloud<pcl::PointXYZ>::Ptr target = buildCandidateSubmap(snapshot, candidate.index);
-    pcl::PointCloud<pcl::PointXYZ>::Ptr source = voxelDown(current.cloud_body, ndt_source_voxel_size_, ndt_max_source_points_);
+    pcl::PointCloud<pcl::PointXYZ>::Ptr source = buildCurrentSourceSubmap(snapshot, current_index);
+    if (source->empty())
+    {
+      source = voxelDown(current.cloud_body, ndt_source_voxel_size_, ndt_max_source_points_);
+    }
     if (static_cast<int>(source->size()) < 50 || static_cast<int>(target->size()) < 200)
     {
       reject_reason = "too_few_points";
@@ -676,7 +717,7 @@ private:
         Eigen::Matrix4d verified_pose = Eigen::Matrix4d::Identity();
         double fitness = std::numeric_limits<double>::quiet_NaN();
         std::string reason;
-        if (verifyCandidateByNdt(current, snapshot, candidate, verified_pose, fitness, reason))
+        if (verifyCandidateByNdt(current, index, snapshot, candidate, verified_pose, fitness, reason))
         {
           const int key = candidate.index;
           if (key == last_candidate_index_)
@@ -778,10 +819,12 @@ private:
   double min_visual_score_ = 0.08;
   double max_descriptor_distance_ = 60.0;
   double ratio_test_ = 0.75;
+  int current_submap_history_width_ = 4;
   int candidate_submap_half_width_ = 8;
   double ndt_source_voxel_size_ = 0.35;
   double ndt_target_voxel_size_ = 0.25;
   int ndt_max_source_points_ = 900;
+  int ndt_max_multiframe_source_points_ = 2500;
   int ndt_max_target_points_ = 25000;
   double ndt_resolution_ = 1.0;
   double ndt_step_size_ = 0.1;
