@@ -141,18 +141,18 @@ lidar_update:
   ndt_use_full_map_target: true  # 局部target在当前loop3会随错误初值裁错地图，默认保留全图NDT基线
   ndt_local_target_radius: 8.0   # NDT局部target半径；需要覆盖近邻墙面/走廊，但排除远处相似结构
   ndt_local_target_min_points: 1000 # 局部target太稀疏时回退全图，避免空地图导致NDT失效
-  ndt_source_voxel_size: 0.35        # 当前帧扫描点云降采样体素；越小越细但越耗CPU
-  ndt_source_voxel_z_size: 0.35      # 默认与XY一致；避免改变稳定NDT基线
-  ndt_target_voxel_size: 0.25        # 全局地图target体素；loop3完整验证中0.25m比0.30m更能抑制中段误吸附
-  ndt_target_voxel_z_size: 0.25      # 默认与XY一致；避免改变稳定NDT基线
-  ndt_max_source_points: 900         # 当前帧参与NDT的最大点数，控制单帧计算量
+  ndt_source_voxel_size: 0.25        # 当前帧扫描点云降采样体素；越小越细但越耗CPU
+  ndt_source_voxel_z_size: 0.25      # 默认与XY一致；避免改变稳定NDT基线
+  ndt_target_voxel_size: 0.15        # 全局地图target体素；loop3完整验证中0.15m明显降低楼梯/拐角误吸附
+  ndt_target_voxel_z_size: 0.15      # 默认与XY一致；避免改变稳定NDT基线
+  ndt_max_source_points: 1400        # 当前帧参与NDT的最大点数，控制单帧计算量
   ndt_multiframe_source_enable: false # 多帧源点云在loop3全包会放大拖影误匹配，默认关闭
   ndt_multiframe_history_size: 3     # 聚合最近3帧，限制拖影和算力
   ndt_multiframe_max_points: 2200    # 聚合源点云最大点数
   ndt_max_target_points: 0           # 全局地图target不截断；避免只拿前一小段地图导致全程误匹配
-  ndt_max_iterations: 30             # NDT最大迭代次数；太大可能增加耗时但更容易收敛
-  ndt_resolution: 1.0        # NDT网格分辨率；数值越小越细，越容易识别局部几何
-  ndt_step_size: 0.1                 # 优化步长；影响NDT搜索和收敛速度
+  ndt_max_iterations: 40             # NDT最大迭代次数；太大可能增加耗时但更容易收敛
+  ndt_resolution: 0.8        # NDT网格分辨率；数值越小越细，越容易识别局部几何
+  ndt_step_size: 0.08                 # 优化步长；影响NDT搜索和收敛速度
   ndt_transformation_epsilon: 0.001 # 变换增量收敛阈值；越小越难判定收敛
   ndt_acceptance_enable: false      # 独立NDT节点轻量验收门控；过严会导致长段冻结，默认关闭
   ndt_coast_on_reject_enable: false # coast会累计漂移；仅保留为实验开关，默认不干预NDT输出
