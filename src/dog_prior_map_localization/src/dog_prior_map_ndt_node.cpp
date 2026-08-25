@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cmath>
+#include <deque>
 #include <fstream>
 #include <iomanip>
 #include <limits>
@@ -21,6 +22,7 @@
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/kdtree/kdtree_flann.h>
+#include <pcl/registration/icp.h>
 #include <pcl/registration/ndt.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <ros/ros.h>
@@ -45,16 +47,6 @@ Eigen::Matrix4d poseToMatrix(const Eigen::Vector3d &p, const Eigen::Matrix3d &R)
   T.block<3, 3>(0, 0) = R;
   T.block<3, 1>(0, 3) = p;
   return T;
-}
-
-Eigen::Matrix3d rpyDegToRot(const std::vector<double> &rpy_deg)
-{
-  const double roll = rpy_deg[0] * M_PI / 180.0;
-  const double pitch = rpy_deg[1] * M_PI / 180.0;
-  const double yaw = rpy_deg[2] * M_PI / 180.0;
-  return (Eigen::AngleAxisd(yaw, Eigen::Vector3d::UnitZ()) *
-          Eigen::AngleAxisd(pitch, Eigen::Vector3d::UnitY()) *
-          Eigen::AngleAxisd(roll, Eigen::Vector3d::UnitX())).toRotationMatrix();
 }
 
 Eigen::Matrix3d yawToRot(double yaw)
@@ -97,15 +89,35 @@ public:
     ndt_pose_topic_ = getParam<std::string>("topics/ndt_pose", "/dog_livo/ndt_pose");
     ndt_path_topic_ = getParam<std::string>("topics/ndt_path", "/dog_livo/ndt_path");
     points_aligned_topic_ = getParam<std::string>("topics/points_aligned", "/dog_livo/points_aligned");
-    initial_guess_odom_topic_ =
-        getParam<std::string>("topics/ndt_initial_guess_odom", "/dog_livo/odom_high_rate");
-
+    initial_guess_odom_topic_ = getParam<std::string>("topics/ndt_initial_guess_odom", "/aft_mapped_to_init");
     map_pcd_path_ = getParam<std::string>("map/pcd_fallback_path", "");
     map_voxel_size_ = getParam<double>("map/voxel_size", 0.30);
+    map_voxel_z_size_ = getParam<double>("map/voxel_z_size", map_voxel_size_);
     scan_voxel_size_ = getParam<double>("lidar_update/ndt_source_voxel_size", 0.35);
+    source_voxel_z_size_ = getParam<double>("lidar_update/ndt_source_voxel_z_size", std::max(scan_voxel_size_ * 0.5, 0.05));
     max_scan_points_ = getParam<int>("lidar_update/ndt_max_source_points", 900);
+    ndt_multiframe_source_enable_ = getParam<bool>("lidar_update/ndt_multiframe_source_enable", false);
+    ndt_multiframe_history_size_ = std::max(0, getParam<int>("lidar_update/ndt_multiframe_history_size", 3));
+    ndt_multiframe_max_points_ = std::max(max_scan_points_, getParam<int>("lidar_update/ndt_multiframe_max_points", 2200));
     target_voxel_size_ = getParam<double>("lidar_update/ndt_target_voxel_size", 0.30);
+    target_voxel_z_size_ = getParam<double>("lidar_update/ndt_target_voxel_z_size", std::max(target_voxel_size_ * 0.8, 0.05));
     max_target_points_ = getParam<int>("lidar_update/ndt_max_target_points", 0);
+    ndt_use_full_map_target_ = getParam<bool>("lidar_update/ndt_use_full_map_target", true);
+    ndt_local_target_radius_ = getParam<double>("lidar_update/ndt_local_target_radius", 8.0);
+    ndt_local_target_min_points_ = getParam<int>("lidar_update/ndt_local_target_min_points", 1000);
+    ndt_use_external_initial_guess_ = getParam<bool>("lidar_update/ndt_use_external_initial_guess", false);
+    ndt_initial_guess_max_age_sec_ = getParam<double>("lidar_update/ndt_initial_guess_max_age_sec", 0.20);
+    ndt_initial_guess_blend_ = getParam<double>("lidar_update/ndt_initial_guess_blend", 1.0);
+    internal_odom_enable_ = getParam<bool>("lidar_update/internal_odom_enable", false);
+    internal_odom_voxel_size_ = getParam<double>("lidar_update/internal_odom_voxel_size", 0.45);
+    internal_odom_max_points_ = getParam<int>("lidar_update/internal_odom_max_points", 700);
+    internal_odom_max_iterations_ = getParam<int>("lidar_update/internal_odom_max_iterations", 12);
+    internal_odom_max_correspondence_distance_ = getParam<double>("lidar_update/internal_odom_max_correspondence_distance", 1.2);
+    internal_odom_max_fitness_score_ = getParam<double>("lidar_update/internal_odom_max_fitness_score", 0.8);
+    internal_odom_max_translation_ = getParam<double>("lidar_update/internal_odom_max_translation", 0.8);
+    internal_odom_max_rotation_deg_ = getParam<double>("lidar_update/internal_odom_max_rotation_deg", 12.0);
+    internal_odom_planar_ = getParam<bool>("lidar_update/internal_odom_planar", true);
+    internal_odom_correction_blend_ = getParam<double>("lidar_update/internal_odom_correction_blend", 0.05);
     min_range_ = getParam<double>("lidar_update/scan_min_range", 0.5);
     max_range_ = getParam<double>("lidar_update/scan_max_range", 80.0);
     min_z_ = getParam<double>("lidar_update/scan_min_z", -std::numeric_limits<double>::infinity());
@@ -116,6 +128,15 @@ public:
     ndt_transformation_epsilon_ = getParam<double>("lidar_update/ndt_transformation_epsilon", 0.001);
     ndt_max_iterations_ = getParam<int>("lidar_update/ndt_max_iterations", 30);
     ndt_acceptance_enable_ = getParam<bool>("lidar_update/ndt_acceptance_enable", false);
+    ndt_coast_on_reject_enable_ = getParam<bool>("lidar_update/ndt_coast_on_reject_enable", false);
+    ndt_coast_velocity_decay_ = getParam<double>("lidar_update/ndt_coast_velocity_decay", 0.8);
+    ndt_step_limit_enable_ = getParam<bool>("lidar_update/ndt_step_limit_enable", false);
+    ndt_step_limit_max_translation_ = getParam<double>("lidar_update/ndt_step_limit_max_translation", 0.5);
+    ndt_step_limit_max_rotation_deg_ = getParam<double>("lidar_update/ndt_step_limit_max_rotation_deg", 5.0);
+    ndt_large_jump_guard_enable_ = getParam<bool>("lidar_update/ndt_large_jump_guard_enable", false);
+    ndt_large_jump_guard_translation_ = getParam<double>("lidar_update/ndt_large_jump_guard_translation", 1.2);
+    ndt_large_jump_guard_rotation_deg_ = getParam<double>("lidar_update/ndt_large_jump_guard_rotation_deg", 12.0);
+    ndt_large_jump_guard_decay_ = getParam<double>("lidar_update/ndt_large_jump_guard_decay", 1.0);
     ndt_ambiguity_check_enable_ = getParam<bool>("lidar_update/ndt_ambiguity_check_enable", false);
     ndt_ambiguity_period_sec_ = getParam<double>("lidar_update/ndt_ambiguity_period_sec", 1.0);
     ndt_ambiguity_search_radius_ = getParam<double>("lidar_update/ndt_ambiguity_search_radius", 2.0);
@@ -129,9 +150,6 @@ public:
     ndt_reject_zero_iteration_ = getParam<bool>("lidar_update/ndt_reject_zero_iteration", true);
     ndt_accept_max_translation_ = getParam<double>("lidar_update/ndt_accept_max_translation", 1.20);
     ndt_accept_max_rotation_deg_ = getParam<double>("lidar_update/ndt_accept_max_rotation_deg", 12.0);
-    use_external_initial_guess_ = getParam<bool>("lidar_update/ndt_use_external_initial_guess", false);
-    initial_guess_max_age_sec_ = getParam<double>("lidar_update/ndt_initial_guess_max_age_sec", 0.20);
-    initial_guess_blend_ = getParam<double>("lidar_update/ndt_initial_guess_blend", 1.0);
     loop_relocalization_enable_ = getParam<bool>("loop_relocalization/enable", false);
     loop_pose_path_ = getParam<std::string>("loop_relocalization/pose_path", "");
     loop_scan_dir_ = getParam<std::string>("loop_relocalization/scan_dir", "");
@@ -167,7 +185,7 @@ public:
             << "stamp,converged,accepted,reject_reason,align_ms,scan_points,map_points,fitness_score,iterations,"
             << "initial_x,initial_y,initial_z,result_x,result_y,result_z,used_x,used_y,used_z,"
             << "initial_to_result_translation,previous_to_result_translation,previous_to_result_rotation_deg,"
-            << "previous_to_used_translation,previous_to_used_rotation_deg,"
+            << "previous_to_used_translation,previous_to_used_rotation_deg,ndt_step_limited,"
             << "ambiguity_checked,ambiguity_best_mean_residual,ambiguity_current_mean_residual,"
             << "ambiguity_near_best_count,ambiguity_best_dx,ambiguity_best_dy,ambiguity_best_yaw_deg\n";
       }
@@ -178,10 +196,8 @@ public:
       }
     }
 
-    const std::vector<double> init_p = getParamVec("filter/initial_position", {0.0, 0.0, 0.0});
-    const std::vector<double> init_rpy = getParamVec("filter/initial_rpy_deg", {0.0, 0.0, 0.0});
-    p_ = Eigen::Vector3d(init_p[0], init_p[1], init_p[2]);
-    R_ = rpyDegToRot(init_rpy);
+    p_.setZero();
+    R_.setIdentity();
 
     loadMap();
     if (loop_relocalization_enable_)
@@ -211,12 +227,11 @@ public:
     {
       sub_livox_ = nh_.subscribe(lidar_topic_, 5, &DogPriorMapNdtNode::livoxCallback, this);
     }
-    if (use_external_initial_guess_)
+    if (ndt_use_external_initial_guess_)
     {
-      sub_initial_guess_odom_ =
-          nh_.subscribe(initial_guess_odom_topic_, 50, &DogPriorMapNdtNode::initialGuessOdomCallback, this);
+      sub_initial_guess_odom_ = nh_.subscribe(initial_guess_odom_topic_, 100, &DogPriorMapNdtNode::initialGuessOdomCallback, this);
+      ROS_INFO("[DogPriorMap NDT] external initial guess enabled: %s", initial_guess_odom_topic_.c_str());
     }
-
     ROS_INFO("[DogPriorMap NDT] started: map=%s target=%zu lidar=%s output=%s",
              map_pcd_path_.c_str(), target_cloud_->size(), lidar_topic_.c_str(), ndt_odom_topic_.c_str());
   }
@@ -256,8 +271,8 @@ private:
       if (std::isfinite(pt.x) && std::isfinite(pt.y) && std::isfinite(pt.z)) xyz->push_back(pt);
     }
     finalizeCloud(xyz);
-    map_cloud_ = voxelDown(xyz, map_voxel_size_, 0);
-    target_cloud_ = voxelDown(map_cloud_, target_voxel_size_, max_target_points_);
+    map_cloud_ = voxelDown(xyz, map_voxel_size_, map_voxel_size_, map_voxel_z_size_, 0);
+    target_cloud_ = voxelDown(map_cloud_, target_voxel_size_, target_voxel_size_, target_voxel_z_size_, max_target_points_);
     map_kdtree_.setInputCloud(target_cloud_);
 
     ndt_.setInputTarget(target_cloud_);
@@ -266,6 +281,12 @@ private:
     ndt_.setTransformationEpsilon(ndt_transformation_epsilon_);
     ndt_.setMaximumIterations(ndt_max_iterations_);
   }
+
+  struct SourceHistoryFrame
+  {
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud;
+    Eigen::Matrix4d pose = Eigen::Matrix4d::Identity();
+  };
 
   struct LoopKeyframe
   {
@@ -375,7 +396,7 @@ private:
         pcl::PointCloud<pcl::PointXYZ>::Ptr scan_body(new pcl::PointCloud<pcl::PointXYZ>());
         if (pcl::io::loadPCDFile<pcl::PointXYZ>(pcd_name.str(), *scan_body) == 0 && !scan_body->empty())
         {
-          scan_body = voxelDown(scan_body, scan_voxel_size_, loop_context_max_points_);
+          scan_body = voxelDown(scan_body, scan_voxel_size_, scan_voxel_size_, source_voxel_z_size_, loop_context_max_points_);
           pcl::PointCloud<pcl::PointXYZ>::Ptr scan_world(new pcl::PointCloud<pcl::PointXYZ>());
           scan_world->reserve(scan_body->size());
           for (const auto &pt : scan_body->points)
@@ -521,11 +542,20 @@ private:
                                                 double voxel_size,
                                                 int max_points) const
   {
+    return voxelDown(cloud, voxel_size, voxel_size, voxel_size, max_points);
+  }
+
+  pcl::PointCloud<pcl::PointXYZ>::Ptr voxelDown(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
+                                                double voxel_x,
+                                                double voxel_y,
+                                                double voxel_z,
+                                                int max_points) const
+  {
     pcl::PointCloud<pcl::PointXYZ>::Ptr down(new pcl::PointCloud<pcl::PointXYZ>());
-    if (voxel_size > 0.01)
+    if (voxel_x > 0.01 && voxel_y > 0.01 && voxel_z > 0.01)
     {
       pcl::VoxelGrid<pcl::PointXYZ> voxel;
-      voxel.setLeafSize(voxel_size, voxel_size, voxel_size);
+      voxel.setLeafSize(voxel_x, voxel_y, voxel_z);
       voxel.setInputCloud(cloud);
       voxel.filter(*down);
     }
@@ -563,7 +593,141 @@ private:
       filtered->push_back(pt);
     }
     finalizeCloud(filtered);
-    return voxelDown(filtered, scan_voxel_size_, max_scan_points_);
+    return voxelDown(filtered, scan_voxel_size_, scan_voxel_size_, source_voxel_z_size_, max_scan_points_);
+  }
+
+
+  pcl::PointCloud<pcl::PointXYZ>::Ptr buildNdtSource(const pcl::PointCloud<pcl::PointXYZ>::Ptr &current,
+                                                     const Eigen::Matrix4d &initial_guess) const
+  {
+    if (!ndt_multiframe_source_enable_ || source_history_.empty() || ndt_multiframe_history_size_ <= 0)
+    {
+      return current;
+    }
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr merged(new pcl::PointCloud<pcl::PointXYZ>());
+    merged->reserve(static_cast<size_t>(ndt_multiframe_max_points_));
+    for (const auto &pt : current->points)
+    {
+      merged->push_back(pt);
+      if (static_cast<int>(merged->size()) >= ndt_multiframe_max_points_) break;
+    }
+
+    const Eigen::Matrix4d current_inv = initial_guess.inverse();
+    int used_history = 0;
+    for (auto it = source_history_.rbegin();
+         it != source_history_.rend() && used_history < ndt_multiframe_history_size_; ++it, ++used_history)
+    {
+      if (!it->cloud || it->cloud->empty()) continue;
+      const Eigen::Matrix4d history_to_current = current_inv * it->pose;
+      const Eigen::Matrix3d R = history_to_current.block<3, 3>(0, 0);
+      const Eigen::Vector3d p = history_to_current.block<3, 1>(0, 3);
+      for (const auto &pt : it->cloud->points)
+      {
+        const Eigen::Vector3d transformed = R * Eigen::Vector3d(pt.x, pt.y, pt.z) + p;
+        merged->push_back(pcl::PointXYZ(static_cast<float>(transformed.x()),
+                                        static_cast<float>(transformed.y()),
+                                        static_cast<float>(transformed.z())));
+        if (static_cast<int>(merged->size()) >= ndt_multiframe_max_points_) break;
+      }
+      if (static_cast<int>(merged->size()) >= ndt_multiframe_max_points_) break;
+    }
+
+    finalizeCloud(merged);
+    return voxelDown(merged, scan_voxel_size_, scan_voxel_size_, source_voxel_z_size_, ndt_multiframe_max_points_);
+  }
+
+  void pushSourceHistory(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
+                         const Eigen::Matrix4d &pose)
+  {
+    if (!ndt_multiframe_source_enable_ || !source || source->empty()) return;
+    SourceHistoryFrame frame;
+    frame.cloud.reset(new pcl::PointCloud<pcl::PointXYZ>(*source));
+    frame.pose = pose;
+    source_history_.push_back(frame);
+    const size_t keep = static_cast<size_t>(std::max(ndt_multiframe_history_size_, 0));
+    while (source_history_.size() > keep)
+    {
+      source_history_.pop_front();
+    }
+  }
+
+  pcl::PointCloud<pcl::PointXYZ>::Ptr prepareInternalOdomCloud(
+      const pcl::PointCloud<pcl::PointXYZ>::Ptr &source) const
+  {
+    return voxelDown(source, internal_odom_voxel_size_, internal_odom_voxel_size_, std::max(internal_odom_voxel_size_ * 0.5, 0.05), internal_odom_max_points_);
+  }
+
+  bool updateInternalOdomPrediction(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
+                                    Eigen::Matrix4d &prediction)
+  {
+    if (!internal_odom_enable_ || !source || source->empty()) return false;
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr current = prepareInternalOdomCloud(source);
+    if (!current || static_cast<int>(current->size()) < min_effective_points_) return false;
+
+    if (!has_internal_odom_ || !previous_internal_odom_cloud_ || previous_internal_odom_cloud_->empty())
+    {
+      previous_internal_odom_cloud_.reset(new pcl::PointCloud<pcl::PointXYZ>(*current));
+      internal_odom_pose_ = poseToMatrix(p_, R_);
+      internal_odom_delta_.setIdentity();
+      has_internal_odom_ = true;
+      prediction = internal_odom_pose_;
+      return true;
+    }
+
+    pcl::IterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ> icp;
+    icp.setInputSource(current);
+    icp.setInputTarget(previous_internal_odom_cloud_);
+    icp.setMaximumIterations(std::max(1, internal_odom_max_iterations_));
+    icp.setMaxCorrespondenceDistance(internal_odom_max_correspondence_distance_);
+    icp.setTransformationEpsilon(1e-4);
+    icp.setEuclideanFitnessEpsilon(1e-4);
+    pcl::PointCloud<pcl::PointXYZ> aligned;
+    icp.align(aligned, internal_odom_delta_.cast<float>());
+
+    Eigen::Matrix4d relative = internal_odom_delta_;
+    if (icp.hasConverged())
+    {
+      relative = icp.getFinalTransformation().cast<double>().inverse();
+      if (internal_odom_planar_)
+      {
+        const Eigen::Vector3d t = relative.block<3, 1>(0, 3);
+        const double yaw = yawFromRot(relative.block<3, 3>(0, 0));
+        relative = Eigen::Matrix4d::Identity();
+        relative.block<3, 3>(0, 0) = yawToRot(yaw);
+        relative.block<3, 1>(0, 3) = Eigen::Vector3d(t.x(), t.y(), 0.0);
+      }
+      const double translation = relative.block<3, 1>(0, 3).norm();
+      const double rotation_deg = rotationAngleDeg(relative.block<3, 3>(0, 0));
+      const double fitness = icp.getFitnessScore();
+      if ((internal_odom_max_fitness_score_ <= 0.0 || fitness <= internal_odom_max_fitness_score_) &&
+          (internal_odom_max_translation_ <= 0.0 || translation <= internal_odom_max_translation_) &&
+          (internal_odom_max_rotation_deg_ <= 0.0 || rotation_deg <= internal_odom_max_rotation_deg_))
+      {
+        internal_odom_delta_ = relative;
+        previous_internal_odom_cloud_.reset(new pcl::PointCloud<pcl::PointXYZ>(*current));
+      }
+    }
+
+    internal_odom_pose_ = internal_odom_pose_ * internal_odom_delta_;
+    prediction = internal_odom_pose_;
+    return true;
+  }
+
+  void correctInternalOdomToward(const Eigen::Matrix4d &map_pose)
+  {
+    if (!internal_odom_enable_ || !has_internal_odom_) return;
+    const double blend = std::max(0.0, std::min(1.0, internal_odom_correction_blend_));
+    if (blend <= 0.0) return;
+    Eigen::Quaterniond q_odom(internal_odom_pose_.block<3, 3>(0, 0));
+    Eigen::Quaterniond q_map(map_pose.block<3, 3>(0, 0));
+    q_odom.normalize();
+    q_map.normalize();
+    const Eigen::Vector3d blended_p =
+        (1.0 - blend) * internal_odom_pose_.block<3, 1>(0, 3) + blend * map_pose.block<3, 1>(0, 3);
+    const Eigen::Quaterniond blended_q = q_odom.slerp(blend, q_map);
+    internal_odom_pose_ = poseToMatrix(blended_p, blended_q.normalized().toRotationMatrix());
   }
 
   void livoxCallback(const livox_ros_driver2::CustomMsgConstPtr &msg)
@@ -586,22 +750,6 @@ private:
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>());
     pcl::fromROSMsg(*msg, *cloud);
     handleCloud(cloud, msg->header.stamp);
-  }
-
-  void initialGuessOdomCallback(const nav_msgs::OdometryConstPtr &msg)
-  {
-    std::lock_guard<std::mutex> lock(mutex_);
-    Eigen::Vector3d p_guess(msg->pose.pose.position.x,
-                            msg->pose.pose.position.y,
-                            msg->pose.pose.position.z);
-    Eigen::Quaterniond q_guess(msg->pose.pose.orientation.w,
-                               msg->pose.pose.orientation.x,
-                               msg->pose.pose.orientation.y,
-                               msg->pose.pose.orientation.z);
-    if (!p_guess.allFinite() || q_guess.norm() < 1e-9) return;
-    latest_initial_guess_pose_ = poseToMatrix(p_guess, q_guess.normalized().toRotationMatrix());
-    latest_initial_guess_stamp_ = msg->header.stamp;
-    has_latest_initial_guess_ = true;
   }
 
   void handleCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud, const ros::Time &stamp)
@@ -630,18 +778,19 @@ private:
     {
       initial_guess = previous_pose_ * delta_pose_;
     }
-    if (use_external_initial_guess_ && has_latest_initial_guess_)
+    updateInternalOdomPrediction(source, initial_guess);
+    initial_guess = makeInitialGuess(stamp, initial_guess);
+    pcl::PointCloud<pcl::PointXYZ>::Ptr ndt_source = buildNdtSource(source, initial_guess);
+    pcl::PointCloud<pcl::PointXYZ>::Ptr ndt_target = selectNdtTarget(initial_guess);
+    if (!ndt_target || static_cast<int>(ndt_target->size()) < ndt_local_target_min_points_)
     {
-      const double age = std::abs((stamp - latest_initial_guess_stamp_).toSec());
-      if (age <= initial_guess_max_age_sec_)
-      {
-        initial_guess = blendInitialGuess(initial_guess, latest_initial_guess_pose_);
-      }
+      ndt_target = target_cloud_;
     }
+    ndt_.setInputTarget(ndt_target);
     const Eigen::Matrix4d pose_before_update = poseToMatrix(p_, R_);
     const bool had_previous_pose_before_update = has_previous_pose_;
 
-    ndt_.setInputSource(source);
+    ndt_.setInputSource(ndt_source);
     pcl::PointCloud<pcl::PointXYZ> aligned;
     const ros::WallTime align_start = ros::WallTime::now();
     ndt_.align(aligned, initial_guess.cast<float>());
@@ -652,6 +801,31 @@ private:
     Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
     std::string reject_reason = "accepted";
     const bool accepted = acceptNdtResult(converged, score, iterations, result, reject_reason);
+    bool used_prediction = false;
+    bool step_limited = false;
+    Eigen::Matrix4d used_result = result;
+    pcl::PointCloud<pcl::PointXYZ> used_aligned = aligned;
+    if (!accepted && ndt_coast_on_reject_enable_ && has_previous_pose_)
+    {
+      used_prediction = true;
+      const double decay = std::max(0.0, std::min(1.0, ndt_coast_velocity_decay_));
+      used_result = previous_pose_;
+      used_result.block<3, 1>(0, 3) += decay * delta_pose_.block<3, 1>(0, 3);
+      reject_reason = "coasted_" + reject_reason;
+    }
+    if (accepted && !used_prediction && guardLargeNdtJump(result, used_result))
+    {
+      used_prediction = true;
+      reject_reason = "guarded_large_jump";
+    }
+    if (accepted && !used_prediction)
+    {
+      step_limited = limitNdtStep(result, used_result);
+      if (step_limited)
+      {
+        used_aligned = transformCloud(source, used_result);
+      }
+    }
     bool loop_used = false;
     std::string loop_reason = "disabled";
     double loop_similarity = 0.0;
@@ -659,22 +833,27 @@ private:
     double loop_correction_norm = 0.0;
     double loop_yaw_correction_deg = 0.0;
 
-    if (accepted)
+    if (accepted || used_prediction)
     {
       if (has_previous_pose_)
       {
-        delta_pose_ = previous_pose_.inverse() * result;
+        delta_pose_ = previous_pose_.inverse() * used_result;
       }
       else
       {
         has_previous_pose_ = true;
         delta_pose_.setIdentity();
       }
-      previous_pose_ = result;
-      R_ = result.block<3, 3>(0, 0);
-      p_ = result.block<3, 1>(0, 3);
+      previous_pose_ = used_result;
+      R_ = used_result.block<3, 3>(0, 0);
+      p_ = used_result.block<3, 1>(0, 3);
+      correctInternalOdomToward(used_result);
       publishPose(stamp);
-      publishAlignedCloud(aligned, stamp);
+      if (accepted)
+      {
+        pushSourceHistory(source, used_result);
+        publishAlignedCloud(used_aligned, stamp);
+      }
     }
     if (loop_relocalization_enable_)
     {
@@ -702,8 +881,8 @@ private:
                            accepted,
                            reject_reason,
                            align_ms,
-                           static_cast<int>(source->size()),
-                           target_cloud_->size(),
+                           static_cast<int>(ndt_source->size()),
+                           ndt_target->size(),
                            score,
                            iterations,
                            initial_guess,
@@ -711,6 +890,7 @@ private:
                            pose_before_update,
                            poseToMatrix(p_, R_),
                            had_previous_pose_before_update,
+                           step_limited,
                            ambiguity);
 
     publishDiagnostics(stamp,
@@ -718,8 +898,8 @@ private:
                        accepted,
                        reject_reason,
                        align_ms,
-                       static_cast<int>(source->size()),
-                       target_cloud_->size(),
+                       static_cast<int>(ndt_source->size()),
+                       ndt_target->size(),
                        score,
                        iterations,
                        loop_used,
@@ -727,11 +907,145 @@ private:
                        loop_similarity,
                        loop_fitness,
                        loop_correction_norm,
-                       loop_yaw_correction_deg);
+                       loop_yaw_correction_deg,
+                       step_limited);
     ROS_INFO_THROTTLE(1.0,
-                      "[DogPriorMap NDT] conv=%d accept=%d reason=%s source=%zu target=%zu align=%.2fms score=%.4f iter=%d p=(%.2f %.2f %.2f)",
-                      converged ? 1 : 0, accepted ? 1 : 0, reject_reason.c_str(), source->size(), target_cloud_->size(),
+                      "[DogPriorMap NDT] conv=%d accept=%d coast=%d limited=%d reason=%s source=%zu target=%zu align=%.2fms score=%.4f iter=%d p=(%.2f %.2f %.2f)",
+                      converged ? 1 : 0, accepted ? 1 : 0, used_prediction ? 1 : 0, step_limited ? 1 : 0, reject_reason.c_str(), source->size(), ndt_target->size(),
                       align_ms, score, iterations, p_.x(), p_.y(), p_.z());
+  }
+
+  pcl::PointCloud<pcl::PointXYZ>::Ptr selectNdtTarget(const Eigen::Matrix4d &initial_guess) const
+  {
+    if (ndt_use_full_map_target_ || ndt_local_target_radius_ <= 0.0) return target_cloud_;
+    if (!target_cloud_ || target_cloud_->empty()) return target_cloud_;
+
+    const Eigen::Vector3d center = initial_guess.block<3, 1>(0, 3);
+    pcl::PointXYZ query;
+    query.x = static_cast<float>(center.x());
+    query.y = static_cast<float>(center.y());
+    query.z = static_cast<float>(center.z());
+    std::vector<int> indices;
+    std::vector<float> distances;
+    map_kdtree_.radiusSearch(query, ndt_local_target_radius_, indices, distances);
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr local(new pcl::PointCloud<pcl::PointXYZ>());
+    local->reserve(indices.size());
+    for (int index : indices)
+    {
+      if (index >= 0 && static_cast<size_t>(index) < target_cloud_->size()) local->push_back((*target_cloud_)[index]);
+    }
+    finalizeCloud(local);
+    return local;
+  }
+
+  void initialGuessOdomCallback(const nav_msgs::OdometryConstPtr &msg)
+  {
+    if (!msg) return;
+    Eigen::Vector3d p(msg->pose.pose.position.x,
+                      msg->pose.pose.position.y,
+                      msg->pose.pose.position.z);
+    Eigen::Quaterniond q(msg->pose.pose.orientation.w,
+                         msg->pose.pose.orientation.x,
+                         msg->pose.pose.orientation.y,
+                         msg->pose.pose.orientation.z);
+    if (!p.allFinite() || q.norm() < 1e-9) return;
+    std::lock_guard<std::mutex> lock(mutex_);
+    external_initial_guess_pose_ = poseToMatrix(p, q.normalized().toRotationMatrix());
+    external_initial_guess_time_ = msg->header.stamp.toSec();
+    has_external_initial_guess_ = true;
+  }
+
+  Eigen::Matrix4d makeInitialGuess(const ros::Time &stamp, const Eigen::Matrix4d &constant_velocity_guess) const
+  {
+    if (!ndt_use_external_initial_guess_ || !has_external_initial_guess_) return constant_velocity_guess;
+    const double age = std::abs(stamp.toSec() - external_initial_guess_time_);
+    if (ndt_initial_guess_max_age_sec_ > 0.0 && age > ndt_initial_guess_max_age_sec_) return constant_velocity_guess;
+
+    const double blend = std::max(0.0, std::min(1.0, ndt_initial_guess_blend_));
+    if (blend <= 0.0) return constant_velocity_guess;
+    if (blend >= 1.0) return external_initial_guess_pose_;
+
+    Eigen::Matrix4d guess = constant_velocity_guess;
+    guess.block<3, 1>(0, 3) =
+        (1.0 - blend) * constant_velocity_guess.block<3, 1>(0, 3) +
+        blend * external_initial_guess_pose_.block<3, 1>(0, 3);
+    Eigen::Quaterniond q_cv(constant_velocity_guess.block<3, 3>(0, 0));
+    Eigen::Quaterniond q_ext(external_initial_guess_pose_.block<3, 3>(0, 0));
+    guess.block<3, 3>(0, 0) = q_cv.normalized().slerp(blend, q_ext.normalized()).toRotationMatrix();
+    return guess;
+  }
+
+  bool guardLargeNdtJump(const Eigen::Matrix4d &raw_result, Eigen::Matrix4d &used_result) const
+  {
+    if (!ndt_large_jump_guard_enable_ || !has_previous_pose_) return false;
+    const Eigen::Matrix4d previous_to_result = previous_pose_.inverse() * raw_result;
+    const double translation = previous_to_result.block<3, 1>(0, 3).norm();
+    const double rotation_deg = rotationAngleDeg(previous_to_result.block<3, 3>(0, 0));
+    const bool large_translation = ndt_large_jump_guard_translation_ > 0.0 && translation > ndt_large_jump_guard_translation_;
+    const bool large_rotation = ndt_large_jump_guard_rotation_deg_ > 0.0 && rotation_deg > ndt_large_jump_guard_rotation_deg_;
+    if (!large_translation && !large_rotation) return false;
+
+    const double decay = std::max(0.0, std::min(1.0, ndt_large_jump_guard_decay_));
+    used_result = previous_pose_;
+    used_result.block<3, 1>(0, 3) += decay * delta_pose_.block<3, 1>(0, 3);
+    Eigen::Quaterniond q_prev(previous_pose_.block<3, 3>(0, 0));
+    Eigen::Quaterniond q_delta(delta_pose_.block<3, 3>(0, 0));
+    q_prev.normalize();
+    q_delta.normalize();
+    used_result.block<3, 3>(0, 0) = (q_prev * q_delta.slerp(decay, q_delta)).normalized().toRotationMatrix();
+    return true;
+  }
+
+  bool limitNdtStep(const Eigen::Matrix4d &raw_result, Eigen::Matrix4d &used_result) const
+  {
+    if (!ndt_step_limit_enable_ || !has_previous_pose_) return false;
+
+    bool limited = false;
+    used_result = raw_result;
+
+    const Eigen::Vector3d previous_p = previous_pose_.block<3, 1>(0, 3);
+    const Eigen::Vector3d raw_p = raw_result.block<3, 1>(0, 3);
+    const Eigen::Vector3d dp = raw_p - previous_p;
+    const double dist = dp.norm();
+    if (ndt_step_limit_max_translation_ > 0.0 && dist > ndt_step_limit_max_translation_)
+    {
+      used_result.block<3, 1>(0, 3) = previous_p + dp.normalized() * ndt_step_limit_max_translation_;
+      limited = true;
+    }
+
+    const Eigen::Matrix3d previous_R = previous_pose_.block<3, 3>(0, 0);
+    const Eigen::Matrix3d raw_R = raw_result.block<3, 3>(0, 0);
+    const double angle_deg = rotationAngleDeg(previous_R.transpose() * raw_R);
+    if (ndt_step_limit_max_rotation_deg_ > 0.0 && angle_deg > ndt_step_limit_max_rotation_deg_)
+    {
+      const double ratio = ndt_step_limit_max_rotation_deg_ / std::max(angle_deg, 1e-6);
+      Eigen::Quaterniond q_prev(previous_R);
+      Eigen::Quaterniond q_raw(raw_R);
+      used_result.block<3, 3>(0, 0) = q_prev.normalized().slerp(ratio, q_raw.normalized()).toRotationMatrix();
+      limited = true;
+    }
+    return limited;
+  }
+
+  pcl::PointCloud<pcl::PointXYZ> transformCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
+                                                const Eigen::Matrix4d &pose) const
+  {
+    pcl::PointCloud<pcl::PointXYZ> transformed;
+    if (!source) return transformed;
+    transformed.reserve(source->size());
+    const Eigen::Matrix3d R = pose.block<3, 3>(0, 0);
+    const Eigen::Vector3d p = pose.block<3, 1>(0, 3);
+    for (const auto &pt : source->points)
+    {
+      const Eigen::Vector3d local(pt.x, pt.y, pt.z);
+      const Eigen::Vector3d world = R * local + p;
+      transformed.push_back(pcl::PointXYZ(world.x(), world.y(), world.z()));
+    }
+    transformed.width = static_cast<uint32_t>(transformed.points.size());
+    transformed.height = 1;
+    transformed.is_dense = true;
+    return transformed;
   }
 
   bool tryLoopRelocalization(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
@@ -1049,6 +1363,7 @@ private:
                               const Eigen::Matrix4d &pose_before_update,
                               const Eigen::Matrix4d &used_pose,
                               bool had_previous_pose_before_update,
+                              bool step_limited,
                               const AmbiguityStats &ambiguity)
   {
     if (!ndt_diagnostics_csv_) return;
@@ -1097,6 +1412,7 @@ private:
                          << previous_to_result_rotation_deg << ","
                          << previous_to_used_translation << ","
                          << previous_to_used_rotation_deg << ","
+                         << (step_limited ? 1 : 0) << ","
                          << (ambiguity.checked ? 1 : 0) << ","
                          << ambiguity.best_mean_residual << ","
                          << ambiguity.current_mean_residual << ","
@@ -1104,24 +1420,6 @@ private:
                          << ambiguity.best_dx << ","
                          << ambiguity.best_dy << ","
                          << ambiguity.best_yaw_deg << "\n";
-  }
-
-  Eigen::Matrix4d blendInitialGuess(const Eigen::Matrix4d &motion_guess, const Eigen::Matrix4d &external_guess) const
-  {
-    const double blend = std::max(0.0, std::min(1.0, initial_guess_blend_));
-    if (blend <= 0.0) return motion_guess;
-    if (blend >= 1.0) return external_guess;
-
-    Eigen::Matrix4d blended = Eigen::Matrix4d::Identity();
-    const Eigen::Vector3d p_motion = motion_guess.block<3, 1>(0, 3);
-    const Eigen::Vector3d p_external = external_guess.block<3, 1>(0, 3);
-    Eigen::Quaterniond q_motion(motion_guess.block<3, 3>(0, 0));
-    Eigen::Quaterniond q_external(external_guess.block<3, 3>(0, 0));
-    q_motion.normalize();
-    q_external.normalize();
-    blended.block<3, 1>(0, 3) = (1.0 - blend) * p_motion + blend * p_external;
-    blended.block<3, 3>(0, 0) = q_motion.slerp(blend, q_external).toRotationMatrix();
-    return blended;
   }
 
   void publishPose(const ros::Time &stamp)
@@ -1202,7 +1500,8 @@ private:
                           double loop_similarity = 0.0,
                           double loop_fitness = std::numeric_limits<double>::quiet_NaN(),
                           double loop_correction_norm = 0.0,
-                          double loop_yaw_correction_deg = 0.0)
+                          double loop_yaw_correction_deg = 0.0,
+                          bool step_limited = false)
   {
     if (!publish_diagnostics_ || !pub_diagnostics_) return;
     diagnostic_msgs::DiagnosticArray array;
@@ -1215,6 +1514,7 @@ private:
 
     addDiagnosticValue(status, "ndt_converged", converged ? "true" : "false");
     addDiagnosticValue(status, "ndt_accepted", accepted ? "true" : "false");
+    addDiagnosticValue(status, "ndt_step_limited", step_limited ? "true" : "false");
     addDiagnosticValue(status, "ndt_reject_reason", reject_reason);
     addDiagnosticValue(status, "align_time_ms", std::to_string(align_ms));
     addDiagnosticValue(status, "scan_points", std::to_string(scan_points));
@@ -1287,12 +1587,6 @@ private:
   bool has_previous_pose_ = false;
   Eigen::Matrix4d previous_pose_ = Eigen::Matrix4d::Identity();
   Eigen::Matrix4d delta_pose_ = Eigen::Matrix4d::Identity();
-  bool use_external_initial_guess_ = false;
-  bool has_latest_initial_guess_ = false;
-  ros::Time latest_initial_guess_stamp_;
-  Eigen::Matrix4d latest_initial_guess_pose_ = Eigen::Matrix4d::Identity();
-  double initial_guess_max_age_sec_ = 0.20;
-  double initial_guess_blend_ = 1.0;
   bool loop_relocalization_enable_ = false;
   std::string loop_scan_dir_;
   double loop_query_period_sec_ = 1.0;
@@ -1320,10 +1614,40 @@ private:
   std::vector<LoopKeyframe> loop_database_;
 
   double map_voxel_size_ = 0.30;
+  double map_voxel_z_size_ = 0.30;
   double target_voxel_size_ = 0.30;
+  double target_voxel_z_size_ = 0.30;
   double scan_voxel_size_ = 0.35;
+  double source_voxel_z_size_ = 0.35;
   int max_scan_points_ = 900;
+  bool ndt_multiframe_source_enable_ = false;
+  int ndt_multiframe_history_size_ = 3;
+  int ndt_multiframe_max_points_ = 2200;
+  std::deque<SourceHistoryFrame> source_history_;
   int max_target_points_ = 0;
+  bool ndt_use_full_map_target_ = true;
+  double ndt_local_target_radius_ = 8.0;
+  int ndt_local_target_min_points_ = 1000;
+  bool ndt_use_external_initial_guess_ = false;
+  double ndt_initial_guess_max_age_sec_ = 0.20;
+  double ndt_initial_guess_blend_ = 1.0;
+  bool has_external_initial_guess_ = false;
+  double external_initial_guess_time_ = 0.0;
+  Eigen::Matrix4d external_initial_guess_pose_ = Eigen::Matrix4d::Identity();
+  bool internal_odom_enable_ = false;
+  bool has_internal_odom_ = false;
+  pcl::PointCloud<pcl::PointXYZ>::Ptr previous_internal_odom_cloud_;
+  Eigen::Matrix4d internal_odom_pose_ = Eigen::Matrix4d::Identity();
+  Eigen::Matrix4d internal_odom_delta_ = Eigen::Matrix4d::Identity();
+  double internal_odom_voxel_size_ = 0.45;
+  int internal_odom_max_points_ = 700;
+  int internal_odom_max_iterations_ = 12;
+  double internal_odom_max_correspondence_distance_ = 1.2;
+  double internal_odom_max_fitness_score_ = 0.8;
+  double internal_odom_max_translation_ = 0.8;
+  double internal_odom_max_rotation_deg_ = 12.0;
+  bool internal_odom_planar_ = true;
+  double internal_odom_correction_blend_ = 0.05;
   double min_range_ = 0.5;
   double max_range_ = 80.0;
   double min_z_ = -std::numeric_limits<double>::infinity();
@@ -1334,6 +1658,15 @@ private:
   double ndt_step_size_ = 0.1;
   double ndt_transformation_epsilon_ = 0.001;
   bool ndt_acceptance_enable_ = false;
+  bool ndt_coast_on_reject_enable_ = false;
+  double ndt_coast_velocity_decay_ = 0.8;
+  bool ndt_step_limit_enable_ = false;
+  double ndt_step_limit_max_translation_ = 0.5;
+  double ndt_step_limit_max_rotation_deg_ = 5.0;
+  bool ndt_large_jump_guard_enable_ = false;
+  double ndt_large_jump_guard_translation_ = 1.2;
+  double ndt_large_jump_guard_rotation_deg_ = 12.0;
+  double ndt_large_jump_guard_decay_ = 1.0;
   bool ndt_ambiguity_check_enable_ = false;
   double ndt_ambiguity_period_sec_ = 1.0;
   double ndt_ambiguity_search_radius_ = 2.0;

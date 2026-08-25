@@ -46,8 +46,9 @@ done
 rostopic list >/dev/null
 
 rosparam set use_sim_time true
-roslaunch dog_prior_map_localization dog_prior_map_localization.launch \
-  config:="$CONFIG" rviz:=false use_cpp:=true runtime_csv_path:="$OUT/runtime.csv" \
+roslaunch dog_prior_map_localization dog_prior_map_localization_split.launch \
+  config:="$CONFIG" rviz:=false runtime_csv_path:="$OUT/runtime.csv" \
+  ndt_diagnostics_csv_path:="$OUT/ndt_diagnostics.csv" \
   > "$OUT/node.log" 2>&1 &
 NODE_PID=$!
 sleep 8
@@ -59,7 +60,8 @@ done &
 CPU_PID=$!
 
 rosbag record -O "$OUT/abs_ndt_result.bag" \
-  /dog_livo/odom_corrected /dog_livo/odom_high_rate /dog_livo/path_corrected /tf /clock \
+  /dog_livo/odom_corrected /dog_livo/odom_high_rate /dog_livo/path_corrected \
+  /dog_livo/ndt_odom /dog_livo/ndt_pose /dog_livo/ndt_path /dog_livo/diagnostics /tf /clock \
   > "$OUT/record.log" 2>&1 &
 REC_PID=$!
 sleep 3
