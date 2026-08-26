@@ -160,6 +160,10 @@ lidar_update:
   ndt_step_limit_enable: true       # 连续运动限幅：不拒绝NDT，只限制单帧结果相对上次匹配的跳变
   ndt_step_limit_max_translation: 0.5 # 单帧NDT输出最大平移变化，防止几帧误匹配瞬间把EKF拉飞
   ndt_step_limit_max_rotation_deg: 5.0 # 单帧NDT输出最大旋转变化，防止错误吸附造成姿态突跳
+  ndt_confident_step_limit_enable: false # 实验开关：低残差且小旋转时临时放宽平移限幅，避免拐角被0.5m截断
+  ndt_confident_step_limit_max_translation: 0.65
+  ndt_confident_step_limit_max_fitness: 0.30
+  ndt_confident_step_limit_max_rotation_deg: 10.0
   ndt_large_jump_guard_enable: false # 全包验证会造成长段恒速漂移，默认关闭
   ndt_large_jump_guard_translation: 1.2
   ndt_large_jump_guard_rotation_deg: 12.0

@@ -133,6 +133,11 @@ public:
     ndt_step_limit_enable_ = getParam<bool>("lidar_update/ndt_step_limit_enable", false);
     ndt_step_limit_max_translation_ = getParam<double>("lidar_update/ndt_step_limit_max_translation", 0.5);
     ndt_step_limit_max_rotation_deg_ = getParam<double>("lidar_update/ndt_step_limit_max_rotation_deg", 5.0);
+    ndt_confident_step_limit_enable_ = getParam<bool>("lidar_update/ndt_confident_step_limit_enable", false);
+    ndt_confident_step_limit_max_translation_ = getParam<double>("lidar_update/ndt_confident_step_limit_max_translation",
+                                                                 ndt_step_limit_max_translation_);
+    ndt_confident_step_limit_max_fitness_ = getParam<double>("lidar_update/ndt_confident_step_limit_max_fitness", 0.30);
+    ndt_confident_step_limit_max_rotation_deg_ = getParam<double>("lidar_update/ndt_confident_step_limit_max_rotation_deg", 10.0);
     ndt_large_jump_guard_enable_ = getParam<bool>("lidar_update/ndt_large_jump_guard_enable", false);
     ndt_large_jump_guard_translation_ = getParam<double>("lidar_update/ndt_large_jump_guard_translation", 1.2);
     ndt_large_jump_guard_rotation_deg_ = getParam<double>("lidar_update/ndt_large_jump_guard_rotation_deg", 12.0);
@@ -820,7 +825,7 @@ private:
     }
     if (accepted && !used_prediction)
     {
-      step_limited = limitNdtStep(result, used_result);
+      step_limited = limitNdtStep(result, score, used_result);
       if (step_limited)
       {
         used_aligned = transformCloud(source, used_result);
@@ -997,7 +1002,7 @@ private:
     return true;
   }
 
-  bool limitNdtStep(const Eigen::Matrix4d &raw_result, Eigen::Matrix4d &used_result) const
+  bool limitNdtStep(const Eigen::Matrix4d &raw_result, double score, Eigen::Matrix4d &used_result) const
   {
     if (!ndt_step_limit_enable_ || !has_previous_pose_) return false;
 
@@ -1008,15 +1013,23 @@ private:
     const Eigen::Vector3d raw_p = raw_result.block<3, 1>(0, 3);
     const Eigen::Vector3d dp = raw_p - previous_p;
     const double dist = dp.norm();
-    if (ndt_step_limit_max_translation_ > 0.0 && dist > ndt_step_limit_max_translation_)
-    {
-      used_result.block<3, 1>(0, 3) = previous_p + dp.normalized() * ndt_step_limit_max_translation_;
-      limited = true;
-    }
 
     const Eigen::Matrix3d previous_R = previous_pose_.block<3, 3>(0, 0);
     const Eigen::Matrix3d raw_R = raw_result.block<3, 3>(0, 0);
     const double angle_deg = rotationAngleDeg(previous_R.transpose() * raw_R);
+
+    double max_translation = ndt_step_limit_max_translation_;
+    if (ndt_confident_step_limit_enable_ &&
+        std::isfinite(score) && score <= ndt_confident_step_limit_max_fitness_ &&
+        angle_deg <= ndt_confident_step_limit_max_rotation_deg_)
+    {
+      max_translation = std::max(max_translation, ndt_confident_step_limit_max_translation_);
+    }
+    if (max_translation > 0.0 && dist > max_translation)
+    {
+      used_result.block<3, 1>(0, 3) = previous_p + dp.normalized() * max_translation;
+      limited = true;
+    }
     if (ndt_step_limit_max_rotation_deg_ > 0.0 && angle_deg > ndt_step_limit_max_rotation_deg_)
     {
       const double ratio = ndt_step_limit_max_rotation_deg_ / std::max(angle_deg, 1e-6);
@@ -1663,6 +1676,10 @@ private:
   bool ndt_step_limit_enable_ = false;
   double ndt_step_limit_max_translation_ = 0.5;
   double ndt_step_limit_max_rotation_deg_ = 5.0;
+  bool ndt_confident_step_limit_enable_ = false;
+  double ndt_confident_step_limit_max_translation_ = 0.5;
+  double ndt_confident_step_limit_max_fitness_ = 0.30;
+  double ndt_confident_step_limit_max_rotation_deg_ = 10.0;
   bool ndt_large_jump_guard_enable_ = false;
   double ndt_large_jump_guard_translation_ = 1.2;
   double ndt_large_jump_guard_rotation_deg_ = 12.0;
