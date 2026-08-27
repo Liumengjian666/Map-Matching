@@ -207,6 +207,20 @@ public:
     ndt_dual_resolution_z_weight_ = getParam<double>("lidar_update/ndt_dual_resolution_z_weight", 0.5);
     ndt_dual_resolution_min_cost_improvement_ =
         getParam<double>("lidar_update/ndt_dual_resolution_min_cost_improvement", 0.02);
+    ndt_motion_tube_guard_enable_ = getParam<bool>("lidar_update/ndt_motion_tube_guard_enable", false);
+    ndt_motion_tube_trigger_translation_ =
+        getParam<double>("lidar_update/ndt_motion_tube_trigger_translation", 0.45);
+    ndt_motion_tube_trigger_rotation_deg_ =
+        getParam<double>("lidar_update/ndt_motion_tube_trigger_rotation_deg", 7.0);
+    ndt_motion_tube_trigger_z_ = getParam<double>("lidar_update/ndt_motion_tube_trigger_z", 0.20);
+    ndt_motion_tube_max_translation_ = getParam<double>("lidar_update/ndt_motion_tube_max_translation", 0.25);
+    ndt_motion_tube_max_rotation_deg_ = getParam<double>("lidar_update/ndt_motion_tube_max_rotation_deg", 3.0);
+    ndt_motion_tube_max_z_ = getParam<double>("lidar_update/ndt_motion_tube_max_z", 0.12);
+    ndt_motion_tube_result_residual_ratio_ =
+        getParam<double>("lidar_update/ndt_motion_tube_result_residual_ratio", 0.90);
+    ndt_motion_tube_result_residual_margin_ =
+        getParam<double>("lidar_update/ndt_motion_tube_result_residual_margin", -0.02);
+    ndt_motion_tube_max_fitness_ = getParam<double>("lidar_update/ndt_motion_tube_max_fitness", 2.0);
     ndt_max_fitness_score_ = getParam<double>("lidar_update/ndt_max_fitness_score", 3.0);
     ndt_reject_zero_iteration_ = getParam<bool>("lidar_update/ndt_reject_zero_iteration", true);
     ndt_accept_max_translation_ = getParam<double>("lidar_update/ndt_accept_max_translation", 1.20);
@@ -896,6 +910,10 @@ private:
     {
       reject_reason = "dual_resolution_selected";
     }
+    if (accepted && guardWithMotionTube(source, initial_guess, result, aligned, score))
+    {
+      reject_reason = "motion_tube_guarded";
+    }
     bool used_prediction = false;
     bool step_limited = false;
     Eigen::Matrix4d used_result = result;
@@ -1457,6 +1475,80 @@ private:
     return true;
   }
 
+
+
+  Eigen::Matrix4d projectPoseToMotionTube(const Eigen::Matrix4d &initial_guess,
+                                          const Eigen::Matrix4d &result) const
+  {
+    Eigen::Matrix4d projected = result;
+    const Eigen::Vector3d initial_p = initial_guess.block<3, 1>(0, 3);
+    Eigen::Vector3d delta_p = result.block<3, 1>(0, 3) - initial_p;
+    if (ndt_motion_tube_max_translation_ > 0.0 && delta_p.norm() > ndt_motion_tube_max_translation_)
+    {
+      delta_p = delta_p.normalized() * ndt_motion_tube_max_translation_;
+    }
+    if (ndt_motion_tube_max_z_ > 0.0)
+    {
+      delta_p.z() = std::max(-ndt_motion_tube_max_z_, std::min(ndt_motion_tube_max_z_, delta_p.z()));
+    }
+    projected.block<3, 1>(0, 3) = initial_p + delta_p;
+
+    const Eigen::Matrix3d initial_R = initial_guess.block<3, 3>(0, 0);
+    const Eigen::Matrix3d result_R = result.block<3, 3>(0, 0);
+    const double angle_deg = rotationAngleDeg(initial_R.transpose() * result_R);
+    if (ndt_motion_tube_max_rotation_deg_ > 0.0 && angle_deg > ndt_motion_tube_max_rotation_deg_)
+    {
+      const double ratio = ndt_motion_tube_max_rotation_deg_ / std::max(angle_deg, 1e-6);
+      Eigen::Quaterniond q_initial(initial_R);
+      Eigen::Quaterniond q_result(result_R);
+      projected.block<3, 3>(0, 0) = q_initial.normalized().slerp(ratio, q_result.normalized()).toRotationMatrix();
+    }
+    return projected;
+  }
+
+  bool guardWithMotionTube(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
+                           const Eigen::Matrix4d &initial_guess,
+                           Eigen::Matrix4d &result,
+                           pcl::PointCloud<pcl::PointXYZ> &aligned,
+                           double score) const
+  {
+    if (!ndt_motion_tube_guard_enable_ || !has_previous_pose_) return false;
+    const Eigen::Vector3d initial_p = initial_guess.block<3, 1>(0, 3);
+    const Eigen::Vector3d result_p = result.block<3, 1>(0, 3);
+    const double initial_to_result = (result_p - initial_p).norm();
+    const double z_jump = std::abs(result_p.z() - initial_p.z());
+    const double yaw_jump_deg =
+        rotationAngleDeg(initial_guess.block<3, 3>(0, 0).transpose() * result.block<3, 3>(0, 0));
+    const bool risky_translation = ndt_motion_tube_trigger_translation_ > 0.0 &&
+                                   initial_to_result >= ndt_motion_tube_trigger_translation_;
+    const bool risky_rotation = ndt_motion_tube_trigger_rotation_deg_ > 0.0 &&
+                                yaw_jump_deg >= ndt_motion_tube_trigger_rotation_deg_;
+    const bool risky_z = ndt_motion_tube_trigger_z_ > 0.0 && z_jump >= ndt_motion_tube_trigger_z_;
+    if (!risky_translation && !risky_rotation && !risky_z) return false;
+    if (ndt_motion_tube_max_fitness_ > 0.0 && score > ndt_motion_tube_max_fitness_) return false;
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr sampled_source = sampleForAmbiguity(source);
+    const double initial_residual = meanNearestMapResidual(sampled_source ? sampled_source : source, initial_guess);
+    const double result_residual = meanNearestMapResidual(sampled_source ? sampled_source : source, result);
+    const bool result_clearly_better =
+        std::isfinite(initial_residual) && std::isfinite(result_residual) &&
+        result_residual <= initial_residual * ndt_motion_tube_result_residual_ratio_ +
+                               ndt_motion_tube_result_residual_margin_;
+    if (result_clearly_better) return false;
+
+    const Eigen::Matrix4d projected = projectPoseToMotionTube(initial_guess, result);
+    result = projected;
+    aligned = transformCloud(source, result);
+    ROS_INFO_THROTTLE(1.0,
+                      "[DogPriorMap NDT] motion-tube guarded trans=%.3f yaw=%.2f z=%.3f residual %.4f->%.4f score=%.4f",
+                      initial_to_result,
+                      yaw_jump_deg,
+                      z_jump,
+                      initial_residual,
+                      result_residual,
+                      score);
+    return true;
+  }
 
   double dualResolutionCandidateCost(double fitness,
                                      double residual,
@@ -2310,6 +2402,16 @@ private:
   double ndt_dual_resolution_yaw_weight_ = 0.02;
   double ndt_dual_resolution_z_weight_ = 0.5;
   double ndt_dual_resolution_min_cost_improvement_ = 0.02;
+  bool ndt_motion_tube_guard_enable_ = false;
+  double ndt_motion_tube_trigger_translation_ = 0.45;
+  double ndt_motion_tube_trigger_rotation_deg_ = 7.0;
+  double ndt_motion_tube_trigger_z_ = 0.20;
+  double ndt_motion_tube_max_translation_ = 0.25;
+  double ndt_motion_tube_max_rotation_deg_ = 3.0;
+  double ndt_motion_tube_max_z_ = 0.12;
+  double ndt_motion_tube_result_residual_ratio_ = 0.90;
+  double ndt_motion_tube_result_residual_margin_ = -0.02;
+  double ndt_motion_tube_max_fitness_ = 2.0;
   double last_ambiguity_check_time_ = -1.0;
   bool ndt_reject_zero_iteration_ = true;
   double ndt_max_fitness_score_ = 3.0;
