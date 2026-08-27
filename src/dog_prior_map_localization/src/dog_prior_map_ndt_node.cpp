@@ -151,6 +151,29 @@ public:
     ndt_ambiguity_max_points_ = getParam<int>("lidar_update/ndt_ambiguity_max_points", 300);
     ndt_ambiguity_near_best_ratio_ = getParam<double>("lidar_update/ndt_ambiguity_near_best_ratio", 1.25);
     ndt_ambiguity_near_best_margin_ = getParam<double>("lidar_update/ndt_ambiguity_near_best_margin", 0.03);
+    ndt_motion_prior_guard_enable_ = getParam<bool>("lidar_update/ndt_motion_prior_guard_enable", false);
+    ndt_motion_prior_guard_trigger_translation_ =
+        getParam<double>("lidar_update/ndt_motion_prior_guard_trigger_translation", 0.45);
+    ndt_motion_prior_guard_residual_ratio_ =
+        getParam<double>("lidar_update/ndt_motion_prior_guard_residual_ratio", 1.05);
+    ndt_motion_prior_guard_residual_margin_ =
+        getParam<double>("lidar_update/ndt_motion_prior_guard_residual_margin", 0.03);
+    ndt_prior_candidate_enable_ = getParam<bool>("lidar_update/ndt_prior_candidate_enable", false);
+    ndt_prior_candidate_trigger_translation_ =
+        getParam<double>("lidar_update/ndt_prior_candidate_trigger_translation", 0.35);
+    ndt_prior_candidate_search_radius_ = getParam<double>("lidar_update/ndt_prior_candidate_search_radius", 0.35);
+    ndt_prior_candidate_yaw_deg_ = getParam<double>("lidar_update/ndt_prior_candidate_yaw_deg", 3.0);
+    ndt_prior_candidate_max_prior_distance_ = getParam<double>("lidar_update/ndt_prior_candidate_max_prior_distance", 0.45);
+    ndt_prior_candidate_min_prior_reduction_ = getParam<double>("lidar_update/ndt_prior_candidate_min_prior_reduction", 0.20);
+    ndt_prior_candidate_max_extra_aligns_ =
+        std::max(0, getParam<int>("lidar_update/ndt_prior_candidate_max_extra_aligns", 6));
+    ndt_prior_candidate_fitness_ratio_ = getParam<double>("lidar_update/ndt_prior_candidate_fitness_ratio", 1.20);
+    ndt_prior_candidate_fitness_margin_ = getParam<double>("lidar_update/ndt_prior_candidate_fitness_margin", 0.10);
+    ndt_prior_candidate_residual_weight_ = getParam<double>("lidar_update/ndt_prior_candidate_residual_weight", 1.0);
+    ndt_prior_candidate_prior_weight_ = getParam<double>("lidar_update/ndt_prior_candidate_prior_weight", 0.8);
+    ndt_prior_candidate_yaw_weight_ = getParam<double>("lidar_update/ndt_prior_candidate_yaw_weight", 0.02);
+    ndt_prior_candidate_min_cost_improvement_ =
+        getParam<double>("lidar_update/ndt_prior_candidate_min_cost_improvement", 0.02);
     ndt_max_fitness_score_ = getParam<double>("lidar_update/ndt_max_fitness_score", 3.0);
     ndt_reject_zero_iteration_ = getParam<bool>("lidar_update/ndt_reject_zero_iteration", true);
     ndt_accept_max_translation_ = getParam<double>("lidar_update/ndt_accept_max_translation", 1.20);
@@ -799,13 +822,29 @@ private:
     pcl::PointCloud<pcl::PointXYZ> aligned;
     const ros::WallTime align_start = ros::WallTime::now();
     ndt_.align(aligned, initial_guess.cast<float>());
-    const double align_ms = (ros::WallTime::now() - align_start).toSec() * 1000.0;
-    const bool converged = ndt_.hasConverged();
-    const double score = ndt_.getFitnessScore();
-    const int iterations = ndt_.getFinalNumIteration();
+    double align_ms = (ros::WallTime::now() - align_start).toSec() * 1000.0;
+    bool converged = ndt_.hasConverged();
+    double score = ndt_.getFitnessScore();
+    int iterations = ndt_.getFinalNumIteration();
     Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
     std::string reject_reason = "accepted";
-    const bool accepted = acceptNdtResult(converged, score, iterations, result, reject_reason);
+    bool accepted = acceptNdtResult(converged, score, iterations, result, reject_reason);
+    if (accepted && guardWithMotionPrior(source, initial_guess, result, aligned))
+    {
+      reject_reason = "motion_prior_guarded";
+    }
+    else if (accepted && selectPriorCandidate(source,
+                                             ndt_source,
+                                             ndt_target,
+                                             initial_guess,
+                                             result,
+                                             aligned,
+                                             score,
+                                             iterations,
+                                             align_ms))
+    {
+      reject_reason = "prior_candidate_selected";
+    }
     bool used_prediction = false;
     bool step_limited = false;
     Eigen::Matrix4d used_result = result;
@@ -999,6 +1038,255 @@ private:
     q_prev.normalize();
     q_delta.normalize();
     used_result.block<3, 3>(0, 0) = (q_prev * q_delta.slerp(decay, q_delta)).normalized().toRotationMatrix();
+    return true;
+  }
+
+
+
+  bool guardWithMotionPrior(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
+                            const Eigen::Matrix4d &initial_guess,
+                            Eigen::Matrix4d &result,
+                            pcl::PointCloud<pcl::PointXYZ> &aligned) const
+  {
+    if (!ndt_motion_prior_guard_enable_ || !has_previous_pose_) return false;
+    const double prior_distance =
+        (result.block<3, 1>(0, 3) - initial_guess.block<3, 1>(0, 3)).norm();
+    if (ndt_motion_prior_guard_trigger_translation_ > 0.0 &&
+        prior_distance < ndt_motion_prior_guard_trigger_translation_)
+    {
+      return false;
+    }
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr sampled_source = sampleForAmbiguity(source);
+    const double result_residual = meanNearestMapResidual(sampled_source, result);
+    const double prior_residual = meanNearestMapResidual(sampled_source, initial_guess);
+    if (!std::isfinite(result_residual) || !std::isfinite(prior_residual)) return false;
+    const double residual_threshold =
+        result_residual * std::max(ndt_motion_prior_guard_residual_ratio_, 1.0) +
+        std::max(ndt_motion_prior_guard_residual_margin_, 0.0);
+    if (prior_residual > residual_threshold) return false;
+
+    result = initial_guess;
+    aligned = transformCloud(source, result);
+    ROS_INFO_THROTTLE(1.0,
+                      "[DogPriorMap NDT] motion prior guarded raw_dist=%.3f residual prior=%.4f raw=%.4f",
+                      prior_distance,
+                      prior_residual,
+                      result_residual);
+    return true;
+  }
+
+  struct PriorCandidate
+  {
+    Eigen::Matrix4d seed = Eigen::Matrix4d::Identity();
+    Eigen::Matrix4d result = Eigen::Matrix4d::Identity();
+    pcl::PointCloud<pcl::PointXYZ> aligned;
+    double fitness = std::numeric_limits<double>::infinity();
+    double residual = std::numeric_limits<double>::infinity();
+    double prior_distance = std::numeric_limits<double>::infinity();
+    double yaw_distance_deg = std::numeric_limits<double>::infinity();
+    double cost = std::numeric_limits<double>::infinity();
+    int iterations = 0;
+    bool converged = false;
+    bool original = false;
+  };
+
+  double priorCandidateCost(double fitness,
+                            double residual,
+                            double prior_distance,
+                            double yaw_distance_deg) const
+  {
+    return fitness + ndt_prior_candidate_residual_weight_ * residual +
+           ndt_prior_candidate_prior_weight_ * prior_distance +
+           ndt_prior_candidate_yaw_weight_ * yaw_distance_deg;
+  }
+
+  Eigen::Matrix4d makePriorCandidateSeed(const Eigen::Matrix4d &initial_guess,
+                                         const Eigen::Vector3d &offset,
+                                         double yaw_deg) const
+  {
+    Eigen::Matrix4d seed = initial_guess;
+    seed.block<3, 1>(0, 3) += offset;
+    seed.block<3, 3>(0, 0) = yawToRot(yaw_deg * M_PI / 180.0) * seed.block<3, 3>(0, 0);
+    return seed;
+  }
+
+  bool shouldRunPriorCandidates(const Eigen::Matrix4d &initial_guess,
+                                const Eigen::Matrix4d &result) const
+  {
+    if (!ndt_prior_candidate_enable_ || !has_previous_pose_) return false;
+    const Eigen::Vector3d initial_p = initial_guess.block<3, 1>(0, 3);
+    const Eigen::Vector3d result_p = result.block<3, 1>(0, 3);
+    const double initial_to_result = (result_p - initial_p).norm();
+    if (ndt_prior_candidate_trigger_translation_ > 0.0 &&
+        initial_to_result >= ndt_prior_candidate_trigger_translation_)
+    {
+      return true;
+    }
+    return false;
+  }
+
+  PriorCandidate evaluatePriorCandidate(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
+                                        const pcl::PointCloud<pcl::PointXYZ>::Ptr &ndt_source,
+                                        const pcl::PointCloud<pcl::PointXYZ>::Ptr &ndt_target,
+                                        const pcl::PointCloud<pcl::PointXYZ>::Ptr &sampled_source,
+                                        const Eigen::Matrix4d &initial_guess,
+                                        const Eigen::Matrix4d &seed,
+                                        bool original,
+                                        const Eigen::Matrix4d &original_result,
+                                        const pcl::PointCloud<pcl::PointXYZ> &original_aligned,
+                                        double original_fitness,
+                                        int original_iterations) const
+  {
+    PriorCandidate candidate;
+    candidate.seed = seed;
+    candidate.original = original;
+    if (original)
+    {
+      candidate.result = original_result;
+      candidate.aligned = original_aligned;
+      candidate.fitness = original_fitness;
+      candidate.iterations = original_iterations;
+      candidate.converged = true;
+    }
+    else
+    {
+      pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt_check;
+      ndt_check.setInputTarget(ndt_target);
+      ndt_check.setInputSource(ndt_source);
+      ndt_check.setResolution(ndt_resolution_);
+      ndt_check.setStepSize(ndt_step_size_);
+      ndt_check.setTransformationEpsilon(ndt_transformation_epsilon_);
+      ndt_check.setMaximumIterations(ndt_max_iterations_);
+      ndt_check.align(candidate.aligned, seed.cast<float>());
+      candidate.converged = ndt_check.hasConverged();
+      candidate.fitness = ndt_check.getFitnessScore();
+      candidate.iterations = ndt_check.getFinalNumIteration();
+      candidate.result = ndt_check.getFinalTransformation().cast<double>();
+    }
+
+    if (!candidate.converged) return candidate;
+    candidate.residual = meanNearestMapResidual(sampled_source ? sampled_source : source, candidate.result);
+    candidate.prior_distance =
+        (candidate.result.block<3, 1>(0, 3) - initial_guess.block<3, 1>(0, 3)).norm();
+    candidate.yaw_distance_deg =
+        rotationAngleDeg(initial_guess.block<3, 3>(0, 0).transpose() * candidate.result.block<3, 3>(0, 0));
+    candidate.cost = priorCandidateCost(candidate.fitness,
+                                        candidate.residual,
+                                        candidate.prior_distance,
+                                        candidate.yaw_distance_deg);
+    return candidate;
+  }
+
+  bool selectPriorCandidate(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
+                            const pcl::PointCloud<pcl::PointXYZ>::Ptr &ndt_source,
+                            const pcl::PointCloud<pcl::PointXYZ>::Ptr &ndt_target,
+                            const Eigen::Matrix4d &initial_guess,
+                            Eigen::Matrix4d &result,
+                            pcl::PointCloud<pcl::PointXYZ> &aligned,
+                            double &score,
+                            int &iterations,
+                            double &align_ms) const
+  {
+    if (!shouldRunPriorCandidates(initial_guess, result)) return false;
+    if (!source || source->empty() || !ndt_source || ndt_source->empty() || !ndt_target || ndt_target->empty()) return false;
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr sampled_source = sampleForAmbiguity(source);
+    std::vector<PriorCandidate> candidates;
+    candidates.reserve(static_cast<size_t>(ndt_prior_candidate_max_extra_aligns_ + 1));
+    candidates.push_back(evaluatePriorCandidate(source,
+                                                ndt_source,
+                                                ndt_target,
+                                                sampled_source,
+                                                initial_guess,
+                                                initial_guess,
+                                                true,
+                                                result,
+                                                aligned,
+                                                score,
+                                                iterations));
+
+    Eigen::Vector3d motion = delta_pose_.block<3, 1>(0, 3);
+    motion.z() = 0.0;
+    if (motion.norm() < 1e-3)
+    {
+      motion = initial_guess.block<3, 3>(0, 0).col(0);
+      motion.z() = 0.0;
+    }
+    if (motion.norm() < 1e-3) motion = Eigen::Vector3d::UnitX();
+    motion.normalize();
+    const Eigen::Vector3d lateral(-motion.y(), motion.x(), 0.0);
+    const double radius = std::max(0.0, ndt_prior_candidate_search_radius_);
+    const double yaw = std::max(0.0, ndt_prior_candidate_yaw_deg_);
+    std::vector<Eigen::Matrix4d> seeds;
+    if (radius > 0.0)
+    {
+      seeds.push_back(makePriorCandidateSeed(initial_guess, radius * motion, 0.0));
+      seeds.push_back(makePriorCandidateSeed(initial_guess, -radius * motion, 0.0));
+      seeds.push_back(makePriorCandidateSeed(initial_guess, radius * lateral, 0.0));
+      seeds.push_back(makePriorCandidateSeed(initial_guess, -radius * lateral, 0.0));
+    }
+    if (yaw > 0.0)
+    {
+      seeds.push_back(makePriorCandidateSeed(initial_guess, Eigen::Vector3d::Zero(), yaw));
+      seeds.push_back(makePriorCandidateSeed(initial_guess, Eigen::Vector3d::Zero(), -yaw));
+    }
+
+    const ros::WallTime extra_start = ros::WallTime::now();
+    const int max_extra = std::min(static_cast<int>(seeds.size()), ndt_prior_candidate_max_extra_aligns_);
+    for (int i = 0; i < max_extra; ++i)
+    {
+      candidates.push_back(evaluatePriorCandidate(source,
+                                                  ndt_source,
+                                                  ndt_target,
+                                                  sampled_source,
+                                                  initial_guess,
+                                                  seeds[static_cast<size_t>(i)],
+                                                  false,
+                                                  result,
+                                                  aligned,
+                                                  score,
+                                                  iterations));
+    }
+    align_ms += (ros::WallTime::now() - extra_start).toSec() * 1000.0;
+
+    if (candidates.empty()) return false;
+    const PriorCandidate &original = candidates.front();
+    const double max_allowed_fitness = original.fitness * std::max(ndt_prior_candidate_fitness_ratio_, 1.0) +
+                                       std::max(ndt_prior_candidate_fitness_margin_, 0.0);
+    int best_index = 0;
+    for (size_t i = 1; i < candidates.size(); ++i)
+    {
+      const PriorCandidate &candidate = candidates[i];
+      if (!candidate.converged || !std::isfinite(candidate.cost)) continue;
+      if (candidate.fitness > max_allowed_fitness) continue;
+      if (candidate.residual > original.residual + std::max(ndt_prior_candidate_fitness_margin_, 0.0)) continue;
+      if (ndt_prior_candidate_max_prior_distance_ > 0.0 &&
+          candidate.prior_distance > ndt_prior_candidate_max_prior_distance_) continue;
+      if (candidate.prior_distance + std::max(ndt_prior_candidate_min_prior_reduction_, 0.0) >=
+          original.prior_distance) continue;
+      if (candidate.cost + ndt_prior_candidate_min_cost_improvement_ < candidates[static_cast<size_t>(best_index)].cost)
+      {
+        best_index = static_cast<int>(i);
+      }
+    }
+    if (best_index <= 0) return false;
+
+    const PriorCandidate &best = candidates[static_cast<size_t>(best_index)];
+    result = best.result;
+    aligned = best.aligned;
+    score = best.fitness;
+    iterations = best.iterations;
+    ROS_INFO_THROTTLE(1.0,
+                      "[DogPriorMap NDT] prior candidate selected idx=%d cost %.4f->%.4f fitness %.4f->%.4f residual %.4f prior_dist %.3f yaw %.2f",
+                      best_index,
+                      original.cost,
+                      best.cost,
+                      original.fitness,
+                      best.fitness,
+                      best.residual,
+                      best.prior_distance,
+                      best.yaw_distance_deg);
     return true;
   }
 
@@ -1693,6 +1981,23 @@ private:
   int ndt_ambiguity_max_points_ = 300;
   double ndt_ambiguity_near_best_ratio_ = 1.25;
   double ndt_ambiguity_near_best_margin_ = 0.03;
+  bool ndt_motion_prior_guard_enable_ = false;
+  double ndt_motion_prior_guard_trigger_translation_ = 0.45;
+  double ndt_motion_prior_guard_residual_ratio_ = 1.05;
+  double ndt_motion_prior_guard_residual_margin_ = 0.03;
+  bool ndt_prior_candidate_enable_ = false;
+  double ndt_prior_candidate_trigger_translation_ = 0.35;
+  double ndt_prior_candidate_search_radius_ = 0.35;
+  double ndt_prior_candidate_yaw_deg_ = 3.0;
+  double ndt_prior_candidate_max_prior_distance_ = 0.45;
+  double ndt_prior_candidate_min_prior_reduction_ = 0.20;
+  int ndt_prior_candidate_max_extra_aligns_ = 6;
+  double ndt_prior_candidate_fitness_ratio_ = 1.20;
+  double ndt_prior_candidate_fitness_margin_ = 0.10;
+  double ndt_prior_candidate_residual_weight_ = 1.0;
+  double ndt_prior_candidate_prior_weight_ = 0.8;
+  double ndt_prior_candidate_yaw_weight_ = 0.02;
+  double ndt_prior_candidate_min_cost_improvement_ = 0.02;
   double last_ambiguity_check_time_ = -1.0;
   bool ndt_reject_zero_iteration_ = true;
   double ndt_max_fitness_score_ = 3.0;

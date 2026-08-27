@@ -177,6 +177,23 @@ lidar_update:
   ndt_ambiguity_max_points: 300     # 参与歧义诊断的当前帧点数上限，控制额外算力
   ndt_ambiguity_near_best_ratio: 1.25 # 残差接近最优候选的比例阈值；数量越多说明重复结构越强
   ndt_ambiguity_near_best_margin: 0.03 # 残差接近最优候选的绝对余量，避免残差很小时过严
+  ndt_motion_prior_guard_enable: false # 实验开关：NDT远离运动先验且残差优势不明显时保留运动先验，默认关闭
+  ndt_motion_prior_guard_trigger_translation: 0.45
+  ndt_motion_prior_guard_residual_ratio: 1.05
+  ndt_motion_prior_guard_residual_margin: 0.03
+  ndt_prior_candidate_enable: false # 实验开关：风险帧从运动先验附近多初值NDT中选低综合代价候选，默认关闭保护基线
+  ndt_prior_candidate_trigger_translation: 0.35 # 初值到NDT结果超过该距离才触发候选验证，避免全程增加CPU
+  ndt_prior_candidate_search_radius: 0.35       # 沿运动方向/侧向生成局部候选的偏移半径
+  ndt_prior_candidate_yaw_deg: 3.0              # 额外左右yaw候选角度
+  ndt_prior_candidate_max_prior_distance: 0.45  # 候选结果必须足够靠近运动先验，否则不替换原始NDT
+  ndt_prior_candidate_min_prior_reduction: 0.20 # 候选相对原始结果至少减少这么多初值偏离
+  ndt_prior_candidate_max_extra_aligns: 6       # 最多额外NDT次数；Orin上先限制为小候选集
+  ndt_prior_candidate_fitness_ratio: 1.20       # 候选NDT fitness不能比原始结果差太多
+  ndt_prior_candidate_fitness_margin: 0.10
+  ndt_prior_candidate_residual_weight: 1.0      # 综合代价中的最近地图残差权重
+  ndt_prior_candidate_prior_weight: 0.8         # 综合代价中的运动先验距离权重
+  ndt_prior_candidate_yaw_weight: 0.02          # 综合代价中的yaw偏离权重，单位deg
+  ndt_prior_candidate_min_cost_improvement: 0.02 # 候选至少改善这么多代价才替换原结果
   ndt_reject_zero_iteration: true   # 0次迭代通常表示没有真实优化，直接拒绝
   ndt_max_fitness_score: 3.0        # NDT分数上限；明显错误吸附时分数会升高，过严会拒绝有效帧
   ndt_accept_max_translation: 1.20  # 单帧NDT平移跳变上限；温和门控，避免瞬间拉飞
