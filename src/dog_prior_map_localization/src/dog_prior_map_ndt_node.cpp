@@ -151,6 +151,17 @@ public:
     ndt_ambiguity_max_points_ = getParam<int>("lidar_update/ndt_ambiguity_max_points", 300);
     ndt_ambiguity_near_best_ratio_ = getParam<double>("lidar_update/ndt_ambiguity_near_best_ratio", 1.25);
     ndt_ambiguity_near_best_margin_ = getParam<double>("lidar_update/ndt_ambiguity_near_best_margin", 0.03);
+    ndt_temporal_consistency_enable_ = getParam<bool>("lidar_update/ndt_temporal_consistency_enable", false);
+    ndt_temporal_trigger_translation_ = getParam<double>("lidar_update/ndt_temporal_trigger_translation", 0.55);
+    ndt_temporal_window_size_ = std::max(1, getParam<int>("lidar_update/ndt_temporal_window_size", 3));
+    ndt_temporal_min_consistent_ = std::max(1, getParam<int>("lidar_update/ndt_temporal_min_consistent", 2));
+    ndt_temporal_consistency_radius_ = getParam<double>("lidar_update/ndt_temporal_consistency_radius", 0.45);
+    ndt_temporal_consistency_yaw_deg_ = getParam<double>("lidar_update/ndt_temporal_consistency_yaw_deg", 8.0);
+    ndt_temporal_hold_max_frames_ = std::max(0, getParam<int>("lidar_update/ndt_temporal_hold_max_frames", 2));
+    ndt_temporal_prior_fallback_decay_ = getParam<double>("lidar_update/ndt_temporal_prior_fallback_decay", 1.0);
+    ndt_temporal_allow_if_residual_better_ = getParam<bool>("lidar_update/ndt_temporal_allow_if_residual_better", true);
+    ndt_temporal_residual_ratio_ = getParam<double>("lidar_update/ndt_temporal_residual_ratio", 0.90);
+    ndt_temporal_residual_margin_ = getParam<double>("lidar_update/ndt_temporal_residual_margin", -0.02);
     ndt_motion_prior_guard_enable_ = getParam<bool>("lidar_update/ndt_motion_prior_guard_enable", false);
     ndt_motion_prior_guard_trigger_translation_ =
         getParam<double>("lidar_update/ndt_motion_prior_guard_trigger_translation", 0.45);
@@ -829,7 +840,10 @@ private:
     Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
     std::string reject_reason = "accepted";
     bool accepted = acceptNdtResult(converged, score, iterations, result, reject_reason);
-    if (accepted && guardWithMotionPrior(source, initial_guess, result, aligned))
+    if (accepted && guardWithTemporalConsistency(source, initial_guess, result, aligned, reject_reason))
+    {
+    }
+    else if (accepted && guardWithMotionPrior(source, initial_guess, result, aligned))
     {
       reject_reason = "motion_prior_guarded";
     }
@@ -1042,6 +1056,122 @@ private:
   }
 
 
+
+
+  struct TemporalCandidate
+  {
+    Eigen::Matrix4d pose = Eigen::Matrix4d::Identity();
+    double stamp = 0.0;
+  };
+
+  bool isRiskyNdtCorrection(const Eigen::Matrix4d &initial_guess,
+                            const Eigen::Matrix4d &result) const
+  {
+    if (!ndt_temporal_consistency_enable_ || !has_previous_pose_) return false;
+    const double initial_to_result =
+        (result.block<3, 1>(0, 3) - initial_guess.block<3, 1>(0, 3)).norm();
+    return ndt_temporal_trigger_translation_ > 0.0 &&
+           initial_to_result >= ndt_temporal_trigger_translation_;
+  }
+
+  int countTemporalConsistentCandidates(const Eigen::Matrix4d &result) const
+  {
+    int consistent = 0;
+    const Eigen::Vector3d result_p = result.block<3, 1>(0, 3);
+    const Eigen::Matrix3d result_R = result.block<3, 3>(0, 0);
+    for (const auto &candidate : temporal_candidates_)
+    {
+      const double distance = (candidate.pose.block<3, 1>(0, 3) - result_p).norm();
+      const double yaw_deg = rotationAngleDeg(candidate.pose.block<3, 3>(0, 0).transpose() * result_R);
+      if ((ndt_temporal_consistency_radius_ <= 0.0 || distance <= ndt_temporal_consistency_radius_) &&
+          (ndt_temporal_consistency_yaw_deg_ <= 0.0 || yaw_deg <= ndt_temporal_consistency_yaw_deg_))
+      {
+        ++consistent;
+      }
+    }
+    return consistent;
+  }
+
+  void pushTemporalCandidate(const Eigen::Matrix4d &result, const ros::Time &stamp)
+  {
+    TemporalCandidate candidate;
+    candidate.pose = result;
+    candidate.stamp = stamp.toSec();
+    temporal_candidates_.push_back(candidate);
+    while (static_cast<int>(temporal_candidates_.size()) > ndt_temporal_window_size_)
+    {
+      temporal_candidates_.pop_front();
+    }
+  }
+
+  Eigen::Matrix4d temporalFallbackPose(const Eigen::Matrix4d &initial_guess) const
+  {
+    const double decay = std::max(0.0, std::min(1.0, ndt_temporal_prior_fallback_decay_));
+    if (!has_previous_pose_) return initial_guess;
+    Eigen::Matrix4d fallback = previous_pose_;
+    fallback.block<3, 1>(0, 3) += decay * delta_pose_.block<3, 1>(0, 3);
+    Eigen::Quaterniond q_prev(previous_pose_.block<3, 3>(0, 0));
+    Eigen::Quaterniond q_guess(initial_guess.block<3, 3>(0, 0));
+    q_prev.normalize();
+    q_guess.normalize();
+    fallback.block<3, 3>(0, 0) = q_prev.slerp(decay, q_guess).normalized().toRotationMatrix();
+    return fallback;
+  }
+
+  bool temporalResidualStrongEnough(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
+                                    const Eigen::Matrix4d &initial_guess,
+                                    const Eigen::Matrix4d &result) const
+  {
+    if (!ndt_temporal_allow_if_residual_better_) return false;
+    pcl::PointCloud<pcl::PointXYZ>::Ptr sampled_source = sampleForAmbiguity(source);
+    const double result_residual = meanNearestMapResidual(sampled_source, result);
+    const double prior_residual = meanNearestMapResidual(sampled_source, initial_guess);
+    if (!std::isfinite(result_residual) || !std::isfinite(prior_residual)) return false;
+    return result_residual <= prior_residual * std::max(ndt_temporal_residual_ratio_, 0.0) +
+                              ndt_temporal_residual_margin_;
+  }
+
+  bool guardWithTemporalConsistency(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
+                                    const Eigen::Matrix4d &initial_guess,
+                                    Eigen::Matrix4d &result,
+                                    pcl::PointCloud<pcl::PointXYZ> &aligned,
+                                    std::string &reject_reason)
+  {
+    if (!isRiskyNdtCorrection(initial_guess, result))
+    {
+      if (ndt_temporal_consistency_enable_) temporal_hold_frames_ = 0;
+      return false;
+    }
+
+    const int consistent_count = countTemporalConsistentCandidates(result);
+    pushTemporalCandidate(result, ros::Time::now());
+    const bool enough_consistency = consistent_count + 1 >= ndt_temporal_min_consistent_;
+    const bool strong_residual = temporalResidualStrongEnough(source, initial_guess, result);
+    if (enough_consistency || strong_residual)
+    {
+      temporal_hold_frames_ = 0;
+      reject_reason = enough_consistency ? "temporal_consistent" : "temporal_residual_strong";
+      return false;
+    }
+
+    ++temporal_hold_frames_;
+    if (ndt_temporal_hold_max_frames_ > 0 && temporal_hold_frames_ > ndt_temporal_hold_max_frames_)
+    {
+      temporal_hold_frames_ = 0;
+      reject_reason = "temporal_hold_timeout";
+      return false;
+    }
+
+    result = temporalFallbackPose(initial_guess);
+    aligned = transformCloud(source, result);
+    reject_reason = "temporal_hold_prior";
+    ROS_INFO_THROTTLE(1.0,
+                      "[DogPriorMap NDT] temporal hold risk_frames=%d consistent=%d min=%d",
+                      temporal_hold_frames_,
+                      consistent_count + 1,
+                      ndt_temporal_min_consistent_);
+    return true;
+  }
 
   bool guardWithMotionPrior(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
                             const Eigen::Matrix4d &initial_guess,
@@ -1981,6 +2111,19 @@ private:
   int ndt_ambiguity_max_points_ = 300;
   double ndt_ambiguity_near_best_ratio_ = 1.25;
   double ndt_ambiguity_near_best_margin_ = 0.03;
+  bool ndt_temporal_consistency_enable_ = false;
+  double ndt_temporal_trigger_translation_ = 0.55;
+  int ndt_temporal_window_size_ = 3;
+  int ndt_temporal_min_consistent_ = 2;
+  double ndt_temporal_consistency_radius_ = 0.45;
+  double ndt_temporal_consistency_yaw_deg_ = 8.0;
+  int ndt_temporal_hold_max_frames_ = 2;
+  double ndt_temporal_prior_fallback_decay_ = 1.0;
+  bool ndt_temporal_allow_if_residual_better_ = true;
+  double ndt_temporal_residual_ratio_ = 0.90;
+  double ndt_temporal_residual_margin_ = -0.02;
+  std::deque<TemporalCandidate> temporal_candidates_;
+  int temporal_hold_frames_ = 0;
   bool ndt_motion_prior_guard_enable_ = false;
   double ndt_motion_prior_guard_trigger_translation_ = 0.45;
   double ndt_motion_prior_guard_residual_ratio_ = 1.05;

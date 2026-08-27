@@ -177,6 +177,17 @@ lidar_update:
   ndt_ambiguity_max_points: 300     # 参与歧义诊断的当前帧点数上限，控制额外算力
   ndt_ambiguity_near_best_ratio: 1.25 # 残差接近最优候选的比例阈值；数量越多说明重复结构越强
   ndt_ambiguity_near_best_margin: 0.03 # 残差接近最优候选的绝对余量，避免残差很小时过严
+  ndt_temporal_consistency_enable: false # 实验开关：风险NDT修正需跨短滑窗一致，默认关闭保护基线
+  ndt_temporal_trigger_translation: 0.55 # NDT结果远离运动初值超过该距离时进入滑窗验证
+  ndt_temporal_window_size: 3
+  ndt_temporal_min_consistent: 2
+  ndt_temporal_consistency_radius: 0.45
+  ndt_temporal_consistency_yaw_deg: 8.0
+  ndt_temporal_hold_max_frames: 2
+  ndt_temporal_prior_fallback_decay: 1.0
+  ndt_temporal_allow_if_residual_better: true
+  ndt_temporal_residual_ratio: 0.90
+  ndt_temporal_residual_margin: -0.02
   ndt_motion_prior_guard_enable: false # 实验开关：NDT远离运动先验且残差优势不明显时保留运动先验，默认关闭
   ndt_motion_prior_guard_trigger_translation: 0.45
   ndt_motion_prior_guard_residual_ratio: 1.05
