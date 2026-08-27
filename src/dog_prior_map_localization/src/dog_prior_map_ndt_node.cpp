@@ -185,6 +185,28 @@ public:
     ndt_prior_candidate_yaw_weight_ = getParam<double>("lidar_update/ndt_prior_candidate_yaw_weight", 0.02);
     ndt_prior_candidate_min_cost_improvement_ =
         getParam<double>("lidar_update/ndt_prior_candidate_min_cost_improvement", 0.02);
+    ndt_dual_resolution_candidate_enable_ = getParam<bool>("lidar_update/ndt_dual_resolution_candidate_enable", false);
+    ndt_dual_resolution_trigger_translation_ =
+        getParam<double>("lidar_update/ndt_dual_resolution_trigger_translation", 0.45);
+    ndt_dual_resolution_trigger_rotation_deg_ =
+        getParam<double>("lidar_update/ndt_dual_resolution_trigger_rotation_deg", 6.0);
+    ndt_dual_resolution_source_voxel_size_ =
+        getParam<double>("lidar_update/ndt_dual_resolution_source_voxel_size", 0.35);
+    ndt_dual_resolution_target_voxel_size_ =
+        getParam<double>("lidar_update/ndt_dual_resolution_target_voxel_size", 0.25);
+    ndt_dual_resolution_max_source_points_ =
+        getParam<int>("lidar_update/ndt_dual_resolution_max_source_points", 900);
+    ndt_dual_resolution_resolution_ = getParam<double>("lidar_update/ndt_dual_resolution_resolution", 1.0);
+    ndt_dual_resolution_step_size_ = getParam<double>("lidar_update/ndt_dual_resolution_step_size", 0.1);
+    ndt_dual_resolution_max_iterations_ = getParam<int>("lidar_update/ndt_dual_resolution_max_iterations", 30);
+    ndt_dual_resolution_fitness_ratio_ = getParam<double>("lidar_update/ndt_dual_resolution_fitness_ratio", 1.20);
+    ndt_dual_resolution_fitness_margin_ = getParam<double>("lidar_update/ndt_dual_resolution_fitness_margin", 0.10);
+    ndt_dual_resolution_residual_weight_ = getParam<double>("lidar_update/ndt_dual_resolution_residual_weight", 1.0);
+    ndt_dual_resolution_prior_weight_ = getParam<double>("lidar_update/ndt_dual_resolution_prior_weight", 0.8);
+    ndt_dual_resolution_yaw_weight_ = getParam<double>("lidar_update/ndt_dual_resolution_yaw_weight", 0.02);
+    ndt_dual_resolution_z_weight_ = getParam<double>("lidar_update/ndt_dual_resolution_z_weight", 0.5);
+    ndt_dual_resolution_min_cost_improvement_ =
+        getParam<double>("lidar_update/ndt_dual_resolution_min_cost_improvement", 0.02);
     ndt_max_fitness_score_ = getParam<double>("lidar_update/ndt_max_fitness_score", 3.0);
     ndt_reject_zero_iteration_ = getParam<bool>("lidar_update/ndt_reject_zero_iteration", true);
     ndt_accept_max_translation_ = getParam<double>("lidar_update/ndt_accept_max_translation", 1.20);
@@ -312,6 +334,11 @@ private:
     finalizeCloud(xyz);
     map_cloud_ = voxelDown(xyz, map_voxel_size_, map_voxel_size_, map_voxel_z_size_, 0);
     target_cloud_ = voxelDown(map_cloud_, target_voxel_size_, target_voxel_size_, target_voxel_z_size_, max_target_points_);
+    coarse_target_cloud_ = voxelDown(map_cloud_,
+                                     ndt_dual_resolution_target_voxel_size_,
+                                     ndt_dual_resolution_target_voxel_size_,
+                                     ndt_dual_resolution_target_voxel_size_,
+                                     max_target_points_);
     map_kdtree_.setInputCloud(target_cloud_);
 
     ndt_.setInputTarget(target_cloud_);
@@ -858,6 +885,16 @@ private:
                                              align_ms))
     {
       reject_reason = "prior_candidate_selected";
+    }
+    else if (accepted && selectDualResolutionCandidate(source,
+                                                       initial_guess,
+                                                       result,
+                                                       aligned,
+                                                       score,
+                                                       iterations,
+                                                       align_ms))
+    {
+      reject_reason = "dual_resolution_selected";
     }
     bool used_prediction = false;
     bool step_limited = false;
@@ -1417,6 +1454,121 @@ private:
                       best.residual,
                       best.prior_distance,
                       best.yaw_distance_deg);
+    return true;
+  }
+
+
+  double dualResolutionCandidateCost(double fitness,
+                                     double residual,
+                                     double prior_distance,
+                                     double yaw_distance_deg,
+                                     double z_distance) const
+  {
+    return fitness + ndt_dual_resolution_residual_weight_ * residual +
+           ndt_dual_resolution_prior_weight_ * prior_distance +
+           ndt_dual_resolution_yaw_weight_ * yaw_distance_deg +
+           ndt_dual_resolution_z_weight_ * z_distance;
+  }
+
+  bool shouldRunDualResolutionCandidate(const Eigen::Matrix4d &initial_guess,
+                                        const Eigen::Matrix4d &result) const
+  {
+    if (!ndt_dual_resolution_candidate_enable_ || !has_previous_pose_) return false;
+    const Eigen::Vector3d initial_p = initial_guess.block<3, 1>(0, 3);
+    const Eigen::Vector3d result_p = result.block<3, 1>(0, 3);
+    const double initial_to_result = (result_p - initial_p).norm();
+    const double initial_to_result_rot_deg =
+        rotationAngleDeg(initial_guess.block<3, 3>(0, 0).transpose() * result.block<3, 3>(0, 0));
+    return (ndt_dual_resolution_trigger_translation_ > 0.0 &&
+            initial_to_result >= ndt_dual_resolution_trigger_translation_) ||
+           (ndt_dual_resolution_trigger_rotation_deg_ > 0.0 &&
+            initial_to_result_rot_deg >= ndt_dual_resolution_trigger_rotation_deg_);
+  }
+
+  bool selectDualResolutionCandidate(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
+                                     const Eigen::Matrix4d &initial_guess,
+                                     Eigen::Matrix4d &result,
+                                     pcl::PointCloud<pcl::PointXYZ> &aligned,
+                                     double &score,
+                                     int &iterations,
+                                     double &align_ms) const
+  {
+    if (!shouldRunDualResolutionCandidate(initial_guess, result)) return false;
+    if (!source || source->empty() || !coarse_target_cloud_ || coarse_target_cloud_->empty()) return false;
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr coarse_source =
+        voxelDown(source,
+                  ndt_dual_resolution_source_voxel_size_,
+                  ndt_dual_resolution_source_voxel_size_,
+                  ndt_dual_resolution_source_voxel_size_,
+                  ndt_dual_resolution_max_source_points_);
+    if (!coarse_source || static_cast<int>(coarse_source->size()) < min_effective_points_) return false;
+
+    pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt_coarse;
+    ndt_coarse.setInputTarget(coarse_target_cloud_);
+    ndt_coarse.setInputSource(coarse_source);
+    ndt_coarse.setResolution(ndt_dual_resolution_resolution_);
+    ndt_coarse.setStepSize(ndt_dual_resolution_step_size_);
+    ndt_coarse.setTransformationEpsilon(ndt_transformation_epsilon_);
+    ndt_coarse.setMaximumIterations(std::max(1, ndt_dual_resolution_max_iterations_));
+
+    pcl::PointCloud<pcl::PointXYZ> coarse_aligned;
+    const ros::WallTime extra_start = ros::WallTime::now();
+    ndt_coarse.align(coarse_aligned, initial_guess.cast<float>());
+    align_ms += (ros::WallTime::now() - extra_start).toSec() * 1000.0;
+    if (!ndt_coarse.hasConverged()) return false;
+
+    const double fine_fitness = score;
+    const double coarse_fitness = ndt_coarse.getFitnessScore();
+    const int coarse_iterations = ndt_coarse.getFinalNumIteration();
+    const Eigen::Matrix4d coarse_result = ndt_coarse.getFinalTransformation().cast<double>();
+    const double max_allowed_fitness = fine_fitness * std::max(ndt_dual_resolution_fitness_ratio_, 1.0) +
+                                       std::max(ndt_dual_resolution_fitness_margin_, 0.0);
+    if (coarse_fitness > max_allowed_fitness) return false;
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr sampled_source = sampleForAmbiguity(source);
+    const double fine_residual = meanNearestMapResidual(sampled_source ? sampled_source : source, result);
+    const double coarse_residual = meanNearestMapResidual(sampled_source ? sampled_source : source, coarse_result);
+    const Eigen::Vector3d initial_p = initial_guess.block<3, 1>(0, 3);
+    const Eigen::Vector3d fine_p = result.block<3, 1>(0, 3);
+    const Eigen::Vector3d coarse_p = coarse_result.block<3, 1>(0, 3);
+    const double fine_prior_distance = (fine_p - initial_p).norm();
+    const double coarse_prior_distance = (coarse_p - initial_p).norm();
+    const double fine_yaw_distance_deg =
+        rotationAngleDeg(initial_guess.block<3, 3>(0, 0).transpose() * result.block<3, 3>(0, 0));
+    const double coarse_yaw_distance_deg =
+        rotationAngleDeg(initial_guess.block<3, 3>(0, 0).transpose() * coarse_result.block<3, 3>(0, 0));
+    const double fine_cost = dualResolutionCandidateCost(fine_fitness,
+                                                         fine_residual,
+                                                         fine_prior_distance,
+                                                         fine_yaw_distance_deg,
+                                                         std::abs(fine_p.z() - initial_p.z()));
+    const double coarse_cost = dualResolutionCandidateCost(coarse_fitness,
+                                                           coarse_residual,
+                                                           coarse_prior_distance,
+                                                           coarse_yaw_distance_deg,
+                                                           std::abs(coarse_p.z() - initial_p.z()));
+    if (!std::isfinite(coarse_cost) || coarse_cost + ndt_dual_resolution_min_cost_improvement_ >= fine_cost)
+    {
+      return false;
+    }
+
+    result = coarse_result;
+    aligned = transformCloud(source, result);
+    score = coarse_fitness;
+    iterations = coarse_iterations;
+    ROS_INFO_THROTTLE(1.0,
+                      "[DogPriorMap NDT] dual-resolution selected cost %.4f->%.4f fitness %.4f->%.4f residual %.4f->%.4f prior %.3f->%.3f yaw %.2f->%.2f",
+                      fine_cost,
+                      coarse_cost,
+                      fine_fitness,
+                      coarse_fitness,
+                      fine_residual,
+                      coarse_residual,
+                      fine_prior_distance,
+                      coarse_prior_distance,
+                      fine_yaw_distance_deg,
+                      coarse_yaw_distance_deg);
     return true;
   }
 
@@ -2009,6 +2161,7 @@ private:
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud_;
   pcl::PointCloud<pcl::PointXYZ>::Ptr target_cloud_;
+  pcl::PointCloud<pcl::PointXYZ>::Ptr coarse_target_cloud_;
   pcl::KdTreeFLANN<pcl::PointXYZ> map_kdtree_;
   pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt_;
   nav_msgs::Path path_;
@@ -2141,6 +2294,22 @@ private:
   double ndt_prior_candidate_prior_weight_ = 0.8;
   double ndt_prior_candidate_yaw_weight_ = 0.02;
   double ndt_prior_candidate_min_cost_improvement_ = 0.02;
+  bool ndt_dual_resolution_candidate_enable_ = false;
+  double ndt_dual_resolution_trigger_translation_ = 0.45;
+  double ndt_dual_resolution_trigger_rotation_deg_ = 6.0;
+  double ndt_dual_resolution_source_voxel_size_ = 0.35;
+  double ndt_dual_resolution_target_voxel_size_ = 0.25;
+  int ndt_dual_resolution_max_source_points_ = 900;
+  double ndt_dual_resolution_resolution_ = 1.0;
+  double ndt_dual_resolution_step_size_ = 0.1;
+  int ndt_dual_resolution_max_iterations_ = 30;
+  double ndt_dual_resolution_fitness_ratio_ = 1.20;
+  double ndt_dual_resolution_fitness_margin_ = 0.10;
+  double ndt_dual_resolution_residual_weight_ = 1.0;
+  double ndt_dual_resolution_prior_weight_ = 0.8;
+  double ndt_dual_resolution_yaw_weight_ = 0.02;
+  double ndt_dual_resolution_z_weight_ = 0.5;
+  double ndt_dual_resolution_min_cost_improvement_ = 0.02;
   double last_ambiguity_check_time_ = -1.0;
   bool ndt_reject_zero_iteration_ = true;
   double ndt_max_fitness_score_ = 3.0;
