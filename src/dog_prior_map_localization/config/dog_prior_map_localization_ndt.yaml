@@ -221,16 +221,6 @@ lidar_update:
   ndt_dual_resolution_yaw_weight: 0.02
   ndt_dual_resolution_z_weight: 0.5             # 抑制无连续证据的楼层/Z突跳
   ndt_dual_resolution_min_cost_improvement: 0.02
-  ndt_motion_tube_guard_enable: false # 实验开关：风险帧在NDT没有明显残差优势时投影回运动先验管道
-  ndt_motion_tube_trigger_translation: 0.45 # NDT结果相对IMU/上一帧传播初值超过该距离才触发
-  ndt_motion_tube_trigger_rotation_deg: 7.0
-  ndt_motion_tube_trigger_z: 0.20
-  ndt_motion_tube_max_translation: 0.25 # 触发后允许NDT相对运动初值的最大平移修正
-  ndt_motion_tube_max_rotation_deg: 3.0
-  ndt_motion_tube_max_z: 0.12
-  ndt_motion_tube_result_residual_ratio: 0.90 # NDT残差若明显优于初值则不过滤
-  ndt_motion_tube_result_residual_margin: -0.02
-  ndt_motion_tube_max_fitness: 2.0
   ndt_reject_zero_iteration: true   # 0次迭代通常表示没有真实优化，直接拒绝
   ndt_max_fitness_score: 3.0        # NDT分数上限；明显错误吸附时分数会升高，过严会拒绝有效帧
   ndt_accept_max_translation: 1.20  # 单帧NDT平移跳变上限；温和门控，避免瞬间拉飞
