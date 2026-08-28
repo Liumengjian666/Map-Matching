@@ -42,6 +42,10 @@
 
 ![三算法轨迹三维图](figures/three_algo_loop3_3d_view_20260828.png)
 
+另外单独给出了本文算法的全程整体路径图，便于直接观察完整行进轨迹、起终点闭合情况以及楼梯/拐角处是否发生局部偏移。该图把整条轨迹按时间渐变着色，整体路径更清楚。
+
+![本文算法整体路径图](figures/ours_overall_path_20260828.png)
+
 同时导出了可在 CloudCompare / PCL Viewer 中打开的彩色轨迹 PCD：
 
 - `/home/jian/rosbag/loop3/report_three_algo_20260828_135951/three_algorithm_trajectories_rgb.pcd`：只包含三条彩色轨迹
