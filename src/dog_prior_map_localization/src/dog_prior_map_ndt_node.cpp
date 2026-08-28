@@ -348,14 +348,11 @@ private:
     finalizeCloud(xyz);
     map_cloud_ = voxelDown(xyz, map_voxel_size_, map_voxel_size_, map_voxel_z_size_, 0);
     target_cloud_ = voxelDown(map_cloud_, target_voxel_size_, target_voxel_size_, target_voxel_z_size_, max_target_points_);
-    if (ndt_dual_resolution_candidate_enable_)
-    {
-      coarse_target_cloud_ = voxelDown(map_cloud_,
-                                       ndt_dual_resolution_target_voxel_size_,
-                                       ndt_dual_resolution_target_voxel_size_,
-                                       ndt_dual_resolution_target_voxel_size_,
-                                       max_target_points_);
-    }
+    coarse_target_cloud_ = voxelDown(map_cloud_,
+                                     ndt_dual_resolution_target_voxel_size_,
+                                     ndt_dual_resolution_target_voxel_size_,
+                                     ndt_dual_resolution_target_voxel_size_,
+                                     max_target_points_);
     map_kdtree_.setInputCloud(target_cloud_);
 
     ndt_.setInputTarget(target_cloud_);
