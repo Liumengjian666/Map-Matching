@@ -50,11 +50,10 @@
 
 ![本文算法整体路径图](figures/ours_overall_path_20260828.png)
 
-现场录屏已经同时导出为 GIF、MP4 和 HTML 预览页。由于很多 Word 阅读器会把 GIF 只显示成首帧，所以这里保留 GIF 供外部查看，并额外放一张中间帧封面图、MP4 和 HTML 预览页，方便在 Word 里直接打开外部查看；另外附上局部误匹配和整体路径的两张原始截图，便于和导师沟通具体拐角问题。
+现场录屏已经同时导出为 GIF、MP4 和 HTML 预览页。这里再次直接放回 GIF 版本，便于优先在支持动画的查看器中播放；同时保留 MP4 和 HTML 预览页作为备用，避免 Word 阅读器不播放动画时看不到过程；另外附上局部误匹配和整体路径的两张原始截图，便于和导师沟通具体拐角问题。
 
-![现场录屏封面图](figures/screen_video_20260828_152939_cover.png)
+![现场录屏 GIF](figures/screen_video_20260828_152939_loop_small.gif)
 
-- GIF：`figures/screen_video_20260828_152939_loop_small.gif`
 - MP4：`figures/screen_video_20260828_152939.mp4`
 - HTML 预览：`figures/screen_video_preview_20260828.html`
 
