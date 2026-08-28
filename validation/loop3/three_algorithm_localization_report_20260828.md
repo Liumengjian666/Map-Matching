@@ -36,21 +36,33 @@
 
 ## 3. 轨迹叠加可视化
 
-图中灰色为先验地图，红色为本文算法，绿色为 FAST-LIVO2，蓝色为 FASTLIO2Location。圆点表示起点，叉号表示终点。
+图中灰色为先验地图，红色为本文算法，绿色为对齐后的 FAST-LIVO2，蓝色为 FASTLIO2Location。圆点表示起点，叉号表示终点。
 
 ![三算法轨迹俯视图](figures/three_algo_loop3_top_view_20260828.png)
 
 ![三算法轨迹三维图](figures/three_algo_loop3_3d_view_20260828.png)
 
+补充核对：FAST-LIVO2 的 `/aft_mapped_to_init` 本身属于它自己的里程计坐标系，不应直接当作先验地图坐标系来读。重新核对后，FAST-LIVO2 原始轨迹直接对齐 FASTLIO2Location 的 mean 约为 5.85 m，而做刚体对齐后 mean 约为 0.59 m，因此下方三算法图里的 FAST-LIVO2 主要作为轨迹形状参考，绝对坐标需要结合对齐结果理解。
+
+![FAST-LIVO2 坐标复核图](figures/fastlivo2_alignment_check_20260828.png)
+
 另外单独给出了本文算法的全程整体路径图，便于直接观察完整行进轨迹、起终点闭合情况以及楼梯/拐角处是否发生局部偏移。该图把整条轨迹按时间渐变着色，整体路径更清楚。
 
 ![本文算法整体路径图](figures/ours_overall_path_20260828.png)
+
+现场录屏也转成了 GIF，便于在 Word 中直接查看轨迹运动过程；另外附上局部误匹配和整体路径的两张原始截图，便于和导师沟通具体拐角问题。
+
+![现场录屏 GIF](figures/screen_video_20260828_152939.gif)
+
+![局部误匹配截图](figures/local_mismatch.png)
+
+![整体路径截图](figures/overall_path.png)
 
 同时导出了可在 CloudCompare / PCL Viewer 中打开的彩色轨迹 PCD：
 
 - `/home/jian/rosbag/loop3/report_three_algo_20260828_135951/three_algorithm_trajectories_rgb.pcd`：只包含三条彩色轨迹
 - `/home/jian/rosbag/loop3/report_three_algo_20260828_135951/prior_map_with_three_algorithm_trajectories_rgb.pcd`：灰色先验地图 + 三条彩色轨迹
-- 红色：本文算法；绿色：FAST-LIVO2；蓝色：FASTLIO2Location
+- 红色：本文算法；绿色：对齐后的 FAST-LIVO2；蓝色：FASTLIO2Location
 
 ## 4. 定量结果
 
