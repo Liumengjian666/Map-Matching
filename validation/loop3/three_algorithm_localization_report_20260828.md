@@ -36,13 +36,13 @@
 
 ## 3. 轨迹叠加可视化
 
-图中灰色为先验地图，红色为本文算法，绿色为对齐后的 FAST-LIVO2，蓝色为 FASTLIO2Location。圆点表示起点，叉号表示终点。
+图中灰色为先验地图，红色为本文算法，绿色为**刚体对齐后**的 FAST-LIVO2，蓝色为 FASTLIO2Location。圆点表示起点，叉号表示终点。
 
 ![三算法轨迹俯视图](figures/three_algo_loop3_top_view_20260828.png)
 
 ![三算法轨迹三维图](figures/three_algo_loop3_3d_view_20260828.png)
 
-补充核对：FAST-LIVO2 的 `/aft_mapped_to_init` 本身属于它自己的里程计坐标系，不应直接当作先验地图坐标系来读。重新核对后，FAST-LIVO2 原始轨迹直接对齐 FASTLIO2Location 的 mean 约为 5.85 m，而做刚体对齐后 mean 约为 0.59 m，因此下方三算法图里的 FAST-LIVO2 主要作为轨迹形状参考，绝对坐标需要结合对齐结果理解。
+补充核对：FAST-LIVO2 的 `/aft_mapped_to_init` 本身是它自己的 SLAM 里程计坐标系，不是先验地图坐标系；`Rcl/Pcl` 也只是 FAST-LIVO2 内部的相机-雷达外参，不能用来直接把整条轨迹变成先验地图坐标。当前对比图里绿色轨迹只展示**刚体对齐**后的 FAST-LIVO2 结果；如果看原始轨迹直接对齐 FASTLIO2Location，当前 CSV 复核的 mean 约为 6.23 m，而刚体对齐后 mean 约为 0.49 m，因此绝对坐标必须按对齐后的结果理解。
 
 ![FAST-LIVO2 坐标复核图](figures/fastlivo2_alignment_check_20260828.png)
 
