@@ -138,90 +138,19 @@ lidar_update:
   max_update_time_ms: 80.0      # 单帧地图匹配软预算；太小会导致有效点不足
   ndt_enable: true              # NDT主模式下打开；用于和点到面EKF/FASTLIO2Location对比
   ndt_absolute_pose_mode: true  # 关闭全局绝对位姿NDT；长廊/重复结构下容易误吸附到错误全局姿态
-  ndt_use_full_map_target: true  # 局部target在当前loop3会随错误初值裁错地图，默认保留全图NDT基线
-  ndt_local_target_radius: 8.0   # NDT局部target半径；需要覆盖近邻墙面/走廊，但排除远处相似结构
-  ndt_local_target_min_points: 1000 # 局部target太稀疏时回退全图，避免空地图导致NDT失效
   ndt_source_voxel_size: 0.25        # 当前帧扫描点云降采样体素；越小越细但越耗CPU
   ndt_source_voxel_z_size: 0.25      # 默认与XY一致；避免改变稳定NDT基线
-  ndt_target_voxel_size: 0.15        # 全局地图target体素；loop3完整验证中0.15m明显降低楼梯/拐角误吸附
+  ndt_target_voxel_size: 0.15        # 全局地图target体素；loop3完整验证中0.15m比0.30m更稳
   ndt_target_voxel_z_size: 0.15      # 默认与XY一致；避免改变稳定NDT基线
   ndt_max_source_points: 1400        # 当前帧参与NDT的最大点数，控制单帧计算量
-  ndt_multiframe_source_enable: false # 多帧源点云在loop3全包会放大拖影误匹配，默认关闭
-  ndt_multiframe_history_size: 3     # 聚合最近3帧，限制拖影和算力
-  ndt_multiframe_max_points: 2200    # 聚合源点云最大点数
   ndt_max_target_points: 0           # 全局地图target不截断；避免只拿前一小段地图导致全程误匹配
   ndt_max_iterations: 40             # NDT最大迭代次数；太大可能增加耗时但更容易收敛
   ndt_resolution: 0.8        # NDT网格分辨率；数值越小越细，越容易识别局部几何
   ndt_step_size: 0.08                 # 优化步长；影响NDT搜索和收敛速度
   ndt_transformation_epsilon: 0.001 # 变换增量收敛阈值；越小越难判定收敛
-  ndt_acceptance_enable: false      # 独立NDT节点轻量验收门控；过严会导致长段冻结，默认关闭
-  ndt_coast_on_reject_enable: false # coast会累计漂移；仅保留为实验开关，默认不干预NDT输出
-  ndt_coast_velocity_decay: 0.8     # 连续坏帧时逐步衰减恒速预测，等待NDT重新可信
   ndt_step_limit_enable: true       # 连续运动限幅：不拒绝NDT，只限制单帧结果相对上次匹配的跳变
   ndt_step_limit_max_translation: 0.5 # 单帧NDT输出最大平移变化，防止几帧误匹配瞬间把EKF拉飞
   ndt_step_limit_max_rotation_deg: 5.0 # 单帧NDT输出最大旋转变化，防止错误吸附造成姿态突跳
-  ndt_confident_step_limit_enable: false # 实验开关：低残差且小旋转时临时放宽平移限幅，避免拐角被0.5m截断
-  ndt_confident_step_limit_max_translation: 0.65
-  ndt_confident_step_limit_max_fitness: 0.30
-  ndt_confident_step_limit_max_rotation_deg: 10.0
-  ndt_large_jump_guard_enable: false # 全包验证会造成长段恒速漂移，默认关闭
-  ndt_large_jump_guard_translation: 1.2
-  ndt_large_jump_guard_rotation_deg: 12.0
-  ndt_large_jump_guard_decay: 1.0
-  ndt_ambiguity_check_enable: false # NDT歧义诊断；只记录局部候选残差，不干预定位，实验时再打开
-  ndt_ambiguity_period_sec: 1.0     # 歧义诊断最小间隔；越小越密但越耗CPU
-  ndt_ambiguity_search_radius: 2.0  # 围绕当前NDT结果在XY平面搜索的半径，用于判断是否存在相似错误位置
-  ndt_ambiguity_search_step: 1.0    # XY候选间隔；越小越细但候选数量更多
-  ndt_ambiguity_yaw_search_deg: 8.0 # 围绕当前yaw额外搜索角度范围
-  ndt_ambiguity_yaw_step_deg: 4.0   # yaw候选间隔
-  ndt_ambiguity_max_points: 300     # 参与歧义诊断的当前帧点数上限，控制额外算力
-  ndt_ambiguity_near_best_ratio: 1.25 # 残差接近最优候选的比例阈值；数量越多说明重复结构越强
-  ndt_ambiguity_near_best_margin: 0.03 # 残差接近最优候选的绝对余量，避免残差很小时过严
-  ndt_temporal_consistency_enable: false # 实验开关：风险NDT修正需跨短滑窗一致，默认关闭保护基线
-  ndt_temporal_trigger_translation: 0.55 # NDT结果远离运动初值超过该距离时进入滑窗验证
-  ndt_temporal_window_size: 3
-  ndt_temporal_min_consistent: 2
-  ndt_temporal_consistency_radius: 0.45
-  ndt_temporal_consistency_yaw_deg: 8.0
-  ndt_temporal_hold_max_frames: 2
-  ndt_temporal_prior_fallback_decay: 1.0
-  ndt_temporal_allow_if_residual_better: true
-  ndt_temporal_residual_ratio: 0.90
-  ndt_temporal_residual_margin: -0.02
-  ndt_motion_prior_guard_enable: false # 实验开关：NDT远离运动先验且残差优势不明显时保留运动先验，默认关闭
-  ndt_motion_prior_guard_trigger_translation: 0.45
-  ndt_motion_prior_guard_residual_ratio: 1.05
-  ndt_motion_prior_guard_residual_margin: 0.03
-  ndt_prior_candidate_enable: false # 实验开关：风险帧从运动先验附近多初值NDT中选低综合代价候选，默认关闭保护基线
-  ndt_prior_candidate_trigger_translation: 0.35 # 初值到NDT结果超过该距离才触发候选验证，避免全程增加CPU
-  ndt_prior_candidate_search_radius: 0.35       # 沿运动方向/侧向生成局部候选的偏移半径
-  ndt_prior_candidate_yaw_deg: 3.0              # 额外左右yaw候选角度
-  ndt_prior_candidate_max_prior_distance: 0.45  # 候选结果必须足够靠近运动先验，否则不替换原始NDT
-  ndt_prior_candidate_min_prior_reduction: 0.20 # 候选相对原始结果至少减少这么多初值偏离
-  ndt_prior_candidate_max_extra_aligns: 6       # 最多额外NDT次数；Orin上先限制为小候选集
-  ndt_prior_candidate_fitness_ratio: 1.20       # 候选NDT fitness不能比原始结果差太多
-  ndt_prior_candidate_fitness_margin: 0.10
-  ndt_prior_candidate_residual_weight: 1.0      # 综合代价中的最近地图残差权重
-  ndt_prior_candidate_prior_weight: 0.8         # 综合代价中的运动先验距离权重
-  ndt_prior_candidate_yaw_weight: 0.02          # 综合代价中的yaw偏离权重，单位deg
-  ndt_prior_candidate_min_cost_improvement: 0.02 # 候选至少改善这么多代价才替换原结果
-  ndt_reject_zero_iteration: true   # 0次迭代通常表示没有真实优化，直接拒绝
-  ndt_max_fitness_score: 3.0        # NDT分数上限；明显错误吸附时分数会升高，过严会拒绝有效帧
-  ndt_accept_max_translation: 1.20  # 单帧NDT平移跳变上限；温和门控，避免瞬间拉飞
-  ndt_accept_max_rotation_deg: 12.0 # 单帧NDT旋转跳变上限；温和门控，避免重复走廊错误转向
-  ndt_use_external_initial_guess: false # 内部高频初值全包验证会引入闭环漂移，默认关闭
-  ndt_initial_guess_max_age_sec: 0.20
-  ndt_initial_guess_blend: 1.0
-  internal_odom_enable: false        # 内部ICP初值在loop3会被重复走廊拉偏，默认关闭
-  internal_odom_voxel_size: 0.45
-  internal_odom_max_points: 700
-  internal_odom_max_iterations: 12
-  internal_odom_max_correspondence_distance: 1.2
-  internal_odom_max_fitness_score: 0.8
-  internal_odom_max_translation: 0.8
-  internal_odom_max_rotation_deg: 12.0
-  internal_odom_planar: true         # 机器狗室内行走优先约束scan-to-scan里程计为平面运动
-  internal_odom_correction_blend: 0.05
   gicp_enable: false            # NDT试验版关闭GICP，避免多种匹配同时修正
   gicp_source_voxel_size: 0.35  # 当前帧GICP体素；越小越精但越耗CPU
   gicp_target_voxel_size: 0.25  # 局部地图GICP体素；室内稀疏MID360不宜过大
