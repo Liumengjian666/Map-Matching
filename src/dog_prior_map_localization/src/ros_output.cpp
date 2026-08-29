@@ -151,20 +151,16 @@ void DogPriorMapEkfNode::maybePrintRuntime(const ros::Time &stamp)
   const double avg_update_ms = lidar_update_time_sum_ms_ / static_cast<double>(update_total);
   const uint64_t icp_total = std::max<uint64_t>(icp_update_ok_count_ + icp_update_fail_count_, 1);
   const double avg_icp_ms = icp_update_time_sum_ms_ / static_cast<double>(icp_total);
-  const uint64_t lidar_odom_total = std::max<uint64_t>(lidar_odom_ok_count_ + lidar_odom_fail_count_, 1);
-  const double avg_lidar_odom_ms = lidar_odom_time_sum_ms_ / static_cast<double>(lidar_odom_total);
   const uint64_t image_total = std::max<uint64_t>(image_msg_count_, 1);
   const double avg_visual_ms = visual_update_time_sum_ms_ / static_cast<double>(image_total);
 
-  ROS_INFO("[DogPriorMap C++] runtime: imu=%.1fHz lidar=%.1fHz image=%.1fHz corr=%.2fHz lidar_ms(avg/max)=%.2f/%.2f odom_ms(avg/max)=%.2f/%.2f icp_ms(avg/max)=%.2f/%.2f visual_ms(avg/max)=%.2f/%.2f feature=%.2f v_weight=%.2f degen=%d score=%.2f ok/fail=%lu/%lu lio=%lu/%lu icp=%lu/%lu",
+  ROS_INFO("[DogPriorMap C++] runtime: imu=%.1fHz lidar=%.1fHz image=%.1fHz corr=%.2fHz lidar_ms(avg/max)=%.2f/%.2f ndt_ms(avg/max)=%.2f/%.2f visual_ms(avg/max)=%.2f/%.2f feature=%.2f v_weight=%.2f degen=%d score=%.2f ok/fail=%lu/%lu ndt=%lu/%lu",
            static_cast<double>(imu_delta) / dt,
            static_cast<double>(lidar_delta) / dt,
            static_cast<double>(image_delta) / dt,
            static_cast<double>(update_delta) / dt,
            avg_update_ms,
            lidar_update_time_max_ms_,
-           avg_lidar_odom_ms,
-           lidar_odom_time_max_ms_,
            avg_icp_ms,
            icp_update_time_max_ms_,
            avg_visual_ms,
@@ -175,8 +171,6 @@ void DogPriorMapEkfNode::maybePrintRuntime(const ros::Time &stamp)
            lidar_degeneracy_score_,
            static_cast<unsigned long>(lidar_update_ok_count_),
            static_cast<unsigned long>(lidar_update_fail_count_),
-           static_cast<unsigned long>(lidar_odom_ok_count_),
-           static_cast<unsigned long>(lidar_odom_fail_count_),
            static_cast<unsigned long>(icp_update_ok_count_),
            static_cast<unsigned long>(icp_update_fail_count_));
 
@@ -192,10 +186,6 @@ void DogPriorMapEkfNode::maybePrintRuntime(const ros::Time &stamp)
                  << icp_update_time_max_ms_ << ","
                  << icp_update_ok_count_ << ","
                  << icp_update_fail_count_ << ","
-                 << avg_lidar_odom_ms << ","
-                 << lidar_odom_time_max_ms_ << ","
-                 << lidar_odom_ok_count_ << ","
-                 << lidar_odom_fail_count_ << ","
                  << last_used_points_ << ","
                  << last_mean_residual_ << ","
                  << lidar_update_ok_count_ << ","

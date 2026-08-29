@@ -20,7 +20,6 @@
 #include <diagnostic_msgs/DiagnosticStatus.h>
 #include <diagnostic_msgs/KeyValue.h>
 #include <geometry_msgs/PoseStamped.h>
-#include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <livox_ros_driver2/CustomMsg.h>
 #include <nav_msgs/Odometry.h>
 #include <opencv2/calib3d.hpp>
@@ -89,33 +88,13 @@ private:
   void pointCloud2Callback(const sensor_msgs::PointCloud2ConstPtr &msg);
   void handleLidarCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud_lidar, const ros::Time &stamp);
   pcl::PointCloud<pcl::PointXYZ>::Ptr preprocessScan(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud_lidar);
-  bool runLidarOdometryPrediction(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
-                                  const ros::Time &stamp);
-  bool runLooseIcpLidarOdometry(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
-                                const pcl::PointCloud<pcl::PointXYZ>::Ptr &local_target,
-                                const ros::Time &stamp);
-  void updateLastLidarOdomFrame(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
-                                const ros::Time &stamp);
   bool lidarMapUpdate(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
                       const pcl::PointCloud<pcl::PointXYZ>::Ptr &match_map,
                       int &used,
                       double &mean_residual);
   pcl::PointCloud<pcl::PointXYZ>::Ptr buildLocalSubmap();
-  bool runMultiResolutionIcp(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
-                             const pcl::PointCloud<pcl::PointXYZ>::Ptr &local_map);
-  bool runGicpRefinement(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
-                         const pcl::PointCloud<pcl::PointXYZ>::Ptr &local_map);
   bool runNdtRefinement(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
                         const pcl::PointCloud<pcl::PointXYZ>::Ptr &local_map);
-  bool anchorRelocalizationUpdate(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
-                                  const ros::Time &stamp);
-  bool verticalRelocalizationUpdate(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
-                                    const ros::Time &stamp);
-  bool evaluateAnchorCandidate(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
-                               const Eigen::Vector3d &candidate_p,
-                               double candidate_yaw,
-                               double &mean_residual,
-                               int &used) const;
   void applyPoseCorrection(const Eigen::Vector3d &dp, const Eigen::Vector3d &dtheta);
   bool updateLidarDegeneracyStatus(const Eigen::Matrix<double, 6, 6> &information_matrix,
                                    double geometry_degeneracy_score);
@@ -126,8 +105,7 @@ private:
                                 const std::vector<cv::Point2f> &prev_pts,
                                 const std::vector<cv::Point2f> &curr_pts,
                                 double weight_scale);
-  void externalOdomCallback(const nav_msgs::OdometryConstPtr &msg);
-  void initialPoseCallback(const geometry_msgs::PoseWithCovarianceStampedConstPtr &msg);
+  void ndtObservationCallback(const nav_msgs::OdometryConstPtr &msg);
 
   void publishState(const ros::Time &stamp, bool corrected);
   void publishFilteredCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
@@ -147,8 +125,7 @@ private:
   ros::Subscriber sub_livox_;
   ros::Subscriber sub_pc2_;
   ros::Subscriber sub_image_;
-  ros::Subscriber sub_external_odom_;
-  ros::Subscriber sub_initial_pose_;
+  ros::Subscriber sub_ndt_observation_;
   ros::Publisher pub_high_;
   ros::Publisher pub_imu_propagate_;
   ros::Publisher pub_corr_;
@@ -171,8 +148,7 @@ private:
   std::string lidar_topic_;
   std::string lidar_msg_type_;
   std::string image_topic_;
-  std::string external_odom_topic_;
-  std::string initial_pose_topic_;
+  std::string ndt_observation_topic_;
   std::string odom_high_rate_topic_;
   std::string imu_propagate_topic_;
   std::string odom_corrected_topic_;
@@ -222,46 +198,15 @@ private:
   double lidar_offset_time_scale_ = 1e-9;
   double imu_history_keep_sec_ = 2.0;
 
-  bool lidar_odometry_enable_ = true;
-  std::string lidar_odom_method_ = "loose_icp";
-  double lidar_odom_voxel_size_ = 0.35;
-  int lidar_odom_max_points_ = 900;
-  int lidar_odom_min_points_ = 80;
-  int lidar_odom_max_iterations_ = 8;
-  double lidar_odom_max_correspondence_distance_ = 0.8;
-  double lidar_odom_max_fitness_score_ = 0.25;
-  double lidar_odom_min_fitness_improvement_ = 0.15;
-  double lidar_odom_max_frame_translation_ = 1.5;
-  double lidar_odom_max_frame_rotation_ = 8.0 * M_PI / 180.0;
-  double lidar_odom_max_initial_correction_ = 0.8;
-  double lidar_odom_apply_ratio_ = 0.7;
-  double lidar_odom_velocity_blend_ = 0.5;
-  double lidar_odom_local_radius_ = 8.0;
-  int lidar_odom_local_max_points_ = 15000;
-  int lidar_odom_update_every_n_scans_ = 1;
-  bool lidar_odom_prior_consistency_enable_ = true;
-  double lidar_odom_prior_max_worse_ratio_ = 1.05;
-  int lidar_odom_prior_min_points_ = 80;
-  bool has_last_lidar_odom_frame_ = false;
-  double last_lidar_odom_stamp_ = 0.0;
-  Eigen::Vector3d last_lidar_odom_p_ = Eigen::Vector3d::Zero();
-  Eigen::Matrix3d last_lidar_odom_R_ = Eigen::Matrix3d::Identity();
-  pcl::PointCloud<pcl::PointXYZ>::Ptr last_lidar_odom_scan_;
-  pcl::PointCloud<pcl::PointXYZ>::Ptr lidar_odom_local_map_;
-
-  bool external_odom_enable_ = false;
-  bool external_odom_same_map_frame_ = false;
-  double external_odom_apply_ratio_ = 0.8;
-  double external_odom_z_apply_ratio_ = 0.0;
-  double external_odom_roll_pitch_apply_ratio_ = 0.3;
-  double external_odom_max_translation_correction_ = 1.0;
-  double external_odom_max_rotation_correction_ = 5.0 * M_PI / 180.0;
-  double external_odom_velocity_blend_ = 0.6;
-  bool has_external_odom_alignment_ = false;
-  double last_external_odom_time_ = 0.0;
-  Eigen::Vector3d external_align_p_ = Eigen::Vector3d::Zero();
-  Eigen::Matrix3d external_align_R_ = Eigen::Matrix3d::Identity();
-  Eigen::Vector3d last_external_odom_p_map_ = Eigen::Vector3d::Zero();
+  bool ndt_observation_enable_ = false;
+  double ndt_observation_apply_ratio_ = 0.8;
+  double ndt_observation_z_apply_ratio_ = 1.0;
+  double ndt_observation_roll_pitch_apply_ratio_ = 1.0;
+  double ndt_observation_max_translation_correction_ = 1.0;
+  double ndt_observation_max_rotation_correction_ = 5.0 * M_PI / 180.0;
+  double ndt_observation_velocity_blend_ = 0.6;
+  double last_ndt_observation_time_ = 0.0;
+  Eigen::Vector3d last_ndt_observation_p_map_ = Eigen::Vector3d::Zero();
 
   bool lidar_enable_ = true;
   bool prior_map_update_enable_ = true;
@@ -318,23 +263,6 @@ private:
   bool local_submap_enable_ = true;
   int local_submap_max_points_ = 12000;
   int local_submap_min_points_ = 500;
-  bool multires_icp_enable_ = true;
-  bool gicp_enable_ = false;
-  bool ndt_enable_ = false;
-  double icp_coarse_voxel_size_ = 0.80;
-  double icp_fine_voxel_size_ = 0.35;
-  int icp_coarse_iterations_ = 8;
-  int icp_fine_iterations_ = 5;
-  double icp_max_correspondence_distance_ = 1.5;
-  double icp_max_fitness_score_ = 0.8;
-  double gicp_source_voxel_size_ = 0.35;
-  double gicp_target_voxel_size_ = 0.25;
-  int gicp_max_source_points_ = 1200;
-  int gicp_max_target_points_ = 30000;
-  int gicp_max_iterations_ = 8;
-  double gicp_max_correspondence_distance_ = 0.8;
-  double gicp_max_fitness_score_ = 0.35;
-  double gicp_transformation_epsilon_ = 1e-4;
   double ndt_source_voxel_size_ = 0.35;
   double ndt_target_voxel_size_ = 0.30;
   int ndt_max_source_points_ = 900;
@@ -362,36 +290,6 @@ private:
   double degeneracy_project_min_scale_ = 0.10;
   bool lidar_degenerate_ = false;
   double lidar_degeneracy_score_ = 0.0;
-  bool anchor_relocalization_enable_ = false;
-  double anchor_period_sec_ = 5.0;
-  double anchor_trigger_residual_ = 0.25;
-  double anchor_trigger_degeneracy_score_ = 0.45;
-  double anchor_search_radius_ = 6.0;
-  double anchor_search_step_ = 1.0;
-  double anchor_yaw_search_deg_ = 8.0;
-  double anchor_yaw_step_deg_ = 4.0;
-  int anchor_min_effective_points_ = 80;
-  double anchor_accept_residual_ = 0.18;
-  double anchor_improve_ratio_ = 0.70;
-  double anchor_max_correction_ = 2.0;
-  double anchor_apply_ratio_ = 0.65;
-  double last_anchor_time_ = 0.0;
-  uint64_t anchor_update_ok_count_ = 0;
-  uint64_t anchor_update_fail_count_ = 0;
-  bool vertical_relocalization_enable_ = true;
-  double vertical_relocalization_period_sec_ = 1.0;
-  double vertical_relocalization_search_radius_ = 8.0;
-  double vertical_relocalization_search_step_ = 0.5;
-  int vertical_relocalization_max_points_ = 350;
-  int vertical_relocalization_min_effective_points_ = 80;
-  double vertical_relocalization_accept_residual_ = 0.18;
-  double vertical_relocalization_improve_ratio_ = 0.75;
-  double vertical_relocalization_max_correction_ = 0.8;
-  double vertical_relocalization_apply_ratio_ = 0.6;
-  double last_vertical_relocalization_time_ = 0.0;
-  uint64_t vertical_relocalization_ok_count_ = 0;
-  uint64_t vertical_relocalization_fail_count_ = 0;
-
   bool camera_enable_ = true;
   bool visual_feature_update_enable_ = true;
   double max_over_exposure_ratio_ = 0.25;
@@ -444,10 +342,6 @@ private:
   double icp_update_time_max_ms_ = 0.0;
   uint64_t icp_update_ok_count_ = 0;
   uint64_t icp_update_fail_count_ = 0;
-  double lidar_odom_time_sum_ms_ = 0.0;
-  double lidar_odom_time_max_ms_ = 0.0;
-  uint64_t lidar_odom_ok_count_ = 0;
-  uint64_t lidar_odom_fail_count_ = 0;
   int last_used_points_ = 0;
   double last_mean_residual_ = 0.0;
   double last_registration_score_ = 0.0;

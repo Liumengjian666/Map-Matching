@@ -3,8 +3,6 @@
   <arg name="rviz" default="false" />
   <arg name="runtime_csv_path" default="" />
   <arg name="ndt_diagnostics_csv_path" default="" />
-  <arg name="loop_closure" default="false" />
-
   <rosparam command="load" file="$(arg config)" />
 
   <!--
@@ -14,16 +12,13 @@
     原来的 dog_prior_map_localization.launch 不改，仍可运行一体化节点。
   -->
 
-  <param name="external_odometry/enable" value="true" />
-  <param name="external_odometry/same_map_frame" value="true" />
-  <param name="external_odometry/apply_ratio" value="1.0" />
-  <param name="external_odometry/z_apply_ratio" value="1.0" />
-  <param name="external_odometry/roll_pitch_apply_ratio" value="1.0" />
-  <param name="external_odometry/max_translation_correction" value="2.0" />
-  <param name="external_odometry/max_rotation_correction_deg" value="20.0" />
-  <param name="topics/external_odom" value="/dog_livo/ndt_odom" />
+  <param name="ndt_observation/enable" value="true" />
+  <param name="ndt_observation/apply_ratio" value="1.0" />
+  <param name="ndt_observation/z_apply_ratio" value="1.0" />
+  <param name="ndt_observation/roll_pitch_apply_ratio" value="1.0" />
+  <param name="ndt_observation/max_translation_correction" value="2.0" />
+  <param name="ndt_observation/max_rotation_correction_deg" value="20.0" />
   <param name="lidar_update/enable" value="false" />
-  <param name="lidar_odometry/enable" value="false" />
   <param name="output/runtime_csv_path" value="$(arg runtime_csv_path)" />
   <param name="output/ndt_diagnostics_csv_path" value="$(arg ndt_diagnostics_csv_path)" />
 
@@ -43,16 +38,6 @@
         output="screen">
     <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
   </node>
-
-  <group if="$(arg loop_closure)">
-    <param name="visual_lidar_loop_closure/enable" value="true" />
-    <node pkg="dog_prior_map_localization"
-          type="visual_lidar_loop_closure_node_cpp"
-          name="visual_lidar_loop_closure"
-          output="screen">
-      <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
-    </node>
-  </group>
 
   <group if="$(arg rviz)">
     <node pkg="rviz"

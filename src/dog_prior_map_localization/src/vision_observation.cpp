@@ -211,55 +211,36 @@ void DogPriorMapEkfNode::applyVisualYawCorrection(const cv::Mat &prev_gray,
   applyPoseCorrection(Eigen::Vector3d::Zero(), dtheta);
 }
 
-void DogPriorMapEkfNode::externalOdomCallback(const nav_msgs::OdometryConstPtr &msg)
+void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr &msg)
 {
   std::lock_guard<std::mutex> lock(mutex_);
-  if (!external_odom_enable_) return;
+  if (!ndt_observation_enable_) return;
 
-  // ------------------------- 外部位姿观测 -------------------------
-  // 两种输入都走这个回调：
-  // 1) FAST-LIVO2/FAST-LIO2这类前端里程计：其坐标系不一定等于先验地图，需要首帧对齐。
-  // 2) 本工程拆分版NDT：/dog_livo/ndt_odom本身已经是camera_init/map下的绝对位姿，不能再首帧归零。
-  Eigen::Vector3d p_ext(msg->pose.pose.position.x,
-                        msg->pose.pose.position.y,
-                        msg->pose.pose.position.z);
-  Eigen::Quaterniond q_ext(msg->pose.pose.orientation.w,
-                           msg->pose.pose.orientation.x,
-                           msg->pose.pose.orientation.y,
-                           msg->pose.pose.orientation.z);
-  if (!p_ext.allFinite() || q_ext.norm() < 1e-9) return;
-  Eigen::Matrix3d R_ext = q_ext.normalized().toRotationMatrix();
+  Eigen::Vector3d p_target(msg->pose.pose.position.x,
+                           msg->pose.pose.position.y,
+                           msg->pose.pose.position.z);
+  Eigen::Quaterniond q_target(msg->pose.pose.orientation.w,
+                              msg->pose.pose.orientation.x,
+                              msg->pose.pose.orientation.y,
+                              msg->pose.pose.orientation.z);
+  if (!p_target.allFinite() || q_target.norm() < 1e-9) return;
+  Eigen::Matrix3d R_target = q_target.normalized().toRotationMatrix();
 
-  if (!external_odom_same_map_frame_ && !has_external_odom_alignment_)
-  {
-    external_align_R_ = R_ * R_ext.transpose();
-    external_align_p_ = p_ - external_align_R_ * p_ext;
-    last_external_odom_p_map_ = p_;
-    last_external_odom_time_ = msg->header.stamp.toSec();
-    has_external_odom_alignment_ = true;
-    ROS_INFO("[DogPriorMap C++] external LIO/LIVO prior init finished first-frame alignment.");
-    return;
-  }
-
-  const Eigen::Vector3d p_target =
-      external_odom_same_map_frame_ ? p_ext : (external_align_R_ * p_ext + external_align_p_);
-  const Eigen::Matrix3d R_target =
-      external_odom_same_map_frame_ ? R_ext : (external_align_R_ * R_ext);
   Eigen::Vector3d dp = p_target - p_;
   Eigen::AngleAxisd aa(R_target * R_.transpose());
   Eigen::Vector3d dtheta = aa.axis() * aa.angle();
   if (!dp.allFinite() || !dtheta.allFinite()) return;
 
-  const double ratio = std::max(0.0, std::min(1.0, external_odom_apply_ratio_));
-  const double z_ratio = std::max(0.0, std::min(1.0, external_odom_z_apply_ratio_));
-  const double roll_pitch_ratio = std::max(0.0, std::min(1.0, external_odom_roll_pitch_apply_ratio_));
+  const double ratio = std::max(0.0, std::min(1.0, ndt_observation_apply_ratio_));
+  const double z_ratio = std::max(0.0, std::min(1.0, ndt_observation_z_apply_ratio_));
+  const double roll_pitch_ratio = std::max(0.0, std::min(1.0, ndt_observation_roll_pitch_apply_ratio_));
   dp.x() *= ratio;
   dp.y() *= ratio;
   dp.z() *= ratio * z_ratio;
-  dtheta = limitVector(dtheta * ratio, external_odom_max_rotation_correction_);
+  dtheta = limitVector(dtheta * ratio, ndt_observation_max_rotation_correction_);
   dtheta.x() *= roll_pitch_ratio;
   dtheta.y() *= roll_pitch_ratio;
-  dp = limitVector(dp, external_odom_max_translation_correction_);
+  dp = limitVector(dp, ndt_observation_max_translation_correction_);
   applyPoseCorrection(dp, dtheta);
   ++lidar_update_ok_count_;
   ++icp_update_ok_count_;
@@ -268,36 +249,19 @@ void DogPriorMapEkfNode::externalOdomCallback(const nav_msgs::OdometryConstPtr &
   publishState(msg->header.stamp, true);
 
   const double t = msg->header.stamp.toSec();
-  const double dt = t - last_external_odom_time_;
+  const double dt = t - last_ndt_observation_time_;
   if (dt > 1e-3 && dt < 1.0)
   {
-    // 外部轻量前端更适合作为“运动趋势/速度观测”，不要把它的累计漂移硬塞进位置状态。
-    // 这里用外部前端在先验地图系下的相邻位移估计速度；位置是否修正仍由上面的apply_ratio控制。
-    Eigen::Vector3d odom_velocity = (p_target - last_external_odom_p_map_) / dt;
+    Eigen::Vector3d odom_velocity = (p_target - last_ndt_observation_p_map_) / dt;
     odom_velocity.z() *= z_ratio;
-    const double blend = std::max(0.0, std::min(1.0, external_odom_velocity_blend_));
+    const double blend = std::max(0.0, std::min(1.0, ndt_observation_velocity_blend_));
     v_ = (1.0 - blend) * v_ + blend * odom_velocity;
   }
-  last_external_odom_p_map_ = p_target;
-  last_external_odom_time_ = t;
+  last_ndt_observation_p_map_ = p_target;
+  last_ndt_observation_time_ = t;
 
   for (int i = 0; i < 3; ++i) P_(i, i) = std::max(P_(i, i) * 0.85, 1e-4);
   for (int i = 6; i < 9; ++i) P_(i, i) = std::max(P_(i, i) * 0.85, 1e-5);
-}
-
-void DogPriorMapEkfNode::initialPoseCallback(const geometry_msgs::PoseWithCovarianceStampedConstPtr &msg)
-{
-  std::lock_guard<std::mutex> lock(mutex_);
-  p_ = Eigen::Vector3d(msg->pose.pose.position.x, msg->pose.pose.position.y, msg->pose.pose.position.z);
-  Eigen::Quaterniond q(msg->pose.pose.orientation.w, msg->pose.pose.orientation.x,
-                       msg->pose.pose.orientation.y, msg->pose.pose.orientation.z);
-  R_ = q.normalized().toRotationMatrix();
-  v_.setZero();
-  has_last_imu_ = false;
-  has_external_odom_alignment_ = false;
-  has_last_lidar_odom_frame_ = false;
-  if (lidar_odom_local_map_) lidar_odom_local_map_->clear();
-  ROS_INFO("[DogPriorMap C++] received external initial pose and reset state.");
 }
 
 }  // namespace dog_prior_map_localization

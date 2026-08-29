@@ -1,6 +1,5 @@
 #include "dog_prior_map_localization/dog_prior_map_ekf_node.hpp"
 
-#include <pcl/registration/gicp.h>
 #include <pcl/registration/ndt.h>
 
 namespace dog_prior_map_localization
@@ -8,14 +7,6 @@ namespace dog_prior_map_localization
 
 namespace
 {
-void finalizeCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud)
-{
-  if (!cloud) return;
-  cloud->width = static_cast<uint32_t>(cloud->points.size());
-  cloud->height = 1;
-  cloud->is_dense = true;
-}
-
 Eigen::Matrix3d calcFastLivoBodyCov(const Eigen::Vector3d &point_body,
                                     double depth_noise,
                                     double beam_noise_deg)
@@ -276,33 +267,12 @@ void DogPriorMapEkfNode::handleLidarCloud(const pcl::PointCloud<pcl::PointXYZ>::
     return;
   }
 
-  const bool lidar_odom_prediction_ok = runLidarOdometryPrediction(scan_body, stamp);
-
-  if (!prior_map_update_enable_)
-  {
-    updateLastLidarOdomFrame(scan_body, stamp);
-    publishState(stamp, true);
-    publishDiagnostics(stamp, lidar_odom_prediction_ok, 0.0, static_cast<int>(scan_body->size()),
-                       map_cloud_ ? static_cast<int>(map_cloud_->size()) : 0,
-                       last_mean_residual_);
-    maybePrintRuntime(stamp);
-    return;
-  }
-
-  if (scan_count_ % update_every_n_scans_ != 0)
-  {
-    if (lidar_odom_prediction_ok)
-    {
-      updateLastLidarOdomFrame(scan_body, stamp);
-    }
-    return;
-  }
-
   int used = 0;
   double mean_residual = 0.0;
   const bool ndt_main_mode = registration_method_ == "ndt";
   pcl::PointCloud<pcl::PointXYZ>::Ptr local_map =
       (ndt_main_mode && ndt_absolute_pose_mode_ && ndt_use_full_map_target_) ? map_cloud_ : buildLocalSubmap();
+
   if (ndt_main_mode && local_map && static_cast<int>(local_map->size()) >= min_effective_points_)
   {
     const ros::WallTime ndt_start = ros::WallTime::now();
@@ -320,7 +290,6 @@ void DogPriorMapEkfNode::handleLidarCloud(const pcl::PointCloud<pcl::PointXYZ>::
     {
       ++icp_update_ok_count_;
       ++lidar_update_ok_count_;
-      updateLastLidarOdomFrame(scan_body, stamp);
       publishState(stamp, true);
       if (print_debug_)
       {
@@ -332,46 +301,11 @@ void DogPriorMapEkfNode::handleLidarCloud(const pcl::PointCloud<pcl::PointXYZ>::
     {
       ++icp_update_fail_count_;
       ++lidar_update_fail_count_;
-      if (lidar_odom_prediction_ok)
-      {
-        updateLastLidarOdomFrame(scan_body, stamp);
-      }
     }
     publishDiagnostics(stamp, ndt_ok, ndt_ms, static_cast<int>(scan_body->size()),
                        static_cast<int>(local_map->size()), last_registration_score_);
     maybePrintRuntime(stamp);
     return;
-  }
-
-  if (ndt_enable_ && local_map && static_cast<int>(local_map->size()) >= min_effective_points_)
-  {
-    const ros::WallTime icp_start = ros::WallTime::now();
-    const bool icp_ok = runNdtRefinement(scan_body, local_map);
-    const double icp_ms = (ros::WallTime::now() - icp_start).toSec() * 1000.0;
-    icp_update_time_sum_ms_ += icp_ms;
-    icp_update_time_max_ms_ = std::max(icp_update_time_max_ms_, icp_ms);
-    if (icp_ok) ++icp_update_ok_count_;
-    else ++icp_update_fail_count_;
-  }
-  else if (gicp_enable_ && local_map && static_cast<int>(local_map->size()) >= min_effective_points_)
-  {
-    const ros::WallTime icp_start = ros::WallTime::now();
-    const bool icp_ok = runGicpRefinement(scan_body, local_map);
-    const double icp_ms = (ros::WallTime::now() - icp_start).toSec() * 1000.0;
-    icp_update_time_sum_ms_ += icp_ms;
-    icp_update_time_max_ms_ = std::max(icp_update_time_max_ms_, icp_ms);
-    if (icp_ok) ++icp_update_ok_count_;
-    else ++icp_update_fail_count_;
-  }
-  else if (multires_icp_enable_ && local_map && static_cast<int>(local_map->size()) >= min_effective_points_)
-  {
-    const ros::WallTime icp_start = ros::WallTime::now();
-    const bool icp_ok = runMultiResolutionIcp(scan_body, local_map);
-    const double icp_ms = (ros::WallTime::now() - icp_start).toSec() * 1000.0;
-    icp_update_time_sum_ms_ += icp_ms;
-    icp_update_time_max_ms_ = std::max(icp_update_time_max_ms_, icp_ms);
-    if (icp_ok) ++icp_update_ok_count_;
-    else ++icp_update_fail_count_;
   }
 
   const bool ok = lidarMapUpdate(scan_body, local_map, used, mean_residual);
@@ -383,26 +317,7 @@ void DogPriorMapEkfNode::handleLidarCloud(const pcl::PointCloud<pcl::PointXYZ>::
   last_mean_residual_ = mean_residual;
   if (ok)
   {
-    if (vertical_relocalization_enable_ &&
-        lidar_degenerate_ &&
-        stamp.toSec() - last_vertical_relocalization_time_ >= vertical_relocalization_period_sec_)
-    {
-      if (verticalRelocalizationUpdate(scan_body, stamp)) ++vertical_relocalization_ok_count_;
-      else ++vertical_relocalization_fail_count_;
-      last_vertical_relocalization_time_ = stamp.toSec();
-    }
-    if (anchor_relocalization_enable_ &&
-        stamp.toSec() - last_anchor_time_ >= anchor_period_sec_ &&
-        (mean_residual > anchor_trigger_residual_ ||
-         lidar_degeneracy_score_ > anchor_trigger_degeneracy_score_))
-    {
-      const bool anchor_ok = anchorRelocalizationUpdate(scan_body, stamp);
-      last_anchor_time_ = stamp.toSec();
-      if (anchor_ok) ++anchor_update_ok_count_;
-      else ++anchor_update_fail_count_;
-    }
     ++lidar_update_ok_count_;
-    updateLastLidarOdomFrame(scan_body, stamp);
     publishState(stamp, true);
     if (print_debug_)
     {
@@ -413,506 +328,10 @@ void DogPriorMapEkfNode::handleLidarCloud(const pcl::PointCloud<pcl::PointXYZ>::
   else
   {
     ++lidar_update_fail_count_;
-    if (vertical_relocalization_enable_ &&
-        stamp.toSec() - last_vertical_relocalization_time_ >= vertical_relocalization_period_sec_)
-    {
-      const bool vertical_ok = verticalRelocalizationUpdate(scan_body, stamp);
-      last_vertical_relocalization_time_ = stamp.toSec();
-      if (vertical_ok)
-      {
-        ++vertical_relocalization_ok_count_;
-        ++lidar_update_ok_count_;
-        updateLastLidarOdomFrame(scan_body, stamp);
-        publishState(stamp, true);
-      }
-      else
-      {
-        ++vertical_relocalization_fail_count_;
-        if (lidar_odom_prediction_ok)
-        {
-          updateLastLidarOdomFrame(scan_body, stamp);
-        }
-      }
-    }
-    else if (lidar_odom_prediction_ok)
-    {
-      updateLastLidarOdomFrame(scan_body, stamp);
-    }
   }
   publishDiagnostics(stamp, ok, update_ms, static_cast<int>(scan_body->size()),
                      last_map_points_, mean_residual);
   maybePrintRuntime(stamp);
-}
-
-bool DogPriorMapEkfNode::runLidarOdometryPrediction(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
-                                                    const ros::Time &stamp)
-{
-  // ------------------------- 自研轻量LiDAR前端里程计 -------------------------
-  // 运行顺序是：
-  // 1) IMU在imuCallback里高频传播，给当前帧一个初始位姿；
-  // 2) 当前雷达帧和滚动局部雷达地图做前端里程计，得到更稳的短时初值；
-  // 3) 同一帧雷达继续进入后面的先验地图匹配，消除累计误差。
-  // 这里没有使用FAST-LIO2/FAST-LIVO2实时输出；FAST-LIVO2只用于离线建先验地图。
-  if (!lidar_odometry_enable_ || !scan_body || scan_body->empty())
-  {
-    return false;
-  }
-  if (lidar_odom_method_ == "prior_map_tracking")
-  {
-    // ------------------------- 先验地图实时跟踪前端 -------------------------
-    // 用户提出的核心思路：不要只靠“走过的局部点云”或KISS给初值，
-    // 而是像FAST-LIVO2 scan-to-map一样，每帧雷达先直接匹配FAST-LIVO2离线建好的先验地图。
-    //
-    // 这一层定位角色：
-    // 1) IMU先高频传播得到当前帧初值；
-    // 2) 从先验地图中截取当前位置附近的小局部地图；
-    // 3) 用点到面/混合EKF做一次小步跟踪，输出更稳定的实时里程计初值；
-    // 4) 后面handleLidarCloud()还会再执行一次严格先验地图匹配作为低频纠偏。
-    //
-    // 注意：两层都来自同一张先验地图，所以第一层只做“小步跟踪”，不能过度相信；
-    // 第二层才使用更严格门控决定是否发布/校正。
-    pcl::PointCloud<pcl::PointXYZ>::Ptr prior_local_map = buildLocalSubmap();
-    if (!prior_local_map || static_cast<int>(prior_local_map->size()) < lidar_odom_min_points_)
-    {
-      ++lidar_odom_fail_count_;
-      return false;
-    }
-
-    const ros::WallTime odom_start = ros::WallTime::now();
-    const Eigen::Vector3d p_before = p_;
-    const Eigen::Vector3d v_before = v_;
-    const Eigen::Matrix3d R_before = R_;
-    const Matrix15d P_before = P_;
-
-    const int saved_min_effective_points = min_effective_points_;
-    const int saved_max_iterations = max_iterations_;
-    const double saved_max_translation_update = max_translation_update_;
-    const double saved_max_rotation_update = max_rotation_update_;
-    const double saved_max_update_time_ms = max_update_time_ms_;
-    const bool saved_match_accept_gate_enable = match_accept_gate_enable_;
-    const double saved_match_accept_max_mean_residual = match_accept_max_mean_residual_;
-    const double saved_match_accept_max_residual_increase_ratio = match_accept_max_residual_increase_ratio_;
-    const double saved_match_accept_min_improvement_ratio = match_accept_min_improvement_ratio_;
-    const double saved_match_accept_max_translation = match_accept_max_translation_;
-    const double saved_match_accept_max_rotation = match_accept_max_rotation_;
-    const double saved_match_accept_degenerate_max_translation = match_accept_degenerate_max_translation_;
-    const double saved_match_accept_degenerate_max_rotation = match_accept_degenerate_max_rotation_;
-
-    min_effective_points_ = lidar_odom_min_points_;
-    max_iterations_ = lidar_odom_max_iterations_;
-    max_translation_update_ = std::min(max_translation_update_, lidar_odom_max_initial_correction_);
-    max_rotation_update_ = std::min(max_rotation_update_, lidar_odom_max_frame_rotation_);
-    max_update_time_ms_ = std::min(max_update_time_ms_, 35.0);
-    match_accept_gate_enable_ = true;
-    match_accept_max_mean_residual_ = std::max(match_accept_max_mean_residual_, lidar_odom_max_fitness_score_);
-    match_accept_max_residual_increase_ratio_ = std::max(match_accept_max_residual_increase_ratio_, 1.20);
-    match_accept_min_improvement_ratio_ = 0.0;
-    match_accept_max_translation_ = lidar_odom_max_initial_correction_;
-    match_accept_max_rotation_ = lidar_odom_max_frame_rotation_;
-    match_accept_degenerate_max_translation_ = std::min(lidar_odom_max_initial_correction_, 0.10);
-    match_accept_degenerate_max_rotation_ = std::min(lidar_odom_max_frame_rotation_, 1.0 * M_PI / 180.0);
-
-    int used = 0;
-    double mean_residual = 0.0;
-    const bool ok = lidarMapUpdate(scan_body, prior_local_map, used, mean_residual);
-
-    min_effective_points_ = saved_min_effective_points;
-    max_iterations_ = saved_max_iterations;
-    max_translation_update_ = saved_max_translation_update;
-    max_rotation_update_ = saved_max_rotation_update;
-    max_update_time_ms_ = saved_max_update_time_ms;
-    match_accept_gate_enable_ = saved_match_accept_gate_enable;
-    match_accept_max_mean_residual_ = saved_match_accept_max_mean_residual;
-    match_accept_max_residual_increase_ratio_ = saved_match_accept_max_residual_increase_ratio;
-    match_accept_min_improvement_ratio_ = saved_match_accept_min_improvement_ratio;
-    match_accept_max_translation_ = saved_match_accept_max_translation;
-    match_accept_max_rotation_ = saved_match_accept_max_rotation;
-    match_accept_degenerate_max_translation_ = saved_match_accept_degenerate_max_translation;
-    match_accept_degenerate_max_rotation_ = saved_match_accept_degenerate_max_rotation;
-
-    const double odom_ms = (ros::WallTime::now() - odom_start).toSec() * 1000.0;
-    lidar_odom_time_sum_ms_ += odom_ms;
-    lidar_odom_time_max_ms_ = std::max(lidar_odom_time_max_ms_, odom_ms);
-
-    if (!ok || used < lidar_odom_min_points_ || mean_residual > lidar_odom_max_fitness_score_)
-    {
-      p_ = p_before;
-      v_ = v_before;
-      R_ = R_before;
-      P_ = P_before;
-      ++lidar_odom_fail_count_;
-      return false;
-    }
-
-    const double dt = stamp.toSec() - last_lidar_odom_stamp_;
-    if (dt > 1e-3 && dt < 1.0)
-    {
-      const Eigen::Vector3d lidar_velocity = (p_ - last_lidar_odom_p_) / dt;
-      const double blend = std::max(0.0, std::min(1.0, lidar_odom_velocity_blend_));
-      v_ = (1.0 - blend) * v_ + blend * lidar_velocity;
-    }
-
-    ++lidar_odom_ok_count_;
-    return true;
-  }
-  if (!lidar_odom_local_map_ ||
-      static_cast<int>(lidar_odom_local_map_->size()) < lidar_odom_min_points_)
-  {
-    ++lidar_odom_fail_count_;
-    return false;
-  }
-
-  pcl::PointCloud<pcl::PointXYZ>::Ptr local_target(new pcl::PointCloud<pcl::PointXYZ>());
-  local_target->reserve(std::min<int>(lidar_odom_local_map_->size(), lidar_odom_local_max_points_));
-  const double local_radius2 = lidar_odom_local_radius_ * lidar_odom_local_radius_;
-  for (const auto &pt : lidar_odom_local_map_->points)
-  {
-    Eigen::Vector3d pw(pt.x, pt.y, pt.z);
-    if ((pw - p_).squaredNorm() <= local_radius2)
-    {
-      local_target->push_back(pt);
-    }
-  }
-  if (static_cast<int>(local_target->size()) < lidar_odom_min_points_)
-  {
-    ++lidar_odom_fail_count_;
-    return false;
-  }
-
-  if (lidar_odom_method_ == "loose_icp")
-  {
-    return runLooseIcpLidarOdometry(scan_body, local_target, stamp);
-  }
-
-  const ros::WallTime odom_start = ros::WallTime::now();
-  const Eigen::Vector3d p_before = p_;
-  const Eigen::Vector3d v_before = v_;
-  const Eigen::Matrix3d R_before = R_;
-  const Matrix15d P_before = P_;
-  const int saved_min_effective_points = min_effective_points_;
-  const int saved_max_iterations = max_iterations_;
-  const double saved_max_translation_update = max_translation_update_;
-  const double saved_max_rotation_update = max_rotation_update_;
-  const double saved_max_update_time_ms = max_update_time_ms_;
-
-  min_effective_points_ = lidar_odom_min_points_;
-  max_iterations_ = lidar_odom_max_iterations_;
-  max_translation_update_ = std::min(max_translation_update_, lidar_odom_max_initial_correction_);
-  max_rotation_update_ = std::min(max_rotation_update_, lidar_odom_max_frame_rotation_);
-  max_update_time_ms_ = std::min(max_update_time_ms_, 40.0);
-
-  int used = 0;
-  double mean_residual = 0.0;
-  const bool ok = lidarMapUpdate(scan_body, local_target, used, mean_residual);
-
-  min_effective_points_ = saved_min_effective_points;
-  max_iterations_ = saved_max_iterations;
-  max_translation_update_ = saved_max_translation_update;
-  max_rotation_update_ = saved_max_rotation_update;
-  max_update_time_ms_ = saved_max_update_time_ms;
-
-  const double odom_ms = (ros::WallTime::now() - odom_start).toSec() * 1000.0;
-  lidar_odom_time_sum_ms_ += odom_ms;
-  lidar_odom_time_max_ms_ = std::max(lidar_odom_time_max_ms_, odom_ms);
-
-  if (!ok)
-  {
-    ++lidar_odom_fail_count_;
-    return false;
-  }
-
-  if (lidar_odom_prior_consistency_enable_ && map_kdtree_)
-  {
-    auto priorResidualScore = [this, &scan_body](const Eigen::Vector3d &pose_p,
-                                                 const Eigen::Matrix3d &pose_R,
-                                                 int &score_used) {
-      double sum = 0.0;
-      score_used = 0;
-      const int step = std::max(1, static_cast<int>(scan_body->size()) /
-                                       std::max(lidar_odom_prior_min_points_ * 3, 1));
-      for (size_t i = 0; i < scan_body->size(); i += static_cast<size_t>(step))
-      {
-        const auto &pt = scan_body->points[i];
-        Eigen::Vector3d pb(pt.x, pt.y, pt.z);
-        Eigen::Vector3d pw = pose_R * pb + pose_p;
-        pcl::PointXYZ query(pw.x(), pw.y(), pw.z());
-        std::vector<int> idx(1);
-        std::vector<float> dist2(1);
-        if (map_kdtree_->nearestKSearch(query, 1, idx, dist2) <= 0) continue;
-        const double dist = std::sqrt(static_cast<double>(dist2[0]));
-        if (dist > max_match_distance_) continue;
-        sum += std::min(dist, huber_threshold_);
-        ++score_used;
-      }
-      if (score_used < lidar_odom_prior_min_points_) return std::numeric_limits<double>::infinity();
-      return sum / static_cast<double>(score_used);
-    };
-
-    int before_used = 0;
-    int after_used = 0;
-    const double before_score = priorResidualScore(p_before, R_before, before_used);
-    const double after_score = priorResidualScore(p_, R_, after_used);
-    if (!std::isfinite(before_score) || !std::isfinite(after_score) ||
-        after_score > before_score * lidar_odom_prior_max_worse_ratio_)
-    {
-      p_ = p_before;
-      v_ = v_before;
-      R_ = R_before;
-      P_ = P_before;
-      ++lidar_odom_fail_count_;
-      return false;
-    }
-  }
-
-  const double dt = stamp.toSec() - last_lidar_odom_stamp_;
-  if (dt > 1e-3 && dt < 1.0)
-  {
-    const Eigen::Vector3d lidar_velocity = (p_ - last_lidar_odom_p_) / dt;
-    const double blend = std::max(0.0, std::min(1.0, lidar_odom_velocity_blend_));
-    v_ = (1.0 - blend) * v_ + blend * lidar_velocity;
-  }
-
-  ++lidar_odom_ok_count_;
-  return true;
-}
-
-bool DogPriorMapEkfNode::runLooseIcpLidarOdometry(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
-                                                  const pcl::PointCloud<pcl::PointXYZ>::Ptr &local_target,
-                                                  const ros::Time &stamp)
-{
-  // ------------------------- 松耦合ICP前端 -------------------------
-  // 这一层只负责给先验地图匹配一个短时连续的初值：
-  // - 输入源点云：当前帧雷达点，用IMU预测位姿先投到map坐标；
-  // - 目标点云：过去若干帧按修正后位姿累积的滚动局部雷达地图；
-  // - 输出修正：ICP求得 source->target 的小位姿增量，再限幅反馈到EKF状态。
-  // 它和先验地图匹配是松耦合：前端只看局部雷达地图，后端再看FAST-LIVO2先验地图。
-  if (!scan_body || !local_target || scan_body->empty() || local_target->empty()) return false;
-
-  const ros::WallTime odom_start = ros::WallTime::now();
-  const Eigen::Vector3d p_before = p_;
-  const Eigen::Vector3d v_before = v_;
-  const Eigen::Matrix3d R_before = R_;
-  const Matrix15d P_before = P_;
-
-  pcl::PointCloud<pcl::PointXYZ>::Ptr source_world(new pcl::PointCloud<pcl::PointXYZ>());
-  source_world->reserve(scan_body->size());
-  for (const auto &pt : scan_body->points)
-  {
-    Eigen::Vector3d pb(pt.x, pt.y, pt.z);
-    Eigen::Vector3d pw = R_ * pb + p_;
-    if (pw.allFinite()) source_world->push_back(pcl::PointXYZ(pw.x(), pw.y(), pw.z()));
-  }
-
-  auto voxelDownsample = [](const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
-                            double voxel_size,
-                            int max_points) {
-    pcl::PointCloud<pcl::PointXYZ>::Ptr down(new pcl::PointCloud<pcl::PointXYZ>());
-    if (voxel_size > 0.01)
-    {
-      pcl::VoxelGrid<pcl::PointXYZ> voxel;
-      voxel.setLeafSize(voxel_size, voxel_size, voxel_size);
-      voxel.setInputCloud(cloud);
-      voxel.filter(*down);
-    }
-    else
-    {
-      *down = *cloud;
-    }
-    if (max_points > 0 && static_cast<int>(down->size()) > max_points)
-    {
-      pcl::PointCloud<pcl::PointXYZ>::Ptr sampled(new pcl::PointCloud<pcl::PointXYZ>());
-      sampled->reserve(max_points);
-      const double step = static_cast<double>(down->size() - 1) / static_cast<double>(max_points - 1);
-      for (int i = 0; i < max_points; ++i)
-      {
-        sampled->push_back(down->points[static_cast<size_t>(std::round(i * step))]);
-      }
-      finalizeCloud(sampled);
-      return sampled;
-    }
-    finalizeCloud(down);
-    return down;
-  };
-
-  pcl::PointCloud<pcl::PointXYZ>::Ptr source =
-      voxelDownsample(source_world, lidar_odom_voxel_size_, lidar_odom_max_points_);
-  pcl::PointCloud<pcl::PointXYZ>::Ptr target =
-      voxelDownsample(local_target, lidar_odom_voxel_size_, lidar_odom_local_max_points_);
-  if (static_cast<int>(source->size()) < lidar_odom_min_points_ ||
-      static_cast<int>(target->size()) < lidar_odom_min_points_)
-  {
-    ++lidar_odom_fail_count_;
-    return false;
-  }
-
-  pcl::IterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ> icp;
-  icp.setInputSource(source);
-  icp.setInputTarget(target);
-  icp.setMaximumIterations(lidar_odom_max_iterations_);
-  icp.setMaxCorrespondenceDistance(lidar_odom_max_correspondence_distance_);
-  icp.setTransformationEpsilon(1e-4);
-  icp.setEuclideanFitnessEpsilon(1e-4);
-  icp.setRANSACIterations(0);
-
-  pcl::PointCloud<pcl::PointXYZ> aligned;
-  icp.align(aligned);
-
-  const double odom_ms = (ros::WallTime::now() - odom_start).toSec() * 1000.0;
-  lidar_odom_time_sum_ms_ += odom_ms;
-  lidar_odom_time_max_ms_ = std::max(lidar_odom_time_max_ms_, odom_ms);
-
-  if (!icp.hasConverged())
-  {
-    ++lidar_odom_fail_count_;
-    return false;
-  }
-  const double fitness = icp.getFitnessScore(lidar_odom_max_correspondence_distance_);
-  if (!std::isfinite(fitness) || fitness > lidar_odom_max_fitness_score_)
-  {
-    ++lidar_odom_fail_count_;
-    return false;
-  }
-
-  const Eigen::Matrix4f delta = icp.getFinalTransformation();
-  Eigen::Matrix3d dR = delta.block<3, 3>(0, 0).cast<double>();
-  Eigen::Vector3d dp = delta.block<3, 1>(0, 3).cast<double>();
-  Eigen::AngleAxisd aa(dR);
-  Eigen::Vector3d dtheta = aa.axis() * aa.angle();
-  if (!dp.allFinite() || !dtheta.allFinite())
-  {
-    ++lidar_odom_fail_count_;
-    return false;
-  }
-  if (dp.norm() > lidar_odom_max_frame_translation_ ||
-      dtheta.norm() > lidar_odom_max_frame_rotation_)
-  {
-    ++lidar_odom_fail_count_;
-    return false;
-  }
-
-  const double ratio = std::max(0.0, std::min(1.0, lidar_odom_apply_ratio_));
-  dp = limitVector(dp * ratio, lidar_odom_max_initial_correction_);
-  dtheta = limitVector(dtheta * ratio, lidar_odom_max_frame_rotation_);
-  applyPoseCorrection(dp, dtheta);
-
-  if (lidar_odom_prior_consistency_enable_ && map_kdtree_)
-  {
-    auto priorResidualScore = [this, &scan_body](const Eigen::Vector3d &pose_p,
-                                                 const Eigen::Matrix3d &pose_R,
-                                                 int &score_used) {
-      double sum = 0.0;
-      score_used = 0;
-      const int step = std::max(1, static_cast<int>(scan_body->size()) /
-                                       std::max(lidar_odom_prior_min_points_ * 3, 1));
-      for (size_t i = 0; i < scan_body->size(); i += static_cast<size_t>(step))
-      {
-        const auto &pt = scan_body->points[i];
-        Eigen::Vector3d pb(pt.x, pt.y, pt.z);
-        Eigen::Vector3d pw = pose_R * pb + pose_p;
-        pcl::PointXYZ query(pw.x(), pw.y(), pw.z());
-        std::vector<int> idx(1);
-        std::vector<float> dist2(1);
-        if (map_kdtree_->nearestKSearch(query, 1, idx, dist2) <= 0) continue;
-        const double dist = std::sqrt(static_cast<double>(dist2[0]));
-        if (dist > max_match_distance_) continue;
-        sum += std::min(dist, huber_threshold_);
-        ++score_used;
-      }
-      if (score_used < lidar_odom_prior_min_points_) return std::numeric_limits<double>::infinity();
-      return sum / static_cast<double>(score_used);
-    };
-
-    int before_used = 0;
-    int after_used = 0;
-    const double before_score = priorResidualScore(p_before, R_before, before_used);
-    const double after_score = priorResidualScore(p_, R_, after_used);
-    if (!std::isfinite(before_score) || !std::isfinite(after_score) ||
-        after_score > before_score * lidar_odom_prior_max_worse_ratio_)
-    {
-      p_ = p_before;
-      v_ = v_before;
-      R_ = R_before;
-      P_ = P_before;
-      ++lidar_odom_fail_count_;
-      return false;
-    }
-  }
-
-  const double dt = stamp.toSec() - last_lidar_odom_stamp_;
-  if (dt > 1e-3 && dt < 1.0)
-  {
-    const Eigen::Vector3d lidar_velocity = (p_ - last_lidar_odom_p_) / dt;
-    const double blend = std::max(0.0, std::min(1.0, lidar_odom_velocity_blend_));
-    v_ = (1.0 - blend) * v_ + blend * lidar_velocity;
-  }
-
-  for (int i = 0; i < 3; ++i) P_(i, i) = std::max(P_(i, i) * 0.90, 1e-4);
-  for (int i = 6; i < 9; ++i) P_(i, i) = std::max(P_(i, i) * 0.90, 1e-5);
-  ++lidar_odom_ok_count_;
-  return true;
-}
-
-void DogPriorMapEkfNode::updateLastLidarOdomFrame(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
-                                                  const ros::Time &stamp)
-{
-  if (!lidar_odometry_enable_ || !scan_body || scan_body->empty()) return;
-  if (scan_count_ % lidar_odom_update_every_n_scans_ != 0) return;
-
-  last_lidar_odom_scan_.reset(new pcl::PointCloud<pcl::PointXYZ>());
-  *last_lidar_odom_scan_ = *scan_body;
-  last_lidar_odom_stamp_ = stamp.toSec();
-  last_lidar_odom_p_ = p_;
-  last_lidar_odom_R_ = R_;
-  has_last_lidar_odom_frame_ = true;
-
-  if (!lidar_odom_local_map_) lidar_odom_local_map_.reset(new pcl::PointCloud<pcl::PointXYZ>());
-  for (const auto &pt : scan_body->points)
-  {
-    Eigen::Vector3d pb(pt.x, pt.y, pt.z);
-    Eigen::Vector3d pw = R_ * pb + p_;
-    if (pw.allFinite()) lidar_odom_local_map_->push_back(pcl::PointXYZ(pw.x(), pw.y(), pw.z()));
-  }
-
-  pcl::PointCloud<pcl::PointXYZ>::Ptr pruned(new pcl::PointCloud<pcl::PointXYZ>());
-  pruned->reserve(lidar_odom_local_map_->size());
-  const double keep_radius2 = lidar_odom_local_radius_ * lidar_odom_local_radius_;
-  for (const auto &pt : lidar_odom_local_map_->points)
-  {
-    Eigen::Vector3d pw(pt.x, pt.y, pt.z);
-    if ((pw - p_).squaredNorm() <= keep_radius2)
-    {
-      pruned->push_back(pt);
-    }
-  }
-
-  pcl::PointCloud<pcl::PointXYZ>::Ptr down(new pcl::PointCloud<pcl::PointXYZ>());
-  if (lidar_odom_voxel_size_ > 0.01)
-  {
-    pcl::VoxelGrid<pcl::PointXYZ> voxel;
-    voxel.setLeafSize(lidar_odom_voxel_size_, lidar_odom_voxel_size_, lidar_odom_voxel_size_);
-    voxel.setInputCloud(pruned);
-    voxel.filter(*down);
-  }
-  else
-  {
-    *down = *pruned;
-  }
-
-  if (static_cast<int>(down->size()) > lidar_odom_local_max_points_)
-  {
-    pcl::PointCloud<pcl::PointXYZ>::Ptr sampled(new pcl::PointCloud<pcl::PointXYZ>());
-    sampled->reserve(lidar_odom_local_max_points_);
-    const double step = static_cast<double>(down->size() - 1) / static_cast<double>(lidar_odom_local_max_points_ - 1);
-    for (int i = 0; i < lidar_odom_local_max_points_; ++i)
-    {
-      sampled->push_back(down->points[static_cast<size_t>(std::round(i * step))]);
-    }
-    lidar_odom_local_map_ = sampled;
-  }
-  else
-  {
-    lidar_odom_local_map_ = down;
-  }
 }
 
 pcl::PointCloud<pcl::PointXYZ>::Ptr DogPriorMapEkfNode::buildLocalSubmap()
@@ -956,171 +375,6 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr DogPriorMapEkfNode::buildLocalSubmap()
   ROS_DEBUG_THROTTLE(1.0, "[DogPriorMap C++] local submap radius=%.2f pts=%zu",
                      used_radius, local->size());
   return local;
-}
-
-bool DogPriorMapEkfNode::runMultiResolutionIcp(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
-                                               const pcl::PointCloud<pcl::PointXYZ>::Ptr &local_map)
-{
-  // ------------------------- 多分辨率ICP预配准 -------------------------
-  // 作用不是替代EKF，而是在进入点到点/点到面小步更新前，先用局部地图做一次粗到细位姿预修正。
-  // 粗层：大体素、少迭代，负责把初值拉到正确局部极小值附近。
-  // 细层：小体素、少迭代，负责精调。最后仍限制单次修正量，避免错误ICP把位姿拉飞。
-  auto transformScanToMap = [this](const pcl::PointCloud<pcl::PointXYZ>::Ptr &src) {
-    pcl::PointCloud<pcl::PointXYZ>::Ptr out(new pcl::PointCloud<pcl::PointXYZ>());
-    out->reserve(src->size());
-    for (const auto &pt : src->points)
-    {
-      Eigen::Vector3d pb(pt.x, pt.y, pt.z);
-      Eigen::Vector3d pw = R_ * pb + p_;
-      out->push_back(pcl::PointXYZ(pw.x(), pw.y(), pw.z()));
-    }
-    return out;
-  };
-
-  auto voxelDown = [](const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud, double voxel_size) {
-    pcl::PointCloud<pcl::PointXYZ>::Ptr out(new pcl::PointCloud<pcl::PointXYZ>());
-    if (voxel_size > 0.01)
-    {
-      pcl::VoxelGrid<pcl::PointXYZ> voxel;
-      voxel.setLeafSize(voxel_size, voxel_size, voxel_size);
-      voxel.setInputCloud(cloud);
-      voxel.filter(*out);
-    }
-    else
-    {
-      *out = *cloud;
-    }
-    return out;
-  };
-
-  pcl::PointCloud<pcl::PointXYZ>::Ptr scan_world = transformScanToMap(scan_body);
-  Eigen::Matrix4f total = Eigen::Matrix4f::Identity();
-
-  const std::vector<double> voxels = {icp_coarse_voxel_size_, icp_fine_voxel_size_};
-  const std::vector<int> iterations = {icp_coarse_iterations_, icp_fine_iterations_};
-  for (size_t level = 0; level < voxels.size(); ++level)
-  {
-    pcl::PointCloud<pcl::PointXYZ>::Ptr src = voxelDown(scan_world, voxels[level]);
-    pcl::PointCloud<pcl::PointXYZ>::Ptr tgt = voxelDown(local_map, voxels[level]);
-    if (src->size() < 20 || tgt->size() < 50) return false;
-
-    pcl::IterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ> icp;
-    icp.setInputSource(src);
-    icp.setInputTarget(tgt);
-    icp.setMaximumIterations(iterations[level]);
-    icp.setMaxCorrespondenceDistance(icp_max_correspondence_distance_);
-    icp.setTransformationEpsilon(1e-4);
-    icp.setEuclideanFitnessEpsilon(1e-4);
-
-    pcl::PointCloud<pcl::PointXYZ> aligned;
-    icp.align(aligned);
-    if (!icp.hasConverged() || icp.getFitnessScore() > icp_max_fitness_score_)
-    {
-      return false;
-    }
-
-    Eigen::Matrix4f delta = icp.getFinalTransformation();
-    total = delta * total;
-    pcl::transformPointCloud(*scan_world, *scan_world, delta);
-  }
-
-  Eigen::Matrix3d dR = total.block<3, 3>(0, 0).cast<double>();
-  Eigen::Vector3d dp = total.block<3, 1>(0, 3).cast<double>();
-  Eigen::AngleAxisd aa(dR);
-  Eigen::Vector3d dtheta = aa.axis() * aa.angle();
-  if (!dp.allFinite() || !dtheta.allFinite()) return false;
-
-  dp = limitVector(dp, max_translation_update_);
-  dtheta = limitVector(dtheta, max_rotation_update_);
-  applyPoseCorrection(dp, dtheta);
-  return true;
-}
-
-bool DogPriorMapEkfNode::runGicpRefinement(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
-                                           const pcl::PointCloud<pcl::PointXYZ>::Ptr &local_map)
-{
-  // ------------------------- 局部子地图GICP精配准 -------------------------
-  // 这是当前主流先验地图定位里很常见的一层：
-  // 1) 用IMU/EKF当前位姿把当前帧雷达点投到地图坐标；
-  // 2) 只和当前附近的局部子地图做GICP，避免全局重复结构误匹配；
-  // 3) GICP利用源点和目标点邻域协方差信息，比普通点到点ICP更适合墙面/地面这类结构；
-  // 4) 输出只作为一次小幅预校正，再交给后面的EKF点到面更新精修，防止单次配准拉飞。
-  if (!scan_body || !local_map || scan_body->empty() || local_map->empty()) return false;
-
-  auto voxelDown = [](const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud, double voxel_size, int max_points) {
-    pcl::PointCloud<pcl::PointXYZ>::Ptr down(new pcl::PointCloud<pcl::PointXYZ>());
-    if (voxel_size > 0.01)
-    {
-      pcl::VoxelGrid<pcl::PointXYZ> voxel;
-      voxel.setLeafSize(voxel_size, voxel_size, voxel_size);
-      voxel.setInputCloud(cloud);
-      voxel.filter(*down);
-    }
-    else
-    {
-      *down = *cloud;
-    }
-
-    if (max_points > 0 && static_cast<int>(down->size()) > max_points)
-    {
-      pcl::PointCloud<pcl::PointXYZ>::Ptr sampled(new pcl::PointCloud<pcl::PointXYZ>());
-      sampled->reserve(max_points);
-      const double step = static_cast<double>(down->size() - 1) / static_cast<double>(max_points - 1);
-      for (int i = 0; i < max_points; ++i)
-      {
-        sampled->push_back(down->points[static_cast<size_t>(std::round(i * step))]);
-      }
-      return sampled;
-    }
-    return down;
-  };
-
-  pcl::PointCloud<pcl::PointXYZ>::Ptr scan_world(new pcl::PointCloud<pcl::PointXYZ>());
-  scan_world->reserve(scan_body->size());
-  for (const auto &pt : scan_body->points)
-  {
-    Eigen::Vector3d pb(pt.x, pt.y, pt.z);
-    Eigen::Vector3d pw = R_ * pb + p_;
-    if (pw.allFinite()) scan_world->push_back(pcl::PointXYZ(pw.x(), pw.y(), pw.z()));
-  }
-
-  pcl::PointCloud<pcl::PointXYZ>::Ptr source = voxelDown(scan_world, gicp_source_voxel_size_, gicp_max_source_points_);
-  pcl::PointCloud<pcl::PointXYZ>::Ptr target = voxelDown(local_map, gicp_target_voxel_size_, gicp_max_target_points_);
-  if (static_cast<int>(source->size()) < min_effective_points_ || static_cast<int>(target->size()) < min_effective_points_)
-  {
-    return false;
-  }
-
-  pcl::GeneralizedIterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ> gicp;
-  gicp.setInputSource(source);
-  gicp.setInputTarget(target);
-  gicp.setMaximumIterations(gicp_max_iterations_);
-  gicp.setMaxCorrespondenceDistance(gicp_max_correspondence_distance_);
-  gicp.setTransformationEpsilon(gicp_transformation_epsilon_);
-  gicp.setEuclideanFitnessEpsilon(1e-4);
-  gicp.setRANSACIterations(0);
-
-  pcl::PointCloud<pcl::PointXYZ> aligned;
-  gicp.align(aligned);
-  if (!gicp.hasConverged()) return false;
-  const double fitness = gicp.getFitnessScore(gicp_max_correspondence_distance_);
-  if (!std::isfinite(fitness) || fitness > gicp_max_fitness_score_) return false;
-
-  const Eigen::Matrix4f delta = gicp.getFinalTransformation();
-  Eigen::Matrix3d dR = delta.block<3, 3>(0, 0).cast<double>();
-  Eigen::Vector3d dp = delta.block<3, 1>(0, 3).cast<double>();
-  Eigen::AngleAxisd aa(dR);
-  Eigen::Vector3d dtheta = aa.axis() * aa.angle();
-  if (!dp.allFinite() || !dtheta.allFinite()) return false;
-  if (dp.norm() > ndt_accept_max_translation_ || dtheta.norm() > ndt_accept_max_rotation_)
-  {
-    return false;
-  }
-
-  dp = limitVector(dp, max_translation_update_);
-  dtheta = limitVector(dtheta, max_rotation_update_);
-  applyPoseCorrection(dp, dtheta);
-  return true;
 }
 
 bool DogPriorMapEkfNode::runNdtRefinement(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
@@ -1251,23 +505,14 @@ bool DogPriorMapEkfNode::runNdtRefinement(const pcl::PointCloud<pcl::PointXYZ>::
   const Eigen::Matrix4d final_transform = ndt.getFinalTransformation().cast<double>();
   Eigen::Vector3d dp = Eigen::Vector3d::Zero();
   Eigen::Vector3d dtheta = Eigen::Vector3d::Zero();
+  const bool had_previous_ndt_pose = ndt_has_previous_pose_;
+  const Eigen::Matrix4d previous_ndt_pose = ndt_previous_pose_;
   if (ndt_absolute_pose_mode_)
   {
     const Eigen::Matrix4d delta_from_guess = ndt_initial_guess.inverse() * final_transform;
     Eigen::AngleAxisd aa(delta_from_guess.block<3, 3>(0, 0));
     dp = delta_from_guess.block<3, 1>(0, 3);
     dtheta = aa.axis() * aa.angle();
-
-    if (ndt_has_previous_pose_)
-    {
-      ndt_delta_pose_ = ndt_previous_pose_.inverse() * final_transform;
-    }
-    else
-    {
-      ndt_delta_pose_.setIdentity();
-      ndt_has_previous_pose_ = true;
-    }
-    ndt_previous_pose_ = final_transform;
   }
   else
   {
@@ -1283,40 +528,56 @@ bool DogPriorMapEkfNode::runNdtRefinement(const pcl::PointCloud<pcl::PointXYZ>::
     dp = limitVector(dp, max_translation_update_);
     dtheta = limitVector(dtheta, max_rotation_update_);
   }
-  else if (!ndt_absolute_pose_mode_ &&
-           (dp.norm() > ndt_accept_max_translation_ || dtheta.norm() > ndt_accept_max_rotation_))
+  else
   {
-    ROS_WARN_THROTTLE(1.0, "[DogPriorMap C++] NDT reject: correction dp=%.3f max=%.3f dtheta_deg=%.2f max=%.2f fitness=%.4f",
-                      dp.norm(), ndt_accept_max_translation_,
-                      dtheta.norm() * 180.0 / M_PI, ndt_accept_max_rotation_ * 180.0 / M_PI,
-      fitness);
-    return false;
-  }
-
-  if (ndt_absolute_pose_mode_ && ndt_has_previous_pose_)
-  {
-    const Eigen::Matrix4d delta_from_previous = ndt_previous_pose_.inverse() * final_transform;
-    Eigen::Vector3d prev_dp = delta_from_previous.block<3, 1>(0, 3);
-    Eigen::Matrix3d prev_dR = delta_from_previous.block<3, 3>(0, 0);
-    Eigen::AngleAxisd prev_aa(prev_dR);
-    Eigen::Vector3d prev_dtheta = prev_aa.axis() * prev_aa.angle();
-
-    const double jump_trans = prev_dp.norm();
-    const double jump_rot_deg = prev_dtheta.norm() * 180.0 / M_PI;
-    const bool suspicious_jump = (jump_trans > 0.8 && fitness > 1.5) ||
-                                (jump_rot_deg > 15.0 && fitness > 1.5);
-
-    if (suspicious_jump)
+    if (ndt.getFinalNumIteration() <= 0)
     {
-      ROS_WARN_THROTTLE(1.0,
-                        "[DogPriorMap C++] NDT reject: suspicious full-map jump prev_dp=%.3f prev_yaw_deg=%.2f fitness=%.4f",
-                        jump_trans, jump_rot_deg, fitness);
+      ROS_WARN_THROTTLE(1.0, "[DogPriorMap C++] NDT reject: zero iteration fitness=%.4f", fitness);
       return false;
+    }
+    if (!std::isfinite(fitness))
+    {
+      ROS_WARN_THROTTLE(1.0, "[DogPriorMap C++] NDT reject: non-finite fitness source=%zu target=%zu",
+                        source->size(), target->size());
+      return false;
+    }
+
+    if (had_previous_ndt_pose)
+    {
+      const Eigen::Matrix4d delta_from_previous = previous_ndt_pose.inverse() * final_transform;
+      Eigen::Vector3d prev_dp = delta_from_previous.block<3, 1>(0, 3);
+      Eigen::Matrix3d prev_dR = delta_from_previous.block<3, 3>(0, 0);
+      Eigen::AngleAxisd prev_aa(prev_dR);
+      Eigen::Vector3d prev_dtheta = prev_aa.axis() * prev_aa.angle();
+
+      const double jump_trans = prev_dp.norm();
+      const double jump_rot_deg = prev_dtheta.norm() * 180.0 / M_PI;
+      const bool large_jump = jump_trans > ndt_accept_max_translation_ ||
+                              jump_rot_deg > ndt_accept_max_rotation_ * 180.0 / M_PI;
+
+      if (large_jump)
+      {
+        ROS_WARN_THROTTLE(1.0,
+                          "[DogPriorMap C++] NDT reject: full-map jump prev_dp=%.3f max=%.3f prev_rot_deg=%.2f max=%.2f fitness=%.4f",
+                          jump_trans, ndt_accept_max_translation_, jump_rot_deg,
+                          ndt_accept_max_rotation_ * 180.0 / M_PI, fitness);
+        return false;
+      }
     }
   }
 
   if (ndt_absolute_pose_mode_)
   {
+    if (had_previous_ndt_pose)
+    {
+      ndt_delta_pose_ = previous_ndt_pose.inverse() * final_transform;
+    }
+    else
+    {
+      ndt_delta_pose_.setIdentity();
+      ndt_has_previous_pose_ = true;
+    }
+    ndt_previous_pose_ = final_transform;
     R_ = final_transform.block<3, 3>(0, 0);
     p_ = final_transform.block<3, 1>(0, 3);
     v_.setZero();
@@ -1820,208 +1081,6 @@ bool DogPriorMapEkfNode::lidarMapUpdate(const pcl::PointCloud<pcl::PointXYZ>::Pt
     if (dp.norm() < 0.01 && dtheta.norm() < 0.2 * M_PI / 180.0) break;
   }
   return accepted_any_update;
-}
-
-bool DogPriorMapEkfNode::evaluateAnchorCandidate(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
-                                                 const Eigen::Vector3d &candidate_p,
-                                                 double candidate_yaw,
-                                                 double &mean_residual,
-                                                 int &used) const
-{
-  // ------------------------- 锚点候选快速评分 -------------------------
-  // 用当前帧少量雷达点，在候选位姿下投到先验地图，统计最近邻残差。
-  // 它不做EKF更新，只判断“这个候选位置是不是比当前局部匹配更像真实位置”。
-  used = 0;
-  mean_residual = std::numeric_limits<double>::infinity();
-  if (!scan_body || scan_body->empty() || !map_kdtree_) return false;
-
-  Eigen::Matrix3d candidate_R = Eigen::AngleAxisd(candidate_yaw, Eigen::Vector3d::UnitZ()).toRotationMatrix() * R_;
-  double residual_sum = 0.0;
-
-  for (const auto &pt : scan_body->points)
-  {
-    Eigen::Vector3d pb(pt.x, pt.y, pt.z);
-    Eigen::Vector3d pred = candidate_R * pb + candidate_p;
-    pcl::PointXYZ query(pred.x(), pred.y(), pred.z());
-
-    std::vector<int> idx(1);
-    std::vector<float> dist2(1);
-    if (map_kdtree_->nearestKSearch(query, 1, idx, dist2) <= 0) continue;
-    const double dist = std::sqrt(static_cast<double>(dist2[0]));
-    if (dist > max_match_distance_) continue;
-
-    residual_sum += std::min(dist, huber_threshold_);
-    ++used;
-  }
-
-  if (used < anchor_min_effective_points_) return false;
-  mean_residual = residual_sum / static_cast<double>(used);
-  return std::isfinite(mean_residual);
-}
-
-bool DogPriorMapEkfNode::anchorRelocalizationUpdate(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
-                                                    const ros::Time &stamp)
-{
-  // ------------------------- 类回环/锚点重定位 -------------------------
-  // 触发条件来自上一帧局部匹配：残差偏大或长廊退化分数偏高。
-  // 这里不做重型pose graph，而是在当前估计附近做一个小范围候选搜索：
-  // 1) XY平面网格搜索，yaw小角度搜索；
-  // 2) 每个候选用全局先验地图KDTree快速评分；
-  // 3) 只有候选残差明显优于当前残差，且有效点足够，才作为锚点；
-  // 4) 锚点校正限幅+按比例应用，避免错误重定位一把拉飞。
-  if (!scan_body || scan_body->empty()) return false;
-
-  double base_residual = std::numeric_limits<double>::infinity();
-  int base_used = 0;
-  if (!evaluateAnchorCandidate(scan_body, p_, 0.0, base_residual, base_used))
-  {
-    return false;
-  }
-
-  Eigen::Vector3d best_p = p_;
-  double best_yaw = 0.0;
-  double best_residual = base_residual;
-  int best_used = base_used;
-
-  const int xy_steps = std::max(1, static_cast<int>(std::floor(anchor_search_radius_ / std::max(anchor_search_step_, 1e-3))));
-  const int yaw_steps = std::max(0, static_cast<int>(std::floor(anchor_yaw_search_deg_ / std::max(anchor_yaw_step_deg_, 1e-3))));
-  for (int ix = -xy_steps; ix <= xy_steps; ++ix)
-  {
-    for (int iy = -xy_steps; iy <= xy_steps; ++iy)
-    {
-      const double dx = static_cast<double>(ix) * anchor_search_step_;
-      const double dy = static_cast<double>(iy) * anchor_search_step_;
-      if (std::hypot(dx, dy) > anchor_search_radius_) continue;
-
-      for (int iyaw = -yaw_steps; iyaw <= yaw_steps; ++iyaw)
-      {
-        if (ix == 0 && iy == 0 && iyaw == 0) continue;
-        const double yaw = static_cast<double>(iyaw) * anchor_yaw_step_deg_ * M_PI / 180.0;
-        Eigen::Vector3d candidate_p = p_ + Eigen::Vector3d(dx, dy, 0.0);
-        double residual = std::numeric_limits<double>::infinity();
-        int used = 0;
-        if (!evaluateAnchorCandidate(scan_body, candidate_p, yaw, residual, used)) continue;
-
-        // 有效点更多且残差更低的候选更可信；这里用一个很轻的评分，不引入额外库。
-        const double used_bonus = 1.0 - 0.15 * std::min(1.0, static_cast<double>(used - anchor_min_effective_points_) /
-                                                              std::max(1.0, static_cast<double>(anchor_min_effective_points_)));
-        const double score = residual * used_bonus;
-        const double best_score = best_residual * (1.0 - 0.15 * std::min(1.0, static_cast<double>(best_used - anchor_min_effective_points_) /
-                                                                                std::max(1.0, static_cast<double>(anchor_min_effective_points_))));
-        if (score < best_score)
-        {
-          best_p = candidate_p;
-          best_yaw = yaw;
-          best_residual = residual;
-          best_used = used;
-        }
-      }
-    }
-  }
-
-  if (best_used < anchor_min_effective_points_) return false;
-  if (best_residual > anchor_accept_residual_) return false;
-  if (best_residual > base_residual * anchor_improve_ratio_) return false;
-
-  Eigen::Vector3d dp = best_p - p_;
-  if (dp.norm() > anchor_max_correction_)
-  {
-    dp = limitVector(dp, anchor_max_correction_);
-  }
-  dp *= std::max(0.0, std::min(1.0, anchor_apply_ratio_));
-
-  Eigen::Vector3d dtheta(0.0, 0.0, best_yaw * std::max(0.0, std::min(1.0, anchor_apply_ratio_)));
-  dtheta = limitVector(dtheta, max_rotation_update_);
-  applyPoseCorrection(dp, dtheta);
-
-  ROS_WARN("[DogPriorMap C++] anchor relocalization correction: base_res=%.3f/%d best_res=%.3f/%d dp=(%.2f %.2f %.2f) dyaw=%.2fdeg t=%.3f",
-           base_residual, base_used, best_residual, best_used,
-           dp.x(), dp.y(), dp.z(), dtheta.z() * 180.0 / M_PI, stamp.toSec());
-  return true;
-}
-
-bool DogPriorMapEkfNode::verticalRelocalizationUpdate(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
-                                                      const ros::Time &stamp)
-{
-  // ------------------------- 垂直方向先验地图重定位 -------------------------
-  // loop3的主要失败模式是长走廊/楼梯后Z轴累计漂移：XY轨迹形状还像，但高度偏离先验地图。
-  // 这里不固定Z，也不假设平地；只在当前XY/yaw附近沿地图Z方向搜索若干候选高度，
-  // 用当前雷达点到先验地图最近邻残差打分。如果某个高度明显更像先验地图，就小步修正Z。
-  if (!scan_body || scan_body->empty() || !map_kdtree_) return false;
-  if (vertical_relocalization_search_radius_ <= 0.0 || vertical_relocalization_search_step_ <= 1e-3) return false;
-
-  auto scoreZ = [&](double dz, int &used) {
-    used = 0;
-    double residual_sum = 0.0;
-    std::vector<int> idx(1);
-    std::vector<float> dist2(1);
-    const int step = std::max(1, static_cast<int>(scan_body->size()) /
-                                     std::max(vertical_relocalization_max_points_, 1));
-    for (size_t i = 0; i < scan_body->size(); i += static_cast<size_t>(step))
-    {
-      const auto &pt = scan_body->points[i];
-      Eigen::Vector3d pb(pt.x, pt.y, pt.z);
-      Eigen::Vector3d pred = R_ * pb + p_ + Eigen::Vector3d(0.0, 0.0, dz);
-      if (!pred.allFinite()) continue;
-      pcl::PointXYZ query(pred.x(), pred.y(), pred.z());
-      if (map_kdtree_->nearestKSearch(query, 1, idx, dist2) <= 0) continue;
-      const double dist = std::sqrt(static_cast<double>(dist2[0]));
-      if (dist > max_match_distance_) continue;
-      residual_sum += std::min(dist, huber_threshold_);
-      ++used;
-    }
-    if (used < vertical_relocalization_min_effective_points_) return std::numeric_limits<double>::infinity();
-    return residual_sum / static_cast<double>(used);
-  };
-
-  int base_used = 0;
-  const double base_residual = scoreZ(0.0, base_used);
-  double best_dz = 0.0;
-  double best_residual = base_residual;
-  int best_used = base_used;
-  const int steps = std::max(1, static_cast<int>(std::floor(vertical_relocalization_search_radius_ /
-                                                           vertical_relocalization_search_step_)));
-  for (int iz = -steps; iz <= steps; ++iz)
-  {
-    if (iz == 0) continue;
-    const double dz = static_cast<double>(iz) * vertical_relocalization_search_step_;
-    int used = 0;
-    const double residual = scoreZ(dz, used);
-    if (!std::isfinite(residual)) continue;
-    const double used_bonus = 1.0 - 0.10 * std::min(1.0, static_cast<double>(used - vertical_relocalization_min_effective_points_) /
-                                                          std::max(1.0, static_cast<double>(vertical_relocalization_min_effective_points_)));
-    const double score = residual * used_bonus;
-    const double best_score = best_residual * (1.0 - 0.10 * std::min(1.0, static_cast<double>(best_used - vertical_relocalization_min_effective_points_) /
-                                                                            std::max(1.0, static_cast<double>(vertical_relocalization_min_effective_points_))));
-    if (score < best_score)
-    {
-      best_dz = dz;
-      best_residual = residual;
-      best_used = used;
-    }
-  }
-
-  if (std::abs(best_dz) < 1e-6) return false;
-  if (best_used < vertical_relocalization_min_effective_points_) return false;
-  if (best_residual > vertical_relocalization_accept_residual_) return false;
-  if (std::isfinite(base_residual) &&
-      best_residual > base_residual * vertical_relocalization_improve_ratio_)
-  {
-    return false;
-  }
-
-  double dz_apply = std::max(-vertical_relocalization_max_correction_,
-                             std::min(vertical_relocalization_max_correction_, best_dz));
-  dz_apply *= std::max(0.0, std::min(1.0, vertical_relocalization_apply_ratio_));
-  if (std::abs(dz_apply) < 1e-4) return false;
-
-  applyPoseCorrection(Eigen::Vector3d(0.0, 0.0, dz_apply), Eigen::Vector3d::Zero());
-  v_.z() *= 0.5;
-  ROS_WARN_THROTTLE(1.0,
-                    "[DogPriorMap C++] 垂直地图重定位: base=%.3f/%d best=%.3f/%d dz=%.2f apply=%.2f t=%.3f",
-                    base_residual, base_used, best_residual, best_used,
-                    best_dz, dz_apply, stamp.toSec());
-  return true;
 }
 
 bool DogPriorMapEkfNode::updateLidarDegeneracyStatus(const Eigen::Matrix<double, 6, 6> &information_matrix,

@@ -15,8 +15,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   lidar_topic_ = getParam<std::string>("topics/lidar", "/livox/lidar");
   lidar_msg_type_ = getParam<std::string>("topics/lidar_msg_type", "livox");
   image_topic_ = getParam<std::string>("topics/image", "/image_left/image_rect");
-  external_odom_topic_ = getParam<std::string>("topics/external_odom", "/aft_mapped_to_init");
-  initial_pose_topic_ = getParam<std::string>("topics/initial_pose", "/initialpose");
+  ndt_observation_topic_ = getParam<std::string>("topics/ndt_odom", "/dog_livo/ndt_odom");
   odom_high_rate_topic_ = getParam<std::string>("topics/odom_high_rate", "/dog_livo/odom_high_rate");
   imu_propagate_topic_ = getParam<std::string>("topics/imu_propagate", "/LIVO2/imu_propagate");
   odom_corrected_topic_ = getParam<std::string>("topics/odom_corrected", "/dog_livo/odom_corrected");
@@ -46,40 +45,18 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   acc_bias_noise_ = getParam<double>("imu/acc_bias_noise", 0.0001);
   gyro_bias_noise_ = getParam<double>("imu/gyro_bias_noise", 0.0001);
   imu_history_keep_sec_ = getParam<double>("imu/history_keep_sec", 2.0);
+
+  ndt_observation_enable_ = getParam<bool>("ndt_observation/enable", false);
+  ndt_observation_apply_ratio_ = getParam<double>("ndt_observation/apply_ratio", 0.8);
+  ndt_observation_z_apply_ratio_ = getParam<double>("ndt_observation/z_apply_ratio", 1.0);
+  ndt_observation_roll_pitch_apply_ratio_ = getParam<double>("ndt_observation/roll_pitch_apply_ratio", 1.0);
+  ndt_observation_max_translation_correction_ = getParam<double>("ndt_observation/max_translation_correction", 1.0);
+  ndt_observation_max_rotation_correction_ = getParam<double>("ndt_observation/max_rotation_correction_deg", 5.0) * M_PI / 180.0;
+  ndt_observation_velocity_blend_ = getParam<double>("ndt_observation/velocity_blend", 0.6);
   lidar_deskew_enable_ = getParam<bool>("lidar_update/deskew_enable", true);
   lidar_deskew_translation_enable_ = getParam<bool>("lidar_update/deskew_translation_enable", true);
   lidar_offset_time_scale_ = getParam<double>("lidar_update/offset_time_scale", 1e-9);
 
-  lidar_odometry_enable_ = getParam<bool>("lidar_odometry/enable", true);
-  lidar_odom_method_ = getParam<std::string>("lidar_odometry/method", "loose_icp");
-  lidar_odom_voxel_size_ = getParam<double>("lidar_odometry/voxel_size", 0.35);
-  lidar_odom_max_points_ = std::max(50, getParam<int>("lidar_odometry/max_points", 900));
-  lidar_odom_min_points_ = std::max(20, getParam<int>("lidar_odometry/min_points", 80));
-  lidar_odom_max_iterations_ = std::max(1, getParam<int>("lidar_odometry/max_iterations", 8));
-  lidar_odom_max_correspondence_distance_ = getParam<double>("lidar_odometry/max_correspondence_distance", 0.8);
-  lidar_odom_max_fitness_score_ = getParam<double>("lidar_odometry/max_fitness_score", 0.25);
-  lidar_odom_min_fitness_improvement_ = getParam<double>("lidar_odometry/min_fitness_improvement", 0.15);
-  lidar_odom_max_frame_translation_ = getParam<double>("lidar_odometry/max_frame_translation", 1.5);
-  lidar_odom_max_frame_rotation_ = getParam<double>("lidar_odometry/max_frame_rotation_deg", 8.0) * M_PI / 180.0;
-  lidar_odom_max_initial_correction_ = getParam<double>("lidar_odometry/max_initial_correction", 0.8);
-  lidar_odom_apply_ratio_ = getParam<double>("lidar_odometry/apply_ratio", 0.7);
-  lidar_odom_velocity_blend_ = getParam<double>("lidar_odometry/velocity_blend", 0.5);
-  lidar_odom_local_radius_ = getParam<double>("lidar_odometry/local_radius", 8.0);
-  lidar_odom_local_max_points_ = std::max(500, getParam<int>("lidar_odometry/local_max_points", 15000));
-  lidar_odom_update_every_n_scans_ = std::max(1, getParam<int>("lidar_odometry/update_every_n_scans", 1));
-  lidar_odom_prior_consistency_enable_ = getParam<bool>("lidar_odometry/prior_consistency_enable", true);
-  lidar_odom_prior_max_worse_ratio_ = getParam<double>("lidar_odometry/prior_max_worse_ratio", 1.05);
-  lidar_odom_prior_min_points_ = std::max(10, getParam<int>("lidar_odometry/prior_min_points", 80));
-
-  external_odom_enable_ = getParam<bool>("external_odometry/enable", false);
-  external_odom_same_map_frame_ = getParam<bool>("external_odometry/same_map_frame", false);
-  external_odom_apply_ratio_ = getParam<double>("external_odometry/apply_ratio", 0.8);
-  external_odom_z_apply_ratio_ = getParam<double>("external_odometry/z_apply_ratio", 0.0);
-  external_odom_roll_pitch_apply_ratio_ = getParam<double>("external_odometry/roll_pitch_apply_ratio", 0.3);
-  external_odom_max_translation_correction_ = getParam<double>("external_odometry/max_translation_correction", 1.0);
-  external_odom_max_rotation_correction_ =
-      getParam<double>("external_odometry/max_rotation_correction_deg", 5.0) * M_PI / 180.0;
-  external_odom_velocity_blend_ = getParam<double>("external_odometry/velocity_blend", 0.6);
 
   lidar_enable_ = getParam<bool>("lidar_update/enable", true);
   prior_map_update_enable_ = getParam<bool>("lidar_update/prior_map_update_enable", true);
@@ -138,23 +115,6 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   local_submap_enable_ = getParam<bool>("map/local_submap_enable", true);
   local_submap_max_points_ = std::max(500, getParam<int>("map/local_submap_max_points", 12000));
   local_submap_min_points_ = std::max(50, getParam<int>("map/local_submap_min_points", 500));
-  multires_icp_enable_ = getParam<bool>("lidar_update/multires_icp_enable", true);
-  gicp_enable_ = getParam<bool>("lidar_update/gicp_enable", false);
-  ndt_enable_ = getParam<bool>("lidar_update/ndt_enable", false);
-  icp_coarse_voxel_size_ = getParam<double>("lidar_update/icp_coarse_voxel_size", 0.80);
-  icp_fine_voxel_size_ = getParam<double>("lidar_update/icp_fine_voxel_size", 0.35);
-  icp_coarse_iterations_ = std::max(1, getParam<int>("lidar_update/icp_coarse_iterations", 8));
-  icp_fine_iterations_ = std::max(1, getParam<int>("lidar_update/icp_fine_iterations", 5));
-  icp_max_correspondence_distance_ = getParam<double>("lidar_update/icp_max_correspondence_distance", 1.5);
-  icp_max_fitness_score_ = getParam<double>("lidar_update/icp_max_fitness_score", 0.8);
-  gicp_source_voxel_size_ = getParam<double>("lidar_update/gicp_source_voxel_size", 0.35);
-  gicp_target_voxel_size_ = getParam<double>("lidar_update/gicp_target_voxel_size", 0.25);
-  gicp_max_source_points_ = std::max(50, getParam<int>("lidar_update/gicp_max_source_points", 1200));
-  gicp_max_target_points_ = std::max(500, getParam<int>("lidar_update/gicp_max_target_points", 30000));
-  gicp_max_iterations_ = std::max(1, getParam<int>("lidar_update/gicp_max_iterations", 8));
-  gicp_max_correspondence_distance_ = getParam<double>("lidar_update/gicp_max_correspondence_distance", 0.8);
-  gicp_max_fitness_score_ = getParam<double>("lidar_update/gicp_max_fitness_score", 0.35);
-  gicp_transformation_epsilon_ = getParam<double>("lidar_update/gicp_transformation_epsilon", 1e-4);
   ndt_source_voxel_size_ = getParam<double>("lidar_update/ndt_source_voxel_size", 0.35);
   ndt_target_voxel_size_ = getParam<double>("lidar_update/ndt_target_voxel_size", 0.30);
   ndt_max_source_points_ = std::max(50, getParam<int>("lidar_update/ndt_max_source_points", 900));
@@ -175,30 +135,6 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   degeneracy_project_update_enable_ = getParam<bool>("lidar_update/degeneracy_project_update_enable", true);
   degeneracy_project_eigen_ratio_ = getParam<double>("lidar_update/degeneracy_project_eigen_ratio", 0.03);
   degeneracy_project_min_scale_ = getParam<double>("lidar_update/degeneracy_project_min_scale", 0.10);
-  anchor_relocalization_enable_ = getParam<bool>("anchor_relocalization/enable", false);
-  anchor_period_sec_ = getParam<double>("anchor_relocalization/period_sec", 5.0);
-  anchor_trigger_residual_ = getParam<double>("anchor_relocalization/trigger_residual", 0.25);
-  anchor_trigger_degeneracy_score_ = getParam<double>("anchor_relocalization/trigger_degeneracy_score", 0.45);
-  anchor_search_radius_ = getParam<double>("anchor_relocalization/search_radius", 6.0);
-  anchor_search_step_ = getParam<double>("anchor_relocalization/search_step", 1.0);
-  anchor_yaw_search_deg_ = getParam<double>("anchor_relocalization/yaw_search_deg", 8.0);
-  anchor_yaw_step_deg_ = getParam<double>("anchor_relocalization/yaw_step_deg", 4.0);
-  anchor_min_effective_points_ = std::max(10, getParam<int>("anchor_relocalization/min_effective_points", 80));
-  anchor_accept_residual_ = getParam<double>("anchor_relocalization/accept_residual", 0.18);
-  anchor_improve_ratio_ = getParam<double>("anchor_relocalization/improve_ratio", 0.70);
-  anchor_max_correction_ = getParam<double>("anchor_relocalization/max_correction", 2.0);
-  anchor_apply_ratio_ = getParam<double>("anchor_relocalization/apply_ratio", 0.65);
-  vertical_relocalization_enable_ = getParam<bool>("vertical_relocalization/enable", true);
-  vertical_relocalization_period_sec_ = getParam<double>("vertical_relocalization/period_sec", 1.0);
-  vertical_relocalization_search_radius_ = getParam<double>("vertical_relocalization/search_radius", 8.0);
-  vertical_relocalization_search_step_ = getParam<double>("vertical_relocalization/search_step", 0.5);
-  vertical_relocalization_max_points_ = std::max(30, getParam<int>("vertical_relocalization/max_points", 350));
-  vertical_relocalization_min_effective_points_ = std::max(10, getParam<int>("vertical_relocalization/min_effective_points", 80));
-  vertical_relocalization_accept_residual_ = getParam<double>("vertical_relocalization/accept_residual", 0.18);
-  vertical_relocalization_improve_ratio_ = getParam<double>("vertical_relocalization/improve_ratio", 0.75);
-  vertical_relocalization_max_correction_ = getParam<double>("vertical_relocalization/max_correction", 0.8);
-  vertical_relocalization_apply_ratio_ = getParam<double>("vertical_relocalization/apply_ratio", 0.6);
-
   camera_enable_ = getParam<bool>("camera_update/enable", true);
   visual_feature_update_enable_ = getParam<bool>("camera_update/feature_update_enable", true);
   max_over_exposure_ratio_ = getParam<double>("camera_update/max_over_exposure_ratio", 0.25);
@@ -230,7 +166,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     runtime_csv_.open(runtime_csv_path_, std::ios::out);
     if (runtime_csv_.is_open())
     {
-      runtime_csv_ << "stamp,imu_hz,lidar_hz,correct_hz,avg_update_ms,max_update_ms,avg_icp_ms,max_icp_ms,icp_ok_count,icp_fail_count,avg_lidar_odom_ms,max_lidar_odom_ms,lidar_odom_ok_count,lidar_odom_fail_count,last_used_points,last_mean_residual,ok_count,fail_count,image_hz,avg_visual_ms,max_visual_ms,last_feature_ratio,visual_weight,lidar_degenerate,lidar_degeneracy_score,visual_ok_count,visual_fail_count,rss_note\n";
+      runtime_csv_ << "stamp,imu_hz,lidar_hz,correct_hz,avg_update_ms,max_update_ms,avg_ndt_ms,max_ndt_ms,ndt_ok_count,ndt_fail_count,last_used_points,last_mean_residual,ok_count,fail_count,image_hz,avg_visual_ms,max_visual_ms,last_feature_ratio,visual_weight,lidar_degenerate,lidar_degeneracy_score,visual_ok_count,visual_fail_count,rss_note\n";
     }
     else
     {
@@ -238,12 +174,9 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     }
   }
 
-  std::vector<double> init_p = getParamVec("filter/initial_position", {0.0, 0.0, 0.0});
-  std::vector<double> init_rpy = getParamVec("filter/initial_rpy_deg", {0.0, 0.0, 0.0});
-  std::vector<double> init_v = getParamVec("filter/initial_velocity", {0.0, 0.0, 0.0});
-  p_ = Eigen::Vector3d(init_p[0], init_p[1], init_p[2]);
-  v_ = Eigen::Vector3d(init_v[0], init_v[1], init_v[2]);
-  R_ = rpyDegToRot(init_rpy);
+  p_.setZero();
+  v_.setZero();
+  R_.setIdentity();
   ba_.setZero();
   bg_.setZero();
   g_ = Eigen::Vector3d(0.0, 0.0, -gravity_norm_);
@@ -274,7 +207,6 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
            cam_fx_, cam_fy_, cam_cx_, cam_cy_, camera_intrinsic_valid_ ? 1 : 0);
   ROS_INFO("[DogPriorMap C++] T_base_camera=[%.4f %.4f %.4f]",
            T_base_camera_.x(), T_base_camera_.y(), T_base_camera_.z());
-  lidar_odom_local_map_.reset(new pcl::PointCloud<pcl::PointXYZ>());
 
   // ------------------------- 2. 加载先验地图 -------------------------
   // C++版本为了少依赖Python/npz库，直接读取FAST-LIVO2输出的PCD。
@@ -309,7 +241,6 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   path_corr_.header.frame_id = map_frame_;
 
   sub_imu_ = nh_.subscribe(imu_topic_, 500, &DogPriorMapEkfNode::imuCallback, this);
-  sub_initial_pose_ = nh_.subscribe(initial_pose_topic_, 2, &DogPriorMapEkfNode::initialPoseCallback, this);
   if (lidar_enable_)
   {
     if (lidar_msg_type_ == "pointcloud2")
@@ -325,12 +256,6 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   {
     sub_image_ = nh_.subscribe(image_topic_, 2, &DogPriorMapEkfNode::imageCallback, this);
   }
-  if (external_odom_enable_)
-  {
-    sub_external_odom_ = nh_.subscribe(external_odom_topic_, 100, &DogPriorMapEkfNode::externalOdomCallback, this);
-    ROS_INFO("[DogPriorMap C++] external LIO/LIVO prior init enabled: %s", external_odom_topic_.c_str());
-  }
-
   ROS_INFO("[DogPriorMap C++] node started: map=%zu pts, imu=%s, lidar=%s",
            map_cloud_->size(), imu_topic_.c_str(), lidar_topic_.c_str());
 }

@@ -41,7 +41,7 @@ add_executable(dog_prior_map_ekf_node_cpp
   src/map_loader.cpp
   src/imu_processor.cpp
   src/lidar_matcher.cpp
-  src/vision_and_initial_pose.cpp
+  src/vision_observation.cpp
   src/ros_output.cpp
   src/math_utils.cpp
 )
@@ -70,25 +70,9 @@ add_dependencies(dog_prior_map_ndt_node_cpp
   ${catkin_EXPORTED_TARGETS}
 )
 
-add_executable(visual_lidar_loop_closure_node_cpp
-  src/visual_lidar_loop_closure_node.cpp
-)
-
-target_link_libraries(visual_lidar_loop_closure_node_cpp
-  ${catkin_LIBRARIES}
-  ${PCL_LIBRARIES}
-  ${OpenCV_LIBRARIES}
-  /usr/lib/x86_64-linux-gnu/libusb-1.0.so
-)
-
-add_dependencies(visual_lidar_loop_closure_node_cpp
-  ${catkin_EXPORTED_TARGETS}
-)
-
 catkin_install_python(PROGRAMS
   scripts/dog_prior_map_ekf_node.py
   scripts/pcd_to_npz_map.py
-  scripts/make_initial_pose_yaml.py
   scripts/evaluate_runtime_and_accuracy.py
   scripts/build_livox_keyframe_scan_db.py
   scripts/run_dataset_evaluation.sh
@@ -99,6 +83,6 @@ install(DIRECTORY config launch docs rviz
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
-install(TARGETS dog_prior_map_ekf_node_cpp dog_prior_map_ndt_node_cpp visual_lidar_loop_closure_node_cpp
+install(TARGETS dog_prior_map_ekf_node_cpp dog_prior_map_ndt_node_cpp
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
