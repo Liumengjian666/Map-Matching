@@ -52,6 +52,11 @@ double rotationAngleDeg(const Eigen::Matrix3d &R)
   return std::abs(angle_axis.angle()) * 180.0 / M_PI;
 }
 
+double clamp01(double value)
+{
+  return std::max(0.0, std::min(1.0, value));
+}
+
 }  // namespace
 
 class DogPriorMapNdtNode
@@ -93,6 +98,13 @@ public:
     ndt_step_limit_enable_ = getParam<bool>("lidar_update/ndt_step_limit_enable", false);
     ndt_step_limit_max_translation_ = getParam<double>("lidar_update/ndt_step_limit_max_translation", 0.5);
     ndt_step_limit_max_rotation_deg_ = getParam<double>("lidar_update/ndt_step_limit_max_rotation_deg", 5.0);
+    reliability_fitness_scale_ = getParam<double>("reliability/fitness_scale", 2.0);
+    reliability_translation_scale_ = getParam<double>("reliability/translation_scale", 0.50);
+    reliability_rotation_scale_deg_ = getParam<double>("reliability/rotation_scale_deg", 5.0);
+    reliability_temporal_translation_scale_ = getParam<double>("reliability/temporal_translation_scale", 0.35);
+    reliability_temporal_rotation_scale_deg_ = getParam<double>("reliability/temporal_rotation_scale_deg", 3.0);
+    reliability_geometry_ratio_scale_ = getParam<double>("reliability/geometry_ratio_scale", 0.10);
+    reliability_iteration_scale_ = getParam<double>("reliability/iteration_scale", 10.0);
     publish_tf_ = getParam<bool>("output/ndt_publish_tf", false);
     publish_path_ = getParam<bool>("output/publish_path", false);
     publish_filtered_points_ = getParam<bool>("output/publish_filtered_points", true);
@@ -220,6 +232,27 @@ private:
     return voxelDown(filtered, scan_voxel_size_, source_voxel_z_size_, max_scan_points_);
   }
 
+  // XY协方差最小/最大特征值之比；越接近零，平面内结构越接近单方向退化。
+  double computeXyGeometryRatio(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud) const
+  {
+    if (!cloud || cloud->size() < 3) return 0.0;
+    Eigen::Vector2d mean = Eigen::Vector2d::Zero();
+    for (const auto &point : cloud->points) mean += Eigen::Vector2d(point.x, point.y);
+    mean /= static_cast<double>(cloud->size());
+    Eigen::Matrix2d covariance = Eigen::Matrix2d::Zero();
+    for (const auto &point : cloud->points)
+    {
+      const Eigen::Vector2d centered = Eigen::Vector2d(point.x, point.y) - mean;
+      covariance.noalias() += centered * centered.transpose();
+    }
+    covariance /= static_cast<double>(cloud->size() - 1);
+    const Eigen::SelfAdjointEigenSolver<Eigen::Matrix2d> solver(covariance);
+    if (solver.info() != Eigen::Success) return 0.0;
+    const double smallest = std::max(0.0, solver.eigenvalues()(0));
+    const double largest = std::max(0.0, solver.eigenvalues()(1));
+    return largest > 1e-9 ? smallest / largest : 0.0;
+  }
+
   // 将 Livox 自定义消息转换为 XYZ 点云并进入统一 NDT 处理流程。
   void livoxCallback(const livox_ros_driver2::CustomMsgConstPtr &msg)
   {
@@ -280,13 +313,53 @@ private:
     const double score = ndt_.getFitnessScore();
     const int iterations = ndt_.getFinalNumIteration();
 
+    double innovation_translation = 0.0;
+    double innovation_rotation_deg = 0.0;
+    double raw_step_translation = 0.0;
+    double raw_step_rotation_deg = 0.0;
+    double temporal_translation = 0.0;
+    double temporal_rotation_deg = 0.0;
+    Eigen::Matrix4d raw_result = initial_guess;
+    if (ok)
+    {
+      raw_result = ndt_.getFinalTransformation().cast<double>();
+      const Eigen::Matrix4d innovation = initial_guess.inverse() * raw_result;
+      innovation_translation = innovation.block<3, 1>(0, 3).norm();
+      innovation_rotation_deg = rotationAngleDeg(innovation.block<3, 3>(0, 0));
+      if (has_previous_pose_)
+      {
+        const Eigen::Matrix4d raw_delta = previous_pose_.inverse() * raw_result;
+        raw_step_translation = raw_delta.block<3, 1>(0, 3).norm();
+        raw_step_rotation_deg = rotationAngleDeg(raw_delta.block<3, 3>(0, 0));
+        const Eigen::Matrix4d temporal_error = delta_pose_.inverse() * raw_delta;
+        temporal_translation = temporal_error.block<3, 1>(0, 3).norm();
+        temporal_rotation_deg = rotationAngleDeg(temporal_error.block<3, 3>(0, 0));
+      }
+    }
+    const double geometry_ratio = computeXyGeometryRatio(source);
+    const double fitness_quality = ok && std::isfinite(score)
+        ? 1.0 / (1.0 + std::max(0.0, score) / std::max(reliability_fitness_scale_, 1e-6))
+        : 0.0;
+    const double innovation_quality = std::exp(-0.5 * std::pow(
+        innovation_translation / std::max(reliability_translation_scale_, 1e-6), 2.0) -
+        0.5 * std::pow(innovation_rotation_deg / std::max(reliability_rotation_scale_deg_, 1e-6), 2.0));
+    const double temporal_quality = has_previous_pose_ ? std::exp(-0.5 * std::pow(
+        temporal_translation / std::max(reliability_temporal_translation_scale_, 1e-6), 2.0) -
+        0.5 * std::pow(temporal_rotation_deg / std::max(reliability_temporal_rotation_scale_deg_, 1e-6), 2.0)) : 1.0;
+    const double geometry_quality = clamp01(geometry_ratio /
+        std::max(reliability_geometry_ratio_scale_, 1e-6));
+    const double iteration_quality = std::exp(-static_cast<double>(iterations) /
+        std::max(reliability_iteration_scale_, 1e-6));
+    const double reliability_score = ok ? std::pow(std::max(
+        fitness_quality * innovation_quality * temporal_quality * geometry_quality * iteration_quality,
+        1e-12), 0.2) : 0.0;
+
     bool step_limited = false;
     double localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
     if (ok)
     {
-      const Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
-      Eigen::Matrix4d used_result = result;
-      step_limited = limitNdtStep(result, used_result);
+      Eigen::Matrix4d used_result = raw_result;
+      step_limited = limitNdtStep(raw_result, used_result);
       if (has_previous_pose_)
       {
         delta_pose_ = previous_pose_.inverse() * used_result;
@@ -313,7 +386,12 @@ private:
     }
 
     publishDiagnostics(stamp, ok, align_ms, preprocess_ms, localization_ms,
-                       static_cast<int>(source->size()), target_cloud_->size(), score, iterations, step_limited);
+                       static_cast<int>(source->size()), target_cloud_->size(), score, iterations, step_limited,
+                       innovation_translation, innovation_rotation_deg,
+                       raw_step_translation, raw_step_rotation_deg,
+                       temporal_translation, temporal_rotation_deg,
+                       geometry_ratio, fitness_quality, innovation_quality,
+                       temporal_quality, geometry_quality, iteration_quality, reliability_score);
     ROS_INFO_THROTTLE(1.0,
                       "[DogPriorMap NDT] conv=%d limited=%d source=%zu target=%zu align=%.2fms score=%.4f iter=%d p=(%.2f %.2f %.2f)",
                       ok ? 1 : 0, step_limited ? 1 : 0, source->size(), target_cloud_->size(), align_ms, score, iterations, p_.x(), p_.y(), p_.z());
@@ -451,7 +529,20 @@ private:
                           size_t map_points,
                           double score,
                           int iterations,
-                          bool step_limited = false)
+                          bool step_limited = false,
+                          double innovation_translation = 0.0,
+                          double innovation_rotation_deg = 0.0,
+                          double raw_step_translation = 0.0,
+                          double raw_step_rotation_deg = 0.0,
+                          double temporal_translation = 0.0,
+                          double temporal_rotation_deg = 0.0,
+                          double geometry_ratio = 0.0,
+                          double fitness_quality = 0.0,
+                          double innovation_quality = 0.0,
+                          double temporal_quality = 0.0,
+                          double geometry_quality = 0.0,
+                          double iteration_quality = 0.0,
+                          double reliability_score = 0.0)
   {
     if (!publish_diagnostics_ || !pub_diagnostics_) return;
     diagnostic_msgs::DiagnosticArray array;
@@ -470,6 +561,20 @@ private:
     addDiagnosticValue(status, "map_points", std::to_string(map_points));
     addDiagnosticValue(status, "fitness_score", std::to_string(score));
     addDiagnosticValue(status, "iterations", std::to_string(iterations));
+    addDiagnosticValue(status, "step_limited", step_limited ? "true" : "false");
+    addDiagnosticValue(status, "innovation_translation_m", std::to_string(innovation_translation));
+    addDiagnosticValue(status, "innovation_rotation_deg", std::to_string(innovation_rotation_deg));
+    addDiagnosticValue(status, "raw_step_translation_m", std::to_string(raw_step_translation));
+    addDiagnosticValue(status, "raw_step_rotation_deg", std::to_string(raw_step_rotation_deg));
+    addDiagnosticValue(status, "temporal_translation_m", std::to_string(temporal_translation));
+    addDiagnosticValue(status, "temporal_rotation_deg", std::to_string(temporal_rotation_deg));
+    addDiagnosticValue(status, "xy_geometry_ratio", std::to_string(geometry_ratio));
+    addDiagnosticValue(status, "fitness_quality", std::to_string(fitness_quality));
+    addDiagnosticValue(status, "innovation_quality", std::to_string(innovation_quality));
+    addDiagnosticValue(status, "temporal_quality", std::to_string(temporal_quality));
+    addDiagnosticValue(status, "geometry_quality", std::to_string(geometry_quality));
+    addDiagnosticValue(status, "iteration_quality", std::to_string(iteration_quality));
+    addDiagnosticValue(status, "reliability_score", std::to_string(reliability_score));
     addDiagnosticValue(status, "pose_xyz", std::to_string(p_.x()) + "," +
                                   std::to_string(p_.y()) + "," +
                                   std::to_string(p_.z()));
@@ -546,6 +651,13 @@ private:
   bool ndt_step_limit_enable_ = false;
   double ndt_step_limit_max_translation_ = 0.5;
   double ndt_step_limit_max_rotation_deg_ = 5.0;
+  double reliability_fitness_scale_ = 2.0;
+  double reliability_translation_scale_ = 0.50;
+  double reliability_rotation_scale_deg_ = 5.0;
+  double reliability_temporal_translation_scale_ = 0.35;
+  double reliability_temporal_rotation_scale_deg_ = 3.0;
+  double reliability_geometry_ratio_scale_ = 0.10;
+  double reliability_iteration_scale_ = 10.0;
   bool publish_tf_ = true;
   bool publish_path_ = false;
   bool publish_filtered_points_ = true;

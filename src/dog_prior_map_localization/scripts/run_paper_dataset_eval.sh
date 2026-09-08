@@ -31,6 +31,8 @@ source "$WORKSPACE/devel/setup.bash"
 cp "$CONFIG" "$OUTPUT_DIR/config_used.yaml"
 git -C "$WORKSPACE" rev-parse HEAD > "$OUTPUT_DIR/git_head.txt"
 git -C "$WORKSPACE" status --short --branch > "$OUTPUT_DIR/git_status.txt"
+printf 'play_rate=%s\nduration_sec=%s\n' \
+  "$PLAY_RATE" "$DURATION_SEC" > "$OUTPUT_DIR/run_parameters.txt"
 md5sum "$INPUT_BAG" > "$OUTPUT_DIR/input_md5.txt"
 MAP_PATH=$(sed -n 's/^[[:space:]]*pcd_fallback_path:[[:space:]]*"\([^"]*\)".*/\1/p' "$CONFIG" | head -1)
 if [[ -n "$MAP_PATH" && -f "$MAP_PATH" ]]; then

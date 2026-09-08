@@ -26,6 +26,20 @@ DIAGNOSTIC_KEYS = (
     "reliability_score",
     "innovation_translation_m",
     "innovation_rotation_deg",
+    "raw_step_translation_m",
+    "raw_step_rotation_deg",
+    "temporal_translation_m",
+    "temporal_rotation_deg",
+    "xy_geometry_ratio",
+    "fitness_quality",
+    "innovation_quality",
+    "temporal_quality",
+    "geometry_quality",
+    "iteration_quality",
+)
+FLAG_KEYS = (
+    "ndt_converged",
+    "step_limited",
 )
 
 
@@ -65,7 +79,7 @@ def trajectory_summary(samples):
 def read_bag(path):
     odom = {topic: [] for topic in ODOM_TOPICS}
     diagnostics = {key: [] for key in DIAGNOSTIC_KEYS}
-    converged = []
+    flags = {key: [] for key in FLAG_KEYS}
     levels = []
     with rosbag.Bag(str(path)) as bag:
         for topic, msg, _ in bag.read_messages(topics=list(ODOM_TOPICS) + ["/dog_livo/diagnostics"]):
@@ -78,13 +92,14 @@ def read_bag(path):
                     continue
                 values = {entry.key: entry.value for entry in status.values}
                 levels.append(int(status.level))
-                converged.append(values.get("ndt_converged", "false").lower() == "true")
+                for key in FLAG_KEYS:
+                    flags[key].append(values.get(key, "false").lower() == "true")
                 for key in DIAGNOSTIC_KEYS:
                     try:
                         diagnostics[key].append(float(values[key]))
                     except (KeyError, ValueError):
                         pass
-    return odom, diagnostics, converged, levels
+    return odom, diagnostics, flags, levels
 
 
 def read_resources(path):
@@ -114,7 +129,8 @@ def main():
     args = parser.parse_args()
 
     bag_path = Path(args.bag)
-    odom, diagnostics, converged, levels = read_bag(bag_path)
+    odom, diagnostics, flags, levels = read_bag(bag_path)
+    converged = flags["ndt_converged"]
     result = {
         "name": args.name,
         "result_bag": str(bag_path.resolve()),
@@ -125,6 +141,14 @@ def main():
             "converged_frames": int(sum(converged)),
             "failed_frames": int(len(converged) - sum(converged)),
             "warning_or_error_frames": int(sum(level > 0 for level in levels)),
+            "flags": {
+                key: {
+                    "true_count": int(sum(values)),
+                    "false_count": int(len(values) - sum(values)),
+                    "true_ratio": float(sum(values) / len(values)) if values else 0.0,
+                }
+                for key, values in flags.items()
+            },
             "metrics": {key: percentile_summary(values) for key, values in diagnostics.items() if values},
         },
         "resources": read_resources(Path(args.resources)),
