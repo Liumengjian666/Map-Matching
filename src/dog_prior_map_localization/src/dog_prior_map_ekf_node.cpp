@@ -1,5 +1,6 @@
 #include "dog_prior_map_localization/dog_prior_map_ekf_node.hpp"
 
+// 程序入口：初始化 ROS 节点，构造定位器并进入回调循环。
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "dog_prior_map_ekf");

@@ -49,21 +49,28 @@ using Matrix3x15d = Eigen::Matrix<double, 3, 15>;
 
 struct ImuSample
 {
+  // IMU 样本时间戳，单位为秒。
   double stamp = 0.0;
+  // 加速度计和陀螺仪原始测量，均位于 IMU/机体系。
   Eigen::Vector3d acc = Eigen::Vector3d::Zero();
   Eigen::Vector3d gyro = Eigen::Vector3d::Zero();
 };
 
+/// 将三维向量转换为叉乘对应的反对称矩阵。
 Eigen::Matrix3d skew(const Eigen::Vector3d &v);
+/// 将角度制的 roll、pitch、yaw 转换为旋转矩阵。
 Eigen::Matrix3d rpyDegToRot(const std::vector<double> &rpy_deg);
+/// 将向量模长限制在给定上限内，方向保持不变。
 Eigen::Vector3d limitVector(const Eigen::Vector3d &v, double max_norm);
 
 class DogPriorMapEkfNode
 {
 public:
+  /// 读取参数、初始化状态与地图，并建立 ROS 订阅发布关系。
   DogPriorMapEkfNode();
 
 private:
+  /// 优先从全局命名空间读取参数，再读取私有命名空间，均不存在时返回默认值。
   template <typename T>
   T getParam(const std::string &name, const T &default_value)
   {
@@ -73,50 +80,75 @@ private:
     return default_value;
   }
 
+  /// 读取 double 数组参数，读取失败时返回调用者提供的默认数组。
   std::vector<double> getParamVec(const std::string &name, const std::vector<double> &default_value);
 
+  /// 加载并预处理先验点云地图，同时建立最近邻搜索树。
   void loadPriorMap();
+  /// 从 PCD 文件中兼容读取 XYZ/XYZI 点并统一转换为 XYZ 点云。
   pcl::PointCloud<pcl::PointXYZ>::Ptr loadPcdXyzOnly(const std::string &pcd_path);
 
+  /// 接收 IMU 数据，完成初始化、状态传播和高频里程计发布。
   void imuCallback(const sensor_msgs::ImuConstPtr &msg);
+  /// 使用一次 IMU 测量传播姿态、速度、位置和误差状态协方差。
   void propagateImu(const Eigen::Vector3d &acc_m, const Eigen::Vector3d &gyr_m, double dt);
 
+  /// 接收 Livox 自定义点云并按配置决定是否执行帧内去畸变。
   void livoxCallback(const livox_ros_driver2::CustomMsgConstPtr &msg);
+  /// 利用 IMU 历史将 Livox 一帧内各点补偿到统一的帧尾时刻。
   pcl::PointCloud<pcl::PointXYZ>::Ptr deskewLivoxCloud(const livox_ros_driver2::CustomMsgConstPtr &msg);
+  /// 对指定时间区间的陀螺仪数据积分，得到相对旋转。
   Eigen::Matrix3d integrateImuRotation(double t0, double t1) const;
+  /// 对指定时间区间的 IMU 数据积分，得到相对旋转和平移。
   bool integrateImuDelta(double t0, double t1, Eigen::Matrix3d &R_delta, Eigen::Vector3d &p_delta) const;
+  /// 接收标准 PointCloud2 点云并转入统一 LiDAR 处理流程。
   void pointCloud2Callback(const sensor_msgs::PointCloud2ConstPtr &msg);
+  /// 调度点云预处理、局部地图构建、匹配更新和结果发布。
   void handleLidarCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud_lidar, const ros::Time &stamp);
+  /// 将雷达点转换到机体系，并执行范围过滤、降采样和离群点剔除。
   pcl::PointCloud<pcl::PointXYZ>::Ptr preprocessScan(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud_lidar);
+  /// 使用点到点或点到平面残差迭代估计当前帧的六自由度位姿修正量。
   bool lidarMapUpdate(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
                       const pcl::PointCloud<pcl::PointXYZ>::Ptr &match_map,
                       int &used,
                       double &mean_residual);
+  /// 按当前位置从先验地图截取用于本帧匹配的局部子地图。
   pcl::PointCloud<pcl::PointXYZ>::Ptr buildLocalSubmap();
+  /// 以当前状态为初值执行 NDT 精配准，并按门限决定是否接收结果。
   bool runNdtRefinement(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
                         const pcl::PointCloud<pcl::PointXYZ>::Ptr &local_map);
+  /// 将位置和小角度姿态修正反馈到当前导航状态。
   void applyPoseCorrection(const Eigen::Vector3d &dp, const Eigen::Vector3d &dtheta);
+  /// 根据匹配信息矩阵与地图几何分布更新 LiDAR 退化状态。
   bool updateLidarDegeneracyStatus(const Eigen::Matrix<double, 6, 6> &information_matrix,
                                    double geometry_degeneracy_score);
 
+  /// 评估图像质量、跟踪角点，并在 LiDAR 退化时触发视觉航向约束。
   void imageCallback(const sensor_msgs::ImageConstPtr &msg);
+  /// 从相邻图像的特征运动估计相对旋转，并仅反馈受限的 yaw 修正。
   void applyVisualYawCorrection(const cv::Mat &prev_gray,
                                 const cv::Mat &curr_gray,
                                 const std::vector<cv::Point2f> &prev_pts,
                                 const std::vector<cv::Point2f> &curr_pts,
                                 double weight_scale);
+  /// 将独立 NDT 节点输出作为低频外部观测融合到 EKF 状态中。
   void ndtObservationCallback(const nav_msgs::OdometryConstPtr &msg);
 
+  /// 发布当前里程计，并按配置同步发布路径、TF 和兼容话题。
   void publishState(const ros::Time &stamp, bool corrected);
+  /// 将预处理后的机体系点云转换到地图系并发布调试点云。
   void publishFilteredCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
                             const ros::Time &stamp);
+  /// 发布本次地图匹配的耗时、点数、残差和收敛状态。
   void publishDiagnostics(const ros::Time &stamp,
                           bool converged,
                           double match_time_ms,
                           int scan_points,
                           int map_points,
                           double score);
+  /// 向轨迹消息追加一个位姿，并限制轨迹缓存长度。
   void appendPath(nav_msgs::Path &path, const nav_msgs::Odometry &odom);
+  /// 按固定周期打印并记录各传感器和匹配模块的运行统计。
   void maybePrintRuntime(const ros::Time &stamp);
 
   ros::NodeHandle nh_;

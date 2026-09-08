@@ -27,6 +27,7 @@ namespace dog_prior_map_localization
 {
 namespace
 {
+// 更新点云尺寸和稠密属性，确保后续 PCL 算法获得合法的组织信息。
 void finalizeCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud)
 {
   if (!cloud) return;
@@ -35,6 +36,7 @@ void finalizeCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud)
   cloud->is_dense = true;
 }
 
+// 将位置和旋转矩阵组合为 PCL/NDT 使用的四阶齐次变换矩阵。
 Eigen::Matrix4d poseToMatrix(const Eigen::Vector3d &p, const Eigen::Matrix3d &R)
 {
   Eigen::Matrix4d T = Eigen::Matrix4d::Identity();
@@ -43,6 +45,7 @@ Eigen::Matrix4d poseToMatrix(const Eigen::Vector3d &p, const Eigen::Matrix3d &R)
   return T;
 }
 
+// 提取旋转矩阵对应的最小旋转角，并转换为角度制。
 double rotationAngleDeg(const Eigen::Matrix3d &R)
 {
   Eigen::AngleAxisd angle_axis(R);
@@ -54,6 +57,7 @@ double rotationAngleDeg(const Eigen::Matrix3d &R)
 class DogPriorMapNdtNode
 {
 public:
+  // 初始化独立 NDT 定位节点：读取参数、加载地图并建立 ROS 接口。
   DogPriorMapNdtNode() : nh_(), pnh_("~")
   {
     map_frame_ = getParam<std::string>("frames/map_frame", "camera_init");
@@ -123,6 +127,7 @@ public:
   }
 
 private:
+  // 优先读取全局参数，再读取节点私有参数，不存在时使用默认值。
   template <typename T>
   T getParam(const std::string &name, const T &default_value)
   {
@@ -132,6 +137,7 @@ private:
     return default_value;
   }
 
+  // 加载先验 PCD 地图，去除非法点并生成 NDT 使用的降采样目标点云。
   void loadMap()
   {
     if (map_pcd_path_.empty()) throw std::runtime_error("map/pcd_fallback_path is empty");
@@ -159,6 +165,7 @@ private:
     ndt_.setMaximumIterations(ndt_max_iterations_);
   }
 
+  // 按 XYZ 分辨率执行各向异性体素降采样，并可限制最终点数。
   pcl::PointCloud<pcl::PointXYZ>::Ptr voxelDown(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
                                                 double voxel_size,
                                                 double voxel_z_size,
@@ -193,6 +200,7 @@ private:
     return down;
   }
 
+  // 对输入扫描执行有限值、距离和高度过滤，再进行体素降采样。
   pcl::PointCloud<pcl::PointXYZ>::Ptr preprocess(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud) const
   {
     pcl::PointCloud<pcl::PointXYZ>::Ptr filtered(new pcl::PointCloud<pcl::PointXYZ>());
@@ -209,8 +217,10 @@ private:
     return voxelDown(filtered, scan_voxel_size_, source_voxel_z_size_, max_scan_points_);
   }
 
+  // 将 Livox 自定义消息转换为 XYZ 点云并进入统一 NDT 处理流程。
   void livoxCallback(const livox_ros_driver2::CustomMsgConstPtr &msg)
   {
+    const ros::WallTime callback_start = ros::WallTime::now();
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>());
     cloud->reserve(msg->points.size());
     for (const auto &pt : msg->points)
@@ -221,26 +231,34 @@ private:
       }
     }
     finalizeCloud(cloud);
-    handleCloud(cloud, msg->header.stamp);
+    handleCloud(cloud, msg->header.stamp, callback_start);
   }
 
+  // 将标准 PointCloud2 转为 PCL 点云并进入统一 NDT 处理流程。
   void pointCloud2Callback(const sensor_msgs::PointCloud2ConstPtr &msg)
   {
+    const ros::WallTime callback_start = ros::WallTime::now();
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>());
     pcl::fromROSMsg(*msg, *cloud);
-    handleCloud(cloud, msg->header.stamp);
+    handleCloud(cloud, msg->header.stamp, callback_start);
   }
 
-  void handleCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud, const ros::Time &stamp)
+  // 独立 NDT 主流程：预处理、预测初值、配准、步长审核及结果发布。
+  void handleCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
+                   const ros::Time &stamp,
+                   const ros::WallTime &callback_start)
   {
     if (!cloud || cloud->empty()) return;
     std::lock_guard<std::mutex> lock(mutex_);
 
     pcl::PointCloud<pcl::PointXYZ>::Ptr source = preprocess(cloud);
+    const double preprocess_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
     publishCloud(source, stamp, base_frame_, pub_filtered_);
     if (static_cast<int>(source->size()) < min_effective_points_)
     {
-      publishDiagnostics(stamp, false, 0.0, static_cast<int>(source->size()), target_cloud_->size(), 0.0, 0);
+      const double localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
+      publishDiagnostics(stamp, false, 0.0, preprocess_ms, localization_ms,
+                         static_cast<int>(source->size()), target_cloud_->size(), 0.0, 0);
       return;
     }
 
@@ -260,6 +278,7 @@ private:
     const int iterations = ndt_.getFinalNumIteration();
 
     bool step_limited = false;
+    double localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
     if (ok)
     {
       const Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
@@ -277,6 +296,7 @@ private:
       previous_pose_ = used_result;
       R_ = used_result.block<3, 3>(0, 0);
       p_ = used_result.block<3, 1>(0, 3);
+      localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
       publishPose(stamp);
       if (step_limited)
       {
@@ -289,12 +309,14 @@ private:
       }
     }
 
-    publishDiagnostics(stamp, ok, align_ms, static_cast<int>(source->size()), target_cloud_->size(), score, iterations, step_limited);
+    publishDiagnostics(stamp, ok, align_ms, preprocess_ms, localization_ms,
+                       static_cast<int>(source->size()), target_cloud_->size(), score, iterations, step_limited);
     ROS_INFO_THROTTLE(1.0,
                       "[DogPriorMap NDT] conv=%d limited=%d source=%zu target=%zu align=%.2fms score=%.4f iter=%d p=(%.2f %.2f %.2f)",
                       ok ? 1 : 0, step_limited ? 1 : 0, source->size(), target_cloud_->size(), align_ms, score, iterations, p_.x(), p_.y(), p_.z());
   }
 
+  // 使用给定齐次变换把源点云转换到地图坐标系。
   pcl::PointCloud<pcl::PointXYZ> transformCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
                                                  const Eigen::Matrix4d &pose) const
   {
@@ -316,6 +338,7 @@ private:
     return transformed;
   }
 
+  // 限制相邻 NDT 位姿跳变；超限时按比例截断平移和旋转增量。
   bool limitNdtStep(const Eigen::Matrix4d &raw_result, Eigen::Matrix4d &used_result) const
   {
     if (!ndt_step_limit_enable_ || !has_previous_pose_) return false;
@@ -348,6 +371,7 @@ private:
     return limited;
   }
 
+  // 发布 NDT 位姿、里程计、可选轨迹以及 map 到 base 的 TF。
   void publishPose(const ros::Time &stamp)
   {
     Eigen::Quaterniond q(R_);
@@ -389,6 +413,7 @@ private:
     }
   }
 
+  // 将指定坐标系中的 PCL 点云转换为 ROS 消息并发布。
   void publishCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
                     const ros::Time &stamp,
                     const std::string &frame_id,
@@ -402,6 +427,7 @@ private:
     publisher.publish(msg);
   }
 
+  // 发布已经变换到地图系的 NDT 对齐点云，用于观察配准效果。
   void publishAlignedCloud(const pcl::PointCloud<pcl::PointXYZ> &aligned, const ros::Time &stamp)
   {
     if (!pub_aligned_) return;
@@ -412,9 +438,12 @@ private:
     pub_aligned_.publish(msg);
   }
 
+  // 发布 NDT 收敛状态、耗时、点数、适应度和当前位姿等诊断量。
   void publishDiagnostics(const ros::Time &stamp,
                           bool converged,
                           double align_ms,
+                          double preprocess_ms,
+                          double localization_ms,
                           int scan_points,
                           size_t map_points,
                           double score,
@@ -432,6 +461,8 @@ private:
 
     addDiagnosticValue(status, "ndt_converged", converged ? "true" : "false");
     addDiagnosticValue(status, "align_time_ms", std::to_string(align_ms));
+    addDiagnosticValue(status, "preprocess_time_ms", std::to_string(preprocess_ms));
+    addDiagnosticValue(status, "localization_time_ms", std::to_string(localization_ms));
     addDiagnosticValue(status, "scan_points", std::to_string(scan_points));
     addDiagnosticValue(status, "map_points", std::to_string(map_points));
     addDiagnosticValue(status, "fitness_score", std::to_string(score));
@@ -443,6 +474,7 @@ private:
     pub_diagnostics_.publish(array);
   }
 
+  // 向 DiagnosticStatus 追加一个键值字段，统一诊断消息构造方式。
   void addDiagnosticValue(diagnostic_msgs::DiagnosticStatus &status,
                           const std::string &key,
                           const std::string &value)
@@ -516,6 +548,7 @@ private:
 };
 }  // namespace dog_prior_map_localization
 
+// 独立 NDT 可执行程序入口：初始化节点并持续处理点云回调。
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "dog_prior_map_ndt");

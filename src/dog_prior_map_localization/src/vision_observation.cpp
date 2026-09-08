@@ -3,6 +3,7 @@
 namespace dog_prior_map_localization
 {
 
+// 图像主回调：检查曝光与特征质量，跟踪相邻帧角点并决定是否提供视觉约束。
 void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
 {
   std::lock_guard<std::mutex> lock(mutex_);
@@ -137,6 +138,7 @@ void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
   visual_update_time_max_ms_ = std::max(visual_update_time_max_ms_, visual_ms);
 }
 
+// 根据特征对应估计相机相对旋转，并把受限航向残差反馈到机体姿态。
 void DogPriorMapEkfNode::applyVisualYawCorrection(const cv::Mat &prev_gray,
                                                   const cv::Mat &curr_gray,
                                                   const std::vector<cv::Point2f> &prev_pts,
@@ -211,6 +213,7 @@ void DogPriorMapEkfNode::applyVisualYawCorrection(const cv::Mat &prev_gray,
   applyPoseCorrection(Eigen::Vector3d::Zero(), dtheta);
 }
 
+// 融合独立 NDT 节点的绝对位姿观测，同时用相邻观测估计并平滑速度。
 void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr &msg)
 {
   std::lock_guard<std::mutex> lock(mutex_);

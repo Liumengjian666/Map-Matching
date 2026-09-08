@@ -7,6 +7,7 @@ namespace dog_prior_map_localization
 
 namespace
 {
+// 按 FAST-LIVO2 的量测模型估计单个雷达点在机体系中的各向异性协方差。
 Eigen::Matrix3d calcFastLivoBodyCov(const Eigen::Vector3d &point_body,
                                     double depth_noise,
                                     double beam_noise_deg)
@@ -49,6 +50,7 @@ Eigen::Matrix3d calcFastLivoBodyCov(const Eigen::Vector3d &point_body,
 }
 }  // namespace
 
+// Livox 点云入口：可选执行帧内去畸变，再交给统一地图匹配流程。
 void DogPriorMapEkfNode::livoxCallback(const livox_ros_driver2::CustomMsgConstPtr &msg)
 {
   if (lidar_deskew_enable_)
@@ -70,6 +72,7 @@ void DogPriorMapEkfNode::livoxCallback(const livox_ros_driver2::CustomMsgConstPt
   handleLidarCloud(cloud, msg->header.stamp);
 }
 
+// 将 Livox 一帧中不同采样时刻的点补偿到帧尾，降低运动造成的点云弯曲。
 pcl::PointCloud<pcl::PointXYZ>::Ptr DogPriorMapEkfNode::deskewLivoxCloud(const livox_ros_driver2::CustomMsgConstPtr &msg)
 {
   // ------------------------- Livox完整帧内去畸变 -------------------------
@@ -140,6 +143,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr DogPriorMapEkfNode::deskewLivoxCloud(const l
   return cloud;
 }
 
+// 在短时间区间内积分 IMU，计算点时刻到帧尾时刻的相对旋转和平移。
 bool DogPriorMapEkfNode::integrateImuDelta(double t0, double t1, Eigen::Matrix3d &R_delta, Eigen::Vector3d &p_delta) const
 {
   if (t1 <= t0 || imu_history_.size() < 2)
@@ -200,6 +204,7 @@ bool DogPriorMapEkfNode::integrateImuDelta(double t0, double t1, Eigen::Matrix3d
   return R_delta.allFinite() && p_delta.allFinite();
 }
 
+// 仅积分陀螺仪得到相对旋转，作为平移积分不可用时的去畸变降级方案。
 Eigen::Matrix3d DogPriorMapEkfNode::integrateImuRotation(double t0, double t1) const
 {
   if (t1 <= t0 || imu_history_.size() < 2) return Eigen::Matrix3d::Identity();
@@ -241,6 +246,7 @@ Eigen::Matrix3d DogPriorMapEkfNode::integrateImuRotation(double t0, double t1) c
   return R_delta;
 }
 
+// 标准 PointCloud2 入口：转换为 PCL XYZ 点云后进入统一处理流程。
 void DogPriorMapEkfNode::pointCloud2Callback(const sensor_msgs::PointCloud2ConstPtr &msg)
 {
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>());
@@ -248,6 +254,7 @@ void DogPriorMapEkfNode::pointCloud2Callback(const sensor_msgs::PointCloud2Const
   handleLidarCloud(cloud, msg->header.stamp);
 }
 
+// LiDAR 主流程：预处理扫描、构建局部地图、执行配准并发布校正状态与诊断。
 void DogPriorMapEkfNode::handleLidarCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud_lidar, const ros::Time &stamp)
 {
   if (!cloud_lidar || cloud_lidar->empty()) return;
@@ -334,6 +341,7 @@ void DogPriorMapEkfNode::handleLidarCloud(const pcl::PointCloud<pcl::PointXYZ>::
   maybePrintRuntime(stamp);
 }
 
+// 根据当前位置和自适应半径，从全局先验地图中截取本帧配准目标。
 pcl::PointCloud<pcl::PointXYZ>::Ptr DogPriorMapEkfNode::buildLocalSubmap()
 {
   // ------------------------- 局部子地图筛选 -------------------------
@@ -377,6 +385,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr DogPriorMapEkfNode::buildLocalSubmap()
   return local;
 }
 
+// 执行 NDT 精配准，并通过收敛、适应度和位姿跳变门限过滤错误匹配。
 bool DogPriorMapEkfNode::runNdtRefinement(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
                                           const pcl::PointCloud<pcl::PointXYZ>::Ptr &local_map)
 {
@@ -386,6 +395,7 @@ bool DogPriorMapEkfNode::runNdtRefinement(const pcl::PointCloud<pcl::PointXYZ>::
   // 这里同样只做“小步预校正”，随后仍由EKF点到面残差做主更新。
   if (!scan_body || !local_map || scan_body->empty() || local_map->empty()) return false;
 
+  // 局部降采样函数：压缩 NDT 源/目标点数，并在需要时做均匀抽样限长。
   auto voxelDown = [](const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud, double voxel_size, int max_points) {
     pcl::PointCloud<pcl::PointXYZ>::Ptr down(new pcl::PointCloud<pcl::PointXYZ>());
     if (voxel_size > 0.01)
@@ -589,6 +599,7 @@ bool DogPriorMapEkfNode::runNdtRefinement(const pcl::PointCloud<pcl::PointXYZ>::
   return true;
 }
 
+// 将原始雷达点转换到机体系，并执行距离、高度、体素与半径离群滤波。
 pcl::PointCloud<pcl::PointXYZ>::Ptr DogPriorMapEkfNode::preprocessScan(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud_lidar)
 {
   pcl::PointCloud<pcl::PointXYZ>::Ptr body(new pcl::PointCloud<pcl::PointXYZ>());
@@ -649,6 +660,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr DogPriorMapEkfNode::preprocessScan(const pcl
   return down;
 }
 
+// 构建点到点/点到平面最小二乘问题，迭代求解并审核六自由度状态修正。
 bool DogPriorMapEkfNode::lidarMapUpdate(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
                                         const pcl::PointCloud<pcl::PointXYZ>::Ptr &match_map,
                                         int &used,
@@ -666,6 +678,7 @@ bool DogPriorMapEkfNode::lidarMapUpdate(const pcl::PointCloud<pcl::PointXYZ>::Pt
   pcl::KdTreeFLANN<pcl::PointXYZ> local_kdtree;
   local_kdtree.setInputCloud(match_map);
 
+  // 复算候选位姿的最近邻平均残差，为更新接收门控提供统一评分。
   auto scorePoseByNearestMap = [&](const Eigen::Vector3d &pose_p,
                                    const Eigen::Matrix3d &pose_R,
                                    int &score_used) -> double {
@@ -1083,6 +1096,7 @@ bool DogPriorMapEkfNode::lidarMapUpdate(const pcl::PointCloud<pcl::PointXYZ>::Pt
   return accepted_any_update;
 }
 
+// 由信息矩阵特征值和匹配点几何分布判断当前 LiDAR 约束是否退化。
 bool DogPriorMapEkfNode::updateLidarDegeneracyStatus(const Eigen::Matrix<double, 6, 6> &information_matrix,
                                                      double geometry_degeneracy_score)
 {
@@ -1116,6 +1130,7 @@ bool DogPriorMapEkfNode::updateLidarDegeneracyStatus(const Eigen::Matrix<double,
   return lidar_degeneracy_score_ > 0.0;
 }
 
+// 将通过门控的位置和旋转增量反馈到当前状态估计。
 void DogPriorMapEkfNode::applyPoseCorrection(const Eigen::Vector3d &dp, const Eigen::Vector3d &dtheta)
 {
   p_ += dp;

@@ -3,6 +3,7 @@
 namespace dog_prior_map_localization
 {
 
+// 发布当前导航状态；corrected 区分 LiDAR 校正结果和纯 IMU 高频传播结果。
 void DogPriorMapEkfNode::publishState(const ros::Time &stamp, bool corrected)
 {
   nav_msgs::Odometry odom;
@@ -54,6 +55,7 @@ void DogPriorMapEkfNode::publishState(const ros::Time &stamp, bool corrected)
   }
 }
 
+// 发布已经完成坐标变换与滤波的当前帧点云，供 RViz 和离线诊断使用。
 void DogPriorMapEkfNode::publishFilteredCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &scan_body,
                                               const ros::Time &stamp)
 {
@@ -66,6 +68,7 @@ void DogPriorMapEkfNode::publishFilteredCloud(const pcl::PointCloud<pcl::PointXY
   pub_filtered_points_.publish(msg);
 }
 
+// 将匹配是否成功、耗时、点数和退化程度封装为 ROS diagnostics 消息。
 void DogPriorMapEkfNode::publishDiagnostics(const ros::Time &stamp,
                                             bool converged,
                                             double match_time_ms,
@@ -75,6 +78,7 @@ void DogPriorMapEkfNode::publishDiagnostics(const ros::Time &stamp,
 {
   if (!publish_diagnostics_ || !pub_diagnostics_) return;
 
+  // 统一追加诊断键值，避免重复构造 KeyValue 消息。
   auto addValue = [](diagnostic_msgs::DiagnosticStatus &status,
                      const std::string &key,
                      const std::string &value) {
@@ -113,6 +117,7 @@ void DogPriorMapEkfNode::publishDiagnostics(const ros::Time &stamp,
   pub_diagnostics_.publish(array);
 }
 
+// 将里程计位姿转换为 PoseStamped 追加到轨迹，并裁剪过长的历史缓存。
 void DogPriorMapEkfNode::appendPath(nav_msgs::Path &path, const nav_msgs::Odometry &odom)
 {
   geometry_msgs::PoseStamped ps;
@@ -127,6 +132,7 @@ void DogPriorMapEkfNode::appendPath(nav_msgs::Path &path, const nav_msgs::Odomet
   }
 }
 
+// 定期汇总输入频率、匹配成功率和耗时，并可追加写入运行统计 CSV。
 void DogPriorMapEkfNode::maybePrintRuntime(const ros::Time &stamp)
 {
   if (!print_debug_) return;

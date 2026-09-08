@@ -3,6 +3,7 @@
 namespace dog_prior_map_localization
 {
 
+// IMU 主回调：维护短时历史、完成重力初始化并驱动高频状态传播。
 void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
 {
   std::lock_guard<std::mutex> lock(mutex_);
@@ -68,6 +69,7 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
   maybePrintRuntime(msg->header.stamp);
 }
 
+// 惯性传播：扣除零偏后积分姿态，并更新速度、位置及 15 维协方差。
 void DogPriorMapEkfNode::propagateImu(const Eigen::Vector3d &acc_m, const Eigen::Vector3d &gyr_m, double dt)
 {
   // ------------------------- IMU高频传播 -------------------------

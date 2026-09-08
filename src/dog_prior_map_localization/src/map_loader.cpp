@@ -3,6 +3,7 @@
 namespace dog_prior_map_localization
 {
 
+// 加载先验地图、执行体素降采样，并建立后续最近邻匹配使用的 KD 树。
 void DogPriorMapEkfNode::loadPriorMap()
 {
   const std::string pcd_path = getParam<std::string>(
@@ -39,6 +40,7 @@ void DogPriorMapEkfNode::loadPriorMap()
            raw->size(), map_cloud_->size(), pcd_path.c_str());
 }
 
+// 兼容读取仅含 XYZ 或同时含强度等字段的 PCD，并只保留有限 XYZ 坐标。
 pcl::PointCloud<pcl::PointXYZ>::Ptr DogPriorMapEkfNode::loadPcdXyzOnly(const std::string &pcd_path)
 {
   // ------------------------- 轻量PCD读取器 -------------------------

@@ -82,6 +82,7 @@ class DogPriorMapEkfNode:
     """机器狗端先验地图定位主类。"""
 
     def __init__(self):
+        """读取 ROS 参数，初始化滤波状态、地图、订阅器和发布器。"""
         # ------------------------- 参数读取 -------------------------
         self.map_frame = rospy.get_param("~frames/map_frame", rospy.get_param("frames/map_frame", "map"))
         self.odom_frame = rospy.get_param("~frames/odom_frame", rospy.get_param("frames/odom_frame", "odom"))
@@ -451,6 +452,7 @@ class DogPriorMapEkfNode:
 
 
 def main():
+    """初始化 Python 原型节点并进入 ROS 回调循环。"""
     rospy.init_node("dog_prior_map_ekf")
     DogPriorMapEkfNode()
     rospy.loginfo("[DogPriorMap] 节点启动完成，等待 IMU/LiDAR/Camera 数据。")

@@ -3,6 +3,7 @@
 namespace dog_prior_map_localization
 {
 
+// 构造完整定位节点：集中读取参数、初始化状态和发布订阅关系。
 DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
 {
   // ------------------------- 1. 读取ROS参数 -------------------------
@@ -241,6 +242,11 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   path_corr_.header.frame_id = map_frame_;
 
   sub_imu_ = nh_.subscribe(imu_topic_, 500, &DogPriorMapEkfNode::imuCallback, this);
+  if (ndt_observation_enable_)
+  {
+    sub_ndt_observation_ = nh_.subscribe(
+        ndt_observation_topic_, 10, &DogPriorMapEkfNode::ndtObservationCallback, this);
+  }
   if (lidar_enable_)
   {
     if (lidar_msg_type_ == "pointcloud2")
@@ -260,6 +266,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
            map_cloud_->size(), imu_topic_.c_str(), lidar_topic_.c_str());
 }
 
+// 读取浮点数组参数；兼容全局和私有命名空间，并提供安全默认值。
 std::vector<double> DogPriorMapEkfNode::getParamVec(const std::string &name, const std::vector<double> &default_value)
 {
   std::vector<double> value;
