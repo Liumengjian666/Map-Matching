@@ -12,3 +12,5 @@ logs/
 *.so
 *.a
 .cache/
+__pycache__/
+*.py[cod]
