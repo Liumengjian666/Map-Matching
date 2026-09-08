@@ -48,6 +48,10 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   imu_history_keep_sec_ = getParam<double>("imu/history_keep_sec", 2.0);
 
   ndt_observation_enable_ = getParam<bool>("ndt_observation/enable", false);
+  ndt_observation_fusion_mode_ = getParam<std::string>("ndt_observation/fusion_mode", "legacy_blend");
+  ndt_observation_nis_threshold_ = getParam<double>("ndt_observation/nis_threshold", 22.458);
+  ndt_observation_max_covariance_inflation_ =
+      getParam<double>("ndt_observation/max_covariance_inflation", 100.0);
   ndt_observation_apply_ratio_ = getParam<double>("ndt_observation/apply_ratio", 0.8);
   ndt_observation_z_apply_ratio_ = getParam<double>("ndt_observation/z_apply_ratio", 1.0);
   ndt_observation_roll_pitch_apply_ratio_ = getParam<double>("ndt_observation/roll_pitch_apply_ratio", 1.0);

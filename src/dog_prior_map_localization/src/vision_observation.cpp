@@ -234,6 +234,74 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
   Eigen::Vector3d dtheta = aa.axis() * aa.angle();
   if (!dp.allFinite() || !dtheta.allFinite()) return;
 
+  if (ndt_observation_fusion_mode_ == "reliability_eskf")
+  {
+    Eigen::Matrix<double, 6, 15> H = Eigen::Matrix<double, 6, 15>::Zero();
+    H.block<3, 3>(0, 0).setIdentity();
+    H.block<3, 3>(3, 6).setIdentity();
+    Eigen::Matrix<double, 6, 1> innovation;
+    innovation << dp, dtheta;
+
+    Eigen::Matrix<double, 6, 6> observation_covariance = Eigen::Matrix<double, 6, 6>::Zero();
+    for (int i = 0; i < 6; ++i)
+    {
+      double variance = msg->pose.covariance[static_cast<size_t>(i * 6 + i)];
+      if (!std::isfinite(variance) || variance <= 0.0)
+      {
+        variance = i < 3 ? 0.01 : std::pow(2.0 * M_PI / 180.0, 2.0);
+      }
+      observation_covariance(i, i) = variance;
+    }
+    Eigen::Matrix<double, 6, 6> innovation_covariance = H * P_ * H.transpose() + observation_covariance;
+    Eigen::LDLT<Eigen::Matrix<double, 6, 6>> ldlt(innovation_covariance);
+    if (ldlt.info() != Eigen::Success)
+    {
+      ++lidar_update_fail_count_;
+      ++icp_update_fail_count_;
+      return;
+    }
+    const double nis = innovation.dot(ldlt.solve(innovation));
+    if (!std::isfinite(nis))
+    {
+      ++lidar_update_fail_count_;
+      ++icp_update_fail_count_;
+      return;
+    }
+    const double covariance_inflation = std::min(
+        std::max(1.0, nis / std::max(ndt_observation_nis_threshold_, 1e-6)),
+        std::max(1.0, ndt_observation_max_covariance_inflation_));
+    if (covariance_inflation > 1.0)
+    {
+      observation_covariance *= covariance_inflation;
+      innovation_covariance = H * P_ * H.transpose() + observation_covariance;
+      ldlt.compute(innovation_covariance);
+      if (ldlt.info() != Eigen::Success) return;
+    }
+
+    const Eigen::Matrix<double, 15, 6> gain = P_ * H.transpose() * ldlt.solve(
+        Eigen::Matrix<double, 6, 6>::Identity());
+    const Vector15d correction = gain * innovation;
+    p_ += correction.segment<3>(0);
+    v_ += correction.segment<3>(3);
+    applyPoseCorrection(Eigen::Vector3d::Zero(), correction.segment<3>(6));
+    ba_ += correction.segment<3>(9);
+    bg_ += correction.segment<3>(12);
+    const Matrix15d identity = Matrix15d::Identity();
+    const Matrix15d joseph_left = identity - gain * H;
+    P_ = joseph_left * P_ * joseph_left.transpose() +
+         gain * observation_covariance * gain.transpose();
+    P_ = 0.5 * (P_ + P_.transpose());
+
+    ++lidar_update_ok_count_;
+    ++icp_update_ok_count_;
+    last_used_points_ = 0;
+    last_mean_residual_ = innovation.head<3>().norm();
+    publishState(msg->header.stamp, true);
+    last_ndt_observation_p_map_ = p_target;
+    last_ndt_observation_time_ = msg->header.stamp.toSec();
+    return;
+  }
+
   const double ratio = std::max(0.0, std::min(1.0, ndt_observation_apply_ratio_));
   const double z_ratio = std::max(0.0, std::min(1.0, ndt_observation_z_apply_ratio_));
   const double roll_pitch_ratio = std::max(0.0, std::min(1.0, ndt_observation_roll_pitch_apply_ratio_));

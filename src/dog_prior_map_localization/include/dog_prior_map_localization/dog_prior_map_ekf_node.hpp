@@ -231,6 +231,9 @@ private:
   double imu_history_keep_sec_ = 2.0;
 
   bool ndt_observation_enable_ = false;
+  std::string ndt_observation_fusion_mode_ = "legacy_blend";
+  double ndt_observation_nis_threshold_ = 22.458;
+  double ndt_observation_max_covariance_inflation_ = 100.0;
   double ndt_observation_apply_ratio_ = 0.8;
   double ndt_observation_z_apply_ratio_ = 1.0;
   double ndt_observation_roll_pitch_apply_ratio_ = 1.0;

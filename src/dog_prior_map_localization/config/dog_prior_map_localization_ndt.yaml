@@ -99,6 +99,9 @@ reliability:
   temporal_rotation_scale_deg: 3.0
   geometry_ratio_scale: 0.10
   iteration_scale: 10.0
+  position_std_m: 0.08
+  rotation_std_deg: 1.0
+  min_score: 0.10
 
 camera_update:
   enable: true

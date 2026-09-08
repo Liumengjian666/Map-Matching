@@ -105,6 +105,9 @@ public:
     reliability_temporal_rotation_scale_deg_ = getParam<double>("reliability/temporal_rotation_scale_deg", 3.0);
     reliability_geometry_ratio_scale_ = getParam<double>("reliability/geometry_ratio_scale", 0.10);
     reliability_iteration_scale_ = getParam<double>("reliability/iteration_scale", 10.0);
+    reliability_position_std_ = getParam<double>("reliability/position_std_m", 0.08);
+    reliability_rotation_std_ = getParam<double>("reliability/rotation_std_deg", 1.0) * M_PI / 180.0;
+    reliability_min_score_ = getParam<double>("reliability/min_score", 0.10);
     publish_tf_ = getParam<bool>("output/ndt_publish_tf", false);
     publish_path_ = getParam<bool>("output/publish_path", false);
     publish_filtered_points_ = getParam<bool>("output/publish_filtered_points", true);
@@ -373,7 +376,7 @@ private:
       R_ = used_result.block<3, 3>(0, 0);
       p_ = used_result.block<3, 1>(0, 3);
       localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
-      publishPose(stamp);
+      publishPose(stamp, reliability_score);
       if (step_limited)
       {
         pcl::PointCloud<pcl::PointXYZ> limited_aligned = transformCloud(source, used_result);
@@ -453,7 +456,7 @@ private:
   }
 
   // 发布 NDT 位姿、里程计、可选轨迹以及 map 到 base 的 TF。
-  void publishPose(const ros::Time &stamp)
+  void publishPose(const ros::Time &stamp, double reliability_score)
   {
     Eigen::Quaterniond q(R_);
     q.normalize();
@@ -469,6 +472,15 @@ private:
     odom.pose.pose.orientation.y = q.y();
     odom.pose.pose.orientation.z = q.z();
     odom.pose.pose.orientation.w = q.w();
+    const double bounded_score = std::max(reliability_min_score_, clamp01(reliability_score));
+    const double position_variance = std::pow(reliability_position_std_ / bounded_score, 2.0);
+    const double rotation_variance = std::pow(reliability_rotation_std_ / bounded_score, 2.0);
+    odom.pose.covariance[0] = position_variance;
+    odom.pose.covariance[7] = position_variance;
+    odom.pose.covariance[14] = position_variance;
+    odom.pose.covariance[21] = rotation_variance;
+    odom.pose.covariance[28] = rotation_variance;
+    odom.pose.covariance[35] = rotation_variance;
     pub_odom_.publish(odom);
 
     geometry_msgs::PoseStamped pose;
@@ -658,6 +670,9 @@ private:
   double reliability_temporal_rotation_scale_deg_ = 3.0;
   double reliability_geometry_ratio_scale_ = 0.10;
   double reliability_iteration_scale_ = 10.0;
+  double reliability_position_std_ = 0.08;
+  double reliability_rotation_std_ = M_PI / 180.0;
+  double reliability_min_score_ = 0.10;
   bool publish_tf_ = true;
   bool publish_path_ = false;
   bool publish_filtered_points_ = true;
