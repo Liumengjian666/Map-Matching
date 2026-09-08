@@ -209,10 +209,12 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   ROS_INFO("[DogPriorMap C++] T_base_camera=[%.4f %.4f %.4f]",
            T_base_camera_.x(), T_base_camera_.y(), T_base_camera_.z());
 
-  // ------------------------- 2. 加载先验地图 -------------------------
-  // C++版本为了少依赖Python/npz库，直接读取FAST-LIVO2输出的PCD。
-  // 读入后再次按yaml里的voxel_size降采样，并建立KDTree，后续匹配只做最近邻查询。
-  loadPriorMap();
+  // 拆分模式只接收独立 NDT 节点的位姿观测，不重复持有地图和 KDTree。
+  // 一体化模式仍由本节点加载地图，保持原有运行方式不变。
+  if (lidar_enable_)
+  {
+    loadPriorMap();
+  }
 
   // ------------------------- 3. ROS发布和订阅 -------------------------
   pub_high_ = nh_.advertise<nav_msgs::Odometry>(odom_high_rate_topic_, 50);
@@ -223,7 +225,10 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   pub_corr_ = nh_.advertise<nav_msgs::Odometry>(odom_corrected_topic_, 20);
   pub_path_high_ = nh_.advertise<nav_msgs::Path>(path_high_rate_topic_, 5);
   pub_path_corr_ = nh_.advertise<nav_msgs::Path>(path_corrected_topic_, 5);
-  pub_prior_map_ = nh_.advertise<sensor_msgs::PointCloud2>(prior_map_topic_, 1, true);
+  if (lidar_enable_)
+  {
+    pub_prior_map_ = nh_.advertise<sensor_msgs::PointCloud2>(prior_map_topic_, 1, true);
+  }
   if (publish_filtered_points_)
   {
     pub_filtered_points_ = nh_.advertise<sensor_msgs::PointCloud2>(filtered_points_topic_, 5);
@@ -233,11 +238,14 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     pub_diagnostics_ = nh_.advertise<diagnostic_msgs::DiagnosticArray>(diagnostics_topic_, 5);
   }
 
-  sensor_msgs::PointCloud2 prior_map_msg;
-  pcl::toROSMsg(*map_cloud_, prior_map_msg);
-  prior_map_msg.header.stamp = ros::Time::now();
-  prior_map_msg.header.frame_id = map_frame_;
-  pub_prior_map_.publish(prior_map_msg);
+  if (map_cloud_ && !map_cloud_->empty() && pub_prior_map_)
+  {
+    sensor_msgs::PointCloud2 prior_map_msg;
+    pcl::toROSMsg(*map_cloud_, prior_map_msg);
+    prior_map_msg.header.stamp = ros::Time::now();
+    prior_map_msg.header.frame_id = map_frame_;
+    pub_prior_map_.publish(prior_map_msg);
+  }
   path_high_.header.frame_id = map_frame_;
   path_corr_.header.frame_id = map_frame_;
 
@@ -263,7 +271,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     sub_image_ = nh_.subscribe(image_topic_, 2, &DogPriorMapEkfNode::imageCallback, this);
   }
   ROS_INFO("[DogPriorMap C++] node started: map=%zu pts, imu=%s, lidar=%s",
-           map_cloud_->size(), imu_topic_.c_str(), lidar_topic_.c_str());
+           map_cloud_ ? map_cloud_->size() : 0, imu_topic_.c_str(), lidar_topic_.c_str());
 }
 
 // 读取浮点数组参数；兼容全局和私有命名空间，并提供安全默认值。

@@ -66,6 +66,7 @@ public:
     lidar_msg_type_ = getParam<std::string>("topics/lidar_msg_type", "livox");
     filtered_points_topic_ = getParam<std::string>("topics/filtered_points", "/dog_livo/filtered_points");
     diagnostics_topic_ = getParam<std::string>("topics/diagnostics", "/dog_livo/diagnostics");
+    prior_map_topic_ = getParam<std::string>("topics/prior_map", "/dog_livo/prior_map");
     ndt_odom_topic_ = getParam<std::string>("topics/ndt_odom", "/dog_livo/ndt_odom");
     ndt_pose_topic_ = getParam<std::string>("topics/ndt_pose", "/dog_livo/ndt_pose");
     ndt_path_topic_ = getParam<std::string>("topics/ndt_path", "/dog_livo/ndt_path");
@@ -103,6 +104,7 @@ public:
     pub_pose_ = nh_.advertise<geometry_msgs::PoseStamped>(ndt_pose_topic_, 20);
     pub_path_ = nh_.advertise<nav_msgs::Path>(ndt_path_topic_, 5);
     pub_aligned_ = nh_.advertise<sensor_msgs::PointCloud2>(points_aligned_topic_, 5);
+    pub_prior_map_ = nh_.advertise<sensor_msgs::PointCloud2>(prior_map_topic_, 1, true);
     if (publish_filtered_points_)
     {
       pub_filtered_ = nh_.advertise<sensor_msgs::PointCloud2>(filtered_points_topic_, 5);
@@ -112,6 +114,7 @@ public:
       pub_diagnostics_ = nh_.advertise<diagnostic_msgs::DiagnosticArray>(diagnostics_topic_, 5);
     }
     path_.header.frame_id = map_frame_;
+    publishCloud(map_cloud_, ros::Time::now(), map_frame_, pub_prior_map_);
 
     if (lidar_msg_type_ == "pointcloud2")
     {
@@ -494,6 +497,7 @@ private:
   ros::Publisher pub_path_;
   ros::Publisher pub_filtered_;
   ros::Publisher pub_aligned_;
+  ros::Publisher pub_prior_map_;
   ros::Publisher pub_diagnostics_;
   tf::TransformBroadcaster tf_broadcaster_;
   std::mutex mutex_;
@@ -504,6 +508,7 @@ private:
   std::string lidar_msg_type_;
   std::string filtered_points_topic_;
   std::string diagnostics_topic_;
+  std::string prior_map_topic_;
   std::string ndt_odom_topic_;
   std::string ndt_pose_topic_;
   std::string ndt_path_topic_;
