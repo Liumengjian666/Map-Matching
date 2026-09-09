@@ -110,7 +110,9 @@ def read_bag(path):
                     flags[key].append(values.get(key, "false").lower() == "true")
                 for key in DIAGNOSTIC_KEYS:
                     try:
-                        diagnostics[key].append(float(values[key]))
+                        value = float(values[key])
+                        if np.isfinite(value):
+                            diagnostics[key].append(value)
                     except (KeyError, ValueError):
                         pass
     return odom, diagnostics, flags, levels, fusion, fusion_accepted
