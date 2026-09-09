@@ -26,6 +26,10 @@ def main():
     parser.add_argument("--ground-truth", required=True)
     parser.add_argument("--sensor-translation", nargs=3, type=float, default=(0.0, 0.0, 0.4612))
     parser.add_argument("--rpe-delta", type=float, default=1.0)
+    parser.add_argument("--start-offset", type=float, default=0.0,
+                        help="evaluation start in seconds relative to the first ground-truth timestamp")
+    parser.add_argument("--duration", type=float, default=0.0,
+                        help="evaluation duration in seconds; zero uses all remaining samples")
     parser.add_argument("--output", required=True)
     args = parser.parse_args()
 
@@ -48,7 +52,11 @@ def main():
             positions.append((p.x, p.y, p.z))
             quaternions.append((q.x, q.y, q.z, q.w))
     stamps = np.asarray(stamps)
-    valid = (stamps >= truth_times[0]) & (stamps <= truth_times[-1])
+    evaluation_start = truth_times[0] + max(0.0, args.start_offset)
+    evaluation_end = truth_times[-1]
+    if args.duration > 0.0:
+        evaluation_end = min(evaluation_end, evaluation_start + args.duration)
+    valid = (stamps >= evaluation_start) & (stamps <= evaluation_end)
     stamps = stamps[valid]
     estimate_positions = np.asarray(positions)[valid]
     estimate_rotations = Rotation.from_quat(np.asarray(quaternions)[valid])
@@ -85,6 +93,10 @@ def main():
         gt_relative_rotations.inv() * estimate_relative_rotations).magnitude() * 180.0 / np.pi
     result = {
         "alignment": "none; both trajectories expressed in the initial LiDAR frame",
+        "evaluation_window_s": {
+            "start_offset": args.start_offset,
+            "duration": args.duration,
+        },
         "topic": args.topic,
         "translation_error_m": summary(translation_error),
         "rotation_error_deg": summary(rotation_error_deg),
