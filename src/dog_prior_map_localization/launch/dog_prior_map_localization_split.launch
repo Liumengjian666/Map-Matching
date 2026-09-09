@@ -4,6 +4,8 @@
   <arg name="runtime_csv_path" default="" />
   <arg name="ndt_diagnostics_csv_path" default="" />
   <arg name="ndt_fusion_mode" default="legacy_blend" />
+  <arg name="lidar_msg_type" default="livox" />
+  <arg name="map_path" default="/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd" />
   <rosparam command="load" file="$(arg config)" />
 
   <!--
@@ -17,6 +19,8 @@
   <param name="ndt_observation/fusion_mode" value="$(arg ndt_fusion_mode)" />
   <param name="ndt_observation/nis_threshold" value="22.458" />
   <param name="ndt_observation/max_covariance_inflation" value="100.0" />
+  <param name="topics/lidar_msg_type" value="$(arg lidar_msg_type)" />
+  <param name="map/pcd_fallback_path" value="$(arg map_path)" />
   <param name="ndt_observation/apply_ratio" value="1.0" />
   <param name="ndt_observation/z_apply_ratio" value="1.0" />
   <param name="ndt_observation/roll_pitch_apply_ratio" value="1.0" />

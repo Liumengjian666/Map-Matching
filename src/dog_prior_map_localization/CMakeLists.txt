@@ -77,6 +77,8 @@ catkin_install_python(PROGRAMS
   scripts/build_livox_keyframe_scan_db.py
   scripts/run_dataset_evaluation.sh
   scripts/analyze_paper_run.py
+  scripts/build_gt_prior_map.py
+  scripts/evaluate_tum_ground_truth.py
   scripts/run_paper_dataset_eval.sh
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
