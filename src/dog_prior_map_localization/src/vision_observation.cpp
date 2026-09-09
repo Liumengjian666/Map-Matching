@@ -258,6 +258,8 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
     {
       ++lidar_update_fail_count_;
       ++icp_update_fail_count_;
+      publishNdtFusionDiagnostics(msg->header.stamp, false,
+                                  std::numeric_limits<double>::quiet_NaN(), 1.0);
       return;
     }
     const double nis = innovation.dot(ldlt.solve(innovation));
@@ -265,6 +267,7 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
     {
       ++lidar_update_fail_count_;
       ++icp_update_fail_count_;
+      publishNdtFusionDiagnostics(msg->header.stamp, false, nis, 1.0);
       return;
     }
     const double covariance_inflation = std::min(
@@ -275,7 +278,13 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
       observation_covariance *= covariance_inflation;
       innovation_covariance = H * P_ * H.transpose() + observation_covariance;
       ldlt.compute(innovation_covariance);
-      if (ldlt.info() != Eigen::Success) return;
+      if (ldlt.info() != Eigen::Success)
+      {
+        ++lidar_update_fail_count_;
+        ++icp_update_fail_count_;
+        publishNdtFusionDiagnostics(msg->header.stamp, false, nis, covariance_inflation);
+        return;
+      }
     }
 
     const Eigen::Matrix<double, 15, 6> gain = P_ * H.transpose() * ldlt.solve(
@@ -299,6 +308,7 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
     publishState(msg->header.stamp, true);
     last_ndt_observation_p_map_ = p_target;
     last_ndt_observation_time_ = msg->header.stamp.toSec();
+    publishNdtFusionDiagnostics(msg->header.stamp, true, nis, covariance_inflation);
     return;
   }
 
@@ -333,6 +343,36 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
 
   for (int i = 0; i < 3; ++i) P_(i, i) = std::max(P_(i, i) * 0.85, 1e-4);
   for (int i = 6; i < 9; ++i) P_(i, i) = std::max(P_(i, i) * 0.85, 1e-5);
+}
+
+void DogPriorMapEkfNode::publishNdtFusionDiagnostics(const ros::Time &stamp,
+                                                      bool accepted,
+                                                      double nis,
+                                                      double covariance_inflation)
+{
+  if (!publish_diagnostics_ || !pub_diagnostics_) return;
+  diagnostic_msgs::DiagnosticArray array;
+  array.header.stamp = stamp;
+  diagnostic_msgs::DiagnosticStatus status;
+  status.name = "dog_prior_map_ekf_fusion";
+  status.hardware_id = base_frame_;
+  status.level = accepted ? diagnostic_msgs::DiagnosticStatus::OK
+                          : diagnostic_msgs::DiagnosticStatus::WARN;
+  status.message = accepted ? "NDT observation accepted" : "NDT observation rejected";
+  diagnostic_msgs::KeyValue accepted_value;
+  accepted_value.key = "accepted";
+  accepted_value.value = accepted ? "true" : "false";
+  status.values.push_back(accepted_value);
+  diagnostic_msgs::KeyValue nis_value;
+  nis_value.key = "nis";
+  nis_value.value = std::to_string(nis);
+  status.values.push_back(nis_value);
+  diagnostic_msgs::KeyValue inflation_value;
+  inflation_value.key = "covariance_inflation";
+  inflation_value.value = std::to_string(covariance_inflation);
+  status.values.push_back(inflation_value);
+  array.status.push_back(status);
+  pub_diagnostics_.publish(array);
 }
 
 }  // namespace dog_prior_map_localization

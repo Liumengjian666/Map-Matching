@@ -41,6 +41,7 @@ FLAG_KEYS = (
     "ndt_converged",
     "step_limited",
 )
+FUSION_KEYS = ("nis", "covariance_inflation")
 
 
 def percentile_summary(values):
@@ -80,6 +81,8 @@ def read_bag(path):
     odom = {topic: [] for topic in ODOM_TOPICS}
     diagnostics = {key: [] for key in DIAGNOSTIC_KEYS}
     flags = {key: [] for key in FLAG_KEYS}
+    fusion = {key: [] for key in FUSION_KEYS}
+    fusion_accepted = []
     levels = []
     with rosbag.Bag(str(path)) as bag:
         for topic, msg, _ in bag.read_messages(topics=list(ODOM_TOPICS) + ["/dog_livo/diagnostics"]):
@@ -88,6 +91,17 @@ def read_bag(path):
                 odom[topic].append((msg.header.stamp.to_sec(), p.x, p.y, p.z))
                 continue
             for status in msg.status:
+                if status.name == "dog_prior_map_ekf_fusion":
+                    values = {entry.key: entry.value for entry in status.values}
+                    fusion_accepted.append(values.get("accepted", "false").lower() == "true")
+                    for key in FUSION_KEYS:
+                        try:
+                            value = float(values[key])
+                            if np.isfinite(value):
+                                fusion[key].append(value)
+                        except (KeyError, ValueError):
+                            pass
+                    continue
                 if status.name != "dog_prior_map_ndt":
                     continue
                 values = {entry.key: entry.value for entry in status.values}
@@ -99,7 +113,7 @@ def read_bag(path):
                         diagnostics[key].append(float(values[key]))
                     except (KeyError, ValueError):
                         pass
-    return odom, diagnostics, flags, levels
+    return odom, diagnostics, flags, levels, fusion, fusion_accepted
 
 
 def read_resources(path):
@@ -129,7 +143,7 @@ def main():
     args = parser.parse_args()
 
     bag_path = Path(args.bag)
-    odom, diagnostics, flags, levels = read_bag(bag_path)
+    odom, diagnostics, flags, levels, fusion, fusion_accepted = read_bag(bag_path)
     converged = flags["ndt_converged"]
     result = {
         "name": args.name,
@@ -150,6 +164,12 @@ def main():
                 for key, values in flags.items()
             },
             "metrics": {key: percentile_summary(values) for key, values in diagnostics.items() if values},
+        },
+        "fusion": {
+            "diagnostic_frames": len(fusion_accepted),
+            "accepted_frames": int(sum(fusion_accepted)),
+            "rejected_frames": int(len(fusion_accepted) - sum(fusion_accepted)),
+            "metrics": {key: percentile_summary(values) for key, values in fusion.items() if values},
         },
         "resources": read_resources(Path(args.resources)),
     }

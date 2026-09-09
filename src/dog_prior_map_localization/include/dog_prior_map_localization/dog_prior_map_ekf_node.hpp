@@ -133,6 +133,9 @@ private:
                                 double weight_scale);
   /// 将独立 NDT 节点输出作为低频外部观测融合到 EKF 状态中。
   void ndtObservationCallback(const nav_msgs::OdometryConstPtr &msg);
+  /// 发布可靠性自适应融合的创新一致性和协方差膨胀诊断。
+  void publishNdtFusionDiagnostics(const ros::Time &stamp, bool accepted,
+                                   double nis, double covariance_inflation);
 
   /// 发布当前里程计，并按配置同步发布路径、TF 和兼容话题。
   void publishState(const ros::Time &stamp, bool corrected);
