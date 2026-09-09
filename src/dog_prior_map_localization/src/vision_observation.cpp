@@ -303,6 +303,10 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
     const Matrix15d joseph_left = identity - gain * H;
     P_ = joseph_left * P_ * joseph_left.transpose() +
          gain * observation_covariance * gain.transpose();
+    Matrix15d reset_jacobian = Matrix15d::Identity();
+    reset_jacobian.block<3, 3>(6, 6) -=
+        0.5 * skew(correction.segment<3>(6));
+    P_ = reset_jacobian * P_ * reset_jacobian.transpose();
     P_ = 0.5 * (P_ + P_.transpose());
 
     ++lidar_update_ok_count_;
