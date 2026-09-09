@@ -306,8 +306,18 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
     last_used_points_ = 0;
     last_mean_residual_ = innovation.head<3>().norm();
     publishState(msg->header.stamp, true);
+    const double observation_time = msg->header.stamp.toSec();
+    const double observation_dt = observation_time - last_ndt_observation_time_;
+    if (observation_dt > 1e-3 && observation_dt < 1.0)
+    {
+      const Eigen::Vector3d observed_velocity =
+          (p_target - last_ndt_observation_p_map_) / observation_dt;
+      const double velocity_blend = std::max(0.0, std::min(1.0,
+          ndt_observation_velocity_blend_ / std::sqrt(covariance_inflation)));
+      v_ = (1.0 - velocity_blend) * v_ + velocity_blend * observed_velocity;
+    }
     last_ndt_observation_p_map_ = p_target;
-    last_ndt_observation_time_ = msg->header.stamp.toSec();
+    last_ndt_observation_time_ = observation_time;
     publishNdtFusionDiagnostics(msg->header.stamp, true, nis, covariance_inflation);
     return;
   }
