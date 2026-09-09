@@ -25,6 +25,7 @@ def main():
     parser.add_argument("--topic", default="/dog_livo/odom_corrected")
     parser.add_argument("--ground-truth", required=True)
     parser.add_argument("--sensor-translation", nargs=3, type=float, default=(0.0, 0.0, 0.4612))
+    parser.add_argument("--rpe-delta", type=float, default=1.0)
     parser.add_argument("--output", required=True)
     args = parser.parse_args()
 
@@ -64,11 +65,34 @@ def main():
 
     translation_error = np.linalg.norm(estimate_positions - gt_positions, axis=1)
     rotation_error_deg = (gt_rotations.inv() * estimate_rotations).magnitude() * 180.0 / np.pi
+    pair_right = np.searchsorted(stamps, stamps + args.rpe_delta)
+    pair_left = np.arange(len(stamps))
+    pair_valid = pair_right < len(stamps)
+    pair_left = pair_left[pair_valid]
+    pair_right = pair_right[pair_valid]
+    pair_valid = np.abs((stamps[pair_right] - stamps[pair_left]) - args.rpe_delta) < 0.05
+    pair_left = pair_left[pair_valid]
+    pair_right = pair_right[pair_valid]
+    gt_relative_positions = gt_rotations[pair_left].inv().apply(
+        gt_positions[pair_right] - gt_positions[pair_left])
+    estimate_relative_positions = estimate_rotations[pair_left].inv().apply(
+        estimate_positions[pair_right] - estimate_positions[pair_left])
+    relative_translation_error = np.linalg.norm(
+        estimate_relative_positions - gt_relative_positions, axis=1)
+    gt_relative_rotations = gt_rotations[pair_left].inv() * gt_rotations[pair_right]
+    estimate_relative_rotations = estimate_rotations[pair_left].inv() * estimate_rotations[pair_right]
+    relative_rotation_error_deg = (
+        gt_relative_rotations.inv() * estimate_relative_rotations).magnitude() * 180.0 / np.pi
     result = {
         "alignment": "none; both trajectories expressed in the initial LiDAR frame",
         "topic": args.topic,
         "translation_error_m": summary(translation_error),
         "rotation_error_deg": summary(rotation_error_deg),
+        "relative_error": {
+            "delta_s": args.rpe_delta,
+            "translation_m": summary(relative_translation_error),
+            "rotation_deg": summary(relative_rotation_error_deg),
+        },
     }
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
