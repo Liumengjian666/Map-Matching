@@ -234,7 +234,8 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
   Eigen::Vector3d dtheta = aa.axis() * aa.angle();
   if (!dp.allFinite() || !dtheta.allFinite()) return;
 
-  if (ndt_observation_fusion_mode_ == "reliability_eskf")
+  if (ndt_observation_fusion_mode_ == "reliability_eskf" ||
+      ndt_observation_fusion_mode_ == "fixed_eskf")
   {
     Eigen::Matrix<double, 6, 15> H = Eigen::Matrix<double, 6, 15>::Zero();
     H.block<3, 3>(0, 0).setIdentity();
@@ -245,7 +246,10 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
     Eigen::Matrix<double, 6, 6> observation_covariance = Eigen::Matrix<double, 6, 6>::Zero();
     for (int i = 0; i < 6; ++i)
     {
-      double variance = msg->pose.covariance[static_cast<size_t>(i * 6 + i)];
+      double variance = ndt_observation_fusion_mode_ == "fixed_eskf"
+          ? std::pow(i < 3 ? ndt_observation_fixed_position_std_
+                           : ndt_observation_fixed_rotation_std_, 2.0)
+          : msg->pose.covariance[static_cast<size_t>(i * 6 + i)];
       if (!std::isfinite(variance) || variance <= 0.0)
       {
         variance = i < 3 ? 0.01 : std::pow(2.0 * M_PI / 180.0, 2.0);

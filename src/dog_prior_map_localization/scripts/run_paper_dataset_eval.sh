@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if [[ $# -lt 2 ]]; then
-  echo "用法: $0 DATASET_NAME INPUT_BAG [CONFIG] [DURATION_SEC] [PLAY_RATE] [FUSION_MODE] [LIDAR_TOPIC] [IMU_TOPIC] [LIDAR_MSG_TYPE] [MAP_PATH]" >&2
+  echo "用法: $0 DATASET_NAME INPUT_BAG [CONFIG] [DURATION_SEC] [PLAY_RATE] [FUSION_MODE] [LIDAR_TOPIC] [IMU_TOPIC] [LIDAR_MSG_TYPE] [MAP_PATH] [MAX_COVARIANCE_INFLATION]" >&2
   exit 2
 fi
 
@@ -16,6 +16,7 @@ FUSION_MODE=${6:-legacy_blend}
 LIDAR_INPUT_TOPIC=${7:-/livox/lidar}
 IMU_INPUT_TOPIC=${8:-/livox/imu}
 LIDAR_MSG_TYPE=${9:-livox}
+MAX_COVARIANCE_INFLATION=${11:-100.0}
 RUN_NAME=${RUN_NAME:-${DATASET_NAME}_$(date +%Y%m%d_%H%M%S)}
 OUTPUT_ROOT=${OUTPUT_ROOT:-/home/jian/rosbag/paper_localization}
 OUTPUT_DIR=$OUTPUT_ROOT/$DATASET_NAME/$RUN_NAME
@@ -38,9 +39,9 @@ git -C "$WORKSPACE" status --short --branch > "$OUTPUT_DIR/git_status.txt"
 md5sum "$INPUT_BAG" > "$OUTPUT_DIR/input_md5.txt"
 MAP_PATH=$(sed -n 's/^[[:space:]]*pcd_fallback_path:[[:space:]]*"\([^"]*\)".*/\1/p' "$CONFIG" | head -1)
 MAP_PATH=${10:-$MAP_PATH}
-printf 'play_rate=%s\nduration_sec=%s\nfusion_mode=%s\nlidar_input_topic=%s\nimu_input_topic=%s\nlidar_msg_type=%s\nmap_path=%s\n' \
+printf 'play_rate=%s\nduration_sec=%s\nfusion_mode=%s\nlidar_input_topic=%s\nimu_input_topic=%s\nlidar_msg_type=%s\nmap_path=%s\nmax_covariance_inflation=%s\n' \
   "$PLAY_RATE" "$DURATION_SEC" "$FUSION_MODE" "$LIDAR_INPUT_TOPIC" \
-  "$IMU_INPUT_TOPIC" "$LIDAR_MSG_TYPE" "$MAP_PATH" > "$OUTPUT_DIR/run_parameters.txt"
+  "$IMU_INPUT_TOPIC" "$LIDAR_MSG_TYPE" "$MAP_PATH" "$MAX_COVARIANCE_INFLATION" > "$OUTPUT_DIR/run_parameters.txt"
 if [[ -n "$MAP_PATH" && -f "$MAP_PATH" ]]; then
   md5sum "$MAP_PATH" > "$OUTPUT_DIR/map_md5.txt"
 fi
@@ -69,6 +70,7 @@ roslaunch dog_prior_map_localization dog_prior_map_localization_split.launch \
   config:="$CONFIG" rviz:=false runtime_csv_path:="$OUTPUT_DIR/runtime.csv" \
   ndt_fusion_mode:="$FUSION_MODE" \
   lidar_msg_type:="$LIDAR_MSG_TYPE" map_path:="$MAP_PATH" \
+  max_covariance_inflation:="$MAX_COVARIANCE_INFLATION" \
   ndt_diagnostics_csv_path:="$OUTPUT_DIR/ndt_diagnostics.csv" \
   > "$OUTPUT_DIR/node.log" 2>&1 &
 LAUNCH_PID=$!
