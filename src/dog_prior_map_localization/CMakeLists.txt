@@ -79,6 +79,7 @@ catkin_install_python(PROGRAMS
   scripts/analyze_paper_run.py
   scripts/build_gt_prior_map.py
   scripts/evaluate_tum_ground_truth.py
+  scripts/generate_public_validation_word_report.py
   scripts/run_paper_dataset_eval.sh
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
