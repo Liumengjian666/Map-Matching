@@ -213,10 +213,12 @@ private:
   bool use_acc_for_position_ = false;
   double velocity_damping_ = 0.98;
   bool initialize_gravity_from_imu_ = true;
+  bool initialize_gyro_bias_from_imu_ = true;
   bool gravity_initialized_ = false;
   int init_imu_samples_ = 200;
   int imu_init_count_ = 0;
   Eigen::Vector3d imu_acc_sum_ = Eigen::Vector3d::Zero();
+  Eigen::Vector3d imu_gyr_sum_ = Eigen::Vector3d::Zero();
   bool continuous_gravity_correction_enable_ = true;
   double gravity_correction_expected_acc_norm_ = 1.0;
   double gravity_correction_gain_ = 0.01;

@@ -29,6 +29,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
 
   gravity_norm_ = getParam<double>("imu/gravity", 9.80665);
   initialize_gravity_from_imu_ = getParam<bool>("imu/initialize_gravity_from_imu", true);
+  initialize_gyro_bias_from_imu_ = getParam<bool>("imu/initialize_gyro_bias_from_imu", true);
   init_imu_samples_ = std::max(1, getParam<int>("imu/init_imu_samples", 200));
   max_imu_dt_ = getParam<double>("imu/max_dt", 0.05);
   publish_high_rate_ = getParam<bool>("imu/publish_high_rate", true);

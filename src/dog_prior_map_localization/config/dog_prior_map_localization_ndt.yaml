@@ -57,8 +57,16 @@ camera_intrinsic:
 imu:
   gravity: 9.80665
   initialize_gravity_from_imu: true
+  initialize_gyro_bias_from_imu: true
   init_imu_samples: 200
+  use_acc_for_position: false
   velocity_damping: 0.98
+  continuous_gravity_correction_enable: false
+  gravity_correction_expected_acc_norm: 1.0
+  gravity_correction_gain: 0.01
+  gravity_correction_max_angle_deg: 0.5
+  gravity_correction_acc_tolerance: 0.25
+  gravity_correction_gyro_max: 0.8
   acc_noise: 2.0
   gyro_noise: 0.1
   acc_bias_noise: 0.0001
