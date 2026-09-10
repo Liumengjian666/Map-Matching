@@ -63,6 +63,8 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   ndt_observation_z_apply_ratio_ = getParam<double>("ndt_observation/z_apply_ratio", 1.0);
   ndt_observation_roll_pitch_apply_ratio_ = getParam<double>("ndt_observation/roll_pitch_apply_ratio", 1.0);
   ndt_observation_max_translation_correction_ = getParam<double>("ndt_observation/max_translation_correction", 1.0);
+  ndt_observation_max_frame_translation_ =
+      getParam<double>("ndt_observation/max_frame_translation", 0.5);
   ndt_observation_max_rotation_correction_ = getParam<double>("ndt_observation/max_rotation_correction_deg", 5.0) * M_PI / 180.0;
   ndt_observation_velocity_blend_ = getParam<double>("ndt_observation/velocity_blend", 0.6);
   lidar_deskew_enable_ = getParam<bool>("lidar_update/deskew_enable", true);

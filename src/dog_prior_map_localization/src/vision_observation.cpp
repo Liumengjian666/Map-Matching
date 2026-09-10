@@ -239,6 +239,35 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
   Eigen::Vector3d dtheta = aa.axis() * aa.angle();
   if (!dp.allFinite() || !dtheta.allFinite()) return;
 
+  // Keep the IMU-propagated state as the prior for this frame.  If the fused
+  // result moves too far in one update (typical long-corridor NDT ambiguity),
+  // roll back the complete ESKF state and drop this observation.
+  const Eigen::Vector3d p_before_update = p_;
+  const Eigen::Vector3d v_before_update = v_;
+  const Eigen::Matrix3d R_before_update = R_;
+  const Eigen::Vector3d ba_before_update = ba_;
+  const Eigen::Vector3d bg_before_update = bg_;
+  const Matrix15d P_before_update = P_;
+  auto reject_large_frame_jump = [&](double nis, double covariance_inflation) {
+    const double jump = (p_ - p_before_update).norm();
+    if (ndt_observation_max_frame_translation_ <= 0.0 ||
+        !std::isfinite(jump) || jump <= ndt_observation_max_frame_translation_)
+      return false;
+    p_ = p_before_update;
+    v_ = v_before_update;
+    R_ = R_before_update;
+    ba_ = ba_before_update;
+    bg_ = bg_before_update;
+    P_ = P_before_update;
+    ++lidar_update_fail_count_;
+    ++icp_update_fail_count_;
+    ROS_WARN_THROTTLE(1.0,
+                      "[DogPriorMap C++] drop NDT frame: final position jump %.3f m > %.3f m",
+                      jump, ndt_observation_max_frame_translation_);
+    publishNdtFusionDiagnostics(msg->header.stamp, false, nis, covariance_inflation);
+    return true;
+  };
+
   if (ndt_observation_fusion_mode_ == "reliability_eskf" ||
       ndt_observation_fusion_mode_ == "fixed_eskf")
   {
@@ -322,6 +351,8 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
     P_ = reset_jacobian * P_ * reset_jacobian.transpose();
     P_ = 0.5 * (P_ + P_.transpose());
 
+    if (reject_large_frame_jump(nis, covariance_inflation)) return;
+
     ++lidar_update_ok_count_;
     ++icp_update_ok_count_;
     last_used_points_ = 0;
@@ -354,6 +385,7 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
   dtheta.y() *= roll_pitch_ratio;
   dp = limitVector(dp, ndt_observation_max_translation_correction_);
   applyPoseCorrection(dp, dtheta);
+  if (reject_large_frame_jump(0.0, 1.0)) return;
   ++lidar_update_ok_count_;
   ++icp_update_ok_count_;
   last_used_points_ = 0;

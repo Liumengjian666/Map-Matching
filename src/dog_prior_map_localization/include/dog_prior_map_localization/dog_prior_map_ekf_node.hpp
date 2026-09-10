@@ -246,6 +246,8 @@ private:
   double ndt_observation_z_apply_ratio_ = 1.0;
   double ndt_observation_roll_pitch_apply_ratio_ = 1.0;
   double ndt_observation_max_translation_correction_ = 1.0;
+  // Reject a fused NDT result if the final state jumps too far in one update.
+  double ndt_observation_max_frame_translation_ = 0.5;
   double ndt_observation_max_rotation_correction_ = 5.0 * M_PI / 180.0;
   double ndt_observation_velocity_blend_ = 0.6;
   double last_ndt_observation_time_ = 0.0;
