@@ -438,15 +438,11 @@ private:
       p_ = used_result.block<3, 1>(0, 3);
       localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
       publishPose(stamp, reliability_score);
-      if (step_limited)
-      {
-        pcl::PointCloud<pcl::PointXYZ> limited_aligned = transformCloud(source, used_result);
-        publishAlignedCloud(limited_aligned, stamp);
-      }
-      else
-      {
-        publishAlignedCloud(aligned, stamp);
-      }
+      // 与旧版可视化/定位链路保持一致：始终显式执行
+      // p_map = R_map_body * p_body + t_map_body，避免直接依赖PCL aligned
+      // 的内部输出坐标解释。
+      pcl::PointCloud<pcl::PointXYZ> transformed_scan = transformCloud(source, used_result);
+      publishAlignedCloud(transformed_scan, stamp);
     }
 
     publishDiagnostics(stamp, ok, align_ms, preprocess_ms, localization_ms,
