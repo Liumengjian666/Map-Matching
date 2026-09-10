@@ -101,6 +101,8 @@ public:
     ndt_step_limit_max_rotation_deg_ = getParam<double>("lidar_update/ndt_step_limit_max_rotation_deg", 5.0);
     ndt_hard_reject_max_translation_ =
         getParam<double>("lidar_update/ndt_hard_reject_max_translation", 0.5);
+    ndt_hard_reject_max_fitness_ =
+        getParam<double>("lidar_update/ndt_hard_reject_max_fitness", 5.0);
     reliability_fitness_scale_ = getParam<double>("reliability/fitness_scale", 2.0);
     reliability_translation_scale_ = getParam<double>("reliability/translation_scale", 0.50);
     reliability_rotation_scale_deg_ = getParam<double>("reliability/rotation_scale_deg", 5.0);
@@ -386,6 +388,17 @@ private:
                            static_cast<int>(source->size()), target_cloud_->size(), score, iterations);
         return;
       }
+    }
+    if (ok && ndt_hard_reject_max_fitness_ > 0.0 &&
+        (!std::isfinite(score) || score > ndt_hard_reject_max_fitness_))
+    {
+      ROS_WARN_THROTTLE(1.0,
+                        "[DogPriorMap NDT] drop candidate: fitness=%.3f > %.3f",
+                        score, ndt_hard_reject_max_fitness_);
+      publishDiagnostics(stamp, false, align_ms, preprocess_ms,
+                         (ros::WallTime::now() - callback_start).toSec() * 1000.0,
+                         static_cast<int>(source->size()), target_cloud_->size(), score, iterations);
+      return;
     }
     const double geometry_ratio = computeXyGeometryRatio(source);
     const double fitness_quality = ok && std::isfinite(score)
@@ -716,6 +729,7 @@ private:
   double ndt_step_limit_max_translation_ = 0.5;
   double ndt_step_limit_max_rotation_deg_ = 5.0;
   double ndt_hard_reject_max_translation_ = 0.5;
+  double ndt_hard_reject_max_fitness_ = 5.0;
   double reliability_fitness_scale_ = 2.0;
   double reliability_translation_scale_ = 0.50;
   double reliability_rotation_scale_deg_ = 5.0;
