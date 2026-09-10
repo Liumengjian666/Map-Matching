@@ -19,6 +19,7 @@ IMU_INPUT_TOPIC=${8:-/livox/imu}
 LIDAR_MSG_TYPE=${9:-livox}
 MAX_COVARIANCE_INFLATION=${11:-100.0}
 CAMERA_ENABLE=${CAMERA_ENABLE:-true}
+HARD_REJECT_NIS_THRESHOLD=${HARD_REJECT_NIS_THRESHOLD:-0.0}
 RUN_NAME=${RUN_NAME:-${DATASET_NAME}_$(date +%Y%m%d_%H%M%S)}
 OUTPUT_ROOT=${OUTPUT_ROOT:-/home/jian/rosbag/paper_localization}
 OUTPUT_DIR=$OUTPUT_ROOT/$DATASET_NAME/$RUN_NAME
@@ -45,6 +46,7 @@ printf 'play_rate=%s\nduration_sec=%s\nfusion_mode=%s\nlidar_input_topic=%s\nimu
   "$PLAY_RATE" "$DURATION_SEC" "$FUSION_MODE" "$LIDAR_INPUT_TOPIC" \
   "$IMU_INPUT_TOPIC" "$LIDAR_MSG_TYPE" "$MAP_PATH" "$MAX_COVARIANCE_INFLATION" > "$OUTPUT_DIR/run_parameters.txt"
 printf 'camera_enable=%s\n' "$CAMERA_ENABLE" >> "$OUTPUT_DIR/run_parameters.txt"
+printf 'hard_reject_nis_threshold=%s\n' "$HARD_REJECT_NIS_THRESHOLD" >> "$OUTPUT_DIR/run_parameters.txt"
 if [[ -n "$MAP_PATH" && -f "$MAP_PATH" ]]; then
   md5sum "$MAP_PATH" > "$OUTPUT_DIR/map_md5.txt"
 fi
@@ -75,6 +77,7 @@ roslaunch dog_prior_map_localization dog_prior_map_localization_split.launch \
   lidar_msg_type:="$LIDAR_MSG_TYPE" map_path:="$MAP_PATH" \
   max_covariance_inflation:="$MAX_COVARIANCE_INFLATION" \
   camera_enable:="$CAMERA_ENABLE" \
+  hard_reject_nis_threshold:="$HARD_REJECT_NIS_THRESHOLD" \
   ndt_diagnostics_csv_path:="$OUTPUT_DIR/ndt_diagnostics.csv" \
   > "$OUTPUT_DIR/node.log" 2>&1 &
 LAUNCH_PID=$!

@@ -238,6 +238,7 @@ private:
   bool ndt_observation_enable_ = false;
   std::string ndt_observation_fusion_mode_ = "legacy_blend";
   double ndt_observation_nis_threshold_ = 22.458;
+  double ndt_observation_hard_reject_nis_threshold_ = 0.0;
   double ndt_observation_max_covariance_inflation_ = 100.0;
   double ndt_observation_fixed_position_std_ = 0.08;
   double ndt_observation_fixed_rotation_std_ = M_PI / 180.0;

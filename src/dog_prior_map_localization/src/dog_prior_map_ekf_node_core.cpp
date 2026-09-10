@@ -51,6 +51,8 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   ndt_observation_enable_ = getParam<bool>("ndt_observation/enable", false);
   ndt_observation_fusion_mode_ = getParam<std::string>("ndt_observation/fusion_mode", "legacy_blend");
   ndt_observation_nis_threshold_ = getParam<double>("ndt_observation/nis_threshold", 22.458);
+  ndt_observation_hard_reject_nis_threshold_ =
+      getParam<double>("ndt_observation/hard_reject_nis_threshold", 0.0);
   ndt_observation_max_covariance_inflation_ =
       getParam<double>("ndt_observation/max_covariance_inflation", 100.0);
   ndt_observation_fixed_position_std_ =

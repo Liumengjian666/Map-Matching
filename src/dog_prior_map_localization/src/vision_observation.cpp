@@ -81,7 +81,8 @@ void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
   {
     visual_constraint_weight_scale_ = bad_image_weight_scale_;
   }
-  else if (lidar_degeneracy_score_ >= min_degeneracy_score_for_visual_)
+  else if (!ndt_observation_enable_ &&
+           lidar_degeneracy_score_ >= min_degeneracy_score_for_visual_)
   {
     // ------------------------- 退化自适应视觉权重 -------------------------
     // 用户要求的思想：视觉权重与“相机有效角点占比 / 雷达退化程度”相关。
@@ -96,8 +97,12 @@ void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
     visual_constraint_weight_scale_ = good_image_weight_scale_;
   }
 
+  // split 模式的 EKF 不直接处理点云，因而没有本地退化分数。此时让视觉
+  // 持续提供弱时序约束，而不是被永远为零的退化分数错误禁用。
+  const bool visual_motion_constraint_active = ndt_observation_enable_ ||
+      lidar_degeneracy_score_ >= min_degeneracy_score_for_visual_;
   if (visual_feature_update_enable_ &&
-      lidar_degeneracy_score_ >= min_degeneracy_score_for_visual_ &&
+      visual_motion_constraint_active &&
       image_quality_good_ &&
       !last_gray_.empty() && !last_features_.empty() &&
       has_last_image_pose_ &&
@@ -268,6 +273,14 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
     }
     const double nis = innovation.dot(ldlt.solve(innovation));
     if (!std::isfinite(nis))
+    {
+      ++lidar_update_fail_count_;
+      ++icp_update_fail_count_;
+      publishNdtFusionDiagnostics(msg->header.stamp, false, nis, 1.0);
+      return;
+    }
+    if (ndt_observation_hard_reject_nis_threshold_ > 0.0 &&
+        nis > ndt_observation_hard_reject_nis_threshold_)
     {
       ++lidar_update_fail_count_;
       ++icp_update_fail_count_;
