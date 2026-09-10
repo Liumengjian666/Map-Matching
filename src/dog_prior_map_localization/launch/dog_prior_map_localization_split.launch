@@ -3,7 +3,7 @@
   <arg name="rviz" default="false" />
   <arg name="runtime_csv_path" default="" />
   <arg name="ndt_diagnostics_csv_path" default="" />
-  <arg name="ndt_fusion_mode" default="legacy_blend" />
+  <arg name="ndt_fusion_mode" default="reliability_eskf" />
   <arg name="lidar_msg_type" default="livox" />
   <arg name="map_path" default="/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd" />
   <arg name="max_covariance_inflation" default="100.0" />
@@ -26,6 +26,7 @@
   <param name="camera_update/enable" value="$(arg camera_enable)" />
   <param name="ndt_observation/hard_reject_nis_threshold" value="$(arg hard_reject_nis_threshold)" />
   <param name="ndt_observation/max_frame_translation" value="$(arg max_frame_translation)" />
+  <param name="lidar_update/ndt_hard_reject_max_translation" value="$(arg max_frame_translation)" />
   <param name="ndt_observation/fixed_position_std_m" value="0.08" />
   <param name="ndt_observation/fixed_rotation_std_deg" value="1.0" />
   <param name="topics/lidar_msg_type" value="$(arg lidar_msg_type)" />

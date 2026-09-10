@@ -76,6 +76,7 @@ public:
     ndt_pose_topic_ = getParam<std::string>("topics/ndt_pose", "/dog_livo/ndt_pose");
     ndt_path_topic_ = getParam<std::string>("topics/ndt_path", "/dog_livo/ndt_path");
     points_aligned_topic_ = getParam<std::string>("topics/points_aligned", "/dog_livo/points_aligned");
+    prediction_topic_ = getParam<std::string>("topics/odom_high_rate", "/dog_livo/odom_high_rate");
 
     map_pcd_path_ = getParam<std::string>("map/pcd_fallback_path", "");
     map_voxel_size_ = getParam<double>("map/voxel_size", 0.30);
@@ -98,6 +99,8 @@ public:
     ndt_step_limit_enable_ = getParam<bool>("lidar_update/ndt_step_limit_enable", false);
     ndt_step_limit_max_translation_ = getParam<double>("lidar_update/ndt_step_limit_max_translation", 0.5);
     ndt_step_limit_max_rotation_deg_ = getParam<double>("lidar_update/ndt_step_limit_max_rotation_deg", 5.0);
+    ndt_hard_reject_max_translation_ =
+        getParam<double>("lidar_update/ndt_hard_reject_max_translation", 0.5);
     reliability_fitness_scale_ = getParam<double>("reliability/fitness_scale", 2.0);
     reliability_translation_scale_ = getParam<double>("reliability/translation_scale", 0.50);
     reliability_rotation_scale_deg_ = getParam<double>("reliability/rotation_scale_deg", 5.0);
@@ -139,6 +142,8 @@ public:
     {
       sub_livox_ = nh_.subscribe(lidar_topic_, 5, &DogPriorMapNdtNode::livoxCallback, this);
     }
+    sub_prediction_ = nh_.subscribe(prediction_topic_, 10,
+                                    &DogPriorMapNdtNode::predictionCallback, this);
 
     ROS_INFO("[DogPriorMap NDT] started: map=%s target=%zu lidar=%s output=%s",
              map_pcd_path_.c_str(), target_cloud_->size(), lidar_topic_.c_str(), ndt_odom_topic_.c_str());
@@ -257,6 +262,22 @@ private:
   }
 
   // 将 Livox 自定义消息转换为 XYZ 点云并进入统一 NDT 处理流程。
+  void predictionCallback(const nav_msgs::OdometryConstPtr &msg)
+  {
+    std::lock_guard<std::mutex> lock(mutex_);
+    Eigen::Quaterniond q(msg->pose.pose.orientation.w,
+                         msg->pose.pose.orientation.x,
+                         msg->pose.pose.orientation.y,
+                         msg->pose.pose.orientation.z);
+    const Eigen::Vector3d p(msg->pose.pose.position.x,
+                            msg->pose.pose.position.y,
+                            msg->pose.pose.position.z);
+    if (!p.allFinite() || q.norm() < 1e-9) return;
+    imu_prediction_pose_ = poseToMatrix(p, q.normalized().toRotationMatrix());
+    has_imu_prediction_ = true;
+  }
+
+  // 将 Livox 自定义消息转换为 XYZ 点云并进入统一 NDT 处理流程。
   void livoxCallback(const livox_ros_driver2::CustomMsgConstPtr &msg)
   {
     const ros::WallTime callback_start = ros::WallTime::now();
@@ -302,7 +323,12 @@ private:
     }
 
     Eigen::Matrix4d initial_guess = poseToMatrix(p_, R_);
-    if (has_previous_pose_)
+    if (has_imu_prediction_)
+    {
+      // NDT 的优化初值来自 IMU/EKF 传播，而不是 NDT 自己的历史外推。
+      initial_guess = imu_prediction_pose_;
+    }
+    else if (has_previous_pose_)
     {
       initial_guess = previous_pose_ * delta_pose_;
     }
@@ -337,6 +363,28 @@ private:
         const Eigen::Matrix4d temporal_error = delta_pose_.inverse() * raw_delta;
         temporal_translation = temporal_error.block<3, 1>(0, 3).norm();
         temporal_rotation_deg = rotationAngleDeg(temporal_error.block<3, 3>(0, 0));
+      }
+    }
+
+    if (ok && ndt_hard_reject_max_translation_ > 0.0)
+    {
+      const Eigen::Vector3d raw_p = raw_result.block<3, 1>(0, 3);
+      const double prediction_jump = has_imu_prediction_
+          ? (raw_p - imu_prediction_pose_.block<3, 1>(0, 3)).norm()
+          : std::numeric_limits<double>::infinity();
+      const double previous_jump = has_previous_pose_
+          ? (raw_p - previous_pose_.block<3, 1>(0, 3)).norm()
+          : prediction_jump;
+      if ((has_imu_prediction_ && prediction_jump > ndt_hard_reject_max_translation_) ||
+          (!has_imu_prediction_ && has_previous_pose_ && previous_jump > ndt_hard_reject_max_translation_))
+      {
+        ROS_WARN_THROTTLE(1.0,
+                          "[DogPriorMap NDT] drop candidate: jump_to_imu=%.3f jump_to_previous=%.3f limit=%.3f",
+                          prediction_jump, previous_jump, ndt_hard_reject_max_translation_);
+        publishDiagnostics(stamp, false, align_ms, preprocess_ms,
+                           (ros::WallTime::now() - callback_start).toSec() * 1000.0,
+                           static_cast<int>(source->size()), target_cloud_->size(), score, iterations);
+        return;
       }
     }
     const double geometry_ratio = computeXyGeometryRatio(source);
@@ -609,6 +657,7 @@ private:
   ros::NodeHandle pnh_;
   ros::Subscriber sub_livox_;
   ros::Subscriber sub_pc2_;
+  ros::Subscriber sub_prediction_;
   ros::Publisher pub_odom_;
   ros::Publisher pub_pose_;
   ros::Publisher pub_path_;
@@ -630,6 +679,7 @@ private:
   std::string ndt_pose_topic_;
   std::string ndt_path_topic_;
   std::string points_aligned_topic_;
+  std::string prediction_topic_;
   std::string map_pcd_path_;
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud_;
@@ -642,6 +692,8 @@ private:
   bool has_previous_pose_ = false;
   Eigen::Matrix4d previous_pose_ = Eigen::Matrix4d::Identity();
   Eigen::Matrix4d delta_pose_ = Eigen::Matrix4d::Identity();
+  bool has_imu_prediction_ = false;
+  Eigen::Matrix4d imu_prediction_pose_ = Eigen::Matrix4d::Identity();
 
   double map_voxel_size_ = 0.30;
   double map_voxel_z_size_ = 0.30;
@@ -663,6 +715,7 @@ private:
   bool ndt_step_limit_enable_ = false;
   double ndt_step_limit_max_translation_ = 0.5;
   double ndt_step_limit_max_rotation_deg_ = 5.0;
+  double ndt_hard_reject_max_translation_ = 0.5;
   double reliability_fitness_scale_ = 2.0;
   double reliability_translation_scale_ = 0.50;
   double reliability_rotation_scale_deg_ = 5.0;
