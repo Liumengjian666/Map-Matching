@@ -16,6 +16,7 @@
 #include <nav_msgs/Odometry.h>
 #include <nav_msgs/Path.h>
 #include <pcl/filters/voxel_grid.h>
+#include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/registration/ndt.h>
 #include <pcl_conversions/pcl_conversions.h>
@@ -103,6 +104,18 @@ public:
         getParam<double>("lidar_update/ndt_hard_reject_max_translation", 0.5);
     ndt_hard_reject_max_fitness_ =
         getParam<double>("lidar_update/ndt_hard_reject_max_fitness", 5.0);
+    ndt_local_map_radius_ =
+        getParam<double>("lidar_update/ndt_local_map_radius", 12.0);
+    ndt_degeneracy_enable_ =
+        getParam<bool>("lidar_update/ndt_degeneracy_enable", true);
+    ndt_degeneracy_ratio_ =
+        getParam<double>("lidar_update/ndt_degeneracy_ratio", 8.0);
+    ndt_degenerate_scale_ =
+        getParam<double>("lidar_update/ndt_degenerate_scale", 0.15);
+    ndt_direction_check_enable_ =
+        getParam<bool>("lidar_update/ndt_direction_check_enable", true);
+    ndt_direction_min_motion_ =
+        getParam<double>("lidar_update/ndt_direction_min_motion", 0.05);
     reliability_fitness_scale_ = getParam<double>("reliability/fitness_scale", 2.0);
     reliability_translation_scale_ = getParam<double>("reliability/translation_scale", 0.50);
     reliability_rotation_scale_deg_ = getParam<double>("reliability/rotation_scale_deg", 5.0);
@@ -188,6 +201,8 @@ private:
     ndt_.setStepSize(ndt_step_size_);
     ndt_.setTransformationEpsilon(ndt_transformation_epsilon_);
     ndt_.setMaximumIterations(ndt_max_iterations_);
+    map_kdtree_.reset(new pcl::KdTreeFLANN<pcl::PointXYZ>());
+    map_kdtree_->setInputCloud(map_cloud_);
   }
 
   // 按 XYZ 分辨率执行各向异性体素降采样，并可限制最终点数。
@@ -335,6 +350,15 @@ private:
       initial_guess = previous_pose_ * delta_pose_;
     }
 
+    pcl::PointCloud<pcl::PointXYZ>::Ptr local_target = buildLocalTarget(initial_guess.block<3, 1>(0, 3));
+    if (!local_target || static_cast<int>(local_target->size()) < min_effective_points_)
+    {
+      ROS_WARN_THROTTLE(1.0,
+                        "[DogPriorMap NDT] drop frame: local prior map has too few points (%zu)",
+                        local_target ? local_target->size() : 0UL);
+      return;
+    }
+    ndt_.setInputTarget(local_target);
     ndt_.setInputSource(source);
     pcl::PointCloud<pcl::PointXYZ> aligned;
     const ros::WallTime align_start = ros::WallTime::now();
@@ -343,6 +367,11 @@ private:
     const bool ok = ndt_.hasConverged();
     const double score = ndt_.getFitnessScore();
     const int iterations = ndt_.getFinalNumIteration();
+
+    Eigen::Vector3d weak_direction = Eigen::Vector3d::Zero();
+    double degeneracy_ratio = 1.0;
+    const bool lidar_degenerate = ndt_degeneracy_enable_ &&
+        estimateWeakDirection(local_target, weak_direction, degeneracy_ratio);
 
     double innovation_translation = 0.0;
     double innovation_rotation_deg = 0.0;
@@ -385,7 +414,7 @@ private:
                           prediction_jump, previous_jump, ndt_hard_reject_max_translation_);
         publishDiagnostics(stamp, false, align_ms, preprocess_ms,
                            (ros::WallTime::now() - callback_start).toSec() * 1000.0,
-                           static_cast<int>(source->size()), target_cloud_->size(), score, iterations);
+                           static_cast<int>(source->size()), local_target->size(), score, iterations);
         return;
       }
     }
@@ -397,8 +426,27 @@ private:
                         score, ndt_hard_reject_max_fitness_);
       publishDiagnostics(stamp, false, align_ms, preprocess_ms,
                          (ros::WallTime::now() - callback_start).toSec() * 1000.0,
-                         static_cast<int>(source->size()), target_cloud_->size(), score, iterations);
+                         static_cast<int>(source->size()), local_target->size(), score, iterations);
       return;
+    }
+
+    // 走廊中前进方向可能出现两个相似局部极小值。若 LiDAR 位移与 IMU
+    // 预测方向相反，直接拒绝，避免把错误结果写入下一帧的历史状态。
+    if (ok && ndt_direction_check_enable_ && has_previous_pose_ && has_imu_prediction_)
+    {
+      const Eigen::Vector3d predicted_delta =
+          initial_guess.block<3, 1>(0, 3) - previous_pose_.block<3, 1>(0, 3);
+      const Eigen::Vector3d ndt_delta =
+          raw_result.block<3, 1>(0, 3) - previous_pose_.block<3, 1>(0, 3);
+      if (predicted_delta.norm() > ndt_direction_min_motion_ &&
+          ndt_delta.norm() > ndt_direction_min_motion_ &&
+          predicted_delta.dot(ndt_delta) < 0.0)
+      {
+        ROS_WARN_THROTTLE(1.0,
+                          "[DogPriorMap NDT] drop candidate: motion direction disagrees with IMU (pred=%.3f ndt=%.3f)",
+                          predicted_delta.norm(), ndt_delta.norm());
+        return;
+      }
     }
     const double geometry_ratio = computeXyGeometryRatio(source);
     const double fitness_quality = ok && std::isfinite(score)
@@ -424,6 +472,28 @@ private:
     {
       Eigen::Matrix4d used_result = raw_result;
       step_limited = limitNdtStep(raw_result, used_result);
+      // 被步长限制的结果说明 NDT 给出的绝对解不可信；不能把截断值写回
+      // previous_pose_/delta_pose_，否则错误会在后续帧中逐步累积。
+      if (step_limited)
+      {
+        ROS_WARN_THROTTLE(1.0,
+                          "[DogPriorMap NDT] use IMU prediction: NDT step limited (raw jump %.3f)",
+                          raw_step_translation);
+        // 仅使用 IMU 预测作为本帧安全结果，不把截断后的 NDT 错误解写回历史。
+        used_result = initial_guess;
+      }
+      if (lidar_degenerate && has_imu_prediction_)
+      {
+        const Eigen::Vector3d correction =
+            raw_result.block<3, 1>(0, 3) - initial_guess.block<3, 1>(0, 3);
+        const double weak_component = correction.dot(weak_direction);
+        used_result.block<3, 1>(0, 3) =
+            raw_result.block<3, 1>(0, 3) -
+            (1.0 - clamp01(ndt_degenerate_scale_)) * weak_component * weak_direction;
+        ROS_DEBUG_THROTTLE(1.0,
+                           "[DogPriorMap NDT] degenerate direction ratio=%.2f weak=(%.2f %.2f %.2f)",
+                           degeneracy_ratio, weak_direction.x(), weak_direction.y(), weak_direction.z());
+      }
       if (has_previous_pose_)
       {
         delta_pose_ = previous_pose_.inverse() * used_result;
@@ -446,7 +516,7 @@ private:
     }
 
     publishDiagnostics(stamp, ok, align_ms, preprocess_ms, localization_ms,
-                       static_cast<int>(source->size()), target_cloud_->size(), score, iterations, step_limited,
+                       static_cast<int>(source->size()), local_target->size(), score, iterations, step_limited,
                        innovation_translation, innovation_rotation_deg,
                        raw_step_translation, raw_step_rotation_deg,
                        temporal_translation, temporal_rotation_deg,
@@ -455,6 +525,48 @@ private:
     ROS_INFO_THROTTLE(1.0,
                       "[DogPriorMap NDT] conv=%d limited=%d source=%zu target=%zu align=%.2fms score=%.4f iter=%d p=(%.2f %.2f %.2f)",
                       ok ? 1 : 0, step_limited ? 1 : 0, source->size(), target_cloud_->size(), align_ms, score, iterations, p_.x(), p_.y(), p_.z());
+  }
+
+  pcl::PointCloud<pcl::PointXYZ>::Ptr buildLocalTarget(const Eigen::Vector3d &center) const
+  {
+    pcl::PointCloud<pcl::PointXYZ>::Ptr local(new pcl::PointCloud<pcl::PointXYZ>());
+    if (!map_kdtree_ || !center.allFinite() || ndt_local_map_radius_ <= 0.0) return local;
+    pcl::PointXYZ query(static_cast<float>(center.x()), static_cast<float>(center.y()), static_cast<float>(center.z()));
+    std::vector<int> indices;
+    std::vector<float> squared_distances;
+    map_kdtree_->radiusSearch(query, ndt_local_map_radius_ * ndt_local_map_radius_, indices, squared_distances);
+    local->reserve(indices.size());
+    for (const int index : indices)
+    {
+      if (index >= 0 && static_cast<size_t>(index) < map_cloud_->size()) local->push_back(map_cloud_->points[index]);
+    }
+    finalizeCloud(local);
+    return local;
+  }
+
+  // 用局部先验地图的 PCA 近似 NDT Hessian 的弱方向：长廊中最长轴通常
+  // 对平移最不敏感。返回最大/最小特征值比超过阈值时的最长轴方向。
+  bool estimateWeakDirection(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
+                             Eigen::Vector3d &direction, double &ratio) const
+  {
+    if (!cloud || cloud->size() < 20) return false;
+    Eigen::Vector3d mean = Eigen::Vector3d::Zero();
+    for (const auto &point : cloud->points) mean += Eigen::Vector3d(point.x, point.y, point.z);
+    mean /= static_cast<double>(cloud->size());
+    Eigen::Matrix3d covariance = Eigen::Matrix3d::Zero();
+    for (const auto &point : cloud->points)
+    {
+      const Eigen::Vector3d d = Eigen::Vector3d(point.x, point.y, point.z) - mean;
+      covariance.noalias() += d * d.transpose();
+    }
+    covariance /= static_cast<double>(cloud->size() - 1);
+    Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> solver(covariance);
+    if (solver.info() != Eigen::Success) return false;
+    const Eigen::Vector3d eval = solver.eigenvalues().cwiseMax(1e-9);
+    ratio = eval(2) / eval(0);
+    if (!std::isfinite(ratio) || ratio < ndt_degeneracy_ratio_) return false;
+    direction = solver.eigenvectors().col(2).normalized();
+    return direction.allFinite();
   }
 
   // 使用给定齐次变换把源点云转换到地图坐标系。
@@ -693,6 +805,7 @@ private:
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud_;
   pcl::PointCloud<pcl::PointXYZ>::Ptr target_cloud_;
+  pcl::KdTreeFLANN<pcl::PointXYZ>::Ptr map_kdtree_;
   pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt_;
   nav_msgs::Path path_;
 
@@ -726,6 +839,12 @@ private:
   double ndt_step_limit_max_rotation_deg_ = 5.0;
   double ndt_hard_reject_max_translation_ = 0.5;
   double ndt_hard_reject_max_fitness_ = 5.0;
+  double ndt_local_map_radius_ = 12.0;
+  bool ndt_degeneracy_enable_ = true;
+  double ndt_degeneracy_ratio_ = 8.0;
+  double ndt_degenerate_scale_ = 0.15;
+  bool ndt_direction_check_enable_ = true;
+  double ndt_direction_min_motion_ = 0.05;
   double reliability_fitness_scale_ = 2.0;
   double reliability_translation_scale_ = 0.50;
   double reliability_rotation_scale_deg_ = 5.0;
