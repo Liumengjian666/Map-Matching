@@ -20,6 +20,7 @@ LIDAR_MSG_TYPE=${9:-livox}
 MAX_COVARIANCE_INFLATION=${11:-100.0}
 CAMERA_ENABLE=${CAMERA_ENABLE:-true}
 HARD_REJECT_NIS_THRESHOLD=${HARD_REJECT_NIS_THRESHOLD:-0.0}
+START_OFFSET_SEC=${START_OFFSET_SEC:-0}
 RUN_NAME=${RUN_NAME:-${DATASET_NAME}_$(date +%Y%m%d_%H%M%S)}
 OUTPUT_ROOT=${OUTPUT_ROOT:-/home/jian/rosbag/paper_localization}
 OUTPUT_DIR=$OUTPUT_ROOT/$DATASET_NAME/$RUN_NAME
@@ -47,6 +48,7 @@ printf 'play_rate=%s\nduration_sec=%s\nfusion_mode=%s\nlidar_input_topic=%s\nimu
   "$IMU_INPUT_TOPIC" "$LIDAR_MSG_TYPE" "$MAP_PATH" "$MAX_COVARIANCE_INFLATION" > "$OUTPUT_DIR/run_parameters.txt"
 printf 'camera_enable=%s\n' "$CAMERA_ENABLE" >> "$OUTPUT_DIR/run_parameters.txt"
 printf 'hard_reject_nis_threshold=%s\n' "$HARD_REJECT_NIS_THRESHOLD" >> "$OUTPUT_DIR/run_parameters.txt"
+printf 'start_offset_sec=%s\n' "$START_OFFSET_SEC" >> "$OUTPUT_DIR/run_parameters.txt"
 if [[ -n "$MAP_PATH" && -f "$MAP_PATH" ]]; then
   md5sum "$MAP_PATH" > "$OUTPUT_DIR/map_md5.txt"
 fi
@@ -107,8 +109,14 @@ RECORD_PID=$!
 sleep 2
 
 PLAY_ARGS=(--clock -r "$PLAY_RATE" "$INPUT_BAG" --topics "$LIDAR_INPUT_TOPIC" "$IMU_INPUT_TOPIC" /image_left/image_rect "$LIDAR_INPUT_TOPIC:=/livox/lidar" "$IMU_INPUT_TOPIC:=/livox/imu")
+if [[ "$START_OFFSET_SEC" != "0" ]]; then
+  PLAY_ARGS=(--clock -r "$PLAY_RATE" --start="$START_OFFSET_SEC" "$INPUT_BAG" --topics "$LIDAR_INPUT_TOPIC" "$IMU_INPUT_TOPIC" /image_left/image_rect "$LIDAR_INPUT_TOPIC:=/livox/lidar" "$IMU_INPUT_TOPIC:=/livox/imu")
+fi
 if [[ "$DURATION_SEC" != "0" ]]; then
   PLAY_ARGS=(--clock -r "$PLAY_RATE" --duration="$DURATION_SEC" "$INPUT_BAG" --topics "$LIDAR_INPUT_TOPIC" "$IMU_INPUT_TOPIC" /image_left/image_rect "$LIDAR_INPUT_TOPIC:=/livox/lidar" "$IMU_INPUT_TOPIC:=/livox/imu")
+  if [[ "$START_OFFSET_SEC" != "0" ]]; then
+    PLAY_ARGS=(--clock -r "$PLAY_RATE" --start="$START_OFFSET_SEC" --duration="$DURATION_SEC" "$INPUT_BAG" --topics "$LIDAR_INPUT_TOPIC" "$IMU_INPUT_TOPIC" /image_left/image_rect "$LIDAR_INPUT_TOPIC:=/livox/lidar" "$IMU_INPUT_TOPIC:=/livox/imu")
+  fi
 fi
 rosbag play "${PLAY_ARGS[@]}" > "$OUTPUT_DIR/play.log" 2>&1 &
 PLAY_PID=$!
