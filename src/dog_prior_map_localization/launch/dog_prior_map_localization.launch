@@ -1,5 +1,8 @@
 <launch>
-  <arg name="config" default="$(find dog_prior_map_localization)/config/dog_prior_map_localization.yaml" />
+  <!-- Use the same map/lidar coordinate chain as the validated split NDT
+       pipeline.  The integrated node only changes the published topics and
+       keeps the same camera_init -> livox_frame numeric pose convention. -->
+  <arg name="config" default="$(find dog_prior_map_localization)/config/dog_prior_map_localization_ndt.yaml" />
   <arg name="rviz" default="false" />
   <arg name="use_cpp" default="true" />
   <arg name="runtime_csv_path" default="" />
