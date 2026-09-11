@@ -211,6 +211,16 @@ public:
     scan_to_scan_fitness_epsilon_ = getParam<double>("lidar_update/scan_to_scan_fitness_epsilon", 0.001);
     scan_to_scan_max_fitness_ = getParam<double>("lidar_update/scan_to_scan_max_fitness", 0.35);
     scan_to_scan_max_translation_ = getParam<double>("lidar_update/scan_to_scan_max_translation", 1.0);
+    temporal_velocity_enable_ = getParam<bool>("lidar_update/temporal_velocity_enable", true);
+    temporal_velocity_window_ = std::max(3, getParam<int>("lidar_update/temporal_velocity_window", 20));
+    temporal_velocity_max_speed_ = getParam<double>("lidar_update/temporal_velocity_max_speed", 3.0);
+    temporal_velocity_max_dt_ = getParam<double>("lidar_update/temporal_velocity_max_dt", 0.5);
+    temporal_degeneracy_recovery_frames_ = std::max(1, getParam<int>("lidar_update/temporal_degeneracy_recovery_frames", 10));
+    information_fallback_enable_ = getParam<bool>("lidar_update/information_fallback_enable", false);
+    multi_hypothesis_enable_ = getParam<bool>("lidar_update/multi_hypothesis_enable", true);
+    multi_hypothesis_stride_ = std::max(1, getParam<int>("lidar_update/multi_hypothesis_stride", 5));
+    multi_hypothesis_radius_steps_ = std::max(1, getParam<int>("lidar_update/multi_hypothesis_radius_steps", 4));
+    multi_hypothesis_step_ = getParam<double>("lidar_update/multi_hypothesis_step", 5.0);
     publish_tf_ = getParam<bool>("output/ndt_publish_tf", false);
     publish_path_ = getParam<bool>("output/publish_path", false);
     publish_filtered_points_ = getParam<bool>("output/publish_filtered_points", true);
@@ -486,14 +496,14 @@ private:
     bool step_limited = false;
     bool frame_degenerate = false;
     double frame_degeneracy_ratio = 1.0;
-    bool information_degenerate = false;
+  bool information_degenerate = false;
     Eigen::Matrix4d relative_motion = Eigen::Matrix4d::Identity();
     bool relative_motion_ok = false;
     double information_condition = 1.0;
     double localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
     if (ok)
     {
-      const Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
+      Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
       Eigen::Matrix4d used_result = result;
       Eigen::Vector3d weak_direction = Eigen::Vector3d::Zero();
       double degeneracy_ratio = 1.0;
@@ -507,13 +517,61 @@ private:
                                            information_correspondence_distance_,
                                            information_weak, information_condition) &&
           information_condition > information_condition_max_;
+      if (information_degenerate && !degeneracy_latched_ && has_velocity_)
+      {
+        frozen_velocity_ = temporal_velocity_;
+        has_frozen_velocity_ = frozen_velocity_.allFinite() && frozen_velocity_.norm() > 0.05;
+        degeneracy_latched_ = true;
+        degeneracy_recovery_frames_ = 0;
+      }
+      else if (information_degenerate)
+      {
+        degeneracy_recovery_frames_ = 0;
+      }
+      else if (degeneracy_latched_ && information_condition < information_condition_max_ * 0.5)
+      {
+        ++degeneracy_recovery_frames_;
+        if (degeneracy_recovery_frames_ >= temporal_degeneracy_recovery_frames_)
+        {
+          degeneracy_latched_ = false;
+          has_frozen_velocity_ = false;
+          degeneracy_recovery_frames_ = 0;
+        }
+      }
+      const bool corridor_degenerate = information_degenerate || degeneracy_latched_;
       // Only spend the extra registration cost in the suspected degenerate
       // case.  ICP aligns the current scan to the previous scan, so its
       // transform is directly usable as T(previous <- current).
-      if (information_degenerate && scan_to_scan_enable_ && previous_source_ &&
+      if (corridor_degenerate && scan_to_scan_enable_ && previous_source_ &&
           previous_source_->size() >= static_cast<size_t>(min_effective_points_))
       {
         relative_motion_ok = estimateRelativeMotion(source, previous_source_, relative_motion);
+      }
+      if (corridor_degenerate && multi_hypothesis_enable_ && has_frozen_velocity_ &&
+          (++degenerate_frame_count_ % multi_hypothesis_stride_ == 0))
+      {
+        const Eigen::Vector3d axis = frozen_velocity_.normalized();
+        const Eigen::Matrix4d base_guess = has_previous_pose_ ? previous_pose_ : initial_guess;
+        double best_score = score;
+        for (int k = -multi_hypothesis_radius_steps_; k <= multi_hypothesis_radius_steps_; ++k)
+        {
+          if (k == 0) continue;
+          Eigen::Matrix4d guess = base_guess;
+          guess.block<3, 1>(0, 3) += axis * (static_cast<double>(k) * multi_hypothesis_step_);
+          pcl::PointCloud<pcl::PointXYZ> candidate_aligned;
+          ndt_.align(candidate_aligned, guess.cast<float>());
+          if (!ndt_.hasConverged()) continue;
+          const double candidate_score = ndt_.getFitnessScore();
+          if (std::isfinite(candidate_score) && candidate_score < best_score)
+          {
+            best_score = candidate_score;
+            result = ndt_.getFinalTransformation().cast<double>();
+            aligned.swap(candidate_aligned);
+          }
+        }
+        ROS_INFO_THROTTLE(2.0,
+                          "[DogPriorMap NDT] multi-hypothesis candidates=%d best_score=%.4f",
+                          2 * multi_hypothesis_radius_steps_, best_score);
       }
       frame_degenerate = degenerate;
       frame_degeneracy_ratio = degeneracy_ratio;
@@ -528,15 +586,26 @@ private:
                            "[DogPriorMap NDT] degenerate update ratio=%.2f weak=(%.2f %.2f %.2f)",
                            degeneracy_ratio, weak_direction.x(), weak_direction.y(), weak_direction.z());
       }
-      if (information_degenerate && has_prediction_)
+      if (information_fallback_enable_ && corridor_degenerate &&
+          (has_prediction_ || temporal_velocity_enable_))
       {
         // In a corridor the current absolute NDT solution can be locally
         // ambiguous.  Continue with the previous-frame relative motion
         // instead of freezing the robot at the last globally matched place;
         // this is the temporal-observability fallback.
-        const Eigen::Matrix4d temporal_guess = (has_previous_pose_ && relative_motion_ok)
+        Eigen::Matrix4d temporal_guess = (has_previous_pose_ && relative_motion_ok)
             ? previous_pose_ * relative_motion
             : (has_previous_pose_ ? previous_pose_ * delta_pose_ : initial_guess);
+        const Eigen::Vector3d active_velocity = has_frozen_velocity_ ? frozen_velocity_ : temporal_velocity_;
+        const bool active_velocity_valid = has_frozen_velocity_ || has_velocity_;
+        if (temporal_velocity_enable_ && has_previous_pose_ && !relative_motion_ok &&
+            active_velocity_valid && active_velocity.norm() > 0.05 && stamp > last_pose_stamp_)
+        {
+          const double dt = std::min((stamp - last_pose_stamp_).toSec(), temporal_velocity_max_dt_);
+          const Eigen::Vector3d predicted = previous_pose_.block<3, 1>(0, 3) +
+              active_velocity * std::max(0.0, dt);
+          temporal_guess.block<3, 1>(0, 3) = predicted;
+        }
         Eigen::Matrix<double, 6, 1> correction;
         // The information Jacobian is expressed in map coordinates.  Keep
         // both translation and rotation correction in that same frame before
@@ -546,9 +615,38 @@ private:
         Eigen::AngleAxisd aa(result.block<3, 3>(0, 0) *
                              temporal_guess.block<3, 3>(0, 0).transpose());
         correction.tail<3>() = aa.axis() * aa.angle();
-        const double weak_component = correction.dot(information_weak);
-        correction -= (1.0 - std::max(0.0, std::min(1.0, ndt_degenerate_scale_))) *
-                      weak_component * information_weak;
+        const double projection_scale =
+            1.0 - std::max(0.0, std::min(1.0, ndt_degenerate_scale_));
+        const Eigen::Vector3d projection_velocity = has_frozen_velocity_ ? frozen_velocity_ : temporal_velocity_;
+        if (temporal_velocity_enable_ && (has_frozen_velocity_ || has_velocity_) &&
+            projection_velocity.norm() > 0.05)
+        {
+          // The 6-DoF point-to-point eigenvector mixes metres and radians and
+          // is not guaranteed to identify the corridor travel axis.  When a
+          // stable recent translation direction exists, constrain only that
+          // map-frame component to the temporal prediction and keep the
+          // orthogonal NDT translation correction.
+          const Eigen::Vector3d travel_dir = projection_velocity.normalized();
+          correction.head<3>() -= projection_scale *
+              correction.head<3>().dot(travel_dir) * travel_dir;
+          Eigen::Vector3d weak_rotation = information_weak.tail<3>();
+          if (weak_rotation.norm() > 1e-6)
+          {
+            weak_rotation.normalize();
+            correction.tail<3>() -= projection_scale *
+                correction.tail<3>().dot(weak_rotation) * weak_rotation;
+          }
+          ROS_INFO_THROTTLE(2.0,
+                            "[DogPriorMap NDT] temporal fallback vel=(%.3f %.3f %.3f) weak=(%.3f %.3f %.3f) cond=%.3g",
+                            projection_velocity.x(), projection_velocity.y(), projection_velocity.z(),
+                            information_weak.x(), information_weak.y(), information_weak.z(),
+                            information_condition);
+        }
+        else
+        {
+          const double weak_component = correction.dot(information_weak);
+          correction -= projection_scale * weak_component * information_weak;
+        }
         Eigen::Matrix4d projected = temporal_guess;
         projected.block<3, 1>(0, 3) += correction.head<3>();
         const double angle = correction.tail<3>().norm();
@@ -569,6 +667,29 @@ private:
         delta_pose_.setIdentity();
       }
       previous_source_.reset(new pcl::PointCloud<pcl::PointXYZ>(*source));
+      const bool accept_velocity_sample = !corridor_degenerate && !step_limited;
+      if (accept_velocity_sample && has_previous_pose_ && stamp > last_pose_stamp_)
+      {
+        const double dt = (stamp - last_pose_stamp_).toSec();
+        if (dt > 1e-3 && dt < 1.0)
+        {
+          const Eigen::Vector3d sample_velocity =
+              (used_result.block<3, 1>(0, 3) - previous_pose_.block<3, 1>(0, 3)) / dt;
+          if (sample_velocity.allFinite() && sample_velocity.norm() < temporal_velocity_max_speed_)
+          {
+            velocity_samples_.push_back(sample_velocity);
+            while (velocity_samples_.size() > temporal_velocity_window_) velocity_samples_.pop_front();
+            if (!velocity_samples_.empty())
+            {
+              temporal_velocity_ = Eigen::Vector3d::Zero();
+              for (const auto &v : velocity_samples_) temporal_velocity_ += v;
+              temporal_velocity_ /= static_cast<double>(velocity_samples_.size());
+              has_velocity_ = true;
+            }
+          }
+        }
+      }
+      last_pose_stamp_ = stamp;
       previous_pose_ = used_result;
       R_ = used_result.block<3, 3>(0, 0);
       p_ = used_result.block<3, 1>(0, 3);
@@ -854,6 +975,15 @@ private:
   Eigen::Matrix4d previous_pose_ = Eigen::Matrix4d::Identity();
   Eigen::Matrix4d delta_pose_ = Eigen::Matrix4d::Identity();
   pcl::PointCloud<pcl::PointXYZ>::Ptr previous_source_;
+  std::deque<Eigen::Vector3d> velocity_samples_;
+  Eigen::Vector3d temporal_velocity_ = Eigen::Vector3d::Zero();
+  Eigen::Vector3d frozen_velocity_ = Eigen::Vector3d::Zero();
+  ros::Time last_pose_stamp_;
+  bool has_velocity_ = false;
+  bool has_frozen_velocity_ = false;
+  bool degeneracy_latched_ = false;
+  int degeneracy_recovery_frames_ = 0;
+  int degenerate_frame_count_ = 0;
   bool has_prediction_ = false;
   Eigen::Matrix4d imu_prediction_pose_ = Eigen::Matrix4d::Identity();
   ros::Time prediction_stamp_;
@@ -893,6 +1023,16 @@ private:
   double scan_to_scan_fitness_epsilon_ = 0.001;
   double scan_to_scan_max_fitness_ = 0.35;
   double scan_to_scan_max_translation_ = 1.0;
+  bool temporal_velocity_enable_ = true;
+  int temporal_velocity_window_ = 20;
+  double temporal_velocity_max_speed_ = 3.0;
+  double temporal_velocity_max_dt_ = 0.5;
+  int temporal_degeneracy_recovery_frames_ = 10;
+  bool information_fallback_enable_ = false;
+  bool multi_hypothesis_enable_ = true;
+  int multi_hypothesis_stride_ = 5;
+  int multi_hypothesis_radius_steps_ = 4;
+  double multi_hypothesis_step_ = 5.0;
   bool deskew_enable_ = false;
   double lidar_offset_time_scale_ = 1e-9;
   double imu_history_keep_sec_ = 2.0;
