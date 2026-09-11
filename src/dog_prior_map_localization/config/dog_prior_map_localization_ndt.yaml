@@ -101,7 +101,7 @@ lidar_update:
   ndt_degenerate_scale: 0.15
   # Experimental 6DoF information-matrix guard; baseline keeps it off.
   information_degeneracy_enable: true
-  information_condition_max: 100000.0
+  information_condition_max: 500.0
   information_correspondence_distance: 0.8
 
 camera_update:
