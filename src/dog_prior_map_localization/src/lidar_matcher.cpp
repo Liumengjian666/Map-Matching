@@ -512,7 +512,49 @@ bool DogPriorMapEkfNode::runNdtRefinement(const pcl::PointCloud<pcl::PointXYZ>::
     return false;
   }
 
-  const Eigen::Matrix4d final_transform = ndt.getFinalTransformation().cast<double>();
+  Eigen::Matrix4d final_transform = ndt.getFinalTransformation().cast<double>();
+  // In a corridor, NDT's longitudinal coordinate can be physically
+  // unobservable.  Keep its observable y/z/attitude result, but let the
+  // temporal fingerprint tracker arbitrate x using a short sequence and a
+  // small set of scalar hypotheses.
+  bool corridor_degenerate = lidar_degenerate_;
+  if (ndt_absolute_pose_mode_ && corridor_sequence_enable_ && target && target->size() >= 20)
+  {
+    // NDT itself does not expose its Hessian.  A very elongated local map is
+    // therefore used as a conservative proxy for a corridor's weak axial
+    // information; the full point-to-plane path still uses the exact Fisher
+    // matrix test below.
+    Eigen::Vector3d mean = Eigen::Vector3d::Zero();
+    for (const auto &pt : target->points) mean += Eigen::Vector3d(pt.x, pt.y, pt.z);
+    mean /= static_cast<double>(target->size());
+    Eigen::Matrix3d covariance = Eigen::Matrix3d::Zero();
+    for (const auto &pt : target->points)
+    {
+      const Eigen::Vector3d d = Eigen::Vector3d(pt.x, pt.y, pt.z) - mean;
+      covariance += d * d.transpose();
+    }
+    covariance /= static_cast<double>(target->size());
+    const Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> eig(covariance);
+    if (eig.info() == Eigen::Success && eig.eigenvalues().maxCoeff() > 1e-6)
+    {
+      corridor_degenerate = corridor_degenerate ||
+                            eig.eigenvalues().minCoeff() / eig.eigenvalues().maxCoeff() < degeneracy_geometry_ratio_;
+    }
+  }
+  if (ndt_absolute_pose_mode_ && corridor_sequence_localizer_.ready())
+  {
+    const Eigen::Matrix3d ndt_R = final_transform.block<3, 3>(0, 0);
+    const Eigen::Vector3d ndt_p = final_transform.block<3, 1>(0, 3);
+    const double temporal_x = corridor_sequence_localizer_.update(
+        scan_body, ndt_R, ndt_p, p_.x(), corridor_degenerate);
+    if (corridor_degenerate && std::isfinite(temporal_x))
+    {
+      final_transform(0, 3) = temporal_x;
+      ROS_DEBUG_THROTTLE(1.0,
+                         "[DogPriorMap C++] corridor temporal x=%.3f ndt_x=%.3f confidence=%.3f",
+                         temporal_x, ndt_p.x(), corridor_sequence_localizer_.last_score());
+    }
+  }
   Eigen::Vector3d dp = Eigen::Vector3d::Zero();
   Eigen::Vector3d dtheta = Eigen::Vector3d::Zero();
   const bool had_previous_ndt_pose = ndt_has_previous_pose_;

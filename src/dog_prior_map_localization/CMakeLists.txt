@@ -41,6 +41,7 @@ add_executable(dog_prior_map_ekf_node_cpp
   src/map_loader.cpp
   src/imu_processor.cpp
   src/lidar_matcher.cpp
+  src/corridor_sequence_localizer.cpp
   src/vision_observation.cpp
   src/ros_output.cpp
   src/math_utils.cpp

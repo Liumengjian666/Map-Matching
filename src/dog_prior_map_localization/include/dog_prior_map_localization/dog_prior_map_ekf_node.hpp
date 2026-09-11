@@ -33,6 +33,7 @@
 #include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/registration/icp.h>
 #include <pcl/registration/ndt.h>
+#include "dog_prior_map_localization/corridor_sequence_localizer.hpp"
 #include <pcl_conversions/pcl_conversions.h>
 #include <ros/ros.h>
 #include <sensor_msgs/Image.h>
@@ -122,6 +123,7 @@ private:
   /// 根据匹配信息矩阵与地图几何分布更新 LiDAR 退化状态。
   bool updateLidarDegeneracyStatus(const Eigen::Matrix<double, 6, 6> &information_matrix,
                                    double geometry_degeneracy_score);
+  void initializeCorridorSequenceLocalizer();
 
   /// 评估图像质量、跟踪角点，并在 LiDAR 退化时触发视觉航向约束。
   void imageCallback(const sensor_msgs::ImageConstPtr &msg);
@@ -326,6 +328,14 @@ private:
   Eigen::Matrix4d ndt_previous_pose_ = Eigen::Matrix4d::Identity();
   Eigen::Matrix4d ndt_delta_pose_ = Eigen::Matrix4d::Identity();
   pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt_full_map_;
+  bool corridor_sequence_enable_ = false;
+  double corridor_sequence_bin_size_ = 0.5;
+  int corridor_sequence_length_ = 8;
+  int corridor_sequence_max_hypotheses_ = 5;
+  double corridor_sequence_search_radius_ = 8.0;
+  double corridor_axis_min_ = 0.0;
+  double corridor_axis_max_ = 0.0;
+  CorridorSequenceLocalizer corridor_sequence_localizer_;
   bool degeneracy_check_enable_ = true;
   double degeneracy_min_eigenvalue_ = 1e-3;
   double degeneracy_max_condition_number_ = 1e5;

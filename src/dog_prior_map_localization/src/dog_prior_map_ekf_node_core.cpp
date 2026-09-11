@@ -149,6 +149,13 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   degeneracy_project_update_enable_ = getParam<bool>("lidar_update/degeneracy_project_update_enable", true);
   degeneracy_project_eigen_ratio_ = getParam<double>("lidar_update/degeneracy_project_eigen_ratio", 0.03);
   degeneracy_project_min_scale_ = getParam<double>("lidar_update/degeneracy_project_min_scale", 0.10);
+  corridor_sequence_enable_ = getParam<bool>("lidar_update/corridor_sequence_enable", false);
+  corridor_sequence_bin_size_ = getParam<double>("lidar_update/corridor_sequence_bin_size", 0.5);
+  corridor_sequence_length_ = getParam<int>("lidar_update/corridor_sequence_length", 8);
+  corridor_sequence_max_hypotheses_ = getParam<int>("lidar_update/corridor_sequence_max_hypotheses", 5);
+  corridor_sequence_search_radius_ = getParam<double>("lidar_update/corridor_sequence_search_radius", 8.0);
+  corridor_axis_min_ = getParam<double>("lidar_update/corridor_axis_min", 0.0);
+  corridor_axis_max_ = getParam<double>("lidar_update/corridor_axis_max", 0.0);
   camera_enable_ = getParam<bool>("camera_update/enable", true);
   visual_feature_update_enable_ = getParam<bool>("camera_update/feature_update_enable", true);
   max_over_exposure_ratio_ = getParam<double>("camera_update/max_over_exposure_ratio", 0.25);
@@ -259,6 +266,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     prior_map_msg.header.frame_id = map_frame_;
     pub_prior_map_.publish(prior_map_msg);
   }
+  initializeCorridorSequenceLocalizer();
   path_high_.header.frame_id = map_frame_;
   path_corr_.header.frame_id = map_frame_;
 
