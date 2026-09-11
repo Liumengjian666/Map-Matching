@@ -407,11 +407,11 @@ private:
     }
 
     std_msgs::Float64 degeneracy_msg;
-    if (frame_degenerate && ndt_degeneracy_ratio_ > 1e-6)
+    if (std::isfinite(frame_degeneracy_ratio) && ndt_degeneracy_ratio_ > 1.0)
     {
       degeneracy_msg.data = std::max(0.0, std::min(1.0,
-          (frame_degeneracy_ratio - ndt_degeneracy_ratio_) /
-          ndt_degeneracy_ratio_));
+          (frame_degeneracy_ratio - 1.0) /
+          (ndt_degeneracy_ratio_ - 1.0)));
     }
     else
     {
