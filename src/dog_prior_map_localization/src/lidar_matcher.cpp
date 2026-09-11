@@ -264,10 +264,10 @@ void DogPriorMapEkfNode::handleLidarCloud(const pcl::PointCloud<pcl::PointXYZ>::
   std::lock_guard<std::mutex> lock(mutex_);
   const ros::WallTime wall_start = ros::WallTime::now();
   pcl::PointCloud<pcl::PointXYZ>::Ptr scan_body = preprocessScan(cloud_lidar);
-  publishFilteredCloud(scan_body, stamp);
   if (static_cast<int>(scan_body->size()) < min_effective_points_)
   {
     ++lidar_update_fail_count_;
+    publishFilteredCloud(scan_body, stamp);
     publishDiagnostics(stamp, false, 0.0, static_cast<int>(scan_body->size()),
                        map_cloud_ ? static_cast<int>(map_cloud_->size()) : 0,
                        std::numeric_limits<double>::infinity());
@@ -309,6 +309,10 @@ void DogPriorMapEkfNode::handleLidarCloud(const pcl::PointCloud<pcl::PointXYZ>::
       ++icp_update_fail_count_;
       ++lidar_update_fail_count_;
     }
+    // Publish after the correction so the displayed scan and pose use the
+    // same state.  Publishing before NDT made the scan appear tilted/offset
+    // whenever the current frame received a non-zero pose update.
+    publishFilteredCloud(scan_body, stamp);
     publishDiagnostics(stamp, ndt_ok, ndt_ms, static_cast<int>(scan_body->size()),
                        static_cast<int>(local_map->size()), last_registration_score_);
     maybePrintRuntime(stamp);
@@ -336,6 +340,9 @@ void DogPriorMapEkfNode::handleLidarCloud(const pcl::PointCloud<pcl::PointXYZ>::
   {
     ++lidar_update_fail_count_;
   }
+  // Keep the visualization synchronized with the final accepted/rejected
+  // state of this frame rather than the pre-update prediction.
+  publishFilteredCloud(scan_body, stamp);
   publishDiagnostics(stamp, ok, update_ms, static_cast<int>(scan_body->size()),
                      last_map_points_, mean_residual);
   maybePrintRuntime(stamp);
