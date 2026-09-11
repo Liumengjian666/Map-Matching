@@ -20,7 +20,7 @@ Visualization Manager:
   Class: ""
   Displays:
     - Class: rviz/TF
-      Enabled: false
+      Enabled: true
       Filter (blacklist): ""
       Filter (whitelist): ""
       Frame Timeout: 15
@@ -35,7 +35,7 @@ Visualization Manager:
       Tree:
         {}
       Update Interval: 0
-      Value: false
+      Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -80,14 +80,14 @@ Visualization Manager:
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Min Color: 0; 0; 0
-      Name: Aligned Current Scan
+      Name: Current Frame Scan
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
       Size (m): 0.029999999329447746
       Style: Flat Squares
-      Topic: /dog_livo/points_aligned
+      Topic: /dog_livo/filtered_points
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -108,7 +108,7 @@ Visualization Manager:
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Min Color: 0; 0; 0
-      Name: Raw Filtered Scan Body Frame
+      Name: Raw Filtered Scan Body Frame (disabled duplicate)
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
@@ -142,6 +142,30 @@ Visualization Manager:
       Shaft Diameter: 0.10000000149011612
       Shaft Length: 0.10000000149011612
       Topic: /dog_livo/path_corrected
+      Unreliable: false
+      Value: true
+    - Alpha: 1
+      Buffer Length: 1
+      Class: rviz/Path
+      Color: 255; 170; 0
+      Enabled: true
+      Head Diameter: 0.2
+      Head Length: 0.15
+      Length: 0.2
+      Line Style: Lines
+      Line Width: 0.08
+      Name: High-rate IMU Path
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Pose Color: 255; 170; 0
+      Pose Style: None
+      Queue Size: 10
+      Radius: 0.02
+      Shaft Diameter: 0.05
+      Shaft Length: 0.05
+      Topic: /dog_livo/path_high_rate
       Unreliable: false
       Value: true
   Enabled: true
