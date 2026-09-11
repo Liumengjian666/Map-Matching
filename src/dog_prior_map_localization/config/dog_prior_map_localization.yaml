@@ -189,7 +189,7 @@ camera_update:
 
 output:
   path_max_length: 5000
-  publish_path: false           # 机器狗部署建议false；RViz展示时可改true
+  publish_path: true            # RViz/回放默认显示完整历史轨迹
   publish_tf: true
   print_debug: true
   debug_interval_sec: 2.0       # 每隔几秒打印一次实时性统计

@@ -50,6 +50,10 @@ void DogPriorMapEkfNode::publishState(const ros::Time &stamp, bool corrected)
     {
       appendPath(path_high_, odom);
       pub_path_high_.publish(path_high_);
+      // Publish the fused trajectory on every high-rate propagation as well.
+      // Otherwise path_corrected only refreshes when a LiDAR correction is
+      // accepted and appears frozen/short during corridor degeneracy.
+      pub_path_corr_.publish(path_corr_);
     }
   }
 
