@@ -20,6 +20,7 @@
 #include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/registration/ndt.h>
+#include <pcl/registration/icp.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
@@ -204,6 +205,12 @@ public:
     information_degeneracy_enable_ = getParam<bool>("lidar_update/information_degeneracy_enable", true);
     information_condition_max_ = getParam<double>("lidar_update/information_condition_max", 1e5);
     information_correspondence_distance_ = getParam<double>("lidar_update/information_correspondence_distance", 0.8);
+    scan_to_scan_enable_ = getParam<bool>("lidar_update/scan_to_scan_enable", true);
+    scan_to_scan_max_iterations_ = getParam<int>("lidar_update/scan_to_scan_max_iterations", 12);
+    scan_to_scan_max_correspondence_distance_ = getParam<double>("lidar_update/scan_to_scan_max_correspondence_distance", 1.5);
+    scan_to_scan_fitness_epsilon_ = getParam<double>("lidar_update/scan_to_scan_fitness_epsilon", 0.001);
+    scan_to_scan_max_fitness_ = getParam<double>("lidar_update/scan_to_scan_max_fitness", 0.35);
+    scan_to_scan_max_translation_ = getParam<double>("lidar_update/scan_to_scan_max_translation", 1.0);
     publish_tf_ = getParam<bool>("output/ndt_publish_tf", false);
     publish_path_ = getParam<bool>("output/publish_path", false);
     publish_filtered_points_ = getParam<bool>("output/publish_filtered_points", true);
@@ -480,6 +487,8 @@ private:
     bool frame_degenerate = false;
     double frame_degeneracy_ratio = 1.0;
     bool information_degenerate = false;
+    Eigen::Matrix4d relative_motion = Eigen::Matrix4d::Identity();
+    bool relative_motion_ok = false;
     double information_condition = 1.0;
     double localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
     if (ok)
@@ -498,6 +507,14 @@ private:
                                            information_correspondence_distance_,
                                            information_weak, information_condition) &&
           information_condition > information_condition_max_;
+      // Only spend the extra registration cost in the suspected degenerate
+      // case.  ICP aligns the current scan to the previous scan, so its
+      // transform is directly usable as T(previous <- current).
+      if (information_degenerate && scan_to_scan_enable_ && previous_source_ &&
+          previous_source_->size() >= static_cast<size_t>(min_effective_points_))
+      {
+        relative_motion_ok = estimateRelativeMotion(source, previous_source_, relative_motion);
+      }
       frame_degenerate = degenerate;
       frame_degeneracy_ratio = degeneracy_ratio;
       if (degenerate && has_prediction_)
@@ -517,12 +534,17 @@ private:
         // ambiguous.  Continue with the previous-frame relative motion
         // instead of freezing the robot at the last globally matched place;
         // this is the temporal-observability fallback.
-        const Eigen::Matrix4d temporal_guess = has_previous_pose_
-            ? previous_pose_ * delta_pose_ : initial_guess;
-        const Eigen::Matrix4d delta = temporal_guess.inverse() * result;
-        Eigen::AngleAxisd aa(delta.block<3, 3>(0, 0));
+        const Eigen::Matrix4d temporal_guess = (has_previous_pose_ && relative_motion_ok)
+            ? previous_pose_ * relative_motion
+            : (has_previous_pose_ ? previous_pose_ * delta_pose_ : initial_guess);
         Eigen::Matrix<double, 6, 1> correction;
-        correction.head<3>() = delta.block<3, 1>(0, 3);
+        // The information Jacobian is expressed in map coordinates.  Keep
+        // both translation and rotation correction in that same frame before
+        // projecting the weak eigen-direction; using temporal_guess^{-1}*R
+        // here would silently mix body-frame translation with map-frame H.
+        correction.head<3>() = result.block<3, 1>(0, 3) - temporal_guess.block<3, 1>(0, 3);
+        Eigen::AngleAxisd aa(result.block<3, 3>(0, 0) *
+                             temporal_guess.block<3, 3>(0, 0).transpose());
         correction.tail<3>() = aa.axis() * aa.angle();
         const double weak_component = correction.dot(information_weak);
         correction -= (1.0 - std::max(0.0, std::min(1.0, ndt_degenerate_scale_))) *
@@ -533,7 +555,7 @@ private:
         if (angle > 1e-12)
           projected.block<3, 3>(0, 0) =
               Eigen::AngleAxisd(angle, correction.tail<3>() / angle).toRotationMatrix() *
-              initial_guess.block<3, 3>(0, 0);
+              temporal_guess.block<3, 3>(0, 0);
         used_result = projected;
       }
       step_limited = limitNdtStep(result, used_result);
@@ -546,6 +568,7 @@ private:
         has_previous_pose_ = true;
         delta_pose_.setIdentity();
       }
+      previous_source_.reset(new pcl::PointCloud<pcl::PointXYZ>(*source));
       previous_pose_ = used_result;
       R_ = used_result.block<3, 3>(0, 0);
       p_ = used_result.block<3, 1>(0, 3);
@@ -584,6 +607,32 @@ private:
     ROS_INFO_THROTTLE(1.0,
                       "[DogPriorMap NDT] conv=%d limited=%d source=%zu target=%zu align=%.2fms score=%.4f iter=%d p=(%.2f %.2f %.2f)",
                       ok ? 1 : 0, step_limited ? 1 : 0, source->size(), target_cloud_->size(), align_ms, score, iterations, p_.x(), p_.y(), p_.z());
+  }
+
+  // Estimate short-term motion without the prior map.  This is intentionally
+  // a fallback for corridor degeneracy only; normal frames retain the
+  // validated absolute NDT result and do not pay this cost.
+  bool estimateRelativeMotion(const pcl::PointCloud<pcl::PointXYZ>::Ptr &current,
+                              const pcl::PointCloud<pcl::PointXYZ>::Ptr &previous,
+                              Eigen::Matrix4d &motion) const
+  {
+    if (!current || !previous || current->empty() || previous->empty()) return false;
+    pcl::IterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ> icp;
+    icp.setInputSource(current);
+    icp.setInputTarget(previous);
+    icp.setMaximumIterations(scan_to_scan_max_iterations_);
+    icp.setMaxCorrespondenceDistance(scan_to_scan_max_correspondence_distance_);
+    icp.setTransformationEpsilon(1e-4);
+    icp.setEuclideanFitnessEpsilon(scan_to_scan_fitness_epsilon_);
+    pcl::PointCloud<pcl::PointXYZ> aligned;
+    icp.align(aligned);
+    if (!icp.hasConverged()) return false;
+    const double score = icp.getFitnessScore();
+    if (!std::isfinite(score) || score > scan_to_scan_max_fitness_) return false;
+    motion = icp.getFinalTransformation().cast<double>();
+    const Eigen::Vector3d dp = motion.block<3,1>(0,3);
+    if (!motion.allFinite() || dp.norm() > scan_to_scan_max_translation_) return false;
+    return true;
   }
 
   // 使用给定齐次变换把源点云转换到地图坐标系。
@@ -804,6 +853,7 @@ private:
   bool has_previous_pose_ = false;
   Eigen::Matrix4d previous_pose_ = Eigen::Matrix4d::Identity();
   Eigen::Matrix4d delta_pose_ = Eigen::Matrix4d::Identity();
+  pcl::PointCloud<pcl::PointXYZ>::Ptr previous_source_;
   bool has_prediction_ = false;
   Eigen::Matrix4d imu_prediction_pose_ = Eigen::Matrix4d::Identity();
   ros::Time prediction_stamp_;
@@ -837,6 +887,12 @@ private:
   bool information_degeneracy_enable_ = true;
   double information_condition_max_ = 1e5;
   double information_correspondence_distance_ = 0.8;
+  bool scan_to_scan_enable_ = true;
+  int scan_to_scan_max_iterations_ = 12;
+  double scan_to_scan_max_correspondence_distance_ = 1.5;
+  double scan_to_scan_fitness_epsilon_ = 0.001;
+  double scan_to_scan_max_fitness_ = 0.35;
+  double scan_to_scan_max_translation_ = 1.0;
   bool deskew_enable_ = false;
   double lidar_offset_time_scale_ = 1e-9;
   double imu_history_keep_sec_ = 2.0;

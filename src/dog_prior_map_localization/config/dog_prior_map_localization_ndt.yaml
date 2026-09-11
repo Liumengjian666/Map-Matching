@@ -101,8 +101,20 @@ lidar_update:
   ndt_degenerate_scale: 0.15
   # Experimental 6DoF information-matrix guard; baseline keeps it off.
   information_degeneracy_enable: true
+  # Ordinary scenes reach roughly 10^2--10^3 with this point-to-point
+  # approximation; reserve the fallback for the clearly corridor-like tail.
   information_condition_max: 500.0
   information_correspondence_distance: 0.8
+  # Scan-to-scan fallback is evaluated only when the information matrix says
+  # the absolute map match is degenerate.
+  # Disabled by default: raw scan-to-scan ICP is ambiguous in the same
+  # repetitive corridor and was observed to introduce lateral drift.
+  scan_to_scan_enable: false
+  scan_to_scan_max_iterations: 12
+  scan_to_scan_max_correspondence_distance: 1.5
+  scan_to_scan_fitness_epsilon: 0.001
+  scan_to_scan_max_fitness: 0.35
+  scan_to_scan_max_translation: 1.0
 
 camera_update:
   enable: true
