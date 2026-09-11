@@ -17,6 +17,7 @@
 #include <nav_msgs/Odometry.h>
 #include <nav_msgs/Path.h>
 #include <pcl/filters/voxel_grid.h>
+#include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/registration/ndt.h>
 #include <pcl_conversions/pcl_conversions.h>
@@ -30,6 +31,15 @@ namespace dog_prior_map_localization
 {
 namespace
 {
+Eigen::Matrix3d skew(const Eigen::Vector3d &v)
+{
+  Eigen::Matrix3d m;
+  m << 0.0, -v.z(), v.y(),
+       v.z(), 0.0, -v.x(),
+       -v.y(), v.x(), 0.0;
+  return m;
+}
+
 // 更新点云尺寸和稠密属性，确保后续 PCL 算法获得合法的组织信息。
 void finalizeCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud)
 {
@@ -96,6 +106,49 @@ bool estimateWeakDirection(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
   return weak_direction.allFinite();
 }
 
+// Build a lightweight 6-DoF point-to-point information matrix at the NDT
+// solution.  This is independent of PCL's internal NDT covariance and gives
+// us an explicit observability test for the corridor experiment.
+bool estimateInformationWeakDirection(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
+                                      const pcl::PointCloud<pcl::PointXYZ>::Ptr &target,
+                                      const Eigen::Matrix4d &pose,
+                                      double max_correspondence_distance,
+                                      Eigen::Matrix<double, 6, 1> &weak,
+                                      double &condition)
+{
+  if (!source || !target || source->empty() || target->empty()) return false;
+  pcl::KdTreeFLANN<pcl::PointXYZ> tree;
+  tree.setInputCloud(target);
+  Eigen::Matrix<double, 6, 6> H = Eigen::Matrix<double, 6, 6>::Zero();
+  std::vector<int> idx(1);
+  std::vector<float> dist2(1);
+  const Eigen::Matrix3d R = pose.block<3, 3>(0, 0);
+  const Eigen::Vector3d p = pose.block<3, 1>(0, 3);
+  int used = 0;
+  for (const auto &pt : source->points)
+  {
+    const Eigen::Vector3d pb(pt.x, pt.y, pt.z);
+    const Eigen::Vector3d pw = R * pb + p;
+    pcl::PointXYZ query(pw.x(), pw.y(), pw.z());
+    if (tree.nearestKSearch(query, 1, idx, dist2) <= 0) continue;
+    if (max_correspondence_distance > 0.0 && std::sqrt(dist2[0]) > max_correspondence_distance) continue;
+    Eigen::Matrix<double, 3, 6> J = Eigen::Matrix<double, 3, 6>::Zero();
+    J.block<3, 3>(0, 0) = Eigen::Matrix3d::Identity();
+    J.block<3, 3>(0, 3) = -skew(pw);
+    H.noalias() += J.transpose() * J;
+    ++used;
+  }
+  if (used < 20) return false;
+  Eigen::SelfAdjointEigenSolver<Eigen::Matrix<double, 6, 6>> solver(H);
+  if (solver.info() != Eigen::Success) return false;
+  const auto eval = solver.eigenvalues();
+  const double min_eval = std::max(eval[0], 1e-12);
+  const double max_eval = std::max(eval[5], 1e-12);
+  condition = max_eval / min_eval;
+  weak = solver.eigenvectors().col(0).normalized();
+  return weak.allFinite() && std::isfinite(condition);
+}
+
 }  // namespace
 
 class DogPriorMapNdtNode
@@ -148,6 +201,9 @@ public:
     ndt_degeneracy_radius_ = getParam<double>("lidar_update/ndt_degeneracy_radius", 15.0);
     ndt_degeneracy_ratio_ = getParam<double>("lidar_update/ndt_degeneracy_ratio", 3.0);
     ndt_degenerate_scale_ = getParam<double>("lidar_update/ndt_degenerate_scale", 0.15);
+    information_degeneracy_enable_ = getParam<bool>("lidar_update/information_degeneracy_enable", true);
+    information_condition_max_ = getParam<double>("lidar_update/information_condition_max", 1e5);
+    information_correspondence_distance_ = getParam<double>("lidar_update/information_correspondence_distance", 0.8);
     publish_tf_ = getParam<bool>("output/ndt_publish_tf", false);
     publish_path_ = getParam<bool>("output/publish_path", false);
     publish_filtered_points_ = getParam<bool>("output/publish_filtered_points", true);
@@ -423,6 +479,8 @@ private:
     bool step_limited = false;
     bool frame_degenerate = false;
     double frame_degeneracy_ratio = 1.0;
+    bool information_degenerate = false;
+    double information_condition = 1.0;
     double localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
     if (ok)
     {
@@ -434,6 +492,12 @@ private:
           estimateWeakDirection(map_cloud_, initial_guess.block<3, 1>(0, 3),
                                 ndt_degeneracy_radius_, ndt_degeneracy_ratio_,
                                 weak_direction, degeneracy_ratio);
+      Eigen::Matrix<double, 6, 1> information_weak = Eigen::Matrix<double, 6, 1>::Zero();
+      information_degenerate = information_degeneracy_enable_ &&
+          estimateInformationWeakDirection(source, target_cloud_, result,
+                                           information_correspondence_distance_,
+                                           information_weak, information_condition) &&
+          information_condition > information_condition_max_;
       frame_degenerate = degenerate;
       frame_degeneracy_ratio = degeneracy_ratio;
       if (degenerate && has_prediction_)
@@ -446,6 +510,25 @@ private:
         ROS_DEBUG_THROTTLE(1.0,
                            "[DogPriorMap NDT] degenerate update ratio=%.2f weak=(%.2f %.2f %.2f)",
                            degeneracy_ratio, weak_direction.x(), weak_direction.y(), weak_direction.z());
+      }
+      if (information_degenerate && has_prediction_)
+      {
+        const Eigen::Matrix4d delta = initial_guess.inverse() * result;
+        Eigen::AngleAxisd aa(delta.block<3, 3>(0, 0));
+        Eigen::Matrix<double, 6, 1> correction;
+        correction.head<3>() = delta.block<3, 1>(0, 3);
+        correction.tail<3>() = aa.axis() * aa.angle();
+        const double weak_component = correction.dot(information_weak);
+        correction -= (1.0 - std::max(0.0, std::min(1.0, ndt_degenerate_scale_))) *
+                      weak_component * information_weak;
+        Eigen::Matrix4d projected = initial_guess;
+        projected.block<3, 1>(0, 3) += correction.head<3>();
+        const double angle = correction.tail<3>().norm();
+        if (angle > 1e-12)
+          projected.block<3, 3>(0, 0) =
+              Eigen::AngleAxisd(angle, correction.tail<3>() / angle).toRotationMatrix() *
+              initial_guess.block<3, 3>(0, 0);
+        used_result = projected;
       }
       step_limited = limitNdtStep(result, used_result);
       if (has_previous_pose_)
@@ -490,6 +573,8 @@ private:
                        static_cast<int>(source->size()), target_cloud_->size(), score, iterations, step_limited);
     ROS_INFO_THROTTLE(2.0, "[DogPriorMap NDT] local_anisotropy=%.3f degenerate=%d",
                        frame_degeneracy_ratio, frame_degenerate ? 1 : 0);
+    ROS_INFO_THROTTLE(2.0, "[DogPriorMap NDT] information_condition=%.3g degenerate=%d",
+                       information_condition, information_degenerate ? 1 : 0);
     ROS_INFO_THROTTLE(1.0,
                       "[DogPriorMap NDT] conv=%d limited=%d source=%zu target=%zu align=%.2fms score=%.4f iter=%d p=(%.2f %.2f %.2f)",
                       ok ? 1 : 0, step_limited ? 1 : 0, source->size(), target_cloud_->size(), align_ms, score, iterations, p_.x(), p_.y(), p_.z());
@@ -743,6 +828,9 @@ private:
   double ndt_degeneracy_radius_ = 15.0;
   double ndt_degeneracy_ratio_ = 8.0;
   double ndt_degenerate_scale_ = 0.15;
+  bool information_degeneracy_enable_ = true;
+  double information_condition_max_ = 1e5;
+  double information_correspondence_distance_ = 0.8;
   bool deskew_enable_ = false;
   double lidar_offset_time_scale_ = 1e-9;
   double imu_history_keep_sec_ = 2.0;
