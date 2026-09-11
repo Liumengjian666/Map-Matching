@@ -17,6 +17,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   lidar_msg_type_ = getParam<std::string>("topics/lidar_msg_type", "livox");
   image_topic_ = getParam<std::string>("topics/image", "/image_left/image_rect");
   ndt_observation_topic_ = getParam<std::string>("topics/ndt_odom", "/dog_livo/ndt_odom");
+  lidar_degeneracy_topic_ = getParam<std::string>("topics/lidar_degeneracy", "/dog_livo/lidar_degeneracy");
   odom_high_rate_topic_ = getParam<std::string>("topics/odom_high_rate", "/dog_livo/odom_high_rate");
   imu_propagate_topic_ = getParam<std::string>("topics/imu_propagate", "/LIVO2/imu_propagate");
   odom_corrected_topic_ = getParam<std::string>("topics/odom_corrected", "/dog_livo/odom_corrected");
@@ -247,6 +248,8 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     sub_ndt_observation_ = nh_.subscribe(
         ndt_observation_topic_, 10, &DogPriorMapEkfNode::ndtObservationCallback, this);
   }
+  sub_lidar_degeneracy_ = nh_.subscribe(
+      lidar_degeneracy_topic_, 10, &DogPriorMapEkfNode::lidarDegeneracyCallback, this);
   if (lidar_enable_)
   {
     if (lidar_msg_type_ == "pointcloud2")

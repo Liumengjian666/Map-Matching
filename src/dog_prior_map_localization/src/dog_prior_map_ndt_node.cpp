@@ -21,6 +21,7 @@
 #include <pcl_conversions/pcl_conversions.h>
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
+#include <std_msgs/Float64.h>
 #include <tf/transform_broadcaster.h>
 
 namespace dog_prior_map_localization
@@ -52,6 +53,45 @@ double rotationAngleDeg(const Eigen::Matrix3d &R)
   return std::abs(angle_axis.angle()) * 180.0 / M_PI;
 }
 
+bool estimateWeakDirection(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
+                           const Eigen::Vector3d &center,
+                           double radius,
+                           double min_ratio,
+                           Eigen::Vector3d &weak_direction,
+                           double &anisotropy_ratio)
+{
+  if (!cloud || cloud->empty()) return false;
+  Eigen::Vector3d mean = Eigen::Vector3d::Zero();
+  int count = 0;
+  const double radius_sq = radius > 0.0 ? radius * radius : std::numeric_limits<double>::infinity();
+  for (const auto &pt : cloud->points)
+  {
+    const Eigen::Vector3d d(pt.x - center.x(), pt.y - center.y(), pt.z - center.z());
+    if (d.squaredNorm() > radius_sq) continue;
+    mean += d;
+    ++count;
+  }
+  if (count < 50) return false;
+  mean /= static_cast<double>(count);
+  Eigen::Matrix3d covariance = Eigen::Matrix3d::Zero();
+  for (const auto &pt : cloud->points)
+  {
+    const Eigen::Vector3d d(pt.x - center.x(), pt.y - center.y(), pt.z - center.z());
+    if (d.squaredNorm() > radius_sq) continue;
+    const Eigen::Vector3d centered = d - mean;
+    covariance += centered * centered.transpose();
+  }
+  covariance /= static_cast<double>(count);
+  Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> solver(covariance);
+  if (solver.info() != Eigen::Success) return false;
+  const Eigen::Vector3d values = solver.eigenvalues();
+  const double middle = std::max(values(1), 1e-6);
+  anisotropy_ratio = values(2) / middle;
+  if (!std::isfinite(anisotropy_ratio) || anisotropy_ratio < min_ratio) return false;
+  weak_direction = solver.eigenvectors().col(2).normalized();
+  return weak_direction.allFinite();
+}
+
 }  // namespace
 
 class DogPriorMapNdtNode
@@ -67,9 +107,11 @@ public:
     filtered_points_topic_ = getParam<std::string>("topics/filtered_points", "/dog_livo/filtered_points");
     diagnostics_topic_ = getParam<std::string>("topics/diagnostics", "/dog_livo/diagnostics");
     ndt_odom_topic_ = getParam<std::string>("topics/ndt_odom", "/dog_livo/ndt_odom");
+    lidar_degeneracy_topic_ = getParam<std::string>("topics/lidar_degeneracy", "/dog_livo/lidar_degeneracy");
     ndt_pose_topic_ = getParam<std::string>("topics/ndt_pose", "/dog_livo/ndt_pose");
     ndt_path_topic_ = getParam<std::string>("topics/ndt_path", "/dog_livo/ndt_path");
     points_aligned_topic_ = getParam<std::string>("topics/points_aligned", "/dog_livo/points_aligned");
+    prediction_topic_ = getParam<std::string>("topics/odom_high_rate", "/dog_livo/odom_high_rate");
 
     map_pcd_path_ = getParam<std::string>("map/pcd_fallback_path", "");
     map_voxel_size_ = getParam<double>("map/voxel_size", 0.30);
@@ -92,6 +134,12 @@ public:
     ndt_step_limit_enable_ = getParam<bool>("lidar_update/ndt_step_limit_enable", false);
     ndt_step_limit_max_translation_ = getParam<double>("lidar_update/ndt_step_limit_max_translation", 0.5);
     ndt_step_limit_max_rotation_deg_ = getParam<double>("lidar_update/ndt_step_limit_max_rotation_deg", 5.0);
+    ndt_prediction_enable_ = getParam<bool>("lidar_update/ndt_prediction_enable", true);
+    ndt_prediction_max_age_ = getParam<double>("lidar_update/ndt_prediction_max_age", 0.25);
+    ndt_degeneracy_enable_ = getParam<bool>("lidar_update/ndt_degeneracy_enable", true);
+    ndt_degeneracy_radius_ = getParam<double>("lidar_update/ndt_degeneracy_radius", 15.0);
+    ndt_degeneracy_ratio_ = getParam<double>("lidar_update/ndt_degeneracy_ratio", 8.0);
+    ndt_degenerate_scale_ = getParam<double>("lidar_update/ndt_degenerate_scale", 0.15);
     publish_tf_ = getParam<bool>("output/ndt_publish_tf", false);
     publish_path_ = getParam<bool>("output/publish_path", false);
     publish_filtered_points_ = getParam<bool>("output/publish_filtered_points", true);
@@ -100,6 +148,7 @@ public:
     loadMap();
 
     pub_odom_ = nh_.advertise<nav_msgs::Odometry>(ndt_odom_topic_, 20);
+    pub_lidar_degeneracy_ = nh_.advertise<std_msgs::Float64>(lidar_degeneracy_topic_, 20);
     pub_pose_ = nh_.advertise<geometry_msgs::PoseStamped>(ndt_pose_topic_, 20);
     pub_path_ = nh_.advertise<nav_msgs::Path>(ndt_path_topic_, 5);
     pub_aligned_ = nh_.advertise<sensor_msgs::PointCloud2>(points_aligned_topic_, 5);
@@ -121,9 +170,28 @@ public:
     {
       sub_livox_ = nh_.subscribe(lidar_topic_, 5, &DogPriorMapNdtNode::livoxCallback, this);
     }
+    sub_prediction_ = nh_.subscribe(prediction_topic_, 20,
+                                    &DogPriorMapNdtNode::predictionCallback, this);
 
     ROS_INFO("[DogPriorMap NDT] started: map=%s target=%zu lidar=%s output=%s",
              map_pcd_path_.c_str(), target_cloud_->size(), lidar_topic_.c_str(), ndt_odom_topic_.c_str());
+  }
+
+  void predictionCallback(const nav_msgs::OdometryConstPtr &msg)
+  {
+    if (!msg) return;
+    std::lock_guard<std::mutex> lock(mutex_);
+    Eigen::Quaterniond q(msg->pose.pose.orientation.w, msg->pose.pose.orientation.x,
+                         msg->pose.pose.orientation.y, msg->pose.pose.orientation.z);
+    if (!q.coeffs().allFinite() || q.norm() < 1e-6) return;
+    q.normalize();
+    imu_prediction_pose_.setIdentity();
+    imu_prediction_pose_.block<3, 3>(0, 0) = q.toRotationMatrix();
+    imu_prediction_pose_(0, 3) = msg->pose.pose.position.x;
+    imu_prediction_pose_(1, 3) = msg->pose.pose.position.y;
+    imu_prediction_pose_(2, 3) = msg->pose.pose.position.z;
+    prediction_stamp_ = msg->header.stamp;
+    has_prediction_ = true;
   }
 
 private:
@@ -263,7 +331,13 @@ private:
     }
 
     Eigen::Matrix4d initial_guess = poseToMatrix(p_, R_);
-    if (has_previous_pose_)
+    if (ndt_prediction_enable_ && has_prediction_ &&
+        (stamp - prediction_stamp_).toSec() >= -0.05 &&
+        (stamp - prediction_stamp_).toSec() <= ndt_prediction_max_age_)
+    {
+      initial_guess = imu_prediction_pose_;
+    }
+    else if (has_previous_pose_)
     {
       initial_guess = previous_pose_ * delta_pose_;
     }
@@ -278,11 +352,32 @@ private:
     const int iterations = ndt_.getFinalNumIteration();
 
     bool step_limited = false;
+    bool frame_degenerate = false;
+    double frame_degeneracy_ratio = 1.0;
     double localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
     if (ok)
     {
       const Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
       Eigen::Matrix4d used_result = result;
+      Eigen::Vector3d weak_direction = Eigen::Vector3d::Zero();
+      double degeneracy_ratio = 1.0;
+      const bool degenerate = ndt_degeneracy_enable_ &&
+          estimateWeakDirection(map_cloud_, initial_guess.block<3, 1>(0, 3),
+                                ndt_degeneracy_radius_, ndt_degeneracy_ratio_,
+                                weak_direction, degeneracy_ratio);
+      frame_degenerate = degenerate;
+      frame_degeneracy_ratio = degeneracy_ratio;
+      if (degenerate && has_prediction_)
+      {
+        const Eigen::Vector3d correction = result.block<3, 1>(0, 3) - initial_guess.block<3, 1>(0, 3);
+        const double weak_component = correction.dot(weak_direction);
+        used_result.block<3, 1>(0, 3) = result.block<3, 1>(0, 3) -
+            (1.0 - std::max(0.0, std::min(1.0, ndt_degenerate_scale_))) *
+            weak_component * weak_direction;
+        ROS_DEBUG_THROTTLE(1.0,
+                           "[DogPriorMap NDT] degenerate update ratio=%.2f weak=(%.2f %.2f %.2f)",
+                           degeneracy_ratio, weak_direction.x(), weak_direction.y(), weak_direction.z());
+      }
       step_limited = limitNdtStep(result, used_result);
       if (has_previous_pose_)
       {
@@ -308,6 +403,19 @@ private:
         publishAlignedCloud(aligned, stamp);
       }
     }
+
+    std_msgs::Float64 degeneracy_msg;
+    if (frame_degenerate && ndt_degeneracy_ratio_ > 1e-6)
+    {
+      degeneracy_msg.data = std::max(0.0, std::min(1.0,
+          (frame_degeneracy_ratio - ndt_degeneracy_ratio_) /
+          ndt_degeneracy_ratio_));
+    }
+    else
+    {
+      degeneracy_msg.data = 0.0;
+    }
+    pub_lidar_degeneracy_.publish(degeneracy_msg);
 
     publishDiagnostics(stamp, ok, align_ms, preprocess_ms, localization_ms,
                        static_cast<int>(source->size()), target_cloud_->size(), score, iterations, step_limited);
@@ -489,7 +597,9 @@ private:
   ros::NodeHandle pnh_;
   ros::Subscriber sub_livox_;
   ros::Subscriber sub_pc2_;
+  ros::Subscriber sub_prediction_;
   ros::Publisher pub_odom_;
+  ros::Publisher pub_lidar_degeneracy_;
   ros::Publisher pub_pose_;
   ros::Publisher pub_path_;
   ros::Publisher pub_filtered_;
@@ -505,10 +615,12 @@ private:
   std::string filtered_points_topic_;
   std::string diagnostics_topic_;
   std::string ndt_odom_topic_;
+  std::string lidar_degeneracy_topic_;
   std::string ndt_pose_topic_;
   std::string ndt_path_topic_;
   std::string points_aligned_topic_;
   std::string map_pcd_path_;
+  std::string prediction_topic_;
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud_;
   pcl::PointCloud<pcl::PointXYZ>::Ptr target_cloud_;
@@ -520,6 +632,9 @@ private:
   bool has_previous_pose_ = false;
   Eigen::Matrix4d previous_pose_ = Eigen::Matrix4d::Identity();
   Eigen::Matrix4d delta_pose_ = Eigen::Matrix4d::Identity();
+  bool has_prediction_ = false;
+  Eigen::Matrix4d imu_prediction_pose_ = Eigen::Matrix4d::Identity();
+  ros::Time prediction_stamp_;
 
   double map_voxel_size_ = 0.30;
   double map_voxel_z_size_ = 0.30;
@@ -541,6 +656,12 @@ private:
   bool ndt_step_limit_enable_ = false;
   double ndt_step_limit_max_translation_ = 0.5;
   double ndt_step_limit_max_rotation_deg_ = 5.0;
+  bool ndt_prediction_enable_ = true;
+  double ndt_prediction_max_age_ = 0.25;
+  bool ndt_degeneracy_enable_ = true;
+  double ndt_degeneracy_radius_ = 15.0;
+  double ndt_degeneracy_ratio_ = 8.0;
+  double ndt_degenerate_scale_ = 0.15;
   bool publish_tf_ = true;
   bool publish_path_ = false;
   bool publish_filtered_points_ = true;

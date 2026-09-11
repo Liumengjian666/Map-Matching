@@ -3,6 +3,14 @@
 namespace dog_prior_map_localization
 {
 
+void DogPriorMapEkfNode::lidarDegeneracyCallback(const std_msgs::Float64ConstPtr &msg)
+{
+  if (!msg || !std::isfinite(msg->data)) return;
+  std::lock_guard<std::mutex> lock(mutex_);
+  lidar_degeneracy_score_ = std::max(0.0, std::min(1.0, msg->data));
+  lidar_degenerate_ = lidar_degeneracy_score_ >= min_degeneracy_score_for_visual_;
+}
+
 // 图像主回调：检查曝光与特征质量，跟踪相邻帧角点并决定是否提供视觉约束。
 void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
 {

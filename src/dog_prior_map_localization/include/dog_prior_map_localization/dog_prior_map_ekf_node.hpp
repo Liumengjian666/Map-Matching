@@ -38,6 +38,7 @@
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/Imu.h>
 #include <sensor_msgs/PointCloud2.h>
+#include <std_msgs/Float64.h>
 #include <tf/transform_broadcaster.h>
 
 namespace dog_prior_map_localization
@@ -133,6 +134,7 @@ private:
                                 double weight_scale);
   /// 将独立 NDT 节点输出作为低频外部观测融合到 EKF 状态中。
   void ndtObservationCallback(const nav_msgs::OdometryConstPtr &msg);
+  void lidarDegeneracyCallback(const std_msgs::Float64ConstPtr &msg);
 
   /// 发布当前里程计，并按配置同步发布路径、TF 和兼容话题。
   void publishState(const ros::Time &stamp, bool corrected);
@@ -158,6 +160,7 @@ private:
   ros::Subscriber sub_pc2_;
   ros::Subscriber sub_image_;
   ros::Subscriber sub_ndt_observation_;
+  ros::Subscriber sub_lidar_degeneracy_;
   ros::Publisher pub_high_;
   ros::Publisher pub_imu_propagate_;
   ros::Publisher pub_corr_;
@@ -181,6 +184,7 @@ private:
   std::string lidar_msg_type_;
   std::string image_topic_;
   std::string ndt_observation_topic_;
+  std::string lidar_degeneracy_topic_;
   std::string odom_high_rate_topic_;
   std::string imu_propagate_topic_;
   std::string odom_corrected_topic_;
