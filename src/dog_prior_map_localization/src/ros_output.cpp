@@ -23,12 +23,19 @@ void DogPriorMapEkfNode::publishState(const ros::Time &stamp, bool corrected)
   odom.twist.twist.linear.y = v_.y();
   odom.twist.twist.linear.z = v_.z();
 
+  // Keep a complete fused trajectory history.  The split NDT node appends
+  // every accepted frame to its path; doing the same here avoids a path that
+  // only contains successful correction instants.
+  if (publish_path_)
+  {
+    appendPath(path_corr_, odom);
+  }
+
   if (corrected)
   {
     pub_corr_.publish(odom);
     if (publish_path_)
     {
-      appendPath(path_corr_, odom);
       pub_path_corr_.publish(path_corr_);
     }
   }
@@ -61,10 +68,27 @@ void DogPriorMapEkfNode::publishFilteredCloud(const pcl::PointCloud<pcl::PointXY
 {
   if (!publish_filtered_points_ || !pub_filtered_points_ || !scan_body) return;
 
+  // Publish the current scan in the map frame, matching the split NDT
+  // visualisation (/points_aligned).  This avoids relying on RViz to apply a
+  // moving base_link TF to a body-frame cloud and makes map/scan overlap
+  // immediately visible.
+  pcl::PointCloud<pcl::PointXYZ> scan_map;
+  scan_map.reserve(scan_body->size());
+  for (const auto &pt : scan_body->points)
+  {
+    const Eigen::Vector3d q = R_ * Eigen::Vector3d(pt.x, pt.y, pt.z) + p_;
+    scan_map.emplace_back(static_cast<float>(q.x()),
+                          static_cast<float>(q.y()),
+                          static_cast<float>(q.z()));
+  }
+  scan_map.width = static_cast<uint32_t>(scan_map.size());
+  scan_map.height = 1;
+  scan_map.is_dense = true;
+
   sensor_msgs::PointCloud2 msg;
-  pcl::toROSMsg(*scan_body, msg);
+  pcl::toROSMsg(scan_map, msg);
   msg.header.stamp = stamp;
-  msg.header.frame_id = base_frame_;
+  msg.header.frame_id = map_frame_;
   pub_filtered_points_.publish(msg);
 }
 
