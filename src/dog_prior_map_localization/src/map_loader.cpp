@@ -3,20 +3,6 @@
 namespace dog_prior_map_localization
 {
 
-void DogPriorMapEkfNode::initializeCorridorSequenceLocalizer()
-{
-  corridor_sequence_localizer_.configure(corridor_sequence_enable_, corridor_sequence_bin_size_,
-                                         corridor_sequence_length_, corridor_sequence_max_hypotheses_,
-                                         corridor_sequence_search_radius_, corridor_axis_min_, corridor_axis_max_);
-  if (corridor_sequence_enable_ && map_cloud_ && !map_cloud_->empty())
-  {
-    corridor_sequence_localizer_.buildMap(map_cloud_);
-    ROS_INFO("[DogPriorMap C++] corridor sequence localizer: enabled=%d ready=%d binsize=%.2f hypotheses=%d",
-             corridor_sequence_enable_, corridor_sequence_localizer_.ready(), corridor_sequence_bin_size_,
-             corridor_sequence_max_hypotheses_);
-  }
-}
-
 // 加载先验地图、执行体素降采样，并建立后续最近邻匹配使用的 KD 树。
 void DogPriorMapEkfNode::loadPriorMap()
 {

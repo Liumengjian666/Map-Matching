@@ -33,7 +33,6 @@
 #include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/registration/icp.h>
 #include <pcl/registration/ndt.h>
-#include "dog_prior_map_localization/corridor_sequence_localizer.hpp"
 #include <pcl_conversions/pcl_conversions.h>
 #include <ros/ros.h>
 #include <sensor_msgs/Image.h>
@@ -123,7 +122,6 @@ private:
   /// 根据匹配信息矩阵与地图几何分布更新 LiDAR 退化状态。
   bool updateLidarDegeneracyStatus(const Eigen::Matrix<double, 6, 6> &information_matrix,
                                    double geometry_degeneracy_score);
-  void initializeCorridorSequenceLocalizer();
 
   /// 评估图像质量、跟踪角点，并在 LiDAR 退化时触发视觉航向约束。
   void imageCallback(const sensor_msgs::ImageConstPtr &msg);
@@ -135,9 +133,6 @@ private:
                                 double weight_scale);
   /// 将独立 NDT 节点输出作为低频外部观测融合到 EKF 状态中。
   void ndtObservationCallback(const nav_msgs::OdometryConstPtr &msg);
-  /// 发布可靠性自适应融合的创新一致性和协方差膨胀诊断。
-  void publishNdtFusionDiagnostics(const ros::Time &stamp, bool accepted,
-                                   double nis, double covariance_inflation);
 
   /// 发布当前里程计，并按配置同步发布路径、TF 和兼容话题。
   void publishState(const ros::Time &stamp, bool corrected);
@@ -215,12 +210,10 @@ private:
   bool use_acc_for_position_ = false;
   double velocity_damping_ = 0.98;
   bool initialize_gravity_from_imu_ = true;
-  bool initialize_gyro_bias_from_imu_ = true;
   bool gravity_initialized_ = false;
   int init_imu_samples_ = 200;
   int imu_init_count_ = 0;
   Eigen::Vector3d imu_acc_sum_ = Eigen::Vector3d::Zero();
-  Eigen::Vector3d imu_gyr_sum_ = Eigen::Vector3d::Zero();
   bool continuous_gravity_correction_enable_ = true;
   double gravity_correction_expected_acc_norm_ = 1.0;
   double gravity_correction_gain_ = 0.01;
@@ -238,18 +231,10 @@ private:
   double imu_history_keep_sec_ = 2.0;
 
   bool ndt_observation_enable_ = false;
-  std::string ndt_observation_fusion_mode_ = "legacy_blend";
-  double ndt_observation_nis_threshold_ = 22.458;
-  double ndt_observation_hard_reject_nis_threshold_ = 0.0;
-  double ndt_observation_max_covariance_inflation_ = 100.0;
-  double ndt_observation_fixed_position_std_ = 0.08;
-  double ndt_observation_fixed_rotation_std_ = M_PI / 180.0;
   double ndt_observation_apply_ratio_ = 0.8;
   double ndt_observation_z_apply_ratio_ = 1.0;
   double ndt_observation_roll_pitch_apply_ratio_ = 1.0;
   double ndt_observation_max_translation_correction_ = 1.0;
-  // Reject a fused NDT result if the final state jumps too far in one update.
-  double ndt_observation_max_frame_translation_ = 0.5;
   double ndt_observation_max_rotation_correction_ = 5.0 * M_PI / 180.0;
   double ndt_observation_velocity_blend_ = 0.6;
   double last_ndt_observation_time_ = 0.0;
@@ -328,14 +313,6 @@ private:
   Eigen::Matrix4d ndt_previous_pose_ = Eigen::Matrix4d::Identity();
   Eigen::Matrix4d ndt_delta_pose_ = Eigen::Matrix4d::Identity();
   pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt_full_map_;
-  bool corridor_sequence_enable_ = false;
-  double corridor_sequence_bin_size_ = 0.5;
-  int corridor_sequence_length_ = 8;
-  int corridor_sequence_max_hypotheses_ = 5;
-  double corridor_sequence_search_radius_ = 8.0;
-  double corridor_axis_min_ = 0.0;
-  double corridor_axis_max_ = 0.0;
-  CorridorSequenceLocalizer corridor_sequence_localizer_;
   bool degeneracy_check_enable_ = true;
   double degeneracy_min_eigenvalue_ = 1e-3;
   double degeneracy_max_condition_number_ = 1e5;

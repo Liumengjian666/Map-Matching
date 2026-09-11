@@ -16,14 +16,12 @@
 #include <nav_msgs/Odometry.h>
 #include <nav_msgs/Path.h>
 #include <pcl/filters/voxel_grid.h>
-#include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/registration/ndt.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <tf/transform_broadcaster.h>
-#include "dog_prior_map_localization/corridor_sequence_localizer.hpp"
 
 namespace dog_prior_map_localization
 {
@@ -54,11 +52,6 @@ double rotationAngleDeg(const Eigen::Matrix3d &R)
   return std::abs(angle_axis.angle()) * 180.0 / M_PI;
 }
 
-double clamp01(double value)
-{
-  return std::max(0.0, std::min(1.0, value));
-}
-
 }  // namespace
 
 class DogPriorMapNdtNode
@@ -73,12 +66,10 @@ public:
     lidar_msg_type_ = getParam<std::string>("topics/lidar_msg_type", "livox");
     filtered_points_topic_ = getParam<std::string>("topics/filtered_points", "/dog_livo/filtered_points");
     diagnostics_topic_ = getParam<std::string>("topics/diagnostics", "/dog_livo/diagnostics");
-    prior_map_topic_ = getParam<std::string>("topics/prior_map", "/dog_livo/prior_map");
     ndt_odom_topic_ = getParam<std::string>("topics/ndt_odom", "/dog_livo/ndt_odom");
     ndt_pose_topic_ = getParam<std::string>("topics/ndt_pose", "/dog_livo/ndt_pose");
     ndt_path_topic_ = getParam<std::string>("topics/ndt_path", "/dog_livo/ndt_path");
     points_aligned_topic_ = getParam<std::string>("topics/points_aligned", "/dog_livo/points_aligned");
-    prediction_topic_ = getParam<std::string>("topics/odom_high_rate", "/dog_livo/odom_high_rate");
 
     map_pcd_path_ = getParam<std::string>("map/pcd_fallback_path", "");
     map_voxel_size_ = getParam<double>("map/voxel_size", 0.30);
@@ -101,61 +92,17 @@ public:
     ndt_step_limit_enable_ = getParam<bool>("lidar_update/ndt_step_limit_enable", false);
     ndt_step_limit_max_translation_ = getParam<double>("lidar_update/ndt_step_limit_max_translation", 0.5);
     ndt_step_limit_max_rotation_deg_ = getParam<double>("lidar_update/ndt_step_limit_max_rotation_deg", 5.0);
-    ndt_hard_reject_max_translation_ =
-        getParam<double>("lidar_update/ndt_hard_reject_max_translation", 0.5);
-    ndt_hard_reject_max_fitness_ =
-        getParam<double>("lidar_update/ndt_hard_reject_max_fitness", 5.0);
-    ndt_local_map_radius_ =
-        getParam<double>("lidar_update/ndt_local_map_radius", 12.0);
-    ndt_degeneracy_enable_ =
-        getParam<bool>("lidar_update/ndt_degeneracy_enable", true);
-    ndt_degeneracy_ratio_ =
-        getParam<double>("lidar_update/ndt_degeneracy_ratio", 8.0);
-    ndt_degenerate_scale_ =
-        getParam<double>("lidar_update/ndt_degenerate_scale", 0.15);
-    ndt_direction_check_enable_ =
-        getParam<bool>("lidar_update/ndt_direction_check_enable", true);
-    ndt_direction_min_motion_ =
-        getParam<double>("lidar_update/ndt_direction_min_motion", 0.05);
-    corridor_sequence_enable_ = getParam<bool>("lidar_update/corridor_sequence_enable", false);
-    corridor_sequence_bin_size_ = getParam<double>("lidar_update/corridor_sequence_bin_size", 0.5);
-    corridor_sequence_length_ = getParam<int>("lidar_update/corridor_sequence_length", 8);
-    corridor_sequence_max_hypotheses_ = getParam<int>("lidar_update/corridor_sequence_max_hypotheses", 5);
-    corridor_sequence_search_radius_ = getParam<double>("lidar_update/corridor_sequence_search_radius", 8.0);
-    corridor_axis_min_ = getParam<double>("lidar_update/corridor_axis_min", 0.0);
-    corridor_axis_max_ = getParam<double>("lidar_update/corridor_axis_max", 0.0);
-    reliability_fitness_scale_ = getParam<double>("reliability/fitness_scale", 2.0);
-    reliability_translation_scale_ = getParam<double>("reliability/translation_scale", 0.50);
-    reliability_rotation_scale_deg_ = getParam<double>("reliability/rotation_scale_deg", 5.0);
-    reliability_temporal_translation_scale_ = getParam<double>("reliability/temporal_translation_scale", 0.35);
-    reliability_temporal_rotation_scale_deg_ = getParam<double>("reliability/temporal_rotation_scale_deg", 3.0);
-    reliability_geometry_ratio_scale_ = getParam<double>("reliability/geometry_ratio_scale", 0.10);
-    reliability_iteration_scale_ = getParam<double>("reliability/iteration_scale", 10.0);
-    reliability_position_std_ = getParam<double>("reliability/position_std_m", 0.08);
-    reliability_rotation_std_ = getParam<double>("reliability/rotation_std_deg", 1.0) * M_PI / 180.0;
-    reliability_min_score_ = getParam<double>("reliability/min_score", 0.10);
     publish_tf_ = getParam<bool>("output/ndt_publish_tf", false);
     publish_path_ = getParam<bool>("output/publish_path", false);
     publish_filtered_points_ = getParam<bool>("output/publish_filtered_points", true);
     publish_diagnostics_ = getParam<bool>("output/publish_diagnostics", true);
 
     loadMap();
-    corridor_sequence_localizer_.configure(corridor_sequence_enable_, corridor_sequence_bin_size_,
-                                           corridor_sequence_length_, corridor_sequence_max_hypotheses_,
-                                           corridor_sequence_search_radius_, corridor_axis_min_, corridor_axis_max_);
-    if (corridor_sequence_enable_)
-    {
-      corridor_sequence_localizer_.buildMap(map_cloud_);
-      ROS_INFO("[DogPriorMap NDT] corridor sequence: enabled=%d ready=%d bin=%.2f hypotheses=%d",
-               corridor_sequence_enable_, corridor_sequence_localizer_.ready(), corridor_sequence_bin_size_,
-               corridor_sequence_max_hypotheses_);
-    }
 
     pub_odom_ = nh_.advertise<nav_msgs::Odometry>(ndt_odom_topic_, 20);
     pub_pose_ = nh_.advertise<geometry_msgs::PoseStamped>(ndt_pose_topic_, 20);
     pub_path_ = nh_.advertise<nav_msgs::Path>(ndt_path_topic_, 5);
     pub_aligned_ = nh_.advertise<sensor_msgs::PointCloud2>(points_aligned_topic_, 5);
-    pub_prior_map_ = nh_.advertise<sensor_msgs::PointCloud2>(prior_map_topic_, 1, true);
     if (publish_filtered_points_)
     {
       pub_filtered_ = nh_.advertise<sensor_msgs::PointCloud2>(filtered_points_topic_, 5);
@@ -165,7 +112,6 @@ public:
       pub_diagnostics_ = nh_.advertise<diagnostic_msgs::DiagnosticArray>(diagnostics_topic_, 5);
     }
     path_.header.frame_id = map_frame_;
-    publishCloud(map_cloud_, ros::Time::now(), map_frame_, pub_prior_map_);
 
     if (lidar_msg_type_ == "pointcloud2")
     {
@@ -175,8 +121,6 @@ public:
     {
       sub_livox_ = nh_.subscribe(lidar_topic_, 5, &DogPriorMapNdtNode::livoxCallback, this);
     }
-    sub_prediction_ = nh_.subscribe(prediction_topic_, 10,
-                                    &DogPriorMapNdtNode::predictionCallback, this);
 
     ROS_INFO("[DogPriorMap NDT] started: map=%s target=%zu lidar=%s output=%s",
              map_pcd_path_.c_str(), target_cloud_->size(), lidar_topic_.c_str(), ndt_odom_topic_.c_str());
@@ -219,8 +163,6 @@ private:
     ndt_.setStepSize(ndt_step_size_);
     ndt_.setTransformationEpsilon(ndt_transformation_epsilon_);
     ndt_.setMaximumIterations(ndt_max_iterations_);
-    map_kdtree_.reset(new pcl::KdTreeFLANN<pcl::PointXYZ>());
-    map_kdtree_->setInputCloud(map_cloud_);
   }
 
   // 按 XYZ 分辨率执行各向异性体素降采样，并可限制最终点数。
@@ -275,43 +217,6 @@ private:
     return voxelDown(filtered, scan_voxel_size_, source_voxel_z_size_, max_scan_points_);
   }
 
-  // XY协方差最小/最大特征值之比；越接近零，平面内结构越接近单方向退化。
-  double computeXyGeometryRatio(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud) const
-  {
-    if (!cloud || cloud->size() < 3) return 0.0;
-    Eigen::Vector2d mean = Eigen::Vector2d::Zero();
-    for (const auto &point : cloud->points) mean += Eigen::Vector2d(point.x, point.y);
-    mean /= static_cast<double>(cloud->size());
-    Eigen::Matrix2d covariance = Eigen::Matrix2d::Zero();
-    for (const auto &point : cloud->points)
-    {
-      const Eigen::Vector2d centered = Eigen::Vector2d(point.x, point.y) - mean;
-      covariance.noalias() += centered * centered.transpose();
-    }
-    covariance /= static_cast<double>(cloud->size() - 1);
-    const Eigen::SelfAdjointEigenSolver<Eigen::Matrix2d> solver(covariance);
-    if (solver.info() != Eigen::Success) return 0.0;
-    const double smallest = std::max(0.0, solver.eigenvalues()(0));
-    const double largest = std::max(0.0, solver.eigenvalues()(1));
-    return largest > 1e-9 ? smallest / largest : 0.0;
-  }
-
-  // 将 Livox 自定义消息转换为 XYZ 点云并进入统一 NDT 处理流程。
-  void predictionCallback(const nav_msgs::OdometryConstPtr &msg)
-  {
-    std::lock_guard<std::mutex> lock(mutex_);
-    Eigen::Quaterniond q(msg->pose.pose.orientation.w,
-                         msg->pose.pose.orientation.x,
-                         msg->pose.pose.orientation.y,
-                         msg->pose.pose.orientation.z);
-    const Eigen::Vector3d p(msg->pose.pose.position.x,
-                            msg->pose.pose.position.y,
-                            msg->pose.pose.position.z);
-    if (!p.allFinite() || q.norm() < 1e-9) return;
-    imu_prediction_pose_ = poseToMatrix(p, q.normalized().toRotationMatrix());
-    has_imu_prediction_ = true;
-  }
-
   // 将 Livox 自定义消息转换为 XYZ 点云并进入统一 NDT 处理流程。
   void livoxCallback(const livox_ros_driver2::CustomMsgConstPtr &msg)
   {
@@ -358,25 +263,11 @@ private:
     }
 
     Eigen::Matrix4d initial_guess = poseToMatrix(p_, R_);
-    if (has_imu_prediction_)
-    {
-      // NDT 的优化初值来自 IMU/EKF 传播，而不是 NDT 自己的历史外推。
-      initial_guess = imu_prediction_pose_;
-    }
-    else if (has_previous_pose_)
+    if (has_previous_pose_)
     {
       initial_guess = previous_pose_ * delta_pose_;
     }
 
-    pcl::PointCloud<pcl::PointXYZ>::Ptr local_target = buildLocalTarget(initial_guess.block<3, 1>(0, 3));
-    if (!local_target || static_cast<int>(local_target->size()) < min_effective_points_)
-    {
-      ROS_WARN_THROTTLE(1.0,
-                        "[DogPriorMap NDT] drop frame: local prior map has too few points (%zu)",
-                        local_target ? local_target->size() : 0UL);
-      return;
-    }
-    ndt_.setInputTarget(local_target);
     ndt_.setInputSource(source);
     pcl::PointCloud<pcl::PointXYZ> aligned;
     const ros::WallTime align_start = ros::WallTime::now();
@@ -386,148 +277,13 @@ private:
     const double score = ndt_.getFitnessScore();
     const int iterations = ndt_.getFinalNumIteration();
 
-    Eigen::Vector3d weak_direction = Eigen::Vector3d::Zero();
-    double degeneracy_ratio = 1.0;
-    const bool lidar_degenerate = ndt_degeneracy_enable_ &&
-        estimateWeakDirection(local_target, weak_direction, degeneracy_ratio);
-
-    double innovation_translation = 0.0;
-    double innovation_rotation_deg = 0.0;
-    double raw_step_translation = 0.0;
-    double raw_step_rotation_deg = 0.0;
-    double temporal_translation = 0.0;
-    double temporal_rotation_deg = 0.0;
-    Eigen::Matrix4d raw_result = initial_guess;
-    if (ok)
-    {
-      raw_result = ndt_.getFinalTransformation().cast<double>();
-      const Eigen::Matrix4d innovation = initial_guess.inverse() * raw_result;
-      innovation_translation = innovation.block<3, 1>(0, 3).norm();
-      innovation_rotation_deg = rotationAngleDeg(innovation.block<3, 3>(0, 0));
-      if (has_previous_pose_)
-      {
-        const Eigen::Matrix4d raw_delta = previous_pose_.inverse() * raw_result;
-        raw_step_translation = raw_delta.block<3, 1>(0, 3).norm();
-        raw_step_rotation_deg = rotationAngleDeg(raw_delta.block<3, 3>(0, 0));
-        const Eigen::Matrix4d temporal_error = delta_pose_.inverse() * raw_delta;
-        temporal_translation = temporal_error.block<3, 1>(0, 3).norm();
-        temporal_rotation_deg = rotationAngleDeg(temporal_error.block<3, 3>(0, 0));
-      }
-    }
-
-    if (ok && corridor_sequence_localizer_.ready())
-    {
-      const double predicted_s = initial_guess(0, 3);
-      const double temporal_s = corridor_sequence_localizer_.update(
-          source, raw_result.block<3, 3>(0, 0), raw_result.block<3, 1>(0, 3),
-          predicted_s, lidar_degenerate);
-      if (lidar_degenerate && std::isfinite(temporal_s))
-      {
-        raw_result(0, 3) = temporal_s;
-        ROS_DEBUG_THROTTLE(1.0,
-                           "[DogPriorMap NDT] corridor temporal x=%.3f raw_ndt_x=%.3f confidence=%.3f",
-                           temporal_s, ndt_.getFinalTransformation()(0, 3),
-                           corridor_sequence_localizer_.last_score());
-      }
-    }
-
-    if (ok && ndt_hard_reject_max_translation_ > 0.0)
-    {
-      const Eigen::Vector3d raw_p = raw_result.block<3, 1>(0, 3);
-      const double prediction_jump = has_imu_prediction_
-          ? (raw_p - imu_prediction_pose_.block<3, 1>(0, 3)).norm()
-          : std::numeric_limits<double>::infinity();
-      const double previous_jump = has_previous_pose_
-          ? (raw_p - previous_pose_.block<3, 1>(0, 3)).norm()
-          : prediction_jump;
-      if ((has_imu_prediction_ && prediction_jump > ndt_hard_reject_max_translation_) ||
-          (!has_imu_prediction_ && has_previous_pose_ && previous_jump > ndt_hard_reject_max_translation_))
-      {
-        ROS_WARN_THROTTLE(1.0,
-                          "[DogPriorMap NDT] drop candidate: jump_to_imu=%.3f jump_to_previous=%.3f limit=%.3f",
-                          prediction_jump, previous_jump, ndt_hard_reject_max_translation_);
-        publishDiagnostics(stamp, false, align_ms, preprocess_ms,
-                           (ros::WallTime::now() - callback_start).toSec() * 1000.0,
-                           static_cast<int>(source->size()), local_target->size(), score, iterations);
-        return;
-      }
-    }
-    if (ok && ndt_hard_reject_max_fitness_ > 0.0 &&
-        (!std::isfinite(score) || score > ndt_hard_reject_max_fitness_))
-    {
-      ROS_WARN_THROTTLE(1.0,
-                        "[DogPriorMap NDT] drop candidate: fitness=%.3f > %.3f",
-                        score, ndt_hard_reject_max_fitness_);
-      publishDiagnostics(stamp, false, align_ms, preprocess_ms,
-                         (ros::WallTime::now() - callback_start).toSec() * 1000.0,
-                         static_cast<int>(source->size()), local_target->size(), score, iterations);
-      return;
-    }
-
-    // 走廊中前进方向可能出现两个相似局部极小值。若 LiDAR 位移与 IMU
-    // 预测方向相反，直接拒绝，避免把错误结果写入下一帧的历史状态。
-    if (ok && ndt_direction_check_enable_ && has_previous_pose_ && has_imu_prediction_)
-    {
-      const Eigen::Vector3d predicted_delta =
-          initial_guess.block<3, 1>(0, 3) - previous_pose_.block<3, 1>(0, 3);
-      const Eigen::Vector3d ndt_delta =
-          raw_result.block<3, 1>(0, 3) - previous_pose_.block<3, 1>(0, 3);
-      if (predicted_delta.norm() > ndt_direction_min_motion_ &&
-          ndt_delta.norm() > ndt_direction_min_motion_ &&
-          predicted_delta.dot(ndt_delta) < 0.0)
-      {
-        ROS_WARN_THROTTLE(1.0,
-                          "[DogPriorMap NDT] drop candidate: motion direction disagrees with IMU (pred=%.3f ndt=%.3f)",
-                          predicted_delta.norm(), ndt_delta.norm());
-        return;
-      }
-    }
-    const double geometry_ratio = computeXyGeometryRatio(source);
-    const double fitness_quality = ok && std::isfinite(score)
-        ? 1.0 / (1.0 + std::max(0.0, score) / std::max(reliability_fitness_scale_, 1e-6))
-        : 0.0;
-    const double innovation_quality = std::exp(-0.5 * std::pow(
-        innovation_translation / std::max(reliability_translation_scale_, 1e-6), 2.0) -
-        0.5 * std::pow(innovation_rotation_deg / std::max(reliability_rotation_scale_deg_, 1e-6), 2.0));
-    const double temporal_quality = has_previous_pose_ ? std::exp(-0.5 * std::pow(
-        temporal_translation / std::max(reliability_temporal_translation_scale_, 1e-6), 2.0) -
-        0.5 * std::pow(temporal_rotation_deg / std::max(reliability_temporal_rotation_scale_deg_, 1e-6), 2.0)) : 1.0;
-    const double geometry_quality = clamp01(geometry_ratio /
-        std::max(reliability_geometry_ratio_scale_, 1e-6));
-    const double iteration_quality = std::exp(-static_cast<double>(iterations) /
-        std::max(reliability_iteration_scale_, 1e-6));
-    const double reliability_score = ok ? std::pow(std::max(
-        fitness_quality * innovation_quality * temporal_quality * geometry_quality * iteration_quality,
-        1e-12), 0.2) : 0.0;
-
     bool step_limited = false;
     double localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
     if (ok)
     {
-      Eigen::Matrix4d used_result = raw_result;
-      step_limited = limitNdtStep(raw_result, used_result);
-      // 被步长限制的结果说明 NDT 给出的绝对解不可信；不能把截断值写回
-      // previous_pose_/delta_pose_，否则错误会在后续帧中逐步累积。
-      if (step_limited)
-      {
-        ROS_WARN_THROTTLE(1.0,
-                          "[DogPriorMap NDT] use IMU prediction: NDT step limited (raw jump %.3f)",
-                          raw_step_translation);
-        // 仅使用 IMU 预测作为本帧安全结果，不把截断后的 NDT 错误解写回历史。
-        used_result = initial_guess;
-      }
-      if (lidar_degenerate && has_imu_prediction_)
-      {
-        const Eigen::Vector3d correction =
-            raw_result.block<3, 1>(0, 3) - initial_guess.block<3, 1>(0, 3);
-        const double weak_component = correction.dot(weak_direction);
-        used_result.block<3, 1>(0, 3) =
-            raw_result.block<3, 1>(0, 3) -
-            (1.0 - clamp01(ndt_degenerate_scale_)) * weak_component * weak_direction;
-        ROS_DEBUG_THROTTLE(1.0,
-                           "[DogPriorMap NDT] degenerate direction ratio=%.2f weak=(%.2f %.2f %.2f)",
-                           degeneracy_ratio, weak_direction.x(), weak_direction.y(), weak_direction.z());
-      }
+      const Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
+      Eigen::Matrix4d used_result = result;
+      step_limited = limitNdtStep(result, used_result);
       if (has_previous_pose_)
       {
         delta_pose_ = previous_pose_.inverse() * used_result;
@@ -541,66 +297,23 @@ private:
       R_ = used_result.block<3, 3>(0, 0);
       p_ = used_result.block<3, 1>(0, 3);
       localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
-      publishPose(stamp, reliability_score);
-      // 与旧版可视化/定位链路保持一致：始终显式执行
-      // p_map = R_map_body * p_body + t_map_body，避免直接依赖PCL aligned
-      // 的内部输出坐标解释。
-      pcl::PointCloud<pcl::PointXYZ> transformed_scan = transformCloud(source, used_result);
-      publishAlignedCloud(transformed_scan, stamp);
+      publishPose(stamp);
+      if (step_limited)
+      {
+        pcl::PointCloud<pcl::PointXYZ> limited_aligned = transformCloud(source, used_result);
+        publishAlignedCloud(limited_aligned, stamp);
+      }
+      else
+      {
+        publishAlignedCloud(aligned, stamp);
+      }
     }
 
     publishDiagnostics(stamp, ok, align_ms, preprocess_ms, localization_ms,
-                       static_cast<int>(source->size()), local_target->size(), score, iterations, step_limited,
-                       innovation_translation, innovation_rotation_deg,
-                       raw_step_translation, raw_step_rotation_deg,
-                       temporal_translation, temporal_rotation_deg,
-                       geometry_ratio, fitness_quality, innovation_quality,
-                       temporal_quality, geometry_quality, iteration_quality, reliability_score);
+                       static_cast<int>(source->size()), target_cloud_->size(), score, iterations, step_limited);
     ROS_INFO_THROTTLE(1.0,
                       "[DogPriorMap NDT] conv=%d limited=%d source=%zu target=%zu align=%.2fms score=%.4f iter=%d p=(%.2f %.2f %.2f)",
                       ok ? 1 : 0, step_limited ? 1 : 0, source->size(), target_cloud_->size(), align_ms, score, iterations, p_.x(), p_.y(), p_.z());
-  }
-
-  pcl::PointCloud<pcl::PointXYZ>::Ptr buildLocalTarget(const Eigen::Vector3d &center) const
-  {
-    pcl::PointCloud<pcl::PointXYZ>::Ptr local(new pcl::PointCloud<pcl::PointXYZ>());
-    if (!map_kdtree_ || !center.allFinite() || ndt_local_map_radius_ <= 0.0) return local;
-    pcl::PointXYZ query(static_cast<float>(center.x()), static_cast<float>(center.y()), static_cast<float>(center.z()));
-    std::vector<int> indices;
-    std::vector<float> squared_distances;
-    map_kdtree_->radiusSearch(query, ndt_local_map_radius_ * ndt_local_map_radius_, indices, squared_distances);
-    local->reserve(indices.size());
-    for (const int index : indices)
-    {
-      if (index >= 0 && static_cast<size_t>(index) < map_cloud_->size()) local->push_back(map_cloud_->points[index]);
-    }
-    finalizeCloud(local);
-    return local;
-  }
-
-  // 用局部先验地图的 PCA 近似 NDT Hessian 的弱方向：长廊中最长轴通常
-  // 对平移最不敏感。返回最大/最小特征值比超过阈值时的最长轴方向。
-  bool estimateWeakDirection(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
-                             Eigen::Vector3d &direction, double &ratio) const
-  {
-    if (!cloud || cloud->size() < 20) return false;
-    Eigen::Vector3d mean = Eigen::Vector3d::Zero();
-    for (const auto &point : cloud->points) mean += Eigen::Vector3d(point.x, point.y, point.z);
-    mean /= static_cast<double>(cloud->size());
-    Eigen::Matrix3d covariance = Eigen::Matrix3d::Zero();
-    for (const auto &point : cloud->points)
-    {
-      const Eigen::Vector3d d = Eigen::Vector3d(point.x, point.y, point.z) - mean;
-      covariance.noalias() += d * d.transpose();
-    }
-    covariance /= static_cast<double>(cloud->size() - 1);
-    Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> solver(covariance);
-    if (solver.info() != Eigen::Success) return false;
-    const Eigen::Vector3d eval = solver.eigenvalues().cwiseMax(1e-9);
-    ratio = eval(2) / eval(0);
-    if (!std::isfinite(ratio) || ratio < ndt_degeneracy_ratio_) return false;
-    direction = solver.eigenvectors().col(2).normalized();
-    return direction.allFinite();
   }
 
   // 使用给定齐次变换把源点云转换到地图坐标系。
@@ -659,7 +372,7 @@ private:
   }
 
   // 发布 NDT 位姿、里程计、可选轨迹以及 map 到 base 的 TF。
-  void publishPose(const ros::Time &stamp, double reliability_score)
+  void publishPose(const ros::Time &stamp)
   {
     Eigen::Quaterniond q(R_);
     q.normalize();
@@ -675,15 +388,6 @@ private:
     odom.pose.pose.orientation.y = q.y();
     odom.pose.pose.orientation.z = q.z();
     odom.pose.pose.orientation.w = q.w();
-    const double bounded_score = std::max(reliability_min_score_, clamp01(reliability_score));
-    const double position_variance = std::pow(reliability_position_std_ / bounded_score, 2.0);
-    const double rotation_variance = std::pow(reliability_rotation_std_ / bounded_score, 2.0);
-    odom.pose.covariance[0] = position_variance;
-    odom.pose.covariance[7] = position_variance;
-    odom.pose.covariance[14] = position_variance;
-    odom.pose.covariance[21] = rotation_variance;
-    odom.pose.covariance[28] = rotation_variance;
-    odom.pose.covariance[35] = rotation_variance;
     pub_odom_.publish(odom);
 
     geometry_msgs::PoseStamped pose;
@@ -744,20 +448,7 @@ private:
                           size_t map_points,
                           double score,
                           int iterations,
-                          bool step_limited = false,
-                          double innovation_translation = 0.0,
-                          double innovation_rotation_deg = 0.0,
-                          double raw_step_translation = 0.0,
-                          double raw_step_rotation_deg = 0.0,
-                          double temporal_translation = 0.0,
-                          double temporal_rotation_deg = 0.0,
-                          double geometry_ratio = 0.0,
-                          double fitness_quality = 0.0,
-                          double innovation_quality = 0.0,
-                          double temporal_quality = 0.0,
-                          double geometry_quality = 0.0,
-                          double iteration_quality = 0.0,
-                          double reliability_score = 0.0)
+                          bool step_limited = false)
   {
     if (!publish_diagnostics_ || !pub_diagnostics_) return;
     diagnostic_msgs::DiagnosticArray array;
@@ -776,20 +467,6 @@ private:
     addDiagnosticValue(status, "map_points", std::to_string(map_points));
     addDiagnosticValue(status, "fitness_score", std::to_string(score));
     addDiagnosticValue(status, "iterations", std::to_string(iterations));
-    addDiagnosticValue(status, "step_limited", step_limited ? "true" : "false");
-    addDiagnosticValue(status, "innovation_translation_m", std::to_string(innovation_translation));
-    addDiagnosticValue(status, "innovation_rotation_deg", std::to_string(innovation_rotation_deg));
-    addDiagnosticValue(status, "raw_step_translation_m", std::to_string(raw_step_translation));
-    addDiagnosticValue(status, "raw_step_rotation_deg", std::to_string(raw_step_rotation_deg));
-    addDiagnosticValue(status, "temporal_translation_m", std::to_string(temporal_translation));
-    addDiagnosticValue(status, "temporal_rotation_deg", std::to_string(temporal_rotation_deg));
-    addDiagnosticValue(status, "xy_geometry_ratio", std::to_string(geometry_ratio));
-    addDiagnosticValue(status, "fitness_quality", std::to_string(fitness_quality));
-    addDiagnosticValue(status, "innovation_quality", std::to_string(innovation_quality));
-    addDiagnosticValue(status, "temporal_quality", std::to_string(temporal_quality));
-    addDiagnosticValue(status, "geometry_quality", std::to_string(geometry_quality));
-    addDiagnosticValue(status, "iteration_quality", std::to_string(iteration_quality));
-    addDiagnosticValue(status, "reliability_score", std::to_string(reliability_score));
     addDiagnosticValue(status, "pose_xyz", std::to_string(p_.x()) + "," +
                                   std::to_string(p_.y()) + "," +
                                   std::to_string(p_.z()));
@@ -812,13 +489,11 @@ private:
   ros::NodeHandle pnh_;
   ros::Subscriber sub_livox_;
   ros::Subscriber sub_pc2_;
-  ros::Subscriber sub_prediction_;
   ros::Publisher pub_odom_;
   ros::Publisher pub_pose_;
   ros::Publisher pub_path_;
   ros::Publisher pub_filtered_;
   ros::Publisher pub_aligned_;
-  ros::Publisher pub_prior_map_;
   ros::Publisher pub_diagnostics_;
   tf::TransformBroadcaster tf_broadcaster_;
   std::mutex mutex_;
@@ -829,17 +504,14 @@ private:
   std::string lidar_msg_type_;
   std::string filtered_points_topic_;
   std::string diagnostics_topic_;
-  std::string prior_map_topic_;
   std::string ndt_odom_topic_;
   std::string ndt_pose_topic_;
   std::string ndt_path_topic_;
   std::string points_aligned_topic_;
-  std::string prediction_topic_;
   std::string map_pcd_path_;
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud_;
   pcl::PointCloud<pcl::PointXYZ>::Ptr target_cloud_;
-  pcl::KdTreeFLANN<pcl::PointXYZ>::Ptr map_kdtree_;
   pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt_;
   nav_msgs::Path path_;
 
@@ -848,8 +520,6 @@ private:
   bool has_previous_pose_ = false;
   Eigen::Matrix4d previous_pose_ = Eigen::Matrix4d::Identity();
   Eigen::Matrix4d delta_pose_ = Eigen::Matrix4d::Identity();
-  bool has_imu_prediction_ = false;
-  Eigen::Matrix4d imu_prediction_pose_ = Eigen::Matrix4d::Identity();
 
   double map_voxel_size_ = 0.30;
   double map_voxel_z_size_ = 0.30;
@@ -871,32 +541,6 @@ private:
   bool ndt_step_limit_enable_ = false;
   double ndt_step_limit_max_translation_ = 0.5;
   double ndt_step_limit_max_rotation_deg_ = 5.0;
-  double ndt_hard_reject_max_translation_ = 0.5;
-  double ndt_hard_reject_max_fitness_ = 5.0;
-  double ndt_local_map_radius_ = 12.0;
-  bool ndt_degeneracy_enable_ = true;
-  double ndt_degeneracy_ratio_ = 8.0;
-  double ndt_degenerate_scale_ = 0.15;
-  bool ndt_direction_check_enable_ = true;
-  double ndt_direction_min_motion_ = 0.05;
-  bool corridor_sequence_enable_ = false;
-  double corridor_sequence_bin_size_ = 0.5;
-  int corridor_sequence_length_ = 8;
-  int corridor_sequence_max_hypotheses_ = 5;
-  double corridor_sequence_search_radius_ = 8.0;
-  double corridor_axis_min_ = 0.0;
-  double corridor_axis_max_ = 0.0;
-  CorridorSequenceLocalizer corridor_sequence_localizer_;
-  double reliability_fitness_scale_ = 2.0;
-  double reliability_translation_scale_ = 0.50;
-  double reliability_rotation_scale_deg_ = 5.0;
-  double reliability_temporal_translation_scale_ = 0.35;
-  double reliability_temporal_rotation_scale_deg_ = 3.0;
-  double reliability_geometry_ratio_scale_ = 0.10;
-  double reliability_iteration_scale_ = 10.0;
-  double reliability_position_std_ = 0.08;
-  double reliability_rotation_std_ = M_PI / 180.0;
-  double reliability_min_score_ = 0.10;
   bool publish_tf_ = true;
   bool publish_path_ = false;
   bool publish_filtered_points_ = true;

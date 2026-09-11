@@ -41,7 +41,6 @@ add_executable(dog_prior_map_ekf_node_cpp
   src/map_loader.cpp
   src/imu_processor.cpp
   src/lidar_matcher.cpp
-  src/corridor_sequence_localizer.cpp
   src/vision_observation.cpp
   src/ros_output.cpp
   src/math_utils.cpp
@@ -59,7 +58,6 @@ add_dependencies(dog_prior_map_ekf_node_cpp
 
 add_executable(dog_prior_map_ndt_node_cpp
   src/dog_prior_map_ndt_node.cpp
-  src/corridor_sequence_localizer.cpp
 )
 
 target_link_libraries(dog_prior_map_ndt_node_cpp
@@ -78,11 +76,6 @@ catkin_install_python(PROGRAMS
   scripts/evaluate_runtime_and_accuracy.py
   scripts/build_livox_keyframe_scan_db.py
   scripts/run_dataset_evaluation.sh
-  scripts/analyze_paper_run.py
-  scripts/build_gt_prior_map.py
-  scripts/evaluate_tum_ground_truth.py
-  scripts/generate_public_validation_word_report.py
-  scripts/run_paper_dataset_eval.sh
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

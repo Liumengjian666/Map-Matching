@@ -10,19 +10,14 @@ Primary references:
 - [launch/dog_prior_map_localization.launch](launch/dog_prior_map_localization.launch)
 - [config/dog_prior_map_localization.yaml](config/dog_prior_map_localization.yaml)
 
-Workspace role:
-- `/home/jian/livox_ws/dog_light_loc_ws` is the stable quadruped-robot project workspace.
-- `/home/jian/livox_ws/dog_light_loc_paper_ws` is the isolated research workspace for paper-oriented algorithm development and experiments.
-- Keep experimental algorithm changes in this research workspace unless the user explicitly asks to backport a validated change to the stable workspace.
-
 ## Build and run
 
 Use the standard Catkin workflow from the workspace root:
 
 ```bash
-source /home/jian/livox_ws/devel/setup.bash
-cd /home/jian/livox_ws/dog_light_loc_paper_ws
-catkin_make -DCMAKE_BUILD_TYPE=Release -j1 -l1
+source /opt/ros/noetic/setup.bash
+cd /home/jian/livox_ws/dog_light_loc_ws
+catkin_make -DCMAKE_BUILD_TYPE=Release
 source devel/setup.bash
 roslaunch dog_prior_map_localization dog_prior_map_localization.launch rviz:=false
 ```

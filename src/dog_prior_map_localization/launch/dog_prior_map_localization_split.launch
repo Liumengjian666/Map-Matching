@@ -3,13 +3,6 @@
   <arg name="rviz" default="false" />
   <arg name="runtime_csv_path" default="" />
   <arg name="ndt_diagnostics_csv_path" default="" />
-  <arg name="ndt_fusion_mode" default="reliability_eskf" />
-  <arg name="lidar_msg_type" default="livox" />
-  <arg name="map_path" default="/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd" />
-  <arg name="max_covariance_inflation" default="100.0" />
-  <arg name="camera_enable" default="true" />
-  <arg name="hard_reject_nis_threshold" default="0.0" />
-  <arg name="max_frame_translation" default="0.5" />
   <rosparam command="load" file="$(arg config)" />
 
   <!--
@@ -20,24 +13,6 @@
   -->
 
   <param name="ndt_observation/enable" value="true" />
-  <param name="ndt_observation/fusion_mode" value="$(arg ndt_fusion_mode)" />
-  <param name="ndt_observation/nis_threshold" value="22.458" />
-  <param name="ndt_observation/max_covariance_inflation" value="$(arg max_covariance_inflation)" />
-  <param name="camera_update/enable" value="$(arg camera_enable)" />
-  <param name="ndt_observation/hard_reject_nis_threshold" value="$(arg hard_reject_nis_threshold)" />
-  <param name="ndt_observation/max_frame_translation" value="$(arg max_frame_translation)" />
-  <param name="lidar_update/ndt_hard_reject_max_translation" value="$(arg max_frame_translation)" />
-  <param name="lidar_update/ndt_hard_reject_max_fitness" value="5.0" />
-  <param name="lidar_update/ndt_local_map_radius" value="12.0" />
-  <param name="lidar_update/ndt_degeneracy_enable" value="true" />
-  <param name="lidar_update/ndt_degeneracy_ratio" value="8.0" />
-  <param name="lidar_update/ndt_degenerate_scale" value="0.15" />
-  <param name="lidar_update/ndt_direction_check_enable" value="true" />
-  <param name="lidar_update/ndt_direction_min_motion" value="0.05" />
-  <param name="ndt_observation/fixed_position_std_m" value="0.08" />
-  <param name="ndt_observation/fixed_rotation_std_deg" value="1.0" />
-  <param name="topics/lidar_msg_type" value="$(arg lidar_msg_type)" />
-  <param name="map/pcd_fallback_path" value="$(arg map_path)" />
   <param name="ndt_observation/apply_ratio" value="1.0" />
   <param name="ndt_observation/z_apply_ratio" value="1.0" />
   <param name="ndt_observation/roll_pitch_apply_ratio" value="1.0" />
@@ -46,8 +21,6 @@
   <param name="lidar_update/enable" value="false" />
   <param name="output/runtime_csv_path" value="$(arg runtime_csv_path)" />
   <param name="output/ndt_diagnostics_csv_path" value="$(arg ndt_diagnostics_csv_path)" />
-  <!-- split 模式由 EKF 发布融合后的唯一 camera_init -> livox_frame TF，避免 NDT 原始TF冲突。 -->
-  <param name="output/ndt_publish_tf" value="false" />
 
   <node pkg="dog_prior_map_localization"
         type="dog_prior_map_ndt_node_cpp"

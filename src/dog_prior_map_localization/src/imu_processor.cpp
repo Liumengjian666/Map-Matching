@@ -21,17 +21,13 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
     imu_history_.pop_front();
   }
 
-  if ((initialize_gravity_from_imu_ || initialize_gyro_bias_from_imu_) &&
-      !gravity_initialized_)
+  if (initialize_gravity_from_imu_ && !gravity_initialized_)
   {
     // ------------------------- 启动重力初始化 -------------------------
     // MID360的IMU在静止时，加速度计测到的是“向上约9.8m/s^2”的比力。
     // 若直接假设初始姿态为单位阵，而设备有一点俯仰/横滚，积分会把重力当运动加速度，
     // 于是Z轴会快速飘到几十米甚至几万米。这里用前N帧静止IMU平均值对齐roll/pitch。
     imu_acc_sum_ += Eigen::Vector3d(msg->linear_acceleration.x, msg->linear_acceleration.y, msg->linear_acceleration.z);
-    imu_gyr_sum_ += Eigen::Vector3d(msg->angular_velocity.x,
-                                    msg->angular_velocity.y,
-                                    msg->angular_velocity.z);
     ++imu_init_count_;
     if (imu_init_count_ < init_imu_samples_)
     {
@@ -41,19 +37,14 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
     }
 
     Eigen::Vector3d acc_avg = imu_acc_sum_ / static_cast<double>(imu_init_count_);
-    if (initialize_gravity_from_imu_ && acc_avg.norm() > 1e-3)
+    if (acc_avg.norm() > 1e-3)
     {
       Eigen::Quaterniond q_align;
       q_align.setFromTwoVectors(acc_avg.normalized(), Eigen::Vector3d::UnitZ());
       R_ = q_align.toRotationMatrix() * R_;
+      ROS_INFO("[DogPriorMap C++] IMU gravity init complete: samples=%d acc_avg=(%.3f %.3f %.3f)",
+               imu_init_count_, acc_avg.x(), acc_avg.y(), acc_avg.z());
     }
-    if (initialize_gyro_bias_from_imu_)
-    {
-      bg_ = imu_gyr_sum_ / static_cast<double>(imu_init_count_);
-    }
-    ROS_INFO("[DogPriorMap C++] IMU init complete: samples=%d acc_avg=(%.3f %.3f %.3f) bg=(%.6f %.6f %.6f)",
-             imu_init_count_, acc_avg.x(), acc_avg.y(), acc_avg.z(),
-             bg_.x(), bg_.y(), bg_.z());
     gravity_initialized_ = true;
     last_imu_time_ = t;
     has_last_imu_ = true;

@@ -81,8 +81,7 @@ void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
   {
     visual_constraint_weight_scale_ = bad_image_weight_scale_;
   }
-  else if (!ndt_observation_enable_ &&
-           lidar_degeneracy_score_ >= min_degeneracy_score_for_visual_)
+  else if (lidar_degeneracy_score_ >= min_degeneracy_score_for_visual_)
   {
     // ------------------------- 退化自适应视觉权重 -------------------------
     // 用户要求的思想：视觉权重与“相机有效角点占比 / 雷达退化程度”相关。
@@ -97,12 +96,8 @@ void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
     visual_constraint_weight_scale_ = good_image_weight_scale_;
   }
 
-  // split 模式的 EKF 不直接处理点云，因而没有本地退化分数。此时让视觉
-  // 持续提供弱时序约束，而不是被永远为零的退化分数错误禁用。
-  const bool visual_motion_constraint_active = ndt_observation_enable_ ||
-      lidar_degeneracy_score_ >= min_degeneracy_score_for_visual_;
   if (visual_feature_update_enable_ &&
-      visual_motion_constraint_active &&
+      lidar_degeneracy_score_ >= min_degeneracy_score_for_visual_ &&
       image_quality_good_ &&
       !last_gray_.empty() && !last_features_.empty() &&
       has_last_image_pose_ &&
@@ -239,141 +234,6 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
   Eigen::Vector3d dtheta = aa.axis() * aa.angle();
   if (!dp.allFinite() || !dtheta.allFinite()) return;
 
-  // Keep the IMU-propagated state as the prior for this frame.  If the fused
-  // result moves too far in one update (typical long-corridor NDT ambiguity),
-  // roll back the complete ESKF state and drop this observation.
-  const Eigen::Vector3d p_before_update = p_;
-  const Eigen::Vector3d v_before_update = v_;
-  const Eigen::Matrix3d R_before_update = R_;
-  const Eigen::Vector3d ba_before_update = ba_;
-  const Eigen::Vector3d bg_before_update = bg_;
-  const Matrix15d P_before_update = P_;
-  auto reject_large_frame_jump = [&](double nis, double covariance_inflation) {
-    const double jump = (p_ - p_before_update).norm();
-    if (ndt_observation_max_frame_translation_ <= 0.0 ||
-        !std::isfinite(jump) || jump <= ndt_observation_max_frame_translation_)
-      return false;
-    p_ = p_before_update;
-    v_ = v_before_update;
-    R_ = R_before_update;
-    ba_ = ba_before_update;
-    bg_ = bg_before_update;
-    P_ = P_before_update;
-    ++lidar_update_fail_count_;
-    ++icp_update_fail_count_;
-    ROS_WARN_THROTTLE(1.0,
-                      "[DogPriorMap C++] drop NDT frame: final position jump %.3f m > %.3f m",
-                      jump, ndt_observation_max_frame_translation_);
-    publishNdtFusionDiagnostics(msg->header.stamp, false, nis, covariance_inflation);
-    return true;
-  };
-
-  if (ndt_observation_fusion_mode_ == "reliability_eskf" ||
-      ndt_observation_fusion_mode_ == "fixed_eskf")
-  {
-    Eigen::Matrix<double, 6, 15> H = Eigen::Matrix<double, 6, 15>::Zero();
-    H.block<3, 3>(0, 0).setIdentity();
-    H.block<3, 3>(3, 6).setIdentity();
-    Eigen::Matrix<double, 6, 1> innovation;
-    innovation << dp, dtheta;
-
-    Eigen::Matrix<double, 6, 6> observation_covariance = Eigen::Matrix<double, 6, 6>::Zero();
-    for (int i = 0; i < 6; ++i)
-    {
-      double variance = ndt_observation_fusion_mode_ == "fixed_eskf"
-          ? std::pow(i < 3 ? ndt_observation_fixed_position_std_
-                           : ndt_observation_fixed_rotation_std_, 2.0)
-          : msg->pose.covariance[static_cast<size_t>(i * 6 + i)];
-      if (!std::isfinite(variance) || variance <= 0.0)
-      {
-        variance = i < 3 ? 0.01 : std::pow(2.0 * M_PI / 180.0, 2.0);
-      }
-      observation_covariance(i, i) = variance;
-    }
-    Eigen::Matrix<double, 6, 6> innovation_covariance = H * P_ * H.transpose() + observation_covariance;
-    Eigen::LDLT<Eigen::Matrix<double, 6, 6>> ldlt(innovation_covariance);
-    if (ldlt.info() != Eigen::Success)
-    {
-      ++lidar_update_fail_count_;
-      ++icp_update_fail_count_;
-      publishNdtFusionDiagnostics(msg->header.stamp, false,
-                                  std::numeric_limits<double>::quiet_NaN(), 1.0);
-      return;
-    }
-    const double nis = innovation.dot(ldlt.solve(innovation));
-    if (!std::isfinite(nis))
-    {
-      ++lidar_update_fail_count_;
-      ++icp_update_fail_count_;
-      publishNdtFusionDiagnostics(msg->header.stamp, false, nis, 1.0);
-      return;
-    }
-    if (ndt_observation_hard_reject_nis_threshold_ > 0.0 &&
-        nis > ndt_observation_hard_reject_nis_threshold_)
-    {
-      ++lidar_update_fail_count_;
-      ++icp_update_fail_count_;
-      publishNdtFusionDiagnostics(msg->header.stamp, false, nis, 1.0);
-      return;
-    }
-    const double covariance_inflation = std::min(
-        std::max(1.0, nis / std::max(ndt_observation_nis_threshold_, 1e-6)),
-        std::max(1.0, ndt_observation_max_covariance_inflation_));
-    if (covariance_inflation > 1.0)
-    {
-      observation_covariance *= covariance_inflation;
-      innovation_covariance = H * P_ * H.transpose() + observation_covariance;
-      ldlt.compute(innovation_covariance);
-      if (ldlt.info() != Eigen::Success)
-      {
-        ++lidar_update_fail_count_;
-        ++icp_update_fail_count_;
-        publishNdtFusionDiagnostics(msg->header.stamp, false, nis, covariance_inflation);
-        return;
-      }
-    }
-
-    const Eigen::Matrix<double, 15, 6> gain = P_ * H.transpose() * ldlt.solve(
-        Eigen::Matrix<double, 6, 6>::Identity());
-    const Vector15d correction = gain * innovation;
-    p_ += correction.segment<3>(0);
-    v_ += correction.segment<3>(3);
-    applyPoseCorrection(Eigen::Vector3d::Zero(), correction.segment<3>(6));
-    ba_ += correction.segment<3>(9);
-    bg_ += correction.segment<3>(12);
-    const Matrix15d identity = Matrix15d::Identity();
-    const Matrix15d joseph_left = identity - gain * H;
-    P_ = joseph_left * P_ * joseph_left.transpose() +
-         gain * observation_covariance * gain.transpose();
-    Matrix15d reset_jacobian = Matrix15d::Identity();
-    reset_jacobian.block<3, 3>(6, 6) -=
-        0.5 * skew(correction.segment<3>(6));
-    P_ = reset_jacobian * P_ * reset_jacobian.transpose();
-    P_ = 0.5 * (P_ + P_.transpose());
-
-    if (reject_large_frame_jump(nis, covariance_inflation)) return;
-
-    ++lidar_update_ok_count_;
-    ++icp_update_ok_count_;
-    last_used_points_ = 0;
-    last_mean_residual_ = innovation.head<3>().norm();
-    publishState(msg->header.stamp, true);
-    const double observation_time = msg->header.stamp.toSec();
-    const double observation_dt = observation_time - last_ndt_observation_time_;
-    if (observation_dt > 1e-3 && observation_dt < 1.0)
-    {
-      const Eigen::Vector3d observed_velocity =
-          (p_target - last_ndt_observation_p_map_) / observation_dt;
-      const double velocity_blend = std::max(0.0, std::min(1.0,
-          ndt_observation_velocity_blend_ / std::sqrt(covariance_inflation)));
-      v_ = (1.0 - velocity_blend) * v_ + velocity_blend * observed_velocity;
-    }
-    last_ndt_observation_p_map_ = p_target;
-    last_ndt_observation_time_ = observation_time;
-    publishNdtFusionDiagnostics(msg->header.stamp, true, nis, covariance_inflation);
-    return;
-  }
-
   const double ratio = std::max(0.0, std::min(1.0, ndt_observation_apply_ratio_));
   const double z_ratio = std::max(0.0, std::min(1.0, ndt_observation_z_apply_ratio_));
   const double roll_pitch_ratio = std::max(0.0, std::min(1.0, ndt_observation_roll_pitch_apply_ratio_));
@@ -385,7 +245,6 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
   dtheta.y() *= roll_pitch_ratio;
   dp = limitVector(dp, ndt_observation_max_translation_correction_);
   applyPoseCorrection(dp, dtheta);
-  if (reject_large_frame_jump(0.0, 1.0)) return;
   ++lidar_update_ok_count_;
   ++icp_update_ok_count_;
   last_used_points_ = 0;
@@ -406,36 +265,6 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
 
   for (int i = 0; i < 3; ++i) P_(i, i) = std::max(P_(i, i) * 0.85, 1e-4);
   for (int i = 6; i < 9; ++i) P_(i, i) = std::max(P_(i, i) * 0.85, 1e-5);
-}
-
-void DogPriorMapEkfNode::publishNdtFusionDiagnostics(const ros::Time &stamp,
-                                                      bool accepted,
-                                                      double nis,
-                                                      double covariance_inflation)
-{
-  if (!publish_diagnostics_ || !pub_diagnostics_) return;
-  diagnostic_msgs::DiagnosticArray array;
-  array.header.stamp = stamp;
-  diagnostic_msgs::DiagnosticStatus status;
-  status.name = "dog_prior_map_ekf_fusion";
-  status.hardware_id = base_frame_;
-  status.level = accepted ? diagnostic_msgs::DiagnosticStatus::OK
-                          : diagnostic_msgs::DiagnosticStatus::WARN;
-  status.message = accepted ? "NDT observation accepted" : "NDT observation rejected";
-  diagnostic_msgs::KeyValue accepted_value;
-  accepted_value.key = "accepted";
-  accepted_value.value = accepted ? "true" : "false";
-  status.values.push_back(accepted_value);
-  diagnostic_msgs::KeyValue nis_value;
-  nis_value.key = "nis";
-  nis_value.value = std::to_string(nis);
-  status.values.push_back(nis_value);
-  diagnostic_msgs::KeyValue inflation_value;
-  inflation_value.key = "covariance_inflation";
-  inflation_value.value = std::to_string(covariance_inflation);
-  status.values.push_back(inflation_value);
-  array.status.push_back(status);
-  pub_diagnostics_.publish(array);
 }
 
 }  // namespace dog_prior_map_localization

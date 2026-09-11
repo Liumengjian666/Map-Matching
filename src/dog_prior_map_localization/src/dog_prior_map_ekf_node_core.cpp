@@ -29,7 +29,6 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
 
   gravity_norm_ = getParam<double>("imu/gravity", 9.80665);
   initialize_gravity_from_imu_ = getParam<bool>("imu/initialize_gravity_from_imu", true);
-  initialize_gyro_bias_from_imu_ = getParam<bool>("imu/initialize_gyro_bias_from_imu", true);
   init_imu_samples_ = std::max(1, getParam<int>("imu/init_imu_samples", 200));
   max_imu_dt_ = getParam<double>("imu/max_dt", 0.05);
   publish_high_rate_ = getParam<bool>("imu/publish_high_rate", true);
@@ -49,22 +48,10 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   imu_history_keep_sec_ = getParam<double>("imu/history_keep_sec", 2.0);
 
   ndt_observation_enable_ = getParam<bool>("ndt_observation/enable", false);
-  ndt_observation_fusion_mode_ = getParam<std::string>("ndt_observation/fusion_mode", "legacy_blend");
-  ndt_observation_nis_threshold_ = getParam<double>("ndt_observation/nis_threshold", 22.458);
-  ndt_observation_hard_reject_nis_threshold_ =
-      getParam<double>("ndt_observation/hard_reject_nis_threshold", 0.0);
-  ndt_observation_max_covariance_inflation_ =
-      getParam<double>("ndt_observation/max_covariance_inflation", 100.0);
-  ndt_observation_fixed_position_std_ =
-      getParam<double>("ndt_observation/fixed_position_std_m", 0.08);
-  ndt_observation_fixed_rotation_std_ =
-      getParam<double>("ndt_observation/fixed_rotation_std_deg", 1.0) * M_PI / 180.0;
   ndt_observation_apply_ratio_ = getParam<double>("ndt_observation/apply_ratio", 0.8);
   ndt_observation_z_apply_ratio_ = getParam<double>("ndt_observation/z_apply_ratio", 1.0);
   ndt_observation_roll_pitch_apply_ratio_ = getParam<double>("ndt_observation/roll_pitch_apply_ratio", 1.0);
   ndt_observation_max_translation_correction_ = getParam<double>("ndt_observation/max_translation_correction", 1.0);
-  ndt_observation_max_frame_translation_ =
-      getParam<double>("ndt_observation/max_frame_translation", 0.5);
   ndt_observation_max_rotation_correction_ = getParam<double>("ndt_observation/max_rotation_correction_deg", 5.0) * M_PI / 180.0;
   ndt_observation_velocity_blend_ = getParam<double>("ndt_observation/velocity_blend", 0.6);
   lidar_deskew_enable_ = getParam<bool>("lidar_update/deskew_enable", true);
@@ -149,13 +136,6 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   degeneracy_project_update_enable_ = getParam<bool>("lidar_update/degeneracy_project_update_enable", true);
   degeneracy_project_eigen_ratio_ = getParam<double>("lidar_update/degeneracy_project_eigen_ratio", 0.03);
   degeneracy_project_min_scale_ = getParam<double>("lidar_update/degeneracy_project_min_scale", 0.10);
-  corridor_sequence_enable_ = getParam<bool>("lidar_update/corridor_sequence_enable", false);
-  corridor_sequence_bin_size_ = getParam<double>("lidar_update/corridor_sequence_bin_size", 0.5);
-  corridor_sequence_length_ = getParam<int>("lidar_update/corridor_sequence_length", 8);
-  corridor_sequence_max_hypotheses_ = getParam<int>("lidar_update/corridor_sequence_max_hypotheses", 5);
-  corridor_sequence_search_radius_ = getParam<double>("lidar_update/corridor_sequence_search_radius", 8.0);
-  corridor_axis_min_ = getParam<double>("lidar_update/corridor_axis_min", 0.0);
-  corridor_axis_max_ = getParam<double>("lidar_update/corridor_axis_max", 0.0);
   camera_enable_ = getParam<bool>("camera_update/enable", true);
   visual_feature_update_enable_ = getParam<bool>("camera_update/feature_update_enable", true);
   max_over_exposure_ratio_ = getParam<double>("camera_update/max_over_exposure_ratio", 0.25);
@@ -229,12 +209,10 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   ROS_INFO("[DogPriorMap C++] T_base_camera=[%.4f %.4f %.4f]",
            T_base_camera_.x(), T_base_camera_.y(), T_base_camera_.z());
 
-  // 拆分模式只接收独立 NDT 节点的位姿观测，不重复持有地图和 KDTree。
-  // 一体化模式仍由本节点加载地图，保持原有运行方式不变。
-  if (lidar_enable_)
-  {
-    loadPriorMap();
-  }
+  // ------------------------- 2. 加载先验地图 -------------------------
+  // C++版本为了少依赖Python/npz库，直接读取FAST-LIVO2输出的PCD。
+  // 读入后再次按yaml里的voxel_size降采样，并建立KDTree，后续匹配只做最近邻查询。
+  loadPriorMap();
 
   // ------------------------- 3. ROS发布和订阅 -------------------------
   pub_high_ = nh_.advertise<nav_msgs::Odometry>(odom_high_rate_topic_, 50);
@@ -245,10 +223,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   pub_corr_ = nh_.advertise<nav_msgs::Odometry>(odom_corrected_topic_, 20);
   pub_path_high_ = nh_.advertise<nav_msgs::Path>(path_high_rate_topic_, 5);
   pub_path_corr_ = nh_.advertise<nav_msgs::Path>(path_corrected_topic_, 5);
-  if (lidar_enable_)
-  {
-    pub_prior_map_ = nh_.advertise<sensor_msgs::PointCloud2>(prior_map_topic_, 1, true);
-  }
+  pub_prior_map_ = nh_.advertise<sensor_msgs::PointCloud2>(prior_map_topic_, 1, true);
   if (publish_filtered_points_)
   {
     pub_filtered_points_ = nh_.advertise<sensor_msgs::PointCloud2>(filtered_points_topic_, 5);
@@ -258,15 +233,11 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     pub_diagnostics_ = nh_.advertise<diagnostic_msgs::DiagnosticArray>(diagnostics_topic_, 5);
   }
 
-  if (map_cloud_ && !map_cloud_->empty() && pub_prior_map_)
-  {
-    sensor_msgs::PointCloud2 prior_map_msg;
-    pcl::toROSMsg(*map_cloud_, prior_map_msg);
-    prior_map_msg.header.stamp = ros::Time::now();
-    prior_map_msg.header.frame_id = map_frame_;
-    pub_prior_map_.publish(prior_map_msg);
-  }
-  initializeCorridorSequenceLocalizer();
+  sensor_msgs::PointCloud2 prior_map_msg;
+  pcl::toROSMsg(*map_cloud_, prior_map_msg);
+  prior_map_msg.header.stamp = ros::Time::now();
+  prior_map_msg.header.frame_id = map_frame_;
+  pub_prior_map_.publish(prior_map_msg);
   path_high_.header.frame_id = map_frame_;
   path_corr_.header.frame_id = map_frame_;
 
@@ -292,7 +263,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     sub_image_ = nh_.subscribe(image_topic_, 2, &DogPriorMapEkfNode::imageCallback, this);
   }
   ROS_INFO("[DogPriorMap C++] node started: map=%zu pts, imu=%s, lidar=%s",
-           map_cloud_ ? map_cloud_->size() : 0, imu_topic_.c_str(), lidar_topic_.c_str());
+           map_cloud_->size(), imu_topic_.c_str(), lidar_topic_.c_str());
 }
 
 // 读取浮点数组参数；兼容全局和私有命名空间，并提供安全默认值。

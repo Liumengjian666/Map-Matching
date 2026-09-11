@@ -57,16 +57,8 @@ camera_intrinsic:
 imu:
   gravity: 9.80665
   initialize_gravity_from_imu: true
-  initialize_gyro_bias_from_imu: true
   init_imu_samples: 200
-  use_acc_for_position: false
   velocity_damping: 0.98
-  continuous_gravity_correction_enable: false
-  gravity_correction_expected_acc_norm: 1.0
-  gravity_correction_gain: 0.01
-  gravity_correction_max_angle_deg: 0.5
-  gravity_correction_acc_tolerance: 0.25
-  gravity_correction_gyro_max: 0.8
   acc_noise: 2.0
   gyro_noise: 0.1
   acc_bias_noise: 0.0001
@@ -98,27 +90,6 @@ lidar_update:
   ndt_step_limit_enable: true
   ndt_step_limit_max_translation: 0.5
   ndt_step_limit_max_rotation_deg: 5.0
-  # Temporal corridor fingerprint localization. Disabled by default until a
-  # corridor map axis/range is validated on the target route.
-  corridor_sequence_enable: false
-  corridor_sequence_bin_size: 0.5
-  corridor_sequence_length: 8
-  corridor_sequence_max_hypotheses: 5
-  corridor_sequence_search_radius: 8.0
-  corridor_axis_min: 0.0
-  corridor_axis_max: 0.0
-
-reliability:
-  fitness_scale: 2.0
-  translation_scale: 0.50
-  rotation_scale_deg: 5.0
-  temporal_translation_scale: 0.35
-  temporal_rotation_scale_deg: 3.0
-  geometry_ratio_scale: 0.10
-  iteration_scale: 10.0
-  position_std_m: 0.08
-  rotation_std_deg: 1.0
-  min_score: 0.10
 
 camera_update:
   enable: true
