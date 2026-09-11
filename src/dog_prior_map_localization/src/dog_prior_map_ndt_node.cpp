@@ -513,7 +513,13 @@ private:
       }
       if (information_degenerate && has_prediction_)
       {
-        const Eigen::Matrix4d delta = initial_guess.inverse() * result;
+        // In a corridor the current absolute NDT solution can be locally
+        // ambiguous.  Continue with the previous-frame relative motion
+        // instead of freezing the robot at the last globally matched place;
+        // this is the temporal-observability fallback.
+        const Eigen::Matrix4d temporal_guess = has_previous_pose_
+            ? previous_pose_ * delta_pose_ : initial_guess;
+        const Eigen::Matrix4d delta = temporal_guess.inverse() * result;
         Eigen::AngleAxisd aa(delta.block<3, 3>(0, 0));
         Eigen::Matrix<double, 6, 1> correction;
         correction.head<3>() = delta.block<3, 1>(0, 3);
@@ -521,7 +527,7 @@ private:
         const double weak_component = correction.dot(information_weak);
         correction -= (1.0 - std::max(0.0, std::min(1.0, ndt_degenerate_scale_))) *
                       weak_component * information_weak;
-        Eigen::Matrix4d projected = initial_guess;
+        Eigen::Matrix4d projected = temporal_guess;
         projected.block<3, 1>(0, 3) += correction.head<3>();
         const double angle = correction.tail<3>().norm();
         if (angle > 1e-12)
