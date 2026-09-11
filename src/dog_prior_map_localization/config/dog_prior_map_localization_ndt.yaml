@@ -71,7 +71,9 @@ imu:
 
 lidar_update:
   registration_method: "ndt"
-  deskew_enable: true
+  # Keep the validated split-NDT baseline unchanged by default. Enable this
+  # experimentally only after comparing the same bag with deskew disabled.
+  deskew_enable: false
   deskew_translation_enable: true
   offset_time_scale: 0.000000001
   scan_voxel_size: 0.25
@@ -97,7 +99,8 @@ lidar_update:
   ndt_degeneracy_radius: 15.0
   ndt_degeneracy_ratio: 3.0
   ndt_degenerate_scale: 0.15
-  information_degeneracy_enable: true
+  # Experimental 6DoF information-matrix guard; baseline keeps it off.
+  information_degeneracy_enable: false
   information_condition_max: 100000.0
   information_correspondence_distance: 0.8
 
