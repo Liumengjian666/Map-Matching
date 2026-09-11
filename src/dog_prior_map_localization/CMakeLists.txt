@@ -59,6 +59,7 @@ add_dependencies(dog_prior_map_ekf_node_cpp
 
 add_executable(dog_prior_map_ndt_node_cpp
   src/dog_prior_map_ndt_node.cpp
+  src/corridor_sequence_localizer.cpp
 )
 
 target_link_libraries(dog_prior_map_ndt_node_cpp

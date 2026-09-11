@@ -23,6 +23,7 @@
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <tf/transform_broadcaster.h>
+#include "dog_prior_map_localization/corridor_sequence_localizer.hpp"
 
 namespace dog_prior_map_localization
 {
@@ -116,6 +117,13 @@ public:
         getParam<bool>("lidar_update/ndt_direction_check_enable", true);
     ndt_direction_min_motion_ =
         getParam<double>("lidar_update/ndt_direction_min_motion", 0.05);
+    corridor_sequence_enable_ = getParam<bool>("lidar_update/corridor_sequence_enable", false);
+    corridor_sequence_bin_size_ = getParam<double>("lidar_update/corridor_sequence_bin_size", 0.5);
+    corridor_sequence_length_ = getParam<int>("lidar_update/corridor_sequence_length", 8);
+    corridor_sequence_max_hypotheses_ = getParam<int>("lidar_update/corridor_sequence_max_hypotheses", 5);
+    corridor_sequence_search_radius_ = getParam<double>("lidar_update/corridor_sequence_search_radius", 8.0);
+    corridor_axis_min_ = getParam<double>("lidar_update/corridor_axis_min", 0.0);
+    corridor_axis_max_ = getParam<double>("lidar_update/corridor_axis_max", 0.0);
     reliability_fitness_scale_ = getParam<double>("reliability/fitness_scale", 2.0);
     reliability_translation_scale_ = getParam<double>("reliability/translation_scale", 0.50);
     reliability_rotation_scale_deg_ = getParam<double>("reliability/rotation_scale_deg", 5.0);
@@ -132,6 +140,16 @@ public:
     publish_diagnostics_ = getParam<bool>("output/publish_diagnostics", true);
 
     loadMap();
+    corridor_sequence_localizer_.configure(corridor_sequence_enable_, corridor_sequence_bin_size_,
+                                           corridor_sequence_length_, corridor_sequence_max_hypotheses_,
+                                           corridor_sequence_search_radius_, corridor_axis_min_, corridor_axis_max_);
+    if (corridor_sequence_enable_)
+    {
+      corridor_sequence_localizer_.buildMap(map_cloud_);
+      ROS_INFO("[DogPriorMap NDT] corridor sequence: enabled=%d ready=%d bin=%.2f hypotheses=%d",
+               corridor_sequence_enable_, corridor_sequence_localizer_.ready(), corridor_sequence_bin_size_,
+               corridor_sequence_max_hypotheses_);
+    }
 
     pub_odom_ = nh_.advertise<nav_msgs::Odometry>(ndt_odom_topic_, 20);
     pub_pose_ = nh_.advertise<geometry_msgs::PoseStamped>(ndt_pose_topic_, 20);
@@ -394,6 +412,22 @@ private:
         const Eigen::Matrix4d temporal_error = delta_pose_.inverse() * raw_delta;
         temporal_translation = temporal_error.block<3, 1>(0, 3).norm();
         temporal_rotation_deg = rotationAngleDeg(temporal_error.block<3, 3>(0, 0));
+      }
+    }
+
+    if (ok && corridor_sequence_localizer_.ready())
+    {
+      const double predicted_s = initial_guess(0, 3);
+      const double temporal_s = corridor_sequence_localizer_.update(
+          source, raw_result.block<3, 3>(0, 0), raw_result.block<3, 1>(0, 3),
+          predicted_s, lidar_degenerate);
+      if (lidar_degenerate && std::isfinite(temporal_s))
+      {
+        raw_result(0, 3) = temporal_s;
+        ROS_DEBUG_THROTTLE(1.0,
+                           "[DogPriorMap NDT] corridor temporal x=%.3f raw_ndt_x=%.3f confidence=%.3f",
+                           temporal_s, ndt_.getFinalTransformation()(0, 3),
+                           corridor_sequence_localizer_.last_score());
       }
     }
 
@@ -845,6 +879,14 @@ private:
   double ndt_degenerate_scale_ = 0.15;
   bool ndt_direction_check_enable_ = true;
   double ndt_direction_min_motion_ = 0.05;
+  bool corridor_sequence_enable_ = false;
+  double corridor_sequence_bin_size_ = 0.5;
+  int corridor_sequence_length_ = 8;
+  int corridor_sequence_max_hypotheses_ = 5;
+  double corridor_sequence_search_radius_ = 8.0;
+  double corridor_axis_min_ = 0.0;
+  double corridor_axis_max_ = 0.0;
+  CorridorSequenceLocalizer corridor_sequence_localizer_;
   double reliability_fitness_scale_ = 2.0;
   double reliability_translation_scale_ = 0.50;
   double reliability_rotation_scale_deg_ = 5.0;
