@@ -71,7 +71,9 @@ bool estimateWeakDirection(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
     mean += d;
     ++count;
   }
-  if (count < 50) return false;
+  // 局部子图在稀疏走廊或地图边缘可能只有几十个点；只要样本足够
+  // 支撑一个稳定的 3D 协方差估计，就允许进入退化判定。
+  if (count < 20) return false;
   mean /= static_cast<double>(count);
   Eigen::Matrix3d covariance = Eigen::Matrix3d::Zero();
   for (const auto &pt : cloud->points)
