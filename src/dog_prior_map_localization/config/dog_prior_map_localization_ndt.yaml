@@ -95,12 +95,12 @@ lidar_update:
   ndt_step_limit_max_rotation_deg: 5.0
   ndt_prediction_enable: true
   ndt_prediction_max_age: 0.25
-  ndt_degeneracy_enable: true
+  ndt_degeneracy_enable: false
   ndt_degeneracy_radius: 15.0
   ndt_degeneracy_ratio: 3.0
   ndt_degenerate_scale: 0.15
   # Experimental 6DoF information-matrix guard; baseline keeps it off.
-  information_degeneracy_enable: false
+  information_degeneracy_enable: true
   information_condition_max: 100000.0
   information_correspondence_distance: 0.8
 
