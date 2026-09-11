@@ -421,6 +421,8 @@ private:
 
     publishDiagnostics(stamp, ok, align_ms, preprocess_ms, localization_ms,
                        static_cast<int>(source->size()), target_cloud_->size(), score, iterations, step_limited);
+    ROS_INFO_THROTTLE(2.0, "[DogPriorMap NDT] local_anisotropy=%.3f degenerate=%d",
+                       frame_degeneracy_ratio, frame_degenerate ? 1 : 0);
     ROS_INFO_THROTTLE(1.0,
                       "[DogPriorMap NDT] conv=%d limited=%d source=%zu target=%zu align=%.2fms score=%.4f iter=%d p=(%.2f %.2f %.2f)",
                       ok ? 1 : 0, step_limited ? 1 : 0, source->size(), target_cloud_->size(), align_ms, score, iterations, p_.x(), p_.y(), p_.z());
