@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cmath>
+#include <deque>
 #include <limits>
 #include <mutex>
 #include <stdexcept>
@@ -21,6 +22,7 @@
 #include <pcl_conversions/pcl_conversions.h>
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
+#include <sensor_msgs/Imu.h>
 #include <std_msgs/Float64.h>
 #include <tf/transform_broadcaster.h>
 
@@ -106,6 +108,7 @@ public:
     base_frame_ = getParam<std::string>("frames/base_frame", "livox_frame");
     lidar_topic_ = getParam<std::string>("topics/lidar", "/livox/lidar");
     lidar_msg_type_ = getParam<std::string>("topics/lidar_msg_type", "livox");
+    imu_topic_ = getParam<std::string>("topics/imu", "/livox/imu");
     filtered_points_topic_ = getParam<std::string>("topics/filtered_points", "/dog_livo/filtered_points");
     diagnostics_topic_ = getParam<std::string>("topics/diagnostics", "/dog_livo/diagnostics");
     ndt_odom_topic_ = getParam<std::string>("topics/ndt_odom", "/dog_livo/ndt_odom");
@@ -114,6 +117,9 @@ public:
     ndt_path_topic_ = getParam<std::string>("topics/ndt_path", "/dog_livo/ndt_path");
     points_aligned_topic_ = getParam<std::string>("topics/points_aligned", "/dog_livo/points_aligned");
     prediction_topic_ = getParam<std::string>("topics/odom_high_rate", "/dog_livo/odom_high_rate");
+    deskew_enable_ = getParam<bool>("lidar_update/deskew_enable", false);
+    lidar_offset_time_scale_ = getParam<double>("lidar_update/offset_time_scale", 1e-9);
+    imu_history_keep_sec_ = getParam<double>("imu/history_keep_sec", 2.0);
 
     map_pcd_path_ = getParam<std::string>("map/pcd_fallback_path", "");
     map_voxel_size_ = getParam<double>("map/voxel_size", 0.30);
@@ -174,6 +180,7 @@ public:
     }
     sub_prediction_ = nh_.subscribe(prediction_topic_, 20,
                                     &DogPriorMapNdtNode::predictionCallback, this);
+    sub_imu_ = nh_.subscribe(imu_topic_, 500, &DogPriorMapNdtNode::imuCallback, this);
 
     ROS_INFO("[DogPriorMap NDT] started: map=%s target=%zu lidar=%s output=%s",
              map_pcd_path_.c_str(), target_cloud_->size(), lidar_topic_.c_str(), ndt_odom_topic_.c_str());
@@ -194,6 +201,24 @@ public:
     imu_prediction_pose_(2, 3) = msg->pose.pose.position.z;
     prediction_stamp_ = msg->header.stamp;
     has_prediction_ = true;
+  }
+
+  void imuCallback(const sensor_msgs::ImuConstPtr &msg)
+  {
+    if (!msg) return;
+    std::lock_guard<std::mutex> lock(mutex_);
+    imu_history_.push_back(ImuSample{msg->header.stamp.toSec(),
+                                     Eigen::Vector3d(msg->linear_acceleration.x,
+                                                     msg->linear_acceleration.y,
+                                                     msg->linear_acceleration.z),
+                                     Eigen::Vector3d(msg->angular_velocity.x,
+                                                     msg->angular_velocity.y,
+                                                     msg->angular_velocity.z)});
+    while (!imu_history_.empty() &&
+           msg->header.stamp.toSec() - imu_history_.front().stamp > imu_history_keep_sec_)
+    {
+      imu_history_.pop_front();
+    }
   }
 
 private:
@@ -293,15 +318,57 @@ private:
     const ros::WallTime callback_start = ros::WallTime::now();
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>());
     cloud->reserve(msg->points.size());
+    double frame_end = msg->header.stamp.toSec();
+    for (const auto &pt : msg->points)
+      frame_end = std::max(frame_end, msg->header.stamp.toSec() +
+                           static_cast<double>(pt.offset_time) * lidar_offset_time_scale_);
     for (const auto &pt : msg->points)
     {
       if (std::isfinite(pt.x) && std::isfinite(pt.y) && std::isfinite(pt.z))
       {
-        cloud->push_back(pcl::PointXYZ(pt.x, pt.y, pt.z));
+        Eigen::Vector3d p(pt.x, pt.y, pt.z);
+        if (deskew_enable_ && frame_end > msg->header.stamp.toSec())
+        {
+          const double point_time = msg->header.stamp.toSec() +
+              static_cast<double>(pt.offset_time) * lidar_offset_time_scale_;
+          p = integrateImuRotation(point_time, frame_end) * p;
+        }
+        cloud->push_back(pcl::PointXYZ(p.x(), p.y(), p.z()));
       }
     }
     finalizeCloud(cloud);
     handleCloud(cloud, msg->header.stamp, callback_start);
+  }
+
+  Eigen::Matrix3d integrateImuRotation(double t0, double t1) const
+  {
+    if (t1 <= t0) return Eigen::Matrix3d::Identity();
+    std::deque<ImuSample> history;
+    {
+      std::lock_guard<std::mutex> lock(mutex_);
+      history = imu_history_;
+    }
+    if (history.size() < 2 || history.front().stamp > t0 || history.back().stamp < t1)
+      return Eigen::Matrix3d::Identity();
+    Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
+    double prev_t = t0;
+    Eigen::Vector3d prev_g = history.front().gyro;
+    for (size_t i = 1; i < history.size(); ++i)
+    {
+      if (history[i].stamp <= t0) { prev_g = history[i].gyro; continue; }
+      const double seg_end = std::min(history[i].stamp, t1);
+      if (seg_end > prev_t)
+      {
+        const Eigen::Vector3d g = 0.5 * (prev_g + history[i].gyro);
+        const double dt = seg_end - prev_t;
+        const double angle = g.norm() * dt;
+        if (angle > 1e-12) R = R * Eigen::AngleAxisd(angle, g.normalized()).toRotationMatrix();
+        prev_t = seg_end;
+      }
+      prev_g = history[i].gyro;
+      if (prev_t >= t1) break;
+    }
+    return R;
   }
 
   // 将标准 PointCloud2 转为 PCL 点云并进入统一 NDT 处理流程。
@@ -602,6 +669,7 @@ private:
   ros::Subscriber sub_livox_;
   ros::Subscriber sub_pc2_;
   ros::Subscriber sub_prediction_;
+  ros::Subscriber sub_imu_;
   ros::Publisher pub_odom_;
   ros::Publisher pub_lidar_degeneracy_;
   ros::Publisher pub_pose_;
@@ -610,7 +678,7 @@ private:
   ros::Publisher pub_aligned_;
   ros::Publisher pub_diagnostics_;
   tf::TransformBroadcaster tf_broadcaster_;
-  std::mutex mutex_;
+  mutable std::mutex mutex_;
 
   std::string map_frame_;
   std::string base_frame_;
@@ -625,6 +693,15 @@ private:
   std::string points_aligned_topic_;
   std::string map_pcd_path_;
   std::string prediction_topic_;
+  std::string imu_topic_;
+
+  struct ImuSample
+  {
+    double stamp = 0.0;
+    Eigen::Vector3d acc = Eigen::Vector3d::Zero();
+    Eigen::Vector3d gyro = Eigen::Vector3d::Zero();
+  };
+  std::deque<ImuSample> imu_history_;
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud_;
   pcl::PointCloud<pcl::PointXYZ>::Ptr target_cloud_;
@@ -666,6 +743,9 @@ private:
   double ndt_degeneracy_radius_ = 15.0;
   double ndt_degeneracy_ratio_ = 8.0;
   double ndt_degenerate_scale_ = 0.15;
+  bool deskew_enable_ = false;
+  double lidar_offset_time_scale_ = 1e-9;
+  double imu_history_keep_sec_ = 2.0;
   bool publish_tf_ = true;
   bool publish_path_ = false;
   bool publish_filtered_points_ = true;
