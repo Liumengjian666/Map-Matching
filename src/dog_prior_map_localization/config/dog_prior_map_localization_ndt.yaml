@@ -101,40 +101,11 @@ lidar_update:
   ndt_degenerate_scale: 0.15
   # Experimental 6DoF information-matrix guard; baseline keeps it off.
   information_degeneracy_enable: true
-  # Ordinary scenes reach roughly 10^2--10^3 with this point-to-point
-  # approximation; reserve the fallback for the clearly corridor-like tail.
-  information_condition_max: 5000.0
+  information_condition_max: 100000.0
   information_correspondence_distance: 0.8
-  # Scan-to-scan fallback is evaluated only when the information matrix says
-  # the absolute map match is degenerate.
-  # Disabled by default: raw scan-to-scan ICP is ambiguous in the same
-  # repetitive corridor and was observed to introduce lateral drift.
-  scan_to_scan_enable: false
-  scan_to_scan_max_iterations: 12
-  scan_to_scan_max_correspondence_distance: 1.5
-  scan_to_scan_fitness_epsilon: 0.001
-  scan_to_scan_max_fitness: 0.35
-  scan_to_scan_max_translation: 1.0
-  temporal_velocity_window: 20
-  temporal_velocity_max_speed: 3.0
-  temporal_velocity_max_dt: 0.5
-  temporal_degeneracy_recovery_frames: 10
-  # Experimental temporal fallback is retained behind an explicit flag;
-  # stable split-NDT deployment keeps the validated baseline active.
-  information_fallback_enable: false
-  temporal_velocity_enable: false
-  multi_hypothesis_enable: false
-  multi_hypothesis_stride: 5
-  multi_hypothesis_radius_steps: 4
-  multi_hypothesis_step: 5.0
 
 camera_update:
   enable: true
-  metric_odom_enable: true
-  metric_odom_max_translation_correction: 0.5
-  metric_odom_max_rotation_correction_deg: 5.0
-  metric_odom_reprojection_error: 3.0
-  metric_odom_min_points: 12
   mode: "quality_gate"
   feature_update_enable: true
   min_gradient_mean: 2.5

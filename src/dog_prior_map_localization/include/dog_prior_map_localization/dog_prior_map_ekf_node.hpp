@@ -104,8 +104,6 @@ private:
   bool integrateImuDelta(double t0, double t1, Eigen::Matrix3d &R_delta, Eigen::Vector3d &p_delta) const;
   /// 接收标准 PointCloud2 点云并转入统一 LiDAR 处理流程。
   void pointCloud2Callback(const sensor_msgs::PointCloud2ConstPtr &msg);
-  /// 接收拆分 NDT 节点发布的机体系预处理点云，仅供视觉深度关联。
-  void metricCloudCallback(const sensor_msgs::PointCloud2ConstPtr &msg);
   /// 调度点云预处理、局部地图构建、匹配更新和结果发布。
   void handleLidarCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud_lidar, const ros::Time &stamp);
   /// 将雷达点转换到机体系，并执行范围过滤、降采样和离群点剔除。
@@ -134,13 +132,6 @@ private:
                                 const std::vector<cv::Point2f> &prev_pts,
                                 const std::vector<cv::Point2f> &curr_pts,
                                 double weight_scale);
-  /// 利用雷达深度建立3D-2D对应并估计退化段视觉相对平移/姿态。
-  bool estimateVisualMetricMotion(const std::vector<cv::Point2f> &prev_pts,
-                                  const std::vector<cv::Point2f> &curr_pts,
-                                  Eigen::Matrix3d &R_rel,
-                                  Eigen::Vector3d &t_rel);
-  /// 为当前图像角点关联最近的机体系雷达深度点。
-  void buildVisualDepthAssociations(const std::vector<cv::Point2f> &features);
   /// 将独立 NDT 节点输出作为低频外部观测融合到 EKF 状态中。
   void ndtObservationCallback(const nav_msgs::OdometryConstPtr &msg);
   void lidarDegeneracyCallback(const std_msgs::Float64ConstPtr &msg);
@@ -167,7 +158,6 @@ private:
   ros::Subscriber sub_imu_;
   ros::Subscriber sub_livox_;
   ros::Subscriber sub_pc2_;
-  ros::Subscriber sub_metric_cloud_;
   ros::Subscriber sub_image_;
   ros::Subscriber sub_ndt_observation_;
   ros::Subscriber sub_lidar_degeneracy_;
@@ -349,17 +339,6 @@ private:
   double visual_degenerate_weight_scale_ = 2.0;
   double min_degeneracy_score_for_visual_ = 0.15;
   bool camera_intrinsic_valid_ = false;
-  bool visual_metric_odom_enable_ = false;
-  double visual_metric_max_translation_correction_ = 0.5;
-  double visual_metric_max_rotation_correction_deg_ = 5.0;
-  double visual_metric_reprojection_error_ = 3.0;
-  int visual_metric_min_points_ = 12;
-  pcl::PointCloud<pcl::PointXYZ>::Ptr latest_scan_body_;
-  ros::Time latest_scan_stamp_;
-  std::vector<Eigen::Vector3d> last_depth_points_;
-  std::vector<uint8_t> last_depth_valid_;
-  Eigen::Vector3d last_visual_p_ = Eigen::Vector3d::Zero();
-  Eigen::Matrix3d last_visual_R_ = Eigen::Matrix3d::Identity();
   double cam_fx_ = 0.0;
   double cam_fy_ = 0.0;
   double cam_cx_ = 0.0;

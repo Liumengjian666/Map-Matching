@@ -128,27 +128,6 @@ void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
     if (static_cast<int>(prev_good.size()) >= min_tracked_features_)
     {
       applyVisualYawCorrection(last_gray_, gray, prev_good, curr_good, visual_constraint_weight_scale_);
-      if (visual_metric_odom_enable_ && camera_intrinsic_valid_ &&
-          lidar_degeneracy_score_ >= min_degeneracy_score_for_visual_)
-      {
-        Eigen::Matrix3d R_visual = Eigen::Matrix3d::Identity();
-        Eigen::Vector3d t_visual = Eigen::Vector3d::Zero();
-        if (estimateVisualMetricMotion(prev_good, curr_good, R_visual, t_visual))
-        {
-          const Eigen::Matrix3d R_pred_rel = last_visual_R_.transpose() * R_;
-          const Eigen::Vector3d t_pred_rel = last_visual_R_.transpose() * (p_ - last_visual_p_);
-          const Eigen::Vector3d dp_world = last_visual_R_ *
-              limitVector(t_visual - t_pred_rel, visual_metric_max_translation_correction_);
-          Eigen::AngleAxisd aa(R_visual * R_pred_rel.transpose());
-          Eigen::Vector3d dtheta = aa.axis() * aa.angle();
-          dtheta = limitVector(dtheta * std::max(0.0, std::min(1.0, visual_constraint_weight_scale_)),
-                               visual_metric_max_rotation_correction_deg_ * M_PI / 180.0);
-          applyPoseCorrection(dp_world, dtheta);
-          ROS_INFO_THROTTLE(2.0,
-                            "[DogPriorMap C++] metric visual correction t=(%.3f %.3f %.3f) points=%d",
-                            dp_world.x(), dp_world.y(), dp_world.z(), visual_metric_min_points_);
-        }
-      }
       ++visual_update_ok_count_;
     }
     else
@@ -159,104 +138,12 @@ void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
 
   last_gray_ = gray.clone();
   last_features_ = features;
-  buildVisualDepthAssociations(features);
   last_image_R_ = R_;
-  last_visual_R_ = R_;
-  last_visual_p_ = p_;
   has_last_image_pose_ = true;
 
   const double visual_ms = (ros::WallTime::now() - visual_start).toSec() * 1000.0;
   visual_update_time_sum_ms_ += visual_ms;
   visual_update_time_max_ms_ = std::max(visual_update_time_max_ms_, visual_ms);
-}
-
-void DogPriorMapEkfNode::buildVisualDepthAssociations(const std::vector<cv::Point2f> &features)
-{
-  last_depth_points_.assign(features.size(), Eigen::Vector3d::Zero());
-  last_depth_valid_.assign(features.size(), 0);
-  if (!latest_scan_body_ || !camera_intrinsic_valid_) return;
-  std::vector<float> best_dist(features.size(), 16.0f);
-  const Eigen::Matrix3d R_camera_base = R_base_camera_.transpose();
-  for (const auto &pt : latest_scan_body_->points)
-  {
-    const Eigen::Vector3d p_base(pt.x, pt.y, pt.z);
-    const Eigen::Vector3d p_cam = R_camera_base * (p_base - T_base_camera_);
-    if (!p_cam.allFinite() || p_cam.z() <= 0.2) continue;
-    const float u = static_cast<float>(cam_fx_ * p_cam.x() / p_cam.z() + cam_cx_);
-    const float v = static_cast<float>(cam_fy_ * p_cam.y() / p_cam.z() + cam_cy_);
-    for (size_t i = 0; i < features.size(); ++i)
-    {
-      const float du = features[i].x - u;
-      const float dv = features[i].y - v;
-      const float d2 = du * du + dv * dv;
-      if (d2 < best_dist[i])
-      {
-        best_dist[i] = d2;
-        last_depth_points_[i] = p_base;
-        last_depth_valid_[i] = 1;
-      }
-    }
-  }
-}
-
-bool DogPriorMapEkfNode::estimateVisualMetricMotion(const std::vector<cv::Point2f> &prev_pts,
-                                                    const std::vector<cv::Point2f> &curr_pts,
-                                                    Eigen::Matrix3d &R_rel,
-                                                    Eigen::Vector3d &t_rel)
-{
-  try
-  {
-    if (prev_pts.size() != curr_pts.size() ||
-        prev_pts.size() < static_cast<size_t>(visual_metric_min_points_) ||
-        last_depth_points_.size() != last_features_.size()) return false;
-    std::vector<cv::Point3f> object_points;
-    std::vector<cv::Point2f> image_points;
-    for (size_t i = 0; i < prev_pts.size(); ++i)
-    {
-      if (!std::isfinite(prev_pts[i].x) || !std::isfinite(prev_pts[i].y) ||
-          !std::isfinite(curr_pts[i].x) || !std::isfinite(curr_pts[i].y)) continue;
-      size_t best = last_features_.size();
-      float best_d2 = 4.0f;
-      for (size_t j = 0; j < last_features_.size(); ++j)
-      {
-        const float du = prev_pts[i].x - last_features_[j].x;
-        const float dv = prev_pts[i].y - last_features_[j].y;
-        const float d2 = du * du + dv * dv;
-        if (std::isfinite(d2) && d2 < best_d2) { best_d2 = d2; best = j; }
-      }
-      if (best >= last_depth_points_.size() || !last_depth_valid_[best]) continue;
-      const auto &p = last_depth_points_[best];
-      if (!p.allFinite() || p.z() <= 0.2) continue;
-      object_points.emplace_back(static_cast<float>(p.x()), static_cast<float>(p.y()), static_cast<float>(p.z()));
-      image_points.push_back(curr_pts[i]);
-    }
-    if (object_points.size() < static_cast<size_t>(visual_metric_min_points_)) return false;
-    cv::Mat K = (cv::Mat_<double>(3, 3) << cam_fx_, 0.0, cam_cx_,
-                 0.0, cam_fy_, cam_cy_, 0.0, 0.0, 1.0);
-    cv::Mat rvec, tvec, inliers;
-    if (!cv::solvePnPRansac(object_points, image_points, K, cv::noArray(), rvec, tvec, false,
-                            100, visual_metric_reprojection_error_, 0.99, inliers,
-                            cv::SOLVEPNP_ITERATIVE) || inliers.rows < visual_metric_min_points_)
-      return false;
-    cv::Mat R_cv;
-    cv::Rodrigues(rvec, R_cv);
-    Eigen::Matrix3d R_cam;
-    for (int r = 0; r < 3; ++r) for (int c = 0; c < 3; ++c) R_cam(r, c) = R_cv.at<double>(r, c);
-    Eigen::Vector3d t_cam(tvec.at<double>(0), tvec.at<double>(1), tvec.at<double>(2));
-    R_rel = R_base_camera_ * R_cam;
-    t_rel = R_base_camera_ * t_cam + T_base_camera_;
-    return R_rel.allFinite() && t_rel.allFinite() && t_rel.norm() < 2.0;
-  }
-  catch (const cv::Exception &e)
-  {
-    ROS_WARN_THROTTLE(2.0, "[DogPriorMap C++] metric PnP rejected frame: %s", e.what());
-    return false;
-  }
-  catch (const std::exception &e)
-  {
-    ROS_WARN_THROTTLE(2.0, "[DogPriorMap C++] metric visual exception: %s", e.what());
-    return false;
-  }
 }
 
 // 根据特征对应估计相机相对旋转，并把受限航向残差反馈到机体姿态。
