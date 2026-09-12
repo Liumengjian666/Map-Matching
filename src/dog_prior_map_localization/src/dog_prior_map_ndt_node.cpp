@@ -204,6 +204,7 @@ public:
     information_degeneracy_enable_ = getParam<bool>("lidar_update/information_degeneracy_enable", true);
     information_condition_max_ = getParam<double>("lidar_update/information_condition_max", 1e5);
     information_correspondence_distance_ = getParam<double>("lidar_update/information_correspondence_distance", 0.8);
+    information_pose_projection_enable_ = getParam<bool>("lidar_update/information_pose_projection_enable", false);
     publish_tf_ = getParam<bool>("output/ndt_publish_tf", false);
     publish_path_ = getParam<bool>("output/publish_path", false);
     publish_filtered_points_ = getParam<bool>("output/publish_filtered_points", true);
@@ -511,7 +512,7 @@ private:
                            "[DogPriorMap NDT] degenerate update ratio=%.2f weak=(%.2f %.2f %.2f)",
                            degeneracy_ratio, weak_direction.x(), weak_direction.y(), weak_direction.z());
       }
-      if (information_degenerate && has_prediction_)
+      if (information_pose_projection_enable_ && information_degenerate && has_prediction_)
       {
         const Eigen::Matrix4d delta = initial_guess.inverse() * result;
         Eigen::AngleAxisd aa(delta.block<3, 3>(0, 0));
@@ -831,6 +832,9 @@ private:
   bool information_degeneracy_enable_ = true;
   double information_condition_max_ = 1e5;
   double information_correspondence_distance_ = 0.8;
+  // Stage 0 keeps the information matrix as a detector only.  Pose projection
+  // is opt-in for a later controlled experiment and disabled by default.
+  bool information_pose_projection_enable_ = false;
   bool deskew_enable_ = false;
   double lidar_offset_time_scale_ = 1e-9;
   double imu_history_keep_sec_ = 2.0;

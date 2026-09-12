@@ -103,6 +103,8 @@ lidar_update:
   information_degeneracy_enable: true
   information_condition_max: 100000.0
   information_correspondence_distance: 0.8
+  # Stage 0: Hessian/eigen analysis is diagnostic only; it must not alter T_ndt.
+  information_pose_projection_enable: false
 
 camera_update:
   enable: true
