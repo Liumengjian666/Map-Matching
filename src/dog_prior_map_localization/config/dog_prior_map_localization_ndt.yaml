@@ -130,6 +130,11 @@ lidar_update:
 
 camera_update:
   enable: true
+  metric_odom_enable: true
+  metric_odom_max_translation_correction: 0.5
+  metric_odom_max_rotation_correction_deg: 5.0
+  metric_odom_reprojection_error: 3.0
+  metric_odom_min_points: 12
   mode: "quality_gate"
   feature_update_enable: true
   min_gradient_mean: 2.5

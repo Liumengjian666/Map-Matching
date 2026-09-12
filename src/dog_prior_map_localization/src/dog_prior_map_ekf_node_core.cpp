@@ -154,6 +154,11 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   cam_cx_ = getParam<double>("camera_intrinsic/cx", 0.0);
   cam_cy_ = getParam<double>("camera_intrinsic/cy", 0.0);
   camera_intrinsic_valid_ = cam_fx_ > 1.0 && cam_fy_ > 1.0;
+  visual_metric_odom_enable_ = getParam<bool>("camera_update/metric_odom_enable", false);
+  visual_metric_max_translation_correction_ = getParam<double>("camera_update/metric_odom_max_translation_correction", 0.5);
+  visual_metric_max_rotation_correction_deg_ = getParam<double>("camera_update/metric_odom_max_rotation_correction_deg", 5.0);
+  visual_metric_reprojection_error_ = getParam<double>("camera_update/metric_odom_reprojection_error", 3.0);
+  visual_metric_min_points_ = std::max(8, getParam<int>("camera_update/metric_odom_min_points", 12));
 
   path_max_length_ = getParam<int>("output/path_max_length", 5000);
   publish_path_ = getParam<bool>("output/publish_path", false);
@@ -260,6 +265,11 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     {
       sub_livox_ = nh_.subscribe(lidar_topic_, 5, &DogPriorMapEkfNode::livoxCallback, this);
     }
+  }
+  if (visual_metric_odom_enable_)
+  {
+    sub_metric_cloud_ = nh_.subscribe(filtered_points_topic_, 5,
+                                      &DogPriorMapEkfNode::metricCloudCallback, this);
   }
   if (camera_enable_)
   {

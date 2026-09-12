@@ -717,6 +717,14 @@ private:
     {
       degeneracy_msg.data = 0.0;
     }
+    // The EKF visual gate must also see the information-matrix degeneracy.
+    // The legacy geometric score is intentionally disabled in the split
+    // baseline, so publishing only that score would leave visual updates
+    // permanently disabled even when the Fisher information is singular.
+    if (information_degenerate)
+    {
+      degeneracy_msg.data = std::max(degeneracy_msg.data, 1.0);
+    }
     pub_lidar_degeneracy_.publish(degeneracy_msg);
 
     publishDiagnostics(stamp, ok, align_ms, preprocess_ms, localization_ms,

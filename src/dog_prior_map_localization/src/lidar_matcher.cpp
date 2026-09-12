@@ -254,6 +254,16 @@ void DogPriorMapEkfNode::pointCloud2Callback(const sensor_msgs::PointCloud2Const
   handleLidarCloud(cloud, msg->header.stamp);
 }
 
+void DogPriorMapEkfNode::metricCloudCallback(const sensor_msgs::PointCloud2ConstPtr &msg)
+{
+  if (!msg || !visual_metric_odom_enable_) return;
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>());
+  pcl::fromROSMsg(*msg, *cloud);
+  std::lock_guard<std::mutex> lock(mutex_);
+  latest_scan_body_ = cloud;
+  latest_scan_stamp_ = msg->header.stamp;
+}
+
 // LiDAR 主流程：预处理扫描、构建局部地图、执行配准并发布校正状态与诊断。
 void DogPriorMapEkfNode::handleLidarCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud_lidar, const ros::Time &stamp)
 {
@@ -264,6 +274,11 @@ void DogPriorMapEkfNode::handleLidarCloud(const pcl::PointCloud<pcl::PointXYZ>::
   std::lock_guard<std::mutex> lock(mutex_);
   const ros::WallTime wall_start = ros::WallTime::now();
   pcl::PointCloud<pcl::PointXYZ>::Ptr scan_body = preprocessScan(cloud_lidar);
+  // Keep the most recent body-frame scan for metric visual odometry.  The
+  // image callback uses this cloud to associate tracked pixels with actual
+  // LiDAR depth; it is not fed back into the normal NDT path.
+  latest_scan_body_ = scan_body;
+  latest_scan_stamp_ = stamp;
   if (static_cast<int>(scan_body->size()) < min_effective_points_)
   {
     ++lidar_update_fail_count_;
