@@ -261,11 +261,13 @@ void DogPriorMapEkfNode::applyVisualYawCorrection(const cv::Mat &prev_gray,
         }
         const Eigen::Matrix3d R_base_rel = R_base_camera_ * R_cam * R_base_camera_.transpose();
         yaw_base = std::atan2(R_base_rel(1, 0), R_base_rel(0, 0));
-        Eigen::AngleAxisd relative_angle(R_base_rel);
         last_visual_relative_pose_.head<3>() = Eigen::Vector3d(t_cv.at<double>(0),
                                                                 t_cv.at<double>(1),
                                                                 t_cv.at<double>(2));
-        last_visual_relative_pose_.tail<3>() = relative_angle.axis() * relative_angle.angle();
+        // Keep the diagnostic state ordering consistent with the localization
+        // state [x,y,z,roll,pitch,yaw].  The translation remains a unit
+        // direction because monocular scale is unavailable.
+        last_visual_relative_pose_.tail<3>() = R_base_rel.eulerAngles(0, 1, 2);
         last_visual_relative_pose_valid_ = last_visual_relative_pose_.allFinite();
         // Essential-matrix translation has unknown monocular scale.  A true
         // reprojection covariance is also unavailable in this lightweight
