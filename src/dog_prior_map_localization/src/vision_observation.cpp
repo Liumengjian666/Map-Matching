@@ -244,6 +244,9 @@ void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
   last_visual_reprojection_valid_ = false;
   last_visual_covariance_valid_ = false;
   last_visual_tracking_good_ = false;
+  last_visual_relative_rotation_.setIdentity();
+  last_visual_imu_rotation_residual_deg_ = std::numeric_limits<double>::quiet_NaN();
+  last_visual_imu_rotation_valid_ = false;
   last_visual_update_reason_ = camera_enable_ ? "no_update" : "camera_disabled";
 
   // ------------------------- 相机质量门控 -------------------------
@@ -467,6 +470,8 @@ void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
     if (apply_correction && !visual_pose_estimated) ++visual_update_fail_count_;
   }
 
+  updateVisualImuDiagnostic(msg->header.stamp);
+
   // Update the hysteresis controller after this frame's relative pose has
   // been estimated, so a "good" visual event means both valid tracking and a
   // valid geometric relative-pose estimate.  A mode transition takes effect
@@ -540,6 +545,7 @@ bool DogPriorMapEkfNode::applyVisualYawCorrection(const cv::Mat &prev_gray,
         }
         const Eigen::Matrix3d R_base_rel = R_base_camera_ * R_cam * R_base_camera_.transpose();
         yaw_base = std::atan2(R_base_rel(1, 0), R_base_rel(0, 0));
+        last_visual_relative_rotation_ = R_base_rel;
         last_visual_relative_pose_.head<3>() = Eigen::Vector3d(t_cv.at<double>(0),
                                                                 t_cv.at<double>(1),
                                                                 t_cv.at<double>(2));
@@ -598,6 +604,8 @@ bool DogPriorMapEkfNode::applyVisualYawCorrection(const cv::Mat &prev_gray,
       return false;
     }
     yaw_base = std::atan2(b, a);
+    last_visual_relative_rotation_ =
+        Eigen::AngleAxisd(yaw_base, Eigen::Vector3d::UnitZ()).toRotationMatrix();
     last_visual_relative_pose_.setZero();
     last_visual_relative_pose_(5) = yaw_base;
     last_visual_relative_pose_valid_ = last_visual_relative_pose_.allFinite();
@@ -636,6 +644,35 @@ bool DogPriorMapEkfNode::applyVisualYawCorrection(const cv::Mat &prev_gray,
   applyPoseCorrection(Eigen::Vector3d::Zero(), dtheta);
   last_visual_update_reason_ = "yaw_only_correction_applied";
   return true;
+}
+
+void DogPriorMapEkfNode::updateVisualImuDiagnostic(const ros::Time &stamp)
+{
+  if (!local_vio_diagnostic_enable_ || !last_visual_relative_pose_valid_ ||
+      !last_image_stamp_.isValid() || !stamp.isValid())
+    return;
+  const double t0 = last_image_stamp_.toSec();
+  const double t1 = stamp.toSec();
+  if (!std::isfinite(t0) || !std::isfinite(t1) || t1 <= t0) return;
+
+  const Eigen::Matrix3d R_imu = integrateImuRotation(t0, t1);
+  if (!R_imu.allFinite()) return;
+  Eigen::Quaterniond q_error(last_visual_relative_rotation_.transpose() * R_imu);
+  if (!q_error.coeffs().allFinite() || q_error.norm() < 1e-9) return;
+  q_error.normalize();
+  const double w = std::max(-1.0, std::min(1.0, std::abs(q_error.w())));
+  last_visual_imu_rotation_residual_deg_ =
+      2.0 * std::acos(w) * 180.0 / M_PI;
+  last_visual_imu_rotation_valid_ = std::isfinite(last_visual_imu_rotation_residual_deg_);
+  if (visual_imu_consistency_gate_enable_ && last_visual_imu_rotation_valid_ &&
+      visual_imu_consistency_max_deg_ > 0.0 &&
+      last_visual_imu_rotation_residual_deg_ > visual_imu_consistency_max_deg_)
+  {
+    // A large visual/gyro disagreement is a diagnostic failure, not a reason
+    // to inject either measurement into the EKF.
+    last_visual_tracking_good_ = false;
+    last_visual_update_reason_ = "visual_imu_rotation_inconsistent";
+  }
 }
 
 // 融合独立 NDT 节点的绝对位姿观测，同时用相邻观测估计并平滑速度。

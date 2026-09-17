@@ -192,6 +192,8 @@ void DogPriorMapEkfNode::publishDiagnostics(const ros::Time &stamp,
            std::to_string(last_visual_relative_pose_(4)) + "," +
            std::to_string(last_visual_relative_pose_(5)));
   addValue(status, "visual_relative_pose_valid", last_visual_relative_pose_valid_ ? "true" : "false");
+  addValue(status, "visual_imu_rotation_residual_deg", std::to_string(last_visual_imu_rotation_residual_deg_));
+  addValue(status, "visual_imu_rotation_valid", last_visual_imu_rotation_valid_ ? "true" : "false");
   addValue(status, "visual_metric_translation_valid", last_visual_metric_translation_valid_ ? "true" : "false");
   addValue(status, "visual_reprojection_valid", last_visual_reprojection_valid_ ? "true" : "false");
   addValue(status, "visual_covariance_valid", last_visual_covariance_valid_ ? "true" : "false");
@@ -327,6 +329,8 @@ void DogPriorMapEkfNode::maybePrintRuntime(const ros::Time &stamp)
                  << last_visual_relative_pose_(4) << ","
                  << last_visual_relative_pose_(5) << ","
                  << (last_visual_relative_pose_valid_ ? 1 : 0) << ","
+                 << last_visual_imu_rotation_residual_deg_ << ","
+                 << (last_visual_imu_rotation_valid_ ? 1 : 0) << ","
                  << (last_visual_metric_translation_valid_ ? 1 : 0) << ","
                  << (last_visual_reprojection_valid_ ? 1 : 0) << ","
                  << (last_visual_covariance_valid_ ? 1 : 0) << ","

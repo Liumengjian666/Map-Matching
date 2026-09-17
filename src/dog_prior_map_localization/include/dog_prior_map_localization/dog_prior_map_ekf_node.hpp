@@ -146,6 +146,8 @@ private:
                                 const std::vector<cv::Point2f> &curr_pts,
                                 double weight_scale,
                                 bool apply_correction);
+  /// 仅用于诊断：比较视觉相对旋转与同一图像时间窗内的陀螺仪积分。
+  void updateVisualImuDiagnostic(const ros::Time &stamp);
   /// 将独立 NDT 节点输出作为低频外部观测融合到 EKF 状态中。
   void ndtObservationCallback(const nav_msgs::OdometryConstPtr &msg);
   void lidarDegeneracyCallback(const std_msgs::Float64ConstPtr &msg);
@@ -280,6 +282,9 @@ private:
   bool skip_updates_when_both_degraded_ = true;
   bool legacy_visual_yaw_enable_ = false;
   double lidar_information_max_age_sec_ = 0.05;
+  bool local_vio_diagnostic_enable_ = true;
+  bool visual_imu_consistency_gate_enable_ = false;
+  double visual_imu_consistency_max_deg_ = 20.0;
   bool lidar_directional_valid_ = false;
   bool lidar_directional_degenerate_ = false;
   bool lidar_information_received_ = false;
@@ -422,6 +427,9 @@ private:
   Eigen::Vector3d last_image_p_ = Eigen::Vector3d::Zero();
   ros::Time last_image_stamp_;
   bool last_visual_tracking_good_ = false;
+  Eigen::Matrix3d last_visual_relative_rotation_ = Eigen::Matrix3d::Identity();
+  double last_visual_imu_rotation_residual_deg_ = std::numeric_limits<double>::quiet_NaN();
+  bool last_visual_imu_rotation_valid_ = false;
   int last_visual_feature_count_ = 0;
   int last_visual_tracked_count_ = 0;
   int last_visual_inlier_count_ = 0;

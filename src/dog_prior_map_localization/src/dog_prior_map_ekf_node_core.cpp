@@ -69,6 +69,11 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   legacy_visual_yaw_enable_ = getParam<bool>("fusion/legacy_visual_yaw_enable", false);
   lidar_information_max_age_sec_ = std::max(0.0,
       getParam<double>("fusion/lidar_information_max_age_sec", 0.05));
+  local_vio_diagnostic_enable_ = getParam<bool>("camera_update/local_vio_diagnostic_enable", true);
+  visual_imu_consistency_gate_enable_ = getParam<bool>(
+      "camera_update/imu_rotation_consistency_gate_enable", false);
+  visual_imu_consistency_max_deg_ = std::max(0.0,
+      getParam<double>("camera_update/imu_rotation_consistency_max_deg", 20.0));
   lidar_deskew_enable_ = getParam<bool>("lidar_update/deskew_enable", true);
   lidar_deskew_translation_enable_ = getParam<bool>("lidar_update/deskew_translation_enable", true);
   lidar_offset_time_scale_ = getParam<double>("lidar_update/offset_time_scale", 1e-9);
@@ -183,7 +188,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     runtime_csv_.open(runtime_csv_path_, std::ios::out);
     if (runtime_csv_.is_open())
     {
-      runtime_csv_ << "stamp,imu_hz,lidar_hz,correct_hz,avg_update_ms,max_update_ms,avg_ndt_ms,max_ndt_ms,ndt_ok_count,ndt_fail_count,last_used_points,last_mean_residual,ok_count,fail_count,image_hz,avg_visual_ms,max_visual_ms,last_feature_ratio,visual_weight,lidar_degenerate,lidar_degeneracy_score,visual_ok_count,visual_fail_count,rss_note,localization_mode,lidar_information_received,lidar_information_valid,lidar_information_degenerate,lidar_information_stale,lidar_projector_valid,lidar_information_stamp,lidar_information_condition,lidar_information_lambda0,lidar_information_lambda1,lidar_information_lambda2,lidar_information_lambda3,lidar_information_lambda4,lidar_information_lambda5,lidar_information_weak0,lidar_information_weak1,lidar_information_weak2,lidar_information_weak3,lidar_information_weak4,lidar_information_weak5,lidar_geometry_degeneracy_score,lidar_geometry_degeneracy_valid,visual_feature_count,visual_tracked_count,visual_inlier_count,visual_flow_residual_px,visual_flow_residual_valid,visual_reprojection_error_px,visual_relative_tx,visual_relative_ty,visual_relative_tz,visual_relative_roll,visual_relative_pitch,visual_relative_yaw,visual_relative_pose_valid,visual_metric_translation_valid,visual_reprojection_valid,visual_covariance_valid,visual_update_reason\n";
+      runtime_csv_ << "stamp,imu_hz,lidar_hz,correct_hz,avg_update_ms,max_update_ms,avg_ndt_ms,max_ndt_ms,ndt_ok_count,ndt_fail_count,last_used_points,last_mean_residual,ok_count,fail_count,image_hz,avg_visual_ms,max_visual_ms,last_feature_ratio,visual_weight,lidar_degenerate,lidar_degeneracy_score,visual_ok_count,visual_fail_count,rss_note,localization_mode,lidar_information_received,lidar_information_valid,lidar_information_degenerate,lidar_information_stale,lidar_projector_valid,lidar_information_stamp,lidar_information_condition,lidar_information_lambda0,lidar_information_lambda1,lidar_information_lambda2,lidar_information_lambda3,lidar_information_lambda4,lidar_information_lambda5,lidar_information_weak0,lidar_information_weak1,lidar_information_weak2,lidar_information_weak3,lidar_information_weak4,lidar_information_weak5,lidar_geometry_degeneracy_score,lidar_geometry_degeneracy_valid,visual_feature_count,visual_tracked_count,visual_inlier_count,visual_flow_residual_px,visual_flow_residual_valid,visual_reprojection_error_px,visual_relative_tx,visual_relative_ty,visual_relative_tz,visual_relative_roll,visual_relative_pitch,visual_relative_yaw,visual_relative_pose_valid,visual_imu_rotation_residual_deg,visual_imu_rotation_valid,visual_metric_translation_valid,visual_reprojection_valid,visual_covariance_valid,visual_update_reason\n";
     }
     else
     {

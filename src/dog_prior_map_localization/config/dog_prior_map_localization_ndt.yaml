@@ -116,6 +116,11 @@ camera_update:
   enable: true
   mode: "quality_gate"
   feature_update_enable: true
+  # Stage 2 diagnostic only: compare KLT/essential rotation with IMU
+  # integration over the same image timestamps. It never updates the EKF.
+  local_vio_diagnostic_enable: true
+  imu_rotation_consistency_gate_enable: false
+  imu_rotation_consistency_max_deg: 20.0
   min_gradient_mean: 2.5
   max_over_exposure_ratio: 0.25
   max_under_exposure_ratio: 0.35
