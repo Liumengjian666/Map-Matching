@@ -287,6 +287,10 @@ private:
   // telemetry still reports roll/pitch/yaw components in radians.
   double information_rotation_scale_m_ = 1.0;
   bool local_vio_diagnostic_enable_ = true;
+  // Experimental diagnostic only: use the norm of short-window IMU
+  // preintegration to scale the monocular essential-matrix translation
+  // direction.  This is not connected to the EKF update path.
+  bool local_vio_metric_enable_ = false;
   bool visual_imu_consistency_gate_enable_ = false;
   double visual_imu_consistency_max_deg_ = 20.0;
   bool lidar_directional_valid_ = false;
@@ -432,8 +436,13 @@ private:
   ros::Time last_image_stamp_;
   bool last_visual_tracking_good_ = false;
   Eigen::Matrix3d last_visual_relative_rotation_ = Eigen::Matrix3d::Identity();
+  Eigen::Vector3d last_visual_translation_direction_base_ = Eigen::Vector3d::Zero();
+  bool last_visual_translation_direction_valid_ = false;
+  double last_visual_translation_scale_m_ = std::numeric_limits<double>::quiet_NaN();
   double last_visual_imu_rotation_residual_deg_ = std::numeric_limits<double>::quiet_NaN();
   bool last_visual_imu_rotation_valid_ = false;
+  Eigen::Matrix<double, 6, 1> last_visual_covariance_diag_ =
+      Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
   int last_visual_feature_count_ = 0;
   int last_visual_tracked_count_ = 0;
   int last_visual_inlier_count_ = 0;

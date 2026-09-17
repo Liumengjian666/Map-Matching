@@ -245,8 +245,12 @@ void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
   last_visual_covariance_valid_ = false;
   last_visual_tracking_good_ = false;
   last_visual_relative_rotation_.setIdentity();
+  last_visual_translation_direction_base_.setZero();
+  last_visual_translation_direction_valid_ = false;
+  last_visual_translation_scale_m_ = std::numeric_limits<double>::quiet_NaN();
   last_visual_imu_rotation_residual_deg_ = std::numeric_limits<double>::quiet_NaN();
   last_visual_imu_rotation_valid_ = false;
+  last_visual_covariance_diag_.setConstant(std::numeric_limits<double>::quiet_NaN());
   last_visual_update_reason_ = camera_enable_ ? "no_update" : "camera_disabled";
 
   // ------------------------- 相机质量门控 -------------------------
@@ -546,18 +550,25 @@ bool DogPriorMapEkfNode::applyVisualYawCorrection(const cv::Mat &prev_gray,
         const Eigen::Matrix3d R_base_rel = R_base_camera_ * R_cam * R_base_camera_.transpose();
         yaw_base = std::atan2(R_base_rel(1, 0), R_base_rel(0, 0));
         last_visual_relative_rotation_ = R_base_rel;
-        last_visual_relative_pose_.head<3>() = Eigen::Vector3d(t_cv.at<double>(0),
-                                                                t_cv.at<double>(1),
-                                                                t_cv.at<double>(2));
+        const Eigen::Vector3d t_cam(t_cv.at<double>(0), t_cv.at<double>(1), t_cv.at<double>(2));
+        const Eigen::Vector3d t_base = R_base_camera_ * t_cam;
+        if (t_base.allFinite() && t_base.norm() > 1e-9)
+        {
+          last_visual_translation_direction_base_ = t_base.normalized();
+          last_visual_translation_direction_valid_ = true;
+        }
+        last_visual_relative_pose_.head<3>() = last_visual_translation_direction_valid_ ?
+            last_visual_translation_direction_base_ : t_cam;
         // Keep the diagnostic state ordering consistent with the localization
-        // state [x,y,z,roll,pitch,yaw].  The translation remains a unit
-        // direction because monocular scale is unavailable.
+        // state [x,y,z,roll,pitch,yaw].  The translation is a base-frame unit
+        // direction until the optional IMU-norm scale diagnostic runs.
         last_visual_relative_pose_.tail<3>() = R_base_rel.eulerAngles(0, 1, 2);
         last_visual_relative_pose_valid_ = last_visual_relative_pose_.allFinite();
-        // Essential-matrix translation has unknown monocular scale.  A true
-        // reprojection covariance is also unavailable in this lightweight
-        // tracker, so keep both validity flags false instead of fabricating a
-        // metric measurement for Stage 2.
+        // Essential-matrix translation has unknown monocular scale; the
+        // optional diagnostic may fill it from short-window IMU integration.
+        // A true reprojection covariance is still unavailable in this
+        // lightweight tracker, so only the empirical diagonal covariance is
+        // reported when explicitly enabled.
         last_visual_metric_translation_valid_ = false;
         last_visual_reprojection_valid_ = false;
         last_visual_covariance_valid_ = false;
@@ -679,6 +690,43 @@ void DogPriorMapEkfNode::updateVisualImuDiagnostic(const ros::Time &stamp)
   last_visual_imu_rotation_residual_deg_ =
       2.0 * std::acos(w) * 180.0 / M_PI;
   last_visual_imu_rotation_valid_ = std::isfinite(last_visual_imu_rotation_residual_deg_);
+
+  if (local_vio_metric_enable_ && last_visual_translation_direction_valid_)
+  {
+    Eigen::Matrix3d R_delta = Eigen::Matrix3d::Identity();
+    Eigen::Vector3d p_delta = Eigen::Vector3d::Zero();
+    if (integrateImuDelta(t0, t1, R_delta, p_delta) && p_delta.allFinite())
+    {
+      const double scale_m = p_delta.norm();
+      const double dt = t1 - t0;
+      if (std::isfinite(scale_m) && scale_m >= 1e-3 && scale_m <= 5.0 && dt <= 0.5)
+      {
+        last_visual_translation_scale_m_ = scale_m;
+        last_visual_relative_pose_.head<3>() =
+            last_visual_translation_direction_base_ * scale_m;
+        last_visual_metric_translation_valid_ =
+            last_visual_relative_pose_.head<3>().allFinite();
+      }
+    }
+  }
+
+  // Empirical diagonal covariance for the diagnostic stream only.  It uses
+  // the observed KLT residual and focal length; no covariance is fed to the
+  // EKF and no claim of a full VIO uncertainty model is made.
+  if (last_visual_metric_translation_valid_ && last_visual_flow_residual_valid_ &&
+      camera_intrinsic_valid_ && last_visual_inlier_count_ >= 6)
+  {
+    const double sigma_px = std::max(last_visual_flow_residual_px_, 0.5);
+    const double sigma_rot = sigma_px / std::max(std::min(cam_fx_, cam_fy_), 1.0);
+    const double sigma_trans = std::max(last_visual_translation_scale_m_ * sigma_rot, 0.01);
+    if (std::isfinite(sigma_rot) && std::isfinite(sigma_trans))
+    {
+      last_visual_covariance_diag_.head<3>().setConstant(sigma_trans * sigma_trans);
+      last_visual_covariance_diag_.tail<3>().setConstant(sigma_rot * sigma_rot);
+      last_visual_covariance_valid_ = true;
+    }
+  }
+
   if (visual_imu_consistency_gate_enable_ && last_visual_imu_rotation_valid_ &&
       visual_imu_consistency_max_deg_ > 0.0 &&
       last_visual_imu_rotation_residual_deg_ > visual_imu_consistency_max_deg_)

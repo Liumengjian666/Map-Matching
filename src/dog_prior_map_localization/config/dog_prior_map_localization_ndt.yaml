@@ -120,6 +120,10 @@ camera_update:
   # Stage 2 diagnostic only: compare KLT/essential rotation with IMU
   # integration over the same image timestamps. It never updates the EKF.
   local_vio_diagnostic_enable: true
+  # Optional IMU-norm scale for the monocular translation direction. This is
+  # diagnostic-only and remains off until its relative-motion consistency is
+  # checked on the bag.
+  local_vio_metric_enable: false
   imu_rotation_consistency_gate_enable: false
   imu_rotation_consistency_max_deg: 20.0
   min_gradient_mean: 2.5
