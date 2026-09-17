@@ -69,6 +69,8 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   legacy_visual_yaw_enable_ = getParam<bool>("fusion/legacy_visual_yaw_enable", false);
   lidar_information_max_age_sec_ = std::max(0.0,
       getParam<double>("fusion/lidar_information_max_age_sec", 0.05));
+  information_rotation_scale_m_ = std::max(1e-3,
+      getParam<double>("lidar_update/information_rotation_scale_m", 1.0));
   local_vio_diagnostic_enable_ = getParam<bool>("camera_update/local_vio_diagnostic_enable", true);
   visual_imu_consistency_gate_enable_ = getParam<bool>(
       "camera_update/imu_rotation_consistency_gate_enable", false);

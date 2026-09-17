@@ -119,6 +119,7 @@ bool estimateInformationWeakDirection(const pcl::PointCloud<pcl::PointXYZ>::Ptr 
                                       const pcl::PointCloud<pcl::PointXYZ>::Ptr &target,
                                       const Eigen::Matrix4d &pose,
                                       double max_correspondence_distance,
+                                      double rotation_scale_m,
                                       Eigen::Matrix<double, 6, 1> &weak,
                                       Eigen::Matrix<double, 6, 1> &eigenvalues,
                                       Eigen::Matrix<double, 6, 6> &eigenvectors,
@@ -128,7 +129,8 @@ bool estimateInformationWeakDirection(const pcl::PointCloud<pcl::PointXYZ>::Ptr 
   eigenvalues.setConstant(std::numeric_limits<double>::quiet_NaN());
   eigenvectors.setConstant(std::numeric_limits<double>::quiet_NaN());
   information_matrix.setConstant(std::numeric_limits<double>::quiet_NaN());
-  if (!source || !target || source->empty() || target->empty()) return false;
+  if (!source || !target || source->empty() || target->empty() ||
+      !std::isfinite(rotation_scale_m) || rotation_scale_m <= 0.0) return false;
   pcl::KdTreeFLANN<pcl::PointXYZ> tree;
   tree.setInputCloud(target);
   Eigen::Matrix<double, 6, 6> H = Eigen::Matrix<double, 6, 6>::Zero();
@@ -146,12 +148,12 @@ bool estimateInformationWeakDirection(const pcl::PointCloud<pcl::PointXYZ>::Ptr 
     if (max_correspondence_distance > 0.0 && std::sqrt(dist2[0]) > max_correspondence_distance) continue;
     Eigen::Matrix<double, 3, 6> J = Eigen::Matrix<double, 3, 6>::Zero();
     J.block<3, 3>(0, 0) = Eigen::Matrix3d::Identity();
-    // The correction later consumed by the EKF is the right/body-frame
-    // increment initial_guess^{-1} * result.  Use the source point pb in the
-    // rotational Jacobian rather than the world point pw; otherwise the
-    // eigensystem changes when the map origin is translated and its basis is
-    // inconsistent with the correction coordinates.
-    J.block<3, 3>(0, 3) = -skew(pb);
+    // Publish a left/world perturbation around the scan pose.  The lever arm
+    // R*pb is independent of the arbitrary map origin and matches the EKF's
+    // absolute correction [delta-p_world, delta-theta_world].  Rotation is
+    // represented internally as scale[m] * angle[rad] so all six coordinates
+    // have comparable units before eigendecomposition.
+    J.block<3, 3>(0, 3) = -skew(R * pb) / rotation_scale_m;
     H.noalias() += J.transpose() * J;
     ++used;
   }
@@ -227,6 +229,8 @@ public:
     information_degeneracy_enable_ = getParam<bool>("lidar_update/information_degeneracy_enable", true);
     information_condition_max_ = getParam<double>("lidar_update/information_condition_max", 1e5);
     information_correspondence_distance_ = getParam<double>("lidar_update/information_correspondence_distance", 0.8);
+    information_rotation_scale_m_ = std::max(1e-3,
+        getParam<double>("lidar_update/information_rotation_scale_m", 1.0));
     information_pose_projection_enable_ = getParam<bool>("lidar_update/information_pose_projection_enable", false);
     information_diagnostic_enable_ = getParam<bool>("lidar_update/information_diagnostic_enable", false);
     // Direction-selective fusion consumes the eigensystem, so it implicitly
@@ -798,6 +802,7 @@ private:
           information_degeneracy_enable_ &&
           estimateInformationWeakDirection(source, target_cloud_, result,
                                            information_correspondence_distance_,
+                                           information_rotation_scale_m_,
                                            information_weak, information_eigenvalues,
                                            information_eigenvectors, information_matrix,
                                            information_condition);
@@ -830,20 +835,26 @@ private:
       }
       if (information_pose_projection_enable_ && information_degenerate && has_prediction_)
       {
-        const Eigen::Matrix4d delta = initial_guess.inverse() * result;
-        Eigen::AngleAxisd aa(delta.block<3, 3>(0, 0));
+        // The information eigensystem and this projection both use a
+        // left/world perturbation around the initial scan pose.  This matches
+        // the absolute correction consumed by the EKF and avoids mixing it
+        // with the right/body delta used for NDT initialization.
+        const Eigen::Vector3d delta_p =
+            result.block<3, 1>(0, 3) - initial_guess.block<3, 1>(0, 3);
+        Eigen::AngleAxisd aa(result.block<3, 3>(0, 0) *
+                             initial_guess.block<3, 3>(0, 0).transpose());
         Eigen::Matrix<double, 6, 1> correction;
-        correction.head<3>() = delta.block<3, 1>(0, 3);
-        correction.tail<3>() = aa.axis() * aa.angle();
+        correction.head<3>() = delta_p;
+        correction.tail<3>() = aa.axis() * aa.angle() * information_rotation_scale_m_;
         const double weak_component = correction.dot(information_weak);
         correction -= (1.0 - std::max(0.0, std::min(1.0, ndt_degenerate_scale_))) *
                       weak_component * information_weak;
         Eigen::Matrix4d projected = initial_guess;
         projected.block<3, 1>(0, 3) += correction.head<3>();
-        const double angle = correction.tail<3>().norm();
+        const double angle = correction.tail<3>().norm() / information_rotation_scale_m_;
         if (angle > 1e-12)
           projected.block<3, 3>(0, 0) =
-              Eigen::AngleAxisd(angle, correction.tail<3>() / angle).toRotationMatrix() *
+              Eigen::AngleAxisd(angle, correction.tail<3>().normalized()).toRotationMatrix() *
               initial_guess.block<3, 3>(0, 0);
         used_result = projected;
       }
@@ -1177,6 +1188,7 @@ private:
   bool information_degeneracy_enable_ = true;
   double information_condition_max_ = 1e5;
   double information_correspondence_distance_ = 0.8;
+  double information_rotation_scale_m_ = 1.0;
   bool information_pose_projection_enable_ = false;
   bool information_diagnostic_enable_ = false;
   bool information_compute_enable_ = false;

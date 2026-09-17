@@ -282,6 +282,10 @@ private:
   bool skip_updates_when_both_degraded_ = true;
   bool legacy_visual_yaw_enable_ = false;
   double lidar_information_max_age_sec_ = 0.05;
+  // Internal information coordinates are [m,m,m,scale*m,scale*m,scale*m]
+  // so translation and rotation eigenvalues are comparable.  The public
+  // telemetry still reports roll/pitch/yaw components in radians.
+  double information_rotation_scale_m_ = 1.0;
   bool local_vio_diagnostic_enable_ = true;
   bool visual_imu_consistency_gate_enable_ = false;
   double visual_imu_consistency_max_deg_ = 20.0;

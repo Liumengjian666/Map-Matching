@@ -160,6 +160,7 @@ void DogPriorMapEkfNode::publishDiagnostics(const ros::Time &stamp,
   addValue(status, "lidar_information_stale", lidar_information_stale_ ? "true" : "false");
   addValue(status, "lidar_projector_valid", lidar_projector_valid_ ? "true" : "false");
   addValue(status, "lidar_information_stamp", std::to_string(lidar_information_stamp_));
+  addValue(status, "information_rotation_scale_m", std::to_string(information_rotation_scale_m_));
   addValue(status, "lidar_information_degenerate", lidar_information_degenerate_ ? "true" : "false");
   addValue(status, "lidar_information_condition", std::to_string(lidar_information_condition_));
   addValue(status, "lidar_information_eigenvalues",

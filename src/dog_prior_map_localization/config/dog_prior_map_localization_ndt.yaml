@@ -104,6 +104,7 @@ lidar_update:
   information_degeneracy_enable: true
   information_condition_max: 100000.0
   information_correspondence_distance: 0.8
+  information_rotation_scale_m: 1.0
   # The 6x6 correspondence/Hessian diagnostic is opt-in because the current
   # implementation is an approximate observability probe, not PCL's exact NDT
   # Hessian. Directional fusion also enables it explicitly.

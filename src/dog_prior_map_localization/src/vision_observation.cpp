@@ -634,13 +634,28 @@ bool DogPriorMapEkfNode::applyVisualYawCorrection(const cv::Mat &prev_gray,
   const double yaw_correction = std::max(-max_visual_yaw_update_,
                                          std::min(max_visual_yaw_update_,
                                                   yaw_residual * normalized_weight * 0.1));
-  if (std::abs(yaw_correction) < 1e-6)
+  double directional_yaw_correction = yaw_correction;
+  if (directional_fusion_enable_ && state_machine_enable_ &&
+      localization_mode_ == LocalizationMode::VISION_ASSISTED &&
+      lidar_projector_valid_ && !lidar_information_stale_)
+  {
+    // This stage only has a yaw estimate; do not invent metric visual
+    // translation.  Retain the component of the yaw correction that lies in
+    // the measured weak subspace, expressed in the same scaled coordinates
+    // as the LiDAR projector.
+    Eigen::Matrix<double, 6, 1> visual_correction =
+        Eigen::Matrix<double, 6, 1>::Zero();
+    visual_correction(5) = yaw_correction * information_rotation_scale_m_;
+    visual_correction = lidar_degenerate_projector_ * visual_correction;
+    directional_yaw_correction = visual_correction(5) / information_rotation_scale_m_;
+  }
+  if (std::abs(directional_yaw_correction) < 1e-6)
   {
     last_visual_update_reason_ = "relative_pose_below_update_threshold";
     return true;
   }
 
-  Eigen::Vector3d dtheta(0.0, 0.0, yaw_correction);
+  Eigen::Vector3d dtheta(0.0, 0.0, directional_yaw_correction);
   applyPoseCorrection(Eigen::Vector3d::Zero(), dtheta);
   last_visual_update_reason_ = "yaw_only_correction_applied";
   return true;
@@ -752,13 +767,13 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
     }
     Eigen::Matrix<double, 6, 1> correction;
     correction.head<3>() = dp;
-    correction.tail<3>() = dtheta;
+    correction.tail<3>() = dtheta * information_rotation_scale_m_;
     const Eigen::Matrix<double, 6, 6> projector =
         lidar_reliable_projector_ + weak_weight * lidar_degenerate_projector_;
     correction = projector * correction;
     if (!correction.allFinite()) return;
     dp = correction.head<3>();
-    dtheta = correction.tail<3>();
+    dtheta = correction.tail<3>() / information_rotation_scale_m_;
   }
 
   applyPoseCorrection(dp, dtheta);
