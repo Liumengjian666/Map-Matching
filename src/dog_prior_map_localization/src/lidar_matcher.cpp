@@ -1114,7 +1114,18 @@ bool DogPriorMapEkfNode::updateLidarDegeneracyStatus(const Eigen::Matrix<double,
   // 2) 条件数很大：强约束和弱约束方向差异过大，容易沿弱约束方向滑移。
   // 检测到退化后，不削弱LiDAR主约束，而是通知视觉模块：如果图像质量好，后续视觉残差可以适当增权。
   lidar_degeneracy_score_ = 0.0;
+  // Preserve the original score calculation exactly.  The producer currently
+  // supplies a finite [0,1] value, but keep an explicit validity bit for any
+  // future caller that violates that assumption.
+  lidar_geometry_degeneracy_score_ = geometry_degeneracy_score;
+  lidar_geometry_degeneracy_valid_ = std::isfinite(geometry_degeneracy_score);
+  lidar_information_valid_ = false;
+  lidar_information_degenerate_ = false;
+  lidar_information_condition_ = 1.0;
+  lidar_information_eigenvalues_.setZero();
+  lidar_information_weak_eigenvector_.setZero();
   if (!degeneracy_check_enable_) return false;
+  if (!information_matrix.allFinite()) return false;
 
   Eigen::SelfAdjointEigenSolver<Eigen::Matrix<double, 6, 6>> solver(information_matrix);
   if (solver.info() != Eigen::Success) return false;
@@ -1123,6 +1134,18 @@ bool DogPriorMapEkfNode::updateLidarDegeneracyStatus(const Eigen::Matrix<double,
   const double min_eval = std::max(eval[0], 0.0);
   const double max_eval = std::max(eval[5], 1e-12);
   const double condition_number = max_eval / std::max(min_eval, 1e-12);
+
+  if (!eval.allFinite() || !std::isfinite(condition_number)) return false;
+  const Eigen::Matrix<double, 6, 1> weak_eigenvector = solver.eigenvectors().col(0).normalized();
+  if (!weak_eigenvector.allFinite()) return false;
+
+  // Diagnostic snapshot only.  The existing score and pose-update path below
+  // are deliberately unchanged; these values are needed to validate whether
+  // a future direction-selective update is mathematically justified.
+  lidar_information_valid_ = true;
+  lidar_information_condition_ = condition_number;
+  lidar_information_eigenvalues_ = eval;
+  lidar_information_weak_eigenvector_ = weak_eigenvector;
 
   const double eigen_score =
       min_eval < degeneracy_min_eigenvalue_
@@ -1134,6 +1157,7 @@ bool DogPriorMapEkfNode::updateLidarDegeneracyStatus(const Eigen::Matrix<double,
           : 0.0;
 
   lidar_degeneracy_score_ = std::max(std::max(eigen_score, condition_score), geometry_degeneracy_score);
+  lidar_information_degenerate_ = std::max(eigen_score, condition_score) > 0.0;
   return lidar_degeneracy_score_ > 0.0;
 }
 

@@ -3,6 +3,22 @@
 namespace dog_prior_map_localization
 {
 
+namespace
+{
+const char *localizationModeName(DogPriorMapEkfNode::LocalizationMode mode)
+{
+  switch (mode)
+  {
+    case DogPriorMapEkfNode::LocalizationMode::LIDAR_DEGRADED: return "LIDAR_DEGRADED";
+    case DogPriorMapEkfNode::LocalizationMode::VISION_ASSISTED: return "VISION_ASSISTED";
+    case DogPriorMapEkfNode::LocalizationMode::BOTH_DEGRADED: return "BOTH_DEGRADED";
+    case DogPriorMapEkfNode::LocalizationMode::RECOVERY: return "RECOVERY";
+    case DogPriorMapEkfNode::LocalizationMode::NORMAL:
+    default: return "NORMAL";
+  }
+}
+}  // namespace
+
 // 发布当前导航状态；corrected 区分 LiDAR 校正结果和纯 IMU 高频传播结果。
 void DogPriorMapEkfNode::publishState(const ros::Time &stamp, bool corrected)
 {
@@ -138,6 +154,44 @@ void DogPriorMapEkfNode::publishDiagnostics(const ros::Time &stamp,
   addValue(status, "icp_ndt_fail", std::to_string(icp_update_fail_count_));
   addValue(status, "degenerate", lidar_degenerate_ ? "true" : "false");
   addValue(status, "degeneracy_score", std::to_string(lidar_degeneracy_score_));
+  addValue(status, "localization_mode", localizationModeName(localization_mode_));
+  addValue(status, "lidar_information_valid", lidar_information_valid_ ? "true" : "false");
+  addValue(status, "lidar_information_degenerate", lidar_information_degenerate_ ? "true" : "false");
+  addValue(status, "lidar_information_condition", std::to_string(lidar_information_condition_));
+  addValue(status, "lidar_information_eigenvalues",
+           std::to_string(lidar_information_eigenvalues_(0)) + "," +
+           std::to_string(lidar_information_eigenvalues_(1)) + "," +
+           std::to_string(lidar_information_eigenvalues_(2)) + "," +
+           std::to_string(lidar_information_eigenvalues_(3)) + "," +
+           std::to_string(lidar_information_eigenvalues_(4)) + "," +
+           std::to_string(lidar_information_eigenvalues_(5)));
+  addValue(status, "lidar_information_weak_eigenvector",
+           std::to_string(lidar_information_weak_eigenvector_(0)) + "," +
+           std::to_string(lidar_information_weak_eigenvector_(1)) + "," +
+           std::to_string(lidar_information_weak_eigenvector_(2)) + "," +
+           std::to_string(lidar_information_weak_eigenvector_(3)) + "," +
+           std::to_string(lidar_information_weak_eigenvector_(4)) + "," +
+           std::to_string(lidar_information_weak_eigenvector_(5)));
+  addValue(status, "lidar_geometry_degeneracy_score", std::to_string(lidar_geometry_degeneracy_score_));
+  addValue(status, "lidar_geometry_degeneracy_valid", lidar_geometry_degeneracy_valid_ ? "true" : "false");
+  addValue(status, "visual_feature_count", std::to_string(last_visual_feature_count_));
+  addValue(status, "visual_tracked_count", std::to_string(last_visual_tracked_count_));
+  addValue(status, "visual_inlier_count", std::to_string(last_visual_inlier_count_));
+  addValue(status, "visual_flow_residual_px", std::to_string(last_visual_flow_residual_px_));
+  addValue(status, "visual_flow_residual_valid", last_visual_flow_residual_valid_ ? "true" : "false");
+  addValue(status, "visual_reprojection_error_px", std::to_string(last_visual_reprojection_error_px_));
+  addValue(status, "visual_relative_pose",
+           std::to_string(last_visual_relative_pose_(0)) + "," +
+           std::to_string(last_visual_relative_pose_(1)) + "," +
+           std::to_string(last_visual_relative_pose_(2)) + "," +
+           std::to_string(last_visual_relative_pose_(3)) + "," +
+           std::to_string(last_visual_relative_pose_(4)) + "," +
+           std::to_string(last_visual_relative_pose_(5)));
+  addValue(status, "visual_relative_pose_valid", last_visual_relative_pose_valid_ ? "true" : "false");
+  addValue(status, "visual_metric_translation_valid", last_visual_metric_translation_valid_ ? "true" : "false");
+  addValue(status, "visual_reprojection_valid", last_visual_reprojection_valid_ ? "true" : "false");
+  addValue(status, "visual_covariance_valid", last_visual_covariance_valid_ ? "true" : "false");
+  addValue(status, "visual_update_reason", last_visual_update_reason_);
   addValue(status, "pose_xyz", std::to_string(p_.x()) + "," +
                               std::to_string(p_.y()) + "," +
                               std::to_string(p_.z()));
@@ -233,7 +287,42 @@ void DogPriorMapEkfNode::maybePrintRuntime(const ros::Time &stamp)
                  << lidar_degeneracy_score_ << ","
                  << visual_update_ok_count_ << ","
                  << visual_update_fail_count_ << ","
-                 << "rss_sampled_by_ps"
+                 << "rss_sampled_by_ps" << ","
+                 << localizationModeName(localization_mode_) << ","
+                 << (lidar_information_valid_ ? 1 : 0) << ","
+                 << (lidar_information_degenerate_ ? 1 : 0) << ","
+                 << lidar_information_condition_ << ","
+                 << lidar_information_eigenvalues_(0) << ","
+                 << lidar_information_eigenvalues_(1) << ","
+                 << lidar_information_eigenvalues_(2) << ","
+                 << lidar_information_eigenvalues_(3) << ","
+                 << lidar_information_eigenvalues_(4) << ","
+                 << lidar_information_eigenvalues_(5) << ","
+                 << lidar_information_weak_eigenvector_(0) << ","
+                 << lidar_information_weak_eigenvector_(1) << ","
+                 << lidar_information_weak_eigenvector_(2) << ","
+                 << lidar_information_weak_eigenvector_(3) << ","
+                 << lidar_information_weak_eigenvector_(4) << ","
+                 << lidar_information_weak_eigenvector_(5) << ","
+                 << lidar_geometry_degeneracy_score_ << ","
+                 << (lidar_geometry_degeneracy_valid_ ? 1 : 0) << ","
+                 << last_visual_feature_count_ << ","
+                 << last_visual_tracked_count_ << ","
+                 << last_visual_inlier_count_ << ","
+                 << last_visual_flow_residual_px_ << ","
+                 << (last_visual_flow_residual_valid_ ? 1 : 0) << ","
+                 << last_visual_reprojection_error_px_ << ","
+                 << last_visual_relative_pose_(0) << ","
+                 << last_visual_relative_pose_(1) << ","
+                 << last_visual_relative_pose_(2) << ","
+                 << last_visual_relative_pose_(3) << ","
+                 << last_visual_relative_pose_(4) << ","
+                 << last_visual_relative_pose_(5) << ","
+                 << (last_visual_relative_pose_valid_ ? 1 : 0) << ","
+                 << (last_visual_metric_translation_valid_ ? 1 : 0) << ","
+                 << (last_visual_reprojection_valid_ ? 1 : 0) << ","
+                 << (last_visual_covariance_valid_ ? 1 : 0) << ","
+                 << last_visual_update_reason_
                  << "\n";
     runtime_csv_.flush();
   }

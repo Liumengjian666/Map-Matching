@@ -67,6 +67,18 @@ Eigen::Vector3d limitVector(const Eigen::Vector3d &v, double max_norm);
 class DogPriorMapEkfNode
 {
 public:
+  // Stage-1 telemetry only.  The state machine is intentionally not connected
+  // to any update path until the direction-selective fusion experiment is
+  // validated against the unchanged baseline.
+  enum class LocalizationMode
+  {
+    NORMAL,
+    LIDAR_DEGRADED,
+    VISION_ASSISTED,
+    BOTH_DEGRADED,
+    RECOVERY
+  };
+
   /// 读取参数、初始化状态与地图，并建立 ROS 订阅发布关系。
   DogPriorMapEkfNode();
 
@@ -326,6 +338,18 @@ private:
   double degeneracy_project_min_scale_ = 0.10;
   bool lidar_degenerate_ = false;
   double lidar_degeneracy_score_ = 0.0;
+  bool lidar_information_valid_ = false;
+  bool lidar_information_degenerate_ = false;
+  double lidar_information_condition_ = 1.0;
+  double lidar_geometry_degeneracy_score_ = 0.0;
+  bool lidar_geometry_degeneracy_valid_ = false;
+  Eigen::Matrix<double, 6, 1> lidar_information_eigenvalues_ = Eigen::Matrix<double, 6, 1>::Zero();
+  Eigen::Matrix<double, 6, 1> lidar_information_weak_eigenvector_ = Eigen::Matrix<double, 6, 1>::Zero();
+
+  // The enum is telemetry-only in Stage 1.  It must remain NORMAL until a
+  // separately validated hysteresis controller is introduced.
+  LocalizationMode localization_mode_ = LocalizationMode::NORMAL;
+
   bool camera_enable_ = true;
   bool visual_feature_update_enable_ = true;
   double max_over_exposure_ratio_ = 0.25;
@@ -355,6 +379,19 @@ private:
   std::vector<cv::Point2f> last_features_;
   bool has_last_image_pose_ = false;
   Eigen::Matrix3d last_image_R_ = Eigen::Matrix3d::Identity();
+  int last_visual_feature_count_ = 0;
+  int last_visual_tracked_count_ = 0;
+  int last_visual_inlier_count_ = 0;
+  double last_visual_flow_residual_px_ = std::numeric_limits<double>::quiet_NaN();
+  bool last_visual_flow_residual_valid_ = false;
+  double last_visual_reprojection_error_px_ = std::numeric_limits<double>::quiet_NaN();
+  Eigen::Matrix<double, 6, 1> last_visual_relative_pose_ =
+      Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
+  bool last_visual_relative_pose_valid_ = false;
+  bool last_visual_metric_translation_valid_ = false;
+  bool last_visual_reprojection_valid_ = false;
+  bool last_visual_covariance_valid_ = false;
+  std::string last_visual_update_reason_ = "not_initialized";
 
   int path_max_length_ = 5000;
   bool publish_path_ = false;
