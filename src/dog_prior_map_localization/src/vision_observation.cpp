@@ -683,7 +683,11 @@ void DogPriorMapEkfNode::updateVisualImuDiagnostic(const ros::Time &stamp)
 
   const Eigen::Matrix3d R_imu = integrateImuRotation(t0, t1);
   if (!R_imu.allFinite()) return;
-  Eigen::Quaterniond q_error(last_visual_relative_rotation_.transpose() * R_imu);
+  // recoverPose returns the rotation from the previous camera coordinates to
+  // the current camera coordinates, whereas integrateImuRotation follows the
+  // body-to-world propagation convention (the inverse relative rotation).
+  // Their product is therefore the consistency error.
+  Eigen::Quaterniond q_error(last_visual_relative_rotation_ * R_imu);
   if (!q_error.coeffs().allFinite() || q_error.norm() < 1e-9) return;
   q_error.normalize();
   const double w = std::max(-1.0, std::min(1.0, std::abs(q_error.w())));
