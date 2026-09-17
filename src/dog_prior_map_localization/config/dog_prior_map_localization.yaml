@@ -21,6 +21,7 @@ topics:
   path_high_rate: "/dog_livo/path_high_rate"
   path_corrected: "/dog_livo/path_corrected"
   debug_cloud: "/dog_livo/matched_scan"
+  lidar_information: "/dog_livo/lidar_information"
 
 map:
   # 推荐先用 pcd_to_npz_map.py 把 PCD 转成 npz，机器狗端加载更快、内存更低。

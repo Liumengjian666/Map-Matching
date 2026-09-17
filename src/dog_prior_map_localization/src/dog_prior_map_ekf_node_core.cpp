@@ -18,6 +18,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   image_topic_ = getParam<std::string>("topics/image", "/image_left/image_rect");
   ndt_observation_topic_ = getParam<std::string>("topics/ndt_odom", "/dog_livo/ndt_odom");
   lidar_degeneracy_topic_ = getParam<std::string>("topics/lidar_degeneracy", "/dog_livo/lidar_degeneracy");
+  lidar_information_topic_ = getParam<std::string>("topics/lidar_information", "/dog_livo/lidar_information");
   odom_high_rate_topic_ = getParam<std::string>("topics/odom_high_rate", "/dog_livo/odom_high_rate");
   imu_propagate_topic_ = getParam<std::string>("topics/imu_propagate", "/LIVO2/imu_propagate");
   odom_corrected_topic_ = getParam<std::string>("topics/odom_corrected", "/dog_livo/odom_corrected");
@@ -55,6 +56,19 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   ndt_observation_max_translation_correction_ = getParam<double>("ndt_observation/max_translation_correction", 1.0);
   ndt_observation_max_rotation_correction_ = getParam<double>("ndt_observation/max_rotation_correction_deg", 5.0) * M_PI / 180.0;
   ndt_observation_velocity_blend_ = getParam<double>("ndt_observation/velocity_blend", 0.6);
+  directional_fusion_enable_ = getParam<bool>("fusion/directional_enable", false);
+  state_machine_enable_ = getParam<bool>("fusion/state_machine_enable", false);
+  directional_eigen_ratio_ = std::max(1e-6, getParam<double>("fusion/degenerated_eigen_ratio", 0.03));
+  lidar_degraded_enter_frames_ = std::max(1, getParam<int>("fusion/lidar_degraded_enter_frames", 5));
+  visual_assisted_enter_frames_ = std::max(1, getParam<int>("fusion/visual_assisted_enter_frames", 3));
+  both_degraded_enter_frames_ = std::max(1, getParam<int>("fusion/both_degraded_enter_frames", 3));
+  recovery_exit_frames_ = std::max(1, getParam<int>("fusion/recovery_exit_frames", 5));
+  recovery_weak_weight_start_ = std::max(0.0, std::min(1.0,
+      getParam<double>("fusion/recovery_weak_weight_start", 0.0)));
+  skip_updates_when_both_degraded_ = getParam<bool>("fusion/skip_updates_when_both_degraded", true);
+  legacy_visual_yaw_enable_ = getParam<bool>("fusion/legacy_visual_yaw_enable", false);
+  lidar_information_max_age_sec_ = std::max(0.0,
+      getParam<double>("fusion/lidar_information_max_age_sec", 0.05));
   lidar_deskew_enable_ = getParam<bool>("lidar_update/deskew_enable", true);
   lidar_deskew_translation_enable_ = getParam<bool>("lidar_update/deskew_translation_enable", true);
   lidar_offset_time_scale_ = getParam<double>("lidar_update/offset_time_scale", 1e-9);
@@ -143,6 +157,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   max_under_exposure_ratio_ = getParam<double>("camera_update/max_under_exposure_ratio", 0.35);
   max_features_ = std::max(20, getParam<int>("camera_update/max_features", 300));
   min_tracked_features_ = std::max(5, getParam<int>("camera_update/min_tracked_features", 40));
+  visual_max_flow_residual_px_ = std::max(0.0, getParam<double>("camera_update/max_flow_residual_px", 3.0));
   min_feature_ratio_ = getParam<double>("camera_update/min_feature_ratio", 0.15);
   max_visual_yaw_update_ = getParam<double>("camera_update/max_yaw_update_deg", 0.5) * M_PI / 180.0;
   good_image_weight_scale_ = getParam<double>("camera_update/good_image_weight_scale", 1.0);
@@ -168,7 +183,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     runtime_csv_.open(runtime_csv_path_, std::ios::out);
     if (runtime_csv_.is_open())
     {
-      runtime_csv_ << "stamp,imu_hz,lidar_hz,correct_hz,avg_update_ms,max_update_ms,avg_ndt_ms,max_ndt_ms,ndt_ok_count,ndt_fail_count,last_used_points,last_mean_residual,ok_count,fail_count,image_hz,avg_visual_ms,max_visual_ms,last_feature_ratio,visual_weight,lidar_degenerate,lidar_degeneracy_score,visual_ok_count,visual_fail_count,rss_note,localization_mode,lidar_information_valid,lidar_information_degenerate,lidar_information_condition,lidar_information_lambda0,lidar_information_lambda1,lidar_information_lambda2,lidar_information_lambda3,lidar_information_lambda4,lidar_information_lambda5,lidar_information_weak0,lidar_information_weak1,lidar_information_weak2,lidar_information_weak3,lidar_information_weak4,lidar_information_weak5,lidar_geometry_degeneracy_score,lidar_geometry_degeneracy_valid,visual_feature_count,visual_tracked_count,visual_inlier_count,visual_flow_residual_px,visual_flow_residual_valid,visual_reprojection_error_px,visual_relative_tx,visual_relative_ty,visual_relative_tz,visual_relative_roll,visual_relative_pitch,visual_relative_yaw,visual_relative_pose_valid,visual_metric_translation_valid,visual_reprojection_valid,visual_covariance_valid,visual_update_reason\n";
+      runtime_csv_ << "stamp,imu_hz,lidar_hz,correct_hz,avg_update_ms,max_update_ms,avg_ndt_ms,max_ndt_ms,ndt_ok_count,ndt_fail_count,last_used_points,last_mean_residual,ok_count,fail_count,image_hz,avg_visual_ms,max_visual_ms,last_feature_ratio,visual_weight,lidar_degenerate,lidar_degeneracy_score,visual_ok_count,visual_fail_count,rss_note,localization_mode,lidar_information_received,lidar_information_valid,lidar_information_degenerate,lidar_information_stale,lidar_projector_valid,lidar_information_stamp,lidar_information_condition,lidar_information_lambda0,lidar_information_lambda1,lidar_information_lambda2,lidar_information_lambda3,lidar_information_lambda4,lidar_information_lambda5,lidar_information_weak0,lidar_information_weak1,lidar_information_weak2,lidar_information_weak3,lidar_information_weak4,lidar_information_weak5,lidar_geometry_degeneracy_score,lidar_geometry_degeneracy_valid,visual_feature_count,visual_tracked_count,visual_inlier_count,visual_flow_residual_px,visual_flow_residual_valid,visual_reprojection_error_px,visual_relative_tx,visual_relative_ty,visual_relative_tz,visual_relative_roll,visual_relative_pitch,visual_relative_yaw,visual_relative_pose_valid,visual_metric_translation_valid,visual_reprojection_valid,visual_covariance_valid,visual_update_reason\n";
     }
     else
     {
@@ -250,6 +265,8 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   }
   sub_lidar_degeneracy_ = nh_.subscribe(
       lidar_degeneracy_topic_, 10, &DogPriorMapEkfNode::lidarDegeneracyCallback, this);
+  sub_lidar_information_ = nh_.subscribe(
+      lidar_information_topic_, 10, &DogPriorMapEkfNode::lidarInformationCallback, this);
   if (lidar_enable_)
   {
     if (lidar_msg_type_ == "pointcloud2")
@@ -267,6 +284,10 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   }
   ROS_INFO("[DogPriorMap C++] node started: map=%zu pts, imu=%s, lidar=%s",
            map_cloud_->size(), imu_topic_.c_str(), lidar_topic_.c_str());
+  ROS_INFO("[DogPriorMap C++] directional fusion=%d state machine=%d eigen ratio=%.4f",
+           directional_fusion_enable_ ? 1 : 0,
+           state_machine_enable_ ? 1 : 0,
+           directional_eigen_ratio_);
 }
 
 // 读取浮点数组参数；兼容全局和私有命名空间，并提供安全默认值。

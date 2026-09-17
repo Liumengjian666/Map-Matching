@@ -25,6 +25,7 @@ topics:
   diagnostics: "/dog_livo/diagnostics"
   ndt_odom: "/dog_livo/ndt_odom"
   lidar_degeneracy: "/dog_livo/lidar_degeneracy"
+  lidar_information: "/dog_livo/lidar_information"
   ndt_pose: "/dog_livo/ndt_pose"
   ndt_path: "/dog_livo/ndt_path"
   points_aligned: "/dog_livo/points_aligned"
@@ -103,7 +104,12 @@ lidar_update:
   information_degeneracy_enable: true
   information_condition_max: 100000.0
   information_correspondence_distance: 0.8
-  # Stage 0: Hessian/eigen analysis is diagnostic only; it must not alter T_ndt.
+  # The 6x6 correspondence/Hessian diagnostic is opt-in because the current
+  # implementation is an approximate observability probe, not PCL's exact NDT
+  # Hessian. Directional fusion also enables it explicitly.
+  information_diagnostic_enable: false
+  # Stage 1/2 keep information analysis diagnostic-only. Enable only in a
+  # separately validated experiment after the coordinate convention is fixed.
   information_pose_projection_enable: false
 
 camera_update:
@@ -115,12 +121,30 @@ camera_update:
   max_under_exposure_ratio: 0.35
   max_features: 300
   min_tracked_features: 40
+  max_flow_residual_px: 3.0
   min_feature_ratio: 0.15
   max_yaw_update_deg: 0.5
   good_image_weight_scale: 1.0
   bad_image_weight_scale: 0.4
   degenerate_weight_scale: 2.0
   min_degeneracy_score_for_visual: 0.15
+
+fusion:
+  # Direction-selective fusion is opt-in. Keep both switches false for
+  # Stage-1/2 behavior-neutral replay and enable them only for Stage 3.
+  directional_enable: false
+  state_machine_enable: false
+  degenerated_eigen_ratio: 0.03
+  lidar_degraded_enter_frames: 5
+  visual_assisted_enter_frames: 3
+  both_degraded_enter_frames: 3
+  recovery_exit_frames: 5
+  recovery_weak_weight_start: 0.0
+  skip_updates_when_both_degraded: true
+  lidar_information_max_age_sec: 0.05
+  # The historical yaw-only visual path is kept as an explicit opt-in for
+  # ablation; it is off while validating direction-selective fusion.
+  legacy_visual_yaw_enable: false
 
 output:
   path_max_length: 200000

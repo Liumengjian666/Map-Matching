@@ -11,9 +11,221 @@ void DogPriorMapEkfNode::lidarDegeneracyCallback(const std_msgs::Float64ConstPtr
   lidar_degenerate_ = lidar_degeneracy_score_ >= min_degeneracy_score_for_visual_;
 }
 
+void DogPriorMapEkfNode::lidarInformationCallback(const std_msgs::Float64MultiArrayConstPtr &msg)
+{
+  std::lock_guard<std::mutex> lock(mutex_);
+  const auto invalidate = [this]() {
+    lidar_directional_valid_ = false;
+    lidar_directional_degenerate_ = false;
+    lidar_information_valid_ = false;
+    lidar_information_degenerate_ = false;
+    lidar_information_condition_ = std::numeric_limits<double>::quiet_NaN();
+    lidar_information_eigenvalues_.setConstant(std::numeric_limits<double>::quiet_NaN());
+    lidar_information_eigenvectors_.setConstant(std::numeric_limits<double>::quiet_NaN());
+    lidar_degenerate_projector_.setZero();
+    lidar_reliable_projector_.setIdentity();
+    lidar_projector_valid_ = false;
+    lidar_information_stale_ = true;
+  };
+
+  if (!msg || msg->data.size() < 46)
+  {
+    invalidate();
+    return;
+  }
+
+  const double stamp = msg->data[0];
+  const bool valid = std::isfinite(stamp) && stamp > 0.0 && msg->data[1] > 0.5;
+  if (!valid)
+  {
+    invalidate();
+    return;
+  }
+  if (std::isfinite(lidar_information_stamp_) &&
+      stamp + 1e-9 < lidar_information_stamp_)
+  {
+    ROS_WARN_THROTTLE(2.0, "[DogPriorMap C++] rejecting out-of-order lidar information stamp");
+    return;
+  }
+
+  lidar_information_condition_ = msg->data[3];
+  for (int i = 0; i < 6; ++i) lidar_information_eigenvalues_(i) = msg->data[4 + i];
+  size_t offset = 10;
+  for (int col = 0; col < 6; ++col)
+    for (int row = 0; row < 6; ++row)
+      lidar_information_eigenvectors_(row, col) = msg->data[offset++];
+
+  const bool finite = std::isfinite(lidar_information_condition_) &&
+      lidar_information_condition_ >= 1.0 &&
+      lidar_information_eigenvalues_.allFinite() && lidar_information_eigenvectors_.allFinite();
+  if (!finite)
+  {
+    invalidate();
+    return;
+  }
+
+  const double max_eval = lidar_information_eigenvalues_.maxCoeff();
+  const double eigen_tolerance = 1e-9 * std::max(1.0, std::abs(max_eval));
+  if (!std::isfinite(max_eval) || max_eval <= eigen_tolerance)
+  {
+    invalidate();
+    return;
+  }
+  for (int i = 0; i < 6; ++i)
+  {
+    if (lidar_information_eigenvalues_(i) < -eigen_tolerance)
+    {
+      invalidate();
+      return;
+    }
+    if (i > 0 && lidar_information_eigenvalues_(i) + eigen_tolerance <
+        lidar_information_eigenvalues_(i - 1))
+    {
+      invalidate();
+      return;
+    }
+    const double norm = lidar_information_eigenvectors_.col(i).norm();
+    if (!std::isfinite(norm) || norm < 1e-6)
+    {
+      invalidate();
+      return;
+    }
+    lidar_information_eigenvectors_.col(i) /= norm;
+  }
+  const Eigen::Matrix<double, 6, 6> gram =
+      lidar_information_eigenvectors_.transpose() * lidar_information_eigenvectors_;
+  if (!gram.allFinite() || (gram - Eigen::Matrix<double, 6, 6>::Identity()).norm() > 1e-3)
+  {
+    invalidate();
+    return;
+  }
+
+  lidar_information_stamp_ = stamp;
+  lidar_information_received_ = true;
+  lidar_information_valid_ = true;
+  lidar_information_degenerate_ = msg->data[2] > 0.5;
+  lidar_information_weak_eigenvector_ = lidar_information_eigenvectors_.col(0).normalized();
+  rebuildDirectionalProjectors();
+}
+
+void DogPriorMapEkfNode::rebuildDirectionalProjectors()
+{
+  lidar_degenerate_projector_.setZero();
+  lidar_reliable_projector_.setIdentity();
+  lidar_directional_valid_ = false;
+  lidar_directional_degenerate_ = false;
+  lidar_projector_valid_ = false;
+  if (!lidar_information_valid_) return;
+
+  const double max_eval = lidar_information_eigenvalues_.maxCoeff();
+  if (!std::isfinite(max_eval) || max_eval <= 0.0 ||
+      !lidar_information_eigenvalues_.allFinite() ||
+      !lidar_information_eigenvectors_.allFinite()) return;
+  Eigen::Matrix<double, 6, 6> weak = Eigen::Matrix<double, 6, 6>::Zero();
+  for (int i = 0; i < 6; ++i)
+  {
+    const Eigen::Matrix<double, 6, 1> v = lidar_information_eigenvectors_.col(i);
+    const double norm = v.norm();
+    if (!std::isfinite(norm) || norm < 1e-9) return;
+    if (lidar_information_eigenvalues_(i) >= 0.0 &&
+        lidar_information_eigenvalues_(i) <= max_eval * directional_eigen_ratio_)
+    {
+      const Eigen::Matrix<double, 6, 1> vn = v / norm;
+      weak.noalias() += vn * vn.transpose();
+    }
+  }
+  weak = 0.5 * (weak + weak.transpose());
+  const double weak_dimension = weak.trace();
+  const Eigen::Matrix<double, 6, 6> reliable =
+      Eigen::Matrix<double, 6, 6>::Identity() - weak;
+  const double weak_projector_error = (weak * weak - weak).norm();
+  const double reliable_projector_error = (reliable * reliable - reliable).norm();
+  if (!std::isfinite(weak_dimension) || !weak.allFinite() || !reliable.allFinite() ||
+      weak_projector_error > 1e-3 || reliable_projector_error > 1e-3)
+    return;
+
+  lidar_degenerate_projector_ = weak;
+  lidar_reliable_projector_ = reliable;
+  lidar_projector_valid_ = true;
+  lidar_directional_valid_ = true;
+  if (weak_dimension > 0.5)
+  {
+    lidar_directional_degenerate_ = true;
+  }
+}
+
+void DogPriorMapEkfNode::updateLocalizationMode(bool lidar_event, bool visual_event)
+{
+  if (!state_machine_enable_)
+  {
+    localization_mode_ = LocalizationMode::NORMAL;
+    return;
+  }
+
+  const bool lidar_bad = !lidar_information_received_ || lidar_information_stale_ ||
+      !lidar_information_valid_ || lidar_information_degenerate_ ||
+      lidar_directional_degenerate_ || lidar_degenerate_;
+  const bool visual_good = last_visual_tracking_good_ && last_visual_relative_pose_valid_;
+  if (lidar_event && lidar_bad)
+  {
+    ++lidar_degraded_count_;
+    lidar_recovery_count_ = 0;
+  }
+  else if (lidar_event)
+  {
+    lidar_degraded_count_ = 0;
+    ++lidar_recovery_count_;
+  }
+  if (visual_event && visual_good)
+  {
+    ++visual_good_count_;
+    visual_bad_count_ = 0;
+  }
+  else if (visual_event)
+  {
+    visual_good_count_ = 0;
+    ++visual_bad_count_;
+  }
+
+  switch (localization_mode_)
+  {
+    case LocalizationMode::NORMAL:
+      if (lidar_degraded_count_ >= lidar_degraded_enter_frames_)
+        localization_mode_ = LocalizationMode::LIDAR_DEGRADED;
+      break;
+    case LocalizationMode::LIDAR_DEGRADED:
+      if (!lidar_bad && lidar_recovery_count_ >= recovery_exit_frames_)
+        localization_mode_ = LocalizationMode::RECOVERY;
+      else if (lidar_bad && visual_good_count_ >= visual_assisted_enter_frames_)
+        localization_mode_ = LocalizationMode::VISION_ASSISTED;
+      else if (lidar_bad && visual_bad_count_ >= both_degraded_enter_frames_)
+        localization_mode_ = LocalizationMode::BOTH_DEGRADED;
+      break;
+    case LocalizationMode::VISION_ASSISTED:
+      if (!lidar_bad && lidar_recovery_count_ >= recovery_exit_frames_)
+        localization_mode_ = LocalizationMode::RECOVERY;
+      else if (lidar_bad && visual_bad_count_ >= both_degraded_enter_frames_)
+        localization_mode_ = LocalizationMode::BOTH_DEGRADED;
+      break;
+    case LocalizationMode::BOTH_DEGRADED:
+      if (!lidar_bad && lidar_recovery_count_ >= recovery_exit_frames_)
+        localization_mode_ = LocalizationMode::RECOVERY;
+      else if (visual_good_count_ >= visual_assisted_enter_frames_)
+        localization_mode_ = LocalizationMode::VISION_ASSISTED;
+      break;
+    case LocalizationMode::RECOVERY:
+      if (lidar_bad && lidar_degraded_count_ >= lidar_degraded_enter_frames_)
+        localization_mode_ = LocalizationMode::LIDAR_DEGRADED;
+      else if (lidar_recovery_count_ >= recovery_exit_frames_)
+        localization_mode_ = LocalizationMode::NORMAL;
+      break;
+  }
+}
+
 // 图像主回调：检查曝光与特征质量，跟踪相邻帧角点并决定是否提供视觉约束。
 void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
 {
+  if (!msg) return;
   std::lock_guard<std::mutex> lock(mutex_);
   const ros::WallTime visual_start = ros::WallTime::now();
   ++image_msg_count_;
@@ -31,6 +243,7 @@ void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
   last_visual_metric_translation_valid_ = false;
   last_visual_reprojection_valid_ = false;
   last_visual_covariance_valid_ = false;
+  last_visual_tracking_good_ = false;
   last_visual_update_reason_ = camera_enable_ ? "no_update" : "camera_disabled";
 
   // ------------------------- 相机质量门控 -------------------------
@@ -39,10 +252,15 @@ void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
   // 这里仅为后续视觉重投影/光度残差预留权重：
   // 1) 图像质量好，且LiDAR处于长廊等退化场景时，提高视觉约束权重。
   // 2) 图像过曝/欠曝时，降低视觉约束自身权重，而不是降低雷达匹配权重。
-  if (!camera_enable_) return;
+  if (!camera_enable_)
+  {
+    updateLocalizationMode(false, true);
+    return;
+  }
   if (msg->data.empty())
   {
     last_visual_update_reason_ = "empty_image";
+    updateLocalizationMode(false, true);
     return;
   }
 
@@ -56,6 +274,7 @@ void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
     ++visual_update_fail_count_;
     last_visual_update_reason_ = "image_conversion_failed";
     ROS_WARN_THROTTLE(2.0, "[DogPriorMap C++] image conversion failed: %s", e.what());
+    updateLocalizationMode(false, true);
     return;
   }
 
@@ -76,7 +295,33 @@ void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
   {
     ++visual_update_fail_count_;
     last_visual_update_reason_ = "unsupported_image_channels";
+    updateLocalizationMode(false, true);
     return;
+  }
+
+  if (gray.empty() || gray.rows <= 0 || gray.cols <= 0)
+  {
+    ++visual_update_fail_count_;
+    last_visual_update_reason_ = "empty_gray_image";
+    updateLocalizationMode(false, true);
+    return;
+  }
+  if (gray.depth() != CV_8U)
+  {
+    cv::Mat gray8;
+    double min_value = 0.0;
+    double max_value = 0.0;
+    cv::minMaxLoc(gray, &min_value, &max_value);
+    if (!std::isfinite(min_value) || !std::isfinite(max_value))
+    {
+      ++visual_update_fail_count_;
+      last_visual_update_reason_ = "nonfinite_gray_image";
+      updateLocalizationMode(false, true);
+      return;
+    }
+    const double scale = max_value > min_value ? 255.0 / (max_value - min_value) : 1.0;
+    gray.convertTo(gray8, CV_8U, scale, -min_value * scale);
+    gray = gray8;
   }
 
   size_t over = 0;
@@ -128,52 +373,45 @@ void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
     visual_constraint_weight_scale_ = good_image_weight_scale_;
   }
 
-  if (!visual_feature_update_enable_)
+  // The frontend remains hot in NORMAL mode: estimate a sparse track for
+  // every valid image pair, but decide separately whether its pose is allowed
+  // to modify the EKF.  This avoids a cold-start when LiDAR degeneracy begins.
+  std::vector<cv::Point2f> prev_good;
+  std::vector<cv::Point2f> curr_good;
+  bool tracking_attempted = false;
+  if (image_quality_good_ && !last_gray_.empty() && !last_features_.empty() && has_last_image_pose_)
   {
-    last_visual_update_reason_ = "feature_update_disabled";
-  }
-  else if (lidar_degeneracy_score_ < min_degeneracy_score_for_visual_)
-  {
-    last_visual_update_reason_ = "lidar_not_degenerate";
-  }
-  else if (!image_quality_good_)
-  {
-    last_visual_update_reason_ = "image_quality_bad";
-  }
-  else if (last_gray_.empty() || last_features_.empty() || !has_last_image_pose_)
-  {
-    last_visual_update_reason_ = "no_previous_image";
-  }
-  else if (static_cast<int>(last_features_.size()) < min_tracked_features_)
-  {
-    last_visual_update_reason_ = "previous_feature_count_below_threshold";
-  }
-  else if (
-      lidar_degeneracy_score_ >= min_degeneracy_score_for_visual_ &&
-      image_quality_good_ &&
-      !last_gray_.empty() && !last_features_.empty() &&
-      has_last_image_pose_ &&
-      static_cast<int>(last_features_.size()) >= min_tracked_features_)
-  {
+    tracking_attempted = true;
     std::vector<cv::Point2f> tracked;
     std::vector<uint8_t> status;
     std::vector<float> err;
     cv::calcOpticalFlowPyrLK(last_gray_, gray, last_features_, tracked, status, err);
 
-    std::vector<cv::Point2f> prev_good;
-    std::vector<cv::Point2f> curr_good;
-    for (size_t i = 0; i < status.size(); ++i)
+    const size_t track_count = std::min(status.size(),
+        std::min(last_features_.size(), tracked.size()));
+    for (size_t i = 0; i < track_count; ++i)
     {
       if (!status[i]) continue;
-      prev_good.push_back(last_features_[i]);
-      curr_good.push_back(tracked[i]);
+      const cv::Point2f &prev = last_features_[i];
+      const cv::Point2f &curr = tracked[i];
+      const bool finite = std::isfinite(prev.x) && std::isfinite(prev.y) &&
+          std::isfinite(curr.x) && std::isfinite(curr.y);
+      const bool in_prev = prev.x >= 0.0f && prev.x < static_cast<float>(last_gray_.cols) &&
+          prev.y >= 0.0f && prev.y < static_cast<float>(last_gray_.rows);
+      const bool in_curr = curr.x >= 0.0f && curr.x < static_cast<float>(gray.cols) &&
+          curr.y >= 0.0f && curr.y < static_cast<float>(gray.rows);
+      if (!finite || !in_prev || !in_curr) continue;
+      prev_good.push_back(prev);
+      curr_good.push_back(curr);
     }
     last_visual_tracked_count_ = static_cast<int>(prev_good.size());
     double flow_error_sum = 0.0;
     int flow_error_count = 0;
-    for (size_t i = 0; i < status.size() && i < err.size(); ++i)
+    for (size_t i = 0; i < track_count && i < err.size(); ++i)
     {
-      if (status[i] && std::isfinite(err[i]))
+      if (status[i] && std::isfinite(err[i]) &&
+          std::isfinite(last_features_[i].x) && std::isfinite(last_features_[i].y) &&
+          std::isfinite(tracked[i].x) && std::isfinite(tracked[i].y))
       {
         flow_error_sum += static_cast<double>(err[i]);
         ++flow_error_count;
@@ -185,22 +423,62 @@ void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
       last_visual_flow_residual_valid_ = std::isfinite(last_visual_flow_residual_px_);
     }
 
-    if (static_cast<int>(prev_good.size()) >= min_tracked_features_)
+  }
+
+  last_visual_tracking_good_ = image_quality_good_ &&
+      last_feature_ratio_ >= min_feature_ratio_ &&
+      static_cast<int>(prev_good.size()) >= min_tracked_features_ &&
+      (visual_max_flow_residual_px_ <= 0.0 ||
+       (last_visual_flow_residual_valid_ &&
+        last_visual_flow_residual_px_ <= visual_max_flow_residual_px_));
+  if (!tracking_attempted)
+  {
+    last_visual_update_reason_ = image_quality_good_ ? "no_previous_image" : "image_quality_bad";
+    ++visual_update_fail_count_;
+  }
+  else if (!last_visual_tracking_good_)
+  {
+    last_visual_update_reason_ = "insufficient_tracked_features";
+    ++visual_update_fail_count_;
+  }
+  else
+  {
+    bool apply_correction = false;
+    if (directional_fusion_enable_ && state_machine_enable_)
     {
-      last_visual_update_reason_ = "relative_pose_estimation_attempt";
-      applyVisualYawCorrection(last_gray_, gray, prev_good, curr_good, visual_constraint_weight_scale_);
-      ++visual_update_ok_count_;
+      apply_correction = visual_feature_update_enable_ &&
+          localization_mode_ == LocalizationMode::VISION_ASSISTED;
+      if (!apply_correction && localization_mode_ == LocalizationMode::BOTH_DEGRADED)
+        last_visual_update_reason_ = "both_degraded_imu_only";
+      else if (!apply_correction && localization_mode_ == LocalizationMode::NORMAL)
+        last_visual_update_reason_ = "normal_visual_standby";
     }
     else
     {
-      last_visual_update_reason_ = "insufficient_tracked_features";
-      ++visual_update_fail_count_;
+      apply_correction = legacy_visual_yaw_enable_ && visual_feature_update_enable_ &&
+          lidar_degeneracy_score_ >= min_degeneracy_score_for_visual_;
     }
+    last_visual_update_reason_ = apply_correction ? "relative_pose_estimation_attempt" :
+        (visual_feature_update_enable_ ? "relative_pose_estimated_no_update" : "feature_update_disabled");
+    const bool visual_pose_estimated = applyVisualYawCorrection(
+        last_gray_, gray, prev_good, curr_good,
+        visual_constraint_weight_scale_, apply_correction);
+    if (apply_correction && visual_pose_estimated) ++visual_update_ok_count_;
+    if (apply_correction && !visual_pose_estimated) ++visual_update_fail_count_;
   }
 
+  // Update the hysteresis controller after this frame's relative pose has
+  // been estimated, so a "good" visual event means both valid tracking and a
+  // valid geometric relative-pose estimate.  A mode transition takes effect
+  // on the next frame, preventing a single callback from changing its own
+  // gating decision halfway through processing.
+  updateLocalizationMode(false, true);
+
   last_gray_ = gray.clone();
-  last_features_ = features;
+  last_features_ = curr_good.size() >= static_cast<size_t>(min_tracked_features_) ? curr_good : features;
   last_image_R_ = R_;
+  last_image_p_ = p_;
+  last_image_stamp_ = msg->header.stamp;
   has_last_image_pose_ = true;
 
   const double visual_ms = (ros::WallTime::now() - visual_start).toSec() * 1000.0;
@@ -209,11 +487,12 @@ void DogPriorMapEkfNode::imageCallback(const sensor_msgs::ImageConstPtr &msg)
 }
 
 // 根据特征对应估计相机相对旋转，并把受限航向残差反馈到机体姿态。
-void DogPriorMapEkfNode::applyVisualYawCorrection(const cv::Mat &prev_gray,
+bool DogPriorMapEkfNode::applyVisualYawCorrection(const cv::Mat &prev_gray,
                                                   const cv::Mat &curr_gray,
                                                   const std::vector<cv::Point2f> &prev_pts,
                                                   const std::vector<cv::Point2f> &curr_pts,
-                                                  double weight_scale)
+                                                  double weight_scale,
+                                                  bool apply_correction)
 {
   (void)prev_gray;
   (void)curr_gray;
@@ -227,7 +506,7 @@ void DogPriorMapEkfNode::applyVisualYawCorrection(const cv::Mat &prev_gray,
   if (prev_pts.size() < 6 || curr_pts.size() < 6)
   {
     last_visual_update_reason_ = "too_few_correspondences";
-    return;
+    return false;
   }
 
   double yaw_base = std::numeric_limits<double>::quiet_NaN();
@@ -287,7 +566,7 @@ void DogPriorMapEkfNode::applyVisualYawCorrection(const cv::Mat &prev_gray,
     if (affine.empty() || affine.rows != 2 || affine.cols != 3)
     {
       last_visual_update_reason_ = "relative_pose_estimation_failed";
-      return;
+      return false;
     }
 
     last_visual_inlier_count_ = 0;
@@ -316,7 +595,7 @@ void DogPriorMapEkfNode::applyVisualYawCorrection(const cv::Mat &prev_gray,
     {
       last_visual_relative_pose_valid_ = false;
       last_visual_update_reason_ = "relative_pose_nonfinite";
-      return;
+      return false;
     }
     yaw_base = std::atan2(b, a);
     last_visual_relative_pose_.setZero();
@@ -329,28 +608,34 @@ void DogPriorMapEkfNode::applyVisualYawCorrection(const cv::Mat &prev_gray,
   if (!std::isfinite(yaw_base))
   {
     last_visual_update_reason_ = "relative_pose_nonfinite";
-    return;
+    return false;
   }
 
-  const Eigen::Matrix3d R_pred_base_rel = last_image_R_.transpose() * R_;
+  const Eigen::Matrix3d R_pred_base_rel = R_.transpose() * last_image_R_;
   const double yaw_pred = std::atan2(R_pred_base_rel(1, 0), R_pred_base_rel(0, 0));
   double yaw_residual = yaw_base - yaw_pred;
   while (yaw_residual > M_PI) yaw_residual -= 2.0 * M_PI;
   while (yaw_residual < -M_PI) yaw_residual += 2.0 * M_PI;
 
   const double normalized_weight = std::max(0.0, std::min(1.0, weight_scale / std::max(visual_degenerate_weight_scale_, 1e-6)));
+  if (!apply_correction)
+  {
+    last_visual_update_reason_ = "relative_pose_estimated_no_update";
+    return true;
+  }
   const double yaw_correction = std::max(-max_visual_yaw_update_,
                                          std::min(max_visual_yaw_update_,
                                                   yaw_residual * normalized_weight * 0.1));
   if (std::abs(yaw_correction) < 1e-6)
   {
     last_visual_update_reason_ = "relative_pose_below_update_threshold";
-    return;
+    return true;
   }
 
   Eigen::Vector3d dtheta(0.0, 0.0, yaw_correction);
   applyPoseCorrection(Eigen::Vector3d::Zero(), dtheta);
   last_visual_update_reason_ = "yaw_only_correction_applied";
+  return true;
 }
 
 // 融合独立 NDT 节点的绝对位姿观测，同时用相邻观测估计并平滑速度。
@@ -358,6 +643,7 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
 {
   std::lock_guard<std::mutex> lock(mutex_);
   if (!ndt_observation_enable_) return;
+  if (!msg) return;
 
   Eigen::Vector3d p_target(msg->pose.pose.position.x,
                            msg->pose.pose.position.y,
@@ -374,6 +660,31 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
   Eigen::Vector3d dtheta = aa.axis() * aa.angle();
   if (!dp.allFinite() || !dtheta.allFinite()) return;
 
+  // Float64MultiArray carries the LiDAR sensor stamp in data[0].  The
+  // eigensystem is usable for this observation only when that stamp is close
+  // enough; an old projector must never be applied to a new pose.
+  const double observation_stamp = msg->header.stamp.toSec();
+  lidar_information_stale_ = !(lidar_information_received_ &&
+      lidar_information_valid_ && std::isfinite(observation_stamp) &&
+      std::isfinite(lidar_information_stamp_) &&
+      std::abs(observation_stamp - lidar_information_stamp_) <= lidar_information_max_age_sec_ &&
+      lidar_projector_valid_);
+  updateLocalizationMode(true, false);
+
+  const bool directional_mode = directional_fusion_enable_ && state_machine_enable_;
+  if (directional_mode && localization_mode_ == LocalizationMode::BOTH_DEGRADED &&
+      skip_updates_when_both_degraded_)
+  {
+    // Do not feed an untrusted absolute pose (or its differenced velocity)
+    // into the EKF while both sensors are degraded.  Reset the velocity
+    // differencer so the next accepted observation cannot span the outage.
+    last_ndt_observation_time_ = 0.0;
+    last_ndt_observation_p_map_ = p_target;
+    last_mean_residual_ = 0.0;
+    publishState(msg->header.stamp, false);
+    return;
+  }
+
   const double ratio = std::max(0.0, std::min(1.0, ndt_observation_apply_ratio_));
   const double z_ratio = std::max(0.0, std::min(1.0, ndt_observation_z_apply_ratio_));
   const double roll_pitch_ratio = std::max(0.0, std::min(1.0, ndt_observation_roll_pitch_apply_ratio_));
@@ -384,6 +695,35 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
   dtheta.x() *= roll_pitch_ratio;
   dtheta.y() *= roll_pitch_ratio;
   dp = limitVector(dp, ndt_observation_max_translation_correction_);
+
+  // In a locally degenerate mode, keep the LiDAR correction in the reliable
+  // eigenspace.  During RECOVERY, weak directions are reintroduced smoothly
+  // instead of switching from zero to full weight on a single frame.
+  const bool use_directional_lidar = directional_mode &&
+      localization_mode_ != LocalizationMode::NORMAL &&
+      lidar_directional_valid_ && lidar_directional_degenerate_ &&
+      !lidar_information_stale_ && lidar_projector_valid_;
+  if (use_directional_lidar)
+  {
+    double weak_weight = 0.0;
+    if (localization_mode_ == LocalizationMode::RECOVERY)
+    {
+      const double progress = static_cast<double>(lidar_recovery_count_) /
+          static_cast<double>(std::max(1, recovery_exit_frames_));
+      weak_weight = recovery_weak_weight_start_ +
+          (1.0 - recovery_weak_weight_start_) * std::max(0.0, std::min(1.0, progress));
+    }
+    Eigen::Matrix<double, 6, 1> correction;
+    correction.head<3>() = dp;
+    correction.tail<3>() = dtheta;
+    const Eigen::Matrix<double, 6, 6> projector =
+        lidar_reliable_projector_ + weak_weight * lidar_degenerate_projector_;
+    correction = projector * correction;
+    if (!correction.allFinite()) return;
+    dp = correction.head<3>();
+    dtheta = correction.tail<3>();
+  }
+
   applyPoseCorrection(dp, dtheta);
   ++lidar_update_ok_count_;
   ++icp_update_ok_count_;
@@ -397,6 +737,21 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
   {
     Eigen::Vector3d odom_velocity = (p_target - last_ndt_observation_p_map_) / dt;
     odom_velocity.z() *= z_ratio;
+    if (use_directional_lidar)
+    {
+      double weak_weight = 0.0;
+      if (localization_mode_ == LocalizationMode::RECOVERY)
+      {
+        const double progress = static_cast<double>(lidar_recovery_count_) /
+            static_cast<double>(std::max(1, recovery_exit_frames_));
+        weak_weight = recovery_weak_weight_start_ +
+            (1.0 - recovery_weak_weight_start_) * std::max(0.0, std::min(1.0, progress));
+      }
+      Eigen::Matrix<double, 6, 1> velocity6 = Eigen::Matrix<double, 6, 1>::Zero();
+      velocity6.head<3>() = odom_velocity;
+      velocity6 = (lidar_reliable_projector_ + weak_weight * lidar_degenerate_projector_) * velocity6;
+      odom_velocity = velocity6.head<3>();
+    }
     const double blend = std::max(0.0, std::min(1.0, ndt_observation_velocity_blend_));
     v_ = (1.0 - blend) * v_ + blend * odom_velocity;
   }

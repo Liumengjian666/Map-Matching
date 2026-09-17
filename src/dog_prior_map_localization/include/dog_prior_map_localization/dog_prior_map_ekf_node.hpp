@@ -5,6 +5,7 @@
 #include <cstring>
 #include <deque>
 #include <fstream>
+#include <iomanip>
 #include <limits>
 #include <mutex>
 #include <random>
@@ -39,6 +40,7 @@
 #include <sensor_msgs/Imu.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <std_msgs/Float64.h>
+#include <std_msgs/Float64MultiArray.h>
 #include <tf/transform_broadcaster.h>
 
 namespace dog_prior_map_localization
@@ -67,9 +69,8 @@ Eigen::Vector3d limitVector(const Eigen::Vector3d &v, double max_norm);
 class DogPriorMapEkfNode
 {
 public:
-  // Stage-1 telemetry only.  The state machine is intentionally not connected
-  // to any update path until the direction-selective fusion experiment is
-  // validated against the unchanged baseline.
+  // Direction-selective fusion and the hysteresis state machine are opt-in.
+  // The default configuration remains the existing full NDT + IMU + EKF path.
   enum class LocalizationMode
   {
     NORMAL,
@@ -139,14 +140,21 @@ private:
   /// 评估图像质量、跟踪角点，并在 LiDAR 退化时触发视觉航向约束。
   void imageCallback(const sensor_msgs::ImageConstPtr &msg);
   /// 从相邻图像的特征运动估计相对旋转，并仅反馈受限的 yaw 修正。
-  void applyVisualYawCorrection(const cv::Mat &prev_gray,
+  bool applyVisualYawCorrection(const cv::Mat &prev_gray,
                                 const cv::Mat &curr_gray,
                                 const std::vector<cv::Point2f> &prev_pts,
                                 const std::vector<cv::Point2f> &curr_pts,
-                                double weight_scale);
+                                double weight_scale,
+                                bool apply_correction);
   /// 将独立 NDT 节点输出作为低频外部观测融合到 EKF 状态中。
   void ndtObservationCallback(const nav_msgs::OdometryConstPtr &msg);
   void lidarDegeneracyCallback(const std_msgs::Float64ConstPtr &msg);
+  /// 接收 NDT 发布的 6DoF 信息矩阵特征系统，并构造退化/可靠子空间。
+  void lidarInformationCallback(const std_msgs::Float64MultiArrayConstPtr &msg);
+  /// 带滞回地更新 NORMAL/DEGRADED/RECOVERY 状态；默认只记录，不参与更新。
+  void updateLocalizationMode(bool lidar_event, bool visual_event);
+  /// 根据特征值比例构造 P_d 与 P_r，状态顺序为 [x,y,z,roll,pitch,yaw]。
+  void rebuildDirectionalProjectors();
 
   /// 发布当前里程计，并按配置同步发布路径、TF 和兼容话题。
   void publishState(const ros::Time &stamp, bool corrected);
@@ -173,6 +181,7 @@ private:
   ros::Subscriber sub_image_;
   ros::Subscriber sub_ndt_observation_;
   ros::Subscriber sub_lidar_degeneracy_;
+  ros::Subscriber sub_lidar_information_;
   ros::Publisher pub_high_;
   ros::Publisher pub_imu_propagate_;
   ros::Publisher pub_corr_;
@@ -197,6 +206,7 @@ private:
   std::string image_topic_;
   std::string ndt_observation_topic_;
   std::string lidar_degeneracy_topic_;
+  std::string lidar_information_topic_;
   std::string odom_high_rate_topic_;
   std::string imu_propagate_topic_;
   std::string odom_corrected_topic_;
@@ -255,6 +265,37 @@ private:
   double ndt_observation_velocity_blend_ = 0.6;
   double last_ndt_observation_time_ = 0.0;
   Eigen::Vector3d last_ndt_observation_p_map_ = Eigen::Vector3d::Zero();
+
+  // Direction-selective fusion is deliberately opt-in.  Until a replay
+  // validates the eigensystem convention and visual relative motion, the
+  // existing full NDT correction remains the only active measurement path.
+  bool directional_fusion_enable_ = false;
+  bool state_machine_enable_ = false;
+  double directional_eigen_ratio_ = 0.03;
+  int lidar_degraded_enter_frames_ = 5;
+  int visual_assisted_enter_frames_ = 3;
+  int both_degraded_enter_frames_ = 3;
+  int recovery_exit_frames_ = 5;
+  double recovery_weak_weight_start_ = 0.0;
+  bool skip_updates_when_both_degraded_ = true;
+  bool legacy_visual_yaw_enable_ = false;
+  double lidar_information_max_age_sec_ = 0.05;
+  bool lidar_directional_valid_ = false;
+  bool lidar_directional_degenerate_ = false;
+  bool lidar_information_received_ = false;
+  bool lidar_information_stale_ = true;
+  bool lidar_projector_valid_ = false;
+  double lidar_information_stamp_ = std::numeric_limits<double>::quiet_NaN();
+  Eigen::Matrix<double, 6, 6> lidar_information_eigenvectors_ =
+      Eigen::Matrix<double, 6, 6>::Zero();
+  Eigen::Matrix<double, 6, 6> lidar_degenerate_projector_ =
+      Eigen::Matrix<double, 6, 6>::Zero();
+  Eigen::Matrix<double, 6, 6> lidar_reliable_projector_ =
+      Eigen::Matrix<double, 6, 6>::Identity();
+  int lidar_degraded_count_ = 0;
+  int lidar_recovery_count_ = 0;
+  int visual_good_count_ = 0;
+  int visual_bad_count_ = 0;
 
   bool lidar_enable_ = true;
   bool prior_map_update_enable_ = true;
@@ -346,8 +387,6 @@ private:
   Eigen::Matrix<double, 6, 1> lidar_information_eigenvalues_ = Eigen::Matrix<double, 6, 1>::Zero();
   Eigen::Matrix<double, 6, 1> lidar_information_weak_eigenvector_ = Eigen::Matrix<double, 6, 1>::Zero();
 
-  // The enum is telemetry-only in Stage 1.  It must remain NORMAL until a
-  // separately validated hysteresis controller is introduced.
   LocalizationMode localization_mode_ = LocalizationMode::NORMAL;
 
   bool camera_enable_ = true;
@@ -356,6 +395,7 @@ private:
   double max_under_exposure_ratio_ = 0.35;
   int max_features_ = 300;
   int min_tracked_features_ = 40;
+  double visual_max_flow_residual_px_ = 3.0;
   double min_feature_ratio_ = 0.15;
   double max_visual_yaw_update_ = 0.5 * M_PI / 180.0;
   double good_image_weight_scale_ = 1.0;
@@ -379,6 +419,9 @@ private:
   std::vector<cv::Point2f> last_features_;
   bool has_last_image_pose_ = false;
   Eigen::Matrix3d last_image_R_ = Eigen::Matrix3d::Identity();
+  Eigen::Vector3d last_image_p_ = Eigen::Vector3d::Zero();
+  ros::Time last_image_stamp_;
+  bool last_visual_tracking_good_ = false;
   int last_visual_feature_count_ = 0;
   int last_visual_tracked_count_ = 0;
   int last_visual_inlier_count_ = 0;
@@ -400,6 +443,10 @@ private:
   double debug_interval_sec_ = 2.0;
   std::string runtime_csv_path_;
   std::ofstream runtime_csv_;
+  bool ekf_determinism_diagnostic_enable_ = false;
+  std::string ekf_ndt_feedback_csv_path_;
+  std::ofstream ekf_ndt_feedback_csv_;
+  uint64_t ekf_ndt_feedback_frame_index_ = 0;
   double last_debug_time_ = 0.0;
   uint64_t imu_msg_count_ = 0;
   uint64_t lidar_msg_count_ = 0;

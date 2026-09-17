@@ -1,8 +1,13 @@
 #include <algorithm>
 #include <cmath>
+#include <cstdint>
 #include <deque>
+#include <cstring>
+#include <fstream>
+#include <iomanip>
 #include <limits>
 #include <mutex>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -25,6 +30,7 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <sensor_msgs/Imu.h>
 #include <std_msgs/Float64.h>
+#include <std_msgs/Float64MultiArray.h>
 #include <tf/transform_broadcaster.h>
 
 namespace dog_prior_map_localization
@@ -114,8 +120,14 @@ bool estimateInformationWeakDirection(const pcl::PointCloud<pcl::PointXYZ>::Ptr 
                                       const Eigen::Matrix4d &pose,
                                       double max_correspondence_distance,
                                       Eigen::Matrix<double, 6, 1> &weak,
+                                      Eigen::Matrix<double, 6, 1> &eigenvalues,
+                                      Eigen::Matrix<double, 6, 6> &eigenvectors,
+                                      Eigen::Matrix<double, 6, 6> &information_matrix,
                                       double &condition)
 {
+  eigenvalues.setConstant(std::numeric_limits<double>::quiet_NaN());
+  eigenvectors.setConstant(std::numeric_limits<double>::quiet_NaN());
+  information_matrix.setConstant(std::numeric_limits<double>::quiet_NaN());
   if (!source || !target || source->empty() || target->empty()) return false;
   pcl::KdTreeFLANN<pcl::PointXYZ> tree;
   tree.setInputCloud(target);
@@ -134,7 +146,12 @@ bool estimateInformationWeakDirection(const pcl::PointCloud<pcl::PointXYZ>::Ptr 
     if (max_correspondence_distance > 0.0 && std::sqrt(dist2[0]) > max_correspondence_distance) continue;
     Eigen::Matrix<double, 3, 6> J = Eigen::Matrix<double, 3, 6>::Zero();
     J.block<3, 3>(0, 0) = Eigen::Matrix3d::Identity();
-    J.block<3, 3>(0, 3) = -skew(pw);
+    // The correction later consumed by the EKF is the right/body-frame
+    // increment initial_guess^{-1} * result.  Use the source point pb in the
+    // rotational Jacobian rather than the world point pw; otherwise the
+    // eigensystem changes when the map origin is translated and its basis is
+    // inconsistent with the correction coordinates.
+    J.block<3, 3>(0, 3) = -skew(pb);
     H.noalias() += J.transpose() * J;
     ++used;
   }
@@ -142,10 +159,15 @@ bool estimateInformationWeakDirection(const pcl::PointCloud<pcl::PointXYZ>::Ptr 
   Eigen::SelfAdjointEigenSolver<Eigen::Matrix<double, 6, 6>> solver(H);
   if (solver.info() != Eigen::Success) return false;
   const auto eval = solver.eigenvalues();
+  if (!eval.allFinite()) return false;
   const double min_eval = std::max(eval[0], 1e-12);
   const double max_eval = std::max(eval[5], 1e-12);
   condition = max_eval / min_eval;
-  weak = solver.eigenvectors().col(0).normalized();
+  if (!std::isfinite(condition)) return false;
+  eigenvalues = eval;
+  eigenvectors = solver.eigenvectors();
+  information_matrix = H;
+  weak = eigenvectors.col(0).normalized();
   return weak.allFinite() && std::isfinite(condition);
 }
 
@@ -166,6 +188,7 @@ public:
     diagnostics_topic_ = getParam<std::string>("topics/diagnostics", "/dog_livo/diagnostics");
     ndt_odom_topic_ = getParam<std::string>("topics/ndt_odom", "/dog_livo/ndt_odom");
     lidar_degeneracy_topic_ = getParam<std::string>("topics/lidar_degeneracy", "/dog_livo/lidar_degeneracy");
+    lidar_information_topic_ = getParam<std::string>("topics/lidar_information", "/dog_livo/lidar_information");
     ndt_pose_topic_ = getParam<std::string>("topics/ndt_pose", "/dog_livo/ndt_pose");
     ndt_path_topic_ = getParam<std::string>("topics/ndt_path", "/dog_livo/ndt_path");
     points_aligned_topic_ = getParam<std::string>("topics/points_aligned", "/dog_livo/points_aligned");
@@ -205,6 +228,42 @@ public:
     information_condition_max_ = getParam<double>("lidar_update/information_condition_max", 1e5);
     information_correspondence_distance_ = getParam<double>("lidar_update/information_correspondence_distance", 0.8);
     information_pose_projection_enable_ = getParam<bool>("lidar_update/information_pose_projection_enable", false);
+    information_diagnostic_enable_ = getParam<bool>("lidar_update/information_diagnostic_enable", false);
+    // Direction-selective fusion consumes the eigensystem, so it implicitly
+    // enables the diagnostic computation.  Otherwise the approximate H=J^T J
+    // calculation stays completely off and the default baseline has no extra
+    // per-scan work or topic traffic.
+    information_compute_enable_ = information_diagnostic_enable_ ||
+        information_pose_projection_enable_ ||
+        getParam<bool>("fusion/directional_enable", false);
+    const bool determinism_requested = getParam<bool>("output/diagnostic_determinism_enable", false);
+    determinism_diagnostic_enable_ = determinism_requested;
+    determinism_csv_path_ = getParam<std::string>("output/ndt_determinism_csv_path", "");
+    if (determinism_csv_path_.empty())
+    {
+      determinism_csv_path_ = getParam<std::string>("output/ndt_diagnostics_csv_path", "");
+    }
+    // Supplying an explicit CSV path is itself an opt-in for this observation
+    // path.  With no path, the default remains completely behavior-neutral.
+    determinism_diagnostic_enable_ = determinism_requested || !determinism_csv_path_.empty();
+    if (determinism_diagnostic_enable_ && !determinism_csv_path_.empty())
+    {
+      determinism_csv_.open(determinism_csv_path_, std::ios::out);
+      if (determinism_csv_.is_open())
+      {
+        determinism_csv_ << determinismCsvHeader() << "\n";
+        determinism_csv_.flush();
+      }
+      else
+      {
+        ROS_WARN("[DogPriorMap NDT] failed to write determinism CSV: %s", determinism_csv_path_.c_str());
+      }
+    }
+    else if (determinism_diagnostic_enable_)
+    {
+      ROS_WARN("[DogPriorMap NDT] determinism diagnostics enabled without an output CSV path");
+      determinism_diagnostic_enable_ = false;
+    }
     publish_tf_ = getParam<bool>("output/ndt_publish_tf", false);
     publish_path_ = getParam<bool>("output/publish_path", false);
     publish_filtered_points_ = getParam<bool>("output/publish_filtered_points", true);
@@ -214,6 +273,7 @@ public:
 
     pub_odom_ = nh_.advertise<nav_msgs::Odometry>(ndt_odom_topic_, 20);
     pub_lidar_degeneracy_ = nh_.advertise<std_msgs::Float64>(lidar_degeneracy_topic_, 20);
+    pub_lidar_information_ = nh_.advertise<std_msgs::Float64MultiArray>(lidar_information_topic_, 20);
     pub_pose_ = nh_.advertise<geometry_msgs::PoseStamped>(ndt_pose_topic_, 20);
     pub_path_ = nh_.advertise<nav_msgs::Path>(ndt_path_topic_, 5);
     pub_aligned_ = nh_.advertise<sensor_msgs::PointCloud2>(points_aligned_topic_, 5);
@@ -279,6 +339,175 @@ public:
   }
 
 private:
+  struct DeterminismRow
+  {
+    uint64_t frame_index = 0;
+    double lidar_header_stamp = std::numeric_limits<double>::quiet_NaN();
+    double ros_now = std::numeric_limits<double>::quiet_NaN();
+    double wall_time = std::numeric_limits<double>::quiet_NaN();
+    uint32_t cloud_seq = 0;
+    size_t cloud_size_raw = 0;
+    size_t cloud_size_after_filter = 0;
+    uint64_t cloud_hash = 0;
+    bool prediction_received = false;
+    double prediction_stamp = std::numeric_limits<double>::quiet_NaN();
+    double prediction_age = std::numeric_limits<double>::quiet_NaN();
+    bool prediction_used = false;
+    std::string prediction_source = "not_evaluated";
+    std::string prediction_reason = "not_evaluated";
+    Eigen::Matrix4d initial_guess = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
+    Eigen::Matrix4d previous_pose = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
+    Eigen::Matrix4d delta_pose = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
+    Eigen::Matrix4d raw_ndt = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
+    Eigen::Matrix<double, 6, 1> raw_delta =
+        Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
+    double raw_delta_translation = std::numeric_limits<double>::quiet_NaN();
+    double raw_delta_rotation_deg = std::numeric_limits<double>::quiet_NaN();
+    double ndt_fitness = std::numeric_limits<double>::quiet_NaN();
+    bool ndt_has_converged = false;
+    int ndt_iterations = 0;
+    bool information_valid = false;
+    bool information_degenerate = false;
+    double information_condition = std::numeric_limits<double>::quiet_NaN();
+    Eigen::Matrix<double, 6, 1> information_eigenvalues =
+        Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
+    Eigen::Matrix<double, 6, 1> information_weak =
+        Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
+    Eigen::Matrix4d projected = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
+    Eigen::Matrix4d used_before_step_limit = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
+    bool translation_limited = false;
+    bool rotation_limited = false;
+    Eigen::Matrix4d final_used = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
+  };
+
+  static std::string determinismCsvHeader()
+  {
+    return "frame_index,lidar_header_stamp,ros_now,wall_time,cloud_seq,cloud_size_raw,cloud_size_after_filter,cloud_hash,"
+           "prediction_received,prediction_stamp,prediction_age,prediction_used,prediction_source,prediction_reason,"
+           "initial_guess_tx,initial_guess_ty,initial_guess_tz,initial_guess_qx,initial_guess_qy,initial_guess_qz,initial_guess_qw,"
+           "previous_pose_tx,previous_pose_ty,previous_pose_tz,previous_pose_qx,previous_pose_qy,previous_pose_qz,previous_pose_qw,"
+           "delta_pose_tx,delta_pose_ty,delta_pose_tz,delta_pose_qx,delta_pose_qy,delta_pose_qz,delta_pose_qw,"
+           "raw_ndt_tx,raw_ndt_ty,raw_ndt_tz,raw_ndt_qx,raw_ndt_qy,raw_ndt_qz,raw_ndt_qw,"
+           "raw_delta_tx,raw_delta_ty,raw_delta_tz,raw_delta_rx,raw_delta_ry,raw_delta_rz,"
+           "raw_delta_from_guess_translation,raw_delta_from_guess_rotation_deg,ndt_fitness,ndt_has_converged,ndt_iterations,"
+           "information_valid,information_degenerate,information_condition,lambda_0,lambda_1,lambda_2,lambda_3,lambda_4,lambda_5,"
+           "weak_v0,weak_v1,weak_v2,weak_v3,weak_v4,weak_v5,"
+           "projected_tx,projected_ty,projected_tz,projected_qx,projected_qy,projected_qz,projected_qw,"
+           "used_before_step_limit_tx,used_before_step_limit_ty,used_before_step_limit_tz,used_before_step_limit_qx,"
+           "used_before_step_limit_qy,used_before_step_limit_qz,used_before_step_limit_qw,"
+           "translation_limited,rotation_limited,final_used_tx,final_used_ty,final_used_tz,final_used_qx,final_used_qy,"
+           "final_used_qz,final_used_qw";
+  }
+
+  static void appendPoseCsv(std::ostream &out, const Eigen::Matrix4d &pose)
+  {
+    if (!pose.allFinite())
+    {
+      out << "nan,nan,nan,nan,nan,nan,nan";
+      return;
+    }
+    Eigen::Quaterniond q(pose.block<3, 3>(0, 0));
+    if (!q.coeffs().allFinite() || q.norm() < 1e-12)
+    {
+      out << "nan,nan,nan,nan,nan,nan,nan";
+      return;
+    }
+    q.normalize();
+    out << pose(0, 3) << "," << pose(1, 3) << "," << pose(2, 3) << ","
+        << q.x() << "," << q.y() << "," << q.z() << "," << q.w();
+  }
+
+  static uint64_t stableCloudHash(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud)
+  {
+    constexpr uint64_t kOffset = 1469598103934665603ULL;
+    constexpr uint64_t kPrime = 1099511628211ULL;
+    uint64_t hash = kOffset;
+    const auto mixByte = [&hash](uint8_t byte) {
+      hash ^= static_cast<uint64_t>(byte);
+      hash *= kPrime;
+    };
+    const auto mixU32 = [&mixByte](uint32_t value) {
+      for (int shift = 0; shift < 32; shift += 8)
+      {
+        mixByte(static_cast<uint8_t>((value >> shift) & 0xffU));
+      }
+    };
+    if (!cloud) return hash;
+    mixU32(cloud->width);
+    mixU32(cloud->height);
+    mixU32(cloud->is_dense ? 1U : 0U);
+    mixU32(static_cast<uint32_t>(cloud->size()));
+    for (const auto &point : cloud->points)
+    {
+      uint32_t bits = 0;
+      std::memcpy(&bits, &point.x, sizeof(bits));
+      mixU32(bits);
+      std::memcpy(&bits, &point.y, sizeof(bits));
+      mixU32(bits);
+      std::memcpy(&bits, &point.z, sizeof(bits));
+      mixU32(bits);
+    }
+    return hash;
+  }
+
+  void writeDeterminismRow(const DeterminismRow &row)
+  {
+    if (!determinism_diagnostic_enable_ || !determinism_csv_.is_open()) return;
+    std::ostringstream out;
+    out << std::setprecision(17)
+        << row.frame_index << "," << row.lidar_header_stamp << "," << row.ros_now << ","
+        << row.wall_time << "," << row.cloud_seq << "," << row.cloud_size_raw << ","
+        << row.cloud_size_after_filter << ","
+        << std::hex << std::setw(16) << std::setfill('0') << row.cloud_hash << std::dec << std::setfill('0') << ","
+        << (row.prediction_received ? 1 : 0) << "," << row.prediction_stamp << ","
+        << row.prediction_age << "," << (row.prediction_used ? 1 : 0) << ","
+        << row.prediction_source << "," << row.prediction_reason << ",";
+    appendPoseCsv(out, row.initial_guess); out << ",";
+    appendPoseCsv(out, row.previous_pose); out << ",";
+    appendPoseCsv(out, row.delta_pose); out << ",";
+    appendPoseCsv(out, row.raw_ndt); out << ","
+        << row.raw_delta(0) << "," << row.raw_delta(1) << "," << row.raw_delta(2) << ","
+        << row.raw_delta(3) << "," << row.raw_delta(4) << "," << row.raw_delta(5) << ","
+        << row.raw_delta_translation << "," << row.raw_delta_rotation_deg << ","
+        << row.ndt_fitness << "," << (row.ndt_has_converged ? 1 : 0) << "," << row.ndt_iterations << ","
+        << (row.information_valid ? 1 : 0) << "," << (row.information_degenerate ? 1 : 0) << ","
+        << row.information_condition;
+    for (int i = 0; i < 6; ++i) out << "," << row.information_eigenvalues(i);
+    for (int i = 0; i < 6; ++i) out << "," << row.information_weak(i);
+    out << ","; appendPoseCsv(out, row.projected);
+    out << ","; appendPoseCsv(out, row.used_before_step_limit);
+    out << "," << (row.translation_limited ? 1 : 0) << "," << (row.rotation_limited ? 1 : 0) << ",";
+    appendPoseCsv(out, row.final_used);
+    out << "\n";
+    determinism_csv_ << out.str();
+  }
+
+  // Publish the information eigensystem in a self-contained message so the
+  // EKF can construct a direction-level degeneracy projector without
+  // depending on callback ordering of DiagnosticArray messages.  Layout:
+  // stamp, valid, degenerate, condition, six eigenvalues, then the 6x6
+  // eigenvector matrix in column-major order.  The values are diagnostic and
+  // do not alter the NDT pose output.
+  void publishInformation(const ros::Time &stamp,
+                          bool valid,
+                          bool degenerate,
+                          double condition,
+                          const Eigen::Matrix<double, 6, 1> &eigenvalues,
+                          const Eigen::Matrix<double, 6, 6> &eigenvectors)
+  {
+    std_msgs::Float64MultiArray msg;
+    msg.data.reserve(46);
+    msg.data.push_back(stamp.toSec());
+    msg.data.push_back(valid ? 1.0 : 0.0);
+    msg.data.push_back(degenerate ? 1.0 : 0.0);
+    msg.data.push_back(condition);
+    for (int i = 0; i < 6; ++i) msg.data.push_back(eigenvalues(i));
+    for (int col = 0; col < 6; ++col)
+      for (int row = 0; row < 6; ++row)
+        msg.data.push_back(eigenvectors(row, col));
+    pub_lidar_information_.publish(msg);
+  }
+
   // 优先读取全局参数，再读取节点私有参数，不存在时使用默认值。
   template <typename T>
   T getParam(const std::string &name, const T &default_value)
@@ -394,7 +623,7 @@ private:
       }
     }
     finalizeCloud(cloud);
-    handleCloud(cloud, msg->header.stamp, callback_start);
+    handleCloud(cloud, msg->header.stamp, callback_start, msg->header.seq);
   }
 
   Eigen::Matrix3d integrateImuRotation(double t0, double t1) const
@@ -434,25 +663,65 @@ private:
     const ros::WallTime callback_start = ros::WallTime::now();
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>());
     pcl::fromROSMsg(*msg, *cloud);
-    handleCloud(cloud, msg->header.stamp, callback_start);
+    handleCloud(cloud, msg->header.stamp, callback_start, msg->header.seq);
   }
 
   // 独立 NDT 主流程：预处理、预测初值、配准、步长审核及结果发布。
   void handleCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
                    const ros::Time &stamp,
-                   const ros::WallTime &callback_start)
+                   const ros::WallTime &callback_start,
+                   uint32_t header_seq)
   {
     if (!cloud || cloud->empty()) return;
     std::lock_guard<std::mutex> lock(mutex_);
 
+    DeterminismRow diagnostic_row;
+    if (determinism_diagnostic_enable_)
+    {
+      diagnostic_row.frame_index = ++determinism_frame_index_;
+      diagnostic_row.lidar_header_stamp = stamp.toSec();
+      diagnostic_row.ros_now = ros::Time::now().toSec();
+      diagnostic_row.wall_time = ros::WallTime::now().toSec();
+      diagnostic_row.cloud_seq = header_seq;
+      diagnostic_row.cloud_size_raw = cloud->size();
+      diagnostic_row.prediction_received = has_prediction_;
+      diagnostic_row.prediction_stamp = has_prediction_ ? prediction_stamp_.toSec() :
+          std::numeric_limits<double>::quiet_NaN();
+      diagnostic_row.prediction_age = has_prediction_ ? (stamp - prediction_stamp_).toSec() :
+          std::numeric_limits<double>::quiet_NaN();
+      if (has_previous_pose_)
+      {
+        diagnostic_row.previous_pose = previous_pose_;
+        diagnostic_row.delta_pose = delta_pose_;
+      }
+    }
+
     pcl::PointCloud<pcl::PointXYZ>::Ptr source = preprocess(cloud);
+    if (determinism_diagnostic_enable_)
+    {
+      diagnostic_row.cloud_size_after_filter = source->size();
+      diagnostic_row.cloud_hash = stableCloudHash(source);
+    }
     const double preprocess_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
     publishCloud(source, stamp, base_frame_, pub_filtered_);
     if (static_cast<int>(source->size()) < min_effective_points_)
     {
       const double localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
+      const Eigen::Matrix<double, 6, 1> invalid_values =
+          Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
+      const Eigen::Matrix<double, 6, 6> invalid_vectors =
+          Eigen::Matrix<double, 6, 6>::Constant(std::numeric_limits<double>::quiet_NaN());
+      if (information_compute_enable_)
+      {
+        publishInformation(stamp, false, false,
+                           std::numeric_limits<double>::quiet_NaN(),
+                           invalid_values, invalid_vectors);
+      }
       publishDiagnostics(stamp, false, 0.0, preprocess_ms, localization_ms,
                          static_cast<int>(source->size()), target_cloud_->size(), 0.0, 0);
+      diagnostic_row.prediction_source = "not_evaluated";
+      diagnostic_row.prediction_reason = "insufficient_points";
+      writeDeterminismRow(diagnostic_row);
       return;
     }
 
@@ -462,11 +731,26 @@ private:
         (stamp - prediction_stamp_).toSec() <= ndt_prediction_max_age_)
     {
       initial_guess = imu_prediction_pose_;
+      diagnostic_row.prediction_used = true;
+      diagnostic_row.prediction_source = "ekf_prediction";
+      diagnostic_row.prediction_reason = "accepted_by_age";
     }
     else if (has_previous_pose_)
     {
       initial_guess = previous_pose_ * delta_pose_;
+      diagnostic_row.prediction_source = "previous_pose_delta";
+      if (!has_prediction_) diagnostic_row.prediction_reason = "not_available";
+      else if ((stamp - prediction_stamp_).toSec() < -0.05) diagnostic_row.prediction_reason = "too_future";
+      else diagnostic_row.prediction_reason = "too_old";
     }
+    else
+    {
+      diagnostic_row.prediction_source = "current_pose";
+      if (!has_prediction_) diagnostic_row.prediction_reason = "not_available";
+      else if ((stamp - prediction_stamp_).toSec() < -0.05) diagnostic_row.prediction_reason = "too_future";
+      else diagnostic_row.prediction_reason = "too_old";
+    }
+    diagnostic_row.initial_guess = initial_guess;
 
     ndt_.setInputSource(source);
     pcl::PointCloud<pcl::PointXYZ> aligned;
@@ -476,6 +760,9 @@ private:
     const bool ok = ndt_.hasConverged();
     const double score = ndt_.getFitnessScore();
     const int iterations = ndt_.getFinalNumIteration();
+    diagnostic_row.ndt_has_converged = ok;
+    diagnostic_row.ndt_fitness = score;
+    diagnostic_row.ndt_iterations = iterations;
 
     bool step_limited = false;
     bool frame_degenerate = false;
@@ -487,6 +774,13 @@ private:
     {
       const Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
       Eigen::Matrix4d used_result = result;
+      diagnostic_row.raw_ndt = result;
+      const Eigen::Matrix4d raw_delta = initial_guess.inverse() * result;
+      const Eigen::AngleAxisd raw_delta_angle(raw_delta.block<3, 3>(0, 0));
+      diagnostic_row.raw_delta.head<3>() = raw_delta.block<3, 1>(0, 3);
+      diagnostic_row.raw_delta.tail<3>() = raw_delta_angle.axis() * raw_delta_angle.angle();
+      diagnostic_row.raw_delta_translation = raw_delta.block<3, 1>(0, 3).norm();
+      diagnostic_row.raw_delta_rotation_deg = rotationAngleDeg(raw_delta.block<3, 3>(0, 0));
       Eigen::Vector3d weak_direction = Eigen::Vector3d::Zero();
       double degeneracy_ratio = 1.0;
       const bool degenerate = ndt_degeneracy_enable_ &&
@@ -494,11 +788,33 @@ private:
                                 ndt_degeneracy_radius_, ndt_degeneracy_ratio_,
                                 weak_direction, degeneracy_ratio);
       Eigen::Matrix<double, 6, 1> information_weak = Eigen::Matrix<double, 6, 1>::Zero();
-      information_degenerate = information_degeneracy_enable_ &&
+      Eigen::Matrix<double, 6, 1> information_eigenvalues =
+          Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
+      Eigen::Matrix<double, 6, 6> information_eigenvectors =
+          Eigen::Matrix<double, 6, 6>::Constant(std::numeric_limits<double>::quiet_NaN());
+      Eigen::Matrix<double, 6, 6> information_matrix =
+          Eigen::Matrix<double, 6, 6>::Constant(std::numeric_limits<double>::quiet_NaN());
+      const bool information_valid = information_compute_enable_ &&
+          information_degeneracy_enable_ &&
           estimateInformationWeakDirection(source, target_cloud_, result,
                                            information_correspondence_distance_,
-                                           information_weak, information_condition) &&
+                                           information_weak, information_eigenvalues,
+                                           information_eigenvectors, information_matrix,
+                                           information_condition);
+      information_degenerate = information_degeneracy_enable_ &&
+          information_valid &&
           information_condition > information_condition_max_;
+      diagnostic_row.information_valid = information_valid;
+      diagnostic_row.information_degenerate = information_degenerate;
+      diagnostic_row.information_condition = information_condition;
+      diagnostic_row.information_eigenvalues = information_eigenvalues;
+      diagnostic_row.information_weak = information_weak;
+      if (information_compute_enable_)
+      {
+        publishInformation(stamp, information_valid, information_degenerate,
+                           information_condition, information_eigenvalues,
+                           information_eigenvectors);
+      }
       frame_degenerate = degenerate;
       frame_degeneracy_ratio = degeneracy_ratio;
       if (degenerate && has_prediction_)
@@ -531,7 +847,12 @@ private:
               initial_guess.block<3, 3>(0, 0);
         used_result = projected;
       }
-      step_limited = limitNdtStep(result, used_result);
+      diagnostic_row.projected = used_result;
+      diagnostic_row.used_before_step_limit = used_result;
+      step_limited = limitNdtStep(result, used_result,
+                                  diagnostic_row.translation_limited,
+                                  diagnostic_row.rotation_limited);
+      diagnostic_row.final_used = used_result;
       if (has_previous_pose_)
       {
         delta_pose_ = previous_pose_.inverse() * used_result;
@@ -556,6 +877,19 @@ private:
         publishAlignedCloud(aligned, stamp);
       }
     }
+    else
+    {
+      const Eigen::Matrix<double, 6, 1> invalid_values =
+          Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
+      const Eigen::Matrix<double, 6, 6> invalid_vectors =
+          Eigen::Matrix<double, 6, 6>::Constant(std::numeric_limits<double>::quiet_NaN());
+      if (information_compute_enable_)
+      {
+        publishInformation(stamp, false, false,
+                           std::numeric_limits<double>::quiet_NaN(),
+                           invalid_values, invalid_vectors);
+      }
+    }
 
     std_msgs::Float64 degeneracy_msg;
     if (std::isfinite(frame_degeneracy_ratio) && ndt_degeneracy_ratio_ > 1.0)
@@ -572,10 +906,14 @@ private:
 
     publishDiagnostics(stamp, ok, align_ms, preprocess_ms, localization_ms,
                        static_cast<int>(source->size()), target_cloud_->size(), score, iterations, step_limited);
+    writeDeterminismRow(diagnostic_row);
     ROS_INFO_THROTTLE(2.0, "[DogPriorMap NDT] local_anisotropy=%.3f degenerate=%d",
                        frame_degeneracy_ratio, frame_degenerate ? 1 : 0);
-    ROS_INFO_THROTTLE(2.0, "[DogPriorMap NDT] information_condition=%.3g degenerate=%d",
-                       information_condition, information_degenerate ? 1 : 0);
+    if (information_compute_enable_)
+    {
+      ROS_INFO_THROTTLE(2.0, "[DogPriorMap NDT] information_condition=%.3g degenerate=%d",
+                         information_condition, information_degenerate ? 1 : 0);
+    }
     ROS_INFO_THROTTLE(1.0,
                       "[DogPriorMap NDT] conv=%d limited=%d source=%zu target=%zu align=%.2fms score=%.4f iter=%d p=(%.2f %.2f %.2f)",
                       ok ? 1 : 0, step_limited ? 1 : 0, source->size(), target_cloud_->size(), align_ms, score, iterations, p_.x(), p_.y(), p_.z());
@@ -604,13 +942,16 @@ private:
   }
 
   // 限制相邻 NDT 位姿跳变；超限时按比例截断平移和旋转增量。
-  bool limitNdtStep(const Eigen::Matrix4d &raw_result, Eigen::Matrix4d &used_result) const
+  bool limitNdtStep(const Eigen::Matrix4d &raw_result,
+                    Eigen::Matrix4d &used_result,
+                    bool &translation_limited,
+                    bool &rotation_limited) const
   {
+    translation_limited = false;
+    rotation_limited = false;
     if (!ndt_step_limit_enable_ || !has_previous_pose_) return false;
 
     bool limited = false;
-    used_result = raw_result;
-
     const Eigen::Vector3d previous_p = previous_pose_.block<3, 1>(0, 3);
     const Eigen::Vector3d raw_p = raw_result.block<3, 1>(0, 3);
     const Eigen::Vector3d dp = raw_p - previous_p;
@@ -624,6 +965,7 @@ private:
     {
       used_result.block<3, 1>(0, 3) = previous_p + dp.normalized() * ndt_step_limit_max_translation_;
       limited = true;
+      translation_limited = true;
     }
     if (ndt_step_limit_max_rotation_deg_ > 0.0 && angle_deg > ndt_step_limit_max_rotation_deg_)
     {
@@ -632,6 +974,7 @@ private:
       Eigen::Quaterniond q_raw(raw_R);
       used_result.block<3, 3>(0, 0) = q_prev.normalized().slerp(ratio, q_raw.normalized()).toRotationMatrix();
       limited = true;
+      rotation_limited = true;
     }
     return limited;
   }
@@ -758,6 +1101,7 @@ private:
   ros::Subscriber sub_imu_;
   ros::Publisher pub_odom_;
   ros::Publisher pub_lidar_degeneracy_;
+  ros::Publisher pub_lidar_information_;
   ros::Publisher pub_pose_;
   ros::Publisher pub_path_;
   ros::Publisher pub_filtered_;
@@ -774,6 +1118,7 @@ private:
   std::string diagnostics_topic_;
   std::string ndt_odom_topic_;
   std::string lidar_degeneracy_topic_;
+  std::string lidar_information_topic_;
   std::string ndt_pose_topic_;
   std::string ndt_path_topic_;
   std::string points_aligned_topic_;
@@ -832,9 +1177,13 @@ private:
   bool information_degeneracy_enable_ = true;
   double information_condition_max_ = 1e5;
   double information_correspondence_distance_ = 0.8;
-  // Stage 0 keeps the information matrix as a detector only.  Pose projection
-  // is opt-in for a later controlled experiment and disabled by default.
   bool information_pose_projection_enable_ = false;
+  bool information_diagnostic_enable_ = false;
+  bool information_compute_enable_ = false;
+  bool determinism_diagnostic_enable_ = false;
+  std::string determinism_csv_path_;
+  std::ofstream determinism_csv_;
+  uint64_t determinism_frame_index_ = 0;
   bool deskew_enable_ = false;
   double lidar_offset_time_scale_ = 1e-9;
   double imu_history_keep_sec_ = 2.0;

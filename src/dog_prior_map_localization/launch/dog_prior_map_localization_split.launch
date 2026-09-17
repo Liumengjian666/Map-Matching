@@ -5,6 +5,14 @@
   <arg name="ndt_diagnostics_csv_path" default="" />
   <arg name="diagnostic_determinism_enable" default="false" />
   <arg name="ndt_determinism_csv_path" default="" />
+  <arg name="information_diagnostic_enable" default="false" />
+  <arg name="directional_fusion_enable" default="false" />
+  <arg name="state_machine_enable" default="false" />
+  <arg name="degenerated_eigen_ratio" default="0.03" />
+  <arg name="lidar_degraded_enter_frames" default="5" />
+  <arg name="visual_assisted_enter_frames" default="3" />
+  <arg name="both_degraded_enter_frames" default="3" />
+  <arg name="recovery_exit_frames" default="5" />
   <rosparam command="load" file="$(arg config)" />
 
   <!--
@@ -25,6 +33,14 @@
   <param name="output/ndt_diagnostics_csv_path" value="$(arg ndt_diagnostics_csv_path)" />
   <param name="output/diagnostic_determinism_enable" value="$(arg diagnostic_determinism_enable)" />
   <param name="output/ndt_determinism_csv_path" value="$(arg ndt_determinism_csv_path)" />
+  <param name="lidar_update/information_diagnostic_enable" value="$(arg information_diagnostic_enable)" />
+  <param name="fusion/directional_enable" value="$(arg directional_fusion_enable)" />
+  <param name="fusion/state_machine_enable" value="$(arg state_machine_enable)" />
+  <param name="fusion/degenerated_eigen_ratio" value="$(arg degenerated_eigen_ratio)" />
+  <param name="fusion/lidar_degraded_enter_frames" value="$(arg lidar_degraded_enter_frames)" />
+  <param name="fusion/visual_assisted_enter_frames" value="$(arg visual_assisted_enter_frames)" />
+  <param name="fusion/both_degraded_enter_frames" value="$(arg both_degraded_enter_frames)" />
+  <param name="fusion/recovery_exit_frames" value="$(arg recovery_exit_frames)" />
 
   <node pkg="dog_prior_map_localization"
         type="dog_prior_map_ndt_node_cpp"

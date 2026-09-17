@@ -155,7 +155,11 @@ void DogPriorMapEkfNode::publishDiagnostics(const ros::Time &stamp,
   addValue(status, "degenerate", lidar_degenerate_ ? "true" : "false");
   addValue(status, "degeneracy_score", std::to_string(lidar_degeneracy_score_));
   addValue(status, "localization_mode", localizationModeName(localization_mode_));
+  addValue(status, "lidar_information_received", lidar_information_received_ ? "true" : "false");
   addValue(status, "lidar_information_valid", lidar_information_valid_ ? "true" : "false");
+  addValue(status, "lidar_information_stale", lidar_information_stale_ ? "true" : "false");
+  addValue(status, "lidar_projector_valid", lidar_projector_valid_ ? "true" : "false");
+  addValue(status, "lidar_information_stamp", std::to_string(lidar_information_stamp_));
   addValue(status, "lidar_information_degenerate", lidar_information_degenerate_ ? "true" : "false");
   addValue(status, "lidar_information_condition", std::to_string(lidar_information_condition_));
   addValue(status, "lidar_information_eigenvalues",
@@ -289,8 +293,12 @@ void DogPriorMapEkfNode::maybePrintRuntime(const ros::Time &stamp)
                  << visual_update_fail_count_ << ","
                  << "rss_sampled_by_ps" << ","
                  << localizationModeName(localization_mode_) << ","
+                 << (lidar_information_received_ ? 1 : 0) << ","
                  << (lidar_information_valid_ ? 1 : 0) << ","
                  << (lidar_information_degenerate_ ? 1 : 0) << ","
+                 << (lidar_information_stale_ ? 1 : 0) << ","
+                 << (lidar_projector_valid_ ? 1 : 0) << ","
+                 << lidar_information_stamp_ << ","
                  << lidar_information_condition_ << ","
                  << lidar_information_eigenvalues_(0) << ","
                  << lidar_information_eigenvalues_(1) << ","
