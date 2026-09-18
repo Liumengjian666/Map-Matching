@@ -6,6 +6,7 @@
   <arg name="ndt_diagnostics_csv_path" default="" />
   <arg name="oosm_enable" default="false" />
   <arg name="oosm_max_alignment_sec" default="0.02" />
+  <arg name="scan_reference_time" default="start" />
   <arg name="oosm_csv_path" default="" />
   <arg name="diagnostic_determinism_enable" default="false" />
   <arg name="ndt_determinism_csv_path" default="" />
@@ -35,6 +36,7 @@
   <param name="ndt_observation/max_rotation_correction_deg" value="20.0" />
   <param name="ndt_observation/oosm_enable" value="$(arg oosm_enable)" />
   <param name="ndt_observation/oosm_max_alignment_sec" value="$(arg oosm_max_alignment_sec)" />
+  <param name="lidar_update/scan_reference_time" value="$(arg scan_reference_time)" />
   <param name="lidar_update/enable" value="false" />
   <param name="output/runtime_csv_path" value="$(arg runtime_csv_path)" />
   <param name="output/publish_path" value="$(arg publish_path)" />

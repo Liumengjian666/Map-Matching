@@ -197,6 +197,13 @@ public:
     prediction_topic_ = getParam<std::string>("topics/odom_high_rate", "/dog_livo/odom_high_rate");
     deskew_enable_ = getParam<bool>("lidar_update/deskew_enable", false);
     lidar_offset_time_scale_ = getParam<double>("lidar_update/offset_time_scale", 1e-9);
+    scan_reference_time_ = getParam<std::string>("lidar_update/scan_reference_time", "start");
+    if (scan_reference_time_ != "start" && scan_reference_time_ != "mid" && scan_reference_time_ != "end")
+    {
+      ROS_WARN("[DogPriorMap NDT] invalid lidar_update/scan_reference_time='%s'; using start",
+               scan_reference_time_.c_str());
+      scan_reference_time_ = "start";
+    }
     imu_history_keep_sec_ = getParam<double>("imu/history_keep_sec", 2.0);
 
     map_pcd_path_ = getParam<std::string>("map/pcd_fallback_path", "");
@@ -398,8 +405,23 @@ private:
   {
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud;
     ros::Time stamp;
+    ros::Time reference_stamp;
+    ros::Time scan_mid_stamp;
+    ros::Time scan_end_stamp;
+    double scan_min_offset_sec = 0.0;
+    double scan_max_offset_sec = 0.0;
     ros::WallTime callback_start;
     uint32_t header_seq = 0;
+  };
+
+  struct ScanTiming
+  {
+    ros::Time start_stamp;
+    ros::Time mid_stamp;
+    ros::Time end_stamp;
+    ros::Time reference_stamp;
+    double min_offset_sec = 0.0;
+    double max_offset_sec = 0.0;
   };
 
   struct PredictionSelection
@@ -455,6 +477,27 @@ private:
     double prediction_watermark_minus_lidar_sec = std::numeric_limits<double>::quiet_NaN();
     double selected_prediction_stamp = std::numeric_limits<double>::quiet_NaN();
     double selected_prediction_age_sec = std::numeric_limits<double>::quiet_NaN();
+    double scan_start_stamp = std::numeric_limits<double>::quiet_NaN();
+    double scan_mid_stamp = std::numeric_limits<double>::quiet_NaN();
+    double scan_end_stamp = std::numeric_limits<double>::quiet_NaN();
+    double scan_min_offset_sec = std::numeric_limits<double>::quiet_NaN();
+    double scan_max_offset_sec = std::numeric_limits<double>::quiet_NaN();
+    double scan_duration_ms = std::numeric_limits<double>::quiet_NaN();
+    double prediction_start_stamp = std::numeric_limits<double>::quiet_NaN();
+    double prediction_start_age_ms = std::numeric_limits<double>::quiet_NaN();
+    double prediction_mid_stamp = std::numeric_limits<double>::quiet_NaN();
+    double prediction_mid_age_ms = std::numeric_limits<double>::quiet_NaN();
+    double prediction_end_stamp = std::numeric_limits<double>::quiet_NaN();
+    double prediction_end_age_ms = std::numeric_limits<double>::quiet_NaN();
+    Eigen::Matrix4d prediction_start_pose = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
+    Eigen::Matrix4d prediction_mid_pose = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
+    Eigen::Matrix4d prediction_end_pose = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
+    double start_to_mid_translation = std::numeric_limits<double>::quiet_NaN();
+    double start_to_mid_rotation_deg = std::numeric_limits<double>::quiet_NaN();
+    double mid_to_end_translation = std::numeric_limits<double>::quiet_NaN();
+    double mid_to_end_rotation_deg = std::numeric_limits<double>::quiet_NaN();
+    double start_to_end_translation = std::numeric_limits<double>::quiet_NaN();
+    double start_to_end_rotation_deg = std::numeric_limits<double>::quiet_NaN();
     size_t pending_lidar_count = 0;
     uint64_t prediction_out_of_order_count = 0;
     uint64_t prediction_duplicate_count = 0;
@@ -479,6 +522,14 @@ private:
            "translation_limited,rotation_limited,final_used_tx,final_used_ty,final_used_tz,final_used_qx,final_used_qy,"
            "final_used_qz,final_used_qw,prediction_history_size,latest_prediction_stamp,"
            "prediction_watermark_minus_lidar_sec,selected_prediction_stamp,selected_prediction_age_sec,"
+           "scan_start_stamp,scan_mid_stamp,scan_end_stamp,scan_min_offset_sec,scan_max_offset_sec,scan_duration_ms,"
+           "prediction_start_stamp,prediction_start_age_ms,prediction_mid_stamp,prediction_mid_age_ms,"
+           "prediction_end_stamp,prediction_end_age_ms,"
+           "prediction_start_tx,prediction_start_ty,prediction_start_tz,prediction_start_qx,prediction_start_qy,prediction_start_qz,prediction_start_qw,"
+           "prediction_mid_tx,prediction_mid_ty,prediction_mid_tz,prediction_mid_qx,prediction_mid_qy,prediction_mid_qz,prediction_mid_qw,"
+           "prediction_end_tx,prediction_end_ty,prediction_end_tz,prediction_end_qx,prediction_end_qy,prediction_end_qz,prediction_end_qw,"
+           "start_to_mid_translation,start_to_mid_rotation_deg,mid_to_end_translation,mid_to_end_rotation_deg,"
+           "start_to_end_translation,start_to_end_rotation_deg,"
            "pending_lidar_count,prediction_out_of_order_count,prediction_duplicate_count,pending_overflow_count";
   }
 
@@ -563,7 +614,19 @@ private:
     appendPoseCsv(out, row.final_used);
     out << "," << row.prediction_history_size << "," << row.latest_prediction_stamp << ","
         << row.prediction_watermark_minus_lidar_sec << "," << row.selected_prediction_stamp << ","
-        << row.selected_prediction_age_sec << "," << row.pending_lidar_count << ","
+        << row.selected_prediction_age_sec << ","
+        << row.scan_start_stamp << "," << row.scan_mid_stamp << "," << row.scan_end_stamp << ","
+        << row.scan_min_offset_sec << "," << row.scan_max_offset_sec << "," << row.scan_duration_ms << ","
+        << row.prediction_start_stamp << "," << row.prediction_start_age_ms << ","
+        << row.prediction_mid_stamp << "," << row.prediction_mid_age_ms << ","
+        << row.prediction_end_stamp << "," << row.prediction_end_age_ms << ",";
+    appendPoseCsv(out, row.prediction_start_pose); out << ",";
+    appendPoseCsv(out, row.prediction_mid_pose); out << ",";
+    appendPoseCsv(out, row.prediction_end_pose);
+    out << "," << row.start_to_mid_translation << "," << row.start_to_mid_rotation_deg << ","
+        << row.mid_to_end_translation << "," << row.mid_to_end_rotation_deg << ","
+        << row.start_to_end_translation << "," << row.start_to_end_rotation_deg << ","
+        << row.pending_lidar_count << ","
         << row.prediction_out_of_order_count << "," << row.prediction_duplicate_count << ","
         << row.pending_overflow_count;
     out << "\n";
@@ -686,8 +749,24 @@ private:
     return voxelDown(filtered, scan_voxel_size_, source_voxel_z_size_, max_scan_points_);
   }
 
+  ScanTiming makeScanTiming(const ros::Time &start_stamp,
+                            double min_offset_sec,
+                            double max_offset_sec) const
+  {
+    ScanTiming timing;
+    timing.start_stamp = start_stamp;
+    timing.min_offset_sec = std::isfinite(min_offset_sec) ? min_offset_sec : 0.0;
+    timing.max_offset_sec = std::isfinite(max_offset_sec) ? max_offset_sec : 0.0;
+    timing.end_stamp = start_stamp + ros::Duration(timing.max_offset_sec);
+    timing.mid_stamp = start_stamp + ros::Duration(0.5 * timing.max_offset_sec);
+    if (scan_reference_time_ == "mid") timing.reference_stamp = timing.mid_stamp;
+    else if (scan_reference_time_ == "end") timing.reference_stamp = timing.end_stamp;
+    else timing.reference_stamp = timing.start_stamp;
+    return timing;
+  }
+
   void enqueueCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
-                    const ros::Time &stamp,
+                    const ScanTiming &timing,
                     const ros::WallTime &callback_start,
                     uint32_t header_seq)
   {
@@ -695,17 +774,24 @@ private:
     std::lock_guard<std::mutex> lock(mutex_);
     if (!ndt_prediction_enable_)
     {
-      handleCloudLocked(cloud, stamp, callback_start, header_seq, nullptr);
+      handleCloudLocked(cloud, timing.start_stamp, callback_start, timing, header_seq, nullptr);
       return;
     }
 
     PendingLidarFrame frame;
     frame.cloud = cloud;
-    frame.stamp = stamp;
+    frame.stamp = timing.start_stamp;
+    frame.reference_stamp = timing.reference_stamp;
+    frame.scan_mid_stamp = timing.mid_stamp;
+    frame.scan_end_stamp = timing.end_stamp;
+    frame.scan_min_offset_sec = timing.min_offset_sec;
+    frame.scan_max_offset_sec = timing.max_offset_sec;
     frame.callback_start = callback_start;
     frame.header_seq = header_seq;
     auto insert_at = pending_lidar_frames_.begin();
-    while (insert_at != pending_lidar_frames_.end() && insert_at->stamp <= stamp)
+    while (insert_at != pending_lidar_frames_.end() &&
+           (insert_at->reference_stamp < frame.reference_stamp ||
+            (insert_at->reference_stamp == frame.reference_stamp && insert_at->stamp <= frame.stamp)))
       ++insert_at;
     pending_lidar_frames_.insert(insert_at, frame);
 
@@ -718,6 +804,9 @@ private:
       forced_fallback.watermark_ready = true;
       forced_fallback.reason = "pending_overflow";
       handleCloudLocked(overflow.cloud, overflow.stamp, overflow.callback_start,
+                        ScanTiming{overflow.stamp, overflow.scan_mid_stamp, overflow.scan_end_stamp,
+                                   overflow.reference_stamp, overflow.scan_min_offset_sec,
+                                   overflow.scan_max_offset_sec},
                         overflow.header_seq, &forced_fallback);
     }
     processPendingCloudsLocked();
@@ -728,7 +817,6 @@ private:
     PredictionSelection selection;
     selection.watermark_ready = has_prediction_watermark_ &&
         latest_prediction_stamp_ >= lidar_stamp;
-    if (!selection.watermark_ready) return selection;
 
     for (auto it = prediction_history_.rbegin(); it != prediction_history_.rend(); ++it)
     {
@@ -740,7 +828,31 @@ private:
           "accepted_at_or_before" : "stale_prediction";
       return selection;
     }
+    if (!selection.watermark_ready)
+      selection.reason = "watermark_not_ready";
     return selection;
+  }
+
+  static void fillReferencePredictionDiagnostic(const PredictionSelection &selection,
+                                                double &stamp,
+                                                double &age_ms,
+                                                Eigen::Matrix4d &pose)
+  {
+    if (!selection.has_prediction) return;
+    stamp = selection.prediction.stamp.toSec();
+    age_ms = selection.age_sec * 1000.0;
+    pose = selection.prediction.pose;
+  }
+
+  static void fillPoseDifferenceDiagnostic(const Eigen::Matrix4d &from,
+                                           const Eigen::Matrix4d &to,
+                                           double &translation,
+                                           double &rotation_deg)
+  {
+    if (!from.allFinite() || !to.allFinite()) return;
+    translation = (to.block<3, 1>(0, 3) - from.block<3, 1>(0, 3)).norm();
+    rotation_deg = rotationAngleDeg(from.block<3, 3>(0, 0).transpose() *
+                                    to.block<3, 3>(0, 0));
   }
 
   void processPendingCloudsLocked()
@@ -749,7 +861,7 @@ private:
     {
       const PendingLidarFrame &front = pending_lidar_frames_.front();
       const bool watermark_ready = has_prediction_watermark_ &&
-          latest_prediction_stamp_ >= front.stamp;
+          latest_prediction_stamp_ >= front.reference_stamp;
       if (!watermark_ready)
       {
         // Preserve the original first-frame initialization behavior when no
@@ -764,16 +876,22 @@ private:
           startup_selection.watermark_ready = true;
           startup_selection.reason = "startup_no_history";
           handleCloudLocked(startup.cloud, startup.stamp, startup.callback_start,
+                            ScanTiming{startup.stamp, startup.scan_mid_stamp, startup.scan_end_stamp,
+                                       startup.reference_stamp, startup.scan_min_offset_sec,
+                                       startup.scan_max_offset_sec},
                             startup.header_seq, &startup_selection);
           continue;
         }
         break;
       }
 
-      PredictionSelection selection = getPredictionAtOrBefore(front.stamp);
+      PredictionSelection selection = getPredictionAtOrBefore(front.reference_stamp);
       PendingLidarFrame ready = front;
       pending_lidar_frames_.pop_front();
       handleCloudLocked(ready.cloud, ready.stamp, ready.callback_start,
+                        ScanTiming{ready.stamp, ready.scan_mid_stamp, ready.scan_end_stamp,
+                                   ready.reference_stamp, ready.scan_min_offset_sec,
+                                   ready.scan_max_offset_sec},
                         ready.header_seq, &selection);
     }
   }
@@ -784,10 +902,21 @@ private:
     const ros::WallTime callback_start = ros::WallTime::now();
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>());
     cloud->reserve(msg->points.size());
-    double frame_end = msg->header.stamp.toSec();
+    double min_offset_sec = std::numeric_limits<double>::infinity();
+    double max_offset_sec = -std::numeric_limits<double>::infinity();
     for (const auto &pt : msg->points)
-      frame_end = std::max(frame_end, msg->header.stamp.toSec() +
-                           static_cast<double>(pt.offset_time) * lidar_offset_time_scale_);
+    {
+      const double offset_sec = static_cast<double>(pt.offset_time) * lidar_offset_time_scale_;
+      min_offset_sec = std::min(min_offset_sec, offset_sec);
+      max_offset_sec = std::max(max_offset_sec, offset_sec);
+    }
+    if (!std::isfinite(min_offset_sec) || !std::isfinite(max_offset_sec))
+    {
+      min_offset_sec = 0.0;
+      max_offset_sec = 0.0;
+    }
+    const ScanTiming timing = makeScanTiming(msg->header.stamp, min_offset_sec, max_offset_sec);
+    const double frame_end = timing.end_stamp.toSec();
     for (const auto &pt : msg->points)
     {
       if (std::isfinite(pt.x) && std::isfinite(pt.y) && std::isfinite(pt.z))
@@ -803,7 +932,7 @@ private:
       }
     }
     finalizeCloud(cloud);
-    enqueueCloud(cloud, msg->header.stamp, callback_start, msg->header.seq);
+    enqueueCloud(cloud, timing, callback_start, msg->header.seq);
   }
 
   Eigen::Matrix3d integrateImuRotation(double t0, double t1) const
@@ -843,13 +972,14 @@ private:
     const ros::WallTime callback_start = ros::WallTime::now();
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>());
     pcl::fromROSMsg(*msg, *cloud);
-    enqueueCloud(cloud, msg->header.stamp, callback_start, msg->header.seq);
+    enqueueCloud(cloud, makeScanTiming(msg->header.stamp, 0.0, 0.0), callback_start, msg->header.seq);
   }
 
   // 独立 NDT 主流程：预处理、预测初值、配准、步长审核及结果发布。
   void handleCloudLocked(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
                          const ros::Time &stamp,
                          const ros::WallTime &callback_start,
+                         const ScanTiming &timing,
                          uint32_t header_seq,
                          const PredictionSelection *prediction_selection)
   {
@@ -860,6 +990,39 @@ private:
     {
       diagnostic_row.frame_index = ++determinism_frame_index_;
       diagnostic_row.lidar_header_stamp = stamp.toSec();
+      diagnostic_row.scan_start_stamp = timing.start_stamp.toSec();
+      diagnostic_row.scan_mid_stamp = timing.mid_stamp.toSec();
+      diagnostic_row.scan_end_stamp = timing.end_stamp.toSec();
+      diagnostic_row.scan_min_offset_sec = timing.min_offset_sec;
+      diagnostic_row.scan_max_offset_sec = timing.max_offset_sec;
+      diagnostic_row.scan_duration_ms = (timing.end_stamp - timing.start_stamp).toSec() * 1000.0;
+      const PredictionSelection start_prediction = getPredictionAtOrBefore(timing.start_stamp);
+      const PredictionSelection mid_prediction = getPredictionAtOrBefore(timing.mid_stamp);
+      const PredictionSelection end_prediction = getPredictionAtOrBefore(timing.end_stamp);
+      fillReferencePredictionDiagnostic(start_prediction,
+                                        diagnostic_row.prediction_start_stamp,
+                                        diagnostic_row.prediction_start_age_ms,
+                                        diagnostic_row.prediction_start_pose);
+      fillReferencePredictionDiagnostic(mid_prediction,
+                                        diagnostic_row.prediction_mid_stamp,
+                                        diagnostic_row.prediction_mid_age_ms,
+                                        diagnostic_row.prediction_mid_pose);
+      fillReferencePredictionDiagnostic(end_prediction,
+                                        diagnostic_row.prediction_end_stamp,
+                                        diagnostic_row.prediction_end_age_ms,
+                                        diagnostic_row.prediction_end_pose);
+      fillPoseDifferenceDiagnostic(diagnostic_row.prediction_start_pose,
+                                   diagnostic_row.prediction_mid_pose,
+                                   diagnostic_row.start_to_mid_translation,
+                                   diagnostic_row.start_to_mid_rotation_deg);
+      fillPoseDifferenceDiagnostic(diagnostic_row.prediction_mid_pose,
+                                   diagnostic_row.prediction_end_pose,
+                                   diagnostic_row.mid_to_end_translation,
+                                   diagnostic_row.mid_to_end_rotation_deg);
+      fillPoseDifferenceDiagnostic(diagnostic_row.prediction_start_pose,
+                                   diagnostic_row.prediction_end_pose,
+                                   diagnostic_row.start_to_end_translation,
+                                   diagnostic_row.start_to_end_rotation_deg);
       diagnostic_row.ros_now = ros::Time::now().toSec();
       diagnostic_row.wall_time = ros::WallTime::now().toSec();
       diagnostic_row.cloud_seq = header_seq;
@@ -868,7 +1031,7 @@ private:
       diagnostic_row.latest_prediction_stamp = has_prediction_watermark_ ?
           latest_prediction_stamp_.toSec() : std::numeric_limits<double>::quiet_NaN();
       diagnostic_row.prediction_watermark_minus_lidar_sec = has_prediction_watermark_ ?
-          (latest_prediction_stamp_ - stamp).toSec() : std::numeric_limits<double>::quiet_NaN();
+          (latest_prediction_stamp_ - timing.reference_stamp).toSec() : std::numeric_limits<double>::quiet_NaN();
       diagnostic_row.pending_lidar_count = pending_lidar_frames_.size();
       diagnostic_row.prediction_out_of_order_count = prediction_out_of_order_count_;
       diagnostic_row.prediction_duplicate_count = prediction_duplicate_count_;
@@ -1421,6 +1584,7 @@ private:
   bool publish_path_ = false;
   bool publish_filtered_points_ = true;
   bool publish_diagnostics_ = true;
+  std::string scan_reference_time_ = "start";
 };
 }  // namespace dog_prior_map_localization
 
