@@ -183,3 +183,5 @@ output:
   debug_interval_sec: 2.0
   runtime_csv_path: "/home/jian/dog_prior_map_livo_ws/validation/latest_runtime.csv"
   oosm_csv_path: ""
+  # Stage 2D: optional EKF prediction/OOSM lineage diagnostics.
+  ekf_prediction_diagnostics_csv_path: ""

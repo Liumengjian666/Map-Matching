@@ -49,6 +49,7 @@ void DogPriorMapEkfNode::publishState(const ros::Time &stamp, bool corrected)
 
   if (corrected)
   {
+    writeEkfPredictionLineage("CORRECTED_PUBLISH", ros::Time::now().toSec());
     pub_corr_.publish(odom);
     if (publish_path_)
     {
@@ -57,6 +58,8 @@ void DogPriorMapEkfNode::publishState(const ros::Time &stamp, bool corrected)
   }
   else
   {
+    const uint64_t publish_seq = ++high_rate_publish_seq_;
+    writeEkfPredictionLineage("IMU_HIGH_RATE_PUBLISH", ros::Time::now().toSec(), publish_seq);
     pub_high_.publish(odom);
     if (publish_imu_propagate_alias_)
     {
@@ -236,6 +239,50 @@ void DogPriorMapEkfNode::writeOosmDiagnostic(double ndt_stamp,
             << imu_history_count << ","
             << result << "\n";
   oosm_csv_.flush();
+}
+
+void DogPriorMapEkfNode::writeEkfPredictionLineage(const std::string &event_type,
+                                                   double event_ros_stamp,
+                                                   uint64_t publish_seq,
+                                                   double ndt_measurement_stamp,
+                                                   double state_now_before_ndt,
+                                                   double state_now_after_replay,
+                                                   double rollback_stamp,
+                                                   size_t replay_imu_count,
+                                                   double lag_ms,
+                                                   double rewrite_translation_m,
+                                                   double rewrite_rotation_deg,
+                                                   double rewrite_velocity_mps)
+{
+  if (!ekf_prediction_diagnostics_csv_.is_open()) return;
+
+  Eigen::Quaterniond q(R_);
+  q.normalize();
+  ekf_prediction_diagnostics_csv_ << ++ekf_prediction_event_index_ << ","
+      << event_type << ","
+      << event_ros_stamp << ","
+      << state_stamp_ << ","
+      << p_.x() << "," << p_.y() << "," << p_.z() << ","
+      << q.x() << "," << q.y() << "," << q.z() << "," << q.w() << ","
+      << v_.x() << "," << v_.y() << "," << v_.z() << ","
+      << last_ndt_observation_time_ << ","
+      << lidar_update_ok_count_ << ","
+      << imu_msg_count_ << ","
+      << oosm_frame_index_ << ","
+      << state_history_.size() << ","
+      << imu_history_.size() << ","
+      << ekf_state_revision_ << ","
+      << publish_seq << ","
+      << ndt_measurement_stamp << ","
+      << state_now_before_ndt << ","
+      << state_now_after_replay << ","
+      << rollback_stamp << ","
+      << replay_imu_count << ","
+      << lag_ms << ","
+      << rewrite_translation_m << ","
+      << rewrite_rotation_deg << ","
+      << rewrite_velocity_mps << "\n";
+  ekf_prediction_diagnostics_csv_.flush();
 }
 
 // 将里程计位姿转换为 PoseStamped 追加到轨迹，并裁剪过长的历史缓存。

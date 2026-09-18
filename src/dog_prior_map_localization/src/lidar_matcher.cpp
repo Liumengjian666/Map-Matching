@@ -1164,6 +1164,7 @@ bool DogPriorMapEkfNode::updateLidarDegeneracyStatus(const Eigen::Matrix<double,
 // 将通过门控的位置和旋转增量反馈到当前状态估计。
 void DogPriorMapEkfNode::applyPoseCorrection(const Eigen::Vector3d &dp, const Eigen::Vector3d &dtheta)
 {
+  ++ekf_state_revision_;
   p_ += dp;
   const double angle = dtheta.norm();
   Eigen::Matrix3d dR = Eigen::Matrix3d::Identity();

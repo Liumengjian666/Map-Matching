@@ -192,6 +192,18 @@ private:
   void appendPath(nav_msgs::Path &path, const nav_msgs::Odometry &odom);
   /// 按固定周期打印并记录各传感器和匹配模块的运行统计。
   void maybePrintRuntime(const ros::Time &stamp);
+  void writeEkfPredictionLineage(const std::string &event_type,
+                                 double event_ros_stamp,
+                                 uint64_t publish_seq = 0,
+                                 double ndt_measurement_stamp = std::numeric_limits<double>::quiet_NaN(),
+                                 double state_now_before_ndt = std::numeric_limits<double>::quiet_NaN(),
+                                 double state_now_after_replay = std::numeric_limits<double>::quiet_NaN(),
+                                 double rollback_stamp = std::numeric_limits<double>::quiet_NaN(),
+                                 size_t replay_imu_count = 0,
+                                 double lag_ms = std::numeric_limits<double>::quiet_NaN(),
+                                 double rewrite_translation_m = std::numeric_limits<double>::quiet_NaN(),
+                                 double rewrite_rotation_deg = std::numeric_limits<double>::quiet_NaN(),
+                                 double rewrite_velocity_mps = std::numeric_limits<double>::quiet_NaN());
   void writeOosmDiagnostic(double ndt_stamp,
                            double state_now_stamp,
                            double rollback_stamp,
@@ -496,6 +508,11 @@ private:
   double debug_interval_sec_ = 2.0;
   std::string runtime_csv_path_;
   std::ofstream runtime_csv_;
+  std::string ekf_prediction_diagnostics_csv_path_;
+  std::ofstream ekf_prediction_diagnostics_csv_;
+  uint64_t ekf_prediction_event_index_ = 0;
+  uint64_t ekf_state_revision_ = 0;
+  uint64_t high_rate_publish_seq_ = 0;
   std::string oosm_csv_path_;
   std::ofstream oosm_csv_;
   uint64_t oosm_frame_index_ = 0;

@@ -217,6 +217,29 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
       ROS_WARN("[DogPriorMap C++] failed to write OOSM CSV: %s", oosm_csv_path_.c_str());
     }
   }
+  ekf_prediction_diagnostics_csv_path_ = getParam<std::string>(
+      "output/ekf_prediction_diagnostics_csv_path", "");
+  if (!ekf_prediction_diagnostics_csv_path_.empty())
+  {
+    ekf_prediction_diagnostics_csv_.open(ekf_prediction_diagnostics_csv_path_, std::ios::out);
+    if (ekf_prediction_diagnostics_csv_.is_open())
+    {
+      ekf_prediction_diagnostics_csv_ << std::setprecision(17)
+          << "event_index,event_type,event_ros_stamp,state_stamp,"
+             "p_x,p_y,p_z,q_x,q_y,q_z,q_w,v_x,v_y,v_z,"
+             "last_ndt_observation_time,ndt_update_count,imu_msg_count,oosm_frame_index,"
+             "state_history_size,imu_history_size,state_revision,high_rate_publish_seq,"
+             "ndt_measurement_stamp,state_now_before_ndt,state_now_after_replay,rollback_stamp,"
+             "replay_imu_count,lag_ms,oosm_rewrite_translation_m,oosm_rewrite_rotation_deg,"
+             "oosm_rewrite_velocity_mps\n";
+      ekf_prediction_diagnostics_csv_.flush();
+    }
+    else
+    {
+      ROS_WARN("[DogPriorMap C++] failed to write EKF prediction diagnostics CSV: %s",
+               ekf_prediction_diagnostics_csv_path_.c_str());
+    }
+  }
 
   p_.setZero();
   v_.setZero();

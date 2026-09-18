@@ -752,6 +752,8 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
   const double t_ndt = msg->header.stamp.toSec();
   const double t_now = has_state_stamp_ ? state_stamp_ :
       std::numeric_limits<double>::quiet_NaN();
+  writeEkfPredictionLineage("NDT_CALLBACK_ENTER", ros::Time::now().toSec(), 0,
+                            t_ndt, t_now);
   const size_t state_history_count = state_history_.size();
   const size_t imu_history_count = imu_history_.size();
   double rollback_stamp = std::numeric_limits<double>::quiet_NaN();
@@ -766,6 +768,7 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
   const Eigen::Vector3d last_ndt_p_before = last_ndt_observation_p_map_;
   const uint64_t lidar_update_ok_before = lidar_update_ok_count_;
   const uint64_t icp_update_ok_before = icp_update_ok_count_;
+  const uint64_t state_revision_before_oosm = ekf_state_revision_;
   const int last_used_points_before = last_used_points_;
   const double last_mean_residual_before = last_mean_residual_;
 
@@ -777,6 +780,7 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
     last_ndt_observation_p_map_ = last_ndt_p_before;
     lidar_update_ok_count_ = lidar_update_ok_before;
     icp_update_ok_count_ = icp_update_ok_before;
+    ekf_state_revision_ = state_revision_before_oosm;
     last_used_points_ = last_used_points_before;
     last_mean_residual_ = last_mean_residual_before;
   };
@@ -897,6 +901,10 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
     state_stamp_ = rollback_stamp;
     oosm_active = true;
     oosm_result = "APPLIED";
+    writeEkfPredictionLineage("OOSM_ROLLBACK", ros::Time::now().toSec(), 0,
+                              t_ndt, t_now, std::numeric_limits<double>::quiet_NaN(),
+                              rollback_stamp, replay_imu_count,
+                              (t_now - t_ndt) * 1000.0);
   }
 
   Eigen::Vector3d dp = p_target - p_;
@@ -968,6 +976,13 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
   }
 
   applyPoseCorrection(dp, dtheta);
+  writeEkfPredictionLineage("NDT_CORRECTION_APPLIED", ros::Time::now().toSec(), 0,
+                            t_ndt, t_now,
+                            oosm_active ? std::numeric_limits<double>::quiet_NaN() : state_stamp_,
+                            rollback_stamp, replay_imu_count,
+                            std::isfinite(t_now) && std::isfinite(t_ndt) ?
+                                (t_now - t_ndt) * 1000.0 :
+                                std::numeric_limits<double>::quiet_NaN());
   ++lidar_update_ok_count_;
   ++icp_update_ok_count_;
   last_used_points_ = 0;
@@ -1029,6 +1044,15 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
       writeOosmResult("REPLAY_INCOMPLETE");
       return;
     }
+    const double rewrite_translation_m = (p_ - state_before_oosm.p).norm();
+    const double rewrite_rotation_deg =
+        Eigen::AngleAxisd(state_before_oosm.R.transpose() * R_).angle() * 180.0 / M_PI;
+    const double rewrite_velocity_mps = (v_ - state_before_oosm.v).norm();
+    writeEkfPredictionLineage("OOSM_REPLAY_COMPLETE", ros::Time::now().toSec(), 0,
+                              t_ndt, t_now, t_now, rollback_stamp, replay_imu_count,
+                              (t_now - t_ndt) * 1000.0,
+                              rewrite_translation_m, rewrite_rotation_deg,
+                              rewrite_velocity_mps);
     // The replayed state is current-time state, so its publication timestamp
     // must be t_now rather than the older NDT measurement timestamp.
     publishState(ros::Time(t_now), true);
