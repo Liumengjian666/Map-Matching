@@ -70,6 +70,11 @@ imu:
   publish_high_rate: true
   publish_imu_propagate_alias: true
 
+ndt_observation:
+  # Stage 1 OOSM correction is opt-in; split launch Run B overrides this to true.
+  oosm_enable: false
+  oosm_max_alignment_sec: 0.02
+
 lidar_update:
   registration_method: "ndt"
   # Keep the validated split-NDT baseline unchanged by default. Enable this
@@ -165,3 +170,4 @@ output:
   print_debug: true
   debug_interval_sec: 2.0
   runtime_csv_path: "/home/jian/dog_prior_map_livo_ws/validation/latest_runtime.csv"
+  oosm_csv_path: ""

@@ -48,6 +48,9 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
     gravity_initialized_ = true;
     last_imu_time_ = t;
     has_last_imu_ = true;
+    has_state_stamp_ = true;
+    state_stamp_ = t;
+    saveStateSnapshot(state_stamp_);
     return;
   }
 
@@ -55,6 +58,9 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
   {
     last_imu_time_ = t;
     has_last_imu_ = true;
+    has_state_stamp_ = true;
+    state_stamp_ = t;
+    saveStateSnapshot(state_stamp_);
     return;
   }
 
@@ -65,8 +71,84 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
   Eigen::Vector3d acc(msg->linear_acceleration.x, msg->linear_acceleration.y, msg->linear_acceleration.z);
   Eigen::Vector3d gyr(msg->angular_velocity.x, msg->angular_velocity.y, msg->angular_velocity.z);
   propagateImu(acc, gyr, dt);
+  has_state_stamp_ = true;
+  state_stamp_ = t;
+  saveStateSnapshot(state_stamp_);
   if (publish_high_rate_) publishState(msg->header.stamp, false);
   maybePrintRuntime(msg->header.stamp);
+}
+
+void DogPriorMapEkfNode::saveStateSnapshot(double stamp)
+{
+  if (!oosm_enable_ || !has_state_stamp_ || !std::isfinite(stamp)) return;
+  if (!state_history_.empty() && stamp < state_history_.back().stamp - 1e-9) return;
+
+  while (!state_history_.empty() &&
+         std::abs(state_history_.back().stamp - stamp) <= 1e-9)
+  {
+    state_history_.pop_back();
+  }
+
+  FilterStateSnapshot snapshot;
+  snapshot.stamp = stamp;
+  snapshot.p = p_;
+  snapshot.v = v_;
+  snapshot.R = R_;
+  snapshot.ba = ba_;
+  snapshot.bg = bg_;
+  snapshot.P = P_;
+  state_history_.push_back(snapshot);
+  pruneStateHistory(stamp);
+}
+
+void DogPriorMapEkfNode::restoreStateSnapshot(const FilterStateSnapshot &snapshot)
+{
+  p_ = snapshot.p;
+  v_ = snapshot.v;
+  R_ = snapshot.R;
+  ba_ = snapshot.ba;
+  bg_ = snapshot.bg;
+  P_ = snapshot.P;
+}
+
+void DogPriorMapEkfNode::pruneStateHistory(double current_stamp)
+{
+  if (!oosm_enable_ || !std::isfinite(current_stamp)) return;
+  while (!state_history_.empty() &&
+         current_stamp - state_history_.front().stamp > imu_history_keep_sec_)
+  {
+    state_history_.pop_front();
+  }
+}
+
+bool DogPriorMapEkfNode::findStateSnapshotAtOrBefore(double target_stamp,
+                                                      size_t &index,
+                                                      double &alignment_error) const
+{
+  index = 0;
+  alignment_error = std::numeric_limits<double>::quiet_NaN();
+  if (!oosm_enable_ || !std::isfinite(target_stamp) || state_history_.empty()) return false;
+
+  for (size_t i = state_history_.size(); i > 0; --i)
+  {
+    const FilterStateSnapshot &snapshot = state_history_[i - 1];
+    if (snapshot.stamp <= target_stamp + 1e-9)
+    {
+      index = i - 1;
+      alignment_error = std::max(0.0, target_stamp - snapshot.stamp);
+      return std::isfinite(alignment_error);
+    }
+  }
+  return false;
+}
+
+void DogPriorMapEkfNode::eraseStateHistoryAfter(double stamp)
+{
+  if (!oosm_enable_ || !std::isfinite(stamp)) return;
+  while (!state_history_.empty() && state_history_.back().stamp > stamp + 1e-9)
+  {
+    state_history_.pop_back();
+  }
 }
 
 // 惯性传播：扣除零偏后积分姿态，并更新速度、位置及 15 维协方差。

@@ -3,6 +3,9 @@
   <arg name="rviz" default="false" />
   <arg name="runtime_csv_path" default="" />
   <arg name="ndt_diagnostics_csv_path" default="" />
+  <arg name="oosm_enable" default="false" />
+  <arg name="oosm_max_alignment_sec" default="0.02" />
+  <arg name="oosm_csv_path" default="" />
   <arg name="diagnostic_determinism_enable" default="false" />
   <arg name="ndt_determinism_csv_path" default="" />
   <arg name="information_diagnostic_enable" default="false" />
@@ -29,8 +32,11 @@
   <param name="ndt_observation/roll_pitch_apply_ratio" value="1.0" />
   <param name="ndt_observation/max_translation_correction" value="2.0" />
   <param name="ndt_observation/max_rotation_correction_deg" value="20.0" />
+  <param name="ndt_observation/oosm_enable" value="$(arg oosm_enable)" />
+  <param name="ndt_observation/oosm_max_alignment_sec" value="$(arg oosm_max_alignment_sec)" />
   <param name="lidar_update/enable" value="false" />
   <param name="output/runtime_csv_path" value="$(arg runtime_csv_path)" />
+  <param name="output/oosm_csv_path" value="$(arg oosm_csv_path)" />
   <param name="output/ndt_diagnostics_csv_path" value="$(arg ndt_diagnostics_csv_path)" />
   <param name="output/diagnostic_determinism_enable" value="$(arg diagnostic_determinism_enable)" />
   <param name="output/ndt_determinism_csv_path" value="$(arg ndt_determinism_csv_path)" />

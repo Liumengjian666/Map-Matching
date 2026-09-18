@@ -749,6 +749,46 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
   if (!ndt_observation_enable_) return;
   if (!msg) return;
 
+  const double t_ndt = msg->header.stamp.toSec();
+  const double t_now = has_state_stamp_ ? state_stamp_ :
+      std::numeric_limits<double>::quiet_NaN();
+  const size_t state_history_count = state_history_.size();
+  const size_t imu_history_count = imu_history_.size();
+  double rollback_stamp = std::numeric_limits<double>::quiet_NaN();
+  double alignment_error = std::numeric_limits<double>::quiet_NaN();
+  size_t replay_imu_count = 0;
+  std::string oosm_result = oosm_enable_ ? "NOT_DELAYED" : "DISABLED";
+  bool oosm_active = false;
+  FilterStateSnapshot state_before_oosm;
+  std::deque<FilterStateSnapshot> history_before_oosm;
+  std::vector<ImuSample> replay_samples;
+  const double last_ndt_time_before = last_ndt_observation_time_;
+  const Eigen::Vector3d last_ndt_p_before = last_ndt_observation_p_map_;
+  const uint64_t lidar_update_ok_before = lidar_update_ok_count_;
+  const uint64_t icp_update_ok_before = icp_update_ok_count_;
+  const int last_used_points_before = last_used_points_;
+  const double last_mean_residual_before = last_mean_residual_;
+
+  const auto restoreOosmAttempt = [&]() {
+    restoreStateSnapshot(state_before_oosm);
+    state_stamp_ = t_now;
+    state_history_ = history_before_oosm;
+    last_ndt_observation_time_ = last_ndt_time_before;
+    last_ndt_observation_p_map_ = last_ndt_p_before;
+    lidar_update_ok_count_ = lidar_update_ok_before;
+    icp_update_ok_count_ = icp_update_ok_before;
+    last_used_points_ = last_used_points_before;
+    last_mean_residual_ = last_mean_residual_before;
+  };
+
+  const auto writeOosmResult = [&](const std::string &result) {
+    writeOosmDiagnostic(t_ndt, t_now, rollback_stamp,
+                        std::isfinite(t_now) && std::isfinite(t_ndt) ? t_now - t_ndt :
+                            std::numeric_limits<double>::quiet_NaN(),
+                        alignment_error, replay_imu_count, state_history_count,
+                        imu_history_count, result);
+  };
+
   Eigen::Vector3d p_target(msg->pose.pose.position.x,
                            msg->pose.pose.position.y,
                            msg->pose.pose.position.z);
@@ -756,13 +796,13 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
                               msg->pose.pose.orientation.x,
                               msg->pose.pose.orientation.y,
                               msg->pose.pose.orientation.z);
-  if (!p_target.allFinite() || q_target.norm() < 1e-9) return;
+  if (!std::isfinite(t_ndt) || !p_target.allFinite() ||
+      !q_target.coeffs().allFinite() || q_target.norm() < 1e-9)
+  {
+    writeOosmResult("INVALID_MEASUREMENT");
+    return;
+  }
   Eigen::Matrix3d R_target = q_target.normalized().toRotationMatrix();
-
-  Eigen::Vector3d dp = p_target - p_;
-  Eigen::AngleAxisd aa(R_target * R_.transpose());
-  Eigen::Vector3d dtheta = aa.axis() * aa.angle();
-  if (!dp.allFinite() || !dtheta.allFinite()) return;
 
   // Float64MultiArray carries the LiDAR sensor stamp in data[0].  The
   // eigensystem is usable for this observation only when that stamp is close
@@ -785,7 +825,94 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
     last_ndt_observation_time_ = 0.0;
     last_ndt_observation_p_map_ = p_target;
     last_mean_residual_ = 0.0;
-    publishState(msg->header.stamp, false);
+    publishState(oosm_enable_ && std::isfinite(t_now) ? ros::Time(t_now) : msg->header.stamp,
+                 false);
+    writeOosmResult("BOTH_DEGRADED_SKIP");
+    return;
+  }
+
+  if (oosm_enable_)
+  {
+    if (!has_state_stamp_ || !std::isfinite(t_now))
+    {
+      writeOosmResult("NO_HISTORY");
+      return;
+    }
+    if (t_ndt > t_now + 1e-9)
+    {
+      writeOosmResult("FUTURE_MEASUREMENT");
+      return;
+    }
+
+    size_t rollback_index = 0;
+    if (!findStateSnapshotAtOrBefore(t_ndt, rollback_index, alignment_error))
+    {
+      writeOosmResult("NO_HISTORY");
+      return;
+    }
+    rollback_stamp = state_history_[rollback_index].stamp;
+    if (alignment_error > oosm_max_alignment_sec_ + 1e-9)
+    {
+      writeOosmResult("ALIGNMENT_TOO_LARGE");
+      return;
+    }
+
+    replay_samples.reserve(imu_history_.size());
+    for (const auto &sample : imu_history_)
+    {
+      if (sample.stamp > rollback_stamp + 1e-9 && sample.stamp <= t_now)
+      {
+        replay_samples.push_back(sample);
+      }
+    }
+    std::sort(replay_samples.begin(), replay_samples.end(),
+              [](const ImuSample &a, const ImuSample &b) { return a.stamp < b.stamp; });
+    replay_imu_count = replay_samples.size();
+
+    // Validate the replay interval before changing the current EKF state.
+    // Stage 1 deliberately does not split an IMU interval at t_ndt.
+    double replay_stamp = rollback_stamp;
+    for (const auto &sample : replay_samples)
+    {
+      const double dt = sample.stamp - replay_stamp;
+      if (!std::isfinite(sample.stamp) || !sample.acc.allFinite() ||
+          !sample.gyro.allFinite() || dt <= 0.0 || dt > max_imu_dt_ + 1e-9)
+      {
+        writeOosmResult("REPLAY_INCOMPLETE");
+        return;
+      }
+      replay_stamp = sample.stamp;
+    }
+
+    state_before_oosm.stamp = t_now;
+    state_before_oosm.p = p_;
+    state_before_oosm.v = v_;
+    state_before_oosm.R = R_;
+    state_before_oosm.ba = ba_;
+    state_before_oosm.bg = bg_;
+    state_before_oosm.P = P_;
+    history_before_oosm = state_history_;
+    eraseStateHistoryAfter(rollback_stamp);
+    restoreStateSnapshot(state_history_[rollback_index]);
+    state_stamp_ = rollback_stamp;
+    oosm_active = true;
+    oosm_result = "APPLIED";
+  }
+
+  Eigen::Vector3d dp = p_target - p_;
+  Eigen::AngleAxisd aa(R_target * R_.transpose());
+  Eigen::Vector3d dtheta = aa.axis() * aa.angle();
+  if (!dp.allFinite() || !dtheta.allFinite())
+  {
+    if (oosm_active)
+    {
+      restoreOosmAttempt();
+      writeOosmResult("REPLAY_INCOMPLETE");
+    }
+    else
+    {
+      writeOosmResult("INVALID_MEASUREMENT");
+    }
     return;
   }
 
@@ -823,7 +950,19 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
     const Eigen::Matrix<double, 6, 6> projector =
         lidar_reliable_projector_ + weak_weight * lidar_degenerate_projector_;
     correction = projector * correction;
-    if (!correction.allFinite()) return;
+    if (!correction.allFinite())
+    {
+      if (oosm_active)
+      {
+        restoreOosmAttempt();
+        writeOosmResult("REPLAY_INCOMPLETE");
+      }
+      else
+      {
+        writeOosmResult("INVALID_MEASUREMENT");
+      }
+      return;
+    }
     dp = correction.head<3>();
     dtheta = correction.tail<3>() / information_rotation_scale_m_;
   }
@@ -833,10 +972,9 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
   ++icp_update_ok_count_;
   last_used_points_ = 0;
   last_mean_residual_ = dp.norm();
-  publishState(msg->header.stamp, true);
+  if (!oosm_active) publishState(msg->header.stamp, true);
 
-  const double t = msg->header.stamp.toSec();
-  const double dt = t - last_ndt_observation_time_;
+  const double dt = t_ndt - last_ndt_observation_time_;
   if (dt > 1e-3 && dt < 1.0)
   {
     Eigen::Vector3d odom_velocity = (p_target - last_ndt_observation_p_map_) / dt;
@@ -860,10 +998,43 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
     v_ = (1.0 - blend) * v_ + blend * odom_velocity;
   }
   last_ndt_observation_p_map_ = p_target;
-  last_ndt_observation_time_ = t;
+  last_ndt_observation_time_ = t_ndt;
 
   for (int i = 0; i < 3; ++i) P_(i, i) = std::max(P_(i, i) * 0.85, 1e-4);
   for (int i = 6; i < 9; ++i) P_(i, i) = std::max(P_(i, i) * 0.85, 1e-5);
+
+  if (oosm_active)
+  {
+    saveStateSnapshot(rollback_stamp);
+    for (const auto &sample : replay_samples)
+    {
+      if (sample.stamp <= state_stamp_ + 1e-9) continue;
+      const double replay_dt = sample.stamp - state_stamp_;
+      if (replay_dt <= 0.0 || replay_dt > max_imu_dt_ + 1e-9)
+      {
+        restoreOosmAttempt();
+        writeOosmResult("REPLAY_INCOMPLETE");
+        return;
+      }
+      propagateImu(sample.acc, sample.gyro, replay_dt);
+      state_stamp_ = sample.stamp;
+      saveStateSnapshot(state_stamp_);
+    }
+
+    if (!has_state_stamp_ || std::abs(state_stamp_ - t_now) > 1e-4 ||
+        !p_.allFinite() || !v_.allFinite() || !R_.allFinite() ||
+        !ba_.allFinite() || !bg_.allFinite() || !P_.allFinite())
+    {
+      restoreOosmAttempt();
+      writeOosmResult("REPLAY_INCOMPLETE");
+      return;
+    }
+    // The replayed state is current-time state, so its publication timestamp
+    // must be t_now rather than the older NDT measurement timestamp.
+    publishState(ros::Time(t_now), true);
+  }
+
+  writeOosmResult(oosm_result);
 }
 
 }  // namespace dog_prior_map_localization

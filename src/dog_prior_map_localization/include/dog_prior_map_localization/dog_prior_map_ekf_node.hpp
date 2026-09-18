@@ -59,6 +59,17 @@ struct ImuSample
   Eigen::Vector3d gyro = Eigen::Vector3d::Zero();
 };
 
+struct FilterStateSnapshot
+{
+  double stamp = 0.0;
+  Eigen::Vector3d p = Eigen::Vector3d::Zero();
+  Eigen::Vector3d v = Eigen::Vector3d::Zero();
+  Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
+  Eigen::Vector3d ba = Eigen::Vector3d::Zero();
+  Eigen::Vector3d bg = Eigen::Vector3d::Zero();
+  Matrix15d P = Matrix15d::Identity();
+};
+
 /// 将三维向量转换为叉乘对应的反对称矩阵。
 Eigen::Matrix3d skew(const Eigen::Vector3d &v);
 /// 将角度制的 roll、pitch、yaw 转换为旋转矩阵。
@@ -106,6 +117,13 @@ private:
   void imuCallback(const sensor_msgs::ImuConstPtr &msg);
   /// 使用一次 IMU 测量传播姿态、速度、位置和误差状态协方差。
   void propagateImu(const Eigen::Vector3d &acc_m, const Eigen::Vector3d &gyr_m, double dt);
+  void saveStateSnapshot(double stamp);
+  void restoreStateSnapshot(const FilterStateSnapshot &snapshot);
+  void pruneStateHistory(double current_stamp);
+  bool findStateSnapshotAtOrBefore(double target_stamp,
+                                   size_t &index,
+                                   double &alignment_error) const;
+  void eraseStateHistoryAfter(double stamp);
 
   /// 接收 Livox 自定义点云并按配置决定是否执行帧内去畸变。
   void livoxCallback(const livox_ros_driver2::CustomMsgConstPtr &msg);
@@ -174,6 +192,15 @@ private:
   void appendPath(nav_msgs::Path &path, const nav_msgs::Odometry &odom);
   /// 按固定周期打印并记录各传感器和匹配模块的运行统计。
   void maybePrintRuntime(const ros::Time &stamp);
+  void writeOosmDiagnostic(double ndt_stamp,
+                           double state_now_stamp,
+                           double rollback_stamp,
+                           double lag_sec,
+                           double alignment_error_sec,
+                           size_t replay_imu_count,
+                           size_t state_history_count,
+                           size_t imu_history_count,
+                           const std::string &result);
 
   ros::NodeHandle nh_;
   ros::NodeHandle pnh_;
@@ -197,6 +224,8 @@ private:
   std::mutex mutex_;
   bool has_last_imu_ = false;
   double last_imu_time_ = 0.0;
+  bool has_state_stamp_ = false;
+  double state_stamp_ = 0.0;
   int scan_count_ = 0;
 
   std::string map_frame_;
@@ -257,8 +286,11 @@ private:
   bool lidar_deskew_translation_enable_ = true;
   double lidar_offset_time_scale_ = 1e-9;
   double imu_history_keep_sec_ = 2.0;
+  std::deque<FilterStateSnapshot> state_history_;
 
   bool ndt_observation_enable_ = false;
+  bool oosm_enable_ = false;
+  double oosm_max_alignment_sec_ = 0.02;
   double ndt_observation_apply_ratio_ = 0.8;
   double ndt_observation_z_apply_ratio_ = 1.0;
   double ndt_observation_roll_pitch_apply_ratio_ = 1.0;
@@ -464,6 +496,9 @@ private:
   double debug_interval_sec_ = 2.0;
   std::string runtime_csv_path_;
   std::ofstream runtime_csv_;
+  std::string oosm_csv_path_;
+  std::ofstream oosm_csv_;
+  uint64_t oosm_frame_index_ = 0;
   bool ekf_determinism_diagnostic_enable_ = false;
   std::string ekf_ndt_feedback_csv_path_;
   std::ofstream ekf_ndt_feedback_csv_;

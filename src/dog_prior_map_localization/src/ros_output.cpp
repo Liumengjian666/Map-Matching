@@ -214,6 +214,30 @@ void DogPriorMapEkfNode::publishDiagnostics(const ros::Time &stamp,
   pub_diagnostics_.publish(array);
 }
 
+void DogPriorMapEkfNode::writeOosmDiagnostic(double ndt_stamp,
+                                             double state_now_stamp,
+                                             double rollback_stamp,
+                                             double lag_sec,
+                                             double alignment_error_sec,
+                                             size_t replay_imu_count,
+                                             size_t state_history_count,
+                                             size_t imu_history_count,
+                                             const std::string &result)
+{
+  if (!oosm_csv_.is_open()) return;
+  oosm_csv_ << ++oosm_frame_index_ << ","
+            << ndt_stamp << ","
+            << state_now_stamp << ","
+            << rollback_stamp << ","
+            << lag_sec * 1000.0 << ","
+            << alignment_error_sec * 1000.0 << ","
+            << replay_imu_count << ","
+            << state_history_count << ","
+            << imu_history_count << ","
+            << result << "\n";
+  oosm_csv_.flush();
+}
+
 // 将里程计位姿转换为 PoseStamped 追加到轨迹，并裁剪过长的历史缓存。
 void DogPriorMapEkfNode::appendPath(nav_msgs::Path &path, const nav_msgs::Odometry &odom)
 {

@@ -50,6 +50,9 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   imu_history_keep_sec_ = getParam<double>("imu/history_keep_sec", 2.0);
 
   ndt_observation_enable_ = getParam<bool>("ndt_observation/enable", false);
+  oosm_enable_ = getParam<bool>("ndt_observation/oosm_enable", false);
+  oosm_max_alignment_sec_ = std::max(0.0,
+      getParam<double>("ndt_observation/oosm_max_alignment_sec", 0.02));
   ndt_observation_apply_ratio_ = getParam<double>("ndt_observation/apply_ratio", 0.8);
   ndt_observation_z_apply_ratio_ = getParam<double>("ndt_observation/z_apply_ratio", 1.0);
   ndt_observation_roll_pitch_apply_ratio_ = getParam<double>("ndt_observation/roll_pitch_apply_ratio", 1.0);
@@ -198,6 +201,22 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
       ROS_WARN("[DogPriorMap C++] failed to write runtime CSV: %s", runtime_csv_path_.c_str());
     }
   }
+  oosm_csv_path_ = getParam<std::string>("output/oosm_csv_path", "");
+  if (!oosm_csv_path_.empty())
+  {
+    oosm_csv_.open(oosm_csv_path_, std::ios::out);
+    if (oosm_csv_.is_open())
+    {
+      oosm_csv_ << std::setprecision(17)
+                << "frame_index,ndt_stamp,state_now_stamp,rollback_stamp,lag_ms,"
+                   "alignment_error_ms,replay_imu_count,state_history_count,imu_history_count,oosm_result\n";
+      oosm_csv_.flush();
+    }
+    else
+    {
+      ROS_WARN("[DogPriorMap C++] failed to write OOSM CSV: %s", oosm_csv_path_.c_str());
+    }
+  }
 
   p_.setZero();
   v_.setZero();
@@ -296,6 +315,8 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
            directional_fusion_enable_ ? 1 : 0,
            state_machine_enable_ ? 1 : 0,
            directional_eigen_ratio_);
+  ROS_INFO("[DogPriorMap C++] NDT OOSM=%d max_alignment=%.3f s",
+           oosm_enable_ ? 1 : 0, oosm_max_alignment_sec_);
 }
 
 // 读取浮点数组参数；兼容全局和私有命名空间，并提供安全默认值。
