@@ -222,6 +222,14 @@ public:
     ndt_step_limit_max_rotation_deg_ = getParam<double>("lidar_update/ndt_step_limit_max_rotation_deg", 5.0);
     ndt_prediction_enable_ = getParam<bool>("lidar_update/ndt_prediction_enable", true);
     ndt_prediction_max_age_ = getParam<double>("lidar_update/ndt_prediction_max_age", 0.25);
+    prediction_history_keep_sec_ = std::max(0.1,
+        getParam<double>("lidar_update/prediction_history_keep_sec", 2.0));
+    pending_lidar_max_frames_ = static_cast<size_t>(std::max(1,
+        getParam<int>("lidar_update/pending_lidar_max_frames", 50)));
+    lidar_subscriber_queue_size_ = static_cast<uint32_t>(std::max(1,
+        getParam<int>("lidar_update/lidar_subscriber_queue_size", 100)));
+    prediction_subscriber_queue_size_ = static_cast<uint32_t>(std::max(1,
+        getParam<int>("lidar_update/prediction_subscriber_queue_size", 1000)));
     ndt_degeneracy_enable_ = getParam<bool>("lidar_update/ndt_degeneracy_enable", true);
     ndt_degeneracy_radius_ = getParam<double>("lidar_update/ndt_degeneracy_radius", 15.0);
     ndt_degeneracy_ratio_ = getParam<double>("lidar_update/ndt_degeneracy_ratio", 3.0);
@@ -293,13 +301,15 @@ public:
 
     if (lidar_msg_type_ == "pointcloud2")
     {
-      sub_pc2_ = nh_.subscribe(lidar_topic_, 5, &DogPriorMapNdtNode::pointCloud2Callback, this);
+      sub_pc2_ = nh_.subscribe(lidar_topic_, lidar_subscriber_queue_size_,
+                                &DogPriorMapNdtNode::pointCloud2Callback, this);
     }
     else
     {
-      sub_livox_ = nh_.subscribe(lidar_topic_, 5, &DogPriorMapNdtNode::livoxCallback, this);
+      sub_livox_ = nh_.subscribe(lidar_topic_, lidar_subscriber_queue_size_,
+                                 &DogPriorMapNdtNode::livoxCallback, this);
     }
-    sub_prediction_ = nh_.subscribe(prediction_topic_, 20,
+    sub_prediction_ = nh_.subscribe(prediction_topic_, prediction_subscriber_queue_size_,
                                     &DogPriorMapNdtNode::predictionCallback, this);
     sub_imu_ = nh_.subscribe(imu_topic_, 500, &DogPriorMapNdtNode::imuCallback, this);
 
@@ -315,13 +325,48 @@ public:
                          msg->pose.pose.orientation.y, msg->pose.pose.orientation.z);
     if (!q.coeffs().allFinite() || q.norm() < 1e-6) return;
     q.normalize();
-    imu_prediction_pose_.setIdentity();
-    imu_prediction_pose_.block<3, 3>(0, 0) = q.toRotationMatrix();
-    imu_prediction_pose_(0, 3) = msg->pose.pose.position.x;
-    imu_prediction_pose_(1, 3) = msg->pose.pose.position.y;
-    imu_prediction_pose_(2, 3) = msg->pose.pose.position.z;
-    prediction_stamp_ = msg->header.stamp;
-    has_prediction_ = true;
+    TimedPrediction incoming;
+    incoming.stamp = msg->header.stamp;
+    incoming.pose.setIdentity();
+    incoming.pose.block<3, 3>(0, 0) = q.toRotationMatrix();
+    incoming.pose(0, 3) = msg->pose.pose.position.x;
+    incoming.pose(1, 3) = msg->pose.pose.position.y;
+    incoming.pose(2, 3) = msg->pose.pose.position.z;
+
+    auto insert_at = prediction_history_.begin();
+    while (insert_at != prediction_history_.end() && insert_at->stamp < incoming.stamp)
+      ++insert_at;
+    if (insert_at != prediction_history_.end() && insert_at->stamp == incoming.stamp)
+    {
+      ++prediction_duplicate_count_;
+      // Keep the first sample for a duplicate timestamp.  This makes the
+      // selected sample independent of callback arrival order when a topic
+      // publisher repeats an identical timestamp.
+    }
+    else
+    {
+      if (has_prediction_watermark_ && incoming.stamp < latest_prediction_stamp_)
+      {
+        ++prediction_out_of_order_count_;
+      }
+      prediction_history_.insert(insert_at, incoming);
+      if (!has_prediction_watermark_ || incoming.stamp > latest_prediction_stamp_)
+      {
+        latest_prediction_stamp_ = incoming.stamp;
+        has_prediction_watermark_ = true;
+        imu_prediction_pose_ = incoming.pose;
+        prediction_stamp_ = incoming.stamp;
+        has_prediction_ = true;
+      }
+    }
+
+    if (has_prediction_watermark_)
+    {
+      const ros::Time oldest_allowed = latest_prediction_stamp_ - ros::Duration(prediction_history_keep_sec_);
+      while (!prediction_history_.empty() && prediction_history_.front().stamp < oldest_allowed)
+        prediction_history_.pop_front();
+    }
+    processPendingCloudsLocked();
   }
 
   void imuCallback(const sensor_msgs::ImuConstPtr &msg)
@@ -343,6 +388,29 @@ public:
   }
 
 private:
+  struct TimedPrediction
+  {
+    ros::Time stamp;
+    Eigen::Matrix4d pose = Eigen::Matrix4d::Identity();
+  };
+
+  struct PendingLidarFrame
+  {
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud;
+    ros::Time stamp;
+    ros::WallTime callback_start;
+    uint32_t header_seq = 0;
+  };
+
+  struct PredictionSelection
+  {
+    bool watermark_ready = false;
+    bool has_prediction = false;
+    TimedPrediction prediction;
+    double age_sec = std::numeric_limits<double>::quiet_NaN();
+    std::string reason = "no_history";
+  };
+
   struct DeterminismRow
   {
     uint64_t frame_index = 0;
@@ -382,6 +450,15 @@ private:
     bool translation_limited = false;
     bool rotation_limited = false;
     Eigen::Matrix4d final_used = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
+    size_t prediction_history_size = 0;
+    double latest_prediction_stamp = std::numeric_limits<double>::quiet_NaN();
+    double prediction_watermark_minus_lidar_sec = std::numeric_limits<double>::quiet_NaN();
+    double selected_prediction_stamp = std::numeric_limits<double>::quiet_NaN();
+    double selected_prediction_age_sec = std::numeric_limits<double>::quiet_NaN();
+    size_t pending_lidar_count = 0;
+    uint64_t prediction_out_of_order_count = 0;
+    uint64_t prediction_duplicate_count = 0;
+    uint64_t pending_overflow_count = 0;
   };
 
   static std::string determinismCsvHeader()
@@ -400,7 +477,9 @@ private:
            "used_before_step_limit_tx,used_before_step_limit_ty,used_before_step_limit_tz,used_before_step_limit_qx,"
            "used_before_step_limit_qy,used_before_step_limit_qz,used_before_step_limit_qw,"
            "translation_limited,rotation_limited,final_used_tx,final_used_ty,final_used_tz,final_used_qx,final_used_qy,"
-           "final_used_qz,final_used_qw";
+           "final_used_qz,final_used_qw,prediction_history_size,latest_prediction_stamp,"
+           "prediction_watermark_minus_lidar_sec,selected_prediction_stamp,selected_prediction_age_sec,"
+           "pending_lidar_count,prediction_out_of_order_count,prediction_duplicate_count,pending_overflow_count";
   }
 
   static void appendPoseCsv(std::ostream &out, const Eigen::Matrix4d &pose)
@@ -482,6 +561,11 @@ private:
     out << ","; appendPoseCsv(out, row.used_before_step_limit);
     out << "," << (row.translation_limited ? 1 : 0) << "," << (row.rotation_limited ? 1 : 0) << ",";
     appendPoseCsv(out, row.final_used);
+    out << "," << row.prediction_history_size << "," << row.latest_prediction_stamp << ","
+        << row.prediction_watermark_minus_lidar_sec << "," << row.selected_prediction_stamp << ","
+        << row.selected_prediction_age_sec << "," << row.pending_lidar_count << ","
+        << row.prediction_out_of_order_count << "," << row.prediction_duplicate_count << ","
+        << row.pending_overflow_count;
     out << "\n";
     determinism_csv_ << out.str();
   }
@@ -602,6 +686,98 @@ private:
     return voxelDown(filtered, scan_voxel_size_, source_voxel_z_size_, max_scan_points_);
   }
 
+  void enqueueCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
+                    const ros::Time &stamp,
+                    const ros::WallTime &callback_start,
+                    uint32_t header_seq)
+  {
+    if (!cloud || cloud->empty()) return;
+    std::lock_guard<std::mutex> lock(mutex_);
+    if (!ndt_prediction_enable_)
+    {
+      handleCloudLocked(cloud, stamp, callback_start, header_seq, nullptr);
+      return;
+    }
+
+    PendingLidarFrame frame;
+    frame.cloud = cloud;
+    frame.stamp = stamp;
+    frame.callback_start = callback_start;
+    frame.header_seq = header_seq;
+    auto insert_at = pending_lidar_frames_.begin();
+    while (insert_at != pending_lidar_frames_.end() && insert_at->stamp <= stamp)
+      ++insert_at;
+    pending_lidar_frames_.insert(insert_at, frame);
+
+    while (pending_lidar_frames_.size() > pending_lidar_max_frames_)
+    {
+      PendingLidarFrame overflow = pending_lidar_frames_.front();
+      pending_lidar_frames_.pop_front();
+      ++pending_overflow_count_;
+      PredictionSelection forced_fallback;
+      forced_fallback.watermark_ready = true;
+      forced_fallback.reason = "pending_overflow";
+      handleCloudLocked(overflow.cloud, overflow.stamp, overflow.callback_start,
+                        overflow.header_seq, &forced_fallback);
+    }
+    processPendingCloudsLocked();
+  }
+
+  PredictionSelection getPredictionAtOrBefore(const ros::Time &lidar_stamp) const
+  {
+    PredictionSelection selection;
+    selection.watermark_ready = has_prediction_watermark_ &&
+        latest_prediction_stamp_ >= lidar_stamp;
+    if (!selection.watermark_ready) return selection;
+
+    for (auto it = prediction_history_.rbegin(); it != prediction_history_.rend(); ++it)
+    {
+      if (it->stamp > lidar_stamp) continue;
+      selection.has_prediction = true;
+      selection.prediction = *it;
+      selection.age_sec = (lidar_stamp - it->stamp).toSec();
+      selection.reason = selection.age_sec <= ndt_prediction_max_age_ ?
+          "accepted_at_or_before" : "stale_prediction";
+      return selection;
+    }
+    return selection;
+  }
+
+  void processPendingCloudsLocked()
+  {
+    while (!pending_lidar_frames_.empty())
+    {
+      const PendingLidarFrame &front = pending_lidar_frames_.front();
+      const bool watermark_ready = has_prediction_watermark_ &&
+          latest_prediction_stamp_ >= front.stamp;
+      if (!watermark_ready)
+      {
+        // Preserve the original first-frame initialization behavior when no
+        // prediction has arrived yet.  Later frames wait for the sensor-time
+        // watermark; this startup exception is intentionally kept separate so
+        // Stage 2B does not change the initial pose algorithm.
+        if (!has_previous_pose_ && prediction_history_.empty())
+        {
+          PendingLidarFrame startup = front;
+          pending_lidar_frames_.pop_front();
+          PredictionSelection startup_selection;
+          startup_selection.watermark_ready = true;
+          startup_selection.reason = "startup_no_history";
+          handleCloudLocked(startup.cloud, startup.stamp, startup.callback_start,
+                            startup.header_seq, &startup_selection);
+          continue;
+        }
+        break;
+      }
+
+      PredictionSelection selection = getPredictionAtOrBefore(front.stamp);
+      PendingLidarFrame ready = front;
+      pending_lidar_frames_.pop_front();
+      handleCloudLocked(ready.cloud, ready.stamp, ready.callback_start,
+                        ready.header_seq, &selection);
+    }
+  }
+
   // 将 Livox 自定义消息转换为 XYZ 点云并进入统一 NDT 处理流程。
   void livoxCallback(const livox_ros_driver2::CustomMsgConstPtr &msg)
   {
@@ -627,7 +803,7 @@ private:
       }
     }
     finalizeCloud(cloud);
-    handleCloud(cloud, msg->header.stamp, callback_start, msg->header.seq);
+    enqueueCloud(cloud, msg->header.stamp, callback_start, msg->header.seq);
   }
 
   Eigen::Matrix3d integrateImuRotation(double t0, double t1) const
@@ -667,17 +843,17 @@ private:
     const ros::WallTime callback_start = ros::WallTime::now();
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>());
     pcl::fromROSMsg(*msg, *cloud);
-    handleCloud(cloud, msg->header.stamp, callback_start, msg->header.seq);
+    enqueueCloud(cloud, msg->header.stamp, callback_start, msg->header.seq);
   }
 
   // 独立 NDT 主流程：预处理、预测初值、配准、步长审核及结果发布。
-  void handleCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
-                   const ros::Time &stamp,
-                   const ros::WallTime &callback_start,
-                   uint32_t header_seq)
+  void handleCloudLocked(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
+                         const ros::Time &stamp,
+                         const ros::WallTime &callback_start,
+                         uint32_t header_seq,
+                         const PredictionSelection *prediction_selection)
   {
     if (!cloud || cloud->empty()) return;
-    std::lock_guard<std::mutex> lock(mutex_);
 
     DeterminismRow diagnostic_row;
     if (determinism_diagnostic_enable_)
@@ -688,11 +864,27 @@ private:
       diagnostic_row.wall_time = ros::WallTime::now().toSec();
       diagnostic_row.cloud_seq = header_seq;
       diagnostic_row.cloud_size_raw = cloud->size();
-      diagnostic_row.prediction_received = has_prediction_;
-      diagnostic_row.prediction_stamp = has_prediction_ ? prediction_stamp_.toSec() :
-          std::numeric_limits<double>::quiet_NaN();
-      diagnostic_row.prediction_age = has_prediction_ ? (stamp - prediction_stamp_).toSec() :
-          std::numeric_limits<double>::quiet_NaN();
+      diagnostic_row.prediction_history_size = prediction_history_.size();
+      diagnostic_row.latest_prediction_stamp = has_prediction_watermark_ ?
+          latest_prediction_stamp_.toSec() : std::numeric_limits<double>::quiet_NaN();
+      diagnostic_row.prediction_watermark_minus_lidar_sec = has_prediction_watermark_ ?
+          (latest_prediction_stamp_ - stamp).toSec() : std::numeric_limits<double>::quiet_NaN();
+      diagnostic_row.pending_lidar_count = pending_lidar_frames_.size();
+      diagnostic_row.prediction_out_of_order_count = prediction_out_of_order_count_;
+      diagnostic_row.prediction_duplicate_count = prediction_duplicate_count_;
+      diagnostic_row.pending_overflow_count = pending_overflow_count_;
+      if (prediction_selection && prediction_selection->has_prediction)
+      {
+        diagnostic_row.prediction_received = true;
+        diagnostic_row.prediction_stamp = prediction_selection->prediction.stamp.toSec();
+        diagnostic_row.prediction_age = prediction_selection->age_sec;
+        diagnostic_row.selected_prediction_stamp = prediction_selection->prediction.stamp.toSec();
+        diagnostic_row.selected_prediction_age_sec = prediction_selection->age_sec;
+      }
+      else
+      {
+        diagnostic_row.prediction_received = !prediction_history_.empty();
+      }
       if (has_previous_pose_)
       {
         diagnostic_row.previous_pose = previous_pose_;
@@ -730,29 +922,44 @@ private:
     }
 
     Eigen::Matrix4d initial_guess = poseToMatrix(p_, R_);
-    if (ndt_prediction_enable_ && has_prediction_ &&
-        (stamp - prediction_stamp_).toSec() >= -0.05 &&
-        (stamp - prediction_stamp_).toSec() <= ndt_prediction_max_age_)
+    if (ndt_prediction_enable_ && prediction_selection)
     {
-      initial_guess = imu_prediction_pose_;
-      diagnostic_row.prediction_used = true;
-      diagnostic_row.prediction_source = "ekf_prediction";
-      diagnostic_row.prediction_reason = "accepted_by_age";
+      const bool selected_prediction_valid = prediction_selection->has_prediction &&
+          prediction_selection->age_sec >= 0.0 &&
+          prediction_selection->age_sec <= ndt_prediction_max_age_;
+      if (selected_prediction_valid)
+      {
+        initial_guess = prediction_selection->prediction.pose;
+        diagnostic_row.prediction_used = true;
+        diagnostic_row.prediction_source = "timestamped_prediction";
+        diagnostic_row.prediction_reason = "accepted_at_or_before";
+      }
+      else if (has_previous_pose_)
+      {
+        initial_guess = previous_pose_ * delta_pose_;
+        diagnostic_row.prediction_source = prediction_selection->has_prediction ?
+            "previous_pose_delta_stale" : "previous_pose_delta_no_history";
+        diagnostic_row.prediction_reason = prediction_selection->reason;
+      }
+      else
+      {
+        diagnostic_row.prediction_source = prediction_selection->has_prediction ?
+            "current_pose_stale" : "current_pose_no_history";
+        diagnostic_row.prediction_reason = prediction_selection->reason;
+      }
     }
     else if (has_previous_pose_)
     {
+      // Prediction-disabled mode retains the original fallback behavior.
       initial_guess = previous_pose_ * delta_pose_;
       diagnostic_row.prediction_source = "previous_pose_delta";
-      if (!has_prediction_) diagnostic_row.prediction_reason = "not_available";
-      else if ((stamp - prediction_stamp_).toSec() < -0.05) diagnostic_row.prediction_reason = "too_future";
-      else diagnostic_row.prediction_reason = "too_old";
+      diagnostic_row.prediction_reason = "prediction_disabled";
     }
     else
     {
       diagnostic_row.prediction_source = "current_pose";
-      if (!has_prediction_) diagnostic_row.prediction_reason = "not_available";
-      else if ((stamp - prediction_stamp_).toSec() < -0.05) diagnostic_row.prediction_reason = "too_future";
-      else diagnostic_row.prediction_reason = "too_old";
+      diagnostic_row.prediction_reason = ndt_prediction_enable_ ?
+          "prediction_selection_unavailable" : "prediction_disabled";
     }
     diagnostic_row.initial_guess = initial_guess;
 
@@ -1158,6 +1365,13 @@ private:
   bool has_prediction_ = false;
   Eigen::Matrix4d imu_prediction_pose_ = Eigen::Matrix4d::Identity();
   ros::Time prediction_stamp_;
+  std::deque<TimedPrediction> prediction_history_;
+  std::deque<PendingLidarFrame> pending_lidar_frames_;
+  bool has_prediction_watermark_ = false;
+  ros::Time latest_prediction_stamp_;
+  uint64_t prediction_out_of_order_count_ = 0;
+  uint64_t prediction_duplicate_count_ = 0;
+  uint64_t pending_overflow_count_ = 0;
 
   double map_voxel_size_ = 0.30;
   double map_voxel_z_size_ = 0.30;
@@ -1181,6 +1395,10 @@ private:
   double ndt_step_limit_max_rotation_deg_ = 5.0;
   bool ndt_prediction_enable_ = true;
   double ndt_prediction_max_age_ = 0.25;
+  double prediction_history_keep_sec_ = 2.0;
+  size_t pending_lidar_max_frames_ = 50;
+  uint32_t lidar_subscriber_queue_size_ = 100;
+  uint32_t prediction_subscriber_queue_size_ = 1000;
   bool ndt_degeneracy_enable_ = true;
   double ndt_degeneracy_radius_ = 15.0;
   double ndt_degeneracy_ratio_ = 8.0;
