@@ -1002,12 +1002,20 @@ private:
     finalizeCloud(xyz);
     map_cloud_ = voxelDown(xyz, map_voxel_size_, map_voxel_z_size_, 0);
     target_cloud_ = voxelDown(map_cloud_, target_voxel_size_, target_voxel_z_size_, max_target_points_);
-    const ros::WallTime schur_tree_start = ros::WallTime::now();
-    schur_target_tree_.reset(new pcl::KdTreeFLANN<pcl::PointXYZ>());
-    schur_target_tree_->setInputCloud(target_cloud_);
-    schur_tree_build_ms_ = (ros::WallTime::now() - schur_tree_start).toSec() * 1000.0;
-    ROS_INFO("[DogPriorMap NDT] Schur target KD-tree built once: target=%zu build=%.3f ms",
-             target_cloud_->size(), schur_tree_build_ms_);
+    if (schur_diagnostic_enable_)
+    {
+      const ros::WallTime schur_tree_start = ros::WallTime::now();
+      schur_target_tree_.reset(new pcl::KdTreeFLANN<pcl::PointXYZ>());
+      schur_target_tree_->setInputCloud(target_cloud_);
+      schur_tree_build_ms_ = (ros::WallTime::now() - schur_tree_start).toSec() * 1000.0;
+      ROS_INFO("[DogPriorMap NDT] Schur target KD-tree built once: target=%zu build=%.3f ms",
+               target_cloud_->size(), schur_tree_build_ms_);
+    }
+    else
+    {
+      schur_target_tree_.reset();
+      schur_tree_build_ms_ = std::numeric_limits<double>::quiet_NaN();
+    }
 
     ndt_.setInputTarget(target_cloud_);
     ndt_.setResolution(ndt_resolution_);
