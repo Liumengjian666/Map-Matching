@@ -134,6 +134,13 @@ lidar_update:
   # Stage 1/2 keep information analysis diagnostic-only. Enable only in a
   # separately validated experiment after the coordinate convention is fixed.
   information_pose_projection_enable: false
+  # Stage3A diagnostic-only Schur observability; inert unless enabled.
+  schur_diagnostic_enable: false
+  schur_normal_k: 10
+  schur_max_correspondence_distance: 0.8
+  schur_planarity_ratio_max: 0.20
+  schur_max_source_points: 500
+  schur_pinv_relative_epsilon: 0.000001
 
 camera_update:
   enable: true

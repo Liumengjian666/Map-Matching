@@ -173,6 +173,213 @@ bool estimateInformationWeakDirection(const pcl::PointCloud<pcl::PointXYZ>::Ptr 
   return weak.allFinite() && std::isfinite(condition);
 }
 
+struct SchurObservabilityResult
+{
+  bool valid = false;
+  std::string invalid_reason = "not_computed";
+  int used_points = 0;
+  int planar_points = 0;
+  Eigen::Vector3d h_tt_eigenvalues = Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
+  Eigen::Vector3d h_rr_eigenvalues = Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
+  Eigen::Vector3d translation_eigenvalues = Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
+  Eigen::Vector3d rotation_eigenvalues = Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
+  Eigen::Vector3d translation_weak = Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
+  Eigen::Vector3d rotation_weak = Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
+  double translation_condition = std::numeric_limits<double>::quiet_NaN();
+  double rotation_condition = std::numeric_limits<double>::quiet_NaN();
+  double translation_min_max_ratio = std::numeric_limits<double>::quiet_NaN();
+  double rotation_min_max_ratio = std::numeric_limits<double>::quiet_NaN();
+};
+
+Eigen::Matrix3d stableSymmetricPseudoInverse(const Eigen::Matrix3d &matrix,
+                                             double relative_epsilon,
+                                             bool &finite)
+{
+  finite = false;
+  Eigen::Matrix3d result = Eigen::Matrix3d::Zero();
+  Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> solver(0.5 * (matrix + matrix.transpose()));
+  if (solver.info() != Eigen::Success) return result;
+  const Eigen::Vector3d values = solver.eigenvalues();
+  if (!values.allFinite()) return result;
+  const double max_value = std::max(0.0, values.maxCoeff());
+  if (!std::isfinite(max_value)) return result;
+  const double threshold = std::max(0.0, relative_epsilon) * max_value;
+  for (int i = 0; i < 3; ++i)
+  {
+    if (values(i) > threshold && values(i) > 0.0)
+    {
+      result.noalias() += (1.0 / values(i)) *
+          (solver.eigenvectors().col(i) * solver.eigenvectors().col(i).transpose());
+    }
+  }
+  finite = result.allFinite();
+  return result;
+}
+
+// Diagnostic-only point-to-plane observability estimate.  It intentionally
+// does not construct a residual right-hand side and never modifies the NDT
+// pose.  The perturbation convention is [delta-p-world, delta-theta-world].
+SchurObservabilityResult estimateSchurObservability(
+    const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
+    const pcl::PointCloud<pcl::PointXYZ>::Ptr &target,
+    const Eigen::Matrix4d &pose,
+    int normal_k,
+    double max_correspondence_distance,
+    double planarity_ratio_max,
+    int max_source_points,
+    double pinv_relative_epsilon)
+{
+  SchurObservabilityResult output;
+  if (!source || !target || source->empty() || target->empty())
+  {
+    output.invalid_reason = "missing_cloud";
+    return output;
+  }
+  const int k = std::max(3, normal_k);
+  if (static_cast<int>(target->size()) < k)
+  {
+    output.invalid_reason = "target_too_small";
+    return output;
+  }
+  const int selected_points = std::min<int>(
+      static_cast<int>(source->size()), std::max(1, max_source_points));
+  if (selected_points <= 0)
+  {
+    output.invalid_reason = "source_too_small";
+    return output;
+  }
+
+  pcl::KdTreeFLANN<pcl::PointXYZ> tree;
+  tree.setInputCloud(target);
+  const Eigen::Matrix3d rotation = pose.block<3, 3>(0, 0);
+  const Eigen::Vector3d translation = pose.block<3, 1>(0, 3);
+  Eigen::Matrix<double, 6, 6> hessian = Eigen::Matrix<double, 6, 6>::Zero();
+  std::vector<int> indices(static_cast<size_t>(k));
+  std::vector<float> squared_distances(static_cast<size_t>(k));
+  constexpr int kMinimumPlanarPoints = 20;
+
+  for (int sample = 0; sample < selected_points; ++sample)
+  {
+    const size_t source_index = selected_points == 1 ? 0U : static_cast<size_t>(std::round(
+        static_cast<double>(sample) * static_cast<double>(source->size() - 1) /
+        static_cast<double>(selected_points - 1)));
+    const auto &point = source->points[source_index];
+    const Eigen::Vector3d body_point(point.x, point.y, point.z);
+    const Eigen::Vector3d world_point = rotation * body_point + translation;
+    pcl::PointXYZ query(world_point.x(), world_point.y(), world_point.z());
+    if (tree.nearestKSearch(query, k, indices, squared_distances) < k) continue;
+    if (max_correspondence_distance > 0.0 &&
+        std::sqrt(std::max(0.0f, squared_distances.front())) > max_correspondence_distance)
+      continue;
+    ++output.used_points;
+
+    Eigen::Vector3d mean = Eigen::Vector3d::Zero();
+    for (int i = 0; i < k; ++i)
+    {
+      const auto &neighbor = target->points[static_cast<size_t>(indices[static_cast<size_t>(i)])];
+      mean += Eigen::Vector3d(neighbor.x, neighbor.y, neighbor.z);
+    }
+    mean /= static_cast<double>(k);
+    Eigen::Matrix3d covariance = Eigen::Matrix3d::Zero();
+    for (int i = 0; i < k; ++i)
+    {
+      const auto &neighbor = target->points[static_cast<size_t>(indices[static_cast<size_t>(i)])];
+      const Eigen::Vector3d centered = Eigen::Vector3d(neighbor.x, neighbor.y, neighbor.z) - mean;
+      covariance.noalias() += centered * centered.transpose();
+    }
+    covariance /= static_cast<double>(k);
+    Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> normal_solver(covariance);
+    if (normal_solver.info() != Eigen::Success || !normal_solver.eigenvalues().allFinite()) continue;
+    const Eigen::Vector3d local_values = normal_solver.eigenvalues();
+    const double planarity_ratio = local_values(0) /
+        std::max(local_values(1), 1e-12);
+    if (!std::isfinite(planarity_ratio) || planarity_ratio > planarity_ratio_max) continue;
+
+    const Eigen::Vector3d normal = normal_solver.eigenvectors().col(0).normalized();
+    if (!normal.allFinite()) continue;
+    ++output.planar_points;
+    Eigen::Matrix<double, 1, 6> jacobian;
+    jacobian.head<3>() = normal.transpose();
+    jacobian.tail<3>() = -normal.transpose() * skew(rotation * body_point);
+    hessian.noalias() += jacobian.transpose() * jacobian;
+  }
+
+  if (output.planar_points < kMinimumPlanarPoints)
+  {
+    output.invalid_reason = "insufficient_planar_points";
+    return output;
+  }
+  hessian = 0.5 * (hessian + hessian.transpose());
+  Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> h_tt_solver(hessian.block<3, 3>(0, 0));
+  Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> h_rr_solver(hessian.block<3, 3>(3, 3));
+  if (h_tt_solver.info() != Eigen::Success || h_rr_solver.info() != Eigen::Success)
+  {
+    output.invalid_reason = "hessian_solver_failure";
+    return output;
+  }
+  output.h_tt_eigenvalues = h_tt_solver.eigenvalues();
+  output.h_rr_eigenvalues = h_rr_solver.eigenvalues();
+  bool h_rr_pinv_finite = false;
+  bool h_tt_pinv_finite = false;
+  const Eigen::Matrix3d h_rr_pinv = stableSymmetricPseudoInverse(
+      hessian.block<3, 3>(3, 3), pinv_relative_epsilon, h_rr_pinv_finite);
+  const Eigen::Matrix3d h_tt_pinv = stableSymmetricPseudoInverse(
+      hessian.block<3, 3>(0, 0), pinv_relative_epsilon, h_tt_pinv_finite);
+  if (!h_rr_pinv_finite || !h_tt_pinv_finite)
+  {
+    output.invalid_reason = "pseudo_inverse_failure";
+    return output;
+  }
+
+  const Eigen::Matrix3d h_tt = hessian.block<3, 3>(0, 0);
+  const Eigen::Matrix3d h_tr = hessian.block<3, 3>(0, 3);
+  const Eigen::Matrix3d h_rt = hessian.block<3, 3>(3, 0);
+  const Eigen::Matrix3d h_rr = hessian.block<3, 3>(3, 3);
+  const Eigen::Matrix3d translation_schur = 0.5 *
+      ((h_tt - h_tr * h_rr_pinv * h_rt) +
+       (h_tt - h_tr * h_rr_pinv * h_rt).transpose());
+  const Eigen::Matrix3d rotation_schur = 0.5 *
+      ((h_rr - h_rt * h_tt_pinv * h_tr) +
+       (h_rr - h_rt * h_tt_pinv * h_tr).transpose());
+  Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> translation_solver(translation_schur);
+  Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> rotation_solver(rotation_schur);
+  if (translation_solver.info() != Eigen::Success || rotation_solver.info() != Eigen::Success)
+  {
+    output.invalid_reason = "schur_solver_failure";
+    return output;
+  }
+  output.translation_eigenvalues = translation_solver.eigenvalues();
+  output.rotation_eigenvalues = rotation_solver.eigenvalues();
+  output.translation_weak = translation_solver.eigenvectors().col(0).normalized();
+  output.rotation_weak = rotation_solver.eigenvectors().col(0).normalized();
+  if (!output.translation_eigenvalues.allFinite() || !output.rotation_eigenvalues.allFinite() ||
+      !output.translation_weak.allFinite() || !output.rotation_weak.allFinite())
+  {
+    output.invalid_reason = "nonfinite_schur_result";
+    return output;
+  }
+  const double translation_max = output.translation_eigenvalues(2);
+  const double rotation_max = output.rotation_eigenvalues(2);
+  const double translation_min = output.translation_eigenvalues(0);
+  const double rotation_min = output.rotation_eigenvalues(0);
+  if (!std::isfinite(translation_max) || !std::isfinite(rotation_max) ||
+      translation_max <= 1e-12 || rotation_max <= 1e-12)
+  {
+    output.invalid_reason = "zero_schur_information";
+    return output;
+  }
+  output.translation_min_max_ratio = translation_min / translation_max;
+  output.rotation_min_max_ratio = rotation_min / rotation_max;
+  output.translation_condition = translation_max / std::max(translation_min, 1e-12);
+  output.rotation_condition = rotation_max / std::max(rotation_min, 1e-12);
+  output.valid = std::isfinite(output.translation_min_max_ratio) &&
+      std::isfinite(output.rotation_min_max_ratio) &&
+      std::isfinite(output.translation_condition) &&
+      std::isfinite(output.rotation_condition);
+  output.invalid_reason = output.valid ? "ok" : "nonfinite_condition";
+  return output;
+}
+
 }  // namespace
 
 class DogPriorMapNdtNode
@@ -250,6 +457,16 @@ public:
         getParam<double>("lidar_update/information_rotation_scale_m", 1.0));
     information_pose_projection_enable_ = getParam<bool>("lidar_update/information_pose_projection_enable", false);
     information_diagnostic_enable_ = getParam<bool>("lidar_update/information_diagnostic_enable", false);
+    schur_diagnostic_enable_ = getParam<bool>("lidar_update/schur_diagnostic_enable", false);
+    schur_normal_k_ = std::max(3, getParam<int>("lidar_update/schur_normal_k", 10));
+    schur_max_correspondence_distance_ = getParam<double>(
+        "lidar_update/schur_max_correspondence_distance", 0.8);
+    schur_planarity_ratio_max_ = getParam<double>(
+        "lidar_update/schur_planarity_ratio_max", 0.20);
+    schur_max_source_points_ = std::max(1, getParam<int>(
+        "lidar_update/schur_max_source_points", 500));
+    schur_pinv_relative_epsilon_ = std::max(1e-12, getParam<double>(
+        "lidar_update/schur_pinv_relative_epsilon", 1.0e-6));
     // Direction-selective fusion consumes the eigensystem, so it implicitly
     // enables the diagnostic computation.  Otherwise the approximate H=J^T J
     // calculation stays completely off and the default baseline has no extra
@@ -496,6 +713,27 @@ private:
         Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
     Eigen::Matrix<double, 6, 1> information_weak =
         Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
+    bool schur_valid = false;
+    std::string schur_invalid_reason = "disabled";
+    int schur_used_points = 0;
+    int schur_planar_points = 0;
+    Eigen::Vector3d schur_h_tt_eigenvalues =
+        Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
+    Eigen::Vector3d schur_h_rr_eigenvalues =
+        Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
+    Eigen::Vector3d schur_translation_eigenvalues =
+        Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
+    Eigen::Vector3d schur_rotation_eigenvalues =
+        Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
+    double schur_translation_condition = std::numeric_limits<double>::quiet_NaN();
+    double schur_rotation_condition = std::numeric_limits<double>::quiet_NaN();
+    double schur_translation_min_max_ratio = std::numeric_limits<double>::quiet_NaN();
+    double schur_rotation_min_max_ratio = std::numeric_limits<double>::quiet_NaN();
+    Eigen::Vector3d schur_translation_weak =
+        Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
+    Eigen::Vector3d schur_rotation_weak =
+        Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
+    double schur_compute_ms = std::numeric_limits<double>::quiet_NaN();
     Eigen::Matrix4d projected = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
     Eigen::Matrix4d used_before_step_limit = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
     bool translation_limited = false;
@@ -550,6 +788,15 @@ private:
            "raw_delta_from_guess_translation,raw_delta_from_guess_rotation_deg,ndt_fitness,ndt_has_converged,ndt_iterations,"
            "information_valid,information_degenerate,information_condition,lambda_0,lambda_1,lambda_2,lambda_3,lambda_4,lambda_5,"
            "weak_v0,weak_v1,weak_v2,weak_v3,weak_v4,weak_v5,"
+           "schur_valid,schur_invalid_reason,schur_used_points,schur_planar_points,"
+           "schur_h_tt_lambda_0,schur_h_tt_lambda_1,schur_h_tt_lambda_2,"
+           "schur_h_rr_lambda_0,schur_h_rr_lambda_1,schur_h_rr_lambda_2,"
+           "schur_translation_lambda_0,schur_translation_lambda_1,schur_translation_lambda_2,"
+           "schur_rotation_lambda_0,schur_rotation_lambda_1,schur_rotation_lambda_2,"
+           "schur_translation_condition,schur_rotation_condition,"
+           "schur_translation_min_max_ratio,schur_rotation_min_max_ratio,"
+           "schur_translation_weak_x,schur_translation_weak_y,schur_translation_weak_z,"
+           "schur_rotation_weak_x,schur_rotation_weak_y,schur_rotation_weak_z,schur_compute_ms,"
            "projected_tx,projected_ty,projected_tz,projected_qx,projected_qy,projected_qz,projected_qw,"
            "used_before_step_limit_tx,used_before_step_limit_ty,used_before_step_limit_tz,used_before_step_limit_qx,"
            "used_before_step_limit_qy,used_before_step_limit_qz,used_before_step_limit_qw,"
@@ -652,6 +899,18 @@ private:
         << row.information_condition;
     for (int i = 0; i < 6; ++i) out << "," << row.information_eigenvalues(i);
     for (int i = 0; i < 6; ++i) out << "," << row.information_weak(i);
+    out << "," << (row.schur_valid ? 1 : 0) << "," << row.schur_invalid_reason << ","
+        << row.schur_used_points << "," << row.schur_planar_points;
+    for (int i = 0; i < 3; ++i) out << "," << row.schur_h_tt_eigenvalues(i);
+    for (int i = 0; i < 3; ++i) out << "," << row.schur_h_rr_eigenvalues(i);
+    for (int i = 0; i < 3; ++i) out << "," << row.schur_translation_eigenvalues(i);
+    for (int i = 0; i < 3; ++i) out << "," << row.schur_rotation_eigenvalues(i);
+    out << "," << row.schur_translation_condition << "," << row.schur_rotation_condition
+        << "," << row.schur_translation_min_max_ratio << "," << row.schur_rotation_min_max_ratio
+        << "," << row.schur_translation_weak.x() << "," << row.schur_translation_weak.y()
+        << "," << row.schur_translation_weak.z() << "," << row.schur_rotation_weak.x()
+        << "," << row.schur_rotation_weak.y() << "," << row.schur_rotation_weak.z()
+        << "," << row.schur_compute_ms;
     out << ","; appendPoseCsv(out, row.projected);
     out << ","; appendPoseCsv(out, row.used_before_step_limit);
     out << "," << (row.translation_limited ? 1 : 0) << "," << (row.rotation_limited ? 1 : 0) << ",";
@@ -1073,6 +1332,10 @@ private:
 
     DeterminismRow diagnostic_row;
     diagnostic_row.local_imu_prior_enabled = local_imu_rotation_prior_enable_;
+    if (schur_diagnostic_enable_)
+    {
+      diagnostic_row.schur_invalid_reason = "not_computed";
+    }
     if (determinism_diagnostic_enable_)
     {
       diagnostic_row.frame_index = ++determinism_frame_index_;
@@ -1172,6 +1435,10 @@ private:
                          static_cast<int>(source->size()), target_cloud_->size(), 0.0, 0);
       diagnostic_row.prediction_source = "not_evaluated";
       diagnostic_row.prediction_reason = "insufficient_points";
+      if (schur_diagnostic_enable_)
+      {
+        diagnostic_row.schur_invalid_reason = "insufficient_points";
+      }
       writeDeterminismRow(diagnostic_row);
       return;
     }
@@ -1336,6 +1603,30 @@ private:
       diagnostic_row.information_condition = information_condition;
       diagnostic_row.information_eigenvalues = information_eigenvalues;
       diagnostic_row.information_weak = information_weak;
+      if (schur_diagnostic_enable_)
+      {
+        const ros::WallTime schur_start = ros::WallTime::now();
+        const SchurObservabilityResult schur = estimateSchurObservability(
+            source, target_cloud_, result, schur_normal_k_,
+            schur_max_correspondence_distance_, schur_planarity_ratio_max_,
+            schur_max_source_points_, schur_pinv_relative_epsilon_);
+        diagnostic_row.schur_valid = schur.valid;
+        diagnostic_row.schur_invalid_reason = schur.invalid_reason;
+        diagnostic_row.schur_used_points = schur.used_points;
+        diagnostic_row.schur_planar_points = schur.planar_points;
+        diagnostic_row.schur_h_tt_eigenvalues = schur.h_tt_eigenvalues;
+        diagnostic_row.schur_h_rr_eigenvalues = schur.h_rr_eigenvalues;
+        diagnostic_row.schur_translation_eigenvalues = schur.translation_eigenvalues;
+        diagnostic_row.schur_rotation_eigenvalues = schur.rotation_eigenvalues;
+        diagnostic_row.schur_translation_condition = schur.translation_condition;
+        diagnostic_row.schur_rotation_condition = schur.rotation_condition;
+        diagnostic_row.schur_translation_min_max_ratio = schur.translation_min_max_ratio;
+        diagnostic_row.schur_rotation_min_max_ratio = schur.rotation_min_max_ratio;
+        diagnostic_row.schur_translation_weak = schur.translation_weak;
+        diagnostic_row.schur_rotation_weak = schur.rotation_weak;
+        diagnostic_row.schur_compute_ms =
+            (ros::WallTime::now() - schur_start).toSec() * 1000.0;
+      }
       if (information_compute_enable_)
       {
         publishInformation(timing.reference_stamp, information_valid, information_degenerate,
@@ -1414,6 +1705,10 @@ private:
     }
     else
     {
+      if (schur_diagnostic_enable_)
+      {
+        diagnostic_row.schur_invalid_reason = "ndt_not_converged";
+      }
       const Eigen::Matrix<double, 6, 1> invalid_values =
           Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
       const Eigen::Matrix<double, 6, 6> invalid_vectors =
@@ -1777,6 +2072,12 @@ private:
   bool information_pose_projection_enable_ = false;
   bool information_diagnostic_enable_ = false;
   bool information_compute_enable_ = false;
+  bool schur_diagnostic_enable_ = false;
+  int schur_normal_k_ = 10;
+  double schur_max_correspondence_distance_ = 0.8;
+  double schur_planarity_ratio_max_ = 0.20;
+  int schur_max_source_points_ = 500;
+  double schur_pinv_relative_epsilon_ = 1.0e-6;
   bool determinism_diagnostic_enable_ = false;
   std::string determinism_csv_path_;
   std::ofstream determinism_csv_;
