@@ -183,8 +183,14 @@ struct SchurObservabilityResult
   Eigen::Vector3d h_rr_eigenvalues = Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
   Eigen::Vector3d translation_eigenvalues = Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
   Eigen::Vector3d rotation_eigenvalues = Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
+  Eigen::Matrix3d translation_eigenvectors = Eigen::Matrix3d::Constant(std::numeric_limits<double>::quiet_NaN());
+  Eigen::Matrix3d rotation_eigenvectors = Eigen::Matrix3d::Constant(std::numeric_limits<double>::quiet_NaN());
   Eigen::Vector3d translation_weak = Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
   Eigen::Vector3d rotation_weak = Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
+  double translation_eigen_gap_01 = std::numeric_limits<double>::quiet_NaN();
+  double translation_eigen_gap_12 = std::numeric_limits<double>::quiet_NaN();
+  double rotation_eigen_gap_01 = std::numeric_limits<double>::quiet_NaN();
+  double rotation_eigen_gap_12 = std::numeric_limits<double>::quiet_NaN();
   double translation_condition = std::numeric_limits<double>::quiet_NaN();
   double rotation_condition = std::numeric_limits<double>::quiet_NaN();
   double translation_min_max_ratio = std::numeric_limits<double>::quiet_NaN();
@@ -354,14 +360,25 @@ SchurObservabilityResult estimateSchurObservability(
   }
   output.translation_eigenvalues = translation_solver.eigenvalues();
   output.rotation_eigenvalues = rotation_solver.eigenvalues();
+  output.translation_eigenvectors = translation_solver.eigenvectors();
+  output.rotation_eigenvectors = rotation_solver.eigenvectors();
   output.translation_weak = translation_solver.eigenvectors().col(0).normalized();
   output.rotation_weak = rotation_solver.eigenvectors().col(0).normalized();
   if (!output.translation_eigenvalues.allFinite() || !output.rotation_eigenvalues.allFinite() ||
+      !output.translation_eigenvectors.allFinite() || !output.rotation_eigenvectors.allFinite() ||
       !output.translation_weak.allFinite() || !output.rotation_weak.allFinite())
   {
     output.invalid_reason = "nonfinite_schur_result";
     return output;
   }
+  output.translation_eigen_gap_01 = output.translation_eigenvalues(0) /
+      std::max(output.translation_eigenvalues(1), 1e-12);
+  output.translation_eigen_gap_12 = output.translation_eigenvalues(1) /
+      std::max(output.translation_eigenvalues(2), 1e-12);
+  output.rotation_eigen_gap_01 = output.rotation_eigenvalues(0) /
+      std::max(output.rotation_eigenvalues(1), 1e-12);
+  output.rotation_eigen_gap_12 = output.rotation_eigenvalues(1) /
+      std::max(output.rotation_eigenvalues(2), 1e-12);
   const double translation_max = output.translation_eigenvalues(2);
   const double rotation_max = output.rotation_eigenvalues(2);
   const double translation_min = output.translation_eigenvalues(0);
@@ -731,6 +748,14 @@ private:
         Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
     Eigen::Vector3d schur_rotation_eigenvalues =
         Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
+    Eigen::Matrix3d schur_translation_eigenvectors =
+        Eigen::Matrix3d::Constant(std::numeric_limits<double>::quiet_NaN());
+    Eigen::Matrix3d schur_rotation_eigenvectors =
+        Eigen::Matrix3d::Constant(std::numeric_limits<double>::quiet_NaN());
+    double schur_translation_eigen_gap_01 = std::numeric_limits<double>::quiet_NaN();
+    double schur_translation_eigen_gap_12 = std::numeric_limits<double>::quiet_NaN();
+    double schur_rotation_eigen_gap_01 = std::numeric_limits<double>::quiet_NaN();
+    double schur_rotation_eigen_gap_12 = std::numeric_limits<double>::quiet_NaN();
     double schur_translation_condition = std::numeric_limits<double>::quiet_NaN();
     double schur_rotation_condition = std::numeric_limits<double>::quiet_NaN();
     double schur_translation_min_max_ratio = std::numeric_limits<double>::quiet_NaN();
@@ -801,6 +826,14 @@ private:
            "schur_h_rr_lambda_0,schur_h_rr_lambda_1,schur_h_rr_lambda_2,"
            "schur_translation_lambda_0,schur_translation_lambda_1,schur_translation_lambda_2,"
            "schur_rotation_lambda_0,schur_rotation_lambda_1,schur_rotation_lambda_2,"
+           "schur_translation_v0_x,schur_translation_v0_y,schur_translation_v0_z,"
+           "schur_translation_v1_x,schur_translation_v1_y,schur_translation_v1_z,"
+           "schur_translation_v2_x,schur_translation_v2_y,schur_translation_v2_z,"
+           "schur_rotation_v0_x,schur_rotation_v0_y,schur_rotation_v0_z,"
+           "schur_rotation_v1_x,schur_rotation_v1_y,schur_rotation_v1_z,"
+           "schur_rotation_v2_x,schur_rotation_v2_y,schur_rotation_v2_z,"
+           "schur_translation_eigen_gap_01,schur_translation_eigen_gap_12,"
+           "schur_rotation_eigen_gap_01,schur_rotation_eigen_gap_12,"
            "schur_translation_condition,schur_rotation_condition,"
            "schur_translation_min_max_ratio,schur_rotation_min_max_ratio,"
            "schur_translation_weak_x,schur_translation_weak_y,schur_translation_weak_z,"
@@ -914,7 +947,17 @@ private:
     for (int i = 0; i < 3; ++i) out << "," << row.schur_h_rr_eigenvalues(i);
     for (int i = 0; i < 3; ++i) out << "," << row.schur_translation_eigenvalues(i);
     for (int i = 0; i < 3; ++i) out << "," << row.schur_rotation_eigenvalues(i);
-    out << "," << row.schur_translation_condition << "," << row.schur_rotation_condition
+    for (int column = 0; column < 3; ++column)
+      for (int component = 0; component < 3; ++component)
+        out << "," << row.schur_translation_eigenvectors(component, column);
+    for (int column = 0; column < 3; ++column)
+      for (int component = 0; component < 3; ++component)
+        out << "," << row.schur_rotation_eigenvectors(component, column);
+    out << "," << row.schur_translation_eigen_gap_01 << ","
+        << row.schur_translation_eigen_gap_12 << ","
+        << row.schur_rotation_eigen_gap_01 << ","
+        << row.schur_rotation_eigen_gap_12
+        << "," << row.schur_translation_condition << "," << row.schur_rotation_condition
         << "," << row.schur_translation_min_max_ratio << "," << row.schur_rotation_min_max_ratio
         << "," << row.schur_translation_weak.x() << "," << row.schur_translation_weak.y()
         << "," << row.schur_translation_weak.z() << "," << row.schur_rotation_weak.x()
@@ -1642,6 +1685,12 @@ private:
         diagnostic_row.schur_h_rr_eigenvalues = schur.h_rr_eigenvalues;
         diagnostic_row.schur_translation_eigenvalues = schur.translation_eigenvalues;
         diagnostic_row.schur_rotation_eigenvalues = schur.rotation_eigenvalues;
+        diagnostic_row.schur_translation_eigenvectors = schur.translation_eigenvectors;
+        diagnostic_row.schur_rotation_eigenvectors = schur.rotation_eigenvectors;
+        diagnostic_row.schur_translation_eigen_gap_01 = schur.translation_eigen_gap_01;
+        diagnostic_row.schur_translation_eigen_gap_12 = schur.translation_eigen_gap_12;
+        diagnostic_row.schur_rotation_eigen_gap_01 = schur.rotation_eigen_gap_01;
+        diagnostic_row.schur_rotation_eigen_gap_12 = schur.rotation_eigen_gap_12;
         diagnostic_row.schur_translation_condition = schur.translation_condition;
         diagnostic_row.schur_rotation_condition = schur.rotation_condition;
         diagnostic_row.schur_translation_min_max_ratio = schur.translation_min_max_ratio;
