@@ -18,7 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 find_package(Eigen3 REQUIRED)
-find_package(PCL REQUIRED COMPONENTS common filters kdtree registration)
+find_package(PCL REQUIRED COMPONENTS common filters io kdtree registration)
 find_package(OpenCV REQUIRED)
 
 set(CMAKE_CXX_FLAGS "-O2 -g -Wall ${CMAKE_CXX_FLAGS}")
@@ -70,6 +70,17 @@ add_dependencies(dog_prior_map_ndt_node_cpp
   ${catkin_EXPORTED_TARGETS}
 )
 
+# Offline-only NDT objective probe. It is intentionally independent of the
+# runtime localization nodes and is never linked into their execution path.
+add_executable(ndt_uncertainty_probe
+  src/ndt_uncertainty_probe.cpp
+)
+
+target_link_libraries(ndt_uncertainty_probe
+  ${PCL_LIBRARIES}
+  /usr/lib/x86_64-linux-gnu/libusb-1.0.so
+)
+
 catkin_install_python(PROGRAMS
   scripts/dog_prior_map_ekf_node.py
   scripts/pcd_to_npz_map.py
@@ -83,6 +94,6 @@ install(DIRECTORY config launch docs rviz
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
-install(TARGETS dog_prior_map_ekf_node_cpp dog_prior_map_ndt_node_cpp
+install(TARGETS dog_prior_map_ekf_node_cpp dog_prior_map_ndt_node_cpp ndt_uncertainty_probe
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
