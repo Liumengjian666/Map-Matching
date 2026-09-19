@@ -81,6 +81,16 @@ target_link_libraries(ndt_uncertainty_probe
   /usr/lib/x86_64-linux-gnu/libusb-1.0.so
 )
 
+# Offline-only Stage3A.6 local covariance/eigenvector alignment probe.
+add_executable(ndt_direction_alignment_probe
+  src/ndt_direction_alignment_probe.cpp
+)
+
+target_link_libraries(ndt_direction_alignment_probe
+  ${PCL_LIBRARIES}
+  /usr/lib/x86_64-linux-gnu/libusb-1.0.so
+)
+
 catkin_install_python(PROGRAMS
   scripts/dog_prior_map_ekf_node.py
   scripts/pcd_to_npz_map.py
@@ -94,6 +104,6 @@ install(DIRECTORY config launch docs rviz
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
-install(TARGETS dog_prior_map_ekf_node_cpp dog_prior_map_ndt_node_cpp ndt_uncertainty_probe
+install(TARGETS dog_prior_map_ekf_node_cpp dog_prior_map_ndt_node_cpp ndt_uncertainty_probe ndt_direction_alignment_probe
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
