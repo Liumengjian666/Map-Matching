@@ -271,7 +271,10 @@ SurfaceFit fitLocalSurface(const std::vector<Eigen::Vector3d> &deltas,
   result.covariance_valid = h_eigenvalues.minCoeff() > 1e-8 * scale;
   for (int i = 0; i < 3; ++i)
   {
-    const int h_index = 2 - i;
+    // Eigen returns h0 <= h1 <= h2.  Keep the uncertainty basis semantic
+    // index aligned with the Schur basis: index 0 is the flattest curvature
+    // (largest 1/H proxy uncertainty), and index 2 is the strongest one.
+    const int h_index = i;
     result.covariance_eigenvalues(i) = 1.0 / h_eigenvalues(h_index);
     result.stddev_eigenvalues(i) = std::sqrt(result.covariance_eigenvalues(i));
     result.sigma_vectors.col(i) = solver.eigenvectors().col(h_index);
@@ -435,7 +438,9 @@ int main(int argc, char **argv)
         for (int i = 0; i < 3; ++i)
         {
           eigen_output << row.at("frame_index") << ',' << row.at("target_rel") << ',' << row.at("t_rel") << ',' << type << ',' << i << ',';
-          writeValue(eigen_output, h_values(2 - i)); eigen_output << ',';
+          // Report the same weakest-to-strongest ordering as the fitted
+          // covariance eigenvectors below: h0, h1, h2.
+          writeValue(eigen_output, h_values(i)); eigen_output << ',';
           writeValue(eigen_output, fits[type_index].covariance_eigenvalues(i)); eigen_output << ',';
           writeValue(eigen_output, fits[type_index].stddev_eigenvalues(i)); eigen_output << ',';
           writeValue(eigen_output, fits[type_index].sigma_vectors(0, i)); eigen_output << ',';
