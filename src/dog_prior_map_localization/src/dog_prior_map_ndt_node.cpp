@@ -189,6 +189,8 @@ struct SchurObservabilityResult
   double rotation_condition = std::numeric_limits<double>::quiet_NaN();
   double translation_min_max_ratio = std::numeric_limits<double>::quiet_NaN();
   double rotation_min_max_ratio = std::numeric_limits<double>::quiet_NaN();
+  double knn_normal_ms = std::numeric_limits<double>::quiet_NaN();
+  double hessian_schur_ms = std::numeric_limits<double>::quiet_NaN();
 };
 
 Eigen::Matrix3d stableSymmetricPseudoInverse(const Eigen::Matrix3d &matrix,
@@ -222,6 +224,7 @@ Eigen::Matrix3d stableSymmetricPseudoInverse(const Eigen::Matrix3d &matrix,
 SchurObservabilityResult estimateSchurObservability(
     const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
     const pcl::PointCloud<pcl::PointXYZ>::Ptr &target,
+    const pcl::KdTreeFLANN<pcl::PointXYZ> &target_tree,
     const Eigen::Matrix4d &pose,
     int normal_k,
     double max_correspondence_distance,
@@ -249,14 +252,13 @@ SchurObservabilityResult estimateSchurObservability(
     return output;
   }
 
-  pcl::KdTreeFLANN<pcl::PointXYZ> tree;
-  tree.setInputCloud(target);
   const Eigen::Matrix3d rotation = pose.block<3, 3>(0, 0);
   const Eigen::Vector3d translation = pose.block<3, 1>(0, 3);
   Eigen::Matrix<double, 6, 6> hessian = Eigen::Matrix<double, 6, 6>::Zero();
   std::vector<int> indices(static_cast<size_t>(k));
   std::vector<float> squared_distances(static_cast<size_t>(k));
   constexpr int kMinimumPlanarPoints = 20;
+  const ros::WallTime knn_normal_start = ros::WallTime::now();
 
   for (int sample = 0; sample < selected_points; ++sample)
   {
@@ -267,7 +269,7 @@ SchurObservabilityResult estimateSchurObservability(
     const Eigen::Vector3d body_point(point.x, point.y, point.z);
     const Eigen::Vector3d world_point = rotation * body_point + translation;
     pcl::PointXYZ query(world_point.x(), world_point.y(), world_point.z());
-    if (tree.nearestKSearch(query, k, indices, squared_distances) < k) continue;
+    if (target_tree.nearestKSearch(query, k, indices, squared_distances) < k) continue;
     if (max_correspondence_distance > 0.0 &&
         std::sqrt(std::max(0.0f, squared_distances.front())) > max_correspondence_distance)
       continue;
@@ -303,12 +305,14 @@ SchurObservabilityResult estimateSchurObservability(
     jacobian.tail<3>() = -normal.transpose() * skew(rotation * body_point);
     hessian.noalias() += jacobian.transpose() * jacobian;
   }
+  output.knn_normal_ms = (ros::WallTime::now() - knn_normal_start).toSec() * 1000.0;
 
   if (output.planar_points < kMinimumPlanarPoints)
   {
     output.invalid_reason = "insufficient_planar_points";
     return output;
   }
+  const ros::WallTime hessian_schur_start = ros::WallTime::now();
   hessian = 0.5 * (hessian + hessian.transpose());
   Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> h_tt_solver(hessian.block<3, 3>(0, 0));
   Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> h_rr_solver(hessian.block<3, 3>(3, 3));
@@ -377,6 +381,8 @@ SchurObservabilityResult estimateSchurObservability(
       std::isfinite(output.translation_condition) &&
       std::isfinite(output.rotation_condition);
   output.invalid_reason = output.valid ? "ok" : "nonfinite_condition";
+  output.hessian_schur_ms =
+      (ros::WallTime::now() - hessian_schur_start).toSec() * 1000.0;
   return output;
 }
 
@@ -734,6 +740,8 @@ private:
     Eigen::Vector3d schur_rotation_weak =
         Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
     double schur_compute_ms = std::numeric_limits<double>::quiet_NaN();
+    double schur_knn_normal_ms = std::numeric_limits<double>::quiet_NaN();
+    double schur_hessian_schur_ms = std::numeric_limits<double>::quiet_NaN();
     Eigen::Matrix4d projected = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
     Eigen::Matrix4d used_before_step_limit = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
     bool translation_limited = false;
@@ -796,7 +804,8 @@ private:
            "schur_translation_condition,schur_rotation_condition,"
            "schur_translation_min_max_ratio,schur_rotation_min_max_ratio,"
            "schur_translation_weak_x,schur_translation_weak_y,schur_translation_weak_z,"
-           "schur_rotation_weak_x,schur_rotation_weak_y,schur_rotation_weak_z,schur_compute_ms,"
+           "schur_rotation_weak_x,schur_rotation_weak_y,schur_rotation_weak_z,"
+           "schur_compute_ms,schur_knn_normal_ms,schur_hessian_schur_ms,"
            "projected_tx,projected_ty,projected_tz,projected_qx,projected_qy,projected_qz,projected_qw,"
            "used_before_step_limit_tx,used_before_step_limit_ty,used_before_step_limit_tz,used_before_step_limit_qx,"
            "used_before_step_limit_qy,used_before_step_limit_qz,used_before_step_limit_qw,"
@@ -910,7 +919,8 @@ private:
         << "," << row.schur_translation_weak.x() << "," << row.schur_translation_weak.y()
         << "," << row.schur_translation_weak.z() << "," << row.schur_rotation_weak.x()
         << "," << row.schur_rotation_weak.y() << "," << row.schur_rotation_weak.z()
-        << "," << row.schur_compute_ms;
+        << "," << row.schur_compute_ms << "," << row.schur_knn_normal_ms
+        << "," << row.schur_hessian_schur_ms;
     out << ","; appendPoseCsv(out, row.projected);
     out << ","; appendPoseCsv(out, row.used_before_step_limit);
     out << "," << (row.translation_limited ? 1 : 0) << "," << (row.rotation_limited ? 1 : 0) << ",";
@@ -992,6 +1002,12 @@ private:
     finalizeCloud(xyz);
     map_cloud_ = voxelDown(xyz, map_voxel_size_, map_voxel_z_size_, 0);
     target_cloud_ = voxelDown(map_cloud_, target_voxel_size_, target_voxel_z_size_, max_target_points_);
+    const ros::WallTime schur_tree_start = ros::WallTime::now();
+    schur_target_tree_.reset(new pcl::KdTreeFLANN<pcl::PointXYZ>());
+    schur_target_tree_->setInputCloud(target_cloud_);
+    schur_tree_build_ms_ = (ros::WallTime::now() - schur_tree_start).toSec() * 1000.0;
+    ROS_INFO("[DogPriorMap NDT] Schur target KD-tree built once: target=%zu build=%.3f ms",
+             target_cloud_->size(), schur_tree_build_ms_);
 
     ndt_.setInputTarget(target_cloud_);
     ndt_.setResolution(ndt_resolution_);
@@ -1606,12 +1622,12 @@ private:
       if (schur_diagnostic_enable_)
       {
         const ros::WallTime schur_start = ros::WallTime::now();
-        const SchurObservabilityResult schur = estimateSchurObservability(
-            source, target_cloud_, result, schur_normal_k_,
+        const SchurObservabilityResult schur = schur_target_tree_ ? estimateSchurObservability(
+            source, target_cloud_, *schur_target_tree_, result, schur_normal_k_,
             schur_max_correspondence_distance_, schur_planarity_ratio_max_,
-            schur_max_source_points_, schur_pinv_relative_epsilon_);
+            schur_max_source_points_, schur_pinv_relative_epsilon_) : SchurObservabilityResult();
         diagnostic_row.schur_valid = schur.valid;
-        diagnostic_row.schur_invalid_reason = schur.invalid_reason;
+        diagnostic_row.schur_invalid_reason = schur_target_tree_ ? schur.invalid_reason : "tree_unavailable";
         diagnostic_row.schur_used_points = schur.used_points;
         diagnostic_row.schur_planar_points = schur.planar_points;
         diagnostic_row.schur_h_tt_eigenvalues = schur.h_tt_eigenvalues;
@@ -1626,6 +1642,8 @@ private:
         diagnostic_row.schur_rotation_weak = schur.rotation_weak;
         diagnostic_row.schur_compute_ms =
             (ros::WallTime::now() - schur_start).toSec() * 1000.0;
+        diagnostic_row.schur_knn_normal_ms = schur.knn_normal_ms;
+        diagnostic_row.schur_hessian_schur_ms = schur.hessian_schur_ms;
       }
       if (information_compute_enable_)
       {
@@ -2013,6 +2031,8 @@ private:
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud_;
   pcl::PointCloud<pcl::PointXYZ>::Ptr target_cloud_;
+  pcl::KdTreeFLANN<pcl::PointXYZ>::Ptr schur_target_tree_;
+  double schur_tree_build_ms_ = std::numeric_limits<double>::quiet_NaN();
   pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt_;
   nav_msgs::Path path_;
 
