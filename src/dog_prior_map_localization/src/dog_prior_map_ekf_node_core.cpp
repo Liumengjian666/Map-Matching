@@ -181,7 +181,13 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   cam_cy_ = getParam<double>("camera_intrinsic/cy", 0.0);
   camera_intrinsic_valid_ = cam_fx_ > 1.0 && cam_fy_ > 1.0;
 
-  path_max_length_ = getParam<int>("output/path_max_length", 5000);
+  path_max_length_ = std::max(1, getParam<int>("output/path_max_length", 5000));
+  path_sample_rate_hz_ = getParam<double>("output/path_sample_rate_hz", 2.0);
+  path_publish_rate_hz_ = getParam<double>("output/path_publish_rate_hz", 1.0);
+  if (!std::isfinite(path_sample_rate_hz_) || path_sample_rate_hz_ <= 0.0)
+    path_sample_rate_hz_ = 2.0;
+  if (!std::isfinite(path_publish_rate_hz_) || path_publish_rate_hz_ <= 0.0)
+    path_publish_rate_hz_ = 1.0;
   publish_path_ = getParam<bool>("output/publish_path", false);
   publish_tf_ = getParam<bool>("output/publish_tf", true);
   publish_filtered_points_ = getParam<bool>("output/publish_filtered_points", true);

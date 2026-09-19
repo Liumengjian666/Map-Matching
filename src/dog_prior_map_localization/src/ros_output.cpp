@@ -39,22 +39,20 @@ void DogPriorMapEkfNode::publishState(const ros::Time &stamp, bool corrected)
   odom.twist.twist.linear.y = v_.y();
   odom.twist.twist.linear.z = v_.z();
 
-  // Keep a complete fused trajectory history.  The split NDT node appends
-  // every accepted frame to its path; doing the same here avoids a path that
-  // only contains successful correction instants.
+  // Keep bounded, sensor-time-sampled trajectory histories.  The odometry
+  // topics below remain high-rate; only the RViz Path messages are sampled.
   if (publish_path_)
   {
-    appendPath(path_corr_, odom);
+    if (!corrected && shouldSamplePath(stamp, last_path_high_sample_stamp_))
+      appendPath(path_high_, odom);
+    if (shouldSamplePath(stamp, last_path_corr_sample_stamp_))
+      appendPath(path_corr_, odom);
   }
 
   if (corrected)
   {
     writeEkfPredictionLineage("CORRECTED_PUBLISH", ros::Time::now().toSec());
     pub_corr_.publish(odom);
-    if (publish_path_)
-    {
-      pub_path_corr_.publish(path_corr_);
-    }
   }
   else
   {
@@ -65,16 +63,9 @@ void DogPriorMapEkfNode::publishState(const ros::Time &stamp, bool corrected)
     {
       pub_imu_propagate_.publish(odom);
     }
-    if (publish_path_)
-    {
-      appendPath(path_high_, odom);
-      pub_path_high_.publish(path_high_);
-      // Publish the fused trajectory on every high-rate propagation as well.
-      // Otherwise path_corrected only refreshes when a LiDAR correction is
-      // accepted and appears frozen/short during corridor degeneracy.
-      pub_path_corr_.publish(path_corr_);
-    }
   }
+
+  publishPathsIfDue(stamp);
 
   if (publish_tf_)
   {
@@ -298,6 +289,42 @@ void DogPriorMapEkfNode::appendPath(nav_msgs::Path &path, const nav_msgs::Odomet
   {
     path.poses.erase(path.poses.begin(), path.poses.begin() + (path.poses.size() - path_max_length_));
   }
+}
+
+bool DogPriorMapEkfNode::shouldSamplePath(const ros::Time &stamp,
+                                          double &last_sample_stamp) const
+{
+  const double sensor_stamp = stamp.toSec();
+  if (!std::isfinite(sensor_stamp) || !std::isfinite(path_sample_rate_hz_) ||
+      path_sample_rate_hz_ <= 0.0)
+    return false;
+  const double interval = 1.0 / path_sample_rate_hz_;
+  if (last_sample_stamp >= 0.0 &&
+      (sensor_stamp <= last_sample_stamp || sensor_stamp - last_sample_stamp < interval))
+    return false;
+  last_sample_stamp = sensor_stamp;
+  return true;
+}
+
+void DogPriorMapEkfNode::publishPathsIfDue(const ros::Time &stamp)
+{
+  if (!publish_path_) return;
+  const double sensor_stamp = stamp.toSec();
+  if (!std::isfinite(sensor_stamp) || !std::isfinite(path_publish_rate_hz_) ||
+      path_publish_rate_hz_ <= 0.0)
+    return;
+  const double interval = 1.0 / path_publish_rate_hz_;
+  if (last_path_publish_stamp_ >= 0.0 &&
+      (sensor_stamp <= last_path_publish_stamp_ ||
+       sensor_stamp - last_path_publish_stamp_ < interval))
+    return;
+  last_path_publish_stamp_ = sensor_stamp;
+  path_high_.header.stamp = stamp;
+  path_high_.header.frame_id = map_frame_;
+  path_corr_.header.stamp = stamp;
+  path_corr_.header.frame_id = map_frame_;
+  pub_path_high_.publish(path_high_);
+  pub_path_corr_.publish(path_corr_);
 }
 
 // 定期汇总输入频率、匹配成功率和耗时，并可追加写入运行统计 CSV。

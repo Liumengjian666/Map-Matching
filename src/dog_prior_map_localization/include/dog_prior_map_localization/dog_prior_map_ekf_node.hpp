@@ -190,6 +190,8 @@ private:
                           double score);
   /// 向轨迹消息追加一个位姿，并限制轨迹缓存长度。
   void appendPath(nav_msgs::Path &path, const nav_msgs::Odometry &odom);
+  bool shouldSamplePath(const ros::Time &stamp, double &last_sample_stamp) const;
+  void publishPathsIfDue(const ros::Time &stamp);
   /// 按固定周期打印并记录各传感器和匹配模块的运行统计。
   void maybePrintRuntime(const ros::Time &stamp);
   void writeEkfPredictionLineage(const std::string &event_type,
@@ -502,6 +504,11 @@ private:
   std::string last_visual_update_reason_ = "not_initialized";
 
   int path_max_length_ = 5000;
+  double path_sample_rate_hz_ = 2.0;
+  double path_publish_rate_hz_ = 1.0;
+  double last_path_high_sample_stamp_ = -1.0;
+  double last_path_corr_sample_stamp_ = -1.0;
+  double last_path_publish_stamp_ = -1.0;
   bool publish_path_ = false;
   bool publish_tf_ = true;
   bool print_debug_ = true;

@@ -174,7 +174,9 @@ fusion:
   legacy_visual_yaw_enable: false
 
 output:
-  path_max_length: 200000
+  path_max_length: 5000
+  path_sample_rate_hz: 2.0
+  path_publish_rate_hz: 1.0
   publish_path: true
   publish_tf: true
   publish_filtered_points: true

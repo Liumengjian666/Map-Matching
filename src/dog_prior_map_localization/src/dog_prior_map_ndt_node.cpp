@@ -284,6 +284,13 @@ public:
       determinism_diagnostic_enable_ = false;
     }
     publish_tf_ = getParam<bool>("output/ndt_publish_tf", false);
+    path_max_length_ = std::max(1, getParam<int>("output/path_max_length", 5000));
+    path_sample_rate_hz_ = getParam<double>("output/path_sample_rate_hz", 2.0);
+    path_publish_rate_hz_ = getParam<double>("output/path_publish_rate_hz", 1.0);
+    if (!std::isfinite(path_sample_rate_hz_) || path_sample_rate_hz_ <= 0.0)
+      path_sample_rate_hz_ = 2.0;
+    if (!std::isfinite(path_publish_rate_hz_) || path_publish_rate_hz_ <= 0.0)
+      path_publish_rate_hz_ = 1.0;
     publish_path_ = getParam<bool>("output/publish_path", false);
     publish_filtered_points_ = getParam<bool>("output/publish_filtered_points", true);
     publish_diagnostics_ = getParam<bool>("output/publish_diagnostics", true);
@@ -1386,11 +1393,56 @@ private:
 
     if (publish_path_)
     {
-      path_.header.stamp = stamp;
-      path_.header.frame_id = map_frame_;
-      path_.poses.push_back(pose);
-      if (path_.poses.size() > 5000) path_.poses.erase(path_.poses.begin());
-      pub_path_.publish(path_);
+      const double sensor_stamp = stamp.toSec();
+      const double sample_interval = 1.0 / path_sample_rate_hz_;
+      if (std::isfinite(sensor_stamp) &&
+          (next_ndt_path_sample_stamp_ < 0.0 ||
+           sensor_stamp >= next_ndt_path_sample_stamp_))
+      {
+        if (last_ndt_path_sample_stamp_ < 0.0 ||
+            sensor_stamp > last_ndt_path_sample_stamp_)
+        {
+          last_ndt_path_sample_stamp_ = sensor_stamp;
+          path_.header.stamp = stamp;
+          path_.header.frame_id = map_frame_;
+          path_.poses.push_back(pose);
+          if (static_cast<int>(path_.poses.size()) > path_max_length_)
+            path_.poses.erase(path_.poses.begin(),
+                              path_.poses.begin() + (path_.poses.size() - path_max_length_));
+        }
+        if (next_ndt_path_sample_stamp_ < 0.0)
+          next_ndt_path_sample_stamp_ = sensor_stamp + sample_interval;
+        else
+        {
+          do
+          {
+            next_ndt_path_sample_stamp_ += sample_interval;
+          } while (next_ndt_path_sample_stamp_ <= sensor_stamp);
+        }
+      }
+      const double publish_interval = 1.0 / path_publish_rate_hz_;
+      if (std::isfinite(sensor_stamp) &&
+          (next_ndt_path_publish_stamp_ < 0.0 ||
+           sensor_stamp >= next_ndt_path_publish_stamp_))
+      {
+        if (last_ndt_path_publish_stamp_ < 0.0 ||
+            sensor_stamp > last_ndt_path_publish_stamp_)
+        {
+          last_ndt_path_publish_stamp_ = sensor_stamp;
+          path_.header.stamp = stamp;
+          path_.header.frame_id = map_frame_;
+          pub_path_.publish(path_);
+        }
+        if (next_ndt_path_publish_stamp_ < 0.0)
+          next_ndt_path_publish_stamp_ = sensor_stamp + publish_interval;
+        else
+        {
+          do
+          {
+            next_ndt_path_publish_stamp_ += publish_interval;
+          } while (next_ndt_path_publish_stamp_ <= sensor_stamp);
+        }
+      }
     }
 
     if (publish_tf_)
@@ -1582,6 +1634,13 @@ private:
   double imu_history_keep_sec_ = 2.0;
   bool publish_tf_ = true;
   bool publish_path_ = false;
+  int path_max_length_ = 5000;
+  double path_sample_rate_hz_ = 2.0;
+  double path_publish_rate_hz_ = 1.0;
+  double last_ndt_path_sample_stamp_ = -1.0;
+  double last_ndt_path_publish_stamp_ = -1.0;
+  double next_ndt_path_sample_stamp_ = -1.0;
+  double next_ndt_path_publish_stamp_ = -1.0;
   bool publish_filtered_points_ = true;
   bool publish_diagnostics_ = true;
   std::string scan_reference_time_ = "start";
