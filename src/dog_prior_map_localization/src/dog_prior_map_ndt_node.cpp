@@ -228,6 +228,8 @@ public:
     ndt_step_limit_max_translation_ = getParam<double>("lidar_update/ndt_step_limit_max_translation", 0.5);
     ndt_step_limit_max_rotation_deg_ = getParam<double>("lidar_update/ndt_step_limit_max_rotation_deg", 5.0);
     ndt_prediction_enable_ = getParam<bool>("lidar_update/ndt_prediction_enable", true);
+    local_imu_rotation_prior_enable_ = getParam<bool>(
+        "lidar_update/local_imu_rotation_prior_enable", false);
     ndt_prediction_max_age_ = getParam<double>("lidar_update/ndt_prediction_max_age", 0.25);
     prediction_history_keep_sec_ = std::max(0.1,
         getParam<double>("lidar_update/prediction_history_keep_sec", 2.0));
@@ -387,6 +389,11 @@ public:
   {
     if (!msg) return;
     std::lock_guard<std::mutex> lock(mutex_);
+    if (!has_imu_watermark_ || msg->header.stamp > latest_imu_stamp_)
+    {
+      latest_imu_stamp_ = msg->header.stamp;
+      has_imu_watermark_ = true;
+    }
     imu_history_.push_back(ImuSample{msg->header.stamp.toSec(),
                                      Eigen::Vector3d(msg->linear_acceleration.x,
                                                      msg->linear_acceleration.y,
@@ -399,6 +406,8 @@ public:
     {
       imu_history_.pop_front();
     }
+    if (local_imu_rotation_prior_enable_)
+      processPendingCloudsLocked();
   }
 
 private:
@@ -456,6 +465,19 @@ private:
     bool prediction_used = false;
     std::string prediction_source = "not_evaluated";
     std::string prediction_reason = "not_evaluated";
+    bool local_imu_prior_enabled = false;
+    bool local_imu_prior_used = false;
+    std::string local_imu_prior_reason = "not_evaluated";
+    double local_imu_t0 = std::numeric_limits<double>::quiet_NaN();
+    double local_imu_t1 = std::numeric_limits<double>::quiet_NaN();
+    double local_imu_dt = std::numeric_limits<double>::quiet_NaN();
+    double local_imu_history_first_stamp = std::numeric_limits<double>::quiet_NaN();
+    double local_imu_history_last_stamp = std::numeric_limits<double>::quiet_NaN();
+    double local_imu_delta_rotation_deg = std::numeric_limits<double>::quiet_NaN();
+    Eigen::Matrix4d baseline_guess = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
+    Eigen::Matrix4d imu_rotation_guess = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
+    double baseline_to_imu_translation_diff = std::numeric_limits<double>::quiet_NaN();
+    double baseline_to_imu_rotation_diff_deg = std::numeric_limits<double>::quiet_NaN();
     Eigen::Matrix4d initial_guess = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
     Eigen::Matrix4d previous_pose = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
     Eigen::Matrix4d delta_pose = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
@@ -515,6 +537,11 @@ private:
   {
     return "frame_index,lidar_header_stamp,ros_now,wall_time,cloud_seq,cloud_size_raw,cloud_size_after_filter,cloud_hash,"
            "prediction_received,prediction_stamp,prediction_age,prediction_used,prediction_source,prediction_reason,"
+           "local_imu_prior_enabled,local_imu_prior_used,local_imu_prior_reason,local_imu_t0,local_imu_t1,local_imu_dt,"
+           "local_imu_history_first_stamp,local_imu_history_last_stamp,local_imu_delta_rotation_deg,"
+           "baseline_guess_tx,baseline_guess_ty,baseline_guess_tz,baseline_guess_qx,baseline_guess_qy,baseline_guess_qz,baseline_guess_qw,"
+           "imu_rotation_guess_tx,imu_rotation_guess_ty,imu_rotation_guess_tz,imu_rotation_guess_qx,imu_rotation_guess_qy,imu_rotation_guess_qz,imu_rotation_guess_qw,"
+           "baseline_to_imu_translation_diff,baseline_to_imu_rotation_diff_deg,"
            "initial_guess_tx,initial_guess_ty,initial_guess_tz,initial_guess_qx,initial_guess_qy,initial_guess_qz,initial_guess_qw,"
            "previous_pose_tx,previous_pose_ty,previous_pose_tz,previous_pose_qx,previous_pose_qy,previous_pose_qz,previous_pose_qw,"
            "delta_pose_tx,delta_pose_ty,delta_pose_tz,delta_pose_qx,delta_pose_qy,delta_pose_qz,delta_pose_qw,"
@@ -602,7 +629,17 @@ private:
         << std::hex << std::setw(16) << std::setfill('0') << row.cloud_hash << std::dec << std::setfill('0') << ","
         << (row.prediction_received ? 1 : 0) << "," << row.prediction_stamp << ","
         << row.prediction_age << "," << (row.prediction_used ? 1 : 0) << ","
-        << row.prediction_source << "," << row.prediction_reason << ",";
+        << row.prediction_source << "," << row.prediction_reason << ","
+        << (row.local_imu_prior_enabled ? 1 : 0) << ","
+        << (row.local_imu_prior_used ? 1 : 0) << ","
+        << row.local_imu_prior_reason << ","
+        << row.local_imu_t0 << "," << row.local_imu_t1 << "," << row.local_imu_dt << ","
+        << row.local_imu_history_first_stamp << "," << row.local_imu_history_last_stamp << ","
+        << row.local_imu_delta_rotation_deg << ",";
+    appendPoseCsv(out, row.baseline_guess); out << ",";
+    appendPoseCsv(out, row.imu_rotation_guess); out << ","
+        << row.baseline_to_imu_translation_diff << ","
+        << row.baseline_to_imu_rotation_diff_deg << ",";
     appendPoseCsv(out, row.initial_guess); out << ",";
     appendPoseCsv(out, row.previous_pose); out << ",";
     appendPoseCsv(out, row.delta_pose); out << ",";
@@ -779,7 +816,7 @@ private:
   {
     if (!cloud || cloud->empty()) return;
     std::lock_guard<std::mutex> lock(mutex_);
-    if (!ndt_prediction_enable_)
+    if (!ndt_prediction_enable_ && !local_imu_rotation_prior_enable_)
     {
       handleCloudLocked(cloud, timing.start_stamp, callback_start, timing, header_seq, nullptr);
       return;
@@ -867,15 +904,18 @@ private:
     while (!pending_lidar_frames_.empty())
     {
       const PendingLidarFrame &front = pending_lidar_frames_.front();
-      const bool watermark_ready = has_prediction_watermark_ &&
-          latest_prediction_stamp_ >= front.reference_stamp;
+      const bool prediction_watermark_ready = !ndt_prediction_enable_ ||
+          (has_prediction_watermark_ && latest_prediction_stamp_ >= front.reference_stamp);
+      const bool imu_watermark_ready = !local_imu_rotation_prior_enable_ ||
+          (has_imu_watermark_ && latest_imu_stamp_ >= front.reference_stamp);
+      const bool watermark_ready = prediction_watermark_ready && imu_watermark_ready;
       if (!watermark_ready)
       {
         // Preserve the original first-frame initialization behavior when no
         // prediction has arrived yet.  Later frames wait for the sensor-time
         // watermark; this startup exception is intentionally kept separate so
         // Stage 2B does not change the initial pose algorithm.
-        if (!has_previous_pose_ && prediction_history_.empty())
+        if (!local_imu_rotation_prior_enable_ && !has_previous_pose_ && prediction_history_.empty())
         {
           PendingLidarFrame startup = front;
           pending_lidar_frames_.pop_front();
@@ -942,35 +982,74 @@ private:
     enqueueCloud(cloud, timing, callback_start, msg->header.seq);
   }
 
-  Eigen::Matrix3d integrateImuRotation(double t0, double t1) const
+  bool integrateImuRotationFromHistoryLocked(double t0,
+                                              double t1,
+                                              Eigen::Matrix3d &rotation,
+                                              std::string &reason) const
   {
-    if (t1 <= t0) return Eigen::Matrix3d::Identity();
-    std::deque<ImuSample> history;
+    rotation = Eigen::Matrix3d::Identity();
+    if (!std::isfinite(t0) || !std::isfinite(t1) || t1 <= t0)
     {
-      std::lock_guard<std::mutex> lock(mutex_);
-      history = imu_history_;
+      reason = "invalid_interval";
+      return false;
     }
-    if (history.size() < 2 || history.front().stamp > t0 || history.back().stamp < t1)
-      return Eigen::Matrix3d::Identity();
+    if (imu_history_.size() < 2)
+    {
+      reason = "insufficient_imu_history";
+      return false;
+    }
+    if (!std::isfinite(imu_history_.front().stamp) ||
+        !std::isfinite(imu_history_.back().stamp) ||
+        imu_history_.front().stamp > t0 || imu_history_.back().stamp < t1)
+    {
+      reason = "imu_history_coverage";
+      return false;
+    }
     Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
     double prev_t = t0;
-    Eigen::Vector3d prev_g = history.front().gyro;
-    for (size_t i = 1; i < history.size(); ++i)
+    Eigen::Vector3d prev_g = imu_history_.front().gyro;
+    for (size_t i = 1; i < imu_history_.size(); ++i)
     {
-      if (history[i].stamp <= t0) { prev_g = history[i].gyro; continue; }
-      const double seg_end = std::min(history[i].stamp, t1);
+      if (imu_history_[i].stamp <= t0) { prev_g = imu_history_[i].gyro; continue; }
+      const double seg_end = std::min(imu_history_[i].stamp, t1);
       if (seg_end > prev_t)
       {
-        const Eigen::Vector3d g = 0.5 * (prev_g + history[i].gyro);
+        const Eigen::Vector3d g = 0.5 * (prev_g + imu_history_[i].gyro);
         const double dt = seg_end - prev_t;
+        if (!g.allFinite() || !std::isfinite(dt) || dt <= 0.0)
+        {
+          reason = "nonfinite_imu_sample";
+          return false;
+        }
         const double angle = g.norm() * dt;
+        if (!std::isfinite(angle))
+        {
+          reason = "nonfinite_imu_integration";
+          return false;
+        }
         if (angle > 1e-12) R = R * Eigen::AngleAxisd(angle, g.normalized()).toRotationMatrix();
         prev_t = seg_end;
       }
-      prev_g = history[i].gyro;
+      prev_g = imu_history_[i].gyro;
       if (prev_t >= t1) break;
     }
-    return R;
+    if (prev_t < t1 - 1e-9 || !R.allFinite())
+    {
+      reason = "imu_integration_incomplete";
+      return false;
+    }
+    rotation = R;
+    reason = "applied";
+    return true;
+  }
+
+  Eigen::Matrix3d integrateImuRotation(double t0, double t1) const
+  {
+    std::lock_guard<std::mutex> lock(mutex_);
+    Eigen::Matrix3d rotation = Eigen::Matrix3d::Identity();
+    std::string reason;
+    integrateImuRotationFromHistoryLocked(t0, t1, rotation, reason);
+    return rotation;
   }
 
   // 将标准 PointCloud2 转为 PCL 点云并进入统一 NDT 处理流程。
@@ -993,6 +1072,7 @@ private:
     if (!cloud || cloud->empty()) return;
 
     DeterminismRow diagnostic_row;
+    diagnostic_row.local_imu_prior_enabled = local_imu_rotation_prior_enable_;
     if (determinism_diagnostic_enable_)
     {
       diagnostic_row.frame_index = ++determinism_frame_index_;
@@ -1043,6 +1123,11 @@ private:
       diagnostic_row.prediction_out_of_order_count = prediction_out_of_order_count_;
       diagnostic_row.prediction_duplicate_count = prediction_duplicate_count_;
       diagnostic_row.pending_overflow_count = pending_overflow_count_;
+      if (!imu_history_.empty())
+      {
+        diagnostic_row.local_imu_history_first_stamp = imu_history_.front().stamp;
+        diagnostic_row.local_imu_history_last_stamp = imu_history_.back().stamp;
+      }
       if (prediction_selection && prediction_selection->has_prediction)
       {
         diagnostic_row.prediction_received = true;
@@ -1092,6 +1177,8 @@ private:
     }
 
     Eigen::Matrix4d initial_guess = poseToMatrix(p_, R_);
+    Eigen::Matrix4d baseline_guess = initial_guess;
+    bool baseline_from_previous_pose = false;
     if (ndt_prediction_enable_ && prediction_selection)
     {
       const bool selected_prediction_valid = prediction_selection->has_prediction &&
@@ -1100,6 +1187,7 @@ private:
       if (selected_prediction_valid)
       {
         initial_guess = prediction_selection->prediction.pose;
+        baseline_guess = initial_guess;
         diagnostic_row.prediction_used = true;
         diagnostic_row.prediction_source = "timestamped_prediction";
         diagnostic_row.prediction_reason = "accepted_at_or_before";
@@ -1107,6 +1195,8 @@ private:
       else if (has_previous_pose_)
       {
         initial_guess = previous_pose_ * delta_pose_;
+        baseline_guess = initial_guess;
+        baseline_from_previous_pose = true;
         diagnostic_row.prediction_source = prediction_selection->has_prediction ?
             "previous_pose_delta_stale" : "previous_pose_delta_no_history";
         diagnostic_row.prediction_reason = prediction_selection->reason;
@@ -1122,6 +1212,8 @@ private:
     {
       // Prediction-disabled mode retains the original fallback behavior.
       initial_guess = previous_pose_ * delta_pose_;
+      baseline_guess = initial_guess;
+      baseline_from_previous_pose = true;
       diagnostic_row.prediction_source = "previous_pose_delta";
       diagnostic_row.prediction_reason = "prediction_disabled";
     }
@@ -1130,6 +1222,59 @@ private:
       diagnostic_row.prediction_source = "current_pose";
       diagnostic_row.prediction_reason = ndt_prediction_enable_ ?
           "prediction_selection_unavailable" : "prediction_disabled";
+    }
+
+    diagnostic_row.baseline_guess = baseline_guess;
+    if (!local_imu_rotation_prior_enable_)
+    {
+      diagnostic_row.local_imu_prior_reason = "disabled";
+    }
+    else if (!baseline_from_previous_pose)
+    {
+      diagnostic_row.local_imu_prior_reason = ndt_prediction_enable_ ?
+          "timestamped_prediction_active" : "no_previous_pose";
+      diagnostic_row.prediction_source = ndt_prediction_enable_ ?
+          "timestamped_prediction" : "current_pose_imu_unavailable";
+      diagnostic_row.prediction_reason = diagnostic_row.local_imu_prior_reason;
+    }
+    else if (!has_previous_pose_reference_stamp_)
+    {
+      diagnostic_row.local_imu_prior_reason = "no_previous_reference_stamp";
+      diagnostic_row.prediction_source = "previous_pose_delta_imu_unavailable";
+      diagnostic_row.prediction_reason = diagnostic_row.local_imu_prior_reason;
+    }
+    else
+    {
+      diagnostic_row.local_imu_t0 = previous_pose_reference_stamp_.toSec();
+      diagnostic_row.local_imu_t1 = timing.reference_stamp.toSec();
+      diagnostic_row.local_imu_dt = diagnostic_row.local_imu_t1 - diagnostic_row.local_imu_t0;
+      Eigen::Matrix3d delta_rotation = Eigen::Matrix3d::Identity();
+      std::string imu_reason;
+      const bool imu_ok = integrateImuRotationFromHistoryLocked(
+          diagnostic_row.local_imu_t0, diagnostic_row.local_imu_t1,
+          delta_rotation, imu_reason);
+      diagnostic_row.local_imu_prior_reason = imu_reason;
+      if (imu_ok)
+      {
+        initial_guess = baseline_guess;
+        initial_guess.block<3, 3>(0, 0) =
+            previous_pose_.block<3, 3>(0, 0) * delta_rotation;
+        diagnostic_row.local_imu_prior_used = true;
+        diagnostic_row.prediction_source = "local_imu_rotation_prior";
+        diagnostic_row.prediction_reason = "applied";
+        diagnostic_row.imu_rotation_guess = initial_guess;
+        diagnostic_row.local_imu_delta_rotation_deg = rotationAngleDeg(delta_rotation);
+        diagnostic_row.baseline_to_imu_translation_diff =
+            (initial_guess.block<3, 1>(0, 3) - baseline_guess.block<3, 1>(0, 3)).norm();
+        diagnostic_row.baseline_to_imu_rotation_diff_deg = rotationAngleDeg(
+            baseline_guess.block<3, 3>(0, 0).transpose() *
+            initial_guess.block<3, 3>(0, 0));
+      }
+      else
+      {
+        diagnostic_row.prediction_source = "previous_pose_delta_imu_unavailable";
+        diagnostic_row.prediction_reason = imu_reason;
+      }
     }
     diagnostic_row.initial_guess = initial_guess;
 
@@ -1251,6 +1396,8 @@ private:
         delta_pose_.setIdentity();
       }
       previous_pose_ = used_result;
+      previous_pose_reference_stamp_ = timing.reference_stamp;
+      has_previous_pose_reference_stamp_ = true;
       R_ = used_result.block<3, 3>(0, 0);
       p_ = used_result.block<3, 1>(0, 3);
       localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
@@ -1566,6 +1713,8 @@ private:
     Eigen::Vector3d gyro = Eigen::Vector3d::Zero();
   };
   std::deque<ImuSample> imu_history_;
+  bool has_imu_watermark_ = false;
+  ros::Time latest_imu_stamp_;
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud_;
   pcl::PointCloud<pcl::PointXYZ>::Ptr target_cloud_;
@@ -1577,6 +1726,8 @@ private:
   bool has_previous_pose_ = false;
   Eigen::Matrix4d previous_pose_ = Eigen::Matrix4d::Identity();
   Eigen::Matrix4d delta_pose_ = Eigen::Matrix4d::Identity();
+  bool has_previous_pose_reference_stamp_ = false;
+  ros::Time previous_pose_reference_stamp_;
   bool has_prediction_ = false;
   Eigen::Matrix4d imu_prediction_pose_ = Eigen::Matrix4d::Identity();
   ros::Time prediction_stamp_;
@@ -1609,6 +1760,7 @@ private:
   double ndt_step_limit_max_translation_ = 0.5;
   double ndt_step_limit_max_rotation_deg_ = 5.0;
   bool ndt_prediction_enable_ = true;
+  bool local_imu_rotation_prior_enable_ = false;
   double ndt_prediction_max_age_ = 0.25;
   double prediction_history_keep_sec_ = 2.0;
   size_t pending_lidar_max_frames_ = 50;

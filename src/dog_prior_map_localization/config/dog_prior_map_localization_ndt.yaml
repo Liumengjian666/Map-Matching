@@ -100,6 +100,9 @@ lidar_update:
   ndt_step_limit_max_translation: 0.5
   ndt_step_limit_max_rotation_deg: 5.0
   ndt_prediction_enable: true
+  # Stage 2E-B1: keep the baseline translation prediction but optionally
+  # replace only its rotation with the local IMU gyro integration.
+  local_imu_rotation_prior_enable: false
   ndt_prediction_max_age: 0.25
   # Stage 2C: reference time used to select a timestamped prediction for a
   # multi-point Livox scan.  "start" preserves Stage 2B behavior.
