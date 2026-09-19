@@ -1164,11 +1164,11 @@ private:
           Eigen::Matrix<double, 6, 6>::Constant(std::numeric_limits<double>::quiet_NaN());
       if (information_compute_enable_)
       {
-        publishInformation(stamp, false, false,
+        publishInformation(timing.reference_stamp, false, false,
                            std::numeric_limits<double>::quiet_NaN(),
                            invalid_values, invalid_vectors);
       }
-      publishDiagnostics(stamp, false, 0.0, preprocess_ms, localization_ms,
+      publishDiagnostics(timing.reference_stamp, false, 0.0, preprocess_ms, localization_ms,
                          static_cast<int>(source->size()), target_cloud_->size(), 0.0, 0);
       diagnostic_row.prediction_source = "not_evaluated";
       diagnostic_row.prediction_reason = "insufficient_points";
@@ -1338,7 +1338,7 @@ private:
       diagnostic_row.information_weak = information_weak;
       if (information_compute_enable_)
       {
-        publishInformation(stamp, information_valid, information_degenerate,
+        publishInformation(timing.reference_stamp, information_valid, information_degenerate,
                            information_condition, information_eigenvalues,
                            information_eigenvectors);
       }
@@ -1401,7 +1401,7 @@ private:
       R_ = used_result.block<3, 3>(0, 0);
       p_ = used_result.block<3, 1>(0, 3);
       localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
-      publishPose(stamp);
+      publishPose(timing.reference_stamp);
       if (step_limited)
       {
         pcl::PointCloud<pcl::PointXYZ> limited_aligned = transformCloud(source, used_result);
@@ -1420,7 +1420,7 @@ private:
           Eigen::Matrix<double, 6, 6>::Constant(std::numeric_limits<double>::quiet_NaN());
       if (information_compute_enable_)
       {
-        publishInformation(stamp, false, false,
+        publishInformation(timing.reference_stamp, false, false,
                            std::numeric_limits<double>::quiet_NaN(),
                            invalid_values, invalid_vectors);
       }
@@ -1439,7 +1439,7 @@ private:
     }
     pub_lidar_degeneracy_.publish(degeneracy_msg);
 
-    publishDiagnostics(stamp, ok, align_ms, preprocess_ms, localization_ms,
+    publishDiagnostics(timing.reference_stamp, ok, align_ms, preprocess_ms, localization_ms,
                        static_cast<int>(source->size()), target_cloud_->size(), score, iterations, step_limited);
     writeDeterminismRow(diagnostic_row);
     ROS_INFO_THROTTLE(2.0, "[DogPriorMap NDT] local_anisotropy=%.3f degenerate=%d",
