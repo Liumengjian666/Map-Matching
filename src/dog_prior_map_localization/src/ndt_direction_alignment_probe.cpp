@@ -191,9 +191,20 @@ Direction schurDirection(const std::unordered_map<std::string, std::string> &row
   result.vector.x() = number(row, "schur_" + type + "_v" + std::to_string(index) + "_x");
   result.vector.y() = number(row, "schur_" + type + "_v" + std::to_string(index) + "_y");
   result.vector.z() = number(row, "schur_" + type + "_v" + std::to_string(index) + "_z");
+  // Stage3A.3 runtime CSVs contain the weakest Schur vector but not the
+  // complete v1/v2 eigenbasis.  Keep index 0 usable for magnitude/1D
+  // diagnostics and leave unavailable higher-basis directions invalid rather
+  // than fabricating an orthogonal completion.
+  if ((!result.vector.allFinite() || result.vector.norm() < 1e-8) && index == 0)
+  {
+    result.vector.x() = number(row, "schur_" + type + "_weak_x");
+    result.vector.y() = number(row, "schur_" + type + "_weak_y");
+    result.vector.z() = number(row, "schur_" + type + "_weak_z");
+  }
   const double norm = result.vector.norm();
-  if (!std::isfinite(result.lambda) || !result.vector.allFinite() || norm < 1e-8)
+  if (!std::isfinite(result.lambda))
     throw std::runtime_error("invalid Schur eigenvector for " + type + " index " + std::to_string(index));
+  if (!result.vector.allFinite() || norm < 1e-8) return result;
   result.vector /= norm;
   return result;
 }
