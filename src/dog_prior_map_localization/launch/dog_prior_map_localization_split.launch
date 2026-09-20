@@ -1,6 +1,7 @@
 <launch>
   <arg name="config" default="$(find dog_prior_map_localization)/config/dog_prior_map_localization_ndt.yaml" />
   <arg name="rviz" default="false" />
+  <arg name="camera_enable" default="false" />
   <arg name="publish_path" default="true" />
   <arg name="runtime_csv_path" default="" />
   <arg name="ndt_diagnostics_csv_path" default="" />
@@ -48,6 +49,7 @@
   <param name="output/diagnostic_determinism_enable" value="$(arg diagnostic_determinism_enable)" />
   <param name="output/ndt_determinism_csv_path" value="$(arg ndt_determinism_csv_path)" />
   <param name="lidar_update/information_diagnostic_enable" value="$(arg information_diagnostic_enable)" />
+  <param name="camera_update/enable" value="$(arg camera_enable)" />
   <param name="camera_update/local_vio_metric_enable" value="$(arg local_vio_metric_enable)" />
   <param name="fusion/directional_enable" value="$(arg directional_fusion_enable)" />
   <param name="fusion/state_machine_enable" value="$(arg state_machine_enable)" />
