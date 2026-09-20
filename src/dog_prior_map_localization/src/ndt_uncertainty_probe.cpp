@@ -247,6 +247,31 @@ EigenDirection readDirection(const std::unordered_map<std::string, std::string> 
   return result;
 }
 
+// Stage3A.8 uses only the weakest direction. Stage3A.3 runtime CSVs expose
+// that direction as schur_*_weak_* but do not contain the complete v1/v2
+// basis. Keep the fallback local to sparse mode so the original full probe
+// contract is unchanged.
+EigenDirection readWeakDirection(const std::unordered_map<std::string, std::string> &row,
+                                 const std::string &type)
+{
+  EigenDirection result;
+  result.lambda = number(row, "schur_" + type + "_lambda_0");
+  result.vector.x() = static_cast<float>(number(row, "schur_" + type + "_v0_x"));
+  result.vector.y() = static_cast<float>(number(row, "schur_" + type + "_v0_y"));
+  result.vector.z() = static_cast<float>(number(row, "schur_" + type + "_v0_z"));
+  if (!result.vector.allFinite() || result.vector.norm() < 1e-5f)
+  {
+    result.vector.x() = static_cast<float>(number(row, "schur_" + type + "_weak_x"));
+    result.vector.y() = static_cast<float>(number(row, "schur_" + type + "_weak_y"));
+    result.vector.z() = static_cast<float>(number(row, "schur_" + type + "_weak_z"));
+  }
+  const float norm = result.vector.norm();
+  if (!std::isfinite(result.lambda) || !result.vector.allFinite() || norm < 1e-5f)
+    throw std::runtime_error("invalid sparse Schur weak direction for " + type);
+  result.vector /= norm;
+  return result;
+}
+
 Eigen::Matrix4f perturbPose(const Eigen::Matrix4f &center, const EigenDirection &direction,
                             const std::string &type, double delta)
 {
@@ -330,6 +355,161 @@ void writeCsvValue(std::ofstream &output, double value)
   else output << "nan";
 }
 
+struct SparseAxisStats
+{
+  double k_small = std::numeric_limits<double>::quiet_NaN();
+  double k_large = std::numeric_limits<double>::quiet_NaN();
+  double asym_small = std::numeric_limits<double>::quiet_NaN();
+  double asym_large = std::numeric_limits<double>::quiet_NaN();
+  double center_violation_small = std::numeric_limits<double>::quiet_NaN();
+  double center_violation_large = std::numeric_limits<double>::quiet_NaN();
+  double scale_consistency = std::numeric_limits<double>::quiet_NaN();
+  bool nonconcave_small = false;
+  bool nonconcave_large = false;
+};
+
+double sparseCurvature(double log_minus, double log_center, double log_plus, double delta)
+{
+  return -(log_plus - 2.0 * log_center + log_minus) / (delta * delta);
+}
+
+SparseAxisStats makeSparseStats(double log_center, double log_minus_small, double log_plus_small,
+                                double log_minus_large, double log_plus_large,
+                                double small_delta, double large_delta)
+{
+  SparseAxisStats stats;
+  stats.k_small = sparseCurvature(log_minus_small, log_center, log_plus_small, small_delta);
+  stats.k_large = sparseCurvature(log_minus_large, log_center, log_plus_large, large_delta);
+  stats.asym_small = std::abs(log_plus_small - log_minus_small);
+  stats.asym_large = std::abs(log_plus_large - log_minus_large);
+  stats.center_violation_small = std::max(log_plus_small, log_minus_small) - log_center;
+  stats.center_violation_large = std::max(log_plus_large, log_minus_large) - log_center;
+  stats.nonconcave_small = !std::isfinite(stats.k_small) || stats.k_small <= 0.0;
+  stats.nonconcave_large = !std::isfinite(stats.k_large) || stats.k_large <= 0.0;
+  if (!stats.nonconcave_small && !stats.nonconcave_large)
+    stats.scale_consistency = std::abs(std::log(stats.k_small / stats.k_large));
+  return stats;
+}
+
+void runSparseProbe(const std::string &frames_path, const std::string &map_path,
+                    const std::string &output_dir)
+{
+  const auto frames = readCsv(frames_path);
+  if (frames.empty()) throw std::runtime_error("selected frame CSV is empty");
+
+  CloudPtr raw_map(new Cloud());
+  if (pcl::io::loadPCDFile(map_path, *raw_map) != 0) throw std::runtime_error("failed to load map");
+  CloudPtr finite_map(new Cloud());
+  for (const auto &point : raw_map->points)
+    if (std::isfinite(point.x) && std::isfinite(point.y) && std::isfinite(point.z)) finite_map->push_back(point);
+  finalizeCloud(finite_map);
+  CloudPtr map_cloud = voxelDown(finite_map, 0.15, 0.15, 0);
+  CloudPtr target_cloud = voxelDown(map_cloud, 0.15, 0.15, 0);
+  if (target_cloud->size() != 459154U)
+    throw std::runtime_error("target size mismatch: " + std::to_string(target_cloud->size()));
+
+  ProbeNdt ndt;
+  ndt.setResolution(0.8);
+  ndt.setInputTarget(target_cloud);
+  std::ofstream samples(output_dir + "/sparse_score_samples.csv");
+  std::ofstream features(output_dir + "/sparse_features.csv");
+  std::ofstream performance(output_dir + "/performance.csv");
+  if (!samples.is_open() || !features.is_open() || !performance.is_open())
+    throw std::runtime_error("failed to open Stage3A.8 output files");
+  samples << "frame_index,target_rel,t_rel,sample_type,axis,offset,offset_unit,raw_ndt_score,log_score,score_semantics\n";
+  features << "frame_index,target_rel,t_rel,translation_k_small,translation_k_large,translation_asym_small,"
+      "translation_asym_large,translation_center_violation_small,translation_center_violation_large,"
+      "translation_scale_consistency,translation_nonconcave_small,translation_nonconcave_large,"
+      "rotation_k_small,rotation_k_large,rotation_asym_small,rotation_asym_large,"
+      "rotation_center_violation_small,rotation_center_violation_large,rotation_scale_consistency,"
+      "rotation_nonconcave_small,rotation_nonconcave_large,center_score,sparse_cell_count,sparse_eval_ms\n";
+  performance << "frames,target_size,score_cells,mean_cell_ms,p95_cell_ms,max_cell_ms,"
+      "mean_9cell_frame_ms,p95_9cell_frame_ms,max_9cell_frame_ms\n";
+
+  std::vector<double> cell_ms;
+  std::vector<double> frame_ms;
+  for (const auto &row : frames)
+  {
+    CloudPtr raw(new Cloud());
+    const std::string pcd_path = row.at("raw_pcd_path");
+    if (pcl::io::loadPCDFile(pcd_path, *raw) != 0) throw std::runtime_error("failed to load scan: " + pcd_path);
+    finalizeCloud(raw);
+    CloudPtr source = preprocess(raw);
+    std::ostringstream hash_stream;
+    hash_stream << std::hex << std::setw(16) << std::setfill('0') << stableCloudHash(source);
+    if (source->size() != static_cast<size_t>(number(row, "cloud_size_after_filter")) ||
+        hash_stream.str() != row.at("cloud_hash"))
+      throw std::runtime_error("runtime source preprocessing mismatch at frame " + row.at("frame_index"));
+    ndt.setInputSource(source);
+    const Eigen::Matrix4f pose = poseFromRow(row);
+    const EigenDirection translation = readWeakDirection(row, "translation");
+    const EigenDirection rotation = readWeakDirection(row, "rotation");
+    std::vector<double> score_times;
+    const auto evaluate = [&](const std::string &sample_type, const std::string &axis,
+                              double offset, const std::string &unit, const EigenDirection *direction) {
+      const auto start = std::chrono::steady_clock::now();
+      const double score = direction == nullptr ? ndt.scoreAtPose(pose) :
+          ndt.scoreAtPose(perturbPose(pose, *direction, axis == "rotation" ? "rotation" : "translation", offset));
+      const double elapsed = std::chrono::duration<double, std::milli>(
+          std::chrono::steady_clock::now() - start).count();
+      if (!std::isfinite(score)) throw std::runtime_error("non-finite sparse PCL NDT score");
+      score_times.push_back(elapsed);
+      samples << row.at("frame_index") << ',' << row.at("target_rel") << ',' << row.at("t_rel") << ','
+              << sample_type << ',' << axis << ',';
+      writeCsvValue(samples, offset); samples << ',' << unit << ',';
+      writeCsvValue(samples, score); samples << ',';
+      writeCsvValue(samples, std::log(std::max(score, std::numeric_limits<double>::min())));
+      samples << ',' << kScoreSemantics << '\n';
+      return score;
+    };
+    const double center_score = evaluate("center", "all", 0.0, "none", nullptr);
+    const double t_minus_small = evaluate("translation", "translation", -0.10, "m", &translation);
+    const double t_plus_small = evaluate("translation", "translation", 0.10, "m", &translation);
+    const double t_minus_large = evaluate("translation", "translation", -0.20, "m", &translation);
+    const double t_plus_large = evaluate("translation", "translation", 0.20, "m", &translation);
+    const double r_minus_small = evaluate("rotation", "rotation", -0.5, "deg", &rotation);
+    const double r_plus_small = evaluate("rotation", "rotation", 0.5, "deg", &rotation);
+    const double r_minus_large = evaluate("rotation", "rotation", -1.0, "deg", &rotation);
+    const double r_plus_large = evaluate("rotation", "rotation", 1.0, "deg", &rotation);
+    const auto log_score = [](double value) { return std::log(std::max(value, std::numeric_limits<double>::min())); };
+    const double log_center = log_score(center_score);
+    const SparseAxisStats ts = makeSparseStats(log_center, log_score(t_minus_small), log_score(t_plus_small),
+                                                log_score(t_minus_large), log_score(t_plus_large), 0.10, 0.20);
+    const double rad = M_PI / 180.0;
+    const SparseAxisStats rs = makeSparseStats(log_center, log_score(r_minus_small), log_score(r_plus_small),
+                                                log_score(r_minus_large), log_score(r_plus_large), 0.5 * rad, 1.0 * rad);
+    const double sparse_eval_ms = std::accumulate(score_times.begin(), score_times.end(), 0.0);
+    features << row.at("frame_index") << ',' << row.at("target_rel") << ',' << row.at("t_rel") << ',';
+    const auto write_stats = [&features](const SparseAxisStats &s) {
+      writeCsvValue(features, s.k_small); features << ','; writeCsvValue(features, s.k_large); features << ',';
+      writeCsvValue(features, s.asym_small); features << ','; writeCsvValue(features, s.asym_large); features << ',';
+      writeCsvValue(features, s.center_violation_small); features << ','; writeCsvValue(features, s.center_violation_large); features << ',';
+      writeCsvValue(features, s.scale_consistency); features << ',' << (s.nonconcave_small ? 1 : 0) << ',' << (s.nonconcave_large ? 1 : 0) << ',';
+    };
+    write_stats(ts); write_stats(rs); writeCsvValue(features, center_score); features << ',' << score_times.size() << ',';
+    writeCsvValue(features, sparse_eval_ms); features << '\n';
+    cell_ms.insert(cell_ms.end(), score_times.begin(), score_times.end());
+    frame_ms.push_back(sparse_eval_ms);
+  }
+  auto percentile = [](std::vector<double> values, double fraction) {
+    if (values.empty()) return std::numeric_limits<double>::quiet_NaN();
+    std::sort(values.begin(), values.end());
+    const size_t index = std::min(values.size() - 1, static_cast<size_t>(std::ceil(fraction * values.size()) - 1.0));
+    return values[index];
+  };
+  const auto mean = [](const std::vector<double> &values) {
+    return values.empty() ? std::numeric_limits<double>::quiet_NaN() :
+        std::accumulate(values.begin(), values.end(), 0.0) / values.size();
+  };
+  performance << frames.size() << ',' << target_cloud->size() << ',' << cell_ms.size() << ','
+              << mean(cell_ms) << ',' << percentile(cell_ms, 0.95) << ','
+              << (cell_ms.empty() ? std::numeric_limits<double>::quiet_NaN() : *std::max_element(cell_ms.begin(), cell_ms.end())) << ','
+              << mean(frame_ms) << ',' << percentile(frame_ms, 0.95) << ','
+              << (frame_ms.empty() ? std::numeric_limits<double>::quiet_NaN() : *std::max_element(frame_ms.begin(), frame_ms.end())) << '\n';
+  std::cout << "frames=" << frames.size() << " target_size=" << target_cloud->size()
+            << " score_cells=" << cell_ms.size() << " output_dir=" << output_dir << '\n';
+}
+
 }  // namespace
 
 int main(int argc, char **argv)
@@ -340,6 +520,11 @@ int main(int argc, char **argv)
     const std::string frames_path = argv[1];
     const std::string map_path = argv[2];
     const std::string output_dir = argv[3];
+    if (argc >= 5 && std::string(argv[4]) == "sparse")
+    {
+      runSparseProbe(frames_path, map_path, output_dir);
+      return 0;
+    }
     const auto frames = readCsv(frames_path);
     if (frames.empty()) throw std::runtime_error("selected frame CSV is empty");
 
