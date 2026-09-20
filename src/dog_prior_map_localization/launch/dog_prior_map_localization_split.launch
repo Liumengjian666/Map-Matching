@@ -39,6 +39,7 @@
   <param name="ndt_observation/oosm_max_alignment_sec" value="$(arg oosm_max_alignment_sec)" />
   <param name="lidar_update/scan_reference_time" value="$(arg scan_reference_time)" />
   <param name="lidar_update/enable" value="false" />
+  <param name="map/load_in_ekf" value="false" />
   <param name="output/runtime_csv_path" value="$(arg runtime_csv_path)" />
   <param name="output/publish_path" value="$(arg publish_path)" />
   <param name="output/oosm_csv_path" value="$(arg oosm_csv_path)" />

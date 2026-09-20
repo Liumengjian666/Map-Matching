@@ -86,6 +86,12 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
 
 
   lidar_enable_ = getParam<bool>("lidar_update/enable", true);
+  const bool load_prior_map_in_ekf = getParam<bool>("map/load_in_ekf", true);
+  if (lidar_enable_ && !load_prior_map_in_ekf)
+  {
+    ROS_FATAL("[DogPriorMap C++] map/load_in_ekf=false is incompatible with lidar_update/enable=true");
+    throw std::runtime_error("EKF lidar update requires map/load_in_ekf=true");
+  }
   prior_map_update_enable_ = getParam<bool>("lidar_update/prior_map_update_enable", true);
   registration_method_ = getParam<std::string>("lidar_update/registration_method", "point_to_plane");
   update_every_n_scans_ = std::max(1, getParam<int>("lidar_update/update_every_n_scans", 1));
@@ -284,7 +290,14 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   // ------------------------- 2. 加载先验地图 -------------------------
   // C++版本为了少依赖Python/npz库，直接读取FAST-LIVO2输出的PCD。
   // 读入后再次按yaml里的voxel_size降采样，并建立KDTree，后续匹配只做最近邻查询。
-  loadPriorMap();
+  if (load_prior_map_in_ekf)
+  {
+    loadPriorMap();
+  }
+  else
+  {
+    ROS_INFO("[DogPriorMap C++] prior map loading disabled for split EKF");
+  }
 
   // ------------------------- 3. ROS发布和订阅 -------------------------
   pub_high_ = nh_.advertise<nav_msgs::Odometry>(odom_high_rate_topic_, 50);
@@ -305,11 +318,14 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     pub_diagnostics_ = nh_.advertise<diagnostic_msgs::DiagnosticArray>(diagnostics_topic_, 5);
   }
 
-  sensor_msgs::PointCloud2 prior_map_msg;
-  pcl::toROSMsg(*map_cloud_, prior_map_msg);
-  prior_map_msg.header.stamp = ros::Time::now();
-  prior_map_msg.header.frame_id = map_frame_;
-  pub_prior_map_.publish(prior_map_msg);
+  if (map_cloud_)
+  {
+    sensor_msgs::PointCloud2 prior_map_msg;
+    pcl::toROSMsg(*map_cloud_, prior_map_msg);
+    prior_map_msg.header.stamp = ros::Time::now();
+    prior_map_msg.header.frame_id = map_frame_;
+    pub_prior_map_.publish(prior_map_msg);
+  }
   path_high_.header.frame_id = map_frame_;
   path_corr_.header.frame_id = map_frame_;
 
@@ -338,8 +354,10 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   {
     sub_image_ = nh_.subscribe(image_topic_, 2, &DogPriorMapEkfNode::imageCallback, this);
   }
-  ROS_INFO("[DogPriorMap C++] node started: map=%zu pts, imu=%s, lidar=%s",
-           map_cloud_->size(), imu_topic_.c_str(), lidar_topic_.c_str());
+  const std::string map_status = map_cloud_ ?
+      (std::to_string(map_cloud_->size()) + " pts") : "disabled";
+  ROS_INFO("[DogPriorMap C++] node started: map=%s, imu=%s, lidar=%s",
+           map_status.c_str(), imu_topic_.c_str(), lidar_topic_.c_str());
   ROS_INFO("[DogPriorMap C++] directional fusion=%d state machine=%d eigen ratio=%.4f",
            directional_fusion_enable_ ? 1 : 0,
            state_machine_enable_ ? 1 : 0,

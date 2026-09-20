@@ -565,8 +565,15 @@ public:
       sub_livox_ = nh_.subscribe(lidar_topic_, lidar_subscriber_queue_size_,
                                  &DogPriorMapNdtNode::livoxCallback, this);
     }
-    sub_prediction_ = nh_.subscribe(prediction_topic_, prediction_subscriber_queue_size_,
-                                    &DogPriorMapNdtNode::predictionCallback, this);
+    if (ndt_prediction_enable_)
+    {
+      sub_prediction_ = nh_.subscribe(prediction_topic_, prediction_subscriber_queue_size_,
+                                      &DogPriorMapNdtNode::predictionCallback, this);
+    }
+    else
+    {
+      ROS_INFO("[DogPriorMap NDT] EKF prediction input disabled; prediction subscriber/history inactive");
+    }
     sub_imu_ = nh_.subscribe(imu_topic_, 500, &DogPriorMapNdtNode::imuCallback, this);
 
     ROS_INFO("[DogPriorMap NDT] started: map=%s target=%zu lidar=%s output=%s",
