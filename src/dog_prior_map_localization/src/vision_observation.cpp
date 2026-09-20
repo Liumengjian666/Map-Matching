@@ -762,7 +762,7 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
   std::string oosm_result = oosm_enable_ ? "NOT_DELAYED" : "DISABLED";
   bool oosm_active = false;
   FilterStateSnapshot state_before_oosm;
-  std::deque<FilterStateSnapshot> history_before_oosm;
+  StateHistory history_before_oosm;
   std::vector<ImuSample> replay_samples;
   const double last_ndt_time_before = last_ndt_observation_time_;
   const Eigen::Vector3d last_ndt_p_before = last_ndt_observation_p_map_;
@@ -854,7 +854,7 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
       writeOosmResult("NO_HISTORY");
       return;
     }
-    rollback_stamp = state_history_[rollback_index].stamp;
+    rollback_stamp = state_history_.at(rollback_index).stamp;
     if (alignment_error > oosm_max_alignment_sec_ + 1e-9)
     {
       writeOosmResult("ALIGNMENT_TOO_LARGE");
@@ -897,7 +897,7 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
     state_before_oosm.P = P_;
     history_before_oosm = state_history_;
     eraseStateHistoryAfter(rollback_stamp);
-    restoreStateSnapshot(state_history_[rollback_index]);
+    restoreStateSnapshot(state_history_.at(rollback_index));
     state_stamp_ = rollback_stamp;
     oosm_active = true;
     oosm_result = "APPLIED";

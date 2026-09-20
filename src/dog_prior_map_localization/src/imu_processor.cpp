@@ -81,13 +81,6 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
 void DogPriorMapEkfNode::saveStateSnapshot(double stamp)
 {
   if (!oosm_enable_ || !has_state_stamp_ || !std::isfinite(stamp)) return;
-  if (!state_history_.empty() && stamp < state_history_.back().stamp - 1e-9) return;
-
-  while (!state_history_.empty() &&
-         std::abs(state_history_.back().stamp - stamp) <= 1e-9)
-  {
-    state_history_.pop_back();
-  }
 
   FilterStateSnapshot snapshot;
   snapshot.stamp = stamp;
@@ -97,7 +90,7 @@ void DogPriorMapEkfNode::saveStateSnapshot(double stamp)
   snapshot.ba = ba_;
   snapshot.bg = bg_;
   snapshot.P = P_;
-  state_history_.push_back(snapshot);
+  state_history_.insertMonotonic(snapshot);
   pruneStateHistory(stamp);
 }
 
@@ -114,11 +107,7 @@ void DogPriorMapEkfNode::restoreStateSnapshot(const FilterStateSnapshot &snapsho
 void DogPriorMapEkfNode::pruneStateHistory(double current_stamp)
 {
   if (!oosm_enable_ || !std::isfinite(current_stamp)) return;
-  while (!state_history_.empty() &&
-         current_stamp - state_history_.front().stamp > imu_history_keep_sec_)
-  {
-    state_history_.pop_front();
-  }
+  state_history_.pruneOlderThan(current_stamp, imu_history_keep_sec_);
 }
 
 bool DogPriorMapEkfNode::findStateSnapshotAtOrBefore(double target_stamp,
@@ -128,27 +117,13 @@ bool DogPriorMapEkfNode::findStateSnapshotAtOrBefore(double target_stamp,
   index = 0;
   alignment_error = std::numeric_limits<double>::quiet_NaN();
   if (!oosm_enable_ || !std::isfinite(target_stamp) || state_history_.empty()) return false;
-
-  for (size_t i = state_history_.size(); i > 0; --i)
-  {
-    const FilterStateSnapshot &snapshot = state_history_[i - 1];
-    if (snapshot.stamp <= target_stamp + 1e-9)
-    {
-      index = i - 1;
-      alignment_error = std::max(0.0, target_stamp - snapshot.stamp);
-      return std::isfinite(alignment_error);
-    }
-  }
-  return false;
+  return state_history_.findAtOrBefore(target_stamp, index, alignment_error);
 }
 
 void DogPriorMapEkfNode::eraseStateHistoryAfter(double stamp)
 {
   if (!oosm_enable_ || !std::isfinite(stamp)) return;
-  while (!state_history_.empty() && state_history_.back().stamp > stamp + 1e-9)
-  {
-    state_history_.pop_back();
-  }
+  state_history_.eraseAfter(stamp);
 }
 
 // 惯性传播：扣除零偏后积分姿态，并更新速度、位置及 15 维协方差。

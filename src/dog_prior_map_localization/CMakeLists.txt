@@ -39,6 +39,7 @@ add_executable(dog_prior_map_ekf_node_cpp
   src/dog_prior_map_ekf_node.cpp
   src/dog_prior_map_ekf_node_core.cpp
   src/map_loader.cpp
+  src/core/state_history.cpp
   src/imu_processor.cpp
   src/lidar_matcher.cpp
   src/vision_observation.cpp

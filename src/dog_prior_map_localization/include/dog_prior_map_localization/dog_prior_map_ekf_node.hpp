@@ -44,6 +44,7 @@
 #include <tf/transform_broadcaster.h>
 
 #include "dog_prior_map_localization/core/estimator_types.hpp"
+#include "dog_prior_map_localization/core/state_history.hpp"
 
 namespace dog_prior_map_localization
 {
@@ -278,7 +279,7 @@ private:
   bool lidar_deskew_translation_enable_ = true;
   double lidar_offset_time_scale_ = 1e-9;
   double imu_history_keep_sec_ = 2.0;
-  std::deque<FilterStateSnapshot> state_history_;
+  StateHistory state_history_;
 
   bool ndt_observation_enable_ = false;
   bool oosm_enable_ = false;
