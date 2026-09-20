@@ -43,32 +43,10 @@
 #include <std_msgs/Float64MultiArray.h>
 #include <tf/transform_broadcaster.h>
 
+#include "dog_prior_map_localization/core/estimator_types.hpp"
+
 namespace dog_prior_map_localization
 {
-
-using Matrix15d = Eigen::Matrix<double, 15, 15>;
-using Vector15d = Eigen::Matrix<double, 15, 1>;
-using Matrix3x15d = Eigen::Matrix<double, 3, 15>;
-
-struct ImuSample
-{
-  // IMU 样本时间戳，单位为秒。
-  double stamp = 0.0;
-  // 加速度计和陀螺仪原始测量，均位于 IMU/机体系。
-  Eigen::Vector3d acc = Eigen::Vector3d::Zero();
-  Eigen::Vector3d gyro = Eigen::Vector3d::Zero();
-};
-
-struct FilterStateSnapshot
-{
-  double stamp = 0.0;
-  Eigen::Vector3d p = Eigen::Vector3d::Zero();
-  Eigen::Vector3d v = Eigen::Vector3d::Zero();
-  Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
-  Eigen::Vector3d ba = Eigen::Vector3d::Zero();
-  Eigen::Vector3d bg = Eigen::Vector3d::Zero();
-  Matrix15d P = Matrix15d::Identity();
-};
 
 /// 将三维向量转换为叉乘对应的反对称矩阵。
 Eigen::Matrix3d skew(const Eigen::Vector3d &v);
