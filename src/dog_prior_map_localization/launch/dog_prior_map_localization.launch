@@ -1,4 +1,7 @@
 <launch>
+  <!-- LEGACY / NOT DELIVERY ENTRYPOINT: the validated delivery path is
+       dog_prior_map_localization_split.launch.  This integrated launch is
+       retained for historical experiments without changing its behavior. -->
   <!-- Use the same map/lidar coordinate chain as the validated split NDT
        pipeline.  The integrated node only changes the published topics and
        keeps the same camera_init -> livox_frame numeric pose convention. -->

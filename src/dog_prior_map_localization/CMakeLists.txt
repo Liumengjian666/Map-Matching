@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(dog_prior_map_localization)
 
+option(
+  DOG_PRIOR_BUILD_RESEARCH_TOOLS
+  "Build offline research and diagnostic tools"
+  OFF
+)
+
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
@@ -81,29 +87,29 @@ add_dependencies(dog_prior_map_ndt_node_cpp
   ${catkin_EXPORTED_TARGETS}
 )
 
-# Offline-only NDT objective probe. It is intentionally independent of the
-# runtime localization nodes and is never linked into their execution path.
-add_executable(ndt_uncertainty_probe
-  src/ndt_uncertainty_probe.cpp
-)
+if(DOG_PRIOR_BUILD_RESEARCH_TOOLS)
+  # Offline-only probes are intentionally independent of the runtime
+  # localization nodes and are never linked into their execution path.
+  add_executable(ndt_uncertainty_probe
+    tools/offline/ndt_uncertainty_probe.cpp
+  )
 
-target_link_libraries(ndt_uncertainty_probe
-  ${PCL_LIBRARIES}
-  /usr/lib/x86_64-linux-gnu/libusb-1.0.so
-)
+  target_link_libraries(ndt_uncertainty_probe
+    ${PCL_LIBRARIES}
+    /usr/lib/x86_64-linux-gnu/libusb-1.0.so
+  )
 
-# Offline-only Stage3A.6 local covariance/eigenvector alignment probe.
-add_executable(ndt_direction_alignment_probe
-  src/ndt_direction_alignment_probe.cpp
-)
+  add_executable(ndt_direction_alignment_probe
+    tools/offline/ndt_direction_alignment_probe.cpp
+  )
 
-target_link_libraries(ndt_direction_alignment_probe
-  ${PCL_LIBRARIES}
-  /usr/lib/x86_64-linux-gnu/libusb-1.0.so
-)
+  target_link_libraries(ndt_direction_alignment_probe
+    ${PCL_LIBRARIES}
+    /usr/lib/x86_64-linux-gnu/libusb-1.0.so
+  )
+endif()
 
 catkin_install_python(PROGRAMS
-  scripts/dog_prior_map_ekf_node.py
   scripts/pcd_to_npz_map.py
   scripts/evaluate_runtime_and_accuracy.py
   scripts/build_livox_keyframe_scan_db.py
@@ -115,6 +121,12 @@ install(DIRECTORY config launch docs rviz
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
-install(TARGETS dog_prior_map_ekf_node_cpp dog_prior_map_ndt_node_cpp ndt_uncertainty_probe ndt_direction_alignment_probe
+install(TARGETS dog_prior_map_ekf_node_cpp dog_prior_map_ndt_node_cpp
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
+if(DOG_PRIOR_BUILD_RESEARCH_TOOLS)
+  install(TARGETS ndt_uncertainty_probe ndt_direction_alignment_probe
+    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+  )
+endif()
