@@ -10,7 +10,6 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <vector>
 
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
@@ -22,30 +21,18 @@
 #include <nav_msgs/Odometry.h>
 #include <nav_msgs/Path.h>
 #include <pcl/filters/voxel_grid.h>
-#include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/registration/ndt.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <sensor_msgs/Imu.h>
-#include <std_msgs/Float64.h>
-#include <std_msgs/Float64MultiArray.h>
 #include <tf/transform_broadcaster.h>
 
 namespace dog_prior_map_localization
 {
 namespace
 {
-Eigen::Matrix3d skew(const Eigen::Vector3d &v)
-{
-  Eigen::Matrix3d m;
-  m << 0.0, -v.z(), v.y(),
-       v.z(), 0.0, -v.x(),
-       -v.y(), v.x(), 0.0;
-  return m;
-}
-
 // 更新点云尺寸和稠密属性，确保后续 PCL 算法获得合法的组织信息。
 void finalizeCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud)
 {
@@ -71,338 +58,6 @@ double rotationAngleDeg(const Eigen::Matrix3d &R)
   return std::abs(angle_axis.angle()) * 180.0 / M_PI;
 }
 
-bool estimateWeakDirection(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud,
-                           const Eigen::Vector3d &center,
-                           double radius,
-                           double min_ratio,
-                           Eigen::Vector3d &weak_direction,
-                           double &anisotropy_ratio)
-{
-  if (!cloud || cloud->empty()) return false;
-  Eigen::Vector3d mean = Eigen::Vector3d::Zero();
-  int count = 0;
-  const double radius_sq = radius > 0.0 ? radius * radius : std::numeric_limits<double>::infinity();
-  for (const auto &pt : cloud->points)
-  {
-    const Eigen::Vector3d d(pt.x - center.x(), pt.y - center.y(), pt.z - center.z());
-    if (d.squaredNorm() > radius_sq) continue;
-    mean += d;
-    ++count;
-  }
-  // 局部子图在稀疏走廊或地图边缘可能只有几十个点；只要样本足够
-  // 支撑一个稳定的 3D 协方差估计，就允许进入退化判定。
-  if (count < 20) return false;
-  mean /= static_cast<double>(count);
-  Eigen::Matrix3d covariance = Eigen::Matrix3d::Zero();
-  for (const auto &pt : cloud->points)
-  {
-    const Eigen::Vector3d d(pt.x - center.x(), pt.y - center.y(), pt.z - center.z());
-    if (d.squaredNorm() > radius_sq) continue;
-    const Eigen::Vector3d centered = d - mean;
-    covariance += centered * centered.transpose();
-  }
-  covariance /= static_cast<double>(count);
-  Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> solver(covariance);
-  if (solver.info() != Eigen::Success) return false;
-  const Eigen::Vector3d values = solver.eigenvalues();
-  const double middle = std::max(values(1), 1e-6);
-  anisotropy_ratio = values(2) / middle;
-  if (!std::isfinite(anisotropy_ratio) || anisotropy_ratio < min_ratio) return false;
-  weak_direction = solver.eigenvectors().col(2).normalized();
-  return weak_direction.allFinite();
-}
-
-// Build a lightweight 6-DoF point-to-point information matrix at the NDT
-// solution.  This is independent of PCL's internal NDT covariance and gives
-// us an explicit observability test for the corridor experiment.
-bool estimateInformationWeakDirection(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
-                                      const pcl::PointCloud<pcl::PointXYZ>::Ptr &target,
-                                      const Eigen::Matrix4d &pose,
-                                      double max_correspondence_distance,
-                                      double rotation_scale_m,
-                                      Eigen::Matrix<double, 6, 1> &weak,
-                                      Eigen::Matrix<double, 6, 1> &eigenvalues,
-                                      Eigen::Matrix<double, 6, 6> &eigenvectors,
-                                      Eigen::Matrix<double, 6, 6> &information_matrix,
-                                      double &condition)
-{
-  eigenvalues.setConstant(std::numeric_limits<double>::quiet_NaN());
-  eigenvectors.setConstant(std::numeric_limits<double>::quiet_NaN());
-  information_matrix.setConstant(std::numeric_limits<double>::quiet_NaN());
-  if (!source || !target || source->empty() || target->empty() ||
-      !std::isfinite(rotation_scale_m) || rotation_scale_m <= 0.0) return false;
-  pcl::KdTreeFLANN<pcl::PointXYZ> tree;
-  tree.setInputCloud(target);
-  Eigen::Matrix<double, 6, 6> H = Eigen::Matrix<double, 6, 6>::Zero();
-  std::vector<int> idx(1);
-  std::vector<float> dist2(1);
-  const Eigen::Matrix3d R = pose.block<3, 3>(0, 0);
-  const Eigen::Vector3d p = pose.block<3, 1>(0, 3);
-  int used = 0;
-  for (const auto &pt : source->points)
-  {
-    const Eigen::Vector3d pb(pt.x, pt.y, pt.z);
-    const Eigen::Vector3d pw = R * pb + p;
-    pcl::PointXYZ query(pw.x(), pw.y(), pw.z());
-    if (tree.nearestKSearch(query, 1, idx, dist2) <= 0) continue;
-    if (max_correspondence_distance > 0.0 && std::sqrt(dist2[0]) > max_correspondence_distance) continue;
-    Eigen::Matrix<double, 3, 6> J = Eigen::Matrix<double, 3, 6>::Zero();
-    J.block<3, 3>(0, 0) = Eigen::Matrix3d::Identity();
-    // Publish a left/world perturbation around the scan pose.  The lever arm
-    // R*pb is independent of the arbitrary map origin and matches the EKF's
-    // absolute correction [delta-p_world, delta-theta_world].  Rotation is
-    // represented internally as scale[m] * angle[rad] so all six coordinates
-    // have comparable units before eigendecomposition.
-    J.block<3, 3>(0, 3) = -skew(R * pb) / rotation_scale_m;
-    H.noalias() += J.transpose() * J;
-    ++used;
-  }
-  if (used < 20) return false;
-  Eigen::SelfAdjointEigenSolver<Eigen::Matrix<double, 6, 6>> solver(H);
-  if (solver.info() != Eigen::Success) return false;
-  const auto eval = solver.eigenvalues();
-  if (!eval.allFinite()) return false;
-  const double min_eval = std::max(eval[0], 1e-12);
-  const double max_eval = std::max(eval[5], 1e-12);
-  condition = max_eval / min_eval;
-  if (!std::isfinite(condition)) return false;
-  eigenvalues = eval;
-  eigenvectors = solver.eigenvectors();
-  information_matrix = H;
-  weak = eigenvectors.col(0).normalized();
-  return weak.allFinite() && std::isfinite(condition);
-}
-
-struct SchurObservabilityResult
-{
-  bool valid = false;
-  std::string invalid_reason = "not_computed";
-  int used_points = 0;
-  int planar_points = 0;
-  Eigen::Vector3d h_tt_eigenvalues = Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
-  Eigen::Vector3d h_rr_eigenvalues = Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
-  Eigen::Vector3d translation_eigenvalues = Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
-  Eigen::Vector3d rotation_eigenvalues = Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
-  Eigen::Matrix3d translation_eigenvectors = Eigen::Matrix3d::Constant(std::numeric_limits<double>::quiet_NaN());
-  Eigen::Matrix3d rotation_eigenvectors = Eigen::Matrix3d::Constant(std::numeric_limits<double>::quiet_NaN());
-  Eigen::Vector3d translation_weak = Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
-  Eigen::Vector3d rotation_weak = Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
-  double translation_eigen_gap_01 = std::numeric_limits<double>::quiet_NaN();
-  double translation_eigen_gap_12 = std::numeric_limits<double>::quiet_NaN();
-  double rotation_eigen_gap_01 = std::numeric_limits<double>::quiet_NaN();
-  double rotation_eigen_gap_12 = std::numeric_limits<double>::quiet_NaN();
-  double translation_condition = std::numeric_limits<double>::quiet_NaN();
-  double rotation_condition = std::numeric_limits<double>::quiet_NaN();
-  double translation_min_max_ratio = std::numeric_limits<double>::quiet_NaN();
-  double rotation_min_max_ratio = std::numeric_limits<double>::quiet_NaN();
-  double knn_normal_ms = std::numeric_limits<double>::quiet_NaN();
-  double hessian_schur_ms = std::numeric_limits<double>::quiet_NaN();
-};
-
-Eigen::Matrix3d stableSymmetricPseudoInverse(const Eigen::Matrix3d &matrix,
-                                             double relative_epsilon,
-                                             bool &finite)
-{
-  finite = false;
-  Eigen::Matrix3d result = Eigen::Matrix3d::Zero();
-  Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> solver(0.5 * (matrix + matrix.transpose()));
-  if (solver.info() != Eigen::Success) return result;
-  const Eigen::Vector3d values = solver.eigenvalues();
-  if (!values.allFinite()) return result;
-  const double max_value = std::max(0.0, values.maxCoeff());
-  if (!std::isfinite(max_value)) return result;
-  const double threshold = std::max(0.0, relative_epsilon) * max_value;
-  for (int i = 0; i < 3; ++i)
-  {
-    if (values(i) > threshold && values(i) > 0.0)
-    {
-      result.noalias() += (1.0 / values(i)) *
-          (solver.eigenvectors().col(i) * solver.eigenvectors().col(i).transpose());
-    }
-  }
-  finite = result.allFinite();
-  return result;
-}
-
-// Diagnostic-only point-to-plane observability estimate.  It intentionally
-// does not construct a residual right-hand side and never modifies the NDT
-// pose.  The perturbation convention is [delta-p-world, delta-theta-world].
-SchurObservabilityResult estimateSchurObservability(
-    const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
-    const pcl::PointCloud<pcl::PointXYZ>::Ptr &target,
-    const pcl::KdTreeFLANN<pcl::PointXYZ> &target_tree,
-    const Eigen::Matrix4d &pose,
-    int normal_k,
-    double max_correspondence_distance,
-    double planarity_ratio_max,
-    int max_source_points,
-    double pinv_relative_epsilon)
-{
-  SchurObservabilityResult output;
-  if (!source || !target || source->empty() || target->empty())
-  {
-    output.invalid_reason = "missing_cloud";
-    return output;
-  }
-  const int k = std::max(3, normal_k);
-  if (static_cast<int>(target->size()) < k)
-  {
-    output.invalid_reason = "target_too_small";
-    return output;
-  }
-  const int selected_points = std::min<int>(
-      static_cast<int>(source->size()), std::max(1, max_source_points));
-  if (selected_points <= 0)
-  {
-    output.invalid_reason = "source_too_small";
-    return output;
-  }
-
-  const Eigen::Matrix3d rotation = pose.block<3, 3>(0, 0);
-  const Eigen::Vector3d translation = pose.block<3, 1>(0, 3);
-  Eigen::Matrix<double, 6, 6> hessian = Eigen::Matrix<double, 6, 6>::Zero();
-  std::vector<int> indices(static_cast<size_t>(k));
-  std::vector<float> squared_distances(static_cast<size_t>(k));
-  constexpr int kMinimumPlanarPoints = 20;
-  const ros::WallTime knn_normal_start = ros::WallTime::now();
-
-  for (int sample = 0; sample < selected_points; ++sample)
-  {
-    const size_t source_index = selected_points == 1 ? 0U : static_cast<size_t>(std::round(
-        static_cast<double>(sample) * static_cast<double>(source->size() - 1) /
-        static_cast<double>(selected_points - 1)));
-    const auto &point = source->points[source_index];
-    const Eigen::Vector3d body_point(point.x, point.y, point.z);
-    const Eigen::Vector3d world_point = rotation * body_point + translation;
-    pcl::PointXYZ query(world_point.x(), world_point.y(), world_point.z());
-    if (target_tree.nearestKSearch(query, k, indices, squared_distances) < k) continue;
-    if (max_correspondence_distance > 0.0 &&
-        std::sqrt(std::max(0.0f, squared_distances.front())) > max_correspondence_distance)
-      continue;
-    ++output.used_points;
-
-    Eigen::Vector3d mean = Eigen::Vector3d::Zero();
-    for (int i = 0; i < k; ++i)
-    {
-      const auto &neighbor = target->points[static_cast<size_t>(indices[static_cast<size_t>(i)])];
-      mean += Eigen::Vector3d(neighbor.x, neighbor.y, neighbor.z);
-    }
-    mean /= static_cast<double>(k);
-    Eigen::Matrix3d covariance = Eigen::Matrix3d::Zero();
-    for (int i = 0; i < k; ++i)
-    {
-      const auto &neighbor = target->points[static_cast<size_t>(indices[static_cast<size_t>(i)])];
-      const Eigen::Vector3d centered = Eigen::Vector3d(neighbor.x, neighbor.y, neighbor.z) - mean;
-      covariance.noalias() += centered * centered.transpose();
-    }
-    covariance /= static_cast<double>(k);
-    Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> normal_solver(covariance);
-    if (normal_solver.info() != Eigen::Success || !normal_solver.eigenvalues().allFinite()) continue;
-    const Eigen::Vector3d local_values = normal_solver.eigenvalues();
-    const double planarity_ratio = local_values(0) /
-        std::max(local_values(1), 1e-12);
-    if (!std::isfinite(planarity_ratio) || planarity_ratio > planarity_ratio_max) continue;
-
-    const Eigen::Vector3d normal = normal_solver.eigenvectors().col(0).normalized();
-    if (!normal.allFinite()) continue;
-    ++output.planar_points;
-    Eigen::Matrix<double, 1, 6> jacobian;
-    jacobian.head<3>() = normal.transpose();
-    jacobian.tail<3>() = -normal.transpose() * skew(rotation * body_point);
-    hessian.noalias() += jacobian.transpose() * jacobian;
-  }
-  output.knn_normal_ms = (ros::WallTime::now() - knn_normal_start).toSec() * 1000.0;
-
-  if (output.planar_points < kMinimumPlanarPoints)
-  {
-    output.invalid_reason = "insufficient_planar_points";
-    return output;
-  }
-  const ros::WallTime hessian_schur_start = ros::WallTime::now();
-  hessian = 0.5 * (hessian + hessian.transpose());
-  Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> h_tt_solver(hessian.block<3, 3>(0, 0));
-  Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> h_rr_solver(hessian.block<3, 3>(3, 3));
-  if (h_tt_solver.info() != Eigen::Success || h_rr_solver.info() != Eigen::Success)
-  {
-    output.invalid_reason = "hessian_solver_failure";
-    return output;
-  }
-  output.h_tt_eigenvalues = h_tt_solver.eigenvalues();
-  output.h_rr_eigenvalues = h_rr_solver.eigenvalues();
-  bool h_rr_pinv_finite = false;
-  bool h_tt_pinv_finite = false;
-  const Eigen::Matrix3d h_rr_pinv = stableSymmetricPseudoInverse(
-      hessian.block<3, 3>(3, 3), pinv_relative_epsilon, h_rr_pinv_finite);
-  const Eigen::Matrix3d h_tt_pinv = stableSymmetricPseudoInverse(
-      hessian.block<3, 3>(0, 0), pinv_relative_epsilon, h_tt_pinv_finite);
-  if (!h_rr_pinv_finite || !h_tt_pinv_finite)
-  {
-    output.invalid_reason = "pseudo_inverse_failure";
-    return output;
-  }
-
-  const Eigen::Matrix3d h_tt = hessian.block<3, 3>(0, 0);
-  const Eigen::Matrix3d h_tr = hessian.block<3, 3>(0, 3);
-  const Eigen::Matrix3d h_rt = hessian.block<3, 3>(3, 0);
-  const Eigen::Matrix3d h_rr = hessian.block<3, 3>(3, 3);
-  const Eigen::Matrix3d translation_schur = 0.5 *
-      ((h_tt - h_tr * h_rr_pinv * h_rt) +
-       (h_tt - h_tr * h_rr_pinv * h_rt).transpose());
-  const Eigen::Matrix3d rotation_schur = 0.5 *
-      ((h_rr - h_rt * h_tt_pinv * h_tr) +
-       (h_rr - h_rt * h_tt_pinv * h_tr).transpose());
-  Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> translation_solver(translation_schur);
-  Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> rotation_solver(rotation_schur);
-  if (translation_solver.info() != Eigen::Success || rotation_solver.info() != Eigen::Success)
-  {
-    output.invalid_reason = "schur_solver_failure";
-    return output;
-  }
-  output.translation_eigenvalues = translation_solver.eigenvalues();
-  output.rotation_eigenvalues = rotation_solver.eigenvalues();
-  output.translation_eigenvectors = translation_solver.eigenvectors();
-  output.rotation_eigenvectors = rotation_solver.eigenvectors();
-  output.translation_weak = translation_solver.eigenvectors().col(0).normalized();
-  output.rotation_weak = rotation_solver.eigenvectors().col(0).normalized();
-  if (!output.translation_eigenvalues.allFinite() || !output.rotation_eigenvalues.allFinite() ||
-      !output.translation_eigenvectors.allFinite() || !output.rotation_eigenvectors.allFinite() ||
-      !output.translation_weak.allFinite() || !output.rotation_weak.allFinite())
-  {
-    output.invalid_reason = "nonfinite_schur_result";
-    return output;
-  }
-  output.translation_eigen_gap_01 = output.translation_eigenvalues(0) /
-      std::max(output.translation_eigenvalues(1), 1e-12);
-  output.translation_eigen_gap_12 = output.translation_eigenvalues(1) /
-      std::max(output.translation_eigenvalues(2), 1e-12);
-  output.rotation_eigen_gap_01 = output.rotation_eigenvalues(0) /
-      std::max(output.rotation_eigenvalues(1), 1e-12);
-  output.rotation_eigen_gap_12 = output.rotation_eigenvalues(1) /
-      std::max(output.rotation_eigenvalues(2), 1e-12);
-  const double translation_max = output.translation_eigenvalues(2);
-  const double rotation_max = output.rotation_eigenvalues(2);
-  const double translation_min = output.translation_eigenvalues(0);
-  const double rotation_min = output.rotation_eigenvalues(0);
-  if (!std::isfinite(translation_max) || !std::isfinite(rotation_max) ||
-      translation_max <= 1e-12 || rotation_max <= 1e-12)
-  {
-    output.invalid_reason = "zero_schur_information";
-    return output;
-  }
-  output.translation_min_max_ratio = translation_min / translation_max;
-  output.rotation_min_max_ratio = rotation_min / rotation_max;
-  output.translation_condition = translation_max / std::max(translation_min, 1e-12);
-  output.rotation_condition = rotation_max / std::max(rotation_min, 1e-12);
-  output.valid = std::isfinite(output.translation_min_max_ratio) &&
-      std::isfinite(output.rotation_min_max_ratio) &&
-      std::isfinite(output.translation_condition) &&
-      std::isfinite(output.rotation_condition);
-  output.invalid_reason = output.valid ? "ok" : "nonfinite_condition";
-  output.hessian_schur_ms =
-      (ros::WallTime::now() - hessian_schur_start).toSec() * 1000.0;
-  return output;
-}
-
 }  // namespace
 
 class DogPriorMapNdtNode
@@ -419,8 +74,6 @@ public:
     filtered_points_topic_ = getParam<std::string>("topics/filtered_points", "/dog_livo/filtered_points");
     diagnostics_topic_ = getParam<std::string>("topics/diagnostics", "/dog_livo/diagnostics");
     ndt_odom_topic_ = getParam<std::string>("topics/ndt_odom", "/dog_livo/ndt_odom");
-    lidar_degeneracy_topic_ = getParam<std::string>("topics/lidar_degeneracy", "/dog_livo/lidar_degeneracy");
-    lidar_information_topic_ = getParam<std::string>("topics/lidar_information", "/dog_livo/lidar_information");
     ndt_pose_topic_ = getParam<std::string>("topics/ndt_pose", "/dog_livo/ndt_pose");
     ndt_path_topic_ = getParam<std::string>("topics/ndt_path", "/dog_livo/ndt_path");
     points_aligned_topic_ = getParam<std::string>("topics/points_aligned", "/dog_livo/points_aligned");
@@ -469,34 +122,6 @@ public:
         getParam<int>("lidar_update/lidar_subscriber_queue_size", 100)));
     prediction_subscriber_queue_size_ = static_cast<uint32_t>(std::max(1,
         getParam<int>("lidar_update/prediction_subscriber_queue_size", 1000)));
-    ndt_degeneracy_enable_ = getParam<bool>("lidar_update/ndt_degeneracy_enable", true);
-    ndt_degeneracy_radius_ = getParam<double>("lidar_update/ndt_degeneracy_radius", 15.0);
-    ndt_degeneracy_ratio_ = getParam<double>("lidar_update/ndt_degeneracy_ratio", 3.0);
-    ndt_degenerate_scale_ = getParam<double>("lidar_update/ndt_degenerate_scale", 0.15);
-    information_degeneracy_enable_ = getParam<bool>("lidar_update/information_degeneracy_enable", true);
-    information_condition_max_ = getParam<double>("lidar_update/information_condition_max", 1e5);
-    information_correspondence_distance_ = getParam<double>("lidar_update/information_correspondence_distance", 0.8);
-    information_rotation_scale_m_ = std::max(1e-3,
-        getParam<double>("lidar_update/information_rotation_scale_m", 1.0));
-    information_pose_projection_enable_ = getParam<bool>("lidar_update/information_pose_projection_enable", false);
-    information_diagnostic_enable_ = getParam<bool>("lidar_update/information_diagnostic_enable", false);
-    schur_diagnostic_enable_ = getParam<bool>("lidar_update/schur_diagnostic_enable", false);
-    schur_normal_k_ = std::max(3, getParam<int>("lidar_update/schur_normal_k", 10));
-    schur_max_correspondence_distance_ = getParam<double>(
-        "lidar_update/schur_max_correspondence_distance", 0.8);
-    schur_planarity_ratio_max_ = getParam<double>(
-        "lidar_update/schur_planarity_ratio_max", 0.20);
-    schur_max_source_points_ = std::max(1, getParam<int>(
-        "lidar_update/schur_max_source_points", 500));
-    schur_pinv_relative_epsilon_ = std::max(1e-12, getParam<double>(
-        "lidar_update/schur_pinv_relative_epsilon", 1.0e-6));
-    // Direction-selective fusion consumes the eigensystem, so it implicitly
-    // enables the diagnostic computation.  Otherwise the approximate H=J^T J
-    // calculation stays completely off and the default baseline has no extra
-    // per-scan work or topic traffic.
-    information_compute_enable_ = information_diagnostic_enable_ ||
-        information_pose_projection_enable_ ||
-        getParam<bool>("fusion/directional_enable", false);
     const bool determinism_requested = getParam<bool>("output/diagnostic_determinism_enable", false);
     determinism_diagnostic_enable_ = determinism_requested;
     determinism_csv_path_ = getParam<std::string>("output/ndt_determinism_csv_path", "");
@@ -540,8 +165,6 @@ public:
     loadMap();
 
     pub_odom_ = nh_.advertise<nav_msgs::Odometry>(ndt_odom_topic_, 20);
-    pub_lidar_degeneracy_ = nh_.advertise<std_msgs::Float64>(lidar_degeneracy_topic_, 20);
-    pub_lidar_information_ = nh_.advertise<std_msgs::Float64MultiArray>(lidar_information_topic_, 20);
     pub_pose_ = nh_.advertise<geometry_msgs::PoseStamped>(ndt_pose_topic_, 20);
     pub_path_ = nh_.advertise<nav_msgs::Path>(ndt_path_topic_, 5);
     pub_aligned_ = nh_.advertise<sensor_msgs::PointCloud2>(points_aligned_topic_, 5);
@@ -617,9 +240,6 @@ public:
       {
         latest_prediction_stamp_ = incoming.stamp;
         has_prediction_watermark_ = true;
-        imu_prediction_pose_ = incoming.pose;
-        prediction_stamp_ = incoming.stamp;
-        has_prediction_ = true;
       }
     }
 
@@ -736,45 +356,6 @@ private:
     double ndt_fitness = std::numeric_limits<double>::quiet_NaN();
     bool ndt_has_converged = false;
     int ndt_iterations = 0;
-    bool information_valid = false;
-    bool information_degenerate = false;
-    double information_condition = std::numeric_limits<double>::quiet_NaN();
-    Eigen::Matrix<double, 6, 1> information_eigenvalues =
-        Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
-    Eigen::Matrix<double, 6, 1> information_weak =
-        Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
-    bool schur_valid = false;
-    std::string schur_invalid_reason = "disabled";
-    int schur_used_points = 0;
-    int schur_planar_points = 0;
-    Eigen::Vector3d schur_h_tt_eigenvalues =
-        Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
-    Eigen::Vector3d schur_h_rr_eigenvalues =
-        Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
-    Eigen::Vector3d schur_translation_eigenvalues =
-        Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
-    Eigen::Vector3d schur_rotation_eigenvalues =
-        Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
-    Eigen::Matrix3d schur_translation_eigenvectors =
-        Eigen::Matrix3d::Constant(std::numeric_limits<double>::quiet_NaN());
-    Eigen::Matrix3d schur_rotation_eigenvectors =
-        Eigen::Matrix3d::Constant(std::numeric_limits<double>::quiet_NaN());
-    double schur_translation_eigen_gap_01 = std::numeric_limits<double>::quiet_NaN();
-    double schur_translation_eigen_gap_12 = std::numeric_limits<double>::quiet_NaN();
-    double schur_rotation_eigen_gap_01 = std::numeric_limits<double>::quiet_NaN();
-    double schur_rotation_eigen_gap_12 = std::numeric_limits<double>::quiet_NaN();
-    double schur_translation_condition = std::numeric_limits<double>::quiet_NaN();
-    double schur_rotation_condition = std::numeric_limits<double>::quiet_NaN();
-    double schur_translation_min_max_ratio = std::numeric_limits<double>::quiet_NaN();
-    double schur_rotation_min_max_ratio = std::numeric_limits<double>::quiet_NaN();
-    Eigen::Vector3d schur_translation_weak =
-        Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
-    Eigen::Vector3d schur_rotation_weak =
-        Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
-    double schur_compute_ms = std::numeric_limits<double>::quiet_NaN();
-    double schur_knn_normal_ms = std::numeric_limits<double>::quiet_NaN();
-    double schur_hessian_schur_ms = std::numeric_limits<double>::quiet_NaN();
-    Eigen::Matrix4d projected = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
     Eigen::Matrix4d used_before_step_limit = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
     bool translation_limited = false;
     bool rotation_limited = false;
@@ -826,27 +407,6 @@ private:
            "raw_ndt_tx,raw_ndt_ty,raw_ndt_tz,raw_ndt_qx,raw_ndt_qy,raw_ndt_qz,raw_ndt_qw,"
            "raw_delta_tx,raw_delta_ty,raw_delta_tz,raw_delta_rx,raw_delta_ry,raw_delta_rz,"
            "raw_delta_from_guess_translation,raw_delta_from_guess_rotation_deg,ndt_fitness,ndt_has_converged,ndt_iterations,"
-           "information_valid,information_degenerate,information_condition,lambda_0,lambda_1,lambda_2,lambda_3,lambda_4,lambda_5,"
-           "weak_v0,weak_v1,weak_v2,weak_v3,weak_v4,weak_v5,"
-           "schur_valid,schur_invalid_reason,schur_used_points,schur_planar_points,"
-           "schur_h_tt_lambda_0,schur_h_tt_lambda_1,schur_h_tt_lambda_2,"
-           "schur_h_rr_lambda_0,schur_h_rr_lambda_1,schur_h_rr_lambda_2,"
-           "schur_translation_lambda_0,schur_translation_lambda_1,schur_translation_lambda_2,"
-           "schur_rotation_lambda_0,schur_rotation_lambda_1,schur_rotation_lambda_2,"
-           "schur_translation_v0_x,schur_translation_v0_y,schur_translation_v0_z,"
-           "schur_translation_v1_x,schur_translation_v1_y,schur_translation_v1_z,"
-           "schur_translation_v2_x,schur_translation_v2_y,schur_translation_v2_z,"
-           "schur_rotation_v0_x,schur_rotation_v0_y,schur_rotation_v0_z,"
-           "schur_rotation_v1_x,schur_rotation_v1_y,schur_rotation_v1_z,"
-           "schur_rotation_v2_x,schur_rotation_v2_y,schur_rotation_v2_z,"
-           "schur_translation_eigen_gap_01,schur_translation_eigen_gap_12,"
-           "schur_rotation_eigen_gap_01,schur_rotation_eigen_gap_12,"
-           "schur_translation_condition,schur_rotation_condition,"
-           "schur_translation_min_max_ratio,schur_rotation_min_max_ratio,"
-           "schur_translation_weak_x,schur_translation_weak_y,schur_translation_weak_z,"
-           "schur_rotation_weak_x,schur_rotation_weak_y,schur_rotation_weak_z,"
-           "schur_compute_ms,schur_knn_normal_ms,schur_hessian_schur_ms,"
-           "projected_tx,projected_ty,projected_tz,projected_qx,projected_qy,projected_qz,projected_qw,"
            "used_before_step_limit_tx,used_before_step_limit_ty,used_before_step_limit_tz,used_before_step_limit_qx,"
            "used_before_step_limit_qy,used_before_step_limit_qz,used_before_step_limit_qw,"
            "translation_limited,rotation_limited,final_used_tx,final_used_ty,final_used_tz,final_used_qx,final_used_qy,"
@@ -943,36 +503,8 @@ private:
         << row.raw_delta(0) << "," << row.raw_delta(1) << "," << row.raw_delta(2) << ","
         << row.raw_delta(3) << "," << row.raw_delta(4) << "," << row.raw_delta(5) << ","
         << row.raw_delta_translation << "," << row.raw_delta_rotation_deg << ","
-        << row.ndt_fitness << "," << (row.ndt_has_converged ? 1 : 0) << "," << row.ndt_iterations << ","
-        << (row.information_valid ? 1 : 0) << "," << (row.information_degenerate ? 1 : 0) << ","
-        << row.information_condition;
-    for (int i = 0; i < 6; ++i) out << "," << row.information_eigenvalues(i);
-    for (int i = 0; i < 6; ++i) out << "," << row.information_weak(i);
-    out << "," << (row.schur_valid ? 1 : 0) << "," << row.schur_invalid_reason << ","
-        << row.schur_used_points << "," << row.schur_planar_points;
-    for (int i = 0; i < 3; ++i) out << "," << row.schur_h_tt_eigenvalues(i);
-    for (int i = 0; i < 3; ++i) out << "," << row.schur_h_rr_eigenvalues(i);
-    for (int i = 0; i < 3; ++i) out << "," << row.schur_translation_eigenvalues(i);
-    for (int i = 0; i < 3; ++i) out << "," << row.schur_rotation_eigenvalues(i);
-    for (int column = 0; column < 3; ++column)
-      for (int component = 0; component < 3; ++component)
-        out << "," << row.schur_translation_eigenvectors(component, column);
-    for (int column = 0; column < 3; ++column)
-      for (int component = 0; component < 3; ++component)
-        out << "," << row.schur_rotation_eigenvectors(component, column);
-    out << "," << row.schur_translation_eigen_gap_01 << ","
-        << row.schur_translation_eigen_gap_12 << ","
-        << row.schur_rotation_eigen_gap_01 << ","
-        << row.schur_rotation_eigen_gap_12
-        << "," << row.schur_translation_condition << "," << row.schur_rotation_condition
-        << "," << row.schur_translation_min_max_ratio << "," << row.schur_rotation_min_max_ratio
-        << "," << row.schur_translation_weak.x() << "," << row.schur_translation_weak.y()
-        << "," << row.schur_translation_weak.z() << "," << row.schur_rotation_weak.x()
-        << "," << row.schur_rotation_weak.y() << "," << row.schur_rotation_weak.z()
-        << "," << row.schur_compute_ms << "," << row.schur_knn_normal_ms
-        << "," << row.schur_hessian_schur_ms;
-    out << ","; appendPoseCsv(out, row.projected);
-    out << ","; appendPoseCsv(out, row.used_before_step_limit);
+        << row.ndt_fitness << "," << (row.ndt_has_converged ? 1 : 0) << "," << row.ndt_iterations << ",";
+    appendPoseCsv(out, row.used_before_step_limit);
     out << "," << (row.translation_limited ? 1 : 0) << "," << (row.rotation_limited ? 1 : 0) << ",";
     appendPoseCsv(out, row.final_used);
     out << "," << row.prediction_history_size << "," << row.latest_prediction_stamp << ","
@@ -994,32 +526,6 @@ private:
         << row.pending_overflow_count;
     out << "\n";
     determinism_csv_ << out.str();
-  }
-
-  // Publish the information eigensystem in a self-contained message so the
-  // EKF can construct a direction-level degeneracy projector without
-  // depending on callback ordering of DiagnosticArray messages.  Layout:
-  // stamp, valid, degenerate, condition, six eigenvalues, then the 6x6
-  // eigenvector matrix in column-major order.  The values are diagnostic and
-  // do not alter the NDT pose output.
-  void publishInformation(const ros::Time &stamp,
-                          bool valid,
-                          bool degenerate,
-                          double condition,
-                          const Eigen::Matrix<double, 6, 1> &eigenvalues,
-                          const Eigen::Matrix<double, 6, 6> &eigenvectors)
-  {
-    std_msgs::Float64MultiArray msg;
-    msg.data.reserve(46);
-    msg.data.push_back(stamp.toSec());
-    msg.data.push_back(valid ? 1.0 : 0.0);
-    msg.data.push_back(degenerate ? 1.0 : 0.0);
-    msg.data.push_back(condition);
-    for (int i = 0; i < 6; ++i) msg.data.push_back(eigenvalues(i));
-    for (int col = 0; col < 6; ++col)
-      for (int row = 0; row < 6; ++row)
-        msg.data.push_back(eigenvectors(row, col));
-    pub_lidar_information_.publish(msg);
   }
 
   // 优先读取全局参数，再读取节点私有参数，不存在时使用默认值。
@@ -1050,23 +556,9 @@ private:
       if (std::isfinite(pt.x) && std::isfinite(pt.y) && std::isfinite(pt.z)) xyz->push_back(pt);
     }
     finalizeCloud(xyz);
-    map_cloud_ = voxelDown(xyz, map_voxel_size_, map_voxel_z_size_, 0);
-    target_cloud_ = voxelDown(map_cloud_, target_voxel_size_, target_voxel_z_size_, max_target_points_);
-    if (schur_diagnostic_enable_)
-    {
-      const ros::WallTime schur_tree_start = ros::WallTime::now();
-      schur_target_tree_.reset(new pcl::KdTreeFLANN<pcl::PointXYZ>());
-      schur_target_tree_->setInputCloud(target_cloud_);
-      schur_tree_build_ms_ = (ros::WallTime::now() - schur_tree_start).toSec() * 1000.0;
-      ROS_INFO("[DogPriorMap NDT] Schur target KD-tree built once: target=%zu build=%.3f ms",
-               target_cloud_->size(), schur_tree_build_ms_);
-    }
-    else
-    {
-      schur_target_tree_.reset();
-      schur_tree_build_ms_ = std::numeric_limits<double>::quiet_NaN();
-    }
-
+    const pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud =
+        voxelDown(xyz, map_voxel_size_, map_voxel_z_size_, 0);
+    target_cloud_ = voxelDown(map_cloud, target_voxel_size_, target_voxel_z_size_, max_target_points_);
     ndt_.setInputTarget(target_cloud_);
     ndt_.setResolution(ndt_resolution_);
     ndt_.setStepSize(ndt_step_size_);
@@ -1406,10 +898,6 @@ private:
 
     DeterminismRow diagnostic_row;
     diagnostic_row.local_imu_prior_enabled = local_imu_rotation_prior_enable_;
-    if (schur_diagnostic_enable_)
-    {
-      diagnostic_row.schur_invalid_reason = "not_computed";
-    }
     if (determinism_diagnostic_enable_)
     {
       diagnostic_row.frame_index = ++determinism_frame_index_;
@@ -1495,24 +983,10 @@ private:
     if (static_cast<int>(source->size()) < min_effective_points_)
     {
       const double localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
-      const Eigen::Matrix<double, 6, 1> invalid_values =
-          Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
-      const Eigen::Matrix<double, 6, 6> invalid_vectors =
-          Eigen::Matrix<double, 6, 6>::Constant(std::numeric_limits<double>::quiet_NaN());
-      if (information_compute_enable_)
-      {
-        publishInformation(timing.reference_stamp, false, false,
-                           std::numeric_limits<double>::quiet_NaN(),
-                           invalid_values, invalid_vectors);
-      }
       publishDiagnostics(timing.reference_stamp, false, 0.0, preprocess_ms, localization_ms,
                          static_cast<int>(source->size()), target_cloud_->size(), 0.0, 0);
       diagnostic_row.prediction_source = "not_evaluated";
       diagnostic_row.prediction_reason = "insufficient_points";
-      if (schur_diagnostic_enable_)
-      {
-        diagnostic_row.schur_invalid_reason = "insufficient_points";
-      }
       writeDeterminismRow(diagnostic_row);
       return;
     }
@@ -1632,10 +1106,6 @@ private:
     diagnostic_row.ndt_iterations = iterations;
 
     bool step_limited = false;
-    bool frame_degenerate = false;
-    double frame_degeneracy_ratio = 1.0;
-    bool information_degenerate = false;
-    double information_condition = 1.0;
     double localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
     if (ok)
     {
@@ -1648,112 +1118,6 @@ private:
       diagnostic_row.raw_delta.tail<3>() = raw_delta_angle.axis() * raw_delta_angle.angle();
       diagnostic_row.raw_delta_translation = raw_delta.block<3, 1>(0, 3).norm();
       diagnostic_row.raw_delta_rotation_deg = rotationAngleDeg(raw_delta.block<3, 3>(0, 0));
-      Eigen::Vector3d weak_direction = Eigen::Vector3d::Zero();
-      double degeneracy_ratio = 1.0;
-      const bool degenerate = ndt_degeneracy_enable_ &&
-          estimateWeakDirection(map_cloud_, initial_guess.block<3, 1>(0, 3),
-                                ndt_degeneracy_radius_, ndt_degeneracy_ratio_,
-                                weak_direction, degeneracy_ratio);
-      Eigen::Matrix<double, 6, 1> information_weak = Eigen::Matrix<double, 6, 1>::Zero();
-      Eigen::Matrix<double, 6, 1> information_eigenvalues =
-          Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
-      Eigen::Matrix<double, 6, 6> information_eigenvectors =
-          Eigen::Matrix<double, 6, 6>::Constant(std::numeric_limits<double>::quiet_NaN());
-      Eigen::Matrix<double, 6, 6> information_matrix =
-          Eigen::Matrix<double, 6, 6>::Constant(std::numeric_limits<double>::quiet_NaN());
-      const bool information_valid = information_compute_enable_ &&
-          information_degeneracy_enable_ &&
-          estimateInformationWeakDirection(source, target_cloud_, result,
-                                           information_correspondence_distance_,
-                                           information_rotation_scale_m_,
-                                           information_weak, information_eigenvalues,
-                                           information_eigenvectors, information_matrix,
-                                           information_condition);
-      information_degenerate = information_degeneracy_enable_ &&
-          information_valid &&
-          information_condition > information_condition_max_;
-      diagnostic_row.information_valid = information_valid;
-      diagnostic_row.information_degenerate = information_degenerate;
-      diagnostic_row.information_condition = information_condition;
-      diagnostic_row.information_eigenvalues = information_eigenvalues;
-      diagnostic_row.information_weak = information_weak;
-      if (schur_diagnostic_enable_)
-      {
-        const ros::WallTime schur_start = ros::WallTime::now();
-        const SchurObservabilityResult schur = schur_target_tree_ ? estimateSchurObservability(
-            source, target_cloud_, *schur_target_tree_, result, schur_normal_k_,
-            schur_max_correspondence_distance_, schur_planarity_ratio_max_,
-            schur_max_source_points_, schur_pinv_relative_epsilon_) : SchurObservabilityResult();
-        diagnostic_row.schur_valid = schur.valid;
-        diagnostic_row.schur_invalid_reason = schur_target_tree_ ? schur.invalid_reason : "tree_unavailable";
-        diagnostic_row.schur_used_points = schur.used_points;
-        diagnostic_row.schur_planar_points = schur.planar_points;
-        diagnostic_row.schur_h_tt_eigenvalues = schur.h_tt_eigenvalues;
-        diagnostic_row.schur_h_rr_eigenvalues = schur.h_rr_eigenvalues;
-        diagnostic_row.schur_translation_eigenvalues = schur.translation_eigenvalues;
-        diagnostic_row.schur_rotation_eigenvalues = schur.rotation_eigenvalues;
-        diagnostic_row.schur_translation_eigenvectors = schur.translation_eigenvectors;
-        diagnostic_row.schur_rotation_eigenvectors = schur.rotation_eigenvectors;
-        diagnostic_row.schur_translation_eigen_gap_01 = schur.translation_eigen_gap_01;
-        diagnostic_row.schur_translation_eigen_gap_12 = schur.translation_eigen_gap_12;
-        diagnostic_row.schur_rotation_eigen_gap_01 = schur.rotation_eigen_gap_01;
-        diagnostic_row.schur_rotation_eigen_gap_12 = schur.rotation_eigen_gap_12;
-        diagnostic_row.schur_translation_condition = schur.translation_condition;
-        diagnostic_row.schur_rotation_condition = schur.rotation_condition;
-        diagnostic_row.schur_translation_min_max_ratio = schur.translation_min_max_ratio;
-        diagnostic_row.schur_rotation_min_max_ratio = schur.rotation_min_max_ratio;
-        diagnostic_row.schur_translation_weak = schur.translation_weak;
-        diagnostic_row.schur_rotation_weak = schur.rotation_weak;
-        diagnostic_row.schur_compute_ms =
-            (ros::WallTime::now() - schur_start).toSec() * 1000.0;
-        diagnostic_row.schur_knn_normal_ms = schur.knn_normal_ms;
-        diagnostic_row.schur_hessian_schur_ms = schur.hessian_schur_ms;
-      }
-      if (information_compute_enable_)
-      {
-        publishInformation(timing.reference_stamp, information_valid, information_degenerate,
-                           information_condition, information_eigenvalues,
-                           information_eigenvectors);
-      }
-      frame_degenerate = degenerate;
-      frame_degeneracy_ratio = degeneracy_ratio;
-      if (degenerate && has_prediction_)
-      {
-        const Eigen::Vector3d correction = result.block<3, 1>(0, 3) - initial_guess.block<3, 1>(0, 3);
-        const double weak_component = correction.dot(weak_direction);
-        used_result.block<3, 1>(0, 3) = result.block<3, 1>(0, 3) -
-            (1.0 - std::max(0.0, std::min(1.0, ndt_degenerate_scale_))) *
-            weak_component * weak_direction;
-        ROS_DEBUG_THROTTLE(1.0,
-                           "[DogPriorMap NDT] degenerate update ratio=%.2f weak=(%.2f %.2f %.2f)",
-                           degeneracy_ratio, weak_direction.x(), weak_direction.y(), weak_direction.z());
-      }
-      if (information_pose_projection_enable_ && information_degenerate && has_prediction_)
-      {
-        // The information eigensystem and this projection both use a
-        // left/world perturbation around the initial scan pose.  This matches
-        // the absolute correction consumed by the EKF and avoids mixing it
-        // with the right/body delta used for NDT initialization.
-        const Eigen::Vector3d delta_p =
-            result.block<3, 1>(0, 3) - initial_guess.block<3, 1>(0, 3);
-        Eigen::AngleAxisd aa(result.block<3, 3>(0, 0) *
-                             initial_guess.block<3, 3>(0, 0).transpose());
-        Eigen::Matrix<double, 6, 1> correction;
-        correction.head<3>() = delta_p;
-        correction.tail<3>() = aa.axis() * aa.angle() * information_rotation_scale_m_;
-        const double weak_component = correction.dot(information_weak);
-        correction -= (1.0 - std::max(0.0, std::min(1.0, ndt_degenerate_scale_))) *
-                      weak_component * information_weak;
-        Eigen::Matrix4d projected = initial_guess;
-        projected.block<3, 1>(0, 3) += correction.head<3>();
-        const double angle = correction.tail<3>().norm() / information_rotation_scale_m_;
-        if (angle > 1e-12)
-          projected.block<3, 3>(0, 0) =
-              Eigen::AngleAxisd(angle, correction.tail<3>().normalized()).toRotationMatrix() *
-              initial_guess.block<3, 3>(0, 0);
-        used_result = projected;
-      }
-      diagnostic_row.projected = used_result;
       diagnostic_row.used_before_step_limit = used_result;
       step_limited = limitNdtStep(result, used_result,
                                   diagnostic_row.translation_limited,
@@ -1785,47 +1149,10 @@ private:
         publishAlignedCloud(aligned, stamp);
       }
     }
-    else
-    {
-      if (schur_diagnostic_enable_)
-      {
-        diagnostic_row.schur_invalid_reason = "ndt_not_converged";
-      }
-      const Eigen::Matrix<double, 6, 1> invalid_values =
-          Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
-      const Eigen::Matrix<double, 6, 6> invalid_vectors =
-          Eigen::Matrix<double, 6, 6>::Constant(std::numeric_limits<double>::quiet_NaN());
-      if (information_compute_enable_)
-      {
-        publishInformation(timing.reference_stamp, false, false,
-                           std::numeric_limits<double>::quiet_NaN(),
-                           invalid_values, invalid_vectors);
-      }
-    }
-
-    std_msgs::Float64 degeneracy_msg;
-    if (std::isfinite(frame_degeneracy_ratio) && ndt_degeneracy_ratio_ > 1.0)
-    {
-      degeneracy_msg.data = std::max(0.0, std::min(1.0,
-          (frame_degeneracy_ratio - 1.0) /
-          (ndt_degeneracy_ratio_ - 1.0)));
-    }
-    else
-    {
-      degeneracy_msg.data = 0.0;
-    }
-    pub_lidar_degeneracy_.publish(degeneracy_msg);
 
     publishDiagnostics(timing.reference_stamp, ok, align_ms, preprocess_ms, localization_ms,
                        static_cast<int>(source->size()), target_cloud_->size(), score, iterations, step_limited);
     writeDeterminismRow(diagnostic_row);
-    ROS_INFO_THROTTLE(2.0, "[DogPriorMap NDT] local_anisotropy=%.3f degenerate=%d",
-                       frame_degeneracy_ratio, frame_degenerate ? 1 : 0);
-    if (information_compute_enable_)
-    {
-      ROS_INFO_THROTTLE(2.0, "[DogPriorMap NDT] information_condition=%.3g degenerate=%d",
-                         information_condition, information_degenerate ? 1 : 0);
-    }
     ROS_INFO_THROTTLE(1.0,
                       "[DogPriorMap NDT] conv=%d limited=%d source=%zu target=%zu align=%.2fms score=%.4f iter=%d p=(%.2f %.2f %.2f)",
                       ok ? 1 : 0, step_limited ? 1 : 0, source->size(), target_cloud_->size(), align_ms, score, iterations, p_.x(), p_.y(), p_.z());
@@ -2057,8 +1384,6 @@ private:
   ros::Subscriber sub_prediction_;
   ros::Subscriber sub_imu_;
   ros::Publisher pub_odom_;
-  ros::Publisher pub_lidar_degeneracy_;
-  ros::Publisher pub_lidar_information_;
   ros::Publisher pub_pose_;
   ros::Publisher pub_path_;
   ros::Publisher pub_filtered_;
@@ -2074,8 +1399,6 @@ private:
   std::string filtered_points_topic_;
   std::string diagnostics_topic_;
   std::string ndt_odom_topic_;
-  std::string lidar_degeneracy_topic_;
-  std::string lidar_information_topic_;
   std::string ndt_pose_topic_;
   std::string ndt_path_topic_;
   std::string points_aligned_topic_;
@@ -2093,10 +1416,7 @@ private:
   bool has_imu_watermark_ = false;
   ros::Time latest_imu_stamp_;
 
-  pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud_;
   pcl::PointCloud<pcl::PointXYZ>::Ptr target_cloud_;
-  pcl::KdTreeFLANN<pcl::PointXYZ>::Ptr schur_target_tree_;
-  double schur_tree_build_ms_ = std::numeric_limits<double>::quiet_NaN();
   pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt_;
   nav_msgs::Path path_;
 
@@ -2107,9 +1427,6 @@ private:
   Eigen::Matrix4d delta_pose_ = Eigen::Matrix4d::Identity();
   bool has_previous_pose_reference_stamp_ = false;
   ros::Time previous_pose_reference_stamp_;
-  bool has_prediction_ = false;
-  Eigen::Matrix4d imu_prediction_pose_ = Eigen::Matrix4d::Identity();
-  ros::Time prediction_stamp_;
   std::deque<TimedPrediction> prediction_history_;
   std::deque<PendingLidarFrame> pending_lidar_frames_;
   bool has_prediction_watermark_ = false;
@@ -2145,23 +1462,6 @@ private:
   size_t pending_lidar_max_frames_ = 50;
   uint32_t lidar_subscriber_queue_size_ = 100;
   uint32_t prediction_subscriber_queue_size_ = 1000;
-  bool ndt_degeneracy_enable_ = true;
-  double ndt_degeneracy_radius_ = 15.0;
-  double ndt_degeneracy_ratio_ = 8.0;
-  double ndt_degenerate_scale_ = 0.15;
-  bool information_degeneracy_enable_ = true;
-  double information_condition_max_ = 1e5;
-  double information_correspondence_distance_ = 0.8;
-  double information_rotation_scale_m_ = 1.0;
-  bool information_pose_projection_enable_ = false;
-  bool information_diagnostic_enable_ = false;
-  bool information_compute_enable_ = false;
-  bool schur_diagnostic_enable_ = false;
-  int schur_normal_k_ = 10;
-  double schur_max_correspondence_distance_ = 0.8;
-  double schur_planarity_ratio_max_ = 0.20;
-  int schur_max_source_points_ = 500;
-  double schur_pinv_relative_epsilon_ = 1.0e-6;
   bool determinism_diagnostic_enable_ = false;
   std::string determinism_csv_path_;
   std::ofstream determinism_csv_;

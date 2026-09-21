@@ -21,8 +21,6 @@ topics:
   filtered_points: "/dog_livo/filtered_points"
   diagnostics: "/dog_livo/diagnostics"
   ndt_odom: "/dog_livo/ndt_odom"
-  lidar_degeneracy: "/dog_livo/lidar_degeneracy"
-  lidar_information: "/dog_livo/lidar_information"
   ndt_pose: "/dog_livo/ndt_pose"
   ndt_path: "/dog_livo/ndt_path"
   points_aligned: "/dog_livo/points_aligned"
@@ -96,29 +94,6 @@ lidar_update:
   # dropping scans/predictions while one NDT alignment is running.
   lidar_subscriber_queue_size: 100
   prediction_subscriber_queue_size: 1000
-  ndt_degeneracy_enable: false
-  ndt_degeneracy_radius: 15.0
-  ndt_degeneracy_ratio: 3.0
-  ndt_degenerate_scale: 0.15
-  # Experimental 6DoF information-matrix guard; baseline keeps it off.
-  information_degeneracy_enable: true
-  information_condition_max: 100000.0
-  information_correspondence_distance: 0.8
-  information_rotation_scale_m: 1.0
-  # The 6x6 correspondence/Hessian diagnostic is opt-in because the current
-  # implementation is an approximate observability probe, not PCL's exact NDT
-  # Hessian. Directional fusion also enables it explicitly.
-  information_diagnostic_enable: false
-  # Stage 1/2 keep information analysis diagnostic-only. Enable only in a
-  # separately validated experiment after the coordinate convention is fixed.
-  information_pose_projection_enable: false
-  # Stage3A diagnostic-only Schur observability; inert unless enabled.
-  schur_diagnostic_enable: false
-  schur_normal_k: 10
-  schur_max_correspondence_distance: 0.8
-  schur_planarity_ratio_max: 0.20
-  schur_max_source_points: 500
-  schur_pinv_relative_epsilon: 0.000001
 
 output:
   path_max_length: 5000

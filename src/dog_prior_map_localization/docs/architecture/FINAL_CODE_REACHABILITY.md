@@ -71,8 +71,7 @@ owned by the user.
 
 The canonical YAML retains only parameters read by the active NDT/EKF path,
 plus the output and deterministic diagnostics needed for validation. Camera
-intrinsics/extrinsics, image topics, camera update settings, and the disabled
-directional-fusion state-machine block are not read by the delivery chain and
-are removed. The NDT information/Schur diagnostic keys remain for the separate
-Stage C runtime slimming audit; their mathematics and defaults are unchanged
-in this stage.
+intrinsics/extrinsics, image topics, camera update settings, disabled
+directional-fusion state-machine parameters, and the removed NDT
+information/Schur/degeneracy diagnostics are not part of the delivery
+configuration.

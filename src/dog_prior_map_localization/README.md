@@ -55,7 +55,7 @@ Outputs:
 - `/dog_livo/odom_high_rate`: IMU-propagated EKF pose
 - `/dog_livo/odom_corrected`: EKF pose after NDT correction/OOSM replay
 - `/dog_livo/path_high_rate` and `/dog_livo/path_corrected`
-- `/dog_livo/diagnostics`, `/dog_livo/lidar_degeneracy`, and related map/debug topics
+- `/dog_livo/diagnostics` and related map/debug topics
 - TF for the current high-rate state
 
 ## Build

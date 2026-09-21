@@ -58,8 +58,6 @@ node.
 - `/dog_livo/path_high_rate`
 - `/dog_livo/path_corrected`
 - `/dog_livo/diagnostics`
-- `/dog_livo/lidar_degeneracy`
-- `/dog_livo/lidar_information`
 - `/dog_livo/prior_map`, `/dog_livo/filtered_points`, `/dog_livo/points_aligned`
 - current-state TF (the corrected-state duplicate TF path is disabled)
 
