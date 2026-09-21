@@ -50,6 +50,7 @@ add_executable(dog_prior_map_ekf_node_cpp
   src/imu_processor.cpp
   src/lidar_matcher.cpp
   src/vision_observation.cpp
+  src/fusion/ndt_observation.cpp
   src/ros_output.cpp
   src/math_utils.cpp
 )
