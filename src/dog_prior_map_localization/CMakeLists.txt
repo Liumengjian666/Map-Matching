@@ -44,11 +44,9 @@ include_directories(
 add_executable(dog_prior_map_ekf_node_cpp
   src/dog_prior_map_ekf_node.cpp
   src/dog_prior_map_ekf_node_core.cpp
-  src/map_loader.cpp
   src/core/oosm_replay_planner.cpp
   src/core/state_history.cpp
   src/imu_processor.cpp
-  src/lidar_matcher.cpp
   src/vision_observation.cpp
   src/fusion/ndt_observation.cpp
   src/ros_output.cpp
@@ -57,7 +55,6 @@ add_executable(dog_prior_map_ekf_node_cpp
 
 target_link_libraries(dog_prior_map_ekf_node_cpp
   ${catkin_LIBRARIES}
-  ${PCL_LIBRARIES}
   ${OpenCV_LIBRARIES}
 )
 

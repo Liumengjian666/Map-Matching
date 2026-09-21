@@ -13,8 +13,6 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   base_frame_ = getParam<std::string>("frames/base_frame", "base_link");
 
   imu_topic_ = getParam<std::string>("topics/imu", "/livox/imu");
-  lidar_topic_ = getParam<std::string>("topics/lidar", "/livox/lidar");
-  lidar_msg_type_ = getParam<std::string>("topics/lidar_msg_type", "livox");
   image_topic_ = getParam<std::string>("topics/image", "/image_left/image_rect");
   ndt_observation_topic_ = getParam<std::string>("topics/ndt_odom", "/dog_livo/ndt_odom");
   lidar_degeneracy_topic_ = getParam<std::string>("topics/lidar_degeneracy", "/dog_livo/lidar_degeneracy");
@@ -24,9 +22,6 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   odom_corrected_topic_ = getParam<std::string>("topics/odom_corrected", "/dog_livo/odom_corrected");
   path_high_rate_topic_ = getParam<std::string>("topics/path_high_rate", "/dog_livo/path_high_rate");
   path_corrected_topic_ = getParam<std::string>("topics/path_corrected", "/dog_livo/path_corrected");
-  filtered_points_topic_ = getParam<std::string>("topics/filtered_points", "/dog_livo/filtered_points");
-  prior_map_topic_ = getParam<std::string>("topics/prior_map", "/dog_livo/prior_map");
-  diagnostics_topic_ = getParam<std::string>("topics/diagnostics", "/dog_livo/diagnostics");
 
 
   gravity_norm_ = getParam<double>("imu/gravity", 9.80665);
@@ -86,94 +81,6 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
       "camera_update/imu_rotation_consistency_gate_enable", false);
   visual_imu_consistency_max_deg_ = std::max(0.0,
       getParam<double>("camera_update/imu_rotation_consistency_max_deg", 20.0));
-  lidar_deskew_enable_ = getParam<bool>("lidar_update/deskew_enable", true);
-  lidar_deskew_translation_enable_ = getParam<bool>("lidar_update/deskew_translation_enable", true);
-  lidar_offset_time_scale_ = getParam<double>("lidar_update/offset_time_scale", 1e-9);
-
-
-  lidar_enable_ = getParam<bool>("lidar_update/enable", true);
-  const bool load_prior_map_in_ekf = getParam<bool>("map/load_in_ekf", true);
-  if (lidar_enable_ && !load_prior_map_in_ekf)
-  {
-    ROS_FATAL("[DogPriorMap C++] map/load_in_ekf=false is incompatible with lidar_update/enable=true");
-    throw std::runtime_error("EKF lidar update requires map/load_in_ekf=true");
-  }
-  prior_map_update_enable_ = getParam<bool>("lidar_update/prior_map_update_enable", true);
-  registration_method_ = getParam<std::string>("lidar_update/registration_method", "point_to_plane");
-  update_every_n_scans_ = std::max(1, getParam<int>("lidar_update/update_every_n_scans", 1));
-  scan_voxel_size_ = getParam<double>("lidar_update/scan_voxel_size", 0.25);
-  max_scan_points_ = getParam<int>("lidar_update/max_scan_points", 2500);
-  scan_min_range_ = getParam<double>("lidar_update/scan_min_range", 0.5);
-  scan_max_range_ = getParam<double>("lidar_update/scan_max_range", 80.0);
-  scan_min_z_ = getParam<double>("lidar_update/scan_min_z", -std::numeric_limits<double>::infinity());
-  scan_max_z_ = getParam<double>("lidar_update/scan_max_z", std::numeric_limits<double>::infinity());
-  scan_radius_outlier_enable_ = getParam<bool>("lidar_update/scan_radius_outlier_enable", false);
-  scan_radius_outlier_radius_ = getParam<double>("lidar_update/scan_radius_outlier_radius", 0.35);
-  scan_radius_outlier_min_neighbors_ = std::max(1, getParam<int>("lidar_update/scan_radius_outlier_min_neighbors", 2));
-  max_match_distance_ = getParam<double>("lidar_update/max_match_distance", 1.0);
-  min_effective_points_ = getParam<int>("lidar_update/min_effective_points", 80);
-  point_noise_ = getParam<double>("lidar_update/point_to_point_noise", 0.20);
-  hybrid_point_noise_ = getParam<double>("lidar_update/hybrid_point_noise", 0.60);
-  plane_noise_ = getParam<double>("lidar_update/point_to_plane_noise", 0.12);
-  plane_neighbor_k_ = std::max(3, getParam<int>("lidar_update/plane_neighbor_k", 5));
-  plane_min_eigen_ratio_ = getParam<double>("lidar_update/plane_min_eigen_ratio", 0.08);
-  fastlio_plane_threshold_ = getParam<double>("lidar_update/fastlio_plane_threshold", 0.10);
-  fastlio_residual_gate_ = getParam<double>("lidar_update/fastlio_residual_gate", 0.90);
-  fastlivo_outlier_reject_enable_ = getParam<bool>("lidar_update/fastlivo_outlier_reject_enable", true);
-  plane_radius_gate_scale_ = getParam<double>("lidar_update/plane_radius_gate_scale", 3.0);
-  plane_sigma_gate_ = getParam<double>("lidar_update/plane_sigma_gate", 3.0);
-  plane_min_radius_ = getParam<double>("lidar_update/plane_min_radius", 0.05);
-  plane_min_sigma_ = getParam<double>("lidar_update/plane_min_sigma", 0.03);
-  range_noise_per_meter_ = getParam<double>("lidar_update/range_noise_per_meter", 0.003);
-  fastlivo_body_cov_enable_ = getParam<bool>("lidar_update/fastlivo_body_cov_enable", true);
-  lidar_depth_noise_ = getParam<double>("lidar_update/lidar_depth_noise", 0.05);
-  lidar_beam_noise_deg_ = getParam<double>("lidar_update/lidar_beam_noise_deg", 0.02);
-  horizontal_plane_z_observation_enable_ = getParam<bool>("lidar_update/horizontal_plane_z_observation_enable", true);
-  horizontal_plane_normal_z_min_ = getParam<double>("lidar_update/horizontal_plane_normal_z_min", 0.85);
-  horizontal_plane_weight_scale_ = getParam<double>("lidar_update/horizontal_plane_weight_scale", 2.0);
-  horizontal_plane_residual_gate_ = getParam<double>("lidar_update/horizontal_plane_residual_gate", 0.35);
-  huber_threshold_ = getParam<double>("lidar_update/huber_threshold", 0.6);
-  max_iterations_ = std::max(1, getParam<int>("lidar_update/max_iterations", 3));
-  max_translation_update_ = getParam<double>("lidar_update/max_translation_update", 0.25);
-  max_rotation_update_ = getParam<double>("lidar_update/max_rotation_update_deg", 3.0) * M_PI / 180.0;
-  max_update_time_ms_ = getParam<double>("lidar_update/max_update_time_ms", 25.0);
-  match_accept_gate_enable_ = getParam<bool>("lidar_update/match_accept_gate_enable", true);
-  match_accept_max_mean_residual_ = getParam<double>("lidar_update/match_accept_max_mean_residual", 0.20);
-  match_accept_max_residual_increase_ratio_ = getParam<double>("lidar_update/match_accept_max_residual_increase_ratio", 1.02);
-  match_accept_min_improvement_ratio_ = getParam<double>("lidar_update/match_accept_min_improvement_ratio", 0.0);
-  match_accept_min_effective_ratio_ = getParam<double>("lidar_update/match_accept_min_effective_ratio", 0.10);
-  match_accept_max_translation_ = getParam<double>("lidar_update/match_accept_max_translation", max_translation_update_);
-  match_accept_max_rotation_ = getParam<double>("lidar_update/match_accept_max_rotation_deg", max_rotation_update_ * 180.0 / M_PI) * M_PI / 180.0;
-  match_accept_degenerate_max_translation_ =
-      getParam<double>("lidar_update/match_accept_degenerate_max_translation", 0.12);
-  match_accept_degenerate_max_rotation_ =
-      getParam<double>("lidar_update/match_accept_degenerate_max_rotation_deg", 0.8) * M_PI / 180.0;
-  local_radius_ = getParam<double>("map/local_radius", 18.0);
-  local_radius_max_ = std::max(local_radius_, getParam<double>("map/local_radius_max", local_radius_));
-  local_radius_step_ = std::max(0.5, getParam<double>("map/local_radius_step", 2.0));
-  local_submap_enable_ = getParam<bool>("map/local_submap_enable", true);
-  local_submap_max_points_ = std::max(500, getParam<int>("map/local_submap_max_points", 12000));
-  local_submap_min_points_ = std::max(50, getParam<int>("map/local_submap_min_points", 500));
-  ndt_source_voxel_size_ = getParam<double>("lidar_update/ndt_source_voxel_size", 0.35);
-  ndt_target_voxel_size_ = getParam<double>("lidar_update/ndt_target_voxel_size", 0.30);
-  ndt_max_source_points_ = std::max(50, getParam<int>("lidar_update/ndt_max_source_points", 900));
-  ndt_max_target_points_ = getParam<int>("lidar_update/ndt_max_target_points", 25000);
-  ndt_max_iterations_ = std::max(1, getParam<int>("lidar_update/ndt_max_iterations", 15));
-  ndt_resolution_ = getParam<double>("lidar_update/ndt_resolution", 1.0);
-  ndt_step_size_ = getParam<double>("lidar_update/ndt_step_size", 0.1);
-  ndt_transformation_epsilon_ = getParam<double>("lidar_update/ndt_transformation_epsilon", 0.01);
-  ndt_max_fitness_score_ = getParam<double>("lidar_update/ndt_max_fitness_score", 0.6);
-  ndt_accept_max_translation_ = getParam<double>("lidar_update/ndt_accept_max_translation", 0.6);
-  ndt_accept_max_rotation_ = getParam<double>("lidar_update/ndt_accept_max_rotation_deg", 8.0) * M_PI / 180.0;
-  ndt_absolute_pose_mode_ = getParam<bool>("lidar_update/ndt_absolute_pose_mode", false);
-  ndt_use_full_map_target_ = getParam<bool>("lidar_update/ndt_use_full_map_target", false);
-  degeneracy_check_enable_ = getParam<bool>("lidar_update/degeneracy_check_enable", true);
-  degeneracy_min_eigenvalue_ = getParam<double>("lidar_update/degeneracy_min_eigenvalue", 1e-3);
-  degeneracy_max_condition_number_ = getParam<double>("lidar_update/degeneracy_max_condition_number", 1e5);
-  degeneracy_geometry_ratio_ = getParam<double>("lidar_update/degeneracy_geometry_ratio", 0.08);
-  degeneracy_project_update_enable_ = getParam<bool>("lidar_update/degeneracy_project_update_enable", true);
-  degeneracy_project_eigen_ratio_ = getParam<double>("lidar_update/degeneracy_project_eigen_ratio", 0.03);
-  degeneracy_project_min_scale_ = getParam<double>("lidar_update/degeneracy_project_min_scale", 0.10);
   camera_enable_ = getParam<bool>("camera_update/enable", true);
   visual_feature_update_enable_ = getParam<bool>("camera_update/feature_update_enable", true);
   max_over_exposure_ratio_ = getParam<double>("camera_update/max_over_exposure_ratio", 0.25);
@@ -202,8 +109,6 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     path_publish_rate_hz_ = 1.0;
   publish_path_ = getParam<bool>("output/publish_path", false);
   publish_tf_ = getParam<bool>("output/publish_tf", true);
-  publish_filtered_points_ = getParam<bool>("output/publish_filtered_points", true);
-  publish_diagnostics_ = getParam<bool>("output/publish_diagnostics", true);
   print_debug_ = getParam<bool>("output/print_debug", true);
   debug_interval_sec_ = getParam<double>("output/debug_interval_sec", 2.0);
   runtime_csv_path_ = getParam<std::string>("output/runtime_csv_path", "");
@@ -291,12 +196,6 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   for (int i = 6; i < 9; ++i) P_(i, i) = init_rot_std * init_rot_std;
   for (int i = 9; i < 15; ++i) P_(i, i) = init_bias_std * init_bias_std;
 
-  std::vector<double> t_bl = getParamVec("extrinsic/T_base_lidar", {0.0, 0.0, 0.0});
-  std::vector<double> r_bl = getParamVec("extrinsic/R_base_lidar", {1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0});
-  T_base_lidar_ = Eigen::Vector3d(t_bl[0], t_bl[1], t_bl[2]);
-  R_base_lidar_ << r_bl[0], r_bl[1], r_bl[2],
-                   r_bl[3], r_bl[4], r_bl[5],
-                   r_bl[6], r_bl[7], r_bl[8];
   std::vector<double> t_bc = getParamVec("extrinsic/T_base_camera", {0.0, 0.0, 0.0});
   std::vector<double> r_bc = getParamVec("extrinsic/R_base_camera", {1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0});
   T_base_camera_ = Eigen::Vector3d(t_bc[0], t_bc[1], t_bc[2]);
@@ -308,19 +207,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   ROS_INFO("[DogPriorMap C++] T_base_camera=[%.4f %.4f %.4f]",
            T_base_camera_.x(), T_base_camera_.y(), T_base_camera_.z());
 
-  // ------------------------- 2. 加载先验地图 -------------------------
-  // C++版本为了少依赖Python/npz库，直接读取FAST-LIVO2输出的PCD。
-  // 读入后再次按yaml里的voxel_size降采样，并建立KDTree，后续匹配只做最近邻查询。
-  if (load_prior_map_in_ekf)
-  {
-    loadPriorMap();
-  }
-  else
-  {
-    ROS_INFO("[DogPriorMap C++] prior map loading disabled for split EKF");
-  }
-
-  // ------------------------- 3. ROS发布和订阅 -------------------------
+  // ------------------------- 2. ROS发布和订阅 -------------------------
   pub_high_ = nh_.advertise<nav_msgs::Odometry>(odom_high_rate_topic_, 50);
   if (publish_imu_propagate_alias_)
   {
@@ -329,24 +216,6 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   pub_corr_ = nh_.advertise<nav_msgs::Odometry>(odom_corrected_topic_, 20);
   pub_path_high_ = nh_.advertise<nav_msgs::Path>(path_high_rate_topic_, 5);
   pub_path_corr_ = nh_.advertise<nav_msgs::Path>(path_corrected_topic_, 5);
-  pub_prior_map_ = nh_.advertise<sensor_msgs::PointCloud2>(prior_map_topic_, 1, true);
-  if (publish_filtered_points_)
-  {
-    pub_filtered_points_ = nh_.advertise<sensor_msgs::PointCloud2>(filtered_points_topic_, 5);
-  }
-  if (publish_diagnostics_)
-  {
-    pub_diagnostics_ = nh_.advertise<diagnostic_msgs::DiagnosticArray>(diagnostics_topic_, 5);
-  }
-
-  if (map_cloud_)
-  {
-    sensor_msgs::PointCloud2 prior_map_msg;
-    pcl::toROSMsg(*map_cloud_, prior_map_msg);
-    prior_map_msg.header.stamp = ros::Time::now();
-    prior_map_msg.header.frame_id = map_frame_;
-    pub_prior_map_.publish(prior_map_msg);
-  }
   path_high_.header.frame_id = map_frame_;
   path_corr_.header.frame_id = map_frame_;
 
@@ -360,25 +229,13 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
       lidar_degeneracy_topic_, 10, &DogPriorMapEkfNode::lidarDegeneracyCallback, this);
   sub_lidar_information_ = nh_.subscribe(
       lidar_information_topic_, 10, &DogPriorMapEkfNode::lidarInformationCallback, this);
-  if (lidar_enable_)
-  {
-    if (lidar_msg_type_ == "pointcloud2")
-    {
-      sub_pc2_ = nh_.subscribe(lidar_topic_, 5, &DogPriorMapEkfNode::pointCloud2Callback, this);
-    }
-    else
-    {
-      sub_livox_ = nh_.subscribe(lidar_topic_, 5, &DogPriorMapEkfNode::livoxCallback, this);
-    }
-  }
   if (camera_enable_)
   {
     sub_image_ = nh_.subscribe(image_topic_, 2, &DogPriorMapEkfNode::imageCallback, this);
   }
-  const std::string map_status = map_cloud_ ?
-      (std::to_string(map_cloud_->size()) + " pts") : "disabled";
-  ROS_INFO("[DogPriorMap C++] node started: map=%s, imu=%s, lidar=%s",
-           map_status.c_str(), imu_topic_.c_str(), lidar_topic_.c_str());
+  ROS_INFO("[DogPriorMap C++] node started: external_ndt=%s, imu=%s",
+           ndt_observation_enable_ ? ndt_observation_topic_.c_str() : "disabled",
+           imu_topic_.c_str());
   ROS_INFO("[DogPriorMap C++] directional fusion=%d state machine=%d eigen ratio=%.4f",
            directional_fusion_enable_ ? 1 : 0,
            state_machine_enable_ ? 1 : 0,
