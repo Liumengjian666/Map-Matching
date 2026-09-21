@@ -67,7 +67,11 @@ void DogPriorMapEkfNode::publishState(const ros::Time &stamp, bool corrected)
 
   publishPathsIfDue(stamp);
 
-  if (publish_tf_)
+  // The high-rate current-state stream is the single TF authority.  A
+  // corrected/OOSM publication may share the same sensor timestamp as the
+  // following IMU publication; sending both creates TF_REPEATED_DATA and
+  // gives TF two competing writers for camera_init -> livox_frame.
+  if (publish_tf_ && !corrected)
   {
     tf::Transform tf_msg;
     tf_msg.setOrigin(tf::Vector3(p_.x(), p_.y(), p_.z()));
