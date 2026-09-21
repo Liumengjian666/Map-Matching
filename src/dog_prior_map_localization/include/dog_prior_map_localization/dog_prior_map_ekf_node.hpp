@@ -147,6 +147,17 @@ private:
   void updateVisualImuDiagnostic(const ros::Time &stamp);
   /// 将独立 NDT 节点输出作为低频外部观测融合到 EKF 状态中。
   void ndtObservationCallback(const nav_msgs::OdometryConstPtr &msg);
+  /// 在调用方已持有 mutex_ 时执行一条 NDT 观测的完整校正流程。
+  void processNdtObservationLocked(const nav_msgs::OdometryConstPtr &msg);
+  /// 在 IMU 状态推进后按传感器时间处理已到达 watermark 的 NDT 观测。
+  void processReadyDeferredNdtLocked();
+  void writeDeferredDiagnostic(const std::string &event,
+                              double ndt_stamp,
+                              double state_now_stamp,
+                              double future_lead_sec,
+                              std::size_t queue_size,
+                              double wait_ms,
+                              const std::string &result);
   void lidarDegeneracyCallback(const std_msgs::Float64ConstPtr &msg);
   /// 接收 NDT 发布的 6DoF 信息矩阵特征系统，并构造退化/可靠子空间。
   void lidarInformationCallback(const std_msgs::Float64MultiArrayConstPtr &msg);
@@ -290,6 +301,26 @@ private:
   double ndt_observation_max_translation_correction_ = 1.0;
   double ndt_observation_max_rotation_correction_ = 5.0 * M_PI / 180.0;
   double ndt_observation_velocity_blend_ = 0.6;
+  bool future_deferral_enable_ = false;
+  double future_deferral_max_sec_ = 0.010;
+  std::size_t future_deferral_max_queue_ = 20;
+
+  struct DeferredNdtObservation
+  {
+    nav_msgs::OdometryConstPtr msg;
+    double stamp = std::numeric_limits<double>::quiet_NaN();
+    double received_state_stamp = std::numeric_limits<double>::quiet_NaN();
+    double future_lead_sec = std::numeric_limits<double>::quiet_NaN();
+    double received_wall_sec = 0.0;
+  };
+  std::deque<DeferredNdtObservation> deferred_ndt_observations_;
+  uint64_t deferred_received_count_ = 0;
+  uint64_t deferred_processed_count_ = 0;
+  uint64_t deferred_over_limit_count_ = 0;
+  uint64_t deferred_queue_full_count_ = 0;
+  std::size_t max_deferred_queue_size_ = 0;
+  std::string deferred_csv_path_;
+  std::ofstream deferred_csv_;
   double last_ndt_observation_time_ = 0.0;
   Eigen::Vector3d last_ndt_observation_p_map_ = Eigen::Vector3d::Zero();
 

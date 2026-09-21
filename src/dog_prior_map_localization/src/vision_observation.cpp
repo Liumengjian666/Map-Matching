@@ -742,18 +742,81 @@ void DogPriorMapEkfNode::updateVisualImuDiagnostic(const ros::Time &stamp)
   }
 }
 
-// 融合独立 NDT 节点的绝对位姿观测，同时用相邻观测估计并平滑速度。
+// 接收 NDT 观测并负责锁内调度；实际校正逻辑位于
+// processNdtObservationLocked()，以便 deferred measurement 复用同一条路径。
 void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr &msg)
 {
   std::lock_guard<std::mutex> lock(mutex_);
-  if (!ndt_observation_enable_) return;
-  if (!msg) return;
+  if (!ndt_observation_enable_ || !msg) return;
 
   const double t_ndt = msg->header.stamp.toSec();
   const double t_now = has_state_stamp_ ? state_stamp_ :
       std::numeric_limits<double>::quiet_NaN();
   writeEkfPredictionLineage("NDT_CALLBACK_ENTER", ros::Time::now().toSec(), 0,
                             t_ndt, t_now);
+
+  if (oosm_enable_ && future_deferral_enable_ && has_state_stamp_ &&
+      std::isfinite(t_ndt) && std::isfinite(t_now) && t_ndt > t_now + 1e-9)
+  {
+    const double future_lead_sec = t_ndt - t_now;
+    if (future_lead_sec <= future_deferral_max_sec_ + 1e-9)
+    {
+      if (deferred_ndt_observations_.size() >= future_deferral_max_queue_)
+      {
+        ++deferred_queue_full_count_;
+        writeOosmDiagnostic(t_ndt, t_now,
+                            std::numeric_limits<double>::quiet_NaN(),
+                            t_now - t_ndt,
+                            std::numeric_limits<double>::quiet_NaN(), 0,
+                            state_history_.size(), imu_history_.size(),
+                            "FUTURE_QUEUE_FULL");
+        writeDeferredDiagnostic("NDT_DEFERRED_FUTURE", t_ndt, t_now,
+                                future_lead_sec, deferred_ndt_observations_.size(),
+                                0.0, "FUTURE_QUEUE_FULL");
+        return;
+      }
+
+      DeferredNdtObservation deferred;
+      deferred.msg = msg;
+      deferred.stamp = t_ndt;
+      deferred.received_state_stamp = t_now;
+      deferred.future_lead_sec = future_lead_sec;
+      deferred.received_wall_sec = ros::WallTime::now().toSec();
+      auto insert_at = deferred_ndt_observations_.begin();
+      while (insert_at != deferred_ndt_observations_.end() &&
+             insert_at->stamp <= deferred.stamp)
+      {
+        ++insert_at;
+      }
+      deferred_ndt_observations_.insert(insert_at, deferred);
+      ++deferred_received_count_;
+      max_deferred_queue_size_ = std::max(max_deferred_queue_size_,
+                                          deferred_ndt_observations_.size());
+      writeDeferredDiagnostic("NDT_DEFERRED_FUTURE", t_ndt, t_now,
+                              future_lead_sec, deferred_ndt_observations_.size(),
+                              0.0, "DEFERRED");
+      return;
+    }
+
+    ++deferred_over_limit_count_;
+    writeDeferredDiagnostic("NDT_DEFERRED_FUTURE", t_ndt, t_now,
+                            future_lead_sec, deferred_ndt_observations_.size(),
+                            0.0, "FUTURE_OVER_LIMIT");
+  }
+
+  processNdtObservationLocked(msg);
+}
+
+// 融合独立 NDT 节点的绝对位姿观测，同时用相邻观测估计并平滑速度。
+// 调用方必须已经持有 mutex_；该函数只保留一份原有校正、回滚和 replay 逻辑。
+void DogPriorMapEkfNode::processNdtObservationLocked(const nav_msgs::OdometryConstPtr &msg)
+{
+  if (!ndt_observation_enable_) return;
+  if (!msg) return;
+
+  const double t_ndt = msg->header.stamp.toSec();
+  const double t_now = has_state_stamp_ ? state_stamp_ :
+      std::numeric_limits<double>::quiet_NaN();
   const size_t state_history_count = state_history_.size();
   const size_t imu_history_count = imu_history_.size();
   double rollback_stamp = std::numeric_limits<double>::quiet_NaN();

@@ -7,8 +7,12 @@
   <arg name="ndt_diagnostics_csv_path" default="" />
   <arg name="oosm_enable" default="true" />
   <arg name="oosm_max_alignment_sec" default="0.02" />
+  <arg name="future_deferral_enable" default="false" />
+  <arg name="future_deferral_max_sec" default="0.01" />
+  <arg name="future_deferral_max_queue" default="20" />
   <arg name="scan_reference_time" default="mid" />
   <arg name="oosm_csv_path" default="" />
+  <arg name="deferred_csv_path" default="" />
   <arg name="ekf_prediction_diagnostics_csv_path" default="" />
   <arg name="diagnostic_determinism_enable" default="false" />
   <arg name="ndt_determinism_csv_path" default="" />
@@ -38,12 +42,16 @@
   <param name="ndt_observation/max_rotation_correction_deg" value="20.0" />
   <param name="ndt_observation/oosm_enable" value="$(arg oosm_enable)" />
   <param name="ndt_observation/oosm_max_alignment_sec" value="$(arg oosm_max_alignment_sec)" />
+  <param name="ndt_observation/future_deferral_enable" value="$(arg future_deferral_enable)" />
+  <param name="ndt_observation/future_deferral_max_sec" value="$(arg future_deferral_max_sec)" />
+  <param name="ndt_observation/future_deferral_max_queue" value="$(arg future_deferral_max_queue)" />
   <param name="lidar_update/scan_reference_time" value="$(arg scan_reference_time)" />
   <param name="lidar_update/enable" value="false" />
   <param name="map/load_in_ekf" value="false" />
   <param name="output/runtime_csv_path" value="$(arg runtime_csv_path)" />
   <param name="output/publish_path" value="$(arg publish_path)" />
   <param name="output/oosm_csv_path" value="$(arg oosm_csv_path)" />
+  <param name="output/deferred_csv_path" value="$(arg deferred_csv_path)" />
   <param name="output/ekf_prediction_diagnostics_csv_path" value="$(arg ekf_prediction_diagnostics_csv_path)" />
   <param name="output/ndt_diagnostics_csv_path" value="$(arg ndt_diagnostics_csv_path)" />
   <param name="output/diagnostic_determinism_enable" value="$(arg diagnostic_determinism_enable)" />

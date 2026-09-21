@@ -51,6 +51,8 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
     has_state_stamp_ = true;
     state_stamp_ = t;
     saveStateSnapshot(state_stamp_);
+    if (future_deferral_enable_)
+      processReadyDeferredNdtLocked();
     return;
   }
 
@@ -61,6 +63,8 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
     has_state_stamp_ = true;
     state_stamp_ = t;
     saveStateSnapshot(state_stamp_);
+    if (future_deferral_enable_)
+      processReadyDeferredNdtLocked();
     return;
   }
 
@@ -74,8 +78,34 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
   has_state_stamp_ = true;
   state_stamp_ = t;
   saveStateSnapshot(state_stamp_);
+  if (future_deferral_enable_)
+    processReadyDeferredNdtLocked();
   if (publish_high_rate_) publishState(msg->header.stamp, false);
   maybePrintRuntime(msg->header.stamp);
+}
+
+void DogPriorMapEkfNode::processReadyDeferredNdtLocked()
+{
+  if (!future_deferral_enable_ || deferred_ndt_observations_.empty() ||
+      !has_state_stamp_ || !std::isfinite(state_stamp_))
+    return;
+
+  while (!deferred_ndt_observations_.empty() &&
+         deferred_ndt_observations_.front().stamp <= state_stamp_ + 1e-9)
+  {
+    DeferredNdtObservation deferred = deferred_ndt_observations_.front();
+    deferred_ndt_observations_.pop_front();
+    ++deferred_processed_count_;
+    const double wait_ms = std::max(0.0,
+        (ros::WallTime::now().toSec() - deferred.received_wall_sec) * 1000.0);
+    writeDeferredDiagnostic("NDT_DEFERRED_PROCESS", deferred.stamp, state_stamp_,
+                            deferred.future_lead_sec,
+                            deferred_ndt_observations_.size(), wait_ms,
+                            "PROCESS");
+    writeEkfPredictionLineage("NDT_DEFERRED_PROCESS", ros::Time::now().toSec(), 0,
+                              deferred.stamp, state_stamp_);
+    processNdtObservationLocked(deferred.msg);
+  }
 }
 
 void DogPriorMapEkfNode::saveStateSnapshot(double stamp)

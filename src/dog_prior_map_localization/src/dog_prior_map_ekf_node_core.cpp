@@ -59,6 +59,12 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   ndt_observation_max_translation_correction_ = getParam<double>("ndt_observation/max_translation_correction", 1.0);
   ndt_observation_max_rotation_correction_ = getParam<double>("ndt_observation/max_rotation_correction_deg", 5.0) * M_PI / 180.0;
   ndt_observation_velocity_blend_ = getParam<double>("ndt_observation/velocity_blend", 0.6);
+  future_deferral_enable_ = getParam<bool>("ndt_observation/future_deferral_enable", false);
+  future_deferral_max_sec_ = std::max(0.0, std::min(0.1,
+      getParam<double>("ndt_observation/future_deferral_max_sec", 0.010)));
+  future_deferral_max_queue_ = static_cast<std::size_t>(std::max(1,
+      getParam<int>("ndt_observation/future_deferral_max_queue", 20)));
+  deferred_csv_path_ = getParam<std::string>("output/deferred_csv_path", "");
   directional_fusion_enable_ = getParam<bool>("fusion/directional_enable", false);
   state_machine_enable_ = getParam<bool>("fusion/state_machine_enable", false);
   directional_eigen_ratio_ = std::max(1e-6, getParam<double>("fusion/degenerated_eigen_ratio", 0.03));
@@ -229,6 +235,21 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
       ROS_WARN("[DogPriorMap C++] failed to write OOSM CSV: %s", oosm_csv_path_.c_str());
     }
   }
+  if (!deferred_csv_path_.empty())
+  {
+    deferred_csv_.open(deferred_csv_path_, std::ios::out);
+    if (deferred_csv_.is_open())
+    {
+      deferred_csv_ << std::setprecision(17)
+                    << "event,ndt_stamp,state_now_stamp,future_lead_ms,queue_size,"
+                       "wait_ms,result\n";
+      deferred_csv_.flush();
+    }
+    else
+    {
+      ROS_WARN("[DogPriorMap C++] failed to write deferred CSV: %s", deferred_csv_path_.c_str());
+    }
+  }
   ekf_prediction_diagnostics_csv_path_ = getParam<std::string>(
       "output/ekf_prediction_diagnostics_csv_path", "");
   if (!ekf_prediction_diagnostics_csv_path_.empty())
@@ -364,6 +385,29 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
            directional_eigen_ratio_);
   ROS_INFO("[DogPriorMap C++] NDT OOSM=%d max_alignment=%.3f s",
            oosm_enable_ ? 1 : 0, oosm_max_alignment_sec_);
+  ROS_INFO("[DogPriorMap C++] future NDT deferral=%d max=%.3f ms queue=%zu",
+           future_deferral_enable_ ? 1 : 0,
+           future_deferral_max_sec_ * 1000.0,
+           future_deferral_max_queue_);
+}
+
+void DogPriorMapEkfNode::writeDeferredDiagnostic(const std::string &event,
+                                                  double ndt_stamp,
+                                                  double state_now_stamp,
+                                                  double future_lead_sec,
+                                                  std::size_t queue_size,
+                                                  double wait_ms,
+                                                  const std::string &result)
+{
+  if (!deferred_csv_.is_open()) return;
+  deferred_csv_ << event << ","
+                << ndt_stamp << ","
+                << state_now_stamp << ","
+                << future_lead_sec * 1000.0 << ","
+                << queue_size << ","
+                << wait_ms << ","
+                << result << "\n";
+  deferred_csv_.flush();
 }
 
 // 读取浮点数组参数；兼容全局和私有命名空间，并提供安全默认值。
