@@ -78,6 +78,11 @@ The two runtime executables are:
 The ROS-free `oosm_replay_planner_contract_test` is a contract test, not a
 runtime node.
 
+The final loop2 acceptance record is in
+[`docs/validation/FINAL_DELIVERY_ACCEPTANCE_20260922.md`](docs/validation/FINAL_DELIVERY_ACCEPTANCE_20260922.md).
+It includes the two full replays, reference-deviation metrics, resource
+samples, and the known user-owned dirty-file boundary.
+
 ## Research and experimental modules
 
 The following offline material is retained for future experiments but is not
