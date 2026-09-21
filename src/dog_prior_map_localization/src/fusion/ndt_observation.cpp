@@ -1,5 +1,8 @@
 #include "dog_prior_map_localization/dog_prior_map_ekf_node.hpp"
 
+#include <vector>
+
+#include "dog_prior_map_localization/core/math_utils.hpp"
 #include <utility>
 
 #include "dog_prior_map_localization/core/oosm_replay_planner.hpp"

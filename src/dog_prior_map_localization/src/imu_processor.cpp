@@ -1,4 +1,5 @@
 #include "dog_prior_map_localization/dog_prior_map_ekf_node.hpp"
+#include "dog_prior_map_localization/core/math_utils.hpp"
 
 namespace dog_prior_map_localization
 {

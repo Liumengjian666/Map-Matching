@@ -35,11 +35,11 @@ The runtime data flow is:
                                              +-> TF and diagnostic topics
 ```
 
-The canonical launch keeps the validated delivery semantics: camera and
-directional fusion are disabled by default, the integrated EKF LiDAR matcher
-is disabled, NDT prediction is disabled in favor of the local IMU rotation
-prior, and OOSM correction remains enabled. Existing launch arguments can be
-used for diagnostics without changing those defaults.
+The canonical launch is deliberately a small delivery chain: there is no
+active camera frontend, visual update, directional fusion, or integrated EKF
+LiDAR matcher. NDT prediction is disabled in favor of the local IMU rotation
+prior, and OOSM correction remains enabled. The remaining diagnostic switches
+are opt-in and do not change the delivery state by default.
 
 ## Main topics
 
@@ -80,14 +80,15 @@ runtime node.
 
 ## Research and experimental modules
 
-The following code is retained for future experiments but is not part of the
-default delivery runtime or default build:
+The following offline material is retained for future experiments but is not
+part of the default delivery runtime or default build:
 
-- vision frontend and visual fusion code
-- LiDAR degeneracy/directional-fusion code
-- Schur and uncertainty diagnostics
 - `tools/offline/ndt_uncertainty_probe.cpp`
 - `tools/offline/ndt_direction_alignment_probe.cpp`
+
+The former vision and directional-fusion runtime branches are not active in
+the delivery package. Future sensor work must enter through a separate typed
+measurement module; it must not reintroduce direct access to EKF internals.
 
 To build the two offline probes explicitly:
 
@@ -102,12 +103,16 @@ executable.
 
 ## Legacy entry points
 
-`launch/dog_prior_map_localization.launch` is retained for historical
-integrated-mode experiments and is marked `LEGACY / NOT DELIVERY ENTRYPOINT`.
-The Python `dog_prior_map_ekf_node.py` fallback is also retained as source for
-reference, but is no longer installed by the default package build. The old
-YAML profiles in `config/` remain in the repository until a later reference
-cleanup confirms that they can be archived safely.
+The canonical entry point is the split launch above. The old integrated launch,
+Python fallback, and deploy-light-odom scripts are historical artifacts and
+are not installed or used by the canonical runtime. They remain temporarily
+because user-owned staged evaluation scripts still reference them; they are
+tracked as `DEFERRED_DUE_TO_USER_STAGED_WORK` in
+`docs/architecture/FINAL_CODE_REACHABILITY.md` and are not part of delivery.
+
+The unused light-odom, KISS external-prior, and old integrated YAML profiles
+have been removed. `dog_prior_map_localization_ndt.yaml` is the only canonical
+configuration.
 
 ## Map conversion
 

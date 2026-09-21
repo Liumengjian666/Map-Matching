@@ -7,8 +7,8 @@ This repository is a ROS 1 / Catkin package for low-cost prior-map localization 
 Primary references:
 - [README.md](README.md)
 - [CMakeLists.txt](CMakeLists.txt)
-- [launch/dog_prior_map_localization.launch](launch/dog_prior_map_localization.launch)
-- [config/dog_prior_map_localization.yaml](config/dog_prior_map_localization.yaml)
+- [launch/dog_prior_map_localization_split.launch](launch/dog_prior_map_localization_split.launch)
+- [config/dog_prior_map_localization_ndt.yaml](config/dog_prior_map_localization_ndt.yaml)
 
 ## Build and run
 
@@ -16,10 +16,10 @@ Use the standard Catkin workflow from the workspace root:
 
 ```bash
 source /opt/ros/noetic/setup.bash
-cd /home/jian/livox_ws/dog_light_loc_ws
-catkin_make -DCMAKE_BUILD_TYPE=Release
+cd /home/jian/livox_ws/dog_visual_loc_ws
+catkin_make -DCMAKE_BUILD_TYPE=Release --pkg dog_prior_map_localization
 source devel/setup.bash
-roslaunch dog_prior_map_localization dog_prior_map_localization.launch rviz:=false
+roslaunch dog_prior_map_localization dog_prior_map_localization_split.launch rviz:=false
 ```
 
 For offline evaluation or bag playback, follow the commands in [README.md](README.md). The package loads YAML parameters from the config directory and runs the C++ node by default.
@@ -29,7 +29,7 @@ For offline evaluation or bag playback, follow the commands in [README.md](READM
 - `src/` contains the main C++ implementation.
   - `dog_prior_map_ekf_node.cpp` is the main executable entry point.
   - `dog_prior_map_ekf_node_core.cpp` holds the core node logic.
-  - `map_loader.cpp`, `imu_processor.cpp`, `lidar_matcher.cpp`, and `vision_and_initial_pose.cpp` are feature-specific modules.
+- `imu_processor.cpp`, `fusion/ndt_observation.cpp`, and the core files are feature-specific modules.
 - `config/` stores ROS params and tuning profiles for different localization modes.
 - `launch/` contains launch files for robot runtime and split-node setup.
 - `scripts/` contains Python utilities for map conversion, evaluation, and dataset runs.
@@ -47,7 +47,7 @@ For offline evaluation or bag playback, follow the commands in [README.md](READM
 
 When investigating or editing this repo, start with these files based on the area:
 
-- Parameter and launch behavior: [launch/dog_prior_map_localization.launch](launch/dog_prior_map_localization.launch), [config/dog_prior_map_localization.yaml](config/dog_prior_map_localization.yaml)
+- Parameter and launch behavior: [launch/dog_prior_map_localization_split.launch](launch/dog_prior_map_localization_split.launch), [config/dog_prior_map_localization_ndt.yaml](config/dog_prior_map_localization_ndt.yaml)
 - Core node startup: [src/dog_prior_map_ekf_node.cpp](src/dog_prior_map_ekf_node.cpp)
 - Matching and prior-map logic: [src/lidar_matcher.cpp](src/lidar_matcher.cpp), [src/map_loader.cpp](src/map_loader.cpp)
 - IMU, TF, and output flow: [src/imu_processor.cpp](src/imu_processor.cpp), [src/ros_output.cpp](src/ros_output.cpp)

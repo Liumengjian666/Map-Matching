@@ -6,14 +6,11 @@ frames:
   odom_frame: "odom"
   base_frame: "livox_frame" # MID360 雷达/IMU 一体，定位结果直接表示雷达坐标系
   lidar_frame: "livox_frame"
-  camera_frame: "hikrobot_camera"
 
 topics:
   imu: "/livox/imu"
   lidar: "/livox/lidar"
   lidar_msg_type: "livox"
-  image: "/image_left/image_rect"
-  camera_info: "/image_left/camera_info_rect"
   odom_high_rate: "/dog_livo/odom_high_rate"
   imu_propagate: "/LIVO2/imu_propagate"
   odom_corrected: "/dog_livo/odom_corrected"
@@ -36,25 +33,6 @@ map:
   voxel_size: 0.15
   local_radius: 18.0
   max_map_points: 25000
-
-extrinsic:
-  T_base_lidar: [0.0, 0.0, 0.0]
-  R_base_lidar: [1.0, 0.0, 0.0,
-                 0.0, 1.0, 0.0,
-                 0.0, 0.0, 1.0]
-  # FAST-LIVO2 中 X_camera = Rcl * X_lidar + Pcl；这里 base≈lidar，因此 X_base = Rcl^T * X_camera - Rcl^T * Pcl。
-  T_base_camera: [0.108050122829, -0.00442391041245, -0.1043500639]
-  R_base_camera: [0.008746632885, 0.3925737708, 0.9196789281,
-                  -0.9995229208, -0.02381193512, 0.01967034435,
-                  0.02962139622, -0.9194122178, 0.3921782078]
-
-camera_intrinsic:
-  width: 720
-  height: 540
-  fx: 404.61956787109375
-  fy: 404.0733337402344
-  cx: 352.0961769179812
-  cy: 268.1299251892142
 
 imu:
   gravity: 9.80665
@@ -141,49 +119,6 @@ lidar_update:
   schur_planarity_ratio_max: 0.20
   schur_max_source_points: 500
   schur_pinv_relative_epsilon: 0.000001
-
-camera_update:
-  enable: true
-  mode: "quality_gate"
-  feature_update_enable: true
-  # Stage 2 diagnostic only: compare KLT/essential rotation with IMU
-  # integration over the same image timestamps. It never updates the EKF.
-  local_vio_diagnostic_enable: true
-  # Optional IMU-norm scale for the monocular translation direction. This is
-  # diagnostic-only and remains off until its relative-motion consistency is
-  # checked on the bag.
-  local_vio_metric_enable: false
-  imu_rotation_consistency_gate_enable: false
-  imu_rotation_consistency_max_deg: 20.0
-  min_gradient_mean: 2.5
-  max_over_exposure_ratio: 0.25
-  max_under_exposure_ratio: 0.35
-  max_features: 300
-  min_tracked_features: 40
-  max_flow_residual_px: 3.0
-  min_feature_ratio: 0.15
-  max_yaw_update_deg: 0.5
-  good_image_weight_scale: 1.0
-  bad_image_weight_scale: 0.4
-  degenerate_weight_scale: 2.0
-  min_degeneracy_score_for_visual: 0.15
-
-fusion:
-  # Direction-selective fusion is opt-in. Keep both switches false for
-  # Stage-1/2 behavior-neutral replay and enable them only for Stage 3.
-  directional_enable: false
-  state_machine_enable: false
-  degenerated_eigen_ratio: 0.03
-  lidar_degraded_enter_frames: 5
-  visual_assisted_enter_frames: 3
-  both_degraded_enter_frames: 3
-  recovery_exit_frames: 5
-  recovery_weak_weight_start: 0.0
-  skip_updates_when_both_degraded: true
-  lidar_information_max_age_sec: 0.05
-  # The historical yaw-only visual path is kept as an explicit opt-in for
-  # ablation; it is off while validating direction-selective fusion.
-  legacy_visual_yaw_enable: false
 
 output:
   path_max_length: 5000

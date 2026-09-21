@@ -28,13 +28,6 @@
 namespace dog_prior_map_localization
 {
 
-/// 将三维向量转换为叉乘对应的反对称矩阵。
-Eigen::Matrix3d skew(const Eigen::Vector3d &v);
-/// 将角度制的 roll、pitch、yaw 转换为旋转矩阵。
-Eigen::Matrix3d rpyDegToRot(const std::vector<double> &rpy_deg);
-/// 将向量模长限制在给定上限内，方向保持不变。
-Eigen::Vector3d limitVector(const Eigen::Vector3d &v, double max_norm);
-
 class DogPriorMapEkfNode
 {
 public:

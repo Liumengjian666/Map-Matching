@@ -24,14 +24,13 @@ for pattern in ["dog_odom.bag", "dog_odom.bag.active", "latest_runtime.csv", "cp
 PY
 
 source /opt/ros/noetic/setup.bash
-source /home/jian/livox_ws/devel/setup.bash
-source /home/jian/dog_prior_map_livo_ws/devel/setup.bash
+source /home/jian/livox_ws/dog_visual_loc_ws/devel/setup.bash
 
 rosparam set /use_sim_time true
 
-roslaunch dog_prior_map_localization dog_prior_map_localization.launch \
-  config:="${DOG_PRIOR_CONFIG:-/home/jian/dog_prior_map_livo_ws/src/dog_prior_map_localization/config/dog_prior_map_localization.yaml}" \
-  use_cpp:=true rviz:=false \
+roslaunch dog_prior_map_localization dog_prior_map_localization_split.launch \
+  config:="${DOG_PRIOR_CONFIG:-/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/config/dog_prior_map_localization_ndt.yaml}" \
+  rviz:=false \
   runtime_csv_path:="$OUT/latest_runtime.csv" \
   > "$OUT/node.log" 2>&1 &
 NODE_PID=$!
@@ -56,22 +55,18 @@ rosbag play --clock -r "${DOG_PRIOR_PLAY_RATE:-1}" --duration="$DURATION" "$BAG"
   > "$OUT/play.log" 2>&1 || true
 sleep 2
 
-GLOBAL_RUNTIME_CSV="/home/jian/dog_prior_map_livo_ws/validation/latest_runtime.csv"
-if [ ! -f "$OUT/latest_runtime.csv" ] && [ -f "$GLOBAL_RUNTIME_CSV" ]; then
-  cp "$GLOBAL_RUNTIME_CSV" "$OUT/latest_runtime.csv"
-fi
-
 for node in $(rosnode list 2>/dev/null | grep '^/record' || true); do
   rosnode kill "$node" >/dev/null 2>&1 || true
 done
 rosnode kill /dog_prior_map_ekf >/dev/null 2>&1 || true
+rosnode kill /dog_prior_map_ndt >/dev/null 2>&1 || true
 sleep 2
 
 wait "$REC_PID" 2>/dev/null || true
 wait "$NODE_PID" 2>/dev/null || true
 wait "$MON_PID" 2>/dev/null || true
 
-python3 /home/jian/dog_prior_map_livo_ws/src/dog_prior_map_localization/scripts/evaluate_runtime_and_accuracy.py \
+python3 /home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/scripts/evaluate_runtime_and_accuracy.py \
   --name "$NAME" \
   --odom-bag "$OUT/dog_odom.bag" \
   --runtime-csv "$OUT/latest_runtime.csv" \

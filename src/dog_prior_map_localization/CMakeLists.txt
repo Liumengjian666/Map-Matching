@@ -46,7 +46,6 @@ add_executable(dog_prior_map_ekf_node_cpp
   src/imu_processor.cpp
   src/fusion/ndt_observation.cpp
   src/ros_output.cpp
-  src/math_utils.cpp
 )
 
 target_link_libraries(dog_prior_map_ekf_node_cpp

@@ -7,7 +7,8 @@ namespace dog_prior_map_localization
 DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
 {
   // ------------------------- 1. 读取ROS参数 -------------------------
-  // 这些参数都放在 config/dog_prior_map_localization.yaml 里，部署到机器狗时只改yaml，不改代码。
+  // These parameters are kept in the canonical NDT split YAML so deployment
+  // changes remain configuration-only.
   map_frame_ = getParam<std::string>("frames/map_frame", "map");
   odom_frame_ = getParam<std::string>("frames/odom_frame", "odom");
   base_frame_ = getParam<std::string>("frames/base_frame", "base_link");

@@ -1,12 +1,12 @@
 # Delivery runtime manifest
 
-Status: canonical delivery surface for `DELIVERY-CLEANUP-1`  
+Status: historical manifest superseded by `FINAL_CODE_REACHABILITY.md`  
 Repository: `https://github.com/Liumengjian666/fuxianFASTLIVO2`  
 Branch: `feature/visual-factor-window`  
 Baseline: `6f5a0d5b315fd5d77570327a3bd0b059ca5de2be`
 
-This document describes the runtime path that should be used for the teacher
-project. It does not remove research code or change localization behavior.
+The canonical runtime remains the split NDT + IMU/EKF chain. Current cleanup
+and reachability decisions are recorded in `FINAL_CODE_REACHABILITY.md`.
 
 ## Canonical entry points
 
@@ -34,13 +34,11 @@ default semantics are:
 | Executable | Runtime role | Primary source |
 |---|---|---|
 | `dog_prior_map_ndt_node_cpp` | Livox scan preprocessing, prior-map NDT, NDT diagnostics and `/dog_livo/ndt_odom` | `src/dog_prior_map_ndt_node.cpp` |
-| `dog_prior_map_ekf_node_cpp` | IMU propagation, NDT observation correction, OOSM replay, output and TF | `src/dog_prior_map_ekf_node.cpp`, `src/dog_prior_map_ekf_node_core.cpp`, `src/imu_processor.cpp`, `src/vision_observation.cpp`, `src/ros_output.cpp`, `src/core/state_history.cpp`, `src/core/oosm_replay_planner.cpp` |
+| `dog_prior_map_ekf_node_cpp` | IMU propagation, NDT observation correction, OOSM replay, output and TF | `src/dog_prior_map_ekf_node.cpp`, `src/dog_prior_map_ekf_node_core.cpp`, `src/imu_processor.cpp`, `src/ros_output.cpp`, `src/core/state_history.cpp`, `src/core/oosm_replay_planner.cpp` |
 
-The EKF executable still compiles `map_loader.cpp`, `lidar_matcher.cpp`, and
-`math_utils.cpp` because the current `DogPriorMapEkfNode` is a transitional
-God class. In the canonical split launch, integrated LiDAR matching and EKF map
-loading are disabled; these compiled-but-inactive pieces are intentionally
-kept for a later ownership refactor.
+The EKF executable no longer compiles the removed integrated LiDAR/map
+translation units. The independent NDT node owns prior-map loading and
+matching; the EKF consumes only its timestamped odometry observation.
 
 `oosm_replay_planner_contract_test` is a ROS-free contract test, not a runtime
 node.
@@ -50,7 +48,7 @@ node.
 - `/livox/lidar`
 - `/livox/imu`
 - `map/pcd_fallback_path` or `map/npz_path` from the canonical YAML
-- optional camera topics are disabled by the canonical split launch
+- camera topics are not part of the delivery path
 
 ## Outputs
 
@@ -69,10 +67,9 @@ node.
 
 The current package build requires the ROS components in `package.xml`: roscpp,
 rospy, sensor_msgs, nav_msgs, geometry_msgs, std_msgs, diagnostic_msgs,
-cv_bridge, tf2_ros, tf, pcl_ros, pcl_conversions, and livox_ros_driver2. Eigen,
-PCL, and OpenCV remain build dependencies because the transitional EKF source
-still contains integrated LiDAR and vision code. Further dependency reduction
-is deliberately deferred to a later refactor.
+cv_bridge, tf2_ros, tf, pcl_ros, pcl_conversions, and livox_ros_driver2. Eigen
+and PCL remain build dependencies for the core/NDT targets. The Python fallback
+dependency remains only for the historical user-owned scripts described below.
 
 The offline research probes use Eigen and PCL and are not linked to either
 runtime executable. They are only added to the build when
@@ -86,16 +83,11 @@ runtime executable. They are only added to the build when
   retained and marked `LEGACY / NOT DELIVERY ENTRYPOINT`.
 - `scripts/dog_prior_map_ekf_node.py`: Python fallback source; retained for
   reference but no longer installed by the default CMake install surface.
-- `config/dog_prior_map_localization.yaml`: referenced by a historical
-  evaluation script and old documentation, not by the canonical split launch.
 - `config/dog_prior_map_localization_deploy_light_odom.yaml`: referenced only
   by historical loop3/loop5 scripts using the separate `dog_light_loc_ws`
   workspace.
-- `config/dog_light_odom_only.yaml` and
-  `config/dog_light_odom_only_tuned.yaml`: no current launch/script reference
-  was found; retained as legacy candidates pending a separate archive decision.
-- `config/dog_prior_map_localization_kiss_external_prior.yaml`: no current
-  launch/script reference was found; retained as a legacy candidate.
+- The unused light-odom, old integrated, and KISS external-prior profiles were
+  removed; `dog_prior_map_localization_ndt.yaml` is the only canonical config.
 
 ### Research-only tools
 

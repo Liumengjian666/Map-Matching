@@ -2,7 +2,7 @@
 <package format="2">
   <name>dog_prior_map_localization</name>
   <version>0.1.0</version>
-  <description>Low-compute prior-map localization for quadruped robot using IMU propagation, LiDAR map matching, and optional camera constraints.</description>
+  <description>Low-compute prior-map localization for a quadruped robot using independent LiDAR NDT matching, IMU propagation, and timestamped EKF/OOSM correction.</description>
   <maintainer email="jian@example.com">jian</maintainer>
   <license>MIT</license>
 
