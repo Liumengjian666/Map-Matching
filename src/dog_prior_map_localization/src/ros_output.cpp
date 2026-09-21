@@ -3,22 +3,6 @@
 namespace dog_prior_map_localization
 {
 
-namespace
-{
-const char *localizationModeName(DogPriorMapEkfNode::LocalizationMode mode)
-{
-  switch (mode)
-  {
-    case DogPriorMapEkfNode::LocalizationMode::LIDAR_DEGRADED: return "LIDAR_DEGRADED";
-    case DogPriorMapEkfNode::LocalizationMode::VISION_ASSISTED: return "VISION_ASSISTED";
-    case DogPriorMapEkfNode::LocalizationMode::BOTH_DEGRADED: return "BOTH_DEGRADED";
-    case DogPriorMapEkfNode::LocalizationMode::RECOVERY: return "RECOVERY";
-    case DogPriorMapEkfNode::LocalizationMode::NORMAL:
-    default: return "NORMAL";
-  }
-}
-}  // namespace
-
 // 发布当前导航状态；corrected 区分 LiDAR 校正结果和纯 IMU 高频传播结果。
 void DogPriorMapEkfNode::publishState(const ros::Time &stamp, bool corrected)
 {
@@ -199,7 +183,7 @@ void DogPriorMapEkfNode::publishPathsIfDue(const ros::Time &stamp)
   pub_path_corr_.publish(path_corr_);
 }
 
-// 定期汇总输入频率、匹配成功率和耗时，并可追加写入运行统计 CSV。
+// 定期汇总 IMU、NDT 校正和 OOSM 运行统计，并可追加写入 CSV。
 void DogPriorMapEkfNode::maybePrintRuntime(const ros::Time &stamp)
 {
   if (!print_debug_) return;
@@ -209,49 +193,33 @@ void DogPriorMapEkfNode::maybePrintRuntime(const ros::Time &stamp)
   {
     last_debug_time_ = now;
     last_debug_imu_count_ = imu_msg_count_;
-    last_debug_lidar_count_ = lidar_msg_count_;
     last_debug_update_ok_count_ = lidar_update_ok_count_;
-    last_debug_image_count_ = image_msg_count_;
     return;
   }
 
   const double dt = std::max(now - last_debug_time_, 1e-6);
   const uint64_t imu_delta = imu_msg_count_ - last_debug_imu_count_;
-  const uint64_t lidar_delta = lidar_msg_count_ - last_debug_lidar_count_;
   const uint64_t update_delta = lidar_update_ok_count_ - last_debug_update_ok_count_;
-  const uint64_t image_delta = image_msg_count_ - last_debug_image_count_;
   const uint64_t update_total = std::max<uint64_t>(lidar_update_ok_count_ + lidar_update_fail_count_, 1);
   const double avg_update_ms = lidar_update_time_sum_ms_ / static_cast<double>(update_total);
   const uint64_t icp_total = std::max<uint64_t>(icp_update_ok_count_ + icp_update_fail_count_, 1);
   const double avg_icp_ms = icp_update_time_sum_ms_ / static_cast<double>(icp_total);
-  const uint64_t image_total = std::max<uint64_t>(image_msg_count_, 1);
-  const double avg_visual_ms = visual_update_time_sum_ms_ / static_cast<double>(image_total);
 
-  ROS_INFO("[DogPriorMap C++] runtime: imu=%.1fHz lidar=%.1fHz image=%.1fHz corr=%.2fHz lidar_ms(avg/max)=%.2f/%.2f ndt_ms(avg/max)=%.2f/%.2f visual_ms(avg/max)=%.2f/%.2f feature=%.2f v_weight=%.2f degen=%d score=%.2f ok/fail=%lu/%lu ndt=%lu/%lu",
+  ROS_INFO("[DogPriorMap C++] runtime: imu=%.1fHz corr=%.2fHz ndt_ms(avg/max)=%.2f/%.2f oosm=%lu deferred=%lu/%lu ok/fail=%lu/%lu",
            static_cast<double>(imu_delta) / dt,
-           static_cast<double>(lidar_delta) / dt,
-           static_cast<double>(image_delta) / dt,
            static_cast<double>(update_delta) / dt,
-           avg_update_ms,
-           lidar_update_time_max_ms_,
            avg_icp_ms,
            icp_update_time_max_ms_,
-           avg_visual_ms,
-           visual_update_time_max_ms_,
-           last_feature_ratio_,
-           visual_constraint_weight_scale_,
-           lidar_degenerate_ ? 1 : 0,
-           lidar_degeneracy_score_,
+           static_cast<unsigned long>(oosm_frame_index_),
+           static_cast<unsigned long>(deferred_received_count_),
+           static_cast<unsigned long>(deferred_processed_count_),
            static_cast<unsigned long>(lidar_update_ok_count_),
-           static_cast<unsigned long>(lidar_update_fail_count_),
-           static_cast<unsigned long>(icp_update_ok_count_),
-           static_cast<unsigned long>(icp_update_fail_count_));
+           static_cast<unsigned long>(lidar_update_fail_count_));
 
   if (runtime_csv_.is_open())
   {
     runtime_csv_ << now << ","
                  << static_cast<double>(imu_delta) / dt << ","
-                 << static_cast<double>(lidar_delta) / dt << ","
                  << static_cast<double>(update_delta) / dt << ","
                  << avg_update_ms << ","
                  << lidar_update_time_max_ms_ << ","
@@ -263,73 +231,22 @@ void DogPriorMapEkfNode::maybePrintRuntime(const ros::Time &stamp)
                  << last_mean_residual_ << ","
                  << lidar_update_ok_count_ << ","
                  << lidar_update_fail_count_ << ","
-                 << static_cast<double>(image_delta) / dt << ","
-                 << avg_visual_ms << ","
-                 << visual_update_time_max_ms_ << ","
-                 << last_feature_ratio_ << ","
-                 << visual_constraint_weight_scale_ << ","
-                 << (lidar_degenerate_ ? 1 : 0) << ","
-                 << lidar_degeneracy_score_ << ","
-                 << visual_update_ok_count_ << ","
-                 << visual_update_fail_count_ << ","
                  << "rss_sampled_by_ps" << ","
-                 << localizationModeName(localization_mode_) << ","
-                 << (lidar_information_received_ ? 1 : 0) << ","
-                 << (lidar_information_valid_ ? 1 : 0) << ","
-                 << (lidar_information_degenerate_ ? 1 : 0) << ","
-                 << (lidar_information_stale_ ? 1 : 0) << ","
-                 << (lidar_projector_valid_ ? 1 : 0) << ","
-                 << lidar_information_stamp_ << ","
-                 << lidar_information_condition_ << ","
-                 << lidar_information_eigenvalues_(0) << ","
-                 << lidar_information_eigenvalues_(1) << ","
-                 << lidar_information_eigenvalues_(2) << ","
-                 << lidar_information_eigenvalues_(3) << ","
-                 << lidar_information_eigenvalues_(4) << ","
-                 << lidar_information_eigenvalues_(5) << ","
-                 << lidar_information_weak_eigenvector_(0) << ","
-                 << lidar_information_weak_eigenvector_(1) << ","
-                 << lidar_information_weak_eigenvector_(2) << ","
-                 << lidar_information_weak_eigenvector_(3) << ","
-                 << lidar_information_weak_eigenvector_(4) << ","
-                 << lidar_information_weak_eigenvector_(5) << ","
-                 << lidar_geometry_degeneracy_score_ << ","
-                 << (lidar_geometry_degeneracy_valid_ ? 1 : 0) << ","
-                 << last_visual_feature_count_ << ","
-                 << last_visual_tracked_count_ << ","
-                 << last_visual_inlier_count_ << ","
-                 << last_visual_flow_residual_px_ << ","
-                 << (last_visual_flow_residual_valid_ ? 1 : 0) << ","
-                 << last_visual_reprojection_error_px_ << ","
-                 << last_visual_relative_pose_(0) << ","
-                 << last_visual_relative_pose_(1) << ","
-                 << last_visual_relative_pose_(2) << ","
-                 << last_visual_relative_pose_(3) << ","
-                 << last_visual_relative_pose_(4) << ","
-                 << last_visual_relative_pose_(5) << ","
-                 << (last_visual_relative_pose_valid_ ? 1 : 0) << ","
-                 << last_visual_imu_rotation_residual_deg_ << ","
-                 << (last_visual_imu_rotation_valid_ ? 1 : 0) << ","
-                 << last_visual_translation_scale_m_ << ","
-                 << last_visual_covariance_diag_(0) << ","
-                 << last_visual_covariance_diag_(1) << ","
-                 << last_visual_covariance_diag_(2) << ","
-                 << last_visual_covariance_diag_(3) << ","
-                 << last_visual_covariance_diag_(4) << ","
-                 << last_visual_covariance_diag_(5) << ","
-                 << (last_visual_metric_translation_valid_ ? 1 : 0) << ","
-                 << (last_visual_reprojection_valid_ ? 1 : 0) << ","
-                 << (last_visual_covariance_valid_ ? 1 : 0) << ","
-                 << last_visual_update_reason_
+                 << oosm_frame_index_ << ","
+                 << deferred_received_count_ << ","
+                 << deferred_processed_count_ << ","
+                 << deferred_over_limit_count_ << ","
+                 << deferred_queue_full_count_ << ","
+                 << max_deferred_queue_size_ << ","
+                 << state_history_.size() << ","
+                 << imu_history_.size()
                  << "\n";
     runtime_csv_.flush();
   }
 
   last_debug_time_ = now;
   last_debug_imu_count_ = imu_msg_count_;
-  last_debug_lidar_count_ = lidar_msg_count_;
   last_debug_update_ok_count_ = lidar_update_ok_count_;
-  last_debug_image_count_ = image_msg_count_;
 }
 
 }  // namespace dog_prior_map_localization

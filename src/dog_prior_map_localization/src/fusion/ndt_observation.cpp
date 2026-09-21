@@ -136,33 +136,6 @@ void DogPriorMapEkfNode::processNdtObservationLocked(const nav_msgs::OdometryCon
   }
   Eigen::Matrix3d R_target = q_target.normalized().toRotationMatrix();
 
-  // Float64MultiArray carries the LiDAR sensor stamp in data[0].  The
-  // eigensystem is usable for this observation only when that stamp is close
-  // enough; an old projector must never be applied to a new pose.
-  const double observation_stamp = msg->header.stamp.toSec();
-  lidar_information_stale_ = !(lidar_information_received_ &&
-      lidar_information_valid_ && std::isfinite(observation_stamp) &&
-      std::isfinite(lidar_information_stamp_) &&
-      std::abs(observation_stamp - lidar_information_stamp_) <= lidar_information_max_age_sec_ &&
-      lidar_projector_valid_);
-  updateLocalizationMode(true, false);
-
-  const bool directional_mode = directional_fusion_enable_ && state_machine_enable_;
-  if (directional_mode && localization_mode_ == LocalizationMode::BOTH_DEGRADED &&
-      skip_updates_when_both_degraded_)
-  {
-    // Do not feed an untrusted absolute pose (or its differenced velocity)
-    // into the EKF while both sensors are degraded.  Reset the velocity
-    // differencer so the next accepted observation cannot span the outage.
-    last_ndt_observation_time_ = 0.0;
-    last_ndt_observation_p_map_ = p_target;
-    last_mean_residual_ = 0.0;
-    publishState(oosm_enable_ && std::isfinite(t_now) ? ros::Time(t_now) : msg->header.stamp,
-                 false);
-    writeOosmResult("BOTH_DEGRADED_SKIP");
-    return;
-  }
-
   if (oosm_enable_)
   {
     if (!has_state_stamp_ || !std::isfinite(t_now))
@@ -240,46 +213,6 @@ void DogPriorMapEkfNode::processNdtObservationLocked(const nav_msgs::OdometryCon
   dtheta.y() *= roll_pitch_ratio;
   dp = limitVector(dp, ndt_observation_max_translation_correction_);
 
-  // In a locally degenerate mode, keep the LiDAR correction in the reliable
-  // eigenspace.  During RECOVERY, weak directions are reintroduced smoothly
-  // instead of switching from zero to full weight on a single frame.
-  const bool use_directional_lidar = directional_mode &&
-      localization_mode_ != LocalizationMode::NORMAL &&
-      lidar_directional_valid_ && lidar_directional_degenerate_ &&
-      !lidar_information_stale_ && lidar_projector_valid_;
-  if (use_directional_lidar)
-  {
-    double weak_weight = 0.0;
-    if (localization_mode_ == LocalizationMode::RECOVERY)
-    {
-      const double progress = static_cast<double>(lidar_recovery_count_) /
-          static_cast<double>(std::max(1, recovery_exit_frames_));
-      weak_weight = recovery_weak_weight_start_ +
-          (1.0 - recovery_weak_weight_start_) * std::max(0.0, std::min(1.0, progress));
-    }
-    Eigen::Matrix<double, 6, 1> correction;
-    correction.head<3>() = dp;
-    correction.tail<3>() = dtheta * information_rotation_scale_m_;
-    const Eigen::Matrix<double, 6, 6> projector =
-        lidar_reliable_projector_ + weak_weight * lidar_degenerate_projector_;
-    correction = projector * correction;
-    if (!correction.allFinite())
-    {
-      if (oosm_active)
-      {
-        restoreOosmAttempt();
-        writeOosmResult("REPLAY_INCOMPLETE");
-      }
-      else
-      {
-        writeOosmResult("INVALID_MEASUREMENT");
-      }
-      return;
-    }
-    dp = correction.head<3>();
-    dtheta = correction.tail<3>() / information_rotation_scale_m_;
-  }
-
   applyPoseCorrection(dp, dtheta);
   writeEkfPredictionLineage("NDT_CORRECTION_APPLIED", ros::Time::now().toSec(), 0,
                             t_ndt, t_now,
@@ -299,21 +232,6 @@ void DogPriorMapEkfNode::processNdtObservationLocked(const nav_msgs::OdometryCon
   {
     Eigen::Vector3d odom_velocity = (p_target - last_ndt_observation_p_map_) / dt;
     odom_velocity.z() *= z_ratio;
-    if (use_directional_lidar)
-    {
-      double weak_weight = 0.0;
-      if (localization_mode_ == LocalizationMode::RECOVERY)
-      {
-        const double progress = static_cast<double>(lidar_recovery_count_) /
-            static_cast<double>(std::max(1, recovery_exit_frames_));
-        weak_weight = recovery_weak_weight_start_ +
-            (1.0 - recovery_weak_weight_start_) * std::max(0.0, std::min(1.0, progress));
-      }
-      Eigen::Matrix<double, 6, 1> velocity6 = Eigen::Matrix<double, 6, 1>::Zero();
-      velocity6.head<3>() = odom_velocity;
-      velocity6 = (lidar_reliable_projector_ + weak_weight * lidar_degenerate_projector_) * velocity6;
-      odom_velocity = velocity6.head<3>();
-    }
     const double blend = std::max(0.0, std::min(1.0, ndt_observation_velocity_blend_));
     v_ = (1.0 - blend) * v_ + blend * odom_velocity;
   }

@@ -91,7 +91,7 @@ def read_runtime_csv(path):
         return {}
 
     def vals(key):
-        return [float(row[key]) for row in rows if row.get(key, "") != ""]
+        return [float(row[key]) for row in rows if row.get(key, "") not in ("", "nan", "NaN")]
 
     out = {"runtime_rows": len(rows)}
     for key in [

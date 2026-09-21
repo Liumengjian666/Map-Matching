@@ -15,7 +15,6 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   std_msgs
   diagnostic_msgs
-  cv_bridge
   tf2_ros
   tf
   pcl_ros
@@ -25,12 +24,11 @@ find_package(catkin REQUIRED COMPONENTS
 
 find_package(Eigen3 REQUIRED)
 find_package(PCL REQUIRED COMPONENTS common filters io kdtree registration)
-find_package(OpenCV REQUIRED)
 
 set(CMAKE_CXX_FLAGS "-O2 -g -Wall ${CMAKE_CXX_FLAGS}")
 
 catkin_package(
-  CATKIN_DEPENDS roscpp rospy sensor_msgs nav_msgs geometry_msgs std_msgs diagnostic_msgs cv_bridge tf2_ros tf pcl_ros pcl_conversions livox_ros_driver2
+  CATKIN_DEPENDS roscpp rospy sensor_msgs nav_msgs geometry_msgs std_msgs diagnostic_msgs tf2_ros tf pcl_ros pcl_conversions livox_ros_driver2
 )
 
 include_directories(
@@ -38,7 +36,6 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIRS}
   ${PCL_INCLUDE_DIRS}
-  ${OpenCV_INCLUDE_DIRS}
 )
 
 add_executable(dog_prior_map_ekf_node_cpp
@@ -47,7 +44,6 @@ add_executable(dog_prior_map_ekf_node_cpp
   src/core/oosm_replay_planner.cpp
   src/core/state_history.cpp
   src/imu_processor.cpp
-  src/vision_observation.cpp
   src/fusion/ndt_observation.cpp
   src/ros_output.cpp
   src/math_utils.cpp
@@ -55,7 +51,6 @@ add_executable(dog_prior_map_ekf_node_cpp
 
 target_link_libraries(dog_prior_map_ekf_node_cpp
   ${catkin_LIBRARIES}
-  ${OpenCV_LIBRARIES}
 )
 
 add_dependencies(dog_prior_map_ekf_node_cpp

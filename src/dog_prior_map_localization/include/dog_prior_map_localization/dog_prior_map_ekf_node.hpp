@@ -8,7 +8,6 @@
 #include <iomanip>
 #include <limits>
 #include <mutex>
-#include <random>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -16,19 +15,11 @@
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 
-#include <cv_bridge/cv_bridge.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <nav_msgs/Odometry.h>
-#include <opencv2/calib3d.hpp>
-#include <opencv2/core.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/video/tracking.hpp>
 #include <nav_msgs/Path.h>
 #include <ros/ros.h>
-#include <sensor_msgs/Image.h>
 #include <sensor_msgs/Imu.h>
-#include <std_msgs/Float64.h>
-#include <std_msgs/Float64MultiArray.h>
 #include <tf/transform_broadcaster.h>
 
 #include "dog_prior_map_localization/core/estimator_types.hpp"
@@ -47,18 +38,7 @@ Eigen::Vector3d limitVector(const Eigen::Vector3d &v, double max_norm);
 class DogPriorMapEkfNode
 {
 public:
-  // Direction-selective fusion and the hysteresis state machine are opt-in.
-  // The default configuration remains the existing full NDT + IMU + EKF path.
-  enum class LocalizationMode
-  {
-    NORMAL,
-    LIDAR_DEGRADED,
-    VISION_ASSISTED,
-    BOTH_DEGRADED,
-    RECOVERY
-  };
-
-  /// 读取参数、初始化状态与地图，并建立 ROS 订阅发布关系。
+  /// 读取参数、初始化状态并建立 ROS 订阅发布关系。
   DogPriorMapEkfNode();
 
 private:
@@ -72,9 +52,6 @@ private:
     return default_value;
   }
 
-  /// 读取 double 数组参数，读取失败时返回调用者提供的默认数组。
-  std::vector<double> getParamVec(const std::string &name, const std::vector<double> &default_value);
-
   /// 接收 IMU 数据，完成初始化、状态传播和高频里程计发布。
   void imuCallback(const sensor_msgs::ImuConstPtr &msg);
   /// 使用一次 IMU 测量传播姿态、速度、位置和误差状态协方差。
@@ -87,23 +64,8 @@ private:
                                    double &alignment_error) const;
   void eraseStateHistoryAfter(double stamp);
 
-  /// 对指定时间区间的陀螺仪数据积分，得到相对旋转。
-  Eigen::Matrix3d integrateImuRotation(double t0, double t1) const;
-  /// 对指定时间区间的 IMU 数据积分，得到相对旋转和平移。
-  bool integrateImuDelta(double t0, double t1, Eigen::Matrix3d &R_delta, Eigen::Vector3d &p_delta) const;
   /// 将位置和小角度姿态修正反馈到当前导航状态。
   void applyPoseCorrection(const Eigen::Vector3d &dp, const Eigen::Vector3d &dtheta);
-  /// 评估图像质量、跟踪角点，并在 LiDAR 退化时触发视觉航向约束。
-  void imageCallback(const sensor_msgs::ImageConstPtr &msg);
-  /// 从相邻图像的特征运动估计相对旋转，并仅反馈受限的 yaw 修正。
-  bool applyVisualYawCorrection(const cv::Mat &prev_gray,
-                                const cv::Mat &curr_gray,
-                                const std::vector<cv::Point2f> &prev_pts,
-                                const std::vector<cv::Point2f> &curr_pts,
-                                double weight_scale,
-                                bool apply_correction);
-  /// 仅用于诊断：比较视觉相对旋转与同一图像时间窗内的陀螺仪积分。
-  void updateVisualImuDiagnostic(const ros::Time &stamp);
   /// 将独立 NDT 节点输出作为低频外部观测融合到 EKF 状态中。
   void ndtObservationCallback(const nav_msgs::OdometryConstPtr &msg);
   /// 在调用方已持有 mutex_ 时执行一条 NDT 观测的完整校正流程。
@@ -117,14 +79,6 @@ private:
                               std::size_t queue_size,
                               double wait_ms,
                               const std::string &result);
-  void lidarDegeneracyCallback(const std_msgs::Float64ConstPtr &msg);
-  /// 接收 NDT 发布的 6DoF 信息矩阵特征系统，并构造退化/可靠子空间。
-  void lidarInformationCallback(const std_msgs::Float64MultiArrayConstPtr &msg);
-  /// 带滞回地更新 NORMAL/DEGRADED/RECOVERY 状态；默认只记录，不参与更新。
-  void updateLocalizationMode(bool lidar_event, bool visual_event);
-  /// 根据特征值比例构造 P_d 与 P_r，状态顺序为 [x,y,z,roll,pitch,yaw]。
-  void rebuildDirectionalProjectors();
-
   /// 发布当前里程计，并按配置同步发布路径、TF 和兼容话题。
   void publishState(const ros::Time &stamp, bool corrected);
   /// 向轨迹消息追加一个位姿，并限制轨迹缓存长度。
@@ -158,10 +112,7 @@ private:
   ros::NodeHandle nh_;
   ros::NodeHandle pnh_;
   ros::Subscriber sub_imu_;
-  ros::Subscriber sub_image_;
   ros::Subscriber sub_ndt_observation_;
-  ros::Subscriber sub_lidar_degeneracy_;
-  ros::Subscriber sub_lidar_information_;
   ros::Publisher pub_high_;
   ros::Publisher pub_imu_propagate_;
   ros::Publisher pub_corr_;
@@ -179,10 +130,7 @@ private:
   std::string odom_frame_;
   std::string base_frame_;
   std::string imu_topic_;
-  std::string image_topic_;
   std::string ndt_observation_topic_;
-  std::string lidar_degeneracy_topic_;
-  std::string lidar_information_topic_;
   std::string odom_high_rate_topic_;
   std::string imu_propagate_topic_;
   std::string odom_corrected_topic_;
@@ -196,9 +144,6 @@ private:
   Eigen::Vector3d bg_;
   Eigen::Vector3d g_;
   Matrix15d P_;
-
-  Eigen::Vector3d T_base_camera_ = Eigen::Vector3d::Zero();
-  Eigen::Matrix3d R_base_camera_ = Eigen::Matrix3d::Identity();
 
   double gravity_norm_ = 9.80665;
   double max_imu_dt_ = 0.05;
@@ -257,115 +202,6 @@ private:
   double last_ndt_observation_time_ = 0.0;
   Eigen::Vector3d last_ndt_observation_p_map_ = Eigen::Vector3d::Zero();
 
-  // Direction-selective fusion is deliberately opt-in.  Until a replay
-  // validates the eigensystem convention and visual relative motion, the
-  // existing full NDT correction remains the only active measurement path.
-  bool directional_fusion_enable_ = false;
-  bool state_machine_enable_ = false;
-  double directional_eigen_ratio_ = 0.03;
-  int lidar_degraded_enter_frames_ = 5;
-  int visual_assisted_enter_frames_ = 3;
-  int both_degraded_enter_frames_ = 3;
-  int recovery_exit_frames_ = 5;
-  double recovery_weak_weight_start_ = 0.0;
-  bool skip_updates_when_both_degraded_ = true;
-  bool legacy_visual_yaw_enable_ = false;
-  double lidar_information_max_age_sec_ = 0.05;
-  // Internal information coordinates are [m,m,m,scale*m,scale*m,scale*m]
-  // so translation and rotation eigenvalues are comparable.  The public
-  // telemetry still reports roll/pitch/yaw components in radians.
-  double information_rotation_scale_m_ = 1.0;
-  bool local_vio_diagnostic_enable_ = true;
-  // Experimental diagnostic only: use the norm of short-window IMU
-  // preintegration to scale the monocular essential-matrix translation
-  // direction.  This is not connected to the EKF update path.
-  bool local_vio_metric_enable_ = false;
-  bool visual_imu_consistency_gate_enable_ = false;
-  double visual_imu_consistency_max_deg_ = 20.0;
-  bool lidar_directional_valid_ = false;
-  bool lidar_directional_degenerate_ = false;
-  bool lidar_information_received_ = false;
-  bool lidar_information_stale_ = true;
-  bool lidar_projector_valid_ = false;
-  double lidar_information_stamp_ = std::numeric_limits<double>::quiet_NaN();
-  Eigen::Matrix<double, 6, 6> lidar_information_eigenvectors_ =
-      Eigen::Matrix<double, 6, 6>::Zero();
-  Eigen::Matrix<double, 6, 6> lidar_degenerate_projector_ =
-      Eigen::Matrix<double, 6, 6>::Zero();
-  Eigen::Matrix<double, 6, 6> lidar_reliable_projector_ =
-      Eigen::Matrix<double, 6, 6>::Identity();
-  int lidar_degraded_count_ = 0;
-  int lidar_recovery_count_ = 0;
-  int visual_good_count_ = 0;
-  int visual_bad_count_ = 0;
-
-  bool lidar_degenerate_ = false;
-  double lidar_degeneracy_score_ = 0.0;
-  bool lidar_information_valid_ = false;
-  bool lidar_information_degenerate_ = false;
-  double lidar_information_condition_ = 1.0;
-  double lidar_geometry_degeneracy_score_ = 0.0;
-  bool lidar_geometry_degeneracy_valid_ = false;
-  Eigen::Matrix<double, 6, 1> lidar_information_eigenvalues_ = Eigen::Matrix<double, 6, 1>::Zero();
-  Eigen::Matrix<double, 6, 1> lidar_information_weak_eigenvector_ = Eigen::Matrix<double, 6, 1>::Zero();
-
-  LocalizationMode localization_mode_ = LocalizationMode::NORMAL;
-
-  bool camera_enable_ = true;
-  bool visual_feature_update_enable_ = true;
-  double max_over_exposure_ratio_ = 0.25;
-  double max_under_exposure_ratio_ = 0.35;
-  int max_features_ = 300;
-  int min_tracked_features_ = 40;
-  double visual_max_flow_residual_px_ = 3.0;
-  double min_feature_ratio_ = 0.15;
-  double max_visual_yaw_update_ = 0.5 * M_PI / 180.0;
-  double good_image_weight_scale_ = 1.0;
-  double bad_image_weight_scale_ = 0.4;
-  double visual_degenerate_weight_scale_ = 2.0;
-  double min_degeneracy_score_for_visual_ = 0.15;
-  bool camera_intrinsic_valid_ = false;
-  double cam_fx_ = 0.0;
-  double cam_fy_ = 0.0;
-  double cam_cx_ = 0.0;
-  double cam_cy_ = 0.0;
-  bool image_quality_good_ = true;
-  double last_feature_ratio_ = 0.0;
-  double visual_constraint_weight_scale_ = 1.0;
-  double visual_update_time_sum_ms_ = 0.0;
-  double visual_update_time_max_ms_ = 0.0;
-  uint64_t image_msg_count_ = 0;
-  uint64_t visual_update_ok_count_ = 0;
-  uint64_t visual_update_fail_count_ = 0;
-  cv::Mat last_gray_;
-  std::vector<cv::Point2f> last_features_;
-  bool has_last_image_pose_ = false;
-  Eigen::Matrix3d last_image_R_ = Eigen::Matrix3d::Identity();
-  Eigen::Vector3d last_image_p_ = Eigen::Vector3d::Zero();
-  ros::Time last_image_stamp_;
-  bool last_visual_tracking_good_ = false;
-  Eigen::Matrix3d last_visual_relative_rotation_ = Eigen::Matrix3d::Identity();
-  Eigen::Vector3d last_visual_translation_direction_base_ = Eigen::Vector3d::Zero();
-  bool last_visual_translation_direction_valid_ = false;
-  double last_visual_translation_scale_m_ = std::numeric_limits<double>::quiet_NaN();
-  double last_visual_imu_rotation_residual_deg_ = std::numeric_limits<double>::quiet_NaN();
-  bool last_visual_imu_rotation_valid_ = false;
-  Eigen::Matrix<double, 6, 1> last_visual_covariance_diag_ =
-      Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
-  int last_visual_feature_count_ = 0;
-  int last_visual_tracked_count_ = 0;
-  int last_visual_inlier_count_ = 0;
-  double last_visual_flow_residual_px_ = std::numeric_limits<double>::quiet_NaN();
-  bool last_visual_flow_residual_valid_ = false;
-  double last_visual_reprojection_error_px_ = std::numeric_limits<double>::quiet_NaN();
-  Eigen::Matrix<double, 6, 1> last_visual_relative_pose_ =
-      Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
-  bool last_visual_relative_pose_valid_ = false;
-  bool last_visual_metric_translation_valid_ = false;
-  bool last_visual_reprojection_valid_ = false;
-  bool last_visual_covariance_valid_ = false;
-  std::string last_visual_update_reason_ = "not_initialized";
-
   int path_max_length_ = 5000;
   double path_sample_rate_hz_ = 2.0;
   double path_publish_rate_hz_ = 1.0;
@@ -392,13 +228,10 @@ private:
   uint64_t ekf_ndt_feedback_frame_index_ = 0;
   double last_debug_time_ = 0.0;
   uint64_t imu_msg_count_ = 0;
-  uint64_t lidar_msg_count_ = 0;
   uint64_t lidar_update_ok_count_ = 0;
   uint64_t lidar_update_fail_count_ = 0;
   uint64_t last_debug_imu_count_ = 0;
-  uint64_t last_debug_lidar_count_ = 0;
   uint64_t last_debug_update_ok_count_ = 0;
-  uint64_t last_debug_image_count_ = 0;
   double lidar_update_time_sum_ms_ = 0.0;
   double lidar_update_time_max_ms_ = 0.0;
   double icp_update_time_sum_ms_ = 0.0;

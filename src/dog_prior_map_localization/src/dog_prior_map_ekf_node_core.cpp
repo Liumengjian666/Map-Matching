@@ -13,10 +13,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   base_frame_ = getParam<std::string>("frames/base_frame", "base_link");
 
   imu_topic_ = getParam<std::string>("topics/imu", "/livox/imu");
-  image_topic_ = getParam<std::string>("topics/image", "/image_left/image_rect");
   ndt_observation_topic_ = getParam<std::string>("topics/ndt_odom", "/dog_livo/ndt_odom");
-  lidar_degeneracy_topic_ = getParam<std::string>("topics/lidar_degeneracy", "/dog_livo/lidar_degeneracy");
-  lidar_information_topic_ = getParam<std::string>("topics/lidar_information", "/dog_livo/lidar_information");
   odom_high_rate_topic_ = getParam<std::string>("topics/odom_high_rate", "/dog_livo/odom_high_rate");
   imu_propagate_topic_ = getParam<std::string>("topics/imu_propagate", "/LIVO2/imu_propagate");
   odom_corrected_topic_ = getParam<std::string>("topics/odom_corrected", "/dog_livo/odom_corrected");
@@ -60,45 +57,6 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   future_deferral_max_queue_ = static_cast<std::size_t>(std::max(1,
       getParam<int>("ndt_observation/future_deferral_max_queue", 20)));
   deferred_csv_path_ = getParam<std::string>("output/deferred_csv_path", "");
-  directional_fusion_enable_ = getParam<bool>("fusion/directional_enable", false);
-  state_machine_enable_ = getParam<bool>("fusion/state_machine_enable", false);
-  directional_eigen_ratio_ = std::max(1e-6, getParam<double>("fusion/degenerated_eigen_ratio", 0.03));
-  lidar_degraded_enter_frames_ = std::max(1, getParam<int>("fusion/lidar_degraded_enter_frames", 5));
-  visual_assisted_enter_frames_ = std::max(1, getParam<int>("fusion/visual_assisted_enter_frames", 3));
-  both_degraded_enter_frames_ = std::max(1, getParam<int>("fusion/both_degraded_enter_frames", 3));
-  recovery_exit_frames_ = std::max(1, getParam<int>("fusion/recovery_exit_frames", 5));
-  recovery_weak_weight_start_ = std::max(0.0, std::min(1.0,
-      getParam<double>("fusion/recovery_weak_weight_start", 0.0)));
-  skip_updates_when_both_degraded_ = getParam<bool>("fusion/skip_updates_when_both_degraded", true);
-  legacy_visual_yaw_enable_ = getParam<bool>("fusion/legacy_visual_yaw_enable", false);
-  lidar_information_max_age_sec_ = std::max(0.0,
-      getParam<double>("fusion/lidar_information_max_age_sec", 0.05));
-  information_rotation_scale_m_ = std::max(1e-3,
-      getParam<double>("lidar_update/information_rotation_scale_m", 1.0));
-  local_vio_diagnostic_enable_ = getParam<bool>("camera_update/local_vio_diagnostic_enable", true);
-  local_vio_metric_enable_ = getParam<bool>("camera_update/local_vio_metric_enable", false);
-  visual_imu_consistency_gate_enable_ = getParam<bool>(
-      "camera_update/imu_rotation_consistency_gate_enable", false);
-  visual_imu_consistency_max_deg_ = std::max(0.0,
-      getParam<double>("camera_update/imu_rotation_consistency_max_deg", 20.0));
-  camera_enable_ = getParam<bool>("camera_update/enable", true);
-  visual_feature_update_enable_ = getParam<bool>("camera_update/feature_update_enable", true);
-  max_over_exposure_ratio_ = getParam<double>("camera_update/max_over_exposure_ratio", 0.25);
-  max_under_exposure_ratio_ = getParam<double>("camera_update/max_under_exposure_ratio", 0.35);
-  max_features_ = std::max(20, getParam<int>("camera_update/max_features", 300));
-  min_tracked_features_ = std::max(5, getParam<int>("camera_update/min_tracked_features", 40));
-  visual_max_flow_residual_px_ = std::max(0.0, getParam<double>("camera_update/max_flow_residual_px", 3.0));
-  min_feature_ratio_ = getParam<double>("camera_update/min_feature_ratio", 0.15);
-  max_visual_yaw_update_ = getParam<double>("camera_update/max_yaw_update_deg", 0.5) * M_PI / 180.0;
-  good_image_weight_scale_ = getParam<double>("camera_update/good_image_weight_scale", 1.0);
-  bad_image_weight_scale_ = getParam<double>("camera_update/bad_image_weight_scale", 0.4);
-  visual_degenerate_weight_scale_ = getParam<double>("camera_update/degenerate_weight_scale", 2.0);
-  min_degeneracy_score_for_visual_ = getParam<double>("camera_update/min_degeneracy_score_for_visual", 0.15);
-  cam_fx_ = getParam<double>("camera_intrinsic/fx", 0.0);
-  cam_fy_ = getParam<double>("camera_intrinsic/fy", 0.0);
-  cam_cx_ = getParam<double>("camera_intrinsic/cx", 0.0);
-  cam_cy_ = getParam<double>("camera_intrinsic/cy", 0.0);
-  camera_intrinsic_valid_ = cam_fx_ > 1.0 && cam_fy_ > 1.0;
 
   path_max_length_ = std::max(1, getParam<int>("output/path_max_length", 5000));
   path_sample_rate_hz_ = getParam<double>("output/path_sample_rate_hz", 2.0);
@@ -117,7 +75,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     runtime_csv_.open(runtime_csv_path_, std::ios::out);
     if (runtime_csv_.is_open())
     {
-      runtime_csv_ << "stamp,imu_hz,lidar_hz,correct_hz,avg_update_ms,max_update_ms,avg_ndt_ms,max_ndt_ms,ndt_ok_count,ndt_fail_count,last_used_points,last_mean_residual,ok_count,fail_count,image_hz,avg_visual_ms,max_visual_ms,last_feature_ratio,visual_weight,lidar_degenerate,lidar_degeneracy_score,visual_ok_count,visual_fail_count,rss_note,localization_mode,lidar_information_received,lidar_information_valid,lidar_information_degenerate,lidar_information_stale,lidar_projector_valid,lidar_information_stamp,lidar_information_condition,lidar_information_lambda0,lidar_information_lambda1,lidar_information_lambda2,lidar_information_lambda3,lidar_information_lambda4,lidar_information_lambda5,lidar_information_weak0,lidar_information_weak1,lidar_information_weak2,lidar_information_weak3,lidar_information_weak4,lidar_information_weak5,lidar_geometry_degeneracy_score,lidar_geometry_degeneracy_valid,visual_feature_count,visual_tracked_count,visual_inlier_count,visual_flow_residual_px,visual_flow_residual_valid,visual_reprojection_error_px,visual_relative_tx,visual_relative_ty,visual_relative_tz,visual_relative_roll,visual_relative_pitch,visual_relative_yaw,visual_relative_pose_valid,visual_imu_rotation_residual_deg,visual_imu_rotation_valid,visual_translation_scale_m,visual_covariance_diag0,visual_covariance_diag1,visual_covariance_diag2,visual_covariance_diag3,visual_covariance_diag4,visual_covariance_diag5,visual_metric_translation_valid,visual_reprojection_valid,visual_covariance_valid,visual_update_reason\n";
+      runtime_csv_ << "stamp,imu_hz,correct_hz,avg_update_ms,max_update_ms,avg_ndt_ms,max_ndt_ms,ndt_ok_count,ndt_fail_count,last_used_points,last_mean_residual,ok_count,fail_count,rss_note,oosm_event_count,deferred_received_count,deferred_processed_count,deferred_over_limit_count,deferred_queue_full_count,max_deferred_queue_size,state_history_size,imu_history_size\n";
     }
     else
     {
@@ -196,17 +154,6 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   for (int i = 6; i < 9; ++i) P_(i, i) = init_rot_std * init_rot_std;
   for (int i = 9; i < 15; ++i) P_(i, i) = init_bias_std * init_bias_std;
 
-  std::vector<double> t_bc = getParamVec("extrinsic/T_base_camera", {0.0, 0.0, 0.0});
-  std::vector<double> r_bc = getParamVec("extrinsic/R_base_camera", {1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0});
-  T_base_camera_ = Eigen::Vector3d(t_bc[0], t_bc[1], t_bc[2]);
-  R_base_camera_ << r_bc[0], r_bc[1], r_bc[2],
-                    r_bc[3], r_bc[4], r_bc[5],
-                    r_bc[6], r_bc[7], r_bc[8];
-  ROS_INFO("[DogPriorMap C++] camera intrinsic fx/fy/cx/cy=%.3f/%.3f/%.3f/%.3f valid=%d",
-           cam_fx_, cam_fy_, cam_cx_, cam_cy_, camera_intrinsic_valid_ ? 1 : 0);
-  ROS_INFO("[DogPriorMap C++] T_base_camera=[%.4f %.4f %.4f]",
-           T_base_camera_.x(), T_base_camera_.y(), T_base_camera_.z());
-
   // ------------------------- 2. ROS发布和订阅 -------------------------
   pub_high_ = nh_.advertise<nav_msgs::Odometry>(odom_high_rate_topic_, 50);
   if (publish_imu_propagate_alias_)
@@ -225,21 +172,9 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     sub_ndt_observation_ = nh_.subscribe(
         ndt_observation_topic_, 10, &DogPriorMapEkfNode::ndtObservationCallback, this);
   }
-  sub_lidar_degeneracy_ = nh_.subscribe(
-      lidar_degeneracy_topic_, 10, &DogPriorMapEkfNode::lidarDegeneracyCallback, this);
-  sub_lidar_information_ = nh_.subscribe(
-      lidar_information_topic_, 10, &DogPriorMapEkfNode::lidarInformationCallback, this);
-  if (camera_enable_)
-  {
-    sub_image_ = nh_.subscribe(image_topic_, 2, &DogPriorMapEkfNode::imageCallback, this);
-  }
   ROS_INFO("[DogPriorMap C++] node started: external_ndt=%s, imu=%s",
            ndt_observation_enable_ ? ndt_observation_topic_.c_str() : "disabled",
            imu_topic_.c_str());
-  ROS_INFO("[DogPriorMap C++] directional fusion=%d state machine=%d eigen ratio=%.4f",
-           directional_fusion_enable_ ? 1 : 0,
-           state_machine_enable_ ? 1 : 0,
-           directional_eigen_ratio_);
   ROS_INFO("[DogPriorMap C++] NDT OOSM=%d max_alignment=%.3f s",
            oosm_enable_ ? 1 : 0, oosm_max_alignment_sec_);
   ROS_INFO("[DogPriorMap C++] future NDT deferral=%d max=%.3f ms queue=%zu",
@@ -267,13 +202,19 @@ void DogPriorMapEkfNode::writeDeferredDiagnostic(const std::string &event,
   deferred_csv_.flush();
 }
 
-// 读取浮点数组参数；兼容全局和私有命名空间，并提供安全默认值。
-std::vector<double> DogPriorMapEkfNode::getParamVec(const std::string &name, const std::vector<double> &default_value)
+// 将外部 NDT 观测修正反馈到 estimator 状态。
+void DogPriorMapEkfNode::applyPoseCorrection(const Eigen::Vector3d &dp,
+                                             const Eigen::Vector3d &dtheta)
 {
-  std::vector<double> value;
-  if (nh_.getParam(name, value)) return value;
-  if (pnh_.getParam(name, value)) return value;
-  return default_value;
+  ++ekf_state_revision_;
+  p_ += dp;
+  const double angle = dtheta.norm();
+  Eigen::Matrix3d dR = Eigen::Matrix3d::Identity();
+  if (angle > 1e-12)
+  {
+    dR = Eigen::AngleAxisd(angle, dtheta / angle).toRotationMatrix();
+  }
+  R_ = dR * R_;
 }
 
 }  // namespace dog_prior_map_localization
