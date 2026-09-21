@@ -39,6 +39,7 @@ add_executable(dog_prior_map_ekf_node_cpp
   src/dog_prior_map_ekf_node.cpp
   src/dog_prior_map_ekf_node_core.cpp
   src/map_loader.cpp
+  src/core/oosm_replay_planner.cpp
   src/core/state_history.cpp
   src/imu_processor.cpp
   src/lidar_matcher.cpp
@@ -55,6 +56,15 @@ target_link_libraries(dog_prior_map_ekf_node_cpp
 
 add_dependencies(dog_prior_map_ekf_node_cpp
   ${catkin_EXPORTED_TARGETS}
+)
+
+# ROS-free contract test for rollback/replay planning.  It deliberately links
+# only the core planner and StateHistory, so its API cannot acquire a ROS
+# dependency accidentally.
+add_executable(oosm_replay_planner_contract_test
+  tests/oosm_replay_planner_contract_test.cpp
+  src/core/oosm_replay_planner.cpp
+  src/core/state_history.cpp
 )
 
 add_executable(dog_prior_map_ndt_node_cpp

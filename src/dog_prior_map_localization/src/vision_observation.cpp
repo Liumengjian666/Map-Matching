@@ -1,5 +1,9 @@
 #include "dog_prior_map_localization/dog_prior_map_ekf_node.hpp"
 
+#include <utility>
+
+#include "dog_prior_map_localization/core/oosm_replay_planner.hpp"
+
 namespace dog_prior_map_localization
 {
 
@@ -911,45 +915,22 @@ void DogPriorMapEkfNode::processNdtObservationLocked(const nav_msgs::OdometryCon
       return;
     }
 
-    size_t rollback_index = 0;
-    if (!findStateSnapshotAtOrBefore(t_ndt, rollback_index, alignment_error))
-    {
-      writeOosmResult("NO_HISTORY");
-      return;
-    }
-    rollback_stamp = state_history_.at(rollback_index).stamp;
-    if (alignment_error > oosm_max_alignment_sec_ + 1e-9)
-    {
-      writeOosmResult("ALIGNMENT_TOO_LARGE");
-      return;
-    }
-
-    replay_samples.reserve(imu_history_.size());
-    for (const auto &sample : imu_history_)
-    {
-      if (sample.stamp > rollback_stamp + 1e-9 && sample.stamp <= t_now)
-      {
-        replay_samples.push_back(sample);
-      }
-    }
-    std::sort(replay_samples.begin(), replay_samples.end(),
-              [](const ImuSample &a, const ImuSample &b) { return a.stamp < b.stamp; });
+    const OosmReplayPlanner replay_planner;
+    OosmReplayPlan replay_plan = replay_planner.makePlan(
+        state_history_, imu_history_, t_ndt, t_now,
+        oosm_max_alignment_sec_, max_imu_dt_);
+    alignment_error = replay_plan.alignment_error_sec;
+    rollback_stamp = replay_plan.rollback_stamp;
+    replay_samples = std::move(replay_plan.replay_samples);
     replay_imu_count = replay_samples.size();
-
-    // Validate the replay interval before changing the current EKF state.
-    // Stage 1 deliberately does not split an IMU interval at t_ndt.
-    double replay_stamp = rollback_stamp;
-    for (const auto &sample : replay_samples)
+    if (replay_plan.status != OosmPlanStatus::kReady)
     {
-      const double dt = sample.stamp - replay_stamp;
-      if (!std::isfinite(sample.stamp) || !sample.acc.allFinite() ||
-          !sample.gyro.allFinite() || dt <= 0.0 || dt > max_imu_dt_ + 1e-9)
-      {
-        writeOosmResult("REPLAY_INCOMPLETE");
-        return;
-      }
-      replay_stamp = sample.stamp;
+      const std::string result = replay_plan.status == OosmPlanStatus::kInvalidTimestamp ?
+          "INVALID_MEASUREMENT" : oosmPlanStatusName(replay_plan.status);
+      writeOosmResult(result);
+      return;
     }
+    const size_t rollback_index = replay_plan.rollback_index;
 
     state_before_oosm.stamp = t_now;
     state_before_oosm.p = p_;
