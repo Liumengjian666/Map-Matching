@@ -1,0 +1,27 @@
+path: /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/raw_data_core_2023-07-25-03-01-44.bag
+version: 2.0
+duration: 279.996549
+start: 1690254112.821741
+end: 1690254392.818290
+size: 6473379689
+messages: 65454
+indexed: True
+compression: none
+types:
+    - type: sensor_msgs/Image
+      md5: 060021388200f6f0f447d0fcd9c64743
+    - type: sensor_msgs/Imu
+      md5: 6a62c6daae103f4ff57a132d6f95cec2
+    - type: velodyne_msgs/VelodyneScan
+      md5: 50804fc9533a0e579e6322c04ae70566
+topics:
+    - topic: /camera_1/image_raw
+      type: sensor_msgs/Image
+      messages: 6720
+    - topic: /imu/data
+      type: sensor_msgs/Imu
+      messages: 55957
+    - topic: /velodyne_packets
+      type: velodyne_msgs/VelodyneScan
+      messages: 2777
+

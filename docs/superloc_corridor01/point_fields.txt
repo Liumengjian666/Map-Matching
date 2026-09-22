@@ -1,0 +1,11 @@
+topic=/velodyne_points
+type=sensor_msgs/PointCloud2
+frame_id=cmu_rc2_velodyne
+first_header_stamp=1517157229.072650909424
+field_name,offset,datatype,count
+x,0,7,1
+y,4,7,1
+z,8,7,1
+intensity,12,7,1
+ring,16,4,1
+time,18,7,1

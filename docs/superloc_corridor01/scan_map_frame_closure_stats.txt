@@ -1,0 +1,22 @@
+voxel_size_m=0.200000
+map_points_raw=338210
+map_points_voxel=139947
+test_scans=20
+selection=2 scans per 10 equal header-time bins, low-motion candidates, separated across trajectory
+hypothesis,scan_median_mean_m,global_median_m,global_p90_m,global_p95_m,global_lt0.5_ratio,global_lt1_ratio
+L_direct,11.379923231,12.907341942,19.337031809,20.053073215,0.172854631,0.207117311
+L_conjugate,11.809989128,13.495793551,19.945509920,20.569976826,0.099409196,0.140192456
+I_direct,11.351531006,12.874206143,19.299506012,20.025021601,0.174079709,0.207354423
+I_conjugate,11.780287417,13.466435593,19.908676449,20.526674324,0.100081013,0.140330771
+
+per_scan_median_winner_counts
+L_direct=0
+L_conjugate=1
+I_direct=18
+I_conjugate=1
+SCAN_MAP_FRAME_WINNER=I_direct
+winner_consistency=18/20 scans
+t0_header_stamp=1517157222.214606046677
+T_local_lidar_t0_translation_norm_m=0.000000000000e+00
+T_local_lidar_t0_rotation_error_rad=0.000000000000e+00
+R_lidar_imu=Ri_l^T; lever_arm_norm_m=0.090227490

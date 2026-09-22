@@ -1,0 +1,12 @@
+map_raw_points=338210
+map_voxel_points=139946
+scan_voxel=0.2
+map_voxel=0.2
+max_correspondence_distance=8
+max_iterations=60
+transformation_epsilon=1e-5
+euclidean_fitness_epsilon=1e-4
+method=PCL_ICP
+stage_a_convergence=17/30
+axis_best_candidate=5
+axis_calibration_convergence=8/10

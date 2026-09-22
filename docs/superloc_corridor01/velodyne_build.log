@@ -1,0 +1,344 @@
+-- The C compiler identification is GNU 9.4.0
+-- The CXX compiler identification is GNU 9.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Using CATKIN_DEVEL_PREFIX: /home/jian/livox_ws/superloc_adapter_ws/devel
+-- Using CMAKE_PREFIX_PATH: /opt/ros/noetic
+-- This workspace overlays: /opt/ros/noetic
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using Debian Python package layout
+-- Found PY_em: /home/jian/.local/lib/python3.8/site-packages/em.py  
+-- Using empy: /home/jian/.local/lib/python3.8/site-packages/em.py
+-- Using CATKIN_ENABLE_TESTING: OFF
+-- catkin 0.8.12
+-- BUILD_SHARED_LIBS is on
+-- BUILD_SHARED_LIBS is on
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~  traversing 6 packages in topological order:
+-- ~~  - velodyne (metapackage)
+-- ~~  - velodyne_msgs
+-- ~~  - velodyne_driver
+-- ~~  - velodyne_laserscan
+-- ~~  - velodyne_pcl
+-- ~~  - velodyne_pointcloud
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- +++ processing catkin metapackage: 'velodyne'
+-- ==> add_subdirectory(velodyne/velodyne)
+-- +++ processing catkin package: 'velodyne_msgs'
+-- ==> add_subdirectory(velodyne/velodyne_msgs)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- velodyne_msgs: 2 messages, 0 services
+-- +++ processing catkin package: 'velodyne_driver'
+-- ==> add_subdirectory(velodyne/velodyne_driver)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.71.0/BoostConfig.cmake (found version "1.71.0") found components: thread 
+-- Found PythonInterp: /usr/bin/python3 (found version "3.8.10") 
+-- +++ processing catkin package: 'velodyne_laserscan'
+-- ==> add_subdirectory(velodyne/velodyne_laserscan)
+-- +++ processing catkin package: 'velodyne_pcl'
+-- ==> add_subdirectory(velodyne/velodyne_pcl)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- +++ processing catkin package: 'velodyne_pointcloud'
+-- ==> add_subdirectory(velodyne/velodyne_pointcloud)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Could NOT find Boost: missing: signals (found /usr/lib/x86_64-linux-gnu/cmake/Boost-1.71.0/BoostConfig.cmake (found version "1.71.0"))
+-- Found PkgConfig: /usr/bin/pkg-config (found version "0.29.1") 
+-- Checking for module 'yaml-cpp'
+--   Found yaml-cpp, version 0.6.2
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/jian/livox_ws/superloc_adapter_ws/build
+Scanning dependencies of target _velodyne_msgs_generate_messages_check_deps_VelodynePacket
+Scanning dependencies of target std_msgs_generate_messages_eus
+Scanning dependencies of target _velodyne_msgs_generate_messages_check_deps_VelodyneScan
+Scanning dependencies of target std_msgs_generate_messages_py
+Scanning dependencies of target std_msgs_generate_messages_nodejs
+Scanning dependencies of target std_msgs_generate_messages_lisp
+Scanning dependencies of target std_msgs_generate_messages_cpp
+[  0%] Built target std_msgs_generate_messages_eus
+[  0%] Built target std_msgs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_py
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  0%] Built target std_msgs_generate_messages_cpp
+[  0%] Built target _velodyne_msgs_generate_messages_check_deps_VelodyneScan
+[  0%] Built target _velodyne_msgs_generate_messages_check_deps_VelodynePacket
+Scanning dependencies of target velodyne_msgs_generate_messages_py
+Scanning dependencies of target velodyne_msgs_generate_messages_eus
+Scanning dependencies of target velodyne_msgs_generate_messages_lisp
+Scanning dependencies of target velodyne_msgs_generate_messages_nodejs
+Scanning dependencies of target velodyne_msgs_generate_messages_cpp
+[ 25%] Generating Lisp code from velodyne_msgs/VelodynePacket.msg
+[ 25%] Generating Python from MSG velodyne_msgs/VelodynePacket
+[ 25%] Generating Javascript code from velodyne_msgs/VelodyneScan.msg
+[ 41%] Generating EusLisp code from velodyne_msgs/VelodynePacket.msg
+[ 41%] Generating EusLisp manifest code for velodyne_msgs
+[ 50%] Generating C++ code from velodyne_msgs/VelodyneScan.msg
+[ 58%] Generating EusLisp code from velodyne_msgs/VelodyneScan.msg
+[ 66%] Generating C++ code from velodyne_msgs/VelodynePacket.msg
+[ 75%] Generating Javascript code from velodyne_msgs/VelodynePacket.msg
+[ 83%] Generating Lisp code from velodyne_msgs/VelodyneScan.msg
+[ 91%] Generating Python from MSG velodyne_msgs/VelodyneScan
+[ 91%] Built target velodyne_msgs_generate_messages_nodejs
+[ 91%] Built target velodyne_msgs_generate_messages_lisp
+[ 91%] Built target velodyne_msgs_generate_messages_cpp
+[100%] Generating Python msg __init__.py for velodyne_msgs
+[100%] Built target velodyne_msgs_generate_messages_py
+[100%] Built target velodyne_msgs_generate_messages_eus
+Scanning dependencies of target velodyne_msgs_generate_messages
+[100%] Built target velodyne_msgs_generate_messages
+Scanning dependencies of target velodyne_pointcloud_gencfg
+Scanning dependencies of target tf2_msgs_generate_messages_lisp
+Scanning dependencies of target tf2_msgs_generate_messages_nodejs
+Scanning dependencies of target bond_generate_messages_lisp
+Scanning dependencies of target sensor_msgs_generate_messages_nodejs
+[  3%] Generating dynamic reconfigure files from cfg/TransformNode.cfg: /home/jian/livox_ws/superloc_adapter_ws/devel/include/velodyne_pointcloud/TransformNodeConfig.h /home/jian/livox_ws/superloc_adapter_ws/devel/lib/python3/dist-packages/velodyne_pointcloud/cfg/TransformNodeConfig.py
+Scanning dependencies of target nodelet_generate_messages_py
+Scanning dependencies of target bond_generate_messages_eus
+[  3%] Built target tf2_msgs_generate_messages_lisp
+[  3%] Built target std_msgs_generate_messages_cpp
+[  3%] Built target std_msgs_generate_messages_py
+[  3%] Built target std_msgs_generate_messages_eus
+[  3%] Built target std_msgs_generate_messages_nodejs
+[  3%] Built target std_msgs_generate_messages_lisp
+[  3%] Built target tf2_msgs_generate_messages_nodejs
+[  3%] Built target sensor_msgs_generate_messages_nodejs
+[  3%] Built target bond_generate_messages_lisp
+Scanning dependencies of target nodelet_generate_messages_nodejs
+Scanning dependencies of target bond_generate_messages_nodejs
+[  3%] Built target nodelet_generate_messages_py
+[  3%] Built target bond_generate_messages_eus
+Scanning dependencies of target tf2_msgs_generate_messages_py
+Scanning dependencies of target nodelet_generate_messages_cpp
+Scanning dependencies of target dynamic_reconfigure_gencfg
+Scanning dependencies of target bond_generate_messages_cpp
+Scanning dependencies of target rosgraph_msgs_generate_messages_nodejs
+Scanning dependencies of target dynamic_reconfigure_generate_messages_nodejs
+Scanning dependencies of target actionlib_generate_messages_cpp
+Scanning dependencies of target actionlib_msgs_generate_messages_py
+[  3%] Built target nodelet_generate_messages_nodejs
+[  3%] Built target tf2_msgs_generate_messages_py
+[  3%] Built target dynamic_reconfigure_gencfg
+[  3%] Built target bond_generate_messages_nodejs
+[  3%] Built target nodelet_generate_messages_cpp
+[  3%] Built target bond_generate_messages_cpp
+Scanning dependencies of target dynamic_reconfigure_generate_messages_lisp
+[  3%] Built target _velodyne_msgs_generate_messages_check_deps_VelodynePacket
+[  3%] Built target _velodyne_msgs_generate_messages_check_deps_VelodyneScan
+Scanning dependencies of target diagnostic_msgs_generate_messages_cpp
+Scanning dependencies of target tf2_msgs_generate_messages_cpp
+Generating reconfiguration files for TransformNode in velodyne_pointcloud
+Wrote header file in /home/jian/livox_ws/superloc_adapter_ws/devel/include/velodyne_pointcloud/TransformNodeConfig.h
+[  3%] Built target dynamic_reconfigure_generate_messages_nodejs
+[  3%] Built target rosgraph_msgs_generate_messages_nodejs
+[  3%] Built target actionlib_generate_messages_cpp
+Scanning dependencies of target diagnostic_msgs_generate_messages_eus
+[  3%] Built target actionlib_msgs_generate_messages_py
+Scanning dependencies of target tf_generate_messages_eus
+Scanning dependencies of target roscpp_generate_messages_py
+Scanning dependencies of target rosgraph_msgs_generate_messages_lisp
+Scanning dependencies of target actionlib_msgs_generate_messages_eus
+[  3%] Built target dynamic_reconfigure_generate_messages_lisp
+Scanning dependencies of target dynamic_reconfigure_generate_messages_py
+Scanning dependencies of target diagnostic_msgs_generate_messages_nodejs
+[  3%] Built target diagnostic_msgs_generate_messages_cpp
+[  3%] Built target tf2_msgs_generate_messages_cpp
+Scanning dependencies of target nodelet_generate_messages_lisp
+Scanning dependencies of target roscpp_generate_messages_eus
+Scanning dependencies of target sensor_msgs_generate_messages_cpp
+[  3%] Built target tf_generate_messages_eus
+[  3%] Built target rosgraph_msgs_generate_messages_lisp
+[  3%] Built target diagnostic_msgs_generate_messages_eus
+[  3%] Built target dynamic_reconfigure_generate_messages_py
+[  3%] Built target roscpp_generate_messages_py
+[  3%] Built target actionlib_msgs_generate_messages_eus
+[  3%] Built target diagnostic_msgs_generate_messages_nodejs
+[  3%] Built target nodelet_generate_messages_lisp
+[  3%] Built target roscpp_generate_messages_eus
+Scanning dependencies of target geometry_msgs_generate_messages_eus
+Scanning dependencies of target diagnostic_msgs_generate_messages_py
+[  3%] Built target velodyne_pointcloud_gencfg
+Scanning dependencies of target roscpp_generate_messages_cpp
+[  3%] Built target sensor_msgs_generate_messages_cpp
+Scanning dependencies of target sensor_msgs_generate_messages_lisp
+Scanning dependencies of target sensor_msgs_generate_messages_eus
+Scanning dependencies of target nodelet_generate_messages_eus
+Scanning dependencies of target dynamic_reconfigure_generate_messages_cpp
+Scanning dependencies of target tf_generate_messages_lisp
+Scanning dependencies of target actionlib_generate_messages_nodejs
+[  3%] Built target diagnostic_msgs_generate_messages_py
+[  3%] Built target geometry_msgs_generate_messages_eus
+Scanning dependencies of target rosgraph_msgs_generate_messages_py
+Scanning dependencies of target roscpp_generate_messages_lisp
+Scanning dependencies of target actionlib_generate_messages_lisp
+Scanning dependencies of target rosgraph_msgs_generate_messages_eus
+Scanning dependencies of target bond_generate_messages_py
+[  3%] Built target roscpp_generate_messages_cpp
+Scanning dependencies of target roscpp_generate_messages_nodejs
+Scanning dependencies of target tf_generate_messages_cpp
+[  3%] Built target sensor_msgs_generate_messages_lisp
+[  3%] Built target tf_generate_messages_lisp
+[  3%] Built target actionlib_generate_messages_nodejs
+[  3%] Built target dynamic_reconfigure_generate_messages_cpp
+[  3%] Built target sensor_msgs_generate_messages_eus
+[  3%] Built target nodelet_generate_messages_eus
+[  3%] Built target rosgraph_msgs_generate_messages_py
+[  3%] Built target roscpp_generate_messages_lisp
+[  3%] Built target roscpp_generate_messages_nodejs
+[  3%] Built target bond_generate_messages_py
+[  3%] Built target actionlib_generate_messages_lisp
+[  3%] Built target rosgraph_msgs_generate_messages_eus
+[  3%] Built target tf_generate_messages_cpp
+Scanning dependencies of target tf_generate_messages_nodejs
+Scanning dependencies of target geometry_msgs_generate_messages_cpp
+Scanning dependencies of target dynamic_reconfigure_generate_messages_eus
+Scanning dependencies of target geometry_msgs_generate_messages_lisp
+Scanning dependencies of target geometry_msgs_generate_messages_nodejs
+Scanning dependencies of target geometry_msgs_generate_messages_py
+Scanning dependencies of target tf2_msgs_generate_messages_eus
+Scanning dependencies of target rosgraph_msgs_generate_messages_cpp
+Scanning dependencies of target actionlib_generate_messages_eus
+Scanning dependencies of target actionlib_msgs_generate_messages_cpp
+Scanning dependencies of target diagnostic_msgs_generate_messages_lisp
+Scanning dependencies of target sensor_msgs_generate_messages_py
+Scanning dependencies of target tf_generate_messages_py
+Scanning dependencies of target actionlib_generate_messages_py
+[  3%] Built target tf_generate_messages_nodejs
+[  3%] Built target dynamic_reconfigure_generate_messages_eus
+[  3%] Built target geometry_msgs_generate_messages_cpp
+[  3%] Built target geometry_msgs_generate_messages_lisp
+[  3%] Built target rosgraph_msgs_generate_messages_cpp
+[  3%] Built target sensor_msgs_generate_messages_py
+[  3%] Built target geometry_msgs_generate_messages_nodejs
+[  3%] Built target actionlib_generate_messages_py
+[  3%] Built target diagnostic_msgs_generate_messages_lisp
+[  3%] Built target actionlib_generate_messages_eus
+[  3%] Built target tf2_msgs_generate_messages_eus
+[  3%] Built target tf_generate_messages_py
+[  3%] Built target geometry_msgs_generate_messages_py
+[  3%] Built target actionlib_msgs_generate_messages_cpp
+Scanning dependencies of target actionlib_msgs_generate_messages_lisp
+Scanning dependencies of target actionlib_msgs_generate_messages_nodejs
+[ 29%] Built target velodyne_msgs_generate_messages_cpp
+[ 29%] Built target actionlib_msgs_generate_messages_nodejs
+[ 29%] Built target actionlib_msgs_generate_messages_lisp
+[ 29%] Built target velodyne_msgs_generate_messages_lisp
+[ 33%] Built target velodyne_msgs_generate_messages_nodejs
+[ 37%] Built target velodyne_msgs_generate_messages_py
+[ 48%] Built target velodyne_msgs_generate_messages_eus
+Scanning dependencies of target velodyne_input
+[ 51%] Building CXX object velodyne/velodyne_driver/src/lib/CMakeFiles/velodyne_input.dir/input.cc.o
+[ 55%] Linking CXX shared library /home/jian/livox_ws/superloc_adapter_ws/devel/lib/libvelodyne_input.so
+[ 55%] Built target velodyne_input
+Scanning dependencies of target velodyne_rawdata
+[ 59%] Building CXX object velodyne/velodyne_pointcloud/src/lib/CMakeFiles/velodyne_rawdata.dir/rawdata.cc.o
+[ 62%] Building CXX object velodyne/velodyne_pointcloud/src/lib/CMakeFiles/velodyne_rawdata.dir/calibration.cc.o
+[ 66%] Linking CXX shared library /home/jian/livox_ws/superloc_adapter_ws/devel/lib/libvelodyne_rawdata.so
+[ 66%] Built target velodyne_rawdata
+Scanning dependencies of target data_containers
+[ 74%] Building CXX object velodyne/velodyne_pointcloud/src/conversions/CMakeFiles/data_containers.dir/organized_cloudXYZIRT.cc.o
+[ 74%] Building CXX object velodyne/velodyne_pointcloud/src/conversions/CMakeFiles/data_containers.dir/pointcloudXYZIRT.cc.o
+[ 77%] Linking CXX shared library /home/jian/livox_ws/superloc_adapter_ws/devel/lib/libdata_containers.so
+[ 77%] Built target data_containers
+Scanning dependencies of target transform_node
+Scanning dependencies of target transform_nodelet
+[ 85%] Building CXX object velodyne/velodyne_pointcloud/src/conversions/CMakeFiles/transform_nodelet.dir/transform_nodelet.cc.o
+[ 85%] Building CXX object velodyne/velodyne_pointcloud/src/conversions/CMakeFiles/transform_nodelet.dir/transform.cc.o
+[ 88%] Building CXX object velodyne/velodyne_pointcloud/src/conversions/CMakeFiles/transform_node.dir/transform_node.cc.o
+[ 92%] Building CXX object velodyne/velodyne_pointcloud/src/conversions/CMakeFiles/transform_node.dir/transform.cc.o
+[ 96%] Linking CXX executable /home/jian/livox_ws/superloc_adapter_ws/devel/lib/velodyne_pointcloud/transform_node
+[100%] Linking CXX shared library /home/jian/livox_ws/superloc_adapter_ws/devel/lib/libtransform_nodelet.so
+[100%] Built target transform_nodelet
+[100%] Built target transform_node
+Base path: /home/jian/livox_ws/superloc_adapter_ws
+Source space: /home/jian/livox_ws/superloc_adapter_ws/src
+Build space: /home/jian/livox_ws/superloc_adapter_ws/build
+Devel space: /home/jian/livox_ws/superloc_adapter_ws/devel
+Install space: /home/jian/livox_ws/superloc_adapter_ws/install
+Creating symlink "/home/jian/livox_ws/superloc_adapter_ws/src/CMakeLists.txt" pointing to "/opt/ros/noetic/share/catkin/cmake/toplevel.cmake"
+####
+#### Running command: "cmake /home/jian/livox_ws/superloc_adapter_ws/src -DCATKIN_ENABLE_TESTING=OFF -DCATKIN_DEVEL_PREFIX=/home/jian/livox_ws/superloc_adapter_ws/devel -DCMAKE_INSTALL_PREFIX=/home/jian/livox_ws/superloc_adapter_ws/install -G Unix Makefiles" in "/home/jian/livox_ws/superloc_adapter_ws/build"
+####
+####
+#### Running command: "make -j16 -l16" in "/home/jian/livox_ws/superloc_adapter_ws/build/velodyne/velodyne_msgs"
+####
+####
+#### Running command: "make -j16 -l16" in "/home/jian/livox_ws/superloc_adapter_ws/build/velodyne/velodyne_pointcloud"
+####
+--- adapter package build ---
+Base path: /home/jian/livox_ws/superloc_adapter_ws
+Source space: /home/jian/livox_ws/superloc_adapter_ws/src
+Build space: /home/jian/livox_ws/superloc_adapter_ws/build
+Devel space: /home/jian/livox_ws/superloc_adapter_ws/devel
+Install space: /home/jian/livox_ws/superloc_adapter_ws/install
+Error(s) in package '/home/jian/livox_ws/superloc_adapter_ws/src/superloc_adapter/package.xml':
+Invalid email "local@invalid" for person "Local audit workspace"
+ADAPTER_BUILD_EXIT=1
+--- adapter package build retry ---
+-- Using CATKIN_DEVEL_PREFIX: /home/jian/livox_ws/superloc_adapter_ws/devel
+-- Using CMAKE_PREFIX_PATH: /opt/ros/noetic
+-- This workspace overlays: /opt/ros/noetic
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using Debian Python package layout
+-- Using empy: /home/jian/.local/lib/python3.8/site-packages/em.py
+-- Using CATKIN_ENABLE_TESTING: OFF
+-- catkin 0.8.12
+-- BUILD_SHARED_LIBS is on
+-- BUILD_SHARED_LIBS is on
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~  traversing 7 packages in topological order:
+-- ~~  - superloc_adapter
+-- ~~  - velodyne (metapackage)
+-- ~~  - velodyne_msgs
+-- ~~  - velodyne_driver
+-- ~~  - velodyne_laserscan
+-- ~~  - velodyne_pcl
+-- ~~  - velodyne_pointcloud
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- +++ processing catkin package: 'superloc_adapter'
+-- ==> add_subdirectory(superloc_adapter)
+-- +++ processing catkin metapackage: 'velodyne'
+-- ==> add_subdirectory(velodyne/velodyne)
+-- +++ processing catkin package: 'velodyne_msgs'
+-- ==> add_subdirectory(velodyne/velodyne_msgs)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- velodyne_msgs: 2 messages, 0 services
+-- +++ processing catkin package: 'velodyne_driver'
+-- ==> add_subdirectory(velodyne/velodyne_driver)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Found PythonInterp: /usr/bin/python3 (found version "3.8.10") 
+-- +++ processing catkin package: 'velodyne_laserscan'
+-- ==> add_subdirectory(velodyne/velodyne_laserscan)
+-- +++ processing catkin package: 'velodyne_pcl'
+-- ==> add_subdirectory(velodyne/velodyne_pcl)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- +++ processing catkin package: 'velodyne_pointcloud'
+-- ==> add_subdirectory(velodyne/velodyne_pointcloud)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Could NOT find Boost: missing: signals (found /usr/lib/x86_64-linux-gnu/cmake/Boost-1.71.0/BoostConfig.cmake (found version "1.71.0"))
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/jian/livox_ws/superloc_adapter_ws/build
+Base path: /home/jian/livox_ws/superloc_adapter_ws
+Source space: /home/jian/livox_ws/superloc_adapter_ws/src
+Build space: /home/jian/livox_ws/superloc_adapter_ws/build
+Devel space: /home/jian/livox_ws/superloc_adapter_ws/devel
+Install space: /home/jian/livox_ws/superloc_adapter_ws/install
+####
+#### Running command: "cmake /home/jian/livox_ws/superloc_adapter_ws/src -DCATKIN_ENABLE_TESTING=OFF -DCATKIN_DEVEL_PREFIX=/home/jian/livox_ws/superloc_adapter_ws/devel -DCMAKE_INSTALL_PREFIX=/home/jian/livox_ws/superloc_adapter_ws/install -G Unix Makefiles" in "/home/jian/livox_ws/superloc_adapter_ws/build"
+####
+####
+#### Running command: "make -j16 -l16" in "/home/jian/livox_ws/superloc_adapter_ws/build/superloc_adapter"
+####
+ADAPTER_BUILD_RETRY_EXIT=0

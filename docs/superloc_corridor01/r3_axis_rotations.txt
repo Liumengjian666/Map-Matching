@@ -1,0 +1,96 @@
+candidate 0
+1 0 0
+0 1 0
+0 0 1
+candidate 1
+-1  0  0
+ 0 -1  0
+ 0  0  1
+candidate 2
+-1  0  0
+ 0  1  0
+ 0  0 -1
+candidate 3
+ 1  0  0
+ 0 -1  0
+ 0  0 -1
+candidate 4
+-1  0  0
+ 0  0  1
+ 0  1  0
+candidate 5
+ 1  0  0
+ 0  0 -1
+ 0  1  0
+candidate 6
+ 1  0  0
+ 0  0  1
+ 0 -1  0
+candidate 7
+-1  0  0
+ 0  0 -1
+ 0 -1  0
+candidate 8
+ 0 -1  0
+ 1  0  0
+ 0  0  1
+candidate 9
+ 0  1  0
+-1  0  0
+ 0  0  1
+candidate 10
+ 0  1  0
+ 1  0  0
+ 0  0 -1
+candidate 11
+ 0 -1  0
+-1  0  0
+ 0  0 -1
+candidate 12
+0 1 0
+0 0 1
+1 0 0
+candidate 13
+ 0 -1  0
+ 0  0 -1
+ 1  0  0
+candidate 14
+ 0 -1  0
+ 0  0  1
+-1  0  0
+candidate 15
+ 0  1  0
+ 0  0 -1
+-1  0  0
+candidate 16
+0 0 1
+1 0 0
+0 1 0
+candidate 17
+ 0  0 -1
+-1  0  0
+ 0  1  0
+candidate 18
+ 0  0 -1
+ 1  0  0
+ 0 -1  0
+candidate 19
+ 0  0  1
+-1  0  0
+ 0 -1  0
+candidate 20
+ 0  0 -1
+ 0  1  0
+ 1  0  0
+candidate 21
+ 0  0  1
+ 0 -1  0
+ 1  0  0
+candidate 22
+ 0  0  1
+ 0  1  0
+-1  0  0
+candidate 23
+ 0  0 -1
+ 0 -1  0
+-1  0  0
