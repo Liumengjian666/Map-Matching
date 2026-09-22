@@ -83,6 +83,12 @@ The FAST-LIO-Localization reference comparison is also a deviation only:
 NDT mean/RMSE `0.345367/0.398882 m`; corrected A/B mean/RMSE
 `0.345587/0.399150 m` and `0.345607/0.399175 m`.
 
+For the previously sensitive corridor interval (relative time `618--710 s`),
+NDT A/B were identical: mean/RMSE/median/P95/max
+`0.053304/0.066138/0.043353/0.094021/0.463719 m`. Corrected odometry was
+also stable: A `0.050177/0.058392/0.043464/0.088959/0.316203 m`; B
+`0.050180/0.058406/0.043551/0.089042/0.316168 m`.
+
 ## Delivery boundary
 
 The inactive external prediction subscriber/history and prediction-only CSV
