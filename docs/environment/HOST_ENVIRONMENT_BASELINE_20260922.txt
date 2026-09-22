@@ -1,0 +1,3496 @@
+HOST ENVIRONMENT BASELINE 2026-09-22
+Purpose: reproducible paper-workspace host fingerprint; no packages modified.
+
+===== DATE =====
+2026-09-22T22:27:52+08:00
+[exit_code=0]
+
+===== UNAME =====
+Linux jian-Lenovo-ThinkBook-14p-Gen-2 5.15.0-139-generic #149~20.04.1-Ubuntu SMP Wed Apr 16 08:29:56 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+[exit_code=0]
+
+===== LSB_RELEASE =====
+Distributor ID:	Ubuntu
+Description:	Ubuntu 20.04.6 LTS
+Release:	20.04
+Codename:	focal
+No LSB modules are available.
+[exit_code=0]
+
+===== ROS_DISTRO =====
+noetic
+[exit_code=0]
+
+===== GCC =====
+gcc (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0
+Copyright (C) 2019 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+[exit_code=0]
+
+===== GXX =====
+g++ (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0
+Copyright (C) 2019 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+[exit_code=0]
+
+===== CMAKE =====
+cmake version 3.16.3
+
+CMake suite maintained and supported by Kitware (kitware.com/cmake).
+[exit_code=0]
+
+===== PCL_PKG_CONFIG =====
+Package pcl_common was not found in the pkg-config search path.
+Perhaps you should add the directory containing `pcl_common.pc'
+to the PKG_CONFIG_PATH environment variable
+No package 'pcl_common' found
+[exit_code=1]
+
+===== PYTHON3 =====
+Python 3.8.10
+[exit_code=0]
+
+===== PIP3 =====
+pip 25.0.1 from /home/jian/.local/lib/python3.8/site-packages/pip (python 3.8)
+[exit_code=0]
+
+===== LIVOX_SETUP =====
+/home/jian/livox_ws/devel/setup.bash: EXISTS
+
+===== DPKG_QUERY_W =====
+accountsservice	0.6.55-0ubuntu12~20.04.7
+acl	2.2.53-6
+acpi-support	0.143
+acpid	1:2.0.32-1ubuntu1
+adduser	3.118ubuntu2
+adwaita-icon-theme	3.36.1-2ubuntu0.20.04.2
+aisleriot	1:3.22.9-1
+alsa-base	1.0.25+dfsg-0ubuntu5
+alsa-topology-conf	1.2.2-1
+alsa-ucm-conf	1.2.2-1ubuntu0.13
+alsa-utils	1.2.2-1ubuntu2.1
+amd64-microcode	3.20191218.1ubuntu1.3
+anacron	2.3-29
+apg	2.2.3.dfsg.1-5
+app-install-data-partner	19.04
+apparmor	2.13.3-7ubuntu5.4
+apport	2.20.11-0ubuntu27.31
+apport-gtk	2.20.11-0ubuntu27.31
+apport-symptoms	0.23
+appstream	0.12.10-2
+apt	2.0.9
+apt-config-icons	0.12.10-2
+apt-config-icons-hidpi	0.12.10-2
+apt-transport-https	2.0.11
+apt-utils	2.0.9
+aptdaemon	1.1.1+bzr982-0ubuntu32.3
+aptdaemon-data	1.1.1+bzr982-0ubuntu32.3
+apturl	0.5.2ubuntu19
+apturl-common	0.5.2ubuntu19
+aspell	0.60.8-1ubuntu0.1
+aspell-en	2018.04.16-0-1
+at-spi2-core	2.36.0-2
+autoconf	2.69-11.1
+automake	1:1.16.1-4ubuntu6
+autopoint	0.19.8.1-10build1
+autotools-dev	20180224.1
+avahi-autoipd	0.7-4ubuntu7.3
+avahi-daemon	0.7-4ubuntu7.3
+avahi-utils	0.7-4ubuntu7.3
+baobab	3.34.0-1
+base-files	11ubuntu5.7
+base-passwd	3.5.47
+bash	5.0-6ubuntu1.2
+bash-completion	1:2.10-1ubuntu1
+bc	1.07.1-2build1
+bind9-dnsutils	1:9.18.30-0ubuntu0.20.04.2
+bind9-host	1:9.18.30-0ubuntu0.20.04.2
+bind9-libs:amd64	1:9.18.30-0ubuntu0.20.04.2
+binfmt-support	2.2.0-2
+binutils	2.34-6ubuntu1.11
+binutils-common:amd64	2.34-6ubuntu1.11
+binutils-x86-64-linux-gnu	2.34-6ubuntu1.11
+blt	2.5.3+dfsg-4
+bluez	5.53-0ubuntu3.9
+bluez-cups	5.53-0ubuntu3.9
+bluez-obexd	5.53-0ubuntu3.9
+bolt	0.9.1-2~ubuntu20.04.1
+branding-ubuntu	0.10
+brltty	6.0+dfsg-4ubuntu6
+bsdmainutils	11.1.2ubuntu3
+bsdutils	1:2.34-0.1ubuntu9.6
+bubblewrap	0.4.0-1ubuntu4.1
+build-essential	12.8ubuntu1.1
+busybox-initramfs	1:1.30.1-4ubuntu6.5
+busybox-static	1:1.30.1-4ubuntu6.5
+bzip2	1.0.8-2
+bzip2-doc	1.0.8-2
+ca-certificates	20240203~20.04.1
+cabextract	1.9-3
+cheese	3.34.0-1ubuntu1
+cheese-common	3.34.0-1ubuntu1
+chromium-codecs-ffmpeg-extra	80.0.3987.163-0ubuntu1
+chrony	3.5-6ubuntu6.2
+clash-verge	1.7.7
+cloudcompare	2.10.3-4build1
+cmake	3.16.3-1ubuntu1.20.04.1
+cmake-curses-gui	3.16.3-1ubuntu1.20.04.1
+cmake-data	3.16.3-1ubuntu1.20.04.1
+colmap	3.6+dev2+git20191105-1build1
+colord	1.4.4-2
+colord-data	1.4.4-2
+comerr-dev:amd64	2.1-1.45.5-2ubuntu1.2
+command-not-found	20.04.6
+console-setup	1.194ubuntu3
+console-setup-linux	1.194ubuntu3
+coreutils	8.30-3ubuntu2
+cpio	2.13+dfsg-2ubuntu0.4
+cpp	4:9.3.0-1ubuntu2
+cpp-9	9.4.0-1ubuntu1~20.04.2
+cracklib-runtime	2.9.6-3.2
+crda	3.18-1build1
+cron	3.0pl1-136ubuntu1
+cups	2.3.1-9ubuntu1.9
+cups-browsed	1.27.4-1ubuntu0.4
+cups-bsd	2.3.1-9ubuntu1.9
+cups-client	2.3.1-9ubuntu1.9
+cups-common	2.3.1-9ubuntu1.9
+cups-core-drivers	2.3.1-9ubuntu1.9
+cups-daemon	2.3.1-9ubuntu1.9
+cups-filters	1.27.4-1ubuntu0.4
+cups-filters-core-drivers	1.27.4-1ubuntu0.4
+cups-ipp-utils	2.3.1-9ubuntu1.9
+cups-pk-helper	0.2.6-1ubuntu3
+cups-ppdc	2.3.1-9ubuntu1.9
+cups-server-common	2.3.1-9ubuntu1.9
+curl	7.68.0-1ubuntu2.25
+cython3	0.29.14-0.1ubuntu3
+dash	0.5.10.2-6
+dbus	1.12.16-2ubuntu2.3
+dbus-user-session	1.12.16-2ubuntu2.3
+dbus-x11	1.12.16-2ubuntu2.3
+dc	1.07.1-2build1
+dconf-cli	0.36.0-1
+dconf-gsettings-backend:amd64	0.36.0-1
+dconf-service	0.36.0-1
+debconf	1.5.73
+debconf-i18n	1.5.73
+debhelper	12.10ubuntu1
+debianutils	4.9.1
+default-libmysqlclient-dev:amd64	1.0.5ubuntu2
+deja-dup	40.7-0ubuntu2
+desktop-file-utils	0.24-1ubuntu3
+dh-autoreconf	19
+dh-strip-nondeterminism	1.7.0-1
+dictionaries-common	1.28.1
+diffutils	1:3.7-3
+dirmngr	2.2.19-3ubuntu2.5
+distro-info	0.23ubuntu1
+distro-info-data	0.43ubuntu1.20
+dmidecode	3.2-3
+dmsetup	2:1.02.167-1ubuntu1
+dmz-cursor-theme	0.4.5ubuntu1
+dns-root-data	2019052802
+dnsmasq-base	2.90-0ubuntu0.20.04.1
+dnsutils	1:9.18.30-0ubuntu0.20.04.2
+docbook-xml	4.5-9
+docutils-common	0.16+dfsg-2
+dosfstools	4.1-2
+dpkg	1.19.7ubuntu3.2
+dpkg-dev	1.19.7ubuntu3.2
+duplicity	0.8.11.1612-1
+dwz	0.13-5
+e2fsprogs	1.45.5-2ubuntu1.1
+ed	1.16-1
+efibootmgr	17-1
+eject	2.1.5+deb1+cvs20081104-14
+emacsen-common	3.0.4
+enchant-2	2.2.8-1ubuntu0.20.04.1
+eog	3.36.3-0ubuntu1
+espeak-ng-data:amd64	1.50+dfsg-6ubuntu0.1
+evince	3.36.10-0ubuntu1
+evince-common	3.36.10-0ubuntu1
+evolution-data-server	3.36.5-0ubuntu1
+evolution-data-server-common	3.36.5-0ubuntu1
+exfat-fuse	1.3.0-1
+exfat-utils	1.3.0-1
+fakeroot	1.24-1
+fdisk	2.34-0.1ubuntu9.6
+ffmpeg	7:4.2.7-0ubuntu0.1
+file	1:5.38-4
+file-roller	3.36.3-0ubuntu1.1
+findutils	4.7.0-1ubuntu1
+firefox	136.0+build3-0ubuntu0.20.04.1
+firefox-locale-en	136.0+build3-0ubuntu0.20.04.1
+firefox-locale-zh-hans	136.0+build3-0ubuntu0.20.04.1
+flameshot	0.6.0+git20191001-2
+flang-18	1:18.1.8-11~20.04.2
+fltk1.3-doc	1.3.4-10build1
+fluid	1.3.4-10build1
+fontconfig	2.13.1-2ubuntu3
+fontconfig-config	2.13.1-2ubuntu3
+fonts-arphic-ukai	0.2.20080216.2-5
+fonts-arphic-uming	0.2.20080216.2-10ubuntu2
+fonts-beng	2:1.2
+fonts-beng-extra	1.0-7
+fonts-dejavu-core	2.37-1
+fonts-deva	2:1.2
+fonts-deva-extra	3.0-5
+fonts-droid-fallback	1:6.0.1r16-1.1
+fonts-freefont-ttf	20120503-10
+fonts-gargi	2.0-4
+fonts-gubbi	1.3-3
+fonts-gujr	2:1.3
+fonts-gujr-extra	1.0.1-1
+fonts-guru	2:1.2
+fonts-guru-extra	2.0-5
+fonts-indic	2:1.3
+fonts-kacst	2.01+mry-14
+fonts-kacst-one	5.0+svn11846-10
+fonts-kalapi	1.0-3
+fonts-khmeros-core	5.0-7ubuntu1
+fonts-knda	2:1.2
+fonts-lao	0.0.20060226-9ubuntu1
+fonts-lato	2.0-2
+fonts-liberation	1:1.07.4-11
+fonts-liberation2	2.1.0-1
+fonts-lklug-sinhala	0.6-3
+fonts-lohit-beng-assamese	2.91.5-1
+fonts-lohit-beng-bengali	2.91.5-1
+fonts-lohit-deva	2.95.4-4
+fonts-lohit-gujr	2.92.4-4
+fonts-lohit-guru	2.91.2-1
+fonts-lohit-knda	2.5.4-2
+fonts-lohit-mlym	2.92.2-1
+fonts-lohit-orya	2.91.2-1
+fonts-lohit-taml	2.91.3-1
+fonts-lohit-taml-classical	2.5.4-1
+fonts-lohit-telu	2.5.5-1
+fonts-lyx	2.3.4.2-2
+fonts-mlym	2:1.2
+fonts-nakula	1.0-3
+fonts-navilu	1.2-2
+fonts-noto-cjk	1:20190410+repack1-2
+fonts-noto-color-emoji	0~20200916-1~ubuntu20.04.1
+fonts-noto-mono	20200323-1build1~ubuntu20.04.1
+fonts-opensymbol	2:102.11+LibO6.4.7-0ubuntu0.20.04.15
+fonts-orya	2:1.2
+fonts-orya-extra	2.0-6
+fonts-pagul	1.0-7
+fonts-sahadeva	1.0-4
+fonts-samyak-deva	1.2.2-4
+fonts-samyak-gujr	1.2.2-4
+fonts-samyak-mlym	1.2.2-4
+fonts-samyak-taml	1.2.2-4
+fonts-sarai	1.0-2
+fonts-sil-abyssinica	2.000-1
+fonts-sil-padauk	4.000-1
+fonts-smc	1:7.1
+fonts-smc-anjalioldlipi	7.1.2-1
+fonts-smc-chilanka	1.400-1
+fonts-smc-dyuthi	3.0.2-1
+fonts-smc-gayathri	1.100-1
+fonts-smc-karumbi	1.1.2-1
+fonts-smc-keraleeyam	3.0.2-1
+fonts-smc-manjari	1.710-1
+fonts-smc-meera	7.0.3-1
+fonts-smc-rachana	7.0.2-1
+fonts-smc-raghumalayalamsans	2.2.1-1
+fonts-smc-suruma	3.2.3-1
+fonts-smc-uroob	2.0.2-1
+fonts-taml	2:1.3
+fonts-telu	2:1.2
+fonts-telu-extra	2.0-4
+fonts-thai-tlwg	1:0.7.1-3
+fonts-tibetan-machine	1.901b-5
+fonts-tlwg-garuda	1:0.7.1-3
+fonts-tlwg-garuda-ttf	1:0.7.1-3
+fonts-tlwg-kinnari	1:0.7.1-3
+fonts-tlwg-kinnari-ttf	1:0.7.1-3
+fonts-tlwg-laksaman	1:0.7.1-3
+fonts-tlwg-laksaman-ttf	1:0.7.1-3
+fonts-tlwg-loma	1:0.7.1-3
+fonts-tlwg-loma-ttf	1:0.7.1-3
+fonts-tlwg-mono	1:0.7.1-3
+fonts-tlwg-mono-ttf	1:0.7.1-3
+fonts-tlwg-norasi	1:0.7.1-3
+fonts-tlwg-norasi-ttf	1:0.7.1-3
+fonts-tlwg-purisa	1:0.7.1-3
+fonts-tlwg-purisa-ttf	1:0.7.1-3
+fonts-tlwg-sawasdee	1:0.7.1-3
+fonts-tlwg-sawasdee-ttf	1:0.7.1-3
+fonts-tlwg-typewriter	1:0.7.1-3
+fonts-tlwg-typewriter-ttf	1:0.7.1-3
+fonts-tlwg-typist	1:0.7.1-3
+fonts-tlwg-typist-ttf	1:0.7.1-3
+fonts-tlwg-typo	1:0.7.1-3
+fonts-tlwg-typo-ttf	1:0.7.1-3
+fonts-tlwg-umpush	1:0.7.1-3
+fonts-tlwg-umpush-ttf	1:0.7.1-3
+fonts-tlwg-waree	1:0.7.1-3
+fonts-tlwg-waree-ttf	1:0.7.1-3
+fonts-ubuntu	0.83-4ubuntu1
+fonts-urw-base35	20170801.1-3
+fonts-wqy-microhei	0.2.0-beta-3
+fonts-wqy-zenhei	0.9.45-7ubuntu1
+fonts-yrsa-rasa	1.002-2
+foomatic-db-compressed-ppds	20200401-1
+fprintd	1.90.9-1~ubuntu20.04.1
+freeglut3:amd64	2.8.1-3
+freeglut3-dev:amd64	2.8.1-3
+friendly-recovery	0.2.41ubuntu0.20.04.1
+ftp	0.17-34.1
+fuse	2.9.9-3
+fwupd	1.7.9-1~20.04.1
+fwupd-signed	1.51.1~20.04.1+1.4-0ubuntu0.1
+g++	4:9.3.0-1ubuntu2
+g++-9	9.4.0-1ubuntu1~20.04.2
+gamemode	1.5.1-0ubuntu3.1
+gazebo11	11.15.1-1~focal
+gazebo11-common	11.15.1-1~focal
+gazebo11-plugin-base	11.15.1-1~focal
+gcc	4:9.3.0-1ubuntu2
+gcc-10-base:amd64	10.5.0-1ubuntu1~20.04
+gcc-7-base:amd64	7.5.0-6ubuntu2
+gcc-8-base:amd64	8.4.0-3ubuntu2
+gcc-9	9.4.0-1ubuntu1~20.04.2
+gcc-9-base:amd64	9.4.0-1ubuntu1~20.04.2
+gcr	3.36.0-2build1
+gdal-data	3.0.4+dfsg-1build3
+gdb	9.2-0ubuntu1~20.04.2
+gdbserver	9.2-0ubuntu1~20.04.2
+gdisk	1.0.5-1
+gdm3	3.36.3-0ubuntu0.20.04.4
+gedit	3.36.2-0ubuntu1
+gedit-common	3.36.2-0ubuntu1
+genisoimage	9:1.1.11-3.1ubuntu1
+geoclue-2.0	2.5.6-0ubuntu1
+gettext	0.19.8.1-10build1
+gettext-base	0.19.8.1-10build1
+ghostscript	9.50~dfsg-5ubuntu4.15
+ghostscript-x	9.50~dfsg-5ubuntu4.15
+gir1.2-accountsservice-1.0	0.6.55-0ubuntu12~20.04.7
+gir1.2-atk-1.0:amd64	2.35.1-1ubuntu2
+gir1.2-atspi-2.0:amd64	2.36.0-2
+gir1.2-clutter-1.0:amd64	1.26.4+dfsg-1
+gir1.2-clutter-gst-3.0:amd64	3.0.27-1
+gir1.2-cogl-1.0:amd64	1.22.6-1
+gir1.2-coglpango-1.0:amd64	1.22.6-1
+gir1.2-dbusmenu-glib-0.4:amd64	16.04.1+18.10.20180917-0ubuntu6
+gir1.2-dee-1.0	1.2.7+17.10.20170616-4ubuntu6
+gir1.2-freedesktop:amd64	1.64.1-1~ubuntu20.04.1
+gir1.2-gck-1:amd64	3.36.0-2build1
+gir1.2-gcr-3:amd64	3.36.0-2build1
+gir1.2-gdesktopenums-3.0:amd64	3.36.0-1ubuntu1
+gir1.2-gdkpixbuf-2.0:amd64	2.40.0+dfsg-3ubuntu0.5
+gir1.2-gdm-1.0:amd64	3.36.3-0ubuntu0.20.04.4
+gir1.2-geoclue-2.0:amd64	2.5.6-0ubuntu1
+gir1.2-glib-2.0:amd64	1.64.1-1~ubuntu20.04.1
+gir1.2-gmenu-3.0:amd64	3.36.0-1ubuntu1
+gir1.2-gnomebluetooth-1.0:amd64	3.34.3-0ubuntu1
+gir1.2-gnomedesktop-3.0:amd64	3.36.8-0ubuntu1
+gir1.2-goa-1.0:amd64	3.36.1-0ubuntu1
+gir1.2-graphene-1.0:amd64	1.10.0-1build2
+gir1.2-gst-plugins-base-1.0:amd64	1.16.3-0ubuntu1.4
+gir1.2-gstreamer-1.0:amd64	1.16.3-0ubuntu1.2
+gir1.2-gtk-2.0:amd64	2.24.32-4ubuntu4.1
+gir1.2-gtk-3.0:amd64	3.24.20-0ubuntu1.2
+gir1.2-gtkclutter-1.0:amd64	1.8.4-4
+gir1.2-gtksource-4:amd64	4.6.0-1
+gir1.2-gudev-1.0:amd64	1:233-1
+gir1.2-gweather-3.0:amd64	3.36.1-1~ubuntu20.04.1
+gir1.2-harfbuzz-0.0:amd64	2.6.4-1ubuntu4.3
+gir1.2-ibus-1.0:amd64	1.5.22-2ubuntu2.1
+gir1.2-javascriptcoregtk-4.0:amd64	2.38.6-0ubuntu0.20.04.1
+gir1.2-json-1.0:amd64	1.4.4-2ubuntu2
+gir1.2-mutter-6:amd64	3.36.9-0ubuntu0.20.04.2
+gir1.2-nm-1.0:amd64	1.22.10-1ubuntu2.4
+gir1.2-nma-1.0:amd64	1.8.24-1ubuntu3
+gir1.2-notify-0.7:amd64	0.7.9-1ubuntu3.20.04.2
+gir1.2-packagekitglib-1.0	1.1.13-2ubuntu1.1
+gir1.2-pango-1.0:amd64	1.44.7-2ubuntu4
+gir1.2-peas-1.0:amd64	1.26.0-2
+gir1.2-polkit-1.0	0.105-26ubuntu1.3
+gir1.2-rb-3.0:amd64	3.4.4-1ubuntu2
+gir1.2-rsvg-2.0:amd64	2.48.9-1ubuntu0.20.04.4
+gir1.2-secret-1:amd64	0.20.4-0ubuntu1
+gir1.2-snapd-1:amd64	1.58-0ubuntu0.20.04.0
+gir1.2-soup-2.4:amd64	2.70.0-1ubuntu0.5
+gir1.2-totem-1.0:amd64	3.34.1-2ubuntu2
+gir1.2-totemplparser-1.0:amd64	3.26.5-1ubuntu1
+gir1.2-udisks-2.0:amd64	2.8.4-1ubuntu2
+gir1.2-unity-5.0:amd64	7.1.4+19.04.20190319-0ubuntu3
+gir1.2-upowerglib-1.0:amd64	0.99.11-1build2
+gir1.2-vte-2.91:amd64	0.60.3-0ubuntu1~20.5
+gir1.2-webkit2-4.0:amd64	2.38.6-0ubuntu0.20.04.1
+gir1.2-wnck-3.0:amd64	3.36.0-1
+git	1:2.25.1-1ubuntu3.14
+git-lfs	2.9.2-1
+git-man	1:2.25.1-1ubuntu3.14
+gjs	1.64.5-0ubuntu0.20.04.01
+gkbd-capplet	3.26.1-1
+glib-networking:amd64	2.64.2-1ubuntu0.1
+glib-networking-common	2.64.2-1ubuntu0.1
+glib-networking-services	2.64.2-1ubuntu0.1
+gnome-accessibility-themes	3.28-1ubuntu1
+gnome-bluetooth	3.34.3-0ubuntu1
+gnome-calculator	1:3.36.0-1ubuntu1
+gnome-calendar	3.36.2-0ubuntu1
+gnome-characters	3.34.0-1
+gnome-control-center	1:3.36.5-0ubuntu4.1
+gnome-control-center-data	1:3.36.5-0ubuntu4.1
+gnome-control-center-faces	1:3.36.5-0ubuntu4.1
+gnome-desktop3-data	3.36.8-0ubuntu1
+gnome-disk-utility	3.36.3-0ubuntu1
+gnome-font-viewer	3.34.0-2
+gnome-getting-started-docs	3.36.2-0ubuntu0.1
+gnome-initial-setup	3.36.2-0ubuntu2
+gnome-keyring	3.36.0-1ubuntu1
+gnome-keyring-pkcs11:amd64	3.36.0-1ubuntu1
+gnome-logs	3.34.0-1ubuntu1
+gnome-mahjongg	1:3.36.1-1
+gnome-menus	3.36.0-1ubuntu1
+gnome-mines	1:3.36.0-1
+gnome-online-accounts	3.36.1-0ubuntu1
+gnome-power-manager	3.32.0-2
+gnome-screenshot	3.36.0-1ubuntu1
+gnome-session-bin	3.36.0-2ubuntu1
+gnome-session-canberra	0.30-7ubuntu1
+gnome-session-common	3.36.0-2ubuntu1
+gnome-settings-daemon	3.36.1-0ubuntu1.1
+gnome-settings-daemon-common	3.36.1-0ubuntu1.1
+gnome-shell	3.36.9-0ubuntu0.20.04.4
+gnome-shell-common	3.36.9-0ubuntu0.20.04.4
+gnome-shell-extension-appindicator	33.1-0ubuntu0.20.04.2
+gnome-shell-extension-desktop-icons	20.04.0-3~ubuntu20.04.6
+gnome-shell-extension-ubuntu-dock	68ubuntu1~20.04.1
+gnome-startup-applications	3.36.0-2ubuntu1
+gnome-sudoku	1:3.36.0-1
+gnome-system-monitor	3.36.1-0ubuntu0.20.04.1
+gnome-terminal	3.36.2-1ubuntu1~20.04
+gnome-terminal-data	3.36.2-1ubuntu1~20.04
+gnome-themes-extra:amd64	3.28-1ubuntu1
+gnome-themes-extra-data	3.28-1ubuntu1
+gnome-todo	3.28.1-5
+gnome-todo-common	3.28.1-5
+gnome-user-docs	3.36.2+git20200704-0ubuntu0.1
+gnome-user-docs-zh-hans	3.36.2+git20200704-0ubuntu0.1
+gnome-video-effects	0.5.0-1ubuntu1
+gnupg	2.2.19-3ubuntu2.5
+gnupg-l10n	2.2.19-3ubuntu2.5
+gnupg-utils	2.2.19-3ubuntu2.5
+gnupg2	2.2.19-3ubuntu2.5
+google-chrome-stable	150.0.7871.114-1
+google-mock:amd64	1.10.0-2
+googletest	1.10.0-2
+gpg	2.2.19-3ubuntu2.5
+gpg-agent	2.2.19-3ubuntu2.5
+gpg-wks-client	2.2.19-3ubuntu2.5
+gpg-wks-server	2.2.19-3ubuntu2.5
+gpgconf	2.2.19-3ubuntu2.5
+gpgsm	2.2.19-3ubuntu2.5
+gpgv	2.2.19-3ubuntu2.5
+graphviz	2.42.2-3build2
+grep	3.4-1
+grilo-plugins-0.3-base:amd64	0.3.11-1ubuntu1
+groff-base	1.22.4-4build1
+grub-common	2.04-1ubuntu26.16
+grub-efi-amd64-bin	2.06-2ubuntu14.4
+grub-efi-amd64-signed	1.187.6~20.04.1+2.06-2ubuntu14.4
+grub-gfxpayload-lists	0.7
+grub-pc	2.04-1ubuntu26.16
+grub-pc-bin	2.04-1ubuntu26.16
+grub2-common	2.04-1ubuntu26.16
+gsettings-desktop-schemas	3.36.0-1ubuntu1
+gsettings-ubuntu-schemas	0.0.7+17.10.20170922-0ubuntu1
+gstreamer1.0-alsa:amd64	1.16.3-0ubuntu1.4
+gstreamer1.0-clutter-3.0:amd64	3.0.27-1
+gstreamer1.0-gl:amd64	1.16.3-0ubuntu1.4
+gstreamer1.0-gtk3:amd64	1.16.3-0ubuntu1.3
+gstreamer1.0-libav:amd64	1.16.2-2
+gstreamer1.0-packagekit	1.1.13-2ubuntu1.1
+gstreamer1.0-plugins-base:amd64	1.16.3-0ubuntu1.4
+gstreamer1.0-plugins-base-apps	1.16.3-0ubuntu1.4
+gstreamer1.0-plugins-good:amd64	1.16.3-0ubuntu1.3
+gstreamer1.0-plugins-ugly:amd64	1.16.2-2build1
+gstreamer1.0-pulseaudio:amd64	1.16.3-0ubuntu1.3
+gstreamer1.0-tools	1.16.3-0ubuntu1.2
+gstreamer1.0-vaapi:amd64	1.16.2-2
+gstreamer1.0-x:amd64	1.16.3-0ubuntu1.4
+gtk-update-icon-cache	3.24.20-0ubuntu1.2
+gtk2-engines-murrine:amd64	0.98.2-3
+gtk2-engines-pixbuf:amd64	2.24.32-4ubuntu4.1
+guile-2.2-libs:amd64	2.2.7+1-4
+gvfs:amd64	1.44.1-1ubuntu1.2
+gvfs-backends	1.44.1-1ubuntu1.2
+gvfs-bin	1.44.1-1ubuntu1.2
+gvfs-common	1.44.1-1ubuntu1.2
+gvfs-daemons	1.44.1-1ubuntu1.2
+gvfs-fuse	1.44.1-1ubuntu1.2
+gvfs-libs:amd64	1.44.1-1ubuntu1.2
+gyp	0.1+20180428git4d467626-3ubuntu1
+gzip	1.10-0ubuntu4.1
+hddtemp	0.3-beta15-53
+hdf5-helpers	1.10.4+repack-11ubuntu1
+hdparm	9.58+ds-4
+hicolor-icon-theme	0.17-2
+hostname	3.23
+hplip	3.20.3+dfsg0-2ubuntu0.1
+hplip-data	3.20.3+dfsg0-2ubuntu0.1
+htop	2.2.0-2build1
+humanity-icon-theme	0.6.15
+hunspell-en-us	1:2018.04.16-1
+hyphen-en-us	2.8.8-7
+i965-va-driver:amd64	2.4.0-0ubuntu1
+ibus	1.5.22-2ubuntu2.1
+ibus-data	1.5.22-2ubuntu2.1
+ibus-gtk:amd64	1.5.22-2ubuntu2.1
+ibus-gtk3:amd64	1.5.22-2ubuntu2.1
+ibus-libpinyin	1.11.1-3
+ibus-table	1.9.25-1
+ibus-table-wubi	1.8.2-3
+ibverbs-providers:amd64	28.0-1ubuntu1
+icu-devtools	66.1-2ubuntu2.1
+ignition-tools:amd64	1.5.0-1~focal
+iio-sensor-proxy	2.8-1ubuntu2
+im-config	0.44-1ubuntu1.3
+info	6.7.0.dfsg.2-5
+init	1.57
+init-system-helpers	1.57
+initramfs-tools	0.136ubuntu6.7
+initramfs-tools-bin	0.136ubuntu6.7
+initramfs-tools-core	0.136ubuntu6.7
+inputattach	1:1.7.0-1
+install-info	6.7.0.dfsg.2-5
+intel-media-va-driver:amd64	20.1.1+dfsg1-1
+intel-microcode	3.20250512.0ubuntu0.20.04.1
+intltool-debian	0.35.0+20060710.5
+ippusbxd	1.34-2ubuntu1
+iproute2	5.5.0-1ubuntu1
+iptables	1.8.4-3ubuntu2
+iputils-ping	3:20190709-3ubuntu1
+iputils-tracepath	3:20190709-3
+irqbalance	1.6.0-3ubuntu1
+isc-dhcp-client	4.4.1-2.1ubuntu5.20.04.5
+isc-dhcp-common	4.4.1-2.1ubuntu5.20.04.5
+iso-codes	4.4-1
+iucode-tool	2.3.1-1
+iw	5.4-1
+javascript-common	11
+kbd	2.0.4-4ubuntu2
+kerneloops	0.12+git20140509-6ubuntu2
+keyboard-configuration	1.194ubuntu3
+klibc-utils	2.0.7-1ubuntu5.2
+kmod	27-1ubuntu2.1
+krb5-locales	1.17-6ubuntu4.11
+krb5-multidev:amd64	1.17-6ubuntu4.11
+language-pack-en	1:20.04+20220818
+language-pack-en-base	1:20.04+20220818
+language-pack-gnome-en	1:20.04+20220818
+language-pack-gnome-en-base	1:20.04+20220818
+language-pack-gnome-zh-hans	1:20.04+20220818
+language-pack-gnome-zh-hans-base	1:20.04+20220818
+language-pack-zh-hans	1:20.04+20220818
+language-pack-zh-hans-base	1:20.04+20220818
+language-selector-common	0.204.2
+language-selector-gnome	0.204.2
+laptop-detect	0.16
+less	551-1ubuntu0.3
+liba52-0.7.4:amd64	0.7.4-20
+libaa1:amd64	1.4p5-46
+libaacs0:amd64	0.9.0-2
+libabw-0.1-1:amd64	0.1.3-1build1
+libaccountsservice0:amd64	0.6.55-0ubuntu12~20.04.7
+libacl1:amd64	2.2.53-6
+libaec-dev:amd64	1.0.4-1
+libaec0:amd64	1.0.4-1
+libalgorithm-diff-perl	1.19.03-2
+libalgorithm-diff-xs-perl	0.04-6
+libalgorithm-merge-perl	0.08-3
+libamd2:amd64	1:5.7.1+dfsg-2
+libamtk-5-0:amd64	5.0.2-1build1
+libamtk-5-common	5.0.2-1build1
+libann0	1.1.2+doc-7build1
+libao-common	1.2.2+20180113-1ubuntu1
+libao4:amd64	1.2.2+20180113-1ubuntu1
+libaom0:amd64	1.0.0.errata1-3+deb11u1ubuntu0.1
+libapparmor1:amd64	2.13.3-7ubuntu5.4
+libappindicator3-1	12.10.1+20.04.20200408.1-0ubuntu1
+libappstream4:amd64	0.12.10-2
+libapr1:amd64	1.6.5-1ubuntu1.1
+libapr1-dev	1.6.5-1ubuntu1.1
+libaprutil1:amd64	1.6.1-4ubuntu2.2
+libaprutil1-dev	1.6.1-4ubuntu2.2
+libapt-pkg6.0:amd64	2.0.9
+libarchive-cpio-perl	0.10-1
+libarchive-zip-perl	1.67-2
+libarchive13:amd64	3.4.0-2ubuntu1.5
+libargon2-1:amd64	0~20171227-0.2
+libaribb24-0:amd64	1.0.3-2
+libarmadillo-dev	1:9.800.4+dfsg-1build1
+libarmadillo9	1:9.800.4+dfsg-1build1
+libarpack2:amd64	3.7.0-3
+libarpack2-dev:amd64	3.7.0-3
+libasan4:amd64	7.5.0-6ubuntu2
+libasan5:amd64	9.4.0-1ubuntu1~20.04.2
+libasan6:amd64	10.5.0-1ubuntu1~20.04
+libasn1-8-heimdal:amd64	7.7.0+dfsg-1ubuntu1.4
+libasound2:amd64	1.2.2-2.1ubuntu2.5
+libasound2-data	1.2.2-2.1ubuntu2.5
+libasound2-plugins:amd64	1.2.2-1ubuntu1
+libaspell15:amd64	0.60.8-1ubuntu0.1
+libass9:amd64	1:0.14.0-2
+libassimp-dev:amd64	5.0.1~ds0-1build1
+libassimp5:amd64	5.0.1~ds0-1build1
+libassuan-dev	2.5.3-7ubuntu2
+libassuan0:amd64	2.5.3-7ubuntu2
+libasyncns0:amd64	0.8-6
+libatasmart4:amd64	0.19-5
+libatk-adaptor:amd64	2.34.2-0ubuntu2~20.04.1
+libatk-bridge2.0-0:amd64	2.34.2-0ubuntu2~20.04.1
+libatk-bridge2.0-dev:amd64	2.34.2-0ubuntu2~20.04.1
+libatk1.0-0:amd64	2.35.1-1ubuntu2
+libatk1.0-data	2.35.1-1ubuntu2
+libatk1.0-dev:amd64	2.35.1-1ubuntu2
+libatkmm-1.6-1v5:amd64	2.28.0-2build1
+libatlas3-base:amd64	3.10.3-8ubuntu7
+libatm1:amd64	1:2.5.1-4
+libatomic1:amd64	10.5.0-1ubuntu1~20.04
+libatopology2:amd64	1.2.2-2.1ubuntu2.5
+libatspi2.0-0:amd64	2.36.0-2
+libatspi2.0-dev:amd64	2.36.0-2
+libattr1:amd64	1:2.4.48-5
+libaudit-common	1:2.8.5-2ubuntu6
+libaudit1:amd64	1:2.8.5-2ubuntu6
+libauthen-sasl-perl	2.1600-1
+libavahi-client3:amd64	0.7-4ubuntu7.3
+libavahi-common-data:amd64	0.7-4ubuntu7.3
+libavahi-common3:amd64	0.7-4ubuntu7.3
+libavahi-core7:amd64	0.7-4ubuntu7.3
+libavahi-glib1:amd64	0.7-4ubuntu7.3
+libavahi-ui-gtk3-0:amd64	0.7-4ubuntu7.3
+libavc1394-0:amd64	0.5.4-5
+libavcodec-dev:amd64	7:4.2.7-0ubuntu0.1
+libavcodec-extra:amd64	7:4.2.7-0ubuntu0.1
+libavcodec-extra58:amd64	7:4.2.7-0ubuntu0.1
+libavdevice-dev:amd64	7:4.2.7-0ubuntu0.1
+libavdevice58:amd64	7:4.2.7-0ubuntu0.1
+libavfilter-dev:amd64	7:4.2.7-0ubuntu0.1
+libavfilter7:amd64	7:4.2.7-0ubuntu0.1
+libavformat-dev:amd64	7:4.2.7-0ubuntu0.1
+libavformat58:amd64	7:4.2.7-0ubuntu0.1
+libavresample-dev:amd64	7:4.2.7-0ubuntu0.1
+libavresample4:amd64	7:4.2.7-0ubuntu0.1
+libavutil-dev:amd64	7:4.2.7-0ubuntu0.1
+libavutil56:amd64	7:4.2.7-0ubuntu0.1
+libayatana-appindicator3-1	0.5.4-2
+libayatana-indicator3-7:amd64	0.6.3-1
+libbabeltrace1:amd64	1.5.8-1build1
+libbasicusageenvironment1:amd64	2020.01.19-1build1
+libbdplus0:amd64	0.1.2-3
+libbinutils:amd64	2.34-6ubuntu1.11
+libblas-dev:amd64	3.9.0-1build1
+libblas3:amd64	3.9.0-1build1
+libblkid-dev:amd64	2.34-0.1ubuntu9.6
+libblkid1:amd64	2.34-0.1ubuntu9.6
+libblockdev-crypto2:amd64	2.23-2ubuntu3
+libblockdev-fs2:amd64	2.23-2ubuntu3
+libblockdev-loop2:amd64	2.23-2ubuntu3
+libblockdev-part-err2:amd64	2.23-2ubuntu3
+libblockdev-part2:amd64	2.23-2ubuntu3
+libblockdev-swap2:amd64	2.23-2ubuntu3
+libblockdev-utils2:amd64	2.23-2ubuntu3
+libblockdev2:amd64	2.23-2ubuntu3
+libbluetooth3:amd64	5.53-0ubuntu3.9
+libbluray2:amd64	1:1.2.0-1
+libboost-all-dev	1.71.0.0ubuntu2
+libboost-atomic-dev:amd64	1.71.0.0ubuntu2
+libboost-atomic1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-atomic1.71.0:amd64	1.71.0-6ubuntu6
+libboost-chrono-dev:amd64	1.71.0.0ubuntu2
+libboost-chrono1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-chrono1.71.0:amd64	1.71.0-6ubuntu6
+libboost-container-dev:amd64	1.71.0.0ubuntu2
+libboost-container1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-container1.71.0:amd64	1.71.0-6ubuntu6
+libboost-context-dev:amd64	1.71.0.0ubuntu2
+libboost-context1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-context1.71.0:amd64	1.71.0-6ubuntu6
+libboost-coroutine-dev:amd64	1.71.0.0ubuntu2
+libboost-coroutine1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-coroutine1.71.0:amd64	1.71.0-6ubuntu6
+libboost-date-time-dev:amd64	1.71.0.0ubuntu2
+libboost-date-time1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-date-time1.71.0:amd64	1.71.0-6ubuntu6
+libboost-dev:amd64	1.71.0.0ubuntu2
+libboost-exception-dev:amd64	1.71.0.0ubuntu2
+libboost-exception1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-fiber-dev:amd64	1.71.0.0ubuntu2
+libboost-fiber1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-fiber1.71.0:amd64	1.71.0-6ubuntu6
+libboost-filesystem-dev:amd64	1.71.0.0ubuntu2
+libboost-filesystem1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-filesystem1.71.0:amd64	1.71.0-6ubuntu6
+libboost-graph-dev:amd64	1.71.0.0ubuntu2
+libboost-graph-parallel-dev	1.71.0.0ubuntu2
+libboost-graph-parallel1.71-dev	1.71.0-6ubuntu6
+libboost-graph-parallel1.71.0	1.71.0-6ubuntu6
+libboost-graph1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-graph1.71.0:amd64	1.71.0-6ubuntu6
+libboost-iostreams-dev:amd64	1.71.0.0ubuntu2
+libboost-iostreams1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-iostreams1.71.0:amd64	1.71.0-6ubuntu6
+libboost-locale-dev:amd64	1.71.0.0ubuntu2
+libboost-locale1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-locale1.71.0:amd64	1.71.0-6ubuntu6
+libboost-log-dev	1.71.0.0ubuntu2
+libboost-log1.71-dev	1.71.0-6ubuntu6
+libboost-log1.71.0	1.71.0-6ubuntu6
+libboost-math-dev:amd64	1.71.0.0ubuntu2
+libboost-math1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-math1.71.0:amd64	1.71.0-6ubuntu6
+libboost-mpi-dev	1.71.0.0ubuntu2
+libboost-mpi-python-dev	1.71.0.0ubuntu2
+libboost-mpi-python1.71-dev	1.71.0-6ubuntu6
+libboost-mpi-python1.71.0	1.71.0-6ubuntu6
+libboost-mpi1.71-dev	1.71.0-6ubuntu6
+libboost-mpi1.71.0	1.71.0-6ubuntu6
+libboost-numpy-dev	1.71.0.0ubuntu2
+libboost-numpy1.71-dev	1.71.0-6ubuntu6
+libboost-numpy1.71.0	1.71.0-6ubuntu6
+libboost-program-options-dev:amd64	1.71.0.0ubuntu2
+libboost-program-options1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-program-options1.71.0:amd64	1.71.0-6ubuntu6
+libboost-python-dev	1.71.0.0ubuntu2
+libboost-python1.71-dev	1.71.0-6ubuntu6
+libboost-python1.71.0	1.71.0-6ubuntu6
+libboost-random-dev:amd64	1.71.0.0ubuntu2
+libboost-random1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-random1.71.0:amd64	1.71.0-6ubuntu6
+libboost-regex-dev:amd64	1.71.0.0ubuntu2
+libboost-regex1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-regex1.71.0:amd64	1.71.0-6ubuntu6
+libboost-serialization-dev:amd64	1.71.0.0ubuntu2
+libboost-serialization1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-serialization1.71.0:amd64	1.71.0-6ubuntu6
+libboost-stacktrace-dev:amd64	1.71.0.0ubuntu2
+libboost-stacktrace1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-stacktrace1.71.0:amd64	1.71.0-6ubuntu6
+libboost-system-dev:amd64	1.71.0.0ubuntu2
+libboost-system1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-system1.71.0:amd64	1.71.0-6ubuntu6
+libboost-test-dev:amd64	1.71.0.0ubuntu2
+libboost-test1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-test1.71.0:amd64	1.71.0-6ubuntu6
+libboost-thread-dev:amd64	1.71.0.0ubuntu2
+libboost-thread1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-thread1.71.0:amd64	1.71.0-6ubuntu6
+libboost-timer-dev:amd64	1.71.0.0ubuntu2
+libboost-timer1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-timer1.71.0:amd64	1.71.0-6ubuntu6
+libboost-tools-dev	1.71.0.0ubuntu2
+libboost-type-erasure-dev:amd64	1.71.0.0ubuntu2
+libboost-type-erasure1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-type-erasure1.71.0:amd64	1.71.0-6ubuntu6
+libboost-wave-dev:amd64	1.71.0.0ubuntu2
+libboost-wave1.71-dev:amd64	1.71.0-6ubuntu6
+libboost-wave1.71.0:amd64	1.71.0-6ubuntu6
+libboost1.71-dev:amd64	1.71.0-6ubuntu6
+libboost1.71-tools-dev	1.71.0-6ubuntu6
+libbrlapi0.7:amd64	6.0+dfsg-4ubuntu6
+libbrotli1:amd64	1.0.7-6ubuntu0.1
+libbs2b0:amd64	3.1.0+dfsg-2.2build1
+libbsd0:amd64	0.10.0-1
+libbtf1:amd64	1:5.7.1+dfsg-2
+libbullet-dev:amd64	2.88+dfsg-2build2
+libbullet2.88:amd64	2.88+dfsg-2build2
+libbz2-1.0:amd64	1.0.8-2
+libbz2-dev:amd64	1.0.8-2
+libc-ares2:amd64	1.15.0-1ubuntu0.5
+libc-bin	2.31-0ubuntu9.18
+libc-dev-bin	2.31-0ubuntu9.18
+libc6:amd64	2.31-0ubuntu9.18
+libc6-dbg:amd64	2.31-0ubuntu9.18
+libc6-dev:amd64	2.31-0ubuntu9.18
+libcaca0:amd64	0.99.beta19-2.1ubuntu1.20.04.2
+libcaf-openmpi-3:amd64	2.8.0-1
+libcairo-gobject-perl	1.005-2
+libcairo-gobject2:amd64	1.16.0-4ubuntu1
+libcairo-perl	1.107-1
+libcairo-script-interpreter2:amd64	1.16.0-4ubuntu1
+libcairo2:amd64	1.16.0-4ubuntu1
+libcairo2-dev:amd64	1.16.0-4ubuntu1
+libcairomm-1.0-1v5:amd64	1.12.2-4build1
+libcamd2:amd64	1:5.7.1+dfsg-2
+libcamel-1.2-62:amd64	3.36.5-0ubuntu1
+libcanberra-gtk3-0:amd64	0.30-7ubuntu1
+libcanberra-gtk3-module:amd64	0.30-7ubuntu1
+libcanberra-pulse:amd64	0.30-7ubuntu1
+libcanberra0:amd64	0.30-7ubuntu1
+libcap-ng0:amd64	0.7.9-2.1build1
+libcap2:amd64	1:2.32-1ubuntu0.2
+libcap2-bin	1:2.32-1ubuntu0.2
+libcbor0.6:amd64	0.6.0-0ubuntu1
+libcc1-0:amd64	10.5.0-1ubuntu1~20.04
+libccd-dev:amd64	2.1-1
+libccd2:amd64	2.1-1
+libccolamd2:amd64	1:5.7.1+dfsg-2
+libcddb2	1.3.2-6fakesync1
+libcdio-cdda2:amd64	10.2+2.0.0-1
+libcdio-paranoia2:amd64	10.2+2.0.0-1
+libcdio18:amd64	2.0.0-2ubuntu0.2
+libcdparanoia0:amd64	3.10.2+debian-13
+libcdr-0.1-1:amd64	0.1.6-1build2
+libcdt5:amd64	2.42.2-3build2
+libceres-dev	1.14.0-4ubuntu1.1
+libceres1	1.14.0-4ubuntu1.1
+libcfitsio-dev:amd64	3.470-3
+libcfitsio-doc	3.470-3
+libcfitsio8:amd64	3.470-3
+libcgraph6:amd64	2.42.2-3build2
+libcharls-dev:amd64	2.0.0+dfsg-1build1
+libcharls2:amd64	2.0.0+dfsg-1build1
+libcheese-gtk25:amd64	3.34.0-1ubuntu1
+libcheese8:amd64	3.34.0-1ubuntu1
+libcholmod3:amd64	1:5.7.1+dfsg-2
+libchromaprint1:amd64	1.4.3-3build1
+libcilkrts5:amd64	7.5.0-6ubuntu2
+libclang-cpp18	1:18.1.8-11~20.04.2
+libclang1-10	1:10.0.0-4ubuntu1
+libclucene-contribs1v5:amd64	2.3.3.4+dfsg-1build1
+libclucene-core1v5:amd64	2.3.3.4+dfsg-1build1
+libclutter-1.0-0:amd64	1.26.4+dfsg-1
+libclutter-1.0-common	1.26.4+dfsg-1
+libclutter-gst-3.0-0:amd64	3.0.27-1
+libclutter-gtk-1.0-0:amd64	1.8.4-4
+libcmis-0.5-5v5	0.5.2-1ubuntu1
+libcoarrays-dev:amd64	2.8.0-1
+libcoarrays-openmpi-dev:amd64	2.8.0-1
+libcodec2-0.9:amd64	0.9.2-2
+libcogl-common	1.22.6-1
+libcogl-pango20:amd64	1.22.6-1
+libcogl-path20:amd64	1.22.6-1
+libcogl20:amd64	1.22.6-1
+libcolamd2:amd64	1:5.7.1+dfsg-2
+libcolord-gtk1:amd64	0.2.0-0ubuntu1
+libcolord2:amd64	1.4.4-2
+libcolorhug2:amd64	1.4.4-2
+libcom-err2:amd64	1.45.5-2ubuntu1.2
+libconsole-bridge-dev:amd64	0.4.4+dfsg-1build1
+libconsole-bridge0.4:amd64	0.4.4+dfsg-1build1
+libcrack2:amd64	2.9.6-3.2
+libcroco3:amd64	0.6.13-1ubuntu0.1
+libcrypt-dev:amd64	1:4.4.10-10ubuntu4
+libcrypt1:amd64	1:4.4.10-10ubuntu4
+libcryptsetup12:amd64	2:2.2.2-3ubuntu2.4
+libctf-nobfd0:amd64	2.34-6ubuntu1.11
+libctf0:amd64	2.34-6ubuntu1.11
+libcue2:amd64	2.2.1-2ubuntu0.1
+libcups2:amd64	2.3.1-9ubuntu1.9
+libcupsfilters1:amd64	1.27.4-1ubuntu0.4
+libcupsimage2:amd64	2.3.1-9ubuntu1.9
+libcurl3-gnutls:amd64	7.68.0-1ubuntu2.25
+libcurl4:amd64	7.68.0-1ubuntu2.25
+libcurl4-openssl-dev:amd64	7.68.0-1ubuntu2.25
+libcxsparse3:amd64	1:5.7.1+dfsg-2
+libdaemon0:amd64	0.14-7
+libdap-dev:amd64	3.20.5-1
+libdap25:amd64	3.20.5-1
+libdapclient6v5:amd64	3.20.5-1
+libdapserver7v5:amd64	3.20.5-1
+libdart-collision-bullet-dev	6.9.2-2build4
+libdart-collision-ode-dev	6.9.2-2build4
+libdart-dev	6.9.2-2build4
+libdart-external-ikfast-dev	6.9.2-2build4
+libdart-external-odelcpsolver-dev	6.9.2-2build4
+libdart-utils-dev	6.9.2-2build4
+libdart-utils-urdf-dev	6.9.2-2build4
+libdart6	6.9.2-2build4
+libdart6-collision-bullet	6.9.2-2build4
+libdart6-collision-ode	6.9.2-2build4
+libdart6-external-odelcpsolver	6.9.2-2build4
+libdart6-utils	6.9.2-2build4
+libdart6-utils-urdf	6.9.2-2build4
+libdata-dump-perl	1.23-1
+libdatrie-dev:amd64	0.2.12-3
+libdatrie1:amd64	0.2.12-3
+libdazzle-1.0-0:amd64	3.36.0-1
+libdb5.3:amd64	5.3.28+dfsg1-0.6ubuntu2
+libdbus-1-3:amd64	1.12.16-2ubuntu2.3
+libdbus-1-dev:amd64	1.12.16-2ubuntu2.3
+libdbus-glib-1-2:amd64	0.110-5fakssync1
+libdbusmenu-glib4:amd64	16.04.1+18.10.20180917-0ubuntu6
+libdbusmenu-gtk3-4:amd64	16.04.1+18.10.20180917-0ubuntu6
+libdc1394-22:amd64	2.2.5-2.1
+libdc1394-22-dev:amd64	2.2.5-2.1
+libdca0:amd64	0.0.6-1
+libdconf1:amd64	0.36.0-1
+libdebconfclient0:amd64	0.251ubuntu1
+libdebhelper-perl	12.10ubuntu1
+libdee-1.0-4:amd64	1.2.7+17.10.20170616-4ubuntu6
+libdevmapper1.02.1:amd64	2:1.02.167-1ubuntu1
+libdjvulibre-text	3.5.27.1-14ubuntu0.1
+libdjvulibre21:amd64	3.5.27.1-14ubuntu0.1
+libdmapsharing-3.0-2:amd64	2.9.39-6
+libdns-export1109	1:9.11.16+dfsg-3~ubuntu1
+libdotconf0:amd64	1.3-0.3fakesync1
+libdouble-conversion3:amd64	3.1.5-4ubuntu1
+libdpkg-perl	1.19.7ubuntu3.2
+libdrm-amdgpu1:amd64	2.4.107-8ubuntu1~20.04.2
+libdrm-common	2.4.107-8ubuntu1~20.04.2
+libdrm-intel1:amd64	2.4.107-8ubuntu1~20.04.2
+libdrm-nouveau2:amd64	2.4.107-8ubuntu1~20.04.2
+libdrm-radeon1:amd64	2.4.107-8ubuntu1~20.04.2
+libdrm2:amd64	2.4.107-8ubuntu1~20.04.2
+libdv4:amd64	1.0.0-12
+libdvbpsi10:amd64	1.3.3-1
+libdvdnav4:amd64	6.0.1-1build1
+libdvdread7:amd64	6.1.0+really6.0.2-1
+libdw1:amd64	0.176-1.1ubuntu0.1
+libe-book-0.1-1:amd64	0.1.3-1build3
+libebackend-1.2-10:amd64	3.36.5-0ubuntu1
+libebml4v5:amd64	1.3.10-1build1
+libebook-1.2-20:amd64	3.36.5-0ubuntu1
+libebook-contacts-1.2-3:amd64	3.36.5-0ubuntu1
+libecal-2.0-1:amd64	3.36.5-0ubuntu1
+libedata-book-1.2-26:amd64	3.36.5-0ubuntu1
+libedata-cal-2.0-1:amd64	3.36.5-0ubuntu1
+libedataserver-1.2-24:amd64	3.36.5-0ubuntu1
+libedataserverui-1.2-2:amd64	3.36.5-0ubuntu1
+libedit2:amd64	3.1-20191231-1
+libefiboot1:amd64	37-2ubuntu2.2
+libefivar1:amd64	37-2ubuntu2.2
+libegl-dev:amd64	1.3.2-1~ubuntu0.20.04.2
+libegl-mesa0:amd64	21.2.6-0ubuntu0.1~20.04.2
+libegl1:amd64	1.3.2-1~ubuntu0.20.04.2
+libegl1-mesa-dev:amd64	21.2.6-0ubuntu0.1~20.04.2
+libeigen3-dev	3.3.7-2
+libelf1:amd64	0.176-1.1ubuntu0.1
+libenchant-2-2:amd64	2.2.8-1ubuntu0.20.04.1
+libencode-locale-perl	1.05-1
+libeot0:amd64	0.01-5
+libepoxy-dev:amd64	1.5.4-1
+libepoxy0:amd64	1.5.4-1
+libepsilon-dev:amd64	0.9.2+dfsg-4
+libepsilon1:amd64	0.9.2+dfsg-4
+libepubgen-0.1-1:amd64	0.1.1-1ubuntu2
+liberror-perl	0.17029-1
+libespeak-ng1:amd64	1.50+dfsg-6ubuntu0.1
+libestr0:amd64	0.1.10-2.1
+libetonyek-0.1-1:amd64	0.1.9-3
+libevdev2:amd64	1.9.0+dfsg-1ubuntu0.2
+libevdocument3-4:amd64	3.36.10-0ubuntu1
+libevent-2.1-7:amd64	2.1.11-stable-1
+libevent-core-2.1-7:amd64	2.1.11-stable-1
+libevent-dev	2.1.11-stable-1
+libevent-extra-2.1-7:amd64	2.1.11-stable-1
+libevent-openssl-2.1-7:amd64	2.1.11-stable-1
+libevent-pthreads-2.1-7:amd64	2.1.11-stable-1
+libevview3-3:amd64	3.36.10-0ubuntu1
+libexempi8:amd64	2.5.1-1ubuntu0.1
+libexif-dev:amd64	0.6.21-6ubuntu0.4
+libexif-doc	0.6.21-6ubuntu0.4
+libexif12:amd64	0.6.21-6ubuntu0.4
+libexiv2-27:amd64	0.27.2-8ubuntu2.7
+libexpat1:amd64	2.2.9-1ubuntu0.8
+libexpat1-dev:amd64	2.2.9-1ubuntu0.8
+libext2fs2:amd64	1.45.5-2ubuntu1.1
+libexttextcat-2.0-0:amd64	3.4.5-1
+libexttextcat-data	3.4.5-1
+libextutils-depends-perl	0.8000-1
+libextutils-pkgconfig-perl	1.16-1
+libfaad2:amd64	2.9.1-1ubuntu0.1
+libfabric1	1.6.2-3ubuntu0.1
+libfakeroot:amd64	1.24-1
+libfastjson4:amd64	0.99.8-2
+libfcl-dev	0.5.0-5build1
+libfcl0.5	0.5.0-5build1
+libfdisk1:amd64	2.34-0.1ubuntu9.6
+libffi-dev:amd64	3.3-4
+libffi7:amd64	3.3-4
+libfftw3-double3:amd64	3.3.8-2ubuntu1
+libfftw3-single3:amd64	3.3.8-2ubuntu1
+libfido2-1:amd64	1.3.1-1ubuntu2
+libfile-basedir-perl	0.08-1
+libfile-desktopentry-perl	0.22-1
+libfile-fcntllock-perl	0.22-3build4
+libfile-listing-perl	6.04-1
+libfile-mimeinfo-perl	0.29-1
+libfile-stripnondeterminism-perl	1.7.0-1
+libflac8:amd64	1.3.3-1ubuntu0.2
+libflang-18-dev	1:18.1.8-11~20.04.2
+libflann-dev:amd64	1.9.1+dfsg-9build1
+libflann1.9:amd64	1.9.1+dfsg-9build1
+libflite1:amd64	2.1-release-3
+libfltk-cairo1.3:amd64	1.3.4-10build1
+libfltk-forms1.3:amd64	1.3.4-10build1
+libfltk-gl1.3:amd64	1.3.4-10build1
+libfltk-images1.3:amd64	1.3.4-10build1
+libfltk1.3:amd64	1.3.4-10build1
+libfltk1.3-dev	1.3.4-10build1
+libfont-afm-perl	1.20-2
+libfontconfig1:amd64	2.13.1-2ubuntu3
+libfontconfig1-dev:amd64	2.13.1-2ubuntu3
+libfontembed1:amd64	1.27.4-1ubuntu0.4
+libfontenc1:amd64	1:1.1.4-0ubuntu1
+libfprint-2-2:amd64	1:1.90.2+tod1-0ubuntu1~20.04.10
+libfprint-2-tod1:amd64	1:1.90.2+tod1-0ubuntu1~20.04.10
+libfreehand-0.1-1	0.1.2-2ubuntu1
+libfreeimage-dev	3.18.0+ds2-1ubuntu3.1
+libfreeimage3:amd64	3.18.0+ds2-1ubuntu3.1
+libfreerdp-client2-2:amd64	2.6.1+dfsg1-0ubuntu0.20.04.2
+libfreerdp2-2:amd64	2.6.1+dfsg1-0ubuntu0.20.04.2
+libfreetype-dev:amd64	2.10.1-2ubuntu0.4
+libfreetype6:amd64	2.10.1-2ubuntu0.4
+libfreetype6-dev:amd64	2.10.1-2ubuntu0.4
+libfreexl-dev:amd64	1.0.5-3
+libfreexl1:amd64	1.0.5-3
+libfribidi-dev:amd64	1.0.8-2ubuntu0.1
+libfribidi0:amd64	1.0.8-2ubuntu0.1
+libfuse2:amd64	2.9.9-3
+libfwupd2:amd64	1.7.9-1~20.04.1
+libfwupdplugin1:amd64	1.5.11-0ubuntu1~20.04.2
+libfwupdplugin5:amd64	1.7.9-1~20.04.1
+libfyba-dev:amd64	4.1.1-6build1
+libfyba0:amd64	4.1.1-6build1
+libgail-common:amd64	2.24.32-4ubuntu4.1
+libgail18:amd64	2.24.32-4ubuntu4.1
+libgamemode0	1.5.1-0ubuntu3.1
+libgamemodeauto0	1.5.1-0ubuntu3.1
+libgazebo11:amd64	11.15.1-1~focal
+libgazebo11-dev:amd64	11.15.1-1~focal
+libgbm1:amd64	21.2.6-0ubuntu0.1~20.04.2
+libgc1c2:amd64	1:7.6.4-0.4ubuntu1
+libgcab-1.0-0:amd64	1.4-1
+libgcc-10-dev:amd64	10.5.0-1ubuntu1~20.04
+libgcc-7-dev:amd64	7.5.0-6ubuntu2
+libgcc-9-dev:amd64	9.4.0-1ubuntu1~20.04.2
+libgcc-s1:amd64	10.5.0-1ubuntu1~20.04
+libgck-1-0:amd64	3.36.0-2build1
+libgcr-base-3-1:amd64	3.36.0-2build1
+libgcr-ui-3-1:amd64	3.36.0-2build1
+libgcrypt20:amd64	1.8.5-5ubuntu1.1
+libgd3:amd64	2.2.5-5.2ubuntu2.4
+libgdal-dev	3.0.4+dfsg-1build3
+libgdal26	3.0.4+dfsg-1build3
+libgdata-common	0.17.12-1
+libgdata22:amd64	0.17.12-1
+libgdbm-compat4:amd64	1.18.1-5
+libgdbm6:amd64	1.18.1-5
+libgdcm-dev	3.0.5-1.1ubuntu2
+libgdcm3.0:amd64	3.0.5-1.1ubuntu2
+libgdk-pixbuf2.0-0:amd64	2.40.0+dfsg-3ubuntu0.5
+libgdk-pixbuf2.0-bin	2.40.0+dfsg-3ubuntu0.5
+libgdk-pixbuf2.0-common	2.40.0+dfsg-3ubuntu0.5
+libgdk-pixbuf2.0-dev:amd64	2.40.0+dfsg-3ubuntu0.5
+libgdm1	3.36.3-0ubuntu0.20.04.4
+libgee-0.8-2:amd64	0.20.3-1
+libgeoclue-2-0:amd64	2.5.6-0ubuntu1
+libgeocode-glib0:amd64	3.26.2-2
+libgeographic-dev	1.50.1-1build1
+libgeographic19:amd64	1.50.1-1build1
+libgeos-3.8.0:amd64	3.8.0-1build1
+libgeos-c1v5:amd64	3.8.0-1build1
+libgeos-dev	3.8.0-1build1
+libgeotiff-dev:amd64	1.5.1-2
+libgeotiff5:amd64	1.5.1-2
+libgexiv2-2:amd64	0.12.0-2
+libgflags-dev	2.2.2-1build1
+libgflags2.2	2.2.2-1build1
+libgfortran5:amd64	10.5.0-1ubuntu1~20.04
+libgif-dev	5.1.9-1ubuntu0.1
+libgif7:amd64	5.1.9-1ubuntu0.1
+libgirepository-1.0-1:amd64	1.64.1-1~ubuntu20.04.1
+libgjs0g:amd64	1.64.5-0ubuntu0.20.04.01
+libgl-dev:amd64	1.3.2-1~ubuntu0.20.04.2
+libgl1:amd64	1.3.2-1~ubuntu0.20.04.2
+libgl1-mesa-dev:amd64	21.2.6-0ubuntu0.1~20.04.2
+libgl1-mesa-dri:amd64	21.2.6-0ubuntu0.1~20.04.2
+libgl2ps-dev	1.4.0+dfsg1-2
+libgl2ps1.4	1.4.0+dfsg1-2
+libglapi-mesa:amd64	21.2.6-0ubuntu0.1~20.04.2
+libgles-dev:amd64	1.3.2-1~ubuntu0.20.04.2
+libgles1:amd64	1.3.2-1~ubuntu0.20.04.2
+libgles2:amd64	1.3.2-1~ubuntu0.20.04.2
+libglew-dev:amd64	2.1.0-4
+libglew2.1:amd64	2.1.0-4
+libglfw3:amd64	3.3.2-1
+libglfw3-dev:amd64	3.3.2-1
+libglib-object-introspection-perl	0.048-2build1
+libglib-perl:amd64	3:1.329.2-1
+libglib2.0-0:amd64	2.64.6-1~ubuntu20.04.9
+libglib2.0-bin	2.64.6-1~ubuntu20.04.9
+libglib2.0-data	2.64.6-1~ubuntu20.04.9
+libglib2.0-dev:amd64	2.64.6-1~ubuntu20.04.9
+libglib2.0-dev-bin	2.64.6-1~ubuntu20.04.9
+libglibmm-2.4-1v5:amd64	2.64.2-1
+libglu1-mesa:amd64	9.0.1-1build1
+libglu1-mesa-dev:amd64	9.0.1-1build1
+libglvnd-dev:amd64	1.3.2-1~ubuntu0.20.04.2
+libglvnd0:amd64	1.3.2-1~ubuntu0.20.04.2
+libglx-dev:amd64	1.3.2-1~ubuntu0.20.04.2
+libglx-mesa0:amd64	21.2.6-0ubuntu0.1~20.04.2
+libglx0:amd64	1.3.2-1~ubuntu0.20.04.2
+libgme0:amd64	0.6.2-1build1
+libgmp10:amd64	2:6.2.0+dfsg-4ubuntu0.1
+libgnome-autoar-0-0:amd64	0.2.3-2ubuntu0.4
+libgnome-bluetooth13:amd64	3.34.3-0ubuntu1
+libgnome-desktop-3-19:amd64	3.36.8-0ubuntu1
+libgnome-games-support-1-3:amd64	1.6.1-1
+libgnome-games-support-common	1.6.1-1
+libgnome-menu-3-0:amd64	3.36.0-1ubuntu1
+libgnome-todo	3.28.1-5
+libgnomekbd-common	3.26.1-1
+libgnomekbd8:amd64	3.26.1-1
+libgnutls30:amd64	3.6.13-2ubuntu1.12
+libgoa-1.0-0b:amd64	3.36.1-0ubuntu1
+libgoa-1.0-common	3.36.1-0ubuntu1
+libgoa-backend-1.0-1:amd64	3.36.1-0ubuntu1
+libgom-1.0-0:amd64	0.4-1
+libgomp1:amd64	10.5.0-1ubuntu1~20.04
+libgoogle-glog-dev	0.4.0-1build1
+libgoogle-glog0v5	0.4.0-1build1
+libgpg-error-dev	1.37-1
+libgpg-error0:amd64	1.37-1
+libgpgme-dev	1.13.1-7ubuntu2.2
+libgpgme11:amd64	1.13.1-7ubuntu2.2
+libgpgmepp6:amd64	1.13.1-7ubuntu2
+libgphoto2-6:amd64	2.5.25-0ubuntu0.1
+libgphoto2-dev:amd64	2.5.25-0ubuntu0.1
+libgphoto2-l10n	2.5.25-0ubuntu0.1
+libgphoto2-port12:amd64	2.5.25-0ubuntu0.1
+libgpm2:amd64	1.20.7-5
+libgpod-common	0.8.3-15
+libgpod4:amd64	0.8.3-15
+libgraphblas3:amd64	1:5.7.1+dfsg-2
+libgraphene-1.0-0:amd64	1.10.0-1build2
+libgraphite2-3:amd64	1.3.13-11build1
+libgraphite2-dev:amd64	1.3.13-11build1
+libgrilo-0.3-0:amd64	0.3.12-1ubuntu0.1
+libgroupsock8:amd64	2020.01.19-1build1
+libgs9:amd64	9.50~dfsg-5ubuntu4.15
+libgs9-common	9.50~dfsg-5ubuntu4.15
+libgsf-1-114:amd64	1.14.46-1ubuntu0.1
+libgsf-1-common	1.14.46-1ubuntu0.1
+libgsm1:amd64	1.0.18-2
+libgsound0:amd64	1.0.2-4
+libgspell-1-2:amd64	1.8.3-1
+libgspell-1-common	1.8.3-1
+libgssapi-krb5-2:amd64	1.17-6ubuntu4.11
+libgssapi3-heimdal:amd64	7.7.0+dfsg-1ubuntu1.4
+libgssdp-1.2-0:amd64	1.2.3-0ubuntu0.20.04.1
+libgssrpc4:amd64	1.17-6ubuntu4.11
+libgstreamer-gl1.0-0:amd64	1.16.3-0ubuntu1.4
+libgstreamer-plugins-bad1.0-0:amd64	1.16.3-0ubuntu1.1
+libgstreamer-plugins-base1.0-0:amd64	1.16.3-0ubuntu1.4
+libgstreamer-plugins-good1.0-0:amd64	1.16.3-0ubuntu1.3
+libgstreamer1.0-0:amd64	1.16.3-0ubuntu1.2
+libgtest-dev:amd64	1.10.0-2
+libgtk-3-0:amd64	3.24.20-0ubuntu1.2
+libgtk-3-bin	3.24.20-0ubuntu1.2
+libgtk-3-common	3.24.20-0ubuntu1.2
+libgtk-3-dev:amd64	3.24.20-0ubuntu1.2
+libgtk2.0-0:amd64	2.24.32-4ubuntu4.1
+libgtk2.0-bin	2.24.32-4ubuntu4.1
+libgtk2.0-common	2.24.32-4ubuntu4.1
+libgtk2.0-dev:amd64	2.24.32-4ubuntu4.1
+libgtk3-perl	0.037-1
+libgtkmm-3.0-1v5:amd64	3.24.2-1build1
+libgtksourceview-4-0:amd64	4.6.0-1
+libgtksourceview-4-common	4.6.0-1
+libgtop-2.0-11:amd64	2.40.0-2
+libgtop2-common	2.40.0-2
+libgts-0.7-5:amd64	0.7.6+darcs121130-4
+libgts-bin	0.7.6+darcs121130-4
+libgts-dev:amd64	0.7.6+darcs121130-4
+libgudev-1.0-0:amd64	1:233-1
+libgupnp-1.2-0:amd64	1.2.4-0ubuntu1
+libgupnp-av-1.0-2	0.12.11-2
+libgupnp-dlna-2.0-3	0.10.5-4
+libgusb2:amd64	0.3.4-0.1
+libgvc6	2.42.2-3build2
+libgvpr2:amd64	2.42.2-3build2
+libgweather-3-16:amd64	3.36.1-1~ubuntu20.04.1
+libgweather-common	3.36.1-1~ubuntu20.04.1
+libgxps2:amd64	0.3.1-1
+libhandy-0.0-0:amd64	0.0.13-1
+libharfbuzz-dev:amd64	2.6.4-1ubuntu4.3
+libharfbuzz-gobject0:amd64	2.6.4-1ubuntu4.3
+libharfbuzz-icu0:amd64	2.6.4-1ubuntu4.3
+libharfbuzz0b:amd64	2.6.4-1ubuntu4.3
+libhcrypto4-heimdal:amd64	7.7.0+dfsg-1ubuntu1.4
+libhdf4-0-alt	4.2.14-1ubuntu1
+libhdf4-alt-dev	4.2.14-1ubuntu1
+libhdf5-103:amd64	1.10.4+repack-11ubuntu1
+libhdf5-cpp-103:amd64	1.10.4+repack-11ubuntu1
+libhdf5-dev	1.10.4+repack-11ubuntu1
+libhdf5-mpi-dev	1.10.4+repack-11ubuntu1
+libhdf5-openmpi-103:amd64	1.10.4+repack-11ubuntu1
+libhdf5-openmpi-dev	1.10.4+repack-11ubuntu1
+libheimbase1-heimdal:amd64	7.7.0+dfsg-1ubuntu1.4
+libheimntlm0-heimdal:amd64	7.7.0+dfsg-1ubuntu1.4
+libhogweed5:amd64	3.5.1+really3.5.1-2ubuntu0.2
+libhpmud0:amd64	3.20.3+dfsg0-2ubuntu0.1
+libhtml-form-perl	6.07-1
+libhtml-format-perl	2.12-1
+libhtml-parser-perl	3.72-5
+libhtml-tagset-perl	3.20-4
+libhtml-tree-perl	5.07-2
+libhttp-cookies-perl	6.08-1
+libhttp-daemon-perl	6.06-1ubuntu0.1
+libhttp-date-perl	6.05-1
+libhttp-message-perl	6.22-1
+libhttp-negotiate-perl	6.01-1
+libhunspell-1.7-0:amd64	1.7.0-2build2
+libhwloc-dev:amd64	2.1.0+dfsg-4
+libhwloc-plugins:amd64	2.1.0+dfsg-4
+libhwloc15:amd64	2.1.0+dfsg-4
+libhx509-5-heimdal:amd64	7.7.0+dfsg-1ubuntu1.4
+libhyphen0:amd64	2.8.8-7
+libibus-1.0-5:amd64	1.5.22-2ubuntu2.1
+libibverbs-dev:amd64	28.0-1ubuntu1
+libibverbs1:amd64	28.0-1ubuntu1
+libical3:amd64	3.0.8-1
+libice-dev:amd64	2:1.0.10-0ubuntu1
+libice6:amd64	2:1.0.10-0ubuntu1
+libicu-dev:amd64	66.1-2ubuntu2.1
+libicu66:amd64	66.1-2ubuntu2.1
+libidn11:amd64	1.33-2.2ubuntu2
+libidn2-0:amd64	2.2.0-2
+libiec61883-0:amd64	1.2.0-3
+libieee1284-3:amd64	0.2.11-13build1
+libigdgmm11:amd64	20.1.1+ds1-1
+libignition-cmake2-dev:amd64	2.17.2-1~focal
+libignition-common3:amd64	3.17.0-1~focal
+libignition-common3-av:amd64	3.17.0-1~focal
+libignition-common3-av-dev:amd64	3.17.0-1~focal
+libignition-common3-core-dev:amd64	3.17.0-1~focal
+libignition-common3-dev:amd64	3.17.0-1~focal
+libignition-common3-events:amd64	3.17.0-1~focal
+libignition-common3-events-dev:amd64	3.17.0-1~focal
+libignition-common3-graphics:amd64	3.17.0-1~focal
+libignition-common3-graphics-dev:amd64	3.17.0-1~focal
+libignition-common3-profiler:amd64	3.17.0-1~focal
+libignition-common3-profiler-dev:amd64	3.17.0-1~focal
+libignition-fuel-tools4:amd64	4.9.1-1~focal
+libignition-fuel-tools4-dev:amd64	4.9.1-1~focal
+libignition-math6:amd64	6.15.1-1~focal
+libignition-math6-dev:amd64	6.15.1-1~focal
+libignition-msgs5:amd64	5.11.0-1~focal
+libignition-msgs5-dev:amd64	5.11.0-1~focal
+libignition-tools-dev:amd64	1.5.0-1~focal
+libignition-transport8:amd64	8.5.0-1~focal
+libignition-transport8-core-dev:amd64	8.5.0-1~focal
+libignition-transport8-dev:amd64	8.5.0-1~focal
+libignition-transport8-log:amd64	8.5.0-1~focal
+libignition-transport8-log-dev:amd64	8.5.0-1~focal
+libijs-0.35:amd64	0.35-15
+libilmbase-dev:amd64	2.3.0-6build1
+libilmbase24:amd64	2.3.0-6build1
+libimagequant0:amd64	2.12.2-1.1
+libimobiledevice6:amd64	1.2.1~git20191129.9f79242-1build1
+libinput-bin	1.15.5-1ubuntu0.3
+libinput10:amd64	1.15.5-1ubuntu0.3
+libio-html-perl	1.001-1
+libio-socket-ssl-perl	2.067-1
+libio-stringy-perl	2.111-3
+libip4tc2:amd64	1.8.4-3ubuntu2
+libip6tc2:amd64	1.8.4-3ubuntu2
+libipc-system-simple-perl	1.26-1
+libisc-export1105:amd64	1:9.11.16+dfsg-3~ubuntu1
+libisl22:amd64	0.22.1-1
+libitm1:amd64	10.5.0-1ubuntu1~20.04
+libiw30:amd64	30~pre9-13ubuntu1
+libixml10:amd64	1:1.8.4-2ubuntu2
+libjack-jackd2-0:amd64	1.9.12~dfsg-2ubuntu2
+libjansson4:amd64	2.12-1build1
+libjavascriptcoregtk-4.0-18:amd64	2.38.6-0ubuntu0.20.04.1
+libjbig-dev:amd64	2.1-3.1ubuntu0.20.04.1
+libjbig0:amd64	2.1-3.1ubuntu0.20.04.1
+libjbig2dec0:amd64	0.18-1ubuntu1
+libjcat1:amd64	0.1.4-0ubuntu0.20.04.1
+libjpeg-dev:amd64	8c-2ubuntu8
+libjpeg-turbo8:amd64	2.0.3-0ubuntu1.20.04.3
+libjpeg-turbo8-dev:amd64	2.0.3-0ubuntu1.20.04.3
+libjpeg8:amd64	8c-2ubuntu8
+libjpeg8-dev:amd64	8c-2ubuntu8
+libjs-inherits	2.0.4-1
+libjs-is-typedarray	1.0.0-2
+libjs-jquery	3.3.1~dfsg-3ubuntu0.1
+libjs-jquery-ui	1.12.1+dfsg-5ubuntu0.20.04.1
+libjs-psl	1.7.0+ds-1
+libjs-typedarray-to-buffer	3.0.3-3
+libjson-c-dev:amd64	0.13.1+dfsg-7ubuntu0.3
+libjson-c4:amd64	0.13.1+dfsg-7ubuntu0.3
+libjson-glib-1.0-0:amd64	1.4.4-2ubuntu2
+libjson-glib-1.0-common	1.4.4-2ubuntu2
+libjsoncpp-dev:amd64	1.7.4-3.1ubuntu2
+libjsoncpp1:amd64	1.7.4-3.1ubuntu2
+libjuh-java	1:6.4.7-0ubuntu0.20.04.15
+libjurt-java	1:6.4.7-0ubuntu0.20.04.15
+libjxr0:amd64	1.1-6build1
+libk5crypto3:amd64	1.17-6ubuntu4.11
+libkadm5clnt-mit11:amd64	1.17-6ubuntu4.11
+libkadm5srv-mit11:amd64	1.17-6ubuntu4.11
+libkate1:amd64	0.4.1-11build1
+libkdb5-9:amd64	1.17-6ubuntu4.11
+libkeyutils1:amd64	1.6-6ubuntu1.1
+libklibc:amd64	2.0.7-1ubuntu5.2
+libklu1:amd64	1:5.7.1+dfsg-2
+libkml-dev:amd64	1.3.0-8build1
+libkmlbase1:amd64	1.3.0-8build1
+libkmlconvenience1:amd64	1.3.0-8build1
+libkmldom1:amd64	1.3.0-8build1
+libkmlengine1:amd64	1.3.0-8build1
+libkmlregionator1:amd64	1.3.0-8build1
+libkmlxsd1:amd64	1.3.0-8build1
+libkmod2:amd64	27-1ubuntu2.1
+libkpathsea6:amd64	2019.20190605.51237-3ubuntu0.2
+libkrb5-26-heimdal:amd64	7.7.0+dfsg-1ubuntu1.4
+libkrb5-3:amd64	1.17-6ubuntu4.11
+libkrb5-dev:amd64	1.17-6ubuntu4.11
+libkrb5support0:amd64	1.17-6ubuntu4.11
+libksba8:amd64	1.3.5-2ubuntu0.20.04.2
+liblab-gamut1:amd64	2.42.2-3build2
+liblangtag-common	0.6.3-1
+liblangtag1:amd64	0.6.3-1
+liblapack-dev:amd64	3.9.0-1build1
+liblapack3:amd64	3.9.0-1build1
+liblaszip8:amd64	3.4.3-1build1
+liblcms2-2:amd64	2.9-4
+liblcms2-utils	2.9-4
+libldap-2.4-2:amd64	2.4.49+dfsg-2ubuntu1.10
+libldap-common	2.4.49+dfsg-2ubuntu1.10
+libldap2-dev:amd64	2.4.49+dfsg-2ubuntu1.10
+libldb2:amd64	2:2.4.4-0ubuntu0.20.04.2
+libldl2:amd64	1:5.7.1+dfsg-2
+liblept5:amd64	1.79.0-1
+liblilv-0-0:amd64	0.24.6-1ubuntu0.1
+liblirc-client0:amd64	0.10.1-6.1ubuntu1.1
+liblivemedia77:amd64	2020.01.19-1build1
+libllvm10:amd64	1:10.0.0-4ubuntu1
+libllvm12:amd64	1:12.0.0-3ubuntu1~20.04.5
+libllvm18:amd64	1:18.1.8-11~20.04.2
+libllvm9:amd64	1:9.0.1-12
+liblmdb0:amd64	0.9.24-1
+liblocale-gettext-perl	1.07-4
+liblog4cxx-dev:amd64	0.10.0-15ubuntu2
+liblog4cxx10v5:amd64	0.10.0-15ubuntu2
+liblouis-data	3.12.0-3ubuntu0.2
+liblouis20:amd64	3.12.0-3ubuntu0.2
+liblouisutdml-bin	2.8.0-3
+liblouisutdml-data	2.8.0-3
+liblouisutdml9:amd64	2.8.0-3
+liblsan0:amd64	10.5.0-1ubuntu1~20.04
+libltdl-dev:amd64	2.4.6-14
+libltdl7:amd64	2.4.6-14
+liblua5.2-0:amd64	5.2.4-1.1build3
+liblua5.3-0:amd64	5.3.3-1.1ubuntu2
+libluajit-5.1-2:amd64	2.1.0~beta3+dfsg-5.1build1
+libluajit-5.1-common	2.1.0~beta3+dfsg-5.1build1
+liblwp-mediatypes-perl	6.04-1
+liblwp-protocol-https-perl	6.07-2ubuntu2
+liblz4-1:amd64	1.9.2-2ubuntu0.20.04.1
+liblz4-dev:amd64	1.9.2-2ubuntu0.20.04.1
+liblzma-dev:amd64	5.2.4-1ubuntu1.1
+liblzma5:amd64	5.2.4-1ubuntu1.1
+liblzo2-2:amd64	2.10-2
+libmad0:amd64	0.15.1b-10ubuntu1
+libmagic-mgc	1:5.38-4
+libmagic1:amd64	1:5.38-4
+libmail-sendmail-perl	0.80-1
+libmailtools-perl	2.21-1
+libmatroska6v5:amd64	1.5.2-3build1
+libmaxminddb0:amd64	1.4.2-0ubuntu1.20.04.1
+libmbedcrypto3:amd64	2.16.4-1ubuntu2
+libmbedtls12:amd64	2.16.4-1ubuntu2
+libmbedx509-0:amd64	2.16.4-1ubuntu2
+libmbim-glib4:amd64	1.26.2-1~ubuntu20.04.1
+libmbim-proxy	1.26.2-1~ubuntu20.04.1
+libmediaart-2.0-0:amd64	1.9.4-2
+libmessaging-menu0:amd64	13.10.1+18.10.20180918-0ubuntu2
+libmetis5:amd64	5.1.0.dfsg-5
+libmhash2:amd64	0.9.9.9-8
+libminiupnpc17:amd64	2.1.20190824-0ubuntu2
+libminizip-dev:amd64	1.1-8build1
+libminizip1:amd64	1.1-8build1
+libmm-glib0:amd64	1.18.6-1~ubuntu20.04.1
+libmnl0:amd64	1.0.4-2
+libmongoose2:amd64	1:5.7.1+dfsg-2
+libmount-dev:amd64	2.34-0.1ubuntu9.6
+libmount1:amd64	2.34-0.1ubuntu9.6
+libmozjs-68-0:amd64	68.6.0-1ubuntu1
+libmp3lame0:amd64	3.100-3
+libmpc3:amd64	1.1.0-1
+libmpcdec6:amd64	2:0.1~r495-2
+libmpdec2:amd64	2.4.2-3
+libmpeg2-4:amd64	0.5.1-9
+libmpfr6:amd64	4.0.2-1
+libmpg123-0:amd64	1.25.13-1ubuntu0.2
+libmpx2:amd64	8.4.0-3ubuntu2
+libmspack0:amd64	0.10.1-2
+libmspub-0.1-1:amd64	0.1.4-1build3
+libmtdev1:amd64	1.1.5-1.1
+libmtp-common	1.1.17-3
+libmtp-runtime	1.1.17-3
+libmtp9:amd64	1.1.17-3
+libmutter-6-0:amd64	3.36.9-0ubuntu0.20.04.2
+libmwaw-0.3-3:amd64	0.3.15-2build1
+libmysofa1:amd64	1.0~dfsg0-1
+libmysqlclient-dev	8.0.42-0ubuntu0.20.04.1
+libmysqlclient21:amd64	8.0.42-0ubuntu0.20.04.1
+libmythes-1.2-0:amd64	2:1.2.4-3build1
+libnatpmp1:amd64	20150609-7build1
+libnautilus-extension1a:amd64	1:3.36.3-0ubuntu1.20.04.2
+libncurses6:amd64	6.2-0ubuntu2.1
+libncursesw6:amd64	6.2-0ubuntu2.1
+libndp0:amd64	1.7-0ubuntu1.1
+libneon27-gnutls:amd64	0.30.2-4
+libnet-dbus-perl	1.2.0-1
+libnet-http-perl	6.19-1
+libnet-smtp-ssl-perl	1.04-1
+libnet-ssleay-perl	1.88-2ubuntu1
+libnetcdf-c++4	4.2-11build2
+libnetcdf-cxx-legacy-dev	4.2-11build2
+libnetcdf-dev	1:4.7.3-1
+libnetcdf15:amd64	1:4.7.3-1
+libnetfilter-conntrack3:amd64	1.0.7-2
+libnetplan0:amd64	0.104-0ubuntu2~20.04.6
+libnettle7:amd64	3.5.1+really3.5.1-2ubuntu0.2
+libnewt0.52:amd64	0.52.21-4ubuntu2
+libnfnetlink0:amd64	1.0.1-3build1
+libnfs13:amd64	4.0.0-1
+libnftnl11:amd64	1.1.5-1
+libnghttp2-14:amd64	1.40.0-1ubuntu0.3
+libnl-3-200:amd64	3.4.0-1ubuntu0.1
+libnl-3-dev:amd64	3.4.0-1ubuntu0.1
+libnl-genl-3-200:amd64	3.4.0-1ubuntu0.1
+libnl-route-3-200:amd64	3.4.0-1ubuntu0.1
+libnl-route-3-dev:amd64	3.4.0-1ubuntu0.1
+libnm0:amd64	1.22.10-1ubuntu2.4
+libnma0:amd64	1.8.24-1ubuntu3
+libnorm-dev:amd64	1.5.8+dfsg2-2build1
+libnorm1:amd64	1.5.8+dfsg2-2build1
+libnotify-bin	0.7.9-1ubuntu3.20.04.2
+libnotify4:amd64	0.7.9-1ubuntu3.20.04.2
+libnpth0:amd64	1.6-1
+libnspr4:amd64	2:4.35-0ubuntu0.20.04.1
+libnss-mdns:amd64	0.14.1-1ubuntu1
+libnss-systemd:amd64	245.4-4ubuntu3.24
+libnss3:amd64	2:3.98-0ubuntu0.20.04.2
+libntfs-3g883	1:2017.3.23AR.3-3ubuntu1.3
+libnuma-dev:amd64	2.0.12-1
+libnuma1:amd64	2.0.12-1
+libobs0:amd64	25.0.3+dfsg1-2
+liboctomap-dev:amd64	1.9.3+dfsg-2
+liboctomap1.9:amd64	1.9.3+dfsg-2
+libodbc1:amd64	2.3.6-0.1ubuntu0.1
+libode-dev	2:0.16-3build1
+libode8	2:0.16-3build1
+libodfgen-0.1-1:amd64	0.1.7-1ubuntu2
+libogdi-dev	4.1.0+ds-1build1
+libogdi4.1	4.1.0+ds-1build1
+libogg-dev:amd64	1.3.4-0ubuntu1
+libogg0:amd64	1.3.4-0ubuntu1
+libogre-1.9-dev	1.9.0+dfsg1-12build1
+libogre-1.9.0v5:amd64	1.9.0+dfsg1-12build1
+libomp-10-dev	1:10.0.0-4ubuntu1
+libomp-dev	1:10.0-50~exp1
+libomp5-10:amd64	1:10.0.0-4ubuntu1
+libopenal-data	1:1.19.1-1
+libopenal1:amd64	1:1.19.1-1
+libopencore-amrnb0:amd64	0.1.5-1
+libopencore-amrwb0:amd64	0.1.5-1
+libopencv-calib3d-dev:amd64	4.2.0+dfsg-5
+libopencv-calib3d4.2:amd64	4.2.0+dfsg-5
+libopencv-contrib-dev:amd64	4.2.0+dfsg-5
+libopencv-contrib4.2:amd64	4.2.0+dfsg-5
+libopencv-core-dev:amd64	4.2.0+dfsg-5
+libopencv-core4.2:amd64	4.2.0+dfsg-5
+libopencv-dev	4.2.0+dfsg-5
+libopencv-dnn-dev:amd64	4.2.0+dfsg-5
+libopencv-dnn4.2:amd64	4.2.0+dfsg-5
+libopencv-features2d-dev:amd64	4.2.0+dfsg-5
+libopencv-features2d4.2:amd64	4.2.0+dfsg-5
+libopencv-flann-dev:amd64	4.2.0+dfsg-5
+libopencv-flann4.2:amd64	4.2.0+dfsg-5
+libopencv-highgui-dev:amd64	4.2.0+dfsg-5
+libopencv-highgui4.2:amd64	4.2.0+dfsg-5
+libopencv-imgcodecs-dev:amd64	4.2.0+dfsg-5
+libopencv-imgcodecs4.2:amd64	4.2.0+dfsg-5
+libopencv-imgproc-dev:amd64	4.2.0+dfsg-5
+libopencv-imgproc4.2:amd64	4.2.0+dfsg-5
+libopencv-ml-dev:amd64	4.2.0+dfsg-5
+libopencv-ml4.2:amd64	4.2.0+dfsg-5
+libopencv-objdetect-dev:amd64	4.2.0+dfsg-5
+libopencv-objdetect4.2:amd64	4.2.0+dfsg-5
+libopencv-photo-dev:amd64	4.2.0+dfsg-5
+libopencv-photo4.2:amd64	4.2.0+dfsg-5
+libopencv-shape-dev:amd64	4.2.0+dfsg-5
+libopencv-shape4.2:amd64	4.2.0+dfsg-5
+libopencv-stitching-dev:amd64	4.2.0+dfsg-5
+libopencv-stitching4.2:amd64	4.2.0+dfsg-5
+libopencv-superres-dev:amd64	4.2.0+dfsg-5
+libopencv-superres4.2:amd64	4.2.0+dfsg-5
+libopencv-ts-dev:amd64	4.2.0+dfsg-5
+libopencv-video-dev:amd64	4.2.0+dfsg-5
+libopencv-video4.2:amd64	4.2.0+dfsg-5
+libopencv-videoio-dev:amd64	4.2.0+dfsg-5
+libopencv-videoio4.2:amd64	4.2.0+dfsg-5
+libopencv-videostab-dev:amd64	4.2.0+dfsg-5
+libopencv-videostab4.2:amd64	4.2.0+dfsg-5
+libopencv-viz-dev:amd64	4.2.0+dfsg-5
+libopencv-viz4.2:amd64	4.2.0+dfsg-5
+libopencv4.2-java	4.2.0+dfsg-5
+libopencv4.2-jni	4.2.0+dfsg-5
+libopenexr-dev	2.3.0-6ubuntu0.5
+libopenexr24:amd64	2.3.0-6ubuntu0.5
+libopengl-dev:amd64	1.3.2-1~ubuntu0.20.04.2
+libopengl0:amd64	1.3.2-1~ubuntu0.20.04.2
+libopenjp2-7:amd64	2.3.1-1ubuntu4.20.04.4
+libopenjp2-7-dev	2.3.1-1ubuntu4.20.04.4
+libopenmpi-dev:amd64	4.0.3-0ubuntu1
+libopenmpi3:amd64	4.0.3-0ubuntu1
+libopenmpt-modplug1:amd64	0.4.11-1build1
+libopenmpt0:amd64	0.4.11-1build1
+libopenni-dev	1.5.4.0+dfsg-4build1
+libopenni-sensor-pointclouds0	5.1.0.41.9-3build1
+libopenni0	1.5.4.0+dfsg-4build1
+libopenni2-0	2.2.0.33+dfsg-13build1
+libopenni2-dev	2.2.0.33+dfsg-13build1
+libopus0:amd64	1.3.1-0ubuntu1
+liborc-0.4-0:amd64	1:0.4.31-1ubuntu0.1
+liborcus-0.15-0:amd64	0.15.3-3build2
+liborocos-kdl-dev:amd64	1.4.0-7ubuntu1
+liborocos-kdl1.4	1.4.0-7ubuntu1
+libp11-kit0:amd64	0.23.20-1ubuntu0.1
+libpackagekit-glib2-18:amd64	1.1.13-2ubuntu1.1
+libpagemaker-0.0-0:amd64	0.0.4-1build1
+libpam-cap:amd64	1:2.32-1ubuntu0.2
+libpam-fprintd:amd64	1.90.9-1~ubuntu20.04.1
+libpam-gnome-keyring:amd64	3.36.0-1ubuntu1
+libpam-modules:amd64	1.3.1-5ubuntu4.7
+libpam-modules-bin	1.3.1-5ubuntu4.7
+libpam-runtime	1.3.1-5ubuntu4.7
+libpam-systemd:amd64	245.4-4ubuntu3.24
+libpam0g:amd64	1.3.1-5ubuntu4.7
+libpango-1.0-0:amd64	1.44.7-2ubuntu4
+libpango1.0-dev:amd64	1.44.7-2ubuntu4
+libpangocairo-1.0-0:amd64	1.44.7-2ubuntu4
+libpangoft2-1.0-0:amd64	1.44.7-2ubuntu4
+libpangomm-1.4-1v5:amd64	2.42.0-2build1
+libpangoxft-1.0-0:amd64	1.44.7-2ubuntu4
+libpaper-utils	1.1.28
+libpaper1:amd64	1.1.28
+libparted-fs-resize0:amd64	3.3-4ubuntu0.20.04.1
+libparted2:amd64	3.3-4ubuntu0.20.04.1
+libpathplan4:amd64	2.42.2-3build2
+libpcap0.8:amd64	1.9.1-3
+libpcaudio0:amd64	1.1-4
+libpci3:amd64	1:3.6.4-1ubuntu0.20.04.1
+libpciaccess0:amd64	0.16-0ubuntu1
+libpcl-apps1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcl-common1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcl-dev	1.10.0+dfsg-5ubuntu1
+libpcl-features1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcl-filters1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcl-io1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcl-kdtree1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcl-keypoints1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcl-ml1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcl-octree1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcl-outofcore1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcl-people1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcl-recognition1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcl-registration1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcl-sample-consensus1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcl-search1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcl-segmentation1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcl-stereo1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcl-surface1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcl-tracking1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcl-visualization1.10:amd64	1.10.0+dfsg-5ubuntu1
+libpcre16-3:amd64	2:8.39-12ubuntu0.1
+libpcre2-16-0:amd64	10.34-7ubuntu0.1
+libpcre2-32-0:amd64	10.34-7ubuntu0.1
+libpcre2-8-0:amd64	10.34-7ubuntu0.1
+libpcre2-dev:amd64	10.34-7ubuntu0.1
+libpcre2-posix2:amd64	10.34-7ubuntu0.1
+libpcre3:amd64	2:8.39-12ubuntu0.1
+libpcre3-dev:amd64	2:8.39-12ubuntu0.1
+libpcre32-3:amd64	2:8.39-12ubuntu0.1
+libpcrecpp0v5:amd64	2:8.39-12ubuntu0.1
+libpcsclite1:amd64	1.8.26-3
+libpdal-base9	2.0.1+ds-1build3
+libpdal-plugin-faux	2.0.1+ds-1build3
+libpdal-plugin-icebridge	2.0.1+ds-1build3
+libpdal-plugin-pgpointcloud	2.0.1+ds-1build3
+libpdal-plugin-python	2.0.1+ds-1build3
+libpdal-plugin-sqlite	2.0.1+ds-1build3
+libpdal-plugins	2.0.1+ds-1build3
+libpdal-util9	2.0.1+ds-1build3
+libpeas-1.0-0:amd64	1.26.0-2
+libpeas-common	1.26.0-2
+libperl5.30:amd64	5.30.0-9ubuntu0.5
+libpgm-5.2-0:amd64	5.2.122~dfsg-3ubuntu1
+libpgm-dev:amd64	5.2.122~dfsg-3ubuntu1
+libphonenumber7:amd64	7.1.0-5ubuntu11
+libpinyin-data:amd64	2.3.0-1build1
+libpinyin13:amd64	2.3.0-1build1
+libpipeline1:amd64	1.5.2-2build1
+libpixman-1-0:amd64	0.38.4-0ubuntu2.1
+libpixman-1-dev:amd64	0.38.4-0ubuntu2.1
+libpkcs11-helper1:amd64	1.26-1
+libplacebo7:amd64	1.7.0-2
+libplist3:amd64	2.1.0-4build2
+libplymouth5:amd64	0.9.4git20200323-0ubuntu6.2
+libpmix2:amd64	3.1.5-1
+libpng-dev:amd64	1.6.37-2
+libpng-tools	1.6.37-2
+libpng16-16:amd64	1.6.37-2
+libpoco-dev	1.9.2-3ubuntu3
+libpococrypto62:amd64	1.9.2-3ubuntu3
+libpocodata62:amd64	1.9.2-3ubuntu3
+libpocodatamysql62:amd64	1.9.2-3ubuntu3
+libpocodataodbc62:amd64	1.9.2-3ubuntu3
+libpocodatasqlite62:amd64	1.9.2-3ubuntu3
+libpocoencodings62:amd64	1.9.2-3ubuntu3
+libpocofoundation62:amd64	1.9.2-3ubuntu3
+libpocojson62:amd64	1.9.2-3ubuntu3
+libpocomongodb62:amd64	1.9.2-3ubuntu3
+libpoconet62:amd64	1.9.2-3ubuntu3
+libpoconetssl62:amd64	1.9.2-3ubuntu3
+libpocoredis62:amd64	1.9.2-3ubuntu3
+libpocoutil62:amd64	1.9.2-3ubuntu3
+libpocoxml62:amd64	1.9.2-3ubuntu3
+libpocozip62:amd64	1.9.2-3ubuntu3
+libpolkit-agent-1-0:amd64	0.105-26ubuntu1.3
+libpolkit-gobject-1-0:amd64	0.105-26ubuntu1.3
+libpoppler-cpp0v5:amd64	0.86.1-0ubuntu1.7
+libpoppler-dev:amd64	0.86.1-0ubuntu1.7
+libpoppler-glib8:amd64	0.86.1-0ubuntu1.7
+libpoppler-private-dev:amd64	0.86.1-0ubuntu1.7
+libpoppler97:amd64	0.86.1-0ubuntu1.7
+libpopt0:amd64	1.16-14
+libpostproc-dev:amd64	7:4.2.7-0ubuntu0.1
+libpostproc55:amd64	7:4.2.7-0ubuntu0.1
+libpq-dev	12.22-0ubuntu0.20.04.4
+libpq5:amd64	12.22-0ubuntu0.20.04.4
+libprocps8:amd64	2:3.3.16-1ubuntu2.4
+libproj-dev:amd64	6.3.1-1
+libproj15:amd64	6.3.1-1
+libprotobuf-dev:amd64	3.6.1.3-2ubuntu5.2
+libprotobuf-lite17:amd64	3.6.1.3-2ubuntu5.2
+libprotobuf17:amd64	3.6.1.3-2ubuntu5.2
+libprotoc-dev:amd64	3.6.1.3-2ubuntu5.2
+libprotoc17:amd64	3.6.1.3-2ubuntu5.2
+libproxy-tools	0.4.15-10ubuntu1.2
+libproxy1-plugin-gsettings:amd64	0.4.15-10ubuntu1.2
+libproxy1-plugin-networkmanager:amd64	0.4.15-10ubuntu1.2
+libproxy1v5:amd64	0.4.15-10ubuntu1.2
+libpsl5:amd64	0.21.0-1ubuntu1
+libpsm-infinipath1	3.3+20.604758e7-6
+libpsm2-2	11.2.86-1
+libpthread-stubs0-dev:amd64	0.4-1
+libpulse-mainloop-glib0:amd64	1:13.99.1-1ubuntu3.13
+libpulse0:amd64	1:13.99.1-1ubuntu3.13
+libpulsedsp:amd64	1:13.99.1-1ubuntu3.13
+libpwquality-common	1.4.2-1build1
+libpwquality1:amd64	1.4.2-1build1
+libpyside2-dev	5.14.0-1~exp1ubuntu5
+libpyside2-py3-5.14	5.14.0-1~exp1ubuntu5
+libpython2-stdlib:amd64	2.7.17-2ubuntu4
+libpython2.7-minimal:amd64	2.7.18-1~20.04.7
+libpython2.7-stdlib:amd64	2.7.18-1~20.04.7
+libpython3-dev:amd64	3.8.2-0ubuntu2
+libpython3-stdlib:amd64	3.8.2-0ubuntu2
+libpython3.8:amd64	3.8.10-0ubuntu1~20.04.18
+libpython3.8-dev:amd64	3.8.10-0ubuntu1~20.04.18
+libpython3.8-minimal:amd64	3.8.10-0ubuntu1~20.04.18
+libpython3.8-stdlib:amd64	3.8.10-0ubuntu1~20.04.18
+libqhull-dev:amd64	2015.2-4
+libqhull-r7:amd64	2015.2-4
+libqhull7:amd64	2015.2-4
+libqmi-glib5:amd64	1.30.4-1~ubuntu20.04.1
+libqmi-proxy	1.30.4-1~ubuntu20.04.1
+libqpdf26:amd64	9.1.1-1ubuntu0.1
+libqqwing2v5:amd64	1.3.4-1.1build1
+libqt5concurrent5:amd64	5.12.8+dfsg-0ubuntu2.1
+libqt5core5a:amd64	5.12.8+dfsg-0ubuntu2.1
+libqt5dbus5:amd64	5.12.8+dfsg-0ubuntu2.1
+libqt5designer5:amd64	5.12.8-0ubuntu1
+libqt5designercomponents5:amd64	5.12.8-0ubuntu1
+libqt5gui5:amd64	5.12.8+dfsg-0ubuntu2.1
+libqt5help5:amd64	5.12.8-0ubuntu1
+libqt5network5:amd64	5.12.8+dfsg-0ubuntu2.1
+libqt5opengl5:amd64	5.12.8+dfsg-0ubuntu2.1
+libqt5opengl5-dev:amd64	5.12.8+dfsg-0ubuntu2.1
+libqt5positioning5:amd64	5.12.8+dfsg-0ubuntu1
+libqt5printsupport5:amd64	5.12.8+dfsg-0ubuntu2.1
+libqt5qml5:amd64	5.12.8-0ubuntu1
+libqt5quick5:amd64	5.12.8-0ubuntu1
+libqt5quickparticles5:amd64	5.12.8-0ubuntu1
+libqt5quickshapes5:amd64	5.12.8-0ubuntu1
+libqt5quicktest5:amd64	5.12.8-0ubuntu1
+libqt5quickwidgets5:amd64	5.12.8-0ubuntu1
+libqt5sensors5:amd64	5.12.8-0ubuntu1
+libqt5sql5:amd64	5.12.8+dfsg-0ubuntu2.1
+libqt5sql5-sqlite:amd64	5.12.8+dfsg-0ubuntu2.1
+libqt5svg5:amd64	5.12.8-0ubuntu1
+libqt5test5:amd64	5.12.8+dfsg-0ubuntu2.1
+libqt5webchannel5:amd64	5.12.8-0ubuntu1
+libqt5webkit5:amd64	5.212.0~alpha4-1ubuntu2.1
+libqt5webkit5-dev:amd64	5.212.0~alpha4-1ubuntu2.1
+libqt5widgets5:amd64	5.12.8+dfsg-0ubuntu2.1
+libqt5x11extras5:amd64	5.12.8-0ubuntu1
+libqt5xml5:amd64	5.12.8+dfsg-0ubuntu2.1
+libquadmath0:amd64	10.5.0-1ubuntu1~20.04
+libqwt-qt5-6	6.1.4-1.1build1
+libqwt-qt5-dev	6.1.4-1.1build1
+libraptor2-0:amd64	2.0.15-0ubuntu1.20.04.2
+librasqal3:amd64	0.9.33-0.1
+libraw1394-11:amd64	2.1.2-1
+libraw1394-dev:amd64	2.1.2-1
+libraw1394-tools	2.1.2-1
+libraw19:amd64	0.19.5-1ubuntu1.4
+librbio2:amd64	1:5.7.1+dfsg-2
+librdf0:amd64	1.0.17-1.1ubuntu1
+librdmacm1:amd64	28.0-1ubuntu1
+libreadline8:amd64	8.0-4
+libreoffice-base-core	1:6.4.7-0ubuntu0.20.04.15
+libreoffice-calc	1:6.4.7-0ubuntu0.20.04.15
+libreoffice-common	1:6.4.7-0ubuntu0.20.04.15
+libreoffice-core	1:6.4.7-0ubuntu0.20.04.15
+libreoffice-draw	1:6.4.7-0ubuntu0.20.04.15
+libreoffice-gnome	1:6.4.7-0ubuntu0.20.04.15
+libreoffice-gtk3	1:6.4.7-0ubuntu0.20.04.15
+libreoffice-help-common	1:6.4.7-0ubuntu0.20.04.15
+libreoffice-help-en-us	1:6.4.7-0ubuntu0.20.04.15
+libreoffice-help-zh-cn	1:6.4.7-0ubuntu0.20.04.15
+libreoffice-impress	1:6.4.7-0ubuntu0.20.04.15
+libreoffice-l10n-zh-cn	1:6.4.7-0ubuntu0.20.04.15
+libreoffice-math	1:6.4.7-0ubuntu0.20.04.15
+libreoffice-ogltrans	1:6.4.7-0ubuntu0.20.04.15
+libreoffice-pdfimport	1:6.4.7-0ubuntu0.20.04.15
+libreoffice-style-breeze	1:6.4.7-0ubuntu0.20.04.15
+libreoffice-style-colibre	1:6.4.7-0ubuntu0.20.04.15
+libreoffice-style-elementary	1:6.4.7-0ubuntu0.20.04.15
+libreoffice-style-tango	1:6.4.7-0ubuntu0.20.04.15
+libreoffice-writer	1:6.4.7-0ubuntu0.20.04.15
+libresid-builder0c2a	2.1.1-15ubuntu2
+librest-0.7-0:amd64	0.8.1-1
+librevenge-0.0-0:amd64	0.0.4-6ubuntu5
+librhash0:amd64	1.3.9-1
+librhythmbox-core10:amd64	3.4.4-1ubuntu2
+libridl-java	1:6.4.7-0ubuntu0.20.04.15
+libroken18-heimdal:amd64	7.7.0+dfsg-1ubuntu1.4
+librsvg2-2:amd64	2.48.9-1ubuntu0.20.04.4
+librsvg2-common:amd64	2.48.9-1ubuntu0.20.04.4
+librsync2:amd64	2.0.2-1ubuntu1
+librtmp1:amd64	2.4+20151223.gitfa8646d.1-2build1
+librubberband2:amd64	1.8.2-1build1
+libruby2.7:amd64	2.7.0-5ubuntu1.18
+librygel-core-2.6-2:amd64	0.38.3-1ubuntu1
+librygel-db-2.6-2:amd64	0.38.3-1ubuntu1
+librygel-renderer-2.6-2:amd64	0.38.3-1ubuntu1
+librygel-server-2.6-2:amd64	0.38.3-1ubuntu1
+libsamplerate0:amd64	0.1.9-2
+libsane:amd64	1.0.29-0ubuntu5.2
+libsane-common	1.0.29-0ubuntu5.2
+libsane-hpaio:amd64	3.20.3+dfsg0-2ubuntu0.1
+libsasl2-2:amd64	2.1.27+dfsg-2ubuntu0.1
+libsasl2-modules:amd64	2.1.27+dfsg-2ubuntu0.1
+libsasl2-modules-db:amd64	2.1.27+dfsg-2ubuntu0.1
+libsbc1:amd64	1.4-1
+libsctp-dev:amd64	1.0.18+dfsg-1
+libsctp1:amd64	1.0.18+dfsg-1
+libsdformat9:amd64	9.10.1-1~focal
+libsdformat9-dev:amd64	9.10.1-1~focal
+libsdl-image1.2:amd64	1.2.12-12
+libsdl1.2debian:amd64	1.2.15+dfsg2-5
+libsdl2-2.0-0:amd64	2.0.10+dfsg1-3
+libseccomp2:amd64	2.5.1-1ubuntu1~20.04.2
+libsecret-1-0:amd64	0.20.4-0ubuntu1
+libsecret-common	0.20.4-0ubuntu1
+libselinux1:amd64	3.0-1build2
+libselinux1-dev:amd64	3.0-1build2
+libsemanage-common	3.0-1build2
+libsemanage1:amd64	3.0-1build2
+libsensors-config	1:3.6.0-2ubuntu1.1
+libsensors5:amd64	1:3.6.0-2ubuntu1.1
+libsepol1:amd64	3.0-1ubuntu0.1
+libsepol1-dev:amd64	3.0-1ubuntu0.1
+libserd-0-0:amd64	0.30.2-1
+libsgutils2-2	1.44-1ubuntu2
+libshiboken2-dev	5.14.0-1~exp1ubuntu5
+libshiboken2-py3-5.14	5.14.0-1~exp1ubuntu5
+libshine3:amd64	3.1.1-2
+libshout3:amd64	2.4.3-1
+libsidplay1v5:amd64	1.36.59-11build1
+libsidplay2	2.1.1-15ubuntu2
+libsigc++-2.0-0v5:amd64	2.10.2-1build1
+libsigsegv2:amd64	2.12-2
+libsimbody-dev:amd64	3.6.1+dfsg-7build1
+libsimbody3.6:amd64	3.6.1+dfsg-7build1
+libslang2:amd64	2.3.2-4
+libsm-dev:amd64	2:1.2.3-1
+libsm6:amd64	2:1.2.3-1
+libsmartcols1:amd64	2.34-0.1ubuntu9.6
+libsmbclient:amd64	2:4.15.13+dfsg-0ubuntu0.20.04.7
+libsmbios-c2	2.4.3-1
+libsnapd-glib1:amd64	1.58-0ubuntu0.20.04.0
+libsnappy1v5:amd64	1.1.8-1build1
+libsndfile1:amd64	1.0.28-7ubuntu0.3
+libsndio7.0:amd64	1.5.0-3
+libsnmp-base	5.8+dfsg-2ubuntu2.6
+libsnmp35:amd64	5.8+dfsg-2ubuntu2.6
+libsocket++1:amd64	1.12.13-10build1
+libsodium-dev:amd64	1.0.18-1
+libsodium23:amd64	1.0.18-1
+libsonic0:amd64	0.2.0-8
+libsord-0-0:amd64	0.16.4-1
+libsoup-gnome2.4-1:amd64	2.70.0-1ubuntu0.5
+libsoup2.4-1:amd64	2.70.0-1ubuntu0.5
+libsoxr0:amd64	0.1.3-2build1
+libspatialaudio0:amd64	0.3.0+git20180730+dfsg1-2build1
+libspatialite-dev:amd64	4.3.0a-6build1
+libspatialite7:amd64	4.3.0a-6build1
+libspectre1:amd64	0.2.8-2
+libspeechd2:amd64	0.9.1-4
+libspeex1:amd64	1.2~rc1.2-1.1ubuntu1.20.04.1
+libspeexdsp1:amd64	1.2~rc1.2-1.1ubuntu1.20.04.1
+libspnav0	0.2.3-1
+libspqr2:amd64	1:5.7.1+dfsg-2
+libsqlite3-0:amd64	3.31.1-4ubuntu0.7
+libsqlite3-dev:amd64	3.31.1-4ubuntu0.7
+libsqlite3-mod-spatialite:amd64	4.3.0a-6build1
+libsratom-0-0:amd64	0.6.4-1
+libsrt1:amd64	1.4.0-1build1
+libss2:amd64	1.45.5-2ubuntu1.1
+libssh-4:amd64	0.9.3-2ubuntu2.5
+libssh-gcrypt-4:amd64	0.9.3-2ubuntu2.5
+libssh2-1:amd64	1.8.0-2.1ubuntu0.1
+libssl-dev:amd64	1.1.1f-1ubuntu2.24
+libssl1.1:amd64	1.1.1f-1ubuntu2.24
+libstartup-notification0:amd64	0.12-6
+libstdc++-10-dev:amd64	10.5.0-1ubuntu1~20.04
+libstdc++-7-dev:amd64	7.5.0-6ubuntu2
+libstdc++-9-dev:amd64	9.4.0-1ubuntu1~20.04.2
+libstdc++6:amd64	10.5.0-1ubuntu1~20.04
+libstemmer0d:amd64	0+svn585-2
+libsub-override-perl	0.09-2
+libsuitesparse-dev:amd64	1:5.7.1+dfsg-2
+libsuitesparseconfig5:amd64	1:5.7.1+dfsg-2
+libsuperlu-dev:amd64	5.2.1+dfsg1-4
+libsuperlu5:amd64	5.2.1+dfsg1-4
+libswresample-dev:amd64	7:4.2.7-0ubuntu0.1
+libswresample3:amd64	7:4.2.7-0ubuntu0.1
+libswscale-dev:amd64	7:4.2.7-0ubuntu0.1
+libswscale5:amd64	7:4.2.7-0ubuntu0.1
+libsynctex2:amd64	2019.20190605.51237-3ubuntu0.2
+libsys-hostname-long-perl	1.5-1
+libsysmetrics1:amd64	1.6.1ubuntu0.1
+libsystemd0:amd64	245.4-4ubuntu3.24
+libsz2:amd64	1.0.4-1
+libtag1v5:amd64	1.11.1+dfsg.1-0.3ubuntu2
+libtag1v5-vanilla:amd64	1.11.1+dfsg.1-0.3ubuntu2
+libtalloc2:amd64	2.3.3-0ubuntu0.20.04.1
+libtar-dev:amd64	1.2.20-8ubuntu0.20.04.1
+libtar0:amd64	1.2.20-8ubuntu0.20.04.1
+libtasn1-6:amd64	4.16.0-2ubuntu0.1
+libtbb-dev:amd64	2020.1-2
+libtbb2:amd64	2020.1-2
+libtcl8.6:amd64	8.6.10+dfsg-1
+libtdb1:amd64	1.4.5-0ubuntu0.20.04.1
+libteamdctl0:amd64	1.30-1
+libtepl-4-0:amd64	4.4.0-1
+libtesseract4:amd64	4.1.1-2build2
+libtevent0:amd64	0.11.0-0ubuntu0.20.04.1
+libtext-charwidth-perl	0.04-10
+libtext-iconv-perl	1.7-7
+libtext-wrapi18n-perl	0.06-9
+libthai-data	0.1.28-3
+libthai-dev:amd64	0.1.28-3
+libthai0:amd64	0.1.28-3
+libtheora-dev:amd64	1.1.1+dfsg.1-15ubuntu2
+libtheora0:amd64	1.1.1+dfsg.1-15ubuntu2
+libtie-ixhash-perl	1.23-2
+libtiff-dev:amd64	4.1.0+git191117-2ubuntu0.20.04.14
+libtiff5:amd64	4.1.0+git191117-2ubuntu0.20.04.14
+libtiffxx5:amd64	4.1.0+git191117-2ubuntu0.20.04.14
+libtimedate-perl	2.3200-1
+libtinfo6:amd64	6.2-0ubuntu2.1
+libtinyxml-dev:amd64	2.6.2-4+deb10u2build0.20.04.1
+libtinyxml2-6a:amd64	7.0.0+dfsg-1build1
+libtinyxml2-dev:amd64	7.0.0+dfsg-1build1
+libtinyxml2.6.2v5:amd64	2.6.2-4+deb10u2build0.20.04.1
+libtk8.6:amd64	8.6.10-1
+libtool	2.4.6-14
+libtotem-plparser-common	3.26.5-1ubuntu1
+libtotem-plparser18:amd64	3.26.5-1ubuntu1
+libtotem0:amd64	3.34.1-2ubuntu2
+libtracker-control-2.0-0:amd64	2.3.6-0ubuntu1
+libtracker-miner-2.0-0:amd64	2.3.6-0ubuntu1
+libtracker-sparql-2.0-0:amd64	2.3.6-0ubuntu1
+libtry-tiny-perl	0.30-1
+libtsan0:amd64	10.5.0-1ubuntu1~20.04
+libtss2-esys0	2.3.2-1ubuntu0.20.04.2
+libturbojpeg:amd64	2.0.3-0ubuntu1.20.04.3
+libturbojpeg0-dev:amd64	2.0.3-0ubuntu1.20.04.3
+libtwolame0:amd64	0.4.0-2
+libu2f-udev	1.1.10-1
+libubsan0:amd64	7.5.0-6ubuntu2
+libubsan1:amd64	10.5.0-1ubuntu1~20.04
+libuchardet0:amd64	0.0.6-3build1
+libudev1:amd64	245.4-4ubuntu3.20
+libudisks2-0:amd64	2.8.4-1ubuntu2
+libumfpack5:amd64	1:5.7.1+dfsg-2
+libunistring2:amd64	0.9.10-2
+libunity-protocol-private0:amd64	7.1.4+19.04.20190319-0ubuntu3
+libunity-scopes-json-def-desktop	7.1.4+19.04.20190319-0ubuntu3
+libunity9:amd64	7.1.4+19.04.20190319-0ubuntu3
+libuno-cppu3	1:6.4.7-0ubuntu0.20.04.15
+libuno-cppuhelpergcc3-3	1:6.4.7-0ubuntu0.20.04.15
+libuno-purpenvhelpergcc3-3	1:6.4.7-0ubuntu0.20.04.15
+libuno-sal3	1:6.4.7-0ubuntu0.20.04.15
+libuno-salhelpergcc3-3	1:6.4.7-0ubuntu0.20.04.15
+libunoloader-java	1:6.4.7-0ubuntu0.20.04.15
+libunwind8:amd64	1.2.1-9build1
+libupnp13:amd64	1:1.8.4-2ubuntu2
+libupower-glib3:amd64	0.99.11-1build2
+liburdfdom-dev:amd64	1.0.4+ds-2
+liburdfdom-headers-dev	1.0.4-1
+liburdfdom-model:amd64	1.0.4+ds-2
+liburdfdom-model-state:amd64	1.0.4+ds-2
+liburdfdom-sensor:amd64	1.0.4+ds-2
+liburdfdom-world:amd64	1.0.4+ds-2
+liburi-perl	1.76-2
+liburiparser-dev	0.9.3-2
+liburiparser1:amd64	0.9.3-2
+libusageenvironment3:amd64	2020.01.19-1build1
+libusb-1.0-0:amd64	2:1.0.23-2build1
+libusb-1.0-0-dev:amd64	2:1.0.23-2build1
+libusb-1.0-doc	2:1.0.23-2build1
+libusbmuxd6:amd64	2.0.1-2
+libutempter0:amd64	1.1.6-4
+libuuid1:amd64	2.34-0.1ubuntu9.6
+libuv1:amd64	1.34.2-1ubuntu1.5
+libuv1-dev:amd64	1.34.2-1ubuntu1.5
+libv4l-0:amd64	1.18.0-2build1
+libv4l2rds0:amd64	1.18.0-2build1
+libv4lconvert0:amd64	1.18.0-2build1
+libva-drm2:amd64	2.7.0-2
+libva-wayland2:amd64	2.7.0-2
+libva-x11-2:amd64	2.7.0-2
+libva2:amd64	2.7.0-2
+libvdpau1:amd64	1.3-1ubuntu2
+libvidstab1.1:amd64	1.1.0-2
+libvisio-0.1-1:amd64	0.1.7-1build2
+libvisual-0.4-0:amd64	0.4.0-17
+libvlc-bin:amd64	3.0.9.2-1
+libvlc5:amd64	3.0.9.2-1
+libvlccore9:amd64	3.0.9.2-1
+libvncclient1:amd64	0.9.12+dfsg-9ubuntu0.3
+libvo-amrwbenc0:amd64	0.1.3-2
+libvolume-key1	0.3.12-3.1
+libvorbis0a:amd64	1.3.6-2ubuntu1
+libvorbisenc2:amd64	1.3.6-2ubuntu1
+libvorbisfile3:amd64	1.3.6-2ubuntu1
+libvpx6:amd64	1.8.2-1ubuntu0.4
+libvte-2.91-0:amd64	0.60.3-0ubuntu1~20.5
+libvte-2.91-common	0.60.3-0ubuntu1~20.5
+libvtk6.3	6.3.0+dfsg2-5build2
+libvtk7-dev	7.1.1+dfsg2-2ubuntu1
+libvtk7-java	7.1.1+dfsg2-2ubuntu1
+libvtk7-jni	7.1.1+dfsg2-2ubuntu1
+libvtk7-qt-dev	7.1.1+dfsg2-2ubuntu1
+libvtk7.1p	7.1.1+dfsg2-2ubuntu1
+libvtk7.1p-qt	7.1.1+dfsg2-2ubuntu1
+libvulkan-dev:amd64	1.2.131.2-1
+libvulkan1:amd64	1.2.131.2-1
+libwacom-bin	1.3-2ubuntu3
+libwacom-common	1.3-2ubuntu3
+libwacom2:amd64	1.3-2ubuntu3
+libwavpack1:amd64	5.2.0-1ubuntu0.1
+libwayland-bin	1.18.0-1ubuntu0.1
+libwayland-client0:amd64	1.18.0-1ubuntu0.1
+libwayland-cursor0:amd64	1.18.0-1ubuntu0.1
+libwayland-dev:amd64	1.18.0-1ubuntu0.1
+libwayland-egl1:amd64	1.18.0-1ubuntu0.1
+libwayland-server0:amd64	1.18.0-1ubuntu0.1
+libwbclient0:amd64	2:4.15.13+dfsg-0ubuntu0.20.04.7
+libwebkit2gtk-4.0-37:amd64	2.38.6-0ubuntu0.20.04.1
+libwebp-dev:amd64	0.6.1-2ubuntu0.20.04.3
+libwebp6:amd64	0.6.1-2ubuntu0.20.04.3
+libwebpdemux2:amd64	0.6.1-2ubuntu0.20.04.3
+libwebpmux3:amd64	0.6.1-2ubuntu0.20.04.3
+libwebrtc-audio-processing1:amd64	0.3.1-0ubuntu3
+libwhoopsie-preferences0	22
+libwhoopsie0:amd64	0.2.69ubuntu0.3
+libwind0-heimdal:amd64	7.7.0+dfsg-1ubuntu1.4
+libwinpr2-2:amd64	2.6.1+dfsg1-0ubuntu0.20.04.2
+libwmf0.2-7:amd64	0.2.8.4-17ubuntu1
+libwmf0.2-7-gtk	0.2.8.4-17ubuntu1
+libwnck-3-0:amd64	3.36.0-1
+libwnck-3-common	3.36.0-1
+libwoff1:amd64	1.0.2-1build2
+libwpd-0.10-10:amd64	0.10.3-1build1
+libwpg-0.3-3:amd64	0.3.3-1build1
+libwps-0.4-4:amd64	0.4.10-1build1
+libwrap0:amd64	7.6.q-30
+libwww-perl	6.43-1
+libwww-robotrules-perl	6.02-1
+libx11-6:amd64	2:1.6.9-2ubuntu1.6
+libx11-data	2:1.6.9-2ubuntu1.6
+libx11-dev:amd64	2:1.6.9-2ubuntu1.6
+libx11-protocol-perl	0.56-7
+libx11-xcb1:amd64	2:1.6.9-2ubuntu1.6
+libx264-155:amd64	2:0.155.2917+git0a84d98-2
+libx265-179:amd64	3.2.1-1build1
+libxatracker2:amd64	21.2.6-0ubuntu0.1~20.04.2
+libxau-dev:amd64	1:1.0.9-0ubuntu1
+libxau6:amd64	1:1.0.9-0ubuntu1
+libxaw7:amd64	2:1.0.13-1
+libxcb-dri2-0:amd64	1.14-2
+libxcb-dri3-0:amd64	1.14-2
+libxcb-glx0:amd64	1.14-2
+libxcb-icccm4:amd64	0.4.1-1.1
+libxcb-image0:amd64	0.4.0-1build1
+libxcb-keysyms1:amd64	0.4.0-1build1
+libxcb-present0:amd64	1.14-2
+libxcb-randr0:amd64	1.14-2
+libxcb-render-util0:amd64	0.3.9-1build1
+libxcb-render0:amd64	1.14-2
+libxcb-render0-dev:amd64	1.14-2
+libxcb-res0:amd64	1.14-2
+libxcb-shape0:amd64	1.14-2
+libxcb-shm0:amd64	1.14-2
+libxcb-shm0-dev:amd64	1.14-2
+libxcb-sync1:amd64	1.14-2
+libxcb-util1:amd64	0.4.0-0ubuntu3
+libxcb-xfixes0:amd64	1.14-2
+libxcb-xinerama0:amd64	1.14-2
+libxcb-xinput0:amd64	1.14-2
+libxcb-xkb1:amd64	1.14-2
+libxcb-xv0:amd64	1.14-2
+libxcb1:amd64	1.14-2
+libxcb1-dev:amd64	1.14-2
+libxcomposite-dev:amd64	1:0.4.5-1
+libxcomposite1:amd64	1:0.4.5-1
+libxcursor-dev:amd64	1:1.2.0-2
+libxcursor1:amd64	1:1.2.0-2
+libxdamage-dev:amd64	1:1.1.5-2
+libxdamage1:amd64	1:1.1.5-2
+libxdmcp-dev:amd64	1:1.1.3-0ubuntu1
+libxdmcp6:amd64	1:1.1.3-0ubuntu1
+libxerces-c-dev	3.2.2+debian-1ubuntu0.2
+libxerces-c3.2:amd64	3.2.2+debian-1ubuntu0.2
+libxext-dev:amd64	2:1.3.4-0ubuntu1
+libxext6:amd64	2:1.3.4-0ubuntu1
+libxfixes-dev:amd64	1:5.0.3-2
+libxfixes3:amd64	1:5.0.3-2
+libxfont2:amd64	1:2.0.3-1
+libxft-dev:amd64	2.3.3-0ubuntu1
+libxft2:amd64	2.3.3-0ubuntu1
+libxi-dev:amd64	2:1.7.10-0ubuntu1
+libxi6:amd64	2:1.7.10-0ubuntu1
+libxinerama-dev:amd64	2:1.1.4-2
+libxinerama1:amd64	2:1.1.4-2
+libxkbcommon-dev:amd64	0.10.0-1
+libxkbcommon-x11-0:amd64	0.10.0-1
+libxkbcommon0:amd64	0.10.0-1
+libxkbfile1:amd64	1:1.1.0-1
+libxklavier16:amd64	5.4-4
+libxml-parser-perl	2.46-1
+libxml-twig-perl	1:3.50-2
+libxml-xpathengine-perl	0.14-1
+libxml2:amd64	2.9.10+dfsg-5ubuntu0.20.04.10
+libxml2-dev:amd64	2.9.10+dfsg-5ubuntu0.20.04.10
+libxml2-utils	2.9.10+dfsg-5ubuntu0.20.04.10
+libxmlb1:amd64	0.1.15-2ubuntu1~20.04.1
+libxmlb2:amd64	0.3.6-2build1~20.04.1
+libxmlsec1:amd64	1.2.28-2
+libxmlsec1-nss:amd64	1.2.28-2
+libxmu-dev:amd64	2:1.1.3-0ubuntu1
+libxmu-headers	2:1.1.3-0ubuntu1
+libxmu6:amd64	2:1.1.3-0ubuntu1
+libxmuu1:amd64	2:1.1.3-0ubuntu1
+libxnvctrl0:amd64	470.57.01-0ubuntu0.20.04.3
+libxpm4:amd64	1:3.5.12-1ubuntu0.20.04.2
+libxrandr-dev:amd64	2:1.5.2-0ubuntu1
+libxrandr2:amd64	2:1.5.2-0ubuntu1
+libxrender-dev:amd64	1:0.9.10-1
+libxrender1:amd64	1:0.9.10-1
+libxres1:amd64	2:1.2.0-4
+libxshmfence1:amd64	1.3-1
+libxslt1.1:amd64	1.1.34-4ubuntu0.20.04.3
+libxss-dev:amd64	1:1.2.3-1
+libxss1:amd64	1:1.2.3-1
+libxt-dev:amd64	1:1.1.5-1
+libxt6:amd64	1:1.1.5-1
+libxtables12:amd64	1.8.4-3ubuntu2
+libxtst-dev:amd64	2:1.2.3-1
+libxtst6:amd64	2:1.2.3-1
+libxv1:amd64	2:1.0.11-1
+libxvidcore4:amd64	2:1.3.7-1
+libxvmc1:amd64	2:1.0.12-2
+libxxf86dga1:amd64	2:1.1.5-0ubuntu1
+libxxf86vm1:amd64	1:1.1.4-1build1
+libyajl2:amd64	2.1.0-3ubuntu0.20.04.1
+libyaml-0-2:amd64	0.2.2-1
+libyaml-cpp-dev	0.6.2-4ubuntu1
+libyaml-cpp0.6:amd64	0.6.2-4ubuntu1
+libyaml-dev:amd64	0.2.2-1
+libyelp0:amd64	3.36.2-0ubuntu1.1
+libzip-dev:amd64	1.5.1-0ubuntu1
+libzip5:amd64	1.5.1-0ubuntu1
+libzmq3-dev:amd64	4.3.2-2ubuntu1
+libzmq5:amd64	4.3.2-2ubuntu1
+libzstd-dev:amd64	1.4.4+dfsg-3ubuntu0.1
+libzstd1:amd64	1.4.4+dfsg-3ubuntu0.1
+libzvbi-common	0.2.35-17
+libzvbi0:amd64	0.2.35-17
+libzzip-0-13:amd64	0.13.62-3.2ubuntu1.1
+linux-base	4.5ubuntu3.7
+linux-firmware	1.187.36
+linux-generic-hwe-20.04	5.15.0.139.149~20.04.1
+linux-headers-5.15.0-139-generic	5.15.0-139.149~20.04.1
+linux-headers-5.15.0-67-generic	5.15.0-67.74~20.04.1
+linux-headers-generic-hwe-20.04	5.15.0.139.149~20.04.1
+linux-hwe-5.15-headers-5.15.0-139	5.15.0-139.149~20.04.1
+linux-hwe-5.15-headers-5.15.0-67	5.15.0-67.74~20.04.1
+linux-image-5.15.0-139-generic	5.15.0-139.149~20.04.1
+linux-image-5.15.0-67-generic	5.15.0-67.74~20.04.1
+linux-image-generic-hwe-20.04	5.15.0.139.149~20.04.1
+linux-libc-dev:amd64	5.4.0-216.236
+linux-modules-5.15.0-139-generic	5.15.0-139.149~20.04.1
+linux-modules-5.15.0-67-generic	5.15.0-67.74~20.04.1
+linux-modules-extra-5.15.0-139-generic	5.15.0-139.149~20.04.1
+linux-modules-extra-5.15.0-67-generic	5.15.0-67.74~20.04.1
+linux-sound-base	1.0.25+dfsg-0ubuntu5
+lm-sensors	1:3.6.0-2ubuntu1.1
+locales	2.31-0ubuntu9.18
+login	1:4.8.1-1ubuntu5.20.04.5
+logrotate	3.14.0-4ubuntu3
+logsave	1.45.5-2ubuntu1.1
+lp-solve	5.5.0.15-4build1
+lsb-base	11.1.0ubuntu2
+lsb-release	11.1.0ubuntu2
+lshw	02.18.85-0.3ubuntu2.20.04.1
+lsof	4.93.2+dfsg-1ubuntu0.20.04.1
+ltrace	0.7.3-6.1ubuntu1
+lz4	1.9.2-2ubuntu0.20.04.1
+m4	1.4.18-4
+make	4.2.1-1.2
+man-db	2.9.1-1
+manpages	5.05-1
+manpages-dev	5.05-1
+mawk	1.3.4.20200120-2
+media-player-info	24-2
+memtest86+	5.01-3.1ubuntu2.1
+mesa-va-drivers:amd64	21.2.6-0ubuntu0.1~20.04.2
+mesa-vdpau-drivers:amd64	21.2.6-0ubuntu0.1~20.04.2
+mesa-vulkan-drivers:amd64	21.2.6-0ubuntu0.1~20.04.2
+mime-support	3.64ubuntu1
+mobile-broadband-provider-info	20190618-3
+modemmanager	1.18.6-1~ubuntu20.04.1
+mokutil	0.6.0-2~20.04.2
+mount	2.34-0.1ubuntu9.6
+mousetweaks	3.32.0-2
+mpi-default-bin	1.13
+mpi-default-dev	1.13
+mscompress	0.4-7
+mtools	4.0.24-1
+mtr-tiny	0.93-1
+mutter	3.36.9-0ubuntu0.20.04.2
+mutter-common	3.36.9-0ubuntu0.20.04.2
+mvs	2025-07-11
+mysql-common	5.8+1.0.5ubuntu2
+mythes-en-us	1:6.4.3-1
+nano	4.8-1ubuntu1.1
+nautilus	1:3.36.3-0ubuntu1.20.04.2
+nautilus-data	1:3.36.3-0ubuntu1.20.04.2
+nautilus-extension-gnome-terminal	3.36.2-1ubuntu1~20.04
+nautilus-sendto	3.8.6-3ubuntu0.20.04.1
+nautilus-share	0.7.3-2ubuntu3.1
+ncurses-base	6.2-0ubuntu2.1
+ncurses-bin	6.2-0ubuntu2.1
+ncurses-term	6.2-0ubuntu2.1
+net-tools	1.60+git20180626.aebd88e-1ubuntu1.3
+netbase	6.1
+netcat-openbsd	1.206-1ubuntu1
+netplan.io	0.104-0ubuntu2~20.04.6
+network-manager	1.22.10-1ubuntu2.4
+network-manager-config-connectivity-ubuntu	1.22.10-1ubuntu2.4
+network-manager-gnome	1.8.24-1ubuntu3
+network-manager-openvpn	1.8.12-1
+network-manager-openvpn-gnome	1.8.12-1
+network-manager-pptp	1.2.8-2
+network-manager-pptp-gnome	1.2.8-2
+networkd-dispatcher	2.1-2~ubuntu20.04.3
+node-duplexer3	0.1.4-5
+nodejs	22.23.1-1nodesource1
+npm	6.14.4+ds-1ubuntu2
+ntfs-3g	1:2017.3.23AR.3-3ubuntu1.3
+obs-plugins	25.0.3+dfsg1-2
+obs-studio	25.0.3+dfsg1-2
+ocl-icd-libopencl1:amd64	2.2.11-1ubuntu1
+odbcinst	2.3.6-0.1ubuntu0.1
+odbcinst1debian2:amd64	2.3.6-0.1ubuntu0.1
+opencv-data	4.2.0+dfsg-5
+openmpi-bin	4.0.3-0ubuntu1
+openmpi-common	4.0.3-0ubuntu1
+openni-utils	1.5.4.0+dfsg-4build1
+openprinting-ppds	20200401-1
+openssh-client	1:8.2p1-4ubuntu0.13
+openssh-server	1:8.2p1-4ubuntu0.13
+openssh-sftp-server	1:8.2p1-4ubuntu0.13
+openssl	1.1.1f-1ubuntu2.24
+openvpn	2.4.12-0ubuntu0.20.04.2
+orca	3.36.2-1ubuntu1~20.04.2
+os-prober	1.74ubuntu2
+p11-kit	0.23.20-1ubuntu0.1
+p11-kit-modules:amd64	0.23.20-1ubuntu0.1
+packagekit	1.1.13-2ubuntu1.1
+packagekit-tools	1.1.13-2ubuntu1.1
+pango1.0-tools	1.44.7-2ubuntu4
+parted	3.3-4ubuntu0.20.04.1
+passwd	1:4.8.1-1ubuntu5.20.04.5
+patch	2.7.6-6
+pci.ids	0.0~2020.03.20-1
+pciutils	1:3.6.4-1ubuntu0.20.04.1
+pcl-tools	1.10.0+dfsg-5ubuntu1
+pcmciautils	018-11
+perl	5.30.0-9ubuntu0.5
+perl-base	5.30.0-9ubuntu0.5
+perl-modules-5.30	5.30.0-9ubuntu0.5
+perl-openssl-defaults:amd64	4
+pinentry-curses	1.1.0-3build1
+pinentry-gnome3	1.1.0-3build1
+pkg-config	0.29.1-0ubuntu4
+plymouth	0.9.4git20200323-0ubuntu6.2
+plymouth-label	0.9.4git20200323-0ubuntu6.2
+plymouth-theme-spinner	0.9.4git20200323-0ubuntu6.2
+plymouth-theme-ubuntu-text	0.9.4git20200323-0ubuntu6.2
+po-debconf	1.0.21
+policykit-1	0.105-26ubuntu1.3
+policykit-desktop-privileges	0.21
+poppler-data	0.4.9-2
+poppler-utils	0.86.1-0ubuntu1.7
+popularity-contest	1.69ubuntu1
+powermgmt-base	1.36
+ppp	2.4.7-2+4.1ubuntu5.1
+pptp-linux	1.10.0-1build1
+printer-driver-brlaser	6-1build1
+printer-driver-c2esp	27-6
+printer-driver-foo2zjs	20171202dfsg0-4ubuntu0.1
+printer-driver-foo2zjs-common	20171202dfsg0-4ubuntu0.1
+printer-driver-hpcups	3.20.3+dfsg0-2ubuntu0.1
+printer-driver-m2300w	0.51-14
+printer-driver-min12xxw	0.0.9-11
+printer-driver-pnm2ppa	1.13+nondbs-0ubuntu6
+printer-driver-postscript-hp	3.20.3+dfsg0-2ubuntu0.1
+printer-driver-ptouch	1.4.2-3
+printer-driver-pxljr	1.4+repack0-5
+printer-driver-sag-gdi	0.1-7
+printer-driver-splix	2.0.0+svn315-7fakesync1ubuntu0.1
+procps	2:3.3.16-1ubuntu2.4
+proj-bin	6.3.1-1
+proj-data	6.3.1-1
+protobuf-compiler	3.6.1.3-2ubuntu5.2
+psmisc	23.3-1
+publicsuffix	20200303.0012-1
+pulseaudio	1:13.99.1-1ubuntu3.13
+pulseaudio-module-bluetooth	1:13.99.1-1ubuntu3.13
+pulseaudio-utils	1:13.99.1-1ubuntu3.13
+pyqt5-dev	5.14.1+dfsg-3build1
+python-apt-common	2.0.1ubuntu0.20.04.1
+python-matplotlib-data	3.1.2-1ubuntu4
+python-pip-whl	20.0.2-5ubuntu1.11
+python-pkg-resources	44.0.0-2ubuntu0.1
+python2	2.7.17-2ubuntu4
+python2-minimal	2.7.17-2ubuntu4
+python2.7	2.7.18-1~20.04.7
+python2.7-minimal	2.7.18-1~20.04.7
+python3	3.8.2-0ubuntu2
+python3-apport	2.20.11-0ubuntu27.31
+python3-apt	2.0.1ubuntu0.20.04.1
+python3-aptdaemon	1.1.1+bzr982-0ubuntu32.3
+python3-aptdaemon.gtk3widgets	1.1.1+bzr982-0ubuntu32.3
+python3-attr	19.3.0-2
+python3-autobahn	17.10.1+dfsg1-6
+python3-automat	0.8.0-1ubuntu1
+python3-bcrypt	3.1.7-2ubuntu1
+python3-blinker	1.4+dfsg1-0.3ubuntu1
+python3-brlapi:amd64	6.0+dfsg-4ubuntu6
+python3-cairo:amd64	1.16.2-2ubuntu2
+python3-catkin-pkg	1.0.0-100
+python3-catkin-pkg-modules	1.0.0-1
+python3-catkin-tools	0.9.4-1
+python3-cbor	1.0.0-1.1build1
+python3-certifi	2019.11.28-1
+python3-cffi-backend	1.14.0-1build1
+python3-chardet	3.0.4-4build1
+python3-click	7.0-3
+python3-colorama	0.4.3-1build1
+python3-commandnotfound	20.04.6
+python3-constantly	15.1.0-1build1
+python3-cryptography	2.8-3ubuntu0.3
+python3-cups	1.9.73-3build1
+python3-cupshelpers	1.5.12-0ubuntu1.1
+python3-cycler	0.10.0-3
+python3-dateutil	2.7.3-3ubuntu1
+python3-dbus	1.2.16-1build1
+python3-debconf	1.5.73
+python3-debian	0.1.36ubuntu1
+python3-defer	1.0.6-2.1
+python3-defusedxml	0.6.0-2
+python3-dev	3.8.2-0ubuntu2
+python3-distro	1.4.0-1
+python3-distro-info	0.23ubuntu1
+python3-distupgrade	1:20.04.41
+python3-distutils	3.8.10-0ubuntu1~20.04
+python3-docutils	0.16+dfsg-2
+python3-empy	3.3.2-5.1
+python3-entrypoints	0.3-2ubuntu1
+python3-fasteners	0.14.1-2
+python3-future	0.18.2-2ubuntu0.1
+python3-gdbm:amd64	3.8.10-0ubuntu1~20.04
+python3-gi	3.36.0-1
+python3-gi-cairo	3.36.0-1
+python3-gnupg	0.4.5-2
+python3-hamcrest	1.9.0-3
+python3-httplib2	0.14.0-1ubuntu1
+python3-hyperlink	19.0.0-1
+python3-ibus-1.0	1.5.22-2ubuntu2.1
+python3-idna	2.8-1ubuntu0.1
+python3-importlib-metadata	1.5.0-1
+python3-incremental	16.10.1-3.2
+python3-jwt	1.7.1-2ubuntu2.1
+python3-keyring	18.0.1-2ubuntu1
+python3-kiwisolver	1.0.1-3build1
+python3-launchpadlib	1.10.13-1
+python3-lazr.restfulclient	0.14.2-2build1
+python3-lazr.uri	1.0.3-4build1
+python3-ldb	2:2.4.4-0ubuntu0.20.04.2
+python3-lib2to3	3.8.10-0ubuntu1~20.04
+python3-lockfile	1:0.12.2-2ubuntu2
+python3-louis	3.12.0-3ubuntu0.2
+python3-lz4	3.0.2+dfsg-1build1
+python3-macaroonbakery	1.3.1-1
+python3-mako	1.1.0+ds1-1ubuntu2.1
+python3-markupsafe	1.1.0-1build2
+python3-matplotlib	3.1.2-1ubuntu4
+python3-minimal	3.8.2-0ubuntu2
+python3-monotonic	1.5-0ubuntu2
+python3-more-itertools	4.2.0-1build1
+python3-mpi4py	3.0.3-4build2
+python3-nacl	1.3.0-5
+python3-netifaces	0.10.4-1ubuntu4
+python3-nose	1.3.7-5
+python3-numpy	1:1.17.4-5ubuntu3.1
+python3-oauthlib	3.1.0-1ubuntu2
+python3-olefile	0.46-2
+python3-opencv	4.2.0+dfsg-5
+python3-opengl	3.1.0+dfsg-2build1
+python3-openssl	19.0.0-1build1
+python3-osrf-pycommon	2.0.2-1
+python3-paramiko	2.6.0-2ubuntu0.3
+python3-pexpect	4.6.0-1build1
+python3-pil:amd64	7.0.0-4ubuntu0.9
+python3-pip	20.0.2-5ubuntu1.11
+python3-pkg-resources	45.2.0-1ubuntu0.3
+python3-png	0.0.20+ds-2
+python3-problem-report	2.20.11-0ubuntu27.31
+python3-protobuf	3.6.1.3-2ubuntu5.2
+python3-psutil	5.5.1-1ubuntu4
+python3-ptyprocess	0.6.0-1ubuntu1
+python3-pyasn1	0.4.2-3build1
+python3-pyasn1-modules	0.2.1-0.2build1
+python3-pyatspi	2.36.0-1
+python3-pycryptodome	3.6.1-2build4
+python3-pydot	1.4.1-3
+python3-pygments	2.3.1+dfsg-1ubuntu2.2
+python3-pykdl:amd64	1.4.0-7ubuntu1
+python3-pymacaroons	0.13.0-3
+python3-pyparsing	2.4.6-1
+python3-pyqrcode	1.2.1-4
+python3-pyqt5	5.14.1+dfsg-3build1
+python3-pyqt5.qtopengl	5.14.1+dfsg-3build1
+python3-pyqt5.qtsvg	5.14.1+dfsg-3build1
+python3-pyqt5.qtwebkit	5.14.1+dfsg-3build1
+python3-pyside2.qtcore	5.14.0-1~exp1ubuntu5
+python3-pyside2.qtgui	5.14.0-1~exp1ubuntu5
+python3-pyside2.qtsvg	5.14.0-1~exp1ubuntu5
+python3-pyside2.qtwidgets	5.14.0-1~exp1ubuntu5
+python3-renderpm:amd64	3.5.34-1ubuntu1.1
+python3-reportlab	3.5.34-1ubuntu1.1
+python3-reportlab-accel:amd64	3.5.34-1ubuntu1.1
+python3-requests	2.22.0-2ubuntu1.1
+python3-requests-unixsocket	0.2.0-2
+python3-rfc3339	1.1-2
+python3-roman	2.0.0-3build1
+python3-rosdep	0.25.1-1
+python3-rosdep-modules	0.25.1-1
+python3-rosdistro-modules	1.0.1-1
+python3-rospkg	1.6.0-100
+python3-rospkg-modules	1.6.0-1
+python3-secretstorage	2.3.1-2ubuntu1
+python3-service-identity	18.1.0-5build1
+python3-setuptools	45.2.0-1ubuntu0.3
+python3-simplejson	3.16.0-2ubuntu2
+python3-sip	4.19.21+dfsg-1build1
+python3-sip-dev	4.19.21+dfsg-1build1
+python3-six	1.14.0-2
+python3-snappy	0.5.3-1.1build1
+python3-software-properties	0.99.9.11
+python3-speechd	0.9.1-4
+python3-systemd	234-3build2
+python3-talloc:amd64	2.3.3-0ubuntu0.20.04.1
+python3-tk:amd64	3.8.10-0ubuntu1~20.04
+python3-trie	0.2+ds-2
+python3-twisted	18.9.0-11ubuntu0.20.04.5
+python3-twisted-bin:amd64	18.9.0-11ubuntu0.20.04.5
+python3-txaio	2.10.0-2
+python3-tz	2019.3-1ubuntu0.20.04.0
+python3-u-msgpack	2.1-1build1
+python3-ubjson	0.14.0-2build1
+python3-uno	1:6.4.7-0ubuntu0.20.04.15
+python3-update-manager	1:20.04.10.11
+python3-urllib3	1.25.8-2ubuntu0.4
+python3-venv	3.8.2-0ubuntu2
+python3-vtk7	7.1.1+dfsg2-2ubuntu1
+python3-wadllib	1.3.3-3build1
+python3-wheel	0.34.2-1ubuntu0.1
+python3-wsaccel	0.6.2-2build1
+python3-xdg	0.26-1ubuntu1
+python3-xkit	0.5.0ubuntu4
+python3-yaml	5.3.1-1ubuntu0.1
+python3-zipp	1.0.0-1ubuntu0.1
+python3-zope.interface	4.7.1-1
+python3.8	3.8.10-0ubuntu1~20.04.18
+python3.8-dev	3.8.10-0ubuntu1~20.04.18
+python3.8-minimal	3.8.10-0ubuntu1~20.04.18
+python3.8-venv	3.8.10-0ubuntu1~20.04.18
+qdoc-qt5	5.12.8-0ubuntu1
+qhelpgenerator-qt5	5.12.8-0ubuntu1
+qt5-assistant	5.12.8-0ubuntu1
+qt5-gtk-platformtheme:amd64	5.12.8+dfsg-0ubuntu2.1
+qt5-qmake:amd64	5.12.8+dfsg-0ubuntu2.1
+qt5-qmake-bin	5.12.8+dfsg-0ubuntu2.1
+qt5-qmltooling-plugins:amd64	5.12.8-0ubuntu1
+qtattributionsscanner-qt5	5.12.8-0ubuntu1
+qtbase5-dev:amd64	5.12.8+dfsg-0ubuntu2.1
+qtbase5-dev-tools	5.12.8+dfsg-0ubuntu2.1
+qtchooser	66-2build1
+qtdeclarative5-dev:amd64	5.12.8-0ubuntu1
+qtdeclarative5-dev-tools	5.12.8-0ubuntu1
+qttools5-dev:amd64	5.12.8-0ubuntu1
+qttools5-dev-tools	5.12.8-0ubuntu1
+qttools5-private-dev:amd64	5.12.8-0ubuntu1
+qttranslations5-l10n	5.12.8-0ubuntu1
+rake	13.0.1-4
+readline-common	8.0-4
+remmina	1.4.25+dfsg-0ubuntu0.20.04.1
+remmina-common	1.4.25+dfsg-0ubuntu0.20.04.1
+remmina-plugin-rdp:amd64	1.4.25+dfsg-0ubuntu0.20.04.1
+remmina-plugin-secret:amd64	1.4.25+dfsg-0ubuntu0.20.04.1
+remmina-plugin-vnc:amd64	1.4.25+dfsg-0ubuntu0.20.04.1
+rfkill	2.34-0.1ubuntu9.6
+rhythmbox	3.4.4-1ubuntu2
+rhythmbox-data	3.4.4-1ubuntu2
+rhythmbox-plugin-alternative-toolbar	0.19.3-1.1
+rhythmbox-plugins	3.4.4-1ubuntu2
+ros-noetic-actionlib	1.14.3-1focal.20250519.235901
+ros-noetic-actionlib-msgs	1.13.2-1focal.20250426.013228
+ros-noetic-actionlib-tutorials	0.2.0-1focal.20250520.000327
+ros-noetic-angles	1.9.14-1focal.20250426.230930
+ros-noetic-bond	1.8.7-1focal.20250426.013629
+ros-noetic-bond-core	1.8.7-1focal.20250519.232600
+ros-noetic-bondcpp	1.8.7-1focal.20250519.230329
+ros-noetic-bondpy	1.8.7-1focal.20250519.232145
+ros-noetic-camera-calibration	1.17.0-1focal.20250520.005809
+ros-noetic-camera-calibration-parsers	1.12.1-1focal.20250519.235403
+ros-noetic-camera-info-manager	1.12.1-1focal.20250520.000220
+ros-noetic-catkin	0.8.12-1focal.20250426.001935
+ros-noetic-class-loader	0.5.2-1focal.20250426.005342
+ros-noetic-cmake-modules	0.5.2-1focal.20250426.003525
+ros-noetic-common-msgs	1.13.2-1focal.20250520.013139
+ros-noetic-common-tutorials	0.2.0-1focal.20250520.001345
+ros-noetic-compressed-depth-image-transport	1.15.0-1focal.20250521.004155
+ros-noetic-compressed-image-transport	1.15.0-1focal.20250521.004234
+ros-noetic-control-msgs	1.5.2-1focal.20250426.013409
+ros-noetic-control-toolbox	1.19.0-1focal.20250521.003230
+ros-noetic-controller-interface	0.20.0-1focal.20250519.231323
+ros-noetic-controller-manager	0.20.0-1focal.20250520.005452
+ros-noetic-controller-manager-msgs	0.20.0-1focal.20250519.235753
+ros-noetic-cpp-common	0.7.3-1focal.20250426.004527
+ros-noetic-cv-bridge	1.16.2-1focal.20250519.235655
+ros-noetic-depth-image-proc	1.17.0-1focal.20250520.012250
+ros-noetic-desktop	1.5.0-1focal.20250521.014654
+ros-noetic-desktop-full	1.5.0-1focal.20250521.014741
+ros-noetic-diagnostic-aggregator	1.12.1-1focal.20250519.233912
+ros-noetic-diagnostic-analysis	1.12.1-1focal.20250519.234837
+ros-noetic-diagnostic-common-diagnostics	1.12.1-1focal.20250520.004213
+ros-noetic-diagnostic-msgs	1.13.2-1focal.20250426.013751
+ros-noetic-diagnostic-updater	1.12.1-1focal.20250519.233305
+ros-noetic-diagnostics	1.12.1-1focal.20250520.004640
+ros-noetic-diff-drive-controller	0.22.0-1focal.20250521.001737
+ros-noetic-dynamic-reconfigure	1.7.6-1focal.20250521.000900
+ros-noetic-eigen-conversions	1.13.4-1focal.20250426.012425
+ros-noetic-executive-smach	2.5.3-1focal.20250520.015747
+ros-noetic-filters	1.9.3-1focal.20250519.233517
+ros-noetic-forward-command-controller	0.22.0-1focal.20250520.000736
+ros-noetic-gazebo-dev	2.9.3-1focal.20250426.005053
+ros-noetic-gazebo-msgs	2.9.3-1focal.20250520.004928
+ros-noetic-gazebo-plugins	2.9.3-1focal.20250521.004734
+ros-noetic-gazebo-ros	2.9.3-1focal.20250521.003802
+ros-noetic-gazebo-ros-control	2.9.3-1focal.20250521.005335
+ros-noetic-gazebo-ros-pkgs	2.9.3-1focal.20250521.011748
+ros-noetic-gencpp	0.7.2-1focal.20250426.005903
+ros-noetic-geneus	3.0.0-1focal.20250426.010129
+ros-noetic-genlisp	0.4.18-1focal.20250426.005852
+ros-noetic-genmsg	0.6.1-1focal.20250426.005243
+ros-noetic-gennodejs	2.0.2-1focal.20250426.005653
+ros-noetic-genpy	0.6.18-1focal.20250426.005606
+ros-noetic-geographic-msgs	0.5.6-1focal.20250426.013201
+ros-noetic-geometry	1.13.4-1focal.20250520.021541
+ros-noetic-geometry-msgs	1.13.2-1focal.20250426.011953
+ros-noetic-geometry-tutorials	0.2.4-1focal.20250520.022154
+ros-noetic-gl-dependency	1.1.4-1focal.20250426.003855
+ros-noetic-hardware-interface	0.20.0-1focal.20250519.231100
+ros-noetic-image-common	1.12.1-1focal.20250520.015250
+ros-noetic-image-geometry	1.16.2-1focal.20250520.005312
+ros-noetic-image-pipeline	1.17.0-1focal.20250521.010122
+ros-noetic-image-proc	1.17.0-1focal.20250521.004322
+ros-noetic-image-publisher	1.17.0-1focal.20250521.003823
+ros-noetic-image-rotate	1.17.0-1focal.20250521.003149
+ros-noetic-image-transport	1.12.1-1focal.20250519.235437
+ros-noetic-image-transport-plugins	1.15.0-1focal.20250521.012022
+ros-noetic-image-view	1.17.0-1focal.20250521.003902
+ros-noetic-interactive-marker-tutorials	0.11.2-1focal.20250520.002856
+ros-noetic-interactive-markers	1.12.2-1focal.20250520.002353
+ros-noetic-joint-limits-interface	0.20.0-1focal.20250519.234747
+ros-noetic-joint-state-controller	0.22.0-1focal.20250520.000738
+ros-noetic-joint-state-publisher	1.15.2-1focal.20250519.235627
+ros-noetic-joint-state-publisher-gui	1.15.2-1focal.20250519.235716
+ros-noetic-kdl-conversions	1.13.4-1focal.20250426.014106
+ros-noetic-kdl-parser	1.14.2-1focal.20250519.234758
+ros-noetic-laser-assembler	1.7.8-1focal.20250520.003141
+ros-noetic-laser-filters	1.9.1-2focal.20250521.004125
+ros-noetic-laser-geometry	1.6.8-1focal.20250520.002454
+ros-noetic-laser-pipeline	1.6.4-1focal.20250521.012210
+ros-noetic-librviz-tutorial	0.11.2-1focal.20250520.011204
+ros-noetic-map-msgs	1.14.2-1focal.20250519.235841
+ros-noetic-media-export	0.3.0-1focal.20250426.005754
+ros-noetic-message-filters	1.17.4-1focal.20250519.233523
+ros-noetic-message-generation	0.4.1-1focal.20250426.010337
+ros-noetic-message-runtime	0.4.13-1focal.20250426.011132
+ros-noetic-mk	1.15.10-1focal.20250426.230532
+ros-noetic-nav-msgs	1.13.2-1focal.20250426.013359
+ros-noetic-nmea-msgs	1.1.0-1focal.20250426.012243
+ros-noetic-nodelet	1.11.2-1focal.20250519.231850
+ros-noetic-nodelet-core	1.11.2-1focal.20250521.010457
+ros-noetic-nodelet-topic-tools	1.11.2-1focal.20250521.003920
+ros-noetic-nodelet-tutorial-math	0.2.0-1focal.20250519.232311
+ros-noetic-pcl-conversions	1.7.4-1focal.20250520.005606
+ros-noetic-pcl-msgs	0.3.0-1focal.20250520.005335
+ros-noetic-pcl-ros	1.7.4-1focal.20250521.004323
+ros-noetic-perception	1.5.0-1focal.20250521.013504
+ros-noetic-perception-pcl	1.7.4-1focal.20250521.013426
+ros-noetic-pluginlib	1.13.2-1focal.20250426.231402
+ros-noetic-pluginlib-tutorials	0.2.0-1focal.20250519.231312
+ros-noetic-polled-camera	1.12.1-1focal.20250520.000507
+ros-noetic-position-controllers	0.22.0-1focal.20250520.000937
+ros-noetic-python-qt-binding	0.4.6-1focal.20250426.201332
+ros-noetic-qt-dotgraph	0.4.5-1focal.20250426.202029
+ros-noetic-qt-gui	0.4.5-1focal.20250426.202313
+ros-noetic-qt-gui-cpp	0.4.5-1focal.20250427.060425
+ros-noetic-qt-gui-py-common	0.4.5-1focal.20250426.201640
+ros-noetic-qwt-dependency	1.1.1-2focal.20250426.010052
+ros-noetic-realtime-tools	1.16.1-1focal.20250520.000413
+ros-noetic-resource-retriever	1.12.10-1focal.20250426.231456
+ros-noetic-robot	1.5.0-1focal.20250521.012857
+ros-noetic-robot-localization	2.7.7-1focal.20250520.002042
+ros-noetic-robot-state-publisher	1.15.3-1focal.20250520.002451
+ros-noetic-ros	1.15.10-1focal.20250426.231030
+ros-noetic-ros-base	1.5.0-1focal.20250521.010531
+ros-noetic-ros-comm	1.17.4-1focal.20250520.000923
+ros-noetic-ros-core	1.5.0-1focal.20250520.015810
+ros-noetic-ros-environment	1.3.2-1focal.20250426.010109
+ros-noetic-ros-numpy	0.0.5-2focal.20250520.003642
+ros-noetic-ros-tutorials	0.10.3-1focal.20250519.233900
+ros-noetic-rosbag	1.17.4-1focal.20250519.234429
+ros-noetic-rosbag-migration-rule	1.0.2-1focal.20250426.010122
+ros-noetic-rosbag-storage	1.17.4-1focal.20250519.233542
+ros-noetic-rosbash	1.15.10-1focal.20250426.230519
+ros-noetic-rosboost-cfg	1.15.10-1focal.20250426.201140
+ros-noetic-rosbuild	1.15.10-1focal.20250426.201143
+ros-noetic-rosclean	1.15.10-1focal.20250426.201147
+ros-noetic-rosconsole	1.14.4-1focal.20250426.230918
+ros-noetic-rosconsole-bridge	0.5.5-1focal.20250426.231403
+ros-noetic-roscpp	1.17.4-1focal.20250519.225343
+ros-noetic-roscpp-core	0.7.3-1focal.20250426.011153
+ros-noetic-roscpp-serialization	0.7.3-1focal.20250426.010742
+ros-noetic-roscpp-traits	0.7.3-1focal.20250426.010711
+ros-noetic-roscpp-tutorials	0.10.3-1focal.20250519.231628
+ros-noetic-roscreate	1.15.10-1focal.20250426.230758
+ros-noetic-rosgraph	1.17.4-1focal.20250519.224802
+ros-noetic-rosgraph-msgs	1.11.4-1focal.20250426.012754
+ros-noetic-roslang	1.15.10-1focal.20250426.201201
+ros-noetic-roslaunch	1.17.4-1focal.20250519.232645
+ros-noetic-roslib	1.15.10-1focal.20250426.230521
+ros-noetic-roslint	0.12.0-1focal.20250426.010138
+ros-noetic-roslisp	1.9.25-1focal.20250426.230524
+ros-noetic-roslz4	1.17.4-1focal.20250519.224812
+ros-noetic-rosmake	1.15.10-1focal.20250426.201209
+ros-noetic-rosmaster	1.17.4-1focal.20250519.225411
+ros-noetic-rosmsg	1.17.4-1focal.20250519.234838
+ros-noetic-rosnode	1.17.4-1focal.20250519.235748
+ros-noetic-rosout	1.17.4-1focal.20250519.231643
+ros-noetic-rospack	2.6.4-1focal.20250426.230225
+ros-noetic-rosparam	1.17.4-1focal.20250519.225309
+ros-noetic-rospy	1.17.4-1focal.20250519.231646
+ros-noetic-rospy-tutorials	0.10.3-1focal.20250519.233633
+ros-noetic-rosservice	1.17.4-1focal.20250519.235234
+ros-noetic-rostest	1.17.4-1focal.20250519.233130
+ros-noetic-rostime	0.7.3-1focal.20250426.004754
+ros-noetic-rostopic	1.17.4-1focal.20250519.235106
+ros-noetic-rosunit	1.15.10-1focal.20250426.230759
+ros-noetic-roswtf	1.17.4-1focal.20250519.235947
+ros-noetic-rqt	0.5.5-1focal.20250519.233427
+ros-noetic-rqt-action	0.4.11-1focal.20250520.001424
+ros-noetic-rqt-bag	0.5.3-1focal.20250519.235942
+ros-noetic-rqt-bag-plugins	0.5.3-1focal.20250520.001317
+ros-noetic-rqt-common-plugins	0.4.11-1focal.20250521.005128
+ros-noetic-rqt-console	0.4.14-1focal.20250520.001205
+ros-noetic-rqt-dep	0.4.14-1focal.20250520.000033
+ros-noetic-rqt-graph	0.4.16-1focal.20250519.235907
+ros-noetic-rqt-gui	0.5.5-1focal.20250519.232427
+ros-noetic-rqt-gui-cpp	0.5.5-1focal.20250519.232315
+ros-noetic-rqt-gui-py	0.5.5-1focal.20250519.233238
+ros-noetic-rqt-image-view	0.4.19-1focal.20250520.001352
+ros-noetic-rqt-launch	0.4.10-1focal.20250520.001300
+ros-noetic-rqt-logger-level	0.4.13-1focal.20250519.235914
+ros-noetic-rqt-moveit	0.5.13-1focal.20250520.001222
+ros-noetic-rqt-msg	0.4.12-1focal.20250520.001309
+ros-noetic-rqt-nav-view	0.5.8-1focal.20250520.003700
+ros-noetic-rqt-plot	0.4.16-1focal.20250520.001122
+ros-noetic-rqt-pose-view	0.5.13-1focal.20250520.004134
+ros-noetic-rqt-publisher	0.4.12-1focal.20250520.001359
+ros-noetic-rqt-py-common	0.5.5-1focal.20250520.000903
+ros-noetic-rqt-py-console	0.4.12-1focal.20250519.233341
+ros-noetic-rqt-reconfigure	0.5.7-1focal.20250521.003225
+ros-noetic-rqt-robot-dashboard	0.5.8-1focal.20250520.003750
+ros-noetic-rqt-robot-monitor	0.5.15-1focal.20250520.001222
+ros-noetic-rqt-robot-plugins	0.5.8-1focal.20250520.013008
+ros-noetic-rqt-robot-steering	0.5.14-1focal.20250519.235722
+ros-noetic-rqt-runtime-monitor	0.5.10-1focal.20250519.233325
+ros-noetic-rqt-rviz	0.7.2-1focal.20250520.012319
+ros-noetic-rqt-service-caller	0.4.12-1focal.20250520.001357
+ros-noetic-rqt-shell	0.4.13-1focal.20250519.233725
+ros-noetic-rqt-srv	0.4.11-1focal.20250520.001432
+ros-noetic-rqt-tf-tree	0.6.5-1focal.20250520.001233
+ros-noetic-rqt-top	0.4.11-1focal.20250519.233400
+ros-noetic-rqt-topic	0.4.15-1focal.20250519.235732
+ros-noetic-rqt-web	0.4.11-1focal.20250519.233405
+ros-noetic-rviz	1.14.26-1focal.20250520.002916
+ros-noetic-rviz-plugin-tutorials	0.11.2-1focal.20250520.022635
+ros-noetic-rviz-python-tutorial	0.11.2-1focal.20250520.022649
+ros-noetic-self-test	1.12.1-1focal.20250519.233601
+ros-noetic-sensor-msgs	1.13.2-1focal.20250519.234916
+ros-noetic-serial	1.2.1-1focal.20250426.010535
+ros-noetic-shape-msgs	1.13.2-1focal.20250426.012615
+ros-noetic-simulators	1.5.0-1focal.20250521.012934
+ros-noetic-smach	2.5.3-1focal.20250426.003520
+ros-noetic-smach-msgs	2.5.3-1focal.20250426.060145
+ros-noetic-smach-ros	2.5.3-1focal.20250520.000906
+ros-noetic-smclib	1.8.7-1focal.20250426.010546
+ros-noetic-sophus	1.2.1-1focal.20200728.135441
+ros-noetic-stage	4.3.0-1focal.20250426.004649
+ros-noetic-stage-ros	1.8.0-1focal.20250520.002057
+ros-noetic-std-msgs	0.5.14-1focal.20250426.011621
+ros-noetic-std-srvs	1.11.4-1focal.20250426.011617
+ros-noetic-stereo-image-proc	1.17.0-1focal.20250521.005052
+ros-noetic-stereo-msgs	1.13.2-1focal.20250520.005342
+ros-noetic-tf	1.13.4-1focal.20250520.001125
+ros-noetic-tf-conversions	1.13.4-1focal.20250520.015950
+ros-noetic-tf2	0.7.10-1focal.20250502.231751
+ros-noetic-tf2-eigen	0.7.10-1focal.20250502.232642
+ros-noetic-tf2-geometry-msgs	0.7.10-1focal.20250520.001448
+ros-noetic-tf2-kdl	0.7.10-1focal.20250520.001448
+ros-noetic-tf2-msgs	0.7.10-1focal.20250502.231510
+ros-noetic-tf2-py	0.7.10-1focal.20250519.232104
+ros-noetic-tf2-ros	0.7.10-1focal.20250520.000336
+ros-noetic-tf2-tools	0.7.10-1focal.20250520.015821
+ros-noetic-theora-image-transport	1.15.0-1focal.20250521.004408
+ros-noetic-topic-tools	1.17.4-1focal.20250519.233757
+ros-noetic-trajectory-msgs	1.13.2-1focal.20250426.012617
+ros-noetic-transmission-interface	0.20.0-1focal.20250519.231320
+ros-noetic-turtle-actionlib	0.2.0-1focal.20250520.000451
+ros-noetic-turtle-tf	0.2.4-1focal.20250520.003429
+ros-noetic-turtle-tf2	0.2.4-1focal.20250520.002604
+ros-noetic-turtlesim	0.10.3-1focal.20250519.230656
+ros-noetic-urdf	1.13.4-1focal.20250519.233550
+ros-noetic-urdf-parser-plugin	1.13.4-1focal.20250426.230328
+ros-noetic-urdf-sim-tutorial	0.5.1-1focal.20250521.010112
+ros-noetic-urdf-tutorial	0.5.0-2focal.20250520.012713
+ros-noetic-usb-cam	0.3.7-1focal.20250520.000847
+ros-noetic-uuid-msgs	1.0.6-1focal.20250426.013002
+ros-noetic-vision-opencv	1.16.2-1focal.20250520.015345
+ros-noetic-visualization-marker-tutorials	0.11.2-1focal.20250519.230754
+ros-noetic-visualization-msgs	1.13.2-1focal.20250426.012640
+ros-noetic-visualization-tutorials	0.11.2-1focal.20250520.023319
+ros-noetic-viz	1.5.0-1focal.20250521.012248
+ros-noetic-webkit-dependency	1.1.3-1focal.20250426.230409
+ros-noetic-xacro	1.14.20-1focal.20250519.233806
+ros-noetic-xmlrpcpp	1.17.4-1focal.20250519.224718
+rsync	3.1.3-8ubuntu0.9
+rsyslog	8.2001.0-1ubuntu1.3
+rtkit	0.12-4
+ruby	1:2.7+1
+ruby-minitest	5.13.0-1
+ruby-net-telnet	0.1.1-2
+ruby-power-assert	1.1.7-1
+ruby-test-unit	3.3.5-1
+ruby-xmlrpc	0.3.0-2
+ruby2.7	2.7.0-5ubuntu1.18
+rubygems-integration	1.16
+rygel	0.38.3-1ubuntu1
+samba-libs:amd64	2:4.15.13+dfsg-0ubuntu0.20.04.7
+sane-utils	1.0.29-0ubuntu5.2
+sbcl	2:2.0.1-3
+sbsigntool	0.9.2-2ubuntu1.1
+screen	4.8.0-1ubuntu0.1
+sdformat9-sdf	9.10.1-1~focal
+seahorse	3.36-1
+secureboot-db	1.5
+sed	4.7-1
+sensible-utils	0.0.12+nmu1
+session-migration	0.3.5
+sgml-base	1.29.1
+sgml-data	2.0.11
+shared-mime-info	1.15-1
+shiboken2	5.14.0-1~exp1ubuntu5
+shim-signed	1.40.10+15.8-0ubuntu1
+shotwell	0.30.10-0ubuntu0.1
+shotwell-common	0.30.10-0ubuntu0.1
+simple-scan	3.36.3-0ubuntu0.20.04.0
+sip-dev	4.19.21+dfsg-1build1
+snapd	2.63+20.04ubuntu0.1
+software-properties-common	0.99.9.11
+software-properties-gtk	0.99.9.11
+sound-icons	0.1-7
+sound-theme-freedesktop	0.8-2ubuntu1
+speech-dispatcher	0.9.1-4
+speech-dispatcher-audio-plugins:amd64	0.9.1-4
+speech-dispatcher-espeak-ng	0.9.1-4
+spice-vdagent	0.19.0-2ubuntu0.2
+squashfs-tools	1:4.4-1ubuntu0.3
+ssh-import-id	5.10-0ubuntu1
+ssl-cert	1.0.39
+strace	5.5-3ubuntu1
+sudo	1.8.31-1ubuntu1.5
+switcheroo-control	2.1-1
+syslinux	3:6.04~git20190206.bf6db5b4+dfsg1-2
+syslinux-common	3:6.04~git20190206.bf6db5b4+dfsg1-2
+syslinux-legacy	2:3.63+dfsg-2ubuntu9
+system-config-printer	1.5.12-0ubuntu1.1
+system-config-printer-common	1.5.12-0ubuntu1.1
+system-config-printer-udev	1.5.12-0ubuntu1.1
+systemd	245.4-4ubuntu3.24
+systemd-sysv	245.4-4ubuntu3.24
+systemd-timesyncd	245.4-4ubuntu3.20
+sysvinit-utils	2.96-2.1ubuntu1
+tango-icon-theme	0.8.90-7
+tar	1.30+dfsg-7ubuntu0.20.04.4
+tcl	8.6.9+1
+tcl-dev:amd64	8.6.9+1
+tcl-vtk7	7.1.1+dfsg2-2ubuntu1
+tcl8.6	8.6.10+dfsg-1
+tcl8.6-dev:amd64	8.6.10+dfsg-1
+tcpdump	4.9.3-4ubuntu0.2
+telnet	0.17-41.2build1
+thermald	1.9.1-1ubuntu0.6
+thunderbird	1:115.18.0+build1-0ubuntu0.20.04.1
+thunderbird-gnome-support	1:115.18.0+build1-0ubuntu0.20.04.1
+thunderbird-locale-en	1:115.18.0+build1-0ubuntu0.20.04.1
+thunderbird-locale-en-us	1:115.18.0+build1-0ubuntu0.20.04.1
+thunderbird-locale-zh-cn	1:115.18.0+build1-0ubuntu0.20.04.1
+thunderbird-locale-zh-hans	1:115.18.0+build1-0ubuntu0.20.04.1
+time	1.7-25.1build1
+tk	8.6.9+1
+tk-dev:amd64	8.6.9+1
+tk8.6	8.6.10-1
+tk8.6-blt2.5	2.5.3+dfsg-4
+tk8.6-dev:amd64	8.6.10-1
+tmux	3.0a-2ubuntu0.4
+todesk	4.8.6.2
+totem	3.34.1-2ubuntu2
+totem-common	3.34.1-2ubuntu2
+totem-plugins	3.34.1-2ubuntu2
+tpm-udev	0.4
+tracker	2.3.6-0ubuntu1
+tracker-extract	2.3.3-2ubuntu0.20.04.1
+tracker-miner-fs	2.3.3-2ubuntu0.20.04.1
+transmission-common	2.94-2ubuntu3
+transmission-gtk	2.94-2ubuntu3
+tree	1.8.0-1
+ttf-bitstream-vera	1.10-8
+ttf-dejavu-core	2.37-1
+ttf-mscorefonts-installer	3.7ubuntu6
+tzdata	2025b-0ubuntu0.20.04.1
+ubuntu-advantage-desktop-daemon	1.10.ubuntu0.20.04.1
+ubuntu-advantage-tools	27.13.6~20.04.1
+ubuntu-desktop	1.450.2
+ubuntu-desktop-minimal	1.450.2
+ubuntu-docs	20.04.3
+ubuntu-drivers-common	1:0.9.0~0.20.04.7
+ubuntu-keyring	2020.02.11.4
+ubuntu-minimal	1.450.2
+ubuntu-mono	19.04-0ubuntu3
+ubuntu-release-upgrader-core	1:20.04.41
+ubuntu-release-upgrader-gtk	1:20.04.41
+ubuntu-report	1.6.1ubuntu0.1
+ubuntu-restricted-addons	26
+ubuntu-restricted-extras	67
+ubuntu-session	3.36.0-2ubuntu1
+ubuntu-settings	20.04.6
+ubuntu-standard	1.450.2
+ubuntu-wallpapers	20.04.2-0ubuntu1
+ubuntu-wallpapers-focal	20.04.2-0ubuntu1
+ucf	3.0038+nmu1
+udev	245.4-4ubuntu3.20
+udisks2	2.8.4-1ubuntu2
+ufw	0.36-6ubuntu1
+unattended-upgrades	2.3ubuntu0.3
+unixodbc-dev:amd64	2.3.6-0.1ubuntu0.1
+uno-libs-private	1:6.4.7-0ubuntu0.20.04.15
+unrar	1:5.6.6-2ubuntu0.1
+unzip	6.0-25ubuntu1.2
+update-inetd	4.50
+update-manager	1:20.04.10.11
+update-manager-core	1:20.04.10.11
+update-notifier	3.192.30.16
+update-notifier-common	3.192.30.16
+upower	0.99.11-1build2
+ure	1:6.4.7-0ubuntu0.20.04.15
+usb-creator-common	0.3.7
+usb-creator-gtk	0.3.7
+usb-modeswitch	2.5.2+repack0-2ubuntu3
+usb-modeswitch-data	20191128-3
+usb.ids	2020.03.19-1
+usbmuxd	1.1.1~git20191130.9af2b12-1
+usbutils	1:012-2
+util-linux	2.34-0.1ubuntu9.6
+uuid-dev:amd64	2.34-0.1ubuntu9.6
+uuid-runtime	2.34-0.1ubuntu9.6
+v4l-utils	1.18.0-2build1
+va-driver-all:amd64	2.7.0-2
+vdpau-driver-all:amd64	1.3-1ubuntu2
+vim	2:8.1.2269-1ubuntu5.32
+vim-common	2:8.1.2269-1ubuntu5.32
+vim-runtime	2:8.1.2269-1ubuntu5.32
+vim-tiny	2:8.1.2269-1ubuntu5.32
+vino	3.22.0-5ubuntu2.2
+vlc	3.0.9.2-1
+vlc-bin	3.0.9.2-1
+vlc-data	3.0.9.2-1
+vlc-l10n	3.0.9.2-1
+vlc-plugin-base:amd64	3.0.9.2-1
+vlc-plugin-notify:amd64	3.0.9.2-1
+vlc-plugin-qt:amd64	3.0.9.2-1
+vlc-plugin-samba:amd64	3.0.9.2-1
+vlc-plugin-skins2:amd64	3.0.9.2-1
+vlc-plugin-video-output:amd64	3.0.9.2-1
+vlc-plugin-video-splitter:amd64	3.0.9.2-1
+vlc-plugin-visualization:amd64	3.0.9.2-1
+vtk7	7.1.1+dfsg2-2ubuntu1
+wamerican	2018.04.16-1
+wayland-protocols	1.20-1
+wbritish	2018.04.16-1
+wechat	4.1.1.8
+wemeet	3.26.10.401
+wget	1.20.3-1ubuntu2.1
+whiptail	0.52.21-4ubuntu2
+whoopsie	0.2.69ubuntu0.3
+whoopsie-preferences	22
+wireless-regdb	2026.02.04-0ubuntu1~20.04.1
+wireless-tools	30~pre9-13ubuntu1
+wpasupplicant	2:2.9-1ubuntu4.6
+wps-office	11.1.0.11733.XA
+x11-apps	7.7+8
+x11-common	1:7.7+19ubuntu14
+x11-session-utils	7.7+4
+x11-utils	7.7+5
+x11-xkb-utils	7.7+5
+x11-xserver-utils	7.7+8
+x11proto-core-dev	2019.2-1ubuntu1
+x11proto-dev	2019.2-1ubuntu1
+x11proto-input-dev	2019.2-1ubuntu1
+x11proto-randr-dev	2019.2-1ubuntu1
+x11proto-record-dev	2019.2-1ubuntu1
+x11proto-scrnsaver-dev	2019.2-1ubuntu1
+x11proto-xext-dev	2019.2-1ubuntu1
+x11proto-xinerama-dev	2019.2-1ubuntu1
+xauth	1:1.1-0ubuntu1
+xbitmaps	1.1.1-2
+xbrlapi	6.0+dfsg-4ubuntu6
+xclip	0.13-1
+xcursor-themes	1.0.6-0ubuntu1
+xdg-dbus-proxy	0.1.2-1
+xdg-desktop-portal	1.6.0-1ubuntu2
+xdg-desktop-portal-gtk	1.6.0-1ubuntu1
+xdg-user-dirs	0.17-2ubuntu1
+xdg-user-dirs-gtk	0.10-3
+xdg-utils	1.1.3-2ubuntu1.20.04.2
+xfonts-base	1:1.0.5
+xfonts-encodings	1:1.0.5-0ubuntu1
+xfonts-scalable	1:1.0.3-1.1
+xfonts-utils	1:7.7+6
+xinit	1.4.1-0ubuntu2
+xinput	1.6.3-1
+xkb-data	2.29-2
+xml-core	0.18+nmu1
+xorg	1:7.7+19ubuntu14
+xorg-docs-core	1:1.7.1-1.1
+xorg-sgml-doctools	1:1.11-1
+xserver-common	2:1.20.13-1ubuntu1~20.04.19
+xserver-xephyr	2:1.20.13-1ubuntu1~20.04.19
+xserver-xorg	1:7.7+19ubuntu14
+xserver-xorg-core	2:1.20.13-1ubuntu1~20.04.19
+xserver-xorg-input-all	1:7.7+19ubuntu14
+xserver-xorg-input-libinput	0.29.0-1
+xserver-xorg-input-wacom	1:0.39.0-0ubuntu1
+xserver-xorg-legacy	2:1.20.13-1ubuntu1~20.04.19
+xserver-xorg-video-all	1:7.7+19ubuntu14
+xserver-xorg-video-amdgpu	19.1.0-1ubuntu0.1
+xserver-xorg-video-ati	1:19.1.0-1
+xserver-xorg-video-fbdev	1:0.5.0-1ubuntu1
+xserver-xorg-video-intel	2:2.99.917+git20200226-1
+xserver-xorg-video-nouveau	1:1.0.16-1
+xserver-xorg-video-qxl	0.1.5+git20200331-1
+xserver-xorg-video-radeon	1:19.1.0-1
+xserver-xorg-video-vesa	1:2.4.0-2
+xserver-xorg-video-vmware	1:13.3.0-3
+xtrans-dev	1.4.0-1
+xul-ext-ubufox	3.4-0ubuntu1.17.10.1
+xwayland	2:1.20.13-1ubuntu1~20.04.19
+xxd	2:8.1.2269-1ubuntu5.32
+xz-utils	5.2.4-1ubuntu1.1
+yaru-theme-gnome-shell	20.04.11.1
+yaru-theme-gtk	20.04.11.1
+yaru-theme-icon	20.04.11.1
+yaru-theme-sound	20.04.11.1
+yelp	3.36.2-0ubuntu1.1
+yelp-xsl	3.36.0-1ubuntu0.1
+zenity	3.32.0-5
+zenity-common	3.32.0-5
+zip	3.0-11build1
+zlib1g:amd64	1:1.2.11.dfsg-2ubuntu1.5
+zlib1g-dev:amd64	1:1.2.11.dfsg-2ubuntu1.5
+[exit_code=0]
+
+===== PIP3_FREEZE =====
+actionlib==1.14.3
+addict==2.4.0
+aiofiles==23.2.1
+albucore==0.0.17
+albumentations==1.4.18
+angles==1.9.14
+annotated-doc==0.0.4
+annotated-types==0.7.0
+anyio==4.5.2
+apturl==0.5.2
+argcomplete==3.7.0
+asttokens==3.0.2
+attrs==25.3.0
+autobahn==17.10.1
+Automat==0.8.0
+azure-ai-translation-text==1.0.1
+azure-core==1.33.0
+backcall==0.2.0
+bcrypt==3.1.7
+beautifulsoup4==4.15.0
+blinker==1.8.2
+bondpy==1.8.7
+Brlapi==0.7.0
+camera-calibration==1.17.0
+camera-calibration-parsers==1.12.1
+catkin==0.8.12
+catkin-pkg==1.1.0
+catkin-pkg-modules==1.0.0
+catkin-tools==0.9.4
+cbor==1.0.0
+certifi==2019.11.28
+chardet==3.0.4
+charset-normalizer==3.5.1
+click==8.1.8
+colorama==0.4.3
+comm==0.2.3
+command-not-found==0.3
+ConfigArgParse==1.7.5
+constantly==15.1.0
+contourpy==1.1.1
+controller-manager==0.20.0
+controller-manager-msgs==0.20.0
+cryptography==2.8
+cupshelpers==1.0
+cv-bridge==1.16.2
+cycler==0.10.0
+Cython==0.29.14
+dash==4.3.0
+dbus-python==1.2.16
+decorator==5.3.1
+deep-translator==1.11.4
+deepl==1.18.0
+defer==1.0.6
+defusedxml==0.6.0
+diagnostic-analysis==1.12.1
+diagnostic-common-diagnostics==1.12.1
+diagnostic-updater==1.12.1
+distro==1.9.0
+distro-info===0.23ubuntu1
+doclayout_yolo==0.0.4
+docutils==0.16
+duplicity==0.8.12.0
+dynamic-reconfigure==1.7.6
+empy==3.3.4
+entrypoints==0.3
+eval_type_backport==0.4.0
+evo==1.31.1
+exceptiongroup==1.3.1
+executing==2.2.1
+fastapi==0.124.4
+fasteners==0.14.1
+fastjsonschema==2.21.2
+ffmpy==0.5.0
+filelock==3.16.1
+Flask==3.0.3
+fonttools==4.57.0
+fsspec==2025.3.0
+future==0.18.2
+gazebo_plugins==2.9.3
+gazebo_ros==2.9.3
+gencpp==0.7.2
+geneus==3.0.0
+genlisp==0.4.18
+genmsg==0.6.1
+gennodejs==2.0.2
+genpy==0.6.18
+gradio==4.44.1
+gradio_client==1.3.0
+h11==0.16.0
+hf-xet==1.6.0
+httpcore==1.0.9
+httplib2==0.14.0
+httpx==0.28.1
+huggingface_hub==0.36.2
+hyperlink==19.0.0
+idna==2.8
+iilabs3d-toolkit==0.2.1
+image-geometry==1.16.2
+imageio==2.35.1
+importlib_metadata==8.5.0
+importlib_resources==6.4.5
+incremental==16.10.1
+interactive-markers==1.12.2
+ipython==8.12.3
+ipywidgets==8.1.8
+isodate==0.7.2
+itsdangerous==2.2.0
+janus==1.0.0
+jedi==0.19.2
+Jinja2==3.1.6
+jiter==0.9.1
+joblib==1.4.2
+joint-state-publisher==1.15.2
+joint-state-publisher-gui==1.15.2
+jsonschema==4.23.0
+jsonschema-specifications==2023.12.1
+jupyter_core==5.8.1
+jupyterlab_widgets==3.0.16
+keyring==18.0.1
+kiss-icp @ file:///home/jian/livox_ws/online_light_odom_review/src/kiss-icp/python
+kiwisolver==1.0.1
+language-selector==0.1
+laser-geometry==1.6.8
+launchpadlib==1.10.13
+lazr.restfulclient==0.14.2
+lazr.uri==1.0.3
+lazy_loader==0.4
+lockfile==0.12.2
+louis==3.12.0
+lxml==6.1.1
+lz4==3.0.2+dfsg
+macaroonbakery==1.3.1
+Mako==1.1.0
+markdown-it-py==3.0.0
+MarkupSafe==2.1.5
+matplotlib==3.7.5
+matplotlib-inline==0.1.7
+mdurl==0.1.2
+message-filters==1.17.4
+monotonic==1.5
+more-itertools==4.2.0
+mpi4py==3.0.3
+mpmath==1.3.0
+narwhals==1.42.1
+natsort==8.4.0
+nbformat==5.10.4
+nest-asyncio==1.6.0
+netifaces==0.10.4
+networkx==3.1
+ninja==1.13.0
+nose==1.3.7
+numexpr==2.8.6
+numpy==1.24.4
+nvidia-cublas-cu12==12.1.3.1
+nvidia-cuda-cupti-cu12==12.1.105
+nvidia-cuda-nvrtc-cu12==12.1.105
+nvidia-cuda-runtime-cu12==12.1.105
+nvidia-cudnn-cu12==9.1.0.70
+nvidia-cufft-cu12==11.0.2.54
+nvidia-curand-cu12==10.3.2.106
+nvidia-cusolver-cu12==11.4.5.107
+nvidia-cusparse-cu12==12.1.0.106
+nvidia-nccl-cu12==2.20.5
+nvidia-nvjitlink-cu12==12.9.86
+nvidia-nvtx-cu12==12.1.105
+oauthlib==3.1.0
+olefile==0.46
+ollama==0.6.2
+open3d==0.19.0
+openai==2.2.0
+opencv-python==5.0.0.93
+opencv-python-headless==5.0.0.93
+orjson==3.10.15
+osrf-pycommon==2.0.2
+packaging==26.2
+pandas==2.0.3
+paramiko==2.6.0
+parso==0.8.7
+pdf2zh @ file:///home/jian/%E6%A1%8C%E9%9D%A2/%E6%96%87%E7%8C%AE/pdf2zh/pdf2zh-1.7.9-py3-none-any.whl#sha256=c7a66b56005f3f7fdffeae8ad6ce63aa5fbf80d2d40fe40f1e4e60878a1417c9
+pexpect==4.6.0
+pickleshare==0.7.5
+pillow==10.4.0
+pkgutil_resolve_name==1.3.10
+platformdirs==4.3.6
+plotly==6.9.0
+prompt_toolkit==3.0.52
+protobuf==3.6.1
+psutil==5.5.1
+pure_eval==0.2.3
+py-cpuinfo==9.0.0
+py-ubjson==0.14.0
+pyasn1==0.4.2
+pyasn1-modules==0.2.1
+pycairo==1.16.2
+pycryptodomex==3.6.1
+pycups==1.9.73
+pydantic==2.10.6
+pydantic-settings==2.8.1
+pydantic_core==2.27.2
+pydot==1.4.1
+pydub==0.25.1
+Pygments==2.19.2
+PyGObject==3.36.0
+PyHamcrest==1.9.0
+PyJWT==1.7.1
+pymacaroons==0.13.0
+PyMuPDF==1.24.11
+PyNaCl==1.3.0
+PyOpenGL==3.1.0
+pyOpenSSL==19.0.0
+pyparsing==2.4.6
+pypdf==5.9.0
+pypng==0.0.20
+PyQRCode==1.2.1
+PyQt5==5.14.1
+pyquaternion==0.9.9
+pyRFC3339==1.1
+python-apt==2.0.1+ubuntu0.20.4.1
+python-dateutil==2.9.0.post0
+python-debian===0.1.36ubuntu1
+python-docx==1.1.2
+python-dotenv==1.0.1
+python-gnupg==0.4.5
+python-multipart==0.0.20
+python-qt-binding==0.4.6
+python-snappy==0.5.3
+PyTrie==0.2
+pytz==2026.2
+PyWavelets==1.4.1
+pyxdg==0.26
+PyYAML==6.0.3
+qt-dotgraph==0.4.5
+qt-gui==0.4.5
+qt-gui-cpp==0.4.5
+qt-gui-py-common==0.4.5
+referencing==0.35.1
+reportlab==3.5.34
+requests==2.32.4
+requests-unixsocket==0.2.0
+resource-retriever==1.12.10
+retrying==1.4.2
+rich==14.3.4
+roman==2.0.0
+ros_numpy==0.0.5
+rosbag==1.17.4
+rosbags==0.9.23
+rosboost-cfg==1.15.10
+rosclean==1.15.10
+roscreate==1.15.10
+rosdep==0.25.1
+rosdep-modules==0.25.1
+rosdistro-modules==1.0.1
+rosgraph==1.17.4
+roslaunch==1.17.4
+roslib==1.15.10
+roslint==0.12.0
+roslz4==1.17.4
+rosmake==1.15.10
+rosmaster==1.17.4
+rosmsg==1.17.4
+rosnode==1.17.4
+rosparam==1.17.4
+rospkg==1.6.1
+rospkg-modules==1.6.0
+rospy==1.17.4
+rosservice==1.17.4
+rostest==1.17.4
+rostopic==1.17.4
+rosunit==1.15.10
+roswtf==1.17.4
+rpds-py==0.20.1
+rqt-action==0.4.11
+rqt-bag==0.5.3
+rqt-bag-plugins==0.5.3
+rqt-console==0.4.14
+rqt-dep==0.4.14
+rqt-graph==0.4.16
+rqt-gui==0.5.5
+rqt-gui-py==0.5.5
+rqt-image-view==0.4.19
+rqt-launch==0.4.10
+rqt-logger-level==0.4.13
+rqt-moveit==0.5.13
+rqt-msg==0.4.12
+rqt-nav-view==0.5.8
+rqt-plot==0.4.16
+rqt-pose-view==0.5.13
+rqt-publisher==0.4.12
+rqt-py-common==0.5.5
+rqt-py-console==0.4.12
+rqt-reconfigure==0.5.7
+rqt-robot-dashboard==0.5.8
+rqt-robot-monitor==0.5.15
+rqt-robot-steering==0.5.14
+rqt-runtime-monitor==0.5.10
+rqt-rviz==0.7.2
+rqt-service-caller==0.4.12
+rqt-shell==0.4.13
+rqt-srv==0.4.11
+rqt-tf-tree==0.6.5
+rqt-top==0.4.11
+rqt-topic==0.4.15
+rqt-web==0.4.11
+ruamel.yaml==0.18.16
+ruamel.yaml.clib==0.2.8
+ruff==0.16.5
+rviz==1.14.26
+scikit-image==0.21.0
+scikit-learn==1.3.2
+scipy==1.10.1
+seaborn==0.13.2
+SecretStorage==2.3.1
+semantic-version==2.10.0
+sensor-msgs==1.13.2
+service-identity==18.1.0
+shellingham==1.5.4
+simplejson==3.16.0
+sip==4.19.21
+six==1.14.0
+smach==2.5.3
+smach-ros==2.5.3
+smclib==1.8.7
+sniffio==1.3.1
+soupsieve==2.7
+ssh-import-id==5.10
+stack-data==0.6.3
+starlette==0.44.0
+sympy==1.13.3
+systemd-python==234
+tenacity==9.0.0
+tf==1.13.4
+tf-conversions==1.13.4
+tf2-geometry-msgs==0.7.10
+tf2-kdl==0.7.10
+tf2-py==0.7.10
+tf2-ros==0.7.10
+thop==0.1.1.post2209072238
+threadpoolctl==3.5.0
+tifffile==2023.7.10
+tomlkit==0.12.0
+topic-tools==1.17.4
+torch==2.4.1
+torchvision==0.19.1
+tqdm==4.70.0
+traitlets==5.14.3
+triton==3.0.0
+Twisted==18.9.0
+txaio==2.10.0
+typer==0.20.1
+typing_extensions==4.13.2
+tzdata==2026.3
+u-msgpack-python==2.1
+ubuntu-advantage-tools==8001
+ubuntu-drivers-common==0.0.0
+ufw==0.36
+unattended-upgrades==0.1
+urllib3==2.2.3
+usb-creator==0.3.7
+uvicorn==0.33.0
+vcstool==0.3.0
+wadllib==1.3.3
+wcwidth==0.8.2
+websockets==12.0
+Werkzeug==3.0.6
+widgetsnbextension==4.0.15
+wsaccel==0.6.2
+xacro==1.14.20
+xkit==0.0.0
+zipp==3.20.2
+zope.interface==4.7.1
+zstandard==0.23.0
+[exit_code=0]
+
+===== ENV_SORTED_REDACTED =====
+ALLUSERSPROFILE=/opt/MVS/MVFG
+CHROME_DESKTOP=code.desktop
+CMAKE_PREFIX_PATH=/home/jian/livox_ws/devel:/opt/ros/noetic
+CODEX_CI=1
+CODEX_INTERNAL_ORIGINATOR_OVERRIDE=codex_vscode
+CODEX_PERMISSION_PROFILE=:danger-full-access
+CODEX_SESSION_ID=01a09f14-716d-76f3-bfc8-5b5ec9f5defc
+CODEX_THREAD_ID=01a09f14-716d-76f3-bfc8-5b5ec9f5defc
+CODEX_VERSION=0.154.0-alpha.6.2
+COLORTERM=
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+DEBUG=release
+DESKTOP_SESSION=ubuntu
+DISPLAY=:0
+ELECTRON_NO_ATTACH_CONSOLE=1
+ELECTRON_RUN_AS_NODE=1
+FC_FONTATIONS=1
+FONTCONFIG_FILE=/etc/fonts/fonts.conf
+FONTCONFIG_PATH=/etc/fonts
+GDK_BACKEND=x11
+GDK_PIXBUF_MODULEDIR=/snap/code/264/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
+GDK_PIXBUF_MODULE_FILE=/home/jian/snap/code/common/.cache/gdk-pixbuf-loaders.cache
+GDMSESSION=ubuntu
+GH_PAGER=cat
+GIO_LAUNCHED_DESKTOP_FILE=/var/lib/snapd/desktop/applications/code_code.desktop
+GIO_LAUNCHED_DESKTOP_FILE_PID=4697
+GIO_MODULE_DIR=/home/jian/snap/code/common/.cache/gio-modules
+GIT_PAGER=cat
+GJS_DEBUG_OUTPUT=stderr
+GJS_DEBUG_TOPICS=JS ERROR;JS LOG
+GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+GNOME_SHELL_SESSION_MODE=ubuntu
+GPG_AGENT_INFO=/run/user/1000/gnupg/S.gpg-agent:0:1
+GSETTINGS_SCHEMA_DIR=/home/jian/snap/code/264/.local/share/glib-2.0/schemas
+GTK_EXE_PREFIX=/snap/code/264/usr
+GTK_IM_MODULE_FILE=/home/jian/snap/code/common/.cache/immodules/immodules.cache
+GTK_MODULES=gail:atk-bridge
+GTK_PATH=/snap/code/264/usr/lib/x86_64-linux-gnu/gtk-3.0
+HOME=/home/jian
+IM_CONFIG_PHASE=1
+INVOCATION_ID=bb071306f74347ebb88e4e39e9a0d0ae
+JOURNAL_STREAM=8:67420
+LANG=C.UTF-8
+LANGUAGE=zh_CN:zh
+LC_ALL=C.UTF-8
+LC_CTYPE=C.UTF-8
+LD_LIBRARY_PATH=/opt/MVS/lib/64:/opt/MVS/lib/32:/opt/MVS/lib/64:/opt/MVS/lib/32:/opt/MVS/lib/64:/opt/MVS/lib/32:/opt/MVS/lib/64:/opt/MVS/lib/32:/home/jian/drivers/dhcamera/lib:/home/jian/livox_ws/devel/lib:/opt/ros/noetic/lib:/opt/MVS/lib/64:/opt/MVS/lib/32:/opt/MVS/lib/64:/opt/MVS/lib/32:/opt/MVS/lib/64:/opt/MVS/lib/32
+LESSCLOSE=/usr/bin/lesspipe %s %s
+LESSOPEN=| /usr/bin/lesspipe %s
+LOCPATH=/snap/code/264/usr/lib/locale
+LOGNAME=jian
+MANAGERPID=2205
+MVCAM_COMMON_RUNENV=/opt/MVS/lib
+MVCAM_GENICAM_CLPROTOCOL=/opt/MVS/lib/CLProtocol
+MVCAM_SDK_PATH=/opt/MVS
+MVCAM_SDK_VERSION=
+NO_COLOR=1
+PAGER=cat
+PATH=/home/jian/.local/bin:/home/jian/bin:/home/jian/.codex/tmp/arg0/codex-arg0ggXQ8I:/home/jian/.local/bin:/home/jian/bin:/home/jian/bin:/home/jian/.local/bin:/opt/ros/noetic/bin:/home/jian/.local/bin:/home/jian/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/jian/.vscode/extensions/openai.chatgpt-26.908.40401-linux-x64/bin/linux-x86_64
+PKG_CONFIG_PATH=/home/jian/livox_ws/devel/lib/pkgconfig:/opt/ros/noetic/lib/pkgconfig
+PWD=/home/jian/livox_ws/dog_loc_paper_ws
+PYTHONPATH=/home/jian/livox_ws/devel/lib/python3/dist-packages:/opt/ros/noetic/lib/python3/dist-packages
+QT_ACCESSIBILITY=1
+QT_IM_MODULE=ibus
+ROSLISP_PACKAGE_DIRECTORIES=/home/jian/livox_ws/devel/share/common-lisp
+ROS_DISTRO=noetic
+ROS_ETC_DIR=/opt/ros/noetic/etc/ros
+ROS_MASTER_URI=http://localhost:11311
+ROS_PACKAGE_PATH=/home/jian/livox_ws/src:/opt/ros/noetic/share
+ROS_PYTHON_VERSION=3
+ROS_ROOT=/opt/ros/noetic/share/ros
+ROS_VERSION=1
+RUST_LOG=warn
+SESSION_MANAGER=local/jian-Lenovo-ThinkBook-14p-Gen-2:@/tmp/.ICE-unix/2629,unix/jian-Lenovo-ThinkBook-14p-Gen-2:/tmp/.ICE-unix/2629
+SHELL=/bin/bash
+SHLVL=0
+SNAP=/snap/code/264
+SNAP_ARCH=amd64
+SNAP_COMMON=/var/snap/code/common
+SNAP_CONTEXT=LcgJ-7Zojqz-1CI_RW7z89wd8Q_9Cqc26EVt2rvicVRLAf5J8yOE
+SNAP_COOKIE=<REDACTED>
+SNAP_DATA=/var/snap/code/264
+SNAP_EUID=1000
+SNAP_INSTANCE_NAME=code
+SNAP_LAUNCHER_ARCH_TRIPLET=x86_64-linux-gnu
+SNAP_LIBRARY_PATH=/var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32
+SNAP_NAME=code
+SNAP_REAL_HOME=/home/jian
+SNAP_REVISION=264
+SNAP_UID=1000
+SNAP_USER_COMMON=/home/jian/snap/code/common
+SNAP_USER_DATA=/home/jian/snap/code/264
+SNAP_VERSION=7debcd0e
+SSH_AGENT_PID=2555
+SSH_AUTH_SOCK=<REDACTED>
+TERM=dumb
+USER=jian
+USERNAME=jian
+VSCODE_CLI=1
+VSCODE_CODE_CACHE_PATH=/home/jian/.config/Code/CachedData/7debcd0e2acdea1c52de81bf9ee1620444407dda
+VSCODE_CRASH_REPORTER_PROCESS_TYPE=extensionHost
+VSCODE_CWD=/home/jian
+VSCODE_ESM_ENTRYPOINT=vs/workbench/api/node/extensionHostProcess
+VSCODE_HANDLES_UNCAUGHT_ERRORS=true
+VSCODE_IPC_HOOK=/run/user/1000/vscode-7715d3d9-1.13-main.sock
+VSCODE_NLS_CONFIG={"userLocale":"zh-cn","osLocale":"zh-cn","resolvedLanguage":"zh-cn","defaultMessagesFile":"/snap/code/264/usr/share/code/resources/app/out/nls.messages.json","languagePack":{"translationsConfigFile":"/home/jian/.config/Code/clp/75539731208fa508a5b042c8fe051beb.zh-cn/tcf.json","messagesFile":"/home/jian/.config/Code/clp/75539731208fa508a5b042c8fe051beb.zh-cn/7debcd0e2acdea1c52de81bf9ee1620444407dda/nls.messages.json","corruptMarkerFile":"/home/jian/.config/Code/clp/75539731208fa508a5b042c8fe051beb.zh-cn/corrupted.info"},"locale":"zh-cn","availableLanguages":{"*":"zh-cn"},"_languagePackId":"75539731208fa508a5b042c8fe051beb.zh-cn","_languagePackSupport":true,"_translationsConfigFile":"/home/jian/.config/Code/clp/75539731208fa508a5b042c8fe051beb.zh-cn/tcf.json","_cacheRoot":"/home/jian/.config/Code/clp/75539731208fa508a5b042c8fe051beb.zh-cn","_resolvedLanguagePackCoreLocation":"/home/jian/.config/Code/clp/75539731208fa508a5b042c8fe051beb.zh-cn/7debcd0e2acdea1c52de81bf9ee1620444407dda","_corruptedFile":"/home/jian/.config/Code/clp/75539731208fa508a5b042c8fe051beb.zh-cn/corrupted.info"}
+VSCODE_PID=4906
+V_API_KEY=<REDACTED>
+WINDOWPATH=2
+XAUTHORITY=<REDACTED>
+XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
+XDG_CONFIG_DIRS_VSCODE_SNAP_ORIG=/etc/xdg/xdg-ubuntu:/etc/xdg
+XDG_CURRENT_DESKTOP=ubuntu:GNOME
+XDG_DATA_DIRS=/home/jian/snap/code/264/.local/share:/home/jian/snap/code/264:/snap/code/264/usr/share:/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
+XDG_DATA_DIRS_VSCODE_SNAP_ORIG=/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
+XDG_DATA_HOME=/home/jian/snap/code/264/.local/share
+XDG_MENU_PREFIX=gnome-
+XDG_RUNTIME_DIR=/run/user/1000
+XDG_SESSION_CLASS=user
+XDG_SESSION_DESKTOP=ubuntu
+XDG_SESSION_TYPE=x11
+XMODIFIERS=@im=ibus
+_=/usr/bin/env
+[exit_code=0]
