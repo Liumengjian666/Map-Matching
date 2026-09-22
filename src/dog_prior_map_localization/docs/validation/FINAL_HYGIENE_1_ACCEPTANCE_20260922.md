@@ -97,6 +97,14 @@ canonical runtime still consists of the independent NDT node, EKF/OOSM/IMU
 path, deskew, and the existing diagnostic tools. No Stage3B or visual fusion
 work was entered.
 
+## Code size
+
+The NDT translation unit is `1502 -> 1215` lines relative to the starting
+commit. The tracked EKF/core runtime source set is `1189 -> 1152` lines and
+the EKF header is `241 -> 224` lines. The legacy files removed in the code
+commit account for `979` lines; no user-staged file is included in these
+counts.
+
 ## Classification
 
 `FINAL-HYGIENE-1-PASS` locally. The only deferred item is the user's existing
