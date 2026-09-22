@@ -10,7 +10,6 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   // These parameters are kept in the canonical NDT split YAML so deployment
   // changes remain configuration-only.
   map_frame_ = getParam<std::string>("frames/map_frame", "map");
-  odom_frame_ = getParam<std::string>("frames/odom_frame", "odom");
   base_frame_ = getParam<std::string>("frames/base_frame", "base_link");
 
   imu_topic_ = getParam<std::string>("topics/imu", "/livox/imu");
@@ -76,7 +75,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     runtime_csv_.open(runtime_csv_path_, std::ios::out);
     if (runtime_csv_.is_open())
     {
-      runtime_csv_ << "stamp,imu_hz,correct_hz,avg_update_ms,max_update_ms,avg_ndt_ms,max_ndt_ms,ndt_ok_count,ndt_fail_count,last_used_points,last_mean_residual,ok_count,fail_count,rss_note,oosm_event_count,deferred_received_count,deferred_processed_count,deferred_over_limit_count,deferred_queue_full_count,max_deferred_queue_size,state_history_size,imu_history_size\n";
+      runtime_csv_ << "stamp,imu_hz,correction_hz,ndt_correction_count,oosm_event_count,deferred_received_count,deferred_processed_count,deferred_over_limit_count,deferred_queue_full_count,max_deferred_queue_size,state_history_size,imu_history_size\n";
     }
     else
     {

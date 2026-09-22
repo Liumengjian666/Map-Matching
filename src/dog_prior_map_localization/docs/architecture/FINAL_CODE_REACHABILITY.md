@@ -35,9 +35,7 @@ These are not linked into either runtime executable:
 - `scripts/evaluate_runtime_and_accuracy.py`
 - `scripts/compare_odom_to_reference.py`
 - `scripts/build_livox_keyframe_scan_db.py`
-- `scripts/pcd_to_npz_map.py`
 - `scripts/run_loop2_determinism_trial.sh`
-- `scripts/run_loop3_absolute_ndt_compare.sh`
 - `scripts/run_loop5_record_raw.sh`
 
 They remain because they support map preparation, reproducibility checks, or
@@ -47,17 +45,19 @@ offline evaluation. The research probes are enabled only with
 ## Legacy or historical surface
 
 The following profiles have no active canonical launch or runtime consumer and
-are removed by FINAL-CLEANUP-5:
+are removed by the cleanup stages:
 
 - `config/dog_light_odom_only.yaml`
 - `config/dog_light_odom_only_tuned.yaml`
 - `config/dog_prior_map_localization.yaml`
 - `config/dog_prior_map_localization_kiss_external_prior.yaml`
 
-The old integrated launch, Python EKF fallback, and deploy-light-odom scripts
-remain historical files for this cleanup step because user-owned staged
-evaluation scripts still reference them. They are not part of the canonical
-build or launch and are explicitly deferred rather than modified:
+The old integrated launch, Python EKF fallback, NPZ conversion helper, and
+loop3/deploy-light-odom helpers are deleted from the active package. A
+user-owned staged evaluation script still references one historical
+deploy-light-odom filename; its staged contents are preserved verbatim and
+must be handled in a later user-authorized cleanup commit. This boundary is
+explicitly deferred rather than modified:
 
 ```text
 DEFERRED_DUE_TO_USER_STAGED_WORK

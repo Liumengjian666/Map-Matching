@@ -96,33 +96,23 @@ def read_runtime_csv(path):
     out = {"runtime_rows": len(rows)}
     for key in [
         "imu_hz",
-        "lidar_hz",
-        "correct_hz",
-        "avg_update_ms",
-        "max_update_ms",
-        "avg_icp_ms",
-        "max_icp_ms",
-        "icp_ok_count",
-        "icp_fail_count",
-        "last_used_points",
-        "last_mean_residual",
-        "image_hz",
-        "avg_visual_ms",
-        "max_visual_ms",
-        "last_feature_ratio",
-        "visual_weight",
-        "lidar_degenerate",
-        "lidar_degeneracy_score",
-        "visual_ok_count",
-        "visual_fail_count",
+        "correction_hz",
+        "ndt_correction_count",
+        "oosm_event_count",
+        "deferred_received_count",
+        "deferred_processed_count",
+        "deferred_over_limit_count",
+        "deferred_queue_full_count",
+        "max_deferred_queue_size",
+        "state_history_size",
+        "imu_history_size",
     ]:
         arr = vals(key)
         if arr:
             out[key + "_mean"] = float(np.mean(arr))
             out[key + "_max"] = float(np.max(arr))
             out[key + "_min"] = float(np.min(arr))
-    out["ok_count_last"] = int(rows[-1].get("ok_count", 0))
-    out["fail_count_last"] = int(rows[-1].get("fail_count", 0))
+    out["ndt_correction_count_last"] = int(rows[-1].get("ndt_correction_count", 0))
     return out
 
 

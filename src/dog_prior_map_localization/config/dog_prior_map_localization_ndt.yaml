@@ -3,9 +3,7 @@
 
 frames:
   map_frame: "camera_init"  # 与 FAST-LIVO2 建图/先验 PCD 坐标系保持一致
-  odom_frame: "odom"
   base_frame: "livox_frame" # MID360 雷达/IMU 一体，定位结果直接表示雷达坐标系
-  lidar_frame: "livox_frame"
 
 topics:
   imu: "/livox/imu"
@@ -16,8 +14,6 @@ topics:
   odom_corrected: "/dog_livo/odom_corrected"
   path_high_rate: "/dog_livo/path_high_rate"
   path_corrected: "/dog_livo/path_corrected"
-  debug_cloud: "/dog_livo/matched_scan"
-  prior_map: "/dog_livo/prior_map"
   filtered_points: "/dog_livo/filtered_points"
   diagnostics: "/dog_livo/diagnostics"
   ndt_odom: "/dog_livo/ndt_odom"
@@ -26,11 +22,8 @@ topics:
   points_aligned: "/dog_livo/points_aligned"
 
 map:
-  npz_path: "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_prior_map_voxel_0p30.npz"
   pcd_fallback_path: "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd"
   voxel_size: 0.15
-  local_radius: 18.0
-  max_map_points: 25000
 
 imu:
   gravity: 9.80665
@@ -50,21 +43,15 @@ ndt_observation:
   # Validated deterministic split baseline:
   # - OOSM enabled
   # - midpoint scan reference
-  # - EKF prediction disabled for NDT initialization
+  # - external EKF pose feedback is not consumed for NDT initialization
   # - NDT-local gyro rotation prior enabled
   oosm_enable: true
   oosm_max_alignment_sec: 0.02
 
 lidar_update:
-  registration_method: "ndt"
   # Validated deterministic split baseline keeps deskew disabled.
   deskew_enable: false
-  deskew_translation_enable: true
   offset_time_scale: 0.000000001
-  scan_voxel_size: 0.25
-  max_scan_points: 800
-  ndt_enable: true
-  ndt_absolute_pose_mode: true
   ndt_source_voxel_size: 0.25
   ndt_source_voxel_z_size: 0.25
   ndt_target_voxel_size: 0.15
@@ -78,22 +65,15 @@ lidar_update:
   ndt_step_limit_enable: true
   ndt_step_limit_max_translation: 0.5
   ndt_step_limit_max_rotation_deg: 5.0
-  # The validated baseline uses the local IMU gyro rotation prior instead of
-  # a timestamped EKF prediction for NDT initialization.
-  ndt_prediction_enable: false
+  # The validated baseline uses the local IMU gyro rotation prior and does not
+  # consume EKF pose feedback for NDT initialization.
   local_imu_rotation_prior_enable: true
-  ndt_prediction_max_age: 0.25
   # Use the validated midpoint reference time for each multi-point Livox scan.
   scan_reference_time: "mid"
-  # Stage 2B: keep a bounded sensor-time prediction history and delay pending
-  # LiDAR frames until the prediction timestamp watermark covers them.
-  prediction_history_keep_sec: 2.0
   pending_lidar_max_frames: 50
-  # Transport queues are deliberately larger than the bounded sensor-time
-  # pending queue.  They prevent ROS callback scheduling from silently
-  # dropping scans/predictions while one NDT alignment is running.
+  # The transport queue prevents ROS callback scheduling from silently
+  # dropping scans while one NDT alignment is running.
   lidar_subscriber_queue_size: 100
-  prediction_subscriber_queue_size: 1000
 
 output:
   path_max_length: 5000
@@ -107,5 +87,3 @@ output:
   debug_interval_sec: 2.0
   runtime_csv_path: "/home/jian/dog_prior_map_livo_ws/validation/latest_runtime.csv"
   oosm_csv_path: ""
-  # Stage 2D: optional EKF prediction/OOSM lineage diagnostics.
-  ekf_prediction_diagnostics_csv_path: ""

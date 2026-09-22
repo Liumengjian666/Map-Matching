@@ -33,7 +33,17 @@ Offline research probes remain opt-in and are not linked into the default
 runtime build.  A future sensor extension must enter through a typed external
 measurement module and must not restore a second map/matcher path inside EKF.
 
+The NDT node also does not consume EKF pose-prediction feedback.  Its
+timestamped scan initialization uses the previous accepted NDT pose and delta,
+optionally augmented by the bounded local IMU rotation prior.  The EKF receives
+the resulting timestamped NDT observation and performs the existing OOSM
+rollback/replay.  The former prediction subscriber/history branch was dead in
+the canonical configuration and is removed from the delivery source.
+
 The final code is intentionally conservative: no NDT mathematics, EKF update,
 OOSM policy, IMU propagation, topic contract, or coordinate convention was
 changed by the cleanup stages.  The cleanup removed unreachable code and
 resource ownership only.
+
+The file-level reachability and deferred user-owned boundary are recorded in
+[`FINAL_HYGIENE_1_REACHABILITY.md`](FINAL_HYGIENE_1_REACHABILITY.md).

@@ -47,7 +47,7 @@ Inputs:
 
 - `/livox/imu`
 - `/livox/lidar`
-- the prior PCD/NPZ map configured under `map/`
+- the prior PCD map configured under `map/pcd_fallback_path`
 
 Outputs:
 
@@ -109,23 +109,19 @@ executable.
 ## Legacy entry points
 
 The canonical entry point is the split launch above. The old integrated launch,
-Python fallback, and deploy-light-odom scripts are historical artifacts and
-are not installed or used by the canonical runtime. They remain temporarily
-because user-owned staged evaluation scripts still reference them; they are
-tracked as `DEFERRED_DUE_TO_USER_STAGED_WORK` in
-`docs/architecture/FINAL_CODE_REACHABILITY.md` and are not part of delivery.
+Python fallback, and deploy-light-odom helpers are not part of the canonical
+runtime. Files that are still referenced by user-owned staged evaluation
+scripts remain explicitly deferred and are tracked as
+`DEFERRED_DUE_TO_USER_STAGED_WORK` in
+`docs/architecture/FINAL_CODE_REACHABILITY.md`.
 
 The unused light-odom, KISS external-prior, and old integrated YAML profiles
 have been removed. `dog_prior_map_localization_ndt.yaml` is the only canonical
 configuration.
 
-## Map conversion
+## Map format
 
-For a faster NPZ map when desired:
-
-```bash
-rosrun dog_prior_map_localization pcd_to_npz_map.py \
-  --input /home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd \
-  --output /home/jian/rosbag/loop2/loop2mapping/pcd/loop2_prior_map_voxel_0p30.npz \
-  --voxel 0.30
-```
+The delivery NDT node loads the configured PCD map directly. The removed NPZ
+conversion helper was not part of the runtime path; existing historical NPZ
+files may remain as external data, but changing or regenerating them is not
+required for the canonical launch.

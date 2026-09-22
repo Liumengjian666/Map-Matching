@@ -9,13 +9,10 @@ option(
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  rospy
   sensor_msgs
   nav_msgs
   geometry_msgs
-  std_msgs
   diagnostic_msgs
-  tf2_ros
   tf
   pcl_ros
   pcl_conversions
@@ -28,7 +25,7 @@ find_package(PCL REQUIRED COMPONENTS common filters io kdtree registration)
 set(CMAKE_CXX_FLAGS "-O2 -g -Wall ${CMAKE_CXX_FLAGS}")
 
 catkin_package(
-  CATKIN_DEPENDS roscpp rospy sensor_msgs nav_msgs geometry_msgs std_msgs diagnostic_msgs tf2_ros tf pcl_ros pcl_conversions livox_ros_driver2
+  CATKIN_DEPENDS roscpp sensor_msgs nav_msgs geometry_msgs diagnostic_msgs tf pcl_ros pcl_conversions livox_ros_driver2
 )
 
 include_directories(
@@ -102,7 +99,6 @@ if(DOG_PRIOR_BUILD_RESEARCH_TOOLS)
 endif()
 
 catkin_install_python(PROGRAMS
-  scripts/pcd_to_npz_map.py
   scripts/evaluate_runtime_and_accuracy.py
   scripts/build_livox_keyframe_scan_db.py
   scripts/run_dataset_evaluation.sh

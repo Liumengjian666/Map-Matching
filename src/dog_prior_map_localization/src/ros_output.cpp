@@ -113,7 +113,7 @@ void DogPriorMapEkfNode::writeEkfPredictionLineage(const std::string &event_type
       << q.x() << "," << q.y() << "," << q.z() << "," << q.w() << ","
       << v_.x() << "," << v_.y() << "," << v_.z() << ","
       << last_ndt_observation_time_ << ","
-      << lidar_update_ok_count_ << ","
+      << ndt_correction_count_ << ","
       << imu_msg_count_ << ","
       << oosm_frame_index_ << ","
       << state_history_.size() << ","
@@ -193,45 +193,28 @@ void DogPriorMapEkfNode::maybePrintRuntime(const ros::Time &stamp)
   {
     last_debug_time_ = now;
     last_debug_imu_count_ = imu_msg_count_;
-    last_debug_update_ok_count_ = lidar_update_ok_count_;
+    last_debug_ndt_correction_count_ = ndt_correction_count_;
     return;
   }
 
   const double dt = std::max(now - last_debug_time_, 1e-6);
   const uint64_t imu_delta = imu_msg_count_ - last_debug_imu_count_;
-  const uint64_t update_delta = lidar_update_ok_count_ - last_debug_update_ok_count_;
-  const uint64_t update_total = std::max<uint64_t>(lidar_update_ok_count_ + lidar_update_fail_count_, 1);
-  const double avg_update_ms = lidar_update_time_sum_ms_ / static_cast<double>(update_total);
-  const uint64_t icp_total = std::max<uint64_t>(icp_update_ok_count_ + icp_update_fail_count_, 1);
-  const double avg_icp_ms = icp_update_time_sum_ms_ / static_cast<double>(icp_total);
+  const uint64_t correction_delta = ndt_correction_count_ - last_debug_ndt_correction_count_;
 
-  ROS_INFO("[DogPriorMap C++] runtime: imu=%.1fHz corr=%.2fHz ndt_ms(avg/max)=%.2f/%.2f oosm=%lu deferred=%lu/%lu ok/fail=%lu/%lu",
+  ROS_INFO("[DogPriorMap C++] runtime: imu=%.1fHz corr=%.2fHz oosm=%lu deferred=%lu/%lu ndt_corrections=%lu",
            static_cast<double>(imu_delta) / dt,
-           static_cast<double>(update_delta) / dt,
-           avg_icp_ms,
-           icp_update_time_max_ms_,
+           static_cast<double>(correction_delta) / dt,
            static_cast<unsigned long>(oosm_frame_index_),
            static_cast<unsigned long>(deferred_received_count_),
            static_cast<unsigned long>(deferred_processed_count_),
-           static_cast<unsigned long>(lidar_update_ok_count_),
-           static_cast<unsigned long>(lidar_update_fail_count_));
+           static_cast<unsigned long>(ndt_correction_count_));
 
   if (runtime_csv_.is_open())
   {
     runtime_csv_ << now << ","
                  << static_cast<double>(imu_delta) / dt << ","
-                 << static_cast<double>(update_delta) / dt << ","
-                 << avg_update_ms << ","
-                 << lidar_update_time_max_ms_ << ","
-                 << avg_icp_ms << ","
-                 << icp_update_time_max_ms_ << ","
-                 << icp_update_ok_count_ << ","
-                 << icp_update_fail_count_ << ","
-                 << last_used_points_ << ","
-                 << last_mean_residual_ << ","
-                 << lidar_update_ok_count_ << ","
-                 << lidar_update_fail_count_ << ","
-                 << "rss_sampled_by_ps" << ","
+                 << static_cast<double>(correction_delta) / dt << ","
+                 << ndt_correction_count_ << ","
                  << oosm_frame_index_ << ","
                  << deferred_received_count_ << ","
                  << deferred_processed_count_ << ","
@@ -246,7 +229,7 @@ void DogPriorMapEkfNode::maybePrintRuntime(const ros::Time &stamp)
 
   last_debug_time_ = now;
   last_debug_imu_count_ = imu_msg_count_;
-  last_debug_update_ok_count_ = lidar_update_ok_count_;
+  last_debug_ndt_correction_count_ = ndt_correction_count_;
 }
 
 }  // namespace dog_prior_map_localization

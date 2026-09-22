@@ -141,16 +141,6 @@ void DogPriorMapEkfNode::pruneStateHistory(double current_stamp)
   state_history_.pruneOlderThan(current_stamp, imu_history_keep_sec_);
 }
 
-bool DogPriorMapEkfNode::findStateSnapshotAtOrBefore(double target_stamp,
-                                                      size_t &index,
-                                                      double &alignment_error) const
-{
-  index = 0;
-  alignment_error = std::numeric_limits<double>::quiet_NaN();
-  if (!oosm_enable_ || !std::isfinite(target_stamp) || state_history_.empty()) return false;
-  return state_history_.findAtOrBefore(target_stamp, index, alignment_error);
-}
-
 void DogPriorMapEkfNode::eraseStateHistoryAfter(double stamp)
 {
   if (!oosm_enable_ || !std::isfinite(stamp)) return;

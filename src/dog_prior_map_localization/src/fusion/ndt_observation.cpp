@@ -97,11 +97,8 @@ void DogPriorMapEkfNode::processNdtObservationLocked(const nav_msgs::OdometryCon
   std::vector<ImuSample> replay_samples;
   const double last_ndt_time_before = last_ndt_observation_time_;
   const Eigen::Vector3d last_ndt_p_before = last_ndt_observation_p_map_;
-  const uint64_t lidar_update_ok_before = lidar_update_ok_count_;
-  const uint64_t icp_update_ok_before = icp_update_ok_count_;
+  const uint64_t ndt_correction_count_before = ndt_correction_count_;
   const uint64_t state_revision_before_oosm = ekf_state_revision_;
-  const int last_used_points_before = last_used_points_;
-  const double last_mean_residual_before = last_mean_residual_;
 
   const auto restoreOosmAttempt = [&]() {
     restoreStateSnapshot(state_before_oosm);
@@ -109,11 +106,8 @@ void DogPriorMapEkfNode::processNdtObservationLocked(const nav_msgs::OdometryCon
     state_history_ = history_before_oosm;
     last_ndt_observation_time_ = last_ndt_time_before;
     last_ndt_observation_p_map_ = last_ndt_p_before;
-    lidar_update_ok_count_ = lidar_update_ok_before;
-    icp_update_ok_count_ = icp_update_ok_before;
+    ndt_correction_count_ = ndt_correction_count_before;
     ekf_state_revision_ = state_revision_before_oosm;
-    last_used_points_ = last_used_points_before;
-    last_mean_residual_ = last_mean_residual_before;
   };
 
   const auto writeOosmResult = [&](const std::string &result) {
@@ -224,10 +218,7 @@ void DogPriorMapEkfNode::processNdtObservationLocked(const nav_msgs::OdometryCon
                             std::isfinite(t_now) && std::isfinite(t_ndt) ?
                                 (t_now - t_ndt) * 1000.0 :
                                 std::numeric_limits<double>::quiet_NaN());
-  ++lidar_update_ok_count_;
-  ++icp_update_ok_count_;
-  last_used_points_ = 0;
-  last_mean_residual_ = dp.norm();
+  ++ndt_correction_count_;
   if (!oosm_active) publishState(msg->header.stamp, true);
 
   const double dt = t_ndt - last_ndt_observation_time_;

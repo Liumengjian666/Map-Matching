@@ -52,9 +52,6 @@ private:
   void saveStateSnapshot(double stamp);
   void restoreStateSnapshot(const FilterStateSnapshot &snapshot);
   void pruneStateHistory(double current_stamp);
-  bool findStateSnapshotAtOrBefore(double target_stamp,
-                                   size_t &index,
-                                   double &alignment_error) const;
   void eraseStateHistoryAfter(double stamp);
 
   /// 将位置和小角度姿态修正反馈到当前导航状态。
@@ -120,7 +117,6 @@ private:
   double state_stamp_ = 0.0;
 
   std::string map_frame_;
-  std::string odom_frame_;
   std::string base_frame_;
   std::string imu_topic_;
   std::string ndt_observation_topic_;
@@ -215,24 +211,11 @@ private:
   std::string oosm_csv_path_;
   std::ofstream oosm_csv_;
   uint64_t oosm_frame_index_ = 0;
-  bool ekf_determinism_diagnostic_enable_ = false;
-  std::string ekf_ndt_feedback_csv_path_;
-  std::ofstream ekf_ndt_feedback_csv_;
-  uint64_t ekf_ndt_feedback_frame_index_ = 0;
   double last_debug_time_ = 0.0;
   uint64_t imu_msg_count_ = 0;
-  uint64_t lidar_update_ok_count_ = 0;
-  uint64_t lidar_update_fail_count_ = 0;
+  uint64_t ndt_correction_count_ = 0;
   uint64_t last_debug_imu_count_ = 0;
-  uint64_t last_debug_update_ok_count_ = 0;
-  double lidar_update_time_sum_ms_ = 0.0;
-  double lidar_update_time_max_ms_ = 0.0;
-  double icp_update_time_sum_ms_ = 0.0;
-  double icp_update_time_max_ms_ = 0.0;
-  uint64_t icp_update_ok_count_ = 0;
-  uint64_t icp_update_fail_count_ = 0;
-  int last_used_points_ = 0;
-  double last_mean_residual_ = 0.0;
+  uint64_t last_debug_ndt_correction_count_ = 0;
 
   nav_msgs::Path path_high_;
   nav_msgs::Path path_corr_;
