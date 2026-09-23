@@ -1,0 +1,61 @@
+PAPER-P3 frozen NDT runtime snapshot
+====================================
+
+Input bag (SHA256):
+  /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/derived/corridor01_adapted_v1.bag
+  60048c6369ea1065cc4dee2484ff38360620fa6b7321abc05b71e874f2b06345
+
+Normalized map (SHA256):
+  /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd
+  103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f
+
+Run C:
+  /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/frozen_baseline_derived_runC_20260923/
+
+Frames/topics:
+  map_frame: camera_init
+  base_frame: cmu_rc2_velodyne
+  imu_topic: /superloc_adapter/imu_lidar
+  lidar_topic: /superloc_adapter/points_deskewed
+  lidar_msg_type: pointcloud2
+  scan_reference_time: mid (runtime derived bag is start-referenced for scan stamp)
+
+Map/source preprocessing:
+  map voxel leaf: 0.15 m (x/y/z)
+  target voxel leaf: 0.15 m (x/y/z)
+  resulting NDT target points: 226164
+  source voxel leaf: 0.25 m (x/y), 0.25 m (z)
+  maximum source points: 1400 (deterministic uniform index sampling)
+  range filter: 0.5 <= sqrt(x^2+y^2+z^2) <= 80 m
+  z filter: unbounded in Run C
+  minimum effective source points: runtime default/launch value, all selected frames have 1400
+
+PCL NormalDistributionsTransform:
+  resolution: 0.8 m
+  step_size: 0.08
+  transformation_epsilon: 0.001
+  maximum_iterations: 40
+  PCL outlier_ratio: installed default 0.55
+  target local search: radiusSearch with NDT resolution, PCL 1.10 target voxel grid
+
+Runtime acceptance/post-processing:
+  step-limit enabled: true
+  maximum accepted translation step: 0.5 m
+  maximum accepted rotation step: 5 deg
+  local IMU rotation prior: enabled
+  future deferral: disabled for Run C
+  diagnostics determinism: enabled
+
+Online diagnostic semantics (frozen source):
+  dog_prior_map_ndt_node.cpp handleCloudLocked() calls ndt_.align(...)
+  and then ndt_.getFitnessScore().  The published `score`/`ndt_fitness`
+  is therefore PCL nearest-neighbour fitness (lower is better), not the
+  internal NDT likelihood/objective.
+
+Offline objective semantics:
+  the probe uses PCL 1.10 protected computeDerivatives() through a thin
+  public wrapper.  It evaluates the exact PCL score at a fixed transform;
+  this is the score summed by PCL updateDerivatives().  PCL's
+  transformation_probability_ is score / input point count.  For this
+  installation the raw score is higher (less outlier penalty) when the
+  NDT objective is better.  NN fitness must not be substituted for it.
