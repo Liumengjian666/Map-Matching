@@ -1,0 +1,10 @@
+SE3_POSITION_PASS
+SE3_ORIENTATION_PASS
+NO_SCALE_PASS
+FULL_ALIGNMENT_CONTAMINATION_TEST
+position_max_error=3.70678595964e-14
+orientation_max_error_deg=0
+scaled_rigid_rmse=5.9518283451
+full_alignment_prefix_rmse=51.1841912736
+prefix10_alignment_prefix_rmse=3.01949538114e-16
+FULL_ALIGNMENT_CONTAMINATION_PASS

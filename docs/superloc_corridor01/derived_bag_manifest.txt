@@ -1,0 +1,39 @@
+PAPER-P2B-R1 derived input manifest
+
+source bag:
+/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/raw_data_core_2023-07-25-03-01-44.bag
+source bag sha256:
+c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811
+
+derived bag:
+/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/derived/corridor01_adapted_v1.bag
+derived bag sha256:
+60048c6369ea1065cc4dee2484ff38360620fa6b7321abc05b71e874f2b06345
+derived bag size/duration/messages:
+1.7 GB / 279 s / 58722
+
+topics:
+/superloc_adapter/points_deskewed : sensor_msgs/PointCloud2, 2776 messages
+/superloc_adapter/imu_lidar       : sensor_msgs/Imu, 55946 messages
+
+derived cloud hashes:
+845c922e14d73cab8cba4331541ec5bfc94470b6acb1adce047098d2a90f77e8  derived_cloud_hashes.csv
+derived IMU hashes:
+3b1f45fd1a870c44aaa91bfd53052074c626d06c14aeb49f0995f14224526fd7  derived_imu_hashes.csv
+timestamp audit:
+109333795f0a96798d8af68d1cd14e5ab67d9b3d1407d12398a4242e59d28408  derived_timestamp_audit.json
+
+sensor timestamps:
+cloud first/last = 1517157219.188979 / 1517157499.058448
+IMU first/last   = 1517157219.214208 / 1517157499.161280
+cloud strictly monotonic = true; nonfinite/backward = 0
+IMU strictly monotonic   = true; nonfinite/backward = 0
+
+provenance:
+velodyne commit = 29abd0e1361cb7f5eda451d2b51c35eeca45e0d5
+extrinsics sha256 = 59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d
+adapter config sha256 = d737f60d97e784d4dc17ec380d2e860377bf31e6f945d4c20eecb47f530adf3f
+deskew = OFFICIAL_STYLE_ROTATION_ONLY; scan reference = start
+GT used during generation = false; future GT used = false
+
+Both Run C and Run D verified the same derived bag SHA before playback.
