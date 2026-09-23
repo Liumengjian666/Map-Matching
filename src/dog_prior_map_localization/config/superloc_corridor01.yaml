@@ -157,5 +157,5 @@ output: {}                                 # launch/base profile owns runtime ou
 
 evaluation:
   reference: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/gt/corridor01_gt.txt"
-  reference_sensor: "UNRESOLVED_LIDAR_OR_IMU_ORIGIN"
+  reference_sensor: "IMU (official SubT-MRS GT lineage; exact trajectory match)"
   absolute_world_transform: "UNRESOLVED"
