@@ -1,0 +1,5 @@
+Repository: https://github.com/Liumengjian666/Map-Matching.git
+Workspace: /home/jian/livox_ws/dog_visual_loc_ws
+Branch: feature/visual-factor-window
+Frozen baseline HEAD: 41999ea700c66c4cadf0eca9e0c5d73caa2783fd
+Paper workspace HEAD at experiment start: 427968cd588b39a345adf2043c1b427255c4a564

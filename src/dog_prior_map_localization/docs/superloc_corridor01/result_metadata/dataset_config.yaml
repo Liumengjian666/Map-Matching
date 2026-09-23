@@ -1,0 +1,77 @@
+# Exact dataset overlay copied from config/superloc_corridor01.yaml.
+dataset:
+  name: "SuperLoc Corridor01"
+  sensor: "Velodyne VLP-16 + Epson IMU"
+  input_bag: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/raw_data_core_2023-07-25-03-01-44.bag"
+  derived_bag: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/derived/corridor01_adapted_full_se3_v2.bag"
+  calibration: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/calibration/corridor01_extrinsics.yaml"
+  calibration_sha256: "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d"
+  raw_header_semantics: "VelodyneScan.header equals first packet stamp"
+
+topics:
+  lidar_input: "/velodyne_points"
+  lidar_raw: "/velodyne_points"
+  lidar_rotation_only: "/superloc_adapter/points_rot_only"
+  lidar: "/superloc_adapter/points_deskewed"
+  imu_input: "/imu/data"
+  imu: "/superloc_adapter/imu_lidar"
+  lidar_msg_type: "pointcloud2"
+  odom_history: "/dog_livo/ndt_odom"
+  motion_diagnostics: "/superloc_adapter/motion_diagnostics"
+
+frames:
+  map_frame: "camera_init"
+  base_frame: "cmu_rc2_velodyne"
+  lidar_input: "cmu_rc2_velodyne"
+  lidar: "cmu_rc2_velodyne"
+  imu_input: "epson"
+  imu_output: "cmu_rc2_velodyne"
+
+map:
+  path: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd"
+  pcd_fallback_path: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd"
+
+lidar_update:
+  deskew_enable: false
+  scan_reference_time: "start"
+
+preprocessing:
+  input_has_point_time: true
+  point_time_field: "time"
+  point_time_unit: "seconds_from_scan_start"
+  raw_scan_header_time_reference: "scan_start"
+  point_time_rule: "point_stamp = PointCloud2.header.stamp + point.time"
+  deskew:
+    enabled: true
+    location: "upstream_adapter"
+    rotational: true
+    translational: true
+    method: "full_se3_imu_state_propagation"
+    reference: "scan_start"
+    translation_model: "constant_world_velocity_from_two_prior_completed_odom_poses"
+    translation_pose_origin: "IMU_origin_derived_from_LiDAR_child_pose_and_calibrated_extrinsic"
+    rotation_source: "imu_gyro"
+    bootstrap_policy: "zero_IMU_origin_translation_until_two_prior_poses"
+    seed_topic: "/dog_livo/ndt_odom"
+    seed_pose_child_frame: "cmu_rc2_velodyne"
+    current_scan_pose_used: false
+    strict_imu_coverage: true
+    imu_max_interpolation_gap_sec: 0.02
+    velocity_window_min_sec: 0.05
+    velocity_max_age_sec: 0.25
+    velocity_safety_limit_mps: 12.0
+    internal_baseline_deskew: false
+    GT_used: false
+
+initialization:
+  method: "unchanged_frozen_baseline_initial_guess_with_runtime_NDT"
+
+evaluation:
+  reference_sensor: "corridor01_gt.txt (post-run evaluation only; never used by deskew)"
+
+extrinsics:
+  laser_to_imu:
+    rotation_row_major: [0.999212900, -0.000519121, 0.004000000,
+                         0.000516111, 0.999218492, -0.000939132,
+                         -0.004000000, 0.000802565, 0.999993652]
+    translation_m: [0.080000000, 0.029000000, 0.030000000]

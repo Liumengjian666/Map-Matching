@@ -1,0 +1,49 @@
+# Dataset-only overlay. Load after dog_prior_map_localization_ndt.yaml.
+# No full translational or rotational point-cloud motion compensation is active
+# in the current own-loop2 runtime configuration.
+dataset:
+  name: "Own loop2"
+  sensor: "Livox MID-360"
+  input_bag: "/home/jian/rosbag/loop2/raw_restore_20260914_stage0/loop2_raw.bag"
+
+topics:
+  lidar_input: "/livox/lidar"
+  lidar: "/livox/lidar"
+  imu_input: "/livox/imu"
+  imu: "/livox/imu"
+  lidar_msg_type: "livox"
+  odom_history: "/dog_livo/odom_corrected"
+
+frames:
+  map_frame: "camera_init"
+  lidar: "livox_frame"
+  imu_input: "livox_frame"
+  imu_output: "livox_frame"
+
+map:
+  pcd_fallback_path: "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd"
+
+lidar_update:
+  deskew_enable: false
+  scan_reference_time: "mid"
+
+preprocessing:
+  input_has_point_time: true
+  point_time_field: "offset_time"
+  point_time_unit: "nanoseconds_from_scan_start"
+  deskew:
+    enabled: false
+    location: "none_in_current_runtime"
+    rotational: false
+    translational: false
+    method: "disabled"
+    internal_baseline_deskew: false
+    GT_used: false
+
+initialization:
+  method: "current_runtime_IMU_gravity_initialization"
+
+extrinsics:
+  # The configured input/output frames are both livox_frame in the current
+  # pipeline; no separate LiDAR-to-IMU transform is applied by this overlay.
+  lidar_to_imu_effective: "identity_by_shared_frame_id"

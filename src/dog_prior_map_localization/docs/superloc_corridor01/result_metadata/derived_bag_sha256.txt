@@ -1,0 +1,1 @@
+7c52b3703f2f5f9b7fe291e579187c67c0181e015df6a9a8398cf4795b547ba0  /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/derived/corridor01_adapted_full_se3_v2.bag

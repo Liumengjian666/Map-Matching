@@ -1,5 +1,6 @@
 <launch>
   <arg name="config" default="$(find dog_prior_map_localization)/config/dog_prior_map_localization_ndt.yaml" />
+  <arg name="dataset_config" default="" />
   <arg name="rviz" default="false" />
   <arg name="camera_enable" default="false" />
   <arg name="publish_path" default="true" />
@@ -10,7 +11,7 @@
   <arg name="future_deferral_enable" default="false" />
   <arg name="future_deferral_max_sec" default="0.01" />
   <arg name="future_deferral_max_queue" default="20" />
-  <arg name="scan_reference_time" default="mid" />
+  <arg name="scan_reference_time" default="" />
   <arg name="oosm_csv_path" default="" />
   <arg name="deferred_csv_path" default="" />
   <arg name="ekf_prediction_diagnostics_csv_path" default="" />
@@ -26,6 +27,8 @@
   <arg name="both_degraded_enter_frames" default="3" />
   <arg name="recovery_exit_frames" default="5" />
   <rosparam command="load" file="$(arg config)" />
+  <rosparam command="load" file="$(arg dataset_config)"
+            if="$(eval arg('dataset_config') != '')" />
 
   <!--
     拆分版结构：
@@ -45,7 +48,8 @@
   <param name="ndt_observation/future_deferral_enable" value="$(arg future_deferral_enable)" />
   <param name="ndt_observation/future_deferral_max_sec" value="$(arg future_deferral_max_sec)" />
   <param name="ndt_observation/future_deferral_max_queue" value="$(arg future_deferral_max_queue)" />
-  <param name="lidar_update/scan_reference_time" value="$(arg scan_reference_time)" />
+  <param name="lidar_update/scan_reference_time" value="$(arg scan_reference_time)"
+         if="$(eval arg('scan_reference_time') != '')" />
   <param name="lidar_update/enable" value="false" />
   <param name="map/load_in_ekf" value="false" />
   <param name="output/runtime_csv_path" value="$(arg runtime_csv_path)" />

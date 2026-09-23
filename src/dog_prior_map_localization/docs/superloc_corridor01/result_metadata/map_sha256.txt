@@ -1,0 +1,2 @@
+103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f  /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd
+4b5231d58ebd4aeb4fc293559051dc30a18b6f07376237938d064962bfe8f40a  /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/corridor01.pcd

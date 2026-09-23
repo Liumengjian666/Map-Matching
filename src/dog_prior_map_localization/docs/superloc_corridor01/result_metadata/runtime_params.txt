@@ -1,0 +1,15 @@
+Frozen baseline: dog_visual_loc_ws, feature/visual-factor-window, 41999ea700c66c4cadf0eca9e0c5d73caa2783fd
+Paper code HEAD at run start: 427968cd588b39a345adf2043c1b427255c4a564
+Base config: /home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_localization/config/dog_prior_map_localization_ndt.yaml
+Base config SHA256: 482d11e26b998aad0fcb07840d9d8eede788291348c1a93a748a74edf1fe6b83
+Dataset overlay: /home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_localization/config/superloc_corridor01.yaml
+Dataset overlay SHA256: 4336afc2d82c17aa7e5949b3630599b9b3b31f461a0b85b72d574329356905f2
+Map: /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd
+Map SHA256: 103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f
+Input: /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/derived/corridor01_adapted_full_se3_v2.bag
+Input SHA256: 7c52b3703f2f5f9b7fe291e579187c67c0181e015df6a9a8398cf4795b547ba0
+Adapter: upstream full-SE3 CV deskew; baseline internal deskew=false; reference=start
+NDT: unchanged resolution=0.8 m, step_size=0.08, max_iterations=40, transformation_epsilon=0.001, max source points=1400, translation step cap=0.5 m, rotation step cap=5 deg, local IMU rotation prior enabled
+EKF/OOSM: frozen baseline parameters and behavior; OOSM enabled, maximum alignment interval=0.020 s; imu/use_acc_for_position=false
+Run settings: rviz=false; simulated time from bag; full 279.9843 s playback; runA and runB each replayed once
+Evaluation reference: official corridor01_gt.txt, post-run only; not used in deskew, init, or NDT

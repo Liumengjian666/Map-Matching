@@ -1,0 +1,35 @@
+dataset: "SuperLoc Corridor01"
+input_bag: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/raw_data_core_2023-07-25-03-01-44.bag"
+input_bag_sha256: "c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811"
+output_bag: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/derived/corridor01_adapted_full_se3_v2.bag"
+output_bag_sha256: "7c52b3703f2f5f9b7fe291e579187c67c0181e015df6a9a8398cf4795b547ba0"
+calibration: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/calibration/corridor01_extrinsics.yaml"
+calibration_sha256: "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d"
+normalized_map_sha256: "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f"
+adapter_workspace: "/home/jian/livox_ws/superloc_adapter_ws"
+adapter_git_revision: null
+adapter_source_sha256:
+  full_se3_deskew_hpp: "0cba8177a3542bbc9589e0e9418bc1db1727a66c572cad18eac592fe419f596e"
+  shared_runtime_cpp: "58c4073839247098b6f0f545065056be647336cc64631563f5d070d7dcd3b4e8"
+deskew:
+  enabled: true
+  location: "upstream_adapter"
+  reference: "scan_start"
+  rotational: "gyro integration with LiDAR/IMU extrinsic"
+  translational: "causal constant world velocity from two prior completed NDT poses"
+  translation_origin: "IMU origin with calibrated LiDAR lever arm"
+  current_scan_final_ndt_pose_used: false
+  accelerometer_double_integration_used: false
+  GT_used: false
+  strict_imu_coverage_no_extrapolation: true
+  bootstrap: "zero translation for first two scans until two prior completed poses exist"
+counts:
+  raw_scans: 2777
+  emitted_clouds: 2776
+  dropped_scans: 1
+  drop_reason: "imu_does_not_cover_scan_start on first scan"
+  adapted_imu_messages: 55957
+timestamp_audit:
+  cloud: "strictly monotonic; second replay hash/timestamps byte-identical"
+  imu: "strictly monotonic; second replay hash/timestamps byte-identical"
+generated_date: "2026-09-23"
