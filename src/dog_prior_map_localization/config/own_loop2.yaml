@@ -1,49 +1,155 @@
-# Dataset-only overlay. Load after dog_prior_map_localization_ndt.yaml.
-# No full translational or rotational point-cloud motion compensation is active
-# in the current own-loop2 runtime configuration.
+# Dataset overlay. Runtime namespaces are limited to the explicitly marked
+# compatibility keys below; descriptive sensor/calibration metadata is not
+# consumed by the localization nodes.
 dataset:
   name: "Own loop2"
-  sensor: "Livox MID-360"
+  source: "user-collected robot dataset"
+  platform: "quadruped robot"
+  sensor_suite: "Livox MID-360 + Hikrobot RGB camera"
   input_bag: "/home/jian/rosbag/loop2/raw_restore_20260914_stage0/loop2_raw.bag"
+  input_bag_sha256: "NOT_RECORDED_IN_THIS_STAGE"
+  derived_bag: "NOT_APPLICABLE_CURRENT_LOOP2_INPUT_IS_RAW"
+  derived_bag_sha256: "NOT_APPLICABLE"
+  calibration: "NOT_APPLICABLE_NO_PHYSICAL_MID360_LIDAR_IMU_CALIBRATION"
+  calibration_sha256: "NOT_APPLICABLE"
+  camera_calibration: "/home/jian/.ros/camera_info/hikrobot_camera.yaml"
+  camera_calibration_sha256: "NOT_RECORDED_IN_THIS_STAGE"
+
+frames:
+  map_frame: "camera_init"                 # RUNTIME_USED: map frame ID published by NDT
+  odom_frame: "odom"                       # METADATA_ONLY here; base profile owns runtime output
+  base_frame: "livox_frame"                # RUNTIME_USED: child frame; same configured LiDAR frame
+  lidar_frame: "livox_frame"
+  lidar_input: "livox_frame"
+  lidar: "livox_frame"
+  imu_frame: "livox_frame"
+  imu_input: "livox_frame"
+  imu_output: "livox_frame"
+  camera_frame: "hikrobot_camera"
+  map_semantics: "local PCD coordinate frame; not a global georeferenced frame"
 
 topics:
   lidar_input: "/livox/lidar"
-  lidar: "/livox/lidar"
+  lidar_raw: "/livox/lidar"
+  lidar_rotation_only: ""
+  lidar: "/livox/lidar"                    # RUNTIME_USED
+  lidar_msg_type: "livox"                  # RUNTIME_USED
   imu_input: "/livox/imu"
-  imu: "/livox/imu"
-  lidar_msg_type: "livox"
+  imu: "/livox/imu"                        # RUNTIME_USED
+  imu_output: "/livox/imu"
+  image: "/image_left/image_rect"
+  camera_info: "/image_left/camera_info_rect"
   odom_history: "/dog_livo/odom_corrected"
-
-frames:
-  map_frame: "camera_init"
-  lidar: "livox_frame"
-  imu_input: "livox_frame"
-  imu_output: "livox_frame"
+  motion_diagnostics: ""
 
 map:
-  pcd_fallback_path: "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd"
+  path: "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd"
+  pcd_fallback_path: "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd" # RUNTIME_USED
+  source: "loop2 prior-map PCD"
+  world_transform_status: "UNRESOLVED_NO_GLOBAL_WORLD_TRANSFORM"
 
-lidar_update:
-  deskew_enable: false
-  scan_reference_time: "mid"
+lidar:
+  available: true
+  model: "Livox MID-360"
+  message_type: "livox_ros_driver2/CustomMsg"
+  point_time_field: "offset_time"
+  point_time_unit: "nanoseconds_from_scan_start"
+
+imu:
+  available: true
+  model: "MID-360 integrated IMU"
+  frame: "livox_frame"
+  runtime_assumption: "same frame ID as LiDAR; no independently calibrated physical T_lidar_imu is currently applied"
+  gravity_initialization: "current runtime IMU gravity initialization"
+
+camera:
+  available: true
+  enabled: false                           # current split launch defaults camera_enable=false
+  topic: "/image_left/image_rect"
+  camera_info_topic: "/image_left/camera_info_rect"
+  frame: "hikrobot_camera"
+  model: "pinhole_rectified"
+  intrinsics:
+    width: 720
+    height: 540
+    fx: 404.61956787109375
+    fy: 404.0733337402344
+    cx: 352.0961769179812
+    cy: 268.1299251892142
+    source: "/home/jian/.ros/camera_info/hikrobot_camera.yaml projection_matrix; matches active FAST-LIVO2/runtime config"
+  distortion:
+    model: "plumb_bob_raw_calibration"
+    coefficients: [-0.2834433143146102, 0.10442683699228826, 0.0008406726202089348, -0.0003447772213801494, -0.020688134843208764]
+    source: "/home/jian/.ros/camera_info/hikrobot_camera.yaml distortion_coefficients"
+    active_topic_is_rectified: true
+    active_rectified_coefficients: [0.0, 0.0, 0.0, 0.0, 0.0]
+  model_parameters:
+    xi: "NOT_APPLICABLE_PINHOLE_MODEL"
+
+extrinsics:
+  # p_camera = T_camera_lidar * p_lidar. Source calibration stores
+  # X_camera = Rcl * X_lidar + Pcl; values below are copied in that direction.
+  T_camera_lidar:
+    status: "AVAILABLE_FROM_LAST_ACTIVE_LOOP2_FASTLIVO_CONFIG"
+    translation_m: [-0.002275880026, -0.1384637097, -0.05836058027]
+    rotation_row_major: [0.008746632885, -0.9995229208, 0.02962139622,
+                         0.3925737708, -0.02381193512, -0.9194122178,
+                         0.9196789281, 0.01967034435, 0.3921782078]
+    source: "/media/jian/HIKVISION/Jian_FASTLIVO_Data/dogrosbag/loop2_map_match_experiment_2026_08_08_17_36_19/config/loop2_config.yaml; corroborated by active config inverse T_base_camera"
+  T_imu_lidar:
+    status: "UNAVAILABLE_NOT_PHYSICALLY_CALIBRATED"
+    translation_m: "UNAVAILABLE"
+    rotation_row_major: "UNAVAILABLE"
+    source: "No separate MID-360 LiDAR/IMU calibration found in the active configuration"
+  # p_lidar = T_lidar_imu * p_imu. The runtime shares a frame ID, but that is
+  # an assumption, not a physical calibration; do not substitute identity.
+  T_lidar_imu:
+    status: "UNAVAILABLE_NOT_PHYSICALLY_CALIBRATED"
+    translation_m: "UNAVAILABLE"
+    rotation_row_major: "UNAVAILABLE"
+    source: "No separate MID-360 LiDAR/IMU calibration found in the active configuration"
+  T_imu_camera:
+    status: "NOT_REQUIRED_FOR_THIS_DATASET_OVERLAY"
+    translation_m: "UNAVAILABLE"
+    rotation_row_major: "UNAVAILABLE"
+    source: "Only T_camera_lidar is retained from the active FAST-LIVO2 config"
 
 preprocessing:
   input_has_point_time: true
   point_time_field: "offset_time"
   point_time_unit: "nanoseconds_from_scan_start"
+  raw_scan_header_time_reference: "scan_start"
   deskew:
     enabled: false
-    location: "none_in_current_runtime"
+    reference_time: "mid"
     rotational: false
     translational: false
-    method: "disabled"
+    method: "disabled_in_current_dataset_overlay"
+    location: "none_in_current_runtime"
+    translation_model: "NOT_APPLICABLE_DESKEW_DISABLED"
+    translation_pose_origin: "NOT_APPLICABLE_DESKEW_DISABLED"
+    rotation_source: "NOT_APPLICABLE_DESKEW_DISABLED"
+    seed_topic: "NOT_APPLICABLE_DESKEW_DISABLED"
+    current_scan_final_ndt_pose_used: false
+    accelerometer_double_integration_used: false
+    strict_imu_coverage_no_extrapolation: false
     internal_baseline_deskew: false
     GT_used: false
 
 initialization:
   method: "current_runtime_IMU_gravity_initialization"
+  initial_pose_file: "NOT_USED_BY_CURRENT_SPLIT_LAUNCH"
+  initial_pose_file_semantics: "not applicable; no external pose file is read"
 
-extrinsics:
-  # The configured input/output frames are both livox_frame in the current
-  # pipeline; no separate LiDAR-to-IMU transform is applied by this overlay.
-  lidar_to_imu_effective: "identity_by_shared_frame_id"
+ndt_observation: {}                        # launch owns runtime observation parameters
+
+lidar_update:
+  deskew_enable: false                     # RUNTIME_USED; prevents internal deskew
+  scan_reference_time: "mid"               # RUNTIME_USED
+
+output: {}                                 # launch/base profile owns runtime output parameters
+
+evaluation:
+  reference: "No external ground-truth trajectory declared for own_loop2"
+  reference_sensor: "UNAVAILABLE"
+  absolute_world_transform: "UNRESOLVED"

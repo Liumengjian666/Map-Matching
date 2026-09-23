@@ -1,81 +1,161 @@
-# Dataset-only overlay. Load after dog_prior_map_localization_ndt.yaml.
-# Algorithm/NDT/EKF parameters remain owned by the unchanged default profile.
+# Dataset overlay for the frozen SuperLoc Corridor01 baseline.
+# Runtime keys are explicitly marked; other sensor and calibration fields are
+# metadata and are not consumed by the localization nodes.
 dataset:
   name: "SuperLoc Corridor01"
-  sensor: "Velodyne VLP-16 + Epson IMU"
+  source: "SubT-MRS / official SuperLoc release"
+  platform: "RC2"
+  sensor_suite: "Velodyne VLP-16 + Epson M-G365 IMU + RGB camera"
   input_bag: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/raw_data_core_2023-07-25-03-01-44.bag"
+  input_bag_sha256: "c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811"
   derived_bag: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/derived/corridor01_adapted_full_se3_v2.bag"
+  derived_bag_sha256: "7c52b3703f2f5f9b7fe291e579187c67c0181e015df6a9a8398cf4795b547ba0"
   calibration: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/calibration/corridor01_extrinsics.yaml"
   calibration_sha256: "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d"
-  raw_header_semantics: "VelodyneScan.header equals first packet stamp (verified from official raw bag)"
+  camera_calibration: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/calibration/corridor01_intrinsics.yaml"
+  camera_calibration_sha256: "NOT_RECORDED_IN_THIS_STAGE"
+
+frames:
+  map_frame: "camera_init"                 # RUNTIME_USED: frame assigned to normalized PCD coordinates
+  odom_frame: "odom"                       # METADATA_ONLY here; base profile owns runtime output
+  base_frame: "cmu_rc2_velodyne"            # RUNTIME_USED: this dataset's output pose origin is LiDAR
+  lidar_frame: "cmu_rc2_velodyne"
+  lidar_input: "cmu_rc2_velodyne"
+  lidar: "cmu_rc2_velodyne"
+  imu_frame: "epson"
+  imu_input: "epson"
+  imu_output: "cmu_rc2_velodyne"
+  camera_frame: "NOT_SPECIFIED_BY_CURRENT_BAG_AUDIT"
+  map_semantics: "normalized PCD frame; official fixed map-to-GT-world transform unresolved"
 
 topics:
-  lidar_input: "/velodyne_points"
+  lidar_input: "/velodyne_points"            # adapter input after packet conversion
   lidar_raw: "/velodyne_points"
   lidar_rotation_only: "/superloc_adapter/points_rot_only"
-  lidar: "/superloc_adapter/points_deskewed"
+  lidar: "/superloc_adapter/points_deskewed" # RUNTIME_USED
+  lidar_msg_type: "pointcloud2"              # RUNTIME_USED
   imu_input: "/imu/data"
-  imu: "/superloc_adapter/imu_lidar"
-  lidar_msg_type: "pointcloud2"
+  imu: "/superloc_adapter/imu_lidar"         # RUNTIME_USED
+  imu_output: "/superloc_adapter/imu_lidar"
+  image: "/camera_1/image_raw"
+  camera_info: "NOT_PRESENT_IN_RAW_BAG"
   odom_history: "/dog_livo/ndt_odom"
   motion_diagnostics: "/superloc_adapter/motion_diagnostics"
 
-frames:
-  map_frame: "camera_init"
-  # Runtime node key is base_frame; lidar is retained as dataset metadata.
-  base_frame: "cmu_rc2_velodyne"
-  lidar_input: "cmu_rc2_velodyne"
-  lidar: "cmu_rc2_velodyne"
-  imu_input: "epson"
-  imu_output: "cmu_rc2_velodyne"
-
 map:
   path: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd"
-  pcd_fallback_path: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd"
+  pcd_fallback_path: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd" # RUNTIME_USED
+  source: "official Corridor01 GT map, converted/normalized for current baseline"
+  world_transform_status: "UNRESOLVED_NO_OFFICIAL_FIXED_MAP_WORLD_TRANSFORM"
 
-lidar_update:
-  # Deskew is upstream in the adapter; prevent a second correction in NDT.
-  deskew_enable: false
-  scan_reference_time: "start"
+lidar:
+  available: true
+  model: "Velodyne VLP-16"
+  message_type: "velodyne_msgs/VelodyneScan"
+  point_time_field: "time"
+  point_time_unit: "seconds_from_scan_start"
+
+imu:
+  available: true
+  model: "Epson M-G365"
+  frame: "epson"
+  runtime_assumption: "adapter re-expresses IMU measurements into the configured LiDAR child frame using official extrinsics"
+  gravity_initialization: "unchanged frozen baseline IMU gravity initialization"
+
+camera:
+  available: true
+  enabled: false                           # localization baseline launch disables visual updates
+  topic: "/camera_1/image_raw"
+  camera_info_topic: "NOT_PRESENT_IN_RAW_BAG"
+  frame: "NOT_SPECIFIED_BY_CURRENT_BAG_AUDIT"
+  model: "MEI_fisheye"
+  intrinsics:
+    width: 640
+    height: 480
+    fx: 771.6611713881042
+    fy: 688.7864250675316
+    cx: 317.73333375994946
+    cy: 233.53737010585292
+    source: "official Corridor01 corridor01_intrinsics.yaml projection_parameters"
+  distortion:
+    model: "radial_tangential"
+    coefficients: [-0.04701957438555236, 0.28058825271927323, 0.0004063627333225579, -0.00015239154341021015]
+    source: "official Corridor01 corridor01_intrinsics.yaml distortion_parameters"
+    active_topic_is_rectified: false
+    active_rectified_coefficients: "NOT_APPLICABLE_RAW_IMAGE_TOPIC"
+  model_parameters:
+    xi: 1.5967783801524584
+
+extrinsics:
+  # p_camera = T_camera_lidar * p_lidar.
+  # Derived as inverse(T_imu_camera) * T_imu_lidar from official calibration.
+  T_camera_lidar:
+    status: "DERIVED_FROM_OFFICIAL_CAMERA_IMU_AND_LIDAR_IMU_CALIBRATIONS"
+    translation_m: [0.0213135882065023, -0.0494388827604280, -0.0992778639860870]
+    rotation_row_major: [-0.0211004462691371, -0.9995568845122130, 0.0209953754784298,
+                         0.00361722592888706, -0.0210762387083302, -0.9997713277737510,
+                         0.9997708171595230, -0.0210196761665470, 0.00406034112247578]
+    source: "inv(T_imu_camera) * T_imu_lidar; source rotations projected to nearest proper SO(3) because official matrix values are rounded"
+  # p_imu = T_imu_lidar * p_lidar; direct official laser_to_imu direction.
+  T_imu_lidar:
+    status: "AVAILABLE_OFFICIAL_CALIBRATION"
+    translation_m: [0.08, 0.029, 0.03]
+    rotation_row_major: [0.9999918597233476, -0.0005161381080031, 0.0040017606742145,
+                         0.0005196241852026, 0.9999994864189841, -0.0008701450879252,
+                         -0.0040013095039469, 0.0008722174163331, 0.9999916143443562]
+    source: "official corridor01_extrinsics.yaml laser_to_imu, interpreted by official SuperOdom parameter/calibration code as T_imu_lidar"
+  # p_lidar = T_lidar_imu * p_imu; inverse of T_imu_lidar above.
+  T_lidar_imu:
+    status: "INVERSE_OF_OFFICIAL_T_IMU_LIDAR"
+    translation_m: [-0.0798943786, -0.0289848606, -0.0302946551]
+    rotation_row_major: [0.9999918597233480, 0.0005196241852027, -0.0040013095039469,
+                         -0.0005161381080030, 0.9999994864189843, 0.0008722174163331,
+                         0.0040017606742146, -0.0008701450879251, 0.9999916143443569]
+    source: "matrix inverse of official T_imu_lidar"
+  T_imu_camera:
+    status: "AVAILABLE_OFFICIAL_CALIBRATION"
+    translation_m: [0.17967550, 0.04727031, -0.01985536]
+    rotation_row_major: [-0.0205003466385239, -0.000372770849054233, 0.9997897763177990,
+                         -0.9995856044838150, -0.0202044021759871, -0.0205036933608671,
+                         0.0202077979113481, -0.9997958007386330, 0.0000415808737460180]
+    source: "official corridor01_extrinsics.yaml rgb_camera_to_imu"
 
 preprocessing:
   input_has_point_time: true
   point_time_field: "time"
   point_time_unit: "seconds_from_scan_start"
   raw_scan_header_time_reference: "scan_start"
-  point_time_rule: "point_stamp = PointCloud2.header.stamp + point.time"
   deskew:
     enabled: true
-    location: "upstream_adapter"
+    reference_time: "start"
     rotational: true
     translational: true
-    method: "full_se3_imu_state_propagation"
-    reference: "scan_start"
-    translation_model: "constant_world_velocity_from_two_prior_completed_odom_poses"
-    translation_pose_origin: "IMU_origin_derived_from_LiDAR_child_pose_and_calibrated_extrinsic"
-    rotation_source: "imu_gyro"
-    bootstrap_policy: "zero_IMU_origin_translation_until_two_prior_poses"
+    method: "FULL_SE3_CV_DESKEW"
+    location: "upstream_adapter"
+    translation_model: "causal constant world velocity from two prior completed NDT poses"
+    translation_pose_origin: "IMU origin derived from prior LiDAR pose and calibrated lever arm"
+    rotation_source: "IMU gyro plus LiDAR/IMU extrinsic"
     seed_topic: "/dog_livo/ndt_odom"
-    seed_pose_child_frame: "cmu_rc2_velodyne"
-    current_scan_pose_used: false
-    strict_imu_coverage: true
-    imu_max_interpolation_gap_sec: 0.02
-    velocity_window_min_sec: 0.05
-    velocity_max_age_sec: 0.25
-    velocity_safety_limit_mps: 12.0
+    current_scan_final_ndt_pose_used: false
+    accelerometer_double_integration_used: false
+    strict_imu_coverage_no_extrapolation: true
     internal_baseline_deskew: false
     GT_used: false
 
 initialization:
-  method: "unchanged_frozen_baseline_initial_guess_with_runtime_NDT"
+  method: "unchanged frozen baseline initial guess with runtime NDT"
+  initial_pose_file: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/initial_pose/corridor01.yaml"
+  initial_pose_file_semantics: "world_darpa fields present, but their direction/meaning is not proven and this baseline does not load this file"
+
+ndt_observation: {}                        # launch owns runtime observation parameters
+
+lidar_update:
+  deskew_enable: false                     # RUNTIME_USED: adapter already deskews; prevent second deskew
+  scan_reference_time: "start"              # RUNTIME_USED
+
+output: {}                                 # launch/base profile owns runtime output parameters
 
 evaluation:
-  reference_sensor: "corridor01_gt.txt (post-run evaluation only; never used by deskew)"
-
-extrinsics:
-  # T_imu_lidar: maps LiDAR-frame coordinates into IMU frame.
-  laser_to_imu:
-    rotation_row_major: [0.999212900, -0.000519121, 0.004000000,
-                         0.000516111, 0.999218492, -0.000939132,
-                         -0.004000000, 0.000802565, 0.999993652]
-    translation_m: [0.080000000, 0.029000000, 0.030000000]
+  reference: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/gt/corridor01_gt.txt"
+  reference_sensor: "UNRESOLVED_LIDAR_OR_IMU_ORIGIN"
+  absolute_world_transform: "UNRESOLVED"
