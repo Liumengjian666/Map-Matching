@@ -1,0 +1,11 @@
+sequence,phase,frozen_window,start_s,end_s,selected_counterfactual_frames,full_baseline_frames,counterfactual_available,semantics
+Corridor01,PHASE0,"R6 W0 (0, 3.068314] s; t=0 anchor excluded",0,3.06831407547,30,R4 S0,YES,reference-near / pre-failure; first-pair-relative; LiDAR-origin registration metric
+Corridor01,PHASE1,"R6 W1+W2; (3.068314,5.589692] + (5.589692,6.5] s",3.06831407547,6.5,34,R4 S1-S3 extend through 12 s; selected R6 ends at 6.5 s,"YES, early slice only",early failure onset; no later persistent-failure counterfactual in R6
+Corridor01,PHASE2,"R4 S4 [12,34.131304) s",12,34.131304166,0,220,NO,persistent moderate baseline failure; baseline timeline only
+Corridor01,PHASE3,"R4 S5+S6 [34.131304, end] s",34.131304166,end,0,2386,NO,rapid/severe baseline divergence; baseline timeline only
+Floor01,PHASE0,"R7I W0_PRE [15,20] s",15,20,50,full R7H timeline exists; first instant 0.25 m crossing 21.280282 s,YES,reference-near / pre-failure selected sample
+Floor01,PHASE1,"R7I W1_TRANSIENT [30,35] s",30,35,50,transient degradation before persistent 0.25 m at 38.223808 s,YES,early/transient degradation
+Floor01,PHASE1_TO_PHASE2_TRANSITION,"R7I W2_P025 [36,42] s",36,42,60,persistent 0.25 m crossing at 38.223808 s falls inside this window,YES,frozen window straddles transient-to-persistent boundary
+Floor01,PHASE2,"R7I W3_P050 [109,116] s",109,116,70,persistent 0.5 m crossing at 112.351752 s,YES,persistent moderate failure
+Floor01,PHASE2_TO_PHASE3_TRANSITION,"R7I W4_RAPID [137,142] s",137,142,49,persistent 1.0 m crossing at 139.078133 s; >5 m at 140.590976 s,YES,frozen rapid window straddles moderate-to-severe divergence
+Floor01,PHASE2_AND_PHASE3_TRANSITION,R7I W3+W4 persistent union (registered windows only),109,142,119,persistent union; not continuous full interval sample,YES,predeclared persistent-failure union for the R7I primary comparison

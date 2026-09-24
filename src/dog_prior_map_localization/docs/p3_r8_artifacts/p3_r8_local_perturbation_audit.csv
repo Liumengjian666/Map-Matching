@@ -1,0 +1,8 @@
+sequence,anchor,perturbations_n,standardized_near_015m_2deg_n,standardized_near_rate,source_legacy_stable_count,legacy_threshold,formal_threshold,interpretation
+Corridor01,ANCHOR_0P25,24,23,0.958333333333,16,0.10m/1deg raw stable flag,0.15m/2deg,"local perturbation only; not basin, stationarity, Hessian, or multimodality"
+Corridor01,ANCHOR_0P5,24,24,1,0,0.10m/1deg raw stable flag,0.15m/2deg,"local perturbation only; not basin, stationarity, Hessian, or multimodality"
+Corridor01,ANCHOR_LIDAR_0P5,24,22,0.916666666667,0,0.10m/1deg raw stable flag,0.15m/2deg,"local perturbation only; not basin, stationarity, Hessian, or multimodality"
+Floor01,A1_INSTANT_050,24,24,1,0,0.10m/1deg legacy flag,0.15m/2deg,"local perturbation only; not basin, stationarity, Hessian, or multimodality"
+Floor01,A2_PERSISTENT_025,24,0,0,0,0.10m/1deg legacy flag,0.15m/2deg,"local perturbation only; not basin, stationarity, Hessian, or multimodality"
+Floor01,A3_PERSISTENT_050,24,0,0,0,0.10m/1deg legacy flag,0.15m/2deg,"local perturbation only; not basin, stationarity, Hessian, or multimodality"
+Floor01,A4_PERSISTENT_100,24,0,0,0,0.10m/1deg legacy flag,0.15m/2deg,"local perturbation only; not basin, stationarity, Hessian, or multimodality"
