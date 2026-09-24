@@ -33,6 +33,12 @@ struct FilterStateSnapshot
   Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
   Eigen::Vector3d ba = Eigen::Vector3d::Zero();
   Eigen::Vector3d bg = Eigen::Vector3d::Zero();
+  // Sensor sample associated with this propagated timestamp and derived
+  // kinematics. These are used only to reconstruct short-horizon pose samples.
+  Eigen::Vector3d acc_measurement = Eigen::Vector3d::Zero();
+  Eigen::Vector3d gyro_measurement = Eigen::Vector3d::Zero();
+  Eigen::Vector3d acc_world = Eigen::Vector3d::Zero();
+  Eigen::Vector3d gyro_unbiased = Eigen::Vector3d::Zero();
   Matrix15d P = Matrix15d::Identity();
 };
 

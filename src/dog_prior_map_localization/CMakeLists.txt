@@ -40,6 +40,9 @@ add_executable(dog_prior_map_ekf_node_cpp
   src/dog_prior_map_ekf_node_core.cpp
   src/core/oosm_replay_planner.cpp
   src/core/state_history.cpp
+  src/core/imu_propagation.cpp
+  src/core/imu_deskew.cpp
+  src/imu_deskew_runtime.cpp
   src/imu_processor.cpp
   src/fusion/ndt_observation.cpp
   src/ros_output.cpp
@@ -60,6 +63,13 @@ add_executable(oosm_replay_planner_contract_test
   tests/oosm_replay_planner_contract_test.cpp
   src/core/oosm_replay_planner.cpp
   src/core/state_history.cpp
+)
+
+add_executable(imu_deskew_contract_test
+  tests/imu_deskew_contract_test.cpp
+  src/core/state_history.cpp
+  src/core/imu_propagation.cpp
+  src/core/imu_deskew.cpp
 )
 
 add_executable(dog_prior_map_ndt_node_cpp

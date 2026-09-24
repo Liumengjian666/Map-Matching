@@ -47,6 +47,14 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
                imu_init_count_, acc_avg.x(), acc_avg.y(), acc_avg.z());
     }
     gravity_initialized_ = true;
+    last_acc_measurement_ = Eigen::Vector3d(msg->linear_acceleration.x,
+                                             msg->linear_acceleration.y,
+                                             msg->linear_acceleration.z);
+    last_gyro_measurement_ = Eigen::Vector3d(msg->angular_velocity.x,
+                                              msg->angular_velocity.y,
+                                              msg->angular_velocity.z);
+    last_unbiased_gyro_ = last_gyro_measurement_ - bg_;
+    last_acc_world_ = R_ * (last_acc_measurement_ - ba_) + g_;
     last_imu_time_ = t;
     has_last_imu_ = true;
     has_state_stamp_ = true;
@@ -54,11 +62,20 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
     saveStateSnapshot(state_stamp_);
     if (future_deferral_enable_)
       processReadyDeferredNdtLocked();
+    processReadyImuDeskewCloudsLocked();
     return;
   }
 
   if (!has_last_imu_)
   {
+    last_acc_measurement_ = Eigen::Vector3d(msg->linear_acceleration.x,
+                                             msg->linear_acceleration.y,
+                                             msg->linear_acceleration.z);
+    last_gyro_measurement_ = Eigen::Vector3d(msg->angular_velocity.x,
+                                              msg->angular_velocity.y,
+                                              msg->angular_velocity.z);
+    last_unbiased_gyro_ = last_gyro_measurement_ - bg_;
+    last_acc_world_ = R_ * (last_acc_measurement_ - ba_) + g_;
     last_imu_time_ = t;
     has_last_imu_ = true;
     has_state_stamp_ = true;
@@ -66,6 +83,7 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
     saveStateSnapshot(state_stamp_);
     if (future_deferral_enable_)
       processReadyDeferredNdtLocked();
+    processReadyImuDeskewCloudsLocked();
     return;
   }
 
@@ -81,6 +99,7 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
   saveStateSnapshot(state_stamp_);
   if (future_deferral_enable_)
     processReadyDeferredNdtLocked();
+  processReadyImuDeskewCloudsLocked();
   if (publish_high_rate_) publishState(msg->header.stamp, false);
   maybePrintRuntime(msg->header.stamp);
 }
@@ -111,7 +130,7 @@ void DogPriorMapEkfNode::processReadyDeferredNdtLocked()
 
 void DogPriorMapEkfNode::saveStateSnapshot(double stamp)
 {
-  if (!oosm_enable_ || !has_state_stamp_ || !std::isfinite(stamp)) return;
+  if ((!oosm_enable_ && !imu_deskew_enable_) || !has_state_stamp_ || !std::isfinite(stamp)) return;
 
   FilterStateSnapshot snapshot;
   snapshot.stamp = stamp;
@@ -120,6 +139,10 @@ void DogPriorMapEkfNode::saveStateSnapshot(double stamp)
   snapshot.R = R_;
   snapshot.ba = ba_;
   snapshot.bg = bg_;
+  snapshot.acc_measurement = last_acc_measurement_;
+  snapshot.gyro_measurement = last_gyro_measurement_;
+  snapshot.acc_world = last_acc_world_;
+  snapshot.gyro_unbiased = last_unbiased_gyro_;
   snapshot.P = P_;
   state_history_.insertMonotonic(snapshot);
   pruneStateHistory(stamp);
@@ -132,18 +155,22 @@ void DogPriorMapEkfNode::restoreStateSnapshot(const FilterStateSnapshot &snapsho
   R_ = snapshot.R;
   ba_ = snapshot.ba;
   bg_ = snapshot.bg;
+  last_acc_measurement_ = snapshot.acc_measurement;
+  last_gyro_measurement_ = snapshot.gyro_measurement;
+  last_acc_world_ = snapshot.acc_world;
+  last_unbiased_gyro_ = snapshot.gyro_unbiased;
   P_ = snapshot.P;
 }
 
 void DogPriorMapEkfNode::pruneStateHistory(double current_stamp)
 {
-  if (!oosm_enable_ || !std::isfinite(current_stamp)) return;
+  if ((!oosm_enable_ && !imu_deskew_enable_) || !std::isfinite(current_stamp)) return;
   state_history_.pruneOlderThan(current_stamp, imu_history_keep_sec_);
 }
 
 void DogPriorMapEkfNode::eraseStateHistoryAfter(double stamp)
 {
-  if (!oosm_enable_ || !std::isfinite(stamp)) return;
+  if ((!oosm_enable_ && !imu_deskew_enable_) || !std::isfinite(stamp)) return;
   state_history_.eraseAfter(stamp);
 }
 
@@ -154,52 +181,19 @@ void DogPriorMapEkfNode::propagateImu(const Eigen::Vector3d &acc_m, const Eigen:
   // 机器狗端真正高频输出靠这一段：每个IMU到来就积分一次姿态、速度、位置。
   // 低频地图匹配只负责把漂移拉回来，不需要每帧都做重计算。
   const Eigen::Vector3d acc = acc_m - ba_;
-  const Eigen::Vector3d gyr = gyr_m - bg_;
-  const Eigen::Matrix3d dR = Eigen::AngleAxisd(gyr.norm() * dt, gyr.norm() > 1e-12 ? gyr.normalized() : Eigen::Vector3d::UnitX()).toRotationMatrix();
-  R_ = R_ * dR;
-
-  if (continuous_gravity_correction_enable_)
-  {
-    // ------------------------- 连续重力方向姿态约束 -------------------------
-    // 这不是Z轴位置阻尼：不直接修改p_.z，也不假设机器人必须在某个固定高度。
-    // 只在加速度模长接近9.8、角速度不大时，把“当前IMU测到的重力/比力方向”
-    // 缓慢对齐到地图Z轴，用来抑制roll/pitch漂移。roll/pitch一旦漂，雷达点投到
-    // 先验地图时高度会系统性偏掉，长走廊里就会表现成Z轴越走越歪。
-    const double acc_norm = acc_m.norm();
-    const double gyro_norm = gyr_m.norm();
-    if (acc_norm > 1e-3 &&
-        std::abs(acc_norm - gravity_correction_expected_acc_norm_) <= gravity_correction_acc_tolerance_ &&
-        gyro_norm <= gravity_correction_gyro_max_)
-    {
-      const Eigen::Vector3d measured_up_map = (R_ * acc_m.normalized()).normalized();
-      const Eigen::Vector3d expected_up_map = Eigen::Vector3d::UnitZ();
-      Eigen::Quaterniond q_full;
-      q_full.setFromTwoVectors(measured_up_map, expected_up_map);
-      Eigen::AngleAxisd aa(q_full);
-      Eigen::Vector3d rotvec = aa.axis() * aa.angle();
-      rotvec = limitVector(rotvec * gravity_correction_gain_, gravity_correction_max_angle_);
-      if (rotvec.allFinite() && rotvec.norm() > 1e-12)
-      {
-        R_ = Eigen::AngleAxisd(rotvec.norm(), rotvec.normalized()).toRotationMatrix() * R_;
-      }
-    }
-  }
-
-  if (use_acc_for_position_)
-  {
-    // 高精度IMU且零偏估计稳定时，可以启用完整加速度位置积分。
-    // 但MID360板载IMU直接裸积分会很快被零偏和重力误差放大，所以机器狗定位默认关闭。
-    const Eigen::Vector3d acc_world = R_ * acc + g_;
-    p_ = p_ + v_ * dt + 0.5 * acc_world * dt * dt;
-    v_ = v_ + acc_world * dt;
-  }
-  else
-  {
-    // 低算力定位默认模式：IMU负责高频姿态/短时平滑，位置主要由先验地图匹配修正。
-    // 这样不会因为几mg的加速度计零偏，在几十秒内把Z轴积分到几百米外。
-    p_ = p_ + v_ * dt;
-    v_ *= std::pow(std::max(0.0, std::min(1.0, velocity_damping_)), dt * 200.0);
-  }
+  ImuKinematicsConfig kinematics_config;
+  kinematics_config.use_acc_for_position = use_acc_for_position_;
+  kinematics_config.velocity_damping = velocity_damping_;
+  kinematics_config.continuous_gravity_correction_enable = continuous_gravity_correction_enable_;
+  kinematics_config.gravity_correction_expected_acc_norm = gravity_correction_expected_acc_norm_;
+  kinematics_config.gravity_correction_gain = gravity_correction_gain_;
+  kinematics_config.gravity_correction_max_angle = gravity_correction_max_angle_;
+  kinematics_config.gravity_correction_acc_tolerance = gravity_correction_acc_tolerance_;
+  kinematics_config.gravity_correction_gyro_max = gravity_correction_gyro_max_;
+  propagateImuKinematics(p_, v_, R_, ba_, bg_, acc_m, gyr_m, dt, g_,
+                         kinematics_config, last_acc_world_, last_unbiased_gyro_);
+  last_acc_measurement_ = acc_m;
+  last_gyro_measurement_ = gyr_m;
 
   // ------------------------- 协方差预测 -------------------------
   // 状态顺序: [位置p, 速度v, 姿态theta, 加计零偏ba, 陀螺零偏bg]，共15维。

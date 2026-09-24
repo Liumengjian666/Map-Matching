@@ -6,22 +6,43 @@ namespace dog_prior_map_localization
 // 发布当前导航状态；corrected 区分 LiDAR 校正结果和纯 IMU 高频传播结果。
 void DogPriorMapEkfNode::publishState(const ros::Time &stamp, bool corrected)
 {
+  Eigen::Vector3d output_position = p_;
+  Eigen::Vector3d output_linear_velocity = v_;
+  Eigen::Vector3d output_angular_velocity = Eigen::Vector3d::Zero();
+  Eigen::Matrix3d output_rotation = R_;
+  if (imu_deskew_enable_)
+  {
+    Eigen::Isometry3d T_world_imu = Eigen::Isometry3d::Identity();
+    T_world_imu.linear() = R_;
+    T_world_imu.translation() = p_;
+    const Eigen::Isometry3d T_world_lidar = T_world_imu * T_imu_lidar_;
+    output_position = T_world_lidar.translation();
+    output_rotation = T_world_lidar.linear();
+    const Eigen::Vector3d lidar_lever_arm_velocity =
+        R_ * last_unbiased_gyro_.cross(T_imu_lidar_.translation());
+    output_linear_velocity = output_rotation.transpose() * (v_ + lidar_lever_arm_velocity);
+    output_angular_velocity = T_imu_lidar_.linear().transpose() * last_unbiased_gyro_;
+  }
+
   nav_msgs::Odometry odom;
   odom.header.stamp = stamp;
   odom.header.frame_id = map_frame_;
   odom.child_frame_id = base_frame_;
-  odom.pose.pose.position.x = p_.x();
-  odom.pose.pose.position.y = p_.y();
-  odom.pose.pose.position.z = p_.z();
-  Eigen::Quaterniond q(R_);
+  odom.pose.pose.position.x = output_position.x();
+  odom.pose.pose.position.y = output_position.y();
+  odom.pose.pose.position.z = output_position.z();
+  Eigen::Quaterniond q(output_rotation);
   q.normalize();
   odom.pose.pose.orientation.x = q.x();
   odom.pose.pose.orientation.y = q.y();
   odom.pose.pose.orientation.z = q.z();
   odom.pose.pose.orientation.w = q.w();
-  odom.twist.twist.linear.x = v_.x();
-  odom.twist.twist.linear.y = v_.y();
-  odom.twist.twist.linear.z = v_.z();
+  odom.twist.twist.linear.x = output_linear_velocity.x();
+  odom.twist.twist.linear.y = output_linear_velocity.y();
+  odom.twist.twist.linear.z = output_linear_velocity.z();
+  odom.twist.twist.angular.x = output_angular_velocity.x();
+  odom.twist.twist.angular.y = output_angular_velocity.y();
+  odom.twist.twist.angular.z = output_angular_velocity.z();
 
   // Keep bounded, sensor-time-sampled trajectory histories.  The odometry
   // topics below remain high-rate; only the RViz Path messages are sampled.
@@ -58,7 +79,7 @@ void DogPriorMapEkfNode::publishState(const ros::Time &stamp, bool corrected)
   if (publish_tf_ && !corrected)
   {
     tf::Transform tf_msg;
-    tf_msg.setOrigin(tf::Vector3(p_.x(), p_.y(), p_.z()));
+    tf_msg.setOrigin(tf::Vector3(output_position.x(), output_position.y(), output_position.z()));
     tf_msg.setRotation(tf::Quaternion(q.x(), q.y(), q.z(), q.w()));
     tf_broadcaster_.sendTransform(tf::StampedTransform(tf_msg, stamp, map_frame_, base_frame_));
   }

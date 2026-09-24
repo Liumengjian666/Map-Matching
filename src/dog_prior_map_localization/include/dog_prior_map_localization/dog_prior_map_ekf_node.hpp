@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdint>
 #include <cstring>
 #include <deque>
 #include <fstream>
@@ -20,9 +21,11 @@
 #include <nav_msgs/Path.h>
 #include <ros/ros.h>
 #include <sensor_msgs/Imu.h>
+#include <sensor_msgs/PointCloud2.h>
 #include <tf/transform_broadcaster.h>
 
 #include "dog_prior_map_localization/core/estimator_types.hpp"
+#include "dog_prior_map_localization/core/imu_propagation.hpp"
 #include "dog_prior_map_localization/core/state_history.hpp"
 
 namespace dog_prior_map_localization
@@ -53,6 +56,30 @@ private:
   void restoreStateSnapshot(const FilterStateSnapshot &snapshot);
   void pruneStateHistory(double current_stamp);
   void eraseStateHistoryAfter(double stamp);
+  void imuDeskewCloudCallback(const sensor_msgs::PointCloud2ConstPtr &msg);
+  void processReadyImuDeskewCloudsLocked();
+  void writeImuDeskewDiagnostic(uint64_t scan_index,
+                                const std::string &status,
+                                const std::string &reason,
+                                double scan_start,
+                                double scan_end,
+                                double reference_stamp,
+                                std::size_t point_count_in,
+                                std::size_t point_count_out,
+                                double point_time_min,
+                                double point_time_max,
+                                double history_first_stamp,
+                                double history_last_stamp,
+                                double max_state_gap,
+                                std::size_t state_samples,
+                                double max_velocity,
+                                double max_acc_world,
+                                double max_gyro,
+                                double displacement_mean,
+                                double displacement_median,
+                                double displacement_p95,
+                                double displacement_max,
+                                double deskew_processing_ms = -1.0);
 
   /// 将位置和小角度姿态修正反馈到当前导航状态。
   void applyPoseCorrection(const Eigen::Vector3d &dp, const Eigen::Vector3d &dtheta);
@@ -103,9 +130,11 @@ private:
   ros::NodeHandle pnh_;
   ros::Subscriber sub_imu_;
   ros::Subscriber sub_ndt_observation_;
+  ros::Subscriber sub_imu_deskew_cloud_;
   ros::Publisher pub_high_;
   ros::Publisher pub_imu_propagate_;
   ros::Publisher pub_corr_;
+  ros::Publisher pub_imu_deskew_cloud_;
   ros::Publisher pub_path_high_;
   ros::Publisher pub_path_corr_;
   tf::TransformBroadcaster tf_broadcaster_;
@@ -133,6 +162,10 @@ private:
   Eigen::Vector3d bg_;
   Eigen::Vector3d g_;
   Matrix15d P_;
+  Eigen::Vector3d last_acc_measurement_ = Eigen::Vector3d::Zero();
+  Eigen::Vector3d last_gyro_measurement_ = Eigen::Vector3d::Zero();
+  Eigen::Vector3d last_acc_world_ = Eigen::Vector3d::Zero();
+  Eigen::Vector3d last_unbiased_gyro_ = Eigen::Vector3d::Zero();
 
   double gravity_norm_ = 9.80665;
   double max_imu_dt_ = 0.05;
@@ -158,6 +191,36 @@ private:
   std::deque<ImuSample> imu_history_;
   double imu_history_keep_sec_ = 2.0;
   StateHistory state_history_;
+
+  struct PendingImuDeskewCloud
+  {
+    uint64_t scan_index = 0;
+    sensor_msgs::PointCloud2ConstPtr msg;
+    double scan_start = 0.0;
+    double scan_end = 0.0;
+    double point_time_min = 0.0;
+    double point_time_max = 0.0;
+    std::size_t point_count = 0;
+  };
+  std::string deskew_mode_ = "legacy_prior_ndt_cv";
+  std::string deskew_input_topic_;
+  std::string deskew_output_topic_;
+  std::string deskew_time_field_ = "time";
+  std::string deskew_expected_lidar_frame_;
+  std::string deskew_reference_time_ = "start";
+  std::string deskew_state_frame_ = "lidar";
+  std::string deskew_csv_path_;
+  bool imu_deskew_enable_ = false;
+  double deskew_max_scan_duration_sec_ = 0.15;
+  double deskew_max_imu_gap_sec_ = 0.02;
+  double deskew_history_keep_sec_ = 2.0;
+  std::size_t deskew_max_pending_clouds_ = 8;
+  Eigen::Isometry3d T_imu_lidar_ = Eigen::Isometry3d::Identity();
+  ImuKinematicsConfig imu_kinematics_config_;
+  std::deque<PendingImuDeskewCloud> pending_imu_deskew_clouds_;
+  std::ofstream imu_deskew_csv_;
+  uint64_t imu_deskew_scan_index_ = 0;
+  double last_imu_deskew_input_stamp_ = -1.0;
 
   bool ndt_observation_enable_ = false;
   bool oosm_enable_ = false;

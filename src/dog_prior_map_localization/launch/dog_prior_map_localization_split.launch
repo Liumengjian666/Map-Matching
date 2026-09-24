@@ -15,6 +15,7 @@
   <arg name="oosm_csv_path" default="" />
   <arg name="deferred_csv_path" default="" />
   <arg name="ekf_prediction_diagnostics_csv_path" default="" />
+  <arg name="imu_deskew_csv_path" default="" />
   <arg name="diagnostic_determinism_enable" default="false" />
   <arg name="ndt_determinism_csv_path" default="" />
   <arg name="information_diagnostic_enable" default="false" />
@@ -57,6 +58,7 @@
   <param name="output/oosm_csv_path" value="$(arg oosm_csv_path)" />
   <param name="output/deferred_csv_path" value="$(arg deferred_csv_path)" />
   <param name="output/ekf_prediction_diagnostics_csv_path" value="$(arg ekf_prediction_diagnostics_csv_path)" />
+  <param name="output/imu_deskew_csv_path" value="$(arg imu_deskew_csv_path)" />
   <param name="output/ndt_diagnostics_csv_path" value="$(arg ndt_diagnostics_csv_path)" />
   <param name="output/diagnostic_determinism_enable" value="$(arg diagnostic_determinism_enable)" />
   <param name="output/ndt_determinism_csv_path" value="$(arg ndt_determinism_csv_path)" />

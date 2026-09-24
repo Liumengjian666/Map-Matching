@@ -1,5 +1,7 @@
 #include "dog_prior_map_localization/dog_prior_map_ekf_node.hpp"
 
+#include <stdexcept>
+
 namespace dog_prior_map_localization
 {
 
@@ -58,6 +60,81 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
       getParam<int>("ndt_observation/future_deferral_max_queue", 20)));
   deferred_csv_path_ = getParam<std::string>("output/deferred_csv_path", "");
 
+  deskew_mode_ = getParam<std::string>("deskew/mode", "legacy_prior_ndt_cv");
+  if (deskew_mode_ != "legacy_prior_ndt_cv" && deskew_mode_ != "ekf_imu_fastlio")
+  {
+    ROS_FATAL("[DogPriorMap C++] unsupported deskew/mode='%s'; retaining disabled experimental deskew",
+              deskew_mode_.c_str());
+    deskew_mode_ = "legacy_prior_ndt_cv";
+  }
+  imu_deskew_enable_ = deskew_mode_ == "ekf_imu_fastlio";
+  if (imu_deskew_enable_)
+  {
+    deskew_input_topic_ = getParam<std::string>("deskew/input_topic", "");
+    deskew_output_topic_ = getParam<std::string>("deskew/output_topic", "");
+    deskew_time_field_ = getParam<std::string>("deskew/point_time_field", "time");
+    deskew_expected_lidar_frame_ = getParam<std::string>("deskew/expected_lidar_frame", "");
+    deskew_reference_time_ = getParam<std::string>("deskew/reference_time", "start");
+    deskew_state_frame_ = getParam<std::string>("deskew/state_frame", "imu");
+    deskew_max_scan_duration_sec_ = getParam<double>("deskew/max_scan_duration_sec", 0.15);
+    deskew_max_imu_gap_sec_ = getParam<double>("deskew/max_imu_gap_sec", max_imu_dt_);
+    deskew_history_keep_sec_ = getParam<double>("deskew/history_keep_sec", imu_history_keep_sec_);
+    deskew_max_pending_clouds_ = static_cast<std::size_t>(std::max(1,
+        getParam<int>("deskew/max_pending_clouds", 8)));
+    deskew_csv_path_ = getParam<std::string>("output/imu_deskew_csv_path", "");
+
+    const std::vector<double> translation = getParam<std::vector<double>>(
+        "deskew/T_imu_lidar_translation_m", std::vector<double>());
+    const std::vector<double> rotation = getParam<std::vector<double>>(
+        "deskew/T_imu_lidar_rotation_row_major", std::vector<double>());
+    if (deskew_input_topic_.empty() || deskew_output_topic_.empty() ||
+        deskew_input_topic_ == deskew_output_topic_ || deskew_time_field_.empty() ||
+        deskew_expected_lidar_frame_.empty() || deskew_state_frame_ != "imu" ||
+        (deskew_reference_time_ != "start" && deskew_reference_time_ != "end") ||
+        !std::isfinite(deskew_max_scan_duration_sec_) || deskew_max_scan_duration_sec_ <= 0.0 ||
+        !std::isfinite(deskew_max_imu_gap_sec_) || deskew_max_imu_gap_sec_ <= 0.0 ||
+        !std::isfinite(deskew_history_keep_sec_) ||
+        deskew_history_keep_sec_ <= deskew_max_scan_duration_sec_ ||
+        translation.size() != 3 || rotation.size() != 9)
+    {
+      ROS_FATAL("[DogPriorMap C++] invalid ekf_imu_fastlio parameters; refusing unsafe frame/time setup");
+      throw std::runtime_error("invalid ekf_imu_fastlio deskew parameters");
+    }
+    imu_history_keep_sec_ = deskew_history_keep_sec_;
+    Eigen::Matrix3d raw_rotation;
+    for (int r = 0; r < 3; ++r)
+      for (int c = 0; c < 3; ++c)
+        raw_rotation(r, c) = rotation[static_cast<std::size_t>(r * 3 + c)];
+    if (!raw_rotation.allFinite() || raw_rotation.determinant() <= 0.0 ||
+        (raw_rotation.transpose() * raw_rotation - Eigen::Matrix3d::Identity()).norm() > 0.05)
+    {
+      ROS_FATAL("[DogPriorMap C++] T_imu_lidar rotation is not a plausible proper rotation");
+      throw std::runtime_error("invalid T_imu_lidar rotation");
+    }
+    Eigen::Quaterniond q_imu_lidar(raw_rotation);
+    if (!q_imu_lidar.coeffs().allFinite() || q_imu_lidar.norm() < 1e-12)
+    {
+      ROS_FATAL("[DogPriorMap C++] T_imu_lidar rotation quaternion is invalid");
+      throw std::runtime_error("invalid T_imu_lidar quaternion");
+    }
+    T_imu_lidar_.linear() = q_imu_lidar.normalized().toRotationMatrix();
+    T_imu_lidar_.translation() = Eigen::Vector3d(translation[0], translation[1], translation[2]);
+
+    if (!oosm_enable_ || !ndt_observation_enable_ || !use_acc_for_position_)
+    {
+      ROS_FATAL("[DogPriorMap C++] ekf_imu_fastlio requires OOSM, external NDT observation, and IMU acceleration propagation");
+      throw std::runtime_error("incomplete ekf_imu_fastlio state pipeline");
+    }
+    imu_kinematics_config_.use_acc_for_position = use_acc_for_position_;
+    imu_kinematics_config_.velocity_damping = velocity_damping_;
+    imu_kinematics_config_.continuous_gravity_correction_enable = continuous_gravity_correction_enable_;
+    imu_kinematics_config_.gravity_correction_expected_acc_norm = gravity_correction_expected_acc_norm_;
+    imu_kinematics_config_.gravity_correction_gain = gravity_correction_gain_;
+    imu_kinematics_config_.gravity_correction_max_angle = gravity_correction_max_angle_;
+    imu_kinematics_config_.gravity_correction_acc_tolerance = gravity_correction_acc_tolerance_;
+    imu_kinematics_config_.gravity_correction_gyro_max = gravity_correction_gyro_max_;
+  }
+
   path_max_length_ = std::max(1, getParam<int>("output/path_max_length", 5000));
   path_sample_rate_hz_ = getParam<double>("output/path_sample_rate_hz", 2.0);
   path_publish_rate_hz_ = getParam<double>("output/path_publish_rate_hz", 1.0);
@@ -80,6 +157,27 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     else
     {
       ROS_WARN("[DogPriorMap C++] failed to write runtime CSV: %s", runtime_csv_path_.c_str());
+    }
+  }
+  if (imu_deskew_enable_ && !deskew_csv_path_.empty())
+  {
+    imu_deskew_csv_.open(deskew_csv_path_, std::ios::out);
+    if (imu_deskew_csv_.is_open())
+    {
+      imu_deskew_csv_ << std::setprecision(17)
+          << "scan_index,status,reason,scan_start_stamp,scan_end_stamp,reference_stamp,"
+             "point_count_in,point_count_out,point_time_min_sec,point_time_max_sec,"
+             "history_first_stamp,history_last_stamp,max_state_gap_sec,state_samples_in_scan,"
+             "max_velocity_norm_mps,max_acc_world_norm_mps2,max_gyro_norm_radps,"
+             "point_displacement_mean_m,point_displacement_median_m,"
+             "point_displacement_p95_m,point_displacement_max_m,deskew_processing_ms,"
+             "point_time_convention,current_scan_ndt_leakage,future_measurement_used\n";
+      imu_deskew_csv_.flush();
+    }
+    else
+    {
+      ROS_WARN("[DogPriorMap C++] unable to write IMU deskew diagnostics: %s",
+               deskew_csv_path_.c_str());
     }
   }
   oosm_csv_path_ = getParam<std::string>("output/oosm_csv_path", "");
@@ -167,6 +265,16 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   path_corr_.header.frame_id = map_frame_;
 
   sub_imu_ = nh_.subscribe(imu_topic_, 500, &DogPriorMapEkfNode::imuCallback, this);
+  if (imu_deskew_enable_)
+  {
+    pub_imu_deskew_cloud_ = nh_.advertise<sensor_msgs::PointCloud2>(deskew_output_topic_, 8);
+    sub_imu_deskew_cloud_ = nh_.subscribe(deskew_input_topic_, 8,
+        &DogPriorMapEkfNode::imuDeskewCloudCallback, this);
+    ROS_INFO("[DogPriorMap C++] experimental IMU deskew mode=%s input=%s output=%s ref=%s T_imu_lidar=(%.3f %.3f %.3f)",
+             deskew_mode_.c_str(), deskew_input_topic_.c_str(), deskew_output_topic_.c_str(),
+             deskew_reference_time_.c_str(), T_imu_lidar_.translation().x(),
+             T_imu_lidar_.translation().y(), T_imu_lidar_.translation().z());
+  }
   if (ndt_observation_enable_)
   {
     sub_ndt_observation_ = nh_.subscribe(

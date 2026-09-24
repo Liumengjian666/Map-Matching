@@ -26,6 +26,7 @@ public:
   void eraseAfter(double stamp);
 
   const FilterStateSnapshot &at(std::size_t index) const;
+  const std::deque<FilterStateSnapshot> &samples() const noexcept { return snapshots_; }
 
   std::size_t size() const noexcept { return snapshots_.size(); }
   bool empty() const noexcept { return snapshots_.empty(); }

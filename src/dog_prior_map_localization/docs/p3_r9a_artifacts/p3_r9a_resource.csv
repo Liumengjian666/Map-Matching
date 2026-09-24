@@ -1,0 +1,7 @@
+run,metric_scope,sample_count,cpu_mean_percent_one_core,cpu_p95_percent_one_core,cpu_peak_percent_one_core,rss_mean_kib,rss_peak_kib,deskew_latency_mean_ms,deskew_latency_p95_ms,deskew_latency_peak_ms,state_samples_mean,state_samples_p95,state_samples_max,history_retention_config_sec
+run_a_v3,ekf,170,14.454799,16.97318,17.9871,16555.788,17184,,,,,,,2.0
+run_a_v3,ndt,170,13.908568,19.9675,26.9568,121109.51,121360,,,,,,,2.0
+run_a_v3,deskew,1651,,,,,,10.380617,14.115431,18.137382,19.784979,21,21,2.0
+run_b_v1,ekf,158,13.037135,16.973055,17.9749,16804.127,17528,,,,,,,2.0
+run_b_v1,ndt,158,12.664372,18.97093,24.9565,121424,121424,,,,,,,2.0
+run_b_v1,deskew,1651,,,,,,10.250285,14.214956,20.93469,19.784979,21,21,2.0

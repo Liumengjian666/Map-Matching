@@ -132,6 +132,15 @@ void DogPriorMapEkfNode::processNdtObservationLocked(const nav_msgs::OdometryCon
     return;
   }
   Eigen::Matrix3d R_target = q_target.normalized().toRotationMatrix();
+  if (imu_deskew_enable_)
+  {
+    Eigen::Isometry3d T_world_lidar = Eigen::Isometry3d::Identity();
+    T_world_lidar.linear() = R_target;
+    T_world_lidar.translation() = p_target;
+    const Eigen::Isometry3d T_world_imu = T_world_lidar * T_imu_lidar_.inverse();
+    p_target = T_world_imu.translation();
+    R_target = T_world_imu.linear();
+  }
 
   if (oosm_enable_)
   {
@@ -169,6 +178,10 @@ void DogPriorMapEkfNode::processNdtObservationLocked(const nav_msgs::OdometryCon
     state_before_oosm.R = R_;
     state_before_oosm.ba = ba_;
     state_before_oosm.bg = bg_;
+    state_before_oosm.acc_measurement = last_acc_measurement_;
+    state_before_oosm.gyro_measurement = last_gyro_measurement_;
+    state_before_oosm.acc_world = last_acc_world_;
+    state_before_oosm.gyro_unbiased = last_unbiased_gyro_;
     state_before_oosm.P = P_;
     history_before_oosm = state_history_;
     eraseStateHistoryAfter(rollback_stamp);
@@ -276,6 +289,7 @@ void DogPriorMapEkfNode::processNdtObservationLocked(const nav_msgs::OdometryCon
   }
 
   writeOosmResult(oosm_result);
+  processReadyImuDeskewCloudsLocked();
 }
 
 }  // namespace dog_prior_map_localization
