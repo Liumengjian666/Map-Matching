@@ -33,10 +33,14 @@ struct FilterStateSnapshot
   Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
   Eigen::Vector3d ba = Eigen::Vector3d::Zero();
   Eigen::Vector3d bg = Eigen::Vector3d::Zero();
-  // Sensor sample associated with this propagated timestamp and derived
-  // kinematics. These are used only to reconstruct short-horizon pose samples.
+  // Raw IMU sensor sample at exactly `stamp` (not an interval average).
   Eigen::Vector3d acc_measurement = Eigen::Vector3d::Zero();
   Eigen::Vector3d gyro_measurement = Eigen::Vector3d::Zero();
+  // Input used for the completed interval ending at `stamp`. These fields are
+  // diagnostic/replay metadata; the next interval is formed from raw samples.
+  Eigen::Vector3d interval_acc_input = Eigen::Vector3d::Zero();
+  Eigen::Vector3d interval_gyro_input = Eigen::Vector3d::Zero();
+  bool has_interval_input = false;
   Eigen::Vector3d acc_world = Eigen::Vector3d::Zero();
   Eigen::Vector3d gyro_unbiased = Eigen::Vector3d::Zero();
   Matrix15d P = Matrix15d::Identity();

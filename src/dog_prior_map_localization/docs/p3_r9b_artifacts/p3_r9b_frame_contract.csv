@@ -1,0 +1,8 @@
+contract,translation_error_m,rotation_error_rad,linear_twist_error,angular_twist_error,result
+identity,0,0,nan,nan,PASS
+pure_translation,0,0,nan,nan,PASS
+pure_rotation,0,3.10317e-17,nan,nan,PASS
+combined_rotation_translation,0,7.47342e-17,nan,nan,PASS
+ninety_degree_yaw,0,0,nan,nan,PASS
+nonzero_lever_arm,0,0,nan,nan,PASS
+twist_child_lidar,nan,nan,0,0,PASS

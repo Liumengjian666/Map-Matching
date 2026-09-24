@@ -1,0 +1,37 @@
+<launch>
+  <arg name="reference_time" default="start" />
+  <arg name="deskew_csv_path" default="" />
+  <arg name="runtime_csv_path" default="" />
+  <arg name="ndt_diagnostics_csv_path" default="" />
+  <arg name="oosm_csv_path" default="" />
+  <arg name="rviz" default="false" />
+
+  <node pkg="nodelet" type="nodelet" name="p3_r9b_velodyne_manager"
+        args="manager" output="screen" />
+  <node pkg="nodelet" type="nodelet" name="p3_r9b_velodyne_transform"
+        args="load velodyne_pointcloud/TransformNodelet p3_r9b_velodyne_manager"
+        output="screen">
+    <param name="model" value="VLP16" />
+    <param name="calibration"
+           value="/home/jian/livox_ws/ndt_landscape_ws/third_party/velodyne/velodyne_pointcloud/params/VLP16db.yaml" />
+    <param name="fixed_frame" value="" />
+    <param name="target_frame" value="" />
+    <param name="max_range" value="130.0" />
+    <param name="min_range" value="0.9" />
+    <param name="organize_cloud" value="false" />
+    <remap from="velodyne_packets" to="/input/velodyne_packets" />
+    <remap from="velodyne_points" to="/velodyne_points" />
+  </node>
+
+  <include file="$(find dog_prior_map_localization)/launch/dog_prior_map_localization_split.launch">
+    <arg name="config" value="$(find dog_prior_map_localization)/config/dog_prior_map_localization_ndt.yaml" />
+    <arg name="dataset_config" value="$(find dog_prior_map_localization)/config/superloc_floor01_imu_deskew_r9b.yaml" />
+    <arg name="rviz" value="$(arg rviz)" />
+    <arg name="runtime_csv_path" value="$(arg runtime_csv_path)" />
+    <arg name="ndt_diagnostics_csv_path" value="$(arg ndt_diagnostics_csv_path)" />
+    <arg name="oosm_csv_path" value="$(arg oosm_csv_path)" />
+    <arg name="imu_deskew_csv_path" value="$(arg deskew_csv_path)" />
+    <arg name="scan_reference_time" value="$(arg reference_time)" />
+  </include>
+  <param name="deskew/reference_time" value="$(arg reference_time)" />
+</launch>

@@ -1,4 +1,5 @@
 #include "dog_prior_map_localization/dog_prior_map_ekf_node.hpp"
+#include "dog_prior_map_localization/core/frame_conversions.hpp"
 
 namespace dog_prior_map_localization
 {
@@ -15,13 +16,13 @@ void DogPriorMapEkfNode::publishState(const ros::Time &stamp, bool corrected)
     Eigen::Isometry3d T_world_imu = Eigen::Isometry3d::Identity();
     T_world_imu.linear() = R_;
     T_world_imu.translation() = p_;
-    const Eigen::Isometry3d T_world_lidar = T_world_imu * T_imu_lidar_;
+    const Eigen::Isometry3d T_world_lidar = imuPoseToLidarPose(T_world_imu, T_imu_lidar_);
     output_position = T_world_lidar.translation();
     output_rotation = T_world_lidar.linear();
-    const Eigen::Vector3d lidar_lever_arm_velocity =
-        R_ * last_unbiased_gyro_.cross(T_imu_lidar_.translation());
-    output_linear_velocity = output_rotation.transpose() * (v_ + lidar_lever_arm_velocity);
-    output_angular_velocity = T_imu_lidar_.linear().transpose() * last_unbiased_gyro_;
+    const Eigen::Vector3d omega_at_stamp = last_gyro_measurement_ - bg_;
+    const LidarFrameTwist twist = imuTwistToLidarFrame(v_, omega_at_stamp, R_, T_imu_lidar_);
+    output_linear_velocity = twist.linear;
+    output_angular_velocity = twist.angular;
   }
 
   nav_msgs::Odometry odom;
@@ -207,8 +208,73 @@ void DogPriorMapEkfNode::publishPathsIfDue(const ros::Time &stamp)
 // 定期汇总 IMU、NDT 校正和 OOSM 运行统计，并可追加写入 CSV。
 void DogPriorMapEkfNode::maybePrintRuntime(const ros::Time &stamp)
 {
-  if (!print_debug_) return;
   const double now = stamp.toSec();
+  if (!std::isfinite(now)) return;
+  if (imu_deskew_enable_)
+  {
+    max_state_history_size_ = std::max<uint64_t>(max_state_history_size_, state_history_.size());
+    max_imu_history_size_ = std::max<uint64_t>(max_imu_history_size_, imu_history_.size());
+    max_pending_runtime_queue_size_ = std::max<uint64_t>(
+        max_pending_runtime_queue_size_, pending_imu_deskew_clouds_.size());
+    if (!std::isfinite(last_runtime_sample_stamp_))
+    {
+      last_runtime_sample_stamp_ = now;
+      last_debug_time_ = now;
+      last_debug_imu_count_ = imu_msg_count_;
+      last_debug_ndt_correction_count_ = ndt_correction_count_;
+      return;
+    }
+    if (now - last_runtime_sample_stamp_ < 1.0) return;
+
+    const double dt = std::max(now - last_debug_time_, 1e-6);
+    const uint64_t imu_delta = imu_msg_count_ - last_debug_imu_count_;
+    const uint64_t correction_delta = ndt_correction_count_ - last_debug_ndt_correction_count_;
+    if (print_debug_)
+    {
+      ROS_INFO("[DogPriorMap C++] runtime: imu=%.1fHz corr=%.2fHz state_hist=%zu imu_hist=%zu pending=%zu",
+               static_cast<double>(imu_delta) / dt,
+               static_cast<double>(correction_delta) / dt,
+               state_history_.size(), imu_history_.size(), pending_imu_deskew_clouds_.size());
+    }
+    if (runtime_csv_.is_open())
+    {
+      double history_span = 0.0;
+      if (state_history_.size() > 1)
+      {
+        const auto &samples = state_history_.samples();
+        history_span = samples.back().stamp - samples.front().stamp;
+      }
+      runtime_csv_ << std::setprecision(17)
+                   << now << ","
+                   << static_cast<double>(imu_delta) / dt << ","
+                   << static_cast<double>(correction_delta) / dt << ","
+                   << ndt_correction_count_ << ","
+                   << oosm_frame_index_ << ","
+                   << deferred_received_count_ << ","
+                   << deferred_processed_count_ << ","
+                   << deferred_over_limit_count_ << ","
+                   << deferred_queue_full_count_ << ","
+                   << max_deferred_queue_size_ << ","
+                   << state_history_.size() << ","
+                   << imu_history_.size() << ","
+                   << history_span << ","
+                   << pending_imu_deskew_clouds_.size() << ","
+                   << imu_deskew_raw_cloud_received_count_ << ","
+                   << max_state_history_size_ << ","
+                   << max_imu_history_size_ << ","
+                   << std::max<uint64_t>(max_pending_runtime_queue_size_,
+                                         max_pending_imu_deskew_clouds_size_)
+                   << "\n";
+      runtime_csv_.flush();
+    }
+    last_runtime_sample_stamp_ = now;
+    last_debug_time_ = now;
+    last_debug_imu_count_ = imu_msg_count_;
+    last_debug_ndt_correction_count_ = ndt_correction_count_;
+    return;
+  }
+
+  if (!print_debug_) return;
   if (last_debug_time_ > 0.0 && now - last_debug_time_ < debug_interval_sec_) return;
   if (last_debug_time_ <= 0.0)
   {

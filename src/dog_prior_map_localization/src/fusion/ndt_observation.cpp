@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "dog_prior_map_localization/core/math_utils.hpp"
+#include "dog_prior_map_localization/core/frame_conversions.hpp"
 #include <utility>
 
 #include "dog_prior_map_localization/core/oosm_replay_planner.hpp"
@@ -137,7 +138,7 @@ void DogPriorMapEkfNode::processNdtObservationLocked(const nav_msgs::OdometryCon
     Eigen::Isometry3d T_world_lidar = Eigen::Isometry3d::Identity();
     T_world_lidar.linear() = R_target;
     T_world_lidar.translation() = p_target;
-    const Eigen::Isometry3d T_world_imu = T_world_lidar * T_imu_lidar_.inverse();
+    const Eigen::Isometry3d T_world_imu = lidarPoseToImuPose(T_world_lidar, T_imu_lidar_);
     p_target = T_world_imu.translation();
     R_target = T_world_imu.linear();
   }
@@ -180,6 +181,9 @@ void DogPriorMapEkfNode::processNdtObservationLocked(const nav_msgs::OdometryCon
     state_before_oosm.bg = bg_;
     state_before_oosm.acc_measurement = last_acc_measurement_;
     state_before_oosm.gyro_measurement = last_gyro_measurement_;
+    state_before_oosm.interval_acc_input = last_interval_acc_input_;
+    state_before_oosm.interval_gyro_input = last_interval_gyro_input_;
+    state_before_oosm.has_interval_input = has_last_interval_input_;
     state_before_oosm.acc_world = last_acc_world_;
     state_before_oosm.gyro_unbiased = last_unbiased_gyro_;
     state_before_oosm.P = P_;
@@ -263,6 +267,7 @@ void DogPriorMapEkfNode::processNdtObservationLocked(const nav_msgs::OdometryCon
       }
       propagateImu(sample.acc, sample.gyro, replay_dt);
       state_stamp_ = sample.stamp;
+      last_imu_time_ = sample.stamp;
       saveStateSnapshot(state_stamp_);
     }
 

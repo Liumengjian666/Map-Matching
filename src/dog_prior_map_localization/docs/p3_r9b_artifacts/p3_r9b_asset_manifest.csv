@@ -1,0 +1,4 @@
+asset,path,size_bytes,sha256
+raw_input_bag,"/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/p3_r7_floor01_full_baseline/floor01_canonical_raw_inputs.bag",413681649,6383fdbdad0e3f8375069b33cc552ed069dafb91aec88f1673bc043e0f314e0b
+map_pcd,/tmp/floor01_candidates/floor01_h1_map.pcd,6595818,2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570
+calibration,"/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/calibration/floor01_extrinsics.yaml",919,fd9fbfb209d6715b4812a92d458cdeb32cbfd75160356a87802c2bda5dfa7414

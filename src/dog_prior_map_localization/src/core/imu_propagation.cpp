@@ -8,6 +8,31 @@
 namespace dog_prior_map_localization
 {
 
+ImuIntervalInput makeImuIntervalInput(const Eigen::Vector3d &head_acc,
+                                      const Eigen::Vector3d &head_gyro,
+                                      const Eigen::Vector3d &tail_acc,
+                                      const Eigen::Vector3d &tail_gyro,
+                                      ImuIntervalInputPolicy policy)
+{
+  ImuIntervalInput input;
+  if (policy == ImuIntervalInputPolicy::kMidpointAverage)
+  {
+    input.acc = 0.5 * (head_acc + tail_acc);
+    input.gyro = 0.5 * (head_gyro + tail_gyro);
+  }
+  else if (policy == ImuIntervalInputPolicy::kHeadSample)
+  {
+    input.acc = head_acc;
+    input.gyro = head_gyro;
+  }
+  else
+  {
+    input.acc = tail_acc;
+    input.gyro = tail_gyro;
+  }
+  return input;
+}
+
 void propagateImuKinematics(Eigen::Vector3d &p,
                             Eigen::Vector3d &v,
                             Eigen::Matrix3d &R,

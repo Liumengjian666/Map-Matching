@@ -1,0 +1,2 @@
+contract,translation_error_m,rotation_error_rad,linear_twist_error,angular_twist_error,result
+twist_child_lidar,nan,nan,0,0,PASS

@@ -20,6 +20,9 @@ ImuDeskewPose toPose(const FilterStateSnapshot &snapshot)
   pose.bg = snapshot.bg;
   pose.acc_measurement = snapshot.acc_measurement;
   pose.gyro_measurement = snapshot.gyro_measurement;
+  pose.interval_acc_input = snapshot.interval_acc_input;
+  pose.interval_gyro_input = snapshot.interval_gyro_input;
+  pose.has_interval_input = snapshot.has_interval_input;
   pose.acc_world = snapshot.acc_world;
   pose.gyro_unbiased = snapshot.gyro_unbiased;
   pose.latest_source_stamp = snapshot.stamp;
@@ -114,9 +117,11 @@ bool interpolateImuDeskewPose(const StateHistory &history,
                               const Eigen::Vector3d &gravity_world,
                               const ImuKinematicsConfig &propagation_config,
                               ImuDeskewPose &pose,
-                              std::string &reason)
+                              std::string &reason,
+                              double max_source_stamp)
 {
-  if (!std::isfinite(stamp) || !std::isfinite(max_gap_sec) || max_gap_sec <= 0.0)
+  if (!std::isfinite(stamp) || !std::isfinite(max_gap_sec) || max_gap_sec <= 0.0 ||
+      std::isnan(max_source_stamp))
   {
     reason = "invalid_interpolation_time";
     return false;
@@ -154,15 +159,28 @@ bool interpolateImuDeskewPose(const StateHistory &history,
     return false;
   }
 
-  // Reconstruct only from the latest state and IMU sample that are at or
-  // before this point's acquisition time. The next stored snapshot proves
-  // interval coverage but contributes no future measurement to this point.
+  // Snapshot measurements are raw samples at their own timestamps. Use the
+  // mature head/tail mean only when its tail is within the caller's admitted
+  // data horizon; the final scan-boundary fragment must not consume an IMU
+  // sample after scan_end.
   pose = toPose(*lower);
+  const bool tail_is_within_horizon = upper->stamp <= max_source_stamp + kStampEpsilon;
+  const bool midpoint = propagation_config.midpoint_interval_input_enable &&
+                        tail_is_within_horizon;
+  const ImuIntervalInput interval = makeImuIntervalInput(
+      lower->acc_measurement, lower->gyro_measurement,
+      upper->acc_measurement, upper->gyro_measurement,
+      midpoint ? ImuIntervalInputPolicy::kMidpointAverage :
+                 ImuIntervalInputPolicy::kHeadSample);
+  pose.interval_acc_input = interval.acc;
+  pose.interval_gyro_input = interval.gyro;
+  pose.has_interval_input = true;
   propagateImuKinematics(pose.p, pose.v, pose.R, pose.ba, pose.bg,
-                         pose.acc_measurement, pose.gyro_measurement, dt,
+                         interval.acc, interval.gyro, dt,
                          gravity_world, propagation_config,
                          pose.acc_world, pose.gyro_unbiased);
   pose.stamp = stamp;
+  pose.latest_source_stamp = midpoint ? upper->stamp : lower->stamp;
   if (!pose.p.allFinite() || !pose.v.allFinite() || !pose.R.allFinite() ||
       !pose.acc_world.allFinite() || !pose.gyro_unbiased.allFinite())
   {

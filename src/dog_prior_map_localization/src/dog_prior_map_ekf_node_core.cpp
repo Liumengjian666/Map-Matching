@@ -25,6 +25,8 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
 
   gravity_norm_ = getParam<double>("imu/gravity", 9.80665);
   initialize_gravity_from_imu_ = getParam<bool>("imu/initialize_gravity_from_imu", true);
+  initialize_gyro_bias_from_imu_ = getParam<bool>("imu/initialize_gyro_bias_from_imu", false);
+  midpoint_interval_input_enable_ = getParam<bool>("imu/midpoint_interval_input_enable", false);
   init_imu_samples_ = std::max(1, getParam<int>("imu/init_imu_samples", 200));
   max_imu_dt_ = getParam<double>("imu/max_dt", 0.05);
   publish_high_rate_ = getParam<bool>("imu/publish_high_rate", true);
@@ -81,6 +83,8 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     deskew_history_keep_sec_ = getParam<double>("deskew/history_keep_sec", imu_history_keep_sec_);
     deskew_max_pending_clouds_ = static_cast<std::size_t>(std::max(1,
         getParam<int>("deskew/max_pending_clouds", 8)));
+    deskew_input_subscriber_queue_size_ = static_cast<uint32_t>(std::max(1,
+        getParam<int>("deskew/input_subscriber_queue_size", 8)));
     deskew_csv_path_ = getParam<std::string>("output/imu_deskew_csv_path", "");
 
     const std::vector<double> translation = getParam<std::vector<double>>(
@@ -127,12 +131,18 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     }
     imu_kinematics_config_.use_acc_for_position = use_acc_for_position_;
     imu_kinematics_config_.velocity_damping = velocity_damping_;
+    imu_kinematics_config_.midpoint_interval_input_enable = midpoint_interval_input_enable_;
     imu_kinematics_config_.continuous_gravity_correction_enable = continuous_gravity_correction_enable_;
     imu_kinematics_config_.gravity_correction_expected_acc_norm = gravity_correction_expected_acc_norm_;
     imu_kinematics_config_.gravity_correction_gain = gravity_correction_gain_;
     imu_kinematics_config_.gravity_correction_max_angle = gravity_correction_max_angle_;
     imu_kinematics_config_.gravity_correction_acc_tolerance = gravity_correction_acc_tolerance_;
     imu_kinematics_config_.gravity_correction_gyro_max = gravity_correction_gyro_max_;
+  }
+  if (midpoint_interval_input_enable_ && !imu_deskew_enable_)
+  {
+    ROS_FATAL("[DogPriorMap C++] midpoint IMU intervals are restricted to the experimental IMU deskew mode");
+    throw std::runtime_error("midpoint IMU interval input requires ekf_imu_fastlio");
   }
 
   path_max_length_ = std::max(1, getParam<int>("output/path_max_length", 5000));
@@ -152,7 +162,14 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     runtime_csv_.open(runtime_csv_path_, std::ios::out);
     if (runtime_csv_.is_open())
     {
-      runtime_csv_ << "stamp,imu_hz,correction_hz,ndt_correction_count,oosm_event_count,deferred_received_count,deferred_processed_count,deferred_over_limit_count,deferred_queue_full_count,max_deferred_queue_size,state_history_size,imu_history_size\n";
+      if (imu_deskew_enable_)
+      {
+        runtime_csv_ << "stamp,imu_hz,correction_hz,ndt_correction_count,oosm_event_count,deferred_received_count,deferred_processed_count,deferred_over_limit_count,deferred_queue_full_count,max_deferred_queue_size,state_history_size,imu_history_size,state_history_span_sec,pending_cloud_queue_size,raw_cloud_received_count,state_history_peak,imu_history_peak,pending_cloud_queue_peak\n";
+      }
+      else
+      {
+        runtime_csv_ << "stamp,imu_hz,correction_hz,ndt_correction_count,oosm_event_count,deferred_received_count,deferred_processed_count,deferred_over_limit_count,deferred_queue_full_count,max_deferred_queue_size,state_history_size,imu_history_size\n";
+      }
     }
     else
     {
@@ -171,7 +188,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
              "max_velocity_norm_mps,max_acc_world_norm_mps2,max_gyro_norm_radps,"
              "point_displacement_mean_m,point_displacement_median_m,"
              "point_displacement_p95_m,point_displacement_max_m,deskew_processing_ms,"
-             "point_time_convention,current_scan_ndt_leakage,future_measurement_used\n";
+             "point_time_convention,current_scan_ndt_leakage,max_imu_source_stamp,post_scan_end_imu_used\n";
       imu_deskew_csv_.flush();
     }
     else
@@ -268,7 +285,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   if (imu_deskew_enable_)
   {
     pub_imu_deskew_cloud_ = nh_.advertise<sensor_msgs::PointCloud2>(deskew_output_topic_, 8);
-    sub_imu_deskew_cloud_ = nh_.subscribe(deskew_input_topic_, 8,
+    sub_imu_deskew_cloud_ = nh_.subscribe(deskew_input_topic_, deskew_input_subscriber_queue_size_,
         &DogPriorMapEkfNode::imuDeskewCloudCallback, this);
     ROS_INFO("[DogPriorMap C++] experimental IMU deskew mode=%s input=%s output=%s ref=%s T_imu_lidar=(%.3f %.3f %.3f)",
              deskew_mode_.c_str(), deskew_input_topic_.c_str(), deskew_output_topic_.c_str(),

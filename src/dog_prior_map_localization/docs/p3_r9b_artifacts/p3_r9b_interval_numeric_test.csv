@@ -1,0 +1,3 @@
+trajectory,imu_hz,lidar_hz,scan_duration_sec,orientation_error_rad,velocity_error_mps,position_error_m,deskew_point_error_m,result
+R9A_ZOH,200,10,0.1,3.43893e-18,0.000110963,5.54814e-06,1.25007e-06,MEASURED
+R9B_HEAD_TAIL_MEAN,200,10,0.1,3.43893e-18,5.54814e-05,2.77407e-06,6.24166e-07,PASS

@@ -21,6 +21,7 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
   {
     imu_history_.pop_front();
   }
+  max_imu_history_size_ = std::max<uint64_t>(max_imu_history_size_, imu_history_.size());
 
   if (initialize_gravity_from_imu_ && !gravity_initialized_)
   {
@@ -29,6 +30,7 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
     // 若直接假设初始姿态为单位阵，而设备有一点俯仰/横滚，积分会把重力当运动加速度，
     // 于是Z轴会快速飘到几十米甚至几万米。这里用前N帧静止IMU平均值对齐roll/pitch。
     imu_acc_sum_ += Eigen::Vector3d(msg->linear_acceleration.x, msg->linear_acceleration.y, msg->linear_acceleration.z);
+    imu_gyro_sum_ += Eigen::Vector3d(msg->angular_velocity.x, msg->angular_velocity.y, msg->angular_velocity.z);
     ++imu_init_count_;
     if (imu_init_count_ < init_imu_samples_)
     {
@@ -38,21 +40,32 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
     }
 
     Eigen::Vector3d acc_avg = imu_acc_sum_ / static_cast<double>(imu_init_count_);
+    const Eigen::Vector3d gyro_avg = imu_gyro_sum_ / static_cast<double>(imu_init_count_);
+    const Eigen::Vector3d bg_before = bg_;
     if (acc_avg.norm() > 1e-3)
     {
       Eigen::Quaterniond q_align;
       q_align.setFromTwoVectors(acc_avg.normalized(), Eigen::Vector3d::UnitZ());
       R_ = q_align.toRotationMatrix() * R_;
-      ROS_INFO("[DogPriorMap C++] IMU gravity init complete: samples=%d acc_avg=(%.3f %.3f %.3f)",
-               imu_init_count_, acc_avg.x(), acc_avg.y(), acc_avg.z());
+      if (initialize_gyro_bias_from_imu_)
+        bg_ = gyro_avg;
+      ROS_INFO("[DogPriorMap C++] IMU init complete: samples=%d stamp=%.9f acc_mean=(%.9f %.9f %.9f) gyro_mean=(%.12g %.12g %.12g) bg_before=(%.12g %.12g %.12g) bg_after=(%.12g %.12g %.12g) gyro_bias_enabled=%d",
+               imu_init_count_, t, acc_avg.x(), acc_avg.y(), acc_avg.z(),
+               gyro_avg.x(), gyro_avg.y(), gyro_avg.z(),
+               bg_before.x(), bg_before.y(), bg_before.z(),
+               bg_.x(), bg_.y(), bg_.z(), initialize_gyro_bias_from_imu_ ? 1 : 0);
     }
     gravity_initialized_ = true;
+    gravity_init_completion_stamp_ = t;
     last_acc_measurement_ = Eigen::Vector3d(msg->linear_acceleration.x,
                                              msg->linear_acceleration.y,
                                              msg->linear_acceleration.z);
     last_gyro_measurement_ = Eigen::Vector3d(msg->angular_velocity.x,
                                               msg->angular_velocity.y,
                                               msg->angular_velocity.z);
+    last_interval_acc_input_.setZero();
+    last_interval_gyro_input_.setZero();
+    has_last_interval_input_ = false;
     last_unbiased_gyro_ = last_gyro_measurement_ - bg_;
     last_acc_world_ = R_ * (last_acc_measurement_ - ba_) + g_;
     last_imu_time_ = t;
@@ -74,6 +87,9 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
     last_gyro_measurement_ = Eigen::Vector3d(msg->angular_velocity.x,
                                               msg->angular_velocity.y,
                                               msg->angular_velocity.z);
+    last_interval_acc_input_.setZero();
+    last_interval_gyro_input_.setZero();
+    has_last_interval_input_ = false;
     last_unbiased_gyro_ = last_gyro_measurement_ - bg_;
     last_acc_world_ = R_ * (last_acc_measurement_ - ba_) + g_;
     last_imu_time_ = t;
@@ -88,12 +104,35 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
   }
 
   const double dt = t - last_imu_time_;
-  last_imu_time_ = t;
-  if (dt <= 0.0 || dt > max_imu_dt_) return;
+  const Eigen::Vector3d acc(msg->linear_acceleration.x, msg->linear_acceleration.y, msg->linear_acceleration.z);
+  const Eigen::Vector3d gyr(msg->angular_velocity.x, msg->angular_velocity.y, msg->angular_velocity.z);
+  if (dt <= 0.0)
+  {
+    if (!midpoint_interval_input_enable_) last_imu_time_ = t;
+    return;
+  }
+  if (dt > max_imu_dt_)
+  {
+    last_imu_time_ = t;
+    if (midpoint_interval_input_enable_)
+    {
+      // Do not form a midpoint across an interval that was deliberately
+      // dropped. Rebase the raw sample cursor so later valid intervals can
+      // resume; state history remains discontinuous and deskew coverage will
+      // reject scans spanning the missing propagation interval.
+      last_acc_measurement_ = acc;
+      last_gyro_measurement_ = gyr;
+      last_interval_acc_input_.setZero();
+      last_interval_gyro_input_.setZero();
+      has_last_interval_input_ = false;
+      last_unbiased_gyro_ = gyr - bg_;
+      last_acc_world_ = R_ * (acc - ba_) + g_;
+    }
+    return;
+  }
 
-  Eigen::Vector3d acc(msg->linear_acceleration.x, msg->linear_acceleration.y, msg->linear_acceleration.z);
-  Eigen::Vector3d gyr(msg->angular_velocity.x, msg->angular_velocity.y, msg->angular_velocity.z);
   propagateImu(acc, gyr, dt);
+  last_imu_time_ = t;
   has_state_stamp_ = true;
   state_stamp_ = t;
   saveStateSnapshot(state_stamp_);
@@ -141,11 +180,15 @@ void DogPriorMapEkfNode::saveStateSnapshot(double stamp)
   snapshot.bg = bg_;
   snapshot.acc_measurement = last_acc_measurement_;
   snapshot.gyro_measurement = last_gyro_measurement_;
+  snapshot.interval_acc_input = last_interval_acc_input_;
+  snapshot.interval_gyro_input = last_interval_gyro_input_;
+  snapshot.has_interval_input = has_last_interval_input_;
   snapshot.acc_world = last_acc_world_;
   snapshot.gyro_unbiased = last_unbiased_gyro_;
   snapshot.P = P_;
   state_history_.insertMonotonic(snapshot);
   pruneStateHistory(stamp);
+  max_state_history_size_ = std::max<uint64_t>(max_state_history_size_, state_history_.size());
 }
 
 void DogPriorMapEkfNode::restoreStateSnapshot(const FilterStateSnapshot &snapshot)
@@ -157,9 +200,16 @@ void DogPriorMapEkfNode::restoreStateSnapshot(const FilterStateSnapshot &snapsho
   bg_ = snapshot.bg;
   last_acc_measurement_ = snapshot.acc_measurement;
   last_gyro_measurement_ = snapshot.gyro_measurement;
+  last_interval_acc_input_ = snapshot.interval_acc_input;
+  last_interval_gyro_input_ = snapshot.interval_gyro_input;
+  has_last_interval_input_ = snapshot.has_interval_input;
   last_acc_world_ = snapshot.acc_world;
   last_unbiased_gyro_ = snapshot.gyro_unbiased;
   P_ = snapshot.P;
+  last_imu_time_ = snapshot.stamp;
+  has_last_imu_ = true;
+  state_stamp_ = snapshot.stamp;
+  has_state_stamp_ = true;
 }
 
 void DogPriorMapEkfNode::pruneStateHistory(double current_stamp)
@@ -180,7 +230,11 @@ void DogPriorMapEkfNode::propagateImu(const Eigen::Vector3d &acc_m, const Eigen:
   // ------------------------- IMU高频传播 -------------------------
   // 机器狗端真正高频输出靠这一段：每个IMU到来就积分一次姿态、速度、位置。
   // 低频地图匹配只负责把漂移拉回来，不需要每帧都做重计算。
-  const Eigen::Vector3d acc = acc_m - ba_;
+  const ImuIntervalInput interval = makeImuIntervalInput(
+      last_acc_measurement_, last_gyro_measurement_, acc_m, gyr_m,
+      midpoint_interval_input_enable_ && has_last_imu_ ?
+          ImuIntervalInputPolicy::kMidpointAverage : ImuIntervalInputPolicy::kTailSample);
+  const Eigen::Vector3d acc = interval.acc - ba_;
   ImuKinematicsConfig kinematics_config;
   kinematics_config.use_acc_for_position = use_acc_for_position_;
   kinematics_config.velocity_damping = velocity_damping_;
@@ -190,8 +244,11 @@ void DogPriorMapEkfNode::propagateImu(const Eigen::Vector3d &acc_m, const Eigen:
   kinematics_config.gravity_correction_max_angle = gravity_correction_max_angle_;
   kinematics_config.gravity_correction_acc_tolerance = gravity_correction_acc_tolerance_;
   kinematics_config.gravity_correction_gyro_max = gravity_correction_gyro_max_;
-  propagateImuKinematics(p_, v_, R_, ba_, bg_, acc_m, gyr_m, dt, g_,
+  propagateImuKinematics(p_, v_, R_, ba_, bg_, interval.acc, interval.gyro, dt, g_,
                          kinematics_config, last_acc_world_, last_unbiased_gyro_);
+  last_interval_acc_input_ = interval.acc;
+  last_interval_gyro_input_ = interval.gyro;
+  has_last_interval_input_ = has_last_imu_;
   last_acc_measurement_ = acc_m;
   last_gyro_measurement_ = gyr_m;
 

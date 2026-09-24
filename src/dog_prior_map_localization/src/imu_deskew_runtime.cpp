@@ -68,6 +68,7 @@ void DogPriorMapEkfNode::imuDeskewCloudCallback(const sensor_msgs::PointCloud2Co
   if (!imu_deskew_enable_ || !msg) return;
   std::lock_guard<std::mutex> lock(mutex_);
   const uint64_t scan_index = ++imu_deskew_scan_index_;
+  ++imu_deskew_raw_cloud_received_count_;
   const double scan_start = msg->header.stamp.toSec();
   const std::size_t point_count = static_cast<std::size_t>(msg->width) * msg->height;
   const auto *x_field = findField(*msg, "x");
@@ -162,6 +163,8 @@ void DogPriorMapEkfNode::imuDeskewCloudCallback(const sensor_msgs::PointCloud2Co
   pending.point_time_max = max_offset;
   pending.point_count = point_count;
   pending_imu_deskew_clouds_.push_back(pending);
+  max_pending_imu_deskew_clouds_size_ = std::max(
+      max_pending_imu_deskew_clouds_size_, pending_imu_deskew_clouds_.size());
   processReadyImuDeskewCloudsLocked();
 }
 
@@ -170,6 +173,19 @@ void DogPriorMapEkfNode::processReadyImuDeskewCloudsLocked()
   while (!pending_imu_deskew_clouds_.empty())
   {
     const PendingImuDeskewCloud pending = pending_imu_deskew_clouds_.front();
+    if (std::isfinite(gravity_init_completion_stamp_) &&
+        pending.scan_start < gravity_init_completion_stamp_ - kPointTimeToleranceSec)
+    {
+      pending_imu_deskew_clouds_.pop_front();
+      writeImuDeskewDiagnostic(pending.scan_index, "REJECTED", "PREINIT_REJECTED",
+          pending.scan_start, pending.scan_end, pending.scan_start,
+          pending.point_count, 0, pending.point_time_min, pending.point_time_max,
+          std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(),
+          0.0, 0, 0.0, 0.0, 0.0,
+          std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(),
+          std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN());
+      continue;
+    }
     ImuDeskewCoverage coverage;
     std::string reason;
     const bool covered = inspectImuDeskewCoverage(state_history_, pending.scan_start,
@@ -220,7 +236,8 @@ void DogPriorMapEkfNode::processReadyImuDeskewCloudsLocked()
         pending.scan_end : pending.scan_start;
     ImuDeskewPose reference_pose;
     if (!interpolateImuDeskewPose(state_history_, reference_stamp,
-            deskew_max_imu_gap_sec_, g_, imu_kinematics_config_, reference_pose, reason))
+            deskew_max_imu_gap_sec_, g_, imu_kinematics_config_, reference_pose, reason,
+            pending.scan_end))
     {
       writeImuDeskewDiagnostic(pending.scan_index, "REJECTED", "reference_" + reason,
           pending.scan_start, pending.scan_end, reference_stamp,
@@ -242,7 +259,9 @@ void DogPriorMapEkfNode::processReadyImuDeskewCloudsLocked()
     double max_velocity = reference_pose.v.norm();
     double max_acc_world = reference_pose.acc_world.norm();
     double max_gyro = reference_pose.gyro_unbiased.norm();
+    double max_imu_source_stamp = reference_pose.latest_source_stamp;
     bool valid = true;
+    bool post_scan_end_imu_used = false;
     std::string failure_reason;
 
     for (std::size_t i = 0; i < pending.point_count; ++i)
@@ -271,16 +290,19 @@ void DogPriorMapEkfNode::processReadyImuDeskewCloudsLocked()
       }
       ImuDeskewPose point_pose;
       if (!interpolateImuDeskewPose(state_history_, point_stamp,
-              deskew_max_imu_gap_sec_, g_, imu_kinematics_config_, point_pose, reason))
+              deskew_max_imu_gap_sec_, g_, imu_kinematics_config_, point_pose, reason,
+              pending.scan_end))
       {
         valid = false;
         failure_reason = "point_" + reason;
         break;
       }
-      if (point_pose.latest_source_stamp > point_stamp + 1e-9)
+      max_imu_source_stamp = std::max(max_imu_source_stamp, point_pose.latest_source_stamp);
+      if (point_pose.latest_source_stamp > pending.scan_end + 1e-9)
       {
         valid = false;
-        failure_reason = "future_imu_sample_used_for_point";
+        post_scan_end_imu_used = true;
+        failure_reason = "post_scan_end_imu_sample_used";
         break;
       }
       max_velocity = std::max(max_velocity, point_pose.v.norm());
@@ -330,7 +352,7 @@ void DogPriorMapEkfNode::processReadyImuDeskewCloudsLocked()
           coverage.samples_in_scan, max_velocity, max_acc_world, max_gyro,
           std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(),
           std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(),
-          deskew_elapsed_ms());
+          deskew_elapsed_ms(), max_imu_source_stamp, post_scan_end_imu_used);
       continue;
     }
 
@@ -345,7 +367,7 @@ void DogPriorMapEkfNode::processReadyImuDeskewCloudsLocked()
         coverage.history_first_stamp, coverage.history_last_stamp, coverage.max_gap_sec,
         coverage.samples_in_scan, max_velocity, max_acc_world, max_gyro,
         displacement_mean, displacement_median, displacement_p95, displacement_max,
-        deskew_elapsed_ms());
+        deskew_elapsed_ms(), max_imu_source_stamp, post_scan_end_imu_used);
   }
 }
 
@@ -370,7 +392,9 @@ void DogPriorMapEkfNode::writeImuDeskewDiagnostic(uint64_t scan_index,
                                                   double displacement_median,
                                                   double displacement_p95,
                                                   double displacement_max,
-                                                  double deskew_processing_ms)
+                                                  double deskew_processing_ms,
+                                                  double max_imu_source_stamp,
+                                                  bool post_scan_end_imu_used)
 {
   if (!imu_deskew_csv_.is_open()) return;
   imu_deskew_csv_ << scan_index << "," << status << "," << reason << ","
@@ -385,7 +409,8 @@ void DogPriorMapEkfNode::writeImuDeskewDiagnostic(uint64_t scan_index,
       << deskew_processing_ms << ","
       << (deskew_reference_time_ == "start" ? "seconds_from_scan_start" :
                                              "seconds_from_output_reference")
-      << ",0,0\n";
+      << ",0," << max_imu_source_stamp << ","
+      << (post_scan_end_imu_used ? 1 : 0) << "\n";
   imu_deskew_csv_.flush();
 }
 

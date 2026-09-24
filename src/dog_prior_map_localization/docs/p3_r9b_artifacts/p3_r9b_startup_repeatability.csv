@@ -1,0 +1,6 @@
+run,raw_cloud_callback_rows,published,preinit_rejected,other_reject_reasons,runtime_sampled_raw_cloud_peak,pending_queue_peak,missing_start,queue_full,state_gap,first_published_stamp,first_ndt_stamp,ndt_frames,oosm_applied,stamp_mismatch_vs_01,cloud_hash_mismatch_vs_01,raw_final_pose_mismatch_vs_01,nodelet_plugin_error,all_frames_converged
+startup_valid_01,296,285,11,,290,11,0,0,0,1660857393.6012471,1660857393.6012471,285,285,0,0,0,0,1
+startup_valid_02,297,285,12,,291,12,0,0,0,1660857393.6012471,1660857393.6012471,285,285,0,0,0,0,1
+startup_valid_03,296,285,11,,290,11,0,0,0,1660857393.6012471,1660857393.6012471,285,285,0,0,0,0,1
+startup_valid_04,297,285,12,,291,12,0,0,0,1660857393.6012471,1660857393.6012471,285,285,0,0,0,0,1
+startup_valid_05,296,285,11,,290,11,0,0,0,1660857393.6012471,1660857393.6012471,285,285,0,0,0,0,1

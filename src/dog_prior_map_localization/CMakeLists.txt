@@ -72,6 +72,15 @@ add_executable(imu_deskew_contract_test
   src/core/imu_deskew.cpp
 )
 
+add_executable(imu_interval_numeric_test
+  tests/imu_interval_numeric_test.cpp
+  src/core/imu_propagation.cpp
+)
+
+add_executable(frame_conversion_contract_test
+  tests/frame_conversion_contract_test.cpp
+)
+
 add_executable(dog_prior_map_ndt_node_cpp
   src/dog_prior_map_ndt_node.cpp
 )

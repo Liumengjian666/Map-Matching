@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <limits>
 #include <string>
 
 #include <Eigen/Dense>
@@ -20,8 +21,13 @@ struct ImuDeskewPose
   Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
   Eigen::Vector3d ba = Eigen::Vector3d::Zero();
   Eigen::Vector3d bg = Eigen::Vector3d::Zero();
+  // Raw IMU measurement at `stamp`; never an interval average.
   Eigen::Vector3d acc_measurement = Eigen::Vector3d::Zero();
   Eigen::Vector3d gyro_measurement = Eigen::Vector3d::Zero();
+  // Input used for the interval that ended at this pose timestamp.
+  Eigen::Vector3d interval_acc_input = Eigen::Vector3d::Zero();
+  Eigen::Vector3d interval_gyro_input = Eigen::Vector3d::Zero();
+  bool has_interval_input = false;
   Eigen::Vector3d acc_world = Eigen::Vector3d::Zero();
   Eigen::Vector3d gyro_unbiased = Eigen::Vector3d::Zero();
   double latest_source_stamp = 0.0;
@@ -44,15 +50,16 @@ bool inspectImuDeskewCoverage(const StateHistory &history,
                              ImuDeskewCoverage &coverage,
                              std::string &reason);
 
-// Interpolates only between existing EKF snapshots. This does not re-integrate
-// IMU data and never extrapolates before/after the stored trajectory.
+// Reconstructs a partial state between bracketing EKF snapshots using their raw
+// head/tail IMU samples. It never extrapolates outside stored state coverage.
 bool interpolateImuDeskewPose(const StateHistory &history,
                               double stamp,
                               double max_gap_sec,
                               const Eigen::Vector3d &gravity_world,
                               const ImuKinematicsConfig &propagation_config,
                               ImuDeskewPose &pose,
-                              std::string &reason);
+                              std::string &reason,
+                              double max_source_stamp = std::numeric_limits<double>::infinity());
 
 // Transforms one LiDAR-frame point from its acquisition pose to the selected
 // reference LiDAR pose using T_imu_lidar (p_imu = T_imu_lidar * p_lidar).

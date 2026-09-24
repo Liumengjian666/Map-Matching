@@ -73,50 +73,85 @@ int main()
     return 1;
   }
 
-  // A point between two IMU timestamps may use the lower (already received)
-  // sample, but changing the upper sample must not change that point pose.
-  StateHistory causal_history_a;
-  StateHistory causal_history_b;
+  // TEST-A: an IMU sample after scan_end must not affect a point in the scan.
+  StateHistory bounded_history_a;
+  StateHistory bounded_history_b;
   FilterStateSnapshot lower = snapshot(2.0, Eigen::Vector3d::Zero());
-  lower.acc_measurement = Eigen::Vector3d(1.0, 0.0, 9.80665);
+  lower.acc_measurement = Eigen::Vector3d(1.0, 0.0, 0.0);
   lower.gyro_measurement = Eigen::Vector3d(0.0, 0.0, 0.2);
   FilterStateSnapshot upper_a = snapshot(2.01, Eigen::Vector3d(5.0, -2.0, 1.0));
-  upper_a.acc_measurement = Eigen::Vector3d::Zero();
-  upper_a.gyro_measurement = Eigen::Vector3d::Zero();
+  upper_a.acc_measurement = Eigen::Vector3d(3.0, 0.0, 0.0);
+  upper_a.gyro_measurement = Eigen::Vector3d(0.0, 0.0, 0.4);
   FilterStateSnapshot upper_b = upper_a;
   upper_b.acc_measurement = Eigen::Vector3d(1000.0, -2000.0, 3000.0);
   upper_b.gyro_measurement = Eigen::Vector3d(-20.0, 30.0, 40.0);
-  causal_history_a.insertMonotonic(lower);
-  causal_history_a.insertMonotonic(upper_a);
-  causal_history_b.insertMonotonic(lower);
-  causal_history_b.insertMonotonic(upper_b);
+  FilterStateSnapshot post_scan_a = snapshot(2.02, Eigen::Vector3d::Zero());
+  post_scan_a.acc_measurement = Eigen::Vector3d::Zero();
+  post_scan_a.gyro_measurement = Eigen::Vector3d::Zero();
+  FilterStateSnapshot post_scan_b = post_scan_a;
+  post_scan_b.acc_measurement = Eigen::Vector3d(-1e6, 2e6, -3e6);
+  post_scan_b.gyro_measurement = Eigen::Vector3d(1e4, -2e4, 3e4);
+  bounded_history_a.insertMonotonic(lower);
+  bounded_history_a.insertMonotonic(upper_a);
+  bounded_history_a.insertMonotonic(post_scan_a);
+  bounded_history_b.insertMonotonic(lower);
+  bounded_history_b.insertMonotonic(upper_b);
+  bounded_history_b.insertMonotonic(post_scan_b);
 
-  ImuKinematicsConfig causal_model;
-  causal_model.use_acc_for_position = true;
-  causal_model.continuous_gravity_correction_enable = false;
-  ImuDeskewPose causal_pose_a, causal_pose_b;
+  ImuKinematicsConfig midpoint_model;
+  midpoint_model.use_acc_for_position = true;
+  midpoint_model.midpoint_interval_input_enable = true;
+  midpoint_model.continuous_gravity_correction_enable = false;
+  ImuDeskewPose bounded_pose_a, bounded_pose_b;
   if (!dog_prior_map_localization::interpolateImuDeskewPose(
-          causal_history_a, 2.005, 0.011, Eigen::Vector3d(0.0, 0.0, -9.80665),
-          causal_model, causal_pose_a, reason) ||
+          bounded_history_a, 2.005, 0.011, Eigen::Vector3d::Zero(),
+          midpoint_model, bounded_pose_a, reason, 2.007) ||
       !dog_prior_map_localization::interpolateImuDeskewPose(
-          causal_history_b, 2.005, 0.011, Eigen::Vector3d(0.0, 0.0, -9.80665),
-          causal_model, causal_pose_b, reason) ||
-      causal_pose_a.latest_source_stamp > 2.005 + 1e-9 ||
-      !near(causal_pose_a.latest_source_stamp, 2.0) ||
-      !near(causal_pose_a.p.x(), 0.5 * 1.0 * 0.005 * 0.005) ||
-      !near(causal_pose_a.v.norm(), 0.005, 1e-8) ||
-      (causal_pose_a.p - causal_pose_b.p).norm() > 1e-12 ||
-      (causal_pose_a.v - causal_pose_b.v).norm() > 1e-12 ||
-      (causal_pose_a.R - causal_pose_b.R).norm() > 1e-12)
+          bounded_history_b, 2.005, 0.011, Eigen::Vector3d::Zero(),
+          midpoint_model, bounded_pose_b, reason, 2.007) ||
+      bounded_pose_a.latest_source_stamp > 2.007 + 1e-9 ||
+      !near(bounded_pose_a.latest_source_stamp, 2.0) ||
+      (bounded_pose_a.p - bounded_pose_b.p).norm() > 1e-12 ||
+      (bounded_pose_a.v - bounded_pose_b.v).norm() > 1e-12 ||
+      (bounded_pose_a.R - bounded_pose_b.R).norm() > 1e-12)
   {
-    std::cerr << "future IMU sample affected point-time pose: " << reason
-              << " source=" << causal_pose_a.latest_source_stamp
-              << " p_a=" << causal_pose_a.p.transpose()
-              << " p_b=" << causal_pose_b.p.transpose()
-              << " v_a=" << causal_pose_a.v.transpose()
-              << " v_b=" << causal_pose_b.v.transpose()
-              << " R_diff=" << (causal_pose_a.R - causal_pose_b.R).norm()
-              << " expected_px=" << 0.5 * 1.0 * 0.005 * 0.005 << "\n";
+    std::cerr << "TEST-A post-scan-end IMU influenced scan: " << reason
+              << " source=" << bounded_pose_a.latest_source_stamp
+              << " p_diff=" << (bounded_pose_a.p - bounded_pose_b.p).norm()
+              << " v_diff=" << (bounded_pose_a.v - bounded_pose_b.v).norm()
+              << " R_diff=" << (bounded_pose_a.R - bounded_pose_b.R).norm() << "\n";
+    return 1;
+  }
+
+  // TEST-B: head/tail measurements from a legal within-scan interval drive
+  // the partial propagation through their midpoint average.
+  StateHistory interval_history_a;
+  StateHistory interval_history_b;
+  interval_history_a.insertMonotonic(lower);
+  interval_history_a.insertMonotonic(upper_a);
+  FilterStateSnapshot interval_upper_b = upper_a;
+  interval_upper_b.acc_measurement = Eigen::Vector3d(5.0, 0.0, 0.0);
+  interval_upper_b.gyro_measurement = Eigen::Vector3d(0.0, 0.0, 0.8);
+  interval_history_b.insertMonotonic(lower);
+  interval_history_b.insertMonotonic(interval_upper_b);
+  ImuDeskewPose interval_pose_a, interval_pose_b;
+  if (!dog_prior_map_localization::interpolateImuDeskewPose(
+          interval_history_a, 2.005, 0.011, Eigen::Vector3d::Zero(),
+          midpoint_model, interval_pose_a, reason, 2.01) ||
+      !dog_prior_map_localization::interpolateImuDeskewPose(
+          interval_history_b, 2.005, 0.011, Eigen::Vector3d::Zero(),
+          midpoint_model, interval_pose_b, reason, 2.01) ||
+      !near(interval_pose_a.latest_source_stamp, 2.01) ||
+      (interval_pose_a.p - interval_pose_b.p).norm() < 1e-8 ||
+      (interval_pose_a.v - interval_pose_b.v).norm() < 1e-5 ||
+      (interval_pose_a.R - interval_pose_b.R).norm() < 1e-8 ||
+      !near(interval_pose_a.interval_acc_input.x(), 2.0) ||
+      !near(interval_pose_a.interval_gyro_input.z(), 0.3))
+  {
+    std::cerr << "TEST-B legal head/tail interval did not affect partial propagation: " << reason
+              << " source=" << interval_pose_a.latest_source_stamp
+              << " input_acc=" << interval_pose_a.interval_acc_input.transpose()
+              << " input_gyro=" << interval_pose_a.interval_gyro_input.transpose() << "\n";
     return 1;
   }
 

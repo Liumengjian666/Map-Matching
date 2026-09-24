@@ -79,7 +79,9 @@ private:
                                 double displacement_median,
                                 double displacement_p95,
                                 double displacement_max,
-                                double deskew_processing_ms = -1.0);
+                                double deskew_processing_ms = -1.0,
+                                double max_imu_source_stamp = std::numeric_limits<double>::quiet_NaN(),
+                                bool post_scan_end_imu_used = false);
 
   /// 将位置和小角度姿态修正反馈到当前导航状态。
   void applyPoseCorrection(const Eigen::Vector3d &dp, const Eigen::Vector3d &dtheta);
@@ -164,6 +166,9 @@ private:
   Matrix15d P_;
   Eigen::Vector3d last_acc_measurement_ = Eigen::Vector3d::Zero();
   Eigen::Vector3d last_gyro_measurement_ = Eigen::Vector3d::Zero();
+  Eigen::Vector3d last_interval_acc_input_ = Eigen::Vector3d::Zero();
+  Eigen::Vector3d last_interval_gyro_input_ = Eigen::Vector3d::Zero();
+  bool has_last_interval_input_ = false;
   Eigen::Vector3d last_acc_world_ = Eigen::Vector3d::Zero();
   Eigen::Vector3d last_unbiased_gyro_ = Eigen::Vector3d::Zero();
 
@@ -174,10 +179,14 @@ private:
   bool use_acc_for_position_ = false;
   double velocity_damping_ = 0.98;
   bool initialize_gravity_from_imu_ = true;
+  bool initialize_gyro_bias_from_imu_ = false;
+  bool midpoint_interval_input_enable_ = false;
   bool gravity_initialized_ = false;
+  double gravity_init_completion_stamp_ = std::numeric_limits<double>::quiet_NaN();
   int init_imu_samples_ = 200;
   int imu_init_count_ = 0;
   Eigen::Vector3d imu_acc_sum_ = Eigen::Vector3d::Zero();
+  Eigen::Vector3d imu_gyro_sum_ = Eigen::Vector3d::Zero();
   bool continuous_gravity_correction_enable_ = true;
   double gravity_correction_expected_acc_norm_ = 1.0;
   double gravity_correction_gain_ = 0.01;
@@ -215,11 +224,14 @@ private:
   double deskew_max_imu_gap_sec_ = 0.02;
   double deskew_history_keep_sec_ = 2.0;
   std::size_t deskew_max_pending_clouds_ = 8;
+  uint32_t deskew_input_subscriber_queue_size_ = 8;
   Eigen::Isometry3d T_imu_lidar_ = Eigen::Isometry3d::Identity();
   ImuKinematicsConfig imu_kinematics_config_;
   std::deque<PendingImuDeskewCloud> pending_imu_deskew_clouds_;
   std::ofstream imu_deskew_csv_;
   uint64_t imu_deskew_scan_index_ = 0;
+  uint64_t imu_deskew_raw_cloud_received_count_ = 0;
+  std::size_t max_pending_imu_deskew_clouds_size_ = 0;
   double last_imu_deskew_input_stamp_ = -1.0;
 
   bool ndt_observation_enable_ = false;
@@ -275,6 +287,10 @@ private:
   std::ofstream oosm_csv_;
   uint64_t oosm_frame_index_ = 0;
   double last_debug_time_ = 0.0;
+  double last_runtime_sample_stamp_ = std::numeric_limits<double>::quiet_NaN();
+  uint64_t max_state_history_size_ = 0;
+  uint64_t max_imu_history_size_ = 0;
+  uint64_t max_pending_runtime_queue_size_ = 0;
   uint64_t imu_msg_count_ = 0;
   uint64_t ndt_correction_count_ = 0;
   uint64_t last_debug_imu_count_ = 0;

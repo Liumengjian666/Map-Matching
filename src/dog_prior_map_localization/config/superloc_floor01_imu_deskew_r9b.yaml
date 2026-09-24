@@ -1,0 +1,128 @@
+# Floor01 R9B engineering profile. It isolates mature IMU interval semantics
+# from the legacy/default localization configuration. No GT is loaded here.
+dataset:
+  name: "SuperLoc Floor01 (P3-R9B engineering)"
+  source: "SubT-MRS official Multi-Floor release"
+  input_bag: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/p3_r7_floor01_full_baseline/floor01_canonical_raw_inputs.bag"
+  input_bag_sha256: "6383fdbdad0e3f8375069b33cc552ed069dafb91aec88f1673bc043e0f314e0b"
+  lidar_model: "Velodyne VLP-16"
+  lidar_raw_topic: "/input/velodyne_packets"
+  lidar_raw_message_type: "velodyne_msgs/VelodyneScan"
+  lidar_decoded_topic: "/velodyne_points"
+  lidar_decoded_message_type: "sensor_msgs/PointCloud2"
+  imu_raw_topic: "/input/imu"
+  imu_message_type: "sensor_msgs/Imu"
+  calibration_sha256: "fd9fbfb209d6715b4812a92d458cdeb32cbfd75160356a87802c2bda5dfa7414"
+  map_sha256: "2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570"
+  decoder: "ros-drivers/velodyne 1.7.0, commit 89faa698688a48d4a5080f73c04d7aed8117eec0"
+
+frames:
+  map_frame: "floor01_map_h1"
+  base_frame: "cmu_sp1_velodyne"
+
+topics:
+  imu: "/input/imu"
+  lidar: "/dog_livo/points_deskewed_imu_exp"
+  lidar_msg_type: "pointcloud2"
+  ndt_odom: "/dog_livo/ndt_odom"
+  ndt_pose: "/dog_livo/ndt_pose"
+  ndt_path: "/dog_livo/ndt_path"
+  points_aligned: "/dog_livo/points_aligned"
+  filtered_points: "/dog_livo/filtered_points"
+  diagnostics: "/dog_livo/diagnostics"
+  odom_high_rate: "/dog_livo/odom_high_rate"
+  odom_corrected: "/dog_livo/odom_corrected"
+  path_high_rate: "/dog_livo/path_high_rate"
+  path_corrected: "/dog_livo/path_corrected"
+
+map:
+  pcd_fallback_path: "/tmp/floor01_candidates/floor01_h1_map.pcd"
+  voxel_size: 0.15
+
+imu:
+  gravity: 9.80665
+  initialize_gravity_from_imu: true
+  initialize_gyro_bias_from_imu: true
+  init_imu_samples: 200
+  midpoint_interval_input_enable: true
+  use_acc_for_position: true
+  velocity_damping: 0.98
+  continuous_gravity_correction_enable: false
+  gravity_correction_expected_acc_norm: 1.0
+  gravity_correction_gain: 0.01
+  gravity_correction_max_angle_deg: 0.5
+  gravity_correction_acc_tolerance: 1.5
+  gravity_correction_gyro_max: 0.8
+  acc_noise: 2.0
+  gyro_noise: 0.1
+  acc_bias_noise: 0.0001
+  gyro_bias_noise: 0.0001
+  max_dt: 0.05
+  history_keep_sec: 2.0
+  publish_high_rate: true
+  publish_imu_propagate_alias: false
+
+ndt_observation:
+  enable: true
+  oosm_enable: true
+  oosm_max_alignment_sec: 0.02
+  apply_ratio: 1.0
+  z_apply_ratio: 1.0
+  roll_pitch_apply_ratio: 1.0
+  max_translation_correction: 2.0
+  max_rotation_correction_deg: 20.0
+  velocity_blend: 0.6
+
+lidar_update:
+  deskew_enable: false
+  scan_reference_time: "start"
+  ndt_source_voxel_size: 0.25
+  ndt_source_voxel_z_size: 0.25
+  ndt_target_voxel_size: 0.15
+  ndt_target_voxel_z_size: 0.15
+  ndt_max_source_points: 1400
+  ndt_max_target_points: 0
+  ndt_max_iterations: 40
+  ndt_resolution: 0.8
+  ndt_step_size: 0.08
+  ndt_transformation_epsilon: 0.001
+  ndt_step_limit_enable: true
+  ndt_step_limit_max_translation: 0.5
+  ndt_step_limit_max_rotation_deg: 5.0
+  local_imu_rotation_prior_enable: true
+  lidar_subscriber_queue_size: 100
+  pending_lidar_max_frames: 100
+
+deskew:
+  mode: "ekf_imu_fastlio"
+  state_frame: "imu"
+  input_topic: "/velodyne_points"
+  output_topic: "/dog_livo/points_deskewed_imu_exp"
+  expected_lidar_frame: "cmu_sp1_velodyne"
+  point_time_field: "time"
+  point_time_convention: "seconds_from_scan_start"
+  reference_time: "start"
+  strict_imu_coverage: true
+  max_scan_duration_sec: 0.15
+  max_imu_gap_sec: 0.02
+  max_pending_clouds: 32
+  input_subscriber_queue_size: 64
+  history_keep_sec: 2.0
+  extrinsic_source: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/calibration/floor01_extrinsics.yaml"
+  T_imu_lidar_translation_m: [0.08, 0.029, 0.03]
+  T_imu_lidar_rotation_row_major: [0.999945562, 0.009074807, 0.005149763,
+                                    -0.009060897, 0.999955255, -0.002718066,
+                                    -0.005174199, 0.002671256, 0.999983046]
+
+output:
+  publish_path: false
+  publish_tf: false
+  publish_filtered_points: true
+  publish_diagnostics: true
+  print_debug: false
+  path_max_length: 5000
+  path_sample_rate_hz: 2.0
+  path_publish_rate_hz: 1.0
+  runtime_csv_path: ""
+  oosm_csv_path: ""
+  imu_deskew_csv_path: ""
