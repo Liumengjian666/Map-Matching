@@ -1,0 +1,161 @@
+# Metadata-only overlay for SuperLoc Corridor02 (RC1).
+# Fields marked UNRESOLVED must not be passed to the runtime before the
+# official rosbag topic/frame/point-time audit is complete.
+
+dataset:
+  name: "SuperLoc Corridor02"
+  source: "SuperLoc official release"
+  platform: "RC1"
+  trajectory_index: 690
+  official_duration_s: 893
+  sensor_suite: "RGB + LiDAR + IMU"
+  input_bag: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/raw/corridor02.zip"
+  input_bag_sha256: "NOT_DOWNLOADED_OFFICIAL_GOOGLE_DRIVE_QUOTA_EXCEEDED"
+  official_bag_url: "https://drive.google.com/file/d/1fbQIjza6zCVZ719VvXfNhAONDZflqGnf/view?usp=sharing"
+  derived_bag: "NOT_CREATED_BAG_AUDIT_INCOMPLETE"
+  derived_bag_sha256: "NOT_APPLICABLE"
+  calibration: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/calibration/corridor02_extrinsics.yaml"
+  calibration_sha256: "892bf743dc0f51eabfe9d8ae71dc98663753f174910ae9cc40ee244c77a9e217"
+  camera_calibration: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/calibration/corridor02_intrinsics.yaml"
+  camera_calibration_sha256: "8d47e98aed48cf941c8ee642136514b50ea7e6dd0bd26de9266081bd8693fe12"
+
+frames:
+  map_frame: "UNRESOLVED_UNTIL_BAG_AND_MAP_FRAME_AUDIT"
+  odom_frame: "UNRESOLVED_METADATA_ONLY"
+  base_frame: "UNRESOLVED_UNTIL_BAG_AUDIT"
+  lidar_frame: "UNRESOLVED_UNTIL_BAG_AUDIT"
+  lidar_input: "UNRESOLVED_UNTIL_BAG_AUDIT"
+  lidar: "UNRESOLVED_UNTIL_BAG_AUDIT"
+  imu_frame: "UNRESOLVED_UNTIL_BAG_AUDIT"
+  imu_input: "UNRESOLVED_UNTIL_BAG_AUDIT"
+  imu_output: "UNRESOLVED_UNTIL_BAG_AUDIT"
+  camera_frame: "UNRESOLVED_UNTIL_BAG_AUDIT"
+  map_semantics: "official Corridor02 PCD; map-to-GT-world transform unresolved"
+
+topics:
+  lidar_input: "UNRESOLVED_UNTIL_ROSBAG_INFO"
+  lidar_raw: "UNRESOLVED_UNTIL_ROSBAG_INFO"
+  lidar_rotation_only: "NOT_CREATED"
+  lidar: "UNRESOLVED_UNTIL_ROSBAG_INFO"
+  lidar_msg_type: "UNRESOLVED_UNTIL_ROSBAG_INFO"
+  imu_input: "UNRESOLVED_UNTIL_ROSBAG_INFO"
+  imu: "UNRESOLVED_UNTIL_ROSBAG_INFO"
+  imu_output: "UNRESOLVED_UNTIL_ROSBAG_INFO"
+  image: "UNRESOLVED_UNTIL_ROSBAG_INFO"
+  camera_info: "UNRESOLVED_UNTIL_ROSBAG_INFO"
+  odom_history: "UNRESOLVED_RUNTIME_ADAPTER_TOPIC"
+  motion_diagnostics: "NOT_CREATED"
+
+map:
+  path: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/map/corridor02.pcd"
+  pcd_fallback_path: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/map/corridor02.pcd"
+  source: "official SuperLoc Corridor02 GT map"
+  sha256: "6c39e243556eddbef7a8b4bd2de25cf7c962c4ff0f52c94cfc1d994f178ae228"
+  world_transform_status: "UNRESOLVED_NO_OFFICIAL_FIXED_MAP_WORLD_TRANSFORM"
+
+lidar:
+  available: true
+  model: "UNRESOLVED_OFFICIAL_BAG_SENSOR_MODEL"
+  message_type: "UNRESOLVED_UNTIL_ROSBAG_INFO"
+  point_time_field: "UNRESOLVED_UNTIL_POINT_TIME_AUDIT"
+  point_time_unit: "UNRESOLVED_UNTIL_POINT_TIME_AUDIT"
+
+imu:
+  available: true
+  model: "UNRESOLVED_OFFICIAL_BAG_IMU_MODEL"
+  frame: "UNRESOLVED_UNTIL_BAG_AUDIT"
+  runtime_assumption: "must not be inferred before Corridor02 bag audit"
+  gravity_initialization: "unchanged frozen baseline initialization if later run"
+
+camera:
+  available: true
+  enabled: false
+  topic: "UNRESOLVED_UNTIL_ROSBAG_INFO"
+  camera_info_topic: "UNRESOLVED_UNTIL_ROSBAG_INFO"
+  frame: "UNRESOLVED_UNTIL_BAG_AUDIT"
+  model: "MEI"
+  intrinsics:
+    width: 640
+    height: 480
+    xi: 1.5629934283981157
+    gamma1: 761.6791126513665
+    gamma2: 678.7676595096547
+    u0: 317.73997456826834
+    v0: 233.50210820810244
+    source: "official corridor02_Intrinsics.yaml"
+  distortion:
+    model: "radial_tangential_plus_mei_mirror"
+    coefficients: [-0.07083665039247518, 0.3094574364801575,
+                   0.0004607746627279861, 0.00015704097191542886]
+    source: "official corridor02_Intrinsics.yaml"
+
+extrinsics:
+  # Convention: p_target = T_target_source * p_source.
+  # Official SuperOdom comments corroborate imu^R_laser / imu^T_laser.
+  T_imu_lidar:
+    status: "AVAILABLE_OFFICIAL_CALIBRATION"
+    translation_m: [0.0, 0.0, 0.0]
+    rotation_row_major: [0.999954875339377, 0.0, 0.009499857104811,
+                         0.0, 1.0, 0.0,
+                         -0.009499857104811, 0.0, 0.999954875339377]
+    source: "official corridor02_extrinsics.yaml laser_to_imu"
+  T_lidar_imu:
+    status: "INVERSE_OF_OFFICIAL_T_IMU_LIDAR"
+    translation_m: [0.0, 0.0, 0.0]
+    rotation_row_major: [0.999954875339377, 0.0, -0.009499857104811,
+                         0.0, 1.0, 0.0,
+                         0.009499857104811, 0.0, 0.999954875339377]
+    source: "matrix inverse of official T_imu_lidar"
+  T_imu_camera:
+    status: "AVAILABLE_OFFICIAL_CALIBRATION"
+    translation_m: [0.17313616, 0.0476788, -0.01933398]
+    rotation_row_major: [-0.01578308, -0.01124397, 0.99981222,
+                         -0.99975463, -0.01536642, -0.01595499,
+                         0.01554293, -0.99981871, -0.01099868]
+    source: "official corridor02_extrinsics.yaml rgb_camera_to_imu"
+  T_camera_lidar:
+    status: "DERIVED_METADATA_ONLY"
+    translation_m: [0.050700230449, -0.016651084925, -0.172555580993]
+    rotation_row_major: [-0.015930030426, -0.999754621367, 0.015392293303,
+                         -0.001745326223, -0.015366418125, -0.999880403068,
+                         0.999871581885, -0.015954982740, -0.001500112045]
+    source: "inverse(T_imu_camera) * T_imu_lidar"
+
+preprocessing:
+  input_has_point_time: "UNRESOLVED_UNTIL_BAG_AUDIT"
+  point_time_field: "UNRESOLVED_UNTIL_POINT_TIME_AUDIT"
+  point_time_unit: "UNRESOLVED_UNTIL_POINT_TIME_AUDIT"
+  raw_scan_header_time_reference: "UNRESOLVED_UNTIL_BAG_AUDIT"
+  deskew:
+    enabled: false
+    reference_time: "UNRESOLVED_UNTIL_POINT_TIME_AUDIT"
+    rotational: false
+    translational: false
+    method: "NOT_CREATED_BAG_AUDIT_INCOMPLETE"
+    location: "NOT_CREATED"
+    translation_model: "causal constant velocity from prior completed LiDAR poses (planned)"
+    translation_pose_origin: "UNRESOLVED_UNTIL_FRAME_AUDIT"
+    rotation_source: "official RC1 IMU gyro plus LiDAR/IMU extrinsic (planned)"
+    seed_topic: "UNRESOLVED_RUNTIME_ADAPTER_TOPIC"
+    current_scan_final_ndt_pose_used: false
+    accelerometer_double_integration_used: false
+    strict_imu_coverage_no_extrapolation: true
+    internal_baseline_deskew: false
+    GT_used: false
+
+initialization:
+  method: "official initial pose file; runtime loading not yet audited"
+  initial_pose_file: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/initial_pose/corridor02.yaml"
+  initial_pose_file_semantics: "world_darpa fields present; exact transform direction unresolved"
+
+ndt_observation: {}
+lidar_update:
+  deskew_enable: false
+  scan_reference_time: "UNRESOLVED_UNTIL_POINT_TIME_AUDIT"
+output: {}
+
+evaluation:
+  reference: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/gt/corridor02_gt.txt"
+  reference_sensor: "UNRESOLVED_GT_POSE_ORIGIN"
+  gt_origin_evidence: "UNRESOLVED: official SuperLoc page gives TUM fields only"
+  absolute_world_transform: "UNRESOLVED"
