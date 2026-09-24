@@ -8,13 +8,13 @@ At most these three are retained. None is a root-cause finding or an authorizati
 
 **Contradiction / boundary:** Corridor often retains a near-reference oracle endpoint in the early window, while Floor persistent W3+W4 retains none of 119 inside 0.15 m/2 deg. Windows and failure phases differ; the same endpoint behavior is not replicated.
 
-**Missing test:** Apply the frozen R6 three-initialization probe to predeclared Corridor persistent-phase frames. Keep identical baseline-conditioned clouds and report raw endpoints, errors, objectives, and local perturbations; no GT may be used online.
+**Missing test:** Apply the frozen R6 three-initialization probe to predeclared Corridor persistent-phase frames. Keep identical baseline-conditioned clouds and report raw endpoints, errors, named registration-score diagnostics, and local perturbations; no GT may be used online.
 
-## H2 — Observation/objective-limited registration
+## H2 — Registration limitation beyond initialization
 
-**Support:** In Floor W3+W4, even the oracle-initialized raw endpoints remain 0.645 m mean from the reference and 0/119 satisfy the near-reference box. Fitness/probability rank is mixed per frame, so the endpoint/objective relation is not uniform.
+**Support:** In Floor W3+W4, even the oracle-initialized raw endpoints remain 0.645 m mean from the reference and 0/119 satisfy the near-reference box. Reported PCL registration score / transformation-probability rank is mixed per frame, so the endpoint/reference relation is not uniform. PCL `getFitnessScore` is a post-registration nearest-neighbor fitness score, not the exact NDT optimized likelihood.
 
-**Contradiction / boundary:** In Corridor early-failure windows the oracle endpoint is often retained near the reference. Existing evidence does not isolate observation geometry, objective shape, or sensor quality; the clouds are conditioned on prior NDT history.
+**Contradiction / boundary:** In Corridor early-failure windows the oracle endpoint is often retained near the reference. Observation quality, geometry, objective landscape, and score behavior remain unresolved candidate interpretations; existing evidence does not isolate any of them as the cause. The clouds are conditioned on prior NDT history, and Corridor R6 W1+W2 versus Floor R7I W3+W4 are neither phase- nor time-matched.
 
 **Missing test:** Use a small frozen-cloud, phase-matched registration comparison that separates initialization effect from source-cloud/time changes and records existing runtime-observable diagnostics. This stage does not authorize Hessian, mode, or geometry-cause claims.
 
