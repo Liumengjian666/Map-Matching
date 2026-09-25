@@ -9,11 +9,13 @@ option(
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  sensor_msgs
+  nav_msgs
   dog_prior_map_interfaces
 )
 
 catkin_package(
-  CATKIN_DEPENDS roscpp dog_prior_map_interfaces
+  CATKIN_DEPENDS roscpp sensor_msgs nav_msgs dog_prior_map_interfaces
 )
 
 if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
@@ -73,4 +75,110 @@ if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
     ${OpenMP_CXX_FLAGS}
   )
   add_dependencies(ikfom_pose_api_spike ${catkin_EXPORTED_TARGETS})
+  add_test(NAME ikfom_pose_api_spike
+    COMMAND $<TARGET_FILE:ikfom_pose_api_spike>)
+
+  add_executable(fastlio2_propagation_contract_test
+    src/fastlio2_frontend_ikfom.cpp
+    tests/fastlio2_propagation_contract_test.cpp
+  )
+  target_include_directories(fastlio2_propagation_contract_test PRIVATE
+    include
+    "${FASTLIO2_REF_ROOT}/include"
+    ${EIGEN3_INCLUDE_DIRS}
+    ${catkin_INCLUDE_DIRS}
+  )
+  target_compile_options(fastlio2_propagation_contract_test PRIVATE ${OpenMP_CXX_FLAGS})
+  target_link_libraries(fastlio2_propagation_contract_test
+    ${catkin_LIBRARIES}
+    ${OpenMP_CXX_FLAGS}
+  )
+  add_dependencies(fastlio2_propagation_contract_test ${catkin_EXPORTED_TARGETS})
+  add_test(NAME fastlio2_propagation_contract_test
+    COMMAND $<TARGET_FILE:fastlio2_propagation_contract_test>)
+
+  add_executable(scan_end_deskew_runtime_test
+    src/fastlio2_frontend_ikfom.cpp
+    src/scan_processor.cpp
+    tests/scan_end_deskew_runtime_test.cpp
+  )
+  target_include_directories(scan_end_deskew_runtime_test PRIVATE
+    include
+    "${FASTLIO2_REF_ROOT}/include"
+    ${EIGEN3_INCLUDE_DIRS}
+    ${catkin_INCLUDE_DIRS}
+  )
+  target_compile_options(scan_end_deskew_runtime_test PRIVATE ${OpenMP_CXX_FLAGS})
+  target_link_libraries(scan_end_deskew_runtime_test
+    ${catkin_LIBRARIES}
+    ${OpenMP_CXX_FLAGS}
+  )
+  add_dependencies(scan_end_deskew_runtime_test ${catkin_EXPORTED_TARGETS})
+  add_test(NAME scan_end_deskew_runtime_test
+    COMMAND $<TARGET_FILE:scan_end_deskew_runtime_test>)
+
+  add_executable(frontend_runtime_end_to_end_test
+    src/fastlio2_frontend_ikfom.cpp
+    src/scan_processor.cpp
+    src/frontend_runtime.cpp
+    tests/frontend_runtime_end_to_end_test.cpp
+  )
+  target_include_directories(frontend_runtime_end_to_end_test PRIVATE
+    include
+    "${FASTLIO2_REF_ROOT}/include"
+    ${EIGEN3_INCLUDE_DIRS}
+    ${catkin_INCLUDE_DIRS}
+  )
+  target_compile_options(frontend_runtime_end_to_end_test PRIVATE ${OpenMP_CXX_FLAGS})
+  target_link_libraries(frontend_runtime_end_to_end_test
+    ${catkin_LIBRARIES}
+    ${OpenMP_CXX_FLAGS}
+  )
+  add_dependencies(frontend_runtime_end_to_end_test ${catkin_EXPORTED_TARGETS})
+  add_test(NAME frontend_runtime_end_to_end_test
+    COMMAND $<TARGET_FILE:frontend_runtime_end_to_end_test>)
+
+  add_executable(dog_prior_map_fastlio2_frontend_node
+    src/fastlio2_frontend_ikfom.cpp
+    src/scan_processor.cpp
+    src/frontend_runtime.cpp
+    src/fastlio2_frontend_node.cpp
+  )
+  target_include_directories(dog_prior_map_fastlio2_frontend_node PRIVATE
+    include
+    "${FASTLIO2_REF_ROOT}/include"
+    ${EIGEN3_INCLUDE_DIRS}
+    ${catkin_INCLUDE_DIRS}
+  )
+  target_compile_options(dog_prior_map_fastlio2_frontend_node PRIVATE ${OpenMP_CXX_FLAGS})
+  target_link_libraries(dog_prior_map_fastlio2_frontend_node
+    ${catkin_LIBRARIES}
+    ${OpenMP_CXX_FLAGS}
+  )
+  add_dependencies(dog_prior_map_fastlio2_frontend_node ${catkin_EXPORTED_TARGETS})
+  install(TARGETS dog_prior_map_fastlio2_frontend_node
+    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+  )
+  install(DIRECTORY config launch docs
+    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+  )
+
+  add_executable(ndt_pose_update_runtime_test
+    src/fastlio2_frontend_ikfom.cpp
+    tests/ndt_pose_update_runtime_test.cpp
+  )
+  target_include_directories(ndt_pose_update_runtime_test PRIVATE
+    include
+    "${FASTLIO2_REF_ROOT}/include"
+    ${EIGEN3_INCLUDE_DIRS}
+    ${catkin_INCLUDE_DIRS}
+  )
+  target_compile_options(ndt_pose_update_runtime_test PRIVATE ${OpenMP_CXX_FLAGS})
+  target_link_libraries(ndt_pose_update_runtime_test
+    ${catkin_LIBRARIES}
+    ${OpenMP_CXX_FLAGS}
+  )
+  add_dependencies(ndt_pose_update_runtime_test ${catkin_EXPORTED_TARGETS})
+  add_test(NAME ndt_pose_update_runtime_test
+    COMMAND $<TARGET_FILE:ndt_pose_update_runtime_test>)
 endif()

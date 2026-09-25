@@ -22,6 +22,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 find_package(Eigen3 REQUIRED)
 find_package(PCL REQUIRED COMPONENTS common filters io kdtree registration)
+find_package(OpenSSL REQUIRED)
 
 set(CMAKE_CXX_FLAGS "-O2 -g -Wall ${CMAKE_CXX_FLAGS}")
 
@@ -84,17 +85,33 @@ add_executable(frame_conversion_contract_test
 
 add_executable(dog_prior_map_ndt_node_cpp
   src/dog_prior_map_ndt_node.cpp
+  src/external_ndt_transaction_server.cpp
 )
 
 target_link_libraries(dog_prior_map_ndt_node_cpp
   ${catkin_LIBRARIES}
   ${PCL_LIBRARIES}
+  OpenSSL::Crypto
   /usr/lib/x86_64-linux-gnu/libusb-1.0.so
 )
 
 add_dependencies(dog_prior_map_ndt_node_cpp
   ${catkin_EXPORTED_TARGETS}
 )
+
+if(CATKIN_ENABLE_TESTING)
+  add_executable(external_ndt_server_integration_test
+    tests/external_ndt_server_integration_test.cpp
+    src/external_ndt_transaction_server.cpp
+  )
+  target_link_libraries(external_ndt_server_integration_test
+    ${catkin_LIBRARIES}
+    ${PCL_LIBRARIES}
+    OpenSSL::Crypto
+    /usr/lib/x86_64-linux-gnu/libusb-1.0.so
+  )
+  add_dependencies(external_ndt_server_integration_test ${catkin_EXPORTED_TARGETS})
+endif()
 
 if(DOG_PRIOR_BUILD_RESEARCH_TOOLS)
   # Offline-only probes are intentionally independent of the runtime

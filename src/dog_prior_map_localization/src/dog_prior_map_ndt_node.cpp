@@ -28,6 +28,7 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <sensor_msgs/Imu.h>
 #include <tf/transform_broadcaster.h>
+#include "dog_prior_map_localization/external_ndt_transaction_server.hpp"
 
 namespace dog_prior_map_localization
 {
@@ -1203,6 +1204,17 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "dog_prior_map_ndt");
   try
   {
+    ros::NodeHandle nh;
+    ros::NodeHandle pnh("~");
+    bool external_transaction_enabled = false;
+    if (!nh.getParam("external_transaction/enabled", external_transaction_enabled))
+      pnh.param("external_transaction/enabled", external_transaction_enabled, false);
+    if (external_transaction_enabled)
+    {
+      dog_prior_map_localization::ExternalNdtTransactionServer node;
+      ros::spin();
+      return 0;
+    }
     dog_prior_map_localization::DogPriorMapNdtNode node;
     ros::spin();
   }

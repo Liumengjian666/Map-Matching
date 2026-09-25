@@ -1,0 +1,9 @@
+<launch>
+  <rosparam command="load"
+            file="$(find dog_prior_map_fastlio2_frontend_exp)/config/fastlio2_frontend_runtime_template.yaml"
+            ns="dog_prior_map_fastlio2_frontend" />
+  <node pkg="dog_prior_map_fastlio2_frontend_exp"
+        type="dog_prior_map_fastlio2_frontend_node"
+        name="dog_prior_map_fastlio2_frontend"
+        output="screen" />
+</launch>

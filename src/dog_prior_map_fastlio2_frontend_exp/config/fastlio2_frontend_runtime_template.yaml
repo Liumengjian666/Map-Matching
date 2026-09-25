@@ -1,0 +1,64 @@
+# Runtime-1B template. Missing identity-critical inputs intentionally keep the
+# node blocked; never replace them with identity or GT-derived values.
+topics:
+  imu: "/imu/data"
+  lidar: "/velodyne_points"
+  request: "/dog_livo/ndt/scan_request"
+  result: "/dog_livo/ndt/scan_result"
+  status: "/dog_livo/ndt/server_status"
+  control: "/dog_livo/ndt/session_control"
+  control_ack: "/dog_livo/ndt/session_control_ack"
+  ack: "/dog_livo/ndt/scan_ack"
+  odometry: "/dog_livo/fastlio2_ndt_odom"
+
+frames:
+  map: "camera_init"
+  lidar: "cmu_rc2_velodyne"
+
+lidar:
+  point_time_field: "time"
+  point_time_scale_to_seconds: 1.0 # seconds_from_scan_start
+  max_scan_duration_seconds: 0.25
+
+imu:
+  static_init_samples: 200
+  gravity_mps2: 9.809
+  max_static_gyro_std_rad_s: 0.05
+  max_static_accel_std_m_s2: 0.50
+  gyro_noise_std_rad_s: 0.1
+  accel_noise_std_m_s2: 2.0
+  gyro_bias_rw_std_rad_s2: 0.0001
+  accel_bias_rw_std_m_s3: 0.0001
+
+update:
+  pose_position_sigma_m: 0.20
+  pose_rotation_sigma_rad: 0.10
+
+queues:
+  max_imu_samples: 20000
+  max_scans: 64
+  max_results: 64
+
+protocol:
+  version: 1
+  terminal_cache_max_entries: 15000
+  result_timeout_wall_seconds: 5.0
+  # Fill with the exact latched NdtServerStatus values for the selected map
+  # and canonical NDT configuration before allowing the frontend to start.
+  map_sha256: ""
+  canonical_ndt_config_sha256: ""
+
+# REQUIRED calibration; direct from the authenticated dataset calibration.
+# p_imu = T_imu_lidar * p_lidar.
+T_imu_lidar:
+  x: 0.08
+  y: 0.029
+  z: 0.03
+  qx: 0.000435592
+  qy: 0.002000773
+  qz: 0.000258940
+  qw: 0.999997870
+
+# REQUIRED and deliberately omitted until a non-GT source is approved.
+# Add x/y/z/qx/qy/qz/qw only after establishing the pose and timestamp
+# provenance. Without it the runtime remains in WAIT_INIT.
