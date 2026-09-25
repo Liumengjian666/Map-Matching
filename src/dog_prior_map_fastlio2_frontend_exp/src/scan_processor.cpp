@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <iterator>
 
 namespace dog_prior_map_fastlio2_frontend_exp {
 namespace {
@@ -30,6 +31,60 @@ bool setFailure(std::string* reason, const char* value) {
 }
 
 }  // namespace
+
+bool prepareScanWindow(
+    uint64_t raw_scan_start_ns, uint64_t scan_end_ns,
+    uint64_t committed_ns,
+    std::vector<TimedLidarPoint,
+                Eigen::aligned_allocator<TimedLidarPoint>>* cloud,
+    ScanWindowDecision* decision, ScanWindowStats* stats,
+    std::string* failure_reason) {
+  if (failure_reason) failure_reason->clear();
+  if (!cloud || !decision || !stats || raw_scan_start_ns == 0 ||
+      scan_end_ns <= raw_scan_start_ns || committed_ns == 0 || cloud->empty()) {
+    if (failure_reason) *failure_reason = "invalid_scan_window_input";
+    return false;
+  }
+
+  for (const TimedLidarPoint& point : *cloud) {
+    if (point.stamp_ns < raw_scan_start_ns || point.stamp_ns > scan_end_ns) {
+      if (failure_reason) *failure_reason = "point_timestamp_outside_raw_scan_window";
+      return false;
+    }
+  }
+
+  ScanWindowStats prepared;
+  prepared.effective_scan_start_ns = std::max(raw_scan_start_ns, committed_ns);
+  prepared.remaining_points = cloud->size();
+  if (scan_end_ns <= committed_ns) {
+    *decision = ScanWindowDecision::SKIP_STALE;
+    *stats = prepared;
+    return true;
+  }
+
+  *decision = ScanWindowDecision::PROCESS;
+  if (raw_scan_start_ns < committed_ns) {
+    prepared.overlap_duration_ns = committed_ns - raw_scan_start_ns;
+    const std::size_t retained = static_cast<std::size_t>(std::count_if(
+        cloud->begin(), cloud->end(), [committed_ns](const TimedLidarPoint& point) {
+          return point.stamp_ns >= committed_ns;
+        }));
+    if (retained == 0) {
+      if (failure_reason) *failure_reason = "partial_overlap_has_no_points_at_or_after_commit";
+      return false;
+    }
+    const auto first_retained = std::remove_if(
+        cloud->begin(), cloud->end(), [committed_ns](const TimedLidarPoint& point) {
+          return point.stamp_ns < committed_ns;
+        });
+    prepared.overlap_points_dropped =
+        static_cast<std::size_t>(std::distance(first_retained, cloud->end()));
+    cloud->erase(first_retained, cloud->end());
+    prepared.remaining_points = cloud->size();
+  }
+  *stats = prepared;
+  return true;
+}
 
 bool ScanEndProcessor::process(
     FastLio2IkfomFrontend* candidate, const Pose3d& T_imu_lidar,

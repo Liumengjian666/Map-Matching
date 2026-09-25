@@ -2,6 +2,8 @@
 
 #include "dog_prior_map_fastlio2_frontend_exp/fastlio2_frontend.hpp"
 
+#include <cstddef>
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -13,6 +15,26 @@ struct TimedLidarPoint {
   double intensity = 0.0;
   uint64_t stamp_ns = 0;
 };
+
+enum class ScanWindowDecision : uint8_t {
+  PROCESS = 0,
+  SKIP_STALE = 1
+};
+
+struct ScanWindowStats {
+  uint64_t effective_scan_start_ns = 0;
+  uint64_t overlap_duration_ns = 0;
+  std::size_t overlap_points_dropped = 0;
+  std::size_t remaining_points = 0;
+};
+
+bool prepareScanWindow(
+    uint64_t raw_scan_start_ns, uint64_t scan_end_ns,
+    uint64_t committed_ns,
+    std::vector<TimedLidarPoint,
+                Eigen::aligned_allocator<TimedLidarPoint>>* cloud,
+    ScanWindowDecision* decision, ScanWindowStats* stats,
+    std::string* failure_reason);
 
 struct ScanEndResult {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

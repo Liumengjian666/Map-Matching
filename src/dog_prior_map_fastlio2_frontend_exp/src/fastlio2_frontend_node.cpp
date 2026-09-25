@@ -872,21 +872,50 @@ class FastLio2FrontendNode {
   }
 
   bool processOneScan(const sensor_msgs::PointCloud2::ConstPtr& message) {
-    uint64_t scan_start_ns = 0, scan_end_ns = 0;
+    uint64_t raw_scan_start_ns = 0, scan_end_ns = 0;
     std::vector<TimedLidarPoint, Eigen::aligned_allocator<TimedLidarPoint>> points;
-    if (!parseScan(*message, &scan_start_ns, &scan_end_ns, &points)) return false;
+    if (!parseScan(*message, &raw_scan_start_ns, &scan_end_ns, &points)) return false;
     const FilterSnapshot committed = runtime_.committedState();
     // Static initialization consumes an initial IMU-only window. Scans that
     // overlap it cannot be deskewed from that later initialized state.
-    if (scan_start_ns < committed.stamp_ns) {
+    if (raw_scan_start_ns < committed.stamp_ns) {
       if (runtime_.counters().last_committed_transaction == 0) {
-        ROS_WARN("[FAST-LIO2 frontend] skipping scan overlapping static-init window: start=%llu init=%llu",
-                 static_cast<unsigned long long>(scan_start_ns),
+        ++initial_skipped_scans_;
+        ROS_WARN_THROTTLE(2.0, "[FAST-LIO2 frontend] skipping scan overlapping static-init window: count=%llu start=%llu init=%llu",
+                 static_cast<unsigned long long>(initial_skipped_scans_),
+                 static_cast<unsigned long long>(raw_scan_start_ns),
                  static_cast<unsigned long long>(committed.stamp_ns));
         return true;
       }
-      setFatal("nonmonotonic/overlapping LiDAR scan after a committed transaction");
+    }
+
+    ScanWindowDecision window_decision = ScanWindowDecision::PROCESS;
+    ScanWindowStats window_stats;
+    std::string failure;
+    if (!prepareScanWindow(raw_scan_start_ns, scan_end_ns, committed.stamp_ns,
+                           &points, &window_decision, &window_stats, &failure)) {
+      setFatal("invalid scan time window: " + failure);
       return false;
+    }
+    if (window_decision == ScanWindowDecision::SKIP_STALE) {
+      ++stale_skipped_scans_;
+      ROS_WARN_THROTTLE(2.0, "[FAST-LIO2 frontend] skipping stale LiDAR scan: count=%llu raw_start=%llu end=%llu committed=%llu",
+                        static_cast<unsigned long long>(stale_skipped_scans_),
+                        static_cast<unsigned long long>(raw_scan_start_ns),
+                        static_cast<unsigned long long>(scan_end_ns),
+                        static_cast<unsigned long long>(committed.stamp_ns));
+      return true;
+    }
+    const uint64_t scan_start_ns = window_stats.effective_scan_start_ns;
+    if (window_stats.overlap_duration_ns > 0) {
+      ++partial_overlap_scans_;
+      overlap_points_dropped_ += window_stats.overlap_points_dropped;
+      overlap_duration_ns_ += window_stats.overlap_duration_ns;
+      ROS_WARN_THROTTLE(2.0, "[FAST-LIO2 frontend] trimming LiDAR overlap: duration_us=%.3f dropped=%zu remaining=%zu partial_count=%llu",
+                        static_cast<double>(window_stats.overlap_duration_ns) / 1e3,
+                        window_stats.overlap_points_dropped,
+                        window_stats.remaining_points,
+                        static_cast<unsigned long long>(partial_overlap_scans_));
     }
     if (terminal_ledger_.size() >= expected_cache_entries_) {
       setFatal("completed-result terminal ledger capacity exhausted before scan");
@@ -896,7 +925,6 @@ class FastLio2FrontendNode {
     if (!imuForScan(committed.stamp_ns, scan_end_ns, &imu)) return false;
     const uint64_t transaction_id = runtime_.counters().last_committed_transaction + 1;
     ScanEndResult processed;
-    std::string failure;
     if (!runtime_.beginScan(transaction_id, scan_start_ns, scan_end_ns, imu,
                             points, &processed, &failure)) {
       setFatal("candidate prediction/deskew failed: " + failure);
@@ -940,12 +968,25 @@ class FastLio2FrontendNode {
     const FilterSnapshot state = runtime_.committedState();
     pruneImuThrough(state.stamp_ns);
     publishOdometry(state, scan_end_ns);
+    ++processed_scans_;
+    if (result.disposition == Result::SUCCESS)
+      ++ndt_success_count_;
+    else
+      ++ndt_reject_count_;
     const RuntimeCounters counters = runtime_.counters();
-    ROS_INFO("[FAST-LIO2 frontend] tx=%llu disposition=%u committed=%llu updates=%llu prediction_only=%llu p=(%.3f %.3f %.3f)",
+    ROS_INFO("[FAST-LIO2 frontend] tx=%llu disposition=%u committed=%llu updates=%llu prediction_only=%llu processed=%llu init_skip=%llu stale_skip=%llu partial_overlap=%llu overlap_dropped=%llu overlap_us_total=%.3f ndt_success=%llu ndt_reject=%llu p=(%.3f %.3f %.3f)",
              static_cast<unsigned long long>(transaction_id), result.disposition,
              static_cast<unsigned long long>(state.stamp_ns),
              static_cast<unsigned long long>(counters.measurement_updates),
              static_cast<unsigned long long>(counters.prediction_only_commits),
+             static_cast<unsigned long long>(processed_scans_),
+             static_cast<unsigned long long>(initial_skipped_scans_),
+             static_cast<unsigned long long>(stale_skipped_scans_),
+             static_cast<unsigned long long>(partial_overlap_scans_),
+             static_cast<unsigned long long>(overlap_points_dropped_),
+             static_cast<double>(overlap_duration_ns_) / 1e3,
+             static_cast<unsigned long long>(ndt_success_count_),
+             static_cast<unsigned long long>(ndt_reject_count_),
              state.map_T_imu.position.x(), state.map_T_imu.position.y(),
              state.map_T_imu.position.z());
     return true;
@@ -1036,6 +1077,14 @@ class FastLio2FrontendNode {
   bool extrinsic_valid_ = false;
   uint32_t protocol_version_ = 1;
   uint64_t expected_cache_entries_ = 15000;
+  uint64_t processed_scans_ = 0;
+  uint64_t initial_skipped_scans_ = 0;
+  uint64_t stale_skipped_scans_ = 0;
+  uint64_t partial_overlap_scans_ = 0;
+  uint64_t overlap_points_dropped_ = 0;
+  uint64_t overlap_duration_ns_ = 0;
+  uint64_t ndt_success_count_ = 0;
+  uint64_t ndt_reject_count_ = 0;
   int max_imu_samples_ = 20000, max_scans_ = 64, max_results_ = 64;
   double point_time_scale_seconds_ = 1.0;
   double max_scan_duration_seconds_ = 0.25;

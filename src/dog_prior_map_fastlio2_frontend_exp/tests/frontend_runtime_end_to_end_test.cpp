@@ -41,9 +41,137 @@ std::vector<TimedLidarPoint, Eigen::aligned_allocator<TimedLidarPoint>> cloudFor
   return cloud;
 }
 
+bool overlapBoundaryContractTest() {
+  const auto point = [](uint64_t stamp_ns, int index) {
+    TimedLidarPoint lidar_point;
+    lidar_point.stamp_ns = stamp_ns;
+    lidar_point.position = Eigen::Vector3d(2.0 + 0.1 * index,
+                                           -0.8 + 0.04 * index,
+                                           0.3 + 0.02 * (index % 7));
+    lidar_point.intensity = static_cast<double>(index);
+    return lidar_point;
+  };
+
+  std::string failure;
+  ScanWindowDecision decision = ScanWindowDecision::PROCESS;
+  ScanWindowStats window_stats;
+  std::vector<TimedLidarPoint, Eigen::aligned_allocator<TimedLidarPoint>> stale_cloud = {
+      point(99000000ULL, 0), point(199000000ULL, 1)};
+  if (!require(prepareScanWindow(99000000ULL, 199000000ULL, 200000000ULL,
+                                 &stale_cloud, &decision, &window_stats,
+                                 &failure),
+               "whole stale scan preparation: " + failure) ||
+      !require(decision == ScanWindowDecision::SKIP_STALE &&
+               stale_cloud.size() == 2 && window_stats.remaining_points == 2 &&
+               window_stats.effective_scan_start_ns == 200000000ULL,
+               "whole stale scan must be skipped without mutating its cloud"))
+    return false;
+
+  RuntimeParameters parameters;
+  parameters.static_init_samples = 20;
+  parameters.pose_position_sigma_m = 0.03;
+  parameters.pose_rotation_sigma_rad = 0.02;
+  FrontendRuntime runtime(parameters);
+  const uint64_t init_start = 1000000000ULL;
+  const auto init_imu = imuRange(init_start, init_start + 95000000ULL);
+  Pose3d extrinsic;
+  extrinsic.position = Eigen::Vector3d(0.08, 0.015, 0.03);
+  extrinsic.orientation = Eigen::Quaterniond(
+      Eigen::AngleAxisd(0.01, Eigen::Vector3d::UnitY()));
+  Pose3d initial_map_T_lidar;
+  initial_map_T_lidar.orientation = extrinsic.orientation;
+  if (!require(runtime.initializeStatic(init_imu, initial_map_T_lidar, extrinsic,
+                                        &failure),
+               "overlap-test static init: " + failure)) return false;
+
+  const uint64_t scan1_start = runtime.committedState().stamp_ns;
+  const uint64_t scan1_end = scan1_start + 100000000ULL;
+  const uint64_t raw_scan2_start = scan1_end - 35000ULL;
+  const uint64_t scan2_end = scan1_end + 100000000ULL;
+  const uint64_t scan3_end = scan2_end + 100000000ULL;
+  ScanEndResult output;
+
+  if (!require(runtime.beginScan(1, scan1_start, scan1_end,
+                                 imuRange(scan1_start, scan1_end),
+                                 cloudFor(scan1_start, scan1_end), &output,
+                                 &failure),
+               "overlap-test scan1 begin: " + failure) ||
+      !require(runtime.finishScan(1, RuntimeDisposition::SUCCESS, true,
+                                  output.predicted_map_T_lidar, nullptr, &failure),
+               "overlap-test scan1 commit: " + failure))
+    return false;
+  const uint64_t committed_after_scan1 = runtime.committedState().stamp_ns;
+
+  std::vector<TimedLidarPoint, Eigen::aligned_allocator<TimedLidarPoint>> runtime_stale = {
+      point(committed_after_scan1 - 101000000ULL, 0),
+      point(committed_after_scan1 - 1000000ULL, 1)};
+  const RuntimeCounters before_stale = runtime.counters();
+  if (!require(prepareScanWindow(runtime_stale.front().stamp_ns,
+                                 runtime_stale.back().stamp_ns,
+                                 committed_after_scan1, &runtime_stale,
+                                 &decision, &window_stats, &failure),
+               "runtime stale scan preparation: " + failure) ||
+      !require(decision == ScanWindowDecision::SKIP_STALE &&
+               runtime.counters().last_committed_transaction ==
+                   before_stale.last_committed_transaction &&
+               runtime.committedState().stamp_ns == committed_after_scan1,
+               "stale scan must not create a transaction or advance filter time"))
+    return false;
+
+  std::vector<TimedLidarPoint, Eigen::aligned_allocator<TimedLidarPoint>> overlap_cloud = {
+      point(raw_scan2_start, 0),
+      point(scan1_end - 20000ULL, 1),
+      point(scan1_end, 2),
+      point(scan1_end + 20000000ULL, 3),
+      point(scan2_end, 4)};
+  if (!require(prepareScanWindow(raw_scan2_start, scan2_end, scan1_end,
+                                 &overlap_cloud, &decision, &window_stats,
+                                 &failure),
+               "partial overlap preparation: " + failure) ||
+      !require(decision == ScanWindowDecision::PROCESS &&
+               window_stats.effective_scan_start_ns == scan1_end &&
+               window_stats.overlap_duration_ns == 35000ULL &&
+               window_stats.overlap_points_dropped == 2 &&
+               window_stats.remaining_points == 3 && overlap_cloud.size() == 3,
+               "35us overlap must drop only points before committed time"))
+    return false;
+
+  if (!require(runtime.beginScan(2, window_stats.effective_scan_start_ns,
+                                 scan2_end, imuRange(scan1_end, scan2_end),
+                                 overlap_cloud, &output, &failure),
+               "overlap-test scan2 transaction: " + failure) ||
+      !require(output.imu_poses.front().stamp_ns == scan1_end &&
+               output.imu_poses.back().stamp_ns == scan2_end &&
+               output.scan_end_ns == scan2_end,
+               "overlap scan propagation must begin at commit and end exactly"))
+    return false;
+  if (!require(runtime.finishScan(2, RuntimeDisposition::SUCCESS, true,
+                                  output.predicted_map_T_lidar, nullptr, &failure),
+               "overlap-test scan2 commit: " + failure) ||
+      !require(runtime.committedState().stamp_ns == scan2_end,
+               "overlap scan must commit at its physical scan end"))
+    return false;
+
+  if (!require(runtime.beginScan(3, scan2_end, scan3_end,
+                                 imuRange(scan2_end, scan3_end),
+                                 cloudFor(scan2_end, scan3_end), &output,
+                                 &failure),
+               "overlap-test scan3 continuation: " + failure) ||
+      !require(runtime.finishScan(3, RuntimeDisposition::SUCCESS, true,
+                                  output.predicted_map_T_lidar, nullptr, &failure),
+               "overlap-test scan3 commit: " + failure))
+    return false;
+
+  return require(!runtime.fatal() &&
+                 runtime.counters().last_committed_transaction == 3 &&
+                 runtime.committedState().stamp_ns == scan3_end,
+                 "scan after an overlapping scan must continue normally");
+}
+
 }  // namespace
 
 int main() {
+  if (!overlapBoundaryContractTest()) return 1;
   RuntimeParameters parameters;
   parameters.static_init_samples = 20;
   parameters.pose_position_sigma_m = 0.03;
@@ -127,7 +255,8 @@ int main() {
                runtime.committedState().stamp_ns == scan3_end && !runtime.fatal(),
                "transaction order/counters/final state")) return 1;
 
-  std::cout << "FRONTEND_RUNTIME_END_TO_END_PASS"
+  std::cout << "OVERLAP_BOUNDARY_CONTRACT_PASS\n"
+            << "FRONTEND_RUNTIME_END_TO_END_PASS"
             << " measurement_updates=" << counters.measurement_updates
             << " prediction_only_commits=" << counters.prediction_only_commits
             << " last_tx=" << counters.last_committed_transaction
