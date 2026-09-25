@@ -1,0 +1,39 @@
+parameter,legacy,mature,status,evidence
+NDT resolution (m),0.8,0.8,SAME,R7H effective_params.yaml; R9B profile + runtime dump /lidar_update/ndt_resolution
+NDT step size,0.08,0.08,SAME,R7H effective_params.yaml; R9B profile + runtime dump /lidar_update/ndt_step_size
+transformation epsilon,0.001,0.001,SAME,R7H effective_params.yaml; R9B profile + runtime dump /lidar_update/ndt_transformation_epsilon
+maximum iterations,40,40.0,SAME,R7H effective_params.yaml; R9B profile + runtime dump /lidar_update/ndt_max_iterations
+source voxel XY (m),0.25,0.25,SAME,R7H effective_params.yaml; R9B profile + runtime dump /lidar_update/ndt_source_voxel_size
+source voxel Z (m),0.25,0.25,SAME,R7H effective_params.yaml; R9B profile + runtime dump /lidar_update/ndt_source_voxel_z_size
+target voxel XY (m),0.15,0.15,SAME,R7H effective_params.yaml; R9B profile + runtime dump /lidar_update/ndt_target_voxel_size
+target voxel Z (m),0.15,0.15,SAME,R7H effective_params.yaml; R9B profile + runtime dump /lidar_update/ndt_target_voxel_z_size
+maximum source points,1400,1400.0,SAME,R7H effective_params.yaml; R9B profile + runtime dump /lidar_update/ndt_max_source_points
+maximum target points,0,0.0,SAME,R7H effective_params.yaml; R9B profile + runtime dump /lidar_update/ndt_max_target_points
+step limiter enabled,True,True,SAME,R7H effective_params.yaml; R9B profile + runtime dump /lidar_update/ndt_step_limit_enable
+translation step limit (m),0.5,0.5,SAME,R7H effective_params.yaml; R9B profile + runtime dump /lidar_update/ndt_step_limit_max_translation
+rotation step limit (deg),5.0,5.0,SAME,R7H effective_params.yaml; R9B profile + runtime dump /lidar_update/ndt_step_limit_max_rotation_deg
+scan reference,start,start,SAME,R7H effective_params.yaml; R9B profile + runtime dump /lidar_update/scan_reference_time
+point-offset scale,1e-09,1e-09,SAME,R7H effective_params.yaml; R9B profile + runtime dump /lidar_update/offset_time_scale
+local IMU rotation prior,True,True,SAME,R7H effective_params.yaml; R9B profile + runtime dump /lidar_update/local_imu_rotation_prior_enable
+map SHA-256,2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570,2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570,SAME,R7H provenance and R9B profile checked against manifest-verified H1 PCD 2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570; R9B runtime prefix=2b571af236738a066
+map frame,floor01_map_h1,floor01_map_h1,SAME,R7H effective parameters and R9B profile
+LiDAR/base frame,cmu_sp1_velodyne,cmu_sp1_velodyne,SAME,R7H effective parameters and R9B profile
+map voxel size (m),0.15,0.15,SAME,effective map voxelization
+map path,/tmp/floor01_candidates/floor01_h1_map.pcd,/tmp/floor01_candidates/floor01_h1_map.pcd,SAME,same H1 PCD file
+Floor01 calibration SHA-256,fd9fbfb209d6715b4812a92d458cdeb32cbfd75160356a87802c2bda5dfa7414,fd9fbfb209d6715b4812a92d458cdeb32cbfd75160356a87802c2bda5dfa7414,SAME,R7H provenance and R9B profile/runtime checked against manifest-verified official calibration fd9fbfb209d6715b4812a92d458cdeb32cbfd75160356a87802c2bda5dfa7414; R9B runtime prefix=fd9fbfb209d6715b4
+LiDAR-to-IMU rotation (row-major 3x3),"[0.999945562,0.009074807,0.005149763,-0.009060897,0.999955255,-0.002718066,-0.005174199,0.002671256,0.999983046]","[0.999945562,0.009074807,0.005149763,-0.009060897,0.999955255,-0.002718066,-0.005174199,0.002671256,0.999983046]",SAME,R7H hash-verified adapter launch vs R9B profile; both compared independently to official calibration
+LiDAR-to-IMU translation (m),"[0.08,0.029,0.03]","[0.08,0.029,0.03]",SAME,R7H launch/runtime dump vs R9B profile/runtime dump; both compared independently to official calibration
+range filter (m),"[0.5, 80.0] shared-source defaults","[0.5, 80.0] shared-source defaults",SAME,same NDT source SHA; defaults at getParam(scan_min_range/max_range); no profile override
+packet decoder,"ros-drivers/velodyne 1.7.0, commit 89faa698688a48d4a5080f73c04d7aed8117eec0","ros-drivers/velodyne 1.7.0, commit 89faa698688a48d4a5080f73c04d7aed8117eec0",SAME,R7E official decoder audit and R9B dataset overlay
+point time semantics,official VLP16 firing-time table; first-packet/start reference,field=time; convention=seconds_from_scan_start; reference=start,SAME,"same raw packet bag, official decoder timing, and first-packet scan-start convention"
+loaded target point count,549606,549606,SAME,R7H NDT startup log and R9B NDT startup log
+NDT implementation SHA-256,40cdf26f9dddb9d06dc16c0bfd89fc88a9dd33e42e5bbd4e9bc3b453f1e4277c,40cdf26f9dddb9d06dc16c0bfd89fc88a9dd33e42e5bbd4e9bc3b453f1e4277c,SAME,R7H formal run provenance SHA versus hash-verified R9B workspace source at frozen start revision
+initial-guess implementation,previous_pose_delta + local IMU rotation prior; shared code,previous_pose_delta + local IMU rotation prior; shared code,SAME,same NDT source SHA; per-frame source/use gate below
+initial pose / map normalization,H1 map frame; initial current_pose is identity,H1 map frame; initial current_pose is identity,SAME,same map SHA/frame; both first logged output guesses are current_pose/no_previous_pose at identity
+translation/rotation motion compensation,prior-NDT CV translation + IMU gyro rotation,EKF/IMU full-SE(3) deskew,EXPECTED_PIPELINE_DIFFERENCE,R7H/R9B formal pipeline definitions
+IMU state propagation and NDT feedback,prior NDT pose CV history,"EKF propagation, NDT correction, later state-driven deskew",EXPECTED_PIPELINE_DIFFERENCE,closed-loop infrastructure contrast explicitly defined by R9C
+gyro-bias static initialization,legacy adapter behavior,first 200 accepted IMU samples mean gyro,EXPECTED_PIPELINE_DIFFERENCE,R9B recorded experiment profile
+deskew/NDT input topic plumbing,/superloc_adapter/points_deskewed,/dog_livo/points_deskewed_imu_exp,EXPECTED_PIPELINE_DIFFERENCE,interfaces differ while decoded packet-time semantics and NDT settings are held fixed
+first emitted initial guess identity,True,True,SAME,"first rows in each Run-A detailed NDT CSV: current_pose/no_previous_pose, identity pose"
+logged initial-guess source/reason,common=4126,common=4126,EXPECTED_PIPELINE_DIFFERENCE,mismatches=1; stamps=[Decimal('1660857393.6012471')]; only first common anchor differs because mature Run A rejects pre-initialization scans and has no previous NDT pose; later common source/reason must match
+logged local IMU prior enable/use,common=4126,common=4126,EXPECTED_PIPELINE_DIFFERENCE,mismatches=1; stamps=[Decimal('1660857393.6012471')]; expected first-output history availability only
