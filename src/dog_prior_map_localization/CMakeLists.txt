@@ -17,6 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_ros
   pcl_conversions
   livox_ros_driver2
+  dog_prior_map_interfaces
 )
 
 find_package(Eigen3 REQUIRED)
@@ -25,7 +26,7 @@ find_package(PCL REQUIRED COMPONENTS common filters io kdtree registration)
 set(CMAKE_CXX_FLAGS "-O2 -g -Wall ${CMAKE_CXX_FLAGS}")
 
 catkin_package(
-  CATKIN_DEPENDS roscpp sensor_msgs nav_msgs geometry_msgs diagnostic_msgs tf pcl_ros pcl_conversions livox_ros_driver2
+  CATKIN_DEPENDS roscpp sensor_msgs nav_msgs geometry_msgs diagnostic_msgs tf pcl_ros pcl_conversions livox_ros_driver2 dog_prior_map_interfaces
 )
 
 include_directories(

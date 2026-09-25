@@ -1,0 +1,19 @@
+std_msgs/Header header
+uint8 BEGIN_SESSION=0
+uint8 BEGIN_EPOCH=1
+uint8 END_SESSION=2
+uint8 REASON_FRONTEND_START=0
+uint8 REASON_EXPLICIT_FILTER_RESET=1
+uint8 REASON_SENSOR_TIME_REWIND=2
+uint8 REASON_DATASET_RESTART=3
+uint8 REASON_FRONTEND_END=4
+uint32 PROTOCOL_VERSION=1
+
+uint8 command
+uint32 protocol_version
+string server_instance_id
+string frontend_session_id
+uint32 epoch
+uint8 reason
+uint8[32] expected_map_sha256
+uint8[32] expected_ndt_config_sha256
