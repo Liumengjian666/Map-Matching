@@ -1,4 +1,5 @@
 #include "dog_prior_map_localization/external_ndt_transaction_server.hpp"
+#include "dog_prior_map_localization/ndt_request_identity.hpp"
 
 #include <dog_prior_map_interfaces/NdtScanAck.h>
 #include <dog_prior_map_interfaces/NdtScanRequest.h>
@@ -13,7 +14,6 @@
 #include <pcl/registration/ndt.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <ros/ros.h>
-#include <ros/serialization.h>
 
 #include <algorithm>
 #include <array>
@@ -143,13 +143,6 @@ bool sha256Text(const std::string& text, std::array<uint8_t, 32>* output) {
                               EVP_sha256(), nullptr) == 1 && length == output->size();
 }
 
-std::vector<uint8_t> serializeRequest(const Request& request) {
-  std::vector<uint8_t> bytes(ros::serialization::serializationLength(request));
-  ros::serialization::OStream stream(bytes.data(), static_cast<uint32_t>(bytes.size()));
-  ros::serialization::serialize(stream, request);
-  return bytes;
-}
-
 uint64_t cloudHash(const sensor_msgs::PointCloud2& cloud) {
   constexpr uint64_t kOffset = 14695981039346656037ULL;
   constexpr uint64_t kPrime = 1099511628211ULL;
@@ -215,7 +208,7 @@ struct ExternalNdtTransactionServer::Impl {
     Ack ack;
   };
   struct Cached {
-    std::vector<uint8_t> serialized_request;
+    detail::NdtRequestIdentity request_identity;
     Result result;
   };
 
@@ -634,7 +627,6 @@ struct ExternalNdtTransactionServer::Impl {
   void processRequest(const Request& request) {
     Result result = baseResult(request, Result::ERROR_PROTOCOL, "invalid_request_envelope");
     const Key key(request.frontend_session_id, request.epoch, request.transaction_id);
-    const std::vector<uint8_t> payload = serializeRequest(request);
     if (request.transaction_id == 0 || !isUuidV4(request.frontend_session_id) ||
         !validTimestampEnvelope(request) || request.protocol_version != Status::PROTOCOL_VERSION ||
         request.server_instance_id != status.server_instance_id ||
@@ -652,9 +644,14 @@ struct ExternalNdtTransactionServer::Impl {
       result_pub.publish(result);
       return;
     }
+    const uint64_t actual_cloud_hash = cloudHash(request.cloud_end_frame);
+    const detail::NdtRequestIdentity request_identity =
+        detail::makeNdtRequestIdentity(request);
     const auto existing = terminal_cache.find(key);
     if (existing != terminal_cache.end()) {
-      if (existing->second.serialized_request == payload) {
+      if (actual_cloud_hash == request.request_cloud_hash &&
+          detail::exactNdtRequestIdentity(existing->second.request_identity,
+                                          request_identity)) {
         result_pub.publish(existing->second.result);
       } else {
         result.reason = "conflicting_duplicate_request_identity";
@@ -670,7 +667,7 @@ struct ExternalNdtTransactionServer::Impl {
       latchFatal(Status::FATAL_CACHE_EXHAUSTED);
       return;
     }
-    if (cloudHash(request.cloud_end_frame) != request.request_cloud_hash) {
+    if (actual_cloud_hash != request.request_cloud_hash) {
       result.reason = "request_cloud_hash_mismatch";
       result_pub.publish(result);
       return;
@@ -728,7 +725,7 @@ struct ExternalNdtTransactionServer::Impl {
         }
       }
     }
-    terminal_cache.emplace(key, Cached{payload, result});
+    terminal_cache.emplace(key, Cached{request_identity, result});
     result_pub.publish(result);
   }
 

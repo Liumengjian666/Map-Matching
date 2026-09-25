@@ -1,4 +1,5 @@
 #include "dog_prior_map_localization/external_ndt_transaction_server.hpp"
+#include "dog_prior_map_localization/ndt_request_identity.hpp"
 
 #include <dog_prior_map_interfaces/NdtScanRequest.h>
 #include <dog_prior_map_interfaces/NdtScanResult.h>
@@ -34,6 +35,9 @@ using Status = dog_prior_map_interfaces::NdtServerStatus;
 using Control = dog_prior_map_interfaces::NdtSessionControl;
 using ControlAck = dog_prior_map_interfaces::NdtSessionControlAck;
 
+static_assert(sizeof(dog_prior_map_localization::detail::NdtRequestIdentity) <= 256,
+              "terminal request identity must stay compact");
+
 class Probe {
  public:
   void status(const Status::ConstPtr& message) {
@@ -51,6 +55,7 @@ class Probe {
   void result(const Result::ConstPtr& message) {
     std::lock_guard<std::mutex> lock(mutex);
     results[message->transaction_id] = *message;
+    ++result_counts[message->transaction_id];
     condition.notify_all();
   }
   bool waitStatus(Status* output) {
@@ -68,12 +73,19 @@ class Probe {
     return true;
   }
   bool waitResult(uint64_t tx, Result* output) {
+    return waitResultAfter(tx, 0, output);
+  }
+  bool waitResultAfter(uint64_t tx, uint64_t previous_count, Result* output) {
     std::unique_lock<std::mutex> lock(mutex);
-    if (!condition.wait_for(lock, std::chrono::seconds(10), [this, tx] {
-          return results.find(tx) != results.end();
+    if (!condition.wait_for(lock, std::chrono::seconds(10), [this, tx, previous_count] {
+          return result_counts[tx] > previous_count;
         })) return false;
     *output = results.at(tx);
     return true;
+  }
+  uint64_t resultCount(uint64_t tx) {
+    std::lock_guard<std::mutex> lock(mutex);
+    return result_counts[tx];
   }
 
   std::mutex mutex;
@@ -81,6 +93,7 @@ class Probe {
   Status latest_status;
   ControlAck control_ack;
   std::map<uint64_t, Result> results;
+  std::map<uint64_t, uint64_t> result_counts;
   bool got_status = false;
   bool got_ack = false;
 };
@@ -213,6 +226,22 @@ sensor_msgs::PointCloud2 makeSource(const pcl::PointCloud<pcl::PointXYZ>& map,
   return message;
 }
 
+std::vector<uint8_t> serializeResultPayload(Result result) {
+  // roscpp assigns Header.seq on each publish; it is transport metadata, not
+  // part of the cached NDT terminal payload.
+  result.header.seq = 0;
+  std::vector<uint8_t> bytes(ros::serialization::serializationLength(result));
+  ros::serialization::OStream stream(bytes.data(), static_cast<uint32_t>(bytes.size()));
+  ros::serialization::serialize(stream, result);
+  return bytes;
+}
+
+Eigen::Vector3d usedTranslation(const Result& result) {
+  return Eigen::Vector3d(result.used_map_T_lidar.pose.position.x,
+                         result.used_map_T_lidar.pose.position.y,
+                         result.used_map_T_lidar.pose.position.z);
+}
+
 }  // namespace
 
 int main(int argc, char** argv) {
@@ -245,6 +274,8 @@ int main(int argc, char** argv) {
   setParam("/lidar_update/ndt_step_size", 0.1);
   setParam("/lidar_update/ndt_transformation_epsilon", 0.001);
   setParam("/lidar_update/ndt_max_iterations", 1);
+  setParam("/lidar_update/ndt_step_limit_enable", true);
+  setParam("/lidar_update/ndt_step_limit_max_translation", 0.15);
   setParam("/external_transaction/queue_capacity", 8);
   setParam("/external_transaction/terminal_cache_max_entries", 100);
   setParam("/external_transaction/request_topic", std::string("/test/ndt/request"));
@@ -297,8 +328,16 @@ int main(int argc, char** argv) {
   first_stamp.fromNSec(first_end_ns);
   const sensor_msgs::PointCloud2 success_cloud = makeSource(
       *map, true_map_T_lidar, "lidar", first_stamp);
-  request_pub.publish(requestFor(1, status, session, true_map_T_lidar,
-                                 success_cloud));
+  const Request first_request = requestFor(1, status, session, true_map_T_lidar,
+                                           success_cloud);
+  const auto first_identity =
+      dog_prior_map_localization::detail::makeNdtRequestIdentity(first_request);
+  if (!dog_prior_map_localization::detail::exactNdtRequestIdentity(
+          first_identity, first_identity)) {
+    std::cerr << "FAIL: compact request identity is not reflexive\n";
+    return 1;
+  }
+  request_pub.publish(first_request);
   Result success;
   if (!probe.waitResult(1, &success) || success.disposition != Result::SUCCESS ||
       !success.pose_valid || !success.converged) {
@@ -325,16 +364,106 @@ int main(int argc, char** argv) {
     return 1;
   }
 
-  const uint64_t second_end_ns = 2200000000ULL;
-  ros::Time second_stamp;
-  second_stamp.fromNSec(second_end_ns);
+  Request cloud_payload_conflict = first_request;
+  cloud_payload_conflict.cloud_end_frame.data.at(0) ^= 0x01U;
+  uint64_t prior_result_count = probe.resultCount(1);
+  request_pub.publish(cloud_payload_conflict);
+  Result cloud_payload_conflict_result;
+  if (!probe.waitResultAfter(1, prior_result_count, &cloud_payload_conflict_result) ||
+      cloud_payload_conflict_result.disposition != Result::ERROR_PROTOCOL ||
+      cloud_payload_conflict_result.pose_valid ||
+      cloud_payload_conflict_result.reason != "conflicting_duplicate_request_identity") {
+    std::cerr << "FAIL: changed point-cloud bytes with unchanged declared hash were not rejected as a duplicate conflict\n";
+    return 1;
+  }
+
+  Request cloud_conflict = first_request;
+  ++cloud_conflict.request_cloud_hash;
+  prior_result_count = probe.resultCount(1);
+  request_pub.publish(cloud_conflict);
+  Result cloud_conflict_result;
+  if (!probe.waitResultAfter(1, prior_result_count, &cloud_conflict_result) ||
+      cloud_conflict_result.disposition != Result::ERROR_PROTOCOL ||
+      cloud_conflict_result.reason != "conflicting_duplicate_request_identity") {
+    std::cerr << "FAIL: changed request cloud hash was not rejected as a duplicate conflict\n";
+    return 1;
+  }
+
+  Request pose_conflict = first_request;
+  pose_conflict.predicted_map_T_lidar.pose.position.x += 0.01;
+  prior_result_count = probe.resultCount(1);
+  request_pub.publish(pose_conflict);
+  Result pose_conflict_result;
+  if (!probe.waitResultAfter(1, prior_result_count, &pose_conflict_result) ||
+      pose_conflict_result.disposition != Result::ERROR_PROTOCOL ||
+      pose_conflict_result.reason != "conflicting_duplicate_request_identity") {
+    std::cerr << "FAIL: changed predicted pose was not rejected as a duplicate conflict\n";
+    return 1;
+  }
+
+  const Eigen::Matrix4d second_true_pose = pose(0.80, -0.16, 0.11, 0.035);
+  ros::Time second_scan_stamp;
+  second_scan_stamp.fromNSec(2200000000ULL);
+  const auto second_cloud = makeSource(*map, second_true_pose, "lidar", second_scan_stamp);
+  request_pub.publish(requestFor(2, status, session, second_true_pose, second_cloud));
+  Result second_success;
+  if (!probe.waitResult(2, &second_success) ||
+      second_success.disposition != Result::SUCCESS || !second_success.pose_valid) {
+    std::cerr << "FAIL: second scan did not succeed for duplicate idempotence check\n";
+    return 1;
+  }
+
+  const Eigen::Matrix4d third_true_pose = pose(1.32, -0.16, 0.11, 0.035);
+  ros::Time third_scan_stamp;
+  third_scan_stamp.fromNSec(2300000000ULL);
+  const auto third_cloud = makeSource(*map, third_true_pose, "lidar", third_scan_stamp);
+  request_pub.publish(requestFor(3, status, session, third_true_pose, third_cloud));
+  Result third_success;
+  if (!probe.waitResult(3, &third_success) ||
+      third_success.disposition != Result::SUCCESS || !third_success.pose_valid ||
+      (usedTranslation(third_success) - usedTranslation(success)).norm() < 0.20) {
+    std::cerr << "FAIL: later transactions did not advance NDT limiter state\n";
+    return 1;
+  }
+
+  prior_result_count = probe.resultCount(1);
+  request_pub.publish(first_request);
+  Result cached_duplicate;
+  const bool got_cached_duplicate =
+      probe.waitResultAfter(1, prior_result_count, &cached_duplicate);
+  const auto cached_bytes = got_cached_duplicate ? serializeResultPayload(cached_duplicate)
+                                                  : std::vector<uint8_t>();
+  const auto first_bytes = serializeResultPayload(success);
+  if (!got_cached_duplicate || cached_bytes != first_bytes ||
+      (usedTranslation(cached_duplicate) - usedTranslation(success)).norm() > 0.0) {
+    std::size_t mismatch = 0;
+    while (mismatch < cached_bytes.size() && mismatch < first_bytes.size() &&
+           cached_bytes[mismatch] == first_bytes[mismatch]) ++mismatch;
+    std::cerr << "FAIL: identical duplicate did not return exact cached result; disposition="
+              << static_cast<int>(cached_duplicate.disposition)
+              << " reason=" << cached_duplicate.reason
+              << " first_x=" << success.used_map_T_lidar.pose.position.x
+              << " tx3_x=" << third_success.used_map_T_lidar.pose.position.x
+              << " duplicate_x=" << cached_duplicate.used_map_T_lidar.pose.position.x
+              << " fitness=" << success.fitness << "/" << cached_duplicate.fitness
+              << " iter=" << success.iterations << "/" << cached_duplicate.iterations
+              << " bytes=" << first_bytes.size() << "/" << cached_bytes.size()
+              << " mismatch_offset=" << mismatch
+              << " result_count=" << probe.resultCount(1)
+              << " ndt may have rerun\n";
+    return 1;
+  }
+
+  const uint64_t insufficient_end_ns = 2400000000ULL;
+  ros::Time insufficient_stamp;
+  insufficient_stamp.fromNSec(insufficient_end_ns);
   const sensor_msgs::PointCloud2 small_cloud = makeSource(
-      *map, true_map_T_lidar, "lidar", second_stamp,
+      *map, true_map_T_lidar, "lidar", insufficient_stamp,
       Eigen::Vector3d::Zero(), 10);
-  request_pub.publish(requestFor(2, status, session, true_map_T_lidar,
+  request_pub.publish(requestFor(4, status, session, true_map_T_lidar,
                                  small_cloud));
   Result insufficient;
-  if (!probe.waitResult(2, &insufficient) ||
+  if (!probe.waitResult(4, &insufficient) ||
       insufficient.disposition != Result::REJECT_INSUFFICIENT_POINTS ||
       insufficient.pose_valid) {
     std::cerr << "FAIL: insufficient-point transaction disposition mismatch\n";
