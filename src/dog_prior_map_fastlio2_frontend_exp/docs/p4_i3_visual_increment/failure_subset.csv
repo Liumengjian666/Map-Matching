@@ -1,0 +1,5 @@
+interval,threshold_m,count,visual_valid,evaluated,visual_better,better_rate
+all,0.25,1086,551,551,551,1.0
+all,0.4,662,340,340,340,1.0
+150-end,0.25,1086,551,551,551,1.0
+150-end,0.4,662,340,340,340,1.0
