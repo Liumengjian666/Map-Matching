@@ -1,0 +1,9 @@
+stage,samples,mean_ms,p95_ms,max_ms,sum_ms,note
+BASELINE_NDT_ALIGN,5,26.444708600000002,82.27604799999997,96.69742,132.223543,Five-scan fixed-cloud reproduction; target setup excluded.
+PRIMARY_MULTI_START_NDT_PER_SCAN,32,3444.6943571875,5631.302949199999,5767.466642999994,110230.21943,Sum of 245 planar + 18 axial align calls per scan; NDT align time only.
+WIDE_SEARCH_NDT_PER_TARGETED_SCAN,8,710.332381125,1061.46262625,1067.508941,5682.659049,Sum of 48 wide planar align calls; eight targeted scans.
+ALL_SEED_NDT_PER_SCAN,32,3622.2774524687493,6415.57496445,6670.829559999999,115912.87847899998,Sum of NDT align calls for each selected scan.
+PROJECTED_5_CANDIDATE_SEEDS_PER_SCAN,32,65.58627499558527,107.45557206455625,109.64765480988592,2098.7607998587287,Descriptive projection: five times the observed per-seed NDT align mean for each scan; not an optimized runtime design.
+FULL_MODE_SEARCH_PROCESS_WALL,1,146826.0,146826.0,146826.0,146826.0,C++ helper internal ELAPSED_SEC measured from before per-frame cloud loading through seed scoring; map setup/hash validation precede this timer.
+ANALYTIC_PLUS_FD_CURVATURE_PER_MODE,108,383.9223171481483,534.25146745,554.992691,41463.61025200001,PCL analytic score Hessian plus three FD sensitivity scales (72 perturbation evaluations per scale plus shared center); excludes per-frame PCL warm-up align.
+GT_BLIND_CLUSTERING_AND_SCATTER_PROCESS,1,72863.7757159886,72863.7757159886,72863.7757159886,72863.7757159886,Measured script wall time through cluster/scatter computation; plotting and file output excluded.
