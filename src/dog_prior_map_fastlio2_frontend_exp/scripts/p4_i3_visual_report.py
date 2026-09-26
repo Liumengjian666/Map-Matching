@@ -16,6 +16,7 @@ from p3_r10c_failure_mechanism import (
     rotation_error_deg,
     summarize,
 )
+from p4_i3_visual_directional import direction_stats, evaluate_directional
 
 
 def metrics(rows, label):
@@ -165,6 +166,7 @@ def plots(rows, segments, out):
     plt.grid(alpha=0.3)
     plt.tight_layout()
     plt.savefig(out / "time_vs_local_translation_error.png", dpi=150)
+    plt.savefig(out / "01_visual_vs_ikfom_translation_error.png", dpi=150)
     plt.close()
     attempts = [r for r in rows if r["attempted"]]
     plt.figure(figsize=(12, 4))
@@ -177,6 +179,7 @@ def plots(rows, segments, out):
     plt.grid(alpha=0.3)
     plt.tight_layout()
     plt.savefig(out / "time_vs_inlier_ratio.png", dpi=150)
+    plt.savefig(out / "02_visual_inlier_ratio.png", dpi=150)
     plt.close()
     plt.figure(figsize=(6, 6))
     a = np.array([r["ikfom_t_error_m"] for r in paired])
@@ -190,6 +193,7 @@ def plots(rows, segments, out):
     plt.grid(alpha=0.3)
     plt.tight_layout()
     plt.savefig(out / "ikfom_vs_visual_translation_error.png", dpi=150)
+    plt.savefig(out / "03_visual_vs_ikfom_scatter.png", dpi=150)
     plt.close()
     fig, axes = plt.subplots(2, 1, figsize=(12, 7), sharex=True)
     index = np.arange(len(segments))
@@ -208,6 +212,7 @@ def plots(rows, segments, out):
     axes[1].set_xlabel("Evaluation time segment (s)")
     fig.tight_layout()
     fig.savefig(out / "segment_coverage_and_rmse.png", dpi=150)
+    fig.savefig(out / "04_segment_coverage_rmse.png", dpi=150)
     plt.close(fig)
 
 
@@ -228,6 +233,9 @@ def evaluate_and_report(rows, sync, camera, calibration, paths, out, limit):
     )
     gt = DATA / "gt/floor01_gt.txt"
     evaluate(rows, calibration, local, gt)
+    direction_count = evaluate_directional(rows, calibration, gt, RUNTIME)
+    directions = direction_stats(rows)
+    write_csv(out / "directional_metrics.csv", directions)
     write_csv(out / "visual_increment.csv", rows)
     segments = []
     for low in range(0, 400, 50):
@@ -254,12 +262,15 @@ def evaluate_and_report(rows, sync, camera, calibration, paths, out, limit):
         "feature_ms",
         "klt_ms",
         "depth_ms",
+        "projection_ms",
+        "association_ms",
         "pnp_ms",
         "preprocess_ms",
         "total_ms",
     ):
         runtime.append(dict(component=key, **summarize([r[key] for r in attempts])))
     write_csv(out / "runtime_metrics.csv", runtime)
+    write_csv(out / "runtime_breakdown.csv", runtime)
     improve = 1 - late["visual_t_rmse_m"] / late["ikfom_t_rmse_m"]
     rotation_ratio = late["visual_r_rmse_deg"] / late["ikfom_r_rmse_deg"]
     gate_a = late["coverage"] >= 0.6
@@ -268,7 +279,11 @@ def evaluate_and_report(rows, sync, camera, calibration, paths, out, limit):
     verdict = (
         "VISUAL_MOTION_PROMISING"
         if gate_a and gate_b and gate_c
-        else ("SPARSE_VISUAL_SIGNAL" if not gate_a else "NOT_PROMISING")
+        else (
+            "SPARSE_VISUAL_SIGNAL"
+            if not gate_a and gate_b and gate_c
+            else "NOT_PROMISING"
+        )
     )
     if limit:
         verdict = "SMOKE_ONLY_NO_SCIENTIFIC_VERDICT"
@@ -279,6 +294,7 @@ def evaluate_and_report(rows, sync, camera, calibration, paths, out, limit):
         f"Verdict: `{verdict}`. Offline only; no runtime changes, NDT rerun, IKFoM replay or rosbag playback.",
         "",
         f"Start SHA: `{START_SHA}`; branch `paper`. Synthetic PnP direction and MEI rectification: PASS.",
+        "Supplement follows completed first-pass commit `8def495a82245d52772c3bc78334adfaf797cce9`; no reset or rewrite to the original algorithm baseline. Only instrumentation and post-hoc evaluation are supplemented.",
         "## Camera and source lineage",
         "",
         f"Camera: `{json.dumps(camera)}`.",
@@ -352,6 +368,8 @@ def evaluate_and_report(rows, sync, camera, calibration, paths, out, limit):
                 for k in (
                     "detected",
                     "klt_valid",
+                    "klt_forward_valid",
+                    "fb_valid",
                     "depth_associated",
                     "pnp_inliers",
                     "inlier_ratio",
@@ -373,6 +391,8 @@ def evaluate_and_report(rows, sync, camera, calibration, paths, out, limit):
         RUNTIME,
         MANIFEST,
         local,
+        RUNTIME.parent / "evaluation_inputs/predictor.csv",
+        RUNTIME.parent / "evaluation_inputs/corrected.csv",
         gt,
         DATA / "calibration/floor01_intrinsics.yaml",
         DATA / "calibration/floor01_extrinsics.yaml",
@@ -380,12 +400,37 @@ def evaluate_and_report(rows, sync, camera, calibration, paths, out, limit):
         report.append(f"- `{p}` SHA256 `{sha256(p)}`")
     report += [
         "",
+        "## Nearest-time pose and directional supplement",
+        "",
+        f"Reconstructed {direction_count} valid paired increments from saved corrected/predictor poses; scalar translation/rotation residuals agree with the existing R10C values within 1e-5 m / 1e-4 deg.",
+        "For each sync-valid visual pair, independently select nearest saved corrected(ref image) and predictor(cur image), each <=20 ms, and require their IDs to equal the original adjacent scans. This is the task-authorized nearest-endpoint approximation, NOT exact image-time propagation. No interpolation across NDT correction discontinuities, no doubled scan interval, no new IKFoM run.",
+        "Absolute endpoint offset and interval-length difference (ms), over attempted pairs:",
+        "```json",
+        json.dumps(
+            {
+                key: summarize([abs(r[key]) for r in attempts])
+                for key in (
+                    "ikfom_ref_image_offset_ms",
+                    "ikfom_cur_image_offset_ms",
+                    "image_minus_ikfom_dt_ms",
+                )
+            },
+            indent=2,
+        ),
+        "```",
+        "Residual E = inverse(GT_delta) * estimated_delta. e_visual_xyz/e_ikfom_xyz are E translation, in metres. Both are expressed in the common GT-current-scan IMU/body basis: image-time visual residual is rotated by Q=R_GT_scan_cur^T R_GT_image_cur; rotation residual is conjugated Q E_R Q^T. GT is used only in post-hoc scoring, never to alter a measured visual pose or validity.",
+        "roll/pitch/yaw are extrinsic xyz Euler angles (degrees) of the residual rotation, NOT differences between pose Euler angles and NOT the SO(3) geodesic angle. Component RMSE squares therefore need not sum to the squared geodesic RMSE.",
+        "```json",
+        json.dumps(directions, indent=2),
+        "```",
+        "klt_forward_valid counts successful forward LK status flags. fb_valid additionally requires backward status, FB<=1px, finite image bounds (same as klt_valid). projection_ms includes cloud decoding, extrinsic projection and pixel z-buffer; association_ms includes KD-tree construction/query and feature-ray depth assignment. depth_ms retains their combined wrapper time.",
+        "",
         "## Scope and interpretation",
         "",
         f"Timestamp sensitivity (150s-end): scoring the unchanged visual estimate against scan-time GT gives rotation RMSE {late['visual_scan_gt_r_rmse_deg']:.6f} deg versus IKFoM {late['ikfom_r_rmse_deg']:.6f} deg, ratio {late['visual_scan_gt_r_rmse_deg'] / late['ikfom_r_rmse_deg']:.6f}. The image-time rotation gate must not be presented as a timestamp-insensitive guarantee; the final sparse-coverage verdict is unchanged.",
         "LiDAR depth comes from saved scan-end IMU-deskewed request clouds. It carries the existing inertial deskew assumptions, so visual estimates are not statistically independent of IMU. This is a fixed-parameter signal viability test on one sequence; no fusion or novelty claim.",
         "OpenCV reference: https://docs.opencv.org/4.5.5/d3/ddc/group__ccalib.html .",
-        "Outputs: visual_increment.csv, segment_metrics.csv, sync_stats.csv, failure_subset.csv, runtime_metrics.csv and four PNG plots. Raw images, bags and point clouds are not included.",
+        "Outputs: visual_increment.csv, segment_metrics.csv, sync_stats.csv, failure_subset.csv, runtime_metrics.csv, runtime_breakdown.csv, directional_metrics.csv and four plots named 01..04 (old plot aliases retained). Raw images, bags and point clouds are not included.",
         "",
     ]
     (out / "summary.md").write_text("\n".join(report))

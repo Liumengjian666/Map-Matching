@@ -105,6 +105,7 @@ def xyz_array(cloud):
 
 
 def associate_depth(cloud, features, calibration):
+    tick = time.perf_counter()
     xyz = xyz_array(cloud)
     transform = calibration["T_camera_lidar"]
     xyz = xyz @ transform[:3, :3].T + transform[:3, 3]
@@ -116,17 +117,24 @@ def associate_depth(cloud, features, calibration):
     valid = (uv[:, 0] >= 0) & (uv[:, 0] < w - 1) & (uv[:, 1] >= 0) & (uv[:, 1] < h - 1)
     uv, xyz = uv[valid], xyz[valid]
     if not len(uv):
-        return np.zeros(len(features), dtype=bool), np.empty((0, 3))
+        return (
+            np.zeros(len(features), dtype=bool),
+            np.empty((0, 3)),
+            (time.perf_counter() - tick) * 1000,
+            0.0,
+        )
     pixels = np.rint(uv).astype(int)
     pixel_id = pixels[:, 1] * w + pixels[:, 0]
     order = np.lexsort((xyz[:, 2], pixel_id))
     _, first = np.unique(pixel_id[order], return_index=True)
     chosen = order[first]  # Nearest positive Z per pixel, then nearest projection.
+    projection_ms = (time.perf_counter() - tick) * 1000
+    tick = time.perf_counter()
     distance, index = cKDTree(uv[chosen]).query(features, distance_upper_bound=2.0)
     good = np.isfinite(distance)
     rays = np.column_stack([features[good], np.ones(good.sum())]) @ np.linalg.inv(k).T
     points = rays * xyz[chosen[index[good]], 2:3]
-    return good, points
+    return good, points, projection_ms, (time.perf_counter() - tick) * 1000
 
 
 def pnp(points, pixels, k, seed):
@@ -162,6 +170,8 @@ def estimate(ref, cur, cloud, calibration, seed):
         "status": "NO_FEATURES",
         "detected": 0,
         "klt_valid": 0,
+        "klt_forward_valid": 0,
+        "fb_valid": 0,
         "depth_associated": 0,
         "pnp_correspondences": 0,
         "pnp_inliers": 0,
@@ -170,6 +180,8 @@ def estimate(ref, cur, cloud, calibration, seed):
         "feature_ms": 0.0,
         "klt_ms": 0.0,
         "depth_ms": 0.0,
+        "projection_ms": 0.0,
+        "association_ms": 0.0,
         "pnp_ms": 0.0,
     }
     features = cv2.goodFeaturesToTrack(ref, 500, 0.01, 10, mask=calibration["mask"])
@@ -184,6 +196,7 @@ def estimate(ref, cur, cloud, calibration, seed):
         "criteria": (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 30, 0.01),
     }
     forward, s1, _ = cv2.calcOpticalFlowPyrLK(ref, cur, features, None, **options)
+    row["klt_forward_valid"] = int(np.count_nonzero(s1))
     backward, s2, _ = cv2.calcOpticalFlowPyrLK(cur, ref, forward, None, **options)
     a, b = features.reshape(-1, 2), forward.reshape(-1, 2)
     w, h = calibration["size"]
@@ -201,9 +214,12 @@ def estimate(ref, cur, cloud, calibration, seed):
     )
     a, b = a[valid], b[valid]
     row["klt_valid"] = len(a)
+    row["fb_valid"] = len(a)
     row["klt_ms"] = (time.perf_counter() - tick) * 1000
     tick = time.perf_counter()
-    good, points = associate_depth(cloud, a, calibration)
+    good, points, row["projection_ms"], row["association_ms"] = associate_depth(
+        cloud, a, calibration
+    )
     pixels = b[good].astype(float)
     row["depth_ms"] = (time.perf_counter() - tick) * 1000
     row["depth_associated"] = row["pnp_correspondences"] = len(points)

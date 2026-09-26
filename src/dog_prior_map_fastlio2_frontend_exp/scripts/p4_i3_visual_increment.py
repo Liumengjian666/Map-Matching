@@ -152,6 +152,8 @@ def run_visual(paths, sync, calibration, limit):
                 "status": "SYNC_INVALID",
                 "detected": 0,
                 "klt_valid": 0,
+                "klt_forward_valid": 0,
+                "fb_valid": 0,
                 "depth_associated": 0,
                 "pnp_correspondences": 0,
                 "pnp_inliers": 0,
@@ -160,6 +162,8 @@ def run_visual(paths, sync, calibration, limit):
                 "feature_ms": 0.0,
                 "klt_ms": 0.0,
                 "depth_ms": 0.0,
+                "projection_ms": 0.0,
+                "association_ms": 0.0,
                 "pnp_ms": 0.0,
                 "preprocess_ms": preprocess + old_preprocess,
                 "total_ms": 0.0,
@@ -218,7 +222,9 @@ def main():
     head = subprocess.check_output(
         ["git", "-C", str(workspace), "rev-parse", "HEAD"], text=True
     ).strip()
-    assert head == START_SHA, "unexpected experiment starting revision"
+    assert head in (START_SHA, "8def495a82245d52772c3bc78334adfaf797cce9"), (
+        "unexpected experiment starting revision"
+    )
     cv2.setNumThreads(1)
     calibration = load_calibration(DATA / "calibration")
     sanity(calibration)
