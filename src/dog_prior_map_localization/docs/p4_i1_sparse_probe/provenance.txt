@@ -1,0 +1,18 @@
+input_bag_sha256=860d41e88038165be469420b2c9e4db1e164ded4d58952b7b507ee01a4b0a9db
+input_map_sha256=2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570
+input_gt_sha256=b8db2491cdb3ca3194f653cab90f31eae70b457e91b2f87f30ed7fe2d0e2ce9f
+input_extrinsics_sha256=fd9fbfb209d6715b4812a92d458cdeb32cbfd75160356a87802c2bda5dfa7414
+window_start_s=80
+window_end_s=170
+probe_events=91
+eval_origin_epoch=1660857393.197807074
+map=/tmp/floor01_candidates/floor01_h1_map.pcd
+bag=/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/p3_r10b_fix1_floor01_full_rerun_20260926/floor01_fix1_runtime_topics.bag
+gt=/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/gt/floor01_gt.txt
+extrinsics=/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/calibration/floor01_extrinsics.yaml
+compile=g++ -std=c++14 -O2 -Wall ... (PCL 1.10, Eigen3)
+baseline_replay_max_translation_m=0.000154432136964
+baseline_replay_max_rotation_deg=0.00103555082182
+baseline_replay_max_fitness_delta=1.28607250461e-05
+verdict=NOT_PROMISING
+verdict_reason=Fewer than 70% of accepted sparse recoveries improved translation post hoc.
