@@ -1,0 +1,10 @@
+P6_I4_MARGIN_PROGRESS frames=10/88 dense_frames=24
+P6_I4_MARGIN_PROGRESS frames=20/88 dense_frames=24
+P6_I4_MARGIN_PROGRESS frames=30/88 dense_frames=24
+P6_I4_MARGIN_PROGRESS frames=40/88 dense_frames=24
+P6_I4_MARGIN_PROGRESS frames=50/88 dense_frames=24
+P6_I4_MARGIN_PROGRESS frames=60/88 dense_frames=24
+P6_I4_MARGIN_PROGRESS frames=70/88 dense_frames=24
+P6_I4_MARGIN_PROGRESS frames=80/88 dense_frames=24
+P6_I4_MARGIN_PROGRESS frames=88/88 dense_frames=24
+P6_I4_MARGIN_SEARCH_COMPLETE frames=88 dense_frames=24 repeatability_frames=10 principal_dense_calls=32464 repeat_calls=1439 peak_rss_bytes=96468992

@@ -1,0 +1,13 @@
+{
+  "baseline_gt_coverage_skips_no_extrapolation": 1,
+  "baseline_gt_evaluated_frames": 4126,
+  "baseline_max_rotation_delta_vs_frozen_deg": 0.0,
+  "baseline_max_translation_delta_vs_frozen_m": 0.0,
+  "baseline_rotation_rmse_deg": 9.90607772849742,
+  "baseline_translation_rmse_m": 21.936132736999266,
+  "corrected_anchor_sha256": "ff61f3fc72ec2b0c4c9e7a99f54e0866d696bb8999cf1f7a16001cacd3a26416",
+  "extrinsics_sha256": "fd9fbfb209d6715b4812a92d458cdeb32cbfd75160356a87802c2bda5dfa7414",
+  "gt_read_for_posthoc_only": true,
+  "gt_sha256": "b8db2491cdb3ca3194f653cab90f31eae70b457e91b2f87f30ed7fe2d0e2ce9f",
+  "posthoc_gt_opened_after_ndt_only_csv_sha256": "fe7df2d52fa738ddf75d0127382940291ab17655bb97b641b977bb4d57cd3340"
+}

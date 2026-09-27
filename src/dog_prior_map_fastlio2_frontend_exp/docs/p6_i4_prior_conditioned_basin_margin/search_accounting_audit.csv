@@ -1,0 +1,7 @@
+stream,ndt_calls,record_source
+BASELINE_M0_AND_CLOSED_LOOP,4127,runtime_breakdown.csv; includes all 4127 full replay scans
+PRINCIPAL_RAYS,13013,ray_probe_results.csv; unique actual principal NDT alignments
+DENSE_EXTRA_MARGIN_RAYS,18546,ray_probe_results.csv; unique actual dense-margin alignments
+INDEPENDENT_RETENTION_RAYS,817,ray_probe_results.csv; unique actual retention alignments
+REPEATABILITY_RAYS,1439,ray_probe_results.csv; repeated principal alignments
+PRINCIPAL_DENSE_SEARCH_TOTAL,32376,runtime_breakdown.csv and the three matching ray CSV categories

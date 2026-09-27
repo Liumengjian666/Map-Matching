@@ -1,0 +1,57 @@
+{
+  "dense_rows": 24,
+  "dense_selection": {
+    "FAILURE_ONSET": [
+      "target=84.000000000,selected=P2F011@84.011647299",
+      "target=90.000000000,selected=P2F014@89.962047413",
+      "target=96.000000000,selected=P2F017@96.013310268",
+      "target=110.000000000,selected=P2F024@110.03206332",
+      "target=130.000000000,selected=P2F034@130.001216083",
+      "target=145.000000000,selected=P2F041@144.019970253",
+      "target=152.000000000,selected=P2F045@151.987459257",
+      "target=158.000000000,selected=P2F048@158.038717895"
+    ],
+    "HEALTHY_EARLY_CONTROL_1": [
+      "target=0.504279211,selected=P2F001@0.504279211"
+    ],
+    "HEALTHY_EARLY_CONTROL_2": [
+      "target=9.984558180,selected=P2F002@9.98455818"
+    ],
+    "HEALTHY_EARLY_CONTROL_3": [
+      "target=12.505946234,selected=P2F003@12.505946234"
+    ],
+    "HEALTHY_EARLY_CONTROL_4": [
+      "target=19.969138220,selected=P2F004@19.96913822"
+    ],
+    "HEALTHY_EARLY_CONTROL_5": [
+      "target=29.953717306,selected=P2F005@29.953717306"
+    ],
+    "HEALTHY_EARLY_CONTROL_6": [
+      "target=37.517824248,selected=P2F006@37.517824248"
+    ],
+    "LATE_UNIFORM": [
+      "target=349.964406326,selected=P2F082@349.964406326",
+      "target=361.966062525,selected=P2F083@360.049831227",
+      "target=373.967718723,selected=P2F084@370.034402206",
+      "target=385.969374922,selected=P2F086@390.003544405",
+      "target=397.971031120,selected=P2F087@399.988116338",
+      "target=409.972687319,selected=P2F088@409.972687319"
+    ],
+    "WRONG_SHARP": [
+      "target=286.023000000,selected=P2F072@286.022800281",
+      "target=287.536000000,selected=P2F073@287.535642222",
+      "target=289.048000000,selected=P2F074@289.048429325",
+      "target=291.973000000,selected=P2F075@291.973208263"
+    ]
+  },
+  "direction_rng": "numpy.random.Generator(PCG64(seed=20260928)).standard_normal((32, 6)); row-normalized",
+  "direction_seed": 20260928,
+  "direction_sha256": "9ab601004cfcbafe3fc54987b851b48b5143e469328ee17002b53d082f2fe118",
+  "early_control_rule": "first six HEALTHY rows by transaction_id; includes P5-I1 multimode controls present in P5-I2",
+  "gt_read": false,
+  "late_rule": "six equally spaced target timestamps from 350 s to latest P5-I2 late stratum timestamp, nearest available late row; no replacement",
+  "numpy_version": "1.24.4",
+  "source_manifest": "src/dog_prior_map_fastlio2_frontend_exp/docs/p5_i2_failure_attribution/frame_manifest.csv",
+  "source_rows": 88,
+  "source_sha256": "c520bb0232f98b3e5eb65528d14ca5732ca62291e560ed9cac285fc24b83a291"
+}
