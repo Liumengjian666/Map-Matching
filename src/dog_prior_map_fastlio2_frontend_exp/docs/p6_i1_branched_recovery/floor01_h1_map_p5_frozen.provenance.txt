@@ -1,0 +1,52 @@
+P5 Frozen Floor01 H1 Map Recovery Provenance
+
+Recovery date: 2026-09-27 (Asia/Shanghai)
+Recovery mode: EXACT
+
+Original P5 path:
+/tmp/floor01_candidates/floor01_h1_map.pcd
+
+Expected P5 SHA-256:
+2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570
+
+Persistent recovered path:
+/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/map/frozen/floor01_h1_map_p5_frozen.pcd
+
+Actual SHA-256:
+2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570
+
+Source map:
+/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/map/floor01.pcd
+Source SHA-256:
+bad163fdcada69b975159365dfd776befde542cd08cdd0a2ce1f702a3d0aaf5d
+
+Official H1 matrix source:
+/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/initial_pose/multi-floor01.yaml
+Source SHA-256:
+6da3daf5194b30e27c2b07956738798b4e39d5b2e613c71206da683961737c98
+The released matrix was used directly as H1. The official semantic direction remains unconfirmed; no semantic claim is added by this byte recovery.
+
+Normalizer source:
+/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/src/superloc_map_normalizer.cpp
+Source SHA-256:
+5c38a755fc015abffabafab7ed71f343716ca29028b9f93b4ce35fba24abe808
+
+Normalizer executable:
+/home/jian/livox_ws/superloc_adapter_ws/devel/lib/superloc_corridor_adapter/superloc_map_normalizer
+Executable SHA-256:
+103fac3e3f92d9308ca2432e714f7ecdd41c50bf495d0db4b56ce3c8fc295a72
+
+Generation command (executed with the stored two-line normalizer input YAML):
+env -u LD_LIBRARY_PATH /home/jian/livox_ws/superloc_adapter_ws/devel/lib/superloc_corridor_adapter/superloc_map_normalizer \
+  '/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/map/floor01.pcd' \
+  'src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i1_branched_recovery/floor01_h1_map_normalizer_input.yaml' \
+  '/tmp/floor01_map_recovery/floor01_h1_map.pcd'
+
+The original normalizer loads the official source as PointXYZ, parses the H1 translation/rotation, applies inverse(T_map_lidar_H1) using PCL transformPointCloud, and writes binary PCD. The matrix values are copied exactly from the audited official YAML; this does not resolve their official semantic direction.
+
+Generated raw PCD points: 549637
+P5 processed target points: 549606 (finite filter, 0.15 m voxelization, then runtime 0.15 m target voxelization; inherited from the frozen P5 run because the recovered PCD SHA is byte-identical)
+
+P5 five-frame baseline reproduction gate: PASS (historical P5-I1 result for this exact map SHA; max translation delta 1.9222e-6 m, max rotation delta 0 deg, fitness delta 3.0482e-6. Not rerun as part of recovery because the recovered bytes exactly match the frozen P5 input.)
+
+Transient shared-library note: the first launch resolved /opt/MVS/lib/64/libusb-1.0.so.0, which lacked the symbol required by system libpcl_io. Running with LD_LIBRARY_PATH unset resolved system libusb and completed. No package/runtime code was changed.

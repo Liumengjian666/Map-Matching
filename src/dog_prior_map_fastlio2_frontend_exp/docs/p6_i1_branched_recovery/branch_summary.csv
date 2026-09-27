@@ -1,0 +1,5 @@
+mode,total_scans,baseline_branch_count,dcreg_branch_count,multistart_attempted,multistart_multicluster,visual_arbitration_used,visual_changed_baseline_choice,objective_only_changed_baseline,selected_nonbaseline_seed_count
+DCREG_ONLY,4127,3680,447,0,0,0,0,,0
+MULTISTART_OBJECTIVE,4127,2325,0,1802,623,0,0,1715,1715
+MULTISTART_VISUAL,4127,2839,0,1802,1288,1288,911,,911
+FULL_ROUTER,4127,2532,455,1607,1140,1140,706,,706

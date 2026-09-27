@@ -1,0 +1,2 @@
+mode,prior_5m_crossing_s,recovery_start_s,recovery_confirmed_s,duration_to_confirmation_s,threshold_below_m,required_duration_s
+NONE,,,,,2.0,10.0
