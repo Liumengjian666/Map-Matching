@@ -1,0 +1,5 @@
+fixture,expected_weak_translation_axes,expected_weak_translation_subspace_dimension,expected_weak_rotation_axes,expected_weak_rotation_subspace_dimension,theory_reference
+RICH_CORNER,none,0,none,0,"Asymmetric floor plus two nonparallel finite walls; no exact continuous rigid-motion symmetry is intended. Do not infer a single weak axis from the measured spectrum."
+SINGLE_LARGE_PLANE,x|y,2,yaw,1,"Ideal uniform infinite z-normal plane is invariant to in-plane translation and rotation about its normal; the finite sampled plane approximates those symmetries."
+STRAIGHT_CORRIDOR,x,1,none,0,"Longitudinally extruded left/right walls and floor are invariant to translation along +x in the ideal infinite corridor; floor and asymmetric cross-section are intended to constrain rotations."
+EXTRUDED_TUNNEL,x,1,roll,1,"Repeated circular cross-section along +x is invariant to longitudinal translation and rotation about its axis in the ideal infinite tunnel; finite ends and angular sampling approximate the symmetries."

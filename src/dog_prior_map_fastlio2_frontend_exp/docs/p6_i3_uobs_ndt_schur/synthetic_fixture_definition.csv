@@ -1,0 +1,5 @@
+fixture,target_geometry,source_geometry,extent_or_parameters,point_spacing_m,ndt_resolution_m,truth_pose
+RICH_CORNER,"floor z=-2; wall y=3; wall x=4; bounded asymmetric extents","same surfaces transformed by inverse truth pose","floor x[-8,8] y[-6,6]; y-wall x[-8,4] z[-2,4]; x-wall y[-6,3] z[-2,4]",0.25,0.8,"T=[0.20,-0.15,0.10]m; Euler XYZ=[0.25,-0.20,0.30]deg"
+SINGLE_LARGE_PLANE,"single horizontal plane z=0","same plane transformed by inverse truth pose","square x,y[-12,12]",0.25,0.8,"T=[0.20,-0.15,0.10]m; Euler XYZ=[0.25,-0.20,0.30]deg"
+STRAIGHT_CORRIDOR,"longitudinal left wall y=-2; right wall y=2; floor z=-1.5","same surfaces transformed by inverse truth pose","axis +x; x[-12,12]; z[-1.5,2] walls; y[-2,2] floor",0.25,0.8,"T=[0.20,-0.15,0.10]m; Euler XYZ=[0.25,-0.20,0.30]deg"
+EXTRUDED_TUNNEL,"cylindrical wall radius=2 around +x","same cylindrical surface transformed by inverse truth pose","axis +x; x[-12,12]; 64 uniform angular samples",0.25,0.8,"T=[0.20,-0.15,0.10]m; Euler XYZ=[0.25,-0.20,0.30]deg"
