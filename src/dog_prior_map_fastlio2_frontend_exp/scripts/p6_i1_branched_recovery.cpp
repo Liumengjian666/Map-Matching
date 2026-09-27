@@ -10,6 +10,7 @@
 #undef main
 
 #include <Eigen/Core>
+#include <Eigen/Eigenvalues>
 #include <Eigen/Geometry>
 #include <dcreg.hpp>
 
@@ -742,6 +743,63 @@ void writeDcregRow(std::ostream& output, const std::string& mode,
   output << '\n';
 }
 
+struct HorizontalCovarianceProbe {
+  bool valid = false;
+  std::string failure_reason = "uninitialized";
+  Eigen::Matrix2d covariance = Eigen::Matrix2d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+  Eigen::Vector2d eigenvalues = Eigen::Vector2d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+  Eigen::Vector2d maximum_eigenvector = Eigen::Vector2d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+  int position_state_index = -1;
+};
+
+HorizontalCovarianceProbe horizontalCovarianceProbe(
+    const FilterSnapshot& predicted) {
+  HorizontalCovarianceProbe result;
+  result.position_state_index = MTK::getStartIdx(&state_ikfom::pos);
+  if (result.position_state_index < 0 ||
+      predicted.covariance.rows() < result.position_state_index + 2 ||
+      predicted.covariance.cols() < result.position_state_index + 2) {
+    result.failure_reason = "position_covariance_block_out_of_range";
+    return result;
+  }
+  const Eigen::Matrix2d raw = predicted.covariance.block<2, 2>(
+      result.position_state_index, result.position_state_index);
+  if (!raw.allFinite()) {
+    result.failure_reason = "position_covariance_nonfinite";
+    return result;
+  }
+  const double scale = std::max(raw.cwiseAbs().maxCoeff(), 1.0);
+  if ((raw - raw.transpose()).cwiseAbs().maxCoeff() > 1e-8 * scale) {
+    result.failure_reason = "position_covariance_not_symmetric";
+    return result;
+  }
+  result.covariance = 0.5 * (raw + raw.transpose());
+  Eigen::SelfAdjointEigenSolver<Eigen::Matrix2d> solver(result.covariance);
+  if (solver.info() != Eigen::Success || !solver.eigenvalues().allFinite() ||
+      !solver.eigenvectors().allFinite()) {
+    result.failure_reason = "position_covariance_eigendecomposition_failed";
+    return result;
+  }
+  result.eigenvalues = solver.eigenvalues();
+  if (result.eigenvalues(0) < -1e-10 * scale) {
+    result.failure_reason = "position_covariance_not_positive_semidefinite";
+    return result;
+  }
+  result.maximum_eigenvector = solver.eigenvectors().col(1);
+  const double vector_norm = result.maximum_eigenvector.norm();
+  if (!std::isfinite(vector_norm) || vector_norm <= 1e-12) {
+    result.failure_reason = "maximum_eigenvector_invalid";
+    return result;
+  }
+  result.maximum_eigenvector /= vector_norm;
+  result.valid = true;
+  result.failure_reason = "OK";
+  return result;
+}
+
 void runMode(const std::string& mode, const p4_i2::Inputs& inputs,
              const std::vector<ScanAsset>& assets,
              const std::vector<VisualMeasurement>& visual,
@@ -749,14 +807,20 @@ void runMode(const std::string& mode, const p4_i2::Inputs& inputs,
              const std::string& params_path, const std::string& trajectory_path,
              const std::string& branch_path, const std::string& dcreg_path,
              const std::string& multistart_path, const std::string& candidates_path,
-             const std::string& arbitration_path, const std::string& runtime_path) {
+             const std::string& arbitration_path, const std::string& runtime_path,
+             const std::string& basin_path = "",
+             const std::string& covariance_path = "") {
   const bool use_dcreg = mode == "DCREG_ONLY" || mode == "FULL_ROUTER";
   const bool use_multistart = mode == "MULTISTART_OBJECTIVE" ||
-      mode == "MULTISTART_VISUAL" || mode == "FULL_ROUTER";
+      mode == "MULTISTART_VISUAL" || mode == "FULL_ROUTER" ||
+      mode == "GEO7_REFERENCE";
   const bool use_visual_arbitration = mode == "MULTISTART_VISUAL" ||
       mode == "FULL_ROUTER";
+  const bool use_covariance_probe = mode == "COV3_OBJECTIVE";
+  const bool geometry_reference = mode == "GEO7_REFERENCE";
   if (!(mode == "DCREG_ONLY" || mode == "MULTISTART_OBJECTIVE" ||
-        mode == "MULTISTART_VISUAL" || mode == "FULL_ROUTER"))
+        mode == "MULTISTART_VISUAL" || mode == "FULL_ROUTER" ||
+        use_covariance_probe || geometry_reference))
     throw std::runtime_error("unsupported_p6_mode:" + mode);
   p5_i1::requireFrozenMapSha256(map_path);
   const Cloud::Ptr target = loadTarget(map_path);
@@ -765,7 +829,8 @@ void runMode(const std::string& mode, const p4_i2::Inputs& inputs,
   const RuntimeParameters parameters = p4_i2::readParameters(
       params_path, &initial_map_T_lidar, &T_imu_lidar_pose);
   const Eigen::Matrix4d T_imu_lidar = poseMatrix(T_imu_lidar_pose);
-  checkVisualSeedConvention(T_imu_lidar);
+  if (!use_covariance_probe && !geometry_reference)
+    checkVisualSeedConvention(T_imu_lidar);
   if (inputs.imu.size() < static_cast<std::size_t>(parameters.static_init_samples))
     throw std::runtime_error("not_enough_static_initialization_imu_samples");
   FastLio2IkfomFrontend frontend(parameters);
@@ -816,6 +881,26 @@ void runMode(const std::string& mode, const p4_i2::Inputs& inputs,
                  "is_baseline_cluster,selected\n";
   runtime << "mode,transaction_id,time_s,prediction_ms,baseline_ndt_ms,dcreg_ms,"
               "multistart_ms,visual_arbitration_ms,ikfom_update_ms,total_ms\n";
+  std::ofstream basin_events, covariance_directions;
+  if (use_covariance_probe) {
+    if (basin_path.empty() || covariance_path.empty())
+      throw std::runtime_error("cov3_output_paths_required");
+    basin_events.open(basin_path);
+    covariance_directions.open(covariance_path);
+    if (!basin_events || !covariance_directions)
+      throw std::runtime_error("cannot_create_cov3_diagnostics");
+    basin_events << "mode,transaction_id,time_s,covariance_valid,covariance_failure_reason,"
+                    "ndt_calls,m0_converged,mplus_converged,mminus_converged,"
+                    "m0_objective,mplus_objective,mminus_objective,selected_seed_index,"
+                    "selected_objective,m0_cluster,selected_cluster,basin_escape,"
+                    "objective_uplift_gb,delta_translation_m,delta_rotation_deg,"
+                    "m0_x,m0_y,m0_z,m0_qx,m0_qy,m0_qz,m0_qw,"
+                    "selected_x,selected_y,selected_z,selected_qx,selected_qy,selected_qz,selected_qw\n";
+    covariance_directions << "mode,transaction_id,time_s,covariance_valid,fallback_to_m0,"
+                              "failure_reason,p_xx,p_xy,p_yy,eigenvalue_min,eigenvalue_max,"
+                              "eigen_gap,vmax_x,vmax_y,rho_m,plus_x,plus_y,minus_x,minus_y,"
+                              "position_state_index\n";
+  }
 
   Eigen::Matrix4d previous_used = Eigen::Matrix4d::Identity();
   bool has_previous_used = false;
@@ -885,8 +970,115 @@ void runMode(const std::string& mode, const p4_i2::Inputs& inputs,
       selected_pose = dc.pose;
       selected_seed_index = -2;
       selected_objective = std::numeric_limits<double>::quiet_NaN();
-    } else if (use_multistart && visual_measurement) {
-      auto seeds = makeSeeds(predicted_map_T_lidar, visual_measurement,
+    } else if (use_covariance_probe) {
+      constexpr double kProbeRadius = 0.8;
+      const HorizontalCovarianceProbe probe = horizontalCovarianceProbe(predicted);
+      std::vector<Candidate> candidates;
+      candidates.reserve(probe.valid ? 3 : 1);
+      candidates.push_back(baseline);
+      Eigen::Matrix4d plus_seed = Eigen::Matrix4d::Constant(
+          std::numeric_limits<double>::quiet_NaN());
+      Eigen::Matrix4d minus_seed = plus_seed;
+      if (probe.valid) {
+        plus_seed = predicted_map_T_lidar;
+        minus_seed = predicted_map_T_lidar;
+        plus_seed(0, 3) += kProbeRadius * probe.maximum_eigenvector.x();
+        plus_seed(1, 3) += kProbeRadius * probe.maximum_eigenvector.y();
+        minus_seed(0, 3) -= kProbeRadius * probe.maximum_eigenvector.x();
+        minus_seed(1, 3) -= kProbeRadius * probe.maximum_eigenvector.y();
+        candidates.push_back(runNdtCandidate(ndt, source, plus_seed, 1,
+                                              "M_PLUS_VMAX"));
+        candidates.push_back(runNdtCandidate(ndt, source, minus_seed, 2,
+                                              "M_MINUS_VMAX"));
+        multistart_ms = candidates[1].runtime_ms + candidates[2].runtime_ms;
+      }
+      const auto clusters = completeLinkClusters(&candidates);
+      std::size_t selected_candidate = 0;
+      for (std::size_t candidate_i = 1; candidate_i < candidates.size();
+           ++candidate_i) {
+        if (candidates[candidate_i].converged &&
+            candidates[candidate_i].objective >
+                candidates[selected_candidate].objective)
+          selected_candidate = candidate_i;
+      }
+      for (std::size_t candidate_i = 0; candidate_i < candidates.size();
+           ++candidate_i) {
+        candidates[candidate_i].objective_gate = candidates[candidate_i].converged;
+        writeCandidateRow(candidate_output, mode, asset, candidates[candidate_i],
+                          candidate_i == selected_candidate);
+      }
+      const Candidate& best = candidates[selected_candidate];
+      selected_pose = best.pose;
+      selected_seed_index = best.seed_index;
+      selected_objective = best.objective;
+      branch = probe.valid ? "COV3_OBJECTIVE" :
+                             "COV3_INVALID_COVARIANCE_FALLBACK_M0";
+      const double denominator = std::max(
+          {std::abs(best.objective), std::abs(baseline.objective), 1e-12});
+      const double objective_uplift =
+          (best.objective - baseline.objective) / denominator;
+      const double delta_translation = (best.pose.block<3, 1>(0, 3) -
+          baseline.pose.block<3, 1>(0, 3)).norm();
+      const double delta_rotation = rotationDifferenceDeg(baseline.pose, best.pose);
+      const double numerical_epsilon =
+          1e-6 * std::max(std::abs(baseline.objective), 1.0);
+      const bool same_cluster = best.cluster_id == candidates.front().cluster_id;
+      const bool basin_escape = !same_cluster &&
+          best.objective > baseline.objective + numerical_epsilon;
+      const double nan = std::numeric_limits<double>::quiet_NaN();
+      const Eigen::Quaterniond m0_q(baseline.pose.block<3, 3>(0, 0));
+      const Eigen::Quaterniond selected_q(best.pose.block<3, 3>(0, 0));
+      basin_events << mode << ',' << asset.transaction_id << ',' << asset.time_s
+                   << ',' << (probe.valid ? 1 : 0) << ',' << probe.failure_reason
+                   << ',' << candidates.size() << ','
+                   << (candidates[0].converged ? 1 : 0) << ','
+                   << (probe.valid ? (candidates[1].converged ? 1 : 0) : -1)
+                   << ',' << (probe.valid ? (candidates[2].converged ? 1 : 0) : -1)
+                   << ',' << baseline.objective << ','
+                   << (probe.valid ? candidates[1].objective : nan) << ','
+                   << (probe.valid ? candidates[2].objective : nan) << ','
+                   << best.seed_index << ',' << best.objective << ','
+                   << candidates.front().cluster_id << ',' << best.cluster_id << ','
+                   << (basin_escape ? 1 : 0) << ',' << objective_uplift << ','
+                   << delta_translation << ',' << delta_rotation << ','
+                   << baseline.pose(0, 3) << ',' << baseline.pose(1, 3) << ','
+                   << baseline.pose(2, 3) << ',' << m0_q.x() << ',' << m0_q.y()
+                   << ',' << m0_q.z() << ',' << m0_q.w() << ','
+                   << best.pose(0, 3) << ',' << best.pose(1, 3) << ','
+                   << best.pose(2, 3) << ',' << selected_q.x() << ','
+                   << selected_q.y() << ',' << selected_q.z() << ','
+                   << selected_q.w() << '\n';
+      covariance_directions << mode << ',' << asset.transaction_id << ','
+                            << asset.time_s << ',' << (probe.valid ? 1 : 0)
+                            << ',' << (probe.valid ? 0 : 1) << ','
+                            << probe.failure_reason << ','
+                            << probe.covariance(0, 0) << ','
+                            << probe.covariance(0, 1) << ','
+                            << probe.covariance(1, 1) << ','
+                            << probe.eigenvalues(0) << ','
+                            << probe.eigenvalues(1) << ','
+                            << probe.eigenvalues(1) - probe.eigenvalues(0) << ','
+                            << probe.maximum_eigenvector.x() << ','
+                            << probe.maximum_eigenvector.y() << ',' << kProbeRadius
+                            << ',' << (probe.valid ? plus_seed(0, 3) : nan) << ','
+                            << (probe.valid ? plus_seed(1, 3) : nan) << ','
+                            << (probe.valid ? minus_seed(0, 3) : nan) << ','
+                            << (probe.valid ? minus_seed(1, 3) : nan) << ','
+                            << probe.position_state_index << '\n';
+      const std::size_t converged_count = static_cast<std::size_t>(
+          std::count_if(candidates.begin(), candidates.end(),
+              [](const Candidate& candidate) { return candidate.converged; }));
+      multistart << mode << ',' << asset.transaction_id << ',' << asset.time_s
+                 << ",0," << candidates.size() << ',' << converged_count << ','
+                 << clusters.size() << ',' << clusters.size() << ','
+                 << baseline.objective << ',' << best.objective << ','
+                 << best.objective << ",nan,nan,0," << best.seed_index << ','
+                 << (best.seed_index != 0 ? 1 : 0) << ',' << delta_translation << ','
+                 << delta_rotation << ",nan,nan," << best.objective -
+                     baseline.objective << ",nan," << multistart_ms << '\n';
+    } else if (use_multistart && (visual_measurement || geometry_reference)) {
+      auto seeds = makeSeeds(predicted_map_T_lidar,
+                             geometry_reference ? nullptr : visual_measurement,
                              previous_accepted_map_T_imu, T_imu_lidar);
       std::vector<Candidate> candidates;
       candidates.reserve(seeds.size());
@@ -958,8 +1150,9 @@ void runMode(const std::string& mode, const p4_i2::Inputs& inputs,
       selected_objective = chosen.objective;
       selected_visual_residual = chosen.visual_residual;
       branch = mode == "MULTISTART_OBJECTIVE" ? "MULTISTART_OBJECTIVE" :
-          (visual_arbitration_used ? "MULTISTART_VISUAL_ARBITRATION" :
-                                    "MULTISTART_SINGLE_CLUSTER_BASELINE");
+          (geometry_reference ? "GEO7_REFERENCE" :
+           (visual_arbitration_used ? "MULTISTART_VISUAL_ARBITRATION" :
+                                     "MULTISTART_SINGLE_CLUSTER_BASELINE"));
       for (std::size_t candidate_i = 0; candidate_i < candidates.size(); ++candidate_i)
         writeCandidateRow(candidate_output, mode, asset, candidates[candidate_i],
                           candidate_i == selected_candidate);
@@ -983,9 +1176,10 @@ void runMode(const std::string& mode, const p4_i2::Inputs& inputs,
       }
       std::size_t converged_count = 0;
       double best_objective = -std::numeric_limits<double>::infinity();
-      double baseline_residual = candidateVisualResidual(
+      double baseline_residual = visual_measurement ? candidateVisualResidual(
           baseline.pose, T_imu_lidar, previous_accepted_map_T_imu,
-          visual_measurement->translation).norm();
+          visual_measurement->translation).norm() :
+          std::numeric_limits<double>::quiet_NaN();
       for (const Candidate& candidate : candidates) {
         converged_count += candidate.converged ? 1 : 0;
         if (candidate.converged) best_objective = std::max(best_objective,
@@ -1030,7 +1224,8 @@ void runMode(const std::string& mode, const p4_i2::Inputs& inputs,
                                                 gated_visual_residuals.end());
         visual_residual_spread = *bounds.second - *bounds.first;
       }
-      multistart << mode << ',' << asset.transaction_id << ',' << asset.time_s << ",1,"
+      multistart << mode << ',' << asset.transaction_id << ',' << asset.time_s << ','
+                 << (visual_measurement ? 1 : 0) << ','
                  << candidates.size() << ',' << converged_count << ',' << clusters.size()
                  << ',' << gated.size() << ',' << baseline.objective << ','
                  << best_objective << ',' << selected_objective << ','
@@ -1043,7 +1238,7 @@ void runMode(const std::string& mode, const p4_i2::Inputs& inputs,
                  << max_inter_t << ',' << max_inter_r << ',' << objective_gap << ','
                  << visual_residual_spread << ','
                  << multistart_ms << '\n';
-    } else if (use_multistart && !visual_measurement) {
+    } else if (use_multistart && !visual_measurement && !geometry_reference) {
       branch = "BASELINE_NO_VISUAL";
     }
 
@@ -1082,6 +1277,10 @@ void runMode(const std::string& mode, const p4_i2::Inputs& inputs,
     if ((index + 1) % 100 == 0 || index + 1 == assets.size()) {
       trajectory.flush(); branches.flush(); dc_events.flush(); multistart.flush();
       candidate_output.flush(); arbitration.flush(); runtime.flush();
+      if (use_covariance_probe) {
+        basin_events.flush();
+        covariance_directions.flush();
+      }
       std::cerr << "P6_MODE_PROGRESS mode=" << mode << " frames=" << index + 1
                 << '/' << assets.size() << " branch=" << branch << '\n';
     }
@@ -1104,7 +1303,7 @@ int main(int argc, char** argv) {
       p6_i1::runBaseline(inputs, assets, argv[5], argv[6], argv[7], argv[8], argv[9]);
       return 0;
     }
-    if (argc == 16 && std::string(argv[1]) != "baseline") {
+    if ((argc == 16 || argc == 18) && std::string(argv[1]) != "baseline") {
       p4_i2::Inputs inputs;
       std::string reason;
       if (!p4_i2::readInputs(argv[2], argv[3], &inputs, &reason))
@@ -1112,15 +1311,20 @@ int main(int argc, char** argv) {
       const auto assets = p6_i1::readScanAssets(argv[4]);
       if (assets.size() != inputs.scans.size())
         throw std::runtime_error("scan_asset_and_filter_counts_differ");
-      const auto visual = p6_i1::readVisual(argv[8]);
+      const std::string mode = argv[1];
+      if (argc == 18 && mode != "COV3_OBJECTIVE")
+        throw std::runtime_error("extended_output_arguments_only_valid_for_COV3_OBJECTIVE");
+      const auto visual = (mode == "COV3_OBJECTIVE" || mode == "GEO7_REFERENCE")
+          ? std::vector<p6_i1::VisualMeasurement>{} : p6_i1::readVisual(argv[8]);
       p6_i1::runMode(argv[1], inputs, assets, visual, argv[5], argv[6], argv[7],
                      argv[9], argv[10], argv[11], argv[12], argv[13], argv[14],
-                     argv[15]);
+                     argv[15], argc == 18 ? argv[16] : "",
+                     argc == 18 ? argv[17] : "");
       return 0;
     }
     std::cerr << "usage:\n"
               << "  p6_i1_branched_recovery baseline imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt baseline_replay.csv baseline_trajectory.csv\n"
-              << "  p6_i1_branched_recovery MODE imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt visual.csv trajectory.csv branch.csv dcreg.csv multistart.csv candidates.csv arbitration.csv runtime.csv\n";
+              << "  p6_i1_branched_recovery MODE imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt visual.csv trajectory.csv branch.csv dcreg.csv multistart.csv candidates.csv arbitration.csv runtime.csv [basin.csv covariance.csv]\n";
     return 2;
   } catch (const std::exception& error) {
     std::cerr << "P6_I1_RUNNER_FAILED: " << error.what() << '\n';

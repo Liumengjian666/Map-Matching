@@ -1,0 +1,12 @@
+workspace_head=9ece6bc50b24b9bc8d619fc2ac84fdb74616480c
+origin_paper=9ece6bc50b24b9bc8d619fc2ac84fdb74616480c	refs/heads/paper
+frozen_map_sha256=2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570
+floor01_bag_sha256=860d41e88038165be469420b2c9e4db1e164ded4d58952b7b507ee01a4b0a9db
+floor01_config_sha256=4e9584a4c1d5c2ada963700892880cdf2a7f4e75e43f0ff258b5fd4272af7d77
+input_manifest_sha256=75e71ba365b9c2d0b247f4bf3944008994d398f8f5d87fcb2d49e9e7ffd2a09e
+baseline_reference_sha256=fd9cb3ef78d25fb48361989bdf2f7b15b8f5e0fefa1e0f4fac0362b0911837da
+objective_reference_sha256=2ca529dfe5c9133e29751c68167d73607ef954d3b494594f62f0733629102eb7
+p6_i1_visual_seed7_winners=71
+GEO7_REFERENCE=7 seeds S0-S6 at every scan; fixed P6-I1 +/-0.8m predicted-lidar/body-frame x/y and +/-5deg yaw geometry
+COV3_OBJECTIVE=nominal plus/minus max-eigenvector of predicted map-frame P_xy; rho=0.8m
+GT=NOT OPENED; post-hoc evaluator must run only after all trajectories pass completeness checks

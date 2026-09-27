@@ -1,0 +1,9 @@
+seed_index,seed_name,candidate_frames,converged_frames,selected_objective_wins,multistart_event_s7_wins,branch_log_s7_wins,visual_arbitration_rows,trajectory_rows
+0,S0_PREDICTED,1802,1802,87,0,0,0,4127
+1,S1_PLUS_X,1802,1802,332,0,0,0,4127
+2,S2_MINUS_X,1802,1802,322,0,0,0,4127
+3,S3_PLUS_Y,1802,1802,312,0,0,0,4127
+4,S4_MINUS_Y,1802,1802,467,0,0,0,4127
+5,S5_PLUS_YAW,1802,1802,63,0,0,0,4127
+6,S6_MINUS_YAW,1802,1802,148,0,0,0,4127
+7,S7_VISUAL_MOTION,1802,1802,71,71,71,0,4127

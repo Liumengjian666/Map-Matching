@@ -1,0 +1,5 @@
+dcreg_degenerate_proxy,cov3_basin_escape,count,fraction_of_all_frames,proxy_semantics
+0,0,1276,0.3091834262175915,"DEGENERACY PROXY ONLY: P6-I1 FULL_ROUTER DCReg state, transaction-aligned"
+0,1,491,0.11897261933607947,"DEGENERACY PROXY ONLY: P6-I1 FULL_ROUTER DCReg state, transaction-aligned"
+1,0,1938,0.46959050157499393,"DEGENERACY PROXY ONLY: P6-I1 FULL_ROUTER DCReg state, transaction-aligned"
+1,1,422,0.10225345287133511,"DEGENERACY PROXY ONLY: P6-I1 FULL_ROUTER DCReg state, transaction-aligned"

@@ -1,0 +1,9 @@
+P6-I2 baseline reproduction PASS
+predictor_t_difference_m=4.9849833349528082e-14
+predictor_r_difference_deg=5.0365409239254527e-05
+raw_t_difference_m=0
+raw_r_difference_deg=0.038865161178962208
+used_t_difference_m=0
+used_r_difference_deg=0.031821153208565142
+corrected_t_difference_m=3.9203647687275676e-14
+corrected_r_difference_deg=5.0365409239254527e-05

@@ -1,0 +1,29 @@
+metric,value,definition
+covariance_valid_frames,4127,finite symmetric PSD P_xy with successful eigensolve
+covariance_fallback_frames,0,M0-only fallback on invalid covariance/eigensolve
+basin_escape_frames,913,different deterministic cluster and objective uplift above numeric epsilon
+basin_escape_rate,0.22122607220741458,escape frames / all scans
+mean_objective_uplift_GB,0.011347255444119216,mean across all COV3 scan events
+median_objective_uplift_GB,0.00290999,median across all COV3 scan events
+p95_objective_uplift_GB,0.04125258,P95 across all COV3 scan events
+mean_delta_translation_m,0.0901327639205234,selected M* relative to nominal M0
+p95_delta_translation_m,0.6191453999999998,selected M* relative to nominal M0
+mean_delta_rotation_deg,0.9650056308868427,selected M* relative to nominal M0
+p95_delta_rotation_deg,3.2363669999999995,selected M* relative to nominal M0
+recovery_retention_R,0.9624396877090473,(E_base - E_cov3) / (E_base - E_geo7)
+escape_posthoc_better,474,"GT post-hoc only, BASIN_ESCAPE frames"
+escape_posthoc_worse,439,"GT post-hoc only, BASIN_ESCAPE frames"
+escape_posthoc_equal,0,"GT post-hoc only, abs(error difference) <= 1e-9m"
+escape_better_ratio,0.5191675794085433,"better / (better + worse), equal excluded"
+COV3_mean_three_NDT_ms,43.78630314393021,"sum of M0, M+, M- registration runtimes per scan"
+REALTIME_CANDIDATE,YES,NDT registration sum mean <= 100ms/scan
+GEO7_required_due_S7_winners,71,P6-I1 selected S7 as objective winner
+NDT_map_SHA256,2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570,exact frozen persistent map
+Official_GT_SHA256,b8db2491cdb3ca3194f653cab90f31eae70b457e91b2f87f30ed7fe2d0e2ce9f,post-hoc evaluation only
+T_imu_lidar,"[[ 0.999945562; 0.009074807; 0.005149763; 0.08       ];
+ [-0.009060897; 0.999955255;-0.002718066; 0.029      ];
+ [-0.005174199; 0.002671256; 0.999983046; 0.03       ];
+ [ 0.         ; 0.         ; 0.         ; 1.         ]]",official calibration laser_to_imu matrix
+local_NDT_curvature,NOT RUN,optional; no finite-difference Hessian was computed
+DCReg_vs_basin_semantics,DEGENERACY PROXY ONLY,P6-I1 FULL_ROUTER state-aligned transaction log; not NDT-compatible U_obs
+verdict,MINIMAL_PROBE_NOT_PROMISING,fixed P6-I2 decision gates
