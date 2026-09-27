@@ -39,8 +39,12 @@ p_{seed}=p_{pred}+\delta p_{map}.
 \]
 
 This is `SO(3) x R^3`, not an `SE(3)` exponential with a coupled `V(delta_phi)`
-translation. The linearized map from the complete IKFoM error state to this
-pose tangent is `J_pose`; it retains every orientation/position cross term:
+translation. The 6x6 pose covariance is projected from the full IKFoM
+prediction covariance using `J_pose`, rather than formed from independently
+diagonalized rotation/translation blocks. `J_pose` has nonzero columns only for
+the pose rotation and position state components, so the resulting marginal
+retains the rotation-position cross covariance; velocity, bias, gravity, and
+extrinsic-to-pose cross terms do not directly appear in the 6x6 pose marginal:
 
 \[
 P_{pose}^{-}=J_{pose}P_{state}^{-}J_{pose}^{T},\qquad
@@ -76,58 +80,90 @@ calibrated number of standard deviations. All selected contexts in this run
 are rank six; a future rank-deficient case needs separate interpretation of
 the ideal infimum because the pseudometric has zero-cost nullspace directions.
 
-## Operational mode and basin
+## Operational nominal-basin acceptance set and margin
 
-For two converged terminal poses `A` and `B`,
+For a fixed scan/frame context `k`, let the nominal terminal LiDAR pose be
 
 \[
-sameMode(A,B)\iff
-\|p_A-p_B\|_2\le0.20\;\mathrm m
-\quad\land\quad
-\operatorname{angle}(R_A^TR_B)\le2.0^\circ.
+M_0=\mathcal R_k(T^-;M,Z_k,\theta),
 \]
 
-The inequalities are inclusive. A non-converged result is never classified as
-the nominal operational mode. Objective and fitness do not enter this label.
-Define the nominal operational basin
+where the nominal registration converges. For a prior perturbation `delta`,
+let `T_delta = R_k(T^- boxplus delta; M,Z_k,theta)` denote the probe terminal
+LiDAR pose when the probe converges. Define the operational acceptance
+indicator relative to the one fixed nominal reference `M_0`:
 
 \[
-\mathcal B_0=\{\delta:\kappa(\mathcal R_k(T_{minus}\boxplus\delta))
-                         =\kappa(M_0)\}.
+A_k(\delta;M_0)=
+\begin{cases}
+1,&\text{if the probe converges, }\|p_\delta-p_0\|_2\le0.20\;\mathrm m,
+  \text{ and }\operatorname{angle}(R_0^TR_\delta)\le2.0^\circ,\\
+0,&\text{otherwise.}
+\end{cases}
 \]
 
-The ideal prior-conditioned operational basin margin is
+Equivalently, for a converged probe this is the product of the three
+convergence/translation/rotation indicators; a non-converged probe is rejected.
+The inequalities are inclusive. Objective and fitness do not enter acceptance.
+The fixed-reference acceptance relation is not a pairwise equivalence relation:
+the tolerance rule need not be transitive. No global mode label `kappa` or
+equivalence class is induced by it.
+
+The operational nominal-basin set is
 
 \[
-m_B^*=\inf_{\delta\notin\mathcal B_0}
+\mathcal B_0^{op}=\{\delta\mid A_k(\delta;M_0)=1\}.
+\]
+
+The ideal **Prior-Conditioned Operational Nominal-Basin Margin** is
+
+\[
+m_B^{op,*}=\inf_{\delta\notin\mathcal B_0^{op}}
        \sqrt{\delta^TP_{pose}^{\dagger}\delta}.
 \]
 
-This is not pose error, solution correctness, GT likelihood, objective quality,
-or posterior probability. It measures how far the nominal attraction mode is
-from an operational mode change under the filter-reported prior metric.
+This is a prior-conditioned operational stability margin: the filter-prior-
+metric distance to the complement of the fixed nominal terminal-pose
+acceptance set. It is an operational proxy for attraction-basin stability,
+not a strict dynamical-systems attraction basin or its topology-exact global
+boundary. It is not pose error, solution correctness, GT likelihood, objective
+quality, failure probability, calibrated uncertainty, or posterior probability.
+
+## GT and frozen cohort provenance
+
+No GT pose/error values were read by the P6-I4 estimator, direction
+generation, NDT probing, operational boundary search, retention computation,
+or A--F verdict. Frame identities and strata were inherited from the frozen
+P5-I2 manifest; therefore this experiment does not claim that the historical
+cohort design was prospectively GT-independent. In `preparation_manifest.json`,
+`gt_read=false` records only that the P6-I4 preparation script did not itself
+open the GT file; it does not mean that the inherited manifest contains no
+historical GT-derived metadata.
 
 ## Finite estimators used in this experiment
 
-`PRINCIPAL_MARGIN` checks both signs of every positive-support covariance
-eigenvector. For each ray it visits `alpha=0.25,0.50,...,3.00`, finds the first
-sampled same-to-different transition, then bisects until the interval width is
-at most `0.01`. The reported ray margin is the different-side endpoint. If no
-switch is found through 3.0, the ray is right-censored (`>3`). This finite grid
-can miss narrow switch-and-return regions and does not establish a global
-nearest boundary.
+`m_principal` is the **principal operational margin estimator**: it checks both
+signs of every positive-support covariance eigenvector. For each ray it visits
+`alpha=0.25,0.50,...,3.00`, finds the first sampled accepted-to-rejected
+transition under `A_k`, then bisects until the interval width is at most
+`0.01`. The reported ray margin is the rejected-side endpoint. If no switch is
+found through 3.0, the ray is right-censored (`>3`). This finite grid can miss
+narrow switch-and-return regions and does not establish a global nearest
+boundary.
 
-`DENSE_DIRECTIONAL_REFERENCE_MARGIN` takes the minimum over the same twelve
-signed principal rays and both signs of 32 extra fixed whitened-space unit
-directions (deduplicated). The 32 vectors are generated before NDT from
-PCG64(seed `20260928`), standard-normal sampled and normalized. If a frame has
-rank less than six, the first `r` components are retained and renormalized.
-The result is a finite directional reference, not the exact global margin.
-Including the principal rays implies `m_dense <= m_principal` for finite pairs
-up to numerical tolerance `0.01`.
+`m_dense` is the **dense directional reference for `m_B^{op,*}`**: it takes the
+minimum over the same twelve signed principal rays and both signs of 32 extra
+fixed whitened-space unit directions (deduplicated). The 32 vectors are
+generated before NDT from PCG64(seed `20260928`), standard-normal sampled and
+normalized. If a frame has rank less than six, the first `r` components are
+retained and renormalized. Both `m_principal` and `m_dense` are
+finite-direction approximations to the operational margin, not estimates of a
+topology-exact global attraction-basin boundary. Including the principal rays
+implies `m_dense <= m_principal` for finite pairs up to numerical tolerance
+`0.01`; this is an implementation-consistency property.
 
 The protocol's empirical retention curve uses only the 32 extra direction
-families and both signs (so it is independent of the principal-ray estimator):
+families and both signs, which do not overlap the principal-estimator rays:
 
 \[
 S(\alpha)=\frac{\#\{\text{extra probes still in the nominal mode}\}}{64},
@@ -139,9 +175,9 @@ Probe cache keys are frame transaction, ray id, sign, and alpha quantized to
 `1e-6`; cache lifetime is one frame only.
 
 The retention directions are also included in the dense-reference search.
-Thus the prescribed `m_dense` versus `S(alpha)` association is not a held-out,
-statistically independent validation: it measures consistency on a shared
-fixed extra-ray set. The separate `m_principal` versus `S(alpha)` correlation
-does not share principal rays with the retention sample. This dependency is
-reported as a limitation and does not change the task's literal numerical
-gate.
+Therefore Gate E (`m_dense` versus `S(alpha)`) is a **shared-ray internal
+semantic-consistency gate**, not held-out, independent, or external validation.
+The separate `m_principal` versus `S(alpha)` association does not share
+principal-estimator rays with the retention sample, but remains descriptive and
+is not a fully independent experiment. These finite-direction limitations do
+not change the frozen protocol's numerical gate.

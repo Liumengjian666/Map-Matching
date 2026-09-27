@@ -167,7 +167,7 @@ def write_plots(out: Path, broad: list[dict[str, str]], dense: list[dict[str, st
     ax.text(0.5, 0.79, "DUAL REGISTRATION RELIABILITY", ha="center", fontsize=15, weight="bold")
     ax.text(0.27, 0.53, "U_obs\nlocal geometric\nobservability\n(P6-I3: PARTIAL)", ha="center", va="center",
             bbox={"boxstyle": "round,pad=0.8", "fc": "#dceeff", "ec": "#4778a8"}, fontsize=11)
-    ax.text(0.73, 0.53, "U_nonlocal candidate\nprior-conditioned operational\nbasin margin m_B\n(this P6-I4 study)",
+    ax.text(0.73, 0.53, "U_nonlocal candidate\nprior-conditioned operational\nnominal-basin margin m_B^op\n(this P6-I4 study)",
             ha="center", va="center", bbox={"boxstyle": "round,pad=0.8", "fc": "#fce9d8", "ec": "#ad7445"}, fontsize=11)
     ax.annotate("distinct coordinates; neither is correctness probability", xy=(0.5, 0.27), ha="center", fontsize=10)
     fig.tight_layout(); fig.savefig(out / "01_dual_reliability_math_scope.png", dpi=180); plt.close(fig)
@@ -179,7 +179,7 @@ def write_plots(out: Path, broad: list[dict[str, str]], dense: list[dict[str, st
     ax.annotate("first detected operational mode transition", xy=(0.74, 0.69), xytext=(0.58, 0.91),
                 arrowprops={"arrowstyle": "->"}, ha="center")
     ax.annotate("prior-metric radius α", xy=(0.67, 0.5), xytext=(0.65, 0.38), arrowprops={"arrowstyle": "->"})
-    ax.set(xlim=(0, 1), ylim=(0, 1), title="Operational attraction basin (schematic)", xlabel="initialization space", ylabel="initialization space")
+    ax.set(xlim=(0, 1), ylim=(0, 1), title="Operational nominal-basin acceptance set (schematic)", xlabel="initialization space", ylabel="initialization space")
     ax.set_aspect("equal"); fig.tight_layout(); fig.savefig(out / "02_operational_basin_definition.png", dpi=180); plt.close(fig)
 
     dense_finite = [row for row in dense if row["m_dense"] not in ("", "nan") and int(row["dense_censored"]) == 0]
@@ -188,13 +188,13 @@ def write_plots(out: Path, broad: list[dict[str, str]], dense: list[dict[str, st
                [float(r["m_dense"]) for r in dense_finite], c=[float(r["time_s"]) for r in dense_finite], cmap="viridis")
     lim = max([float(r["m_principal"]) for r in dense_finite] + [float(r["m_dense"]) for r in dense_finite] + [1.0])
     ax.plot([0, lim], [0, lim], "k--", linewidth=1)
-    ax.set(xlabel="principal margin (prior-metric radius)", ylabel="dense directional reference margin", title="Principal estimator vs dense reference")
+    ax.set(xlabel="principal operational margin (prior-metric radius)", ylabel="dense operational reference margin", title="Principal estimator vs dense reference")
     fig.colorbar(ax.collections[0], ax=ax, label="time (s)"); fig.tight_layout(); fig.savefig(out / "03_principal_vs_dense_margin.png", dpi=180); plt.close(fig)
 
     fig, ax = plt.subplots(figsize=(7.4, 4.6))
     ret_map: dict[str, list[tuple[float, float]]] = {}
-    # Retention points are emitted in the dense-reference CSV; each one uses
-    # the independently sampled 32 extra signed directions only.
+    # Retention points use the extra signed directions, which are disjoint
+    # from principal rays but are also included in the dense-reference search.
     for row in dense:
         ret_map[row["frame_id"]] = [(0.5, float(row["S_0_5"])), (1.0, float(row["S_1"])),
                                      (2.0, float(row["S_2"])), (3.0, float(row["S_3"]))]
@@ -203,7 +203,7 @@ def write_plots(out: Path, broad: list[dict[str, str]], dense: list[dict[str, st
     if ret_map:
         matrix = np.asarray([[v for _, v in p] for p in ret_map.values()])
         ax.plot([0.5, 1, 2, 3], np.mean(matrix, axis=0), "ko-", linewidth=2, label="dense cohort mean")
-    ax.set(xlabel="prior-metric radius α", ylabel="empirical directional retention S(α)", ylim=(-0.03, 1.03), title="Independent extra-direction retention")
+    ax.set(xlabel="prior-metric radius α", ylabel="empirical directional retention S(α)", ylim=(-0.03, 1.03), title="Shared-extra-ray internal consistency")
     ax.legend(); fig.tight_layout(); fig.savefig(out / "04_basin_retention_curves.png", dpi=180); plt.close(fig)
 
     broad_finite = [r for r in broad if int(r["principal_censored"]) == 0]
@@ -212,7 +212,7 @@ def write_plots(out: Path, broad: list[dict[str, str]], dense: list[dict[str, st
     ax.scatter(t, m, s=22, color="#22577a", label="finite principal margin")
     ax.scatter([float(r["time_s"]) for r in broad if int(r["principal_censored"])],
                [3.0] * sum(int(r["principal_censored"]) for r in broad), marker="^", color="#777", label="censored >3")
-    ax.set(xlabel="elapsed time (s)", ylabel="prior-metric radius", title="Principal margin over sampled Floor01 frames")
+    ax.set(xlabel="elapsed time (s)", ylabel="prior-metric radius", title="Principal operational margin over sampled Floor01 frames")
     ax.legend(); fig.tight_layout(); fig.savefig(out / "05_margin_over_time.png", dpi=180); plt.close(fig)
 
     healthy = [r for r in multimodality if r["dense_group"].startswith("HEALTHY_EARLY_CONTROL")
@@ -224,7 +224,7 @@ def write_plots(out: Path, broad: list[dict[str, str]], dense: list[dict[str, st
                    s=60, c=float(row["S_1"]), cmap="viridis", vmin=0, vmax=1, edgecolor="black")
         ax.annotate(str(row["transaction_id"]), (float(row["K_primary_stable_modes"]), float(row["m_dense"])), xytext=(3, 3), textcoords="offset points")
     ax.axhline(1.0, color="gray", linestyle="--", linewidth=1)
-    ax.set(xlabel="P5-I1 stable mode count K", ylabel="dense reference margin", title="Healthy multimodality negative control")
+    ax.set(xlabel="P5-I1 stable mode count K", ylabel="dense operational reference margin", title="Healthy multimodality negative control")
     fig.tight_layout(); fig.savefig(out / "06_healthy_multimode_negative_control.png", dpi=180); plt.close(fig)
 
     fig, ax = plt.subplots(figsize=(7.0, 4.8))
@@ -235,7 +235,7 @@ def write_plots(out: Path, broad: list[dict[str, str]], dense: list[dict[str, st
     colors = [float(r["stable_basin_entropy"]) for r in multimodality_valid]
     points = ax.scatter(xs, ys, c=colors, cmap="plasma", s=42, edgecolor="none")
     fig.colorbar(points, ax=ax, label="P5-I1 stable-basin entropy")
-    ax.set(xlabel="stable mode count K", ylabel="principal margin (censored plotted at 3)", title="Prior-conditioned margin vs global multimodality")
+    ax.set(xlabel="stable mode count K", ylabel="principal operational margin (censored plotted at 3)", title="Prior-conditioned margin vs global multimodality")
     fig.tight_layout(); fig.savefig(out / "07_margin_vs_mode_count_entropy.png", dpi=180); plt.close(fig)
 
     fig, ax = plt.subplots(figsize=(7.0, 4.8))
@@ -245,14 +245,14 @@ def write_plots(out: Path, broad: list[dict[str, str]], dense: list[dict[str, st
     if len(uobs) == len(xs):
         xsr = [float(row["rotation_block_min_eigenvalue"]) for row in uobs]
         ax.scatter(xsr, ys, s=25, alpha=0.6, label="rotation block λmin")
-    ax.set(xlabel="P6-I3 BLOCK Hessian λmin", ylabel="principal prior-basin margin", title="Local curvature vs nonlocal margin (descriptive)")
+    ax.set(xlabel="P6-I3 BLOCK Hessian λmin", ylabel="principal operational margin", title="Local curvature vs nonlocal margin (descriptive)")
     ax.legend(); fig.tight_layout(); fig.savefig(out / "08_margin_vs_block_curvature.png", dpi=180); plt.close(fig)
 
     fig, ax = plt.subplots(figsize=(7.2, 4.8))
     ax.scatter([float(r["m_principal"]) for r in gt_rows],
                [float(r["baseline_corrected_translation_error_m"]) for r in gt_rows],
                c=[float(r["time_s"]) for r in gt_rows], cmap="viridis")
-    ax.set(xlabel="principal margin (prior-metric radius)", ylabel="baseline corrected translation error (m)", title="GT post-hoc diagnostic only")
+    ax.set(xlabel="principal operational margin (prior-metric radius)", ylabel="baseline corrected translation error (m)", title="GT post-hoc diagnostic only")
     fig.colorbar(ax.collections[0], ax=ax, label="time (s)"); fig.tight_layout(); fig.savefig(out / "09_margin_vs_gt_error_posthoc.png", dpi=180); plt.close(fig)
 
     ray_counts = Counter(row["ray_type"] for row in ray_rows)
@@ -554,7 +554,7 @@ def analyze(output_dir: Path, gt_path: Path, extrinsics_path: Path,
             "first_switched_terminal_translation_gt_error_m": switched_t,
             "first_switched_terminal_rotation_gt_error_deg": switched_r,
             "switched_terminal_closer_than_nominal_descriptive": switched_better,
-            "gt_use": "POSTHOC_ONLY; not used by cohort/direction/mode/margin/retention",
+            "gt_use": "POSTHOC_ONLY; P6-I4 estimator/probes/search/retention/verdict are GT-free; cohort labels are inherited from the frozen P5-I2 manifest, so prospective historical cohort independence is not claimed",
         })
 
         p_pose = np.asarray([float(x) for x in context_cov[tx]["P_pose_map_row_major"].split(";")]).reshape(6, 6)
@@ -641,7 +641,7 @@ def analyze(output_dir: Path, gt_path: Path, extrinsics_path: Path,
     else:
         verdict = "MARGIN_COMPUTABLE_BUT_SEMANTICS_WEAK"
     principal_verdict = "GOOD" if principal_estimator_good else "INSUFFICIENT"
-    u_nonlocal = "SUPPORTED CANDIDATE" if verdict == "PRIOR_CONDITIONED_MARGIN_SUPPORTED" else "OPEN"
+    u_nonlocal = "SUPPORTED MATHEMATICAL CANDIDATE" if verdict == "PRIOR_CONDITIONED_MARGIN_SUPPORTED" else "OPEN"
 
     def metric_table(name: str, metric: dict[str, float]) -> str:
         return (f"| {name} | {fmt(metric['mean'], 6)} | {fmt(metric['rmse'], 6)} | "
@@ -653,6 +653,17 @@ def analyze(output_dir: Path, gt_path: Path, extrinsics_path: Path,
 
 Result: `{verdict}`
 
+`SUPPORTED` here means numerical and operational viability under the frozen Floor01 finite-direction protocol only. It does not establish a topology-exact attraction basin, correctness/failure probability, calibrated uncertainty, cross-dataset validation, runtime readiness, or a complete `U_nonlocal` estimator.
+
+## P6-I4-R1 claim/math closure
+
+- R1: global equivalence-label notation removed; replaced by nominal-reference operational acceptance set — **PASS**.
+- R2: covariance wording corrected; the pose marginal retains rotation-position cross covariance only — **PASS**.
+- R3: GT provenance narrowed; estimator is GT-free, while prospective GT-independence of the historical cohort is not claimed — **PASS**.
+- R4: Gate E labeled shared-ray internal semantic consistency; no held-out validation claim — **PASS**.
+- R5: Gate D labeled implementation consistency — **PASS**.
+- R6: supported verdict retained only as numerical/operational viability under the frozen Floor01 finite-direction protocol — **PASS**.
+
 ## Frozen inputs and estimator definition
 
 - Workspace branch / start commit: `paper` / `1beb3863777df13b32c4117151fbd503598ab16f`.
@@ -660,10 +671,11 @@ Result: `{verdict}`
 - Exact frozen map SHA-256: `2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570`; raw bag SHA-256 `{broad[0]['input_bag_sha256']}`. Frozen map target preprocessing yields 549,606 points; PCL NDT resolution 0.8m, step 0.08, epsilon 0.001, maximum iterations 40. No map/bag/cloud asset is included in the repository.
 - Nominal registration map: `registrationMap(T_minus)`, the terminal PCL NDT pose from the formal closed-loop baseline seed.
 - Pose tangent: map product tangent `[dphi_map, dp_map]`, with `R_seed=Exp(dphi_map)R_pred`, `p_seed=p_pred+dp_map`; not a coupled SE(3) twist.
-- Prediction covariance: full pre-NDT IKFoM state covariance projected by `J_pose P_state J_pose^T`, including orientation-position cross covariance; right/body SO(3) state error is mapped by `R_est`, position error is map-additive.
-- Operational mode equivalence: both NDT runs converge and terminal translation separation `<=0.20m` AND rotation separation `<=2.0deg`; objective/fitness do not define a mode.
-- Ideal object: `m_B*=inf_(delta:not in B0) sqrt(delta^T P_pose^dagger delta)`; computed estimates are finite directional operational approximations, not a topology-exact boundary or correctness likelihood.
-- Estimator search: principal ± covariance eigen-directions and 32 fixed extra whitened directions with both signs, coarse alpha step 0.25 over [0,3], first observed same→different bracket, bisection width <=0.01, report upper endpoint; high values are censored `>3`.
+- Prediction covariance: the 6x6 pose covariance is projected from the full pre-NDT IKFoM prediction covariance using `J_pose P_state J_pose^T`, not from independently diagonalized rotation/translation blocks. `J_pose` has nonzero columns only for pose rotation and position, so the resulting marginal retains rotation-position cross covariance; velocity/bias/gravity/extrinsic-to-pose cross terms do not directly appear in that marginal. Right/body SO(3) state error is mapped by `R_est`; position error is map-additive.
+- Nominal reference: `M_0 = R_k(T^-)`, the terminal PCL NDT pose from the formal closed-loop baseline seed. `A_k(delta;M_0)=1` iff the probe converges and its terminal translation/rotation separations from fixed `M_0` are `<=0.20m` / `<=2.0deg`; otherwise it is zero. The fixed-reference tolerance is not a transitive pairwise equivalence relation and induces no global mode label.
+- Operational nominal-basin set: `B_0^op={{delta | A_k(delta;M_0)=1}}`. **Prior-Conditioned Operational Nominal-Basin Margin**: ideal margin `m_B^{{op,*}}=inf_(delta notin B_0^op) sqrt(delta^T P_pose^dagger delta)`. The object is an operational stability margin and proxy for attraction-basin stability—not the strict attraction basin or a topology-exact global boundary.
+- Estimators: `m_principal` (principal operational margin estimator) and `m_dense` (dense directional reference for `m_B^{{op,*}}`) are finite-direction approximations only.
+- Estimator search: principal ± covariance eigen-directions and 32 fixed extra whitened directions with both signs, coarse alpha step 0.25 over [0,3], first observed accepted-to-rejected bracket, bisection width <=0.01, report upper endpoint; high values are censored `>3`.
 
 ## Covariance audit and baseline replay
 
@@ -686,10 +698,9 @@ Result: `{verdict}`
 
 ## Retention relationship and negative control
 
-- Dense margin vs extra-direction retention: Spearman `m_dense` vs `S(1)` = `{fmt(spearman_dense_s1)}` (`n={n_s1}`); vs `S(2)` = `{fmt(spearman_dense_s2)}` (`n={n_s2}`). Required both >=0.50: **{'PASS' if retention_pass else 'FAIL'}**.
-- Independence caveat: retention uses extra directions rather than principal rays, but `m_dense` also searches those same extra rays. This is a protocol-defined consistency association, not a held-out independent validation; the specified numerical threshold is met, with this semantic limitation.
-- Principal margin vs retention is descriptive: Spearman with `S(1)` `{fmt(p_vs_s1)}` (`n={p_n1}`), with `S(2)` `{fmt(p_vs_s2)}` (`n={p_n2}`).
-- Healthy P5-I1 multimodal controls (K>=2) in the frozen healthy dense cohort: `{selected_p5_healthy}`. Controls with `m_dense>=1`: `{len(healthy_m1)}`; with `S(1)>=0.90`: `{len(healthy_s1)}`. H3 negative-control gate: **{'PASS' if healthy_pass else 'FAIL'}**. Raw global multimodality does **not** automatically imply nearby prior-conditioned basin instability: **{'YES' if healthy_pass else 'NOT DEMONSTRATED'}**.
+- Gate E — shared-ray internal semantic consistency: Spearman `m_dense` vs `S(1)` = `{fmt(spearman_dense_s1)}` (`n={n_s1}`); vs `S(2)` = `{fmt(spearman_dense_s2)}` (`n={n_s2}`). Required both >=0.50: **{'PASS' if retention_pass else 'FAIL'}**. The same extra-ray sample enters both `m_dense` and `S(alpha)`; this is not held-out, independent, or external validation. Descriptive cap-at-3 sensitivity including the four censored frames preserves the qualitative association (`S1≈0.804`, `S2≈0.962`); sensitivity only, not the gate.
+- Principal margin vs retention is descriptive: Spearman with `S(1)` `{fmt(p_vs_s1)}` (`n={p_n1}`), with `S(2)` `{fmt(p_vs_s2)}` (`n={p_n2}`). Principal estimator rays do not overlap the extra-ray retention sample, but this is not a fully independent experiment.
+- Gate F — healthy multimodality counterexamples: frozen healthy dense cohort has `{selected_p5_healthy}` matching P5-I1 controls (`K>=2`). `{len(healthy_m1)}` have `m_dense>=1`; `{len(healthy_s1)}` have `S(1)>=0.90`. This demonstrates existence of healthy multimodal counterexamples in these two controls only; it does not establish statistical independence or orthogonality. Raw multimodality need not imply nearby operational instability in these controls: **{'YES' if healthy_pass else 'NOT DEMONSTRATED'}**.
 
 ## U_obs relation (descriptive only)
 
@@ -703,17 +714,17 @@ Result: `{verdict}`
 - Strict GT overlap: {len(baseline_eval_rows)}/{len(trajectory)} baseline scans; the final scan beyond official GT support is omitted, without extrapolation.
 - Principal margin vs current corrected baseline translation error Spearman `{fmt(corr_current)}` (`n={corr_current_n}`); vs next-5s max error increase `DeltaE5` `{fmt(corr_future)}` (`n={corr_future_n}`). These are descriptive, not gates/classifiers.
 - Pose NEES uses `e=[Log(R_GT R_pred^T),p_GT-p_pred]` and the unscaled pseudoinverse of `P_pose`; median `{fmt(float(np.nanmedian([r['NEES_pose'] for r in covariance_posthoc])))}` over valid rows. Covariance was not rescaled using GT. Large NEES means the radius is only a filter-reported prior metric, not a calibrated probability.
-- The first switched terminal pose's relative GT error is recorded as descriptive only; mode/censoring/margin decisions were fully frozen before GT was read. **No GT was used in the estimator, cohort selection, direction generation, NDT mode search, or retention.**
+- The first switched terminal pose's relative GT error is recorded as descriptive only. No GT pose/error values were read by the P6-I4 estimator, direction generation, NDT probing, operational boundary search, retention computation, or A--F verdict. Frame identities and strata were inherited from the frozen P5-I2 manifest; this experiment therefore does not claim prospective GT-independence of the historical cohort design. `preparation_manifest.json`'s `gt_read=false` means only that the P6-I4 preparation script did not itself open GT; the inherited manifest can contain historical GT-derived metadata. The frozen `margin_with_gt_posthoc.csv` is not modified in R1; its legacy `gt_use` cohort wording is superseded by this provenance statement.
 - Official GT SHA `{gt_sha}`; calibration SHA `{extrinsics_sha}`; frozen alignment provenance SHA `{EXPECTED_CORRECTED_ANCHOR_SHA}`.
 
 ## Runtime and memory (not a realtime gate)
 
 - Formal baseline replay: 4,127 NDT calls, replay `{next((float(r['runtime_ms']) for r in runtime if r['stage']=='BASELINE_TOTAL'), math.nan):.3f}ms`, peak RSS `{96468992/1024/1024:.2f}MiB`.
-- Principal/dense search made `{runtime_calls_by_stage['PRINCIPAL_AND_DENSE']}` actual probe alignments over 88 frames: principal `{ray_counts['PRINCIPAL']}`, extra margin `{ray_counts['EXTRA_MARGIN']}`, and independent retention `{ray_counts['EXTRA_RETENTION']}`; repeatability made `{ray_counts['REPEATABILITY']}` calls over 10 frames. The run log's legacy `principal_dense_calls=32464` included an extra nominal-seed count per frame; nominal M0 was already computed in the baseline's 4,127 calls. Corrected source now reports these categories separately. Principal/dense per-frame runtime mean / P95 / max `{fmt(runtime_summary['mean'])}` / `{fmt(runtime_summary['p95'])}` / `{fmt(runtime_summary['max'])}ms`. `search_accounting_audit.csv` reconciles the per-probe rows and runtime counts.
+- Principal/dense search made `{runtime_calls_by_stage['PRINCIPAL_AND_DENSE']}` actual probe alignments over 88 frames: principal `{ray_counts['PRINCIPAL']}`, extra margin `{ray_counts['EXTRA_MARGIN']}`, and retention `{ray_counts['EXTRA_RETENTION']}`; repeatability made `{ray_counts['REPEATABILITY']}` calls over 10 frames. The run log's legacy `principal_dense_calls=32464` included an extra nominal-seed count per frame; nominal M0 was already computed in the baseline's 4,127 calls. Corrected source now reports these categories separately. Principal/dense per-frame runtime mean / P95 / max `{fmt(runtime_summary['mean'])}` / `{fmt(runtime_summary['p95'])}` / `{fmt(runtime_summary['max'])}ms`. `search_accounting_audit.csv` reconciles the per-probe rows and runtime counts.
 
 ## Prior-art and claim boundary
 
-Mature prior art includes initialization-dependent registration uncertainty, multiple initial poses / multi-start NDT, uncertainty propagation through nonlinear registration, multi-NDT mode covariance, and Hessian-guided seed arrangements. The only candidate distinction under study is a **prior-conditioned nearest operational attraction-basin margin as a reliability coordinate, explicitly separated from local observability**. `NOVELTY_UNVERIFIED`; no “first/novel” claim is made.
+Mature prior art includes initialization-dependent registration uncertainty, multiple initial poses / multi-start NDT, uncertainty propagation through nonlinear registration, multi-NDT mode covariance, and Hessian-guided seed arrangements. The only candidate distinction under study is a **prior-conditioned operational nominal-basin margin as a reliability coordinate, explicitly separated from local observability**. `NOVELTY_UNVERIFIED`; no “first/novel” claim is made.
 
 ## Gates and verdict
 
@@ -722,17 +733,23 @@ Mature prior art includes initialization-dependent registration uncertainty, mul
 | A: covariance convention FD <=1e-5 | {'PASS' if fd_pass else 'FAIL'} |
 | B: finite covariance >=99% | {'PASS' if cov_valid_fraction >= 0.99 else 'FAIL'} |
 | C: at least 10 repeatability frames stable within .01 | {'PASS' if repeatability_pass else 'FAIL'} |
-| D: dense <= principal + .01 | {'PASS' if dense_principal_pass else 'FAIL'} |
-| E: dense margin Spearman with S1 and S2 >=.50 | {'PASS' if retention_pass else 'FAIL'} |
-| F: healthy K>=2 with m_dense>=1 or S1>=.90 | {'PASS' if healthy_pass else 'FAIL'} |
+| D: nested dense/principal rays agree within .01 — implementation consistency | {'PASS' if dense_principal_pass else 'FAIL'} |
+| E: dense margin/retention Spearman >=.50 — shared-ray internal semantic consistency | {'PASS' if retention_pass else 'FAIL'} |
+| F: healthy K>=2 counterexample exists in the two matched controls | {'PASS' if healthy_pass else 'FAIL'} |
 
-Final margin verdict: **{verdict}**. This is a single-sequence, finite directional, operational-mode viability study—not a correctness probability, runtime router, mitigation, or calibrated uncertainty claim.
+Final margin verdict: **{verdict}**. `SUPPORTED` means numerical and operational viability under the frozen Floor01 finite-direction protocol. This single-sequence result is not a correctness/failure probability, calibrated uncertainty, topology-exact attraction basin, cross-dataset validation, runtime risk predictor, mitigation, or completed `U_nonlocal` estimator.
+
+## Scientific state after P6-I4
+
+- `U_obs = PARTIAL`: local BLOCK curvature has synthetic directional feasibility, but no real degeneracy ground truth.
+- `U_nonlocal = SUPPORTED MATHEMATICAL CANDIDATE`; primitive: `m_B^{{op,*}}`. Meaning: filter-prior-metric distance to the first detected exit from the nominal terminal-pose operational acceptance set (finite directional approximation in this experiment).
+- Dual Reliability: **INCOMPLETE**. Novelty: **NOVELTY_UNVERIFIED**.
 
 ## Implementation checks
 
 - Release C++ experiment target: PASS.
 - Product-tangent / mode-threshold / covariance-whitening math tests: PASS (`P6_I4_MATH_TEST_PASS`).
-- Python report syntax and complete report generation: PASS.
+- Frozen P6-I4 Python report generation: PASS. R1 wording/template syntax is verified separately; no estimator or NDT rerun is part of R1.
 - `git diff --check`: PASS.
 
 Limitations: operational mode tolerances; 0.25 alpha coarse grid can miss narrow switch-and-return regions; finite 32-direction reference; dense-margin/retention correlation reuses the same extra-ray set; alpha cap 3; filter covariance calibration unknown; Floor01 only; frozen deskew clouds; no visual, mitigation, or runtime integration.

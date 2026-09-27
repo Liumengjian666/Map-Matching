@@ -18,9 +18,13 @@ The audited FAST-LIO2/IKFoM source snapshot is
 8. gravity direction (`S2`).
 
 The tangent start indices are obtained from the same `state_ikfom` type using
-`MTK::getStartIdx`; no hard-coded 6x6 covariance block is assumed. The full
-`FilterSnapshot::covariance` is projected through `J_pose`, including all
-pose-to-rest and rotation-position cross terms.
+`MTK::getStartIdx`; no hard-coded 6x6 covariance block is assumed. The 6x6 pose
+covariance is projected from the full IKFoM prediction covariance using
+`J_pose` rather than formed from independently diagonalized
+rotation/translation blocks. Because `J_pose` has nonzero columns only for the
+pose rotation and position state components, the resulting marginal retains
+the rotation-position cross covariance; velocity, bias, gravity, and extrinsic-
+to-pose cross terms do not directly appear in the final 6x6 pose marginal.
 
 ## Rotation and position perturbation
 

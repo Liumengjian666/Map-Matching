@@ -12,11 +12,13 @@ This experiment does not claim that any of the following concepts is new:
 
 The only recorded `NOVELTY_CANDIDATE` is the proposed reliability coordinate:
 
-> prior-conditioned nearest operational attraction-basin margin, explicitly
-> separated from local geometric observability.
+> prior-conditioned operational nominal-basin margin, explicitly separated
+> from local geometric observability.
 
-The present study tests whether this candidate is numerically computable and
-has empirical nonlocal meaning on one frozen Floor01 sequence. It does not
-establish novelty, priority, correctness prediction, improved localization,
+The present study tests numerical and operational viability, finite-direction
+consistency, and internal directional-retention consistency on one frozen
+Floor01 sequence. The object is an operational proxy for attraction-basin
+stability, not a strict attraction basin or a topology-exact boundary. It does
+not establish novelty, priority, correctness prediction, improved localization,
 runtime feasibility, or a complete dual-reliability method. `NOVELTY_UNVERIFIED`
 remains the status until a separate literature review and later validation.
