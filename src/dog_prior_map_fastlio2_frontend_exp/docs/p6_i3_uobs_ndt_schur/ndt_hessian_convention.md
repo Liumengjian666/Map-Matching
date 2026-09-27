@@ -1,38 +1,42 @@
-# PCL NDT Hessian Convention
+# PCL NDT Hessian Convention — P6-I3 R1
 
-## Audited implementation
+## Audited PCL convention and Hessian sign
 
-- Installed library: PCL `1.10.0` (`libpcl-dev 1.10.0+dfsg-5ubuntu1`).
-- Source audited locally: `/usr/include/pcl-1.10/pcl/registration/impl/ndt.hpp` and `ndt.h`.
-- PCL's `computeTransformation` extracts translation from the current transform and obtains Euler XYZ angles using `rotation().eulerAngles(0,1,2)`. Its 6-vector is `p = [tx, ty, tz, rx, ry, rz]`; angles are in radians. Its incremental transform is translation followed by `AngleAxis(rx,X) * AngleAxis(ry,Y) * AngleAxis(rz,Z)`.
-- `computeDerivatives` returns the scalar NDT probability score, its gradient, and the score Hessian with respect to that translation-first Euler vector. NDT solves `H_score * delta = -gradient`; the line search uses `phi=-score` and `dphi=-gradient·direction`, so the optimizer maximizes score (equivalently minimizes negative score).
+The installed PCL is 1.10.0. PCL's six-vector uses raw order `[tx, ty, tz, rx, ry, rz]`; the rotation is `Rx(rx) Ry(ry) Rz(rz)` with radians. NDT maximizes its scalar score. The canonical order is `[rx, ry, rz, tx, ty, tz]`; after the corresponding permutation, `H_euler = -sym(H_score_canonical)`. This is local negative score curvature at the converged score maximum, not Fisher information, a covariance inverse, or a universal observability matrix. Raw asymmetry and non-finite/negative curvature remain visible diagnostics; no eigenvalue clamp is applied.
 
-## Canonicalization and sign
+## Fixed coordinate pipeline
 
-Canonical order is `[rx, ry, rz, tx, ty, tz]`. Let `P` reorder raw indices `[3,4,5,0,1,2]`:
+The analyzed pipeline is exactly:
 
 ```text
-H_score_canonical = Pᵀ * H_score_raw * P
-H_information_raw = -0.5 * (H_score_canonical + H_score_canonicalᵀ)
+PCL raw Hessian, [tx, ty, tz, rx, ry, rz]
+  -> reorder to Euler canonical, [rx, ry, rz, tx, ty, tz]
+  -> sign/symmetrize: H_euler = -sym(H_score_canonical)
+  -> Euler increments to map-frame spatial tangent:
+       A = blockdiag(J_spatial^-1, I3)
+       H_phys = A^T H_euler A
+       physical order [d_phi_x, d_phi_y, d_phi_z, dt_x, dt_y, dt_z]
+  -> fixed dimensionless translation coordinate u=t/r, r=0.8 m:
+       S = diag(I3, r I3)
+       H_bar = S^T H_phys S
+  -> RAW6 / BLOCK / SCHUR analysis, all on H_bar
 ```
 
-The minus sign converts local score curvature at a maximizing mode into a local information/negative-curvature convention. This does not guarantee positive semidefiniteness: negative eigenvalues, failed convergence, and non-finite outputs remain visible diagnostics, not silently clamped values. The pre-symmetrization asymmetry is retained as a numeric diagnostic.
+`J_spatial` and its finite-difference validation are defined in `rotation_coordinate_convention.md`. Invalid/ill-conditioned Jacobian samples are marked invalid, not silently inverted. The translation scale is isotropic and fixed; no scale sweep is performed.
 
-## Fixed unit normalization
+## Schur systems
 
-Keep `H_information_raw` in rad/m coordinates. With the mandated NDT resolution `r=0.8 m`, use exactly:
+Partition `H_bar = [[H_RR, H_Rt], [H_tR, H_tt]]`:
 
 ```text
-D = diag(1, 1, 1, 1/r, 1/r, 1/r)
-H_bar = Dᵀ * H_information_raw * D
+S_R = H_RR - H_Rt H_tt^-1 H_tR
+S_t = H_tt - H_tR H_RR^-1 H_Rt
 ```
 
-No normalization parameter is tuned. All RAW6, BLOCK, and SCHUR comparisons use `H_bar`; the unscaled information matrix remains available in the output for audit.
+The implementation solves the right-hand systems with LDLT, then column-pivoted QR as a recorded fallback. It uses no `matrix.inverse()`, regularization, eigenvalue clamping, DCReg threshold, or preconditioner. Fallbacks and failures are counted. BLOCK and SCHUR physical eigenbases use the DCReg-style one-to-one greedy axis matching and aligned eigenvalues; weak subspaces still use principal-angle agreement.
 
-## Schur solve policy
+RAW6 remains one coupled 6D spectrum. Its projection is an evaluation-only comparison that uses the preregistered expected weak-subspace dimension; it is not an online unknown-dimensional U_obs estimator.
 
-The two 3x3 Schur systems use LDLT first and column-pivoted QR as the recorded fallback. No diagonal regularization, eigenvalue clamping, or silent pseudoinverse is applied. If both solves fail the Schur component is marked non-finite and the failure is counted; conditioning estimates, solve method, fallback count, and factorization-failure count are emitted per sample.
+## Interpretation limits
 
-## Limitations
-
-This is PCL's analytic objective curvature, not DCReg's ICP `JᵀJ`, a calibrated covariance, or a universal physical observability scale. It is analyzed only at a converged local NDT mode under the fixed PCL configuration; no eigenvalue threshold or runtime trigger is introduced.
+This is analytic objective curvature from a specific PCL NDT implementation and configuration. Synthetic expected directions are hard labels for validation; sampled Floor01 has no ground-truth degeneracy labels. This analysis does not establish calibrated covariance, a runtime degeneracy detector, or completed Dual Reliability.

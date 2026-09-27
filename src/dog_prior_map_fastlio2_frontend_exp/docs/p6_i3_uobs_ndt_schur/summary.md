@@ -1,64 +1,116 @@
-# PAPER-P6-I3-UOBS-NDT-SCHUR-VALIDATION
+# PAPER-P6-I3-R1-ADVERSARIAL-REVIEW-FIX-AND-CLOSURE
 
-## Overall framework
+## REVIEW FIXES
 
-- Overall candidate: **DUAL REGISTRATION RELIABILITY**.
-- `U_obs`: local observability reliability; this phase tested a PCL NDT-Schur candidate only.
-- `U_nonlocal`: **OPEN**. P6-I2's first reliability estimator **FAILED** (474 better / 439 worse; ratio 0.51917). Multi-start established that nonlocal failure matters but is not itself a reliability estimator.
-- Overall Dual Reliability complete: **NO**.
-- Novelty status: **NOVELTY_UNVERIFIED**.
+R1 Euler→physical tangent: **PASS**
+R2 dimensionless translation scaling: **PASS**
+R3 DCReg-style aligned physical-axis/eigenvalue mapping: **PASS**
+R4 A/B/C/D verdict classification semantics: **PASS**
+R5 unsupported DCReg-proxy comparison claim removed (`NOT RUN IN P6-I3`): **PASS**
+R6 synthetic full-workload gate and Floor01 sampled timing clearly separated: **PASS**
 
-## Frozen configuration and mathematical convention
+## GIT
+START_SHA: `6788030bae1aea873fb7b5231acd6aee78102489`
+Remote SHA: `6788030bae1aea873fb7b5231acd6aee78102489`
+Review branch at run: `review/paper-p6-i3-uobs-ndt-schur-20260928`; local HEAD at run: `ace8a72323413e06ed2abf85e4b6f422f1b8a5c4`
+END_SHA: see containing commit in GitHub commit history (self-reference intentionally omitted)
+Commit: `review: fix P6-I3 observability validation`
+Push: one final publication attempt; exact outcome is in the completion handoff
+RESULT: see completion handoff; P6-I3 R1 only
 
-- PCL: `1.10.0`; formal NDT settings unchanged: resolution=0.8 m; step size=0.08; epsilon=0.001; maximum iterations=40.
-- PCL raw derivative order: `[tx,ty,tz,rx,ry,rz]`; canonical order: `[rx,ry,rz,tx,ty,tz]`; angles are radians.
-- NDT maximizes scalar score; information convention is `H_info=-sym(H_score)` at the converged score maximum. The unscaled canonical Hessian is retained.
-- Fixed normalization: `D=diag(1,1,1,1/0.8,1/0.8,1/0.8)`, `Hbar=Dᵀ H_info D`.
-- Hessian finite-rate and raw asymmetry are in `synthetic_results.csv` and `floor01_uobs.csv`; no eigenvalue threshold or binary runtime trigger was defined.
+## ROTATION COORDINATE VALIDATION
 
-## Synthetic results
+Convention: map-frame / spatial infinitesimal rotation coordinates.
+Jacobian formula: `J_spatial = [e_x, Rx(rx)e_y, Rx(rx)Ry(ry)e_z]`.
+FD epsilon: `1.0e-07 rad`
+Max Jacobian error: `6.19787347e-09`
+Max Jacobian condition: `2.20243122`
+Failures: `0` finite-difference rows; synthetic transform-invalid converged samples `0`; Floor01 transform-invalid frames `0`
+Floor01 orientation cases: `131` distinct selected orientations
 
-| Fixture / component | Expected weak subspace | RAW6 median | BLOCK median | SCHUR median | SCHUR identification rate |
+## HESSIAN PIPELINE
+
+PCL raw order: `[tx, ty, tz, rx, ry, rz]`
+Euler canonical order: `[rx, ry, rz, tx, ty, tz]`
+Physical tangent order: `[d_phi_x, d_phi_y, d_phi_z, dt_x, dt_y, dt_z]`
+Sign convention: `H_euler = -sym(H_score_canonical)`; local negative score curvature only, not Fisher information or inverse covariance.
+Translation dimensionless scaling: `u=t/r`, `r=0.8 m`, `S=diag(I3,r I3)`.
+Final `H_bar` definition: `H_bar=S^T H_phys S`, where `H_phys=A^T H_euler A`, `A=blockdiag(J_spatial^-1,I3)`. All RAW6/BLOCK/SCHUR use `H_bar`.
+Floor01 congruence audit: `524` BLOCK/SCHUR rows; failures `0`; max relative errors physical `6.37e-15`, dimensionless `1.62e-15`.
+
+## SYNTHETIC
+
+Median direction/subspace agreement by method (RAW6 / BLOCK / SCHUR); Schur identification rate is shown separately:
+
+| Fixture/component | Expected weak direction/subspace | RAW6 median | BLOCK median | SCHUR median | SCHUR ≥0.90 rate |
 |---|---|---:|---:|---:|---:|
-| SINGLE_LARGE_PLANE / TRANSLATION | XY | 0.9999999821571199 | 0.999999999999997 | 0.9999999824187515 | 1.0 |
-| SINGLE_LARGE_PLANE / ROTATION | yaw | 0.999969856636667 | 0.9999698725176175 | 0.9999709604612455 | 1.0 |
-| STRAIGHT_CORRIDOR / TRANSLATION | +x | 0.999996723375991 | 0.99999813669893 | 0.9999967063159925 | 1.0 |
-| EXTRUDED_TUNNEL / TRANSLATION | +x | 0.99999988352771 | 0.999999992950064 | 0.9999998855647465 | 1.0 |
-| EXTRUDED_TUNNEL / ROTATION | roll | 0.9999979914758395 | 0.9999992372583425 | 0.9999999349281714 | 1.0 |
+| SINGLE_LARGE_PLANE / TRANSLATION | XY translation | 0.9999999823121906 | 0.999999999999997 | 0.9999999824187515 | 1.0 |
+| SINGLE_LARGE_PLANE / ROTATION | map-frame rotation_z | 0.999999971749766 | 0.9999999720826975 | 0.999999999998688 | 1.0 |
+| STRAIGHT_CORRIDOR / TRANSLATION | +x translation | 0.9999967093300185 | 0.99999813669893 | 0.9999967063182394 | 1.0 |
+| EXTRUDED_TUNNEL / TRANSLATION | +x translation | 0.99999988474922 | 0.999999992950064 | 0.999999885564715 | 1.0 |
+| EXTRUDED_TUNNEL / ROTATION | map-frame rotation_x | 0.999997509198585 | 0.999999274797122 | 0.9999999196366205 | 1.0 |
 
-- Rich-corner fixture was also evaluated for 20 perturbations; no single weak axis was preregistered.
-- Finite method/component output: `100.0000%` (gate `PASS`).
-- Analyzer total (registration excluded): mean `10.178 ms`, P95 `15.148 ms`, max `17.119 ms`; 2 ms mean gate `FAIL`.
-- Synthetic hard gates overall: **FAIL**.
-- Schur incremental value: **SCHUR_NOT_DISTINCT**. RAW6/BLOCK/SCHUR comparisons and selected full-system eigenvalues are in `raw_block_schur_comparison.csv`.
+Finite rate: `100.0000%` (gate PASS).
+Local observability direction gates: **PASS**; FD and physical-axis audits: **PASS**.
+Schur vs RAW6/BLOCK: **SCHUR NOT DISTINCT**. No new threshold was added; distinctness uses the frozen ≥0.90 median and ≥90% perturbation rules.
+RAW6 is a coupled 6D spectrum; the expected weak-subspace dimension is used for evaluation-only projection, not an online unknown-dimensional estimator.
 
-## Floor01 sampled sanity (descriptive only)
+## LOCAL OBSERVABILITY DIRECTION FEASIBILITY
 
-- Selected `131` frames (120 uniform indices plus stratified window probes; <=150 total). Only these frames ran official single-start NDT; no full 4127-frame replay, multi-start, COV3/GEO7, visual, EKF changes, or DCReg pose use.
-- NDT/Hessian finite method-component rate: `100.0000%`.
-- Dominant weakest translation-axis counts: z=64, x=49, y=18.
-- Dominant weakest rotation-axis counts: roll=85, pitch=46.
-- Sampled baseline replay max delta: translation `3.84438e-06 m`, rotation `0.0338973 deg`, fitness `9.91558e-06`; iteration match rate `100.00%`.
-- Official GT absolute pose error is appended post-hoc only; it is not used for observability labels, thresholds, or parameter choice.
-- DCReg proxy comparison: **DESCRIPTIVE ONLY; not treated as ground truth or cross-validation**.
+**SUPPORTED** — supported on the five fixed synthetic direction/subspace gates only. Floor01 has no labeled degeneracy truth.
 
-## Compute and memory
+## SCHUR INCREMENTAL VALUE
 
-- Synthetic analyzer total (NDT registration excluded): mean `10.178 ms`, P95 `15.148 ms`, max `17.119 ms`.
-- Floor01 per-stage mean/P95/max: see `runtime_breakdown.csv`; registration is reported separately and excluded from analyzer overhead.
-- Memory: bounded fixed-size matrix/eigensolver state; full-process RSS was not separately attributable. See `memory_notes.md`.
+**NOT DISTINCT** — distinctness is evaluated independently of compute time.
 
-## Verdict and limitations
+## COMPUTE
 
-**UOBS_NDT_SCHUR_NOT_PROMISING**
+Synthetic analyzer mean/P95/max: `9.528/14.505/15.049 ms` (NDT registration excluded; full synthetic fixtures).
+Original synthetic mean ≤2 ms gate: **FAIL**.
+Floor01 analyzer mean/P95/max: `1.751/2.607/3.501 ms` (131-frame sampled practical timing only; does not replace the synthetic gate).
 
-`U_obs`: **NOT SUPPORTED**. `U_nonlocal`: **OPEN**. Overall Dual Reliability complete: **NO**.
+## FLOOR01
 
-Limitations: synthetic labels are only for hard validation; Floor01 has no true degeneracy labels; no visual; no mitigation; no multi-start recovery; no ROS runtime modification; U_nonlocal is unsolved. NDT-Schur is only a candidate U_obs implementation. No novelty claim is made.
+Frames: `131` (fixed 120-uniform plus stratified probes; no full 4127-frame run).
+Source hash gate: **PASS**.
+Baseline replay gate: **PASS** — convergence PASS, iterations PASS, translation max `3.84438e-06 m`, rotation max `0.0338973 deg`, fitness max `9.91558e-06`.
+Weak translation axes (SCHUR): z=64, x=51, y=16.
+Weak rotation axes (SCHUR; map-frame): rotation_x=85, rotation_y=46.
+GT usage: **POST-HOC ONLY**; `130` translation rows have aligned GT comparisons. GT is anchored at the first common baseline timestamp; these are anchor-aligned relative trajectory discrepancies, not absolute-pose accuracy, and do not affect NDT/Hessian/axis selection/verdict.
 
-## Provenance
+## DCREG PROXY
 
-- Paper start SHA: `6788030bae1aea873fb7b5231acd6aee78102489`; D CReg reference: `ce7db8220f549a4a4391729e3bf4de4d4ab74635` (unmodified); map SHA-256: `2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570`.
-- Expected-axes SHA-256: `e4310edc4b9e0b597ca15fbf37346c8883fe4810e4ecb5b1eb5a89172403356f`; perturbation-list SHA-256: `8d1ce425d3317bba909e38ba65a671d5764b7fc358b72a6a008da99c19856f83`; fixture-definition SHA-256: `3beb6e59fcded100ae3f010b52f738c00cebf24a08d845270b56fd85dd935e04`.
-- P6-I1 baseline replay SHA-256: `1b234a7594726a6918c5e91eb32be3d7046f25fd6993c37fcac31acfcb21b1b9`; baseline trajectory SHA-256: `fd9cb3ef78d25fb48361989bdf2f7b15b8f5e0fefa1e0f4fac0362b0911837da`.
-- Exact stage details are recorded in `dual_reliability_scope.md`, `dcreg_reuse_inventory.md`, and `ndt_hessian_convention.md`.
+**NOT RUN IN P6-I3**. No DCReg proxy results or logs were loaded or compared.
+
+## DUAL RELIABILITY STATUS
+
+U_obs: **PARTIAL** (synthetic direction feasibility only; real Floor01 degeneracy labels unavailable).
+U_nonlocal: **OPEN**.
+Dual Reliability complete: **NO**.
+Novelty: **NOVELTY_UNVERIFIED**.
+
+## FINAL VERDICT
+
+**B / UOBS_FEASIBLE_SCHUR_NOT_DISTINCT**
+
+## SCIENTIFIC INTERPRETATION
+
+1. Can NDT local curvature recover known weak directions on these synthetic fixtures? **YES, on the five fixed labeled gates**.
+2. Does Schur provide measurable value over BLOCK? **NO; not distinct**.
+3. Is this sufficient as a paper innovation? **NO** — synthetic labels only, no real degeneracy labels, no novelty validation, and the original synthetic compute gate is FAIL.
+These three conclusions are separate. Similar RAW6/BLOCK/SCHUR direction scores do not establish a unique Schur contribution.
+
+## LIMITATIONS
+
+- Synthetic hard labels only; Floor01 has no ground-truth degeneracy labels.
+- No visual processing, mitigation, U_nonlocal, multi-start, or runtime ROS modification.
+- No DCReg proxy comparison was run. This is local Hessian direction characterization only; it is not a completed Dual Reliability method.
+- Expected axes, perturbations, and fixture definition are HASH-PINNED INPUTS FOR THIS RUN; the final report commit does not prove preregistration before observing results.
+
+## INPUT PROVENANCE
+
+Remote paper at run: `6788030bae1aea873fb7b5231acd6aee78102489`; local review HEAD at run: `ace8a72323413e06ed2abf85e4b6f422f1b8a5c4`.
+Frozen map: `2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570`; packed XYZ: `f7b5262552fe8d52f383e50813de2b568fa8a5990c69e2bba55231df8547188f`; scans: `9371e593c0e625611f053e3ef0a581c52481ccaed392aa8d74d74313caa9938f`.
+Expected axes: `e4310edc4b9e0b597ca15fbf37346c8883fe4810e4ecb5b1eb5a89172403356f`; perturbations: `8d1ce425d3317bba909e38ba65a671d5764b7fc358b72a6a008da99c19856f83`; fixture definition: `3beb6e59fcded100ae3f010b52f738c00cebf24a08d845270b56fd85dd935e04`.
+P6-I1 baseline replay: `1b234a7594726a6918c5e91eb32be3d7046f25fd6993c37fcac31acfcb21b1b9`; trajectory: `fd9cb3ef78d25fb48361989bdf2f7b15b8f5e0fefa1e0f4fac0362b0911837da`; source bag: `860d41e88038165be469420b2c9e4db1e164ded4d58952b7b507ee01a4b0a9db`.
+See `run_provenance.md`, `rotation_coordinate_convention.md`, and `ndt_hessian_convention.md`.

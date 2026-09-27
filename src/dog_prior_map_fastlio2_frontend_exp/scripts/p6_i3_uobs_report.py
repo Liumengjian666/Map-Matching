@@ -82,11 +82,16 @@ def git(cwd, *args):
 
 
 def verify_start_and_reference_assets():
-    if git(WORKSPACE, "branch", "--show-current") != "paper":
-        raise RuntimeError("P6-I3 workspace is not on paper branch")
+    branch = git(WORKSPACE, "branch", "--show-current")
     head = git(WORKSPACE, "rev-parse", "HEAD")
-    if head != EXPECTED_START_SHA:
-        raise RuntimeError(f"P6-I3 start SHA mismatch: {head}")
+    if not branch.startswith("review/") and branch != "paper":
+        raise RuntimeError(f"P6-I3 R1 must run on review/* or paper branch, found {branch}")
+    ancestor_status = subprocess.run(
+        ["git", "-C", str(WORKSPACE), "merge-base", "--is-ancestor", EXPECTED_START_SHA, head],
+        check=False,
+    ).returncode
+    if ancestor_status != 0:
+        raise RuntimeError(f"P6-I3 review draft is not based on expected paper SHA: {head}")
     remote = subprocess.check_output(
         ["git", "-C", str(WORKSPACE), "ls-remote", "origin", "refs/heads/paper"],
         text=True,
@@ -122,7 +127,7 @@ def verify_start_and_reference_assets():
         raise RuntimeError("P6 prepared manifest bag SHA mismatch")
     if int(manifest.get("scan_count", "0")) != 4127:
         raise RuntimeError("P6 prepared manifest scan count mismatch")
-    return head, remote
+    return {"branch": branch, "head": head, "remote_paper": remote}
 
 
 def finite(value):
@@ -136,6 +141,149 @@ def finite(value):
 def percentile(values, p):
     array = np.asarray([v for v in values if math.isfinite(v)], dtype=float)
     return float(np.percentile(array, p)) if array.size else math.nan
+
+
+def coordinate_validation_metrics(require_floor=False):
+    paths = [OUT / "coordinate_transform_validation_synthetic.csv"]
+    floor_path = OUT / "coordinate_transform_validation_floor01.csv"
+    if floor_path.is_file():
+        paths.append(floor_path)
+    rows = []
+    for path in paths:
+        if path.is_file():
+            rows.extend(read_csv(path))
+    if not rows:
+        raise RuntimeError("rotation coordinate finite-difference validation is missing")
+    errors = [finite(row.get("error_norm")) for row in rows]
+    conditions = [finite(row.get("jacobian_condition")) for row in rows]
+    failures = sum(row.get("pass") != "1" for row in rows)
+    floor_cases = {row["case_id"] for row in rows if row["case_id"].startswith("FLOOR01_TX_")}
+    identity_near = any(row["case_id"] == "IDENTITY_NEAR" for row in rows)
+    max_error = max((value for value in errors if math.isfinite(value)), default=math.nan)
+    max_condition = max((value for value in conditions if math.isfinite(value)), default=math.nan)
+    coverage_ok = identity_near and (not require_floor or len(floor_cases) >= 3)
+    passed = failures == 0 and coverage_ok and math.isfinite(max_error) and max_error <= 1e-5
+    return {
+        "rows": rows,
+        "pass": passed,
+        "max_error": max_error,
+        "max_condition": max_condition,
+        "failure_count": failures,
+        "floor_case_count": len(floor_cases),
+        "identity_near_present": identity_near,
+    }
+
+
+def merge_coordinate_validation_csv():
+    metrics = coordinate_validation_metrics(require_floor=True)
+    write_csv(OUT / "coordinate_transform_validation.csv", metrics["rows"],
+              list(metrics["rows"][0]))
+    return metrics
+
+
+def parse_matrix_field(row, field, shape):
+    values = np.asarray([finite(value) for value in row[field].split(";")], dtype=float)
+    if values.size != shape[0] * shape[1] or not np.isfinite(values).all():
+        raise ValueError(f"invalid flattened matrix in {field}")
+    return values.reshape(shape)
+
+
+def audit_hessian_congruences():
+    rows = read_csv(OUT / "floor01_uobs_ndt_only.csv")
+    max_physical_error = 0.0
+    max_dimensionless_error = 0.0
+    checked = 0
+    failed = 0
+    for row in rows:
+        if row["method"] not in ("BLOCK", "SCHUR"):
+            continue
+        try:
+            h_euler = parse_matrix_field(row, "h_information_euler_canonical_flat_row_major", (6, 6))
+            jacobian = parse_matrix_field(row, "h_rotation_coordinate_jacobian_flat_row_major", (3, 3))
+            h_physical = parse_matrix_field(row, "h_information_physical_flat_row_major", (6, 6))
+            h_bar = parse_matrix_field(row, "h_normalized_dimensionless_flat_row_major", (6, 6))
+            a = np.eye(6)
+            a[:3, :3] = np.linalg.solve(jacobian, np.eye(3))
+            expected_physical = a.T @ h_euler @ a
+            scale = np.diag([1.0, 1.0, 1.0, 0.8, 0.8, 0.8])
+            expected_dimensionless = scale.T @ h_physical @ scale
+            physical_error = np.linalg.norm(h_physical - expected_physical) / max(
+                np.linalg.norm(expected_physical), 1.0
+            )
+            dimensionless_error = np.linalg.norm(h_bar - expected_dimensionless) / max(
+                np.linalg.norm(expected_dimensionless), 1.0
+            )
+            if not np.isfinite([physical_error, dimensionless_error]).all():
+                raise ValueError("non-finite congruence residual")
+            max_physical_error = max(max_physical_error, float(physical_error))
+            max_dimensionless_error = max(max_dimensionless_error, float(dimensionless_error))
+            if physical_error > 1e-10 or dimensionless_error > 1e-10:
+                failed += 1
+            checked += 1
+        except (KeyError, ValueError, np.linalg.LinAlgError):
+            failed += 1
+    return {
+        "checked_rows": checked,
+        "failure_count": failed,
+        "max_physical_relative_error": max_physical_error,
+        "max_dimensionless_relative_error": max_dimensionless_error,
+        "pass": checked > 0 and failed == 0,
+    }
+
+
+def audit_aligned_eigenvalue_mapping():
+    paths = [OUT / "synthetic_results.csv", OUT / "floor01_uobs_ndt_only.csv"]
+    rows = []
+    for path in paths:
+        source_rows = read_csv(path)
+        if path.name == "floor01_uobs_ndt_only.csv" and source_rows and \
+                "aligned_eigenvalues_axis_order" not in source_rows[0]:
+            continue
+        rows.extend(source_rows)
+    checked = 0
+    failures = 0
+    for row in rows:
+        if row["method"] not in ("BLOCK", "SCHUR"):
+            continue
+        try:
+            mappings = [part.split(":", 1) for part in row["axis_to_eigenmode_greedy"].split("|")]
+            indices = [int(part[1]) for part in mappings]
+            aligned_values = np.asarray(
+                [finite(value) for value in row["aligned_eigenvalues_axis_order"].split(";")]
+            )
+            eigenvalues = np.asarray([finite(row[f"lambda{i}"]) for i in (1, 2, 3)])
+            raw_basis = parse_matrix_field(row, "eigenvectors_flat_row_major", (3, 3))
+            aligned_basis = parse_matrix_field(row, "aligned_basis_flat_row_major", (3, 3))
+            contributions = parse_matrix_field(
+                row, "axis_contribution_squared_flat_row_major", (3, 3)
+            )
+            weakest_axis = mappings[int(np.argmin(aligned_values))][0]
+            valid = (len(mappings) == 3 and sorted(indices) == [0, 1, 2]
+                     and aligned_values.size == 3 and np.isfinite(aligned_values).all()
+                     and np.isfinite(eigenvalues).all()
+                     and weakest_axis == row["weakest_physical_axis"])
+            if valid:
+                valid = all(np.isclose(aligned_values[axis], eigenvalues[index],
+                                       rtol=1e-10, atol=1e-10)
+                            for axis, index in enumerate(indices))
+            if valid:
+                for axis, index in enumerate(indices):
+                    expected_column = raw_basis[:, index].copy()
+                    if expected_column[axis] < 0.0:
+                        expected_column *= -1.0
+                    valid = valid and np.allclose(
+                        aligned_basis[:, axis], expected_column, rtol=1e-10, atol=1e-10
+                    )
+                valid = valid and np.allclose(
+                    contributions, aligned_basis ** 2, rtol=1e-10, atol=1e-10
+                )
+            checked += 1
+            failures += int(not valid)
+        except (ValueError, IndexError, KeyError):
+            checked += 1
+            failures += 1
+    return {"checked_rows": checked, "failure_count": failures,
+            "pass": checked > 0 and failures == 0}
 
 
 def stage_statistics(rows, field):
@@ -221,6 +369,15 @@ def summarize_synthetic():
     finite_pass = finite_rate >= 0.99
     axis_pass = all(axis_gate.values())
     hard_pass = axis_pass and finite_pass and overhead_pass
+    coordinate = coordinate_validation_metrics(require_floor=False)
+    transform_samples = [row for row in rows
+                         if row["method"] == "SCHUR" and row["component"] == "TRANSLATION"]
+    coordinate_transform_failures = sum(
+        row.get("registration_converged") == "1"
+        and row.get("rotation_coordinate_transform_valid") != "1"
+        for row in transform_samples
+    )
+    alignment_audit = audit_aligned_eigenvalue_mapping()
 
     distinct = False
     distinct_cases = []
@@ -252,9 +409,18 @@ def summarize_synthetic():
         "overhead_pass": overhead_pass,
         "axis_gate": axis_gate,
         "axis_pass": axis_pass,
+        "direction_feasible": axis_pass and finite_pass and coordinate["pass"] and
+                              coordinate_transform_failures == 0 and alignment_audit["pass"],
         "hard_pass": hard_pass,
         "schur_distinct": distinct,
         "schur_distinct_cases": distinct_cases,
+        "coordinate_validation_pass": coordinate["pass"],
+        "coordinate_validation_max_error": coordinate["max_error"],
+        "coordinate_validation_max_condition": coordinate["max_condition"],
+        "coordinate_transform_failures_synthetic": coordinate_transform_failures,
+        "axis_alignment_failures": alignment_audit["failure_count"],
+        "axis_alignment_checked_rows": alignment_audit["checked_rows"],
+        "axis_alignment_audit_pass": alignment_audit["pass"],
     }
     (OUT / "synthetic_gate_summary.md").write_text(render_synthetic_gate(metrics, robustness))
     print(
@@ -271,8 +437,8 @@ def render_synthetic_gate(metrics, robustness):
     lines = [
         "# P6-I3 Synthetic Gate (pre-Floor01)",
         "",
-        "Expected axes SHA-256: `" + EXPECTED_AXES_SHA + "` (frozen before analysis).",
-        "Perturbations SHA-256: `" + EXPECTED_PERTURBATIONS_SHA + "`.",
+        "Expected axes SHA-256: `" + EXPECTED_AXES_SHA + "` (hash-pinned for this run; this commit alone does not prove preregistration before results).",
+        "Perturbations SHA-256: `" + EXPECTED_PERTURBATIONS_SHA + "` (hash-pinned for this run).",
         "",
         "| Hard gate | Result | Measured |",
         "|---|---:|---:|",
@@ -280,13 +446,16 @@ def render_synthetic_gate(metrics, robustness):
     for key, label in (
         (("STRAIGHT_CORRIDOR", "TRANSLATION"), "Corridor +x median Schur alignment >= 0.90 and >=90% perturbations identified"),
         (("EXTRUDED_TUNNEL", "TRANSLATION"), "Tunnel +x median Schur alignment >= 0.90 and >=90% perturbations identified"),
-        (("EXTRUDED_TUNNEL", "ROTATION"), "Tunnel roll weak subspace median Schur agreement >= 0.90 and >=90% identified"),
+        (("EXTRUDED_TUNNEL", "ROTATION"), "Tunnel map-frame rotation_x weak subspace median Schur agreement >= 0.90 and >=90% identified"),
         (("SINGLE_LARGE_PLANE", "TRANSLATION"), "Plane XY weak translation subspace Schur agreement >= 0.90 and >=90% identified"),
-        (("SINGLE_LARGE_PLANE", "ROTATION"), "Plane yaw weak rotation subspace Schur agreement >= 0.90 and >=90% identified"),
+        (("SINGLE_LARGE_PLANE", "ROTATION"), "Plane map-frame rotation_z weak rotation subspace Schur agreement >= 0.90 and >=90% identified"),
     ):
         lines.append(f"| {label} | {'PASS' if metrics['axis_gate'][key] else 'FAIL'} | See `perturbation_robustness.csv` |")
     lines.extend([
         f"| Finite estimator output >=99% | {'PASS' if metrics['finite_pass'] else 'FAIL'} | {metrics['finite_rate']:.4%} |",
+        f"| Spatial-Jacobian FD validation <=1e-5 | {'PASS' if metrics['coordinate_validation_pass'] else 'FAIL'} | max error {metrics['coordinate_validation_max_error']:.3g}; max condition {metrics['coordinate_validation_max_condition']:.6g} |",
+        f"| Spatial-coordinate transform validity | {'PASS' if metrics['coordinate_transform_failures_synthetic'] == 0 else 'FAIL'} | converged synthetic samples rejected: {metrics['coordinate_transform_failures_synthetic']} |",
+        f"| Physical-axis mapping consistency | {'PASS' if metrics['axis_alignment_audit_pass'] else 'FAIL'} | checked {metrics['axis_alignment_checked_rows']} rows; failures {metrics['axis_alignment_failures']} |",
         f"| Analyzer mean <=2 ms/frame | {'PASS' if metrics['overhead_pass'] else 'FAIL'} | mean {metrics['analyzer_mean_ms']:.3f} ms; P95 {metrics['analyzer_p95_ms']:.3f} ms; max {metrics['analyzer_max_ms']:.3f} ms |",
         "",
         f"Overall synthetic hard gate: **{'PASS' if metrics['hard_pass'] else 'FAIL'}**.",
@@ -300,7 +469,7 @@ def render_synthetic_gate(metrics, robustness):
 
 
 def run_floor01(executable):
-    head, remote = verify_start_and_reference_assets()
+    state = verify_start_and_reference_assets()
     executable = Path(executable).resolve()
     if not executable.is_file():
         raise RuntimeError(f"P6-I3 C++ analyzer not found: {executable}")
@@ -315,9 +484,13 @@ def run_floor01(executable):
     shutil.copy2(INPUT_MANIFEST, OUT / "floor01_input_manifest.txt")
     shutil.copy2(OUT / "floor01_uobs.csv", OUT / "floor01_uobs_ndt_only.csv")
     frames = read_csv(OUT / "floor01_manifest.csv")
-    if not frames or len(frames) > 150:
+    if len(frames) != 131:
         raise RuntimeError(f"invalid Floor01 selected frame count: {len(frames)}")
-    print(f"FLOOR01_ANALYSIS_COMPLETE frames={len(frames)} start={head} remote={remote}", flush=True)
+    print(
+        f"FLOOR01_ANALYSIS_COMPLETE frames={len(frames)} "
+        f"head={state['head']} remote_paper={state['remote_paper']}",
+        flush=True,
+    )
 
 
 def append_posthoc_gt():
@@ -376,6 +549,7 @@ def aggregate_runtime():
         ("NDT_REGISTRATION_EXCLUDED", "registration_ms", "YES"),
         ("HESSIAN_EXTRACTION", "hessian_extraction_ms", "NO"),
         ("CANONICALIZATION", "canonicalization_ms", "NO"),
+        ("ROTATION_COORDINATE_TRANSFORM", "rotation_coordinate_transform_ms", "NO"),
         ("NORMALIZATION", "normalization_ms", "NO"),
         ("SCHUR_SOLVE", "schur_ms", "NO"),
         ("EIGENSOLVE", "eigensolve_ms", "NO"),
@@ -405,15 +579,27 @@ def floor01_summary():
     t_delta = [finite(row["baseline_translation_delta_m"]) for row in manifest]
     r_delta = [finite(row["baseline_rotation_delta_deg"]) for row in manifest]
     fit_delta = [finite(row["baseline_fitness_delta"]) for row in manifest]
+    source_hash_gate = bool(manifest) and all(row["source_hash_match"] == "1" for row in manifest)
+    convergence_gate = bool(manifest) and all(row["single_start_converged"] == "1" for row in manifest)
+    iteration_gate = bool(manifest) and all(row["baseline_iteration_match"] == "1" for row in manifest)
+    max_t = max(v for v in t_delta if math.isfinite(v))
+    max_r = max(v for v in r_delta if math.isfinite(v))
+    max_fitness = max(v for v in fit_delta if math.isfinite(v))
+    pose_gate = max_t <= 1e-3 and max_r <= 0.1
     return {
         "frames": len(manifest),
         "finite_rate": finite_rate,
         "translation_axes": tx_axes,
         "rotation_axes": rot_axes,
-        "baseline_t_max": max(v for v in t_delta if math.isfinite(v)),
-        "baseline_r_max": max(v for v in r_delta if math.isfinite(v)),
-        "baseline_fitness_max": max(v for v in fit_delta if math.isfinite(v)),
+        "baseline_t_max": max_t,
+        "baseline_r_max": max_r,
+        "baseline_fitness_max": max_fitness,
         "baseline_iterations_match_rate": sum(row["baseline_iteration_match"] == "1" for row in manifest) / len(manifest),
+        "source_hash_gate": source_hash_gate,
+        "convergence_gate": convergence_gate,
+        "iteration_gate": iteration_gate,
+        "pose_gate": pose_gate,
+        "baseline_replay_pass": source_hash_gate and convergence_gate and iteration_gate and pose_gate,
         "posthoc_gt_t_available": sum(bool(row.get("posthoc_gt_translation_error_m")) for row in trans),
     }
 
@@ -480,7 +666,9 @@ def generate_plots(robustness, runtime):
 
     fig, axes = plt.subplots(1, 2, figsize=(12, 4.5), sharey=True)
     plane_rows = [row for row in comp if row["fixture"] == "SINGLE_LARGE_PLANE"]
-    for ax, component, title in zip(axes, ("TRANSLATION", "ROTATION"), ("weak XY translation subspace", "weak yaw rotation subspace")):
+    for ax, component, title in zip(axes, ("TRANSLATION", "ROTATION"),
+                                    ("weak XY translation subspace",
+                                     "weak map-frame rotation_z subspace")):
         group = [row for row in plane_rows if row["component"] == component]
         for method in methods:
             vals = [finite(row[f"{method.lower()}_agreement"]) for row in group]
@@ -536,17 +724,30 @@ def generate_plots(robustness, runtime):
     ax.grid(alpha=0.2); ax.legend(); fig.tight_layout()
     fig.savefig(OUT / "08_floor01_uobs_over_time.png", dpi=170); plt.close(fig)
 
-    fig, ax = plt.subplots(figsize=(10, 4.5))
-    analyzer = [r for r in runtime if r["stage"] != "NDT_REGISTRATION_EXCLUDED" and r["stage"] != "ANALYZER_TOTAL_EXCLUDING_REGISTRATION"]
-    labels = [f"{r['dataset']}\n{r['stage'].replace('_',' ')}" for r in analyzer]
-    means = [float(r["mean_ms"]) for r in analyzer]
-    p95 = [float(r["p95_ms"]) for r in analyzer]
-    x = np.arange(len(labels)); ax.bar(x, means, color="#64748b")
-    ax.scatter(x, p95, marker="D", color="#dc2626", label="P95")
-    ax.axhline(2, color="black", linestyle="--", label="2 ms mean gate")
-    ax.set_xticks(x, labels, rotation=40, ha="right"); ax.set_ylabel("milliseconds")
-    ax.set_title("Analyzer stage timing; NDT registration excluded")
-    ax.grid(axis="y", alpha=0.2); ax.legend(); fig.tight_layout()
+    fig, ax = plt.subplots(figsize=(8.5, 5.4))
+    totals = {(row["dataset"], row["stage"]): row for row in runtime
+              if row["stage"] == "ANALYZER_TOTAL_EXCLUDING_REGISTRATION"}
+    datasets = ["SYNTHETIC", "FLOOR01"]
+    labels = ["Synthetic full fixtures\n(4 × 20)", "Floor01 sampled\n(131 frames)"]
+    means = [float(totals[(dataset, "ANALYZER_TOTAL_EXCLUDING_REGISTRATION")]["mean_ms"])
+             for dataset in datasets]
+    p95 = [float(totals[(dataset, "ANALYZER_TOTAL_EXCLUDING_REGISTRATION")]["p95_ms"])
+           for dataset in datasets]
+    x = np.arange(len(labels))
+    ax.bar(x, means, color=["#dc2626", "#2563eb"], width=0.55, label="mean")
+    ax.scatter(x, p95, marker="D", color="#111827", label="P95")
+    ax.axhline(2, color="black", linestyle="--", label="original 2 ms synthetic mean gate")
+    for index, (mean, p95_value) in enumerate(zip(means, p95)):
+        ax.annotate(f"mean {mean:.3f} ms\nP95 {p95_value:.3f} ms",
+                    (index, max(mean, p95_value)), xytext=(0, 8),
+                    textcoords="offset points", ha="center", fontsize=9)
+    ax.set_xticks(x, labels)
+    ax.set_ylabel("Analyzer total (ms; NDT registration excluded)")
+    ax.set_title("Separate original synthetic gate from sampled practical timing")
+    ax.set_ylim(0, max(p95) * 1.24)
+    ax.grid(axis="y", alpha=0.2)
+    ax.legend()
+    fig.tight_layout()
     fig.savefig(OUT / "09_runtime_overhead.png", dpi=170); plt.close(fig)
 
 
@@ -560,19 +761,93 @@ No standalone heap profiler or before/after RSS attribution was run. The process
     (OUT / "memory_notes.md").write_text(text)
 
 
-def write_scope_and_convention_status():
-    # These files are authored before result interpretation; append only measured provenance here.
+def write_scope_and_convention_status(state, coordinate, hessian_audit):
+    (OUT / "rotation_coordinate_convention.md").write_text(
+        """# Rotation Coordinate Convention — P6-I3 R1
+
+## PCL parameter convention
+
+PCL 1.10 NDT evaluates its six-vector in translation-first order `[tx, ty, tz, rx, ry, rz]`; its XYZ Euler rotation is `R = Rx(rx) Ry(ry) Rz(rz)` and angles are radians. The Hessian is therefore initially expressed in Euler-parameter increments, not fixed physical roll/pitch/yaw axes.
+
+## Physical rotation perturbation
+
+P6-I3 reports map-frame / spatial infinitesimal rotation coordinates `d_phi`, defined by the left perturbation `R(e + d_e) R(e)^T ≈ Exp([d_phi]x)`. For the stated PCL XYZ convention:
+
+```text
+d_phi = J_spatial d_e
+J_spatial = [ e_x, Rx(rx)e_y, Rx(rx)Ry(ry)e_z ]
+d_e = [drx, dry, drz]^T
+d_phi = [d_phi_x, d_phi_y, d_phi_z]^T
+```
+
+The Hessian input is first reordered to Euler-canonical `[rx, ry, rz, tx, ty, tz]`. Define `A = blockdiag(J_spatial^-1, I3)`; the physical-tangent Hessian is `H_phys = A^T H_euler A`. The physical order is `[d_phi_x, d_phi_y, d_phi_z, dt_x, dt_y, dt_z]` and serialized rotation axis names are `rotation_x`, `rotation_y`, `rotation_z`. These are map-frame infinitesimal axes; “roll-like / pitch-like / yaw-like” is only an approximate interpretation.
+
+## Finite-difference validation and singularity handling
+
+For each fixed orientation, each column is checked using `Log(R(e + eps e_i)R(e)^T)/eps`, with `eps = 1e-7 rad`. The output `coordinate_transform_validation.csv` records analytic and finite-difference columns, errors, and Jacobian condition. The maximum column error and maximum condition are reported in `summary.md`.
+
+The implementation estimates the Jacobian condition from its singular values, rejects condition above `1/sqrt(machine epsilon)`, requires full rank under column-pivoted QR, and accepts the solve only when the inverse residual is at most `1e-10`. Invalid orientations are explicitly marked and counted; there is no silent matrix inverse or fallback to Euler axes.
+
+## Scope
+
+This convention changes only the offline P6-I3 Hessian analysis. It does not change the ROS runtime, NDT optimizer, thresholds, eigenvalue policy, or any visual/multi-start behavior.
+"""
+    )
+    (OUT / "ndt_hessian_convention.md").write_text(
+        """# PCL NDT Hessian Convention — P6-I3 R1
+
+## Audited PCL convention and Hessian sign
+
+The installed PCL is 1.10.0. PCL's six-vector uses raw order `[tx, ty, tz, rx, ry, rz]`; the rotation is `Rx(rx) Ry(ry) Rz(rz)` with radians. NDT maximizes its scalar score. The canonical order is `[rx, ry, rz, tx, ty, tz]`; after the corresponding permutation, `H_euler = -sym(H_score_canonical)`. This is local negative score curvature at the converged score maximum, not Fisher information, a covariance inverse, or a universal observability matrix. Raw asymmetry and non-finite/negative curvature remain visible diagnostics; no eigenvalue clamp is applied.
+
+## Fixed coordinate pipeline
+
+The analyzed pipeline is exactly:
+
+```text
+PCL raw Hessian, [tx, ty, tz, rx, ry, rz]
+  -> reorder to Euler canonical, [rx, ry, rz, tx, ty, tz]
+  -> sign/symmetrize: H_euler = -sym(H_score_canonical)
+  -> Euler increments to map-frame spatial tangent:
+       A = blockdiag(J_spatial^-1, I3)
+       H_phys = A^T H_euler A
+       physical order [d_phi_x, d_phi_y, d_phi_z, dt_x, dt_y, dt_z]
+  -> fixed dimensionless translation coordinate u=t/r, r=0.8 m:
+       S = diag(I3, r I3)
+       H_bar = S^T H_phys S
+  -> RAW6 / BLOCK / SCHUR analysis, all on H_bar
+```
+
+`J_spatial` and its finite-difference validation are defined in `rotation_coordinate_convention.md`. Invalid/ill-conditioned Jacobian samples are marked invalid, not silently inverted. The translation scale is isotropic and fixed; no scale sweep is performed.
+
+## Schur systems
+
+Partition `H_bar = [[H_RR, H_Rt], [H_tR, H_tt]]`:
+
+```text
+S_R = H_RR - H_Rt H_tt^-1 H_tR
+S_t = H_tt - H_tR H_RR^-1 H_Rt
+```
+
+The implementation solves the right-hand systems with LDLT, then column-pivoted QR as a recorded fallback. It uses no `matrix.inverse()`, regularization, eigenvalue clamping, DCReg threshold, or preconditioner. Fallbacks and failures are counted. BLOCK and SCHUR physical eigenbases use the DCReg-style one-to-one greedy axis matching and aligned eigenvalues; weak subspaces still use principal-angle agreement.
+
+RAW6 remains one coupled 6D spectrum. Its projection is an evaluation-only comparison that uses the preregistered expected weak-subspace dimension; it is not an online unknown-dimensional U_obs estimator.
+
+## Interpretation limits
+
+This is analytic objective curvature from a specific PCL NDT implementation and configuration. Synthetic expected directions are hard labels for validation; sampled Floor01 has no ground-truth degeneracy labels. This analysis does not establish calibrated covariance, a runtime degeneracy detector, or completed Dual Reliability.
+"""
+    )
     (OUT / "run_provenance.md").write_text(
-        "# P6-I3 Run Provenance\n\n"
-        f"Paper start SHA: `{EXPECTED_START_SHA}`; remote paper at entry: `{EXPECTED_START_SHA}`.\n\n"
-        f"DCReg read-only reference: `{EXPECTED_DCREG_SHA}`; clean at entry.\n\n"
-        f"Frozen map SHA-256: `{EXPECTED_MAP_SHA}` (`EXACT`).\n\n"
-        f"Frozen packed source XYZ SHA-256: `{EXPECTED_PACKED_XYZ_SHA}`.\n\n"
-        f"Frozen scan metadata SHA-256: `{EXPECTED_SCANS_SHA}`.\n\n"
-        f"Expected-axes SHA-256: `{EXPECTED_AXES_SHA}`. Perturbation-list SHA-256: `{EXPECTED_PERTURBATIONS_SHA}`.\n\n"
-        f"Synthetic fixture-definition SHA-256: `{EXPECTED_FIXTURE_DEFINITION_SHA}`.\n\n"
-        f"P6-I1 baseline replay SHA-256: `{EXPECTED_BASELINE_REPLAY_SHA}`; trajectory SHA-256: `{EXPECTED_BASELINE_TRAJECTORY_SHA}`.\n\n"
-        f"Official source bag SHA-256 from P6 input manifest: `{EXPECTED_SOURCE_BAG_SHA}`.\n"
+        "# P6-I3 R1 Run Provenance\n\n"
+        f"Workspace branch at run: `{state['branch']}`; local HEAD at run: `{state['head']}`.\n\n"
+        f"Remote `origin/paper` at run: `{state['remote_paper'].split()[0]}` (expected start `{EXPECTED_START_SHA}`).\n\n"
+        f"DCReg read-only reference: `{EXPECTED_DCREG_SHA}`; reference worktree clean at run. No DCReg proxy experiment was run in P6-I3.\n\n"
+        f"Frozen map SHA-256: `{EXPECTED_MAP_SHA}` (`EXACT`); packed XYZ SHA-256: `{EXPECTED_PACKED_XYZ_SHA}`; scan metadata SHA-256: `{EXPECTED_SCANS_SHA}`.\n\n"
+        f"Expected-axes SHA-256: `{EXPECTED_AXES_SHA}`; perturbation-list SHA-256: `{EXPECTED_PERTURBATIONS_SHA}`; fixture-definition SHA-256: `{EXPECTED_FIXTURE_DEFINITION_SHA}`. These are HASH-PINNED INPUTS FOR THIS RUN; this report commit does not independently establish preregistration before the results were observed.\n\n"
+        f"P6-I1 baseline replay SHA-256: `{EXPECTED_BASELINE_REPLAY_SHA}`; baseline trajectory SHA-256: `{EXPECTED_BASELINE_TRAJECTORY_SHA}`; source bag SHA-256: `{EXPECTED_SOURCE_BAG_SHA}`.\n\n"
+        f"Finite-difference validation result: `{ 'PASS' if coordinate['pass'] else 'FAIL' }`; max column error `{coordinate['max_error']:.9g}`, max Jacobian condition `{coordinate['max_condition']:.9g}`, validation failures `{coordinate['failure_count']}`.\n\n"
+        f"Floor01 congruence audit: `{ 'PASS' if hessian_audit['pass'] else 'FAIL' }`; checked rows `{hessian_audit['checked_rows']}`, failures `{hessian_audit['failure_count']}`, max relative errors physical `{hessian_audit['max_physical_relative_error']:.3g}` and dimensionless `{hessian_audit['max_dimensionless_relative_error']:.3g}`.\n"
     )
 
 
@@ -582,58 +857,133 @@ def finalize_report():
     runtime = aggregate_runtime()
     synthetic_metrics, robustness = summarize_synthetic()
     floor = floor01_summary()
+    coordinate = merge_coordinate_validation_csv()
+    hessian_audit = audit_hessian_congruences()
     generate_plots(robustness, runtime)
     write_memory_notes()
-    write_scope_and_convention_status()
-    write_summary(synthetic_metrics, floor, runtime)
+    state = verify_start_and_reference_assets()
+    write_scope_and_convention_status(state, coordinate, hessian_audit)
+    write_summary(synthetic_metrics, floor, runtime, coordinate, hessian_audit, state)
 
 
-def write_summary(synthetic, floor, runtime):
-    if synthetic["hard_pass"]:
-        verdict = "UOBS_NDT_SCHUR_SUPPORTED" if synthetic["schur_distinct"] else "UOBS_FEASIBLE_SCHUR_NOT_DISTINCT"
-    else:
-        verdict = "UOBS_NDT_SCHUR_NOT_PROMISING"
-    uobs = "SUPPORTED" if verdict.startswith("UOBS_") and verdict != "UOBS_NDT_SCHUR_NOT_PROMISING" else "NOT SUPPORTED"
-    axis_text = lambda counter: ", ".join(f"{axis}={count}" for axis, count in counter.most_common())
-    syn = read_csv(OUT / "perturbation_robustness.csv")
+def classify_verdict(direction_feasible, schur_distinct, compute_pass, convention_valid):
+    if not convention_valid:
+        return "ANALYSIS_BLOCKED"
+    if not direction_feasible:
+        return "UOBS_NDT_SCHUR_NOT_PROMISING"
+    if not schur_distinct:
+        return "UOBS_FEASIBLE_SCHUR_NOT_DISTINCT"
+    if compute_pass:
+        return "UOBS_NDT_SCHUR_SUPPORTED"
+    # The frozen A/B/C definitions leave the distinct-but-over-budget corner
+    # unclassified. Fail closed rather than rewriting any category's meaning.
+    return "ANALYSIS_BLOCKED_UNCLASSIFIED_COMPUTE_FAILURE"
+
+
+def classification_regression_check():
+    cases = [
+        ((True, True, True, True), "UOBS_NDT_SCHUR_SUPPORTED"),
+        ((True, False, False, True), "UOBS_FEASIBLE_SCHUR_NOT_DISTINCT"),
+        ((False, False, True, True), "UOBS_NDT_SCHUR_NOT_PROMISING"),
+        ((True, True, True, False), "ANALYSIS_BLOCKED"),
+    ]
+    return all(classify_verdict(*inputs) == expected for inputs, expected in cases)
+
+
+def write_summary(synthetic, floor, runtime, coordinate, hessian_audit, state):
+    robustness = read_csv(OUT / "perturbation_robustness.csv")
+
     def metric(fixture, component, method, column):
-        row = next(item for item in syn if (item["fixture"], item["component"], item["method"]) == (fixture, component, method))
+        row = next(item for item in robustness if
+                   (item["fixture"], item["component"], item["method"]) ==
+                   (fixture, component, method))
         return row[column]
-    floor_comparison = read_csv(OUT / "floor01_comparison.csv")
-    runtime_s = [row for row in runtime if row["dataset"] == "SYNTHETIC" and row["stage"] == "ANALYZER_TOTAL_EXCLUDING_REGISTRATION"][0]
-    p95_runtime = [row for row in runtime if row["dataset"] == "SYNTHETIC" and row["stage"] == "ANALYZER_TOTAL_EXCLUDING_REGISTRATION"][0]
-    ndt_cfg = "resolution=0.8 m; step size=0.08; epsilon=0.001; maximum iterations=40"
+
+    def runtime_row(dataset):
+        return next(row for row in runtime if row["dataset"] == dataset and
+                    row["stage"] == "ANALYZER_TOTAL_EXCLUDING_REGISTRATION")
+
+    synthetic_time = runtime_row("SYNTHETIC")
+    floor_time = runtime_row("FLOOR01")
+    floor_manifest = read_csv(OUT / "floor01_manifest.csv")
+    floor_transform_failures = sum(
+        row.get("rotation_coordinate_transform_valid") != "1"
+        for row in floor_manifest
+    )
+    convention_valid = (
+        coordinate["pass"] and hessian_audit["pass"] and
+        floor_transform_failures == 0 and floor["baseline_replay_pass"] and
+        floor["frames"] == 131
+    )
+    direction_feasible = synthetic["direction_feasible"] and convention_valid
+    compute_pass = synthetic["overhead_pass"]
+    verdict = classify_verdict(direction_feasible, synthetic["schur_distinct"],
+                               compute_pass, convention_valid)
+    classification_pass = classification_regression_check()
+    overall_direction = "SUPPORTED" if direction_feasible else "NOT SUPPORTED"
+    overall_schur = ("SUPPORTED" if synthetic["schur_distinct"] else
+                     "NOT DISTINCT" if direction_feasible else "NOT SUPPORTED")
+    uobs = "PARTIAL" if direction_feasible else "NOT SUPPORTED"
+    axis_text = lambda counter: ", ".join(
+        f"{axis}={count}" for axis, count in counter.most_common()
+    ) or "none"
+    expected_axes = {
+        ("SINGLE_LARGE_PLANE", "TRANSLATION"): "XY translation",
+        ("SINGLE_LARGE_PLANE", "ROTATION"): "map-frame rotation_z",
+        ("STRAIGHT_CORRIDOR", "TRANSLATION"): "+x translation",
+        ("EXTRUDED_TUNNEL", "TRANSLATION"): "+x translation",
+        ("EXTRUDED_TUNNEL", "ROTATION"): "map-frame rotation_x",
+    }
     lines = [
-        "# PAPER-P6-I3-UOBS-NDT-SCHUR-VALIDATION",
+        "# PAPER-P6-I3-R1-ADVERSARIAL-REVIEW-FIX-AND-CLOSURE",
         "",
-        "## Overall framework",
+        "## REVIEW FIXES",
         "",
-        "- Overall candidate: **DUAL REGISTRATION RELIABILITY**.",
-        "- `U_obs`: local observability reliability; this phase tested a PCL NDT-Schur candidate only.",
-        "- `U_nonlocal`: **OPEN**. P6-I2's first reliability estimator **FAILED** (474 better / 439 worse; ratio 0.51917). Multi-start established that nonlocal failure matters but is not itself a reliability estimator.",
-        "- Overall Dual Reliability complete: **NO**.",
-        "- Novelty status: **NOVELTY_UNVERIFIED**.",
+        f"R1 Euler→physical tangent: **{'PASS' if coordinate['pass'] and floor_transform_failures == 0 and synthetic['coordinate_transform_failures_synthetic'] == 0 else 'FAIL'}**",
+        f"R2 dimensionless translation scaling: **{'PASS' if hessian_audit['pass'] else 'FAIL'}**",
+        f"R3 DCReg-style aligned physical-axis/eigenvalue mapping: **{'PASS' if synthetic['axis_alignment_audit_pass'] else 'FAIL'}**",
+        f"R4 A/B/C/D verdict classification semantics: **{'PASS' if classification_pass else 'FAIL'}**",
+        "R5 unsupported DCReg-proxy comparison claim removed (`NOT RUN IN P6-I3`): **PASS**",
+        "R6 synthetic full-workload gate and Floor01 sampled timing clearly separated: **PASS**",
         "",
-        "## Frozen configuration and mathematical convention",
+        "## GIT",
+        f"START_SHA: `{EXPECTED_START_SHA}`",
+        f"Remote SHA: `{state['remote_paper'].split()[0]}`",
+        f"Review branch at run: `{state['branch']}`; local HEAD at run: `{state['head']}`",
+        "END_SHA: see containing commit in GitHub commit history (self-reference intentionally omitted)",
+        "Commit: `review: fix P6-I3 observability validation`",
+        "Push: one final publication attempt; exact outcome is in the completion handoff",
+        "RESULT: see completion handoff; P6-I3 R1 only",
         "",
-        f"- PCL: `1.10.0`; formal NDT settings unchanged: {ndt_cfg}.",
-        "- PCL raw derivative order: `[tx,ty,tz,rx,ry,rz]`; canonical order: `[rx,ry,rz,tx,ty,tz]`; angles are radians.",
-        "- NDT maximizes scalar score; information convention is `H_info=-sym(H_score)` at the converged score maximum. The unscaled canonical Hessian is retained.",
-        "- Fixed normalization: `D=diag(1,1,1,1/0.8,1/0.8,1/0.8)`, `Hbar=Dᵀ H_info D`.",
-        "- Hessian finite-rate and raw asymmetry are in `synthetic_results.csv` and `floor01_uobs.csv`; no eigenvalue threshold or binary runtime trigger was defined.",
+        "## ROTATION COORDINATE VALIDATION",
         "",
-        "## Synthetic results",
+        "Convention: map-frame / spatial infinitesimal rotation coordinates.",
+        "Jacobian formula: `J_spatial = [e_x, Rx(rx)e_y, Rx(rx)Ry(ry)e_z]`.",
+        f"FD epsilon: `{k_coordinate_epsilon():.1e} rad`",
+        f"Max Jacobian error: `{coordinate['max_error']:.9g}`",
+        f"Max Jacobian condition: `{coordinate['max_condition']:.9g}`",
+        f"Failures: `{coordinate['failure_count']}` finite-difference rows; synthetic transform-invalid converged samples `{synthetic['coordinate_transform_failures_synthetic']}`; Floor01 transform-invalid frames `{floor_transform_failures}`",
+        f"Floor01 orientation cases: `{coordinate['floor_case_count']}` distinct selected orientations",
         "",
-        "| Fixture / component | Expected weak subspace | RAW6 median | BLOCK median | SCHUR median | SCHUR identification rate |",
+        "## HESSIAN PIPELINE",
+        "",
+        "PCL raw order: `[tx, ty, tz, rx, ry, rz]`",
+        "Euler canonical order: `[rx, ry, rz, tx, ty, tz]`",
+        "Physical tangent order: `[d_phi_x, d_phi_y, d_phi_z, dt_x, dt_y, dt_z]`",
+        "Sign convention: `H_euler = -sym(H_score_canonical)`; local negative score curvature only, not Fisher information or inverse covariance.",
+        "Translation dimensionless scaling: `u=t/r`, `r=0.8 m`, `S=diag(I3,r I3)`.",
+        "Final `H_bar` definition: `H_bar=S^T H_phys S`, where `H_phys=A^T H_euler A`, `A=blockdiag(J_spatial^-1,I3)`. All RAW6/BLOCK/SCHUR use `H_bar`.",
+        f"Floor01 congruence audit: `{hessian_audit['checked_rows']}` BLOCK/SCHUR rows; failures `{hessian_audit['failure_count']}`; max relative errors physical `{hessian_audit['max_physical_relative_error']:.3g}`, dimensionless `{hessian_audit['max_dimensionless_relative_error']:.3g}`.",
+        "",
+        "## SYNTHETIC",
+        "",
+        "Median direction/subspace agreement by method (RAW6 / BLOCK / SCHUR); Schur identification rate is shown separately:",
+        "",
+        "| Fixture/component | Expected weak direction/subspace | RAW6 median | BLOCK median | SCHUR median | SCHUR ≥0.90 rate |",
         "|---|---|---:|---:|---:|---:|",
     ]
-    for fixture, component in (("SINGLE_LARGE_PLANE", "TRANSLATION"),
-                               ("SINGLE_LARGE_PLANE", "ROTATION"),
-                               ("STRAIGHT_CORRIDOR", "TRANSLATION"),
-                               ("EXTRUDED_TUNNEL", "TRANSLATION"),
-                               ("EXTRUDED_TUNNEL", "ROTATION")):
-        expected = {"SINGLE_LARGE_PLANE": "XY" if component == "TRANSLATION" else "yaw",
-                    "STRAIGHT_CORRIDOR": "+x", "EXTRUDED_TUNNEL": "+x" if component == "TRANSLATION" else "roll"}[fixture]
+    for key, expected in expected_axes.items():
+        fixture, component = key
         lines.append(
             f"| {fixture} / {component} | {expected} | "
             f"{metric(fixture, component, 'RAW6', 'agreement_median')} | "
@@ -641,47 +991,79 @@ def write_summary(synthetic, floor, runtime):
             f"{metric(fixture, component, 'SCHUR', 'agreement_median')} | "
             f"{metric(fixture, component, 'SCHUR', 'identified_ge_0_90_rate')} |"
         )
-    lines += [
+    lines.extend([
         "",
-        f"- Rich-corner fixture was also evaluated for 20 perturbations; no single weak axis was preregistered.",
-        f"- Finite method/component output: `{synthetic['finite_rate']:.4%}` (gate `{ 'PASS' if synthetic['finite_pass'] else 'FAIL' }`).",
-        f"- Analyzer total (registration excluded): mean `{synthetic['analyzer_mean_ms']:.3f} ms`, P95 `{synthetic['analyzer_p95_ms']:.3f} ms`, max `{synthetic['analyzer_max_ms']:.3f} ms`; 2 ms mean gate `{ 'PASS' if synthetic['overhead_pass'] else 'FAIL' }`.",
-        f"- Synthetic hard gates overall: **{'PASS' if synthetic['hard_pass'] else 'FAIL'}**.",
-        f"- Schur incremental value: **{'SCHUR_ADDS_DIRECTIONAL_VALUE' if synthetic['schur_distinct'] else 'SCHUR_NOT_DISTINCT'}**. RAW6/BLOCK/SCHUR comparisons and selected full-system eigenvalues are in `raw_block_schur_comparison.csv`.",
+        f"Finite rate: `{synthetic['finite_rate']:.4%}` (gate {'PASS' if synthetic['finite_pass'] else 'FAIL'}).",
+        f"Local observability direction gates: **{'PASS' if synthetic['axis_pass'] else 'FAIL'}**; FD and physical-axis audits: **{'PASS' if direction_feasible else 'FAIL'}**.",
+        f"Schur vs RAW6/BLOCK: **{'SCHUR DISTINCT' if synthetic['schur_distinct'] else 'SCHUR NOT DISTINCT'}**. No new threshold was added; distinctness uses the frozen ≥0.90 median and ≥90% perturbation rules.",
+        "RAW6 is a coupled 6D spectrum; the expected weak-subspace dimension is used for evaluation-only projection, not an online unknown-dimensional estimator.",
         "",
-        "## Floor01 sampled sanity (descriptive only)",
+        "## LOCAL OBSERVABILITY DIRECTION FEASIBILITY",
         "",
-        f"- Selected `{floor['frames']}` frames (120 uniform indices plus stratified window probes; <=150 total). Only these frames ran official single-start NDT; no full 4127-frame replay, multi-start, COV3/GEO7, visual, EKF changes, or DCReg pose use.",
-        f"- NDT/Hessian finite method-component rate: `{floor['finite_rate']:.4%}`.",
-        f"- Dominant weakest translation-axis counts: {axis_text(floor['translation_axes']) or 'none'}.",
-        f"- Dominant weakest rotation-axis counts: {axis_text(floor['rotation_axes']) or 'none'}.",
-        f"- Sampled baseline replay max delta: translation `{floor['baseline_t_max']:.6g} m`, rotation `{floor['baseline_r_max']:.6g} deg`, fitness `{floor['baseline_fitness_max']:.6g}`; iteration match rate `{floor['baseline_iterations_match_rate']:.2%}`.",
-        "- Official GT absolute pose error is appended post-hoc only; it is not used for observability labels, thresholds, or parameter choice.",
-        "- DCReg proxy comparison: **DESCRIPTIVE ONLY; not treated as ground truth or cross-validation**.",
+        f"**{overall_direction}** — {'supported on the five fixed synthetic direction/subspace gates only' if direction_feasible else 'one or more fixed synthetic/convention gates failed'}. Floor01 has no labeled degeneracy truth.",
         "",
-        "## Compute and memory",
+        "## SCHUR INCREMENTAL VALUE",
         "",
-        f"- Synthetic analyzer total (NDT registration excluded): mean `{runtime_s['mean_ms']:.3f} ms`, P95 `{p95_runtime['p95_ms']:.3f} ms`, max `{p95_runtime['max_ms']:.3f} ms`.",
-        "- Floor01 per-stage mean/P95/max: see `runtime_breakdown.csv`; registration is reported separately and excluded from analyzer overhead.",
-        "- Memory: bounded fixed-size matrix/eigensolver state; full-process RSS was not separately attributable. See `memory_notes.md`.",
+        f"**{overall_schur}** — distinctness is evaluated independently of compute time.",
         "",
-        "## Verdict and limitations",
+        "## COMPUTE",
         "",
-        f"**{verdict}**",
+        f"Synthetic analyzer mean/P95/max: `{synthetic_time['mean_ms']:.3f}/{synthetic_time['p95_ms']:.3f}/{synthetic_time['max_ms']:.3f} ms` (NDT registration excluded; full synthetic fixtures).",
+        f"Original synthetic mean ≤2 ms gate: **{'PASS' if compute_pass else 'FAIL'}**.",
+        f"Floor01 analyzer mean/P95/max: `{floor_time['mean_ms']:.3f}/{floor_time['p95_ms']:.3f}/{floor_time['max_ms']:.3f} ms` (131-frame sampled practical timing only; does not replace the synthetic gate).",
         "",
-        f"`U_obs`: **{uobs}**. `U_nonlocal`: **OPEN**. Overall Dual Reliability complete: **NO**.",
+        "## FLOOR01",
         "",
-        "Limitations: synthetic labels are only for hard validation; Floor01 has no true degeneracy labels; no visual; no mitigation; no multi-start recovery; no ROS runtime modification; U_nonlocal is unsolved. NDT-Schur is only a candidate U_obs implementation. No novelty claim is made.",
+        f"Frames: `{floor['frames']}` (fixed 120-uniform plus stratified probes; no full 4127-frame run).",
+        f"Source hash gate: **{'PASS' if floor['source_hash_gate'] else 'FAIL'}**.",
+        f"Baseline replay gate: **{'PASS' if floor['baseline_replay_pass'] else 'FAIL'}** — convergence {'PASS' if floor['convergence_gate'] else 'FAIL'}, iterations {'PASS' if floor['iteration_gate'] else 'FAIL'}, translation max `{floor['baseline_t_max']:.6g} m`, rotation max `{floor['baseline_r_max']:.6g} deg`, fitness max `{floor['baseline_fitness_max']:.6g}`.",
+        f"Weak translation axes (SCHUR): {axis_text(floor['translation_axes'])}.",
+        f"Weak rotation axes (SCHUR; map-frame): {axis_text(floor['rotation_axes'])}.",
+        f"GT usage: **POST-HOC ONLY**; `{floor['posthoc_gt_t_available']}` translation rows have aligned GT comparisons. GT is anchored at the first common baseline timestamp; these are anchor-aligned relative trajectory discrepancies, not absolute-pose accuracy, and do not affect NDT/Hessian/axis selection/verdict.",
         "",
-        "## Provenance",
+        "## DCREG PROXY",
         "",
-        f"- Paper start SHA: `{EXPECTED_START_SHA}`; D CReg reference: `{EXPECTED_DCREG_SHA}` (unmodified); map SHA-256: `{EXPECTED_MAP_SHA}`.",
-        f"- Expected-axes SHA-256: `{EXPECTED_AXES_SHA}`; perturbation-list SHA-256: `{EXPECTED_PERTURBATIONS_SHA}`; fixture-definition SHA-256: `{EXPECTED_FIXTURE_DEFINITION_SHA}`.",
-        f"- P6-I1 baseline replay SHA-256: `{EXPECTED_BASELINE_REPLAY_SHA}`; baseline trajectory SHA-256: `{EXPECTED_BASELINE_TRAJECTORY_SHA}`.",
-        "- Exact stage details are recorded in `dual_reliability_scope.md`, `dcreg_reuse_inventory.md`, and `ndt_hessian_convention.md`.",
+        "**NOT RUN IN P6-I3**. No DCReg proxy results or logs were loaded or compared.",
         "",
-    ]
+        "## DUAL RELIABILITY STATUS",
+        "",
+        f"U_obs: **{uobs}** (synthetic direction feasibility only; real Floor01 degeneracy labels unavailable).",
+        "U_nonlocal: **OPEN**.",
+        "Dual Reliability complete: **NO**.",
+        "Novelty: **NOVELTY_UNVERIFIED**.",
+        "",
+        "## FINAL VERDICT",
+        "",
+        f"**{'A' if verdict == 'UOBS_NDT_SCHUR_SUPPORTED' else 'B' if verdict == 'UOBS_FEASIBLE_SCHUR_NOT_DISTINCT' else 'C' if verdict == 'UOBS_NDT_SCHUR_NOT_PROMISING' else 'D'} / {verdict}**",
+        "",
+        "## SCIENTIFIC INTERPRETATION",
+        "",
+        f"1. Can NDT local curvature recover known weak directions on these synthetic fixtures? **{'YES, on the five fixed labeled gates' if direction_feasible else 'NO / PARTIAL; see failed fixed gates'}**.",
+        f"2. Does Schur provide measurable value over BLOCK? **{'YES under the frozen distinctness rule' if synthetic['schur_distinct'] else 'NO; not distinct'}**.",
+        f"3. Is this sufficient as a paper innovation? **NO** — synthetic labels only, no real degeneracy labels, no novelty validation, and the original synthetic compute gate is {'PASS' if compute_pass else 'FAIL'}.",
+        "These three conclusions are separate. Similar RAW6/BLOCK/SCHUR direction scores do not establish a unique Schur contribution.",
+        "",
+        "## LIMITATIONS",
+        "",
+        "- Synthetic hard labels only; Floor01 has no ground-truth degeneracy labels.",
+        "- No visual processing, mitigation, U_nonlocal, multi-start, or runtime ROS modification.",
+        "- No DCReg proxy comparison was run. This is local Hessian direction characterization only; it is not a completed Dual Reliability method.",
+        "- Expected axes, perturbations, and fixture definition are HASH-PINNED INPUTS FOR THIS RUN; the final report commit does not prove preregistration before observing results.",
+        "",
+        "## INPUT PROVENANCE",
+        "",
+        f"Remote paper at run: `{state['remote_paper'].split()[0]}`; local review HEAD at run: `{state['head']}`.",
+        f"Frozen map: `{EXPECTED_MAP_SHA}`; packed XYZ: `{EXPECTED_PACKED_XYZ_SHA}`; scans: `{EXPECTED_SCANS_SHA}`.",
+        f"Expected axes: `{EXPECTED_AXES_SHA}`; perturbations: `{EXPECTED_PERTURBATIONS_SHA}`; fixture definition: `{EXPECTED_FIXTURE_DEFINITION_SHA}`.",
+        f"P6-I1 baseline replay: `{EXPECTED_BASELINE_REPLAY_SHA}`; trajectory: `{EXPECTED_BASELINE_TRAJECTORY_SHA}`; source bag: `{EXPECTED_SOURCE_BAG_SHA}`.",
+        "See `run_provenance.md`, `rotation_coordinate_convention.md`, and `ndt_hessian_convention.md`.",
+        "",
+    ])
     (OUT / "summary.md").write_text("\n".join(lines))
+
+
+def k_coordinate_epsilon():
+    return 1e-7
 
 
 def main():

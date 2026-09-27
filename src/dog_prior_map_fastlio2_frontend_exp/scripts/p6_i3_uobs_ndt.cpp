@@ -38,6 +38,9 @@ using Matrix3d = Eigen::Matrix3d;
 using Matrix6d = Eigen::Matrix<double, 6, 6>;
 using Clock = std::chrono::steady_clock;
 constexpr double kResolution = 0.8;
+constexpr double kCoordinateValidationEpsilon = 1e-7;
+const double kMaxSpatialJacobianCondition =
+    1.0 / std::sqrt(std::numeric_limits<double>::epsilon());
 constexpr const char* kExpectedMapSha =
     "2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570";
 
@@ -274,12 +277,11 @@ std::uint64_t sourceCloudHash(const Cloud::Ptr& cloud) {
 }
 
 Vector6d poseVector(const Eigen::Matrix4f& pose) {
-  Eigen::Transform<float, 3, Eigen::Affine> transform;
-  transform.matrix() = pose;
-  const Eigen::Vector3f euler = transform.rotation().eulerAngles(0, 1, 2);
+  const Eigen::Vector3d euler =
+      pose.block<3, 3>(0, 0).cast<double>().eulerAngles(0, 1, 2);
   Vector6d result;
-  result << transform.translation().x(), transform.translation().y(),
-      transform.translation().z(), euler.x(), euler.y(), euler.z();
+  result << pose(0, 3), pose(1, 3), pose(2, 3),
+      euler.x(), euler.y(), euler.z();
   return result;
 }
 
@@ -306,6 +308,79 @@ Eigen::Matrix4f poseFromQuaternion(double x, double y, double z,
   pose.block<3, 1>(0, 3) = Eigen::Vector3f(static_cast<float>(x),
       static_cast<float>(y), static_cast<float>(z));
   return pose;
+}
+
+struct SpatialJacobian {
+  bool valid = false;
+  Matrix3d value = Matrix3d::Constant(std::numeric_limits<double>::quiet_NaN());
+  Matrix3d inverse = Matrix3d::Constant(std::numeric_limits<double>::quiet_NaN());
+  double condition = std::numeric_limits<double>::infinity();
+};
+
+Eigen::Matrix3d eulerXyzRotation(const Vector3d& euler) {
+  const Eigen::AngleAxisd rx(euler.x(), Vector3d::UnitX());
+  const Eigen::AngleAxisd ry(euler.y(), Vector3d::UnitY());
+  const Eigen::AngleAxisd rz(euler.z(), Vector3d::UnitZ());
+  return (rx * ry * rz).toRotationMatrix();
+}
+
+SpatialJacobian makeSpatialJacobian(const Vector3d& euler) {
+  SpatialJacobian result;
+  const Eigen::AngleAxisd rx(euler.x(), Vector3d::UnitX());
+  const Eigen::AngleAxisd ry(euler.y(), Vector3d::UnitY());
+  result.value.col(0) = Vector3d::UnitX();
+  result.value.col(1) = rx * Vector3d::UnitY();
+  result.value.col(2) = rx * ry * Vector3d::UnitZ();
+  if (!result.value.allFinite()) return result;
+
+  Eigen::JacobiSVD<Matrix3d> svd(result.value);
+  const Vector3d singular = svd.singularValues();
+  if (!singular.allFinite() || singular.minCoeff() <= 0.0) return result;
+  result.condition = singular.maxCoeff() / singular.minCoeff();
+  if (!std::isfinite(result.condition) ||
+      result.condition > kMaxSpatialJacobianCondition) return result;
+
+  Eigen::ColPivHouseholderQR<Matrix3d> qr(result.value);
+  if (qr.rank() != 3) return result;
+  result.inverse = qr.solve(Matrix3d::Identity());
+  const double residual = (result.value * result.inverse - Matrix3d::Identity()).norm();
+  result.valid = result.inverse.allFinite() && std::isfinite(residual) &&
+                 residual <= 1e-10;
+  return result;
+}
+
+Vector3d rotationLog(const Matrix3d& rotation) {
+  const Eigen::AngleAxisd angle_axis(rotation);
+  return angle_axis.angle() * angle_axis.axis();
+}
+
+struct JacobianValidation {
+  SpatialJacobian jacobian;
+  std::array<Vector3d, 3> finite_difference;
+  std::array<double, 3> errors{{std::numeric_limits<double>::infinity(),
+                                std::numeric_limits<double>::infinity(),
+                                std::numeric_limits<double>::infinity()}};
+  bool pass = false;
+};
+
+JacobianValidation validateSpatialJacobian(const Vector3d& euler) {
+  JacobianValidation result;
+  result.jacobian = makeSpatialJacobian(euler);
+  if (!result.jacobian.valid) return result;
+  const Matrix3d base = eulerXyzRotation(euler);
+  for (int axis = 0; axis < 3; ++axis) {
+    Vector3d perturbed = euler;
+    perturbed(axis) += kCoordinateValidationEpsilon;
+    const Matrix3d relative = eulerXyzRotation(perturbed) * base.transpose();
+    result.finite_difference[static_cast<std::size_t>(axis)] =
+        rotationLog(relative) / kCoordinateValidationEpsilon;
+    result.errors[static_cast<std::size_t>(axis)] =
+        (result.finite_difference[static_cast<std::size_t>(axis)] -
+         result.jacobian.value.col(axis)).norm();
+  }
+  const double max_error = *std::max_element(result.errors.begin(), result.errors.end());
+  result.pass = std::isfinite(max_error) && max_error <= 1e-5;
+  return result;
 }
 
 double rotationDifferenceDeg(const Eigen::Matrix4f& a, const Eigen::Matrix4f& b) {
@@ -336,6 +411,9 @@ std::array<bool, 3> parseAxes(const std::string& text,
   std::stringstream stream(text);
   std::string name;
   while (std::getline(stream, name, '|')) {
+    if (name == "roll") name = "rotation_x";
+    else if (name == "pitch") name = "rotation_y";
+    else if (name == "yaw") name = "rotation_z";
     bool found = false;
     for (int i = 0; i < 3; ++i) {
       if (name == names[static_cast<std::size_t>(i)]) {
@@ -358,7 +436,7 @@ std::vector<FixtureExpectation> readExpectations(const std::string& path) {
     item.weak_translation = parseAxes(table.get(row, "expected_weak_translation_axes"),
                                       {{"x", "y", "z"}});
     item.weak_rotation = parseAxes(table.get(row, "expected_weak_rotation_axes"),
-                                   {{"roll", "pitch", "yaw"}});
+                                   {{"rotation_x", "rotation_y", "rotation_z"}});
     result.push_back(item);
   }
   return result;
@@ -442,6 +520,7 @@ Vector6d truthPoseVector() {
 struct Timing {
   double hessian_ms = 0.0;
   double canonical_ms = 0.0;
+  double rotation_transform_ms = 0.0;
   double normalization_ms = 0.0;
   double schur_ms = 0.0;
   double eigensolve_ms = 0.0;
@@ -457,7 +536,11 @@ struct HessianOutput {
   double asymmetry = std::numeric_limits<double>::quiet_NaN();
   Matrix6d raw_score = Matrix6d::Constant(std::numeric_limits<double>::quiet_NaN());
   Matrix6d information = Matrix6d::Constant(std::numeric_limits<double>::quiet_NaN());
+  Matrix6d physical_information = Matrix6d::Constant(std::numeric_limits<double>::quiet_NaN());
   Matrix6d normalized = Matrix6d::Constant(std::numeric_limits<double>::quiet_NaN());
+  Matrix3d spatial_jacobian = Matrix3d::Constant(std::numeric_limits<double>::quiet_NaN());
+  double jacobian_condition = std::numeric_limits<double>::infinity();
+  bool coordinate_transform_valid = false;
   Timing timing;
 };
 
@@ -485,16 +568,34 @@ HessianOutput extractAndNormalize(AuditedNdt& ndt, const Cloud::Ptr& source,
   result.timing.canonical_ms = std::chrono::duration<double, std::milli>(
       Clock::now() - canonical_start).count();
 
+  const auto rotation_transform_start = Clock::now();
+  const SpatialJacobian spatial = makeSpatialJacobian(p.tail<3>());
+  result.spatial_jacobian = spatial.value;
+  result.jacobian_condition = spatial.condition;
+  if (spatial.valid) {
+    Matrix6d euler_from_physical = Matrix6d::Identity();
+    euler_from_physical.block<3, 3>(0, 0) = spatial.inverse;
+    result.physical_information = euler_from_physical.transpose() *
+        result.information * euler_from_physical;
+    result.coordinate_transform_valid = result.physical_information.allFinite();
+  }
+  result.timing.rotation_transform_ms = std::chrono::duration<double, std::milli>(
+      Clock::now() - rotation_transform_start).count();
+
   const auto normalization_start = Clock::now();
-  Matrix6d d = Matrix6d::Identity();
-  d(3, 3) = d(4, 4) = d(5, 5) = 1.0 / kResolution;
-  result.normalized = d.transpose() * result.information * d;
+  Matrix6d physical_to_dimensionless = Matrix6d::Identity();
+  physical_to_dimensionless(3, 3) = physical_to_dimensionless(4, 4) =
+      physical_to_dimensionless(5, 5) = kResolution;
+  if (result.coordinate_transform_valid)
+    result.normalized = physical_to_dimensionless.transpose() *
+        result.physical_information * physical_to_dimensionless;
   result.timing.normalization_ms = std::chrono::duration<double, std::milli>(
       Clock::now() - normalization_start).count();
   result.timing.total_ms = std::chrono::duration<double, std::milli>(
       Clock::now() - total_start).count();
   result.finite = std::isfinite(result.score) && result.raw_score.allFinite() &&
-                  result.information.allFinite() && result.normalized.allFinite();
+                  result.information.allFinite() && result.coordinate_transform_valid &&
+                  result.normalized.allFinite();
   return result;
 }
 
@@ -579,9 +680,22 @@ Spectrum3 diagonalize6(const Matrix6d& input,
 
 std::string axisName(int axis, bool rotation) {
   static const std::array<std::string, 3> trans{{"x", "y", "z"}};
-  static const std::array<std::string, 3> rot{{"roll", "pitch", "yaw"}};
+  static const std::array<std::string, 3> rot{{"rotation_x", "rotation_y", "rotation_z"}};
   return rotation ? rot[static_cast<std::size_t>(axis)] :
                     trans[static_cast<std::size_t>(axis)];
+}
+
+void writeJacobianValidation(std::ofstream& output, const std::string& case_id,
+                             const Vector3d& euler) {
+  const JacobianValidation validation = validateSpatialJacobian(euler);
+  for (int axis = 0; axis < 3; ++axis) {
+    writeRow(output, {case_id, number(euler.x()), number(euler.y()), number(euler.z()),
+        number(validation.jacobian.condition), axisName(axis, true),
+        flatten(validation.jacobian.value.col(axis)),
+        flatten(validation.finite_difference[static_cast<std::size_t>(axis)]),
+        number(validation.errors[static_cast<std::size_t>(axis)]),
+        validation.pass ? "1" : "0"});
+  }
 }
 
 struct MethodComponent {
@@ -590,6 +704,9 @@ struct MethodComponent {
   bool finite = false;
   Vector3d values = Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
   Matrix3d vectors = Matrix3d::Constant(std::numeric_limits<double>::quiet_NaN());
+  Matrix3d aligned_basis = Matrix3d::Constant(std::numeric_limits<double>::quiet_NaN());
+  Vector3d aligned_values = Vector3d::Constant(std::numeric_limits<double>::quiet_NaN());
+  std::array<int, 3> original_indices{{-1, -1, -1}};
   Eigen::Matrix<double, 6, 1> raw_values =
       Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
   Matrix3d contribution = Matrix3d::Constant(std::numeric_limits<double>::quiet_NaN());
@@ -621,6 +738,32 @@ double subspaceAgreement(const Matrix3d& expected, int dimension,
   if (!svd.singularValues().allFinite())
     return std::numeric_limits<double>::quiet_NaN();
   return std::min(1.0, svd.singularValues()(dimension - 1));
+}
+
+bool alignEigenBasisToAxes(const Matrix3d& raw_basis, Matrix3d* aligned_basis,
+                           std::array<int, 3>* original_indices) {
+  aligned_basis->setZero();
+  original_indices->fill(-1);
+  std::array<bool, 3> used{{false, false, false}};
+  for (int axis = 0; axis < 3; ++axis) {
+    double best_score = -1.0;
+    int best_index = -1;
+    for (int candidate = 0; candidate < 3; ++candidate) {
+      if (used[static_cast<std::size_t>(candidate)]) continue;
+      const double score = std::abs(raw_basis(axis, candidate));
+      if (score > best_score) {
+        best_score = score;
+        best_index = candidate;
+      }
+    }
+    if (best_index < 0) return false;
+    used[static_cast<std::size_t>(best_index)] = true;
+    (*original_indices)[static_cast<std::size_t>(axis)] = best_index;
+    aligned_basis->col(axis) = raw_basis.col(best_index);
+    if ((*aligned_basis)(axis, axis) < 0.0)
+      aligned_basis->col(axis) *= -1.0;
+  }
+  return aligned_basis->allFinite();
 }
 
 Matrix3d projectRawBasis(const Eigen::Matrix<double, 6, 6>& full_vectors,
@@ -685,9 +828,31 @@ MethodComponent characterize(const std::string& method, const std::string& compo
     result.vectors = spectrum.vectors;
     result.agreement = subspaceAgreement(expected, expected_dim,
                                         result.vectors, 3);
+    if (!alignEigenBasisToAxes(result.vectors, &result.aligned_basis,
+                               &result.original_indices)) {
+      result.finite = false;
+      return result;
+    }
+    for (int axis = 0; axis < 3; ++axis)
+      result.aligned_values(axis) = result.values(
+          result.original_indices[static_cast<std::size_t>(axis)]);
+    result.contribution = result.aligned_basis.cwiseProduct(result.aligned_basis);
+    Eigen::Index weakest_axis = 0;
+    result.aligned_values.minCoeff(&weakest_axis);
+    result.weakest_axis = axisName(static_cast<int>(weakest_axis), rotation);
+    result.weakest = result.aligned_basis.col(weakest_axis);
+    std::ostringstream mapping;
+    for (int axis = 0; axis < 3; ++axis) {
+      if (axis) mapping << '|';
+      mapping << axisName(axis, rotation) << ':'
+              << result.original_indices[static_cast<std::size_t>(axis)];
+    }
+    result.axis_to_mode = mapping.str();
+    return result;
   }
   if (!result.finite) return result;
   result.weakest = result.vectors.col(0);
+  result.aligned_basis = result.vectors;
   result.contribution = result.vectors.cwiseProduct(result.vectors);
   Eigen::Index dominant = 0;
   result.weakest.cwiseAbs().maxCoeff(&dominant);
@@ -801,11 +966,15 @@ std::vector<std::string> methodComponentHeader() {
       "expected_weak_axes", "expected_subspace_dimension", "weakest_physical_axis",
       "direction_or_subspace_agreement", "lambda1", "lambda2", "lambda3",
       "raw6_lambda1", "raw6_lambda2", "raw6_lambda3", "raw6_all_six_eigenvalues",
-      "weakest_eigenvector_xyz_or_rpy", "eigenvectors_flat_row_major",
+      "weakest_eigenvector_xyz_or_rotation_xyz", "eigenvectors_flat_row_major",
+      "aligned_basis_flat_row_major", "aligned_eigenvalues_axis_order",
       "axis_contribution_squared_flat_row_major", "axis_to_eigenmode_greedy",
-      "finite", "analytic_score", "analytic_hessian_asymmetry_frobenius",
+      "finite", "rotation_coordinate_transform_condition",
+      "rotation_coordinate_transform_valid", "rotation_coordinate_transform_failure_count",
+      "analytic_score", "analytic_hessian_asymmetry_frobenius",
       "registration_converged", "registration_iterations", "registration_ms",
-      "hessian_extraction_ms", "canonicalization_ms", "normalization_ms",
+      "hessian_extraction_ms", "canonicalization_ms", "rotation_coordinate_transform_ms",
+      "normalization_ms",
       "schur_ms", "eigensolve_ms", "physical_axis_ms", "analyzer_total_ms",
       "schur_rotation_solve", "schur_translation_solve", "cond_hrr", "cond_htt",
       "factorization_fallback_count", "factorization_failure_count"};
@@ -832,10 +1001,15 @@ std::vector<std::string> makeResultRow(const std::string& fixture,
       number(item.values(2)), number(analysis.raw_values(0)),
       number(analysis.raw_values(1)), number(analysis.raw_values(2)),
       flattenVector6(analysis.raw_values), flatten(item.weakest),
-      flatten(item.vectors), flatten(item.contribution), item.axis_to_mode,
-      item.finite ? "1" : "0", number(hessian.score), number(hessian.asymmetry),
+      flatten(item.vectors), flatten(item.aligned_basis), flatten(item.aligned_values),
+      flatten(item.contribution), item.axis_to_mode,
+      item.finite ? "1" : "0", number(hessian.jacobian_condition),
+      hessian.coordinate_transform_valid ? "1" : "0",
+      hessian.coordinate_transform_valid ? "0" : "1",
+      number(hessian.score), number(hessian.asymmetry),
       converged ? "1" : "0", std::to_string(iterations), number(registration_ms),
       number(hessian.timing.hessian_ms), number(hessian.timing.canonical_ms),
+      number(hessian.timing.rotation_transform_ms),
       number(hessian.timing.normalization_ms), number(analysis.timing.schur_ms),
       number(analysis.timing.eigensolve_ms), number(analysis.timing.physical_ms),
       number(analysis.timing.total_ms), analysis.solve_rot, analysis.solve_trans,
@@ -851,9 +1025,15 @@ void writeSynthetic(const std::string& output_dir,
   const std::string results_path = output_dir + "/synthetic_results.csv";
   const std::string comparison_path = output_dir + "/raw_block_schur_comparison.csv";
   const std::string timings_path = output_dir + "/timing_samples.csv";
-  std::ofstream results(results_path), comparison(comparison_path), timings(timings_path);
-  if (!results || !comparison || !timings)
+  const std::string validation_path =
+      output_dir + "/coordinate_transform_validation_synthetic.csv";
+  std::ofstream results(results_path), comparison(comparison_path), timings(timings_path),
+      validation(validation_path);
+  if (!results || !comparison || !timings || !validation)
     throw std::runtime_error("cannot create synthetic output files");
+  writeHeader(validation, {"case_id", "rx", "ry", "rz", "jacobian_condition",
+      "axis", "analytic_jacobian_xyz", "fd_jacobian_xyz", "error_norm", "pass"});
+  writeJacobianValidation(validation, "IDENTITY_NEAR", Vector3d(0.01, -0.02, 0.03));
   writeHeader(results, methodComponentHeader());
   writeHeader(comparison, {"fixture", "perturbation_id", "component", "expected_weak_axes",
       "expected_subspace_dimension", "raw6_agreement", "block_agreement", "schur_agreement",
@@ -862,7 +1042,8 @@ void writeSynthetic(const std::string& output_dir,
       "block_lambda3", "schur_lambda1", "schur_lambda2", "schur_lambda3",
       "raw6_finite", "block_finite", "schur_finite"});
   writeHeader(timings, {"dataset", "fixture_or_transaction", "perturbation_id", "registration_ms",
-      "hessian_extraction_ms", "canonicalization_ms", "normalization_ms", "schur_ms",
+      "hessian_extraction_ms", "canonicalization_ms", "rotation_coordinate_transform_ms",
+      "normalization_ms", "schur_ms",
       "eigensolve_ms", "physical_axis_ms", "analyzer_total_ms", "fallback_count",
       "factorization_failure_count"});
 
@@ -891,6 +1072,8 @@ void writeSynthetic(const std::string& output_dir,
       HessianOutput hessian;
       Analysis analysis;
       if (converged) {
+        writeJacobianValidation(validation, expected.name + "_" + perturbation.id,
+                                poseVector(final_pose).tail<3>());
         hessian = extractAndNormalize(ndt, source, final_pose);
         analysis = analyzeHessian(&hessian, expected.weak_translation,
                                   expected.weak_rotation);
@@ -924,7 +1107,9 @@ void writeSynthetic(const std::string& output_dir,
       }
       writeRow(timings, {"SYNTHETIC", expected.name, perturbation.id,
           number(registration_ms), number(hessian.timing.hessian_ms),
-          number(hessian.timing.canonical_ms), number(hessian.timing.normalization_ms),
+          number(hessian.timing.canonical_ms),
+          number(hessian.timing.rotation_transform_ms),
+          number(hessian.timing.normalization_ms),
           number(analysis.timing.schur_ms), number(analysis.timing.eigensolve_ms),
           number(analysis.timing.physical_ms), number(analysis.timing.total_ms),
           std::to_string(analysis.timing.fallback_count),
@@ -1052,27 +1237,38 @@ void writeFloor01(const std::string& map_path, const std::string& packed_path,
   std::ofstream results(output_dir + "/floor01_uobs.csv");
   std::ofstream comparison(output_dir + "/floor01_comparison.csv");
   std::ofstream timings(output_dir + "/timing_samples_floor01.csv");
-  if (!manifest || !results || !comparison || !timings)
+  std::ofstream validation(output_dir + "/coordinate_transform_validation_floor01.csv");
+  if (!manifest || !results || !comparison || !timings || !validation)
     throw std::runtime_error("cannot create Floor01 outputs");
+  writeHeader(validation, {"case_id", "rx", "ry", "rz", "jacobian_condition",
+      "axis", "analytic_jacobian_xyz", "fd_jacobian_xyz", "error_norm", "pass"});
+  writeJacobianValidation(validation, "IDENTITY_NEAR", Vector3d(0.01, -0.02, 0.03));
   writeHeader(manifest, {"transaction_id", "frame_index_zero_based", "stamp_ns", "time_s",
       "selection_reason", "source_point_count", "source_cloud_hash_expected",
       "source_cloud_hash_actual", "source_hash_match", "start_pose_saved_predictor_xyz_q_xyzw",
       "single_start_converged", "iterations", "fitness", "transformation_probability",
       "registration_ms", "baseline_translation_delta_m", "baseline_rotation_delta_deg",
       "baseline_fitness_delta", "baseline_iteration_match", "final_pose_matrix16",
-      "map_sha256_expected", "target_point_count"});
+      "map_sha256_expected", "target_point_count", "rotation_coordinate_transform_condition",
+      "rotation_coordinate_transform_valid", "rotation_coordinate_transform_failure_count"});
   writeHeader(results, {"transaction_id", "time_s", "component", "method",
       "weakest_physical_axis", "lambda1", "lambda2", "lambda3",
-      "raw6_all_six_eigenvalues", "weakest_eigenvector_xyz_or_rpy",
-      "eigenvectors_flat_row_major", "axis_contribution_squared_flat_row_major",
-      "axis_to_eigenmode_greedy", "finite", "analytic_score",
+      "raw6_all_six_eigenvalues", "weakest_eigenvector_xyz_or_rotation_xyz",
+      "eigenvectors_flat_row_major", "aligned_basis_flat_row_major",
+      "aligned_eigenvalues_axis_order", "axis_contribution_squared_flat_row_major",
+      "axis_to_eigenmode_greedy", "finite", "rotation_coordinate_transform_condition",
+      "rotation_coordinate_transform_valid", "rotation_coordinate_transform_failure_count",
+      "analytic_score",
       "analytic_hessian_asymmetry_frobenius", "ndt_converged", "ndt_iterations",
       "ndt_fitness", "ndt_probability", "registration_ms", "hessian_extraction_ms",
-      "canonicalization_ms", "normalization_ms", "schur_ms", "eigensolve_ms",
+      "canonicalization_ms", "rotation_coordinate_transform_ms", "normalization_ms",
+      "schur_ms", "eigensolve_ms",
       "physical_axis_ms", "analyzer_total_ms", "schur_rotation_solve",
       "schur_translation_solve", "cond_hrr", "cond_htt", "factorization_fallback_count",
       "factorization_failure_count", "h_score_raw_flat_row_major",
-      "h_information_canonical_flat_row_major", "h_normalized_flat_row_major",
+      "h_information_euler_canonical_flat_row_major",
+      "h_rotation_coordinate_jacobian_flat_row_major",
+      "h_information_physical_flat_row_major", "h_normalized_dimensionless_flat_row_major",
       "h_rr_flat_row_major", "h_rt_flat_row_major", "h_tr_flat_row_major",
       "h_tt_flat_row_major", "s_rotation_flat_row_major", "s_translation_flat_row_major"});
   writeHeader(comparison, {"transaction_id", "time_s", "component", "raw6_weakest_axis",
@@ -1081,7 +1277,8 @@ void writeFloor01(const std::string& map_path, const std::string& packed_path,
       "schur_lambda1", "schur_lambda2", "schur_lambda3", "raw6_finite",
       "block_finite", "schur_finite"});
   writeHeader(timings, {"dataset", "fixture_or_transaction", "perturbation_id", "registration_ms",
-      "hessian_extraction_ms", "canonicalization_ms", "normalization_ms", "schur_ms",
+      "hessian_extraction_ms", "canonicalization_ms", "rotation_coordinate_transform_ms",
+      "normalization_ms", "schur_ms",
       "eigensolve_ms", "physical_axis_ms", "analyzer_total_ms", "fallback_count",
       "factorization_failure_count"});
 
@@ -1115,10 +1312,11 @@ void writeFloor01(const std::string& map_path, const std::string& packed_path,
     const double probability = ndt.getTransformationProbability();
     if (!converged) throw std::runtime_error("sampled Floor01 single-start NDT did not converge at tx=" + integer(scan.transaction));
 
+    writeJacobianValidation(validation, "FLOOR01_TX_" + integer(scan.transaction),
+                            poseVector(final_pose).tail<3>());
     HessianOutput hessian = extractAndNormalize(ndt, source, final_pose);
     const std::array<bool, 3> no_expected{{false, false, false}};
     Analysis analysis = analyzeHessian(&hessian, no_expected, no_expected);
-    if (!hessian.finite) throw std::runtime_error("nonfinite Floor01 Hessian at tx=" + integer(scan.transaction));
 
     auto field = [&baseline_table, &baseline_row](const std::string& name) {
       return parseDouble(baseline_table.get(baseline_row->second, name));
@@ -1146,23 +1344,30 @@ void writeFloor01(const std::string& map_path, const std::string& packed_path,
         start_pose_text.str(), converged ? "1" : "0", std::to_string(iterations),
         number(fitness), number(probability), number(registration_ms), number(t_delta),
         number(r_delta), number(fit_delta), iterations == static_cast<int>(field("replayed_iterations")) ? "1" : "0",
-        final_pose_text.str(), kExpectedMapSha, std::to_string(target->size())});
+        final_pose_text.str(), kExpectedMapSha, std::to_string(target->size()),
+        number(hessian.jacobian_condition), hessian.coordinate_transform_valid ? "1" : "0",
+        hessian.coordinate_transform_valid ? "0" : "1"});
 
     for (const MethodComponent& item : analysis.results) {
       writeRow(results, {integer(scan.transaction), number(scan.time_s), item.component,
           item.method, item.weakest_axis, number(item.values(0)), number(item.values(1)),
           number(item.values(2)), flattenVector6(analysis.raw_values), flatten(item.weakest),
-          flatten(item.vectors), flatten(item.contribution), item.axis_to_mode,
-          item.finite ? "1" : "0", number(hessian.score), number(hessian.asymmetry),
+          flatten(item.vectors), flatten(item.aligned_basis), flatten(item.aligned_values),
+          flatten(item.contribution), item.axis_to_mode, item.finite ? "1" : "0",
+          number(hessian.jacobian_condition), hessian.coordinate_transform_valid ? "1" : "0",
+          hessian.coordinate_transform_valid ? "0" : "1",
+          number(hessian.score), number(hessian.asymmetry),
           converged ? "1" : "0", std::to_string(iterations), number(fitness),
           number(probability), number(registration_ms), number(hessian.timing.hessian_ms),
-          number(hessian.timing.canonical_ms), number(hessian.timing.normalization_ms),
+          number(hessian.timing.canonical_ms), number(hessian.timing.rotation_transform_ms),
+          number(hessian.timing.normalization_ms),
           number(analysis.timing.schur_ms), number(analysis.timing.eigensolve_ms),
           number(analysis.timing.physical_ms), number(analysis.timing.total_ms),
           analysis.solve_rot, analysis.solve_trans, number(analysis.cond_rr),
           number(analysis.cond_tt), std::to_string(analysis.timing.fallback_count),
           std::to_string(analysis.timing.factor_failures), flatten(hessian.raw_score),
-          flatten(hessian.information), flatten(hessian.normalized), flatten(analysis.hrr),
+          flatten(hessian.information), flatten(hessian.spatial_jacobian),
+          flatten(hessian.physical_information), flatten(hessian.normalized), flatten(analysis.hrr),
           flatten(hessian.normalized.block<3,3>(0,3)),
           flatten(hessian.normalized.block<3,3>(3,0)), flatten(analysis.htt),
           flatten(analysis.sr), flatten(analysis.st)});
@@ -1185,7 +1390,8 @@ void writeFloor01(const std::string& map_path, const std::string& packed_path,
     }
     writeRow(timings, {"FLOOR01", integer(scan.transaction), "NA",
         number(registration_ms), number(hessian.timing.hessian_ms),
-        number(hessian.timing.canonical_ms), number(hessian.timing.normalization_ms),
+        number(hessian.timing.canonical_ms), number(hessian.timing.rotation_transform_ms),
+        number(hessian.timing.normalization_ms),
         number(analysis.timing.schur_ms), number(analysis.timing.eigensolve_ms),
         number(analysis.timing.physical_ms), number(analysis.timing.total_ms),
         std::to_string(analysis.timing.fallback_count),
