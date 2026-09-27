@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.10)
+project(p5_i2_ndt_oracle LANGUAGES CXX)
+
+find_package(PCL 1.10 REQUIRED COMPONENTS common io filters registration)
+find_package(OpenSSL REQUIRED)
+find_library(USB_1_LIBRARY NAMES usb-1.0)
+if(NOT USB_1_LIBRARY)
+  message(FATAL_ERROR "libusb-1.0 development library not found")
+endif()
+
+add_executable(p5_i2_ndt_oracle ../p5_i2_ndt_oracle.cpp)
+target_compile_features(p5_i2_ndt_oracle PRIVATE cxx_std_17)
+target_include_directories(p5_i2_ndt_oracle PRIVATE "${CMAKE_CURRENT_LIST_DIR}/..")
+target_link_directories(p5_i2_ndt_oracle PRIVATE ${PCL_LIBRARY_DIRS})
+target_compile_options(p5_i2_ndt_oracle PRIVATE ${PCL_DEFINITIONS})
+target_link_libraries(p5_i2_ndt_oracle PRIVATE ${PCL_LIBRARIES} OpenSSL::Crypto ${USB_1_LIBRARY})

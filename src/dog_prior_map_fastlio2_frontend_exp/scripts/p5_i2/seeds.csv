@@ -1,0 +1,8 @@
+seed_index,seed_name,dx_m,dy_m,dz_m,roll_deg,pitch_deg,yaw_deg,coordinate_frame
+0,GT_EXACT,0,0,0,0,0,0,right_body
+1,DX_P400,0.4,0,0,0,0,0,right_body
+2,DX_M400,-0.4,0,0,0,0,0,right_body
+3,DY_P400,0,0.4,0,0,0,0,right_body
+4,DY_M400,0,-0.4,0,0,0,0,right_body
+5,YAW_P5,0,0,0,0,0,5,right_body
+6,YAW_M5,0,0,0,0,0,-5,right_body
