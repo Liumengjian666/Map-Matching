@@ -1,0 +1,34 @@
+section,metric,value,details
+INPUT,sha256_count,9,expected 9; checked against input_integrity.sha256
+INPUT,principal_frames,88,expected 88
+INPUT,dense_frames,24,expected 24
+INPUT,principal_finite_censored,75/13,expected finite/censored
+INPUT,dense_finite_censored,20/4,expected finite/censored
+ACCEPTANCE,probe_rows,33815,frozen ray_probe_results.csv data rows
+ACCEPTANCE,recomputed_mismatches,0,recomputed from terminal pose and frozen thresholds
+ACCEPTANCE,max_translation_separation_abs_delta_m,5.551115123125783e-17,recomputed vs recorded separation
+ACCEPTANCE,max_rotation_separation_abs_delta_deg,7.910465872618122e-06,recomputed vs recorded separation
+BOUNDARY,finite_principal_winners,75,expected 75
+BOUNDARY,finite_dense_winners,20,expected 20
+BOUNDARY,missing_endpoints,0,must be 0
+BOUNDARY,duplicate_probe_key_conflicts,0,must be 0
+BOUNDARY,sampled_reentries_principal,0,observed sampled reject-to-accept transitions through winning outside alpha; unsampled transitions remain possible
+BOUNDARY,sampled_reentries_dense,0,observed sampled reject-to-accept transitions through winning outside alpha; unsampled transitions remain possible
+EXTRA,logical_retention_reconstructed,6144,expected 6144
+EXTRA,logical_retention_missing,0,must be 0
+EXTRA,retention_conservation_checks,96,expected 96
+EXTRA,retention_conservation_errors,0,must be 0
+FOLD,dense_reconstruction_matches,24,expected 24/24
+FOLD,min_fold_equals_dense_matches,24,"min(margin_fold_A, margin_fold_B) equals frozen m_dense; expected 24/24 including censor semantics"
+BASELINE,baseline_replay_rows,4127,expected 4127
+BASELINE,source_hash_mismatches,0,must be 0
+NDT,audit_script_ndt_calls,NONE_BY_DESIGN,"offline CSV/math/plot source has no ROS/PCL/NDT imports, subprocess, or registration runner"
+FROZEN,P6-I4_CSV_changed,0,all 9 input SHA256 values still match
+MATH,single_minimum_toy_test,PASS,1.599 accepted; 1.601 rejected; boundary 1.6
+MATH,local_terminal_sensitivity_derivation,PASS,first-order formula and assumptions are documented in mathematical_counterexamples.md
+MATH,covariance_scaling_identity,PASS,full-rank ideal identity proved; finite-grid/capped caveat documented
+TANGENT,ALL_SAVED_ROWS,mean=0.023241784580067718;p95=0.036230685126370746;max=2.9023397032748943;ge_pi=0,"local tangent coordinate, not globally unique SO(3) distance"
+TANGENT,EXTRA_MARGIN,mean=0.016399331262101424;p95=0.03434705478841104;max=0.29459683885622207;ge_pi=0,"local tangent coordinate, not globally unique SO(3) distance"
+TANGENT,EXTRA_RETENTION,mean=0.36131859923934867;p95=1.9348931355165957;max=2.9023397032748943;ge_pi=0,"local tangent coordinate, not globally unique SO(3) distance"
+TANGENT,PRINCIPAL,mean=0.012651415337940062;p95=0.03493859352436364;max=0.2500015376286495;ge_pi=0,"local tangent coordinate, not globally unique SO(3) distance"
+TANGENT,REPEATABILITY,mean=0.015252803764346774;p95=0.04188309061233783;max=0.2500015376286495;ge_pi=0,"local tangent coordinate, not globally unique SO(3) distance"
