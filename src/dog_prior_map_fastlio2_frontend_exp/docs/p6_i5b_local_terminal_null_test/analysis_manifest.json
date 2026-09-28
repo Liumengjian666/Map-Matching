@@ -1,0 +1,392 @@
+{
+  "acceptance_thresholds_frozen": {
+    "angular_roundoff_deg": 1e-12,
+    "rotation_deg": 2.0,
+    "translation_m": 0.2
+  },
+  "analysis_mode": "EXISTING_DATA_OFFLINE_ONLY",
+  "base_sha": "ec35ced556f0f1eba192b928bf07452543c5c0dc",
+  "branch_expected": "research/p6-i5b-local-response-null",
+  "dense_boundary_i5a_crosschecks": [
+    {
+      "alpha_diff": 0.046875,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F001",
+      "ray_id": 104,
+      "ray_type": "EXTRA_MARGIN",
+      "sign": 1,
+      "transaction_id": "1"
+    },
+    {
+      "alpha_diff": 2.1796875,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F002",
+      "ray_id": 4,
+      "ray_type": "PRINCIPAL",
+      "sign": 1,
+      "transaction_id": "95"
+    },
+    {
+      "alpha_diff": 2.046875,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F003",
+      "ray_id": 4,
+      "ray_type": "PRINCIPAL",
+      "sign": -1,
+      "transaction_id": "120"
+    },
+    {
+      "alpha_diff": 2.5703125,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F004",
+      "ray_id": 4,
+      "ray_type": "PRINCIPAL",
+      "sign": 1,
+      "transaction_id": "194"
+    },
+    {
+      "crosscheck_status": "CENSORED_MATCH",
+      "dense_censored": true,
+      "frame_id": "P2F005",
+      "transaction_id": "293"
+    },
+    {
+      "alpha_diff": 1.984375,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F006",
+      "ray_id": 3,
+      "ray_type": "PRINCIPAL",
+      "sign": -1,
+      "transaction_id": "368"
+    },
+    {
+      "crosscheck_status": "CENSORED_MATCH",
+      "dense_censored": true,
+      "frame_id": "P2F011",
+      "transaction_id": "829"
+    },
+    {
+      "crosscheck_status": "CENSORED_MATCH",
+      "dense_censored": true,
+      "frame_id": "P2F014",
+      "transaction_id": "888"
+    },
+    {
+      "crosscheck_status": "CENSORED_MATCH",
+      "dense_censored": true,
+      "frame_id": "P2F017",
+      "transaction_id": "948"
+    },
+    {
+      "alpha_diff": 0.453125,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F024",
+      "ray_id": 2,
+      "ray_type": "PRINCIPAL",
+      "sign": -1,
+      "transaction_id": "1087"
+    },
+    {
+      "alpha_diff": 2.375,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F034",
+      "ray_id": 2,
+      "ray_type": "PRINCIPAL",
+      "sign": 1,
+      "transaction_id": "1285"
+    },
+    {
+      "alpha_diff": 1.421875,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F041",
+      "ray_id": 2,
+      "ray_type": "PRINCIPAL",
+      "sign": 1,
+      "transaction_id": "1424"
+    },
+    {
+      "alpha_diff": 1.8046875,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F045",
+      "ray_id": 126,
+      "ray_type": "EXTRA_MARGIN",
+      "sign": 1,
+      "transaction_id": "1502"
+    },
+    {
+      "alpha_diff": 1.8515625,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F048",
+      "ray_id": 5,
+      "ray_type": "PRINCIPAL",
+      "sign": 1,
+      "transaction_id": "1562"
+    },
+    {
+      "alpha_diff": 1.9140625,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F072",
+      "ray_id": 129,
+      "ray_type": "EXTRA_MARGIN",
+      "sign": -1,
+      "transaction_id": "2831"
+    },
+    {
+      "alpha_diff": 0.6640625,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F073",
+      "ray_id": 4,
+      "ray_type": "PRINCIPAL",
+      "sign": 1,
+      "transaction_id": "2846"
+    },
+    {
+      "alpha_diff": 0.9921875,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F074",
+      "ray_id": 126,
+      "ray_type": "EXTRA_MARGIN",
+      "sign": 1,
+      "transaction_id": "2861"
+    },
+    {
+      "alpha_diff": 0.25,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F075",
+      "ray_id": 117,
+      "ray_type": "EXTRA_MARGIN",
+      "sign": -1,
+      "transaction_id": "2890"
+    },
+    {
+      "alpha_diff": 0.21875,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F082",
+      "ray_id": 112,
+      "ray_type": "EXTRA_MARGIN",
+      "sign": -1,
+      "transaction_id": "3465"
+    },
+    {
+      "alpha_diff": 0.875,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F083",
+      "ray_id": 4,
+      "ray_type": "PRINCIPAL",
+      "sign": 1,
+      "transaction_id": "3565"
+    },
+    {
+      "alpha_diff": 1.53125,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F084",
+      "ray_id": 5,
+      "ray_type": "PRINCIPAL",
+      "sign": -1,
+      "transaction_id": "3664"
+    },
+    {
+      "alpha_diff": 1.171875,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F086",
+      "ray_id": 103,
+      "ray_type": "EXTRA_MARGIN",
+      "sign": -1,
+      "transaction_id": "3862"
+    },
+    {
+      "alpha_diff": 1.8984375,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F087",
+      "ray_id": 4,
+      "ray_type": "PRINCIPAL",
+      "sign": 1,
+      "transaction_id": "3961"
+    },
+    {
+      "alpha_diff": 1.7109375,
+      "crosscheck_status": "FINITE_WINNER_MATCH",
+      "dense_censored": false,
+      "frame_id": "P2F088",
+      "ray_id": 4,
+      "ray_type": "PRINCIPAL",
+      "sign": 1,
+      "transaction_id": "4060"
+    }
+  ],
+  "exception_rows": 567,
+  "exploratory_alphas": [
+    2.0,
+    3.0
+  ],
+  "extra_duplicate_identical_key_count": 0,
+  "extra_logical_outcome_count": 6144,
+  "frame_counts": {
+    "dense": 24,
+    "principal": 88
+  },
+  "frozen_p6_i4_files_modified": 0,
+  "frozen_p6_i5a_files_modified": 0,
+  "gt_data_read": false,
+  "i5a_gt_posthoc_csv_opened": false,
+  "input_count": 11,
+  "input_hashes": {
+    "src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i4_prior_conditioned_basin_margin/basin_retention.csv": "c73c35a2a2351f288ce66d8c7777ae4c1fd62486214aea2bac89353f4fb8a7ed",
+    "src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i4_prior_conditioned_basin_margin/dense_reference_margin.csv": "cb7de8f77d2a5e391c29e31590148ca71660519ea1719d7ddc86fe9ed6fa4cd8",
+    "src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i4_prior_conditioned_basin_margin/prediction_contexts.csv": "6d9c18b9b26f78cf086636d471659b1fe287561014d4eea7f7fadf493d5abb24",
+    "src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i4_prior_conditioned_basin_margin/principal_margin.csv": "139988c495a7cba1c5cdeef2f04163808661a8d32d07f34dd93f5aea7bffedf1",
+    "src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i4_prior_conditioned_basin_margin/ray_probe_results.csv": "b18ac3d63bc23fb50d470951ced41cfc69f57d202800c531861f5cba16307023",
+    "src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i4_prior_conditioned_basin_margin/reference_directions.csv": "9ab601004cfcbafe3fc54987b851b48b5143e469328ee17002b53d082f2fe118",
+    "src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i5a_margin_semantic_audit/analysis_manifest.json": "47d35be5c8fa60f9728c461c64e71f6803b1f287e910c252d500d85b7a8c2316",
+    "src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i5a_margin_semantic_audit/boundary_phenotype.csv": "18624ee18dc55cfebb419b8cd4a78728f4cad12341624c76646901c957317945",
+    "src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i5a_margin_semantic_audit/extra_probe_coverage.csv": "a860dd3aaaa1c9151aced62b63cf70e27abf10615a9de742ba2f5322c315070f",
+    "src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i5a_margin_semantic_audit/parity_holdout_margin.csv": "078c0ec401e07b3b7453edc911fd21df970e543148b4e64f5f4d5dd34cffc84f",
+    "src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i5a_margin_semantic_audit/parity_holdout_retention.csv": "339742b1624435af93a282f1ed9d8acd5be198fd5d6f01e18530093b6aae6d33"
+  },
+  "input_integrity": "PASS",
+  "ndt_calls_added": 0,
+  "ndt_calls_added_basis": "offline source contains no ROS/PCL/NDT imports, subprocess, or registration runner",
+  "outputs": {
+    "01_local_model_vs_actual_terminal_error.png": "7d4d3ca470af7b047d08d6114bf44742c65992cdcba0a524ea8ac711d93261b6",
+    "02_heldout_acceptance_confusion.png": "49e3c8e790baf9d0614251e2213cc5c2c3b4bb3d2d12e7fd80453a943d358ae8",
+    "03_predicted_vs_detected_exit_radius.png": "fa4ee0216765c10558d1f586d7d7293a75c76859c9f215c24461183b006ca823",
+    "dense_boundary_crosscheck.csv": "20bd13831d41249909bb6e3fa9afe638f1fc6e5a0cf62747964dc2a742986fc4",
+    "exception_frames.csv": "139af6d2d59ea50abc242645dd4fe792ea29923e05e58ce37f204e6168c1f215",
+    "heldout_acceptance_metrics.csv": "ae710c0045ae2d462f14458f2e8a8b707656800570cdcac9b7117895cda63e76",
+    "heldout_terminal_error_metrics.csv": "d8e181fa6e10caeb0c8093f1486131fa3f5090ec4faa7b09474713eb98d1fa1a",
+    "heldout_terminal_predictions.csv": "3ddc7544017e6a014c7a552b64d21795f113a1ac28989aa34002740b86478ae7",
+    "input_integrity.sha256": "ba758800bf3d404382f733eac4db674efca149aca907ef12567a19a2563979c2",
+    "local_support_audit.csv": "90335cfbac0d5a278a2423b2a75d64ce958730e585e275bb8cc05f610e0b5642",
+    "local_symmetry_audit.csv": "fcc88abcda993236badb1b718cb78edd63b0c89c2d2a4569f8df3eaed33f3e11",
+    "mathematical_definition.md": "03a7807154a0d7fb8339c55740fa6f11cc434e303b0a81dd7a8f0e526674d141",
+    "per_frame_metrics.csv": "478c9e62829e473276d23cca24b0fe024ae5d3ad8d526dd05a4a360ae981257f",
+    "predicted_vs_detected_exit.csv": "a58042f44080a860156b3761d2bddb30fe0a05b150faacfe9a78f0059d74ea8d",
+    "principal_secant_matrix.csv": "856ca87e78384055ceadef021d922be485d21f891d23da14ffb242c07ea4e10e",
+    "summary.md": "ece709f468307dc91ee0bb3435e01b4071ef606d8bda8d77a4bbcb4dc7fcb5ca",
+    "training_probe_audit.csv": "50d9f18db52e35a1108131028addd67b8b1b1c949a26d713a5140be352f19c8b"
+  },
+  "primary_validation_alphas": [
+    0.5,
+    1.0
+  ],
+  "scientific_status": {
+    "U_nonlocal": "SUPPORTED MATHEMATICAL CANDIDATE; semantics pending",
+    "U_obs": "PARTIAL",
+    "distinct_optimizer_local_minima": "NOT DEMONSTRATED",
+    "dual_reliability": "INCOMPLETE",
+    "independent_nonlocal_semantic_evidence": "NOT ESTABLISHED BY THIS EXPERIMENT",
+    "novelty": "UNVERIFIED",
+    "wrong_basin_detector": "NOT DEMONSTRATED"
+  },
+  "script_sha256": "3675d6d5f9615c06922c2c44cc01153981177535a5727066197e2ddc9c1ef3f5",
+  "stage_status": "LOCAL_NULL_TEST_COMPLETE",
+  "start_sha": "0a8d6fe6283b421813dd3c2eac4dbb46f6befceb",
+  "support": {
+    "contaminated_frames": 2,
+    "contaminated_startup_count": 1,
+    "contaminated_transaction_ids": [
+      "1",
+      "3465"
+    ],
+    "startup_tx1_reasons": "ONE_OR_MORE_REJECTED_AT_ALPHA_0P25",
+    "startup_tx1_status": "LOCAL_SUPPORT_CONTAMINATED",
+    "startup_tx1_strict_eligible": false,
+    "strict_frames": 22,
+    "strict_transaction_ids": [
+      "95",
+      "120",
+      "194",
+      "293",
+      "368",
+      "829",
+      "888",
+      "948",
+      "1087",
+      "1285",
+      "1424",
+      "1502",
+      "1562",
+      "2831",
+      "2846",
+      "2861",
+      "2890",
+      "3565",
+      "3664",
+      "3862",
+      "3961",
+      "4060"
+    ],
+    "symmetry_all_rotation": {
+      "max": 0.05432837141506816,
+      "mean": 0.0031650814637515165,
+      "median": 0.0010955418761653334,
+      "n": 144,
+      "p95": 0.013690847838101759
+    },
+    "symmetry_all_rotation_normalized": {
+      "max": 1.5563931949512948,
+      "mean": 0.09067290484402538,
+      "median": 0.031384962892058735,
+      "n": 144,
+      "p95": 0.3922138995395191
+    },
+    "symmetry_all_translation": {
+      "max": 0.4533847150292403,
+      "mean": 0.013759506685325398,
+      "median": 0.002921932994331784,
+      "n": 144,
+      "p95": 0.02473887193906434
+    },
+    "symmetry_all_translation_normalized": {
+      "max": 2.2669235751462016,
+      "mean": 0.068797533426627,
+      "median": 0.014609664971658921,
+      "n": 144,
+      "p95": 0.1236943596953217
+    },
+    "symmetry_strict_rotation": {
+      "max": 0.01677620312166193,
+      "mean": 0.0020698703188369912,
+      "median": 0.0010743070128092082,
+      "n": 132,
+      "p95": 0.006482050367360044
+    },
+    "symmetry_strict_translation": {
+      "max": 0.044059136280102974,
+      "mean": 0.005200463620682157,
+      "median": 0.0028661720137383344,
+      "n": 132,
+      "p95": 0.016657161513963473
+    },
+    "training_rows": 288
+  },
+  "synthetic_left_tangent_test": {
+    "left_error_rad": 7.408711319456051e-17,
+    "left_right_coordinate_separation_rad": 0.018307816457646356,
+    "negative_quaternion_sign_error_rad": 7.408711319456051e-17,
+    "passed": true,
+    "right_body_tangent_relation_error_rad": 7.850462293418876e-17
+  },
+  "task": "PAPER-P6-I5B-LOCAL-TERMINAL-RESPONSE-NULL-TEST",
+  "training_probe_count": 288,
+  "training_radius_alpha": 0.25
+}
