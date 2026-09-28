@@ -220,9 +220,18 @@ struct CloudContext {
 };
 
 struct DerivativeNdt : public ::AuditedNdt {
+  void initializeDerivativeBuffers() {
+    // Match PCL 1.10 NormalDistributionsTransform::computeTransformation()
+    // before calling computeDerivatives() directly for this offline audit.
+    this->point_gradient_.setZero();
+    this->point_gradient_.block<3, 3>(0, 0).setIdentity();
+    this->point_hessian_.setZero();
+  }
+
   double derivatives(Cloud& transformed, Eigen::Matrix<double, 6, 1>& p,
                      Eigen::Matrix<double, 6, 1>& gradient,
                      Eigen::Matrix<double, 6, 6>& hessian) {
+    initializeDerivativeBuffers();
     return this->computeDerivatives(gradient, hessian, transformed, p, true);
   }
 };

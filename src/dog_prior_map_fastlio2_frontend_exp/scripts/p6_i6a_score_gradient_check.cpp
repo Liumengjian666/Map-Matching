@@ -36,6 +36,20 @@ void runCheck(const std::string& selected_path, const std::string& manifest_path
       saved_pose.block<3, 3>(0, 0).cast<double>(),
       roundtrip.block<3, 3>(0, 0).cast<double>()) * 180.0 / M_PI;
 
+  Eigen::Matrix<double, 6, 1> generic_pcl_pose;
+  generic_pcl_pose << 0.23, -0.41, 0.72, 0.31, -0.22, 0.43;
+  const Eigen::Matrix4f generic_roundtrip =
+      p6_i5c::poseFromPclVector(generic_pcl_pose);
+  const Eigen::Matrix4f explicit_pcl_order =
+      (Eigen::Translation3f(static_cast<float>(generic_pcl_pose(0)),
+                            static_cast<float>(generic_pcl_pose(1)),
+                            static_cast<float>(generic_pcl_pose(2))) *
+       Eigen::AngleAxisf(static_cast<float>(generic_pcl_pose(3)), Eigen::Vector3f::UnitX()) *
+       Eigen::AngleAxisf(static_cast<float>(generic_pcl_pose(4)), Eigen::Vector3f::UnitY()) *
+       Eigen::AngleAxisf(static_cast<float>(generic_pcl_pose(5)), Eigen::Vector3f::UnitZ())).matrix();
+  const double pcl_order_matrix_error =
+      (generic_roundtrip - explicit_pcl_order).norm();
+
   Eigen::Matrix<double, 6, 1> analytic_gradient;
   Eigen::Matrix<double, 6, 6> analytic_hessian;
   const double center_score = scoreAtP(ndt, cloud->second.source, p,
@@ -51,10 +65,11 @@ void runCheck(const std::string& selected_path, const std::string& manifest_path
       << "frame_id,transaction_id,endpoint,component,pcl_order,pcl_value,score_center,"
          "analytic_score_gradient,fd_gradient_h_1e-4,fd_gradient_h_5e-5,"
          "directional_sign_h,directional_sign_half_h,relative_diff_h,relative_diff_half_h,"
-         "pose_roundtrip_translation_m,pose_roundtrip_rotation_deg,align_calls\n";
-  int comparable = 0;
-  int sign_matches = 0;
-  int close_derivatives = 0;
+         "pose_roundtrip_translation_m,pose_roundtrip_rotation_deg,"
+         "pcl_rx_ry_rz_matrix_error,align_calls\n";
+  int checked_axes = 0;
+  int meaningful_fd_axes = 0;
+  int fully_matching_axes = 0;
   for (int axis = 0; axis < 6; ++axis) {
     const auto finiteDifference = [&](double step) {
       Eigen::Matrix<double, 6, 1> plus = p, minus = p;
@@ -71,33 +86,42 @@ void runCheck(const std::string& selected_path, const std::string& manifest_path
     const double denom_half = std::max({std::abs(analytic), std::abs(fd_half), 1e-8});
     const double rel_h = std::abs(analytic - fd_h) / denom_h;
     const double rel_half = std::abs(analytic - fd_half) / denom_half;
-    const bool meaningful = std::abs(analytic) > 1e-6 && std::abs(fd_half) > 1e-6;
-    const bool sign_h = !meaningful || analytic * fd_h > 0.0;
-    const bool sign_half = !meaningful || analytic * fd_half > 0.0;
-    if (meaningful) {
-      ++comparable;
-      if (sign_h && sign_half) ++sign_matches;
-      if (rel_h <= 0.10 && rel_half <= 0.10) ++close_derivatives;
-    }
+    const bool finite_difference_meaningful =
+        std::isfinite(fd_h) && std::isfinite(fd_half) &&
+        std::abs(fd_h) > 1e-6 && std::abs(fd_half) > 1e-6;
+    const bool analytic_meaningful = std::isfinite(analytic) && std::abs(analytic) > 1e-6;
+    const bool sign_h = analytic_meaningful && finite_difference_meaningful && analytic * fd_h > 0.0;
+    const bool sign_half = analytic_meaningful && finite_difference_meaningful && analytic * fd_half > 0.0;
+    const bool axis_matches = analytic_meaningful && finite_difference_meaningful &&
+        sign_h && sign_half && rel_h <= 0.10 && rel_half <= 0.10;
+    ++checked_axes;
+    if (finite_difference_meaningful) ++meaningful_fd_axes;
+    if (axis_matches) ++fully_matching_axes;
+    const char* sign_h_status = !analytic_meaningful || !finite_difference_meaningful
+        ? "UNDEFINED" : (sign_h ? "MATCH" : "MISMATCH");
+    const char* sign_half_status = !analytic_meaningful || !finite_difference_meaningful
+        ? "UNDEFINED" : (sign_half ? "MATCH" : "MISMATCH");
     output << item.frame_id << ',' << item.transaction_id << ",inside," << axes[axis]
            << ',' << axis << ',' << p(axis) << ',' << center_score << ',' << analytic
-           << ',' << fd_h << ',' << fd_half << ',' << (sign_h ? "MATCH_OR_UNDEFINED" : "MISMATCH")
-           << ',' << (sign_half ? "MATCH_OR_UNDEFINED" : "MISMATCH") << ',' << rel_h << ','
-           << rel_half << ',' << roundtrip_t << ',' << roundtrip_r << ",0\n";
+           << ',' << fd_h << ',' << fd_half << ',' << sign_h_status
+           << ',' << sign_half_status << ',' << rel_h << ',' << rel_half << ','
+           << roundtrip_t << ',' << roundtrip_r << ',' << pcl_order_matrix_error << ",0\n";
   }
   output.close();
   if (!output) throw std::runtime_error("score_gradient_check_write_failed");
-  const std::string result = comparable > 0 && sign_matches == comparable &&
-          close_derivatives == comparable && roundtrip_t <= 1e-5 && roundtrip_r <= 1e-4
+  const std::string result = checked_axes == 6 && meaningful_fd_axes == 6 &&
+          fully_matching_axes == 6 && roundtrip_t <= 1e-5 && roundtrip_r <= 1e-4 &&
+          pcl_order_matrix_error <= 1e-6
       ? "PASS" : "INDETERMINATE";
   std::cout << "PCL_SCORE_SIGN_AND_COORDINATE_CHECK=" << result
             << ",case=" << item.frame_id << ",endpoint=inside"
-            << ",meaningful_fd_axes=" << comparable
-            << ",same_direction_axes=" << sign_matches
-            << ",within_10pct_axes=" << close_derivatives
+            << ",checked_axes=" << checked_axes
+            << ",meaningful_fd_axes=" << meaningful_fd_axes
+            << ",axes_matching_direction_and_magnitude=" << fully_matching_axes
             << ",pcl_parameter_order=tx_ty_tz_rx_ry_rz"
             << ",pose_roundtrip_translation_m=" << roundtrip_t
             << ",pose_roundtrip_rotation_deg=" << roundtrip_r
+            << ",rx_ry_rz_matrix_error=" << pcl_order_matrix_error
             << ",ndt_align_calls=0"
             << ",selected_sha256=" << selection_hashes.first
             << ",manifest_sha256=" << selection_hashes.second << '\n';

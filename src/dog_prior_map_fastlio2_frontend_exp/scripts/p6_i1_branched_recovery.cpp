@@ -244,6 +244,8 @@ void runBaseline(const p4_i2::Inputs& inputs,
   const char* profile_name = strict_profile ? "STRICT" : "BASELINE";
   const int maximum_iterations = strict_profile ? 80 : 40;
   const double transformation_epsilon = strict_profile ? 1e-5 : 0.001;
+  constexpr double ndt_resolution = 0.8;
+  constexpr double ndt_step_size = 0.08;
   using namespace dog_prior_map_fastlio2_frontend_exp;
   p5_i1::requireFrozenMapSha256(map_path);
   const Cloud::Ptr target = loadTarget(map_path);
@@ -263,10 +265,10 @@ void runBaseline(const p4_i2::Inputs& inputs,
 
   AuditedNdt ndt;
   configureNdt(ndt, target);
-  if (strict_profile) {
-    ndt.setTransformationEpsilon(transformation_epsilon);
-    ndt.setMaximumIterations(maximum_iterations);
-  }
+  ndt.setResolution(ndt_resolution);
+  ndt.setStepSize(ndt_step_size);
+  ndt.setTransformationEpsilon(transformation_epsilon);
+  ndt.setMaximumIterations(maximum_iterations);
   std::ofstream output(output_path);
   std::ofstream trajectory(trajectory_path);
   if (!output || !trajectory) throw std::runtime_error("cannot_create_baseline_outputs");
@@ -278,7 +280,8 @@ void runBaseline(const p4_i2::Inputs& inputs,
          << ",saved_step_limited,replayed_step_limited,predictor_t_difference_m,predictor_r_difference_deg"
          << ",raw_t_difference_m,raw_r_difference_deg,used_t_difference_m,used_r_difference_deg"
          << ",corrected_t_difference_m,corrected_r_difference_deg,ndt_objective,runtime_ms"
-         << ",step_total_ms,run_profile,ndt_epsilon,ndt_max_iterations"
+         << ",step_total_ms,run_profile,ndt_resolution,ndt_step_size"
+         << ",ndt_epsilon,ndt_max_iterations"
          << ",predicted_lidar_x,predicted_lidar_y,predicted_lidar_z,predicted_lidar_qx,predicted_lidar_qy,predicted_lidar_qz,predicted_lidar_qw"
          << ",raw_lidar_x,raw_lidar_y,raw_lidar_z,raw_lidar_qx,raw_lidar_qy,raw_lidar_qz,raw_lidar_qw"
          << ",used_lidar_x,used_lidar_y,used_lidar_z,used_lidar_qx,used_lidar_qy,used_lidar_qz,used_lidar_qw"
@@ -375,7 +378,8 @@ void runBaseline(const p4_i2::Inputs& inputs,
            << predictor_t << ',' << predictor_r << ',' << raw_t << ',' << raw_r << ','
            << used_t << ',' << used_r << ',' << corrected_t << ',' << corrected_r << ','
            << objective << ',' << runtime_ms << ',' << step_total_ms << ','
-           << profile_name << ',' << transformation_epsilon << ',' << maximum_iterations;
+           << profile_name << ',' << ndt_resolution << ',' << ndt_step_size << ','
+           << transformation_epsilon << ',' << maximum_iterations;
     writePose7(output, predicted_lidar);
     writePose7(output, raw_pose_d);
     writePose7(output, used_pose_d);

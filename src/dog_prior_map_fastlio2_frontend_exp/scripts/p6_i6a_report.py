@@ -11,8 +11,12 @@ from scipy.spatial.transform import Rotation, Slerp
 
 EXPECTED_GT_SHA256 = "b8db2491cdb3ca3194f653cab90f31eae70b457e91b2f87f30ed7fe2d0e2ce9f"
 EXPECTED_BASE_TRAJECTORY_SHA256 = "fd9cb3ef78d25fb48361989bdf2f7b15b8f5e0fefa1e0f4fac0362b0911837da"
+EXPECTED_BASE_REPLAY_SHA256 = "1b234a7594726a6918c5e91eb32be3d7046f25fd6993c37fcac31acfcb21b1b9"
+EXPECTED_STRICT_REPLAY_SHA256 = "274791b6341bee2f2c56337df544fa9d4aa9f3226ab9277cfa3a2faa7e074f23"
+EXPECTED_STRICT_TRAJECTORY_SHA256 = "3f467b70345a8723fde8a61d260153d1cf5726c1bd574984940b89835e66a3b2"
 EVAL_START = 1660857393.197807074
 EXPECTED_ROWS = 4127
+EXPECTED_TARGET_POINTS = 549606
 
 
 def sha256(path):
@@ -33,6 +37,9 @@ def pose(row, prefix):
     quaternion = np.array([float(row[f"{prefix}_q{axis}"]) for axis in "xyzw"])
     if not np.all(np.isfinite(translation)) or not np.all(np.isfinite(quaternion)):
         raise RuntimeError(f"nonfinite trajectory pose: {prefix}")
+    quaternion_norm = float(np.linalg.norm(quaternion))
+    if not np.isfinite(quaternion_norm) or abs(quaternion_norm - 1.0) > 1e-5:
+        raise RuntimeError(f"invalid trajectory quaternion norm: {prefix}")
     matrix = np.eye(4)
     matrix[:3, :3] = Rotation.from_quat(quaternion).as_matrix()
     matrix[:3, 3] = translation
@@ -107,6 +114,8 @@ def validate_trajectory(rows, label):
         raise RuntimeError(f"{label} transaction sequence is invalid")
     if any(right <= left for left, right in zip(stamps, stamps[1:])):
         raise RuntimeError(f"{label} timestamps are not strictly increasing")
+    for row in rows:
+        pose(row, "corrected_imu")
     return stamps
 
 
@@ -129,21 +138,81 @@ def aligned_errors(rows, gt_times, gt_matrices, anchor):
     return times, translations, rotations
 
 
-def timing(replay_path, expected_mode):
-    rows = read_csv(replay_path)
+def validate_replay_binding(rows, expected_mode, trajectory_rows):
     if len(rows) != EXPECTED_ROWS:
-        raise RuntimeError(f"{replay_path} has {len(rows)} replay rows")
+        raise RuntimeError(f"{expected_mode} has {len(rows)} replay rows")
     if [int(row["transaction_id"]) for row in rows] != list(range(1, EXPECTED_ROWS + 1)):
-        raise RuntimeError(f"{replay_path} transaction order is invalid")
+        raise RuntimeError(f"{expected_mode} replay transaction order is invalid")
+    trajectory_ids = [int(row["transaction_id"]) for row in trajectory_rows]
+    replay_stamps = [int(row["stamp_ns"]) for row in rows]
+    trajectory_stamps = [int(row["stamp_ns"]) for row in trajectory_rows]
+    if [int(row["transaction_id"]) for row in rows] != trajectory_ids:
+        raise RuntimeError(f"{expected_mode} replay/trajectory transaction mismatch")
+    if replay_stamps != trajectory_stamps:
+        raise RuntimeError(f"{expected_mode} replay/trajectory timestamp mismatch")
     if any(row["replayed_converged"] not in ("1", "true") for row in rows):
-        raise RuntimeError(f"{replay_path} contains a nonconverged NDT result")
+        raise RuntimeError(f"{expected_mode} contains a nonconverged NDT result")
+    source_hashes = []
+    source_point_counts = []
+    target_point_counts = []
+    for index, row in enumerate(rows):
+        expected_hash = row["source_hash_expected"].strip()
+        actual_hash = row["source_hash_actual"].strip()
+        if not expected_hash or expected_hash != actual_hash:
+            raise RuntimeError(
+                f"{expected_mode} source cloud hash mismatch at tx {index + 1}")
+        source_hashes.append(actual_hash)
+        source_points = int(row["source_points"])
+        target_points = int(row["target_points"])
+        if source_points <= 0 or target_points != EXPECTED_TARGET_POINTS:
+            raise RuntimeError(
+                f"{expected_mode} invalid cloud counts at tx {index + 1}")
+        source_point_counts.append(source_points)
+        target_point_counts.append(target_points)
+        numeric_fields = (
+            "time_s", "replayed_fitness", "ndt_objective", "runtime_ms",
+            "step_total_ms")
+        for field in numeric_fields:
+            value = float(row[field])
+            if not np.isfinite(value):
+                raise RuntimeError(
+                    f"{expected_mode} nonfinite {field} at tx {index + 1}")
+        if float(row["runtime_ms"]) < 0.0 or float(row["step_total_ms"]) < 0.0:
+            raise RuntimeError(f"{expected_mode} negative timing at tx {index + 1}")
     if expected_mode == "STRICT":
         if any(row.get("run_profile") != "STRICT" for row in rows):
             raise RuntimeError("STRICT replay profile label mismatch")
-        if any(float(row["ndt_epsilon"]) != 1e-5 for row in rows):
+        if any(not np.isclose(float(row["ndt_epsilon"]), 1e-5, rtol=1e-12, atol=0.0)
+               for row in rows):
             raise RuntimeError("STRICT epsilon mismatch")
         if any(int(row["ndt_max_iterations"]) != 80 for row in rows):
             raise RuntimeError("STRICT iteration limit mismatch")
+        if "ndt_resolution" in rows[0] and any(
+                not np.isclose(float(row["ndt_resolution"]), 0.8, rtol=0.0, atol=1e-12)
+                for row in rows):
+            raise RuntimeError("STRICT resolution mismatch")
+        if "ndt_step_size" in rows[0] and any(
+                not np.isclose(float(row["ndt_step_size"]), 0.08, rtol=0.0, atol=1e-12)
+                for row in rows):
+            raise RuntimeError("STRICT step-size mismatch")
+    return source_hashes, source_point_counts, target_point_counts
+
+
+def validate_shared_replay_inputs(base_binding, strict_binding):
+    base_hashes, base_source_counts, base_target_counts = base_binding
+    strict_hashes, strict_source_counts, strict_target_counts = strict_binding
+    if base_hashes != strict_hashes:
+        raise RuntimeError("BASE/STRICT source cloud hashes differ")
+    if base_source_counts != strict_source_counts:
+        raise RuntimeError("BASE/STRICT source point counts differ")
+    if base_target_counts != strict_target_counts:
+        raise RuntimeError("BASE/STRICT target point counts differ")
+
+
+def timing(replay_path, expected_mode, trajectory_rows):
+    rows = read_csv(replay_path)
+    source_hashes, source_point_counts, target_point_counts = validate_replay_binding(
+        rows, expected_mode, trajectory_rows)
     ndt_ms = [float(row["runtime_ms"]) for row in rows]
     step_ms = [float(row["step_total_ms"]) for row in rows]
     return {
@@ -152,7 +221,7 @@ def timing(replay_path, expected_mode):
         "ndt_p95_ms": float(np.percentile(ndt_ms, 95)),
         "ndt_max_ms": max(ndt_ms),
         "per_scan_step_sum_s": sum(step_ms) / 1000.0,
-    }
+    }, (source_hashes, source_point_counts, target_point_counts)
 
 
 def main():
@@ -165,9 +234,17 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--strict-wall-s", type=float, required=True)
     args = parser.parse_args()
+    if not np.isfinite(args.strict_wall_s) or args.strict_wall_s < 0.0:
+        raise RuntimeError("invalid STRICT full replay wall time")
 
     if sha256(args.baseline_trajectory) != EXPECTED_BASE_TRAJECTORY_SHA256:
         raise RuntimeError("frozen BASE trajectory SHA256 mismatch")
+    if sha256(args.baseline_replay) != EXPECTED_BASE_REPLAY_SHA256:
+        raise RuntimeError("frozen BASE replay SHA256 mismatch")
+    if sha256(args.strict_trajectory) != EXPECTED_STRICT_TRAJECTORY_SHA256:
+        raise RuntimeError("frozen STRICT trajectory SHA256 mismatch")
+    if sha256(args.strict_replay) != EXPECTED_STRICT_REPLAY_SHA256:
+        raise RuntimeError("frozen STRICT replay SHA256 mismatch")
     gt_sha = sha256(args.gt)
     if gt_sha != EXPECTED_GT_SHA256:
         raise RuntimeError(f"official GT SHA256 mismatch: {gt_sha}")
@@ -195,6 +272,12 @@ def main():
         raise RuntimeError("frozen baseline anchor is outside official GT coverage")
     anchor = pose(baseline[0], "corrected_imu") @ np.linalg.inv(first_gt)
 
+    base_timing, base_binding = timing(
+        args.baseline_replay, "BASE", baseline)
+    strict_timing, strict_binding = timing(
+        args.strict_replay, "STRICT", strict)
+    validate_shared_replay_inputs(base_binding, strict_binding)
+
     fields = [
         "mode", "evaluated_samples", "t_mean_m", "t_rmse_m", "t_median_m", "t_p95_m", "t_max_m",
         "r_mean_deg", "r_rmse_deg", "r_median_deg", "r_p95_deg", "r_max_deg",
@@ -202,14 +285,13 @@ def main():
         "ndt_p95_ms", "ndt_max_ms", "per_scan_step_sum_s", "full_replay_wall_s", "gt_sha256",
     ]
     output_rows = []
-    for mode, trajectory, replay, wall_s in (
-        ("BASE", baseline, args.baseline_replay, ""),
-        ("STRICT", strict, args.strict_replay, args.strict_wall_s),
+    for mode, trajectory, timing_stats, wall_s in (
+        ("BASE", baseline, base_timing, ""),
+        ("STRICT", strict, strict_timing, args.strict_wall_s),
     ):
         times, t_errors, r_errors = aligned_errors(trajectory, gt_times, gt_matrices, anchor)
         t_stats = summarize(t_errors)
         r_stats = summarize(r_errors)
-        timing_stats = timing(replay, mode)
         row = {
             "mode": mode,
             "evaluated_samples": len(times),

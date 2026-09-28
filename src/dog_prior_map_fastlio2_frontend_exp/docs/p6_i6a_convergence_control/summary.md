@@ -66,13 +66,18 @@ The independent value object records nominal, positive-perturbed, and negative-p
 
 ### Targeted PCL convention check
 
-One no-align diagnostic was run at P2F003's frozen original inside terminal. It records PCL parameter order `tx, ty, tz, rx, ry, rz`, round-trip pose error, fixed-score values, analytic/central-difference gradients at two step sizes, and zero `align` calls. PCL's score direction is maximization. The pose round trip was numerically consistent, and three meaningful angular axes had matching directional signs; however, translation analytic gradients underflowed to approximately `1e-308`. The `ry` magnitude mismatch was 52.7% at `h=1e-4` but 0.13% at `h=5e-5`; therefore the focused empirical check is **INDETERMINATE**, not PASS. The Euler values also lie on an equivalent near-π representation branch for a near-identity rotation. Do not yet use this run to claim that empirical curvature is a validated operational reliability score.
+One no-align diagnostic was run at P2F003's frozen original inside terminal. `DerivativeNdt` now exposes and reuses PCL 1.10's pre-derivative initialization (`point_gradient_` zeroed with its translation identity block, and `point_hessian_` zeroed) before each direct derivative evaluation. All six axes have finite, meaningful analytic and central-difference values; tx/ty/tz gradients now agree with finite differences, and the generic transform-order assertion reports zero matrix error for `Translation * Rx * Ry * Rz`. Pose round-trip rotation error is about `5.45e-8` degrees, with zero translation error. All six axes' directional signs match at both steps and 5/6 axes meet the 10% magnitude criterion at both steps. For `ry`, the magnitude mismatch is 52.7% at `h=1e-4` but 0.13% at `h=5e-5`; its saved Euler coordinate is near the equivalent ±π branch. The focused empirical check therefore remains **INDETERMINATE**, not PASS. The output records zero NDT `align` calls. U_obs remains `UNVERIFIED`; this does not block coding U_nonlocal or the joint decision module, but curvature must not be treated as an operationally validated signal yet.
 
 ## Builds, tests, and call accounting
 
-- Release helper/module build: PASS (`scripts/p6_i6a/CMakeLists.txt`; build directory `/tmp/p6-i6a-build`).
-- Reliability-module CTest: PASS, 1/1.
-- P6-I1 replay executable Release build: PASS (`/tmp/p6-i6a-runner-build`).
+- Eigen-only Release module build: PASS (`scripts/p6_i6a/CMakeLists.txt`; build directory `/tmp/p6-i6a-module-build`).
+- PCL-backed Release helper build with explicit FAST-LIO2/DCReg roots: PASS (`/tmp/p6-i6a-build`).
+- Reliability-module CTest: PASS, 1/1 in both build configurations.
+- Report-integrity unit tests: PASS, 8/8 (`p6_i6a_report_test.py`).
+- Frozen BASE replay SHA-256: `1b234a7594726a6918c5e91eb32be3d7046f25fd6993c37fcac31acfcb21b1b9`.
+- Frozen STRICT replay SHA-256: `274791b6341bee2f2c56337df544fa9d4aa9f3226ab9277cfa3a2faa7e074f23`.
+- Frozen STRICT trajectory SHA-256: `3f467b70345a8723fde8a61d260153d1cf5726c1bd574984940b89835e66a3b2`.
+- P6-I1 replay executable Release build: PASS (`/tmp/p6-i1-build`; configured from `scripts/p6_i1/CMakeLists.txt`).
 - `git diff --check`: PASS.
 - New NDT `.align` calls: 28 (7-frame BASE/STRICT direct-seed comparison) + 4,127 (STRICT closed-loop replay) = **4,155**. The focused score/gradient check performed zero `.align` calls.
 - Existing frozen BASE replay and result outputs were reused; no BASE replay or NDT retuning was done in this phase.
@@ -85,6 +90,7 @@ One no-align diagnostic was run at P2F003's frozen original inside terminal. It 
 - `trajectory_STRICT.csv`
 - `floor01_base_strict_metrics.csv`
 - `score_gradient_convention_check.csv`
+- `scripts/p6_i6a_report_test.py`
 - `scripts/p6_i6a/CMakeLists.txt`, reusable C++ module and its minimal test, strict-frame runner, score/gradient checker, and post-hoc report script
 
-The focused derivative convention result remains indeterminate; the full-loop base wall time was not preserved; and only Floor01 was run. The next joint decision logic should treat local curvature as unavailable until its score/gradient coordinate convention is established, keep terminal stability descriptive and budget-aware, define a common dataset-independent interface with dataset-specific calibration/configuration only, and test that a reliability signal does not overrule a materially wrong absolute NDT update. No algorithm selector, new threshold, Corridor01 run, or I6B experiment was added here.
+The focused derivative convention result remains indeterminate; the full-loop base wall time was not preserved; and only Floor01 was run. The report binds replay and trajectory rows by transaction and timestamp, verifies source expected/actual hashes and BASE/STRICT input identity, validates cloud counts and finite numeric fields, and pins the frozen input artifacts by SHA-256. The next joint decision logic should treat local curvature as unavailable until its score/gradient coordinate convention is established, keep terminal stability descriptive and budget-aware, define a common dataset-independent interface with dataset-specific calibration/configuration only, and test that a reliability signal does not overrule a materially wrong absolute NDT update. No algorithm selector, new threshold, Corridor01 run, or I6B experiment was added in I6A.
