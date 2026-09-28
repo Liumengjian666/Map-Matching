@@ -1,6 +1,7 @@
 #include "dog_prior_map_fastlio2_frontend_exp/fastlio2_frontend.hpp"
 
 #include <omp.h>
+#include <Eigen/Cholesky>
 
 // This is the only runtime translation unit allowed to include this pinned
 // header: it defines non-inline free functions.
@@ -382,21 +383,39 @@ bool FastLio2IkfomFrontend::predictHeldInputTo(
 bool FastLio2IkfomFrontend::applyPoseMeasurement(
     const Pose3d& map_T_imu_measurement, PoseCorrectionDelta* delta,
     std::string* failure_reason) {
-  if (failure_reason) failure_reason->clear();
-  if (!impl_->is_initialized) return fail(failure_reason, "filter_not_initialized");
-  if (!finitePose(map_T_imu_measurement))
-    return fail(failure_reason, "invalid_pose_measurement");
-
-  const FilterSnapshot before = getState();
-  PoseMeasurement measurement(vect3(map_T_imu_measurement.position),
-                              SO3(map_T_imu_measurement.orientation.toRotationMatrix()));
   Eigen::Matrix<double, 6, 6> noise = Eigen::Matrix<double, 6, 6>::Zero();
   noise.block<3, 3>(0, 0).diagonal().setConstant(
       impl_->parameters.pose_position_sigma_m * impl_->parameters.pose_position_sigma_m);
   noise.block<3, 3>(3, 3).diagonal().setConstant(
       impl_->parameters.pose_rotation_sigma_rad * impl_->parameters.pose_rotation_sigma_rad);
+  return applyPoseMeasurement(map_T_imu_measurement, noise, delta, failure_reason);
+}
 
-  impl_->filter.update_iterated(measurement, noise);
+bool FastLio2IkfomFrontend::applyPoseMeasurement(
+    const Pose3d& map_T_imu_measurement,
+    const Eigen::Matrix<double, 6, 6>& measurement_covariance,
+    PoseCorrectionDelta* delta, std::string* failure_reason) {
+  if (failure_reason) failure_reason->clear();
+  if (!impl_->is_initialized) return fail(failure_reason, "filter_not_initialized");
+  if (!finitePose(map_T_imu_measurement))
+    return fail(failure_reason, "invalid_pose_measurement");
+  if (!measurement_covariance.allFinite())
+    return fail(failure_reason, "nonfinite_pose_measurement_covariance");
+  if ((measurement_covariance - measurement_covariance.transpose()).cwiseAbs().maxCoeff() > 1e-10)
+    return fail(failure_reason, "asymmetric_pose_measurement_covariance");
+  Eigen::LLT<Eigen::Matrix<double, 6, 6>> noise_factor(measurement_covariance);
+  if (noise_factor.info() != Eigen::Success ||
+      !noise_factor.matrixL().toDenseMatrix().allFinite() ||
+      noise_factor.matrixL().toDenseMatrix().diagonal().minCoeff() <= 0.0)
+    return fail(failure_reason, "pose_measurement_covariance_not_spd");
+
+  const FilterSnapshot before = getState();
+  PoseMeasurement measurement(vect3(map_T_imu_measurement.position),
+                              SO3(map_T_imu_measurement.orientation.toRotationMatrix()));
+  // The pinned IKFoM API accepts a mutable R reference (and may reuse its
+  // workspace), so keep the public caller's validated covariance immutable.
+  Eigen::Matrix<double, 6, 6> update_noise = measurement_covariance;
+  impl_->filter.update_iterated(measurement, update_noise);
   state_ikfom state = impl_->filter.get_x();
   auto covariance = impl_->filter.get_P();
   enforceFixedExtrinsicConstraint(state, covariance, impl_->fixed_rotation,

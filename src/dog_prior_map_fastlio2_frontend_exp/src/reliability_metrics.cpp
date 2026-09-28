@@ -78,6 +78,8 @@ NonlocalTerminalStability analyzeNonlocalTerminalStability(
   result.geometry_valid = finitePose(nominal.map_T_lidar) &&
                           finitePose(positive.map_T_lidar) &&
                           finitePose(negative.map_T_lidar);
+  result.all_converged = nominal.converged && positive.converged &&
+                         negative.converged;
   result.objectives_finite = std::isfinite(nominal.fixed_objective) &&
                              std::isfinite(positive.fixed_objective) &&
                              std::isfinite(negative.fixed_objective);
@@ -86,6 +88,12 @@ NonlocalTerminalStability analyzeNonlocalTerminalStability(
         (positive.map_T_lidar.translation() - negative.map_T_lidar.translation()).norm();
     result.positive_negative_rotation_gap_rad = rotationDistance(
         positive.map_T_lidar.linear(), negative.map_T_lidar.linear());
+    result.max_nominal_translation_delta_m = std::max(
+        (positive.map_T_lidar.translation() - nominal.map_T_lidar.translation()).norm(),
+        (negative.map_T_lidar.translation() - nominal.map_T_lidar.translation()).norm());
+    result.max_nominal_rotation_delta_rad = std::max(
+        rotationDistance(nominal.map_T_lidar.linear(), positive.map_T_lidar.linear()),
+        rotationDistance(nominal.map_T_lidar.linear(), negative.map_T_lidar.linear()));
   }
   if (result.objectives_finite) {
     result.positive_minus_nominal_objective =
@@ -98,6 +106,7 @@ NonlocalTerminalStability analyzeNonlocalTerminalStability(
 
   if (!result.geometry_valid) result.status = "INVALID_TERMINAL_POSE";
   else if (!result.objectives_finite) result.status = "NONFINITE_FIXED_OBJECTIVE";
+  else if (!result.all_converged) result.status = "NDT_NOT_CONVERGED";
   else result.status = "RECORDED_NO_BASIN_CLASSIFICATION";
   return result;
 }

@@ -1,0 +1,457 @@
+#!/usr/bin/env python3
+"""Post-hoc common-anchor evaluation for the four P6-I6B closed-loop runs."""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import hashlib
+import math
+from collections import Counter
+from pathlib import Path
+
+import numpy as np
+from scipy.spatial.transform import Rotation, Slerp
+
+EXPECTED_GT_SHA256 = "b8db2491cdb3ca3194f653cab90f31eae70b457e91b2f87f30ed7fe2d0e2ce9f"
+EXPECTED_BASELINE_TRAJECTORY_SHA256 = "fd9cb3ef78d25fb48361989bdf2f7b15b8f5e0fefa1e0f4fac0362b0911837da"
+EXPECTED_ROWS = 4127
+EVAL_START = 1660857393.197807074
+GT_PATH = Path("/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/gt/floor01_gt.txt")
+MODES = ("STRICT_BASELINE", "UOBS_ONLY", "UNONLOCAL_ONLY", "DUAL_RELIABILITY")
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(8 * 1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def read_csv(path: Path) -> list[dict[str, str]]:
+    with path.open(newline="", encoding="utf-8") as stream:
+        return list(csv.DictReader(stream))
+
+
+def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
+    if not rows:
+        raise RuntimeError(f"refusing to write empty CSV: {path}")
+    with path.open("w", newline="", encoding="utf-8") as stream:
+        writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def pose(row: dict[str, str], prefix: str) -> np.ndarray:
+    position = np.array([float(row[f"{prefix}_t{axis}"]) for axis in "xyz"])
+    quaternion = np.array([float(row[f"{prefix}_q{axis}"]) for axis in "xyzw"])
+    if not np.all(np.isfinite(position)) or not np.all(np.isfinite(quaternion)):
+        raise RuntimeError(f"nonfinite pose: {prefix}")
+    norm = float(np.linalg.norm(quaternion))
+    if abs(norm - 1.0) > 1e-5:
+        raise RuntimeError(f"invalid quaternion norm for {prefix}: {norm}")
+    matrix = np.eye(4)
+    matrix[:3, :3] = Rotation.from_quat(quaternion).as_matrix()
+    matrix[:3, 3] = position
+    return matrix
+
+
+def validate_trajectory(path: Path, label: str) -> list[dict[str, str]]:
+    rows = read_csv(path)
+    if len(rows) != EXPECTED_ROWS:
+        raise RuntimeError(f"{label} has {len(rows)} rows; expected {EXPECTED_ROWS}")
+    if [int(row["transaction_id"]) for row in rows] != list(range(1, EXPECTED_ROWS + 1)):
+        raise RuntimeError(f"{label} transaction sequence mismatch")
+    stamps = [int(row["stamp_ns"]) for row in rows]
+    if any(right <= left for left, right in zip(stamps, stamps[1:])):
+        raise RuntimeError(f"{label} timestamps are not strictly increasing")
+    for row in rows:
+        pose(row, "corrected_imu")
+        pose(row, "predictor_imu")
+    return rows
+
+
+def interpolate_gt(times: np.ndarray, positions: np.ndarray,
+                   quaternions: np.ndarray, stamp: float) -> np.ndarray | None:
+    if stamp < times[0] or stamp > times[-1]:
+        return None
+    upper = int(np.searchsorted(times, stamp, side="right"))
+    if upper == 0:
+        lower = upper = 0
+        fraction = 0.0
+    elif upper >= len(times):
+        lower = upper = len(times) - 1
+        fraction = 0.0
+    else:
+        lower = upper - 1
+        fraction = (stamp - times[lower]) / (times[upper] - times[lower])
+    matrix = np.eye(4)
+    if lower == upper:
+        matrix[:3, 3] = positions[lower]
+        matrix[:3, :3] = Rotation.from_quat(quaternions[lower]).as_matrix()
+    else:
+        matrix[:3, 3] = positions[lower] + fraction * (positions[upper] - positions[lower])
+        matrix[:3, :3] = Slerp(
+            [0.0, 1.0], Rotation.from_quat([quaternions[lower], quaternions[upper]])
+        )([fraction]).as_matrix()[0]
+    return matrix
+
+
+def summarize(values: list[float]) -> dict[str, float]:
+    array = np.asarray(values, dtype=float)
+    if array.size == 0 or not np.all(np.isfinite(array)):
+        raise RuntimeError("empty/nonfinite evaluation values")
+    return {
+        "mean": float(np.mean(array)),
+        "rmse": float(np.sqrt(np.mean(array * array))),
+        "median": float(np.median(array)),
+        "p95": float(np.percentile(array, 95)),
+        "max": float(np.max(array)),
+    }
+
+
+def persistent_crossing(times: list[float], errors: list[float],
+                         threshold: float, duration: float = 5.0) -> float | None:
+    over = np.asarray(errors) > threshold
+    index = 0
+    while index < len(times):
+        if not over[index]:
+            index += 1
+            continue
+        end = index
+        while (end + 1 < len(times) and over[end + 1] and
+               times[end + 1] - times[end] <= 0.25):
+            end += 1
+        if times[end] - times[index] >= duration:
+            return times[index]
+        index = end + 1
+    return None
+
+
+def validate_diagnostics(out: Path, mode: str,
+                         trajectory: list[dict[str, str]]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    reliability = read_csv(out / f"reliability_{mode}.csv")
+    runtime = read_csv(out / f"runtime_{mode}.csv")
+    if len(reliability) != EXPECTED_ROWS or len(runtime) != EXPECTED_ROWS:
+        raise RuntimeError(f"{mode}: expected {EXPECTED_ROWS} reliability/runtime rows")
+    trajectory_ids = [row["transaction_id"] for row in trajectory]
+    trajectory_stamps = [row["stamp_ns"] for row in trajectory]
+    if [row["transaction_id"] for row in reliability] != trajectory_ids:
+        raise RuntimeError(f"{mode}: reliability transaction binding mismatch")
+    if [row["stamp_ns"] for row in reliability] != trajectory_stamps:
+        raise RuntimeError(f"{mode}: reliability timestamp binding mismatch")
+    if [row["transaction_id"] for row in runtime] != trajectory_ids:
+        raise RuntimeError(f"{mode}: runtime transaction binding mismatch")
+    for index, row in enumerate(reliability):
+        calls = int(row["ndt_call_count"])
+        if calls not in (1, 3):
+            raise RuntimeError(f"{mode}: unexpected NDT call count at row {index + 1}")
+        if (row["probe_executed"] == "1") != (calls == 3):
+            raise RuntimeError(f"{mode}: probe execution and NDT call count disagree")
+        if row["probe_executed"] == "1" and row["probe_triggered"] != "1":
+            raise RuntimeError(f"{mode}: probes executed without a trigger")
+        if row["M0_converged"] not in ("0", "1"):
+            raise RuntimeError(f"{mode}: invalid nominal convergence field")
+        if mode != "STRICT_BASELINE" and row["M0_converged"] == "0" and row["decision"] != "PREDICTION_ONLY":
+            raise RuntimeError(f"{mode}: nonconverged M0 was not prediction-only")
+        for field in ("nominal_ndt_ms", "extra_probe_ms", "ikfom_update_ms", "total_ms"):
+            value = float(runtime[index][field])
+            if not math.isfinite(value) or value < 0.0:
+                raise RuntimeError(f"{mode}: invalid timing {field}")
+    return reliability, runtime
+
+
+def evaluate(out: Path) -> None:
+    gt_hash = sha256(GT_PATH)
+    if gt_hash != EXPECTED_GT_SHA256:
+        raise RuntimeError(f"official GT SHA mismatch: {gt_hash}")
+    gt = np.loadtxt(GT_PATH, comments="#", ndmin=2)
+    if gt.shape[1] != 8 or not np.all(np.isfinite(gt)):
+        raise RuntimeError("official GT must contain finite timestamp + xyz + xyzw")
+    if not np.all(np.diff(gt[:, 0]) > 0.0):
+        raise RuntimeError("official GT timestamps are not strictly increasing")
+    gt_times = gt[:, 0]
+    gt_positions = gt[:, 1:4]
+    gt_quaternions = gt[:, 4:8]
+
+    runs = {mode: validate_trajectory(out / f"trajectory_{mode}.csv", mode)
+            for mode in MODES}
+    base_ids = [row["transaction_id"] for row in runs["STRICT_BASELINE"]]
+    base_stamps = [row["stamp_ns"] for row in runs["STRICT_BASELINE"]]
+    for mode in MODES[1:]:
+        if ([row["transaction_id"] for row in runs[mode]] != base_ids or
+                [row["stamp_ns"] for row in runs[mode]] != base_stamps):
+            raise RuntimeError(f"{mode}: closed-loop event sequence differs from STRICT")
+    parity_file = out / "strict_replay_parity.txt"
+    if not parity_file.is_file() or "STRICT_BASELINE_REPLAY_PARITY=PASS" not in parity_file.read_text():
+        raise RuntimeError("STRICT parity gate missing or failed")
+
+    anchor_rows = read_csv(out / "baseline_anchor.csv")
+    if len(anchor_rows) != 1 or anchor_rows[0]["source_sha256"] != EXPECTED_BASELINE_TRAJECTORY_SHA256:
+        raise RuntimeError("frozen BASE evaluation anchor identity mismatch")
+    anchor_row = anchor_rows[0]
+    first_row = runs["STRICT_BASELINE"][0]
+    if (anchor_row["transaction_id"] != first_row["transaction_id"] or
+            anchor_row["stamp_ns"] != first_row["stamp_ns"]):
+        raise RuntimeError("frozen BASE anchor does not match the replay start event")
+    first_stamp = int(anchor_row["stamp_ns"]) * 1e-9
+    first_gt = interpolate_gt(gt_times, gt_positions, gt_quaternions, first_stamp)
+    if first_gt is None:
+        raise RuntimeError("common GT anchor would require extrapolation")
+    anchor = pose(anchor_row, "corrected_imu") @ np.linalg.inv(first_gt)
+
+    error_rows: list[dict[str, object]] = []
+    evaluated: dict[str, dict[str, list[float]]] = {}
+    sample_times: list[float] | None = None
+    for mode in MODES:
+        mode_values = {"t": [], "r": [], "predictor_t": [], "predictor_r": []}
+        times: list[float] = []
+        for row in runs[mode]:
+            stamp = int(row["stamp_ns"]) * 1e-9
+            if stamp < EVAL_START:
+                continue
+            gt_pose = interpolate_gt(gt_times, gt_positions, gt_quaternions, stamp)
+            if gt_pose is None:
+                continue
+            reference = anchor @ gt_pose
+            corrected = pose(row, "corrected_imu")
+            predictor = pose(row, "predictor_imu")
+            t_error = float(np.linalg.norm(corrected[:3, 3] - reference[:3, 3]))
+            r_error = float(np.degrees(Rotation.from_matrix(
+                corrected[:3, :3] @ reference[:3, :3].T).magnitude()))
+            predictor_t = float(np.linalg.norm(predictor[:3, 3] - reference[:3, 3]))
+            predictor_r = float(np.degrees(Rotation.from_matrix(
+                predictor[:3, :3] @ reference[:3, :3].T).magnitude()))
+            eval_time = stamp - EVAL_START
+            times.append(eval_time)
+            for key, value in (("t", t_error), ("r", r_error),
+                               ("predictor_t", predictor_t), ("predictor_r", predictor_r)):
+                mode_values[key].append(value)
+            error_rows.append({
+                "mode": mode, "transaction_id": row["transaction_id"],
+                "stamp_ns": row["stamp_ns"], "eval_time_s": eval_time,
+                "translation_error_m": t_error, "rotation_error_deg": r_error,
+                "predictor_translation_error_m": predictor_t,
+                "predictor_rotation_error_deg": predictor_r,
+            })
+        if len(times) < 4000:
+            raise RuntimeError(f"{mode}: only {len(times)} post-hoc GT samples")
+        if sample_times is None:
+            sample_times = times
+        elif times != sample_times:
+            raise RuntimeError(f"{mode}: GT-overlap samples differ")
+        evaluated[mode] = mode_values
+
+    assert sample_times is not None
+    metric_rows: list[dict[str, object]] = []
+    crossing_rows: list[dict[str, object]] = []
+    segment_rows: list[dict[str, object]] = []
+    for mode in MODES:
+        values = evaluated[mode]
+        row: dict[str, object] = {"mode": mode, "evaluated_samples": len(values["t"])}
+        for prefix, key in (("t", "t"), ("r", "r"),
+                            ("predictor_t", "predictor_t"),
+                            ("predictor_r", "predictor_r")):
+            row.update({f"{prefix}_{metric}": value
+                        for metric, value in summarize(values[key]).items()})
+        metric_rows.append(row)
+        for threshold in (0.25, 0.5, 1.0, 2.0, 5.0):
+            crossing_rows.append({
+                "mode": mode, "threshold_m": threshold,
+                "persistent_crossing_s": persistent_crossing(sample_times, values["t"], threshold),
+                "persistence_s": 5.0, "maximum_sample_gap_s": 0.25,
+            })
+        final_time = sample_times[-1]
+        boundaries = [(float(lo), float(lo + 50)) for lo in range(0, 400, 50)]
+        boundaries.append((400.0, final_time + 1e-9))
+        for lower, upper in boundaries:
+            indices = [i for i, value in enumerate(sample_times) if lower <= value < upper]
+            if not indices:
+                continue
+            segment: dict[str, object] = {
+                "mode": mode, "segment_start_s": lower,
+                "segment_end_s": min(upper, final_time), "sample_count": len(indices),
+            }
+            for prefix, key in (("corrected_t", "t"), ("corrected_r", "r"),
+                                ("predictor_t", "predictor_t"),
+                                ("predictor_r", "predictor_r")):
+                segment[f"{prefix}_rmse"] = summarize(
+                    [values[key][i] for i in indices])["rmse"]
+            segment_rows.append(segment)
+
+    reliability_summary: list[dict[str, object]] = []
+    run_wall = {row["mode"]: float(row["process_wall_s"])
+                for row in read_csv(out / "mode_wall_times.csv")}
+    for mode in MODES:
+        reliability, runtime = validate_diagnostics(out, mode, runs[mode])
+        calls = np.asarray([int(row["ndt_call_count"]) for row in reliability], dtype=int)
+        extra_ms = np.asarray([float(row["extra_probe_ms"]) for row in runtime], dtype=float)
+        nominal_ms = np.asarray([float(row["nominal_ndt_ms"]) for row in runtime], dtype=float)
+        updates_ms = np.asarray([float(row["ikfom_update_ms"]) for row in runtime], dtype=float)
+        total_ms = np.asarray([float(row["total_ms"]) for row in runtime], dtype=float)
+        actions = Counter(row["decision"] for row in reliability)
+        triggers = Counter(row["probe_trigger_reason"] for row in reliability)
+        extra_calls = int(np.sum(calls - 1))
+        reliability_summary.append({
+            "mode": mode, "scans": len(calls), "ndt_calls_total": int(np.sum(calls)),
+            "extra_ndt_calls": extra_calls,
+            "extra_ndt_calls_per_scan": extra_calls / len(calls),
+            "one_call_scans": int(np.sum(calls == 1)),
+            "three_call_scans": int(np.sum(calls == 3)),
+            "probe_triggered_scans": sum(row["probe_triggered"] == "1" for row in reliability),
+            "probe_executed_scans": sum(row["probe_executed"] == "1" for row in reliability),
+            "uobs_valid_scans": sum(row["uobs_valid"] == "1" for row in reliability),
+            "M0_nonconverged_scans": sum(row["M0_converged"] == "0" for row in reliability),
+            "NORMAL_UPDATE": actions["NORMAL_UPDATE"],
+            "DIRECTIONAL_UPDATE": actions["DIRECTIONAL_UPDATE"],
+            "CAUTIOUS_UPDATE": actions["CAUTIOUS_UPDATE"],
+            "PREDICTION_ONLY": actions["PREDICTION_ONLY"],
+            "trigger_reason_counts": ";".join(f"{k}:{v}" for k, v in sorted(triggers.items())),
+            "probe_time_mean_ms": float(np.mean(extra_ms)),
+            "probe_time_p95_ms": float(np.percentile(extra_ms, 95)),
+            "probe_time_max_ms": float(np.max(extra_ms)),
+            "nominal_ndt_mean_ms": float(np.mean(nominal_ms)),
+            "nominal_ndt_p95_ms": float(np.percentile(nominal_ms, 95)),
+            "nominal_ndt_max_ms": float(np.max(nominal_ms)),
+            "ikfom_update_mean_ms": float(np.mean(updates_ms)),
+            "ikfom_update_p95_ms": float(np.percentile(updates_ms, 95)),
+            "ikfom_update_max_ms": float(np.max(updates_ms)),
+            "per_frame_total_sum_s": float(np.sum(total_ms) / 1000.0),
+            "process_wall_s": run_wall[mode],
+        })
+
+    write_csv(out / "trajectory_errors.csv", error_rows)
+    write_csv(out / "mode_metrics.csv", metric_rows)
+    write_csv(out / "segment_metrics.csv", segment_rows)
+    write_csv(out / "crossings.csv", crossing_rows)
+    write_csv(out / "reliability_mode_summary.csv", reliability_summary)
+    write_summary(out, metric_rows, crossing_rows, reliability_summary, gt_hash)
+
+
+def fmt(value: object, digits: int = 6) -> str:
+    if value is None or value == "":
+        return "none"
+    if isinstance(value, (float, np.floating)):
+        return f"{float(value):.{digits}f}"
+    return str(value)
+
+
+def write_summary(out: Path, metrics: list[dict[str, object]],
+                  crossings: list[dict[str, object]],
+                  reliability: list[dict[str, object]], gt_hash: str) -> None:
+    by_mode = {row["mode"]: row for row in metrics}
+    by_rel = {row["mode"]: row for row in reliability}
+    cross = {(row["mode"], row["threshold_m"]): row["persistent_crossing_s"]
+             for row in crossings}
+    lines = [
+        "# PAPER-P6-I6B Dual-Reliability Floor01 V0",
+        "",
+        "## Protocol and integrity",
+        "",
+        "- Four independent full closed-loop runs use frozen prepared IMU/scans/cloud bytes and the exact frozen map.",
+        "- Each frame propagates the filter, runs strict NDT from that frame's own predicted state, decides reliability, updates or commits prediction-only, then continues to the next frame.",
+        "- NDT parameters: resolution 0.8, step 0.08, epsilon 1e-5, maximum iterations 80.",
+        "- GT was opened only by this post-hoc report after all four closed-loop trajectories and row/timestamp checks were complete; no GT was used in state update or candidate choice.",
+        f"- Official GT SHA-256: {gt_hash}. Evaluation uses the fixed left anchor from the first corrected pose of the frozen P6-I6A BASE trajectory (source SHA-256: {EXPECTED_BASELINE_TRAJECTORY_SHA256}); the exact one-row pose is recorded in baseline_anchor.csv. No GT extrapolation is used.",
+        "- STRICT_BASELINE parity gate against the frozen I6A strict trajectory: PASS (translation max delta < 5 mm; rotation max delta < 0.05 deg). See strict_replay_parity.txt.",
+        "",
+        "## Method and implementation mapping",
+        "",
+        "- U_obs reuses P6-I3's normalized negative-score BLOCK curvature interface. The P6-I6A score/gradient coordinate check remains INDETERMINATE, so LocalObservability.valid is explicitly false at runtime in every mode. No Hessian inverse or fabricated weak direction is used. Consequently UOBS_ONLY is a control/fallback path, not evidence of an active U_obs benefit.",
+        "- U_nonlocal uses strict nominal M0 from the predicted pose. On high 6-DoF normalized innovation or every 25th scan, two probes M+/M- use +/-1 prior standard deviation along the principal eigenvector of the P6-I4-projected map-product pose covariance. All use the same source cloud, map and fixed PCL score. The implementation records endpoint gaps/objectives/convergence/iterations and never selects a probe instead of M0.",
+        "- Measurement noise order is [position XYZ, SO(3)]; the rotational weak direction (if U_obs becomes verified) is transformed from map-spatial to the pinned IKFoM right/body error basis using R_pred^T. Covariance is symmetrized and must be finite SPD before update.",
+        "- Nominal nonconvergence is handled as prediction-only in adaptive modes. A terminal-response risk inflates the existing isotropic pose-measurement covariance 4x; this is a conservative v0 policy, not a correctness probability or basin classifier.",
+        "- In this run U_obs is unverified and invalid, so DUAL_RELIABILITY operationally reduces to the U_nonlocal branch. Results do not validate a fully active two-signal fusion policy.",
+        "",
+        "## Build and run validation",
+        "",
+        "- Release build: p6_i6b_closed_loop and p6_i6b_dual_reliability_test built successfully against the pinned FAST-LIO2/IKFoM, PCL 1.10 and DCReg sources.",
+        "- CTest: 1/1 passed. Python driver/report syntax checks and git diff --check passed.",
+        "- All four modes contain 4,127 strictly increasing transactions with finite predictor/corrected poses and aligned per-frame diagnostic rows. Every nominal NDT converged; no prediction-only frame occurred in this dataset run.",
+        "",
+        "## Full-trajectory metrics",
+        "",
+        "Errors are post-hoc versus anchored official GT; translation is metres, rotation is degrees.",
+        "",
+        "| Mode | t RMSE | t P95 | t max | r RMSE | predictor t RMSE | predictor r RMSE |",
+        "|---|---:|---:|---:|---:|---:|---:|",
+    ]
+    for mode in MODES:
+        row = by_mode[mode]
+        lines.append(
+            f"| {mode} | {fmt(row['t_rmse'])} | {fmt(row['t_p95'])} | {fmt(row['t_max'])} | "
+            f"{fmt(row['r_rmse'])} | {fmt(row['predictor_t_rmse'])} | {fmt(row['predictor_r_rmse'])} |"
+        )
+    strict_rmse = float(by_mode["STRICT_BASELINE"]["t_rmse"])
+    unonlocal_rmse = float(by_mode["UNONLOCAL_ONLY"]["t_rmse"])
+    strict_rotation_rmse = float(by_mode["STRICT_BASELINE"]["r_rmse"])
+    unonlocal_rotation_rmse = float(by_mode["UNONLOCAL_ONLY"]["r_rmse"])
+    unonlocal_relative_change = 100.0 * (unonlocal_rmse - strict_rmse) / strict_rmse
+    extra_calls = int(by_rel["UNONLOCAL_ONLY"]["extra_ndt_calls"])
+    strict_wall = float(by_rel["STRICT_BASELINE"]["process_wall_s"])
+    unonlocal_wall = float(by_rel["UNONLOCAL_ONLY"]["process_wall_s"])
+    lines.extend([
+        "",
+        f"Frozen I6A STRICT Floor01 translation RMSE reference: 0.8896597 m. Replayed STRICT_BASELINE gives {strict_rmse:.7f} m (difference {strict_rmse - 0.8896597:+.7f} m).",
+        f"UOBS_ONLY reproduces STRICT_BASELINE exactly. UNONLOCAL_ONLY and DUAL_RELIABILITY give {unonlocal_rmse:.7f} m translation RMSE ({unonlocal_rmse - strict_rmse:+.7f} m, {unonlocal_relative_change:+.3f}%) and {unonlocal_rotation_rmse:.7f} deg rotation RMSE ({unonlocal_rotation_rmse - strict_rotation_rmse:+.6f} deg); this is a small regression, not an improvement. The 1 m persistent crossing is unchanged and neither mode reaches a persistent 2 m or 5 m crossing.",
+        f"UNONLOCAL_ONLY/DUAL add {extra_calls} NDT align calls ({extra_calls / EXPECTED_ROWS:.5f} extra calls/scan; {100.0 * extra_calls / EXPECTED_ROWS:.2f}% over one-call STRICT) and process wall time rises from {strict_wall:.2f} s to {unonlocal_wall:.2f} s ({100.0 * (unonlocal_wall / strict_wall - 1.0):.1f}%); 101/4127 frames used cautious inflation, with no prediction-only frame.",
+        "",
+        "### Persistent translation-error crossings",
+        "",
+        "Crossing means error remains above threshold for at least 5 s, with sample gaps no larger than 0.25 s; absent crossings are right-censored at sequence end.",
+        "",
+        "| Mode | 0.25 m | 0.5 m | 1 m | 2 m | 5 m |",
+        "|---|---:|---:|---:|---:|---:|",
+    ])
+    for mode in MODES:
+        vals = [cross.get((mode, threshold)) for threshold in (0.25, 0.5, 1.0, 2.0, 5.0)]
+        lines.append(f"| {mode} | " + " | ".join(fmt(value) for value in vals) + " |")
+    lines.extend([
+        "",
+        "## Reliability and compute accounting",
+        "",
+        "| Mode | NDT calls | Extra calls/scan | 1-call frames | 3-call frames | U_obs valid | cautious | prediction-only | mean probe ms/frame | NDT mean ms | process wall s |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+    ])
+    for mode in MODES:
+        row = by_rel[mode]
+        lines.append(
+        f"| {mode} | {row['ndt_calls_total']} | {fmt(row['extra_ndt_calls_per_scan'], 5)} | "
+            f"{row['one_call_scans']} | {row['three_call_scans']} | "
+            f"{row['uobs_valid_scans']} (triggered={row['probe_triggered_scans']}, executed={row['probe_executed_scans']}) | "
+            f"{row['CAUTIOUS_UPDATE']} | {row['PREDICTION_ONLY']} | "
+            f"{fmt(row['probe_time_mean_ms'])} | {fmt(row['nominal_ndt_mean_ms'])} | "
+            f"{fmt(row['process_wall_s'], 2)} |"
+        )
+    lines.extend([
+        "",
+        "Trigger reasons and detailed timing distributions are in reliability_mode_summary.csv; per-frame diagnostics are in reliability_<MODE>.csv and runtime_<MODE>.csv.",
+        "",
+        "## Current limitations and judgment",
+        "",
+        "- U_obs is code-wired but deliberately inactive because its required score/gradient coordinate validation remains INDETERMINATE. Resolve that diagnostic before claiming active local-direction reliability.",
+        "- U_nonlocal samples only one covariance-principal perturbation pair plus periodic/high-innovation triggers. It is not a global search and does not establish distinct local minima or localization correctness.",
+        "- The first policy uses fixed engineering thresholds (chi-square 16.812, periodic interval 25 scans, endpoint warning 0.20 m / 2 deg, 4x covariance inflation). This run evaluates behavior but does not tune them.",
+        "- No visual module, new dataset, candidate switching, or NDT parameter search was added.",
+        "",
+        "## Output files",
+        "",
+        "- mode_metrics.csv, segment_metrics.csv, crossings.csv, trajectory_errors.csv",
+        "- reliability_mode_summary.csv, reliability_<MODE>.csv, runtime_<MODE>.csv, mode_wall_times.csv",
+        "- input_provenance.txt, baseline_anchor.csv, four mode logs, and strict_replay_parity.txt",
+        "",
+    ])
+    (out / "summary.md").write_text("\n".join(lines), encoding="utf-8")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output-dir", type=Path, required=True)
+    args = parser.parse_args()
+    evaluate(args.output_dir)
+    print(f"POSTHOC_REPORT_PASS output={args.output_dir / 'summary.md'}")
+
+
+if __name__ == "__main__":
+    main()

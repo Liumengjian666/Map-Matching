@@ -36,6 +36,13 @@ class FastLio2IkfomFrontend {
   bool applyPoseMeasurement(const Pose3d& map_T_imu_measurement,
                             PoseCorrectionDelta* delta,
                             std::string* failure_reason);
+  // Adaptive measurement covariance order follows PoseMeasurement's MTK
+  // fields: [position XYZ, SO(3) residual]. The SO(3) block is in the filter's
+  // right/body error coordinates. The original isotropic API remains intact.
+  bool applyPoseMeasurement(
+      const Pose3d& map_T_imu_measurement,
+      const Eigen::Matrix<double, 6, 6>& measurement_covariance,
+      PoseCorrectionDelta* delta, std::string* failure_reason);
 
   std::unique_ptr<FastLio2IkfomFrontend> cloneCandidate() const;
   bool commitCandidate(const FastLio2IkfomFrontend& candidate,

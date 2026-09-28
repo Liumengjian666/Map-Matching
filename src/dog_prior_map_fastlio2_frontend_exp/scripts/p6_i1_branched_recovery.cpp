@@ -9,6 +9,9 @@
 #include "p5_i1_ndt_mode_landscape.cpp"
 #undef main
 
+#include "dog_prior_map_fastlio2_frontend_exp/dual_reliability.hpp"
+#include "p6_i4_basin_margin_math.hpp"
+
 #include <Eigen/Core>
 #include <Eigen/Eigenvalues>
 #include <Eigen/Geometry>
@@ -558,6 +561,315 @@ Candidate runNdtCandidate(AuditedNdt& ndt, const Cloud::Ptr& source,
       throw std::runtime_error("nonfinite_ndt_candidate");
   }
   return candidate;
+}
+
+Eigen::Matrix<double, 6, 6> projectMapProductPoseCovariance(
+    const FilterSnapshot& snapshot) {
+  if (snapshot.covariance.rows() != state_ikfom::DOF ||
+      snapshot.covariance.cols() != state_ikfom::DOF ||
+      !snapshot.covariance.allFinite())
+    throw std::runtime_error("dual_reliability_prediction_covariance_invalid");
+  const int position_index = MTK::getStartIdx(&state_ikfom::pos);
+  const int rotation_index = MTK::getStartIdx(&state_ikfom::rot);
+  const Eigen::MatrixXd jacobian = p6_i4::buildPoseErrorJacobian(
+      snapshot.map_T_imu.orientation.toRotationMatrix(), state_ikfom::DOF,
+      position_index, rotation_index);
+  Eigen::Matrix<double, 6, 6> covariance =
+      jacobian * snapshot.covariance * jacobian.transpose();
+  return 0.5 * (covariance + covariance.transpose());
+}
+
+reliability::TerminalCapture terminalCapture(const Candidate& candidate) {
+  reliability::TerminalCapture terminal;
+  terminal.map_T_lidar = Eigen::Isometry3d::Identity();
+  terminal.map_T_lidar.matrix() = candidate.pose;
+  terminal.fixed_objective = candidate.objective;
+  terminal.converged = candidate.converged;
+  terminal.iterations = candidate.iterations;
+  return terminal;
+}
+
+void runDualReliabilityMode(
+    const std::string& mode, const p4_i2::Inputs& inputs,
+    const std::vector<ScanAsset>& assets, const std::string& cloud_binary_path,
+    const std::string& map_path, const std::string& params_path,
+    const std::string& trajectory_path, const std::string& reliability_path,
+    const std::string& runtime_path) {
+  if (mode != "STRICT_BASELINE" && mode != "UOBS_ONLY" &&
+      mode != "UNONLOCAL_ONLY" && mode != "DUAL_RELIABILITY")
+    throw std::runtime_error("unsupported_dual_reliability_mode:" + mode);
+  p5_i1::requireFrozenMapSha256(map_path);
+  const Cloud::Ptr target = loadTarget(map_path);
+  if (target->size() != 549606)
+    throw std::runtime_error("frozen_target_point_count_mismatch");
+
+  Pose3d initial_map_T_lidar, T_imu_lidar_pose;
+  const RuntimeParameters parameters = p4_i2::readParameters(
+      params_path, &initial_map_T_lidar, &T_imu_lidar_pose);
+  if (inputs.imu.size() < static_cast<std::size_t>(parameters.static_init_samples))
+    throw std::runtime_error("not_enough_static_initialization_imu_samples");
+  FastLio2IkfomFrontend frontend(parameters);
+  p4_i2::ImuVector initialization_imu(inputs.imu.begin(),
+      inputs.imu.begin() + parameters.static_init_samples);
+  std::string failure;
+  if (!frontend.initializeStatic(initialization_imu, initial_map_T_lidar,
+                                 T_imu_lidar_pose, &failure))
+    throw std::runtime_error("dual_reliability_static_initialization_failed:" + failure);
+
+  constexpr double kStrictEpsilon = 1e-5;
+  constexpr int kStrictMaximumIterations = 80;
+  constexpr bool kScoreGradientCoordinateGatePassed = false;
+  const reliability::DualReliabilityConfig reliability_config;
+  const bool use_uobs = mode == "UOBS_ONLY" || mode == "DUAL_RELIABILITY";
+  const bool use_unonlocal = mode == "UNONLOCAL_ONLY" || mode == "DUAL_RELIABILITY";
+
+  AuditedNdt ndt;
+  configureNdt(ndt, target);
+  ndt.setResolution(0.8);
+  ndt.setStepSize(0.08);
+  ndt.setTransformationEpsilon(kStrictEpsilon);
+  ndt.setMaximumIterations(kStrictMaximumIterations);
+
+  std::ofstream trajectory(trajectory_path), events(reliability_path), runtime(runtime_path);
+  if (!trajectory || !events || !runtime)
+    throw std::runtime_error("cannot_create_dual_reliability_outputs");
+  trajectory << std::setprecision(17);
+  p4_i2::writeHeader(trajectory);
+  events << std::setprecision(17)
+      << "mode,transaction_id,stamp_ns,time_s,uobs_valid,uobs_status"
+         ",translation_weak,translation_weak_ratio,rotation_weak,rotation_weak_ratio"
+         ",innovation_chi2,innovation_status,probe_trigger_reason,probe_triggered"
+         ",probe_executed,ndt_call_count"
+         ",M0_converged,M0_iterations,M0_objective"
+         ",Mplus_converged,Mplus_iterations,Mplus_objective"
+         ",Mminus_converged,Mminus_iterations,Mminus_objective"
+         ",Delta_t_m,Delta_R_rad,plus_minus_translation_gap_m"
+         ",plus_minus_rotation_gap_rad,plus_minus_objective_delta"
+         ",step_limited,decision,decision_reason,noise_inflation,R_position_diag"
+         ",R_rotation_body_diag,extra_probe_ms\n";
+  runtime << std::setprecision(17)
+      << "mode,transaction_id,prediction_ms,nominal_ndt_ms,extra_probe_ms"
+         ",ikfom_update_ms,total_ms,ndt_call_count,probe_trigger,decision\n";
+
+  Eigen::Matrix4d previous_used = Eigen::Matrix4d::Identity();
+  bool has_previous_used = false;
+  for (std::size_t index = 0; index < assets.size(); ++index) {
+    const ScanAsset& asset = assets[index];
+    const p4_i2::PoseRecord& saved = inputs.scans[index];
+    if (saved.transaction_id != asset.transaction_id || saved.stamp_ns != asset.stamp_ns)
+      throw std::runtime_error("filter_input_and_cloud_metadata_alignment_mismatch");
+    const auto frame_start = std::chrono::steady_clock::now();
+    const auto prediction_start = std::chrono::steady_clock::now();
+    const FilterSnapshot start = frontend.getState();
+    const p4_i2::ImuVector window = p4_i2::imuWindow(
+        inputs.imu, start.stamp_ns, asset.stamp_ns);
+    std::vector<ImuPoseSample, Eigen::aligned_allocator<ImuPoseSample>> imu_poses;
+    if (!frontend.predictImuSequence(window, asset.stamp_ns, &imu_poses, &failure))
+      throw std::runtime_error("dual_reliability_imu_prediction_failed_tx_" +
+          std::to_string(asset.transaction_id) + ":" + failure);
+    const double prediction_ms = std::chrono::duration<double, std::milli>(
+        std::chrono::steady_clock::now() - prediction_start).count();
+    const FilterSnapshot predicted = frontend.getState();
+    const Eigen::Matrix4d predicted_map_T_imu = poseMatrix(predicted.map_T_imu);
+    const Eigen::Matrix4d T_imu_lidar = poseMatrix(T_imu_lidar_pose);
+    const Eigen::Matrix4d predicted_map_T_lidar = predicted_map_T_imu * T_imu_lidar;
+
+    const Cloud::Ptr raw_source = loadRawCloudAt(cloud_binary_path, asset);
+    const Cloud::Ptr source = preprocessSource(raw_source);
+    const uint64_t source_hash = sourceCloudHash(source);
+    if (source_hash != asset.expected_source_hash)
+      throw std::runtime_error("prepared_source_hash_mismatch_tx_" +
+                               std::to_string(asset.transaction_id));
+
+    const auto nominal_start = std::chrono::steady_clock::now();
+    const Candidate nominal = runNdtCandidate(
+        ndt, source, predicted_map_T_lidar, 0, "M0_STRICT_PREDICTION");
+    const double nominal_ndt_ms = std::chrono::duration<double, std::milli>(
+        std::chrono::steady_clock::now() - nominal_start).count();
+    uint64_t ndt_call_count = 1;
+
+    Eigen::Matrix<double, 6, 6> predicted_map_covariance =
+        Eigen::Matrix<double, 6, 6>::Constant(
+            std::numeric_limits<double>::quiet_NaN());
+    p6_i4::PoseCovarianceSpectrum covariance_spectrum;
+    try {
+      predicted_map_covariance = projectMapProductPoseCovariance(predicted);
+      covariance_spectrum = p6_i4::analyzePoseCovariance(predicted_map_covariance);
+    } catch (const std::exception&) {
+      covariance_spectrum.reason = "POSE_COVARIANCE_PROJECTION_FAILED";
+    }
+
+    reliability::Vector6d innovation = reliability::Vector6d::Constant(
+        std::numeric_limits<double>::quiet_NaN());
+    reliability::ProbeTrigger probe_trigger;
+    probe_trigger.reason = "DISABLED_BY_MODE";
+    if (nominal.converged) {
+      const Pose3d nominal_lidar_pose = poseFromMatrix(nominal.pose);
+      const Pose3d nominal_imu_pose = p4_i2::lidarMeasurementToImu(
+          nominal_lidar_pose, T_imu_lidar_pose);
+      innovation = reliability::mapProductInnovation(
+          p4_i2::asIsometry(predicted.map_T_imu),
+          p4_i2::asIsometry(nominal_imu_pose));
+      if (use_unonlocal)
+        probe_trigger = reliability::shouldRunNonlocalProbes(
+            asset.transaction_id, innovation, predicted_map_covariance,
+            reliability_config);
+    }
+
+    reliability::NonlocalTerminalStability terminal_stability;
+    terminal_stability.status = "NOT_PROBED";
+    Candidate positive, negative;
+    double extra_probe_ms = 0.0;
+    bool probes_executed = false;
+    if (nominal.converged && probe_trigger.run_probes) {
+      const auto probe_start = std::chrono::steady_clock::now();
+      if (covariance_spectrum.valid && covariance_spectrum.effective_rank > 0) {
+        const double eigenvalue = covariance_spectrum.eigenvalues(5);
+        if (eigenvalue > 0.0 && std::isfinite(eigenvalue)) {
+          const Eigen::Matrix<double, 6, 1> delta =
+              reliability_config.probe_prior_sigma * std::sqrt(eigenvalue) *
+              covariance_spectrum.eigenvectors.col(5);
+          const Eigen::Matrix4d positive_map_T_imu = p6_i4::boxplusMapPose(
+              predicted_map_T_imu, delta);
+          const Eigen::Matrix4d negative_map_T_imu = p6_i4::boxplusMapPose(
+              predicted_map_T_imu, -delta);
+          positive = runNdtCandidate(ndt, source,
+              positive_map_T_imu * T_imu_lidar, 1, "M_PLUS_PRIOR_PRINCIPAL");
+          negative = runNdtCandidate(ndt, source,
+              negative_map_T_imu * T_imu_lidar, 2, "M_MINUS_PRIOR_PRINCIPAL");
+          ndt_call_count += 2;
+          probes_executed = true;
+          terminal_stability = reliability::analyzeNonlocalTerminalStability(
+              terminalCapture(nominal), terminalCapture(positive),
+              terminalCapture(negative), 2);
+        } else {
+          terminal_stability.status = "PROBE_PRIOR_VARIANCE_NOT_POSITIVE";
+        }
+      } else {
+        terminal_stability.status = "PROBE_PRIOR_COVARIANCE_INVALID";
+      }
+      extra_probe_ms = std::chrono::duration<double, std::milli>(
+          std::chrono::steady_clock::now() - probe_start).count();
+      if (terminal_stability.status != "RECORDED_NO_BASIN_CLASSIFICATION" &&
+          terminal_stability.status != "NDT_NOT_CONVERGED" &&
+          terminal_stability.status != "INVALID_TERMINAL_POSE" &&
+          terminal_stability.status != "NONFINITE_FIXED_OBJECTIVE") {
+        terminal_stability.geometry_valid = false;
+        terminal_stability.objectives_finite = false;
+      }
+    }
+
+    // I6A's finite-difference score/gradient gate is INDETERMINATE. Keep U_obs
+    // explicitly unavailable; no per-frame Hessian direction is fabricated.
+    const Eigen::Matrix<double, 6, 6> unavailable_curvature =
+        Eigen::Matrix<double, 6, 6>::Constant(
+            std::numeric_limits<double>::quiet_NaN());
+    const reliability::LocalObservability local_observability =
+        reliability::analyzeLocalObservability(
+            unavailable_curvature, nominal.converged,
+            kScoreGradientCoordinateGatePassed);
+    const reliability::LocalRisk local_risk =
+        reliability::assessLocalRisk(local_observability, reliability_config);
+
+    reliability::DualReliabilityDecision decision;
+    if (mode == "STRICT_BASELINE") {
+      if (!nominal.converged)
+        throw std::runtime_error("strict_single_start_ndt_not_converged_tx_" +
+                                 std::to_string(asset.transaction_id));
+      decision.action = reliability::UpdateAction::NORMAL_UPDATE;
+      decision.reason = "STRICT_BASELINE_ISOTROPIC";
+    } else {
+      decision = reliability::decideDualReliability(
+          local_risk, terminal_stability, nominal.converged,
+          predicted.map_T_imu.orientation.toRotationMatrix(),
+          parameters.pose_position_sigma_m, parameters.pose_rotation_sigma_rad,
+          use_uobs, use_unonlocal, reliability_config);
+    }
+
+    double update_ms = 0.0;
+    bool step_limited = false;
+    if (decision.action != reliability::UpdateAction::PREDICTION_ONLY) {
+      const Eigen::Matrix4d used_pose = limitStep(
+          nominal.pose, previous_used, has_previous_used, &step_limited);
+      previous_used = used_pose;
+      has_previous_used = true;
+      const Pose3d used_lidar_pose = poseFromMatrix(used_pose);
+      const Pose3d used_imu_measurement = p4_i2::lidarMeasurementToImu(
+          used_lidar_pose, T_imu_lidar_pose);
+      const auto update_start = std::chrono::steady_clock::now();
+      if (mode == "STRICT_BASELINE") {
+        if (!frontend.applyPoseMeasurement(used_imu_measurement, nullptr, &failure))
+          throw std::runtime_error("strict_baseline_pose_update_failed_tx_" +
+              std::to_string(asset.transaction_id) + ":" + failure);
+      } else if (!decision.measurement_noise.valid ||
+          !frontend.applyPoseMeasurement(used_imu_measurement,
+              decision.measurement_noise.covariance, nullptr, &failure)) {
+        throw std::runtime_error("adaptive_pose_update_failed_tx_" +
+            std::to_string(asset.transaction_id) + ":" + failure);
+      }
+      update_ms = std::chrono::duration<double, std::milli>(
+          std::chrono::steady_clock::now() - update_start).count();
+    } else {
+      // The filter has still advanced to this scan end. Do not let the next
+      // measurement's step limiter compare against a stale pre-rejection NDT.
+      previous_used = predicted_map_T_lidar;
+      has_previous_used = true;
+    }
+
+    const FilterSnapshot corrected = frontend.getState();
+    if (corrected.stamp_ns != asset.stamp_ns || !frontend.postconditionsValid(&failure))
+      throw std::runtime_error("dual_reliability_filter_postcondition_failed_tx_" +
+          std::to_string(asset.transaction_id) + ":" + failure);
+    p4_i2::writeRow(trajectory, index, saved, predicted.map_T_imu,
+                    predicted, corrected, T_imu_lidar_pose);
+
+    const double nan = std::numeric_limits<double>::quiet_NaN();
+    const double position_diag = decision.measurement_noise.valid
+        ? decision.measurement_noise.covariance.block<3, 3>(0, 0).diagonal().maxCoeff() : nan;
+    const double rotation_diag = decision.measurement_noise.valid
+        ? decision.measurement_noise.covariance.block<3, 3>(3, 3).diagonal().maxCoeff() : nan;
+    events << mode << ',' << asset.transaction_id << ',' << asset.stamp_ns << ','
+           << asset.time_s << ',' << (local_observability.valid ? 1 : 0) << ','
+           << local_observability.status << ','
+           << (local_risk.translation_weak ? 1 : 0) << ','
+           << local_risk.translation_weak_ratio << ','
+           << (local_risk.rotation_weak ? 1 : 0) << ','
+           << local_risk.rotation_weak_ratio << ','
+           << probe_trigger.innovation.mahalanobis_squared << ','
+           << probe_trigger.innovation.status << ',' << probe_trigger.reason << ','
+           << (probe_trigger.run_probes ? 1 : 0) << ','
+           << (probes_executed ? 1 : 0) << ',' << ndt_call_count << ','
+           << (nominal.converged ? 1 : 0) << ',' << nominal.iterations << ','
+           << nominal.objective << ','
+           << (ndt_call_count == 3 ? (positive.converged ? 1 : 0) : -1) << ','
+           << (ndt_call_count == 3 ? positive.iterations : -1) << ','
+           << (ndt_call_count == 3 ? positive.objective : nan) << ','
+           << (ndt_call_count == 3 ? (negative.converged ? 1 : 0) : -1) << ','
+           << (ndt_call_count == 3 ? negative.iterations : -1) << ','
+           << (ndt_call_count == 3 ? negative.objective : nan) << ','
+           << terminal_stability.max_nominal_translation_delta_m << ','
+           << terminal_stability.max_nominal_rotation_delta_rad << ','
+           << terminal_stability.positive_negative_translation_gap_m << ','
+           << terminal_stability.positive_negative_rotation_gap_rad << ','
+           << terminal_stability.positive_minus_negative_objective << ','
+           << (step_limited ? 1 : 0) << ','
+           << reliability::toString(decision.action) << ',' << decision.reason << ','
+           << decision.additional_noise_inflation << ',' << position_diag << ','
+           << rotation_diag << ',' << extra_probe_ms << '\n';
+    const double total_ms = std::chrono::duration<double, std::milli>(
+        std::chrono::steady_clock::now() - frame_start).count();
+    runtime << mode << ',' << asset.transaction_id << ',' << prediction_ms << ','
+            << nominal_ndt_ms << ',' << extra_probe_ms << ',' << update_ms << ','
+            << total_ms << ',' << ndt_call_count << ',' << probe_trigger.reason << ','
+            << reliability::toString(decision.action) << '\n';
+    if ((index + 1) % 100 == 0 || index + 1 == assets.size()) {
+      trajectory.flush(); events.flush(); runtime.flush();
+      std::cerr << mode << "_PROGRESS=" << index + 1 << "/" << assets.size()
+                << " ndt_calls=" << ndt_call_count
+                << " decision=" << reliability::toString(decision.action) << '\n';
+    }
+  }
+  std::cout << "P6_I6B_MODE_COMPLETE=" << mode << " frames=" << assets.size() << '\n';
 }
 
 double normalizedPoseDistance(const Eigen::Matrix4d& left,
@@ -1309,6 +1621,22 @@ void runMode(const std::string& mode, const p4_i2::Inputs& inputs,
 
 int main(int argc, char** argv) {
   try {
+    if (argc == 11 &&
+        (std::string(argv[1]) == "STRICT_BASELINE" ||
+         std::string(argv[1]) == "UOBS_ONLY" ||
+         std::string(argv[1]) == "UNONLOCAL_ONLY" ||
+         std::string(argv[1]) == "DUAL_RELIABILITY")) {
+      p4_i2::Inputs inputs;
+      std::string reason;
+      if (!p4_i2::readInputs(argv[2], argv[3], &inputs, &reason))
+        throw std::runtime_error("filter_input_load_failed:" + reason);
+      const auto assets = p6_i1::readScanAssets(argv[4]);
+      if (assets.size() != inputs.scans.size())
+        throw std::runtime_error("scan_asset_and_filter_counts_differ");
+      p6_i1::runDualReliabilityMode(argv[1], inputs, assets, argv[5], argv[6],
+                                    argv[7], argv[8], argv[9], argv[10]);
+      return 0;
+    }
     if (argc == 10 && std::string(argv[1]) == "baseline") {
       p4_i2::Inputs inputs;
       std::string reason;
@@ -1353,6 +1681,7 @@ int main(int argc, char** argv) {
     std::cerr << "usage:\n"
               << "  p6_i1_branched_recovery baseline imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt baseline_replay.csv baseline_trajectory.csv\n"
               << "  p6_i1_branched_recovery strict_single_start imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt strict_replay.csv strict_trajectory.csv\n"
+              << "  p6_i1_branched_recovery (STRICT_BASELINE|UOBS_ONLY|UNONLOCAL_ONLY|DUAL_RELIABILITY) imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt trajectory.csv reliability.csv runtime.csv\n"
               << "  p6_i1_branched_recovery MODE imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt visual.csv trajectory.csv branch.csv dcreg.csv multistart.csv candidates.csv arbitration.csv runtime.csv [basin.csv covariance.csv]\n";
     return 2;
   } catch (const std::exception& error) {

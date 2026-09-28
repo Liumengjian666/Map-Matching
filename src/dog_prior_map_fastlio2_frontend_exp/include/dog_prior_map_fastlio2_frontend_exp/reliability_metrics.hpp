@@ -45,6 +45,7 @@ struct TerminalCapture {
 struct NonlocalTerminalStability {
   bool geometry_valid = false;
   bool objectives_finite = false;
+  bool all_converged = false;
   std::string status = "UNINITIALIZED";
   TerminalCapture nominal;
   TerminalCapture positive;
@@ -52,6 +53,10 @@ struct NonlocalTerminalStability {
   double positive_negative_translation_gap_m =
       std::numeric_limits<double>::quiet_NaN();
   double positive_negative_rotation_gap_rad =
+      std::numeric_limits<double>::quiet_NaN();
+  double max_nominal_translation_delta_m =
+      std::numeric_limits<double>::quiet_NaN();
+  double max_nominal_rotation_delta_rad =
       std::numeric_limits<double>::quiet_NaN();
   double positive_minus_nominal_objective =
       std::numeric_limits<double>::quiet_NaN();
