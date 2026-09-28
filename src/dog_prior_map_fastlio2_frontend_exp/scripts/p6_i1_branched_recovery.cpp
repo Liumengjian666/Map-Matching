@@ -45,6 +45,7 @@ struct ScanAsset {
   uint64_t cloud_byte_offset = 0;
   uint64_t cloud_point_count = 0;
   uint64_t expected_source_hash = 0;
+  bool expected_source_hash_available = false;
   uint64_t request_cloud_hash = 0;
   Eigen::Matrix4f saved_raw = Eigen::Matrix4f::Identity();
   Eigen::Matrix4f saved_used = Eigen::Matrix4f::Identity();
@@ -139,8 +140,18 @@ std::vector<ScanAsset> readScanAssets(const std::string& path) {
       throw std::runtime_error("missing scan metadata field: " + name);
     return row[found->second];
   };
+  auto optionalValue = [&columns](const std::vector<std::string>& row,
+                                  const std::string& name,
+                                  const std::string& fallback) -> std::string {
+    const auto found = columns.find(name);
+    return found == columns.end() || found->second >= row.size()
+        ? fallback : row[found->second];
+  };
   std::vector<ScanAsset> assets;
   uint64_t previous_tx = 0;
+  uint64_t previous_stamp = 0;
+  uint64_t expected_cloud_offset = 0;
+  double previous_time_s = -std::numeric_limits<double>::infinity();
   while (std::getline(input, line)) {
     if (line.empty()) continue;
     const auto row = split(line, ',');
@@ -150,24 +161,39 @@ std::vector<ScanAsset> readScanAssets(const std::string& path) {
     asset.time_s = std::stod(value(row, "time_s"));
     asset.cloud_byte_offset = std::stoull(value(row, "cloud_byte_offset"));
     asset.cloud_point_count = std::stoull(value(row, "cloud_point_count"));
-    asset.expected_source_hash = std::stoull(value(row, "ndt_source_cloud_hash"));
-    asset.request_cloud_hash = std::stoull(value(row, "request_cloud_hash"));
-    asset.saved_fitness = std::stod(value(row, "fitness"));
-    asset.saved_iterations = std::stoi(value(row, "iterations"));
-    asset.saved_converged = std::stoi(value(row, "converged"));
-    asset.saved_step_limited = std::stoi(value(row, "step_limited"));
-    asset.saved_raw = parsePose7(row, columns, "raw_");
-    asset.saved_used = parsePose7(row, columns, "used_");
-    if (asset.transaction_id != previous_tx + 1 || asset.stamp_ns == 0 ||
+    asset.expected_source_hash = std::stoull(
+        optionalValue(row, "ndt_source_cloud_hash", "0"));
+    const std::string source_hash_available = optionalValue(
+        row, "ndt_source_cloud_hash_available",
+        columns.count("ndt_source_cloud_hash") != 0 ? "1" : "0");
+    if (source_hash_available != "0" && source_hash_available != "1")
+      throw std::runtime_error("invalid ndt_source_cloud_hash_available flag");
+    asset.expected_source_hash_available = source_hash_available == "1";
+    asset.request_cloud_hash = std::stoull(
+        optionalValue(row, "request_cloud_hash", "0"));
+    asset.saved_fitness = std::stod(optionalValue(row, "fitness", "0"));
+    asset.saved_iterations = std::stoi(optionalValue(row, "iterations", "0"));
+    asset.saved_converged = std::stoi(optionalValue(row, "converged", "0"));
+    asset.saved_step_limited = std::stoi(optionalValue(row, "step_limited", "0"));
+    if (columns.count("raw_x") != 0)
+      asset.saved_raw = parsePose7(row, columns, "raw_");
+    if (columns.count("used_x") != 0)
+      asset.saved_used = parsePose7(row, columns, "used_");
+    if (asset.transaction_id != previous_tx + 1 || asset.stamp_ns <= previous_stamp ||
+        asset.cloud_byte_offset != expected_cloud_offset ||
         asset.cloud_point_count == 0 || !std::isfinite(asset.time_s) ||
+        asset.time_s <= previous_time_s ||
         !std::isfinite(asset.saved_fitness) || asset.saved_iterations < 0 ||
         (asset.saved_converged != 0 && asset.saved_converged != 1) ||
         (asset.saved_step_limited != 0 && asset.saved_step_limited != 1))
       throw std::runtime_error("invalid scan metadata sequence");
     previous_tx = asset.transaction_id;
+    previous_stamp = asset.stamp_ns;
+    previous_time_s = asset.time_s;
+    expected_cloud_offset += asset.cloud_point_count * 3 * sizeof(float);
     assets.push_back(asset);
   }
-  if (assets.size() != 4127) throw std::runtime_error("scan_metadata_count_not_4127");
+  if (assets.empty()) throw std::runtime_error("scan_metadata_csv_contains_no_scans");
   return assets;
 }
 
@@ -314,7 +340,8 @@ void runBaseline(const p4_i2::Inputs& inputs,
     Cloud::Ptr raw_source = loadRawCloudAt(cloud_binary_path, asset);
     const Cloud::Ptr source = preprocessSource(raw_source);
     const uint64_t source_hash = sourceCloudHash(source);
-    if (source_hash != asset.expected_source_hash)
+    if (!asset.expected_source_hash_available ||
+        source_hash != asset.expected_source_hash)
       throw std::runtime_error("prepared_source_hash_mismatch_tx_" +
                                std::to_string(asset.transaction_id));
     ndt.setInputSource(source);
@@ -629,6 +656,7 @@ bool verifyScoreGradientConvention(
     std::ofstream& output) {
   constexpr double kStep = 1e-4;
   constexpr double kHalfStep = 5e-5;
+  constexpr double kQuarterStep = 2.5e-5;
   constexpr double kRelativeTolerance = 0.10;
   constexpr double kMeaningful = 1e-6;
   const char* axis_names[] = {"tx", "ty", "tz", "rx", "ry", "rz"};
@@ -662,28 +690,35 @@ bool verifyScoreGradientConvention(
     };
     const double fd = finiteDifference(kStep);
     const double fd_half = finiteDifference(kHalfStep);
+    const double fd_quarter = finiteDifference(kQuarterStep);
     const double denominator = std::max({std::abs(analytic(axis)), std::abs(fd), 1e-8});
     const double half_denominator = std::max(
         {std::abs(analytic(axis)), std::abs(fd_half), 1e-8});
     const double relative_error = std::abs(analytic(axis) - fd) / denominator;
     const double half_relative_error =
         std::abs(analytic(axis) - fd_half) / half_denominator;
+    const double quarter_denominator = std::max(
+        {std::abs(analytic(axis)), std::abs(fd_quarter), 1e-8});
+    const double quarter_relative_error =
+        std::abs(analytic(axis) - fd_quarter) / quarter_denominator;
     const bool meaningful = std::isfinite(analytic(axis)) &&
-        std::isfinite(fd) && std::isfinite(fd_half) &&
+        std::isfinite(fd) && std::isfinite(fd_half) && std::isfinite(fd_quarter) &&
         std::abs(analytic(axis)) > kMeaningful &&
-        std::abs(fd) > kMeaningful && std::abs(fd_half) > kMeaningful;
+        std::abs(fd) > kMeaningful && std::abs(fd_half) > kMeaningful &&
+        std::abs(fd_quarter) > kMeaningful;
     const bool signs_match = meaningful && analytic(axis) * fd > 0.0 &&
-        analytic(axis) * fd_half > 0.0;
+        analytic(axis) * fd_half > 0.0 && analytic(axis) * fd_quarter > 0.0;
     const bool axis_pass = common_pass && meaningful && signs_match &&
         relative_error <= kRelativeTolerance &&
-        half_relative_error <= kRelativeTolerance;
+        half_relative_error <= kRelativeTolerance &&
+        quarter_relative_error <= kRelativeTolerance;
     sample_pass = sample_pass && axis_pass;
     output << mode << ',' << sample_index << ',' << candidate.seed_name << ','
            << (candidate.converged ? 1 : 0) << ','
            << (normal_coordinates ? 1 : 0) << ',' << axis_names[axis] << ','
            << axis << ',' << p(axis) << ',' << center_score << ','
-           << analytic(axis) << ',' << fd << ',' << fd_half << ','
-           << relative_error << ',' << half_relative_error << ','
+           << analytic(axis) << ',' << fd << ',' << fd_half << ',' << fd_quarter << ','
+           << relative_error << ',' << half_relative_error << ',' << quarter_relative_error << ','
            << (signs_match ? 1 : 0) << ',' << (axis_pass ? 1 : 0) << ",0\n";
   }
   return common_pass && sample_pass;
@@ -716,13 +751,24 @@ void runDualReliabilityMode(
     const std::vector<ScanAsset>& assets, const std::string& cloud_binary_path,
     const std::string& map_path, const std::string& params_path,
     const std::string& trajectory_path, const std::string& reliability_path,
-    const std::string& runtime_path) {
+    const std::string& runtime_path,
+    uint64_t initialization_stamp_ns = 0,
+    const std::string& map_profile = "floor01") {
   if (mode != "STRICT_BASELINE" && mode != "UOBS_ONLY" &&
       mode != "UNONLOCAL_ONLY" && mode != "DUAL_RELIABILITY")
     throw std::runtime_error("unsupported_dual_reliability_mode:" + mode);
-  p5_i1::requireFrozenMapSha256(map_path);
+  if (map_profile == "floor01") {
+    p5_i1::requireFrozenMapSha256(map_path);
+  } else if (map_profile == "corridor01") {
+    if (p5_i1::sha256File(map_path) !=
+        "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f")
+      throw std::runtime_error("corridor01_map_sha256_mismatch");
+  } else {
+    throw std::runtime_error("unsupported_map_profile:" + map_profile);
+  }
   const Cloud::Ptr target = loadTarget(map_path);
-  if (target->size() != 549606)
+  if (target->empty()) throw std::runtime_error("empty_preprocessed_target_map");
+  if (map_profile == "floor01" && target->size() != 549606)
     throw std::runtime_error("frozen_target_point_count_mismatch");
 
   Pose3d initial_map_T_lidar, T_imu_lidar_pose;
@@ -731,12 +777,57 @@ void runDualReliabilityMode(
   if (inputs.imu.size() < static_cast<std::size_t>(parameters.static_init_samples))
     throw std::runtime_error("not_enough_static_initialization_imu_samples");
   FastLio2IkfomFrontend frontend(parameters);
-  p4_i2::ImuVector initialization_imu(inputs.imu.begin(),
-      inputs.imu.begin() + parameters.static_init_samples);
+  p4_i2::ImuVector initialization_imu;
+  if (initialization_stamp_ns == 0) {
+    initialization_imu.assign(inputs.imu.begin(),
+        inputs.imu.begin() + parameters.static_init_samples);
+  } else {
+    const auto exact_or_after = std::lower_bound(
+        inputs.imu.begin(), inputs.imu.end(), initialization_stamp_ns,
+        [](const ImuSample& sample, uint64_t stamp) { return sample.stamp_ns < stamp; });
+    if (exact_or_after == inputs.imu.begin())
+      throw std::runtime_error("initialization_stamp_outside_imu_range");
+    auto causal_end = exact_or_after;
+    const bool exact_imu_stamp = exact_or_after != inputs.imu.end() &&
+        exact_or_after->stamp_ns == initialization_stamp_ns;
+    if (exact_imu_stamp) ++causal_end;
+    const auto count = static_cast<std::ptrdiff_t>(parameters.static_init_samples);
+    if (std::distance(inputs.imu.begin(), causal_end) < count)
+      throw std::runtime_error("insufficient_causal_imu_samples_before_initialization_stamp");
+    initialization_imu.assign(causal_end - count, causal_end);
+    if (initialization_imu.back().stamp_ns > initialization_stamp_ns)
+      throw std::runtime_error("static_initialization_uses_future_imu_sample");
+    if (initialization_imu.back().stamp_ns < initialization_stamp_ns) {
+      std::vector<uint64_t> recent_periods;
+      const std::size_t first_period = initialization_imu.size() > 101
+          ? initialization_imu.size() - 101 : 1;
+      for (std::size_t i = first_period; i < initialization_imu.size(); ++i) {
+        if (initialization_imu[i].stamp_ns <= initialization_imu[i - 1].stamp_ns)
+          throw std::runtime_error("nonmonotonic_causal_static_imu_window");
+        recent_periods.push_back(initialization_imu[i].stamp_ns -
+                                 initialization_imu[i - 1].stamp_ns);
+      }
+      if (recent_periods.empty())
+        throw std::runtime_error("insufficient_imu_periods_for_initialization_epoch");
+      std::sort(recent_periods.begin(), recent_periods.end());
+      const uint64_t median_period_ns = recent_periods[recent_periods.size() / 2];
+      const uint64_t held_gap_ns = initialization_stamp_ns - initialization_imu.back().stamp_ns;
+      if (median_period_ns == 0 || held_gap_ns > 2 * median_period_ns)
+        throw std::runtime_error("initialization_epoch_extrapolation_exceeds_two_median_imu_periods");
+    }
+  }
   std::string failure;
   if (!frontend.initializeStatic(initialization_imu, initial_map_T_lidar,
                                  T_imu_lidar_pose, &failure))
     throw std::runtime_error("dual_reliability_static_initialization_failed:" + failure);
+  if (initialization_stamp_ns != 0 &&
+      frontend.getState().stamp_ns < initialization_stamp_ns) {
+    const ImuSample& causal_head = initialization_imu[initialization_imu.size() - 2];
+    const ImuSample& causal_tail = initialization_imu.back();
+    if (!frontend.predictHeldInputTo(initialization_stamp_ns, causal_head,
+                                     causal_tail, &failure))
+      throw std::runtime_error("causal_initialization_epoch_propagation_failed:" + failure);
+  }
 
   constexpr double kStrictEpsilon = 1e-5;
   constexpr int kStrictMaximumIterations = 80;
@@ -761,7 +852,7 @@ void runDualReliabilityMode(
   trajectory << std::setprecision(17);
   p4_i2::writeHeader(trajectory);
   events << std::setprecision(17)
-      << "mode,transaction_id,stamp_ns,time_s,uobs_valid,uobs_status"
+      << "mode,transaction_id,stamp_ns,time_s,source_cloud_hash_verified,uobs_valid,uobs_status"
          ",uobs_gradient_gate_passed,uobs_gate_samples_passed"
          ",translation_weak,translation_weak_ratio,translation_min_eigenvalue"
          ",translation_block_condition,translation_weak_direction_map_xyz"
@@ -794,8 +885,9 @@ void runDualReliabilityMode(
     gradient_gate << std::setprecision(17)
         << "mode,sample_index,seed_name,M0_converged,normal_euler_coordinates"
            ",component,pcl_order,pcl_value,score_center,analytic_gradient"
-           ",fd_gradient_h_1e-4,fd_gradient_h_5e-5,relative_error_h"
-           ",relative_error_half_h,sign_matches,axis_pass,align_calls\n";
+           ",fd_gradient_h_1e-4,fd_gradient_h_5e-5,fd_gradient_h_2_5e-5"
+           ",relative_error_h,relative_error_half_h,relative_error_quarter_h"
+           ",sign_matches,axis_pass,align_calls\n";
 
   Eigen::Matrix4d previous_used = Eigen::Matrix4d::Identity();
   bool has_previous_used = false;
@@ -827,7 +919,9 @@ void runDualReliabilityMode(
     const Cloud::Ptr raw_source = loadRawCloudAt(cloud_binary_path, asset);
     const Cloud::Ptr source = preprocessSource(raw_source);
     const uint64_t source_hash = sourceCloudHash(source);
-    if (source_hash != asset.expected_source_hash)
+    if ((!asset.expected_source_hash_available && map_profile != "corridor01") ||
+        (asset.expected_source_hash_available &&
+         source_hash != asset.expected_source_hash))
       throw std::runtime_error("prepared_source_hash_mismatch_tx_" +
                                std::to_string(asset.transaction_id));
 
@@ -856,18 +950,21 @@ void runDualReliabilityMode(
         Eigen::Matrix<double, 6, 6>::Constant(
             std::numeric_limits<double>::quiet_NaN());
     p6_i4::PoseCovarianceSpectrum covariance_spectrum;
-    try {
-      predicted_map_covariance = projectMapProductPoseCovariance(predicted);
-      covariance_spectrum = p6_i4::analyzePoseCovariance(predicted_map_covariance);
-    } catch (const std::exception&) {
-      covariance_spectrum.reason = "POSE_COVARIANCE_PROJECTION_FAILED";
+    covariance_spectrum.reason = "UNONLOCAL_DISABLED_BY_MODE";
+    if (use_unonlocal) {
+      try {
+        predicted_map_covariance = projectMapProductPoseCovariance(predicted);
+        covariance_spectrum = p6_i4::analyzePoseCovariance(predicted_map_covariance);
+      } catch (const std::exception&) {
+        covariance_spectrum.reason = "POSE_COVARIANCE_PROJECTION_FAILED";
+      }
     }
 
     reliability::Vector6d innovation = reliability::Vector6d::Constant(
         std::numeric_limits<double>::quiet_NaN());
     reliability::ProbeTrigger probe_trigger;
     probe_trigger.reason = "DISABLED_BY_MODE";
-    if (nominal.converged) {
+    if (use_unonlocal && nominal.converged) {
       const Pose3d nominal_lidar_pose = poseFromMatrix(nominal.pose);
       const Pose3d nominal_imu_pose = p4_i2::lidarMeasurementToImu(
           nominal_lidar_pose, T_imu_lidar_pose);
@@ -968,8 +1065,11 @@ void runDualReliabilityMode(
         local_observability.status == "NONFINITE_CURVATURE" &&
         score_gradient_gate_passed)
       uobs_status = curvature_status;
-    const reliability::LocalRisk local_risk =
-        reliability::assessLocalRisk(local_observability, reliability_config);
+    reliability::LocalRisk local_risk;
+    if (use_uobs)
+      local_risk = reliability::assessLocalRisk(local_observability, reliability_config);
+    else
+      local_risk.status = "UOBS_DISABLED_BY_MODE";
 
     reliability::DualReliabilityDecision decision;
     if (mode == "STRICT_BASELINE") {
@@ -1037,7 +1137,8 @@ void runDualReliabilityMode(
                           terminal_stability.delta_rotation_negative.transpose());
     }
     events << mode << ',' << asset.transaction_id << ',' << asset.stamp_ns << ','
-           << asset.time_s << ',' << (local_observability.valid ? 1 : 0) << ','
+           << asset.time_s << ',' << (asset.expected_source_hash_available ? 1 : 0)
+           << ',' << (local_observability.valid ? 1 : 0) << ','
            << uobs_status << ','
            << (score_gradient_gate_passed ? 1 : 0) << ','
            << score_gradient_gate_pass_samples << ','
@@ -1497,7 +1598,8 @@ void runMode(const std::string& mode, const p4_i2::Inputs& inputs,
     Cloud::Ptr raw_source = loadRawCloudAt(cloud_binary_path, asset);
     const Cloud::Ptr source = preprocessSource(raw_source);
     const uint64_t source_hash = sourceCloudHash(source);
-    if (source_hash != asset.expected_source_hash)
+    if (!asset.expected_source_hash_available ||
+        source_hash != asset.expected_source_hash)
       throw std::runtime_error("prepared_source_hash_mismatch_tx_" +
                                std::to_string(asset.transaction_id));
     const auto visual_it = visual_by_tx.find(asset.transaction_id);
@@ -1862,7 +1964,7 @@ void runMode(const std::string& mode, const p4_i2::Inputs& inputs,
 
 int main(int argc, char** argv) {
   try {
-    if ((argc == 11 || argc == 12) &&
+    if ((argc >= 11 && argc <= 14) &&
         (std::string(argv[1]) == "STRICT_BASELINE" ||
          std::string(argv[1]) == "UOBS_ONLY" ||
          std::string(argv[1]) == "UNONLOCAL_ONLY" ||
@@ -1875,15 +1977,19 @@ int main(int argc, char** argv) {
       if (assets.size() != inputs.scans.size())
         throw std::runtime_error("scan_asset_and_filter_counts_differ");
       std::vector<p6_i1::ScanAsset> selected_assets = assets;
-      if (argc == 12) {
+      if (argc >= 12) {
         const long long requested = std::stoll(argv[11]);
         if (requested <= 0 || static_cast<std::size_t>(requested) > assets.size())
           throw std::runtime_error("requested_frame_limit_out_of_range");
         selected_assets.resize(static_cast<std::size_t>(requested));
         inputs.scans.resize(static_cast<std::size_t>(requested));
       }
+      const uint64_t initialization_stamp_ns = argc == 13
+          ? std::stoull(argv[12]) : (argc == 14 ? std::stoull(argv[12]) : 0);
+      const std::string map_profile = argc == 14 ? argv[13] : "floor01";
       p6_i1::runDualReliabilityMode(argv[1], inputs, selected_assets, argv[5], argv[6],
-                                    argv[7], argv[8], argv[9], argv[10]);
+                                    argv[7], argv[8], argv[9], argv[10],
+                                    initialization_stamp_ns, map_profile);
       return 0;
     }
     if (argc == 10 && std::string(argv[1]) == "baseline") {
@@ -1930,7 +2036,7 @@ int main(int argc, char** argv) {
     std::cerr << "usage:\n"
               << "  p6_i1_branched_recovery baseline imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt baseline_replay.csv baseline_trajectory.csv\n"
               << "  p6_i1_branched_recovery strict_single_start imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt strict_replay.csv strict_trajectory.csv\n"
-              << "  p6_i1_branched_recovery (STRICT_BASELINE|UOBS_ONLY|UNONLOCAL_ONLY|DUAL_RELIABILITY) imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt trajectory.csv reliability.csv runtime.csv\n"
+              << "  p6_i1_branched_recovery (STRICT_BASELINE|UOBS_ONLY|UNONLOCAL_ONLY|DUAL_RELIABILITY) imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt trajectory.csv reliability.csv runtime.csv [frame_limit [init_stamp_ns [floor01|corridor01]]]\n"
               << "  p6_i1_branched_recovery MODE imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt visual.csv trajectory.csv branch.csv dcreg.csv multistart.csv candidates.csv arbitration.csv runtime.csv [basin.csv covariance.csv]\n";
     return 2;
   } catch (const std::exception& error) {

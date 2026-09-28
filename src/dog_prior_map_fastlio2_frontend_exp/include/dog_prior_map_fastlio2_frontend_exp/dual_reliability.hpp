@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <limits>
 #include <string>
+#include <vector>
 
 namespace dog_prior_map_fastlio2_frontend_exp::reliability {
 
@@ -137,16 +138,33 @@ DualReliabilityDecision decideDualReliability(
 
 const char* toString(UpdateAction action);
 
-// Placeholder contract for a future vision-derived reliability assist. This
-// release deliberately leaves it disabled and carries no visual measurement.
+// Timestamped two-view epipolar factors produced by the offline LK frontend.
+// Jacobian columns are [camera-relative translation XYZ (m), left camera
+// relative rotation XYZ (rad)]. These are not absolute-pose observations and
+// cannot be fused into IKFoM until mapped through the state-history Jacobian.
+struct VisualGeometryFactor {
+  std::uint64_t reference_stamp_ns = 0;
+  std::uint64_t current_stamp_ns = 0;
+  std::size_t tracked_count = 0;
+  std::size_t inlier_count = 0;
+  double robust_residual_rms = std::numeric_limits<double>::quiet_NaN();
+  Eigen::VectorXd residuals;
+  Eigen::Matrix<double, Eigen::Dynamic, 6> relative_pose_jacobian;
+  std::string status = "UNAVAILABLE";
+};
+
+// Vision is enabled only when real timestamped factors exist. The first I6C
+// release intentionally keeps fusion disabled: a camera-relative factor is
+// not itself a metric map-position measurement.
 struct VisionAssistInterface {
   bool enabled = false;
+  bool fusion_enabled = false;
   bool trigger_requested = false;
   bool observation_available = false;
-  std::uint64_t stamp_ns = 0;
-  Eigen::Isometry3d map_T_imu_observation = Eigen::Isometry3d::Identity();
+  std::uint64_t latest_stamp_ns = 0;
+  std::vector<VisualGeometryFactor> factors;
   std::string trigger_reason = "NOT_REQUESTED";
-  std::string status = "DISABLED_NOT_IMPLEMENTED";
+  std::string status = "DISABLED_NO_STATE_HISTORY_JACOBIAN";
 };
 
 }  // namespace dog_prior_map_fastlio2_frontend_exp::reliability

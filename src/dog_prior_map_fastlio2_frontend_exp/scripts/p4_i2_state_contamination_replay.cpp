@@ -31,6 +31,7 @@ struct PoseRecord {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   uint64_t transaction_id = 0;
   uint64_t stamp_ns = 0;
+  bool saved_pose_available = true;
   Pose3d saved_predictor_lidar;
   Pose3d used_lidar;
   Pose3d saved_corrected_lidar;
@@ -93,7 +94,7 @@ bool readInputs(const std::string& imu_path, const std::string& scan_path,
   while (std::getline(scan_file, line)) {
     if (line.empty()) continue;
     const auto fields = splitCsv(line);
-    if (fields.size() != 23) {
+    if (fields.size() != 2 && fields.size() != 23) {
       if (reason) *reason = "invalid_scan_csv_field_count";
       return false;
     }
@@ -114,10 +115,13 @@ bool readInputs(const std::string& imu_path, const std::string& scan_path,
       pose->orientation.normalize();
       return true;
     };
+    record.saved_pose_available = fields.size() == 23;
+    const bool saved_poses_valid = !record.saved_pose_available ||
+        (parsePose(2, &record.saved_predictor_lidar) &&
+         parsePose(9, &record.used_lidar) &&
+         parsePose(16, &record.saved_corrected_lidar));
     if (record.transaction_id != expected_transaction || record.stamp_ns <= previous_stamp ||
-        !parsePose(2, &record.saved_predictor_lidar) ||
-        !parsePose(9, &record.used_lidar) ||
-        !parsePose(16, &record.saved_corrected_lidar)) {
+        !saved_poses_valid) {
       if (reason) *reason = "invalid_scan_sequence_or_pose";
       return false;
     }
@@ -222,6 +226,10 @@ void writePose(std::ostream& output, const Pose3d& pose) {
          << pose.orientation.w();
 }
 
+void writeUnavailablePose(std::ostream& output) {
+  for (int i = 0; i < 7; ++i) output << ",NA";
+}
+
 void writeHeader(std::ostream& output) {
   output << "frame_index,transaction_id,stamp_ns"
          << ",predictor_imu_tx,predictor_imu_ty,predictor_imu_tz,predictor_imu_qx,predictor_imu_qy,predictor_imu_qz,predictor_imu_qw"
@@ -242,11 +250,17 @@ void writeRow(std::ostream& output, std::size_t index, const PoseRecord& record,
   output << index + 1 << ',' << record.transaction_id << ',' << record.stamp_ns;
   writePose(output, predictor);
   writePose(output, after.map_T_imu);
-  writePose(output, fromIsometry(asIsometry(record.saved_predictor_lidar) *
-                                 asIsometry(T_imu_lidar).inverse()));
-  writePose(output, fromIsometry(asIsometry(record.saved_corrected_lidar) *
-                                 asIsometry(T_imu_lidar).inverse()));
-  writePose(output, record.used_lidar);
+  if (record.saved_pose_available) {
+    writePose(output, fromIsometry(asIsometry(record.saved_predictor_lidar) *
+                                   asIsometry(T_imu_lidar).inverse()));
+    writePose(output, fromIsometry(asIsometry(record.saved_corrected_lidar) *
+                                   asIsometry(T_imu_lidar).inverse()));
+    writePose(output, record.used_lidar);
+  } else {
+    writeUnavailablePose(output);
+    writeUnavailablePose(output);
+    writeUnavailablePose(output);
+  }
   writeVector(output, after.map_T_imu.position - before.map_T_imu.position);
   const Eigen::AngleAxisd rotation_delta(poseDelta(before.map_T_imu, after.map_T_imu));
   writeVector(output, rotation_delta.axis() * rotation_delta.angle());

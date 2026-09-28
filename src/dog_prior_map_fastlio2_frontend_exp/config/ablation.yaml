@@ -1,0 +1,57 @@
+schema_version: 1
+
+# All profiles dispatch to the same p6_i1_branched_recovery closed-loop core.
+# U_obs and vision remain unavailable until their respective validity/fusion
+# gates pass; a requested unavailable profile must report NOT_AVAILABLE.
+module_availability:
+  u_obs: false
+  u_obs_reason: "INVALID_SCORE_GRADIENT_GATE_3_OF_12_AXES"
+  u_nonlocal: true
+  vision: false
+  vision_core_integrated: false
+  vision_reason: "MONOCULAR_SCALE_UNOBSERVABLE_AND_NO_CAUSAL_STATE_HISTORY_CHAIN_RULE"
+
+profiles:
+  B0:
+    label: STRICT
+    enable_u_obs: false
+    enable_u_nonlocal: false
+    enable_vision: false
+    runner_mode: STRICT_BASELINE
+    availability: AVAILABLE
+  B1:
+    label: STRICT_PLUS_U_OBS
+    enable_u_obs: true
+    enable_u_nonlocal: false
+    enable_vision: false
+    runner_mode: UOBS_ONLY
+    availability: NOT_AVAILABLE_UNTIL_U_OBS_GATE_PASSES
+  B2:
+    label: STRICT_PLUS_U_NONLOCAL
+    enable_u_obs: false
+    enable_u_nonlocal: true
+    enable_vision: false
+    runner_mode: UNONLOCAL_ONLY
+    availability: AVAILABLE
+  B3:
+    label: STRICT_PLUS_U_OBS_PLUS_U_NONLOCAL
+    enable_u_obs: true
+    enable_u_nonlocal: true
+    enable_vision: false
+    runner_mode: DUAL_RELIABILITY
+    availability: NOT_AVAILABLE_UNTIL_U_OBS_GATE_PASSES
+  B4:
+    label: FULL_WITH_REAL_VISION
+    enable_u_obs: true
+    enable_u_nonlocal: true
+    enable_vision: true
+    runner_mode: DUAL_RELIABILITY
+    availability: NOT_AVAILABLE_UNTIL_U_OBS_AND_VISION_FUSION_GATES_PASS
+
+dataset_maps:
+  Floor01:
+    map_sha256: 2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570
+    map_profile: floor01
+  Corridor01:
+    map_sha256: 103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f
+    map_profile: corridor01
