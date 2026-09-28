@@ -31,6 +31,7 @@ EXECUTABLE = BUILD / "p6_i6b_closed_loop"
 FASTLIO2 = Path("/media/jian/HIKVISION/comparison algorithm/FAST_LIO2")
 DCREG = Path("/home/jian/livox_ws/DCReg/DCReg")
 EVAL_START_NS = 1_517_157_224_188_979_000
+EXPECTED_INPUT_MANIFEST_SHA256 = "6d722ec6946570cc09d984c1a8ac7ebaaff799f012f9386ae169e3d47747a043"
 EXPECTED_SCAN_COUNT = 2726
 PINNED_SOURCE_HASHES = {
     "raw_bag_sha256": ("raw_bag", RAW_BAG,
@@ -123,7 +124,10 @@ def validate_mode_outputs(mode: str, out_dir: Path, expected: int) -> int:
 
 
 def verify_bundle() -> dict[str, str]:
-    manifest = read_manifest(INPUT / "input_manifest.txt")
+    manifest_path = INPUT / "input_manifest.txt"
+    if sha256(manifest_path) != EXPECTED_INPUT_MANIFEST_SHA256:
+        raise RuntimeError("prepared Corridor01 manifest differs from the frozen input identity")
+    manifest = read_manifest(manifest_path)
     expected = {
         "imu_csv_sha256": INPUT / "imu.csv",
         "filter_scans_csv_sha256": INPUT / "filter_scans.csv",
@@ -137,6 +141,12 @@ def verify_bundle() -> dict[str, str]:
             raise RuntimeError(f"prepared input SHA mismatch for {key}")
     if manifest.get("scan_count_replayed") != str(EXPECTED_SCAN_COUNT):
         raise RuntimeError("Corridor01 scan count differs from the frozen exporter contract")
+    if manifest.get("evaluation_start_header_stamp_ns") != str(EVAL_START_NS):
+        raise RuntimeError("Corridor01 evaluation/init epoch differs from the frozen P2B contract")
+    if manifest.get("cloud_source_index_start_inclusive") != "50" or \
+       manifest.get("initialization_clouds_excluded") != "50" or \
+       manifest.get("cloud_count_total") != "2776":
+        raise RuntimeError("Corridor01 first-50-cloud initialization contract mismatch")
     if manifest.get("map_sha256") != "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f":
         raise RuntimeError("Corridor01 map SHA differs from the recorded normalized map")
     if sha256(MAP) != manifest["map_sha256"]:

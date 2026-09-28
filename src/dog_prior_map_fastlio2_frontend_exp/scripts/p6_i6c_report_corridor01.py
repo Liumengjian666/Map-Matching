@@ -14,7 +14,9 @@ import numpy as np
 
 MODES = ("STRICT_BASELINE", "UNONLOCAL_ONLY")
 THRESHOLDS_M = (0.25, 0.5, 1.0, 2.0, 5.0)
-EXPECTED_GT_SHA256 = "b8db2491cdb3ca3194f653cab90f31eae70b457e91b2f87f30ed7fe2d0e2ce9f"
+# Corridor01 P2A asset audit pins this dataset's official GT bytes. Do not use
+# the unrelated Floor01/P6-I2 GT digest here.
+EXPECTED_GT_SHA256 = "3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03"
 
 
 def q_to_r(q: np.ndarray) -> np.ndarray:
@@ -55,6 +57,8 @@ def kabsch(est: np.ndarray, gt: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
 
 def interpolate_gt(t: float, times: np.ndarray, positions: np.ndarray,
                    quaternions: np.ndarray):
+    if math.isclose(t, float(times[-1]), rel_tol=0.0, abs_tol=1e-9):
+        return positions[-1], quaternions[-1]
     j = int(np.searchsorted(times, t, side="right"))
     if j == 0 or j >= len(times):
         return None
@@ -149,7 +153,8 @@ def evaluate(mode: str, out: Path, gt_t: np.ndarray, gt_p: np.ndarray,
         error_rows.append([mode, t, relative_time, te, re])
     translation_errors = np.asarray(translation_errors)
     rotation_errors = np.asarray(rotation_errors)
-    metrics = {"mode": mode, "samples": len(aligned_pairs),
+    metrics = {"mode": mode, "trajectory_rows": len(rows),
+               "samples": len(aligned_pairs),
                "prefix_alignment_samples": int(prefix.sum()),
                "translation": stats(translation_errors),
                "rotation_deg": stats(rotation_errors),
@@ -186,30 +191,41 @@ def main() -> int:
             runtime_rows = list(csv.DictReader(stream))
         with (args.out / f"reliability_{mode}.csv").open(newline="") as stream:
             reliability_rows = list(csv.DictReader(stream))
-        if len(runtime_rows) != len(reliability_rows) or len(runtime_rows) != result["samples"]:
-            raise RuntimeError(f"{mode}: runtime/reliability/evaluation row count mismatch")
+        if len(runtime_rows) != len(reliability_rows) or \
+           len(runtime_rows) != result["trajectory_rows"]:
+            raise RuntimeError(f"{mode}: runtime/reliability/trajectory row count mismatch")
         ndt_ms = np.asarray([float(row["nominal_ndt_ms"]) for row in runtime_rows])
+        extra_probe_ms = np.asarray([float(row["extra_probe_ms"]) for row in runtime_rows])
+        all_align_ms = ndt_ms + extra_probe_ms
         ndt_calls = np.asarray([int(row["ndt_call_count"]) for row in runtime_rows])
         result.update({"gt_sha256": gt_hash, "ndt_ms_mean": float(ndt_ms.mean()),
                        "ndt_ms_p95": float(np.percentile(ndt_ms, 95)),
                        "ndt_ms_max": float(ndt_ms.max()),
+                       "all_align_ms_mean": float(all_align_ms.mean()),
+                       "all_align_ms_p95": float(np.percentile(all_align_ms, 95)),
+                       "all_align_ms_max": float(all_align_ms.max()),
+                       "all_align_work_s": float(all_align_ms.sum()/1000.0),
                        "ndt_calls_total": int(ndt_calls.sum()),
                        "ndt_calls_mean_per_scan": float(ndt_calls.mean()),
                        "m0_nonconverged": sum(row["M0_converged"] != "1"
                                                for row in reliability_rows),
                        "prediction_only_count": sum(row["decision"] == "PREDICTION_ONLY"
                                                      for row in reliability_rows),
-                       "extra_probe_calls": sum(int(row["probe_executed"])
-                                                 for row in reliability_rows), **resource})
+                       "probe_frames": sum(int(row["probe_executed"])
+                                           for row in reliability_rows),
+                       "extra_ndt_align_calls": int(ndt_calls.sum()-len(ndt_calls)),
+                       **resource})
         metrics.append(result)
         for threshold, value in events.items():
             crossings.append({"mode": mode, "threshold_m": threshold,
                               "first_persistent_crossing_s": "NONE" if value is None else value})
 
-    fields = ["mode", "samples", "prefix_alignment_samples", "translation", "rotation_deg",
+    fields = ["mode", "trajectory_rows", "samples", "prefix_alignment_samples",
+              "translation", "rotation_deg",
               "ndt_ms_mean", "ndt_ms_p95", "ndt_ms_max", "ndt_calls_total",
+              "all_align_ms_mean", "all_align_ms_p95", "all_align_ms_max", "all_align_work_s",
               "ndt_calls_mean_per_scan", "m0_nonconverged", "prediction_only_count",
-              "extra_probe_calls", "process_wall_s", "user_cpu_s",
+              "probe_frames", "extra_ndt_align_calls", "process_wall_s", "user_cpu_s",
               "system_cpu_s", "peak_rss_kib", "gt_sha256", "alignment_R_rowmajor", "alignment_t_xyz"]
     with (args.out / "mode_metrics.csv").open("w", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
@@ -227,11 +243,11 @@ def main() -> int:
              "", "GT is read only in this posthoc script, after complete closed-loop trajectories were validated.",
              f"Evaluation start sensor stamp: {args.start:.9f} s.",
              "Alignment: independent fixed PREFIX_10S rigid SE(3), scale=1, following the P2B-R1 audit; no full-trajectory alignment.",
-             f"GT SHA-256: `{gt_hash}`.", "", "| Mode | n | t RMSE / P95 / max (m) | r RMSE / P95 / max (deg) | NDT mean/P95/max (ms) | NDT calls | nonconv. / prediction-only | wall (s) | CPU user/system (s) | peak RSS (MiB) |",
-             "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
+             f"GT SHA-256: `{gt_hash}`.", "The official GT ends about 0.101 s before the final replay scan; no GT extrapolation is performed, so error metrics use only timestamp-overlapping samples.", "", "NDT timings show nominal align and total measured align work (nominal plus both probe alignments); full replay wall time also includes propagation, preprocessing and updates.", "", "| Mode | replay rows / GT-overlap n | t RMSE / P95 / max (m) | r RMSE / P95 / max (deg) | nominal NDT mean/P95/max (ms) | all-align work mean/P95/max (ms) | all-align work (s) | NDT calls | probe frames | wall (s) | peak RSS (MiB) |",
+             "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
     for row in metrics:
         t, r = row["translation"], row["rotation_deg"]
-        lines.append(f"| {row['mode']} | {row['samples']} | {t['rmse']:.4f} / {t['p95']:.4f} / {t['max']:.4f} | {r['rmse']:.4f} / {r['p95']:.4f} / {r['max']:.4f} | {row['ndt_ms_mean']:.2f}/{row['ndt_ms_p95']:.2f}/{row['ndt_ms_max']:.2f} | {row['ndt_calls_total']} ({row['ndt_calls_mean_per_scan']:.2f}/scan) | {row['m0_nonconverged']} / {row['prediction_only_count']} | {row.get('process_wall_s','')} | {row.get('user_cpu_s','')}/{row.get('system_cpu_s','')} | {int(row.get('peak_rss_kib','0'))/1024:.1f} |")
+        lines.append(f"| {row['mode']} | {row['trajectory_rows']} / {row['samples']} | {t['rmse']:.4f} / {t['p95']:.4f} / {t['max']:.4f} | {r['rmse']:.4f} / {r['p95']:.4f} / {r['max']:.4f} | {row['ndt_ms_mean']:.2f}/{row['ndt_ms_p95']:.2f}/{row['ndt_ms_max']:.2f} | {row['all_align_ms_mean']:.2f}/{row['all_align_ms_p95']:.2f}/{row['all_align_ms_max']:.2f} | {row['all_align_work_s']:.2f} | {row['ndt_calls_total']} | {row['probe_frames']} | {row.get('process_wall_s','')} | {int(row.get('peak_rss_kib','0'))/1024:.1f} |")
     lines.extend(["", "## Persistent translation-error crossings", "",
                   "Crossing requires error continuously above threshold for at least 5 s; sample gaps must be <=0.5 s. Times are relative to the fixed evaluation epoch.",
                   "", "| Mode | 0.25 m | 0.5 m | 1 m | 2 m | 5 m |", "|---|---:|---:|---:|---:|---:|"])
@@ -240,7 +256,7 @@ def main() -> int:
         values = ["NONE" if x["first_persistent_crossing_s"] == "NONE"
                   else f"{float(x['first_persistent_crossing_s']):.3f}" for x in row]
         lines.append(f"| {mode} | " + " | ".join(values) + " |")
-    lines.extend(["", "The result is descriptive only; changing from STRICT to UNONLOCAL_ONLY also changes reliability-driven covariance/prediction-only behavior. No thresholds were tuned on Corridor01 GT. `extra_probe_calls` is separately recorded in mode_metrics.csv; it should remain zero for the U_nonlocal-disabled comparison.", ""])
+    lines.extend(["", "The result is descriptive only; changing from STRICT to UNONLOCAL_ONLY also changes reliability-driven covariance/prediction-only behavior. No thresholds were tuned on Corridor01 GT. `probe_frames` counts scans where the U_nonlocal perturbation probe ran; `extra_ndt_align_calls` is the total NDT align count beyond one nominal align per replay scan.", ""])
     (args.out / "summary.md").write_text("\n".join(lines), encoding="utf-8")
     print((args.out / "summary.md").read_text(), end="")
     return 0
