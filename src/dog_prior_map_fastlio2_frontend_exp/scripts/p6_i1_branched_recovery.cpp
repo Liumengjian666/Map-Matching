@@ -589,6 +589,128 @@ reliability::TerminalCapture terminalCapture(const Candidate& candidate) {
   return terminal;
 }
 
+Eigen::Matrix4f poseFromPclParameters(const Eigen::Matrix<double, 6, 1>& p) {
+  const Eigen::AngleAxisf rx(static_cast<float>(p(3)), Eigen::Vector3f::UnitX());
+  const Eigen::AngleAxisf ry(static_cast<float>(p(4)), Eigen::Vector3f::UnitY());
+  const Eigen::AngleAxisf rz(static_cast<float>(p(5)), Eigen::Vector3f::UnitZ());
+  Eigen::Matrix4f pose = Eigen::Matrix4f::Identity();
+  // PCL 1.10 NDT::computeTransformation() uses this exact composition; do not
+  // substitute pcl::getTransformation(), whose generic Euler helper differs.
+  pose.block<3, 3>(0, 0) = (rx * ry * rz).toRotationMatrix();
+  pose.block<3, 1>(0, 3) = p.head<3>().cast<float>();
+  return pose;
+}
+
+Eigen::Vector3d normalNdtEulerXyz(const Eigen::Matrix3f& rotation) {
+  const Eigen::Matrix3d r = rotation.cast<double>();
+  const double pitch = std::asin(std::clamp(r(0, 2), -1.0, 1.0));
+  return Eigen::Vector3d(std::atan2(-r(1, 2), r(2, 2)), pitch,
+                         std::atan2(-r(0, 1), r(0, 0)));
+}
+
+Eigen::Matrix<double, 6, 1> pclNdtParameters(const Eigen::Matrix4f& pose) {
+  Eigen::Matrix<double, 6, 1> parameters;
+  parameters.head<3>() = pose.block<3, 1>(0, 3).cast<double>();
+  parameters.tail<3>() = normalNdtEulerXyz(pose.block<3, 3>(0, 0));
+  return parameters;
+}
+
+double scoreAtPclParameters(AuditedNdt& ndt, const Cloud::Ptr& source,
+                            const Eigen::Matrix<double, 6, 1>& p) {
+  Cloud transformed;
+  pcl::transformPointCloud(*source, transformed, poseFromPclParameters(p));
+  Eigen::Matrix<double, 6, 1> mutable_p = p;
+  return ndt.scoreDerivatives(transformed, mutable_p, nullptr, nullptr);
+}
+
+bool verifyScoreGradientConvention(
+    AuditedNdt& ndt, const Cloud::Ptr& source, const Candidate& candidate,
+    std::size_t sample_index, const std::string& mode,
+    std::ofstream& output) {
+  constexpr double kStep = 1e-4;
+  constexpr double kHalfStep = 5e-5;
+  constexpr double kRelativeTolerance = 0.10;
+  constexpr double kMeaningful = 1e-6;
+  const char* axis_names[] = {"tx", "ty", "tz", "rx", "ry", "rz"};
+  const Eigen::Matrix4f pose = candidate.pose.cast<float>();
+  // Extract the normal branch for PCL NDT's internal Rx*Ry*Rz parameterization.
+  const Eigen::Matrix<double, 6, 1> p = pclNdtParameters(pose);
+  const Eigen::Vector3d euler = p.tail<3>();
+  const bool normal_coordinates = euler.allFinite() &&
+      euler.cwiseAbs().maxCoeff() < 1.0 && std::abs(std::cos(euler.y())) > 0.5;
+  Eigen::Matrix<double, 6, 1> analytic =
+      Eigen::Matrix<double, 6, 1>::Constant(
+          std::numeric_limits<double>::quiet_NaN());
+  Eigen::Matrix<double, 6, 6> hessian =
+      Eigen::Matrix<double, 6, 6>::Constant(
+          std::numeric_limits<double>::quiet_NaN());
+  Cloud transformed;
+  pcl::transformPointCloud(*source, transformed, pose);
+  Eigen::Matrix<double, 6, 1> mutable_p = p;
+  const double center_score = ndt.scoreDerivatives(
+      transformed, mutable_p, &analytic, &hessian);
+  const bool common_pass = candidate.converged && normal_coordinates &&
+      std::isfinite(center_score) && analytic.allFinite() && hessian.allFinite();
+  bool sample_pass = common_pass;
+  for (int axis = 0; axis < 6; ++axis) {
+    const auto finiteDifference = [&](double step) {
+      Eigen::Matrix<double, 6, 1> plus = p, minus = p;
+      plus(axis) += step;
+      minus(axis) -= step;
+      return (scoreAtPclParameters(ndt, source, plus) -
+              scoreAtPclParameters(ndt, source, minus)) / (2.0 * step);
+    };
+    const double fd = finiteDifference(kStep);
+    const double fd_half = finiteDifference(kHalfStep);
+    const double denominator = std::max({std::abs(analytic(axis)), std::abs(fd), 1e-8});
+    const double half_denominator = std::max(
+        {std::abs(analytic(axis)), std::abs(fd_half), 1e-8});
+    const double relative_error = std::abs(analytic(axis) - fd) / denominator;
+    const double half_relative_error =
+        std::abs(analytic(axis) - fd_half) / half_denominator;
+    const bool meaningful = std::isfinite(analytic(axis)) &&
+        std::isfinite(fd) && std::isfinite(fd_half) &&
+        std::abs(analytic(axis)) > kMeaningful &&
+        std::abs(fd) > kMeaningful && std::abs(fd_half) > kMeaningful;
+    const bool signs_match = meaningful && analytic(axis) * fd > 0.0 &&
+        analytic(axis) * fd_half > 0.0;
+    const bool axis_pass = common_pass && meaningful && signs_match &&
+        relative_error <= kRelativeTolerance &&
+        half_relative_error <= kRelativeTolerance;
+    sample_pass = sample_pass && axis_pass;
+    output << mode << ',' << sample_index << ',' << candidate.seed_name << ','
+           << (candidate.converged ? 1 : 0) << ','
+           << (normal_coordinates ? 1 : 0) << ',' << axis_names[axis] << ','
+           << axis << ',' << p(axis) << ',' << center_score << ','
+           << analytic(axis) << ',' << fd << ',' << fd_half << ','
+           << relative_error << ',' << half_relative_error << ','
+           << (signs_match ? 1 : 0) << ',' << (axis_pass ? 1 : 0) << ",0\n";
+  }
+  return common_pass && sample_pass;
+}
+
+std::string matrixField(const Eigen::MatrixXd& matrix) {
+  std::ostringstream stream;
+  stream << std::setprecision(10);
+  for (Eigen::Index row = 0; row < matrix.rows(); ++row)
+    for (Eigen::Index column = 0; column < matrix.cols(); ++column) {
+      if (row != 0 || column != 0) stream << ';';
+      stream << matrix(row, column);
+    }
+  return stream.str();
+}
+
+std::string poseField(const Eigen::Matrix4d& pose) {
+  return matrixField(pose);
+}
+
+std::string vectorField(const Eigen::Vector3d& vector) {
+  std::ostringstream stream;
+  stream << std::setprecision(10) << vector.x() << ';' << vector.y() << ';'
+         << vector.z();
+  return stream.str();
+}
+
 void runDualReliabilityMode(
     const std::string& mode, const p4_i2::Inputs& inputs,
     const std::vector<ScanAsset>& assets, const std::string& cloud_binary_path,
@@ -618,7 +740,6 @@ void runDualReliabilityMode(
 
   constexpr double kStrictEpsilon = 1e-5;
   constexpr int kStrictMaximumIterations = 80;
-  constexpr bool kScoreGradientCoordinateGatePassed = false;
   const reliability::DualReliabilityConfig reliability_config;
   const bool use_uobs = mode == "UOBS_ONLY" || mode == "DUAL_RELIABILITY";
   const bool use_unonlocal = mode == "UNONLOCAL_ONLY" || mode == "DUAL_RELIABILITY";
@@ -631,28 +752,57 @@ void runDualReliabilityMode(
   ndt.setMaximumIterations(kStrictMaximumIterations);
 
   std::ofstream trajectory(trajectory_path), events(reliability_path), runtime(runtime_path);
+  std::ofstream gradient_gate;
+  if (use_uobs) gradient_gate.open(reliability_path + ".gradient_gate.csv");
   if (!trajectory || !events || !runtime)
     throw std::runtime_error("cannot_create_dual_reliability_outputs");
+  if (use_uobs && !gradient_gate)
+    throw std::runtime_error("cannot_create_uobs_gradient_gate_output");
   trajectory << std::setprecision(17);
   p4_i2::writeHeader(trajectory);
   events << std::setprecision(17)
       << "mode,transaction_id,stamp_ns,time_s,uobs_valid,uobs_status"
-         ",translation_weak,translation_weak_ratio,rotation_weak,rotation_weak_ratio"
+         ",uobs_gradient_gate_passed,uobs_gate_samples_passed"
+         ",translation_weak,translation_weak_ratio,translation_min_eigenvalue"
+         ",translation_block_condition,translation_weak_direction_map_xyz"
+         ",rotation_weak,rotation_weak_ratio,rotation_min_eigenvalue"
+         ",rotation_block_condition,rotation_weak_direction_map_xyz"
          ",innovation_chi2,innovation_status,probe_trigger_reason,probe_triggered"
-         ",probe_executed,ndt_call_count"
+         ",probe_executed,probe_status,ndt_call_count"
          ",M0_converged,M0_iterations,M0_objective"
+         ",M0_pose_map_T_lidar_rowmajor"
          ",Mplus_converged,Mplus_iterations,Mplus_objective"
+         ",Mplus_pose_map_T_lidar_rowmajor"
          ",Mminus_converged,Mminus_iterations,Mminus_objective"
-         ",Delta_t_m,Delta_R_rad,plus_minus_translation_gap_m"
+         ",Mminus_pose_map_T_lidar_rowmajor"
+         ",delta_p_plus_map_T_imu_xyz_m,delta_p_minus_map_T_imu_xyz_m,delta_phi_plus_map_xyz_rad"
+         ",delta_phi_minus_map_xyz_rad,Bp_map_T_imu_rowmajor_m2,BR_map_spatial_rowmajor_rad2"
+         ",Delta_t_map_T_lidar_m,Delta_R_map_T_lidar_rad,plus_minus_translation_gap_map_T_lidar_m"
          ",plus_minus_rotation_gap_rad,plus_minus_objective_delta"
-         ",step_limited,decision,decision_reason,noise_inflation,R_position_diag"
-         ",R_rotation_body_diag,extra_probe_ms\n";
+         ",R_position_rowmajor,R_rotation_map_rowmajor,R_rotation_body_rowmajor"
+         ",step_limited,decision,decision_reason,local_curvature_used"
+         ",nonlocal_response_used,vision_assist_status,vision_observation_available"
+         ",vision_assist_trigger_requested,vision_assist_trigger_reason"
+         ",local_curvature_ms,gradient_gate_ms,extra_probe_ms\n";
   runtime << std::setprecision(17)
-      << "mode,transaction_id,prediction_ms,nominal_ndt_ms,extra_probe_ms"
-         ",ikfom_update_ms,total_ms,ndt_call_count,probe_trigger,decision\n";
+      << "mode,transaction_id,prediction_ms,nominal_ndt_ms,local_curvature_ms"
+         ",gradient_gate_ms,extra_probe_ms,ikfom_update_ms,total_ms"
+         ",ndt_call_count,probe_trigger,decision,vision_assist_status"
+         ",vision_assist_trigger_requested,vision_assist_trigger_reason\n";
+
+  if (use_uobs)
+    gradient_gate << std::setprecision(17)
+        << "mode,sample_index,seed_name,M0_converged,normal_euler_coordinates"
+           ",component,pcl_order,pcl_value,score_center,analytic_gradient"
+           ",fd_gradient_h_1e-4,fd_gradient_h_5e-5,relative_error_h"
+           ",relative_error_half_h,sign_matches,axis_pass,align_calls\n";
 
   Eigen::Matrix4d previous_used = Eigen::Matrix4d::Identity();
   bool has_previous_used = false;
+  bool score_gradient_gate_passed = !use_uobs;
+  int score_gradient_gate_samples = 0;
+  int score_gradient_gate_pass_samples = 0;
+  const reliability::VisionAssistInterface vision_assist;
   for (std::size_t index = 0; index < assets.size(); ++index) {
     const ScanAsset& asset = assets[index];
     const p4_i2::PoseRecord& saved = inputs.scans[index];
@@ -687,6 +837,20 @@ void runDualReliabilityMode(
     const double nominal_ndt_ms = std::chrono::duration<double, std::milli>(
         std::chrono::steady_clock::now() - nominal_start).count();
     uint64_t ndt_call_count = 1;
+
+    double gradient_gate_ms = 0.0;
+    if (use_uobs && index < 2) {
+      const auto gate_start = std::chrono::steady_clock::now();
+      const bool sample_pass = verifyScoreGradientConvention(
+          ndt, source, nominal, index, mode, gradient_gate);
+      gradient_gate.flush();
+      ++score_gradient_gate_samples;
+      if (sample_pass) ++score_gradient_gate_pass_samples;
+      score_gradient_gate_passed = score_gradient_gate_samples == 2 &&
+          score_gradient_gate_pass_samples == 2;
+      gradient_gate_ms = std::chrono::duration<double, std::milli>(
+          std::chrono::steady_clock::now() - gate_start).count();
+    }
 
     Eigen::Matrix<double, 6, 6> predicted_map_covariance =
         Eigen::Matrix<double, 6, 6>::Constant(
@@ -741,7 +905,8 @@ void runDualReliabilityMode(
           probes_executed = true;
           terminal_stability = reliability::analyzeNonlocalTerminalStability(
               terminalCapture(nominal), terminalCapture(positive),
-              terminalCapture(negative), 2);
+              terminalCapture(negative),
+              p4_i2::asIsometry(T_imu_lidar_pose), 2);
         } else {
           terminal_stability.status = "PROBE_PRIOR_VARIANCE_NOT_POSITIVE";
         }
@@ -753,21 +918,56 @@ void runDualReliabilityMode(
       if (terminal_stability.status != "RECORDED_NO_BASIN_CLASSIFICATION" &&
           terminal_stability.status != "NDT_NOT_CONVERGED" &&
           terminal_stability.status != "INVALID_TERMINAL_POSE" &&
+          terminal_stability.status != "INVALID_IMU_LIDAR_EXTRINSIC" &&
           terminal_stability.status != "NONFINITE_FIXED_OBJECTIVE") {
         terminal_stability.geometry_valid = false;
         terminal_stability.objectives_finite = false;
       }
     }
 
-    // I6A's finite-difference score/gradient gate is INDETERMINATE. Keep U_obs
-    // explicitly unavailable; no per-frame Hessian direction is fabricated.
-    const Eigen::Matrix<double, 6, 6> unavailable_curvature =
+    const auto curvature_start = std::chrono::steady_clock::now();
+    Eigen::Matrix<double, 6, 6> normalized_curvature =
         Eigen::Matrix<double, 6, 6>::Constant(
             std::numeric_limits<double>::quiet_NaN());
-    const reliability::LocalObservability local_observability =
-        reliability::analyzeLocalObservability(
-            unavailable_curvature, nominal.converged,
-            kScoreGradientCoordinateGatePassed);
+    std::string curvature_status = "UOBS_DISABLED_BY_MODE";
+    if (use_uobs && !score_gradient_gate_passed)
+      curvature_status = "SCORE_GRADIENT_COORDINATE_CHECK_UNVERIFIED";
+    if (use_uobs && score_gradient_gate_passed && nominal.converged) {
+      Cloud transformed;
+      const Eigen::Matrix4f nominal_pose = nominal.pose.cast<float>();
+      pcl::transformPointCloud(*source, transformed, nominal_pose);
+      Eigen::Matrix<double, 6, 1> pcl_parameters =
+          pclNdtParameters(nominal_pose);
+      Eigen::Matrix<double, 6, 1> score_gradient;
+      Eigen::Matrix<double, 6, 6> score_hessian;
+      const double score = ndt.scoreDerivatives(
+          transformed, pcl_parameters, &score_gradient, &score_hessian);
+      if (std::isfinite(score) && score_gradient.allFinite() && score_hessian.allFinite()) {
+        const reliability::PclCurvatureTransform transformed_curvature =
+            reliability::transformPclScoreHessianToNormalizedMapTangent(
+                score_hessian, pcl_parameters.tail<3>(), 0.8);
+        curvature_status = transformed_curvature.status;
+        if (transformed_curvature.valid)
+          normalized_curvature =
+              transformed_curvature.normalized_negative_score_curvature;
+      } else {
+        curvature_status = "NONFINITE_PCL_SCORE_DERIVATIVES";
+      }
+    }
+    const double local_curvature_ms = std::chrono::duration<double, std::milli>(
+        std::chrono::steady_clock::now() - curvature_start).count();
+    reliability::LocalObservability local_observability;
+    if (use_uobs) {
+      local_observability = reliability::analyzeLocalObservability(
+          normalized_curvature, nominal.converged, score_gradient_gate_passed);
+    } else {
+      local_observability.status = "UOBS_DISABLED_BY_MODE";
+    }
+    std::string uobs_status = local_observability.status;
+    if (use_uobs && !local_observability.valid &&
+        local_observability.status == "NONFINITE_CURVATURE" &&
+        score_gradient_gate_passed)
+      uobs_status = curvature_status;
     const reliability::LocalRisk local_risk =
         reliability::assessLocalRisk(local_observability, reliability_config);
 
@@ -824,44 +1024,85 @@ void runDualReliabilityMode(
                     predicted, corrected, T_imu_lidar_pose);
 
     const double nan = std::numeric_limits<double>::quiet_NaN();
-    const double position_diag = decision.measurement_noise.valid
-        ? decision.measurement_noise.covariance.block<3, 3>(0, 0).diagonal().maxCoeff() : nan;
-    const double rotation_diag = decision.measurement_noise.valid
-        ? decision.measurement_noise.covariance.block<3, 3>(3, 3).diagonal().maxCoeff() : nan;
+    Eigen::Matrix3d raw_bp = Eigen::Matrix3d::Constant(nan);
+    Eigen::Matrix3d raw_br = Eigen::Matrix3d::Constant(nan);
+    if (terminal_stability.response_valid) {
+      raw_bp = 0.5 * (terminal_stability.delta_position_imu_positive *
+                          terminal_stability.delta_position_imu_positive.transpose() +
+                      terminal_stability.delta_position_imu_negative *
+                          terminal_stability.delta_position_imu_negative.transpose());
+      raw_br = 0.5 * (terminal_stability.delta_rotation_positive *
+                          terminal_stability.delta_rotation_positive.transpose() +
+                      terminal_stability.delta_rotation_negative *
+                          terminal_stability.delta_rotation_negative.transpose());
+    }
     events << mode << ',' << asset.transaction_id << ',' << asset.stamp_ns << ','
            << asset.time_s << ',' << (local_observability.valid ? 1 : 0) << ','
-           << local_observability.status << ','
+           << uobs_status << ','
+           << (score_gradient_gate_passed ? 1 : 0) << ','
+           << score_gradient_gate_pass_samples << ','
            << (local_risk.translation_weak ? 1 : 0) << ','
            << local_risk.translation_weak_ratio << ','
+           << local_risk.translation_min_eigenvalue << ','
+           << local_risk.translation_block_condition << ','
+           << (local_risk.valid ? vectorField(local_risk.map_translation_weak_direction) : "NA") << ','
            << (local_risk.rotation_weak ? 1 : 0) << ','
            << local_risk.rotation_weak_ratio << ','
+           << local_risk.rotation_min_eigenvalue << ','
+           << local_risk.rotation_block_condition << ','
+           << (local_risk.valid ? vectorField(local_risk.map_rotation_weak_direction) : "NA") << ','
            << probe_trigger.innovation.mahalanobis_squared << ','
            << probe_trigger.innovation.status << ',' << probe_trigger.reason << ','
            << (probe_trigger.run_probes ? 1 : 0) << ','
-           << (probes_executed ? 1 : 0) << ',' << ndt_call_count << ','
+           << (probes_executed ? 1 : 0) << ',' << terminal_stability.status << ','
+           << ndt_call_count << ','
            << (nominal.converged ? 1 : 0) << ',' << nominal.iterations << ','
-           << nominal.objective << ','
+           << nominal.objective << ',' << poseField(nominal.pose) << ','
            << (ndt_call_count == 3 ? (positive.converged ? 1 : 0) : -1) << ','
            << (ndt_call_count == 3 ? positive.iterations : -1) << ','
            << (ndt_call_count == 3 ? positive.objective : nan) << ','
+           << (ndt_call_count == 3 ? poseField(positive.pose) : "NOT_PROBED") << ','
            << (ndt_call_count == 3 ? (negative.converged ? 1 : 0) : -1) << ','
            << (ndt_call_count == 3 ? negative.iterations : -1) << ','
            << (ndt_call_count == 3 ? negative.objective : nan) << ','
+           << (ndt_call_count == 3 ? poseField(negative.pose) : "NOT_PROBED") << ','
+           << (terminal_stability.response_valid ? vectorField(terminal_stability.delta_position_imu_positive) : "NA") << ','
+           << (terminal_stability.response_valid ? vectorField(terminal_stability.delta_position_imu_negative) : "NA") << ','
+           << (terminal_stability.response_valid ? vectorField(terminal_stability.delta_rotation_positive) : "NA") << ','
+           << (terminal_stability.response_valid ? vectorField(terminal_stability.delta_rotation_negative) : "NA") << ','
+           << (terminal_stability.response_valid ? matrixField(raw_bp) : "NA") << ','
+           << (terminal_stability.response_valid ? matrixField(raw_br) : "NA") << ','
            << terminal_stability.max_nominal_translation_delta_m << ','
            << terminal_stability.max_nominal_rotation_delta_rad << ','
            << terminal_stability.positive_negative_translation_gap_m << ','
            << terminal_stability.positive_negative_rotation_gap_rad << ','
            << terminal_stability.positive_minus_negative_objective << ','
+           << (decision.measurement_noise.valid
+                   ? matrixField(decision.measurement_noise.covariance.block<3, 3>(0, 0)) : "NA") << ','
+           << (decision.measurement_noise.valid
+                   ? matrixField(decision.measurement_noise.rotation_map_covariance) : "NA") << ','
+           << (decision.measurement_noise.valid
+                   ? matrixField(decision.measurement_noise.covariance.block<3, 3>(3, 3)) : "NA") << ','
            << (step_limited ? 1 : 0) << ','
            << reliability::toString(decision.action) << ',' << decision.reason << ','
-           << decision.additional_noise_inflation << ',' << position_diag << ','
-           << rotation_diag << ',' << extra_probe_ms << '\n';
+           << (decision.local_curvature_used ? 1 : 0) << ','
+           << (decision.nonlocal_response_used ? 1 : 0) << ','
+           << vision_assist.status << ','
+           << (vision_assist.observation_available ? 1 : 0) << ','
+           << (vision_assist.trigger_requested ? 1 : 0) << ','
+           << vision_assist.trigger_reason << ','
+           << local_curvature_ms << ',' << gradient_gate_ms << ','
+           << extra_probe_ms << '\n';
     const double total_ms = std::chrono::duration<double, std::milli>(
         std::chrono::steady_clock::now() - frame_start).count();
     runtime << mode << ',' << asset.transaction_id << ',' << prediction_ms << ','
-            << nominal_ndt_ms << ',' << extra_probe_ms << ',' << update_ms << ','
+            << nominal_ndt_ms << ',' << local_curvature_ms << ','
+            << gradient_gate_ms << ',' << extra_probe_ms << ',' << update_ms << ','
             << total_ms << ',' << ndt_call_count << ',' << probe_trigger.reason << ','
-            << reliability::toString(decision.action) << '\n';
+            << reliability::toString(decision.action) << ','
+            << vision_assist.status << ','
+            << (vision_assist.trigger_requested ? 1 : 0) << ','
+            << vision_assist.trigger_reason << '\n';
     if ((index + 1) % 100 == 0 || index + 1 == assets.size()) {
       trajectory.flush(); events.flush(); runtime.flush();
       std::cerr << mode << "_PROGRESS=" << index + 1 << "/" << assets.size()
@@ -1621,7 +1862,7 @@ void runMode(const std::string& mode, const p4_i2::Inputs& inputs,
 
 int main(int argc, char** argv) {
   try {
-    if (argc == 11 &&
+    if ((argc == 11 || argc == 12) &&
         (std::string(argv[1]) == "STRICT_BASELINE" ||
          std::string(argv[1]) == "UOBS_ONLY" ||
          std::string(argv[1]) == "UNONLOCAL_ONLY" ||
@@ -1633,7 +1874,15 @@ int main(int argc, char** argv) {
       const auto assets = p6_i1::readScanAssets(argv[4]);
       if (assets.size() != inputs.scans.size())
         throw std::runtime_error("scan_asset_and_filter_counts_differ");
-      p6_i1::runDualReliabilityMode(argv[1], inputs, assets, argv[5], argv[6],
+      std::vector<p6_i1::ScanAsset> selected_assets = assets;
+      if (argc == 12) {
+        const long long requested = std::stoll(argv[11]);
+        if (requested <= 0 || static_cast<std::size_t>(requested) > assets.size())
+          throw std::runtime_error("requested_frame_limit_out_of_range");
+        selected_assets.resize(static_cast<std::size_t>(requested));
+        inputs.scans.resize(static_cast<std::size_t>(requested));
+      }
+      p6_i1::runDualReliabilityMode(argv[1], inputs, selected_assets, argv[5], argv[6],
                                     argv[7], argv[8], argv[9], argv[10]);
       return 0;
     }

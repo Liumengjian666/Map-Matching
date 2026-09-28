@@ -1,0 +1,3 @@
+STRICT_BASELINE_REPLAY_PARITY=PASS
+translation_max_delta_m=0
+rotation_max_delta_deg=6.7586786981099735e-15

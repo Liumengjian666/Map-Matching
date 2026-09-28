@@ -35,6 +35,24 @@ class AuditedNdt : public Ndt {
     Eigen::Matrix<double, 6, 6> hessian;
     return this->computeDerivatives(gradient, hessian, transformed, p, true);
   }
+
+  double scoreDerivatives(Cloud& transformed, Eigen::Matrix<double, 6, 1>& p,
+                          Eigen::Matrix<double, 6, 1>* gradient,
+                          Eigen::Matrix<double, 6, 6>* hessian) {
+    Eigen::Matrix<double, 6, 1> local_gradient;
+    Eigen::Matrix<double, 6, 6> local_hessian;
+    // Match PCL 1.10 computeTransformation()'s derivative preamble before
+    // direct score evaluation. This is required for per-frame U_obs and the
+    // small finite-difference convention gate; no NDT align is performed.
+    this->point_gradient_.setZero();
+    this->point_gradient_.block<3, 3>(0, 0).setIdentity();
+    this->point_hessian_.setZero();
+    const double score = this->computeDerivatives(
+        local_gradient, local_hessian, transformed, p, true);
+    if (gradient) *gradient = local_gradient;
+    if (hessian) *hessian = local_hessian;
+    return score;
+  }
 };
 
 std::vector<std::string> split(const std::string& text, char delimiter) {

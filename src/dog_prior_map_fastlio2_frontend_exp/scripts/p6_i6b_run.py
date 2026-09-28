@@ -4,8 +4,10 @@
 from __future__ import annotations
 
 import csv
+import argparse
 import hashlib
 import os
+import shutil
 import subprocess
 import time
 from pathlib import Path
@@ -20,7 +22,8 @@ EXTERNAL_MAP = Path(
     "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/map/frozen/"
     "floor01_h1_map_p5_frozen.pcd"
 )
-OUT = PACKAGE / "docs/p6_i6b_dual_reliability_v0"
+OUT = PACKAGE / "docs/p6_i6b_dual_reliability_v1"
+V0_OUT = PACKAGE / "docs/p6_i6b_dual_reliability_v0"
 BUILD = Path("/tmp/p6-i6b-build")
 EXECUTABLE = BUILD / "p6_i6b_closed_loop"
 FASTLIO2 = Path("/media/jian/HIKVISION/comparison algorithm/FAST_LIO2")
@@ -51,6 +54,9 @@ EXPECTED = {
 }
 MODES = ("STRICT_BASELINE", "UOBS_ONLY", "UNONLOCAL_ONLY", "DUAL_RELIABILITY")
 EXPECTED_SCANS = 4127
+EXPECTED_BASELINE_TRAJECTORY_SHA256 = (
+    "fd9cb3ef78d25fb48361989bdf2f7b15b8f5e0fefa1e0f4fac0362b0911837da"
+)
 
 
 def sha256(path: Path) -> str:
@@ -122,13 +128,17 @@ def verify_frozen_inputs() -> dict:
     return actual
 
 
-def run_logged(command, log_path: Path):
+def run_logged(command, log_path: Path, resource_path: Path | None = None):
     env = os.environ.copy()
     env.pop("LD_LIBRARY_PATH", None)
+    executable_command = [str(part) for part in command]
+    if resource_path is not None:
+        executable_command = ["/usr/bin/time", "-v", "-o", str(resource_path),
+                              *executable_command]
     print("RUN", " ".join(str(part) for part in command), flush=True)
     with log_path.open("w") as log:
         process = subprocess.Popen(
-            [str(part) for part in command],
+            executable_command,
             cwd=REPO,
             env=env,
             stdout=subprocess.PIPE,
@@ -146,12 +156,79 @@ def run_logged(command, log_path: Path):
         raise RuntimeError(f"command failed exit={code}; see {log_path}")
 
 
-def validate_trajectory(path: Path) -> list[dict]:
+def read_csv_dict(path: Path) -> list[dict[str, str]]:
+    with path.open(newline="") as stream:
+        return list(csv.DictReader(stream))
+
+
+def ensure_vision_assist_diagnostics(output_dir: Path,
+                                     modes: tuple[str, ...] = MODES) -> None:
+    """Expose the disabled vision-assist contract in every per-frame table."""
+    for mode in modes:
+        for prefix in ("reliability", "runtime"):
+            path = output_dir / f"{prefix}_{mode}.csv"
+            rows = read_csv_dict(path)
+            if not rows:
+                raise RuntimeError(f"{path.name}: cannot finalize empty diagnostics")
+            fields = list(rows[0])
+            for field, default in (
+                ("vision_assist_trigger_requested", "0"),
+                ("vision_assist_trigger_reason", "NOT_REQUESTED"),
+            ):
+                if field not in fields:
+                    fields.append(field)
+                for row in rows:
+                    row.setdefault(field, default)
+            with path.open("w", newline="") as stream:
+                writer = csv.DictWriter(stream, fieldnames=fields,
+                                        lineterminator="\n")
+                writer.writeheader()
+                writer.writerows(rows)
+
+
+def write_resource_usage(output_dir: Path, modes: tuple[str, ...]) -> None:
+    fields = ["mode", "wall_max_rss_kib", "user_cpu_s", "system_cpu_s"]
+    rows = []
+    for mode in modes:
+        text = (output_dir / f"resource_{mode}.txt").read_text()
+        values = {}
+        for line in text.splitlines():
+            if "Maximum resident set size" in line:
+                values["wall_max_rss_kib"] = line.rsplit(":", 1)[1].strip()
+            elif "User time (seconds)" in line:
+                values["user_cpu_s"] = line.rsplit(":", 1)[1].strip()
+            elif "System time (seconds)" in line:
+                values["system_cpu_s"] = line.rsplit(":", 1)[1].strip()
+        if len(values) != 3:
+            raise RuntimeError(f"could not parse GNU time resource report for {mode}")
+        rows.append({"mode": mode, **values})
+    with (output_dir / "resource_usage.csv").open("w", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def copy_frozen_baseline_anchor(output_dir: Path) -> str:
+    source = V0_OUT / "baseline_anchor.csv"
+    rows = read_csv_dict(source)
+    if (len(rows) != 1 or
+            rows[0].get("source_sha256") != EXPECTED_BASELINE_TRAJECTORY_SHA256 or
+            rows[0].get("transaction_id") != "1"):
+        raise RuntimeError("frozen V0 common-anchor identity mismatch")
+    target = output_dir / "baseline_anchor.csv"
+    shutil.copyfile(source, target)
+    copied_sha = sha256(target)
+    if copied_sha != sha256(source):
+        raise RuntimeError("frozen V0 common-anchor copy changed bytes")
+    return copied_sha
+
+
+def validate_trajectory(path: Path, expected_rows: int = EXPECTED_SCANS) -> list[dict]:
     with path.open(newline="") as stream:
         rows = list(csv.DictReader(stream))
-    if len(rows) != EXPECTED_SCANS:
-        raise RuntimeError(f"{path.name}: expected {EXPECTED_SCANS} rows, got {len(rows)}")
-    if [int(row["transaction_id"]) for row in rows] != list(range(1, EXPECTED_SCANS + 1)):
+    if len(rows) != expected_rows:
+        raise RuntimeError(f"{path.name}: expected {expected_rows} rows, got {len(rows)}")
+    if [int(row["transaction_id"]) for row in rows] != list(range(1, expected_rows + 1)):
         raise RuntimeError(f"{path.name}: invalid transaction sequence")
     stamps = [int(row["stamp_ns"]) for row in rows]
     if any(b <= a for a, b in zip(stamps, stamps[1:])):
@@ -168,25 +245,30 @@ def validate_trajectory(path: Path) -> list[dict]:
     return rows
 
 
-def run_mode(mode: str):
-    trajectory = OUT / f"trajectory_{mode}.csv"
-    reliability = OUT / f"reliability_{mode}.csv"
-    runtime = OUT / f"runtime_{mode}.csv"
+def run_mode(mode: str, output_dir: Path, frame_limit: int | None = None):
+    output_dir.mkdir(parents=True, exist_ok=True)
+    trajectory = output_dir / f"trajectory_{mode}.csv"
+    reliability = output_dir / f"reliability_{mode}.csv"
+    runtime = output_dir / f"runtime_{mode}.csv"
     command = [
         EXECUTABLE, mode,
         INPUT / "imu.csv", INPUT / "filter_scans.csv", INPUT / "scans.csv",
         INPUT / "request_xyz_f32.bin", MAP, INPUT / "params.txt",
         trajectory, reliability, runtime,
     ]
+    if frame_limit is not None:
+        command.append(str(frame_limit))
     started = time.perf_counter()
-    run_logged(command, OUT / f"{mode}.log")
+    run_logged(command, output_dir / f"{mode}.log",
+               output_dir / f"resource_{mode}.txt")
     wall_s = time.perf_counter() - started
-    trajectory_rows = validate_trajectory(trajectory)
+    expected_rows = frame_limit if frame_limit is not None else EXPECTED_SCANS
+    trajectory_rows = validate_trajectory(trajectory, expected_rows)
     with reliability.open(newline="") as stream:
         reliability_rows = list(csv.DictReader(stream))
     with runtime.open(newline="") as stream:
         runtime_rows = list(csv.DictReader(stream))
-    if len(reliability_rows) != EXPECTED_SCANS or len(runtime_rows) != EXPECTED_SCANS:
+    if len(reliability_rows) != expected_rows or len(runtime_rows) != expected_rows:
         raise RuntimeError(f"{mode}: diagnostics/replay row count mismatch")
     for row in reliability_rows:
         if int(row["ndt_call_count"]) not in (1, 3):
@@ -196,12 +278,17 @@ def run_mode(mode: str):
             raise RuntimeError(f"{mode}: probe execution and NDT call count disagree")
         if row["probe_executed"] == "1" and row["probe_triggered"] != "1":
             raise RuntimeError(f"{mode}: probes executed without a recorded trigger")
+        if (row.get("vision_assist_trigger_requested") != "0" or
+                row.get("vision_assist_trigger_reason") != "NOT_REQUESTED"):
+            raise RuntimeError(f"{mode}: unexpected vision-assist trigger state")
     return trajectory_rows, wall_s
 
 
-def strict_replay_parity(replayed: list[dict]) -> dict:
+def strict_replay_parity(replayed: list[dict], expected_rows: int = EXPECTED_SCANS) -> dict:
     from scipy.spatial.transform import Rotation
-    frozen = validate_trajectory(FROZEN_I6A)
+    frozen = validate_trajectory(FROZEN_I6A, EXPECTED_SCANS)[:expected_rows]
+    if len(replayed) != expected_rows:
+        raise RuntimeError(f"STRICT parity expected {expected_rows} rows, got {len(replayed)}")
     max_t = 0.0
     max_r = 0.0
     for current, reference in zip(replayed, frozen):
@@ -223,6 +310,7 @@ def strict_replay_parity(replayed: list[dict]) -> dict:
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     actual = verify_frozen_inputs()
+    actual["frozen_v0_baseline_anchor_sha256"] = copy_frozen_baseline_anchor(OUT)
     actual.update(
         {
             "start_sha": git(REPO, "rev-parse", "HEAD"),
@@ -231,7 +319,7 @@ def main():
             "ndt_profile": "resolution=0.8,step=0.08,epsilon=1e-5,max_iterations=80",
             "probe_trigger": "normalized innovation chi-square > 16.812 or every 25 scans",
             "probe_prior_radius_sigma": "1.0",
-            "uobs_score_gradient_gate": "INDETERMINATE; runtime U_obs.valid=false",
+            "uobs_score_gradient_gate": "six-coordinate central finite differences at h=1e-4 and 5e-5 on first two normal-coordinate nominal terminals; details per UOBS mode",
             "gt_used_during_replay": "NO",
         }
     )
@@ -250,8 +338,39 @@ def main():
     if not EXECUTABLE.is_file():
         raise RuntimeError("I6B closed-loop executable missing")
 
+    smoke_dir = OUT / "smoke_100"
+    smoke_wall_rows = []
+    smoke_trajectories = {}
+    for mode in MODES:
+        rows, wall_s = run_mode(mode, smoke_dir, frame_limit=100)
+        smoke_trajectories[mode] = rows
+        smoke_wall_rows.append({"mode": mode, "process_wall_s": wall_s})
+        for row in read_csv_dict(smoke_dir / f"reliability_{mode}.csv"):
+            if row["M0_converged"] != "1":
+                raise RuntimeError(f"Smoke {mode}: M0 did not converge at tx {row['transaction_id']}")
+    smoke_parity = strict_replay_parity(smoke_trajectories["STRICT_BASELINE"], 100)
+    first_stamps = [row["stamp_ns"] for row in smoke_trajectories["STRICT_BASELINE"]]
+    for mode in MODES[1:]:
+        if [row["stamp_ns"] for row in smoke_trajectories[mode]] != first_stamps:
+            raise RuntimeError(f"Smoke {mode}: timestamps differ from STRICT_BASELINE")
+    with (smoke_dir / "mode_wall_times.csv").open("w", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=["mode", "process_wall_s"],
+                                lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(smoke_wall_rows)
+    write_resource_usage(smoke_dir, MODES)
+    (smoke_dir / "smoke_validation.md").write_text(
+        "# P6-I6B 100-frame Floor01 smoke\n\n"
+        "- All four modes replayed 100 aligned scan/IMU events through the real closed-loop runner.\n"
+        "- Each mode has finite normalized predictor/corrected poses, valid quaternions, increasing timestamps and matching event rows.\n"
+        "- M0 converged on all 100 frames per mode; NDT calls and probe triggers are recorded per transaction.\n"
+        f"- STRICT parity versus the frozen I6A trajectory prefix: max translation delta {smoke_parity['translation_max_delta_m']:.9g} m; max rotation delta {smoke_parity['rotation_max_delta_deg']:.9g} deg.\n"
+        "- GT was not loaded or used for smoke validation.\n",
+        encoding="utf-8",
+    )
+
     wall_rows = []
-    strict_rows, wall_s = run_mode("STRICT_BASELINE")
+    strict_rows, wall_s = run_mode("STRICT_BASELINE", OUT)
     wall_rows.append({"mode": "STRICT_BASELINE", "process_wall_s": wall_s})
     parity = strict_replay_parity(strict_rows)
     (OUT / "strict_replay_parity.txt").write_text(
@@ -259,8 +378,9 @@ def main():
         "\n".join(f"{key}={value:.17g}" for key, value in parity.items()) + "\n"
     )
     for mode in MODES[1:]:
-        _, wall_s = run_mode(mode)
+        _, wall_s = run_mode(mode, OUT)
         wall_rows.append({"mode": mode, "process_wall_s": wall_s})
+    write_resource_usage(OUT, MODES)
     with (OUT / "mode_wall_times.csv").open("w", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=["mode", "process_wall_s"],
                                 lineterminator="\n")
@@ -276,5 +396,43 @@ def main():
     print("PAPER_P6_I6B_ALL_CLOSED_LOOP_MODES_COMPLETE", flush=True)
 
 
+def rerun_modes(mode_names: list[str], output_dir: Path,
+                frame_limit: int | None = None) -> None:
+    """Replace selected full/smoke mode outputs after a narrowly scoped fix."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    wall_by_mode = {
+        row["mode"]: float(row["process_wall_s"])
+        for row in read_csv_dict(output_dir / "mode_wall_times.csv")
+    } if (output_dir / "mode_wall_times.csv").is_file() else {}
+    expected_rows = frame_limit if frame_limit is not None else EXPECTED_SCANS
+    for mode in mode_names:
+        rows, wall_s = run_mode(mode, output_dir, frame_limit)
+        if len(rows) != expected_rows:
+            raise RuntimeError(f"{mode}: selected rerun row count mismatch")
+        wall_by_mode[mode] = wall_s
+    write_resource_usage(output_dir, MODES)
+    with (output_dir / "mode_wall_times.csv").open("w", newline="") as stream:
+        writer = csv.DictWriter(stream, fieldnames=["mode", "process_wall_s"],
+                                lineterminator="\n")
+        writer.writeheader()
+        writer.writerows({"mode": mode, "process_wall_s": wall_by_mode[mode]}
+                         for mode in MODES)
+
+
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--rerun-modes", nargs="+", choices=MODES)
+    parser.add_argument("--output-dir", type=Path)
+    parser.add_argument("--frame-limit", type=int)
+    parser.add_argument("--augment-diagnostics", action="store_true")
+    args = parser.parse_args()
+    if args.augment_diagnostics:
+        if args.output_dir is None:
+            raise SystemExit("--output-dir is required with --augment-diagnostics")
+        ensure_vision_assist_diagnostics(args.output_dir)
+    elif args.rerun_modes:
+        if args.output_dir is None:
+            raise SystemExit("--output-dir is required with --rerun-modes")
+        rerun_modes(args.rerun_modes, args.output_dir, args.frame_limit)
+    else:
+        main()

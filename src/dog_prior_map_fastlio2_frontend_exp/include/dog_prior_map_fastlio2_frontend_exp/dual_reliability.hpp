@@ -28,11 +28,19 @@ struct DualReliabilityConfig {
   double gamma_rotation = 10.0;
   double ndt_translation_scale_m = 0.8;
 
+  // U_nonlocal's finite +/- probe response enters as an empirical covariance
+  // increment. These are fixed first-version engineering gains and hard
+  // eigenvalue caps, not probabilistic calibration parameters.
+  double alpha_translation_response = 1.0;
+  double alpha_rotation_response = 1.0;
+  double max_nonlocal_translation_variance_m2 = 0.04;
+  double max_nonlocal_rotation_variance_rad2 =
+      0.0012184696791468343;  // (2 degrees)^2
+
   // P6-I5 operational same-terminal tolerance, used as a stability warning,
   // never as a basin/minimum classifier.
   double terminal_translation_limit_m = 0.20;
   double terminal_rotation_limit_rad = 2.0 * 3.14159265358979323846 / 180.0;
-  double cautious_noise_inflation = 4.0;
 
   // Trigger two extra prior-conditioned probes after M0 for a large normalized
   // innovation or periodically. Probe amplitude is in prior standard deviations.
@@ -73,6 +81,10 @@ struct LocalRisk {
   bool rotation_weak = false;
   double translation_weak_ratio = 0.0;
   double rotation_weak_ratio = 0.0;
+  double translation_min_eigenvalue = 0.0;
+  double rotation_min_eigenvalue = 0.0;
+  double translation_block_condition = std::numeric_limits<double>::infinity();
+  double rotation_block_condition = std::numeric_limits<double>::infinity();
   Eigen::Vector3d map_translation_weak_direction = Eigen::Vector3d::Zero();
   Eigen::Vector3d map_rotation_weak_direction = Eigen::Vector3d::Zero();
   std::string status = "UNAVAILABLE";
@@ -87,21 +99,29 @@ struct MeasurementNoiseResult {
   // block is in IKFoM's right/body error coordinates, not map-spatial axes.
   Matrix6d covariance = Matrix6d::Constant(
       std::numeric_limits<double>::quiet_NaN());
+  Eigen::Matrix3d local_translation_increment = Eigen::Matrix3d::Zero();
+  Eigen::Matrix3d local_rotation_map_increment = Eigen::Matrix3d::Zero();
+  Eigen::Matrix3d nonlocal_translation_increment = Eigen::Matrix3d::Zero();
+  Eigen::Matrix3d nonlocal_rotation_map_increment = Eigen::Matrix3d::Zero();
+  Eigen::Matrix3d rotation_map_covariance = Eigen::Matrix3d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
   std::string status = "UNINITIALIZED";
 };
 
 MeasurementNoiseResult makePoseMeasurementNoise(
     double position_sigma_m, double rotation_sigma_rad,
     const Eigen::Matrix3d& predicted_map_R_imu,
-    const LocalRisk& local_risk, bool apply_directional_downdate,
-    double additional_isotropic_inflation,
+    const LocalRisk& local_risk,
+    const NonlocalTerminalStability& nonlocal,
+    bool use_uobs, bool use_unonlocal,
     const DualReliabilityConfig& config = {});
 
 struct DualReliabilityDecision {
   UpdateAction action = UpdateAction::PREDICTION_ONLY;
   bool local_risk = false;
   bool nonlocal_risk = false;
-  double additional_noise_inflation = 1.0;
+  bool local_curvature_used = false;
+  bool nonlocal_response_used = false;
   std::string reason = "UNINITIALIZED";
   MeasurementNoiseResult measurement_noise;
 };
@@ -116,5 +136,17 @@ DualReliabilityDecision decideDualReliability(
     const DualReliabilityConfig& config = {});
 
 const char* toString(UpdateAction action);
+
+// Placeholder contract for a future vision-derived reliability assist. This
+// release deliberately leaves it disabled and carries no visual measurement.
+struct VisionAssistInterface {
+  bool enabled = false;
+  bool trigger_requested = false;
+  bool observation_available = false;
+  std::uint64_t stamp_ns = 0;
+  Eigen::Isometry3d map_T_imu_observation = Eigen::Isometry3d::Identity();
+  std::string trigger_reason = "NOT_REQUESTED";
+  std::string status = "DISABLED_NOT_IMPLEMENTED";
+};
 
 }  // namespace dog_prior_map_fastlio2_frontend_exp::reliability

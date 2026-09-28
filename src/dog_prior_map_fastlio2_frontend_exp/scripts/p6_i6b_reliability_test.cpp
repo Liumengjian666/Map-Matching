@@ -42,6 +42,40 @@ void testSo3MapInnovation() {
           "position innovation is map additive");
 }
 
+void testPclCurvatureCoordinateTransform() {
+  reliability::Matrix6d pcl_hessian = reliability::Matrix6d::Zero();
+  // PCL order is [translation xyz, Euler rx/ry/rz]. The score is locally
+  // concave here, so -sym(H_score) has positive diagonal curvature.
+  pcl_hessian.diagonal() << -2.0, -3.0, -4.0, -5.0, -6.0, -7.0;
+  const Eigen::Vector3d euler(0.31, -0.22, 0.43);
+  const auto transformed = reliability::transformPclScoreHessianToNormalizedMapTangent(
+      pcl_hessian, euler, 0.8);
+  require(transformed.valid, "P6-I3 Euler-to-map curvature transform valid");
+  require(transformed.status == "PASS_P6I3_EULER_TO_MAP_TANGENT",
+          "P6-I3 transform status explicit");
+  const Eigen::Matrix3d expected_rotation_euler =
+      Eigen::Vector3d(5.0, 6.0, 7.0).asDiagonal();
+  const Eigen::Matrix3d expected_translation_euler =
+      Eigen::Vector3d(2.0, 3.0, 4.0).asDiagonal();
+  require((transformed.hessian_euler.block<3, 3>(0, 0) -
+           expected_rotation_euler).norm() < 1e-12,
+          "PCL rotation columns reordered before canonical Hessian");
+  require((transformed.hessian_euler.block<3, 3>(3, 3) -
+           expected_translation_euler).norm() < 1e-12,
+          "PCL translation columns reordered before canonical Hessian");
+  Eigen::Matrix3d inverse = transformed.euler_to_map_spatial_jacobian.inverse();
+  const Eigen::Matrix3d expected_rotation = inverse.transpose() *
+      Eigen::Vector3d(5.0, 6.0, 7.0).asDiagonal() * inverse;
+  require((transformed.hessian_physical.block<3, 3>(0, 0) -
+           expected_rotation).norm() < 1e-10,
+          "physical rotation curvature uses P6-I3 inverse Euler Jacobian");
+  require(std::abs(transformed.normalized_negative_score_curvature(3, 3) - 1.28) < 1e-12,
+          "translation curvature receives S^T H S with resolution scale squared");
+  const auto singular = reliability::transformPclScoreHessianToNormalizedMapTangent(
+      pcl_hessian, Eigen::Vector3d(0.1, M_PI_2, -0.2), 0.8);
+  require(!singular.valid, "Euler spatial Jacobian singularity is rejected");
+}
+
 void testWeakDirectionAndAdaptiveNoise() {
   const reliability::DualReliabilityConfig config;
   const reliability::LocalRisk local = reliability::assessLocalRisk(validLocal(), config);
@@ -52,8 +86,10 @@ void testWeakDirectionAndAdaptiveNoise() {
 
   const Eigen::Matrix3d map_R_imu = Eigen::AngleAxisd(
       M_PI / 2.0, Eigen::Vector3d::UnitZ()).toRotationMatrix();
+  reliability::NonlocalTerminalStability not_probed;
+  not_probed.status = "NOT_PROBED";
   const auto noise = reliability::makePoseMeasurementNoise(
-      0.2, 0.1, map_R_imu, local, true, 1.0, config);
+      0.2, 0.1, map_R_imu, local, not_probed, true, false, config);
   require(noise.valid, "adaptive noise valid");
   Eigen::SelfAdjointEigenSolver<reliability::Matrix6d> solver(noise.covariance);
   require(solver.info() == Eigen::Success && solver.eigenvalues().minCoeff() > 0.0,
@@ -68,15 +104,17 @@ void testWeakDirectionAndAdaptiveNoise() {
           "rotation covariance eigensolve");
   require(std::abs(rotation_solver.eigenvectors().col(2).dot(expected_body)) > 1.0 - 1e-12,
           "map weak rotation transformed into body error axes");
-
-  const auto inflated = reliability::makePoseMeasurementNoise(
-      0.2, 0.1, map_R_imu, local, false, 4.0, config);
-  require(inflated.valid, "inflated covariance valid");
-  reliability::Matrix6d expected_inflated = reliability::Matrix6d::Zero();
-  expected_inflated.block<3, 3>(0, 0).diagonal().setConstant(4.0 * 0.2 * 0.2);
-  expected_inflated.block<3, 3>(3, 3).diagonal().setConstant(4.0 * 0.1 * 0.1);
-  require((inflated.covariance - expected_inflated).norm() < 1e-12,
-          "cautious update isotropically inflates baseline noise");
+  require((noise.rotation_map_covariance -
+      (0.1 * 0.1 * Eigen::Matrix3d::Identity() +
+       noise.local_rotation_map_increment)).norm() < 1e-12,
+      "U_obs contributes map-frame direction noise before basis conversion");
+  const Eigen::Matrix3d expected_body_cov = map_R_imu.transpose() *
+      noise.rotation_map_covariance * map_R_imu;
+  require((noise.covariance.block<3, 3>(3, 3) - expected_body_cov).norm() < 1e-12,
+          "full map rotation covariance is converted to right/body basis");
+  require(noise.local_translation_increment(0, 0) > 0.0 &&
+              noise.local_translation_increment(1, 1) == 0.0,
+          "weak-curvature severity produces bounded rank-one translation increment");
 }
 
 void testProbeTriggerAndMahalanobis() {
@@ -118,7 +156,7 @@ void testTerminalResponseAndDecision() {
   positive.map_T_lidar.linear() = Eigen::AngleAxisd(
       3.0 * M_PI / 180.0, Eigen::Vector3d::UnitZ()).toRotationMatrix();
   const auto stability = reliability::analyzeNonlocalTerminalStability(
-      nominal, positive, negative, 2);
+      nominal, positive, negative, Eigen::Isometry3d::Identity(), 2);
   require(stability.geometry_valid && stability.objectives_finite &&
               stability.all_converged && stability.extra_ndt_calls == 2,
           "terminal response fields captured");
@@ -126,28 +164,127 @@ void testTerminalResponseAndDecision() {
           "Delta_t is max nominal response");
   require(std::abs(stability.max_nominal_rotation_delta_rad - 3.0 * M_PI / 180.0) < 1e-12,
           "Delta_R is max nominal response");
+  require(stability.response_valid &&
+              (stability.delta_position_imu_positive - Eigen::Vector3d(0.25, 0.0, 0.0)).norm() < 1e-12 &&
+              (stability.delta_position_imu_negative - Eigen::Vector3d(-0.03, 0.0, 0.0)).norm() < 1e-12,
+          "signed plus/minus IMU-origin translation responses retained");
+  require((stability.delta_rotation_positive -
+           Eigen::Vector3d(0.0, 0.0, 3.0 * M_PI / 180.0)).norm() < 1e-12,
+          "SO3 log response retained in map-spatial coordinates");
   const auto local = reliability::assessLocalRisk(validLocal());
   const auto decision = reliability::decideDualReliability(
       local, stability, true, Eigen::Matrix3d::Identity(), 0.2, 0.1,
       true, true);
   require(decision.action == reliability::UpdateAction::CAUTIOUS_UPDATE &&
-              decision.nonlocal_risk && decision.measurement_noise.valid,
-          "nonlocal instability selects cautious update without candidate switch");
+              decision.nonlocal_risk && decision.measurement_noise.valid &&
+              decision.nonlocal_response_used,
+          "nonlocal instability selects directional cautious update without candidate switch");
+  const Eigen::Matrix3d expected_bp = 0.5 *
+      (stability.delta_position_imu_positive *
+           stability.delta_position_imu_positive.transpose() +
+       stability.delta_position_imu_negative *
+           stability.delta_position_imu_negative.transpose());
+  require((decision.measurement_noise.nonlocal_translation_increment - expected_bp).norm() < 1e-12,
+          "U_nonlocal position covariance uses signed response outer products");
+  const double expected_rotation_cap = reliability::DualReliabilityConfig{}
+      .max_nonlocal_rotation_variance_rad2;
+  require(std::abs(decision.measurement_noise.nonlocal_rotation_map_increment(2, 2) -
+                   expected_rotation_cap) < 1e-12,
+          "U_nonlocal rotation response obeys configured spectral cap");
 
   const auto failed = reliability::analyzeNonlocalTerminalStability(
-      nominal, positive, negative, 2);
+      nominal, positive, negative, Eigen::Isometry3d::Identity(), 2);
   auto nonconverged_nominal = nominal;
   nonconverged_nominal.converged = false;
   const auto failed_pair = reliability::analyzeNonlocalTerminalStability(
-      nonconverged_nominal, positive, negative, 2);
+      nonconverged_nominal, positive, negative, Eigen::Isometry3d::Identity(), 2);
   require(failed.all_converged && !failed_pair.all_converged &&
-              failed_pair.status == "NDT_NOT_CONVERGED",
+              failed_pair.status == "NDT_NOT_CONVERGED" &&
+              !failed_pair.response_valid,
           "nonconverged probe remains explicit");
+  const auto wrong_call_count = reliability::analyzeNonlocalTerminalStability(
+      nominal, positive, negative, Eigen::Isometry3d::Identity(), 1);
+  require(wrong_call_count.status == "PROBE_CALL_COUNT_MISMATCH" &&
+              wrong_call_count.response_valid,
+          "probe response requires exactly two additional NDT calls");
+  auto nan_objective_terminal = positive;
+  nan_objective_terminal.fixed_objective =
+      std::numeric_limits<double>::quiet_NaN();
+  const auto nan_objective_pair = reliability::analyzeNonlocalTerminalStability(
+      nominal, nan_objective_terminal, negative,
+      Eigen::Isometry3d::Identity(), 2);
+  require(!nan_objective_pair.objectives_finite &&
+              nan_objective_pair.status == "NONFINITE_FIXED_OBJECTIVE",
+          "NaN fixed objective invalidates the probe pair");
+
+  // NDT terminals are map_T_lidar, but the adaptive position covariance is
+  // consumed by an IKFoM map_T_imu update. A nonzero rotated lever arm makes
+  // those translation responses measurably different when the LiDAR rotates.
+  Eigen::Isometry3d imu_T_lidar = Eigen::Isometry3d::Identity();
+  imu_T_lidar.linear() = Eigen::AngleAxisd(
+      0.2, Eigen::Vector3d::UnitY()).toRotationMatrix();
+  imu_T_lidar.translation() = Eigen::Vector3d(0.08, 0.029, 0.03);
+  const auto lever_arm_stability = reliability::analyzeNonlocalTerminalStability(
+      nominal, positive, negative, imu_T_lidar, 2);
+  const Eigen::Vector3d expected_positive_imu_position =
+      (positive.map_T_lidar * imu_T_lidar.inverse()).translation() -
+      (nominal.map_T_lidar * imu_T_lidar.inverse()).translation();
+  const Eigen::Vector3d expected_negative_imu_position =
+      (negative.map_T_lidar * imu_T_lidar.inverse()).translation() -
+      (nominal.map_T_lidar * imu_T_lidar.inverse()).translation();
+  require(lever_arm_stability.imu_lidar_extrinsic_valid &&
+              lever_arm_stability.response_valid &&
+              (lever_arm_stability.delta_position_imu_positive -
+               expected_positive_imu_position).norm() < 1e-12 &&
+              (lever_arm_stability.delta_position_imu_negative -
+               expected_negative_imu_position).norm() < 1e-12,
+          "nonlocal position response is transformed to map_T_imu origin");
+  require((lever_arm_stability.delta_position_imu_positive -
+           Eigen::Vector3d(0.25, 0.0, 0.0)).norm() > 1e-3,
+          "LiDAR rotation lever arm contributes to IMU-origin position response");
+  Eigen::Isometry3d invalid_extrinsic = Eigen::Isometry3d::Identity();
+  invalid_extrinsic.linear()(0, 0) = std::numeric_limits<double>::quiet_NaN();
+  const auto invalid_extrinsic_result = reliability::analyzeNonlocalTerminalStability(
+      nominal, positive, negative, invalid_extrinsic, 2);
+  require(!invalid_extrinsic_result.imu_lidar_extrinsic_valid &&
+              !invalid_extrinsic_result.response_valid &&
+              invalid_extrinsic_result.status == "INVALID_IMU_LIDAR_EXTRINSIC",
+          "invalid LiDAR-IMU transform cannot produce a nonlocal response");
   const auto prediction_only = reliability::decideDualReliability(
       local, stability, false, Eigen::Matrix3d::Identity(), 0.2, 0.1,
       true, true);
   require(prediction_only.action == reliability::UpdateAction::PREDICTION_ONLY,
           "nonconverged nominal rejects measurement update");
+
+  reliability::NonlocalTerminalStability not_probed;
+  not_probed.status = "NOT_PROBED";
+  const auto no_probe = reliability::decideDualReliability(
+      local, not_probed, true, Eigen::Matrix3d::Identity(), 0.2, 0.1,
+      false, true);
+  require(no_probe.action == reliability::UpdateAction::NORMAL_UPDATE &&
+              !no_probe.nonlocal_response_used &&
+              no_probe.measurement_noise.nonlocal_translation_increment.isZero(0.0),
+          "NOT_PROBED has zero response contribution and is not called stable");
+
+  auto invalid_probe = stability;
+  invalid_probe.status = "NDT_NOT_CONVERGED";
+  invalid_probe.all_converged = false;
+  const auto invalid_decision = reliability::decideDualReliability(
+      local, invalid_probe, true, Eigen::Matrix3d::Identity(), 0.2, 0.1,
+      false, true);
+  require(invalid_decision.action == reliability::UpdateAction::PREDICTION_ONLY &&
+              invalid_decision.reason.find("PROBE_INVALID:") == 0,
+          "nonconverged probes never become a response covariance");
+  const auto nan_objective_decision = reliability::decideDualReliability(
+      local, nan_objective_pair, true, Eigen::Matrix3d::Identity(), 0.2, 0.1,
+      false, true);
+  require(nan_objective_decision.action == reliability::UpdateAction::PREDICTION_ONLY,
+          "NaN probe objective cannot form adaptive measurement covariance");
+  const auto wrong_count_decision = reliability::decideDualReliability(
+      local, wrong_call_count, true, Eigen::Matrix3d::Identity(), 0.2, 0.1,
+      false, true);
+  require(wrong_count_decision.action == reliability::UpdateAction::PREDICTION_ONLY,
+          "mismatched probe call count invalidates reliability update");
 }
 
 void testInvalidInputs() {
@@ -158,12 +295,13 @@ void testInvalidInputs() {
   require(!risk.valid, "unverified U_obs stays invalid");
   const auto noise = reliability::makePoseMeasurementNoise(
       std::numeric_limits<double>::quiet_NaN(), 0.1, Eigen::Matrix3d::Identity(),
-      risk, true, 1.0);
+      risk, reliability::NonlocalTerminalStability{}, true, false);
   require(!noise.valid && noise.status == "INVALID_NOISE_INPUT",
           "nonfinite adaptive noise input rejected");
+  reliability::NonlocalTerminalStability not_probed;
+  not_probed.status = "NOT_PROBED";
   const auto decision = reliability::decideDualReliability(
-      risk, reliability::NonlocalTerminalStability{}, true,
-      Eigen::Matrix3d::Identity(), 0.2, 0.1, true, true);
+      risk, not_probed, true, Eigen::Matrix3d::Identity(), 0.2, 0.1, true, true);
   require(decision.action == reliability::UpdateAction::NORMAL_UPDATE &&
               !decision.local_risk && !decision.nonlocal_risk,
           "unavailable U_obs never fabricates a weak direction");
@@ -174,6 +312,7 @@ void testInvalidInputs() {
 int main() {
   try {
     testSo3MapInnovation();
+    testPclCurvatureCoordinateTransform();
     testWeakDirectionAndAdaptiveNoise();
     testProbeTriggerAndMahalanobis();
     testTerminalResponseAndDecision();

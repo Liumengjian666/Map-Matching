@@ -46,7 +46,7 @@ int main() {
     positive.map_T_lidar.linear() = Eigen::AngleAxisd(0.1, Eigen::Vector3d::UnitZ()).toRotationMatrix();
     negative.map_T_lidar.linear() = Eigen::AngleAxisd(-0.1, Eigen::Vector3d::UnitZ()).toRotationMatrix();
     const auto nonlocal = reliability::analyzeNonlocalTerminalStability(
-        nominal, positive, negative, 2);
+        nominal, positive, negative, Eigen::Isometry3d::Identity(), 2);
     require(nonlocal.geometry_valid && nonlocal.objectives_finite,
             "finite terminal pair should remain recordable");
     require(std::abs(nonlocal.positive_negative_translation_gap_m - 2.0) < 1e-12,
@@ -59,8 +59,9 @@ int main() {
             "fixed-objective difference mismatch");
     require(nonlocal.extra_ndt_calls == 2 && !nonlocal.positive.converged,
             "call count and per-terminal convergence must be retained");
-    require(nonlocal.status == "RECORDED_NO_BASIN_CLASSIFICATION",
-            "terminal record must not classify a basin");
+    require(nonlocal.status == "NDT_NOT_CONVERGED" &&
+                !nonlocal.response_valid,
+            "nonconverged terminal pair must not supply a response covariance");
     std::cout << "P6_I6A_RELIABILITY_TEST_PASS\n";
     return 0;
   } catch (const std::exception& error) {

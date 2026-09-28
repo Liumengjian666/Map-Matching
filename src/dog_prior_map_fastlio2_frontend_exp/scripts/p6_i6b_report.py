@@ -144,6 +144,11 @@ def validate_diagnostics(out: Path, mode: str,
     if [row["transaction_id"] for row in runtime] != trajectory_ids:
         raise RuntimeError(f"{mode}: runtime transaction binding mismatch")
     for index, row in enumerate(reliability):
+        if (row.get("vision_assist_trigger_requested") != "0" or
+                row.get("vision_assist_trigger_reason") != "NOT_REQUESTED" or
+                runtime[index].get("vision_assist_trigger_requested") != "0" or
+                runtime[index].get("vision_assist_trigger_reason") != "NOT_REQUESTED"):
+            raise RuntimeError(f"{mode}: invalid disabled vision-assist trigger state")
         calls = int(row["ndt_call_count"])
         if calls not in (1, 3):
             raise RuntimeError(f"{mode}: unexpected NDT call count at row {index + 1}")
@@ -283,6 +288,7 @@ def evaluate(out: Path) -> None:
     reliability_summary: list[dict[str, object]] = []
     run_wall = {row["mode"]: float(row["process_wall_s"])
                 for row in read_csv(out / "mode_wall_times.csv")}
+    resource_rows = {row["mode"]: row for row in read_csv(out / "resource_usage.csv")}
     for mode in MODES:
         reliability, runtime = validate_diagnostics(out, mode, runs[mode])
         calls = np.asarray([int(row["ndt_call_count"]) for row in reliability], dtype=int)
@@ -290,8 +296,11 @@ def evaluate(out: Path) -> None:
         nominal_ms = np.asarray([float(row["nominal_ndt_ms"]) for row in runtime], dtype=float)
         updates_ms = np.asarray([float(row["ikfom_update_ms"]) for row in runtime], dtype=float)
         total_ms = np.asarray([float(row["total_ms"]) for row in runtime], dtype=float)
+        curvature_ms = np.asarray([float(row["local_curvature_ms"]) for row in runtime], dtype=float)
+        gate_ms = np.asarray([float(row["gradient_gate_ms"]) for row in runtime], dtype=float)
         actions = Counter(row["decision"] for row in reliability)
         triggers = Counter(row["probe_trigger_reason"] for row in reliability)
+        probe_states = Counter(row["probe_status"] for row in reliability)
         extra_calls = int(np.sum(calls - 1))
         reliability_summary.append({
             "mode": mode, "scans": len(calls), "ndt_calls_total": int(np.sum(calls)),
@@ -302,12 +311,15 @@ def evaluate(out: Path) -> None:
             "probe_triggered_scans": sum(row["probe_triggered"] == "1" for row in reliability),
             "probe_executed_scans": sum(row["probe_executed"] == "1" for row in reliability),
             "uobs_valid_scans": sum(row["uobs_valid"] == "1" for row in reliability),
+            "uobs_used_scans": sum(row["local_curvature_used"] == "1" for row in reliability),
+            "nonlocal_response_used_scans": sum(row["nonlocal_response_used"] == "1" for row in reliability),
             "M0_nonconverged_scans": sum(row["M0_converged"] == "0" for row in reliability),
             "NORMAL_UPDATE": actions["NORMAL_UPDATE"],
             "DIRECTIONAL_UPDATE": actions["DIRECTIONAL_UPDATE"],
             "CAUTIOUS_UPDATE": actions["CAUTIOUS_UPDATE"],
             "PREDICTION_ONLY": actions["PREDICTION_ONLY"],
             "trigger_reason_counts": ";".join(f"{k}:{v}" for k, v in sorted(triggers.items())),
+            "probe_status_counts": ";".join(f"{k}:{v}" for k, v in sorted(probe_states.items())),
             "probe_time_mean_ms": float(np.mean(extra_ms)),
             "probe_time_p95_ms": float(np.percentile(extra_ms, 95)),
             "probe_time_max_ms": float(np.max(extra_ms)),
@@ -317,8 +329,15 @@ def evaluate(out: Path) -> None:
             "ikfom_update_mean_ms": float(np.mean(updates_ms)),
             "ikfom_update_p95_ms": float(np.percentile(updates_ms, 95)),
             "ikfom_update_max_ms": float(np.max(updates_ms)),
+            "local_curvature_mean_ms": float(np.mean(curvature_ms)),
+            "local_curvature_p95_ms": float(np.percentile(curvature_ms, 95)),
+            "local_curvature_max_ms": float(np.max(curvature_ms)),
+            "gradient_gate_total_ms": float(np.sum(gate_ms)),
             "per_frame_total_sum_s": float(np.sum(total_ms) / 1000.0),
             "process_wall_s": run_wall[mode],
+            "user_cpu_s": float(resource_rows[mode]["user_cpu_s"]),
+            "system_cpu_s": float(resource_rows[mode]["system_cpu_s"]),
+            "max_rss_mib": float(resource_rows[mode]["wall_max_rss_kib"]) / 1024.0,
         })
 
     write_csv(out / "trajectory_errors.csv", error_rows)
@@ -344,8 +363,21 @@ def write_summary(out: Path, metrics: list[dict[str, object]],
     by_rel = {row["mode"]: row for row in reliability}
     cross = {(row["mode"], row["threshold_m"]): row["persistent_crossing_s"]
              for row in crossings}
+    gate_results = {}
+    total_nonconverged = sum(int(row["M0_nonconverged_scans"]) for row in reliability)
+    total_prediction_only = sum(int(row["PREDICTION_ONLY"]) for row in reliability)
+    for mode in ("UOBS_ONLY", "DUAL_RELIABILITY"):
+        gate_path = out / f"reliability_{mode}.csv.gradient_gate.csv"
+        rows = read_csv(gate_path) if gate_path.is_file() else []
+        passed = len(rows) == 12 and all(
+            row["axis_pass"] == "1" and row["normal_euler_coordinates"] == "1" and
+            row["M0_converged"] == "1" for row in rows
+        ) and {int(row["sample_index"]) for row in rows} == {0, 1}
+        passing_axes = sum(row["axis_pass"] == "1" for row in rows)
+        gate_results[mode] = ("PASS" if passed else "INDETERMINATE",
+                              len(rows), passing_axes)
     lines = [
-        "# PAPER-P6-I6B Dual-Reliability Floor01 V0",
+        "# PAPER-P6-I6B Dual-Reliability Floor01 V1",
         "",
         "## Protocol and integrity",
         "",
@@ -358,17 +390,22 @@ def write_summary(out: Path, metrics: list[dict[str, object]],
         "",
         "## Method and implementation mapping",
         "",
-        "- U_obs reuses P6-I3's normalized negative-score BLOCK curvature interface. The P6-I6A score/gradient coordinate check remains INDETERMINATE, so LocalObservability.valid is explicitly false at runtime in every mode. No Hessian inverse or fabricated weak direction is used. Consequently UOBS_ONLY is a control/fallback path, not evidence of an active U_obs benefit.",
-        "- U_nonlocal uses strict nominal M0 from the predicted pose. On high 6-DoF normalized innovation or every 25th scan, two probes M+/M- use +/-1 prior standard deviation along the principal eigenvector of the P6-I4-projected map-product pose covariance. All use the same source cloud, map and fixed PCL score. The implementation records endpoint gaps/objectives/convergence/iterations and never selects a probe instead of M0.",
-        "- Measurement noise order is [position XYZ, SO(3)]; the rotational weak direction (if U_obs becomes verified) is transformed from map-spatial to the pinned IKFoM right/body error basis using R_pred^T. Covariance is symmetrized and must be finite SPD before update.",
-        "- Nominal nonconvergence is handled as prediction-only in adaptive modes. A terminal-response risk inflates the existing isotropic pose-measurement covariance 4x; this is a conservative v0 policy, not a correctness probability or basin classifier.",
-        "- In this run U_obs is unverified and invalid, so DUAL_RELIABILITY operationally reduces to the U_nonlocal branch. Results do not validate a fully active two-signal fusion policy.",
+        "- The four modes use independent full closed-loop replays; every scan propagates IMU, seeds strict NDT from that replay's own predicted state, computes reliability, updates/commits prediction-only, and then continues. The 100-frame smoke is retained under smoke_100/ and was validated without loading GT.",
+        "- STRICT_BASELINE parity against frozen I6A STRICT is required below 5 mm translation and 0.05 deg rotation. The full parity result is strict_replay_parity.txt.",
+        "",
+        "## Core definitions and implementation mapping",
+        "",
+        "- U_obs calls PCL 1.10 score derivatives at the nominal M0 terminal. The curvature conversion reuses P6-I3: reorder PCL [tx,ty,tz,rx,ry,rz] to [rotation,translation], H_euler=-sym(H_score), map-spatial Euler Jacobian J, A=diag(J^-1,I), H_phys=A^T H_euler A, S=diag(I,0.8I), and Hbar=S^T H_phys S. BLOCK eigenvalues/eigenvectors, condition ratios and minimum eigenvalues are emitted per scan. This is a local curvature proxy, not an information matrix or covariance.",
+        f"- The focused score/gradient gate uses PCL 1.10 NDT's internal Translation*Rx*Ry*Rz parameterization (not the generic pcl::getTransformation helper) and checks all six coordinates at h=1e-4 and 5e-5 on two normal-coordinate M0 samples; each axis must be finite, meaningful, sign-consistent and within 10% relative error at both step sizes. UOBS_ONLY: {gate_results['UOBS_ONLY'][0]} ({gate_results['UOBS_ONLY'][2]}/{gate_results['UOBS_ONLY'][1]} axis rows passed); DUAL_RELIABILITY: {gate_results['DUAL_RELIABILITY'][0]} ({gate_results['DUAL_RELIABILITY'][2]}/{gate_results['DUAL_RELIABILITY'][1]} axis rows passed). U_obs remains invalid unless the full gate passes.",
+        "- U_nonlocal uses STRICT M0 plus M+/M- on high normalized innovation or every 25 scans. The probe direction is the largest prior-covariance principal axis from P6-I4; amplitudes are +/-1 prior sigma. The raw NDT endpoints remain map_T_lidar, while the adaptive position measurement is map_T_imu. Each terminal is therefore transformed as map_T_imu=map_T_lidar*inverse(imu_T_lidar) before taking delta_p for Bp (the extrinsic lever arm is retained); Delta_t and positive/negative terminal gap continue to describe the raw map_T_lidar endpoints. SO(3) responses are Log(R+ R0^T), Log(R- R0^T); finite responses form Bp=0.5(sum delta_p_imu delta_p_imu^T) and BR=0.5(sum delta_phi delta_phi^T). These are empirical finite-probe response matrices, not calibrated covariance or basin probabilities. Endpoint poses, objectives, convergence, iterations, and calls are recorded.",
+        "- Adaptive covariance is R_p=sigma_p^2 I+lambda_t v_t v_t^T+alpha_p Bp and R_R,map=sigma_phi^2 I+lambda_R v_R v_R^T+alpha_R BR. U_obs increments are bounded by curvature weakness and gamma=10; U_nonlocal alpha defaults to 1 and each added covariance's largest eigenvalue is capped at 0.04 m^2 / (2 deg)^2. R_R,body=R_pred^T R_R,map R_pred for the pinned IKFoM right/body SO(3) residual. The final [position XYZ, rotation] 6x6 matrix is checked finite SPD before update. No whole-matrix 4x inflation, inverse-Hessian covariance, GT update, or candidate switching is used.",
+        "- Nominal nonconvergence or an invalid/nonconverged probe pair leads to prediction-only in adaptive modes. STRICT_BASELINE preserves the exact isotropic baseline update. VisionAssist is explicitly DISABLED_NOT_IMPLEMENTED; trigger_requested=0, trigger_reason=NOT_REQUESTED, and no visual measurement is fabricated.",
         "",
         "## Build and run validation",
         "",
-        "- Release build: p6_i6b_closed_loop and p6_i6b_dual_reliability_test built successfully against the pinned FAST-LIO2/IKFoM, PCL 1.10 and DCReg sources.",
+        "- Release build: p6_i6b_closed_loop and p6_i6b_dual_reliability_test built successfully against the pinned FAST-LIO2/IKFoM, PCL 1.10 and DCReg sources. The targeted reliability test exercises a rotated nonzero imu_T_lidar lever arm and verifies that a nonconverged terminal pair cannot mark its response covariance valid.",
         "- CTest: 1/1 passed. Python driver/report syntax checks and git diff --check passed.",
-        "- All four modes contain 4,127 strictly increasing transactions with finite predictor/corrected poses and aligned per-frame diagnostic rows. Every nominal NDT converged; no prediction-only frame occurred in this dataset run.",
+        f"- All four modes contain 4,127 strictly increasing transactions with finite predictor/corrected poses and aligned per-frame diagnostic rows. Across all four modes, nominal NDT nonconvergence rows={total_nonconverged}; prediction-only rows={total_prediction_only}.",
         "",
         "## Full-trajectory metrics",
         "",
@@ -384,18 +421,23 @@ def write_summary(out: Path, metrics: list[dict[str, object]],
             f"{fmt(row['r_rmse'])} | {fmt(row['predictor_t_rmse'])} | {fmt(row['predictor_r_rmse'])} |"
         )
     strict_rmse = float(by_mode["STRICT_BASELINE"]["t_rmse"])
-    unonlocal_rmse = float(by_mode["UNONLOCAL_ONLY"]["t_rmse"])
     strict_rotation_rmse = float(by_mode["STRICT_BASELINE"]["r_rmse"])
-    unonlocal_rotation_rmse = float(by_mode["UNONLOCAL_ONLY"]["r_rmse"])
-    unonlocal_relative_change = 100.0 * (unonlocal_rmse - strict_rmse) / strict_rmse
-    extra_calls = int(by_rel["UNONLOCAL_ONLY"]["extra_ndt_calls"])
-    strict_wall = float(by_rel["STRICT_BASELINE"]["process_wall_s"])
-    unonlocal_wall = float(by_rel["UNONLOCAL_ONLY"]["process_wall_s"])
     lines.extend([
         "",
         f"Frozen I6A STRICT Floor01 translation RMSE reference: 0.8896597 m. Replayed STRICT_BASELINE gives {strict_rmse:.7f} m (difference {strict_rmse - 0.8896597:+.7f} m).",
-        f"UOBS_ONLY reproduces STRICT_BASELINE exactly. UNONLOCAL_ONLY and DUAL_RELIABILITY give {unonlocal_rmse:.7f} m translation RMSE ({unonlocal_rmse - strict_rmse:+.7f} m, {unonlocal_relative_change:+.3f}%) and {unonlocal_rotation_rmse:.7f} deg rotation RMSE ({unonlocal_rotation_rmse - strict_rotation_rmse:+.6f} deg); this is a small regression, not an improvement. The 1 m persistent crossing is unchanged and neither mode reaches a persistent 2 m or 5 m crossing.",
-        f"UNONLOCAL_ONLY/DUAL add {extra_calls} NDT align calls ({extra_calls / EXPECTED_ROWS:.5f} extra calls/scan; {100.0 * extra_calls / EXPECTED_ROWS:.2f}% over one-call STRICT) and process wall time rises from {strict_wall:.2f} s to {unonlocal_wall:.2f} s ({100.0 * (unonlocal_wall / strict_wall - 1.0):.1f}%); 101/4127 frames used cautious inflation, with no prediction-only frame.",
+        "",
+        "Per-mode translation-RMSE change versus STRICT_BASELINE:",
+    ])
+    for mode in MODES[1:]:
+        row = by_mode[mode]
+        delta = float(row["t_rmse"]) - strict_rmse
+        relative = 100.0 * delta / strict_rmse
+        rotation_delta = float(row["r_rmse"]) - strict_rotation_rmse
+        lines.append(
+            f"- {mode}: t RMSE {float(row['t_rmse']):.7f} m ({delta:+.7f} m, {relative:+.3f}%); "
+            f"rotation RMSE {float(row['r_rmse']):.7f} deg ({rotation_delta:+.6f} deg)."
+        )
+    lines.extend([
         "",
         "### Persistent translation-error crossings",
         "",
@@ -411,35 +453,35 @@ def write_summary(out: Path, metrics: list[dict[str, object]],
         "",
         "## Reliability and compute accounting",
         "",
-        "| Mode | NDT calls | Extra calls/scan | 1-call frames | 3-call frames | U_obs valid | cautious | prediction-only | mean probe ms/frame | NDT mean ms | process wall s |",
-        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+        "| Mode | NDT calls | Calls/scan | Probed frames | U_obs valid/used | Nonlocal response used | Cautious | Prediction-only | NDT mean ms | curvature mean ms | CPU user/system s | peak RSS MiB | wall s |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
     ])
     for mode in MODES:
         row = by_rel[mode]
         lines.append(
-        f"| {mode} | {row['ndt_calls_total']} | {fmt(row['extra_ndt_calls_per_scan'], 5)} | "
-            f"{row['one_call_scans']} | {row['three_call_scans']} | "
-            f"{row['uobs_valid_scans']} (triggered={row['probe_triggered_scans']}, executed={row['probe_executed_scans']}) | "
-            f"{row['CAUTIOUS_UPDATE']} | {row['PREDICTION_ONLY']} | "
-            f"{fmt(row['probe_time_mean_ms'])} | {fmt(row['nominal_ndt_mean_ms'])} | "
-            f"{fmt(row['process_wall_s'], 2)} |"
+            f"| {mode} | {row['ndt_calls_total']} | {fmt(row['ndt_calls_total'] / row['scans'], 5)} | "
+            f"{row['probe_executed_scans']} | {row['uobs_valid_scans']}/{row['uobs_used_scans']} | "
+            f"{row['nonlocal_response_used_scans']} | {row['CAUTIOUS_UPDATE']} | {row['PREDICTION_ONLY']} | "
+            f"{fmt(row['nominal_ndt_mean_ms'])} | {fmt(row['local_curvature_mean_ms'])} | "
+            f"{fmt(row['user_cpu_s'], 2)}/{fmt(row['system_cpu_s'], 2)} | "
+            f"{fmt(row['max_rss_mib'], 1)} | {fmt(row['process_wall_s'], 2)} |"
         )
     lines.extend([
         "",
-        "Trigger reasons and detailed timing distributions are in reliability_mode_summary.csv; per-frame diagnostics are in reliability_<MODE>.csv and runtime_<MODE>.csv.",
+        "Trigger/probe status counts and detailed timing distributions are in reliability_mode_summary.csv; per-frame diagnostics are in reliability_<MODE>.csv and runtime_<MODE>.csv. GNU time per-process CPU and peak RSS are preserved in resource_usage.csv and resource_<MODE>.txt.",
         "",
         "## Current limitations and judgment",
         "",
-        "- U_obs is code-wired but deliberately inactive because its required score/gradient coordinate validation remains INDETERMINATE. Resolve that diagnostic before claiming active local-direction reliability.",
-        "- U_nonlocal samples only one covariance-principal perturbation pair plus periodic/high-innovation triggers. It is not a global search and does not establish distinct local minima or localization correctness.",
-        "- The first policy uses fixed engineering thresholds (chi-square 16.812, periodic interval 25 scans, endpoint warning 0.20 m / 2 deg, 4x covariance inflation). This run evaluates behavior but does not tune them.",
-        "- No visual module, new dataset, candidate switching, or NDT parameter search was added.",
+        "- U_obs active scan count is reported per mode; if the focused gate is INDETERMINATE, only U_obs is disabled while U_nonlocal and closed-loop replay continue.",
+        "- U_nonlocal is a single principal-direction +/- probe on selected scans, not a global search and not evidence of distinct local minima or localization correctness.",
+        "- STRICT_BASELINE translation RMSE reference is 0.8896597 m; it is the denominator/reference for interpretation. This first version validates runnable integration and reports any gain or regression without parameter search.",
+        "- Corridor01 assets were inspected but the I6B replay was not run there. Existing raw/derived ROS bags, normalized map, GT, calibration, initial pose and adapter reports are present. The matching prepared replay bundle is absent: Corridor01 `imu.csv`, `filter_scans.csv`, `scans.csv`, `request_xyz_f32.bin`, `params.txt`, and an input manifest with I6B-compatible row/hash semantics were not found. No new adapter was built and no dataset-specific copy of the joint decision algorithm was introduced.",
         "",
         "## Output files",
         "",
         "- mode_metrics.csv, segment_metrics.csv, crossings.csv, trajectory_errors.csv",
         "- reliability_mode_summary.csv, reliability_<MODE>.csv, runtime_<MODE>.csv, mode_wall_times.csv",
-        "- input_provenance.txt, baseline_anchor.csv, four mode logs, and strict_replay_parity.txt",
+        "- input_provenance.txt, baseline_anchor.csv, four mode logs, strict_replay_parity.txt, smoke_100/, and resource_usage.csv",
         "",
     ])
     (out / "summary.md").write_text("\n".join(lines), encoding="utf-8")

@@ -3,6 +3,7 @@
 #include <Eigen/Eigenvalues>
 #include <Eigen/Cholesky>
 #include <Eigen/Geometry>
+#include <Eigen/LU>
 
 #include <algorithm>
 #include <cmath>
@@ -39,12 +40,18 @@ bool validConfig(const DualReliabilityConfig& config) {
       std::isfinite(config.gamma_translation) && config.gamma_translation >= 1.0 &&
       std::isfinite(config.gamma_rotation) && config.gamma_rotation >= 1.0 &&
       std::isfinite(config.ndt_translation_scale_m) && config.ndt_translation_scale_m > 0.0 &&
+      std::isfinite(config.alpha_translation_response) &&
+      config.alpha_translation_response >= 0.0 &&
+      std::isfinite(config.alpha_rotation_response) &&
+      config.alpha_rotation_response >= 0.0 &&
+      std::isfinite(config.max_nonlocal_translation_variance_m2) &&
+      config.max_nonlocal_translation_variance_m2 > 0.0 &&
+      std::isfinite(config.max_nonlocal_rotation_variance_rad2) &&
+      config.max_nonlocal_rotation_variance_rad2 > 0.0 &&
       std::isfinite(config.terminal_translation_limit_m) &&
       config.terminal_translation_limit_m > 0.0 &&
       std::isfinite(config.terminal_rotation_limit_rad) &&
       config.terminal_rotation_limit_rad > 0.0 &&
-      std::isfinite(config.cautious_noise_inflation) &&
-      config.cautious_noise_inflation >= 1.0 &&
       std::isfinite(config.innovation_chi_square_99pct_6d) &&
       config.innovation_chi_square_99pct_6d > 0.0 &&
       std::isfinite(config.absolute_translation_fallback_m) &&
@@ -57,6 +64,29 @@ bool validConfig(const DualReliabilityConfig& config) {
 
 bool finitePose(const Eigen::Isometry3d& pose) {
   return pose.matrix().allFinite() && validRotation(pose.linear());
+}
+
+bool cappedResponseCovariance(const Eigen::Matrix3d& raw,
+                              double alpha, double maximum_eigenvalue,
+                              Eigen::Matrix3d* output) {
+  if (!output || !raw.allFinite() || !std::isfinite(alpha) || alpha < 0.0 ||
+      !std::isfinite(maximum_eigenvalue) || maximum_eigenvalue <= 0.0)
+    return false;
+  const Eigen::Matrix3d symmetric = 0.5 * (raw + raw.transpose());
+  Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> solver(symmetric);
+  if (solver.info() != Eigen::Success || !solver.eigenvalues().allFinite() ||
+      !solver.eigenvectors().allFinite())
+    return false;
+  const double scale = std::max(1.0, solver.eigenvalues().cwiseAbs().maxCoeff());
+  const double tolerance = 1e-10 * scale;
+  if (solver.eigenvalues().minCoeff() < -tolerance) return false;
+  Eigen::Vector3d bounded = solver.eigenvalues().cwiseMax(0.0) * alpha;
+  for (int index = 0; index < 3; ++index)
+    bounded(index) = std::min(bounded(index), maximum_eigenvalue);
+  *output = solver.eigenvectors() * bounded.asDiagonal() *
+            solver.eigenvectors().transpose();
+  *output = 0.5 * (*output + output->transpose());
+  return output->allFinite();
 }
 
 }  // namespace
@@ -181,6 +211,10 @@ LocalRisk assessLocalRisk(const LocalObservability& local,
   }
   result.rotation_weak_ratio = rotation_min / rotation_max;
   result.translation_weak_ratio = translation_min / translation_max;
+  result.rotation_min_eigenvalue = rotation_min;
+  result.translation_min_eigenvalue = translation_min;
+  result.rotation_block_condition = local.rotation_block_condition;
+  result.translation_block_condition = local.translation_block_condition;
   result.rotation_weak = result.rotation_weak_ratio <= config.weak_eigenvalue_ratio;
   result.translation_weak =
       result.translation_weak_ratio <= config.weak_eigenvalue_ratio;
@@ -205,14 +239,13 @@ LocalRisk assessLocalRisk(const LocalObservability& local,
 MeasurementNoiseResult makePoseMeasurementNoise(
     double position_sigma_m, double rotation_sigma_rad,
     const Eigen::Matrix3d& predicted_map_R_imu, const LocalRisk& local_risk,
-    bool apply_directional_downdate, double additional_isotropic_inflation,
+    const NonlocalTerminalStability& nonlocal, bool use_uobs,
+    bool use_unonlocal,
     const DualReliabilityConfig& config) {
   MeasurementNoiseResult result;
   if (!validConfig(config) || !std::isfinite(position_sigma_m) ||
       !std::isfinite(rotation_sigma_rad) || position_sigma_m <= 0.0 ||
-      rotation_sigma_rad <= 0.0 || !validRotation(predicted_map_R_imu) ||
-      !std::isfinite(additional_isotropic_inflation) ||
-      additional_isotropic_inflation < 1.0) {
+      rotation_sigma_rad <= 0.0 || !validRotation(predicted_map_R_imu)) {
     result.status = "INVALID_NOISE_INPUT";
     return result;
   }
@@ -223,43 +256,75 @@ MeasurementNoiseResult makePoseMeasurementNoise(
     return result;
   }
   result.covariance.setZero();
-  Eigen::Matrix3d position_covariance =
-      position_variance * Eigen::Matrix3d::Identity();
-  Eigen::Matrix3d rotation_body_covariance =
-      rotation_variance * Eigen::Matrix3d::Identity();
-  if (apply_directional_downdate && local_risk.valid) {
-    if (local_risk.translation_weak) {
-      const Eigen::Vector3d v = local_risk.map_translation_weak_direction.normalized();
-      if (!v.allFinite() || std::abs(v.norm() - 1.0) > 1e-10) {
-        result.status = "INVALID_MAP_TRANSLATION_DIRECTION";
-        return result;
-      }
-      position_covariance = position_variance *
-          (Eigen::Matrix3d::Identity() +
-           (config.gamma_translation - 1.0) * (v * v.transpose()));
-    }
-    if (local_risk.rotation_weak) {
-      const Eigen::Vector3d map_direction =
-          local_risk.map_rotation_weak_direction.normalized();
-      // MTK SO3 box-plus is right/body multiplication. Convert the P6-I3
-      // map-spatial weak direction to body coordinates at the predicted pose.
-      const Eigen::Vector3d body_direction =
-          predicted_map_R_imu.transpose() * map_direction;
-      if (!body_direction.allFinite() ||
-          std::abs(body_direction.norm() - 1.0) > 1e-10) {
-        result.status = "INVALID_BODY_ROTATION_DIRECTION";
-        return result;
-      }
-      rotation_body_covariance = rotation_variance *
-          (Eigen::Matrix3d::Identity() +
-           (config.gamma_rotation - 1.0) *
-               (body_direction * body_direction.transpose()));
+  if (use_uobs && local_risk.valid) {
+    const auto localIncrement = [&](bool weak, double ratio, double sigma,
+                                    double gamma, const Eigen::Vector3d& direction,
+                                    Eigen::Matrix3d* increment) {
+      if (!weak) return true;
+      if (!std::isfinite(ratio) || ratio < 0.0 ||
+          !direction.allFinite() || std::abs(direction.norm() - 1.0) > 1e-8)
+        return false;
+      const double strength = std::clamp(
+          1.0 - ratio / config.weak_eigenvalue_ratio, 0.0, 1.0);
+      const double lambda = sigma * sigma * (gamma - 1.0) * strength;
+      *increment = lambda * (direction * direction.transpose());
+      return increment->allFinite();
+    };
+    if (!localIncrement(local_risk.translation_weak,
+                        local_risk.translation_weak_ratio, position_sigma_m,
+                        config.gamma_translation,
+                        local_risk.map_translation_weak_direction,
+                        &result.local_translation_increment) ||
+        !localIncrement(local_risk.rotation_weak,
+                        local_risk.rotation_weak_ratio, rotation_sigma_rad,
+                        config.gamma_rotation,
+                        local_risk.map_rotation_weak_direction,
+                        &result.local_rotation_map_increment)) {
+      result.status = "INVALID_LOCAL_WEAK_DIRECTION_OR_STRENGTH";
+      return result;
     }
   }
-  result.covariance.block<3, 3>(0, 0) = additional_isotropic_inflation *
-      position_covariance;
-  result.covariance.block<3, 3>(3, 3) = additional_isotropic_inflation *
-      rotation_body_covariance;
+
+  if (use_unonlocal && nonlocal.status != "NOT_PROBED") {
+    if (nonlocal.status != "RECORDED_NO_BASIN_CLASSIFICATION" ||
+        !nonlocal.response_valid || nonlocal.extra_ndt_calls != 2) {
+      result.status = "PROBE_INVALID:" + nonlocal.status;
+      return result;
+    }
+    const Eigen::Matrix3d raw_position = 0.5 *
+        (nonlocal.delta_position_imu_positive *
+             nonlocal.delta_position_imu_positive.transpose() +
+         nonlocal.delta_position_imu_negative *
+             nonlocal.delta_position_imu_negative.transpose());
+    const Eigen::Matrix3d raw_rotation = 0.5 *
+        (nonlocal.delta_rotation_positive * nonlocal.delta_rotation_positive.transpose() +
+         nonlocal.delta_rotation_negative * nonlocal.delta_rotation_negative.transpose());
+    if (!cappedResponseCovariance(raw_position,
+            config.alpha_translation_response,
+            config.max_nonlocal_translation_variance_m2,
+            &result.nonlocal_translation_increment) ||
+        !cappedResponseCovariance(raw_rotation,
+            config.alpha_rotation_response,
+            config.max_nonlocal_rotation_variance_rad2,
+            &result.nonlocal_rotation_map_increment)) {
+      result.status = "INVALID_NONLOCAL_RESPONSE_COVARIANCE";
+      return result;
+    }
+  }
+
+  Eigen::Matrix3d position_covariance = position_variance *
+      Eigen::Matrix3d::Identity() + result.local_translation_increment +
+      result.nonlocal_translation_increment;
+  result.rotation_map_covariance = rotation_variance *
+      Eigen::Matrix3d::Identity() + result.local_rotation_map_increment +
+      result.nonlocal_rotation_map_increment;
+  // The pinned MTK SO3 innovation is right/body. Rotate the complete map-frame
+  // covariance (including non-axis-aligned response terms) into that basis.
+  const Eigen::Matrix3d rotation_body_covariance =
+      predicted_map_R_imu.transpose() * result.rotation_map_covariance *
+      predicted_map_R_imu;
+  result.covariance.block<3, 3>(0, 0) = position_covariance;
+  result.covariance.block<3, 3>(3, 3) = rotation_body_covariance;
   result.covariance = 0.5 * (result.covariance + result.covariance.transpose());
   Eigen::SelfAdjointEigenSolver<Matrix6d> solver(result.covariance);
   if (solver.info() != Eigen::Success || !solver.eigenvalues().allFinite() ||
@@ -286,36 +351,46 @@ DualReliabilityDecision decideDualReliability(
   const bool local_available = use_uobs && local.valid;
   result.local_risk = local_available &&
       (local.translation_weak || local.rotation_weak);
-  const bool has_probe_record = nonlocal.status != "UNINITIALIZED" &&
-                                nonlocal.status != "NOT_PROBED";
-  result.nonlocal_risk = use_unonlocal && has_probe_record &&
-      (!nonlocal.geometry_valid || !nonlocal.objectives_finite ||
-       !nonlocal.all_converged ||
-       nonlocal.max_nominal_translation_delta_m >
+  const bool probe_requested = use_unonlocal && nonlocal.status != "NOT_PROBED";
+  if (probe_requested &&
+      (nonlocal.status != "RECORDED_NO_BASIN_CLASSIFICATION" ||
+       !nonlocal.geometry_valid || !nonlocal.objectives_finite ||
+       !nonlocal.all_converged || !nonlocal.response_valid ||
+       nonlocal.extra_ndt_calls != 2)) {
+    result.action = UpdateAction::PREDICTION_ONLY;
+    result.nonlocal_risk = true;
+    result.reason = "PROBE_INVALID:" + nonlocal.status;
+    return result;
+  }
+  result.nonlocal_response_used = probe_requested;
+  result.local_curvature_used = local_available;
+  result.nonlocal_risk = probe_requested &&
+      (nonlocal.max_nominal_translation_delta_m >
            config.terminal_translation_limit_m ||
        nonlocal.max_nominal_rotation_delta_rad >
            config.terminal_rotation_limit_rad);
 
   if (result.local_risk && result.nonlocal_risk) {
     result.action = UpdateAction::CAUTIOUS_UPDATE;
-    result.additional_noise_inflation = config.cautious_noise_inflation;
-    result.reason = "LOCAL_AND_TERMINAL_RESPONSE_RISK";
+    result.reason = "LOCAL_AND_NONLOCAL_DIRECTIONAL_RESPONSE";
   } else if (result.nonlocal_risk) {
     result.action = UpdateAction::CAUTIOUS_UPDATE;
-    result.additional_noise_inflation = config.cautious_noise_inflation;
-    result.reason = "TERMINAL_RESPONSE_RISK";
+    result.reason = "NONLOCAL_DIRECTIONAL_RESPONSE";
   } else if (result.local_risk) {
     result.action = UpdateAction::DIRECTIONAL_UPDATE;
     result.reason = "LOCAL_WEAK_DIRECTION";
+  } else if (result.nonlocal_response_used) {
+    result.action = UpdateAction::DIRECTIONAL_UPDATE;
+    result.reason = "FINITE_PROBE_RESPONSE_COVARIANCE";
   } else {
     result.action = UpdateAction::NORMAL_UPDATE;
     result.reason = local_available ? "NO_RELIABILITY_RISK" :
-                                      "UOBS_UNAVAILABLE_NONLOCAL_NOT_RISKY";
+        (use_unonlocal ? "UOBS_UNAVAILABLE_NONLOCAL_NOT_PROBED" :
+                         "UOBS_UNAVAILABLE_UNONLOCAL_DISABLED");
   }
-  const bool apply_directional = local_available && result.local_risk;
   result.measurement_noise = makePoseMeasurementNoise(
       position_sigma_m, rotation_sigma_rad, predicted_map_R_imu,
-      local, apply_directional, result.additional_noise_inflation, config);
+      local, nonlocal, local_available, use_unonlocal, config);
   if (!result.measurement_noise.valid) {
     result.action = UpdateAction::PREDICTION_ONLY;
     result.reason = "MEASUREMENT_NOISE_INVALID:" + result.measurement_noise.status;
