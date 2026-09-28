@@ -239,7 +239,11 @@ void runBaseline(const p4_i2::Inputs& inputs,
                  const std::string& map_path,
                  const std::string& params_path,
                  const std::string& output_path,
-                 const std::string& trajectory_path) {
+                 const std::string& trajectory_path,
+                 bool strict_profile = false) {
+  const char* profile_name = strict_profile ? "STRICT" : "BASELINE";
+  const int maximum_iterations = strict_profile ? 80 : 40;
+  const double transformation_epsilon = strict_profile ? 1e-5 : 0.001;
   using namespace dog_prior_map_fastlio2_frontend_exp;
   p5_i1::requireFrozenMapSha256(map_path);
   const Cloud::Ptr target = loadTarget(map_path);
@@ -259,6 +263,10 @@ void runBaseline(const p4_i2::Inputs& inputs,
 
   AuditedNdt ndt;
   configureNdt(ndt, target);
+  if (strict_profile) {
+    ndt.setTransformationEpsilon(transformation_epsilon);
+    ndt.setMaximumIterations(maximum_iterations);
+  }
   std::ofstream output(output_path);
   std::ofstream trajectory(trajectory_path);
   if (!output || !trajectory) throw std::runtime_error("cannot_create_baseline_outputs");
@@ -270,7 +278,7 @@ void runBaseline(const p4_i2::Inputs& inputs,
          << ",saved_step_limited,replayed_step_limited,predictor_t_difference_m,predictor_r_difference_deg"
          << ",raw_t_difference_m,raw_r_difference_deg,used_t_difference_m,used_r_difference_deg"
          << ",corrected_t_difference_m,corrected_r_difference_deg,ndt_objective,runtime_ms"
-         << ",step_total_ms"
+         << ",step_total_ms,run_profile,ndt_epsilon,ndt_max_iterations"
          << ",predicted_lidar_x,predicted_lidar_y,predicted_lidar_z,predicted_lidar_qx,predicted_lidar_qy,predicted_lidar_qz,predicted_lidar_qw"
          << ",raw_lidar_x,raw_lidar_y,raw_lidar_z,raw_lidar_qx,raw_lidar_qy,raw_lidar_qz,raw_lidar_qw"
          << ",used_lidar_x,used_lidar_y,used_lidar_z,used_lidar_qx,used_lidar_qy,used_lidar_qz,used_lidar_qw"
@@ -310,7 +318,7 @@ void runBaseline(const p4_i2::Inputs& inputs,
     const double runtime_ms = std::chrono::duration<double, std::milli>(
         std::chrono::steady_clock::now() - ndt_start).count();
     const bool converged = ndt.hasConverged();
-    if (!converged) throw std::runtime_error("baseline_ndt_not_converged_tx_" +
+    if (!converged) throw std::runtime_error(std::string(profile_name) + "_ndt_not_converged_tx_" +
                                              std::to_string(asset.transaction_id));
     const Eigen::Matrix4f raw_pose = ndt.getFinalTransformation();
     const Eigen::Matrix4d raw_pose_d = poseMatrix(raw_pose);
@@ -366,7 +374,8 @@ void runBaseline(const p4_i2::Inputs& inputs,
            << asset.saved_step_limited << ',' << (step_limited ? 1 : 0) << ','
            << predictor_t << ',' << predictor_r << ',' << raw_t << ',' << raw_r << ','
            << used_t << ',' << used_r << ',' << corrected_t << ',' << corrected_r << ','
-           << objective << ',' << runtime_ms << ',' << step_total_ms;
+           << objective << ',' << runtime_ms << ',' << step_total_ms << ','
+           << profile_name << ',' << transformation_epsilon << ',' << maximum_iterations;
     writePose7(output, predicted_lidar);
     writePose7(output, raw_pose_d);
     writePose7(output, used_pose_d);
@@ -374,7 +383,7 @@ void runBaseline(const p4_i2::Inputs& inputs,
     output << '\n';
     if ((index + 1) % 100 == 0 || index + 1 == assets.size()) {
       output.flush();
-      std::cerr << "BASELINE_REPLAY_PROGRESS=" << index + 1 << "/" << assets.size()
+      std::cerr << profile_name << "_REPLAY_PROGRESS=" << index + 1 << "/" << assets.size()
                 << " raw_dt=" << raw_t << " used_dt=" << used_t
                 << " corrected_dt=" << corrected_t << '\n';
     }
@@ -382,11 +391,15 @@ void runBaseline(const p4_i2::Inputs& inputs,
   output.close();
   trajectory.close();
   std::cout << std::setprecision(12)
-            << "BASELINE_MAX_TRANSLATION_DELTA_M=" << max_translation_delta << '\n'
-            << "BASELINE_MAX_ROTATION_DELTA_DEG=" << max_rotation_delta << '\n';
-  if (!(max_translation_delta < 0.005 && max_rotation_delta < 0.05))
+            << profile_name << "_MAX_TRANSLATION_DELTA_VS_FROZEN_BASE_M="
+            << max_translation_delta << '\n'
+            << profile_name << "_MAX_ROTATION_DELTA_VS_FROZEN_BASE_DEG="
+            << max_rotation_delta << '\n';
+  if (!strict_profile && !(max_translation_delta < 0.005 && max_rotation_delta < 0.05))
     throw std::runtime_error("BASELINE_REPLAY_GATE_FAIL; prototype modes blocked");
-  std::cout << "BASELINE_REPLAY_COMPLETE frames=" << assets.size() << '\n';
+  std::cout << profile_name << "_REPLAY_COMPLETE frames=" << assets.size()
+            << " epsilon=" << transformation_epsilon
+            << " max_iterations=" << maximum_iterations << '\n';
 }
 
 std::vector<VisualMeasurement> readVisual(const std::string& path) {
@@ -1303,6 +1316,17 @@ int main(int argc, char** argv) {
       p6_i1::runBaseline(inputs, assets, argv[5], argv[6], argv[7], argv[8], argv[9]);
       return 0;
     }
+    if (argc == 10 && std::string(argv[1]) == "strict_single_start") {
+      p4_i2::Inputs inputs;
+      std::string reason;
+      if (!p4_i2::readInputs(argv[2], argv[3], &inputs, &reason))
+        throw std::runtime_error("filter_input_load_failed:" + reason);
+      const auto assets = p6_i1::readScanAssets(argv[4]);
+      if (assets.size() != inputs.scans.size())
+        throw std::runtime_error("scan_asset_and_filter_counts_differ");
+      p6_i1::runBaseline(inputs, assets, argv[5], argv[6], argv[7], argv[8], argv[9], true);
+      return 0;
+    }
     if ((argc == 16 || argc == 18) && std::string(argv[1]) != "baseline") {
       p4_i2::Inputs inputs;
       std::string reason;
@@ -1324,6 +1348,7 @@ int main(int argc, char** argv) {
     }
     std::cerr << "usage:\n"
               << "  p6_i1_branched_recovery baseline imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt baseline_replay.csv baseline_trajectory.csv\n"
+              << "  p6_i1_branched_recovery strict_single_start imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt strict_replay.csv strict_trajectory.csv\n"
               << "  p6_i1_branched_recovery MODE imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt visual.csv trajectory.csv branch.csv dcreg.csv multistart.csv candidates.csv arbitration.csv runtime.csv [basin.csv covariance.csv]\n";
     return 2;
   } catch (const std::exception& error) {

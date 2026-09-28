@@ -1149,6 +1149,7 @@ void run(const std::string& mode, const std::string& selected_path,
 
 }  // namespace p6_i5c_app
 
+#ifndef P6_I5C_NO_MAIN
 int main(int argc, char** argv) {
   try {
     if (argc != 7) {
@@ -1163,3 +1164,4 @@ int main(int argc, char** argv) {
     return 1;
   }
 }
+#endif  // P6_I5C_NO_MAIN
