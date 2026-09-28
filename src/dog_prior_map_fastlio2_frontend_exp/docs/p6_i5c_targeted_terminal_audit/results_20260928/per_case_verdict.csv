@@ -1,0 +1,8 @@
+frame_id,transaction_id,selection_group,replay_status,refined_separation_t_m,refined_separation_r_deg,inside_own_return_count,outside_own_return_count,inside_cross_return_count,outside_cross_return_count,classification,reason
+P2F087,3961,A_HIGH_JUMP,PASS,0,0,12,12,12,12,REFINED_COLLAPSE,both_reference_tolerances_met
+P2F083,3565,A_HIGH_JUMP,PASS,0.0027148331948760812,0.12703787277893477,12,12,12,11,REFINED_COLLAPSE,both_reference_tolerances_met
+P2F073,2846,A_HIGH_JUMP,PASS,0,1.3018788534037446e-05,12,12,12,12,REFINED_COLLAPSE,both_reference_tolerances_met
+P2F075,2890,A_HIGH_JUMP,PASS,0,2.0853600137700763e-06,12,12,12,12,REFINED_COLLAPSE,both_reference_tolerances_met
+P2F003,120,B_LOW_JUMP_CONTROL,PASS,1.1641532182693481e-09,1.3660472236580438e-05,12,12,12,12,REFINED_COLLAPSE,both_reference_tolerances_met
+P2F048,1562,B_LOW_JUMP_CONTROL,PASS,0.0061728709321215262,0.28437280639279805,8,1,0,0,REFINED_COLLAPSE,both_reference_tolerances_met
+P2F006,368,C_FIRST_EXIT_MISMATCH,PASS,0,1.5945896591494504e-07,12,12,12,12,REFINED_COLLAPSE,both_reference_tolerances_met

@@ -1,0 +1,112 @@
+{
+  "asset_gates": {
+    "map_sha256_actual_persistent": "2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570",
+    "map_sha256_actual_prepared": "2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570",
+    "map_sha256_expected": "2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570",
+    "packed_xyz_sha256_expected": "f7b5262552fe8d52f383e50813de2b568fa8a5990c69e2bba55231df8547188f",
+    "scans_sha256_expected": "9371e593c0e625611f053e3ef0a581c52481ccaed392aa8d74d74313caa9938f"
+  },
+  "candidate_counts": {
+    "i5a_dense_finite_all": 20,
+    "i5a_dense_finite_strict_support": 18,
+    "strict_first_exit_mismatch_frames": 21,
+    "strict_first_exit_mismatch_signed_rays": 468
+  },
+  "endpoint_source_validation": "PASS: every selected inside/outside endpoint exact-key joined and matched to raw I4 pose/convergence",
+  "gt_used_for_selection": false,
+  "input_hashes": {
+    "i4_dense_reference_margin.csv": "cb7de8f77d2a5e391c29e31590148ca71660519ea1719d7ddc86fe9ed6fa4cd8",
+    "i4_preparation_manifest.json": "65a91916fe507f27f70540f93889dbdf46d542077e4cc32a6b2cef66c6d6c6ab",
+    "i4_ray_probe_results.csv": "b18ac3d63bc23fb50d470951ced41cfc69f57d202800c531861f5cba16307023",
+    "i5a_boundary_phenotype.csv": "18624ee18dc55cfebb419b8cd4a78728f4cad12341624c76646901c957317945",
+    "i5b_dense_boundary_crosscheck.csv": "20bd13831d41249909bb6e3fa9afe638f1fc6e5a0cf62747964dc2a742986fc4",
+    "i5b_exception_frames.csv": "139af6d2d59ea50abc242645dd4fe792ea29923e05e58ce37f204e6168c1f215",
+    "i5b_local_support_audit.csv": "90335cfbac0d5a278a2423b2a75d64ce958730e585e275bb8cc05f610e0b5642",
+    "packed_xyz.bin": "f7b5262552fe8d52f383e50813de2b568fa8a5990c69e2bba55231df8547188f",
+    "persistent_frozen_map.pcd": "2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570",
+    "prepared_frozen_map.pcd": "2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570",
+    "scan_assets.csv": "9371e593c0e625611f053e3ef0a581c52481ccaed392aa8d74d74313caa9938f"
+  },
+  "new_ndt_calls_at_selection_time": 0,
+  "selected_cases": [
+    {
+      "frame_id": "P2F087",
+      "group": "A_HIGH_JUMP",
+      "q": 3.288026401762901,
+      "transaction_id": "3961"
+    },
+    {
+      "frame_id": "P2F083",
+      "group": "A_HIGH_JUMP",
+      "q": 1.490061037459643,
+      "transaction_id": "3565"
+    },
+    {
+      "frame_id": "P2F073",
+      "group": "A_HIGH_JUMP",
+      "q": 1.4363364244926529,
+      "transaction_id": "2846"
+    },
+    {
+      "frame_id": "P2F075",
+      "group": "A_HIGH_JUMP",
+      "q": 0.8022190758815125,
+      "transaction_id": "2890"
+    },
+    {
+      "frame_id": "P2F003",
+      "group": "B_LOW_JUMP_CONTROL",
+      "q": 0.004035046050014971,
+      "transaction_id": "120"
+    },
+    {
+      "frame_id": "P2F048",
+      "group": "B_LOW_JUMP_CONTROL",
+      "q": 0.006737315149699152,
+      "transaction_id": "1562"
+    },
+    {
+      "frame_id": "P2F006",
+      "group": "C_FIRST_EXIT_MISMATCH",
+      "q": 0.2731682846625684,
+      "transaction_id": "368"
+    }
+  ],
+  "selection_code_sha256": "2c7139803b36a0f2d5cd766f66819a2dc2ca9bf84a424bef1b108a3db757384d",
+  "selection_frozen_before_new_ndt_calls": true,
+  "selection_rule": {
+    "A": "up to 4 distinct frames sorted q descending then transaction_id ascending",
+    "B": "up to 2 remaining distinct frames sorted q ascending then transaction_id ascending",
+    "C": "up to 1 remaining eligible frame with the greatest number of unique strict-support signed first-exit mismatch rays; ties transaction_id ascending",
+    "alpha_key": "floor(alpha*1e6 + 0.5), consistent with I5A positive alpha llround convention",
+    "eligible": "I5A margin_source=DENSE, finite alpha_diff, terminal geometry available, finite DENSE summary crosscheck, STRICT_LOCAL_SUPPORT; contaminated excluded",
+    "endpoint_join": "(transaction_id, ray_type, ray_id, sign, alpha_key); no fuzzy timestamp joins",
+    "endpoint_pose_agreement": "translation <=1e-9 m, quaternion-sign-invariant SO(3) angle <=1e-8 deg",
+    "q": "max(jump_t_m/0.20, jump_r_deg/2.0), selection ranking only, not a margin or mechanism classifier"
+  },
+  "selection_status": "FROZEN_SELECTION_READY_FOR_PRE_NDT_COMMIT",
+  "strict_exit_mismatch_counts_by_transaction": {
+    "1087": 21,
+    "120": 23,
+    "1285": 3,
+    "1424": 28,
+    "1502": 9,
+    "1562": 24,
+    "194": 28,
+    "2831": 33,
+    "2846": 26,
+    "2861": 33,
+    "2890": 5,
+    "293": 34,
+    "3565": 25,
+    "3664": 14,
+    "368": 36,
+    "3862": 24,
+    "3961": 10,
+    "4060": 12,
+    "829": 34,
+    "888": 34,
+    "95": 12
+  },
+  "task": "PAPER-P6-I5C-TARGETED-TERMINAL-ATTRACTOR-VERIFICATION"
+}
