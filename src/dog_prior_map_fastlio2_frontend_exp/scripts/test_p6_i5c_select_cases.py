@@ -41,6 +41,37 @@ class SelectionProtocolTests(unittest.TestCase):
         with self.assertRaisesRegex(selector.SelectionBlocked, "conflicting_raw_endpoint_key"):
             selector.build_probe_index([row, conflict])
 
+    def test_inside_and_outside_endpoint_lineage_is_checked(self):
+        pose = "1;2;3;0;0;0;1"
+        boundary = {
+            "transaction_id": "7", "ray_type": "PRINCIPAL", "ray_id": "4", "sign": "-1",
+            "alpha_same": "0.25", "alpha_diff": "0.5",
+            "inside_endpoint_source": "FROZEN_PROBE", "outside_endpoint_source": "FROZEN_PROBE",
+            "inside_terminal_pose": pose, "outside_terminal_pose": pose,
+            "inside_converged": "true", "outside_converged": "true",
+            "outside_seed_pose": pose,
+        }
+        def probe(alpha, terminal=pose, seed=pose):
+            return {"transaction_id": "7", "ray_type": "PRINCIPAL", "ray_id": "4",
+                    "sign": "-1", "alpha": alpha, "converged": "true",
+                    "terminal_map_T_lidar_xyz_q_xyzw": terminal,
+                    "seed_map_T_lidar_xyz_q_xyzw": seed,
+                    "terminal_objective": "10", "terminal_fitness": "0.1",
+                    "terminal_iterations": "4"}
+        indexed = selector.build_probe_index([probe("0.25"), probe("0.5")])
+        selector.verify_endpoint(boundary, "inside", indexed)
+        selector.verify_endpoint(boundary, "outside", indexed)
+
+        mutated = dict(boundary, inside_terminal_pose="1.1;2;3;0;0;0;1")
+        with self.assertRaisesRegex(selector.SelectionBlocked, "boundary_terminal_pose_mismatch"):
+            selector.verify_endpoint(mutated, "inside", indexed)
+        mutated = dict(boundary, outside_seed_pose="1.1;2;3;0;0;0;1")
+        with self.assertRaisesRegex(selector.SelectionBlocked, "boundary_outside_seed_pose_mismatch"):
+            selector.verify_endpoint(mutated, "outside", indexed)
+        mutated = dict(boundary, inside_endpoint_source="RECOMPUTED")
+        with self.assertRaisesRegex(selector.SelectionBlocked, "non_frozen_endpoint_source"):
+            selector.verify_endpoint(mutated, "inside", indexed)
+
     def test_group_selection_is_distinct_stable_and_uses_mismatch_rays(self):
         rows = [candidate(str(tx), q) for tx, q in
                 ((8, 8.0), (2, 10.0), (1, 10.0), (3, 9.0), (4, 1.0), (5, 0.5),
