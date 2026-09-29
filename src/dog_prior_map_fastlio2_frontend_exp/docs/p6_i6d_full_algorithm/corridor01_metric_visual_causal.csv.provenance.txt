@@ -1,0 +1,22 @@
+dataset=SuperLoc Corridor01
+input_manifest_sha256=6d722ec6946570cc09d984c1a8ac7ebaaff799f012f9386ae169e3d47747a043
+raw_bag_sha256=c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811
+derived_v2_bag_sha256=7c52b3703f2f5f9b7fe291e579187c67c0181e015df6a9a8398cf4795b547ba0
+official_intrinsics_sha256=083ff73553f6df25734bfddc439fbda7eb7b01c8baeede2b4949e960f72fd370
+official_extrinsics_sha256=59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d
+image_topic=/camera_1/image_raw
+cloud_topic=/superloc_adapter/points_rot_only
+time_basis=both sensors' header.stamp; bag record time ignored
+depth_frame=adapter points_rot_only; rotational deskew only; no second deskew
+depth_causality=nearest_cloud_header_stamp_le_ref_image;max_age_ns=20000000
+transform= T_imu_camera * inverse(T_camera_cur_camera_ref) * inverse(T_imu_camera)
+payload=metric relative IMU translation only; PnP rotation discarded by EKF
+online_initialization=GT-free v2 first-50-cloud pose; GT not read
+image_messages=6720
+cloud_messages=2776
+pairs=6719
+depth_unsynchronized=5384
+pair_gap_rejected=0
+pnp_valid=482
+pnp_invalid=827
+output_sha256=bbb48dd03473bbd50339a95c416615d624339dc7f6795901dc57310e223c083b
