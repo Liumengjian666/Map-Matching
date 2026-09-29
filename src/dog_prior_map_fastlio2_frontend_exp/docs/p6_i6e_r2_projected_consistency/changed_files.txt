@@ -1,0 +1,12 @@
+Relative to c9fec80b3cef5106ae415d0cf16a674e4bce9ce3:
+src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/fastlio2_frontend.hpp
+src/dog_prior_map_fastlio2_frontend_exp/src/fastlio2_frontend_ikfom.cpp
+src/dog_prior_map_fastlio2_frontend_exp/tests/ndt_pose_update_runtime_test.cpp
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b/CMakeLists.txt
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6e_conditional_compensation_test.cpp
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i1_branched_recovery.cpp
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6d_run.py
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6e_r2_diagnostics.hpp
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6e_r2_report.py
+src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i6e_r2_projected_consistency/ (new reports, logs and short-run CSVs)
+No change to config, launch, NDT parameters, reliability thresholds, calibration, maps, input bundles or frozen result directories.

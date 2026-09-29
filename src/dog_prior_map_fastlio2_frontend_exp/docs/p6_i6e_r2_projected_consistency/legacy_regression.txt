@@ -1,0 +1,6 @@
+Floor01 trajectory.csv: PASS; 144 rows; 11232 old non-timing fields exactly equal
+Floor01 reliability.csv: PASS; 144 rows; 13536 old non-timing fields exactly equal
+Floor01 reliability.csv.visual_updates.csv: PASS; 67 rows; 2479 old non-timing fields exactly equal
+Corridor01 trajectory.csv: PASS; 149 rows; 11622 old non-timing fields exactly equal
+Corridor01 reliability.csv: PASS; 149 rows; 14006 old non-timing fields exactly equal
+Corridor01 reliability.csv.visual_updates.csv: PASS; 53 rows; 1961 old non-timing fields exactly equal

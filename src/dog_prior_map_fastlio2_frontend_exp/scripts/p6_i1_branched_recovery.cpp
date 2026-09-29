@@ -3100,15 +3100,14 @@ void runMode(const std::string& mode, const p4_i2::Inputs& inputs,
 
 int main(int argc, char** argv) {
   try {
-    if ((argc >= 11 && argc <= 16) &&
+    if (((argc >= 11 && argc <= 15) ||
+         (argc == 16 && std::string(argv[1]) == "FULL_ALGORITHM_V1")) &&
         (std::string(argv[1]) == "STRICT_BASELINE" ||
          std::string(argv[1]) == "UOBS_ONLY" ||
          std::string(argv[1]) == "UNONLOCAL_ONLY" ||
          std::string(argv[1]) == "DUAL_RELIABILITY" ||
          std::string(argv[1]) == "FULL_ALGORITHM_V1")) {
       const bool full_algorithm = std::string(argv[1]) == "FULL_ALGORITHM_V1";
-      if (!full_algorithm && argc > 15)
-        throw std::runtime_error("R2_policy_argument_is_FULL_only");
       if (full_algorithm && argc != 15 && argc != 16)
         throw std::runtime_error("FULL_ALGORITHM_V1_requires_visual_csv_and_replay_arguments");
       p4_i2::Inputs inputs;

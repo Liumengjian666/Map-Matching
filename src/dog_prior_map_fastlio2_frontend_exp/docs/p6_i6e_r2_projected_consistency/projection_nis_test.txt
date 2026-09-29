@@ -1,0 +1,1 @@
+NDT_POSE_UPDATE_RUNTIME_CONTRACT_PASS pos_before_m=0.0908295 pos_after_m=0.000103603 rot_before_rad=0.06 rot_after_rad=5.62928e-05 projected_update_m=0.199269 delta_v=0.0877383 delta_bg=3.66965e-06 delta_ba=8.00374e-06 delta_gravity=7.34424e-06

@@ -1,0 +1,1 @@
+PASS: 112 branch rows; four identical hashed priors per selected transaction; official snapshot exactly unchanged after every branch. Full state/P exact assertions execute in C++.

@@ -1,0 +1,231 @@
+-- The C compiler identification is GNU 9.4.0
+-- The CXX compiler identification is GNU 9.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Using CATKIN_DEVEL_PREFIX: /tmp/p6-i6e-r2-catkin-devel
+-- Using CMAKE_PREFIX_PATH: /opt/ros/noetic
+-- This workspace overlays: /opt/ros/noetic
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3")
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using Debian Python package layout
+-- Found PY_em: /home/jian/.local/lib/python3.8/site-packages/em.py
+-- Using empy: /home/jian/.local/lib/python3.8/site-packages/em.py
+-- Using CATKIN_ENABLE_TESTING: ON
+-- Call enable_testing()
+-- Using CATKIN_TEST_RESULTS_DIR: /tmp/p6-i6e-r2-catkin-build/test_results
+-- Forcing gtest/gmock from source, though one was otherwise available.
+-- Found gtest sources under '/usr/src/googletest': gtests will be built
+-- Found gmock sources under '/usr/src/googletest': gmock will be built
+-- Found PythonInterp: /usr/bin/python3 (found version "3.8.10")
+-- Found Threads: TRUE
+-- Using Python nosetests: /usr/bin/nosetests3
+-- catkin 0.8.12
+-- BUILD_SHARED_LIBS is on
+-- BUILD_SHARED_LIBS is on
+-- Using CATKIN_WHITELIST_PACKAGES: dog_prior_map_interfaces;dog_prior_map_fastlio2_frontend_exp
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~  traversing 2 packages in topological order:
+-- ~~  - dog_prior_map_interfaces
+-- ~~  - dog_prior_map_fastlio2_frontend_exp
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- +++ processing catkin package: 'dog_prior_map_interfaces'
+-- ==> add_subdirectory(dog_prior_map_interfaces)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- dog_prior_map_interfaces: 6 messages, 0 services
+-- +++ processing catkin package: 'dog_prior_map_fastlio2_frontend_exp'
+-- ==> add_subdirectory(dog_prior_map_fastlio2_frontend_exp)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Found OpenMP_C: -fopenmp (found version "4.5")
+-- Found OpenMP_CXX: -fopenmp (found version "4.5")
+-- Found OpenMP: TRUE (found version "4.5")
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /tmp/p6-i6e-r2-catkin-build
+Scanning dependencies of target std_msgs_generate_messages_lisp
+Scanning dependencies of target _dog_prior_map_interfaces_generate_messages_check_deps_NdtSessionControlAck
+[  0%] Built target std_msgs_generate_messages_lisp
+Scanning dependencies of target _dog_prior_map_interfaces_generate_messages_check_deps_NdtSessionControl
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtSessionControlAck
+Scanning dependencies of target geometry_msgs_generate_messages_lisp
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtSessionControl
+[  0%] Built target geometry_msgs_generate_messages_lisp
+Scanning dependencies of target sensor_msgs_generate_messages_lisp
+Scanning dependencies of target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanRequest
+[  0%] Built target sensor_msgs_generate_messages_lisp
+Scanning dependencies of target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanResult
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanRequest
+Scanning dependencies of target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanAck
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanResult
+Scanning dependencies of target _dog_prior_map_interfaces_generate_messages_check_deps_NdtServerStatus
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanAck
+Scanning dependencies of target sensor_msgs_generate_messages_py
+[  0%] Built target sensor_msgs_generate_messages_py
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtServerStatus
+Scanning dependencies of target geometry_msgs_generate_messages_py
+Scanning dependencies of target std_msgs_generate_messages_py
+[  0%] Built target std_msgs_generate_messages_py
+[  0%] Built target geometry_msgs_generate_messages_py
+Scanning dependencies of target std_msgs_generate_messages_nodejs
+Scanning dependencies of target geometry_msgs_generate_messages_nodejs
+[  0%] Built target geometry_msgs_generate_messages_nodejs
+[  0%] Built target std_msgs_generate_messages_nodejs
+Scanning dependencies of target sensor_msgs_generate_messages_cpp
+Scanning dependencies of target sensor_msgs_generate_messages_nodejs
+[  0%] Built target sensor_msgs_generate_messages_cpp
+[  0%] Built target sensor_msgs_generate_messages_nodejs
+Scanning dependencies of target geometry_msgs_generate_messages_cpp
+Scanning dependencies of target std_msgs_generate_messages_cpp
+[  0%] Built target geometry_msgs_generate_messages_cpp
+[  0%] Built target std_msgs_generate_messages_cpp
+Scanning dependencies of target geometry_msgs_generate_messages_eus
+Scanning dependencies of target sensor_msgs_generate_messages_eus
+[  0%] Built target geometry_msgs_generate_messages_eus
+[  0%] Built target sensor_msgs_generate_messages_eus
+Scanning dependencies of target std_msgs_generate_messages_eus
+Scanning dependencies of target _catkin_empty_exported_target
+[  0%] Built target std_msgs_generate_messages_eus
+[  0%] Built target _catkin_empty_exported_target
+Scanning dependencies of target roscpp_generate_messages_eus
+Scanning dependencies of target rosgraph_msgs_generate_messages_py
+[  0%] Built target roscpp_generate_messages_eus
+[  0%] Built target rosgraph_msgs_generate_messages_py
+Scanning dependencies of target nav_msgs_generate_messages_cpp
+Scanning dependencies of target actionlib_msgs_generate_messages_nodejs
+[  0%] Built target nav_msgs_generate_messages_cpp
+[  0%] Built target actionlib_msgs_generate_messages_nodejs
+Scanning dependencies of target roscpp_generate_messages_nodejs
+Scanning dependencies of target rosgraph_msgs_generate_messages_eus
+[  0%] Built target roscpp_generate_messages_nodejs
+[  0%] Built target rosgraph_msgs_generate_messages_eus
+Scanning dependencies of target roscpp_generate_messages_cpp
+Scanning dependencies of target roscpp_generate_messages_py
+[  0%] Built target roscpp_generate_messages_cpp
+[  0%] Built target roscpp_generate_messages_py
+Scanning dependencies of target actionlib_msgs_generate_messages_eus
+Scanning dependencies of target rosgraph_msgs_generate_messages_lisp
+[  0%] Built target rosgraph_msgs_generate_messages_lisp
+[  0%] Built target actionlib_msgs_generate_messages_eus
+Scanning dependencies of target nav_msgs_generate_messages_py
+Scanning dependencies of target nav_msgs_generate_messages_nodejs
+[  0%] Built target nav_msgs_generate_messages_py
+[  0%] Built target nav_msgs_generate_messages_nodejs
+Scanning dependencies of target actionlib_msgs_generate_messages_cpp
+Scanning dependencies of target nav_msgs_generate_messages_eus
+[  0%] Built target actionlib_msgs_generate_messages_cpp
+[  0%] Built target nav_msgs_generate_messages_eus
+Scanning dependencies of target rosgraph_msgs_generate_messages_cpp
+Scanning dependencies of target actionlib_msgs_generate_messages_lisp
+[  0%] Built target actionlib_msgs_generate_messages_lisp
+[  0%] Built target rosgraph_msgs_generate_messages_cpp
+Scanning dependencies of target rosgraph_msgs_generate_messages_nodejs
+Scanning dependencies of target actionlib_msgs_generate_messages_py
+[  0%] Built target rosgraph_msgs_generate_messages_nodejs
+[  0%] Built target actionlib_msgs_generate_messages_py
+Scanning dependencies of target roscpp_generate_messages_lisp
+Scanning dependencies of target nav_msgs_generate_messages_lisp
+[  0%] Built target roscpp_generate_messages_lisp
+[  0%] Built target nav_msgs_generate_messages_lisp
+Scanning dependencies of target dog_prior_map_interfaces_generate_messages_lisp
+Scanning dependencies of target dog_prior_map_interfaces_generate_messages_py
+[  3%] Generating Python from MSG dog_prior_map_interfaces/NdtScanRequest
+[  3%] Generating Lisp code from dog_prior_map_interfaces/NdtScanRequest.msg
+[  5%] Generating Lisp code from dog_prior_map_interfaces/NdtScanResult.msg
+[  7%] Generating Lisp code from dog_prior_map_interfaces/NdtServerStatus.msg
+[  8%] Generating Lisp code from dog_prior_map_interfaces/NdtSessionControl.msg
+[ 10%] Generating Python from MSG dog_prior_map_interfaces/NdtScanResult
+[ 12%] Generating Lisp code from dog_prior_map_interfaces/NdtSessionControlAck.msg
+[ 14%] Generating Lisp code from dog_prior_map_interfaces/NdtScanAck.msg
+[ 14%] Built target dog_prior_map_interfaces_generate_messages_lisp
+[ 15%] Generating Python from MSG dog_prior_map_interfaces/NdtServerStatus
+Scanning dependencies of target dog_prior_map_interfaces_generate_messages_nodejs
+[ 17%] Generating Javascript code from dog_prior_map_interfaces/NdtScanRequest.msg
+[ 19%] Generating Javascript code from dog_prior_map_interfaces/NdtScanResult.msg
+[ 21%] Generating Python from MSG dog_prior_map_interfaces/NdtSessionControl
+[ 22%] Generating Javascript code from dog_prior_map_interfaces/NdtServerStatus.msg
+[ 24%] Generating Javascript code from dog_prior_map_interfaces/NdtSessionControl.msg
+[ 26%] Generating Python from MSG dog_prior_map_interfaces/NdtSessionControlAck
+[ 28%] Generating Javascript code from dog_prior_map_interfaces/NdtSessionControlAck.msg
+[ 29%] Generating Javascript code from dog_prior_map_interfaces/NdtScanAck.msg
+[ 29%] Built target dog_prior_map_interfaces_generate_messages_nodejs
+[ 31%] Generating Python from MSG dog_prior_map_interfaces/NdtScanAck
+Scanning dependencies of target dog_prior_map_interfaces_generate_messages_cpp
+[ 33%] Generating C++ code from dog_prior_map_interfaces/NdtScanRequest.msg
+[ 35%] Generating Python msg __init__.py for dog_prior_map_interfaces
+[ 36%] Generating C++ code from dog_prior_map_interfaces/NdtScanResult.msg
+[ 36%] Built target dog_prior_map_interfaces_generate_messages_py
+Scanning dependencies of target dog_prior_map_interfaces_generate_messages_eus
+[ 38%] Generating C++ code from dog_prior_map_interfaces/NdtServerStatus.msg
+[ 40%] Generating EusLisp code from dog_prior_map_interfaces/NdtScanRequest.msg
+[ 42%] Generating EusLisp code from dog_prior_map_interfaces/NdtScanResult.msg
+[ 43%] Generating C++ code from dog_prior_map_interfaces/NdtSessionControl.msg
+[ 45%] Generating EusLisp code from dog_prior_map_interfaces/NdtServerStatus.msg
+[ 47%] Generating C++ code from dog_prior_map_interfaces/NdtSessionControlAck.msg
+[ 49%] Generating EusLisp code from dog_prior_map_interfaces/NdtSessionControl.msg
+[ 50%] Generating C++ code from dog_prior_map_interfaces/NdtScanAck.msg
+[ 52%] Generating EusLisp code from dog_prior_map_interfaces/NdtSessionControlAck.msg
+[ 52%] Built target dog_prior_map_interfaces_generate_messages_cpp
+[ 54%] Generating EusLisp code from dog_prior_map_interfaces/NdtScanAck.msg
+[ 56%] Generating EusLisp manifest code for dog_prior_map_interfaces
+[ 56%] Built target dog_prior_map_interfaces_generate_messages_eus
+Scanning dependencies of target dog_prior_map_interfaces_generate_messages
+Scanning dependencies of target ndt_protocol_contract_test
+[ 56%] Built target dog_prior_map_interfaces_generate_messages
+[ 57%] Building CXX object dog_prior_map_interfaces/CMakeFiles/ndt_protocol_contract_test.dir/test/ndt_protocol_contract_test.cpp.o
+Scanning dependencies of target dog_prior_map_fastlio2_frontend_node
+[ 59%] Building CXX object dog_prior_map_fastlio2_frontend_exp/CMakeFiles/dog_prior_map_fastlio2_frontend_node.dir/src/fastlio2_frontend_ikfom.cpp.o
+[ 61%] Linking CXX executable /tmp/p6-i6e-r2-catkin-devel/lib/dog_prior_map_interfaces/ndt_protocol_contract_test
+[ 61%] Built target ndt_protocol_contract_test
+[ 63%] Building CXX object dog_prior_map_fastlio2_frontend_exp/CMakeFiles/dog_prior_map_fastlio2_frontend_node.dir/src/scan_processor.cpp.o
+[ 64%] Building CXX object dog_prior_map_fastlio2_frontend_exp/CMakeFiles/dog_prior_map_fastlio2_frontend_node.dir/src/frontend_runtime.cpp.o
+[ 66%] Building CXX object dog_prior_map_fastlio2_frontend_exp/CMakeFiles/dog_prior_map_fastlio2_frontend_node.dir/src/fastlio2_frontend_node.cpp.o
+Scanning dependencies of target fastlio2_propagation_contract_test
+[ 68%] Building CXX object dog_prior_map_fastlio2_frontend_exp/CMakeFiles/fastlio2_propagation_contract_test.dir/src/fastlio2_frontend_ikfom.cpp.o
+[ 70%] Linking CXX executable /tmp/p6-i6e-r2-catkin-devel/lib/dog_prior_map_fastlio2_frontend_exp/dog_prior_map_fastlio2_frontend_node
+[ 70%] Built target dog_prior_map_fastlio2_frontend_node
+Scanning dependencies of target ikfom_pose_api_spike
+[ 71%] Building CXX object dog_prior_map_fastlio2_frontend_exp/CMakeFiles/ikfom_pose_api_spike.dir/src/ikfom_pose_api_spike.cpp.o
+[ 73%] Building CXX object dog_prior_map_fastlio2_frontend_exp/CMakeFiles/ikfom_pose_api_spike.dir/tests/ikfom_pose_api_spike_main.cpp.o
+[ 75%] Linking CXX executable /tmp/p6-i6e-r2-catkin-devel/lib/dog_prior_map_fastlio2_frontend_exp/ikfom_pose_api_spike
+[ 75%] Built target ikfom_pose_api_spike
+[ 77%] Building CXX object dog_prior_map_fastlio2_frontend_exp/CMakeFiles/fastlio2_propagation_contract_test.dir/tests/fastlio2_propagation_contract_test.cpp.o
+Scanning dependencies of target scan_end_deskew_runtime_test
+[ 78%] Building CXX object dog_prior_map_fastlio2_frontend_exp/CMakeFiles/scan_end_deskew_runtime_test.dir/src/fastlio2_frontend_ikfom.cpp.o
+[ 80%] Linking CXX executable /tmp/p6-i6e-r2-catkin-devel/lib/dog_prior_map_fastlio2_frontend_exp/fastlio2_propagation_contract_test
+[ 80%] Built target fastlio2_propagation_contract_test
+Scanning dependencies of target frontend_runtime_end_to_end_test
+[ 82%] Building CXX object dog_prior_map_fastlio2_frontend_exp/CMakeFiles/frontend_runtime_end_to_end_test.dir/src/fastlio2_frontend_ikfom.cpp.o
+[ 84%] Building CXX object dog_prior_map_fastlio2_frontend_exp/CMakeFiles/scan_end_deskew_runtime_test.dir/src/scan_processor.cpp.o
+[ 85%] Building CXX object dog_prior_map_fastlio2_frontend_exp/CMakeFiles/scan_end_deskew_runtime_test.dir/tests/scan_end_deskew_runtime_test.cpp.o
+[ 87%] Linking CXX executable /tmp/p6-i6e-r2-catkin-devel/lib/dog_prior_map_fastlio2_frontend_exp/scan_end_deskew_runtime_test
+[ 87%] Built target scan_end_deskew_runtime_test
+Scanning dependencies of target ndt_pose_update_runtime_test
+[ 89%] Building CXX object dog_prior_map_fastlio2_frontend_exp/CMakeFiles/ndt_pose_update_runtime_test.dir/src/fastlio2_frontend_ikfom.cpp.o
+[ 91%] Building CXX object dog_prior_map_fastlio2_frontend_exp/CMakeFiles/frontend_runtime_end_to_end_test.dir/src/scan_processor.cpp.o
+[ 92%] Building CXX object dog_prior_map_fastlio2_frontend_exp/CMakeFiles/frontend_runtime_end_to_end_test.dir/src/frontend_runtime.cpp.o
+[ 94%] Building CXX object dog_prior_map_fastlio2_frontend_exp/CMakeFiles/frontend_runtime_end_to_end_test.dir/tests/frontend_runtime_end_to_end_test.cpp.o
+[ 96%] Linking CXX executable /tmp/p6-i6e-r2-catkin-devel/lib/dog_prior_map_fastlio2_frontend_exp/frontend_runtime_end_to_end_test
+[ 96%] Built target frontend_runtime_end_to_end_test
+[ 98%] Building CXX object dog_prior_map_fastlio2_frontend_exp/CMakeFiles/ndt_pose_update_runtime_test.dir/tests/ndt_pose_update_runtime_test.cpp.o
+[100%] Linking CXX executable /tmp/p6-i6e-r2-catkin-devel/lib/dog_prior_map_fastlio2_frontend_exp/ndt_pose_update_runtime_test
+[100%] Built target ndt_pose_update_runtime_test
+Base path: /home/jian/livox_ws/dog_loc_p6_i6b_ws
+Source space: /home/jian/livox_ws/dog_loc_p6_i6b_ws/src
+Build space: /tmp/p6-i6e-r2-catkin-build
+Devel space: /tmp/p6-i6e-r2-catkin-devel
+Install space: /home/jian/livox_ws/dog_loc_p6_i6b_ws/install
+####
+#### Running command: "cmake /home/jian/livox_ws/dog_loc_p6_i6b_ws/src -DCATKIN_WHITELIST_PACKAGES=dog_prior_map_interfaces;dog_prior_map_fastlio2_frontend_exp -DDOG_PRIOR_ENABLE_FASTLIO2_EXP=ON -DFASTLIO2_REF_ROOT=/media/jian/HIKVISION/comparison algorithm/FAST_LIO2 -DCMAKE_BUILD_TYPE=Release -DCATKIN_DEVEL_PREFIX=/tmp/p6-i6e-r2-catkin-devel -DCMAKE_INSTALL_PREFIX=/home/jian/livox_ws/dog_loc_p6_i6b_ws/install -G Unix Makefiles" in "/tmp/p6-i6e-r2-catkin-build"
+####
+####
+#### Running command: "make -j2" in "/tmp/p6-i6e-r2-catkin-build"
+####

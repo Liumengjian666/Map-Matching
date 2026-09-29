@@ -1,0 +1,4 @@
+FULL_ALGORITHM_V1_PROGRESS=100/149 ndt_calls=3 decision=CAUTIOUS_UPDATE
+FULL_ALGORITHM_V1_PROGRESS=149/149 ndt_calls=1 decision=NORMAL_UPDATE
+P6_I6B_MODE_COMPLETE=FULL_ALGORITHM_V1 frames=149
+PAPER-P6-I6E-R2_RUN_COMPLETE profile=B4 dataset=Corridor01 frames=149 wall_s=26.430 counts={'frames': 149, 'uobs_valid_frames': 144, 'uobs_used_frames': 144, 'unonlocal_used_frames': 123, 'nonlocal_probe_frames': 123, 'ndt_align_calls': 395, 'm0_nonconverged_frames': 0, 'visual_factor_events': 53, 'visual_filter_updates': 42, 'visual_nonzero_state_updates': 42}

@@ -1,0 +1,4 @@
+FULL_ALGORITHM_V1_PROGRESS=100/144 ndt_calls=3 decision=DIRECTIONAL_UPDATE
+FULL_ALGORITHM_V1_PROGRESS=144/144 ndt_calls=1 decision=DIRECTIONAL_UPDATE
+P6_I6B_MODE_COMPLETE=FULL_ALGORITHM_V1 frames=144
+PAPER-P6-I6E-R2_RUN_COMPLETE profile=B4 dataset=Floor01 frames=144 wall_s=5.257 counts={'frames': 144, 'uobs_valid_frames': 144, 'uobs_used_frames': 144, 'unonlocal_used_frames': 5, 'nonlocal_probe_frames': 5, 'ndt_align_calls': 154, 'm0_nonconverged_frames': 0, 'visual_factor_events': 67, 'visual_filter_updates': 0, 'visual_nonzero_state_updates': 0}

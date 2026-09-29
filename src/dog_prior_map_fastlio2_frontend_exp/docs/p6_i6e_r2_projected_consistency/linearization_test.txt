@@ -1,0 +1,7 @@
+scale_only_weak=0 scale_only_reliable=6 rotation_ratio=0.666667 translation_ratio=0.666667
+true_translation_weak=1 true_translation_reliable=5 rotation_ratio=0.666667 translation_ratio=0.00166667
+cross_coupled_weak=1 cross_coupled_reliable=5 rotation_schur_formula_error=0 translation_schur_formula_error=0
+coupled_linear_nis_difference=0 nonlinear_fd_epsilon=1e-07 nonlinear_fd_relative_error=4.41622e-10
+single_weak_leakage_relative=1.79954e-17 single_weak_orthogonality_error=1.14465e-16 discarded_residual_projection_delta=3.98609e-17
+two_weak_rank=4 two_weak_leakage_relative=5.46858e-17 two_weak_orthogonality_error=2.9962e-16
+PAPER_P6_I6E_CONDITIONAL_COMPENSATION_TEST_PASS

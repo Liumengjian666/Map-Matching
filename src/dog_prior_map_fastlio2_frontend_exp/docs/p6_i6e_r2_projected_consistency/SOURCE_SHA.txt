@@ -1,0 +1,16 @@
+TASK=PAPER-P6-I6E-R2
+BEFORE_SHA=c9fec80b3cef5106ae415d0cf16a674e4bce9ce3
+CODE_SHA=7f9febec7cac4b4627af09f2ff51a47c9d0da485
+BRANCH=research/p6-i6d-full-algorithm
+FROZEN_I6D_BASELINE=a561c310e97510dc18265ebb3057ac9d586daaee
+FASTLIO2_SHA=7cc4175de6f8ba2edf34bab02a42195b141027e9
+FASTLIO2_ROOT=/media/jian/HIKVISION/comparison algorithm/FAST_LIO2
+DCREG_SHA=ce7db8220f549a4a4391729e3bf4de4d4ab74635
+DCREG_ROOT=/home/jian/livox_ws/DCReg/DCReg
+RUNNER_SHA256=796f1fb3bb4c162a3bbe68f2329cc198084e386f292e548a245848374466c516
+BUILD_DIR=/tmp/p6-i6e-r2-pinned-release
+CATKIN_BUILD_DIR=/tmp/p6-i6e-r2-catkin-build
+RESULT_SHA=the Git commit containing this file; full AFTER_SHA returned in handoff (no self-referential commit hash)
+GT_USED=NO
+POLICY_DEFAULT=LEGACY_BASE_NO_GATE
+FROZEN_MAPS_AND_INPUTS_CHANGED=NO
