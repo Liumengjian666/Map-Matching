@@ -1,15 +1,16 @@
 schema_version: 1
 
 # All profiles dispatch to the same p6_i1_branched_recovery closed-loop core.
-# U_obs and vision remain unavailable until their respective validity/fusion
-# gates pass; a requested unavailable profile must report NOT_AVAILABLE.
+# FULL is an offline research prototype: historical cross-covariance is
+# conservatively bounded, not propagated as an augmented-state covariance.
 module_availability:
-  u_obs: false
-  u_obs_reason: "INVALID_SCORE_GRADIENT_GATE_3_OF_12_AXES"
+  u_obs: true
+  u_obs_method: "regularized NDT voxel geometric Gauss-Newton information proxy"
   u_nonlocal: true
-  vision: false
-  vision_core_integrated: false
-  vision_reason: "MONOCULAR_SCALE_UNOBSERVABLE_AND_NO_CAUSAL_STATE_HISTORY_CHAIN_RULE"
+  vision: true
+  vision_core_integrated: true
+  vision_method: "causal LiDAR-depth metric relative translation; PnP rotation discarded"
+  vision_history_covariance: "conservative decorrelation bound; exact historical cross covariance unavailable"
 
 profiles:
   B0:
@@ -25,7 +26,7 @@ profiles:
     enable_u_nonlocal: false
     enable_vision: false
     runner_mode: UOBS_ONLY
-    availability: NOT_AVAILABLE_UNTIL_U_OBS_GATE_PASSES
+    availability: AVAILABLE
   B2:
     label: STRICT_PLUS_U_NONLOCAL
     enable_u_obs: false
@@ -39,14 +40,14 @@ profiles:
     enable_u_nonlocal: true
     enable_vision: false
     runner_mode: DUAL_RELIABILITY
-    availability: NOT_AVAILABLE_UNTIL_U_OBS_GATE_PASSES
+    availability: AVAILABLE
   B4:
     label: FULL_WITH_REAL_VISION
     enable_u_obs: true
     enable_u_nonlocal: true
     enable_vision: true
-    runner_mode: DUAL_RELIABILITY
-    availability: NOT_AVAILABLE_UNTIL_U_OBS_AND_VISION_FUSION_GATES_PASS
+    runner_mode: FULL_ALGORITHM_V1
+    availability: AVAILABLE_WITH_RESEARCH_PROTOTYPE_CAVEAT
 
 dataset_maps:
   Floor01:

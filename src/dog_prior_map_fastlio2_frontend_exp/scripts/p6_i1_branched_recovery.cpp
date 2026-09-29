@@ -38,6 +38,51 @@
 namespace p6_i1 {
 using namespace dog_prior_map_fastlio2_frontend_exp;
 
+class GeometricNdt : public AuditedNdt {
+ public:
+  using LeafConstPtr = typename AuditedNdt::TargetGridLeafConstPtr;
+
+  std::vector<reliability::GeometricObservation> geometricObservations(
+      const Cloud& source, const Eigen::Matrix4f& map_T_lidar,
+      double resolution) {
+    std::vector<reliability::GeometricObservation> observations;
+    if (!std::isfinite(resolution) || resolution <= 0.0 ||
+        !map_T_lidar.allFinite())
+      return observations;
+    std::vector<LeafConstPtr> leaves;
+    std::vector<float> squared_distances;
+    const Eigen::Matrix3d rotation = map_T_lidar.block<3, 3>(0, 0).cast<double>();
+    const Eigen::Vector3d translation = map_T_lidar.block<3, 1>(0, 3).cast<double>();
+    for (const Point& point : source.points) {
+      if (!pcl::isFinite(point)) continue;
+      const Eigen::Vector3d rotated = rotation *
+          Eigen::Vector3d(point.x, point.y, point.z);
+      const Eigen::Vector3d query = rotated + translation;
+      if (!query.allFinite()) continue;
+      const Point query_point(static_cast<float>(query.x()),
+                              static_cast<float>(query.y()),
+                              static_cast<float>(query.z()));
+      this->target_cells_.radiusSearch(query_point, resolution,
+                                       leaves, squared_distances);
+      const std::size_t count = std::min(leaves.size(), squared_distances.size());
+      for (std::size_t index = 0; index < count; ++index) {
+        if (!leaves[index] || !std::isfinite(squared_distances[index]) ||
+            squared_distances[index] < 0.0f)
+          continue;
+        reliability::GeometricObservation observation;
+        observation.rotated_source_map = rotated;
+        observation.residual_map = query - leaves[index]->getMean();
+        observation.voxel_covariance_map = leaves[index]->getCov();
+        observation.nonnegative_weight = std::exp(
+            -0.5 * static_cast<double>(squared_distances[index]) /
+            (resolution * resolution));
+        observations.push_back(std::move(observation));
+      }
+    }
+    return observations;
+  }
+};
+
 struct ScanAsset {
   uint64_t transaction_id = 0;
   uint64_t stamp_ns = 0;
@@ -58,12 +103,23 @@ struct ScanAsset {
 struct VisualMeasurement {
   uint64_t ref_ns = 0;
   uint64_t cur_ns = 0;
+  uint64_t depth_stamp_ns = 0;
   uint64_t transaction_ref = 0;
   uint64_t transaction_cur = 0;
   Eigen::Vector3d translation = Eigen::Vector3d::Zero();
   int inliers = 0;
   double ratio = 0.0;
   double reprojection = 0.0;
+};
+
+struct ImageTimeEvent {
+  uint64_t stamp_ns = 0;
+  std::size_t measurement_index = 0;
+  bool is_current = false;
+};
+
+struct VisualAnchorSnapshot {
+  FilterSnapshot state;
 };
 
 struct Candidate {
@@ -195,6 +251,58 @@ std::vector<ScanAsset> readScanAssets(const std::string& path) {
   }
   if (assets.empty()) throw std::runtime_error("scan_metadata_csv_contains_no_scans");
   return assets;
+}
+
+std::vector<VisualMeasurement> readI6dVisual(const std::string& path) {
+  std::ifstream input(path);
+  if (!input) throw std::runtime_error("cannot_open_i6d_metric_visual_csv");
+  std::string line;
+  if (!std::getline(input, line))
+    throw std::runtime_error("empty_i6d_metric_visual_csv");
+  const auto header = split(line, ',');
+  std::map<std::string, std::size_t> columns;
+  for (std::size_t i = 0; i < header.size(); ++i) columns[header[i]] = i;
+  auto get = [&columns](const std::vector<std::string>& fields,
+                        const std::string& key) -> const std::string& {
+    const auto found = columns.find(key);
+    if (found == columns.end() || found->second >= fields.size())
+      throw std::runtime_error("missing_i6d_visual_field:" + key);
+    return fields[found->second];
+  };
+  std::vector<VisualMeasurement> visual;
+  std::uint64_t previous_current = 0;
+  while (std::getline(input, line)) {
+    if (line.empty()) continue;
+    const auto fields = split(line, ',');
+    VisualMeasurement measurement;
+    measurement.transaction_ref = std::stoull(get(fields, "transaction_ref"));
+    measurement.transaction_cur = std::stoull(get(fields, "transaction_cur"));
+    measurement.ref_ns = std::stoull(get(fields, "ref_ns"));
+    measurement.cur_ns = std::stoull(get(fields, "cur_ns"));
+    measurement.depth_stamp_ns = std::stoull(get(fields, "depth_stamp_ns"));
+    measurement.translation = Eigen::Vector3d(
+        std::stod(get(fields, "zx")), std::stod(get(fields, "zy")),
+        std::stod(get(fields, "zz")));
+    measurement.inliers = std::stoi(get(fields, "inliers"));
+    measurement.ratio = std::stod(get(fields, "inlier_ratio"));
+    measurement.reprojection = std::stod(get(fields, "reprojection_rmse_px"));
+    if (get(fields, "status") != "VALID_CAUSAL_LIDAR_DEPTH" ||
+        measurement.transaction_cur != measurement.transaction_ref + 1 ||
+        measurement.transaction_cur <= previous_current ||
+        measurement.depth_stamp_ns == 0 ||
+        measurement.depth_stamp_ns > measurement.ref_ns ||
+        measurement.ref_ns - measurement.depth_stamp_ns > 20000000ULL ||
+        measurement.ref_ns == 0 || measurement.cur_ns <= measurement.ref_ns ||
+        measurement.cur_ns - measurement.ref_ns > 250000000ULL ||
+        !measurement.translation.allFinite() || measurement.inliers < 6 ||
+        !std::isfinite(measurement.ratio) || measurement.ratio <= 0.0 ||
+        !std::isfinite(measurement.reprojection) || measurement.reprojection <= 0.0)
+      throw std::runtime_error("invalid_or_noncausal_i6d_visual_pair");
+    previous_current = measurement.transaction_cur;
+    visual.push_back(measurement);
+  }
+  if (visual.empty()) throw std::runtime_error("no_valid_causal_visual_measurements");
+  return visual;
 }
 
 Cloud::Ptr loadRawCloudAt(const std::string& path, const ScanAsset& asset) {
@@ -492,6 +600,106 @@ Pose3d poseFromMatrix(const Eigen::Matrix4d& matrix) {
   return pose;
 }
 
+Eigen::Matrix3d positionMarginalCovariance(const FilterSnapshot& snapshot) {
+  const int position_index = MTK::getStartIdx(&state_ikfom::pos);
+  if (snapshot.covariance.rows() != state_ikfom::DOF ||
+      snapshot.covariance.cols() != state_ikfom::DOF ||
+      !snapshot.covariance.allFinite())
+    return Eigen::Matrix3d::Constant(
+        std::numeric_limits<double>::quiet_NaN());
+  return snapshot.covariance.block<3, 3>(position_index, position_index);
+}
+
+Eigen::Matrix3d visualAnchorTargetCovariance(
+    const FilterSnapshot& anchor,
+    const Eigen::Vector3d& reference_frame_translation) {
+  Eigen::Matrix3d result = Eigen::Matrix3d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+  if (anchor.covariance.rows() != state_ikfom::DOF ||
+      anchor.covariance.cols() != state_ikfom::DOF ||
+      !anchor.covariance.allFinite())
+    return result;
+  const int position_index = MTK::getStartIdx(&state_ikfom::pos);
+  const int rotation_index = MTK::getStartIdx(&state_ikfom::rot);
+  Eigen::Matrix<double, 3, state_ikfom::DOF> anchor_jacobian =
+      Eigen::Matrix<double, 3, state_ikfom::DOF>::Zero();
+  anchor_jacobian.block<3, 3>(0, position_index).setIdentity();
+  Eigen::Matrix3d skew;
+  skew << 0.0, -reference_frame_translation.z(), reference_frame_translation.y(),
+          reference_frame_translation.z(), 0.0, -reference_frame_translation.x(),
+          -reference_frame_translation.y(), reference_frame_translation.x(), 0.0;
+  // IKFoM SO(3) error is right/body: d(R z)/d(theta_body) = -R[z]x.
+  anchor_jacobian.block<3, 3>(0, rotation_index) =
+      -anchor.map_T_imu.orientation.toRotationMatrix() * skew;
+  result = anchor_jacobian * anchor.covariance * anchor_jacobian.transpose();
+  return 0.5 * (result + result.transpose());
+}
+
+Eigen::Matrix3d conservativeVisualInnovationNoise(
+    const FilterSnapshot& anchor, const FilterSnapshot& current,
+    const Eigen::Vector3d& reference_frame_translation, double visual_sigma_m) {
+  Eigen::Matrix3d result = Eigen::Matrix3d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+  if (!std::isfinite(visual_sigma_m) || visual_sigma_m <= 0.0)
+    return Eigen::Matrix3d::Constant(std::numeric_limits<double>::quiet_NaN());
+  const Eigen::Matrix3d anchor_target_covariance =
+      visualAnchorTargetCovariance(anchor, reference_frame_translation);
+  const Eigen::Matrix3d current_position_covariance =
+      positionMarginalCovariance(current);
+  if (!anchor_target_covariance.allFinite() ||
+      !current_position_covariance.allFinite())
+    return result;
+  // The historical/current cross-covariance is not available in this minimal
+  // frontend API. By Cauchy-Schwarz, Cov(x_cur-x_ref) <= 2(P_cur+P_ref).
+  // Add current marginal to R (the update already contains one P_cur) and
+  // twice the projected anchor marginal, yielding that conservative bound.
+  result = visual_sigma_m * visual_sigma_m * Eigen::Matrix3d::Identity() +
+      2.0 * anchor_target_covariance + current_position_covariance;
+  result = 0.5 * (result + result.transpose());
+  result.diagonal().array() += 1e-9;
+  return result;
+}
+
+void predictFrontendTo(FastLio2IkfomFrontend& frontend,
+                       const p4_i2::ImuVector& all_imu,
+                       uint64_t end_stamp_ns) {
+  const FilterSnapshot start = frontend.getState();
+  if (end_stamp_ns < start.stamp_ns)
+    throw std::runtime_error("image_time_event_would_rewind_filter");
+  if (end_stamp_ns == start.stamp_ns) return;
+  const auto first_after_start = std::upper_bound(
+      all_imu.begin(), all_imu.end(), start.stamp_ns,
+      [](uint64_t stamp, const ImuSample& sample) { return stamp < sample.stamp_ns; });
+  const auto first_after_end = std::upper_bound(
+      all_imu.begin(), all_imu.end(), end_stamp_ns,
+      [](uint64_t stamp, const ImuSample& sample) { return stamp < sample.stamp_ns; });
+  if (first_after_start == all_imu.begin())
+    throw std::runtime_error("image_time_prediction_has_no_causal_imu_history");
+  std::vector<ImuPoseSample, Eigen::aligned_allocator<ImuPoseSample>> poses;
+  std::string failure;
+  const auto first_causal = first_after_start - 1;
+  if (first_after_end - first_causal >= 2) {
+    const p4_i2::ImuVector window(first_causal, first_after_end);
+    if (!frontend.predictImuSequence(window, end_stamp_ns, &poses, &failure))
+      throw std::runtime_error("causal_image_time_prediction_failed:" + failure);
+  } else {
+    // A camera event can fall between consecutive IMU samples. In that case
+    // there is not yet a two-sample causal interval ending before the image;
+    // extrapolate only the last already-observed IMU input to the image time.
+    const auto causal_history_end = std::upper_bound(
+        all_imu.begin(), all_imu.end(), start.stamp_ns,
+        [](uint64_t stamp, const ImuSample& sample) { return stamp < sample.stamp_ns; });
+    if (causal_history_end - all_imu.begin() < 2)
+      throw std::runtime_error("image_time_prediction_lacks_two_past_imu_samples");
+    const ImuSample& head = *(causal_history_end - 2);
+    const ImuSample& tail = *(causal_history_end - 1);
+    if (!frontend.predictHeldInputTo(end_stamp_ns, head, tail, &failure))
+      throw std::runtime_error("causal_image_time_held_imu_prediction_failed:" + failure);
+  }
+  if (frontend.getState().stamp_ns != end_stamp_ns)
+    throw std::runtime_error("image_time_prediction_not_exact");
+}
+
 Eigen::Matrix4d makeBodyDelta(const Eigen::Vector3d& translation,
                               double yaw_rad) {
   Eigen::Matrix4d delta = Eigen::Matrix4d::Identity();
@@ -753,10 +961,17 @@ void runDualReliabilityMode(
     const std::string& trajectory_path, const std::string& reliability_path,
     const std::string& runtime_path,
     uint64_t initialization_stamp_ns = 0,
-    const std::string& map_profile = "floor01") {
+    const std::string& map_profile = "floor01",
+    const std::vector<VisualMeasurement>* visual_measurements = nullptr,
+    double visual_sigma_m = 0.05) {
   if (mode != "STRICT_BASELINE" && mode != "UOBS_ONLY" &&
-      mode != "UNONLOCAL_ONLY" && mode != "DUAL_RELIABILITY")
+      mode != "UNONLOCAL_ONLY" && mode != "DUAL_RELIABILITY" &&
+      mode != "FULL_ALGORITHM_V1")
     throw std::runtime_error("unsupported_dual_reliability_mode:" + mode);
+  const bool enable_vision = mode == "FULL_ALGORITHM_V1";
+  if (enable_vision && (!visual_measurements || visual_measurements->empty() ||
+      !std::isfinite(visual_sigma_m) || visual_sigma_m <= 0.0))
+    throw std::runtime_error("FULL_ALGORITHM_V1_requires_valid_metric_visual_input");
   if (map_profile == "floor01") {
     p5_i1::requireFrozenMapSha256(map_path);
   } else if (map_profile == "corridor01") {
@@ -832,10 +1047,12 @@ void runDualReliabilityMode(
   constexpr double kStrictEpsilon = 1e-5;
   constexpr int kStrictMaximumIterations = 80;
   const reliability::DualReliabilityConfig reliability_config;
-  const bool use_uobs = mode == "UOBS_ONLY" || mode == "DUAL_RELIABILITY";
-  const bool use_unonlocal = mode == "UNONLOCAL_ONLY" || mode == "DUAL_RELIABILITY";
+  const bool use_uobs = mode == "UOBS_ONLY" || mode == "DUAL_RELIABILITY" ||
+                        mode == "FULL_ALGORITHM_V1";
+  const bool use_unonlocal = mode == "UNONLOCAL_ONLY" ||
+      mode == "DUAL_RELIABILITY" || mode == "FULL_ALGORITHM_V1";
 
-  AuditedNdt ndt;
+  GeometricNdt ndt;
   configureNdt(ndt, target);
   ndt.setResolution(0.8);
   ndt.setStepSize(0.08);
@@ -843,17 +1060,28 @@ void runDualReliabilityMode(
   ndt.setMaximumIterations(kStrictMaximumIterations);
 
   std::ofstream trajectory(trajectory_path), events(reliability_path), runtime(runtime_path);
-  std::ofstream gradient_gate;
-  if (use_uobs) gradient_gate.open(reliability_path + ".gradient_gate.csv");
+  std::ofstream visual_updates;
+  if (enable_vision) visual_updates.open(reliability_path + ".visual_updates.csv");
+  std::ofstream pcl_hessian_status;
+  if (use_uobs) pcl_hessian_status.open(reliability_path + ".pcl_score_hessian.txt");
   if (!trajectory || !events || !runtime)
     throw std::runtime_error("cannot_create_dual_reliability_outputs");
-  if (use_uobs && !gradient_gate)
-    throw std::runtime_error("cannot_create_uobs_gradient_gate_output");
+  if (enable_vision && !visual_updates)
+    throw std::runtime_error("cannot_create_i6d_visual_update_output");
+  if (use_uobs && !pcl_hessian_status)
+    throw std::runtime_error("cannot_create_legacy_pcl_status_output");
+  if (use_uobs)
+    pcl_hessian_status << "PCL_SCORE_HESSIAN=INDETERMINATE\n"
+        << "reason=geometric_voxel_information_proxy_is_independent_of_legacy_score_Hessian_gate\n";
   trajectory << std::setprecision(17);
   p4_i2::writeHeader(trajectory);
   events << std::setprecision(17)
       << "mode,transaction_id,stamp_ns,time_s,source_cloud_hash_verified,uobs_valid,uobs_status"
-         ",uobs_gradient_gate_passed,uobs_gate_samples_passed"
+         ",legacy_pcl_score_gradient_gate_passed,legacy_pcl_gate_samples_passed"
+         ",uobs_effective_weight_sum,uobs_valid_correspondences,uobs_rejected_voxel_covariances"
+         ",uobs_normalized_information_rowmajor"
+         ",visual_valid_factor_count,visual_updates_total,visual_nonzero_updates"
+         ",visual_last_update_status,visual_trigger_reason"
          ",translation_weak,translation_weak_ratio,translation_min_eigenvalue"
          ",translation_block_condition,translation_weak_direction_map_xyz"
          ",rotation_weak,rotation_weak_ratio,rotation_min_eigenvalue"
@@ -881,34 +1109,162 @@ void runDualReliabilityMode(
          ",ndt_call_count,probe_trigger,decision,vision_assist_status"
          ",vision_assist_trigger_requested,vision_assist_trigger_reason\n";
 
-  if (use_uobs)
-    gradient_gate << std::setprecision(17)
-        << "mode,sample_index,seed_name,M0_converged,normal_euler_coordinates"
-           ",component,pcl_order,pcl_value,score_center,analytic_gradient"
-           ",fd_gradient_h_1e-4,fd_gradient_h_5e-5,fd_gradient_h_2_5e-5"
-           ",relative_error_h,relative_error_half_h,relative_error_quarter_h"
-           ",sign_matches,axis_pass,align_calls\n";
+  if (enable_vision) {
+    visual_updates << std::setprecision(17)
+        << "transaction_ref,transaction_cur,ref_ns,cur_ns,depth_stamp_ns,status"
+        << ",trigger_reason,measurement_map_xyz,innovation_map_xyz,innovation_norm_m"
+        << ",position_correction_norm_m,velocity_correction_norm_m"
+        << ",anchor_projected_covariance_rowmajor,current_position_covariance_rowmajor"
+        << ",effective_noise_rowmajor,update_ms,pnp_inliers,inlier_ratio,reprojection_rmse_px\n";
+  }
 
   Eigen::Matrix4d previous_used = Eigen::Matrix4d::Identity();
   bool has_previous_used = false;
-  bool score_gradient_gate_passed = !use_uobs;
-  int score_gradient_gate_samples = 0;
-  int score_gradient_gate_pass_samples = 0;
-  const reliability::VisionAssistInterface vision_assist;
+  constexpr bool score_gradient_gate_passed = false;
+  constexpr int score_gradient_gate_samples = 0;
+  std::vector<VisualMeasurement> active_visual_measurements;
+  if (enable_vision) {
+    const uint64_t init_stamp = frontend.getState().stamp_ns;
+    const uint64_t final_stamp = assets.back().stamp_ns;
+    for (const VisualMeasurement& measurement : *visual_measurements) {
+      // Factors outside a partial smoke/replay window are not replayable here:
+      // their reference image state is either before initialization or beyond
+      // the selected final scan. They are excluded, never time-shifted.
+      if (measurement.ref_ns < init_stamp || measurement.cur_ns > final_stamp)
+        continue;
+      if (measurement.depth_stamp_ns > measurement.ref_ns ||
+          measurement.cur_ns <= measurement.ref_ns)
+        throw std::runtime_error("noncausal_visual_factor_in_replay_window");
+      active_visual_measurements.push_back(measurement);
+    }
+    if (active_visual_measurements.empty())
+      throw std::runtime_error("no_visual_factors_inside_replay_window");
+  }
+  reliability::VisionAssistInterface vision_assist;
+  vision_assist.enabled = enable_vision;
+  vision_assist.fusion_enabled = enable_vision;
+  vision_assist.observation_available = enable_vision &&
+      !active_visual_measurements.empty();
+  vision_assist.status = enable_vision ? "METRIC_CAUSAL_LIDAR_DEPTH_POSITION_UPDATE" :
+                                         "DISABLED_BY_MODE";
+  std::vector<ImageTimeEvent> image_events;
+  if (enable_vision) {
+    for (std::size_t i = 0; i < active_visual_measurements.size(); ++i) {
+      const VisualMeasurement& measurement = active_visual_measurements[i];
+      image_events.push_back({measurement.ref_ns, i, false});
+      image_events.push_back({measurement.cur_ns, i, true});
+    }
+    std::stable_sort(image_events.begin(), image_events.end(),
+        [](const ImageTimeEvent& left, const ImageTimeEvent& right) {
+          if (left.stamp_ns != right.stamp_ns) return left.stamp_ns < right.stamp_ns;
+          // At one image timestamp, first consume a just-completed factor,
+          // then snapshot that corrected state as the next reference anchor.
+          return left.is_current && !right.is_current;
+        });
+    vision_assist.latest_stamp_ns = image_events.empty() ? 0 :
+        image_events.back().stamp_ns;
+    visual_updates.flush();
+  }
+  std::map<uint64_t, VisualAnchorSnapshot> visual_anchors;
+  std::size_t image_event_index = 0;
+  std::uint64_t visual_updates_total = 0;
+  std::uint64_t visual_nonzero_updates = 0;
+  std::string visual_last_update_status = enable_vision ? "NO_TRIGGERED_UPDATE" :
+                                                         "DISABLED_BY_MODE";
+  bool vision_trigger_requested = false;
+  std::string vision_trigger_reason = "WAITING_FOR_FIRST_RELIABILITY_EVENT";
+  auto processImageEvent = [&](const ImageTimeEvent& event) {
+    const VisualMeasurement& measurement =
+        active_visual_measurements[event.measurement_index];
+    if (frontend.getState().stamp_ns < event.stamp_ns)
+      predictFrontendTo(frontend, inputs.imu, event.stamp_ns);
+    const FilterSnapshot event_state = frontend.getState();
+    if (event_state.stamp_ns != event.stamp_ns)
+      throw std::runtime_error("visual_event_state_timestamp_mismatch");
+    if (!event.is_current) {
+      visual_anchors[event.stamp_ns] = VisualAnchorSnapshot{event_state};
+      return;
+    }
+    const auto anchor_it = visual_anchors.find(measurement.ref_ns);
+    if (anchor_it == visual_anchors.end())
+      throw std::runtime_error("causal_visual_reference_snapshot_missing");
+    const FilterSnapshot& anchor = anchor_it->second.state;
+    const Eigen::Vector3d target_position = anchor.map_T_imu.position +
+        anchor.map_T_imu.orientation * measurement.translation;
+    const Eigen::Vector3d innovation = target_position -
+        event_state.map_T_imu.position;
+    const Eigen::Matrix3d anchor_covariance = visualAnchorTargetCovariance(
+        anchor, measurement.translation);
+    const Eigen::Matrix3d current_covariance =
+        positionMarginalCovariance(event_state);
+    if (!anchor_covariance.allFinite() || !current_covariance.allFinite())
+      throw std::runtime_error("nonfinite_visual_history_covariance");
+    if (!vision_trigger_requested) {
+      visual_last_update_status = "SKIPPED_TRIGGER_NOT_REQUESTED";
+      visual_updates << measurement.transaction_ref << ','
+          << measurement.transaction_cur << ',' << measurement.ref_ns << ','
+          << measurement.cur_ns << ',' << measurement.depth_stamp_ns
+          << ",SKIPPED_TRIGGER_NOT_REQUESTED," << vision_trigger_reason << ','
+          << vectorField(target_position) << ',' << vectorField(innovation) << ','
+          << innovation.norm() << ",0,0," << matrixField(anchor_covariance) << ','
+          << matrixField(current_covariance) << ",NA,0," << measurement.inliers
+          << ',' << measurement.ratio << ',' << measurement.reprojection << '\n';
+      return;
+    }
+    const Eigen::Matrix3d noise = conservativeVisualInnovationNoise(
+        anchor, event_state, measurement.translation, visual_sigma_m);
+    if (!noise.allFinite())
+      throw std::runtime_error("nonfinite_conservative_visual_noise");
+    PoseCorrectionDelta delta;
+    std::string failure;
+    const auto update_start = std::chrono::steady_clock::now();
+    if (!frontend.applyPositionMeasurement(target_position, noise, &delta, &failure))
+      throw std::runtime_error("causal_visual_position_update_failed:" + failure);
+    const double update_ms = std::chrono::duration<double, std::milli>(
+        std::chrono::steady_clock::now() - update_start).count();
+    const FilterSnapshot after = frontend.getState();
+    ++visual_updates_total;
+    if (delta.position.norm() > 1e-12 || delta.velocity.norm() > 1e-12)
+      ++visual_nonzero_updates;
+    visual_last_update_status = "APPLIED_CAUSAL_METRIC_POSITION";
+    visual_updates << measurement.transaction_ref << ','
+        << measurement.transaction_cur << ',' << measurement.ref_ns << ','
+        << measurement.cur_ns << ',' << measurement.depth_stamp_ns
+        << ",APPLIED_CAUSAL_METRIC_POSITION," << vision_trigger_reason << ','
+        << vectorField(target_position) << ',' << vectorField(innovation) << ','
+        << innovation.norm() << ',' << delta.position.norm() << ','
+        << delta.velocity.norm() << ',' << matrixField(anchor_covariance) << ','
+        << matrixField(current_covariance) << ',' << matrixField(noise) << ','
+        << update_ms << ',' << measurement.inliers << ',' << measurement.ratio
+        << ',' << measurement.reprojection << '\n';
+    if (!frontend.postconditionsValid(&failure) || after.stamp_ns != event.stamp_ns)
+      throw std::runtime_error("causal_visual_update_postcondition_failed:" + failure);
+  };
   for (std::size_t index = 0; index < assets.size(); ++index) {
     const ScanAsset& asset = assets[index];
     const p4_i2::PoseRecord& saved = inputs.scans[index];
     if (saved.transaction_id != asset.transaction_id || saved.stamp_ns != asset.stamp_ns)
       throw std::runtime_error("filter_input_and_cloud_metadata_alignment_mismatch");
     const auto frame_start = std::chrono::steady_clock::now();
+    if (enable_vision) {
+      while (image_event_index < image_events.size() &&
+             image_events[image_event_index].stamp_ns < asset.stamp_ns) {
+        processImageEvent(image_events[image_event_index]);
+        ++image_event_index;
+      }
+    }
     const auto prediction_start = std::chrono::steady_clock::now();
     const FilterSnapshot start = frontend.getState();
-    const p4_i2::ImuVector window = p4_i2::imuWindow(
-        inputs.imu, start.stamp_ns, asset.stamp_ns);
-    std::vector<ImuPoseSample, Eigen::aligned_allocator<ImuPoseSample>> imu_poses;
-    if (!frontend.predictImuSequence(window, asset.stamp_ns, &imu_poses, &failure))
-      throw std::runtime_error("dual_reliability_imu_prediction_failed_tx_" +
-          std::to_string(asset.transaction_id) + ":" + failure);
+    if (enable_vision) {
+      predictFrontendTo(frontend, inputs.imu, asset.stamp_ns);
+    } else {
+      const p4_i2::ImuVector window = p4_i2::imuWindow(
+          inputs.imu, start.stamp_ns, asset.stamp_ns);
+      std::vector<ImuPoseSample, Eigen::aligned_allocator<ImuPoseSample>> imu_poses;
+      if (!frontend.predictImuSequence(window, asset.stamp_ns, &imu_poses, &failure))
+        throw std::runtime_error("dual_reliability_imu_prediction_failed_tx_" +
+            std::to_string(asset.transaction_id) + ":" + failure);
+    }
     const double prediction_ms = std::chrono::duration<double, std::milli>(
         std::chrono::steady_clock::now() - prediction_start).count();
     const FilterSnapshot predicted = frontend.getState();
@@ -932,19 +1288,7 @@ void runDualReliabilityMode(
         std::chrono::steady_clock::now() - nominal_start).count();
     uint64_t ndt_call_count = 1;
 
-    double gradient_gate_ms = 0.0;
-    if (use_uobs && index < 2) {
-      const auto gate_start = std::chrono::steady_clock::now();
-      const bool sample_pass = verifyScoreGradientConvention(
-          ndt, source, nominal, index, mode, gradient_gate);
-      gradient_gate.flush();
-      ++score_gradient_gate_samples;
-      if (sample_pass) ++score_gradient_gate_pass_samples;
-      score_gradient_gate_passed = score_gradient_gate_samples == 2 &&
-          score_gradient_gate_pass_samples == 2;
-      gradient_gate_ms = std::chrono::duration<double, std::milli>(
-          std::chrono::steady_clock::now() - gate_start).count();
-    }
+    const double gradient_gate_ms = 0.0;
 
     Eigen::Matrix<double, 6, 6> predicted_map_covariance =
         Eigen::Matrix<double, 6, 6>::Constant(
@@ -1023,48 +1367,21 @@ void runDualReliabilityMode(
     }
 
     const auto curvature_start = std::chrono::steady_clock::now();
-    Eigen::Matrix<double, 6, 6> normalized_curvature =
-        Eigen::Matrix<double, 6, 6>::Constant(
-            std::numeric_limits<double>::quiet_NaN());
-    std::string curvature_status = "UOBS_DISABLED_BY_MODE";
-    if (use_uobs && !score_gradient_gate_passed)
-      curvature_status = "SCORE_GRADIENT_COORDINATE_CHECK_UNVERIFIED";
-    if (use_uobs && score_gradient_gate_passed && nominal.converged) {
-      Cloud transformed;
-      const Eigen::Matrix4f nominal_pose = nominal.pose.cast<float>();
-      pcl::transformPointCloud(*source, transformed, nominal_pose);
-      Eigen::Matrix<double, 6, 1> pcl_parameters =
-          pclNdtParameters(nominal_pose);
-      Eigen::Matrix<double, 6, 1> score_gradient;
-      Eigen::Matrix<double, 6, 6> score_hessian;
-      const double score = ndt.scoreDerivatives(
-          transformed, pcl_parameters, &score_gradient, &score_hessian);
-      if (std::isfinite(score) && score_gradient.allFinite() && score_hessian.allFinite()) {
-        const reliability::PclCurvatureTransform transformed_curvature =
-            reliability::transformPclScoreHessianToNormalizedMapTangent(
-                score_hessian, pcl_parameters.tail<3>(), 0.8);
-        curvature_status = transformed_curvature.status;
-        if (transformed_curvature.valid)
-          normalized_curvature =
-              transformed_curvature.normalized_negative_score_curvature;
-      } else {
-        curvature_status = "NONFINITE_PCL_SCORE_DERIVATIVES";
-      }
+    std::vector<reliability::GeometricObservation> geometric_observations;
+    if (use_uobs && nominal.converged) {
+      geometric_observations = ndt.geometricObservations(
+          *source, nominal.pose.cast<float>(), 0.8);
     }
     const double local_curvature_ms = std::chrono::duration<double, std::milli>(
         std::chrono::steady_clock::now() - curvature_start).count();
     reliability::LocalObservability local_observability;
     if (use_uobs) {
-      local_observability = reliability::analyzeLocalObservability(
-          normalized_curvature, nominal.converged, score_gradient_gate_passed);
+      local_observability = reliability::analyzeGeometricObservability(
+          geometric_observations, nominal.converged, 0.8);
     } else {
       local_observability.status = "UOBS_DISABLED_BY_MODE";
     }
     std::string uobs_status = local_observability.status;
-    if (use_uobs && !local_observability.valid &&
-        local_observability.status == "NONFINITE_CURVATURE" &&
-        score_gradient_gate_passed)
-      uobs_status = curvature_status;
     reliability::LocalRisk local_risk;
     if (use_uobs)
       local_risk = reliability::assessLocalRisk(local_observability, reliability_config);
@@ -1134,14 +1451,37 @@ void runDualReliabilityMode(
       raw_br = 0.5 * (terminal_stability.delta_rotation_positive *
                           terminal_stability.delta_rotation_positive.transpose() +
                       terminal_stability.delta_rotation_negative *
-                          terminal_stability.delta_rotation_negative.transpose());
+                      terminal_stability.delta_rotation_negative.transpose());
     }
+    const bool nonlocal_translation_risk = terminal_stability.response_valid &&
+        std::max(terminal_stability.delta_position_imu_positive.norm(),
+                 terminal_stability.delta_position_imu_negative.norm()) >
+            reliability_config.terminal_translation_limit_m;
+    vision_trigger_requested = enable_vision &&
+        ((local_risk.valid && local_risk.translation_weak) ||
+         nonlocal_translation_risk);
+    vision_trigger_reason = !enable_vision ? "DISABLED_BY_MODE" :
+        (local_risk.valid && local_risk.translation_weak
+             ? "UOBS_TRANSLATION_WEAK" :
+             (nonlocal_translation_risk ? "UNONLOCAL_TRANSLATION_RESPONSE" :
+                                          "NO_TRANSLATION_RELIABILITY_RISK"));
+    vision_assist.trigger_requested = vision_trigger_requested;
+    vision_assist.trigger_reason = vision_trigger_reason;
     events << mode << ',' << asset.transaction_id << ',' << asset.stamp_ns << ','
            << asset.time_s << ',' << (asset.expected_source_hash_available ? 1 : 0)
            << ',' << (local_observability.valid ? 1 : 0) << ','
            << uobs_status << ','
            << (score_gradient_gate_passed ? 1 : 0) << ','
-           << score_gradient_gate_pass_samples << ','
+           << score_gradient_gate_samples << ','
+           << local_observability.effective_weight_sum << ','
+           << local_observability.valid_correspondence_count << ','
+           << local_observability.rejected_covariance_count << ','
+           << (local_observability.valid
+                   ? matrixField(local_observability.normalized_geometric_information)
+                   : "NA") << ','
+           << (enable_vision ? active_visual_measurements.size() : 0) << ','
+           << visual_updates_total << ',' << visual_nonzero_updates << ','
+           << visual_last_update_status << ',' << vision_trigger_reason << ','
            << (local_risk.translation_weak ? 1 : 0) << ','
            << local_risk.translation_weak_ratio << ','
            << local_risk.translation_min_eigenvalue << ','
@@ -1210,6 +1550,16 @@ void runDualReliabilityMode(
                 << " ndt_calls=" << ndt_call_count
                 << " decision=" << reliability::toString(decision.action) << '\n';
     }
+  }
+  if (enable_vision) {
+    const uint64_t final_stamp = assets.back().stamp_ns;
+    while (image_event_index < image_events.size()) {
+      if (image_events[image_event_index].stamp_ns > final_stamp)
+        throw std::runtime_error("visual_image_event_after_last_scan");
+      processImageEvent(image_events[image_event_index]);
+      ++image_event_index;
+    }
+    visual_updates.flush();
   }
   std::cout << "P6_I6B_MODE_COMPLETE=" << mode << " frames=" << assets.size() << '\n';
 }
@@ -1964,11 +2314,15 @@ void runMode(const std::string& mode, const p4_i2::Inputs& inputs,
 
 int main(int argc, char** argv) {
   try {
-    if ((argc >= 11 && argc <= 14) &&
+    if ((argc >= 11 && argc <= 15) &&
         (std::string(argv[1]) == "STRICT_BASELINE" ||
          std::string(argv[1]) == "UOBS_ONLY" ||
          std::string(argv[1]) == "UNONLOCAL_ONLY" ||
-         std::string(argv[1]) == "DUAL_RELIABILITY")) {
+         std::string(argv[1]) == "DUAL_RELIABILITY" ||
+         std::string(argv[1]) == "FULL_ALGORITHM_V1")) {
+      const bool full_algorithm = std::string(argv[1]) == "FULL_ALGORITHM_V1";
+      if (full_algorithm && argc != 15)
+        throw std::runtime_error("FULL_ALGORITHM_V1_requires_visual_csv_and_replay_arguments");
       p4_i2::Inputs inputs;
       std::string reason;
       if (!p4_i2::readInputs(argv[2], argv[3], &inputs, &reason))
@@ -1976,20 +2330,30 @@ int main(int argc, char** argv) {
       const auto assets = p6_i1::readScanAssets(argv[4]);
       if (assets.size() != inputs.scans.size())
         throw std::runtime_error("scan_asset_and_filter_counts_differ");
+      std::vector<p6_i1::VisualMeasurement> visual;
+      if (full_algorithm) visual = p6_i1::readI6dVisual(argv[11]);
       std::vector<p6_i1::ScanAsset> selected_assets = assets;
-      if (argc >= 12) {
-        const long long requested = std::stoll(argv[11]);
+      const int frame_limit_arg = full_algorithm ? 12 : 11;
+      if ((full_algorithm && argc >= 13) || (!full_algorithm && argc >= 12)) {
+        const long long requested = std::stoll(argv[frame_limit_arg]);
         if (requested <= 0 || static_cast<std::size_t>(requested) > assets.size())
           throw std::runtime_error("requested_frame_limit_out_of_range");
         selected_assets.resize(static_cast<std::size_t>(requested));
         inputs.scans.resize(static_cast<std::size_t>(requested));
       }
-      const uint64_t initialization_stamp_ns = argc == 13
-          ? std::stoull(argv[12]) : (argc == 14 ? std::stoull(argv[12]) : 0);
-      const std::string map_profile = argc == 14 ? argv[13] : "floor01";
+      uint64_t initialization_stamp_ns = 0;
+      std::string map_profile = "floor01";
+      if (full_algorithm) {
+        if (argc >= 14) initialization_stamp_ns = std::stoull(argv[13]);
+        if (argc >= 15) map_profile = argv[14];
+      } else {
+        if (argc >= 13) initialization_stamp_ns = std::stoull(argv[12]);
+        if (argc >= 14) map_profile = argv[13];
+      }
       p6_i1::runDualReliabilityMode(argv[1], inputs, selected_assets, argv[5], argv[6],
                                     argv[7], argv[8], argv[9], argv[10],
-                                    initialization_stamp_ns, map_profile);
+                                    initialization_stamp_ns, map_profile,
+                                    full_algorithm ? &visual : nullptr);
       return 0;
     }
     if (argc == 10 && std::string(argv[1]) == "baseline") {
@@ -2037,6 +2401,7 @@ int main(int argc, char** argv) {
               << "  p6_i1_branched_recovery baseline imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt baseline_replay.csv baseline_trajectory.csv\n"
               << "  p6_i1_branched_recovery strict_single_start imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt strict_replay.csv strict_trajectory.csv\n"
               << "  p6_i1_branched_recovery (STRICT_BASELINE|UOBS_ONLY|UNONLOCAL_ONLY|DUAL_RELIABILITY) imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt trajectory.csv reliability.csv runtime.csv [frame_limit [init_stamp_ns [floor01|corridor01]]]\n"
+              << "  p6_i1_branched_recovery FULL_ALGORITHM_V1 imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt trajectory.csv reliability.csv runtime.csv visual.csv frame_limit init_stamp_ns floor01|corridor01\n"
               << "  p6_i1_branched_recovery MODE imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt visual.csv trajectory.csv branch.csv dcreg.csv multistart.csv candidates.csv arbitration.csv runtime.csv [basin.csv covariance.csv]\n";
     return 2;
   } catch (const std::exception& error) {

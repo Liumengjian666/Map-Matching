@@ -88,6 +88,39 @@ int main() {
     return 1;
   }
 
+  std::unique_ptr<FastLio2IkfomFrontend> visual_position_update =
+      candidate->cloneCandidate();
+  const FilterSnapshot before_visual_position = visual_position_update->getState();
+  const Eigen::Vector3d visual_position_measurement =
+      before_visual_position.map_T_imu.position + Eigen::Vector3d(0.2, -0.1, 0.05);
+  const Eigen::Matrix3d visual_noise = Eigen::Matrix3d::Identity() * 0.01;
+  PoseCorrectionDelta visual_delta;
+  if (!visual_position_update->applyPositionMeasurement(
+          visual_position_measurement, visual_noise, &visual_delta, &failure)) {
+    std::cerr << "FAIL: position-only IKFoM measurement: " << failure << '\n';
+    return 1;
+  }
+  const FilterSnapshot after_visual_position = visual_position_update->getState();
+  if ((after_visual_position.map_T_imu.position - visual_position_measurement).norm() >=
+          (before_visual_position.map_T_imu.position - visual_position_measurement).norm() ||
+      visual_delta.position.norm() <= 0.0 ||
+      !visual_position_update->postconditionsValid(&failure) ||
+      (after_visual_position.covariance -
+       after_visual_position.covariance.transpose()).norm() > 1e-8) {
+    std::cerr << "FAIL: position-only update correction/covariance: " << failure << '\n';
+    return 1;
+  }
+  Eigen::Matrix3d invalid_visual_noise = visual_noise;
+  invalid_visual_noise(0, 0) = -1.0;
+  const Eigen::Vector3d before_rejected =
+      after_visual_position.map_T_imu.position;
+  if (visual_position_update->applyPositionMeasurement(
+          visual_position_measurement, invalid_visual_noise, nullptr, &failure) ||
+      (visual_position_update->getState().map_T_imu.position - before_rejected).norm() > 1e-12) {
+    std::cerr << "FAIL: invalid visual covariance must reject without mutation\n";
+    return 1;
+  }
+
   if (!committed.commitCandidate(*candidate, &failure) ||
       committed.getState().stamp_ns != scan_end_ns) {
     std::cerr << "FAIL: prediction-only candidate commit: " << failure << '\n';

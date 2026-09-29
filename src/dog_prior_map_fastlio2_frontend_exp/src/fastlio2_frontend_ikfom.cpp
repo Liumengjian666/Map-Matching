@@ -445,6 +445,97 @@ bool FastLio2IkfomFrontend::applyPoseMeasurement(
   return true;
 }
 
+bool FastLio2IkfomFrontend::applyPositionMeasurement(
+    const Eigen::Vector3d& map_position_measurement,
+    const Eigen::Matrix3d& measurement_covariance,
+    PoseCorrectionDelta* delta, std::string* failure_reason) {
+  if (failure_reason) failure_reason->clear();
+  if (!impl_->is_initialized)
+    return fail(failure_reason, "filter_not_initialized");
+  if (!map_position_measurement.allFinite())
+    return fail(failure_reason, "nonfinite_position_measurement");
+  if (!measurement_covariance.allFinite())
+    return fail(failure_reason, "nonfinite_position_measurement_covariance");
+  if ((measurement_covariance - measurement_covariance.transpose())
+          .cwiseAbs().maxCoeff() > 1e-10)
+    return fail(failure_reason, "asymmetric_position_measurement_covariance");
+  Eigen::LLT<Eigen::Matrix3d> noise_factor(measurement_covariance);
+  if (noise_factor.info() != Eigen::Success ||
+      !noise_factor.matrixL().toDenseMatrix().allFinite() ||
+      noise_factor.matrixL().toDenseMatrix().diagonal().minCoeff() <= 0.0)
+    return fail(failure_reason, "position_measurement_covariance_not_spd");
+
+  const FilterSnapshot before = getState();
+  state_ikfom prior = impl_->filter.get_x();
+  state_ikfom state = prior;
+  const Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> covariance =
+      impl_->filter.get_P();
+  Eigen::Matrix<double, 3, state_ikfom::DOF> h =
+      Eigen::Matrix<double, 3, state_ikfom::DOF>::Zero();
+  h.block<3, 3>(0, MTK::getStartIdx(&state_ikfom::pos)).setIdentity();
+  const Eigen::Matrix3d innovation_covariance =
+      h * covariance * h.transpose() + measurement_covariance;
+  const Eigen::LDLT<Eigen::Matrix3d> innovation_factor(innovation_covariance);
+  if (innovation_factor.info() != Eigen::Success || !innovation_factor.isPositive())
+    return fail(failure_reason, "position_innovation_covariance_not_positive");
+  const Eigen::Matrix<double, state_ikfom::DOF, 3> gain =
+      covariance * h.transpose() *
+      innovation_factor.solve(Eigen::Matrix3d::Identity());
+  const Eigen::Matrix<double, state_ikfom::DOF, 1> dx =
+      gain * (map_position_measurement - prior.pos);
+  if (!dx.allFinite())
+    return fail(failure_reason, "nonfinite_position_update_increment");
+  state.boxplus(dx);
+
+  const Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> residual_map =
+      Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF>::Identity() - gain * h;
+  Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> posterior =
+      residual_map * covariance * residual_map.transpose() +
+      gain * measurement_covariance * gain.transpose();
+  Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> reset =
+      Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF>::Identity();
+  for (const auto& item : state.SO3_state) {
+    const int index = item.first;
+    const MTK::vect<3, double> tangent = dx.template segment<3>(index);
+    reset.template block<3, 3>(index, index) = A_matrix(tangent).transpose();
+  }
+  for (const auto& item : state.S2_state) {
+    const int index = item.first;
+    MTK::vect<2, double> tangent;
+    tangent << dx[index], dx[index + 1];
+    Eigen::Matrix<double, 2, 3> nx;
+    Eigen::Matrix<double, 3, 2> mx;
+    state.S2_Nx_yy(nx, index);
+    prior.S2_Mx(mx, tangent, index);
+    reset.template block<2, 2>(index, index) = nx * mx;
+  }
+  posterior = (reset * posterior * reset.transpose()).eval();
+  posterior = (0.5 * (posterior + posterior.transpose())).eval();
+  enforceFixedExtrinsicConstraint(state, posterior, impl_->fixed_rotation,
+                                  impl_->fixed_translation);
+  impl_->filter.change_x(state);
+  impl_->filter.change_P(posterior);
+  if (!postconditionsValid(failure_reason)) return false;
+
+  if (delta) {
+    const FilterSnapshot after = getState();
+    delta->position = after.map_T_imu.position - before.map_T_imu.position;
+    const Eigen::Quaterniond q_before = before.map_T_imu.orientation.normalized();
+    const Eigen::Quaterniond q_after = after.map_T_imu.orientation.normalized();
+    const Eigen::Quaterniond dq = (q_before.conjugate() * q_after).normalized();
+    const Eigen::AngleAxisd angle_axis(dq);
+    delta->rotation = angle_axis.axis() * angle_axis.angle();
+    delta->velocity = after.velocity - before.velocity;
+    delta->gyro_bias = after.gyro_bias - before.gyro_bias;
+    delta->accel_bias = after.accel_bias - before.accel_bias;
+    const Eigen::Vector3d tangent_axis = before.gravity.normalized().unitOrthogonal();
+    const Eigen::Vector3d tangent_axis_2 = before.gravity.normalized().cross(tangent_axis);
+    delta->gravity_tangent << tangent_axis.dot(after.gravity - before.gravity),
+                              tangent_axis_2.dot(after.gravity - before.gravity);
+  }
+  return true;
+}
+
 std::unique_ptr<FastLio2IkfomFrontend>
 FastLio2IkfomFrontend::cloneCandidate() const {
   std::unique_ptr<FastLio2IkfomFrontend> candidate(

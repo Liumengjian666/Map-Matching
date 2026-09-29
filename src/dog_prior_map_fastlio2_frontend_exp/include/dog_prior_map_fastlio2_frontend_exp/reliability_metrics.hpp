@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <limits>
 #include <string>
+#include <vector>
 
 namespace dog_prior_map_fastlio2_frontend_exp::reliability {
 
@@ -42,6 +43,9 @@ PclCurvatureTransform transformPclScoreHessianToNormalizedMapTangent(
 // dataset-specific decision.
 struct LocalObservability {
   bool valid = false;
+  // True only for the independent NDT voxel-geometry Gauss-Newton proxy.
+  // It does not depend on PCL's score-Hessian finite-difference audit.
+  bool geometric_proxy = false;
   bool ndt_converged = false;
   bool score_gradient_coordinate_check_passed = false;
   std::string status = "UNINITIALIZED";
@@ -55,11 +59,40 @@ struct LocalObservability {
       std::numeric_limits<double>::quiet_NaN());
   double rotation_block_condition = std::numeric_limits<double>::infinity();
   double translation_block_condition = std::numeric_limits<double>::infinity();
+  Matrix6d normalized_geometric_information = Matrix6d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+  double effective_weight_sum = 0.0;
+  std::uint64_t valid_correspondence_count = 0;
+  std::uint64_t rejected_covariance_count = 0;
 };
+
+struct GeometricObservation {
+  // R*p in map axes (translation excluded), for a map-spatial left rotation
+  // perturbation delta q = -[R*p]_x delta_phi + delta_t.
+  Eigen::Vector3d rotated_source_map = Eigen::Vector3d::Zero();
+  Eigen::Vector3d residual_map = Eigen::Vector3d::Zero();
+  Eigen::Matrix3d voxel_covariance_map = Eigen::Matrix3d::Identity();
+  double nonnegative_weight = 1.0;
+};
+
+// Jacobian of map-frame residual q(delta)-mu under a spatial/left rotation
+// perturbation and additive map translation: [ -[R p]_x, I ].
+Eigen::Matrix<double, 3, 6> geometricPointResidualJacobian(
+    const Eigen::Vector3d& rotated_source_map);
 
 LocalObservability analyzeLocalObservability(
     const Eigen::Matrix<double, 6, 6>& normalized_negative_score_curvature,
     bool ndt_converged, bool score_gradient_coordinate_check_passed);
+
+// Forms a symmetric PSD geometric information proxy from NDT target-voxel
+// covariances. Each covariance is symmetrized and eigenvalue-floored before
+// inversion; weights are normalized by their positive sum. `length_scale_m`
+// is the fixed NDT resolution used to nondimensionalize translation.
+LocalObservability analyzeGeometricObservability(
+    const std::vector<GeometricObservation>& observations,
+    bool ndt_converged, double length_scale_m,
+    double covariance_eigenvalue_floor_m2 = 1e-6,
+    double covariance_relative_floor = 1e-3);
 
 struct TerminalCapture {
   Eigen::Isometry3d map_T_lidar = Eigen::Isometry3d::Identity();

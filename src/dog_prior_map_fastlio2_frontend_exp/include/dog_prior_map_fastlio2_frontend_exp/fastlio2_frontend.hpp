@@ -43,6 +43,13 @@ class FastLio2IkfomFrontend {
       const Pose3d& map_T_imu_measurement,
       const Eigen::Matrix<double, 6, 6>& measurement_covariance,
       PoseCorrectionDelta* delta, std::string* failure_reason);
+  // Linear map-frame XYZ observation. The update uses the complete IKFoM
+  // covariance (including position cross-covariances with velocity/bias),
+  // applies the manifold covariance reset, and rejects non-SPD noise.
+  bool applyPositionMeasurement(
+      const Eigen::Vector3d& map_position_measurement,
+      const Eigen::Matrix3d& measurement_covariance,
+      PoseCorrectionDelta* delta, std::string* failure_reason);
 
   std::unique_ptr<FastLio2IkfomFrontend> cloneCandidate() const;
   bool commitCandidate(const FastLio2IkfomFrontend& candidate,

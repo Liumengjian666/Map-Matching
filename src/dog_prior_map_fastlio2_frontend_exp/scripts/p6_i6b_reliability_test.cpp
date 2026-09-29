@@ -307,6 +307,86 @@ void testInvalidInputs() {
           "unavailable U_obs never fabricates a weak direction");
 }
 
+void testGeometricObservabilityProxy() {
+  const Eigen::Vector3d rotated_source(0.7, -0.4, 1.2);
+  const auto analytic = reliability::geometricPointResidualJacobian(rotated_source);
+  Eigen::Matrix<double, 3, 6> numeric;
+  constexpr double step = 1e-7;
+  for (int axis = 0; axis < 6; ++axis) {
+    Eigen::Vector3d translation_delta = Eigen::Vector3d::Zero();
+    if (axis >= 3) translation_delta(axis % 3) = step;
+    const Eigen::Matrix3d plus_rotation =
+        Eigen::AngleAxisd(step, Eigen::Vector3d::Unit(axis % 3)).toRotationMatrix();
+    const Eigen::Matrix3d minus_rotation =
+        Eigen::AngleAxisd(-step, Eigen::Vector3d::Unit(axis % 3)).toRotationMatrix();
+    const Eigen::Vector3d plus = (axis < 3 ? plus_rotation * rotated_source :
+        rotated_source) + translation_delta;
+    const Eigen::Vector3d minus = (axis < 3 ? minus_rotation * rotated_source :
+        rotated_source) - translation_delta;
+    numeric.col(axis) = (plus - minus) / (2.0 * step);
+  }
+  require(analytic.allFinite() && (analytic - numeric).norm() < 1e-8,
+          "map-spatial left perturbation geometric Jacobian matches central differences");
+
+  std::vector<reliability::GeometricObservation> observations;
+  for (int i = 0; i < 12; ++i) {
+    reliability::GeometricObservation sample;
+    sample.rotated_source_map = Eigen::Vector3d(
+        0.2 * i, std::sin(0.4 * i), std::cos(0.31 * i));
+    sample.residual_map = Eigen::Vector3d(0.001 * i, -0.002, 0.003);
+    sample.voxel_covariance_map = Eigen::Vector3d(0.02, 0.04, 0.08).asDiagonal();
+    sample.nonnegative_weight = 1.0 + 0.1 * i;
+    observations.push_back(sample);
+  }
+  const auto local = reliability::analyzeGeometricObservability(
+      observations, true, 0.8);
+  require(local.valid && local.geometric_proxy &&
+              local.status == "VALID_GEOMETRIC_GAUSS_NEWTON_PROXY",
+          "geometric U_obs valid without the legacy PCL derivative gate");
+  require(!local.score_gradient_coordinate_check_passed &&
+              local.normalized_geometric_information.allFinite() &&
+              (local.normalized_geometric_information -
+               local.normalized_geometric_information.transpose()).norm() < 1e-12,
+          "geometric information is explicitly separate, finite, symmetric");
+  Eigen::SelfAdjointEigenSolver<reliability::Matrix6d> psd_solver(
+      local.normalized_geometric_information);
+  require(psd_solver.info() == Eigen::Success &&
+              psd_solver.eigenvalues().minCoeff() >= -1e-10,
+          "geometric information proxy is positive semidefinite");
+  require(local.valid_correspondence_count == observations.size() &&
+              std::abs(local.effective_weight_sum - 18.6) < 1e-12,
+          "geometric observability reports effective correspondence weights");
+
+  auto invalid_covariance = observations;
+  invalid_covariance.front().voxel_covariance_map.diagonal() << 1.0, 0.1, -0.5;
+  const auto rejected_covariance = reliability::analyzeGeometricObservability(
+      invalid_covariance, true, 0.8);
+  require(rejected_covariance.valid &&
+              rejected_covariance.rejected_covariance_count == 1 &&
+              rejected_covariance.valid_correspondence_count == observations.size() - 1,
+          "materially indefinite target covariance is rejected, not floored into fake geometry");
+
+  // Singular block curvature is valid geometric evidence: a zero eigenvalue
+  // denotes an unconstrained direction, not an invalid PCL Hessian.
+  reliability::LocalObservability rank_deficient;
+  rank_deficient.valid = true;
+  rank_deficient.geometric_proxy = true;
+  rank_deficient.status = "VALID_GEOMETRIC_GAUSS_NEWTON_PROXY";
+  rank_deficient.rotation_block_eigenvalues << 0.0, 0.5, 1.0;
+  rank_deficient.translation_block_eigenvalues << 0.0, 0.3, 0.9;
+  rank_deficient.rotation_block_eigenvectors.setIdentity();
+  rank_deficient.translation_block_eigenvectors.setIdentity();
+  const auto risk = reliability::assessLocalRisk(rank_deficient);
+  require(risk.valid && risk.rotation_weak && risk.translation_weak &&
+              risk.rotation_weak_ratio == 0.0 && risk.translation_weak_ratio == 0.0,
+          "PSD geometric block with null direction is usable as directional risk");
+
+  const auto invalid = reliability::analyzeGeometricObservability(
+      observations, false, 0.8);
+  require(!invalid.valid && invalid.status == "NDT_NOT_CONVERGED",
+          "nonconverged NDT does not expose geometric observability");
+}
+
 }  // namespace
 
 int main() {
@@ -317,6 +397,7 @@ int main() {
     testProbeTriggerAndMahalanobis();
     testTerminalResponseAndDecision();
     testInvalidInputs();
+    testGeometricObservabilityProxy();
     std::cout << "P6_I6B_DUAL_RELIABILITY_TEST_PASS\n";
     return 0;
   } catch (const std::exception& error) {

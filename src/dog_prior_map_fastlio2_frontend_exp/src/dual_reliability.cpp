@@ -204,9 +204,14 @@ LocalRisk assessLocalRisk(const LocalObservability& local,
   const double translation_max = local.translation_block_eigenvalues.maxCoeff();
   const double rotation_min = local.rotation_block_eigenvalues.minCoeff();
   const double translation_min = local.translation_block_eigenvalues.minCoeff();
-  if (rotation_min <= 0.0 || translation_min <= 0.0 ||
+  const double rotation_tolerance = 1e-12 * std::max(1.0, rotation_max);
+  const double translation_tolerance = 1e-12 * std::max(1.0, translation_max);
+  if ((!local.geometric_proxy && (rotation_min <= 0.0 || translation_min <= 0.0)) ||
+      (local.geometric_proxy &&
+       (rotation_min < -rotation_tolerance || translation_min < -translation_tolerance)) ||
       rotation_max <= 0.0 || translation_max <= 0.0) {
-    result.status = "NONPOSITIVE_BLOCK_CURVATURE";
+    result.status = local.geometric_proxy ? "INVALID_GEOMETRIC_INFORMATION_BLOCK" :
+                                          "NONPOSITIVE_BLOCK_CURVATURE";
     return result;
   }
   result.rotation_weak_ratio = rotation_min / rotation_max;

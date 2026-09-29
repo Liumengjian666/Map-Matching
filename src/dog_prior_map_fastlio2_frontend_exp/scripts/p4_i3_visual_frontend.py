@@ -15,10 +15,11 @@ import yaml
 from scipy.spatial import cKDTree
 
 
-def load_calibration(directory):
-    with (directory / "floor01_intrinsics.yaml").open() as stream:
+def load_calibration(directory, dataset_prefix="floor01"):
+    """Load the same validated MEI/depth geometry for another calibrated set."""
+    with (directory / f"{dataset_prefix}_intrinsics.yaml").open() as stream:
         intr = yaml.safe_load(stream)["rgb_camera"]
-    with (directory / "floor01_extrinsics.yaml").open() as stream:
+    with (directory / f"{dataset_prefix}_extrinsics.yaml").open() as stream:
         extr = yaml.safe_load(stream)
     assert intr["model_type"] == "MEI"
     p = intr["projection_parameters"]
@@ -42,11 +43,33 @@ def load_calibration(directory):
         cv2.CV_32FC1,
         cv2.omnidir.RECTIFY_PERSPECTIVE,
     )
-    t_ic = np.array(extr["rgb_camera_to_imu"]["data"]).reshape(4, 4)
-    t_il = np.array(extr["laser_to_imu"]["data"]).reshape(4, 4)
-    for transform in (t_ic, t_il):
-        assert np.max(abs(transform[:3, :3].T @ transform[:3, :3] - np.eye(3))) < 1e-6
-        assert abs(np.linalg.det(transform[:3, :3]) - 1) < 1e-6
+    t_ic = np.array(extr["rgb_camera_to_imu"]["data"], dtype=float).reshape(4, 4)
+    t_il = np.array(extr["laser_to_imu"]["data"], dtype=float).reshape(4, 4)
+    rotation_projection_error = {}
+    for name, transform, max_defect, project_to_so3 in (
+        ("camera_to_imu", t_ic, 1e-6, False),
+        # P2C explicitly projects Corridor01's rounded official laser matrix
+        # before composing transforms. Preserve Floor01's historical raw
+        # calibration semantics and reject non-orthogonal Floor01 matrices.
+        ("laser_to_imu", t_il,
+         2e-3 if dataset_prefix == "corridor01" else 1e-6,
+         dataset_prefix == "corridor01"),
+    ):
+        raw_rotation = transform[:3, :3]
+        defect = np.max(abs(raw_rotation.T @ raw_rotation - np.eye(3)))
+        determinant = np.linalg.det(raw_rotation)
+        if (not np.isfinite(transform).all() or defect > max_defect or
+                determinant <= 0.0 or abs(determinant - 1.0) > max_defect):
+            raise RuntimeError(f"invalid official {name} calibration matrix")
+        if project_to_so3:
+            u, _, vt = np.linalg.svd(raw_rotation)
+            sign = np.eye(3)
+            sign[2, 2] = np.linalg.det(u @ vt)
+            transform[:3, :3] = u @ sign @ vt
+        rotation_projection_error[name] = float(defect)
+    if not np.allclose(t_ic[3], [0, 0, 0, 1], atol=1e-10) or \
+       not np.allclose(t_il[3], [0, 0, 0, 1], atol=1e-10):
+        raise RuntimeError("invalid official calibration homogeneous row")
     mask = (
         (maps[0] >= 0)
         & (maps[0] < size[0] - 1)
@@ -64,6 +87,7 @@ def load_calibration(directory):
         "T_imu_camera": t_ic,
         "T_imu_lidar": t_il,
         "T_camera_lidar": np.linalg.inv(t_ic) @ t_il,
+        "rotation_projection_defect": rotation_projection_error,
     }
 
 
