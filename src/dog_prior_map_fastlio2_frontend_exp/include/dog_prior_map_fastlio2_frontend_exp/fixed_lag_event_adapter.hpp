@@ -6,6 +6,7 @@
 #include <Eigen/Core>
 
 #include <cstdint>
+#include <map>
 #include <set>
 #include <string>
 #include <tuple>
@@ -57,6 +58,17 @@ struct AdapterEventStatus {
   std::string reason = "NOT_PROCESSED";
 };
 
+struct AdapterLifecycleDiagnostics {
+  std::size_t peak_imu_buffer_size = 0;
+  std::size_t peak_active_source_records = 0;
+  std::size_t expired_source_records_removed = 0;
+  bool last_imu_factor_covariance_regularized = false;
+  double last_imu_regularization = 0.0;
+  double last_imu_physical_min_eigenvalue = 0.0;
+  double last_imu_factor_min_eigenvalue = 0.0;
+  double last_imu_information_change_norm = 0.0;
+};
+
 const char* toString(AdapterEventDisposition disposition);
 
 // Causal adapter around the already-tested FixedLagExperimentalController.
@@ -79,6 +91,8 @@ class FixedLagEventAdapter {
   bool appendImu(const ImuSample& sample, std::string* reason = nullptr);
   bool processLidarEvent(const FrozenLidarEvent& event,
                          std::string* reason = nullptr);
+  bool processVisualReferenceStamp(std::uint64_t ref_ns,
+                                   std::string* reason = nullptr);
   bool processVisualEvent(const FrozenVisualEvent& event,
                           std::string* reason = nullptr);
   bool optimizeCurrentWindow(std::string* reason = nullptr);
@@ -90,6 +104,7 @@ class FixedLagEventAdapter {
   std::uint64_t nextObservationId() const;
   std::size_t sourceRecordCount() const;
   std::size_t imuSampleCount() const;
+  AdapterLifecycleDiagnostics lifecycleDiagnostics() const;
 
  private:
   using SourceKey = std::tuple<unsigned char, std::uint64_t, std::uint64_t>;
@@ -98,6 +113,8 @@ class FixedLagEventAdapter {
             std::string* output_reason);
   bool accept(std::uint64_t observation_id, std::string* output_reason);
   bool sourceSeen(const SourceKey& key) const;
+  void recordSource(const SourceKey& key, std::uint64_t expiry_stamp_ns);
+  void pruneExpiredHistory();
   bool ensureStateAt(std::uint64_t stamp_ns, std::string* reason);
   bool buildPredictedState(std::uint64_t stamp_ns, WindowState* output,
                            ImuPreintegratedMeasurement* preintegrated,
@@ -109,10 +126,10 @@ class FixedLagEventAdapter {
   bool rebuildLidarBasis(const FrozenLidarEvent& event,
                          const WindowState& state, Matrix6d* basis, int* rank,
                          std::string* reason) const;
-  bool rawLidarResidual(const WindowState& state, const Pose3d& map_T_imu,
-                        Eigen::Matrix<double, 6, 1>* residual,
-                        std::string* reason) const;
   Pose3d lidarToImu(const Pose3d& map_T_lidar) const;
+  bool configureVisualDirection(const FrozenVisualEvent& event,
+                                VisualRelativeMeasurement* measurement,
+                                std::string* reason) const;
   std::uint64_t allocateObservationId();
   void setStatus(AdapterEventDisposition disposition, std::uint64_t id,
                  const std::string& reason, std::string* output_reason);
@@ -122,10 +139,21 @@ class FixedLagEventAdapter {
   ImuNoiseParameters imu_noise_;
   std::vector<ImuSample, Eigen::aligned_allocator<ImuSample>> imu_samples_;
   std::set<SourceKey> source_records_;
+  std::map<SourceKey, std::uint64_t> source_expiry_stamps_;
+  struct LidarRiskRecord {
+    std::uint64_t stamp_ns = 0;
+    reliability::LocalRisk risk;
+    bool map_support_valid = false;
+    bool ndt_converged = false;
+    Matrix6d exact_jacobian = Matrix6d::Zero();
+  };
+  std::vector<LidarRiskRecord> lidar_risk_history_;
+  std::uint64_t lidar_transaction_watermark_ = 0;
   std::uint64_t next_observation_id_ = 1;
   std::uint64_t last_imu_stamp_ns_ = 0;
   bool initialized_ = false;
   AdapterEventStatus last_status_;
+  mutable AdapterLifecycleDiagnostics lifecycle_diagnostics_;
 };
 
 }  // namespace dog_prior_map_fastlio2_frontend_exp::fixed_lag

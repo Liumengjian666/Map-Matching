@@ -739,7 +739,7 @@ const char* toString(UpdateAction action) {
   return "UNKNOWN";
 }
 
-VisualQualityDecision assessVisualQuality(
+VisualQualityDecision assessVisualSensorQuality(
     const VisualQualityObservation& observation,
     const DualReliabilityConfig& config) {
   VisualQualityDecision result;
@@ -805,12 +805,24 @@ VisualQualityDecision assessVisualQuality(
     result.rejection_reason = "REPROJECTION_ERROR_OUT_OF_RANGE";
     return result;
   }
+  result.passed = true;
+  result.prediction_consistent = false;
+  result.rejection_reason = "WINDOW_PREDICTION_NIS_PENDING";
+  return result;
+}
+
+VisualQualityDecision assessVisualQuality(
+    const VisualQualityObservation& observation,
+    const DualReliabilityConfig& config) {
+  VisualQualityDecision result = assessVisualSensorQuality(observation, config);
+  if (!result.passed) return result;
   result.prediction_consistent =
       std::isfinite(observation.innovation_chi_square) &&
       observation.innovation_chi_square >= 0.0 &&
       observation.innovation_chi_square <=
           config.visual_innovation_chi_square_99pct_3d;
   if (!result.prediction_consistent) {
+    result.passed = false;
     result.rejection_reason = "VISUAL_PREDICTION_INCONSISTENT";
     return result;
   }

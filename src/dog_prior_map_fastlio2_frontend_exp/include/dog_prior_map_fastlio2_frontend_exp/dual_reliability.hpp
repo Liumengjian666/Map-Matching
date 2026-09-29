@@ -224,6 +224,10 @@ VisualQualityDecision assessVisualQuality(
     const VisualQualityObservation& observation,
     const DualReliabilityConfig& config = {});
 
+VisualQualityDecision assessVisualSensorQuality(
+    const VisualQualityObservation& observation,
+    const DualReliabilityConfig& config = {});
+
 struct VisualSubspaceDecision {
   bool valid = false;
   bool complementary = false;

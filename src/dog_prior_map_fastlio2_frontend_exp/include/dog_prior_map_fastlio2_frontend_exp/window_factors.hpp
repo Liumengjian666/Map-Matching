@@ -51,11 +51,25 @@ struct ImuPreintegratedMeasurement {
   Eigen::Matrix3d jacobian_position_gyro_bias = Eigen::Matrix3d::Zero();
   Eigen::Matrix3d jacobian_position_accel_bias = Eigen::Matrix3d::Zero();
   Matrix15d covariance = Matrix15d::Zero();
+  Matrix15d physical_covariance = Matrix15d::Zero();
+  bool factor_covariance_regularized = false;
+  double factor_covariance_regularization = 0.0;
+  double physical_min_eigenvalue = 0.0;
+  double factor_min_eigenvalue = 0.0;
+  double information_change_norm = 0.0;
   Eigen::Vector3d linearization_gyro_bias = Eigen::Vector3d::Zero();
   Eigen::Vector3d linearization_accel_bias = Eigen::Vector3d::Zero();
   bool valid = false;
   std::string status = "UNINITIALIZED";
 };
+
+enum class VisualFactorMode {
+  FULL_TRANSLATION,
+  LIDAR_WEAK_TRANSLATION,
+  NOT_TRIGGERED,
+};
+
+const char* toString(VisualFactorMode mode);
 
 bool preintegrateImu(
     const std::vector<ImuSample, Eigen::aligned_allocator<ImuSample>>& samples,
@@ -116,6 +130,10 @@ struct VisualRelativeMeasurement {
   std::uint64_t current_stamp_ns = 0;
   Eigen::Vector3d reference_imu_translation = Eigen::Vector3d::Zero();
   Eigen::Matrix3d covariance = Eigen::Matrix3d::Identity();
+  Eigen::Matrix3d measurement_basis = Eigen::Matrix3d::Identity();
+  int selected_rank = 3;
+  VisualFactorMode mode = VisualFactorMode::FULL_TRANSLATION;
+  std::string trigger_status = "FULL_TRANSLATION";
   bool valid = false;
   std::string source_semantic = "METRIC_PNP_RELATIVE_TRANSLATION_FACTOR";
 };
@@ -132,5 +150,11 @@ bool linearizeVisualFactor(
     Eigen::Matrix<double, 3, 15>* jacobian_reference,
     Eigen::Matrix<double, 3, 15>* jacobian_current,
     std::string* reason = nullptr);
+
+bool linearizeSelectedVisualFactor(
+    const WindowState& reference, const WindowState& current,
+    const VisualRelativeMeasurement& measurement, Eigen::VectorXd* residual,
+    Eigen::MatrixXd* jacobian_reference, Eigen::MatrixXd* jacobian_current,
+    Eigen::MatrixXd* covariance, std::string* reason = nullptr);
 
 }  // namespace dog_prior_map_fastlio2_frontend_exp::fixed_lag

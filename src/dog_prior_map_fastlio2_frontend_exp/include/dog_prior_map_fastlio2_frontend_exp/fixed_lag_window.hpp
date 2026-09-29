@@ -75,6 +75,15 @@ class FixedLagWindow {
       const ImuNoiseParameters& imu_noise = {});
 
   bool addState(const WindowState& state, std::string* reason = nullptr);
+  bool initializeWithPriorAtomic(const WindowState& state,
+                                 const Matrix15d& information,
+                                 const Vector15d& gradient,
+                                 std::string* reason = nullptr);
+  bool addStateWithImuFactorAtomic(
+      const WindowState& state, std::uint64_t observation_id,
+      std::uint64_t from_stamp_ns,
+      const ImuPreintegratedMeasurement& measurement,
+      std::string* reason = nullptr);
   bool addImuFactor(std::uint64_t observation_id, std::uint64_t from_stamp_ns,
                     std::uint64_t to_stamp_ns,
                     const ImuPreintegratedMeasurement& measurement,

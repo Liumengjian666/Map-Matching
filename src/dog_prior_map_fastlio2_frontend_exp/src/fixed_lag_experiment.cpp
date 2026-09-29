@@ -30,6 +30,24 @@ bool FixedLagExperimentalController::addState(const WindowState& state,
       fail(reason, "fixed_lag_experimental_mode_disabled");
 }
 
+bool FixedLagExperimentalController::initializeWithPriorAtomic(
+    const WindowState& state, const Matrix15d& information,
+    const Vector15d& gradient, std::string* reason) {
+  return enabled() ?
+      window_.initializeWithPriorAtomic(state, information, gradient, reason) :
+      fail(reason, "fixed_lag_experimental_mode_disabled");
+}
+
+bool FixedLagExperimentalController::addStateWithImuFactorAtomic(
+    const WindowState& state, std::uint64_t observation_id,
+    std::uint64_t from_stamp_ns,
+    const ImuPreintegratedMeasurement& measurement, std::string* reason) {
+  return enabled() ? window_.addStateWithImuFactorAtomic(
+                         state, observation_id, from_stamp_ns, measurement,
+                         reason) :
+      fail(reason, "fixed_lag_experimental_mode_disabled");
+}
+
 bool FixedLagExperimentalController::addImuFactor(
     std::uint64_t observation_id, std::uint64_t from_stamp_ns,
     std::uint64_t to_stamp_ns, const ImuPreintegratedMeasurement& measurement,
@@ -83,6 +101,16 @@ bool FixedLagExperimentalController::latestState(WindowState* output,
   const WindowState* state = window_.latestState();
   if (!state) return fail(reason, "window_is_empty");
   *output = *state;
+  return true;
+}
+
+bool FixedLagExperimentalController::oldestState(WindowState* output,
+                                                 std::string* reason) const {
+  if (!enabled()) return fail(reason, "fixed_lag_experimental_mode_disabled");
+  if (!output) return fail(reason, "null_window_state_output");
+  const auto& states = window_.states();
+  if (states.empty()) return fail(reason, "window_is_empty");
+  *output = states.front();
   return true;
 }
 

@@ -222,6 +222,9 @@ bool preintegrateImu(
       !output->delta_position.allFinite() ||
       covariance_solver.eigenvalues().minCoeff() < -1e-10)
     return fail(reason, "invalid_imu_preintegration_result");
+  output->physical_covariance = output->covariance;
+  output->physical_min_eigenvalue = covariance_solver.eigenvalues().minCoeff();
+  output->factor_min_eigenvalue = output->physical_min_eigenvalue;
   output->valid = true;
   output->status = "PASS_PREINTEGRATED_IMU_WITH_BIAS_JACOBIANS";
   return true;

@@ -72,7 +72,6 @@ FrozenVisualEvent visual(std::uint64_t ref_ns, std::uint64_t cur_ns) {
   event.quality.hull_fraction = 0.40;
   event.quality.median_parallax_px = 2.0;
   event.quality.reprojection_rmse_px = 0.5;
-  event.quality.innovation_chi_square = 0.1;
   return event;
 }
 
@@ -195,9 +194,9 @@ void testCausalEventSequence() {
   require(summary.active_observation_id_count <=
               options.maximum_active_observation_ids,
           "active observation ID limit is bounded");
-  require(adapter.sourceRecordCount() == 15,
-          "only accepted LiDAR and visual source keys are retained: " +
-              std::to_string(adapter.sourceRecordCount()));
+  require(adapter.sourceRecordCount() <= 15 &&
+              adapter.lifecycleDiagnostics().expired_source_records_removed > 0,
+          "expired source keys are pruned while active keys remain bounded");
 }
 
 void testSkipReasonsAndEndpointChecks() {

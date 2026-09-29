@@ -75,6 +75,70 @@ FixedLagWindow::FixedLagWindow(const FixedLagOptions& options,
                                const ImuNoiseParameters& imu_noise)
     : options_(options), imu_noise_(imu_noise) {}
 
+bool FixedLagWindow::initializeWithPriorAtomic(
+    const WindowState& state, const Matrix15d& information,
+    const Vector15d& gradient, std::string* reason) {
+  if (reason) reason->clear();
+  if (!states_.empty() || prior_.valid)
+    return fail(reason, "window_already_initialized");
+  if (!finiteState(state) || !information.allFinite() || !gradient.allFinite() ||
+      (information - information.transpose()).cwiseAbs().maxCoeff() > 1e-10)
+    return fail(reason, "invalid_atomic_initial_state_or_prior");
+  Eigen::SelfAdjointEigenSolver<Matrix15d> solver(information);
+  if (solver.info() != Eigen::Success ||
+      solver.eigenvalues().minCoeff() < -1e-10)
+    return fail(reason, "atomic_initial_prior_not_psd");
+  states_.push_back(state);
+  prior_.information = information;
+  prior_.gradient = gradient;
+  prior_.reference_states = states_;
+  prior_.valid = true;
+  summary_.latest_state_timestamp = state.stamp_ns;
+  markWindowMutated();
+  return true;
+}
+
+bool FixedLagWindow::addStateWithImuFactorAtomic(
+    const WindowState& state, std::uint64_t observation_id,
+    std::uint64_t from_stamp_ns,
+    const ImuPreintegratedMeasurement& measurement, std::string* reason) {
+  if (reason) reason->clear();
+  if (!finiteState(state) || states_.empty() ||
+      state.stamp_ns <= states_.back().stamp_ns ||
+      from_stamp_ns != states_.back().stamp_ns ||
+      measurement.start_stamp_ns != from_stamp_ns ||
+      measurement.end_stamp_ns != state.stamp_ns || !measurement.valid ||
+      !finiteSpd(measurement.covariance))
+    return fail(reason, "invalid_atomic_state_or_imu_factor");
+  if (!observationIdAvailable(observation_id, reason)) return false;
+  if (prior_.valid) {
+    const Eigen::Index dimension = static_cast<Eigen::Index>(states_.size() * 15);
+    if (prior_.reference_states.size() != states_.size() ||
+        prior_.information.rows() != dimension ||
+        prior_.information.cols() != dimension ||
+        prior_.gradient.size() != dimension)
+      return fail(reason, "window_prior_invalid_before_atomic_extension");
+  }
+
+  if (prior_.valid) {
+    const Eigen::Index old_dimension = prior_.information.rows();
+    prior_.information.conservativeResize(old_dimension + 15,
+                                          old_dimension + 15);
+    prior_.information.rightCols(15).setZero();
+    prior_.information.bottomRows(15).setZero();
+    prior_.gradient.conservativeResize(old_dimension + 15);
+    prior_.gradient.tail(15).setZero();
+    prior_.reference_states.push_back(state);
+  }
+  states_.push_back(state);
+  imu_factors_.push_back(
+      {observation_id, from_stamp_ns, state.stamp_ns, measurement});
+  active_observation_ids_.insert(observation_id);
+  summary_.latest_state_timestamp = state.stamp_ns;
+  markWindowMutated();
+  return true;
+}
+
 void FixedLagWindow::markWindowMutated() {
   ++window_revision_;
   summary_.prediction_feedback_ready = false;
@@ -200,7 +264,9 @@ bool FixedLagWindow::addVisualFactor(
   std::size_t reference_index = 0, current_index = 0;
   if (!findStateIndex(measurement.reference_stamp_ns, &reference_index) ||
       !findStateIndex(measurement.current_stamp_ns, &current_index) ||
-      reference_index >= current_index || !measurement.valid)
+      reference_index >= current_index || !measurement.valid ||
+      measurement.mode == VisualFactorMode::NOT_TRIGGERED ||
+      measurement.selected_rank < 1 || measurement.selected_rank > 3)
     return fail(reason, "invalid_visual_factor_state_or_measurement");
   if (measurement.source_semantic != "METRIC_PNP_RELATIVE_TRANSLATION_FACTOR")
     return fail(reason, "unsupported_visual_factor_semantic");
@@ -344,22 +410,24 @@ bool FixedLagWindow::linearizeSelected(LinearizationScope scope,
         !findStateIndex(factor_record.measurement.current_stamp_ns,
                         &current_index))
       return fail(reason, "visual_factor_state_removed_without_marginalization");
-    Eigen::Vector3d residual;
-    Eigen::Matrix<double, 3, 15> jacobian_reference, jacobian_current;
-    if (!linearizeVisualFactor(states_[reference_index], states_[current_index],
-                               factor_record.measurement, &residual,
-                               &jacobian_reference, &jacobian_current, reason))
+    Eigen::VectorXd residual;
+    Eigen::MatrixXd jacobian_reference, jacobian_current, covariance;
+    if (!linearizeSelectedVisualFactor(
+            states_[reference_index], states_[current_index],
+            factor_record.measurement, &residual, &jacobian_reference,
+            &jacobian_current, &covariance, reason))
       return false;
-    if (!finiteSpd(factor_record.measurement.covariance))
+    if (!finiteSpd(covariance))
       return fail(reason, "visual_factor_covariance_not_spd");
-    Eigen::LDLT<Eigen::Matrix3d> factor(factor_record.measurement.covariance);
-    const Eigen::Matrix3d information = factor.solve(Eigen::Matrix3d::Identity());
+    Eigen::LDLT<Eigen::MatrixXd> factor(covariance);
+    const Eigen::MatrixXd information = factor.solve(
+        Eigen::MatrixXd::Identity(covariance.rows(), covariance.cols()));
     const Eigen::Index reference_offset = static_cast<Eigen::Index>(reference_index * 15);
     const Eigen::Index current_offset = static_cast<Eigen::Index>(current_index * 15);
     addBlock(hessian, gradient, jacobian_reference, residual,
-             factor_record.measurement.covariance, reference_offset);
+             covariance, reference_offset);
     addBlock(hessian, gradient, jacobian_current, residual,
-             factor_record.measurement.covariance, current_offset);
+             covariance, current_offset);
     addCrossBlock(hessian, jacobian_reference, jacobian_current, information,
                   reference_offset, current_offset);
     *cost += residual.dot(information * residual);

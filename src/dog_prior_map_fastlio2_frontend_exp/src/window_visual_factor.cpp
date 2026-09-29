@@ -21,6 +21,16 @@ Eigen::Matrix3d skew(const Eigen::Vector3d& v) {
 
 }  // namespace
 
+const char* toString(VisualFactorMode mode) {
+  switch (mode) {
+    case VisualFactorMode::FULL_TRANSLATION: return "FULL_TRANSLATION";
+    case VisualFactorMode::LIDAR_WEAK_TRANSLATION:
+      return "LIDAR_WEAK_TRANSLATION";
+    case VisualFactorMode::NOT_TRIGGERED: return "NOT_TRIGGERED";
+  }
+  return "UNKNOWN";
+}
+
 bool buildVisualResidual(const WindowState& reference,
                          const WindowState& current,
                          const VisualRelativeMeasurement& measurement,
@@ -63,6 +73,40 @@ bool linearizeVisualFactor(
   jacobian_reference->block<3, 3>(0, 0) =
       reference.rotation * skew(measurement.reference_imu_translation);
   return jacobian_reference->allFinite() && jacobian_current->allFinite();
+}
+
+bool linearizeSelectedVisualFactor(
+    const WindowState& reference, const WindowState& current,
+    const VisualRelativeMeasurement& measurement, Eigen::VectorXd* residual,
+    Eigen::MatrixXd* jacobian_reference, Eigen::MatrixXd* jacobian_current,
+    Eigen::MatrixXd* covariance, std::string* reason) {
+  if (!residual || !jacobian_reference || !jacobian_current || !covariance)
+    return fail(reason, "null_selected_visual_factor_output");
+  if (measurement.mode == VisualFactorMode::NOT_TRIGGERED ||
+      measurement.selected_rank < 1 || measurement.selected_rank > 3)
+    return fail(reason, "visual_factor_not_triggered_or_invalid_rank");
+  Eigen::Vector3d full_residual;
+  Eigen::Matrix<double, 3, 15> full_reference, full_current;
+  if (!linearizeVisualFactor(reference, current, measurement, &full_residual,
+                             &full_reference, &full_current, reason))
+    return false;
+  const Eigen::MatrixXd basis =
+      measurement.measurement_basis.leftCols(measurement.selected_rank);
+  if (!basis.allFinite() ||
+      (basis.transpose() * basis -
+       Eigen::MatrixXd::Identity(measurement.selected_rank,
+                                 measurement.selected_rank)).norm() > 1e-8)
+    return fail(reason, "invalid_selected_visual_basis");
+  *residual = basis.transpose() * full_residual;
+  *jacobian_reference = basis.transpose() * full_reference;
+  *jacobian_current = basis.transpose() * full_current;
+  *covariance = basis.transpose() * measurement.covariance * basis;
+  *covariance = 0.5 * (*covariance + covariance->transpose());
+  Eigen::LLT<Eigen::MatrixXd> covariance_factor(*covariance);
+  if (covariance_factor.info() != Eigen::Success || !residual->allFinite() ||
+      !jacobian_reference->allFinite() || !jacobian_current->allFinite())
+    return fail(reason, "selected_visual_factor_covariance_not_spd");
+  return true;
 }
 
 }  // namespace dog_prior_map_fastlio2_frontend_exp::fixed_lag
