@@ -1,0 +1,22 @@
+Code and test changes in CODE_SHA 0f7122c2b2927df9581f973fe721b809401f4689:
+
+src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/fastlio2_frontend.hpp
+src/dog_prior_map_fastlio2_frontend_exp/src/fastlio2_frontend_ikfom.cpp
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i1_branched_recovery.cpp
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b/CMakeLists.txt
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6d_run.py
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6e_r2_diagnostics.hpp
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6e_r3_actual_state.hpp
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6e_r3_math.hpp
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6e_r3_residual_jacobian_test.cpp
+
+Analysis helper added with the result commit:
+
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6e_r3_analyze.py
+
+Generated result tree:
+
+src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i6e_r3_residual_consistency/
+
+No FAST-LIO2 checkout, DCReg checkout, frozen input, frozen map, visual CSV,
+NDT parameter, or legacy I6D/R2 result was modified.

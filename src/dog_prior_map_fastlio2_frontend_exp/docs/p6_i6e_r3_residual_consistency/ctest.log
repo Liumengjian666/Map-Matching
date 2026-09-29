@@ -1,0 +1,13 @@
+Test project /tmp/p6-i6e-r3-release-final
+    Start 1: p6_i6b_dual_reliability
+1/4 Test #1: p6_i6b_dual_reliability .............   Passed    0.00 sec
+    Start 2: p6_i6e_conditional_compensation
+2/4 Test #2: p6_i6e_conditional_compensation .....   Passed    0.00 sec
+    Start 3: p6_i6e_projected_pose_consistency
+3/4 Test #3: p6_i6e_projected_pose_consistency ...   Passed    0.00 sec
+    Start 4: p6_i6e_r3_residual_jacobian
+4/4 Test #4: p6_i6e_r3_residual_jacobian .........   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 4
+
+Total Test time (real) =   0.01 sec

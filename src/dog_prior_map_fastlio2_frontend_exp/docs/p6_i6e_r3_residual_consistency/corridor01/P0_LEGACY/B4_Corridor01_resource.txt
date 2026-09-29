@@ -1,0 +1,23 @@
+	Command being timed: "/tmp/p6-i6e-r3-build/p6_i6b_closed_loop FULL_ALGORITHM_V1 /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_i6c_framework/input/imu.csv /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_i6c_framework/input/filter_scans.csv /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_i6c_framework/input/scans.csv /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_i6c_framework/input/request_xyz_f32.bin /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i6d_full_algorithm/corridor01_params_official_calibration.txt /tmp/p6-i6e-r3-legacy-final.RHRjtk/corridor01/B4_Corridor01_trajectory.csv /tmp/p6-i6e-r3-legacy-final.RHRjtk/corridor01/B4_Corridor01_reliability.csv /tmp/p6-i6e-r3-legacy-final.RHRjtk/corridor01/B4_Corridor01_runtime.csv src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i6e_r1_source_repair/corridor01_15s/frozen_visual_quality.csv 149 1517157224188979000 corridor01"
+	User time (seconds): 18.68
+	System time (seconds): 6.05
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:24.77
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 56672
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 12148
+	Voluntary context switches: 642
+	Involuntary context switches: 4128
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 2528
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

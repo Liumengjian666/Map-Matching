@@ -1,0 +1,37 @@
+PAPER-P6-I6E-R3 LEGACY NON-TIMING REGRESSION
+CODE_SHA=0f7122c2b2927df9581f973fe721b809401f4689
+REFERENCE=docs/p6_i6e_r2_projected_consistency/{floor01,corridor01}/P0
+POLICY=LEGACY_BASE_NO_GATE
+R3_MODE=LEGACY
+RESULT=PASS
+
+Comparison rule:
+- CSV row counts must match.
+- Every historical non-timing field is compared as its exact serialized string.
+- Only local_curvature_ms, gradient_gate_ms, extra_probe_ms, and visual
+  update_ms are excluded as wall-runtime-dependent fields.
+- Resource, provenance, and run wall-clock files are not numerical state
+  regression inputs.
+
+Floor01:
+- trajectory.csv: PASS; 144 rows; 78/78 columns compared.
+- reliability.csv: PASS; 144 rows; 103 non-timing columns compared.
+- map_support_diagnostic.csv: PASS; 144 rows; 29/29 columns compared.
+- r2_linearization_consistency.csv: PASS; 144 rows; 12/12 columns compared.
+- r2_nonlocal_basis_comparison.csv: PASS; 144 rows; 28/28 columns compared.
+- r2_projected_innovation.csv: PASS; 144 rows; 29/29 columns compared.
+- r2_shadow_counterfactual.csv: PASS; 56 rows; 28/28 columns compared.
+- visual_updates.csv: PASS; 67 rows; 37 non-timing columns compared.
+
+Corridor01:
+- trajectory.csv: PASS; 149 rows; 78/78 columns compared.
+- reliability.csv: PASS; 149 rows; 103 non-timing columns compared.
+- map_support_diagnostic.csv: PASS; 149 rows; 29/29 columns compared.
+- r2_linearization_consistency.csv: PASS; 249 rows; 12/12 columns compared.
+- r2_nonlocal_basis_comparison.csv: PASS; 149 rows; 28/28 columns compared.
+- r2_projected_innovation.csv: PASS; 149 rows; 29/29 columns compared.
+- r2_shadow_counterfactual.csv: PASS; 56 rows; 28/28 columns compared.
+- visual_updates.csv: PASS; 53 rows; 37 non-timing columns compared.
+
+The argc==15 formal FULL path was used for both P0+LEGACY runs. Therefore the
+formal default remains R2=P0 and R3=LEGACY.
