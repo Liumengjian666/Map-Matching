@@ -42,6 +42,8 @@ MODE_FOR_PROFILE = {
     "B3": "DUAL_RELIABILITY",
     "B4": "FULL_ALGORITHM_V1",
 }
+R2_POLICIES = ("LEGACY_BASE_NO_GATE", "ADAPTIVE_NO_GATE",
+               "BASE_SELECTED_NIS", "ADAPTIVE_SELECTED_NIS")
 
 
 def sha256(path: Path) -> str:
@@ -159,7 +161,11 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--frame-limit", type=int)
     parser.add_argument("--task-label", default="PAPER-P6-I6D-FULL-ALGORITHM-FIRST")
+    parser.add_argument("--r2-policy", choices=R2_POLICIES,
+                        default="LEGACY_BASE_NO_GATE")
     args = parser.parse_args()
+    if args.profile != "B4" and args.r2_policy != "LEGACY_BASE_NO_GATE":
+        parser.error("non-LEGACY --r2-policy is only allowed with B4")
 
     config = yaml.safe_load(CONFIG.read_text())
     profile = config["profiles"][args.profile]
@@ -204,7 +210,8 @@ def main() -> int:
                str(map_path), str(params_path), str(trajectory), str(reliability),
                str(runtime)]
     if args.profile == "B4":
-        command.extend((str(visual_path), str(frame_count), str(init_stamp), map_profile))
+        command.extend((str(visual_path), str(frame_count), str(init_stamp), map_profile,
+                        args.r2_policy))
     else:
         command.extend((str(frame_count), str(init_stamp), map_profile))
     env = os.environ.copy()
@@ -220,6 +227,7 @@ def main() -> int:
     provenance_path = prefix.with_name(prefix.name + "_provenance.txt")
     provenance_path.write_text(
         f"task={args.task_label}\nprofile={args.profile}\nmode={mode}\n"
+        f"r2_policy={args.r2_policy}\n"
         f"dataset={args.dataset}\nsource_manifest_sha256={sha256(input_dir / 'input_manifest.txt')}\n"
         f"map_sha256={sha256(map_path)}\nparams_sha256={sha256(params_path)}\n"
         f"visual_csv_sha256={sha256(visual_path) if visual_path else 'DISABLED'}\n"

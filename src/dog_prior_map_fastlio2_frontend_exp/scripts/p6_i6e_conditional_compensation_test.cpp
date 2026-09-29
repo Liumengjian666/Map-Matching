@@ -261,6 +261,40 @@ void testCoupledWeakDirectionAnnihilation() {
        reliable.transpose() * residual_two).norm();
   require(discarded_residual_projection_delta < 1e-10,
           "adding a discarded weak residual cannot change the projected measurement");
+  const Eigen::MatrixXd S = reliable.transpose() *
+      (reliability::Matrix6d::Identity() + transform * transform.transpose()) * reliable;
+  const Eigen::VectorXd r1 = reliable.transpose() * residual_one;
+  const Eigen::VectorXd r2 = reliable.transpose() * residual_two;
+  const double nis_difference = std::abs(r1.dot(S.ldlt().solve(r1)) -
+                                        r2.dot(S.ldlt().solve(r2)));
+  require(nis_difference < 1e-9, "coupled physical weak direction preserves linear NIS");
+  constexpr double epsilon = 1e-7;
+  const Eigen::Quaterniond nominal_q(map_R_imu);
+  const Eigen::Vector3d nominal_p(0.3, -0.4, 0.7);
+  const Eigen::Vector3d lidar_p = nominal_p + map_R_imu * imu_T_lidar;
+  auto perturbed_residual = [&](double sign) {
+    const Eigen::Vector3d phi = sign * epsilon * weak.head<3>();
+    const Eigen::Quaterniond dq(Eigen::AngleAxisd(phi.norm(), phi.normalized()));
+    const Eigen::Quaterniond measured_q = (dq * nominal_q).normalized();
+    const Eigen::Vector3d measured_p = lidar_p + sign * epsilon * 0.8 * weak.tail<3>() -
+        measured_q * imu_T_lidar;
+    Eigen::Quaterniond error = (nominal_q.conjugate() * measured_q).normalized();
+    if (error.w() < 0.0) error.coeffs() *= -1.0;
+    const Eigen::AngleAxisd angle(error);
+    Eigen::Matrix<double, 6, 1> r;
+    r.head<3>() = measured_p - nominal_p;
+    r.tail<3>() = angle.angle() * angle.axis();
+    return r;
+  };
+  const Eigen::Matrix<double, 6, 1> fd =
+      (perturbed_residual(1.0) - perturbed_residual(-1.0)) / (2.0 * epsilon);
+  const double nonlinear_relative_error = (reliable.transpose() * fd).norm() /
+      (transform * weak).norm();
+  require(nonlinear_relative_error < 1e-5,
+          "left-product LiDAR perturbation cancels in actual right-SO3 IMU residual at equal priors");
+  std::cout << "coupled_linear_nis_difference=" << nis_difference
+            << " nonlinear_fd_epsilon=" << epsilon
+            << " nonlinear_fd_relative_error=" << nonlinear_relative_error << '\n';
   std::cout << "single_weak_leakage_relative=" << leakage
             << " single_weak_orthogonality_error=" << orthogonality_error
             << " discarded_residual_projection_delta=" <<

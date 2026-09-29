@@ -39,6 +39,51 @@
 namespace p6_i1 {
 using namespace dog_prior_map_fastlio2_frontend_exp;
 
+enum class R2Policy {
+  LEGACY_BASE_NO_GATE,
+  ADAPTIVE_NO_GATE,
+  BASE_SELECTED_NIS,
+  ADAPTIVE_SELECTED_NIS
+};
+
+const char* r2PolicyName(R2Policy policy) {
+  switch (policy) {
+    case R2Policy::LEGACY_BASE_NO_GATE: return "LEGACY_BASE_NO_GATE";
+    case R2Policy::ADAPTIVE_NO_GATE: return "ADAPTIVE_NO_GATE";
+    case R2Policy::BASE_SELECTED_NIS: return "BASE_SELECTED_NIS";
+    case R2Policy::ADAPTIVE_SELECTED_NIS: return "ADAPTIVE_SELECTED_NIS";
+  }
+  return "UNKNOWN_R2_POLICY";
+}
+
+R2Policy parseR2Policy(const std::string& value) {
+  if (value == "LEGACY_BASE_NO_GATE") return R2Policy::LEGACY_BASE_NO_GATE;
+  if (value == "ADAPTIVE_NO_GATE") return R2Policy::ADAPTIVE_NO_GATE;
+  if (value == "BASE_SELECTED_NIS") return R2Policy::BASE_SELECTED_NIS;
+  if (value == "ADAPTIVE_SELECTED_NIS") return R2Policy::ADAPTIVE_SELECTED_NIS;
+  throw std::runtime_error("unsupported_r2_policy:" + value);
+}
+
+bool r2PolicyUsesAdaptiveNoise(R2Policy policy) {
+  return policy == R2Policy::ADAPTIVE_NO_GATE ||
+         policy == R2Policy::ADAPTIVE_SELECTED_NIS;
+}
+
+bool r2PolicyUsesNisGate(R2Policy policy) {
+  return policy == R2Policy::BASE_SELECTED_NIS ||
+         policy == R2Policy::ADAPTIVE_SELECTED_NIS;
+}
+
+Eigen::Matrix<double, 6, 6> makeBasePoseNoise(
+    const RuntimeParameters& parameters) {
+  Eigen::Matrix<double, 6, 6> noise = Eigen::Matrix<double, 6, 6>::Zero();
+  noise.block<3, 3>(0, 0) = parameters.pose_position_sigma_m *
+      parameters.pose_position_sigma_m * Eigen::Matrix3d::Identity();
+  noise.block<3, 3>(3, 3) = parameters.pose_rotation_sigma_rad *
+      parameters.pose_rotation_sigma_rad * Eigen::Matrix3d::Identity();
+  return noise;
+}
+
 struct GeometricSearchDiagnostic {
   std::size_t sampled_source_points = 0;
   std::size_t queries_with_neighbors_r = 0;
@@ -1173,6 +1218,78 @@ std::string vectorField(const Eigen::Vector3d& vector) {
   return stream.str();
 }
 
+std::string stateSnapshotHash(const FilterSnapshot& snapshot) {
+  std::uint64_t hash = 1469598103934665603ULL;
+  const auto consume = [&](const void* data, std::size_t size) {
+    const unsigned char* bytes = static_cast<const unsigned char*>(data);
+    for (std::size_t index = 0; index < size; ++index) {
+      hash ^= bytes[index];
+      hash *= 1099511628211ULL;
+    }
+  };
+  consume(&snapshot.stamp_ns, sizeof(snapshot.stamp_ns));
+  consume(snapshot.map_T_imu.position.data(), 3 * sizeof(double));
+  consume(snapshot.map_T_imu.orientation.coeffs().data(), 4 * sizeof(double));
+  consume(snapshot.velocity.data(), 3 * sizeof(double));
+  consume(snapshot.gyro_bias.data(), 3 * sizeof(double));
+  consume(snapshot.accel_bias.data(), 3 * sizeof(double));
+  consume(snapshot.gravity.data(), 3 * sizeof(double));
+  consume(snapshot.T_imu_lidar_rotation.data(), 9 * sizeof(double));
+  consume(snapshot.T_imu_lidar_translation.data(), 3 * sizeof(double));
+  for (Eigen::Index index = 0; index < snapshot.covariance.size(); ++index)
+    consume(snapshot.covariance.data() + index, sizeof(double));
+  std::ostringstream text;
+  text << std::hex << std::setw(16) << std::setfill('0') << hash;
+  return text.str();
+}
+
+bool sameSnapshotExactly(const FilterSnapshot& left,
+                         const FilterSnapshot& right) {
+  return left.stamp_ns == right.stamp_ns &&
+      (left.map_T_imu.position.array() == right.map_T_imu.position.array()).all() &&
+      (left.map_T_imu.orientation.coeffs().array() ==
+       right.map_T_imu.orientation.coeffs().array()).all() &&
+      (left.velocity.array() == right.velocity.array()).all() &&
+      (left.gyro_bias.array() == right.gyro_bias.array()).all() &&
+      (left.accel_bias.array() == right.accel_bias.array()).all() &&
+      (left.gravity.array() == right.gravity.array()).all() &&
+      (left.T_imu_lidar_rotation.array() == right.T_imu_lidar_rotation.array()).all() &&
+      (left.T_imu_lidar_translation.array() ==
+       right.T_imu_lidar_translation.array()).all() &&
+      left.covariance.rows() == right.covariance.rows() &&
+      left.covariance.cols() == right.covariance.cols() &&
+      (left.covariance.array() == right.covariance.array()).all();
+}
+
+Eigen::Matrix<double, 6, 1> poseResidual(
+    const Pose3d& prior, const Pose3d& measurement) {
+  Eigen::Matrix<double, 6, 1> residual;
+  residual.head<3>() = measurement.position - prior.position;
+  Eigen::Quaterniond error =
+      (prior.orientation.conjugate() * measurement.orientation.normalized()).normalized();
+  if (error.w() < 0.0) error.coeffs() *= -1.0;
+  const Eigen::AngleAxisd angle_axis(error);
+  residual.tail<3>() = angle_axis.axis() * angle_axis.angle();
+  return residual;
+}
+
+Eigen::Matrix<double, 6, 6> normalizedLidarToPoseJacobian(
+    const Pose3d& map_T_imu, const Pose3d& T_imu_lidar,
+    double length_scale_m) {
+  const Eigen::Vector3d map_imu_origin_minus_lidar =
+      -(map_T_imu.orientation * T_imu_lidar.position);
+  Eigen::Matrix<double, 6, 6> jacobian =
+      Eigen::Matrix<double, 6, 6>::Zero();
+  jacobian.block<3, 3>(0, 0) = -skewMatrix(map_imu_origin_minus_lidar);
+  jacobian.block<3, 3>(0, 3) =
+      length_scale_m * Eigen::Matrix3d::Identity();
+  jacobian.block<3, 3>(3, 0) =
+      map_T_imu.orientation.toRotationMatrix().transpose();
+  return jacobian;
+}
+
+#include "p6_i6e_r2_diagnostics.hpp"
+
 void runDualReliabilityMode(
     const std::string& mode, const p4_i2::Inputs& inputs,
     const std::vector<ScanAsset>& assets, const std::string& cloud_binary_path,
@@ -1182,12 +1299,15 @@ void runDualReliabilityMode(
     uint64_t initialization_stamp_ns = 0,
     const std::string& map_profile = "floor01",
     const std::vector<VisualMeasurement>* visual_measurements = nullptr,
-    double visual_sigma_m = 0.05) {
+    double visual_sigma_m = 0.05,
+    R2Policy r2_policy = R2Policy::LEGACY_BASE_NO_GATE) {
   if (mode != "STRICT_BASELINE" && mode != "UOBS_ONLY" &&
       mode != "UNONLOCAL_ONLY" && mode != "DUAL_RELIABILITY" &&
       mode != "FULL_ALGORITHM_V1")
     throw std::runtime_error("unsupported_dual_reliability_mode:" + mode);
   const bool enable_vision = mode == "FULL_ALGORITHM_V1";
+  if (!enable_vision && r2_policy != R2Policy::LEGACY_BASE_NO_GATE)
+    throw std::runtime_error("nonlegacy_r2_policy_only_valid_for_full_algorithm");
   if (enable_vision && (!visual_measurements || visual_measurements->empty() ||
       !std::isfinite(visual_sigma_m) || visual_sigma_m <= 0.0))
     throw std::runtime_error("FULL_ALGORITHM_V1_requires_valid_metric_visual_input");
@@ -1281,6 +1401,14 @@ void runDualReliabilityMode(
   std::ofstream trajectory(trajectory_path), events(reliability_path), runtime(runtime_path);
   std::ofstream visual_updates;
   if (enable_vision) visual_updates.open(reliability_path + ".visual_updates.csv");
+  std::ofstream projected_innovation, shadow_counterfactual;
+  std::ofstream nonlocal_basis_comparison, linearization_consistency;
+  if (enable_vision) {
+    projected_innovation.open(reliability_path + ".r2_projected_innovation.csv");
+    shadow_counterfactual.open(reliability_path + ".r2_shadow_counterfactual.csv");
+    nonlocal_basis_comparison.open(reliability_path + ".r2_nonlocal_basis_comparison.csv");
+    linearization_consistency.open(reliability_path + ".r2_linearization_consistency.csv");
+  }
   std::ofstream map_support_diagnostic;
   if (enable_vision)
     map_support_diagnostic.open(reliability_path + ".map_support_diagnostic.csv");
@@ -1290,6 +1418,9 @@ void runDualReliabilityMode(
     throw std::runtime_error("cannot_create_dual_reliability_outputs");
   if (enable_vision && !visual_updates)
     throw std::runtime_error("cannot_create_i6d_visual_update_output");
+  if (enable_vision && (!projected_innovation || !shadow_counterfactual ||
+      !nonlocal_basis_comparison || !linearization_consistency))
+    throw std::runtime_error("cannot_create_i6e_r2_diagnostic_outputs");
   if (enable_vision && !map_support_diagnostic)
     throw std::runtime_error("cannot_create_map_support_diagnostic_output");
   if (use_uobs && !pcl_hessian_status)
@@ -1335,7 +1466,11 @@ void runDualReliabilityMode(
          ",visual_rejection_reason,imu_coasting_s,relocalization_required,recovery_stamp_ns"
          ",local_curvature_ms,gradient_gate_ms,extra_probe_ms"
          ",maximum_position_sigma_m,maximum_rotation_sigma_rad"
-         ",lidar_update_applied,lidar_update_projected\n";
+         ",lidar_update_applied,lidar_update_projected"
+         ",route_provisional,lidar_update_attempted,lidar_update_committed"
+         ",lidar_nis_rejected,visual_update_in_scan_interval"
+         ",external_update_in_scan_interval,last_actual_external_update_ns"
+         ",time_since_last_actual_external_update_s,route_actual\n";
   runtime << std::setprecision(17)
       << "mode,transaction_id,prediction_ms,nominal_ndt_ms,local_curvature_ms"
          ",gradient_gate_ms,extra_probe_ms,ikfom_update_ms,total_ms"
@@ -1356,6 +1491,41 @@ void runDualReliabilityMode(
         << ",position_correction_norm_m,velocity_correction_norm_m"
         << ",anchor_projected_covariance_rowmajor,current_position_covariance_rowmajor"
         << ",effective_noise_rowmajor,update_ms\n";
+    projected_innovation << std::setprecision(17)
+        << "transaction_id,time_s,r2_policy,route_provisional,route_actual"
+        << ",projected_route,reliable_rank,weak_rank,raw_residual_norm"
+        << ",selected_residual_norm,base_R_selected_trace,adaptive_R_selected_trace"
+        << ",adaptive_R_minus_base_frobenius,selected_R_trace,selected_R_min_eigenvalue"
+        << ",selected_R_max_eigenvalue,selected_S_trace,selected_nis,nis_threshold"
+        << ",nis_gate_enabled,update_attempted,update_committed,nis_rejected"
+        << ",update_status,actual_delta_position_norm,actual_delta_rotation_norm"
+        << ",actual_delta_velocity_norm,prior_position_sigma_max,posterior_position_sigma_max\n";
+    shadow_counterfactual << std::setprecision(17)
+        << "transaction_id,time_s,policy,prior_state_hash,prior_position_xyz"
+        << ",prior_velocity_xyz,reliable_rank,weak_rank,raw_pose_residual_norm"
+        << ",selected_residual_norm,selected_noise_trace,selected_noise_min_eigenvalue"
+        << ",selected_noise_max_eigenvalue,selected_innovation_trace,selected_nis"
+        << ",selected_nis_threshold,nis_gate_passed,update_attempted,update_committed"
+        << ",update_failure,delta_position_norm,delta_rotation_norm,delta_velocity_norm"
+        << ",delta_gyro_bias_norm,delta_accel_bias_norm,posterior_position_sigma_max"
+        << ",official_state_hash_after,official_state_unchanged\n";
+    nonlocal_basis_comparison << std::setprecision(17)
+        << "transaction_id,time_s,r2_policy,local_status,combined_status"
+        << ",local_weak_dimension,combined_weak_dimension,local_reliable_dimension"
+        << ",combined_reliable_dimension,additional_removed_dimension"
+        << ",local_selected_rank,combined_selected_rank,local_nis,local_threshold"
+        << ",combined_nis,combined_threshold,local_raw_residual_norm"
+        << ",combined_raw_residual_norm,local_selected_residual_norm"
+        << ",combined_selected_residual_norm,local_projected_R_trace"
+        << ",combined_projected_R_trace,local_projected_R_min_eigenvalue"
+        << ",local_projected_R_max_eigenvalue,combined_projected_R_min_eigenvalue"
+        << ",combined_projected_R_max_eigenvalue,local_projected_R_rowmajor"
+        << ",combined_projected_R_rowmajor\n";
+    linearization_consistency << std::setprecision(17)
+        << "transaction_id,time_s,r2_policy,weak_index,weak_direction_normalized"
+        << ",nominal_leakage,predicted_leakage,rotation_difference_rad"
+        << ",translation_difference_m,fd_selected_weak_response_norm"
+        << ",fd_selected_weak_response,status\n";
     map_support_diagnostic << std::setprecision(17)
         << "transaction_id,time_s,source_points,sampled_points,predicted_sampled_points"
         << ",M0_converged,M0_fitness,M0_objective,ndt_converged_without_geometric_support"
@@ -1438,6 +1608,8 @@ void runDualReliabilityMode(
   bool last_visual_applied = false;
   int last_visual_complementary_rank = 0;
   std::uint64_t last_visual_observation_stamp_ns = 0;
+  bool visual_update_in_scan_interval = false;
+  std::uint64_t last_actual_external_update_ns = frontend.getState().stamp_ns;
   std::string last_visual_rejection_reason = "NO_VISUAL_EVENT";
   std::uint64_t coast_start_ns = 0;
   std::uint64_t recovery_stamp_ns = 0;
@@ -1559,6 +1731,8 @@ void runDualReliabilityMode(
         if (delta.position.norm() > 1e-12 || delta.velocity.norm() > 1e-12)
           ++visual_nonzero_updates;
         last_visual_applied = true;
+        visual_update_in_scan_interval = true;
+        last_actual_external_update_ns = measurement.cur_ns;
       } else {
         rejection = "UPDATE_FAILED_" + update_failure;
         status = "REJECTED_UPDATE_FAILURE";
@@ -1600,6 +1774,7 @@ void runDualReliabilityMode(
   for (std::size_t index = 0; index < assets.size(); ++index) {
     const ScanAsset& asset = assets[index];
     const p4_i2::PoseRecord& saved = inputs.scans[index];
+    visual_update_in_scan_interval = false;
     if (saved.transaction_id != asset.transaction_id || saved.stamp_ns != asset.stamp_ns)
       throw std::runtime_error("filter_input_and_cloud_metadata_alignment_mismatch");
     const auto frame_start = std::chrono::steady_clock::now();
@@ -1876,6 +2051,23 @@ void runDualReliabilityMode(
       vision_assist.observation_available = recent_visual;
     }
 
+    const std::string route_provisional = reliability::toString(conditional_route.mode);
+    const auto base_noise = makeBasePoseNoise(parameters);
+    const auto& adaptive_noise = decision.measurement_noise.covariance;
+    if (enable_vision) {
+      writeR2PreupdateDiagnostics(frontend, asset, r2_policy,
+          poseFromMatrix(nominal.pose), T_imu_lidar_pose, local_risk,
+          routed_lidar_risk, base_noise, adaptive_noise,
+          decision.measurement_noise.valid, nonlocal_basis_comparison,
+          linearization_consistency, shadow_counterfactual);
+    }
+    ProjectedPoseInnovation projected_diagnostic;
+    PoseCorrectionDelta actual_projected_delta;
+    int selected_rank = 0;
+    double base_selected_trace = nan, adaptive_selected_trace = nan;
+    double adaptive_base_difference = nan;
+    bool lidar_update_attempted = false, lidar_nis_rejected = false;
+    std::string projected_status = "NO_PROJECTED_UPDATE";
     double update_ms = 0.0;
     bool step_limited = false;
     bool lidar_update_applied = false;
@@ -1904,6 +2096,7 @@ void runDualReliabilityMode(
           used_lidar_pose, T_imu_lidar_pose);
       const auto update_start = std::chrono::steady_clock::now();
       if (mode == "STRICT_BASELINE") {
+        lidar_update_attempted = true;
         if (!frontend.applyPoseMeasurement(used_imu_measurement, nullptr, &failure))
           throw std::runtime_error("strict_baseline_pose_update_failed_tx_" +
               std::to_string(asset.transaction_id) + ":" + failure);
@@ -1930,27 +2123,41 @@ void runDualReliabilityMode(
           // anchored to the propagated state actually held by the filter.
           previous_used = predicted_map_T_lidar;
         } else {
-          Eigen::Matrix<double, 6, 6> base_noise =
-              Eigen::Matrix<double, 6, 6>::Zero();
-          base_noise.block<3, 3>(0, 0) =
-              parameters.pose_position_sigma_m * parameters.pose_position_sigma_m *
-              Eigen::Matrix3d::Identity();
-          base_noise.block<3, 3>(3, 3) =
-              parameters.pose_rotation_sigma_rad * parameters.pose_rotation_sigma_rad *
-              Eigen::Matrix3d::Identity();
-          if (!frontend.applyProjectedPoseMeasurement(used_imu_measurement,
-                  base_noise, reliable_basis, reliable_rank, nullptr, &failure))
-            throw std::runtime_error("directional_lidar_pose_update_failed_tx_" +
-                std::to_string(asset.transaction_id) + ":" + failure);
-          lidar_update_applied = true;
-          lidar_update_projected = true;
+          selected_rank = reliable_rank;
+          const Eigen::MatrixXd B = reliable_basis.leftCols(reliable_rank);
+          const Eigen::MatrixXd rb = B.transpose() * base_noise * B;
+          base_selected_trace = rb.trace();
+          if (decision.measurement_noise.valid) {
+            const Eigen::MatrixXd ra = B.transpose() * adaptive_noise * B;
+            adaptive_selected_trace = ra.trace();
+            adaptive_base_difference = (ra - rb).norm();
+          }
+          lidar_update_attempted = true;
+          if (r2PolicyUsesAdaptiveNoise(r2_policy) && !decision.measurement_noise.valid) {
+            projected_status = "INVALID_ADAPTIVE_MEASUREMENT_NOISE";
+          } else {
+            const auto& selected_noise = r2PolicyUsesAdaptiveNoise(r2_policy)
+                ? adaptive_noise : base_noise;
+            lidar_update_applied = frontend.applyProjectedPoseMeasurementChecked(
+                used_imu_measurement, selected_noise, reliable_basis, reliable_rank,
+                r2PolicyUsesNisGate(r2_policy), chiSquare99Threshold(reliable_rank),
+                &projected_diagnostic, &actual_projected_delta, &failure);
+            lidar_update_projected = lidar_update_applied;
+            lidar_nis_rejected = failure == "SELECTED_NIS_REJECTED";
+            projected_status = lidar_update_applied ? "COMMITTED" : failure;
+          }
+          if (!lidar_update_applied) {
+            previous_used = predicted_map_T_lidar;
+            has_previous_used = true;
+          }
         }
-      } else if (!decision.measurement_noise.valid ||
-          !frontend.applyPoseMeasurement(used_imu_measurement,
-              decision.measurement_noise.covariance, nullptr, &failure)) {
-        throw std::runtime_error("adaptive_pose_update_failed_tx_" +
-            std::to_string(asset.transaction_id) + ":" + failure);
       } else {
+        lidar_update_attempted = true;
+        if (!decision.measurement_noise.valid ||
+            !frontend.applyPoseMeasurement(used_imu_measurement,
+                decision.measurement_noise.covariance, nullptr, &failure))
+          throw std::runtime_error("adaptive_pose_update_failed_tx_" +
+              std::to_string(asset.transaction_id) + ":" + failure);
         lidar_update_applied = true;
       }
       update_ms = std::chrono::duration<double, std::milli>(
@@ -1963,6 +2170,27 @@ void runDualReliabilityMode(
     }
 
     const FilterSnapshot corrected = frontend.getState();
+    if (lidar_update_applied) last_actual_external_update_ns = asset.stamp_ns;
+    const bool external_update_in_scan_interval = lidar_update_applied || visual_update_in_scan_interval;
+    const std::string route_actual = lidar_update_applied
+        ? reliability::toString(conditional_route.mode)
+        : (visual_update_in_scan_interval ? "VISUAL_ONLY_THIS_INTERVAL" : "IMU_ONLY_THIS_INTERVAL");
+    const double time_since_actual_external_update =
+        static_cast<double>(asset.stamp_ns - last_actual_external_update_ns) * 1e-9;
+    if (enable_vision) {
+      projected_innovation << asset.transaction_id << ',' << asset.time_s << ',' << r2PolicyName(r2_policy)
+          << ',' << route_provisional << ',' << route_actual << ',' << (routed_lidar_risk.weak_dimension > 0)
+          << ',' << selected_rank << ',' << routed_lidar_risk.weak_dimension
+          << ',' << projected_diagnostic.residual_norm << ',' << projected_diagnostic.projected_residual_norm
+          << ',' << base_selected_trace << ',' << adaptive_selected_trace << ',' << adaptive_base_difference
+          << ',' << projected_diagnostic.projected_noise_trace << ',' << projected_diagnostic.projected_noise_min_eigenvalue
+          << ',' << projected_diagnostic.projected_noise_max_eigenvalue << ',' << projected_diagnostic.innovation_covariance_trace
+          << ',' << projected_diagnostic.nis << ',' << chiSquare99Threshold(selected_rank)
+          << ',' << r2PolicyUsesNisGate(r2_policy) << ',' << lidar_update_attempted << ',' << lidar_update_applied
+          << ',' << lidar_nis_rejected << ',' << projected_status << ',' << actual_projected_delta.position.norm()
+          << ',' << actual_projected_delta.rotation.norm() << ',' << actual_projected_delta.velocity.norm()
+          << ',' << maximumPositionSigma(predicted) << ',' << maximumPositionSigma(corrected) << '\n';
+    }
     if (corrected.stamp_ns != asset.stamp_ns || !frontend.postconditionsValid(&failure))
       throw std::runtime_error("dual_reliability_filter_postcondition_failed_tx_" +
           std::to_string(asset.transaction_id) + ":" + failure);
@@ -2087,7 +2315,11 @@ void runDualReliabilityMode(
            << local_curvature_ms << ',' << gradient_gate_ms << ','
            << extra_probe_ms << ',' << maximum_position_sigma_m << ','
            << maximum_rotation_sigma_rad << ',' << (lidar_update_applied ? 1 : 0)
-           << ',' << (lidar_update_projected ? 1 : 0) << '\n';
+           << ',' << (lidar_update_projected ? 1 : 0)
+           << ',' << route_provisional << ',' << lidar_update_attempted << ',' << lidar_update_applied
+           << ',' << lidar_nis_rejected << ',' << visual_update_in_scan_interval
+           << ',' << external_update_in_scan_interval << ',' << last_actual_external_update_ns
+           << ',' << time_since_actual_external_update << ',' << route_actual << '\n';
     const double total_ms = std::chrono::duration<double, std::milli>(
         std::chrono::steady_clock::now() - frame_start).count();
     runtime << mode << ',' << asset.transaction_id << ',' << prediction_ms << ','
@@ -2868,14 +3100,16 @@ void runMode(const std::string& mode, const p4_i2::Inputs& inputs,
 
 int main(int argc, char** argv) {
   try {
-    if ((argc >= 11 && argc <= 15) &&
+    if ((argc >= 11 && argc <= 16) &&
         (std::string(argv[1]) == "STRICT_BASELINE" ||
          std::string(argv[1]) == "UOBS_ONLY" ||
          std::string(argv[1]) == "UNONLOCAL_ONLY" ||
          std::string(argv[1]) == "DUAL_RELIABILITY" ||
          std::string(argv[1]) == "FULL_ALGORITHM_V1")) {
       const bool full_algorithm = std::string(argv[1]) == "FULL_ALGORITHM_V1";
-      if (full_algorithm && argc != 15)
+      if (!full_algorithm && argc > 15)
+        throw std::runtime_error("R2_policy_argument_is_FULL_only");
+      if (full_algorithm && argc != 15 && argc != 16)
         throw std::runtime_error("FULL_ALGORITHM_V1_requires_visual_csv_and_replay_arguments");
       p4_i2::Inputs inputs;
       std::string reason;
@@ -2907,7 +3141,9 @@ int main(int argc, char** argv) {
       p6_i1::runDualReliabilityMode(argv[1], inputs, selected_assets, argv[5], argv[6],
                                     argv[7], argv[8], argv[9], argv[10],
                                     initialization_stamp_ns, map_profile,
-                                    full_algorithm ? &visual : nullptr);
+                                    full_algorithm ? &visual : nullptr, 0.05,
+                                    full_algorithm && argc == 16 ? p6_i1::parseR2Policy(argv[15])
+                                        : p6_i1::R2Policy::LEGACY_BASE_NO_GATE);
       return 0;
     }
     if (argc == 10 && std::string(argv[1]) == "baseline") {
@@ -2955,7 +3191,7 @@ int main(int argc, char** argv) {
               << "  p6_i1_branched_recovery baseline imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt baseline_replay.csv baseline_trajectory.csv\n"
               << "  p6_i1_branched_recovery strict_single_start imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt strict_replay.csv strict_trajectory.csv\n"
               << "  p6_i1_branched_recovery (STRICT_BASELINE|UOBS_ONLY|UNONLOCAL_ONLY|DUAL_RELIABILITY) imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt trajectory.csv reliability.csv runtime.csv [frame_limit [init_stamp_ns [floor01|corridor01]]]\n"
-              << "  p6_i1_branched_recovery FULL_ALGORITHM_V1 imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt trajectory.csv reliability.csv runtime.csv visual.csv frame_limit init_stamp_ns floor01|corridor01\n"
+              << "  p6_i1_branched_recovery FULL_ALGORITHM_V1 imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt trajectory.csv reliability.csv runtime.csv visual.csv frame_limit init_stamp_ns floor01|corridor01 [r2_policy]\n"
               << "  p6_i1_branched_recovery MODE imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt visual.csv trajectory.csv branch.csv dcreg.csv multistart.csv candidates.csv arbitration.csv runtime.csv [basin.csv covariance.csv]\n";
     return 2;
   } catch (const std::exception& error) {

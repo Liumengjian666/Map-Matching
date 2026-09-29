@@ -189,7 +189,9 @@ bool buildProjectedPoseSystem(
   system->S = system->H * prior_covariance * system->H.transpose() + system->R;
   system->innovation_factor.compute(system->S);
   if (system->innovation_factor.info() != Eigen::Success ||
-      !system->innovation_factor.isPositive())
+      !system->S.allFinite() || !system->innovation_factor.isPositive() ||
+      !system->innovation_factor.vectorD().allFinite() ||
+      system->innovation_factor.vectorD().minCoeff() <= 0.0)
     return reject("projected_pose_innovation_not_positive");
 
   Eigen::Matrix<double, 6, 1> raw_residual;
@@ -743,7 +745,6 @@ bool FastLio2IkfomFrontend::applyProjectedPoseMeasurementChecked(
     ProjectedPoseInnovation* diagnostic, PoseCorrectionDelta* delta,
     std::string* reason) {
   if (reason) reason->clear();
-  if (delta) *delta = PoseCorrectionDelta();
   if (diagnostic) *diagnostic = ProjectedPoseInnovation();
   if (!impl_->is_initialized) {
     if (diagnostic) diagnostic->status = "filter_not_initialized";
@@ -770,6 +771,7 @@ bool FastLio2IkfomFrontend::applyProjectedPoseMeasurementChecked(
     if (diagnostic) *diagnostic = system.diagnostic;
     return fail(reason, "invalid_projected_pose_nis_threshold");
   }
+  if (enforce_nis_gate) system.diagnostic.threshold = nis_threshold;
   if (enforce_nis_gate && system.diagnostic.nis > nis_threshold) {
     system.diagnostic.status = "SELECTED_NIS_REJECTED";
     if (diagnostic) *diagnostic = system.diagnostic;
@@ -778,8 +780,8 @@ bool FastLio2IkfomFrontend::applyProjectedPoseMeasurementChecked(
 
   state_ikfom state = prior;
   const Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> covariance = backup_P;
-  const Eigen::MatrixXd gain = system.innovation_factor.solve(
-      (system.H * covariance).eval()).transpose();
+  const Eigen::MatrixXd gain = covariance * system.H.transpose() *
+      system.innovation_factor.solve(Eigen::MatrixXd::Identity(rank, rank));
   const Eigen::Matrix<double, state_ikfom::DOF, 1> dx =
       gain * system.residual;
   if (!gain.allFinite() || !dx.allFinite()) {

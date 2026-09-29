@@ -11,21 +11,16 @@ using namespace dog_prior_map_fastlio2_frontend_exp;
 namespace {
 
 bool sameFilterSnapshot(const FilterSnapshot& lhs, const FilterSnapshot& rhs) {
-  const Eigen::Quaterniond lhs_q = lhs.map_T_imu.orientation.normalized();
-  const Eigen::Quaterniond rhs_q = rhs.map_T_imu.orientation.normalized();
-  const double rotation_error = Eigen::AngleAxisd(lhs_q.conjugate() * rhs_q).angle();
   return lhs.stamp_ns == rhs.stamp_ns &&
-      (lhs.map_T_imu.position - rhs.map_T_imu.position).norm() <= 1e-12 &&
-      rotation_error <= 1e-12 &&
-      (lhs.velocity - rhs.velocity).norm() <= 1e-12 &&
-      (lhs.gyro_bias - rhs.gyro_bias).norm() <= 1e-12 &&
-      (lhs.accel_bias - rhs.accel_bias).norm() <= 1e-12 &&
-      (lhs.gravity - rhs.gravity).norm() <= 1e-12 &&
-      (lhs.T_imu_lidar_translation - rhs.T_imu_lidar_translation).norm() <= 1e-12 &&
-      (lhs.T_imu_lidar_rotation - rhs.T_imu_lidar_rotation).norm() <= 1e-12 &&
+      lhs.map_T_imu.position == rhs.map_T_imu.position &&
+      lhs.map_T_imu.orientation.coeffs() == rhs.map_T_imu.orientation.coeffs() &&
+      lhs.velocity == rhs.velocity && lhs.gyro_bias == rhs.gyro_bias &&
+      lhs.accel_bias == rhs.accel_bias && lhs.gravity == rhs.gravity &&
+      lhs.T_imu_lidar_translation == rhs.T_imu_lidar_translation &&
+      lhs.T_imu_lidar_rotation == rhs.T_imu_lidar_rotation &&
       lhs.covariance.rows() == rhs.covariance.rows() &&
       lhs.covariance.cols() == rhs.covariance.cols() &&
-      (lhs.covariance - rhs.covariance).norm() <= 1e-12;
+      lhs.covariance == rhs.covariance;
 }
 
 }  // namespace
@@ -288,10 +283,9 @@ int main() {
       failure != "SELECTED_NIS_REJECTED" ||
       gated_diagnostic.status != "SELECTED_NIS_REJECTED" ||
       !sameFilterSnapshot(before_gate, gated_candidate->getState()) ||
-      gated_delta.position.norm() != 0.0 || gated_delta.rotation.norm() != 0.0 ||
-      gated_delta.velocity.norm() != 0.0 || gated_delta.gyro_bias.norm() != 0.0 ||
-      gated_delta.accel_bias.norm() != 0.0 ||
-      gated_delta.gravity_tangent.norm() != 0.0) {
+      !gated_delta.position.isOnes() || !gated_delta.rotation.isOnes() ||
+      !gated_delta.velocity.isOnes() || !gated_delta.gyro_bias.isOnes() ||
+      !gated_delta.accel_bias.isOnes() || !gated_delta.gravity_tangent.isOnes()) {
     std::cerr << "FAIL: selected NIS rejection was not atomic: " << failure << '\n';
     return 1;
   }
@@ -299,7 +293,7 @@ int main() {
   std::unique_ptr<FastLio2IkfomFrontend> ungated_candidate = candidate->cloneCandidate();
   PoseCorrectionDelta ungated_delta;
   if (!ungated_candidate->applyProjectedPoseMeasurement(
-          diagnostic_measurement, pose_noise, y_basis, 1, &ungated_delta, &failure) ||
+          high_innovation, pose_noise, y_basis, 1, &ungated_delta, &failure) ||
       ungated_delta.position.norm() <= 0.0) {
     std::cerr << "FAIL: gate-off legacy projected update: " << failure << '\n';
     return 1;
