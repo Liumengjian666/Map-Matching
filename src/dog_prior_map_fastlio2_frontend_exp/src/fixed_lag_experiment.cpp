@@ -51,10 +51,39 @@ bool FixedLagExperimentalController::addVisualFactor(
       fail(reason, "fixed_lag_experimental_mode_disabled");
 }
 
+bool FixedLagExperimentalController::setInitialPrior(
+    std::uint64_t stamp_ns, const Matrix15d& information,
+    const Vector15d& gradient, std::string* reason) {
+  return enabled() ? window_.setInitialPrior(stamp_ns, information, gradient,
+                                               reason) :
+      fail(reason, "fixed_lag_experimental_mode_disabled");
+}
+
 bool FixedLagExperimentalController::optimizeAndMarginalize(std::string* reason) {
   if (!enabled()) return fail(reason, "fixed_lag_experimental_mode_disabled");
   if (!window_.optimize(reason)) return false;
   return window_.marginalizeIfNeeded(reason);
+}
+
+bool FixedLagExperimentalController::stateAt(std::uint64_t stamp_ns,
+                                              WindowState* output,
+                                              std::string* reason) const {
+  if (!enabled()) return fail(reason, "fixed_lag_experimental_mode_disabled");
+  if (!output) return fail(reason, "null_window_state_output");
+  const WindowState* state = window_.stateAt(stamp_ns);
+  if (!state) return fail(reason, "window_state_not_found");
+  *output = *state;
+  return true;
+}
+
+bool FixedLagExperimentalController::latestState(WindowState* output,
+                                                 std::string* reason) const {
+  if (!enabled()) return fail(reason, "fixed_lag_experimental_mode_disabled");
+  if (!output) return fail(reason, "null_window_state_output");
+  const WindowState* state = window_.latestState();
+  if (!state) return fail(reason, "window_is_empty");
+  *output = *state;
+  return true;
 }
 
 bool FixedLagExperimentalController::predictionFeedbackSeed(

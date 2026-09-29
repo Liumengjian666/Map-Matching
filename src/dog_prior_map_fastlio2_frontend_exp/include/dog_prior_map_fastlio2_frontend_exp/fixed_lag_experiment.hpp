@@ -34,7 +34,13 @@ class FixedLagExperimentalController {
                       std::string* reason = nullptr);
   bool addVisualFactor(const VisualRelativeMeasurement& measurement,
                        std::string* reason = nullptr);
+  bool setInitialPrior(std::uint64_t stamp_ns, const Matrix15d& information,
+                       const Vector15d& gradient,
+                       std::string* reason = nullptr);
   bool optimizeAndMarginalize(std::string* reason = nullptr);
+  bool stateAt(std::uint64_t stamp_ns, WindowState* output,
+               std::string* reason = nullptr) const;
+  bool latestState(WindowState* output, std::string* reason = nullptr) const;
   bool predictionFeedbackSeed(WindowState* output,
                               std::string* reason = nullptr) const;
   WindowSummary summary() const;

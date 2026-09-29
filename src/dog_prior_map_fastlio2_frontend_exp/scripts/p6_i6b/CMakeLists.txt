@@ -16,7 +16,8 @@ add_library(p6_i6b_dual_reliability STATIC
   "${PACKAGE_ROOT}/src/window_visual_factor.cpp"
   "${PACKAGE_ROOT}/src/window_marginalization.cpp"
   "${PACKAGE_ROOT}/src/fixed_lag_window.cpp"
-  "${PACKAGE_ROOT}/src/fixed_lag_experiment.cpp")
+  "${PACKAGE_ROOT}/src/fixed_lag_experiment.cpp"
+  "${PACKAGE_ROOT}/src/fixed_lag_event_adapter.cpp")
 target_compile_features(p6_i6b_dual_reliability PUBLIC cxx_std_17)
 target_include_directories(p6_i6b_dual_reliability PUBLIC
   "${PACKAGE_ROOT}/include")
@@ -83,6 +84,16 @@ target_compile_options(p6_a1_r1_fixed_lag_regression_test PRIVATE
   -Wall -Wextra -Wpedantic)
 add_test(NAME p6_a1_r1_fixed_lag_regression
   COMMAND $<TARGET_FILE:p6_a1_r1_fixed_lag_regression_test>)
+
+add_executable(p6_alg_integration_a2a_adapter_test
+  "${PACKAGE_ROOT}/scripts/p6_alg_integration_a2a_adapter_test.cpp")
+target_compile_features(p6_alg_integration_a2a_adapter_test PRIVATE cxx_std_17)
+target_link_libraries(p6_alg_integration_a2a_adapter_test PRIVATE
+  p6_i6b_dual_reliability Eigen3::Eigen)
+target_compile_options(p6_alg_integration_a2a_adapter_test PRIVATE
+  -Wall -Wextra -Wpedantic)
+add_test(NAME p6_alg_integration_a2a_adapter
+  COMMAND $<TARGET_FILE:p6_alg_integration_a2a_adapter_test>)
 
 if(BUILD_I6B_CLOSED_LOOP_TOOLS)
   set(FASTLIO2_ROOT "" CACHE PATH "Pinned FAST-LIO2 source root")

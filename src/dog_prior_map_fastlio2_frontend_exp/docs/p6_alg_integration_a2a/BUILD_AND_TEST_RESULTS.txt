@@ -1,0 +1,31 @@
+TASK=PAPER-P6-ALG-INTEGRATION-A2A
+SOURCE_SHA=53ac44292c7665a26df90e3a3fdcf3c9e2d2acb2
+BUILD_DIR=/tmp/p6-a2-new
+BUILD=PASS (Release, standalone p6_i6b CMake)
+DIFF_CHECK=PASS
+FORMAL_ROSBAG_RUN=NOT_RUN (required boundary)
+
+CTest (7/7 passed):
+  p6_i6b_dual_reliability
+  p6_i6e_conditional_compensation
+  p6_i6f_measurement_noise
+  p6_i6f_joint_window
+  p6_i6f_imu_preintegration
+  p6_a1_r1_fixed_lag_regression
+  p6_alg_integration_a2a_adapter
+
+Total test time: 0.64 s
+Adapter executable output: P6_ALG_INTEGRATION_A2A_ADAPTER_PASS
+
+Coverage notes:
+  - causal IMU right-boundary rejection: PASS
+  - irregular/between-sample causal interpolation: PASS
+  - same-timestamp LiDAR then visual ordering: PASS
+  - visual two-endpoint factor: PASS
+  - LiDAR residual basis callback: PASS
+  - unified observation IDs and duplicate source rejection: PASS
+  - optimization feedback revision boundary: PASS
+  - duration/node marginalization and active-ID bound: PASS
+  - explicit NDT/visual skip reasons: PASS
+
+No Floor01, Corridor01, GT tuning, full rosbag, or formal FULL replay was run.
