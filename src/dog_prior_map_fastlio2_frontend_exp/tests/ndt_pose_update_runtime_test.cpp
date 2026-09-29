@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <limits>
 #include <string>
 #include <vector>
 
@@ -220,6 +221,156 @@ int main() {
               << failure << '\n';
     return 1;
   }
+
+  const double expected_chi99[] = {
+      std::numeric_limits<double>::quiet_NaN(),
+      6.635, 9.210, 11.345, 13.277, 15.086, 16.812};
+  for (int rank = 1; rank <= 6; ++rank) {
+    if (std::abs(chiSquare99Threshold(rank) - expected_chi99[rank]) > 1e-12) {
+      std::cerr << "FAIL: rank-specific chi-square threshold: " << rank << '\n';
+      return 1;
+    }
+  }
+  if (std::isfinite(chiSquare99Threshold(0)) ||
+      std::isfinite(chiSquare99Threshold(7))) {
+    std::cerr << "FAIL: invalid rank returned a chi-square threshold\n";
+    return 1;
+  }
+
+  Eigen::Matrix<double, 6, 6> y_basis = Eigen::Matrix<double, 6, 6>::Zero();
+  y_basis(1, 0) = 1.0;
+  Pose3d diagnostic_measurement = before_projected_pose.map_T_imu;
+  diagnostic_measurement.position.y() += 0.03;
+  const FilterSnapshot before_diagnostic = candidate->getState();
+  ProjectedPoseInnovation diagnostic;
+  if (!candidate->evaluateProjectedPoseInnovation(
+          diagnostic_measurement, pose_noise, y_basis, 1, &diagnostic, &failure) ||
+      !diagnostic.valid || diagnostic.rank != 1 ||
+      diagnostic.status != "OK" || !std::isfinite(diagnostic.nis) ||
+      !sameFilterSnapshot(before_diagnostic, candidate->getState())) {
+    std::cerr << "FAIL: projected innovation read-only evaluation: " << failure << '\n';
+    return 1;
+  }
+
+  Pose3d weak_direction_variant = diagnostic_measurement;
+  weak_direction_variant.position.x() += 8.0;
+  weak_direction_variant.position.z() -= 4.0;
+  weak_direction_variant.orientation =
+      (weak_direction_variant.orientation * Eigen::Quaterniond(
+          Eigen::AngleAxisd(0.7, Eigen::Vector3d::UnitX()))).normalized();
+  ProjectedPoseInnovation variant_diagnostic;
+  if (!candidate->evaluateProjectedPoseInnovation(
+          weak_direction_variant, pose_noise, y_basis, 1,
+          &variant_diagnostic, &failure) ||
+      std::abs(diagnostic.projected_residual_norm -
+               variant_diagnostic.projected_residual_norm) > 1e-9 ||
+      std::abs(diagnostic.nis - variant_diagnostic.nis) > 1e-9) {
+    std::cerr << "FAIL: selected NIS depends on discarded residual axes: "
+              << failure << '\n';
+    return 1;
+  }
+
+  Pose3d high_innovation = diagnostic_measurement;
+  high_innovation.position.y() += 100.0;
+  std::unique_ptr<FastLio2IkfomFrontend> gated_candidate = candidate->cloneCandidate();
+  const FilterSnapshot before_gate = gated_candidate->getState();
+  PoseCorrectionDelta gated_delta;
+  gated_delta.position.setConstant(1.0);
+  gated_delta.rotation.setConstant(1.0);
+  gated_delta.velocity.setConstant(1.0);
+  gated_delta.gyro_bias.setConstant(1.0);
+  gated_delta.accel_bias.setConstant(1.0);
+  gated_delta.gravity_tangent.setConstant(1.0);
+  ProjectedPoseInnovation gated_diagnostic;
+  if (gated_candidate->applyProjectedPoseMeasurementChecked(
+          high_innovation, pose_noise, y_basis, 1, true,
+          chiSquare99Threshold(1), &gated_diagnostic, &gated_delta, &failure) ||
+      failure != "SELECTED_NIS_REJECTED" ||
+      gated_diagnostic.status != "SELECTED_NIS_REJECTED" ||
+      !sameFilterSnapshot(before_gate, gated_candidate->getState()) ||
+      gated_delta.position.norm() != 0.0 || gated_delta.rotation.norm() != 0.0 ||
+      gated_delta.velocity.norm() != 0.0 || gated_delta.gyro_bias.norm() != 0.0 ||
+      gated_delta.accel_bias.norm() != 0.0 ||
+      gated_delta.gravity_tangent.norm() != 0.0) {
+    std::cerr << "FAIL: selected NIS rejection was not atomic: " << failure << '\n';
+    return 1;
+  }
+
+  std::unique_ptr<FastLio2IkfomFrontend> ungated_candidate = candidate->cloneCandidate();
+  PoseCorrectionDelta ungated_delta;
+  if (!ungated_candidate->applyProjectedPoseMeasurement(
+          diagnostic_measurement, pose_noise, y_basis, 1, &ungated_delta, &failure) ||
+      ungated_delta.position.norm() <= 0.0) {
+    std::cerr << "FAIL: gate-off legacy projected update: " << failure << '\n';
+    return 1;
+  }
+
+  Eigen::Matrix<double, 6, 6> adaptive_noise =
+      Eigen::Matrix<double, 6, 6>::Identity() * 0.01;
+  adaptive_noise(0, 0) = 0.09;
+  Eigen::Matrix<double, 6, 6> diagonal_basis =
+      Eigen::Matrix<double, 6, 6>::Zero();
+  diagonal_basis(0, 0) = 1.0;
+  ProjectedPoseInnovation fixed_noise_diagnostic;
+  ProjectedPoseInnovation adaptive_noise_diagnostic;
+  if (!candidate->evaluateProjectedPoseInnovation(
+          diagnostic_measurement, pose_noise, diagonal_basis, 1,
+          &fixed_noise_diagnostic, &failure) ||
+      !candidate->evaluateProjectedPoseInnovation(
+          diagnostic_measurement, adaptive_noise, diagonal_basis, 1,
+          &adaptive_noise_diagnostic, &failure) ||
+      std::abs(fixed_noise_diagnostic.projected_noise_trace - 0.01) > 1e-12 ||
+      std::abs(adaptive_noise_diagnostic.projected_noise_trace - 0.09) > 1e-12) {
+    std::cerr << "FAIL: projected covariance did not use selected noise: "
+              << failure << '\n';
+    return 1;
+  }
+
+  std::unique_ptr<FastLio2IkfomFrontend> shadow_branches[4];
+  const FilterSnapshot before_shadow_branches = candidate->getState();
+  const bool shadow_gates[] = {false, false, true, true};
+  const Eigen::Matrix<double, 6, 6>* shadow_noises[] = {
+      &pose_noise, &adaptive_noise, &pose_noise, &adaptive_noise};
+  for (int index = 0; index < 4; ++index) {
+    shadow_branches[index] = candidate->cloneCandidate();
+    ProjectedPoseInnovation branch_diagnostic;
+    const bool applied = shadow_branches[index]->applyProjectedPoseMeasurementChecked(
+        diagnostic_measurement, *shadow_noises[index], y_basis, 1,
+        shadow_gates[index], chiSquare99Threshold(1), &branch_diagnostic,
+        nullptr, &failure);
+    if (!applied) {
+      std::cerr << "FAIL: cloned counterfactual update: " << failure << '\n';
+      return 1;
+    }
+  }
+  if (!sameFilterSnapshot(before_shadow_branches, candidate->getState())) {
+    std::cerr << "FAIL: shadow branches mutated the official frontend\n";
+    return 1;
+  }
+
+  Eigen::Matrix<double, 6, 6> invalid_checked_pose_noise = pose_noise;
+  invalid_checked_pose_noise(1, 1) = -1.0;
+  Eigen::Matrix<double, 6, 6> nonorthogonal_basis = y_basis;
+  nonorthogonal_basis(1, 0) = 2.0;
+  const FilterSnapshot before_invalid_pose = candidate->getState();
+  ProjectedPoseInnovation invalid_diagnostic;
+  if (candidate->applyProjectedPoseMeasurementChecked(
+          diagnostic_measurement, invalid_checked_pose_noise, y_basis, 1, false, 0.0,
+          &invalid_diagnostic, nullptr, &failure) ||
+      !sameFilterSnapshot(before_invalid_pose, candidate->getState()) ||
+      candidate->applyProjectedPoseMeasurementChecked(
+          diagnostic_measurement, pose_noise, y_basis, 0, false, 0.0,
+          &invalid_diagnostic, nullptr, &failure) ||
+      !sameFilterSnapshot(before_invalid_pose, candidate->getState()) ||
+      candidate->applyProjectedPoseMeasurementChecked(
+          diagnostic_measurement, pose_noise, nonorthogonal_basis, 1, false, 0.0,
+          &invalid_diagnostic, nullptr, &failure) ||
+      !sameFilterSnapshot(before_invalid_pose, candidate->getState())) {
+    std::cerr << "FAIL: invalid projected pose input was accepted or mutated state: "
+              << failure << '\n';
+    return 1;
+  }
+
   Eigen::Matrix3d invalid_visual_noise = visual_noise;
   invalid_visual_noise(0, 0) = -1.0;
   const FilterSnapshot before_rejected = visual_position_update->getState();

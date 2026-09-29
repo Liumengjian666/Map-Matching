@@ -2,6 +2,7 @@
 
 #include <omp.h>
 #include <Eigen/Cholesky>
+#include <Eigen/Eigenvalues>
 
 // This is the only runtime translation unit allowed to include this pinned
 // header: it defines non-inline free functions.
@@ -111,7 +112,127 @@ bool finiteState(const state_ikfom& state) {
          state.bg.allFinite() && state.ba.allFinite() && state.grav.vec.allFinite();
 }
 
+struct ProjectedPoseSystem {
+  Eigen::MatrixXd H;
+  Eigen::MatrixXd R;
+  Eigen::MatrixXd S;
+  Eigen::VectorXd residual;
+  Eigen::VectorXd S_inverse_residual;
+  Eigen::LDLT<Eigen::MatrixXd> innovation_factor;
+  ProjectedPoseInnovation diagnostic;
+};
+
+Pose3d statePose(const state_ikfom& state) {
+  Pose3d pose;
+  pose.position = state.pos;
+  pose.orientation = Eigen::Quaterniond(
+      state.rot.w(), state.rot.x(), state.rot.y(), state.rot.z());
+  return pose;
+}
+
+bool buildProjectedPoseSystem(
+    const Pose3d& prior_pose,
+    const Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF>& prior_covariance,
+    const Pose3d& measurement,
+    const Eigen::Matrix<double, 6, 6>& measurement_noise,
+    const Eigen::Matrix<double, 6, 6>& measurement_basis,
+    int rank, ProjectedPoseSystem* system, std::string* reason) {
+  if (reason) reason->clear();
+  if (!system) return fail(reason, "null_projected_pose_system");
+  *system = ProjectedPoseSystem();
+  system->diagnostic.rank = rank;
+  system->diagnostic.threshold = chiSquare99Threshold(rank);
+  const auto reject = [&](const char* status) {
+    system->diagnostic.status = status;
+    return fail(reason, status);
+  };
+  if (rank < 1 || rank > 6)
+    return reject("projected_pose_rank_out_of_range");
+  if (!finitePose(prior_pose) || !finitePose(measurement))
+    return reject("invalid_projected_pose_measurement");
+  if (!measurement_basis.allFinite() || !measurement_noise.allFinite() ||
+      !prior_covariance.allFinite())
+    return reject("nonfinite_projected_pose_input");
+  if ((measurement_noise - measurement_noise.transpose())
+          .cwiseAbs().maxCoeff() > 1e-10)
+    return reject("asymmetric_projected_pose_covariance");
+  Eigen::LLT<Eigen::Matrix<double, 6, 6>> full_noise_factor(measurement_noise);
+  if (full_noise_factor.info() != Eigen::Success ||
+      !full_noise_factor.matrixL().toDenseMatrix().allFinite() ||
+      full_noise_factor.matrixL().toDenseMatrix().diagonal().minCoeff() <= 0.0)
+    return reject("projected_pose_full_covariance_not_spd");
+  if ((prior_covariance - prior_covariance.transpose())
+          .cwiseAbs().maxCoeff() > 1e-8)
+    return reject("asymmetric_projected_pose_prior_covariance");
+
+  const Eigen::MatrixXd basis = measurement_basis.leftCols(rank);
+  if ((basis.transpose() * basis -
+       Eigen::MatrixXd::Identity(rank, rank)).norm() > 1e-8)
+    return reject("projected_pose_basis_not_orthonormal");
+
+  system->R = basis.transpose() * measurement_noise * basis;
+  Eigen::LLT<Eigen::MatrixXd> noise_factor(system->R);
+  if (noise_factor.info() != Eigen::Success ||
+      !noise_factor.matrixL().toDenseMatrix().allFinite() ||
+      noise_factor.matrixL().toDenseMatrix().diagonal().minCoeff() <= 0.0)
+    return reject("projected_pose_covariance_not_spd");
+  const Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> noise_eigenvalues(system->R);
+  if (noise_eigenvalues.info() != Eigen::Success ||
+      !noise_eigenvalues.eigenvalues().allFinite())
+    return reject("projected_pose_covariance_eigendecomposition_failed");
+
+  Eigen::Matrix<double, 6, state_ikfom::DOF> selector =
+      Eigen::Matrix<double, 6, state_ikfom::DOF>::Zero();
+  selector.block<3, 3>(0, MTK::getStartIdx(&state_ikfom::pos)).setIdentity();
+  selector.block<3, 3>(3, MTK::getStartIdx(&state_ikfom::rot)).setIdentity();
+  system->H = basis.transpose() * selector;
+  system->S = system->H * prior_covariance * system->H.transpose() + system->R;
+  system->innovation_factor.compute(system->S);
+  if (system->innovation_factor.info() != Eigen::Success ||
+      !system->innovation_factor.isPositive())
+    return reject("projected_pose_innovation_not_positive");
+
+  Eigen::Matrix<double, 6, 1> raw_residual;
+  raw_residual.head<3>() = measurement.position - prior_pose.position;
+  Eigen::Quaterniond rotation_residual =
+      (prior_pose.orientation.conjugate() * measurement.orientation.normalized()).normalized();
+  if (rotation_residual.w() < 0.0)
+    rotation_residual.coeffs() *= -1.0;
+  const Eigen::AngleAxisd rotation_error(rotation_residual);
+  raw_residual.tail<3>() = rotation_error.axis() * rotation_error.angle();
+  system->residual = basis.transpose() * raw_residual;
+  system->S_inverse_residual =
+      system->innovation_factor.solve(system->residual);
+  if (!system->S_inverse_residual.allFinite())
+    return reject("projected_pose_innovation_solve_nonfinite");
+  double nis = system->residual.dot(system->S_inverse_residual);
+  if (!std::isfinite(nis) || nis < -1e-10)
+    return reject("projected_pose_nis_invalid");
+
+  system->diagnostic.valid = true;
+  system->diagnostic.nis = std::max(0.0, nis);
+  system->diagnostic.residual_norm = raw_residual.norm();
+  system->diagnostic.projected_residual_norm = system->residual.norm();
+  system->diagnostic.projected_noise_trace = system->R.trace();
+  system->diagnostic.innovation_covariance_trace = system->S.trace();
+  system->diagnostic.projected_noise_min_eigenvalue =
+      noise_eigenvalues.eigenvalues().minCoeff();
+  system->diagnostic.projected_noise_max_eigenvalue =
+      noise_eigenvalues.eigenvalues().maxCoeff();
+  system->diagnostic.status = "OK";
+  return true;
+}
+
 }  // namespace
+
+double chiSquare99Threshold(int rank) {
+  static const double thresholds[] = {
+      std::numeric_limits<double>::quiet_NaN(),
+      6.635, 9.210, 11.345, 13.277, 15.086, 16.812};
+  if (rank < 1 || rank > 6)
+    return std::numeric_limits<double>::quiet_NaN();
+  return thresholds[rank];
+}
 
 struct FastLio2IkfomFrontend::Impl {
   explicit Impl(const RuntimeParameters& runtime_parameters)
@@ -585,71 +706,96 @@ bool FastLio2IkfomFrontend::applyProjectedPoseMeasurement(
     const Eigen::Matrix<double, 6, 6>& measurement_basis,
     int measurement_rank, PoseCorrectionDelta* delta,
     std::string* failure_reason) {
-  if (failure_reason) failure_reason->clear();
-  if (!impl_->is_initialized)
-    return fail(failure_reason, "filter_not_initialized");
-  if (!finitePose(map_T_imu_measurement))
-    return fail(failure_reason, "invalid_projected_pose_measurement");
-  if (measurement_rank < 1 || measurement_rank > 6)
-    return fail(failure_reason, "projected_pose_rank_out_of_range");
-  if (!measurement_basis.allFinite() || !measurement_covariance.allFinite())
-    return fail(failure_reason, "nonfinite_projected_pose_input");
-  if ((measurement_covariance - measurement_covariance.transpose())
-          .cwiseAbs().maxCoeff() > 1e-10)
-    return fail(failure_reason, "asymmetric_projected_pose_covariance");
-  const Eigen::MatrixXd basis = measurement_basis.leftCols(measurement_rank);
-  if ((basis.transpose() * basis -
-       Eigen::MatrixXd::Identity(measurement_rank, measurement_rank)).norm() > 1e-8)
-    return fail(failure_reason, "projected_pose_basis_not_orthonormal");
-  const Eigen::MatrixXd projected_noise = basis.transpose() *
-      measurement_covariance * basis;
-  Eigen::LLT<Eigen::MatrixXd> noise_factor(projected_noise);
-  if (noise_factor.info() != Eigen::Success ||
-      !noise_factor.matrixL().toDenseMatrix().allFinite() ||
-      noise_factor.matrixL().toDenseMatrix().diagonal().minCoeff() <= 0.0)
-    return fail(failure_reason, "projected_pose_covariance_not_spd");
+  return applyProjectedPoseMeasurementChecked(
+      map_T_imu_measurement, measurement_covariance, measurement_basis,
+      measurement_rank, false, std::numeric_limits<double>::quiet_NaN(),
+      nullptr, delta, failure_reason);
+}
+
+bool FastLio2IkfomFrontend::evaluateProjectedPoseInnovation(
+    const Pose3d& map_T_imu_measurement,
+    const Eigen::Matrix<double, 6, 6>& measurement_noise,
+    const Eigen::Matrix<double, 6, 6>& measurement_basis, int rank,
+    ProjectedPoseInnovation* output, std::string* reason) const {
+  if (reason) reason->clear();
+  if (output) *output = ProjectedPoseInnovation();
+  if (!impl_->is_initialized) {
+    if (output) output->status = "filter_not_initialized";
+    return fail(reason, "filter_not_initialized");
+  }
+  const state_ikfom& prior = impl_->filter.get_x();
+  const auto prior_covariance = impl_->filter.get_P();
+  ProjectedPoseSystem system;
+  std::string local_reason;
+  const bool valid = buildProjectedPoseSystem(
+      statePose(prior), prior_covariance, map_T_imu_measurement,
+      measurement_noise, measurement_basis, rank, &system, &local_reason);
+  if (output) *output = system.diagnostic;
+  if (!valid) return fail(reason, local_reason.c_str());
+  return true;
+}
+
+bool FastLio2IkfomFrontend::applyProjectedPoseMeasurementChecked(
+    const Pose3d& map_T_imu_measurement,
+    const Eigen::Matrix<double, 6, 6>& measurement_noise,
+    const Eigen::Matrix<double, 6, 6>& measurement_basis, int rank,
+    bool enforce_nis_gate, double nis_threshold,
+    ProjectedPoseInnovation* diagnostic, PoseCorrectionDelta* delta,
+    std::string* reason) {
+  if (reason) reason->clear();
+  if (delta) *delta = PoseCorrectionDelta();
+  if (diagnostic) *diagnostic = ProjectedPoseInnovation();
+  if (!impl_->is_initialized) {
+    if (diagnostic) diagnostic->status = "filter_not_initialized";
+    return fail(reason, "filter_not_initialized");
+  }
 
   const FilterSnapshot before = getState();
   state_ikfom backup_x = impl_->filter.get_x();
   auto backup_P = impl_->filter.get_P();
   state_ikfom prior = backup_x;
+  ProjectedPoseSystem system;
+  std::string local_reason;
+  if (!buildProjectedPoseSystem(
+          statePose(prior), backup_P, map_T_imu_measurement,
+          measurement_noise, measurement_basis, rank, &system,
+          &local_reason)) {
+    if (diagnostic) *diagnostic = system.diagnostic;
+    return fail(reason, local_reason.c_str());
+  }
+  if (enforce_nis_gate &&
+      (!std::isfinite(nis_threshold) || nis_threshold <= 0.0)) {
+    system.diagnostic.valid = false;
+    system.diagnostic.status = "invalid_projected_pose_nis_threshold";
+    if (diagnostic) *diagnostic = system.diagnostic;
+    return fail(reason, "invalid_projected_pose_nis_threshold");
+  }
+  if (enforce_nis_gate && system.diagnostic.nis > nis_threshold) {
+    system.diagnostic.status = "SELECTED_NIS_REJECTED";
+    if (diagnostic) *diagnostic = system.diagnostic;
+    return fail(reason, "SELECTED_NIS_REJECTED");
+  }
+
   state_ikfom state = prior;
   const Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> covariance = backup_P;
-  const int position_index = MTK::getStartIdx(&state_ikfom::pos);
-  const int rotation_index = MTK::getStartIdx(&state_ikfom::rot);
-  Eigen::Matrix<double, 6, state_ikfom::DOF> selector =
-      Eigen::Matrix<double, 6, state_ikfom::DOF>::Zero();
-  selector.block<3, 3>(0, position_index).setIdentity();
-  selector.block<3, 3>(3, rotation_index).setIdentity();
-  const Eigen::MatrixXd h = basis.transpose() * selector;
-  const Eigen::MatrixXd selected_innovation_covariance =
-      h * covariance * h.transpose() + projected_noise;
-  Eigen::LDLT<Eigen::MatrixXd> innovation_factor(selected_innovation_covariance);
-  if (innovation_factor.info() != Eigen::Success || !innovation_factor.isPositive())
-    return fail(failure_reason, "projected_pose_innovation_not_positive");
-  const Eigen::MatrixXd gain = covariance * h.transpose() *
-      innovation_factor.solve(Eigen::MatrixXd::Identity(
-          measurement_rank, measurement_rank));
-  Eigen::Matrix<double, 6, 1> pose_residual;
-  pose_residual.head<3>() = map_T_imu_measurement.position - prior.pos;
-  Eigen::Quaterniond rotation_residual =
-      (before.map_T_imu.orientation.conjugate() *
-       map_T_imu_measurement.orientation.normalized()).normalized();
-  if (rotation_residual.w() < 0.0)
-    rotation_residual.coeffs() *= -1.0;
-  const Eigen::AngleAxisd rotation_error(rotation_residual);
-  pose_residual.tail<3>() = rotation_error.axis() * rotation_error.angle();
-  const Eigen::VectorXd selected_residual = basis.transpose() * pose_residual;
-  const Eigen::Matrix<double, state_ikfom::DOF, 1> dx = gain * selected_residual;
-  if (!dx.allFinite())
-    return fail(failure_reason, "nonfinite_projected_pose_increment");
+  const Eigen::MatrixXd gain = system.innovation_factor.solve(
+      (system.H * covariance).eval()).transpose();
+  const Eigen::Matrix<double, state_ikfom::DOF, 1> dx =
+      gain * system.residual;
+  if (!gain.allFinite() || !dx.allFinite()) {
+    system.diagnostic.valid = false;
+    system.diagnostic.status = "nonfinite_projected_pose_increment";
+    if (diagnostic) *diagnostic = system.diagnostic;
+    return fail(reason, "nonfinite_projected_pose_increment");
+  }
   state.boxplus(dx);
 
   const Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> residual_map =
-      Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF>::Identity() - gain * h;
+      Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF>::Identity() -
+      gain * system.H;
   Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> posterior =
       residual_map * covariance * residual_map.transpose() +
-      gain * projected_noise * gain.transpose();
+      gain * system.R * gain.transpose();
   Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> reset =
       Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF>::Identity();
   for (const auto& item : state.SO3_state) {
@@ -677,9 +823,13 @@ bool FastLio2IkfomFrontend::applyProjectedPoseMeasurement(
   if (!postconditionsValid(&postcondition_failure)) {
     impl_->filter.change_x(backup_x);
     impl_->filter.change_P(backup_P);
-    return fail(failure_reason, postcondition_failure.c_str());
+    system.diagnostic.valid = false;
+    system.diagnostic.status = postcondition_failure;
+    if (diagnostic) *diagnostic = system.diagnostic;
+    return fail(reason, postcondition_failure.c_str());
   }
 
+  if (diagnostic) *diagnostic = system.diagnostic;
   if (delta) {
     const FilterSnapshot after = getState();
     delta->position = after.map_T_imu.position - before.map_T_imu.position;
@@ -698,6 +848,7 @@ bool FastLio2IkfomFrontend::applyProjectedPoseMeasurement(
   }
   return true;
 }
+
 
 std::unique_ptr<FastLio2IkfomFrontend>
 FastLio2IkfomFrontend::cloneCandidate() const {

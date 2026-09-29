@@ -2,11 +2,28 @@
 
 #include "dog_prior_map_fastlio2_frontend_exp/frontend_types.hpp"
 
+#include <limits>
 #include <memory>
 #include <string>
 #include <vector>
 
 namespace dog_prior_map_fastlio2_frontend_exp {
+
+struct ProjectedPoseInnovation {
+  bool valid = false;
+  int rank = 0;
+  double nis = std::numeric_limits<double>::quiet_NaN();
+  double threshold = std::numeric_limits<double>::quiet_NaN();
+  double residual_norm = 0.0;
+  double projected_residual_norm = 0.0;
+  double projected_noise_trace = 0.0;
+  double innovation_covariance_trace = 0.0;
+  double projected_noise_min_eigenvalue = 0.0;
+  double projected_noise_max_eigenvalue = 0.0;
+  std::string status = "UNINITIALIZED";
+};
+
+double chiSquare99Threshold(int rank);
 
 class FastLio2IkfomFrontend {
  public:
@@ -56,6 +73,19 @@ class FastLio2IkfomFrontend {
       const Eigen::Matrix<double, 6, 6>& measurement_basis,
       int measurement_rank, PoseCorrectionDelta* delta,
       std::string* failure_reason);
+  bool evaluateProjectedPoseInnovation(
+      const Pose3d& map_T_imu_measurement,
+      const Eigen::Matrix<double, 6, 6>& measurement_noise,
+      const Eigen::Matrix<double, 6, 6>& measurement_basis,
+      int rank, ProjectedPoseInnovation* output,
+      std::string* reason) const;
+  bool applyProjectedPoseMeasurementChecked(
+      const Pose3d& map_T_imu_measurement,
+      const Eigen::Matrix<double, 6, 6>& measurement_noise,
+      const Eigen::Matrix<double, 6, 6>& measurement_basis,
+      int rank, bool enforce_nis_gate, double nis_threshold,
+      ProjectedPoseInnovation* diagnostic, PoseCorrectionDelta* delta,
+      std::string* reason);
   // Applies only the position residual components spanned by the first
   // `measurement_rank` orthonormal map-frame basis columns. This is used to
   // keep visual corrections inside the LiDAR-weak measurement row-space.

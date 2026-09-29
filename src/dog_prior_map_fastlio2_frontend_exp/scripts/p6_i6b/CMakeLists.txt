@@ -66,4 +66,17 @@ if(BUILD_I6B_CLOSED_LOOP_TOOLS)
   target_link_libraries(p6_i6b_closed_loop PRIVATE
     p6_i6b_dual_reliability Eigen3::Eigen ${PCL_LIBRARIES}
     OpenSSL::Crypto ${USB_1_LIBRARY} gomp)
+
+  add_executable(p6_i6e_projected_pose_consistency_test
+    "${PACKAGE_ROOT}/src/fastlio2_frontend_ikfom.cpp"
+    "${PACKAGE_ROOT}/tests/ndt_pose_update_runtime_test.cpp")
+  target_compile_features(p6_i6e_projected_pose_consistency_test PRIVATE cxx_std_17)
+  target_include_directories(p6_i6e_projected_pose_consistency_test PRIVATE
+    "${PACKAGE_ROOT}/include"
+    "${FASTLIO2_INCLUDE_DIR}")
+  target_compile_options(p6_i6e_projected_pose_consistency_test PRIVATE -fopenmp)
+  target_link_libraries(p6_i6e_projected_pose_consistency_test PRIVATE
+    Eigen3::Eigen gomp)
+  add_test(NAME p6_i6e_projected_pose_consistency
+    COMMAND $<TARGET_FILE:p6_i6e_projected_pose_consistency_test>)
 endif()
