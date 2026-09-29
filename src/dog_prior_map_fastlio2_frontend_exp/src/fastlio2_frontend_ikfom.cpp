@@ -1009,6 +1009,44 @@ FilterSnapshot FastLio2IkfomFrontend::getState() const {
   return snapshot;
 }
 
+bool FastLio2IkfomFrontend::setWindowPredictionSeed(
+    const FilterSnapshot& seed, std::string* failure_reason) {
+  if (failure_reason) failure_reason->clear();
+  if (!impl_->is_initialized)
+    return fail(failure_reason, "filter_not_initialized");
+  if (seed.stamp_ns < impl_->stamp_ns)
+    return fail(failure_reason, "window_feedback_timestamp_regressed");
+  if (!finitePose(seed.map_T_imu) || !seed.velocity.allFinite() ||
+      !seed.gyro_bias.allFinite() || !seed.accel_bias.allFinite() ||
+      !seed.gravity.allFinite() || seed.gravity.norm() < 1e-9 ||
+      seed.covariance.rows() != state_ikfom::DOF ||
+      seed.covariance.cols() != state_ikfom::DOF ||
+      !seed.covariance.allFinite() ||
+      (seed.covariance - seed.covariance.transpose()).cwiseAbs().maxCoeff() > 1e-8)
+    return fail(failure_reason, "invalid_window_feedback_seed");
+  Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> covariance_solver(seed.covariance);
+  if (covariance_solver.info() != Eigen::Success ||
+      covariance_solver.eigenvalues().minCoeff() < -1e-10)
+    return fail(failure_reason, "window_feedback_covariance_not_psd");
+  state_ikfom state = impl_->filter.get_x();
+  state.pos = vect3(seed.map_T_imu.position);
+  state.rot = SO3(seed.map_T_imu.orientation.toRotationMatrix());
+  state.vel = vect3(seed.velocity);
+  state.bg = vect3(seed.gyro_bias);
+  state.ba = vect3(seed.accel_bias);
+  if (std::abs(seed.gravity.norm() - impl_->parameters.gravity_mps2) > 1e-6)
+    return fail(failure_reason, "window_feedback_gravity_norm_mismatch");
+  state.grav = S2(vect3(seed.gravity));
+  Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> covariance =
+      seed.covariance;
+  enforceFixedExtrinsicConstraint(state, covariance, impl_->fixed_rotation,
+                                  impl_->fixed_translation);
+  impl_->filter.change_x(state);
+  impl_->filter.change_P(covariance);
+  impl_->stamp_ns = seed.stamp_ns;
+  return postconditionsValid(failure_reason);
+}
+
 Eigen::Matrix<double, 12, 12>
 FastLio2IkfomFrontend::getProcessNoiseCovariance() const {
   return impl_->process_noise;

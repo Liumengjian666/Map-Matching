@@ -128,6 +128,11 @@ class FastLio2IkfomFrontend {
 
   bool initialized() const;
   FilterSnapshot getState() const;
+  // Explicit experimental fixed-lag feedback boundary. This method validates
+  // the optimized seed and updates IKFoM through its public change_x/change_P
+  // path; callers must not mutate IKFoM internals directly.
+  bool setWindowPredictionSeed(const FilterSnapshot& seed,
+                               std::string* failure_reason);
   Eigen::Matrix<double, 12, 12> getProcessNoiseCovariance() const;
   bool postconditionsValid(std::string* failure_reason) const;
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "dog_prior_map_fastlio2_frontend_exp/reliability_metrics.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/measurement_noise_model.hpp"
 
 #include <Eigen/Core>
 
@@ -144,6 +145,13 @@ bool buildReliableMeasurementBasisFromWeak(
 
 struct MeasurementNoiseResult {
   bool valid = false;
+  // This covariance is an empirical pose-residual model.  It is already in
+  // the IKFoM right/body pose-residual coordinates below and must not be
+  // re-propagated as a physical LiDAR perturbation covariance.
+  MeasurementNoiseSemantic semantic =
+      MeasurementNoiseSemantic::EMPIRICAL_POSE_RESIDUAL;
+  std::string coordinate_definition = "IKFOM_RIGHT_POSE_RESIDUAL";
+  bool statistically_calibrated = false;
   // PoseMeasurement is ordered [position XYZ, SO(3) residual]. The rotation
   // block is in IKFoM's right/body error coordinates, not map-spatial axes.
   Matrix6d covariance = Matrix6d::Constant(

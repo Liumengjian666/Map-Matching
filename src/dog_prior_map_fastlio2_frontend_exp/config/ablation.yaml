@@ -3,6 +3,10 @@ schema_version: 1
 # All profiles dispatch to the same p6_i1_branched_recovery closed-loop core.
 # FULL is an offline research prototype: historical cross-covariance is
 # conservatively bounded, not propagated as an augmented-state covariance.
+execution_modes:
+  formal_full_default: FORMAL_FULL_LEGACY
+  fixed_lag_experimental: FULL_FIXED_LAG_EXPERIMENTAL
+  default_enabled: FORMAL_FULL_LEGACY
 module_availability:
   u_obs: true
   u_obs_method: "regularized NDT voxel geometric Gauss-Newton information proxy"
@@ -48,6 +52,14 @@ profiles:
     enable_vision: true
     runner_mode: FULL_ALGORITHM_V1
     availability: AVAILABLE_WITH_RESEARCH_PROTOTYPE_CAVEAT
+
+experimental_modes:
+  FULL_FIXED_LAG_EXPERIMENTAL:
+    based_on: B4
+    runner_mode: FULL_FIXED_LAG_EXPERIMENTAL
+    formal_full_default_unchanged: true
+    complete_rosbag_allowed_in_this_phase: false
+    status: MATHEMATICAL_AND_SYNTHETIC_TEST_ONLY
 
 dataset_maps:
   Floor01:

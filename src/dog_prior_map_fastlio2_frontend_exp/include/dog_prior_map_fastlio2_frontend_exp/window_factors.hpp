@@ -1,0 +1,136 @@
+#pragma once
+
+#include "dog_prior_map_fastlio2_frontend_exp/frontend_types.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/measurement_noise_model.hpp"
+
+#include <Eigen/Core>
+#include <Eigen/Geometry>
+
+#include <cstdint>
+#include <functional>
+#include <string>
+#include <vector>
+
+namespace dog_prior_map_fastlio2_frontend_exp::fixed_lag {
+
+using Vector15d = Eigen::Matrix<double, 15, 1>;
+using Matrix15d = Eigen::Matrix<double, 15, 15>;
+
+// Local error order is [right rotation, position, velocity, gyro bias,
+// accelerometer bias]. All poses remain on SO(3); only local increments are
+// Euclidean vectors.
+struct WindowState {
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+  std::uint64_t stamp_ns = 0;
+  Eigen::Matrix3d rotation = Eigen::Matrix3d::Identity();
+  Eigen::Vector3d position = Eigen::Vector3d::Zero();
+  Eigen::Vector3d velocity = Eigen::Vector3d::Zero();
+  Eigen::Vector3d gyro_bias = Eigen::Vector3d::Zero();
+  Eigen::Vector3d accel_bias = Eigen::Vector3d::Zero();
+};
+
+struct ImuNoiseParameters {
+  double gyro_noise_density = 0.01;
+  double accel_noise_density = 0.10;
+  double gyro_bias_random_walk = 1e-4;
+  double accel_bias_random_walk = 1e-3;
+  Eigen::Vector3d gravity = Eigen::Vector3d(0.0, 0.0, -9.809);
+};
+
+struct ImuPreintegratedMeasurement {
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+  std::uint64_t start_stamp_ns = 0;
+  std::uint64_t end_stamp_ns = 0;
+  double dt_s = 0.0;
+  Eigen::Matrix3d delta_rotation = Eigen::Matrix3d::Identity();
+  Eigen::Vector3d delta_velocity = Eigen::Vector3d::Zero();
+  Eigen::Vector3d delta_position = Eigen::Vector3d::Zero();
+  Eigen::Matrix3d jacobian_rotation_gyro_bias = Eigen::Matrix3d::Zero();
+  Eigen::Matrix3d jacobian_velocity_gyro_bias = Eigen::Matrix3d::Zero();
+  Eigen::Matrix3d jacobian_velocity_accel_bias = Eigen::Matrix3d::Zero();
+  Eigen::Matrix3d jacobian_position_gyro_bias = Eigen::Matrix3d::Zero();
+  Eigen::Matrix3d jacobian_position_accel_bias = Eigen::Matrix3d::Zero();
+  Matrix15d covariance = Matrix15d::Zero();
+  Eigen::Vector3d linearization_gyro_bias = Eigen::Vector3d::Zero();
+  Eigen::Vector3d linearization_accel_bias = Eigen::Vector3d::Zero();
+  bool valid = false;
+  std::string status = "UNINITIALIZED";
+};
+
+bool preintegrateImu(
+    const std::vector<ImuSample, Eigen::aligned_allocator<ImuSample>>& samples,
+    std::uint64_t start_stamp_ns, std::uint64_t end_stamp_ns,
+    const Eigen::Vector3d& linearization_gyro_bias,
+    const Eigen::Vector3d& linearization_accel_bias,
+    const ImuNoiseParameters& noise, ImuPreintegratedMeasurement* output,
+    std::string* reason = nullptr);
+
+bool applyLocalIncrement(WindowState* state, const Vector15d& increment,
+                         std::string* reason = nullptr);
+Vector15d localDifference(const WindowState& state,
+                          const WindowState& reference);
+
+bool buildImuResidual(const WindowState& from, const WindowState& to,
+                      const ImuPreintegratedMeasurement& measurement,
+                      const ImuNoiseParameters& noise, Vector15d* residual,
+                      std::string* reason = nullptr);
+
+bool linearizeImuFactor(
+    const WindowState& from, const WindowState& to,
+    const ImuPreintegratedMeasurement& measurement,
+    const ImuNoiseParameters& noise, Eigen::Matrix<double, 15, 15>* jacobian_from,
+    Eigen::Matrix<double, 15, 15>* jacobian_to, Vector15d* residual,
+    std::string* reason = nullptr);
+
+struct LidarWindowMeasurement {
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+  std::uint64_t observation_id = 0;
+  std::uint64_t stamp_ns = 0;
+  Eigen::Matrix3d measured_rotation = Eigen::Matrix3d::Identity();
+  Eigen::Vector3d measured_position = Eigen::Vector3d::Zero();
+  Matrix6d covariance = Matrix6d::Identity();
+  Matrix6d measurement_basis = Matrix6d::Identity();
+  int reliable_rank = 6;
+  // For a degenerate (rank < 6) measurement, the owning NDT/U_obs adapter
+  // must rebuild the reliable basis at every outer linearization point.  The
+  // returned basis is frozen while the local Jacobian is evaluated.
+  std::function<bool(const WindowState&, Matrix6d*, int*, std::string*)>
+      basis_relinearizer;
+  bool valid = false;
+  std::string skipped_reason;
+};
+
+bool buildLidarResidual(const WindowState& state,
+                        const LidarWindowMeasurement& measurement,
+                        Eigen::VectorXd* residual, std::string* reason = nullptr);
+
+bool linearizeLidarFactor(
+    const WindowState& state, const LidarWindowMeasurement& measurement,
+    Eigen::VectorXd* residual, Eigen::MatrixXd* jacobian,
+    Eigen::MatrixXd* covariance, std::string* reason = nullptr);
+
+struct VisualRelativeMeasurement {
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+  std::uint64_t observation_id = 0;
+  std::uint64_t reference_stamp_ns = 0;
+  std::uint64_t current_stamp_ns = 0;
+  Eigen::Vector3d reference_imu_translation = Eigen::Vector3d::Zero();
+  Eigen::Matrix3d covariance = Eigen::Matrix3d::Identity();
+  bool valid = false;
+  std::string source_semantic = "METRIC_PNP_RELATIVE_TRANSLATION_FACTOR";
+};
+
+bool buildVisualResidual(const WindowState& reference,
+                         const WindowState& current,
+                         const VisualRelativeMeasurement& measurement,
+                         Eigen::Vector3d* residual,
+                         std::string* reason = nullptr);
+
+bool linearizeVisualFactor(
+    const WindowState& reference, const WindowState& current,
+    const VisualRelativeMeasurement& measurement, Eigen::Vector3d* residual,
+    Eigen::Matrix<double, 3, 15>* jacobian_reference,
+    Eigen::Matrix<double, 3, 15>* jacobian_current,
+    std::string* reason = nullptr);
+
+}  // namespace dog_prior_map_fastlio2_frontend_exp::fixed_lag

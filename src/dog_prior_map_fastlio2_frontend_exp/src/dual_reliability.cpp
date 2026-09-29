@@ -571,6 +571,9 @@ MeasurementNoiseResult makePoseMeasurementNoise(
     bool use_unonlocal,
     const DualReliabilityConfig& config) {
   MeasurementNoiseResult result;
+  result.semantic = MeasurementNoiseSemantic::EMPIRICAL_POSE_RESIDUAL;
+  result.coordinate_definition = "IKFOM_RIGHT_POSE_RESIDUAL";
+  result.statistically_calibrated = false;
   if (!validConfig(config) || !std::isfinite(position_sigma_m) ||
       !std::isfinite(rotation_sigma_rad) || position_sigma_m <= 0.0 ||
       rotation_sigma_rad <= 0.0 || !validRotation(predicted_map_R_imu)) {
