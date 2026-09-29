@@ -1,0 +1,31 @@
+PAPER-P6-ALG-INTEGRATION-A2B
+Date: 2026-09-30 Asia/Shanghai
+
+START_SHA=e816648514954adc27b828a67c917ba7953a7e63
+CODE_SHA=d5f8be5df500cef30cfc8f9eac615f8c202df803
+
+Release configure/build:
+  cmake -S src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b \
+        -B /tmp/p6_a2b_build -DCMAKE_BUILD_TYPE=Release
+  cmake --build /tmp/p6_a2b_build -j2
+Result: PASS
+
+Release CTest:
+  cd /tmp/p6_a2b_build && ctest --output-on-failure
+Result: 8/8 PASS, 0 failed, 0.73 s
+
+Debug targeted test:
+  cmake -S src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b \
+        -B /tmp/p6_a2b_debug -DCMAKE_BUILD_TYPE=Debug
+  cmake --build /tmp/p6_a2b_debug --target p6_alg_integration_a2b_test -j2
+  /tmp/p6_a2b_debug/p6_alg_integration_a2b_test
+Result: P6_ALG_INTEGRATION_A2B_PASS
+
+Memory line:
+  peak_imu_buffer_size=301 peak_active_source_records=8
+  expired_source_records_removed=192 final_imu_buffer_size=300
+  final_active_source_records=6
+
+git diff --check: PASS
+Formal dataset/rosbag execution: NOT RUN (prohibited by task)
+READY_FOR_FORMAL_EXPERIMENT=NO

@@ -1,0 +1,31 @@
+CODE COMMIT d5f8be5df500cef30cfc8f9eac615f8c202df803
+
+include/dog_prior_map_fastlio2_frontend_exp/dual_reliability.hpp
+include/dog_prior_map_fastlio2_frontend_exp/fixed_lag_event_adapter.hpp
+include/dog_prior_map_fastlio2_frontend_exp/fixed_lag_experiment.hpp
+include/dog_prior_map_fastlio2_frontend_exp/fixed_lag_window.hpp
+include/dog_prior_map_fastlio2_frontend_exp/lidar_residual_math.hpp
+include/dog_prior_map_fastlio2_frontend_exp/window_factors.hpp
+scripts/p6_alg_integration_a2a_adapter_test.cpp
+scripts/p6_alg_integration_a2b_test.cpp
+scripts/p6_i6b/CMakeLists.txt
+scripts/p6_i6e_r3_math.hpp
+src/dual_reliability.cpp
+src/fixed_lag_event_adapter.cpp
+src/fixed_lag_experiment.cpp
+src/fixed_lag_window.cpp
+src/window_imu_factor.cpp
+src/window_visual_factor.cpp
+
+DOCUMENTATION COMMIT
+docs/p6_alg_integration_a2b/ANALYTIC_LIDAR_JACOBIAN_TEST.md
+docs/p6_alg_integration_a2b/ASYNC_VISUAL_EVENT_TEST.md
+docs/p6_alg_integration_a2b/ATOMIC_STATE_COMMIT_TEST.md
+docs/p6_alg_integration_a2b/BUILD_AND_CTEST_RESULTS.txt
+docs/p6_alg_integration_a2b/COVARIANCE_SEMANTICS.md
+docs/p6_alg_integration_a2b/DIRECTIONAL_VISUAL_FACTOR_TEST.md
+docs/p6_alg_integration_a2b/MEMORY_LIFECYCLE_TEST.md
+docs/p6_alg_integration_a2b/SOURCE_MATH_CORRESPONDENCE.md
+docs/p6_alg_integration_a2b/SOURCE_SHA.txt
+docs/p6_alg_integration_a2b/changed_files.txt
+docs/p6_alg_integration_a2b/summary.md
