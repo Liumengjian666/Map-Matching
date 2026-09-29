@@ -4,6 +4,7 @@
 #include <Eigen/Cholesky>
 #include <Eigen/Geometry>
 #include <Eigen/LU>
+#include <Eigen/QR>
 #include <Eigen/SVD>
 
 #include <algorithm>
@@ -241,44 +242,66 @@ LocalRisk assessLocalRisk(const LocalObservability& local,
       !local.rotation_block_eigenvectors.allFinite() ||
       !local.translation_block_eigenvectors.allFinite())
     return result;
-  Eigen::Vector3d rotation_values = local.rotation_schur_eigenvalues;
-  Eigen::Vector3d translation_values = local.translation_schur_eigenvalues;
-  if (!local.schur_decoupling_valid || !rotation_values.allFinite() ||
-      !translation_values.allFinite()) {
-    rotation_values = local.rotation_block_eigenvalues;
-    translation_values = local.translation_block_eigenvalues;
+  const bool full_geometric_information = local.geometric_proxy;
+  if (full_geometric_information &&
+      (!local.normalized_geometric_information.allFinite() ||
+       !local.map_support_sufficient || !local.schur_decoupling_valid ||
+       !local.rotation_schur_information.allFinite() ||
+       !local.translation_schur_information.allFinite() ||
+       !local.rotation_schur_eigenvalues.allFinite() ||
+       !local.translation_schur_eigenvalues.allFinite())) {
+    result.status = !local.map_support_sufficient ? "MAP_SUPPORT_INSUFFICIENT" :
+        (!local.normalized_geometric_information.allFinite()
+             ? "GEOMETRIC_INFORMATION_REQUIRED"
+             : "GEOMETRIC_SCHUR_DIAGNOSTICS_REQUIRED");
+    return result;
+  }
+  Eigen::Vector3d rotation_values = full_geometric_information
+      ? local.rotation_schur_eigenvalues
+      : local.rotation_block_eigenvalues;
+  Eigen::Vector3d translation_values = full_geometric_information
+      ? local.translation_schur_eigenvalues
+      : local.translation_block_eigenvalues;
+  if (!rotation_values.allFinite() || !translation_values.allFinite()) {
+    result.status = "NONFINITE_BLOCK_INFORMATION_SPECTRUM";
+    return result;
   }
   const double rotation_max = rotation_values.maxCoeff();
   const double translation_max = translation_values.maxCoeff();
   const double rotation_min = rotation_values.minCoeff();
   const double translation_min = translation_values.minCoeff();
-  const double rotation_tolerance = 1e-12 * std::max(1.0, rotation_max);
-  const double translation_tolerance = 1e-12 * std::max(1.0, translation_max);
+  const double rotation_tolerance = 1e-10 *
+      std::max(1.0, rotation_values.cwiseAbs().maxCoeff());
+  const double translation_tolerance = 1e-10 *
+      std::max(1.0, translation_values.cwiseAbs().maxCoeff());
   if ((!local.geometric_proxy && (rotation_min <= 0.0 || translation_min <= 0.0)) ||
       (local.geometric_proxy &&
        (rotation_min < -rotation_tolerance || translation_min < -translation_tolerance)) ||
-      rotation_max <= 0.0 || translation_max <= 0.0) {
+      rotation_max < -rotation_tolerance || translation_max < -translation_tolerance) {
     result.status = local.geometric_proxy ? "INVALID_GEOMETRIC_INFORMATION_BLOCK" :
                                           "NONPOSITIVE_BLOCK_CURVATURE";
     return result;
   }
-  result.rotation_weak_ratio = rotation_min / rotation_max;
-  result.translation_weak_ratio = translation_min / translation_max;
+  result.rotation_weak_ratio = rotation_max > 0.0
+      ? std::max(0.0, rotation_min) / rotation_max : 0.0;
+  result.translation_weak_ratio = translation_max > 0.0
+      ? std::max(0.0, translation_min) / translation_max : 0.0;
   result.rotation_min_eigenvalue = rotation_min;
   result.translation_min_eigenvalue = translation_min;
   result.rotation_block_condition = rotation_min > 0.0
       ? rotation_max / rotation_min : std::numeric_limits<double>::infinity();
   result.translation_block_condition = translation_min > 0.0
       ? translation_max / translation_min : std::numeric_limits<double>::infinity();
-  result.rotation_weak = result.rotation_weak_ratio <= config.weak_eigenvalue_ratio;
-  result.translation_weak =
+  result.rotation_weak = rotation_max <= 0.0 ||
+      result.rotation_weak_ratio <= config.weak_eigenvalue_ratio;
+  result.translation_weak = translation_max <= 0.0 ||
       result.translation_weak_ratio <= config.weak_eigenvalue_ratio;
-  const Eigen::Matrix3d rotation_information = local.schur_decoupling_valid
+  const Eigen::Matrix3d rotation_information = full_geometric_information
       ? local.rotation_schur_information
       : local.rotation_block_eigenvectors *
             local.rotation_block_eigenvalues.asDiagonal() *
             local.rotation_block_eigenvectors.transpose();
-  const Eigen::Matrix3d translation_information = local.schur_decoupling_valid
+  const Eigen::Matrix3d translation_information = full_geometric_information
       ? local.translation_schur_information
       : local.translation_block_eigenvectors *
             local.translation_block_eigenvalues.asDiagonal() *
@@ -287,16 +310,134 @@ LocalRisk assessLocalRisk(const LocalObservability& local,
       rotation_information);
   Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> translation_solver(
       translation_information);
-  const Eigen::Matrix3d rotation_vectors = rotation_solver.info() == Eigen::Success
-      ? rotation_solver.eigenvectors() : local.rotation_block_eigenvectors;
-  const Eigen::Matrix3d translation_vectors = translation_solver.info() == Eigen::Success
-      ? translation_solver.eigenvectors() : local.translation_block_eigenvectors;
+  if (rotation_solver.info() != Eigen::Success ||
+      translation_solver.info() != Eigen::Success ||
+      !rotation_solver.eigenvalues().allFinite() ||
+      !translation_solver.eigenvalues().allFinite() ||
+      !rotation_solver.eigenvectors().allFinite() ||
+      !translation_solver.eigenvectors().allFinite()) {
+    result.status = "SCHUR_WEAK_DIRECTION_EIGENSOLVE_FAILED";
+    return result;
+  }
+  const Eigen::Matrix3d rotation_vectors = rotation_solver.eigenvectors();
+  const Eigen::Matrix3d translation_vectors = translation_solver.eigenvectors();
   result.map_rotation_weak_direction = rotation_vectors.col(0).normalized();
   result.map_translation_weak_direction = translation_vectors.col(0).normalized();
 
-  if (local.normalized_geometric_information.allFinite()) {
+  if (full_geometric_information) {
+    const double sr = std::sqrt(std::max(rotation_max, 1e-12));
+    const double st = std::sqrt(std::max(translation_max, 1e-12));
+    if (!std::isfinite(sr) || !std::isfinite(st) || sr <= 0.0 || st <= 0.0) {
+      result.status = "INVALID_SCHUR_GROUP_SCALE";
+      return result;
+    }
+    Matrix6d equalization_inverse = Matrix6d::Zero();
+    equalization_inverse.block<3, 3>(0, 0) =
+        Eigen::Matrix3d::Identity() / sr;
+    equalization_inverse.block<3, 3>(3, 3) =
+        Eigen::Matrix3d::Identity() / st;
+    const Matrix6d information = 0.5 *
+        (local.normalized_geometric_information +
+         local.normalized_geometric_information.transpose());
+    Matrix6d equalized = equalization_inverse.transpose() * information *
+                         equalization_inverse;
+    equalized = 0.5 * (equalized + equalized.transpose());
+    if (!equalized.allFinite()) {
+      result.status = "NONFINITE_SCALE_BALANCED_INFORMATION";
+      return result;
+    }
+    Eigen::SelfAdjointEigenSolver<Matrix6d> joint_solver(equalized);
+    if (joint_solver.info() != Eigen::Success ||
+        !joint_solver.eigenvalues().allFinite() ||
+        !joint_solver.eigenvectors().allFinite()) {
+      result.status = "SCALE_BALANCED_JOINT_EIGENSOLVE_FAILED";
+      return result;
+    }
+    const double joint_max = joint_solver.eigenvalues().maxCoeff();
+    const double joint_scale = std::max(
+        1.0, joint_solver.eigenvalues().cwiseAbs().maxCoeff());
+    const double joint_tolerance = 1e-10 * joint_scale;
+    if (!std::isfinite(joint_max) ||
+        joint_solver.eigenvalues().minCoeff() < -joint_tolerance) {
+      result.status = "INVALID_SCALE_BALANCED_JOINT_INFORMATION";
+      return result;
+    }
+    std::vector<int> weak_indices;
+    if (joint_max <= 0.0) {
+      result.weak_dimension = 6;
+      result.reliable_dimension = 0;
+      for (int index = 0; index < 6; ++index) weak_indices.push_back(index);
+    } else {
+      const Eigen::Matrix<double, 6, 1> nonnegative_values =
+          joint_solver.eigenvalues().cwiseMax(0.0);
+      for (int index = 0; index < 6; ++index) {
+        const double ratio = nonnegative_values(index) / joint_max;
+        if (ratio <= config.weak_eigenvalue_ratio)
+          weak_indices.push_back(index);
+      }
+      result.weak_dimension = static_cast<int>(weak_indices.size());
+      result.reliable_dimension = 6 - result.weak_dimension;
+    }
+    result.joint_weak_basis.setZero();
+    result.joint_reliable_basis.setZero();
+    if (result.weak_dimension == 0) {
+      result.joint_reliable_basis.setIdentity();
+    } else if (result.weak_dimension == 6) {
+      Eigen::Matrix<double, 6, 6> mapped_weak =
+          equalization_inverse * joint_solver.eigenvectors();
+      Eigen::HouseholderQR<Eigen::Matrix<double, 6, 6>> qr(mapped_weak);
+      const Matrix6d q = qr.householderQ() * Matrix6d::Identity();
+      result.joint_weak_basis = q;
+    } else {
+      Eigen::MatrixXd mapped_weak(6, result.weak_dimension);
+      for (int column = 0; column < result.weak_dimension; ++column)
+        mapped_weak.col(column) = equalization_inverse *
+            joint_solver.eigenvectors().col(weak_indices[
+                static_cast<std::size_t>(column)]);
+      Eigen::HouseholderQR<Eigen::MatrixXd> qr(mapped_weak);
+      const Eigen::MatrixXd triangular = qr.matrixQR();
+      const double largest_diagonal = triangular.topLeftCorner(
+          result.weak_dimension, result.weak_dimension).diagonal().cwiseAbs().maxCoeff();
+      const double rank_tolerance = std::numeric_limits<double>::epsilon() *
+          100.0 * std::max(1.0, largest_diagonal);
+      if (triangular.topLeftCorner(result.weak_dimension,
+              result.weak_dimension).diagonal().cwiseAbs().minCoeff() <=
+          rank_tolerance) {
+        result.status = "MAPPED_WEAK_BASIS_RANK_DEFICIENT";
+        return result;
+      }
+      const Matrix6d q = qr.householderQ() * Matrix6d::Identity();
+      result.joint_weak_basis.leftCols(result.weak_dimension) =
+          q.leftCols(result.weak_dimension);
+      result.joint_reliable_basis.leftCols(result.reliable_dimension) =
+          q.rightCols(result.reliable_dimension);
+    }
+    const Eigen::MatrixXd weak = result.joint_weak_basis.leftCols(
+        result.weak_dimension);
+    const Eigen::MatrixXd reliable = result.joint_reliable_basis.leftCols(
+        result.reliable_dimension);
+    const double weak_orthogonality = result.weak_dimension == 0 ? 0.0 :
+        (weak.transpose() * weak - Eigen::MatrixXd::Identity(
+             result.weak_dimension, result.weak_dimension)).norm();
+    const double reliable_orthogonality = result.reliable_dimension == 0 ? 0.0 :
+        (reliable.transpose() * reliable - Eigen::MatrixXd::Identity(
+             result.reliable_dimension, result.reliable_dimension)).norm();
+    const double cross_orthogonality = result.weak_dimension == 0 ||
+        result.reliable_dimension == 0 ? 0.0 :
+        (weak.transpose() * reliable).norm();
+    if (!std::isfinite(weak_orthogonality) ||
+        !std::isfinite(reliable_orthogonality) ||
+        !std::isfinite(cross_orthogonality) ||
+        weak_orthogonality > 1e-8 || reliable_orthogonality > 1e-8 ||
+        cross_orthogonality > 1e-8) {
+      result.status = "SCALE_BALANCED_BASES_NOT_ORTHOGONAL";
+      return result;
+    }
+  } else if (local.normalized_geometric_information.allFinite()) {
+    // Keep the historical full-matrix path for non-geometric fixtures. Live
+    // geometric U_obs never reaches this branch: it must use Schur balancing.
     const Matrix6d information = 0.5 * (local.normalized_geometric_information +
-                                       local.normalized_geometric_information.transpose());
+        local.normalized_geometric_information.transpose());
     Eigen::SelfAdjointEigenSolver<Matrix6d> joint_solver(information);
     if (joint_solver.info() != Eigen::Success ||
         !joint_solver.eigenvalues().allFinite() ||
@@ -305,34 +446,26 @@ LocalRisk assessLocalRisk(const LocalObservability& local,
       return result;
     }
     const double joint_max = joint_solver.eigenvalues().maxCoeff();
-    if (!std::isfinite(joint_max) || joint_max < -1e-10) {
-      result.status = "INVALID_JOINT_INFORMATION";
-      return result;
-    }
-    if (joint_max <= 1e-12) {
+    if (joint_max <= 0.0) {
       result.joint_weak_basis.setIdentity();
       result.weak_dimension = 6;
       result.reliable_dimension = 0;
-      result.translation_weak = true;
-      result.rotation_weak = true;
-      result.translation_weak_ratio = 0.0;
-      result.rotation_weak_ratio = 0.0;
     } else {
       for (int index = 0; index < 6; ++index) {
         const double ratio = std::max(0.0, joint_solver.eigenvalues()(index)) /
                              joint_max;
-        if (ratio <= config.weak_eigenvalue_ratio) {
+        if (ratio <= config.weak_eigenvalue_ratio)
           result.joint_weak_basis.col(result.weak_dimension++) =
               joint_solver.eigenvectors().col(index);
-        } else {
+        else
           result.joint_reliable_basis.col(result.reliable_dimension++) =
               joint_solver.eigenvectors().col(index);
-        }
       }
     }
   } else {
     // Compatibility for older unit fixtures that provide only the decoupled
-    // blocks. Live geometric U_obs always supplies the full joint information.
+    // blocks. A live geometric matrix with failed Schur diagnostics was
+    // rejected above and cannot silently fall back to this approximation.
     if (result.rotation_weak)
       result.joint_weak_basis.block<3, 1>(0, result.weak_dimension++) =
           rotation_vectors.col(0);
@@ -355,9 +488,80 @@ LocalRisk assessLocalRisk(const LocalObservability& local,
   }
   result.valid = true;
   result.status = result.map_support_sufficient
-      ? "VALID_JOINT_WEAK_DIRECTIONS_SCHUR_DECOUPLED"
+      ? (full_geometric_information
+             ? "VALID_JOINT_WEAK_DIRECTIONS_SCHUR_SCALE_BALANCED"
+             : "VALID_JOINT_WEAK_DIRECTIONS_LEGACY_FIXTURE")
       : "MAP_SUPPORT_INSUFFICIENT";
   return result;
+}
+
+bool buildReliableMeasurementBasisFromWeak(
+    const Matrix6d& pose_from_normalized_lidar,
+    const Matrix6d& normalized_weak_basis,
+    int weak_dimension,
+    Matrix6d* measurement_basis,
+    int* reliable_rank,
+    std::string* failure_reason) {
+  if (failure_reason) failure_reason->clear();
+  const auto reject = [failure_reason](const char* reason) {
+    if (failure_reason) *failure_reason = reason;
+    return false;
+  };
+  if (!measurement_basis || !reliable_rank)
+    return reject("NULL_OUTPUT_POINTER");
+  if (!pose_from_normalized_lidar.allFinite() ||
+      !normalized_weak_basis.allFinite())
+    return reject("NONFINITE_BASIS_INPUT");
+  if (weak_dimension < 0 || weak_dimension > 6)
+    return reject("WEAK_DIMENSION_OUT_OF_RANGE");
+  const Eigen::MatrixXd weak = normalized_weak_basis.leftCols(weak_dimension);
+  if (weak_dimension > 0 &&
+      (weak.transpose() * weak - Eigen::MatrixXd::Identity(
+           weak_dimension, weak_dimension)).norm() > 1e-8)
+    return reject("NORMALIZED_WEAK_BASIS_NOT_ORTHONORMAL");
+  measurement_basis->setZero();
+  if (weak_dimension == 0) {
+    measurement_basis->setIdentity();
+    *reliable_rank = 6;
+    return true;
+  }
+  if (weak_dimension == 6) {
+    *reliable_rank = 0;
+    return true;
+  }
+  const Eigen::MatrixXd mapped_weak =
+      pose_from_normalized_lidar * weak;
+  if (!mapped_weak.allFinite())
+    return reject("NONFINITE_MAPPED_WEAK_BASIS");
+  Eigen::JacobiSVD<Eigen::MatrixXd> svd(
+      mapped_weak, Eigen::ComputeFullU | Eigen::ComputeThinV);
+  // Eigen 3.3's JacobiSVD has no info() status accessor; finite factors and
+  // the explicit singular-rank check below are the supported validity gates.
+  if (!svd.singularValues().allFinite() || !svd.matrixU().allFinite())
+    return reject("MAPPED_WEAK_SVD_FAILED");
+  const Eigen::VectorXd singular = svd.singularValues();
+  if (singular.size() != weak_dimension || singular.size() == 0)
+    return reject("MAPPED_WEAK_SINGULAR_VALUE_COUNT_MISMATCH");
+  const double singular_floor = std::numeric_limits<double>::epsilon() *
+      100.0 * std::max(1.0, singular.maxCoeff());
+  int effective_rank = 0;
+  for (Eigen::Index i = 0; i < singular.size(); ++i)
+    if (singular(i) > singular_floor) ++effective_rank;
+  if (effective_rank != weak_dimension)
+    return reject("MAPPED_WEAK_EFFECTIVE_RANK_MISMATCH");
+  const int rank = 6 - weak_dimension;
+  const Eigen::MatrixXd reliable = svd.matrixU().rightCols(rank);
+  measurement_basis->leftCols(rank) = reliable;
+  *reliable_rank = rank;
+  const Eigen::MatrixXd leakage = reliable.transpose() * mapped_weak;
+  const double normalized_leakage = leakage.norm() /
+      (1.0 + mapped_weak.norm());
+  if (!std::isfinite(normalized_leakage) || normalized_leakage >= 1e-9)
+    return reject("MAPPED_WEAK_MEASUREMENT_LEAKAGE");
+  if ((reliable.transpose() * reliable -
+       Eigen::MatrixXd::Identity(rank, rank)).norm() > 1e-8)
+    return reject("RELIABLE_MEASUREMENT_BASIS_NOT_ORTHONORMAL");
+  return true;
 }
 
 MeasurementNoiseResult makePoseMeasurementNoise(

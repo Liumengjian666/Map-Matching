@@ -1,0 +1,26 @@
+task=PAPER-P6-I6E-R1
+dataset=Corridor01
+modes=B0 STRICT_BASELINE and B4 FULL_ALGORITHM_V1
+smoke_window=149 scan frames; 0.042698054999999999 s through 14.969062954 s
+map_sha256=103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f
+input_manifest_sha256=6d722ec6946570cc09d984c1a8ac7ebaaff799f012f9386ae169e3d47747a043
+imu_sha256=7dc881d4ebfeacea9354be569a5952e5e466ccdd366637e52a7797a6f37457aa
+filter_scans_sha256=f992626762f1f2321f78212c0b0c8be9e65b196bd1a638b4dc6c4fe51f846450
+scans_sha256=59179734b433a8d81d5c4ead554556f7d650f2865c87f7205a0e3f1e8c7286af
+request_xyz_sha256=beb700449a60a7f31c33e107b938862782d83afd7c93e589c323371db4be1610
+params_sha256=7e42752ff8b84eae2b2da8d7d9fe179db0bb8f364a923e12236d2e91336e357d (official calibration params)
+visual_quality_csv_sha256=f192b2d77ac427c62357ac6592acebabf678c60fbe762dc4cbe48422de8c5a63
+GT_used_online=NO
+map_path=/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd
+input_root=/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_i6c_framework/input
+visual_source=/tmp/p6-i6e/corridor01/corridor01_visual_quality.csv (byte-identical archived copy above; SHA checked)
+filter_start_ns=1517157224188979000
+U_obs_threshold=30 valid geometric correspondences; NDT parameters unchanged
+B0_frames=149; B4_frames=149; B4_NDT_calls=377; B4_M0_nonconverged=0
+first_IMU_COASTING=transaction 124 at 12.447744995 s, coincident with first U_obs support below 30 (2 valid correspondences)
+first_zero_U_obs_correspondences=transaction 125 at 12.548605114 s
+at_12.750325113_s=tx127; M0_converged=1; fitness=21.63248; valid_correspondences=64; nominal r/2r query support=8/12 of 128; predicted r/2r=7/13; max position sigma=0.110425 m; LiDAR reliable dimension=5; predicted-vs-M0 translation=0.174732 m, rotation=0.398762 rad
+at_14.969062954_s=tx149; M0_converged=1; M0_fitness=225.8711; valid_correspondences=0; nominal and predicted r/2r query support=0/0 of 128; position sigma=0.223495 m; LiDAR reliable dimension=0; status=NDT_CONVERGED_WITHOUT_GEOMETRIC_SUPPORT
+runtime_ms_mean_p95_max_total=163.708 / 400.038 / 514.214
+runtime_ms_mean_p95_max_nominal_NDT=55.322 / 141.846 / 171.589
+runtime_ms_mean_p95_max_U_obs=1.411 / 1.777 / 1.970

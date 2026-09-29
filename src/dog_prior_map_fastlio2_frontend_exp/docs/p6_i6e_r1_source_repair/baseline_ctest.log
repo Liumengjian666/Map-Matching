@@ -1,0 +1,18 @@
+Test project /tmp/p6_i6e_r1_base_build.wgXugH
+    Start 1: p6_i6b_dual_reliability
+1/2 Test #1: p6_i6b_dual_reliability ...........***Failed    0.00 sec
+P6_I6B_DUAL_RELIABILITY_TEST_FAIL: low-count geometric U_obs remains diagnostic but cannot claim map support
+
+    Start 2: p6_i6e_conditional_compensation
+2/2 Test #2: p6_i6e_conditional_compensation ...***Failed    0.00 sec
+PAPER_P6_I6E_CONDITIONAL_COMPENSATION_TEST_FAIL: geometric U_obs exposes joint spectrum and Schur diagnostics
+
+
+0% tests passed, 2 tests failed out of 2
+
+Total Test time (real) =   0.01 sec
+
+The following tests FAILED:
+	  1 - p6_i6b_dual_reliability (Failed)
+	  2 - p6_i6e_conditional_compensation (Failed)
+Errors while running CTest

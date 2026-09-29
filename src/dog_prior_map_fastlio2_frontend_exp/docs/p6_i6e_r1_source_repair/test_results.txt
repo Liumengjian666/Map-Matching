@@ -1,0 +1,36 @@
+P6-I6E-R1 verification record
+==============================
+
+Original source reproduction
+----------------------------
+Source SHA: 0c0c1711330e9ed60cc330fea3b4f2ec8ce34ba6
+Independent Release build: PASS.
+Original CTest: 0/2 pass. Both expected source/report-consistency regressions reproduced:
+  p6_i6b_dual_reliability: "low-count geometric U_obs remains diagnostic but cannot claim map support"
+  p6_i6e_conditional_compensation: "geometric U_obs exposes joint spectrum and Schur diagnostics"
+Full logs: baseline_build.log and baseline_ctest.log.
+
+Final focused Release tests
+---------------------------
+  p6_i6b_dual_reliability: PASS
+  p6_i6e_conditional_compensation: PASS
+  CTest: 2/2 PASS.
+
+Final package/workspace Release build
+-------------------------------------
+Temporary isolated Catkin workspace: /tmp/p6_i6e_r1_catkin_ws
+Pinned FAST-LIO2 source: /media/jian/HIKVISION/comparison algorithm/FAST_LIO2
+FAST-LIO2 SHA: 7cc4175de6f8ba2edf34bab02a42195b141027e9
+Catkin generated messages, frontend ROS executable, and all enabled test targets: PASS.
+Full Catkin CTest: 6/6 PASS, including ndt_pose_update_runtime_test and protocol contract test.
+
+Runner and scripts
+------------------
+Release p6_i6b_closed_loop build: PASS (p6_i6b_runner_build.log).
+Event audit script syntax: PASS (AST parse; no bytecode artifacts retained).
+Map-support plots regenerated from each archived diagnostic CSV: PASS.
+git diff --check: PASS before commit.
+
+Build invocation note
+---------------------
+An initial direct package-only CMake build had no generated NdtScanAck.h because the generated-message package was not part of that isolated build graph. No source edit was made in response. The final build was rerun successfully in a fresh temporary Catkin workspace containing both dog_prior_map_interfaces and dog_prior_map_fastlio2_frontend_exp; this is the authoritative final build above.

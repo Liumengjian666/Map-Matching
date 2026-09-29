@@ -410,6 +410,10 @@ bool FastLio2IkfomFrontend::applyPoseMeasurement(
     return fail(failure_reason, "pose_measurement_covariance_not_spd");
 
   const FilterSnapshot before = getState();
+  // update_iterated mutates the filter object in place. Keep a transaction
+  // snapshot so a failed postcondition cannot leak a partial correction.
+  state_ikfom backup_x = impl_->filter.get_x();
+  auto backup_P = impl_->filter.get_P();
   PoseMeasurement measurement(vect3(map_T_imu_measurement.position),
                               SO3(map_T_imu_measurement.orientation.toRotationMatrix()));
   // The pinned IKFoM API accepts a mutable R reference (and may reuse its
@@ -422,7 +426,12 @@ bool FastLio2IkfomFrontend::applyPoseMeasurement(
                                   impl_->fixed_translation);
   impl_->filter.change_x(state);
   impl_->filter.change_P(covariance);
-  if (!postconditionsValid(failure_reason)) return false;
+  std::string postcondition_failure;
+  if (!postconditionsValid(&postcondition_failure)) {
+    impl_->filter.change_x(backup_x);
+    impl_->filter.change_P(backup_P);
+    return fail(failure_reason, postcondition_failure.c_str());
+  }
 
   if (delta) {
     const FilterSnapshot after = getState();
@@ -487,10 +496,11 @@ bool FastLio2IkfomFrontend::applyProjectedPositionMeasurement(
     return fail(failure_reason, "projected_position_covariance_not_spd");
 
   const FilterSnapshot before = getState();
-  state_ikfom prior = impl_->filter.get_x();
+  state_ikfom backup_x = impl_->filter.get_x();
+  auto backup_P = impl_->filter.get_P();
+  state_ikfom prior = backup_x;
   state_ikfom state = prior;
-  const Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> covariance =
-      impl_->filter.get_P();
+  const Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> covariance = backup_P;
   Eigen::MatrixXd h = Eigen::MatrixXd::Zero(measurement_rank,
                                              state_ikfom::DOF);
   h.block(0, MTK::getStartIdx(&state_ikfom::pos), measurement_rank, 3) =
@@ -543,7 +553,12 @@ bool FastLio2IkfomFrontend::applyProjectedPositionMeasurement(
                                   impl_->fixed_translation);
   impl_->filter.change_x(state);
   impl_->filter.change_P(posterior);
-  if (!postconditionsValid(failure_reason)) return false;
+  std::string postcondition_failure;
+  if (!postconditionsValid(&postcondition_failure)) {
+    impl_->filter.change_x(backup_x);
+    impl_->filter.change_P(backup_P);
+    return fail(failure_reason, postcondition_failure.c_str());
+  }
 
   if (delta) {
     const FilterSnapshot after = getState();
@@ -595,10 +610,11 @@ bool FastLio2IkfomFrontend::applyProjectedPoseMeasurement(
     return fail(failure_reason, "projected_pose_covariance_not_spd");
 
   const FilterSnapshot before = getState();
-  state_ikfom prior = impl_->filter.get_x();
+  state_ikfom backup_x = impl_->filter.get_x();
+  auto backup_P = impl_->filter.get_P();
+  state_ikfom prior = backup_x;
   state_ikfom state = prior;
-  const Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> covariance =
-      impl_->filter.get_P();
+  const Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> covariance = backup_P;
   const int position_index = MTK::getStartIdx(&state_ikfom::pos);
   const int rotation_index = MTK::getStartIdx(&state_ikfom::rot);
   Eigen::Matrix<double, 6, state_ikfom::DOF> selector =
@@ -657,7 +673,12 @@ bool FastLio2IkfomFrontend::applyProjectedPoseMeasurement(
                                   impl_->fixed_translation);
   impl_->filter.change_x(state);
   impl_->filter.change_P(posterior);
-  if (!postconditionsValid(failure_reason)) return false;
+  std::string postcondition_failure;
+  if (!postconditionsValid(&postcondition_failure)) {
+    impl_->filter.change_x(backup_x);
+    impl_->filter.change_P(backup_P);
+    return fail(failure_reason, postcondition_failure.c_str());
+  }
 
   if (delta) {
     const FilterSnapshot after = getState();

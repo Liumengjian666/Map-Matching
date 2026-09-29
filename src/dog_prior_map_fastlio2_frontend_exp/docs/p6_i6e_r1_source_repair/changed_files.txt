@@ -1,0 +1,35 @@
+R1 implementation and regression files
+========================================
+
+include/dog_prior_map_fastlio2_frontend_exp/reliability_metrics.hpp
+  Added a distinct numerical_failure result bit to LocalObservability.
+
+src/reliability_metrics.cpp
+  analyzeGeometricObservability(): retained the pre-existing point residual Jacobian/information construction and S normalization; added the 30-valid-correspondence support gate, PSD-safe 3x3 pseudoinverse, both correctly ordered Schur complements, finite/PSD checks, and persistence of Schur and joint eigensystem fields.
+
+include/dog_prior_map_fastlio2_frontend_exp/dual_reliability.hpp
+  Declared buildReliableMeasurementBasisFromWeak(); clarified visual information as POSITION_PROXY_INFORMATION.
+
+src/dual_reliability.cpp
+  assessLocalRisk(): keeps Schur group ratios, uses Schur-scale-equalized joint classification for full geometric U_obs, maps weak directions back to normalized coordinates, and builds an orthonormal complement. Added the full-rank-checked SVD weak-image complement builder and prevents real full-geometric data from silently falling back to legacy block fixtures.
+
+scripts/p6_i1_branched_recovery.cpp
+  makeReliablePoseMeasurementBasis(): constructs the specified physical coordinate map A and delegates to the weak-direction image complement. GeometricNdt::diagnoseSearch() and the FULL-mode map-support diagnostic CSV record nominal/predicted support at r and 2r without changing the formal U_obs radius or NDT result.
+
+scripts/p6_i6b_reliability_test.cpp
+  Added/updated support threshold, full-information/Schur population, and no-fallback checks for incomplete real-geometric information.
+
+scripts/p6_i6e_conditional_compensation_test.cpp
+  Added Schur-scale, known-weak-direction, cross-block Schur-formula, one-/two-dimensional mixed weak-direction projection, orthogonality, annihilation, and discarded-residual invariance checks.
+
+src/fastlio2_frontend_ikfom.cpp
+  applyPoseMeasurement(), applyProjectedPoseMeasurement(), and applyProjectedPositionMeasurement() snapshot x/P before mutation and restore the state on failed postconditions; correction deltas are only returned for success.
+
+tests/ndt_pose_update_runtime_test.cpp
+  Added rejected-update state equality coverage across pose, velocity, biases, covariance, and timestamp for invalid measurements/bases.
+
+scripts/p6_i6e_r1_event_audit.py
+  Added an independent DictReader-based event accounting utility for trigger, quality, complementarity, and actual applied updates.
+
+docs/p6_i6e_r1_source_repair/
+  Added this report and two frozen-input 15-second diagnostic bundles/plots. The pre-existing uncommitted reliability_metrics.cpp I6E implementation was preserved and is included; no previous I6E result/report was replaced.

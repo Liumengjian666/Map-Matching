@@ -1,0 +1,22 @@
+P6-I6E-R1 Schur and scale-balanced classification results
+===========================================================
+
+1. Scale-only matrix G=blockdiag(diag(400,500,600), diag(4,5,6)), zero cross block:
+   weak_dimension=0, reliable_dimension=6
+   rotation Schur min/max ratio=0.666667
+   translation Schur min/max ratio=0.666667
+   The 100x group scale disparity alone did not make the full translation group weak.
+
+2. Known weak translation matrix G=blockdiag(diag(400,500,600), diag(0.01,5,6)):
+   weak_dimension=1, reliable_dimension=5
+   translation Schur min/max ratio=0.00166667
+   The explicitly weak translation direction was detected.
+
+3. PSD matrix with nonzero rotation/translation cross block:
+   rotation Schur independent-formula error=0
+   translation Schur independent-formula error=0
+   weak_dimension + reliable_dimension = 6; mapped basis orthogonality and weak-image annihilation are covered by the projection test.
+
+Focused Release executable output ended with:
+PAPER_P6_I6E_CONDITIONAL_COMPENSATION_TEST_PASS
+P6_I6B_DUAL_RELIABILITY_TEST_PASS

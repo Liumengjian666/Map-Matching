@@ -1,0 +1,4 @@
+BEFORE_SHA=0c0c1711330e9ed60cc330fea3b4f2ec8ce34ba6
+FROZEN_I6D_BASELINE_SHA=a561c310e97510dc18265ebb3057ac9d586daaee
+BRANCH=research/p6-i6d-full-algorithm
+AFTER_SHA=see final Git delivery report (a commit cannot contain its own object SHA without a self-reference)

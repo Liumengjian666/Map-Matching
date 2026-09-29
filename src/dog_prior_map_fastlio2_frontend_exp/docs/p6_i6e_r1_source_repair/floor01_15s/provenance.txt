@@ -1,0 +1,26 @@
+task=PAPER-P6-I6E-R1
+dataset=Floor01
+modes=B0 STRICT_BASELINE and B4 FULL_ALGORITHM_V1
+smoke_window=144 scan frames; 0.50427921099999995 s through 14.926418378999999 s
+map_sha256=2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570
+input_manifest_sha256=75e71ba365b9c2d0b247f4bf3944008994d398f8f5d87fcb2d49e9e7ffd2a09e
+imu_sha256=faf83b341d6084df5a84e431d61a15f6680a7465d83e9fc7bba13a03961722c2
+filter_scans_sha256=6cf05c6fb23571969263bb0e011c12adb09dcf73d8707420203459f9d41b1ec0
+scans_sha256=9371e593c0e625611f053e3ef0a581c52481ccaed392aa8d74d74313caa9938f
+request_xyz_sha256=f7b5262552fe8d52f383e50813de2b568fa8a5990c69e2bba55231df8547188f
+params_sha256=84819fc178c70a80de075ba02f5e05938b22879ae4238049f537631e7b121c8b
+visual_quality_csv_sha256=d2db72284b93bfa6d5fb6a9d813f20d45c3fda3e4f38710dd367fcfb68b0d66c
+GT_used_online=NO
+map_path=/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/map/frozen/floor01_h1_map_p5_frozen.pcd
+input_root=/home/jian/livox_ws/p6_i1_recovery_assets_20260927/input
+visual_source=/tmp/p6-i6e/floor01/floor01_visual_quality.csv (byte-identical archived copy above; SHA checked)
+filter_start_ns=0
+U_obs_threshold=30 valid geometric correspondences; NDT parameters unchanged
+B0_frames=144; B4_frames=144; B4_NDT_calls=154; B4_M0_nonconverged=0
+first_fusion_mode_IMU_COASTING=none in this 15-second interval
+imu_coasting_s_counter_first_positive=transaction 2 at 0.60513933 s while fusion_mode=RELOCALIZATION_REQUIRED; this counter is distinct from the explicit IMU_COASTING mode
+first_U_obs_correspondences_below_30=none; U_obs remained valid on all 144 frames
+diagnostic_at_12.304226235_s=tx118; M0_converged=1; fitness=0.3258543; valid_correspondences=2291; nominal r/2r query support=107/122 of 128; predicted r/2r=106/122; max position sigma=0.111194 m; LiDAR reliable dimension=5; predicted-vs-M0 translation=0.033651 m, rotation=0.031965 rad
+runtime_ms_mean_p95_max_total=34.903 / 59.154 / 156.200
+runtime_ms_mean_p95_max_nominal_NDT=26.939 / 45.529 / 127.957
+runtime_ms_mean_p95_max_U_obs=1.763 / 2.045 / 2.614

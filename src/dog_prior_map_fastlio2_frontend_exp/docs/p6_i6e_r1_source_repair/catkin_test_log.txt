@@ -1,0 +1,17 @@
+Test project /tmp/p6_i6e_r1_catkin_ws/build
+    Start 1: ndt_protocol_contract_test
+1/6 Test #1: ndt_protocol_contract_test ...........   Passed    0.00 sec
+    Start 2: ikfom_pose_api_spike
+2/6 Test #2: ikfom_pose_api_spike .................   Passed    0.00 sec
+    Start 3: fastlio2_propagation_contract_test
+3/6 Test #3: fastlio2_propagation_contract_test ...   Passed    0.00 sec
+    Start 4: scan_end_deskew_runtime_test
+4/6 Test #4: scan_end_deskew_runtime_test .........   Passed    0.00 sec
+    Start 5: frontend_runtime_end_to_end_test
+5/6 Test #5: frontend_runtime_end_to_end_test .....   Passed    0.00 sec
+    Start 6: ndt_pose_update_runtime_test
+6/6 Test #6: ndt_pose_update_runtime_test .........   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 6
+
+Total Test time (real) =   0.02 sec

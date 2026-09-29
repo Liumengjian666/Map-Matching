@@ -1,0 +1,99 @@
+Scanning dependencies of target p6_i6b_dual_reliability
+[ 11%] Building CXX object CMakeFiles/p6_i6b_dual_reliability.dir/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/src/dual_reliability.cpp.o
+[ 22%] Linking CXX static library libp6_i6b_dual_reliability.a
+[ 33%] Built target p6_i6b_dual_reliability
+Scanning dependencies of target p6_i6e_conditional_compensation_test
+[ 44%] Building CXX object CMakeFiles/p6_i6e_conditional_compensation_test.dir/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6e_conditional_compensation_test.cpp.o
+Scanning dependencies of target p6_i6b_closed_loop
+[ 55%] Building CXX object CMakeFiles/p6_i6b_closed_loop.dir/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i1_branched_recovery.cpp.o
+In file included from /media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/IKFoM_toolkit/esekfom/../mtk/startIdx.hpp:82,
+                 from /media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/IKFoM_toolkit/esekfom/esekfom.hpp:51,
+                 from /media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/use-ikfom.hpp:4,
+                 from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/../src/fastlio2_frontend_ikfom.cpp:8,
+                 from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p4_i2_state_contamination_replay.cpp:4,
+                 from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i1_branched_recovery.cpp:5:
+/media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/IKFoM_toolkit/esekfom/../mtk/src/SubManifold.hpp:109:35: warning: extra ‘;’ [-Wpedantic]
+  109 |  SubManifold(const X& t) : T(t) {};
+      |                                   ^
+      |                                   -
+In file included from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/../src/fastlio2_frontend_ikfom.cpp:8,
+                 from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p4_i2_state_contamination_replay.cpp:4,
+                 from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i1_branched_recovery.cpp:5:
+/media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/use-ikfom.hpp:21:2: warning: extra ‘;’ [-Wpedantic]
+   21 | );
+      |  ^
+/media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/use-ikfom.hpp:26:2: warning: extra ‘;’ [-Wpedantic]
+   26 | );
+      |  ^
+/media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/use-ikfom.hpp:33:2: warning: extra ‘;’ [-Wpedantic]
+   33 | );
+      |  ^
+In file included from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/../src/fastlio2_frontend_ikfom.cpp:8,
+                 from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p4_i2_state_contamination_replay.cpp:4,
+                 from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i1_branched_recovery.cpp:5:
+/media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/use-ikfom.hpp: In function ‘Eigen::Matrix<double, 24, 12> df_dw(state_ikfom&, const input_ikfom&)’:
+/media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/use-ikfom.hpp:80:72: warning: unused parameter ‘in’ [-Wunused-parameter]
+   80 | Eigen::Matrix<double, 24, 12> df_dw(state_ikfom &s, const input_ikfom &in)
+      |                                                     ~~~~~~~~~~~~~~~~~~~^~
+In file included from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p4_i2_state_contamination_replay.cpp:4,
+                 from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i1_branched_recovery.cpp:5:
+/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/../src/fastlio2_frontend_ikfom.cpp: At global scope:
+/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/../src/fastlio2_frontend_ikfom.cpp:21:2: warning: extra ‘;’ [-Wpedantic]
+   21 | );
+      |  ^
+/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/../src/fastlio2_frontend_ikfom.cpp:116:31: warning: ‘dog_prior_map_fastlio2_frontend_exp::FastLio2IkfomFrontend::Impl’ has a field ‘dog_prior_map_fastlio2_frontend_exp::FastLio2IkfomFrontend::Impl::filter’ whose type uses the anonymous namespace [-Wsubobject-linkage]
+  116 | struct FastLio2IkfomFrontend::Impl {
+      |                               ^~~~
+In file included from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i1_branched_recovery.cpp:5:
+/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p4_i2_state_contamination_replay.cpp:286:7: warning: ‘p4_i2::SelectiveFilter’ has a field ‘p4_i2::SelectiveFilter::filter_’ whose type uses the anonymous namespace [-Wsubobject-linkage]
+  286 | class SelectiveFilter {
+      |       ^~~~~~~~~~~~~~~
+[ 66%] Linking CXX executable p6_i6e_conditional_compensation_test
+[ 66%] Built target p6_i6e_conditional_compensation_test
+Scanning dependencies of target p6_i6b_dual_reliability_test
+[ 77%] Building CXX object CMakeFiles/p6_i6b_dual_reliability_test.dir/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b_reliability_test.cpp.o
+In file included from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i1_branched_recovery.cpp:19:
+/home/jian/livox_ws/DCReg/DCReg/include/dcreg.hpp: In function ‘dcreg::DegeneracyDetection dcreg::DetectDegeneracy(const Matrix6d&, const dcreg::SolverParameters&)’:
+/home/jian/livox_ws/DCReg/DCReg/include/dcreg.hpp:205:69: warning: unused parameter ‘params’ [-Wunused-parameter]
+  205 |                                             const SolverParameters& params) {
+      |                                             ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+In file included from /media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/IKFoM_toolkit/esekfom/esekfom.hpp:48,
+                 from /media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/use-ikfom.hpp:4,
+                 from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/../src/fastlio2_frontend_ikfom.cpp:8,
+                 from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p4_i2_state_contamination_replay.cpp:4,
+                 from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i1_branched_recovery.cpp:5:
+/media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/IKFoM_toolkit/esekfom/../mtk/types/vect.hpp: In instantiation of ‘void MTK::vect<D, _scalar, _Options>::S2_Mx(Eigen::Matrix<_scalar, 3, 2>&, MTK::vectview<const _scalar, 2>) [with int D = 3; _scalar = double; int _Options = 0]’:
+/media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/use-ikfom.hpp:12:1:   required from here
+/media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/IKFoM_toolkit/esekfom/../mtk/types/vect.hpp:140:78: warning: unused parameter ‘delta’ [-Wunused-parameter]
+  140 |  void S2_Mx(Eigen::Matrix<scalar, 3, 2> &res, MTK::vectview<const scalar, 2> delta)
+      |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+In file included from /media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/IKFoM_toolkit/esekfom/esekfom.hpp:49,
+                 from /media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/use-ikfom.hpp:4,
+                 from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/../src/fastlio2_frontend_ikfom.cpp:8,
+                 from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p4_i2_state_contamination_replay.cpp:4,
+                 from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i1_branched_recovery.cpp:5:
+/media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/IKFoM_toolkit/esekfom/../mtk/types/SOn.hpp: In instantiation of ‘void MTK::SO3<_scalar, Options>::S2_Mx(Eigen::Matrix<_scalar, 3, 2>&, MTK::vectview<const _scalar, 2>) [with _scalar = double; int Options = 0]’:
+/media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/use-ikfom.hpp:12:1:   required from here
+/media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/IKFoM_toolkit/esekfom/../mtk/types/SOn.hpp:258:78: warning: unused parameter ‘delta’ [-Wunused-parameter]
+  258 |  void S2_Mx(Eigen::Matrix<scalar, 3, 2> &res, MTK::vectview<const scalar, 2> delta)
+      |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+In file included from /media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/use-ikfom.hpp:4,
+                 from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/../src/fastlio2_frontend_ikfom.cpp:8,
+                 from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p4_i2_state_contamination_replay.cpp:4,
+                 from /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i1_branched_recovery.cpp:5:
+/media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/IKFoM_toolkit/esekfom/esekfom.hpp: In instantiation of ‘void esekfom::esekf<state, process_noise_dof, input, measurement, measurement_noise_dof>::update_iterated(measurement&, esekfom::esekf<state, process_noise_dof, input, measurement, measurement_noise_dof>::measurementnoisecovariance&) [with state = state_ikfom; int process_noise_dof = 12; input = input_ikfom; measurement = dog_prior_map_fastlio2_frontend_exp::{anonymous}::PoseMeasurement; int measurement_noise_dof = 6; esekfom::esekf<state, process_noise_dof, input, measurement, measurement_noise_dof>::measurementnoisecovariance = Eigen::Matrix<double, 6, 6>; typename state::scalar = double]’:
+/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/../src/fastlio2_frontend_ikfom.cpp:422:58:   required from here
+/media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/IKFoM_toolkit/esekfom/esekfom.hpp:422:9: warning: unused variable ‘dim’ [-Wunused-variable]
+  422 |     int dim = (*it).second;
+      |         ^~~
+[ 88%] Linking CXX executable p6_i6b_dual_reliability_test
+/media/jian/HIKVISION/comparison algorithm/FAST_LIO2/include/IKFoM_toolkit/esekfom/esekfom.hpp:442:9: warning: unused variable ‘dim’ [-Wunused-variable]
+  442 |     int dim = (*it).second;
+      |         ^~~
+[ 88%] Built target p6_i6b_dual_reliability_test
+/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i1_branched_recovery.cpp: At global scope:
+/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i1_branched_recovery.cpp:1080:6: warning: ‘bool p6_i1::verifyScoreGradientConvention({anonymous}::AuditedNdt&, const Ptr&, const p6_i1::Candidate&, std::size_t, const string&, std::ofstream&)’ defined but not used [-Wunused-function]
+ 1080 | bool verifyScoreGradientConvention(
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[100%] Linking CXX executable p6_i6b_closed_loop
+[100%] Built target p6_i6b_closed_loop

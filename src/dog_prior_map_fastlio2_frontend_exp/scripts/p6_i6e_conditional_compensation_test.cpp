@@ -70,9 +70,26 @@ void testSchurAwareJointAndVisualCoordinates() {
           "rotation Schur complement removes translation nuisance coupling");
 
   const auto risk = reliability::assessLocalRisk(local);
-  require(risk.valid && risk.weak_dimension > 0 &&
+  require(risk.valid &&
               risk.reliable_dimension + risk.weak_dimension == 6,
-          "joint eigenbasis separates weak and reliable LiDAR subspaces");
+          "joint eigenbasis has a complete rank partition");
+  const Eigen::MatrixXd weak = risk.joint_weak_basis.leftCols(risk.weak_dimension);
+  const Eigen::MatrixXd reliable = risk.joint_reliable_basis.leftCols(
+      risk.reliable_dimension);
+  require((weak.transpose() * weak - Eigen::MatrixXd::Identity(
+              risk.weak_dimension, risk.weak_dimension)).norm() < 1e-8 &&
+              (reliable.transpose() * reliable - Eigen::MatrixXd::Identity(
+                  risk.reliable_dimension, risk.reliable_dimension)).norm() < 1e-8 &&
+              (weak.transpose() * reliable).norm() < 1e-8,
+          "mapped weak and reliable normalized-coordinate bases are orthogonal");
+  const Eigen::Matrix3d a = local.normalized_geometric_information.block<3, 3>(0, 0);
+  const Eigen::Matrix3d b = local.normalized_geometric_information.block<3, 3>(0, 3);
+  const Eigen::Matrix3d c = local.normalized_geometric_information.block<3, 3>(3, 3);
+  require((local.rotation_schur_information -
+           (a - b * c.inverse() * b.transpose())).norm() < 1e-8 &&
+              (local.translation_schur_information -
+               (c - b.transpose() * a.inverse() * b)).norm() < 1e-8,
+          "Schur matrices use the prescribed cross-block order");
 
   const Eigen::Matrix3d visual_noise = 0.01 * Eigen::Matrix3d::Identity();
   reliability::LocalRisk translation_x = weakTranslationX();
@@ -92,6 +109,185 @@ void testSchurAwareJointAndVisualCoordinates() {
               not_complementary.effective_rank == 0 &&
               not_complementary.status == "NO_INFORMATION_IN_LIDAR_WEAK_SUBSPACE",
           "valid position observation cannot repair unobserved pure rotation");
+}
+
+void testSchurScaleBalancedClassification() {
+  const auto make_local = [](const reliability::Matrix6d& information) {
+    reliability::LocalObservability local;
+    local.valid = true;
+    local.geometric_proxy = true;
+    local.map_support_sufficient = true;
+    local.map_support_status = "MAP_SUPPORT_SUFFICIENT";
+    local.valid_correspondence_count = 30;
+    local.effective_weight_sum = 30.0;
+    local.translation_length_scale_m = 0.8;
+    local.normalized_geometric_information = information;
+    Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> rot_block(
+        information.block<3, 3>(0, 0));
+    Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> trans_block(
+        information.block<3, 3>(3, 3));
+    local.rotation_block_eigenvalues = rot_block.eigenvalues();
+    local.rotation_block_eigenvectors = rot_block.eigenvectors();
+    local.translation_block_eigenvalues = trans_block.eigenvalues();
+    local.translation_block_eigenvectors = trans_block.eigenvectors();
+    const Eigen::Matrix3d a = information.block<3, 3>(0, 0);
+    const Eigen::Matrix3d b = information.block<3, 3>(0, 3);
+    const Eigen::Matrix3d c = information.block<3, 3>(3, 3);
+    local.rotation_schur_information = a - b * c.inverse() * b.transpose();
+    local.translation_schur_information = c - b.transpose() * a.inverse() * b;
+    Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> rot_schur(
+        local.rotation_schur_information);
+    Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> trans_schur(
+        local.translation_schur_information);
+    local.rotation_schur_eigenvalues = rot_schur.eigenvalues().cwiseMax(0.0);
+    local.translation_schur_eigenvalues = trans_schur.eigenvalues().cwiseMax(0.0);
+    local.schur_decoupling_valid = true;
+    return local;
+  };
+
+  reliability::Matrix6d first = reliability::Matrix6d::Zero();
+  first.block<3, 3>(0, 0) = Eigen::Vector3d(400, 500, 600).asDiagonal();
+  first.block<3, 3>(3, 3) = Eigen::Vector3d(4, 5, 6).asDiagonal();
+  const auto scale_only = reliability::assessLocalRisk(make_local(first));
+  std::cout << "scale_only_weak=" << scale_only.weak_dimension
+            << " scale_only_reliable=" << scale_only.reliable_dimension
+            << " rotation_ratio=" << scale_only.rotation_weak_ratio
+            << " translation_ratio=" << scale_only.translation_weak_ratio
+            << '\n';
+  require(scale_only.valid && scale_only.weak_dimension == 0 &&
+              scale_only.reliable_dimension == 6,
+          "100x group scale difference does not erase an otherwise reliable translation block");
+
+  reliability::Matrix6d second = reliability::Matrix6d::Zero();
+  second.block<3, 3>(0, 0) = Eigen::Vector3d(400, 500, 600).asDiagonal();
+  second.block<3, 3>(3, 3) = Eigen::Vector3d(0.01, 5, 6).asDiagonal();
+  const auto weak_translation = reliability::assessLocalRisk(make_local(second));
+  std::cout << "true_translation_weak=" << weak_translation.weak_dimension
+            << " true_translation_reliable=" << weak_translation.reliable_dimension
+            << " rotation_ratio=" << weak_translation.rotation_weak_ratio
+            << " translation_ratio=" << weak_translation.translation_weak_ratio
+            << '\n';
+  require(weak_translation.valid && weak_translation.weak_dimension == 1 &&
+              weak_translation.reliable_dimension == 5 &&
+              std::abs(weak_translation.joint_weak_basis(3, 0)) > 1.0 - 1e-8,
+          "a true within-translation weak direction remains detectable after scale balancing");
+
+  Eigen::Matrix<double, 6, 6> mixing = Eigen::Matrix<double, 6, 6>::Identity();
+  constexpr double angle = 0.37;
+  for (int axis = 0; axis < 3; ++axis) {
+    const int trans_axis = axis + 3;
+    mixing(axis, axis) = std::cos(angle);
+    mixing(trans_axis, trans_axis) = std::cos(angle);
+    mixing(axis, trans_axis) = -std::sin(angle);
+    mixing(trans_axis, axis) = std::sin(angle);
+  }
+  Eigen::Matrix<double, 6, 1> eigenvalues;
+  eigenvalues << 0.002, 0.3, 0.5, 0.8, 1.0, 1.2;
+  const reliability::Matrix6d cross_information =
+      mixing * eigenvalues.asDiagonal() * mixing.transpose();
+  const auto cross_local = make_local(cross_information);
+  const auto cross_risk = reliability::assessLocalRisk(cross_local);
+  const Eigen::Matrix3d a = cross_information.block<3, 3>(0, 0);
+  const Eigen::Matrix3d b = cross_information.block<3, 3>(0, 3);
+  const Eigen::Matrix3d c = cross_information.block<3, 3>(3, 3);
+  const double rotation_schur_error = (cross_local.rotation_schur_information -
+      (a - b * c.inverse() * b.transpose())).norm();
+  const double translation_schur_error = (cross_local.translation_schur_information -
+      (c - b.transpose() * a.inverse() * b)).norm();
+  std::cout << "cross_coupled_weak=" << cross_risk.weak_dimension
+            << " cross_coupled_reliable=" << cross_risk.reliable_dimension
+            << " rotation_schur_formula_error=" << rotation_schur_error
+            << " translation_schur_formula_error=" << translation_schur_error
+            << '\n';
+  require(cross_risk.valid && cross_local.schur_decoupling_valid &&
+              rotation_schur_error < 1e-8 && translation_schur_error < 1e-8 &&
+              cross_risk.weak_dimension + cross_risk.reliable_dimension == 6,
+          "PSD cross-coupled information retains exact Schur order and complete partition");
+  const Eigen::MatrixXd cross_weak = cross_risk.joint_weak_basis.leftCols(
+      cross_risk.weak_dimension);
+  const Eigen::MatrixXd cross_reliable = cross_risk.joint_reliable_basis.leftCols(
+      cross_risk.reliable_dimension);
+  require((cross_weak.transpose() * cross_weak - Eigen::MatrixXd::Identity(
+              cross_risk.weak_dimension, cross_risk.weak_dimension)).norm() < 1e-8 &&
+              (cross_reliable.transpose() * cross_reliable - Eigen::MatrixXd::Identity(
+                  cross_risk.reliable_dimension, cross_risk.reliable_dimension)).norm() < 1e-8 &&
+              (cross_weak.transpose() * cross_reliable).norm() < 1e-8,
+          "cross-coupled mapped weak/reliable bases remain orthonormal");
+}
+
+void testCoupledWeakDirectionAnnihilation() {
+  const Eigen::Matrix3d map_R_imu = Eigen::AngleAxisd(
+      0.63, Eigen::Vector3d(0.2, -0.3, 0.9).normalized()).toRotationMatrix();
+  const Eigen::Vector3d imu_T_lidar(0.14, -0.06, 0.09);
+  const Eigen::Vector3d map_imu_origin_minus_lidar = -(map_R_imu * imu_T_lidar);
+  Eigen::Matrix3d lever_skew;
+  lever_skew << 0.0, -map_imu_origin_minus_lidar.z(), map_imu_origin_minus_lidar.y(),
+      map_imu_origin_minus_lidar.z(), 0.0, -map_imu_origin_minus_lidar.x(),
+      -map_imu_origin_minus_lidar.y(), map_imu_origin_minus_lidar.x(), 0.0;
+  reliability::Matrix6d transform = reliability::Matrix6d::Zero();
+  transform.block<3, 3>(0, 0) = -lever_skew;
+  transform.block<3, 3>(0, 3) = 0.8 * Eigen::Matrix3d::Identity();
+  transform.block<3, 3>(3, 0) = map_R_imu.transpose();
+  require((transform.transpose() * transform - reliability::Matrix6d::Identity()).norm() > 1e-2,
+          "test measurement transform is deliberately non-orthogonal");
+
+  Eigen::Matrix<double, 6, 1> weak;
+  weak << 0.2, -0.3, 0.4, 0.5, -0.1, 0.2;
+  weak.normalize();
+  reliability::Matrix6d weak_basis = reliability::Matrix6d::Zero();
+  weak_basis.col(0) = weak;
+  reliability::Matrix6d measurement_basis;
+  int rank = 0;
+  std::string failure;
+  require(reliability::buildReliableMeasurementBasisFromWeak(
+              transform, weak_basis, 1, &measurement_basis, &rank, &failure) &&
+              rank == 5,
+          "mixed rotation/translation weak direction produces rank-five orthogonal complement");
+  const Eigen::MatrixXd reliable = measurement_basis.leftCols(rank);
+  const Eigen::MatrixXd mapped_weak = transform * weak_basis.leftCols(1);
+  const double leakage = (reliable.transpose() * mapped_weak).norm() /
+      (1.0 + mapped_weak.norm());
+  const double orthogonality_error = (reliable.transpose() * reliable -
+      Eigen::Matrix<double, 5, 5>::Identity()).norm();
+  require((reliable.transpose() * reliable - Eigen::MatrixXd::Identity(5, 5)).norm() < 1e-10 &&
+              leakage < 1e-9,
+          "projected measurement row-space annihilates mapped weak direction");
+  Eigen::Matrix<double, 6, 1> residual_one;
+  residual_one << 0.4, -0.2, 0.1, 0.05, 0.3, -0.7;
+  const Eigen::Matrix<double, 6, 1> residual_two =
+      residual_one + mapped_weak.col(0) * 0.1;
+  const double discarded_residual_projection_delta =
+      (reliable.transpose() * residual_one -
+       reliable.transpose() * residual_two).norm();
+  require(discarded_residual_projection_delta < 1e-10,
+          "adding a discarded weak residual cannot change the projected measurement");
+  std::cout << "single_weak_leakage_relative=" << leakage
+            << " single_weak_orthogonality_error=" << orthogonality_error
+            << " discarded_residual_projection_delta=" <<
+                discarded_residual_projection_delta << '\n';
+
+  Eigen::Matrix<double, 6, 1> second_weak;
+  second_weak << -0.1, 0.2, 0.3, -0.2, 0.5, 0.1;
+  second_weak -= weak * weak.dot(second_weak);
+  second_weak.normalize();
+  weak_basis.col(1) = second_weak;
+  require(reliability::buildReliableMeasurementBasisFromWeak(
+              transform, weak_basis, 2, &measurement_basis, &rank, &failure) &&
+              rank == 4,
+          "two independent coupled weak directions produce rank-four complement");
+  const Eigen::MatrixXd reliable_two = measurement_basis.leftCols(rank);
+  const Eigen::MatrixXd mapped_weak_two = transform * weak_basis.leftCols(2);
+  const double two_weak_orthogonality_error = (reliable_two.transpose() *
+      reliable_two - Eigen::Matrix4d::Identity()).norm();
+  const double two_weak_leakage_relative = (reliable_two.transpose() *
+      mapped_weak_two).norm() / (1.0 + mapped_weak_two.norm());
+  require(two_weak_orthogonality_error < 1e-10 &&
+              two_weak_leakage_relative < 1e-9,
+          "two-dimensional mixed weak subspace is fully annihilated");
+  std::cout << "two_weak_rank=" << rank
+            << " two_weak_leakage_relative=" << two_weak_leakage_relative
+            << " two_weak_orthogonality_error=" << two_weak_orthogonality_error
+            << '\n';
 }
 
 void testQualityAndAblationScenariosAtoE() {
@@ -195,6 +391,8 @@ void testQualityAndAblationScenariosAtoE() {
 int main() {
   try {
     testSchurAwareJointAndVisualCoordinates();
+    testSchurScaleBalancedClassification();
+    testCoupledWeakDirectionAnnihilation();
     testQualityAndAblationScenariosAtoE();
     std::cout << "PAPER_P6_I6E_CONDITIONAL_COMPENSATION_TEST_PASS\n";
     return 0;

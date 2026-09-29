@@ -329,7 +329,7 @@ void testGeometricObservabilityProxy() {
           "map-spatial left perturbation geometric Jacobian matches central differences");
 
   std::vector<reliability::GeometricObservation> observations;
-  for (int i = 0; i < 12; ++i) {
+  for (int i = 0; i < 32; ++i) {
     reliability::GeometricObservation sample;
     sample.rotated_source_map = Eigen::Vector3d(
         0.2 * i, std::sin(0.4 * i), std::cos(0.31 * i));
@@ -340,10 +340,10 @@ void testGeometricObservabilityProxy() {
   }
   const auto local = reliability::analyzeGeometricObservability(
       observations, true, 0.8);
-  require(local.valid && local.geometric_proxy &&
-              local.status == "MAP_SUPPORT_INSUFFICIENT" &&
-              !local.map_support_sufficient,
-          "low-count geometric U_obs remains diagnostic but cannot claim map support");
+  require(local.valid && local.geometric_proxy && local.map_support_sufficient &&
+              local.map_support_status == "MAP_SUPPORT_SUFFICIENT" &&
+              !local.numerical_failure,
+          "supported geometric U_obs is valid only after all numerical diagnostics");
   require(!local.score_gradient_coordinate_check_passed &&
               local.normalized_geometric_information.allFinite() &&
               (local.normalized_geometric_information -
@@ -355,14 +355,24 @@ void testGeometricObservabilityProxy() {
               psd_solver.eigenvalues().minCoeff() >= -1e-10,
           "geometric information proxy is positive semidefinite");
   require(local.valid_correspondence_count == observations.size() &&
-              std::abs(local.effective_weight_sum - 18.6) < 1e-12,
+              std::abs(local.effective_weight_sum - 81.6) < 1e-12,
           "geometric observability reports effective correspondence weights");
+
+  std::vector<reliability::GeometricObservation> low_support(
+      observations.begin(), observations.begin() + 12);
+  const auto insufficient = reliability::analyzeGeometricObservability(
+      low_support, true, 0.8);
+  require(!insufficient.valid && !insufficient.numerical_failure &&
+              !insufficient.map_support_sufficient &&
+              insufficient.map_support_status == "MAP_SUPPORT_INSUFFICIENT" &&
+              insufficient.valid_correspondence_count == low_support.size(),
+          "fewer than thirty correspondences are a support failure, not numeric failure");
 
   auto invalid_covariance = observations;
   invalid_covariance.front().voxel_covariance_map.diagonal() << 1.0, 0.1, -0.5;
   const auto rejected_covariance = reliability::analyzeGeometricObservability(
       invalid_covariance, true, 0.8);
-  require(rejected_covariance.valid &&
+  require(rejected_covariance.valid && !rejected_covariance.numerical_failure &&
               rejected_covariance.rejected_covariance_count == 1 &&
               rejected_covariance.valid_correspondence_count == observations.size() - 1,
           "materially indefinite target covariance is rejected, not floored into fake geometry");
@@ -373,14 +383,43 @@ void testGeometricObservabilityProxy() {
   rank_deficient.valid = true;
   rank_deficient.geometric_proxy = true;
   rank_deficient.status = "VALID_GEOMETRIC_GAUSS_NEWTON_PROXY";
+  rank_deficient.map_support_sufficient = true;
+  rank_deficient.map_support_status = "MAP_SUPPORT_SUFFICIENT";
+  rank_deficient.valid_correspondence_count = 30;
+  rank_deficient.translation_length_scale_m = 0.8;
   rank_deficient.rotation_block_eigenvalues << 0.0, 0.5, 1.0;
   rank_deficient.translation_block_eigenvalues << 0.0, 0.3, 0.9;
   rank_deficient.rotation_block_eigenvectors.setIdentity();
   rank_deficient.translation_block_eigenvectors.setIdentity();
+  rank_deficient.rotation_schur_information.setZero();
+  rank_deficient.rotation_schur_information.diagonal() << 0.0, 0.5, 1.0;
+  rank_deficient.translation_schur_information.setZero();
+  rank_deficient.translation_schur_information.diagonal() << 0.0, 0.3, 0.9;
+  rank_deficient.rotation_schur_eigenvalues = rank_deficient.rotation_block_eigenvalues;
+  rank_deficient.translation_schur_eigenvalues =
+      rank_deficient.translation_block_eigenvalues;
+  rank_deficient.normalized_geometric_information.setZero();
+  rank_deficient.normalized_geometric_information.block<3, 3>(0, 0) =
+      rank_deficient.rotation_schur_information;
+  rank_deficient.normalized_geometric_information.block<3, 3>(3, 3) =
+      rank_deficient.translation_schur_information;
+  rank_deficient.schur_decoupling_valid = true;
   const auto risk = reliability::assessLocalRisk(rank_deficient);
+  std::cout << "singular_geometric_risk_status=" << risk.status
+            << " valid=" << risk.valid
+            << " weak=" << risk.weak_dimension
+            << " reliable=" << risk.reliable_dimension
+            << " rotation_weak=" << risk.rotation_weak
+            << " translation_weak=" << risk.translation_weak << '\n';
   require(risk.valid && risk.rotation_weak && risk.translation_weak &&
               risk.rotation_weak_ratio == 0.0 && risk.translation_weak_ratio == 0.0,
-          "PSD geometric block with null direction is usable as directional risk");
+          "full PSD geometric information with Schur null directions is directional risk");
+
+  rank_deficient.schur_decoupling_valid = false;
+  const auto missing_schur = reliability::assessLocalRisk(rank_deficient);
+  require(!missing_schur.valid &&
+              missing_schur.status == "GEOMETRIC_SCHUR_DIAGNOSTICS_REQUIRED",
+          "full geometric information cannot silently fall back when Schur diagnostics are missing");
 
   const auto invalid = reliability::analyzeGeometricObservability(
       observations, false, 0.8);

@@ -41,6 +41,87 @@ Eigen::Vector3d rotationLogMap(const Eigen::Matrix3d& rotation) {
   return (angle / sine_half) * quaternion.vec();
 }
 
+bool pseudoInversePSD3(const Eigen::Matrix3d& input,
+                       Eigen::Matrix3d* inverse,
+                       int* effective_rank) {
+  if (!inverse || !effective_rank || !input.allFinite()) return false;
+  const Eigen::Matrix3d symmetric = 0.5 * (input + input.transpose());
+  Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> solver(symmetric);
+  if (solver.info() != Eigen::Success || !solver.eigenvalues().allFinite() ||
+      !solver.eigenvectors().allFinite())
+    return false;
+  const double scale = std::max(1.0, solver.eigenvalues().cwiseAbs().maxCoeff());
+  const double negative_tolerance = 1e-10 * scale;
+  if (solver.eigenvalues().minCoeff() < -negative_tolerance) return false;
+  const double maximum_positive =
+      std::max(0.0, solver.eigenvalues().maxCoeff());
+  const double rank_tolerance = std::max(1e-12, 1e-9 * maximum_positive);
+  Eigen::Vector3d reciprocal = Eigen::Vector3d::Zero();
+  *effective_rank = 0;
+  for (int i = 0; i < 3; ++i) {
+    const double eigenvalue = std::max(0.0, solver.eigenvalues()(i));
+    if (eigenvalue > rank_tolerance) {
+      reciprocal(i) = 1.0 / eigenvalue;
+      ++*effective_rank;
+    }
+  }
+  *inverse = solver.eigenvectors() * reciprocal.asDiagonal() *
+             solver.eigenvectors().transpose();
+  *inverse = 0.5 * (*inverse + inverse->transpose());
+  return inverse->allFinite();
+}
+
+bool schurDecouple(const Matrix6d& information, Matrix3d* rotation,
+                   Matrix3d* translation, Eigen::Vector3d* rotation_values,
+                   Eigen::Vector3d* translation_values) {
+  if (!rotation || !translation || !rotation_values || !translation_values ||
+      !information.allFinite())
+    return false;
+  const Matrix3d a = 0.5 * (information.block<3, 3>(0, 0) +
+                            information.block<3, 3>(0, 0).transpose());
+  const Matrix3d b = information.block<3, 3>(0, 3);
+  const Matrix3d c = 0.5 * (information.block<3, 3>(3, 3) +
+                            information.block<3, 3>(3, 3).transpose());
+  Matrix3d a_inverse, c_inverse;
+  int rank_a = 0;
+  int rank_c = 0;
+  if (!pseudoInversePSD3(a, &a_inverse, &rank_a) ||
+      !pseudoInversePSD3(c, &c_inverse, &rank_c))
+    return false;
+  (void)rank_a;
+  (void)rank_c;
+  *rotation = a - b * c_inverse * b.transpose();
+  *translation = c - b.transpose() * a_inverse * b;
+  *rotation = 0.5 * (*rotation + rotation->transpose());
+  *translation = 0.5 * (*translation + translation->transpose());
+  Eigen::SelfAdjointEigenSolver<Matrix3d> rotation_solver(*rotation);
+  Eigen::SelfAdjointEigenSolver<Matrix3d> translation_solver(*translation);
+  if (rotation_solver.info() != Eigen::Success ||
+      translation_solver.info() != Eigen::Success ||
+      !rotation_solver.eigenvalues().allFinite() ||
+      !translation_solver.eigenvalues().allFinite())
+    return false;
+  const double rotation_scale = std::max(
+      1.0, rotation_solver.eigenvalues().cwiseAbs().maxCoeff());
+  const double translation_scale = std::max(
+      1.0, translation_solver.eigenvalues().cwiseAbs().maxCoeff());
+  const double rotation_tolerance = 1e-10 * rotation_scale;
+  const double translation_tolerance = 1e-10 * translation_scale;
+  if (rotation_solver.eigenvalues().minCoeff() < -rotation_tolerance ||
+      translation_solver.eigenvalues().minCoeff() < -translation_tolerance)
+    return false;
+  *rotation_values = rotation_solver.eigenvalues().cwiseMax(0.0);
+  *translation_values = translation_solver.eigenvalues().cwiseMax(0.0);
+  *rotation = rotation_solver.eigenvectors() *
+      rotation_values->asDiagonal() * rotation_solver.eigenvectors().transpose();
+  *translation = translation_solver.eigenvectors() *
+      translation_values->asDiagonal() * translation_solver.eigenvectors().transpose();
+  *rotation = 0.5 * (*rotation + rotation->transpose());
+  *translation = 0.5 * (*translation + translation->transpose());
+  return rotation->allFinite() && translation->allFinite() &&
+      rotation_values->allFinite() && translation_values->allFinite();
+}
+
 }  // namespace
 
 Eigen::Matrix<double, 3, 6> geometricPointResidualJacobian(
@@ -201,6 +282,7 @@ LocalObservability analyzeGeometricObservability(
   result.ndt_converged = ndt_converged;
   result.score_gradient_coordinate_check_passed = false;
   result.status = "GEOMETRIC_UNINITIALIZED";
+  result.translation_length_scale_m = length_scale_m;
   if (!ndt_converged) {
     result.status = "NDT_NOT_CONVERGED";
     return result;
@@ -276,9 +358,23 @@ LocalObservability analyzeGeometricObservability(
     ++result.valid_correspondence_count;
   }
   result.effective_weight_sum = weight_sum;
-  if (result.valid_correspondence_count == 0 || !std::isfinite(weight_sum) ||
-      weight_sum <= 0.0) {
+  if (result.valid_correspondence_count == 0) {
+    result.map_support_sufficient = false;
+    result.map_support_status = "NO_VALID_GEOMETRIC_CORRESPONDENCES";
     result.status = "NO_VALID_GEOMETRIC_CORRESPONDENCES";
+    return result;
+  }
+  constexpr std::uint64_t kMinimumCorrespondences = 30;
+  if (result.valid_correspondence_count < kMinimumCorrespondences) {
+    result.map_support_sufficient = false;
+    result.map_support_status = "MAP_SUPPORT_INSUFFICIENT";
+    result.status = "MAP_SUPPORT_INSUFFICIENT";
+    return result;
+  }
+  if (!std::isfinite(weight_sum) || weight_sum <= 0.0) {
+    result.numerical_failure = true;
+    result.map_support_status = "NUMERICAL_FAILURE";
+    result.status = "INVALID_GEOMETRIC_WEIGHT_SUM";
     return result;
   }
 
@@ -290,6 +386,8 @@ LocalObservability analyzeGeometricObservability(
   normalized_information = 0.5 *
       (normalized_information + normalized_information.transpose());
   if (!normalized_information.allFinite()) {
+    result.numerical_failure = true;
+    result.map_support_status = "NUMERICAL_FAILURE";
     result.status = "NONFINITE_GEOMETRIC_INFORMATION";
     return result;
   }
@@ -297,6 +395,8 @@ LocalObservability analyzeGeometricObservability(
   if (full_solver.info() != Eigen::Success ||
       !full_solver.eigenvalues().allFinite() ||
       !full_solver.eigenvectors().allFinite()) {
+    result.numerical_failure = true;
+    result.map_support_status = "NUMERICAL_FAILURE";
     result.status = "GEOMETRIC_INFORMATION_EIGENSOLVE_FAILED";
     return result;
   }
@@ -304,6 +404,8 @@ LocalObservability analyzeGeometricObservability(
       1.0, full_solver.eigenvalues().cwiseAbs().maxCoeff());
   const double psd_tolerance = 1e-10 * spectral_scale;
   if (full_solver.eigenvalues().minCoeff() < -psd_tolerance) {
+    result.numerical_failure = true;
+    result.map_support_status = "NUMERICAL_FAILURE";
     result.status = "GEOMETRIC_INFORMATION_NOT_PSD";
     return result;
   }
@@ -314,7 +416,29 @@ LocalObservability analyzeGeometricObservability(
       full_solver.eigenvectors().transpose();
   normalized_information = 0.5 *
       (normalized_information + normalized_information.transpose());
+  Eigen::SelfAdjointEigenSolver<Matrix6d> corrected_solver(normalized_information);
+  if (corrected_solver.info() != Eigen::Success ||
+      !corrected_solver.eigenvalues().allFinite() ||
+      !corrected_solver.eigenvectors().allFinite()) {
+    result.numerical_failure = true;
+    result.map_support_status = "NUMERICAL_FAILURE";
+    result.status = "CORRECTED_GEOMETRIC_INFORMATION_EIGENSOLVE_FAILED";
+    return result;
+  }
   result.normalized_geometric_information = normalized_information;
+  result.joint_eigenvalues = corrected_solver.eigenvalues().cwiseMax(0.0);
+  result.joint_eigenvectors = corrected_solver.eigenvectors();
+  result.schur_decoupling_valid = schurDecouple(
+      normalized_information, &result.rotation_schur_information,
+      &result.translation_schur_information,
+      &result.rotation_schur_eigenvalues,
+      &result.translation_schur_eigenvalues);
+  if (!result.schur_decoupling_valid) {
+    result.numerical_failure = true;
+    result.map_support_status = "NUMERICAL_FAILURE";
+    result.status = "GEOMETRIC_SCHUR_DECOUPLING_FAILED";
+    return result;
+  }
 
   const Eigen::Matrix3d rotation_block = normalized_information.block<3, 3>(0, 0);
   const Eigen::Matrix3d translation_block = normalized_information.block<3, 3>(3, 3);
@@ -326,6 +450,8 @@ LocalObservability analyzeGeometricObservability(
       !translation_solver.eigenvalues().allFinite() ||
       !rotation_solver.eigenvectors().allFinite() ||
       !translation_solver.eigenvectors().allFinite()) {
+    result.numerical_failure = true;
+    result.map_support_status = "NUMERICAL_FAILURE";
     result.status = "GEOMETRIC_BLOCK_EIGENSOLVE_FAILED";
     return result;
   }
@@ -341,6 +467,8 @@ LocalObservability analyzeGeometricObservability(
   result.translation_block_condition = translation_min > 0.0
       ? result.translation_block_eigenvalues.maxCoeff() / translation_min
       : std::numeric_limits<double>::infinity();
+  result.map_support_sufficient = true;
+  result.map_support_status = "MAP_SUPPORT_SUFFICIENT";
   result.valid = true;
   result.status = "VALID_GEOMETRIC_GAUSS_NEWTON_PROXY";
   return result;

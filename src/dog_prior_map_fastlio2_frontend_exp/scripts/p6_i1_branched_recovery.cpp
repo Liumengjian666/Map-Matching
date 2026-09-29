@@ -39,9 +39,77 @@
 namespace p6_i1 {
 using namespace dog_prior_map_fastlio2_frontend_exp;
 
+struct GeometricSearchDiagnostic {
+  std::size_t sampled_source_points = 0;
+  std::size_t queries_with_neighbors_r = 0;
+  std::size_t queries_with_neighbors_2r = 0;
+  std::size_t total_neighbors_r = 0;
+  std::size_t total_neighbors_2r = 0;
+  bool valid = false;
+};
+
 class GeometricNdt : public AuditedNdt {
  public:
   using LeafConstPtr = typename AuditedNdt::TargetGridLeafConstPtr;
+
+  GeometricSearchDiagnostic diagnoseSearch(
+      const Cloud& source, const Eigen::Matrix4f& map_T_lidar,
+      double resolution) {
+    GeometricSearchDiagnostic result;
+    if (source.empty() || !map_T_lidar.allFinite() ||
+        !std::isfinite(resolution) || resolution <= 0.0)
+      return result;
+    const Eigen::Matrix3f rotation_float = map_T_lidar.block<3, 3>(0, 0);
+    if ((rotation_float.transpose() * rotation_float -
+         Eigen::Matrix3f::Identity()).norm() > 1e-3f ||
+        std::abs(rotation_float.determinant() - 1.0f) > 1e-3f ||
+        (map_T_lidar.row(3) - Eigen::RowVector4f(0, 0, 0, 1)).norm() > 1e-5f)
+      return result;
+
+    const std::size_t sample_count = std::min<std::size_t>(128, source.size());
+    result.sampled_source_points = sample_count;
+    const double increment = sample_count > 1
+        ? static_cast<double>(source.size() - 1) /
+              static_cast<double>(sample_count - 1)
+        : 0.0;
+    const Eigen::Matrix3d rotation = rotation_float.cast<double>();
+    const Eigen::Vector3d translation =
+        map_T_lidar.block<3, 1>(0, 3).cast<double>();
+    std::vector<LeafConstPtr> leaves_r;
+    std::vector<float> distances_r;
+    std::vector<LeafConstPtr> leaves_2r;
+    std::vector<float> distances_2r;
+    std::size_t valid_queries = 0;
+    for (std::size_t sample = 0; sample < sample_count; ++sample) {
+      const std::size_t index = sample_count > 1
+          ? static_cast<std::size_t>(std::llround(sample * increment)) : 0;
+      const Point& point = source.points[index];
+      if (!pcl::isFinite(point)) continue;
+      const Eigen::Vector3d query = rotation *
+          Eigen::Vector3d(point.x, point.y, point.z) + translation;
+      if (!query.allFinite()) continue;
+      const Point query_point(static_cast<float>(query.x()),
+                              static_cast<float>(query.y()),
+                              static_cast<float>(query.z()));
+      leaves_r.clear();
+      distances_r.clear();
+      this->target_cells_.radiusSearch(query_point, resolution,
+                                       leaves_r, distances_r);
+      leaves_2r.clear();
+      distances_2r.clear();
+      this->target_cells_.radiusSearch(query_point, 2.0 * resolution,
+                                       leaves_2r, distances_2r);
+      ++valid_queries;
+      const std::size_t count_r = std::min(leaves_r.size(), distances_r.size());
+      const std::size_t count_2r = std::min(leaves_2r.size(), distances_2r.size());
+      result.total_neighbors_r += count_r;
+      result.total_neighbors_2r += count_2r;
+      if (count_r > 0) ++result.queries_with_neighbors_r;
+      if (count_2r > 0) ++result.queries_with_neighbors_2r;
+    }
+    result.valid = valid_queries > 0;
+    return result;
+  }
 
   std::vector<reliability::GeometricObservation> geometricObservations(
       const Cloud& source, const Eigen::Matrix4f& map_T_lidar,
@@ -754,36 +822,35 @@ reliability::LocalRisk riskWithNonlocalResponse(
 bool makeReliablePoseMeasurementBasis(
     const reliability::LocalRisk& risk, const Pose3d& map_T_imu,
     const Pose3d& T_imu_lidar, Eigen::Matrix<double, 6, 6>* basis,
-    int* rank) {
+    int* rank, std::string* failure_reason) {
+  if (failure_reason) failure_reason->clear();
   if (!basis || !rank || !risk.valid || !map_T_imu.position.allFinite() ||
       !map_T_imu.orientation.coeffs().allFinite() ||
       !T_imu_lidar.position.allFinite() ||
       !T_imu_lidar.orientation.coeffs().allFinite() ||
       !std::isfinite(risk.translation_length_scale_m) ||
-      risk.translation_length_scale_m <= 0.0)
+      risk.translation_length_scale_m <= 0.0) {
+    if (failure_reason) *failure_reason = "INVALID_POSE_BASIS_INPUT";
     return false;
-  *rank = risk.reliable_dimension;
-  basis->setZero();
-  if (*rank <= 0 || *rank > 6) return *rank == 0;
+  }
+  if (risk.weak_dimension < 0 || risk.weak_dimension > 6 ||
+      risk.reliable_dimension != 6 - risk.weak_dimension) {
+    if (failure_reason) *failure_reason = "INVALID_LIDAR_WEAK_RELIABLE_DIMENSIONS";
+    return false;
+  }
   const Eigen::Vector3d map_imu_origin_minus_lidar =
       -(map_T_imu.orientation * T_imu_lidar.position);
-  Eigen::Matrix<double, 6, 6> measurement_from_lidar_tangent =
+  Eigen::Matrix<double, 6, 6> pose_from_normalized_lidar =
       Eigen::Matrix<double, 6, 6>::Zero();
-  measurement_from_lidar_tangent.block<3, 3>(0, 0) =
+  pose_from_normalized_lidar.block<3, 3>(0, 0) =
       -skewMatrix(map_imu_origin_minus_lidar);
-  measurement_from_lidar_tangent.block<3, 3>(0, 3) =
+  pose_from_normalized_lidar.block<3, 3>(0, 3) =
       risk.translation_length_scale_m * Eigen::Matrix3d::Identity();
-  measurement_from_lidar_tangent.block<3, 3>(3, 0) =
+  pose_from_normalized_lidar.block<3, 3>(3, 0) =
       map_T_imu.orientation.toRotationMatrix().transpose();
-  const Eigen::MatrixXd mapped = measurement_from_lidar_tangent *
-      risk.joint_reliable_basis.leftCols(*rank);
-  Eigen::ColPivHouseholderQR<Eigen::MatrixXd> qr(mapped);
-  qr.setThreshold(1e-9);
-  if (qr.rank() != *rank) return false;
-  *basis = qr.householderQ() * Eigen::Matrix<double, 6, 6>::Identity();
-  return basis->leftCols(*rank).allFinite() &&
-      (basis->leftCols(*rank).transpose() * basis->leftCols(*rank) -
-       Eigen::MatrixXd::Identity(*rank, *rank)).norm() <= 1e-8;
+  return reliability::buildReliableMeasurementBasisFromWeak(
+      pose_from_normalized_lidar, risk.joint_weak_basis,
+      risk.weak_dimension, basis, rank, failure_reason);
 }
 
 double maximumPositionSigma(const FilterSnapshot& snapshot) {
@@ -1214,12 +1281,17 @@ void runDualReliabilityMode(
   std::ofstream trajectory(trajectory_path), events(reliability_path), runtime(runtime_path);
   std::ofstream visual_updates;
   if (enable_vision) visual_updates.open(reliability_path + ".visual_updates.csv");
+  std::ofstream map_support_diagnostic;
+  if (enable_vision)
+    map_support_diagnostic.open(reliability_path + ".map_support_diagnostic.csv");
   std::ofstream pcl_hessian_status;
   if (use_uobs) pcl_hessian_status.open(reliability_path + ".pcl_score_hessian.txt");
   if (!trajectory || !events || !runtime)
     throw std::runtime_error("cannot_create_dual_reliability_outputs");
   if (enable_vision && !visual_updates)
     throw std::runtime_error("cannot_create_i6d_visual_update_output");
+  if (enable_vision && !map_support_diagnostic)
+    throw std::runtime_error("cannot_create_map_support_diagnostic_output");
   if (use_uobs && !pcl_hessian_status)
     throw std::runtime_error("cannot_create_legacy_pcl_status_output");
   if (use_uobs)
@@ -1284,6 +1356,18 @@ void runDualReliabilityMode(
         << ",position_correction_norm_m,velocity_correction_norm_m"
         << ",anchor_projected_covariance_rowmajor,current_position_covariance_rowmajor"
         << ",effective_noise_rowmajor,update_ms\n";
+    map_support_diagnostic << std::setprecision(17)
+        << "transaction_id,time_s,source_points,sampled_points,predicted_sampled_points"
+        << ",M0_converged,M0_fitness,M0_objective,ndt_converged_without_geometric_support"
+        << ",predicted_pose_xyz,nominal_pose_xyz,predicted_to_nominal_translation_m"
+        << ",predicted_to_nominal_rotation_rad,uobs_valid_correspondences"
+        << ",uobs_rejected_voxel_covariances,nominal_queries_with_neighbors_r"
+        << ",nominal_queries_with_neighbors_2r,nominal_total_neighbors_r"
+        << ",nominal_total_neighbors_2r,predicted_queries_with_neighbors_r"
+        << ",predicted_queries_with_neighbors_2r,predicted_total_neighbors_r"
+        << ",predicted_total_neighbors_2r,maximum_position_sigma_m"
+        << ",maximum_rotation_sigma_rad,lidar_reliable_dimension,lidar_weak_dimension"
+        << ",nominal_search_valid,predicted_search_valid\n";
   }
 
   Eigen::Matrix4d previous_used = Eigen::Matrix4d::Identity();
@@ -1660,6 +1744,45 @@ void runDualReliabilityMode(
       local_risk = reliability::assessLocalRisk(local_observability, reliability_config);
     else
       local_risk.status = "UOBS_DISABLED_BY_MODE";
+    if (enable_vision) {
+      const GeometricSearchDiagnostic nominal_search = ndt.diagnoseSearch(
+          *source, nominal.pose.cast<float>(), 0.8);
+      const GeometricSearchDiagnostic predicted_search = ndt.diagnoseSearch(
+          *source, predicted_map_T_lidar.cast<float>(), 0.8);
+      const Eigen::Matrix4d predicted_pose_double =
+          predicted_map_T_lidar.cast<double>();
+      const double pose_translation_difference =
+          (nominal.pose.block<3, 1>(0, 3) -
+           predicted_pose_double.block<3, 1>(0, 3)).norm();
+      const double pose_rotation_difference = rotationDifferenceDeg(
+          predicted_pose_double, nominal.pose) * M_PI / 180.0;
+      map_support_diagnostic << asset.transaction_id << ',' << asset.time_s << ','
+          << source->size() << ',' << nominal_search.sampled_source_points << ','
+          << predicted_search.sampled_source_points << ','
+          << (nominal.converged ? 1 : 0) << ',' << nominal.fitness << ','
+          << nominal.objective << ','
+          << (nominal.converged && local_observability.valid_correspondence_count == 0
+                  ? "NDT_CONVERGED_WITHOUT_GEOMETRIC_SUPPORT" : "") << ','
+          << vectorField(predicted_pose_double.block<3, 1>(0, 3)) << ','
+          << vectorField(nominal.pose.block<3, 1>(0, 3)) << ','
+          << pose_translation_difference << ',' << pose_rotation_difference << ','
+          << local_observability.valid_correspondence_count << ','
+          << local_observability.rejected_covariance_count << ','
+          << nominal_search.queries_with_neighbors_r << ','
+          << nominal_search.queries_with_neighbors_2r << ','
+          << nominal_search.total_neighbors_r << ','
+          << nominal_search.total_neighbors_2r << ','
+          << predicted_search.queries_with_neighbors_r << ','
+          << predicted_search.queries_with_neighbors_2r << ','
+          << predicted_search.total_neighbors_r << ','
+          << predicted_search.total_neighbors_2r << ','
+          << maximumPositionSigma(predicted) << ','
+          << maximumRotationSigma(predicted) << ','
+          << local_risk.reliable_dimension << ',' << local_risk.weak_dimension << ','
+          << (nominal_search.valid ? 1 : 0) << ','
+          << (predicted_search.valid ? 1 : 0) << '\n';
+      map_support_diagnostic.flush();
+    }
 
     reliability::DualReliabilityDecision decision;
     if (mode == "STRICT_BASELINE") {
@@ -1788,17 +1911,21 @@ void runDualReliabilityMode(
       } else if (enable_vision && routed_lidar_risk.weak_dimension > 0) {
         Eigen::Matrix<double, 6, 6> reliable_basis;
         int reliable_rank = 0;
+        std::string reliable_basis_failure;
         const Pose3d nominal_imu_measurement = p4_i2::lidarMeasurementToImu(
             poseFromMatrix(nominal.pose), T_imu_lidar_pose);
         if (!makeReliablePoseMeasurementBasis(routed_lidar_risk,
                 nominal_imu_measurement, T_imu_lidar_pose,
-                &reliable_basis, &reliable_rank) || reliable_rank <= 0) {
+                &reliable_basis, &reliable_rank,
+                &reliable_basis_failure) || reliable_rank <= 0) {
           update_ms = 0.0;
           conditional_route.apply_lidar_measurement = false;
           conditional_route.imu_coasting = true;
           conditional_route.mode = reliability::ConditionalFusionMode::
               LIDAR_DEGRADED_VISION_INVALID;
-          conditional_route.reason += ";RELIABLE_SUBSPACE_BASIS_INVALID";
+          conditional_route.reason += ";RELIABLE_SUBSPACE_BASIS_INVALID:" +
+              (reliable_basis_failure.empty() ? "ZERO_RELIABLE_RANK" :
+                                                reliable_basis_failure);
           // The NDT terminal was not committed, so keep the step limiter
           // anchored to the propagated state actually held by the filter.
           previous_used = predicted_map_T_lidar;

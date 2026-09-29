@@ -83,6 +83,10 @@ struct LocalObservability {
   bool schur_decoupling_valid = false;
   bool map_support_sufficient = false;
   std::string map_support_status = "NOT_ASSESSED";
+  // Distinguishes numerical failure from a finite but insufficient set of
+  // geometric correspondences. A numerical failure must never masquerade as
+  // ordinary lack of map support (or as valid observability).
+  bool numerical_failure = false;
   double translation_length_scale_m = 0.0;
   double effective_weight_sum = 0.0;
   std::uint64_t valid_correspondence_count = 0;

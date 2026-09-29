@@ -1,0 +1,28 @@
+P6-I6E-R1 visual event audit (scripts/p6_i6e_r1_event_audit.py)
+=================================================================
+
+Old frozen Floor01 I6E log (108 events):
+  triggered=59; quality_passed=19; triggered_and_quality_passed=0;
+  complementary=57; triggered_quality_complementary=0;
+  applied=0; nonzero_applied=0;
+  quality_passed_but_not_triggered=19; triggered_but_quality_rejected=59.
+
+Old frozen Corridor01 I6E log (88 events):
+  triggered=42; quality_passed=70; triggered_and_quality_passed=33;
+  complementary=32; triggered_quality_complementary=25;
+  applied=25; nonzero_applied=25;
+  quality_passed_but_not_triggered=37; triggered_but_quality_rejected=9;
+  triggered_quality_passed_but_noncomplementary=8.
+
+R1 Floor01 15-second smoke (67 events):
+  triggered=67; quality_passed=0; triggered_and_quality_passed=0;
+  complementary=67; triggered_quality_complementary=0;
+  applied=0; nonzero_applied=0; triggered_but_quality_rejected=67.
+
+R1 Corridor01 15-second smoke (53 events):
+  triggered=39; quality_passed=43; triggered_and_quality_passed=31;
+  complementary=39; triggered_quality_complementary=31;
+  applied=31; nonzero_applied=31;
+  quality_passed_but_not_triggered=12; triggered_but_quality_rejected=8.
+
+Quality-passed is an independent event attribute; it is not equivalent to a triggered, fusion-eligible, or actually-applied visual update. The logged Gv remains POSITION_PROXY_INFORMATION, not per-feature reprojection information.

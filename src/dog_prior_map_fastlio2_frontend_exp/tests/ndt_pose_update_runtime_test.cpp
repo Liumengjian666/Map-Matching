@@ -7,6 +7,28 @@
 
 using namespace dog_prior_map_fastlio2_frontend_exp;
 
+namespace {
+
+bool sameFilterSnapshot(const FilterSnapshot& lhs, const FilterSnapshot& rhs) {
+  const Eigen::Quaterniond lhs_q = lhs.map_T_imu.orientation.normalized();
+  const Eigen::Quaterniond rhs_q = rhs.map_T_imu.orientation.normalized();
+  const double rotation_error = Eigen::AngleAxisd(lhs_q.conjugate() * rhs_q).angle();
+  return lhs.stamp_ns == rhs.stamp_ns &&
+      (lhs.map_T_imu.position - rhs.map_T_imu.position).norm() <= 1e-12 &&
+      rotation_error <= 1e-12 &&
+      (lhs.velocity - rhs.velocity).norm() <= 1e-12 &&
+      (lhs.gyro_bias - rhs.gyro_bias).norm() <= 1e-12 &&
+      (lhs.accel_bias - rhs.accel_bias).norm() <= 1e-12 &&
+      (lhs.gravity - rhs.gravity).norm() <= 1e-12 &&
+      (lhs.T_imu_lidar_translation - rhs.T_imu_lidar_translation).norm() <= 1e-12 &&
+      (lhs.T_imu_lidar_rotation - rhs.T_imu_lidar_rotation).norm() <= 1e-12 &&
+      lhs.covariance.rows() == rhs.covariance.rows() &&
+      lhs.covariance.cols() == rhs.covariance.cols() &&
+      (lhs.covariance - rhs.covariance).norm() <= 1e-12;
+}
+
+}  // namespace
+
 int main() {
   RuntimeParameters parameters;
   parameters.static_init_samples = 200;
@@ -200,12 +222,53 @@ int main() {
   }
   Eigen::Matrix3d invalid_visual_noise = visual_noise;
   invalid_visual_noise(0, 0) = -1.0;
-  const Eigen::Vector3d before_rejected =
-      after_visual_position.map_T_imu.position;
+  const FilterSnapshot before_rejected = visual_position_update->getState();
+  PoseCorrectionDelta rejected_delta;
+  rejected_delta.position.setConstant(11.0);
+  rejected_delta.rotation.setConstant(12.0);
+  rejected_delta.velocity.setConstant(13.0);
+  rejected_delta.gyro_bias.setConstant(14.0);
+  rejected_delta.accel_bias.setConstant(15.0);
+  rejected_delta.gravity_tangent.setConstant(16.0);
+  const PoseCorrectionDelta delta_before_rejection = rejected_delta;
   if (visual_position_update->applyPositionMeasurement(
-          visual_position_measurement, invalid_visual_noise, nullptr, &failure) ||
-      (visual_position_update->getState().map_T_imu.position - before_rejected).norm() > 1e-12) {
-    std::cerr << "FAIL: invalid visual covariance must reject without mutation\n";
+          visual_position_measurement, invalid_visual_noise, &rejected_delta, &failure) ||
+      !sameFilterSnapshot(before_rejected, visual_position_update->getState()) ||
+      (rejected_delta.position - delta_before_rejection.position).norm() > 1e-12 ||
+      (rejected_delta.rotation - delta_before_rejection.rotation).norm() > 1e-12 ||
+      (rejected_delta.velocity - delta_before_rejection.velocity).norm() > 1e-12 ||
+      (rejected_delta.gyro_bias - delta_before_rejection.gyro_bias).norm() > 1e-12 ||
+      (rejected_delta.accel_bias - delta_before_rejection.accel_bias).norm() > 1e-12 ||
+      (rejected_delta.gravity_tangent - delta_before_rejection.gravity_tangent).norm() > 1e-12) {
+    std::cerr << "FAIL: invalid position update must reject without state/delta mutation: "
+              << failure << '\n';
+    return 1;
+  }
+
+  Eigen::Matrix<double, 6, 6> invalid_pose_noise =
+      Eigen::Matrix<double, 6, 6>::Identity() * 0.01;
+  invalid_pose_noise(2, 2) = -1.0;
+  Pose3d invalid_pose_measurement = before_rejected.map_T_imu;
+  invalid_pose_measurement.position.x() += 0.4;
+  if (visual_position_update->applyPoseMeasurement(
+          invalid_pose_measurement, invalid_pose_noise, &rejected_delta, &failure) ||
+      !sameFilterSnapshot(before_rejected, visual_position_update->getState()) ||
+      (rejected_delta.position - delta_before_rejection.position).norm() > 1e-12) {
+    std::cerr << "FAIL: invalid ordinary pose update must reject atomically: "
+              << failure << '\n';
+    return 1;
+  }
+
+  Eigen::Matrix<double, 6, 6> invalid_projected_basis =
+      Eigen::Matrix<double, 6, 6>::Zero();
+  invalid_projected_basis(0, 0) = 2.0;
+  if (visual_position_update->applyProjectedPoseMeasurement(
+          invalid_pose_measurement,
+          Eigen::Matrix<double, 6, 6>::Identity() * 0.01,
+          invalid_projected_basis, 1, &rejected_delta, &failure) ||
+      !sameFilterSnapshot(before_rejected, visual_position_update->getState())) {
+    std::cerr << "FAIL: invalid projected pose update must reject atomically: "
+              << failure << '\n';
     return 1;
   }
 

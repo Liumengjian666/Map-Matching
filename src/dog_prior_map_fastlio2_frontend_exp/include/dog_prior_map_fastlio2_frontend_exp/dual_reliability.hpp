@@ -130,6 +130,18 @@ struct LocalRisk {
 LocalRisk assessLocalRisk(const LocalObservability& local,
                           const DualReliabilityConfig& config = {});
 
+// Builds a measurement-coordinate basis orthogonal to the image of the
+// normalized LiDAR weak subspace. `pose_from_normalized_lidar` maps
+// [map-spatial rotation, translation / length_scale] into the pose residual
+// chart consumed by IKFoM.
+bool buildReliableMeasurementBasisFromWeak(
+    const Matrix6d& pose_from_normalized_lidar,
+    const Matrix6d& normalized_weak_basis,
+    int weak_dimension,
+    Matrix6d* measurement_basis,
+    int* reliable_rank,
+    std::string* failure_reason = nullptr);
+
 struct MeasurementNoiseResult {
   bool valid = false;
   // PoseMeasurement is ordered [position XYZ, SO(3) residual]. The rotation
@@ -213,6 +225,9 @@ struct VisualSubspaceDecision {
   int measurement_rank = 0;
   Eigen::Matrix<double, 6, 1> projected_eigenvalues =
       Eigen::Matrix<double, 6, 1>::Zero();
+  // POSITION_PROXY_INFORMATION: H_position' R_position^-1 H_position in the
+  // normalized LiDAR pose chart. This is not per-feature pixel reprojection
+  // information and cannot establish the true visual measurement nullspace.
   Matrix6d visual_information = Matrix6d::Zero();
   Matrix6d projected_weak_information = Matrix6d::Zero();
   Matrix6d complementary_weak_basis = Matrix6d::Zero();
