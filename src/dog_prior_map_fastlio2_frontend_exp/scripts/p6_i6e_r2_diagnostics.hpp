@@ -141,3 +141,137 @@ inline void writeR2PreupdateDiagnostics(
     if (!isolated) throw std::runtime_error("R2_SHADOW_MODIFIED_OFFICIAL_STATE");
   }
 }
+
+inline void writeR3ShadowComparison(
+    FastLio2IkfomFrontend& frontend, const ScanAsset& asset, R2Policy policy,
+    const Pose3d& nominal_lidar, const Pose3d& extrinsic,
+    const reliability::LocalRisk& risk,
+    const Eigen::Matrix<double, 6, 6>& base_noise,
+    const Eigen::Matrix<double, 6, 6>& adaptive_noise, bool adaptive_valid,
+    std::ostream& output) {
+  static const std::array<std::uint64_t, 10> selected_transactions = {
+      24, 32, 47, 60, 79, 88, 95, 120, 124, 127};
+  if (std::find(selected_transactions.begin(), selected_transactions.end(),
+                asset.transaction_id) == selected_transactions.end())
+    return;
+  const FilterSnapshot prior = frontend.getState();
+  const Pose3d measurement = p4_i2::lidarMeasurementToImu(nominal_lidar,
+                                                            extrinsic);
+  Eigen::Matrix<double, 6, 6> legacy_basis =
+      Eigen::Matrix<double, 6, 6>::Zero();
+  Eigen::Matrix<double, 6, 6> exact_basis = legacy_basis;
+  int legacy_rank = 0, exact_rank = 0;
+  std::string legacy_reason, exact_reason;
+  const bool legacy_built = makeReliablePoseMeasurementBasis(
+      risk, measurement, extrinsic, &legacy_basis, &legacy_rank,
+      &legacy_reason);
+  if (legacy_built && legacy_rank <= 0 && legacy_reason.empty())
+    legacy_reason = "ZERO_RELIABLE_RANK";
+  const bool legacy_valid = legacy_built && legacy_rank > 0;
+  const bool exact_built = makeExactReliablePoseMeasurementBasis(
+      risk, prior.map_T_imu, nominal_lidar, extrinsic, &exact_basis,
+      &exact_rank, &exact_reason);
+  if (exact_built && exact_rank <= 0 && exact_reason.empty())
+    exact_reason = "ZERO_RELIABLE_RANK";
+  const bool exact_valid = exact_built && exact_rank > 0;
+  const auto legacy_A = normalizedLidarToPoseJacobian(
+      measurement, extrinsic, risk.translation_length_scale_m);
+  Eigen::Matrix<double, 6, 6> exact_A =
+      Eigen::Matrix<double, 6, 6>::Constant(
+          std::numeric_limits<double>::quiet_NaN());
+  std::string exact_jacobian_reason;
+  const bool exact_jacobian_valid =
+      normalizedLidarToExactResidualJacobian(
+          prior.map_T_imu, nominal_lidar, extrinsic,
+          risk.translation_length_scale_m, &exact_A,
+          &exact_jacobian_reason);
+  const Eigen::MatrixXd weak = risk.joint_weak_basis.leftCols(
+      std::max(0, risk.weak_dimension));
+  const double legacy_leakage = legacy_valid && risk.weak_dimension > 0
+      ? (legacy_basis.leftCols(legacy_rank).transpose() * legacy_A * weak).norm()
+      : std::numeric_limits<double>::quiet_NaN();
+  const double exact_leakage = exact_valid && exact_jacobian_valid &&
+      risk.weak_dimension > 0
+      ? (exact_basis.leftCols(exact_rank).transpose() * exact_A * weak).norm()
+      : std::numeric_limits<double>::quiet_NaN();
+  constexpr double epsilon = 1e-7;
+  double legacy_fd_response = 0.0;
+  double exact_fd_response = 0.0;
+  if (risk.weak_dimension > 0) {
+    for (int index = 0; index < risk.weak_dimension; ++index) {
+      const Eigen::Matrix<double, 6, 1> direction = weak.col(index);
+      const Eigen::Vector3d phi = epsilon * direction.head<3>();
+      Eigen::Quaterniond delta = Eigen::Quaterniond::Identity();
+      if (phi.norm() > 0.0)
+        delta = Eigen::Quaterniond(Eigen::AngleAxisd(phi.norm(),
+                                                      phi.normalized()));
+      Pose3d plus = nominal_lidar, minus = nominal_lidar;
+      plus.orientation = (delta * plus.orientation).normalized();
+      minus.orientation = (delta.conjugate() * minus.orientation).normalized();
+      plus.position += epsilon * risk.translation_length_scale_m *
+          direction.tail<3>();
+      minus.position -= epsilon * risk.translation_length_scale_m *
+          direction.tail<3>();
+      const Eigen::Matrix<double, 6, 1> fd =
+          (poseResidual(prior.map_T_imu,
+                        p4_i2::lidarMeasurementToImu(plus, extrinsic)) -
+           poseResidual(prior.map_T_imu,
+                        p4_i2::lidarMeasurementToImu(minus, extrinsic))) /
+          (2.0 * epsilon);
+      if (legacy_valid)
+        legacy_fd_response = std::max(legacy_fd_response,
+            (legacy_basis.leftCols(legacy_rank).transpose() * fd).norm());
+      if (exact_valid)
+        exact_fd_response = std::max(exact_fd_response,
+            (exact_basis.leftCols(exact_rank).transpose() * fd).norm());
+    }
+  }
+  const auto& noise = r2PolicyUsesAdaptiveNoise(policy) ? adaptive_noise :
+                                                            base_noise;
+  const bool noise_valid = !r2PolicyUsesAdaptiveNoise(policy) || adaptive_valid;
+  ProjectedPoseInnovation legacy_diagnostic, exact_diagnostic;
+  PoseCorrectionDelta legacy_delta, exact_delta;
+  bool legacy_committed = false, exact_committed = false;
+  if (legacy_valid && noise_valid) {
+    auto clone = frontend.cloneCandidate();
+    if (!sameSnapshotExactly(prior, clone->getState()))
+      throw std::runtime_error("R3_LEGACY_CLONE_PRIOR_MISMATCH");
+    legacy_committed = clone->applyProjectedPoseMeasurementLinearizedChecked(
+        measurement, noise, legacy_basis, legacy_rank,
+        ProjectedPoseLinearizationMode::LEGACY_IDENTITY_ROTATION,
+        r2PolicyUsesNisGate(policy), chiSquare99Threshold(legacy_rank),
+        &legacy_diagnostic, &legacy_delta, &legacy_reason);
+  }
+  if (exact_valid && noise_valid) {
+    auto clone = frontend.cloneCandidate();
+    if (!sameSnapshotExactly(prior, clone->getState()))
+      throw std::runtime_error("R3_EXACT_CLONE_PRIOR_MISMATCH");
+    exact_committed = clone->applyProjectedPoseMeasurementLinearizedChecked(
+        measurement, noise, exact_basis, exact_rank,
+        ProjectedPoseLinearizationMode::EXACT_LOG_RESIDUAL,
+        r2PolicyUsesNisGate(policy), chiSquare99Threshold(exact_rank),
+        &exact_diagnostic, &exact_delta, &exact_reason);
+  }
+  const bool official_unchanged = sameSnapshotExactly(prior,
+                                                       frontend.getState());
+  const double rotation_gap = poseResidual(prior.map_T_imu,
+                                           measurement).tail<3>().norm();
+  std::string status = "OK";
+  if (!legacy_valid) status = "SKIPPED_LEGACY:" + legacy_reason;
+  if (!exact_valid) status = "SKIPPED_EXACT:" + exact_reason;
+  if (!noise_valid) status = "SKIPPED_INVALID_ADAPTIVE_NOISE";
+  output << asset.transaction_id << ',' << asset.time_s << ','
+      << r2PolicyName(policy) << ',' << stateSnapshotHash(prior) << ','
+      << rotation_gap << ',' << legacy_rank << ',' << exact_rank << ','
+      << legacy_leakage << ',' << legacy_fd_response << ','
+      << exact_leakage << ',' << exact_fd_response << ','
+      << legacy_diagnostic.nis << ',' << exact_diagnostic.nis << ','
+      << legacy_committed << ',' << exact_committed << ','
+      << legacy_delta.position.norm() << ',' << exact_delta.position.norm()
+      << ',' << legacy_delta.rotation.norm() << ','
+      << exact_delta.rotation.norm() << ',' << legacy_delta.velocity.norm()
+      << ',' << exact_delta.velocity.norm() << ',' << official_unchanged
+      << ',' << status << '\n';
+  if (!official_unchanged)
+    throw std::runtime_error("R3_SHADOW_MODIFIED_OFFICIAL_STATE");
+}

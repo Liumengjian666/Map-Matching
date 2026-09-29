@@ -79,4 +79,18 @@ if(BUILD_I6B_CLOSED_LOOP_TOOLS)
     Eigen3::Eigen gomp)
   add_test(NAME p6_i6e_projected_pose_consistency
     COMMAND $<TARGET_FILE:p6_i6e_projected_pose_consistency_test>)
+
+  add_executable(p6_i6e_r3_residual_jacobian_test
+    "${PACKAGE_ROOT}/src/fastlio2_frontend_ikfom.cpp"
+    "${PACKAGE_ROOT}/scripts/p6_i6e_r3_residual_jacobian_test.cpp")
+  target_compile_features(p6_i6e_r3_residual_jacobian_test PRIVATE cxx_std_17)
+  target_include_directories(p6_i6e_r3_residual_jacobian_test PRIVATE
+    "${PACKAGE_ROOT}/include"
+    "${PACKAGE_ROOT}/scripts"
+    "${FASTLIO2_INCLUDE_DIR}")
+  target_compile_options(p6_i6e_r3_residual_jacobian_test PRIVATE -fopenmp)
+  target_link_libraries(p6_i6e_r3_residual_jacobian_test PRIVATE
+    p6_i6b_dual_reliability Eigen3::Eigen gomp)
+  add_test(NAME p6_i6e_r3_residual_jacobian
+    COMMAND $<TARGET_FILE:p6_i6e_r3_residual_jacobian_test>)
 endif()

@@ -23,6 +23,15 @@ struct ProjectedPoseInnovation {
   std::string status = "UNINITIALIZED";
 };
 
+enum class ProjectedPoseLinearizationMode {
+  LEGACY_IDENTITY_ROTATION,
+  EXACT_LOG_RESIDUAL,
+};
+
+bool so3LeftJacobianInverse(const Eigen::Vector3d& phi,
+                            Eigen::Matrix3d* result,
+                            std::string* reason = nullptr);
+
 double chiSquare99Threshold(int rank);
 
 class FastLio2IkfomFrontend {
@@ -79,11 +88,25 @@ class FastLio2IkfomFrontend {
       const Eigen::Matrix<double, 6, 6>& measurement_basis,
       int rank, ProjectedPoseInnovation* output,
       std::string* reason) const;
+  bool evaluateProjectedPoseInnovationLinearized(
+      const Pose3d& map_T_imu_measurement,
+      const Eigen::Matrix<double, 6, 6>& measurement_noise,
+      const Eigen::Matrix<double, 6, 6>& measurement_basis,
+      int rank, ProjectedPoseLinearizationMode linearization_mode,
+      ProjectedPoseInnovation* output, std::string* reason) const;
   bool applyProjectedPoseMeasurementChecked(
       const Pose3d& map_T_imu_measurement,
       const Eigen::Matrix<double, 6, 6>& measurement_noise,
       const Eigen::Matrix<double, 6, 6>& measurement_basis,
       int rank, bool enforce_nis_gate, double nis_threshold,
+      ProjectedPoseInnovation* diagnostic, PoseCorrectionDelta* delta,
+      std::string* reason);
+  bool applyProjectedPoseMeasurementLinearizedChecked(
+      const Pose3d& map_T_imu_measurement,
+      const Eigen::Matrix<double, 6, 6>& measurement_noise,
+      const Eigen::Matrix<double, 6, 6>& measurement_basis,
+      int rank, ProjectedPoseLinearizationMode linearization_mode,
+      bool enforce_nis_gate, double nis_threshold,
       ProjectedPoseInnovation* diagnostic, PoseCorrectionDelta* delta,
       std::string* reason);
   // Applies only the position residual components spanned by the first

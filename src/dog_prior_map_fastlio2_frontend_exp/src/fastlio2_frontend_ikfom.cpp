@@ -105,6 +105,14 @@ bool fail(std::string* reason, const char* message) {
   return false;
 }
 
+Eigen::Matrix3d skew(const Eigen::Vector3d& vector) {
+  Eigen::Matrix3d result;
+  result << 0.0, -vector.z(), vector.y(),
+            vector.z(), 0.0, -vector.x(),
+            -vector.y(), vector.x(), 0.0;
+  return result;
+}
+
 bool finiteState(const state_ikfom& state) {
   return state.pos.allFinite() && state.rot.coeffs().allFinite() &&
          state.offset_R_L_I.coeffs().allFinite() &&
@@ -136,7 +144,8 @@ bool buildProjectedPoseSystem(
     const Pose3d& measurement,
     const Eigen::Matrix<double, 6, 6>& measurement_noise,
     const Eigen::Matrix<double, 6, 6>& measurement_basis,
-    int rank, ProjectedPoseSystem* system, std::string* reason) {
+    int rank, ProjectedPoseLinearizationMode linearization_mode,
+    ProjectedPoseSystem* system, std::string* reason) {
   if (reason) reason->clear();
   if (!system) return fail(reason, "null_projected_pose_system");
   *system = ProjectedPoseSystem();
@@ -181,10 +190,37 @@ bool buildProjectedPoseSystem(
       !noise_eigenvalues.eigenvalues().allFinite())
     return reject("projected_pose_covariance_eigendecomposition_failed");
 
+  Eigen::Matrix<double, 6, 1> raw_residual;
+  raw_residual.head<3>() = measurement.position - prior_pose.position;
+  Eigen::Quaterniond rotation_residual =
+      (prior_pose.orientation.conjugate() * measurement.orientation.normalized()).normalized();
+  if (rotation_residual.w() < 0.0)
+    rotation_residual.coeffs() *= -1.0;
+  const Eigen::AngleAxisd rotation_error(rotation_residual);
+  raw_residual.tail<3>() = rotation_error.axis() * rotation_error.angle();
+  if (!raw_residual.allFinite())
+    return reject("nonfinite_projected_pose_residual");
+
   Eigen::Matrix<double, 6, state_ikfom::DOF> selector =
       Eigen::Matrix<double, 6, state_ikfom::DOF>::Zero();
   selector.block<3, 3>(0, MTK::getStartIdx(&state_ikfom::pos)).setIdentity();
-  selector.block<3, 3>(3, MTK::getStartIdx(&state_ikfom::rot)).setIdentity();
+  if (linearization_mode ==
+      ProjectedPoseLinearizationMode::LEGACY_IDENTITY_ROTATION) {
+    selector.block<3, 3>(3, MTK::getStartIdx(&state_ikfom::rot)).setIdentity();
+  } else if (linearization_mode ==
+             ProjectedPoseLinearizationMode::EXACT_LOG_RESIDUAL) {
+    Eigen::Matrix3d left_inverse;
+    std::string jacobian_reason;
+    if (!so3LeftJacobianInverse(raw_residual.tail<3>(), &left_inverse,
+                                &jacobian_reason))
+      return reject(jacobian_reason.c_str());
+    // The residual changes by -H*dx under the filter's right perturbation;
+    // H therefore contains +J_l^{-1}(phi).
+    selector.block<3, 3>(3, MTK::getStartIdx(&state_ikfom::rot)) =
+        left_inverse;
+  } else {
+    return reject("unknown_projected_pose_linearization_mode");
+  }
   system->H = basis.transpose() * selector;
   system->S = system->H * prior_covariance * system->H.transpose() + system->R;
   system->innovation_factor.compute(system->S);
@@ -194,14 +230,6 @@ bool buildProjectedPoseSystem(
       system->innovation_factor.vectorD().minCoeff() <= 0.0)
     return reject("projected_pose_innovation_not_positive");
 
-  Eigen::Matrix<double, 6, 1> raw_residual;
-  raw_residual.head<3>() = measurement.position - prior_pose.position;
-  Eigen::Quaterniond rotation_residual =
-      (prior_pose.orientation.conjugate() * measurement.orientation.normalized()).normalized();
-  if (rotation_residual.w() < 0.0)
-    rotation_residual.coeffs() *= -1.0;
-  const Eigen::AngleAxisd rotation_error(rotation_residual);
-  raw_residual.tail<3>() = rotation_error.axis() * rotation_error.angle();
   system->residual = basis.transpose() * raw_residual;
   system->S_inverse_residual =
       system->innovation_factor.solve(system->residual);
@@ -226,6 +254,37 @@ bool buildProjectedPoseSystem(
 }
 
 }  // namespace
+
+bool so3LeftJacobianInverse(const Eigen::Vector3d& phi,
+                            Eigen::Matrix3d* result,
+                            std::string* reason) {
+  if (reason) reason->clear();
+  if (!result) return fail(reason, "NULL_SO3_JACOBIAN_OUTPUT");
+  if (!phi.allFinite()) return fail(reason, "NONFINITE_ROTATION_RESIDUAL");
+  const double theta = phi.norm();
+  if (!std::isfinite(theta))
+    return fail(reason, "NONFINITE_ROTATION_RESIDUAL");
+  if (theta > M_PI - 1e-4)
+    return fail(reason, "ROTATION_RESIDUAL_NEAR_PI");
+  const Eigen::Matrix3d K = skew(phi);
+  const Eigen::Matrix3d K2 = K * K;
+  if (theta < 1e-4) {
+    *result = Eigen::Matrix3d::Identity() - 0.5 * K +
+        (1.0 / 12.0 + theta * theta / 720.0) * K2;
+  } else {
+    const double half = 0.5 * theta;
+    const double sine = std::sin(half);
+    if (!std::isfinite(sine) || std::abs(sine) < 1e-12)
+      return fail(reason, "INVALID_ROTATION_RESIDUAL_HALF_ANGLE");
+    const double cotangent = std::cos(half) / sine;
+    const double coefficient = 1.0 / (theta * theta) -
+        cotangent / (2.0 * theta);
+    *result = Eigen::Matrix3d::Identity() - 0.5 * K + coefficient * K2;
+  }
+  if (!result->allFinite())
+    return fail(reason, "NONFINITE_SO3_LEFT_JACOBIAN_INVERSE");
+  return true;
+}
 
 double chiSquare99Threshold(int rank) {
   static const double thresholds[] = {
@@ -719,6 +778,18 @@ bool FastLio2IkfomFrontend::evaluateProjectedPoseInnovation(
     const Eigen::Matrix<double, 6, 6>& measurement_noise,
     const Eigen::Matrix<double, 6, 6>& measurement_basis, int rank,
     ProjectedPoseInnovation* output, std::string* reason) const {
+  return evaluateProjectedPoseInnovationLinearized(
+      map_T_imu_measurement, measurement_noise, measurement_basis, rank,
+      ProjectedPoseLinearizationMode::LEGACY_IDENTITY_ROTATION, output,
+      reason);
+}
+
+bool FastLio2IkfomFrontend::evaluateProjectedPoseInnovationLinearized(
+    const Pose3d& map_T_imu_measurement,
+    const Eigen::Matrix<double, 6, 6>& measurement_noise,
+    const Eigen::Matrix<double, 6, 6>& measurement_basis, int rank,
+    ProjectedPoseLinearizationMode linearization_mode,
+    ProjectedPoseInnovation* output, std::string* reason) const {
   if (reason) reason->clear();
   if (output) *output = ProjectedPoseInnovation();
   if (!impl_->is_initialized) {
@@ -731,7 +802,8 @@ bool FastLio2IkfomFrontend::evaluateProjectedPoseInnovation(
   std::string local_reason;
   const bool valid = buildProjectedPoseSystem(
       statePose(prior), prior_covariance, map_T_imu_measurement,
-      measurement_noise, measurement_basis, rank, &system, &local_reason);
+      measurement_noise, measurement_basis, rank, linearization_mode, &system,
+      &local_reason);
   if (output) *output = system.diagnostic;
   if (!valid) return fail(reason, local_reason.c_str());
   return true;
@@ -741,6 +813,20 @@ bool FastLio2IkfomFrontend::applyProjectedPoseMeasurementChecked(
     const Pose3d& map_T_imu_measurement,
     const Eigen::Matrix<double, 6, 6>& measurement_noise,
     const Eigen::Matrix<double, 6, 6>& measurement_basis, int rank,
+    bool enforce_nis_gate, double nis_threshold,
+    ProjectedPoseInnovation* diagnostic, PoseCorrectionDelta* delta,
+    std::string* reason) {
+  return applyProjectedPoseMeasurementLinearizedChecked(
+      map_T_imu_measurement, measurement_noise, measurement_basis, rank,
+      ProjectedPoseLinearizationMode::LEGACY_IDENTITY_ROTATION,
+      enforce_nis_gate, nis_threshold, diagnostic, delta, reason);
+}
+
+bool FastLio2IkfomFrontend::applyProjectedPoseMeasurementLinearizedChecked(
+    const Pose3d& map_T_imu_measurement,
+    const Eigen::Matrix<double, 6, 6>& measurement_noise,
+    const Eigen::Matrix<double, 6, 6>& measurement_basis, int rank,
+    ProjectedPoseLinearizationMode linearization_mode,
     bool enforce_nis_gate, double nis_threshold,
     ProjectedPoseInnovation* diagnostic, PoseCorrectionDelta* delta,
     std::string* reason) {
@@ -759,7 +845,7 @@ bool FastLio2IkfomFrontend::applyProjectedPoseMeasurementChecked(
   std::string local_reason;
   if (!buildProjectedPoseSystem(
           statePose(prior), backup_P, map_T_imu_measurement,
-          measurement_noise, measurement_basis, rank, &system,
+          measurement_noise, measurement_basis, rank, linearization_mode, &system,
           &local_reason)) {
     if (diagnostic) *diagnostic = system.diagnostic;
     return fail(reason, local_reason.c_str());
