@@ -290,12 +290,13 @@ int main() {
                                    Eigen::Vector3d::Zero(), noise,
                                    &preintegrated, &reason) &&
                    incremental_window.addImuFactor(
-                       5000 + index, previous_stamp, stamp, preintegrated,
+                       10000 + 10 * index + 1, previous_stamp, stamp,
+                       preintegrated,
                        &reason),
                    "incremental IMU factor")) return 23;
       LidarWindowMeasurement lidar;
       lidar.valid = true;
-      lidar.observation_id = 6000 + index;
+      lidar.observation_id = 10000 + 10 * index + 2;
       lidar.stamp_ns = stamp;
       const WindowState truth = truthState(stamp, time_s);
       lidar.measured_position = truth.position;
@@ -309,7 +310,7 @@ int main() {
     }
     if (index >= 2 && index % 2 == 0) {
       VisualRelativeMeasurement factor = visual;
-      factor.observation_id = 7000 + index;
+      factor.observation_id = 10000 + 10 * index + 3;
       factor.reference_stamp_ns = start_ns +
           static_cast<std::uint64_t>(0.25 * (index - 2) * 1e9);
       factor.current_stamp_ns = stamp;

@@ -55,9 +55,56 @@ void addCrossBlock(Eigen::MatrixXd* hessian, const Eigen::MatrixXd& left,
 
 }  // namespace
 
+const char* toString(OptimizerStatus status) {
+  switch (status) {
+    case OptimizerStatus::ACCEPTED_UPDATE:
+      return "ACCEPTED_UPDATE";
+    case OptimizerStatus::CONVERGED_WITHOUT_STEP:
+      return "CONVERGED_WITHOUT_STEP";
+    case OptimizerStatus::FAILED_ALL_CANDIDATES:
+      return "FAILED_ALL_CANDIDATES";
+    case OptimizerStatus::INVALID_LINEAR_SYSTEM:
+      return "INVALID_LINEAR_SYSTEM";
+    case OptimizerStatus::NOT_RUN:
+    default:
+      return "NOT_RUN";
+  }
+}
+
 FixedLagWindow::FixedLagWindow(const FixedLagOptions& options,
                                const ImuNoiseParameters& imu_noise)
     : options_(options), imu_noise_(imu_noise) {}
+
+void FixedLagWindow::markWindowMutated() {
+  ++window_revision_;
+  summary_.prediction_feedback_ready = false;
+  summary_.prediction_feedback_status = "STALE_WINDOW_REVISION";
+  summary_.optimizer_success = false;
+  summary_.optimizer_status = "NOT_RUN";
+}
+
+bool FixedLagWindow::observationIdAvailable(std::uint64_t observation_id,
+                                            std::string* reason) {
+  if (observation_id == 0)
+    return fail(reason, "invalid_measurement_id");
+  if (observation_id <= retired_observation_id_watermark_ ||
+      active_observation_ids_.count(observation_id) != 0) {
+    ++summary_.duplicate_measurement_count;
+    return fail(reason, observation_id <= retired_observation_id_watermark_
+                            ? "retired_measurement_id"
+                            : "duplicate_measurement_id");
+  }
+  if (active_observation_ids_.size() >=
+      options_.maximum_active_observation_ids)
+    return fail(reason, "active_observation_id_capacity_exceeded");
+  return true;
+}
+
+void FixedLagWindow::retireObservationId(std::uint64_t observation_id) {
+  active_observation_ids_.erase(observation_id);
+  retired_observation_id_watermark_ =
+      std::max(retired_observation_id_watermark_, observation_id);
+}
 
 bool FixedLagWindow::findStateIndex(std::uint64_t stamp_ns,
                                     std::size_t* index) const {
@@ -94,6 +141,7 @@ bool FixedLagWindow::addState(const WindowState& state, std::string* reason) {
   }
   states_.push_back(state);
   summary_.latest_state_timestamp = state.stamp_ns;
+  markWindowMutated();
   return true;
 }
 
@@ -102,28 +150,22 @@ bool FixedLagWindow::addImuFactor(
     std::uint64_t to_stamp_ns, const ImuPreintegratedMeasurement& measurement,
     std::string* reason) {
   if (reason) reason->clear();
-  if (observation_id == 0 || observation_ids_.count(observation_id) != 0) {
-    ++summary_.duplicate_measurement_count;
-    return fail(reason, "duplicate_measurement_id");
-  }
+  if (!observationIdAvailable(observation_id, reason)) return false;
   std::size_t from_index = 0, to_index = 0;
   if (!findStateIndex(from_stamp_ns, &from_index) ||
       !findStateIndex(to_stamp_ns, &to_index) || from_index >= to_index ||
       !measurement.valid)
     return fail(reason, "invalid_imu_factor_state_or_measurement");
   imu_factors_.push_back({observation_id, from_stamp_ns, to_stamp_ns, measurement});
-  observation_ids_.insert(observation_id);
+  active_observation_ids_.insert(observation_id);
+  markWindowMutated();
   return true;
 }
 
 bool FixedLagWindow::addLidarFactor(const LidarWindowMeasurement& measurement,
                                     std::string* reason) {
   if (reason) reason->clear();
-  if (measurement.observation_id == 0 ||
-      observation_ids_.count(measurement.observation_id) != 0) {
-    ++summary_.duplicate_measurement_count;
-    return fail(reason, "duplicate_measurement_id");
-  }
+  if (!observationIdAvailable(measurement.observation_id, reason)) return false;
   std::size_t index = 0;
   if (!findStateIndex(measurement.stamp_ns, &index))
     return fail(reason, "lidar_factor_state_not_in_window");
@@ -145,19 +187,16 @@ bool FixedLagWindow::addLidarFactor(const LidarWindowMeasurement& measurement,
     return false;
   }
   lidar_factors_.push_back({measurement});
-  observation_ids_.insert(measurement.observation_id);
+  active_observation_ids_.insert(measurement.observation_id);
   summary_.last_lidar_reliable_rank = measurement.reliable_rank;
+  markWindowMutated();
   return true;
 }
 
 bool FixedLagWindow::addVisualFactor(
     const VisualRelativeMeasurement& measurement, std::string* reason) {
   if (reason) reason->clear();
-  if (measurement.observation_id == 0 ||
-      observation_ids_.count(measurement.observation_id) != 0) {
-    ++summary_.duplicate_measurement_count;
-    return fail(reason, "duplicate_measurement_id");
-  }
+  if (!observationIdAvailable(measurement.observation_id, reason)) return false;
   std::size_t reference_index = 0, current_index = 0;
   if (!findStateIndex(measurement.reference_stamp_ns, &reference_index) ||
       !findStateIndex(measurement.current_stamp_ns, &current_index) ||
@@ -166,13 +205,41 @@ bool FixedLagWindow::addVisualFactor(
   if (measurement.source_semantic != "METRIC_PNP_RELATIVE_TRANSLATION_FACTOR")
     return fail(reason, "unsupported_visual_factor_semantic");
   visual_factors_.push_back({measurement});
-  observation_ids_.insert(measurement.observation_id);
+  active_observation_ids_.insert(measurement.observation_id);
+  markWindowMutated();
   return true;
 }
 
-bool FixedLagWindow::linearize(Eigen::MatrixXd* hessian,
-                               Eigen::VectorXd* gradient, double* cost,
-                               std::string* reason) const {
+bool FixedLagWindow::setInitialPrior(std::uint64_t stamp_ns,
+                                     const Matrix15d& information,
+                                     const Vector15d& gradient,
+                                     std::string* reason) {
+  if (reason) reason->clear();
+  if (states_.empty() || stamp_ns != states_.front().stamp_ns)
+    return fail(reason, "initial_prior_must_target_oldest_state");
+  if (prior_.valid) return fail(reason, "initial_prior_already_set");
+  if (!information.allFinite() || !gradient.allFinite() ||
+      (information - information.transpose()).cwiseAbs().maxCoeff() > 1e-10)
+    return fail(reason, "invalid_initial_prior");
+  Eigen::SelfAdjointEigenSolver<Matrix15d> solver(information);
+  if (solver.info() != Eigen::Success ||
+      solver.eigenvalues().minCoeff() < -1e-10)
+    return fail(reason, "initial_prior_not_psd");
+  const Eigen::Index dimension = static_cast<Eigen::Index>(states_.size() * 15);
+  prior_.information = Eigen::MatrixXd::Zero(dimension, dimension);
+  prior_.gradient = Eigen::VectorXd::Zero(dimension);
+  prior_.information.topLeftCorner<15, 15>() = information;
+  prior_.gradient.head<15>() = gradient;
+  prior_.reference_states = states_;
+  prior_.valid = true;
+  markWindowMutated();
+  return true;
+}
+
+bool FixedLagWindow::linearizeSelected(LinearizationScope scope,
+                                       Eigen::MatrixXd* hessian,
+                                       Eigen::VectorXd* gradient, double* cost,
+                                       std::string* reason) const {
   if (reason) reason->clear();
   if (!hessian || !gradient || !cost)
     return fail(reason, "null_window_linearization_output");
@@ -181,20 +248,49 @@ bool FixedLagWindow::linearize(Eigen::MatrixXd* hessian,
   *hessian = Eigen::MatrixXd::Zero(dimension, dimension);
   *gradient = Eigen::VectorXd::Zero(dimension);
   *cost = 0.0;
+  const std::uint64_t oldest_stamp = states_.front().stamp_ns;
   if (prior_.valid) {
     if (prior_.reference_states.size() != states_.size() ||
-        prior_.information.rows() != dimension)
+        prior_.information.rows() != dimension ||
+        prior_.information.cols() != dimension ||
+        prior_.gradient.size() != dimension)
       return fail(reason, "window_prior_dimension_mismatch");
     Eigen::VectorXd displacement(dimension);
-    for (std::size_t index = 0; index < states_.size(); ++index)
+    Eigen::MatrixXd coordinate_jacobian =
+        Eigen::MatrixXd::Identity(dimension, dimension);
+    const double h = std::max(1e-8, options_.finite_difference_step);
+    for (std::size_t index = 0; index < states_.size(); ++index) {
       displacement.segment<15>(static_cast<Eigen::Index>(index * 15)) =
           localDifference(states_[index], prior_.reference_states[index]);
-    *hessian += prior_.information;
-    *gradient += prior_.information * displacement + prior_.gradient;
+      for (int axis = 0; axis < 3; ++axis) {
+        Vector15d increment = Vector15d::Zero();
+        increment(axis) = h;
+        WindowState plus = states_[index];
+        WindowState minus = states_[index];
+        if (!applyLocalIncrement(&plus, increment, reason) ||
+            !applyLocalIncrement(&minus, -increment, reason))
+          return false;
+        coordinate_jacobian.block<15, 1>(
+            static_cast<Eigen::Index>(index * 15),
+            static_cast<Eigen::Index>(index * 15 + axis)) =
+            (localDifference(plus, prior_.reference_states[index]) -
+             localDifference(minus, prior_.reference_states[index])) /
+            (2.0 * h);
+      }
+    }
+    const Eigen::VectorXd prior_force =
+        prior_.information * displacement + prior_.gradient;
+    *hessian += coordinate_jacobian.transpose() * prior_.information *
+        coordinate_jacobian;
+    *gradient += coordinate_jacobian.transpose() * prior_force;
     *cost += displacement.dot(prior_.information * displacement) +
         2.0 * prior_.gradient.dot(displacement);
   }
   for (const ImuFactorRecord& factor_record : imu_factors_) {
+    if (scope == LinearizationScope::FACTORS_TOUCHING_OLDEST &&
+        factor_record.from_stamp_ns != oldest_stamp &&
+        factor_record.to_stamp_ns != oldest_stamp)
+      continue;
     std::size_t from_index = 0, to_index = 0;
     if (!findStateIndex(factor_record.from_stamp_ns, &from_index) ||
         !findStateIndex(factor_record.to_stamp_ns, &to_index))
@@ -221,6 +317,9 @@ bool FixedLagWindow::linearize(Eigen::MatrixXd* hessian,
     *cost += residual.dot(information * residual);
   }
   for (const LidarFactorRecord& factor_record : lidar_factors_) {
+    if (scope == LinearizationScope::FACTORS_TOUCHING_OLDEST &&
+        factor_record.measurement.stamp_ns != oldest_stamp)
+      continue;
     std::size_t state_index = 0;
     if (!findStateIndex(factor_record.measurement.stamp_ns, &state_index))
       return fail(reason, "lidar_factor_state_removed_without_marginalization");
@@ -235,6 +334,10 @@ bool FixedLagWindow::linearize(Eigen::MatrixXd* hessian,
     *cost += residual.dot(covariance.ldlt().solve(residual));
   }
   for (const VisualFactorRecord& factor_record : visual_factors_) {
+    if (scope == LinearizationScope::FACTORS_TOUCHING_OLDEST &&
+        factor_record.measurement.reference_stamp_ns != oldest_stamp &&
+        factor_record.measurement.current_stamp_ns != oldest_stamp)
+      continue;
     std::size_t reference_index = 0, current_index = 0;
     if (!findStateIndex(factor_record.measurement.reference_stamp_ns,
                         &reference_index) ||
@@ -267,6 +370,20 @@ bool FixedLagWindow::linearize(Eigen::MatrixXd* hessian,
   return true;
 }
 
+bool FixedLagWindow::linearize(Eigen::MatrixXd* hessian,
+                               Eigen::VectorXd* gradient, double* cost,
+                               std::string* reason) const {
+  return linearizeSelected(LinearizationScope::ALL_FACTORS, hessian, gradient,
+                           cost, reason);
+}
+
+bool FixedLagWindow::linearizeMarginalizationSubgraph(
+    Eigen::MatrixXd* hessian, Eigen::VectorXd* gradient, double* cost,
+    std::string* reason) const {
+  return linearizeSelected(LinearizationScope::FACTORS_TOUCHING_OLDEST,
+                           hessian, gradient, cost, reason);
+}
+
 double FixedLagWindow::objective(std::string* reason) const {
   Eigen::MatrixXd hessian;
   Eigen::VectorXd gradient;
@@ -276,33 +393,64 @@ double FixedLagWindow::objective(std::string* reason) const {
   return cost;
 }
 
-bool FixedLagWindow::applyGlobalIncrement(const Eigen::VectorXd& increment,
-                                          std::string* reason) {
-  if (increment.size() != static_cast<Eigen::Index>(states_.size() * 15) ||
+bool applyGlobalIncrementAtomically(
+    std::vector<WindowState, Eigen::aligned_allocator<WindowState>>* states,
+    const Eigen::VectorXd& increment, std::string* reason) {
+  if (!states || increment.size() !=
+          static_cast<Eigen::Index>(states->size() * 15) ||
       !increment.allFinite())
     return fail(reason, "invalid_global_window_increment");
-  for (std::size_t index = 0; index < states_.size(); ++index) {
-    if (!applyLocalIncrement(&states_[index], increment.segment<15>(index * 15), reason))
+  const auto backup = *states;
+  for (std::size_t index = 0; index < states->size(); ++index) {
+    if (!applyLocalIncrement(&(*states)[index],
+                             increment.segment<15>(index * 15), reason)) {
+      *states = backup;
       return false;
+    }
   }
   return true;
+}
+
+bool FixedLagWindow::applyGlobalIncrement(const Eigen::VectorXd& increment,
+                                          std::string* reason) {
+  return applyGlobalIncrementAtomically(&states_, increment, reason);
 }
 
 bool FixedLagWindow::optimize(std::string* reason) {
   if (reason) reason->clear();
   if (states_.empty()) return fail(reason, "cannot_optimize_empty_window");
+  const auto optimization_start_states = states_;
+  summary_.prediction_feedback_ready = false;
+  summary_.prediction_feedback_status = "OPTIMIZATION_IN_PROGRESS";
+  summary_.optimizer_status = toString(OptimizerStatus::NOT_RUN);
   double current_cost = objective(reason);
-  if (!std::isfinite(current_cost)) return false;
+  if (!std::isfinite(current_cost)) {
+    states_ = optimization_start_states;
+    summary_.optimizer_status =
+        toString(OptimizerStatus::INVALID_LINEAR_SYSTEM);
+    summary_.optimizer_success = false;
+    summary_.prediction_feedback_status = "INVALID_LINEAR_SYSTEM";
+    return false;
+  }
   summary_.optimizer_initial_cost = current_cost;
   summary_.optimizer_final_cost = current_cost;
   summary_.optimizer_iterations = 0;
   summary_.optimizer_success = false;
+  bool accepted_update = false;
+  bool converged_without_step = false;
   double damping = std::max(1e-12, options_.initial_damping);
   for (int iteration = 0; iteration < options_.maximum_optimizer_iterations;
        ++iteration) {
     Eigen::MatrixXd hessian;
     Eigen::VectorXd gradient;
-    if (!linearize(&hessian, &gradient, &current_cost, reason)) return false;
+    if (!linearize(&hessian, &gradient, &current_cost, reason)) {
+      states_ = optimization_start_states;
+      summary_.optimizer_status =
+          toString(OptimizerStatus::INVALID_LINEAR_SYSTEM);
+      summary_.optimizer_success = false;
+      summary_.prediction_feedback_status = "INVALID_LINEAR_SYSTEM";
+      return false;
+    }
     summary_.hessian_dimension = hessian.rows();
     Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> hessian_solver(hessian);
     if (hessian_solver.info() == Eigen::Success &&
@@ -312,36 +460,75 @@ bool FixedLagWindow::optimize(std::string* reason) {
       summary_.hessian_numerical_rank =
           (hessian_solver.eigenvalues().array() > 1e-9 * scale).count();
     }
+    if (gradient.lpNorm<Eigen::Infinity>() <=
+        options_.gradient_convergence_tolerance) {
+      converged_without_step = !accepted_update;
+      break;
+    }
     Eigen::MatrixXd damped = hessian;
     damped.diagonal().array() += damping *
         damped.diagonal().cwiseAbs().array().max(1.0);
     Eigen::LDLT<Eigen::MatrixXd> factor(damped);
-    if (factor.info() != Eigen::Success)
+    if (factor.info() != Eigen::Success) {
+      states_ = optimization_start_states;
+      summary_.optimizer_status =
+          toString(OptimizerStatus::INVALID_LINEAR_SYSTEM);
+      summary_.optimizer_success = false;
+      summary_.prediction_feedback_status = "INVALID_LINEAR_SYSTEM";
       return fail(reason, "window_normal_equation_factorization_failed");
+    }
     Eigen::VectorXd step = factor.solve(-gradient);
-    if (!step.allFinite()) return fail(reason, "nonfinite_window_optimizer_step");
+    if (!step.allFinite()) {
+      states_ = optimization_start_states;
+      summary_.optimizer_status =
+          toString(OptimizerStatus::INVALID_LINEAR_SYSTEM);
+      summary_.optimizer_success = false;
+      summary_.prediction_feedback_status = "INVALID_LINEAR_SYSTEM";
+      return fail(reason, "nonfinite_window_optimizer_step");
+    }
     if (step.norm() > options_.maximum_step_norm)
       step *= options_.maximum_step_norm / step.norm();
     const auto backup = states_;
-    if (!applyGlobalIncrement(step, reason)) return false;
+    if (!applyGlobalIncrement(step, reason)) {
+      states_ = optimization_start_states;
+      summary_.optimizer_status =
+          toString(OptimizerStatus::INVALID_LINEAR_SYSTEM);
+      summary_.optimizer_success = false;
+      summary_.prediction_feedback_status = "INVALID_LINEAR_SYSTEM";
+      return false;
+    }
     const double candidate_cost = objective(reason);
     if (std::isfinite(candidate_cost) && candidate_cost < current_cost) {
       current_cost = candidate_cost;
       damping = std::max(1e-12, damping * 0.3);
-      summary_.optimizer_success = true;
+      accepted_update = true;
     } else {
       states_ = backup;
       damping = std::min(1e12, damping * 10.0);
+      if (reason) reason->clear();
     }
     summary_.optimizer_iterations = iteration + 1;
     summary_.optimizer_final_cost = current_cost;
     if (step.norm() < 1e-8) break;
   }
   summary_.latest_state_timestamp = states_.back().stamp_ns;
-  summary_.prediction_feedback_ready = finiteState(states_.back());
-  summary_.prediction_feedback_status = summary_.prediction_feedback_ready
-      ? "LATEST_OPTIMIZED_STATE_READY" : "LATEST_STATE_INVALID";
-  return summary_.optimizer_success || summary_.optimizer_iterations > 0;
+  if (accepted_update || converged_without_step) {
+    summary_.optimizer_success = true;
+    summary_.optimizer_status = toString(accepted_update
+        ? OptimizerStatus::ACCEPTED_UPDATE
+        : OptimizerStatus::CONVERGED_WITHOUT_STEP);
+    optimized_revision_ = window_revision_;
+    summary_.prediction_feedback_ready = finiteState(states_.back());
+    summary_.prediction_feedback_status = summary_.prediction_feedback_ready
+        ? "LATEST_OPTIMIZED_STATE_READY" : "LATEST_STATE_INVALID";
+    return summary_.prediction_feedback_ready;
+  }
+  summary_.optimizer_success = false;
+  summary_.optimizer_status =
+      toString(OptimizerStatus::FAILED_ALL_CANDIDATES);
+  summary_.prediction_feedback_ready = false;
+  summary_.prediction_feedback_status = "FAILED_ALL_CANDIDATES";
+  return fail(reason, "all_optimizer_candidates_rejected");
 }
 
 bool FixedLagWindow::marginalizeIfNeeded(std::string* reason) {
@@ -381,6 +568,11 @@ WindowSummary FixedLagWindow::summary() const {
   result.imu_factor_count = imu_factors_.size();
   result.lidar_factor_count = lidar_factors_.size();
   result.visual_factor_count = visual_factors_.size();
+  result.active_observation_id_count = active_observation_ids_.size();
+  result.retired_observation_id_watermark =
+      retired_observation_id_watermark_;
+  result.window_revision = window_revision_;
+  result.optimized_revision = optimized_revision_;
   result.latest_state_timestamp = states_.empty() ? 0 : states_.back().stamp_ns;
   return result;
 }
@@ -389,11 +581,24 @@ const Eigen::MatrixXd& FixedLagWindow::priorInformation() const {
   return prior_.information;
 }
 
+const Eigen::VectorXd& FixedLagWindow::priorGradient() const {
+  return prior_.gradient;
+}
+
+bool FixedLagWindow::linearizedSystem(Eigen::MatrixXd* hessian,
+                                      Eigen::VectorXd* gradient, double* cost,
+                                      std::string* reason) const {
+  return linearize(hessian, gradient, cost, reason);
+}
+
 bool FixedLagWindow::predictionFeedbackSeed(WindowState* output,
                                              std::string* reason) const {
   if (reason) reason->clear();
   if (!output || states_.empty()) return fail(reason, "prediction_feedback_not_ready");
-  if (!summary_.prediction_feedback_ready && !finiteState(states_.back()))
+  if (!summary_.prediction_feedback_ready ||
+      optimized_revision_ != window_revision_)
+    return fail(reason, "window_revision_not_optimized");
+  if (!finiteState(states_.back()))
     return fail(reason, "latest_optimized_state_not_finite");
   *output = states_.back();
   return true;

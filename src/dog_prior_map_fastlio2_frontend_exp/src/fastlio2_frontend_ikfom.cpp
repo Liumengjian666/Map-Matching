@@ -105,6 +105,10 @@ bool fail(std::string* reason, const char* message) {
   return false;
 }
 
+#ifdef DOG_PRIOR_MAP_ENABLE_TEST_HOOKS
+thread_local bool force_window_seed_postcondition_failure = false;
+#endif
+
 Eigen::Matrix3d skew(const Eigen::Vector3d& vector) {
   Eigen::Matrix3d result;
   result << 0.0, -vector.z(), vector.y(),
@@ -1041,11 +1045,40 @@ bool FastLio2IkfomFrontend::setWindowPredictionSeed(
       seed.covariance;
   enforceFixedExtrinsicConstraint(state, covariance, impl_->fixed_rotation,
                                   impl_->fixed_translation);
+  state_ikfom previous_state = impl_->filter.get_x();
+  auto previous_covariance = impl_->filter.get_P();
+  const std::uint64_t previous_stamp_ns = impl_->stamp_ns;
   impl_->filter.change_x(state);
   impl_->filter.change_P(covariance);
   impl_->stamp_ns = seed.stamp_ns;
-  return postconditionsValid(failure_reason);
+  std::string postcondition_failure;
+  bool postconditions_ok = postconditionsValid(&postcondition_failure);
+#ifdef DOG_PRIOR_MAP_ENABLE_TEST_HOOKS
+  if (force_window_seed_postcondition_failure) {
+    postconditions_ok = false;
+    postcondition_failure = "injected_window_feedback_postcondition_failure";
+  }
+#endif
+  if (!postconditions_ok) {
+    impl_->filter.change_x(previous_state);
+    impl_->filter.change_P(previous_covariance);
+    impl_->stamp_ns = previous_stamp_ns;
+    if (failure_reason) *failure_reason = postcondition_failure;
+    return false;
+  }
+  return true;
 }
+
+#ifdef DOG_PRIOR_MAP_ENABLE_TEST_HOOKS
+bool FastLio2IkfomFrontend::
+setWindowPredictionSeedWithInjectedPostconditionFailureForTest(
+    const FilterSnapshot& seed, std::string* failure_reason) {
+  force_window_seed_postcondition_failure = true;
+  const bool result = setWindowPredictionSeed(seed, failure_reason);
+  force_window_seed_postcondition_failure = false;
+  return result;
+}
+#endif
 
 Eigen::Matrix<double, 12, 12>
 FastLio2IkfomFrontend::getProcessNoiseCovariance() const {

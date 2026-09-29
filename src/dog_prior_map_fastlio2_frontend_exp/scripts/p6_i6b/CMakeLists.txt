@@ -74,6 +74,16 @@ target_compile_options(p6_i6f_imu_preintegration_test PRIVATE
 add_test(NAME p6_i6f_imu_preintegration
   COMMAND $<TARGET_FILE:p6_i6f_imu_preintegration_test>)
 
+add_executable(p6_a1_r1_fixed_lag_regression_test
+  "${PACKAGE_ROOT}/scripts/p6_a1_r1_fixed_lag_regression_test.cpp")
+target_compile_features(p6_a1_r1_fixed_lag_regression_test PRIVATE cxx_std_17)
+target_link_libraries(p6_a1_r1_fixed_lag_regression_test PRIVATE
+  p6_i6b_dual_reliability Eigen3::Eigen)
+target_compile_options(p6_a1_r1_fixed_lag_regression_test PRIVATE
+  -Wall -Wextra -Wpedantic)
+add_test(NAME p6_a1_r1_fixed_lag_regression
+  COMMAND $<TARGET_FILE:p6_a1_r1_fixed_lag_regression_test>)
+
 if(BUILD_I6B_CLOSED_LOOP_TOOLS)
   set(FASTLIO2_ROOT "" CACHE PATH "Pinned FAST-LIO2 source root")
   set(DCREG_ROOT "" CACHE PATH "Pinned DCReg source root")
@@ -112,6 +122,8 @@ if(BUILD_I6B_CLOSED_LOOP_TOOLS)
     "${PACKAGE_ROOT}/include"
     "${FASTLIO2_INCLUDE_DIR}")
   target_compile_options(p6_i6e_projected_pose_consistency_test PRIVATE -fopenmp)
+  target_compile_definitions(p6_i6e_projected_pose_consistency_test PRIVATE
+    DOG_PRIOR_MAP_ENABLE_TEST_HOOKS)
   target_link_libraries(p6_i6e_projected_pose_consistency_test PRIVATE
     Eigen3::Eigen gomp)
   add_test(NAME p6_i6e_projected_pose_consistency

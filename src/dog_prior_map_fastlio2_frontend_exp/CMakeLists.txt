@@ -174,6 +174,8 @@ if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
     ${catkin_INCLUDE_DIRS}
   )
   target_compile_options(ndt_pose_update_runtime_test PRIVATE ${OpenMP_CXX_FLAGS})
+  target_compile_definitions(ndt_pose_update_runtime_test PRIVATE
+    DOG_PRIOR_MAP_ENABLE_TEST_HOOKS)
   target_link_libraries(ndt_pose_update_runtime_test
     ${catkin_LIBRARIES}
     ${OpenMP_CXX_FLAGS}
