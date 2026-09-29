@@ -81,9 +81,13 @@ The new independent API is in `include/.../window_factors.hpp` and
   bias random walks) with covariance whitening deferred to normal-equation
   assembly.  `linearizeImuFactor` supplies central finite-difference Jacobians
   over the same right-perturbation chart.
-* `window_lidar_factor.cpp` builds a 6D pose-chart residual
-  `[p_i - p_meas, Log(R_meas^T R_i)]`.  It projects this residual through
-  `measurement_basis`, checks the declared reliable rank and SPD covariance,
+* `window_lidar_factor.cpp` builds the actual 6D raw pose residual
+  `[p_meas - p_i, Log(R_i^T R_meas)]`.  The state convention is `R_i` from
+  IMU/body to map and a right/body local rotation perturbation.  If `B` is the
+  `6 x r` reliable column basis, the factor residual is `B^T r_raw`, its covariance
+  is `B^T Q_raw B`, and its Jacobian is the central derivative of this exact
+  projected residual in the 15D local state order.  It checks the declared
+  reliable rank and SPD projected covariance,
   and skips invalid/degenerate factors with a reason.  Rank-deficient factors
   require an upstream U_obs/R3 `basis_relinearizer`: it is called once at each
   outer factor linearization and its basis is frozen through the local
@@ -103,11 +107,14 @@ The new independent API is in `include/.../window_factors.hpp` and
   terminal measurement cannot be counted twice.  LM-style damped normal
   equations are accepted only when the objective decreases.  The numerical
   Hessian rank is reported, not interpreted as a global observability proof.
-* `window_marginalization.cpp` removes old states with a Schur complement
-  solved by LDLT.  Retained cross-state information is kept in the prior;
-  a tiny solve-only jitter is allowed for a gauge-like oldest block but is
-  never stored as information.  The window is bounded by 2 seconds and 48
-  nodes.
+* R1 correction: `window_marginalization.cpp` assembles the existing prior
+  plus only factors incident on the state being removed.  Retained-only raw
+  factors remain active and are not copied into the new prior, preventing
+  duplicate information while preserving later relinearization.  A tiny
+  solve-only jitter is allowed for a gauge-like oldest block.  Its indirect
+  effect on the Schur result is reported against the unjittered Moore-Penrose
+  reference; it is not described as zero merely because jitter is not stored
+  directly in the prior.  The window is bounded by 2 seconds and 48 nodes.
 
 ## Prediction/optimization feedback
 
@@ -118,7 +125,12 @@ mode `FORMAL_FULL_LEGACY` rejects fixed-lag operations, while
 existing IKFoM frontend exposes `setWindowPredictionSeed` for a future
 explicit integration point; it validates stamp monotonicity, finiteness,
 covariance PSD, gravity, and fixed extrinsic invariants before changing the
-state.  No ROS callback currently calls this setter, so online feedback is
+state and now rolls state, covariance, and stamp back together if a
+postcondition fails.  The window state/covariance is 15D while IKFoM is 23D.
+A complete covariance and cross-covariance mapping is not implemented; the
+boundary therefore requires a genuine propagated 23x23 covariance and does
+not manufacture identity blocks, zero cross blocks, or reuse an unrelated EKF
+posterior.  No ROS callback currently calls this setter, so online feedback is
 not claimed as complete.
 
 ## Verification and limits

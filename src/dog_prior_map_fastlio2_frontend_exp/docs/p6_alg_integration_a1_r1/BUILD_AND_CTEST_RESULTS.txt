@@ -1,0 +1,59 @@
+PAPER-P6-ALG-INTEGRATION-A1-R1 validation
+Date: 2026-09-30 Asia/Shanghai
+
+1. Standalone Release fixed-lag build
+
+  cmake -S src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b \
+    -B /tmp/p6-a1-r1-release -DCMAKE_BUILD_TYPE=Release
+  cmake --build /tmp/p6-a1-r1-release -j2
+  ctest --output-on-failure   (working directory /tmp/p6-a1-r1-release)
+
+  PASS: 6/6 tests, 0 failed
+  Includes all five existing A1/I6B/I6E/I6F tests plus
+  p6_a1_r1_fixed_lag_regression.
+
+2. Release build with pinned FAST-LIO2/DCReg tools
+
+  BUILD_I6B_CLOSED_LOOP_TOOLS=ON
+  FAST-LIO2 SHA gate retained
+  build PASS
+  ctest PASS: 8/8 tests, 0 failed
+
+  Added coverage includes:
+  p6_i6e_projected_pose_consistency (IKFoM rollback test)
+  p6_i6e_r3_residual_jacobian
+  p6_a1_r1_fixed_lag_regression
+
+3. Direct Catkin-package-style Release build, experimental ON
+
+  DOG_PRIOR_ENABLE_FASTLIO2_EXP=ON
+  pinned FASTLIO2_REF_ROOT used
+  configure/build PASS
+  ctest PASS: 5/5 tests, 0 failed
+
+  ikfom_pose_api_spike
+  fastlio2_propagation_contract_test
+  scan_end_deskew_runtime_test
+  frontend_runtime_end_to_end_test
+  ndt_pose_update_runtime_test
+
+4. Direct Catkin-package-style Release build, default OFF
+
+  DOG_PRIOR_ENABLE_FASTLIO2_EXP=OFF
+  configure/build PASS
+
+5. Direct regression output
+
+  P6_A1_R1_FIXED_LAG_REGRESSION_PASS
+  clean_H_error=1.24609e-10 clean_g_error=7.85276e-13
+  noisy_H_error=1.24609e-10 noisy_g_error=7.85276e-13
+  max_active_ids=5 prior_gradient_error=0
+  jitter=1e-07 jitter_H_delta=1.71782e-07
+  jitter_g_delta=1.07995e-08
+
+  NDT_POSE_UPDATE_RUNTIME_CONTRACT_PASS
+
+6. Hygiene
+
+  git diff --check PASS
+  No rosbag, Floor01, Corridor01, GT tuning, or formal FULL run was executed.

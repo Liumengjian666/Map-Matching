@@ -1,0 +1,10 @@
+PAPER-P6-ALG-INTEGRATION-A1-R1
+
+BRANCH=research/p6-i6d-full-algorithm
+BEFORE_SHA=949cea3e4b72080bbf7e50a3db218e65381363d4
+CODE_SHA=d9d0283863c8918a7d40da20c0eee8c17cbceae5
+DOCUMENTATION_PARENT_SHA=d9d0283863c8918a7d40da20c0eee8c17cbceae5
+
+The final documentation commit is the END_SHA reported by the executor after
+commit creation. A Git commit cannot contain its own SHA without changing that
+SHA, so END_SHA is intentionally not self-referential in this tracked file.
