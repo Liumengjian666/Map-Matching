@@ -174,7 +174,8 @@ def pnp(points, pixels, k, seed):
         flags=cv2.SOLVEPNP_EPNP,
     )
     if not ok or inliers is None or len(inliers) < 20:
-        return None, 0 if inliers is None else len(inliers), float("nan")
+        return (None, 0 if inliers is None else len(inliers), float("nan"),
+                np.empty(0, dtype=np.int64))
     take = inliers.ravel()
     rvec, tvec = cv2.solvePnPRefineLM(points[take], pixels[take], k, None, rvec, tvec)
     transform = np.eye(4)
@@ -184,8 +185,22 @@ def pnp(points, pixels, k, seed):
     rmse = float(np.sqrt(np.mean(np.sum((projected - pixels[take]) ** 2, axis=1))))
     positive = (points[take] @ transform[:3, :3].T + transform[:3, 3])[:, 2] > 0
     if not np.isfinite(transform).all() or not np.all(positive):
-        return None, len(take), rmse
-    return transform, len(take), rmse
+        return None, len(take), rmse, take
+    return transform, len(take), rmse, take
+
+
+def feature_distribution(pixels, image_size):
+    """Return dimensionless grid occupancy and convex-hull coverage."""
+    width, height = image_size
+    pixels = np.asarray(pixels, dtype=np.float64).reshape(-1, 2)
+    if len(pixels) < 3 or width <= 0 or height <= 0:
+        return float("nan"), float("nan")
+    grid_x = np.clip((pixels[:, 0] * 4 / width).astype(int), 0, 3)
+    grid_y = np.clip((pixels[:, 1] * 3 / height).astype(int), 0, 2)
+    occupancy = len(np.unique(grid_y * 4 + grid_x)) / 12.0
+    hull = cv2.convexHull(pixels.astype(np.float32))
+    hull_fraction = float(cv2.contourArea(hull) / (width * height))
+    return float(occupancy), hull_fraction
 
 
 def estimate(ref, cur, cloud, calibration, seed):
@@ -193,6 +208,7 @@ def estimate(ref, cur, cloud, calibration, seed):
     row = {
         "status": "NO_FEATURES",
         "detected": 0,
+        "tracked_count": 0,
         "klt_valid": 0,
         "klt_forward_valid": 0,
         "fb_valid": 0,
@@ -200,6 +216,10 @@ def estimate(ref, cur, cloud, calibration, seed):
         "pnp_correspondences": 0,
         "pnp_inliers": 0,
         "inlier_ratio": 0.0,
+        "depth_fraction": float("nan"),
+        "grid_occupancy": float("nan"),
+        "hull_fraction": float("nan"),
+        "median_parallax_px": float("nan"),
         "reprojection_rmse_px": float("nan"),
         "feature_ms": 0.0,
         "klt_ms": 0.0,
@@ -239,6 +259,7 @@ def estimate(ref, cur, cloud, calibration, seed):
     a, b = a[valid], b[valid]
     row["klt_valid"] = len(a)
     row["fb_valid"] = len(a)
+    row["tracked_count"] = len(a)
     row["klt_ms"] = (time.perf_counter() - tick) * 1000
     tick = time.perf_counter()
     good, points, row["projection_ms"], row["association_ms"] = associate_depth(
@@ -247,11 +268,21 @@ def estimate(ref, cur, cloud, calibration, seed):
     pixels = b[good].astype(float)
     row["depth_ms"] = (time.perf_counter() - tick) * 1000
     row["depth_associated"] = row["pnp_correspondences"] = len(points)
+    row["depth_fraction"] = len(points) / max(1, len(a))
     row["status"] = "INSUFFICIENT_CORRESPONDENCES"
     if len(points) < 30:
         return row, None
     tick = time.perf_counter()
-    transform, count, rmse = pnp(points, pixels, calibration["Krect"], seed)
+    transform, count, rmse, inlier_indices = pnp(
+        points, pixels, calibration["Krect"], seed)
+    inlier_pixels = pixels[inlier_indices] if len(inlier_indices) else np.empty((0, 2))
+    grid_occupancy, hull_fraction = feature_distribution(
+        inlier_pixels, calibration["size"])
+    row["grid_occupancy"] = grid_occupancy
+    row["hull_fraction"] = hull_fraction
+    if len(inlier_indices):
+        row["median_parallax_px"] = float(np.median(
+            np.linalg.norm(b[good][inlier_indices] - a[good][inlier_indices], axis=1)))
     row.update(
         pnp_inliers=count,
         inlier_ratio=count / len(points),
@@ -271,7 +302,7 @@ def sanity(calibration):
     pixels = cv2.projectPoints(
         points, cv2.Rodrigues(true[:3, :3])[0], true[:3, 3], calibration["Krect"], None
     )[0].reshape(-1, 2)
-    measured, count, rmse = pnp(points, pixels, calibration["Krect"], 1)
+    measured, count, rmse, _ = pnp(points, pixels, calibration["Krect"], 1)
     assert measured is not None and np.max(abs(measured - true)) < 1e-5 and count == 100
     t_ic = calibration["T_imu_camera"]
     imu_increment = t_ic @ np.linalg.inv(measured) @ np.linalg.inv(t_ic)

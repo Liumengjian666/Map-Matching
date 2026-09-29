@@ -15,6 +15,7 @@
 #include <Eigen/Core>
 #include <Eigen/Eigenvalues>
 #include <Eigen/Geometry>
+#include <Eigen/QR>
 #include <dcreg.hpp>
 
 #include <algorithm>
@@ -108,8 +109,17 @@ struct VisualMeasurement {
   uint64_t transaction_cur = 0;
   Eigen::Vector3d translation = Eigen::Vector3d::Zero();
   int inliers = 0;
+  int detected_count = 0;
+  int tracked_count = 0;
+  int depth_associated_count = 0;
   double ratio = 0.0;
+  double depth_fraction = std::numeric_limits<double>::quiet_NaN();
+  double grid_occupancy = std::numeric_limits<double>::quiet_NaN();
+  double hull_fraction = std::numeric_limits<double>::quiet_NaN();
+  double median_parallax_px = std::numeric_limits<double>::quiet_NaN();
   double reprojection = 0.0;
+  bool source_valid = false;
+  bool quality_metadata_available = false;
 };
 
 struct ImageTimeEvent {
@@ -269,6 +279,9 @@ std::vector<VisualMeasurement> readI6dVisual(const std::string& path) {
       throw std::runtime_error("missing_i6d_visual_field:" + key);
     return fields[found->second];
   };
+  const auto has_column = [&columns](const std::string& name) {
+    return columns.find(name) != columns.end();
+  };
   std::vector<VisualMeasurement> visual;
   std::uint64_t previous_current = 0;
   while (std::getline(input, line)) {
@@ -286,7 +299,23 @@ std::vector<VisualMeasurement> readI6dVisual(const std::string& path) {
     measurement.inliers = std::stoi(get(fields, "inliers"));
     measurement.ratio = std::stod(get(fields, "inlier_ratio"));
     measurement.reprojection = std::stod(get(fields, "reprojection_rmse_px"));
-    if (get(fields, "status") != "VALID_CAUSAL_LIDAR_DEPTH" ||
+    measurement.source_valid = get(fields, "status") == "VALID_CAUSAL_LIDAR_DEPTH";
+    const bool has_quality_metadata =
+        has_column("detected") && has_column("tracked") &&
+        has_column("depth_associated") && has_column("depth_fraction") &&
+        has_column("grid_occupancy") && has_column("hull_fraction") &&
+        has_column("median_parallax_px");
+    if (has_quality_metadata) {
+      measurement.detected_count = std::stoi(get(fields, "detected"));
+      measurement.tracked_count = std::stoi(get(fields, "tracked"));
+      measurement.depth_associated_count = std::stoi(get(fields, "depth_associated"));
+      measurement.depth_fraction = std::stod(get(fields, "depth_fraction"));
+      measurement.grid_occupancy = std::stod(get(fields, "grid_occupancy"));
+      measurement.hull_fraction = std::stod(get(fields, "hull_fraction"));
+      measurement.median_parallax_px = std::stod(get(fields, "median_parallax_px"));
+      measurement.quality_metadata_available = true;
+    }
+    if (!measurement.source_valid ||
         measurement.transaction_cur != measurement.transaction_ref + 1 ||
         measurement.transaction_cur <= previous_current ||
         measurement.depth_stamp_ns == 0 ||
@@ -294,7 +323,7 @@ std::vector<VisualMeasurement> readI6dVisual(const std::string& path) {
         measurement.ref_ns - measurement.depth_stamp_ns > 20000000ULL ||
         measurement.ref_ns == 0 || measurement.cur_ns <= measurement.ref_ns ||
         measurement.cur_ns - measurement.ref_ns > 250000000ULL ||
-        !measurement.translation.allFinite() || measurement.inliers < 6 ||
+        !measurement.translation.allFinite() || measurement.inliers < 0 ||
         !std::isfinite(measurement.ratio) || measurement.ratio <= 0.0 ||
         !std::isfinite(measurement.reprojection) || measurement.reprojection <= 0.0)
       throw std::runtime_error("invalid_or_noncausal_i6d_visual_pair");
@@ -658,6 +687,129 @@ Eigen::Matrix3d conservativeVisualInnovationNoise(
   result = 0.5 * (result + result.transpose());
   result.diagonal().array() += 1e-9;
   return result;
+}
+
+Eigen::Matrix3d skewMatrix(const Eigen::Vector3d& vector) {
+  Eigen::Matrix3d result;
+  result << 0.0, -vector.z(), vector.y(),
+            vector.z(), 0.0, -vector.x(),
+            -vector.y(), vector.x(), 0.0;
+  return result;
+}
+
+reliability::LocalRisk riskWithNonlocalResponse(
+    const reliability::LocalRisk& local,
+    const reliability::NonlocalTerminalStability& nonlocal,
+    bool nonlocal_risk, const Eigen::Vector3d& map_imu_origin_minus_lidar,
+    const reliability::DualReliabilityConfig&) {
+  reliability::LocalRisk result = local;
+  if (!result.valid || !nonlocal_risk || !nonlocal.response_valid ||
+      !map_imu_origin_minus_lidar.allFinite() ||
+      !std::isfinite(result.translation_length_scale_m) ||
+      result.translation_length_scale_m <= 0.0)
+    return result;
+  Eigen::MatrixXd columns(6, 6);
+  columns.setZero();
+  int count = 0;
+  for (int i = 0; i < result.weak_dimension; ++i)
+    columns.col(count++) = result.joint_weak_basis.col(i);
+  const Eigen::Matrix3d lever_skew = skewMatrix(map_imu_origin_minus_lidar);
+  const auto append_response = [&](const Eigen::Vector3d& delta_p_imu,
+                                   const Eigen::Vector3d& delta_phi,
+                                   Eigen::MatrixXd* vectors, int* size) {
+    if (*size >= 6 || !delta_p_imu.allFinite() || !delta_phi.allFinite()) return;
+    Eigen::Matrix<double, 6, 1> direction;
+    direction.head<3>() = delta_phi;
+    // Convert IMU-origin displacement back to the LiDAR-origin chart before
+    // normalizing translation. This retains the lever-arm coupling.
+    direction.tail<3>() = (delta_p_imu + lever_skew * delta_phi) /
+                          result.translation_length_scale_m;
+    for (int i = 0; i < *size; ++i)
+      direction -= vectors->col(i).dot(direction) * vectors->col(i);
+    const double norm = direction.norm();
+    if (std::isfinite(norm) && norm > 1e-8)
+      vectors->col((*size)++) = direction / norm;
+  };
+  append_response(nonlocal.delta_position_imu_positive,
+                  nonlocal.delta_rotation_positive, &columns, &count);
+  append_response(nonlocal.delta_position_imu_negative,
+                  nonlocal.delta_rotation_negative, &columns, &count);
+  result.joint_weak_basis.setZero();
+  result.joint_reliable_basis.setZero();
+  if (count == 0) return result;
+  Eigen::HouseholderQR<Eigen::MatrixXd> qr(columns.leftCols(count));
+  const Eigen::Matrix<double, 6, 6> orthogonal =
+      qr.householderQ() * Eigen::Matrix<double, 6, 6>::Identity();
+  result.weak_dimension = count;
+  result.reliable_dimension = 6 - count;
+  result.joint_weak_basis.leftCols(count) = orthogonal.leftCols(count);
+  if (result.reliable_dimension > 0)
+    result.joint_reliable_basis.leftCols(result.reliable_dimension) =
+        orthogonal.rightCols(result.reliable_dimension);
+  result.translation_weak = true;
+  result.status += ";UNONLOCAL_RESPONSE_DIRECTIONS_INCLUDED";
+  return result;
+}
+
+bool makeReliablePoseMeasurementBasis(
+    const reliability::LocalRisk& risk, const Pose3d& map_T_imu,
+    const Pose3d& T_imu_lidar, Eigen::Matrix<double, 6, 6>* basis,
+    int* rank) {
+  if (!basis || !rank || !risk.valid || !map_T_imu.position.allFinite() ||
+      !map_T_imu.orientation.coeffs().allFinite() ||
+      !T_imu_lidar.position.allFinite() ||
+      !T_imu_lidar.orientation.coeffs().allFinite() ||
+      !std::isfinite(risk.translation_length_scale_m) ||
+      risk.translation_length_scale_m <= 0.0)
+    return false;
+  *rank = risk.reliable_dimension;
+  basis->setZero();
+  if (*rank <= 0 || *rank > 6) return *rank == 0;
+  const Eigen::Vector3d map_imu_origin_minus_lidar =
+      -(map_T_imu.orientation * T_imu_lidar.position);
+  Eigen::Matrix<double, 6, 6> measurement_from_lidar_tangent =
+      Eigen::Matrix<double, 6, 6>::Zero();
+  measurement_from_lidar_tangent.block<3, 3>(0, 0) =
+      -skewMatrix(map_imu_origin_minus_lidar);
+  measurement_from_lidar_tangent.block<3, 3>(0, 3) =
+      risk.translation_length_scale_m * Eigen::Matrix3d::Identity();
+  measurement_from_lidar_tangent.block<3, 3>(3, 0) =
+      map_T_imu.orientation.toRotationMatrix().transpose();
+  const Eigen::MatrixXd mapped = measurement_from_lidar_tangent *
+      risk.joint_reliable_basis.leftCols(*rank);
+  Eigen::ColPivHouseholderQR<Eigen::MatrixXd> qr(mapped);
+  qr.setThreshold(1e-9);
+  if (qr.rank() != *rank) return false;
+  *basis = qr.householderQ() * Eigen::Matrix<double, 6, 6>::Identity();
+  return basis->leftCols(*rank).allFinite() &&
+      (basis->leftCols(*rank).transpose() * basis->leftCols(*rank) -
+       Eigen::MatrixXd::Identity(*rank, *rank)).norm() <= 1e-8;
+}
+
+double maximumPositionSigma(const FilterSnapshot& snapshot) {
+  if (!snapshot.covariance.allFinite())
+    return std::numeric_limits<double>::infinity();
+  const int position_index = MTK::getStartIdx(&state_ikfom::pos);
+  const Eigen::Matrix3d p = 0.5 * (snapshot.covariance.block<3, 3>(
+      position_index, position_index) + snapshot.covariance.block<3, 3>(
+      position_index, position_index).transpose());
+  Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> p_solver(p);
+  if (p_solver.info() != Eigen::Success || !p_solver.eigenvalues().allFinite())
+    return std::numeric_limits<double>::infinity();
+  return std::sqrt(std::max(0.0, p_solver.eigenvalues().maxCoeff()));
+}
+
+double maximumRotationSigma(const FilterSnapshot& snapshot) {
+  if (!snapshot.covariance.allFinite())
+    return std::numeric_limits<double>::infinity();
+  const int rotation_index = MTK::getStartIdx(&state_ikfom::rot);
+  const Eigen::Matrix3d r = 0.5 * (snapshot.covariance.block<3, 3>(
+      rotation_index, rotation_index) + snapshot.covariance.block<3, 3>(
+      rotation_index, rotation_index).transpose());
+  Eigen::SelfAdjointEigenSolver<Eigen::Matrix3d> r_solver(r);
+  if (r_solver.info() != Eigen::Success || !r_solver.eigenvalues().allFinite())
+    return std::numeric_limits<double>::infinity();
+  return std::sqrt(std::max(0.0, r_solver.eigenvalues().maxCoeff()));
 }
 
 void predictFrontendTo(FastLio2IkfomFrontend& frontend,
@@ -1079,7 +1231,10 @@ void runDualReliabilityMode(
       << "mode,transaction_id,stamp_ns,time_s,source_cloud_hash_verified,uobs_valid,uobs_status"
          ",legacy_pcl_score_gradient_gate_passed,legacy_pcl_gate_samples_passed"
          ",uobs_effective_weight_sum,uobs_valid_correspondences,uobs_rejected_voxel_covariances"
-         ",uobs_normalized_information_rowmajor"
+         ",uobs_normalized_information_rowmajor,uobs_map_support_sufficient"
+         ",uobs_map_support_status,uobs_rotation_schur_eigenvalues"
+         ",uobs_translation_schur_eigenvalues,uobs_joint_weak_basis_rowmajor"
+         ",uobs_joint_reliable_basis_rowmajor"
          ",visual_valid_factor_count,visual_updates_total,visual_nonzero_updates"
          ",visual_last_update_status,visual_trigger_reason"
          ",translation_weak,translation_weak_ratio,translation_min_eigenvalue"
@@ -1102,7 +1257,13 @@ void runDualReliabilityMode(
          ",step_limited,decision,decision_reason,local_curvature_used"
          ",nonlocal_response_used,vision_assist_status,vision_observation_available"
          ",vision_assist_trigger_requested,vision_assist_trigger_reason"
-         ",local_curvature_ms,gradient_gate_ms,extra_probe_ms\n";
+         ",fusion_mode,fusion_reason,lidar_reliable_dimension,lidar_weak_dimension"
+         ",visual_trigger_count,visual_observations_available,visual_quality_pass_count"
+         ",visual_weak_information_count,visual_applied_count,visual_rejected_count"
+         ",visual_rejection_reason,imu_coasting_s,relocalization_required,recovery_stamp_ns"
+         ",local_curvature_ms,gradient_gate_ms,extra_probe_ms"
+         ",maximum_position_sigma_m,maximum_rotation_sigma_rad"
+         ",lidar_update_applied,lidar_update_projected\n";
   runtime << std::setprecision(17)
       << "mode,transaction_id,prediction_ms,nominal_ndt_ms,local_curvature_ms"
          ",gradient_gate_ms,extra_probe_ms,ikfom_update_ms,total_ms"
@@ -1112,10 +1273,17 @@ void runDualReliabilityMode(
   if (enable_vision) {
     visual_updates << std::setprecision(17)
         << "transaction_ref,transaction_cur,ref_ns,cur_ns,depth_stamp_ns,status"
+        << ",triggered,observation_available,quality_passed,quality_rejection_reason"
+        << ",detected,tracked,depth_associated,depth_fraction,grid_occupancy,hull_fraction"
+        << ",median_parallax_px,pnp_inliers,inlier_ratio,reprojection_rmse_px"
+        << ",innovation_chi_square,visual_information_rowmajor"
+        << ",projected_weak_information_rowmajor,projected_eigenvalues"
+        << ",visual_effective_rank,visual_measurement_rank,visual_condition"
+        << ",visual_subspace_status"
         << ",trigger_reason,measurement_map_xyz,innovation_map_xyz,innovation_norm_m"
         << ",position_correction_norm_m,velocity_correction_norm_m"
         << ",anchor_projected_covariance_rowmajor,current_position_covariance_rowmajor"
-        << ",effective_noise_rowmajor,update_ms,pnp_inliers,inlier_ratio,reprojection_rmse_px\n";
+        << ",effective_noise_rowmajor,update_ms\n";
   }
 
   Eigen::Matrix4d previous_used = Eigen::Matrix4d::Identity();
@@ -1145,7 +1313,7 @@ void runDualReliabilityMode(
   vision_assist.fusion_enabled = enable_vision;
   vision_assist.observation_available = enable_vision &&
       !active_visual_measurements.empty();
-  vision_assist.status = enable_vision ? "METRIC_CAUSAL_LIDAR_DEPTH_POSITION_UPDATE" :
+  vision_assist.status = enable_vision ? "I6E_DIRECTIONAL_CONDITIONAL_VISION" :
                                          "DISABLED_BY_MODE";
   std::vector<ImageTimeEvent> image_events;
   if (enable_vision) {
@@ -1169,10 +1337,27 @@ void runDualReliabilityMode(
   std::size_t image_event_index = 0;
   std::uint64_t visual_updates_total = 0;
   std::uint64_t visual_nonzero_updates = 0;
+  std::uint64_t visual_trigger_count = 0;
+  std::uint64_t visual_observations_available = 0;
+  std::uint64_t visual_quality_pass_count = 0;
+  std::uint64_t visual_weak_information_count = 0;
+  std::uint64_t visual_rejected_total = 0;
+  std::map<std::string, std::uint64_t> visual_rejection_counts;
   std::string visual_last_update_status = enable_vision ? "NO_TRIGGERED_UPDATE" :
                                                          "DISABLED_BY_MODE";
   bool vision_trigger_requested = false;
   std::string vision_trigger_reason = "WAITING_FOR_FIRST_RELIABILITY_EVENT";
+  reliability::LocalRisk last_visual_lidar_risk;
+  last_visual_lidar_risk.status = "NO_PREVIOUS_LIDAR_OBSERVABILITY";
+  bool last_visual_quality_passed = false;
+  bool last_visual_complementary = false;
+  bool last_visual_applied = false;
+  int last_visual_complementary_rank = 0;
+  std::uint64_t last_visual_observation_stamp_ns = 0;
+  std::string last_visual_rejection_reason = "NO_VISUAL_EVENT";
+  std::uint64_t coast_start_ns = 0;
+  std::uint64_t recovery_stamp_ns = 0;
+  bool relocalization_latched = false;
   auto processImageEvent = [&](const ImageTimeEvent& event) {
     const VisualMeasurement& measurement =
         active_visual_measurements[event.measurement_index];
@@ -1199,44 +1384,132 @@ void runDualReliabilityMode(
         positionMarginalCovariance(event_state);
     if (!anchor_covariance.allFinite() || !current_covariance.allFinite())
       throw std::runtime_error("nonfinite_visual_history_covariance");
-    if (!vision_trigger_requested) {
-      visual_last_update_status = "SKIPPED_TRIGGER_NOT_REQUESTED";
-      visual_updates << measurement.transaction_ref << ','
-          << measurement.transaction_cur << ',' << measurement.ref_ns << ','
-          << measurement.cur_ns << ',' << measurement.depth_stamp_ns
-          << ",SKIPPED_TRIGGER_NOT_REQUESTED," << vision_trigger_reason << ','
-          << vectorField(target_position) << ',' << vectorField(innovation) << ','
-          << innovation.norm() << ",0,0," << matrixField(anchor_covariance) << ','
-          << matrixField(current_covariance) << ",NA,0," << measurement.inliers
-          << ',' << measurement.ratio << ',' << measurement.reprojection << '\n';
-      return;
-    }
     const Eigen::Matrix3d noise = conservativeVisualInnovationNoise(
         anchor, event_state, measurement.translation, visual_sigma_m);
     if (!noise.allFinite())
       throw std::runtime_error("nonfinite_conservative_visual_noise");
+    Eigen::Matrix3d sensor_covariance = visual_sigma_m * visual_sigma_m *
+        Eigen::Matrix3d::Identity();
+    const Eigen::Matrix3d innovation_covariance = current_covariance + noise;
+    Eigen::LLT<Eigen::Matrix3d> innovation_factor(
+        0.5 * (innovation_covariance + innovation_covariance.transpose()));
+    double innovation_chi_square = std::numeric_limits<double>::infinity();
+    if (innovation_factor.info() == Eigen::Success &&
+        innovation_factor.matrixL().toDenseMatrix().diagonal().minCoeff() > 0.0)
+      innovation_chi_square = innovation.dot(innovation_factor.solve(innovation));
+
+    reliability::VisualQualityObservation quality_observation;
+    quality_observation.source_valid = measurement.source_valid;
+    quality_observation.quality_metadata_available =
+        measurement.quality_metadata_available;
+    quality_observation.reference_stamp_ns = measurement.ref_ns;
+    quality_observation.current_stamp_ns = measurement.cur_ns;
+    quality_observation.depth_stamp_ns = measurement.depth_stamp_ns;
+    quality_observation.detected_count = measurement.detected_count;
+    quality_observation.tracked_count = measurement.tracked_count;
+    quality_observation.depth_associated_count =
+        measurement.depth_associated_count;
+    quality_observation.pnp_inlier_count = measurement.inliers;
+    quality_observation.inlier_ratio = measurement.ratio;
+    quality_observation.depth_fraction = measurement.depth_fraction;
+    quality_observation.grid_occupancy = measurement.grid_occupancy;
+    quality_observation.hull_fraction = measurement.hull_fraction;
+    quality_observation.median_parallax_px = measurement.median_parallax_px;
+    quality_observation.reprojection_rmse_px = measurement.reprojection;
+    quality_observation.innovation_chi_square = innovation_chi_square;
+    const reliability::VisualQualityDecision quality =
+        reliability::assessVisualQuality(quality_observation, reliability_config);
+    const Eigen::Vector3d map_imu_origin_minus_lidar =
+        -(event_state.map_T_imu.orientation * T_imu_lidar_pose.position);
+    reliability::VisualSubspaceDecision visual_subspace;
+    if (last_visual_lidar_risk.valid &&
+        last_visual_lidar_risk.map_support_sufficient) {
+      visual_subspace = reliability::assessVisualWeakSubspaceInformation(
+          last_visual_lidar_risk, map_imu_origin_minus_lidar,
+          sensor_covariance, reliability_config);
+    } else {
+      visual_subspace.status = last_visual_lidar_risk.valid
+          ? "LIDAR_MAP_SUPPORT_INSUFFICIENT"
+          : "LIDAR_WEAK_SUBSPACE_UNAVAILABLE";
+    }
+    if (vision_trigger_requested) ++visual_trigger_count;
+    if (measurement.source_valid) ++visual_observations_available;
+    if (quality.passed) ++visual_quality_pass_count;
+    if (quality.passed && visual_subspace.valid && visual_subspace.complementary)
+      ++visual_weak_information_count;
+    last_visual_quality_passed = quality.passed;
+    last_visual_complementary = visual_subspace.complementary;
+    last_visual_applied = false;
+    last_visual_complementary_rank = visual_subspace.measurement_rank;
+    last_visual_observation_stamp_ns = measurement.cur_ns;
+    last_visual_rejection_reason = quality.passed
+        ? (visual_subspace.complementary ? "NONE" : visual_subspace.status)
+        : quality.rejection_reason;
+
+    std::string status = "NOT_TRIGGERED";
+    std::string rejection = "NOT_TRIGGERED";
     PoseCorrectionDelta delta;
-    std::string failure;
-    const auto update_start = std::chrono::steady_clock::now();
-    if (!frontend.applyPositionMeasurement(target_position, noise, &delta, &failure))
-      throw std::runtime_error("causal_visual_position_update_failed:" + failure);
-    const double update_ms = std::chrono::duration<double, std::milli>(
-        std::chrono::steady_clock::now() - update_start).count();
+    double update_ms = 0.0;
+    bool applied = false;
+    if (!vision_trigger_requested) {
+      rejection = "NOT_TRIGGERED";
+    } else if (!quality.passed) {
+      rejection = quality.rejection_reason;
+      status = "REJECTED_" + rejection;
+    } else if (!visual_subspace.valid || !visual_subspace.complementary ||
+               visual_subspace.measurement_rank <= 0) {
+      rejection = visual_subspace.status;
+      status = "REJECTED_NO_COMPLEMENTARY_WEAK_INFORMATION";
+    } else {
+      std::string update_failure;
+      const auto update_start = std::chrono::steady_clock::now();
+      applied = frontend.applyProjectedPositionMeasurement(
+          target_position, noise, visual_subspace.measurement_basis,
+          visual_subspace.measurement_rank, &delta, &update_failure);
+      update_ms = std::chrono::duration<double, std::milli>(
+          std::chrono::steady_clock::now() - update_start).count();
+      if (applied) {
+        status = "APPLIED_PROJECTED_COMPLEMENTARY_TRANSLATION";
+        rejection = "NONE";
+        ++visual_updates_total;
+        if (delta.position.norm() > 1e-12 || delta.velocity.norm() > 1e-12)
+          ++visual_nonzero_updates;
+        last_visual_applied = true;
+      } else {
+        rejection = "UPDATE_FAILED_" + update_failure;
+        status = "REJECTED_UPDATE_FAILURE";
+      }
+    }
+    if (!applied && rejection != "NOT_TRIGGERED") {
+      ++visual_rejection_counts[rejection];
+      ++visual_rejected_total;
+    }
+    visual_last_update_status = status;
     const FilterSnapshot after = frontend.getState();
-    ++visual_updates_total;
-    if (delta.position.norm() > 1e-12 || delta.velocity.norm() > 1e-12)
-      ++visual_nonzero_updates;
-    visual_last_update_status = "APPLIED_CAUSAL_METRIC_POSITION";
     visual_updates << measurement.transaction_ref << ','
         << measurement.transaction_cur << ',' << measurement.ref_ns << ','
-        << measurement.cur_ns << ',' << measurement.depth_stamp_ns
-        << ",APPLIED_CAUSAL_METRIC_POSITION," << vision_trigger_reason << ','
+        << measurement.cur_ns << ',' << measurement.depth_stamp_ns << ','
+        << status << ',' << (vision_trigger_requested ? 1 : 0) << ','
+        << (measurement.source_valid ? 1 : 0) << ',' << (quality.passed ? 1 : 0)
+        << ',' << (quality.passed ? "NONE" : quality.rejection_reason) << ','
+        << measurement.detected_count << ',' << measurement.tracked_count << ','
+        << measurement.depth_associated_count << ',' << measurement.depth_fraction
+        << ',' << measurement.grid_occupancy << ',' << measurement.hull_fraction
+        << ',' << measurement.median_parallax_px << ',' << measurement.inliers
+        << ',' << measurement.ratio << ',' << measurement.reprojection << ','
+        << innovation_chi_square << ','
+        << matrixField(visual_subspace.visual_information) << ','
+        << matrixField(visual_subspace.projected_weak_information) << ','
+        << matrixField(Eigen::MatrixXd(visual_subspace.projected_eigenvalues))
+        << ',' << visual_subspace.effective_rank << ','
+        << visual_subspace.measurement_rank << ','
+        << visual_subspace.effective_condition << ',' << visual_subspace.status << ','
+        << vision_trigger_reason << ','
         << vectorField(target_position) << ',' << vectorField(innovation) << ','
         << innovation.norm() << ',' << delta.position.norm() << ','
         << delta.velocity.norm() << ',' << matrixField(anchor_covariance) << ','
         << matrixField(current_covariance) << ',' << matrixField(noise) << ','
-        << update_ms << ',' << measurement.inliers << ',' << measurement.ratio
-        << ',' << measurement.reprojection << '\n';
+        << update_ms << '\n';
     if (!frontend.postconditionsValid(&failure) || after.stamp_ns != event.stamp_ns)
       throw std::runtime_error("causal_visual_update_postcondition_failed:" + failure);
   };
@@ -1403,13 +1676,106 @@ void runDualReliabilityMode(
           use_uobs, use_unonlocal, reliability_config);
     }
 
+    const bool nonlocal_translation_risk = terminal_stability.response_valid &&
+        std::max(terminal_stability.delta_position_imu_positive.norm(),
+                 terminal_stability.delta_position_imu_negative.norm()) >
+            reliability_config.terminal_translation_limit_m;
+    const bool nonlocal_rotation_risk = terminal_stability.response_valid &&
+        std::max(terminal_stability.delta_rotation_positive.norm(),
+                 terminal_stability.delta_rotation_negative.norm()) >
+            reliability_config.terminal_rotation_limit_rad;
+    const Eigen::Vector3d map_imu_origin_minus_lidar =
+        -(predicted.map_T_imu.orientation * T_imu_lidar_pose.position);
+    reliability::LocalRisk routed_lidar_risk = riskWithNonlocalResponse(
+        local_risk, terminal_stability,
+        decision.nonlocal_risk || nonlocal_translation_risk || nonlocal_rotation_risk,
+        map_imu_origin_minus_lidar, reliability_config);
+    reliability::ConditionalRouteDecision conditional_route;
+    conditional_route.mode = reliability::ConditionalFusionMode::NORMAL_LIDAR;
+    conditional_route.apply_lidar_measurement = nominal.converged;
+    conditional_route.preserve_lidar_reliable_subspace = nominal.converged;
+    double imu_coasting_duration_s = 0.0;
+    const double nan = std::numeric_limits<double>::quiet_NaN();
+    double maximum_position_sigma_m = nan;
+    double maximum_rotation_sigma_rad = nan;
+    if (enable_vision) {
+      reliability::ConditionalRouteInput route_input;
+      route_input.lidar_converged = nominal.converged;
+      route_input.lidar_registration_unstable = !nominal.converged ||
+          decision.nonlocal_risk || nonlocal_translation_risk ||
+          nonlocal_rotation_risk || routed_lidar_risk.weak_dimension > 0;
+      route_input.map_support_sufficient = routed_lidar_risk.valid &&
+          routed_lidar_risk.map_support_sufficient;
+      route_input.lidar_weak_dimension = routed_lidar_risk.weak_dimension;
+      route_input.lidar_reliable_dimension = routed_lidar_risk.reliable_dimension;
+      const std::uint64_t visual_age_ns = asset.stamp_ns >=
+          last_visual_observation_stamp_ns
+          ? asset.stamp_ns - last_visual_observation_stamp_ns
+          : std::numeric_limits<std::uint64_t>::max();
+      const bool recent_visual = last_visual_observation_stamp_ns != 0 &&
+          visual_age_ns <= static_cast<std::uint64_t>(
+              reliability_config.maximum_visual_pair_gap_s * 1e9);
+      route_input.vision_trigger_requested = vision_trigger_requested;
+      route_input.vision_observation_available = recent_visual;
+      route_input.vision_quality_passed = recent_visual &&
+          last_visual_quality_passed && last_visual_applied;
+      route_input.vision_complementary = recent_visual &&
+          last_visual_complementary && last_visual_applied;
+      route_input.vision_complementary_rank = route_input.vision_complementary
+          ? last_visual_complementary_rank : 0;
+      route_input.time_without_external_constraint_s = coast_start_ns == 0
+          ? 0.0 : static_cast<double>(asset.stamp_ns - coast_start_ns) * 1e-9;
+      imu_coasting_duration_s = route_input.time_without_external_constraint_s;
+      maximum_position_sigma_m = maximumPositionSigma(predicted);
+      maximum_rotation_sigma_rad = maximumRotationSigma(predicted);
+      route_input.maximum_position_sigma_m = maximum_position_sigma_m;
+      route_input.maximum_rotation_sigma_rad = maximum_rotation_sigma_rad;
+      conditional_route = reliability::routeConditionalCompensation(
+          route_input, reliability_config);
+      if (relocalization_latched && !conditional_route.imu_coasting) {
+        relocalization_latched = false;
+        recovery_stamp_ns = asset.stamp_ns;
+      }
+      if (conditional_route.relocalization_required)
+        relocalization_latched = true;
+      if (relocalization_latched && conditional_route.imu_coasting) {
+        conditional_route.mode = reliability::ConditionalFusionMode::RELOCALIZATION_REQUIRED;
+        conditional_route.relocalization_required = true;
+        conditional_route.reason += ";RELOCALIZATION_LATCHED";
+      }
+      if (conditional_route.imu_coasting) {
+        if (coast_start_ns == 0) coast_start_ns = asset.stamp_ns;
+      } else if (coast_start_ns != 0) {
+        recovery_stamp_ns = asset.stamp_ns;
+        coast_start_ns = 0;
+      }
+      last_visual_lidar_risk = routed_lidar_risk;
+      vision_assist.observation_available = recent_visual;
+    }
+
     double update_ms = 0.0;
     bool step_limited = false;
-    if (decision.action != reliability::UpdateAction::PREDICTION_ONLY) {
-      const Eigen::Matrix4d used_pose = limitStep(
-          nominal.pose, previous_used, has_previous_used, &step_limited);
-      previous_used = used_pose;
-      has_previous_used = true;
+    bool lidar_update_applied = false;
+    bool lidar_update_projected = false;
+    const bool allow_lidar_update = enable_vision
+        ? conditional_route.apply_lidar_measurement
+        : decision.action != reliability::UpdateAction::PREDICTION_ONLY;
+    if (allow_lidar_update) {
+      const bool projected_lidar_route = enable_vision &&
+          routed_lidar_risk.weak_dimension > 0;
+      // The legacy limiter scales the full translation/rotation increment.
+      // Applying it before row-space projection lets discarded weak-axis
+      // components alter the scale of reliable-axis measurements. Keep the
+      // complete NDT terminal for a directional update and let its projected
+      // EKF covariance control the accepted correction instead.
+      const Eigen::Matrix4d used_pose = projected_lidar_route
+          ? nominal.pose
+          : limitStep(nominal.pose, previous_used, has_previous_used,
+                      &step_limited);
+      if (!projected_lidar_route) {
+        previous_used = used_pose;
+        has_previous_used = true;
+      }
       const Pose3d used_lidar_pose = poseFromMatrix(used_pose);
       const Pose3d used_imu_measurement = p4_i2::lidarMeasurementToImu(
           used_lidar_pose, T_imu_lidar_pose);
@@ -1418,11 +1784,47 @@ void runDualReliabilityMode(
         if (!frontend.applyPoseMeasurement(used_imu_measurement, nullptr, &failure))
           throw std::runtime_error("strict_baseline_pose_update_failed_tx_" +
               std::to_string(asset.transaction_id) + ":" + failure);
+        lidar_update_applied = true;
+      } else if (enable_vision && routed_lidar_risk.weak_dimension > 0) {
+        Eigen::Matrix<double, 6, 6> reliable_basis;
+        int reliable_rank = 0;
+        const Pose3d nominal_imu_measurement = p4_i2::lidarMeasurementToImu(
+            poseFromMatrix(nominal.pose), T_imu_lidar_pose);
+        if (!makeReliablePoseMeasurementBasis(routed_lidar_risk,
+                nominal_imu_measurement, T_imu_lidar_pose,
+                &reliable_basis, &reliable_rank) || reliable_rank <= 0) {
+          update_ms = 0.0;
+          conditional_route.apply_lidar_measurement = false;
+          conditional_route.imu_coasting = true;
+          conditional_route.mode = reliability::ConditionalFusionMode::
+              LIDAR_DEGRADED_VISION_INVALID;
+          conditional_route.reason += ";RELIABLE_SUBSPACE_BASIS_INVALID";
+          // The NDT terminal was not committed, so keep the step limiter
+          // anchored to the propagated state actually held by the filter.
+          previous_used = predicted_map_T_lidar;
+        } else {
+          Eigen::Matrix<double, 6, 6> base_noise =
+              Eigen::Matrix<double, 6, 6>::Zero();
+          base_noise.block<3, 3>(0, 0) =
+              parameters.pose_position_sigma_m * parameters.pose_position_sigma_m *
+              Eigen::Matrix3d::Identity();
+          base_noise.block<3, 3>(3, 3) =
+              parameters.pose_rotation_sigma_rad * parameters.pose_rotation_sigma_rad *
+              Eigen::Matrix3d::Identity();
+          if (!frontend.applyProjectedPoseMeasurement(used_imu_measurement,
+                  base_noise, reliable_basis, reliable_rank, nullptr, &failure))
+            throw std::runtime_error("directional_lidar_pose_update_failed_tx_" +
+                std::to_string(asset.transaction_id) + ":" + failure);
+          lidar_update_applied = true;
+          lidar_update_projected = true;
+        }
       } else if (!decision.measurement_noise.valid ||
           !frontend.applyPoseMeasurement(used_imu_measurement,
               decision.measurement_noise.covariance, nullptr, &failure)) {
         throw std::runtime_error("adaptive_pose_update_failed_tx_" +
             std::to_string(asset.transaction_id) + ":" + failure);
+      } else {
+        lidar_update_applied = true;
       }
       update_ms = std::chrono::duration<double, std::milli>(
           std::chrono::steady_clock::now() - update_start).count();
@@ -1437,10 +1839,16 @@ void runDualReliabilityMode(
     if (corrected.stamp_ns != asset.stamp_ns || !frontend.postconditionsValid(&failure))
       throw std::runtime_error("dual_reliability_filter_postcondition_failed_tx_" +
           std::to_string(asset.transaction_id) + ":" + failure);
+    if (lidar_update_applied && lidar_update_projected) {
+      // Do not let the rejected LiDAR-weak components leak into the next
+      // scan's step-limiter reference. Carry forward the pose actually held
+      // by the filter after the projected correction.
+      previous_used = poseMatrix(corrected.map_T_imu) * T_imu_lidar;
+      has_previous_used = true;
+    }
     p4_i2::writeRow(trajectory, index, saved, predicted.map_T_imu,
                     predicted, corrected, T_imu_lidar_pose);
 
-    const double nan = std::numeric_limits<double>::quiet_NaN();
     Eigen::Matrix3d raw_bp = Eigen::Matrix3d::Constant(nan);
     Eigen::Matrix3d raw_br = Eigen::Matrix3d::Constant(nan);
     if (terminal_stability.response_valid) {
@@ -1453,18 +1861,15 @@ void runDualReliabilityMode(
                       terminal_stability.delta_rotation_negative *
                       terminal_stability.delta_rotation_negative.transpose());
     }
-    const bool nonlocal_translation_risk = terminal_stability.response_valid &&
-        std::max(terminal_stability.delta_position_imu_positive.norm(),
-                 terminal_stability.delta_position_imu_negative.norm()) >
-            reliability_config.terminal_translation_limit_m;
     vision_trigger_requested = enable_vision &&
-        ((local_risk.valid && local_risk.translation_weak) ||
-         nonlocal_translation_risk);
+        routed_lidar_risk.valid && routed_lidar_risk.weak_dimension > 0;
     vision_trigger_reason = !enable_vision ? "DISABLED_BY_MODE" :
-        (local_risk.valid && local_risk.translation_weak
-             ? "UOBS_TRANSLATION_WEAK" :
-             (nonlocal_translation_risk ? "UNONLOCAL_TRANSLATION_RESPONSE" :
-                                          "NO_TRANSLATION_RELIABILITY_RISK"));
+        (local_risk.valid && local_risk.weak_dimension > 0 &&
+         decision.nonlocal_risk ? "UOBS_AND_UNONLOCAL_WEAK_SUBSPACE" :
+         (local_risk.valid && local_risk.weak_dimension > 0
+             ? "UOBS_JOINT_WEAK_SUBSPACE" :
+             (decision.nonlocal_risk ? "UNONLOCAL_TERMINAL_RESPONSE" :
+                                       "NO_WEAK_LIDAR_DIRECTION")));
     vision_assist.trigger_requested = vision_trigger_requested;
     vision_assist.trigger_reason = vision_trigger_reason;
     events << mode << ',' << asset.transaction_id << ',' << asset.stamp_ns << ','
@@ -1479,6 +1884,16 @@ void runDualReliabilityMode(
            << (local_observability.valid
                    ? matrixField(local_observability.normalized_geometric_information)
                    : "NA") << ','
+           << (local_observability.map_support_sufficient ? 1 : 0) << ','
+           << local_observability.map_support_status << ','
+           << (local_observability.schur_decoupling_valid
+                   ? matrixField(Eigen::MatrixXd(
+                         local_observability.rotation_schur_eigenvalues)) : "NA") << ','
+           << (local_observability.schur_decoupling_valid
+                   ? matrixField(Eigen::MatrixXd(
+                         local_observability.translation_schur_eigenvalues)) : "NA") << ','
+           << (local_risk.valid ? matrixField(local_risk.joint_weak_basis) : "NA") << ','
+           << (local_risk.valid ? matrixField(local_risk.joint_reliable_basis) : "NA") << ','
            << (enable_vision ? active_visual_measurements.size() : 0) << ','
            << visual_updates_total << ',' << visual_nonzero_updates << ','
            << visual_last_update_status << ',' << vision_trigger_reason << ','
@@ -1532,8 +1947,20 @@ void runDualReliabilityMode(
            << (vision_assist.observation_available ? 1 : 0) << ','
            << (vision_assist.trigger_requested ? 1 : 0) << ','
            << vision_assist.trigger_reason << ','
+           << reliability::toString(conditional_route.mode) << ','
+           << conditional_route.reason << ','
+           << routed_lidar_risk.reliable_dimension << ','
+           << routed_lidar_risk.weak_dimension << ','
+           << visual_trigger_count << ',' << visual_observations_available << ','
+           << visual_quality_pass_count << ',' << visual_weak_information_count << ','
+           << visual_updates_total << ',' << visual_rejected_total << ','
+           << last_visual_rejection_reason << ',' << imu_coasting_duration_s << ','
+           << (conditional_route.relocalization_required ? 1 : 0) << ','
+           << recovery_stamp_ns << ','
            << local_curvature_ms << ',' << gradient_gate_ms << ','
-           << extra_probe_ms << '\n';
+           << extra_probe_ms << ',' << maximum_position_sigma_m << ','
+           << maximum_rotation_sigma_rad << ',' << (lidar_update_applied ? 1 : 0)
+           << ',' << (lidar_update_projected ? 1 : 0) << '\n';
     const double total_ms = std::chrono::duration<double, std::milli>(
         std::chrono::steady_clock::now() - frame_start).count();
     runtime << mode << ',' << asset.transaction_id << ',' << prediction_ms << ','

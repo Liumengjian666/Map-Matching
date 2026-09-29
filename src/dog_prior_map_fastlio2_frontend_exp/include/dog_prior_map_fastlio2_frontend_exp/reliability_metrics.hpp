@@ -61,6 +61,29 @@ struct LocalObservability {
   double translation_block_condition = std::numeric_limits<double>::infinity();
   Matrix6d normalized_geometric_information = Matrix6d::Constant(
       std::numeric_limits<double>::quiet_NaN());
+  // Full joint spectrum in the normalized physical coordinates
+  // [map-spatial rotation, translation / length_scale]. Keeping the joint
+  // basis is essential: separate 3x3 blocks discard rotation/translation
+  // coupling and can label a coupled null direction as reliable.
+  Eigen::Matrix<double, 6, 1> joint_eigenvalues =
+      Eigen::Matrix<double, 6, 1>::Constant(
+          std::numeric_limits<double>::quiet_NaN());
+  Matrix6d joint_eigenvectors = Matrix6d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+  // Conditional block information after Schur-eliminating the other block.
+  // These are geometric information diagnostics, not covariance matrices.
+  Matrix3d rotation_schur_information = Matrix3d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+  Matrix3d translation_schur_information = Matrix3d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+  Eigen::Vector3d rotation_schur_eigenvalues = Eigen::Vector3d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+  Eigen::Vector3d translation_schur_eigenvalues = Eigen::Vector3d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+  bool schur_decoupling_valid = false;
+  bool map_support_sufficient = false;
+  std::string map_support_status = "NOT_ASSESSED";
+  double translation_length_scale_m = 0.0;
   double effective_weight_sum = 0.0;
   std::uint64_t valid_correspondence_count = 0;
   std::uint64_t rejected_covariance_count = 0;

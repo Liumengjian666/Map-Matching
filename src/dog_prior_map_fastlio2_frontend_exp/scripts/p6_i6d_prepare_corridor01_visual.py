@@ -69,7 +69,14 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=OUTPUT)
     parser.add_argument("--max-pairs", type=int,
                         help="optional bounded smoke; full run is the default")
+    parser.add_argument("--duration-s", type=float,
+                        help="stop at this many sensor-stamp seconds after fixed evaluation start")
     args = parser.parse_args()
+    if args.duration_s is not None and (
+            not np.isfinite(args.duration_s) or args.duration_s <= 0.0):
+        raise ValueError("--duration-s must be finite and positive")
+    duration_end_ns = (EVAL_START_NS + int(args.duration_s * 1e9)
+                       if args.duration_s is not None else None)
 
     for path in (RAW_BAG, DERIVED_BAG, INPUT_MANIFEST,
                  CALIB_DIR / "corridor01_intrinsics.yaml",
@@ -97,7 +104,9 @@ def main() -> int:
     temp_output = args.output.with_suffix(args.output.suffix + ".partial")
     columns = ["transaction_ref", "transaction_cur", "ref_ns", "cur_ns",
                "depth_stamp_ns", "zx", "zy", "zz", "inliers",
-               "inlier_ratio", "reprojection_rmse_px", "status"]
+               "inlier_ratio", "reprojection_rmse_px", "detected", "tracked",
+               "depth_associated", "depth_fraction", "grid_occupancy",
+               "hull_fraction", "median_parallax_px", "status"]
     stats = {"image_messages": 0, "cloud_messages": 0, "pairs": 0,
              "depth_unsynchronized": 0, "pair_gap_rejected": 0,
              "pnp_valid": 0, "pnp_invalid": 0}
@@ -107,6 +116,7 @@ def main() -> int:
     last_cloud_stamp = 0
     latest_cloud_stamp = 0
     pair_index = 0
+    stop_duration = False
 
     def encode_pair(ref_image, cur_image, depth_message, writer):
         ref_stamp, ref_gray = ref_image
@@ -143,7 +153,14 @@ def main() -> int:
         writer.writerow((pair_index, pair_index + 1, ref_stamp, cur_stamp,
                          depth_stamp, *(format(float(v), ".17g") for v in translation),
                          inliers, format(ratio, ".17g"),
-                         format(reprojection, ".17g"), "VALID_CAUSAL_LIDAR_DEPTH"))
+                         format(reprojection, ".17g"),
+                         result["detected"], result["tracked_count"],
+                         result["depth_associated"],
+                         format(float(result["depth_fraction"]), ".17g"),
+                         format(float(result["grid_occupancy"]), ".17g"),
+                         format(float(result["hull_fraction"]), ".17g"),
+                         format(float(result["median_parallax_px"]), ".17g"),
+                         "VALID_CAUSAL_LIDAR_DEPTH"))
         stats["pnp_valid"] += 1
 
     with temp_output.open("w", newline="", encoding="utf-8") as output_stream:
@@ -182,6 +199,9 @@ def main() -> int:
                 while len(image_queue) >= 2 and latest_cloud_stamp >= image_queue[0][0]:
                     ref = image_queue[0]
                     current = image_queue[1]
+                    if duration_end_ns is not None and ref[0] >= duration_end_ns:
+                        stop_duration = True
+                        break
                     pair_index += 1
                     stats["pairs"] += 1
                     eligible_stamps = [entry[0] for entry in cloud_queue
@@ -209,6 +229,8 @@ def main() -> int:
                         cloud_queue.popleft()
                 if args.max_pairs and pair_index >= args.max_pairs:
                     break
+                if stop_duration:
+                    break
                 if stats["pairs"] % 250 == 0 and stats["pairs"]:
                     output_stream.flush()
                     print(f"CORRIDOR_VISUAL_PROGRESS pairs={stats['pairs']} valid={stats['pnp_valid']}",
@@ -218,6 +240,8 @@ def main() -> int:
             # last known past cloud only; no future cloud can be selected.
             while len(image_queue) >= 2:
                 ref, current = image_queue[0], image_queue[1]
+                if duration_end_ns is not None and ref[0] >= duration_end_ns:
+                    break
                 pair_index += 1
                 stats["pairs"] += 1
                 eligible = [entry for entry in cloud_queue if entry[0] <= ref[0]]
@@ -245,6 +269,7 @@ def main() -> int:
         f"depth_causality=nearest_cloud_header_stamp_le_ref_image;max_age_ns={MAX_DEPTH_AGE_NS}\n"
         "transform= T_imu_camera * inverse(T_camera_cur_camera_ref) * inverse(T_imu_camera)\n"
         "payload=metric relative IMU translation only; PnP rotation discarded by EKF\n"
+        "quality_metadata=detected/tracked/depth counts, depth fraction, 4x3 grid occupancy, convex hull fraction, median pixel parallax, reprojection RMSE\n"
         "online_initialization=GT-free v2 first-50-cloud pose; GT not read\n"
         + "".join(f"{key}={value}\n" for key, value in stats.items())
         + f"output_sha256={sha256(args.output)}\n",

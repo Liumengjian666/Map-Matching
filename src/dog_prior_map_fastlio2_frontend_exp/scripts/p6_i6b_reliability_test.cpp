@@ -341,8 +341,9 @@ void testGeometricObservabilityProxy() {
   const auto local = reliability::analyzeGeometricObservability(
       observations, true, 0.8);
   require(local.valid && local.geometric_proxy &&
-              local.status == "VALID_GEOMETRIC_GAUSS_NEWTON_PROXY",
-          "geometric U_obs valid without the legacy PCL derivative gate");
+              local.status == "MAP_SUPPORT_INSUFFICIENT" &&
+              !local.map_support_sufficient,
+          "low-count geometric U_obs remains diagnostic but cannot claim map support");
   require(!local.score_gradient_coordinate_check_passed &&
               local.normalized_geometric_information.allFinite() &&
               (local.normalized_geometric_information -

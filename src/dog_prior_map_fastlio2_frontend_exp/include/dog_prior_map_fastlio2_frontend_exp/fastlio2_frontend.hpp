@@ -50,6 +50,20 @@ class FastLio2IkfomFrontend {
       const Eigen::Vector3d& map_position_measurement,
       const Eigen::Matrix3d& measurement_covariance,
       PoseCorrectionDelta* delta, std::string* failure_reason);
+  bool applyProjectedPoseMeasurement(
+      const Pose3d& map_T_imu_measurement,
+      const Eigen::Matrix<double, 6, 6>& measurement_covariance,
+      const Eigen::Matrix<double, 6, 6>& measurement_basis,
+      int measurement_rank, PoseCorrectionDelta* delta,
+      std::string* failure_reason);
+  // Applies only the position residual components spanned by the first
+  // `measurement_rank` orthonormal map-frame basis columns. This is used to
+  // keep visual corrections inside the LiDAR-weak measurement row-space.
+  bool applyProjectedPositionMeasurement(
+      const Eigen::Vector3d& map_position_measurement,
+      const Eigen::Matrix3d& measurement_covariance,
+      const Eigen::Matrix3d& measurement_basis, int measurement_rank,
+      PoseCorrectionDelta* delta, std::string* failure_reason);
 
   std::unique_ptr<FastLio2IkfomFrontend> cloneCandidate() const;
   bool commitCandidate(const FastLio2IkfomFrontend& candidate,

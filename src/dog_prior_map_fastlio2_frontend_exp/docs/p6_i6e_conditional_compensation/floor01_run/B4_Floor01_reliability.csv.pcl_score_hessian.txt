@@ -1,0 +1,2 @@
+PCL_SCORE_HESSIAN=INDETERMINATE
+reason=geometric_voxel_information_proxy_is_independent_of_legacy_score_Hessian_gate

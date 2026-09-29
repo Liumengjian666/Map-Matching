@@ -110,6 +110,94 @@ int main() {
     std::cerr << "FAIL: position-only update correction/covariance: " << failure << '\n';
     return 1;
   }
+
+  std::unique_ptr<FastLio2IkfomFrontend> projected_position_update =
+      candidate->cloneCandidate();
+  std::unique_ptr<FastLio2IkfomFrontend> projected_position_update_variant =
+      candidate->cloneCandidate();
+  const FilterSnapshot before_projected_position =
+      projected_position_update->getState();
+  Eigen::Matrix3d y_only_basis = Eigen::Matrix3d::Zero();
+  y_only_basis.col(0) = Eigen::Vector3d::UnitY();
+  const Eigen::Matrix3d projected_noise = Eigen::Matrix3d::Identity() * 0.01;
+  Eigen::Vector3d projected_measurement = before_projected_position.map_T_imu.position;
+  projected_measurement.y() -= 0.2;
+  Eigen::Vector3d projected_measurement_variant = projected_measurement;
+  projected_measurement_variant.x() += 10.0;
+  projected_measurement_variant.z() -= 7.0;
+  PoseCorrectionDelta projected_delta;
+  if (!projected_position_update->applyProjectedPositionMeasurement(
+          projected_measurement, projected_noise, y_only_basis, 1,
+          &projected_delta, &failure) ||
+      !projected_position_update_variant->applyProjectedPositionMeasurement(
+          projected_measurement_variant, projected_noise, y_only_basis, 1,
+          nullptr, &failure)) {
+    std::cerr << "FAIL: projected position-only IKFoM measurement: "
+              << failure << '\n';
+    return 1;
+  }
+  const FilterSnapshot after_projected_position =
+      projected_position_update->getState();
+  const FilterSnapshot after_projected_position_variant =
+      projected_position_update_variant->getState();
+  if (projected_delta.position.norm() <= 0.0 ||
+      (after_projected_position.map_T_imu.position -
+       after_projected_position_variant.map_T_imu.position).norm() > 1e-9 ||
+      (after_projected_position.map_T_imu.orientation.coeffs() -
+       after_projected_position_variant.map_T_imu.orientation.coeffs()).norm() > 1e-9 ||
+      !projected_position_update->postconditionsValid(&failure)) {
+    std::cerr << "FAIL: projected update used discarded measurement axes: "
+              << failure << '\n';
+    return 1;
+  }
+  std::unique_ptr<FastLio2IkfomFrontend> projected_pose_update =
+      candidate->cloneCandidate();
+  std::unique_ptr<FastLio2IkfomFrontend> projected_pose_update_variant =
+      candidate->cloneCandidate();
+  const FilterSnapshot before_projected_pose = projected_pose_update->getState();
+  Pose3d projected_pose_measurement = before_projected_pose.map_T_imu;
+  projected_pose_measurement.position.y() -= 0.15;
+  projected_pose_measurement.position.x() += 2.0;
+  projected_pose_measurement.orientation =
+      (projected_pose_measurement.orientation * Eigen::Quaterniond(
+          Eigen::AngleAxisd(0.4, Eigen::Vector3d::UnitX()))).normalized();
+  Pose3d projected_pose_variant = projected_pose_measurement;
+  projected_pose_variant.position.x() -= 4.0;
+  projected_pose_variant.position.z() += 3.0;
+  projected_pose_variant.orientation = before_projected_pose.map_T_imu.orientation;
+  Eigen::Matrix<double, 6, 6> pose_basis =
+      Eigen::Matrix<double, 6, 6>::Zero();
+  pose_basis(1, 0) = 1.0;
+  const Eigen::Matrix<double, 6, 6> pose_noise =
+      Eigen::Matrix<double, 6, 6>::Identity() * 0.01;
+  PoseCorrectionDelta projected_pose_delta;
+  if (!projected_pose_update->applyProjectedPoseMeasurement(
+          projected_pose_measurement, pose_noise, pose_basis, 1,
+          &projected_pose_delta, &failure) ||
+      !projected_pose_update_variant->applyProjectedPoseMeasurement(
+          projected_pose_variant, pose_noise, pose_basis, 1, nullptr, &failure)) {
+    std::cerr << "FAIL: projected LiDAR pose update: " << failure << '\n';
+    return 1;
+  }
+  const FilterSnapshot projected_pose_state = projected_pose_update->getState();
+  const FilterSnapshot projected_pose_state_variant =
+      projected_pose_update_variant->getState();
+  // A selected position residual may update orientation through EKF
+  // cross-covariance. The invariant is that changing discarded measurement
+  // axes cannot change the result, not that every unmeasured state block is
+  // frozen.
+  if (projected_pose_delta.position.norm() <= 0.0 ||
+      (projected_pose_state.map_T_imu.position -
+       projected_pose_state_variant.map_T_imu.position).norm() > 1e-9 ||
+      (projected_pose_state.map_T_imu.orientation.coeffs() -
+       projected_pose_state_variant.map_T_imu.orientation.coeffs()).norm() > 1e-9 ||
+      (projected_pose_state.covariance -
+       projected_pose_state_variant.covariance).norm() > 1e-9 ||
+      !projected_pose_update->postconditionsValid(&failure)) {
+    std::cerr << "FAIL: projected pose update used a discarded measurement direction: "
+              << failure << '\n';
+    return 1;
+  }
   Eigen::Matrix3d invalid_visual_noise = visual_noise;
   invalid_visual_noise(0, 0) = -1.0;
   const Eigen::Vector3d before_rejected =
@@ -138,6 +226,7 @@ int main() {
             << " pos_after_m=" << position_error_after
             << " rot_before_rad=" << rotation_error_before
             << " rot_after_rad=" << rotation_error_after
+            << " projected_update_m=" << projected_delta.position.norm()
             << " delta_v=" << delta.velocity.norm()
             << " delta_bg=" << delta.gyro_bias.norm()
             << " delta_ba=" << delta.accel_bias.norm()

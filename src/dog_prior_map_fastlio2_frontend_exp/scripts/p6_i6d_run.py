@@ -72,7 +72,7 @@ def mode_counts(path: Path, visual_path: Path | None) -> dict[str, int]:
         with visual_path.open(newline="") as stream:
             updates = list(csv.DictReader(stream))
         applied = [row for row in updates
-                   if row.get("status") == "APPLIED_CAUSAL_METRIC_POSITION"]
+                   if row.get("status") == "APPLIED_PROJECTED_COMPLEMENTARY_TRANSLATION"]
         result["visual_factor_events"] = len(updates)
         result["visual_filter_updates"] = len(applied)
         result["visual_nonzero_state_updates"] = sum(
@@ -158,6 +158,7 @@ def main() -> int:
     parser.add_argument("--executable", type=Path, default=DEFAULT_EXE)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--frame-limit", type=int)
+    parser.add_argument("--task-label", default="PAPER-P6-I6D-FULL-ALGORITHM-FIRST")
     args = parser.parse_args()
 
     config = yaml.safe_load(CONFIG.read_text())
@@ -209,16 +210,23 @@ def main() -> int:
     env = os.environ.copy()
     env.pop("LD_LIBRARY_PATH", None)
     env.pop("LD_PRELOAD", None)
+    compatibility_preload = os.environ.get("P6_I6D_COMPAT_PRELOAD")
+    if compatibility_preload:
+        preload_path = Path(compatibility_preload)
+        if not preload_path.is_absolute() or not preload_path.is_file():
+            raise RuntimeError("P6_I6D_COMPAT_PRELOAD must name an existing absolute file")
+        env["LD_PRELOAD"] = str(preload_path)
     resource_path = prefix.with_name(prefix.name + "_resource.txt")
     provenance_path = prefix.with_name(prefix.name + "_provenance.txt")
     provenance_path.write_text(
-        f"task=PAPER-P6-I6D-FULL-ALGORITHM-FIRST\nprofile={args.profile}\nmode={mode}\n"
+        f"task={args.task_label}\nprofile={args.profile}\nmode={mode}\n"
         f"dataset={args.dataset}\nsource_manifest_sha256={sha256(input_dir / 'input_manifest.txt')}\n"
         f"map_sha256={sha256(map_path)}\nparams_sha256={sha256(params_path)}\n"
         f"visual_csv_sha256={sha256(visual_path) if visual_path else 'DISABLED'}\n"
         f"ablation_config_sha256={sha256(CONFIG)}\nmap_profile={map_profile}\n"
         f"frame_limit={frame_count}\ninitialization_stamp_ns={init_stamp}\n"
         "gt_used_online=NO\n"
+        f"compatibility_preload={compatibility_preload or 'DISABLED'}\n"
         + "".join(f"input_{name}_sha256={sha256(input_dir / name)}\n"
                  for name in ("imu.csv", "filter_scans.csv", "scans.csv",
                               "request_xyz_f32.bin", "params.txt"))
@@ -257,7 +265,7 @@ def main() -> int:
                                f"full_visual_update_gate={visual_gate}\n"
                                f"process_wall_s={wall_s:.6f}\n" +
                                counts_text)
-    print(f"I6D_COMPLETE profile={args.profile} dataset={args.dataset} "
+    print(f"{args.task_label}_RUN_COMPLETE profile={args.profile} dataset={args.dataset} "
           f"frames={frame_count} wall_s={wall_s:.3f} counts={counts}", flush=True)
     return 0
 
