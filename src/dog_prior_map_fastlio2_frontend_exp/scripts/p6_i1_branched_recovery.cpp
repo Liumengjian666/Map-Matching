@@ -3296,9 +3296,16 @@ int main(int argc, char** argv) {
       return 0;
     }
     if (argc == 18 && std::string(argv[1]) == "FULL_FIXED_LAG_V3_EXPERIMENTAL") {
+      const std::string raw_path=argv[5];
+      const auto slash=raw_path.find_last_of('/');
+      const std::string manifest=(slash==std::string::npos ? "." : raw_path.substr(0,slash))+
+          "/RAW_TIMED_INPUT_MANIFEST.txt";
+      p6_i1::requireRawTimedInputManifest(argv[5],argv[16],argv[3],manifest);
+      if(p5_i1::sha256File(argv[4])!=p5_i1::sha256File(argv[16]))
+        throw std::runtime_error("V3_RAW_INPUT_SCHEDULE_IDENTITY_MISMATCH");
       p4_i2::Inputs inputs; std::string reason;
       if (!p4_i2::readInputs(argv[2],argv[3],&inputs,&reason)) throw std::runtime_error(reason);
-      auto assets=p6_i1::readScanAssets(argv[4]);
+      auto assets=p6_i1::readRawSensorScanAssets(argv[4]);
       const std::size_t limit=std::stoull(argv[12]);
       if(limit==0 || limit>assets.size() || assets.size()!=inputs.scans.size())
         throw std::runtime_error("V3_frame_limit_or_identity_invalid");

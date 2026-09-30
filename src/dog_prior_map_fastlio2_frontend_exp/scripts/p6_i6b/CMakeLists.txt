@@ -44,6 +44,8 @@ target_compile_options(p6_i6e_conditional_compensation_test PRIVATE
 
 enable_testing()
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
+add_test(NAME p6_a3a_input_contract
+  COMMAND ${Python3_EXECUTABLE} "${PACKAGE_ROOT}/scripts/p6_a3a_input_contract_test.py")
 add_test(NAME p6_a2c_source_boundary_audit
   COMMAND ${Python3_EXECUTABLE} "${PACKAGE_ROOT}/scripts/p6_a2c_source_audit.py")
 add_test(NAME p6_i6b_dual_reliability
