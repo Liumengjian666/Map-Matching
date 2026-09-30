@@ -1,0 +1,6 @@
+TASK=PAPER-P6-ALG-INTEGRATION-A2D
+START_SHA=b04a1f7f3442266dd48bd2efea5baf09d905b0c8
+CODE_SHA=14f0e965639ce7c0e022e77a750670024b5aff37
+BRANCH=research/p6-i6d-full-algorithm
+END_SHA=the subsequent documentation commit containing this file; reported in final Git delivery
+READY_FOR_FORMAL_EXPERIMENT=NO
