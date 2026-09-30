@@ -1,4 +1,11 @@
 // Included inside p6_i1, after the shared V2/V3 producer.
+// V3 has a real no-vision ablation. Keep the historical V1/V2 parser strict:
+// only the V3 caller may pass the explicit sentinel "NONE".
+std::vector<VisualMeasurement> readV3VisualMeasurements(const std::string& path) {
+  if (path == "NONE") return {};
+  return readI6dVisual(path);
+}
+
 struct RawTimedAsset {
   std::uint64_t transaction_id=0,start_ns=0,end_ns=0,offset=0,count=0;
   fixed_lag::LidarCloudProvenance provenance=fixed_lag::LidarCloudProvenance::RAW_TIMED_SENSOR;
@@ -249,9 +256,12 @@ void runWindowOwnedExperimentalMode(const p4_i2::Inputs& inputs,
   auto trajectory=openV3ExclusiveOutput(trajectory_path);
   auto diagnostics=openV3ExclusiveOutput(diagnostics_path);
   auto runtime=openV3ExclusiveOutput(runtime_path);
+  auto deskew_evidence=openV3ExclusiveOutput(trajectory_path+".deskew_evidence.csv");
   const auto result=runFixedLagProducer(inputs,assets,parameters,initial,extrinsic,target,visual,
       [](const ScanAsset&)->Cloud::Ptr {throw std::runtime_error("V3_LEGACY_SOURCE_PROVIDER_FORBIDDEN");},
-      trajectory,diagnostics,runtime,init_stamp,policy,{}, {},&owned);
+      trajectory,diagnostics,runtime,init_stamp,policy,{}, {},&owned,
+      fixed_lag::LidarCloudProvenance::WINDOW_OWNED_SE3_DESKEW,&deskew_evidence);
+  trajectory.flush(); diagnostics.flush(); runtime.flush(); deskew_evidence.flush();
   std::cout<<"FULL_FIXED_LAG_V3_EXPERIMENTAL_COMPLETE window_deskews="<<result.window_deskew_count
       <<" raw_scans_before_handoff="<<result.raw_scans_before_handoff
       <<" ndt_calls="<<result.ndt_calls<<" raw_timed_sha256="<<p5_i1::sha256File(raw_path)

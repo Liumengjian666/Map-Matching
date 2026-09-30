@@ -85,7 +85,8 @@ FixedLagProducerResult runFixedLagProducer(
     const fixed_lag::FixedLagOptions& options = {},
     const WindowOwnedProducerInput* window_owned = nullptr,
     fixed_lag::LidarCloudProvenance compatibility_cloud_provenance =
-        fixed_lag::LidarCloudProvenance::LEGACY_STATE_DERIVED_SE3_DESKEW) {
+        fixed_lag::LidarCloudProvenance::LEGACY_STATE_DERIVED_SE3_DESKEW,
+    std::ostream* deskew_evidence = nullptr) {
   using namespace fixed_lag;
   const auto started=std::chrono::steady_clock::now();
   if(assets.empty() || inputs.imu.empty() || !target || target->empty())
@@ -152,6 +153,12 @@ FixedLagProducerResult runFixedLagProducer(
   trajectory<<std::setprecision(17)<<"transaction_id,stamp_ns,time_s,px,py,pz,qx,qy,qz,qw\n";
   diagnostics<<std::setprecision(17)<<"timestamp,event_type,window_nodes,window_span,optimizer_status,optimizer_cost_before,optimizer_cost_after,predicted_px,predicted_py,predicted_pz,predicted_qx,predicted_qy,predicted_qz,predicted_qw,ndt_converged,uobs_valid,weak_dimension,reliable_dimension,window_covariance_valid,window_position_sigma_max,window_rotation_sigma_max,unonlocal_probe_triggered,unonlocal_status,lidar_factor_attempted,lidar_factor_committed,lidar_selected_rank,lidar_nis,lidar_nis_threshold,visual_sensor_quality,visual_mode,visual_selected_rank,visual_trigger_status,visual_basis_source_lidar_stamp,imu_factor_count,lidar_factor_count,visual_factor_count,r2_policy,imu_buffer_last_stamp,lidar_source_provenance,visual_source_provenance,input_eligibility,post_handoff_ikfom_calls\n";
   runtime<<"timestamp,event_type,ndt_calls,ndt_ms,event_ms,linearization_ms,solve_ms,marginal_covariance_ms,rank_diagnostic_ms,solver_status,sparse_fallback_count\n";
+  if (deskew_evidence)
+    *deskew_evidence<<std::setprecision(17)
+        <<"transaction_id,scan_start_ns,scan_end_ns,raw_point_count,point_stamp_min_ns,point_stamp_max_ns,"
+        <<"anchor_px,anchor_py,anchor_pz,anchor_qx,anchor_qy,anchor_qz,anchor_qw,"
+        <<"predicted_end_px,predicted_end_py,predicted_end_pz,predicted_end_qx,predicted_end_qy,predicted_end_qz,predicted_end_qw,"
+        <<"deskew_point_count,displacement_mean_m,displacement_p95_m,displacement_max_m,status\n";
   for(const ProducerEvent& event:stream) {
     const auto event_start=std::chrono::steady_clock::now();
     // Append through exactly the first right boundary required for this event.
@@ -211,6 +218,35 @@ FixedLagProducerResult runFixedLagProducer(
         if (!deskewScanWithWindowState(anchor,raw.scan_start_ns,raw.scan_end_ns,causal_imu,
               makeWindowImuNoise(parameters,seed.gravity),extrinsic,raw.points,&deskew,&reason))
           throw std::runtime_error("window_owned_deskew:"+reason);
+        if (deskew.cloud_end_frame.size()!=raw.points.size())
+          throw std::runtime_error("WINDOW_DESKEW_POINT_COUNT_CHANGED");
+        if (deskew_evidence) {
+          std::uint64_t point_stamp_min=std::numeric_limits<std::uint64_t>::max();
+          std::uint64_t point_stamp_max=0;
+          std::vector<double> displacement;
+          displacement.reserve(raw.points.size());
+          double displacement_sum=0.0;
+          double displacement_max=0.0;
+          for (std::size_t i=0;i<raw.points.size();++i) {
+            point_stamp_min=std::min(point_stamp_min,raw.points[i].stamp_ns);
+            point_stamp_max=std::max(point_stamp_max,raw.points[i].stamp_ns);
+            const double d=(deskew.cloud_end_frame[i].position-raw.points[i].position).norm();
+            displacement.push_back(d); displacement_sum+=d; displacement_max=std::max(displacement_max,d);
+          }
+          std::sort(displacement.begin(),displacement.end());
+          const std::size_t p95_index=displacement.empty()?0:
+              std::min(displacement.size()-1,static_cast<std::size_t>(std::ceil(0.95*displacement.size()))-1);
+          const Eigen::Quaterniond q_anchor(anchor.rotation),q_end(deskew.predicted_end_state.rotation);
+          *deskew_evidence<<asset.transaction_id<<','<<raw.scan_start_ns<<','<<raw.scan_end_ns<<','
+              <<raw.points.size()<<','<<point_stamp_min<<','<<point_stamp_max<<','
+              <<anchor.position.x()<<','<<anchor.position.y()<<','<<anchor.position.z()<<','
+              <<q_anchor.x()<<','<<q_anchor.y()<<','<<q_anchor.z()<<','<<q_anchor.w()<<','
+              <<deskew.predicted_end_state.position.x()<<','<<deskew.predicted_end_state.position.y()<<','
+              <<deskew.predicted_end_state.position.z()<<','<<q_end.x()<<','<<q_end.y()<<','
+              <<q_end.z()<<','<<q_end.w()<<','<<deskew.cloud_end_frame.size()<<','
+              <<(displacement.empty()?0.0:displacement_sum/displacement.size())<<','
+              <<(displacement.empty()?0.0:displacement[p95_index])<<','<<displacement_max<<','<<deskew.status<<'\n';
+        }
         Cloud::Ptr end_cloud(new Cloud);
         end_cloud->reserve(deskew.cloud_end_frame.size());
         for (const auto& point : deskew.cloud_end_frame) {
@@ -391,7 +427,8 @@ void runFixedLagExperimentalMode(const p4_i2::Inputs& inputs,
       <<" ndt_calls="<<result.ndt_calls<<" total_ms="<<result.total_ms<<'\n';
 }
 
-void runFixedLagProductionFixture(bool window_owned_fixture = false) {
+void runFixedLagProductionFixture(bool window_owned_fixture = false,
+                                  bool no_vision_fixture = false) {
   Cloud::Ptr target(new Cloud);
   for(int x=-2;x<=2;++x) for(int y=-2;y<=2;++y) for(int z=-1;z<=1;++z)
     for(int i=0;i<40;++i) {
@@ -413,15 +450,17 @@ void runFixedLagProductionFixture(bool window_owned_fixture = false) {
     p4_i2::PoseRecord r; r.transaction_id=a.transaction_id; r.stamp_ns=a.stamp_ns;
     inputs.scans.push_back(r);
   }
-  std::vector<VisualMeasurement> visual(2);
-  visual[0].ref_ns=1'250'000'000; visual[0].cur_ns=1'300'000'000;
-  visual[1].ref_ns=1'300'000'000; visual[1].cur_ns=1'350'000'000;
-  for(auto& v:visual) {
-    v.depth_stamp_ns=v.ref_ns; v.source_valid=v.quality_metadata_available=true;
-    v.detected_count=100; v.tracked_count=80; v.depth_associated_count=70;
-    v.inliers=60; v.ratio=0.75; v.depth_fraction=0.7;
-    v.grid_occupancy=0.6; v.hull_fraction=0.4;
-    v.median_parallax_px=2; v.reprojection=0.5;
+  std::vector<VisualMeasurement> visual(no_vision_fixture ? 0 : 2);
+  if (!no_vision_fixture) {
+    visual[0].ref_ns=1'250'000'000; visual[0].cur_ns=1'300'000'000;
+    visual[1].ref_ns=1'300'000'000; visual[1].cur_ns=1'350'000'000;
+    for(auto& v:visual) {
+      v.depth_stamp_ns=v.ref_ns; v.source_valid=v.quality_metadata_available=true;
+      v.detected_count=100; v.tracked_count=80; v.depth_associated_count=70;
+      v.inliers=60; v.ratio=0.75; v.depth_fraction=0.7;
+      v.grid_occupancy=0.6; v.hull_fraction=0.4;
+      v.median_parallax_px=2; v.reprojection=0.5;
+    }
   }
   RuntimeParameters parameters; parameters.static_init_samples=20;
   const Cloud::Ptr source=preprocessSource(target);
@@ -449,9 +488,10 @@ void runFixedLagProductionFixture(bool window_owned_fixture = false) {
     const auto result=runFixedLagProducer(inputs,assets,parameters,Pose3d(),Pose3d(),target,visual,
         [&](const ScanAsset&){++legacy_loads;return source;},trajectory,diagnostics,runtime,0,policy,{}, {},
         window_owned_fixture?&owned:nullptr);
-    const std::size_t expected_events=window_owned_fixture?10:7;
+    const std::size_t expected_events=window_owned_fixture ? (no_vision_fixture ? 6 : 10) : 7;
     if(result.events!=expected_events || result.covariance_available!=3 || result.probes==0 ||
-        result.lidar_committed!=3 || result.ndt_calls!=3+2*result.probes)
+        result.lidar_committed!=3 || (no_vision_fixture && result.visual_committed!=0) ||
+        result.ndt_calls!=3+2*result.probes)
       throw std::runtime_error("production_fixture_did_not_exercise_required_paths");
     std::istringstream rows(diagnostics.str());
     std::string row; std::getline(rows,row);
@@ -463,6 +503,9 @@ void runFixedLagProductionFixture(bool window_owned_fixture = false) {
       std::vector<std::string> fields;
       std::string field;
       while(std::getline(values,field,',')) fields.push_back(field);
+      if(no_vision_fixture && (fields[1]=="VISUAL_REFERENCE" ||
+          fields[1]=="VISUAL_CURRENT" || fields[35]!="0"))
+        throw std::runtime_error("A3B_NONE_CREATED_VISUAL_EVENT_OR_FACTOR");
       const auto stamp=std::stoull(fields[0]);
       const auto right=std::lower_bound(inputs.imu.begin(),inputs.imu.end(),stamp,
           [](const ImuSample& s,std::uint64_t t){return s.stamp_ns<t;});
@@ -487,7 +530,13 @@ void runFixedLagProductionFixture(bool window_owned_fixture = false) {
         <<" total_ms="<<result.total_ms<<" post_handoff_ikfom_calls=0\n";
   }
   if(window_owned_fixture) {
-    if(raw_loads!=12 || legacy_loads!=0) throw std::runtime_error("V3 legacy source provider was invoked");
+    if(raw_loads!=12 || legacy_loads!=0)
+      throw std::runtime_error("V3 legacy source provider was invoked");
+    if(no_vision_fixture) {
+      std::cout<<"A3B_NO_VISION_PRODUCER_FIXTURE_PASS policies=4 events_per_policy=6 "
+          <<"visual_events=0 visual_factors=0 lidar_per_policy=3\n";
+      return;
+    }
     const auto good_provider=owned.provider;
     auto warmup_inputs=inputs; auto warmup_assets=assets; auto warmup_owned=owned;
     ScanAsset warmup; warmup.transaction_id=24; warmup.stamp_ns=1'050'000'000;

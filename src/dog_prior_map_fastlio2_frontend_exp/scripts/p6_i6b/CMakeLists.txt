@@ -171,6 +171,8 @@ if(BUILD_I6B_CLOSED_LOOP_TOOLS)
     COMMAND $<TARGET_FILE:p6_i6b_closed_loop> A2C_FIXTURE)
   add_test(NAME p6_a2d_window_owned_pcl_producer
     COMMAND $<TARGET_FILE:p6_i6b_closed_loop> A2D_FIXTURE)
+  add_test(NAME p6_a3b_no_vision
+    COMMAND $<TARGET_FILE:p6_i6b_closed_loop> A3B_NO_VISION_FIXTURE)
 
   add_executable(p6_i6e_projected_pose_consistency_test
     "${PACKAGE_ROOT}/src/fastlio2_frontend_ikfom.cpp"

@@ -3295,6 +3295,12 @@ int main(int argc, char** argv) {
       p6_i1::runFixedLagProductionFixture(true);
       return 0;
     }
+    if (argc == 2 && std::string(argv[1]) == "A3B_NO_VISION_FIXTURE") {
+      if (!p6_i1::readV3VisualMeasurements("NONE").empty())
+        throw std::runtime_error("A3B_NONE_SENTINEL_DID_NOT_PRODUCE_EMPTY_VISUAL_INPUT");
+      p6_i1::runFixedLagProductionFixture(true, true);
+      return 0;
+    }
     if (argc == 18 && std::string(argv[1]) == "FULL_FIXED_LAG_V3_EXPERIMENTAL") {
       const std::string raw_path=argv[5];
       const auto slash=raw_path.find_last_of('/');
@@ -3311,7 +3317,7 @@ int main(int argc, char** argv) {
         throw std::runtime_error("V3_frame_limit_or_identity_invalid");
       assets.resize(limit); inputs.scans.resize(limit);
       p6_i1::runWindowOwnedExperimentalMode(inputs,assets,argv[5],argv[6],argv[7],
-          argv[8],argv[9],argv[10],p6_i1::readI6dVisual(argv[11]),
+          argv[8],argv[9],argv[10],p6_i1::readV3VisualMeasurements(argv[11]),
           std::stoull(argv[13]),argv[14],p6_i1::parseR2Policy(argv[15]),argv[16],argv[17]);
       return 0;
     }
