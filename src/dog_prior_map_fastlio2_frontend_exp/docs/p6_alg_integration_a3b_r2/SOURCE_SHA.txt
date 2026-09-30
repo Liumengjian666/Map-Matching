@@ -1,0 +1,7 @@
+TASK=PAPER-P6-ALG-INTEGRATION-A3B-R2
+START_SHA=749b31e2fd6ca4ffa1d00df3091eb041a9bdc664
+BRANCH=research/p6-i6d-full-algorithm
+WORKSPACE=/home/jian/livox_ws/dog_loc_p6_i6b_ws
+RUN_START_HEAD=749b31e2fd6ca4ffa1d00df3091eb041a9bdc664
+CODE_SHA=29f9338685e39b4db9173a11af96f4b71ce1c0a0
+END_SHA=the final report/artifact commit at repository HEAD; reported in final handoff

@@ -1,0 +1,33 @@
+PAPER-P6-ALG-INTEGRATION-A3B-R2
+
+Release build:
+  cmake --build /tmp/p6_a2d_build -j2
+  PASS
+
+Release CTest:
+  working directory: /tmp/p6_a2d_build
+  LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu ctest --output-on-failure -j2
+  26/26 PASS
+
+Debug targeted build:
+  targets: p6_a3b_r2_frozen_projection_test,
+           p6_a3b_r1_optimizer_diagnostics_test,
+           p6_a1_r1_fixed_lag_regression_test,
+           p6_i6b_dual_reliability_test,
+           p6_i6f_joint_window_test
+  PASS
+
+Debug targeted CTest:
+  5/5 PASS (A1-R1 Schur regression, I6B dual reliability, I6F joint window,
+            A3B-R1 forensic diagnostics, A3B-R2 frozen projection)
+
+New A3B-R2 synthetic output:
+  A3B_R2_FROZEN_PROJECTION_SYNTHETIC_PASS
+
+Retained A3B-R1 forensic output:
+  A3B_R1_OPTIMIZER_DIAGNOSTICS_SYNTHETIC_PASS
+
+git diff --check: PASS (code and report changes).
+
+The real P3-100 run was not a test pass: it stopped at tx90 with
+producer_optimizer:marginalized_prior_not_finite_psd. P3-200 was not run.
