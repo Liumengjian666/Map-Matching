@@ -51,6 +51,8 @@ class FixedLagExperimentalController {
                std::string* reason = nullptr) const;
   bool latestState(WindowState* output, std::string* reason = nullptr) const;
   bool oldestState(WindowState* output, std::string* reason = nullptr) const;
+  bool latestMarginalCovariance(WindowMarginalCovariance* output,
+                                std::string* reason = nullptr) const;
   bool predictionFeedbackSeed(WindowState* output,
                               std::string* reason = nullptr) const;
   WindowSummary summary() const;

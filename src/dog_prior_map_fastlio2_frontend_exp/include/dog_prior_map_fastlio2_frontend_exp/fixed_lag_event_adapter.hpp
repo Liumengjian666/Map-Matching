@@ -25,6 +25,7 @@ struct FrozenLidarEvent {
   reliability::LocalRisk local_risk;
   bool ndt_converged = false;
   bool map_support_valid = false;
+  bool measurement_commit_allowed = true;
 };
 
 struct FrozenVisualEvent {
@@ -89,6 +90,13 @@ class FixedLagEventAdapter {
                   std::string* reason = nullptr);
 
   bool appendImu(const ImuSample& sample, std::string* reason = nullptr);
+  bool prepareStateAt(std::uint64_t stamp_ns, WindowState* predicted,
+                      std::string* reason = nullptr);
+  bool latestMarginalCovariance(WindowMarginalCovariance* output,
+                                std::string* reason = nullptr) const;
+  bool previewLidarMeasurement(const FrozenLidarEvent& event,
+                               LidarWindowMeasurement* output,
+                               std::string* reason = nullptr) const;
   bool processLidarEvent(const FrozenLidarEvent& event,
                          std::string* reason = nullptr);
   bool processVisualReferenceStamp(std::uint64_t ref_ns,
@@ -105,6 +113,7 @@ class FixedLagEventAdapter {
   std::size_t sourceRecordCount() const;
   std::size_t imuSampleCount() const;
   AdapterLifecycleDiagnostics lifecycleDiagnostics() const;
+  const VisualRelativeMeasurement& lastVisualAdmission() const;
 
  private:
   using SourceKey = std::tuple<unsigned char, std::uint64_t, std::uint64_t>;
@@ -141,18 +150,22 @@ class FixedLagEventAdapter {
   std::set<SourceKey> source_records_;
   std::map<SourceKey, std::uint64_t> source_expiry_stamps_;
   struct LidarRiskRecord {
+    std::uint64_t transaction_id = 0;
     std::uint64_t stamp_ns = 0;
+    Pose3d map_T_lidar;
     reliability::LocalRisk risk;
     bool map_support_valid = false;
     bool ndt_converged = false;
-    Matrix6d exact_jacobian = Matrix6d::Zero();
+    bool factor_committed = false;
   };
   std::vector<LidarRiskRecord> lidar_risk_history_;
   std::uint64_t lidar_transaction_watermark_ = 0;
+  std::uint64_t last_lidar_stamp_ns_ = 0;
   std::uint64_t next_observation_id_ = 1;
   std::uint64_t last_imu_stamp_ns_ = 0;
   bool initialized_ = false;
   AdapterEventStatus last_status_;
+  VisualRelativeMeasurement last_visual_admission_;
   mutable AdapterLifecycleDiagnostics lifecycle_diagnostics_;
 };
 

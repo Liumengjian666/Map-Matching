@@ -659,6 +659,69 @@ bool FixedLagWindow::linearizedSystem(Eigen::MatrixXd* hessian,
   return linearize(hessian, gradient, cost, reason);
 }
 
+bool FixedLagWindow::latestMarginalCovariance(
+    WindowMarginalCovariance* output, std::string* reason) const {
+  if (reason) reason->clear();
+  if (!output) return fail(reason, "null_window_marginal_covariance_output");
+  *output = WindowMarginalCovariance();
+  const auto unavailable = [&](const char* detail) {
+    output->status = "WINDOW_MARGINAL_COVARIANCE_UNAVAILABLE";
+    if (reason) *reason = output->status + ":" + detail;
+    return false;
+  };
+  if (states_.empty()) return unavailable("EMPTY_WINDOW");
+  Eigen::MatrixXd hessian;
+  Eigen::VectorXd gradient;
+  double cost = 0.0;
+  if (!linearize(&hessian, &gradient, &cost, nullptr) ||
+      hessian.rows() != static_cast<Eigen::Index>(15 * states_.size()) ||
+      !hessian.allFinite()) return unavailable("INVALID_LINEARIZATION");
+  // No optimizer damping or artificial diagonal floor is admitted here.
+  hessian = 0.5 * (hessian + hessian.transpose()).eval();
+  if ((hessian.diagonal().array() <= 0.0).any())
+    return unavailable("NONPOSITIVE_HESSIAN_DIAGONAL");
+  // Equilibrate coordinates, without changing the information matrix. Tight
+  // IMU factors and weak priors otherwise have very different numeric scales.
+  const Eigen::VectorXd scale = hessian.diagonal().array().sqrt().inverse();
+  const Eigen::MatrixXd balanced =
+      scale.asDiagonal() * hessian * scale.asDiagonal();
+  Eigen::LLT<Eigen::MatrixXd> factor(balanced);
+  if (factor.info() != Eigen::Success) return unavailable("HESSIAN_NOT_SPD");
+  if (factor.matrixL().toDenseMatrix().diagonal().array().square().minCoeff() <= 1e-12)
+    return unavailable("NUMERICALLY_SINGULAR_HESSIAN");
+  Eigen::MatrixXd selector = Eigen::MatrixXd::Zero(hessian.rows(), 15);
+  selector.bottomRows(15).setIdentity();
+  const Eigen::MatrixXd columns = scale.asDiagonal() *
+      factor.solve(scale.asDiagonal() * selector);
+  const double backward_error = (hessian * columns - selector).norm() /
+      (hessian.norm() * columns.norm() + selector.norm());
+  if (factor.info() != Eigen::Success || !columns.allFinite() ||
+      !std::isfinite(backward_error) || backward_error > 1e-10)
+    return unavailable("SOLVE_RESIDUAL");
+  output->covariance15 = 0.5 *
+      (columns.bottomRows(15) + columns.bottomRows(15).transpose()).eval();
+  Eigen::SelfAdjointEigenSolver<Matrix15d> eigen(output->covariance15);
+  if (eigen.info() != Eigen::Success ||
+      eigen.eigenvalues().minCoeff() < -1e-10 ||
+      !output->covariance15.allFinite()) return unavailable("MARGINAL_NOT_PSD");
+  Eigen::Matrix<double, 6, 15> map_product =
+      Eigen::Matrix<double, 6, 15>::Zero();
+  map_product.block<3, 3>(0, 0) = states_.back().rotation;
+  map_product.block<3, 3>(3, 3).setIdentity();
+  output->map_pose_covariance6 = map_product * output->covariance15 *
+                                 map_product.transpose();
+  output->map_pose_covariance6 = 0.5 *
+      (output->map_pose_covariance6 +
+       output->map_pose_covariance6.transpose()).eval();
+  Eigen::SelfAdjointEigenSolver<Matrix6d> map_eigen(output->map_pose_covariance6);
+  if (!output->map_pose_covariance6.allFinite() || map_eigen.info()!=Eigen::Success ||
+      map_eigen.eigenvalues().minCoeff() < -1e-10)
+    return unavailable("MAP_COVARIANCE_NOT_PSD");
+  output->valid = true;
+  output->status = "WINDOW_MARGINAL_COVARIANCE_AVAILABLE";
+  return true;
+}
+
 bool FixedLagWindow::predictionFeedbackSeed(WindowState* output,
                                              std::string* reason) const {
   if (reason) reason->clear();

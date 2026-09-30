@@ -67,6 +67,13 @@ struct WindowSummary {
       "NOT_VERIFIED_GLOBAL_RELOCALIZATION";
 };
 
+struct WindowMarginalCovariance {
+  bool valid = false;
+  Matrix15d covariance15 = Matrix15d::Zero();
+  Matrix6d map_pose_covariance6 = Matrix6d::Zero();
+  std::string status = "WINDOW_MARGINAL_COVARIANCE_UNAVAILABLE";
+};
+
 class FixedLagWindow {
  public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -111,6 +118,8 @@ class FixedLagWindow {
   bool linearizedSystem(Eigen::MatrixXd* hessian,
                         Eigen::VectorXd* gradient, double* cost,
                         std::string* reason = nullptr) const;
+  bool latestMarginalCovariance(WindowMarginalCovariance* output,
+                                std::string* reason = nullptr) const;
   bool predictionFeedbackSeed(WindowState* output,
                               std::string* reason = nullptr) const;
 

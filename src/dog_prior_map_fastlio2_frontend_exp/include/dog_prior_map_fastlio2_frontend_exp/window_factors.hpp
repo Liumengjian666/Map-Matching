@@ -134,6 +134,8 @@ struct VisualRelativeMeasurement {
   int selected_rank = 3;
   VisualFactorMode mode = VisualFactorMode::FULL_TRANSLATION;
   std::string trigger_status = "FULL_TRANSLATION";
+  std::uint64_t basis_source_lidar_stamp_ns = 0;
+  Matrix6d admission_exact_jacobian = Matrix6d::Zero();
   bool valid = false;
   std::string source_semantic = "METRIC_PNP_RELATIVE_TRANSLATION_FACTOR";
 };

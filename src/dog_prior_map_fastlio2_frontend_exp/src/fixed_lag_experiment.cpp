@@ -120,6 +120,12 @@ bool FixedLagExperimentalController::predictionFeedbackSeed(
   return window_.predictionFeedbackSeed(output, reason);
 }
 
+bool FixedLagExperimentalController::latestMarginalCovariance(
+    WindowMarginalCovariance* output, std::string* reason) const {
+  if (!enabled()) return fail(reason, "fixed_lag_experimental_mode_disabled");
+  return window_.latestMarginalCovariance(output, reason);
+}
+
 WindowSummary FixedLagExperimentalController::summary() const {
   return window_.summary();
 }

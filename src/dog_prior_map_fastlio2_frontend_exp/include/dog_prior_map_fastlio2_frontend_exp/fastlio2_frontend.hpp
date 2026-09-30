@@ -34,6 +34,21 @@ bool so3LeftJacobianInverse(const Eigen::Vector3d& phi,
 
 double chiSquare99Threshold(int rank);
 
+struct FixedLagInitializationSeed {
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+  std::uint64_t stamp_ns = 0;
+  Pose3d map_T_imu;
+  Eigen::Vector3d velocity = Eigen::Vector3d::Zero();
+  Eigen::Vector3d gyro_bias = Eigen::Vector3d::Zero();
+  Eigen::Vector3d accel_bias = Eigen::Vector3d::Zero();
+  Eigen::Vector3d gravity = Eigen::Vector3d::Zero();
+  Eigen::Matrix<double, 15, 15> covariance15 =
+      Eigen::Matrix<double, 15, 15>::Zero();
+  Eigen::Matrix<double, 15, 15> information15 =
+      Eigen::Matrix<double, 15, 15>::Zero();
+  double gravity_conditioning_delta_norm = 0.0;
+};
+
 class FastLio2IkfomFrontend {
  public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -128,6 +143,10 @@ class FastLio2IkfomFrontend {
 
   bool initialized() const;
   FilterSnapshot getState() const;
+  // One-time handoff prior conditioned on fixed initialized gravity. This is
+  // a 15D model choice, not an equivalent representation of the 23D posterior.
+  bool makeFixedLagInitializationSeed(FixedLagInitializationSeed* output,
+                                     std::string* failure_reason) const;
   // Explicit experimental fixed-lag feedback boundary. This method validates
   // the optimized seed and updates IKFoM through its public change_x/change_P
   // path; callers must not mutate IKFoM internals directly. The fixed-lag

@@ -279,6 +279,28 @@ bool FixedLagEventAdapter::rebuildLidarBasis(
       basis, rank, reason);
 }
 
+bool FixedLagEventAdapter::prepareStateAt(std::uint64_t stamp_ns,
+                                         WindowState* predicted,
+                                         std::string* reason) {
+  if (!initialized_ || !predicted)
+    return failLocal(reason, "adapter_not_initialized_or_null_prediction");
+  return ensureStateAt(stamp_ns, reason) &&
+         controller_.stateAt(stamp_ns, predicted, reason);
+}
+
+bool FixedLagEventAdapter::latestMarginalCovariance(
+    WindowMarginalCovariance* output, std::string* reason) const {
+  return controller_.latestMarginalCovariance(output, reason);
+}
+
+bool FixedLagEventAdapter::previewLidarMeasurement(
+    const FrozenLidarEvent& event, LidarWindowMeasurement* output,
+    std::string* reason) const {
+  WindowState state;
+  return controller_.stateAt(event.stamp_ns, &state, reason) &&
+         convertLidarMeasurement(event, state, output, reason);
+}
+
 bool FixedLagEventAdapter::convertLidarMeasurement(
     const FrozenLidarEvent& event, const WindowState& predicted_state,
     LidarWindowMeasurement* output, std::string* reason) const {
@@ -322,12 +344,17 @@ bool FixedLagEventAdapter::processLidarEvent(const FrozenLidarEvent& event,
   if (event.stamp_ns == 0)
     return fail(AdapterEventDisposition::SKIPPED_INVALID_SOURCE,
                 "invalid_lidar_timestamp", reason);
-  const auto consume_lidar = [&]() {
+  if (event.stamp_ns < last_lidar_stamp_ns_)
+    return fail(AdapterEventDisposition::REJECTED_CAUSALITY,
+                "lidar_timestamp_regression", reason);
+  const auto consume_lidar = [&](bool committed = false) {
     lidar_transaction_watermark_ = event.transaction_id;
+    last_lidar_stamp_ns_ = event.stamp_ns;
     recordSource(key, event.stamp_ns);
     lidar_risk_history_.push_back(
-        {event.stamp_ns, event.local_risk, event.map_support_valid,
-         event.ndt_converged, Matrix6d::Zero()});
+        {event.transaction_id, event.stamp_ns, event.map_T_lidar,
+         event.local_risk, event.map_support_valid,
+         event.ndt_converged, committed});
   };
   if (!event.ndt_converged) {
     consume_lidar();
@@ -343,6 +370,11 @@ bool FixedLagEventAdapter::processLidarEvent(const FrozenLidarEvent& event,
     consume_lidar();
     return fail(AdapterEventDisposition::SKIPPED_INVALID_SOURCE,
                 "lidar_reliable_rank_zero_or_invalid", reason);
+  }
+  if (!event.measurement_commit_allowed) {
+    consume_lidar();
+    return fail(AdapterEventDisposition::SKIPPED_INVALID_SOURCE,
+                "LIDAR_MEASUREMENT_REJECTED", reason);
   }
   if (!ensureStateAt(event.stamp_ns, reason)) {
     const AdapterEventDisposition disposition =
@@ -372,14 +404,7 @@ bool FixedLagEventAdapter::processLidarEvent(const FrozenLidarEvent& event,
     return false;
   }
   if (!accept(id, reason)) return false;
-  consume_lidar();
-  Matrix6d exact;
-  const Pose3d map_T_imu = lidarToImu(event.map_T_lidar);
-  if (normalizedLidarResidualJacobian(
-          state, map_T_imu.orientation.normalized().toRotationMatrix(),
-          calibration_.T_imu_lidar.position,
-          event.local_risk.translation_length_scale_m, &exact, nullptr))
-    lidar_risk_history_.back().exact_jacobian = exact;
+  consume_lidar(true);
   setStatus(AdapterEventDisposition::ACCEPTED, id, "LIDAR_FACTOR_ACCEPTED", reason);
   return true;
 }
@@ -442,11 +467,21 @@ bool FixedLagEventAdapter::configureVisualDirection(
     measurement->trigger_status = "STALE_LIDAR_RISK";
     return true;
   }
-  if (!selected->ndt_converged || !selected->map_support_valid) {
+  WindowState risk_state;
+  if (!controller_.stateAt(selected->stamp_ns, &risk_state, nullptr)) {
+    measurement->mode = VisualFactorMode::NOT_TRIGGERED;
+    measurement->trigger_status = "LIDAR_RISK_STATE_NOT_IN_ACTIVE_WINDOW";
+    return true;
+  }
+  measurement->basis_source_lidar_stamp_ns = selected->stamp_ns;
+  if (!selected->ndt_converged || !selected->map_support_valid ||
+      !selected->factor_committed) {
     measurement->mode = VisualFactorMode::FULL_TRANSLATION;
     measurement->measurement_basis.setIdentity();
     measurement->selected_rank = 3;
-    measurement->trigger_status = "RELATIVE_ONLY_NO_GLOBAL_RECOVERY";
+    measurement->trigger_status = selected->ndt_converged &&
+        selected->map_support_valid && !selected->factor_committed
+        ? "LIDAR_MEASUREMENT_REJECTED" : "RELATIVE_ONLY_NO_GLOBAL_RECOVERY";
     return true;
   }
   if (!selected->risk.valid || selected->risk.weak_dimension <= 0) {
@@ -454,7 +489,16 @@ bool FixedLagEventAdapter::configureVisualDirection(
     measurement->trigger_status = "NORMAL_LIDAR";
     return true;
   }
-  const Eigen::MatrixXd mapped = selected->exact_jacobian *
+  Matrix6d exact_jacobian;
+  const Pose3d measured_imu = lidarToImu(selected->map_T_lidar);
+  if (!normalizedLidarResidualJacobian(
+          risk_state, measured_imu.orientation.normalized().toRotationMatrix(),
+          calibration_.T_imu_lidar.position,
+          selected->risk.translation_length_scale_m, &exact_jacobian, reason))
+    return false;
+  // Admission basis only: recomputed now, then frozen for factor lifetime.
+  measurement->admission_exact_jacobian = exact_jacobian;
+  const Eigen::MatrixXd mapped = exact_jacobian *
       selected->risk.joint_weak_basis.leftCols(selected->risk.weak_dimension);
   const Eigen::MatrixXd translation = mapped.topRows(3);
   Eigen::JacobiSVD<Eigen::MatrixXd> svd(
@@ -481,6 +525,10 @@ bool FixedLagEventAdapter::configureVisualDirection(
 bool FixedLagEventAdapter::processVisualEvent(const FrozenVisualEvent& event,
                                               std::string* reason) {
   if (reason) reason->clear();
+  last_visual_admission_ = VisualRelativeMeasurement();
+  last_visual_admission_.mode = VisualFactorMode::NOT_TRIGGERED;
+  last_visual_admission_.selected_rank = 0;
+  last_visual_admission_.trigger_status = "NOT_ADMITTED";
   if (!initialized_)
     return fail(AdapterEventDisposition::REJECTED_WINDOW,
                 "adapter_not_initialized", reason);
@@ -542,6 +590,7 @@ bool FixedLagEventAdapter::processVisualEvent(const FrozenVisualEvent& event,
               reason ? *reason : "visual_direction_configuration_failed", reason);
     return false;
   }
+  last_visual_admission_ = measurement;
   if (measurement.mode == VisualFactorMode::NOT_TRIGGERED) {
     recordSource(key, event.cur_ns);
     setStatus(AdapterEventDisposition::SKIPPED_INVALID_SOURCE, 0,
@@ -611,6 +660,10 @@ void FixedLagEventAdapter::pruneExpiredHistory() {
 }
 
 WindowSummary FixedLagEventAdapter::summary() const { return controller_.summary(); }
+
+const VisualRelativeMeasurement& FixedLagEventAdapter::lastVisualAdmission() const {
+  return last_visual_admission_;
+}
 
 const AdapterEventStatus& FixedLagEventAdapter::lastEventStatus() const {
   return last_status_;
