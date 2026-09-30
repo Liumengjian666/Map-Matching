@@ -262,14 +262,29 @@ void runWindowOwnedExperimentalMode(const p4_i2::Inputs& inputs,
       std::string(diagnostic_environment)=="1";
   fixed_lag::FixedLagOptions options;
   options.capture_optimizer_trace=diagnostic_enabled;
+  const char* marginalization_environment =
+      std::getenv("P6_A3C_R1_MARGINALIZATION_DIAGNOSTICS");
+  const bool marginalization_diagnostic_enabled = marginalization_environment &&
+      std::string(marginalization_environment) == "1";
+  options.capture_marginalization_diagnostics =
+      marginalization_diagnostic_enabled;
   std::ofstream preopt_capsule,optimizer_trace,directional_derivative,
-      damping_sweep,optimizer_failure_summary;
+      damping_sweep,optimizer_failure_summary,marginalization_trace,
+      marginalization_failure_summary;
   if (diagnostic_enabled) {
     preopt_capsule=openV3ExclusiveOutput(trajectory_path+".r1_preopt_capsule.csv");
     optimizer_trace=openV3ExclusiveOutput(trajectory_path+".r1_optimizer_trace.csv");
     directional_derivative=openV3ExclusiveOutput(trajectory_path+".r1_directional_derivative.csv");
     damping_sweep=openV3ExclusiveOutput(trajectory_path+".r1_damping_sweep.csv");
     optimizer_failure_summary=openV3ExclusiveOutput(trajectory_path+".r1_failure_summary.txt");
+  }
+  const std::string marginalization_failure_capsule_path =
+      trajectory_path + ".a3c_r1_failure_capsule.bin";
+  if (marginalization_diagnostic_enabled) {
+    marginalization_trace=openV3ExclusiveOutput(
+        trajectory_path+".a3c_r1_marginalization_trace.csv");
+    marginalization_failure_summary=openV3ExclusiveOutput(
+        trajectory_path+".a3c_r1_failure_summary.txt");
   }
   const auto result=runFixedLagProducer(inputs,assets,parameters,initial,extrinsic,target,visual,
       [](const ScanAsset&)->Cloud::Ptr {throw std::runtime_error("V3_LEGACY_SOURCE_PROVIDER_FORBIDDEN");},
@@ -279,8 +294,13 @@ void runWindowOwnedExperimentalMode(const p4_i2::Inputs& inputs,
       diagnostic_enabled?&optimizer_trace:nullptr,
       diagnostic_enabled?&directional_derivative:nullptr,
       diagnostic_enabled?&damping_sweep:nullptr,
-      diagnostic_enabled?&optimizer_failure_summary:nullptr);
+      diagnostic_enabled?&optimizer_failure_summary:nullptr,
+      marginalization_diagnostic_enabled?&marginalization_trace:nullptr,
+      marginalization_diagnostic_enabled?&marginalization_failure_summary:nullptr,
+      marginalization_diagnostic_enabled?marginalization_failure_capsule_path:
+          std::string());
   trajectory.flush(); diagnostics.flush(); runtime.flush(); deskew_evidence.flush();
+  if (marginalization_diagnostic_enabled) marginalization_trace.flush();
   std::cout<<"FULL_FIXED_LAG_V3_EXPERIMENTAL_COMPLETE window_deskews="<<result.window_deskew_count
       <<" raw_scans_before_handoff="<<result.raw_scans_before_handoff
       <<" ndt_calls="<<result.ndt_calls<<" raw_timed_sha256="<<p5_i1::sha256File(raw_path)

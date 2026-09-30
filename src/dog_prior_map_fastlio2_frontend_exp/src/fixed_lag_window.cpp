@@ -54,6 +54,35 @@ void addCrossBlock(Eigen::MatrixXd* hessian, const Eigen::MatrixXd& left,
   hessian->block(right_offset, left_offset, right.cols(), left.cols()).noalias() += block.transpose();
 }
 
+void addDiagnosticBlock(Eigen::MatrixXd* hessian, Eigen::VectorXd* gradient,
+                       const Eigen::MatrixXd& jacobian,
+                       const Eigen::VectorXd& residual,
+                       const Eigen::MatrixXd& covariance,
+                       Eigen::Index offset) {
+  Eigen::LDLT<Eigen::MatrixXd> factor(covariance);
+  const Eigen::MatrixXd information = factor.solve(
+      Eigen::MatrixXd::Identity(covariance.rows(), covariance.cols()));
+  const Eigen::MatrixXd weighted_jacobian = information * jacobian;
+  hessian->block(offset, offset, jacobian.cols(), jacobian.cols()).noalias() +=
+      jacobian.transpose() * weighted_jacobian;
+  gradient->segment(offset, jacobian.cols()).noalias() +=
+      jacobian.transpose() * information * residual;
+}
+
+void addDiagnosticCrossBlock(Eigen::MatrixXd* hessian,
+                             const Eigen::MatrixXd& left,
+                             const Eigen::MatrixXd& right,
+                             const Eigen::MatrixXd& covariance,
+                             Eigen::Index left_offset,
+                             Eigen::Index right_offset) {
+  Eigen::LDLT<Eigen::MatrixXd> factor(covariance);
+  const Eigen::MatrixXd information = factor.solve(
+      Eigen::MatrixXd::Identity(covariance.rows(), covariance.cols()));
+  const Eigen::MatrixXd block = left.transpose() * information * right;
+  hessian->block(left_offset, right_offset, left.cols(), right.cols()).noalias() += block;
+  hessian->block(right_offset, left_offset, right.cols(), left.cols()).noalias() += block.transpose();
+}
+
 }  // namespace
 
 const char* toString(OptimizerStatus status) {
@@ -306,7 +335,8 @@ bool FixedLagWindow::setInitialPrior(std::uint64_t stamp_ns,
 bool FixedLagWindow::linearizeSelected(LinearizationScope scope,
                                        Eigen::MatrixXd* hessian,
                                        Eigen::VectorXd* gradient, double* cost,
-                                       std::string* reason) const {
+                                       std::string* reason,
+    MarginalizationAssemblyDiagnostics* diagnostics) const {
   if (reason) reason->clear();
   if (!hessian || !gradient || !cost)
     return fail(reason, "null_window_linearization_output");
@@ -315,6 +345,16 @@ bool FixedLagWindow::linearizeSelected(LinearizationScope scope,
   *hessian = Eigen::MatrixXd::Zero(dimension, dimension);
   *gradient = Eigen::VectorXd::Zero(dimension);
   *cost = 0.0;
+  if (diagnostics) {
+    diagnostics->prior_hessian = Eigen::MatrixXd::Zero(dimension, dimension);
+    diagnostics->prior_gradient = Eigen::VectorXd::Zero(dimension);
+    diagnostics->imu_hessian = Eigen::MatrixXd::Zero(dimension, dimension);
+    diagnostics->imu_gradient = Eigen::VectorXd::Zero(dimension);
+    diagnostics->lidar_hessian = Eigen::MatrixXd::Zero(dimension, dimension);
+    diagnostics->lidar_gradient = Eigen::VectorXd::Zero(dimension);
+    diagnostics->visual_hessian = Eigen::MatrixXd::Zero(dimension, dimension);
+    diagnostics->visual_gradient = Eigen::VectorXd::Zero(dimension);
+  }
   const std::uint64_t oldest_stamp = states_.front().stamp_ns;
   if (prior_.valid) {
     if (prior_.reference_states.size() != states_.size() ||
@@ -352,6 +392,12 @@ bool FixedLagWindow::linearizeSelected(LinearizationScope scope,
     *gradient += coordinate_jacobian.transpose() * prior_force;
     *cost += displacement.dot(prior_.information * displacement) +
         2.0 * prior_.gradient.dot(displacement);
+    if (diagnostics) {
+      diagnostics->prior_hessian.noalias() = coordinate_jacobian.transpose() *
+          prior_.information * coordinate_jacobian;
+      diagnostics->prior_gradient.noalias() =
+          coordinate_jacobian.transpose() * prior_force;
+    }
   }
   for (const ImuFactorRecord& factor_record : imu_factors_) {
     if (scope == LinearizationScope::FACTORS_TOUCHING_OLDEST &&
@@ -380,6 +426,17 @@ bool FixedLagWindow::linearizeSelected(LinearizationScope scope,
              factor_record.measurement.covariance, to_offset);
     addCrossBlock(hessian, jacobian_from, jacobian_to, information,
                   from_offset, to_offset);
+    if (diagnostics) {
+      addDiagnosticBlock(&diagnostics->imu_hessian,
+          &diagnostics->imu_gradient, jacobian_from, residual,
+          factor_record.measurement.covariance, from_offset);
+      addDiagnosticBlock(&diagnostics->imu_hessian,
+          &diagnostics->imu_gradient, jacobian_to, residual,
+          factor_record.measurement.covariance, to_offset);
+      addDiagnosticCrossBlock(&diagnostics->imu_hessian, jacobian_from,
+          jacobian_to, factor_record.measurement.covariance, from_offset,
+          to_offset);
+    }
     *cost += residual.dot(information * residual);
   }
   for (const LidarFactorRecord& factor_record : lidar_factors_) {
@@ -397,6 +454,10 @@ bool FixedLagWindow::linearizeSelected(LinearizationScope scope,
     if (!finiteSpd(covariance)) return fail(reason, "lidar_factor_covariance_not_spd");
     addBlock(hessian, gradient, jacobian, residual, covariance,
              static_cast<Eigen::Index>(state_index * 15));
+    if (diagnostics)
+      addDiagnosticBlock(&diagnostics->lidar_hessian,
+          &diagnostics->lidar_gradient, jacobian, residual, covariance,
+          static_cast<Eigen::Index>(state_index * 15));
     *cost += residual.dot(covariance.ldlt().solve(residual));
   }
   for (const VisualFactorRecord& factor_record : visual_factors_) {
@@ -430,6 +491,17 @@ bool FixedLagWindow::linearizeSelected(LinearizationScope scope,
              covariance, current_offset);
     addCrossBlock(hessian, jacobian_reference, jacobian_current, information,
                   reference_offset, current_offset);
+    if (diagnostics) {
+      addDiagnosticBlock(&diagnostics->visual_hessian,
+          &diagnostics->visual_gradient, jacobian_reference, residual,
+          covariance, reference_offset);
+      addDiagnosticBlock(&diagnostics->visual_hessian,
+          &diagnostics->visual_gradient, jacobian_current, residual,
+          covariance, current_offset);
+      addDiagnosticCrossBlock(&diagnostics->visual_hessian,
+          jacobian_reference, jacobian_current, covariance, reference_offset,
+          current_offset);
+    }
     *cost += residual.dot(information * residual);
   }
   *hessian = 0.5 * (*hessian + hessian->transpose());
@@ -447,9 +519,10 @@ bool FixedLagWindow::linearize(Eigen::MatrixXd* hessian,
 
 bool FixedLagWindow::linearizeMarginalizationSubgraph(
     Eigen::MatrixXd* hessian, Eigen::VectorXd* gradient, double* cost,
-    std::string* reason) const {
+    std::string* reason,
+    MarginalizationAssemblyDiagnostics* diagnostics) const {
   return linearizeSelected(LinearizationScope::FACTORS_TOUCHING_OLDEST,
-                           hessian, gradient, cost, reason);
+                           hessian, gradient, cost, reason, diagnostics);
 }
 
 double FixedLagWindow::objective(std::string* reason,
@@ -529,6 +602,16 @@ bool FixedLagWindow::objectiveBreakdownAtStatesForDebug(
 const std::vector<OptimizerIterationTrace>&
 FixedLagWindow::optimizerTraceForDebug() const {
   return optimizer_trace_;
+}
+
+const std::vector<MarginalizationTraceRecord>&
+FixedLagWindow::marginalizationTraceForDiagnostics() const {
+  return marginalization_trace_;
+}
+
+const MarginalizationFailureCapsule&
+FixedLagWindow::marginalizationFailureCapsuleForDiagnostics() const {
+  return marginalization_failure_capsule_;
 }
 
 bool FixedLagWindow::diagnoseOptimizerFailureForDebug(
@@ -994,9 +1077,31 @@ bool FixedLagWindow::optimize(std::string* reason) {
 bool FixedLagWindow::marginalizeIfNeeded(std::string* reason) {
   if (reason) reason->clear();
   if (states_.empty()) return fail(reason, "cannot_marginalize_empty_window");
+  if (options_.capture_marginalization_diagnostics) {
+    ++marginalization_enforcement_index_;
+    marginalization_attempt_index_ = 0;
+    marginalization_failure_capsule_ = MarginalizationFailureCapsule();
+    enforcement_state_stamps_before_.clear();
+    enforcement_state_stamps_before_.reserve(states_.size());
+    for (const auto& state : states_)
+      enforcement_state_stamps_before_.push_back(state.stamp_ns);
+    enforcement_prior_hash_before_ =
+        marginalizationPriorHashForDiagnostics(prior_.information,
+                                               prior_.gradient);
+    enforcement_factor_counts_before_ = {
+        imu_factors_.size(), lidar_factors_.size(), visual_factors_.size()};
+  }
   while (states_.size() > options_.maximum_nodes ||
          (states_.back().stamp_ns - states_.front().stamp_ns) * 1e-9 >
              options_.maximum_duration_s) {
+    if (options_.capture_marginalization_diagnostics) {
+      ++marginalization_attempt_index_;
+      marginalization_trigger_node_limit_ =
+          states_.size() > options_.maximum_nodes;
+      marginalization_trigger_duration_limit_ =
+          (states_.back().stamp_ns - states_.front().stamp_ns) * 1e-9 >
+              options_.maximum_duration_s;
+    }
     if (!marginalizeOldest(reason)) return false;
   }
   summary_.window_node_count = states_.size();

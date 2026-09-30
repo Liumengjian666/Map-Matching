@@ -22,6 +22,132 @@ struct WindowOwnedProducerInput {
   std::vector<fixed_lag::VisualMeasurementProvenance> visual_provenance;
 };
 
+void writeMarginalizationStatsHeader(std::ostream& output,
+                                     const std::string& prefix) {
+  output << ',' << prefix << "_available," << prefix << "_finite,"
+         << prefix << "_dimension," << prefix << "_symmetry_fro,"
+         << prefix << "_symmetry_max_abs,"
+         << prefix << "_lambda_min," << prefix << "_lambda_max,"
+         << prefix << "_min_abs_eigenvalue," << prefix << "_spectral_scale,"
+         << prefix << "_frobenius," << prefix << "_relative_negative,"
+         << prefix << "_negative_count," << prefix << "_numerical_rank";
+}
+
+void writeMarginalizationStats(std::ostream& output,
+    const fixed_lag::MarginalizationMatrixStats& stats) {
+  output << ',' << stats.available << ',' << stats.finite << ','
+         << stats.dimension << ',' << stats.symmetry_frobenius_norm << ','
+         << stats.symmetry_max_abs << ','
+         << stats.lambda_min << ',' << stats.lambda_max << ','
+         << stats.min_abs_eigenvalue << ',' << stats.spectral_scale << ','
+         << stats.frobenius_norm << ',' << stats.relative_negative_ratio << ','
+         << stats.negative_eigenvalue_count << ',' << stats.numerical_rank;
+}
+
+void writeMarginalizationTraceHeader(std::ostream& output) {
+  output << std::setprecision(17)
+      << "transaction_id,event_stamp_ns,enforcement_index,attempt_index,latest_state_stamp_ns,oldest_state_stamp_ns,nodes_before_attempt,span_before_attempt_s,removed_state_stamp_ns,oldest_state_removed,nodes_after_attempt,span_after_attempt_s,trigger_duration_limit,trigger_node_limit,incident_imu_factor_count,incident_lidar_factor_count,incident_visual_factor_count,incoming_prior_valid,incoming_prior_hash_fnv1a64";
+  for (const char* name : {"incoming_prior", "charted_prior", "touching_factors",
+       "imu_contribution", "lidar_contribution", "visual_contribution",
+       "consumed_system", "hmm", "raw_schur", "symmetrized_schur",
+       "new_prior"})
+    writeMarginalizationStatsHeader(output, name);
+  output << ",ldlt_initial_min_abs_D,ldlt_initial_max_abs_D,ldlt_initial_pivot_ratio,ldlt_initial_positive_D_count,ldlt_initial_negative_D_count,ldlt_initial_near_zero_D_count,ldlt_solve_min_abs_D,ldlt_solve_max_abs_D,ldlt_solve_pivot_ratio,ldlt_solve_positive_D_count,ldlt_solve_negative_D_count,ldlt_solve_near_zero_D_count,solve_jitter,Hmm_condition_proxy,solve_finite,solve_H_backward_error,solve_b_backward_error,raw_schur_asymmetry_fro,new_gradient_evaluated,new_gradient_finite,new_gradient_norm,new_gradient_max_abs,first_bad_stage,marginalization_result\n";
+}
+
+void writeMarginalizationTraceRow(std::ostream& output,
+    std::uint64_t transaction_id, std::uint64_t event_stamp_ns,
+    const fixed_lag::MarginalizationTraceRecord& row) {
+  output << transaction_id << ',' << event_stamp_ns << ','
+      << row.marginalization_enforcement_index << ','
+      << row.attempt_index_within_enforcement << ','
+      << row.latest_state_stamp_ns << ',' << row.oldest_state_stamp_ns << ','
+      << row.nodes_before_attempt << ',' << row.span_before_attempt_s << ','
+      << row.removed_state_stamp_ns << ',' << row.oldest_state_removed << ','
+      << row.nodes_after_attempt << ',' << row.span_after_attempt_s << ','
+      << row.trigger_duration_limit << ',' << row.trigger_node_limit << ','
+      << row.incident_imu_factor_count << ','
+      << row.incident_lidar_factor_count << ','
+      << row.incident_visual_factor_count << ',' << row.incoming_prior_valid
+      << ',' << row.incoming_prior_hash_fnv1a64;
+  for (const auto* stats : {&row.incoming_prior, &row.charted_prior,
+       &row.touching_factors, &row.imu_contribution, &row.lidar_contribution,
+       &row.visual_contribution, &row.consumed_system, &row.hmm,
+       &row.raw_schur, &row.symmetrized_schur, &row.new_prior})
+    writeMarginalizationStats(output, *stats);
+  output << ',' << row.ldlt_initial_min_abs_d << ','
+      << row.ldlt_initial_max_abs_d << ',' << row.ldlt_initial_pivot_ratio
+      << ',' << row.ldlt_initial_positive_d_count << ','
+      << row.ldlt_initial_negative_d_count << ','
+      << row.ldlt_initial_near_zero_d_count << ','
+      << row.ldlt_solve_min_abs_d << ',' << row.ldlt_solve_max_abs_d << ','
+      << row.ldlt_solve_pivot_ratio << ','
+      << row.ldlt_solve_positive_d_count << ','
+      << row.ldlt_solve_negative_d_count << ','
+      << row.ldlt_solve_near_zero_d_count << ',' << row.solve_jitter << ','
+      << row.hmm_condition_proxy << ',' << row.solve_finite << ','
+      << row.solve_h_backward_error << ',' << row.solve_b_backward_error << ','
+      << row.raw_schur_asymmetry_frobenius_norm << ','
+      << row.new_gradient_evaluated << ','
+      << row.new_gradient_finite << ',' << row.new_gradient_norm << ','
+      << row.new_gradient_max_abs << ',' << row.first_bad_stage << ','
+      << row.marginalization_result << '\n';
+}
+
+void writeCapsuleArray(std::ostream& file, const std::string& name,
+                       const Eigen::MatrixXd& matrix) {
+  const std::uint32_t name_length = static_cast<std::uint32_t>(name.size());
+  const std::uint64_t rows = static_cast<std::uint64_t>(matrix.rows());
+  const std::uint64_t columns = static_cast<std::uint64_t>(matrix.cols());
+  file.write(reinterpret_cast<const char*>(&name_length), sizeof(name_length));
+  file.write(name.data(), static_cast<std::streamsize>(name.size()));
+  file.write(reinterpret_cast<const char*>(&rows), sizeof(rows));
+  file.write(reinterpret_cast<const char*>(&columns), sizeof(columns));
+  for (Eigen::Index row = 0; row < matrix.rows(); ++row)
+    for (Eigen::Index column = 0; column < matrix.cols(); ++column) {
+      const double value = matrix(row, column);
+      file.write(reinterpret_cast<const char*>(&value), sizeof(value));
+    }
+}
+
+bool writeMarginalizationFailureCapsuleBinary(
+  const std::string& path,
+  const fixed_lag::MarginalizationFailureCapsule& capsule) {
+  if (!capsule.valid || path.empty()) return false;
+  std::ifstream existing(path, std::ios::binary);
+  if (existing.good()) return false;
+  std::ofstream file(path, std::ios::binary | std::ios::out | std::ios::trunc);
+  if (!file) return false;
+  const char magic[16] = {'P','6','A','3','C','R','1','C','A','P','S','U','L','E','\0','\0'};
+  const std::uint32_t version = 1;
+  const std::uint32_t array_count = 11;
+  file.write(magic, sizeof(magic));
+  file.write(reinterpret_cast<const char*>(&version), sizeof(version));
+  file.write(reinterpret_cast<const char*>(&array_count), sizeof(array_count));
+  writeCapsuleArray(file, "incoming_prior_information", capsule.incoming_prior_information);
+  writeCapsuleArray(file, "incoming_prior_gradient", Eigen::MatrixXd(capsule.incoming_prior_gradient));
+  writeCapsuleArray(file, "charted_prior_information", capsule.charted_prior_information);
+  writeCapsuleArray(file, "charted_prior_gradient", Eigen::MatrixXd(capsule.charted_prior_gradient));
+  writeCapsuleArray(file, "consumed_hessian", capsule.consumed_hessian);
+  writeCapsuleArray(file, "consumed_gradient", Eigen::MatrixXd(capsule.consumed_gradient));
+  writeCapsuleArray(file, "imu_hessian", capsule.imu_hessian);
+  writeCapsuleArray(file, "lidar_hessian", capsule.lidar_hessian);
+  writeCapsuleArray(file, "visual_hessian", capsule.visual_hessian);
+  writeCapsuleArray(file, "correction_h", capsule.correction_h);
+  writeCapsuleArray(file, "correction_b", Eigen::MatrixXd(capsule.correction_b));
+  file.flush();
+  return file.good();
+}
+
+std::string stampList(const std::vector<std::uint64_t>& stamps) {
+  std::ostringstream output;
+  for (std::size_t index = 0; index < stamps.size(); ++index) {
+    if (index) output << ';';
+    output << stamps[index];
+  }
+  return output.str();
+}
+
 FixedLagInitializationSeed initializeFixedLagProducer(
     const p4_i2::ImuVector& imu, const RuntimeParameters& parameters,
     const Pose3d& initial_lidar, const Pose3d& extrinsic,
@@ -91,7 +217,10 @@ FixedLagProducerResult runFixedLagProducer(
     std::ostream* optimizer_trace_output = nullptr,
     std::ostream* directional_derivative_output = nullptr,
     std::ostream* damping_sweep_output = nullptr,
-    std::ostream* optimizer_failure_summary = nullptr) {
+    std::ostream* optimizer_failure_summary = nullptr,
+    std::ostream* marginalization_trace_output = nullptr,
+    std::ostream* marginalization_failure_summary = nullptr,
+    const std::string& marginalization_failure_capsule_path = {}) {
   using namespace fixed_lag;
   const auto started=std::chrono::steady_clock::now();
   if(assets.empty() || inputs.imu.empty() || !target || target->empty())
@@ -179,6 +308,8 @@ FixedLagProducerResult runFixedLagProducer(
       <<"reliable_rank,basis,raw_residual_r6,selected_residual_rs,selected_covariance_Rs,"
       <<"selected_nis_valid,selected_nis,nis_threshold,nis_accepted,"
       <<"lidar_attempted,lidar_committed,event_status,factor_counts_before_optimize\n";
+  if (marginalization_trace_output)
+    writeMarginalizationTraceHeader(*marginalization_trace_output);
   if (optimizer_trace_output)
     *optimizer_trace_output<<std::setprecision(17)
       <<"transaction_id,stamp_ns,iteration,lidar_snapshot_generation,max_projector_change_from_previous_outer,"
@@ -231,6 +362,19 @@ FixedLagProducerResult runFixedLagProducer(
     optimizer_trace_output->flush();
     if (!*optimizer_trace_output)
       throw std::runtime_error("optimizer_trace_flush_failed");
+  };
+  std::size_t marginalization_trace_cursor = 0;
+  const auto flushMarginalizationTraceRows = [&] (
+      std::uint64_t transaction_id, std::uint64_t stamp_ns) {
+    if (!marginalization_trace_output) return;
+    const auto* diagnostic_window = adapter.debugWindowForDiagnostics();
+    if (!diagnostic_window) return;
+    const auto& rows = diagnostic_window->marginalizationTraceForDiagnostics();
+    for (; marginalization_trace_cursor < rows.size();
+         ++marginalization_trace_cursor)
+      writeMarginalizationTraceRow(*marginalization_trace_output,
+          transaction_id, stamp_ns, rows[marginalization_trace_cursor]);
+    marginalization_trace_output->flush();
   };
   for(const ProducerEvent& event:stream) {
     const auto event_start=std::chrono::steady_clock::now();
@@ -531,6 +675,85 @@ FixedLagProducerResult runFixedLagProducer(
       if (!*preopt_capsule) throw std::runtime_error("optimizer_preopt_capsule_flush_failed");
     }
     if(!adapter.optimizeCurrentWindow(&reason)) {
+      const std::uint64_t failed_transaction_id =
+          (event.type==ProducerEventType::LIDAR_SCAN ||
+           event.type==ProducerEventType::LIDAR_SCAN_END)
+              ? assets[event.source_index].transaction_id : 0;
+      flushMarginalizationTraceRows(failed_transaction_id, event.stamp_ns);
+      if (marginalization_failure_summary) {
+        *marginalization_failure_summary << std::setprecision(17);
+        const auto* diagnostic_window = adapter.debugWindowForDiagnostics();
+        const auto* capsule = diagnostic_window
+            ? &diagnostic_window->marginalizationFailureCapsuleForDiagnostics()
+            : nullptr;
+        *marginalization_failure_summary
+            << "transaction_id=" << failed_transaction_id << '\n'
+            << "event=" << toString(event.type) << '\n'
+            << "event_stamp_ns=" << event.stamp_ns << '\n'
+            << "failure=producer_optimizer:" << reason << '\n';
+        if (capsule && capsule->valid) {
+          const bool partial_commit =
+              capsule->state_stamps_before_enforcement !=
+                  capsule->state_stamps_at_failure ||
+              capsule->prior_hash_before_enforcement_fnv1a64 !=
+                  capsule->prior_hash_at_failure_fnv1a64 ||
+              capsule->factors_before_enforcement.imu !=
+                  capsule->factors_at_failure.imu ||
+              capsule->factors_before_enforcement.lidar !=
+                  capsule->factors_at_failure.lidar ||
+              capsule->factors_before_enforcement.visual !=
+                  capsule->factors_at_failure.visual;
+          const bool binary_written = writeMarginalizationFailureCapsuleBinary(
+              marginalization_failure_capsule_path, *capsule);
+          const auto& row = capsule->trace;
+          *marginalization_failure_summary
+              << "marginalization_failure_capsule_valid=1\n"
+              << "marginalization_enforcement_index="
+              << row.marginalization_enforcement_index << '\n'
+              << "attempt_index_within_enforcement="
+              << row.attempt_index_within_enforcement << '\n'
+              << "successful_oldest_removals_before_failure_in_same_enforcement="
+              << (row.attempt_index_within_enforcement - 1) << '\n'
+              << "first_bad_stage=" << row.first_bad_stage << '\n'
+              << "marginalization_result=" << row.marginalization_result << '\n'
+              << "state_stamps_before_enforcement="
+              << stampList(capsule->state_stamps_before_enforcement) << '\n'
+              << "state_stamps_at_failing_attempt="
+              << stampList(capsule->state_stamps_at_attempt) << '\n'
+              << "state_stamps_after_failure="
+              << stampList(capsule->state_stamps_at_failure) << '\n'
+              << "prior_hash_before_enforcement_fnv1a64="
+              << capsule->prior_hash_before_enforcement_fnv1a64 << '\n'
+              << "prior_hash_after_failure_fnv1a64="
+              << capsule->prior_hash_at_failure_fnv1a64 << '\n'
+              << "factor_counts_before_enforcement="
+              << capsule->factors_before_enforcement.imu << ';'
+              << capsule->factors_before_enforcement.lidar << ';'
+              << capsule->factors_before_enforcement.visual << '\n'
+              << "factor_counts_after_failure="
+              << capsule->factors_at_failure.imu << ';'
+              << capsule->factors_at_failure.lidar << ';'
+              << capsule->factors_at_failure.visual << '\n'
+              << "partial_marginalization_commit_on_enforcement_failure="
+              << (partial_commit ? "YES" : "NO") << '\n'
+              << "matrix_capsule_binary_path="
+              << marginalization_failure_capsule_path << '\n'
+              << "matrix_capsule_binary_written=" << binary_written << '\n'
+              << "hessian_dimension=" << capsule->consumed_hessian.rows() << '\n'
+              << "marginalized_dimension=15\n"
+              << "retained_dimension="
+              << std::max<Eigen::Index>(0, capsule->consumed_hessian.rows()-15) << '\n'
+              << "solve_jitter=" << row.solve_jitter << '\n'
+              << "hmm_lambda_min=" << row.hmm.lambda_min << '\n'
+              << "hmm_lambda_max=" << row.hmm.lambda_max << '\n'
+              << "production_correction_h_shape="
+              << capsule->correction_h.rows() << 'x'
+              << capsule->correction_h.cols() << '\n'
+              << "hessian_dtype=float64_row_major\n"
+              << "matrix_capsule_format=P6A3CR1CAPSULE_v1\n";
+        }
+        marginalization_failure_summary->flush();
+      }
       if (optimizer_failure_summary) {
         const std::uint64_t transaction_id=
             (event.type==ProducerEventType::LIDAR_SCAN ||
@@ -617,6 +840,11 @@ FixedLagProducerResult runFixedLagProducer(
       }
       throw std::runtime_error("producer_optimizer:"+reason);
     }
+    flushMarginalizationTraceRows(
+        (event.type==ProducerEventType::LIDAR_SCAN ||
+         event.type==ProducerEventType::LIDAR_SCAN_END)
+            ? assets[event.source_index].transaction_id : 0,
+        event.stamp_ns);
     if (optimizer_trace_output) {
       const auto* trace_window = adapter.debugWindowForDiagnostics();
       if (!trace_window)

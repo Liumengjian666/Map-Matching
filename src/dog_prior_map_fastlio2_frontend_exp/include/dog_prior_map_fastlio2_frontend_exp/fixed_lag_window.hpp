@@ -25,6 +25,9 @@ struct FixedLagOptions {
   bool debug_rank_diagnostic = false;
   // Opt-in observability only. This must not participate in solver decisions.
   bool capture_optimizer_trace = false;
+  // Opt-in marginalization forensics. It may collect matrix diagnostics but
+  // must never participate in production decisions or change factor order.
+  bool capture_marginalization_diagnostics = false;
 };
 
 enum class OptimizerStatus {
@@ -175,6 +178,127 @@ struct DampingSweepTrace {
   ObjectiveBreakdown frozen_basis_breakdown;
 };
 
+struct MarginalizationMatrixStats {
+  bool available = false;
+  bool finite = false;
+  Eigen::Index dimension = 0;
+  double symmetry_frobenius_norm = 0.0;
+  double symmetry_max_abs = 0.0;
+  double lambda_min = 0.0;
+  double lambda_max = 0.0;
+  double min_abs_eigenvalue = 0.0;
+  double spectral_scale = 0.0;
+  double frobenius_norm = 0.0;
+  double relative_negative_ratio = 0.0;
+  Eigen::Index negative_eigenvalue_count = 0;
+  Eigen::Index numerical_rank = 0;
+  std::string status = "NOT_AVAILABLE";
+};
+
+// Diagnostics only: spectrum uses the symmetric part, while the original
+// symmetry defect is reported separately. Numerical rank uses eps*n*||A||2.
+MarginalizationMatrixStats marginalizationMatrixStatsForDiagnostics(
+    const Eigen::MatrixXd& matrix);
+std::uint64_t marginalizationPriorHashForDiagnostics(
+    const Eigen::MatrixXd& information, const Eigen::VectorXd& gradient);
+
+struct MarginalizationLdltStats {
+  bool available = false;
+  double min_abs_d = 0.0;
+  double max_abs_d = 0.0;
+  double pivot_ratio = 0.0;
+  double near_zero_threshold = 0.0;
+  std::size_t positive_d_count = 0;
+  std::size_t negative_d_count = 0;
+  std::size_t near_zero_d_count = 0;
+};
+MarginalizationLdltStats marginalizationLdltStatsForDiagnostics(
+    const Eigen::VectorXd& diagonal);
+
+struct MarginalizationTraceRecord {
+  std::uint64_t marginalization_enforcement_index = 0;
+  std::size_t attempt_index_within_enforcement = 0;
+  std::uint64_t latest_state_stamp_ns = 0;
+  std::uint64_t oldest_state_stamp_ns = 0;
+  std::size_t nodes_before_attempt = 0;
+  double span_before_attempt_s = 0.0;
+  std::uint64_t removed_state_stamp_ns = 0;
+  bool oldest_state_removed = false;
+  std::size_t nodes_after_attempt = 0;
+  double span_after_attempt_s = 0.0;
+  bool trigger_duration_limit = false;
+  bool trigger_node_limit = false;
+  std::size_t incident_imu_factor_count = 0;
+  std::size_t incident_lidar_factor_count = 0;
+  std::size_t incident_visual_factor_count = 0;
+  bool incoming_prior_valid = false;
+  std::uint64_t incoming_prior_hash_fnv1a64 = 0;
+  MarginalizationMatrixStats incoming_prior;
+  MarginalizationMatrixStats charted_prior;
+  MarginalizationMatrixStats touching_factors;
+  MarginalizationMatrixStats imu_contribution;
+  MarginalizationMatrixStats lidar_contribution;
+  MarginalizationMatrixStats visual_contribution;
+  MarginalizationMatrixStats consumed_system;
+  MarginalizationMatrixStats hmm;
+  MarginalizationMatrixStats raw_schur;
+  MarginalizationMatrixStats symmetrized_schur;
+  MarginalizationMatrixStats new_prior;
+  double ldlt_initial_min_abs_d = 0.0;
+  double ldlt_initial_max_abs_d = 0.0;
+  double ldlt_initial_pivot_ratio = 0.0;
+  std::size_t ldlt_initial_positive_d_count = 0;
+  std::size_t ldlt_initial_negative_d_count = 0;
+  std::size_t ldlt_initial_near_zero_d_count = 0;
+  double ldlt_solve_min_abs_d = 0.0;
+  double ldlt_solve_max_abs_d = 0.0;
+  double ldlt_solve_pivot_ratio = 0.0;
+  std::size_t ldlt_solve_positive_d_count = 0;
+  std::size_t ldlt_solve_negative_d_count = 0;
+  std::size_t ldlt_solve_near_zero_d_count = 0;
+  double solve_jitter = 0.0;
+  double hmm_condition_proxy = 0.0;
+  bool solve_finite = false;
+  double solve_h_backward_error = 0.0;
+  double solve_b_backward_error = 0.0;
+  double raw_schur_asymmetry_frobenius_norm = 0.0;
+  bool new_gradient_evaluated = false;
+  bool new_gradient_finite = false;
+  double new_gradient_norm = 0.0;
+  double new_gradient_max_abs = 0.0;
+  std::string first_bad_stage = "NONE";
+  std::string marginalization_result = "NOT_RUN";
+};
+
+struct MarginalizationFactorCounts {
+  std::size_t imu = 0;
+  std::size_t lidar = 0;
+  std::size_t visual = 0;
+};
+
+struct MarginalizationFailureCapsule {
+  bool valid = false;
+  MarginalizationTraceRecord trace;
+  std::vector<std::uint64_t> state_stamps_before_enforcement;
+  std::vector<std::uint64_t> state_stamps_at_failure;
+  std::uint64_t prior_hash_before_enforcement_fnv1a64 = 0;
+  std::uint64_t prior_hash_at_failure_fnv1a64 = 0;
+  MarginalizationFactorCounts factors_before_enforcement;
+  MarginalizationFactorCounts factors_at_failure;
+  std::vector<std::uint64_t> state_stamps_at_attempt;
+  Eigen::MatrixXd incoming_prior_information;
+  Eigen::VectorXd incoming_prior_gradient;
+  Eigen::MatrixXd charted_prior_information;
+  Eigen::VectorXd charted_prior_gradient;
+  Eigen::MatrixXd consumed_hessian;
+  Eigen::VectorXd consumed_gradient;
+  Eigen::MatrixXd imu_hessian;
+  Eigen::MatrixXd lidar_hessian;
+  Eigen::MatrixXd visual_hessian;
+  Eigen::MatrixXd correction_h;
+  Eigen::VectorXd correction_b;
+};
+
 class FixedLagWindow {
  public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -250,6 +374,10 @@ class FixedLagWindow {
       double* maximum_state_difference,
       std::string* reason = nullptr) const;
   const std::vector<OptimizerIterationTrace>& optimizerTraceForDebug() const;
+  const std::vector<MarginalizationTraceRecord>&
+  marginalizationTraceForDiagnostics() const;
+  const MarginalizationFailureCapsule&
+  marginalizationFailureCapsuleForDiagnostics() const;
   bool latestMarginalCovariance(WindowMarginalCovariance* output,
                                std::string* reason = nullptr) const;
   bool latestMarginalCovarianceDenseReferenceForTest(
@@ -273,6 +401,17 @@ class FixedLagWindow {
     bool valid = false;
   };
 
+  struct MarginalizationAssemblyDiagnostics {
+    Eigen::MatrixXd prior_hessian;
+    Eigen::VectorXd prior_gradient;
+    Eigen::MatrixXd imu_hessian;
+    Eigen::VectorXd imu_gradient;
+    Eigen::MatrixXd lidar_hessian;
+    Eigen::VectorXd lidar_gradient;
+    Eigen::MatrixXd visual_hessian;
+    Eigen::VectorXd visual_gradient;
+  };
+
   enum class LinearizationScope {
     ALL_FACTORS,
     FACTORS_TOUCHING_OLDEST,
@@ -281,13 +420,16 @@ class FixedLagWindow {
   bool findStateIndex(std::uint64_t stamp_ns, std::size_t* index) const;
   bool linearizeSelected(LinearizationScope scope, Eigen::MatrixXd* hessian,
                          Eigen::VectorXd* gradient, double* cost,
-                         std::string* reason) const;
+                         std::string* reason,
+                         MarginalizationAssemblyDiagnostics* diagnostics =
+                             nullptr) const;
   bool linearize(Eigen::MatrixXd* hessian, Eigen::VectorXd* gradient,
                  double* cost, std::string* reason) const;
   bool linearizeMarginalizationSubgraph(Eigen::MatrixXd* hessian,
                                         Eigen::VectorXd* gradient,
                                         double* cost,
-                                        std::string* reason) const;
+                                        std::string* reason,
+      MarginalizationAssemblyDiagnostics* diagnostics = nullptr) const;
   double objective(std::string* reason,
                    ObjectiveBreakdown* breakdown = nullptr) const;
   bool evaluateObjectiveForDebug(
@@ -318,6 +460,15 @@ class FixedLagWindow {
   PriorInformation prior_;
   mutable WindowSummary summary_;
   std::vector<OptimizerIterationTrace> optimizer_trace_;
+  std::vector<MarginalizationTraceRecord> marginalization_trace_;
+  MarginalizationFailureCapsule marginalization_failure_capsule_;
+  std::uint64_t marginalization_enforcement_index_ = 0;
+  std::size_t marginalization_attempt_index_ = 0;
+  bool marginalization_trigger_duration_limit_ = false;
+  bool marginalization_trigger_node_limit_ = false;
+  std::vector<std::uint64_t> enforcement_state_stamps_before_;
+  std::uint64_t enforcement_prior_hash_before_ = 0;
+  MarginalizationFactorCounts enforcement_factor_counts_before_;
 };
 
 // Applies one stacked 15D local increment per state as a transaction.  On any
