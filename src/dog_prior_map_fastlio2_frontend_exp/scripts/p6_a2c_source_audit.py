@@ -16,11 +16,14 @@ def main():
     stripped = current.replace(
         '#include "dog_prior_map_fastlio2_frontend_exp/fixed_lag_production.hpp"\n', "")
     stripped = stripped.replace('\n#include "p6_a2c_fixed_lag_producer.hpp"\n', "")
+    stripped = stripped.replace('#include "dog_prior_map_fastlio2_frontend_exp/window_scan_processor.hpp"\n', "")
+    stripped = stripped.replace('#include "p6_a2d_raw_timed_provider.hpp"\n', "")
     start = stripped.index('    if (argc == 2 && std::string(argv[1]) == "A2C_FIXTURE")')
     end = stripped.index('    if (((argc >= 11 && argc <= 15)', start)
     stripped = stripped[:start] + stripped[end:]
     stripped = "\n".join(line for line in stripped.split("\n")
-                         if '<< "  p6_i1_branched_recovery FULL_FIXED_LAG_V2_EXPERIMENTAL' not in line)
+                         if not any(f'<< "  p6_i1_branched_recovery {mode}' in line for mode in
+                                    ('FULL_FIXED_LAG_V2_EXPERIMENTAL', 'FULL_FIXED_LAG_V3_EXPERIMENTAL')))
     if stripped != original:
         raise RuntimeError("legacy producer changed beyond additive include/dispatch/usage")
     print("LEGACY_FULL_SOURCE_BYTE_PARITY_PASS sha256=" +

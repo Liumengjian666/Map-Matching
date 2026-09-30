@@ -8,6 +8,13 @@
 
 namespace dog_prior_map_fastlio2_frontend_exp {
 
+struct TimedLidarPoint {
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+  Eigen::Vector3d position = Eigen::Vector3d::Zero();
+  double intensity = 0.0;
+  uint64_t stamp_ns = 0;
+};
+
 struct Pose3d {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   Eigen::Vector3d position = Eigen::Vector3d::Zero();

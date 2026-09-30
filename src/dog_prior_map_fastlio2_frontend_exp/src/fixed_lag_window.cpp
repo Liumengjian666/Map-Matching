@@ -4,6 +4,7 @@
 #include <Eigen/Eigenvalues>
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <limits>
 
@@ -373,7 +374,6 @@ bool FixedLagWindow::linearizeSelected(LinearizationScope scope,
     const Matrix15d information = factor.solve(Matrix15d::Identity());
     const Eigen::Index from_offset = static_cast<Eigen::Index>(from_index * 15);
     const Eigen::Index to_offset = static_cast<Eigen::Index>(to_index * 15);
-    *hessian += Eigen::MatrixXd::Zero(dimension, dimension);
     addBlock(hessian, gradient, jacobian_from, residual,
              factor_record.measurement.covariance, from_offset);
     addBlock(hessian, gradient, jacobian_to, residual,
@@ -453,12 +453,10 @@ bool FixedLagWindow::linearizeMarginalizationSubgraph(
 }
 
 double FixedLagWindow::objective(std::string* reason) const {
-  Eigen::MatrixXd hessian;
-  Eigen::VectorXd gradient;
-  double cost = 0.0;
-  if (!linearize(&hessian, &gradient, &cost, reason))
+  WindowLinearSystem system;
+  if (!blockLinearizedSystem(&system, reason))
     return std::numeric_limits<double>::infinity();
-  return cost;
+  return system.cost;
 }
 
 bool applyGlobalIncrementAtomically(
@@ -491,6 +489,9 @@ bool FixedLagWindow::optimize(std::string* reason) {
   summary_.prediction_feedback_ready = false;
   summary_.prediction_feedback_status = "OPTIMIZATION_IN_PROGRESS";
   summary_.optimizer_status = toString(OptimizerStatus::NOT_RUN);
+  summary_.solver_status = "NOT_RUN";
+  summary_.linearization_ms = summary_.solve_ms = summary_.rank_diagnostic_ms = 0;
+  summary_.hessian_numerical_rank = -1;  // Not measured when diagnostics are off.
   double current_cost = objective(reason);
   if (!std::isfinite(current_cost)) {
     states_ = optimization_start_states;
@@ -509,9 +510,9 @@ bool FixedLagWindow::optimize(std::string* reason) {
   double damping = std::max(1e-12, options_.initial_damping);
   for (int iteration = 0; iteration < options_.maximum_optimizer_iterations;
        ++iteration) {
-    Eigen::MatrixXd hessian;
-    Eigen::VectorXd gradient;
-    if (!linearize(&hessian, &gradient, &current_cost, reason)) {
+    const auto linearization_start = std::chrono::steady_clock::now();
+    WindowLinearSystem system;
+    if (!blockLinearizedSystem(&system, reason)) {
       states_ = optimization_start_states;
       summary_.optimizer_status =
           toString(OptimizerStatus::INVALID_LINEAR_SYSTEM);
@@ -519,25 +520,38 @@ bool FixedLagWindow::optimize(std::string* reason) {
       summary_.prediction_feedback_status = "INVALID_LINEAR_SYSTEM";
       return false;
     }
-    summary_.hessian_dimension = hessian.rows();
-    Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> hessian_solver(hessian);
-    if (hessian_solver.info() == Eigen::Success &&
-        hessian_solver.eigenvalues().allFinite()) {
-      const double scale = std::max(1.0,
-          hessian_solver.eigenvalues().cwiseAbs().maxCoeff());
-      summary_.hessian_numerical_rank =
-          (hessian_solver.eigenvalues().array() > 1e-9 * scale).count();
+    summary_.linearization_ms += std::chrono::duration<double,std::milli>(
+        std::chrono::steady_clock::now()-linearization_start).count();
+    const auto& gradient = system.gradient;
+    current_cost = system.cost;
+    summary_.hessian_dimension = gradient.size();
+    if (options_.debug_rank_diagnostic) {
+      const auto rank_start = std::chrono::steady_clock::now();
+      Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> hessian_solver(system.dense());
+      if (hessian_solver.info() == Eigen::Success &&
+          hessian_solver.eigenvalues().allFinite()) {
+        const double scale = std::max(1.0,
+            hessian_solver.eigenvalues().cwiseAbs().maxCoeff());
+        summary_.hessian_numerical_rank =
+            (hessian_solver.eigenvalues().array() > 1e-9 * scale).count();
+      }
+      summary_.rank_diagnostic_ms += std::chrono::duration<double,std::milli>(
+          std::chrono::steady_clock::now()-rank_start).count();
     }
     if (gradient.lpNorm<Eigen::Infinity>() <=
         options_.gradient_convergence_tolerance) {
       converged_without_step = !accepted_update;
       break;
     }
-    Eigen::MatrixXd damped = hessian;
-    damped.diagonal().array() += damping *
-        damped.diagonal().cwiseAbs().array().max(1.0);
-    Eigen::LDLT<Eigen::MatrixXd> factor(damped);
-    if (factor.info() != Eigen::Success) {
+    const auto solve_start = std::chrono::steady_clock::now();
+    Eigen::VectorXd step;
+    const bool solved = solveWindowLinearSystem(system, damping,
+        options_.solver_backend, &step, &summary_.solver_status);
+    summary_.solve_ms += std::chrono::duration<double,std::milli>(
+        std::chrono::steady_clock::now()-solve_start).count();
+    if (summary_.solver_status == "SPARSE_SOLVER_FALLBACK_DENSE")
+      ++summary_.sparse_solver_fallback_count;
+    if (!solved) {
       states_ = optimization_start_states;
       summary_.optimizer_status =
           toString(OptimizerStatus::INVALID_LINEAR_SYSTEM);
@@ -545,7 +559,6 @@ bool FixedLagWindow::optimize(std::string* reason) {
       summary_.prediction_feedback_status = "INVALID_LINEAR_SYSTEM";
       return fail(reason, "window_normal_equation_factorization_failed");
     }
-    Eigen::VectorXd step = factor.solve(-gradient);
     if (!step.allFinite()) {
       states_ = optimization_start_states;
       summary_.optimizer_status =
@@ -661,6 +674,13 @@ bool FixedLagWindow::linearizedSystem(Eigen::MatrixXd* hessian,
 
 bool FixedLagWindow::latestMarginalCovariance(
     WindowMarginalCovariance* output, std::string* reason) const {
+  const auto started = std::chrono::steady_clock::now();
+  struct Timer {
+    double* milliseconds;
+    std::chrono::steady_clock::time_point started;
+    ~Timer() { *milliseconds = std::chrono::duration<double,std::milli>(
+        std::chrono::steady_clock::now()-started).count(); }
+  } timer{&summary_.marginal_covariance_ms, started};
   if (reason) reason->clear();
   if (!output) return fail(reason, "null_window_marginal_covariance_output");
   *output = WindowMarginalCovariance();

@@ -219,14 +219,7 @@ bool FixedLagEventAdapter::buildPredictedState(
       preintegrated->factor_min_eigenvalue;
   lifecycle_diagnostics_.last_imu_information_change_norm =
       preintegrated->information_change_norm;
-  *output = latest;
-  output->stamp_ns = stamp_ns;
-  output->rotation = latest.rotation * preintegrated->delta_rotation;
-  output->velocity = latest.velocity + imu_noise_.gravity * preintegrated->dt_s +
-      latest.rotation * preintegrated->delta_velocity;
-  output->position = latest.position + latest.velocity * preintegrated->dt_s +
-      0.5 * imu_noise_.gravity * preintegrated->dt_s * preintegrated->dt_s +
-      latest.rotation * preintegrated->delta_position;
+  *output = propagateWindowState(latest, *preintegrated, imu_noise_.gravity);
   return output->rotation.allFinite() && output->position.allFinite() &&
       output->velocity.allFinite();
 }
@@ -248,6 +241,13 @@ bool FixedLagEventAdapter::ensureStateAt(std::uint64_t stamp_ns,
           predicted, id, latest.stamp_ns, preintegrated, reason)) return false;
   if (!accept(id, reason)) return false;
   recordSource(key, stamp_ns);
+  return true;
+}
+
+bool FixedLagEventAdapter::activeStateAt(std::uint64_t stamp_ns,
+    WindowState* state, std::string* reason) const {
+  if (!controller_.stateAt(stamp_ns,state,nullptr))
+    return failLocal(reason,"WINDOW_SCAN_START_NOT_IN_ACTIVE_WINDOW");
   return true;
 }
 
@@ -533,6 +533,10 @@ bool FixedLagEventAdapter::processVisualEvent(const FrozenVisualEvent& event,
     return fail(AdapterEventDisposition::REJECTED_WINDOW,
                 "adapter_not_initialized", reason);
   const SourceKey key(2, event.ref_ns, event.cur_ns);
+  if (!formalVisualInputAllowed(event.provenance) &&
+      !calibration_.allow_compatibility_visual_inputs)
+    return fail(AdapterEventDisposition::SKIPPED_INVALID_SOURCE,
+                "VISUAL_PROVENANCE_REJECTED_NOT_FORMAL_INPUT", reason);
   if (event.ref_ns == 0 || event.cur_ns <= event.ref_ns ||
       event.depth_ns == 0 || event.depth_ns > event.ref_ns) {
     recordSource(key, event.cur_ns);

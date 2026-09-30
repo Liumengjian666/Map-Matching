@@ -79,6 +79,18 @@ bool preintegrateImu(
     const ImuNoiseParameters& noise, ImuPreintegratedMeasurement* output,
     std::string* reason = nullptr);
 
+// Both APIs execute the same bounded integration loop, including its bias,
+// covariance and midpoint-input / left-orientation discretization.
+WindowState propagateWindowState(const WindowState& anchor,
+    const ImuPreintegratedMeasurement& measurement,
+    const Eigen::Vector3d& gravity);
+bool integrateWindowImuTrajectory(
+    const WindowState& anchor, std::uint64_t end_stamp_ns,
+    const std::vector<ImuSample, Eigen::aligned_allocator<ImuSample>>& samples,
+    const ImuNoiseParameters& noise, ImuPreintegratedMeasurement* measurement,
+    std::vector<ImuPoseSample, Eigen::aligned_allocator<ImuPoseSample>>* trajectory,
+    std::string* reason = nullptr);
+
 bool applyLocalIncrement(WindowState* state, const Vector15d& increment,
                          std::string* reason = nullptr);
 Vector15d localDifference(const WindowState& state,
@@ -94,6 +106,14 @@ bool linearizeImuFactor(
     const ImuPreintegratedMeasurement& measurement,
     const ImuNoiseParameters& noise, Eigen::Matrix<double, 15, 15>* jacobian_from,
     Eigen::Matrix<double, 15, 15>* jacobian_to, Vector15d* residual,
+    std::string* reason = nullptr);
+
+// Independent central-FD oracle. Not used by the runtime assembler.
+bool linearizeImuFactorFiniteDifferenceReference(
+    const WindowState& from, const WindowState& to,
+    const ImuPreintegratedMeasurement& measurement,
+    const ImuNoiseParameters& noise, Matrix15d* jacobian_from,
+    Matrix15d* jacobian_to, Vector15d* residual,
     std::string* reason = nullptr);
 
 struct LidarWindowMeasurement {
@@ -119,6 +139,10 @@ bool buildLidarResidual(const WindowState& state,
                         Eigen::VectorXd* residual, std::string* reason = nullptr);
 
 bool linearizeLidarFactor(
+    const WindowState& state, const LidarWindowMeasurement& measurement,
+    Eigen::VectorXd* residual, Eigen::MatrixXd* jacobian,
+    Eigen::MatrixXd* covariance, std::string* reason = nullptr);
+bool linearizeLidarFactorFiniteDifferenceReference(
     const WindowState& state, const LidarWindowMeasurement& measurement,
     Eigen::VectorXd* residual, Eigen::MatrixXd* jacobian,
     Eigen::MatrixXd* covariance, std::string* reason = nullptr);

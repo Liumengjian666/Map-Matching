@@ -2,6 +2,7 @@
 
 #include "dog_prior_map_fastlio2_frontend_exp/dual_reliability.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/fixed_lag_experiment.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/measurement_provenance.hpp"
 
 #include <Eigen/Core>
 
@@ -36,12 +37,15 @@ struct FrozenVisualEvent {
   Eigen::Matrix3d measurement_covariance = Eigen::Matrix3d::Identity();
   reliability::VisualQualityObservation quality;
   bool source_valid = false;
+  VisualMeasurementProvenance provenance = VisualMeasurementProvenance::UNKNOWN;
 };
 
 struct FixedLagAdapterCalibration {
   // T_imu_lidar maps LiDAR coordinates into the IMU body coordinates.
   Pose3d T_imu_lidar;
   reliability::DualReliabilityConfig reliability_config;
+  // Historical adapters default to compatibility. V3 explicitly sets false.
+  bool allow_compatibility_visual_inputs = true;
 };
 
 enum class AdapterEventDisposition {
@@ -92,6 +96,8 @@ class FixedLagEventAdapter {
   bool appendImu(const ImuSample& sample, std::string* reason = nullptr);
   bool prepareStateAt(std::uint64_t stamp_ns, WindowState* predicted,
                       std::string* reason = nullptr);
+  bool activeStateAt(std::uint64_t stamp_ns, WindowState* state,
+                     std::string* reason = nullptr) const;
   bool latestMarginalCovariance(WindowMarginalCovariance* output,
                                 std::string* reason = nullptr) const;
   bool previewLidarMeasurement(const FrozenLidarEvent& event,

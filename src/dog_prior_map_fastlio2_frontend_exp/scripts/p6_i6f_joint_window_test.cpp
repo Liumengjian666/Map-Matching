@@ -149,6 +149,9 @@ int main() {
                "visual cross-state information rank")) return 29;
 
   FixedLagOptions options;
+  // This regression explicitly asserts numerical rank below; retain that
+  // assertion by opting into diagnostics, not by restoring runtime overhead.
+  options.debug_rank_diagnostic = true;
   options.maximum_nodes = 6;
   options.maximum_duration_s = 10.0;
   options.maximum_optimizer_iterations = 10;

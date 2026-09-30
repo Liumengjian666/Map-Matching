@@ -108,7 +108,7 @@ bool buildLidarResidual(const WindowState& state,
   return buildLidarResidualFrozen(state, frozen, residual, reason);
 }
 
-bool linearizeLidarFactor(
+bool linearizeLidarFactorFiniteDifferenceReference(
     const WindowState& state, const LidarWindowMeasurement& measurement,
     Eigen::VectorXd* residual, Eigen::MatrixXd* jacobian,
     Eigen::MatrixXd* covariance, std::string* reason) {
@@ -139,6 +139,35 @@ bool linearizeLidarFactor(
   if (factor.info() != Eigen::Success || !jacobian->allFinite() ||
       !covariance->allFinite())
     return fail(reason, "lidar_factor_covariance_not_spd");
+  return true;
+}
+
+bool linearizeLidarFactor(
+    const WindowState& state, const LidarWindowMeasurement& measurement,
+    Eigen::VectorXd* residual, Eigen::MatrixXd* jacobian,
+    Eigen::MatrixXd* covariance, std::string* reason) {
+  if (!jacobian || !covariance) return fail(reason,"null_lidar_linearization_output");
+  LidarWindowMeasurement frozen;
+  if (!freezeBasisAtState(state,measurement,&frozen,reason) ||
+      !buildLidarResidualFrozen(state,frozen,residual,reason)) return false;
+  const Eigen::Vector3d phi = rawPoseResidual(state,frozen).tail<3>();
+  const double theta = phi.norm();
+  if (std::abs(theta-std::acos(-1.0)) < 1e-12)
+    return fail(reason,"lidar_rotation_log_branch_cut");
+  Eigen::Matrix3d hat;
+  hat << 0,-phi.z(),phi.y(),phi.z(),0,-phi.x(),-phi.y(),phi.x(),0;
+  const double coefficient = theta < 1e-5 ? 1.0/12.0+theta*theta/720.0 :
+      (1.0-.5*theta/std::tan(.5*theta))/(theta*theta);
+  Eigen::Matrix<double,6,15> raw_j = Eigen::Matrix<double,6,15>::Zero();
+  raw_j.block<3,3>(0,3) = -Eigen::Matrix3d::Identity();
+  raw_j.block<3,3>(3,0) = -(Eigen::Matrix3d::Identity()-.5*hat+coefficient*hat*hat);
+  const Eigen::MatrixXd basis = frozen.measurement_basis.leftCols(frozen.reliable_rank);
+  *jacobian = basis.transpose()*raw_j;
+  *covariance = basis.transpose()*frozen.covariance*basis;
+  *covariance = (0.5*(*covariance+covariance->transpose())).eval();
+  Eigen::LLT<Eigen::MatrixXd> factor(*covariance);
+  if (factor.info()!=Eigen::Success || !jacobian->allFinite() || !covariance->allFinite())
+    return fail(reason,"lidar_factor_covariance_not_spd");
   return true;
 }
 

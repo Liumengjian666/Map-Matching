@@ -1,6 +1,7 @@
 #pragma once
 
 #include "dog_prior_map_fastlio2_frontend_exp/window_factors.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/window_linear_system.hpp"
 
 #include <Eigen/Core>
 
@@ -20,6 +21,8 @@ struct FixedLagOptions {
   double maximum_step_norm = 2.0;
   double finite_difference_step = 1e-6;
   double gradient_convergence_tolerance = 1e-9;
+  WindowSolverBackend solver_backend = WindowSolverBackend::BLOCK_SPARSE;
+  bool debug_rank_diagnostic = false;
 };
 
 enum class OptimizerStatus {
@@ -61,6 +64,10 @@ struct WindowSummary {
   std::uint64_t retired_observation_id_watermark = 0;
   std::uint64_t latest_state_timestamp = 0;
   std::string optimizer_status = "NOT_RUN";
+  std::string solver_status = "NOT_RUN";
+  std::size_t sparse_solver_fallback_count = 0;
+  double linearization_ms = 0, solve_ms = 0, marginal_covariance_ms = 0;
+  double rank_diagnostic_ms = 0;
   std::string marginalization_status = "NOT_REQUESTED";
   std::string prediction_feedback_status = "NOT_READY";
   std::string verified_relocalization_status =
@@ -118,6 +125,8 @@ class FixedLagWindow {
   bool linearizedSystem(Eigen::MatrixXd* hessian,
                         Eigen::VectorXd* gradient, double* cost,
                         std::string* reason = nullptr) const;
+  bool blockLinearizedSystem(WindowLinearSystem* system,
+                             std::string* reason = nullptr) const;
   bool latestMarginalCovariance(WindowMarginalCovariance* output,
                                 std::string* reason = nullptr) const;
   bool predictionFeedbackSeed(WindowState* output,
@@ -177,7 +186,7 @@ class FixedLagWindow {
   std::uint64_t window_revision_ = 0;
   std::uint64_t optimized_revision_ = 0;
   PriorInformation prior_;
-  WindowSummary summary_;
+  mutable WindowSummary summary_;
 };
 
 // Applies one stacked 15D local increment per state as a transaction.  On any

@@ -114,13 +114,14 @@ bool collectBoundarySamples(
 
 }  // namespace
 
-bool preintegrateImu(
+static bool integrateBoundedImuSequence(
     const std::vector<ImuSample, Eigen::aligned_allocator<ImuSample>>& samples,
     std::uint64_t start_stamp_ns, std::uint64_t end_stamp_ns,
     const Eigen::Vector3d& linearization_gyro_bias,
     const Eigen::Vector3d& linearization_accel_bias,
     const ImuNoiseParameters& noise, ImuPreintegratedMeasurement* output,
-    std::string* reason) {
+    std::string* reason, const WindowState* anchor = nullptr,
+    std::vector<ImuPoseSample, Eigen::aligned_allocator<ImuPoseSample>>* trajectory = nullptr) {
   if (reason) reason->clear();
   if (!output) return fail(reason, "null_preintegration_output");
   *output = ImuPreintegratedMeasurement();
@@ -141,6 +142,26 @@ bool preintegrateImu(
   output->dt_s = static_cast<double>(end_stamp_ns - start_stamp_ns) * 1e-9;
   output->linearization_gyro_bias = linearization_gyro_bias;
   output->linearization_accel_bias = linearization_accel_bias;
+  auto appendKnot = [&](std::uint64_t stamp, const Eigen::Vector3d& world_acceleration,
+                        const Eigen::Vector3d& unbiased_gyro) {
+    if (!trajectory) return;
+    ImuPreintegratedMeasurement cumulative = *output;
+    cumulative.end_stamp_ns = stamp;
+    cumulative.dt_s = static_cast<double>(stamp - start_stamp_ns) * 1e-9;
+    const WindowState state = propagateWindowState(*anchor, cumulative, noise.gravity);
+    ImuPoseSample pose;
+    pose.stamp_ns = stamp;
+    pose.rotation = state.rotation;
+    pose.position = state.position;
+    pose.velocity = state.velocity;
+    pose.world_acceleration = world_acceleration;
+    pose.unbiased_gyro = unbiased_gyro;
+    trajectory->push_back(pose);
+  };
+  if (trajectory) trajectory->clear();
+  if (anchor) appendKnot(start_stamp_ns,
+      anchor->rotation * (bounded.front().acceleration-linearization_accel_bias) + noise.gravity,
+      bounded.front().angular_velocity-linearization_gyro_bias);
   for (std::size_t index = 0; index + 1 < bounded.size(); ++index) {
     const double dt = static_cast<double>(bounded[index + 1].stamp_ns -
                                           bounded[index].stamp_ns) * 1e-9;
@@ -215,6 +236,8 @@ bool preintegrateImu(
         noise_map * sampled_noise * noise_map.transpose();
     output->covariance = 0.5 *
         (output->covariance + output->covariance.transpose());
+    if (anchor) appendKnot(bounded[index + 1].stamp_ns,
+        anchor->rotation * rotated_acceleration + noise.gravity, omega);
   }
   Eigen::SelfAdjointEigenSolver<Matrix15d> covariance_solver(output->covariance);
   if (covariance_solver.info() != Eigen::Success ||
@@ -228,6 +251,43 @@ bool preintegrateImu(
   output->valid = true;
   output->status = "PASS_PREINTEGRATED_IMU_WITH_BIAS_JACOBIANS";
   return true;
+}
+
+WindowState propagateWindowState(const WindowState& anchor,
+    const ImuPreintegratedMeasurement& measurement,
+    const Eigen::Vector3d& gravity) {
+  WindowState result = anchor;
+  const double dt = measurement.dt_s;
+  result.stamp_ns = measurement.end_stamp_ns;
+  result.rotation = anchor.rotation * measurement.delta_rotation;
+  result.velocity = anchor.velocity + gravity * dt +
+      anchor.rotation * measurement.delta_velocity;
+  result.position = anchor.position + anchor.velocity * dt +
+      0.5 * gravity * dt * dt + anchor.rotation * measurement.delta_position;
+  return result;
+}
+
+bool preintegrateImu(
+    const std::vector<ImuSample, Eigen::aligned_allocator<ImuSample>>& samples,
+    std::uint64_t start, std::uint64_t end, const Eigen::Vector3d& bg,
+    const Eigen::Vector3d& ba, const ImuNoiseParameters& noise,
+    ImuPreintegratedMeasurement* output, std::string* reason) {
+  return integrateBoundedImuSequence(samples, start, end, bg, ba, noise, output, reason);
+}
+
+bool integrateWindowImuTrajectory(
+    const WindowState& anchor, std::uint64_t end,
+    const std::vector<ImuSample, Eigen::aligned_allocator<ImuSample>>& samples,
+    const ImuNoiseParameters& noise, ImuPreintegratedMeasurement* measurement,
+    std::vector<ImuPoseSample, Eigen::aligned_allocator<ImuPoseSample>>* trajectory,
+    std::string* reason) {
+  if (!trajectory || !anchor.rotation.allFinite() || !anchor.position.allFinite() ||
+      !anchor.velocity.allFinite() ||
+      (anchor.rotation.transpose()*anchor.rotation-Eigen::Matrix3d::Identity()).norm()>1e-7 ||
+      std::abs(anchor.rotation.determinant()-1.0)>1e-7)
+    return fail(reason, "invalid_window_trajectory_anchor");
+  return integrateBoundedImuSequence(samples, anchor.stamp_ns, end,
+      anchor.gyro_bias, anchor.accel_bias, noise, measurement, reason, &anchor, trajectory);
 }
 
 bool applyLocalIncrement(WindowState* state, const Vector15d& increment,
@@ -292,7 +352,7 @@ bool buildImuResidual(const WindowState& from, const WindowState& to,
   return true;
 }
 
-bool linearizeImuFactor(
+bool linearizeImuFactorFiniteDifferenceReference(
     const WindowState& from, const WindowState& to,
     const ImuPreintegratedMeasurement& measurement,
     const ImuNoiseParameters& noise, Eigen::Matrix<double, 15, 15>* jacobian_from,
@@ -325,6 +385,52 @@ bool linearizeImuFactor(
     jacobian_to->col(column) = (plus - minus) / (2.0 * h);
   }
   return jacobian_from->allFinite() && jacobian_to->allFinite();
+}
+
+bool linearizeImuFactor(
+    const WindowState& from, const WindowState& to,
+    const ImuPreintegratedMeasurement& m, const ImuNoiseParameters& noise,
+    Matrix15d* a, Matrix15d* b, Vector15d* residual, std::string* reason) {
+  if (!a || !b || !residual) return fail(reason, "null_imu_linearization_output");
+  if (!buildImuResidual(from, to, m, noise, residual, reason)) return false;
+  const Eigen::Vector3d phi = residual->head<3>();
+  // Principal Log is not differentiable exactly at pi. Do not hide this with
+  // an arbitrary near-pi rejection band or a silently selected FD derivative.
+  if (std::abs(phi.norm() - std::acos(-1.0)) < 1e-12)
+    return fail(reason, "imu_rotation_log_branch_cut");
+  auto leftInverse = [](const Eigen::Vector3d& x) {
+    const double theta = x.norm();
+    const Eigen::Matrix3d hat = skew(x);
+    const double coefficient = theta < 1e-5 ?
+        1.0 / 12.0 + theta * theta / 720.0 :
+        (1.0 - 0.5 * theta / std::tan(0.5 * theta)) / (theta * theta);
+    return Eigen::Matrix3d(Eigen::Matrix3d::Identity() - 0.5 * hat + coefficient * hat * hat);
+  };
+  const Eigen::Matrix3d li = leftInverse(phi);
+  const Eigen::Matrix3d ri = leftInverse(-phi);
+  const Eigen::Matrix3d rt = from.rotation.transpose();
+  const Eigen::Vector3d beta = m.jacobian_rotation_gyro_bias *
+      (from.gyro_bias - m.linearization_gyro_bias);
+  const Eigen::Matrix3d corrected = m.delta_rotation * so3Exp(beta);
+  a->setZero(); b->setZero();
+  a->block<3,3>(0,0) = -li * corrected.transpose();
+  b->block<3,3>(0,0) = ri;
+  a->block<3,3>(0,9) = -li * so3RightJacobian(beta) * m.jacobian_rotation_gyro_bias;
+  a->block<3,3>(3,0) = skew(rt * (to.position - from.position -
+      from.velocity * m.dt_s - 0.5 * noise.gravity * m.dt_s * m.dt_s));
+  a->block<3,3>(3,3) = -rt; b->block<3,3>(3,3) = rt;
+  a->block<3,3>(3,6) = -rt * m.dt_s;
+  a->block<3,3>(3,9) = -m.jacobian_position_gyro_bias;
+  a->block<3,3>(3,12) = -m.jacobian_position_accel_bias;
+  a->block<3,3>(6,0) = skew(rt * (to.velocity - from.velocity - noise.gravity * m.dt_s));
+  a->block<3,3>(6,6) = -rt; b->block<3,3>(6,6) = rt;
+  a->block<3,3>(6,9) = -m.jacobian_velocity_gyro_bias;
+  a->block<3,3>(6,12) = -m.jacobian_velocity_accel_bias;
+  a->block<3,3>(9,9) = -Eigen::Matrix3d::Identity();
+  b->block<3,3>(9,9).setIdentity();
+  a->block<3,3>(12,12) = -Eigen::Matrix3d::Identity();
+  b->block<3,3>(12,12).setIdentity();
+  return a->allFinite() && b->allFinite();
 }
 
 }  // namespace dog_prior_map_fastlio2_frontend_exp::fixed_lag

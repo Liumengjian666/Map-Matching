@@ -10,7 +10,21 @@
 
 namespace dog_prior_map_fastlio2_frontend_exp::fixed_lag {
 
-enum class ProducerEventType { LIDAR_SCAN, VISUAL_CURRENT, VISUAL_REFERENCE };
+enum class ProducerEventType { LIDAR_SCAN, VISUAL_CURRENT, VISUAL_REFERENCE,
+                               LIDAR_SCAN_START, LIDAR_SCAN_END };
+
+// Exact ties: scan start, scan end (or V2 scan), visual current, visual ref.
+// V2 ties retain their historical order. Non-ties always use sensor time.
+inline int eventPriority(ProducerEventType type) {
+  switch (type) {
+    case ProducerEventType::LIDAR_SCAN_START: return 0;
+    case ProducerEventType::LIDAR_SCAN:
+    case ProducerEventType::LIDAR_SCAN_END: return 1;
+    case ProducerEventType::VISUAL_CURRENT: return 2;
+    case ProducerEventType::VISUAL_REFERENCE: return 3;
+  }
+  return 4;
+}
 
 struct ProducerEvent {
   std::uint64_t stamp_ns = 0;
@@ -22,6 +36,8 @@ inline const char* toString(ProducerEventType type) {
   switch (type) {
     case ProducerEventType::LIDAR_SCAN: return "LIDAR_SCAN";
     case ProducerEventType::VISUAL_CURRENT: return "VISUAL_CURRENT";
+    case ProducerEventType::LIDAR_SCAN_START: return "LIDAR_SCAN_START";
+    case ProducerEventType::LIDAR_SCAN_END: return "LIDAR_SCAN_END";
     default: return "VISUAL_REFERENCE";
   }
 }
@@ -29,8 +45,8 @@ inline const char* toString(ProducerEventType type) {
 inline void sortProducerEvents(std::vector<ProducerEvent>* events) {
   std::stable_sort(events->begin(), events->end(),
       [](const ProducerEvent& a, const ProducerEvent& b) {
-        return std::tie(a.stamp_ns, a.type, a.source_index) <
-               std::tie(b.stamp_ns, b.type, b.source_index);
+        return std::make_tuple(a.stamp_ns, eventPriority(a.type), a.source_index) <
+               std::make_tuple(b.stamp_ns, eventPriority(b.type), b.source_index);
       });
 }
 

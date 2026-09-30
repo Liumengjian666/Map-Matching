@@ -12,10 +12,13 @@ add_library(p6_i6b_dual_reliability STATIC
   "${PACKAGE_ROOT}/src/dual_reliability.cpp"
   "${PACKAGE_ROOT}/src/measurement_noise_model.cpp"
   "${PACKAGE_ROOT}/src/window_imu_factor.cpp"
+  "${PACKAGE_ROOT}/src/lidar_deskew_geometry.cpp"
+  "${PACKAGE_ROOT}/src/window_scan_processor.cpp"
   "${PACKAGE_ROOT}/src/window_lidar_factor.cpp"
   "${PACKAGE_ROOT}/src/window_visual_factor.cpp"
   "${PACKAGE_ROOT}/src/window_marginalization.cpp"
   "${PACKAGE_ROOT}/src/fixed_lag_window.cpp"
+  "${PACKAGE_ROOT}/src/window_linear_system.cpp"
   "${PACKAGE_ROOT}/src/fixed_lag_experiment.cpp"
   "${PACKAGE_ROOT}/src/fixed_lag_event_adapter.cpp")
 target_compile_features(p6_i6b_dual_reliability PUBLIC cxx_std_17)
@@ -133,6 +136,20 @@ if(BUILD_I6B_CLOSED_LOOP_TOOLS)
   add_test(NAME p6_a2c_initialization
     COMMAND $<TARGET_FILE:p6_a2c_initialization_test>)
 
+  foreach(legacy_scan_test scan_end_deskew_runtime_test frontend_runtime_end_to_end_test)
+    add_executable(${legacy_scan_test}
+      "${PACKAGE_ROOT}/src/fastlio2_frontend_ikfom.cpp"
+      "${PACKAGE_ROOT}/src/scan_processor.cpp"
+      "${PACKAGE_ROOT}/src/lidar_deskew_geometry.cpp"
+      "${PACKAGE_ROOT}/src/frontend_runtime.cpp"
+      "${PACKAGE_ROOT}/tests/${legacy_scan_test}.cpp")
+    target_include_directories(${legacy_scan_test} PRIVATE "${FASTLIO2_INCLUDE_DIR}")
+    target_compile_features(${legacy_scan_test} PRIVATE cxx_std_17)
+    target_compile_options(${legacy_scan_test} PRIVATE -fopenmp)
+    target_link_libraries(${legacy_scan_test} PRIVATE p6_i6b_dual_reliability Eigen3::Eigen gomp)
+    add_test(NAME ${legacy_scan_test} COMMAND $<TARGET_FILE:${legacy_scan_test}>)
+  endforeach()
+
   add_executable(p6_i6b_closed_loop
     "${PACKAGE_ROOT}/scripts/p6_i1_branched_recovery.cpp")
   target_compile_features(p6_i6b_closed_loop PRIVATE cxx_std_17)
@@ -150,6 +167,8 @@ if(BUILD_I6B_CLOSED_LOOP_TOOLS)
     OpenSSL::Crypto ${USB_1_LIBRARY} gomp)
   add_test(NAME p6_a2c_real_pcl_producer
     COMMAND $<TARGET_FILE:p6_i6b_closed_loop> A2C_FIXTURE)
+  add_test(NAME p6_a2d_window_owned_pcl_producer
+    COMMAND $<TARGET_FILE:p6_i6b_closed_loop> A2D_FIXTURE)
 
   add_executable(p6_i6e_projected_pose_consistency_test
     "${PACKAGE_ROOT}/src/fastlio2_frontend_ikfom.cpp"
@@ -187,3 +206,12 @@ target_link_libraries(p6_alg_integration_a2c_test PRIVATE
   p6_i6b_dual_reliability Eigen3::Eigen)
 add_test(NAME p6_alg_integration_a2c
   COMMAND $<TARGET_FILE:p6_alg_integration_a2c_test>)
+
+add_executable(window_deskew_math_test "${PACKAGE_ROOT}/scripts/window_deskew_math_test.cpp")
+target_link_libraries(window_deskew_math_test PRIVATE p6_i6b_dual_reliability)
+add_test(NAME window_deskew_math_test COMMAND $<TARGET_FILE:window_deskew_math_test>)
+foreach(a2d_test dense_sparse_equivalence_test solver_scaling_sanity_test measurement_provenance_test)
+  add_executable(${a2d_test} "${PACKAGE_ROOT}/scripts/${a2d_test}.cpp")
+  target_link_libraries(${a2d_test} PRIVATE p6_i6b_dual_reliability)
+  add_test(NAME ${a2d_test} COMMAND $<TARGET_FILE:${a2d_test}>)
+endforeach()

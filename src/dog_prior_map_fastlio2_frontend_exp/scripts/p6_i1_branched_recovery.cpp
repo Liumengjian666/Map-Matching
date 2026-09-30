@@ -11,6 +11,7 @@
 
 #include "dog_prior_map_fastlio2_frontend_exp/dual_reliability.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/fixed_lag_production.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/window_scan_processor.hpp"
 #include "p6_i4_basin_margin_math.hpp"
 #include "p6_i6e_r3_actual_state.hpp"
 #include "p6_i6e_r3_math.hpp"
@@ -3279,6 +3280,7 @@ void runMode(const std::string& mode, const p4_i2::Inputs& inputs,
 }
 
 #include "p6_a2c_fixed_lag_producer.hpp"
+#include "p6_a2d_raw_timed_provider.hpp"
 
 }  // namespace p6_i1
 
@@ -3286,6 +3288,24 @@ int main(int argc, char** argv) {
   try {
     if (argc == 2 && std::string(argv[1]) == "A2C_FIXTURE") {
       p6_i1::runFixedLagProductionFixture();
+      return 0;
+    }
+    if (argc == 2 && std::string(argv[1]) == "A2D_FIXTURE") {
+      p6_i1::runRawTimedFormatFixture();
+      p6_i1::runFixedLagProductionFixture(true);
+      return 0;
+    }
+    if (argc == 18 && std::string(argv[1]) == "FULL_FIXED_LAG_V3_EXPERIMENTAL") {
+      p4_i2::Inputs inputs; std::string reason;
+      if (!p4_i2::readInputs(argv[2],argv[3],&inputs,&reason)) throw std::runtime_error(reason);
+      auto assets=p6_i1::readScanAssets(argv[4]);
+      const std::size_t limit=std::stoull(argv[12]);
+      if(limit==0 || limit>assets.size() || assets.size()!=inputs.scans.size())
+        throw std::runtime_error("V3_frame_limit_or_identity_invalid");
+      assets.resize(limit); inputs.scans.resize(limit);
+      p6_i1::runWindowOwnedExperimentalMode(inputs,assets,argv[5],argv[6],argv[7],
+          argv[8],argv[9],argv[10],p6_i1::readI6dVisual(argv[11]),
+          std::stoull(argv[13]),argv[14],p6_i1::parseR2Policy(argv[15]),argv[16],argv[17]);
       return 0;
     }
     if (argc == 16 && std::string(argv[1]) == "FULL_FIXED_LAG_V2_EXPERIMENTAL") {
@@ -3400,6 +3420,7 @@ int main(int argc, char** argv) {
               << "  p6_i1_branched_recovery (STRICT_BASELINE|UOBS_ONLY|UNONLOCAL_ONLY|DUAL_RELIABILITY) imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt trajectory.csv reliability.csv runtime.csv [frame_limit [init_stamp_ns [floor01|corridor01]]]\n"
               << "  p6_i1_branched_recovery FULL_ALGORITHM_V1 imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt trajectory.csv reliability.csv runtime.csv visual.csv frame_limit init_stamp_ns floor01|corridor01 [r2_policy [LEGACY|EXACT_RESIDUAL]]\n"
               << "  p6_i1_branched_recovery FULL_FIXED_LAG_V2_EXPERIMENTAL imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt trajectory.csv events.csv runtime.csv visual.csv frame_limit init_stamp_ns floor01|corridor01 r2_policy\n"
+              << "  p6_i1_branched_recovery FULL_FIXED_LAG_V3_EXPERIMENTAL imu.csv filter_scans.csv scans.csv raw_timed.bin map.pcd params.txt trajectory.csv events.csv runtime.csv visual.csv frame_limit init_stamp_ns floor01|corridor01 r2_policy raw_timed_scans.csv visual_provenance.csv|NONE\n"
               << "  p6_i1_branched_recovery MODE imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt visual.csv trajectory.csv branch.csv dcreg.csv multistart.csv candidates.csv arbitration.csv runtime.csv [basin.csv covariance.csv]\n";
     return 2;
   } catch (const std::exception& error) {

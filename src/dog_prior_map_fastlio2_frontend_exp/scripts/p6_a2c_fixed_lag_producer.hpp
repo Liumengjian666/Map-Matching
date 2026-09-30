@@ -10,6 +10,15 @@ struct FixedLagProducerResult {
   std::uint64_t ndt_calls = 0;
   double ndt_ms = 0.0;
   double total_ms = 0.0;
+  std::size_t window_deskew_count = 0;
+};
+
+using RawTimedScanProvider = std::function<bool(const ScanAsset&,
+    fixed_lag::RawTimedScan*, std::string*)>;
+struct WindowOwnedProducerInput {
+  RawTimedScanProvider provider;
+  std::vector<std::uint64_t> scan_start_ns;
+  std::vector<fixed_lag::VisualMeasurementProvenance> visual_provenance;
 };
 
 FixedLagInitializationSeed initializeFixedLagProducer(
@@ -52,6 +61,7 @@ fixed_lag::FrozenVisualEvent frozenVisual(const VisualMeasurement& v,
   event.translation_ref_imu=v.translation;
   event.measurement_covariance=sigma*sigma*Eigen::Matrix3d::Identity();
   event.source_valid=v.source_valid;
+  event.provenance=fixed_lag::VisualMeasurementProvenance::LEGACY_STATE_DERIVED_DEPTH;
   auto& q=event.quality;
   q.quality_metadata_available=v.quality_metadata_available;
   q.detected_count=v.detected_count; q.tracked_count=v.tracked_count;
@@ -71,7 +81,10 @@ FixedLagProducerResult runFixedLagProducer(
     std::ostream& trajectory, std::ostream& diagnostics, std::ostream& runtime,
     std::uint64_t initialization_stamp_ns, R2Policy policy,
     const reliability::DualReliabilityConfig& config = {},
-    const fixed_lag::FixedLagOptions& options = {}) {
+    const fixed_lag::FixedLagOptions& options = {},
+    const WindowOwnedProducerInput* window_owned = nullptr,
+    fixed_lag::LidarCloudProvenance compatibility_cloud_provenance =
+        fixed_lag::LidarCloudProvenance::LEGACY_STATE_DERIVED_SE3_DESKEW) {
   using namespace fixed_lag;
   const auto started=std::chrono::steady_clock::now();
   if(assets.empty() || inputs.imu.empty() || !target || target->empty())
@@ -85,6 +98,7 @@ FixedLagProducerResult runFixedLagProducer(
   initial.gyro_bias=seed.gyro_bias; initial.accel_bias=seed.accel_bias;
   FixedLagAdapterCalibration calibration;
   calibration.T_imu_lidar=extrinsic; calibration.reliability_config=config;
+  calibration.allow_compatibility_visual_inputs = window_owned == nullptr;
   FixedLagEventAdapter adapter(options,makeWindowImuNoise(parameters,seed.gravity),calibration);
   std::string reason;
   if(!adapter.initialize(initial,seed.information15,Vector15d::Zero(),&reason))
@@ -96,7 +110,14 @@ FixedLagProducerResult runFixedLagProducer(
         assets[i].transaction_id!=inputs.scans[i].transaction_id ||
         assets[i].stamp_ns<seed.stamp_ns)
       throw std::runtime_error("fixed_lag_scan_identity_or_time_mismatch");
-    stream.push_back({assets[i].stamp_ns,ProducerEventType::LIDAR_SCAN,i});
+    if (window_owned) {
+      if (!window_owned->provider || window_owned->scan_start_ns.size()!=assets.size() ||
+          window_owned->scan_start_ns[i]<seed.stamp_ns ||
+          window_owned->scan_start_ns[i]>=assets[i].stamp_ns)
+        throw std::runtime_error("RAW_POINT_TIME_UNAVAILABLE:NOT_ELIGIBLE_FOR_WINDOW_OWNED_DESKEW");
+      stream.push_back({window_owned->scan_start_ns[i],ProducerEventType::LIDAR_SCAN_START,i});
+      stream.push_back({assets[i].stamp_ns,ProducerEventType::LIDAR_SCAN_END,i});
+    } else stream.push_back({assets[i].stamp_ns,ProducerEventType::LIDAR_SCAN,i});
   }
   for(std::size_t i=0;i<visual.size();++i) {
     if(visual[i].ref_ns<seed.stamp_ns || visual[i].cur_ns>assets.back().stamp_ns ||
@@ -119,8 +140,8 @@ FixedLagProducerResult runFixedLagProducer(
   const double nan=std::numeric_limits<double>::quiet_NaN();
   FixedLagProducerResult result;
   trajectory<<std::setprecision(17)<<"transaction_id,stamp_ns,time_s,px,py,pz,qx,qy,qz,qw\n";
-  diagnostics<<std::setprecision(17)<<"timestamp,event_type,window_nodes,window_span,optimizer_status,optimizer_cost_before,optimizer_cost_after,predicted_px,predicted_py,predicted_pz,predicted_qx,predicted_qy,predicted_qz,predicted_qw,ndt_converged,uobs_valid,weak_dimension,reliable_dimension,window_covariance_valid,window_position_sigma_max,window_rotation_sigma_max,unonlocal_probe_triggered,unonlocal_status,lidar_factor_attempted,lidar_factor_committed,lidar_selected_rank,lidar_nis,lidar_nis_threshold,visual_sensor_quality,visual_mode,visual_selected_rank,visual_trigger_status,visual_basis_source_lidar_stamp,imu_factor_count,lidar_factor_count,visual_factor_count,r2_policy,imu_buffer_last_stamp,post_handoff_ikfom_calls\n";
-  runtime<<"timestamp,event_type,ndt_calls,ndt_ms,event_ms\n";
+  diagnostics<<std::setprecision(17)<<"timestamp,event_type,window_nodes,window_span,optimizer_status,optimizer_cost_before,optimizer_cost_after,predicted_px,predicted_py,predicted_pz,predicted_qx,predicted_qy,predicted_qz,predicted_qw,ndt_converged,uobs_valid,weak_dimension,reliable_dimension,window_covariance_valid,window_position_sigma_max,window_rotation_sigma_max,unonlocal_probe_triggered,unonlocal_status,lidar_factor_attempted,lidar_factor_committed,lidar_selected_rank,lidar_nis,lidar_nis_threshold,visual_sensor_quality,visual_mode,visual_selected_rank,visual_trigger_status,visual_basis_source_lidar_stamp,imu_factor_count,lidar_factor_count,visual_factor_count,r2_policy,imu_buffer_last_stamp,lidar_source_provenance,visual_source_provenance,input_eligibility,post_handoff_ikfom_calls\n";
+  runtime<<"timestamp,event_type,ndt_calls,ndt_ms,event_ms,linearization_ms,solve_ms,marginal_covariance_ms,rank_diagnostic_ms,solver_status,sparse_fallback_count\n";
   for(const ProducerEvent& event:stream) {
     const auto event_start=std::chrono::steady_clock::now();
     // Append through exactly the first right boundary required for this event.
@@ -147,11 +168,42 @@ FixedLagProducerResult runFixedLagProducer(
     int lidar_rank=0,visual_rank=0;
     std::uint64_t basis_stamp=0;
     std::string visual_mode="NOT_APPLICABLE",visual_trigger="NOT_APPLICABLE";
-    if(event.type==ProducerEventType::LIDAR_SCAN) {
+    std::string lidar_provenance="NOT_APPLICABLE",visual_provenance="NOT_APPLICABLE";
+    if(event.type==ProducerEventType::LIDAR_SCAN || event.type==ProducerEventType::LIDAR_SCAN_END) {
       const auto& asset=assets[event.source_index];
-      const Cloud::Ptr source=source_provider(asset);
+      Cloud::Ptr source;
+      if (window_owned) {
+        RawTimedScan raw;
+        if (!window_owned->provider(asset,&raw,&reason)) throw std::runtime_error("raw_timed_scan:"+reason);
+        if (!rawDeskewInputAllowed(raw.provenance,&reason)) throw std::runtime_error(reason);
+        if (raw.transaction_id!=asset.transaction_id || raw.scan_end_ns!=asset.stamp_ns ||
+            raw.scan_start_ns!=window_owned->scan_start_ns[event.source_index])
+          throw std::runtime_error("raw_timed_scan_identity_mismatch");
+        WindowState anchor;
+        if (!adapter.activeStateAt(raw.scan_start_ns,&anchor,&reason)) throw std::runtime_error(reason);
+        WindowDeskewResult deskew;
+        auto left = std::lower_bound(inputs.imu.begin(),inputs.imu.begin()+imu_cursor,raw.scan_start_ns,
+            [](const ImuSample& s,std::uint64_t t){return s.stamp_ns<t;});
+        if(left!=inputs.imu.begin() && (left==inputs.imu.end() || left->stamp_ns>raw.scan_start_ns)) --left;
+        const p4_i2::ImuVector causal_imu(left,inputs.imu.begin()+imu_cursor);
+        if (!deskewScanWithWindowState(anchor,raw.scan_start_ns,raw.scan_end_ns,causal_imu,
+              makeWindowImuNoise(parameters,seed.gravity),extrinsic,raw.points,&deskew,&reason))
+          throw std::runtime_error("window_owned_deskew:"+reason);
+        Cloud::Ptr end_cloud(new Cloud);
+        end_cloud->reserve(deskew.cloud_end_frame.size());
+        for (const auto& point : deskew.cloud_end_frame) {
+          Point p; p.x=point.position.x(); p.y=point.position.y(); p.z=point.position.z();
+          end_cloud->push_back(p);
+        }
+        source=preprocessSource(end_cloud);
+        lidar_provenance=toString(deskew.provenance);
+        ++result.window_deskew_count;
+      } else {
+        source=source_provider(asset);
+        lidar_provenance=toString(compatibility_cloud_provenance);
+      }
       if(!source || source->empty()) throw std::runtime_error("empty_preprocessed_source");
-      if(asset.expected_source_hash_available && sourceCloudHash(source)!=asset.expected_source_hash)
+      if(!window_owned && asset.expected_source_hash_available && sourceCloudHash(source)!=asset.expected_source_hash)
         throw std::runtime_error("prepared_source_hash_mismatch");
       Pose3d predicted_pose;
       predicted_pose.position=predicted.position;
@@ -217,12 +269,20 @@ FixedLagProducerResult runFixedLagProducer(
       if(!lidar_committed && adapter.lastEventStatus().disposition!=AdapterEventDisposition::SKIPPED_INVALID_SOURCE)
         throw std::runtime_error("producer_lidar:"+reason);
       result.lidar_committed+=lidar_committed;
+    } else if(event.type==ProducerEventType::LIDAR_SCAN_START) {
+      // prepareStateAt above created a real optimizable scan-start node.
+      visual_mode="SCAN_START_STATE";
     } else if(event.type==ProducerEventType::VISUAL_REFERENCE) {
       if(!adapter.processVisualReferenceStamp(event.stamp_ns,&reason))
         throw std::runtime_error("producer_visual_reference:"+reason);
       visual_mode="REFERENCE_STATE"; visual_trigger=reason;
     } else {
-      const auto v=frozenVisual(visual[event.source_index],0.05);
+      auto v=frozenVisual(visual[event.source_index],0.05);
+      if(window_owned) v.provenance=event.source_index<window_owned->visual_provenance.size() ?
+          window_owned->visual_provenance[event.source_index] : VisualMeasurementProvenance::UNKNOWN;
+      visual_provenance=toString(v.provenance);
+      if(!window_owned && !formalVisualInputAllowed(v.provenance))
+        visual_provenance+=";VISUAL_PROVENANCE_COMPATIBILITY_ONLY";
       auto sensor=v.quality;
       sensor.source_valid=v.source_valid; sensor.reference_stamp_ns=v.ref_ns;
       sensor.current_stamp_ns=v.cur_ns; sensor.depth_stamp_ns=v.depth_ns;
@@ -241,7 +301,7 @@ FixedLagProducerResult runFixedLagProducer(
       throw std::runtime_error("producer_optimizer:"+reason);
     WindowState optimized;
     if(!adapter.latestOptimizedState(&optimized,&reason)) throw std::runtime_error("producer_optimized_state:"+reason);
-    if(event.type==ProducerEventType::LIDAR_SCAN) {
+    if(event.type==ProducerEventType::LIDAR_SCAN || event.type==ProducerEventType::LIDAR_SCAN_END) {
       const auto& asset=assets[event.source_index];
       const Eigen::Quaterniond q(optimized.rotation);
       trajectory<<asset.transaction_id<<','<<asset.stamp_ns<<','<<asset.time_s<<','
@@ -263,9 +323,12 @@ FixedLagProducerResult runFixedLagProducer(
       <<lidar_attempted<<','<<lidar_committed<<','<<lidar_rank<<','<<nis.nis<<','<<nis.threshold<<','
       <<quality<<','<<visual_mode<<','<<visual_rank<<','<<visual_trigger<<','<<basis_stamp<<','
       <<summary.imu_factor_count<<','<<summary.lidar_factor_count<<','<<summary.visual_factor_count<<','
-      <<r2PolicyName(policy)<<','<<buffered_stamp<<",0\n";
+      <<r2PolicyName(policy)<<','<<buffered_stamp<<','<<lidar_provenance<<','<<visual_provenance<<','
+      <<(window_owned?"WINDOW_OWNED_EXPERIMENTAL_INPUT":"COMPATIBILITY_ONLY_NOT_FORMAL_INPUT")<<",0\n";
     const double event_ms=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-event_start).count();
-    runtime<<event.stamp_ns<<','<<toString(event.type)<<','<<calls<<','<<ndt_ms<<','<<event_ms<<'\n';
+    runtime<<event.stamp_ns<<','<<toString(event.type)<<','<<calls<<','<<ndt_ms<<','<<event_ms<<','
+        <<summary.linearization_ms<<','<<summary.solve_ms<<','<<summary.marginal_covariance_ms<<','
+        <<summary.rank_diagnostic_ms<<','<<summary.solver_status<<','<<summary.sparse_solver_fallback_count<<'\n';
     result.events++; result.probes+=probed; result.covariance_available+=prior.valid;
     result.ndt_calls+=calls; result.ndt_ms+=ndt_ms;
   }
@@ -296,13 +359,15 @@ void runFixedLagExperimentalMode(const p4_i2::Inputs& inputs,
   if(!trajectory||!diagnostics||!runtime) throw std::runtime_error("producer_output_open_failed");
   const auto result=runFixedLagProducer(inputs,assets,parameters,initial,extrinsic,target,visual,
       [&](const ScanAsset& a){return preprocessSource(loadRawCloudAt(cloud_path,a));},
-      trajectory,diagnostics,runtime,init_stamp,policy);
+      trajectory,diagnostics,runtime,init_stamp,policy,{}, {},nullptr,
+      map_profile=="floor01" ? fixed_lag::LidarCloudProvenance::LEGACY_STATE_DERIVED_SE3_DESKEW :
+          fixed_lag::LidarCloudProvenance::SENSOR_LOCAL_ROTATION_ONLY);
   std::cout<<"FULL_FIXED_LAG_V2_EXPERIMENTAL_COMPLETE events="<<result.events
       <<" lidar="<<result.lidar_committed<<" visual="<<result.visual_committed
       <<" ndt_calls="<<result.ndt_calls<<" total_ms="<<result.total_ms<<'\n';
 }
 
-void runFixedLagProductionFixture() {
+void runFixedLagProductionFixture(bool window_owned_fixture = false) {
   Cloud::Ptr target(new Cloud);
   for(int x=-2;x<=2;++x) for(int y=-2;y<=2;++y) for(int z=-1;z<=1;++z)
     for(int i=0;i<40;++i) {
@@ -336,12 +401,32 @@ void runFixedLagProductionFixture() {
   }
   RuntimeParameters parameters; parameters.static_init_samples=20;
   const Cloud::Ptr source=preprocessSource(target);
+  WindowOwnedProducerInput owned;
+  for(const auto& asset : assets) owned.scan_start_ns.push_back(asset.stamp_ns-50'000'000);
+  owned.visual_provenance.assign(visual.size(),fixed_lag::VisualMeasurementProvenance::WINDOW_OWNED_DEPTH);
+  std::size_t raw_loads=0,legacy_loads=0;
+  owned.provider=[&](const ScanAsset& asset,fixed_lag::RawTimedScan* raw,std::string*) {
+    ++raw_loads;
+    raw->transaction_id=asset.transaction_id;
+    raw->scan_start_ns=asset.stamp_ns-50'000'000; raw->scan_end_ns=asset.stamp_ns;
+    // These are explicitly synthetic stationary-world observations, not
+    // point-time reconstruction from a real XYZ-only prepared bundle.
+    for(std::size_t i=0;i<target->size();++i) {
+      TimedLidarPoint point;
+      point.position=target->points[i].getVector3fMap().cast<double>();
+      point.stamp_ns=raw->scan_start_ns+(i%11)*5'000'000;
+      raw->points.push_back(point);
+    }
+    return true;
+  };
   for(auto policy:{R2Policy::LEGACY_BASE_NO_GATE,R2Policy::ADAPTIVE_NO_GATE,
                    R2Policy::BASE_SELECTED_NIS,R2Policy::ADAPTIVE_SELECTED_NIS}) {
     std::ostringstream trajectory,diagnostics,runtime;
     const auto result=runFixedLagProducer(inputs,assets,parameters,Pose3d(),Pose3d(),target,visual,
-        [&](const ScanAsset&){return source;},trajectory,diagnostics,runtime,0,policy);
-    if(result.events!=7 || result.covariance_available!=7 || result.probes==0 ||
+        [&](const ScanAsset&){++legacy_loads;return source;},trajectory,diagnostics,runtime,0,policy,{}, {},
+        window_owned_fixture?&owned:nullptr);
+    const std::size_t expected_events=window_owned_fixture?10:7;
+    if(result.events!=expected_events || result.covariance_available!=expected_events || result.probes==0 ||
         result.lidar_committed!=3 || result.ndt_calls!=3+2*result.probes)
       throw std::runtime_error("production_fixture_did_not_exercise_required_paths");
     std::istringstream rows(diagnostics.str());
@@ -360,10 +445,12 @@ void runFixedLagProductionFixture() {
       if(right==inputs.imu.end() || std::stoull(fields[37])!=right->stamp_ns)
         throw std::runtime_error("producer_imu_future_prefetch");
       if(fields[36]!=r2PolicyName(policy)) throw std::runtime_error("producer_policy_mismatch");
-      if(fields[1]=="LIDAR_SCAN") {
+      if(fields[1]=="LIDAR_SCAN" || fields[1]=="LIDAR_SCAN_END") {
         const bool has_nis=std::isfinite(std::stod(fields[26]));
         if(has_nis!=r2PolicyUsesNisGate(policy) || fields[15]!="1" || fields[24]!="1")
           throw std::runtime_error("producer_r2_nis_or_geometric_admission_mismatch");
+        if(window_owned_fixture && fields[38]!="WINDOW_OWNED_SE3_DESKEW")
+          throw std::runtime_error("V3 did not deskew raw source");
       }
     }
     std::cout<<"A2C_REAL_PCL_PRODUCER_FIXTURE_PASS policy="<<r2PolicyName(policy)
@@ -371,5 +458,38 @@ void runFixedLagProductionFixture() {
         <<" visual="<<result.visual_committed<<" probes="<<result.probes
         <<" ndt_calls="<<result.ndt_calls<<" ndt_ms="<<result.ndt_ms
         <<" total_ms="<<result.total_ms<<" post_handoff_ikfom_calls=0\n";
+  }
+  if(window_owned_fixture) {
+    if(raw_loads!=12 || legacy_loads!=0) throw std::runtime_error("V3 legacy source provider was invoked");
+    const auto good_provider=owned.provider;
+    owned.provider=[&](const ScanAsset& a,fixed_lag::RawTimedScan* raw,std::string* reason) {
+      good_provider(a,raw,reason);
+      raw->provenance=fixed_lag::LidarCloudProvenance::LEGACY_STATE_DERIVED_SE3_DESKEW;
+      return true;
+    };
+    std::ostringstream trajectory,diagnostics,runtime;
+    bool rejected=false;
+    try {
+      runFixedLagProducer(inputs,assets,parameters,Pose3d(),Pose3d(),target,visual,
+          [&](const ScanAsset&){++legacy_loads;return source;},trajectory,diagnostics,runtime,
+          0,R2Policy::LEGACY_BASE_NO_GATE,{}, {},&owned);
+    } catch(const std::runtime_error& e) {
+      rejected=std::string(e.what()).find("NOT_ELIGIBLE_FOR_WINDOW_OWNED_DESKEW")!=std::string::npos;
+    }
+    std::istringstream runtime_rows(runtime.str()); std::string runtime_row;
+    std::getline(runtime_rows,runtime_row);
+    std::uint64_t rejected_input_calls=0;
+    while(std::getline(runtime_rows,runtime_row)) rejected_input_calls+=std::stoull(split(runtime_row,',')[2]);
+    if(!rejected || legacy_loads!=0 || rejected_input_calls!=0)
+      throw std::runtime_error("V3 legacy LiDAR gate failed");
+    owned.provider=good_provider;
+    owned.visual_provenance.assign(visual.size(),fixed_lag::VisualMeasurementProvenance::LEGACY_STATE_DERIVED_DEPTH);
+    std::ostringstream trajectory2,diagnostics2,runtime2;
+    const auto rejected_visual=runFixedLagProducer(inputs,assets,parameters,Pose3d(),Pose3d(),target,visual,
+        [&](const ScanAsset&){++legacy_loads;return source;},trajectory2,diagnostics2,runtime2,
+        0,R2Policy::LEGACY_BASE_NO_GATE,{}, {},&owned);
+    if(rejected_visual.visual_committed!=0 || diagnostics2.str().find("VISUAL_PROVENANCE_REJECTED_NOT_FORMAL_INPUT")==std::string::npos)
+      throw std::runtime_error("V3 legacy visual gate failed");
+    std::cout<<"A2D_V3_RAW_DESKEW_AND_LEGACY_PROVENANCE_REJECTION_PASS\n";
   }
 }

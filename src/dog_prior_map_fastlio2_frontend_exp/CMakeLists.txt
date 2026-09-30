@@ -100,6 +100,7 @@ if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
   add_executable(scan_end_deskew_runtime_test
     src/fastlio2_frontend_ikfom.cpp
     src/scan_processor.cpp
+    src/lidar_deskew_geometry.cpp
     tests/scan_end_deskew_runtime_test.cpp
   )
   target_include_directories(scan_end_deskew_runtime_test PRIVATE
@@ -120,6 +121,7 @@ if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
   add_executable(frontend_runtime_end_to_end_test
     src/fastlio2_frontend_ikfom.cpp
     src/scan_processor.cpp
+    src/lidar_deskew_geometry.cpp
     src/frontend_runtime.cpp
     tests/frontend_runtime_end_to_end_test.cpp
   )
@@ -141,6 +143,7 @@ if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
   add_executable(dog_prior_map_fastlio2_frontend_node
     src/fastlio2_frontend_ikfom.cpp
     src/scan_processor.cpp
+    src/lidar_deskew_geometry.cpp
     src/frontend_runtime.cpp
     src/fastlio2_frontend_node.cpp
   )
