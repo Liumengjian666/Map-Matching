@@ -68,6 +68,8 @@ struct WindowSummary {
   std::size_t sparse_solver_fallback_count = 0;
   double linearization_ms = 0, solve_ms = 0, marginal_covariance_ms = 0;
   double rank_diagnostic_ms = 0;
+  std::size_t marginal_covariance_requests = 0;
+  std::size_t dense_marginal_reference_requests = 0;
   std::string marginalization_status = "NOT_REQUESTED";
   std::string prediction_feedback_status = "NOT_READY";
   std::string verified_relocalization_status =
@@ -78,6 +80,7 @@ struct WindowMarginalCovariance {
   bool valid = false;
   Matrix15d covariance15 = Matrix15d::Zero();
   Matrix6d map_pose_covariance6 = Matrix6d::Zero();
+  double normalized_backward_error = 0;
   std::string status = "WINDOW_MARGINAL_COVARIANCE_UNAVAILABLE";
 };
 
@@ -128,7 +131,9 @@ class FixedLagWindow {
   bool blockLinearizedSystem(WindowLinearSystem* system,
                              std::string* reason = nullptr) const;
   bool latestMarginalCovariance(WindowMarginalCovariance* output,
-                                std::string* reason = nullptr) const;
+                               std::string* reason = nullptr) const;
+  bool latestMarginalCovarianceDenseReferenceForTest(
+      WindowMarginalCovariance* output, std::string* reason = nullptr) const;
   bool predictionFeedbackSeed(WindowState* output,
                               std::string* reason = nullptr) const;
 

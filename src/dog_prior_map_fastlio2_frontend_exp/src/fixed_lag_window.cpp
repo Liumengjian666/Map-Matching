@@ -672,6 +672,36 @@ bool FixedLagWindow::linearizedSystem(Eigen::MatrixXd* hessian,
   return linearize(hessian, gradient, cost, reason);
 }
 
+namespace {
+bool finishMarginalCovariance(const Eigen::MatrixXd& columns,
+    const Eigen::Matrix3d& rotation, WindowMarginalCovariance* output,
+    std::string* reason) {
+  const auto unavailable = [&](const char* detail) {
+    if (reason) *reason = output->status + ":" + detail;
+    return false;
+  };
+  output->covariance15 = 0.5 *
+      (columns.bottomRows(15) + columns.bottomRows(15).transpose()).eval();
+  Eigen::SelfAdjointEigenSolver<Matrix15d> eigen(output->covariance15);
+  if (eigen.info() != Eigen::Success ||
+      eigen.eigenvalues().minCoeff() < -1e-10 ||
+      !output->covariance15.allFinite()) return unavailable("MARGINAL_NOT_PSD");
+  Eigen::Matrix<double, 6, 15> map_product = Eigen::Matrix<double, 6, 15>::Zero();
+  map_product.block<3, 3>(0, 0) = rotation;
+  map_product.block<3, 3>(3, 3).setIdentity();
+  output->map_pose_covariance6 = map_product * output->covariance15 * map_product.transpose();
+  output->map_pose_covariance6 = 0.5 * (output->map_pose_covariance6 +
+      output->map_pose_covariance6.transpose()).eval();
+  Eigen::SelfAdjointEigenSolver<Matrix6d> map_eigen(output->map_pose_covariance6);
+  if (!output->map_pose_covariance6.allFinite() || map_eigen.info()!=Eigen::Success ||
+      map_eigen.eigenvalues().minCoeff() < -1e-10)
+    return unavailable("MAP_COVARIANCE_NOT_PSD");
+  output->valid = true;
+  output->status = "WINDOW_MARGINAL_COVARIANCE_AVAILABLE";
+  return true;
+}
+}  // namespace
+
 bool FixedLagWindow::latestMarginalCovariance(
     WindowMarginalCovariance* output, std::string* reason) const {
   const auto started = std::chrono::steady_clock::now();
@@ -681,6 +711,28 @@ bool FixedLagWindow::latestMarginalCovariance(
     ~Timer() { *milliseconds = std::chrono::duration<double,std::milli>(
         std::chrono::steady_clock::now()-started).count(); }
   } timer{&summary_.marginal_covariance_ms, started};
+  ++summary_.marginal_covariance_requests;
+  if (reason) reason->clear();
+  if (!output) return fail(reason, "null_window_marginal_covariance_output");
+  *output = WindowMarginalCovariance();
+  WindowLinearSystem system;
+  std::string detail;
+  if (!blockLinearizedSystem(&system, &detail)) {
+    if (reason) *reason = output->status + ":" + detail;
+    return false;
+  }
+  Eigen::MatrixXd columns;
+  if (!solveLatestMarginalColumnsSparse(system, &columns,
+      &output->normalized_backward_error, &detail)) {
+    if (reason) *reason = output->status + ":" + detail;
+    return false;
+  }
+  return finishMarginalCovariance(columns, states_.back().rotation, output, reason);
+}
+
+bool FixedLagWindow::latestMarginalCovarianceDenseReferenceForTest(
+    WindowMarginalCovariance* output, std::string* reason) const {
+  ++summary_.dense_marginal_reference_requests;
   if (reason) reason->clear();
   if (!output) return fail(reason, "null_window_marginal_covariance_output");
   *output = WindowMarginalCovariance();
@@ -718,28 +770,8 @@ bool FixedLagWindow::latestMarginalCovariance(
   if (factor.info() != Eigen::Success || !columns.allFinite() ||
       !std::isfinite(backward_error) || backward_error > 1e-10)
     return unavailable("SOLVE_RESIDUAL");
-  output->covariance15 = 0.5 *
-      (columns.bottomRows(15) + columns.bottomRows(15).transpose()).eval();
-  Eigen::SelfAdjointEigenSolver<Matrix15d> eigen(output->covariance15);
-  if (eigen.info() != Eigen::Success ||
-      eigen.eigenvalues().minCoeff() < -1e-10 ||
-      !output->covariance15.allFinite()) return unavailable("MARGINAL_NOT_PSD");
-  Eigen::Matrix<double, 6, 15> map_product =
-      Eigen::Matrix<double, 6, 15>::Zero();
-  map_product.block<3, 3>(0, 0) = states_.back().rotation;
-  map_product.block<3, 3>(3, 3).setIdentity();
-  output->map_pose_covariance6 = map_product * output->covariance15 *
-                                 map_product.transpose();
-  output->map_pose_covariance6 = 0.5 *
-      (output->map_pose_covariance6 +
-       output->map_pose_covariance6.transpose()).eval();
-  Eigen::SelfAdjointEigenSolver<Matrix6d> map_eigen(output->map_pose_covariance6);
-  if (!output->map_pose_covariance6.allFinite() || map_eigen.info()!=Eigen::Success ||
-      map_eigen.eigenvalues().minCoeff() < -1e-10)
-    return unavailable("MAP_COVARIANCE_NOT_PSD");
-  output->valid = true;
-  output->status = "WINDOW_MARGINAL_COVARIANCE_AVAILABLE";
-  return true;
+  output->normalized_backward_error = backward_error;
+  return finishMarginalCovariance(columns, states_.back().rotation, output, reason);
 }
 
 bool FixedLagWindow::predictionFeedbackSeed(WindowState* output,

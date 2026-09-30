@@ -155,7 +155,19 @@ FixedLagProducerResult runFixedLagProducer(
     if(!adapter.prepareStateAt(event.stamp_ns,&predicted,&reason))
       throw std::runtime_error("producer_prediction:"+reason);
     WindowMarginalCovariance prior;
-    adapter.latestMarginalCovariance(&prior,nullptr);
+    const bool lidar_terminal = event.type==ProducerEventType::LIDAR_SCAN ||
+        event.type==ProducerEventType::LIDAR_SCAN_END;
+    // This producer enables U_nonlocal in every policy; P2/P3 also require P.
+    // Request after prediction/IMU admission, before any current LiDAR factor.
+    const auto pre_measurement = adapter.summary();
+    if (lidar_terminal) adapter.latestMarginalCovariance(&prior,nullptr);
+    else prior.status="NOT_REQUESTED_NON_LIDAR_EVENT";
+    const auto covariance_diagnostic = adapter.summary();
+    if (covariance_diagnostic.dense_marginal_reference_requests != 0 ||
+        covariance_diagnostic.marginal_covariance_requests !=
+            pre_measurement.marginal_covariance_requests + (lidar_terminal ? 1 : 0) ||
+        covariance_diagnostic.lidar_factor_count != pre_measurement.lidar_factor_count)
+      throw std::runtime_error("producer_pre_measurement_covariance_contract");
     Candidate nominal;
     reliability::LocalRisk routed;
     reliability::NonlocalTerminalStability stability;
@@ -319,7 +331,8 @@ FixedLagProducerResult runFixedLagProducer(
       <<predicted.position.x()<<','<<predicted.position.y()<<','<<predicted.position.z()<<','
       <<q.x()<<','<<q.y()<<','<<q.z()<<','<<q.w()<<','
       <<nominal.converged<<','<<uobs_valid<<','<<routed.weak_dimension<<','<<routed.reliable_dimension<<','
-      <<prior.valid<<','<<position_sigma<<','<<rotation_sigma<<','<<probed<<','<<unonlocal_status<<','
+      <<(lidar_terminal ? (prior.valid ? "1" : "0") : prior.status)<<','
+      <<position_sigma<<','<<rotation_sigma<<','<<probed<<','<<unonlocal_status<<','
       <<lidar_attempted<<','<<lidar_committed<<','<<lidar_rank<<','<<nis.nis<<','<<nis.threshold<<','
       <<quality<<','<<visual_mode<<','<<visual_rank<<','<<visual_trigger<<','<<basis_stamp<<','
       <<summary.imu_factor_count<<','<<summary.lidar_factor_count<<','<<summary.visual_factor_count<<','
@@ -327,7 +340,8 @@ FixedLagProducerResult runFixedLagProducer(
       <<(window_owned?"WINDOW_OWNED_EXPERIMENTAL_INPUT":"COMPATIBILITY_ONLY_NOT_FORMAL_INPUT")<<",0\n";
     const double event_ms=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-event_start).count();
     runtime<<event.stamp_ns<<','<<toString(event.type)<<','<<calls<<','<<ndt_ms<<','<<event_ms<<','
-        <<summary.linearization_ms<<','<<summary.solve_ms<<','<<summary.marginal_covariance_ms<<','
+        <<summary.linearization_ms<<','<<summary.solve_ms<<','
+        <<(lidar_terminal ? summary.marginal_covariance_ms : 0.0)<<','
         <<summary.rank_diagnostic_ms<<','<<summary.solver_status<<','<<summary.sparse_solver_fallback_count<<'\n';
     result.events++; result.probes+=probed; result.covariance_available+=prior.valid;
     result.ndt_calls+=calls; result.ndt_ms+=ndt_ms;
@@ -426,7 +440,7 @@ void runFixedLagProductionFixture(bool window_owned_fixture = false) {
         [&](const ScanAsset&){++legacy_loads;return source;},trajectory,diagnostics,runtime,0,policy,{}, {},
         window_owned_fixture?&owned:nullptr);
     const std::size_t expected_events=window_owned_fixture?10:7;
-    if(result.events!=expected_events || result.covariance_available!=expected_events || result.probes==0 ||
+    if(result.events!=expected_events || result.covariance_available!=3 || result.probes==0 ||
         result.lidar_committed!=3 || result.ndt_calls!=3+2*result.probes)
       throw std::runtime_error("production_fixture_did_not_exercise_required_paths");
     std::istringstream rows(diagnostics.str());
@@ -451,6 +465,9 @@ void runFixedLagProductionFixture(bool window_owned_fixture = false) {
           throw std::runtime_error("producer_r2_nis_or_geometric_admission_mismatch");
         if(window_owned_fixture && fields[38]!="WINDOW_OWNED_SE3_DESKEW")
           throw std::runtime_error("V3 did not deskew raw source");
+      } else if(fields[18]!="NOT_REQUESTED_NON_LIDAR_EVENT" ||
+          std::isfinite(std::stod(fields[19])) || std::isfinite(std::stod(fields[20]))) {
+        throw std::runtime_error("non_lidar_event_requested_covariance");
       }
     }
     std::cout<<"A2C_REAL_PCL_PRODUCER_FIXTURE_PASS policy="<<r2PolicyName(policy)

@@ -18,4 +18,7 @@ struct WindowLinearSystem {
 };
 bool solveWindowLinearSystem(const WindowLinearSystem& system, double damping,
     WindowSolverBackend backend, Eigen::VectorXd* step, std::string* status);
+// Undamped joint information solve. No dense fallback or regularization.
+bool solveLatestMarginalColumnsSparse(const WindowLinearSystem& system,
+    Eigen::MatrixXd* columns, double* backward_error, std::string* status);
 }  // namespace dog_prior_map_fastlio2_frontend_exp::fixed_lag

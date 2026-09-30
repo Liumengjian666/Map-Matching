@@ -210,7 +210,7 @@ add_test(NAME p6_alg_integration_a2c
 add_executable(window_deskew_math_test "${PACKAGE_ROOT}/scripts/window_deskew_math_test.cpp")
 target_link_libraries(window_deskew_math_test PRIVATE p6_i6b_dual_reliability)
 add_test(NAME window_deskew_math_test COMMAND $<TARGET_FILE:window_deskew_math_test>)
-foreach(a2d_test dense_sparse_equivalence_test solver_scaling_sanity_test measurement_provenance_test)
+foreach(a2d_test dense_sparse_equivalence_test solver_scaling_sanity_test measurement_provenance_test sparse_marginal_covariance_test)
   add_executable(${a2d_test} "${PACKAGE_ROOT}/scripts/${a2d_test}.cpp")
   target_link_libraries(${a2d_test} PRIVATE p6_i6b_dual_reliability)
   add_test(NAME ${a2d_test} COMMAND $<TARGET_FILE:${a2d_test}>)

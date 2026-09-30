@@ -67,6 +67,45 @@ bool solveWindowLinearSystem(const WindowLinearSystem& system, double damping,
   return factor.info() == Eigen::Success && step->allFinite();
 }
 
+bool solveLatestMarginalColumnsSparse(const WindowLinearSystem& system,
+    Eigen::MatrixXd* columns, double* backward_error, std::string* status) {
+  const auto unavailable = [&](const char* detail) {
+    if (status) *status = detail;
+    return false;
+  };
+  if (!columns || !backward_error || system.gradient.size() < 15)
+    return unavailable("INVALID_MARGINAL_SYSTEM");
+  const Eigen::SparseMatrix<double> h = system.sparse();
+  const Eigen::VectorXd diagonal = h.diagonal();
+  if (!diagonal.allFinite() || (diagonal.array() <= 0).any())
+    return unavailable("NONPOSITIVE_HESSIAN_DIAGONAL");
+  const Eigen::VectorXd scale = diagonal.array().sqrt().inverse();
+  Eigen::SparseMatrix<double> balanced = h;
+  for (int k = 0; k < balanced.outerSize(); ++k)
+    for (Eigen::SparseMatrix<double>::InnerIterator it(balanced, k); it; ++it) {
+      if (!std::isfinite(it.value())) return unavailable("NONFINITE_HESSIAN");
+      it.valueRef() *= scale(it.row()) * scale(it.col());
+    }
+  Eigen::SimplicialLLT<Eigen::SparseMatrix<double>, Eigen::Lower,
+      Eigen::NaturalOrdering<int>> factor;
+  factor.compute(balanced);
+  if (factor.info() != Eigen::Success) return unavailable("HESSIAN_NOT_SPD");
+  // Preserve the existing balanced-pivot reliability gate, including ordering.
+  const Eigen::SparseMatrix<double> lower = factor.matrixL();
+  if (lower.diagonal().array().square().minCoeff() <= 1e-12)
+    return unavailable("NUMERICALLY_SINGULAR_HESSIAN");
+  Eigen::MatrixXd selector = Eigen::MatrixXd::Zero(h.rows(), 15);
+  selector.bottomRows(15).setIdentity();
+  *columns = scale.asDiagonal() * factor.solve(scale.asDiagonal() * selector);
+  *backward_error = (h * *columns - selector).norm() /
+      (h.norm() * columns->norm() + selector.norm());
+  if (factor.info() != Eigen::Success || !columns->allFinite() ||
+      !std::isfinite(*backward_error) || *backward_error > 1e-10)
+    return unavailable("SOLVE_RESIDUAL");
+  if (status) *status = "SPARSE_UNDAMPED_SIMPLICIAL_LLT";
+  return true;
+}
+
 bool FixedLagWindow::blockLinearizedSystem(WindowLinearSystem* system, std::string* reason) const {
   auto fail = [&](const char* text) { if (reason) *reason = text; return false; };
   if (reason) reason->clear();
