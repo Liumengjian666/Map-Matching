@@ -1,0 +1,17 @@
+PAPER-P6-ALG-INTEGRATION-A3B build/test evidence
+
+Release:
+- CMake Release runner build: PASS (`/tmp/p6_a2d_build`, pinned FAST-LIO2/DCReg dependencies).
+- Initial CTest invocation accidentally targeted the workspace root and found no tests; it was not counted as a pass.
+- Correct CTest invocation from `/tmp/p6_a2d_build`: 24/24 PASS (original 23 retained + `p6_a3b_no_vision`).
+- During initial implementation, 21/24 passed; the two producer-fixture assertion regressions and source-boundary placement were corrected. Final 24/24 passed, including both original producer fixtures and source boundary audit.
+
+Debug:
+- Debug runner configured/built in `/tmp/p6_a2d_debug` with closed-loop tools enabled.
+- Targeted `p6_a3b_no_vision`: 1/1 PASS (16.99 s).
+
+Repository:
+- `git diff --check`: PASS before NO-VISION commit; final docs diff also checked before report commit.
+- Original 23 tests were not removed or weakened.
+
+Non-fatal compiler output consists of existing third-party FAST-LIO2/MTK/PCL warning classes and optional VTK target warnings.

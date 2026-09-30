@@ -1,0 +1,6 @@
+TASK=PAPER-P6-ALG-INTEGRATION-A3B
+START_SHA=8fe222768ef80e1bf7158d6571822486415c936e
+CODE_SHA=bbadfb72a0c302b134becc68974b72d9d4d80a6d
+END_SHA=see final handoff after report commit (this file is part of that commit)
+BRANCH=research/p6-i6d-full-algorithm
+WORKSPACE=/home/jian/livox_ws/dog_loc_p6_i6b_ws

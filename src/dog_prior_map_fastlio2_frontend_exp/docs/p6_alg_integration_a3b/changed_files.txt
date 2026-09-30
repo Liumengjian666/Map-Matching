@@ -1,0 +1,27 @@
+Code commit bbadfb72a0c302b134becc68974b72d9d4d80a6d:
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_a2c_fixed_lag_producer.hpp
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_a2d_raw_timed_provider.hpp
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i1_branched_recovery.cpp
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b/CMakeLists.txt
+
+Report/data-only files in this A3B docs directory:
+summary.md
+NO_VISION_MODE_AUDIT.md
+REAL_SHORT_LINK_INPUT_IDENTITY.md
+P0_100_STRUCTURAL_RESULT.md
+P3_100_STRUCTURAL_RESULT.md
+P3_200_STRUCTURAL_RESULT.md
+WINDOW_DESKEW_REAL_EVIDENCE.md
+SOLVER_REAL_HEALTH.md
+SHORT_REAL_RESOURCE_SANITY.md
+BUILD_AND_CTEST_RESULTS.txt
+SOURCE_SHA.txt
+changed_files.txt
+DECISION_AI_HANDOFF.md
+P3_FAILURE_CONTEXT.md
+RUN1_P0_100/
+RUN1_P0_100_STARTUP_LINK_FAILURE/
+RUN2_P3_100/
+RUN2_P3_100/failure_after_stop_schedule.csv
+
+No bag, PCD, point binary, or GT data are included.

@@ -1,0 +1,1 @@
+/tmp/p6_a2d_build/p6_i6b_closed_loop: symbol lookup error: /lib/x86_64-linux-gnu/libpcl_io.so.1.10: undefined symbol: libusb_set_option
