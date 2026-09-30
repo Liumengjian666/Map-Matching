@@ -1,0 +1,7 @@
+START_SHA=8f66c1d6d4cc7e1c250488c1f118b7a31b2006e1
+CODE_SHA=f0de80a4a60d69efb03e32bf2332a585fe473dbd
+END_SHA=reported_in_final_execution_handoff (self-referential final commit SHA is not embedded in its own tree)
+BRANCH=research/p6-i6d-full-algorithm
+WORKSPACE=/home/jian/livox_ws/dog_loc_p6_i6b_ws
+REAL_REPLAY_COUNT=1
+REAL_REPLAY_CODE_NOTE=Production arithmetic and controls unchanged; final trace-stage classifier refinement was diagnostic-only and was not followed by another replay.

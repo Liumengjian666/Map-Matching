@@ -1,0 +1,10 @@
+Command:
+  p6_a3c_r1_marginalization_diagnostics_test TX90_FAILURE_CAPSULE.bin
+
+Result:
+TX90_CPP_CAPSULE_EMULATION raw_asymmetry_fro=6.3275346904335216e-08 production_symmetry_fro=1.5818836835798959e-08 production_symmetry_max_abs=1.1175870895385742e-08 out_of_place_symmetry_max_abs=0 production_validator_pass=0 out_of_place_validator_pass=1
+
+This is a matrix-only reconstruction from the one authorized P3-100 failure
+capsule. It did not run or replay localization. The C++ test uses the same
+in-place Eigen assignment and the same finitePsd thresholds as the production
+code; the alternative is evaluated out-of-place with no threshold change.

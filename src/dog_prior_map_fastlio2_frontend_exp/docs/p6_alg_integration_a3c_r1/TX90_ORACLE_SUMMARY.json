@@ -1,0 +1,464 @@
+{
+  "capsule_npz": "/tmp/p6_a3c_r1_corridor_p3_100/tx90_failure_capsule.npz",
+  "capsule_sha256": "2f597628160e75f41bc4c13d9de015727c17b1755535ad806263f272ebcf0280",
+  "capsule_byte_size": 32432,
+  "packed_capsule_metadata": {
+    "source_path": "/tmp/p6_a3c_r1_corridor_p3_100/trajectory.csv.a3c_r1_failure_capsule.bin",
+    "source_sha256": "40e2e605bc71f24207ab4d5c53a662694361505fbf099b3fb67b9955aa48a959",
+    "source_byte_size": 18242115,
+    "capsule_path": "/tmp/p6_a3c_r1_corridor_p3_100/tx90_failure_capsule.npz",
+    "capsule_sha256": "2f597628160e75f41bc4c13d9de015727c17b1755535ad806263f272ebcf0280",
+    "capsule_byte_size": 32432,
+    "arrays": {
+      "incoming_prior_information": {
+        "shape": [
+          615,
+          615
+        ],
+        "dtype": "float64"
+      },
+      "incoming_prior_gradient": {
+        "shape": [
+          615,
+          1
+        ],
+        "dtype": "float64"
+      },
+      "charted_prior_information": {
+        "shape": [
+          615,
+          615
+        ],
+        "dtype": "float64"
+      },
+      "charted_prior_gradient": {
+        "shape": [
+          615,
+          1
+        ],
+        "dtype": "float64"
+      },
+      "consumed_hessian": {
+        "shape": [
+          615,
+          615
+        ],
+        "dtype": "float64"
+      },
+      "consumed_gradient": {
+        "shape": [
+          615,
+          1
+        ],
+        "dtype": "float64"
+      },
+      "imu_hessian": {
+        "shape": [
+          615,
+          615
+        ],
+        "dtype": "float64"
+      },
+      "lidar_hessian": {
+        "shape": [
+          615,
+          615
+        ],
+        "dtype": "float64"
+      },
+      "visual_hessian": {
+        "shape": [
+          615,
+          615
+        ],
+        "dtype": "float64"
+      },
+      "correction_h": {
+        "shape": [
+          15,
+          600
+        ],
+        "dtype": "float64"
+      },
+      "correction_b": {
+        "shape": [
+          15,
+          1
+        ],
+        "dtype": "float64"
+      }
+    },
+    "format": "P6A3CR1CAPSULE_v1 converted to compressed NPZ",
+    "matrix_order_in_source": "row-major float64"
+  },
+  "npz_arrays": {
+    "incoming_prior_information": {
+      "shape": [
+        615,
+        615
+      ],
+      "dtype": "float64"
+    },
+    "incoming_prior_gradient": {
+      "shape": [
+        615,
+        1
+      ],
+      "dtype": "float64"
+    },
+    "charted_prior_information": {
+      "shape": [
+        615,
+        615
+      ],
+      "dtype": "float64"
+    },
+    "charted_prior_gradient": {
+      "shape": [
+        615,
+        1
+      ],
+      "dtype": "float64"
+    },
+    "consumed_hessian": {
+      "shape": [
+        615,
+        615
+      ],
+      "dtype": "float64"
+    },
+    "consumed_gradient": {
+      "shape": [
+        615,
+        1
+      ],
+      "dtype": "float64"
+    },
+    "imu_hessian": {
+      "shape": [
+        615,
+        615
+      ],
+      "dtype": "float64"
+    },
+    "lidar_hessian": {
+      "shape": [
+        615,
+        615
+      ],
+      "dtype": "float64"
+    },
+    "visual_hessian": {
+      "shape": [
+        615,
+        615
+      ],
+      "dtype": "float64"
+    },
+    "correction_h": {
+      "shape": [
+        15,
+        600
+      ],
+      "dtype": "float64"
+    },
+    "correction_b": {
+      "shape": [
+        15,
+        1
+      ],
+      "dtype": "float64"
+    }
+  },
+  "incoming_prior": {
+    "available": true,
+    "finite": true,
+    "dimension": 615,
+    "symmetry_fro": 2.0942477904075448e-11,
+    "frobenius": 33366.05563315489,
+    "lambda_min": 0.0,
+    "lambda_max": 20952.17843889465,
+    "min_abs_eigenvalue": 0.0,
+    "spectral_scale": 20952.17843889465,
+    "relative_negative": 0.0,
+    "negative_eigenvalue_count": 0,
+    "rank_threshold": 2.86117568302662e-09,
+    "numerical_rank": 15,
+    "nullity": 600
+  },
+  "prior_gradient_stages": {
+    "incoming": {
+      "finite": true,
+      "norm": 23.22478177334352,
+      "max_abs": 18.2018292669695,
+      "size": 615
+    },
+    "charted": {
+      "finite": true,
+      "norm": 41.39627314625335,
+      "max_abs": 38.21931285629844,
+      "size": 615
+    },
+    "touching_factors": {
+      "finite": true,
+      "norm": 58.11217778928185,
+      "max_abs": 38.21908458496445,
+      "size": 615
+    },
+    "consumed": {
+      "finite": true,
+      "norm": 40.78476109923517,
+      "max_abs": 37.39871270466256,
+      "size": 615
+    }
+  },
+  "charted_prior": {
+    "available": true,
+    "finite": true,
+    "dimension": 615,
+    "symmetry_fro": 2.094367119388657e-11,
+    "frobenius": 33366.10237580958,
+    "lambda_min": 0.0,
+    "lambda_max": 20952.222553083415,
+    "min_abs_eigenvalue": 0.0,
+    "spectral_scale": 20952.222553083415,
+    "relative_negative": 0.0,
+    "negative_eigenvalue_count": 0,
+    "rank_threshold": 2.8611817071469538e-09,
+    "numerical_rank": 15,
+    "nullity": 600
+  },
+  "touching_factors": {
+    "available": true,
+    "finite": true,
+    "dimension": 615,
+    "symmetry_fro": 8.948147008030034e-08,
+    "frobenius": 6543347299.105127,
+    "lambda_min": -7.930069190093947e-07,
+    "lambda_max": 2000000012.5015914,
+    "min_abs_eigenvalue": 0.0,
+    "spectral_scale": 2000000012.5015914,
+    "relative_negative": 3.9650345702623524e-16,
+    "negative_eigenvalue_count": 5,
+    "rank_threshold": 0.00027311486576497374,
+    "numerical_rank": 20,
+    "nullity": 595
+  },
+  "factor_components": {
+    "imu": {
+      "available": true,
+      "finite": true,
+      "dimension": 615,
+      "symmetry_fro": 3.579412157724331e-07,
+      "frobenius": 6543347260.374621,
+      "lambda_min": -7.150253299536014e-07,
+      "lambda_max": 2000000000.0016012,
+      "min_abs_eigenvalue": 0.0,
+      "spectral_scale": 2000000000.0016012,
+      "relative_negative": 3.5751266497651446e-16,
+      "negative_eigenvalue_count": 7,
+      "rank_threshold": 0.0002731148640580072,
+      "numerical_rank": 15,
+      "nullity": 600
+    },
+    "lidar": {
+      "available": true,
+      "finite": true,
+      "dimension": 615,
+      "symmetry_fro": 4.2839564349515964e-15,
+      "frobenius": 160.1490967981268,
+      "lambda_min": -1.5987211554602254e-14,
+      "lambda_max": 100.07922494113988,
+      "min_abs_eigenvalue": 0.0,
+      "spectral_scale": 100.07922494113988,
+      "relative_negative": 1.5974555722233957e-16,
+      "negative_eigenvalue_count": 1,
+      "rank_threshold": 1.3666561957404128e-11,
+      "numerical_rank": 5,
+      "nullity": 610
+    },
+    "visual": {
+      "available": true,
+      "finite": true,
+      "dimension": 615,
+      "symmetry_fro": 0.0,
+      "frobenius": 0.0,
+      "lambda_min": 0.0,
+      "lambda_max": 0.0,
+      "min_abs_eigenvalue": 0.0,
+      "spectral_scale": 0.0,
+      "relative_negative": 0.0,
+      "negative_eigenvalue_count": 0,
+      "rank_threshold": 0.0,
+      "numerical_rank": 0,
+      "nullity": 615
+    },
+    "component_sum": {
+      "available": true,
+      "finite": true,
+      "dimension": 615,
+      "symmetry_fro": 3.5794121615142504e-07,
+      "frobenius": 6543347299.105127,
+      "lambda_min": -8.137950815483905e-07,
+      "lambda_max": 2000000012.5015907,
+      "min_abs_eigenvalue": 0.0,
+      "spectral_scale": 2000000012.5015907,
+      "relative_negative": 4.06897538230762e-16,
+      "negative_eigenvalue_count": 6,
+      "rank_threshold": 0.00027311486576497363,
+      "numerical_rank": 20,
+      "nullity": 595
+    }
+  },
+  "H_consumed": {
+    "available": true,
+    "finite": true,
+    "dimension": 615,
+    "symmetry_fro": 8.948658291632821e-08,
+    "frobenius": 6543357331.3296585,
+    "lambda_min": 0.0,
+    "lambda_max": 2000007443.823451,
+    "min_abs_eigenvalue": 0.0,
+    "spectral_scale": 2000007443.823451,
+    "relative_negative": 0.0,
+    "negative_eigenvalue_count": 0,
+    "rank_threshold": 0.00027311588056720345,
+    "numerical_rank": 30,
+    "nullity": 585
+  },
+  "H_mm": {
+    "available": true,
+    "finite": true,
+    "dimension": 15,
+    "symmetry_fro": 6.32777931404558e-08,
+    "frobenius": 3271693772.491909,
+    "lambda_min": 7589490.168407572,
+    "lambda_max": 1000015136.7785262,
+    "min_abs_eigenvalue": 7589490.168407572,
+    "spectral_scale": 1000015136.7785262,
+    "relative_negative": 0.0,
+    "negative_eigenvalue_count": 0,
+    "rank_threshold": 3.330719489475585e-06,
+    "numerical_rank": 15,
+    "nullity": 0
+  },
+  "H_mm_rank_sensitivities": {
+    "primary_machine": {
+      "rank": 15,
+      "nullity": 0,
+      "threshold": 3.330719489475585e-06,
+      "range_residual_hmr": 0.0,
+      "range_residual_gm": 0.0
+    },
+    "relative_1e-14": {
+      "rank": 15,
+      "nullity": 0,
+      "threshold": 1.0000151367785262e-05,
+      "range_residual_hmr": 0.0,
+      "range_residual_gm": 0.0
+    },
+    "relative_1e-12": {
+      "rank": 15,
+      "nullity": 0,
+      "threshold": 0.0010000151367785262,
+      "range_residual_hmr": 0.0,
+      "range_residual_gm": 0.0
+    },
+    "relative_1e-10": {
+      "rank": 15,
+      "nullity": 0,
+      "threshold": 0.10000151367785262,
+      "range_residual_hmr": 0.0,
+      "range_residual_gm": 0.0
+    }
+  },
+  "solve": {
+    "jitter": 0.0,
+    "H_mr_backward_error": 1.545884757662522e-16,
+    "g_m_backward_error": 2.8335129308934197e-17,
+    "production_correction_h_shape": [
+      15,
+      600
+    ],
+    "production_correction_b": {
+      "finite": true,
+      "norm": 2.55158331893434e-11,
+      "max_abs": 2.5084087030077107e-11,
+      "size": 15
+    }
+  },
+  "production_schur": {
+    "available": true,
+    "finite": true,
+    "dimension": 600,
+    "symmetry_fro": 0.0,
+    "frobenius": 33427.40105930816,
+    "lambda_min": 0.0,
+    "lambda_max": 20991.159274611786,
+    "min_abs_eigenvalue": 0.0,
+    "spectral_scale": 20991.159274611786,
+    "relative_negative": 0.0,
+    "negative_eigenvalue_count": 0,
+    "rank_threshold": 2.7965842008297486e-09,
+    "numerical_rank": 15,
+    "nullity": 585
+  },
+  "production_schur_gradient": {
+    "finite": true,
+    "norm": 40.7850464784186,
+    "max_abs": 37.39894097843623,
+    "size": 600
+  },
+  "generalized_schur_primary": {
+    "available": true,
+    "finite": true,
+    "dimension": 600,
+    "symmetry_fro": 0.0,
+    "frobenius": 33427.40106005743,
+    "lambda_min": 0.0,
+    "lambda_max": 20991.15927515144,
+    "min_abs_eigenvalue": 0.0,
+    "spectral_scale": 20991.15927515144,
+    "relative_negative": 0.0,
+    "negative_eigenvalue_count": 0,
+    "rank_threshold": 2.796584200901645e-09,
+    "numerical_rank": 15,
+    "nullity": 585
+  },
+  "generalized_schur_gradient": {
+    "finite": true,
+    "norm": 40.7850464784186,
+    "max_abs": 37.39894097843623,
+    "size": 600
+  },
+  "production_vs_generalized_schur": {
+    "H_relative_frobenius_error": 1.2413274713605209e-10,
+    "gradient_relative_error": 3.4026656841393785e-19
+  },
+  "production_vs_jittered_solve_schur": {
+    "H_relative_frobenius_error": 1.3811890203808442e-11,
+    "gradient_relative_error": 0.0,
+    "solve_schur": {
+      "available": true,
+      "finite": true,
+      "dimension": 600,
+      "symmetry_fro": 0.0,
+      "frobenius": 33427.40105936604,
+      "lambda_min": 0.0,
+      "lambda_max": 20991.159274753427,
+      "min_abs_eigenvalue": 0.0,
+      "spectral_scale": 20991.159274753427,
+      "relative_negative": 0.0,
+      "negative_eigenvalue_count": 0,
+      "rank_threshold": 2.796584200848619e-09,
+      "numerical_rank": 15,
+      "nullity": 585
+    },
+    "solve_gradient": {
+      "finite": true,
+      "norm": 40.7850464784186,
+      "max_abs": 37.39894097843623,
+      "size": 600
+    }
+  }
+}

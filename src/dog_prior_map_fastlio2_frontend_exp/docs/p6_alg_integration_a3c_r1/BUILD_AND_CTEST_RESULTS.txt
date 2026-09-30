@@ -1,0 +1,28 @@
+Configuration:
+  Release build directory: /tmp/p6_a2d_build
+  Debug build directory:   /tmp/p6_a2d_debug
+  Existing Release CTest cases retained: PASS
+
+Release:
+  p6_a3c_r1_marginalization_diagnostics_test build: PASS
+  p6_i6b_closed_loop runner build: PASS
+  Full CTest: 28/28 PASS
+  Includes A1-R1 information-conservation, A2D Schur, A3B-R1 optimizer,
+  A3B-R2 frozen projection, and the two new A3C-R1 tests.
+
+Debug targeted:
+  p6_a1_r1_fixed_lag_regression: PASS
+  p6_a3b_r1_optimizer_diagnostics: PASS
+  p6_a3b_r2_frozen_projection: PASS
+  p6_a3c_r1_marginalization_diagnostics: PASS
+  p6_a3c_r1_marginalization_oracle_math: PASS
+  Total: 5/5 PASS
+
+Additional forensic checks:
+  Python generalized-Schur oracle self-test: PASS
+  C++ replay of tx90 capsule through the production Eigen expression:
+    production validator rejection reproduced; out-of-place symmetric form
+    passed the unchanged validator: PASS
+  git diff --check: PASS
+
+No full dataset replay, GT read, accuracy analysis, or parameter sweep was run.

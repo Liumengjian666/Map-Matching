@@ -1,0 +1,89 @@
+{
+  "source_path": "/tmp/p6_a3c_r1_corridor_p3_100/trajectory.csv.a3c_r1_failure_capsule.bin",
+  "source_sha256": "40e2e605bc71f24207ab4d5c53a662694361505fbf099b3fb67b9955aa48a959",
+  "source_byte_size": 18242115,
+  "capsule_path": "/tmp/p6_a3c_r1_corridor_p3_100/tx90_failure_capsule.npz",
+  "capsule_sha256": "2f597628160e75f41bc4c13d9de015727c17b1755535ad806263f272ebcf0280",
+  "capsule_byte_size": 32432,
+  "arrays": {
+    "incoming_prior_information": {
+      "shape": [
+        615,
+        615
+      ],
+      "dtype": "float64"
+    },
+    "incoming_prior_gradient": {
+      "shape": [
+        615,
+        1
+      ],
+      "dtype": "float64"
+    },
+    "charted_prior_information": {
+      "shape": [
+        615,
+        615
+      ],
+      "dtype": "float64"
+    },
+    "charted_prior_gradient": {
+      "shape": [
+        615,
+        1
+      ],
+      "dtype": "float64"
+    },
+    "consumed_hessian": {
+      "shape": [
+        615,
+        615
+      ],
+      "dtype": "float64"
+    },
+    "consumed_gradient": {
+      "shape": [
+        615,
+        1
+      ],
+      "dtype": "float64"
+    },
+    "imu_hessian": {
+      "shape": [
+        615,
+        615
+      ],
+      "dtype": "float64"
+    },
+    "lidar_hessian": {
+      "shape": [
+        615,
+        615
+      ],
+      "dtype": "float64"
+    },
+    "visual_hessian": {
+      "shape": [
+        615,
+        615
+      ],
+      "dtype": "float64"
+    },
+    "correction_h": {
+      "shape": [
+        15,
+        600
+      ],
+      "dtype": "float64"
+    },
+    "correction_b": {
+      "shape": [
+        15,
+        1
+      ],
+      "dtype": "float64"
+    }
+  },
+  "format": "P6A3CR1CAPSULE_v1 converted to compressed NPZ",
+  "matrix_order_in_source": "row-major float64"
+}

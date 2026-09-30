@@ -1,0 +1,2 @@
+run_id,transaction_id,event,stamp_ns,enforcement_index,attempt_index,raw_trace_first_bad_stage,adjudicated_first_bad_stage,adjudication_basis,replay_repeated
+P3_100_FORENSIC,90,LIDAR_SCAN_END,1517157228164951397,78,1,M2_TOUCHING_FACTORS,M7_SYMMETRIZED_SCHUR,Exact C++ capsule replay of production in-place Eigen symmetrization and unchanged M7 validator; M2 label came from an earlier trace-only classifier applying an absolute symmetry tolerance to a large intermediate matrix; corrected classifier was not rerun on real replay,false
