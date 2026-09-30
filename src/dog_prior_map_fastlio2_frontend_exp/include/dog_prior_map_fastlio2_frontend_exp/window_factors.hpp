@@ -134,6 +134,34 @@ struct LidarWindowMeasurement {
   std::string skipped_reason;
 };
 
+// Immutable reliability-subspace and projected-noise snapshot for one inner
+// optimizer iteration. Both the local model and candidate acceptance must use
+// this exact pair; a new snapshot is formed only at the next outer iteration.
+struct FrozenLidarProjection {
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+  std::uint64_t observation_id = 0;
+  std::uint64_t stamp_ns = 0;
+  Matrix6d basis = Matrix6d::Zero();
+  int reliable_rank = 0;
+  Eigen::MatrixXd selected_covariance;
+  bool valid = false;
+};
+
+using FrozenLidarProjectionVector =
+    std::vector<FrozenLidarProjection,
+                Eigen::aligned_allocator<FrozenLidarProjection>>;
+
+bool freezeLidarProjection(const WindowState& state,
+                           const LidarWindowMeasurement& measurement,
+                           FrozenLidarProjection* output,
+                           std::string* reason = nullptr);
+
+bool linearizeLidarFactorWithFrozenProjection(
+    const WindowState& state, const LidarWindowMeasurement& measurement,
+    const FrozenLidarProjection& projection, Eigen::VectorXd* residual,
+    Eigen::MatrixXd* jacobian, Eigen::MatrixXd* covariance,
+    std::string* reason = nullptr);
+
 bool buildLidarResidual(const WindowState& state,
                         const LidarWindowMeasurement& measurement,
                         Eigen::VectorXd* residual, std::string* reason = nullptr);

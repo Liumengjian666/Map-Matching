@@ -2,6 +2,9 @@
 #include <Eigen/Cholesky>
 #include <Eigen/SparseCholesky>
 #include <cmath>
+#include <limits>
+#include <map>
+#include <set>
 
 namespace dog_prior_map_fastlio2_frontend_exp::fixed_lag {
 void WindowLinearSystem::add(std::size_t row, std::size_t col, const Matrix15d& block) {
@@ -108,9 +111,70 @@ bool solveLatestMarginalColumnsSparse(const WindowLinearSystem& system,
 
 bool FixedLagWindow::blockLinearizedSystem(WindowLinearSystem* system,
     std::string* reason, ObjectiveBreakdown* breakdown) const {
+  LidarIterationSnapshot snapshot;
+  if (!buildLidarIterationSnapshot(&snapshot, reason)) return false;
+  return blockLinearizedSystemWithLidarSnapshot(snapshot, system, reason,
+                                                 breakdown);
+}
+
+double FixedLagWindow::objectiveWithLidarSnapshot(
+    const LidarIterationSnapshot& snapshot, std::string* reason,
+    ObjectiveBreakdown* breakdown) const {
+  WindowLinearSystem system;
+  if (!blockLinearizedSystemWithLidarSnapshot(snapshot, &system, reason,
+                                               breakdown))
+    return std::numeric_limits<double>::infinity();
+  return system.cost;
+}
+
+bool FixedLagWindow::objectiveAtStatesWithLidarSnapshotForDebug(
+    const WindowStateVector& candidate_states,
+    const LidarIterationSnapshot& snapshot, ObjectiveBreakdown* breakdown,
+    std::string* reason) const {
+  if (reason) reason->clear();
+  if (!breakdown || candidate_states.empty() ||
+      candidate_states.size() != states_.size()) {
+    if (reason) *reason = "debug_snapshot_objective_state_shape_mismatch";
+    return false;
+  }
+  for (std::size_t i = 0; i < candidate_states.size(); ++i) {
+    const auto& state = candidate_states[i];
+    if (state.stamp_ns != states_[i].stamp_ns || !state.rotation.allFinite() ||
+        !state.position.allFinite() || !state.velocity.allFinite() ||
+        !state.gyro_bias.allFinite() || !state.accel_bias.allFinite() ||
+        (state.rotation.transpose() * state.rotation -
+         Eigen::Matrix3d::Identity()).norm() >= 1e-7 ||
+        std::abs(state.rotation.determinant() - 1.0) >= 1e-7) {
+      if (reason) *reason = "debug_snapshot_objective_candidate_invalid";
+      return false;
+    }
+  }
+  FixedLagWindow trial = *this;
+  trial.states_ = candidate_states;
+  WindowLinearSystem system;
+  return trial.blockLinearizedSystemWithLidarSnapshot(
+      snapshot, &system, reason, breakdown);
+}
+
+bool FixedLagWindow::blockLinearizedSystemWithLidarSnapshot(
+    const LidarIterationSnapshot& lidar_snapshot, WindowLinearSystem* system,
+    std::string* reason, ObjectiveBreakdown* breakdown) const {
   auto fail = [&](const char* text) { if (reason) *reason = text; return false; };
   if (reason) reason->clear();
   if (!system || states_.empty()) return fail("null_or_empty_block_system");
+  std::map<std::pair<std::uint64_t, std::uint64_t>,
+           const FrozenLidarProjection*> projection_by_identity;
+  std::set<std::uint64_t> projection_observation_ids;
+  for (const auto& projection : lidar_snapshot.projections) {
+    const auto identity = std::make_pair(projection.observation_id,
+                                         projection.stamp_ns);
+    if (!projection.valid ||
+        !projection_observation_ids.insert(projection.observation_id).second ||
+        !projection_by_identity.emplace(identity, &projection).second)
+      return fail("invalid_or_duplicate_lidar_snapshot_identity");
+  }
+  if (projection_by_identity.size() != lidar_factors_.size())
+    return fail("lidar_snapshot_factor_count_mismatch");
   if (breakdown) *breakdown = ObjectiveBreakdown();
   *system = WindowLinearSystem();
   const Eigen::Index dimension = states_.size()*15;
@@ -177,13 +241,20 @@ bool FixedLagWindow::blockLinearizedSystem(WindowLinearSystem* system,
   for (const auto& record : lidar_factors_) {
     std::size_t i; Eigen::VectorXd r; Eigen::MatrixXd a,cov;
     if (!findStateIndex(record.measurement.stamp_ns,&i)) return fail("lidar_factor_state_removed_without_marginalization");
-    if (!linearizeLidarFactor(states_[i],record.measurement,&r,&a,&cov,reason)) return false;
+    const auto identity = std::make_pair(record.measurement.observation_id,
+                                         record.measurement.stamp_ns);
+    const auto projection = projection_by_identity.find(identity);
+    if (projection == projection_by_identity.end())
+      return fail("lidar_snapshot_factor_identity_missing");
+    if (!linearizeLidarFactorWithFrozenProjection(
+            states_[i], record.measurement, *projection->second,
+            &r, &a, &cov, reason)) return false;
     if (!accumulate(i,a,0,nullptr,r,cov,
                     breakdown ? &breakdown->lidar_cost : nullptr))
       return fail("lidar_factor_covariance_not_spd");
     if (breakdown) {
-      // The selected residual and covariance are those produced by the exact
-      // production linearizer above (including basis relinearization).
+      // This is the exact frozen projection used for this system's H/g and
+      // cost; candidate acceptance receives this same snapshot.
       const Eigen::MatrixXd information = cov.ldlt().solve(
           Eigen::MatrixXd::Identity(cov.rows(), cov.cols()));
       const double factor_cost = r.dot(information * r);

@@ -607,7 +607,7 @@ bool FixedLagWindow::diagnoseOptimizerFailureForDebug(
       row.direction_name = direction_entry.first;
       row.direction = direction;
       row.epsilon = epsilon;
-      row.production_model = model_derivative;
+      row.diagnostic_relinearized_basis_model = model_derivative;
       row.frozen_basis_model = model_derivative;
       WindowStateVector plus_states, minus_states;
       if (!perturbed_states(direction, epsilon, &plus_states) ||
@@ -631,19 +631,20 @@ bool FixedLagWindow::diagnoseOptimizerFailureForDebug(
         derivatives->push_back(std::move(row));
         continue;
       }
-      row.production_fd =
+      row.diagnostic_relinearized_basis_fd =
           (production_plus.total_cost - production_minus.total_cost) /
           (2.0 * epsilon);
       row.frozen_basis_fd =
           (frozen_plus.total_cost - frozen_minus.total_cost) /
           (2.0 * epsilon);
-      row.production_relative_error =
-          relative_error(row.production_fd, row.production_model);
+      row.diagnostic_relinearized_basis_relative_error =
+          relative_error(row.diagnostic_relinearized_basis_fd,
+                         row.diagnostic_relinearized_basis_model);
       row.frozen_basis_relative_error =
           relative_error(row.frozen_basis_fd, row.frozen_basis_model);
-      row.valid = std::isfinite(row.production_fd) &&
+      row.valid = std::isfinite(row.diagnostic_relinearized_basis_fd) &&
           std::isfinite(row.frozen_basis_fd) &&
-          std::isfinite(row.production_relative_error) &&
+          std::isfinite(row.diagnostic_relinearized_basis_relative_error) &&
           std::isfinite(row.frozen_basis_relative_error);
       row.status = row.valid ? "OK" : "NONFINITE_DIRECTIONAL_DIFFERENCE";
       derivatives->push_back(std::move(row));
@@ -678,7 +679,7 @@ bool FixedLagWindow::diagnoseOptimizerFailureForDebug(
       continue;
     }
     if (!objectiveBreakdownAtStatesForDebug(candidate_states, false,
-            &row.production_breakdown, &local_reason) ||
+            &row.diagnostic_relinearized_basis_breakdown, &local_reason) ||
         !objectiveBreakdownAtStatesForDebug(candidate_states, true,
             &row.frozen_basis_breakdown, &local_reason)) {
       row.solver_status = "OBJECTIVE_EVALUATION_FAILED:" + local_reason;
@@ -686,13 +687,17 @@ bool FixedLagWindow::diagnoseOptimizerFailureForDebug(
       damping_sweep->push_back(std::move(row));
       continue;
     }
-    row.production_candidate_cost = row.production_breakdown.total_cost;
-    row.production_actual_reduction = start_cost - row.production_candidate_cost;
+    row.diagnostic_relinearized_basis_candidate_cost =
+        row.diagnostic_relinearized_basis_breakdown.total_cost;
+    row.diagnostic_relinearized_basis_actual_reduction =
+        start_cost - row.diagnostic_relinearized_basis_candidate_cost;
     row.frozen_basis_candidate_cost = row.frozen_basis_breakdown.total_cost;
     row.frozen_basis_actual_reduction = start_cost - row.frozen_basis_candidate_cost;
     if (row.predicted_reduction > 0.0 && std::isfinite(row.predicted_reduction)) {
-      row.rho = row.production_actual_reduction / row.predicted_reduction;
-      row.rho_valid = std::isfinite(row.rho);
+      row.diagnostic_relinearized_basis_rho =
+          row.diagnostic_relinearized_basis_actual_reduction /
+          row.predicted_reduction;
+      row.rho_valid = std::isfinite(row.diagnostic_relinearized_basis_rho);
     }
     damping_sweep->push_back(std::move(row));
   }
@@ -730,6 +735,35 @@ bool FixedLagWindow::applyGlobalIncrement(const Eigen::VectorXd& increment,
   return applyGlobalIncrementAtomically(&states_, increment, reason);
 }
 
+bool FixedLagWindow::buildLidarIterationSnapshot(
+    LidarIterationSnapshot* snapshot, std::string* reason,
+    std::uint64_t generation) const {
+  if (reason) reason->clear();
+  if (!snapshot) return fail(reason, "null_lidar_iteration_snapshot");
+  *snapshot = LidarIterationSnapshot();
+  snapshot->generation = generation;
+  std::set<std::uint64_t> observation_ids;
+  std::set<std::pair<std::uint64_t, std::uint64_t>> identities;
+  snapshot->projections.reserve(lidar_factors_.size());
+  for (const auto& record : lidar_factors_) {
+    const auto& measurement = record.measurement;
+    const auto identity = std::make_pair(measurement.observation_id,
+                                         measurement.stamp_ns);
+    if (!observation_ids.insert(measurement.observation_id).second ||
+        !identities.insert(identity).second)
+      return fail(reason, "duplicate_lidar_factor_identity");
+    std::size_t state_index = 0;
+    if (!findStateIndex(measurement.stamp_ns, &state_index))
+      return fail(reason, "lidar_snapshot_state_not_found");
+    FrozenLidarProjection projection;
+    if (!freezeLidarProjection(states_[state_index], measurement,
+                               &projection, reason))
+      return false;
+    snapshot->projections.push_back(std::move(projection));
+  }
+  return true;
+}
+
 bool FixedLagWindow::optimize(std::string* reason) {
   if (reason) reason->clear();
   if (states_.empty()) return fail(reason, "cannot_optimize_empty_window");
@@ -741,28 +775,56 @@ bool FixedLagWindow::optimize(std::string* reason) {
   summary_.solver_status = "NOT_RUN";
   summary_.linearization_ms = summary_.solve_ms = summary_.rank_diagnostic_ms = 0;
   summary_.hessian_numerical_rank = -1;  // Not measured when diagnostics are off.
-  double current_cost = objective(reason);
-  if (!std::isfinite(current_cost)) {
-    states_ = optimization_start_states;
-    summary_.optimizer_status =
-        toString(OptimizerStatus::INVALID_LINEAR_SYSTEM);
-    summary_.optimizer_success = false;
-    summary_.prediction_feedback_status = "INVALID_LINEAR_SYSTEM";
-    return false;
-  }
+  double current_cost = std::numeric_limits<double>::quiet_NaN();
   summary_.optimizer_initial_cost = current_cost;
   summary_.optimizer_final_cost = current_cost;
   summary_.optimizer_iterations = 0;
   summary_.optimizer_success = false;
   bool accepted_update = false;
   bool converged_without_step = false;
+  LidarIterationSnapshot previous_snapshot;
+  bool previous_snapshot_valid = false;
   double damping = std::max(1e-12, options_.initial_damping);
   for (int iteration = 0; iteration < options_.maximum_optimizer_iterations;
        ++iteration) {
     const auto linearization_start = std::chrono::steady_clock::now();
+    LidarIterationSnapshot lidar_snapshot;
+    if (!buildLidarIterationSnapshot(&lidar_snapshot, reason,
+                                     static_cast<std::uint64_t>(iteration + 1))) {
+      states_ = optimization_start_states;
+      summary_.optimizer_status =
+          toString(OptimizerStatus::INVALID_LINEAR_SYSTEM);
+      summary_.optimizer_success = false;
+      summary_.prediction_feedback_status = "INVALID_LINEAR_SYSTEM";
+      return false;
+    }
+    double max_projector_change = 0.0;
+    if (options_.capture_optimizer_trace && previous_snapshot_valid) {
+      for (const auto& projection : lidar_snapshot.projections) {
+        const auto previous = std::find_if(
+            previous_snapshot.projections.begin(),
+            previous_snapshot.projections.end(),
+            [&](const FrozenLidarProjection& candidate) {
+              return candidate.observation_id == projection.observation_id &&
+                     candidate.stamp_ns == projection.stamp_ns;
+            });
+        if (previous == previous_snapshot.projections.end()) continue;
+        const Eigen::MatrixXd current_basis = projection.basis.leftCols(
+            projection.reliable_rank);
+        const Eigen::MatrixXd previous_basis = previous->basis.leftCols(
+            previous->reliable_rank);
+        const Eigen::MatrixXd current_projector =
+            current_basis * current_basis.transpose();
+        const Eigen::MatrixXd previous_projector =
+            previous_basis * previous_basis.transpose();
+        max_projector_change = std::max(
+            max_projector_change,
+            (current_projector - previous_projector).norm());
+      }
+    }
     WindowLinearSystem system;
     ObjectiveBreakdown current_breakdown;
-    if (!blockLinearizedSystem(&system, reason,
+    if (!blockLinearizedSystemWithLidarSnapshot(lidar_snapshot, &system, reason,
             options_.capture_optimizer_trace ? &current_breakdown : nullptr)) {
       states_ = optimization_start_states;
       summary_.optimizer_status =
@@ -775,6 +837,8 @@ bool FixedLagWindow::optimize(std::string* reason) {
         std::chrono::steady_clock::now()-linearization_start).count();
     const auto& gradient = system.gradient;
     current_cost = system.cost;
+    if (iteration == 0) summary_.optimizer_initial_cost = current_cost;
+    summary_.optimizer_final_cost = current_cost;
     summary_.hessian_dimension = gradient.size();
     if (options_.debug_rank_diagnostic) {
       const auto rank_start = std::chrono::steady_clock::now();
@@ -807,8 +871,12 @@ bool FixedLagWindow::optimize(std::string* reason) {
       if (options_.capture_optimizer_trace) {
         OptimizerIterationTrace trace;
         trace.iteration = iteration;
+        trace.lidar_snapshot_generation = lidar_snapshot.generation;
+        trace.max_projector_change_from_previous_outer = max_projector_change;
+        trace.candidate_basis_relinearization_calls = 0;
         trace.damping_before = damping_before;
         trace.damping_after = damping;
+        trace.surrogate_current_cost = current_cost;
         trace.current_cost = current_cost;
         trace.gradient_inf_norm = gradient.lpNorm<Eigen::Infinity>();
         trace.solver_status = summary_.solver_status;
@@ -833,7 +901,11 @@ bool FixedLagWindow::optimize(std::string* reason) {
     OptimizerIterationTrace trace;
     if (options_.capture_optimizer_trace) {
       trace.iteration = iteration;
+      trace.lidar_snapshot_generation = lidar_snapshot.generation;
+      trace.max_projector_change_from_previous_outer = max_projector_change;
+      trace.candidate_basis_relinearization_calls = 0;
       trace.damping_before = damping_before;
+      trace.surrogate_current_cost = current_cost;
       trace.current_cost = current_cost;
       trace.gradient_inf_norm = gradient.lpNorm<Eigen::Infinity>();
       trace.solver_status = summary_.solver_status;
@@ -863,9 +935,11 @@ bool FixedLagWindow::optimize(std::string* reason) {
       return false;
     }
     ObjectiveBreakdown candidate_breakdown;
-    const double candidate_cost = objective(reason, options_.capture_optimizer_trace
-        ? &candidate_breakdown : nullptr);
+    const double candidate_cost = objectiveWithLidarSnapshot(
+        lidar_snapshot, reason,
+        options_.capture_optimizer_trace ? &candidate_breakdown : nullptr);
     if (options_.capture_optimizer_trace) {
+      trace.surrogate_candidate_cost = candidate_cost;
       trace.candidate_cost = candidate_cost;
       trace.actual_reduction = current_cost - candidate_cost;
       trace.candidate_breakdown = candidate_breakdown;
@@ -888,6 +962,10 @@ bool FixedLagWindow::optimize(std::string* reason) {
     if (options_.capture_optimizer_trace) {
       trace.damping_after = damping;
       optimizer_trace_.push_back(std::move(trace));
+    }
+    if (options_.capture_optimizer_trace) {
+      previous_snapshot = std::move(lidar_snapshot);
+      previous_snapshot_valid = true;
     }
     summary_.optimizer_iterations = iteration + 1;
     summary_.optimizer_final_cost = current_cost;

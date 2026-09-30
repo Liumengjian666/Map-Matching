@@ -105,8 +105,16 @@ struct ObjectiveBreakdown {
 
 struct OptimizerIterationTrace {
   int iteration = 0;
+  std::uint64_t lidar_snapshot_generation = 0;
+  double max_projector_change_from_previous_outer = 0.0;
+  std::size_t candidate_basis_relinearization_calls = 0;
   double damping_before = 0.0;
   double damping_after = 0.0;
+  // These costs are the frozen-projection surrogate used for H/g and
+  // candidate acceptance during this exact outer iteration.
+  double surrogate_current_cost = 0.0;
+  double surrogate_candidate_cost = 0.0;
+  // Compatibility aliases retained for existing diagnostic consumers.
   double current_cost = 0.0;
   double gradient_inf_norm = 0.0;
   std::string solver_status = "NOT_RUN";
@@ -128,13 +136,18 @@ struct OptimizerIterationTrace {
   Eigen::VectorXd applied_step;
 };
 
+struct LidarIterationSnapshot {
+  std::uint64_t generation = 0;
+  FrozenLidarProjectionVector projections;
+};
+
 struct DirectionalDerivativeTrace {
   std::string direction_name;
   Eigen::VectorXd direction;
   double epsilon = 0.0;
-  double production_fd = 0.0;
-  double production_model = 0.0;
-  double production_relative_error = 0.0;
+  double diagnostic_relinearized_basis_fd = 0.0;
+  double diagnostic_relinearized_basis_model = 0.0;
+  double diagnostic_relinearized_basis_relative_error = 0.0;
   double frozen_basis_fd = 0.0;
   double frozen_basis_model = 0.0;
   double frozen_basis_relative_error = 0.0;
@@ -152,13 +165,13 @@ struct DampingSweepTrace {
   double g_dot_step = 0.0;
   double step_H_step = 0.0;
   double predicted_reduction = 0.0;
-  double production_candidate_cost = 0.0;
-  double production_actual_reduction = 0.0;
+  double diagnostic_relinearized_basis_candidate_cost = 0.0;
+  double diagnostic_relinearized_basis_actual_reduction = 0.0;
   double frozen_basis_candidate_cost = 0.0;
   double frozen_basis_actual_reduction = 0.0;
-  double rho = 0.0;
+  double diagnostic_relinearized_basis_rho = 0.0;
   bool rho_valid = false;
-  ObjectiveBreakdown production_breakdown;
+  ObjectiveBreakdown diagnostic_relinearized_basis_breakdown;
   ObjectiveBreakdown frozen_basis_breakdown;
 };
 
@@ -209,6 +222,20 @@ class FixedLagWindow {
   bool blockLinearizedSystem(WindowLinearSystem* system,
                              std::string* reason = nullptr,
                              ObjectiveBreakdown* breakdown = nullptr) const;
+  bool buildLidarIterationSnapshot(
+      LidarIterationSnapshot* snapshot, std::string* reason = nullptr,
+      std::uint64_t generation = 0) const;
+  bool blockLinearizedSystemWithLidarSnapshot(
+      const LidarIterationSnapshot& snapshot, WindowLinearSystem* system,
+      std::string* reason = nullptr,
+      ObjectiveBreakdown* breakdown = nullptr) const;
+  double objectiveWithLidarSnapshot(
+      const LidarIterationSnapshot& snapshot, std::string* reason = nullptr,
+      ObjectiveBreakdown* breakdown = nullptr) const;
+  bool objectiveAtStatesWithLidarSnapshotForDebug(
+      const WindowStateVector& candidate_states,
+      const LidarIterationSnapshot& snapshot, ObjectiveBreakdown* breakdown,
+      std::string* reason = nullptr) const;
   bool objectiveBreakdownForDebug(ObjectiveBreakdown* output,
                                   std::string* reason = nullptr) const;
   bool objectiveBreakdownAtStatesForDebug(

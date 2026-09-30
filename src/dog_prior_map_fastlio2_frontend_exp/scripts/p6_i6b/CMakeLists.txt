@@ -184,6 +184,16 @@ if(BUILD_I6B_CLOSED_LOOP_TOOLS)
   add_test(NAME p6_a3b_r1_optimizer_diagnostics
     COMMAND $<TARGET_FILE:p6_a3b_r1_optimizer_diagnostics_test>)
 
+  add_executable(p6_a3b_r2_frozen_projection_test
+    "${PACKAGE_ROOT}/scripts/p6_a3b_r2_frozen_projection_test.cpp")
+  target_compile_features(p6_a3b_r2_frozen_projection_test PRIVATE cxx_std_17)
+  target_link_libraries(p6_a3b_r2_frozen_projection_test PRIVATE
+    p6_i6b_dual_reliability Eigen3::Eigen)
+  target_compile_options(p6_a3b_r2_frozen_projection_test PRIVATE
+    -Wall -Wextra -Wpedantic)
+  add_test(NAME p6_a3b_r2_frozen_projection
+    COMMAND $<TARGET_FILE:p6_a3b_r2_frozen_projection_test>)
+
   add_executable(p6_i6e_projected_pose_consistency_test
     "${PACKAGE_ROOT}/src/fastlio2_frontend_ikfom.cpp"
     "${PACKAGE_ROOT}/tests/ndt_pose_update_runtime_test.cpp")

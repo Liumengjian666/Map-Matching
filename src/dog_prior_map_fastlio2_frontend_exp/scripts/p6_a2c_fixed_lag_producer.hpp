@@ -181,25 +181,57 @@ FixedLagProducerResult runFixedLagProducer(
       <<"lidar_attempted,lidar_committed,event_status,factor_counts_before_optimize\n";
   if (optimizer_trace_output)
     *optimizer_trace_output<<std::setprecision(17)
-      <<"transaction_id,stamp_ns,iteration,damping_before,damping_after,current_cost,"
+      <<"transaction_id,stamp_ns,iteration,lidar_snapshot_generation,max_projector_change_from_previous_outer,"
+      <<"candidate_basis_relinearization_calls,damping_before,damping_after,surrogate_current_cost,"
       <<"gradient_inf_norm,solver_status,raw_step_norm,applied_step_norm,step_clipped,"
-      <<"g_dot_step,step_H_step,predicted_reduction,candidate_cost,actual_reduction,rho,rho_valid,accepted,"
+      <<"g_dot_step,step_H_step,predicted_reduction,surrogate_candidate_cost,actual_reduction,rho,rho_valid,accepted,"
       <<"current_prior,current_imu,current_lidar,current_visual,current_latest_lidar_cost,"
       <<"candidate_prior,candidate_imu,candidate_lidar,candidate_visual,candidate_latest_lidar_cost,"
       <<"applied_step_components\n";
   if (directional_derivative_output)
     *directional_derivative_output<<std::setprecision(17)
-      <<"transaction_id,stamp_ns,direction_name,epsilon,production_fd,production_model,"
-      <<"production_relative_error,frozen_basis_fd,frozen_basis_model,"
+      <<"transaction_id,stamp_ns,direction_name,epsilon,diagnostic_relinearized_basis_fd,"
+      <<"diagnostic_relinearized_basis_model,diagnostic_relinearized_basis_relative_error,"
+      <<"frozen_basis_fd,frozen_basis_model,"
       <<"frozen_basis_relative_error,valid,status,direction_components\n";
   if (damping_sweep_output)
     *damping_sweep_output<<std::setprecision(17)
       <<"transaction_id,stamp_ns,damping,solved,solver_status,raw_step_norm,applied_step_norm,"
-      <<"step_clipped,g_dot_step,step_H_step,predicted_reduction,production_candidate_cost,"
-      <<"production_actual_reduction,frozen_basis_candidate_cost,frozen_basis_actual_reduction,"
-      <<"rho,rho_valid,production_prior,production_imu,production_lidar,production_visual,"
-      <<"production_latest_lidar_cost,frozen_prior,frozen_imu,frozen_lidar,frozen_visual,"
+      <<"step_clipped,g_dot_step,step_H_step,predicted_reduction,diagnostic_relinearized_basis_candidate_cost,"
+      <<"diagnostic_relinearized_basis_actual_reduction,frozen_basis_candidate_cost,frozen_basis_actual_reduction,"
+      <<"diagnostic_relinearized_basis_rho,rho_valid,diagnostic_relinearized_prior,diagnostic_relinearized_imu,"
+      <<"diagnostic_relinearized_lidar,diagnostic_relinearized_visual,"
+      <<"diagnostic_relinearized_latest_lidar_cost,frozen_prior,frozen_imu,frozen_lidar,frozen_visual,"
       <<"frozen_latest_lidar_cost\n";
+  const auto flush_optimizer_trace_rows = [&](
+      std::uint64_t transaction_id, std::uint64_t stamp_ns,
+      const std::vector<fixed_lag::OptimizerIterationTrace>& rows) {
+    if (!optimizer_trace_output) return;
+    for (const auto& row : rows)
+      *optimizer_trace_output<<transaction_id<<','<<stamp_ns<<','
+        <<row.iteration<<','<<row.lidar_snapshot_generation<<','
+        <<row.max_projector_change_from_previous_outer<<','
+        <<row.candidate_basis_relinearization_calls<<','
+        <<row.damping_before<<','<<row.damping_after<<','
+        <<row.surrogate_current_cost<<','<<row.gradient_inf_norm<<','
+        <<row.solver_status<<','<<row.raw_step_norm<<','<<row.applied_step_norm<<','
+        <<row.step_clipped<<','<<row.g_dot_step<<','<<row.step_H_step<<','
+        <<row.predicted_reduction<<','<<row.surrogate_candidate_cost<<','
+        <<row.actual_reduction<<','<<row.rho<<','<<row.rho_valid<<','
+        <<row.accepted<<','<<row.current_breakdown.prior_cost<<','
+        <<row.current_breakdown.imu_cost<<','<<row.current_breakdown.lidar_cost<<','
+        <<row.current_breakdown.visual_cost<<','
+        <<row.current_breakdown.latest_lidar_factor_cost<<','
+        <<row.candidate_breakdown.prior_cost<<','
+        <<row.candidate_breakdown.imu_cost<<','
+        <<row.candidate_breakdown.lidar_cost<<','
+        <<row.candidate_breakdown.visual_cost<<','
+        <<row.candidate_breakdown.latest_lidar_factor_cost<<','
+        <<matrixField(Eigen::MatrixXd(row.applied_step))<<'\n';
+    optimizer_trace_output->flush();
+    if (!*optimizer_trace_output)
+      throw std::runtime_error("optimizer_trace_flush_failed");
+  };
   for(const ProducerEvent& event:stream) {
     const auto event_start=std::chrono::steady_clock::now();
     // Append through exactly the first right boundary required for this event.
@@ -522,29 +554,14 @@ FixedLagProducerResult runFixedLagProducer(
               &breakdown,&derivative_rows,&damping_rows,
               &max_state_difference,&diagnosis_reason);
         }
-        if (optimizer_trace_output) {
-          for (const auto& row : trace_rows)
-            *optimizer_trace_output<<transaction_id<<','<<event.stamp_ns<<','
-              <<row.iteration<<','<<row.damping_before<<','<<row.damping_after<<','
-              <<row.current_cost<<','<<row.gradient_inf_norm<<','<<row.solver_status<<','
-              <<row.raw_step_norm<<','<<row.applied_step_norm<<','<<row.step_clipped<<','
-              <<row.g_dot_step<<','<<row.step_H_step<<','<<row.predicted_reduction<<','
-              <<row.candidate_cost<<','<<row.actual_reduction<<','<<row.rho<<','
-              <<row.rho_valid<<','<<row.accepted<<','
-              <<row.current_breakdown.prior_cost<<','<<row.current_breakdown.imu_cost<<','
-              <<row.current_breakdown.lidar_cost<<','<<row.current_breakdown.visual_cost<<','
-              <<row.current_breakdown.latest_lidar_factor_cost<<','
-              <<row.candidate_breakdown.prior_cost<<','<<row.candidate_breakdown.imu_cost<<','
-              <<row.candidate_breakdown.lidar_cost<<','<<row.candidate_breakdown.visual_cost<<','
-              <<row.candidate_breakdown.latest_lidar_factor_cost<<','
-              <<matrixField(Eigen::MatrixXd(row.applied_step))<<'\n';
-          optimizer_trace_output->flush();
-        }
+        flush_optimizer_trace_rows(transaction_id, event.stamp_ns, trace_rows);
         if (directional_derivative_output) {
           for (const auto& row : derivative_rows)
             *directional_derivative_output<<transaction_id<<','<<event.stamp_ns<<','
-              <<row.direction_name<<','<<row.epsilon<<','<<row.production_fd<<','
-              <<row.production_model<<','<<row.production_relative_error<<','
+              <<row.direction_name<<','<<row.epsilon<<','
+              <<row.diagnostic_relinearized_basis_fd<<','
+              <<row.diagnostic_relinearized_basis_model<<','
+              <<row.diagnostic_relinearized_basis_relative_error<<','
               <<row.frozen_basis_fd<<','<<row.frozen_basis_model<<','
               <<row.frozen_basis_relative_error<<','<<row.valid<<','<<row.status<<','
               <<matrixField(Eigen::MatrixXd(row.direction))<<'\n';
@@ -556,12 +573,15 @@ FixedLagProducerResult runFixedLagProducer(
               <<row.damping<<','<<row.solved<<','<<row.solver_status<<','
               <<row.raw_step_norm<<','<<row.applied_step_norm<<','<<row.step_clipped<<','
               <<row.g_dot_step<<','<<row.step_H_step<<','<<row.predicted_reduction<<','
-              <<row.production_candidate_cost<<','<<row.production_actual_reduction<<','
+              <<row.diagnostic_relinearized_basis_candidate_cost<<','
+              <<row.diagnostic_relinearized_basis_actual_reduction<<','
               <<row.frozen_basis_candidate_cost<<','<<row.frozen_basis_actual_reduction<<','
-              <<row.rho<<','<<row.rho_valid<<','
-              <<row.production_breakdown.prior_cost<<','<<row.production_breakdown.imu_cost<<','
-              <<row.production_breakdown.lidar_cost<<','<<row.production_breakdown.visual_cost<<','
-              <<row.production_breakdown.latest_lidar_factor_cost<<','
+              <<row.diagnostic_relinearized_basis_rho<<','<<row.rho_valid<<','
+              <<row.diagnostic_relinearized_basis_breakdown.prior_cost<<','
+              <<row.diagnostic_relinearized_basis_breakdown.imu_cost<<','
+              <<row.diagnostic_relinearized_basis_breakdown.lidar_cost<<','
+              <<row.diagnostic_relinearized_basis_breakdown.visual_cost<<','
+              <<row.diagnostic_relinearized_basis_breakdown.latest_lidar_factor_cost<<','
               <<row.frozen_basis_breakdown.prior_cost<<','<<row.frozen_basis_breakdown.imu_cost<<','
               <<row.frozen_basis_breakdown.lidar_cost<<','<<row.frozen_basis_breakdown.visual_cost<<','
               <<row.frozen_basis_breakdown.latest_lidar_factor_cost<<'\n';
@@ -596,6 +616,17 @@ FixedLagProducerResult runFixedLagProducer(
         optimizer_failure_summary->flush();
       }
       throw std::runtime_error("producer_optimizer:"+reason);
+    }
+    if (optimizer_trace_output) {
+      const auto* trace_window = adapter.debugWindowForDiagnostics();
+      if (!trace_window)
+        throw std::runtime_error("optimizer_trace_window_unavailable");
+      const std::uint64_t transaction_id =
+          (event.type==ProducerEventType::LIDAR_SCAN ||
+           event.type==ProducerEventType::LIDAR_SCAN_END)
+              ? assets[event.source_index].transaction_id : 0;
+      flush_optimizer_trace_rows(transaction_id, event.stamp_ns,
+          trace_window->optimizerTraceForDebug());
     }
     WindowState optimized;
     if(!adapter.latestOptimizedState(&optimized,&reason)) throw std::runtime_error("producer_optimized_state:"+reason);

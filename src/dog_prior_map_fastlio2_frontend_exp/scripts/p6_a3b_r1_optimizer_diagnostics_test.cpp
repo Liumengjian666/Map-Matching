@@ -163,6 +163,32 @@ void breakdownAndFrozenBasis() {
   require(std::abs(production_candidate.lidar_cost - frozen_candidate.lidar_cost) >
               1e-8,
           "synthetic state-dependent basis did not distinguish objectives");
+  ObjectiveBreakdown diagnostic_start;
+  std::vector<DirectionalDerivativeTrace> forensic_derivatives;
+  std::vector<DampingSweepTrace> forensic_sweep;
+  double forensic_state_difference = -1.0;
+  require(window.diagnoseOptimizerFailureForDebug(
+              {1e-8, 1e-7, 1e-6, 1e-5, 1e-4},
+              {1e-6}, &diagnostic_start, &forensic_derivatives,
+              &forensic_sweep, &forensic_state_difference, &reason),
+          "state-dependent basis forensic derivative: " + reason);
+  bool frozen_fd_matches_model = false;
+  bool relinearized_fd_exposes_mismatch = false;
+  for (const auto& row : forensic_derivatives) {
+    require(row.valid && row.status == "OK",
+            "state-dependent basis forensic row invalid: " + row.status);
+    if (row.epsilon >= 1e-6 && row.epsilon <= 1e-4) {
+      frozen_fd_matches_model = frozen_fd_matches_model ||
+          row.frozen_basis_relative_error < 1e-4;
+      relinearized_fd_exposes_mismatch =
+          relinearized_fd_exposes_mismatch ||
+          row.diagnostic_relinearized_basis_relative_error >
+              std::max(1e-3, 10.0 * row.frozen_basis_relative_error);
+    }
+  }
+  require(frozen_fd_matches_model && relinearized_fd_exposes_mismatch &&
+              forensic_state_difference == 0.0,
+          "forensic FD did not retain frozen-consistent/relinearized-inconsistent evidence transactionally");
   require(window.blockLinearizedSystem(&system_after, &reason),
           "post-debug system: " + reason);
   require((system_before.dense() - system_after.dense()).norm() == 0.0 &&
@@ -207,9 +233,10 @@ void failureTraceAndTransactionalDiagnosis() {
   require(state_difference == 0.0 &&
               localDifference(*failed.latestState(), before).norm() == 0.0,
           "directional derivative/damping sweep changed the failed window state");
-  for (const auto& row : derivatives)
+  for (const auto& row : derivatives) {
     require(row.valid && row.status == "OK",
             "directional derivative row invalid: " + row.status);
+  }
   for (const auto& row : sweep)
     require(row.solved && row.applied_step_norm == 0.0,
             "synthetic damping sweep solve/clip mismatch");
