@@ -1,0 +1,123 @@
+A3A BUILD AND CTEST RESULTS
+CODE_SHA=9d8a794dac7f06b0e52dc2f8c4aadcbfc5138a0c
+2026-09-30 Asia/Shanghai
+Release CMake build: PASS
+Release main build directory: /tmp/p6_a2d_build
+CMAKE_BUILD_TYPE=Release
+BUILD_I6B_CLOSED_LOOP_TOOLS=ON
+cmake -S src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b -B /tmp/p6_a2d_build
+cmake --build /tmp/p6_a2d_build -j2
+LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu ctest --output-on-failure -j2
+Existing MTK/PCL deprecation/unused warnings are non-fatal.
+Old system VTK optional executable warnings unchanged.
+
+Decoder fresh build: PASS
+source /opt/ros/noetic/setup.bash
+cmake -S src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_a3a -B /tmp/p6_a3a_decoder_build -DCMAKE_BUILD_TYPE=Release
+cmake --build /tmp/p6_a3a_decoder_build -j2
+Pinned official rawdata.cc + calibration.cc compiled in a separate private library.
+Loaded-library source identity and actual symbol bindings verified.
+LD_PRELOAD old driver: rejected with runtime_decoder_symbol_interposition_rejected.
+Old sibling library replacement: rejected with runtime_decoder_symbol_unidentified.
+No real NDT or localization invoked by decoder.
+
+Debug targeted build: PASS
+Build directory: /tmp/p6_a2d_debug
+CMAKE_BUILD_TYPE=Debug
+BUILD_I6B_CLOSED_LOOP_TOOLS=OFF
+Targets: sparse_marginal_covariance_test, p6_a1_r1_fixed_lag_regression_test,
+window_deskew_math_test, measurement_provenance_test,
+p6_alg_integration_a2c_test, dense_sparse_equivalence_test.
+Debug targeted CTest also reads current Python input-contract source.
+PCL V3 runner/reader/warmup fixture are covered in Release; not claimed as Debug PCL replay.
+
+Python input contract: 15/15 PASS
+Nonuniform timestamps, exact SHA, missing/wrong identity, truncation, zero time,
+out-of-interval points, legacy provenance, schedule mismatch, semantic relabeling,
+hardware-clock false flag, counts/bounds, malformed hash, loader-environment
+interposition removal, production covariance no dense oracle.
+C++ V3 format fixture additionally covers UNKNOWN/missing visual sidecar rows,
+legacy refusal, immutable outputs, corrupted manifest counts/semantics,
+min(point_stamp)==scan_start, and finite raw-coordinate SHA tampering.
+V3 synthetic producer covers warmup skipping without reindexing/snapping,
+no legacy source call, and LiDAR-only pre-measurement covariance request count.
+
+Schur regression and all A2C math contracts: PASS
+Legacy FULL source byte parity SHA:
+498ec598db3aaec84b74391292d9db7928b2337944be01287621502135abed34
+post_handoff_ikfom_calls=0
+git diff --check: PASS
+
+RELEASE CTEST:
+Test project /tmp/p6_a2d_build
+      Start 21: solver_scaling_sanity_test
+      Start  8: p6_a1_r1_fixed_lag_regression
+ 1/23 Test  #8: p6_a1_r1_fixed_lag_regression .......   Passed    0.36 sec
+      Start 14: p6_a2c_real_pcl_producer
+ 2/23 Test #21: solver_scaling_sanity_test ..........   Passed    0.39 sec
+      Start 23: sparse_marginal_covariance_test
+ 3/23 Test #23: sparse_marginal_covariance_test .....   Passed    0.22 sec
+      Start 15: p6_a2d_window_owned_pcl_producer
+ 4/23 Test #14: p6_a2c_real_pcl_producer ............   Passed    0.34 sec
+      Start  1: p6_a3a_input_contract
+ 5/23 Test  #1: p6_a3a_input_contract ...............   Passed    0.20 sec
+      Start  6: p6_i6f_joint_window
+ 6/23 Test #15: p6_a2d_window_owned_pcl_producer ....   Passed    0.36 sec
+      Start 10: p6_alg_integration_a2b
+ 7/23 Test  #6: p6_i6f_joint_window .................   Passed    0.08 sec
+      Start 20: dense_sparse_equivalence_test
+ 8/23 Test #10: p6_alg_integration_a2b ..............   Passed    0.08 sec
+      Start  5: p6_i6f_measurement_noise
+ 9/23 Test #20: dense_sparse_equivalence_test .......   Passed    0.07 sec
+      Start  2: p6_a2c_source_boundary_audit
+10/23 Test  #5: p6_i6f_measurement_noise ............   Passed    0.05 sec
+      Start  9: p6_alg_integration_a2a_adapter
+11/23 Test  #2: p6_a2c_source_boundary_audit ........   Passed    0.04 sec
+      Start 22: measurement_provenance_test
+12/23 Test  #9: p6_alg_integration_a2a_adapter ......   Passed    0.01 sec
+      Start 18: p6_alg_integration_a2c
+13/23 Test #22: measurement_provenance_test .........   Passed    0.01 sec
+      Start 13: frontend_runtime_end_to_end_test
+14/23 Test #18: p6_alg_integration_a2c ..............   Passed    0.01 sec
+      Start 16: p6_i6e_projected_pose_consistency
+15/23 Test #13: frontend_runtime_end_to_end_test ....   Passed    0.00 sec
+      Start 19: window_deskew_math_test
+16/23 Test #16: p6_i6e_projected_pose_consistency ...   Passed    0.00 sec
+      Start 12: scan_end_deskew_runtime_test
+17/23 Test #19: window_deskew_math_test .............   Passed    0.00 sec
+      Start 17: p6_i6e_r3_residual_jacobian
+18/23 Test #12: scan_end_deskew_runtime_test ........   Passed    0.00 sec
+      Start  7: p6_i6f_imu_preintegration
+19/23 Test #17: p6_i6e_r3_residual_jacobian .........   Passed    0.00 sec
+      Start  3: p6_i6b_dual_reliability
+20/23 Test  #7: p6_i6f_imu_preintegration ...........   Passed    0.00 sec
+      Start 11: p6_a2c_initialization
+21/23 Test  #3: p6_i6b_dual_reliability .............   Passed    0.00 sec
+      Start  4: p6_i6e_conditional_compensation
+22/23 Test #11: p6_a2c_initialization ...............   Passed    0.00 sec
+23/23 Test  #4: p6_i6e_conditional_compensation .....   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 23
+
+Total Test time (real) =   1.14 sec
+
+DEBUG TARGETED CTEST:
+Test project /tmp/p6_a2d_debug
+    Start  8: p6_a1_r1_fixed_lag_regression
+    Start 16: sparse_marginal_covariance_test
+1/7 Test #16: sparse_marginal_covariance_test ...   Passed   12.49 sec
+    Start 13: dense_sparse_equivalence_test
+2/7 Test #13: dense_sparse_equivalence_test .....   Passed    3.30 sec
+    Start  2: p6_a3a_input_contract
+3/7 Test  #2: p6_a3a_input_contract .............   Passed    0.21 sec
+    Start 15: measurement_provenance_test
+4/7 Test #15: measurement_provenance_test .......   Passed    0.18 sec
+    Start 12: window_deskew_math_test
+5/7 Test #12: window_deskew_math_test ...........   Passed    0.18 sec
+    Start 11: p6_alg_integration_a2c
+6/7 Test #11: p6_alg_integration_a2c ............   Passed    0.10 sec
+7/7 Test  #8: p6_a1_r1_fixed_lag_regression .....   Passed   29.58 sec
+
+100% tests passed, 0 tests failed out of 7
+
+Total Test time (real) =  29.58 sec
