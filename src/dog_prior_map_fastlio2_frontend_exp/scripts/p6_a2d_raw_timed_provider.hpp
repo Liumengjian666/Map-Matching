@@ -253,6 +253,7 @@ void runWindowOwnedExperimentalMode(const p4_i2::Inputs& inputs,
       [](const ScanAsset&)->Cloud::Ptr {throw std::runtime_error("V3_LEGACY_SOURCE_PROVIDER_FORBIDDEN");},
       trajectory,diagnostics,runtime,init_stamp,policy,{}, {},&owned);
   std::cout<<"FULL_FIXED_LAG_V3_EXPERIMENTAL_COMPLETE window_deskews="<<result.window_deskew_count
+      <<" raw_scans_before_handoff="<<result.raw_scans_before_handoff
       <<" ndt_calls="<<result.ndt_calls<<" raw_timed_sha256="<<p5_i1::sha256File(raw_path)
       <<" catalog_sha256="<<p5_i1::sha256File(catalog_path)<<'\n';
 }

@@ -11,6 +11,7 @@ struct FixedLagProducerResult {
   double ndt_ms = 0.0;
   double total_ms = 0.0;
   std::size_t window_deskew_count = 0;
+  std::size_t raw_scans_before_handoff = 0;
 };
 
 using RawTimedScanProvider = std::function<bool(const ScanAsset&,
@@ -105,20 +106,28 @@ FixedLagProducerResult runFixedLagProducer(
     throw std::runtime_error("fixed_lag_prior:"+reason);
   // No IKFoM object exists below this boundary. The adapter is the state owner.
   std::vector<ProducerEvent> stream;
+  std::size_t raw_scans_before_handoff=0;
   for(std::size_t i=0;i<assets.size();++i) {
     if(i>=inputs.scans.size() || assets[i].stamp_ns!=inputs.scans[i].stamp_ns ||
         assets[i].transaction_id!=inputs.scans[i].transaction_id ||
-        assets[i].stamp_ns<seed.stamp_ns)
+        (!window_owned && assets[i].stamp_ns<seed.stamp_ns))
       throw std::runtime_error("fixed_lag_scan_identity_or_time_mismatch");
     if (window_owned) {
       if (!window_owned->provider || window_owned->scan_start_ns.size()!=assets.size() ||
-          window_owned->scan_start_ns[i]<seed.stamp_ns ||
+          !window_owned->scan_start_ns[i] ||
           window_owned->scan_start_ns[i]>=assets[i].stamp_ns)
         throw std::runtime_error("RAW_POINT_TIME_UNAVAILABLE:NOT_ELIGIBLE_FOR_WINDOW_OWNED_DESKEW");
+      // Raw export preserves acquisition during initialization. These scans
+      // have no Window-owned start state and cannot be deskewed after handoff.
+      // Skip, never snap/reindex their physical timestamps or transaction IDs.
+      if(window_owned->scan_start_ns[i]<seed.stamp_ns) {
+        ++raw_scans_before_handoff; continue;
+      }
       stream.push_back({window_owned->scan_start_ns[i],ProducerEventType::LIDAR_SCAN_START,i});
       stream.push_back({assets[i].stamp_ns,ProducerEventType::LIDAR_SCAN_END,i});
     } else stream.push_back({assets[i].stamp_ns,ProducerEventType::LIDAR_SCAN,i});
   }
+  if(window_owned && stream.empty()) throw std::runtime_error("NO_RAW_SCAN_AFTER_WINDOW_HANDOFF");
   for(std::size_t i=0;i<visual.size();++i) {
     if(visual[i].ref_ns<seed.stamp_ns || visual[i].cur_ns>assets.back().stamp_ns ||
         visual[i].cur_ns<=visual[i].ref_ns) continue;
@@ -139,6 +148,7 @@ FixedLagProducerResult runFixedLagProducer(
   const Eigen::Matrix4d T_il=poseMatrix(extrinsic);
   const double nan=std::numeric_limits<double>::quiet_NaN();
   FixedLagProducerResult result;
+  result.raw_scans_before_handoff=raw_scans_before_handoff;
   trajectory<<std::setprecision(17)<<"transaction_id,stamp_ns,time_s,px,py,pz,qx,qy,qz,qw\n";
   diagnostics<<std::setprecision(17)<<"timestamp,event_type,window_nodes,window_span,optimizer_status,optimizer_cost_before,optimizer_cost_after,predicted_px,predicted_py,predicted_pz,predicted_qx,predicted_qy,predicted_qz,predicted_qw,ndt_converged,uobs_valid,weak_dimension,reliable_dimension,window_covariance_valid,window_position_sigma_max,window_rotation_sigma_max,unonlocal_probe_triggered,unonlocal_status,lidar_factor_attempted,lidar_factor_committed,lidar_selected_rank,lidar_nis,lidar_nis_threshold,visual_sensor_quality,visual_mode,visual_selected_rank,visual_trigger_status,visual_basis_source_lidar_stamp,imu_factor_count,lidar_factor_count,visual_factor_count,r2_policy,imu_buffer_last_stamp,lidar_source_provenance,visual_source_provenance,input_eligibility,post_handoff_ikfom_calls\n";
   runtime<<"timestamp,event_type,ndt_calls,ndt_ms,event_ms,linearization_ms,solve_ms,marginal_covariance_ms,rank_diagnostic_ms,solver_status,sparse_fallback_count\n";
@@ -479,6 +489,21 @@ void runFixedLagProductionFixture(bool window_owned_fixture = false) {
   if(window_owned_fixture) {
     if(raw_loads!=12 || legacy_loads!=0) throw std::runtime_error("V3 legacy source provider was invoked");
     const auto good_provider=owned.provider;
+    auto warmup_inputs=inputs; auto warmup_assets=assets; auto warmup_owned=owned;
+    ScanAsset warmup; warmup.transaction_id=24; warmup.stamp_ns=1'050'000'000;
+    warmup_assets.insert(warmup_assets.begin(),warmup);
+    p4_i2::PoseRecord warmup_record; warmup_record.transaction_id=24; warmup_record.stamp_ns=warmup.stamp_ns;
+    warmup_inputs.scans.insert(warmup_inputs.scans.begin(),warmup_record);
+    warmup_owned.scan_start_ns.insert(warmup_owned.scan_start_ns.begin(),1'010'000'000);
+    std::ostringstream warmup_trajectory,warmup_diagnostics,warmup_runtime;
+    const auto loads_before=raw_loads;
+    const auto warmup_result=runFixedLagProducer(warmup_inputs,warmup_assets,parameters,Pose3d(),Pose3d(),target,visual,
+        [&](const ScanAsset&){++legacy_loads;return source;},warmup_trajectory,warmup_diagnostics,warmup_runtime,
+        0,R2Policy::LEGACY_BASE_NO_GATE,{}, {},&warmup_owned);
+    if(warmup_result.raw_scans_before_handoff!=1 || warmup_result.events!=10 ||
+        raw_loads-loads_before!=3 || warmup_result.covariance_available!=3 ||
+        warmup_result.lidar_committed!=3 || warmup_trajectory.str().find("1050000000")!=std::string::npos)
+      throw std::runtime_error("V3_raw_warmup_scan_was_snapped_or_consumed");
     owned.provider=[&](const ScanAsset& a,fixed_lag::RawTimedScan* raw,std::string* reason) {
       good_provider(a,raw,reason);
       raw->provenance=fixed_lag::LidarCloudProvenance::LEGACY_STATE_DERIVED_SE3_DESKEW;
