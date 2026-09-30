@@ -1,0 +1,8 @@
+TASK=PAPER-P6-ALG-INTEGRATION-A2C
+START_SHA=7329f74e5691c08379251046cce268477677f4f3
+INTERFACE_COMMIT=982aa1c8dc58f6476d3596da68a62a575cea5451
+CODE_SHA=c78e01fc38d583d8839257c172c41eef8fc34e0e
+BRANCH=research/p6-i6d-full-algorithm
+LEGACY_RUNNER_SHA256=498ec598db3aaec84b74391292d9db7928b2337944be01287621502135abed34
+END_SHA=the documentation delivery commit containing this file; reported externally to avoid a self-referential commit hash
+READY_FOR_FORMAL_EXPERIMENT=NO

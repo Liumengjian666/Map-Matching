@@ -1,0 +1,98 @@
+TASK: PAPER-P6-ALG-INTEGRATION-A2C
+CODE_SHA: c78e01fc38d583d8839257c172c41eef8fc34e0e
+BUILD: Release PASS
+RELEASE CTEST: 14/14 PASS
+DEBUG TARGETED BUILD: PASS
+DEBUG TARGETED CTEST: 3/3 PASS
+DIFF CHECK: PASS
+READY_FOR_FORMAL_EXPERIMENT: NO
+
+Environment:
+GCC 9.4; CMake 3.16.3; Eigen 3.3.7; system PCL 1.10.
+Pinned FAST-LIO2 and DCReg checkouts reused, not modified.
+Build artifacts and raw logs are local /tmp artifacts, not unique research inputs.
+No dataset replay, rosbag, GT tuning or formal FULL integration was run.
+
+Release commands (from repository root):
+cmake -S src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b -B /tmp/p6_a2c_build -DCMAKE_BUILD_TYPE=Release -DBUILD_I6B_CLOSED_LOOP_TOOLS=ON '-DFASTLIO2_ROOT=/media/jian/HIKVISION/comparison algorithm/FAST_LIO2' -DDCREG_ROOT=/home/jian/livox_ws/DCReg/DCReg
+cmake --build /tmp/p6_a2c_build -j1
+cd /tmp/p6_a2c_build
+LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu ctest --output-on-failure
+
+Final Release output:
+Test project /tmp/p6_a2c_build
+ 1/14 p6_a2c_source_boundary_audit ........ PASS
+ 2/14 p6_i6b_dual_reliability ............. PASS
+ 3/14 p6_i6e_conditional_compensation ..... PASS
+ 4/14 p6_i6f_measurement_noise ............ PASS
+ 5/14 p6_i6f_joint_window ................. PASS
+ 6/14 p6_i6f_imu_preintegration ........... PASS
+ 7/14 p6_a1_r1_fixed_lag_regression ....... PASS
+ 8/14 p6_alg_integration_a2a_adapter ...... PASS
+ 9/14 p6_alg_integration_a2b .............. PASS
+10/14 p6_a2c_initialization ............... PASS
+11/14 p6_a2c_real_pcl_producer ............ PASS
+12/14 p6_i6e_projected_pose_consistency ... PASS
+13/14 p6_i6e_r3_residual_jacobian ......... PASS
+14/14 p6_alg_integration_a2c .............. PASS
+100% tests passed, 0 tests failed out of 14
+Total Test time (real) = 1.19 sec
+
+Debug commands (from repository root):
+cmake -S src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b -B /tmp/p6_a2c_debug -DCMAKE_BUILD_TYPE=Debug -DBUILD_I6B_CLOSED_LOOP_TOOLS=ON '-DFASTLIO2_ROOT=/media/jian/HIKVISION/comparison algorithm/FAST_LIO2' -DDCREG_ROOT=/home/jian/livox_ws/DCReg/DCReg
+cmake --build /tmp/p6_a2c_debug --target p6_alg_integration_a2c_test p6_a2c_initialization_test -j1
+cd /tmp/p6_a2c_debug
+LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu ctest -R 'p6_alg_integration_a2c$|p6_a2c_initialization$|p6_a2c_source_boundary_audit$' --output-on-failure
+
+Final Debug output:
+p6_a2c_source_boundary_audit ..... PASS
+p6_a2c_initialization ........... PASS
+p6_alg_integration_a2c .......... PASS
+100% tests passed, 0 tests failed out of 3
+Total Test time (real) = 0.39 sec
+
+New test evidence:
+LEGACY_FULL_SOURCE_BYTE_PARITY_PASS sha256=498ec598db3aaec84b74391292d9db7928b2337944be01287621502135abed34
+POST_HANDOFF_IKFOM_CALLS_ZERO_AND_WINDOW_ONLY_PREDICTION_PASS
+IKFOM_23D_TO_15D_MTK_MAPPING_AND_GRAVITY_CONDITIONAL_PASS delta=0.0309436
+COVARIANCE_DIRECT_INVERSE_AND_MAP_LEFT_FD_PASS
+PUBLIC_PREDICTION_NIS_REJECT_CAUSALITY_AND_ADMISSION_RECOMPUTE_PASS
+MARGINALIZED_RISK_DIRECTION_REJECT_PASS
+SCHEDULER_AND_RUNTIME_NOISE_PASS
+
+Real PCL fixture (final Release CTest run, milliseconds):
+A2C_REAL_PCL_PRODUCER_FIXTURE_PASS policy=LEGACY_BASE_NO_GATE events=7 lidar=3 visual=0 probes=1 ndt_calls=5 ndt_ms=52.1791 total_ms=81.2164 post_handoff_ikfom_calls=0
+A2C_REAL_PCL_PRODUCER_FIXTURE_PASS policy=ADAPTIVE_NO_GATE events=7 lidar=3 visual=0 probes=1 ndt_calls=5 ndt_ms=52.9817 total_ms=81.7748 post_handoff_ikfom_calls=0
+A2C_REAL_PCL_PRODUCER_FIXTURE_PASS policy=BASE_SELECTED_NIS events=7 lidar=3 visual=0 probes=1 ndt_calls=5 ndt_ms=52.9942 total_ms=82.1768 post_handoff_ikfom_calls=0
+A2C_REAL_PCL_PRODUCER_FIXTURE_PASS policy=ADAPTIVE_SELECTED_NIS events=7 lidar=3 visual=0 probes=1 ndt_calls=5 ndt_ms=54.6594 total_ms=84.2122 post_handoff_ikfom_calls=0
+
+Coverage mapping to the 15 authorized checks:
+ 1 IKFoM MTK 23D->15D: initialization test, genuine pinned filter.
+ 2 Gravity conditional P: nonzero Pxg independent reference and no mutation.
+ 3 Body-right->map-left P6: nonidentity R/cross covariance and central SO3 FD.
+ 4 Joint marginal P15: two-state H full inverse reference; singular rejection.
+ 5 Window-only NDT guess: source boundary audit + actual PCL producer fixture.
+ 6 U_obs routed risk: genuine geometric observations/admission in fixture.
+ 7 U_nonlocal window P: source audit + available covariance and actual +/- probes.
+ 8 Policies P0/P1/P2/P3: four fixture runs, finite NIS exactly for P2/P3.
+ 9 Pre-admission selected NIS: actual factor preview and large conflict test.
+10 NIS reject excluded: factor count unchanged and explicit visual fallback trigger.
+11 Same-stamp order: scheduler test + same-stamp scan/current/reference fixture.
+12 Asynchronous image events: 1.25->1.30 and 1.30->1.35 fixture pair stamps.
+13 Post-optimize A/Qw recompute: changed risk state, A_after!=A_before,
+   actual admission A_after and correct Qw projector; Wp invariance documented.
+14 Formal FULL unchanged: exact old source parity after additive dispatch removal.
+15 Post-handoff EKF calls zero: no EKF object in producer; source audit and all rows.
+
+Environment/debug notes:
+- The first unqualified PCL fixture launch picked /opt/MVS/lib/64/libusb-1.0.so.0
+  and failed for missing libusb_set_option. Explicit system LD_LIBRARY_PATH
+  fixes test-process library resolution only; no global library setting changed.
+- CMake 3.16.3 did not honor ctest --test-dir as expected; the initial accidental
+  repository-root run found no tests and is NOT counted as a successful suite.
+  Actual reported CTest runs used the build directory as cwd.
+- Upstream pinned MTK unused-variable / mature helper warnings remain. No
+  warnings were suppressed merely to call the build clean.
+- Initial absolute covariance solve-residual check failed on mixed coordinate
+  scales. Exact diagonal equilibration and normalized backward error corrected
+  the numerical check without damping or scientific-threshold changes.
