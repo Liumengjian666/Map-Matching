@@ -40,6 +40,9 @@ target_compile_options(p6_i6e_conditional_compensation_test PRIVATE
   -Wall -Wextra -Wpedantic)
 
 enable_testing()
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+add_test(NAME p6_a2c_source_boundary_audit
+  COMMAND ${Python3_EXECUTABLE} "${PACKAGE_ROOT}/scripts/p6_a2c_source_audit.py")
 add_test(NAME p6_i6b_dual_reliability
   COMMAND $<TARGET_FILE:p6_i6b_dual_reliability_test>)
 add_test(NAME p6_i6e_conditional_compensation
@@ -119,6 +122,17 @@ if(BUILD_I6B_CLOSED_LOOP_TOOLS)
   find_package(OpenSSL REQUIRED)
   find_library(USB_1_LIBRARY NAMES usb-1.0 REQUIRED)
 
+  add_executable(p6_a2c_initialization_test
+    "${PACKAGE_ROOT}/src/fastlio2_frontend_ikfom.cpp"
+    "${PACKAGE_ROOT}/scripts/p6_a2c_initialization_test.cpp")
+  target_include_directories(p6_a2c_initialization_test PRIVATE
+    "${PACKAGE_ROOT}/include" "${FASTLIO2_INCLUDE_DIR}")
+  target_compile_features(p6_a2c_initialization_test PRIVATE cxx_std_17)
+  target_compile_options(p6_a2c_initialization_test PRIVATE -fopenmp)
+  target_link_libraries(p6_a2c_initialization_test PRIVATE Eigen3::Eigen gomp)
+  add_test(NAME p6_a2c_initialization
+    COMMAND $<TARGET_FILE:p6_a2c_initialization_test>)
+
   add_executable(p6_i6b_closed_loop
     "${PACKAGE_ROOT}/scripts/p6_i1_branched_recovery.cpp")
   target_compile_features(p6_i6b_closed_loop PRIVATE cxx_std_17)
@@ -134,6 +148,8 @@ if(BUILD_I6B_CLOSED_LOOP_TOOLS)
   target_link_libraries(p6_i6b_closed_loop PRIVATE
     p6_i6b_dual_reliability Eigen3::Eigen ${PCL_LIBRARIES}
     OpenSSL::Crypto ${USB_1_LIBRARY} gomp)
+  add_test(NAME p6_a2c_real_pcl_producer
+    COMMAND $<TARGET_FILE:p6_i6b_closed_loop> A2C_FIXTURE)
 
   add_executable(p6_i6e_projected_pose_consistency_test
     "${PACKAGE_ROOT}/src/fastlio2_frontend_ikfom.cpp"
@@ -164,3 +180,10 @@ if(BUILD_I6B_CLOSED_LOOP_TOOLS)
   add_test(NAME p6_i6e_r3_residual_jacobian
     COMMAND $<TARGET_FILE:p6_i6e_r3_residual_jacobian_test>)
 endif()
+
+add_executable(p6_alg_integration_a2c_test
+  "${PACKAGE_ROOT}/scripts/p6_alg_integration_a2c_test.cpp")
+target_link_libraries(p6_alg_integration_a2c_test PRIVATE
+  p6_i6b_dual_reliability Eigen3::Eigen)
+add_test(NAME p6_alg_integration_a2c
+  COMMAND $<TARGET_FILE:p6_alg_integration_a2c_test>)
