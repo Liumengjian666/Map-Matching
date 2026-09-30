@@ -257,10 +257,29 @@ void runWindowOwnedExperimentalMode(const p4_i2::Inputs& inputs,
   auto diagnostics=openV3ExclusiveOutput(diagnostics_path);
   auto runtime=openV3ExclusiveOutput(runtime_path);
   auto deskew_evidence=openV3ExclusiveOutput(trajectory_path+".deskew_evidence.csv");
+  const char* diagnostic_environment=std::getenv("P6_A3B_R1_DIAGNOSTICS");
+  const bool diagnostic_enabled=diagnostic_environment &&
+      std::string(diagnostic_environment)=="1";
+  fixed_lag::FixedLagOptions options;
+  options.capture_optimizer_trace=diagnostic_enabled;
+  std::ofstream preopt_capsule,optimizer_trace,directional_derivative,
+      damping_sweep,optimizer_failure_summary;
+  if (diagnostic_enabled) {
+    preopt_capsule=openV3ExclusiveOutput(trajectory_path+".r1_preopt_capsule.csv");
+    optimizer_trace=openV3ExclusiveOutput(trajectory_path+".r1_optimizer_trace.csv");
+    directional_derivative=openV3ExclusiveOutput(trajectory_path+".r1_directional_derivative.csv");
+    damping_sweep=openV3ExclusiveOutput(trajectory_path+".r1_damping_sweep.csv");
+    optimizer_failure_summary=openV3ExclusiveOutput(trajectory_path+".r1_failure_summary.txt");
+  }
   const auto result=runFixedLagProducer(inputs,assets,parameters,initial,extrinsic,target,visual,
       [](const ScanAsset&)->Cloud::Ptr {throw std::runtime_error("V3_LEGACY_SOURCE_PROVIDER_FORBIDDEN");},
-      trajectory,diagnostics,runtime,init_stamp,policy,{}, {},&owned,
-      fixed_lag::LidarCloudProvenance::WINDOW_OWNED_SE3_DESKEW,&deskew_evidence);
+      trajectory,diagnostics,runtime,init_stamp,policy,{}, options,&owned,
+      fixed_lag::LidarCloudProvenance::WINDOW_OWNED_SE3_DESKEW,&deskew_evidence,
+      diagnostic_enabled?&preopt_capsule:nullptr,
+      diagnostic_enabled?&optimizer_trace:nullptr,
+      diagnostic_enabled?&directional_derivative:nullptr,
+      diagnostic_enabled?&damping_sweep:nullptr,
+      diagnostic_enabled?&optimizer_failure_summary:nullptr);
   trajectory.flush(); diagnostics.flush(); runtime.flush(); deskew_evidence.flush();
   std::cout<<"FULL_FIXED_LAG_V3_EXPERIMENTAL_COMPLETE window_deskews="<<result.window_deskew_count
       <<" raw_scans_before_handoff="<<result.raw_scans_before_handoff

@@ -452,11 +452,259 @@ bool FixedLagWindow::linearizeMarginalizationSubgraph(
                            hessian, gradient, cost, reason);
 }
 
-double FixedLagWindow::objective(std::string* reason) const {
+double FixedLagWindow::objective(std::string* reason,
+                                 ObjectiveBreakdown* breakdown) const {
   WindowLinearSystem system;
-  if (!blockLinearizedSystem(&system, reason))
+  if (!blockLinearizedSystem(&system, reason, breakdown))
     return std::numeric_limits<double>::infinity();
   return system.cost;
+}
+
+bool FixedLagWindow::evaluateObjectiveForDebug(
+    const WindowStateVector& candidate_states, bool freeze_lidar_bases_at_x0,
+    ObjectiveBreakdown* output, std::string* reason) const {
+  const auto fail_debug = [&](const std::string& message) {
+    if (reason) *reason = message;
+    return false;
+  };
+  if (!output || candidate_states.size() != states_.size() || states_.empty())
+    return fail_debug("debug_objective_state_shape_mismatch");
+  for (std::size_t i = 0; i < states_.size(); ++i) {
+    if (candidate_states[i].stamp_ns != states_[i].stamp_ns ||
+        !finiteState(candidate_states[i]))
+      return fail_debug("debug_objective_candidate_state_invalid");
+  }
+
+  FixedLagWindow trial = *this;
+  trial.states_ = candidate_states;
+  if (freeze_lidar_bases_at_x0) {
+    for (auto& record : trial.lidar_factors_) {
+      auto& measurement = record.measurement;
+      if (measurement.reliable_rank >= 6) continue;
+      std::size_t state_index = 0;
+      if (!findStateIndex(measurement.stamp_ns, &state_index))
+        return fail_debug("debug_frozen_basis_state_not_found");
+      if (!measurement.basis_relinearizer)
+        return fail_debug("debug_frozen_basis_relinearizer_missing");
+      Matrix6d basis = Matrix6d::Zero();
+      int rank = 0;
+      std::string local_reason;
+      if (!measurement.basis_relinearizer(states_[state_index], &basis, &rank,
+                                           &local_reason))
+        return fail_debug(local_reason.empty()
+            ? "debug_frozen_basis_relinearization_failed" : local_reason);
+      if (rank < 1 || rank > 6 || !basis.allFinite())
+        return fail_debug("debug_frozen_basis_invalid");
+      measurement.measurement_basis = basis;
+      measurement.reliable_rank = rank;
+      measurement.basis_relinearizer = [basis, rank](
+          const WindowState&, Matrix6d* output_basis, int* output_rank,
+          std::string* local_reason) {
+        if (!output_basis || !output_rank) {
+          if (local_reason) *local_reason = "debug_frozen_basis_null_output";
+          return false;
+        }
+        *output_basis = basis;
+        *output_rank = rank;
+        return true;
+      };
+    }
+  }
+  WindowLinearSystem system;
+  return trial.blockLinearizedSystem(&system, reason, output);
+}
+
+bool FixedLagWindow::objectiveBreakdownForDebug(
+    ObjectiveBreakdown* output, std::string* reason) const {
+  return evaluateObjectiveForDebug(states_, false, output, reason);
+}
+
+bool FixedLagWindow::objectiveBreakdownAtStatesForDebug(
+    const WindowStateVector& candidate_states, bool freeze_lidar_bases_at_x0,
+    ObjectiveBreakdown* output, std::string* reason) const {
+  return evaluateObjectiveForDebug(candidate_states, freeze_lidar_bases_at_x0,
+                                   output, reason);
+}
+
+const std::vector<OptimizerIterationTrace>&
+FixedLagWindow::optimizerTraceForDebug() const {
+  return optimizer_trace_;
+}
+
+bool FixedLagWindow::diagnoseOptimizerFailureForDebug(
+    const std::vector<double>& epsilons,
+    const std::vector<double>& damping_values,
+    ObjectiveBreakdown* start_breakdown,
+    std::vector<DirectionalDerivativeTrace>* derivatives,
+    std::vector<DampingSweepTrace>* damping_sweep,
+    double* maximum_state_difference, std::string* reason) const {
+  const auto fail_debug = [&](const char* message) {
+    if (reason) *reason = message;
+    return false;
+  };
+  if (!start_breakdown || !derivatives || !damping_sweep ||
+      !maximum_state_difference || states_.empty())
+    return fail_debug("debug_failure_diagnosis_null_or_empty_input");
+  for (double epsilon : epsilons)
+    if (!std::isfinite(epsilon) || epsilon <= 0.0)
+      return fail_debug("debug_failure_diagnosis_invalid_epsilon");
+  for (double damping : damping_values)
+    if (!std::isfinite(damping) || damping < 0.0)
+      return fail_debug("debug_failure_diagnosis_invalid_damping");
+
+  const WindowStateVector state_snapshot = states_;
+  WindowLinearSystem system;
+  if (!blockLinearizedSystem(&system, reason, start_breakdown)) return false;
+  const Eigen::MatrixXd hessian = system.dense();
+  const Eigen::VectorXd& gradient = system.gradient;
+  const double start_cost = system.cost;
+  derivatives->clear();
+  damping_sweep->clear();
+  *maximum_state_difference = 0.0;
+
+  std::vector<std::pair<std::string, Eigen::VectorXd>> directions;
+  const double gradient_norm = gradient.norm();
+  if (std::isfinite(gradient_norm) && gradient_norm > 0.0)
+    directions.emplace_back("NEGATIVE_NORMALIZED_GRADIENT", -gradient / gradient_norm);
+
+  Eigen::VectorXd first_step;
+  if (options_.capture_optimizer_trace && !optimizer_trace_.empty() &&
+      optimizer_trace_.front().raw_step.size() == gradient.size()) {
+    first_step = optimizer_trace_.front().raw_step;
+  } else {
+    std::string solver_status;
+    if (!solveWindowLinearSystem(system, options_.initial_damping,
+            options_.solver_backend, &first_step, &solver_status))
+      first_step.resize(0);
+    if (first_step.size() == gradient.size() &&
+        first_step.norm() > options_.maximum_step_norm &&
+        first_step.norm() > 0.0)
+      first_step *= options_.maximum_step_norm / first_step.norm();
+  }
+  if (first_step.size() == gradient.size() && first_step.norm() > 0.0)
+    directions.emplace_back("FIRST_APPLIED_PRODUCTION_LM_STEP",
+                            first_step / first_step.norm());
+
+  const auto perturbed_states = [&](const Eigen::VectorXd& direction,
+                                    double scale,
+                                    WindowStateVector* perturbed) {
+    if (!perturbed || direction.size() != gradient.size()) return false;
+    *perturbed = state_snapshot;
+    std::string local_reason;
+    return applyGlobalIncrementAtomically(perturbed, scale * direction,
+                                          &local_reason);
+  };
+  const auto relative_error = [](double finite_difference, double model) {
+    return std::abs(finite_difference - model) /
+        std::max({1e-12, std::abs(finite_difference), std::abs(model)});
+  };
+
+  for (const auto& direction_entry : directions) {
+    const Eigen::VectorXd& direction = direction_entry.second;
+    const double model_derivative = 2.0 * gradient.dot(direction);
+    for (double epsilon : epsilons) {
+      DirectionalDerivativeTrace row;
+      row.direction_name = direction_entry.first;
+      row.direction = direction;
+      row.epsilon = epsilon;
+      row.production_model = model_derivative;
+      row.frozen_basis_model = model_derivative;
+      WindowStateVector plus_states, minus_states;
+      if (!perturbed_states(direction, epsilon, &plus_states) ||
+          !perturbed_states(direction, -epsilon, &minus_states)) {
+        row.status = "PERTURBED_STATE_INVALID";
+        derivatives->push_back(std::move(row));
+        continue;
+      }
+      ObjectiveBreakdown production_plus, production_minus;
+      ObjectiveBreakdown frozen_plus, frozen_minus;
+      std::string local_reason;
+      if (!objectiveBreakdownAtStatesForDebug(plus_states, false,
+              &production_plus, &local_reason) ||
+          !objectiveBreakdownAtStatesForDebug(minus_states, false,
+              &production_minus, &local_reason) ||
+          !objectiveBreakdownAtStatesForDebug(plus_states, true,
+              &frozen_plus, &local_reason) ||
+          !objectiveBreakdownAtStatesForDebug(minus_states, true,
+              &frozen_minus, &local_reason)) {
+        row.status = local_reason.empty() ? "OBJECTIVE_EVALUATION_FAILED" : local_reason;
+        derivatives->push_back(std::move(row));
+        continue;
+      }
+      row.production_fd =
+          (production_plus.total_cost - production_minus.total_cost) /
+          (2.0 * epsilon);
+      row.frozen_basis_fd =
+          (frozen_plus.total_cost - frozen_minus.total_cost) /
+          (2.0 * epsilon);
+      row.production_relative_error =
+          relative_error(row.production_fd, row.production_model);
+      row.frozen_basis_relative_error =
+          relative_error(row.frozen_basis_fd, row.frozen_basis_model);
+      row.valid = std::isfinite(row.production_fd) &&
+          std::isfinite(row.frozen_basis_fd) &&
+          std::isfinite(row.production_relative_error) &&
+          std::isfinite(row.frozen_basis_relative_error);
+      row.status = row.valid ? "OK" : "NONFINITE_DIRECTIONAL_DIFFERENCE";
+      derivatives->push_back(std::move(row));
+    }
+  }
+
+  for (double damping : damping_values) {
+    DampingSweepTrace row;
+    row.damping = damping;
+    Eigen::VectorXd step;
+    if (!solveWindowLinearSystem(system, damping, options_.solver_backend,
+                                 &step, &row.solver_status)) {
+      damping_sweep->push_back(std::move(row));
+      continue;
+    }
+    row.solved = true;
+    row.raw_step_norm = step.norm();
+    if (row.raw_step_norm > options_.maximum_step_norm && row.raw_step_norm > 0.0) {
+      step *= options_.maximum_step_norm / row.raw_step_norm;
+      row.step_clipped = true;
+    }
+    row.applied_step_norm = step.norm();
+    row.g_dot_step = gradient.dot(step);
+    row.step_H_step = step.dot(hessian * step);
+    row.predicted_reduction = -(2.0 * row.g_dot_step + row.step_H_step);
+    WindowStateVector candidate_states = state_snapshot;
+    std::string local_reason;
+    if (!applyGlobalIncrementAtomically(&candidate_states, step, &local_reason)) {
+      row.solver_status = "APPLY_STEP_FAILED:" + local_reason;
+      row.solved = false;
+      damping_sweep->push_back(std::move(row));
+      continue;
+    }
+    if (!objectiveBreakdownAtStatesForDebug(candidate_states, false,
+            &row.production_breakdown, &local_reason) ||
+        !objectiveBreakdownAtStatesForDebug(candidate_states, true,
+            &row.frozen_basis_breakdown, &local_reason)) {
+      row.solver_status = "OBJECTIVE_EVALUATION_FAILED:" + local_reason;
+      row.solved = false;
+      damping_sweep->push_back(std::move(row));
+      continue;
+    }
+    row.production_candidate_cost = row.production_breakdown.total_cost;
+    row.production_actual_reduction = start_cost - row.production_candidate_cost;
+    row.frozen_basis_candidate_cost = row.frozen_basis_breakdown.total_cost;
+    row.frozen_basis_actual_reduction = start_cost - row.frozen_basis_candidate_cost;
+    if (row.predicted_reduction > 0.0 && std::isfinite(row.predicted_reduction)) {
+      row.rho = row.production_actual_reduction / row.predicted_reduction;
+      row.rho_valid = std::isfinite(row.rho);
+    }
+    damping_sweep->push_back(std::move(row));
+  }
+
+  if (states_.size() != state_snapshot.size())
+    return fail_debug("debug_diagnosis_changed_state_count");
+  for (std::size_t i = 0; i < states_.size(); ++i)
+    *maximum_state_difference = std::max(*maximum_state_difference,
+        localDifference(states_[i], state_snapshot[i]).norm());
+  if (*maximum_state_difference != 0.0)
+    return fail_debug("debug_diagnosis_state_transaction_changed");
+  return true;
 }
 
 bool applyGlobalIncrementAtomically(
@@ -485,6 +733,7 @@ bool FixedLagWindow::applyGlobalIncrement(const Eigen::VectorXd& increment,
 bool FixedLagWindow::optimize(std::string* reason) {
   if (reason) reason->clear();
   if (states_.empty()) return fail(reason, "cannot_optimize_empty_window");
+  optimizer_trace_.clear();
   const auto optimization_start_states = states_;
   summary_.prediction_feedback_ready = false;
   summary_.prediction_feedback_status = "OPTIMIZATION_IN_PROGRESS";
@@ -512,7 +761,9 @@ bool FixedLagWindow::optimize(std::string* reason) {
        ++iteration) {
     const auto linearization_start = std::chrono::steady_clock::now();
     WindowLinearSystem system;
-    if (!blockLinearizedSystem(&system, reason)) {
+    ObjectiveBreakdown current_breakdown;
+    if (!blockLinearizedSystem(&system, reason,
+            options_.capture_optimizer_trace ? &current_breakdown : nullptr)) {
       states_ = optimization_start_states;
       summary_.optimizer_status =
           toString(OptimizerStatus::INVALID_LINEAR_SYSTEM);
@@ -545,6 +796,7 @@ bool FixedLagWindow::optimize(std::string* reason) {
     }
     const auto solve_start = std::chrono::steady_clock::now();
     Eigen::VectorXd step;
+    const double damping_before = damping;
     const bool solved = solveWindowLinearSystem(system, damping,
         options_.solver_backend, &step, &summary_.solver_status);
     summary_.solve_ms += std::chrono::duration<double,std::milli>(
@@ -552,6 +804,17 @@ bool FixedLagWindow::optimize(std::string* reason) {
     if (summary_.solver_status == "SPARSE_SOLVER_FALLBACK_DENSE")
       ++summary_.sparse_solver_fallback_count;
     if (!solved) {
+      if (options_.capture_optimizer_trace) {
+        OptimizerIterationTrace trace;
+        trace.iteration = iteration;
+        trace.damping_before = damping_before;
+        trace.damping_after = damping;
+        trace.current_cost = current_cost;
+        trace.gradient_inf_norm = gradient.lpNorm<Eigen::Infinity>();
+        trace.solver_status = summary_.solver_status;
+        trace.current_breakdown = current_breakdown;
+        optimizer_trace_.push_back(std::move(trace));
+      }
       states_ = optimization_start_states;
       summary_.optimizer_status =
           toString(OptimizerStatus::INVALID_LINEAR_SYSTEM);
@@ -567,8 +830,29 @@ bool FixedLagWindow::optimize(std::string* reason) {
       summary_.prediction_feedback_status = "INVALID_LINEAR_SYSTEM";
       return fail(reason, "nonfinite_window_optimizer_step");
     }
-    if (step.norm() > options_.maximum_step_norm)
+    OptimizerIterationTrace trace;
+    if (options_.capture_optimizer_trace) {
+      trace.iteration = iteration;
+      trace.damping_before = damping_before;
+      trace.current_cost = current_cost;
+      trace.gradient_inf_norm = gradient.lpNorm<Eigen::Infinity>();
+      trace.solver_status = summary_.solver_status;
+      trace.raw_step_norm = step.norm();
+      trace.raw_step = step;
+      trace.current_breakdown = current_breakdown;
+    }
+    if (step.norm() > options_.maximum_step_norm) {
+      if (options_.capture_optimizer_trace) trace.step_clipped = true;
       step *= options_.maximum_step_norm / step.norm();
+    }
+    if (options_.capture_optimizer_trace) {
+      trace.applied_step_norm = step.norm();
+      trace.applied_step = step;
+      trace.g_dot_step = gradient.dot(step);
+      trace.step_H_step = step.dot(system.dense() * step);
+      trace.predicted_reduction =
+          -(2.0 * trace.g_dot_step + trace.step_H_step);
+    }
     const auto backup = states_;
     if (!applyGlobalIncrement(step, reason)) {
       states_ = optimization_start_states;
@@ -578,15 +862,32 @@ bool FixedLagWindow::optimize(std::string* reason) {
       summary_.prediction_feedback_status = "INVALID_LINEAR_SYSTEM";
       return false;
     }
-    const double candidate_cost = objective(reason);
+    ObjectiveBreakdown candidate_breakdown;
+    const double candidate_cost = objective(reason, options_.capture_optimizer_trace
+        ? &candidate_breakdown : nullptr);
+    if (options_.capture_optimizer_trace) {
+      trace.candidate_cost = candidate_cost;
+      trace.actual_reduction = current_cost - candidate_cost;
+      trace.candidate_breakdown = candidate_breakdown;
+      if (trace.predicted_reduction > 0.0 &&
+          std::isfinite(trace.predicted_reduction)) {
+        trace.rho = trace.actual_reduction / trace.predicted_reduction;
+        trace.rho_valid = std::isfinite(trace.rho);
+      }
+    }
     if (std::isfinite(candidate_cost) && candidate_cost < current_cost) {
       current_cost = candidate_cost;
       damping = std::max(1e-12, damping * 0.3);
       accepted_update = true;
+      if (options_.capture_optimizer_trace) trace.accepted = true;
     } else {
       states_ = backup;
       damping = std::min(1e12, damping * 10.0);
       if (reason) reason->clear();
+    }
+    if (options_.capture_optimizer_trace) {
+      trace.damping_after = damping;
+      optimizer_trace_.push_back(std::move(trace));
     }
     summary_.optimizer_iterations = iteration + 1;
     summary_.optimizer_final_cost = current_cost;

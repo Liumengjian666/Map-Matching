@@ -120,6 +120,7 @@ class FixedLagEventAdapter {
   std::size_t imuSampleCount() const;
   AdapterLifecycleDiagnostics lifecycleDiagnostics() const;
   const VisualRelativeMeasurement& lastVisualAdmission() const;
+  const FixedLagWindow* debugWindowForDiagnostics() const;
 
  private:
   using SourceKey = std::tuple<unsigned char, std::uint64_t, std::uint64_t>;

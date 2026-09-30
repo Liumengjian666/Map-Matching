@@ -1,0 +1,25 @@
+PAPER-P6-ALG-INTEGRATION-A3B-R1 build/test record
+
+Release configuration: /tmp/p6_a2d_build, CMAKE_BUILD_TYPE=Release.
+Release targets built: p6_i6b_closed_loop; p6_a3b_r1_optimizer_diagnostics_test.
+Release CTest: 25/25 PASS (including original A1/A2A/A2B/A2C/A2D/A3A/A3B and solver/provenance tests).
+
+Debug configuration: /tmp/p6_a3b_r1_debug, CMAKE_BUILD_TYPE=Debug.
+Debug targeted target: p6_a3b_r1_optimizer_diagnostics_test built.
+Debug targeted CTest: 1/1 PASS.
+
+git diff --check: PASS after code, reports, and raw diagnosis artifacts were added.
+
+Non-fatal configure/build warnings: pre-existing incomplete VTK imported-target references and third-party FAST-LIO2/DCReg unused/pedantic warnings. No compiler errors remained.
+
+Synthetic coverage in p6_a3b_r1_optimizer_diagnostics_test:
+1. trace-on/off optimizer result parity;
+2. exact objective breakdown sum and all factor categories;
+3. dynamic-basis production/frozen objective distinction without factor mutation;
+4. transactional directional FD and damping sweep;
+5. all-candidates-rejected trace capture;
+6. diagnostics state unchanged exactly.
+
+The authorized single real rerun reached tx83 and failed there as expected; see RUN_P3_100/console_resource.txt and TX83 reports. No second rerun, P3-200, P0, or full-data run was performed.
+
+Formal experiment readiness: NO.

@@ -86,7 +86,12 @@ FixedLagProducerResult runFixedLagProducer(
     const WindowOwnedProducerInput* window_owned = nullptr,
     fixed_lag::LidarCloudProvenance compatibility_cloud_provenance =
         fixed_lag::LidarCloudProvenance::LEGACY_STATE_DERIVED_SE3_DESKEW,
-    std::ostream* deskew_evidence = nullptr) {
+    std::ostream* deskew_evidence = nullptr,
+    std::ostream* preopt_capsule = nullptr,
+    std::ostream* optimizer_trace_output = nullptr,
+    std::ostream* directional_derivative_output = nullptr,
+    std::ostream* damping_sweep_output = nullptr,
+    std::ostream* optimizer_failure_summary = nullptr) {
   using namespace fixed_lag;
   const auto started=std::chrono::steady_clock::now();
   if(assets.empty() || inputs.imu.empty() || !target || target->empty())
@@ -159,6 +164,42 @@ FixedLagProducerResult runFixedLagProducer(
         <<"anchor_px,anchor_py,anchor_pz,anchor_qx,anchor_qy,anchor_qz,anchor_qw,"
         <<"predicted_end_px,predicted_end_py,predicted_end_pz,predicted_end_qx,predicted_end_qy,predicted_end_qz,predicted_end_qw,"
         <<"deskew_point_count,displacement_mean_m,displacement_p95_m,displacement_max_m,status\n";
+  if (preopt_capsule)
+    *preopt_capsule<<std::setprecision(17)
+      <<"transaction_id,stamp_ns,window_nodes,window_span_s,predicted_position,predicted_rotation_xyzw,"
+      <<"ndt_converged,ndt_fitness,ndt_objective,ndt_iterations,ndt_runtime_ms,ndt_terminal_pose,"
+      <<"uobs_valid,uobs_status,uobs_weak_dimension,uobs_reliable_dimension,"
+      <<"translation_eigenvalues,rotation_eigenvalues,translation_weak_ratio,rotation_weak_ratio,"
+      <<"weak_translation_direction_map,weak_rotation_direction_map,weak_basis,"
+      <<"pre_measurement_covariance_valid,p15_diagonal,p15_min_eigenvalue,p15_max_eigenvalue,"
+      <<"p_map6_min_eigenvalue,p_map6_max_eigenvalue,unonlocal_triggered,unonlocal_status,"
+      <<"unonlocal_positive_translation_delta,unonlocal_positive_rotation_delta,"
+      <<"unonlocal_negative_translation_delta,unonlocal_negative_rotation_delta,"
+      <<"measurement_noise_mode,adaptive_R6,R6_eigenvalues,measurement_preview_valid,"
+      <<"reliable_rank,basis,raw_residual_r6,selected_residual_rs,selected_covariance_Rs,"
+      <<"selected_nis_valid,selected_nis,nis_threshold,nis_accepted,"
+      <<"lidar_attempted,lidar_committed,event_status,factor_counts_before_optimize\n";
+  if (optimizer_trace_output)
+    *optimizer_trace_output<<std::setprecision(17)
+      <<"transaction_id,stamp_ns,iteration,damping_before,damping_after,current_cost,"
+      <<"gradient_inf_norm,solver_status,raw_step_norm,applied_step_norm,step_clipped,"
+      <<"g_dot_step,step_H_step,predicted_reduction,candidate_cost,actual_reduction,rho,rho_valid,accepted,"
+      <<"current_prior,current_imu,current_lidar,current_visual,current_latest_lidar_cost,"
+      <<"candidate_prior,candidate_imu,candidate_lidar,candidate_visual,candidate_latest_lidar_cost,"
+      <<"applied_step_components\n";
+  if (directional_derivative_output)
+    *directional_derivative_output<<std::setprecision(17)
+      <<"transaction_id,stamp_ns,direction_name,epsilon,production_fd,production_model,"
+      <<"production_relative_error,frozen_basis_fd,frozen_basis_model,"
+      <<"frozen_basis_relative_error,valid,status,direction_components\n";
+  if (damping_sweep_output)
+    *damping_sweep_output<<std::setprecision(17)
+      <<"transaction_id,stamp_ns,damping,solved,solver_status,raw_step_norm,applied_step_norm,"
+      <<"step_clipped,g_dot_step,step_H_step,predicted_reduction,production_candidate_cost,"
+      <<"production_actual_reduction,frozen_basis_candidate_cost,frozen_basis_actual_reduction,"
+      <<"rho,rho_valid,production_prior,production_imu,production_lidar,production_visual,"
+      <<"production_latest_lidar_cost,frozen_prior,frozen_imu,frozen_lidar,frozen_visual,"
+      <<"frozen_latest_lidar_cost\n";
   for(const ProducerEvent& event:stream) {
     const auto event_start=std::chrono::steady_clock::now();
     // Append through exactly the first right boundary required for this event.
@@ -187,11 +228,17 @@ FixedLagProducerResult runFixedLagProducer(
       throw std::runtime_error("producer_pre_measurement_covariance_contract");
     Candidate nominal;
     reliability::LocalRisk routed;
+    reliability::LocalObservability local_observability;
     reliability::NonlocalTerminalStability stability;
     stability.status="NOT_PROBED";
     std::string unonlocal_status="NOT_PROBED";
     SelectedLidarNis nis;
     bool lidar_attempted=false,lidar_committed=false,probed=false,quality=false,uobs_valid=false;
+    bool measurement_preview_valid=false;
+    LidarWindowMeasurement preview_measurement;
+    Eigen::VectorXd selected_residual;
+    Eigen::MatrixXd selected_covariance;
+    Matrix6d selected_measurement_covariance=Matrix6d::Constant(nan);
     std::uint64_t calls=0;
     double ndt_ms=0;
     int lidar_rank=0,visual_rank=0;
@@ -272,9 +319,9 @@ FixedLagProducerResult runFixedLagProducer(
       const auto observations=nominal.converged ?
           ndt.geometricObservations(*source,nominal.pose.cast<float>(),0.8) :
           std::vector<reliability::GeometricObservation>{};
-      const auto local=reliability::analyzeGeometricObservability(observations,nominal.converged,0.8);
-      uobs_valid=local.valid;
-      const auto risk=reliability::assessLocalRisk(local,config);
+      local_observability=reliability::analyzeGeometricObservability(observations,nominal.converged,0.8);
+      uobs_valid=local_observability.valid;
+      const auto risk=reliability::assessLocalRisk(local_observability,config);
       if(prior.valid && nominal.converged) {
         const Pose3d measured_imu=p4_i2::lidarMeasurementToImu(poseFromMatrix(nominal.pose),extrinsic);
         const auto innovation=reliability::mapProductInnovation(
@@ -314,12 +361,20 @@ FixedLagProducerResult runFixedLagProducer(
         lidar.measurement_commit_allowed=noise.valid;
         if(noise.valid) lidar.residual_covariance=noise.covariance;
       }
-      LidarWindowMeasurement measurement;
+      selected_measurement_covariance=lidar.residual_covariance;
       lidar_attempted=lidar.ndt_converged&&lidar.map_support_valid&&routed.reliable_dimension>0;
-      if(lidar_attempted && adapter.previewLidarMeasurement(lidar,&measurement,nullptr)) {
-        lidar_rank=measurement.reliable_rank;
+      if(lidar_attempted && adapter.previewLidarMeasurement(lidar,&preview_measurement,nullptr)) {
+        measurement_preview_valid=true;
+        lidar_rank=preview_measurement.reliable_rank;
+        std::string residual_reason;
+        if (buildLidarResidual(predicted,preview_measurement,&selected_residual,
+                               &residual_reason)) {
+          const Eigen::MatrixXd basis=preview_measurement.measurement_basis.leftCols(
+              preview_measurement.reliable_rank);
+          selected_covariance=basis.transpose()*preview_measurement.covariance*basis;
+        }
         if(r2PolicyUsesNisGate(policy)) {
-          nis=evaluateSelectedLidarNis(predicted,measurement,prior,chiSquare99Threshold(lidar_rank));
+          nis=evaluateSelectedLidarNis(predicted,preview_measurement,prior,chiSquare99Threshold(lidar_rank));
           lidar.measurement_commit_allowed=lidar.measurement_commit_allowed&&nis.valid&&nis.accepted;
         }
       } else if(r2PolicyUsesNisGate(policy)) lidar.measurement_commit_allowed=false;
@@ -355,8 +410,193 @@ FixedLagProducerResult runFixedLagProducer(
       basis_stamp=admission.basis_source_lidar_stamp_ns;
       result.visual_committed+=committed;
     }
-    if(!adapter.optimizeCurrentWindow(&reason))
+    if (preopt_capsule &&
+        (event.type==ProducerEventType::LIDAR_SCAN ||
+         event.type==ProducerEventType::LIDAR_SCAN_END)) {
+      const auto summary_before_optimize=adapter.summary();
+      const auto eigen_bounds=[](const Eigen::MatrixXd& matrix) {
+        const double nan_value=std::numeric_limits<double>::quiet_NaN();
+        Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> eigen(
+            0.5*(matrix+matrix.transpose()));
+        if (!matrix.allFinite() || eigen.info()!=Eigen::Success ||
+            !eigen.eigenvalues().allFinite())
+          return std::pair<double,double>(nan_value,nan_value);
+        return std::pair<double,double>(eigen.eigenvalues().minCoeff(),
+                                        eigen.eigenvalues().maxCoeff());
+      };
+      double p15_min=std::numeric_limits<double>::quiet_NaN();
+      double p15_max=p15_min, pmap_min=p15_min, pmap_max=p15_min;
+      if (prior.valid) {
+        const auto p15=eigen_bounds(prior.covariance15);
+        const auto pmap=eigen_bounds(prior.map_pose_covariance6);
+        p15_min=p15.first; p15_max=p15.second;
+        pmap_min=pmap.first; pmap_max=pmap.second;
+      }
+      Eigen::VectorXd r_eigenvalues=Eigen::VectorXd::Constant(
+          6,std::numeric_limits<double>::quiet_NaN());
+      if (selected_measurement_covariance.allFinite()) {
+        Eigen::SelfAdjointEigenSolver<Matrix6d> r_eigen(
+            0.5*(selected_measurement_covariance+
+                 selected_measurement_covariance.transpose()));
+        if (r_eigen.info()==Eigen::Success && r_eigen.eigenvalues().allFinite())
+          r_eigenvalues=r_eigen.eigenvalues();
+      }
+      Eigen::Matrix<double,6,1> raw_residual=
+          Eigen::Matrix<double,6,1>::Constant(nan);
+      if (measurement_preview_valid) {
+        raw_residual.head<3>()=preview_measurement.measured_position-predicted.position;
+        Eigen::Quaterniond dq(predicted.rotation.transpose()*
+                              preview_measurement.measured_rotation);
+        dq.normalize();
+        if (dq.w()<0.0) dq.coeffs()*=-1.0;
+        const double sine_half=dq.vec().norm();
+        if (sine_half<1e-12) raw_residual.tail<3>()=2.0*dq.vec();
+        else raw_residual.tail<3>()=dq.vec()*(2.0*std::atan2(sine_half,
+                std::clamp(dq.w(),-1.0,1.0))/sine_half);
+      }
+      const Eigen::Quaterniond predicted_q(predicted.rotation);
+      const auto& asset=assets[event.source_index];
+      *preopt_capsule<<asset.transaction_id<<','<<event.stamp_ns<<','
+        <<summary_before_optimize.window_node_count<<','
+        <<summary_before_optimize.window_time_span_s<<','
+        <<vectorField(predicted.position)<<','
+        <<predicted_q.x()<<';'<<predicted_q.y()<<';'<<predicted_q.z()<<';'<<predicted_q.w()<<','
+        <<nominal.converged<<','<<nominal.fitness<<','<<nominal.objective<<','
+        <<nominal.iterations<<','<<nominal.runtime_ms<<','
+        <<matrixField(nominal.pose)<<','
+        <<local_observability.valid<<','<<local_observability.status<<','
+        <<routed.weak_dimension<<','<<routed.reliable_dimension<<','
+        <<matrixField(Eigen::MatrixXd(local_observability.translation_block_eigenvalues))<<','
+        <<matrixField(Eigen::MatrixXd(local_observability.rotation_block_eigenvalues))<<','
+        <<routed.translation_weak_ratio<<','<<routed.rotation_weak_ratio<<','
+        <<vectorField(routed.map_translation_weak_direction)<<','
+        <<vectorField(routed.map_rotation_weak_direction)<<','
+        <<matrixField(routed.joint_weak_basis)<<','
+        <<prior.valid<<','
+        <<(prior.valid ? matrixField(Eigen::MatrixXd(prior.covariance15.diagonal())) : "")<<','
+        <<p15_min<<','<<p15_max<<','<<pmap_min<<','<<pmap_max<<','
+        <<probed<<','<<unonlocal_status<<','
+        <<vectorField(stability.delta_position_imu_positive)<<','
+        <<vectorField(stability.delta_rotation_positive)<<','
+        <<vectorField(stability.delta_position_imu_negative)<<','
+        <<vectorField(stability.delta_rotation_negative)<<','
+        <<(r2PolicyUsesAdaptiveNoise(policy)?"ADAPTIVE":"BASE")<<','
+        <<matrixField(selected_measurement_covariance)<<','
+        <<matrixField(Eigen::MatrixXd(r_eigenvalues))<<','
+        <<measurement_preview_valid<<','<<lidar_rank<<','
+        <<(measurement_preview_valid ? matrixField(preview_measurement.measurement_basis) : "")<<','
+        <<matrixField(Eigen::MatrixXd(raw_residual))<<','
+        <<matrixField(Eigen::MatrixXd(selected_residual))<<','
+        <<matrixField(selected_covariance)<<','
+        <<nis.valid<<','<<nis.nis<<','<<nis.threshold<<','<<nis.accepted<<','
+        <<lidar_attempted<<','<<lidar_committed<<','
+        <<toString(adapter.lastEventStatus().disposition)<<';'
+        <<adapter.lastEventStatus().reason<<','
+        <<summary_before_optimize.imu_factor_count<<';'
+        <<summary_before_optimize.lidar_factor_count<<';'
+        <<summary_before_optimize.visual_factor_count<<'\n';
+      preopt_capsule->flush();
+      if (!*preopt_capsule) throw std::runtime_error("optimizer_preopt_capsule_flush_failed");
+    }
+    if(!adapter.optimizeCurrentWindow(&reason)) {
+      if (optimizer_failure_summary) {
+        const std::uint64_t transaction_id=
+            (event.type==ProducerEventType::LIDAR_SCAN ||
+             event.type==ProducerEventType::LIDAR_SCAN_END)
+                ? assets[event.source_index].transaction_id : 0;
+        const auto failed_summary=adapter.summary();
+        const auto* debug_window=adapter.debugWindowForDiagnostics();
+        ObjectiveBreakdown breakdown;
+        std::vector<OptimizerIterationTrace> trace_rows;
+        std::vector<DirectionalDerivativeTrace> derivative_rows;
+        std::vector<DampingSweepTrace> damping_rows;
+        double max_state_difference=std::numeric_limits<double>::quiet_NaN();
+        bool diagnosis_ok=false;
+        std::string diagnosis_reason="diagnostic_window_unavailable";
+        if (debug_window) {
+          trace_rows=debug_window->optimizerTraceForDebug();
+          diagnosis_ok=debug_window->diagnoseOptimizerFailureForDebug(
+              {1e-8,1e-7,1e-6,1e-5,1e-4},
+              {1e-6,1e-5,1e-4,1e-3,1e-2,1e-1,1.0,10.0,100.0,
+               1e3,1e4,1e5,1e6},
+              &breakdown,&derivative_rows,&damping_rows,
+              &max_state_difference,&diagnosis_reason);
+        }
+        if (optimizer_trace_output) {
+          for (const auto& row : trace_rows)
+            *optimizer_trace_output<<transaction_id<<','<<event.stamp_ns<<','
+              <<row.iteration<<','<<row.damping_before<<','<<row.damping_after<<','
+              <<row.current_cost<<','<<row.gradient_inf_norm<<','<<row.solver_status<<','
+              <<row.raw_step_norm<<','<<row.applied_step_norm<<','<<row.step_clipped<<','
+              <<row.g_dot_step<<','<<row.step_H_step<<','<<row.predicted_reduction<<','
+              <<row.candidate_cost<<','<<row.actual_reduction<<','<<row.rho<<','
+              <<row.rho_valid<<','<<row.accepted<<','
+              <<row.current_breakdown.prior_cost<<','<<row.current_breakdown.imu_cost<<','
+              <<row.current_breakdown.lidar_cost<<','<<row.current_breakdown.visual_cost<<','
+              <<row.current_breakdown.latest_lidar_factor_cost<<','
+              <<row.candidate_breakdown.prior_cost<<','<<row.candidate_breakdown.imu_cost<<','
+              <<row.candidate_breakdown.lidar_cost<<','<<row.candidate_breakdown.visual_cost<<','
+              <<row.candidate_breakdown.latest_lidar_factor_cost<<','
+              <<matrixField(Eigen::MatrixXd(row.applied_step))<<'\n';
+          optimizer_trace_output->flush();
+        }
+        if (directional_derivative_output) {
+          for (const auto& row : derivative_rows)
+            *directional_derivative_output<<transaction_id<<','<<event.stamp_ns<<','
+              <<row.direction_name<<','<<row.epsilon<<','<<row.production_fd<<','
+              <<row.production_model<<','<<row.production_relative_error<<','
+              <<row.frozen_basis_fd<<','<<row.frozen_basis_model<<','
+              <<row.frozen_basis_relative_error<<','<<row.valid<<','<<row.status<<','
+              <<matrixField(Eigen::MatrixXd(row.direction))<<'\n';
+          directional_derivative_output->flush();
+        }
+        if (damping_sweep_output) {
+          for (const auto& row : damping_rows)
+            *damping_sweep_output<<transaction_id<<','<<event.stamp_ns<<','
+              <<row.damping<<','<<row.solved<<','<<row.solver_status<<','
+              <<row.raw_step_norm<<','<<row.applied_step_norm<<','<<row.step_clipped<<','
+              <<row.g_dot_step<<','<<row.step_H_step<<','<<row.predicted_reduction<<','
+              <<row.production_candidate_cost<<','<<row.production_actual_reduction<<','
+              <<row.frozen_basis_candidate_cost<<','<<row.frozen_basis_actual_reduction<<','
+              <<row.rho<<','<<row.rho_valid<<','
+              <<row.production_breakdown.prior_cost<<','<<row.production_breakdown.imu_cost<<','
+              <<row.production_breakdown.lidar_cost<<','<<row.production_breakdown.visual_cost<<','
+              <<row.production_breakdown.latest_lidar_factor_cost<<','
+              <<row.frozen_basis_breakdown.prior_cost<<','<<row.frozen_basis_breakdown.imu_cost<<','
+              <<row.frozen_basis_breakdown.lidar_cost<<','<<row.frozen_basis_breakdown.visual_cost<<','
+              <<row.frozen_basis_breakdown.latest_lidar_factor_cost<<'\n';
+          damping_sweep_output->flush();
+        }
+        *optimizer_failure_summary<<std::setprecision(17)
+          <<"transaction_id="<<transaction_id<<"\n"
+          <<"event="<<toString(event.type)<<"\n"
+          <<"stamp_ns="<<event.stamp_ns<<"\n"
+          <<"failure=producer_optimizer:"<<reason<<"\n"
+          <<"optimizer_status="<<failed_summary.optimizer_status<<"\n"
+          <<"optimizer_iterations="<<failed_summary.optimizer_iterations<<"\n"
+          <<"optimizer_initial_cost="<<failed_summary.optimizer_initial_cost<<"\n"
+          <<"optimizer_final_cost="<<failed_summary.optimizer_final_cost<<"\n"
+          <<"trace_rows="<<trace_rows.size()<<"\n"
+          <<"diagnosis_ok="<<diagnosis_ok<<"\n"
+          <<"diagnosis_status="<<diagnosis_reason<<"\n"
+          <<"start_prior_cost="<<breakdown.prior_cost<<"\n"
+          <<"start_imu_cost="<<breakdown.imu_cost<<"\n"
+          <<"start_lidar_cost="<<breakdown.lidar_cost<<"\n"
+          <<"start_visual_cost="<<breakdown.visual_cost<<"\n"
+          <<"start_total_cost="<<breakdown.total_cost<<"\n"
+          <<"latest_lidar_stamp_ns="<<breakdown.latest_lidar_stamp_ns<<"\n"
+          <<"latest_lidar_observation_id="<<breakdown.latest_lidar_observation_id<<"\n"
+          <<"latest_lidar_factor_cost="<<breakdown.latest_lidar_factor_cost<<"\n"
+          <<"max_lidar_stamp_ns="<<breakdown.max_lidar_stamp_ns<<"\n"
+          <<"max_lidar_observation_id="<<breakdown.max_lidar_observation_id<<"\n"
+          <<"max_single_lidar_factor_cost="<<breakdown.max_single_lidar_factor_cost<<"\n"
+          <<"diagnostic_state_local_difference_max="<<max_state_difference<<"\n"
+          <<"diagnostic_transaction_test="
+          <<((diagnosis_ok&&max_state_difference==0.0)?"PASS":"FAIL")<<"\n";
+        optimizer_failure_summary->flush();
+      }
       throw std::runtime_error("producer_optimizer:"+reason);
+    }
     WindowState optimized;
     if(!adapter.latestOptimizedState(&optimized,&reason)) throw std::runtime_error("producer_optimized_state:"+reason);
     if(event.type==ProducerEventType::LIDAR_SCAN || event.type==ProducerEventType::LIDAR_SCAN_END) {

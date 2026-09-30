@@ -669,6 +669,10 @@ const VisualRelativeMeasurement& FixedLagEventAdapter::lastVisualAdmission() con
   return last_visual_admission_;
 }
 
+const FixedLagWindow* FixedLagEventAdapter::debugWindowForDiagnostics() const {
+  return controller_.debugWindowForDiagnostics();
+}
+
 const AdapterEventStatus& FixedLagEventAdapter::lastEventStatus() const {
   return last_status_;
 }

@@ -130,4 +130,9 @@ WindowSummary FixedLagExperimentalController::summary() const {
   return window_.summary();
 }
 
+const FixedLagWindow*
+FixedLagExperimentalController::debugWindowForDiagnostics() const {
+  return enabled() ? &window_ : nullptr;
+}
+
 }  // namespace dog_prior_map_fastlio2_frontend_exp::fixed_lag

@@ -106,10 +106,12 @@ bool solveLatestMarginalColumnsSparse(const WindowLinearSystem& system,
   return true;
 }
 
-bool FixedLagWindow::blockLinearizedSystem(WindowLinearSystem* system, std::string* reason) const {
+bool FixedLagWindow::blockLinearizedSystem(WindowLinearSystem* system,
+    std::string* reason, ObjectiveBreakdown* breakdown) const {
   auto fail = [&](const char* text) { if (reason) *reason = text; return false; };
   if (reason) reason->clear();
   if (!system || states_.empty()) return fail("null_or_empty_block_system");
+  if (breakdown) *breakdown = ObjectiveBreakdown();
   *system = WindowLinearSystem();
   const Eigen::Index dimension = states_.size()*15;
   system->gradient = Eigen::VectorXd::Zero(dimension);
@@ -131,7 +133,9 @@ bool FixedLagWindow::blockLinearizedSystem(WindowLinearSystem* system, std::stri
       }
     }
     const Eigen::VectorXd force = prior_.information*d+prior_.gradient;
-    system->cost = d.dot(prior_.information*d)+2*prior_.gradient.dot(d);
+    const double prior_cost = d.dot(prior_.information*d)+2*prior_.gradient.dot(d);
+    system->cost = prior_cost;
+    if (breakdown) breakdown->prior_cost = prior_cost;
     for (std::size_t i=0; i<states_.size(); ++i) {
       system->gradient.segment<15>(i*15) += charts[i].transpose()*force.segment<15>(i*15);
       for (std::size_t j=i; j<states_.size(); ++j) {
@@ -142,7 +146,7 @@ bool FixedLagWindow::blockLinearizedSystem(WindowLinearSystem* system, std::stri
   }
   auto accumulate = [&](std::size_t i, const Eigen::MatrixXd& a,
       std::size_t j, const Eigen::MatrixXd* b, const Eigen::VectorXd& r,
-      const Eigen::MatrixXd& covariance) {
+      const Eigen::MatrixXd& covariance, double* component_cost) {
     if (!covariance.allFinite() ||
         (covariance-covariance.transpose()).cwiseAbs().maxCoeff() > 1e-8) return false;
     Eigen::LLT<Eigen::MatrixXd> check(covariance);
@@ -155,7 +159,9 @@ bool FixedLagWindow::blockLinearizedSystem(WindowLinearSystem* system, std::stri
       system->add(i,j,a.transpose()*info*(*b));
       system->gradient.segment<15>(j*15) += b->transpose()*info*r;
     }
-    system->cost += r.dot(info*r);
+    const double factor_cost = r.dot(info*r);
+    system->cost += factor_cost;
+    if (breakdown && component_cost) *component_cost += factor_cost;
     return true;
   };
   for (const auto& record : imu_factors_) {
@@ -164,26 +170,50 @@ bool FixedLagWindow::blockLinearizedSystem(WindowLinearSystem* system, std::stri
       return fail("imu_factor_state_removed_without_marginalization");
     if (!linearizeImuFactor(states_[i],states_[j],record.measurement,imu_noise_,&a,&b,&r,reason)) return false;
     const Eigen::MatrixXd dynamic_b=b;
-    if (!accumulate(i,a,j,&dynamic_b,r,record.measurement.covariance)) return fail("imu_factor_covariance_not_spd");
+    if (!accumulate(i,a,j,&dynamic_b,r,record.measurement.covariance,
+                    breakdown ? &breakdown->imu_cost : nullptr))
+      return fail("imu_factor_covariance_not_spd");
   }
   for (const auto& record : lidar_factors_) {
     std::size_t i; Eigen::VectorXd r; Eigen::MatrixXd a,cov;
     if (!findStateIndex(record.measurement.stamp_ns,&i)) return fail("lidar_factor_state_removed_without_marginalization");
     if (!linearizeLidarFactor(states_[i],record.measurement,&r,&a,&cov,reason)) return false;
-    if (!accumulate(i,a,0,nullptr,r,cov)) return fail("lidar_factor_covariance_not_spd");
+    if (!accumulate(i,a,0,nullptr,r,cov,
+                    breakdown ? &breakdown->lidar_cost : nullptr))
+      return fail("lidar_factor_covariance_not_spd");
+    if (breakdown) {
+      // The selected residual and covariance are those produced by the exact
+      // production linearizer above (including basis relinearization).
+      const Eigen::MatrixXd information = cov.ldlt().solve(
+          Eigen::MatrixXd::Identity(cov.rows(), cov.cols()));
+      const double factor_cost = r.dot(information * r);
+      if (record.measurement.stamp_ns >= breakdown->latest_lidar_stamp_ns) {
+        breakdown->latest_lidar_stamp_ns = record.measurement.stamp_ns;
+        breakdown->latest_lidar_observation_id = record.measurement.observation_id;
+        breakdown->latest_lidar_factor_cost = factor_cost;
+      }
+      if (factor_cost > breakdown->max_single_lidar_factor_cost) {
+        breakdown->max_single_lidar_factor_cost = factor_cost;
+        breakdown->max_lidar_stamp_ns = record.measurement.stamp_ns;
+        breakdown->max_lidar_observation_id = record.measurement.observation_id;
+      }
+    }
   }
   for (const auto& record : visual_factors_) {
     std::size_t i,j; Eigen::VectorXd r; Eigen::MatrixXd a,b,cov;
     if (!findStateIndex(record.measurement.reference_stamp_ns,&i) ||
         !findStateIndex(record.measurement.current_stamp_ns,&j)) return fail("visual_factor_state_removed_without_marginalization");
     if (!linearizeSelectedVisualFactor(states_[i],states_[j],record.measurement,&r,&a,&b,&cov,reason)) return false;
-    if (!accumulate(i,a,j,&b,r,cov)) return fail("visual_factor_covariance_not_spd");
+    if (!accumulate(i,a,j,&b,r,cov,
+                    breakdown ? &breakdown->visual_cost : nullptr))
+      return fail("visual_factor_covariance_not_spd");
   }
   for (auto& block : system->upper_blocks) {
     if (!block.second.allFinite()) return fail("nonfinite_window_linear_system");
     if (block.first.first == block.first.second)
       block.second = (0.5*(block.second+block.second.transpose())).eval();
   }
+  if (breakdown) breakdown->total_cost = system->cost;
   return system->gradient.allFinite() && std::isfinite(system->cost);
 }
 }  // namespace dog_prior_map_fastlio2_frontend_exp::fixed_lag

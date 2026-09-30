@@ -56,6 +56,7 @@ class FixedLagExperimentalController {
   bool predictionFeedbackSeed(WindowState* output,
                               std::string* reason = nullptr) const;
   WindowSummary summary() const;
+  const FixedLagWindow* debugWindowForDiagnostics() const;
 
  private:
   WindowExecutionMode mode_;

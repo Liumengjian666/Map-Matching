@@ -23,6 +23,8 @@ struct FixedLagOptions {
   double gradient_convergence_tolerance = 1e-9;
   WindowSolverBackend solver_backend = WindowSolverBackend::BLOCK_SPARSE;
   bool debug_rank_diagnostic = false;
+  // Opt-in observability only. This must not participate in solver decisions.
+  bool capture_optimizer_trace = false;
 };
 
 enum class OptimizerStatus {
@@ -84,6 +86,82 @@ struct WindowMarginalCovariance {
   std::string status = "WINDOW_MARGINAL_COVARIANCE_UNAVAILABLE";
 };
 
+using WindowStateVector =
+    std::vector<WindowState, Eigen::aligned_allocator<WindowState>>;
+
+struct ObjectiveBreakdown {
+  double prior_cost = 0.0;
+  double imu_cost = 0.0;
+  double lidar_cost = 0.0;
+  double visual_cost = 0.0;
+  double total_cost = 0.0;
+  double latest_lidar_factor_cost = 0.0;
+  std::uint64_t latest_lidar_stamp_ns = 0;
+  std::uint64_t latest_lidar_observation_id = 0;
+  double max_single_lidar_factor_cost = 0.0;
+  std::uint64_t max_lidar_stamp_ns = 0;
+  std::uint64_t max_lidar_observation_id = 0;
+};
+
+struct OptimizerIterationTrace {
+  int iteration = 0;
+  double damping_before = 0.0;
+  double damping_after = 0.0;
+  double current_cost = 0.0;
+  double gradient_inf_norm = 0.0;
+  std::string solver_status = "NOT_RUN";
+  double raw_step_norm = 0.0;
+  double applied_step_norm = 0.0;
+  bool step_clipped = false;
+  double g_dot_step = 0.0;
+  double step_H_step = 0.0;
+  double predicted_reduction = 0.0;
+  double candidate_cost = 0.0;
+  double actual_reduction = 0.0;
+  double rho = 0.0;
+  bool rho_valid = false;
+  bool accepted = false;
+  ObjectiveBreakdown current_breakdown;
+  ObjectiveBreakdown candidate_breakdown;
+  // Retained only for opt-in failure diagnosis; empty when trace capture is off.
+  Eigen::VectorXd raw_step;
+  Eigen::VectorXd applied_step;
+};
+
+struct DirectionalDerivativeTrace {
+  std::string direction_name;
+  Eigen::VectorXd direction;
+  double epsilon = 0.0;
+  double production_fd = 0.0;
+  double production_model = 0.0;
+  double production_relative_error = 0.0;
+  double frozen_basis_fd = 0.0;
+  double frozen_basis_model = 0.0;
+  double frozen_basis_relative_error = 0.0;
+  bool valid = false;
+  std::string status = "UNINITIALIZED";
+};
+
+struct DampingSweepTrace {
+  double damping = 0.0;
+  bool solved = false;
+  std::string solver_status = "NOT_RUN";
+  double raw_step_norm = 0.0;
+  double applied_step_norm = 0.0;
+  bool step_clipped = false;
+  double g_dot_step = 0.0;
+  double step_H_step = 0.0;
+  double predicted_reduction = 0.0;
+  double production_candidate_cost = 0.0;
+  double production_actual_reduction = 0.0;
+  double frozen_basis_candidate_cost = 0.0;
+  double frozen_basis_actual_reduction = 0.0;
+  double rho = 0.0;
+  bool rho_valid = false;
+  ObjectiveBreakdown production_breakdown;
+  ObjectiveBreakdown frozen_basis_breakdown;
+};
+
 class FixedLagWindow {
  public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -129,7 +207,22 @@ class FixedLagWindow {
                         Eigen::VectorXd* gradient, double* cost,
                         std::string* reason = nullptr) const;
   bool blockLinearizedSystem(WindowLinearSystem* system,
-                             std::string* reason = nullptr) const;
+                             std::string* reason = nullptr,
+                             ObjectiveBreakdown* breakdown = nullptr) const;
+  bool objectiveBreakdownForDebug(ObjectiveBreakdown* output,
+                                  std::string* reason = nullptr) const;
+  bool objectiveBreakdownAtStatesForDebug(
+      const WindowStateVector& candidate_states, bool freeze_lidar_bases_at_x0,
+      ObjectiveBreakdown* output, std::string* reason = nullptr) const;
+  bool diagnoseOptimizerFailureForDebug(
+      const std::vector<double>& epsilons,
+      const std::vector<double>& damping_values,
+      ObjectiveBreakdown* start_breakdown,
+      std::vector<DirectionalDerivativeTrace>* derivatives,
+      std::vector<DampingSweepTrace>* damping_sweep,
+      double* maximum_state_difference,
+      std::string* reason = nullptr) const;
+  const std::vector<OptimizerIterationTrace>& optimizerTraceForDebug() const;
   bool latestMarginalCovariance(WindowMarginalCovariance* output,
                                std::string* reason = nullptr) const;
   bool latestMarginalCovarianceDenseReferenceForTest(
@@ -168,7 +261,12 @@ class FixedLagWindow {
                                         Eigen::VectorXd* gradient,
                                         double* cost,
                                         std::string* reason) const;
-  double objective(std::string* reason) const;
+  double objective(std::string* reason,
+                   ObjectiveBreakdown* breakdown = nullptr) const;
+  bool evaluateObjectiveForDebug(
+      const WindowStateVector& candidate_states,
+      bool freeze_lidar_bases_at_x0, ObjectiveBreakdown* output,
+      std::string* reason) const;
   bool applyGlobalIncrement(const Eigen::VectorXd& increment,
                             std::string* reason);
   bool marginalizeOldest(std::string* reason);
@@ -179,7 +277,7 @@ class FixedLagWindow {
 
   FixedLagOptions options_;
   ImuNoiseParameters imu_noise_;
-  std::vector<WindowState, Eigen::aligned_allocator<WindowState>> states_;
+  WindowStateVector states_;
   std::vector<ImuFactorRecord> imu_factors_;
   std::vector<LidarFactorRecord> lidar_factors_;
   std::vector<VisualFactorRecord> visual_factors_;
@@ -192,6 +290,7 @@ class FixedLagWindow {
   std::uint64_t optimized_revision_ = 0;
   PriorInformation prior_;
   mutable WindowSummary summary_;
+  std::vector<OptimizerIterationTrace> optimizer_trace_;
 };
 
 // Applies one stacked 15D local increment per state as a transaction.  On any

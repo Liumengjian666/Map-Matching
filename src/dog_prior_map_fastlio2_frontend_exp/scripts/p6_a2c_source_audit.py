@@ -15,6 +15,9 @@ def main():
     current = (ROOT / REL).read_text()
     stripped = current.replace(
         '#include "dog_prior_map_fastlio2_frontend_exp/fixed_lag_production.hpp"\n', "")
+    # The V3-only diagnostic environment switch uses std::getenv; this additive
+    # standard header must not be treated as a change to the frozen legacy path.
+    stripped = stripped.replace('#include <cstdlib>\n', "")
     stripped = stripped.replace('\n#include "p6_a2c_fixed_lag_producer.hpp"\n', "")
     stripped = stripped.replace('#include "dog_prior_map_fastlio2_frontend_exp/window_scan_processor.hpp"\n', "")
     stripped = stripped.replace('#include "p6_a2d_raw_timed_provider.hpp"\n', "")
@@ -36,10 +39,13 @@ def main():
         if forbidden in handoff:
             raise RuntimeError("post-handoff second estimator dependency: " + forbidden)
     for required in ("adapter.prepareStateAt(event.stamp_ns,&predicted", "prediction*T_il",
-                     "adapter.latestMarginalCovariance(&prior", "prior.map_pose_covariance6",
-                     "evaluateSelectedLidarNis(predicted,measurement,prior"):
+                     "adapter.latestMarginalCovariance(&prior", "prior.map_pose_covariance6"):
         if required not in handoff:
             raise RuntimeError("missing real producer connection: " + required)
+    if not any(candidate in handoff for candidate in (
+            "evaluateSelectedLidarNis(predicted,measurement,prior",
+            "evaluateSelectedLidarNis(predicted,preview_measurement,prior")):
+        raise RuntimeError("missing real producer connection: selected LiDAR NIS")
     print("POST_HANDOFF_IKFOM_CALLS_ZERO_AND_WINDOW_ONLY_PREDICTION_PASS")
 
 
