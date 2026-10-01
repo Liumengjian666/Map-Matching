@@ -50,6 +50,9 @@ target_link_libraries(p6_a3d_r1_termination_test PRIVATE
 add_test(NAME p6_a3d_r1_termination
   COMMAND $<TARGET_FILE:p6_a3d_r1_termination_test>)
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
+add_test(NAME p6_a3e_r1_high_precision_oracle
+  COMMAND ${Python3_EXECUTABLE}
+    "${PACKAGE_ROOT}/scripts/p6_a3e_r1_tx155_schur_oracle.py" --self-test)
 add_test(NAME p6_a3a_input_contract
   COMMAND ${Python3_EXECUTABLE} "${PACKAGE_ROOT}/scripts/p6_a3a_input_contract_test.py")
 add_test(NAME p6_a2c_source_boundary_audit
