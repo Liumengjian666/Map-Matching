@@ -1,0 +1,97 @@
+[
+  {
+    "path": "/tmp/p6_a3f_r1_corridor_p3_200/command.json",
+    "bytes": 1180,
+    "sha256": "32ab5faabdd3b9de86fd7f19785ab7c4dbc89ab7d2cbdc0e7bcaea5d3ea5cddc"
+  },
+  {
+    "path": "/tmp/p6_a3f_r1_corridor_p3_200/console.txt",
+    "bytes": 406,
+    "sha256": "5911727db5ca5ae8f641095a4684bca9fce601b1cbf6c4b7b6a8d440fea8a45b"
+  },
+  {
+    "path": "/tmp/p6_a3f_r1_corridor_p3_200/events.csv",
+    "bytes": 171510,
+    "sha256": "3c5dfc8715c54164c51c595ef1925bfa333a352cc64c513284c0129c16e63a33"
+  },
+  {
+    "path": "/tmp/p6_a3f_r1_corridor_p3_200/identity_gate.json",
+    "bytes": 1686,
+    "sha256": "90832c0fcb9dca95d7896dd2bdd689bdac8d8e032ec0423fc37a691bbc6c0c7e"
+  },
+  {
+    "path": "/tmp/p6_a3f_r1_corridor_p3_200/input_identity.json",
+    "bytes": 1482,
+    "sha256": "cacf90d6288cacc3848f31dbd3078e99f3bffb3891497de1d2f21b62ca35af76"
+  },
+  {
+    "path": "/tmp/p6_a3f_r1_corridor_p3_200/resource.txt",
+    "bytes": 1736,
+    "sha256": "f19973ed3fd8845d22af698de596f7c7f0945532838e45642a528ea103cc2c2a"
+  },
+  {
+    "path": "/tmp/p6_a3f_r1_corridor_p3_200/runtime.csv",
+    "bytes": 31453,
+    "sha256": "d4fabb326828f446b17685824261ecbe02c4b1d58d074adc5fdc25db9315d711"
+  },
+  {
+    "path": "/tmp/p6_a3f_r1_corridor_p3_200/source_identity.json",
+    "bytes": 378,
+    "sha256": "e19e690e202e2c2bb042b0aa3b1238d545e356f179cfc0d3bb0e087ab36b653b"
+  },
+  {
+    "path": "/tmp/p6_a3f_r1_corridor_p3_200/trajectory.csv",
+    "bytes": 27248,
+    "sha256": "9ff3bb60be2325ca1f0f37da2e394886392e2d28ad8691236d550032afb7473a"
+  },
+  {
+    "path": "/tmp/p6_a3f_r1_corridor_p3_200/trajectory.csv.a3c_r1_failure_summary.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "/tmp/p6_a3f_r1_corridor_p3_200/trajectory.csv.a3c_r1_marginalization_trace.csv",
+    "bytes": 212714,
+    "sha256": "0c62239d3a233a1d34bcbd115ad2ed9978d6779300d06b1198b39205cf07a8db"
+  },
+  {
+    "path": "/tmp/p6_a3f_r1_corridor_p3_200/trajectory.csv.a3f_r1_comparison.csv",
+    "bytes": 19255,
+    "sha256": "10e399672587b92a4f9c4c9c4b4fd95d8c8c672e077d137c168c82246db000a0"
+  },
+  {
+    "path": "/tmp/p6_a3f_r1_corridor_p3_200/trajectory.csv.a3f_r1_covariance.csv",
+    "bytes": 47583,
+    "sha256": "e6ec9656dc58cb90b5f7081b127556d77cc2b5aecf57bc0b46aa7c1c2af055b7"
+  },
+  {
+    "path": "/tmp/p6_a3f_r1_corridor_p3_200/trajectory.csv.deskew_evidence.csv",
+    "bytes": 69073,
+    "sha256": "07f7f715b360e8f91db9243b01327de54ac47537fdbf145be56bca7e7ab82a0f"
+  },
+  {
+    "path": "/tmp/p6_a3f_r1_corridor_p3_200/trajectory.csv.r1_damping_sweep.csv",
+    "bytes": 572,
+    "sha256": "0cf7f884ed1d570385fa8f8b0940ddcbf6618aa536dc01821fb2bb264d45d19c"
+  },
+  {
+    "path": "/tmp/p6_a3f_r1_corridor_p3_200/trajectory.csv.r1_directional_derivative.csv",
+    "bytes": 258,
+    "sha256": "a25580110abdecf59c21c1fbd6fb8b9c17e395485d326dd80b782bef7b5e8f52"
+  },
+  {
+    "path": "/tmp/p6_a3f_r1_corridor_p3_200/trajectory.csv.r1_failure_summary.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "/tmp/p6_a3f_r1_corridor_p3_200/trajectory.csv.r1_optimizer_trace.csv",
+    "bytes": 19230611,
+    "sha256": "eff5df51ffbe11b2be980c92f774af82f130b1b72a1b92935eb824dd7b9cfa8a"
+  },
+  {
+    "path": "/tmp/p6_a3f_r1_corridor_p3_200/trajectory.csv.r1_preopt_capsule.csv",
+    "bytes": 333897,
+    "sha256": "3937052a9a92037f41f9ad2f69c5833b63ed4436ff171770b2a55072c11823dc"
+  }
+]

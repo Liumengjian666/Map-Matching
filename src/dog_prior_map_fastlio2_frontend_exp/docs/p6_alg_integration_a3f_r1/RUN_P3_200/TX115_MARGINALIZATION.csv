@@ -1,0 +1,3 @@
+transaction_id,event_stamp_ns,attempt_index,nodes_before_attempt,span_before_attempt_s,nodes_after_attempt,span_after_attempt_s,marginalization_result,qr_marginalized_rank,qr_stack_rows,qr_rows_after_compression,qr_ms,new_prior_symmetry_max_abs,new_prior_lambda_min,legacy_shadow_status,legacy_shadow_lambda_min
+115,1517157230686328484,1,41,2.0170772080000003,40,2.017055584,SUCCESS,15,35,15,4.7603590000000002,0,0,SUCCESS,0
+115,1517157230686328484,2,40,2.017055584,39,1.9162170890000001,SUCCESS,15,30,15,4.8757390000000003,0,0,SUCCESS,0

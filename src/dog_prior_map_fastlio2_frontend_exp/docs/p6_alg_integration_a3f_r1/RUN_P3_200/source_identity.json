@@ -1,0 +1,10 @@
+{
+  "CODE_SHA": "c1ef450eb45fd5825c416e9140e9a4eed1d32d04",
+  "executable_sha256": "6265a0a97432325aa44feeb27550d978a6903fe3cfbf7514cfee0e3024a743a0",
+  "environment": {
+    "LD_LIBRARY_PATH": "/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu",
+    "P6_A3B_R1_DIAGNOSTICS": "1",
+    "P6_A3C_R1_MARGINALIZATION_DIAGNOSTICS": "1",
+    "P6_A3F_R1_COVARIANCE_DIAGNOSTICS": "1"
+  }
+}

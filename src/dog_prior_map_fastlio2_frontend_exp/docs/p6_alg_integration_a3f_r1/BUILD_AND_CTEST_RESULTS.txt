@@ -1,0 +1,48 @@
+A3F-R1 pre-real-replay build/test gate
+START_SHA=34ac3f7692ff51efc3c168fb45e080b8573dee28
+CODE_SHA=c1ef450eb45fd5825c416e9140e9a4eed1d32d04
+Release configure/build=PASS (/tmp/p6_a2d_build)
+Release full CTest=PASS 37/37, 0 failures, 2.97 seconds
+Debug targeted build=PASS (/tmp/p6_a2d_debug)
+Debug targeted CTest=PASS 15/15, 0 failures, 39.81 seconds
+git diff --check=PASS
+Original 35 tests retained. Two new CTests added. No numerical tolerance relaxed.
+
+A3F synthetic evidence:
+permutation_P15_relative=9.83421e-16
+correlated_P15_relative=2.73124e-14
+extreme_P15_known_relative=3.331e-16
+extreme legacy normal LLT success=false
+initial window / IMU-only / joint IMU+rank5 LiDAR+directional cross-state visual=PASS
+repeated QR marginalization covariance dense oracle agreement <=1e-9=PASS
+nonzero prior rotation/gradient chart after optimize before reanchoring=PASS
+rank-deficient fail-closed without fallback=PASS
+query states/prior A,b,H,g/factor counts/ID watermarks/revisions unchanged=PASS
+one basis callback per active LiDAR factor with diagnostics ON and OFF=PASS
+diagnostics P15/Pmap exact parity and NIS/probe decision parity=PASS
+invalid snapshot rank rejected before matrix allocation=PASS
+map-only covariance divergence / asynchronous log ordering / missing stream=PASS
+mismatched stamp/transaction / duplicate event guard=PASS
+
+Retained regressions:
+A1-R1 information conservation=PASS
+A2D dense_sparse_equivalence=PASS
+A3B-R1 forensic diagnostics=PASS
+A3B-R2 frozen projection=PASS
+A3C-R1 marginalization diagnostics=PASS
+A3C-R2 alias-safe and frozen tx90 capsule=PASS
+A3D-R1 natural-small-step and negative controls=PASS
+A3E-R1 offline high-precision oracle self-test=PASS
+A3E-R2 authoritative square-root marginalization/lifecycle=PASS
+Frozen legacy FULL byte-parity audit=PASS
+
+Intermediate development failures resolved BEFORE real replay:
+- initial target build before CMake reconfigure had no target rule;
+- first producer compile used nonexistent SelectedLidarNis.value; corrected to nis;
+- old A3A source-location assertion raised IndexError after function relocation;
+  retained legacy assertions and added stronger square-root no-normal-path checks.
+No true numerical regression failure, test deletion, tolerance relaxation,
+real retry or production parameter adjustment occurred.
+
+Pre-existing optional PCL/VTK/FAST-LIO compiler warnings are not new target failures.
+Full Release and Debug CTest logs are included separately.

@@ -1,0 +1,30 @@
+[
+  {
+    "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_a3a_v3_input/raw_timed_points.bin",
+    "sha256": "4ba09d8ae7004056dcc4e9d63d2ab09915748c7e68bc29d0dc8bd44a24fc95ff"
+  },
+  {
+    "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_a3a_v3_input/raw_timed_catalog.csv",
+    "sha256": "fdaf9607bc1933269f5f999ee044d37aa1eefabedc054f522da5078ce708123f"
+  },
+  {
+    "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_a3a_v3_input/filter_scans.csv",
+    "sha256": "41d0b2040a5de8a8bd428c382a7b6dc18fabcaa8d3e7d2cc331018e0585edf1d"
+  },
+  {
+    "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_a3a_v3_input/RAW_TIMED_INPUT_MANIFEST.txt",
+    "sha256": "fb20125c63aa4c7110851b8bb08ec33e8938d94be18e28e9737d207001377575"
+  },
+  {
+    "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd",
+    "sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f"
+  },
+  {
+    "path": "/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i6d_full_algorithm/corridor01_params_official_calibration.txt",
+    "sha256": "7e42752ff8b84eae2b2da8d7d9fe179db0bb8f364a923e12236d2e91336e357d"
+  },
+  {
+    "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_i6c_framework/input/imu.csv",
+    "sha256": "7dc881d4ebfeacea9354be569a5952e5e466ccdd366637e52a7797a6f37457aa"
+  }
+]

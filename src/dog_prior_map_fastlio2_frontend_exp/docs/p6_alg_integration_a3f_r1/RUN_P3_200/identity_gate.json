@@ -1,0 +1,50 @@
+{
+  "pre_covariance_output_events_checked": 1,
+  "first_covariance_output_divergence": {
+    "transaction_id": "52",
+    "stamp_ns": "1517157224332516266",
+    "legacy_valid": "1",
+    "P15_relative_error": "1.2094514074128008e-09",
+    "Pmap_relative_error": "2.7829433939584123e-09",
+    "production_NIS_valid": "1",
+    "production_NIS": "0.21191546349516932",
+    "threshold": "16.812000000000001",
+    "production_NIS_accepted": "1",
+    "legacy_same_factor_NIS_valid": "1",
+    "legacy_same_factor_NIS": "0.21191546316551765",
+    "legacy_same_factor_NIS_accepted": "1",
+    "production_probe_trigger": "0",
+    "legacy_probe_trigger": "0",
+    "production_LiDAR_committed": "1",
+    "legacy_same_factor_admission": "1"
+  },
+  "first_same_state_shadow_decision_divergence": {
+    "transaction_id": "136",
+    "stamp_ns": "1517157232804267479",
+    "legacy_valid": "0",
+    "P15_relative_error": "nan",
+    "Pmap_relative_error": "nan",
+    "production_NIS_valid": "1",
+    "production_NIS": "0.26912481158413021",
+    "threshold": "6.6349999999999998",
+    "production_NIS_accepted": "1",
+    "legacy_same_factor_NIS_valid": "0",
+    "legacy_same_factor_NIS": "nan",
+    "legacy_same_factor_NIS_accepted": "0",
+    "production_probe_trigger": "1",
+    "legacy_probe_trigger": "0",
+    "production_LiDAR_committed": "1",
+    "legacy_same_factor_admission": "0"
+  },
+  "first_old_run_event_divergence": {
+    "transaction_id": "70",
+    "stamp_ns": "1517157226047034025",
+    "event": "LIDAR_SCAN_START",
+    "explanation": "AFTER_FIRST_COVARIANCE_OUTPUT_DIFFERENCE"
+  },
+  "discrepancy": "",
+  "process_exit_code": 0,
+  "real_replay_count": 1,
+  "retries": 0,
+  "GT_USED": false
+}

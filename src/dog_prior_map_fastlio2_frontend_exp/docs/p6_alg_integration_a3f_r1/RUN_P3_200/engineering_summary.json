@@ -1,0 +1,136 @@
+{
+  "complete": true,
+  "issues": [],
+  "REAL_REPLAY_COUNT": 1,
+  "GT_USED": false,
+  "READY_FOR_FORMAL_EXPERIMENT": "NO",
+  "LiDAR_terminals": 149,
+  "square_root_covariance_requests": 149,
+  "square_root_available": 149,
+  "square_root_unavailable": 0,
+  "production_rank_failures": 0,
+  "legacy_shadow_available": 129,
+  "legacy_shadow_unavailable": 20,
+  "legacy_failure_histogram": {
+    "HESSIAN_NOT_SPD": 17,
+    "NUMERICALLY_SINGULAR_HESSIAN": 3
+  },
+  "P15_eigen_min": 1.367054266694708e-06,
+  "P15_eigen_max": 3.760208570973959,
+  "Pmap_eigen_min": 7.973431667598901e-05,
+  "Pmap_eigen_max": 1.1177630593544055,
+  "triangular_residual_max": 2.6705807443139463e-16,
+  "P15_available_comparison_error": {
+    "mean": 3.29738565075349e-08,
+    "median": 2.147503999472176e-08,
+    "P95": 9.168520674615725e-08,
+    "max": 1.559500819882654e-07
+  },
+  "Pmap_available_comparison_error": {
+    "mean": 2.4361063711274397e-08,
+    "median": 1.688278454381637e-08,
+    "P95": 6.7176465746004e-08,
+    "max": 1.6119122075481807e-07
+  },
+  "same_factor_NIS_decision_differences": 0,
+  "same_state_probe_trigger_differences": 0,
+  "same_factor_admission_differences": 0,
+  "available_NIS_comparison_count": 103,
+  "available_NIS_absolute_difference": {
+    "mean": 3.076504984608622e-08,
+    "median": 1.5084263005338272e-09,
+    "P95": 1.093140951979875e-07,
+    "max": 8.210267381514313e-07
+  },
+  "selected_NIS_valid": 123,
+  "lidar_committed": 107,
+  "lidar_normal_rejection": 42,
+  "selected_NIS_rejections": 16,
+  "no_factor_attempt_status": {
+    "SKIPPED_INVALID_SOURCE;map_support_insufficient": 25,
+    "SKIPPED_INVALID_SOURCE;lidar_reliable_rank_zero_or_invalid": 1
+  },
+  "NDT_converged": 149,
+  "Uobs_valid": 124,
+  "probes": 104,
+  "NDT_calls": 357,
+  "optimizer_status": {
+    "ACCEPTED_UPDATE": 291,
+    "CONVERGED_WITHOUT_STEP": 7
+  },
+  "optimizer_failures": 0,
+  "QR_marginalization_attempts": 260,
+  "QR_marginalization_failures": 0,
+  "QR_marginalization_ms": {
+    "mean": 4.853760919230767,
+    "median": 4.814417,
+    "P95": 5.1152161,
+    "max": 5.919806
+  },
+  "covariance_QR_ms": {
+    "mean": 37.19617220805371,
+    "median": 40.03412,
+    "P95": 44.3254904,
+    "max": 46.512174
+  },
+  "stack_max_rows": 729,
+  "stack_max_columns": 615,
+  "max_covariance_temporary_estimated_bytes": 13767072,
+  "post_handoff_IKFoM_calls": 0,
+  "visual_factors": 0,
+  "max_completed_window_span": 1.9589149060000002,
+  "max_nodes": 40,
+  "max_sparse_fallback": 0,
+  "finite_SO3": true,
+  "identity_gate": {
+    "pre_covariance_output_events_checked": 1,
+    "first_covariance_output_divergence": {
+      "transaction_id": "52",
+      "stamp_ns": "1517157224332516266",
+      "legacy_valid": "1",
+      "P15_relative_error": "1.2094514074128008e-09",
+      "Pmap_relative_error": "2.7829433939584123e-09",
+      "production_NIS_valid": "1",
+      "production_NIS": "0.21191546349516932",
+      "threshold": "16.812000000000001",
+      "production_NIS_accepted": "1",
+      "legacy_same_factor_NIS_valid": "1",
+      "legacy_same_factor_NIS": "0.21191546316551765",
+      "legacy_same_factor_NIS_accepted": "1",
+      "production_probe_trigger": "0",
+      "legacy_probe_trigger": "0",
+      "production_LiDAR_committed": "1",
+      "legacy_same_factor_admission": "1"
+    },
+    "first_same_state_shadow_decision_divergence": {
+      "transaction_id": "136",
+      "stamp_ns": "1517157232804267479",
+      "legacy_valid": "0",
+      "P15_relative_error": "nan",
+      "Pmap_relative_error": "nan",
+      "production_NIS_valid": "1",
+      "production_NIS": "0.26912481158413021",
+      "threshold": "6.6349999999999998",
+      "production_NIS_accepted": "1",
+      "legacy_same_factor_NIS_valid": "0",
+      "legacy_same_factor_NIS": "nan",
+      "legacy_same_factor_NIS_accepted": "0",
+      "production_probe_trigger": "1",
+      "legacy_probe_trigger": "0",
+      "production_LiDAR_committed": "1",
+      "legacy_same_factor_admission": "0"
+    },
+    "first_old_run_event_divergence": {
+      "transaction_id": "70",
+      "stamp_ns": "1517157226047034025",
+      "event": "LIDAR_SCAN_START",
+      "explanation": "AFTER_FIRST_COVARIANCE_OUTPUT_DIFFERENCE"
+    },
+    "discrepancy": "",
+    "process_exit_code": 0,
+    "real_replay_count": 1,
+    "retries": 0,
+    "GT_USED": false
+  },
+  "engineering_gate": "PASS"
+}
