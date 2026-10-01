@@ -1,0 +1,14 @@
+START_SHA=45ceeabdc835ebae96ee98a033dd9575a29b94e9
+CODE_SHA=d0a5307b6e0b1070a6742b06238c8e019342da86
+BRANCH=research/p6-i6d-full-algorithm
+Initial baseline=HEAD matched START_SHA and worktree clean
+END_SHA=ordinary analysis commit containing this file; resolve with git rev-parse HEAD
+Remote HEAD before final push=45ceeabdc835ebae96ee98a033dd9575a29b94e9
+Real prefix trials=4
+Full Corridor01 trials=0
+GT_USED=false
+VISUAL=NONE
+Production estimator src/include diff=0
+Wrapper/config/test changes=YES
+Core innovation math changed=NO
+Final operational readiness=NO

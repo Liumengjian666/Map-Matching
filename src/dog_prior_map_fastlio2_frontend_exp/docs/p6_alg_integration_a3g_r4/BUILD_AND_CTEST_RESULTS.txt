@@ -1,0 +1,50 @@
+Final tested source: d0a5307b6e0b1070a6742b06238c8e019342da86
+Release build directory: /home/jian/livox_ws/p6_a3g_r4_release
+Debug build directory: /home/jian/livox_ws/p6_a3g_r4_debug
+Standalone source: scripts/p6_i6b
+BUILD_I6B_CLOSED_LOOP_TOOLS=ON
+FASTLIO2_ROOT=/media/jian/HIKVISION/comparison algorithm/FAST_LIO2
+DCREG_ROOT=/home/jian/livox_ws/DCReg/DCReg
+LD_LIBRARY_PATH=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu
+
+Release build:
+cmake --build /home/jian/livox_ws/p6_a3g_r4_release -j1
+PASS, exit=0
+Log=/home/jian/livox_ws/p6_a3g_r4_release_build_v3.log
+
+Release CTest:
+env LD_LIBRARY_PATH=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu cmake -E chdir /home/jian/livox_ws/p6_a3g_r4_release ctest --output-on-failure -j2
+100% tests passed, 0 tests failed out of 44
+Total Test time (real) = 1.95 sec
+Log=/home/jian/livox_ws/p6_a3g_r4_release/Testing/Temporary/LastTest.log
+Original 42 tests retained; added tracking and real-PCL recovery admission tests.
+
+Debug build:
+cmake --build /home/jian/livox_ws/p6_a3g_r4_debug --target p6_i6b_closed_loop -j1
+PASS, exit=0
+Log=/home/jian/livox_ws/p6_a3g_r4_debug_build_v3.log
+
+Debug targeted CTest:
+env LD_LIBRARY_PATH=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu cmake -E chdir /home/jian/livox_ws/p6_a3g_r4_debug ctest --output-on-failure -j2 -R 'p6_a1_r1|p6_a2c_source|p6_a2d_window|p6_a3b_|p6_a3c_|p6_a3d_|p6_a3e_|p6_a3f_|p6_a3g_'
+100% tests passed, 0 tests failed out of 24
+Total Test time (real) = 49.55 sec
+Log=/home/jian/livox_ws/p6_a3g_r4_debug/Testing/Temporary/LastTest.log
+
+Additional direct recovery fixture:
+A3G_R4_PCL_RECOVERY_ADMISSION_PASS ineffective_nominal=REJECTED recovery_preview=READ_ONLY recovery_NIS=ENFORCED commit_count=1 invalid_probes=REJECTED candidate_probe_center=PAIRED
+A3G_R4_HEALTHY_PATH_OFF_ON_PARITY_PASS extra_NDT_calls=0
+
+Source boundary:
+git diff START_SHA -- src/dog_prior_map_fastlio2_frontend_exp/src src/dog_prior_map_fastlio2_frontend_exp/include
+EMPTY
+git diff --check: PASS
+Existing tolerances, NIS/noise, core solver and QR rank rule: unchanged.
+
+Environment/orchestration note:
+Earlier simultaneous Release/Debug large translation-unit builds coincided with
+a machine restart; temporary /tmp build directories were lost. Both builds were
+recreated outside the repo and serialized. One mistyped Debug target and one
+premature CTest invocation (target not built yet) were corrected; final full
+Release and targeted Debug runs above passed without test changes. These are
+not suppressed estimator-test failures. Existing unused-variable/function
+warnings remain; no broad warning cleanup was performed.
