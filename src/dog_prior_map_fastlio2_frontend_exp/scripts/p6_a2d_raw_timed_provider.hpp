@@ -228,7 +228,8 @@ void runWindowOwnedExperimentalMode(const p4_i2::Inputs& inputs,
     const std::string& trajectory_path,const std::string& diagnostics_path,
     const std::string& runtime_path,const std::vector<VisualMeasurement>& visual,
     std::uint64_t init_stamp,const std::string& profile,R2Policy policy,
-    const std::string& catalog_path,const std::string& visual_provenance_path) {
+    const std::string& catalog_path,const std::string& visual_provenance_path,
+    const p6_tracking::Config& tracking_config = {}) {
   const auto catalog=readRawTimedCatalog(catalog_path);
   if(catalog.size()<assets.size()) throw std::runtime_error("raw_timed_catalog_too_short");
   WindowOwnedProducerInput owned;
@@ -257,6 +258,9 @@ void runWindowOwnedExperimentalMode(const p4_i2::Inputs& inputs,
   auto diagnostics=openV3ExclusiveOutput(diagnostics_path);
   auto runtime=openV3ExclusiveOutput(runtime_path);
   auto deskew_evidence=openV3ExclusiveOutput(trajectory_path+".deskew_evidence.csv");
+  std::ofstream tracking_output;
+  if (tracking_config.enabled) tracking_output=openV3ExclusiveOutput(trajectory_path+".r4_tracking.csv");
+  std::cout << "tracking_recovery=" << (tracking_config.enabled ? "ON" : "OFF") << '\n';
   const char* diagnostic_environment=std::getenv("P6_A3B_R1_DIAGNOSTICS");
   const bool diagnostic_enabled=diagnostic_environment &&
       std::string(diagnostic_environment)=="1";
@@ -327,7 +331,8 @@ void runWindowOwnedExperimentalMode(const p4_i2::Inputs& inputs,
           std::string(),
       (options.capture_covariance_shadow || health_enabled)?&covariance_requests:nullptr,
       options.capture_covariance_shadow?&covariance_comparisons:nullptr,
-      health_enabled?&soak_health:nullptr,a3g_r3_capture.get());
+      health_enabled?&soak_health:nullptr,a3g_r3_capture.get(),tracking_config,
+      tracking_config.enabled?&tracking_output:nullptr);
   trajectory.flush(); diagnostics.flush(); runtime.flush(); deskew_evidence.flush();
   if (marginalization_diagnostic_enabled) marginalization_trace.flush();
   std::cout<<"FULL_FIXED_LAG_V3_EXPERIMENTAL_COMPLETE window_deskews="<<result.window_deskew_count

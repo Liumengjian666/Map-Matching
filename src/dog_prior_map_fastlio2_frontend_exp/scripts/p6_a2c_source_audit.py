@@ -21,6 +21,7 @@ def main():
     # A3G-R3's synthetic observer-parity fixture needs only std::unique_ptr;
     # it is an additive diagnostic-only dispatch, not part of legacy execution.
     stripped = stripped.replace('#include <memory>\n', "")
+    stripped = stripped.replace('#include "p6_a3g_r4_tracking.hpp"\n', "")
     # Additive V3 covariance diagnostics helper; frozen legacy body is still
     # compared byte-for-byte after removing this include and its blank line.
     stripped = stripped.replace('#include "p6_a3f_r1_covariance_diagnostics.hpp"\n\n', "")
@@ -39,18 +40,21 @@ def main():
           hashlib.sha256(original.encode()).hexdigest())
     producer = (Path(__file__).parent / "p6_a2c_fixed_lag_producer.hpp").read_text()
     handoff = producer[producer.index("FixedLagProducerResult runFixedLagProducer("):]
+    admission = producer[producer.index("LidarCandidateEvaluation evaluateLidarCandidate("):
+                         producer.index("FixedLagProducerResult runFixedLagProducer(")]
+    active_path = admission + handoff
     for forbidden in ("FastLio2IkfomFrontend", "frontend.predict", "initializer.predict",
                       "applyPoseMeasurement", "applyProjected", "setWindowPredictionSeed",
                       "projectMapProductPoseCovariance", "getState()", "get_P()"):
-        if forbidden in handoff:
+        if forbidden in active_path:
             raise RuntimeError("post-handoff second estimator dependency: " + forbidden)
     for required in ("adapter.prepareStateAt(event.stamp_ns,&predicted", "prediction*T_il",
                      "adapter.latestMarginalCovariance(&prior", "prior.map_pose_covariance6"):
-        if required not in handoff:
+        if required not in active_path:
             raise RuntimeError("missing real producer connection: " + required)
-    if not any(candidate in handoff for candidate in (
-            "evaluateSelectedLidarNis(predicted,measurement,prior",
-            "evaluateSelectedLidarNis(predicted,preview_measurement,prior")):
+    if ("evaluateLidarCandidate(ndt,source,nominal" not in handoff or
+            "evaluateSelectedLidarNis(predicted,result.preview,prior" not in admission or
+            "adapter.previewLidarMeasurement(lidar" not in admission):
         raise RuntimeError("missing real producer connection: selected LiDAR NIS")
     print("POST_HANDOFF_IKFOM_CALLS_ZERO_AND_WINDOW_ONLY_PREDICTION_PASS")
 

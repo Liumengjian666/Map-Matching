@@ -43,6 +43,7 @@
 #include <vector>
 
 #include "p6_a3f_r1_covariance_diagnostics.hpp"
+#include "p6_a3g_r4_tracking.hpp"
 
 namespace p6_i1 {
 using namespace dog_prior_map_fastlio2_frontend_exp;
@@ -3309,7 +3310,11 @@ int main(int argc, char** argv) {
       p6_i1::runFixedLagProductionFixture(true, true, true);
       return 0;
     }
-    if (argc == 18 && std::string(argv[1]) == "FULL_FIXED_LAG_V3_EXPERIMENTAL") {
+    if (argc == 2 && std::string(argv[1]) == "A3G_R4_RECOVERY_FIXTURE") {
+      p6_i1::runFixedLagProductionFixture(true,true,false,true);
+      return 0;
+    }
+    if ((argc == 18 || argc == 19) && std::string(argv[1]) == "FULL_FIXED_LAG_V3_EXPERIMENTAL") {
       const std::string raw_path=argv[5];
       const auto slash=raw_path.find_last_of('/');
       const std::string manifest=(slash==std::string::npos ? "." : raw_path.substr(0,slash))+
@@ -3326,7 +3331,8 @@ int main(int argc, char** argv) {
       assets.resize(limit); inputs.scans.resize(limit);
       p6_i1::runWindowOwnedExperimentalMode(inputs,assets,argv[5],argv[6],argv[7],
           argv[8],argv[9],argv[10],p6_i1::readV3VisualMeasurements(argv[11]),
-          std::stoull(argv[13]),argv[14],p6_i1::parseR2Policy(argv[15]),argv[16],argv[17]);
+          std::stoull(argv[13]),argv[14],p6_i1::parseR2Policy(argv[15]),argv[16],argv[17],
+          argc==19?p6_tracking::readConfig(argv[18]):p6_tracking::Config{});
       return 0;
     }
     if (argc == 16 && std::string(argv[1]) == "FULL_FIXED_LAG_V2_EXPERIMENTAL") {
@@ -3441,7 +3447,7 @@ int main(int argc, char** argv) {
               << "  p6_i1_branched_recovery (STRICT_BASELINE|UOBS_ONLY|UNONLOCAL_ONLY|DUAL_RELIABILITY) imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt trajectory.csv reliability.csv runtime.csv [frame_limit [init_stamp_ns [floor01|corridor01]]]\n"
               << "  p6_i1_branched_recovery FULL_ALGORITHM_V1 imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt trajectory.csv reliability.csv runtime.csv visual.csv frame_limit init_stamp_ns floor01|corridor01 [r2_policy [LEGACY|EXACT_RESIDUAL]]\n"
               << "  p6_i1_branched_recovery FULL_FIXED_LAG_V2_EXPERIMENTAL imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt trajectory.csv events.csv runtime.csv visual.csv frame_limit init_stamp_ns floor01|corridor01 r2_policy\n"
-              << "  p6_i1_branched_recovery FULL_FIXED_LAG_V3_EXPERIMENTAL imu.csv filter_scans.csv scans.csv raw_timed.bin map.pcd params.txt trajectory.csv events.csv runtime.csv visual.csv frame_limit init_stamp_ns floor01|corridor01 r2_policy raw_timed_scans.csv visual_provenance.csv|NONE\n"
+              << "  p6_i1_branched_recovery FULL_FIXED_LAG_V3_EXPERIMENTAL imu.csv filter_scans.csv scans.csv raw_timed.bin map.pcd params.txt trajectory.csv events.csv runtime.csv visual.csv frame_limit init_stamp_ns floor01|corridor01 r2_policy raw_timed_scans.csv visual_provenance.csv|NONE [tracking.conf]\n"
               << "  p6_i1_branched_recovery MODE imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt visual.csv trajectory.csv branch.csv dcreg.csv multistart.csv candidates.csv arbitration.csv runtime.csv [basin.csv covariance.csv]\n";
     return 2;
   } catch (const std::exception& error) {

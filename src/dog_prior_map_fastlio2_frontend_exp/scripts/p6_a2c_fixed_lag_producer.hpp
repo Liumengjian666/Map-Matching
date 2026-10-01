@@ -217,6 +217,110 @@ fixed_lag::FrozenVisualEvent frozenVisual(const VisualMeasurement& v,
   return event;
 }
 
+struct LidarCandidateEvaluation {
+  fixed_lag::FrozenLidarEvent event;
+  fixed_lag::LidarWindowMeasurement preview;
+  fixed_lag::SelectedLidarNis nis;
+  reliability::LocalObservability local;
+  reliability::LocalRisk routed;
+  reliability::NonlocalTerminalStability stability;
+  GeometricSearchDiagnostic search;
+  Eigen::VectorXd selected_residual;
+  Eigen::MatrixXd selected_covariance;
+  bool preview_valid=false,attempted=false,probed=false,admissible=false;
+  bool same_factor_noise_allowed=false,production_probe_trigger=false,legacy_probe_trigger=false;
+  bool effective=false;
+  int rank=0;
+  std::uint64_t probe_calls=0;
+  double probe_ms=0;
+  std::string nonlocal_status="NOT_PROBED";
+};
+
+// Every recovery hypothesis uses the same measurement admission chain as M0.
+// Preview is read-only; only the selected result is submitted to the adapter.
+LidarCandidateEvaluation evaluateLidarCandidate(
+    GeometricNdt& ndt,const Cloud::Ptr& source,const Candidate& terminal,
+    const ScanAsset& asset,const fixed_lag::WindowState& predicted,
+    const fixed_lag::WindowMarginalCovariance& prior,const Pose3d& extrinsic,
+    const RuntimeParameters& parameters,R2Policy policy,
+    const reliability::DualReliabilityConfig& config,
+    fixed_lag::FixedLagEventAdapter& adapter,bool enforce_effective_registration) {
+  using namespace fixed_lag;
+  LidarCandidateEvaluation result;
+  result.stability.status="NOT_PROBED";
+  result.effective=p6_tracking::effectiveRegistration(
+      terminal.converged,terminal.iterations,terminal.objective,terminal.pose);
+  const bool converged=terminal.converged && (!enforce_effective_registration || result.effective);
+  const auto observations=converged ? ndt.geometricObservations(*source,terminal.pose.cast<float>(),0.8) :
+      std::vector<reliability::GeometricObservation>{};
+  result.local=reliability::analyzeGeometricObservability(observations,converged,0.8);
+  if (enforce_effective_registration && !result.local.valid)
+    result.search=ndt.diagnoseSearch(*source,terminal.pose.cast<float>(),0.8);
+  const auto risk=reliability::assessLocalRisk(result.local,config);
+  Pose3d predicted_pose; predicted_pose.position=predicted.position;
+  predicted_pose.orientation=Eigen::Quaterniond(predicted.rotation);
+  const Eigen::Matrix4d prediction=poseMatrix(predicted_pose),T_il=poseMatrix(extrinsic);
+  if (prior.valid && converged) {
+    const auto measured=p4_i2::lidarMeasurementToImu(poseFromMatrix(terminal.pose),extrinsic);
+    const auto innovation=reliability::mapProductInnovation(
+        p4_i2::asIsometry(predicted_pose),p4_i2::asIsometry(measured));
+    const auto trigger=reliability::shouldRunNonlocalProbes(
+        asset.transaction_id,innovation,prior.map_pose_covariance6,config);
+    result.production_probe_trigger=trigger.run_probes;
+    if (prior.legacy_shadow_valid)
+      result.legacy_probe_trigger=reliability::shouldRunNonlocalProbes(
+          asset.transaction_id,innovation,prior.legacy_map_pose_covariance6,config).run_probes;
+    const auto spectrum=p6_i4::analyzePoseCovariance(prior.map_pose_covariance6);
+    if (trigger.run_probes && spectrum.valid && spectrum.effective_rank>0 && spectrum.eigenvalues(5)>0) {
+      const Vector6d delta=config.probe_prior_sigma*std::sqrt(spectrum.eigenvalues(5))*spectrum.eigenvectors.col(5);
+      const auto plus=runNdtCandidate(ndt,source,p6_i4::boxplusMapPose(prediction,delta)*T_il,1,"WINDOW_M_PLUS");
+      const auto minus=runNdtCandidate(ndt,source,p6_i4::boxplusMapPose(prediction,-delta)*T_il,2,"WINDOW_M_MINUS");
+      result.probe_calls=2; result.probe_ms=plus.runtime_ms+minus.runtime_ms; result.probed=true;
+      result.stability=reliability::analyzeNonlocalTerminalStability(terminalCapture(terminal),
+          terminalCapture(plus),terminalCapture(minus),p4_i2::asIsometry(extrinsic),2);
+      result.nonlocal_status=result.stability.status;
+    } else if (trigger.run_probes) {
+      result.stability.status="PROBE_PRIOR_COVARIANCE_INVALID";
+      result.nonlocal_status=result.stability.status;
+    } else result.nonlocal_status=trigger.reason;
+  } else if (!prior.valid) result.nonlocal_status="UNONLOCAL_DISABLED_WINDOW_COVARIANCE_UNAVAILABLE";
+  const auto decision=reliability::decideDualReliability(risk,result.stability,converged,
+      predicted.rotation,parameters.pose_position_sigma_m,parameters.pose_rotation_sigma_rad,true,true,config);
+  const auto& stability=result.stability;
+  const bool terminal_risk=stability.response_valid &&
+      (std::max(stability.delta_position_imu_positive.norm(),stability.delta_position_imu_negative.norm())>config.terminal_translation_limit_m ||
+       std::max(stability.delta_rotation_positive.norm(),stability.delta_rotation_negative.norm())>config.terminal_rotation_limit_rad);
+  result.routed=riskWithNonlocalResponse(risk,stability,decision.nonlocal_risk||terminal_risk,
+      -predicted.rotation*extrinsic.position,config);
+  auto& lidar=result.event;
+  lidar.transaction_id=asset.transaction_id; lidar.stamp_ns=asset.stamp_ns;
+  lidar.map_T_lidar=poseFromMatrix(terminal.pose); lidar.local_risk=result.routed;
+  lidar.ndt_converged=converged;
+  lidar.map_support_valid=result.routed.valid&&result.routed.map_support_sufficient;
+  lidar.residual_covariance=makeBasePoseNoise(parameters);
+  if (r2PolicyUsesAdaptiveNoise(policy)) {
+    const auto noise=reliability::makePoseMeasurementNoise(parameters.pose_position_sigma_m,
+        parameters.pose_rotation_sigma_rad,predicted.rotation,result.routed,stability,true,true,config);
+    lidar.measurement_commit_allowed=noise.valid;
+    if (noise.valid) lidar.residual_covariance=noise.covariance;
+  }
+  result.same_factor_noise_allowed=lidar.measurement_commit_allowed;
+  result.attempted=lidar.ndt_converged&&lidar.map_support_valid&&result.routed.reliable_dimension>0;
+  if (result.attempted && adapter.previewLidarMeasurement(lidar,&result.preview,nullptr)) {
+    result.preview_valid=true; result.rank=result.preview.reliable_rank;
+    if (buildLidarResidual(predicted,result.preview,&result.selected_residual,nullptr)) {
+      const Eigen::MatrixXd basis=result.preview.measurement_basis.leftCols(result.rank);
+      result.selected_covariance=basis.transpose()*result.preview.covariance*basis;
+    }
+    if (r2PolicyUsesNisGate(policy)) {
+      result.nis=evaluateSelectedLidarNis(predicted,result.preview,prior,chiSquare99Threshold(result.rank));
+      lidar.measurement_commit_allowed=lidar.measurement_commit_allowed&&result.nis.valid&&result.nis.accepted;
+    }
+  } else if (r2PolicyUsesNisGate(policy)) lidar.measurement_commit_allowed=false;
+  result.admissible=result.attempted && result.preview_valid && lidar.measurement_commit_allowed;
+  return result;
+}
+
 FixedLagProducerResult runFixedLagProducer(
     const p4_i2::Inputs& inputs, const std::vector<ScanAsset>& assets,
     const RuntimeParameters& parameters, const Pose3d& initial_lidar,
@@ -242,7 +346,9 @@ FixedLagProducerResult runFixedLagProducer(
     std::ostream* covariance_request_output = nullptr,
     std::ostream* covariance_comparison_output = nullptr,
     std::ostream* soak_health_output = nullptr,
-    A3gR3EvidenceCapture* a3g_r3_capture = nullptr) {
+    A3gR3EvidenceCapture* a3g_r3_capture = nullptr,
+    const p6_tracking::Config& tracking_config = {},
+    std::ostream* tracking_output = nullptr) {
   using namespace fixed_lag;
   const auto started=std::chrono::steady_clock::now();
   if(assets.empty() || inputs.imu.empty() || !target || target->empty())
@@ -306,6 +412,9 @@ FixedLagProducerResult runFixedLagProducer(
   const Eigen::Matrix4d T_il=poseMatrix(extrinsic);
   const double nan=std::numeric_limits<double>::quiet_NaN();
   FixedLagProducerResult result;
+  p6_tracking::Tracker tracker(tracking_config);
+  if (tracking_output)
+    *tracking_output << "transaction_id,stamp_ns,row_type,health,consecutive_failures,seed,effective_registration,ndt_iterations,objective,fitness,uobs_status,correspondences,reliable_rank,nis_valid,nis,nis_threshold,admissible,committed,recovery_attempts,last_reliable_stamp,map_support_status,rejected_covariances,sampled_neighbor_queries,queries_with_neighbor_0p8,queries_with_neighbor_1p6\n";
   result.raw_scans_before_handoff=raw_scans_before_handoff;
   trajectory<<std::setprecision(17)<<"transaction_id,stamp_ns,time_s,px,py,pz,qx,qy,qz,qw\n";
   diagnostics<<std::setprecision(17)<<"timestamp,event_type,window_nodes,window_span,optimizer_status,optimizer_cost_before,optimizer_cost_after,predicted_px,predicted_py,predicted_pz,predicted_qx,predicted_qy,predicted_qz,predicted_qw,ndt_converged,uobs_valid,weak_dimension,reliable_dimension,window_covariance_valid,window_position_sigma_max,window_rotation_sigma_max,unonlocal_probe_triggered,unonlocal_status,lidar_factor_attempted,lidar_factor_committed,lidar_selected_rank,lidar_nis,lidar_nis_threshold,visual_sensor_quality,visual_mode,visual_selected_rank,visual_trigger_status,visual_basis_source_lidar_stamp,imu_factor_count,lidar_factor_count,visual_factor_count,r2_policy,imu_buffer_last_stamp,lidar_source_provenance,visual_source_provenance,input_eligibility,post_handoff_ikfom_calls,marginalization_backend,initial_square_root_status,square_root_prior_rows,square_root_prior_columns,square_root_prior_bytes,qr_marginalization_ms\n";
@@ -499,6 +608,7 @@ FixedLagProducerResult runFixedLagProducer(
     Matrix6d selected_measurement_covariance=Matrix6d::Constant(nan);
     std::uint64_t calls=0;
     double ndt_ms=0;
+    std::size_t recovery_attempts=0;
     int lidar_rank=0,visual_rank=0;
     std::uint64_t basis_stamp=0;
     std::string visual_mode="NOT_APPLICABLE",visual_trigger="NOT_APPLICABLE";
@@ -582,75 +692,54 @@ FixedLagProducerResult runFixedLagProducer(
         a3g_r3_capture->captureInputs(raw_storage.value(),anchor_storage.value(),predicted,
                                       deskew_storage.value(),*source,extrinsic,
                                       prediction*T_il,pre_measurement);
-      nominal=runNdtCandidate(ndt,source,prediction*T_il,0,"WINDOW_M0");
+      Eigen::Matrix4d selected_initial_seed=prediction*T_il;
+      nominal=runNdtCandidate(ndt,source,selected_initial_seed,0,"WINDOW_M0");
       calls=1; ndt_ms=nominal.runtime_ms;
-      const auto observations=nominal.converged ?
-          ndt.geometricObservations(*source,nominal.pose.cast<float>(),0.8) :
-          std::vector<reliability::GeometricObservation>{};
-      local_observability=reliability::analyzeGeometricObservability(observations,nominal.converged,0.8);
-      uobs_valid=local_observability.valid;
-      const auto risk=reliability::assessLocalRisk(local_observability,config);
-      if(prior.valid && nominal.converged) {
-        const Pose3d measured_imu=p4_i2::lidarMeasurementToImu(poseFromMatrix(nominal.pose),extrinsic);
-        const auto innovation=reliability::mapProductInnovation(
-            p4_i2::asIsometry(predicted_pose),p4_i2::asIsometry(measured_imu));
-        const auto trigger=reliability::shouldRunNonlocalProbes(
-            asset.transaction_id,innovation,prior.map_pose_covariance6,config);
-        production_probe_trigger=trigger.run_probes;
-        if (prior.legacy_shadow_valid)
-          legacy_probe_trigger=reliability::shouldRunNonlocalProbes(
-              asset.transaction_id,innovation,prior.legacy_map_pose_covariance6,config).run_probes;
-        const auto spectrum=p6_i4::analyzePoseCovariance(prior.map_pose_covariance6);
-        if(trigger.run_probes && spectrum.valid && spectrum.effective_rank>0 && spectrum.eigenvalues(5)>0) {
-          const Vector6d delta=config.probe_prior_sigma*std::sqrt(spectrum.eigenvalues(5))*spectrum.eigenvectors.col(5);
-          const Candidate plus=runNdtCandidate(ndt,source,p6_i4::boxplusMapPose(prediction,delta)*T_il,1,"WINDOW_M_PLUS");
-          const Candidate minus=runNdtCandidate(ndt,source,p6_i4::boxplusMapPose(prediction,-delta)*T_il,2,"WINDOW_M_MINUS");
-          calls+=2; ndt_ms+=plus.runtime_ms+minus.runtime_ms; probed=true;
-          stability=reliability::analyzeNonlocalTerminalStability(
-              terminalCapture(nominal),terminalCapture(plus),terminalCapture(minus),p4_i2::asIsometry(extrinsic),2);
-          unonlocal_status=stability.status;
-        } else if(trigger.run_probes) {
-          stability.status="PROBE_PRIOR_COVARIANCE_INVALID";
-          unonlocal_status=stability.status;
-        } else unonlocal_status=trigger.reason;
-      } else if(!prior.valid) unonlocal_status="UNONLOCAL_DISABLED_WINDOW_COVARIANCE_UNAVAILABLE";
-      const auto decision=reliability::decideDualReliability(risk,stability,nominal.converged,
-          predicted.rotation,parameters.pose_position_sigma_m,parameters.pose_rotation_sigma_rad,true,true,config);
-      const bool terminal_risk=stability.response_valid &&
-          (std::max(stability.delta_position_imu_positive.norm(),stability.delta_position_imu_negative.norm())>config.terminal_translation_limit_m ||
-           std::max(stability.delta_rotation_positive.norm(),stability.delta_rotation_negative.norm())>config.terminal_rotation_limit_rad);
-      routed=riskWithNonlocalResponse(risk,stability,decision.nonlocal_risk||terminal_risk,
-          -predicted.rotation*extrinsic.position,config);
-      FrozenLidarEvent lidar;
-      lidar.transaction_id=asset.transaction_id; lidar.stamp_ns=asset.stamp_ns;
-      lidar.map_T_lidar=poseFromMatrix(nominal.pose); lidar.local_risk=routed;
-      lidar.ndt_converged=nominal.converged;
-      lidar.map_support_valid=routed.valid&&routed.map_support_sufficient;
-      lidar.residual_covariance=makeBasePoseNoise(parameters);
-      if(r2PolicyUsesAdaptiveNoise(policy)) {
-        const auto noise=reliability::makePoseMeasurementNoise(parameters.pose_position_sigma_m,
-            parameters.pose_rotation_sigma_rad,predicted.rotation,routed,stability,true,true,config);
-        lidar.measurement_commit_allowed=noise.valid;
-        if(noise.valid) lidar.residual_covariance=noise.covariance;
+      auto evaluation=evaluateLidarCandidate(ndt,source,nominal,asset,predicted,prior,
+          extrinsic,parameters,policy,config,adapter,tracking_config.enabled);
+      calls+=evaluation.probe_calls; ndt_ms+=evaluation.probe_ms;
+      const auto log_candidate=[&](const Candidate& candidate,const LidarCandidateEvaluation& e) {
+        if (!tracking_output) return;
+        *tracking_output<<std::setprecision(17)<<asset.transaction_id<<','<<asset.stamp_ns
+            <<",CANDIDATE,"<<p6_tracking::name(tracker.health())<<','<<tracker.consecutiveFailures()
+            <<','<<candidate.seed_name<<','<<e.effective<<','<<candidate.iterations<<','
+            <<candidate.objective<<','<<candidate.fitness<<','<<e.local.status<<','
+            <<e.local.valid_correspondence_count<<','<<e.rank<<','<<e.nis.valid<<','
+            <<e.nis.nis<<','<<e.nis.threshold<<','<<e.admissible<<",0,"<<recovery_attempts
+            <<','<<tracker.lastReliableStamp()<<','<<e.local.map_support_status<<','
+            <<e.local.rejected_covariance_count<<','<<e.search.sampled_source_points<<','
+            <<e.search.queries_with_neighbors_r<<','<<e.search.queries_with_neighbors_2r<<'\n';
+        tracking_output->flush();
+      };
+      log_candidate(nominal,evaluation);
+      if (tracker.needsRecovery(evaluation.admissible)) {
+        for (const auto& seed_candidate : tracker.seeds(asset.stamp_ns,prediction)) {
+          ++recovery_attempts;
+          auto candidate=runNdtCandidate(ndt,source,seed_candidate.map_T_imu*T_il,
+              static_cast<int>(recovery_attempts),seed_candidate.label);
+          ++calls; ndt_ms+=candidate.runtime_ms;
+          auto candidate_evaluation=evaluateLidarCandidate(ndt,source,candidate,asset,predicted,prior,
+              extrinsic,parameters,policy,config,adapter,true);
+          calls+=candidate_evaluation.probe_calls; ndt_ms+=candidate_evaluation.probe_ms;
+          log_candidate(candidate,candidate_evaluation);
+          if (candidate_evaluation.admissible) {
+            selected_initial_seed=seed_candidate.map_T_imu*T_il;
+            nominal=std::move(candidate); evaluation=std::move(candidate_evaluation);
+            break;
+          }
+        }
       }
+      local_observability=evaluation.local; uobs_valid=local_observability.valid;
+      routed=evaluation.routed; stability=evaluation.stability; nis=evaluation.nis;
+      probed=evaluation.probed; unonlocal_status=evaluation.nonlocal_status;
+      production_probe_trigger=evaluation.production_probe_trigger;
+      legacy_probe_trigger=evaluation.legacy_probe_trigger;
+      measurement_preview_valid=evaluation.preview_valid; preview_measurement=evaluation.preview;
+      lidar_rank=evaluation.rank; lidar_attempted=evaluation.attempted;
+      selected_residual=evaluation.selected_residual; selected_covariance=evaluation.selected_covariance;
+      FrozenLidarEvent lidar=evaluation.event;
       selected_measurement_covariance=lidar.residual_covariance;
-      const bool same_factor_noise_allowed=lidar.measurement_commit_allowed;
-      lidar_attempted=lidar.ndt_converged&&lidar.map_support_valid&&routed.reliable_dimension>0;
-      if(lidar_attempted && adapter.previewLidarMeasurement(lidar,&preview_measurement,nullptr)) {
-        measurement_preview_valid=true;
-        lidar_rank=preview_measurement.reliable_rank;
-        std::string residual_reason;
-        if (buildLidarResidual(predicted,preview_measurement,&selected_residual,
-                               &residual_reason)) {
-          const Eigen::MatrixXd basis=preview_measurement.measurement_basis.leftCols(
-              preview_measurement.reliable_rank);
-          selected_covariance=basis.transpose()*preview_measurement.covariance*basis;
-        }
-        if(r2PolicyUsesNisGate(policy)) {
-          nis=evaluateSelectedLidarNis(predicted,preview_measurement,prior,chiSquare99Threshold(lidar_rank));
-          lidar.measurement_commit_allowed=lidar.measurement_commit_allowed&&nis.valid&&nis.accepted;
-        }
-      } else if(r2PolicyUsesNisGate(policy)) lidar.measurement_commit_allowed=false;
+      const bool same_factor_noise_allowed=evaluation.same_factor_noise_allowed;
       lidar_committed=adapter.processLidarEvent(lidar,&reason);
       if(!lidar_committed && adapter.lastEventStatus().disposition!=AdapterEventDisposition::SKIPPED_INVALID_SOURCE)
         throw std::runtime_error("producer_lidar:"+reason);
@@ -659,7 +748,7 @@ FixedLagProducerResult runFixedLagProducer(
         const auto after_lidar_summary=adapter.summary();
         a3g_r3_capture->captureTerminalMetadata(
             raw_storage.value(),anchor_storage.value(),predicted,deskew_storage.value(),
-            *source,extrinsic,prediction*T_il,nominal,
+            *source,extrinsic,selected_initial_seed,nominal,
             local_observability,routed,lidar,measurement_preview_valid,lidar_rank,
             nis.valid,nis.nis,nis.threshold,nis.accepted,lidar_attempted,
             lidar_committed,toString(adapter.lastEventStatus().disposition),
@@ -1003,6 +1092,20 @@ FixedLagProducerResult runFixedLagProducer(
     if(!adapter.latestOptimizedState(&optimized,&reason)) throw std::runtime_error("producer_optimized_state:"+reason);
     if(event.type==ProducerEventType::LIDAR_SCAN || event.type==ProducerEventType::LIDAR_SCAN_END) {
       const auto& asset=assets[event.source_index];
+      tracker.finish(asset.stamp_ns,lidar_committed,nominal.pose*T_il.inverse(),optimized.velocity);
+      if (tracking_output) {
+        *tracking_output<<std::setprecision(17)<<asset.transaction_id<<','<<asset.stamp_ns
+            <<",RESULT,"<<p6_tracking::name(tracker.health())<<','<<tracker.consecutiveFailures()
+            <<','<<nominal.seed_name<<','<<p6_tracking::effectiveRegistration(nominal.converged,
+                 nominal.iterations,nominal.objective,nominal.pose)<<','<<nominal.iterations<<','
+            <<nominal.objective<<','<<nominal.fitness<<','<<local_observability.status<<','
+            <<local_observability.valid_correspondence_count<<','<<lidar_rank<<','<<nis.valid<<','
+            <<nis.nis<<','<<nis.threshold<<','<<lidar_committed<<','<<lidar_committed<<','
+            <<recovery_attempts<<','<<tracker.lastReliableStamp()<<','
+            <<local_observability.map_support_status<<','
+            <<local_observability.rejected_covariance_count<<",0,0,0\n";
+        tracking_output->flush();
+      }
       const Eigen::Quaterniond q(optimized.rotation);
       trajectory<<asset.transaction_id<<','<<asset.stamp_ns<<','<<asset.time_s<<','
           <<optimized.position.x()<<','<<optimized.position.y()<<','<<optimized.position.z()<<','
@@ -1084,7 +1187,8 @@ void runFixedLagExperimentalMode(const p4_i2::Inputs& inputs,
 
 void runFixedLagProductionFixture(bool window_owned_fixture = false,
                                   bool no_vision_fixture = false,
-                                  bool a3g_r3_capture_parity_fixture = false) {
+                                  bool a3g_r3_capture_parity_fixture = false,
+                                  bool tracking_recovery_fixture = false) {
   Cloud::Ptr target(new Cloud);
   for(int x=-2;x<=2;++x) for(int y=-2;y<=2;++y) for(int z=-1;z<=1;++z)
     for(int i=0;i<40;++i) {
@@ -1138,22 +1242,65 @@ void runFixedLagProductionFixture(bool window_owned_fixture = false,
     }
     return true;
   };
-  if (a3g_r3_capture_parity_fixture) {
+  if (tracking_recovery_fixture) {
+    using namespace fixed_lag;
+    WindowState predicted; predicted.stamp_ns=1'200'000'000;
+    FixedLagEventAdapter adapter;
+    std::string reason;
+    if (!adapter.initialize(predicted,Matrix15d::Identity()*1e6,Vector15d::Zero(),&reason))
+      throw std::runtime_error("tracking_fixture_initialize:"+reason);
+    WindowMarginalCovariance prior;
+    if (!adapter.latestMarginalCovariance(&prior,&reason))
+      throw std::runtime_error("tracking_fixture_covariance:"+reason);
+    GeometricNdt ndt; configureNdt(ndt,target); ndt.setResolution(0.8);
+    ndt.setStepSize(0.08); ndt.setTransformationEpsilon(1e-5); ndt.setMaximumIterations(80);
+    Eigen::Matrix4d bad_seed=Eigen::Matrix4d::Identity(); bad_seed(0,3)=100;
+    const auto bad=runNdtCandidate(ndt,source,bad_seed,0,"BAD_NOMINAL");
+    const auto bad_eval=evaluateLidarCandidate(ndt,source,bad,assets.front(),predicted,
+        prior,Pose3d(),parameters,R2Policy::ADAPTIVE_SELECTED_NIS,{},adapter,true);
+    if (bad.iterations!=0 || bad_eval.effective || bad_eval.admissible ||
+        adapter.summary().lidar_factor_count!=0)
+      throw std::runtime_error("tracking_fixture_seed_passthrough_admitted");
+    const auto recovered=runNdtCandidate(ndt,source,Eigen::Matrix4d::Identity(),1,"RELIABLE_SEED");
+    const auto good=evaluateLidarCandidate(ndt,source,recovered,assets.front(),predicted,
+        prior,Pose3d(),parameters,R2Policy::ADAPTIVE_SELECTED_NIS,{},adapter,true);
+    if (!good.admissible || !good.nis.valid || !good.nis.accepted || good.rank<=0 ||
+        adapter.summary().lidar_factor_count!=0 || adapter.nextObservationId()!=1)
+      throw std::runtime_error("tracking_fixture_recovery_preview_failed");
+    auto shifted=recovered; shifted.pose(0,3)+=0.05;
+    RuntimeParameters tight=parameters;
+    tight.pose_position_sigma_m=0.001; tight.pose_rotation_sigma_rad=0.001;
+    const auto rejected=evaluateLidarCandidate(ndt,source,shifted,assets.front(),predicted,
+        prior,Pose3d(),tight,R2Policy::BASE_SELECTED_NIS,{},adapter,true);
+    if (!rejected.preview_valid || !rejected.nis.valid || rejected.nis.accepted ||
+        rejected.admissible || adapter.nextObservationId()!=1)
+      throw std::runtime_error("tracking_fixture_recovery_NIS_control:preview="+
+          std::to_string(rejected.preview_valid)+" valid="+std::to_string(rejected.nis.valid)+
+          " accepted="+std::to_string(rejected.nis.accepted)+" rank="+std::to_string(rejected.rank)+
+          " nis="+std::to_string(rejected.nis.nis)+" status="+rejected.local.status);
+    if (!adapter.processLidarEvent(good.event,&reason) ||
+        adapter.summary().lidar_factor_count!=1 || adapter.nextObservationId()!=2)
+      throw std::runtime_error("tracking_fixture_commit_lifecycle:"+reason);
+    std::cout<<"A3G_R4_PCL_RECOVERY_ADMISSION_PASS ineffective_nominal=REJECTED "
+             <<"recovery_preview=READ_ONLY recovery_NIS=ENFORCED commit_count=1\n";
+  }
+  if (a3g_r3_capture_parity_fixture || tracking_recovery_fixture) {
     struct CaptureParityRun {
       FixedLagProducerResult result;
       std::string trajectory,diagnostics,runtime,deskew,health;
       std::size_t provider_calls=0;
     };
-    const auto execute=[&](A3gR3EvidenceCapture* capture) {
+    const auto execute=[&](A3gR3EvidenceCapture* capture,bool tracking=false) {
       std::ostringstream trajectory,diagnostics,runtime,deskew,health;
       const auto calls_before=raw_loads;
       CaptureParityRun run;
+      p6_tracking::Config tracking_options; tracking_options.enabled=tracking;
       run.result=runFixedLagProducer(inputs,assets,parameters,Pose3d(),Pose3d(),target,visual,
           [&](const ScanAsset&){++legacy_loads;return source;},trajectory,diagnostics,runtime,
           0,R2Policy::ADAPTIVE_SELECTED_NIS,{}, {},&owned,
           fixed_lag::LidarCloudProvenance::LEGACY_STATE_DERIVED_SE3_DESKEW,&deskew,
           nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,std::string(),
-          nullptr,nullptr,&health,capture);
+          nullptr,nullptr,&health,capture,tracking_options);
       run.trajectory=trajectory.str(); run.diagnostics=diagnostics.str();
       run.runtime=runtime.str(); run.deskew=deskew.str(); run.health=health.str();
       run.provider_calls=raw_loads-calls_before;
@@ -1179,6 +1326,20 @@ void runFixedLagProductionFixture(bool window_owned_fixture = false,
       return output;
     };
     const auto off=execute(nullptr);
+    if (tracking_recovery_fixture) {
+      const auto on=execute(nullptr,true);
+      if (off.trajectory!=on.trajectory || off.deskew!=on.deskew ||
+          off.result.lidar_committed!=on.result.lidar_committed ||
+          off.result.ndt_calls!=on.result.ndt_calls ||
+          off.result.probes!=on.result.probes ||
+          normalize_csv(off.diagnostics,{"qr_marginalization_ms"})!=
+              normalize_csv(on.diagnostics,{"qr_marginalization_ms"}) ||
+          normalize_csv(off.health,{"optimizer_and_marginalization_ms"})!=
+              normalize_csv(on.health,{"optimizer_and_marginalization_ms"}))
+        throw std::runtime_error("tracking_fixture_healthy_path_parity_failed");
+      std::cout<<"A3G_R4_HEALTHY_PATH_OFF_ON_PARITY_PASS extra_NDT_calls=0\n";
+      return;
+    }
     const auto serial=std::chrono::steady_clock::now().time_since_epoch().count();
     const auto root=std::filesystem::temp_directory_path()/
         ("p6_a3g_r3_capture_parity_"+std::to_string(serial));
