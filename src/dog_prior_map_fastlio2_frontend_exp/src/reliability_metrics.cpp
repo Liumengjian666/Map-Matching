@@ -67,7 +67,7 @@ bool pseudoInversePSD3(const Eigen::Matrix3d& input,
   }
   *inverse = solver.eigenvectors() * reciprocal.asDiagonal() *
              solver.eigenvectors().transpose();
-  *inverse = 0.5 * (*inverse + inverse->transpose());
+  *inverse = (0.5 * (*inverse + inverse->transpose())).eval();
   return inverse->allFinite();
 }
 
@@ -92,8 +92,8 @@ bool schurDecouple(const Matrix6d& information, Matrix3d* rotation,
   (void)rank_c;
   *rotation = a - b * c_inverse * b.transpose();
   *translation = c - b.transpose() * a_inverse * b;
-  *rotation = 0.5 * (*rotation + rotation->transpose());
-  *translation = 0.5 * (*translation + translation->transpose());
+  *rotation = (0.5 * (*rotation + rotation->transpose())).eval();
+  *translation = (0.5 * (*translation + translation->transpose())).eval();
   Eigen::SelfAdjointEigenSolver<Matrix3d> rotation_solver(*rotation);
   Eigen::SelfAdjointEigenSolver<Matrix3d> translation_solver(*translation);
   if (rotation_solver.info() != Eigen::Success ||
@@ -116,8 +116,8 @@ bool schurDecouple(const Matrix6d& information, Matrix3d* rotation,
       rotation_values->asDiagonal() * rotation_solver.eigenvectors().transpose();
   *translation = translation_solver.eigenvectors() *
       translation_values->asDiagonal() * translation_solver.eigenvectors().transpose();
-  *rotation = 0.5 * (*rotation + rotation->transpose());
-  *translation = 0.5 * (*translation + translation->transpose());
+  *rotation = (0.5 * (*rotation + rotation->transpose())).eval();
+  *translation = (0.5 * (*translation + translation->transpose())).eval();
   return rotation->allFinite() && translation->allFinite() &&
       rotation_values->allFinite() && translation_values->allFinite();
 }
@@ -199,15 +199,15 @@ PclCurvatureTransform transformPclScoreHessianToNormalizedMapTangent(
   result.hessian_physical = physical_from_euler.transpose() *
       result.hessian_euler * physical_from_euler;
   result.hessian_physical =
-      0.5 * (result.hessian_physical + result.hessian_physical.transpose());
+      (0.5 * (result.hessian_physical + result.hessian_physical.transpose())).eval();
 
   Matrix6d scale = Matrix6d::Identity();
   scale.block<3, 3>(3, 3) *= translation_scale_m;
   result.normalized_negative_score_curvature = scale.transpose() *
       result.hessian_physical * scale;
-  result.normalized_negative_score_curvature = 0.5 *
+  result.normalized_negative_score_curvature = (0.5 *
       (result.normalized_negative_score_curvature +
-       result.normalized_negative_score_curvature.transpose());
+       result.normalized_negative_score_curvature.transpose())).eval();
   if (!result.hessian_euler.allFinite() || !result.hessian_physical.allFinite() ||
       !result.normalized_negative_score_curvature.allFinite()) {
     result.status = "NONFINITE_TRANSFORMED_CURVATURE";
@@ -379,12 +379,12 @@ LocalObservability analyzeGeometricObservability(
   }
 
   information /= weight_sum;
-  information = 0.5 * (information + information.transpose());
+  information = (0.5 * (information + information.transpose())).eval();
   Matrix6d scale = Matrix6d::Identity();
   scale.block<3, 3>(3, 3) *= length_scale_m;
   Matrix6d normalized_information = scale.transpose() * information * scale;
-  normalized_information = 0.5 *
-      (normalized_information + normalized_information.transpose());
+  normalized_information = (0.5 *
+      (normalized_information + normalized_information.transpose())).eval();
   if (!normalized_information.allFinite()) {
     result.numerical_failure = true;
     result.map_support_status = "NUMERICAL_FAILURE";
@@ -414,8 +414,8 @@ LocalObservability analyzeGeometricObservability(
   normalized_information = full_solver.eigenvectors() *
       full_solver.eigenvalues().cwiseMax(0.0).asDiagonal() *
       full_solver.eigenvectors().transpose();
-  normalized_information = 0.5 *
-      (normalized_information + normalized_information.transpose());
+  normalized_information = (0.5 *
+      (normalized_information + normalized_information.transpose())).eval();
   Eigen::SelfAdjointEigenSolver<Matrix6d> corrected_solver(normalized_information);
   if (corrected_solver.info() != Eigen::Success ||
       !corrected_solver.eigenvalues().allFinite() ||

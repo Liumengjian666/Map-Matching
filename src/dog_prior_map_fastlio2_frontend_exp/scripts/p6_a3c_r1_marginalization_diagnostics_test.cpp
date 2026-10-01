@@ -286,6 +286,11 @@ bool inspectProductionSchurGate(const std::string& capsule_path) {
   production = 0.5 * (production + production.transpose());
   const Eigen::MatrixXd out_of_place =
       (0.5 * (raw + raw.transpose())).eval();
+  // Invoke the same evaluated function now used by production M7, while
+  // retaining the old alias expression above as forensic evidence only.
+  const Eigen::MatrixXd repaired_production = evaluateSymmetricInformation(raw);
+  Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> repaired_eigensolver(
+      repaired_production);
   const double production_max_asymmetry =
       (production - production.transpose()).cwiseAbs().maxCoeff();
   const double production_fro_asymmetry =
@@ -310,11 +315,22 @@ bool inspectProductionSchurGate(const std::string& capsule_path) {
       << " out_of_place_symmetry_max_abs=" << out_of_place_max_asymmetry
       << " production_validator_pass=" << productionValidator(production)
       << " out_of_place_validator_pass=" << productionValidator(out_of_place)
+      << " repaired_production_max_asymmetry="
+      << (repaired_production - repaired_production.transpose()).cwiseAbs().maxCoeff()
+      << " repaired_validator_pass=" << productionValidator(repaired_production)
+      << " repaired_lambda_min=" << repaired_eigensolver.eigenvalues().minCoeff()
       << '\n';
   return require(!productionValidator(production),
                  "TX90 Eigen in-place Schur expression reproduces validator rejection") &&
       require(productionValidator(out_of_place),
-              "out-of-place symmetric Schur passes unchanged PSD thresholds");
+              "out-of-place symmetric Schur passes unchanged PSD thresholds") &&
+      require((repaired_production - out_of_place).norm() == 0.0,
+              "actual production evaluator equals independent symmetric oracle") &&
+      require((repaired_production - repaired_production.transpose()).norm() == 0.0 &&
+                  productionValidator(repaired_production) &&
+                  repaired_eigensolver.info() == Eigen::Success &&
+                  repaired_eigensolver.eigenvalues().minCoeff() >= -1e-6,
+              "repaired production capsule passes unchanged validator without injection");
 }
 
 }  // namespace

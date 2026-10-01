@@ -86,7 +86,7 @@ bool schurOldest(const Eigen::MatrixXd& hessian,
     return false;
   *information = hessian.bottomRightCorner(retained, retained) -
       hmr.transpose() * factor.solve(hmr);
-  *information = 0.5 * (*information + information->transpose());
+  *information = (0.5 * (*information + information->transpose())).eval();
   *reduced_gradient = gradient.tail(retained) -
       hmr.transpose() * factor.solve(gradient.head(15));
   return information->allFinite() && reduced_gradient->allFinite();

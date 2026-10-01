@@ -119,7 +119,7 @@ bool cappedResponseCovariance(const Eigen::Matrix3d& raw,
     bounded(index) = std::min(bounded(index), maximum_eigenvalue);
   *output = solver.eigenvectors() * bounded.asDiagonal() *
             solver.eigenvectors().transpose();
-  *output = 0.5 * (*output + output->transpose());
+  *output = (0.5 * (*output + output->transpose())).eval();
   return output->allFinite();
 }
 
@@ -341,7 +341,7 @@ LocalRisk assessLocalRisk(const LocalObservability& local,
          local.normalized_geometric_information.transpose());
     Matrix6d equalized = equalization_inverse.transpose() * information *
                          equalization_inverse;
-    equalized = 0.5 * (equalized + equalized.transpose());
+    equalized = (0.5 * (equalized + equalized.transpose())).eval();
     if (!equalized.allFinite()) {
       result.status = "NONFINITE_SCALE_BALANCED_INFORMATION";
       return result;
@@ -656,7 +656,7 @@ MeasurementNoiseResult makePoseMeasurementNoise(
       predicted_map_R_imu;
   result.covariance.block<3, 3>(0, 0) = position_covariance;
   result.covariance.block<3, 3>(3, 3) = rotation_body_covariance;
-  result.covariance = 0.5 * (result.covariance + result.covariance.transpose());
+  result.covariance = (0.5 * (result.covariance + result.covariance.transpose())).eval();
   Eigen::SelfAdjointEigenSolver<Matrix6d> solver(result.covariance);
   if (solver.info() != Eigen::Success || !solver.eigenvalues().allFinite() ||
       solver.eigenvalues().minCoeff() <= 0.0) {
@@ -874,8 +874,8 @@ VisualSubspaceDecision assessVisualWeakSubspaceInformation(
       Eigen::Matrix3d::Identity());
   result.visual_information = normalized_jacobian.transpose() *
       inverse_covariance * normalized_jacobian;
-  result.visual_information = 0.5 *
-      (result.visual_information + result.visual_information.transpose());
+  result.visual_information = (0.5 *
+      (result.visual_information + result.visual_information.transpose())).eval();
   if (!result.visual_information.allFinite()) {
     result.status = "NONFINITE_VISUAL_INFORMATION";
     return result;

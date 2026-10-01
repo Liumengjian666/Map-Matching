@@ -395,7 +395,10 @@ bool FixedLagWindow::marginalizeOldest(std::string* reason) {
         new_gradient.allFinite() ? new_gradient.cwiseAbs().maxCoeff() :
         std::numeric_limits<double>::infinity();
   }
-  new_information = 0.5 * (new_information + new_information.transpose());
+  // A transpose expression must not read from a matrix as it is overwritten.
+  const Eigen::MatrixXd symmetric_information =
+      evaluateSymmetricInformation(new_information);
+  new_information = symmetric_information;
   if (capture) {
     trace.symmetrized_schur =
         marginalizationMatrixStatsForDiagnostics(new_information);
@@ -451,7 +454,7 @@ bool FixedLagWindow::marginalizeOldest(std::string* reason) {
       const Eigen::VectorXd alternate_gradient =
           br - hmr.transpose() * pseudoinverse * bm;
       alternate_information =
-          0.5 * (alternate_information + alternate_information.transpose());
+          (0.5 * (alternate_information + alternate_information.transpose())).eval();
       jitter_information_delta_norm =
           (new_information - alternate_information).norm();
       jitter_gradient_delta_norm =

@@ -504,7 +504,10 @@ bool FixedLagWindow::linearizeSelected(LinearizationScope scope,
     }
     *cost += residual.dot(information * residual);
   }
-  *hessian = 0.5 * (*hessian + hessian->transpose());
+  // Evaluate before writing: the destination also supplies the transpose.
+  const Eigen::MatrixXd symmetric_hessian =
+      evaluateSymmetricInformation(*hessian);
+  *hessian = symmetric_hessian;
   if (!hessian->allFinite() || !gradient->allFinite() || !std::isfinite(*cost))
     return fail(reason, "nonfinite_window_linear_system");
   return true;

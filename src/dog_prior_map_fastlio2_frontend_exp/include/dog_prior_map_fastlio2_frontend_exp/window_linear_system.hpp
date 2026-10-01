@@ -4,6 +4,11 @@
 #include <map>
 
 namespace dog_prior_map_fastlio2_frontend_exp::fixed_lag {
+// Return an independent, fully evaluated symmetric matrix. In-place
+// A = 0.5*(A + A.transpose()) is not alias-safe in Eigen.
+inline Eigen::MatrixXd evaluateSymmetricInformation(const Eigen::MatrixXd& matrix) {
+  return (0.5 * (matrix + matrix.transpose())).eval();
+}
 enum class WindowSolverBackend { BLOCK_SPARSE, DENSE_REFERENCE };
 struct WindowLinearSystem {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

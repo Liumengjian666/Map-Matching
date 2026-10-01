@@ -101,7 +101,7 @@ bool linearizeSelectedVisualFactor(
   *jacobian_reference = basis.transpose() * full_reference;
   *jacobian_current = basis.transpose() * full_current;
   *covariance = basis.transpose() * measurement.covariance * basis;
-  *covariance = 0.5 * (*covariance + covariance->transpose());
+  *covariance = (0.5 * (*covariance + covariance->transpose())).eval();
   Eigen::LLT<Eigen::MatrixXd> covariance_factor(*covariance);
   if (covariance_factor.info() != Eigen::Success || !residual->allFinite() ||
       !jacobian_reference->allFinite() || !jacobian_current->allFinite())

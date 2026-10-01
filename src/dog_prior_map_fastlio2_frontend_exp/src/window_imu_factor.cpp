@@ -234,8 +234,8 @@ static bool integrateBoundedImuSequence(
         continuous_noise / dt;
     output->covariance = transition * output->covariance * transition.transpose() +
         noise_map * sampled_noise * noise_map.transpose();
-    output->covariance = 0.5 *
-        (output->covariance + output->covariance.transpose());
+    output->covariance = (0.5 *
+        (output->covariance + output->covariance.transpose())).eval();
     if (anchor) appendKnot(bounded[index + 1].stamp_ns,
         anchor->rotation * rotated_acceleration + noise.gravity, omega);
   }

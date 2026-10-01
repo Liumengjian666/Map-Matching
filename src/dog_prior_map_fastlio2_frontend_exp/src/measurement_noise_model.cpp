@@ -58,8 +58,8 @@ PhysicalCovariancePropagation propagatePhysicalLidarCovariance(
     return result;
   }
   result.residual_covariance = A_exact * Q_lidar * A_exact.transpose();
-  result.residual_covariance = 0.5 *
-      (result.residual_covariance + result.residual_covariance.transpose());
+  result.residual_covariance = (0.5 *
+      (result.residual_covariance + result.residual_covariance.transpose())).eval();
   if (!result.residual_covariance.allFinite() ||
       !covarianceIsPSD(result.residual_covariance, 1e-9, &reason)) {
     result.status = "INVALID_PROPAGATED_COVARIANCE:" + reason;
