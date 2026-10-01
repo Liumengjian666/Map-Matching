@@ -126,7 +126,8 @@ def run(executable, directory, limit, config):
             except subprocess.TimeoutExpired:
                 os.killpg(process.pid, signal.SIGKILL)
         code = process.wait(timeout=5)
-    result = dict(exit_code=code, completed=code == 0 and not error, first_failure=error,
+    result = dict(exit_code=code, completed=code == 0 and not error,
+        first_failure=error or ("PROCESS_NONZERO_EXIT" if code else ""),
         frame_limit=limit, expected_terminals=len(post), counts=dict(audit.counts),
         last_health_record=audit.last_row, last_tracking=last_tracking, GT_USED=False, VISUAL="NONE")
     (directory / "run_result.json").write_text(json.dumps(result, indent=2) + "\n")
