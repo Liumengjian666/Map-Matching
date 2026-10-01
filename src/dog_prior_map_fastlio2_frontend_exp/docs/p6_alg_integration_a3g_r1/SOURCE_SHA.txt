@@ -1,0 +1,5 @@
+START_SHA=88831c3906f05589031af8d06c95bc405d9d24d9
+branch=research/p6-i6d-full-algorithm
+production_source=UNCHANGED_FROM_START_SHA
+ledger_sha256=4992c4f56fa49e2b8837f57733b9edc2bde51efb997e6c475a716be35a3cdf05
+END_SHA=See final execution handoff; the containing commit identifies these analysis artifacts.

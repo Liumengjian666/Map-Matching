@@ -1,0 +1,535 @@
+{
+  "stage": "PAPER-P6-ALG-INTEGRATION-A3G-R1",
+  "START_SHA": "88831c3906f05589031af8d06c95bc405d9d24d9",
+  "dataset": "SuperLoc Corridor01",
+  "REAL_REPLAY_COUNT": 0,
+  "GT_USED": false,
+  "production_changes": 0,
+  "artifact_sha_gate": "PASS",
+  "verified_artifact_count": 22,
+  "script_sha256": "7ce5036a7afed46ba6f62ad95de5b974ea6756be8442007e3e55982a86f266a9",
+  "ledger_sha256": "4992c4f56fa49e2b8837f57733b9edc2bde51efb997e6c475a716be35a3cdf05",
+  "params_sha256": "7e42752ff8b84eae2b2da8d7d9fe179db0bb8f364a923e12236d2e91336e357d",
+  "T_imu_lidar": [
+    [
+      0.9999918597233478,
+      -0.0005161381080030299,
+      0.004001760674214568,
+      0.08
+    ],
+    [
+      0.0005196241852026386,
+      0.9999994864189842,
+      -0.0008701450879251561,
+      0.029
+    ],
+    [
+      -0.004001309503946886,
+      0.0008722174163331276,
+      0.9999916143443566,
+      0.03
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "persistence_definition": "at least 20 consecutive stamp-ordered terminal records",
+  "completed_terminals": 314,
+  "attempted_terminals": 315,
+  "last_committed": {
+    "transaction_id": 182,
+    "stamp_ns": 1517157237443522287,
+    "completed": "1",
+    "category": "COMMITTED",
+    "lidar_committed": "1",
+    "event_status": "ACCEPTED;LIDAR_FACTOR_ACCEPTED",
+    "nis_status": "VALID",
+    "selected_nis": "14.25169804323739",
+    "nis_threshold": "15.086",
+    "selected_rank": "5",
+    "uobs_status": "VALID_GEOMETRIC_GAUSS_NEWTON_PROXY",
+    "ndt_converged": "1",
+    "measurement_preview_valid": "1",
+    "lidar_source_provenance": "WINDOW_OWNED_SE3_DESKEW",
+    "P15_valid": "1",
+    "P15_detail": "AVAILABLE",
+    "active_lidar_factors": "8",
+    "window_nodes_after": "39",
+    "window_span_after_s": "1.9162189960000002"
+  },
+  "first_subsequent_noncommit": {
+    "transaction_id": 183,
+    "stamp_ns": 1517157237544382406,
+    "completed": "1",
+    "category": "NO_VALID_GEOMETRIC_CORRESPONDENCES",
+    "lidar_committed": "0",
+    "event_status": "SKIPPED_INVALID_SOURCE;map_support_insufficient",
+    "nis_status": "NIS_NOT_REACHED",
+    "selected_nis": "nan",
+    "nis_threshold": "nan",
+    "selected_rank": "0",
+    "uobs_status": "NO_VALID_GEOMETRIC_CORRESPONDENCES",
+    "ndt_converged": "1",
+    "measurement_preview_valid": "0",
+    "lidar_source_provenance": "WINDOW_OWNED_SE3_DESKEW",
+    "P15_valid": "1",
+    "P15_detail": "AVAILABLE",
+    "active_lidar_factors": "7",
+    "window_nodes_after": "39",
+    "window_span_after_s": "1.9162189960000002"
+  },
+  "last_committed_preopt": {
+    "transaction_id": "182",
+    "stamp_ns": "1517157237443522287",
+    "window_nodes": "41",
+    "window_span_s": "2.0170788760000002",
+    "predicted_position": "18.84510535;-18.71374009;2.843835062",
+    "predicted_rotation_xyzw": "0.14227717183209052;-0.082627436335635782;0.30156634753227285;0.93914197604840743",
+    "ndt_converged": "1",
+    "ndt_fitness": "16.096816828119337",
+    "ndt_objective": "170.95783834476933",
+    "ndt_iterations": "40",
+    "ndt_runtime_ms": "45.799836999999997",
+    "ndt_terminal_pose": "0.9367067218;-0.3398350179;-0.08421764523;18.67948341;0.3398123682;0.9403728843;-0.01504543796;-18.25752831;0.08430895209;-0.01452503353;0.9963337779;2.382717848;0;0;0;1",
+    "uobs_valid": "1",
+    "uobs_status": "VALID_GEOMETRIC_GAUSS_NEWTON_PROXY",
+    "uobs_weak_dimension": "1",
+    "uobs_reliable_dimension": "5",
+    "translation_eigenvalues": "6.26309178;8.809063258;9.104487518",
+    "rotation_eigenvalues": "28.03382457;770.2383875;1334.251665",
+    "translation_weak_ratio": "0.10910740447412129",
+    "rotation_weak_ratio": "0.0094176032155997829",
+    "weak_translation_direction_map": "0.03272327781;-0.06462434796;-0.9973729898",
+    "weak_rotation_direction_map": "0.9605569225;0.2775134681;0.01779532718",
+    "weak_basis": "-0.3654586985;0;0;0;0;0;-0.1046581582;0;0;0;0;0;-0.006835146159;0;0;0;0;0;-0.03052191674;0;0;0;0;0;0.05842536216;0;0;0;0;0;0.9225479825;0;0;0;0;0",
+    "pre_measurement_covariance_valid": "1",
+    "p15_diagonal": "0.0001208931286;0.0001100420731;0.0008189297664;0.04853620585;0.02368945091;0.02943726961;0.03813286334;0.02712934541;0.01528776704;2.629605717e-06;2.598753153e-06;1.114814464e-05;0.0009160842132;0.0009767622878;0.0003952966108",
+    "p15_min_eigenvalue": "1.59348514246913e-06",
+    "p15_max_eigenvalue": "0.081708783717704223",
+    "p_map6_min_eigenvalue": "8.3041333912509127e-05",
+    "p_map6_max_eigenvalue": "0.052471437647413431",
+    "unonlocal_triggered": "1",
+    "unonlocal_status": "RECORDED_NO_BASIN_CLASSIFICATION",
+    "unonlocal_positive_translation_delta": "-1.766668589e-09;5.85137272e-09;-4.645783758e-09",
+    "unonlocal_positive_rotation_delta": "1.169050472e-07;2.790682795e-08;-2.292279376e-08",
+    "unonlocal_negative_translation_delta": "-1.992379595e-09;-1.90115869e-06;-5.050697638e-09",
+    "unonlocal_negative_rotation_delta": "1.290409252e-07;3.399218091e-08;-2.239614236e-08",
+    "measurement_noise_mode": "ADAPTIVE",
+    "adaptive_R6": "0.04;1.888746172e-15;9.135233575e-18;0;0;0;1.888746172e-15;0.04;4.787496746e-15;0;0;0;9.135233575e-18;4.787496746e-15;0.04;0;0;0;0;0;0;0.07286542298;-0.02351466943;-0.009338741132;0;0;0;-0.02351466943;0.01879560897;0.003493135021;0;0;0;-0.009338741132;0.003493135021;0.01138728226",
+    "R6_eigenvalues": "0.01;0.01;0.04;0.04;0.04;0.08304831421",
+    "measurement_preview_valid": "1",
+    "reliable_rank": "5",
+    "basis": "0.04010280944;0.8905550558;-0.4393366099;0.09382056191;0.05354175516;0;0.9984307683;-0.03484761385;0.01719133751;-0.00367121908;-0.002095100574;0;-0.03484761385;0.2261460198;0.3817645882;-0.08152602669;-0.04652547876;0;0.01719133751;0.3817645882;0.8116644683;0.04021915091;0.02295236659;0;-0.00367121908;-0.08152602669;0.04021915091;0.9914111794;-0.004901489843;0;-0.002095100574;-0.04652547876;0.02295236659;-0.004901489843;0.9972028054;0",
+    "raw_residual_r6": "-0.2280581272;0.4022619059;-0.4976156085;-0.2803453574;0.1282370251;-0.2586728202",
+    "selected_residual_rs": "0.4050772564;-0.4350956834;-0.3111882478;0.1348235404;-0.254914011",
+    "selected_covariance_Rs": "0.04001299636;0.0002886074671;0.0005285152588;-0.0003033161359;-9.60713986e-05;0.0002886074671;0.04640904821;0.01173663248;-0.00673568067;-0.002133438304;0.0005285152588;0.01173663248;0.05972558899;-0.01862220658;-0.007390535782;-0.0003033161359;-0.00673568067;-0.01862220658;0.01730525968;0.002822820705;-9.60713986e-05;-0.002133438304;-0.007390535782;0.002822820705;0.01110758371",
+    "selected_nis_valid": "1",
+    "selected_nis": "14.25169804323739",
+    "nis_threshold": "15.086",
+    "nis_accepted": "1",
+    "lidar_attempted": "1",
+    "lidar_committed": "1",
+    "event_status": "ACCEPTED;LIDAR_FACTOR_ACCEPTED",
+    "factor_counts_before_optimize": "40;9;0"
+  },
+  "last_committed_innovation": {
+    "transaction_id": 182,
+    "stamp_ns": 1517157237443522287,
+    "ndt_imu_position": "18.617047220864194;-18.311478189630257;2.3462194538698635",
+    "ndt_imu_rotation_xyzw": "6.0117649685183175e-05;-0.04485850979316252;0.1723918697952497;0.98400648052413897",
+    "translation_innovation_m": 0.6792984912457323,
+    "rotation_innovation_rad": 0.40242997148904447,
+    "ndt_float_rotation_defect": 7.23504910427053e-08
+  },
+  "ndt_converged_count": 314,
+  "zero_iteration_zero_objective_count": 188,
+  "first_zero_iteration_zero_objective_tx": 166,
+  "first_ndt_innovation_over_1m_descriptive_only": {
+    "transaction_id": 83,
+    "stamp_ns": 1517157227458992315,
+    "ndt_imu_position": "5.3805287981378607;-1.5697365179431053;-0.15266689922252386",
+    "ndt_imu_rotation_xyzw": "-0.01274343289144751;0.01387644981491584;0.45967786244228959;0.88788586644858969",
+    "translation_innovation_m": 1.683044256508896,
+    "rotation_innovation_rad": 0.07351406839757646,
+    "ndt_float_rotation_defect": 7.26437729969831e-08
+  },
+  "first_ndt_innovation_over_pi_2_descriptive_only": {
+    "transaction_id": 160,
+    "stamp_ns": 1517157235224723412,
+    "ndt_imu_position": "14.536872418877255;-2.2229118150881022;1.1283825958995339",
+    "ndt_imu_rotation_xyzw": "0.78414458736716841;-0.080978662257094089;0.064389389202664446;0.61189356012294527",
+    "translation_innovation_m": 1.200321652050111,
+    "rotation_innovation_rad": 1.6243617129030148,
+    "ndt_float_rotation_defect": 2.2011150091483245e-07
+  },
+  "last_committed_state_removal": [
+    {
+      "transaction_id": "202",
+      "event_stamp_ns": "1517157239460601402",
+      "enforcement_index": "302",
+      "attempt_index": "1",
+      "oldest_state_stamp_ns": "1517157237443522287",
+      "nodes_before_attempt": "41",
+      "nodes_after_attempt": "40",
+      "span_before_attempt_s": "2.017079115",
+      "span_after_attempt_s": "2.017058445",
+      "incident_lidar_factor_count": "1",
+      "marginalization_result": "SUCCESS",
+      "qr_marginalized_rank": "15"
+    }
+  ],
+  "zero_ndt_and_no_geometry_cooccurrences": 188,
+  "noncommit_runs": [
+    {
+      "first_tx": 83,
+      "last_tx": 83,
+      "count": 1,
+      "first_stamp_ns": 1517157227458992315,
+      "last_stamp_ns": 1517157227458992315
+    },
+    {
+      "first_tx": 86,
+      "last_tx": 86,
+      "count": 1,
+      "first_stamp_ns": 1517157227761572434,
+      "last_stamp_ns": 1517157227761572434
+    },
+    {
+      "first_tx": 88,
+      "last_tx": 88,
+      "count": 1,
+      "first_stamp_ns": 1517157227963292433,
+      "last_stamp_ns": 1517157227963292433
+    },
+    {
+      "first_tx": 143,
+      "last_tx": 145,
+      "count": 3,
+      "first_stamp_ns": 1517157233510227276,
+      "last_stamp_ns": 1517157233711947275
+    },
+    {
+      "first_tx": 149,
+      "last_tx": 149,
+      "count": 1,
+      "first_stamp_ns": 1517157234115325285,
+      "last_stamp_ns": 1517157234115325285
+    },
+    {
+      "first_tx": 156,
+      "last_tx": 159,
+      "count": 4,
+      "first_stamp_ns": 1517157234821345402,
+      "last_stamp_ns": 1517157235123863293
+    },
+    {
+      "first_tx": 161,
+      "last_tx": 161,
+      "count": 1,
+      "first_stamp_ns": 1517157235325583292,
+      "last_stamp_ns": 1517157235325583292
+    },
+    {
+      "first_tx": 164,
+      "last_tx": 173,
+      "count": 10,
+      "first_stamp_ns": 1517157235628163410,
+      "last_stamp_ns": 1517157236535843445
+    },
+    {
+      "first_tx": 175,
+      "last_tx": 175,
+      "count": 1,
+      "first_stamp_ns": 1517157236737563444,
+      "last_stamp_ns": 1517157236737563444
+    },
+    {
+      "first_tx": 180,
+      "last_tx": 180,
+      "count": 1,
+      "first_stamp_ns": 1517157237241802288,
+      "last_stamp_ns": 1517157237241802288
+    },
+    {
+      "first_tx": 183,
+      "last_tx": 366,
+      "count": 184,
+      "first_stamp_ns": 1517157237544382406,
+      "last_stamp_ns": 1517157256000664307
+    }
+  ],
+  "completed_rejection_runs": [
+    {
+      "first_tx": 83,
+      "last_tx": 83,
+      "count": 1,
+      "first_stamp_ns": 1517157227458992315,
+      "last_stamp_ns": 1517157227458992315
+    },
+    {
+      "first_tx": 86,
+      "last_tx": 86,
+      "count": 1,
+      "first_stamp_ns": 1517157227761572434,
+      "last_stamp_ns": 1517157227761572434
+    },
+    {
+      "first_tx": 88,
+      "last_tx": 88,
+      "count": 1,
+      "first_stamp_ns": 1517157227963292433,
+      "last_stamp_ns": 1517157227963292433
+    },
+    {
+      "first_tx": 143,
+      "last_tx": 145,
+      "count": 3,
+      "first_stamp_ns": 1517157233510227276,
+      "last_stamp_ns": 1517157233711947275
+    },
+    {
+      "first_tx": 149,
+      "last_tx": 149,
+      "count": 1,
+      "first_stamp_ns": 1517157234115325285,
+      "last_stamp_ns": 1517157234115325285
+    },
+    {
+      "first_tx": 156,
+      "last_tx": 159,
+      "count": 4,
+      "first_stamp_ns": 1517157234821345402,
+      "last_stamp_ns": 1517157235123863293
+    },
+    {
+      "first_tx": 161,
+      "last_tx": 161,
+      "count": 1,
+      "first_stamp_ns": 1517157235325583292,
+      "last_stamp_ns": 1517157235325583292
+    },
+    {
+      "first_tx": 164,
+      "last_tx": 173,
+      "count": 10,
+      "first_stamp_ns": 1517157235628163410,
+      "last_stamp_ns": 1517157236535843445
+    },
+    {
+      "first_tx": 175,
+      "last_tx": 175,
+      "count": 1,
+      "first_stamp_ns": 1517157236737563444,
+      "last_stamp_ns": 1517157236737563444
+    },
+    {
+      "first_tx": 180,
+      "last_tx": 180,
+      "count": 1,
+      "first_stamp_ns": 1517157237241802288,
+      "last_stamp_ns": 1517157237241802288
+    },
+    {
+      "first_tx": 183,
+      "last_tx": 365,
+      "count": 183,
+      "first_stamp_ns": 1517157237544382406,
+      "last_stamp_ns": 1517157255899804426
+    }
+  ],
+  "first_persistent_noncommit": {
+    "first_tx": 183,
+    "last_tx": 366,
+    "count": 184,
+    "first_stamp_ns": 1517157237544382406,
+    "last_stamp_ns": 1517157256000664307
+  },
+  "first_persistent_rejection": {
+    "first_tx": 183,
+    "last_tx": 365,
+    "count": 183,
+    "first_stamp_ns": 1517157237544382406,
+    "last_stamp_ns": 1517157255899804426
+  },
+  "no_geometry_runs": [
+    {
+      "first_tx": 166,
+      "last_tx": 172,
+      "count": 7,
+      "first_stamp_ns": 1517157235829884363,
+      "last_stamp_ns": 1517157236434983326
+    },
+    {
+      "first_tx": 183,
+      "last_tx": 184,
+      "count": 2,
+      "first_stamp_ns": 1517157237544382406,
+      "last_stamp_ns": 1517157237645242287
+    },
+    {
+      "first_tx": 186,
+      "last_tx": 186,
+      "count": 1,
+      "first_stamp_ns": 1517157237846962286,
+      "last_stamp_ns": 1517157237846962286
+    },
+    {
+      "first_tx": 188,
+      "last_tx": 365,
+      "count": 178,
+      "first_stamp_ns": 1517157238048622442,
+      "last_stamp_ns": 1517157255899804426
+    }
+  ],
+  "first_no_geometry": {
+    "transaction_id": 166,
+    "stamp_ns": 1517157235829884363,
+    "completed": "1",
+    "category": "NO_VALID_GEOMETRIC_CORRESPONDENCES",
+    "lidar_committed": "0",
+    "event_status": "SKIPPED_INVALID_SOURCE;map_support_insufficient",
+    "nis_status": "NIS_NOT_REACHED",
+    "selected_nis": "nan",
+    "nis_threshold": "nan",
+    "selected_rank": "0",
+    "uobs_status": "NO_VALID_GEOMETRIC_CORRESPONDENCES",
+    "ndt_converged": "1",
+    "measurement_preview_valid": "0",
+    "lidar_source_provenance": "WINDOW_OWNED_SE3_DESKEW",
+    "P15_valid": "1",
+    "P15_detail": "AVAILABLE",
+    "active_lidar_factors": "11",
+    "window_nodes_after": "39",
+    "window_span_after_s": "1.916217088"
+  },
+  "first_persistent_no_geometry": {
+    "first_tx": 188,
+    "last_tx": 365,
+    "count": 178,
+    "first_stamp_ns": 1517157238048622442,
+    "last_stamp_ns": 1517157255899804426
+  },
+  "zero_active_runs": [
+    {
+      "first_tx": 202,
+      "last_tx": 366,
+      "count": 165,
+      "first_stamp_ns": 1517157239460601402,
+      "last_stamp_ns": 1517157256000664307
+    }
+  ],
+  "last_active_positive": {
+    "transaction_id": 201,
+    "stamp_ns": 1517157239359741284,
+    "completed": "1",
+    "category": "NO_VALID_GEOMETRIC_CORRESPONDENCES",
+    "lidar_committed": "0",
+    "event_status": "SKIPPED_INVALID_SOURCE;map_support_insufficient",
+    "nis_status": "NIS_NOT_REACHED",
+    "selected_nis": "nan",
+    "nis_threshold": "nan",
+    "selected_rank": "0",
+    "uobs_status": "NO_VALID_GEOMETRIC_CORRESPONDENCES",
+    "ndt_converged": "1",
+    "measurement_preview_valid": "0",
+    "lidar_source_provenance": "WINDOW_OWNED_SE3_DESKEW",
+    "P15_valid": "1",
+    "P15_detail": "AVAILABLE",
+    "active_lidar_factors": "1",
+    "window_nodes_after": "39",
+    "window_span_after_s": "1.9162189970000001"
+  },
+  "first_increment_exceed": {
+    "0.5": {
+      "transaction_id": 160,
+      "stamp_ns": 1517157235224723412,
+      "previous_transaction_id": 159,
+      "dt_s": 0.100860119,
+      "translation_increment_m": 0.6841306374533097,
+      "rotation_increment_rad": 0.014853155066892288,
+      "implied_speed_m_s": 6.782964805477869,
+      "implied_angular_speed_rad_s": 0.14726489730685613
+    },
+    "1.0": {
+      "transaction_id": 176,
+      "stamp_ns": 1517157236838423325,
+      "previous_transaction_id": 175,
+      "dt_s": 0.100859881,
+      "translation_increment_m": 1.2199166658304383,
+      "rotation_increment_rad": 0.03646042667869586,
+      "implied_speed_m_s": 12.095162652734425,
+      "implied_angular_speed_rad_s": 0.3614958328048777
+    },
+    "2.0": {
+      "transaction_id": 215,
+      "stamp_ns": 1517157240771719290,
+      "previous_transaction_id": 214,
+      "dt_s": 0.100859881,
+      "translation_increment_m": 2.024439619502519,
+      "rotation_increment_rad": 0.029571503282697455,
+      "implied_speed_m_s": 20.071802578296907,
+      "implied_angular_speed_rad_s": 0.29319391406675815
+    },
+    "5.0": {
+      "transaction_id": 285,
+      "stamp_ns": 1517157247831493450,
+      "previous_transaction_id": 284,
+      "dt_s": 0.100860119,
+      "translation_increment_m": 5.032843337183671,
+      "rotation_increment_rad": 0.003206754672120274,
+      "implied_speed_m_s": 49.89924052324062,
+      "implied_angular_speed_rad_s": 0.03179407979996805
+    }
+  },
+  "max_increment": {
+    "transaction_id": 365,
+    "stamp_ns": 1517157255899804426,
+    "previous_transaction_id": 364,
+    "dt_s": 0.100860119,
+    "translation_increment_m": 10.221731186158227,
+    "rotation_increment_rad": 0.03897305413966576,
+    "implied_speed_m_s": 101.3456189374338,
+    "implied_angular_speed_rad_s": 0.3864069815311814
+  },
+  "category_histogram": {
+    "COMMITTED": 107,
+    "NIS_REJECTED": 16,
+    "NO_VALID_GEOMETRIC_CORRESPONDENCES": 188,
+    "RELIABLE_RANK_ZERO_OR_INVALID": 1,
+    "MAP_SUPPORT_INSUFFICIENT": 2,
+    "P15_UNAVAILABLE": 1
+  },
+  "window_category_histogram": {
+    "COMMITTED": 22,
+    "NIS_REJECTED": 13,
+    "NO_VALID_GEOMETRIC_CORRESPONDENCES": 43,
+    "RELIABLE_RANK_ZERO_OR_INVALID": 1,
+    "MAP_SUPPORT_INSUFFICIENT": 2
+  },
+  "last_failure": {
+    "transaction_id": 366,
+    "stamp_ns": 1517157256000664307,
+    "completed": "0",
+    "category": "P15_UNAVAILABLE",
+    "lidar_committed": "NOT_EXECUTED",
+    "event_status": "producer_square_root_covariance:SQUARE_ROOT_COVARIANCE_RANK_DEFICIENT",
+    "nis_status": "NOT_EXECUTED",
+    "selected_nis": "NaN",
+    "nis_threshold": "NaN",
+    "selected_rank": "NOT_EXECUTED",
+    "uobs_status": "NOT_EXECUTED",
+    "ndt_converged": "NOT_EXECUTED",
+    "measurement_preview_valid": "NOT_EXECUTED",
+    "lidar_source_provenance": "NOT_EXECUTED",
+    "P15_valid": "0",
+    "P15_detail": "SQUARE_ROOT_COVARIANCE_RANK_DEFICIENT",
+    "active_lidar_factors": "0",
+    "window_nodes_after": "40",
+    "window_span_after_s": "1.9162788390000001"
+  },
+  "deskew_window_count": 81,
+  "deskew_invariant_failures": 0
+}
