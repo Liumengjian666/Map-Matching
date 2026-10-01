@@ -4,6 +4,10 @@ BRANCH=research/p6-i6d-full-algorithm
 Initial baseline=HEAD matched START_SHA and worktree clean
 END_SHA=ordinary analysis commit containing this file; resolve with git rev-parse HEAD
 Remote HEAD before final push=45ceeabdc835ebae96ee98a033dd9575a29b94e9
+Push attempts=1
+Push result=FAILED, HTTPS username unavailable with terminal prompts disabled
+Remote HEAD after failed push=45ceeabdc835ebae96ee98a033dd9575a29b94e9
+No retry, no force push, all local commits retained
 Real prefix trials=4
 Full Corridor01 trials=0
 GT_USED=false

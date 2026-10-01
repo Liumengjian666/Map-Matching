@@ -8,6 +8,10 @@ END_SHA=本文件所在普通 analysis commit，交付时以 git rev-parse HEAD 
 Branch=research/p6-i6d-full-algorithm
 Workspace=/home/jian/livox_ws/dog_loc_p6_i6b_ws
 
+普通 push 已尝试一次，因 HTTPS Username 凭据缺失失败；没有重试或 force push。
+远端仍为 START_SHA。本地提交全部保留，需用户提供正常 GitHub 认证后执行：
+git push origin research/p6-i6d-full-algorithm
+
 参考 hdl_localization、Autoware NDT 和 PCL NDT，已 clean-room 实现：
 
 1. 可配置 tracking health，连续失败进入 recovery。
