@@ -318,7 +318,7 @@ FixedLagProducerResult runFixedLagProducer(
       <<"g_dot_step,step_H_step,predicted_reduction,surrogate_candidate_cost,actual_reduction,rho,rho_valid,accepted,"
       <<"current_prior,current_imu,current_lidar,current_visual,current_latest_lidar_cost,"
       <<"candidate_prior,candidate_imu,candidate_lidar,candidate_visual,candidate_latest_lidar_cost,"
-      <<"applied_step_components\n";
+      <<"applied_step_components,small_step_termination,termination_reason,candidate_rollback_state_difference\n";
   if (directional_derivative_output)
     *directional_derivative_output<<std::setprecision(17)
       <<"transaction_id,stamp_ns,direction_name,epsilon,diagnostic_relinearized_basis_fd,"
@@ -358,7 +358,9 @@ FixedLagProducerResult runFixedLagProducer(
         <<row.candidate_breakdown.lidar_cost<<','
         <<row.candidate_breakdown.visual_cost<<','
         <<row.candidate_breakdown.latest_lidar_factor_cost<<','
-        <<matrixField(Eigen::MatrixXd(row.applied_step))<<'\n';
+        <<matrixField(Eigen::MatrixXd(row.applied_step))<<','
+        <<row.small_step_termination<<','<<row.termination_reason<<','
+        <<row.candidate_rollback_state_difference<<'\n';
     optimizer_trace_output->flush();
     if (!*optimizer_trace_output)
       throw std::runtime_error("optimizer_trace_flush_failed");

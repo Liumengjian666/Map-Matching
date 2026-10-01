@@ -69,6 +69,11 @@ struct WindowSummary {
   std::uint64_t retired_observation_id_watermark = 0;
   std::uint64_t latest_state_timestamp = 0;
   std::string optimizer_status = "NOT_RUN";
+  std::string optimizer_termination_reason = "NOT_RUN";
+  double optimizer_raw_step_norm = 0.0;
+  double optimizer_applied_step_norm = 0.0;
+  bool optimizer_step_clipped = false;
+  bool optimizer_small_step_termination = false;
   std::string solver_status = "NOT_RUN";
   std::size_t sparse_solver_fallback_count = 0;
   double linearization_ms = 0, solve_ms = 0, marginal_covariance_ms = 0;
@@ -124,6 +129,9 @@ struct OptimizerIterationTrace {
   double raw_step_norm = 0.0;
   double applied_step_norm = 0.0;
   bool step_clipped = false;
+  bool small_step_termination = false;
+  std::string termination_reason = "CONTINUE";
+  double candidate_rollback_state_difference = 0.0;
   double g_dot_step = 0.0;
   double step_H_step = 0.0;
   double predicted_reduction = 0.0;

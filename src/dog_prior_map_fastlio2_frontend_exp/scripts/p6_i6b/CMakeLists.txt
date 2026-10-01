@@ -43,6 +43,12 @@ target_compile_options(p6_i6e_conditional_compensation_test PRIVATE
   -Wall -Wextra -Wpedantic)
 
 enable_testing()
+add_executable(p6_a3d_r1_termination_test
+  "${PACKAGE_ROOT}/scripts/p6_a3d_r1_termination_test.cpp")
+target_link_libraries(p6_a3d_r1_termination_test PRIVATE
+  p6_i6b_dual_reliability Eigen3::Eigen)
+add_test(NAME p6_a3d_r1_termination
+  COMMAND $<TARGET_FILE:p6_a3d_r1_termination_test>)
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
 add_test(NAME p6_a3a_input_contract
   COMMAND ${Python3_EXECUTABLE} "${PACKAGE_ROOT}/scripts/p6_a3a_input_contract_test.py")

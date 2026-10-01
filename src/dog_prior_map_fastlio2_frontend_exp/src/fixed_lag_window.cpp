@@ -1,4 +1,5 @@
 #include "dog_prior_map_fastlio2_frontend_exp/fixed_lag_window.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/optimizer_termination.hpp"
 
 #include <Eigen/Cholesky>
 #include <Eigen/Eigenvalues>
@@ -858,6 +859,9 @@ bool FixedLagWindow::optimize(std::string* reason) {
   summary_.prediction_feedback_ready = false;
   summary_.prediction_feedback_status = "OPTIMIZATION_IN_PROGRESS";
   summary_.optimizer_status = toString(OptimizerStatus::NOT_RUN);
+  summary_.optimizer_termination_reason = "INVALID_LINEAR_SYSTEM";
+  summary_.optimizer_raw_step_norm = summary_.optimizer_applied_step_norm = 0.0;
+  summary_.optimizer_step_clipped = summary_.optimizer_small_step_termination = false;
   summary_.solver_status = "NOT_RUN";
   summary_.linearization_ms = summary_.solve_ms = summary_.rank_diagnostic_ms = 0;
   summary_.hessian_numerical_rank = -1;  // Not measured when diagnostics are off.
@@ -873,6 +877,7 @@ bool FixedLagWindow::optimize(std::string* reason) {
   double damping = std::max(1e-12, options_.initial_damping);
   for (int iteration = 0; iteration < options_.maximum_optimizer_iterations;
        ++iteration) {
+    summary_.optimizer_termination_reason = "INVALID_LINEAR_SYSTEM";
     const auto linearization_start = std::chrono::steady_clock::now();
     LidarIterationSnapshot lidar_snapshot;
     if (!buildLidarIterationSnapshot(&lidar_snapshot, reason,
@@ -942,6 +947,7 @@ bool FixedLagWindow::optimize(std::string* reason) {
     if (gradient.lpNorm<Eigen::Infinity>() <=
         options_.gradient_convergence_tolerance) {
       converged_without_step = !accepted_update;
+      summary_.optimizer_termination_reason = "GRADIENT_TOLERANCE";
       break;
     }
     const auto solve_start = std::chrono::steady_clock::now();
@@ -985,6 +991,8 @@ bool FixedLagWindow::optimize(std::string* reason) {
       return fail(reason, "nonfinite_window_optimizer_step");
     }
     OptimizerIterationTrace trace;
+    const double raw_step_norm = step.norm();
+    const bool step_was_clipped = raw_step_norm > options_.maximum_step_norm;
     if (options_.capture_optimizer_trace) {
       trace.iteration = iteration;
       trace.lidar_snapshot_generation = lidar_snapshot.generation;
@@ -995,14 +1003,18 @@ bool FixedLagWindow::optimize(std::string* reason) {
       trace.current_cost = current_cost;
       trace.gradient_inf_norm = gradient.lpNorm<Eigen::Infinity>();
       trace.solver_status = summary_.solver_status;
-      trace.raw_step_norm = step.norm();
+      trace.raw_step_norm = raw_step_norm;
       trace.raw_step = step;
       trace.current_breakdown = current_breakdown;
     }
-    if (step.norm() > options_.maximum_step_norm) {
+    if (step_was_clipped) {
       if (options_.capture_optimizer_trace) trace.step_clipped = true;
-      step *= options_.maximum_step_norm / step.norm();
+      step *= options_.maximum_step_norm / raw_step_norm;
     }
+    const double applied_step_norm = step.norm();
+    summary_.optimizer_raw_step_norm = raw_step_norm;
+    summary_.optimizer_applied_step_norm = applied_step_norm;
+    summary_.optimizer_step_clipped = step_was_clipped;
     if (options_.capture_optimizer_trace) {
       trace.applied_step_norm = step.norm();
       trace.applied_step = step;
@@ -1035,7 +1047,9 @@ bool FixedLagWindow::optimize(std::string* reason) {
         trace.rho_valid = std::isfinite(trace.rho);
       }
     }
-    if (std::isfinite(candidate_cost) && candidate_cost < current_cost) {
+    const bool candidate_accepted =
+        std::isfinite(candidate_cost) && candidate_cost < current_cost;
+    if (candidate_accepted) {
       current_cost = candidate_cost;
       damping = std::max(1e-12, damping * 0.3);
       accepted_update = true;
@@ -1044,9 +1058,34 @@ bool FixedLagWindow::optimize(std::string* reason) {
       states_ = backup;
       damping = std::min(1e12, damping * 10.0);
       if (reason) reason->clear();
+      if (isNaturalSmallStepConvergence(raw_step_norm, step_was_clipped,
+                                       candidate_cost))
+        converged_without_step = true;
+      if (options_.capture_optimizer_trace) {
+        for (std::size_t index = 0; index < states_.size(); ++index)
+          trace.candidate_rollback_state_difference = std::max(
+              trace.candidate_rollback_state_difference,
+              localDifference(states_[index], backup[index]).norm());
+      }
     }
+    const bool small_step_termination = applied_step_norm < kOptimizerSmallStepThreshold;
+    summary_.optimizer_small_step_termination = small_step_termination;
+    summary_.optimizer_termination_reason = "MAX_ITERATIONS";
+    if (small_step_termination) {
+      summary_.optimizer_termination_reason = candidate_accepted
+          ? "ACCEPTED_SMALL_STEP"
+          : (converged_without_step ? "NATURAL_SMALL_STEP_NO_ACCEPTED_UPDATE"
+              : (step_was_clipped ? "CLIPPED_SMALL_STEP_REJECTED"
+                  : (!std::isfinite(candidate_cost) ? "NONFINITE_CANDIDATE_SMALL_STEP"
+                                                    : "ZERO_SOLVER_STEP_REJECTED")));
+    }
+    // Acceptance above remains strict. Small-step convergence only certifies
+    // the restored current state; it never commits a rejected candidate.
     if (options_.capture_optimizer_trace) {
       trace.damping_after = damping;
+      trace.small_step_termination = small_step_termination;
+      trace.termination_reason = small_step_termination
+          ? summary_.optimizer_termination_reason : "CONTINUE";
       optimizer_trace_.push_back(std::move(trace));
     }
     if (options_.capture_optimizer_trace) {
@@ -1055,7 +1094,7 @@ bool FixedLagWindow::optimize(std::string* reason) {
     }
     summary_.optimizer_iterations = iteration + 1;
     summary_.optimizer_final_cost = current_cost;
-    if (step.norm() < 1e-8) break;
+    if (small_step_termination) break;
   }
   summary_.latest_state_timestamp = states_.back().stamp_ns;
   if (accepted_update || converged_without_step) {
@@ -1070,6 +1109,8 @@ bool FixedLagWindow::optimize(std::string* reason) {
     return summary_.prediction_feedback_ready;
   }
   summary_.optimizer_success = false;
+  if (!summary_.optimizer_small_step_termination)
+    summary_.optimizer_termination_reason = "ALL_CANDIDATES_REJECTED";
   summary_.optimizer_status =
       toString(OptimizerStatus::FAILED_ALL_CANDIDATES);
   summary_.prediction_feedback_ready = false;
