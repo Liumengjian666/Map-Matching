@@ -1,0 +1,2 @@
+range,velocity,gyro_bias,accel_bias,gravity_state,availability
+tx150_tx190,NOT_SAVED,NOT_SAVED,NOT_SAVED,NOT_EXTRACTED,FULL_STATE_INTERNAL_CAUSE_NOT_AVAILABLE

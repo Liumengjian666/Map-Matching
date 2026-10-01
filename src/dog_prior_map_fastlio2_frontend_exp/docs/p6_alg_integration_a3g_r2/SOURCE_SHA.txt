@@ -1,0 +1,3 @@
+START_SHA=283be8cf8298e24200099c4a1e51eb3ed1c2d0f7
+CODE_SHA=283be8cf8298e24200099c4a1e51eb3ed1c2d0f7
+NOTE=analysis-only documentation and CSV artifacts; production source unchanged
