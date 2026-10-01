@@ -30,6 +30,8 @@ struct Config {
   unsigned maximum_alternative_seeds = 2;
   double maximum_extrapolation_s = 0.5;
   double maximum_anchor_age_s = 2.0;
+  bool validated_reinitialization = false;
+  unsigned recovery_cooldown_frames = 2;
 };
 
 inline Config readConfig(const std::string& path) {
@@ -43,7 +45,13 @@ inline Config readConfig(const std::string& path) {
     if (split==std::string::npos || !values.emplace(line.substr(0,split),line.substr(split+1)).second)
       throw std::runtime_error("tracking_config_invalid");
   }
-  if (values.size()!=5 || values.count("enabled")==0 ||
+  for (const auto& value : values)
+    if (value.first!="enabled" && value.first!="recovery_after_failures" &&
+        value.first!="maximum_alternative_seeds" && value.first!="maximum_extrapolation_s" &&
+        value.first!="maximum_anchor_age_s" && value.first!="validated_reinitialization" &&
+        value.first!="recovery_cooldown_frames")
+      throw std::runtime_error("tracking_config_unknown_field");
+  if (values.count("enabled")==0 ||
       values.count("recovery_after_failures")==0 || values.count("maximum_alternative_seeds")==0 ||
       values.count("maximum_extrapolation_s")==0 || values.count("maximum_anchor_age_s")==0)
     throw std::runtime_error("tracking_config_fields_invalid");
@@ -63,6 +71,16 @@ inline Config readConfig(const std::string& path) {
     throw std::runtime_error("tracking_config_budget_invalid");
   result.recovery_after_failures=failures;
   result.maximum_alternative_seeds=seeds;
+  if (values.count("validated_reinitialization")) {
+    const auto& value=values.at("validated_reinitialization");
+    if (value!="true" && value!="false") throw std::runtime_error("tracking_config_reset_invalid");
+    result.validated_reinitialization=value=="true";
+  }
+  if (values.count("recovery_cooldown_frames")) {
+    const auto frames=unsigned_value("recovery_cooldown_frames");
+    if (frames>3) throw std::runtime_error("tracking_config_cooldown_invalid");
+    result.recovery_cooldown_frames=frames;
+  }
   for (const char* key : {"maximum_extrapolation_s","maximum_anchor_age_s"}) {
     std::size_t consumed=0;
     const double value=std::stod(values.at(key),&consumed);
@@ -95,10 +113,11 @@ class Tracker {
   Health health() const { return health_; }
   unsigned consecutiveFailures() const { return failures_; }
   std::uint64_t lastReliableStamp() const { return last_.stamp; }
+  unsigned cooldownFrames() const { return cooldown_; }
 
   // Called once per terminal, after evaluating its nominal candidate.
   bool needsRecovery(bool nominal_admissible) {
-    if (!config_.enabled || nominal_admissible) return false;
+    if (!config_.enabled || nominal_admissible || cooldown_>0) return false;
     health_=failures_+1>=config_.recovery_after_failures ? Health::RECOVERING : Health::DEGRADED;
     return health_==Health::RECOVERING;
   }
@@ -106,6 +125,7 @@ class Tracker {
   // Only a successfully optimized, committed measurement advances anchors.
   void finish(std::uint64_t stamp, bool committed, const Eigen::Matrix4d& measured_map_T_imu) {
     if (!config_.enabled) return;
+    if (cooldown_>0) --cooldown_;
     if (!committed) {
       ++failures_;
       health_=failures_>=config_.recovery_after_failures ? Health::LOST : Health::DEGRADED;
@@ -117,6 +137,16 @@ class Tracker {
     previous_=last_;
     last_={stamp,measured_map_T_imu};
     failures_=0; health_=Health::GOOD;
+  }
+
+  void reinitialized(std::uint64_t stamp, const Eigen::Matrix4d& recovered_map_T_imu) {
+    if (!config_.enabled || !stamp || !recovered_map_T_imu.allFinite() ||
+        (last_.stamp && stamp<=last_.stamp))
+      throw std::runtime_error("tracking_reinitialization_anchor_invalid");
+    previous_=Anchor{}; // Do not extrapolate motion across the discarded epoch.
+    last_={stamp,recovered_map_T_imu};
+    failures_=0; health_=Health::GOOD;
+    cooldown_=config_.recovery_cooldown_frames;
   }
 
   std::vector<Seed> seeds(std::uint64_t stamp, const Eigen::Matrix4d& nominal_map_T_imu) const {
@@ -154,6 +184,7 @@ class Tracker {
   Config config_;
   Health health_=Health::GOOD;
   unsigned failures_=0;
+  unsigned cooldown_=0;
   Anchor previous_,last_;
 };
 

@@ -29,6 +29,15 @@ int main() {
   require(tracker.seeds(3'200'000'000,pose).empty(),"stale local anchor must not become global search");
   tracker.finish(1'200'000'000,false,pose);
   require(tracker.lastReliableStamp()==1'100'000'000,"failure must preserve reliable anchor");
+  tracker.reinitialized(1'300'000'000,pose);
+  require(tracker.health()==Health::GOOD && tracker.cooldownFrames()==2 &&
+      tracker.seeds(1'400'000'000,pose).size()==1,"reset must clear cross-epoch motion history");
+  require(!tracker.needsRecovery(false),"cooldown blocks reset trigger only");
+  tracker.finish(1'400'000'000,false,pose);
+  require(!tracker.needsRecovery(false),"second cooldown frame still matches without reset");
+  tracker.finish(1'500'000'000,true,pose);
+  require(tracker.cooldownFrames()==0 && tracker.health()==Health::GOOD,
+      "ordinary successful commits must remain enabled during cooldown");
   Tracker disabled(Config{});
   require(!disabled.needsRecovery(false) && disabled.seeds(1,pose).empty(),"legacy default preserved");
   std::cout<<"A3G_R4_TRACKING_HEALTH_PASS\n";
