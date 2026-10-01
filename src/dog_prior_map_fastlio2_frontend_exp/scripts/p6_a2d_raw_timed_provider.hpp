@@ -264,6 +264,15 @@ void runWindowOwnedExperimentalMode(const p4_i2::Inputs& inputs,
   // Explicit V3 estimator contract, not an environment-selected backend.
   options.marginalization_backend=fixed_lag::MarginalizationBackend::SQUARE_ROOT_QR;
   std::cout << "marginalization_backend=SQUARE_ROOT_QR\n";
+  options.marginal_covariance_backend=fixed_lag::MarginalCovarianceBackend::SQUARE_ROOT_QR;
+  std::cout << "marginal_covariance_backend=SQUARE_ROOT_QR\n";
+  const char* covariance_environment=std::getenv("P6_A3F_R1_COVARIANCE_DIAGNOSTICS");
+  options.capture_covariance_shadow=covariance_environment && std::string(covariance_environment)=="1";
+  std::ofstream covariance_requests,covariance_comparisons;
+  if (options.capture_covariance_shadow) {
+    covariance_requests=openV3ExclusiveOutput(trajectory_path+".a3f_r1_covariance.csv");
+    covariance_comparisons=openV3ExclusiveOutput(trajectory_path+".a3f_r1_comparison.csv");
+  }
   options.capture_optimizer_trace=diagnostic_enabled;
   const char* marginalization_environment =
       std::getenv("P6_A3C_R1_MARGINALIZATION_DIAGNOSTICS");
@@ -301,7 +310,9 @@ void runWindowOwnedExperimentalMode(const p4_i2::Inputs& inputs,
       marginalization_diagnostic_enabled?&marginalization_trace:nullptr,
       marginalization_diagnostic_enabled?&marginalization_failure_summary:nullptr,
       marginalization_diagnostic_enabled?marginalization_failure_capsule_path:
-          std::string());
+          std::string(),
+      options.capture_covariance_shadow?&covariance_requests:nullptr,
+      options.capture_covariance_shadow?&covariance_comparisons:nullptr);
   trajectory.flush(); diagnostics.flush(); runtime.flush(); deskew_evidence.flush();
   if (marginalization_diagnostic_enabled) marginalization_trace.flush();
   std::cout<<"FULL_FIXED_LAG_V3_EXPERIMENTAL_COMPLETE window_deskews="<<result.window_deskew_count

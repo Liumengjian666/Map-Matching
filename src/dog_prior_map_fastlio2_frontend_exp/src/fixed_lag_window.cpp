@@ -1265,22 +1265,15 @@ bool finishMarginalCovariance(const Eigen::MatrixXd& columns,
 }
 }  // namespace
 
-bool FixedLagWindow::latestMarginalCovariance(
+bool FixedLagWindow::latestMarginalCovarianceLegacyWithSnapshot(
+    const LidarIterationSnapshot& snapshot,
     WindowMarginalCovariance* output, std::string* reason) const {
-  const auto started = std::chrono::steady_clock::now();
-  struct Timer {
-    double* milliseconds;
-    std::chrono::steady_clock::time_point started;
-    ~Timer() { *milliseconds = std::chrono::duration<double,std::milli>(
-        std::chrono::steady_clock::now()-started).count(); }
-  } timer{&summary_.marginal_covariance_ms, started};
-  ++summary_.marginal_covariance_requests;
   if (reason) reason->clear();
   if (!output) return fail(reason, "null_window_marginal_covariance_output");
   *output = WindowMarginalCovariance();
   WindowLinearSystem system;
   std::string detail;
-  if (!blockLinearizedSystem(&system, &detail)) {
+  if (!blockLinearizedSystemWithLidarSnapshot(snapshot, &system, &detail)) {
     if (reason) *reason = output->status + ":" + detail;
     return false;
   }

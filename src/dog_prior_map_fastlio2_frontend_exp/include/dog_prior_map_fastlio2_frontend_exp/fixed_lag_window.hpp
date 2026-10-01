@@ -15,6 +15,7 @@
 namespace dog_prior_map_fastlio2_frontend_exp::fixed_lag {
 
 enum class MarginalizationBackend { LEGACY_INFORMATION_SCHUR, SQUARE_ROOT_QR };
+enum class MarginalCovarianceBackend { LEGACY_NORMAL_SPARSE_LLT, SQUARE_ROOT_QR };
 
 struct FixedLagOptions {
   double maximum_duration_s = 2.0;
@@ -33,6 +34,8 @@ struct FixedLagOptions {
   // must never participate in production decisions or change factor order.
   bool capture_marginalization_diagnostics = false;
   MarginalizationBackend marginalization_backend = MarginalizationBackend::LEGACY_INFORMATION_SCHUR;
+  MarginalCovarianceBackend marginal_covariance_backend = MarginalCovarianceBackend::LEGACY_NORMAL_SPARSE_LLT;
+  bool capture_covariance_shadow = false;
 };
 
 enum class OptimizerStatus {
@@ -102,7 +105,23 @@ struct WindowMarginalCovariance {
   Matrix6d map_pose_covariance6 = Matrix6d::Zero();
   double normalized_backward_error = 0;
   std::string status = "WINDOW_MARGINAL_COVARIANCE_UNAVAILABLE";
+  std::string backend = "LEGACY_NORMAL_SPARSE_LLT";
+  std::string detail = "NOT_REQUESTED";
+  Eigen::Index rows = 0, columns = 0, rank = 0;
+  double rank_threshold = 0, min_abs_r = 0, max_abs_r = 0;
+  double qr_ms = 0;
+  std::size_t temporary_estimated_bytes = 0;
+  bool legacy_shadow_requested = false, legacy_shadow_valid = false;
+  std::string legacy_shadow_detail = "NOT_REQUESTED";
+  Matrix15d legacy_covariance15 = Matrix15d::Zero();
+  Matrix6d legacy_map_pose_covariance6 = Matrix6d::Zero();
+  double legacy_backward_error = 0;
 };
+
+// Full-column-rank row-space covariance, without forming normal information.
+bool solveSquareRootMarginalCovariance(const Eigen::MatrixXd& a,
+    const Eigen::Matrix3d& rotation, WindowMarginalCovariance* output,
+    std::string* reason = nullptr);
 
 using WindowStateVector =
     std::vector<WindowState, Eigen::aligned_allocator<WindowState>>;
@@ -410,6 +429,9 @@ class FixedLagWindow {
                                std::string* reason = nullptr) const;
   bool latestMarginalCovarianceDenseReferenceForTest(
       WindowMarginalCovariance* output, std::string* reason = nullptr) const;
+  bool allFactorsSquareRootRowsWithLidarSnapshot(
+      const LidarIterationSnapshot& snapshot, SquareRootRows* output,
+      std::string* reason = nullptr) const;
   bool predictionFeedbackSeed(WindowState* output,
                               std::string* reason = nullptr) const;
 
@@ -448,6 +470,9 @@ class FixedLagWindow {
   };
 
   bool findStateIndex(std::uint64_t stamp_ns, std::size_t* index) const;
+  bool latestMarginalCovarianceLegacyWithSnapshot(
+      const LidarIterationSnapshot& snapshot, WindowMarginalCovariance* output,
+      std::string* reason) const;
   bool linearizeSelected(LinearizationScope scope, Eigen::MatrixXd* hessian,
                          Eigen::VectorXd* gradient, double* cost,
                          std::string* reason,

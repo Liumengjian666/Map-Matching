@@ -18,6 +18,9 @@ def main():
     # The V3-only diagnostic environment switch uses std::getenv; this additive
     # standard header must not be treated as a change to the frozen legacy path.
     stripped = stripped.replace('#include <cstdlib>\n', "")
+    # Additive V3 covariance diagnostics helper; frozen legacy body is still
+    # compared byte-for-byte after removing this include and its blank line.
+    stripped = stripped.replace('#include "p6_a3f_r1_covariance_diagnostics.hpp"\n\n', "")
     stripped = stripped.replace('\n#include "p6_a2c_fixed_lag_producer.hpp"\n', "")
     stripped = stripped.replace('#include "dog_prior_map_fastlio2_frontend_exp/window_scan_processor.hpp"\n', "")
     stripped = stripped.replace('#include "p6_a2d_raw_timed_provider.hpp"\n', "")

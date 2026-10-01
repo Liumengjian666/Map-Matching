@@ -93,10 +93,20 @@ class InputContract(unittest.TestCase):
         self.assertEqual(environment['ROS_DISTRO'],'noetic')
     def test_production_has_no_dense_oracle(self):
         source=(SCRIPTS.parent/'src/fixed_lag_window.cpp').read_text()
-        production=source.split('bool FixedLagWindow::latestMarginalCovariance(')[1].split(
+        legacy=source.split('bool FixedLagWindow::latestMarginalCovarianceLegacyWithSnapshot(')[1].split(
             'bool FixedLagWindow::latestMarginalCovarianceDenseReferenceForTest')[0]
-        self.assertIn('blockLinearizedSystem',production)
-        self.assertIn('solveLatestMarginalColumnsSparse',production)
-        for forbidden in ('linearize(','.dense(','DenseReference','inverse('): self.assertNotIn(forbidden,production)
+        self.assertIn('blockLinearizedSystemWithLidarSnapshot',legacy)
+        self.assertIn('solveLatestMarginalColumnsSparse',legacy)
+        for forbidden in ('linearize(','.dense(','DenseReference','inverse('): self.assertNotIn(forbidden,legacy)
+        # A3F production moved into its own row-space module. Preserve the
+        # legacy contract above and strengthen the new authoritative path.
+        root=(SCRIPTS.parent/'src/window_square_root_covariance.cpp').read_text()
+        self.assertIn('linearizeSquareRootPriorRows',root)
+        self.assertIn('whitenSquareRootRows',root)
+        self.assertIn('qr.colsPermutation().transpose()*selector',root)
+        self.assertIn('y.transpose()*y',root)
+        for forbidden in ('linearize(','.dense(','DenseReference','inverse(',
+                          'blockLinearizedSystem','solveLatestMarginalColumnsSparse'):
+            self.assertNotIn(forbidden,root)
 
 if __name__=='__main__': unittest.main()

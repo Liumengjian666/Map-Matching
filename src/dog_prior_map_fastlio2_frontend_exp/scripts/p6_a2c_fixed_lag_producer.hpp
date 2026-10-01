@@ -236,7 +236,9 @@ FixedLagProducerResult runFixedLagProducer(
     std::ostream* optimizer_failure_summary = nullptr,
     std::ostream* marginalization_trace_output = nullptr,
     std::ostream* marginalization_failure_summary = nullptr,
-    const std::string& marginalization_failure_capsule_path = {}) {
+    const std::string& marginalization_failure_capsule_path = {},
+    std::ostream* covariance_request_output = nullptr,
+    std::ostream* covariance_comparison_output = nullptr) {
   using namespace fixed_lag;
   const auto started=std::chrono::steady_clock::now();
   if(assets.empty() || inputs.imu.empty() || !target || target->empty())
@@ -383,6 +385,14 @@ FixedLagProducerResult runFixedLagProducer(
       throw std::runtime_error("optimizer_trace_flush_failed");
   };
   std::size_t marginalization_trace_cursor = 0;
+  if (covariance_request_output) p6_i6b::writeCovarianceRequestHeader(*covariance_request_output);
+  if (covariance_comparison_output)
+    *covariance_comparison_output<<std::setprecision(17)<<
+        "transaction_id,stamp_ns,legacy_valid,P15_relative_error,Pmap_relative_error,"
+        "production_NIS_valid,production_NIS,threshold,production_NIS_accepted,"
+        "legacy_same_factor_NIS_valid,legacy_same_factor_NIS,legacy_same_factor_NIS_accepted,"
+        "production_probe_trigger,legacy_probe_trigger,production_LiDAR_committed,"
+        "legacy_same_factor_admission\n";
   const auto flushMarginalizationTraceRows = [&] (
       std::uint64_t transaction_id, std::uint64_t stamp_ns) {
     if (!marginalization_trace_output) return;
@@ -415,6 +425,14 @@ FixedLagProducerResult runFixedLagProducer(
     const auto pre_measurement = adapter.summary();
     if (lidar_terminal) adapter.latestMarginalCovariance(&prior,nullptr);
     else prior.status="NOT_REQUESTED_NON_LIDAR_EVENT";
+    if (lidar_terminal && covariance_request_output)
+      p6_i6b::writeCovarianceRequest(*covariance_request_output,
+          assets[event.source_index].transaction_id,event.stamp_ns,prior);
+    // The new backend cannot conceal an unavailable production P by silently
+    // continuing the short-link gate, or by borrowing its legacy shadow P.
+    if (lidar_terminal && options.marginal_covariance_backend==
+        MarginalCovarianceBackend::SQUARE_ROOT_QR && !prior.valid)
+      throw std::runtime_error("producer_square_root_covariance:"+prior.detail);
     const auto covariance_diagnostic = adapter.summary();
     if (covariance_diagnostic.dense_marginal_reference_requests != 0 ||
         covariance_diagnostic.marginal_covariance_requests !=
@@ -430,6 +448,7 @@ FixedLagProducerResult runFixedLagProducer(
     SelectedLidarNis nis;
     bool lidar_attempted=false,lidar_committed=false,probed=false,quality=false,uobs_valid=false;
     bool measurement_preview_valid=false;
+    bool production_probe_trigger=false,legacy_probe_trigger=false;
     LidarWindowMeasurement preview_measurement;
     Eigen::VectorXd selected_residual;
     Eigen::MatrixXd selected_covariance;
@@ -523,6 +542,10 @@ FixedLagProducerResult runFixedLagProducer(
             p4_i2::asIsometry(predicted_pose),p4_i2::asIsometry(measured_imu));
         const auto trigger=reliability::shouldRunNonlocalProbes(
             asset.transaction_id,innovation,prior.map_pose_covariance6,config);
+        production_probe_trigger=trigger.run_probes;
+        if (prior.legacy_shadow_valid)
+          legacy_probe_trigger=reliability::shouldRunNonlocalProbes(
+              asset.transaction_id,innovation,prior.legacy_map_pose_covariance6,config).run_probes;
         const auto spectrum=p6_i4::analyzePoseCovariance(prior.map_pose_covariance6);
         if(trigger.run_probes && spectrum.valid && spectrum.effective_rank>0 && spectrum.eigenvalues(5)>0) {
           const Vector6d delta=config.probe_prior_sigma*std::sqrt(spectrum.eigenvalues(5))*spectrum.eigenvectors.col(5);
@@ -557,6 +580,7 @@ FixedLagProducerResult runFixedLagProducer(
         if(noise.valid) lidar.residual_covariance=noise.covariance;
       }
       selected_measurement_covariance=lidar.residual_covariance;
+      const bool same_factor_noise_allowed=lidar.measurement_commit_allowed;
       lidar_attempted=lidar.ndt_converged&&lidar.map_support_valid&&routed.reliable_dimension>0;
       if(lidar_attempted && adapter.previewLidarMeasurement(lidar,&preview_measurement,nullptr)) {
         measurement_preview_valid=true;
@@ -577,6 +601,28 @@ FixedLagProducerResult runFixedLagProducer(
       if(!lidar_committed && adapter.lastEventStatus().disposition!=AdapterEventDisposition::SKIPPED_INVALID_SOURCE)
         throw std::runtime_error("producer_lidar:"+reason);
       result.lidar_committed+=lidar_committed;
+      if (covariance_comparison_output) {
+        WindowMarginalCovariance shadow;
+        shadow.valid=prior.legacy_shadow_valid;
+        shadow.covariance15=prior.legacy_covariance15;
+        shadow.map_pose_covariance6=prior.legacy_map_pose_covariance6;
+        SelectedLidarNis shadow_nis;
+        if (measurement_preview_valid && shadow.valid && r2PolicyUsesNisGate(policy))
+          shadow_nis=evaluateSelectedLidarNis(predicted,preview_measurement,shadow,
+              chiSquare99Threshold(lidar_rank));
+        const double p15_error=shadow.valid?(prior.covariance15-shadow.covariance15).norm()/shadow.covariance15.norm():nan;
+        const double map_error=shadow.valid?(prior.map_pose_covariance6-shadow.map_pose_covariance6).norm()/shadow.map_pose_covariance6.norm():nan;
+        // This is a same-raw-factor counterfactual, NOT an alternate replay.
+        // If probe triggers differ, alternate NDT probe terminals are unknown.
+        const bool shadow_admission=shadow.valid && lidar_attempted && same_factor_noise_allowed &&
+            (!r2PolicyUsesNisGate(policy) || (shadow_nis.valid && shadow_nis.accepted));
+        *covariance_comparison_output<<asset.transaction_id<<','<<event.stamp_ns<<','<<shadow.valid<<','
+            <<p15_error<<','<<map_error<<','<<nis.valid<<','<<nis.nis<<','<<nis.threshold<<','<<nis.accepted<<','
+            <<shadow_nis.valid<<','<<shadow_nis.nis<<','<<shadow_nis.accepted<<','
+            <<production_probe_trigger<<','<<legacy_probe_trigger<<','<<lidar_committed<<','<<shadow_admission<<'\n';
+        covariance_comparison_output->flush();
+        if (!*covariance_comparison_output) throw std::runtime_error("covariance_comparison_flush_failed");
+      }
     } else if(event.type==ProducerEventType::LIDAR_SCAN_START) {
       // prepareStateAt above created a real optimizable scan-start node.
       visual_mode="SCAN_START_STATE";

@@ -19,6 +19,7 @@ add_library(p6_i6b_dual_reliability STATIC
   "${PACKAGE_ROOT}/src/window_marginalization.cpp"
   "${PACKAGE_ROOT}/src/window_square_root.cpp"
   "${PACKAGE_ROOT}/src/window_square_root_marginalization.cpp"
+  "${PACKAGE_ROOT}/src/window_square_root_covariance.cpp"
   "${PACKAGE_ROOT}/src/fixed_lag_window.cpp"
   "${PACKAGE_ROOT}/src/window_linear_system.cpp"
   "${PACKAGE_ROOT}/src/fixed_lag_experiment.cpp"
@@ -45,6 +46,9 @@ target_compile_options(p6_i6e_conditional_compensation_test PRIVATE
   -Wall -Wextra -Wpedantic)
 
 enable_testing()
+add_executable(p6_a3f_r1_covariance_test "${PACKAGE_ROOT}/scripts/p6_a3f_r1_covariance_test.cpp")
+target_link_libraries(p6_a3f_r1_covariance_test PRIVATE p6_i6b_dual_reliability Eigen3::Eigen)
+add_test(NAME p6_a3f_r1_covariance COMMAND $<TARGET_FILE:p6_a3f_r1_covariance_test>)
 add_executable(p6_a3e_r2_square_root_test "${PACKAGE_ROOT}/scripts/p6_a3e_r2_square_root_test.cpp")
 target_link_libraries(p6_a3e_r2_square_root_test PRIVATE p6_i6b_dual_reliability Eigen3::Eigen)
 add_test(NAME p6_a3e_r2_square_root COMMAND $<TARGET_FILE:p6_a3e_r2_square_root_test>)
@@ -55,6 +59,8 @@ target_link_libraries(p6_a3d_r1_termination_test PRIVATE
 add_test(NAME p6_a3d_r1_termination
   COMMAND $<TARGET_FILE:p6_a3d_r1_termination_test>)
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
+add_test(NAME p6_a3f_r1_replay_guard
+  COMMAND ${Python3_EXECUTABLE} "${PACKAGE_ROOT}/scripts/p6_a3f_r1_replay_guard.py" --self-test)
 add_test(NAME p6_a3e_r2_replay_guard
   COMMAND ${Python3_EXECUTABLE} "${PACKAGE_ROOT}/scripts/p6_a3e_r2_replay_guard.py" --self-test)
 add_test(NAME p6_a3e_r1_high_precision_oracle

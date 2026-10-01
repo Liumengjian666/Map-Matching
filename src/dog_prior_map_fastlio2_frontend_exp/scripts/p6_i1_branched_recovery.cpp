@@ -41,6 +41,8 @@
 #include <tuple>
 #include <vector>
 
+#include "p6_a3f_r1_covariance_diagnostics.hpp"
+
 namespace p6_i1 {
 using namespace dog_prior_map_fastlio2_frontend_exp;
 
