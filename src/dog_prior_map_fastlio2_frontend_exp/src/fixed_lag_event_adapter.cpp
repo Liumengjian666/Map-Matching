@@ -35,6 +35,37 @@ bool spd(const Eigen::MatrixXd& covariance) {
 
 }  // namespace
 
+bool validateRecoveryRegistration(const RecoveryReinitializationRequest& request,
+                                  std::string* reason) {
+  const auto& event = request.registration;
+  if (!event.ndt_converged || request.iterations <= 0 ||
+      request.iterations >= request.maximum_iterations ||
+      !std::isfinite(request.objective) || !std::isfinite(request.fitness) ||
+      !finitePose(event.map_T_lidar) || !finitePose(request.initial_map_T_lidar))
+    return failLocal(reason, "recovery_registration_not_effective");
+  const double position_delta =
+      (event.map_T_lidar.position-request.initial_map_T_lidar.position).norm();
+  const double rotation_delta = Eigen::AngleAxisd(
+      request.initial_map_T_lidar.orientation.normalized().conjugate() *
+      event.map_T_lidar.orientation.normalized()).angle();
+  const double roundoff = std::numeric_limits<double>::epsilon() *
+      std::max(1.0, request.initial_map_T_lidar.position.norm());
+  if (position_delta <= roundoff && rotation_delta <= std::numeric_limits<double>::epsilon())
+    return failLocal(reason, "recovery_seed_passthrough");
+  const auto& risk = event.local_risk;
+  // Same production support minimum as assessLocalRisk; no recovery-specific
+  // weaker gate and no modification to observability definitions.
+  if (!event.map_support_valid || !risk.valid || !risk.map_support_sufficient ||
+      risk.map_support_correspondences < 30 || risk.reliable_dimension <= 0 ||
+      risk.reliable_dimension > 6 || risk.weak_dimension+risk.reliable_dimension != 6 ||
+      !risk.joint_weak_basis.allFinite() || !risk.joint_reliable_basis.allFinite())
+    return failLocal(reason, "recovery_geometric_support_invalid");
+  if (!request.measurement_covariance_available || !spd(event.residual_covariance))
+    return failLocal(reason, "recovery_measurement_covariance_invalid");
+  if (reason) reason->clear();
+  return true;
+}
+
 const char* toString(AdapterEventDisposition disposition) {
   switch (disposition) {
     case AdapterEventDisposition::ACCEPTED: return "ACCEPTED";
@@ -406,6 +437,61 @@ bool FixedLagEventAdapter::processLidarEvent(const FrozenLidarEvent& event,
   if (!accept(id, reason)) return false;
   consume_lidar(true);
   setStatus(AdapterEventDisposition::ACCEPTED, id, "LIDAR_FACTOR_ACCEPTED", reason);
+  return true;
+}
+
+bool FixedLagEventAdapter::resetFromValidatedRecovery(
+    const RecoveryReinitializationRequest& request, std::string* reason) {
+  const auto& event = request.registration;
+  if (!initialized_ || event.transaction_id == 0 || event.stamp_ns == 0)
+    return fail(AdapterEventDisposition::REJECTED_WINDOW, "invalid_recovery_identity", reason);
+  if (event.transaction_id <= lidar_transaction_watermark_ ||
+      event.stamp_ns < last_lidar_stamp_ns_)
+    return fail(AdapterEventDisposition::DUPLICATE_SOURCE, "recovery_below_source_watermark", reason);
+  if (!validateRecoveryRegistration(request, reason)) return false;
+  WindowState propagated;
+  if (!controller_.latestState(&propagated, reason) || propagated.stamp_ns != event.stamp_ns)
+    return fail(AdapterEventDisposition::REJECTED_WINDOW, "recovery_requires_prepared_scan_end", reason);
+  const auto& prior = request.premeasurement_covariance;
+  if (!prior.valid || !prior.covariance15.allFinite() ||
+      !spd(prior.covariance15.bottomRightCorner<9,9>()))
+    return fail(AdapterEventDisposition::REJECTED_FACTOR, "recovery_nonpose_covariance_invalid", reason);
+
+  WindowState recovered = propagated; // Preserve v/bg/ba, replace only pose.
+  const Pose3d map_T_imu = lidarToImu(event.map_T_lidar);
+  recovered.rotation = map_T_imu.orientation.toRotationMatrix();
+  recovered.position = map_T_imu.position;
+  // Measurement chart is [map position, old right/body rotation]. State chart
+  // is [new right/body rotation, map position, v, bg, ba]. Rotate/reorder the
+  // existing uncertainty, without inheriting stale pose/non-pose correlations.
+  Matrix6d chart = Matrix6d::Zero();
+  chart.block<3,3>(0,3) = recovered.rotation.transpose()*propagated.rotation;
+  chart.block<3,3>(3,0).setIdentity();
+  Matrix15d covariance = Matrix15d::Zero();
+  covariance.topLeftCorner<6,6>() =
+      chart*event.residual_covariance*chart.transpose();
+  covariance.bottomRightCorner<9,9>() = prior.covariance15.bottomRightCorner<9,9>();
+  covariance = (0.5*(covariance+covariance.transpose())).eval();
+  Eigen::LLT<Matrix15d> factor(covariance);
+  if (factor.info() != Eigen::Success)
+    return fail(AdapterEventDisposition::REJECTED_FACTOR, "recovery_block_prior_not_spd", reason);
+  Matrix15d information = factor.solve(Matrix15d::Identity());
+  information = (0.5*(information+information.transpose())).eval();
+  if (!information.allFinite())
+    return fail(AdapterEventDisposition::REJECTED_FACTOR, "recovery_block_prior_not_finite", reason);
+  const auto id = next_observation_id_;
+  if (id == std::numeric_limits<std::uint64_t>::max())
+    return fail(AdapterEventDisposition::REJECTED_FACTOR, "recovery_observation_id_exhausted", reason);
+  if (!controller_.resetFromValidatedRecovery(recovered, information, id, reason)) return false;
+
+  // Commit adapter lifecycle only after the replacement Window initialized.
+  ++next_observation_id_;
+  lidar_transaction_watermark_ = event.transaction_id;
+  last_lidar_stamp_ns_ = event.stamp_ns;
+  source_records_.clear(); source_expiry_stamps_.clear();
+  lidar_risk_history_.clear(); last_visual_admission_ = VisualRelativeMeasurement();
+  pruneExpiredHistory(); // Keep causal IMU boundary sample and all future IMU.
+  setStatus(AdapterEventDisposition::ACCEPTED, id, "RECOVERY_REINITIALIZED", reason);
   return true;
 }
 

@@ -29,6 +29,22 @@ struct FrozenLidarEvent {
   bool measurement_commit_allowed = true;
 };
 
+// Explicit relocalization input. Old-window selected NIS is diagnostic only:
+// this request is not an addLidarFactor operation.
+struct RecoveryReinitializationRequest {
+  FrozenLidarEvent registration;
+  Pose3d initial_map_T_lidar;
+  int iterations = 0;
+  int maximum_iterations = 80;
+  double objective = 0.0;
+  double fitness = 0.0;
+  bool measurement_covariance_available = false;
+  WindowMarginalCovariance premeasurement_covariance;
+};
+
+bool validateRecoveryRegistration(const RecoveryReinitializationRequest& request,
+                                  std::string* reason = nullptr);
+
 struct FrozenVisualEvent {
   std::uint64_t ref_ns = 0;
   std::uint64_t cur_ns = 0;
@@ -105,6 +121,8 @@ class FixedLagEventAdapter {
                                std::string* reason = nullptr) const;
   bool processLidarEvent(const FrozenLidarEvent& event,
                          std::string* reason = nullptr);
+  bool resetFromValidatedRecovery(const RecoveryReinitializationRequest& request,
+                                  std::string* reason = nullptr);
   bool processVisualReferenceStamp(std::uint64_t ref_ns,
                                    std::string* reason = nullptr);
   bool processVisualEvent(const FrozenVisualEvent& event,
