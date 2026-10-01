@@ -46,6 +46,10 @@ target_compile_options(p6_i6e_conditional_compensation_test PRIVATE
   -Wall -Wextra -Wpedantic)
 
 enable_testing()
+add_executable(p6_a3g_r4_tracking_test "${PACKAGE_ROOT}/scripts/p6_a3g_r4_tracking_test.cpp")
+target_link_libraries(p6_a3g_r4_tracking_test PRIVATE Eigen3::Eigen)
+target_compile_features(p6_a3g_r4_tracking_test PRIVATE cxx_std_17)
+add_test(NAME p6_a3g_r4_tracking COMMAND $<TARGET_FILE:p6_a3g_r4_tracking_test>)
 add_executable(p6_a3f_r1_covariance_test "${PACKAGE_ROOT}/scripts/p6_a3f_r1_covariance_test.cpp")
 target_link_libraries(p6_a3f_r1_covariance_test PRIVATE p6_i6b_dual_reliability Eigen3::Eigen)
 add_test(NAME p6_a3f_r1_covariance COMMAND $<TARGET_FILE:p6_a3f_r1_covariance_test>)
