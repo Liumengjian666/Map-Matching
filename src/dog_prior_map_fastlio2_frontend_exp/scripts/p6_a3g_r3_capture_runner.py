@@ -117,6 +117,66 @@ def frame_inventory(root: Path):
     return inventory
 
 
+def finalize_existing_capture(expected_code_sha: str, expected_binary_sha256: str):
+    if not TARGET.is_dir():
+        raise RuntimeError(f"existing capture directory missing: {TARGET}")
+    if (TARGET / "MANIFEST.json").exists():
+        raise RuntimeError("refusing to overwrite existing capture manifest")
+    preflight = json.loads((TARGET / "PREFLIGHT.json").read_text())
+    run_record = json.loads((TARGET / "run_result.json").read_text())
+    if preflight.get("code_sha") != expected_code_sha:
+        raise RuntimeError("existing capture CODE_SHA does not match requested identity")
+    if preflight.get("binary", {}).get("sha256") != expected_binary_sha256:
+        raise RuntimeError("existing capture release binary SHA mismatch")
+    if (run_record.get("process_invocations") != 1 or run_record.get("retry_count") != 0 or
+            run_record.get("process_exit_code") != 0 or not run_record.get("completed")):
+        raise RuntimeError("existing capture does not attest exactly one successful replay")
+    audit_script = PACKAGE / "scripts/p6_a3g_r3_prefix_audit.py"
+    audit = subprocess.run([sys.executable, str(audit_script), "--capture-root", str(TARGET)],
+                           cwd=REPO, check=False)
+    if audit.returncode != 0:
+        raise RuntimeError(f"offline capture/prefix parity audit failed ({audit.returncode}); no replay")
+    parity = json.loads((TARGET / "PREFIX_PARITY.json").read_text())
+    inventory = frame_inventory(TARGET)
+    expected_tx = [159,160,163,165,166,173,174,176,182,183,185,187,188,190]
+    actual_tx = sorted(int(p.name[2:]) for p in TARGET.glob("TX[0-9][0-9][0-9][0-9]"))
+    if actual_tx != expected_tx:
+        raise RuntimeError(f"captured transaction allowlist mismatch: {actual_tx}")
+    manifest = {
+        "task": "PAPER-P6-ALG-INTEGRATION-A3G-R3",
+        "dataset": "SuperLoc Corridor01",
+        "replay_type": "PREFIX_TO_TX190_LIDAR_SCAN_END",
+        "real_replay_count": 1,
+        "retry_count": 0,
+        "gt_used": False,
+        "production_mathematics_changed": False,
+        "diagnostic_observer_only": True,
+        "start_sha": EXPECTED_START,
+        "code_sha": expected_code_sha,
+        "prefix_audit_script_sha256": sha256(audit_script),
+        "release_binary_sha256": preflight["binary"]["sha256"],
+        "branch": BRANCH,
+        "input_identity": preflight["inputs"],
+        "frozen_a3g_artifact_ledger_sha256": preflight["frozen_a3g_external_ledger_sha256"],
+        "frozen_a3g_artifact_count": preflight["frozen_a3g_external_artifact_count"],
+        "frame_limit_includes_pre_handoff_scans": True,
+        "initialization_stamp_ns": INIT_NS,
+        "mode": preflight["mode"], "policy": preflight["policy"],
+        "visual": "NONE", "visual_provenance": "NONE",
+        "selected_transactions": expected_tx,
+        "selected_capture_count": len(actual_tx),
+        "prefix_parity": parity,
+        "files_excluding_manifest": inventory,
+        "payload_file_count": len(inventory),
+        "payload_total_bytes_excluding_manifest": sum(x["bytes"] for x in inventory),
+        "process_exit_code": run_record["process_exit_code"],
+    }
+    (TARGET / "MANIFEST.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
+    print(f"A3G_R3_SINGLE_PREFIX_CAPTURE_PASS root={TARGET} selected={len(actual_tx)} "
+          f"manifest_sha256={sha256(TARGET / 'MANIFEST.json')}")
+    return manifest
+
+
 def execute(expected_code_sha: str, expected_binary_sha256: str):
     preflight = check_preflight(expected_code_sha, expected_binary_sha256)
     TARGET.mkdir()
@@ -165,48 +225,7 @@ def execute(expected_code_sha: str, expected_binary_sha256: str):
     (TARGET / "run_result.json").write_text(json.dumps(run_record, indent=2) + "\n")
     if result.returncode != 0:
         raise RuntimeError(f"single prefix replay failed with exit {result.returncode}; no retry")
-    audit_script = PACKAGE / "scripts/p6_a3g_r3_prefix_audit.py"
-    audit = subprocess.run([sys.executable, str(audit_script), "--capture-root", str(TARGET)],
-                           cwd=REPO, check=False)
-    if audit.returncode != 0:
-        raise RuntimeError(f"offline capture/prefix parity audit failed ({audit.returncode}); no retry")
-    parity = json.loads((TARGET / "PREFIX_PARITY.json").read_text())
-    inventory = frame_inventory(TARGET)
-    expected_tx = [159,160,163,165,166,173,174,176,182,183,185,187,188,190]
-    actual_tx = sorted(int(p.name[2:]) for p in TARGET.glob("TX[0-9][0-9][0-9][0-9]"))
-    if actual_tx != expected_tx:
-        raise RuntimeError(f"captured transaction allowlist mismatch: {actual_tx}")
-    manifest = {
-        "task": "PAPER-P6-ALG-INTEGRATION-A3G-R3",
-        "dataset": "SuperLoc Corridor01",
-        "replay_type": "PREFIX_TO_TX190_LIDAR_SCAN_END",
-        "real_replay_count": 1,
-        "retry_count": 0,
-        "gt_used": False,
-        "production_mathematics_changed": False,
-        "diagnostic_observer_only": True,
-        "start_sha": EXPECTED_START,
-        "code_sha": expected_code_sha,
-        "release_binary_sha256": preflight["binary"]["sha256"],
-        "branch": BRANCH,
-        "input_identity": preflight["inputs"],
-        "frozen_a3g_artifact_ledger_sha256": preflight["frozen_a3g_external_ledger_sha256"],
-        "frozen_a3g_artifact_count": preflight["frozen_a3g_external_artifact_count"],
-        "frame_limit_includes_pre_handoff_scans": True,
-        "initialization_stamp_ns": INIT_NS,
-        "mode": preflight["mode"], "policy": preflight["policy"],
-        "visual": "NONE", "visual_provenance": "NONE",
-        "selected_transactions": expected_tx,
-        "selected_capture_count": len(actual_tx),
-        "prefix_parity": parity,
-        "files_excluding_manifest": inventory,
-        "payload_file_count": len(inventory),
-        "payload_total_bytes_excluding_manifest": sum(x["bytes"] for x in inventory),
-        "process_exit_code": result.returncode,
-    }
-    (TARGET / "MANIFEST.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
-    print(f"A3G_R3_SINGLE_PREFIX_CAPTURE_PASS root={TARGET} selected={len(actual_tx)} "
-          f"manifest_sha256={sha256(TARGET / 'MANIFEST.json')}")
+    finalize_existing_capture(expected_code_sha, expected_binary_sha256)
 
 
 def self_test():
@@ -232,14 +251,15 @@ def main():
     parser.add_argument("--self-test", action="store_true")
     parser.add_argument("--preflight-only", action="store_true")
     parser.add_argument("--execute", action="store_true")
+    parser.add_argument("--audit-existing", action="store_true")
     parser.add_argument("--expected-code-sha")
     parser.add_argument("--expected-binary-sha256")
     args = parser.parse_args()
     if args.self_test:
         self_test()
         return 0
-    if args.preflight_only == args.execute:
-        parser.error("choose exactly one of --preflight-only or --execute")
+    if sum((args.preflight_only, args.execute, args.audit_existing)) != 1:
+        parser.error("choose exactly one of --preflight-only, --execute, or --audit-existing")
     if not args.expected_code_sha:
         parser.error("--expected-code-sha is required")
     if not args.expected_binary_sha256 or len(args.expected_binary_sha256) != 64:
@@ -250,6 +270,9 @@ def main():
             "start_sha", "code_sha", "branch", "worktree_clean",
             "frozen_a3g_external_ledger_sha256", "frozen_a3g_external_artifact_count",
             "inputs", "binary")}, indent=2))
+        return 0
+    if args.audit_existing:
+        finalize_existing_capture(args.expected_code_sha, args.expected_binary_sha256)
         return 0
     execute(args.expected_code_sha, args.expected_binary_sha256)
     return 0

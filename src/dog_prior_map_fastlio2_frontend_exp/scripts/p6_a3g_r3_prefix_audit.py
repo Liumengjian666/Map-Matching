@@ -87,6 +87,13 @@ def matrix_from_pose(pose_row):
     return rotation, np.array([float(pose_row[k]) for k in ("px", "py", "pz")])
 
 
+def frozen_preopt_position_text(values) -> str:
+    # The frozen A3G preopt capsule routes position through vectorField(),
+    # which serializes with std::setprecision(10). Match that stored precision
+    # instead of comparing its rounded text to the exact 17-digit capture.
+    return ";".join(format(float(value), ".10g") for value in values)
+
+
 def compare_csv(frozen: Path, observed: Path, key_columns, exclude=(), filter_fn=None,
                 reject_observed_outside_prefix=False):
     frozen_rows = rows(frozen)
@@ -220,7 +227,6 @@ def audit_capture(root: Path):
                 float(((anchor_position - captured_position) ** 2).sum()) ** 0.5 <= 1e-12,
                 f"scan-start state differs from frozen deskew anchor: {tx}")
         predicted = preopt_by_tx[tx]
-        pos = [float(x) for x in predicted["predicted_position"].split(";")]
         quat = [float(x) for x in predicted["predicted_rotation_xyzw"].split(";")]
         import numpy as np
         end_pos = np.array([float(end_state[k]) for k in ("px", "py", "pz")])
@@ -228,7 +234,7 @@ def audit_capture(root: Path):
         target_q = np.array(quat)
         target_q /= np.linalg.norm(target_q)
         end_q /= np.linalg.norm(end_q)
-        require(np.linalg.norm(end_pos - np.array(pos)) <= 1e-12 and
+        require(frozen_preopt_position_text(end_pos) == predicted["predicted_position"] and
                 1.0 - abs(float(np.dot(end_q, target_q))) <= 1e-14,
                 f"scan-end pre-measurement state differs from frozen prediction: {tx}")
 
@@ -264,8 +270,8 @@ def audit_capture(root: Path):
     expected_events = set()
     for row in catalog_prefix:
         if int(row["scan_start_ns"]) >= INIT_NS:
-            expected_events.add((row["scan_start_ns"], "LIDAR_SCAN_START"))
-            expected_events.add((row["scan_end_ns"], "LIDAR_SCAN_END"))
+            expected_events.add((int(row["scan_start_ns"]), "LIDAR_SCAN_START"))
+            expected_events.add((int(row["scan_end_ns"]), "LIDAR_SCAN_END"))
     terminal_190 = catalog_by_tx[190]
     terminal_stamp_190 = int(terminal_190["scan_end_ns"])
     max_stamp = max(stamp for stamp, _ in expected_events)
@@ -274,7 +280,7 @@ def audit_capture(root: Path):
     def event_filter(row):
         return (int(row["timestamp"]), row["event_type"]) in expected_events
     def health_filter(row):
-        return (int(row["event_stamp_ns"]), row["event"]) in expected_events
+        return (int(row["stamp_ns"]), row["event"]) in expected_events
     expected_event_transactions = set()
     for row in catalog_prefix:
         if int(row["scan_start_ns"]) >= INIT_NS:
@@ -301,7 +307,8 @@ def audit_capture(root: Path):
                                   ("transaction_id",), filter_fn=lambda r: int(r["transaction_id"]) <= 190,
                                   reject_observed_outside_prefix=True),
         "events": compare_csv(FROZEN_RUN / "events.csv", root / "events.csv",
-                              ("timestamp", "event_type"), filter_fn=event_filter,
+                              ("timestamp", "event_type"),
+                              exclude=("qr_marginalization_ms",), filter_fn=event_filter,
                               reject_observed_outside_prefix=True),
         "preopt": compare_csv(FROZEN_RUN / "trajectory.csv.r1_preopt_capsule.csv",
                               root / "trajectory.csv.r1_preopt_capsule.csv",
@@ -319,7 +326,7 @@ def audit_capture(root: Path):
                                   reject_observed_outside_prefix=True),
         "health": compare_csv(FROZEN_RUN / "trajectory.csv.a3g_health.csv",
                               root / "trajectory.csv.a3g_health.csv",
-                              ("transaction_id", "event_stamp_ns", "event"),
+                              ("transaction_id", "stamp_ns", "event"),
                               exclude=("optimizer_and_marginalization_ms",),
                               filter_fn=health_filter,
                               reject_observed_outside_prefix=True),
@@ -359,7 +366,15 @@ def self_test():
     require(SELECTED == [159,160,163,165,166,173,174,176,182,183,185,187,188,190],
             "allowlist changed")
     require(40 * 7 == 280, "raw timed record layout self-test")
+    require(frozen_preopt_position_text((13.932515291325632, -2.035916569738783,
+                                         2.172966287204165)) ==
+            "13.93251529;-2.03591657;2.172966287",
+            "frozen 10-digit preopt serialization check")
     require("SQUARE_ROOT_QR" != "LEGACY_INFORMATION_SCHUR", "backend fixture")
+    event_keys = {(1517157238149502993, "LIDAR_SCAN_START"),
+                  (1517157238250342442, "LIDAR_SCAN_END")}
+    require(max(stamp for stamp, _ in event_keys) == 1517157238250342442,
+            "numeric timestamp endpoint ordering fixture")
     expected = {(10, "LIDAR_SCAN_START"), (20, "LIDAR_SCAN_END")}
     observed_rows = [{"key": (10, "LIDAR_SCAN_START")},
                      {"key": (20, "LIDAR_SCAN_END")}]
