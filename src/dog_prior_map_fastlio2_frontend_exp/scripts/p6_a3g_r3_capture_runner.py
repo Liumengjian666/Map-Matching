@@ -47,6 +47,12 @@ def git(*args: str) -> str:
     return subprocess.check_output(["git", *args], cwd=REPO, text=True).strip()
 
 
+def require_frozen_input_identity(entries, name: str, expected_sha: str) -> None:
+    recorded = next((entry["sha256"] for entry in entries if entry["path"] == name), None)
+    if recorded != expected_sha:
+        raise RuntimeError(f"A3G input identity ledger mismatch: {name}")
+
+
 def check_preflight(expected_code_sha: str, expected_binary_sha256: str):
     head = git("rev-parse", "HEAD")
     branch = git("branch", "--show-current")
@@ -68,10 +74,7 @@ def check_preflight(expected_code_sha: str, expected_binary_sha256: str):
         actual_inputs[name] = {"bytes": path.stat().st_size, "sha256": actual}
     frozen_identity = json.loads((FROZEN_RUN / "input_identity.json").read_text())
     for name, expected in INPUT_SHA.items():
-        recorded = next((entry["sha256"] for entry in frozen_identity["inputs"]
-                         if entry["path"] == name), None)
-        if recorded != expected:
-            raise RuntimeError(f"A3G input identity ledger mismatch: {name}")
+        require_frozen_input_identity(frozen_identity, name, expected)
     external_ledger_path = FROZEN_DOCS / "EXTERNAL_RUN_FILES.json"
     ledger = json.loads(external_ledger_path.read_text())
     verified_artifacts = []
@@ -213,6 +216,14 @@ def self_test():
         raise RuntimeError("A3G-R3 runner contract fixture mismatch")
     if len("a" * 64) != 64:
         raise RuntimeError("A3G-R3 binary identity fixture malformed")
+    fixture = [{"path": "/frozen/raw.bin", "sha256": "a" * 64}]
+    require_frozen_input_identity(fixture, "/frozen/raw.bin", "a" * 64)
+    try:
+        require_frozen_input_identity(fixture, "/frozen/other.bin", "a" * 64)
+    except RuntimeError:
+        pass
+    else:
+        raise RuntimeError("A3G-R3 frozen input identity self-test failed to reject mismatch")
     print("A3G_R3_CAPTURE_RUNNER_SELF_TEST_PASS")
 
 
