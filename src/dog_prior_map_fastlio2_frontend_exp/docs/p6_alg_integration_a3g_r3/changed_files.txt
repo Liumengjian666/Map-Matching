@@ -1,0 +1,18 @@
+Observer and runner implementation commit 8368ceef083a4c8eadec3cc854dfa7540e458a40:
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_a2c_fixed_lag_producer.hpp
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_a2c_source_audit.py
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_a2d_raw_timed_provider.hpp
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_a3g_r3_capture.hpp
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_a3g_r3_capture_runner.py
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_a3g_r3_prefix_audit.py
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i1_branched_recovery.cpp
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b/CMakeLists.txt
+
+Runner frozen-input identity fix commit 65b803950902f0a36856d6a6187eb3e82eb72984:
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_a3g_r3_capture_runner.py
+
+Prefix endpoint / exact parity audit commit 618031f482ef6ee26fb718fa06132a51c4e9c21f:
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_a3g_r3_capture_runner.py
+src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_a3g_r3_prefix_audit.py
+
+Analysis report files are listed by this directory's Git commit.

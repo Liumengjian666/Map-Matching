@@ -1,0 +1,19 @@
+External evidence root:
+/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_a3g_r3_capture
+
+MANIFEST.json SHA256=fe29dd76d4906c674f7f4104b5b67df442d7ed9089492b10289802794fdac180
+PREFIX_PARITY.json SHA256=ea68eff90779a105dbf8beae4367d49f1330437cb53a9267f3cd3edf67b1c932
+Payload files excluding MANIFEST.json=103
+Payload bytes excluding MANIFEST.json=33610269
+
+The committed CAPTURE_MANIFEST.json contains byte size and SHA-256 for every payload file, including all per-transaction raw timed binaries, production deskewed PCDs, exact NDT source PCDs, knots, metadata, and run logs. Large point data itself is not in Git.
+
+Frozen input SHA-256 identities:
+raw_timed_points.bin=4ba09d8ae7004056dcc4e9d63d2ab09915748c7e68bc29d0dc8bd44a24fc95ff
+raw_timed_catalog.csv=fdaf9607bc1933269f5f999ee044d37aa1eefabedc054f522da5078ce708123f
+filter_scans.csv=41d0b2040a5de8a8bd428c382a7b6dc18fabcaa8d3e7d2cc331018e0585edf1d
+RAW_TIMED_INPUT_MANIFEST.txt=fb20125c63aa4c7110851b8bb08ec33e8938d94be18e28e9737d207001377575
+imu.csv=7dc881d4ebfeacea9354be569a5952e5e466ccdd366637e52a7797a6f37457aa
+corridor01_map_normalized.pcd=103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f
+corridor01_params_official_calibration.txt=7e42752ff8b84eae2b2da8d7d9fe179db0bb8f364a923e12236d2e91336e357d
+A3G frozen external artifact ledger SHA256=4992c4f56fa49e2b8837f57733b9edc2bde51efb997e6c475a716be35a3cdf05

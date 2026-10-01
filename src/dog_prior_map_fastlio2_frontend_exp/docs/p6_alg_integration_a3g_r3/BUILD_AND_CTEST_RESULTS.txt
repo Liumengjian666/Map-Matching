@@ -1,0 +1,16 @@
+Release build: PASS
+Command: cmake --build /tmp/p6_a2d_build -j1
+
+Full Release CTest: PASS, 42/42
+Command: env LD_LIBRARY_PATH=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu cmake -E chdir /tmp/p6_a2d_build ctest --output-on-failure
+
+Debug targeted CTest: PASS, 22/22
+Coverage included A1-R1, A2D window-owned producer, A3B-R1/R2, A3C-R1/R2, A3D-R1, A3E-R1/R2, square-root covariance, and the A3G-R3 observer parity fixture.
+
+Latest audit/tool regression after the offline prefix-audit precision/header fixes: Debug 4/4 PASS (A2C source boundary, capture runner guard, prefix audit guard, capture parity).
+
+Observer capture OFF/ON synthetic fixture: PASS.
+Python runner/prefix-audit self-tests: PASS.
+git diff --check: PASS.
+
+All Release and Debug CTest invocations were run with the build directory selected by `cmake -E chdir`; the installed CTest is 3.16 and does not honor the newer `--test-dir` option.
