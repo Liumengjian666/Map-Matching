@@ -1,0 +1,4 @@
+marginalization_backend=SQUARE_ROOT_QR
+marginal_covariance_backend=SQUARE_ROOT_QR
+initial_square_root_factorization=PASS_LLT_NO_REGULARIZATION
+P6_I1_RUNNER_FAILED: producer_square_root_covariance:SQUARE_ROOT_COVARIANCE_RANK_DEFICIENT

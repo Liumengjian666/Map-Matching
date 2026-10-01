@@ -1,0 +1,26 @@
+{
+  "START_SHA": "7bcbd5fb2c5c1822e5e0f161f5d59abc356632fd",
+  "binary_sha256": "90aebab700db10e4f0f86d79b9a94fa4efe0d3d7f8d58f9c260462e7eb7b23fe",
+  "environment": {
+    "LD_LIBRARY_PATH": "/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu",
+    "P6_A3B_R1_DIAGNOSTICS": "0",
+    "P6_A3C_R1_MARGINALIZATION_DIAGNOSTICS": "0",
+    "P6_A3F_R1_COVARIANCE_DIAGNOSTICS": "0",
+    "P6_A3G_HEALTH_DIAGNOSTICS": "1"
+  },
+  "uncommitted_diagnostic_diff_sha256": "2c8f1c27714364fb97d17a5288c3a5eaf800389dd8516fc3c42b54669218532d",
+  "diagnostic_source_sha256": {
+    "src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/fixed_lag_window.hpp": "b0e8b8cb374f9826d04302750008016308f9343d07409fa9b05953497b3fd4b0",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_a2c_fixed_lag_producer.hpp": "36ff434c69bb05c2b5e261a7208debfe68e06021cdd0a1b7acbebda43f8b0187",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_a2d_raw_timed_provider.hpp": "6d1092f477a476f51b3593edfa34b073e30646345f4aadb4a298dec7c3dcb973",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_a3e_r2_square_root_test.cpp": "aaf739f99f0fc61ff5eb5aa8def635c3bb17697b85035518dd8a3d559f9a5d7e",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b/CMakeLists.txt": "eb3cb5d5a54c66c1cfa9af77f19cb02c0254c15a78049a7816a3fcca10b1987e",
+    "src/dog_prior_map_fastlio2_frontend_exp/src/fixed_lag_window.cpp": "c37faf53eeb3ca351881abcbaa2d68aafa51b4f60cb991bc463122327fd06ae7",
+    "src/dog_prior_map_fastlio2_frontend_exp/src/window_square_root_marginalization.cpp": "5924c4315330aa1385104d32540418503e5fb2d186cef6f490a95c22645a9d25",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_a3g_health_parity_test.cpp": "1b413908617508ef47b308fc369adf597ee37564065c8ce30593f358528b9000",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_a3g_soak.py": "8eaefdf8f1ae71801f8ff9d43b3af80a1471052f8d124d5d79563c796838cec2"
+  },
+  "full_frame_count": 2777,
+  "pre_handoff": 51,
+  "expected_terminals": 2726
+}

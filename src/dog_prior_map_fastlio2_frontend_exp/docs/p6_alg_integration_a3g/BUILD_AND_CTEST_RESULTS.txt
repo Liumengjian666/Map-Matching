@@ -1,0 +1,29 @@
+Release build: PASS
+Command: cmake --build /tmp/p6_a2d_build -j1
+Serial final build exited 0; all targets completed.
+Before real run: 39/39 CTest PASS (3.37 s), Debug targeted 17/17 PASS (41.54 s).
+After postprocessing-only script correction: 39/39 CTest PASS (3.09 s),
+Debug targeted 17/17 PASS (43.14 s).
+All pre-existing 37 tests retained; 2 A3G observer/guard tests added.
+
+Runtime CTest environment:
+LD_LIBRARY_PATH=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu
+OPENBLAS_NUM_THREADS=1
+
+Release command (cwd /tmp/p6_a2d_build): ctest --output-on-failure
+Debug command (cwd /tmp/p6_a2d_debug):
+ctest -R 'p6_a3g|p6_a3f_r1|p6_a1_r1|dense_sparse_equivalence|p6_a3b_r[12]|p6_a3c_r[12]|p6_a3d_r1|p6_a3e_r[12]' --output-on-failure
+
+Debug targeted build completed at -j1. One mistyped target name in an earlier
+build command was corrected without source/algorithm changes.
+Parallel builds had a compiler process killed under resource pressure;
+build-only processes were stopped and serial compilation succeeded.
+No real replay was performed by any build/test/self-test.
+
+A3G health parity: PASS, states/A/b/H/g/lifecycle/callbacks exact OFF/ON.
+A3G soak guard and summary schema self-test: PASS.
+A1-R1/A2D/A3B-R1/A3B-R2/A3C-R1/A3C-R2/A3D-R1/A3E-R1/A3E-R2/A3F-R1: PASS.
+git diff --check: PASS.
+
+REAL RUN: FAIL at tx366 pre-measurement square-root covariance numerical rank gate.
+This is not a build/test failure and was not fixed/retried.

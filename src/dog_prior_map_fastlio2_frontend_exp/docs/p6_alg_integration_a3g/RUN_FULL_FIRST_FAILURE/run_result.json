@@ -1,0 +1,47 @@
+{
+  "REAL_REPLAY_COUNT": 1,
+  "RETRY_COUNT": 0,
+  "GT_USED": false,
+  "exit_code": 1,
+  "completed": false,
+  "first_failure": "FIRST_FAILURE:producer_square_root_covariance:SQUARE_ROOT_COVARIANCE_RANK_DEFICIENT",
+  "last_health_record": {
+    "stream": "health",
+    "row": {
+      "transaction_id": "366",
+      "stamp_ns": "1517157256000664307",
+      "event": "LIDAR_SCAN_END",
+      "completed": "0",
+      "state_finite": "1",
+      "so3_defect": "2.0206059048177849e-14",
+      "det_defect": "9.7699626167013776e-15",
+      "prior_finite": "1",
+      "prior_rows": "15",
+      "prior_columns": "600",
+      "window_nodes": "40",
+      "window_span": "1.9162788390000001",
+      "imu_factors": "39",
+      "lidar_factors": "0",
+      "visual_factors": "0",
+      "active_ids": "39",
+      "revision": "1331",
+      "optimized_revision": "1330",
+      "optimizer_status": "NOT_RUN",
+      "optimizer_success": "0",
+      "marginalization_status": "PASS_SQUARE_ROOT_QR",
+      "dense_reference_requests": "0",
+      "covariance_requests": "315",
+      "sparse_fallbacks": "0",
+      "optimizer_and_marginalization_ms": "0",
+      "reason": "producer_square_root_covariance:SQUARE_ROOT_COVARIANCE_RANK_DEFICIENT"
+    }
+  },
+  "counts": {
+    "events": 630,
+    "terminals": 314,
+    "covariance": 314,
+    "event_terminals": 314,
+    "trajectory": 314,
+    "removals": 592
+  }
+}

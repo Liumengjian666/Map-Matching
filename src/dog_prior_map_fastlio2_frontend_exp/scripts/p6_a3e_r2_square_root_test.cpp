@@ -104,11 +104,13 @@ LidarWindowMeasurement rankFive(const WindowState& x,std::uint64_t id) {
   return m;
 }
 
-FixedLagWindow graph(bool capture,std::shared_ptr<int> calls=nullptr) {
+FixedLagWindow graph(bool capture,std::shared_ptr<int> calls=nullptr,bool health=false) {
   FixedLagOptions options;
   options.marginalization_backend=MarginalizationBackend::SQUARE_ROOT_QR;
   options.maximum_nodes=2; options.maximum_duration_s=100;
   options.capture_marginalization_diagnostics=capture;
+  options.capture_marginalization_health=health;
+  options.capture_optimizer_trace=health;
   ImuNoiseParameters noise; noise.gravity.setZero();
   FixedLagWindow window(options,noise); std::string reason;
   auto x0=stateAt(0),x1=stateAt(1),x2=stateAt(2);

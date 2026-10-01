@@ -260,6 +260,8 @@ void runWindowOwnedExperimentalMode(const p4_i2::Inputs& inputs,
   const char* diagnostic_environment=std::getenv("P6_A3B_R1_DIAGNOSTICS");
   const bool diagnostic_enabled=diagnostic_environment &&
       std::string(diagnostic_environment)=="1";
+  const char* health_environment=std::getenv("P6_A3G_HEALTH_DIAGNOSTICS");
+  const bool health_enabled=health_environment && std::string(health_environment)=="1";
   fixed_lag::FixedLagOptions options;
   // Explicit V3 estimator contract, not an environment-selected backend.
   options.marginalization_backend=fixed_lag::MarginalizationBackend::SQUARE_ROOT_QR;
@@ -269,21 +271,25 @@ void runWindowOwnedExperimentalMode(const p4_i2::Inputs& inputs,
   const char* covariance_environment=std::getenv("P6_A3F_R1_COVARIANCE_DIAGNOSTICS");
   options.capture_covariance_shadow=covariance_environment && std::string(covariance_environment)=="1";
   std::ofstream covariance_requests,covariance_comparisons;
-  if (options.capture_covariance_shadow) {
+  if (options.capture_covariance_shadow || health_enabled) {
     covariance_requests=openV3ExclusiveOutput(trajectory_path+".a3f_r1_covariance.csv");
+  }
+  if (options.capture_covariance_shadow) {
     covariance_comparisons=openV3ExclusiveOutput(trajectory_path+".a3f_r1_comparison.csv");
   }
-  options.capture_optimizer_trace=diagnostic_enabled;
+  options.capture_optimizer_trace=diagnostic_enabled || health_enabled;
   const char* marginalization_environment =
       std::getenv("P6_A3C_R1_MARGINALIZATION_DIAGNOSTICS");
   const bool marginalization_diagnostic_enabled = marginalization_environment &&
       std::string(marginalization_environment) == "1";
   options.capture_marginalization_diagnostics =
       marginalization_diagnostic_enabled;
+  options.capture_marginalization_health = health_enabled;
   std::ofstream preopt_capsule,optimizer_trace,directional_derivative,
       damping_sweep,optimizer_failure_summary,marginalization_trace,
-      marginalization_failure_summary;
-  if (diagnostic_enabled) {
+      marginalization_failure_summary,soak_health;
+  if (health_enabled) soak_health=openV3ExclusiveOutput(trajectory_path+".a3g_health.csv");
+  if (diagnostic_enabled || health_enabled) {
     preopt_capsule=openV3ExclusiveOutput(trajectory_path+".r1_preopt_capsule.csv");
     optimizer_trace=openV3ExclusiveOutput(trajectory_path+".r1_optimizer_trace.csv");
     directional_derivative=openV3ExclusiveOutput(trajectory_path+".r1_directional_derivative.csv");
@@ -292,7 +298,7 @@ void runWindowOwnedExperimentalMode(const p4_i2::Inputs& inputs,
   }
   const std::string marginalization_failure_capsule_path =
       trajectory_path + ".a3c_r1_failure_capsule.bin";
-  if (marginalization_diagnostic_enabled) {
+  if (marginalization_diagnostic_enabled || health_enabled) {
     marginalization_trace=openV3ExclusiveOutput(
         trajectory_path+".a3c_r1_marginalization_trace.csv");
     marginalization_failure_summary=openV3ExclusiveOutput(
@@ -302,17 +308,18 @@ void runWindowOwnedExperimentalMode(const p4_i2::Inputs& inputs,
       [](const ScanAsset&)->Cloud::Ptr {throw std::runtime_error("V3_LEGACY_SOURCE_PROVIDER_FORBIDDEN");},
       trajectory,diagnostics,runtime,init_stamp,policy,{}, options,&owned,
       fixed_lag::LidarCloudProvenance::WINDOW_OWNED_SE3_DESKEW,&deskew_evidence,
-      diagnostic_enabled?&preopt_capsule:nullptr,
-      diagnostic_enabled?&optimizer_trace:nullptr,
+      (diagnostic_enabled || health_enabled)?&preopt_capsule:nullptr,
+      (diagnostic_enabled || health_enabled)?&optimizer_trace:nullptr,
       diagnostic_enabled?&directional_derivative:nullptr,
       diagnostic_enabled?&damping_sweep:nullptr,
-      diagnostic_enabled?&optimizer_failure_summary:nullptr,
-      marginalization_diagnostic_enabled?&marginalization_trace:nullptr,
-      marginalization_diagnostic_enabled?&marginalization_failure_summary:nullptr,
-      marginalization_diagnostic_enabled?marginalization_failure_capsule_path:
+      (diagnostic_enabled || health_enabled)?&optimizer_failure_summary:nullptr,
+      (marginalization_diagnostic_enabled || health_enabled)?&marginalization_trace:nullptr,
+      (marginalization_diagnostic_enabled || health_enabled)?&marginalization_failure_summary:nullptr,
+      (marginalization_diagnostic_enabled || health_enabled)?marginalization_failure_capsule_path:
           std::string(),
-      options.capture_covariance_shadow?&covariance_requests:nullptr,
-      options.capture_covariance_shadow?&covariance_comparisons:nullptr);
+      (options.capture_covariance_shadow || health_enabled)?&covariance_requests:nullptr,
+      options.capture_covariance_shadow?&covariance_comparisons:nullptr,
+      health_enabled?&soak_health:nullptr);
   trajectory.flush(); diagnostics.flush(); runtime.flush(); deskew_evidence.flush();
   if (marginalization_diagnostic_enabled) marginalization_trace.flush();
   std::cout<<"FULL_FIXED_LAG_V3_EXPERIMENTAL_COMPLETE window_deskews="<<result.window_deskew_count

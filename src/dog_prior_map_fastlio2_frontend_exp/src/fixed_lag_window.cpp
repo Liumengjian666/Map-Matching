@@ -1149,7 +1149,7 @@ bool FixedLagWindow::optimize(std::string* reason) {
 bool FixedLagWindow::marginalizeIfNeeded(std::string* reason) {
   if (reason) reason->clear();
   if (states_.empty()) return fail(reason, "cannot_marginalize_empty_window");
-  if (options_.capture_marginalization_diagnostics) {
+  if (options_.capture_marginalization_diagnostics || options_.capture_marginalization_health) {
     ++marginalization_enforcement_index_;
     marginalization_attempt_index_ = 0;
     marginalization_failure_capsule_ = MarginalizationFailureCapsule();
@@ -1166,7 +1166,7 @@ bool FixedLagWindow::marginalizeIfNeeded(std::string* reason) {
   while (states_.size() > options_.maximum_nodes ||
          (states_.back().stamp_ns - states_.front().stamp_ns) * 1e-9 >
              options_.maximum_duration_s) {
-    if (options_.capture_marginalization_diagnostics) {
+    if (options_.capture_marginalization_diagnostics || options_.capture_marginalization_health) {
       ++marginalization_attempt_index_;
       marginalization_trigger_node_limit_ =
           states_.size() > options_.maximum_nodes;

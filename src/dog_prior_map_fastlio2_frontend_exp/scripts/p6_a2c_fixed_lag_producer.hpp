@@ -238,7 +238,8 @@ FixedLagProducerResult runFixedLagProducer(
     std::ostream* marginalization_failure_summary = nullptr,
     const std::string& marginalization_failure_capsule_path = {},
     std::ostream* covariance_request_output = nullptr,
-    std::ostream* covariance_comparison_output = nullptr) {
+    std::ostream* covariance_comparison_output = nullptr,
+    std::ostream* soak_health_output = nullptr) {
   using namespace fixed_lag;
   const auto started=std::chrono::steady_clock::now();
   if(assets.empty() || inputs.imu.empty() || !target || target->empty())
@@ -405,7 +406,47 @@ FixedLagProducerResult runFixedLagProducer(
           transaction_id, stamp_ns, rows[marginalization_trace_cursor]);
     marginalization_trace_output->flush();
   };
+  if (soak_health_output)
+    *soak_health_output << std::setprecision(17)
+        << "transaction_id,stamp_ns,event,completed,state_finite,so3_defect,det_defect,prior_finite,prior_rows,prior_columns,window_nodes,window_span,imu_factors,lidar_factors,visual_factors,active_ids,revision,optimized_revision,optimizer_status,optimizer_success,marginalization_status,dense_reference_requests,covariance_requests,sparse_fallbacks,optimizer_and_marginalization_ms,reason\n";
   for(const ProducerEvent& event:stream) {
+    double optimizer_and_marginalization_ms = 0;
+    const auto writeSoakHealth = [&](bool completed, const std::string& failure) {
+      if (!soak_health_output) return;
+      const auto* w = adapter.debugWindowForDiagnostics();
+      const auto s = adapter.summary();
+      bool finite = w != nullptr, prior_finite = false;
+      double orthogonal = 0, determinant = 0;
+      if (w) {
+        for (const auto& x : w->states()) {
+          finite = finite && x.rotation.allFinite() && x.position.allFinite() &&
+              x.velocity.allFinite() && x.gyro_bias.allFinite() && x.accel_bias.allFinite();
+          orthogonal = std::max(orthogonal,
+              (x.rotation.transpose()*x.rotation-Eigen::Matrix3d::Identity()).cwiseAbs().maxCoeff());
+          determinant = std::max(determinant, std::abs(x.rotation.determinant()-1));
+        }
+        const auto& p = w->priorSquareRootRows();
+        prior_finite = p.a.allFinite() && p.b.allFinite() &&
+            p.a.rows()==p.b.size() && p.a.cols()==static_cast<Eigen::Index>(15*w->states().size());
+      }
+      const auto tx = (event.type==ProducerEventType::LIDAR_SCAN_START ||
+          event.type==ProducerEventType::LIDAR_SCAN_END || event.type==ProducerEventType::LIDAR_SCAN)
+          ? assets[event.source_index].transaction_id : 0;
+      std::string clean = failure;
+      std::replace(clean.begin(),clean.end(),',',';');
+      std::replace(clean.begin(),clean.end(),'\n',' ');
+      *soak_health_output << tx << ',' << event.stamp_ns << ',' << toString(event.type) << ','
+          << completed << ',' << finite << ',' << orthogonal << ',' << determinant << ','
+          << prior_finite << ',' << s.square_root_prior_rows << ',' << s.square_root_prior_columns << ','
+          << s.window_node_count << ',' << s.window_time_span_s << ',' << s.imu_factor_count << ','
+          << s.lidar_factor_count << ',' << s.visual_factor_count << ',' << s.active_observation_id_count << ','
+          << s.window_revision << ',' << s.optimized_revision << ',' << s.optimizer_status << ','
+          << s.optimizer_success << ',' << s.marginalization_status << ',' << s.dense_marginal_reference_requests << ','
+          << s.marginal_covariance_requests << ',' << s.sparse_solver_fallback_count << ','
+          << optimizer_and_marginalization_ms << ',' << clean << '\n';
+      soak_health_output->flush();
+    };
+    try {
     const auto event_start=std::chrono::steady_clock::now();
     // Append through exactly the first right boundary required for this event.
     while(buffered_stamp<event.stamp_ns) {
@@ -739,7 +780,11 @@ FixedLagProducerResult runFixedLagProducer(
       preopt_capsule->flush();
       if (!*preopt_capsule) throw std::runtime_error("optimizer_preopt_capsule_flush_failed");
     }
-    if(!adapter.optimizeCurrentWindow(&reason)) {
+    const auto optimizer_begin=std::chrono::steady_clock::now();
+    const bool optimizer_completed=adapter.optimizeCurrentWindow(&reason);
+    optimizer_and_marginalization_ms=std::chrono::duration<double,std::milli>(
+        std::chrono::steady_clock::now()-optimizer_begin).count();
+    if(!optimizer_completed) {
       const std::uint64_t failed_transaction_id =
           (event.type==ProducerEventType::LIDAR_SCAN ||
            event.type==ProducerEventType::LIDAR_SCAN_END)
@@ -845,7 +890,7 @@ FixedLagProducerResult runFixedLagProducer(
         std::string diagnosis_reason="diagnostic_window_unavailable";
         if (debug_window) {
           trace_rows=debug_window->optimizerTraceForDebug();
-          diagnosis_ok=debug_window->diagnoseOptimizerFailureForDebug(
+          if (!soak_health_output) diagnosis_ok=debug_window->diagnoseOptimizerFailureForDebug(
               {1e-8,1e-7,1e-6,1e-5,1e-4},
               {1e-6,1e-5,1e-4,1e-3,1e-2,1e-1,1.0,10.0,100.0,
                1e3,1e4,1e5,1e6},
@@ -920,7 +965,7 @@ FixedLagProducerResult runFixedLagProducer(
          event.type==ProducerEventType::LIDAR_SCAN_END)
             ? assets[event.source_index].transaction_id : 0,
         event.stamp_ns);
-    if (optimizer_trace_output) {
+    if (optimizer_trace_output && !soak_health_output) {
       const auto* trace_window = adapter.debugWindowForDiagnostics();
       if (!trace_window)
         throw std::runtime_error("optimizer_trace_window_unavailable");
@@ -968,6 +1013,16 @@ FixedLagProducerResult runFixedLagProducer(
         <<summary.rank_diagnostic_ms<<','<<summary.solver_status<<','<<summary.sparse_solver_fallback_count<<'\n';
     result.events++; result.probes+=probed; result.covariance_available+=prior.valid;
     result.ndt_calls+=calls; result.ndt_ms+=ndt_ms;
+    writeSoakHealth(true, "");
+    if (soak_health_output) { trajectory.flush(); diagnostics.flush(); runtime.flush(); }
+    } catch (const std::exception& error) {
+      const bool scan_event = event.type==ProducerEventType::LIDAR_SCAN_START ||
+          event.type==ProducerEventType::LIDAR_SCAN_END || event.type==ProducerEventType::LIDAR_SCAN;
+      flushMarginalizationTraceRows(scan_event ? assets[event.source_index].transaction_id : 0,event.stamp_ns);
+      writeSoakHealth(false,error.what());
+      trajectory.flush(); diagnostics.flush(); runtime.flush();
+      throw;
+    }
   }
   result.total_ms=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-started).count();
   return result;

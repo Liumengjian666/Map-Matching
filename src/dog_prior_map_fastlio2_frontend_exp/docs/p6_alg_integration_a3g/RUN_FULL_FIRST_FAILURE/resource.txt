@@ -1,0 +1,24 @@
+Command exited with non-zero status 1
+	Command being timed: "/tmp/p6_a2d_build/p6_i6b_closed_loop FULL_FIXED_LAG_V3_EXPERIMENTAL /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_i6c_framework/input/imu.csv /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_a3a_v3_input/filter_scans.csv /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_a3a_v3_input/raw_timed_catalog.csv /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_a3a_v3_input/raw_timed_points.bin /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i6d_full_algorithm/corridor01_params_official_calibration.txt /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_a3g_full_corridor/trajectory.csv /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_a3g_full_corridor/events.csv /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_a3g_full_corridor/runtime.csv NONE 2777 1517157224188979000 corridor01 ADAPTIVE_SELECTED_NIS /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_a3a_v3_input/raw_timed_catalog.csv NONE"
+	User time (seconds): 41.76
+	System time (seconds): 5.99
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:47.98
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 74448
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 3
+	Minor (reclaiming a frame) page faults: 363371
+	Voluntary context switches: 4531
+	Involuntary context switches: 10411
+	Swaps: 0
+	File system inputs: 392
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

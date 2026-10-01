@@ -1,0 +1,86 @@
+{
+  "post_handoff_terminals": 314,
+  "covariance_requests": 315,
+  "covariance_available": 314,
+  "covariance_unavailable": 1,
+  "NDT_converged": 314,
+  "U_obs_valid": 124,
+  "NIS_valid": 123,
+  "LiDAR_committed": 107,
+  "rejected": {
+    "NIS": 16,
+    "map_support": 190,
+    "rank": 1
+  },
+  "U_nonlocal_probes": 110,
+  "optimizer_statuses": {
+    "ACCEPTED_UPDATE": 589,
+    "CONVERGED_WITHOUT_STEP": 41,
+    "NOT_RUN": 1
+  },
+  "QR_marginalization_attempts": 592,
+  "QR_marginalization_failures": 0,
+  "marginalized_rank_violations": 0,
+  "max_completed_nodes": 40,
+  "max_completed_span": 1.9589149060000002,
+  "max_prior_bytes": 72120,
+  "max_prior_rows": 15,
+  "max_SO3_defect": 2.2426505097428162e-14,
+  "max_det_defect": 1.7985612998927536e-14,
+  "post_handoff_IKFoM_calls": 0,
+  "visual_factors": 0,
+  "legacy_fallbacks": 0,
+  "timing_ms": {
+    "event": {
+      "count": 314,
+      "mean": 132.54981847133755,
+      "P50": 70.63810000000001,
+      "P95": 371.83499999999987,
+      "max": 470.08
+    },
+    "NDT": {
+      "count": 314,
+      "mean": 50.408450722929935,
+      "P50": 1.161435,
+      "P95": 262.17869999999965,
+      "max": 362.011
+    },
+    "optimizer": {
+      "count": 630,
+      "mean": 13.486982103174599,
+      "P50": 6.940892999999999,
+      "P95": 29.0315323,
+      "max": 32.268029
+    },
+    "optimizer_linearization": {
+      "count": 630,
+      "mean": 3.177290074603176,
+      "P50": 1.146005,
+      "P95": 7.864897999999999,
+      "max": 9.91099
+    },
+    "optimizer_solve": {
+      "count": 630,
+      "mean": 2.321591388888891,
+      "P50": 0.719337,
+      "P95": 5.56193,
+      "max": 6.65964
+    },
+    "QR_marginalization": {
+      "count": 592,
+      "mean": 4.696625182432432,
+      "P50": 4.7076615,
+      "P95": 5.250875299999999,
+      "max": 6.533155
+    },
+    "QR_covariance": {
+      "count": 315,
+      "mean": 38.113737825396875,
+      "P50": 39.248104,
+      "P95": 44.5827026,
+      "max": 48.369742
+    }
+  },
+  "GT_USED": false,
+  "attempted_terminals": 315
+}

@@ -33,6 +33,8 @@ struct FixedLagOptions {
   // Opt-in marginalization forensics. It may collect matrix diagnostics but
   // must never participate in production decisions or change factor order.
   bool capture_marginalization_diagnostics = false;
+  // Lightweight attempt records and failure capsule only; no legacy shadow.
+  bool capture_marginalization_health = false;
   MarginalizationBackend marginalization_backend = MarginalizationBackend::LEGACY_INFORMATION_SCHUR;
   MarginalCovarianceBackend marginal_covariance_backend = MarginalCovarianceBackend::LEGACY_NORMAL_SPARSE_LLT;
   bool capture_covariance_shadow = false;

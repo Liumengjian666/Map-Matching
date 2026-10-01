@@ -1,0 +1,14 @@
+START_SHA=7bcbd5fb2c5c1822e5e0f161f5d59abc356632fd
+BRANCH=research/p6-i6d-full-algorithm
+WORKSPACE=/home/jian/livox_ws/dog_loc_p6_i6b_ws
+ALGORITHM_BASE_SHA=7bcbd5fb2c5c1822e5e0f161f5d59abc356632fd
+PRODUCTION_ALGORITHM_CHANGED=NO
+DIAGNOSTIC_WIRING_CHANGED=YES
+RUNNER_SHA256=90aebab700db10e4f0f86d79b9a94fa4efe0d3d7f8d58f9c260462e7eb7b23fe
+LAUNCH_SOURCE_IDENTITY=RUN_FULL_FIRST_FAILURE/source_identity.json
+AS_RUN_LAUNCHER=external_results/LAUNCHER_AS_RUN.py (SHA verified against source_identity)
+POST_RUN_ONLY_SCRIPT_CHANGE=summary runtime field-name correction and self-test
+END_SHA=analysis commit containing this report; exact SHA supplied in final handoff
+REAL_REPLAY_COUNT=1
+RETRY_COUNT=0
+GT_USED=false

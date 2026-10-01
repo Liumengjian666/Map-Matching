@@ -1,0 +1,83 @@
+Test project /tmp/p6_a2d_build
+      Start  1: p6_a3f_r1_covariance
+ 1/39 Test  #1: p6_a3f_r1_covariance ....................   Passed    0.01 sec
+      Start  2: p6_a3g_health_parity
+ 2/39 Test  #2: p6_a3g_health_parity ....................   Passed    0.01 sec
+      Start  3: p6_a3e_r2_square_root
+ 3/39 Test  #3: p6_a3e_r2_square_root ...................   Passed    0.07 sec
+      Start  4: p6_a3d_r1_termination
+ 4/39 Test  #4: p6_a3d_r1_termination ...................   Passed    0.00 sec
+      Start  5: p6_a3g_soak_guard
+ 5/39 Test  #5: p6_a3g_soak_guard .......................   Passed    0.04 sec
+      Start  6: p6_a3f_r1_replay_guard
+ 6/39 Test  #6: p6_a3f_r1_replay_guard ..................   Passed    0.04 sec
+      Start  7: p6_a3e_r2_replay_guard
+ 7/39 Test  #7: p6_a3e_r2_replay_guard ..................   Passed    0.03 sec
+      Start  8: p6_a3e_r1_high_precision_oracle
+ 8/39 Test  #8: p6_a3e_r1_high_precision_oracle .........   Passed    0.12 sec
+      Start  9: p6_a3a_input_contract
+ 9/39 Test  #9: p6_a3a_input_contract ...................   Passed    0.13 sec
+      Start 10: p6_a2c_source_boundary_audit
+10/39 Test #10: p6_a2c_source_boundary_audit ............   Passed    0.03 sec
+      Start 11: p6_i6b_dual_reliability
+11/39 Test #11: p6_i6b_dual_reliability .................   Passed    0.00 sec
+      Start 12: p6_i6e_conditional_compensation
+12/39 Test #12: p6_i6e_conditional_compensation .........   Passed    0.00 sec
+      Start 13: p6_i6f_measurement_noise
+13/39 Test #13: p6_i6f_measurement_noise ................   Passed    0.05 sec
+      Start 14: p6_i6f_joint_window
+14/39 Test #14: p6_i6f_joint_window .....................   Passed    0.06 sec
+      Start 15: p6_i6f_imu_preintegration
+15/39 Test #15: p6_i6f_imu_preintegration ...............   Passed    0.00 sec
+      Start 16: p6_a1_r1_fixed_lag_regression
+16/39 Test #16: p6_a1_r1_fixed_lag_regression ...........   Passed    0.35 sec
+      Start 17: p6_alg_integration_a2a_adapter
+17/39 Test #17: p6_alg_integration_a2a_adapter ..........   Passed    0.01 sec
+      Start 18: p6_alg_integration_a2b
+18/39 Test #18: p6_alg_integration_a2b ..................   Passed    0.06 sec
+      Start 19: p6_a2c_initialization
+19/39 Test #19: p6_a2c_initialization ...................   Passed    0.00 sec
+      Start 20: scan_end_deskew_runtime_test
+20/39 Test #20: scan_end_deskew_runtime_test ............   Passed    0.00 sec
+      Start 21: frontend_runtime_end_to_end_test
+21/39 Test #21: frontend_runtime_end_to_end_test ........   Passed    0.00 sec
+      Start 22: p6_a2c_real_pcl_producer
+22/39 Test #22: p6_a2c_real_pcl_producer ................   Passed    0.27 sec
+      Start 23: p6_a2d_window_owned_pcl_producer
+23/39 Test #23: p6_a2d_window_owned_pcl_producer ........   Passed    0.27 sec
+      Start 24: p6_a3b_no_vision
+24/39 Test #24: p6_a3b_no_vision ........................   Passed    0.18 sec
+      Start 25: p6_a3b_r1_optimizer_diagnostics
+25/39 Test #25: p6_a3b_r1_optimizer_diagnostics .........   Passed    0.00 sec
+      Start 26: p6_a3b_r2_frozen_projection
+26/39 Test #26: p6_a3b_r2_frozen_projection .............   Passed    0.00 sec
+      Start 27: p6_a3c_r1_marginalization_diagnostics
+27/39 Test #27: p6_a3c_r1_marginalization_diagnostics ...   Passed    0.00 sec
+      Start 28: p6_a3c_r1_marginalization_oracle_math
+28/39 Test #28: p6_a3c_r1_marginalization_oracle_math ...   Passed    0.09 sec
+      Start 29: p6_a3c_r2_alias_regression
+29/39 Test #29: p6_a3c_r2_alias_regression ..............   Passed    0.00 sec
+      Start 30: p6_a3c_r2_source_alias_inventory
+30/39 Test #30: p6_a3c_r2_source_alias_inventory ........   Passed    0.25 sec
+      Start 31: p6_a3c_r2_tx90_capsule_repair
+31/39 Test #31: p6_a3c_r2_tx90_capsule_repair ...........   Passed    0.35 sec
+      Start 32: p6_i6e_projected_pose_consistency
+32/39 Test #32: p6_i6e_projected_pose_consistency .......   Passed    0.00 sec
+      Start 33: p6_i6e_r3_residual_jacobian
+33/39 Test #33: p6_i6e_r3_residual_jacobian .............   Passed    0.00 sec
+      Start 34: p6_alg_integration_a2c
+34/39 Test #34: p6_alg_integration_a2c ..................   Passed    0.00 sec
+      Start 35: window_deskew_math_test
+35/39 Test #35: window_deskew_math_test .................   Passed    0.00 sec
+      Start 36: dense_sparse_equivalence_test
+36/39 Test #36: dense_sparse_equivalence_test ...........   Passed    0.06 sec
+      Start 37: solver_scaling_sanity_test
+37/39 Test #37: solver_scaling_sanity_test ..............   Passed    0.35 sec
+      Start 38: measurement_provenance_test
+38/39 Test #38: measurement_provenance_test .............   Passed    0.01 sec
+      Start 39: sparse_marginal_covariance_test
+39/39 Test #39: sparse_marginal_covariance_test .........   Passed    0.22 sec
+
+100% tests passed, 0 tests failed out of 39
+
+Total Test time (real) =   3.09 sec

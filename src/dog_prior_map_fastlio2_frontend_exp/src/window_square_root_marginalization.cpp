@@ -46,6 +46,7 @@ bool FixedLagWindow::marginalizeOldestSquareRoot(std::string* reason) {
   if (reason) reason->clear();
   const auto start = std::chrono::steady_clock::now();
   const bool capture = options_.capture_marginalization_diagnostics;
+  const bool health = options_.capture_marginalization_health;
   MarginalizationTraceRecord trace;
   trace.backend = "SQUARE_ROOT_QR";
   trace.marginalization_enforcement_index = marginalization_enforcement_index_;
@@ -64,7 +65,7 @@ bool FixedLagWindow::marginalizeOldestSquareRoot(std::string* reason) {
   const auto fail = [&](const std::string& text) {
     if (reason) *reason = text;
     summary_.marginalization_status = text;
-    if (capture) {
+    if (capture || health) {
       trace.first_bad_stage = "SQUARE_ROOT_QR";
       trace.marginalization_result = "FAIL:" + text;
       marginalization_trace_.push_back(trace);
@@ -204,7 +205,7 @@ bool FixedLagWindow::marginalizeOldestSquareRoot(std::string* reason) {
   summary_.marginalization_solve_jitter = 0;
   summary_.marginalization_jitter_information_delta_norm = 0;
   summary_.marginalization_jitter_gradient_delta_norm = 0;
-  if (capture) {
+  if (capture || health) {
     trace.oldest_state_removed = true; trace.removed_state_stamp_ns = oldest;
     trace.nodes_after_attempt = states_.size();
     trace.span_after_attempt_s = (states_.back().stamp_ns-states_.front().stamp_ns)*1e-9;
