@@ -1,0 +1,69 @@
+Test project /tmp/p6_a2d_build
+      Start  1: p6_a3d_r1_termination
+ 1/32 Test  #1: p6_a3d_r1_termination ...................   Passed    0.00 sec
+      Start  2: p6_a3a_input_contract
+ 2/32 Test  #2: p6_a3a_input_contract ...................   Passed    0.24 sec
+      Start  3: p6_a2c_source_boundary_audit
+ 3/32 Test  #3: p6_a2c_source_boundary_audit ............   Passed    0.04 sec
+      Start  4: p6_i6b_dual_reliability
+ 4/32 Test  #4: p6_i6b_dual_reliability .................   Passed    0.00 sec
+      Start  5: p6_i6e_conditional_compensation
+ 5/32 Test  #5: p6_i6e_conditional_compensation .........   Passed    0.00 sec
+      Start  6: p6_i6f_measurement_noise
+ 6/32 Test  #6: p6_i6f_measurement_noise ................   Passed    0.04 sec
+      Start  7: p6_i6f_joint_window
+ 7/32 Test  #7: p6_i6f_joint_window .....................   Passed    0.06 sec
+      Start  8: p6_i6f_imu_preintegration
+ 8/32 Test  #8: p6_i6f_imu_preintegration ...............   Passed    0.00 sec
+      Start  9: p6_a1_r1_fixed_lag_regression
+ 9/32 Test  #9: p6_a1_r1_fixed_lag_regression ...........   Passed    0.37 sec
+      Start 10: p6_alg_integration_a2a_adapter
+10/32 Test #10: p6_alg_integration_a2a_adapter ..........   Passed    0.01 sec
+      Start 11: p6_alg_integration_a2b
+11/32 Test #11: p6_alg_integration_a2b ..................   Passed    0.06 sec
+      Start 12: p6_a2c_initialization
+12/32 Test #12: p6_a2c_initialization ...................   Passed    0.01 sec
+      Start 13: scan_end_deskew_runtime_test
+13/32 Test #13: scan_end_deskew_runtime_test ............   Passed    0.00 sec
+      Start 14: frontend_runtime_end_to_end_test
+14/32 Test #14: frontend_runtime_end_to_end_test ........   Passed    0.00 sec
+      Start 15: p6_a2c_real_pcl_producer
+15/32 Test #15: p6_a2c_real_pcl_producer ................   Passed    0.30 sec
+      Start 16: p6_a2d_window_owned_pcl_producer
+16/32 Test #16: p6_a2d_window_owned_pcl_producer ........   Passed    0.27 sec
+      Start 17: p6_a3b_no_vision
+17/32 Test #17: p6_a3b_no_vision ........................   Passed    0.18 sec
+      Start 18: p6_a3b_r1_optimizer_diagnostics
+18/32 Test #18: p6_a3b_r1_optimizer_diagnostics .........   Passed    0.00 sec
+      Start 19: p6_a3b_r2_frozen_projection
+19/32 Test #19: p6_a3b_r2_frozen_projection .............   Passed    0.00 sec
+      Start 20: p6_a3c_r1_marginalization_diagnostics
+20/32 Test #20: p6_a3c_r1_marginalization_diagnostics ...   Passed    0.00 sec
+      Start 21: p6_a3c_r1_marginalization_oracle_math
+21/32 Test #21: p6_a3c_r1_marginalization_oracle_math ...   Passed    0.14 sec
+      Start 22: p6_a3c_r2_alias_regression
+22/32 Test #22: p6_a3c_r2_alias_regression ..............   Passed    0.01 sec
+      Start 23: p6_a3c_r2_source_alias_inventory
+23/32 Test #23: p6_a3c_r2_source_alias_inventory ........   Passed    0.32 sec
+      Start 24: p6_a3c_r2_tx90_capsule_repair
+24/32 Test #24: p6_a3c_r2_tx90_capsule_repair ...........   Passed    0.43 sec
+      Start 25: p6_i6e_projected_pose_consistency
+25/32 Test #25: p6_i6e_projected_pose_consistency .......   Passed    0.01 sec
+      Start 26: p6_i6e_r3_residual_jacobian
+26/32 Test #26: p6_i6e_r3_residual_jacobian .............   Passed    0.00 sec
+      Start 27: p6_alg_integration_a2c
+27/32 Test #27: p6_alg_integration_a2c ..................   Passed    0.00 sec
+      Start 28: window_deskew_math_test
+28/32 Test #28: window_deskew_math_test .................   Passed    0.00 sec
+      Start 29: dense_sparse_equivalence_test
+29/32 Test #29: dense_sparse_equivalence_test ...........   Passed    0.06 sec
+      Start 30: solver_scaling_sanity_test
+30/32 Test #30: solver_scaling_sanity_test ..............   Passed    0.37 sec
+      Start 31: measurement_provenance_test
+31/32 Test #31: measurement_provenance_test .............   Passed    0.01 sec
+      Start 32: sparse_marginal_covariance_test
+32/32 Test #32: sparse_marginal_covariance_test .........   Passed    0.22 sec
+
+100% tests passed, 0 tests failed out of 32
+
+Total Test time (real) =   3.20 sec

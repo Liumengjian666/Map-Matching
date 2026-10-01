@@ -1,0 +1,11 @@
+{
+  "identity_checks": {
+    "preopt": true,
+    "first_candidate": true
+  },
+  "discrepancy": "",
+  "process_exit_code": 1,
+  "real_replay_count": 1,
+  "retries": 0,
+  "GT_USED": false
+}

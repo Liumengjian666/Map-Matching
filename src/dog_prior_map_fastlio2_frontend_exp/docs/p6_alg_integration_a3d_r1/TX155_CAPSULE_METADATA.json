@@ -1,0 +1,89 @@
+{
+  "source_path": "/tmp/p6_a3d_r1_corridor_p3_200/trajectory.csv.a3c_r1_failure_capsule.bin",
+  "source_sha256": "7309bfd64296a3341921c57972e0d70db434ebc42f3fd6c1fb9cd5f9cc3f6e63",
+  "source_byte_size": 18242115,
+  "capsule_path": "/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/docs/p6_alg_integration_a3d_r1/TX155_FAILURE_CAPSULE.npz",
+  "capsule_sha256": "b44fe28654437ff1cd944945cb436f62368c7ff315e9e920686836950aed58a8",
+  "capsule_byte_size": 39405,
+  "arrays": {
+    "incoming_prior_information": {
+      "shape": [
+        615,
+        615
+      ],
+      "dtype": "float64"
+    },
+    "incoming_prior_gradient": {
+      "shape": [
+        615,
+        1
+      ],
+      "dtype": "float64"
+    },
+    "charted_prior_information": {
+      "shape": [
+        615,
+        615
+      ],
+      "dtype": "float64"
+    },
+    "charted_prior_gradient": {
+      "shape": [
+        615,
+        1
+      ],
+      "dtype": "float64"
+    },
+    "consumed_hessian": {
+      "shape": [
+        615,
+        615
+      ],
+      "dtype": "float64"
+    },
+    "consumed_gradient": {
+      "shape": [
+        615,
+        1
+      ],
+      "dtype": "float64"
+    },
+    "imu_hessian": {
+      "shape": [
+        615,
+        615
+      ],
+      "dtype": "float64"
+    },
+    "lidar_hessian": {
+      "shape": [
+        615,
+        615
+      ],
+      "dtype": "float64"
+    },
+    "visual_hessian": {
+      "shape": [
+        615,
+        615
+      ],
+      "dtype": "float64"
+    },
+    "correction_h": {
+      "shape": [
+        15,
+        600
+      ],
+      "dtype": "float64"
+    },
+    "correction_b": {
+      "shape": [
+        15,
+        1
+      ],
+      "dtype": "float64"
+    }
+  },
+  "format": "P6A3CR1CAPSULE_v1 converted to compressed NPZ",
+  "matrix_order_in_source": "row-major float64"
+}

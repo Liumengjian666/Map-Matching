@@ -1,0 +1,631 @@
+Start testing: Oct 01 16:14 CST
+----------------------------------------------------------
+1/32 Testing: p6_a3d_r1_termination
+1/32 Test: p6_a3d_r1_termination
+Command: "/tmp/p6_a2d_build/p6_a3d_r1_termination_test"
+Directory: /tmp/p6_a2d_build
+"p6_a3d_r1_termination" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+natural raw=3.3333302758042944e-09 applied=3.3333302758042944e-09 clipped=0 current=200 candidate=200 accepted=0 status=CONVERGED_WITHOUT_STEP
+clipped maximum=0 status=FAILED_ALL_CANDIDATES
+clipped maximum=1e-10 status=FAILED_ALL_CANDIDATES
+nonfinite candidate classifier=NOT_CONVERGED
+A3D_R1_TERMINATION_PASS
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a3d_r1_termination" end time: Oct 01 16:14 CST
+"p6_a3d_r1_termination" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/32 Testing: p6_a3a_input_contract
+2/32 Test: p6_a3a_input_contract
+Command: "/usr/bin/python3.8" "/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b/../../scripts/p6_a3a_input_contract_test.py"
+Directory: /tmp/p6_a2d_build
+"p6_a3a_input_contract" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+...............
+----------------------------------------------------------------------
+Ran 15 tests in 0.016s
+
+OK
+<end of output>
+Test time =   0.24 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a3a_input_contract" end time: Oct 01 16:14 CST
+"p6_a3a_input_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/32 Testing: p6_a2c_source_boundary_audit
+3/32 Test: p6_a2c_source_boundary_audit
+Command: "/usr/bin/python3.8" "/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b/../../scripts/p6_a2c_source_audit.py"
+Directory: /tmp/p6_a2d_build
+"p6_a2c_source_boundary_audit" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+LEGACY_FULL_SOURCE_BYTE_PARITY_PASS sha256=498ec598db3aaec84b74391292d9db7928b2337944be01287621502135abed34
+POST_HANDOFF_IKFOM_CALLS_ZERO_AND_WINDOW_ONLY_PREDICTION_PASS
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a2c_source_boundary_audit" end time: Oct 01 16:14 CST
+"p6_a2c_source_boundary_audit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/32 Testing: p6_i6b_dual_reliability
+4/32 Test: p6_i6b_dual_reliability
+Command: "/tmp/p6_a2d_build/p6_i6b_dual_reliability_test"
+Directory: /tmp/p6_a2d_build
+"p6_i6b_dual_reliability" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+singular_geometric_risk_status=VALID_JOINT_WEAK_DIRECTIONS_SCHUR_SCALE_BALANCED valid=1 weak=2 reliable=4 rotation_weak=1 translation_weak=1
+P6_I6B_DUAL_RELIABILITY_TEST_PASS
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p6_i6b_dual_reliability" end time: Oct 01 16:14 CST
+"p6_i6b_dual_reliability" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/32 Testing: p6_i6e_conditional_compensation
+5/32 Test: p6_i6e_conditional_compensation
+Command: "/tmp/p6_a2d_build/p6_i6e_conditional_compensation_test"
+Directory: /tmp/p6_a2d_build
+"p6_i6e_conditional_compensation" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+scale_only_weak=0 scale_only_reliable=6 rotation_ratio=0.666667 translation_ratio=0.666667
+true_translation_weak=1 true_translation_reliable=5 rotation_ratio=0.666667 translation_ratio=0.00166667
+cross_coupled_weak=1 cross_coupled_reliable=5 rotation_schur_formula_error=0 translation_schur_formula_error=0
+coupled_linear_nis_difference=0 nonlinear_fd_epsilon=1e-07 nonlinear_fd_relative_error=4.41622e-10
+single_weak_leakage_relative=1.79954e-17 single_weak_orthogonality_error=1.14465e-16 discarded_residual_projection_delta=3.98609e-17
+two_weak_rank=4 two_weak_leakage_relative=5.46858e-17 two_weak_orthogonality_error=2.9962e-16
+PAPER_P6_I6E_CONDITIONAL_COMPENSATION_TEST_PASS
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p6_i6e_conditional_compensation" end time: Oct 01 16:14 CST
+"p6_i6e_conditional_compensation" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/32 Testing: p6_i6f_measurement_noise
+6/32 Test: p6_i6f_measurement_noise
+Command: "/tmp/p6_a2d_build/p6_i6f_measurement_noise_test"
+Directory: /tmp/p6_a2d_build
+"p6_i6f_measurement_noise" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+R4_NOISE_TEST_PASS symmetry_psd=1 cross_block=0.034322 monte_carlo_relative_error=0.00494901 nis_delta=0 empirical_not_calibrated=1
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"p6_i6f_measurement_noise" end time: Oct 01 16:14 CST
+"p6_i6f_measurement_noise" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/32 Testing: p6_i6f_joint_window
+7/32 Test: p6_i6f_joint_window
+Command: "/tmp/p6_a2d_build/p6_i6f_joint_window_test"
+Directory: /tmp/p6_a2d_build
+"p6_i6f_joint_window" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+I6F_JOINT_WINDOW_TEST_PASS initial_cost=1134.1 final_cost=8.10866e-20 initial_latest_error=0.174642 final_latest_error=2.53535e-12 hessian_rank=135 marginalized_nodes=6 retained_prior_cross_norm=12512.7 duplicate_count=1 basis_relinearizations=333 visual_information_rank=3 batch_window_position_delta=2.33853e-12 incremental_truth_error=1.96821e-13
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"p6_i6f_joint_window" end time: Oct 01 16:14 CST
+"p6_i6f_joint_window" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/32 Testing: p6_i6f_imu_preintegration
+8/32 Test: p6_i6f_imu_preintegration
+Command: "/tmp/p6_a2d_build/p6_i6f_imu_preintegration_test"
+Directory: /tmp/p6_a2d_build
+"p6_i6f_imu_preintegration" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+I6F_IMU_PREINTEGRATION_TEST_PASS static=1 constant_gyro_angle=0.2 irregular_dv=0.8 irregular_dp=0.16 covariance_trace=0.0127552 bias_jacobian_norm=0.69282 gyro_bias_fd_error=1.47523e-16 accel_bias_fd_error=0 jacobian_norm=4.22079
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p6_i6f_imu_preintegration" end time: Oct 01 16:14 CST
+"p6_i6f_imu_preintegration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/32 Testing: p6_a1_r1_fixed_lag_regression
+9/32 Test: p6_a1_r1_fixed_lag_regression
+Command: "/tmp/p6_a2d_build/p6_a1_r1_fixed_lag_regression_test"
+Directory: /tmp/p6_a2d_build
+"p6_a1_r1_fixed_lag_regression" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+P6_A1_R1_FIXED_LAG_REGRESSION_PASS clean_H_error=1.24607e-10 clean_g_error=7.85293e-13 noisy_H_error=1.24607e-10 noisy_g_error=7.85317e-13 max_active_ids=5 prior_gradient_error=0 jitter=1e-07 jitter_H_delta=1.71782e-07 jitter_g_delta=1.07995e-08
+<end of output>
+Test time =   0.37 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a1_r1_fixed_lag_regression" end time: Oct 01 16:14 CST
+"p6_a1_r1_fixed_lag_regression" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/32 Testing: p6_alg_integration_a2a_adapter
+10/32 Test: p6_alg_integration_a2a_adapter
+Command: "/tmp/p6_a2d_build/p6_alg_integration_a2a_adapter_test"
+Directory: /tmp/p6_a2d_build
+"p6_alg_integration_a2a_adapter" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+P6_ALG_INTEGRATION_A2A_ADAPTER_PASS
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p6_alg_integration_a2a_adapter" end time: Oct 01 16:14 CST
+"p6_alg_integration_a2a_adapter" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/32 Testing: p6_alg_integration_a2b
+11/32 Test: p6_alg_integration_a2b
+Command: "/tmp/p6_a2d_build/p6_alg_integration_a2b_test"
+Directory: /tmp/p6_a2d_build
+"p6_alg_integration_a2b" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+A2B_MEMORY peak_imu_buffer_size=301 peak_active_source_records=8 expired_source_records_removed=192 final_imu_buffer_size=300 final_active_source_records=6
+P6_ALG_INTEGRATION_A2B_PASS
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"p6_alg_integration_a2b" end time: Oct 01 16:14 CST
+"p6_alg_integration_a2b" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/32 Testing: p6_a2c_initialization
+12/32 Test: p6_a2c_initialization
+Command: "/tmp/p6_a2d_build/p6_a2c_initialization_test"
+Directory: /tmp/p6_a2d_build
+"p6_a2c_initialization" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+IKFOM_23D_TO_15D_MTK_MAPPING_AND_GRAVITY_CONDITIONAL_PASS delta=0.0309436
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a2c_initialization" end time: Oct 01 16:14 CST
+"p6_a2c_initialization" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/32 Testing: scan_end_deskew_runtime_test
+13/32 Test: scan_end_deskew_runtime_test
+Command: "/tmp/p6_a2d_build/scan_end_deskew_runtime_test"
+Directory: /tmp/p6_a2d_build
+"scan_end_deskew_runtime_test" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+SCAN_END_DESKEW_RUNTIME_CONTRACT_PASS points=44 raw_mean_m=0.119288 raw_p95_m=0.263083 raw_max_m=0.29239 deskew_mean_m=0.000601596 deskew_p95_m=0.00584186 deskew_max_m=0.00722311 imu_tail_gap_ns=5000000 exact_end_ns=1100000000
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"scan_end_deskew_runtime_test" end time: Oct 01 16:14 CST
+"scan_end_deskew_runtime_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/32 Testing: frontend_runtime_end_to_end_test
+14/32 Test: frontend_runtime_end_to_end_test
+Command: "/tmp/p6_a2d_build/frontend_runtime_end_to_end_test"
+Directory: /tmp/p6_a2d_build
+"frontend_runtime_end_to_end_test" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+OVERLAP_BOUNDARY_CONTRACT_PASS
+FRONTEND_RUNTIME_END_TO_END_PASS measurement_updates=1 prediction_only_commits=2 last_tx=3 scan1_stamp=1195000000 scan2_stamp=1295000000 scan3_stamp=1395000000
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"frontend_runtime_end_to_end_test" end time: Oct 01 16:14 CST
+"frontend_runtime_end_to_end_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+15/32 Testing: p6_a2c_real_pcl_producer
+15/32 Test: p6_a2c_real_pcl_producer
+Command: "/tmp/p6_a2d_build/p6_i6b_closed_loop" "A2C_FIXTURE"
+Directory: /tmp/p6_a2d_build
+"p6_a2c_real_pcl_producer" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+A2C_REAL_PCL_PRODUCER_FIXTURE_PASS policy=LEGACY_BASE_NO_GATE events=7 lidar=3 visual=0 probes=1 ndt_calls=5 ndt_ms=47.8467 total_ms=65.7965 post_handoff_ikfom_calls=0
+A2C_REAL_PCL_PRODUCER_FIXTURE_PASS policy=ADAPTIVE_NO_GATE events=7 lidar=3 visual=0 probes=1 ndt_calls=5 ndt_ms=46.6675 total_ms=60.7362 post_handoff_ikfom_calls=0
+A2C_REAL_PCL_PRODUCER_FIXTURE_PASS policy=BASE_SELECTED_NIS events=7 lidar=3 visual=0 probes=1 ndt_calls=5 ndt_ms=48.7214 total_ms=62.8431 post_handoff_ikfom_calls=0
+A2C_REAL_PCL_PRODUCER_FIXTURE_PASS policy=ADAPTIVE_SELECTED_NIS events=7 lidar=3 visual=0 probes=1 ndt_calls=5 ndt_ms=47.2057 total_ms=61.6416 post_handoff_ikfom_calls=0
+<end of output>
+Test time =   0.30 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a2c_real_pcl_producer" end time: Oct 01 16:14 CST
+"p6_a2c_real_pcl_producer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+16/32 Testing: p6_a2d_window_owned_pcl_producer
+16/32 Test: p6_a2d_window_owned_pcl_producer
+Command: "/tmp/p6_a2d_build/p6_i6b_closed_loop" "A2D_FIXTURE"
+Directory: /tmp/p6_a2d_build
+"p6_a2d_window_owned_pcl_producer" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+A2D_RAW_TIMED_FILE_FORMAT_AND_VISUAL_METADATA_PASS
+A2C_REAL_PCL_PRODUCER_FIXTURE_PASS policy=LEGACY_BASE_NO_GATE events=10 lidar=3 visual=0 probes=1 ndt_calls=5 ndt_ms=21.5881 total_ms=40.9689 post_handoff_ikfom_calls=0
+A2C_REAL_PCL_PRODUCER_FIXTURE_PASS policy=ADAPTIVE_NO_GATE events=10 lidar=3 visual=0 probes=1 ndt_calls=5 ndt_ms=22.026 total_ms=39.5747 post_handoff_ikfom_calls=0
+A2C_REAL_PCL_PRODUCER_FIXTURE_PASS policy=BASE_SELECTED_NIS events=10 lidar=3 visual=0 probes=1 ndt_calls=5 ndt_ms=22.3663 total_ms=40.1442 post_handoff_ikfom_calls=0
+A2C_REAL_PCL_PRODUCER_FIXTURE_PASS policy=ADAPTIVE_SELECTED_NIS events=10 lidar=3 visual=0 probes=1 ndt_calls=5 ndt_ms=22.4775 total_ms=40.9731 post_handoff_ikfom_calls=0
+A2D_V3_RAW_DESKEW_AND_LEGACY_PROVENANCE_REJECTION_PASS
+<end of output>
+Test time =   0.27 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a2d_window_owned_pcl_producer" end time: Oct 01 16:14 CST
+"p6_a2d_window_owned_pcl_producer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+17/32 Testing: p6_a3b_no_vision
+17/32 Test: p6_a3b_no_vision
+Command: "/tmp/p6_a2d_build/p6_i6b_closed_loop" "A3B_NO_VISION_FIXTURE"
+Directory: /tmp/p6_a2d_build
+"p6_a3b_no_vision" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+A2C_REAL_PCL_PRODUCER_FIXTURE_PASS policy=LEGACY_BASE_NO_GATE events=6 lidar=3 visual=0 probes=1 ndt_calls=5 ndt_ms=22.739 total_ms=39.7998 post_handoff_ikfom_calls=0
+A2C_REAL_PCL_PRODUCER_FIXTURE_PASS policy=ADAPTIVE_NO_GATE events=6 lidar=3 visual=0 probes=1 ndt_calls=5 ndt_ms=21.7682 total_ms=38.5411 post_handoff_ikfom_calls=0
+A2C_REAL_PCL_PRODUCER_FIXTURE_PASS policy=BASE_SELECTED_NIS events=6 lidar=3 visual=0 probes=1 ndt_calls=5 ndt_ms=22.15 total_ms=39.1252 post_handoff_ikfom_calls=0
+A2C_REAL_PCL_PRODUCER_FIXTURE_PASS policy=ADAPTIVE_SELECTED_NIS events=6 lidar=3 visual=0 probes=1 ndt_calls=5 ndt_ms=22.5947 total_ms=41.9269 post_handoff_ikfom_calls=0
+A3B_NO_VISION_PRODUCER_FIXTURE_PASS policies=4 events_per_policy=6 visual_events=0 visual_factors=0 lidar_per_policy=3
+<end of output>
+Test time =   0.18 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a3b_no_vision" end time: Oct 01 16:14 CST
+"p6_a3b_no_vision" time elapsed: 00:00:00
+----------------------------------------------------------
+
+18/32 Testing: p6_a3b_r1_optimizer_diagnostics
+18/32 Test: p6_a3b_r1_optimizer_diagnostics
+Command: "/tmp/p6_a2d_build/p6_a3b_r1_optimizer_diagnostics_test"
+Directory: /tmp/p6_a2d_build
+"p6_a3b_r1_optimizer_diagnostics" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+A3B_R1_OPTIMIZER_DIAGNOSTICS_SYNTHETIC_PASS
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a3b_r1_optimizer_diagnostics" end time: Oct 01 16:14 CST
+"p6_a3b_r1_optimizer_diagnostics" time elapsed: 00:00:00
+----------------------------------------------------------
+
+19/32 Testing: p6_a3b_r2_frozen_projection
+19/32 Test: p6_a3b_r2_frozen_projection
+Command: "/tmp/p6_a2d_build/p6_a3b_r2_frozen_projection_test"
+Directory: /tmp/p6_a2d_build
+"p6_a3b_r2_frozen_projection" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+A3B_R2_FROZEN_PROJECTION_SYNTHETIC_PASS
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a3b_r2_frozen_projection" end time: Oct 01 16:14 CST
+"p6_a3b_r2_frozen_projection" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/32 Testing: p6_a3c_r1_marginalization_diagnostics
+20/32 Test: p6_a3c_r1_marginalization_diagnostics
+Command: "/tmp/p6_a2d_build/p6_a3c_r1_marginalization_diagnostics_test"
+Directory: /tmp/p6_a2d_build
+"p6_a3c_r1_marginalization_diagnostics" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+A3C_R1_MARGINALIZATION_DIAGNOSTICS_TEST_PASS
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a3c_r1_marginalization_diagnostics" end time: Oct 01 16:14 CST
+"p6_a3c_r1_marginalization_diagnostics" time elapsed: 00:00:00
+----------------------------------------------------------
+
+21/32 Testing: p6_a3c_r1_marginalization_oracle_math
+21/32 Test: p6_a3c_r1_marginalization_oracle_math
+Command: "/usr/bin/python3.8" "/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b/../../scripts/p6_a3c_r1_marginalization_oracle.py" "--self-test"
+Directory: /tmp/p6_a2d_build
+"p6_a3c_r1_marginalization_oracle_math" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+A3C_R1_ORACLE_MATH_SELF_TEST_PASS
+<end of output>
+Test time =   0.14 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a3c_r1_marginalization_oracle_math" end time: Oct 01 16:14 CST
+"p6_a3c_r1_marginalization_oracle_math" time elapsed: 00:00:00
+----------------------------------------------------------
+
+22/32 Testing: p6_a3c_r2_alias_regression
+22/32 Test: p6_a3c_r2_alias_regression
+Command: "/tmp/p6_a2d_build/p6_a3c_r2_alias_regression_test"
+Directory: /tmp/p6_a2d_build
+"p6_a3c_r2_alias_regression" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+nonsymmetric_unsafe_difference=1.2247448713915889
+attempt=1 raw_schur_max_asymmetry=2.6020852139652106e-18 stored_prior_max_asymmetry=0
+attempt=2 raw_schur_max_asymmetry=6.9388939039072284e-17 stored_prior_max_asymmetry=0
+multi_removal_H_relative_error=7.2511587330693086e-17 g_error=2.540132453772453e-22
+A3C_R2_ALIAS_REGRESSION_PASS
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a3c_r2_alias_regression" end time: Oct 01 16:14 CST
+"p6_a3c_r2_alias_regression" time elapsed: 00:00:00
+----------------------------------------------------------
+
+23/32 Testing: p6_a3c_r2_source_alias_inventory
+23/32 Test: p6_a3c_r2_source_alias_inventory
+Command: "/usr/bin/python3.8" "/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b/../../scripts/p6_a3c_r2_alias_audit.py" "--inventory"
+Directory: /tmp/p6_a2d_build
+"p6_a3c_r2_source_alias_inventory" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+src/dual_reliability.cpp | 109 | symmetric | False | False | 0.5 * (raw + raw.transpose())
+src/dual_reliability.cpp | 122 | *output | True | True | (0.5 * (*output + output->transpose())).eval()
+src/dual_reliability.cpp | 145 | covariance | False | False | 0.5 * (input_covariance + input_covariance.transpose())
+src/dual_reliability.cpp | 339 | information | False | False | 0.5 * (local.normalized_geometric_information + local.normalized_geometric_information.transpose())
+src/dual_reliability.cpp | 344 | equalized | True | True | (0.5 * (equalized + equalized.transpose())).eval()
+src/dual_reliability.cpp | 439 | information | False | False | 0.5 * (local.normalized_geometric_information + local.normalized_geometric_information.transpose())
+src/dual_reliability.cpp | 625 | raw_position | False | False | 0.5 * (nonlocal.delta_position_imu_positive * nonlocal.delta_position_imu_positive.transpose() + nonlocal.delta_position_imu_negative * nonlocal.delta_position_imu_negative.transpose())
+src/dual_reliability.cpp | 630 | raw_rotation | False | False | 0.5 * (nonlocal.delta_rotation_positive * nonlocal.delta_rotation_positive.transpose() + nonlocal.delta_rotation_negative * nonlocal.delta_rotation_negative.transpose())
+src/dual_reliability.cpp | 659 | result.covariance | True | True | (0.5 * (result.covariance + result.covariance.transpose())).eval()
+src/dual_reliability.cpp | 850 | symmetric_covariance | False | False | 0.5 * (measurement_covariance + measurement_covariance.transpose())
+src/dual_reliability.cpp | 877 | result.visual_information | True | True | (0.5 * (result.visual_information + result.visual_information.transpose())).eval()
+src/fastlio2_frontend_ikfom.cpp | 737 | posterior | True | True | (0.5 * (posterior + posterior.transpose())).eval()
+src/fastlio2_frontend_ikfom.cpp | 909 | posterior | True | True | (0.5 * (posterior + posterior.transpose())).eval()
+src/fastlio2_frontend_ikfom.cpp | 1117 | output->covariance15 | False | True | 0.5 * (conditional + conditional.transpose()).eval()
+src/fastlio2_frontend_ikfom.cpp | 1123 | output->information15 | True | True | 0.5 * (output->information15 + output->information15.transpose()).eval()
+src/fixed_lag_window.cpp | 1211 | output->covariance15 | False | True | 0.5 * (columns.bottomRows(15) + columns.bottomRows(15).transpose()).eval()
+src/fixed_lag_window.cpp | 1221 | output->map_pose_covariance6 | True | True | 0.5 * (output->map_pose_covariance6 + output->map_pose_covariance6.transpose()).eval()
+src/fixed_lag_window.cpp | 1280 | hessian | True | True | 0.5 * (hessian + hessian.transpose()).eval()
+src/measurement_noise_model.cpp | 61 | result.residual_covariance | True | True | (0.5 * (result.residual_covariance + result.residual_covariance.transpose())).eval()
+src/measurement_noise_model.cpp | 85 | output->covariance | False | False | 0.5 * (residual_covariance + residual_covariance.transpose())
+src/reliability_metrics.cpp | 48 | symmetric | False | False | 0.5 * (input + input.transpose())
+src/reliability_metrics.cpp | 70 | *inverse | True | True | (0.5 * (*inverse + inverse->transpose())).eval()
+src/reliability_metrics.cpp | 80 | a | False | False | 0.5 * (information.block<3, 3>(0, 0) + information.block<3, 3>(0, 0).transpose())
+src/reliability_metrics.cpp | 83 | c | False | False | 0.5 * (information.block<3, 3>(3, 3) + information.block<3, 3>(3, 3).transpose())
+src/reliability_metrics.cpp | 95 | *rotation | True | True | (0.5 * (*rotation + rotation->transpose())).eval()
+src/reliability_metrics.cpp | 96 | *translation | True | True | (0.5 * (*translation + translation->transpose())).eval()
+src/reliability_metrics.cpp | 119 | *rotation | True | True | (0.5 * (*rotation + rotation->transpose())).eval()
+src/reliability_metrics.cpp | 120 | *translation | True | True | (0.5 * (*translation + translation->transpose())).eval()
+src/reliability_metrics.cpp | 195 | result.hessian_euler | False | False | -0.5 * (canonical + canonical.transpose())
+src/reliability_metrics.cpp | 201 | result.hessian_physical | True | True | (0.5 * (result.hessian_physical + result.hessian_physical.transpose())).eval()
+src/reliability_metrics.cpp | 208 | result.normalized_negative_score_curvature | True | True | (0.5 * (result.normalized_negative_score_curvature + result.normalized_negative_score_curvature.transpose())).eval()
+src/reliability_metrics.cpp | 240 | rotation_block | False | False | 0.5 * (curvature.block<3, 3>(0, 0) + curvature.block<3, 3>(0, 0).transpose())
+src/reliability_metrics.cpp | 242 | translation_block | False | False | 0.5 * (curvature.block<3, 3>(3, 3) + curvature.block<3, 3>(3, 3).transpose())
+src/reliability_metrics.cpp | 311 | symmetric_covariance | False | False | 0.5 * (observation.voxel_covariance_map + observation.voxel_covariance_map.transpose())
+src/reliability_metrics.cpp | 382 | information | True | True | (0.5 * (information + information.transpose())).eval()
+src/reliability_metrics.cpp | 386 | normalized_information | True | True | (0.5 * (normalized_information + normalized_information.transpose())).eval()
+src/reliability_metrics.cpp | 417 | normalized_information | True | True | (0.5 * (normalized_information + normalized_information.transpose())).eval()
+src/window_imu_factor.cpp | 237 | output->covariance | True | True | (0.5 * (output->covariance + output->covariance.transpose())).eval()
+src/window_lidar_factor.cpp | 146 | selected_covariance | True | True | (0.5 * (selected_covariance + selected_covariance.transpose())).eval()
+src/window_linear_system.cpp | 29 | block | False | False | i == j ? Matrix15d(0.5*(entry.second+entry.second.transpose())) : entry.second
+src/window_linear_system.cpp | 285 | block.second | True | True | (0.5*(block.second+block.second.transpose())).eval()
+src/window_marginalization.cpp | 128 | symmetric | False | False | 0.5 * (matrix + matrix.transpose())
+src/window_marginalization.cpp | 334 | hmm_solve | False | False | 0.5 * (hmm + hmm.transpose())
+src/window_marginalization.cpp | 456 | alternate_information | True | True | (0.5 * (alternate_information + alternate_information.transpose())).eval()
+src/window_visual_factor.cpp | 104 | *covariance | True | True | (0.5 * (*covariance + covariance->transpose())).eval()
+include/dog_prior_map_fastlio2_frontend_exp/fixed_lag_production.hpp | 89 | innovation | True | True | 0.5 * (innovation + innovation.transpose()).eval()
+SOURCE_ALIAS_INVENTORY_PASS average_assignments=46 remaining_self_assignments=26 unsafe=0 critical_independent_temporaries=2
+<end of output>
+Test time =   0.32 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a3c_r2_source_alias_inventory" end time: Oct 01 16:14 CST
+"p6_a3c_r2_source_alias_inventory" time elapsed: 00:00:00
+----------------------------------------------------------
+
+24/32 Testing: p6_a3c_r2_tx90_capsule_repair
+24/32 Test: p6_a3c_r2_tx90_capsule_repair
+Command: "/usr/bin/python3.8" "/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b/../../scripts/p6_a3c_r2_alias_audit.py" "--capsule-inspector" "/tmp/p6_a2d_build/p6_a3c_r1_marginalization_diagnostics_test"
+Directory: /tmp/p6_a2d_build
+"p6_a3c_r2_tx90_capsule_repair" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+TX90_CPP_CAPSULE_EMULATION raw_asymmetry_fro=6.3275346904335216e-08 production_symmetry_fro=1.5818836835798959e-08 production_symmetry_max_abs=1.1175870895385742e-08 out_of_place_symmetry_max_abs=0 production_validator_pass=0 out_of_place_validator_pass=1 repaired_production_max_asymmetry=0 repaired_validator_pass=1 repaired_lambda_min=0
+TX90_COMMITTED_CAPSULE_REPAIR_PASS sha=2f597628160e75f41bc4c13d9de015727c17b1755535ad806263f272ebcf0280
+<end of output>
+Test time =   0.43 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a3c_r2_tx90_capsule_repair" end time: Oct 01 16:14 CST
+"p6_a3c_r2_tx90_capsule_repair" time elapsed: 00:00:00
+----------------------------------------------------------
+
+25/32 Testing: p6_i6e_projected_pose_consistency
+25/32 Test: p6_i6e_projected_pose_consistency
+Command: "/tmp/p6_a2d_build/p6_i6e_projected_pose_consistency_test"
+Directory: /tmp/p6_a2d_build
+"p6_i6e_projected_pose_consistency" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+NDT_POSE_UPDATE_RUNTIME_CONTRACT_PASS pos_before_m=0.0908295 pos_after_m=0.000103603 rot_before_rad=0.06 rot_after_rad=5.62928e-05 projected_update_m=0.199269 delta_v=0.0877383 delta_bg=3.66965e-06 delta_ba=8.00374e-06 delta_gravity=7.34424e-06
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p6_i6e_projected_pose_consistency" end time: Oct 01 16:14 CST
+"p6_i6e_projected_pose_consistency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+26/32 Testing: p6_i6e_r3_residual_jacobian
+26/32 Test: p6_i6e_r3_residual_jacobian
+Command: "/tmp/p6_a2d_build/p6_i6e_r3_residual_jacobian_test"
+Directory: /tmp/p6_a2d_build
+"p6_i6e_r3_residual_jacobian" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+SO3_LEFT_JACOBIAN_INVERSE_PASS max_relative_error=6.70905e-09
+PHYSICAL_RESIDUAL_JACOBIAN_PASS max_relative_error=1.20325e-09
+RESIDUAL_CONSISTENT_BASIS_PASS analytic_leakage=1.53239e-16 fd_response=1.23668e-09 legacy_analytic_leakage=9.16915e-17 legacy_fd_response=0.129353
+ZERO_AND_NEAR_PI_PASS reason=ROTATION_RESIDUAL_NEAR_PI
+ACTUAL_FUSION_LEDGER_PASS
+P6_I6E_R3_RESIDUAL_JACOBIAN_PASS
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p6_i6e_r3_residual_jacobian" end time: Oct 01 16:14 CST
+"p6_i6e_r3_residual_jacobian" time elapsed: 00:00:00
+----------------------------------------------------------
+
+27/32 Testing: p6_alg_integration_a2c
+27/32 Test: p6_alg_integration_a2c
+Command: "/tmp/p6_a2d_build/p6_alg_integration_a2c_test"
+Directory: /tmp/p6_a2d_build
+"p6_alg_integration_a2c" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+COVARIANCE_DIRECT_INVERSE_AND_MAP_LEFT_FD_PASS
+PUBLIC_PREDICTION_NIS_REJECT_CAUSALITY_AND_ADMISSION_RECOMPUTE_PASS
+MARGINALIZED_RISK_DIRECTION_REJECT_PASS
+SCHEDULER_AND_RUNTIME_NOISE_PASS
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p6_alg_integration_a2c" end time: Oct 01 16:14 CST
+"p6_alg_integration_a2c" time elapsed: 00:00:00
+----------------------------------------------------------
+
+28/32 Testing: window_deskew_math_test
+28/32 Test: window_deskew_math_test
+Command: "/tmp/p6_a2d_build/window_deskew_math_test"
+Directory: /tmp/p6_a2d_build
+"window_deskew_math_test" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+PASS six motions max_point_error=3.30093e-15 analytic_FD_max=3.95194e-09
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"window_deskew_math_test" end time: Oct 01 16:14 CST
+"window_deskew_math_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+29/32 Testing: dense_sparse_equivalence_test
+29/32 Test: dense_sparse_equivalence_test
+Command: "/tmp/p6_a2d_build/dense_sparse_equivalence_test"
+Directory: /tmp/p6_a2d_build
+"dense_sparse_equivalence_test" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+PASS relative_H=0 relative_g=1.01248e-16 cost=1.73472e-18 relative_step=6.06196e-15 final_state=3.86139e-16
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"dense_sparse_equivalence_test" end time: Oct 01 16:14 CST
+"dense_sparse_equivalence_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+30/32 Testing: solver_scaling_sanity_test
+30/32 Test: solver_scaling_sanity_test
+Command: "/tmp/p6_a2d_build/solver_scaling_sanity_test"
+Directory: /tmp/p6_a2d_build
+"solver_scaling_sanity_test" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+nodes,dense_assembly_ms,block_assembly_ms,dense_solve_ms,sparse_solve_ms,marginal_covariance_ms,dense_H_payload_bytes,block_Hg_payload_bytes,sparse_H_payload_bytes,accounted_sparse_peak_upper_bytes,dense_iterations,sparse_iterations,max_state_difference
+8,0.899424,0.18571,0.148275,0.158611,0.393909,115200,27960,24364,336964,3,3,3.86139e-16
+16,5.42867,0.427223,0.780274,0.287679,0.740674,460800,57720,54364,1034164,3,3,1.07484e-17
+24,13.763,0.773848,2.96814,0.515713,1.08059,1036800,87480,84244,2076844,3,3,2.61922e-17
+32,31.0458,0.938885,5.64295,0.568234,2.84892,1843200,117240,114076,3465076,3,3,2.08576e-17
+48,93.1446,1.58855,16.0259,0.915349,2.73529,4147200,176760,172468,7277068,3,3,7.08896e-17
+<end of output>
+Test time =   0.37 sec
+----------------------------------------------------------
+Test Passed.
+"solver_scaling_sanity_test" end time: Oct 01 16:14 CST
+"solver_scaling_sanity_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+31/32 Testing: measurement_provenance_test
+31/32 Test: measurement_provenance_test
+Command: "/tmp/p6_a2d_build/measurement_provenance_test"
+Directory: /tmp/p6_a2d_build
+"measurement_provenance_test" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+PASS provenance gates scan_start_reoptimized_delta=2.04767 lidar_analytic_FD_max=2.19452e-09
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"measurement_provenance_test" end time: Oct 01 16:14 CST
+"measurement_provenance_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+32/32 Testing: sparse_marginal_covariance_test
+32/32 Test: sparse_marginal_covariance_test
+Command: "/tmp/p6_a2d_build/sparse_marginal_covariance_test"
+Directory: /tmp/p6_a2d_build
+"sparse_marginal_covariance_test" start time: Oct 01 16:14 CST
+Output:
+----------------------------------------------------------
+initial_nonzero_prior_gradient,p15=0,p6=0,backward=4.55665e-17
+imu_only,p15=1.63938e-15,p6=1.48182e-15,backward=3.00881e-17
+directional_lidar,p15=1.59486e-15,p6=1.46006e-15,backward=3.01586e-17
+joint_imu_visual_cross_state_lidar,p15=8.5128e-15,p6=9.88816e-16,backward=1.25805e-17
+before_schur,p15=0,p6=0,backward=4.55665e-17
+before_schur,p15=2.14402e-15,p6=1.18148e-15,backward=2.13577e-17
+before_schur,p15=4.16273e-15,p6=3.3327e-15,backward=2.53538e-17
+repeated_schur,p15=4.76738e-15,p6=1.75354e-15,backward=1.90406e-17
+repeated_schur,p15=3.49873e-15,p6=1.88389e-15,backward=1.68886e-17
+repeated_schur,p15=6.6236e-15,p6=2.69433e-15,backward=2.23249e-17
+repeated_schur,p15=6.63287e-15,p6=1.38542e-15,backward=2.64391e-17
+repeated_schur,p15=8.7241e-15,p6=1.47364e-15,backward=1.9751e-17
+repeated_schur,p15=8.70604e-15,p6=1.96094e-15,backward=2.23629e-17
+repeated_schur,p15=8.92407e-15,p6=1.76499e-15,backward=2.29028e-17
+repeated_schur,p15=7.65279e-15,p6=2.14625e-15,backward=2.36524e-17
+repeated_schur,p15=4.72802e-15,p6=1.65034e-15,backward=1.84352e-17
+nodes,sparse_marginal_ms,dense_marginal_ms,p15_relative_error
+8,0.336289,1.12012,1.20433e-14
+16,0.835589,6.21013,2.22296e-14
+24,1.24437,16.6573,3.2681e-14
+32,1.65099,36.1783,6.22515e-14
+48,2.59009,110.6,6.83644e-14
+SPARSE_MARGINAL_COVARIANCE_PASS
+<end of output>
+Test time =   0.22 sec
+----------------------------------------------------------
+Test Passed.
+"sparse_marginal_covariance_test" end time: Oct 01 16:14 CST
+"sparse_marginal_covariance_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 01 16:14 CST

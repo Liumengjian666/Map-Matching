@@ -1,0 +1,6 @@
+START_SHA=5e90b309c2612146a4ecbfdaff5becd3f6fcf7c8
+CODE_SHA=2ecbe50552fa463fb59cb2250720325c87b829b6
+END_SHA=analysis delivery commit containing this file; literal SHA in final handoff
+branch=research/p6-i6d-full-algorithm
+worktree=/home/jian/livox_ws/dog_loc_p6_i6b_ws
+READY_FOR_FORMAL_EXPERIMENT=NO

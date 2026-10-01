@@ -1,0 +1,25 @@
+Test project /tmp/p6_a2d_debug
+      Start  1: p6_a3d_r1_termination
+ 1/10 Test  #1: p6_a3d_r1_termination ...................   Passed    0.02 sec
+      Start  9: p6_a1_r1_fixed_lag_regression
+ 2/10 Test  #9: p6_a1_r1_fixed_lag_regression ...........   Passed   24.46 sec
+      Start 18: p6_a3b_r1_optimizer_diagnostics
+ 3/10 Test #18: p6_a3b_r1_optimizer_diagnostics .........   Passed    0.11 sec
+      Start 19: p6_a3b_r2_frozen_projection
+ 4/10 Test #19: p6_a3b_r2_frozen_projection .............   Passed    0.02 sec
+      Start 20: p6_a3c_r1_marginalization_diagnostics
+ 5/10 Test #20: p6_a3c_r1_marginalization_diagnostics ...   Passed    0.06 sec
+      Start 21: p6_a3c_r1_marginalization_oracle_math
+ 6/10 Test #21: p6_a3c_r1_marginalization_oracle_math ...   Passed    0.13 sec
+      Start 22: p6_a3c_r2_alias_regression
+ 7/10 Test #22: p6_a3c_r2_alias_regression ..............   Passed    0.14 sec
+      Start 23: p6_a3c_r2_source_alias_inventory
+ 8/10 Test #23: p6_a3c_r2_source_alias_inventory ........   Passed    0.29 sec
+      Start 24: p6_a3c_r2_tx90_capsule_repair
+ 9/10 Test #24: p6_a3c_r2_tx90_capsule_repair ...........   Passed    9.73 sec
+      Start 29: dense_sparse_equivalence_test
+10/10 Test #29: dense_sparse_equivalence_test ...........   Passed    2.37 sec
+
+100% tests passed, 0 tests failed out of 10
+
+Total Test time (real) =  37.33 sec

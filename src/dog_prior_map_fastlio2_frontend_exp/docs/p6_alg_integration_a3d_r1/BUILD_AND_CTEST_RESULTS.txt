@@ -1,0 +1,32 @@
+PAPER-P6-ALG-INTEGRATION-A3D-R1
+START_SHA=5e90b309c2612146a4ecbfdaff5becd3f6fcf7c8
+CODE_SHA=2ecbe50552fa463fb59cb2250720325c87b829b6
+
+Release build: PASS (/tmp/p6_a2d_build, CMAKE_BUILD_TYPE=Release)
+Full Release CTest: PASS 32/32, 3.20 s; original 31 preserved.
+Debug targeted build: PASS (/tmp/p6_a2d_debug, CMAKE_BUILD_TYPE=Debug)
+Debug targeted CTest: PASS 10/10, 37.33 s.
+Targets: A1-R1, A2D dense/sparse+Schur, A3B-R1, A3B-R2,
+A3C-R1 diagnostics+oracle, A3C-R2 alias+source+tx90 capsule, A3D-R1.
+Replay guard standalone synthetic self-test: PASS.
+git diff --check: PASS before code commit and real launch.
+
+Expected pre-fix RED: natural small step fixture FAIL on unchanged production.
+This is the intentionally written failing regression, not a skipped gate.
+Post-repair full/regression gates: no failures.
+
+A1-R1 clean_H_error=1.24607e-10 clean_g_error=7.85293e-13
+A1-R1 noisy_H_error=1.24607e-10 noisy_g_error=7.85317e-13
+prior_gradient_error=0 max_active_ids=5
+jitter regression=1e-7 jitter_H_delta=1.71782e-7 jitter_g_delta=1.07995e-8
+No tolerance relaxation; jitter remains the original regression fixture value.
+
+Natural finite unclipped rejected small step: CONVERGED_WITHOUT_STEP.
+Forced clipped zero and clipped 1e-10: FAILED_ALL_CANDIDATES.
+Nonfinite candidate predicate: NOT_CONVERGED for NaN/+Inf/-Inf.
+Rejected-state rollback: exact zero difference.
+Trace OFF/ON parity: PASS for natural and both clipped controls.
+
+Library path: /lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu
+CTest run in actual build cwd (installed CTest --test-dir is not used).
+Detailed logs are preserved alongside this file.
