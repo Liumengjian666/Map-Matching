@@ -1,0 +1,49 @@
+A3E-R2 pre-real-replay gate
+START_SHA=e74735956ea82d6fef9c9eb9616c33cbf4443dc1
+Release configure/build: PASS (/tmp/p6_a2d_build)
+Release full CTest: PASS 35/35, 0 failures, 1.63 seconds
+Debug targeted build: PASS (/tmp/p6_a2d_debug)
+Debug targeted CTest: PASS 13/13, 0 failures, 24.39 seconds
+git diff --check: PASS
+Existing tests preserved; no tolerance weakened.
+Logs: /tmp/p6_a3e_r2_release_ctest.txt, /tmp/p6_a3e_r2_debug_ctest.txt
+
+New square-root regression:
+linear_H_error=5.98219e-14
+linear_g_error=1.05152e-14
+joint_information_H_relative=3.24986e-13
+joint_information_g_relative=4.82723e-14
+extreme_scale_known_retained_H=1, QR_H=1, legacy_normal_Schur_H=0
+lifecycle_eliminations=1005
+max_prior_rows=15
+max_active_observation_ids=3
+correlated whitening / initial prior orientation: PASS
+prior constant-only objective difference: PASS
+minimized stacked objective consistency: PASS
+nonzero rotation/reference/current chart and gradient: PASS
+rank-5 weak direction preserved: PASS
+retained-only raw factors remain active exactly once: PASS
+shared basis callback diagnostics ON/OFF parity: PASS
+retained compression rank-threshold boundaries: PASS
+rank-deficient oldest block fail closed, window unchanged: PASS
+zero retained row-space: PASS
+initial non-SPD factorization fail closed: PASS
+tiny-scale nonsymmetric covariance rejected: PASS
+multi-removal normal-success lifecycle: PASS
+
+A1-R1 unchanged information regression:
+clean_H_error=1.24607e-10 clean_g_error=7.85293e-13
+noisy_H_error=1.24607e-10 noisy_g_error=7.85317e-13
+max_active_ids=5 prior_gradient_error=0
+legacy jitter=1e-07 jitter_H_delta=1.71782e-07 jitter_g_delta=1.07995e-08
+Repeated conservation, nonzero prior chart and legacy jitter regression: PASS
+
+Legacy TX155 frozen evidence (no raw J/R reconstructed):
+capsule_sha256=b44fe28654437ff1cd944945cb436f62368c7ff315e9e920686836950aed58a8
+legacy_raw_Schur_symmetric_lambda_min=-97.63543657869423
+A3E-R1 high-precision oracle self-test: PASS
+
+Environment warnings: pre-existing optional PCL pcap/png/libusb and missing VTK
+imported executable/library warnings; no required target build failure.
+Execution note: local CTest version requires build-directory cwd (does not
+support --test-dir); final gates above used the correct cwd.

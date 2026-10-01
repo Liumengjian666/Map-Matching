@@ -174,6 +174,11 @@ MarginalizationLdltStats marginalizationLdltStatsForDiagnostics(
 }
 
 bool FixedLagWindow::marginalizeOldest(std::string* reason) {
+  return options_.marginalization_backend == MarginalizationBackend::SQUARE_ROOT_QR
+      ? marginalizeOldestSquareRoot(reason) : marginalizeOldestInformation(reason);
+}
+
+bool FixedLagWindow::marginalizeOldestInformation(std::string* reason) {
   if (reason) reason->clear();
   const bool capture = options_.capture_marginalization_diagnostics;
   MarginalizationTraceRecord trace;
@@ -473,13 +478,37 @@ bool FixedLagWindow::marginalizeOldest(std::string* reason) {
     }
   }
 
+  PriorInformation replacement;
+  replacement.information = std::move(new_information);
+  replacement.gradient = std::move(new_gradient);
+  commitMarginalPrior(std::move(replacement));
+  summary_.retained_prior_cross_information_norm = retained_cross_information_norm;
+  summary_.marginalization_solve_jitter = jitter;
+  summary_.marginalization_jitter_information_delta_norm = jitter_information_delta_norm;
+  summary_.marginalization_jitter_gradient_delta_norm = jitter_gradient_delta_norm;
+  summary_.marginalization_performed = true;
+  summary_.marginalization_psd = true;
+  summary_.marginalization_status = jitter > 0.0
+      ? "PASS_SCHUR_WITH_SOLVE_ONLY_JITTER" : "PASS_SCHUR";
+  if (capture) {
+    trace.oldest_state_removed = true;
+    trace.nodes_after_attempt = states_.size();
+    trace.span_after_attempt_s = states_.size() < 2 ? 0.0 :
+        static_cast<double>(states_.back().stamp_ns - states_.front().stamp_ns) * 1e-9;
+    trace.first_bad_stage = "NONE";
+    trace.marginalization_result = "SUCCESS";
+    marginalization_trace_.push_back(std::move(trace));
+  }
+  return true;
+}
+
+void FixedLagWindow::commitMarginalPrior(PriorInformation&& replacement) {
   const std::uint64_t removed_stamp = states_.front().stamp_ns;
   const bool feedback_was_current = summary_.prediction_feedback_ready &&
       optimized_revision_ == window_revision_;
-  prior_.information = std::move(new_information);
-  prior_.gradient = std::move(new_gradient);
-  prior_.reference_states.assign(states_.begin() + 1, states_.end());
-  prior_.valid = true;
+  replacement.reference_states.assign(states_.begin() + 1, states_.end());
+  replacement.valid = true;
+  prior_ = std::move(replacement);
   states_.erase(states_.begin());
   imu_factors_.erase(std::remove_if(imu_factors_.begin(), imu_factors_.end(),
       [this, removed_stamp](const ImuFactorRecord& factor_record) {
@@ -511,27 +540,6 @@ bool FixedLagWindow::marginalizeOldest(std::string* reason) {
     summary_.prediction_feedback_ready = false;
     summary_.prediction_feedback_status = "STALE_WINDOW_REVISION";
   }
-  summary_.retained_prior_cross_information_norm =
-      retained_cross_information_norm;
-  summary_.marginalization_solve_jitter = jitter;
-  summary_.marginalization_jitter_information_delta_norm =
-      jitter_information_delta_norm;
-  summary_.marginalization_jitter_gradient_delta_norm =
-      jitter_gradient_delta_norm;
-  summary_.marginalization_performed = true;
-  summary_.marginalization_psd = true;
-  summary_.marginalization_status = jitter > 0.0
-      ? "PASS_SCHUR_WITH_SOLVE_ONLY_JITTER" : "PASS_SCHUR";
-  if (capture) {
-    trace.oldest_state_removed = true;
-    trace.nodes_after_attempt = states_.size();
-    trace.span_after_attempt_s = states_.size() < 2 ? 0.0 :
-        static_cast<double>(states_.back().stamp_ns - states_.front().stamp_ns) * 1e-9;
-    trace.first_bad_stage = "NONE";
-    trace.marginalization_result = "SUCCESS";
-    marginalization_trace_.push_back(std::move(trace));
-  }
-  return true;
 }
 
 }  // namespace dog_prior_map_fastlio2_frontend_exp::fixed_lag

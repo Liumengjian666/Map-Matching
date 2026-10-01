@@ -261,6 +261,9 @@ void runWindowOwnedExperimentalMode(const p4_i2::Inputs& inputs,
   const bool diagnostic_enabled=diagnostic_environment &&
       std::string(diagnostic_environment)=="1";
   fixed_lag::FixedLagOptions options;
+  // Explicit V3 estimator contract, not an environment-selected backend.
+  options.marginalization_backend=fixed_lag::MarginalizationBackend::SQUARE_ROOT_QR;
+  std::cout << "marginalization_backend=SQUARE_ROOT_QR\n";
   options.capture_optimizer_trace=diagnostic_enabled;
   const char* marginalization_environment =
       std::getenv("P6_A3C_R1_MARGINALIZATION_DIAGNOSTICS");

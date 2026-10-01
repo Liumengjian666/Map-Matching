@@ -119,11 +119,20 @@ bool FixedLagWindow::initializeWithPriorAtomic(
   if (solver.info() != Eigen::Success ||
       solver.eigenvalues().minCoeff() < -1e-10)
     return fail(reason, "atomic_initial_prior_not_psd");
+  SquareRootRows square_root;
+  if (options_.marginalization_backend == MarginalizationBackend::SQUARE_ROOT_QR &&
+      !factorInitialSquareRootPrior(information, gradient, &square_root, reason))
+    return false;
   states_.push_back(state);
   prior_.information = information;
   prior_.gradient = gradient;
   prior_.reference_states = states_;
   prior_.valid = true;
+  if (options_.marginalization_backend == MarginalizationBackend::SQUARE_ROOT_QR) {
+    prior_.square_root = std::move(square_root);
+    prior_.square_root_authoritative = true;
+    summary_.initial_square_root_status = "PASS_LLT_NO_REGULARIZATION";
+  }
   summary_.latest_state_timestamp = state.stamp_ns;
   markWindowMutated();
   return true;
@@ -160,6 +169,10 @@ bool FixedLagWindow::addStateWithImuFactorAtomic(
     prior_.gradient.conservativeResize(old_dimension + 15);
     prior_.gradient.tail(15).setZero();
     prior_.reference_states.push_back(state);
+    if (prior_.square_root_authoritative) {
+      prior_.square_root.a.conservativeResize(Eigen::NoChange, old_dimension + 15);
+      prior_.square_root.a.rightCols(15).setZero();
+    }
   }
   states_.push_back(state);
   imu_factors_.push_back(
@@ -233,6 +246,10 @@ bool FixedLagWindow::addState(const WindowState& state, std::string* reason) {
     prior_.gradient.conservativeResize(old_dimension + 15);
     prior_.gradient.tail(15).setZero();
     prior_.reference_states.push_back(state);
+    if (prior_.square_root_authoritative) {
+      prior_.square_root.a.conservativeResize(Eigen::NoChange, old_dimension + 15);
+      prior_.square_root.a.rightCols(15).setZero();
+    }
   }
   states_.push_back(state);
   summary_.latest_state_timestamp = state.stamp_ns;
@@ -322,6 +339,12 @@ bool FixedLagWindow::setInitialPrior(std::uint64_t stamp_ns,
   if (solver.info() != Eigen::Success ||
       solver.eigenvalues().minCoeff() < -1e-10)
     return fail(reason, "initial_prior_not_psd");
+  SquareRootRows square_root;
+  if (options_.marginalization_backend == MarginalizationBackend::SQUARE_ROOT_QR) {
+    if (!factorInitialSquareRootPrior(information, gradient, &square_root, reason)) return false;
+    square_root.a.conservativeResize(Eigen::NoChange, states_.size() * 15);
+    if (states_.size() > 1) square_root.a.rightCols((states_.size()-1)*15).setZero();
+  }
   const Eigen::Index dimension = static_cast<Eigen::Index>(states_.size() * 15);
   prior_.information = Eigen::MatrixXd::Zero(dimension, dimension);
   prior_.gradient = Eigen::VectorXd::Zero(dimension);
@@ -329,6 +352,11 @@ bool FixedLagWindow::setInitialPrior(std::uint64_t stamp_ns,
   prior_.gradient.head<15>() = gradient;
   prior_.reference_states = states_;
   prior_.valid = true;
+  if (options_.marginalization_backend == MarginalizationBackend::SQUARE_ROOT_QR) {
+    prior_.square_root = std::move(square_root);
+    prior_.square_root_authoritative = true;
+    summary_.initial_square_root_status = "PASS_LLT_NO_REGULARIZATION";
+  }
   markWindowMutated();
   return true;
 }
@@ -1171,6 +1199,13 @@ const WindowState* FixedLagWindow::latestState() const {
 
 WindowSummary FixedLagWindow::summary() const {
   WindowSummary result = summary_;
+  result.marginalization_backend = options_.marginalization_backend == MarginalizationBackend::SQUARE_ROOT_QR
+      ? "SQUARE_ROOT_QR" : "LEGACY_INFORMATION_SCHUR";
+  if (prior_.square_root_authoritative) {
+    result.square_root_prior_rows = prior_.square_root.a.rows();
+    result.square_root_prior_columns = prior_.square_root.a.cols();
+    result.square_root_prior_bytes = sizeof(double) * (prior_.square_root.a.size() + prior_.square_root.b.size());
+  }
   result.window_node_count = states_.size();
   result.window_time_span_s = states_.size() < 2 ? 0.0 :
       static_cast<double>(states_.back().stamp_ns - states_.front().stamp_ns) * 1e-9;

@@ -52,7 +52,7 @@ void writeMarginalizationTraceHeader(std::ostream& output) {
        "consumed_system", "hmm", "raw_schur", "symmetrized_schur",
        "new_prior"})
     writeMarginalizationStatsHeader(output, name);
-  output << ",ldlt_initial_min_abs_D,ldlt_initial_max_abs_D,ldlt_initial_pivot_ratio,ldlt_initial_positive_D_count,ldlt_initial_negative_D_count,ldlt_initial_near_zero_D_count,ldlt_solve_min_abs_D,ldlt_solve_max_abs_D,ldlt_solve_pivot_ratio,ldlt_solve_positive_D_count,ldlt_solve_negative_D_count,ldlt_solve_near_zero_D_count,solve_jitter,Hmm_condition_proxy,solve_finite,solve_H_backward_error,solve_b_backward_error,raw_schur_asymmetry_fro,new_gradient_evaluated,new_gradient_finite,new_gradient_norm,new_gradient_max_abs,first_bad_stage,marginalization_result\n";
+  output << ",ldlt_initial_min_abs_D,ldlt_initial_max_abs_D,ldlt_initial_pivot_ratio,ldlt_initial_positive_D_count,ldlt_initial_negative_D_count,ldlt_initial_near_zero_D_count,ldlt_solve_min_abs_D,ldlt_solve_max_abs_D,ldlt_solve_pivot_ratio,ldlt_solve_positive_D_count,ldlt_solve_negative_D_count,ldlt_solve_near_zero_D_count,solve_jitter,Hmm_condition_proxy,solve_finite,solve_H_backward_error,solve_b_backward_error,raw_schur_asymmetry_fro,new_gradient_evaluated,new_gradient_finite,new_gradient_norm,new_gradient_max_abs,first_bad_stage,marginalization_result,marginalization_backend,qr_stack_rows,qr_columns,qr_marginalized_rank,qr_rank_threshold,qr_R_diag_min,qr_R_diag_max,qr_rows_before_compression,qr_rows_after_compression,qr_active_columns,qr_compression_rank,qr_compression_threshold,qr_discarded_row_jacobian_norm,qr_discarded_constant_squared,qr_status,qr_ms,legacy_shadow_status,legacy_shadow_lambda_min\n";
 }
 
 void writeMarginalizationTraceRow(std::ostream& output,
@@ -91,7 +91,16 @@ void writeMarginalizationTraceRow(std::ostream& output,
       << row.new_gradient_evaluated << ','
       << row.new_gradient_finite << ',' << row.new_gradient_norm << ','
       << row.new_gradient_max_abs << ',' << row.first_bad_stage << ','
-      << row.marginalization_result << '\n';
+      << row.marginalization_result << ',' << row.backend << ','
+      << row.qr.stack_rows << ',' << row.qr.columns << ','
+      << row.qr.marginalized_rank << ',' << row.qr.marginalized_threshold << ','
+      << row.qr.r_diagonal_min << ',' << row.qr.r_diagonal_max << ','
+      << row.qr.rows_before_compression << ',' << row.qr.rows_after_compression << ','
+      << row.qr.active_columns << ',' << row.qr.compression_rank << ','
+      << row.qr.compression_threshold << ',' << row.qr.discarded_row_jacobian_norm << ','
+      << row.qr.discarded_constant_squared << ',' << row.qr.status << ','
+      << row.qr_ms << ',' << row.legacy_shadow_status << ','
+      << row.legacy_shadow_lambda_min << '\n';
 }
 
 void writeCapsuleArray(std::ostream& file, const std::string& name,
@@ -120,7 +129,8 @@ bool writeMarginalizationFailureCapsuleBinary(
   if (!file) return false;
   const char magic[16] = {'P','6','A','3','C','R','1','C','A','P','S','U','L','E','\0','\0'};
   const std::uint32_t version = 1;
-  const std::uint32_t array_count = 11;
+  const bool square_root = capsule.trace.backend == "SQUARE_ROOT_QR";
+  const std::uint32_t array_count = square_root ? 15 : 11;
   file.write(magic, sizeof(magic));
   file.write(reinterpret_cast<const char*>(&version), sizeof(version));
   file.write(reinterpret_cast<const char*>(&array_count), sizeof(array_count));
@@ -135,6 +145,12 @@ bool writeMarginalizationFailureCapsuleBinary(
   writeCapsuleArray(file, "visual_hessian", capsule.visual_hessian);
   writeCapsuleArray(file, "correction_h", capsule.correction_h);
   writeCapsuleArray(file, "correction_b", Eigen::MatrixXd(capsule.correction_b));
+  if (square_root) {
+    writeCapsuleArray(file,"square_root_stack_A",capsule.square_root_stack.a);
+    writeCapsuleArray(file,"square_root_stack_b",Eigen::MatrixXd(capsule.square_root_stack.b));
+    writeCapsuleArray(file,"incoming_square_root_A",capsule.incoming_square_root_prior.a);
+    writeCapsuleArray(file,"incoming_square_root_b",Eigen::MatrixXd(capsule.incoming_square_root_prior.b));
+  }
   file.flush();
   return file.good();
 }
@@ -239,6 +255,7 @@ FixedLagProducerResult runFixedLagProducer(
   std::string reason;
   if(!adapter.initialize(initial,seed.information15,Vector15d::Zero(),&reason))
     throw std::runtime_error("fixed_lag_prior:"+reason);
+  std::cout << "initial_square_root_factorization=" << adapter.summary().initial_square_root_status << '\n';
   // No IKFoM object exists below this boundary. The adapter is the state owner.
   std::vector<ProducerEvent> stream;
   std::size_t raw_scans_before_handoff=0;
@@ -285,7 +302,7 @@ FixedLagProducerResult runFixedLagProducer(
   FixedLagProducerResult result;
   result.raw_scans_before_handoff=raw_scans_before_handoff;
   trajectory<<std::setprecision(17)<<"transaction_id,stamp_ns,time_s,px,py,pz,qx,qy,qz,qw\n";
-  diagnostics<<std::setprecision(17)<<"timestamp,event_type,window_nodes,window_span,optimizer_status,optimizer_cost_before,optimizer_cost_after,predicted_px,predicted_py,predicted_pz,predicted_qx,predicted_qy,predicted_qz,predicted_qw,ndt_converged,uobs_valid,weak_dimension,reliable_dimension,window_covariance_valid,window_position_sigma_max,window_rotation_sigma_max,unonlocal_probe_triggered,unonlocal_status,lidar_factor_attempted,lidar_factor_committed,lidar_selected_rank,lidar_nis,lidar_nis_threshold,visual_sensor_quality,visual_mode,visual_selected_rank,visual_trigger_status,visual_basis_source_lidar_stamp,imu_factor_count,lidar_factor_count,visual_factor_count,r2_policy,imu_buffer_last_stamp,lidar_source_provenance,visual_source_provenance,input_eligibility,post_handoff_ikfom_calls\n";
+  diagnostics<<std::setprecision(17)<<"timestamp,event_type,window_nodes,window_span,optimizer_status,optimizer_cost_before,optimizer_cost_after,predicted_px,predicted_py,predicted_pz,predicted_qx,predicted_qy,predicted_qz,predicted_qw,ndt_converged,uobs_valid,weak_dimension,reliable_dimension,window_covariance_valid,window_position_sigma_max,window_rotation_sigma_max,unonlocal_probe_triggered,unonlocal_status,lidar_factor_attempted,lidar_factor_committed,lidar_selected_rank,lidar_nis,lidar_nis_threshold,visual_sensor_quality,visual_mode,visual_selected_rank,visual_trigger_status,visual_basis_source_lidar_stamp,imu_factor_count,lidar_factor_count,visual_factor_count,r2_policy,imu_buffer_last_stamp,lidar_source_provenance,visual_source_provenance,input_eligibility,post_handoff_ikfom_calls,marginalization_backend,initial_square_root_status,square_root_prior_rows,square_root_prior_columns,square_root_prior_bytes,qr_marginalization_ms\n";
   runtime<<"timestamp,event_type,ndt_calls,ndt_ms,event_ms,linearization_ms,solve_ms,marginal_covariance_ms,rank_diagnostic_ms,solver_status,sparse_fallback_count\n";
   if (deskew_evidence)
     *deskew_evidence<<std::setprecision(17)
@@ -718,6 +735,16 @@ FixedLagProducerResult runFixedLagProducer(
               << (row.attempt_index_within_enforcement - 1) << '\n'
               << "first_bad_stage=" << row.first_bad_stage << '\n'
               << "marginalization_result=" << row.marginalization_result << '\n'
+              << "marginalization_backend=" << row.backend << '\n'
+              << "square_root_stack_rows=" << row.qr.stack_rows << '\n'
+              << "square_root_stack_columns=" << row.qr.columns << '\n'
+              << "square_root_marginalized_rank=" << row.qr.marginalized_rank << '\n'
+              << "square_root_rank_threshold=" << row.qr.marginalized_threshold << '\n'
+              << "square_root_R_diag_min=" << row.qr.r_diagonal_min << '\n'
+              << "square_root_R_diag_max=" << row.qr.r_diagonal_max << '\n'
+              << "square_root_rows_before_compression=" << row.qr.rows_before_compression << '\n'
+              << "square_root_rows_after_compression=" << row.qr.rows_after_compression << '\n'
+              << "square_root_status=" << row.qr.status << '\n'
               << "state_stamps_before_enforcement="
               << stampList(capsule->state_stamps_before_enforcement) << '\n'
               << "state_stamps_at_failing_attempt="
@@ -884,7 +911,10 @@ FixedLagProducerResult runFixedLagProducer(
       <<quality<<','<<visual_mode<<','<<visual_rank<<','<<visual_trigger<<','<<basis_stamp<<','
       <<summary.imu_factor_count<<','<<summary.lidar_factor_count<<','<<summary.visual_factor_count<<','
       <<r2PolicyName(policy)<<','<<buffered_stamp<<','<<lidar_provenance<<','<<visual_provenance<<','
-      <<(window_owned?"WINDOW_OWNED_EXPERIMENTAL_INPUT":"COMPATIBILITY_ONLY_NOT_FORMAL_INPUT")<<",0\n";
+      <<(window_owned?"WINDOW_OWNED_EXPERIMENTAL_INPUT":"COMPATIBILITY_ONLY_NOT_FORMAL_INPUT")<<",0,"
+      <<summary.marginalization_backend<<','<<summary.initial_square_root_status<<','
+      <<summary.square_root_prior_rows<<','<<summary.square_root_prior_columns<<','
+      <<summary.square_root_prior_bytes<<','<<summary.qr_marginalization_ms<<'\n';
     const double event_ms=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-event_start).count();
     runtime<<event.stamp_ns<<','<<toString(event.type)<<','<<calls<<','<<ndt_ms<<','<<event_ms<<','
         <<summary.linearization_ms<<','<<summary.solve_ms<<','

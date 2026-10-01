@@ -2,15 +2,19 @@
 
 #include "dog_prior_map_fastlio2_frontend_exp/window_factors.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/window_linear_system.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/window_square_root.hpp"
 
 #include <Eigen/Core>
 
 #include <cstdint>
+#include <limits>
 #include <set>
 #include <string>
 #include <vector>
 
 namespace dog_prior_map_fastlio2_frontend_exp::fixed_lag {
+
+enum class MarginalizationBackend { LEGACY_INFORMATION_SCHUR, SQUARE_ROOT_QR };
 
 struct FixedLagOptions {
   double maximum_duration_s = 2.0;
@@ -28,6 +32,7 @@ struct FixedLagOptions {
   // Opt-in marginalization forensics. It may collect matrix diagnostics but
   // must never participate in production decisions or change factor order.
   bool capture_marginalization_diagnostics = false;
+  MarginalizationBackend marginalization_backend = MarginalizationBackend::LEGACY_INFORMATION_SCHUR;
 };
 
 enum class OptimizerStatus {
@@ -81,6 +86,11 @@ struct WindowSummary {
   std::size_t marginal_covariance_requests = 0;
   std::size_t dense_marginal_reference_requests = 0;
   std::string marginalization_status = "NOT_REQUESTED";
+  std::string marginalization_backend = "LEGACY_INFORMATION_SCHUR";
+  std::string initial_square_root_status = "NOT_REQUESTED";
+  std::size_t square_root_prior_rows = 0, square_root_prior_columns = 0;
+  std::size_t square_root_prior_bytes = 0;
+  double qr_marginalization_ms = 0;
   std::string prediction_feedback_status = "NOT_READY";
   std::string verified_relocalization_status =
       "NOT_VERIFIED_GLOBAL_RELOCALIZATION";
@@ -224,6 +234,11 @@ MarginalizationLdltStats marginalizationLdltStatsForDiagnostics(
     const Eigen::VectorXd& diagonal);
 
 struct MarginalizationTraceRecord {
+  std::string backend = "LEGACY_INFORMATION_SCHUR";
+  SquareRootQrDiagnostics qr;
+  double qr_ms = 0;
+  std::string legacy_shadow_status = "NOT_REQUESTED";
+  double legacy_shadow_lambda_min = std::numeric_limits<double>::quiet_NaN();
   std::uint64_t marginalization_enforcement_index = 0;
   std::size_t attempt_index_within_enforcement = 0;
   std::uint64_t latest_state_stamp_ns = 0;
@@ -305,6 +320,8 @@ struct MarginalizationFailureCapsule {
   Eigen::MatrixXd visual_hessian;
   Eigen::MatrixXd correction_h;
   Eigen::VectorXd correction_b;
+  SquareRootRows square_root_stack;
+  SquareRootRows incoming_square_root_prior;
 };
 
 class FixedLagWindow {
@@ -348,6 +365,9 @@ class FixedLagWindow {
   WindowSummary summary() const;
   const Eigen::MatrixXd& priorInformation() const;
   const Eigen::VectorXd& priorGradient() const;
+  const SquareRootRows& priorSquareRootRows() const;
+  bool linearizeSquareRootPriorRows(SquareRootRows* output,
+                                   std::string* reason = nullptr) const;
   bool linearizedSystem(Eigen::MatrixXd* hessian,
                         Eigen::VectorXd* gradient, double* cost,
                         std::string* reason = nullptr) const;
@@ -407,6 +427,8 @@ class FixedLagWindow {
     Eigen::VectorXd gradient;
     std::vector<WindowState, Eigen::aligned_allocator<WindowState>> reference_states;
     bool valid = false;
+    SquareRootRows square_root;
+    bool square_root_authoritative = false;
   };
 
   struct MarginalizationAssemblyDiagnostics {
@@ -447,6 +469,9 @@ class FixedLagWindow {
   bool applyGlobalIncrement(const Eigen::VectorXd& increment,
                             std::string* reason);
   bool marginalizeOldest(std::string* reason);
+  bool marginalizeOldestInformation(std::string* reason);
+  bool marginalizeOldestSquareRoot(std::string* reason);
+  void commitMarginalPrior(PriorInformation&& replacement);
   bool observationIdAvailable(std::uint64_t observation_id,
                               std::string* reason);
   void retireObservationId(std::uint64_t observation_id);
