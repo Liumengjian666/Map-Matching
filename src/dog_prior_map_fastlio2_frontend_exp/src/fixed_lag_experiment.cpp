@@ -38,6 +38,14 @@ bool FixedLagExperimentalController::initializeWithPriorAtomic(
       fail(reason, "fixed_lag_experimental_mode_disabled");
 }
 
+bool FixedLagExperimentalController::resetFromValidatedRecovery(
+    const WindowState& state, const Matrix15d& information,
+    std::uint64_t recovery_observation_id, std::string* reason) {
+  return enabled() ? window_.resetFromValidatedRecovery(
+      state, information, recovery_observation_id, reason) :
+      fail(reason, "fixed_lag_experimental_mode_disabled");
+}
+
 bool FixedLagExperimentalController::addStateWithImuFactorAtomic(
     const WindowState& state, std::uint64_t observation_id,
     std::uint64_t from_stamp_ns,

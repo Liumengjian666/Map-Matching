@@ -357,6 +357,12 @@ class FixedLagWindow {
                                  const Matrix15d& information,
                                  const Vector15d& gradient,
                                  std::string* reason = nullptr);
+  // Explicit relocalization, not a factor update or Schur operation. The reset
+  // observation and every discarded observation remain globally retired.
+  bool resetFromValidatedRecovery(const WindowState& state,
+                                  const Matrix15d& information,
+                                  std::uint64_t recovery_observation_id,
+                                  std::string* reason = nullptr);
   bool addStateWithImuFactorAtomic(
       const WindowState& state, std::uint64_t observation_id,
       std::uint64_t from_stamp_ns,

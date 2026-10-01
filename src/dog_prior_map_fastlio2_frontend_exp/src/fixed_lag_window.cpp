@@ -138,6 +138,27 @@ bool FixedLagWindow::initializeWithPriorAtomic(
   return true;
 }
 
+bool FixedLagWindow::resetFromValidatedRecovery(
+    const WindowState& state, const Matrix15d& information,
+    std::uint64_t recovery_observation_id, std::string* reason) {
+  if (reason) reason->clear();
+  if (states_.empty() || state.stamp_ns != states_.back().stamp_ns)
+    return fail(reason, "recovery_must_replace_current_scan_end_state");
+  if (options_.marginalization_backend != MarginalizationBackend::SQUARE_ROOT_QR)
+    return fail(reason, "recovery_requires_square_root_backend");
+  const std::uint64_t old_max = active_observation_ids_.empty()
+      ? retired_observation_id_watermark_
+      : std::max(retired_observation_id_watermark_, *active_observation_ids_.rbegin());
+  if (recovery_observation_id == 0 || recovery_observation_id <= old_max)
+    return fail(reason, "recovery_observation_id_not_monotonic");
+  FixedLagWindow replacement(options_, imu_noise_);
+  if (!replacement.initializeWithPriorAtomic(
+          state, information, Vector15d::Zero(), reason)) return false;
+  replacement.retired_observation_id_watermark_ = recovery_observation_id;
+  *this = std::move(replacement);
+  return true;
+}
+
 bool FixedLagWindow::addStateWithImuFactorAtomic(
     const WindowState& state, std::uint64_t observation_id,
     std::uint64_t from_stamp_ns,
