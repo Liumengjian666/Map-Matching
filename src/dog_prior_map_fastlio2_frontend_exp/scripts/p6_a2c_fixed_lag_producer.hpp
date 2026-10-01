@@ -249,7 +249,7 @@ LidarCandidateEvaluation evaluateLidarCandidate(
   LidarCandidateEvaluation result;
   result.stability.status="NOT_PROBED";
   result.effective=p6_tracking::effectiveRegistration(
-      terminal.converged,terminal.iterations,terminal.objective,terminal.pose);
+      terminal.converged,terminal.iterations,terminal.objective,terminal.pose,ndt.getMaximumIterations());
   const bool converged=terminal.converged && (!enforce_effective_registration || result.effective);
   const auto observations=converged ? ndt.geometricObservations(*source,terminal.pose.cast<float>(),0.8) :
       std::vector<reliability::GeometricObservation>{};
@@ -1092,7 +1092,7 @@ FixedLagProducerResult runFixedLagProducer(
     if(!adapter.latestOptimizedState(&optimized,&reason)) throw std::runtime_error("producer_optimized_state:"+reason);
     if(event.type==ProducerEventType::LIDAR_SCAN || event.type==ProducerEventType::LIDAR_SCAN_END) {
       const auto& asset=assets[event.source_index];
-      tracker.finish(asset.stamp_ns,lidar_committed,nominal.pose*T_il.inverse(),optimized.velocity);
+      tracker.finish(asset.stamp_ns,lidar_committed,nominal.pose*T_il.inverse());
       if (tracking_output) {
         *tracking_output<<std::setprecision(17)<<asset.transaction_id<<','<<asset.stamp_ns
             <<",RESULT,"<<p6_tracking::name(tracker.health())<<','<<tracker.consecutiveFailures()

@@ -79,8 +79,9 @@ inline Config readConfig(const std::string& path) {
 // A zero-iteration terminal supplies no independent registration update.
 // Its hasConverged flag alone must never reset tracking health.
 inline bool effectiveRegistration(bool converged, int iterations, double objective,
-                                  const Eigen::Matrix4d& pose) {
-  return converged && iterations>0 && std::isfinite(objective) && pose.allFinite();
+                                  const Eigen::Matrix4d& pose, int maximum_iterations=80) {
+  return converged && iterations>0 && iterations<maximum_iterations &&
+      std::isfinite(objective) && pose.allFinite();
 }
 
 struct Seed {
@@ -103,19 +104,18 @@ class Tracker {
   }
 
   // Only a successfully optimized, committed measurement advances anchors.
-  void finish(std::uint64_t stamp, bool committed, const Eigen::Matrix4d& measured_map_T_imu,
-              const Eigen::Vector3d& optimized_velocity) {
+  void finish(std::uint64_t stamp, bool committed, const Eigen::Matrix4d& measured_map_T_imu) {
     if (!config_.enabled) return;
     if (!committed) {
       ++failures_;
       health_=failures_>=config_.recovery_after_failures ? Health::LOST : Health::DEGRADED;
       return;
     }
-    if (!stamp || !measured_map_T_imu.allFinite() || !optimized_velocity.allFinite() ||
+    if (!stamp || !measured_map_T_imu.allFinite() ||
         (last_.stamp && stamp<=last_.stamp))
       throw std::runtime_error("tracking_reliable_anchor_invalid");
     previous_=last_;
-    last_={stamp,measured_map_T_imu,optimized_velocity};
+    last_={stamp,measured_map_T_imu};
     failures_=0; health_=Health::GOOD;
   }
 
@@ -126,6 +126,10 @@ class Tracker {
     const double age=static_cast<double>(stamp-last_.stamp)*1e-9;
     if (age>config_.maximum_anchor_age_s) return output;
     const double horizon=std::min(age,config_.maximum_extrapolation_s);
+    // hdl_localization's last-observation hypothesis does not inherit a
+    // potentially drifting IMU velocity. Keep this no-extrapolation anchor
+    // before the bounded constant-motion alternative.
+    output.push_back({"LAST_RELIABLE_OBSERVATION",last_.pose});
     if (previous_.stamp && last_.stamp>previous_.stamp) {
       const double dt=static_cast<double>(last_.stamp-previous_.stamp)*1e-9;
       Seed seed; seed.label="RELIABLE_POSE_CONSTANT_VELOCITY";
@@ -138,10 +142,6 @@ class Tracker {
           Eigen::AngleAxisd(delta.angle()*horizon/dt,delta.axis()).toRotationMatrix();
       output.push_back(seed);
     }
-    Seed seed; seed.label="IMU_ORIENTATION_RELIABLE_TRANSLATION";
-    seed.map_T_imu=nominal_map_T_imu;
-    seed.map_T_imu.block<3,1>(0,3)=last_.pose.block<3,1>(0,3)+horizon*last_.velocity;
-    output.push_back(seed);
     if (output.size()>config_.maximum_alternative_seeds) output.resize(config_.maximum_alternative_seeds);
     return output;
   }
@@ -150,7 +150,6 @@ class Tracker {
   struct Anchor {
     std::uint64_t stamp=0;
     Eigen::Matrix4d pose=Eigen::Matrix4d::Identity();
-    Eigen::Vector3d velocity=Eigen::Vector3d::Zero();
   };
   Config config_;
   Health health_=Health::GOOD;
