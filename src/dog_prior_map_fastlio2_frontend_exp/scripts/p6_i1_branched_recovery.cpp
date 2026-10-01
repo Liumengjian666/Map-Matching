@@ -34,6 +34,7 @@
 #include <iostream>
 #include <limits>
 #include <map>
+#include <memory>
 #include <numeric>
 #include <sstream>
 #include <stdexcept>
@@ -3302,6 +3303,10 @@ int main(int argc, char** argv) {
       if (!p6_i1::readV3VisualMeasurements("NONE").empty())
         throw std::runtime_error("A3B_NONE_SENTINEL_DID_NOT_PRODUCE_EMPTY_VISUAL_INPUT");
       p6_i1::runFixedLagProductionFixture(true, true);
+      return 0;
+    }
+    if (argc == 2 && std::string(argv[1]) == "A3G_R3_CAPTURE_PARITY_FIXTURE") {
+      p6_i1::runFixedLagProductionFixture(true, true, true);
       return 0;
     }
     if (argc == 18 && std::string(argv[1]) == "FULL_FIXED_LAG_V3_EXPERIMENTAL") {

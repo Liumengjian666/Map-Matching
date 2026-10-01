@@ -1,6 +1,8 @@
 // Included after the mature P6 NDT/input helpers, inside namespace p6_i1.
 // This independent producer owns only FixedLagEventAdapter after handoff.
 
+#include "p6_a3g_r3_capture.hpp"
+
 struct FixedLagProducerResult {
   std::size_t events = 0;
   std::size_t lidar_committed = 0;
@@ -239,7 +241,8 @@ FixedLagProducerResult runFixedLagProducer(
     const std::string& marginalization_failure_capsule_path = {},
     std::ostream* covariance_request_output = nullptr,
     std::ostream* covariance_comparison_output = nullptr,
-    std::ostream* soak_health_output = nullptr) {
+    std::ostream* soak_health_output = nullptr,
+    A3gR3EvidenceCapture* a3g_r3_capture = nullptr) {
   using namespace fixed_lag;
   const auto started=std::chrono::steady_clock::now();
   if(assets.empty() || inputs.imu.empty() || !target || target->empty())
@@ -503,16 +506,22 @@ FixedLagProducerResult runFixedLagProducer(
     if(event.type==ProducerEventType::LIDAR_SCAN || event.type==ProducerEventType::LIDAR_SCAN_END) {
       const auto& asset=assets[event.source_index];
       Cloud::Ptr source;
+      std::optional<RawTimedScan> raw_storage;
+      std::optional<WindowState> anchor_storage;
+      std::optional<WindowDeskewResult> deskew_storage;
       if (window_owned) {
-        RawTimedScan raw;
+        raw_storage.emplace();
+        anchor_storage.emplace();
+        deskew_storage.emplace();
+        auto& raw=*raw_storage;
+        auto& anchor=*anchor_storage;
+        auto& deskew=*deskew_storage;
         if (!window_owned->provider(asset,&raw,&reason)) throw std::runtime_error("raw_timed_scan:"+reason);
         if (!rawDeskewInputAllowed(raw.provenance,&reason)) throw std::runtime_error(reason);
         if (raw.transaction_id!=asset.transaction_id || raw.scan_end_ns!=asset.stamp_ns ||
             raw.scan_start_ns!=window_owned->scan_start_ns[event.source_index])
           throw std::runtime_error("raw_timed_scan_identity_mismatch");
-        WindowState anchor;
         if (!adapter.activeStateAt(raw.scan_start_ns,&anchor,&reason)) throw std::runtime_error(reason);
-        WindowDeskewResult deskew;
         auto left = std::lower_bound(inputs.imu.begin(),inputs.imu.begin()+imu_cursor,raw.scan_start_ns,
             [](const ImuSample& s,std::uint64_t t){return s.stamp_ns<t;});
         if(left!=inputs.imu.begin() && (left==inputs.imu.end() || left->stamp_ns>raw.scan_start_ns)) --left;
@@ -569,6 +578,10 @@ FixedLagProducerResult runFixedLagProducer(
       predicted_pose.position=predicted.position;
       predicted_pose.orientation=Eigen::Quaterniond(predicted.rotation);
       const Eigen::Matrix4d prediction=poseMatrix(predicted_pose);
+      if (window_owned && a3g_r3_capture && a3g_r3_capture->selected(asset.transaction_id))
+        a3g_r3_capture->captureInputs(raw_storage.value(),anchor_storage.value(),predicted,
+                                      deskew_storage.value(),*source,extrinsic,
+                                      prediction*T_il,pre_measurement);
       nominal=runNdtCandidate(ndt,source,prediction*T_il,0,"WINDOW_M0");
       calls=1; ndt_ms=nominal.runtime_ms;
       const auto observations=nominal.converged ?
@@ -642,6 +655,16 @@ FixedLagProducerResult runFixedLagProducer(
       if(!lidar_committed && adapter.lastEventStatus().disposition!=AdapterEventDisposition::SKIPPED_INVALID_SOURCE)
         throw std::runtime_error("producer_lidar:"+reason);
       result.lidar_committed+=lidar_committed;
+      if (window_owned && a3g_r3_capture && a3g_r3_capture->selected(asset.transaction_id)) {
+        const auto after_lidar_summary=adapter.summary();
+        a3g_r3_capture->captureTerminalMetadata(
+            raw_storage.value(),anchor_storage.value(),predicted,deskew_storage.value(),
+            *source,extrinsic,prediction*T_il,nominal,
+            local_observability,routed,lidar,measurement_preview_valid,lidar_rank,
+            nis.valid,nis.nis,nis.threshold,nis.accepted,lidar_attempted,
+            lidar_committed,toString(adapter.lastEventStatus().disposition),
+            adapter.lastEventStatus().reason,pre_measurement,after_lidar_summary);
+      }
       if (covariance_comparison_output) {
         WindowMarginalCovariance shadow;
         shadow.valid=prior.legacy_shadow_valid;
@@ -1060,7 +1083,8 @@ void runFixedLagExperimentalMode(const p4_i2::Inputs& inputs,
 }
 
 void runFixedLagProductionFixture(bool window_owned_fixture = false,
-                                  bool no_vision_fixture = false) {
+                                  bool no_vision_fixture = false,
+                                  bool a3g_r3_capture_parity_fixture = false) {
   Cloud::Ptr target(new Cloud);
   for(int x=-2;x<=2;++x) for(int y=-2;y<=2;++y) for(int z=-1;z<=1;++z)
     for(int i=0;i<40;++i) {
@@ -1114,6 +1138,84 @@ void runFixedLagProductionFixture(bool window_owned_fixture = false,
     }
     return true;
   };
+  if (a3g_r3_capture_parity_fixture) {
+    struct CaptureParityRun {
+      FixedLagProducerResult result;
+      std::string trajectory,diagnostics,runtime,deskew,health;
+      std::size_t provider_calls=0;
+    };
+    const auto execute=[&](A3gR3EvidenceCapture* capture) {
+      std::ostringstream trajectory,diagnostics,runtime,deskew,health;
+      const auto calls_before=raw_loads;
+      CaptureParityRun run;
+      run.result=runFixedLagProducer(inputs,assets,parameters,Pose3d(),Pose3d(),target,visual,
+          [&](const ScanAsset&){++legacy_loads;return source;},trajectory,diagnostics,runtime,
+          0,R2Policy::ADAPTIVE_SELECTED_NIS,{}, {},&owned,
+          fixed_lag::LidarCloudProvenance::LEGACY_STATE_DERIVED_SE3_DESKEW,&deskew,
+          nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,std::string(),
+          nullptr,nullptr,&health,capture);
+      run.trajectory=trajectory.str(); run.diagnostics=diagnostics.str();
+      run.runtime=runtime.str(); run.deskew=deskew.str(); run.health=health.str();
+      run.provider_calls=raw_loads-calls_before;
+      return run;
+    };
+    const auto normalize_csv=[](const std::string& input,
+                               const std::set<std::string>& excluded) {
+      std::istringstream stream(input); std::string line,output;
+      if (!std::getline(stream,line)) return output;
+      const auto header=split(line,',');
+      std::vector<std::size_t> keep;
+      for (std::size_t i=0;i<header.size();++i)
+        if (!excluded.count(header[i])) keep.push_back(i);
+      const auto append=[&](const std::vector<std::string>& row) {
+        for (std::size_t i=0;i<keep.size();++i) {
+          if (i) output.push_back(',');
+          if (keep[i]<row.size()) output+=row[keep[i]];
+        }
+        output.push_back('\n');
+      };
+      append(header);
+      while (std::getline(stream,line)) append(split(line,','));
+      return output;
+    };
+    const auto off=execute(nullptr);
+    const auto serial=std::chrono::steady_clock::now().time_since_epoch().count();
+    const auto root=std::filesystem::temp_directory_path()/
+        ("p6_a3g_r3_capture_parity_"+std::to_string(serial));
+    if (!std::filesystem::create_directory(root))
+      throw std::runtime_error("A3G_R3_FIXTURE_TEMP_DIRECTORY_CREATE_FAILED");
+    A3gR3EvidenceCapture capture(root.string(),{25,26,27});
+    const auto on=execute(&capture);
+    if (off.result.events!=on.result.events || off.result.lidar_committed!=on.result.lidar_committed ||
+        off.result.visual_committed!=on.result.visual_committed ||
+        off.result.covariance_available!=on.result.covariance_available ||
+        off.result.probes!=on.result.probes || off.result.ndt_calls!=on.result.ndt_calls ||
+        off.result.window_deskew_count!=on.result.window_deskew_count ||
+        off.provider_calls!=3 || on.provider_calls!=3 || legacy_loads!=0 ||
+        off.trajectory!=on.trajectory || off.deskew!=on.deskew ||
+        normalize_csv(off.diagnostics,{"qr_marginalization_ms"}) !=
+            normalize_csv(on.diagnostics,{"qr_marginalization_ms"}) ||
+        normalize_csv(off.health,{"optimizer_and_marginalization_ms"}) !=
+            normalize_csv(on.health,{"optimizer_and_marginalization_ms"}) ||
+        normalize_csv(off.runtime,{"ndt_ms","event_ms","linearization_ms","solve_ms",
+             "marginal_covariance_ms","rank_diagnostic_ms"}) !=
+            normalize_csv(on.runtime,{"ndt_ms","event_ms","linearization_ms","solve_ms",
+             "marginal_covariance_ms","rank_diagnostic_ms"}) ||
+        capture.completedSelected()!=3)
+      throw std::runtime_error("A3G_R3_CAPTURE_OFF_ON_PRODUCER_PARITY_FAILED");
+    for (const auto tx : {25ULL,26ULL,27ULL}) {
+      const auto dir=root/("TX00"+std::to_string(tx));
+      for (const char* name : {"RAW_TIMED_POINTS.bin","RAW_TIMED_POINTS_SCHEMA.json",
+             "DESKEWED_END_FRAME.pcd","NDT_SOURCE.pcd","DESKEW_KNOTS.csv","METADATA.json"})
+        if (!std::filesystem::is_regular_file(dir/name))
+          throw std::runtime_error("A3G_R3_CAPTURE_FIXTURE_ARTIFACT_MISSING");
+    }
+    std::filesystem::remove_all(root);
+    std::cout << "A3G_R3_CAPTURE_OFF_ON_PARITY_PASS states=trajectory+health "
+              << "factors=revisions+health callbacks=raw_provider_count "
+              << "deskew=evidence NDT_source=immutable_const_input optimizer=trajectory\n";
+    return;
+  }
   for(auto policy:{R2Policy::LEGACY_BASE_NO_GATE,R2Policy::ADAPTIVE_NO_GATE,
                    R2Policy::BASE_SELECTED_NIS,R2Policy::ADAPTIVE_SELECTED_NIS}) {
     std::ostringstream trajectory,diagnostics,runtime;

@@ -63,6 +63,10 @@ add_test(NAME p6_a3d_r1_termination
   COMMAND $<TARGET_FILE:p6_a3d_r1_termination_test>)
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
 add_test(NAME p6_a3g_soak_guard COMMAND ${Python3_EXECUTABLE} "${PACKAGE_ROOT}/scripts/p6_a3g_soak.py" --self-test)
+add_test(NAME p6_a3g_r3_capture_runner_guard
+  COMMAND ${Python3_EXECUTABLE} "${PACKAGE_ROOT}/scripts/p6_a3g_r3_capture_runner.py" --self-test)
+add_test(NAME p6_a3g_r3_prefix_audit_guard
+  COMMAND ${Python3_EXECUTABLE} "${PACKAGE_ROOT}/scripts/p6_a3g_r3_prefix_audit.py" --self-test)
 add_test(NAME p6_a3f_r1_replay_guard
   COMMAND ${Python3_EXECUTABLE} "${PACKAGE_ROOT}/scripts/p6_a3f_r1_replay_guard.py" --self-test)
 add_test(NAME p6_a3e_r2_replay_guard
@@ -199,6 +203,8 @@ if(BUILD_I6B_CLOSED_LOOP_TOOLS)
     COMMAND $<TARGET_FILE:p6_i6b_closed_loop> A2D_FIXTURE)
   add_test(NAME p6_a3b_no_vision
     COMMAND $<TARGET_FILE:p6_i6b_closed_loop> A3B_NO_VISION_FIXTURE)
+  add_test(NAME p6_a3g_r3_capture_parity
+    COMMAND $<TARGET_FILE:p6_i6b_closed_loop> A3G_R3_CAPTURE_PARITY_FIXTURE)
 
   add_executable(p6_a3b_r1_optimizer_diagnostics_test
     "${PACKAGE_ROOT}/scripts/p6_a3b_r1_optimizer_diagnostics_test.cpp")

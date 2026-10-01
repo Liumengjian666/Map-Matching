@@ -18,6 +18,9 @@ def main():
     # The V3-only diagnostic environment switch uses std::getenv; this additive
     # standard header must not be treated as a change to the frozen legacy path.
     stripped = stripped.replace('#include <cstdlib>\n', "")
+    # A3G-R3's synthetic observer-parity fixture needs only std::unique_ptr;
+    # it is an additive diagnostic-only dispatch, not part of legacy execution.
+    stripped = stripped.replace('#include <memory>\n', "")
     # Additive V3 covariance diagnostics helper; frozen legacy body is still
     # compared byte-for-byte after removing this include and its blank line.
     stripped = stripped.replace('#include "p6_a3f_r1_covariance_diagnostics.hpp"\n\n', "")

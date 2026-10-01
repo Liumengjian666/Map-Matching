@@ -288,6 +288,14 @@ void runWindowOwnedExperimentalMode(const p4_i2::Inputs& inputs,
   std::ofstream preopt_capsule,optimizer_trace,directional_derivative,
       damping_sweep,optimizer_failure_summary,marginalization_trace,
       marginalization_failure_summary,soak_health;
+  std::unique_ptr<A3gR3EvidenceCapture> a3g_r3_capture;
+  const char* capture_environment=std::getenv("P6_A3G_R3_CAPTURE_DIR");
+  if (capture_environment && *capture_environment) {
+    a3g_r3_capture=std::make_unique<A3gR3EvidenceCapture>(capture_environment);
+    std::cout << "a3g_r3_evidence_capture=ON selected_transactions=14\n";
+  } else {
+    std::cout << "a3g_r3_evidence_capture=OFF\n";
+  }
   if (health_enabled) soak_health=openV3ExclusiveOutput(trajectory_path+".a3g_health.csv");
   if (diagnostic_enabled || health_enabled) {
     preopt_capsule=openV3ExclusiveOutput(trajectory_path+".r1_preopt_capsule.csv");
@@ -319,7 +327,7 @@ void runWindowOwnedExperimentalMode(const p4_i2::Inputs& inputs,
           std::string(),
       (options.capture_covariance_shadow || health_enabled)?&covariance_requests:nullptr,
       options.capture_covariance_shadow?&covariance_comparisons:nullptr,
-      health_enabled?&soak_health:nullptr);
+      health_enabled?&soak_health:nullptr,a3g_r3_capture.get());
   trajectory.flush(); diagnostics.flush(); runtime.flush(); deskew_evidence.flush();
   if (marginalization_diagnostic_enabled) marginalization_trace.flush();
   std::cout<<"FULL_FIXED_LAG_V3_EXPERIMENTAL_COMPLETE window_deskews="<<result.window_deskew_count
