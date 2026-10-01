@@ -1,0 +1,82 @@
+[
+  {
+    "path": "/tmp/p6_a3e_r2_corridor_p3_200/command.json",
+    "bytes": 1180,
+    "sha256": "5bf37fb795fb44a9668c7b8cd26cdf06396da433e608d629b78f2462771fbbe7"
+  },
+  {
+    "path": "/tmp/p6_a3e_r2_corridor_p3_200/console.txt",
+    "bytes": 363,
+    "sha256": "cdf4f41bd77eac058547a5879ccd4dbe46c21826064d1ed9feb4adc295163e58"
+  },
+  {
+    "path": "/tmp/p6_a3e_r2_corridor_p3_200/events.csv",
+    "bytes": 171889,
+    "sha256": "f2da91ca35acc31dceff9152b973581901900b9ba8f16355b3ecd8f834d17f87"
+  },
+  {
+    "path": "/tmp/p6_a3e_r2_corridor_p3_200/identity_gate.json",
+    "bytes": 8624,
+    "sha256": "33ff967c202323ed3ff31fd5ee66822e99cb69d9d63860b5248fb2d9f26b6215"
+  },
+  {
+    "path": "/tmp/p6_a3e_r2_corridor_p3_200/input_identity.json",
+    "bytes": 1482,
+    "sha256": "cacf90d6288cacc3848f31dbd3078e99f3bffb3891497de1d2f21b62ca35af76"
+  },
+  {
+    "path": "/tmp/p6_a3e_r2_corridor_p3_200/resource.txt",
+    "bytes": 1737,
+    "sha256": "d262ef3cc4a5fc2f05ba81a9e33a4f9f597d3764303a909d39a11d21958c487f"
+  },
+  {
+    "path": "/tmp/p6_a3e_r2_corridor_p3_200/runtime.csv",
+    "bytes": 31385,
+    "sha256": "fd11109c2399314d7e2193f064e5c64e4e2f37e2996075dfcecf172c07b879e6"
+  },
+  {
+    "path": "/tmp/p6_a3e_r2_corridor_p3_200/trajectory.csv",
+    "bytes": 27202,
+    "sha256": "5691c36e316f6c153f35bfb3024aeff4cbb8c9b390200b365a7e4ff21a997575"
+  },
+  {
+    "path": "/tmp/p6_a3e_r2_corridor_p3_200/trajectory.csv.a3c_r1_failure_summary.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "/tmp/p6_a3e_r2_corridor_p3_200/trajectory.csv.a3c_r1_marginalization_trace.csv",
+    "bytes": 212495,
+    "sha256": "b14d2b7675454a71c638723e012d5eba0e892b996e3d9b99181b1aab8e1d2d44"
+  },
+  {
+    "path": "/tmp/p6_a3e_r2_corridor_p3_200/trajectory.csv.deskew_evidence.csv",
+    "bytes": 68885,
+    "sha256": "f17d230c8567d37e1fd6c3346b6c6d3461a4c881524e9e551e78c42d5eab11ed"
+  },
+  {
+    "path": "/tmp/p6_a3e_r2_corridor_p3_200/trajectory.csv.r1_damping_sweep.csv",
+    "bytes": 572,
+    "sha256": "0cf7f884ed1d570385fa8f8b0940ddcbf6618aa536dc01821fb2bb264d45d19c"
+  },
+  {
+    "path": "/tmp/p6_a3e_r2_corridor_p3_200/trajectory.csv.r1_directional_derivative.csv",
+    "bytes": 258,
+    "sha256": "a25580110abdecf59c21c1fbd6fb8b9c17e395485d326dd80b782bef7b5e8f52"
+  },
+  {
+    "path": "/tmp/p6_a3e_r2_corridor_p3_200/trajectory.csv.r1_failure_summary.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "/tmp/p6_a3e_r2_corridor_p3_200/trajectory.csv.r1_optimizer_trace.csv",
+    "bytes": 20212450,
+    "sha256": "6abc4140d73213f826fd16bc8e3d403a7051814c11c4317f6df31c80b8953323"
+  },
+  {
+    "path": "/tmp/p6_a3e_r2_corridor_p3_200/trajectory.csv.r1_preopt_capsule.csv",
+    "bytes": 344438,
+    "sha256": "4242a4ec9b0125bd1559ef8b2920ca3045043b39b4d87f4a38c5457a77eb8d51"
+  }
+]
