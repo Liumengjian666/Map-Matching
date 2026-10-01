@@ -1,0 +1,198 @@
+Start testing: Oct 01 14:25 CST
+----------------------------------------------------------
+8/31 Testing: p6_a1_r1_fixed_lag_regression
+8/31 Test: p6_a1_r1_fixed_lag_regression
+Command: "/tmp/p6_a2d_debug/p6_a1_r1_fixed_lag_regression_test"
+Directory: /tmp/p6_a2d_debug
+"p6_a1_r1_fixed_lag_regression" start time: Oct 01 14:25 CST
+Output:
+----------------------------------------------------------
+P6_A1_R1_FIXED_LAG_REGRESSION_PASS clean_H_error=1.24607e-10 clean_g_error=7.85293e-13 noisy_H_error=1.24607e-10 noisy_g_error=7.85317e-13 max_active_ids=5 prior_gradient_error=0 jitter=1e-07 jitter_H_delta=1.71782e-07 jitter_g_delta=1.07995e-08
+<end of output>
+Test time =  28.74 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a1_r1_fixed_lag_regression" end time: Oct 01 14:25 CST
+"p6_a1_r1_fixed_lag_regression" time elapsed: 00:00:28
+----------------------------------------------------------
+
+17/31 Testing: p6_a3b_r1_optimizer_diagnostics
+17/31 Test: p6_a3b_r1_optimizer_diagnostics
+Command: "/tmp/p6_a2d_debug/p6_a3b_r1_optimizer_diagnostics_test"
+Directory: /tmp/p6_a2d_debug
+"p6_a3b_r1_optimizer_diagnostics" start time: Oct 01 14:25 CST
+Output:
+----------------------------------------------------------
+A3B_R1_OPTIMIZER_DIAGNOSTICS_SYNTHETIC_PASS
+<end of output>
+Test time =   0.13 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a3b_r1_optimizer_diagnostics" end time: Oct 01 14:25 CST
+"p6_a3b_r1_optimizer_diagnostics" time elapsed: 00:00:00
+----------------------------------------------------------
+
+18/31 Testing: p6_a3b_r2_frozen_projection
+18/31 Test: p6_a3b_r2_frozen_projection
+Command: "/tmp/p6_a2d_debug/p6_a3b_r2_frozen_projection_test"
+Directory: /tmp/p6_a2d_debug
+"p6_a3b_r2_frozen_projection" start time: Oct 01 14:25 CST
+Output:
+----------------------------------------------------------
+A3B_R2_FROZEN_PROJECTION_SYNTHETIC_PASS
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a3b_r2_frozen_projection" end time: Oct 01 14:25 CST
+"p6_a3b_r2_frozen_projection" time elapsed: 00:00:00
+----------------------------------------------------------
+
+19/31 Testing: p6_a3c_r1_marginalization_diagnostics
+19/31 Test: p6_a3c_r1_marginalization_diagnostics
+Command: "/tmp/p6_a2d_debug/p6_a3c_r1_marginalization_diagnostics_test"
+Directory: /tmp/p6_a2d_debug
+"p6_a3c_r1_marginalization_diagnostics" start time: Oct 01 14:25 CST
+Output:
+----------------------------------------------------------
+A3C_R1_MARGINALIZATION_DIAGNOSTICS_TEST_PASS
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a3c_r1_marginalization_diagnostics" end time: Oct 01 14:25 CST
+"p6_a3c_r1_marginalization_diagnostics" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/31 Testing: p6_a3c_r1_marginalization_oracle_math
+20/31 Test: p6_a3c_r1_marginalization_oracle_math
+Command: "/usr/bin/python3.8" "/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b/../../scripts/p6_a3c_r1_marginalization_oracle.py" "--self-test"
+Directory: /tmp/p6_a2d_debug
+"p6_a3c_r1_marginalization_oracle_math" start time: Oct 01 14:25 CST
+Output:
+----------------------------------------------------------
+A3C_R1_ORACLE_MATH_SELF_TEST_PASS
+<end of output>
+Test time =   0.14 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a3c_r1_marginalization_oracle_math" end time: Oct 01 14:25 CST
+"p6_a3c_r1_marginalization_oracle_math" time elapsed: 00:00:00
+----------------------------------------------------------
+
+21/31 Testing: p6_a3c_r2_alias_regression
+21/31 Test: p6_a3c_r2_alias_regression
+Command: "/tmp/p6_a2d_debug/p6_a3c_r2_alias_regression_test"
+Directory: /tmp/p6_a2d_debug
+"p6_a3c_r2_alias_regression" start time: Oct 01 14:25 CST
+Output:
+----------------------------------------------------------
+unsafe_demo=SKIPPED_DEBUG_ASSERTION_STRATEGY
+attempt=1 raw_schur_max_asymmetry=2.6020852139652106e-18 stored_prior_max_asymmetry=0
+attempt=2 raw_schur_max_asymmetry=6.9388939039072284e-17 stored_prior_max_asymmetry=0
+multi_removal_H_relative_error=7.2511587330693086e-17 g_error=2.540132453772453e-22
+A3C_R2_ALIAS_REGRESSION_PASS
+<end of output>
+Test time =   0.18 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a3c_r2_alias_regression" end time: Oct 01 14:25 CST
+"p6_a3c_r2_alias_regression" time elapsed: 00:00:00
+----------------------------------------------------------
+
+22/31 Testing: p6_a3c_r2_source_alias_inventory
+22/31 Test: p6_a3c_r2_source_alias_inventory
+Command: "/usr/bin/python3.8" "/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b/../../scripts/p6_a3c_r2_alias_audit.py" "--inventory"
+Directory: /tmp/p6_a2d_debug
+"p6_a3c_r2_source_alias_inventory" start time: Oct 01 14:25 CST
+Output:
+----------------------------------------------------------
+src/dual_reliability.cpp | 109 | symmetric | False | False | 0.5 * (raw + raw.transpose())
+src/dual_reliability.cpp | 122 | *output | True | True | (0.5 * (*output + output->transpose())).eval()
+src/dual_reliability.cpp | 145 | covariance | False | False | 0.5 * (input_covariance + input_covariance.transpose())
+src/dual_reliability.cpp | 339 | information | False | False | 0.5 * (local.normalized_geometric_information + local.normalized_geometric_information.transpose())
+src/dual_reliability.cpp | 344 | equalized | True | True | (0.5 * (equalized + equalized.transpose())).eval()
+src/dual_reliability.cpp | 439 | information | False | False | 0.5 * (local.normalized_geometric_information + local.normalized_geometric_information.transpose())
+src/dual_reliability.cpp | 625 | raw_position | False | False | 0.5 * (nonlocal.delta_position_imu_positive * nonlocal.delta_position_imu_positive.transpose() + nonlocal.delta_position_imu_negative * nonlocal.delta_position_imu_negative.transpose())
+src/dual_reliability.cpp | 630 | raw_rotation | False | False | 0.5 * (nonlocal.delta_rotation_positive * nonlocal.delta_rotation_positive.transpose() + nonlocal.delta_rotation_negative * nonlocal.delta_rotation_negative.transpose())
+src/dual_reliability.cpp | 659 | result.covariance | True | True | (0.5 * (result.covariance + result.covariance.transpose())).eval()
+src/dual_reliability.cpp | 850 | symmetric_covariance | False | False | 0.5 * (measurement_covariance + measurement_covariance.transpose())
+src/dual_reliability.cpp | 877 | result.visual_information | True | True | (0.5 * (result.visual_information + result.visual_information.transpose())).eval()
+src/fastlio2_frontend_ikfom.cpp | 737 | posterior | True | True | (0.5 * (posterior + posterior.transpose())).eval()
+src/fastlio2_frontend_ikfom.cpp | 909 | posterior | True | True | (0.5 * (posterior + posterior.transpose())).eval()
+src/fastlio2_frontend_ikfom.cpp | 1117 | output->covariance15 | False | True | 0.5 * (conditional + conditional.transpose()).eval()
+src/fastlio2_frontend_ikfom.cpp | 1123 | output->information15 | True | True | 0.5 * (output->information15 + output->information15.transpose()).eval()
+src/fixed_lag_window.cpp | 1170 | output->covariance15 | False | True | 0.5 * (columns.bottomRows(15) + columns.bottomRows(15).transpose()).eval()
+src/fixed_lag_window.cpp | 1180 | output->map_pose_covariance6 | True | True | 0.5 * (output->map_pose_covariance6 + output->map_pose_covariance6.transpose()).eval()
+src/fixed_lag_window.cpp | 1239 | hessian | True | True | 0.5 * (hessian + hessian.transpose()).eval()
+src/measurement_noise_model.cpp | 61 | result.residual_covariance | True | True | (0.5 * (result.residual_covariance + result.residual_covariance.transpose())).eval()
+src/measurement_noise_model.cpp | 85 | output->covariance | False | False | 0.5 * (residual_covariance + residual_covariance.transpose())
+src/reliability_metrics.cpp | 48 | symmetric | False | False | 0.5 * (input + input.transpose())
+src/reliability_metrics.cpp | 70 | *inverse | True | True | (0.5 * (*inverse + inverse->transpose())).eval()
+src/reliability_metrics.cpp | 80 | a | False | False | 0.5 * (information.block<3, 3>(0, 0) + information.block<3, 3>(0, 0).transpose())
+src/reliability_metrics.cpp | 83 | c | False | False | 0.5 * (information.block<3, 3>(3, 3) + information.block<3, 3>(3, 3).transpose())
+src/reliability_metrics.cpp | 95 | *rotation | True | True | (0.5 * (*rotation + rotation->transpose())).eval()
+src/reliability_metrics.cpp | 96 | *translation | True | True | (0.5 * (*translation + translation->transpose())).eval()
+src/reliability_metrics.cpp | 119 | *rotation | True | True | (0.5 * (*rotation + rotation->transpose())).eval()
+src/reliability_metrics.cpp | 120 | *translation | True | True | (0.5 * (*translation + translation->transpose())).eval()
+src/reliability_metrics.cpp | 195 | result.hessian_euler | False | False | -0.5 * (canonical + canonical.transpose())
+src/reliability_metrics.cpp | 201 | result.hessian_physical | True | True | (0.5 * (result.hessian_physical + result.hessian_physical.transpose())).eval()
+src/reliability_metrics.cpp | 208 | result.normalized_negative_score_curvature | True | True | (0.5 * (result.normalized_negative_score_curvature + result.normalized_negative_score_curvature.transpose())).eval()
+src/reliability_metrics.cpp | 240 | rotation_block | False | False | 0.5 * (curvature.block<3, 3>(0, 0) + curvature.block<3, 3>(0, 0).transpose())
+src/reliability_metrics.cpp | 242 | translation_block | False | False | 0.5 * (curvature.block<3, 3>(3, 3) + curvature.block<3, 3>(3, 3).transpose())
+src/reliability_metrics.cpp | 311 | symmetric_covariance | False | False | 0.5 * (observation.voxel_covariance_map + observation.voxel_covariance_map.transpose())
+src/reliability_metrics.cpp | 382 | information | True | True | (0.5 * (information + information.transpose())).eval()
+src/reliability_metrics.cpp | 386 | normalized_information | True | True | (0.5 * (normalized_information + normalized_information.transpose())).eval()
+src/reliability_metrics.cpp | 417 | normalized_information | True | True | (0.5 * (normalized_information + normalized_information.transpose())).eval()
+src/window_imu_factor.cpp | 237 | output->covariance | True | True | (0.5 * (output->covariance + output->covariance.transpose())).eval()
+src/window_lidar_factor.cpp | 146 | selected_covariance | True | True | (0.5 * (selected_covariance + selected_covariance.transpose())).eval()
+src/window_linear_system.cpp | 29 | block | False | False | i == j ? Matrix15d(0.5*(entry.second+entry.second.transpose())) : entry.second
+src/window_linear_system.cpp | 285 | block.second | True | True | (0.5*(block.second+block.second.transpose())).eval()
+src/window_marginalization.cpp | 128 | symmetric | False | False | 0.5 * (matrix + matrix.transpose())
+src/window_marginalization.cpp | 334 | hmm_solve | False | False | 0.5 * (hmm + hmm.transpose())
+src/window_marginalization.cpp | 456 | alternate_information | True | True | (0.5 * (alternate_information + alternate_information.transpose())).eval()
+src/window_visual_factor.cpp | 104 | *covariance | True | True | (0.5 * (*covariance + covariance->transpose())).eval()
+include/dog_prior_map_fastlio2_frontend_exp/fixed_lag_production.hpp | 89 | innovation | True | True | 0.5 * (innovation + innovation.transpose()).eval()
+SOURCE_ALIAS_INVENTORY_PASS average_assignments=46 remaining_self_assignments=26 unsafe=0 critical_independent_temporaries=2
+<end of output>
+Test time =   0.35 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a3c_r2_source_alias_inventory" end time: Oct 01 14:25 CST
+"p6_a3c_r2_source_alias_inventory" time elapsed: 00:00:00
+----------------------------------------------------------
+
+23/31 Testing: p6_a3c_r2_tx90_capsule_repair
+23/31 Test: p6_a3c_r2_tx90_capsule_repair
+Command: "/usr/bin/python3.8" "/home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p6_i6b/../../scripts/p6_a3c_r2_alias_audit.py" "--capsule-inspector" "/tmp/p6_a2d_debug/p6_a3c_r1_marginalization_diagnostics_test"
+Directory: /tmp/p6_a2d_debug
+"p6_a3c_r2_tx90_capsule_repair" start time: Oct 01 14:25 CST
+Output:
+----------------------------------------------------------
+TX90_CPP_CAPSULE_EMULATION raw_asymmetry_fro=6.3275346904335216e-08 production_symmetry_fro=1.5818836835798959e-08 production_symmetry_max_abs=1.1175870895385742e-08 out_of_place_symmetry_max_abs=0 production_validator_pass=0 out_of_place_validator_pass=1 repaired_production_max_asymmetry=0 repaired_validator_pass=1 repaired_lambda_min=0
+TX90_COMMITTED_CAPSULE_REPAIR_PASS sha=2f597628160e75f41bc4c13d9de015727c17b1755535ad806263f272ebcf0280
+<end of output>
+Test time =  12.34 sec
+----------------------------------------------------------
+Test Passed.
+"p6_a3c_r2_tx90_capsule_repair" end time: Oct 01 14:25 CST
+"p6_a3c_r2_tx90_capsule_repair" time elapsed: 00:00:12
+----------------------------------------------------------
+
+28/31 Testing: dense_sparse_equivalence_test
+28/31 Test: dense_sparse_equivalence_test
+Command: "/tmp/p6_a2d_debug/dense_sparse_equivalence_test"
+Directory: /tmp/p6_a2d_debug
+"dense_sparse_equivalence_test" start time: Oct 01 14:25 CST
+Output:
+----------------------------------------------------------
+PASS relative_H=0 relative_g=1.01248e-16 cost=1.73472e-18 relative_step=6.06196e-15 final_state=3.86139e-16
+<end of output>
+Test time =   2.94 sec
+----------------------------------------------------------
+Test Passed.
+"dense_sparse_equivalence_test" end time: Oct 01 14:25 CST
+"dense_sparse_equivalence_test" time elapsed: 00:00:02
+----------------------------------------------------------
+
+End testing: Oct 01 14:25 CST

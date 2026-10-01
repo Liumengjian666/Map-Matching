@@ -1,0 +1,24 @@
+Command exited with non-zero status 1
+	Command being timed: "env LD_LIBRARY_PATH=/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu P6_A3B_R1_DIAGNOSTICS=1 P6_A3C_R1_MARGINALIZATION_DIAGNOSTICS=1 /tmp/p6_a2d_build/p6_i6b_closed_loop FULL_FIXED_LAG_V3_EXPERIMENTAL /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_i6c_framework/input/imu.csv /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_a3a_v3_input/filter_scans.csv /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_a3a_v3_input/raw_timed_catalog.csv /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_a3a_v3_input/raw_timed_points.bin /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd /home/jian/livox_ws/dog_loc_p6_i6b_ws/src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i6d_full_algorithm/corridor01_params_official_calibration.txt /tmp/p6_a3c_r2_corridor_p3_200/trajectory.csv /tmp/p6_a3c_r2_corridor_p3_200/events.csv /tmp/p6_a3c_r2_corridor_p3_200/runtime.csv NONE 200 1517157224188979000 corridor01 ADAPTIVE_SELECTED_NIS /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_a3a_v3_input/raw_timed_catalog.csv NONE"
+	User time (seconds): 46.43
+	System time (seconds): 2.53
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:49.21
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 93516
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 366221
+	Voluntary context switches: 501
+	Involuntary context switches: 13004
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 18896
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 1

@@ -1,0 +1,42 @@
+Final pre-real-data gates:
+Release build: PASS (/tmp/p6_a2d_build, CMAKE_BUILD_TYPE=Release)
+Full Release CTest: 31/31 PASS, 1.77s (original 28 retained)
+Debug targeted build: PASS (/tmp/p6_a2d_debug, CMAKE_BUILD_TYPE=Debug)
+Debug targeted CTest: 9/9 PASS, 44.93s
+git diff --check: PASS
+
+Debug targets: A1-R1, dense_sparse_equivalence (A2D/Schur),
+A3B-R1 forensic, A3B-R2 frozen projection, A3C-R1 diagnostics,
+A3C-R1 oracle math, A3C-R2 alias, source inventory, tx90 capsule repair.
+
+A1: clean H=1.24607e-10, g=7.85293e-13;
+noisy H=1.24607e-10, g=7.85317e-13;
+repeated conservation and 10000-cycle ID regression PASS;
+nonzero rotation prior gradient error=0;
+existing jitter=1e-7, H_delta=1.71782e-7, g_delta=1.07995e-8.
+No original tolerance weakened; independent A1 Schur oracle alias repaired.
+
+New two-removal conservation: H_relative=7.2511587330693086e-17;
+g_absolute=2.540132453772453e-22. Stored prior symmetry=0.
+Release unsafe deterministic-matrix demo difference=1.2247448713915889;
+debug general unsafe demo skipped (build-dependent assertions).
+Real capsule legacy expression remains forensic-only and is tested in both builds:
+legacy max symmetry=1.1175870895385742e-8, validator FAIL;
+new actual production evaluator max symmetry=0, validator PASS, lambda_min=0.
+
+Development plumbing before final gates:
+New test's first draft did not compile (test-local Matrix6d alias/SO3 helpers
+and Eigen 3.3 non-iterable expression). Corrected test plumbing only.
+Initial Debug make invocation had stale target generation; regenerated CMake
+with the absolute source path before final targeted build/test.
+No real replay was run before ALL final gates above passed.
+No original regression failed or was removed; no algorithm tuning was done.
+
+Full evidence: RELEASE_CTEST.txt, DEBUG_TARGETED_CTEST.txt,
+RELEASE_TEST_DETAILS.txt, DEBUG_TEST_DETAILS.txt.
+Package/library/runner builds preserve existing FAST-LIO2/VTK dependency
+warnings; they did not prevent final successful construction.
+
+Post-gate changes are analysis/reporting artifacts only.
+Real results are not build-test results: P3-100 PASS;
+P3-200 FAIL at tx115 optimizer, not marginalization. Stopped without retry.

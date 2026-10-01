@@ -1,0 +1,7 @@
+START_SHA=d97c3cd8e2faeb6a047e93a789692b898429fcc9
+CODE_SHA=32e7f71a8f810590e1ee1090811b2c383b700305
+BRANCH=research/p6-i6d-full-algorithm
+WORKSPACE=/home/jian/livox_ws/dog_loc_p6_i6b_ws
+END_SHA=the analysis delivery commit containing this file; literal SHA in final response
+Resolve delivery SHA: git log -1 --format=%H -- src/dog_prior_map_fastlio2_frontend_exp/docs/p6_alg_integration_a3c_r2/SOURCE_SHA.txt
+No embedded self-referential commit hash is fabricated.

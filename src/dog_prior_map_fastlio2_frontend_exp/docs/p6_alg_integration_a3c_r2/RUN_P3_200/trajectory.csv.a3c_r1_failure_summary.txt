@@ -1,0 +1,4 @@
+transaction_id=115
+event=LIDAR_SCAN_END
+event_stamp_ns=1517157230686328484
+failure=producer_optimizer:all_optimizer_candidates_rejected
