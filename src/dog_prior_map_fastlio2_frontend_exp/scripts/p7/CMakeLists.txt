@@ -37,6 +37,8 @@ find_program(P7_PYTHON3_EXECUTABLE NAMES python3)
 if(P7_PYTHON3_EXECUTABLE)
   add_test(NAME p7_shadow_reporting_test COMMAND "${P7_PYTHON3_EXECUTABLE}"
     "${PACKAGE_ROOT}/tests/p7_shadow_reporting_test.py")
+  add_test(NAME p7_solution_remapping_reporting_test COMMAND "${P7_PYTHON3_EXECUTABLE}"
+    "${PACKAGE_ROOT}/tests/p7_solution_remapping_reporting_test.py")
 endif()
 add_executable(p7_fixed_physical_uobs_test "${PACKAGE_ROOT}/tests/p7_fixed_physical_uobs_test.cpp")
 target_link_libraries(p7_fixed_physical_uobs_test PRIVATE p7_reliability_metrics)
