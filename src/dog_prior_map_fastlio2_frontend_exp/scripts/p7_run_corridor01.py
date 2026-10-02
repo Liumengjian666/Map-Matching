@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the frozen P7 Corridor prefix; all shadow comparison is strictly posthoc."""
+"""Run a frozen P7 Corridor baseline; comparisons are strictly after runner exit."""
 import argparse
 import collections
 import csv
@@ -112,6 +112,8 @@ def summarize(output, frame_limit):
         summary['mean_' + field] = statistics.mean(values)
     summary['p95_ndt_alignment_ms'] = percentile(
         [float(row['ndt_alignment_ms']) for row in runtime], 0.95)
+    summary['p95_frame_total_ms'] = percentile(
+        [float(row['frame_total_ms']) for row in runtime], 0.95)
     resource_text = (output / 'resources.txt').read_text()
     rss_lines = [line for line in resource_text.splitlines()
                  if 'Maximum resident set size (kbytes):' in line]
@@ -170,6 +172,38 @@ def summarize(output, frame_limit):
         summary['resident_rss_frames_11_30_mean_MB'] = statistics.mean(rss[10:30])
         summary['resident_rss_last_20_mean_MB'] = statistics.mean(rss[-20:])
         summary['resident_rss_last_50_span_MB'] = max(rss[-50:]) - min(rss[-50:])
+    remap_path = output / 'solution_remap.csv'
+    if remap_path.is_file():
+        remapping = rows(remap_path)
+        if len(remapping) != frame_limit or any(None in row for row in remapping):
+            raise RuntimeError('invalid_solution_remap_csv_shape')
+        modes = {row['mode'] for row in remapping}
+        if len(modes) != 1 or not modes <= {'FULL_POSE', 'MATURE_SOL_REMAP'}:
+            raise RuntimeError('invalid_solution_remap_mode')
+        summary['mode'] = next(iter(modes))
+        for row, registration, state, time in zip(remapping, registrations, trajectory, runtime):
+            if row['transaction_id'] != registration['transaction_id'] or \
+                    row['stamp_ns'] != registration['stamp_ns'] or any(
+                        data['lidar_update_applied'] != row['lidar_update_applied']
+                        for data in (registration, state, time)):
+                raise RuntimeError('remapping_identity_or_update_flag_mismatch')
+            if summary['mode'] == 'FULL_POSE' and row['lidar_update_applied'] != registration['effective']:
+                raise RuntimeError('full_pose_admission_changed')
+            if summary['mode'] == 'MATURE_SOL_REMAP' and row['lidar_update_applied'] == '1' and (
+                    row['remap_valid'] != '1' or int(row['reliable_dimension']) == 0):
+                raise RuntimeError('invalid_remapped_measurement_admitted')
+            if row['remap_valid'] == '1' and any(
+                    not math.isfinite(float(row[key])) or float(row[key]) > 1e-8
+                    for key in ('projector_symmetry_error', 'projector_idempotence_error')):
+                raise RuntimeError('invalid_solution_projector')
+        summary['remap_statuses'] = dict(collections.Counter(row['remap_status'] for row in remapping))
+        for field in ('raw_rotation_correction_norm', 'raw_translation_correction_norm_m',
+                      'safe_rotation_correction_norm', 'safe_translation_correction_norm_m',
+                      'removed_rotation_norm', 'removed_translation_norm_m'):
+            values = [float(row[field]) for row in remapping if math.isfinite(float(row[field]))]
+            summary['max_' + field] = max(values, default=0.0)
+        summary['mean_solution_remap_ms'] = statistics.mean(
+            float(row['solution_remap_ms']) for row in runtime)
     (output / 'summary.json').write_text(json.dumps(summary, indent=2) + '\n')
     return summary
 
@@ -324,13 +358,16 @@ def compare_reference(output, legacy, recomputed_hashes):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--frame-limit', required=True, type=int, choices=(1, 100))
+    parser.add_argument('--frame-limit', required=True, choices=('1', '20', '100', '400', 'full'))
+    parser.add_argument('--mode', choices=('FULL_POSE', 'MATURE_SOL_REMAP'), default='FULL_POSE')
     parser.add_argument('--output-dir', required=True, type=Path)
     parser.add_argument('--executable', type=Path,
                         default=WORKSPACE / 'build/p7_b/p7_single_state_runner')
     parser.add_argument('--shadow-reference', type=Path,
                         help='P7-B output directory, read only after runner exit')
     args = parser.parse_args()
+    if args.shadow_reference and args.mode != 'FULL_POSE':
+        raise RuntimeError('shadow_parity_reference_only_valid_for_full_pose')
     if args.output_dir.exists():
         raise RuntimeError('output_directory_already_exists')
     actual_sha = {str(path): sha256(path) for path in EXPECTED_SHA}
@@ -339,14 +376,15 @@ def main():
             raise RuntimeError('input_SHA_mismatch:' + str(path))
     if not args.executable.is_file():
         raise RuntimeError('runner_not_built')
+    frame_limit = len(rows(INPUT / 'filter_scans.csv')) if args.frame_limit == 'full' else int(args.frame_limit)
     args.output_dir.mkdir(parents=True)
     (args.output_dir / 'input_sha256.json').write_text(json.dumps(actual_sha, indent=2) + '\n')
     command = ['/usr/bin/time', '-v', '-o', str(args.output_dir / 'resources.txt'),
                str(args.executable), str(INPUT / 'imu.csv'), str(INPUT / 'filter_scans.csv'),
                str(INPUT / 'scans.csv'), str(INPUT / 'request_xyz_f32.bin'), str(MAP), str(PARAMS),
                str(args.output_dir / 'trajectory.csv'), str(args.output_dir / 'registration.csv'),
-               str(args.output_dir / 'runtime.csv'), str(args.output_dir / 'uobs.csv'), str(args.frame_limit),
-               str(INITIALIZATION_STAMP_NS)]
+               str(args.output_dir / 'runtime.csv'), str(args.output_dir / 'uobs.csv'), str(frame_limit),
+               str(INITIALIZATION_STAMP_NS), args.mode, str(args.output_dir / 'solution_remap.csv')]
     environment = os.environ.copy()
     environment.pop('LD_LIBRARY_PATH', None)
     (args.output_dir / 'command.json').write_text(json.dumps(command, indent=2) + '\n')
@@ -354,7 +392,7 @@ def main():
         completed = subprocess.run(command, env=environment, stdout=log, stderr=subprocess.STDOUT)
     if completed.returncode != 0:
         raise RuntimeError('runner_failed:see ' + str(args.output_dir / 'run.log'))
-    summary = summarize(args.output_dir, args.frame_limit)
+    summary = summarize(args.output_dir, frame_limit)
     if args.shadow_reference:
         compare_shadow(args.output_dir, args.shadow_reference, summary)
     print(json.dumps({key: value for key, value in summary.items()

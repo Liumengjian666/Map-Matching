@@ -1,6 +1,8 @@
 #include "dog_prior_map_fastlio2_frontend_exp/current_frame_ndt.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/fastlio2_frontend.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/p7_replay_io.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/registration_geometry.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/solution_remapping_baseline.hpp"
 
 #include <algorithm>
 #include <chrono>
@@ -76,10 +78,13 @@ double residentRssKb() {
 int main(int argc, char** argv) {
   uint64_t transaction = 0;
   try {
-    if (argc != 13)
+    if (argc != 15)
       throw std::runtime_error("usage: p7_single_state_runner IMU_CSV FILTER_SCANS_CSV SCANS_CSV "
           "REQUEST_XYZ_F32_BIN MAP_PCD PARAMS_TXT TRAJECTORY_CSV REGISTRATION_CSV RUNTIME_CSV "
-          "UOBS_CSV FRAME_LIMIT INITIALIZATION_STAMP_NS");
+          "UOBS_CSV FRAME_LIMIT INITIALIZATION_STAMP_NS FULL_POSE|MATURE_SOL_REMAP SOLUTION_REMAP_CSV");
+    const std::string mode(argv[13]);
+    if (mode != "FULL_POSE" && mode != "MATURE_SOL_REMAP")
+      throw std::runtime_error("invalid_baseline_mode");
     const auto all_imu = paper::readP7Imu(argv[1]);
     const auto scans = paper::readP7Scans(argv[2], argv[3]);
     const uint64_t limit = unsignedArgument(argv[11]);
@@ -103,13 +108,14 @@ int main(int argc, char** argv) {
     const paper::CurrentFrameNdtParameters ndt_parameters;
     paper::CurrentFrameNdtRegistration registration{ndt_parameters};
     if (!registration.loadMap(argv[5], &reason)) throw std::runtime_error("map_load_failed:" + reason);
-    std::ofstream trajectory(argv[7]), observations(argv[8]), runtime(argv[9]), uobs(argv[10]);
-    if (!trajectory || !observations || !runtime || !uobs)
+    std::ofstream trajectory(argv[7]), observations(argv[8]), runtime(argv[9]), uobs(argv[10]), remap_csv(argv[14]);
+    if (!trajectory || !observations || !runtime || !uobs || !remap_csv)
       throw std::runtime_error("cannot_create_outputs");
     trajectory.exceptions(std::ios::badbit | std::ios::failbit);
     observations.exceptions(std::ios::badbit | std::ios::failbit);
     runtime.exceptions(std::ios::badbit | std::ios::failbit);
     uobs.exceptions(std::ios::badbit | std::ios::failbit);
+    remap_csv.exceptions(std::ios::badbit | std::ios::failbit);
     trajectory << std::setprecision(17)
         << "transaction_id,stamp_ns,predicted_imu_x,predicted_imu_y,predicted_imu_z,"
            "predicted_imu_qx,predicted_imu_qy,predicted_imu_qz,predicted_imu_qw,"
@@ -126,7 +132,14 @@ int main(int argc, char** argv) {
     runtime << std::setprecision(17)
         << "transaction_id,prediction_ms,cloud_io_ms,ndt_total_ms,ndt_alignment_ms,"
            "ikfom_update_ms,frame_total_ms,ndt_effective,lidar_update_applied,"
-           "uobs_ms,classifier_ms,resident_rss_kb\n";
+           "uobs_ms,classifier_ms,resident_rss_kb,solution_remap_ms\n";
+    remap_csv << std::setprecision(17)
+        << "transaction_id,stamp_ns,mode,weak_dimension,reliable_dimension,"
+           "raw_rotation_correction_norm,raw_translation_correction_norm_m,"
+           "safe_rotation_correction_norm,safe_translation_correction_norm_m,"
+           "removed_rotation_norm,removed_translation_norm_m,"
+           "projector_symmetry_error,projector_idempotence_error,remap_valid,"
+           "lidar_update_applied,remap_status\n";
     uobs << std::setprecision(17)
         << "transaction_id,stamp_ns,ndt_effective,uobs_computed,uobs_valid,uobs_status,"
            "map_support_sufficient,map_support_status,valid_correspondences,rejected_covariances,"
@@ -177,13 +190,26 @@ int main(int argc, char** argv) {
         subspace = paper::reliability::classifyFixedPhysicalJointSubspace(result.local_observability);
         classifier_ms = elapsedMs(classifier_start);
       }
-      // SHADOW ONLY: admission and noise depend on the unchanged P7-B contract,
-      // never on local_observability, the classifier, Schur, rank or thresholds.
+      // FULL_POSE retains the P7-C mean/noise/admission contract exactly.
+      // MATURE_SOL_REMAP only remaps the mean, not the filter covariance update.
+      paper::SolutionRemappingBaselineResult remapping;
+      remapping.status = result.effective ? "FULL_POSE_NOT_REMAPPED" : "NDT_INEFFECTIVE";
+      paper::Pose3d measurement = result.raw_map_T_lidar;
+      bool lidar_update_applied = result.effective;
+      double remap_ms = 0.0;
+      if (mode == "MATURE_SOL_REMAP" && result.effective) {
+        const auto remap_start = Clock::now();
+        remapping = paper::remapNdtSolutionBaseline(result.initial_map_T_lidar,
+            result.raw_map_T_lidar, result.local_observability, subspace);
+        remap_ms = elapsedMs(remap_start);
+        lidar_update_applied = remapping.valid && remapping.lidar_measurement_available;
+        if (lidar_update_applied) measurement = remapping.remapped_map_T_lidar;
+      }
       const auto update_start = Clock::now();
-      if (result.effective) {
+      if (lidar_update_applied) {
         paper::PoseCorrectionDelta delta;
         if (!frontend.applyPoseMeasurement(
-            paper::lidarMeasurementToImu(result.raw_map_T_lidar, extrinsic), &delta, &reason))
+            paper::lidarMeasurementToImu(measurement, extrinsic), &delta, &reason))
           throw std::runtime_error("pose_update_failed:" + reason);
         ++updates;
       }
@@ -197,7 +223,7 @@ int main(int argc, char** argv) {
       poseColumns(trajectory, predicted.map_T_imu); poseColumns(trajectory, corrected.map_T_imu);
       vectorColumns(trajectory, corrected.velocity); vectorColumns(trajectory, corrected.gyro_bias);
       vectorColumns(trajectory, corrected.accel_bias); vectorColumns(trajectory, corrected.gravity);
-      trajectory << ',' << result.effective << '\n';
+      trajectory << ',' << lidar_update_applied << '\n';
       observations << transaction << ',' << scan.stamp_ns << ',' << result.source_point_count
           << ',' << result.target_point_count << ',' << scan.expected_source_hash_available
           << ',' << scan.expected_source_hash << ',' << result.source_cloud_hash << ','
@@ -206,11 +232,11 @@ int main(int argc, char** argv) {
           << paper::currentFrameNdtStatusName(result.status) << ',' << result.iterations << ','
           << result.fitness << ',' << result.transformation_probability << ',' << result.alignment_ms;
       poseColumns(observations, result.initial_map_T_lidar); poseColumns(observations, result.raw_map_T_lidar);
-      observations << ',' << result.effective << '\n';
+      observations << ',' << lidar_update_applied << '\n';
       runtime << transaction << ',' << prediction_ms << ',' << cloud_io_ms << ',' << ndt_total_ms
           << ',' << result.alignment_ms << ',' << update_ms << ',' << total_ms << ','
-          << result.effective << ',' << result.effective << ',' << uobs_ms << ',' << classifier_ms
-          << ',' << rss_kb << '\n';
+          << result.effective << ',' << lidar_update_applied << ',' << uobs_ms << ',' << classifier_ms
+          << ',' << rss_kb << ',' << remap_ms << '\n';
       const auto& local = result.local_observability;
       uobs << transaction << ',' << scan.stamp_ns << ',' << result.effective << ','
           << result.uobs_computed << ',' << local.valid << ','
@@ -230,9 +256,31 @@ int main(int argc, char** argv) {
       matrixColumns(uobs, local.normalized_geometric_information);
       matrixColumns(uobs, subspace.weak_basis); matrixColumns(uobs, subspace.reliable_basis);
       uobs << '\n';
+      const double nan = std::numeric_limits<double>::quiet_NaN();
+      double raw_rotation = nan, raw_translation = nan;
+      double safe_rotation = nan, safe_translation = nan, removed_rotation = nan, removed_translation = nan;
+      if (result.effective) {
+        raw_rotation = paper::so3Log(result.raw_map_T_lidar.orientation.toRotationMatrix() *
+            result.initial_map_T_lidar.orientation.toRotationMatrix().transpose()).norm();
+        raw_translation = (result.raw_map_T_lidar.position - result.initial_map_T_lidar.position).norm();
+        if (mode == "FULL_POSE") {
+          safe_rotation = raw_rotation; safe_translation = raw_translation;
+          removed_rotation = removed_translation = 0.0;
+        } else if (remapping.valid) {
+          safe_rotation = remapping.safe_correction.head<3>().norm();
+          safe_translation = remapping.translation_length_scale_m * remapping.safe_correction.tail<3>().norm();
+          removed_rotation = remapping.removed_correction.head<3>().norm();
+          removed_translation = remapping.translation_length_scale_m * remapping.removed_correction.tail<3>().norm();
+        }
+      }
+      remap_csv << transaction << ',' << scan.stamp_ns << ',' << mode << ',' << subspace.weak_dimension
+          << ',' << subspace.reliable_dimension << ',' << raw_rotation << ',' << raw_translation
+          << ',' << safe_rotation << ',' << safe_translation << ',' << removed_rotation << ',' << removed_translation
+          << ',' << remapping.projector_symmetry_error << ',' << remapping.projector_idempotence_error
+          << ',' << remapping.valid << ',' << lidar_update_applied << ',' << remapping.status << '\n';
     }
-    trajectory.close(); observations.close(); runtime.close(); uobs.close();
-    std::cout << "frames=" << limit << " lidar_updates=" << updates
+    trajectory.close(); observations.close(); runtime.close(); uobs.close(); remap_csv.close();
+    std::cout << "mode=" << mode << " frames=" << limit << " lidar_updates=" << updates
               << " prediction_only=" << limit - updates << " state_finite=true\n";
     return 0;
   } catch (const std::exception& error) {
