@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the frozen P7-B Corridor prefix; comparison is strictly posthoc."""
+"""Run the frozen P7 Corridor prefix; all shadow comparison is strictly posthoc."""
 import argparse
 import collections
 import csv
@@ -48,6 +48,25 @@ def percentile(values, fraction):
     lower = math.floor(index)
     upper = math.ceil(index)
     return ordered[lower] + (ordered[upper] - ordered[lower]) * (index - lower)
+
+
+def shadow_uobs_counts(uobs):
+    computed = [row for row in uobs if row['uobs_computed'] == '1']
+    valid = [row for row in computed if row['uobs_valid'] == '1']
+    classified = [row for row in computed if row['classification_valid'] == '1']
+    return dict(UOBS_COMPUTED=len(computed), UOBS_VALID=len(valid),
+                UOBS_INVALID=len(computed) - len(valid),
+                MAP_SUPPORT_INSUFFICIENT=sum(row['map_support_status'] == 'MAP_SUPPORT_INSUFFICIENT'
+                                             for row in computed),
+                NO_VALID_GEOMETRIC_CORRESPONDENCES=sum(
+                    row['map_support_status'] == 'NO_VALID_GEOMETRIC_CORRESPONDENCES' for row in computed),
+                UOBS_NUMERICAL_FAILURE=sum(row['map_support_status'] == 'NUMERICAL_FAILURE'
+                                           for row in computed),
+                SCHUR_DIAGNOSTIC_UNAVAILABLE=sum(
+                    row['schur_status'] == 'SCHUR_DIAGNOSTIC_UNAVAILABLE' for row in computed),
+                JOINT_CLASSIFIER_INVALID=len(computed) - len(classified),
+                weak_dimension_histogram=dict(collections.Counter(
+                    int(row['weak_dimension']) for row in classified)))
 
 
 def summarize(output, frame_limit):
@@ -99,8 +118,94 @@ def summarize(output, frame_limit):
     if len(rss_lines) != 1:
         raise RuntimeError('missing_peak_rss')
     summary['peak_RSS_MB'] = int(rss_lines[0].split(':')[1]) / 1024.0
+    uobs = rows(output / 'uobs.csv')
+    if len(uobs) != frame_limit or any(None in row for row in uobs):
+        raise RuntimeError('invalid_uobs_csv_shape')
+    if any(a['transaction_id'] != b['transaction_id'] or a['stamp_ns'] != b['stamp_ns']
+           for a, b in zip(uobs, registrations)):
+        raise RuntimeError('uobs_transaction_timestamp_mismatch')
+    for row, registration in zip(uobs, registrations):
+        if row['ndt_effective'] != registration['effective'] or \
+                row['uobs_computed'] != registration['effective']:
+            raise RuntimeError('uobs_not_success_only')
+        if float(row['translation_length_scale_m']) != 0.8 or \
+                float(row['weak_relative_ratio']) != 0.05:
+            raise RuntimeError('uobs_physical_scale_or_ratio_changed')
+        if row['uobs_valid'] == '1':
+            matrices = [[float(row[f'{prefix}_r{i}c{j}']) for i in range(6) for j in range(6)]
+                        for prefix in ('Hphys', 'Hbar')]
+            if not all(math.isfinite(value) for matrix in matrices for value in matrix):
+                raise RuntimeError('nonfinite_valid_uobs_matrix')
+            hphys, hbar = matrices
+            scale = [1.0] * 3 + [0.8] * 3
+            magnitude = max(1.0, max(abs(value) for value in hbar))
+            if max(abs(hbar[i * 6 + j] - scale[i] * hphys[i * 6 + j] * scale[j])
+                   for i in range(6) for j in range(6)) > 1e-10 * magnitude:
+                raise RuntimeError('uobs_csv_physical_normalization_mismatch')
+        if row['classification_valid'] == '1':
+            weak, reliable = int(row['weak_dimension']), int(row['reliable_dimension'])
+            if not 0 <= weak <= 6 or reliable != 6 - weak:
+                raise RuntimeError('uobs_invalid_joint_dimensions')
+            basis = [[float(row[f'{prefix}_r{i}c{j}']) for i in range(6)]
+                     for prefix, count in (('weak_basis', weak), ('reliable_basis', reliable))
+                     for j in range(count)]
+            for i in range(6):
+                for j in range(6):
+                    product = sum(x * y for x, y in zip(basis[i], basis[j]))
+                    if not math.isfinite(product) or abs(product - int(i == j)) > 1e-8:
+                        raise RuntimeError('uobs_csv_bases_not_orthogonal')
+    summary.update(shadow_uobs_counts(uobs))
+    for field in ('uobs_ms', 'classifier_ms', 'resident_rss_kb'):
+        values = [float(row[field]) for row in runtime]
+        if not all(math.isfinite(value) and value >= 0 for value in values):
+            raise RuntimeError('invalid_shadow_runtime_measurement')
+    for field in ('uobs_ms', 'classifier_ms'):
+        values = [float(time[field]) for time, row in zip(runtime, uobs)
+                  if row['uobs_computed'] == '1']
+        summary['mean_' + field] = statistics.mean(values) if values else 0.0
+        summary['p95_' + field] = percentile(values, 0.95) if values else 0.0
+    rss = [float(row['resident_rss_kb']) / 1024.0 for row in runtime]
+    summary['resident_rss_by_frame_MB'] = rss
+    if len(rss) >= 40:
+        summary['resident_rss_frames_11_30_mean_MB'] = statistics.mean(rss[10:30])
+        summary['resident_rss_last_20_mean_MB'] = statistics.mean(rss[-20:])
+        summary['resident_rss_last_50_span_MB'] = max(rss[-50:]) - min(rss[-50:])
     (output / 'summary.json').write_text(json.dumps(summary, indent=2) + '\n')
     return summary
+
+
+def compare_shadow(output, baseline, summary):
+    """Executed only after runner exit; baseline artifacts never enter the estimator."""
+    new_states, old_states = rows(output / 'trajectory.csv'), rows(baseline / 'trajectory.csv')
+    new_reg, old_reg = rows(output / 'registration.csv'), rows(baseline / 'registration.csv')
+    if not new_states or len(new_states) != len(old_states) or len(new_reg) != len(old_reg):
+        raise RuntimeError('incomplete_shadow_reference')
+    # 17-digit round-trippable state output: require exact equality, not a relaxed gate.
+    if new_states != old_states:
+        raise RuntimeError('shadow_changed_filter_state')
+    without_time = lambda row: {key: value for key, value in row.items() if key != 'alignment_ms'}
+    if [without_time(row) for row in new_reg] != [without_time(row) for row in old_reg]:
+        raise RuntimeError('shadow_changed_ndt_result')
+    original = json.loads((baseline / 'summary.json').read_text())
+    report = dict(trajectory_parity=True, ndt_parity=True,
+                  all_state_fields_exact=True, all_registration_fields_except_timing_exact=True,
+                  max_corrected_translation_delta_m=0.0, max_corrected_rotation_delta_deg=0.0,
+                  prechange_mean_frame_ms=original['mean_frame_total_ms'],
+                  shadow_mean_frame_ms=summary['mean_frame_total_ms'],
+                  prechange_peak_RSS_MB=original['peak_RSS_MB'],
+                  shadow_peak_RSS_MB=summary['peak_RSS_MB'],
+                  trajectory_sha256=sha256(output / 'trajectory.csv'),
+                  prechange_trajectory_sha256=sha256(baseline / 'trajectory.csv'),
+                  frames=summary['frames'], outcomes=summary['outcomes'],
+                  first_ineffective_tx=summary['first_ineffective_tx'])
+    if summary['frames'] == 100 and (summary['outcomes'] != {
+            'SUCCESS': 93, 'ITERATION_LIMIT_EXHAUSTED': 7} or
+            summary['first_ineffective_tx'] != 47 or summary['lidar_updates'] != 93):
+        raise RuntimeError('unexpected_p7c_prefix_summary')
+    (output / 'p7c_shadow_report.json').write_text(json.dumps(report, indent=2) + '\n')
+    (output / 'p7c_shadow_report.txt').write_text('\n'.join(
+        f'{key}={json.dumps(value)}' for key, value in report.items()) + '\n')
+    return report
 
 
 def normalized_quaternion(q):
@@ -223,6 +328,8 @@ def main():
     parser.add_argument('--output-dir', required=True, type=Path)
     parser.add_argument('--executable', type=Path,
                         default=WORKSPACE / 'build/p7_b/p7_single_state_runner')
+    parser.add_argument('--shadow-reference', type=Path,
+                        help='P7-B output directory, read only after runner exit')
     args = parser.parse_args()
     if args.output_dir.exists():
         raise RuntimeError('output_directory_already_exists')
@@ -238,7 +345,7 @@ def main():
                str(args.executable), str(INPUT / 'imu.csv'), str(INPUT / 'filter_scans.csv'),
                str(INPUT / 'scans.csv'), str(INPUT / 'request_xyz_f32.bin'), str(MAP), str(PARAMS),
                str(args.output_dir / 'trajectory.csv'), str(args.output_dir / 'registration.csv'),
-               str(args.output_dir / 'runtime.csv'), str(args.frame_limit),
+               str(args.output_dir / 'runtime.csv'), str(args.output_dir / 'uobs.csv'), str(args.frame_limit),
                str(INITIALIZATION_STAMP_NS)]
     environment = os.environ.copy()
     environment.pop('LD_LIBRARY_PATH', None)
@@ -247,7 +354,11 @@ def main():
         completed = subprocess.run(command, env=environment, stdout=log, stderr=subprocess.STDOUT)
     if completed.returncode != 0:
         raise RuntimeError('runner_failed:see ' + str(args.output_dir / 'run.log'))
-    print(json.dumps(summarize(args.output_dir, args.frame_limit), indent=2))
+    summary = summarize(args.output_dir, args.frame_limit)
+    if args.shadow_reference:
+        compare_shadow(args.output_dir, args.shadow_reference, summary)
+    print(json.dumps({key: value for key, value in summary.items()
+                      if key != 'resident_rss_by_frame_MB'}, indent=2))
 
 
 if __name__ == '__main__':

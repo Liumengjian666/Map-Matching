@@ -33,6 +33,11 @@ target_link_libraries(p7_current_frame_ndt PUBLIC Eigen3::Eigen p7_reliability_m
 target_compile_options(p7_current_frame_ndt PRIVATE ${PCL_DEFINITIONS} -Wall -Wextra -Wpedantic)
 
 enable_testing()
+find_program(P7_PYTHON3_EXECUTABLE NAMES python3)
+if(P7_PYTHON3_EXECUTABLE)
+  add_test(NAME p7_shadow_reporting_test COMMAND "${P7_PYTHON3_EXECUTABLE}"
+    "${PACKAGE_ROOT}/tests/p7_shadow_reporting_test.py")
+endif()
 add_executable(p7_fixed_physical_uobs_test "${PACKAGE_ROOT}/tests/p7_fixed_physical_uobs_test.cpp")
 target_link_libraries(p7_fixed_physical_uobs_test PRIVATE p7_reliability_metrics)
 add_test(NAME p7_fixed_physical_uobs_test COMMAND p7_fixed_physical_uobs_test)
