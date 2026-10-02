@@ -214,6 +214,8 @@ if(BUILD_I6B_CLOSED_LOOP_TOOLS)
     COMMAND $<TARGET_FILE:p6_i6b_closed_loop> A3G_R3_CAPTURE_PARITY_FIXTURE)
   add_test(NAME p6_a3g_r4_recovery_admission
     COMMAND $<TARGET_FILE:p6_i6b_closed_loop> A3G_R4_RECOVERY_FIXTURE)
+  add_test(NAME p6_a3g_r5_reset_admission
+    COMMAND $<TARGET_FILE:p6_i6b_closed_loop> A3G_R5_RESET_FIXTURE)
 
   add_executable(p6_a3b_r1_optimizer_diagnostics_test
     "${PACKAGE_ROOT}/scripts/p6_a3b_r1_optimizer_diagnostics_test.cpp")

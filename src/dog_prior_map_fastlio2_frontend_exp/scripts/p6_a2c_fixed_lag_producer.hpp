@@ -337,6 +337,20 @@ LidarCandidateEvaluation evaluateLidarCandidate(
   return result;
 }
 
+fixed_lag::RecoveryReinitializationRequest recoveryResetRequest(
+    const Candidate& candidate, const LidarCandidateEvaluation& evaluation,
+    const Eigen::Matrix4d& initial_map_T_lidar,
+    const fixed_lag::WindowMarginalCovariance& prior, int maximum_iterations) {
+  fixed_lag::RecoveryReinitializationRequest request;
+  request.registration=evaluation.event;
+  request.initial_map_T_lidar=poseFromMatrix(initial_map_T_lidar);
+  request.iterations=candidate.iterations; request.maximum_iterations=maximum_iterations;
+  request.objective=candidate.objective; request.fitness=candidate.fitness;
+  request.measurement_covariance_available=evaluation.same_factor_noise_allowed;
+  request.premeasurement_covariance=prior;
+  return request;
+}
+
 FixedLagProducerResult runFixedLagProducer(
     const p4_i2::Inputs& inputs, const std::vector<ScanAsset>& assets,
     const RuntimeParameters& parameters, const Pose3d& initial_lidar,
@@ -430,7 +444,7 @@ FixedLagProducerResult runFixedLagProducer(
   FixedLagProducerResult result;
   p6_tracking::Tracker tracker(tracking_config);
   if (tracking_output)
-    *tracking_output << "transaction_id,stamp_ns,row_type,health,consecutive_failures,seed,effective_registration,ndt_iterations,objective,fitness,uobs_status,correspondences,reliable_rank,nis_valid,nis,nis_threshold,admissible,committed,recovery_attempts,last_reliable_stamp,map_support_status,rejected_covariances,sampled_neighbor_queries,queries_with_neighbor_0p8,queries_with_neighbor_1p6\n";
+    *tracking_output << "transaction_id,stamp_ns,row_type,health,consecutive_failures,seed,effective_registration,ndt_iterations,objective,fitness,uobs_status,correspondences,reliable_rank,nis_valid,nis,nis_threshold,admissible,committed,recovery_attempts,last_reliable_stamp,map_support_status,rejected_covariances,sampled_neighbor_queries,queries_with_neighbor_0p8,queries_with_neighbor_1p6,reset_validated,reset_committed,reset_reason,cooldown_frames,retired_observation_id\n";
   result.raw_scans_before_handoff=raw_scans_before_handoff;
   trajectory<<std::setprecision(17)<<"transaction_id,stamp_ns,time_s,px,py,pz,qx,qy,qz,qw\n";
   diagnostics<<std::setprecision(17)<<"timestamp,event_type,window_nodes,window_span,optimizer_status,optimizer_cost_before,optimizer_cost_after,predicted_px,predicted_py,predicted_pz,predicted_qx,predicted_qy,predicted_qz,predicted_qw,ndt_converged,uobs_valid,weak_dimension,reliable_dimension,window_covariance_valid,window_position_sigma_max,window_rotation_sigma_max,unonlocal_probe_triggered,unonlocal_status,lidar_factor_attempted,lidar_factor_committed,lidar_selected_rank,lidar_nis,lidar_nis_threshold,visual_sensor_quality,visual_mode,visual_selected_rank,visual_trigger_status,visual_basis_source_lidar_stamp,imu_factor_count,lidar_factor_count,visual_factor_count,r2_policy,imu_buffer_last_stamp,lidar_source_provenance,visual_source_provenance,input_eligibility,post_handoff_ikfom_calls,marginalization_backend,initial_square_root_status,square_root_prior_rows,square_root_prior_columns,square_root_prior_bytes,qr_marginalization_ms\n";
@@ -617,6 +631,8 @@ FixedLagProducerResult runFixedLagProducer(
     SelectedLidarNis nis;
     bool lidar_attempted=false,lidar_committed=false,probed=false,quality=false,uobs_valid=false;
     bool measurement_preview_valid=false;
+    bool recovery_validated=false,reinitialized=false;
+    std::string reset_reason="NOT_ATTEMPTED";
     bool production_probe_trigger=false,legacy_probe_trigger=false;
     LidarWindowMeasurement preview_measurement;
     Eigen::VectorXd selected_residual;
@@ -714,17 +730,20 @@ FixedLagProducerResult runFixedLagProducer(
       auto evaluation=evaluateLidarCandidate(ndt,source,nominal,asset,predicted,prior,
           extrinsic,parameters,policy,config,adapter,tracking_config.enabled);
       calls+=evaluation.probe_calls; ndt_ms+=evaluation.probe_ms;
-      const auto log_candidate=[&](const Candidate& candidate,const LidarCandidateEvaluation& e) {
+      const auto log_candidate=[&](const Candidate& candidate,const LidarCandidateEvaluation& e,
+                                   const char* row_type="CANDIDATE") {
         if (!tracking_output) return;
         *tracking_output<<std::setprecision(17)<<asset.transaction_id<<','<<asset.stamp_ns
-            <<",CANDIDATE,"<<p6_tracking::name(tracker.health())<<','<<tracker.consecutiveFailures()
+            <<','<<row_type<<','<<p6_tracking::name(tracker.health())<<','<<tracker.consecutiveFailures()
             <<','<<candidate.seed_name<<','<<e.effective<<','<<candidate.iterations<<','
             <<candidate.objective<<','<<candidate.fitness<<','<<e.local.status<<','
             <<e.local.valid_correspondence_count<<','<<e.rank<<','<<e.nis.valid<<','
             <<e.nis.nis<<','<<e.nis.threshold<<','<<e.admissible<<",0,"<<recovery_attempts
             <<','<<tracker.lastReliableStamp()<<','<<e.local.map_support_status<<','
             <<e.local.rejected_covariance_count<<','<<e.search.sampled_source_points<<','
-            <<e.search.queries_with_neighbors_r<<','<<e.search.queries_with_neighbors_2r<<'\n';
+            <<e.search.queries_with_neighbors_r<<','<<e.search.queries_with_neighbors_2r<<','
+            <<recovery_validated<<','<<reinitialized<<','<<reset_reason<<','
+            <<tracker.cooldownFrames()<<','<<adapter.summary().retired_observation_id_watermark<<'\n';
         tracking_output->flush();
       };
       log_candidate(nominal,evaluation);
@@ -738,7 +757,20 @@ FixedLagProducerResult runFixedLagProducer(
               extrinsic,parameters,policy,config,adapter,true,&seed_candidate.map_T_imu);
           calls+=candidate_evaluation.probe_calls; ndt_ms+=candidate_evaluation.probe_ms;
           log_candidate(candidate,candidate_evaluation);
-          if (candidate_evaluation.admissible) {
+          if (tracking_config.validated_reinitialization) {
+            const auto request=recoveryResetRequest(candidate,candidate_evaluation,
+                seed_candidate.map_T_imu*T_il,prior,ndt.getMaximumIterations());
+            recovery_validated=validateRecoveryRegistration(request,&reset_reason);
+            if (recovery_validated) {
+              reset_reason="RECOVERY_VALIDATED";
+              log_candidate(candidate,candidate_evaluation,"RECOVERY_VALIDATED");
+              reinitialized=adapter.resetFromValidatedRecovery(request,&reset_reason);
+              log_candidate(candidate,candidate_evaluation,
+                  reinitialized?"RECOVERY_REINITIALIZED":"RECOVERY_RESET_REJECTED");
+              if (reinitialized) marginalization_trace_cursor=0;
+            } else log_candidate(candidate,candidate_evaluation,"RECOVERY_VALIDATION_REJECTED");
+          }
+          if (reinitialized || (!tracking_config.validated_reinitialization && candidate_evaluation.admissible)) {
             selected_initial_seed=seed_candidate.map_T_imu*T_il;
             nominal=std::move(candidate); evaluation=std::move(candidate_evaluation);
             break;
@@ -756,8 +788,10 @@ FixedLagProducerResult runFixedLagProducer(
       FrozenLidarEvent lidar=evaluation.event;
       selected_measurement_covariance=lidar.residual_covariance;
       const bool same_factor_noise_allowed=evaluation.same_factor_noise_allowed;
-      lidar_committed=adapter.processLidarEvent(lidar,&reason);
-      if(!lidar_committed && adapter.lastEventStatus().disposition!=AdapterEventDisposition::SKIPPED_INVALID_SOURCE)
+      // Relocalization is a new prior, not an ordinary factor. Do not double
+      // count the same registration or resubmit its already-consumed source.
+      if (!reinitialized) lidar_committed=adapter.processLidarEvent(lidar,&reason);
+      if(!reinitialized && !lidar_committed && adapter.lastEventStatus().disposition!=AdapterEventDisposition::SKIPPED_INVALID_SOURCE)
         throw std::runtime_error("producer_lidar:"+reason);
       result.lidar_committed+=lidar_committed;
       if (window_owned && a3g_r3_capture && a3g_r3_capture->selected(asset.transaction_id)) {
@@ -1108,7 +1142,8 @@ FixedLagProducerResult runFixedLagProducer(
     if(!adapter.latestOptimizedState(&optimized,&reason)) throw std::runtime_error("producer_optimized_state:"+reason);
     if(event.type==ProducerEventType::LIDAR_SCAN || event.type==ProducerEventType::LIDAR_SCAN_END) {
       const auto& asset=assets[event.source_index];
-      tracker.finish(asset.stamp_ns,lidar_committed,nominal.pose*T_il.inverse());
+      if (reinitialized) tracker.reinitialized(asset.stamp_ns,nominal.pose*T_il.inverse());
+      else tracker.finish(asset.stamp_ns,lidar_committed,nominal.pose*T_il.inverse());
       if (tracking_output) {
         *tracking_output<<std::setprecision(17)<<asset.transaction_id<<','<<asset.stamp_ns
             <<",RESULT,"<<p6_tracking::name(tracker.health())<<','<<tracker.consecutiveFailures()
@@ -1119,7 +1154,9 @@ FixedLagProducerResult runFixedLagProducer(
             <<nis.nis<<','<<nis.threshold<<','<<lidar_committed<<','<<lidar_committed<<','
             <<recovery_attempts<<','<<tracker.lastReliableStamp()<<','
             <<local_observability.map_support_status<<','
-            <<local_observability.rejected_covariance_count<<",0,0,0\n";
+            <<local_observability.rejected_covariance_count<<",0,0,0,"<<recovery_validated<<','
+            <<reinitialized<<','<<reset_reason<<','<<tracker.cooldownFrames()<<','
+            <<adapter.summary().retired_observation_id_watermark<<'\n';
         tracking_output->flush();
       }
       const Eigen::Quaterniond q(optimized.rotation);
@@ -1204,7 +1241,8 @@ void runFixedLagExperimentalMode(const p4_i2::Inputs& inputs,
 void runFixedLagProductionFixture(bool window_owned_fixture = false,
                                   bool no_vision_fixture = false,
                                   bool a3g_r3_capture_parity_fixture = false,
-                                  bool tracking_recovery_fixture = false) {
+                                  bool tracking_recovery_fixture = false,
+                                  bool recovery_reset_fixture = false) {
   Cloud::Ptr target(new Cloud);
   for(int x=-2;x<=2;++x) for(int y=-2;y<=2;++y) for(int z=-1;z<=1;++z)
     for(int i=0;i<40;++i) {
@@ -1322,6 +1360,33 @@ void runFixedLagProductionFixture(bool window_owned_fixture = false,
     std::cout<<"A3G_R4_PCL_RECOVERY_ADMISSION_PASS ineffective_nominal=REJECTED "
              <<"recovery_preview=READ_ONLY recovery_NIS=ENFORCED commit_count=1 "
              <<"invalid_probes=REJECTED candidate_probe_center=PAIRED\n";
+    if (recovery_reset_fixture) {
+      FixedLagOptions qr_options;
+      qr_options.marginalization_backend=MarginalizationBackend::SQUARE_ROOT_QR;
+      qr_options.marginal_covariance_backend=MarginalCovarianceBackend::SQUARE_ROOT_QR;
+      FixedLagEventAdapter reset_adapter(qr_options);
+      if (!reset_adapter.initialize(displaced,Matrix15d::Identity()*1e6,Vector15d::Zero(),&reason))
+        throw std::runtime_error("reset_fixture_initialize:"+reason);
+      const auto stale=evaluateLidarCandidate(ndt,source,recovered,assets.front(),displaced,
+          prior,Pose3d(),parameters,R2Policy::ADAPTIVE_SELECTED_NIS,{},reset_adapter,true,&recovery_center);
+      const auto request=recoveryResetRequest(recovered,stale,recovery_center,prior,ndt.getMaximumIterations());
+      if (!stale.nis.valid || stale.nis.accepted || !validateRecoveryRegistration(request,&reason) ||
+          !reset_adapter.resetFromValidatedRecovery(request,&reason) ||
+          reset_adapter.summary().lidar_factor_count!=0 || !reset_adapter.optimizeCurrentWindow(&reason))
+        throw std::runtime_error("reset_fixture_high_stale_NIS_reset:"+reason);
+      WindowState recovered_state;
+      if (!reset_adapter.latestOptimizedState(&recovered_state,&reason)) throw std::runtime_error(reason);
+      WindowMarginalCovariance new_prior;
+      if (!reset_adapter.latestMarginalCovariance(&new_prior,&reason)) throw std::runtime_error(reason);
+      ScanAsset next=assets.front(); ++next.transaction_id;
+      const auto normal=evaluateLidarCandidate(ndt,source,recovered,next,recovered_state,
+          new_prior,Pose3d(),parameters,R2Policy::ADAPTIVE_SELECTED_NIS,{},reset_adapter,true);
+      if (!normal.admissible || !normal.nis.accepted ||
+          !reset_adapter.processLidarEvent(normal.event,&reason) || reset_adapter.summary().lidar_factor_count!=1)
+        throw std::runtime_error("reset_fixture_normal_commit_after_reset:"+reason);
+      std::cout<<"R5_PCL_VALIDATED_REINITIALIZATION_PASS stale_NIS="<<stale.nis.nis
+               <<" reset=EXPLICIT post_reset_normal_NIS=ACCEPTED factor_count=1\n";
+    }
   }
   if (a3g_r3_capture_parity_fixture || tracking_recovery_fixture) {
     struct CaptureParityRun {
@@ -1334,6 +1399,7 @@ void runFixedLagProductionFixture(bool window_owned_fixture = false,
       const auto calls_before=raw_loads;
       CaptureParityRun run;
       p6_tracking::Config tracking_options; tracking_options.enabled=tracking;
+      tracking_options.validated_reinitialization=recovery_reset_fixture && tracking;
       run.result=runFixedLagProducer(inputs,assets,parameters,Pose3d(),Pose3d(),target,visual,
           [&](const ScanAsset&){++legacy_loads;return source;},trajectory,diagnostics,runtime,
           0,R2Policy::ADAPTIVE_SELECTED_NIS,{}, {},&owned,

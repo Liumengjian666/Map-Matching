@@ -39,13 +39,17 @@ def tracking_summary(directory):
         health_states=dict(Counter(r["health"] for r in results)),
         recovery_NDT_calls=sum(r["seed"] != "WINDOW_M0" for r in candidates),
         recovered_commits=sum(r["committed"] == "1" and r["seed"] != "WINDOW_M0" for r in results),
+        recovery_reset_count=sum(r.get("reset_committed")=="1" for r in results),
+        successful_recovery_count=sum(r["row_type"]=="RECOVERY_REINITIALIZED" for r in rows),
+        failed_recovery_count=sum(r["row_type"] in
+            ("RECOVERY_RESET_REJECTED","RECOVERY_VALIDATION_REJECTED") for r in rows),
         key_transactions={r["transaction_id"]:r for r in results
                           if r["transaction_id"] in ("160","166","174","182","183","202","220","366")})
 
 
-def run(executable, directory, limit, config):
+def run(executable, directory, limit, config, start_sha=START):
     # Normal descendants only; never switch/reset the shared worktree.
-    subprocess.run(["git", "merge-base", "--is-ancestor", START, "HEAD"], cwd=ROOT, check=True)
+    subprocess.run(["git", "merge-base", "--is-ancestor", start_sha, "HEAD"], cwd=ROOT, check=True)
     identities = input_gate()
     frozen = json.loads((ROOT / "docs/p6_alg_integration_a3f_r1/RUN_P3_200/input_identity.json").read_text())
     require(identities == frozen, "FROZEN_INPUT_IDENTITY_MISMATCH")
@@ -59,7 +63,7 @@ def run(executable, directory, limit, config):
     run_config = directory / "tracking.conf"
     run_config.write_bytes(config.read_bytes())
     head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
-    diff = subprocess.check_output(["git", "diff", START, "--"], cwd=ROOT, text=True)
+    diff = subprocess.check_output(["git", "diff", start_sha, "--"], cwd=ROOT, text=True)
     (directory / "source_diff.patch").write_text(diff)
     env = dict(os.environ, LD_LIBRARY_PATH="/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu",
         P6_A3B_R1_DIAGNOSTICS="0", P6_A3C_R1_MARGINALIZATION_DIAGNOSTICS="0",
@@ -72,7 +76,7 @@ def run(executable, directory, limit, config):
         str(directory / "events.csv"), str(directory / "runtime.csv"), "NONE", str(limit), str(INIT),
         "corridor01", "ADAPTIVE_SELECTED_NIS", str(INPUTS[1][0]), "NONE", str(run_config)]
     (directory / "command.json").write_text(json.dumps(command, indent=2) + "\n")
-    (directory / "source_identity.json").write_text(json.dumps(dict(START_SHA=START, CODE_SHA=head,
+    (directory / "source_identity.json").write_text(json.dumps(dict(START_SHA=start_sha, CODE_SHA=head,
         binary_sha256=digest(executable), config_sha256=digest(run_config),
         diff_sha256=hashlib.sha256(diff.encode()).hexdigest(),
         environment={k:v for k,v in env.items() if k.startswith("P6_") or k == "LD_LIBRARY_PATH"},

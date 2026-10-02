@@ -3314,6 +3314,10 @@ int main(int argc, char** argv) {
       p6_i1::runFixedLagProductionFixture(true,true,false,true);
       return 0;
     }
+    if (argc == 2 && std::string(argv[1]) == "A3G_R5_RESET_FIXTURE") {
+      p6_i1::runFixedLagProductionFixture(true,true,false,true,true);
+      return 0;
+    }
     if ((argc == 18 || argc == 19) && std::string(argv[1]) == "FULL_FIXED_LAG_V3_EXPERIMENTAL") {
       const std::string raw_path=argv[5];
       const auto slash=raw_path.find_last_of('/');
