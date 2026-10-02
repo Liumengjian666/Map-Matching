@@ -39,6 +39,8 @@ if(P7_PYTHON3_EXECUTABLE)
     "${PACKAGE_ROOT}/tests/p7_shadow_reporting_test.py")
   add_test(NAME p7_solution_remapping_reporting_test COMMAND "${P7_PYTHON3_EXECUTABLE}"
     "${PACKAGE_ROOT}/tests/p7_solution_remapping_reporting_test.py")
+  add_test(NAME p7_admission_reporting_test COMMAND "${P7_PYTHON3_EXECUTABLE}"
+    "${PACKAGE_ROOT}/tests/p7_admission_reporting_test.py")
 endif()
 add_executable(p7_fixed_physical_uobs_test "${PACKAGE_ROOT}/tests/p7_fixed_physical_uobs_test.cpp")
 target_link_libraries(p7_fixed_physical_uobs_test PRIVATE p7_reliability_metrics)
@@ -67,7 +69,26 @@ target_link_libraries(solution_remapping_baseline_test PRIVATE p7_solution_remap
 add_test(NAME solution_remapping_baseline_test COMMAND solution_remapping_baseline_test)
 
 add_executable(p7_single_state_runner p7_single_state_runner.cpp
-  "${PACKAGE_ROOT}/src/fastlio2_frontend_ikfom.cpp")
+  "${PACKAGE_ROOT}/src/fastlio2_frontend_ikfom.cpp"
+  "${PACKAGE_ROOT}/src/mature_measurement_admission.cpp")
 target_include_directories(p7_single_state_runner PRIVATE "${FASTLIO2_INCLUDE_DIR}")
 target_link_libraries(p7_single_state_runner PRIVATE
   p7_current_frame_ndt p7_replay_io p7_solution_remapping_baseline Eigen3::Eigen OpenMP::OpenMP_CXX)
+
+add_executable(mature_measurement_admission_test
+  "${PACKAGE_ROOT}/tests/mature_measurement_admission_test.cpp"
+  "${PACKAGE_ROOT}/src/mature_measurement_admission.cpp"
+  "${PACKAGE_ROOT}/src/fastlio2_frontend_ikfom.cpp")
+target_include_directories(mature_measurement_admission_test PRIVATE
+  "${PACKAGE_ROOT}/include" "${FASTLIO2_INCLUDE_DIR}")
+target_link_libraries(mature_measurement_admission_test PRIVATE
+  p7_solution_remapping_baseline Eigen3::Eigen OpenMP::OpenMP_CXX)
+add_test(NAME mature_measurement_admission_test COMMAND mature_measurement_admission_test)
+
+# Posthoc frozen-measurement audit: no PCL registration object or GT input.
+add_executable(p7_frozen_full_pose_innovation_audit p7_frozen_full_pose_innovation_audit.cpp
+  "${PACKAGE_ROOT}/src/mature_measurement_admission.cpp"
+  "${PACKAGE_ROOT}/src/fastlio2_frontend_ikfom.cpp")
+target_include_directories(p7_frozen_full_pose_innovation_audit PRIVATE "${FASTLIO2_INCLUDE_DIR}")
+target_link_libraries(p7_frozen_full_pose_innovation_audit PRIVATE
+  p7_replay_io p7_solution_remapping_baseline Eigen3::Eigen OpenMP::OpenMP_CXX)

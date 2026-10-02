@@ -3,6 +3,7 @@
 #include "dog_prior_map_fastlio2_frontend_exp/p7_replay_io.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/registration_geometry.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/solution_remapping_baseline.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/mature_measurement_admission.hpp"
 
 #include <algorithm>
 #include <chrono>
@@ -78,13 +79,16 @@ double residentRssKb() {
 int main(int argc, char** argv) {
   uint64_t transaction = 0;
   try {
-    if (argc != 15)
+    if (argc != 15 && argc != 16)
       throw std::runtime_error("usage: p7_single_state_runner IMU_CSV FILTER_SCANS_CSV SCANS_CSV "
           "REQUEST_XYZ_F32_BIN MAP_PCD PARAMS_TXT TRAJECTORY_CSV REGISTRATION_CSV RUNTIME_CSV "
-          "UOBS_CSV FRAME_LIMIT INITIALIZATION_STAMP_NS FULL_POSE|MATURE_SOL_REMAP SOLUTION_REMAP_CSV");
+          "UOBS_CSV FRAME_LIMIT INITIALIZATION_STAMP_NS FULL_POSE|MATURE_SOL_REMAP|MATURE_ADMISSION "
+          "SOLUTION_REMAP_CSV [ADMISSION_CSV]");
     const std::string mode(argv[13]);
-    if (mode != "FULL_POSE" && mode != "MATURE_SOL_REMAP")
+    if (mode != "FULL_POSE" && mode != "MATURE_SOL_REMAP" && mode != "MATURE_ADMISSION")
       throw std::runtime_error("invalid_baseline_mode");
+    if (mode == "MATURE_ADMISSION" && argc != 16)
+      throw std::runtime_error("admission_csv_required");
     const auto all_imu = paper::readP7Imu(argv[1]);
     const auto scans = paper::readP7Scans(argv[2], argv[3]);
     const uint64_t limit = unsignedArgument(argv[11]);
@@ -92,6 +96,12 @@ int main(int argc, char** argv) {
     if (limit == 0 || limit > scans.size()) throw std::runtime_error("invalid_frame_limit");
     paper::Pose3d initial_lidar, extrinsic;
     const auto parameters = paper::readP7Parameters(argv[6], &initial_lidar, &extrinsic);
+    Eigen::Matrix<double, 6, 6> measurement_noise = Eigen::Matrix<double, 6, 6>::Zero();
+    measurement_noise.diagonal().head<3>().setConstant(
+        parameters.pose_position_sigma_m * parameters.pose_position_sigma_m);
+    measurement_noise.diagonal().tail<3>().setConstant(
+        parameters.pose_rotation_sigma_rad * parameters.pose_rotation_sigma_rad);
+    paper::MatureMeasurementAdmission admission_policy;
     const auto initialization_imu = initializationSamples(
         all_imu, parameters.static_init_samples, initialization_stamp);
     paper::FastLio2IkfomFrontend frontend(parameters);
@@ -116,6 +126,17 @@ int main(int argc, char** argv) {
     runtime.exceptions(std::ios::badbit | std::ios::failbit);
     uobs.exceptions(std::ios::badbit | std::ios::failbit);
     remap_csv.exceptions(std::ios::badbit | std::ios::failbit);
+    std::ofstream admission_csv;
+    if (mode == "MATURE_ADMISSION") {
+      admission_csv.open(argv[15]);
+      if (!admission_csv) throw std::runtime_error("cannot_create_admission_output");
+      admission_csv.exceptions(std::ios::badbit | std::ios::failbit);
+      admission_csv << std::setprecision(17)
+          << "transaction_id,stamp_ns,ndt_status,ndt_effective,iterations,fitness,"
+             "transformation_probability,initial_to_result_distance_m,distance_gate_pass,"
+             "nis_valid,nis,nis_threshold,nis_gate_pass,measurement_accepted,rejection_reason,"
+             "consecutive_rejections,tracking_state,lidar_update_applied,admission_ms\n";
+    }
     trajectory << std::setprecision(17)
         << "transaction_id,stamp_ns,predicted_imu_x,predicted_imu_y,predicted_imu_z,"
            "predicted_imu_qx,predicted_imu_qy,predicted_imu_qz,predicted_imu_qw,"
@@ -153,7 +174,8 @@ int main(int argc, char** argv) {
     matrixHeader(uobs, "Hphys"); matrixHeader(uobs, "Hbar");
     matrixHeader(uobs, "weak_basis"); matrixHeader(uobs, "reliable_basis");
     uobs << '\n';
-    uint64_t updates = 0;
+    uint64_t updates = 0, processed = 0;
+    bool lost = false;
     for (uint64_t index = 0; index < limit; ++index) {
       const auto& scan = scans.at(index);
       transaction = scan.transaction_id;
@@ -204,6 +226,26 @@ int main(int argc, char** argv) {
         remap_ms = elapsedMs(remap_start);
         lidar_update_applied = remapping.valid && remapping.lidar_measurement_available;
         if (lidar_update_applied) measurement = remapping.remapped_map_T_lidar;
+      }
+      paper::MatureMeasurementAdmissionResult admission;
+      double admission_ms = 0.0;
+      if (mode == "MATURE_ADMISSION") {
+        const auto admission_start = Clock::now();
+        const double distance = (result.raw_map_T_lidar.position -
+                                 result.initial_map_T_lidar.position).norm();
+        const bool terminal_success = result.status == paper::CurrentFrameNdtStatus::SUCCESS;
+        paper::ProjectedPoseInnovation innovation;
+        if (terminal_success && paper::MatureMeasurementAdmission::distanceGatePass(distance)) {
+          if (!frontend.evaluateProjectedPoseInnovationLinearized(
+              paper::lidarMeasurementToImu(result.raw_map_T_lidar, extrinsic),
+              measurement_noise, Eigen::Matrix<double, 6, 6>::Identity(), 6,
+              paper::ProjectedPoseLinearizationMode::EXACT_LOG_RESIDUAL, &innovation, &reason))
+            innovation.valid = false;
+        }
+        admission = admission_policy.observe(terminal_success, distance, innovation);
+        lidar_update_applied = admission.accepted;
+        remapping.status = "ADMISSION_NOT_REMAPPED";
+        admission_ms = elapsedMs(admission_start);
       }
       const auto update_start = Clock::now();
       if (lidar_update_applied) {
@@ -278,10 +320,25 @@ int main(int argc, char** argv) {
           << ',' << safe_rotation << ',' << safe_translation << ',' << removed_rotation << ',' << removed_translation
           << ',' << remapping.projector_symmetry_error << ',' << remapping.projector_idempotence_error
           << ',' << remapping.valid << ',' << lidar_update_applied << ',' << remapping.status << '\n';
+      ++processed;
+      if (mode == "MATURE_ADMISSION") {
+        lost = admission.tracking_state == paper::AdmissionTrackingState::LOST;
+        admission_csv << transaction << ',' << scan.stamp_ns << ','
+            << paper::currentFrameNdtStatusName(result.status) << ',' << result.effective << ','
+            << result.iterations << ',' << result.fitness << ',' << result.transformation_probability << ','
+            << admission.initial_to_result_distance_m << ',' << admission.distance_gate_pass << ','
+            << admission.nis_valid << ',' << admission.nis << ',' << admission.nis_threshold << ','
+            << admission.nis_gate_pass << ',' << admission.accepted << ',' << admission.reason << ','
+            << admission.consecutive_rejections << ',' << (lost ? "LOST" : "TRACKING") << ','
+            << lidar_update_applied << ',' << admission_ms << '\n';
+        if (lost) break;  // Persist this prediction-only frame; no automatic recovery.
+      }
     }
     trajectory.close(); observations.close(); runtime.close(); uobs.close(); remap_csv.close();
-    std::cout << "mode=" << mode << " frames=" << limit << " lidar_updates=" << updates
-              << " prediction_only=" << limit - updates << " state_finite=true\n";
+    if (admission_csv.is_open()) admission_csv.close();
+    std::cout << "mode=" << mode << " frames=" << processed << " lidar_updates=" << updates
+              << " prediction_only=" << processed - updates << " state_finite=true"
+              << " stop_reason=" << (lost ? "LOST" : "FRAME_LIMIT") << '\n';
     return 0;
   } catch (const std::exception& error) {
     std::cerr << "FIRST_BAD_TX=" << transaction << " error=" << error.what() << '\n';

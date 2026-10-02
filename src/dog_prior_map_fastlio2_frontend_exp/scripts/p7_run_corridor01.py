@@ -69,6 +69,55 @@ def shadow_uobs_counts(uobs):
                     int(row['weak_dimension']) for row in classified)))
 
 
+def admission_summary(admission, registrations, requested_frames):
+    """Validate normal LOST exit; never relabel an arbitrary truncated replay as success."""
+    if not admission or len(admission) != len(registrations) or len(admission) > requested_frames:
+        raise RuntimeError('invalid_admission_frame_count')
+    counter = 0
+    counts = collections.Counter()
+    for index, (row, registration) in enumerate(zip(admission, registrations), 1):
+        if any(row[key] != registration[key] for key in ('transaction_id', 'stamp_ns',
+                                                         'iterations', 'lidar_update_applied')) or \
+                row['ndt_status'] != registration['status'] or \
+                row['ndt_effective'] != registration['effective'] or \
+                int(row['transaction_id']) != index:
+            raise RuntimeError('admission_identity_mismatch')
+        distance = float(row['initial_to_result_distance_m'])
+        distance_pass = registration['status'] == 'SUCCESS' and math.isfinite(distance) and 0 <= distance <= 3.0
+        nis = float(row['nis'])
+        nis_valid = row['nis_valid'] == '1'
+        nis_pass = nis_valid and math.isfinite(nis) and 0 <= nis <= 16.812
+        accepted = distance_pass and nis_pass
+        expected_reason = ('NDT_TERMINAL_REJECT' if registration['status'] != 'SUCCESS' else
+                           'AUTOWARE_INITIAL_TO_RESULT_DISTANCE_REJECT' if not distance_pass else
+                           'NIS_EVALUATION_INVALID' if not nis_valid else
+                           'MAHALANOBIS_NIS_REJECT' if not nis_pass else 'ACCEPTED')
+        if float(row['nis_threshold']) != 16.812 or \
+                row['distance_gate_pass'] != str(int(distance_pass)) or \
+                row['nis_gate_pass'] != str(int(nis_pass)) or \
+                row['measurement_accepted'] != str(int(accepted)) or \
+                row['lidar_update_applied'] != str(int(accepted)) or \
+                row['rejection_reason'] != expected_reason or \
+                (not distance_pass and nis_valid):
+            raise RuntimeError('admission_gate_contract_mismatch')
+        counter = 0 if accepted else counter + 1
+        lost = counter >= 5
+        if int(row['consecutive_rejections']) != counter or \
+                row['tracking_state'] != ('LOST' if lost else 'TRACKING') or \
+                (lost and index != len(admission)):
+            raise RuntimeError('admission_LOST_contract_mismatch')
+        counts[expected_reason] += 1
+    if len(admission) < requested_frames and not lost:
+        raise RuntimeError('short_admission_without_LOST')
+    return dict(requested_frames=requested_frames, admission_counts=dict(counts),
+                tracking_state='LOST' if lost else 'TRACKING',
+                LOST_TX=int(admission[-1]['transaction_id']) if lost else None,
+                FIRST_DISTANCE_REJECT_TX=next((int(row['transaction_id']) for row in admission if
+                    row['rejection_reason'] == 'AUTOWARE_INITIAL_TO_RESULT_DISTANCE_REJECT'), None),
+                FIRST_NIS_REJECT_TX=next((int(row['transaction_id']) for row in admission if
+                    row['rejection_reason'] == 'MAHALANOBIS_NIS_REJECT'), None))
+
+
 def summarize(output, frame_limit):
     trajectory = rows(output / 'trajectory.csv')
     registrations = rows(output / 'registration.csv')
@@ -178,7 +227,7 @@ def summarize(output, frame_limit):
         if len(remapping) != frame_limit or any(None in row for row in remapping):
             raise RuntimeError('invalid_solution_remap_csv_shape')
         modes = {row['mode'] for row in remapping}
-        if len(modes) != 1 or not modes <= {'FULL_POSE', 'MATURE_SOL_REMAP'}:
+        if len(modes) != 1 or not modes <= {'FULL_POSE', 'MATURE_SOL_REMAP', 'MATURE_ADMISSION'}:
             raise RuntimeError('invalid_solution_remap_mode')
         summary['mode'] = next(iter(modes))
         for row, registration, state, time in zip(remapping, registrations, trajectory, runtime):
@@ -359,7 +408,7 @@ def compare_reference(output, legacy, recomputed_hashes):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--frame-limit', required=True, choices=('1', '20', '100', '400', 'full'))
-    parser.add_argument('--mode', choices=('FULL_POSE', 'MATURE_SOL_REMAP'), default='FULL_POSE')
+    parser.add_argument('--mode', choices=('FULL_POSE', 'MATURE_SOL_REMAP', 'MATURE_ADMISSION'), default='FULL_POSE')
     parser.add_argument('--output-dir', required=True, type=Path)
     parser.add_argument('--executable', type=Path,
                         default=WORKSPACE / 'build/p7_b/p7_single_state_runner')
@@ -385,6 +434,8 @@ def main():
                str(args.output_dir / 'trajectory.csv'), str(args.output_dir / 'registration.csv'),
                str(args.output_dir / 'runtime.csv'), str(args.output_dir / 'uobs.csv'), str(frame_limit),
                str(INITIALIZATION_STAMP_NS), args.mode, str(args.output_dir / 'solution_remap.csv')]
+    if args.mode == 'MATURE_ADMISSION':
+        command.append(str(args.output_dir / 'admission.csv'))
     environment = os.environ.copy()
     environment.pop('LD_LIBRARY_PATH', None)
     (args.output_dir / 'command.json').write_text(json.dumps(command, indent=2) + '\n')
@@ -392,7 +443,15 @@ def main():
         completed = subprocess.run(command, env=environment, stdout=log, stderr=subprocess.STDOUT)
     if completed.returncode != 0:
         raise RuntimeError('runner_failed:see ' + str(args.output_dir / 'run.log'))
-    summary = summarize(args.output_dir, frame_limit)
+    admission = None
+    if args.mode == 'MATURE_ADMISSION':
+        admission_rows = rows(args.output_dir / 'admission.csv')
+        admission = admission_summary(admission_rows, rows(args.output_dir / 'registration.csv'), frame_limit)
+        summary = summarize(args.output_dir, len(admission_rows))
+        summary.update(admission)
+        (args.output_dir / 'summary.json').write_text(json.dumps(summary, indent=2) + '\n')
+    else:
+        summary = summarize(args.output_dir, frame_limit)
     if args.shadow_reference:
         compare_shadow(args.output_dir, args.shadow_reference, summary)
     print(json.dumps({key: value for key, value in summary.items()
