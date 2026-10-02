@@ -59,6 +59,9 @@ struct LocalObservability {
       std::numeric_limits<double>::quiet_NaN());
   double rotation_block_condition = std::numeric_limits<double>::infinity();
   double translation_block_condition = std::numeric_limits<double>::infinity();
+  // Physical map-spatial rotation / additive map-translation coordinates.
+  Matrix6d physical_geometric_information = Matrix6d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
   Matrix6d normalized_geometric_information = Matrix6d::Constant(
       std::numeric_limits<double>::quiet_NaN());
   // Full joint spectrum in the normalized physical coordinates
@@ -81,6 +84,7 @@ struct LocalObservability {
   Eigen::Vector3d translation_schur_eigenvalues = Eigen::Vector3d::Constant(
       std::numeric_limits<double>::quiet_NaN());
   bool schur_decoupling_valid = false;
+  std::string schur_status = "NOT_COMPUTED";
   bool map_support_sufficient = false;
   std::string map_support_status = "NOT_ASSESSED";
   // Distinguishes numerical failure from a finite but insufficient set of
@@ -120,6 +124,32 @@ LocalObservability analyzeGeometricObservability(
     bool ndt_converged, double length_scale_m,
     double covariance_eigenvalue_floor_m2 = 1e-6,
     double covariance_relative_floor = 1e-3);
+
+// P7 joint geometry analysis only. No per-frame group equalization and no
+// state/update policy: the bases remain in [map-spatial rotation, delta_t/L].
+struct FixedPhysicalJointSubspace {
+  bool valid = false;
+  std::string status = "UNINITIALIZED";
+  double translation_length_scale_m = 0.0;
+  double weak_relative_ratio = 0.05;
+  double lambda_max = 0.0;
+  double numerical_floor = 0.0;
+  double weak_threshold = 0.0;
+  Eigen::Matrix<double, 6, 1> eigenvalues = Eigen::Matrix<double, 6, 1>::Zero();
+  Matrix6d eigenvectors = Matrix6d::Zero();
+  Matrix6d weak_basis = Matrix6d::Zero();
+  Matrix6d reliable_basis = Matrix6d::Zero();
+  int weak_dimension = 0;
+  int reliable_dimension = 0;
+  bool schur_decoupling_valid = false;
+  Eigen::Vector3d rotation_schur_eigenvalues = Eigen::Vector3d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+  Eigen::Vector3d translation_schur_eigenvalues = Eigen::Vector3d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+};
+
+FixedPhysicalJointSubspace classifyFixedPhysicalJointSubspace(
+    const LocalObservability& local, double weak_relative_ratio = 0.05);
 
 struct TerminalCapture {
   Eigen::Isometry3d map_T_lidar = Eigen::Isometry3d::Identity();

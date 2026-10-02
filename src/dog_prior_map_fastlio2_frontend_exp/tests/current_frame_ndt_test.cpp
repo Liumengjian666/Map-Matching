@@ -2,6 +2,8 @@
 
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
+#include <pcl/filters/voxel_grid.h>
+#include <pcl/registration/ndt.h>
 
 #include <cmath>
 #include <cstring>
@@ -23,6 +25,58 @@ bool identical(const RegistrationCloud& a, const RegistrationCloud& b) {
         std::memcmp(&a[i].z, &b[i].z, sizeof(float))) return false;
   }
   return true;
+}
+
+// Test-only independent count reference, using PCL's same target setup order.
+// No second target grid exists in the production registration module.
+class SearchReference : public pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> {
+ public:
+  std::size_t count(const Eigen::Vector3d& query) {
+    std::vector<TargetGridLeafConstPtr> leaves;
+    std::vector<float> distances;
+    target_cells_.radiusSearch(pcl::PointXYZ(float(query.x()), float(query.y()), float(query.z())),
+        0.8, leaves, distances);
+    return leaves.size();
+  }
+};
+
+void testRadiusSearchNoStaleOutput(CurrentFrameNdtRegistration& ndt,
+    const pcl::PointCloud<pcl::PointXYZ>& map, const RegistrationCloud& source,
+    const Pose3d& seed) {
+  auto raw = preprocessRegistrationCloud(source, CurrentFrameNdtParameters());
+  raw.pop_back();
+  raw.push_back({70, 0, 0});  // Range-valid, but far outside map support.
+  CurrentFrameNdtResult result;
+  std::string reason;
+  require(ndt.align(4, raw, seed, &result, &reason) && result.effective && result.uobs_computed,
+      "radius search regression alignment failed");
+  const auto prepared = preprocessRegistrationCloud(raw, CurrentFrameNdtParameters());
+  pcl::PointCloud<pcl::PointXYZ>::Ptr target(new pcl::PointCloud<pcl::PointXYZ>(map));
+  for (int pass = 0; pass < 2; ++pass) {
+    pcl::PointCloud<pcl::PointXYZ>::Ptr down(new pcl::PointCloud<pcl::PointXYZ>);
+    pcl::VoxelGrid<pcl::PointXYZ> voxel;
+    voxel.setLeafSize(0.15f, 0.15f, 0.15f); voxel.setInputCloud(target); voxel.filter(*down);
+    target = down;
+  }
+  SearchReference reference;
+  reference.setInputTarget(target); reference.setResolution(0.8f);
+  std::size_t total = 0, empty_index = prepared.size();
+  std::vector<std::size_t> counts;
+  for (std::size_t i = 0; i < prepared.size(); ++i) {
+    const auto& p = prepared[i];
+    const Eigen::Vector3d query = result.raw_map_T_lidar.orientation *
+        Eigen::Vector3d(p.x, p.y, p.z) + result.raw_map_T_lidar.position;
+    const std::size_t count = reference.count(query);
+    counts.push_back(count); total += count;
+    if (p.x == 70 && p.y == 0 && p.z == 0) {
+      require(count == 0, "unsupported point B gained neighbors");
+      empty_index = i;
+    }
+  }
+  require(empty_index > 0 && empty_index + 1 < prepared.size(), "B was not between supported queries");
+  require(counts[empty_index - 1] > 0 && counts[empty_index + 1] > 0, "A/C do not have neighbors");
+  require(result.local_observability.valid_correspondence_count == total,
+      "no-neighbor B inherited prior leaf results");
 }
 
 void testPreprocess() {
@@ -91,18 +145,25 @@ void testActualNdt() {
   require(ndt.loadMap(path, &reason) && ndt.ready() && ndt.targetPointCount() > 0, "map loading failed");
   require(ndt.align(1, {{1, 0, 0}}, truth, &result, &reason) &&
       result.status == CurrentFrameNdtStatus::INSUFFICIENT_POINTS && !result.effective &&
-      result.iterations == 0 && result.alignment_ms == 0.0, "insufficient points not ordinary rejection");
+      result.iterations == 0 && result.alignment_ms == 0.0 && !result.uobs_computed,
+      "insufficient points not ordinary rejection");
   Pose3d seed = truth;
   seed.position += Eigen::Vector3d(0.10, -0.08, 0.06);
   seed.orientation = seed.orientation * Eigen::Quaterniond(Eigen::AngleAxisd(0.015, Eigen::Vector3d::UnitY()));
   require(ndt.align(2, source, seed, &result, &reason), "actual NDT alignment failed");
   require(result.raw_map_T_lidar.position.allFinite() && result.raw_map_T_lidar.orientation.coeffs().allFinite(), "nonfinite actual NDT");
   require(result.effective && result.iterations > 0 && result.iterations < 80, "fixture did not effectively converge");
+  require(result.uobs_computed && std::isfinite(result.uobs_ms) && result.uobs_ms >= 0 &&
+      result.local_observability.valid &&
+      result.local_observability.physical_geometric_information.allFinite() &&
+      result.local_observability.normalized_geometric_information.allFinite() &&
+      result.local_observability.translation_length_scale_m == 0.8, "actual NDT Uobs invalid");
   const uint64_t hash = result.source_cloud_hash;
   const std::size_t count = result.source_point_count;
   require(ndt.align(3, source, seed, &result, &reason) && result.source_cloud_hash == hash &&
       result.source_point_count == count, "actual NDT source nondeterminism");
   std::cout << "actual PCL NDT PASS iterations=" << result.iterations << " count=" << count << '\n';
+  testRadiusSearchNoStaleOutput(ndt, map, source, seed);
   std::remove(path.c_str());
   rmdir(directory);
 }

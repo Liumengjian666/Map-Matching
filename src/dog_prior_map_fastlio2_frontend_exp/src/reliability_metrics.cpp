@@ -298,15 +298,22 @@ LocalObservability analyzeGeometricObservability(
 
   Matrix6d information = Matrix6d::Zero();
   double weight_sum = 0.0;
+  auto numericalFailure = [&result, &weight_sum](const char* status) {
+    result.numerical_failure = true;
+    result.effective_weight_sum = weight_sum;
+    result.map_support_status = "NUMERICAL_FAILURE";
+    result.status = status;
+    return result;
+  };
   for (const GeometricObservation& observation : observations) {
     if (!observation.rotated_source_map.allFinite() ||
         !observation.residual_map.allFinite() ||
-        !std::isfinite(observation.nonnegative_weight) ||
-        observation.nonnegative_weight <= 0.0)
-      continue;
+        !std::isfinite(observation.nonnegative_weight))
+      return numericalFailure("NONFINITE_GEOMETRIC_OBSERVATION");
+    if (observation.nonnegative_weight <= 0.0) continue;
     if (!observation.voxel_covariance_map.allFinite()) {
       ++result.rejected_covariance_count;
-      continue;
+      return numericalFailure("NONFINITE_VOXEL_COVARIANCE");
     }
     const Eigen::Matrix3d symmetric_covariance = 0.5 *
         (observation.voxel_covariance_map + observation.voxel_covariance_map.transpose());
@@ -316,7 +323,7 @@ LocalObservability analyzeGeometricObservability(
         !covariance_solver.eigenvalues().allFinite() ||
         !covariance_solver.eigenvectors().allFinite()) {
       ++result.rejected_covariance_count;
-      continue;
+      return numericalFailure("VOXEL_COVARIANCE_EIGENSOLVE_FAILED");
     }
     const double largest = covariance_solver.eigenvalues().maxCoeff();
     if (!std::isfinite(largest) || largest <= 0.0) {
@@ -338,24 +345,26 @@ LocalObservability analyzeGeometricObservability(
         covariance_solver.eigenvectors().transpose();
     if (!inverse_covariance.allFinite()) {
       ++result.rejected_covariance_count;
-      continue;
+      return numericalFailure("NONFINITE_INVERSE_VOXEL_COVARIANCE");
     }
 
     const Eigen::Matrix<double, 3, 6> jacobian =
         geometricPointResidualJacobian(observation.rotated_source_map);
     if (!jacobian.allFinite()) {
       ++result.rejected_covariance_count;
-      continue;
+      return numericalFailure("NONFINITE_GEOMETRIC_JACOBIAN");
     }
     const Matrix6d contribution = observation.nonnegative_weight *
         jacobian.transpose() * inverse_covariance * jacobian;
     if (!contribution.allFinite()) {
       ++result.rejected_covariance_count;
-      continue;
+      return numericalFailure("NONFINITE_GEOMETRIC_CONTRIBUTION");
     }
     information += contribution;
     weight_sum += observation.nonnegative_weight;
     ++result.valid_correspondence_count;
+    if (!information.allFinite() || !std::isfinite(weight_sum))
+      return numericalFailure("NONFINITE_GEOMETRIC_ACCUMULATION");
   }
   result.effective_weight_sum = weight_sum;
   if (result.valid_correspondence_count == 0) {
@@ -380,6 +389,11 @@ LocalObservability analyzeGeometricObservability(
 
   information /= weight_sum;
   information = (0.5 * (information + information.transpose())).eval();
+  if (!information.allFinite())
+    return numericalFailure("NONFINITE_PHYSICAL_GEOMETRIC_INFORMATION");
+  result.physical_geometric_information = information;
+  // Fixed physical nondimensionalization, not frame-dependent equalization.
+  // delta_t = L * delta_t_bar; L is the configured NDT resolution for the run.
   Matrix6d scale = Matrix6d::Identity();
   scale.block<3, 3>(3, 3) *= length_scale_m;
   Matrix6d normalized_information = scale.transpose() * information * scale;
@@ -402,7 +416,8 @@ LocalObservability analyzeGeometricObservability(
   }
   const double spectral_scale = std::max(
       1.0, full_solver.eigenvalues().cwiseAbs().maxCoeff());
-  const double psd_tolerance = 1e-10 * spectral_scale;
+  const double psd_tolerance = 100.0 *
+      std::numeric_limits<double>::epsilon() * spectral_scale;
   if (full_solver.eigenvalues().minCoeff() < -psd_tolerance) {
     result.numerical_failure = true;
     result.map_support_status = "NUMERICAL_FAILURE";
@@ -425,6 +440,8 @@ LocalObservability analyzeGeometricObservability(
     result.status = "CORRECTED_GEOMETRIC_INFORMATION_EIGENSOLVE_FAILED";
     return result;
   }
+  if (corrected_solver.eigenvalues().minCoeff() < -psd_tolerance)
+    return numericalFailure("CORRECTED_GEOMETRIC_INFORMATION_NOT_PSD");
   result.normalized_geometric_information = normalized_information;
   result.joint_eigenvalues = corrected_solver.eigenvalues().cwiseMax(0.0);
   result.joint_eigenvectors = corrected_solver.eigenvectors();
@@ -434,10 +451,18 @@ LocalObservability analyzeGeometricObservability(
       &result.rotation_schur_eigenvalues,
       &result.translation_schur_eigenvalues);
   if (!result.schur_decoupling_valid) {
-    result.numerical_failure = true;
-    result.map_support_status = "NUMERICAL_FAILURE";
-    result.status = "GEOMETRIC_SCHUR_DECOUPLING_FAILED";
-    return result;
+    // Schur is explanatory only. Do not veto a finite PSD joint spectrum.
+    result.schur_status = "SCHUR_DIAGNOSTIC_UNAVAILABLE";
+    result.rotation_schur_information.setConstant(
+        std::numeric_limits<double>::quiet_NaN());
+    result.translation_schur_information.setConstant(
+        std::numeric_limits<double>::quiet_NaN());
+    result.rotation_schur_eigenvalues.setConstant(
+        std::numeric_limits<double>::quiet_NaN());
+    result.translation_schur_eigenvalues.setConstant(
+        std::numeric_limits<double>::quiet_NaN());
+  } else {
+    result.schur_status = "VALID_DIAGNOSTIC";
   }
 
   const Eigen::Matrix3d rotation_block = normalized_information.block<3, 3>(0, 0);
@@ -471,6 +496,74 @@ LocalObservability analyzeGeometricObservability(
   result.map_support_status = "MAP_SUPPORT_SUFFICIENT";
   result.valid = true;
   result.status = "VALID_GEOMETRIC_GAUSS_NEWTON_PROXY";
+  return result;
+}
+
+FixedPhysicalJointSubspace classifyFixedPhysicalJointSubspace(
+    const LocalObservability& local, double weak_relative_ratio) {
+  FixedPhysicalJointSubspace result;
+  result.translation_length_scale_m = local.translation_length_scale_m;
+  result.weak_relative_ratio = weak_relative_ratio;
+  result.schur_decoupling_valid = local.schur_decoupling_valid;
+  result.rotation_schur_eigenvalues = local.rotation_schur_eigenvalues;
+  result.translation_schur_eigenvalues = local.translation_schur_eigenvalues;
+  if (!std::isfinite(weak_relative_ratio) || weak_relative_ratio <= 0.0 ||
+      weak_relative_ratio >= 1.0) {
+    result.status = "INVALID_WEAK_RELATIVE_RATIO";
+    return result;
+  }
+  if (!local.valid || !local.geometric_proxy || local.numerical_failure ||
+      !local.map_support_sufficient) {
+    result.status = "INVALID_OR_UNSUPPORTED_GEOMETRIC_INFORMATION";
+    return result;
+  }
+  if (!std::isfinite(local.translation_length_scale_m) ||
+      local.translation_length_scale_m <= 0.0 ||
+      !local.normalized_geometric_information.allFinite() ||
+      !local.joint_eigenvalues.allFinite() ||
+      !local.joint_eigenvectors.allFinite()) {
+    result.status = "NONFINITE_OR_INVALID_JOINT_INFORMATION";
+    return result;
+  }
+  const double maximum = local.joint_eigenvalues.maxCoeff();
+  result.numerical_floor = 100.0 * std::numeric_limits<double>::epsilon() *
+      std::max(1.0, std::abs(maximum));
+  if (local.joint_eigenvalues.minCoeff() < -result.numerical_floor) {
+    result.status = "NEGATIVE_JOINT_INFORMATION_EIGENVALUE";
+    return result;
+  }
+  result.eigenvalues = local.joint_eigenvalues.cwiseMax(0.0);
+  result.eigenvectors = local.joint_eigenvectors;
+  result.lambda_max = result.eigenvalues.maxCoeff();
+  result.weak_threshold = std::max(result.numerical_floor,
+      weak_relative_ratio * result.lambda_max);
+  for (int i = 0; i < 6; ++i) {
+    if (result.lambda_max <= result.numerical_floor ||
+        result.eigenvalues(i) < result.weak_threshold) {
+      result.weak_basis.col(result.weak_dimension++) = result.eigenvectors.col(i);
+    } else {
+      result.reliable_basis.col(result.reliable_dimension++) = result.eigenvectors.col(i);
+    }
+  }
+  const auto weak = result.weak_basis.leftCols(result.weak_dimension);
+  const auto reliable = result.reliable_basis.leftCols(result.reliable_dimension);
+  const bool orthogonal =
+      (weak.transpose() * weak - Eigen::MatrixXd::Identity(
+          result.weak_dimension, result.weak_dimension)).norm() <= 1e-8 &&
+      (reliable.transpose() * reliable - Eigen::MatrixXd::Identity(
+          result.reliable_dimension, result.reliable_dimension)).norm() <= 1e-8 &&
+      (weak.transpose() * reliable).norm() <= 1e-8;
+  if (!orthogonal) {
+    result.weak_dimension = 0;
+    result.reliable_dimension = 0;
+    result.weak_basis.setZero();
+    result.reliable_basis.setZero();
+    result.status = "JOINT_BASES_NOT_ORTHOGONAL";
+    return result;
+  }
+  result.valid = true;
+  result.status = result.lambda_max <= result.numerical_floor
+      ? "NO_NUMERICALLY_RESOLVED_INFORMATION" : "VALID_FIXED_PHYSICAL_JOINT_SUBSPACE";
   return result;
 }
 

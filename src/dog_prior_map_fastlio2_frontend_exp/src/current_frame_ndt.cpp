@@ -16,7 +16,39 @@ namespace dog_prior_map_fastlio2_frontend_exp {
 namespace {
 using Point = pcl::PointXYZ;
 using Cloud = pcl::PointCloud<Point>;
-class ObservableNdt : public pcl::NormalDistributionsTransform<Point, Point> {};
+class ObservableNdt : public pcl::NormalDistributionsTransform<Point, Point> {
+ public:
+  std::vector<reliability::GeometricObservation> geometricObservations(
+      const Cloud& source, const Pose3d& map_T_lidar, double resolution) {
+    std::vector<reliability::GeometricObservation> observations;
+    const Eigen::Matrix3d rotation = map_T_lidar.orientation.toRotationMatrix();
+    std::vector<TargetGridLeafConstPtr> leaves;
+    std::vector<float> squared_distances;
+    for (const Point& point : source) {
+      const Eigen::Vector3d rotated = rotation * Eigen::Vector3d(point.x, point.y, point.z);
+      const Eigen::Vector3d query = rotated + map_T_lidar.position;
+      const Point query_point(static_cast<float>(query.x()),
+          static_cast<float>(query.y()), static_cast<float>(query.z()));
+      // Explicitly clear both outputs for every query, including no-neighbor queries.
+      leaves.clear();
+      squared_distances.clear();
+      this->target_cells_.radiusSearch(query_point, resolution, leaves, squared_distances);
+      const std::size_t count = std::min(leaves.size(), squared_distances.size());
+      for (std::size_t i = 0; i < count; ++i) {
+        if (!leaves[i] || !std::isfinite(squared_distances[i]) || squared_distances[i] < 0.0f)
+          continue;
+        reliability::GeometricObservation observation;
+        observation.rotated_source_map = rotated;
+        observation.residual_map = query - leaves[i]->getMean();
+        observation.voxel_covariance_map = leaves[i]->getCov();
+        observation.nonnegative_weight = std::exp(-0.5 *
+            static_cast<double>(squared_distances[i]) / (resolution * resolution));
+        observations.push_back(std::move(observation));
+      }
+    }
+    return observations;
+  }
+};
 
 void finalize(const Cloud::Ptr& cloud) {
   cloud->width = static_cast<uint32_t>(cloud->size());
@@ -217,6 +249,16 @@ bool CurrentFrameNdtRegistration::align(uint64_t stamp_ns, const RegistrationClo
         raw_pose.allFinite() && result->raw_map_T_lidar.orientation.coeffs().allFinite(),
         std::isfinite(result->fitness));
     result->effective = result->status == CurrentFrameNdtStatus::SUCCESS;
+    if (result->effective) {
+      const auto uobs_started = std::chrono::steady_clock::now();
+      const auto observations = impl_->ndt.geometricObservations(
+          *source, result->raw_map_T_lidar, impl_->parameters.resolution_m);
+      result->local_observability = reliability::analyzeGeometricObservability(
+          observations, true, impl_->parameters.resolution_m);
+      result->uobs_computed = true;
+      result->uobs_ms = std::chrono::duration<double, std::milli>(
+          std::chrono::steady_clock::now() - uobs_started).count();
+    }
     return true;
   } catch (const std::exception& error) {
     return fail(reason, std::string("ndt_internal_error:") + error.what());

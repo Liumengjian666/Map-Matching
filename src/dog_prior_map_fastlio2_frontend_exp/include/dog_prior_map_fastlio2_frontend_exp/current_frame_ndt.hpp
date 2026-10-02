@@ -1,6 +1,7 @@
 #pragma once
 
 #include "dog_prior_map_fastlio2_frontend_exp/frontend_types.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/reliability_metrics.hpp"
 
 #include <cstddef>
 #include <cstdint>
@@ -65,6 +66,10 @@ struct CurrentFrameNdtResult {
   double alignment_ms = std::numeric_limits<double>::quiet_NaN();
   Pose3d initial_map_T_lidar;
   Pose3d raw_map_T_lidar;
+  // Shadow only: neither validity nor these diagnostics affect admission.
+  bool uobs_computed = false;
+  double uobs_ms = std::numeric_limits<double>::quiet_NaN();
+  reliability::LocalObservability local_observability;
 };
 
 class CurrentFrameNdtRegistration {
