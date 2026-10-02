@@ -40,3 +40,10 @@ target_compile_options(p7_replay_io PRIVATE -Wall -Wextra -Wpedantic)
 add_executable(p7_replay_io_test "${PACKAGE_ROOT}/tests/p7_replay_io_test.cpp")
 target_link_libraries(p7_replay_io_test PRIVATE p7_replay_io)
 add_test(NAME p7_replay_io_test COMMAND p7_replay_io_test)
+
+add_executable(p7_single_state_runner p7_single_state_runner.cpp
+  "${PACKAGE_ROOT}/src/fastlio2_frontend_ikfom.cpp"
+  "${PACKAGE_ROOT}/src/registration_geometry.cpp")
+target_include_directories(p7_single_state_runner PRIVATE "${FASTLIO2_INCLUDE_DIR}")
+target_link_libraries(p7_single_state_runner PRIVATE
+  p7_current_frame_ndt p7_replay_io Eigen3::Eigen OpenMP::OpenMP_CXX)
