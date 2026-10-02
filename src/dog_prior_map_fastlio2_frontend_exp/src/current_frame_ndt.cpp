@@ -185,9 +185,9 @@ bool CurrentFrameNdtRegistration::loadMap(const std::string& path, std::string* 
     const Cloud::Ptr first = voxelDown(finite, impl_->parameters.map_voxel_m);
     const Cloud::Ptr target = voxelDown(first, impl_->parameters.target_voxel_m);
     if (target->empty()) return fail(reason, "empty_preprocessed_target");
-    // Match the formal target-grid initialization order.
-    impl_->ndt.setInputTarget(target);
+    // PCL 1.10 builds target cells in setInputTarget; configure their size first.
     impl_->ndt.setResolution(impl_->parameters.resolution_m);
+    impl_->ndt.setInputTarget(target);
     impl_->ndt.setStepSize(impl_->parameters.step_size);
     impl_->ndt.setTransformationEpsilon(impl_->parameters.transformation_epsilon);
     impl_->ndt.setMaximumIterations(impl_->parameters.maximum_iterations);

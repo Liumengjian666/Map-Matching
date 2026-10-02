@@ -27,10 +27,11 @@ bool identical(const RegistrationCloud& a, const RegistrationCloud& b) {
   return true;
 }
 
-// Test-only independent count reference, using PCL's same target setup order.
+// Test-only independent reference with the required resolution-before-target order.
 // No second target grid exists in the production registration module.
 class SearchReference : public pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> {
  public:
+  Eigen::Vector3f actualLeafSize() const { return target_cells_.getLeafSize(); }
   std::size_t count(const Eigen::Vector3d& query) {
     std::vector<TargetGridLeafConstPtr> leaves;
     std::vector<float> distances;
@@ -59,7 +60,12 @@ void testRadiusSearchNoStaleOutput(CurrentFrameNdtRegistration& ndt,
     target = down;
   }
   SearchReference reference;
-  reference.setInputTarget(target); reference.setResolution(0.8f);
+  reference.setResolution(0.8f); reference.setInputTarget(target);
+  require(reference.getResolution() == 0.8f &&
+      (reference.actualLeafSize().array() == 0.8f).all(),
+      "configured resolution differs from actual target grid leaf size");
+  std::cout << "target grid contract configured=" << reference.getResolution()
+            << " actual=" << reference.actualLeafSize().transpose() << '\n';
   std::size_t total = 0, empty_index = prepared.size();
   std::vector<std::size_t> counts;
   for (std::size_t i = 0; i < prepared.size(); ++i) {
@@ -76,7 +82,7 @@ void testRadiusSearchNoStaleOutput(CurrentFrameNdtRegistration& ndt,
   require(empty_index > 0 && empty_index + 1 < prepared.size(), "B was not between supported queries");
   require(counts[empty_index - 1] > 0 && counts[empty_index + 1] > 0, "A/C do not have neighbors");
   require(result.local_observability.valid_correspondence_count == total,
-      "no-neighbor B inherited prior leaf results");
+      "production support differs from verified 0.8m grid (or stale leaf output)");
 }
 
 void testPreprocess() {
