@@ -2,7 +2,7 @@
 
 #include "dog_prior_map_fastlio2_frontend_exp/dual_reliability.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/fastlio2_frontend.hpp"
-#include "dog_prior_map_fastlio2_frontend_exp/lidar_residual_math.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/registration_geometry.hpp"
 
 #include <Eigen/Core>
 #include <Eigen/Geometry>
@@ -46,13 +46,9 @@ inline bool normalizedLidarToExactResidualJacobianFromImuMeasurement(
     const Pose3d& prior_map_T_imu, const Pose3d& nominal_map_T_imu,
     const Pose3d& T_imu_lidar, double length_scale_m,
     Eigen::Matrix<double, 6, 6>* jacobian, std::string* reason = nullptr) {
-  dog_prior_map_fastlio2_frontend_exp::fixed_lag::WindowState state;
-  state.stamp_ns = 1;
-  state.rotation = prior_map_T_imu.orientation.normalized().toRotationMatrix();
-  state.position = prior_map_T_imu.position;
-  return dog_prior_map_fastlio2_frontend_exp::fixed_lag::
-      normalizedLidarResidualJacobian(
-          state,
+  return dog_prior_map_fastlio2_frontend_exp::
+      normalizedRegistrationToPoseResidualJacobian(
+          prior_map_T_imu.orientation.normalized().toRotationMatrix(),
           nominal_map_T_imu.orientation.normalized().toRotationMatrix(),
           T_imu_lidar.position, length_scale_m, jacobian, reason);
 }

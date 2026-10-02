@@ -9,7 +9,9 @@ find_package(PCL 1.10 REQUIRED COMPONENTS common io filters registration)
 find_package(OpenSSL REQUIRED)
 find_library(USB_1_LIBRARY NAMES usb-1.0 REQUIRED)
 
-add_executable(p6_i4_basin_margin ../p6_i4_basin_margin.cpp)
+add_executable(p6_i4_basin_margin
+  ../p6_i4_basin_margin.cpp
+  "${PACKAGE_ROOT}/src/registration_geometry.cpp")
 target_compile_features(p6_i4_basin_margin PRIVATE cxx_std_17)
 target_include_directories(p6_i4_basin_margin PRIVATE
   "${PACKAGE_ROOT}/include"

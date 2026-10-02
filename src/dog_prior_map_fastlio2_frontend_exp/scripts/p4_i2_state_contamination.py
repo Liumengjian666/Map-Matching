@@ -53,7 +53,9 @@ OUTPUT_DIR = PACKAGE / "docs/p4_i2_state_contamination"
 ERROR_BINS = [0.5, 1.0, 2.0, 5.0, 10.0]
 COMPILED_FRONTEND_SOURCES = (
     PACKAGE / "src/fastlio2_frontend_ikfom.cpp",
+    PACKAGE / "src/registration_geometry.cpp",
     PACKAGE / "include/dog_prior_map_fastlio2_frontend_exp/fastlio2_frontend.hpp",
+    PACKAGE / "include/dog_prior_map_fastlio2_frontend_exp/registration_geometry.hpp",
     PACKAGE / "include/dog_prior_map_fastlio2_frontend_exp/frontend_types.hpp",
 )
 
@@ -280,6 +282,7 @@ def compile_replay(executable: Path):
         f"-I{FRONTEND_ROOT / 'include'}",
         "-I/usr/include/eigen3",
         str(source),
+        str(PACKAGE / "src/registration_geometry.cpp"),
         "-o",
         str(executable),
     ]

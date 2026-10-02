@@ -90,6 +90,7 @@ def compile_helper(executable):
         f"-I{base.FRONTEND_ROOT / 'include'}",
         "-I/usr/include/eigen3",
         str(PACKAGE / "scripts/p4_i4_visual_fusion_replay.cpp"),
+        str(PACKAGE / "src/registration_geometry.cpp"),
         "-o",
         str(executable),
     ]

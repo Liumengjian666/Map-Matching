@@ -326,6 +326,8 @@ def build_runner():
         PACKAGE / "scripts/p4_i2_state_contamination_replay.cpp",
         PACKAGE / "scripts/p5_i1_ndt_mode_landscape.cpp",
         PACKAGE / "src/fastlio2_frontend_ikfom.cpp",
+        PACKAGE / "src/registration_geometry.cpp",
+        PACKAGE / "include/dog_prior_map_fastlio2_frontend_exp/registration_geometry.hpp",
         PACKAGE / "scripts/p6_i1_run.py",
         PACKAGE / "scripts/p6_i1_report.py",
         cmake_source / "CMakeLists.txt",

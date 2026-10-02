@@ -1,6 +1,7 @@
 #pragma once
 
 #include "dog_prior_map_fastlio2_frontend_exp/frontend_types.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/registration_geometry.hpp"
 
 #include <limits>
 #include <memory>
@@ -28,26 +29,9 @@ enum class ProjectedPoseLinearizationMode {
   EXACT_LOG_RESIDUAL,
 };
 
-bool so3LeftJacobianInverse(const Eigen::Vector3d& phi,
-                            Eigen::Matrix3d* result,
-                            std::string* reason = nullptr);
 
 double chiSquare99Threshold(int rank);
 
-struct FixedLagInitializationSeed {
-  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-  std::uint64_t stamp_ns = 0;
-  Pose3d map_T_imu;
-  Eigen::Vector3d velocity = Eigen::Vector3d::Zero();
-  Eigen::Vector3d gyro_bias = Eigen::Vector3d::Zero();
-  Eigen::Vector3d accel_bias = Eigen::Vector3d::Zero();
-  Eigen::Vector3d gravity = Eigen::Vector3d::Zero();
-  Eigen::Matrix<double, 15, 15> covariance15 =
-      Eigen::Matrix<double, 15, 15>::Zero();
-  Eigen::Matrix<double, 15, 15> information15 =
-      Eigen::Matrix<double, 15, 15>::Zero();
-  double gravity_conditioning_delta_norm = 0.0;
-};
 
 class FastLio2IkfomFrontend {
  public:
@@ -143,23 +127,6 @@ class FastLio2IkfomFrontend {
 
   bool initialized() const;
   FilterSnapshot getState() const;
-  // One-time handoff prior conditioned on fixed initialized gravity. This is
-  // a 15D model choice, not an equivalent representation of the 23D posterior.
-  bool makeFixedLagInitializationSeed(FixedLagInitializationSeed* output,
-                                     std::string* failure_reason) const;
-  // Explicit experimental fixed-lag feedback boundary. This method validates
-  // the optimized seed and updates IKFoM through its public change_x/change_P
-  // path; callers must not mutate IKFoM internals directly. The fixed-lag
-  // state is 15D while IKFoM's covariance is 23x23. Until a mathematically
-  // complete covariance/cross-covariance map exists, callers must provide a
-  // genuine propagated 23x23 covariance; this boundary does not synthesize
-  // identity blocks, zero cross blocks, or reuse an unrelated EKF posterior.
-  bool setWindowPredictionSeed(const FilterSnapshot& seed,
-                               std::string* failure_reason);
-#ifdef DOG_PRIOR_MAP_ENABLE_TEST_HOOKS
-  bool setWindowPredictionSeedWithInjectedPostconditionFailureForTest(
-      const FilterSnapshot& seed, std::string* failure_reason);
-#endif
   Eigen::Matrix<double, 12, 12> getProcessNoiseCovariance() const;
   bool postconditionsValid(std::string* failure_reason) const;
 

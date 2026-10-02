@@ -81,28 +81,6 @@ int main() {
   }
   const FilterSnapshot predicted = candidate->getState();
 
-#ifdef DOG_PRIOR_MAP_ENABLE_TEST_HOOKS
-  std::unique_ptr<FastLio2IkfomFrontend> window_feedback_transaction =
-      candidate->cloneCandidate();
-  const FilterSnapshot before_failed_window_feedback =
-      window_feedback_transaction->getState();
-  FilterSnapshot rejected_window_feedback = before_failed_window_feedback;
-  rejected_window_feedback.stamp_ns += 1;
-  rejected_window_feedback.map_T_imu.position +=
-      Eigen::Vector3d(0.4, -0.2, 0.1);
-  rejected_window_feedback.velocity += Eigen::Vector3d(0.3, 0.1, -0.2);
-  rejected_window_feedback.covariance *= 1.01;
-  if (window_feedback_transaction->
-          setWindowPredictionSeedWithInjectedPostconditionFailureForTest(
-              rejected_window_feedback, &failure) ||
-      failure != "injected_window_feedback_postcondition_failure" ||
-      !sameFilterSnapshot(before_failed_window_feedback,
-                          window_feedback_transaction->getState())) {
-    std::cerr << "FAIL: window prediction feedback rollback was not atomic: "
-              << failure << '\n';
-    return 1;
-  }
-#endif
 
   Pose3d measurement = predicted.map_T_imu;
   measurement.position += Eigen::Vector3d(-0.08, 0.035, 0.025);

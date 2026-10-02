@@ -10,8 +10,6 @@
 #undef main
 
 #include "dog_prior_map_fastlio2_frontend_exp/dual_reliability.hpp"
-#include "dog_prior_map_fastlio2_frontend_exp/fixed_lag_production.hpp"
-#include "dog_prior_map_fastlio2_frontend_exp/window_scan_processor.hpp"
 #include "p6_i4_basin_margin_math.hpp"
 #include "p6_i6e_r3_actual_state.hpp"
 #include "p6_i6e_r3_math.hpp"
@@ -42,7 +40,6 @@
 #include <tuple>
 #include <vector>
 
-#include "p6_a3f_r1_covariance_diagnostics.hpp"
 #include "p6_a3g_r4_tracking.hpp"
 
 namespace p6_i1 {
@@ -3284,76 +3281,11 @@ void runMode(const std::string& mode, const p4_i2::Inputs& inputs,
   std::cout << "P6_MODE_COMPLETE mode=" << mode << " frames=" << assets.size() << '\n';
 }
 
-#include "p6_a2c_fixed_lag_producer.hpp"
-#include "p6_a2d_raw_timed_provider.hpp"
 
 }  // namespace p6_i1
 
 int main(int argc, char** argv) {
   try {
-    if (argc == 2 && std::string(argv[1]) == "A2C_FIXTURE") {
-      p6_i1::runFixedLagProductionFixture();
-      return 0;
-    }
-    if (argc == 2 && std::string(argv[1]) == "A2D_FIXTURE") {
-      p6_i1::runRawTimedFormatFixture();
-      p6_i1::runFixedLagProductionFixture(true);
-      return 0;
-    }
-    if (argc == 2 && std::string(argv[1]) == "A3B_NO_VISION_FIXTURE") {
-      if (!p6_i1::readV3VisualMeasurements("NONE").empty())
-        throw std::runtime_error("A3B_NONE_SENTINEL_DID_NOT_PRODUCE_EMPTY_VISUAL_INPUT");
-      p6_i1::runFixedLagProductionFixture(true, true);
-      return 0;
-    }
-    if (argc == 2 && std::string(argv[1]) == "A3G_R3_CAPTURE_PARITY_FIXTURE") {
-      p6_i1::runFixedLagProductionFixture(true, true, true);
-      return 0;
-    }
-    if (argc == 2 && std::string(argv[1]) == "A3G_R4_RECOVERY_FIXTURE") {
-      p6_i1::runFixedLagProductionFixture(true,true,false,true);
-      return 0;
-    }
-    if (argc == 2 && std::string(argv[1]) == "A3G_R5_RESET_FIXTURE") {
-      p6_i1::runFixedLagProductionFixture(true,true,false,true,true);
-      return 0;
-    }
-    if ((argc == 18 || argc == 19) && std::string(argv[1]) == "FULL_FIXED_LAG_V3_EXPERIMENTAL") {
-      const std::string raw_path=argv[5];
-      const auto slash=raw_path.find_last_of('/');
-      const std::string manifest=(slash==std::string::npos ? "." : raw_path.substr(0,slash))+
-          "/RAW_TIMED_INPUT_MANIFEST.txt";
-      p6_i1::requireRawTimedInputManifest(argv[5],argv[16],argv[3],manifest);
-      if(p5_i1::sha256File(argv[4])!=p5_i1::sha256File(argv[16]))
-        throw std::runtime_error("V3_RAW_INPUT_SCHEDULE_IDENTITY_MISMATCH");
-      p4_i2::Inputs inputs; std::string reason;
-      if (!p4_i2::readInputs(argv[2],argv[3],&inputs,&reason)) throw std::runtime_error(reason);
-      auto assets=p6_i1::readRawSensorScanAssets(argv[4]);
-      const std::size_t limit=std::stoull(argv[12]);
-      if(limit==0 || limit>assets.size() || assets.size()!=inputs.scans.size())
-        throw std::runtime_error("V3_frame_limit_or_identity_invalid");
-      assets.resize(limit); inputs.scans.resize(limit);
-      p6_i1::runWindowOwnedExperimentalMode(inputs,assets,argv[5],argv[6],argv[7],
-          argv[8],argv[9],argv[10],p6_i1::readV3VisualMeasurements(argv[11]),
-          std::stoull(argv[13]),argv[14],p6_i1::parseR2Policy(argv[15]),argv[16],argv[17],
-          argc==19?p6_tracking::readConfig(argv[18]):p6_tracking::Config{});
-      return 0;
-    }
-    if (argc == 16 && std::string(argv[1]) == "FULL_FIXED_LAG_V2_EXPERIMENTAL") {
-      p4_i2::Inputs inputs;
-      std::string reason;
-      if (!p4_i2::readInputs(argv[2],argv[3],&inputs,&reason))
-        throw std::runtime_error(reason);
-      auto assets=p6_i1::readScanAssets(argv[4]);
-      const std::size_t limit=std::stoull(argv[12]);
-      if(limit==0||limit>assets.size()||assets.size()!=inputs.scans.size())
-        throw std::runtime_error("fixed_lag_frame_limit_or_identity_invalid");
-      assets.resize(limit); inputs.scans.resize(limit);
-      p6_i1::runFixedLagExperimentalMode(inputs,assets,argv[5],argv[6],argv[7],
-          argv[8],argv[9],argv[10],p6_i1::readI6dVisual(argv[11]),
-          std::stoull(argv[13]),argv[14],p6_i1::parseR2Policy(argv[15]));
-      return 0;
-    }
     if (((argc >= 11 && argc <= 15) ||
          ((argc == 16 || argc == 17) &&
           std::string(argv[1]) == "FULL_ALGORITHM_V1")) &&
@@ -3450,8 +3382,6 @@ int main(int argc, char** argv) {
               << "  p6_i1_branched_recovery strict_single_start imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt strict_replay.csv strict_trajectory.csv\n"
               << "  p6_i1_branched_recovery (STRICT_BASELINE|UOBS_ONLY|UNONLOCAL_ONLY|DUAL_RELIABILITY) imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt trajectory.csv reliability.csv runtime.csv [frame_limit [init_stamp_ns [floor01|corridor01]]]\n"
               << "  p6_i1_branched_recovery FULL_ALGORITHM_V1 imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt trajectory.csv reliability.csv runtime.csv visual.csv frame_limit init_stamp_ns floor01|corridor01 [r2_policy [LEGACY|EXACT_RESIDUAL]]\n"
-              << "  p6_i1_branched_recovery FULL_FIXED_LAG_V2_EXPERIMENTAL imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt trajectory.csv events.csv runtime.csv visual.csv frame_limit init_stamp_ns floor01|corridor01 r2_policy\n"
-              << "  p6_i1_branched_recovery FULL_FIXED_LAG_V3_EXPERIMENTAL imu.csv filter_scans.csv scans.csv raw_timed.bin map.pcd params.txt trajectory.csv events.csv runtime.csv visual.csv frame_limit init_stamp_ns floor01|corridor01 r2_policy raw_timed_scans.csv visual_provenance.csv|NONE [tracking.conf]\n"
               << "  p6_i1_branched_recovery MODE imu.csv filter_scans.csv scans.csv xyz.bin map.pcd params.txt visual.csv trajectory.csv branch.csv dcreg.csv multistart.csv candidates.csv arbitration.csv runtime.csv [basin.csv covariance.csv]\n";
     return 2;
   } catch (const std::exception& error) {

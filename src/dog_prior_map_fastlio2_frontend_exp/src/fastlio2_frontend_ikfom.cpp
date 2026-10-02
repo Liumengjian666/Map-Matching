@@ -104,19 +104,6 @@ bool fail(std::string* reason, const char* message) {
   if (reason) *reason = message;
   return false;
 }
-
-#ifdef DOG_PRIOR_MAP_ENABLE_TEST_HOOKS
-thread_local bool force_window_seed_postcondition_failure = false;
-#endif
-
-Eigen::Matrix3d skew(const Eigen::Vector3d& vector) {
-  Eigen::Matrix3d result;
-  result << 0.0, -vector.z(), vector.y(),
-            vector.z(), 0.0, -vector.x(),
-            -vector.y(), vector.x(), 0.0;
-  return result;
-}
-
 bool finiteState(const state_ikfom& state) {
   return state.pos.allFinite() && state.rot.coeffs().allFinite() &&
          state.offset_R_L_I.coeffs().allFinite() &&
@@ -259,36 +246,6 @@ bool buildProjectedPoseSystem(
 
 }  // namespace
 
-bool so3LeftJacobianInverse(const Eigen::Vector3d& phi,
-                            Eigen::Matrix3d* result,
-                            std::string* reason) {
-  if (reason) reason->clear();
-  if (!result) return fail(reason, "NULL_SO3_JACOBIAN_OUTPUT");
-  if (!phi.allFinite()) return fail(reason, "NONFINITE_ROTATION_RESIDUAL");
-  const double theta = phi.norm();
-  if (!std::isfinite(theta))
-    return fail(reason, "NONFINITE_ROTATION_RESIDUAL");
-  if (theta > M_PI - 1e-4)
-    return fail(reason, "ROTATION_RESIDUAL_NEAR_PI");
-  const Eigen::Matrix3d K = skew(phi);
-  const Eigen::Matrix3d K2 = K * K;
-  if (theta < 1e-4) {
-    *result = Eigen::Matrix3d::Identity() - 0.5 * K +
-        (1.0 / 12.0 + theta * theta / 720.0) * K2;
-  } else {
-    const double half = 0.5 * theta;
-    const double sine = std::sin(half);
-    if (!std::isfinite(sine) || std::abs(sine) < 1e-12)
-      return fail(reason, "INVALID_ROTATION_RESIDUAL_HALF_ANGLE");
-    const double cotangent = std::cos(half) / sine;
-    const double coefficient = 1.0 / (theta * theta) -
-        cotangent / (2.0 * theta);
-    *result = Eigen::Matrix3d::Identity() - 0.5 * K + coefficient * K2;
-  }
-  if (!result->allFinite())
-    return fail(reason, "NONFINITE_SO3_LEFT_JACOBIAN_INVERSE");
-  return true;
-}
 
 double chiSquare99Threshold(int rank) {
   static const double thresholds[] = {
@@ -1013,139 +970,6 @@ FilterSnapshot FastLio2IkfomFrontend::getState() const {
   return snapshot;
 }
 
-bool FastLio2IkfomFrontend::setWindowPredictionSeed(
-    const FilterSnapshot& seed, std::string* failure_reason) {
-  if (failure_reason) failure_reason->clear();
-  if (!impl_->is_initialized)
-    return fail(failure_reason, "filter_not_initialized");
-  if (seed.stamp_ns < impl_->stamp_ns)
-    return fail(failure_reason, "window_feedback_timestamp_regressed");
-  if (!finitePose(seed.map_T_imu) || !seed.velocity.allFinite() ||
-      !seed.gyro_bias.allFinite() || !seed.accel_bias.allFinite() ||
-      !seed.gravity.allFinite() || seed.gravity.norm() < 1e-9 ||
-      seed.covariance.rows() != state_ikfom::DOF ||
-      seed.covariance.cols() != state_ikfom::DOF ||
-      !seed.covariance.allFinite() ||
-      (seed.covariance - seed.covariance.transpose()).cwiseAbs().maxCoeff() > 1e-8)
-    return fail(failure_reason, "invalid_window_feedback_seed");
-  Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> covariance_solver(seed.covariance);
-  if (covariance_solver.info() != Eigen::Success ||
-      covariance_solver.eigenvalues().minCoeff() < -1e-10)
-    return fail(failure_reason, "window_feedback_covariance_not_psd");
-  state_ikfom state = impl_->filter.get_x();
-  state.pos = vect3(seed.map_T_imu.position);
-  state.rot = SO3(seed.map_T_imu.orientation.toRotationMatrix());
-  state.vel = vect3(seed.velocity);
-  state.bg = vect3(seed.gyro_bias);
-  state.ba = vect3(seed.accel_bias);
-  if (std::abs(seed.gravity.norm() - impl_->parameters.gravity_mps2) > 1e-6)
-    return fail(failure_reason, "window_feedback_gravity_norm_mismatch");
-  state.grav = S2(vect3(seed.gravity));
-  Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> covariance =
-      seed.covariance;
-  enforceFixedExtrinsicConstraint(state, covariance, impl_->fixed_rotation,
-                                  impl_->fixed_translation);
-  state_ikfom previous_state = impl_->filter.get_x();
-  auto previous_covariance = impl_->filter.get_P();
-  const std::uint64_t previous_stamp_ns = impl_->stamp_ns;
-  impl_->filter.change_x(state);
-  impl_->filter.change_P(covariance);
-  impl_->stamp_ns = seed.stamp_ns;
-  std::string postcondition_failure;
-  bool postconditions_ok = postconditionsValid(&postcondition_failure);
-#ifdef DOG_PRIOR_MAP_ENABLE_TEST_HOOKS
-  if (force_window_seed_postcondition_failure) {
-    postconditions_ok = false;
-    postcondition_failure = "injected_window_feedback_postcondition_failure";
-  }
-#endif
-  if (!postconditions_ok) {
-    impl_->filter.change_x(previous_state);
-    impl_->filter.change_P(previous_covariance);
-    impl_->stamp_ns = previous_stamp_ns;
-    if (failure_reason) *failure_reason = postcondition_failure;
-    return false;
-  }
-  return true;
-}
-
-bool FastLio2IkfomFrontend::makeFixedLagInitializationSeed(
-    FixedLagInitializationSeed* output, std::string* reason) const {
-  if (reason) reason->clear();
-  if (!output || !impl_->is_initialized)
-    return fail(reason, "fixed_lag_initialization_filter_not_ready");
-  *output = FixedLagInitializationSeed();
-  const state_ikfom& state = impl_->filter.get_x();
-  const auto covariance = impl_->filter.get_P();
-  const int pos = MTK::getStartIdx(&state_ikfom::pos);
-  const int rot = MTK::getStartIdx(&state_ikfom::rot);
-  const int ext_rot = MTK::getStartIdx(&state_ikfom::offset_R_L_I);
-  const int ext_pos = MTK::getStartIdx(&state_ikfom::offset_T_L_I);
-  const int vel = MTK::getStartIdx(&state_ikfom::vel);
-  const int bg = MTK::getStartIdx(&state_ikfom::bg);
-  const int ba = MTK::getStartIdx(&state_ikfom::ba);
-  const int grav = MTK::getStartIdx(&state_ikfom::grav);
-  if (state_ikfom::DOF != 23 || pos != 0 || rot != 3 || ext_rot != 6 ||
-      ext_pos != 9 || vel != 12 || bg != 15 || ba != 18 || grav != 21)
-    return fail(reason, "pinned_mtk_state_layout_mismatch");
-  if (!finiteState(state) || !covariance.allFinite() ||
-      (covariance - covariance.transpose()).norm() > 1e-8)
-    return fail(reason, "invalid_ikfom_initialization_covariance");
-  for (int row = ext_rot; row < ext_pos + 3; ++row) {
-    for (int col = 0; col < state_ikfom::DOF; ++col) {
-      if (col >= ext_rot && col < ext_pos + 3) continue;
-      if (std::abs(covariance(row, col)) > 1e-12 ||
-          std::abs(covariance(col, row)) > 1e-12)
-        return fail(reason, "fixed_extrinsic_cross_covariance_not_zero");
-    }
-  }
-  Eigen::Matrix<double, 15, 23> selector =
-      Eigen::Matrix<double, 15, 23>::Zero();
-  const int indices[] = {rot, pos, vel, bg, ba};
-  for (int block = 0; block < 5; ++block)
-    selector.block<3, 3>(3 * block, indices[block]).setIdentity();
-  const Eigen::Matrix<double, 15, 15> pxx =
-      selector * covariance * selector.transpose();
-  const Eigen::Matrix<double, 15, 2> pxg =
-      selector * covariance.block<23, 2>(0, grav);
-  const Eigen::Matrix2d pgg = covariance.block<2, 2>(grav, grav);
-  Eigen::LLT<Eigen::Matrix2d> gravity_factor(pgg);
-  if (gravity_factor.info() != Eigen::Success)
-    return fail(reason, "gravity_tangent_covariance_not_spd");
-  const Eigen::Matrix<double, 15, 15> conditional =
-      pxx - pxg * gravity_factor.solve(pxg.transpose());
-  output->covariance15 = 0.5 * (conditional + conditional.transpose()).eval();
-  Eigen::LLT<Eigen::Matrix<double, 15, 15>> factor(output->covariance15);
-  if (!output->covariance15.allFinite() || factor.info() != Eigen::Success)
-    return fail(reason, "fixed_gravity_conditional_covariance_not_spd");
-  output->information15 = factor.solve(
-      Eigen::Matrix<double, 15, 15>::Identity());
-  output->information15 = 0.5 *
-      (output->information15 + output->information15.transpose()).eval();
-  if (!output->information15.allFinite())
-    return fail(reason, "fixed_gravity_conditional_information_not_finite");
-  const FilterSnapshot snapshot = getState();
-  output->stamp_ns = snapshot.stamp_ns;
-  output->map_T_imu = snapshot.map_T_imu;
-  output->velocity = snapshot.velocity;
-  output->gyro_bias = snapshot.gyro_bias;
-  output->accel_bias = snapshot.accel_bias;
-  output->gravity = snapshot.gravity;
-  output->gravity_conditioning_delta_norm =
-      (pxx - output->covariance15).norm();
-  return true;
-}
-
-#ifdef DOG_PRIOR_MAP_ENABLE_TEST_HOOKS
-bool FastLio2IkfomFrontend::
-setWindowPredictionSeedWithInjectedPostconditionFailureForTest(
-    const FilterSnapshot& seed, std::string* failure_reason) {
-  force_window_seed_postcondition_failure = true;
-  const bool result = setWindowPredictionSeed(seed, failure_reason);
-  force_window_seed_postcondition_failure = false;
-  return result;
-}
-#endif
 
 Eigen::Matrix<double, 12, 12>
 FastLio2IkfomFrontend::getProcessNoiseCovariance() const {

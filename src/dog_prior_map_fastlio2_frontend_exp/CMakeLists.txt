@@ -59,6 +59,17 @@ if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
   set(CMAKE_CXX_STANDARD 14)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+  add_executable(registration_geometry_test
+    src/registration_geometry.cpp
+    tests/registration_geometry_test.cpp
+  )
+  target_include_directories(registration_geometry_test PRIVATE
+    include
+    ${EIGEN3_INCLUDE_DIRS}
+  )
+  add_test(NAME registration_geometry_test
+    COMMAND $<TARGET_FILE:registration_geometry_test>)
+
   add_executable(ikfom_pose_api_spike
     src/ikfom_pose_api_spike.cpp
     tests/ikfom_pose_api_spike_main.cpp
@@ -80,6 +91,7 @@ if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
 
   add_executable(fastlio2_propagation_contract_test
     src/fastlio2_frontend_ikfom.cpp
+    src/registration_geometry.cpp
     tests/fastlio2_propagation_contract_test.cpp
   )
   target_include_directories(fastlio2_propagation_contract_test PRIVATE
@@ -99,6 +111,7 @@ if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
 
   add_executable(scan_end_deskew_runtime_test
     src/fastlio2_frontend_ikfom.cpp
+    src/registration_geometry.cpp
     src/scan_processor.cpp
     src/lidar_deskew_geometry.cpp
     tests/scan_end_deskew_runtime_test.cpp
@@ -120,6 +133,7 @@ if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
 
   add_executable(frontend_runtime_end_to_end_test
     src/fastlio2_frontend_ikfom.cpp
+    src/registration_geometry.cpp
     src/scan_processor.cpp
     src/lidar_deskew_geometry.cpp
     src/frontend_runtime.cpp
@@ -142,6 +156,7 @@ if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
 
   add_executable(dog_prior_map_fastlio2_frontend_node
     src/fastlio2_frontend_ikfom.cpp
+    src/registration_geometry.cpp
     src/scan_processor.cpp
     src/lidar_deskew_geometry.cpp
     src/frontend_runtime.cpp
@@ -168,6 +183,7 @@ if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
 
   add_executable(ndt_pose_update_runtime_test
     src/fastlio2_frontend_ikfom.cpp
+    src/registration_geometry.cpp
     tests/ndt_pose_update_runtime_test.cpp
   )
   target_include_directories(ndt_pose_update_runtime_test PRIVATE
