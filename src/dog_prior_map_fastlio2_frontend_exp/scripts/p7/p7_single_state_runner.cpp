@@ -601,7 +601,7 @@ int main(int argc, char** argv) {
              "counterfactual_update_valid,"
              "initial_x,initial_y,initial_z,initial_qx,initial_qy,initial_qz,initial_qw,"
              "terminal_x,terminal_y,terminal_z,terminal_qx,terminal_qy,terminal_qz,terminal_qw,"
-             "counterfactual_imu_x,counterfactual_imu_y,counterfactual_imu_z,"
+             "counterfactual_imu_tx,counterfactual_imu_ty,counterfactual_imu_tz,"
              "counterfactual_imu_qx,counterfactual_imu_qy,counterfactual_imu_qz,counterfactual_imu_qw,"
              "direction_q0_q1_q2_q3_q4_q5\n";
     }
