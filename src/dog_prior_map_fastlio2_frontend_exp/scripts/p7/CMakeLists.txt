@@ -69,7 +69,8 @@ add_executable(p7_single_state_runner p7_single_state_runner.cpp
   "${PACKAGE_ROOT}/src/lidar_deskew_geometry.cpp")
 target_include_directories(p7_single_state_runner PRIVATE "${FASTLIO2_INCLUDE_DIR}")
 target_link_libraries(p7_single_state_runner PRIVATE
-  p7_current_frame_ndt p7_replay_io p7_dual_u_architecture Eigen3::Eigen OpenMP::OpenMP_CXX
+  p7_current_frame_ndt p7_replay_io p7_dual_u_architecture p7_dual_u_r2_sparse_probe
+  Eigen3::Eigen OpenMP::OpenMP_CXX
   ${PCL_LIBRARIES} ${USB_10_LIBRARY})
 
 add_executable(dual_u_r1_multistart_runner dual_u_r1_multistart_runner.cpp)

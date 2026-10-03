@@ -1,5 +1,6 @@
 #include "dog_prior_map_fastlio2_frontend_exp/current_frame_ndt.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/dual_u_architecture.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/dual_u_r2_sparse_probe.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/fastlio2_frontend.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/p7_replay_io.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/scan_processor.hpp"
@@ -104,6 +105,317 @@ std::string poseSemicolonString(const paper::Pose3d& pose) {
   return out.str();
 }
 
+struct R2Candidate {
+  std::string label;
+  int eigen_index = -1;
+  int sign = 0;
+  double chart_radius = 0.0;
+  paper::Pose3d initial_pose;
+  paper::CurrentFrameNdtResult registration;
+  double pcl_score_per_source = std::numeric_limits<double>::quiet_NaN();
+  bool nis_valid = false;
+  double nis = std::numeric_limits<double>::quiet_NaN();
+  double pseudo_map_score = std::numeric_limits<double>::quiet_NaN();
+  int cluster_index = -1;
+  int cluster_probe_support = 0;
+  bool cluster_supported = false;
+};
+
+double rotationDistanceRadians(const paper::Pose3d& a, const paper::Pose3d& b) {
+  return a.orientation.normalized().angularDistance(b.orientation.normalized());
+}
+
+bool sameR2Basin(const R2Candidate& a, const R2Candidate& b) {
+  return (a.registration.raw_map_T_lidar.position -
+          b.registration.raw_map_T_lidar.position).norm() <= 0.20 &&
+      rotationDistanceRadians(a.registration.raw_map_T_lidar,
+                              b.registration.raw_map_T_lidar) <=
+          2.0 * 3.14159265358979323846 / 180.0;
+}
+
+std::vector<std::vector<int>> completeLinkR2Clusters(
+    std::vector<R2Candidate>* candidates) {
+  std::vector<std::vector<int>> clusters;
+  for (std::size_t index = 0; index < candidates->size(); ++index) {
+    R2Candidate& candidate = candidates->at(index);
+    if (!candidate.registration.effective) continue;
+    bool assigned = false;
+    for (std::size_t cluster_index = 0; cluster_index < clusters.size(); ++cluster_index) {
+      const bool fits_all = std::all_of(clusters[cluster_index].begin(),
+          clusters[cluster_index].end(), [&](int member) {
+            return sameR2Basin(candidate, candidates->at(static_cast<std::size_t>(member)));
+          });
+      if (fits_all) {
+        candidate.cluster_index = static_cast<int>(cluster_index);
+        clusters[cluster_index].push_back(static_cast<int>(index));
+        assigned = true;
+        break;
+      }
+    }
+    if (!assigned) {
+      candidate.cluster_index = static_cast<int>(clusters.size());
+      clusters.push_back({static_cast<int>(index)});
+    }
+  }
+  int nominal_cluster = -1;
+  for (std::size_t index = 0; index < candidates->size(); ++index)
+    if (candidates->at(index).label == "NOMINAL" &&
+        candidates->at(index).registration.effective)
+      nominal_cluster = candidates->at(index).cluster_index;
+  for (auto& candidate : *candidates) {
+    if (candidate.cluster_index < 0) continue;
+    const auto& cluster = clusters.at(static_cast<std::size_t>(candidate.cluster_index));
+    int probe_support = 0;
+    for (int member : cluster)
+      if (candidates->at(static_cast<std::size_t>(member)).label != "NOMINAL")
+        ++probe_support;
+    candidate.cluster_probe_support = probe_support;
+    // The nominal terminal is directly supported by the baseline align. A
+    // separated alternative needs two independently initialized probe aligns.
+    candidate.cluster_supported = candidate.cluster_index == nominal_cluster ||
+        probe_support >= 2;
+  }
+  return clusters;
+}
+
+bool evaluateR2Candidate(paper::FastLio2IkfomFrontend* frontend,
+    const paper::Pose3d& extrinsic, const paper::RuntimeParameters& parameters,
+    paper::CurrentFrameNdtRegistration* registration, R2Candidate* candidate,
+    std::string* reason) {
+  if (!frontend || !registration || !candidate || !candidate->registration.effective)
+    return false;
+  paper::NdtObjectiveSample objective;
+  if (!registration->evaluateLocalObjectiveAtPose(
+          candidate->registration.raw_map_T_lidar, &objective, reason) ||
+      !objective.valid || objective.source_point_count == 0)
+    return false;
+  candidate->pcl_score_per_source = objective.score_sum /
+      static_cast<double>(objective.source_point_count);
+  Eigen::Matrix<double, 6, 6> measurement_noise =
+      Eigen::Matrix<double, 6, 6>::Zero();
+  measurement_noise.diagonal().head<3>().setConstant(
+      parameters.pose_position_sigma_m * parameters.pose_position_sigma_m);
+  measurement_noise.diagonal().tail<3>().setConstant(
+      parameters.pose_rotation_sigma_rad * parameters.pose_rotation_sigma_rad);
+  paper::ProjectedPoseInnovation innovation;
+  if (!frontend->evaluateProjectedPoseInnovationLinearized(
+          paper::lidarMeasurementToImu(candidate->registration.raw_map_T_lidar, extrinsic),
+          measurement_noise, Eigen::Matrix<double, 6, 6>::Identity(), 6,
+          paper::ProjectedPoseLinearizationMode::EXACT_LOG_RESIDUAL,
+          &innovation, reason) || !innovation.valid || !std::isfinite(innovation.nis))
+    return true;  // Objective candidate remains recordable if prior NIS is invalid.
+  candidate->nis_valid = true;
+  candidate->nis = innovation.nis;
+  // PCL's per-source transformation score is an unnormalized likelihood
+  // proxy, not a calibrated density. This fixed-coefficient energy comparator
+  // is recorded only as a pseudo-MAP diagnostic, never as a probability claim.
+  if (candidate->pcl_score_per_source > 0.0)
+    candidate->pseudo_map_score = std::log(candidate->pcl_score_per_source) -
+        0.5 * candidate->nis;
+  return true;
+}
+
+int bestCandidateIndex(const std::vector<R2Candidate>& candidates, int selector,
+    bool require_supported) {
+  int best = -1;
+  double best_value = -std::numeric_limits<double>::infinity();
+  for (std::size_t index = 0; index < candidates.size(); ++index) {
+    const R2Candidate& candidate = candidates[index];
+    if (!candidate.registration.effective ||
+        (require_supported && !candidate.cluster_supported)) continue;
+    double value = -std::numeric_limits<double>::infinity();
+    if (selector == 0) value = candidate.pcl_score_per_source;
+    else if (selector == 1 && candidate.nis_valid) value = -candidate.nis;
+    else if (selector == 2 && std::isfinite(candidate.pseudo_map_score))
+      value = candidate.pseudo_map_score;
+    if (std::isfinite(value) && value > best_value) {
+      best_value = value;
+      best = static_cast<int>(index);
+    }
+  }
+  return best;
+}
+
+std::string candidateLabel(const std::vector<R2Candidate>& candidates, int index) {
+  return index >= 0 && static_cast<std::size_t>(index) < candidates.size()
+      ? candidates[static_cast<std::size_t>(index)].label : "NONE";
+}
+
+int writeR2SparseProbe(uint64_t transaction_id, uint64_t stamp_ns,
+    paper::FastLio2IkfomFrontend* frontend, const paper::Pose3d& extrinsic,
+    const paper::RuntimeParameters& parameters,
+    paper::CurrentFrameNdtRegistration* registration,
+    const paper::RegistrationCloud& cloud, const paper::CurrentFrameNdtResult& nominal,
+    const paper::Pose3d& predicted_map_T_lidar, std::ostream& frame_output,
+    std::ostream& candidate_output) {
+  const auto probe_started = Clock::now();
+  paper::WithinBasinObservability u_obs;
+  paper::PclNdtScoreJet jet;
+  const auto target_leaf_f = registration->targetGridLeafSizeMeters();
+  const Eigen::Vector3d target_leaf(target_leaf_f[0], target_leaf_f[1], target_leaf_f[2]);
+  const auto& ndt_parameters = registration->parameters();
+  std::string reason;
+  const bool uobs_valid = nominal.effective &&
+      registration->evaluateLocalScoreJetAtPose(nominal.raw_map_T_lidar, &jet, &reason) &&
+      paper::analyzeWithinBasinObservability(jet, nominal.raw_map_T_lidar,
+          target_leaf, ndt_parameters.resolution_m, &u_obs, &reason);
+
+  std::vector<R2Candidate> candidates;
+  R2Candidate nominal_candidate;
+  nominal_candidate.label = "NOMINAL";
+  nominal_candidate.initial_pose = predicted_map_T_lidar;
+  nominal_candidate.registration = nominal;
+  if (nominal_candidate.registration.effective &&
+      !evaluateR2Candidate(frontend, extrinsic, parameters, registration,
+                           &nominal_candidate, &reason))
+    throw std::runtime_error("r2_nominal_candidate_evaluation_failed:" + reason);
+  candidates.push_back(nominal_candidate);
+
+  paper::SparseProbePolicy policy;
+  std::vector<int> directions;
+  bool trigger = false;
+  if (uobs_valid && paper::selectSparseProbeDirections(
+          u_obs.curvature_eigenvalues, policy, &directions, &reason))
+    trigger = !directions.empty();
+
+  std::array<double, 2> exit_radius{{std::numeric_limits<double>::quiet_NaN(),
+                                      std::numeric_limits<double>::quiet_NaN()}};
+  std::array<double, 2> exit_plus_fraction{{std::numeric_limits<double>::quiet_NaN(),
+                                             std::numeric_limits<double>::quiet_NaN()}};
+  std::array<double, 2> exit_minus_fraction{{std::numeric_limits<double>::quiet_NaN(),
+                                              std::numeric_limits<double>::quiet_NaN()}};
+  std::array<double, 2> probe_radius{{std::numeric_limits<double>::quiet_NaN(),
+                                       std::numeric_limits<double>::quiet_NaN()}};
+  int attempted = 0;
+  int converged = 0;
+  if (trigger) {
+    std::shared_ptr<const paper::NdtFrozenSupportSnapshot> support;
+    paper::NdtFrozenObjectiveSample support_center;
+    if (!registration->captureFrozenSupport(nominal.raw_map_T_lidar,
+            &support, &support_center, &reason))
+      throw std::runtime_error("r2_support_snapshot_failed:" + reason);
+    const int direction_count = static_cast<int>(directions.size());
+    for (int direction_slot = 0; direction_slot < direction_count; ++direction_slot) {
+      const int eigen_index = directions[static_cast<std::size_t>(direction_slot)];
+      const paper::DualUVector6d q = u_obs.curvature_eigenvectors.col(eigen_index);
+      std::vector<paper::SparseProbeSupportSample> support_samples;
+      for (double radius : policy.exit_search_radii) {
+        const paper::Pose3d plus = paper::applyMapProductChartIncrement(
+            nominal.raw_map_T_lidar, radius * q, u_obs.length_scale_m);
+        const paper::Pose3d minus = paper::applyMapProductChartIncrement(
+            nominal.raw_map_T_lidar, -radius * q, u_obs.length_scale_m);
+        paper::NdtObjectiveSample plus_objective, minus_objective;
+        paper::NdtSupportChangeDiagnostic plus_change, minus_change;
+        if (!registration->evaluateDynamicSupportDiagnostic(*support, plus,
+                &plus_objective, &plus_change, &reason) ||
+            !registration->evaluateDynamicSupportDiagnostic(*support, minus,
+                &minus_objective, &minus_change, &reason))
+          throw std::runtime_error("r2_dynamic_support_evaluation_failed:" + reason);
+        support_samples.push_back({radius,
+            plus_change.changed_source_point_fraction,
+            minus_change.changed_source_point_fraction});
+        if (std::max(plus_change.changed_source_point_fraction,
+                     minus_change.changed_source_point_fraction) >=
+            policy.support_exit_fraction) {
+          exit_plus_fraction[static_cast<std::size_t>(direction_slot)] =
+              plus_change.changed_source_point_fraction;
+          exit_minus_fraction[static_cast<std::size_t>(direction_slot)] =
+              minus_change.changed_source_point_fraction;
+          break;
+        }
+        exit_plus_fraction[static_cast<std::size_t>(direction_slot)] =
+            plus_change.changed_source_point_fraction;
+        exit_minus_fraction[static_cast<std::size_t>(direction_slot)] =
+            minus_change.changed_source_point_fraction;
+      }
+      double found_exit = std::numeric_limits<double>::quiet_NaN();
+      if (!paper::findSparseProbeBranchExit(support_samples, policy,
+              &found_exit, &reason)) continue;
+      const double escape_radius = paper::sparseProbeRadiusBeyondExit(found_exit, policy);
+      exit_radius[static_cast<std::size_t>(direction_slot)] = found_exit;
+      probe_radius[static_cast<std::size_t>(direction_slot)] = escape_radius;
+      for (int sign : {-1, 1}) {
+        R2Candidate candidate;
+        candidate.eigen_index = eigen_index;
+        candidate.sign = sign;
+        candidate.chart_radius = escape_radius;
+        candidate.label = "Q" + std::to_string(eigen_index) +
+            (sign < 0 ? "_MINUS" : "_PLUS");
+        paper::DualUVector6d eta = static_cast<double>(sign) * escape_radius * q;
+        candidate.initial_pose = paper::applyMapProductChartIncrement(
+            nominal.raw_map_T_lidar, eta, u_obs.length_scale_m);
+        if (!registration->align(stamp_ns, cloud, candidate.initial_pose,
+                                 &candidate.registration, &reason))
+          throw std::runtime_error("r2_probe_alignment_failed:" + reason);
+        ++attempted;
+        if (candidate.registration.effective) ++converged;
+        if (candidate.registration.effective &&
+            !evaluateR2Candidate(frontend, extrinsic, parameters, registration,
+                                 &candidate, &reason))
+          throw std::runtime_error("r2_probe_candidate_evaluation_failed:" + reason);
+        candidates.push_back(std::move(candidate));
+      }
+    }
+  }
+
+  const std::vector<std::vector<int>> clusters = completeLinkR2Clusters(&candidates);
+  int nominal_cluster = candidates.front().cluster_index;
+  int supported_alternatives = 0;
+  int singleton_alternatives = 0;
+  for (std::size_t cluster_index = 0; cluster_index < clusters.size(); ++cluster_index) {
+    if (static_cast<int>(cluster_index) == nominal_cluster) continue;
+    int support = 0;
+    for (int member : clusters[cluster_index])
+      if (candidates[static_cast<std::size_t>(member)].label != "NOMINAL") ++support;
+    if (support >= 2) ++supported_alternatives;
+    else ++singleton_alternatives;
+  }
+  const int raw_best = bestCandidateIndex(candidates, 0, false);
+  const int consistency_best = bestCandidateIndex(candidates, 1, false);
+  const int nonlocal_best = bestCandidateIndex(candidates, 1, true);
+  const int pseudo_map_best = bestCandidateIndex(candidates, 2, true);
+
+  frame_output << transaction_id << ',' << stamp_ns << ',' << nominal.effective << ','
+      << uobs_valid << ',' << (trigger ? 1 : 0) << ',' << cloud.size() << ','
+      << directions.size() << ',' << attempted << ',' << converged << ','
+      << clusters.size() << ',' << supported_alternatives << ',' << singleton_alternatives
+      << ',' << "FINITE_PROBES_UNRESOLVED" << ','
+      << exit_radius[0] << ',' << probe_radius[0] << ','
+      << exit_plus_fraction[0] << ',' << exit_minus_fraction[0] << ','
+      << exit_radius[1] << ',' << probe_radius[1] << ','
+      << exit_plus_fraction[1] << ',' << exit_minus_fraction[1] << ','
+      << candidateLabel(candidates, raw_best) << ','
+      << candidateLabel(candidates, consistency_best) << ','
+      << candidateLabel(candidates, nonlocal_best) << ','
+      << candidateLabel(candidates, pseudo_map_best) << ','
+      << elapsedMs(probe_started);
+  if (uobs_valid) vector6Columns(frame_output, u_obs.curvature_eigenvalues);
+  else frame_output << ",\"\"";
+  frame_output << '\n';
+
+  for (const R2Candidate& candidate : candidates) {
+    candidate_output << transaction_id << ',' << stamp_ns << ',' << candidate.label << ','
+        << candidate.eigen_index << ',' << candidate.sign << ',' << candidate.chart_radius
+        << ',' << candidate.registration.effective << ','
+        << paper::currentFrameNdtStatusName(candidate.registration.status) << ','
+        << candidate.registration.iterations << ',' << candidate.registration.alignment_ms
+        << ',' << candidate.pcl_score_per_source << ',' << candidate.nis_valid << ','
+        << candidate.nis << ',' << candidate.pseudo_map_score << ','
+        << candidate.cluster_index << ',' << candidate.cluster_probe_support << ','
+        << candidate.cluster_supported;
+    poseColumns(candidate_output, candidate.initial_pose);
+    poseColumns(candidate_output, candidate.registration.raw_map_T_lidar);
+    if (candidate.eigen_index >= 0 && uobs_valid) {
+      const paper::DualUVector6d q = u_obs.curvature_eigenvectors.col(candidate.eigen_index);
+      vector6Columns(candidate_output, q);
+    } else {
+      candidate_output << ",\"\"";
+    }
+    candidate_output << '\n';
+  }
+  return attempted;
+}
+
 void writeCurvatureAudit(paper::CurrentFrameNdtRegistration* registration,
     uint64_t transaction_id, uint64_t stamp_ns, const paper::Pose3d& pose,
     const paper::WithinBasinObservability& u_obs, std::ostream& output) {
@@ -176,6 +488,8 @@ void writeCurvatureAudit(paper::CurrentFrameNdtRegistration* registration,
 int main(int argc, char** argv) {
   uint64_t transaction = 0;
   try {
+    const bool r2_sparse_probe = argc == 14 &&
+        std::string(argv[12]) == "--r2-sparse-probe";
     const bool dual_u_shadow = (argc == 14 || argc == 16 || argc == 18) &&
         std::string(argv[12]) == "--dual-u-shadow";
     const bool curvature_audit = (argc == 16 || argc == 18) &&
@@ -187,8 +501,8 @@ int main(int argc, char** argv) {
           "RAW_TIMED_SCAN_INDEX_CSV RAW_TIMED_POINTS_BIN MAP_PCD PARAMS_TXT "
           "TRAJECTORY_CSV REGISTRATION_CSV RUNTIME_CSV FRAME_LIMIT INITIALIZATION_STAMP_NS "
           "[--dual-u-shadow DUAL_U_CSV [--curvature-audit CURVATURE_CSV "
-          "[--objective-export DIR]]]");
-    if ((argc == 14 && !dual_u_shadow) ||
+          "[--objective-export DIR]]] [--r2-sparse-probe OUTPUT_PREFIX]");
+    if ((argc == 14 && !dual_u_shadow && !r2_sparse_probe) ||
         (argc == 16 && (!dual_u_shadow || !curvature_audit)) ||
         (argc == 18 && (!dual_u_shadow || !curvature_audit || !objective_export)))
       throw std::runtime_error("invalid_optional_diagnostic_arguments");
@@ -218,13 +532,21 @@ int main(int argc, char** argv) {
     std::ofstream dual_u_output;
     std::ofstream curvature_output;
     std::ofstream objective_export_output;
+    std::ofstream r2_frame_output;
+    std::ofstream r2_candidate_output;
     const std::string objective_export_dir = objective_export ? argv[17] : std::string();
+    const std::string r2_output_prefix = r2_sparse_probe ? argv[13] : std::string();
     if (dual_u_shadow) dual_u_output.open(argv[13]);
     if (curvature_audit) curvature_output.open(argv[15]);
     if (objective_export) objective_export_output.open(objective_export_dir + "/cohort.csv");
+    if (r2_sparse_probe) {
+      r2_frame_output.open(r2_output_prefix + ".frames.csv");
+      r2_candidate_output.open(r2_output_prefix + ".candidates.csv");
+    }
     if (!trajectory || !observations || !runtime ||
         (dual_u_shadow && !dual_u_output) || (curvature_audit && !curvature_output) ||
-        (objective_export && !objective_export_output))
+        (objective_export && !objective_export_output) ||
+        (r2_sparse_probe && (!r2_frame_output || !r2_candidate_output)))
       throw std::runtime_error("cannot_create_outputs");
     trajectory.exceptions(std::ios::badbit | std::ios::failbit);
     observations.exceptions(std::ios::badbit | std::ios::failbit);
@@ -240,6 +562,26 @@ int main(int argc, char** argv) {
              "source_point_count,changed_points_plus,changed_fraction_plus,changed_points_minus,"
              "changed_fraction_minus,center_memberships,perturbed_memberships_plus,"
              "membership_symdiff_plus,perturbed_memberships_minus,membership_symdiff_minus\n";
+    }
+    if (r2_sparse_probe) {
+      r2_frame_output.exceptions(std::ios::badbit | std::ios::failbit);
+      r2_candidate_output.exceptions(std::ios::badbit | std::ios::failbit);
+      r2_frame_output << std::setprecision(17)
+          << "transaction_id,stamp_ns,nominal_effective,uobs_valid,probe_trigger,source_points,"
+             "weak_direction_count,extra_align_attempted,extra_align_converged,terminal_cluster_count,"
+             "supported_alternative_clusters,singleton_alternative_clusters,unresolved_status,"
+             "q0_exit_radius,q0_probe_radius,q0_changed_fraction_plus,q0_changed_fraction_minus,"
+             "q1_exit_radius,q1_probe_radius,q1_changed_fraction_plus,q1_changed_fraction_minus,"
+             "raw_score_selection,"
+             "predictor_consistency_selection,nonlocal_supported_selection,pseudo_map_selection,"
+             "diagnostic_ms,u_obs_eigenvalues_ascending\n";
+      r2_candidate_output << std::setprecision(17)
+          << "transaction_id,stamp_ns,candidate_label,eigen_index,sign,chart_radius,ndt_effective,"
+             "ndt_status,iterations,alignment_ms,pcl_score_per_source,nis_valid,nis,"
+             "pseudo_map_score,cluster_index,cluster_probe_support,cluster_supported,"
+             "initial_x,initial_y,initial_z,initial_qx,initial_qy,initial_qz,initial_qw,"
+             "terminal_x,terminal_y,terminal_z,terminal_qx,terminal_qy,terminal_qz,terminal_qw,"
+             "direction_q0_q1_q2_q3_q4_q5\n";
     }
     trajectory << std::setprecision(17)
         << "transaction_id,stamp_ns,predicted_imu_x,predicted_imu_y,predicted_imu_z,"
@@ -280,6 +622,9 @@ int main(int argc, char** argv) {
     }
     uint64_t updates = 0;
     uint64_t objective_export_frames = 0;
+    uint64_t r2_diagnostic_frames = 0;
+    uint64_t r2_extra_alignments = 0;
+    double r2_diagnostic_ms_total = 0.0;
     paper::ScanEndProcessor scan_processor;
     for (uint64_t index = 0; index < limit; ++index) {
       const auto& scan = scans.at(index);
@@ -319,6 +664,15 @@ int main(int argc, char** argv) {
                               scan_end.predicted_map_T_lidar, &result, &reason))
         throw std::runtime_error("registration_internal_error:" + reason);
       const double ndt_total_ms = elapsedMs(ndt_start);
+      if (r2_sparse_probe && isP5I1CohortFrame(transaction)) {
+        const auto r2_start = Clock::now();
+        r2_extra_alignments += static_cast<uint64_t>(writeR2SparseProbe(
+            transaction, scan.scan_end_ns, &frontend, extrinsic,
+            parameters, &registration, cloud, result, scan_end.predicted_map_T_lidar,
+            r2_frame_output, r2_candidate_output));
+        r2_diagnostic_ms_total += elapsedMs(r2_start);
+        ++r2_diagnostic_frames;
+      }
       if (objective_export && isP5I1CohortFrame(transaction)) {
         const std::string cloud_file = objective_export_dir + "/raw_tx_" +
             std::to_string(transaction) + ".xyzf";
@@ -417,12 +771,19 @@ int main(int argc, char** argv) {
     if (dual_u_shadow) dual_u_output.close();
     if (curvature_audit) curvature_output.close();
     if (objective_export) objective_export_output.close();
+    if (r2_sparse_probe) {
+      r2_frame_output.close();
+      r2_candidate_output.close();
+    }
     if (objective_export && objective_export_frames != 32)
       throw std::runtime_error("P5_I1_COHORT_EXPORT_COUNT_MISMATCH:" +
           std::to_string(objective_export_frames));
     std::cout << "frames=" << limit << " lidar_updates=" << updates
               << " prediction_only=" << limit - updates << " state_finite=true"
-              << " objective_export_frames=" << objective_export_frames << '\n';
+              << " objective_export_frames=" << objective_export_frames
+              << " r2_diagnostic_frames=" << r2_diagnostic_frames
+              << " r2_extra_alignments=" << r2_extra_alignments
+              << " r2_diagnostic_ms=" << r2_diagnostic_ms_total << '\n';
     return 0;
   } catch (const std::exception& error) {
     std::cerr << "FIRST_BAD_TX=" << transaction << " error=" << error.what() << '\n';
