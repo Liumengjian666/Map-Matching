@@ -116,6 +116,8 @@ struct R2Candidate {
   bool nis_valid = false;
   double nis = std::numeric_limits<double>::quiet_NaN();
   double pseudo_map_score = std::numeric_limits<double>::quiet_NaN();
+  bool counterfactual_update_valid = false;
+  paper::Pose3d counterfactual_corrected_map_T_imu;
   int cluster_index = -1;
   int cluster_probe_support = 0;
   bool cluster_supported = false;
@@ -191,6 +193,19 @@ bool evaluateR2Candidate(paper::FastLio2IkfomFrontend* frontend,
     return false;
   candidate->pcl_score_per_source = objective.score_sum /
       static_cast<double>(objective.source_point_count);
+  const paper::Pose3d measurement = paper::lidarMeasurementToImu(
+      candidate->registration.raw_map_T_lidar, extrinsic);
+  std::unique_ptr<paper::FastLio2IkfomFrontend> counterfactual =
+      frontend->cloneCandidate();
+  paper::PoseCorrectionDelta correction;
+  std::string update_reason;
+  if (counterfactual && counterfactual->applyPoseMeasurement(
+          measurement, &correction, &update_reason)) {
+    candidate->counterfactual_corrected_map_T_imu = counterfactual->getState().map_T_imu;
+    candidate->counterfactual_update_valid =
+        candidate->counterfactual_corrected_map_T_imu.position.allFinite() &&
+        candidate->counterfactual_corrected_map_T_imu.orientation.coeffs().allFinite();
+  }
   Eigen::Matrix<double, 6, 6> measurement_noise =
       Eigen::Matrix<double, 6, 6>::Zero();
   measurement_noise.diagonal().head<3>().setConstant(
@@ -199,7 +214,7 @@ bool evaluateR2Candidate(paper::FastLio2IkfomFrontend* frontend,
       parameters.pose_rotation_sigma_rad * parameters.pose_rotation_sigma_rad);
   paper::ProjectedPoseInnovation innovation;
   if (!frontend->evaluateProjectedPoseInnovationLinearized(
-          paper::lidarMeasurementToImu(candidate->registration.raw_map_T_lidar, extrinsic),
+          measurement,
           measurement_noise, Eigen::Matrix<double, 6, 6>::Identity(), 6,
           paper::ProjectedPoseLinearizationMode::EXACT_LOG_RESIDUAL,
           &innovation, reason) || !innovation.valid || !std::isfinite(innovation.nis))
@@ -402,9 +417,13 @@ int writeR2SparseProbe(uint64_t transaction_id, uint64_t stamp_ns,
         << ',' << candidate.pcl_score_per_source << ',' << candidate.nis_valid << ','
         << candidate.nis << ',' << candidate.pseudo_map_score << ','
         << candidate.cluster_index << ',' << candidate.cluster_probe_support << ','
-        << candidate.cluster_supported;
+        << candidate.cluster_supported << ',' << candidate.counterfactual_update_valid;
     poseColumns(candidate_output, candidate.initial_pose);
     poseColumns(candidate_output, candidate.registration.raw_map_T_lidar);
+    if (candidate.counterfactual_update_valid)
+      poseColumns(candidate_output, candidate.counterfactual_corrected_map_T_imu);
+    else
+      candidate_output << ",,,,,,,";
     if (candidate.eigen_index >= 0 && uobs_valid) {
       const paper::DualUVector6d q = u_obs.curvature_eigenvectors.col(candidate.eigen_index);
       vector6Columns(candidate_output, q);
@@ -579,8 +598,11 @@ int main(int argc, char** argv) {
           << "transaction_id,stamp_ns,candidate_label,eigen_index,sign,chart_radius,ndt_effective,"
              "ndt_status,iterations,alignment_ms,pcl_score_per_source,nis_valid,nis,"
              "pseudo_map_score,cluster_index,cluster_probe_support,cluster_supported,"
+             "counterfactual_update_valid,"
              "initial_x,initial_y,initial_z,initial_qx,initial_qy,initial_qz,initial_qw,"
              "terminal_x,terminal_y,terminal_z,terminal_qx,terminal_qy,terminal_qz,terminal_qw,"
+             "counterfactual_imu_x,counterfactual_imu_y,counterfactual_imu_z,"
+             "counterfactual_imu_qx,counterfactual_imu_qy,counterfactual_imu_qz,counterfactual_imu_qw,"
              "direction_q0_q1_q2_q3_q4_q5\n";
     }
     trajectory << std::setprecision(17)
