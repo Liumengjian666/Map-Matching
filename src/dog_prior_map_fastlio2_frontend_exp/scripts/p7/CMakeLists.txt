@@ -32,6 +32,12 @@ target_include_directories(p7_dual_u_architecture PUBLIC "${PACKAGE_ROOT}/includ
 target_link_libraries(p7_dual_u_architecture PUBLIC Eigen3::Eigen)
 target_compile_options(p7_dual_u_architecture PRIVATE -Wall -Wextra -Wpedantic)
 
+add_library(p7_dual_u_r2_sparse_probe STATIC
+  "${PACKAGE_ROOT}/src/dual_u_r2_sparse_probe.cpp")
+target_include_directories(p7_dual_u_r2_sparse_probe PUBLIC "${PACKAGE_ROOT}/include")
+target_link_libraries(p7_dual_u_r2_sparse_probe PUBLIC p7_dual_u_architecture Eigen3::Eigen)
+target_compile_options(p7_dual_u_r2_sparse_probe PRIVATE -Wall -Wextra -Wpedantic)
+
 enable_testing()
 add_executable(current_frame_ndt_test "${PACKAGE_ROOT}/tests/current_frame_ndt_test.cpp")
 target_include_directories(current_frame_ndt_test PRIVATE ${PCL_INCLUDE_DIRS})
@@ -50,6 +56,11 @@ add_test(NAME p7_replay_io_test COMMAND p7_replay_io_test)
 add_executable(dual_u_architecture_test "${PACKAGE_ROOT}/tests/dual_u_architecture_test.cpp")
 target_link_libraries(dual_u_architecture_test PRIVATE p7_dual_u_architecture Eigen3::Eigen)
 add_test(NAME dual_u_architecture_test COMMAND dual_u_architecture_test)
+
+add_executable(dual_u_r2_sparse_probe_test
+  "${PACKAGE_ROOT}/tests/dual_u_r2_sparse_probe_test.cpp")
+target_link_libraries(dual_u_r2_sparse_probe_test PRIVATE p7_dual_u_r2_sparse_probe)
+add_test(NAME dual_u_r2_sparse_probe_test COMMAND dual_u_r2_sparse_probe_test)
 
 add_executable(p7_single_state_runner p7_single_state_runner.cpp
   "${PACKAGE_ROOT}/src/fastlio2_frontend_ikfom.cpp"
