@@ -49,6 +49,25 @@ struct WithinBasinObservability {
       std::numeric_limits<double>::quiet_NaN());
 };
 
+struct UobsCovarianceInflation {
+  bool valid = false;
+  bool applied = false;
+  std::string status = "UNINITIALIZED";
+  double weak_weight_floor = 0.25;
+  DualUMatrix6d chart_to_residual_jacobian = DualUMatrix6d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+  DualUMatrix6d baseline_covariance = DualUMatrix6d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+  DualUMatrix6d effective_covariance = DualUMatrix6d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+  DualUVector6d relative_curvature = DualUVector6d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+  DualUVector6d directional_reliability = DualUVector6d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+  DualUVector6d directional_variance_inflation = DualUVector6d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+};
+
 bool buildMapProductChartPullback(const Pose3d& map_T_lidar,
     const Eigen::Vector3d& pcl_euler_xyz, double length_scale_m,
     ProductChartPullback* output, std::string* reason);
@@ -68,6 +87,21 @@ Pose3d applyMapProductChartIncrement(const Pose3d& map_T_lidar,
 // origin. For this product chart: eta_imu = G * eta_lidar.
 DualUMatrix6d lidarOriginToImuOriginTangentMap(
     const Eigen::Vector3d& r_map_imu_to_lidar, double length_scale_m);
+
+// Add conservative, U_obs-directed measurement-noise inflation. The input
+// covariance is the existing EKF residual-coordinate R0. U_obs uses
+// eta=[delta_t_map/L, delta_theta_map] at the LiDAR origin; the returned
+// covariance is mapped into [map position residual, log(R_pred^-1 R_meas)]
+// coordinates. No curvature-to-covariance calibration is assumed.
+bool buildUobsInflatedPoseMeasurementCovariance(
+    const WithinBasinObservability& u_obs,
+    const Pose3d& map_T_lidar_measurement,
+    const Pose3d& map_T_imu_prediction,
+    const Pose3d& map_T_imu_measurement,
+    const DualUMatrix6d& baseline_covariance,
+    double weak_weight_floor,
+    UobsCovarianceInflation* output,
+    std::string* reason);
 
 struct NdtObjectiveProvenance {
   std::string backend = "PCL_1.10_NDT";

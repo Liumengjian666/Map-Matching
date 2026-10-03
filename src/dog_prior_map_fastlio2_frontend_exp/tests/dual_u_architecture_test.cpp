@@ -22,6 +22,25 @@ Pose3d poseFrom(const Eigen::Vector3d& position, const Eigen::Vector3d& axis,
   return pose;
 }
 
+Pose3d composePose(const Pose3d& lhs, const Pose3d& rhs) {
+  Pose3d result;
+  result.position = lhs.position + lhs.orientation * rhs.position;
+  result.orientation = (lhs.orientation * rhs.orientation).normalized();
+  return result;
+}
+
+Eigen::Matrix<double, 6, 1> exactPoseResidual(const Pose3d& prediction,
+                                               const Pose3d& measurement) {
+  Eigen::Matrix<double, 6, 1> residual;
+  residual.head<3>() = measurement.position - prediction.position;
+  Eigen::Quaterniond q = (prediction.orientation.conjugate() *
+      measurement.orientation).normalized();
+  if (q.w() < 0.0) q.coeffs() *= -1.0;
+  const Eigen::AngleAxisd angle_axis(q);
+  residual.tail<3>() = angle_axis.axis() * angle_axis.angle();
+  return residual;
+}
+
 Eigen::Vector3d eulerAtEta(const Pose3d& base, const DualUVector6d& eta) {
   const double angle = eta.tail<3>().norm();
   const Eigen::Matrix3d delta = angle < 1e-14
@@ -151,6 +170,116 @@ void testLidarImuReferenceTransport() {
       "reference-point Hessian transport changed physical directional curvature");
 }
 
+void testUobsChartToEkfResidualJacobian() {
+  const double length_scale = 0.8;
+  const Pose3d map_T_lidar = poseFrom(Eigen::Vector3d(2.0, -0.7, 0.4),
+      Eigen::Vector3d(0.3, -0.4, 1.0), 0.42);
+  const Pose3d lidar_T_imu = poseFrom(Eigen::Vector3d(0.23, -0.11, 0.06),
+      Eigen::Vector3d(1.0, 0.2, -0.1), 0.17);
+  const Pose3d map_T_imu_measurement = composePose(map_T_lidar, lidar_T_imu);
+  Pose3d map_T_imu_prediction = map_T_imu_measurement;
+  map_T_imu_prediction.position += Eigen::Vector3d(-0.12, 0.06, 0.03);
+  map_T_imu_prediction.orientation =
+      (Eigen::Quaterniond(Eigen::AngleAxisd(0.31,
+          Eigen::Vector3d(0.4, -0.1, 0.8).normalized())) *
+       map_T_imu_measurement.orientation).normalized();
+
+  WithinBasinObservability u_obs;
+  u_obs.valid = true;
+  u_obs.locally_convex = true;
+  u_obs.length_scale_m = length_scale;
+  u_obs.curvature_eigenvalues << 0.01, 0.02, 0.1, 0.3, 0.7, 1.0;
+  // Use a genuinely coupled orthonormal basis, not the canonical axes.
+  u_obs.curvature_eigenvectors.setIdentity();
+  for (int index = 0; index < 5; ++index) {
+    const double angle = 0.13 * static_cast<double>(index + 1);
+    DualUMatrix6d plane_rotation = DualUMatrix6d::Identity();
+    plane_rotation(index, index) = std::cos(angle);
+    plane_rotation(index + 1, index + 1) = std::cos(angle);
+    plane_rotation(index, index + 1) = -std::sin(angle);
+    plane_rotation(index + 1, index) = std::sin(angle);
+    u_obs.curvature_eigenvectors *= plane_rotation;
+  }
+
+  DualUMatrix6d baseline = DualUMatrix6d::Zero();
+  baseline.diagonal() << 0.04, 0.05, 0.06, 0.01, 0.012, 0.014;
+  UobsCovarianceInflation result;
+  std::string reason;
+  require(buildUobsInflatedPoseMeasurementCovariance(u_obs, map_T_lidar,
+      map_T_imu_prediction, map_T_imu_measurement, baseline, 0.25,
+      &result, &reason), "U_obs covariance mapping rejected valid inputs");
+  require(result.valid && result.applied && reason.empty(),
+      "valid weak-direction spectrum did not produce an inflation");
+  require((result.effective_covariance - result.effective_covariance.transpose()).norm() < 1e-12,
+      "effective measurement covariance is not symmetric");
+  Eigen::LLT<DualUMatrix6d> effective_factor(result.effective_covariance);
+  require(effective_factor.info() == Eigen::Success,
+      "effective measurement covariance is not positive definite");
+  Eigen::SelfAdjointEigenSolver<DualUMatrix6d> added_eigenvalues(
+      result.effective_covariance - baseline);
+  require(added_eigenvalues.info() == Eigen::Success &&
+      added_eigenvalues.eigenvalues().minCoeff() >= -1e-11,
+      "U_obs reduced baseline measurement covariance in some direction");
+
+  const DualUMatrix6d analytic = result.chart_to_residual_jacobian;
+  Eigen::Matrix<double, 6, 6> finite_difference;
+  const double step = 2e-7;
+  for (int column = 0; column < 6; ++column) {
+    DualUVector6d eta = DualUVector6d::Zero();
+    eta(column) = step;
+    const Pose3d plus_lidar = applyMapProductChartIncrement(
+        map_T_lidar, eta, length_scale);
+    const Pose3d minus_lidar = applyMapProductChartIncrement(
+        map_T_lidar, -eta, length_scale);
+    const Pose3d plus_imu = composePose(plus_lidar, lidar_T_imu);
+    const Pose3d minus_imu = composePose(minus_lidar, lidar_T_imu);
+    finite_difference.col(column) =
+        (exactPoseResidual(map_T_imu_prediction, plus_imu) -
+         exactPoseResidual(map_T_imu_prediction, minus_imu)) / (2.0 * step);
+  }
+  require((finite_difference - analytic).norm() < 2e-6,
+      "chart-to-EKF residual Jacobian disagrees with central finite differences");
+
+  const DualUMatrix6d residual_to_chart = analytic.inverse();
+  const DualUMatrix6d baseline_chart = residual_to_chart * baseline *
+      residual_to_chart.transpose();
+  const DualUMatrix6d effective_chart = residual_to_chart * result.effective_covariance *
+      residual_to_chart.transpose();
+  for (int index = 0; index < 6; ++index) {
+    const DualUVector6d q = u_obs.curvature_eigenvectors.col(index);
+    const double before = q.dot(baseline_chart * q);
+    const double after = q.dot(effective_chart * q);
+    require(std::abs(after / before - result.directional_variance_inflation(index)) < 1e-9,
+        "chart directional variance did not follow the declared bounded inflation");
+  }
+  require(result.directional_variance_inflation.minCoeff() >= 1.0 &&
+      result.directional_variance_inflation.maxCoeff() <= 4.0 + 1e-12 &&
+      std::abs(result.directional_variance_inflation(5) - 1.0) < 1e-12,
+      "directional inflation exceeded the fixed floor/cap contract");
+}
+
+void testUobsInvalidFailsClosedToBaselineCovariance() {
+  const Pose3d map_T_lidar = poseFrom(Eigen::Vector3d(0.5, 0.1, -0.2),
+      Eigen::Vector3d::UnitZ(), 0.2);
+  const Pose3d map_T_imu = poseFrom(Eigen::Vector3d(0.6, 0.0, -0.1),
+      Eigen::Vector3d::UnitZ(), 0.25);
+  DualUMatrix6d baseline = DualUMatrix6d::Identity();
+  baseline.diagonal() << 0.04, 0.04, 0.04, 0.01, 0.01, 0.01;
+  WithinBasinObservability invalid;
+  invalid.valid = true;
+  invalid.locally_convex = false;
+  invalid.length_scale_m = 0.8;
+  UobsCovarianceInflation result;
+  std::string reason;
+  require(buildUobsInflatedPoseMeasurementCovariance(invalid, map_T_lidar,
+      map_T_imu, map_T_imu, baseline, 0.25, &result, &reason),
+      "invalid U_obs should fail closed rather than reject the baseline measurement");
+  require(result.valid && !result.applied &&
+      result.status == "UOBS_INVALID_OR_NONCONVEX_BASELINE_COVARIANCE_USED" &&
+      result.effective_covariance.isApprox(baseline, 0.0),
+      "invalid U_obs did not preserve the exact baseline covariance");
+}
+
 NdtObjectiveProvenance matchingObjective() {
   NdtObjectiveProvenance p;
   p.map_sha256 = "map-sha";
@@ -247,6 +376,8 @@ int main() {
     testChartSingularityFailsClosed();
     testEulerBranchContinuityNearZeroPitch();
     testLidarImuReferenceTransport();
+    testUobsChartToEkfResidualJacobian();
+    testUobsInvalidFailsClosedToBaselineCovariance();
     testCandidateConditionedStatusesAndProvenance();
     testNoGroundTruthInputSurface();
     std::cout << "dual_u_architecture_test PASS\n";
