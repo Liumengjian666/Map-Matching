@@ -27,11 +27,16 @@ target_include_directories(p7_current_frame_ndt PUBLIC "${PACKAGE_ROOT}/include"
 target_link_libraries(p7_current_frame_ndt PUBLIC Eigen3::Eigen PRIVATE ${PCL_LIBRARIES})
 target_compile_options(p7_current_frame_ndt PRIVATE ${PCL_DEFINITIONS} -Wall -Wextra -Wpedantic)
 
+add_library(p7_dual_u_architecture STATIC "${PACKAGE_ROOT}/src/dual_u_architecture.cpp")
+target_include_directories(p7_dual_u_architecture PUBLIC "${PACKAGE_ROOT}/include")
+target_link_libraries(p7_dual_u_architecture PUBLIC Eigen3::Eigen)
+target_compile_options(p7_dual_u_architecture PRIVATE -Wall -Wextra -Wpedantic)
+
 enable_testing()
 add_executable(current_frame_ndt_test "${PACKAGE_ROOT}/tests/current_frame_ndt_test.cpp")
 target_include_directories(current_frame_ndt_test PRIVATE ${PCL_INCLUDE_DIRS})
 target_link_libraries(current_frame_ndt_test PRIVATE
-  p7_current_frame_ndt ${PCL_LIBRARIES} ${USB_10_LIBRARY})
+  p7_current_frame_ndt p7_dual_u_architecture ${PCL_LIBRARIES} ${USB_10_LIBRARY})
 add_test(NAME current_frame_ndt_test COMMAND current_frame_ndt_test)
 
 add_library(p7_replay_io STATIC "${PACKAGE_ROOT}/src/p7_replay_io.cpp")
@@ -42,6 +47,10 @@ add_executable(p7_replay_io_test "${PACKAGE_ROOT}/tests/p7_replay_io_test.cpp")
 target_link_libraries(p7_replay_io_test PRIVATE p7_replay_io)
 add_test(NAME p7_replay_io_test COMMAND p7_replay_io_test)
 
+add_executable(dual_u_architecture_test "${PACKAGE_ROOT}/tests/dual_u_architecture_test.cpp")
+target_link_libraries(dual_u_architecture_test PRIVATE p7_dual_u_architecture Eigen3::Eigen)
+add_test(NAME dual_u_architecture_test COMMAND dual_u_architecture_test)
+
 add_executable(p7_single_state_runner p7_single_state_runner.cpp
   "${PACKAGE_ROOT}/src/fastlio2_frontend_ikfom.cpp"
   "${PACKAGE_ROOT}/src/registration_geometry.cpp"
@@ -49,5 +58,5 @@ add_executable(p7_single_state_runner p7_single_state_runner.cpp
   "${PACKAGE_ROOT}/src/lidar_deskew_geometry.cpp")
 target_include_directories(p7_single_state_runner PRIVATE "${FASTLIO2_INCLUDE_DIR}")
 target_link_libraries(p7_single_state_runner PRIVATE
-  p7_current_frame_ndt p7_replay_io Eigen3::Eigen OpenMP::OpenMP_CXX
+  p7_current_frame_ndt p7_replay_io p7_dual_u_architecture Eigen3::Eigen OpenMP::OpenMP_CXX
   ${PCL_LIBRARIES} ${USB_10_LIBRARY})

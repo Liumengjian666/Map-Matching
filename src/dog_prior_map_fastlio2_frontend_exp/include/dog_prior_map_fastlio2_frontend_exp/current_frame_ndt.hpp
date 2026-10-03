@@ -2,6 +2,7 @@
 
 #include "dog_prior_map_fastlio2_frontend_exp/frontend_types.hpp"
 
+#include <Eigen/Core>
 #include <cstddef>
 #include <cstdint>
 #include <array>
@@ -68,14 +69,45 @@ struct CurrentFrameNdtResult {
   Pose3d raw_map_T_lidar;
 };
 
+struct PclNdtScoreJet {
+  bool valid = false;
+  std::string status = "UNINITIALIZED";
+  double score_sum = std::numeric_limits<double>::quiet_NaN();
+  std::uint64_t source_point_count = 0;
+  Eigen::Vector3d pcl_euler_xyz = Eigen::Vector3d::Constant(
+      std::numeric_limits<double>::quiet_NaN());
+  Eigen::Matrix<double, 6, 1> score_gradient =
+      Eigen::Matrix<double, 6, 1>::Constant(std::numeric_limits<double>::quiet_NaN());
+  Eigen::Matrix<double, 6, 6> score_hessian =
+      Eigen::Matrix<double, 6, 6>::Constant(std::numeric_limits<double>::quiet_NaN());
+};
+
+struct NdtObjectiveSample {
+  bool valid = false;
+  std::string status = "UNINITIALIZED";
+  double score_sum = std::numeric_limits<double>::quiet_NaN();
+  std::uint64_t source_point_count = 0;
+  std::uint64_t target_neighborhood_hash = 0;
+  std::uint64_t target_neighborhood_cell_count = 0;
+};
+
 class CurrentFrameNdtRegistration {
  public:
   explicit CurrentFrameNdtRegistration(const CurrentFrameNdtParameters& parameters);
   ~CurrentFrameNdtRegistration();
   bool loadMap(const std::string& pcd_path, std::string* reason);
   bool ready() const;
+  const CurrentFrameNdtParameters& parameters() const;
   std::size_t targetPointCount() const;
   std::array<float, 3> targetGridLeafSizeMeters() const;
+  // Diagnostic-only access to the same PCL NDT score jet at a fixed pose.
+  // It never changes a frontend/filter state or an NDT terminal transform.
+  bool evaluateLocalScoreJetAtPose(const Pose3d& map_T_lidar,
+      PclNdtScoreJet* result, std::string* reason);
+  // Fixed-pose objective and radius-search support signature for offline
+  // finite-difference checks. The signature detects neighborhood-set changes.
+  bool evaluateLocalObjectiveAtPose(const Pose3d& map_T_lidar,
+      NdtObjectiveSample* result, std::string* reason);
   bool align(uint64_t stamp_ns, const RegistrationCloud& raw_cloud,
       const Pose3d& initial_map_T_lidar, CurrentFrameNdtResult* result,
       std::string* reason);

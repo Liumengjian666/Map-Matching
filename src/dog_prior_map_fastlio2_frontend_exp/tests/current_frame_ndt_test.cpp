@@ -1,8 +1,10 @@
 #include "dog_prior_map_fastlio2_frontend_exp/current_frame_ndt.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/dual_u_architecture.hpp"
 
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
 
+#include <array>
 #include <cmath>
 #include <cstring>
 #include <iostream>
@@ -90,8 +92,11 @@ void testActualNdt() {
   require(!ndt.align(1, source, truth, &result, &reason), "unloaded map accepted");
   require(ndt.loadMap(path, &reason) && ndt.ready() && ndt.targetPointCount() > 0, "map loading failed");
   const auto target_leaf = ndt.targetGridLeafSizeMeters();
+  const double configured_resolution_m = ndt.parameters().resolution_m;
+  require(std::abs(configured_resolution_m - 0.8) < 1e-12,
+          "frozen NDT resolution contract is not 0.8 m");
   for (float axis_leaf : target_leaf)
-    require(std::abs(axis_leaf - 0.8f) < 1e-7f,
+    require(std::abs(axis_leaf - configured_resolution_m) < 1e-7f,
             "actual PCL target grid leaf size differs from configured 0.8 m resolution");
   std::cout << "actual PCL target grid leaf size=" << target_leaf[0] << ','
             << target_leaf[1] << ',' << target_leaf[2] << " m\n";
@@ -106,6 +111,57 @@ void testActualNdt() {
   require(result.effective && result.iterations > 0 && result.iterations < 80, "fixture did not effectively converge");
   const uint64_t hash = result.source_cloud_hash;
   const std::size_t count = result.source_point_count;
+  PclNdtScoreJet jet;
+  require(ndt.evaluateLocalScoreJetAtPose(result.raw_map_T_lidar, &jet, &reason) &&
+      jet.valid && jet.source_point_count == result.source_point_count,
+      "PCL local score jet evaluation failed");
+  WithinBasinObservability local;
+  const bool observability_ok = analyzeWithinBasinObservability(jet, result.raw_map_T_lidar,
+      Eigen::Vector3d(target_leaf[0], target_leaf[1], target_leaf[2]),
+      configured_resolution_m, &local, &reason) && local.valid;
+  if (!observability_ok) std::cerr << "UOBS_REASON=" << reason << '\n';
+  require(observability_ok, "within-basin observability analysis failed");
+  NdtObjectiveSample center;
+  require(ndt.evaluateLocalObjectiveAtPose(result.raw_map_T_lidar, &center, &reason) &&
+      center.valid, "base PCL NDT objective sample failed");
+  bool support_change_observed = false;
+  bool same_support_pair_seen = false;
+  bool stable_fd_validated = false;
+  const auto inspectFiniteDifferenceSupport = [&](int eigen_index) {
+    const DualUVector6d direction = local.curvature_eigenvectors.col(eigen_index);
+    for (double step : {0.02, 0.01, 0.005, 0.0025, 0.001}) {
+      const Pose3d positive_pose = applyMapProductChartIncrement(
+          result.raw_map_T_lidar, step * direction, local.length_scale_m);
+      const Pose3d negative_pose = applyMapProductChartIncrement(
+          result.raw_map_T_lidar, -step * direction, local.length_scale_m);
+      NdtObjectiveSample positive, negative;
+      if (!ndt.evaluateLocalObjectiveAtPose(positive_pose, &positive, &reason) ||
+          !ndt.evaluateLocalObjectiveAtPose(negative_pose, &negative, &reason))
+        continue;
+      if (positive.target_neighborhood_hash != center.target_neighborhood_hash ||
+          negative.target_neighborhood_hash != center.target_neighborhood_hash) {
+        support_change_observed = true;
+        continue;
+      }
+      same_support_pair_seen = true;
+      const double n_source = static_cast<double>(center.source_point_count);
+      const double l0 = -center.score_sum / n_source;
+      const double lp = -positive.score_sum / n_source;
+      const double lm = -negative.score_sum / n_source;
+      const double fd = (lp - 2.0 * l0 + lm) / (step * step);
+      const double analytic = local.curvature_eigenvalues(eigen_index);
+      const double scale = std::max({1.0, std::abs(fd), std::abs(analytic)});
+      if (std::isfinite(fd) && std::isfinite(analytic) && fd * analytic > 0.0 &&
+          std::abs(fd - analytic) / scale < 0.35)
+        stable_fd_validated = true;
+    }
+  };
+  inspectFiniteDifferenceSupport(0);
+  inspectFiniteDifferenceSupport(5);
+  require(stable_fd_validated || (support_change_observed && !same_support_pair_seen),
+      "PCL objective finite difference failed within unchanged target-neighborhood support");
+  if (support_change_observed && !stable_fd_validated)
+    std::cout << "real_fixture_directional_fd=INVALID_TARGET_NEIGHBORHOOD_CHANGED\n";
   require(ndt.align(3, source, seed, &result, &reason) && result.source_cloud_hash == hash &&
       result.source_point_count == count, "actual NDT source nondeterminism");
   std::cout << "actual PCL NDT PASS iterations=" << result.iterations << " count=" << count << '\n';

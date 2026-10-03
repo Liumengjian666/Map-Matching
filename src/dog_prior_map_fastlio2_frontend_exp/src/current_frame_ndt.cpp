@@ -10,7 +10,9 @@
 #include <chrono>
 #include <cmath>
 #include <cstring>
+#include <cstdint>
 #include <stdexcept>
+#include <vector>
 
 namespace dog_prior_map_fastlio2_frontend_exp {
 namespace {
@@ -21,6 +23,81 @@ class ObservableNdt : public pcl::NormalDistributionsTransform<Point, Point> {
   std::array<float, 3> targetGridLeafSizeMeters() const {
     const Eigen::Vector3f size = this->target_cells_.getLeafSize();
     return {{size.x(), size.y(), size.z()}};
+  }
+
+  bool scoreJetAt(const Cloud::Ptr& source, const Pose3d& pose,
+                  PclNdtScoreJet* output) {
+    if (!source || !output) return false;
+    const Eigen::Matrix4f transform = poseMatrix(pose);
+    Cloud transformed;
+    pcl::transformPointCloud(*source, transformed, transform);
+    Eigen::Transform<float, 3, Eigen::Affine, Eigen::ColMajor> affine;
+    affine.matrix() = transform;
+    const Eigen::Vector3f angles = affine.rotation().eulerAngles(0, 1, 2);
+    Eigen::Matrix<double, 6, 1> p;
+    p << affine.translation().x(), affine.translation().y(), affine.translation().z(),
+         angles.x(), angles.y(), angles.z();
+    Eigen::Matrix<double, 6, 1> gradient;
+    Eigen::Matrix<double, 6, 6> hessian;
+    const double score = this->computeDerivatives(gradient, hessian, transformed, p, true);
+    output->score_sum = score;
+    output->source_point_count = source->size();
+    output->pcl_euler_xyz = angles.cast<double>();
+    output->score_gradient = gradient;
+    output->score_hessian = hessian;
+    output->valid = std::isfinite(score) && gradient.allFinite() && hessian.allFinite() &&
+        output->pcl_euler_xyz.allFinite() && source->size() > 0;
+    output->status = output->valid ? "PASS_PCL_SCORE_JET" : "NONFINITE_PCL_SCORE_JET";
+    return output->valid;
+  }
+
+  bool objectiveAt(const Cloud::Ptr& source, const Pose3d& pose,
+                   NdtObjectiveSample* output) {
+    if (!source || !output) return false;
+    PclNdtScoreJet jet;
+    if (!scoreJetAt(source, pose, &jet)) {
+      output->status = jet.status;
+      return false;
+    }
+    const Eigen::Matrix4f transform = poseMatrix(pose);
+    Cloud transformed;
+    pcl::transformPointCloud(*source, transformed, transform);
+    std::uint64_t hash = 1469598103934665603ULL;
+    std::uint64_t cell_count = 0;
+    const auto mix = [&hash](std::uint64_t value) {
+      for (int shift = 0; shift < 64; shift += 8)
+        hash = (hash ^ static_cast<std::uint8_t>(value >> shift)) * 1099511628211ULL;
+    };
+    for (const Point& point : transformed.points) {
+      std::vector<TargetGridLeafConstPtr> cells;
+      std::vector<float> distances;
+      this->target_cells_.radiusSearch(point, this->resolution_, cells, distances);
+      std::vector<std::uintptr_t> identities;
+      identities.reserve(cells.size());
+      for (const auto& cell : cells)
+        identities.push_back(reinterpret_cast<std::uintptr_t>(cell));
+      std::sort(identities.begin(), identities.end());
+      mix(static_cast<std::uint64_t>(identities.size()));
+      for (std::uintptr_t identity : identities) mix(static_cast<std::uint64_t>(identity));
+      cell_count += identities.size();
+    }
+    output->score_sum = jet.score_sum;
+    output->source_point_count = jet.source_point_count;
+    output->target_neighborhood_hash = hash;
+    output->target_neighborhood_cell_count = cell_count;
+    output->valid = std::isfinite(output->score_sum) && output->source_point_count > 0;
+    output->status = output->valid ? "PASS_FIXED_POSE_NDT_OBJECTIVE" :
+                                     "INVALID_FIXED_POSE_NDT_OBJECTIVE";
+    return output->valid;
+  }
+
+ private:
+  static Eigen::Matrix4f poseMatrix(const Pose3d& pose) {
+    Eigen::Matrix4f matrix = Eigen::Matrix4f::Identity();
+    const Eigen::Quaterniond q = pose.orientation.normalized();
+    matrix.block<3, 3>(0, 0) = q.toRotationMatrix().cast<float>();
+    matrix.block<3, 1>(0, 3) = pose.position.cast<float>();
+    return matrix;
   }
 };
 
@@ -137,6 +214,7 @@ struct CurrentFrameNdtRegistration::Impl {
   }
   CurrentFrameNdtParameters parameters;
   Cloud::Ptr target;
+  Cloud::Ptr source;
   ObservableNdt ndt;
 };
 
@@ -174,12 +252,43 @@ bool CurrentFrameNdtRegistration::loadMap(const std::string& path, std::string* 
 }
 
 bool CurrentFrameNdtRegistration::ready() const { return static_cast<bool>(impl_->target); }
+const CurrentFrameNdtParameters& CurrentFrameNdtRegistration::parameters() const {
+  return impl_->parameters;
+}
 std::size_t CurrentFrameNdtRegistration::targetPointCount() const {
   return ready() ? impl_->target->size() : 0;
 }
 std::array<float, 3> CurrentFrameNdtRegistration::targetGridLeafSizeMeters() const {
   return ready() ? impl_->ndt.targetGridLeafSizeMeters()
                  : std::array<float, 3>{{0.0f, 0.0f, 0.0f}};
+}
+
+bool CurrentFrameNdtRegistration::evaluateLocalScoreJetAtPose(
+    const Pose3d& pose, PclNdtScoreJet* result, std::string* reason) {
+  if (reason) reason->clear();
+  if (!result) return fail(reason, "null_score_jet");
+  if (!ready()) return fail(reason, "map_not_loaded");
+  if (!impl_->source) return fail(reason, "no_current_source_cloud");
+  if (!pose.position.allFinite() || !pose.orientation.coeffs().allFinite() ||
+      !std::isfinite(pose.orientation.norm()) || pose.orientation.norm() < 1e-12)
+    return fail(reason, "invalid_score_jet_pose");
+  if (!impl_->ndt.scoreJetAt(impl_->source, pose, result))
+    return fail(reason, result->status);
+  return true;
+}
+
+bool CurrentFrameNdtRegistration::evaluateLocalObjectiveAtPose(
+    const Pose3d& pose, NdtObjectiveSample* result, std::string* reason) {
+  if (reason) reason->clear();
+  if (!result) return fail(reason, "null_objective_sample");
+  if (!ready()) return fail(reason, "map_not_loaded");
+  if (!impl_->source) return fail(reason, "no_current_source_cloud");
+  if (!pose.position.allFinite() || !pose.orientation.coeffs().allFinite() ||
+      !std::isfinite(pose.orientation.norm()) || pose.orientation.norm() < 1e-12)
+    return fail(reason, "invalid_objective_pose");
+  if (!impl_->ndt.objectiveAt(impl_->source, pose, result))
+    return fail(reason, result->status);
+  return true;
 }
 
 bool CurrentFrameNdtRegistration::align(uint64_t stamp_ns, const RegistrationCloud& raw,
@@ -207,6 +316,7 @@ bool CurrentFrameNdtRegistration::align(uint64_t stamp_ns, const RegistrationClo
     source->reserve(prepared.size());
     for (const RegistrationPoint& point : prepared) source->push_back(Point(point.x, point.y, point.z));
     finalize(source);
+    impl_->source = source;
     impl_->ndt.setInputSource(source);
     Eigen::Matrix4d guess = Eigen::Matrix4d::Identity();
     guess.block<3, 3>(0, 0) = initial.orientation.toRotationMatrix();
