@@ -65,3 +65,8 @@ add_executable(dual_u_r1_multistart_runner dual_u_r1_multistart_runner.cpp)
 target_include_directories(dual_u_r1_multistart_runner PRIVATE ${PCL_INCLUDE_DIRS})
 target_link_libraries(dual_u_r1_multistart_runner PRIVATE
   p7_current_frame_ndt Eigen3::Eigen ${PCL_LIBRARIES} ${USB_10_LIBRARY})
+
+add_executable(dual_u_r2b_cross_resolution_runner dual_u_r2b_cross_resolution_runner.cpp)
+target_include_directories(dual_u_r2b_cross_resolution_runner PRIVATE ${PCL_INCLUDE_DIRS})
+target_link_libraries(dual_u_r2b_cross_resolution_runner PRIVATE
+  p7_current_frame_ndt Eigen3::Eigen ${PCL_LIBRARIES} ${USB_10_LIBRARY})
