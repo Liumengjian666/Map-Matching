@@ -176,6 +176,7 @@ void writeCurvatureAudit(paper::CurrentFrameNdtRegistration* registration,
 int main(int argc, char** argv) {
   uint64_t transaction = 0;
   try {
+    const bool uobs_only_mode = argc == 14 && std::string(argv[12]) == "--uobs-only";
     const bool dual_u_shadow = (argc == 14 || argc == 16 || argc == 18) &&
         std::string(argv[12]) == "--dual-u-shadow";
     const bool curvature_audit = (argc == 16 || argc == 18) &&
@@ -186,9 +187,9 @@ int main(int argc, char** argv) {
       throw std::runtime_error("usage: p7_single_state_runner IMU_CSV FILTER_SCANS_CSV "
           "RAW_TIMED_SCAN_INDEX_CSV RAW_TIMED_POINTS_BIN MAP_PCD PARAMS_TXT "
           "TRAJECTORY_CSV REGISTRATION_CSV RUNTIME_CSV FRAME_LIMIT INITIALIZATION_STAMP_NS "
-          "[--dual-u-shadow DUAL_U_CSV [--curvature-audit CURVATURE_CSV "
+          "[--uobs-only UOBS_CSV | --dual-u-shadow DUAL_U_CSV [--curvature-audit CURVATURE_CSV "
           "[--objective-export DIR]]]");
-    if ((argc == 14 && !dual_u_shadow) ||
+    if ((argc == 14 && !dual_u_shadow && !uobs_only_mode) ||
         (argc == 16 && (!dual_u_shadow || !curvature_audit)) ||
         (argc == 18 && (!dual_u_shadow || !curvature_audit || !objective_export)))
       throw std::runtime_error("invalid_optional_diagnostic_arguments");
@@ -216,20 +217,24 @@ int main(int argc, char** argv) {
     if (!registration.loadMap(argv[5], &reason)) throw std::runtime_error("map_load_failed:" + reason);
     std::ofstream trajectory(argv[7]), observations(argv[8]), runtime(argv[9]);
     std::ofstream dual_u_output;
+    std::ofstream uobs_output;
     std::ofstream curvature_output;
     std::ofstream objective_export_output;
     const std::string objective_export_dir = objective_export ? argv[17] : std::string();
     if (dual_u_shadow) dual_u_output.open(argv[13]);
+    if (uobs_only_mode) uobs_output.open(argv[13]);
     if (curvature_audit) curvature_output.open(argv[15]);
     if (objective_export) objective_export_output.open(objective_export_dir + "/cohort.csv");
     if (!trajectory || !observations || !runtime ||
         (dual_u_shadow && !dual_u_output) || (curvature_audit && !curvature_output) ||
+        (uobs_only_mode && !uobs_output) ||
         (objective_export && !objective_export_output))
       throw std::runtime_error("cannot_create_outputs");
     trajectory.exceptions(std::ios::badbit | std::ios::failbit);
     observations.exceptions(std::ios::badbit | std::ios::failbit);
     runtime.exceptions(std::ios::badbit | std::ios::failbit);
     if (dual_u_shadow) dual_u_output.exceptions(std::ios::badbit | std::ios::failbit);
+    if (uobs_only_mode) uobs_output.exceptions(std::ios::badbit | std::ios::failbit);
     if (curvature_audit) {
       curvature_output.exceptions(std::ios::badbit | std::ios::failbit);
       curvature_output << std::setprecision(17)
@@ -268,6 +273,15 @@ int main(int argc, char** argv) {
              "local_curvature_rowmajor,fd_weak_status,fd_weak_relative_error,fd_weak_step,"
              "fd_strong_status,fd_strong_relative_error,fd_strong_step,unonlocal_status,unonlocal_diagnostic,"
              "filter_state_accessed_by_diagnostic\n";
+    }
+    if (uobs_only_mode) {
+      uobs_output << std::setprecision(17)
+          << "transaction_id,stamp_ns,ndt_status,ndt_effective,uobs_valid,uobs_status,"
+             "locally_convex,covariance_inflation_applied,covariance_mapping_status,"
+             "uobs_compute_ms,weak_weight_floor,R0_trace,Reff_trace,added_covariance_trace,"
+             "curvature_eigenvalues,relative_curvature,directional_reliability,"
+             "directional_variance_inflation,chart_to_residual_jacobian_rowmajor,"
+             "effective_covariance_rowmajor,lidar_update_applied\n";
     }
     if (objective_export) {
       objective_export_output.exceptions(std::ios::badbit | std::ios::failbit);
@@ -343,13 +357,24 @@ int main(int argc, char** argv) {
             << '"' << poseSemicolonString(result.raw_map_T_lidar) << '"' << '\n';
         ++objective_export_frames;
       }
-      if (dual_u_shadow) {
-        paper::WithinBasinObservability u_obs;
+      paper::WithinBasinObservability u_obs;
+      paper::UobsCovarianceInflation uobs_inflation;
+      std::string uobs_status = "NOT_REQUESTED";
+      double uobs_compute_ms = 0.0;
+      Eigen::Matrix<double, 6, 6> baseline_pose_covariance =
+          Eigen::Matrix<double, 6, 6>::Zero();
+      baseline_pose_covariance.block<3, 3>(0, 0).diagonal().setConstant(
+          parameters.pose_position_sigma_m * parameters.pose_position_sigma_m);
+      baseline_pose_covariance.block<3, 3>(3, 3).diagonal().setConstant(
+          parameters.pose_rotation_sigma_rad * parameters.pose_rotation_sigma_rad);
+      Eigen::Matrix<double, 6, 6> effective_pose_covariance = baseline_pose_covariance;
+      if (dual_u_shadow || uobs_only_mode) {
         paper::PclNdtScoreJet jet;
         const auto target_leaf_f = registration.targetGridLeafSizeMeters();
         const Eigen::Vector3d target_leaf(target_leaf_f[0], target_leaf_f[1], target_leaf_f[2]);
         const auto& ndt_parameters = registration.parameters();
-        std::string uobs_status = "NDT_NOT_EFFECTIVE";
+        uobs_status = "NDT_NOT_EFFECTIVE";
+        const auto uobs_start = Clock::now();
         if (result.effective && registration.evaluateLocalScoreJetAtPose(
                 result.raw_map_T_lidar, &jet, &reason) &&
             paper::analyzeWithinBasinObservability(jet, result.raw_map_T_lidar,
@@ -358,6 +383,26 @@ int main(int argc, char** argv) {
         } else if (result.effective) {
           uobs_status = reason.empty() ? "UOBS_EVALUATION_FAILED" : reason;
         }
+        if (uobs_only_mode && result.effective) {
+          const paper::Pose3d measurement_map_T_imu =
+              paper::lidarMeasurementToImu(result.raw_map_T_lidar, extrinsic);
+          const paper::Pose3d prediction_map_T_imu = frontend.getState().map_T_imu;
+          paper::UobsCovarianceInflation inflation;
+          std::string mapping_reason;
+          // The fixed 0.25 floor caps each directional variance at 4x R0.
+          // It is an engineering bound, not a GT-fitted parameter.
+          if (!paper::buildUobsInflatedPoseMeasurementCovariance(
+                  u_obs, result.raw_map_T_lidar, prediction_map_T_imu,
+                  measurement_map_T_imu, baseline_pose_covariance, 0.25,
+                  &inflation, &mapping_reason))
+            throw std::runtime_error("uobs_covariance_mapping_failed:" + mapping_reason);
+          uobs_inflation = inflation;
+          effective_pose_covariance = inflation.effective_covariance;
+          if (inflation.status != "UOBS_DIRECTIONAL_COVARIANCE_INFLATION_APPLIED" &&
+              inflation.status != "UOBS_NO_DIRECTIONAL_INFLATION")
+            uobs_status += ";" + inflation.status;
+        }
+        uobs_compute_ms = elapsedMs(uobs_start);
         if (curvature_audit && u_obs.valid && isCurvatureAuditFrame(scan.transaction_id))
           writeCurvatureAudit(&registration, transaction, scan.scan_end_ns,
               result.raw_map_T_lidar, u_obs, curvature_output);
@@ -381,11 +426,33 @@ int main(int argc, char** argv) {
             << "BRANCH_FD_IN_CURVATURE_SIDECAR,NA,NA,"
             << "INDETERMINATE,NO_SAME_OBJECTIVE_MULTI_START_SET,NO_FILTER_HANDLE_OR_STATE_ACCESS\n";
       }
+      if (uobs_only_mode) {
+        const double r0_trace = baseline_pose_covariance.trace();
+        const double reff_trace = effective_pose_covariance.trace();
+        uobs_output << transaction << ',' << scan.scan_end_ns << ','
+            << paper::currentFrameNdtStatusName(result.status) << ',' << result.effective << ','
+            << u_obs.valid << ',' << uobs_status << ',' << u_obs.locally_convex << ','
+            << uobs_inflation.applied << ',' << uobs_inflation.status << ','
+            << uobs_compute_ms << ',' << uobs_inflation.weak_weight_floor << ','
+            << r0_trace << ',' << reff_trace << ',' << reff_trace - r0_trace;
+        vector6Columns(uobs_output, u_obs.curvature_eigenvalues);
+        vector6Columns(uobs_output, uobs_inflation.relative_curvature);
+        vector6Columns(uobs_output, uobs_inflation.directional_reliability);
+        vector6Columns(uobs_output, uobs_inflation.directional_variance_inflation);
+        matrix6RowMajorColumn(uobs_output, uobs_inflation.chart_to_residual_jacobian);
+        matrix6RowMajorColumn(uobs_output, effective_pose_covariance);
+        uobs_output << ',' << result.effective << '\n';
+      }
       const auto update_start = Clock::now();
       if (result.effective) {
         paper::PoseCorrectionDelta delta;
-        if (!frontend.applyPoseMeasurement(
-            paper::lidarMeasurementToImu(result.raw_map_T_lidar, extrinsic), &delta, &reason))
+        const paper::Pose3d measurement_map_T_imu =
+            paper::lidarMeasurementToImu(result.raw_map_T_lidar, extrinsic);
+        const bool update_ok = uobs_only_mode
+            ? frontend.applyPoseMeasurement(measurement_map_T_imu,
+                effective_pose_covariance, &delta, &reason)
+            : frontend.applyPoseMeasurement(measurement_map_T_imu, &delta, &reason);
+        if (!update_ok)
           throw std::runtime_error("pose_update_failed:" + reason);
         ++updates;
       }
@@ -415,6 +482,7 @@ int main(int argc, char** argv) {
     }
     trajectory.close(); observations.close(); runtime.close();
     if (dual_u_shadow) dual_u_output.close();
+    if (uobs_only_mode) uobs_output.close();
     if (curvature_audit) curvature_output.close();
     if (objective_export) objective_export_output.close();
     if (objective_export && objective_export_frames != 32)
