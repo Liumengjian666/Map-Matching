@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <iostream>
 #include <limits>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 
@@ -78,94 +79,119 @@ void matrix6RowMajorColumn(std::ostream& out, const paper::DualUMatrix6d& matrix
   }
   out << '"';
 }
-struct DirectionalFdAudit {
-  std::string status = "NOT_SCHEDULED";
-  double relative_error = std::numeric_limits<double>::quiet_NaN();
-  double step = std::numeric_limits<double>::quiet_NaN();
-};
 bool isCurvatureAuditFrame(uint64_t transaction_id) {
   // Two historical cohort entries and the relative spectrum extremes from
   // that frozen 32-frame cohort; this schedules diagnostics only.
   return transaction_id == 120 || transaction_id == 838 ||
       transaction_id == 1359 || transaction_id == 2350;
 }
-DirectionalFdAudit auditCurvatureDirection(
-    paper::CurrentFrameNdtRegistration* registration,
-    const paper::Pose3d& pose,
-    const paper::WithinBasinObservability& observability,
-    const paper::NdtObjectiveSample& center, int eigen_index) {
-  DirectionalFdAudit result;
-  if (!registration || !observability.valid || !center.valid ||
-      eigen_index < 0 || eigen_index >= 6) {
-    result.status = "INVALID_FD_INPUT";
-    return result;
+bool isP5I1CohortFrame(uint64_t transaction_id) {
+  static const std::array<uint64_t, 32> ids{{120, 244, 368, 616, 740, 838, 839, 864,
+      924, 925, 1111, 1235, 1359, 1497, 1498, 1556, 1557, 1606, 1730, 1854, 2102,
+      2226, 2350, 2598, 2722, 2846, 3094, 3217, 3341, 3631, 3796, 3962}};
+  return std::find(ids.begin(), ids.end(), transaction_id) != ids.end();
+}
+bool isP5I1TargetedFrame(uint64_t transaction_id) {
+  static const std::array<uint64_t, 8> ids{{838, 839, 924, 925, 1497, 1498, 1556, 1557}};
+  return std::find(ids.begin(), ids.end(), transaction_id) != ids.end();
+}
+std::string poseSemicolonString(const paper::Pose3d& pose) {
+  std::ostringstream out;
+  out << std::setprecision(17) << pose.position.x() << ';' << pose.position.y() << ';'
+      << pose.position.z() << ';' << pose.orientation.x() << ';'
+      << pose.orientation.y() << ';' << pose.orientation.z() << ';'
+      << pose.orientation.w();
+  return out.str();
+}
+
+void writeCurvatureAudit(paper::CurrentFrameNdtRegistration* registration,
+    uint64_t transaction_id, uint64_t stamp_ns, const paper::Pose3d& pose,
+    const paper::WithinBasinObservability& u_obs, std::ostream& output) {
+  std::shared_ptr<const paper::NdtFrozenSupportSnapshot> frozen;
+  paper::NdtFrozenObjectiveSample center;
+  std::string reason;
+  if (!registration->captureFrozenSupport(pose, &frozen, &center, &reason))
+    throw std::runtime_error("frozen_support_capture_failed:" + reason);
+  const double n = static_cast<double>(center.source_point_count);
+  const double j0 = -center.score_sum / n;
+  const std::array<int, 4> direction_indices{{0, 2, 3, 5}};
+  const std::array<double, 7> steps{{0.02, 0.01, 0.005, 0.0025, 0.001, 0.0005, 0.00025}};
+  output << std::setprecision(17);
+  for (int eigen_index : direction_indices) {
+    const paper::DualUVector6d q = u_obs.curvature_eigenvectors.col(eigen_index);
+    const double gradient_projection = u_obs.objective_gradient.dot(q);
+    const double directional_curvature = q.dot(u_obs.local_curvature * q);
+    for (double h : steps) {
+      const paper::Pose3d plus_pose = paper::applyMapProductChartIncrement(
+          pose, h * q, u_obs.length_scale_m);
+      const paper::Pose3d minus_pose = paper::applyMapProductChartIncrement(
+          pose, -h * q, u_obs.length_scale_m);
+      paper::NdtFrozenObjectiveSample frozen_plus, frozen_minus;
+      paper::NdtObjectiveSample dynamic_plus, dynamic_minus;
+      paper::NdtSupportChangeDiagnostic support_plus, support_minus;
+      if (!registration->evaluateFrozenSupportObjective(*frozen, plus_pose,
+              &frozen_plus, &reason) ||
+          !registration->evaluateFrozenSupportObjective(*frozen, minus_pose,
+              &frozen_minus, &reason) ||
+          !registration->evaluateDynamicSupportDiagnostic(*frozen, plus_pose,
+              &dynamic_plus, &support_plus, &reason) ||
+          !registration->evaluateDynamicSupportDiagnostic(*frozen, minus_pose,
+              &dynamic_minus, &support_minus, &reason))
+        throw std::runtime_error("curvature_direction_evaluation_failed:" + reason);
+      const double jp_frozen = -frozen_plus.score_sum / n;
+      const double jm_frozen = -frozen_minus.score_sum / n;
+      const double jp_dynamic = -dynamic_plus.score_sum / n;
+      const double jm_dynamic = -dynamic_minus.score_sum / n;
+      const double predicted_plus = j0 + h * gradient_projection +
+          0.5 * h * h * directional_curvature;
+      const double predicted_minus = j0 - h * gradient_projection +
+          0.5 * h * h * directional_curvature;
+      const double central_fd = (jp_frozen - 2.0 * j0 + jm_frozen) / (h * h);
+      const double relative_error = std::abs(central_fd - directional_curvature) /
+          std::max({1.0, std::abs(central_fd), std::abs(directional_curvature)});
+      const double dynamic_central_fd = (jp_dynamic - 2.0 * j0 + jm_dynamic) / (h * h);
+      output << transaction_id << ',' << stamp_ns << ',' << eigen_index << ','
+          << u_obs.curvature_eigenvalues(eigen_index);
+      for (int component = 0; component < 6; ++component) output << ',' << q(component);
+      output << ',' << h << ',' << j0 << ',' << gradient_projection << ','
+          << directional_curvature << ',' << predicted_plus << ',' << predicted_minus
+          << ',' << jp_frozen << ',' << jm_frozen << ',' << central_fd << ','
+          << relative_error << ',' << dynamic_plus.score_sum << ','
+          << dynamic_minus.score_sum << ',' << jp_dynamic << ',' << jm_dynamic << ','
+          << dynamic_central_fd << ',' << support_plus.source_point_count << ','
+          << support_plus.changed_source_point_count << ','
+          << support_plus.changed_source_point_fraction << ','
+          << support_minus.changed_source_point_count << ','
+          << support_minus.changed_source_point_fraction << ','
+          << support_plus.center_gaussian_membership_count << ','
+          << support_plus.perturbed_gaussian_membership_count << ','
+          << support_plus.membership_symmetric_difference_count << ','
+          << support_minus.perturbed_gaussian_membership_count << ','
+          << support_minus.membership_symmetric_difference_count << '\n';
+    }
   }
-  const paper::DualUVector6d direction =
-      observability.curvature_eigenvectors.col(eigen_index);
-  const double predicted = observability.curvature_eigenvalues(eigen_index);
-  bool saw_support_change = false;
-  bool have_previous = false;
-  double previous_fd = std::numeric_limits<double>::quiet_NaN();
-  double previous_step = std::numeric_limits<double>::quiet_NaN();
-  for (double step : {0.02, 0.01, 0.005, 0.0025, 0.001}) {
-    const paper::Pose3d positive_pose = paper::applyMapProductChartIncrement(
-        pose, step * direction, observability.length_scale_m);
-    const paper::Pose3d negative_pose = paper::applyMapProductChartIncrement(
-        pose, -step * direction, observability.length_scale_m);
-    paper::NdtObjectiveSample positive, negative;
-    std::string reason;
-    if (!registration->evaluateLocalObjectiveAtPose(positive_pose, &positive, &reason) ||
-        !registration->evaluateLocalObjectiveAtPose(negative_pose, &negative, &reason)) {
-      result.status = "OBJECTIVE_EVALUATION_FAILED:" + reason;
-      return result;
-    }
-    if (positive.target_neighborhood_hash != center.target_neighborhood_hash ||
-        negative.target_neighborhood_hash != center.target_neighborhood_hash) {
-      saw_support_change = true;
-      have_previous = false;
-      continue;
-    }
-    const double n = static_cast<double>(center.source_point_count);
-    const double f0 = -center.score_sum / n;
-    const double fp = -positive.score_sum / n;
-    const double fm = -negative.score_sum / n;
-    const double fd = (fp - 2.0 * f0 + fm) / (step * step);
-    const double denominator = std::max({1.0, std::abs(fd), std::abs(predicted)});
-    result.relative_error = std::abs(fd - predicted) / denominator;
-    result.step = step;
-    if (!std::isfinite(fd) || !std::isfinite(predicted)) {
-      result.status = "NONFINITE_DIRECTIONAL_CURVATURE";
-      return result;
-    }
-    const bool same_sign = fd * predicted > 0.0;
-    const bool step_stable = have_previous &&
-        std::abs(fd - previous_fd) <= 0.35 *
-            std::max({1.0, std::abs(fd), std::abs(previous_fd)}) &&
-        std::abs(previous_step - 2.0 * step) <= 1e-12;
-    if (same_sign && result.relative_error <= 0.35 && step_stable) {
-      result.status = "PASS_STABLE_SUPPORT_AND_CURVATURE";
-      return result;
-    }
-    previous_fd = fd;
-    previous_step = step;
-    have_previous = true;
-  }
-  result.status = saw_support_change ? "INVALID_TARGET_NEIGHBORHOOD_CHANGED" :
-      (have_previous ? "FD_CURVATURE_OR_STEP_STABILITY_MISMATCH" :
-                       "NO_STABLE_FD_STEP_PAIR");
-  return result;
 }
 }  // namespace
 
 int main(int argc, char** argv) {
   uint64_t transaction = 0;
   try {
-    const bool dual_u_shadow = argc == 14 && std::string(argv[12]) == "--dual-u-shadow";
-    if (argc != 12 && !dual_u_shadow)
+    const bool dual_u_shadow = (argc == 14 || argc == 16 || argc == 18) &&
+        std::string(argv[12]) == "--dual-u-shadow";
+    const bool curvature_audit = (argc == 16 || argc == 18) &&
+        std::string(argv[14]) == "--curvature-audit";
+    const bool objective_export = argc == 18 &&
+        std::string(argv[16]) == "--objective-export";
+    if (argc != 12 && argc != 14 && argc != 16 && argc != 18)
       throw std::runtime_error("usage: p7_single_state_runner IMU_CSV FILTER_SCANS_CSV "
           "RAW_TIMED_SCAN_INDEX_CSV RAW_TIMED_POINTS_BIN MAP_PCD PARAMS_TXT "
           "TRAJECTORY_CSV REGISTRATION_CSV RUNTIME_CSV FRAME_LIMIT INITIALIZATION_STAMP_NS "
-          "[--dual-u-shadow DUAL_U_CSV]");
+          "[--dual-u-shadow DUAL_U_CSV [--curvature-audit CURVATURE_CSV "
+          "[--objective-export DIR]]]");
+    if ((argc == 14 && !dual_u_shadow) ||
+        (argc == 16 && (!dual_u_shadow || !curvature_audit)) ||
+        (argc == 18 && (!dual_u_shadow || !curvature_audit || !objective_export)))
+      throw std::runtime_error("invalid_optional_diagnostic_arguments");
     const auto all_imu = paper::readP7Imu(argv[1]);
     const auto scans = paper::readP7TimedScans(argv[2], argv[3]);
     const uint64_t limit = unsignedArgument(argv[10]);
@@ -190,14 +216,31 @@ int main(int argc, char** argv) {
     if (!registration.loadMap(argv[5], &reason)) throw std::runtime_error("map_load_failed:" + reason);
     std::ofstream trajectory(argv[7]), observations(argv[8]), runtime(argv[9]);
     std::ofstream dual_u_output;
+    std::ofstream curvature_output;
+    std::ofstream objective_export_output;
+    const std::string objective_export_dir = objective_export ? argv[17] : std::string();
     if (dual_u_shadow) dual_u_output.open(argv[13]);
+    if (curvature_audit) curvature_output.open(argv[15]);
+    if (objective_export) objective_export_output.open(objective_export_dir + "/cohort.csv");
     if (!trajectory || !observations || !runtime ||
-        (dual_u_shadow && !dual_u_output))
+        (dual_u_shadow && !dual_u_output) || (curvature_audit && !curvature_output) ||
+        (objective_export && !objective_export_output))
       throw std::runtime_error("cannot_create_outputs");
     trajectory.exceptions(std::ios::badbit | std::ios::failbit);
     observations.exceptions(std::ios::badbit | std::ios::failbit);
     runtime.exceptions(std::ios::badbit | std::ios::failbit);
     if (dual_u_shadow) dual_u_output.exceptions(std::ios::badbit | std::ios::failbit);
+    if (curvature_audit) {
+      curvature_output.exceptions(std::ios::badbit | std::ios::failbit);
+      curvature_output << std::setprecision(17)
+          << "transaction_id,stamp_ns,eigen_index,eigenvalue,q0,q1,q2,q3,q4,q5,h,J0,"
+             "gradient_projection,qTHq,J_pred_plus,J_pred_minus,J_frozen_plus,J_frozen_minus,"
+             "central_second_difference,relative_curvature_error,dynamic_score_sum_plus,"
+             "dynamic_score_sum_minus,J_dynamic_plus,J_dynamic_minus,dynamic_central_second_difference,"
+             "source_point_count,changed_points_plus,changed_fraction_plus,changed_points_minus,"
+             "changed_fraction_minus,center_memberships,perturbed_memberships_plus,"
+             "membership_symdiff_plus,perturbed_memberships_minus,membership_symdiff_minus\n";
+    }
     trajectory << std::setprecision(17)
         << "transaction_id,stamp_ns,predicted_imu_x,predicted_imu_y,predicted_imu_z,"
            "predicted_imu_qx,predicted_imu_qy,predicted_imu_qz,predicted_imu_qw,"
@@ -226,7 +269,17 @@ int main(int argc, char** argv) {
              "fd_strong_status,fd_strong_relative_error,fd_strong_step,unonlocal_status,unonlocal_diagnostic,"
              "filter_state_accessed_by_diagnostic\n";
     }
+    if (objective_export) {
+      objective_export_output.exceptions(std::ios::badbit | std::ios::failbit);
+      objective_export_output << std::setprecision(17)
+          << "transaction_id,stamp_ns,wide_targeted,raw_point_count,raw_cloud_file,prepared_source_hash,"
+             "prepared_source_point_count,target_point_count,configured_resolution_m,"
+             "target_grid_leaf_x_m,target_grid_leaf_y_m,target_grid_leaf_z_m,step_size,"
+             "transformation_epsilon,maximum_iterations,initial_pose_xyz_q_xyzw,"
+             "raw_terminal_pose_xyz_q_xyzw\n";
+    }
     uint64_t updates = 0;
+    uint64_t objective_export_frames = 0;
     paper::ScanEndProcessor scan_processor;
     for (uint64_t index = 0; index < limit; ++index) {
       const auto& scan = scans.at(index);
@@ -266,10 +319,33 @@ int main(int argc, char** argv) {
                               scan_end.predicted_map_T_lidar, &result, &reason))
         throw std::runtime_error("registration_internal_error:" + reason);
       const double ndt_total_ms = elapsedMs(ndt_start);
+      if (objective_export && isP5I1CohortFrame(transaction)) {
+        const std::string cloud_file = objective_export_dir + "/raw_tx_" +
+            std::to_string(transaction) + ".xyzf";
+        std::ofstream cloud_output(cloud_file, std::ios::binary);
+        if (!cloud_output) throw std::runtime_error("cannot_create_objective_source_cloud");
+        for (const paper::RegistrationPoint& point : cloud) {
+          const float xyz[3] = {point.x, point.y, point.z};
+          cloud_output.write(reinterpret_cast<const char*>(xyz), sizeof(xyz));
+        }
+        cloud_output.close();
+        const auto& export_parameters = registration.parameters();
+        const auto export_leaf_f = registration.targetGridLeafSizeMeters();
+        objective_export_output << transaction << ',' << scan.scan_end_ns << ','
+            << isP5I1TargetedFrame(transaction) << ','
+            << cloud.size() << ',' << cloud_file << ',' << result.source_cloud_hash << ','
+            << result.source_point_count << ',' << result.target_point_count << ','
+            << export_parameters.resolution_m << ',' << export_leaf_f[0] << ','
+            << export_leaf_f[1] << ',' << export_leaf_f[2] << ','
+            << export_parameters.step_size << ',' << export_parameters.transformation_epsilon
+            << ',' << export_parameters.maximum_iterations << ','
+            << '"' << poseSemicolonString(scan_end.predicted_map_T_lidar) << '"' << ','
+            << '"' << poseSemicolonString(result.raw_map_T_lidar) << '"' << '\n';
+        ++objective_export_frames;
+      }
       if (dual_u_shadow) {
         paper::WithinBasinObservability u_obs;
         paper::PclNdtScoreJet jet;
-        paper::NdtObjectiveSample center_objective;
         const auto target_leaf_f = registration.targetGridLeafSizeMeters();
         const Eigen::Vector3d target_leaf(target_leaf_f[0], target_leaf_f[1], target_leaf_f[2]);
         const auto& ndt_parameters = registration.parameters();
@@ -279,22 +355,12 @@ int main(int argc, char** argv) {
             paper::analyzeWithinBasinObservability(jet, result.raw_map_T_lidar,
                 target_leaf, ndt_parameters.resolution_m, &u_obs, &reason)) {
           uobs_status = u_obs.status;
-          if (isCurvatureAuditFrame(scan.transaction_id)) {
-            if (!registration.evaluateLocalObjectiveAtPose(
-                    result.raw_map_T_lidar, &center_objective, &reason))
-              uobs_status = "BASE_OBJECTIVE_FAILED:" + reason;
-          }
         } else if (result.effective) {
           uobs_status = reason.empty() ? "UOBS_EVALUATION_FAILED" : reason;
         }
-        DirectionalFdAudit weak_fd, strong_fd;
-        if (u_obs.valid && center_objective.valid &&
-            isCurvatureAuditFrame(scan.transaction_id)) {
-          weak_fd = auditCurvatureDirection(&registration, result.raw_map_T_lidar,
-              u_obs, center_objective, 0);
-          strong_fd = auditCurvatureDirection(&registration, result.raw_map_T_lidar,
-              u_obs, center_objective, 5);
-        }
+        if (curvature_audit && u_obs.valid && isCurvatureAuditFrame(scan.transaction_id))
+          writeCurvatureAudit(&registration, transaction, scan.scan_end_ns,
+              result.raw_map_T_lidar, u_obs, curvature_output);
         dual_u_output << transaction << ',' << scan.scan_end_ns << ','
             << paper::currentFrameNdtStatusName(result.status) << ',' << result.effective << ','
             << result.source_cloud_hash << ',' << result.source_point_count << ','
@@ -311,9 +377,9 @@ int main(int argc, char** argv) {
         vector6Columns(dual_u_output, u_obs.curvature_eigenvalues);
         matrix6RowMajorColumn(dual_u_output, u_obs.curvature_eigenvectors);
         matrix6RowMajorColumn(dual_u_output, u_obs.local_curvature);
-        dual_u_output << ',' << weak_fd.status << ',' << weak_fd.relative_error << ','
-            << weak_fd.step << ',' << strong_fd.status << ',' << strong_fd.relative_error << ','
-            << strong_fd.step << ",INDETERMINATE,NO_SAME_OBJECTIVE_MULTI_START_SET,NO_FILTER_HANDLE_OR_STATE_ACCESS\n";
+        dual_u_output << ",BRANCH_FD_IN_CURVATURE_SIDECAR,NA,NA,"
+            << "BRANCH_FD_IN_CURVATURE_SIDECAR,NA,NA,"
+            << "INDETERMINATE,NO_SAME_OBJECTIVE_MULTI_START_SET,NO_FILTER_HANDLE_OR_STATE_ACCESS\n";
       }
       const auto update_start = Clock::now();
       if (result.effective) {
@@ -349,8 +415,14 @@ int main(int argc, char** argv) {
     }
     trajectory.close(); observations.close(); runtime.close();
     if (dual_u_shadow) dual_u_output.close();
+    if (curvature_audit) curvature_output.close();
+    if (objective_export) objective_export_output.close();
+    if (objective_export && objective_export_frames != 32)
+      throw std::runtime_error("P5_I1_COHORT_EXPORT_COUNT_MISMATCH:" +
+          std::to_string(objective_export_frames));
     std::cout << "frames=" << limit << " lidar_updates=" << updates
-              << " prediction_only=" << limit - updates << " state_finite=true\n";
+              << " prediction_only=" << limit - updates << " state_finite=true"
+              << " objective_export_frames=" << objective_export_frames << '\n';
     return 0;
   } catch (const std::exception& error) {
     std::cerr << "FIRST_BAD_TX=" << transaction << " error=" << error.what() << '\n';

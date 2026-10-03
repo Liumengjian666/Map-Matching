@@ -11,6 +11,7 @@
 #include <cmath>
 #include <cstring>
 #include <cstdint>
+#include <iterator>
 #include <stdexcept>
 #include <vector>
 
@@ -20,6 +21,8 @@ using Point = pcl::PointXYZ;
 using Cloud = pcl::PointCloud<Point>;
 class ObservableNdt : public pcl::NormalDistributionsTransform<Point, Point> {
  public:
+  using LeafPtr = TargetGridLeafConstPtr;
+
   std::array<float, 3> targetGridLeafSizeMeters() const {
     const Eigen::Vector3f size = this->target_cells_.getLeafSize();
     return {{size.x(), size.y(), size.z()}};
@@ -91,6 +94,109 @@ class ObservableNdt : public pcl::NormalDistributionsTransform<Point, Point> {
     return output->valid;
   }
 
+  bool captureSupport(const Cloud::Ptr& source, const Pose3d& pose,
+      std::vector<std::vector<LeafPtr>>* support, std::uint64_t* membership_count) {
+    if (!source || !support || !membership_count) return false;
+    const Eigen::Matrix4f transform = poseMatrix(pose);
+    Cloud transformed;
+    pcl::transformPointCloud(*source, transformed, transform);
+    support->clear();
+    support->resize(transformed.size());
+    *membership_count = 0;
+    for (std::size_t i = 0; i < transformed.size(); ++i) {
+      std::vector<float> distances;
+      this->target_cells_.radiusSearch(transformed.points[i], this->resolution_,
+                                       (*support)[i], distances);
+      *membership_count += (*support)[i].size();
+    }
+    return true;
+  }
+
+  bool frozenScore(const Cloud::Ptr& source, const Pose3d& pose,
+      const std::vector<std::vector<LeafPtr>>& support,
+      std::uint64_t center_memberships, NdtFrozenObjectiveSample* output) const {
+    if (!source || !output || support.size() != source->size()) return false;
+    const Eigen::Matrix4f transform = poseMatrix(pose);
+    Cloud transformed;
+    pcl::transformPointCloud(*source, transformed, transform);
+    double score = 0.0;
+    for (std::size_t i = 0; i < transformed.size(); ++i) {
+      const Point& point = transformed.points[i];
+      const Eigen::Vector3d x_trans(point.x, point.y, point.z);
+      for (const LeafPtr& cell : support[i]) {
+        const Eigen::Vector3d residual = x_trans - cell->getMean();
+        const Eigen::Matrix3d inverse_covariance = cell->getInverseCov();
+        const double exponential = std::exp(-this->gauss_d2_ *
+            residual.dot(inverse_covariance * residual) / 2.0);
+        const double derivative_guard = this->gauss_d2_ * exponential;
+        // Match updateDerivatives()' invalid-contribution behavior.
+        if (!std::isfinite(derivative_guard) || derivative_guard > 1.0 ||
+            derivative_guard < 0.0) continue;
+        score += -this->gauss_d1_ * exponential;
+      }
+    }
+    output->score_sum = score;
+    output->source_point_count = source->size();
+    output->gaussian_membership_count = center_memberships;
+    output->valid = std::isfinite(score) && !source->empty();
+    output->status = output->valid ? "PASS_FROZEN_ACTIVE_SUPPORT" :
+                                     "INVALID_FROZEN_ACTIVE_SUPPORT";
+    return output->valid;
+  }
+
+  bool dynamicSupport(const Cloud::Ptr& source, const Pose3d& pose,
+      const std::vector<std::vector<LeafPtr>>& center_support,
+      std::uint64_t center_memberships, NdtObjectiveSample* sample,
+      NdtSupportChangeDiagnostic* diagnostic) {
+    if (!source || !sample || !diagnostic || center_support.size() != source->size())
+      return false;
+    PclNdtScoreJet jet;
+    if (!scoreJetAt(source, pose, &jet)) return false;
+    const Eigen::Matrix4f transform = poseMatrix(pose);
+    Cloud transformed;
+    pcl::transformPointCloud(*source, transformed, transform);
+    std::uint64_t perturbed_memberships = 0;
+    std::uint64_t changed_points = 0;
+    std::uint64_t symmetric_difference = 0;
+    for (std::size_t i = 0; i < transformed.size(); ++i) {
+      std::vector<LeafPtr> cells;
+      std::vector<float> distances;
+      this->target_cells_.radiusSearch(transformed.points[i], this->resolution_, cells, distances);
+      perturbed_memberships += cells.size();
+      std::vector<std::uintptr_t> center_ids, perturbed_ids;
+      center_ids.reserve(center_support[i].size());
+      perturbed_ids.reserve(cells.size());
+      for (const LeafPtr& cell : center_support[i])
+        center_ids.push_back(reinterpret_cast<std::uintptr_t>(cell));
+      for (const LeafPtr& cell : cells)
+        perturbed_ids.push_back(reinterpret_cast<std::uintptr_t>(cell));
+      std::sort(center_ids.begin(), center_ids.end());
+      std::sort(perturbed_ids.begin(), perturbed_ids.end());
+      if (center_ids != perturbed_ids) ++changed_points;
+      std::vector<std::uintptr_t> difference;
+      std::set_symmetric_difference(center_ids.begin(), center_ids.end(),
+          perturbed_ids.begin(), perturbed_ids.end(), std::back_inserter(difference));
+      symmetric_difference += difference.size();
+    }
+    sample->score_sum = jet.score_sum;
+    sample->source_point_count = jet.source_point_count;
+    sample->target_neighborhood_cell_count = perturbed_memberships;
+    sample->valid = jet.valid;
+    sample->status = jet.valid ? "PASS_DYNAMIC_ACTIVE_SUPPORT" : jet.status;
+    diagnostic->source_point_count = source->size();
+    diagnostic->changed_source_point_count = changed_points;
+    diagnostic->changed_source_point_fraction = source->empty() ?
+        std::numeric_limits<double>::quiet_NaN() :
+        static_cast<double>(changed_points) / static_cast<double>(source->size());
+    diagnostic->center_gaussian_membership_count = center_memberships;
+    diagnostic->perturbed_gaussian_membership_count = perturbed_memberships;
+    diagnostic->membership_symmetric_difference_count = symmetric_difference;
+    diagnostic->valid = sample->valid && source->size() > 0;
+    diagnostic->status = diagnostic->valid ? "PASS_QUANTIFIED_SUPPORT_CHANGE" :
+                                             "INVALID_DYNAMIC_SUPPORT";
+    return diagnostic->valid;
+  }
+
  private:
   static Eigen::Matrix4f poseMatrix(const Pose3d& pose) {
     Eigen::Matrix4f matrix = Eigen::Matrix4f::Identity();
@@ -133,6 +239,13 @@ bool parametersValid(const CurrentFrameNdtParameters& p) {
       p.min_effective_points > 0 && p.maximum_iterations > 0;
 }
 }  // namespace
+
+struct NdtFrozenSupportSnapshot::Impl {
+  const void* owner = nullptr;
+  Cloud::Ptr source;
+  std::vector<std::vector<ObservableNdt::LeafPtr>> support;
+  std::uint64_t membership_count = 0;
+};
 
 CurrentFrameNdtStatus classifyNdtTerminal(bool converged, int iterations,
     int maximum_iterations, bool terminal_pose_finite, bool fitness_finite) {
@@ -288,6 +401,77 @@ bool CurrentFrameNdtRegistration::evaluateLocalObjectiveAtPose(
     return fail(reason, "invalid_objective_pose");
   if (!impl_->ndt.objectiveAt(impl_->source, pose, result))
     return fail(reason, result->status);
+  return true;
+}
+
+bool CurrentFrameNdtRegistration::captureFrozenSupport(
+    const Pose3d& center_pose,
+    std::shared_ptr<const NdtFrozenSupportSnapshot>* snapshot,
+    NdtFrozenObjectiveSample* center_sample, std::string* reason) {
+  if (reason) reason->clear();
+  if (!snapshot || !center_sample) return fail(reason, "null_frozen_support_output");
+  if (!ready()) return fail(reason, "map_not_loaded");
+  if (!impl_->source) return fail(reason, "no_current_source_cloud");
+  if (!center_pose.position.allFinite() || !center_pose.orientation.coeffs().allFinite() ||
+      !std::isfinite(center_pose.orientation.norm()) || center_pose.orientation.norm() < 1e-12)
+    return fail(reason, "invalid_frozen_support_center_pose");
+  std::shared_ptr<NdtFrozenSupportSnapshot::Impl> frozen(
+      new NdtFrozenSupportSnapshot::Impl());
+  frozen->owner = &impl_->ndt;
+  frozen->source = impl_->source;
+  if (!impl_->ndt.captureSupport(frozen->source, center_pose,
+          &frozen->support, &frozen->membership_count))
+    return fail(reason, "frozen_support_capture_failed");
+  NdtFrozenObjectiveSample frozen_center;
+  if (!impl_->ndt.frozenScore(frozen->source, center_pose, frozen->support,
+          frozen->membership_count, &frozen_center))
+    return fail(reason, frozen_center.status);
+  PclNdtScoreJet pcl_center;
+  if (!impl_->ndt.scoreJetAt(frozen->source, center_pose, &pcl_center))
+    return fail(reason, pcl_center.status);
+  const double score_tolerance = 1e-11 *
+      std::max({1.0, std::abs(frozen_center.score_sum), std::abs(pcl_center.score_sum)});
+  if (std::abs(frozen_center.score_sum - pcl_center.score_sum) > score_tolerance)
+    return fail(reason, "FROZEN_CENTER_SCORE_DIFFERS_FROM_PCL_RUNTIME_SCORE");
+  *center_sample = frozen_center;
+  std::shared_ptr<NdtFrozenSupportSnapshot> result(new NdtFrozenSupportSnapshot());
+  result->impl = std::move(frozen);
+  *snapshot = std::move(result);
+  return true;
+}
+
+bool CurrentFrameNdtRegistration::evaluateFrozenSupportObjective(
+    const NdtFrozenSupportSnapshot& snapshot, const Pose3d& pose,
+    NdtFrozenObjectiveSample* sample, std::string* reason) {
+  if (reason) reason->clear();
+  if (!sample) return fail(reason, "null_frozen_objective_sample");
+  if (!ready()) return fail(reason, "map_not_loaded");
+  if (!snapshot.impl || snapshot.impl->owner != &impl_->ndt)
+    return fail(reason, "frozen_support_snapshot_owner_mismatch");
+  if (!pose.position.allFinite() || !pose.orientation.coeffs().allFinite() ||
+      !std::isfinite(pose.orientation.norm()) || pose.orientation.norm() < 1e-12)
+    return fail(reason, "invalid_frozen_objective_pose");
+  if (!impl_->ndt.frozenScore(snapshot.impl->source, pose,
+          snapshot.impl->support, snapshot.impl->membership_count, sample))
+    return fail(reason, sample->status);
+  return true;
+}
+
+bool CurrentFrameNdtRegistration::evaluateDynamicSupportDiagnostic(
+    const NdtFrozenSupportSnapshot& snapshot, const Pose3d& pose,
+    NdtObjectiveSample* sample, NdtSupportChangeDiagnostic* diagnostic,
+    std::string* reason) {
+  if (reason) reason->clear();
+  if (!sample || !diagnostic) return fail(reason, "null_dynamic_support_output");
+  if (!ready()) return fail(reason, "map_not_loaded");
+  if (!snapshot.impl || snapshot.impl->owner != &impl_->ndt)
+    return fail(reason, "frozen_support_snapshot_owner_mismatch");
+  if (!pose.position.allFinite() || !pose.orientation.coeffs().allFinite() ||
+      !std::isfinite(pose.orientation.norm()) || pose.orientation.norm() < 1e-12)
+    return fail(reason, "invalid_dynamic_objective_pose");
+  if (!impl_->ndt.dynamicSupport(snapshot.impl->source, pose,
+          snapshot.impl->support, snapshot.impl->membership_count, sample, diagnostic))
+    return fail(reason, diagnostic->status);
   return true;
 }
 

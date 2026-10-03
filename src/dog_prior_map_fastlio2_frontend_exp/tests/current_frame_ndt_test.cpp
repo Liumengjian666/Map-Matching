@@ -124,44 +124,64 @@ void testActualNdt() {
   NdtObjectiveSample center;
   require(ndt.evaluateLocalObjectiveAtPose(result.raw_map_T_lidar, &center, &reason) &&
       center.valid, "base PCL NDT objective sample failed");
-  bool support_change_observed = false;
-  bool same_support_pair_seen = false;
-  bool stable_fd_validated = false;
-  const auto inspectFiniteDifferenceSupport = [&](int eigen_index) {
+  std::shared_ptr<const NdtFrozenSupportSnapshot> frozen_support;
+  NdtFrozenObjectiveSample frozen_center;
+  require(ndt.captureFrozenSupport(result.raw_map_T_lidar, &frozen_support,
+          &frozen_center, &reason) && frozen_center.valid && frozen_support,
+      "could not capture frozen PCL active support");
+  require(std::abs(frozen_center.score_sum - center.score_sum) <=
+              1e-11 * std::max(1.0, std::abs(center.score_sum)),
+      "frozen support center score differs from runtime PCL score");
+  require(frozen_center.gaussian_membership_count == center.target_neighborhood_cell_count,
+      "frozen support membership count differs from runtime center support");
+  bool frozen_fd_validated = false;
+  const auto inspectFrozenFiniteDifference = [&](int eigen_index) {
     const DualUVector6d direction = local.curvature_eigenvectors.col(eigen_index);
-    for (double step : {0.02, 0.01, 0.005, 0.0025, 0.001}) {
+    const double analytic = direction.dot(local.local_curvature * direction);
+    for (double step : {0.01, 0.005, 0.0025, 0.001, 0.0005}) {
       const Pose3d positive_pose = applyMapProductChartIncrement(
           result.raw_map_T_lidar, step * direction, local.length_scale_m);
       const Pose3d negative_pose = applyMapProductChartIncrement(
           result.raw_map_T_lidar, -step * direction, local.length_scale_m);
-      NdtObjectiveSample positive, negative;
-      if (!ndt.evaluateLocalObjectiveAtPose(positive_pose, &positive, &reason) ||
-          !ndt.evaluateLocalObjectiveAtPose(negative_pose, &negative, &reason))
+      NdtFrozenObjectiveSample positive, negative;
+      if (!ndt.evaluateFrozenSupportObjective(*frozen_support, positive_pose,
+              &positive, &reason) ||
+          !ndt.evaluateFrozenSupportObjective(*frozen_support, negative_pose,
+              &negative, &reason))
         continue;
-      if (positive.target_neighborhood_hash != center.target_neighborhood_hash ||
-          negative.target_neighborhood_hash != center.target_neighborhood_hash) {
-        support_change_observed = true;
-        continue;
-      }
-      same_support_pair_seen = true;
-      const double n_source = static_cast<double>(center.source_point_count);
-      const double l0 = -center.score_sum / n_source;
-      const double lp = -positive.score_sum / n_source;
-      const double lm = -negative.score_sum / n_source;
-      const double fd = (lp - 2.0 * l0 + lm) / (step * step);
-      const double analytic = local.curvature_eigenvalues(eigen_index);
+      const double n_source = static_cast<double>(frozen_center.source_point_count);
+      const double j0 = -frozen_center.score_sum / n_source;
+      const double jp = -positive.score_sum / n_source;
+      const double jm = -negative.score_sum / n_source;
+      const double fd = (jp - 2.0 * j0 + jm) / (step * step);
       const double scale = std::max({1.0, std::abs(fd), std::abs(analytic)});
       if (std::isfinite(fd) && std::isfinite(analytic) && fd * analytic > 0.0 &&
           std::abs(fd - analytic) / scale < 0.35)
-        stable_fd_validated = true;
+        frozen_fd_validated = true;
     }
   };
-  inspectFiniteDifferenceSupport(0);
-  inspectFiniteDifferenceSupport(5);
-  require(stable_fd_validated || (support_change_observed && !same_support_pair_seen),
-      "PCL objective finite difference failed within unchanged target-neighborhood support");
-  if (support_change_observed && !stable_fd_validated)
-    std::cout << "real_fixture_directional_fd=INVALID_TARGET_NEIGHBORHOOD_CHANGED\n";
+  inspectFrozenFiniteDifference(0);
+  inspectFrozenFiniteDifference(5);
+  require(frozen_fd_validated,
+      "frozen-support PCL objective did not agree with analytic chart curvature");
+  const Pose3d displaced = applyMapProductChartIncrement(
+      result.raw_map_T_lidar, 0.005 * local.curvature_eigenvectors.col(5),
+      local.length_scale_m);
+  NdtObjectiveSample dynamic_sample;
+  NdtSupportChangeDiagnostic support_change;
+  require(ndt.evaluateDynamicSupportDiagnostic(*frozen_support, displaced,
+          &dynamic_sample, &support_change, &reason) && dynamic_sample.valid &&
+          support_change.valid && support_change.source_point_count == center.source_point_count &&
+          support_change.changed_source_point_count <= center.source_point_count &&
+          support_change.changed_source_point_fraction >= 0.0 &&
+          support_change.changed_source_point_fraction <= 1.0,
+      "dynamic support-change diagnostic invalid");
+  std::cout << "frozen_support_center_score_delta="
+            << (frozen_center.score_sum - center.score_sum)
+            << " support_changed_points=" << support_change.changed_source_point_count
+            << '/' << support_change.source_point_count
+            << " membership_symdiff="
+            << support_change.membership_symmetric_difference_count << '\n';
   require(ndt.align(3, source, seed, &result, &reason) && result.source_cloud_hash == hash &&
       result.source_point_count == count, "actual NDT source nondeterminism");
   std::cout << "actual PCL NDT PASS iterations=" << result.iterations << " count=" << count << '\n';

@@ -91,6 +91,33 @@ struct NdtObjectiveSample {
   std::uint64_t target_neighborhood_cell_count = 0;
 };
 
+// Active target-Gaussian support captured at one terminal pose. The opaque
+// implementation retains the exact PCL target-cell objects and their
+// per-source-point membership/order; callers cannot alter the support.
+struct NdtFrozenSupportSnapshot {
+  struct Impl;
+  std::shared_ptr<const Impl> impl;
+};
+
+struct NdtFrozenObjectiveSample {
+  bool valid = false;
+  std::string status = "UNINITIALIZED";
+  double score_sum = std::numeric_limits<double>::quiet_NaN();
+  std::uint64_t source_point_count = 0;
+  std::uint64_t gaussian_membership_count = 0;
+};
+
+struct NdtSupportChangeDiagnostic {
+  bool valid = false;
+  std::string status = "UNINITIALIZED";
+  std::uint64_t source_point_count = 0;
+  std::uint64_t changed_source_point_count = 0;
+  double changed_source_point_fraction = std::numeric_limits<double>::quiet_NaN();
+  std::uint64_t center_gaussian_membership_count = 0;
+  std::uint64_t perturbed_gaussian_membership_count = 0;
+  std::uint64_t membership_symmetric_difference_count = 0;
+};
+
 class CurrentFrameNdtRegistration {
  public:
   explicit CurrentFrameNdtRegistration(const CurrentFrameNdtParameters& parameters);
@@ -108,6 +135,20 @@ class CurrentFrameNdtRegistration {
   // finite-difference checks. The signature detects neighborhood-set changes.
   bool evaluateLocalObjectiveAtPose(const Pose3d& map_T_lidar,
       NdtObjectiveSample* result, std::string* reason);
+  // Freeze PCL's active Gaussian-cell membership at center_pose. Subsequent
+  // frozen evaluations reuse precisely those cell identities in the same
+  // per-point order, while dynamic diagnostics re-query PCL and quantify how
+  // much support changes. These APIs are diagnostic-only.
+  bool captureFrozenSupport(const Pose3d& center_pose,
+      std::shared_ptr<const NdtFrozenSupportSnapshot>* snapshot,
+      NdtFrozenObjectiveSample* center_sample, std::string* reason);
+  bool evaluateFrozenSupportObjective(
+      const NdtFrozenSupportSnapshot& snapshot, const Pose3d& pose,
+      NdtFrozenObjectiveSample* sample, std::string* reason);
+  bool evaluateDynamicSupportDiagnostic(
+      const NdtFrozenSupportSnapshot& snapshot, const Pose3d& pose,
+      NdtObjectiveSample* sample, NdtSupportChangeDiagnostic* diagnostic,
+      std::string* reason);
   bool align(uint64_t stamp_ns, const RegistrationCloud& raw_cloud,
       const Pose3d& initial_map_T_lidar, CurrentFrameNdtResult* result,
       std::string* reason);

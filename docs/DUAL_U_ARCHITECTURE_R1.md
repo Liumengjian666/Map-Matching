@@ -349,14 +349,13 @@ objective-matched real multi-start validation, or evidence that using the two
 objects improves localization. Do not describe this as “first”, “novel”, or a
 validated reliability framework.
 
-## Current decision
+## Pre-closure status (superseded by R1 closure)
 
-Architecture status: `DUAL_U_ARCHITECTURE_PARTIAL`. The final 4,127-frame
-shadow is finite and its trajectory is byte-for-byte equal to baseline Run1;
-all non-timing NDT registration fields match. This run used 111,588 kB peak
-RSS and 1:43.23 wall time. All three P7 standalone CTests pass. However, the
-current evidence does not close a real-objective U_obs finite-difference check
-(the support changes) or an objective-matched real U_nonlocal cohort (the
-frozen starts have different PCL target-grid/optimizer provenance). This is a
-diagnostic architecture, not permission to start fusion, recovery, or
-accuracy-driven tuning.
+The initial R1 report was `DUAL_U_ARCHITECTURE_PARTIAL`: its all-or-nothing
+support-hash test did not separate frozen branch-local curvature from dynamic
+support switching, and its historical multi-start terminals had mismatched
+objective provenance. Those findings were valid for the old tests/evidence,
+but are superseded by the focused closure experiments in
+[DUAL_U_R1_CLOSURE_RESULTS.md](DUAL_U_R1_CLOSURE_RESULTS.md). The closure
+adds no estimator update or policy and does not claim a localization accuracy
+gain or novelty result.
