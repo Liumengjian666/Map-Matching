@@ -16,7 +16,13 @@ namespace dog_prior_map_fastlio2_frontend_exp {
 namespace {
 using Point = pcl::PointXYZ;
 using Cloud = pcl::PointCloud<Point>;
-class ObservableNdt : public pcl::NormalDistributionsTransform<Point, Point> {};
+class ObservableNdt : public pcl::NormalDistributionsTransform<Point, Point> {
+ public:
+  std::array<float, 3> targetGridLeafSizeMeters() const {
+    const Eigen::Vector3f size = this->target_cells_.getLeafSize();
+    return {{size.x(), size.y(), size.z()}};
+  }
+};
 
 void finalize(const Cloud::Ptr& cloud) {
   cloud->width = static_cast<uint32_t>(cloud->size());
@@ -153,9 +159,10 @@ bool CurrentFrameNdtRegistration::loadMap(const std::string& path, std::string* 
     const Cloud::Ptr first = voxelDown(finite, impl_->parameters.map_voxel_m);
     const Cloud::Ptr target = voxelDown(first, impl_->parameters.target_voxel_m);
     if (target->empty()) return fail(reason, "empty_preprocessed_target");
-    // Match the formal target-grid initialization order.
-    impl_->ndt.setInputTarget(target);
+    // PCL 1.10 builds target_cells_ inside setInputTarget(), using the
+    // resolution configured at that moment.
     impl_->ndt.setResolution(impl_->parameters.resolution_m);
+    impl_->ndt.setInputTarget(target);
     impl_->ndt.setStepSize(impl_->parameters.step_size);
     impl_->ndt.setTransformationEpsilon(impl_->parameters.transformation_epsilon);
     impl_->ndt.setMaximumIterations(impl_->parameters.maximum_iterations);
@@ -169,6 +176,10 @@ bool CurrentFrameNdtRegistration::loadMap(const std::string& path, std::string* 
 bool CurrentFrameNdtRegistration::ready() const { return static_cast<bool>(impl_->target); }
 std::size_t CurrentFrameNdtRegistration::targetPointCount() const {
   return ready() ? impl_->target->size() : 0;
+}
+std::array<float, 3> CurrentFrameNdtRegistration::targetGridLeafSizeMeters() const {
+  return ready() ? impl_->ndt.targetGridLeafSizeMeters()
+                 : std::array<float, 3>{{0.0f, 0.0f, 0.0f}};
 }
 
 bool CurrentFrameNdtRegistration::align(uint64_t stamp_ns, const RegistrationCloud& raw,

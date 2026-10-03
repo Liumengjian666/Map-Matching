@@ -1,6 +1,7 @@
 #include "dog_prior_map_fastlio2_frontend_exp/current_frame_ndt.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/fastlio2_frontend.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/p7_replay_io.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/scan_processor.hpp"
 
 #include <algorithm>
 #include <chrono>
@@ -60,11 +61,11 @@ int main(int argc, char** argv) {
   uint64_t transaction = 0;
   try {
     if (argc != 12)
-      throw std::runtime_error("usage: p7_single_state_runner IMU_CSV FILTER_SCANS_CSV SCANS_CSV "
-          "REQUEST_XYZ_F32_BIN MAP_PCD PARAMS_TXT TRAJECTORY_CSV REGISTRATION_CSV RUNTIME_CSV "
-          "FRAME_LIMIT INITIALIZATION_STAMP_NS");
+      throw std::runtime_error("usage: p7_single_state_runner IMU_CSV FILTER_SCANS_CSV "
+          "RAW_TIMED_SCAN_INDEX_CSV RAW_TIMED_POINTS_BIN MAP_PCD PARAMS_TXT "
+          "TRAJECTORY_CSV REGISTRATION_CSV RUNTIME_CSV FRAME_LIMIT INITIALIZATION_STAMP_NS");
     const auto all_imu = paper::readP7Imu(argv[1]);
-    const auto scans = paper::readP7Scans(argv[2], argv[3]);
+    const auto scans = paper::readP7TimedScans(argv[2], argv[3]);
     const uint64_t limit = unsignedArgument(argv[10]);
     const uint64_t initialization_stamp = unsignedArgument(argv[11]);
     if (limit == 0 || limit > scans.size()) throw std::runtime_error("invalid_frame_limit");
@@ -98,41 +99,54 @@ int main(int argc, char** argv) {
            "gyro_bias_x,gyro_bias_y,gyro_bias_z,accel_bias_x,accel_bias_y,accel_bias_z,"
            "gravity_x,gravity_y,gravity_z,lidar_update_applied\n";
     observations << std::setprecision(17)
-        << "transaction_id,stamp_ns,source_points,target_points,source_hash_expected_available,"
-           "source_hash_expected,source_hash_actual,source_hash_match,converged,effective,status,"
+        << "transaction_id,scan_start_ns,scan_effective_start_ns,stamp_ns,raw_source_points,"
+           "overlap_points_dropped,source_points,target_points,source_cloud_hash,converged,effective,status,"
            "iterations,fitness,transformation_probability,alignment_ms,"
            "initial_x,initial_y,initial_z,initial_qx,initial_qy,initial_qz,initial_qw,"
            "raw_x,raw_y,raw_z,raw_qx,raw_qy,raw_qz,raw_qw,lidar_update_applied\n";
     runtime << std::setprecision(17)
-        << "transaction_id,prediction_ms,cloud_io_ms,ndt_total_ms,ndt_alignment_ms,"
+        << "transaction_id,prediction_and_deskew_ms,cloud_io_ms,ndt_total_ms,ndt_alignment_ms,"
            "ikfom_update_ms,frame_total_ms,ndt_effective,lidar_update_applied\n";
     uint64_t updates = 0;
+    paper::ScanEndProcessor scan_processor;
     for (uint64_t index = 0; index < limit; ++index) {
       const auto& scan = scans.at(index);
       transaction = scan.transaction_id;
       const auto frame_start = Clock::now();
-      const auto prediction_start = Clock::now();
       const auto start = frontend.getState();
-      const auto causal_imu = paper::imuWindow(all_imu, start.stamp_ns, scan.stamp_ns);
-      std::vector<paper::ImuPoseSample, Eigen::aligned_allocator<paper::ImuPoseSample>> poses;
-      if (!frontend.predictImuSequence(causal_imu, scan.stamp_ns, &poses, &reason))
-        throw std::runtime_error("prediction_failed:" + reason);
-      const auto predicted = frontend.getState();
-      const double prediction_ms = elapsedMs(prediction_start);
-      const auto initial_guess = paper::fromIsometry(
-          paper::asIsometry(predicted.map_T_imu) * paper::asIsometry(extrinsic));
       const auto io_start = Clock::now();
-      const auto cloud = paper::readP7PackedCloud(argv[4], scan);
+      auto timed_cloud = paper::readP7PackedTimedCloud(argv[4], scan);
       const double cloud_io_ms = elapsedMs(io_start);
+      paper::ScanWindowDecision window_decision;
+      paper::ScanWindowStats window_stats;
+      if (!paper::prepareScanWindow(scan.scan_start_ns, scan.scan_end_ns,
+              start.stamp_ns, &timed_cloud, &window_decision, &window_stats, &reason))
+        throw std::runtime_error("scan_window_failed:" + reason);
+      if (window_decision != paper::ScanWindowDecision::PROCESS)
+        throw std::runtime_error("unexpected_stale_raw_scan");
+      const auto prediction_start = Clock::now();
+      const auto causal_imu = paper::imuWindow(all_imu, start.stamp_ns, scan.scan_end_ns);
+      paper::ScanEndResult scan_end;
+      if (!scan_processor.process(&frontend, extrinsic,
+              window_stats.effective_scan_start_ns, scan.scan_end_ns,
+              causal_imu, timed_cloud, &scan_end, &reason))
+        throw std::runtime_error("scan_end_prediction_or_deskew_failed:" + reason);
+      const double prediction_ms = elapsedMs(prediction_start);
+      if (scan_end.scan_end_ns != scan.scan_end_ns ||
+          frontend.getState().stamp_ns != scan.scan_end_ns)
+        throw std::runtime_error("scan_end_prediction_timestamp_mismatch");
+      paper::RegistrationCloud cloud;
+      cloud.reserve(scan_end.cloud_end_frame.size());
+      for (const auto& point : scan_end.cloud_end_frame)
+        cloud.push_back({static_cast<float>(point.position.x()),
+                         static_cast<float>(point.position.y()),
+                         static_cast<float>(point.position.z())});
       const auto ndt_start = Clock::now();
       paper::CurrentFrameNdtResult result;
-      if (!registration.align(scan.stamp_ns, cloud, initial_guess, &result, &reason))
+      if (!registration.align(scan.scan_end_ns, cloud,
+                              scan_end.predicted_map_T_lidar, &result, &reason))
         throw std::runtime_error("registration_internal_error:" + reason);
       const double ndt_total_ms = elapsedMs(ndt_start);
-      const bool hash_match = scan.expected_source_hash_available &&
-          scan.expected_source_hash == result.source_cloud_hash;
-      if (scan.expected_source_hash_available && !hash_match)
-        throw std::runtime_error("source_cloud_hash_mismatch");
       const auto update_start = Clock::now();
       if (result.effective) {
         paper::PoseCorrectionDelta delta;
@@ -143,18 +157,19 @@ int main(int argc, char** argv) {
       }
       const double update_ms = elapsedMs(update_start);
       const auto corrected = frontend.getState();
-      if (corrected.stamp_ns != scan.stamp_ns) throw std::runtime_error("state_timestamp_mismatch");
+      if (corrected.stamp_ns != scan.scan_end_ns) throw std::runtime_error("state_timestamp_mismatch");
       if (!frontend.postconditionsValid(&reason)) throw std::runtime_error("postconditions_failed:" + reason);
       const double total_ms = elapsedMs(frame_start);
-      trajectory << transaction << ',' << scan.stamp_ns;
-      poseColumns(trajectory, predicted.map_T_imu); poseColumns(trajectory, corrected.map_T_imu);
+      trajectory << transaction << ',' << scan.scan_end_ns;
+      poseColumns(trajectory, scan_end.predicted_map_T_imu); poseColumns(trajectory, corrected.map_T_imu);
       vectorColumns(trajectory, corrected.velocity); vectorColumns(trajectory, corrected.gyro_bias);
       vectorColumns(trajectory, corrected.accel_bias); vectorColumns(trajectory, corrected.gravity);
       trajectory << ',' << result.effective << '\n';
-      observations << transaction << ',' << scan.stamp_ns << ',' << result.source_point_count
-          << ',' << result.target_point_count << ',' << scan.expected_source_hash_available
-          << ',' << scan.expected_source_hash << ',' << result.source_cloud_hash << ','
-          << (scan.expected_source_hash_available ? (hash_match ? "1" : "0") : "NA")
+      observations << transaction << ',' << scan.scan_start_ns << ','
+          << window_stats.effective_scan_start_ns << ',' << scan.scan_end_ns << ','
+          << scan.cloud_point_count << ',' << window_stats.overlap_points_dropped << ','
+          << result.source_point_count << ',' << result.target_point_count << ','
+          << result.source_cloud_hash
           << ',' << result.converged << ',' << result.effective << ','
           << paper::currentFrameNdtStatusName(result.status) << ',' << result.iterations << ','
           << result.fitness << ',' << result.transformation_probability << ',' << result.alignment_ms;

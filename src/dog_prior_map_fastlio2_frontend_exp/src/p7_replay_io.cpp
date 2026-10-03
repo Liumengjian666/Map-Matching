@@ -138,6 +138,62 @@ std::vector<P7ScanRecord> readP7Scans(const std::string& filter_path, const std:
   return scans;
 }
 
+std::vector<P7TimedScanRecord> readP7TimedScans(
+    const std::string& filter_path, const std::string& raw_scan_index_path) {
+  const auto filter = readFilterScans(filter_path);
+  std::ifstream input(raw_scan_index_path);
+  std::string line;
+  if (!input || !std::getline(input, line))
+    throw std::runtime_error("cannot_read_raw_timed_scan_index");
+  const auto header = splitCsv(line);
+  std::map<std::string, std::size_t> columns;
+  for (std::size_t index = 0; index < header.size(); ++index)
+    if (!columns.emplace(header[index], index).second)
+      throw std::runtime_error("duplicate_raw_timed_scan_index_header");
+  auto requiredColumn = [&columns](const char* primary, const char* alternate = nullptr) {
+    auto found = columns.find(primary);
+    if (found == columns.end() && alternate) found = columns.find(alternate);
+    if (found == columns.end())
+      throw std::runtime_error(std::string("missing_raw_timed_scan_index_field:") + primary);
+    return found->second;
+  };
+  const std::size_t transaction_column = requiredColumn("transaction_id");
+  const std::size_t start_column = requiredColumn("scan_start_ns");
+  const std::size_t end_column = requiredColumn("scan_end_ns");
+  const std::size_t offset_column = requiredColumn("cloud_byte_offset", "byte_offset");
+  const std::size_t count_column = requiredColumn("cloud_point_count", "point_count");
+
+  std::vector<P7TimedScanRecord> scans;
+  uint64_t expected_offset = 0;
+  uint64_t previous_end = 0;
+  while (std::getline(input, line)) {
+    if (line.empty()) continue;
+    const auto fields = splitCsv(line);
+    if (fields.size() != header.size())
+      throw std::runtime_error("invalid_raw_timed_scan_index_field_count");
+    P7TimedScanRecord scan;
+    scan.transaction_id = unsignedField(fields[transaction_column]);
+    scan.scan_start_ns = unsignedField(fields[start_column]);
+    scan.scan_end_ns = unsignedField(fields[end_column]);
+    scan.cloud_byte_offset = unsignedField(fields[offset_column]);
+    scan.cloud_point_count = unsignedField(fields[count_column]);
+    if (scan.transaction_id != scans.size() + 1 || scan.scan_start_ns == 0 ||
+        scan.scan_end_ns <= scan.scan_start_ns || scan.scan_end_ns <= previous_end ||
+        scan.cloud_byte_offset != expected_offset || scan.cloud_point_count == 0 ||
+        scan.cloud_point_count > (std::numeric_limits<uint64_t>::max() - expected_offset) / 16)
+      throw std::runtime_error("invalid_raw_timed_scan_index_sequence");
+    if (scans.size() >= filter.size() || filter[scans.size()].first != scan.transaction_id ||
+        filter[scans.size()].second != scan.scan_end_ns)
+      throw std::runtime_error("raw_timed_scan_filter_alignment_mismatch");
+    expected_offset += 16 * scan.cloud_point_count;
+    previous_end = scan.scan_end_ns;
+    scans.push_back(scan);
+  }
+  if (scans.size() != filter.size())
+    throw std::runtime_error("raw_timed_scan_filter_count_mismatch");
+  return scans;
+}
+
 RegistrationCloud readP7PackedCloud(const std::string& path, const P7ScanRecord& scan) {
   static_assert(sizeof(float) == 4, "packed XYZ requires float32");
   std::ifstream input(path, std::ios::binary | std::ios::ate);
@@ -156,6 +212,42 @@ RegistrationCloud readP7PackedCloud(const std::string& path, const P7ScanRecord&
     if (input.gcount() != static_cast<std::streamsize>(sizeof(xyz)))
       throw std::runtime_error("truncated_packed_xyz");
     cloud.push_back({xyz[0], xyz[1], xyz[2]});
+  }
+  return cloud;
+}
+
+P7TimedLidarVector readP7PackedTimedCloud(
+    const std::string& path, const P7TimedScanRecord& scan) {
+  static_assert(sizeof(float) == 4 && sizeof(uint32_t) == 4,
+                "timed point records require 32-bit float and uint32");
+  std::ifstream input(path, std::ios::binary | std::ios::ate);
+  if (!input) throw std::runtime_error("cannot_open_packed_timed_lidar");
+  const std::streamoff end = input.tellg();
+  if (end < 0 || scan.cloud_byte_offset > static_cast<uint64_t>(end) ||
+      scan.cloud_point_count > (static_cast<uint64_t>(end) - scan.cloud_byte_offset) / 16 ||
+      scan.cloud_point_count > std::numeric_limits<std::size_t>::max())
+    throw std::runtime_error("truncated_packed_timed_lidar");
+  input.seekg(static_cast<std::streamoff>(scan.cloud_byte_offset));
+  P7TimedLidarVector cloud;
+  cloud.reserve(static_cast<std::size_t>(scan.cloud_point_count));
+  const uint64_t maximum_offset_ns = scan.scan_end_ns - scan.scan_start_ns;
+  for (uint64_t i = 0; i < scan.cloud_point_count; ++i) {
+    uint8_t record[16];
+    input.read(reinterpret_cast<char*>(record), sizeof(record));
+    if (input.gcount() != static_cast<std::streamsize>(sizeof(record)))
+      throw std::runtime_error("truncated_packed_timed_lidar_record");
+    float xyz[3];
+    uint32_t offset_ns = 0;
+    std::memcpy(xyz, record, sizeof(xyz));
+    std::memcpy(&offset_ns, record + sizeof(xyz), sizeof(offset_ns));
+    if (!std::isfinite(xyz[0]) || !std::isfinite(xyz[1]) || !std::isfinite(xyz[2]) ||
+        offset_ns > maximum_offset_ns || offset_ns >
+            std::numeric_limits<uint64_t>::max() - scan.scan_start_ns)
+      throw std::runtime_error("invalid_packed_timed_lidar_payload");
+    TimedLidarPoint point;
+    point.position = Eigen::Vector3d(xyz[0], xyz[1], xyz[2]);
+    point.stamp_ns = scan.scan_start_ns + offset_ns;
+    cloud.push_back(point);
   }
   return cloud;
 }

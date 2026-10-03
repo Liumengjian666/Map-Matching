@@ -98,6 +98,43 @@ void testPacked(Fixture& fixture) {
   rejects([&] { readP7PackedCloud(path, scan); }, "short binary accepted");
 }
 
+void testTimedRawScans(Fixture& fixture) {
+  const auto filter = fixture.path("timed_filter.csv");
+  const auto index = fixture.path("raw_scan_index.csv");
+  const auto binary = fixture.path("raw_timed.bin");
+  textFile(filter, "transaction_id,stamp_ns\n1,120\n2,200\n");
+  const std::string header =
+      "transaction_id,scan_start_ns,scan_end_ns,cloud_byte_offset,cloud_point_count\n";
+  textFile(index, header + "1,100,120,0,2\n2,180,200,32,1\n");
+  const auto scans = readP7TimedScans(filter, index);
+  require(scans.size() == 2 && scans[0].scan_start_ns == 100 &&
+      scans[0].scan_end_ns == 120 && scans[1].cloud_byte_offset == 32,
+      "raw timed scan index contract changed");
+  {
+    std::ofstream out(binary, std::ios::binary);
+    const float xyz[9] = {1.0f, 2.0f, 3.0f, -1.0f, -2.0f, -3.0f, 4.0f, 5.0f, 6.0f};
+    const uint32_t offsets[3] = {0, 20, 20};
+    for (int i = 0; i < 3; ++i) {
+      out.write(reinterpret_cast<const char*>(xyz + 3 * i), 3 * sizeof(float));
+      out.write(reinterpret_cast<const char*>(offsets + i), sizeof(uint32_t));
+    }
+  }
+  const auto first = readP7PackedTimedCloud(binary, scans[0]);
+  require(first.size() == 2 && first[0].stamp_ns == 100 &&
+      first[1].stamp_ns == 120 && first[1].position == Eigen::Vector3d(-1, -2, -3),
+      "raw point-time decoding changed");
+  textFile(index,
+      "transaction_id,scan_start_ns,scan_end_ns,byte_offset,point_count,provenance\n"
+      "1,100,120,0,2,RAW_TIMED_SENSOR\n2,180,200,32,1,RAW_TIMED_SENSOR\n");
+  const auto catalog_scans = readP7TimedScans(filter, index);
+  require(catalog_scans.size() == 2 && catalog_scans[1].cloud_byte_offset == 32 &&
+      catalog_scans[1].cloud_point_count == 1,
+      "raw timed catalog field aliases were not accepted");
+  textFile(index, header + "1,100,121,0,2\n2,180,200,32,1\n");
+  rejects([&] { readP7TimedScans(filter, index); },
+          "raw scan end inconsistent with filter schedule accepted");
+}
+
 void testParameters(Fixture& fixture) {
   const auto path = fixture.path("params.txt");
   const std::string contents = "200 9.809 0.1 0.2 0.3 0.004 0.08 0.000002 0.00004 0.2 0.1 0.5 0.05 1 2 3 0 0 0 1 0.08 0.029 0.03 0 0 0 1\n";
@@ -124,7 +161,8 @@ void testParameters(Fixture& fixture) {
 int main() {
   try {
     Fixture fixture;
-    testImu(fixture); testScans(fixture); testPacked(fixture); testParameters(fixture);
+    testImu(fixture); testScans(fixture); testPacked(fixture);
+    testTimedRawScans(fixture); testParameters(fixture);
     std::cout << "p7_replay_io_test PASS\n";
     return 0;
   } catch (const std::exception& error) {

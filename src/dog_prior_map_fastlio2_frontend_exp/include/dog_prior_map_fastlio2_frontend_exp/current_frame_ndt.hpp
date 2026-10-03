@@ -4,6 +4,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <array>
 #include <limits>
 #include <memory>
 #include <string>
@@ -74,6 +75,7 @@ class CurrentFrameNdtRegistration {
   bool loadMap(const std::string& pcd_path, std::string* reason);
   bool ready() const;
   std::size_t targetPointCount() const;
+  std::array<float, 3> targetGridLeafSizeMeters() const;
   bool align(uint64_t stamp_ns, const RegistrationCloud& raw_cloud,
       const Pose3d& initial_map_T_lidar, CurrentFrameNdtResult* result,
       std::string* reason);

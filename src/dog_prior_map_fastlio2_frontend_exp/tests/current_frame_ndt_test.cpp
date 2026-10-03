@@ -89,6 +89,12 @@ void testActualNdt() {
   CurrentFrameNdtResult result;
   require(!ndt.align(1, source, truth, &result, &reason), "unloaded map accepted");
   require(ndt.loadMap(path, &reason) && ndt.ready() && ndt.targetPointCount() > 0, "map loading failed");
+  const auto target_leaf = ndt.targetGridLeafSizeMeters();
+  for (float axis_leaf : target_leaf)
+    require(std::abs(axis_leaf - 0.8f) < 1e-7f,
+            "actual PCL target grid leaf size differs from configured 0.8 m resolution");
+  std::cout << "actual PCL target grid leaf size=" << target_leaf[0] << ','
+            << target_leaf[1] << ',' << target_leaf[2] << " m\n";
   require(ndt.align(1, {{1, 0, 0}}, truth, &result, &reason) &&
       result.status == CurrentFrameNdtStatus::INSUFFICIENT_POINTS && !result.effective &&
       result.iterations == 0 && result.alignment_ms == 0.0, "insufficient points not ordinary rejection");
