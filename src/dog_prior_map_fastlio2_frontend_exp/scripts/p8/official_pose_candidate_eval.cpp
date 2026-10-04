@@ -522,10 +522,11 @@ void writeMetricsBeforeBbox(std::ostream& output, const CloudMetrics& metrics) {
 
 int main(int argc, char** argv) {
   try {
-    if (argc < 7 || argc > 10)
+    if (argc < 7 || argc > 12)
       throw std::runtime_error("usage: p8_official_pose_candidate_eval FILTER_SCANS_CSV "
           "RAW_TIMED_SCAN_INDEX_CSV TIMED_POINTS_BIN IMU_CSV MAP_PCD OUTPUT_CSV "
-          "[PCD_OUTPUT_DIR [MAP_T_RAW_3X4_CSV [CANDIDATE_TAG]]]");
+          "[PCD_OUTPUT_DIR [MAP_T_RAW_3X4_CSV [CANDIDATE_TAG "
+          "[TRANSACTION_ID [OVERLAP_ONLY]]]]]");
     const std::string filter_path = argv[1];
     const std::string index_path = argv[2];
     const std::string points_path = argv[3];
@@ -535,26 +536,37 @@ int main(int argc, char** argv) {
     const std::string pcd_output_dir = argc >= 8 ? argv[7] : "";
     const Isometry map_T_raw = argc >= 9 ? parseMapFrameTransform(argv[8]) :
                                            Isometry::Identity();
-    const std::string candidate_selector = argc == 10 ? argv[9] : "";
+    const std::string candidate_selector = argc >= 10 ? argv[9] : "";
+    const uint64_t transaction_id = argc >= 11 ? std::stoull(argv[10]) : 665;
+    const bool overlap_only = argc == 12 && std::string(argv[11]) == "OVERLAP_ONLY";
+    require(argc < 12 || overlap_only, "unknown_evaluation_mode");
 
     std::cerr << "stage=read_scan_index\n";
     const auto scans = paper::readP7TimedScans(filter_path, index_path);
     const auto selected_scan = std::find_if(scans.begin(), scans.end(),
-        [](const paper::P7TimedScanRecord& scan) { return scan.transaction_id == 665; });
-    require(selected_scan != scans.end(), "missing_S67_transaction_665");
-    require(selected_scan->scan_start_ns == 1517157286055073023ULL &&
-            selected_scan->scan_end_ns == 1517157286155912472ULL &&
-            selected_scan->cloud_point_count == 29067,
-            "S67_transaction_does_not_match_frozen_adapter_record");
+        [transaction_id](const paper::P7TimedScanRecord& scan) {
+          return scan.transaction_id == transaction_id;
+        });
+    require(selected_scan != scans.end(), "missing_requested_transaction");
+    if (transaction_id == 665)
+      require(selected_scan->scan_start_ns == 1517157286055073023ULL &&
+              selected_scan->scan_end_ns == 1517157286155912472ULL &&
+              selected_scan->cloud_point_count == 29067,
+              "S67_transaction_does_not_match_frozen_adapter_record");
 
-    // Screening approximation only: map bag-relative s=67 to sensor time by
-    // applying the local bag-record/header offset as a unit-rate clock map.
-    // This cross-clock mapping is not an official epoch contract.
+    // Screening approximation only: reuse the previously frozen unit-rate
+    // sensor-time mapping for bag-relative s=67. The same scan-relative
+    // reference offset is used for every selected transaction.
     constexpr uint64_t assumed_s67_reference_ns = 1517157286063423943ULL;
-    require(assumed_s67_reference_ns >= selected_scan->scan_start_ns &&
-            assumed_s67_reference_ns <= selected_scan->scan_end_ns,
-            "s67_reference_not_inside_transaction_665");
-    std::cerr << "stage=read_S67_points point_count=" << selected_scan->cloud_point_count << '\n';
+    constexpr uint64_t reference_offset_from_scan_start_ns = 8350920ULL;
+    const uint64_t reference_ns = selected_scan->scan_start_ns +
+                                  reference_offset_from_scan_start_ns;
+    const uint64_t assumed_bag_zero_sensor_ns = assumed_s67_reference_ns - 67000000000ULL;
+    require(reference_ns >= selected_scan->scan_start_ns &&
+            reference_ns <= selected_scan->scan_end_ns,
+            "selected_reference_not_inside_transaction");
+    std::cerr << "stage=read_transaction_points transaction_id=" << transaction_id
+              << " point_count=" << selected_scan->cloud_point_count << '\n';
     paper::CurrentFrameNdtParameters parameters;
     const auto timed = paper::readP7PackedTimedCloud(points_path, *selected_scan);
     const auto imu = paper::readP7Imu(imu_path);
@@ -564,7 +576,7 @@ int main(int argc, char** argv) {
     const LowVarianceGyroReference gyro_reference =
         earliestCausalLowVarianceGyroReference(imu, assumed_s67_reference_ns);
     const paper::RegistrationCloud deskewed_source = rotationallyDeskewToReference(
-        timed, imu, gyro_reference, assumed_s67_reference_ns);
+        timed, imu, gyro_reference, reference_ns);
     paper::RegistrationCloud raw_source = deskewed_source;
     std::size_t finite_points = 0;
     for (const auto& point : raw_source)
@@ -599,7 +611,15 @@ int main(int argc, char** argv) {
         << T_imu_lidar.matrix() << '\n';
     std::ofstream output(output_path);
     require(static_cast<bool>(output), "cannot_create_output_csv");
-    output << std::setprecision(17)
+    output << std::setprecision(17);
+    if (overlap_only) {
+      output << "transaction_id,scan_start_ns,scan_end_ns,reference_ns,"
+             << "assumed_bag_relative_reference_s,candidate,source_raw_points,"
+             << "source_finite_points,source_prepared_points,target_points,target_grid_x_m,"
+             << "target_grid_y_m,target_grid_z_m,overlap_020,overlap_030,overlap_050,"
+             << "overlap_100,nn_mean_m,nn_median_m,nn_p90_m,nn_p95_m,bbox_fraction\n";
+    } else {
+      output
         << "candidate,source_raw_points,source_finite_points,source_prepared_points,target_points,"
            "target_grid_x_m,target_grid_y_m,target_grid_z_m,overlap_020,overlap_030,overlap_050,"
            "overlap_100,nn_mean_m,nn_median_m,nn_p90_m,nn_p95_m,initial_nn_mse_m2,"
@@ -614,16 +634,23 @@ int main(int argc, char** argv) {
            "evaluated_T_map_lidar_t0,evaluated_T_map_lidar_r10,evaluated_T_map_lidar_r11,"
            "evaluated_T_map_lidar_r12,evaluated_T_map_lidar_t1,evaluated_T_map_lidar_r20,"
            "evaluated_T_map_lidar_r21,evaluated_T_map_lidar_r22,evaluated_T_map_lidar_t2\n";
+    }
     output.flush();
     std::cout << std::setprecision(12)
-        << "transaction_id=665 scan_start_ns=" << selected_scan->scan_start_ns
+        << "transaction_id=" << transaction_id << " scan_start_ns="
+        << selected_scan->scan_start_ns
         << " scan_end_ns=" << selected_scan->scan_end_ns
-        << " assumed_s67_reference_ns=" << assumed_s67_reference_ns
+        << " reference_ns=" << reference_ns
+        << " assumed_bag_relative_reference_s="
+        << static_cast<double>(static_cast<int64_t>(reference_ns) -
+                               static_cast<int64_t>(assumed_bag_zero_sensor_ns)) * 1.0e-9
         << " point_count=" << selected_scan->cloud_point_count << '\n'
         << "prepared_source_points=" << prepared.size() << " finite_points="
         << finite_points << '/' << timed.size() << " target_points=" << target->size()
         << " actual_ndt_target_grid=" << grid[0] << ',' << grid[1] << ',' << grid[2] << "\n"
-        << "rotational_deskew=gyro_only_ref=assumed_s67 low_variance_gyro_reference_window_ns="
+        << "rotational_deskew=gyro_only_ref=scan_start_plus_8350920ns "
+        << "bias_reference=earliest_200_sample_window_before_assumed_s67 "
+        << "low_variance_gyro_reference_window_ns="
         << gyro_reference.start_ns << ':' << gyro_reference.end_ns
         << " gyro_reference_mean=" << gyro_reference.gyro_reference_mean.transpose()
         << " accel_std=" << gyro_reference.accel_std.transpose() << " gyro_std="
@@ -647,12 +674,35 @@ int main(int argc, char** argv) {
       const Isometry map_T_lidar = projectToRigidIsometry(map_T_raw * rigid_raw_candidate);
       const CloudMetrics initial_metrics = measure(target, source, map_T_lidar);
       saveCandidateCloud(pcd_output_dir, candidate.tag, "aligned", visual_source, map_T_lidar);
+      if (overlap_only) {
+        const double bag_relative_reference_s =
+            static_cast<double>(static_cast<int64_t>(reference_ns) -
+                                static_cast<int64_t>(assumed_bag_zero_sensor_ns)) * 1.0e-9;
+        output << transaction_id << ',' << selected_scan->scan_start_ns << ','
+            << selected_scan->scan_end_ns << ',' << reference_ns << ','
+            << bag_relative_reference_s << ',' << candidate.name << ',' << timed.size() << ','
+            << finite_points << ',' << prepared.size() << ',' << target->size() << ','
+            << grid[0] << ',' << grid[1] << ',' << grid[2] << ','
+            << initial_metrics.overlap_020 << ',' << initial_metrics.overlap_030 << ','
+            << initial_metrics.overlap_050 << ',' << initial_metrics.overlap_100 << ','
+            << initial_metrics.nn_mean << ',' << initial_metrics.nn_median << ','
+            << initial_metrics.nn_p90 << ',' << initial_metrics.nn_p95 << ','
+            << initial_metrics.bbox_fraction << '\n';
+        output.flush();
+        std::cout << "overlap_only=true overlap_020_030_050_100="
+            << initial_metrics.overlap_020 << ',' << initial_metrics.overlap_030 << ','
+            << initial_metrics.overlap_050 << ',' << initial_metrics.overlap_100
+            << " nn_mean_median_p95=" << initial_metrics.nn_mean << ','
+            << initial_metrics.nn_median << ',' << initial_metrics.nn_p95
+            << " bbox_fraction=" << initial_metrics.bbox_fraction << '\n';
+        continue;
+      }
       const double initial_ndt_score = initialNdtScore(target, source,
           map_T_lidar, parameters);
       const double initial_ndt_probability = initial_ndt_score /
           static_cast<double>(source->size());
       paper::CurrentFrameNdtResult result;
-      require(registration.align(assumed_s67_reference_ns, raw_source,
+      require(registration.align(reference_ns, raw_source,
                   toPose(map_T_lidar), &result, &reason),
               candidate.name + "_ndt_align:" + reason);
       const Isometry refined = toIsometry(result.raw_map_T_lidar);
