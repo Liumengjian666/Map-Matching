@@ -1,0 +1,103 @@
+{
+  "reference_file": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/gt/corridor01_gt.txt",
+  "anchor_timestamp_ns": 1517157286165072000,
+  "reference_anchor_pose_origin": "IMU; fixed/world frame by ICCV challenge GT lineage",
+  "reference_anchor_orientation_bracket_ns": [
+    1517157286155932903,
+    1517157286357652903
+  ],
+  "R_reference_imu_anchor": [
+    [
+      0.9414318681708185,
+      -0.33583339081105873,
+      0.03036397880300372
+    ],
+    [
+      0.33692590456647636,
+      0.940487602314115,
+      -0.044317092927094515
+    ],
+    [
+      -0.013673786032558644,
+      0.051951934610693695,
+      0.998555969420714
+    ]
+  ],
+  "R_map_imu_official_decoded": [
+    [
+      0.13599021269494949,
+      -0.9904095205253067,
+      -0.024405812914431967
+    ],
+    [
+      0.990705073191466,
+      0.1360273441305625,
+      0.00014000527676030945
+    ],
+    [
+      0.0031811953530703693,
+      -0.024198002017054597,
+      0.9997021239821932
+    ]
+  ],
+  "R_map_reference": [
+    [
+      0.45989704997391795,
+      -0.8845676551645945,
+      -0.07768376189332331
+    ],
+    [
+      0.8870030547558155,
+      0.4617200290472811,
+      -0.006340002399793737
+    ],
+    [
+      0.04147630985441076,
+      -0.06598998570380851,
+      0.9969578915419006
+    ]
+  ],
+  "gravity_reference_world_m_s2": [
+    0.0,
+    0.0,
+    -9.809
+  ],
+  "gravity_map_m_s2": [
+    0.7620000204116083,
+    0.062189083539576764,
+    -9.779159958134503
+  ],
+  "gravity_norm_m_s2": 9.809,
+  "old_static_transport_gravity_m_s2": [
+    -8.29389651046,
+    1.45065657871,
+    -5.03223182738
+  ],
+  "old_new_angle_deg": 63.466936720218676,
+  "old_new_vector_difference_norm_m_s2": 10.31845098072117,
+  "fastlio_gravity_sanity_m_s2": [
+    0.207364641234,
+    -0.983826584322,
+    -9.75733396772
+  ],
+  "dataset_fastlio_angle_deg": 6.92108223883851,
+  "dataset_fastlio_vector_difference_norm_m_s2": 1.1841644966409708,
+  "z_up_sanity_static_window_ns": [
+    1517157224023904000,
+    1517157225018848000
+  ],
+  "z_up_sanity_sample_count": 200,
+  "static_specific_force_mean_body_m_s2": [
+    1.578311024606228,
+    0.2218335355221643,
+    9.698777704238891
+  ],
+  "static_specific_force_mean_reference_world_m_s2": [
+    1.8842941206076644,
+    -0.08388382206948088,
+    9.647411525056654
+  ],
+  "static_specific_force_world_angle_to_plus_z_deg": 11.062327631542335,
+  "world_z_up_evidence": "official challenge fixes trajectory frame and IMU body z-up; static specific force rotated by reference IMU poses has +Z cosine 0.9814 (11.06 deg), an independent data sanity check, not explicit world-axis metadata",
+  "runtime_gt_access": false
+}

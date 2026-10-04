@@ -453,6 +453,8 @@ bool FastLio2IkfomFrontend::initializeFromStaticCalibration(
       !gravity_map.allFinite() ||
       (initial_state.use_initial_velocity &&
        !initial_state.velocity_world_m_s.allFinite()) ||
+      (initial_state.use_initial_gravity &&
+       !initial_state.gravity_map_m_s2.allFinite()) ||
       (initial_state.use_initial_biases &&
        (!initial_state.gyro_bias_rad_s.allFinite() ||
         !initial_state.accel_bias_m_s2.allFinite())) ||
@@ -463,6 +465,10 @@ bool FastLio2IkfomFrontend::initializeFromStaticCalibration(
       calibration.gyro_std.maxCoeff() > impl_->parameters.max_static_gyro_std_rad_s ||
       std::abs(gravity_map.norm() - impl_->parameters.gravity_mps2) > 1e-6)
     return fail(failure_reason, "invalid_static_calibration_or_reanchor_gravity");
+  const Eigen::Vector3d initial_gravity = initial_state.use_initial_gravity
+      ? initial_state.gravity_map_m_s2 : gravity_map;
+  if (std::abs(initial_gravity.norm() - impl_->parameters.gravity_mps2) > 1e-6)
+    return fail(failure_reason, "invalid_initial_gravity_override_magnitude");
   if (initial_state.use_covariance_overrides &&
       (!std::isfinite(initial_state.velocity_std_m_s) ||
        initial_state.velocity_std_m_s <= 0.0 ||
@@ -483,7 +489,7 @@ bool FastLio2IkfomFrontend::initializeFromStaticCalibration(
       ? initial_state.gyro_bias_rad_s : calibration.gyro_bias);
   state.ba = vect3(initial_state.use_initial_biases
       ? initial_state.accel_bias_m_s2 : calibration.accel_bias_prior);
-  state.grav = S2(gravity_map);
+  state.grav = S2(initial_gravity);
 
   Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> covariance =
       makeInitialCovariance(initial_state);

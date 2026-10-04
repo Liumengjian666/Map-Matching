@@ -87,6 +87,8 @@ struct InitialStateOverrides {
   double velocity_std_m_s = 1.0;  // baseline diagonal variance is 1 (m/s)^2
   double gyro_bias_std_rad_s = 0.01;  // baseline variance is 1e-4 (rad/s)^2
   double accel_bias_std_m_s2 = 0.03162277660168379;  // baseline variance is 1e-3
+  bool use_initial_gravity = false;
+  Eigen::Vector3d gravity_map_m_s2 = Eigen::Vector3d::Zero();
 };
 
 struct FilterSnapshot {

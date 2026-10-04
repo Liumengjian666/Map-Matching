@@ -114,12 +114,42 @@ int main() {
       !require(frontend.postconditionsValid(&reason), "posterior state is valid"))
     return 1;
 
+  FastLio2IkfomFrontend gravity_frontend(parameters);
+  InitialStateOverrides gravity_override = initial_state;
+  gravity_override.use_initial_gravity = true;
+  gravity_override.gravity_map_m_s2 =
+      Eigen::Vector3d(0.76200002, 0.06218908, -9.77915996);
+  if (!require(gravity_frontend.initializeFromStaticCalibration(
+          calibration, initial_pose, T_imu_lidar, gravity_map,
+          gravity_override, epoch, &reason),
+      "dataset-specific gravity override initializes")) return 1;
+  const FilterSnapshot gravity_initialized = gravity_frontend.getState();
+  if (!require((gravity_initialized.gravity - gravity_override.gravity_map_m_s2).norm() < 1e-8,
+               "configured dataset gravity is inserted at initialization") ||
+      !require(std::abs(gravity_initialized.gravity.norm() - parameters.gravity_mps2) < 1e-8,
+               "gravity override preserves the configured magnitude"))
+    return 1;
+
+  FastLio2IkfomFrontend default_gravity_frontend(parameters);
+  InitialStateOverrides default_gravity = initial_state;
+  default_gravity.use_initial_gravity = false;
+  if (!require(default_gravity_frontend.initializeFromStaticCalibration(
+          calibration, initial_pose, T_imu_lidar, gravity_map,
+          default_gravity, epoch, &reason),
+      "legacy gravity path initializes when override is disabled")) return 1;
+  if (!require((default_gravity_frontend.getState().gravity - gravity_map).norm() < 1e-8,
+               "disabled gravity override preserves the supplied legacy gravity"))
+    return 1;
+
   std::cout << "DATASET_INITIAL_STATE_OVERRIDE_PASS"
             << " P_v0=" << P0(12, 12)
             << " P_bg0=" << P0(15, 15)
             << " P_ba0=" << P0(18, 18)
             << " update_dv=" << delta.velocity.norm()
             << " update_dbg=" << delta.gyro_bias.norm()
-            << " update_dba=" << delta.accel_bias.norm() << '\n';
+            << " update_dba=" << delta.accel_bias.norm()
+            << " gravity_override_norm=" << gravity_initialized.gravity.norm()
+            << " legacy_gravity_error="
+            << (default_gravity_frontend.getState().gravity - gravity_map).norm() << '\n';
   return 0;
 }
