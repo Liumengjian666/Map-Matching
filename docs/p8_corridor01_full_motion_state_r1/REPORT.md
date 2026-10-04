@@ -4,7 +4,7 @@
 
 `FINAL_RESULT = MOTION_STATE_INITIALIZATION_NOT_PRIMARY_CAUSE`
 
-At the fixed official 67 s pose, injecting the FAST-LIO-derived motion state changed the scan-end LiDAR seed by 0.273374 m and 0.348126 deg. It reduced the NDT translation correction by only 0.054687 m (3.04%) and rotation correction by 0.008702 deg. Both runs still reached the 80-iteration cap and terminated at nearly the same pose (0.066871 m / 0.656300 deg apart). This single-frame test does not support zero velocity/bias initialization as the primary explanation for the large TX666 correction. It does not establish that either terminal is globally correct.
+At the fixed official 67 s pose, injecting the FAST-LIO-derived motion state changed the scan-end LiDAR seed by 0.273374 m and 0.348126 deg. It reduced the NDT translation correction by only 0.054687 m (3.04%) and rotation correction by 0.008702 deg. Both runs still reached the 80-iteration cap and returned nearly the same iteration-limited terminal pose (0.066871 m / 0.656300 deg apart). This single-frame test does not support zero velocity/bias initialization as the primary explanation for the large TX666 correction. It does not establish that either terminal is globally correct.
 
 ## Frozen inputs and provenance
 
@@ -15,7 +15,7 @@ At the fixed official 67 s pose, injecting the FAST-LIO-derived motion state cha
 - Timed scan manifest SHA256 `41d0b2040a5de8a8bd428c382a7b6dc18fabcaa8d3e7d2cc331018e0585edf1d`; timed scan index SHA256 `e018558448ffa2a34c7bbe4f44d2219c22074193c91057765cea5d175544b1af`.
 - Packed timed-point source SHA256 `6195878e0d0a68891b392c490078e7ed3be185cd6425d1738ccc13847df31916`.
 - Frozen P7 parameters: `corridor01_params_official_calibration.txt`, SHA256 `7e42752ff8b84eae2b2da8d7d9fe179db0bb8f364a923e12236d2e91336e357d`.
-- Fixed public `T_imu_lidar` (same in A/B; no SVD or inverse):
+- Fixed public calibration input and the unchanged P7 runtime SO(3) representation (same in A/B; no SVD or inverse):
 
   ```text
   R = [ 0.999212900  -0.000519121   0.004000000
@@ -23,6 +23,16 @@ At the fixed official 67 s pose, injecting the FAST-LIO-derived motion state cha
        -0.004000000   0.000802565   0.999993652 ]
   t = [0.080, 0.029, 0.030] m
   ```
+
+  The P7 parameter file stores the rotation as quaternion `[x,y,z,w] = [0.000435591554, 0.002000771806, 0.000258941125, 0.999997870059]`. The runtime SO(3) matrix decoded from that existing quaternion is
+
+  ```text
+  [ 0.999991860  -0.000516138   0.004001761
+    0.000519624   0.999999486  -0.000870145
+   -0.004001309   0.000872217   0.999991614 ]
+  ```
+
+  This is the P7 quaternion-state representation of the supplied calibration, not a literal use of its slightly non-orthonormal raw 3x3 coefficients. That pre-existing representation was left untouched. Consequently this A/B experiment isolates motion-state sensitivity under the frozen P7 transform; it does not independently close any raw-matrix-versus-SO(3)-encoding calibration question.
 
 - P7 registration settings were unchanged: map/target voxel 0.15 m, source voxel 0.25 m, source cap 1,400, range 0.5–80 m; NDT resolution 0.8 m, step 0.08, epsilon `1e-5`, maximum 80 iterations. Both cases loaded the same raw map and used the same preprocessing implementation.
 - FAST-LIO reference: `hku-mars/FAST_LIO` commit `7cc4175de6f8ba2edf34bab02a42195b141027e9`; dataset-config repository `engcang/SLAM-application` commit `412e162fd7a125df722aa84883541aa7a397cab1`; `FAST_LIO/config/subt_longcorridor.yaml` SHA256 `8b4d5b58819e0a2203785d3b9975614417d17299b33d29710ed9e393465682dd`. State-only instrumentation sampled the filter immediately after IMU prediction and before the TX666 LiDAR update; it did not feed data back into FAST-LIO. The 20-row state capture is archived as `fastlio_tx666_anchor_states.csv`, SHA256 `b12f4ded6e5874f622f308bc278c3af8cc184c51332aa61895171b0558078ef5`.
@@ -204,7 +214,7 @@ Terminal difference: 0.066871 m and 0.656300 deg. The lower FULL_STATE correctio
 
 ## Interpretation and scope
 
-The full state materially changes scan-end prediction (0.273 m seed shift) and same-index deskew geometry, but barely changes the NDT correction and converges to a nearby terminal. The motion-state mismatch is therefore not the primary cause of TX666's roughly 1.8 m / 16.4 deg NDT correction under this experiment. This is a one-frame diagnostic, not proof that motion state never matters or that the NDT terminal is correct. No GT, map fitting, normalized map, SVD, inverse extrinsic, NDT tuning, multi-start, Dual-U, or post-TX666 tracking was used.
+The full state materially changes scan-end prediction (0.273 m seed shift) and same-index deskew geometry, but barely changes the NDT correction and returns a nearby iteration-limited terminal. The motion-state mismatch is therefore not the primary cause of TX666's roughly 1.8 m / 16.4 deg NDT correction under this experiment. This is a one-frame diagnostic, not proof that motion state never matters or that the NDT terminal is correct. The unchanged P7 quaternion encoding of the supplied LiDAR extrinsic remains a limitation on claims about absolute raw calibration. No GT, map fitting, normalized map, SVD, inverse extrinsic, NDT tuning, multi-start, Dual-U, or post-TX666 tracking was used.
 
 ## Code and verification
 
