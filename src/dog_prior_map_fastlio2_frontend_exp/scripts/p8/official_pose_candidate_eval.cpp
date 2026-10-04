@@ -11,6 +11,7 @@
 #include <pcl/registration/ndt.h>
 
 #include <Eigen/Geometry>
+#include <Eigen/SVD>
 
 #include <algorithm>
 #include <cmath>
@@ -20,6 +21,7 @@
 #include <iostream>
 #include <limits>
 #include <stdexcept>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -74,7 +76,14 @@ struct CloudMetrics {
 
 struct Candidate {
   std::string name;
+  std::string tag;
   Isometry map_T_lidar = Isometry::Identity();
+};
+
+struct RotationProjectionStats {
+  double orthogonality_error = 0.0;
+  double determinant = 0.0;
+  double projection_frobenius = 0.0;
 };
 
 struct LowVarianceGyroReference {
@@ -119,14 +128,29 @@ Cloud::Ptr loadBaselineTarget(const std::string& path,
                    parameters.target_voxel_m);
 }
 
-Eigen::Matrix3d officialYamlRotation() {
+Eigen::Matrix3d projectToSO3(const Eigen::Matrix3d& input,
+                             RotationProjectionStats* stats = nullptr) {
+  Eigen::JacobiSVD<Eigen::Matrix3d> svd(input,
+      Eigen::ComputeFullU | Eigen::ComputeFullV);
+  Eigen::Matrix3d correction = Eigen::Matrix3d::Identity();
+  correction(2, 2) = (svd.matrixU() * svd.matrixV().transpose()).determinant();
+  const Eigen::Matrix3d projected =
+      svd.matrixU() * correction * svd.matrixV().transpose();
+  if (stats != nullptr) {
+    stats->orthogonality_error =
+        (input.transpose() * input - Eigen::Matrix3d::Identity()).norm();
+    stats->determinant = input.determinant();
+    stats->projection_frobenius = (projected - input).norm();
+  }
+  return projected;
+}
+
+Eigen::Matrix3d officialYamlRotationInput() {
   Eigen::Matrix3d rotation;
   rotation << 0.135990, -0.990409, -0.024406,
               0.990705,  0.136027,  0.000140,
               0.003181, -0.024198,  0.999702;
-  // Match the pose representation consumed by the baseline: construct a unit
-  // quaternion from the serialized matrix, then use its proper rotation.
-  return Eigen::Quaterniond(rotation).normalized().toRotationMatrix();
+  return rotation;
 }
 
 Isometry transform(const Eigen::Matrix3d& rotation, const Eigen::Vector3d& translation) {
@@ -136,17 +160,53 @@ Isometry transform(const Eigen::Matrix3d& rotation, const Eigen::Vector3d& trans
   return result;
 }
 
-Isometry yamlTransform() {
-  return transform(officialYamlRotation(), Eigen::Vector3d(1.968147, -6.879292, -0.896125));
+Isometry projectToRigidIsometry(const Isometry& input) {
+  Isometry result = input;
+  result.linear() = projectToSO3(input.linear());
+  return result;
 }
 
-Isometry configuredTImuLidar() {
+Isometry parseMapFrameTransform(const std::string& csv) {
+  std::stringstream input(csv);
+  Eigen::Matrix4d matrix = Eigen::Matrix4d::Identity();
+  for (int row = 0; row < 3; ++row) {
+    for (int col = 0; col < 4; ++col) {
+      require(static_cast<bool>(input >> matrix(row, col)),
+              "invalid_map_frame_transform_value");
+      if (row != 2 || col != 3) {
+        char delimiter = '\0';
+        require(static_cast<bool>(input >> delimiter) && delimiter == ',',
+                "invalid_map_frame_transform_delimiter");
+      }
+    }
+  }
+  input >> std::ws;
+  require(input.eof(), "extra_map_frame_transform_values");
+  Isometry result = Isometry::Identity();
+  result.matrix() = matrix;
+  require((result.linear().transpose() * result.linear() - Eigen::Matrix3d::Identity()).norm() < 1e-6 &&
+          std::abs(result.linear().determinant() - 1.0) < 1e-6,
+          "map_frame_transform_rotation_not_proper");
+  result.linear() = projectToSO3(result.linear());
+  return result;
+}
+
+Isometry yamlTransform(RotationProjectionStats* stats = nullptr) {
+  return transform(projectToSO3(officialYamlRotationInput(), stats),
+                   Eigen::Vector3d(1.968147, -6.879292, -0.896125));
+}
+
+Eigen::Matrix3d officialImuLidarRotationInput() {
   Eigen::Matrix3d rotation;
-  rotation << 0.9999918597233476, -0.0005161381080031,  0.0040017606742145,
-              0.0005196241852026,  0.9999994864189841, -0.0008701450879252,
-             -0.0040013095039469,  0.0008722174163331,  0.9999916143443562;
-  const Eigen::Matrix3d projected = Eigen::Quaterniond(rotation).normalized().toRotationMatrix();
-  return transform(projected, Eigen::Vector3d(0.08, 0.029, 0.03));
+  rotation << 0.999212900, -0.000519121,  0.004000000,
+              0.000516111,  0.999218492, -0.000939132,
+             -0.004000000,  0.000802565,  0.999993652;
+  return rotation;
+}
+
+Isometry officialTImuLidar(RotationProjectionStats* stats = nullptr) {
+  return transform(projectToSO3(officialImuLidarRotationInput(), stats),
+                   Eigen::Vector3d(0.080000000, 0.029000000, 0.030000000));
 }
 
 LowVarianceGyroReference earliestCausalLowVarianceGyroReference(
@@ -251,7 +311,7 @@ Eigen::Matrix3d imuRotationFromReferenceToPoint(const paper::P7ImuVector& imu,
 paper::RegistrationCloud rotationallyDeskewToReference(
     const paper::P7TimedLidarVector& timed, const paper::P7ImuVector& imu,
     const LowVarianceGyroReference& gyro_reference, uint64_t reference_ns) {
-  const Isometry T_imu_lidar = configuredTImuLidar();
+  const Isometry T_imu_lidar = officialTImuLidar();
   const Eigen::Matrix3d R_imu_lidar = T_imu_lidar.linear();
   const Eigen::Vector3d t_imu_lidar = T_imu_lidar.translation();
   paper::RegistrationCloud cloud;
@@ -288,12 +348,12 @@ Isometry toIsometry(const paper::Pose3d& pose) {
 
 std::vector<Candidate> candidates() {
   const Isometry T_yaml = yamlTransform();
-  const Isometry T_imu_lidar = configuredTImuLidar();
+  const Isometry T_imu_lidar = officialTImuLidar();
   return {
-      {"A_DIRECT_AS_T_MAP_LIDAR", T_yaml},
-      {"B_INVERSE_AS_T_MAP_LIDAR", T_yaml.inverse()},
-      {"C_DIRECT_AS_T_MAP_IMU", T_yaml * T_imu_lidar},
-      {"D_INVERSE_AS_T_MAP_IMU", T_yaml.inverse() * T_imu_lidar}};
+      {"A_DIRECT_AS_T_MAP_LIDAR", "A", T_yaml},
+      {"B_INVERSE_AS_T_MAP_LIDAR", "B", T_yaml.inverse()},
+      {"C_DIRECT_AS_T_MAP_IMU", "C", T_yaml * T_imu_lidar},
+      {"D_INVERSE_AS_T_MAP_IMU", "D", T_yaml.inverse() * T_imu_lidar}};
 }
 
 CloudMetrics measure(const Cloud::ConstPtr& target, const Cloud::ConstPtr& source,
@@ -365,6 +425,24 @@ Cloud::Ptr transformedCloud(const Cloud::ConstPtr& source, const Isometry& trans
   return result;
 }
 
+Cloud::Ptr makePclCloud(const paper::RegistrationCloud& source) {
+  Cloud::Ptr cloud(new Cloud);
+  cloud->reserve(source.size());
+  for (const auto& point : source) cloud->emplace_back(point.x, point.y, point.z);
+  finalize(cloud);
+  return cloud;
+}
+
+void saveCandidateCloud(const std::string& directory, const std::string& tag,
+                        const std::string& suffix, const Cloud::ConstPtr& cloud,
+                        const Isometry& pose) {
+  if (directory.empty()) return;
+  const Cloud::Ptr aligned = transformedCloud(cloud, pose);
+  const std::string path = directory + "/candidate_" + tag + "_" + suffix + ".pcd";
+  require(pcl::io::savePCDFileBinary(path, *aligned) == 0,
+          "cannot_write_candidate_cloud:" + path);
+}
+
 double initialNdtScore(const Cloud::ConstPtr& target, const Cloud::ConstPtr& source,
                        const Isometry& pose,
                        const paper::CurrentFrameNdtParameters& parameters) {
@@ -404,6 +482,12 @@ void writeMetrics(std::ostream& output, const CloudMetrics& metrics) {
          << metrics.nn_p95 << ',' << metrics.nn_mse << ',' << metrics.bbox_fraction;
 }
 
+void writePoseMatrix(std::ostream& output, const Isometry& pose) {
+  for (int row = 0; row < 3; ++row)
+    for (int col = 0; col < 4; ++col)
+      output << ',' << pose.matrix()(row, col);
+}
+
 void writeMetricsBeforeBbox(std::ostream& output, const CloudMetrics& metrics) {
   output << metrics.overlap_020 << ',' << metrics.overlap_030 << ','
          << metrics.overlap_050 << ',' << metrics.overlap_100 << ','
@@ -414,15 +498,19 @@ void writeMetricsBeforeBbox(std::ostream& output, const CloudMetrics& metrics) {
 
 int main(int argc, char** argv) {
   try {
-    if (argc != 7)
+    if (argc < 7 || argc > 9)
       throw std::runtime_error("usage: p8_official_pose_candidate_eval FILTER_SCANS_CSV "
-          "RAW_TIMED_SCAN_INDEX_CSV TIMED_POINTS_BIN IMU_CSV OFFICIAL_MAP_PCD OUTPUT_CSV");
+          "RAW_TIMED_SCAN_INDEX_CSV TIMED_POINTS_BIN IMU_CSV MAP_PCD OUTPUT_CSV "
+          "[PCD_OUTPUT_DIR [MAP_T_RAW_3X4_CSV]]");
     const std::string filter_path = argv[1];
     const std::string index_path = argv[2];
     const std::string points_path = argv[3];
     const std::string imu_path = argv[4];
     const std::string map_path = argv[5];
     const std::string output_path = argv[6];
+    const std::string pcd_output_dir = argc >= 8 ? argv[7] : "";
+    const Isometry map_T_raw = argc == 9 ? parseMapFrameTransform(argv[8]) :
+                                           Isometry::Identity();
 
     std::cerr << "stage=read_scan_index\n";
     const auto scans = paper::readP7TimedScans(filter_path, index_path);
@@ -445,6 +533,9 @@ int main(int argc, char** argv) {
     paper::CurrentFrameNdtParameters parameters;
     const auto timed = paper::readP7PackedTimedCloud(points_path, *selected_scan);
     const auto imu = paper::readP7Imu(imu_path);
+    RotationProjectionStats yaml_projection, extrinsic_projection;
+    const Isometry T_yaml = yamlTransform(&yaml_projection);
+    const Isometry T_imu_lidar = officialTImuLidar(&extrinsic_projection);
     const LowVarianceGyroReference gyro_reference =
         earliestCausalLowVarianceGyroReference(imu, assumed_s67_reference_ns);
     const paper::RegistrationCloud deskewed_source = rotationallyDeskewToReference(
@@ -454,6 +545,7 @@ int main(int argc, char** argv) {
     for (const auto& point : raw_source)
       finite_points += std::isfinite(point.x) && std::isfinite(point.y) && std::isfinite(point.z);
     const auto prepared = paper::preprocessRegistrationCloud(raw_source, parameters);
+    const Cloud::Ptr visual_source = makePclCloud(raw_source);
     Cloud::Ptr source(new Cloud);
     source->reserve(prepared.size());
     for (const auto& point : prepared)
@@ -469,10 +561,20 @@ int main(int argc, char** argv) {
     const auto grid = registration.targetGridLeafSizeMeters();
     std::cerr << "stage=candidates_ready source_prepared=" << prepared.size()
               << " target_points=" << target->size() << '\n';
-
+    std::cout << std::setprecision(12) << "map_T_raw=\n" << map_T_raw.matrix() << '\n';
+    std::cout << "official_yaml_rotation_projection orthogonality_error="
+        << yaml_projection.orthogonality_error << " determinant=" << yaml_projection.determinant
+        << " frobenius_change=" << yaml_projection.projection_frobenius
+        << " projected_R=\n" << T_yaml.linear() << '\n'
+        << "official_imu_lidar_rotation_projection orthogonality_error="
+        << extrinsic_projection.orthogonality_error << " determinant="
+        << extrinsic_projection.determinant << " frobenius_change="
+        << extrinsic_projection.projection_frobenius << " input_R=\n"
+        << officialImuLidarRotationInput() << "\nprojected_T_imu_lidar=\n"
+        << T_imu_lidar.matrix() << '\n';
     std::ofstream output(output_path);
     require(static_cast<bool>(output), "cannot_create_output_csv");
-    output << std::setprecision(12)
+    output << std::setprecision(17)
         << "candidate,source_raw_points,source_finite_points,source_prepared_points,target_points,"
            "target_grid_x_m,target_grid_y_m,target_grid_z_m,overlap_020,overlap_030,overlap_050,"
            "overlap_100,nn_mean_m,nn_median_m,nn_p90_m,nn_p95_m,initial_nn_mse_m2,"
@@ -482,7 +584,11 @@ int main(int argc, char** argv) {
            "ndt_probability_final,ndt_alignment_ms,translation_correction_m,rotation_correction_rad,"
            "final_overlap_020,final_overlap_030,final_overlap_050,final_overlap_100,"
            "final_nn_mean_m,final_nn_median_m,final_nn_p90_m,final_nn_p95_m,final_nn_mse_m2,"
-           "final_bbox_fraction,final_x,final_y,final_z,final_qx,final_qy,final_qz,final_qw\n";
+           "final_bbox_fraction,final_x,final_y,final_z,final_qx,final_qy,final_qz,final_qw,"
+           "evaluated_T_map_lidar_r00,evaluated_T_map_lidar_r01,evaluated_T_map_lidar_r02,"
+           "evaluated_T_map_lidar_t0,evaluated_T_map_lidar_r10,evaluated_T_map_lidar_r11,"
+           "evaluated_T_map_lidar_r12,evaluated_T_map_lidar_t1,evaluated_T_map_lidar_r20,"
+           "evaluated_T_map_lidar_r21,evaluated_T_map_lidar_r22,evaluated_T_map_lidar_t2\n";
     output.flush();
     std::cout << std::setprecision(12)
         << "transaction_id=665 scan_start_ns=" << selected_scan->scan_start_ns
@@ -500,24 +606,29 @@ int main(int argc, char** argv) {
 
     for (const Candidate& candidate : candidates()) {
       std::cerr << "stage=align candidate=" << candidate.name << '\n';
-      const CloudMetrics initial_metrics = measure(target, source, candidate.map_T_lidar);
+      // Canonicalize once. Initial metrics, the NDT seed, CSV and PCD exports
+      // all use this exact effective rigid transform.
+      const Isometry map_T_lidar = projectToRigidIsometry(map_T_raw * candidate.map_T_lidar);
+      const CloudMetrics initial_metrics = measure(target, source, map_T_lidar);
+      saveCandidateCloud(pcd_output_dir, candidate.tag, "aligned", visual_source, map_T_lidar);
       const double initial_ndt_score = initialNdtScore(target, source,
-          candidate.map_T_lidar, parameters);
+          map_T_lidar, parameters);
       const double initial_ndt_probability = initial_ndt_score /
           static_cast<double>(source->size());
       paper::CurrentFrameNdtResult result;
       require(registration.align(assumed_s67_reference_ns, raw_source,
-                  toPose(candidate.map_T_lidar), &result, &reason),
+                  toPose(map_T_lidar), &result, &reason),
               candidate.name + "_ndt_align:" + reason);
       const Isometry refined = toIsometry(result.raw_map_T_lidar);
       const double final_ndt_score_check = initialNdtScore(target, source, refined, parameters);
       const double final_ndt_probability_check = final_ndt_score_check /
           static_cast<double>(source->size());
       const double translation_correction =
-          (refined.translation() - candidate.map_T_lidar.translation()).norm();
-      const double rotation_correction = rotationDistanceRad(candidate.map_T_lidar, refined);
+          (refined.translation() - map_T_lidar.translation()).norm();
+      const double rotation_correction = rotationDistanceRad(map_T_lidar, refined);
       const Cloud::Ptr final_source = transformedCloud(source, refined);
       const CloudMetrics final_metrics = measure(target, final_source, Isometry::Identity());
+      saveCandidateCloud(pcd_output_dir, candidate.tag, "refined", visual_source, refined);
       output << candidate.name << ',' << raw_source.size() << ',' << finite_points << ','
           << prepared.size() << ',' << target->size() << ',' << grid[0] << ',' << grid[1]
           << ',' << grid[2] << ',';
@@ -535,11 +646,13 @@ int main(int argc, char** argv) {
           << refined.translation().z() << ',' << result.raw_map_T_lidar.orientation.x() << ','
           << result.raw_map_T_lidar.orientation.y() << ','
           << result.raw_map_T_lidar.orientation.z() << ','
-          << result.raw_map_T_lidar.orientation.w() << '\n';
+          << result.raw_map_T_lidar.orientation.w();
+      writePoseMatrix(output, map_T_lidar);
+      output << '\n';
       output.flush();
 
       std::cout << "\n" << candidate.name << '\n';
-      printMatrix(candidate.map_T_lidar);
+      printMatrix(map_T_lidar);
       std::cout << "initial_overlap_020_030_050_100=" << initial_metrics.overlap_020 << ','
           << initial_metrics.overlap_030 << ',' << initial_metrics.overlap_050 << ','
           << initial_metrics.overlap_100 << " nn_mean_median_p90_p95="
@@ -569,7 +682,8 @@ int main(int argc, char** argv) {
           << final_metrics.nn_p90 << ',' << final_metrics.nn_p95
           << " bbox_fraction=" << final_metrics.bbox_fraction << '\n';
     }
-    std::cout << "gt_used=false output_csv=" << output_path << '\n';
+    std::cout << "gt_used=false output_csv=" << output_path
+              << " pcd_output_dir=" << pcd_output_dir << '\n';
     return 0;
   } catch (const std::exception& error) {
     std::cerr << "ERROR=" << error.what() << '\n';
