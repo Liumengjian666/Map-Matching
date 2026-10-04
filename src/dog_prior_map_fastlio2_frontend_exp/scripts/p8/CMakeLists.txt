@@ -53,6 +53,13 @@ target_link_libraries(p8_tx666_deskew_export PRIVATE
 target_compile_options(p8_tx666_deskew_export PRIVATE
   ${PCL_DEFINITIONS} ${OpenMP_CXX_FLAGS} -Wall -Wextra -Wpedantic)
 
+add_executable(p8_public_raw_tx666_ndt public_raw_tx666_ndt.cpp)
+target_include_directories(p8_public_raw_tx666_ndt PRIVATE ${PCL_INCLUDE_DIRS})
+target_link_libraries(p8_public_raw_tx666_ndt PRIVATE
+  p8_baseline_registration ${PCL_LIBRARIES})
+target_compile_options(p8_public_raw_tx666_ndt PRIVATE
+  ${PCL_DEFINITIONS} -Wall -Wextra -Wpedantic)
+
 enable_testing()
 add_test(NAME p8_tx666_rviz_pcd_parser_test
   COMMAND ${PYTHON_EXECUTABLE}
