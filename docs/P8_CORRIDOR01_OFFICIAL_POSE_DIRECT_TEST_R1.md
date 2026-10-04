@@ -74,7 +74,7 @@ effective projected extrinsic is:
 ```
 
 Its rotational change from the supplied block has Frobenius norm
-`0.00110741515153`. The same resulting proper candidate transform is used
+`0.00110741654004`. The same resulting proper candidate transform is used
 for overlap, NDT initialization, CSV provenance, and PCD export. This
 projection is explicitly part of the evaluation contract; C/D are not tests
 of the malformed non-rigid block as an affine warp.
@@ -126,7 +126,7 @@ quantity in m².
 | C direct IMU | .1571/.2393/.3593/.5257 | 1.6701 / .8883 / 4.6173 | 788.759 / .563399 | YES; 80; `ITERATION_LIMIT_EXHAUSTED` | 1.66065 / .289805 | 1777.871 / 1.269908; .819612 | .4271/.5650/.7250/.8743 | .429352, −6.128388, −.896268 |
 | D inverse IMU | .0471/.0907/.1350/.2479 | 3.2918 / 3.4279 / 6.6067 | 274.362 / .195973 | YES; 78; `SUCCESS` | 2.52229 / .131940 | 783.553 / .559681; 6.821955 | .1721/.2450/.2786/.3257 | 6.177386, .885707, −.631861 |
 
-Direct A/C have roughly 2× the 0.30 m initial overlap of B/D and refine into
+Direct A/C have about 2.6–2.8× the 0.30 m initial overlap of B/D and refine into
 the same high-overlap corridor basin. Inverse B/D refine to a quantitatively
 poorer basin. D's wrapper success is not evidence that it is
 the correct map pose: its final fitness and overlap are poor.
