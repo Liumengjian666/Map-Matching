@@ -1,0 +1,74 @@
+{
+  "reference_file": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/gt/corridor01_gt.txt",
+  "reference_sha256": "3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03",
+  "row_count": 1385,
+  "timestamp_semantics": "TUM absolute sensor timestamp in nanoseconds (decimal seconds)",
+  "pose_origin": "IMU, fixed/world frame by ICCV challenge lineage closure",
+  "anchor_timestamp_ns": 1517157286165072000,
+  "central_samples": {
+    "t_minus_ns": 1517157286155932903,
+    "t_plus_ns": 1517157286357652903,
+    "t_minus_position_reference_m": [
+      156.580726,
+      54.339934,
+      -12.846159
+    ],
+    "t_plus_position_reference_m": [
+      157.132107,
+      54.5528,
+      -12.889235
+    ],
+    "dt_s": 0.20172
+  },
+  "central_velocity_reference_m_s": [
+    2.733397779099703,
+    1.0552548086456386,
+    -0.21354352567915538
+  ],
+  "central_speed_m_s": 2.9377928734538816,
+  "local_fit_window_s": [
+    -0.3,
+    0.3
+  ],
+  "local_fit_sample_count": 3,
+  "local_fit_sample_timestamps_ns": [
+    1517157285954282999,
+    1517157286155932903,
+    1517157286357652903
+  ],
+  "local_fit_sample_offsets_from_anchor_s": [
+    -0.210789001,
+    -0.009139097,
+    0.19258090300000003
+  ],
+  "local_fit_velocity_reference_m_s": [
+    2.805128276512832,
+    1.0693030575774427,
+    -0.22875688924060922
+  ],
+  "central_fit_difference_m_s": 0.07465965435252034,
+  "R_map_reference_from_same_anchor_imu_pose": [
+    [
+      0.45989704997391795,
+      -0.8845676551645945,
+      -0.07768376189332331
+    ],
+    [
+      0.8870030547558155,
+      0.4617200290472811,
+      -0.006340002399793737
+    ],
+    [
+      0.04147630985441076,
+      -0.06598998570380851,
+      0.9969578915419006
+    ]
+  ],
+  "velocity_map_m_s": [
+    0.34022616773109743,
+    2.9131183272896117,
+    -0.16915889960861785
+  ],
+  "speed_map_m_s": 2.937792873453881,
+  "frame_transform_contract": "R_map_reference = R_map_imu(anchor) * R_reference_imu(anchor)^T; vector rotation only"
+}

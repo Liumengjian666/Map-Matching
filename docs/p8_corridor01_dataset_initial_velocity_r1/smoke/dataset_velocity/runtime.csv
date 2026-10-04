@@ -1,0 +1,2 @@
+transaction_id,prediction_and_deskew_ms,cloud_io_ms,ndt_total_ms,ndt_alignment_ms,ikfom_update_ms,frame_total_ms,ndt_effective,lidar_update_applied
+666,3.6281479999999999,0.65721300000000005,126.190043,123.129081,0.040018999999999999,138.22806800000001,1,1

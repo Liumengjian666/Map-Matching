@@ -110,6 +110,24 @@ if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
   add_test(NAME fastlio2_propagation_contract_test
     COMMAND $<TARGET_FILE:fastlio2_propagation_contract_test>)
 
+  add_executable(dataset_initial_state_override_test
+    src/fastlio2_frontend_ikfom.cpp
+    src/registration_geometry.cpp
+    tests/dataset_initial_state_override_test.cpp
+  )
+  target_include_directories(dataset_initial_state_override_test PRIVATE
+    include
+    "${FASTLIO2_REF_ROOT}/include"
+    ${EIGEN3_INCLUDE_DIRS}
+    ${catkin_INCLUDE_DIRS}
+  )
+  target_compile_options(dataset_initial_state_override_test PRIVATE ${OpenMP_CXX_FLAGS})
+  target_link_libraries(dataset_initial_state_override_test ${catkin_LIBRARIES}
+    ${OpenMP_CXX_FLAGS})
+  add_dependencies(dataset_initial_state_override_test ${catkin_EXPORTED_TARGETS})
+  add_test(NAME dataset_initial_state_override_test
+    COMMAND $<TARGET_FILE:dataset_initial_state_override_test>)
+
   add_executable(scan_end_deskew_runtime_test
     src/fastlio2_frontend_ikfom.cpp
     src/registration_geometry.cpp
@@ -203,6 +221,7 @@ if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
   target_link_libraries(p8_corridor01_full_motion_state_tx666
     ${catkin_LIBRARIES}
     ${PCL_LIBRARIES}
+    usb-1.0
     ${OpenMP_CXX_FLAGS}
   )
   add_dependencies(p8_corridor01_full_motion_state_tx666 ${catkin_EXPORTED_TARGETS})

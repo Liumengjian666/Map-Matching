@@ -71,6 +71,21 @@ Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> makeInitialCovariance(
   return p;
 }
 
+Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF>
+makeInitialCovariance(const InitialStateOverrides& initial_state) {
+  auto p = makeInitialCovariance();
+  if (!initial_state.use_covariance_overrides) return p;
+  // state_ikfom tangent ordering is [pos(0), rot(3), extrinsic_R(6),
+  // extrinsic_t(9), vel(12), gyro_bias(15), accel_bias(18), gravity_S2(21)].
+  p.block<3, 3>(12, 12).diagonal().setConstant(
+      initial_state.velocity_std_m_s * initial_state.velocity_std_m_s);
+  p.block<3, 3>(15, 15).diagonal().setConstant(
+      initial_state.gyro_bias_std_rad_s * initial_state.gyro_bias_std_rad_s);
+  p.block<3, 3>(18, 18).diagonal().setConstant(
+      initial_state.accel_bias_std_m_s2 * initial_state.accel_bias_std_m_s2);
+  return p;
+}
+
 void enforceFixedExtrinsicConstraint(
     state_ikfom& state,
     Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF>& covariance,
@@ -407,6 +422,20 @@ bool FastLio2IkfomFrontend::initializeFromStaticCalibration(
     const Eigen::Vector3d& gravity_map,
     const Eigen::Vector3d& initial_velocity, uint64_t start_timestamp_ns,
     std::string* failure_reason) {
+  InitialStateOverrides initial_state;
+  initial_state.use_initial_velocity = true;
+  initial_state.velocity_world_m_s = initial_velocity;
+  return initializeFromStaticCalibration(calibration, initial_map_T_imu,
+      T_imu_lidar, gravity_map, initial_state, start_timestamp_ns,
+      failure_reason);
+}
+
+bool FastLio2IkfomFrontend::initializeFromStaticCalibration(
+    const StaticImuCalibration& calibration,
+    const Pose3d& initial_map_T_imu, const Pose3d& T_imu_lidar,
+    const Eigen::Vector3d& gravity_map,
+    const InitialStateOverrides& initial_state, uint64_t start_timestamp_ns,
+    std::string* failure_reason) {
   if (failure_reason) failure_reason->clear();
   if (!calibration.gate_passed ||
       calibration.sample_count != static_cast<std::size_t>(impl_->parameters.static_init_samples) ||
@@ -421,7 +450,12 @@ bool FastLio2IkfomFrontend::initializeFromStaticCalibration(
       !calibration.gyro_bias.allFinite() ||
       !calibration.accel_bias_prior.allFinite() ||
       !calibration.acceleration_std.allFinite() || !calibration.gyro_std.allFinite() ||
-      !gravity_map.allFinite() || !initial_velocity.allFinite() ||
+      !gravity_map.allFinite() ||
+      (initial_state.use_initial_velocity &&
+       !initial_state.velocity_world_m_s.allFinite()) ||
+      (initial_state.use_initial_biases &&
+       (!initial_state.gyro_bias_rad_s.allFinite() ||
+        !initial_state.accel_bias_m_s2.allFinite())) ||
       !std::isfinite(calibration.gravity_mps2) ||
       std::abs(calibration.gravity_mps2 - impl_->parameters.gravity_mps2) > 1e-9 ||
       (calibration.accel_bias_prior - impl_->parameters.initial_accel_bias).norm() > 1e-12 ||
@@ -429,19 +463,30 @@ bool FastLio2IkfomFrontend::initializeFromStaticCalibration(
       calibration.gyro_std.maxCoeff() > impl_->parameters.max_static_gyro_std_rad_s ||
       std::abs(gravity_map.norm() - impl_->parameters.gravity_mps2) > 1e-6)
     return fail(failure_reason, "invalid_static_calibration_or_reanchor_gravity");
+  if (initial_state.use_covariance_overrides &&
+      (!std::isfinite(initial_state.velocity_std_m_s) ||
+       initial_state.velocity_std_m_s <= 0.0 ||
+       !std::isfinite(initial_state.gyro_bias_std_rad_s) ||
+       initial_state.gyro_bias_std_rad_s <= 0.0 ||
+       !std::isfinite(initial_state.accel_bias_std_m_s2) ||
+       initial_state.accel_bias_std_m_s2 <= 0.0))
+    return fail(failure_reason, "invalid_initial_state_covariance_override");
 
   state_ikfom state;
   state.pos = vect3(initial_map_T_imu.position);
   state.rot = SO3(initial_map_T_imu.orientation.toRotationMatrix());
   state.offset_R_L_I = SO3(T_imu_lidar.orientation.toRotationMatrix());
   state.offset_T_L_I = vect3(T_imu_lidar.position);
-  state.vel = vect3(initial_velocity);
-  state.bg = vect3(calibration.gyro_bias);
-  state.ba = vect3(calibration.accel_bias_prior);
+  state.vel = vect3(initial_state.use_initial_velocity
+      ? initial_state.velocity_world_m_s : Eigen::Vector3d::Zero());
+  state.bg = vect3(initial_state.use_initial_biases
+      ? initial_state.gyro_bias_rad_s : calibration.gyro_bias);
+  state.ba = vect3(initial_state.use_initial_biases
+      ? initial_state.accel_bias_m_s2 : calibration.accel_bias_prior);
   state.grav = S2(gravity_map);
 
   Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> covariance =
-      makeInitialCovariance();
+      makeInitialCovariance(initial_state);
   enforceFixedExtrinsicConstraint(state, covariance, state.offset_R_L_I,
                                   state.offset_T_L_I);
   impl_->filter.change_x(state);

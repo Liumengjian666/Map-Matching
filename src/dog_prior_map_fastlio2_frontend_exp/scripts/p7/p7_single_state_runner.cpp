@@ -43,6 +43,31 @@ std::array<double, 16> matrixArgument(const char* argument) {
     throw std::runtime_error("map_T_imu_matrix_has_extra_values");
   return values;
 }
+Eigen::Vector3d vectorArgument(const char* argument, const char* name) {
+  const std::string value(argument);
+  std::stringstream input(value);
+  std::string field;
+  Eigen::Vector3d result;
+  for (int index = 0; index < 3; ++index) {
+    if (!std::getline(input, field, ','))
+      throw std::runtime_error(std::string(name) + "_requires_3_comma_separated_values");
+    std::size_t parsed = 0;
+    result[index] = std::stod(field, &parsed);
+    if (parsed != field.size() || !std::isfinite(result[index]))
+      throw std::runtime_error(std::string("invalid_") + name + "_value");
+  }
+  if (std::getline(input, field, ','))
+    throw std::runtime_error(std::string(name) + "_has_extra_values");
+  return result;
+}
+double scalarArgument(const char* argument, const char* name) {
+  const std::string value(argument);
+  std::size_t parsed = 0;
+  const double result = std::stod(value, &parsed);
+  if (parsed != value.size() || !std::isfinite(result))
+    throw std::runtime_error(std::string("invalid_") + name);
+  return result;
+}
 paper::Pose3d poseFromMatrix(const std::array<double, 16>& values) {
   Eigen::Matrix4d matrix;
   for (std::size_t row = 0; row < 4; ++row)
@@ -106,7 +131,7 @@ void vectorColumns(std::ostream& out, const Eigen::Vector3d& vector) {
 int main(int argc, char** argv) {
   uint64_t transaction = 0;
   try {
-    if (argc != 12 && argc != 17 && argc != 18)
+    if (argc != 12 && argc != 17 && argc != 18 && argc != 24)
       throw std::runtime_error("usage: p7_single_state_runner IMU_CSV FILTER_SCANS_CSV "
           "RAW_TIMED_SCAN_INDEX_CSV RAW_TIMED_POINTS_BIN MAP_PCD PARAMS_TXT "
           "TRAJECTORY_CSV REGISTRATION_CSV RUNTIME_CSV FRAME_LIMIT INITIALIZATION_STAMP_NS "
@@ -114,30 +139,44 @@ int main(int argc, char** argv) {
           "FIRST_TRANSACTION_ID MAP_T_IMU_ROW_MAJOR_16_VALUES] "
           "[--dataset-contract-reanchor CALIBRATION_START_NS CALIBRATION_END_NS "
           "FIRST_TRANSACTION_ID MAP_T_IMU_ROW_MAJOR_16_VALUES T_IMU_LIDAR_ROW_MAJOR_16_VALUES "
-          "(gravity is transported from the static calibration using causal gyro data)]");
+          "(gravity is transported from the static calibration using causal gyro data)] "
+          "[--dataset-state-replay BASELINE|DATASET_VELOCITY CALIBRATION_START_NS "
+          "CALIBRATION_END_NS FIRST_TRANSACTION_ID MAP_T_IMU_ROW_MAJOR_16_VALUES "
+          "VELOCITY_WORLD_3 GYRO_BIAS_3 ACCEL_BIAS_3 VELOCITY_STD GYRO_BIAS_STD "
+          "ACCEL_BIAS_STD]");
     const auto all_imu = paper::readP7Imu(argv[1]);
     const auto scans = paper::readP7TimedScans(argv[2], argv[3]);
     const uint64_t limit = unsignedArgument(argv[10]);
     const uint64_t initialization_stamp = unsignedArgument(argv[11]);
-    const bool dataset_contract_reanchor = argc == 18;
+    const bool dataset_state_replay = argc == 24;
+    const bool dataset_contract_reanchor = argc == 18 || dataset_state_replay;
     const bool official_reanchor = argc == 17 || dataset_contract_reanchor;
-    if (official_reanchor &&
-        std::string(argv[12]) != (dataset_contract_reanchor
-                                      ? "--dataset-contract-reanchor"
-                                      : "--official-pose-reanchor"))
+    const std::string startup_mode = argc > 12 ? argv[12] : "";
+    if (official_reanchor && startup_mode !=
+            (dataset_state_replay ? "--dataset-state-replay" :
+             dataset_contract_reanchor ? "--dataset-contract-reanchor" :
+                                         "--official-pose-reanchor"))
       throw std::runtime_error("unknown_startup_mode");
+    const std::string state_profile = dataset_state_replay ? argv[13] : "";
+    if (dataset_state_replay && state_profile != "BASELINE" &&
+        state_profile != "DATASET_VELOCITY")
+      throw std::runtime_error("unknown_dataset_state_profile");
     paper::Pose3d initial_lidar, extrinsic;
     const auto parameters = paper::readP7Parameters(argv[6], &initial_lidar, &extrinsic);
     if (dataset_contract_reanchor)
-      extrinsic = poseFromMatrix(matrixArgument(argv[17]));
+      if (!dataset_state_replay)
+        extrinsic = poseFromMatrix(matrixArgument(argv[17]));
     paper::FastLio2IkfomFrontend frontend(parameters);
     std::string reason;
     uint64_t first_transaction_id = 1;
     if (official_reanchor) {
-      const uint64_t calibration_start = unsignedArgument(argv[13]);
-      const uint64_t calibration_end = unsignedArgument(argv[14]);
-      first_transaction_id = unsignedArgument(argv[15]);
-      const paper::Pose3d official_map_T_imu = poseFromMatrix(matrixArgument(argv[16]));
+      const int calibration_start_arg = dataset_state_replay ? 14 : 13;
+      const int first_transaction_arg = dataset_state_replay ? 16 : 15;
+      const int pose_arg = dataset_state_replay ? 17 : 16;
+      const uint64_t calibration_start = unsignedArgument(argv[calibration_start_arg]);
+      const uint64_t calibration_end = unsignedArgument(argv[calibration_start_arg + 1]);
+      first_transaction_id = unsignedArgument(argv[first_transaction_arg]);
+      const paper::Pose3d official_map_T_imu = poseFromMatrix(matrixArgument(argv[pose_arg]));
       if (calibration_start == 0 || calibration_end <= calibration_start ||
           calibration_end >= initialization_stamp || first_transaction_id == 0)
         throw std::runtime_error("invalid_official_reanchor_epoch_contract");
@@ -164,12 +203,29 @@ int main(int argc, char** argv) {
       gravity_map = -R_map_imu_calibration *
           calibration.mean_specific_force.normalized() * calibration.gravity_mps2;
       const Eigen::Vector3d zero_velocity = Eigen::Vector3d::Zero();
-      if (!frontend.initializeFromStaticCalibration(calibration, official_map_T_imu,
-              extrinsic, gravity_map, zero_velocity, initialization_stamp, &reason))
+      paper::InitialStateOverrides initial_state;
+      if (dataset_state_replay && state_profile == "DATASET_VELOCITY") {
+        initial_state.use_initial_velocity = true;
+        initial_state.velocity_world_m_s = vectorArgument(argv[18], "initial_velocity");
+        initial_state.use_initial_biases = true;
+        initial_state.gyro_bias_rad_s = vectorArgument(argv[19], "initial_gyro_bias");
+        initial_state.accel_bias_m_s2 = vectorArgument(argv[20], "initial_accel_bias");
+        initial_state.use_covariance_overrides = true;
+        initial_state.velocity_std_m_s = scalarArgument(argv[21], "velocity_std");
+        initial_state.gyro_bias_std_rad_s = scalarArgument(argv[22], "gyro_bias_std");
+        initial_state.accel_bias_std_m_s2 = scalarArgument(argv[23], "accel_bias_std");
+      }
+      const bool initialized = dataset_state_replay
+          ? frontend.initializeFromStaticCalibration(calibration, official_map_T_imu,
+                extrinsic, gravity_map, initial_state, initialization_stamp, &reason)
+          : frontend.initializeFromStaticCalibration(calibration, official_map_T_imu,
+                extrinsic, gravity_map, zero_velocity, initialization_stamp, &reason);
+      if (!initialized)
         throw std::runtime_error("official_pose_reanchor_failed:" + reason);
       std::cout << std::setprecision(12)
           << "STARTUP_MODE=OFFICIAL_POSE_REANCHOR\n"
           << "FRAME_CONTRACT_MODE=" << dataset_contract_reanchor << '\n'
+          << "DATASET_STATE_PROFILE=" << (dataset_state_replay ? state_profile : "LEGACY") << '\n'
           << "STATIC_WINDOW=" << calibration.start_stamp_ns << ','
           << calibration.end_stamp_ns << " samples=" << calibration.sample_count << '\n'
           << "STATIC_GATE=PASS accel_std=" << calibration.acceleration_std.transpose()
@@ -186,9 +242,21 @@ int main(int argc, char** argv) {
           << "REANCHOR timestamp_ns=" << initialization_stamp
           << " map_T_imu=\n" << official_map_T_imu.orientation.toRotationMatrix()
           << "\nposition=" << official_map_T_imu.position.transpose()
-          << " velocity_zero_assumption=" << zero_velocity.transpose()
+          << " velocity=" << frontend.getState().velocity.transpose()
+          << " gyro_bias=" << frontend.getState().gyro_bias.transpose()
+          << " accel_bias=" << frontend.getState().accel_bias.transpose()
           << " gravity_map=" << gravity_map.transpose() << '\n'
+          << "INITIAL_COVARIANCE_DIAG velocity="
+          << frontend.getState().covariance.block<3, 3>(12, 12).diagonal().transpose()
+          << " gyro_bias="
+          << frontend.getState().covariance.block<3, 3>(15, 15).diagonal().transpose()
+          << " accel_bias="
+          << frontend.getState().covariance.block<3, 3>(18, 18).diagonal().transpose() << '\n'
           << "FIRST_TRANSACTION_ID=" << first_transaction_id << '\n';
+      if (dataset_state_replay && state_profile == "DATASET_VELOCITY")
+        std::cout << "INITIAL_VELOCITY_INJECTION timestamp_ns=" << initialization_stamp
+            << " velocity_world_m_s=" << frontend.getState().velocity.transpose()
+            << " count=1\n";
     } else {
       const auto initialization_imu = initializationSamples(
           all_imu, parameters.static_init_samples, initialization_stamp);
@@ -227,7 +295,11 @@ int main(int argc, char** argv) {
            "corrected_imu_x,corrected_imu_y,corrected_imu_z,corrected_imu_qx,corrected_imu_qy,"
            "corrected_imu_qz,corrected_imu_qw,velocity_x,velocity_y,velocity_z,"
            "gyro_bias_x,gyro_bias_y,gyro_bias_z,accel_bias_x,accel_bias_y,accel_bias_z,"
-           "gravity_x,gravity_y,gravity_z,lidar_update_applied\n";
+           "gravity_x,gravity_y,gravity_z,lidar_update_applied";
+    if (dataset_state_replay)
+      trajectory << ",speed_m_s,p_v_x,p_v_y,p_v_z,p_bg_x,p_bg_y,p_bg_z,p_ba_x,p_ba_y,p_ba_z,"
+          "frame_increment_translation_m,frame_increment_rotation_rad";
+    trajectory << '\n';
     observations << std::setprecision(17)
         << "transaction_id,scan_start_ns,scan_effective_start_ns,stamp_ns,raw_source_points,"
            "overlap_points_dropped,source_points,target_points,source_cloud_hash,converged,effective,status,"
@@ -246,6 +318,7 @@ int main(int argc, char** argv) {
            "ikfom_update_ms,frame_total_ms,ndt_effective,lidar_update_applied\n";
     uint64_t updates = 0;
     paper::ScanEndProcessor scan_processor;
+    paper::Pose3d previous_corrected_pose = frontend.getState().map_T_imu;
     for (uint64_t index = 0; index < limit; ++index) {
       const auto& scan = *(first_scan + static_cast<std::ptrdiff_t>(index));
       transaction = scan.transaction_id;
@@ -332,7 +405,23 @@ int main(int argc, char** argv) {
       poseColumns(trajectory, scan_end.predicted_map_T_imu); poseColumns(trajectory, corrected.map_T_imu);
       vectorColumns(trajectory, corrected.velocity); vectorColumns(trajectory, corrected.gyro_bias);
       vectorColumns(trajectory, corrected.accel_bias); vectorColumns(trajectory, corrected.gravity);
-      trajectory << ',' << result.effective << '\n';
+      trajectory << ',' << result.effective;
+      const double frame_translation_increment =
+          (corrected.map_T_imu.position - previous_corrected_pose.position).norm();
+      const double frame_rotation_increment = rotationDistance(
+          previous_corrected_pose, corrected.map_T_imu);
+      if (dataset_state_replay) {
+        trajectory << ',' << corrected.velocity.norm();
+        for (int axis = 0; axis < 3; ++axis)
+          trajectory << ',' << corrected.covariance(12 + axis, 12 + axis);
+        for (int axis = 0; axis < 3; ++axis)
+          trajectory << ',' << corrected.covariance(15 + axis, 15 + axis);
+        for (int axis = 0; axis < 3; ++axis)
+          trajectory << ',' << corrected.covariance(18 + axis, 18 + axis);
+        trajectory << ',' << frame_translation_increment << ',' << frame_rotation_increment;
+      }
+      trajectory << '\n';
+      previous_corrected_pose = corrected.map_T_imu;
       observations << transaction << ',' << scan.scan_start_ns << ','
           << window_stats.effective_scan_start_ns << ',' << scan.scan_end_ns << ','
           << scan.cloud_point_count << ',' << window_stats.overlap_points_dropped << ','
@@ -380,7 +469,18 @@ int main(int argc, char** argv) {
             << final_overlap.fraction_within[3]
             << " fitness=" << result.fitness
             << " pose_imu_xyz=" << corrected.map_T_imu.position.transpose()
-            << " pose_imu_rpy=" << corrected_rpy.transpose() << '\n';
+            << " pose_imu_rpy=" << corrected_rpy.transpose();
+        if (dataset_state_replay)
+          std::cout << " velocity=" << corrected.velocity.transpose()
+              << " speed=" << corrected.velocity.norm()
+              << " bg=" << corrected.gyro_bias.transpose()
+              << " ba=" << corrected.accel_bias.transpose()
+              << " P_v=" << corrected.covariance.block<3, 3>(12, 12).diagonal().transpose()
+              << " P_bg=" << corrected.covariance.block<3, 3>(15, 15).diagonal().transpose()
+              << " P_ba=" << corrected.covariance.block<3, 3>(18, 18).diagonal().transpose()
+              << " frame_increment_m=" << frame_translation_increment
+              << " frame_increment_rad=" << frame_rotation_increment;
+        std::cout << '\n';
       }
     }
     trajectory.close(); observations.close(); runtime.close();

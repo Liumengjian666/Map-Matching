@@ -73,6 +73,22 @@ struct RuntimeParameters {
   double pose_rotation_sigma_rad = 0.10;
 };
 
+// Optional dataset-specific navigation priors. When disabled, the legacy
+// initializer keeps its zero-velocity fallback, calibration biases, and
+// unchanged makeInitialCovariance() defaults.
+struct InitialStateOverrides {
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+  bool use_initial_velocity = false;
+  Eigen::Vector3d velocity_world_m_s = Eigen::Vector3d::Zero();
+  bool use_initial_biases = false;
+  Eigen::Vector3d gyro_bias_rad_s = Eigen::Vector3d::Zero();
+  Eigen::Vector3d accel_bias_m_s2 = Eigen::Vector3d::Zero();
+  bool use_covariance_overrides = false;
+  double velocity_std_m_s = 1.0;  // baseline diagonal variance is 1 (m/s)^2
+  double gyro_bias_std_rad_s = 0.01;  // baseline variance is 1e-4 (rad/s)^2
+  double accel_bias_std_m_s2 = 0.03162277660168379;  // baseline variance is 1e-3
+};
+
 struct FilterSnapshot {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   uint64_t stamp_ns = 0;

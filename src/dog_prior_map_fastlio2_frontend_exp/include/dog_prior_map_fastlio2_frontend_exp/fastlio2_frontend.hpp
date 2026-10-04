@@ -66,6 +66,17 @@ class FastLio2IkfomFrontend {
       uint64_t start_timestamp_ns,
       std::string* failure_reason);
 
+  // Dataset-specific optional initialization values. Missing/disabled
+  // overrides retain the legacy defaults and do not affect later updates.
+  bool initializeFromStaticCalibration(
+      const StaticImuCalibration& calibration,
+      const Pose3d& initial_map_T_imu,
+      const Pose3d& T_imu_lidar,
+      const Eigen::Vector3d& gravity_map,
+      const InitialStateOverrides& initial_state,
+      uint64_t start_timestamp_ns,
+      std::string* failure_reason);
+
   bool predictInterval(const ImuSample& head, const ImuSample& tail,
                        std::string* failure_reason);
   bool predictImuSequence(
