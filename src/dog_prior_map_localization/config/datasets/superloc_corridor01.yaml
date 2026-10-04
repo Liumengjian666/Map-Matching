@@ -1,0 +1,84 @@
+dataset_name: Corridor01
+source: official_superloc
+localization_mode: true
+start_time: 67.0
+start_time_semantics: rosbag_record_time_offset_from_bag_start
+imu_preroll: true
+replay_duration: 10.0
+
+paths:
+  bag: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/raw_data_core_2023-07-25-03-01-44.bag"
+  bag_sha256: "c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811"
+  official_initial_pose: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/initial_pose/corridor01.yaml"
+  official_initial_pose_sha256: "0670732e26f0d9ee19e6115110e29d0aeca5d26f62ab4848d1629c5f9a6eb62b"
+  official_calibration: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/calibration/corridor01_extrinsics.yaml"
+  official_calibration_sha256: "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d"
+  imu_csv: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_i6c_framework/input/imu.csv"
+  filter_scans_csv: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p8_failure_harvest_adapter_r1/filter_scans.csv"
+  timed_scan_index_csv: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p8_failure_harvest_adapter_r1/raw_timed_scan_index.csv"
+  timed_points_bin: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p8_failure_harvest_adapter_r1/p7_timed_points.bin"
+  normalized_map: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd"
+  normalized_map_sha256: "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f"
+  runtime_parameters: "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i6d_full_algorithm/corridor01_params_official_calibration.txt"
+
+topics:
+  imu: "/imu/data"
+  lidar: "/velodyne_packets"
+
+frames:
+  darpa: imu
+  initial_pose_frame: imu
+  initial_pose_source: official_superloc
+  world: world
+  raw_map: official_world
+  normalized_map: camera_init
+  lidar: lidar
+  camera: rgb_camera
+  transform_convention: "p_A = T_A_B * p_B"
+  raw_map_world_transform: [1, 0, 0, 0,
+                            0, 1, 0, 0,
+                            0, 0, 1, 0,
+                            0, 0, 0, 1]
+  raw_map_world_relation_status: "IDENTITY_USED_PER_OFFICIAL_FRAME_CONTRACT; raw PCD has no embedded frame_id"
+  normalized_map_world_transform: [-0.143643602700, 0.989002287400, -0.035227581860, 7.363630829145,
+                                    0.987183928500, 0.140696853400, -0.075314566490, -0.644385552171,
+                                   -0.069529883560, -0.045594558120, -0.996537387400, 0.346859433882,
+                                    0, 0, 0, 1]
+  normalized_map_world_transform_source: "exact raw-to-normalized PCD generation transform; conditionally composed with raw_map_world_transform"
+
+initial_pose:
+  comment: "s 67"
+  rotation_key: extrinsicRotation_world_darpa
+  translation_key: extrinsicTranslation_world_darpa
+  matrix_row_major: [0.135990, -0.990409, -0.024406, 1.968147,
+                     0.990705, 0.136027, 0.000140, -6.879292,
+                     0.003181, -0.024198, 0.999702, -0.896125,
+                     0, 0, 0, 1]
+  interpretation: "T_world_imu; p_world = T_world_imu * p_imu"
+
+extrinsics:
+  lidar_key: laser_to_imu
+  lidar_interpretation: "T_imu_lidar; p_imu = T_imu_lidar * p_lidar"
+  camera_key: rgb_camera_to_imu
+  camera_interpretation: "T_imu_camera; p_imu = T_imu_camera * p_camera"
+  rotation_projection: nearest_proper_so3_svd
+  rotation_projection_reason: "runtime pose state requires SO(3); preserve official full matrices and translations, project only serialized rotation blocks"
+
+startup:
+  static_imu_calibration_start_ns: 1517157224023904000
+  static_imu_calibration_end_ns: 1517157225018848000
+  static_imu_sample_count: 200
+  max_accel_axis_std_m_s2: 0.5
+  max_gyro_axis_std_rad_s: 0.05
+  velocity_m_s: [0, 0, 0]
+  velocity_assumption: ZERO_VELOCITY_START_ASSUMPTION
+  gravity_direction_source: "static mean specific force transported from calibration epoch to anchor by causal gyro-bias-corrected IMU rotation; no navigation position/velocity propagation"
+  anchor_sensor_time: first_imu_header_after_bag_record_cutoff
+  first_lidar_record_selection: first_velodyne_packets_record_at_or_after_bag_record_cutoff
+  first_scan_policy: preserve_all_points_with_causal_imu_pre_anchor_bridge
+
+ndt:
+  resolution_m: 0.8
+  step_size: 0.08
+  transformation_epsilon: 0.00001
+  max_iterations: 80

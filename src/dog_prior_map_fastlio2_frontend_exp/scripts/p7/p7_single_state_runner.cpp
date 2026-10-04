@@ -106,21 +106,30 @@ void vectorColumns(std::ostream& out, const Eigen::Vector3d& vector) {
 int main(int argc, char** argv) {
   uint64_t transaction = 0;
   try {
-    if (argc != 12 && argc != 17)
+    if (argc != 12 && argc != 17 && argc != 18)
       throw std::runtime_error("usage: p7_single_state_runner IMU_CSV FILTER_SCANS_CSV "
           "RAW_TIMED_SCAN_INDEX_CSV RAW_TIMED_POINTS_BIN MAP_PCD PARAMS_TXT "
           "TRAJECTORY_CSV REGISTRATION_CSV RUNTIME_CSV FRAME_LIMIT INITIALIZATION_STAMP_NS "
           "[--official-pose-reanchor CALIBRATION_START_NS CALIBRATION_END_NS "
-          "FIRST_TRANSACTION_ID MAP_T_IMU_ROW_MAJOR_16_VALUES]");
+          "FIRST_TRANSACTION_ID MAP_T_IMU_ROW_MAJOR_16_VALUES] "
+          "[--dataset-contract-reanchor CALIBRATION_START_NS CALIBRATION_END_NS "
+          "FIRST_TRANSACTION_ID MAP_T_IMU_ROW_MAJOR_16_VALUES T_IMU_LIDAR_ROW_MAJOR_16_VALUES "
+          "(gravity is transported from the static calibration using causal gyro data)]");
     const auto all_imu = paper::readP7Imu(argv[1]);
     const auto scans = paper::readP7TimedScans(argv[2], argv[3]);
     const uint64_t limit = unsignedArgument(argv[10]);
     const uint64_t initialization_stamp = unsignedArgument(argv[11]);
-    const bool official_reanchor = argc == 17;
-    if (official_reanchor && std::string(argv[12]) != "--official-pose-reanchor")
+    const bool dataset_contract_reanchor = argc == 18;
+    const bool official_reanchor = argc == 17 || dataset_contract_reanchor;
+    if (official_reanchor &&
+        std::string(argv[12]) != (dataset_contract_reanchor
+                                      ? "--dataset-contract-reanchor"
+                                      : "--official-pose-reanchor"))
       throw std::runtime_error("unknown_startup_mode");
     paper::Pose3d initial_lidar, extrinsic;
     const auto parameters = paper::readP7Parameters(argv[6], &initial_lidar, &extrinsic);
+    if (dataset_contract_reanchor)
+      extrinsic = poseFromMatrix(matrixArgument(argv[17]));
     paper::FastLio2IkfomFrontend frontend(parameters);
     std::string reason;
     uint64_t first_transaction_id = 1;
@@ -140,15 +149,19 @@ int main(int argc, char** argv) {
       paper::StaticImuCalibration calibration;
       if (!frontend.calibrateStaticImu(calibration_samples, &calibration, &reason))
         throw std::runtime_error("static_imu_calibration_failed:" + reason);
-      Eigen::Matrix3d R_calibration_to_anchor;
+      Eigen::Matrix3d R_calibration_to_anchor = Eigen::Matrix3d::Identity();
+      Eigen::Vector3d gravity_map;
       if (!paper::integrateBodyRelativeRotation(all_imu, calibration.end_stamp_ns,
               initialization_stamp, calibration.gyro_bias,
               &R_calibration_to_anchor, &reason))
         throw std::runtime_error("gravity_attitude_transfer_failed:" + reason);
+      // Transport only the static specific-force direction from the calibration
+      // epoch to the official anchor. Navigation position and velocity are
+      // freshly initialized below; no 61 s inertial pose propagation occurs.
       const Eigen::Matrix3d R_map_imu_calibration =
           official_map_T_imu.orientation.toRotationMatrix() *
           R_calibration_to_anchor.transpose();
-      const Eigen::Vector3d gravity_map = -R_map_imu_calibration *
+      gravity_map = -R_map_imu_calibration *
           calibration.mean_specific_force.normalized() * calibration.gravity_mps2;
       const Eigen::Vector3d zero_velocity = Eigen::Vector3d::Zero();
       if (!frontend.initializeFromStaticCalibration(calibration, official_map_T_imu,
@@ -156,6 +169,7 @@ int main(int argc, char** argv) {
         throw std::runtime_error("official_pose_reanchor_failed:" + reason);
       std::cout << std::setprecision(12)
           << "STARTUP_MODE=OFFICIAL_POSE_REANCHOR\n"
+          << "FRAME_CONTRACT_MODE=" << dataset_contract_reanchor << '\n'
           << "STATIC_WINDOW=" << calibration.start_stamp_ns << ','
           << calibration.end_stamp_ns << " samples=" << calibration.sample_count << '\n'
           << "STATIC_GATE=PASS accel_std=" << calibration.acceleration_std.transpose()
@@ -164,9 +178,11 @@ int main(int argc, char** argv) {
           << " accel_bias_prior=" << calibration.accel_bias_prior.transpose()
           << " mean_specific_force=" << calibration.mean_specific_force.transpose()
           << " gravity_magnitude=" << calibration.gravity_mps2 << '\n'
-          << "ROTATION_ONLY_TRANSFER duration_s="
-          << static_cast<double>(initialization_stamp - calibration.end_stamp_ns) * 1e-9
-          << " R_cal_to_anchor=\n" << R_calibration_to_anchor << '\n'
+          << "GRAVITY_INITIALIZATION="
+          << "STATIC_FORCE_CAUSAL_GYRO_TRANSPORT"
+          << " gravity_map=" << gravity_map.transpose() << '\n'
+          << "T_IMU_LIDAR translation=" << extrinsic.position.transpose()
+          << " rotation=\n" << extrinsic.orientation.toRotationMatrix() << '\n'
           << "REANCHOR timestamp_ns=" << initialization_stamp
           << " map_T_imu=\n" << official_map_T_imu.orientation.toRotationMatrix()
           << "\nposition=" << official_map_T_imu.position.transpose()
@@ -238,19 +254,34 @@ int main(int argc, char** argv) {
       const auto io_start = Clock::now();
       auto timed_cloud = paper::readP7PackedTimedCloud(argv[4], scan);
       const double cloud_io_ms = elapsedMs(io_start);
-      paper::ScanWindowDecision window_decision;
       paper::ScanWindowStats window_stats;
-      if (!paper::prepareScanWindow(scan.scan_start_ns, scan.scan_end_ns,
-              start.stamp_ns, &timed_cloud, &window_decision, &window_stats, &reason))
-        throw std::runtime_error("scan_window_failed:" + reason);
-      if (window_decision != paper::ScanWindowDecision::PROCESS)
-        throw std::runtime_error("unexpected_stale_raw_scan");
+      const bool first_scan_preroll = dataset_contract_reanchor && index == 0 &&
+                                      scan.scan_start_ns < start.stamp_ns;
+      paper::P7ImuVector causal_imu;
+      if (first_scan_preroll) {
+        causal_imu = paper::imuWindow(all_imu, scan.scan_start_ns, scan.scan_end_ns);
+        if (!paper::prepareScanWindowWithCausalPreroll(scan.scan_start_ns,
+                scan.scan_end_ns, start.stamp_ns, causal_imu, &timed_cloud,
+                &window_stats, &reason))
+          throw std::runtime_error("causal_preroll_scan_window_failed:" + reason);
+        std::cout << "FIRST_SCAN_COMPLETE=PASS raw_points=" << scan.cloud_point_count
+            << " retained_points=" << window_stats.remaining_points
+            << " dropped_points=" << window_stats.overlap_points_dropped
+            << " anchor_overlap_ns=" << window_stats.overlap_duration_ns << '\n';
+      } else {
+        paper::ScanWindowDecision window_decision;
+        if (!paper::prepareScanWindow(scan.scan_start_ns, scan.scan_end_ns,
+                start.stamp_ns, &timed_cloud, &window_decision, &window_stats, &reason))
+          throw std::runtime_error("scan_window_failed:" + reason);
+        if (window_decision != paper::ScanWindowDecision::PROCESS)
+          throw std::runtime_error("unexpected_stale_raw_scan");
+        causal_imu = paper::imuWindow(all_imu, start.stamp_ns, scan.scan_end_ns);
+      }
       const auto prediction_start = Clock::now();
-      const auto causal_imu = paper::imuWindow(all_imu, start.stamp_ns, scan.scan_end_ns);
       paper::ScanEndResult scan_end;
       if (!scan_processor.process(&frontend, extrinsic,
               window_stats.effective_scan_start_ns, scan.scan_end_ns,
-              causal_imu, timed_cloud, &scan_end, &reason))
+              causal_imu, timed_cloud, &scan_end, &reason, first_scan_preroll))
         throw std::runtime_error("scan_end_prediction_or_deskew_failed:" + reason);
       const double prediction_ms = elapsedMs(prediction_start);
       if (scan_end.scan_end_ns != scan.scan_end_ns ||

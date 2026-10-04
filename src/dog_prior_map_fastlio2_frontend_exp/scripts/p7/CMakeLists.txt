@@ -19,6 +19,7 @@ endif()
 find_package(Eigen3 REQUIRED)
 find_package(PCL 1.10 REQUIRED COMPONENTS common io filters registration)
 find_package(OpenMP REQUIRED)
+find_package(PythonInterp 3 REQUIRED)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -64,3 +65,22 @@ target_compile_options(static_imu_reanchor_contract_test PRIVATE
   ${OpenMP_CXX_FLAGS} -Wall -Wextra -Wpedantic)
 add_test(NAME static_imu_reanchor_contract_test
   COMMAND $<TARGET_FILE:static_imu_reanchor_contract_test>)
+
+add_executable(scan_preroll_contract_test
+  "${PACKAGE_ROOT}/src/fastlio2_frontend_ikfom.cpp"
+  "${PACKAGE_ROOT}/src/registration_geometry.cpp"
+  "${PACKAGE_ROOT}/src/scan_processor.cpp"
+  "${PACKAGE_ROOT}/src/lidar_deskew_geometry.cpp"
+  "${PACKAGE_ROOT}/tests/scan_preroll_contract_test.cpp")
+target_include_directories(scan_preroll_contract_test PRIVATE
+  "${PACKAGE_ROOT}/include" "${FASTLIO2_INCLUDE_DIR}")
+target_link_libraries(scan_preroll_contract_test PRIVATE
+  Eigen3::Eigen OpenMP::OpenMP_CXX ${USB_10_LIBRARY})
+target_compile_options(scan_preroll_contract_test PRIVATE
+  ${OpenMP_CXX_FLAGS} -Wall -Wextra -Wpedantic)
+add_test(NAME scan_preroll_contract_test
+  COMMAND $<TARGET_FILE:scan_preroll_contract_test>)
+
+add_test(NAME p8_corridor01_frame_contract_test
+  COMMAND ${PYTHON_EXECUTABLE}
+    "${PACKAGE_ROOT}/tests/p8_corridor01_frame_contract_test.py")

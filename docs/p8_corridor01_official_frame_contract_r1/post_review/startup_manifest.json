@@ -1,0 +1,1050 @@
+{
+  "dataset_name": "Corridor01",
+  "start_time_s": 67.0,
+  "imu_preroll": true,
+  "darpa_frame": "imu",
+  "initial_pose_frame": "T_world_imu; p_world = T_world_imu * p_imu",
+  "world_raw_map_relation": "IDENTITY_USED_PER_OFFICIAL_FRAME_CONTRACT; raw PCD has no embedded frame_id",
+  "gravity_initialization": "static mean specific force transported from calibration epoch to anchor by causal gyro-bias-corrected IMU rotation; no navigation position/velocity propagation",
+  "epoch": {
+    "bag_start_time_s": 1690254112.8217413,
+    "cutoff_record_time_ns": 1690254179821741342,
+    "end_record_time_ns": 1690254189821741342,
+    "first_imu": {
+      "record_time_ns": 1690254179824601599,
+      "header_stamp_ns": 1517157286165072000
+    },
+    "first_transaction_id": 666,
+    "transactions": [
+      {
+        "transaction_id": 666,
+        "record_time_ns": 1690254179920640694,
+        "header_stamp_ns": 1517157286155932903,
+        "scan_start_ns": 1517157286155932903,
+        "scan_end_ns": 1517157286256772352,
+        "point_count": 29063
+      },
+      {
+        "transaction_id": 667,
+        "record_time_ns": 1690254180016864343,
+        "header_stamp_ns": 1517157286256793022,
+        "scan_start_ns": 1517157286256793022,
+        "scan_end_ns": 1517157286357632471,
+        "point_count": 29073
+      },
+      {
+        "transaction_id": 668,
+        "record_time_ns": 1690254180116315053,
+        "header_stamp_ns": 1517157286357652903,
+        "scan_start_ns": 1517157286357652903,
+        "scan_end_ns": 1517157286458492352,
+        "point_count": 29076
+      },
+      {
+        "transaction_id": 669,
+        "record_time_ns": 1690254180216904850,
+        "header_stamp_ns": 1517157286458513021,
+        "scan_start_ns": 1517157286458513021,
+        "scan_end_ns": 1517157286559352471,
+        "point_count": 29073
+      },
+      {
+        "transaction_id": 670,
+        "record_time_ns": 1690254180318032598,
+        "header_stamp_ns": 1517157286559372902,
+        "scan_start_ns": 1517157286559372902,
+        "scan_end_ns": 1517157286660212351,
+        "point_count": 29074
+      },
+      {
+        "transaction_id": 671,
+        "record_time_ns": 1690254180419174052,
+        "header_stamp_ns": 1517157286660233021,
+        "scan_start_ns": 1517157286660233021,
+        "scan_end_ns": 1517157286761072470,
+        "point_count": 29081
+      },
+      {
+        "transaction_id": 672,
+        "record_time_ns": 1690254180519403930,
+        "header_stamp_ns": 1517157286761092901,
+        "scan_start_ns": 1517157286761092901,
+        "scan_end_ns": 1517157286861932350,
+        "point_count": 29073
+      },
+      {
+        "transaction_id": 673,
+        "record_time_ns": 1690254180628422241,
+        "header_stamp_ns": 1517157286861953020,
+        "scan_start_ns": 1517157286861953020,
+        "scan_end_ns": 1517157286962792469,
+        "point_count": 29101
+      },
+      {
+        "transaction_id": 674,
+        "record_time_ns": 1690254180725573203,
+        "header_stamp_ns": 1517157286962812901,
+        "scan_start_ns": 1517157286962812901,
+        "scan_end_ns": 1517157287063591314,
+        "point_count": 29083
+      },
+      {
+        "transaction_id": 675,
+        "record_time_ns": 1690254180822127977,
+        "header_stamp_ns": 1517157287063611984,
+        "scan_start_ns": 1517157287063611984,
+        "scan_end_ns": 1517157287164451433,
+        "point_count": 29062
+      },
+      {
+        "transaction_id": 676,
+        "record_time_ns": 1690254180923801189,
+        "header_stamp_ns": 1517157287164473057,
+        "scan_start_ns": 1517157287164473057,
+        "scan_end_ns": 1517157287265311314,
+        "point_count": 29053
+      },
+      {
+        "transaction_id": 677,
+        "record_time_ns": 1690254181025940488,
+        "header_stamp_ns": 1517157287265332937,
+        "scan_start_ns": 1517157287265332937,
+        "scan_end_ns": 1517157287366171433,
+        "point_count": 29052
+      },
+      {
+        "transaction_id": 678,
+        "record_time_ns": 1690254181125570340,
+        "header_stamp_ns": 1517157287366193056,
+        "scan_start_ns": 1517157287366193056,
+        "scan_end_ns": 1517157287467032267,
+        "point_count": 29053
+      },
+      {
+        "transaction_id": 679,
+        "record_time_ns": 1690254181225846795,
+        "header_stamp_ns": 1517157287467052937,
+        "scan_start_ns": 1517157287467052937,
+        "scan_end_ns": 1517157287567892386,
+        "point_count": 29043
+      },
+      {
+        "transaction_id": 680,
+        "record_time_ns": 1690254181327075920,
+        "header_stamp_ns": 1517157287567913055,
+        "scan_start_ns": 1517157287567913055,
+        "scan_end_ns": 1517157287668752266,
+        "point_count": 29060
+      },
+      {
+        "transaction_id": 681,
+        "record_time_ns": 1690254181428892319,
+        "header_stamp_ns": 1517157287668772936,
+        "scan_start_ns": 1517157287668772936,
+        "scan_end_ns": 1517157287769612385,
+        "point_count": 29050
+      },
+      {
+        "transaction_id": 682,
+        "record_time_ns": 1690254181530124100,
+        "header_stamp_ns": 1517157287769633055,
+        "scan_start_ns": 1517157287769633055,
+        "scan_end_ns": 1517157287870472265,
+        "point_count": 29048
+      },
+      {
+        "transaction_id": 683,
+        "record_time_ns": 1690254181629687338,
+        "header_stamp_ns": 1517157287870492935,
+        "scan_start_ns": 1517157287870492935,
+        "scan_end_ns": 1517157287971332384,
+        "point_count": 29043
+      },
+      {
+        "transaction_id": 684,
+        "record_time_ns": 1690254181730044693,
+        "header_stamp_ns": 1517157287971353054,
+        "scan_start_ns": 1517157287971353054,
+        "scan_end_ns": 1517157288072131468,
+        "point_count": 29034
+      },
+      {
+        "transaction_id": 685,
+        "record_time_ns": 1690254181833172200,
+        "header_stamp_ns": 1517157288072151899,
+        "scan_start_ns": 1517157288072151899,
+        "scan_end_ns": 1517157288172991348,
+        "point_count": 29032
+      },
+      {
+        "transaction_id": 686,
+        "record_time_ns": 1690254181931735058,
+        "header_stamp_ns": 1517157288173012018,
+        "scan_start_ns": 1517157288173012018,
+        "scan_end_ns": 1517157288273851467,
+        "point_count": 28996
+      },
+      {
+        "transaction_id": 687,
+        "record_time_ns": 1690254182035456178,
+        "header_stamp_ns": 1517157288273871899,
+        "scan_start_ns": 1517157288273871899,
+        "scan_end_ns": 1517157288374711348,
+        "point_count": 28993
+      },
+      {
+        "transaction_id": 688,
+        "record_time_ns": 1690254182133176008,
+        "header_stamp_ns": 1517157288374732018,
+        "scan_start_ns": 1517157288374732018,
+        "scan_end_ns": 1517157288475571467,
+        "point_count": 28975
+      },
+      {
+        "transaction_id": 689,
+        "record_time_ns": 1690254182234651433,
+        "header_stamp_ns": 1517157288475591898,
+        "scan_start_ns": 1517157288475591898,
+        "scan_end_ns": 1517157288576431347,
+        "point_count": 28987
+      },
+      {
+        "transaction_id": 690,
+        "record_time_ns": 1690254182334795261,
+        "header_stamp_ns": 1517157288576452017,
+        "scan_start_ns": 1517157288576452017,
+        "scan_end_ns": 1517157288677291466,
+        "point_count": 28961
+      },
+      {
+        "transaction_id": 691,
+        "record_time_ns": 1690254182436630724,
+        "header_stamp_ns": 1517157288677311897,
+        "scan_start_ns": 1517157288677311897,
+        "scan_end_ns": 1517157288778151346,
+        "point_count": 28970
+      },
+      {
+        "transaction_id": 692,
+        "record_time_ns": 1690254182536737063,
+        "header_stamp_ns": 1517157288778172016,
+        "scan_start_ns": 1517157288778172016,
+        "scan_end_ns": 1517157288879011465,
+        "point_count": 28981
+      },
+      {
+        "transaction_id": 693,
+        "record_time_ns": 1690254182637712307,
+        "header_stamp_ns": 1517157288879031897,
+        "scan_start_ns": 1517157288879031897,
+        "scan_end_ns": 1517157288979871346,
+        "point_count": 28989
+      },
+      {
+        "transaction_id": 694,
+        "record_time_ns": 1690254182738238946,
+        "header_stamp_ns": 1517157288979892015,
+        "scan_start_ns": 1517157288979892015,
+        "scan_end_ns": 1517157289080669476,
+        "point_count": 29038
+      },
+      {
+        "transaction_id": 695,
+        "record_time_ns": 1690254182844412698,
+        "header_stamp_ns": 1517157289080689907,
+        "scan_start_ns": 1517157289080689907,
+        "scan_end_ns": 1517157289181529356,
+        "point_count": 29018
+      },
+      {
+        "transaction_id": 696,
+        "record_time_ns": 1690254182940177362,
+        "header_stamp_ns": 1517157289181550026,
+        "scan_start_ns": 1517157289181550026,
+        "scan_end_ns": 1517157289282389475,
+        "point_count": 29016
+      },
+      {
+        "transaction_id": 697,
+        "record_time_ns": 1690254183042284531,
+        "header_stamp_ns": 1517157289282409906,
+        "scan_start_ns": 1517157289282409906,
+        "scan_end_ns": 1517157289383249355,
+        "point_count": 29015
+      },
+      {
+        "transaction_id": 698,
+        "record_time_ns": 1690254183141764816,
+        "header_stamp_ns": 1517157289383270025,
+        "scan_start_ns": 1517157289383270025,
+        "scan_end_ns": 1517157289484109474,
+        "point_count": 29077
+      },
+      {
+        "transaction_id": 699,
+        "record_time_ns": 1690254183244725913,
+        "header_stamp_ns": 1517157289484131098,
+        "scan_start_ns": 1517157289484131098,
+        "scan_end_ns": 1517157289584969355,
+        "point_count": 29058
+      },
+      {
+        "transaction_id": 700,
+        "record_time_ns": 1690254183343565605,
+        "header_stamp_ns": 1517157289584990978,
+        "scan_start_ns": 1517157289584990978,
+        "scan_end_ns": 1517157289685830427,
+        "point_count": 29070
+      },
+      {
+        "transaction_id": 701,
+        "record_time_ns": 1690254183445160292,
+        "header_stamp_ns": 1517157289685851097,
+        "scan_start_ns": 1517157289685851097,
+        "scan_end_ns": 1517157289786690308,
+        "point_count": 29064
+      },
+      {
+        "transaction_id": 702,
+        "record_time_ns": 1690254183546741683,
+        "header_stamp_ns": 1517157289786710978,
+        "scan_start_ns": 1517157289786710978,
+        "scan_end_ns": 1517157289887550427,
+        "point_count": 29065
+      },
+      {
+        "transaction_id": 703,
+        "record_time_ns": 1690254183650453826,
+        "header_stamp_ns": 1517157289887571096,
+        "scan_start_ns": 1517157289887571096,
+        "scan_end_ns": 1517157289988410307,
+        "point_count": 29075
+      },
+      {
+        "transaction_id": 704,
+        "record_time_ns": 1690254183750618924,
+        "header_stamp_ns": 1517157289988430977,
+        "scan_start_ns": 1517157289988430977,
+        "scan_end_ns": 1517157290089209391,
+        "point_count": 29046
+      },
+      {
+        "transaction_id": 705,
+        "record_time_ns": 1690254183847728420,
+        "header_stamp_ns": 1517157290089230061,
+        "scan_start_ns": 1517157290089230061,
+        "scan_end_ns": 1517157290190069271,
+        "point_count": 29062
+      },
+      {
+        "transaction_id": 706,
+        "record_time_ns": 1690254183953569823,
+        "header_stamp_ns": 1517157290190089941,
+        "scan_start_ns": 1517157290190089941,
+        "scan_end_ns": 1517157290290929390,
+        "point_count": 29076
+      },
+      {
+        "transaction_id": 707,
+        "record_time_ns": 1690254184049244149,
+        "header_stamp_ns": 1517157290290950060,
+        "scan_start_ns": 1517157290290950060,
+        "scan_end_ns": 1517157290391789271,
+        "point_count": 29075
+      },
+      {
+        "transaction_id": 708,
+        "record_time_ns": 1690254184154721525,
+        "header_stamp_ns": 1517157290391809940,
+        "scan_start_ns": 1517157290391809940,
+        "scan_end_ns": 1517157290492649389,
+        "point_count": 29064
+      },
+      {
+        "transaction_id": 709,
+        "record_time_ns": 1690254184251508401,
+        "header_stamp_ns": 1517157290492670059,
+        "scan_start_ns": 1517157290492670059,
+        "scan_end_ns": 1517157290593509270,
+        "point_count": 29068
+      },
+      {
+        "transaction_id": 710,
+        "record_time_ns": 1690254184352049047,
+        "header_stamp_ns": 1517157290593529940,
+        "scan_start_ns": 1517157290593529940,
+        "scan_end_ns": 1517157290694369389,
+        "point_count": 29065
+      },
+      {
+        "transaction_id": 711,
+        "record_time_ns": 1690254184453894449,
+        "header_stamp_ns": 1517157290694390059,
+        "scan_start_ns": 1517157290694390059,
+        "scan_end_ns": 1517157290795229269,
+        "point_count": 29025
+      },
+      {
+        "transaction_id": 712,
+        "record_time_ns": 1690254184555812967,
+        "header_stamp_ns": 1517157290795249939,
+        "scan_start_ns": 1517157290795249939,
+        "scan_end_ns": 1517157290896089388,
+        "point_count": 29054
+      },
+      {
+        "transaction_id": 713,
+        "record_time_ns": 1690254184656692253,
+        "header_stamp_ns": 1517157290896110058,
+        "scan_start_ns": 1517157290896110058,
+        "scan_end_ns": 1517157290996949268,
+        "point_count": 29059
+      },
+      {
+        "transaction_id": 714,
+        "record_time_ns": 1690254184758012950,
+        "header_stamp_ns": 1517157290996969938,
+        "scan_start_ns": 1517157290996969938,
+        "scan_end_ns": 1517157291097747399,
+        "point_count": 29013
+      },
+      {
+        "transaction_id": 715,
+        "record_time_ns": 1690254184856439534,
+        "header_stamp_ns": 1517157291097768068,
+        "scan_start_ns": 1517157291097768068,
+        "scan_end_ns": 1517157291198607279,
+        "point_count": 29035
+      },
+      {
+        "transaction_id": 716,
+        "record_time_ns": 1690254184957343807,
+        "header_stamp_ns": 1517157291198627949,
+        "scan_start_ns": 1517157291198627949,
+        "scan_end_ns": 1517157291299467398,
+        "point_count": 29042
+      },
+      {
+        "transaction_id": 717,
+        "record_time_ns": 1690254185062207212,
+        "header_stamp_ns": 1517157291299488068,
+        "scan_start_ns": 1517157291299488068,
+        "scan_end_ns": 1517157291400327278,
+        "point_count": 28983
+      },
+      {
+        "transaction_id": 718,
+        "record_time_ns": 1690254185163770890,
+        "header_stamp_ns": 1517157291400347948,
+        "scan_start_ns": 1517157291400347948,
+        "scan_end_ns": 1517157291501187397,
+        "point_count": 29016
+      },
+      {
+        "transaction_id": 719,
+        "record_time_ns": 1690254185267301096,
+        "header_stamp_ns": 1517157291501208067,
+        "scan_start_ns": 1517157291501208067,
+        "scan_end_ns": 1517157291602047278,
+        "point_count": 28997
+      },
+      {
+        "transaction_id": 720,
+        "record_time_ns": 1690254185363937862,
+        "header_stamp_ns": 1517157291602068901,
+        "scan_start_ns": 1517157291602068901,
+        "scan_end_ns": 1517157291702907396,
+        "point_count": 28966
+      },
+      {
+        "transaction_id": 721,
+        "record_time_ns": 1690254185461691325,
+        "header_stamp_ns": 1517157291702929020,
+        "scan_start_ns": 1517157291702929020,
+        "scan_end_ns": 1517157291803767277,
+        "point_count": 27711
+      },
+      {
+        "transaction_id": 722,
+        "record_time_ns": 1690254185562294166,
+        "header_stamp_ns": 1517157291803788900,
+        "scan_start_ns": 1517157291803788900,
+        "scan_end_ns": 1517157291904628349,
+        "point_count": 22702
+      },
+      {
+        "transaction_id": 723,
+        "record_time_ns": 1690254185667501901,
+        "header_stamp_ns": 1517157291904649019,
+        "scan_start_ns": 1517157291904649019,
+        "scan_end_ns": 1517157292005427433,
+        "point_count": 21351
+      },
+      {
+        "transaction_id": 724,
+        "record_time_ns": 1690254185764036067,
+        "header_stamp_ns": 1517157292005448103,
+        "scan_start_ns": 1517157292005448103,
+        "scan_end_ns": 1517157292106287314,
+        "point_count": 21854
+      },
+      {
+        "transaction_id": 725,
+        "record_time_ns": 1690254185869041476,
+        "header_stamp_ns": 1517157292106307983,
+        "scan_start_ns": 1517157292106307983,
+        "scan_end_ns": 1517157292207147432,
+        "point_count": 21620
+      },
+      {
+        "transaction_id": 726,
+        "record_time_ns": 1690254185966071744,
+        "header_stamp_ns": 1517157292207168102,
+        "scan_start_ns": 1517157292207168102,
+        "scan_end_ns": 1517157292308007313,
+        "point_count": 21210
+      },
+      {
+        "transaction_id": 727,
+        "record_time_ns": 1690254186066585139,
+        "header_stamp_ns": 1517157292308027983,
+        "scan_start_ns": 1517157292308027983,
+        "scan_end_ns": 1517157292408867432,
+        "point_count": 21039
+      },
+      {
+        "transaction_id": 728,
+        "record_time_ns": 1690254186168771265,
+        "header_stamp_ns": 1517157292408888102,
+        "scan_start_ns": 1517157292408888102,
+        "scan_end_ns": 1517157292509727312,
+        "point_count": 21051
+      },
+      {
+        "transaction_id": 729,
+        "record_time_ns": 1690254186268226853,
+        "header_stamp_ns": 1517157292509747982,
+        "scan_start_ns": 1517157292509747982,
+        "scan_end_ns": 1517157292610587431,
+        "point_count": 21128
+      },
+      {
+        "transaction_id": 730,
+        "record_time_ns": 1690254186373267728,
+        "header_stamp_ns": 1517157292610608101,
+        "scan_start_ns": 1517157292610608101,
+        "scan_end_ns": 1517157292711447312,
+        "point_count": 21163
+      },
+      {
+        "transaction_id": 731,
+        "record_time_ns": 1690254186471011693,
+        "header_stamp_ns": 1517157292711467981,
+        "scan_start_ns": 1517157292711467981,
+        "scan_end_ns": 1517157292812307430,
+        "point_count": 21230
+      },
+      {
+        "transaction_id": 732,
+        "record_time_ns": 1690254186571923981,
+        "header_stamp_ns": 1517157292812328100,
+        "scan_start_ns": 1517157292812328100,
+        "scan_end_ns": 1517157292913167311,
+        "point_count": 21255
+      },
+      {
+        "transaction_id": 733,
+        "record_time_ns": 1690254186671808126,
+        "header_stamp_ns": 1517157292913187981,
+        "scan_start_ns": 1517157292913187981,
+        "scan_end_ns": 1517157293013966395,
+        "point_count": 21198
+      },
+      {
+        "transaction_id": 734,
+        "record_time_ns": 1690254186772657456,
+        "header_stamp_ns": 1517157293013987064,
+        "scan_start_ns": 1517157293013987064,
+        "scan_end_ns": 1517157293114826275,
+        "point_count": 21197
+      },
+      {
+        "transaction_id": 735,
+        "record_time_ns": 1690254186875474806,
+        "header_stamp_ns": 1517157293114846945,
+        "scan_start_ns": 1517157293114846945,
+        "scan_end_ns": 1517157293215686394,
+        "point_count": 21173
+      },
+      {
+        "transaction_id": 736,
+        "record_time_ns": 1690254186974790373,
+        "header_stamp_ns": 1517157293215707064,
+        "scan_start_ns": 1517157293215707064,
+        "scan_end_ns": 1517157293316546274,
+        "point_count": 21172
+      },
+      {
+        "transaction_id": 737,
+        "record_time_ns": 1690254187075293220,
+        "header_stamp_ns": 1517157293316566944,
+        "scan_start_ns": 1517157293316566944,
+        "scan_end_ns": 1517157293417406393,
+        "point_count": 21180
+      },
+      {
+        "transaction_id": 738,
+        "record_time_ns": 1690254187176468255,
+        "header_stamp_ns": 1517157293417427063,
+        "scan_start_ns": 1517157293417427063,
+        "scan_end_ns": 1517157293518266274,
+        "point_count": 21169
+      },
+      {
+        "transaction_id": 739,
+        "record_time_ns": 1690254187278663298,
+        "header_stamp_ns": 1517157293518286943,
+        "scan_start_ns": 1517157293518286943,
+        "scan_end_ns": 1517157293619126392,
+        "point_count": 21189
+      },
+      {
+        "transaction_id": 740,
+        "record_time_ns": 1690254187379409296,
+        "header_stamp_ns": 1517157293619147062,
+        "scan_start_ns": 1517157293619147062,
+        "scan_end_ns": 1517157293719986273,
+        "point_count": 21182
+      },
+      {
+        "transaction_id": 741,
+        "record_time_ns": 1690254187478887597,
+        "header_stamp_ns": 1517157293720006943,
+        "scan_start_ns": 1517157293720006943,
+        "scan_end_ns": 1517157293820846392,
+        "point_count": 21184
+      },
+      {
+        "transaction_id": 742,
+        "record_time_ns": 1690254187579988103,
+        "header_stamp_ns": 1517157293820867062,
+        "scan_start_ns": 1517157293820867062,
+        "scan_end_ns": 1517157293921706272,
+        "point_count": 21167
+      },
+      {
+        "transaction_id": 743,
+        "record_time_ns": 1690254187681104420,
+        "header_stamp_ns": 1517157293921727896,
+        "scan_start_ns": 1517157293921727896,
+        "scan_end_ns": 1517157294022505356,
+        "point_count": 21175
+      },
+      {
+        "transaction_id": 744,
+        "record_time_ns": 1690254187781363122,
+        "header_stamp_ns": 1517157294022526026,
+        "scan_start_ns": 1517157294022526026,
+        "scan_end_ns": 1517157294123365475,
+        "point_count": 21195
+      },
+      {
+        "transaction_id": 745,
+        "record_time_ns": 1690254187881821625,
+        "header_stamp_ns": 1517157294123385906,
+        "scan_start_ns": 1517157294123385906,
+        "scan_end_ns": 1517157294224225355,
+        "point_count": 21203
+      },
+      {
+        "transaction_id": 746,
+        "record_time_ns": 1690254187987027847,
+        "header_stamp_ns": 1517157294224246025,
+        "scan_start_ns": 1517157294224246025,
+        "scan_end_ns": 1517157294325085474,
+        "point_count": 21185
+      },
+      {
+        "transaction_id": 747,
+        "record_time_ns": 1690254188096401078,
+        "header_stamp_ns": 1517157294325105906,
+        "scan_start_ns": 1517157294325105906,
+        "scan_end_ns": 1517157294425945355,
+        "point_count": 21180
+      },
+      {
+        "transaction_id": 748,
+        "record_time_ns": 1690254188184777254,
+        "header_stamp_ns": 1517157294425966024,
+        "scan_start_ns": 1517157294425966024,
+        "scan_end_ns": 1517157294526805473,
+        "point_count": 21165
+      },
+      {
+        "transaction_id": 749,
+        "record_time_ns": 1690254188285434186,
+        "header_stamp_ns": 1517157294526825905,
+        "scan_start_ns": 1517157294526825905,
+        "scan_end_ns": 1517157294627665354,
+        "point_count": 21178
+      },
+      {
+        "transaction_id": 750,
+        "record_time_ns": 1690254188386985852,
+        "header_stamp_ns": 1517157294627686024,
+        "scan_start_ns": 1517157294627686024,
+        "scan_end_ns": 1517157294728525473,
+        "point_count": 21181
+      },
+      {
+        "transaction_id": 751,
+        "record_time_ns": 1690254188489973720,
+        "header_stamp_ns": 1517157294728545904,
+        "scan_start_ns": 1517157294728545904,
+        "scan_end_ns": 1517157294829385353,
+        "point_count": 21192
+      },
+      {
+        "transaction_id": 752,
+        "record_time_ns": 1690254188590040484,
+        "header_stamp_ns": 1517157294829406023,
+        "scan_start_ns": 1517157294829406023,
+        "scan_end_ns": 1517157294930245472,
+        "point_count": 21176
+      },
+      {
+        "transaction_id": 753,
+        "record_time_ns": 1690254188688746479,
+        "header_stamp_ns": 1517157294930265903,
+        "scan_start_ns": 1517157294930265903,
+        "scan_end_ns": 1517157295031044317,
+        "point_count": 21156
+      },
+      {
+        "transaction_id": 754,
+        "record_time_ns": 1690254188791056264,
+        "header_stamp_ns": 1517157295031064987,
+        "scan_start_ns": 1517157295031064987,
+        "scan_end_ns": 1517157295131904436,
+        "point_count": 21180
+      },
+      {
+        "transaction_id": 755,
+        "record_time_ns": 1690254188890716514,
+        "header_stamp_ns": 1517157295131925106,
+        "scan_start_ns": 1517157295131925106,
+        "scan_end_ns": 1517157295232764317,
+        "point_count": 21067
+      },
+      {
+        "transaction_id": 756,
+        "record_time_ns": 1690254188993958052,
+        "header_stamp_ns": 1517157295232784986,
+        "scan_start_ns": 1517157295232784986,
+        "scan_end_ns": 1517157295333624436,
+        "point_count": 21166
+      },
+      {
+        "transaction_id": 757,
+        "record_time_ns": 1690254189092203330,
+        "header_stamp_ns": 1517157295333645105,
+        "scan_start_ns": 1517157295333645105,
+        "scan_end_ns": 1517157295434484316,
+        "point_count": 21706
+      },
+      {
+        "transaction_id": 758,
+        "record_time_ns": 1690254189194021021,
+        "header_stamp_ns": 1517157295434504986,
+        "scan_start_ns": 1517157295434504986,
+        "scan_end_ns": 1517157295535344435,
+        "point_count": 22270
+      },
+      {
+        "transaction_id": 759,
+        "record_time_ns": 1690254189294844624,
+        "header_stamp_ns": 1517157295535365105,
+        "scan_start_ns": 1517157295535365105,
+        "scan_end_ns": 1517157295636204315,
+        "point_count": 22872
+      },
+      {
+        "transaction_id": 760,
+        "record_time_ns": 1690254189394974585,
+        "header_stamp_ns": 1517157295636224985,
+        "scan_start_ns": 1517157295636224985,
+        "scan_end_ns": 1517157295737064434,
+        "point_count": 23593
+      },
+      {
+        "transaction_id": 761,
+        "record_time_ns": 1690254189498022174,
+        "header_stamp_ns": 1517157295737085104,
+        "scan_start_ns": 1517157295737085104,
+        "scan_end_ns": 1517157295837924315,
+        "point_count": 25102
+      },
+      {
+        "transaction_id": 762,
+        "record_time_ns": 1690254189596937798,
+        "header_stamp_ns": 1517157295837944984,
+        "scan_start_ns": 1517157295837944984,
+        "scan_end_ns": 1517157295938784433,
+        "point_count": 28136
+      },
+      {
+        "transaction_id": 763,
+        "record_time_ns": 1690254189702360713,
+        "header_stamp_ns": 1517157295938805103,
+        "scan_start_ns": 1517157295938805103,
+        "scan_end_ns": 1517157296039583279,
+        "point_count": 28981
+      },
+      {
+        "transaction_id": 764,
+        "record_time_ns": 1690254189797981891,
+        "header_stamp_ns": 1517157296039604902,
+        "scan_start_ns": 1517157296039604902,
+        "scan_end_ns": 1517157296140443398,
+        "point_count": 28955
+      }
+    ]
+  },
+  "imu_contract": {
+    "anchor_header_stamp_ns": 1517157286165072000,
+    "anchor_imu_sample_present": true,
+    "first_scan_start_ns": 1517157286155932903,
+    "pre_scan_imu_stamp_ns": 1517157286155072000,
+    "post_scan_imu_stamp_ns": 1517157286160064000,
+    "static_calibration_samples": 200,
+    "first_scan_pre_anchor": true
+  },
+  "rotation_projection": {
+    "T_WORLD_IMU": {
+      "orthogonality_error": 1.2379704056665196e-06,
+      "determinant": 0.999999216169924,
+      "projection_frobenius": 6.189853679228577e-07
+    },
+    "T_IMU_LIDAR": {
+      "orthogonality_error": 0.0022139659176038215,
+      "determinant": 0.9984426773247781,
+      "projection_frobenius": 0.0011074165400378395
+    },
+    "T_IMU_CAMERA": {
+      "orthogonality_error": 1.6417727979927554e-08,
+      "determinant": 0.9999999984588779,
+      "projection_frobenius": 8.208863985425674e-09
+    }
+  },
+  "transforms": {
+    "T_WORLD_IMU": [
+      [
+        0.13598997913351413,
+        -0.9904095504414524,
+        -0.024405900303529408,
+        1.968147
+      ],
+      [
+        0.9907051055252576,
+        0.1360271085440841,
+        0.00014009755043771748,
+        -6.879292
+      ],
+      [
+        0.003181110097757347,
+        -0.024198101898607566,
+        0.9997021218358247,
+        -0.896125
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_IMU_LIDAR": [
+      [
+        0.9999918597233475,
+        -0.0005161381080032746,
+        0.004001760674214531,
+        0.08
+      ],
+      [
+        0.0005196241852023933,
+        0.9999994864189835,
+        -0.0008701450879252283,
+        0.029
+      ],
+      [
+        -0.004001309503946919,
+        0.0008722174163330545,
+        0.9999916143443562,
+        0.03
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_WORLD_LIDAR": [
+      [
+        0.13557188694263408,
+        -0.9905005186477521,
+        -0.02299969628811917,
+        1.9495721443587732
+      ],
+      [
+        0.9907671633134002,
+        0.1355158202199119,
+        0.003986297786338129,
+        -6.796086602483689
+      ],
+      [
+        -0.0008316073175590052,
+        -0.023327773761258688,
+        0.9997275245788785,
+        -0.8665811924921643
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_IMU_CAMERA": [
+      [
+        -0.02050034663852375,
+        -0.00037277084905419796,
+        0.9997897763177994,
+        0.1796755
+      ],
+      [
+        -0.9995856044838157,
+        -0.020204402175987277,
+        -0.02050369336086726,
+        0.04727031
+      ],
+      [
+        0.020207797911348042,
+        -0.9997958007386334,
+        4.158087374598578e-05,
+        -0.01985536
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_WORLD_CAMERA": [
+      [
+        0.9867180979517824,
+        0.04436085641278784,
+        0.15626742972462504,
+        1.9462486889561263
+      ],
+      [
+        -0.15627770653705983,
+        -0.003257721333831728,
+        0.9877077835530244,
+        -6.6948593029102135
+      ],
+      [
+        0.04432463890358546,
+        -0.9990102610434163,
+        0.0037181603020348297,
+        -0.9165467297526033
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_NORMALIZED_WORLD": [
+      [
+        -0.1436436027,
+        0.9890022874,
+        -0.03522758186,
+        7.363630829145
+      ],
+      [
+        0.9871839285,
+        0.1406968534,
+        -0.07531456649,
+        -0.644385552171
+      ],
+      [
+        -0.06952988356,
+        -0.04559455812,
+        -0.9965373874,
+        0.346859433882
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_NORMALIZED_IMU": [
+      [
+        0.9601634621531279,
+        0.2776495580878947,
+        -0.031572780088009185,
+        0.30885189652357425
+      ],
+      [
+        0.2733966289044046,
+        -0.9567553351250845,
+        -0.09936553318090018,
+        0.3981340630305481
+      ],
+      [
+        -0.05779622407398303,
+        0.08677527805857471,
+        -0.9945499889521338,
+        1.4166947473453129
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_NORMALIZED_LIDAR": [
+      [
+        0.9604262520473397,
+        0.27712630021094803,
+        -0.027971766345020382,
+        0.3927696272777332
+      ],
+      [
+        0.27329484242103846,
+        -0.9569826225211077,
+        -0.09743811610253825,
+        0.389278922628846
+      ],
+      [
+        -0.053771160740628224,
+        0.08593760050440459,
+        -0.9948484427369793,
+        1.384751032814529
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  "gt_used": false
+}

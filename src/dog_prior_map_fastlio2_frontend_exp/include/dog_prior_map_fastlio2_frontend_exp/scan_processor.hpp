@@ -29,6 +29,18 @@ bool prepareScanWindow(
     ScanWindowDecision* decision, ScanWindowStats* stats,
     std::string* failure_reason);
 
+// Keeps the whole first scan when its point timestamps straddle a fresh
+// navigation anchor. Requires causal IMU coverage at scan start and the
+// anchor; it never commits a LiDAR update before the anchor.
+bool prepareScanWindowWithCausalPreroll(
+    uint64_t raw_scan_start_ns, uint64_t scan_end_ns,
+    uint64_t committed_ns,
+    const std::vector<ImuSample, Eigen::aligned_allocator<ImuSample>>& imu,
+    std::vector<TimedLidarPoint,
+                Eigen::aligned_allocator<TimedLidarPoint>>* cloud,
+    ScanWindowStats* stats,
+    std::string* failure_reason);
+
 struct ScanEndResult {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   uint64_t scan_end_ns = 0;
@@ -47,7 +59,8 @@ class ScanEndProcessor {
                const std::vector<ImuSample, Eigen::aligned_allocator<ImuSample>>& imu,
                const std::vector<TimedLidarPoint, Eigen::aligned_allocator<TimedLidarPoint>>& cloud,
                ScanEndResult* result,
-               std::string* failure_reason) const;
+               std::string* failure_reason,
+               bool allow_causal_pre_anchor_preroll = false) const;
 };
 
 }  // namespace dog_prior_map_fastlio2_frontend_exp
