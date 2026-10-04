@@ -182,7 +182,7 @@ local refinement. Across the segment:
 
 ```text
 effective NDT updates = 25 / 99
-iteration-limit results = 13 / 99 (TX666–671, TX695–696, TX703)
+iteration-limit results = 13 / 99 (TX666–671, TX695–696, TX698–701, TX703)
 zero-iteration passthrough = 61 / 99 (TX704–764)
 all serialized states finite = YES
 first zero-iteration passthrough = TX704
