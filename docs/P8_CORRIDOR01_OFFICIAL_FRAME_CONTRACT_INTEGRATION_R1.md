@@ -190,8 +190,8 @@ first frame with <1.00 m overlap = TX706
 maximum raw NDT correction = 5.508306 m / 0.453526 rad (TX698)
 final corrected IMU position = [75.918271, -237.298944, -131.478967] m
 displacement from first corrected position = 282.584941 m
-mean / P95 frame time = 78.494 / 223.053 ms
-mean / P95 NDT alignment time = 41.849 / 201.443 ms
+mean / P95 frame time (post-review replay) = 77.343 / 214.249 ms
+mean / P95 NDT alignment time (post-review replay) = 41.535 / 198.579 ms
 ```
 
 This is a finite but failed localization trajectory: after TX704 the system
@@ -260,6 +260,8 @@ the 67–77 s replay was repeated into
 `docs/p8_corridor01_official_frame_contract_r1/post_review/`: it records
 `anchor_imu_sample_present=true` and again processes TX666–TX764 with 25
 accepted updates, 13 iteration-limit results, and 61 passthrough frames. The
+trajectory is byte-identical to the earlier replay; registration CSV differs
+only in the nondeterministic `alignment_ms` column (99/99 rows). The
 first-frame correction and later map-support loss are unchanged.
 
 The review found no transform-composition or replay-counter inconsistency. Two
