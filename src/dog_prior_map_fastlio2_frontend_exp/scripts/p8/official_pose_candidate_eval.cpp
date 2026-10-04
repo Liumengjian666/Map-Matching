@@ -356,6 +356,26 @@ std::vector<Candidate> candidates() {
       {"D_INVERSE_AS_T_MAP_IMU", "D", T_yaml.inverse() * T_imu_lidar}};
 }
 
+Candidate primaryCandidateFromTask() {
+  Eigen::Matrix3d rotation;
+  rotation << 0.135469425, -0.989725170, -0.022931736,
+              0.989994861,  0.135406510,  0.003975072,
+             -0.000832801, -0.023378415,  0.999730103;
+  return {"PRIMARY_T_MAP_IMU_TIMES_T_IMU_LIDAR", "P",
+          transform(rotation, Eigen::Vector3d(1.949572160, -6.796086620,
+                                               -0.866581202))};
+}
+
+std::vector<Candidate> selectedCandidates(const std::string& selector) {
+  if (selector.empty()) return candidates();
+  if (selector == "P") return {primaryCandidateFromTask()};
+  std::vector<Candidate> selected;
+  for (const Candidate& candidate : candidates())
+    if (candidate.tag == selector) selected.push_back(candidate);
+  require(!selected.empty(), "unknown_candidate_selector:" + selector);
+  return selected;
+}
+
 CloudMetrics measure(const Cloud::ConstPtr& target, const Cloud::ConstPtr& source,
                      const Isometry& map_T_lidar) {
   require(!target->empty(), "empty_target_cloud");
@@ -438,7 +458,11 @@ void saveCandidateCloud(const std::string& directory, const std::string& tag,
                         const Isometry& pose) {
   if (directory.empty()) return;
   const Cloud::Ptr aligned = transformedCloud(cloud, pose);
-  const std::string path = directory + "/candidate_" + tag + "_" + suffix + ".pcd";
+  const std::string path = tag == "P" && suffix == "aligned"
+      ? directory + "/tx665_primary_official_pose.pcd"
+      : (tag == "P" && suffix == "refined"
+          ? directory + "/tx665_primary_official_pose_refined.pcd"
+          : directory + "/candidate_" + tag + "_" + suffix + ".pcd");
   require(pcl::io::savePCDFileBinary(path, *aligned) == 0,
           "cannot_write_candidate_cloud:" + path);
 }
@@ -498,10 +522,10 @@ void writeMetricsBeforeBbox(std::ostream& output, const CloudMetrics& metrics) {
 
 int main(int argc, char** argv) {
   try {
-    if (argc < 7 || argc > 9)
+    if (argc < 7 || argc > 10)
       throw std::runtime_error("usage: p8_official_pose_candidate_eval FILTER_SCANS_CSV "
           "RAW_TIMED_SCAN_INDEX_CSV TIMED_POINTS_BIN IMU_CSV MAP_PCD OUTPUT_CSV "
-          "[PCD_OUTPUT_DIR [MAP_T_RAW_3X4_CSV]]");
+          "[PCD_OUTPUT_DIR [MAP_T_RAW_3X4_CSV [CANDIDATE_TAG]]]");
     const std::string filter_path = argv[1];
     const std::string index_path = argv[2];
     const std::string points_path = argv[3];
@@ -509,8 +533,9 @@ int main(int argc, char** argv) {
     const std::string map_path = argv[5];
     const std::string output_path = argv[6];
     const std::string pcd_output_dir = argc >= 8 ? argv[7] : "";
-    const Isometry map_T_raw = argc == 9 ? parseMapFrameTransform(argv[8]) :
+    const Isometry map_T_raw = argc >= 9 ? parseMapFrameTransform(argv[8]) :
                                            Isometry::Identity();
+    const std::string candidate_selector = argc == 10 ? argv[9] : "";
 
     std::cerr << "stage=read_scan_index\n";
     const auto scans = paper::readP7TimedScans(filter_path, index_path);
@@ -604,11 +629,22 @@ int main(int argc, char** argv) {
         << " accel_std=" << gyro_reference.accel_std.transpose() << " gyro_std="
         << gyro_reference.gyro_std.transpose() << " translational_deskew=NO\n";
 
-    for (const Candidate& candidate : candidates()) {
+    for (const Candidate& candidate : selectedCandidates(candidate_selector)) {
       std::cerr << "stage=align candidate=" << candidate.name << '\n';
       // Canonicalize once. Initial metrics, the NDT seed, CSV and PCD exports
       // all use this exact effective rigid transform.
-      const Isometry map_T_lidar = projectToRigidIsometry(map_T_raw * candidate.map_T_lidar);
+      const Isometry rigid_raw_candidate = projectToRigidIsometry(candidate.map_T_lidar);
+      if (candidate.tag == "P") {
+        const Eigen::Matrix3d& input_rotation = candidate.map_T_lidar.linear();
+        std::cout << "primary_input_T_map_lidar=\n" << candidate.map_T_lidar.matrix()
+            << "\nprimary_rotation_orthogonality_error="
+            << (input_rotation.transpose() * input_rotation - Eigen::Matrix3d::Identity()).norm()
+            << " determinant=" << input_rotation.determinant()
+            << " projection_frobenius="
+            << (rigid_raw_candidate.linear() - input_rotation).norm()
+            << " rigid_raw_candidate=\n" << rigid_raw_candidate.matrix() << '\n';
+      }
+      const Isometry map_T_lidar = projectToRigidIsometry(map_T_raw * rigid_raw_candidate);
       const CloudMetrics initial_metrics = measure(target, source, map_T_lidar);
       saveCandidateCloud(pcd_output_dir, candidate.tag, "aligned", visual_source, map_T_lidar);
       const double initial_ndt_score = initialNdtScore(target, source,
