@@ -19,6 +19,7 @@ endif()
 find_package(Eigen3 REQUIRED)
 find_package(PCL 1.10.0 EXACT REQUIRED COMPONENTS common io filters kdtree registration)
 find_package(OpenMP REQUIRED)
+find_package(PythonInterp 3 REQUIRED)
 find_library(USB_10_LIBRARY usb-1.0 REQUIRED)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -51,3 +52,8 @@ target_link_libraries(p8_tx666_deskew_export PRIVATE
   ${PCL_LIBRARIES} ${USB_10_LIBRARY})
 target_compile_options(p8_tx666_deskew_export PRIVATE
   ${PCL_DEFINITIONS} ${OpenMP_CXX_FLAGS} -Wall -Wextra -Wpedantic)
+
+enable_testing()
+add_test(NAME p8_tx666_rviz_pcd_parser_test
+  COMMAND ${PYTHON_EXECUTABLE}
+    "${PACKAGE_ROOT}/tests/p8_tx666_rviz_pcd_parser_test.py")

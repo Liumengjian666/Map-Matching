@@ -1,0 +1,68 @@
+{
+  "screenshots": [
+    {
+      "name": "rviz_raw_top",
+      "path": "docs/p8_corridor01_rviz_direct_geometry_check_r2/screenshots/rviz_raw_top.png",
+      "bytes": 412349,
+      "window_id": "0x560000e"
+    },
+    {
+      "name": "rviz_raw_perspective",
+      "path": "docs/p8_corridor01_rviz_direct_geometry_check_r2/screenshots/rviz_raw_perspective.png",
+      "bytes": 506552,
+      "window_id": "0x560000e"
+    },
+    {
+      "name": "rviz_raw_corridor",
+      "path": "docs/p8_corridor01_rviz_direct_geometry_check_r2/screenshots/rviz_raw_corridor.png",
+      "bytes": 561129,
+      "window_id": "0x560000e"
+    },
+    {
+      "name": "rviz_normalized_top",
+      "path": "docs/p8_corridor01_rviz_direct_geometry_check_r2/screenshots/rviz_normalized_top.png",
+      "bytes": 452256,
+      "window_id": "0x560000e"
+    },
+    {
+      "name": "rviz_normalized_perspective",
+      "path": "docs/p8_corridor01_rviz_direct_geometry_check_r2/screenshots/rviz_normalized_perspective.png",
+      "bytes": 546840,
+      "window_id": "0x560000e"
+    },
+    {
+      "name": "rviz_normalized_corridor",
+      "path": "docs/p8_corridor01_rviz_direct_geometry_check_r2/screenshots/rviz_normalized_corridor.png",
+      "bytes": 468611,
+      "window_id": "0x560000e"
+    }
+  ],
+  "rviz_pid": 171130,
+  "ros_master_uri": "http://localhost:11312",
+  "fixed_frame_views": [
+    {
+      "name": "rviz_raw_top",
+      "fixed_frame": "world"
+    },
+    {
+      "name": "rviz_raw_perspective",
+      "fixed_frame": "world"
+    },
+    {
+      "name": "rviz_raw_corridor",
+      "fixed_frame": "world"
+    },
+    {
+      "name": "rviz_normalized_top",
+      "fixed_frame": "normalized_map"
+    },
+    {
+      "name": "rviz_normalized_perspective",
+      "fixed_frame": "normalized_map"
+    },
+    {
+      "name": "rviz_normalized_corridor",
+      "fixed_frame": "normalized_map"
+    }
+  ]
+}
