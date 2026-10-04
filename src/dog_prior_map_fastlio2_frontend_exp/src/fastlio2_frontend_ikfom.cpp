@@ -291,40 +291,9 @@ bool FastLio2IkfomFrontend::initializeStatic(
     return fail(failure_reason, "insufficient_static_imu_samples");
   if (!finitePose(initial_map_T_lidar) || !finitePose(T_imu_lidar))
     return fail(failure_reason, "invalid_initial_or_extrinsic_pose");
-  if (!std::isfinite(impl_->parameters.gravity_mps2) ||
-      impl_->parameters.gravity_mps2 <= 0.0 ||
-      !impl_->parameters.initial_accel_bias.allFinite())
-    return fail(failure_reason, "invalid_initialization_parameters");
-
-  const std::size_t count =
-      static_cast<std::size_t>(impl_->parameters.static_init_samples);
-  Eigen::Vector3d mean_acc = Eigen::Vector3d::Zero();
-  Eigen::Vector3d mean_gyro = Eigen::Vector3d::Zero();
-  Eigen::Vector3d acc_m2 = Eigen::Vector3d::Zero();
-  Eigen::Vector3d gyro_m2 = Eigen::Vector3d::Zero();
-  uint64_t previous_stamp = 0;
-  for (std::size_t index = 0; index < count; ++index) {
-    const ImuSample& sample = samples[index];
-    if (sample.stamp_ns == 0 || (index > 0 && sample.stamp_ns <= previous_stamp) ||
-        !sample.acceleration.allFinite() || !sample.angular_velocity.allFinite())
-      return fail(failure_reason, "invalid_or_nonmonotonic_static_imu_sample");
-    previous_stamp = sample.stamp_ns;
-    const double n = static_cast<double>(index + 1);
-    const Eigen::Vector3d delta_acc = sample.acceleration - mean_acc;
-    const Eigen::Vector3d delta_gyro = sample.angular_velocity - mean_gyro;
-    mean_acc += delta_acc / n;
-    mean_gyro += delta_gyro / n;
-    acc_m2.array() += delta_acc.array() * (sample.acceleration - mean_acc).array();
-    gyro_m2.array() += delta_gyro.array() * (sample.angular_velocity - mean_gyro).array();
-  }
-
-  const Eigen::Vector3d acc_std = (acc_m2 / static_cast<double>(count - 1)).cwiseMax(0.0).cwiseSqrt();
-  const Eigen::Vector3d gyro_std = (gyro_m2 / static_cast<double>(count - 1)).cwiseMax(0.0).cwiseSqrt();
-  if (acc_std.maxCoeff() > impl_->parameters.max_static_accel_std_m_s2 ||
-      gyro_std.maxCoeff() > impl_->parameters.max_static_gyro_std_rad_s)
-    return fail(failure_reason, "static_imu_variance_exceeds_gate");
-
-  const Eigen::Vector3d mean_specific_force = mean_acc - impl_->parameters.initial_accel_bias;
+  StaticImuCalibration calibration;
+  if (!calibrateStaticImu(samples, &calibration, failure_reason)) return false;
+  const Eigen::Vector3d mean_specific_force = calibration.mean_specific_force;
   if (!mean_specific_force.allFinite() || mean_specific_force.norm() < 1e-6)
     return fail(failure_reason, "invalid_static_acceleration_mean");
 
@@ -352,8 +321,8 @@ bool FastLio2IkfomFrontend::initializeStatic(
   state.offset_R_L_I = SO3(imu_T_lidar.block<3, 3>(0, 0));
   state.offset_T_L_I = vect3(imu_T_lidar.block<3, 1>(0, 3));
   state.vel = vect3(Eigen::Vector3d::Zero());
-  state.bg = vect3(mean_gyro);
-  state.ba = vect3(impl_->parameters.initial_accel_bias);
+  state.bg = vect3(calibration.gyro_bias);
+  state.ba = vect3(calibration.accel_bias_prior);
   state.grav = S2(-initialized_rotation * mean_specific_force.normalized() *
                   impl_->parameters.gravity_mps2);
 
@@ -365,7 +334,121 @@ bool FastLio2IkfomFrontend::initializeStatic(
   impl_->filter.change_P(covariance);
   impl_->fixed_rotation = state.offset_R_L_I;
   impl_->fixed_translation = state.offset_T_L_I;
-  impl_->stamp_ns = samples[count - 1].stamp_ns;
+  impl_->stamp_ns = samples[calibration.sample_count - 1].stamp_ns;
+  impl_->is_initialized = true;
+  return postconditionsValid(failure_reason);
+}
+
+bool FastLio2IkfomFrontend::calibrateStaticImu(
+    const std::vector<ImuSample, Eigen::aligned_allocator<ImuSample>>& samples,
+    StaticImuCalibration* calibration, std::string* failure_reason) const {
+  if (failure_reason) failure_reason->clear();
+  if (!calibration) return fail(failure_reason, "null_static_calibration_output");
+  *calibration = StaticImuCalibration();
+  if (impl_->parameters.static_init_samples <= 1 ||
+      samples.size() < static_cast<std::size_t>(impl_->parameters.static_init_samples))
+    return fail(failure_reason, "insufficient_static_imu_samples");
+  if (!std::isfinite(impl_->parameters.gravity_mps2) ||
+      impl_->parameters.gravity_mps2 <= 0.0 ||
+      !impl_->parameters.initial_accel_bias.allFinite())
+    return fail(failure_reason, "invalid_initialization_parameters");
+
+  const std::size_t count =
+      static_cast<std::size_t>(impl_->parameters.static_init_samples);
+  Eigen::Vector3d mean_acc = Eigen::Vector3d::Zero();
+  Eigen::Vector3d mean_gyro = Eigen::Vector3d::Zero();
+  Eigen::Vector3d acc_m2 = Eigen::Vector3d::Zero();
+  Eigen::Vector3d gyro_m2 = Eigen::Vector3d::Zero();
+  uint64_t previous_stamp = 0;
+  for (std::size_t index = 0; index < count; ++index) {
+    const ImuSample& sample = samples[index];
+    if (sample.stamp_ns == 0 || (index > 0 && sample.stamp_ns <= previous_stamp) ||
+        !sample.acceleration.allFinite() || !sample.angular_velocity.allFinite())
+      return fail(failure_reason, "invalid_or_nonmonotonic_static_imu_sample");
+    previous_stamp = sample.stamp_ns;
+    const double n = static_cast<double>(index + 1);
+    const Eigen::Vector3d delta_acc = sample.acceleration - mean_acc;
+    const Eigen::Vector3d delta_gyro = sample.angular_velocity - mean_gyro;
+    mean_acc += delta_acc / n;
+    mean_gyro += delta_gyro / n;
+    acc_m2.array() += delta_acc.array() * (sample.acceleration - mean_acc).array();
+    gyro_m2.array() += delta_gyro.array() * (sample.angular_velocity - mean_gyro).array();
+  }
+
+  const Eigen::Vector3d acc_std =
+      (acc_m2 / static_cast<double>(count - 1)).cwiseMax(0.0).cwiseSqrt();
+  const Eigen::Vector3d gyro_std =
+      (gyro_m2 / static_cast<double>(count - 1)).cwiseMax(0.0).cwiseSqrt();
+  if (acc_std.maxCoeff() > impl_->parameters.max_static_accel_std_m_s2 ||
+      gyro_std.maxCoeff() > impl_->parameters.max_static_gyro_std_rad_s)
+    return fail(failure_reason, "static_imu_variance_exceeds_gate");
+
+  const Eigen::Vector3d specific_force = mean_acc - impl_->parameters.initial_accel_bias;
+  if (!specific_force.allFinite() || specific_force.norm() < 1e-6)
+    return fail(failure_reason, "invalid_static_acceleration_mean");
+
+  calibration->gate_passed = true;
+  calibration->sample_count = count;
+  calibration->start_stamp_ns = samples.front().stamp_ns;
+  calibration->end_stamp_ns = samples[count - 1].stamp_ns;
+  calibration->mean_acceleration = mean_acc;
+  calibration->mean_specific_force = specific_force;
+  calibration->gyro_bias = mean_gyro;
+  calibration->accel_bias_prior = impl_->parameters.initial_accel_bias;
+  calibration->acceleration_std = acc_std;
+  calibration->gyro_std = gyro_std;
+  calibration->gravity_mps2 = impl_->parameters.gravity_mps2;
+  return true;
+}
+
+bool FastLio2IkfomFrontend::initializeFromStaticCalibration(
+    const StaticImuCalibration& calibration,
+    const Pose3d& initial_map_T_imu, const Pose3d& T_imu_lidar,
+    const Eigen::Vector3d& gravity_map,
+    const Eigen::Vector3d& initial_velocity, uint64_t start_timestamp_ns,
+    std::string* failure_reason) {
+  if (failure_reason) failure_reason->clear();
+  if (!calibration.gate_passed ||
+      calibration.sample_count != static_cast<std::size_t>(impl_->parameters.static_init_samples) ||
+      calibration.start_stamp_ns == 0 ||
+      calibration.end_stamp_ns <= calibration.start_stamp_ns ||
+      start_timestamp_ns <= calibration.end_stamp_ns)
+    return fail(failure_reason, "invalid_or_noncausal_static_calibration");
+  if (!finitePose(initial_map_T_imu) || !finitePose(T_imu_lidar))
+    return fail(failure_reason, "invalid_reanchor_or_extrinsic_pose");
+  if (!calibration.mean_acceleration.allFinite() ||
+      !calibration.mean_specific_force.allFinite() ||
+      !calibration.gyro_bias.allFinite() ||
+      !calibration.accel_bias_prior.allFinite() ||
+      !calibration.acceleration_std.allFinite() || !calibration.gyro_std.allFinite() ||
+      !gravity_map.allFinite() || !initial_velocity.allFinite() ||
+      !std::isfinite(calibration.gravity_mps2) ||
+      std::abs(calibration.gravity_mps2 - impl_->parameters.gravity_mps2) > 1e-9 ||
+      (calibration.accel_bias_prior - impl_->parameters.initial_accel_bias).norm() > 1e-12 ||
+      calibration.acceleration_std.maxCoeff() > impl_->parameters.max_static_accel_std_m_s2 ||
+      calibration.gyro_std.maxCoeff() > impl_->parameters.max_static_gyro_std_rad_s ||
+      std::abs(gravity_map.norm() - impl_->parameters.gravity_mps2) > 1e-6)
+    return fail(failure_reason, "invalid_static_calibration_or_reanchor_gravity");
+
+  state_ikfom state;
+  state.pos = vect3(initial_map_T_imu.position);
+  state.rot = SO3(initial_map_T_imu.orientation.toRotationMatrix());
+  state.offset_R_L_I = SO3(T_imu_lidar.orientation.toRotationMatrix());
+  state.offset_T_L_I = vect3(T_imu_lidar.position);
+  state.vel = vect3(initial_velocity);
+  state.bg = vect3(calibration.gyro_bias);
+  state.ba = vect3(calibration.accel_bias_prior);
+  state.grav = S2(gravity_map);
+
+  Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> covariance =
+      makeInitialCovariance();
+  enforceFixedExtrinsicConstraint(state, covariance, state.offset_R_L_I,
+                                  state.offset_T_L_I);
+  impl_->filter.change_x(state);
+  impl_->filter.change_P(covariance);
+  impl_->fixed_rotation = state.offset_R_L_I;
+  impl_->fixed_translation = state.offset_T_L_I;
+  impl_->stamp_ns = start_timestamp_ns;
   impl_->is_initialized = true;
   return postconditionsValid(failure_reason);
 }

@@ -31,6 +31,12 @@ using P7TimedLidarVector = std::vector<TimedLidarPoint,
     Eigen::aligned_allocator<TimedLidarPoint>>;
 
 P7ImuVector readP7Imu(const std::string& path);
+// Right/body-frame rotation product satisfying
+// R_map_imu(end) = R_map_imu(start) * R_start_to_end.
+bool integrateBodyRelativeRotation(
+    const P7ImuVector& all, uint64_t start_stamp_ns, uint64_t end_stamp_ns,
+    const Eigen::Vector3d& gyro_bias, Eigen::Matrix3d* R_start_to_end,
+    std::string* failure_reason);
 std::vector<P7ScanRecord> readP7Scans(const std::string& filter_path,
                                     const std::string& asset_path);
 std::vector<P7TimedScanRecord> readP7TimedScans(

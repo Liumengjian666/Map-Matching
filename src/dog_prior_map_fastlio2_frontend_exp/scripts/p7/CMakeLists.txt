@@ -51,3 +51,16 @@ target_include_directories(p7_single_state_runner PRIVATE "${FASTLIO2_INCLUDE_DI
 target_link_libraries(p7_single_state_runner PRIVATE
   p7_current_frame_ndt p7_replay_io Eigen3::Eigen OpenMP::OpenMP_CXX
   ${PCL_LIBRARIES} ${USB_10_LIBRARY})
+
+add_executable(static_imu_reanchor_contract_test
+  "${PACKAGE_ROOT}/src/fastlio2_frontend_ikfom.cpp"
+  "${PACKAGE_ROOT}/src/registration_geometry.cpp"
+  "${PACKAGE_ROOT}/tests/static_imu_reanchor_contract_test.cpp")
+target_include_directories(static_imu_reanchor_contract_test PRIVATE
+  "${PACKAGE_ROOT}/include" "${FASTLIO2_INCLUDE_DIR}")
+target_link_libraries(static_imu_reanchor_contract_test PRIVATE
+  p7_replay_io Eigen3::Eigen OpenMP::OpenMP_CXX ${USB_10_LIBRARY})
+target_compile_options(static_imu_reanchor_contract_test PRIVATE
+  ${OpenMP_CXX_FLAGS} -Wall -Wextra -Wpedantic)
+add_test(NAME static_imu_reanchor_contract_test
+  COMMAND $<TARGET_FILE:static_imu_reanchor_contract_test>)

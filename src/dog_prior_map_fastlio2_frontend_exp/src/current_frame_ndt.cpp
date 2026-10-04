@@ -1,6 +1,7 @@
 #include "dog_prior_map_fastlio2_frontend_exp/current_frame_ndt.hpp"
 
 #include <pcl/filters/voxel_grid.h>
+#include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
@@ -39,6 +40,15 @@ Cloud::Ptr voxelDown(const Cloud::Ptr& input, double leaf) {
   voxel.filter(*down);
   finalize(down);
   return down;
+}
+
+double quantile(const std::vector<double>& sorted, double fraction) {
+  if (sorted.empty()) return std::numeric_limits<double>::quiet_NaN();
+  const double index = fraction * static_cast<double>(sorted.size() - 1);
+  const std::size_t lower = static_cast<std::size_t>(std::floor(index));
+  const std::size_t upper = static_cast<std::size_t>(std::ceil(index));
+  const double alpha = index - static_cast<double>(lower);
+  return (1.0 - alpha) * sorted[lower] + alpha * sorted[upper];
 }
 
 bool fail(std::string* reason, const std::string& message) {
@@ -137,6 +147,7 @@ struct CurrentFrameNdtRegistration::Impl {
   }
   CurrentFrameNdtParameters parameters;
   Cloud::Ptr target;
+  pcl::KdTreeFLANN<Point>::Ptr target_tree;
   ObservableNdt ndt;
 };
 
@@ -167,6 +178,8 @@ bool CurrentFrameNdtRegistration::loadMap(const std::string& path, std::string* 
     impl_->ndt.setTransformationEpsilon(impl_->parameters.transformation_epsilon);
     impl_->ndt.setMaximumIterations(impl_->parameters.maximum_iterations);
     impl_->target = target;
+    impl_->target_tree.reset(new pcl::KdTreeFLANN<Point>());
+    impl_->target_tree->setInputCloud(target);
     return true;
   } catch (const std::exception& error) {
     return fail(reason, std::string("map_internal_error:") + error.what());
@@ -232,6 +245,54 @@ bool CurrentFrameNdtRegistration::align(uint64_t stamp_ns, const RegistrationClo
   } catch (const std::exception& error) {
     return fail(reason, std::string("ndt_internal_error:") + error.what());
   }
+}
+
+bool CurrentFrameNdtRegistration::evaluateMapOverlap(
+    const RegistrationCloud& raw_cloud, const Pose3d& map_T_lidar,
+    CurrentFrameNdtOverlap* result, std::string* reason) const {
+  if (reason) reason->clear();
+  if (!result) return fail(reason, "null_overlap_result");
+  if (!ready() || !impl_->target_tree) return fail(reason, "map_not_loaded");
+  if (!map_T_lidar.position.allFinite() || !map_T_lidar.orientation.coeffs().allFinite() ||
+      std::abs(map_T_lidar.orientation.norm() - 1.0) > 1e-6)
+    return fail(reason, "invalid_overlap_pose");
+  CurrentFrameNdtOverlap pending;
+  const RegistrationCloud prepared = preprocessRegistrationCloud(raw_cloud, impl_->parameters);
+  if (prepared.empty()) return fail(reason, "empty_overlap_source");
+  pending.evaluated_points = prepared.size();
+  std::vector<double> distances;
+  distances.reserve(prepared.size());
+  std::array<std::size_t, 4> counts{{0, 0, 0, 0}};
+  const std::array<double, 4> thresholds{{0.2, 0.3, 0.5, 1.0}};
+  const Eigen::Matrix3d rotation = map_T_lidar.orientation.toRotationMatrix();
+  std::vector<int> nearest_index(1);
+  std::vector<float> squared_distance(1);
+  double distance_sum = 0.0;
+  for (const RegistrationPoint& point : prepared) {
+    const Eigen::Vector3d map_point = rotation * Eigen::Vector3d(point.x, point.y, point.z) +
+        map_T_lidar.position;
+    const Point query(static_cast<float>(map_point.x()),
+                      static_cast<float>(map_point.y()),
+                      static_cast<float>(map_point.z()));
+    if (impl_->target_tree->nearestKSearch(query, 1, nearest_index, squared_distance) != 1 ||
+        !std::isfinite(squared_distance.front()) || squared_distance.front() < 0.0f)
+      return fail(reason, "map_overlap_nearest_neighbor_failed");
+    const double distance = std::sqrt(static_cast<double>(squared_distance.front()));
+    distances.push_back(distance);
+    distance_sum += distance;
+    for (std::size_t index = 0; index < thresholds.size(); ++index)
+      if (distance < thresholds[index]) ++counts[index];
+  }
+  std::sort(distances.begin(), distances.end());
+  for (std::size_t index = 0; index < counts.size(); ++index)
+    pending.fraction_within[index] =
+        static_cast<double>(counts[index]) / static_cast<double>(prepared.size());
+  pending.mean_nearest_distance_m = distance_sum / static_cast<double>(prepared.size());
+  pending.median_nearest_distance_m = quantile(distances, 0.50);
+  pending.p90_nearest_distance_m = quantile(distances, 0.90);
+  pending.p95_nearest_distance_m = quantile(distances, 0.95);
+  *result = pending;
+  return true;
 }
 
 }  // namespace dog_prior_map_fastlio2_frontend_exp

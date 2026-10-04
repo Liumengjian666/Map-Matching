@@ -84,6 +84,76 @@ P7ImuVector readP7Imu(const std::string& path) {
   return samples;
 }
 
+bool integrateBodyRelativeRotation(
+    const P7ImuVector& all, uint64_t start_stamp_ns, uint64_t end_stamp_ns,
+    const Eigen::Vector3d& gyro_bias, Eigen::Matrix3d* R_start_to_end,
+    std::string* failure_reason) {
+  if (failure_reason) failure_reason->clear();
+  const auto fail = [failure_reason](const char* message) {
+    if (failure_reason) *failure_reason = message;
+    return false;
+  };
+  if (!R_start_to_end || all.size() < 2 || start_stamp_ns == 0 ||
+      end_stamp_ns <= start_stamp_ns || !gyro_bias.allFinite())
+    return fail("invalid_relative_rotation_input");
+  if (start_stamp_ns < all.front().stamp_ns || end_stamp_ns > all.back().stamp_ns)
+    return fail("relative_rotation_epoch_outside_imu_coverage");
+
+  const auto sampleAt = [&all](uint64_t stamp, ImuSample* output) {
+    if (!output) return false;
+    const auto upper = std::lower_bound(all.begin(), all.end(), stamp,
+        [](const ImuSample& sample, uint64_t time) { return sample.stamp_ns < time; });
+    if (upper != all.end() && upper->stamp_ns == stamp) {
+      *output = *upper;
+      return true;
+    }
+    if (upper == all.begin() || upper == all.end()) return false;
+    const ImuSample& lower = *(upper - 1);
+    if (upper->stamp_ns <= lower.stamp_ns) return false;
+    const double alpha = static_cast<double>(stamp - lower.stamp_ns) /
+        static_cast<double>(upper->stamp_ns - lower.stamp_ns);
+    output->stamp_ns = stamp;
+    output->acceleration = (1.0 - alpha) * lower.acceleration + alpha * upper->acceleration;
+    output->angular_velocity =
+        (1.0 - alpha) * lower.angular_velocity + alpha * upper->angular_velocity;
+    return output->acceleration.allFinite() && output->angular_velocity.allFinite();
+  };
+
+  std::vector<ImuSample, Eigen::aligned_allocator<ImuSample>> knots;
+  ImuSample start;
+  ImuSample end;
+  if (!sampleAt(start_stamp_ns, &start) || !sampleAt(end_stamp_ns, &end))
+    return fail("relative_rotation_missing_epoch_bracket");
+  knots.push_back(start);
+  auto next = std::upper_bound(all.begin(), all.end(), start_stamp_ns,
+      [](uint64_t time, const ImuSample& sample) { return time < sample.stamp_ns; });
+  for (; next != all.end() && next->stamp_ns < end_stamp_ns; ++next)
+    knots.push_back(*next);
+  knots.push_back(end);
+
+  Eigen::Matrix3d result = Eigen::Matrix3d::Identity();
+  for (std::size_t index = 0; index + 1 < knots.size(); ++index) {
+    const ImuSample& head = knots[index];
+    const ImuSample& tail = knots[index + 1];
+    if (tail.stamp_ns <= head.stamp_ns || !head.angular_velocity.allFinite() ||
+        !tail.angular_velocity.allFinite())
+      return fail("invalid_relative_rotation_imu_interval");
+    const double dt = static_cast<double>(tail.stamp_ns - head.stamp_ns) * 1e-9;
+    const Eigen::Vector3d omega =
+        0.5 * (head.angular_velocity + tail.angular_velocity) - gyro_bias;
+    const double angle = omega.norm() * dt;
+    if (!std::isfinite(dt) || dt <= 0.0 || !std::isfinite(angle))
+      return fail("nonfinite_relative_rotation_increment");
+    if (angle > 0.0)
+      result *= Eigen::AngleAxisd(angle, omega.normalized()).toRotationMatrix();
+  }
+  if (!result.allFinite() || std::abs(result.determinant() - 1.0) > 1e-8 ||
+      (result.transpose() * result - Eigen::Matrix3d::Identity()).norm() > 1e-8)
+    return fail("invalid_integrated_relative_rotation");
+  *R_start_to_end = result;
+  return true;
+}
+
 std::vector<P7ScanRecord> readP7Scans(const std::string& filter_path, const std::string& asset_path) {
   const auto filter = readFilterScans(filter_path);
   std::ifstream input(asset_path);

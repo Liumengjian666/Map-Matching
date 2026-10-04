@@ -89,6 +89,14 @@ void testActualNdt() {
   CurrentFrameNdtResult result;
   require(!ndt.align(1, source, truth, &result, &reason), "unloaded map accepted");
   require(ndt.loadMap(path, &reason) && ndt.ready() && ndt.targetPointCount() > 0, "map loading failed");
+  CurrentFrameNdtOverlap overlap;
+  require(ndt.evaluateMapOverlap(source, truth, &overlap, &reason),
+          "map overlap diagnostic failed");
+  require(overlap.evaluated_points == preprocessRegistrationCloud(
+              source, CurrentFrameNdtParameters()).size() &&
+          overlap.fraction_within[3] > 0.99 &&
+          overlap.median_nearest_distance_m < 0.2,
+          "same-target map overlap diagnostic is inconsistent");
   const auto target_leaf = ndt.targetGridLeafSizeMeters();
   for (float axis_leaf : target_leaf)
     require(std::abs(axis_leaf - 0.8f) < 1e-7f,

@@ -1,0 +1,23 @@
+	Command being timed: "/tmp/p7-baseline-v2-build/p7_single_state_runner /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_i6c_framework/input/imu.csv /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p8_failure_harvest_adapter_r1/filter_scans.csv /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p8_failure_harvest_adapter_r1/raw_timed_scan_index.csv /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p8_failure_harvest_adapter_r1/p7_timed_points.bin /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd /home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i6d_full_algorithm/corridor01_params_official_calibration.txt /tmp/p8_corridor01_reanchor_short_r1/trajectory.csv /tmp/p8_corridor01_reanchor_short_r1/registration.csv /tmp/p8_corridor01_reanchor_short_r1/runtime.csv 100 1517157286165072000 --official-pose-reanchor 1517157224023904000 1517157225018848000 666 0.960163465743,0.277649560977,-0.031572778492,0.308851863228,0.273396627048,-0.956755336447,-0.099365539793,0.398134085225,-0.057796222809,0.086775269917,-0.994549973184,1.416694747472,0,0,0,1"
+	User time (seconds): 6.23
+	System time (seconds): 0.88
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:07.17
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 64640
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 1
+	Minor (reclaiming a frame) page faults: 14956
+	Voluntary context switches: 374
+	Involuntary context switches: 751
+	Swaps: 0
+	File system inputs: 40
+	File system outputs: 304
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

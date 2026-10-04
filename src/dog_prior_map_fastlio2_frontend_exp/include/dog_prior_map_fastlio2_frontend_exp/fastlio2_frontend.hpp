@@ -48,6 +48,24 @@ class FastLio2IkfomFrontend {
       const Pose3d& T_imu_lidar,
       std::string* failure_reason);
 
+  // Computes only static-window IMU quantities. It does not create a pose,
+  // velocity, covariance, or navigation timestamp.
+  bool calibrateStaticImu(
+      const std::vector<ImuSample, Eigen::aligned_allocator<ImuSample>>& samples,
+      StaticImuCalibration* calibration, std::string* failure_reason) const;
+
+  // Starts a fresh navigation state at an independently supplied epoch/pose.
+  // gravity_map is the physical gravity vector in the new map frame; it must
+  // have the configured magnitude. No old navigation state is propagated.
+  bool initializeFromStaticCalibration(
+      const StaticImuCalibration& calibration,
+      const Pose3d& initial_map_T_imu,
+      const Pose3d& T_imu_lidar,
+      const Eigen::Vector3d& gravity_map,
+      const Eigen::Vector3d& initial_velocity,
+      uint64_t start_timestamp_ns,
+      std::string* failure_reason);
+
   bool predictInterval(const ImuSample& head, const ImuSample& tail,
                        std::string* failure_reason);
   bool predictImuSequence(

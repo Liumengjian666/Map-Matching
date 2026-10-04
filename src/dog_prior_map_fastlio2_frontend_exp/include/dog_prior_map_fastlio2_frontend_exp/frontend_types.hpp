@@ -3,6 +3,7 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 
+#include <cstddef>
 #include <cstdint>
 #include <vector>
 
@@ -26,6 +27,26 @@ struct ImuSample {
   uint64_t stamp_ns = 0;
   Eigen::Vector3d acceleration = Eigen::Vector3d::Zero();
   Eigen::Vector3d angular_velocity = Eigen::Vector3d::Zero();
+};
+
+// Static-window calibration is deliberately separate from navigation state.
+// Accelerometer bias is the configured prior (not estimated by the current
+// initializer); mean_specific_force is expressed in the IMU body frame at the
+// calibration window and can only be mapped to the navigation frame when that
+// epoch's attitude is known.
+struct StaticImuCalibration {
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+  bool gate_passed = false;
+  std::size_t sample_count = 0;
+  uint64_t start_stamp_ns = 0;
+  uint64_t end_stamp_ns = 0;
+  Eigen::Vector3d mean_acceleration = Eigen::Vector3d::Zero();
+  Eigen::Vector3d mean_specific_force = Eigen::Vector3d::Zero();
+  Eigen::Vector3d gyro_bias = Eigen::Vector3d::Zero();
+  Eigen::Vector3d accel_bias_prior = Eigen::Vector3d::Zero();
+  Eigen::Vector3d acceleration_std = Eigen::Vector3d::Zero();
+  Eigen::Vector3d gyro_std = Eigen::Vector3d::Zero();
+  double gravity_mps2 = 0.0;
 };
 
 struct ImuPoseSample {

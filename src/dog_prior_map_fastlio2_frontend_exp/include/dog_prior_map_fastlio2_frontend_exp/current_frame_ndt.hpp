@@ -68,6 +68,15 @@ struct CurrentFrameNdtResult {
   Pose3d raw_map_T_lidar;
 };
 
+struct CurrentFrameNdtOverlap {
+  std::size_t evaluated_points = 0;
+  std::array<double, 4> fraction_within{{0.0, 0.0, 0.0, 0.0}};  // <0.2, <0.3, <0.5, <1.0 m
+  double mean_nearest_distance_m = std::numeric_limits<double>::quiet_NaN();
+  double median_nearest_distance_m = std::numeric_limits<double>::quiet_NaN();
+  double p90_nearest_distance_m = std::numeric_limits<double>::quiet_NaN();
+  double p95_nearest_distance_m = std::numeric_limits<double>::quiet_NaN();
+};
+
 class CurrentFrameNdtRegistration {
  public:
   explicit CurrentFrameNdtRegistration(const CurrentFrameNdtParameters& parameters);
@@ -79,6 +88,11 @@ class CurrentFrameNdtRegistration {
   bool align(uint64_t stamp_ns, const RegistrationCloud& raw_cloud,
       const Pose3d& initial_map_T_lidar, CurrentFrameNdtResult* result,
       std::string* reason);
+  // Diagnostic only: applies the frozen source preprocessing and queries the
+  // same preprocessed target cloud used to build the runtime NDT target.
+  bool evaluateMapOverlap(const RegistrationCloud& raw_cloud,
+      const Pose3d& map_T_lidar, CurrentFrameNdtOverlap* result,
+      std::string* reason) const;
 
  private:
   struct Impl;
