@@ -178,3 +178,14 @@ This resolves the direction ranking on the released raw map, but not a
 production initialization. The 67 s sensor-time mapping remains provisional,
 deskew is gyro-only with no translation, the official extrinsic rotation is
 not rigid as serialized, and no multi-frame continuity or GT check was used.
+
+The prescribed 5-frame A-vs-C continuation was not run. The frozen P7 runner
+requires a causal 200-sample static-IMU window at its initialization epoch;
+for the provisional TX665 reference `1517157286063423943 ns`, the exact
+runner-selected window is `1517157285065152000`–`1517157286060064000 ns`, with
+acceleration standard deviations `[0.998484, 1.615300, 1.056049] m/s²` and
+gyro standard deviations `[0.140706, 0.117640, 0.068108] rad/s`. These exceed
+the frozen limits `0.50 m/s²` and `0.05 rad/s`. The gate was not relaxed, and
+no candidate was selected by substituting an ad-hoc filter initialization.
+Thus the TX665 test supports DIRECT over INVERSE but does not close the
+LiDAR-vs-IMU frame interpretation.
