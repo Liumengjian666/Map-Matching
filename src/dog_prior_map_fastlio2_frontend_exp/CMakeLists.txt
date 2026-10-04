@@ -56,6 +56,7 @@ if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
 
   find_package(Eigen3 REQUIRED)
   find_package(OpenMP REQUIRED)
+  find_package(PCL 1.10 REQUIRED COMPONENTS common io filters registration kdtree)
   set(CMAKE_CXX_STANDARD 14)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -180,6 +181,31 @@ if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
   install(DIRECTORY config launch docs
     DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
   )
+
+  add_executable(p8_corridor01_full_motion_state_tx666
+    src/fastlio2_frontend_ikfom.cpp
+    src/registration_geometry.cpp
+    src/scan_processor.cpp
+    src/lidar_deskew_geometry.cpp
+    src/current_frame_ndt.cpp
+    src/p7_replay_io.cpp
+    ../../scripts/p8/corridor01_full_motion_state_tx666.cpp
+  )
+  target_include_directories(p8_corridor01_full_motion_state_tx666 PRIVATE
+    include
+    "${FASTLIO2_REF_ROOT}/include"
+    ${EIGEN3_INCLUDE_DIRS}
+    ${catkin_INCLUDE_DIRS}
+    ${PCL_INCLUDE_DIRS}
+  )
+  target_compile_options(p8_corridor01_full_motion_state_tx666 PRIVATE
+    ${OpenMP_CXX_FLAGS} ${PCL_DEFINITIONS})
+  target_link_libraries(p8_corridor01_full_motion_state_tx666
+    ${catkin_LIBRARIES}
+    ${PCL_LIBRARIES}
+    ${OpenMP_CXX_FLAGS}
+  )
+  add_dependencies(p8_corridor01_full_motion_state_tx666 ${catkin_EXPORTED_TARGETS})
 
   add_executable(ndt_pose_update_runtime_test
     src/fastlio2_frontend_ikfom.cpp
