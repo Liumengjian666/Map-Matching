@@ -74,7 +74,7 @@ def certificate(row, supports):
 
 def empty_table(path, fields):
     with Path(path).open('w',newline='') as f:
-        csv.writer(f).writerow(fields)
+        csv.writer(f,lineterminator='\n').writerow(fields)
 
 
 def certificate_counts(nodes):
@@ -121,7 +121,7 @@ def self_test():
     good=dict(failed);good['gradient_relative_error']='.01';assert fd_agrees(good)
     with tempfile.TemporaryDirectory() as directory:
         path=Path(directory)/'empty.csv';empty_table(path,['alpha','status'])
-        assert path.read_text().strip()=='alpha,status' and read(path)==[]
+        assert path.read_bytes()==b'alpha,status\n' and read(path)==[]
     print('P9_R1C_CERTIFICATE_AUDIT_SELF_TEST=PASS')
 
 
