@@ -1,0 +1,15 @@
+{
+  "command": [
+    "/tmp/p9_r1c2_build/p9_numerical_stationarity",
+    "--run",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/map/frozen/floor01_h1_map_p5_frozen.pcd",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/frozen/cohort_frozen.csv",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/dual_u.csv",
+    "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r1a_true_profile_closure/canonical_oracle.csv",
+    "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r1c_support_aware_continuation",
+    "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r1c2_numerical_stationarity",
+    "R1C2_V1"
+  ],
+  "wall_time_s": 2.0978348609642126,
+  "binary_sha256": "8edcccc93d102ce0c9b7d898e4e35f83415c8b51a4aee8518e830088000ba9d5"
+}

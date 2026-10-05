@@ -1,0 +1,5 @@
+[ 20%] Built target p9_numerical_stationarity
+[ 40%] Built target p9_support_aware_continuation
+[ 60%] Built target p9_strong_attractor_closure
+[ 80%] Built target p9_true_profile_closure
+[100%] Built target p9_ndt_energy_contract

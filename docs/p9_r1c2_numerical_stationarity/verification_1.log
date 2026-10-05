@@ -1,0 +1,23 @@
+Test project /tmp/p9_r1c2_build
+    Start 1: p9_math_self_test
+1/9 Test #1: p9_math_self_test ................   Passed    0.03 sec
+    Start 2: p9_r1a_self_test
+2/9 Test #2: p9_r1a_self_test .................   Passed    0.02 sec
+    Start 3: p9_r1b_self_test
+3/9 Test #3: p9_r1b_self_test .................   Passed    0.02 sec
+    Start 4: p9_r1c_self_test
+4/9 Test #4: p9_r1c_self_test .................   Passed    0.02 sec
+    Start 5: p9_r1c2_numerical_self_test
+5/9 Test #5: p9_r1c2_numerical_self_test ......   Passed    0.02 sec
+    Start 6: p9_r1c2_multih_audit_self_test
+6/9 Test #6: p9_r1c2_multih_audit_self_test ...   Passed    0.12 sec
+    Start 7: p9_r1c_certificate_audit
+7/9 Test #7: p9_r1c_certificate_audit .........   Passed    0.19 sec
+    Start 8: p9_r1b_orchestration_test
+8/9 Test #8: p9_r1b_orchestration_test ........   Passed    0.21 sec
+    Start 9: p9_r1b_inference_regression
+9/9 Test #9: p9_r1b_inference_regression ......   Passed    0.21 sec
+
+100% tests passed, 0 tests failed out of 9
+
+Total Test time (real) =   0.85 sec

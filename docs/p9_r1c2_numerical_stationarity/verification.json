@@ -1,0 +1,32 @@
+{
+  "release_build": "PASS",
+  "P9_tests": "9/9 PASS",
+  "diff_check": "PASS",
+  "new_file_whitespace": "PASS",
+  "commands": [
+    {
+      "command": [
+        "cmake",
+        "--build",
+        "/tmp/p9_r1c2_build",
+        "-j1"
+      ],
+      "sha256": "7393443d483cc97b2c2f1f2d71d67f02a74fdda90afb7768b398af34361baa08"
+    },
+    {
+      "command": [
+        "ctest",
+        "--output-on-failure"
+      ],
+      "sha256": "c2a26f6aeae679f7c5ea632718e82b5aa40d8ddb5aba965f5bf5bd5e49f068c3"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}
