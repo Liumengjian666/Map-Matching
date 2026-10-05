@@ -99,6 +99,8 @@ the probes. Formal algorithms exited normally. Summary initially used an
 incompatible imported CSV writer signature for empty conditional tables;
 fixed with an explicit header writer and regression test, then summarized
 the unchanged formal evidence without rerunning optimization.
+The three empty Python-generated tables initially used default CRLF. The writer
+and regression test now require LF; derived tables/hashes were regenerated.
 
 ## Verification and scope
 
