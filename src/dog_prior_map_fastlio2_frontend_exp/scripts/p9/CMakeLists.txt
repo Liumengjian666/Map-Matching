@@ -7,13 +7,16 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBUSB REQUIRED libusb-1.0)
 
 add_executable(p9_ndt_energy_contract p9_ndt_energy_contract.cpp)
-target_compile_features(p9_ndt_energy_contract PRIVATE cxx_std_14)
-target_include_directories(p9_ndt_energy_contract PRIVATE ${PCL_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS})
-target_compile_definitions(p9_ndt_energy_contract PRIVATE ${PCL_DEFINITIONS})
-target_include_directories(p9_ndt_energy_contract PRIVATE ${LIBUSB_INCLUDE_DIRS})
-target_link_libraries(p9_ndt_energy_contract PRIVATE ${PCL_LIBRARIES} ${LIBUSB_LIBRARIES})
+add_executable(p9_true_profile_closure p9_true_profile_closure.cpp)
+foreach(p9_target p9_ndt_energy_contract p9_true_profile_closure)
+  target_compile_features(${p9_target} PRIVATE cxx_std_14)
+  target_include_directories(${p9_target} PRIVATE ${PCL_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${LIBUSB_INCLUDE_DIRS})
+  target_compile_definitions(${p9_target} PRIVATE ${PCL_DEFINITIONS})
+  target_link_libraries(${p9_target} PRIVATE ${PCL_LIBRARIES} ${LIBUSB_LIBRARIES})
+endforeach()
 
 enable_testing()
 add_test(NAME p9_math_self_test COMMAND p9_ndt_energy_contract --self-test)
-set_tests_properties(p9_math_self_test PROPERTIES
+add_test(NAME p9_r1a_self_test COMMAND p9_true_profile_closure --self-test)
+set_tests_properties(p9_math_self_test p9_r1a_self_test PROPERTIES
   ENVIRONMENT "LD_LIBRARY_PATH=/lib/x86_64-linux-gnu")
