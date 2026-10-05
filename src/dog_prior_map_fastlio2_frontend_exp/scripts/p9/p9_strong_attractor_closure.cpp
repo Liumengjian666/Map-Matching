@@ -213,6 +213,7 @@ void refineBranches(AttractorEngine& engine,const std::string& requests_path,con
 }
 } // namespace
 
+#ifndef P9_STRONG_ATTRACTOR_LIBRARY
 int main(int argc,char** argv) {
   try {
     if (argc==2 && std::string(argv[1])=="--self-test") {
@@ -234,3 +235,4 @@ int main(int argc,char** argv) {
     std::cerr<<"P9_R1B_ERROR: "<<error.what()<<'\n';return 1;
   }
 }
+#endif

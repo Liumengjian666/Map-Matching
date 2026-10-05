@@ -325,17 +325,20 @@ class ExactPclNdt : public Ndt {
   // Exact PCL score accumulation without derivative work. The R1A
   // derivative-free control uses this dynamic radius-search evaluator.
   double dynamicValueOnly(const Cloud::ConstPtr& source,
-                          const Eigen::Matrix4f& pose, Support* support = nullptr) {
+                          const Eigen::Matrix4f& pose, Support* support = nullptr,
+                          FrozenSupport* frozen_support = nullptr) {
     if (!source || source->empty() || !pose.allFinite())
       throw std::runtime_error("invalid source/pose for dynamic score evaluation");
     Cloud transformed;
     pcl::transformPointCloud(*source, transformed, pose);
     if (support) support->assign(transformed.size(), PointSupport());
+    if (frozen_support) frozen_support->assign(transformed.size(),std::vector<Leaf>());
     double score = 0.0;
     for (std::size_t i = 0; i < transformed.size(); ++i) {
       std::vector<Leaf> leaves;
       std::vector<float> distances;
       target_cells_.radiusSearch(transformed.points[i], resolution_, leaves, distances);
+      if (frozen_support) (*frozen_support)[i]=leaves;
       const Point& point = transformed.points[i];
       const Eigen::Vector3d x(point.x, point.y, point.z);
       for (const Leaf& leaf : leaves) {
