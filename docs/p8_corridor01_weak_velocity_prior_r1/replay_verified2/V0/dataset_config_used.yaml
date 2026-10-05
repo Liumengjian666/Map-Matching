@@ -1,0 +1,186 @@
+dataset_name: SuperLoc_Corridor01
+config_role: corridor01_67s_dataset_specific_initialization_r1
+start_time_s: 67.0
+start_time_semantics: rosbag_record_time_from_bag_start
+localization_mode: true
+imu_preroll: true
+localization_frame_count: 100
+paths:
+  bag: /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/raw_data_core_2023-07-25-03-01-44.bag
+  bag_sha256: c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811
+  raw_map: /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/corridor01.pcd
+  raw_map_sha256: 4b5231d58ebd4aeb4fc293559051dc30a18b6f07376237938d064962bfe8f40a
+  official_initial_pose: /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/initial_pose/corridor01.yaml
+  official_initial_pose_sha256: 0670732e26f0d9ee19e6115110e29d0aeca5d26f62ab4848d1629c5f9a6eb62b
+  official_calibration: /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/calibration/corridor01_extrinsics.yaml
+  official_calibration_sha256: 59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d
+  imu_csv: /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p6_i6c_framework/input/imu.csv
+  filter_scans_csv: /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p8_failure_harvest_adapter_r1/filter_scans.csv
+  timed_scan_index_csv: /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p8_failure_harvest_adapter_r1/raw_timed_scan_index.csv
+  timed_points_bin: /media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p8_failure_harvest_adapter_r1/p7_timed_points.bin
+  one_frame_anchor_imu_header_ns: 1517157286165072000
+  runtime_parameters: /home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/docs/p6_i6d_full_algorithm/corridor01_params_official_calibration.txt
+sensor_contract:
+  lidar_model: Velodyne_VLP16
+  lidar_type: Velodyne
+  scan_lines: 16
+  nominal_scan_rate_hz: 10.0
+  point_time_input_unit: absolute_sensor_nanoseconds
+  point_time_adapter_output_unit: nanoseconds_from_scan_start
+  raw_lidar_topic: /velodyne_packets
+  public_pointcloud_topic: /velodyne_points
+  imu_topic: /imu/data
+  time_sync_enabled: false
+  lidar_to_imu_time_offset_s: 0.0
+  minimum_range_m: 0.5
+  public_maximum_range_values_m:
+  - 60.0
+  - 100.0
+  - 150.0
+  frozen_algorithm_maximum_range_m: 80.0
+  gravity_m_s2: 9.80665
+  imu_frequency_hz_nominal: 200.0
+imu_calibration:
+  window_start_ns: 1517157224023904000
+  window_end_ns: 1517157225018848000
+  sample_count: 200
+  maximum_axis_gyro_std_rad_s: 0.05
+initial_state:
+  anchor_timestamp_ns: 1517157286165072000
+  first_transaction_id: 666
+  replay_frame_count: 100
+  use_initial_velocity: true
+  velocity_frame: raw_map_world
+  velocity_m_s:
+  - 0.340226167731097
+  - 2.913118327289612
+  - -0.169158899608618
+  velocity_source: reference_trajectory_offline_finite_difference
+  velocity_frame_rotation_source: paired_same_anchor_imu_pose_orientation
+  reference_sha256_for_provenance_only: 3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03
+  use_initial_biases: true
+  gyro_bias_rad_s:
+  - 0.0
+  - 0.0
+  - 0.0
+  accel_bias_m_s2:
+  - 0.0
+  - 0.0
+  - 0.0
+  use_covariance_overrides: true
+  velocity_std_m_s: 0.5
+  gyro_bias_std_rad_s: 0.05
+  accel_bias_std_m_s2: 0.5
+  covariance_override_semantics: set state tangent diagonal blocks to the square of
+    each physical std; pose/gravity/extrinsic blocks retain frozen defaults
+  use_initial_gravity: true
+  gravity_frame: raw_map_world
+  gravity_m_s2:
+  - 0.7620000204116083
+  - 0.062189083539576764
+  - -9.779159958134503
+  gravity_source: reference_trajectory_offline_world_vertical_transform
+  gravity_transform_contract: g_map = R_map_reference(anchor) * [0,0,-9.809]; R_map_reference
+    is frozen from the same-anchor official pose relation used by the velocity derivation
+  gravity_derivation_artifact: docs/p8_corridor01_dataset_specific_gravity_r1/gravity_derivation.json
+  gravity_reference_sha256_for_provenance_only: 3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03
+gravity_ab_control:
+  old_static_transport_map_m_s2:
+  - -8.29389651046
+  - 1.45065657871
+  - -5.03223182738
+  old_profile_source: 'previous dataset-velocity profile: static specific-force direction
+    transported by causal gyro integration'
+  old_profile_value_tolerance_m_s: 1.0e-06
+frames:
+  convention: p_A = T_A_B * p_B
+  darpa_frame: imu
+  raw_map_frame: official_world
+  raw_map_to_world:
+  - 1
+  - 0
+  - 0
+  - 0
+  - 0
+  - 1
+  - 0
+  - 0
+  - 0
+  - 0
+  - 1
+  - 0
+  - 0
+  - 0
+  - 0
+  - 1
+  initial_pose_frame: imu
+  initial_pose_source: official_superloc_corridor01_yaml
+  T_world_imu_row_major:
+  - 0.13599
+  - -0.990409
+  - -0.024406
+  - 1.968147
+  - 0.990705
+  - 0.136027
+  - 0.00014
+  - -6.879292
+  - 0.003181
+  - -0.024198
+  - 0.999702
+  - -0.896125
+  - 0
+  - 0
+  - 0
+  - 1
+  T_imu_lidar_source: public_Corridor01_subt_longcorridor_configs
+  T_imu_lidar_row_major:
+  - 0.9992129
+  - -0.000519121
+  - 0.004
+  - 0.08
+  - 0.000516111
+  - 0.999218492
+  - -0.000939132
+  - 0.029
+  - -0.004
+  - 0.000802565
+  - 0.999993652
+  - 0.03
+  - 0
+  - 0
+  - 0
+  - 1
+  rotation_projection: none
+  normalized_map_used: false
+  public_extrinsic_last_diagonal: 0.999993652
+  official_calibration_last_diagonal: 0.999992652
+  extrinsic_source_conflict: Public subt_longcorridor configs use 0.999993652; local
+    official corridor01_extrinsics.yaml uses 0.999992652. This run follows the user's
+    explicit public-config matrix without correction.
+public_parameter_sources:
+  voxel_pillar_corridor01: https://github.com/whu-xjh/Voxel-Pillar/blob/main/config/SubT_MRS.yaml
+  fast_lio_longcorridor: https://github.com/engcang/SLAM-application/blob/main/FAST_LIO/config/subt_longcorridor.yaml
+  ig_lio_longcorridor: https://github.com/engcang/SLAM-application/blob/main/ig_lio/config/subt_longcorridor.yaml
+  sr_lio_longcorridor: https://github.com/engcang/SLAM-application/blob/main/sr_lio/config/subt_longcorridor.yaml
+  ada_lio_longcorridor: https://github.com/engcang/SLAM-application/blob/main/ada_lio/config/subt_longcorridor.yaml
+  lio_sam_6axis_longcorridor: https://github.com/engcang/SLAM-application/blob/main/LIO_SAM_6AXIS/LIO_SAM_6AXIS/config/subt_longcorridor.yaml
+  dlio_longcorridor: https://github.com/engcang/SLAM-application/blob/main/direct_lidar_inertial_odometry/cfg/subt_longcorridor.yaml
+adapter:
+  input_message: velodyne_msgs/VelodyneScan
+  output_point_semantics: packet-decoded VLP16 XYZ with point time preserved
+  deskew_reference: scan_end_lidar_frame
+  deskew_method: frozen_P7_full_SE3_IMU_propagation_scan_end_processor
+  deskew_point_count_policy: preserve_all_points
+  uses_IMU_after_each_point_within_completed_scan: true
+  uses_IMU_after_scan_end: false
+  gravity_used_by_one_frame_gyro_deskew: false
+frozen_registration_algorithm:
+  map_voxel_m: 0.15
+  target_voxel_m: 0.15
+  source_voxel_m: 0.25
+  max_source_points: 1400
+  minimum_effective_points: 50
+  resolution_m: 0.8
+  step_size: 0.08
+  transformation_epsilon: 1.0e-05
+  max_iterations: 80

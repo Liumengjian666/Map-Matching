@@ -1,0 +1,10 @@
+{
+  "profile": "V2",
+  "velocity_std_m_s": 10.0,
+  "velocity_variance_m2_s2": 100.0,
+  "dataset_config_sha256": "77bb68cae29cc1df729fd66a07476a3949b717c9163294d7d949fa9f4cb43b72",
+  "profile_config_sha256": "3890be79dc0a49e0d7b2cf8ddc7c1b0087212745a7c98d7825f51b4881f36622",
+  "shared_config_without_velocity_std_sha256": "14656e97d0f6b6a05f5b4075a24a8c88695b55223ca5cc77ed0417f38dd337c6",
+  "dataset_config_snapshot": "dataset_config_used.yaml",
+  "runtime_reference_or_gt_access": false
+}

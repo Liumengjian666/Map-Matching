@@ -1,0 +1,128 @@
+{
+  "workspace": "/home/jian/livox_ws/dog_loc_paper_ws",
+  "config_sha256": "77bb68cae29cc1df729fd66a07476a3949b717c9163294d7d949fa9f4cb43b72",
+  "profiles": [
+    {
+      "profile": "V0",
+      "velocity_std_m_s": 0.5,
+      "velocity_variance_m2_s2": 0.25,
+      "return_code": 0,
+      "frames": 100,
+      "diagnostics_valid": true,
+      "error": null,
+      "initial_pv_diag_m2_s2": [
+        0.25,
+        0.25,
+        0.25
+      ],
+      "initial_pbg_diag_rad2_s2": [
+        0.0025,
+        0.0025,
+        0.0025
+      ],
+      "initial_pba_diag_m2_s4": [
+        0.25,
+        0.25,
+        0.25
+      ],
+      "initial_velocity_world_m_s": [
+        0.340226167731097,
+        2.913118327289612,
+        -0.169158899608618
+      ],
+      "initial_speed_m_s": 2.9377928734538816
+    },
+    {
+      "profile": "V1",
+      "velocity_std_m_s": 2.0,
+      "velocity_variance_m2_s2": 4.0,
+      "return_code": 0,
+      "frames": 100,
+      "diagnostics_valid": true,
+      "error": null,
+      "initial_pv_diag_m2_s2": [
+        4.0,
+        4.0,
+        4.0
+      ],
+      "initial_pbg_diag_rad2_s2": [
+        0.0025,
+        0.0025,
+        0.0025
+      ],
+      "initial_pba_diag_m2_s4": [
+        0.25,
+        0.25,
+        0.25
+      ],
+      "initial_velocity_world_m_s": [
+        0.340226167731097,
+        2.913118327289612,
+        -0.169158899608618
+      ],
+      "initial_speed_m_s": 2.9377928734538816
+    },
+    {
+      "profile": "V2",
+      "velocity_std_m_s": 10.0,
+      "velocity_variance_m2_s2": 100.0,
+      "return_code": 0,
+      "frames": 100,
+      "diagnostics_valid": true,
+      "error": null,
+      "initial_pv_diag_m2_s2": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "initial_pbg_diag_rad2_s2": [
+        0.0025,
+        0.0025,
+        0.0025
+      ],
+      "initial_pba_diag_m2_s4": [
+        0.25,
+        0.25,
+        0.25
+      ],
+      "initial_velocity_world_m_s": [
+        0.340226167731097,
+        2.913118327289612,
+        -0.169158899608618
+      ],
+      "initial_speed_m_s": 2.9377928734538816
+    },
+    {
+      "profile": "V3",
+      "velocity_std_m_s": 100.0,
+      "velocity_variance_m2_s2": 10000.0,
+      "return_code": 0,
+      "frames": 100,
+      "diagnostics_valid": true,
+      "error": null,
+      "initial_pv_diag_m2_s2": [
+        10000.0,
+        10000.0,
+        10000.0
+      ],
+      "initial_pbg_diag_rad2_s2": [
+        0.0025,
+        0.0025,
+        0.0025
+      ],
+      "initial_pba_diag_m2_s4": [
+        0.25,
+        0.25,
+        0.25
+      ],
+      "initial_velocity_world_m_s": [
+        0.340226167731097,
+        2.913118327289612,
+        -0.169158899608618
+      ],
+      "initial_speed_m_s": 2.9377928734538816
+    }
+  ],
+  "reference_used_at_runtime": false,
+  "gt_updates_after_initialization": 0
+}

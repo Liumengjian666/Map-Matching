@@ -1,0 +1,1 @@
+LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/opt/MVS/lib/64:/opt/MVS/lib/32:/opt/MVS/lib/64:/opt/MVS/lib/32:/opt/MVS/lib/64:/opt/MVS/lib/32:/home/jian/drivers/dhcamera/lib:/home/jian/livox_ws/devel/lib:/opt/ros/noetic/lib:/opt/MVS/lib/64:/opt/MVS/lib/32:/opt/MVS/lib/64:/opt/MVS/lib/32
