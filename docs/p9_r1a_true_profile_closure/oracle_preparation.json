@@ -1,0 +1,21 @@
+{
+  "major_basins": 22,
+  "canonicalized": 22,
+  "verified_primary_clusters_in_target_frames": 481,
+  "canonical_rule": "maximum raw_ndt_score_sum within exactly reconstructed complete-link membership",
+  "representative_is_real_best_terminal": true,
+  "representative_contract_pass": true,
+  "representative_over_0p05m_0p5deg": 0,
+  "representative_over_0p10m_1deg": 0,
+  "representative_over_0p20m_2deg": 0,
+  "clustering_git_sha": "9945c4f5c3d7759104de108a594bcaf2553fd78c",
+  "clustering_source": "src/dog_prior_map_fastlio2_frontend_exp/scripts/p5_i1_cluster_modes.py",
+  "clustering_source_sha256": "13dd0a7fe9fe87506f1f3728a81a6c81faa5afbbd0789cc4e8fc4cc89fa38805",
+  "gt_accessed": false,
+  "inputs_sha256": {
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/candidates.csv": "c5f3d1b61f9a799c0f02009a8ae8ef8c52a40ac9b350165bdfd6c7d95bdce62f",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/clusters/mode_clusters.csv": "5e3b29e8c179894dca0437e99ebeb6f8b875ea768b08d7afa93d6088df3e05ef",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/frozen/cohort_frozen.csv": "24513cc9ffe73b817e5da7f40d4e025551a006220fc7f0ea44996d7f89d44a42",
+    "docs/p9_dual_u_nonlocal_r1/sidecars/profile_cohort_final/oracle_recovery.csv": "6f94837b1e46a5e1ca21b08f23c3322619960a47a21c0bc69d29bbaeed93c31c"
+  }
+}

@@ -1,0 +1,398 @@
+{
+  "task": "PAPER-P9-R1A-TRUE-PROFILE-AND-ORACLE-CONTRACT-CLOSURE",
+  "branch": "research/p9-r1a-true-profile-closure",
+  "start_sha": "7140e4898079d68728438f89bb8d262da9b8e7b3",
+  "oracle_contract": {
+    "major_basins": 22,
+    "canonicalized": 22,
+    "verified_primary_clusters_in_target_frames": 481,
+    "canonical_rule": "maximum raw_ndt_score_sum within exactly reconstructed complete-link membership",
+    "representative_is_real_best_terminal": true,
+    "representative_contract_pass": true,
+    "representative_over_0p05m_0p5deg": 0,
+    "representative_over_0p10m_1deg": 0,
+    "representative_over_0p20m_2deg": 0,
+    "clustering_git_sha": "9945c4f5c3d7759104de108a594bcaf2553fd78c",
+    "clustering_source": "src/dog_prior_map_fastlio2_frontend_exp/scripts/p5_i1_cluster_modes.py",
+    "clustering_source_sha256": "13dd0a7fe9fe87506f1f3728a81a6c81faa5afbbd0789cc4e8fc4cc89fa38805",
+    "gt_accessed": false,
+    "inputs_sha256": {
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/candidates.csv": "c5f3d1b61f9a799c0f02009a8ae8ef8c52a40ac9b350165bdfd6c7d95bdce62f",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/clusters/mode_clusters.csv": "5e3b29e8c179894dca0437e99ebeb6f8b875ea768b08d7afa93d6088df3e05ef",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/frozen/cohort_frozen.csv": "24513cc9ffe73b817e5da7f40d4e025551a006220fc7f0ea44996d7f89d44a42",
+      "docs/p9_dual_u_nonlocal_r1/sidecars/profile_cohort_final/oracle_recovery.csv": "6f94837b1e46a5e1ca21b08f23c3322619960a47a21c0bc69d29bbaeed93c31c"
+    },
+    "nonstationary_before_refine_gradient_gt_0p1": 7,
+    "nonstationary_after_refine_gradient_gt_0p1": 5,
+    "cluster_changed_after_refine": 2,
+    "refine_status_counts": {
+      "SUCCESS": 22
+    },
+    "complete_link_admitted_after_refine": 20,
+    "positive_local_hessian_before": 22,
+    "positive_local_hessian_after": 22,
+    "max_value_only_score_error": 0.0
+  },
+  "group_a": {
+    "count": 7,
+    "ids": [
+      "616/P02",
+      "616/P03",
+      "616/P10",
+      "616/P12",
+      "616/P13",
+      "616/P17",
+      "2226/P09"
+    ],
+    "original_projection_gte_0p8": 13,
+    "original_inside_region": 18,
+    "original_group_a_geometric_intersection": 9,
+    "closed_weak_projection_gte_0p8": 13,
+    "closed_inside_region": 18,
+    "maximum_reconstruction_error": 4.025276216873795e-15
+  },
+  "true_ub_recovery_and_cost": {
+    "ONE_STEP_NEWTON/ZERO_V": {
+      "targets": 7,
+      "recovered": 2,
+      "endpoint_matches": 2,
+      "energy_evaluations": {
+        "mean": 3.0,
+        "median": 3.0,
+        "p95": 3.0,
+        "max": 3.0
+      },
+      "runtime_ms": {
+        "mean": 3.0677658571428568,
+        "median": 2.87609,
+        "p95": 3.878251199999999,
+        "max": 4.287036
+      },
+      "termination_counts": {
+        "STRONG_MAX_ITER": 7
+      },
+      "full_refine_count": 7,
+      "full_refine_runtime_ms": {
+        "mean": 25.586651285714286,
+        "median": 6.76328,
+        "p95": 81.72273189999997,
+        "max": 91.050586
+      },
+      "reported_accepted_moves": 7,
+      "recorded_accepted_moves": 7
+    },
+    "ITERATIVE_PROJECTED_NEWTON/ZERO_V": {
+      "targets": 7,
+      "recovered": 3,
+      "endpoint_matches": 1,
+      "energy_evaluations": {
+        "mean": 82.0,
+        "median": 97.0,
+        "p95": 162.6,
+        "max": 168.0
+      },
+      "runtime_ms": {
+        "mean": 61.136989142857146,
+        "median": 66.958551,
+        "p95": 132.72679369999997,
+        "max": 144.642374
+      },
+      "termination_counts": {
+        "BRANCH_GRADIENT_SMALL": 3,
+        "MAX_ITERATIONS": 4
+      },
+      "full_refine_count": 7,
+      "full_refine_runtime_ms": {
+        "mean": 14.530478571428572,
+        "median": 5.463173,
+        "p95": 52.78208329999996,
+        "max": 71.194742
+      },
+      "reported_accepted_moves": 49,
+      "recorded_accepted_moves": 49
+    },
+    "DERIVATIVE_FREE_PATTERN/ZERO_V": {
+      "targets": 7,
+      "recovered": 4,
+      "endpoint_matches": 3,
+      "energy_evaluations": {
+        "mean": 98.85714285714286,
+        "median": 100.0,
+        "p95": 100.0,
+        "max": 100.0
+      },
+      "runtime_ms": {
+        "mean": 56.97170771428572,
+        "median": 53.499667,
+        "p95": 73.15876619999997,
+        "max": 81.219849
+      },
+      "termination_counts": {
+        "EVALUATION_BUDGET": 6,
+        "POLL_STEP_SMALL": 1
+      },
+      "full_refine_count": 7,
+      "full_refine_runtime_ms": {
+        "mean": 6.948990142857143,
+        "median": 5.4733,
+        "p95": 13.702311199999997,
+        "max": 15.120842
+      },
+      "reported_accepted_moves": 58,
+      "recorded_accepted_moves": 58
+    },
+    "ITERATIVE_PROJECTED_NEWTON/ORACLE_V_INIT_DIAGNOSTIC": {
+      "targets": 7,
+      "recovered": 7,
+      "endpoint_matches": 7,
+      "energy_evaluations": {
+        "mean": 94.42857142857143,
+        "median": 147.0,
+        "p95": 173.29999999999998,
+        "max": 176.0
+      },
+      "runtime_ms": {
+        "mean": 66.226119,
+        "median": 97.662379,
+        "p95": 130.10520799999998,
+        "max": 138.22544
+      },
+      "termination_counts": {
+        "STEP_SMALL": 2,
+        "MAX_ITERATIONS": 1,
+        "TRUST_RADIUS_EXHAUSTED": 3,
+        "BRANCH_GRADIENT_SMALL": 1
+      },
+      "full_refine_count": 7,
+      "full_refine_runtime_ms": {
+        "mean": 1.7718491428571428,
+        "median": 1.566275,
+        "p95": 2.3149236,
+        "max": 2.323221
+      },
+      "reported_accepted_moves": 25,
+      "recorded_accepted_moves": 25
+    },
+    "DERIVATIVE_FREE_PATTERN/ORACLE_V_INIT_DIAGNOSTIC": {
+      "targets": 7,
+      "recovered": 3,
+      "endpoint_matches": 3,
+      "energy_evaluations": {
+        "mean": 100.0,
+        "median": 100.0,
+        "p95": 100.0,
+        "max": 100.0
+      },
+      "runtime_ms": {
+        "mean": 57.57118085714285,
+        "median": 53.520201,
+        "p95": 73.24188529999998,
+        "max": 81.246878
+      },
+      "termination_counts": {
+        "EVALUATION_BUDGET": 7
+      },
+      "full_refine_count": 7,
+      "full_refine_runtime_ms": {
+        "mean": 15.847876857142856,
+        "median": 4.577788,
+        "p95": 58.48132259999994,
+        "max": 79.68654
+      },
+      "reported_accepted_moves": 44,
+      "recorded_accepted_moves": 44
+    }
+  },
+  "frozen_solver_parameters": {
+    "chart_translation_scale_m": 0.8,
+    "canonical_recovery_translation_m": 0.2,
+    "canonical_recovery_rotation_deg": 2.0,
+    "weak_dimension_maximum": 2,
+    "newton": {
+      "max_iterations": 20,
+      "trust_initial": 0.1,
+      "trust_minimum": 1e-05,
+      "trust_maximum": 0.5,
+      "hessian_eigenvalue_floor_scale": 0.0001,
+      "line_search_alphas": [
+        1.0,
+        0.5,
+        0.25,
+        0.125,
+        0.0625,
+        0.03125,
+        0.015625,
+        0.0078125
+      ],
+      "energy_acceptance": 1e-10,
+      "branch_gradient_tolerance": 1e-05,
+      "step_tolerance": 1e-06,
+      "relative_energy_tolerance": 1e-09,
+      "strong_coordinate_norm_cap": null
+    },
+    "pattern": {
+      "maximum_dynamic_value_evaluations": 100,
+      "step_initial": 0.1,
+      "step_minimum": 0.001,
+      "step_maximum": 0.25,
+      "growth": 1.2,
+      "shrink": 0.5,
+      "energy_acceptance": 1e-10,
+      "strong_coordinate_norm_cap": null
+    },
+    "ndt": {
+      "resolution_m": 0.8,
+      "step_size": 0.08,
+      "epsilon": 1e-05,
+      "max_iterations": 80,
+      "outlier_ratio": 0.55
+    }
+  },
+  "dynamic_support_effect": {
+    "newton_zero_v_failures": [
+      {
+        "transaction_id": "2226",
+        "cluster_id": "P09",
+        "initial_support_change": 0.9963898916967509,
+        "final_support_change": 0.9981949458483754,
+        "max_accepted_switch": 0.4223826714801444,
+        "derivative_free_recovered": true
+      },
+      {
+        "transaction_id": "616",
+        "cluster_id": "P02",
+        "initial_support_change": 0.12849162011173185,
+        "final_support_change": 0.13128491620111732,
+        "max_accepted_switch": 0.002793296089385475,
+        "derivative_free_recovered": true
+      },
+      {
+        "transaction_id": "616",
+        "cluster_id": "P13",
+        "initial_support_change": 0.44692737430167595,
+        "final_support_change": 0.5,
+        "max_accepted_switch": 0.09217877094972067,
+        "derivative_free_recovered": false
+      },
+      {
+        "transaction_id": "616",
+        "cluster_id": "P17",
+        "initial_support_change": 0.3854748603351955,
+        "final_support_change": 0.4245810055865922,
+        "max_accepted_switch": 0.08100558659217877,
+        "derivative_free_recovered": false
+      }
+    ],
+    "dfree_zero_v_recovery_where_newton_failed": [
+      "2226/P09",
+      "616/P02"
+    ],
+    "heavy_switch_definition": "final support difference from T0 >=0.5 (descriptive only)",
+    "newton_zero_v_failures_with_heavy_switch": 2,
+    "dfree_recovered_on_heavy_switch_newton_failures": 1,
+    "strong_fd": {
+      "frozen_gradient_absolute_error": {
+        "mean": 3.078777300567402e-05,
+        "median": 2.1986141999410456e-05,
+        "p95": 8.531972307051914e-05,
+        "max": 0.0002832504486347531
+      },
+      "dynamic_gradient_absolute_error": {
+        "mean": 1.4571196184396626,
+        "median": 1.2041490827082013,
+        "p95": 3.941643215046518,
+        "max": 6.5811042012735985
+      },
+      "frozen_curvature_absolute_error": {
+        "mean": 0.18205787949702534,
+        "median": 0.09547286015172674,
+        "p95": 0.6536226884817685,
+        "max": 2.4698036217977375
+      },
+      "dynamic_curvature_absolute_error": {
+        "mean": 5588.680430148076,
+        "median": 4006.0650916075274,
+        "p95": 16052.477764927131,
+        "max": 28873.292037421943
+      },
+      "frozen_curvature_relative_error": {
+        "mean": 0.013932180954534058,
+        "median": 0.004551125845623616,
+        "p95": 0.059751223547095354,
+        "max": 0.3067480326755471
+      }
+    },
+    "strong_fd_rows": 280,
+    "fd_pass_claim": "absolute errors reported; no posterior/smooth dynamic Hessian validity inferred"
+  },
+  "boundary_diagnostic": {
+    "major_basins": 22,
+    "within_one_grid_step": 1,
+    "within_half_grid_step": 0,
+    "would_be_rejected_by_complete_neighborhood": 5,
+    "would_be_rejected_by_interior_or_invalid_center": 4,
+    "margin_definition": "signed minimum axis-crossing distance to box/physical bounds, in original lattice steps; abs(margin)<threshold counts either side"
+  },
+  "grid_gate": {
+    "required": 0.7,
+    "best_single_zero_v_solver": "DERIVATIVE_FREE_PATTERN",
+    "best_single_zero_v_recovery": 0.5714285714285714,
+    "passed": false,
+    "adaptive_grid_run": false,
+    "reason": "Single-solver zero-v recovery below70%; pooling successes is forbidden"
+  },
+  "scientific_limits": {
+    "exact_pcl_optimization_energy": "CLOSED",
+    "posterior_nll": "NOT_CLOSED",
+    "global_min_v_certified": false,
+    "fixed_weak_subspace_theory_failed": false,
+    "oracle_v_online_allowed": false,
+    "gt_accessed": false,
+    "ekf_integration": false,
+    "full_ndt_refinements": 57
+  },
+  "additional_diagnostic_energy_evaluations": {
+    "endpoint_initial_support_and_terminal": 112,
+    "strong_direction_fd": 1155,
+    "canonical_stage": 110,
+    "nominal_support_context_per_stage": 11,
+    "note": "Standard NDT internal score/derivative calls are not included in explicit energy-evaluator counts"
+  },
+  "final_result": "MIXED_MECHANISM",
+  "next": "STRONG_SUBSPACE_LOCAL_ATTRACTOR_AND_DYNAMIC_SUPPORT_CLOSURE",
+  "csv_json_consistency": "PASS",
+  "verification": {
+    "build": "PASS",
+    "build_type": "Release",
+    "ctest": "2/2 P9 tests PASS",
+    "pcl": "1.10.0+dfsg-5ubuntu1",
+    "compiler": "GNU9.4.0",
+    "scope": "offline scripts only; no production/EKF/stable workspace changes",
+    "trace_initial_rows": 35,
+    "trace_accepted_rows": 183,
+    "archived_run_full_ndt_refinements": 57,
+    "development_reexecution_full_ndt_calls": {
+      "canonical": 44,
+      "endpoint": 140,
+      "total": 184
+    },
+    "reexecution_note": "Same-setting repeats verify logging/math changes; not additional starts or per-frame parameter tuning"
+  },
+  "sidecar_sha256": {
+    "boundary_diagnostic.csv": "b06616c5b32fa5ce5faf92a637b64bbe1c4f5731ed517d859e62056b25ac87ac",
+    "canonical_oracle.csv": "e3b955a700a6205eb48e473186daec22f44b711bb357a2d682f31cbaeb745458",
+    "oracle_membership.csv": "69bea786b23cbe789edc3bf661bb731ba070fe343a83e3fa5743f7826355b975",
+    "oracle_terminal_requests.csv": "98d11dc62589d43d8af925ad42ac622c086e09d08d86175b612d917cae70e4ad",
+    "strong_directional_fd.csv": "87f617db9c2e6377c3dcd388a8acde3330557f76710b24f390ddab732c1d5df0",
+    "strong_solver_trace.csv": "a8e06e049091e896c60acb4ab36cffdf561628cd6f1035a9cb25bc6afbf932a9",
+    "true_ub_solver_comparison.csv": "9e60ce3d047f777e3de587b8b8b5d907ae6997c95f37815e6624abd48da4a715"
+  },
+  "source_sha256": {
+    "CMakeLists.txt": "5419c5018b8176e893eb874fb3a5061e83155c6f40d7f5c1ac88b588bc58d8cb",
+    "p9_ndt_energy_contract.cpp": "6bd27158e8bff5b203abe5b621b580177b92e62be59b8eda9515c224f78dac85",
+    "p9_strong_profile_solvers.hpp": "cc87cbd92cc0fb723c9544704388da9c2d66084ea5ef61e7c1c78083de71bac5",
+    "p9_true_profile_closure.cpp": "f3bbd8431936a617b38d51dc6cab9e64f41d02976f1e182948073d26d0848354",
+    "prepare_true_profile_oracle.py": "bfed85c6b3cde2b2cdf9401e534301ba550d2ce30bc32f33cb51345dedaf0a81",
+    "summarize_true_profile_closure.py": "cbc7984a94e0a2b9b866c0344dbbb269d9f9b6ea78065040be1ff929f75787a7"
+  }
+}
