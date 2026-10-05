@@ -23,6 +23,8 @@ add_test(NAME p9_math_self_test COMMAND p9_ndt_energy_contract --self-test)
 add_test(NAME p9_r1a_self_test COMMAND p9_true_profile_closure --self-test)
 add_test(NAME p9_r1b_self_test COMMAND p9_strong_attractor_closure --self-test)
 add_test(NAME p9_r1c_self_test COMMAND p9_support_aware_continuation --self-test)
+add_test(NAME p9_r1c_certificate_audit COMMAND ${Python3_EXECUTABLE}
+  ${CMAKE_CURRENT_SOURCE_DIR}/run_support_aware_continuation.py --self-test)
 add_test(NAME p9_r1b_orchestration_test COMMAND ${Python3_EXECUTABLE}
   ${CMAKE_CURRENT_SOURCE_DIR}/run_strong_attractor_experiment.py --self-test)
 add_test(NAME p9_r1b_inference_regression COMMAND ${Python3_EXECUTABLE}

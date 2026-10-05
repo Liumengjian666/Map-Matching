@@ -46,6 +46,42 @@ struct FrozenMinimum {
   std::string status="MAX_INNER_ITERATIONS";
 };
 
+bool certifiesFrozenBranch(const FrozenFd& fd,bool support_equal) {
+  return support_equal&&fd.valid&&fd.gradient.norm()<=1e-5&&fd.spd;
+}
+
+enum class SupportDecision { SAME, UPDATED, CYCLE };
+struct SupportFixedPointHistory {
+  std::vector<Support> seen;
+  explicit SupportFixedPointHistory(const Support& initial):seen{initial}{}
+  SupportDecision observe(const Support& previous,const Support& next) {
+    if(next==previous)return SupportDecision::SAME;
+    if(std::find(seen.begin(),seen.end(),next)!=seen.end())return SupportDecision::CYCLE;
+    seen.push_back(next);return SupportDecision::UPDATED;
+  }
+};
+
+bool rootClosurePass(double translation,double rotation_deg) {
+  return std::isfinite(translation)&&std::isfinite(rotation_deg)&&translation<=.02&&rotation_deg<=.2;
+}
+bool canPredictFromRoot(bool certified,bool closure) {return certified&&closure;}
+
+bool runSupportFlowSelfTest() {
+  const Support a={{{{1,2,3}}}},b={{{{1,2,4}}}},c={{{{1,2,5}}}};
+  SupportFixedPointHistory history(a);
+  if(history.observe(a,a)!=SupportDecision::SAME)return false;
+  if(history.observe(a,b)!=SupportDecision::UPDATED)return false;
+  if(history.observe(b,a)!=SupportDecision::CYCLE)return false;
+  SupportFixedPointHistory longer(a);
+  if(longer.observe(a,b)!=SupportDecision::UPDATED||longer.observe(b,c)!=SupportDecision::UPDATED||
+     longer.observe(c,a)!=SupportDecision::CYCLE)return false;
+  // SAME is not certification: a nonstationary point must stop, not predict.
+  FrozenFd fd;fd.valid=true;fd.spd=true;fd.gradient=Eigen::VectorXd::Constant(4,2e-5);
+  if(certifiesFrozenBranch(fd,true)||canPredictFromRoot(false,true)||canPredictFromRoot(true,false))return false;
+  if(rootClosurePass(.02001,.1)||rootClosurePass(.01,.20001)||!rootClosurePass(.02,.2))return false;
+  return true;
+}
+
 template<class Value>
 FrozenMinimum minimizeFrozenStrong(const Eigen::VectorXd& initial, Value value) {
   FrozenMinimum r;r.v=initial;
@@ -85,6 +121,7 @@ FrozenMinimum minimizeFrozenStrong(const Eigen::VectorXd& initial, Value value) 
 }
 
 bool runFrozenBranchSelfTest() {
+  if(!runSupportFlowSelfTest())return false;
   Eigen::MatrixXd h=Eigen::MatrixXd::Identity(6,6);
   h(0,2)=h(2,0)=.2;h(1,4)=h(4,1)=-.3;
   Eigen::VectorXd center=Eigen::VectorXd::LinSpaced(6,-.15,.10);
@@ -97,5 +134,9 @@ bool runFrozenBranchSelfTest() {
   const auto jet=frozenFiniteDifference(Eigen::VectorXd::Zero(6),f);
   const Eigen::VectorXd ub=(Eigen::Vector2d()<<.3,-.2).finished();
   const Eigen::VectorXd predictor=-jet.hessian.bottomRightCorner(4,4).ldlt().solve(jet.hessian.bottomLeftCorner(4,2)*ub);
+  FrozenFd rejected=minimum.fd;rejected.gradient=Eigen::VectorXd::Constant(4,1e-5);
+  if(certifiesFrozenBranch(rejected,true)||certifiesFrozenBranch(minimum.fd,false))return false;
+  rejected=minimum.fd;rejected.spd=false;
+  if(certifiesFrozenBranch(rejected,true))return false;
   return (predictor+h.bottomLeftCorner(4,2)*ub).norm()<1e-7;
 }

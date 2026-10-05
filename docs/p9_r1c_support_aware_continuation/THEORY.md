@@ -26,3 +26,34 @@ by another solver, full NDT, relaxed tolerance, or oracle state.
 The existing evaluator transforms points in float. FD/strict stationarity
 results must retain this numerical caveat without silently changing h or
 evaluator precision. No production path is modified.
+
+## Independent derivative checks and inference boundary
+
+The numerical-helper self-test uses an analytic SPD quadratic with weak/strong
+coupling. Real T0/canonical checks use3 deterministic normalized directions for
+each of7 basin targets and2 supports:42 independent directional checks. Main
+FD partial/mixed stencils and directional check steps are all .001. Diagnostic
+gradient agreement requires absolute error<=1e-4 OR relative error<=.02;
+curvature agreement requires absolute error<=.02 OR relative error<=.05. These
+uniform thresholds were fixed before the formal execution; they do not relax
+the branch stationarity norm<=1e-5. Hessian symmetry and Huv/Hvu asymmetry from
+a shared mixed stencil are algebraic consistency checks, not an independent
+proof of derivative accuracy.
+
+An uncertified root ends that direction. No predictor, random reset, relaxed
+gate, or full NDT is permitted to repair it. Accepted-node certification rate
+is undefined when accepted nodes=0, not100% or a measured0% accepted-node rate.
+Attempted certification fraction is reported separately. Seven basin targets
+use only two frozen scan frames; the six tx616 forward roots are identical,
+not six independent observations.
+
+The data-dependent multibranch/barrier/local-recapture/event-spawn/full-refine
+experiments are gated off when no starting point is certified. Their CSVs have
+headers and zero observations. Zero observed escape is not evidence of safe
+refinement when no refinement was attempted.
+
+The present numerical implementation failing to certify roots does not prove
+the IFT/support-branch model impossible. Float transformed-point quantization,
+FD truncation, bounded solver convergence and nonstationary archived terminals
+are unresolved contributors. The allowed result label identifies the current
+contract as unclosed, not a mathematical disproof or support-only causation.

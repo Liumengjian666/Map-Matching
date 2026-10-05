@@ -7,28 +7,44 @@ struct SupportSnapshot {
   Support signature;
   ExactPclNdt::FrozenSupport leaves;
 };
+struct SupportRound {
+  int index=0,inner=0;
+  Eigen::VectorXd initial,endpoint;
+  std::uint64_t before=0,after=0;
+  double change=0,gradient=0,frozen_energy=0,dynamic_energy=0;
+  bool spd=false,equal=false;
+  std::string inner_status;
+};
 struct BranchPoint {
   Eigen::VectorXd u,v,predictor;
   Eigen::Matrix4f pose=Eigen::Matrix4f::Identity();
   SupportSnapshot support;
+  SupportSnapshot derivative_support;
   FrozenFd fd;
   double dynamic_energy=0,frozen_energy=0,alpha=0;
   int outer=0,inner=0,changes=0;
   bool certified=false,cycle=false;
   std::string status="UNINITIALIZED";
+  std::vector<SupportRound> rounds;
 };
 struct BranchEngine : AttractorEngine {
   std::size_t frozen_calls=0,dynamic_calls=0;
   using AttractorEngine::AttractorEngine;
   SupportSnapshot nominal,canonical;
+  std::map<std::uint64_t,Support> support_archive;
   SupportSnapshot snapshot(const Eigen::Matrix4f& p) {
     SupportSnapshot r;
     ++dynamic_calls;
     ndt.dynamicValueOnly(context.source,p,&r.signature,&r.leaves);
+    const auto hash=supportSignature(r.signature);
+    const auto old=support_archive.find(hash);
+    if(old!=support_archive.end()&&old->second!=r.signature)throw std::runtime_error("support hash collision");
+    support_archive.emplace(hash,r.signature);
     return r;
   }
   void selectBranch(const AttractorTarget& b) {
     context=frameContext(frames.at(b.tx),observations.at(b.tx),ndt,target->size());
+    ++dynamic_calls; // frameContext evaluates the nominal dynamic support once.
     if(context.k!=2||context.strong.cols()!=4||
        (mapChartDisplacement(context.obs.pose,b.closed)-context.weak*b.u-context.strong*b.v).norm()>1e-6)
       throw std::runtime_error("R1C fixed W/S/chart contract mismatch");
@@ -50,26 +66,34 @@ struct BranchEngine : AttractorEngine {
   }
   BranchPoint correct(const Eigen::VectorXd& u,const Eigen::VectorXd& initial,SupportSnapshot support) {
     BranchPoint r;r.u=u;r.v=initial;r.predictor=initial;
-    std::vector<Support> history{support.signature};
+    SupportFixedPointHistory history(support.signature);
     for(int outer=0;outer<8;++outer) {
       r.outer=outer+1;
       auto f=[&](const Eigen::VectorXd& v){return value(u,v,support);};
+      const Eigen::VectorXd old_v=r.v;
       const auto minimum=minimizeFrozenStrong(r.v,f);
       r.inner+=minimum.iterations;r.v=minimum.v;r.fd=minimum.fd;
       r.frozen_energy=f(r.v);r.pose=at(u,r.v);
       auto next=snapshot(r.pose);r.dynamic_energy=actual(r.pose);
-      if(next.signature==support.signature) {
+      r.derivative_support=support;
+      SupportRound round;round.index=r.outer;round.inner=minimum.iterations;
+      round.initial=old_v;round.endpoint=r.v;round.before=supportSignature(support.signature);
+      round.after=supportSignature(next.signature);round.change=supportFraction(support.signature,next.signature);
+      round.gradient=r.fd.gradient.norm();round.spd=r.fd.spd;round.equal=next.signature==support.signature;
+      round.frozen_energy=r.frozen_energy;round.dynamic_energy=r.dynamic_energy;round.inner_status=minimum.status;
+      r.rounds.push_back(round);
+      const auto decision=history.observe(support.signature,next.signature);
+      if(decision==SupportDecision::SAME) {
         r.support=std::move(next);
-        r.certified=r.fd.valid&&r.fd.gradient.norm()<=1e-5&&r.fd.spd;
+        r.certified=certifiesFrozenBranch(r.fd,true);
         r.status=r.certified?"CERTIFIED_LOCAL_BRANCH_POINT":minimum.status;
         // Repeating identical support without stationarity is not a cycle.
         return r;
       }
       ++r.changes;
-      const bool repeated=std::find(history.begin(),history.end(),next.signature)!=history.end();
       r.support=next;
-      if(repeated){r.cycle=true;r.status="SUPPORT_FIXED_POINT_CYCLE";return r;}
-      history.push_back(next.signature);support=std::move(next);
+      if(decision==SupportDecision::CYCLE){r.cycle=true;r.status="SUPPORT_FIXED_POINT_CYCLE";return r;}
+      support=std::move(next);
     }
     r.status="SUPPORT_FIXED_POINT_NOT_CLOSED";return r;
   }
@@ -102,6 +126,8 @@ void probeBranches(BranchEngine& e,const std::string& prefix) {
 }
 }
 
+#include "p9_support_continuation_io.hpp"
+
 int main(int argc,char** argv) {
   try {
     if(argc==2&&std::string(argv[1])=="--self-test") {
@@ -111,6 +137,9 @@ int main(int argc,char** argv) {
     if(argc==7&&std::string(argv[1])=="--probe") {
       BranchEngine engine(argv[2],argv[3],argv[4],argv[5]);probeBranches(engine,argv[6]);return 0;
     }
-    std::cerr<<"usage: --self-test | --probe MAP COHORT UOBS CANONICAL OUTPUT_PREFIX\n";return 2;
+    if(argc==7&&std::string(argv[1])=="--run") {
+      BranchEngine engine(argv[2],argv[3],argv[4],argv[5]);runContinuation(engine,argv[6]);return 0;
+    }
+    std::cerr<<"usage: --self-test | --probe/--run MAP COHORT UOBS CANONICAL OUTPUT_PREFIX/DIRECTORY\n";return 2;
   }catch(const std::exception& e){std::cerr<<"P9_R1C_ERROR "<<e.what()<<'\n';return 1;}
 }
