@@ -23,5 +23,7 @@ add_test(NAME p9_r1a_self_test COMMAND p9_true_profile_closure --self-test)
 add_test(NAME p9_r1b_self_test COMMAND p9_strong_attractor_closure --self-test)
 add_test(NAME p9_r1b_orchestration_test COMMAND ${Python3_EXECUTABLE}
   ${CMAKE_CURRENT_SOURCE_DIR}/run_strong_attractor_experiment.py --self-test)
+add_test(NAME p9_r1b_inference_regression COMMAND ${Python3_EXECUTABLE}
+  ${CMAKE_CURRENT_SOURCE_DIR}/summarize_strong_attractor_closure.py --self-test)
 set_tests_properties(p9_math_self_test p9_r1a_self_test p9_r1b_self_test PROPERTIES
   ENVIRONMENT "LD_LIBRARY_PATH=/lib/x86_64-linux-gnu")

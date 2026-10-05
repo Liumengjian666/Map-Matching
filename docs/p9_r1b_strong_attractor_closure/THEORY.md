@@ -39,8 +39,10 @@ is substituted for the existing map-product coordinates.
    NOMINAL/OTHER labels describe proximity only, not correctness or stationarity.
    Canonical-radius capture is also reported separately: complete-link grouping
    and distance to a single canonical anchor are not identical predicates.
-7. Full refine: one actual endpoint representative per distinct main Newton
-   endpoint group. Choose lowest dynamic-energy main endpoint, tie by beta;
+7. Full refine: one actual endpoint representative per distinct PART A Newton
+   endpoint group. MAIN groups retain their lowest dynamic-energy main endpoint,
+   tie by beta; supplemental NEW groups select the lowest dynamic-energy
+   bisection/local-cross endpoint, tie by request ID.
    never synthesize/average a pose. Canonical-neighborhood escape requires a
    pre-refine pose within .2m AND2deg and a post-refine pose outside either bound.
    Full-refine parameters stay .8m/.08/1e-5/80/outlier .55.
@@ -68,8 +70,10 @@ locations; YES means both kinds intersect, PARTIAL one kind, NO neither. This
 is not a causal proof or a tuned algorithm threshold. Frozen slopes/curvature
 are reported on the same path, without adjusting pose.
 
-Each discovered main group representative is evaluated under all three
-objectives. A separated feasible endpoint with dynamic energy lower than the
+Each discovered PART A group representative is evaluated under all three
+objectives. Separation must hold both from the CLOSED canonical anchor and
+from the selected canonical-group representative; different complete-link
+labels alone do not imply pairwise separation. A separated feasible endpoint with dynamic energy lower than the
 canonical-group representative by >1e-6 demonstrates that a global lower
 envelope would not retain that representative at this u. It does not certify
 the global minimum, prove the representative is a strict dynamic local

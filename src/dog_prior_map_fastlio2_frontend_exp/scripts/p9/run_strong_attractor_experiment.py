@@ -170,20 +170,28 @@ def representatives(main):
     for key in sorted({(r["transaction_id"], r["cluster_id"], r["strong_branch_id"]) for r in main},
                       key=lambda k: (int(k[0]), k[1], k[2])):
         candidates = [r for r in main if (r["transaction_id"], r["cluster_id"], r["strong_branch_id"]) == key]
-        result.append(min(candidates, key=lambda r: (float(r["endpoint_dynamic_energy"]), float(r["beta"]))))
+        result.append(min(candidates, key=lambda r: (float(r["endpoint_dynamic_energy"]),
+            0.0 if key[2].startswith("NEW_") else float(r["beta"]), r["request_id"])))
     return result
 
 
 def checked_representatives(basins, out):
     _, main = main_groups(basins, checked_initial(out))
-    expected = representatives(main);actual = read(out / "full_refine_requests.csv")
+    expected = all_representatives(main,out);actual = read(out / "full_refine_requests.csv")
     if len(actual) != len(expected):
         raise RuntimeError("missing/extra main group refinement request")
     keys = ["request_id", "transaction_id", "cluster_id", "strong_branch_id",
             "endpoint_v", "endpoint_pose_matrix16", "endpoint_dynamic_energy"]
     for a, b in zip(actual, expected):
         if any(str(a[k]) != str(b[k]) for k in keys):
-            raise RuntimeError("refinement request not the selected actual MAIN endpoint")
+            raise RuntimeError("refinement request not the selected actual PART A representative")
+
+
+def all_representatives(main, out):
+    selected = representatives(main)
+    supplemental = [r for r in read(out / "beta_attractor_map.csv") + read(out / "local_capture.csv")
+                    if r["strong_branch_id"].startswith("NEW_")]
+    return selected + representatives(supplemental)
 
 
 def initial(args, basins, out):
@@ -267,7 +275,7 @@ def classify_and_bisect(args, basins, out):
                 r["canonical_radius_capture"] = int(near(pose(r), closed));controls.append(r)
     write(out / "local_capture.csv", local)
     write(out / "frozen_support_control.csv", controls)
-    write(out / "full_refine_requests.csv", representatives(main))
+    write(out / "full_refine_requests.csv", all_representatives(main,out))
 
 
 def self_test():
@@ -288,13 +296,16 @@ def self_test():
     b = origin.copy();b[0, 3] = -.15
     assert group.add_main(a) == "CANONICAL"
     assert group.add_main(b) != "CANONICAL"
+    supplemental = [{"transaction_id":"616", "cluster_id":"P02", "strong_branch_id":"NEW_01",
+                     "endpoint_dynamic_energy":"-1", "beta":"", "request_id":name} for name in ["z", "a"]]
+    assert representatives(supplemental)[0]["request_id"] == "a"
     print("R1B_ORCHESTRATION_SELF_TEST=PASS")
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--self-test", action="store_true")
-    parser.add_argument("--stage", choices=["initial", "bisect", "refine"], default="initial")
+    parser.add_argument("--stage", choices=["initial", "bisect", "prepare-refine", "refine", "refine-supplemental"], default="initial")
     for name in ["runner", "archive", "map", "canonical", "output"]:
         parser.add_argument("--"+name)
     args = parser.parse_args()
@@ -310,6 +321,20 @@ def main():
         initial(args, basins, out)
     elif args.stage == "bisect":
         classify_and_bisect(args, basins, out)
+    elif args.stage == "prepare-refine":
+        _, main = main_groups(basins,checked_initial(out))
+        write(out / "full_refine_requests.csv",all_representatives(main,out))
+    elif args.stage == "refine-supplemental":
+        checked_representatives(basins,out)
+        selected = [r for r in read(out / "full_refine_requests.csv") if r["strong_branch_id"].startswith("NEW_")]
+        main_refines = read(out / "full_refine_main_branch_map.csv")
+        main_ids = {r["representative_request_id"] for r in main_refines}
+        expected_main_ids = {r["request_id"] for r in read(out / "full_refine_requests.csv") if not r["strong_branch_id"].startswith("NEW_")}
+        if main_ids != expected_main_ids or len(main_refines) != len(main_ids):
+            raise RuntimeError("reused main-refine coverage mismatch")
+        write(out / "full_refine_supplemental_requests.csv",selected)
+        invoke(args,"--refine",out / "full_refine_supplemental_requests.csv",out / "full_refine_supplemental_branch_map.csv")
+        write(out / "full_refine_branch_map.csv",main_refines+read(out / "full_refine_supplemental_branch_map.csv"))
     else:
         checked_representatives(basins, out)
         invoke(args, "--refine", out / "full_refine_requests.csv", out / "full_refine_branch_map.csv")
