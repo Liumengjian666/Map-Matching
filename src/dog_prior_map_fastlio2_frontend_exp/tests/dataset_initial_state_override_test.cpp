@@ -114,6 +114,54 @@ int main() {
       !require(frontend.postconditionsValid(&reason), "posterior state is valid"))
     return 1;
 
+  // Exercise the complete requested prior range. Each frontend starts fresh;
+  // only velocity standard deviation changes while bias means and variances
+  // stay fixed. This is a software/math-contract check, not trajectory evidence.
+  for (const double velocity_std : {2.0, 10.0, 100.0}) {
+    FastLio2IkfomFrontend profile_frontend(parameters);
+    InitialStateOverrides profile_state = initial_state;
+    profile_state.velocity_std_m_s = velocity_std;
+    if (!require(profile_frontend.initializeFromStaticCalibration(
+            calibration, initial_pose, T_imu_lidar, gravity_map,
+            profile_state, epoch, &reason),
+        "weak-velocity profile initializes")) return 1;
+    const FilterSnapshot profile_initial = profile_frontend.getState();
+    const double expected_variance = velocity_std * velocity_std;
+    if (!require((profile_initial.covariance.block<3, 3>(12, 12).diagonal().array() -
+                  expected_variance).abs().maxCoeff() < 1e-10,
+                 "velocity variance equals configured standard deviation squared") ||
+        !require((profile_initial.covariance.block<3, 3>(15, 15).diagonal().array() -
+                  0.0025).abs().maxCoeff() < 1e-12,
+                 "gyro-bias covariance is fixed across velocity profiles") ||
+        !require((profile_initial.covariance.block<3, 3>(18, 18).diagonal().array() -
+                  0.25).abs().maxCoeff() < 1e-12,
+                 "accel-bias covariance is fixed across velocity profiles"))
+      return 1;
+
+    std::vector<ImuPoseSample, Eigen::aligned_allocator<ImuPoseSample>> profile_poses;
+    if (!require(profile_frontend.predictImuSequence(sequence, sequence.back().stamp_ns,
+                                                       &profile_poses, &reason),
+                 "weak-velocity profile prediction succeeds")) return 1;
+    Pose3d profile_measurement = profile_frontend.getState().map_T_imu;
+    profile_measurement.position += Eigen::Vector3d(0.12, -0.07, 0.03);
+    profile_measurement.orientation = (profile_measurement.orientation * Eigen::Quaterniond(
+        Eigen::AngleAxisd(0.035, Eigen::Vector3d(0.2, -0.1, 0.97).normalized()))).normalized();
+    PoseCorrectionDelta profile_delta;
+    if (!require(profile_frontend.applyPoseMeasurement(profile_measurement,
+                                                         &profile_delta, &reason),
+                 "weak-velocity profile pose update succeeds") ||
+        !require(profile_delta.velocity.norm() > 1e-9,
+                 "pose update changes velocity for each tested prior scale") ||
+        !require(profile_frontend.getState().covariance.allFinite(),
+                 "weak-velocity profile posterior remains finite") ||
+        !require(profile_frontend.postconditionsValid(&reason),
+                 "weak-velocity profile posterior is valid"))
+      return 1;
+    std::cout << "VELOCITY_PRIOR_PROFILE_PASS std_m_s=" << velocity_std
+              << " variance_m2_s2=" << expected_variance
+              << " update_dv_m_s=" << profile_delta.velocity.norm() << '\n';
+  }
+
   FastLio2IkfomFrontend gravity_frontend(parameters);
   InitialStateOverrides gravity_override = initial_state;
   gravity_override.use_initial_gravity = true;

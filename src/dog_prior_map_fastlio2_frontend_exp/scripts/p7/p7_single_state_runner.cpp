@@ -263,10 +263,29 @@ int main(int argc, char** argv) {
           << " accel_bias="
           << frontend.getState().covariance.block<3, 3>(18, 18).diagonal().transpose() << '\n'
           << "FIRST_TRANSACTION_ID=" << first_transaction_id << '\n';
-      if (dataset_state_replay && state_profile == "DATASET_VELOCITY")
+      if (dataset_state_replay && state_profile == "DATASET_VELOCITY") {
+        const double velocity_std = scalarArgument(argv[21], "velocity_std");
+        const double gyro_bias_std = scalarArgument(argv[22], "gyro_bias_std");
+        const double accel_bias_std = scalarArgument(argv[23], "accel_bias_std");
+        std::cout << "INITIAL_STATE_COVARIANCE_APPLIED"
+            << " velocity_std_m_s=" << velocity_std
+            << " velocity_variance_m2_s2=" << velocity_std * velocity_std
+            << " P_v="
+            << frontend.getState().covariance.block<3, 3>(12, 12).diagonal().transpose()
+            << " gyro_bias_std_rad_s=" << gyro_bias_std
+            << " gyro_bias_variance_rad2_s2=" << gyro_bias_std * gyro_bias_std
+            << " P_bg="
+            << frontend.getState().covariance.block<3, 3>(15, 15).diagonal().transpose()
+            << " accel_bias_std_m_s2=" << accel_bias_std
+            << " accel_bias_variance_m2_s4=" << accel_bias_std * accel_bias_std
+            << " P_ba="
+            << frontend.getState().covariance.block<3, 3>(18, 18).diagonal().transpose()
+            << '\n';
         std::cout << "INITIAL_VELOCITY_INJECTION timestamp_ns=" << initialization_stamp
             << " velocity_world_m_s=" << frontend.getState().velocity.transpose()
             << " count=1\n";
+        std::cout << "INITIAL_VELOCITY_INJECTION_COUNT=1\n";
+      }
       std::cout << "INITIAL_GRAVITY_INJECTION_COUNT="
           << (dataset_gravity_override ? 1 : 0) << '\n';
       if (dataset_gravity_override)
@@ -318,7 +337,10 @@ int main(int argc, char** argv) {
            "gravity_x,gravity_y,gravity_z,lidar_update_applied";
     if (dataset_state_replay)
       trajectory << ",speed_m_s,p_v_x,p_v_y,p_v_z,p_bg_x,p_bg_y,p_bg_z,p_ba_x,p_ba_y,p_ba_z,"
-          "frame_increment_translation_m,frame_increment_rotation_rad";
+          "frame_increment_translation_m,frame_increment_rotation_rad,"
+          "ndt_delta_velocity_x,ndt_delta_velocity_y,ndt_delta_velocity_z,"
+          "p_v_pre_update_x,p_v_pre_update_y,p_v_pre_update_z,"
+          "p_pv_pre_frobenius,p_rv_pre_frobenius,p_pv_post_frobenius,p_rv_post_frobenius";
     trajectory << '\n';
     observations << std::setprecision(17)
         << "transaction_id,scan_start_ns,scan_effective_start_ns,stamp_ns,raw_source_points,"
@@ -409,12 +431,17 @@ int main(int argc, char** argv) {
             (result.raw_map_T_lidar.position - result.initial_map_T_lidar.position).norm();
         rotation_correction = rotationDistance(result.initial_map_T_lidar, result.raw_map_T_lidar);
       }
+      const auto pre_update_state = frontend.getState();
+      if (pre_update_state.stamp_ns != scan.scan_end_ns)
+        throw std::runtime_error("pre_update_state_timestamp_mismatch");
+      Eigen::Vector3d ndt_delta_velocity = Eigen::Vector3d::Zero();
       const auto update_start = Clock::now();
       if (result.effective) {
         paper::PoseCorrectionDelta delta;
         if (!frontend.applyPoseMeasurement(
             paper::lidarMeasurementToImu(result.raw_map_T_lidar, extrinsic), &delta, &reason))
           throw std::runtime_error("pose_update_failed:" + reason);
+        ndt_delta_velocity = delta.velocity;
         ++updates;
       }
       const double update_ms = elapsedMs(update_start);
@@ -446,6 +473,15 @@ int main(int argc, char** argv) {
         for (int axis = 0; axis < 3; ++axis)
           trajectory << ',' << corrected.covariance(18 + axis, 18 + axis);
         trajectory << ',' << frame_translation_increment << ',' << frame_rotation_increment;
+        vectorColumns(trajectory, ndt_delta_velocity);
+        for (int axis = 0; axis < 3; ++axis)
+          trajectory << ',' << pre_update_state.covariance(12 + axis, 12 + axis);
+        // Tangent ordering: position [0:3], rotation [3:6], velocity [12:15].
+        trajectory << ','
+            << pre_update_state.covariance.block<3, 3>(0, 12).norm() << ','
+            << pre_update_state.covariance.block<3, 3>(3, 12).norm() << ','
+            << corrected.covariance.block<3, 3>(0, 12).norm() << ','
+            << corrected.covariance.block<3, 3>(3, 12).norm();
       }
       trajectory << '\n';
       previous_corrected_pose = corrected.map_T_imu;
