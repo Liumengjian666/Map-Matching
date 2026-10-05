@@ -307,7 +307,7 @@ void compareTrueUbSolvers(const std::string& map_path,const std::string& cohort_
     "refined_matches_canonical","recovered_at_true_ub","endpoint_matches_canonical","diagnostic_evaluations",
     "strong_fd_energy_evaluations"});
   writeHeader(traces,{"transaction_id","cluster_id","method","initialization","iteration","evaluations",
-    "v","energy","support_from_T0","support_from_previous_accepted","branch_projected_gradient_before_step","step_or_trust_scale"});
+    "accepted_move","v","energy","support_from_T0","support_from_previous_accepted","branch_projected_gradient_before_step","step_or_trust_scale"});
   std::uint64_t current_tx=0;
   FrameContext context;
   int targets=0;
@@ -355,11 +355,24 @@ void compareTrueUbSolvers(const std::string& map_path,const std::string& cohort_
       ndt.dynamicValueOnly(context.source,poseAtEta(context.obs.pose,context.weak*u+context.strong*initial),&initial_support);
       if (valid && std::abs(endpoint_jet.mean_energy-solution.energy)>1e-10)
         throw std::runtime_error("solver endpoint objective mismatch");
+      if (variant==0) {
+        // The legacy one-step routine remains unchanged. Reconstruct its one
+        // accepted event from already-evaluated initial/endpoint diagnostics.
+        StrongSolution initial_record=solution;
+        initial_record.v=initial;initial_record.energy=solution.initial_energy;
+        initial_record.support=initial_support;initial_record.evaluations=1;
+        initial_record.accepted_steps=0;
+        recordStrongTrace(initial_record,context,initial_support,0,.10);
+        solution.trace=std::move(initial_record.trace);
+        solution.support=endpoint_jet.support;
+        if (solution.accepted_steps>0)
+          recordStrongTrace(solution,context,initial_support,1,.10);
+      }
       double max_switch=0;
       for (const auto& item:solution.trace) {
         max_switch=std::max(max_switch,item.support_from_previous);
         writeRow(traces,{std::to_string(tx),cluster,method,init,std::to_string(item.iteration),
-          std::to_string(item.evaluations),vectorText(item.v),number(item.energy),number(item.support_from_T0),
+          std::to_string(item.evaluations),std::to_string(item.accepted_move),vectorText(item.v),number(item.energy),number(item.support_from_T0),
           number(item.support_from_previous),number(item.projected_gradient_before_step),number(item.scale)});
       }
       Eigen::Matrix4f refined=endpoint;
@@ -449,12 +462,14 @@ bool runClosureSelfTests() {
     support=Support(1);return (v-optimum).squaredNorm();
   },test);
   if (pattern.evaluations>100 || pattern.evaluations<2 || pattern.energy>=pattern.initial_energy) return false;
+  if (pattern.trace.size()!=static_cast<std::size_t>(pattern.accepted_steps+1)) return false;
   for (std::size_t i=1;i<pattern.trace.size();++i)
     if (pattern.trace[i].energy>=pattern.trace[i-1].energy) return false;
   auto interrupted=patternSearch(initial,[&](const Eigen::VectorXd& v,Support& support) {
     support=Support(1);return (v-Eigen::VectorXd::Constant(4,1.0736)).squaredNorm();
   },test);
   if (interrupted.evaluations!=100 || interrupted.status!="EVALUATION_BUDGET") return false;
+  if (interrupted.trace.size()!=static_cast<std::size_t>(interrupted.accepted_steps+1)) return false;
   test.source=source;test.obs.pose=Eigen::Matrix4f::Identity();test.k=2;
   test.weak=Matrix6d::Identity().leftCols(2);test.strong=Matrix6d::Identity().rightCols(4);
   ndt.setInputSource(source);
@@ -463,6 +478,7 @@ bool runClosureSelfTests() {
   const auto newton=iterativeNewton(ndt,test,u,initial);
   if (!newton.v.allFinite() || newton.energy>newton.initial_energy+1e-10 ||
       newton.iterations>20 || newton.evaluations>181) return false;
+  if (newton.trace.size()!=static_cast<std::size_t>(newton.accepted_steps+1)) return false;
   for (std::size_t i=1;i<newton.trace.size();++i)
     if (newton.trace[i].energy>=newton.trace[i-1].energy) return false;
   Vector6d tangent; tangent<<.02,-.01,.01,.01,-.02,.01;

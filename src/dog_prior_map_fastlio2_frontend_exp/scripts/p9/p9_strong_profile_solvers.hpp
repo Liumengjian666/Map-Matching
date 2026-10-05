@@ -3,6 +3,7 @@
 struct StrongTrace {
   int iteration = 0;
   int evaluations = 0;
+  int accepted_move = 0;
   Eigen::VectorXd v;
   double energy = 0.0;
   double support_from_T0 = 0.0;
@@ -33,6 +34,7 @@ void recordStrongTrace(StrongSolution& result, const FrameContext& context,
     double gradient = std::numeric_limits<double>::quiet_NaN()) {
   StrongTrace item;
   item.iteration=iteration; item.evaluations=result.evaluations;
+  item.accepted_move=result.accepted_steps;
   item.v=result.v; item.energy=result.energy;
   item.support_from_T0=supportFraction(context.nominal_support,result.support);
   item.support_from_previous=supportFraction(previous,result.support);
@@ -171,7 +173,6 @@ StrongSolution patternSearch(const Eigen::VectorXd& initial, ValueFunction value
     ++result.iterations;
     const Eigen::VectorXd sweep_start=result.v;
     const double sweep_energy=result.energy;
-    const Support sweep_support=result.support;
     int polls=0;
     for (int axis=0;axis<initial.size() && result.evaluations<100;++axis) {
       const Eigen::VectorXd center=result.v;
@@ -183,14 +184,14 @@ StrongSolution patternSearch(const Eigen::VectorXd& initial, ValueFunction value
         const double energy=value(trial,support); ++result.evaluations;
         ++polls;
         if (std::isfinite(energy) && energy<result.energy-1e-10) {
+          const Support previous=result.support;
           result.v=trial; result.energy=energy; result.support=std::move(support);
           ++result.accepted_steps;
+          recordStrongTrace(result,context,previous,result.iterations,step);
         }
       }
     }
     if (polls<2*initial.size()) {
-      if (result.energy<sweep_energy-1e-10)
-        recordStrongTrace(result,context,sweep_support,result.iterations,step);
       break;  // An incomplete poll cannot certify POLL_STEP_SMALL.
     }
     if (result.energy<sweep_energy-1e-10) {
@@ -199,10 +200,11 @@ StrongSolution patternSearch(const Eigen::VectorXd& initial, ValueFunction value
         Support support;
         const double energy=value(trial,support); ++result.evaluations;
         if (std::isfinite(energy) && energy<result.energy-1e-10) {
+          const Support previous=result.support;
           result.v=trial;result.energy=energy;result.support=std::move(support);++result.accepted_steps;
+          recordStrongTrace(result,context,previous,result.iterations,step);
         }
       }
-      recordStrongTrace(result,context,sweep_support,result.iterations,step);
       step=std::min(.25,1.2*step);
     } else {
       step*=.5;
