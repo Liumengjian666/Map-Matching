@@ -501,6 +501,7 @@ bool runClosureSelfTests() {
 
 }  // namespace
 
+#ifndef P9_TRUE_PROFILE_CLOSURE_LIBRARY
 int main(int argc,char** argv) {
   try {
     if (argc==2 && std::string(argv[1])=="--self-test") {
@@ -525,3 +526,4 @@ int main(int argc,char** argv) {
     return 1;
   }
 }
+#endif
