@@ -322,6 +322,39 @@ class ExactPclNdt : public Ndt {
     return score;
   }
 
+  // Exact PCL score accumulation without derivative work. The R1A
+  // derivative-free control uses this dynamic radius-search evaluator.
+  double dynamicValueOnly(const Cloud::ConstPtr& source,
+                          const Eigen::Matrix4f& pose, Support* support = nullptr) {
+    if (!source || source->empty() || !pose.allFinite())
+      throw std::runtime_error("invalid source/pose for dynamic score evaluation");
+    Cloud transformed;
+    pcl::transformPointCloud(*source, transformed, pose);
+    if (support) support->assign(transformed.size(), PointSupport());
+    double score = 0.0;
+    for (std::size_t i = 0; i < transformed.size(); ++i) {
+      std::vector<Leaf> leaves;
+      std::vector<float> distances;
+      target_cells_.radiusSearch(transformed.points[i], resolution_, leaves, distances);
+      const Point& point = transformed.points[i];
+      const Eigen::Vector3d x(point.x, point.y, point.z);
+      for (const Leaf& leaf : leaves) {
+        const Eigen::Vector3d residual = x - leaf->getMean();
+        const double exponential = std::exp(-gauss_d2_ *
+            residual.dot(leaf->getInverseCov() * residual) / 2.0);
+        const double guard = gauss_d2_ * exponential;
+        if (std::isfinite(guard) && guard <= 1.0 && guard >= 0.0)
+          score += -gauss_d1_ * exponential;
+        if (support) {
+          const Eigen::Vector3d mean = leaf->getMean();
+          (*support)[i].push_back({{bits(mean.x()), bits(mean.y()), bits(mean.z())}});
+        }
+      }
+      if (support) std::sort((*support)[i].begin(), (*support)[i].end());
+    }
+    return score;
+  }
+
  private:
   void captureSupport(const Cloud& transformed, Support* support,
                       FrozenSupport* frozen_support) {
@@ -1710,6 +1743,7 @@ void runProfileSearch(const std::string& map_path, const std::string& cohort_pat
 }
 }  // namespace
 
+#ifndef P9_NDT_ENERGY_CONTRACT_LIBRARY
 int main(int argc, char** argv) {
   try {
     if (argc == 2 && std::string(argv[1]) == "--self-test") {
@@ -1736,3 +1770,4 @@ int main(int argc, char** argv) {
     return 1;
   }
 }
+#endif
