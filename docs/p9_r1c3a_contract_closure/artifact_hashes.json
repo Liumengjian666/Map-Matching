@@ -1,0 +1,13 @@
+{
+  "REPORT.md": "e7d3ffc1b845ff7ce53274903ee10f66b50b459d3e5d5b75ac66a2193ef8ee39",
+  "THEORY.md": "b3fbcd9de604615e69dee222eb96e6354d723f4c8ff93646fc49a9d2aebac9c9",
+  "execution_manifest.json": "259b38f230a8351099fd8adc64ad42f55a937c24a56d188a47d1210400168245",
+  "predictor_multih.csv": "6e23fa1457736b9eefb3dc2d54bc5d8116a8fd4ed4b976e3e7e0c8d8cf254f05",
+  "raw_derivative_diagnostic.csv": "0055bdaac8cf9421e9feeac28920a8192b1b88db0e35db32b1a545c4cc5b134b",
+  "results.json": "a1ec8ee8ce4769d7eff157c5a81e115ba2bd731c3c92b1a6929e491b162a99ac",
+  "root_anchor.csv": "309beb2135c821066c9a21777a42431e78d92adbdc6f36fd7735c7589f742d5b",
+  "root_reclassification.csv": "d89e36d28a9199ab414b745d5bd654c605b5c9ba4a2bbd812c90fea026b0079c",
+  "run_completed.json": "774ef39d452e316e3521bf4750e67c33dd8101c9ee0c750bdfb2659f0de99e50",
+  "support_equivalence.csv": "1657c8c44bf28967487f9df842bf971261038deb55830804697e00abb91c1634",
+  "support_pair_stationary.csv": "60559589451fa97dcc88ea10bd2418311dddd35663e0fcbff833d14a7ce533c6"
+}

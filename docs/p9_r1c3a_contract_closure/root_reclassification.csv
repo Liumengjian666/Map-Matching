@@ -1,0 +1,7 @@
+tx,cluster,independent_root_id,stationary_r1c2,predictor_valid,anchor_associated_02m_2deg,old_002m_02deg_closure,root_start_provenance_verified,oracle_information_used,exact_support_equal,numerically_equivalent_support,support_contract_pass,start_eligible,old_status,float_raw_fd,double_raw_fd
+2226,P05,2226/P05,1,1,1,1,1,NO,1,0,1,1,DERIVATIVE_INVALID,FAIL,PASS
+2350,P01,2350/P01,1,0,1,0,1,NO,1,0,1,0,ROOT_CLOSURE_FAIL,FAIL,PASS
+3341,P02,3341/P02,1,1,1,0,1,NO,0,0,0,0,ROOT_CLOSURE_FAIL,PASS,PASS
+2722,P05,2722/P05,1,1,1,1,1,NO,1,0,1,1,DERIVATIVE_INVALID,FAIL,PASS
+616,P10,616/P10,1,0,1,1,1,NO,1,0,1,0,CERTIFIED,PASS,PASS
+3796,P06,3796/P06,0,0,1,0,1,NO,1,0,1,0,ROOT_CLOSURE_FAIL,FAIL,PASS
