@@ -1,0 +1,592 @@
+{
+  "current_run_state": "COMPLETE",
+  "final_result": "SUPPORT_BRANCH_NUMERICS_REMAIN_UNCLOSED",
+  "next": "CLOSE_EXISTING_BRANCH_NUMERICAL_CONTRACT_WITHOUT_NEW_SEARCH",
+  "primary_recovered": 0,
+  "certified_endpoint_cases": 0,
+  "roots": {
+    "attempted": 8,
+    "certified": 3,
+    "independent_attempted": 6,
+    "independent_certified": 2,
+    "support_unresolved": 2,
+    "FD_invalid": 3,
+    "FD_not_validated": 0
+  },
+  "per_basin": [
+    {
+      "tx": 2226,
+      "cluster": "P05",
+      "rho_W2": 0.8507194141678078,
+      "u_b_norm": 0.1501448373071985,
+      "forward_candidates": 1,
+      "certified_candidates": 0,
+      "accepted_nodes": 0,
+      "max_alpha": 0.0,
+      "support_events": 3,
+      "branch_splits": 0,
+      "branch_merges": 0,
+      "max_active": 0,
+      "certified_to_alpha1": false,
+      "archive_id_recovered": false,
+      "strict_branch_recovered": false,
+      "full_ndt_escape": false
+    },
+    {
+      "tx": 2350,
+      "cluster": "P01",
+      "rho_W2": 0.8642806824177345,
+      "u_b_norm": 2.365729579894445,
+      "forward_candidates": 1,
+      "certified_candidates": 1,
+      "accepted_nodes": 0,
+      "max_alpha": 0.0,
+      "support_events": 2,
+      "branch_splits": 0,
+      "branch_merges": 0,
+      "max_active": 0,
+      "certified_to_alpha1": false,
+      "archive_id_recovered": false,
+      "strict_branch_recovered": false,
+      "full_ndt_escape": false
+    },
+    {
+      "tx": 2350,
+      "cluster": "P05",
+      "rho_W2": 0.8559486460525296,
+      "u_b_norm": 2.349952015553473,
+      "forward_candidates": 1,
+      "certified_candidates": 1,
+      "accepted_nodes": 0,
+      "max_alpha": 0.0,
+      "support_events": 2,
+      "branch_splits": 0,
+      "branch_merges": 0,
+      "max_active": 0,
+      "certified_to_alpha1": false,
+      "archive_id_recovered": false,
+      "strict_branch_recovered": false,
+      "full_ndt_escape": false
+    },
+    {
+      "tx": 3341,
+      "cluster": "P02",
+      "rho_W2": 0.4944527511024945,
+      "u_b_norm": 0.0856660867259351,
+      "forward_candidates": 1,
+      "certified_candidates": 0,
+      "accepted_nodes": 0,
+      "max_alpha": 0.0,
+      "support_events": 8,
+      "branch_splits": 0,
+      "branch_merges": 0,
+      "max_active": 0,
+      "certified_to_alpha1": false,
+      "archive_id_recovered": false,
+      "strict_branch_recovered": false,
+      "full_ndt_escape": false
+    },
+    {
+      "tx": 3341,
+      "cluster": "P03",
+      "rho_W2": 0.5626434931344211,
+      "u_b_norm": 0.12517541064224527,
+      "forward_candidates": 1,
+      "certified_candidates": 0,
+      "accepted_nodes": 0,
+      "max_alpha": 0.0,
+      "support_events": 8,
+      "branch_splits": 0,
+      "branch_merges": 0,
+      "max_active": 0,
+      "certified_to_alpha1": false,
+      "archive_id_recovered": false,
+      "strict_branch_recovered": false,
+      "full_ndt_escape": false
+    },
+    {
+      "tx": 2722,
+      "cluster": "P05",
+      "rho_W2": 0.1939581244617182,
+      "u_b_norm": 0.03735573425874087,
+      "forward_candidates": 1,
+      "certified_candidates": 0,
+      "accepted_nodes": 0,
+      "max_alpha": 0.0,
+      "support_events": 4,
+      "branch_splits": 0,
+      "branch_merges": 0,
+      "max_active": 0,
+      "certified_to_alpha1": false,
+      "archive_id_recovered": false,
+      "strict_branch_recovered": false,
+      "full_ndt_escape": false
+    },
+    {
+      "tx": 616,
+      "cluster": "P10",
+      "rho_W2": 0.9720018682350564,
+      "u_b_norm": 0.6543133095488903,
+      "forward_candidates": 45,
+      "certified_candidates": 30,
+      "accepted_nodes": 16,
+      "max_alpha": 0.7250000000000001,
+      "support_events": 202,
+      "branch_splits": 0,
+      "branch_merges": 14,
+      "max_active": 1,
+      "certified_to_alpha1": false,
+      "archive_id_recovered": false,
+      "strict_branch_recovered": false,
+      "full_ndt_escape": false
+    },
+    {
+      "tx": 3796,
+      "cluster": "P06",
+      "rho_W2": 0.999311458735581,
+      "u_b_norm": 3.692701821194768,
+      "forward_candidates": 1,
+      "certified_candidates": 0,
+      "accepted_nodes": 0,
+      "max_alpha": 0.0,
+      "support_events": 7,
+      "branch_splits": 0,
+      "branch_merges": 0,
+      "max_active": 0,
+      "certified_to_alpha1": false,
+      "archive_id_recovered": false,
+      "strict_branch_recovered": false,
+      "full_ndt_escape": false
+    }
+  ],
+  "costs": [
+    {
+      "tx": "2226",
+      "cluster": "P05",
+      "frozen_evals": "3909",
+      "double_evals": "7299",
+      "dynamic_evals": "6",
+      "guard_evals": "63",
+      "corrector_calls": "1",
+      "support_cycles": "0",
+      "runtime_ms": "509.99648300000001",
+      "full_ndt_calls": "0"
+    },
+    {
+      "tx": "2350",
+      "cluster": "P01",
+      "frozen_evals": "2821",
+      "double_evals": "6149",
+      "dynamic_evals": "5",
+      "guard_evals": "54",
+      "corrector_calls": "1",
+      "support_cycles": "0",
+      "runtime_ms": "313.10428400000001",
+      "full_ndt_calls": "0"
+    },
+    {
+      "tx": "2350",
+      "cluster": "P05",
+      "frozen_evals": "2821",
+      "double_evals": "6149",
+      "dynamic_evals": "5",
+      "guard_evals": "54",
+      "corrector_calls": "1",
+      "support_cycles": "0",
+      "runtime_ms": "311.24488400000001",
+      "full_ndt_calls": "0"
+    },
+    {
+      "tx": "3341",
+      "cluster": "P02",
+      "frozen_evals": "6676",
+      "double_evals": "18415",
+      "dynamic_evals": "10",
+      "guard_evals": "153",
+      "corrector_calls": "1",
+      "support_cycles": "0",
+      "runtime_ms": "876.13147200000003",
+      "full_ndt_calls": "0"
+    },
+    {
+      "tx": "3341",
+      "cluster": "P03",
+      "frozen_evals": "6676",
+      "double_evals": "18415",
+      "dynamic_evals": "10",
+      "guard_evals": "153",
+      "corrector_calls": "1",
+      "support_cycles": "0",
+      "runtime_ms": "875.88611800000001",
+      "full_ndt_calls": "0"
+    },
+    {
+      "tx": "2722",
+      "cluster": "P05",
+      "frozen_evals": "3927",
+      "double_evals": "12751",
+      "dynamic_evals": "7",
+      "guard_evals": "90",
+      "corrector_calls": "1",
+      "support_cycles": "0",
+      "runtime_ms": "1804.1762490000001",
+      "full_ndt_calls": "0"
+    },
+    {
+      "tx": "616",
+      "cluster": "P10",
+      "frozen_evals": "191617",
+      "double_evals": "526388",
+      "dynamic_evals": "234",
+      "guard_evals": "4203",
+      "corrector_calls": "45",
+      "support_cycles": "0",
+      "runtime_ms": "21671.115528999999",
+      "full_ndt_calls": "0"
+    },
+    {
+      "tx": "3796",
+      "cluster": "P06",
+      "frozen_evals": "66879",
+      "double_evals": "160116",
+      "dynamic_evals": "10",
+      "guard_evals": "1494",
+      "corrector_calls": "1",
+      "support_cycles": "0",
+      "runtime_ms": "17248.826561999998",
+      "full_ndt_calls": "0"
+    }
+  ],
+  "success_seed_audit": [
+    {
+      "tx": "2226",
+      "cluster": "P05",
+      "full_successful_seeds": "13",
+      "median_u": "1.0670216371513597",
+      "median_v": "0.40339188427020245",
+      "median_strong_fraction": "0.27593944630065886",
+      "same_index_weak_recovery": "0"
+    },
+    {
+      "tx": "2350",
+      "cluster": "P01",
+      "full_successful_seeds": "10",
+      "median_u": "1.1063182937166185",
+      "median_v": "0.44227988835946824",
+      "median_strong_fraction": "0.37167689133702414",
+      "same_index_weak_recovery": "0"
+    },
+    {
+      "tx": "2350",
+      "cluster": "P05",
+      "full_successful_seeds": "7",
+      "median_u": "2.079081452793952",
+      "median_v": "0.6250155738124822",
+      "median_strong_fraction": "0.2909252672760135",
+      "same_index_weak_recovery": "0"
+    },
+    {
+      "tx": "3341",
+      "cluster": "P02",
+      "full_successful_seeds": "10",
+      "median_u": "0.31567497788594157",
+      "median_v": "0.8103200497399211",
+      "median_strong_fraction": "0.9125032197745317",
+      "same_index_weak_recovery": "0"
+    },
+    {
+      "tx": "3341",
+      "cluster": "P03",
+      "full_successful_seeds": "8",
+      "median_u": "0.4287923475966777",
+      "median_v": "1.1619368686536786",
+      "median_strong_fraction": "0.9120825763965408",
+      "same_index_weak_recovery": "0"
+    },
+    {
+      "tx": "2722",
+      "cluster": "P05",
+      "full_successful_seeds": "11",
+      "median_u": "0.7480129071800112",
+      "median_v": "1.9326275844466307",
+      "median_strong_fraction": "0.9325845042251033",
+      "same_index_weak_recovery": "0"
+    },
+    {
+      "tx": "616",
+      "cluster": "P10",
+      "full_successful_seeds": "8",
+      "median_u": "0.26614758630300056",
+      "median_v": "1.0716536561302377",
+      "median_strong_fraction": "0.9634769210424794",
+      "same_index_weak_recovery": "0"
+    },
+    {
+      "tx": "3796",
+      "cluster": "P06",
+      "full_successful_seeds": "8",
+      "median_u": "2.6000522505907435",
+      "median_v": "0.879461601932254",
+      "median_strong_fraction": "0.3112913795305277",
+      "same_index_weak_recovery": "6"
+    }
+  ],
+  "continuation_full_ndt_calls": 0,
+  "final_diagnostic_ndt_calls": 0,
+  "support_cycles": 0,
+  "gt_used": false,
+  "oracle_v_injected": false,
+  "online_efficiency_claim": false,
+  "input_manifest": {
+    "start_sha": "251cc8d6654735ea034b820fd4058082ad310493",
+    "input_sha256": {
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/candidates.csv": "c5f3d1b61f9a799c0f02009a8ae8ef8c52a40ac9b350165bdfd6c7d95bdce62f",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/frozen/cohort_frozen.csv": "24513cc9ffe73b817e5da7f40d4e025551a006220fc7f0ea44996d7f89d44a42",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/dual_u.csv": "42b281ef9aca9ecc494e1ca448a3a15cb58b7d66e89dee2cd2b52d5e438a9966",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/clusters/mode_clusters.csv": "5e3b29e8c179894dca0437e99ebeb6f8b875ea768b08d7afa93d6088df3e05ef",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/frozen/objective_provenance.json": "7f2652bb568bb5958bfafcac3b4bfa09d8f6fab3ae381e26f1821a76eb64999e",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r1a_true_profile_closure/oracle_terminal_requests.csv": "98d11dc62589d43d8af925ad42ac622c086e09d08d86175b612d917cae70e4ad",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h1/results.json": "ff7d3d3f2ba2e124181f4574d1a8cc31e45a5295fd9abac09e757046c863289f",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h1/major_projection_statistics.csv": "7875977d8a9043b2e9b4540f35a7bd4378f452c68529b0c3d22af65a0b5971e8",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h1/frame_projection_statistics.csv": "0588603d8d110bcdfac305c62ad012bbf39232db4e6b359772a0a186004f6160",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/map/frozen/floor01_h1_map_p5_frozen.pcd": "2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/source_clouds/raw_tx_368.xyzf": "b438c86a7e122d8fb1867d418ceb8527e69ef278df02cedfe2ab9e97aa3d9953",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/source_clouds/raw_tx_616.xyzf": "0b022726d2775c20a1e8c5b22719b7b8bda1669d227ab320f55a1d7a0e4cac80",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/source_clouds/raw_tx_2226.xyzf": "37f74f6948f3aae7dd474a759ee36f2aa4503f6386e4d9c57d05645291d197ea",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/source_clouds/raw_tx_2350.xyzf": "d01b6775294fd83b508d2351ddb443b9243fd920ab0978635489866dafc05cd1",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/source_clouds/raw_tx_2722.xyzf": "86ca409a3ad2add0b64167f394648d71292ca6d327ed10150f5e2ff804db79b1",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/source_clouds/raw_tx_2846.xyzf": "e2626c3850c1d968445649d873f3363bddbd75c2665c611a49bf48ee3065a7f1",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/source_clouds/raw_tx_3341.xyzf": "fe892d6106a4f0d4feab1b826a686826b3475c660bb09551d144fe76539de360",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/source_clouds/raw_tx_3796.xyzf": "0572a54a1c0a273ba5dc0cead9ea54c76c0044c8ef068f8bdac122662371dcc4",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/source_clouds/raw_tx_3962.xyzf": "0fe4f0d7eafef0cb3185742f84f8447279912304205fbb3b92d2b4f6ae9523ef",
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_h2_discovery.py": "9765c1554375834e12d96b91858ae90a2e2809dd627abf39cda652dfb2cd1c0c",
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_h2_matched_discovery.cpp": "bf5885f0470982232c097b2a0441f4a8ae4976a988c9b9160ccaea84dbe5fd01",
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_ndt_energy_contract.cpp": "a33c050749cdaf11ecf3e6fe2853a78a3b9fdc5f843bac14967a835962df6dbf",
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_h1_concentration.py": "5c7c3a2bd075ed977fd03a5068fc19e7d6489ecd47abf58ec28023c12fb505f8",
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/summarize_h2_discovery.py": "8af61e223b4bbfb4f37ef2b9524ee44a046d289ac4b8643618968f36169e9201",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/THEORY.md": "806729a3a380a032f45c48a85f299b0ab2b0ce7a010926bd221f0c6d9ac4c1fd",
+      "/usr/include/pcl-1.10/pcl/registration/ndt.h": "2e86c66a9aa49329e69cd227b3312cc73714851bbae682062dbb76f281068133",
+      "/usr/include/pcl-1.10/pcl/registration/impl/ndt.hpp": "e61be2ca7f1db2fe7171730146cdf493469e4e9e7e6d9c82d47f457d3b6006dc",
+      "/usr/include/pcl-1.10/pcl/registration/impl/registration.hpp": "cfb45f2bf08b30bd22e8218eed14d979b6af547442dd2968a9924e1ab83ed0e3",
+      "/usr/include/pcl-1.10/pcl/filters/impl/voxel_grid.hpp": "c731433d65aae43673f698ba31beb7e311c805c812cb7f31a28834779fc892e6",
+      "/usr/include/pcl-1.10/pcl/filters/impl/voxel_grid_covariance.hpp": "1d6de8ecb84b53ffdf2a4901c52f6479078da50c9d5359d7c1ee825bfd460b77",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/random_subspaces.csv": "1d7cdac944d30f8b9f492fd82b80eb1c0d3559963bb3ecac3a0bdc4ca39f76e8",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/permutation_manifest.csv": "0156a87cc54cc2bfed265dd6cb226f4588517d095f9314f8697305724791f9bd",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/proposal_contract.csv": "11c70994421602c7bdfdd09349305192e8cbfe5cab2ae4d52065fca3d80ca47f",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/projected_seed_parity.csv": "98d77c02a85c5d91fc2108513e764b8250c504f4275d1999b84d0bcad898c357",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/projected_duplicates.csv": "8da145c715ed6f3f0b93ebf361ec7a517ef46108002e2152d6cddfc79d58719e",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/terminal_admission.csv": "916e5c456dbfc2f234bba00270f3b263798e47600899462432a42b91485709ff",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/discovery_cost.csv": "f20ab0f4cf4ed7f69c460d769ed678eba243d843060eea9c189eb2d343bb77b3",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/oracle_pair_separations.csv": "2064c88744869e665d0e8d11ac6d95a41cafc4c7341cb18c059dbe496048898d",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/budget_recall_curves.csv": "43bfd71bc83665f68bbe135fbad94cc2450eb86670a1a065239b44bf027cd6fc",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/per_frame_discovery.csv": "72602f6b4777a0eaa26ba6c1f7474c243a6cdc0e06c61af9905a4b0e799b8b4c",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/random2_summary.csv": "fa10bbf502d254346f5f16f45db5bf8d655fb19936b6755621436da17b6d2635",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/frame_auc.csv": "64b537cb62eb54635f746c8e25cf67ec1d4391867b91795abb33b4b8d3268b6f",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/matched_recall_cost.csv": "963abe63af9447bb18ee349b81ba41a9e6b2141d960c9fa5e044748a55313302",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/ndt_runs.csv": "e136a9aad4fb3ca1a95dac243f9a0195760201ed34da95e999d3fba1b41b51a5",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/permutation_budget_curves.csv": "9de51a159fcea7bb546cd5d7a9b9058cece8a07db56b7a7effd8483ea3262967",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/secondary_projection_gain.csv": "b6a75a312fc8854877afdb321e3482441e60c996650cd48c52ca0d0b09e615db",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/results.json": "9bf146dd0bfbee13205ecd86c05d140391c6791c697cb0dddf0544169d0d3939"
+    },
+    "historical_build_lineage": {
+      "commit": "251cc8d6654735ea034b820fd4058082ad310493",
+      "path": "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/CMakeLists.txt",
+      "sha256": "2e66aaaa5fb5d1975890149fb12a3c850c64472edb2e2e3da92703b831aa9486"
+    },
+    "cases": [
+      [
+        2226,
+        "P05"
+      ],
+      [
+        2350,
+        "P01"
+      ],
+      [
+        2350,
+        "P05"
+      ],
+      [
+        3341,
+        "P02"
+      ],
+      [
+        3341,
+        "P03"
+      ],
+      [
+        2722,
+        "P05"
+      ],
+      [
+        616,
+        "P10"
+      ],
+      [
+        3796,
+        "P06"
+      ]
+    ],
+    "engine_oracle_inputs": "u_b ONLY",
+    "new_ndt_calls": 0,
+    "prepared_sha256": {
+      "success_seed_strong_component.csv": "454de7ebdbca404f0ace8c834e0de87c23f1e74be450d5789c1f8168f20b9899",
+      "success_seed_summary.csv": "41793d5af96cacfb0e17b29aff34fa17173cca635652f18ad6ffe0d3a7be1468",
+      "weak_path_requests.csv": "4610d1a5e6a0557ca412170d120720878f8ab87052dfd85dd4f0aa2c5a3218e3",
+      "case_metadata_offline_only.csv": "368b33ea3a4ca99159b417e54f43b5168869a905f643c892aaed818018cfd011"
+    }
+  },
+  "execution_manifest": {
+    "start_sha": "251cc8d6654735ea034b820fd4058082ad310493",
+    "input_sha256": {
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/candidates.csv": "c5f3d1b61f9a799c0f02009a8ae8ef8c52a40ac9b350165bdfd6c7d95bdce62f",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/frozen/cohort_frozen.csv": "24513cc9ffe73b817e5da7f40d4e025551a006220fc7f0ea44996d7f89d44a42",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/dual_u.csv": "42b281ef9aca9ecc494e1ca448a3a15cb58b7d66e89dee2cd2b52d5e438a9966",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/clusters/mode_clusters.csv": "5e3b29e8c179894dca0437e99ebeb6f8b875ea768b08d7afa93d6088df3e05ef",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/frozen/objective_provenance.json": "7f2652bb568bb5958bfafcac3b4bfa09d8f6fab3ae381e26f1821a76eb64999e",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r1a_true_profile_closure/oracle_terminal_requests.csv": "98d11dc62589d43d8af925ad42ac622c086e09d08d86175b612d917cae70e4ad",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h1/results.json": "ff7d3d3f2ba2e124181f4574d1a8cc31e45a5295fd9abac09e757046c863289f",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h1/major_projection_statistics.csv": "7875977d8a9043b2e9b4540f35a7bd4378f452c68529b0c3d22af65a0b5971e8",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h1/frame_projection_statistics.csv": "0588603d8d110bcdfac305c62ad012bbf39232db4e6b359772a0a186004f6160",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/map/frozen/floor01_h1_map_p5_frozen.pcd": "2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/source_clouds/raw_tx_368.xyzf": "b438c86a7e122d8fb1867d418ceb8527e69ef278df02cedfe2ab9e97aa3d9953",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/source_clouds/raw_tx_616.xyzf": "0b022726d2775c20a1e8c5b22719b7b8bda1669d227ab320f55a1d7a0e4cac80",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/source_clouds/raw_tx_2226.xyzf": "37f74f6948f3aae7dd474a759ee36f2aa4503f6386e4d9c57d05645291d197ea",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/source_clouds/raw_tx_2350.xyzf": "d01b6775294fd83b508d2351ddb443b9243fd920ab0978635489866dafc05cd1",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/source_clouds/raw_tx_2722.xyzf": "86ca409a3ad2add0b64167f394648d71292ca6d327ed10150f5e2ff804db79b1",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/source_clouds/raw_tx_2846.xyzf": "e2626c3850c1d968445649d873f3363bddbd75c2665c611a49bf48ee3065a7f1",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/source_clouds/raw_tx_3341.xyzf": "fe892d6106a4f0d4feab1b826a686826b3475c660bb09551d144fe76539de360",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/source_clouds/raw_tx_3796.xyzf": "0572a54a1c0a273ba5dc0cead9ea54c76c0044c8ef068f8bdac122662371dcc4",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/source_clouds/raw_tx_3962.xyzf": "0fe4f0d7eafef0cb3185742f84f8447279912304205fbb3b92d2b4f6ae9523ef",
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_h2_discovery.py": "9765c1554375834e12d96b91858ae90a2e2809dd627abf39cda652dfb2cd1c0c",
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_h2_matched_discovery.cpp": "bf5885f0470982232c097b2a0441f4a8ae4976a988c9b9160ccaea84dbe5fd01",
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_ndt_energy_contract.cpp": "a33c050749cdaf11ecf3e6fe2853a78a3b9fdc5f843bac14967a835962df6dbf",
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_h1_concentration.py": "5c7c3a2bd075ed977fd03a5068fc19e7d6489ecd47abf58ec28023c12fb505f8",
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/summarize_h2_discovery.py": "8af61e223b4bbfb4f37ef2b9524ee44a046d289ac4b8643618968f36169e9201",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/THEORY.md": "806729a3a380a032f45c48a85f299b0ab2b0ce7a010926bd221f0c6d9ac4c1fd",
+      "/usr/include/pcl-1.10/pcl/registration/ndt.h": "2e86c66a9aa49329e69cd227b3312cc73714851bbae682062dbb76f281068133",
+      "/usr/include/pcl-1.10/pcl/registration/impl/ndt.hpp": "e61be2ca7f1db2fe7171730146cdf493469e4e9e7e6d9c82d47f457d3b6006dc",
+      "/usr/include/pcl-1.10/pcl/registration/impl/registration.hpp": "cfb45f2bf08b30bd22e8218eed14d979b6af547442dd2968a9924e1ab83ed0e3",
+      "/usr/include/pcl-1.10/pcl/filters/impl/voxel_grid.hpp": "c731433d65aae43673f698ba31beb7e311c805c812cb7f31a28834779fc892e6",
+      "/usr/include/pcl-1.10/pcl/filters/impl/voxel_grid_covariance.hpp": "1d6de8ecb84b53ffdf2a4901c52f6479078da50c9d5359d7c1ee825bfd460b77",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/random_subspaces.csv": "1d7cdac944d30f8b9f492fd82b80eb1c0d3559963bb3ecac3a0bdc4ca39f76e8",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/permutation_manifest.csv": "0156a87cc54cc2bfed265dd6cb226f4588517d095f9314f8697305724791f9bd",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/proposal_contract.csv": "11c70994421602c7bdfdd09349305192e8cbfe5cab2ae4d52065fca3d80ca47f",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/projected_seed_parity.csv": "98d77c02a85c5d91fc2108513e764b8250c504f4275d1999b84d0bcad898c357",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/projected_duplicates.csv": "8da145c715ed6f3f0b93ebf361ec7a517ef46108002e2152d6cddfc79d58719e",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/terminal_admission.csv": "916e5c456dbfc2f234bba00270f3b263798e47600899462432a42b91485709ff",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/discovery_cost.csv": "f20ab0f4cf4ed7f69c460d769ed678eba243d843060eea9c189eb2d343bb77b3",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/oracle_pair_separations.csv": "2064c88744869e665d0e8d11ac6d95a41cafc4c7341cb18c059dbe496048898d",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/budget_recall_curves.csv": "43bfd71bc83665f68bbe135fbad94cc2450eb86670a1a065239b44bf027cd6fc",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/per_frame_discovery.csv": "72602f6b4777a0eaa26ba6c1f7474c243a6cdc0e06c61af9905a4b0e799b8b4c",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/random2_summary.csv": "fa10bbf502d254346f5f16f45db5bf8d655fb19936b6755621436da17b6d2635",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/frame_auc.csv": "64b537cb62eb54635f746c8e25cf67ec1d4391867b91795abb33b4b8d3268b6f",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/matched_recall_cost.csv": "963abe63af9447bb18ee349b81ba41a9e6b2141d960c9fa5e044748a55313302",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/ndt_runs.csv": "e136a9aad4fb3ca1a95dac243f9a0195760201ed34da95e999d3fba1b41b51a5",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/permutation_budget_curves.csv": "9de51a159fcea7bb546cd5d7a9b9058cece8a07db56b7a7effd8483ea3262967",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/secondary_projection_gain.csv": "b6a75a312fc8854877afdb321e3482441e60c996650cd48c52ca0d0b09e615db",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h2/results.json": "9bf146dd0bfbee13205ecd86c05d140391c6791c697cb0dddf0544169d0d3939"
+    },
+    "historical_build_lineage": {
+      "commit": "251cc8d6654735ea034b820fd4058082ad310493",
+      "path": "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/CMakeLists.txt",
+      "sha256": "2e66aaaa5fb5d1975890149fb12a3c850c64472edb2e2e3da92703b831aa9486"
+    },
+    "cases": [
+      [
+        2226,
+        "P05"
+      ],
+      [
+        2350,
+        "P01"
+      ],
+      [
+        2350,
+        "P05"
+      ],
+      [
+        3341,
+        "P02"
+      ],
+      [
+        3341,
+        "P03"
+      ],
+      [
+        2722,
+        "P05"
+      ],
+      [
+        616,
+        "P10"
+      ],
+      [
+        3796,
+        "P06"
+      ]
+    ],
+    "engine_oracle_inputs": "u_b ONLY",
+    "new_ndt_calls": 0,
+    "prepared_sha256": {
+      "success_seed_strong_component.csv": "454de7ebdbca404f0ace8c834e0de87c23f1e74be450d5789c1f8168f20b9899",
+      "success_seed_summary.csv": "41793d5af96cacfb0e17b29aff34fa17173cca635652f18ad6ffe0d3a7be1468",
+      "weak_path_requests.csv": "4610d1a5e6a0557ca412170d120720878f8ab87052dfd85dd4f0aa2c5a3218e3",
+      "case_metadata_offline_only.csv": "368b33ea3a4ca99159b417e54f43b5168869a905f643c892aaed818018cfd011"
+    },
+    "branch": "research/p9-r1c3-secondgen-branch-gate",
+    "execution_head": "251cc8d6654735ea034b820fd4058082ad310493",
+    "source_sha256": {
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_secondgen_branch_gate.cpp": "6ca39c4c99d7a1829065146ce661e9edad82f7057a0ddb4318c69ebe3fcc46e7",
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_numeric_branch_certificate.hpp": "1f2ecc3142803e4dd9d48fed07e56562f275430966b824e1bfacb88dae3114e1",
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_stationarity_numerics.hpp": "57b50c060c0b7a81c592a7da9b6d7fbe2759db1ea3fe0d871ca8f9e763807b93",
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_true_profile_closure.cpp": "b8e7c04f5786295f1c2bf21fe92991eb583ef27b327c90d879fd3e5dd3644ccb",
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_ndt_energy_contract.cpp": "a33c050749cdaf11ecf3e6fe2853a78a3b9fdc5f843bac14967a835962df6dbf",
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_strong_profile_solvers.hpp": "cc87cbd92cc0fb723c9544704388da9c2d66084ea5ef61e7c1c78083de71bac5",
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r1c3_branch_gate.py": "89a76302ac13aee56ad51d10c7d89a39b1401ca710eac9da22a8dac9e6ac4b4e",
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/summarize_r1c3_branch_gate.py": "60295d20fe1b2faaa6f130f20230cf8f984ec88fc96d5408e3da25b32da08452",
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_numerical_stationarity.py": "e1184c3c8572a531747a985e5e77d7025b8cda3e9416faa2214600f7bbec0433",
+      "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/CMakeLists.txt": "c9bf81a9588402db9e10956b0e455644bafb32c24e48be5eb965711c4b842844",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r1c3_secondgen_branch_gate/THEORY.md": "380ccfc4bc87d86e13d5d34e3aca56de5fb311111cfebb05525cb11af05c9b11",
+      "/usr/include/pcl-1.10/pcl/registration/impl/ndt.hpp": "e61be2ca7f1db2fe7171730146cdf493469e4e9e7e6d9c82d47f457d3b6006dc",
+      "/usr/include/pcl-1.10/pcl/filters/impl/voxel_grid_covariance.hpp": "1d6de8ecb84b53ffdf2a4901c52f6479078da50c9d5359d7c1ee825bfd460b77"
+    },
+    "binary": "/tmp/p9_r1c3_build/p9_secondgen_branch_gate",
+    "binary_sha256": "98d54fbd30aab358cca8b84a1c602556660665fd518c4ea7b1a77cebb087d841",
+    "build_cache_sha256": "1daa7b3cd67b6723d5196d56c54fe0be041e516aec45412ee6fcac680c539218",
+    "ldd": "\tlinux-vdso.so.1 (0x00007ffee9de2000)\n\tlibpcl_io.so.1.10 => /lib/x86_64-linux-gnu/libpcl_io.so.1.10 (0x00007f83d3084000)\n\tlibpcl_filters.so.1.10 => /lib/x86_64-linux-gnu/libpcl_filters.so.1.10 (0x00007f83d2868000)\n\tlibpcl_search.so.1.10 => /lib/x86_64-linux-gnu/libpcl_search.so.1.10 (0x00007f83d2637000)\n\tlibpcl_kdtree.so.1.10 => /lib/x86_64-linux-gnu/libpcl_kdtree.so.1.10 (0x00007f83d24de000)\n\tlibpcl_common.so.1.10 => /lib/x86_64-linux-gnu/libpcl_common.so.1.10 (0x00007f83d242a000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f83d2248000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f83d20f7000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f83d20dc000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f83d1eea000)\n\tlibboost_filesystem.so.1.71.0 => /lib/x86_64-linux-gnu/libboost_filesystem.so.1.71.0 (0x00007f83d1ecc000)\n\tlibboost_iostreams.so.1.71.0 => /lib/x86_64-linux-gnu/libboost_iostreams.so.1.71.0 (0x00007f83d1ea5000)\n\tlibpcl_io_ply.so.1.10 => /lib/x86_64-linux-gnu/libpcl_io_ply.so.1.10 (0x00007f83d1e41000)\n\tlibpng16.so.16 => /lib/x86_64-linux-gnu/libpng16.so.16 (0x00007f83d1e07000)\n\tlibvtkIOGeometry-7.1.so.7.1p => /lib/x86_64-linux-gnu/libvtkIOGeometry-7.1.so.7.1p (0x00007f83d1cac000)\n\tlibvtkIOLegacy-7.1.so.7.1p => /lib/x86_64-linux-gnu/libvtkIOLegacy-7.1.so.7.1p (0x00007f83d1be2000)\n\tlibvtkIOPLY-7.1.so.7.1p => /lib/x86_64-linux-gnu/libvtkIOPLY-7.1.so.7.1p (0x00007f83d1bc3000)\n\tlibusb-1.0.so.0 => /lib/x86_64-linux-gnu/libusb-1.0.so.0 (0x00007f83d1ba7000)\n\tlibOpenNI2.so.0 => /lib/libOpenNI2.so.0 (0x00007f83d1b02000)\n\tlibOpenNI.so.0 => /lib/libOpenNI.so.0 (0x00007f83d1a7e000)\n\tlibpcap.so.0.8 => /lib/x86_64-linux-gnu/libpcap.so.0.8 (0x00007f83d1a33000)\n\tlibvtkIOCore-7.1.so.7.1p => /lib/x86_64-linux-gnu/libvtkIOCore-7.1.so.7.1p (0x00007f83d19b6000)\n\tlibvtkImagingCore-7.1.so.7.1p => /lib/x86_64-linux-gnu/libvtkImagingCore-7.1.so.7.1p (0x00007f83d17b1000)\n\tlibvtkIOImage-7.1.so.7.1p => /lib/x86_64-linux-gnu/libvtkIOImage-7.1.so.7.1p (0x00007f83d15e6000)\n\tlibvtkCommonExecutionModel-7.1.so.7.1p => /lib/x86_64-linux-gnu/libvtkCommonExecutionModel-7.1.so.7.1p (0x00007f83d151d000)\n\tlibvtkCommonDataModel-7.1.so.7.1p => /lib/x86_64-linux-gnu/libvtkCommonDataModel-7.1.so.7.1p (0x00007f83d1143000)\n\tlibvtkCommonCore-7.1.so.7.1p => /lib/x86_64-linux-gnu/libvtkCommonCore-7.1.so.7.1p (0x00007f83d0df7000)\n\tlibgomp.so.1 => /lib/x86_64-linux-gnu/libgomp.so.1 (0x00007f83d0db5000)\n\tlibpthread.so.0 => /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f83d0d92000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007f83d337e000)\n\tlibpcl_sample_consensus.so.1.10 => /lib/x86_64-linux-gnu/libpcl_sample_consensus.so.1.10 (0x00007f83d00a0000)\n\tlibpcl_octree.so.1.10 => /lib/x86_64-linux-gnu/libpcl_octree.so.1.10 (0x00007f83cfe4a000)\n\tliblz4.so.1 => /lib/x86_64-linux-gnu/liblz4.so.1 (0x00007f83cfe29000)\n\tlibz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f83cfe0d000)\n\tlibbz2.so.1.0 => /lib/x86_64-linux-gnu/libbz2.so.1.0 (0x00007f83cfdfa000)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x00007f83cfdd1000)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0x00007f83cfd26000)\n\tlibvtkCommonTransforms-7.1.so.7.1p => /lib/x86_64-linux-gnu/libvtkCommonTransforms-7.1.so.7.1p (0x00007f83cfcf2000)\n\tlibvtkCommonSystem-7.1.so.7.1p => /lib/x86_64-linux-gnu/libvtkCommonSystem-7.1.so.7.1p (0x00007f83cfcda000)\n\tlibvtksys-7.1.so.7.1p => /lib/x86_64-linux-gnu/libvtksys-7.1.so.7.1p (0x00007f83cfc8e000)\n\tlibvtkCommonMisc-7.1.so.7.1p => /lib/x86_64-linux-gnu/libvtkCommonMisc-7.1.so.7.1p (0x00007f83cfc70000)\n\tlibudev.so.1 => /lib/x86_64-linux-gnu/libudev.so.1 (0x00007f83cfc41000)\n\tlibdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f83cfc3b000)\n\tlibjpeg.so.8 => /lib/x86_64-linux-gnu/libjpeg.so.8 (0x00007f83cfbb6000)\n\tlibrt.so.1 => /lib/x86_64-linux-gnu/librt.so.1 (0x00007f83cfbac000)\n\tlibtinyxml.so.2.6.2 => /lib/x86_64-linux-gnu/libtinyxml.so.2.6.2 (0x00007f83cfb94000)\n\tlibvtkCommonMath-7.1.so.7.1p => /lib/x86_64-linux-gnu/libvtkCommonMath-7.1.so.7.1p (0x00007f83cfb6b000)\n\tlibvtkDICOMParser-7.1.so.7.1p => /lib/x86_64-linux-gnu/libvtkDICOMParser-7.1.so.7.1p (0x00007f83cfb50000)\n\tlibvtkmetaio-7.1.so.7.1p => /lib/x86_64-linux-gnu/libvtkmetaio-7.1.so.7.1p (0x00007f83cfab1000)\n\tlibtiff.so.5 => /lib/x86_64-linux-gnu/libtiff.so.5 (0x00007f83cfa2f000)\n\tlibwebp.so.6 => /lib/x86_64-linux-gnu/libwebp.so.6 (0x00007f83cf9c3000)\n\tlibjbig.so.0 => /lib/x86_64-linux-gnu/libjbig.so.0 (0x00007f83cf9b2000)\n",
+    "environment": {
+      "LD_LIBRARY_PATH": "/lib/x86_64-linux-gnu",
+      "OMP_NUM_THREADS": "1",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "engine_inputs": [
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/map/frozen/floor01_h1_map_p5_frozen.pcd",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/frozen/cohort_frozen.csv",
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/dual_u.csv",
+      "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r1c3_secondgen_branch_gate/weak_path_requests.csv"
+    ]
+  },
+  "sidecar_sha256": {
+    "branch_dispositions.csv": "240d69a6ed6d85fffb9a2e4517a459eb392516930c0429be838b8834a6b137fc",
+    "branch_nodes.csv": "b25decbe560706cfe9d46b7740a2c42b205e11d02a567ab86a12f4f31467d0a5",
+    "branch_splits.csv": "878c68f56bea5db68557c140d17506b6a724bea12fa521bfee94f0e1bec08621",
+    "case_costs.csv": "91c5380cbe2d55bfb48e5ba5d85c6f9e717866902a00243d6e0296b146723de0",
+    "case_metadata_offline_only.csv": "368b33ea3a4ca99159b417e54f43b5168869a905f643c892aaed818018cfd011",
+    "final_branch_evaluation.csv": "c4438078a0d803db0e4672d0766a5005fdeabd30f62c00c4c8bfd44d99bdb71b",
+    "final_refine.csv": "b00e3387c350e334a63d3fb6e8a8b45c3ac54480a687041acb402fcf4d5da086",
+    "numeric_directional_fd.csv": "c365cf808b9fcb251879e42e700d78d62f7fe77809bbb656f90ab1f574928627",
+    "numeric_multih.csv": "2e48d0bc0bb87b5e6efde2cba846d3807040cf8580e3c3c00a224e025637dee1",
+    "numeric_resolution_checks.csv": "6b4a96101ddc0bcf5006ceb883b64ae6eb210c143845d109ad53ac3064314a33",
+    "numeric_root_certificates.csv": "d16cc09f39b06d2729fd26f9fce1624f7bef772b4806562e55efd7fe026f2221",
+    "per_basin_summary.csv": "dd256e58fe5dff489952ed9e4ff23a0cccd824490c11578e965b272e54a2c061",
+    "success_seed_strong_component.csv": "454de7ebdbca404f0ace8c834e0de87c23f1e74be450d5789c1f8168f20b9899",
+    "success_seed_summary.csv": "41793d5af96cacfb0e17b29aff34fa17173cca635652f18ad6ffe0d3a7be1468",
+    "support_events.csv": "7d1b9810f9889597697958f1a1efa8eb5f76de140e58b7c3fd3c02a5ca753efe",
+    "weak_path_requests.csv": "4610d1a5e6a0557ca412170d120720878f8ab87052dfd85dd4f0aa2c5a3218e3"
+  },
+  "documentation_sha256": {
+    "THEORY.md": "380ccfc4bc87d86e13d5d34e3aca56de5fb311111cfebb05525cb11af05c9b11",
+    "REPORT.md": "daf375b630b26c722ff1eeda1ace4daad49335b1e220daaadf28c9e1cb01a698"
+  }
+}

@@ -13,7 +13,8 @@ add_executable(p9_strong_attractor_closure p9_strong_attractor_closure.cpp)
 add_executable(p9_support_aware_continuation p9_support_aware_continuation.cpp)
 add_executable(p9_numerical_stationarity p9_numerical_stationarity.cpp)
 add_executable(p9_h2_matched_discovery p9_h2_matched_discovery.cpp)
-foreach(p9_target p9_ndt_energy_contract p9_true_profile_closure p9_strong_attractor_closure p9_support_aware_continuation p9_numerical_stationarity p9_h2_matched_discovery)
+add_executable(p9_secondgen_branch_gate p9_secondgen_branch_gate.cpp)
+foreach(p9_target p9_ndt_energy_contract p9_true_profile_closure p9_strong_attractor_closure p9_support_aware_continuation p9_numerical_stationarity p9_h2_matched_discovery p9_secondgen_branch_gate)
   target_compile_features(${p9_target} PRIVATE cxx_std_14)
   target_include_directories(${p9_target} PRIVATE ${PCL_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${LIBUSB_INCLUDE_DIRS})
   target_compile_definitions(${p9_target} PRIVATE ${PCL_DEFINITIONS})
@@ -21,6 +22,10 @@ foreach(p9_target p9_ndt_energy_contract p9_true_profile_closure p9_strong_attra
 endforeach()
 
 enable_testing()
+add_test(NAME p9_r1c3_self_test COMMAND p9_secondgen_branch_gate --self-test)
+add_test(NAME p9_r1c3_audit_self_test COMMAND ${Python3_EXECUTABLE}
+  ${CMAKE_CURRENT_SOURCE_DIR}/run_r1c3_branch_gate.py self-test)
+set_tests_properties(p9_r1c3_self_test PROPERTIES ENVIRONMENT "LD_LIBRARY_PATH=/lib/x86_64-linux-gnu")
 add_test(NAME p9_h2_proposal_self_test COMMAND p9_h2_matched_discovery --self-test)
 add_test(NAME p9_h2_statistics_self_test COMMAND ${Python3_EXECUTABLE}
   ${CMAKE_CURRENT_SOURCE_DIR}/run_h2_discovery.py self-test)
