@@ -47,6 +47,7 @@ def inputs():
     c.require(c.digest(dual_path)==expected,"prior frozen R1 nominal archive changed")
     hashes[str(dual_path)]=expected
     dual={int(row["transaction_id"]):row for row in c.read_csv(dual_path)}
+    c.require(set(registration)==set(dual),"R1 registration/prior frozen nominal transaction IDs differ")
     needed=set(nominals)|{frame-lag for frame in nominals for lag in c.LAGS}
     for tx in sorted(needed):
         if tx not in registration:continue
@@ -101,6 +102,7 @@ def freeze_plan(calibration):
         hashes[str(path)]=c.digest(path);print("HASHED",path.name,hashes[str(path)],flush=True)
     c.require(hashes[str(p4.RUNTIME)]=="860d41e88038165be469420b2c9e4db1e164ded4d58952b7b507ee01a4b0a9db","P4 runtime bag hash mismatch")
     source_paths=[c.HERE/"p9_r3_visual_contract.py",c.HERE/"run_r3_visual_evidence.py",c.HERE/"build_r3_visual_evidence.py",
+                  c.HERE/"evaluate_r3_visual_evidence.py",
                   c.PACKAGE/"scripts/p4_i3_visual_frontend.py",c.PACKAGE/"scripts/p4_i3_visual_increment.py",c.OUT/"THEORY.md"]
     manifest=dict(task="PAPER-P9-R3-VISUAL-INDEPENDENT-NONLOCAL-EVIDENCE-GATE",branch=c.BRANCH,start_sha=c.START_SHA,
         preparation_head=subprocess.check_output(["git","rev-parse","HEAD"],cwd=c.ROOT,text=True).strip(),
