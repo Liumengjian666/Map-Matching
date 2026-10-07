@@ -17,7 +17,8 @@ add_executable(p9_secondgen_branch_gate p9_secondgen_branch_gate.cpp)
 add_executable(p9_r1c3a_contract_closure p9_r1c3a_contract_closure.cpp)
 add_executable(p9_discrete_support_evidence p9_discrete_support_evidence.cpp)
 add_executable(p9_r2_terminal_stability p9_r2_terminal_stability.cpp)
-foreach(p9_target p9_ndt_energy_contract p9_true_profile_closure p9_strong_attractor_closure p9_support_aware_continuation p9_numerical_stationarity p9_h2_matched_discovery p9_secondgen_branch_gate p9_r1c3a_contract_closure p9_discrete_support_evidence p9_r2_terminal_stability)
+add_executable(p9_r2a_predictor_search p9_r2a_predictor_search.cpp)
+foreach(p9_target p9_ndt_energy_contract p9_true_profile_closure p9_strong_attractor_closure p9_support_aware_continuation p9_numerical_stationarity p9_h2_matched_discovery p9_secondgen_branch_gate p9_r1c3a_contract_closure p9_discrete_support_evidence p9_r2_terminal_stability p9_r2a_predictor_search)
   target_compile_features(${p9_target} PRIVATE cxx_std_14)
   target_include_directories(${p9_target} PRIVATE ${PCL_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${LIBUSB_INCLUDE_DIRS})
   target_compile_definitions(${p9_target} PRIVATE ${PCL_DEFINITIONS})
@@ -33,6 +34,11 @@ add_test(NAME p9_r1c3b_statistics_self_test COMMAND ${Python3_EXECUTABLE}
 add_test(NAME p9_r2_terminal_stability_self_test COMMAND p9_r2_terminal_stability --self-test)
 add_test(NAME p9_r2_terminal_stability_statistics_self_test COMMAND ${Python3_EXECUTABLE}
   ${CMAKE_CURRENT_SOURCE_DIR}/run_r2_terminal_stability.py self-test)
+add_test(NAME p9_r2a_proposal_self_test COMMAND p9_r2a_predictor_search --self-test)
+add_test(NAME p9_r2a_orchestration_self_test COMMAND ${Python3_EXECUTABLE}
+  ${CMAKE_CURRENT_SOURCE_DIR}/run_r2a_predictor_search.py self-test)
+add_test(NAME p9_r2a_statistics_self_test COMMAND ${Python3_EXECUTABLE}
+  ${CMAKE_CURRENT_SOURCE_DIR}/summarize_r2a_predictor_search.py self-test)
 add_test(NAME p9_r1c3a_audit_self_test COMMAND ${Python3_EXECUTABLE}
   ${CMAKE_CURRENT_SOURCE_DIR}/run_r1c3a_contract_closure.py self-test)
 add_test(NAME p9_r1c3_audit_self_test COMMAND ${Python3_EXECUTABLE}
@@ -54,5 +60,5 @@ add_test(NAME p9_r1b_orchestration_test COMMAND ${Python3_EXECUTABLE}
   ${CMAKE_CURRENT_SOURCE_DIR}/run_strong_attractor_experiment.py --self-test)
 add_test(NAME p9_r1b_inference_regression COMMAND ${Python3_EXECUTABLE}
   ${CMAKE_CURRENT_SOURCE_DIR}/summarize_strong_attractor_closure.py --self-test)
-set_tests_properties(p9_math_self_test p9_r1a_self_test p9_r1b_self_test p9_r1c_self_test p9_r1c2_numerical_self_test p9_r1c3b_discrete_support_self_test p9_r2_terminal_stability_self_test PROPERTIES
+set_tests_properties(p9_math_self_test p9_r1a_self_test p9_r1b_self_test p9_r1c_self_test p9_r1c2_numerical_self_test p9_r1c3b_discrete_support_self_test p9_r2_terminal_stability_self_test p9_r2a_proposal_self_test PROPERTIES
   ENVIRONMENT "LD_LIBRARY_PATH=/lib/x86_64-linux-gnu")
