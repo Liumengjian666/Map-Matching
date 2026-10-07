@@ -1,0 +1,163 @@
+{
+  "GT_LOADED": false,
+  "NEW_NDT_CALLS": 0,
+  "adjacent": {
+    "major_valid": 2,
+    "no_major_valid": 10,
+    "status_counts": {
+      "INSUFFICIENT_CORRESPONDENCES": 18,
+      "SYNC_INVALID": 2,
+      "VALID": 12
+    },
+    "total": 32,
+    "valid": 12
+  },
+  "artifact_sha256": {
+    "cost_per_frame.csv": "fa8c292f81858204803fe9678ca60b74a6f55131f2561ca2807ca6858e5e8c69",
+    "coverage_summary.csv": "758f178a0853c966f9e8974d05d03e14955cea285e857f64e7b3a73656c2e4a1",
+    "delete_one_major.csv": "b2fbb7c38c1bde10df5731733ba31eb4bc0592a109de6fa8e7482c22d3560ce8",
+    "frame_statistics.csv": "698322741198bb69db577c373623363552fa30bad1b8b9c60700858834dc97c6",
+    "lofo.csv": "ac9c0f3d0a2cf32077cef78402096396ff3af0a1e1f058ff4cfd9685805c2553",
+    "permutation_manifest.csv": "62d47b3557ae895d5caad93461598d17f4a27a99c553d7980d12cfc55fb94d44"
+  },
+  "cost": {
+    "four_lag_mean_ms": 85.48277020236128,
+    "four_lag_total_ms": 2735.448646475561,
+    "interpretation": "Conservative both-rectification pair sum; bag I/O/hashing excluded and reported separately",
+    "per_lag_mean_ms": [
+      {
+        "association_ms": 1.4486612526525278,
+        "attempted": 30,
+        "feature_ms": 3.88802543602651,
+        "klt_ms": 8.04182699539524,
+        "lag": 1,
+        "pnp_ms": 0.33783968683565035,
+        "preprocess_ms": 3.0146065964800073,
+        "projection_ms": 2.2245439995458582,
+        "total_ms": 18.997874030901585,
+        "total_ms_sum": 607.9319689888507
+      },
+      {
+        "association_ms": 1.3885057505831355,
+        "attempted": 29,
+        "feature_ms": 3.6939636265742593,
+        "klt_ms": 9.790163967409171,
+        "lag": 2,
+        "pnp_ms": 0.3661103437480051,
+        "preprocess_ms": 3.113668413789128,
+        "projection_ms": 2.1315650028554955,
+        "total_ms": 20.522459884887212,
+        "total_ms_sum": 656.7187163163908
+      },
+      {
+        "association_ms": 1.3706044082937296,
+        "attempted": 29,
+        "feature_ms": 3.6637200610130094,
+        "klt_ms": 11.651993785562809,
+        "lag": 4,
+        "pnp_ms": 0.4216955912852427,
+        "preprocess_ms": 2.897877129726112,
+        "projection_ms": 2.1052782158221817,
+        "total_ms": 22.148032654513372,
+        "total_ms_sum": 708.7370449444279
+      },
+      {
+        "association_ms": 1.3315150317794178,
+        "attempted": 29,
+        "feature_ms": 3.668305464088917,
+        "klt_ms": 13.270130219098064,
+        "lag": 8,
+        "pnp_ms": 0.27169956047146115,
+        "preprocess_ms": 3.0739327867195243,
+        "projection_ms": 2.1613678691210225,
+        "total_ms": 23.81440363205911,
+        "total_ms_sum": 762.0609162258916
+      }
+    ],
+    "serial_smallest_valid_estimated_mean_ms": 50.338114122496336
+  },
+  "coverage": [
+    {
+      "lag": 1,
+      "major_valid": 2,
+      "no_major_valid": 10,
+      "policy": "LAG_1",
+      "status_counts": {
+        "INSUFFICIENT_CORRESPONDENCES": 18,
+        "SYNC_INVALID": 2,
+        "VALID": 12
+      },
+      "total_frames": 32,
+      "valid": 12
+    },
+    {
+      "lag": 2,
+      "major_valid": 2,
+      "no_major_valid": 9,
+      "policy": "LAG_2",
+      "status_counts": {
+        "INSUFFICIENT_CORRESPONDENCES": 18,
+        "SYNC_INVALID": 3,
+        "VALID": 11
+      },
+      "total_frames": 32,
+      "valid": 11
+    },
+    {
+      "lag": 4,
+      "major_valid": 2,
+      "no_major_valid": 9,
+      "policy": "LAG_4",
+      "status_counts": {
+        "INSUFFICIENT_CORRESPONDENCES": 18,
+        "SYNC_INVALID": 3,
+        "VALID": 11
+      },
+      "total_frames": 32,
+      "valid": 11
+    },
+    {
+      "lag": 8,
+      "major_valid": 2,
+      "no_major_valid": 4,
+      "policy": "LAG_8",
+      "status_counts": {
+        "INSUFFICIENT_CORRESPONDENCES": 23,
+        "SYNC_INVALID": 3,
+        "VALID": 6
+      },
+      "total_frames": 32,
+      "valid": 6
+    },
+    {
+      "lag": "",
+      "major_valid": 2,
+      "no_major_valid": 10,
+      "policy": "SMALLEST_VALID",
+      "status_counts": {
+        "1": 12,
+        "UNAVAILABLE": 20
+      },
+      "total_frames": 32,
+      "valid": 12
+    }
+  ],
+  "coverage_gate": false,
+  "evidence_freeze_sha256": "413780dfe511f51ea74a6eac4384595a62333136d43e0f0b314f58e55dcdb9b4",
+  "final_result": "VISUAL_NONLOCAL_EVIDENCE_COVERAGE_INSUFFICIENT",
+  "label_input": "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_foundation_weak_discovery/h1/frame_projection_statistics.csv",
+  "label_sha256": "0588603d8d110bcdfac305c62ad012bbf39232db4e6b359772a0a186004f6160",
+  "next": "VISUAL_FRONTEND_COVERAGE_REDESIGN",
+  "primary_statistics": {
+    "attempted": false,
+    "reason": "COVERAGE_GATE_FAIL"
+  },
+  "reused_statistics_source_sha256": "92da055ff39f8d7d95916cdf831c8058cc02c09b5cf825ff48ef743d62e00b58",
+  "rng": {
+    "replicates": 10000,
+    "seed": 20261012,
+    "type": "NumPy PCG64"
+  },
+  "source_sha256": "66357944efe368d170bc1a19525a361c8b41a75dadc5ef4edc57c7b538ae4dcd",
+  "stage": "VISUAL_GATE_FROZEN_BEFORE_POSTHOC_GT"
+}

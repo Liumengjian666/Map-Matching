@@ -1,0 +1,13 @@
+{
+  "NEW_NDT_CALLS": 0,
+  "extraction_manifest_sha256": "3e4f882b7560f1ee3ac321c4bae238934dee990bdfee5e0620478b238653f3aa",
+  "label_or_gt_evaluation_loaded": false,
+  "measurement_sha256": "40f53e246f74d5222a0a7b1ca32589022d9e4e601a62c9704f5286d5a9f4f00a",
+  "rows": 128,
+  "selected_data_io_seconds": 48.12221133400453,
+  "selected_input_hashes": {
+    "selected_cloud_hashes.csv": "7f9100d688a86aa76ad67f8303a43a42fc4100a75dc27c7c8256b444b74bdcb3",
+    "selected_image_hashes.csv": "12b112e5a8b1963e6a823a92756f7be2547464cf6ac9929e4a5c2d1362112c87"
+  },
+  "wall_seconds": 95.56655454804422
+}
