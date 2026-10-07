@@ -1,0 +1,9 @@
+frame,budget,U_comp,competitive_cluster_count,evidence_flags_potential_ambiguity,archived_B12_selection_left_nominal,archived_B12_GT_annotation,pose_switch_authorized
+120,4,1.9101784008467229,1,1,1,WORSE,0
+3094,4,0.0,0,0,1,WORSE,0
+120,8,1.9101784008467229,1,1,1,WORSE,0
+3094,8,0.2497077981056701,2,1,1,WORSE,0
+120,12,1.9101784008467229,1,1,1,WORSE,0
+3094,12,0.49588827432889593,4,1,1,WORSE,0
+120,16,1.9101784008467229,1,1,1,WORSE,0
+3094,16,0.49588827432889593,4,1,1,WORSE,0

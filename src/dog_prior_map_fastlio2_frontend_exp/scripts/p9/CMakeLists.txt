@@ -25,7 +25,20 @@ foreach(p9_target p9_ndt_energy_contract p9_true_profile_closure p9_strong_attra
   target_link_libraries(${p9_target} PRIVATE ${PCL_LIBRARIES} ${LIBUSB_LIBRARIES})
 endforeach()
 
+add_library(p9_r2b_chart SHARED p9_r2b_chart.cpp)
+add_executable(p9_r2b_chart_self_test p9_r2b_chart.cpp)
+foreach(math_target p9_r2b_chart p9_r2b_chart_self_test)
+  target_compile_features(${math_target} PRIVATE cxx_std_14)
+  target_include_directories(${math_target} PRIVATE ${EIGEN3_INCLUDE_DIRS})
+endforeach()
+target_compile_definitions(p9_r2b_chart_self_test PRIVATE P9_R2B_CHART_TEST_MAIN)
+
 enable_testing()
+add_test(NAME p9_r2b_chart_self_test COMMAND p9_r2b_chart_self_test)
+add_test(NAME p9_r2b_evidence_self_test COMMAND ${Python3_EXECUTABLE}
+  ${CMAKE_CURRENT_SOURCE_DIR}/p9_r2b_nonoracle_evidence.py self-test --library $<TARGET_FILE:p9_r2b_chart>)
+add_test(NAME p9_r2b_statistics_self_test COMMAND ${Python3_EXECUTABLE}
+  ${CMAKE_CURRENT_SOURCE_DIR}/evaluate_r2b_nonoracle_evidence.py self-test)
 add_test(NAME p9_r1c3_self_test COMMAND p9_secondgen_branch_gate --self-test)
 add_test(NAME p9_r1c3a_contract_self_test COMMAND p9_r1c3a_contract_closure --self-test)
 add_test(NAME p9_r1c3b_discrete_support_self_test COMMAND p9_discrete_support_evidence --self-test)

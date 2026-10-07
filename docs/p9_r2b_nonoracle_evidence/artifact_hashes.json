@@ -1,0 +1,41 @@
+{
+  "artifact_sha256": {
+    "REPORT.md": "9b469cd06f9d7cbf326174a8cee2314a73cf2f3e3b3627e12596b43590aace0d",
+    "REVIEW.md": "d77964a5bc9eda2fe7bc0ba6e361d25e560a9cb0d56cdad62d7032cde187c7aa",
+    "THEORY.md": "21719dadf49e320a23da888efbaffebfe69ddc38e7ea6d8699ec04db28738143",
+    "budget_statistics.csv": "cd8a33bd59734f3435d0b65d3e3b29ef7426461a004b203a301f9ef96e33d95c",
+    "competitive_terminals.csv": "3e9fd756600a0bcab8420ab4ce3e7349d5043f9c6e7e42225b870c913db57274",
+    "evaluation_snapshot.json": "111861655097e72fc5af338441973c91b5f4e6977d42cb135d373c11e154ee81",
+    "evaluation_snapshot_initial.json": "6706c85ad1016a43bc6db46466d740a380974d53c63848c7bbe566d4d0f96594",
+    "evidence_freeze.json": "ab53197a817fd140a82098638aaccb6d8d3db8e3a14eff7ed327da24e230b6f5",
+    "frame_statistics.csv": "244876425b69ef0324acdf02b36fbbd65acc77dd3a35363fccfacff5fa398d01",
+    "lofo.csv": "1b73bbeabf8249ed4dc5c971685795d7b17fb97eefad8a11362098a1e363ba4a",
+    "nonoracle_evidence.csv": "ae2d72cb76f289300bd69c5c763c2e11d662e3567a60d79747e66c671f4e7c4b",
+    "omission_stability.csv": "ca7575c72106b97a0d3dde4c764bce4626cbb59216af5f30a1afe3588963e38e",
+    "permutation_manifest.csv": "cac8470e178119311ee8f207cbc234913aa764bf6c20cf820e60db1b750322c1",
+    "posthoc_safety.csv": "9981916da61fcf0f36c0ee72970ca10041a26d67c9a39c1aebbf18c01e0fe805",
+    "results.json": "f5c30bfa5bb0f48108790214d01130b3ba7165b8416725403b3eb721fcf9ca74",
+    "terminal_clusters.csv": "12500b2a406154cde63bb475c6d60caa8646063d0a9a275a58a17319c6e488cf"
+  },
+  "binary_sha256": {
+    "/tmp/p9_r2_build/libp9_r2b_chart.so": "2a71c945f5b23b1eacdf4f73a63aba86fd509d2c556392652a0eda7c723cb711"
+  },
+  "cmake_cache_sha256": "c69212bb0b926b9f2e426935836802f50f91f2142a14083f72bbf788b579f5ab",
+  "source_sha256": {
+    "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/CMakeLists.txt": "819baeb371c6865d14c3b4320d316233181f586e656f7db52ce796c5767f0fc2",
+    "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/audit_r2b_archive.py": "c3f29928e23e687fa1ad88e29320f7b5b094d3ab07fdbb56c652270a0e6df700",
+    "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/evaluate_r2b_nonoracle_evidence.py": "92da055ff39f8d7d95916cdf831c8058cc02c09b5cf825ff48ef743d62e00b58",
+    "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r2b_chart.cpp": "ab9409c4d99a69d37aedfb954bd0eb99dcd9948ba8a3170a3ebeb880cb11c6cc",
+    "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r2b_nonoracle_evidence.py": "6be41da57156b0fdffff812f4d27e79a8993ecc50b411244ca4a1aea45eaaf9a"
+  },
+  "verification": {
+    "GT_USED_FOR_EVIDENCE": false,
+    "GT_USED_FOR_GATE": false,
+    "NEW_NDT_CALLS": 0,
+    "csv_json_hash_audit": "PASS",
+    "p9_tests": "25/25 PASS",
+    "release_build": "PASS",
+    "test_log": "/tmp/p9_r2_build/Testing/Temporary/LastTest.log",
+    "test_log_sha256": "df67310d8b778423bf8e7b732c97e4fe9de336ee4bdd7dc9f2d0bc441efb445d"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "EPS_SCORE": 0.0002747604276,
+  "accepted_method": "COND_WEAK2",
+  "budgets": [
+    4,
+    8,
+    12,
+    16
+  ],
+  "canonical_inputs_loaded": false,
+  "chart_library": "/tmp/p9_r2_build/libp9_r2b_chart.so",
+  "chart_library_sha256": "2a71c945f5b23b1eacdf4f73a63aba86fd509d2c556392652a0eda7c723cb711",
+  "construction_source_sha256": {
+    "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r2b_nonoracle_evidence/THEORY.md": "21719dadf49e320a23da888efbaffebfe69ddc38e7ea6d8699ec04db28738143",
+    "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/CMakeLists.txt": "819baeb371c6865d14c3b4320d316233181f586e656f7db52ce796c5767f0fc2",
+    "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r2b_chart.cpp": "ab9409c4d99a69d37aedfb954bd0eb99dcd9948ba8a3170a3ebeb880cb11c6cc",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r2b_nonoracle_evidence.py": "6be41da57156b0fdffff812f4d27e79a8993ecc50b411244ca4a1aea45eaaf9a"
+  },
+  "frame_count": 32,
+  "frozen_artifact_sha256": {
+    "competitive_terminals.csv": "3e9fd756600a0bcab8420ab4ce3e7349d5043f9c6e7e42225b870c913db57274",
+    "nonoracle_evidence.csv": "ae2d72cb76f289300bd69c5c763c2e11d662e3567a60d79747e66c671f4e7c4b",
+    "terminal_clusters.csv": "12500b2a406154cde63bb475c6d60caa8646063d0a9a275a58a17319c6e488cf"
+  },
+  "git": {
+    "branch": "research/p9-r2b-nonoracle-evidence",
+    "construction_head": "2712573a8d3be1768ba59f6aa92f184d0949d19f",
+    "start_sha": "2712573a8d3be1768ba59f6aa92f184d0949d19f"
+  },
+  "gt_used_for_evidence": false,
+  "input_read_allowlist": [
+    "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r2a_predictor_conditioned_search/ndt_runs.csv",
+    "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r2a_predictor_conditioned_search/predictor_parity.csv",
+    "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r2a_predictor_conditioned_search/score_carrier_sensitivity.csv"
+  ],
+  "input_sha256": {
+    "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r2a_predictor_conditioned_search/ndt_runs.csv": "2bc280af9bec134568a2769b7f423900b7c8b5ea2e7c6e99487daeaf9148ce35",
+    "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r2a_predictor_conditioned_search/predictor_parity.csv": "af6ede8987cb61101b575c244635594cb957769a3d28a5ed75e55a9efd411b6b",
+    "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r2a_predictor_conditioned_search/score_carrier_sensitivity.csv": "de1dbe911b799a56cc42fdbf6b65e0ccd9d6c138db5a4902d10e485b4a649ef1"
+  },
+  "labels_loaded": false,
+  "new_ndt_calls": 0,
+  "rows": {
+    "clusters": 566,
+    "competitive_terminals": 69,
+    "evidence": 128
+  },
+  "source_carrier_max_gap": 0.00013738021380049759,
+  "state": "EVIDENCE_FROZEN_BEFORE_LABELS",
+  "task": "PAPER-P9-R2B-NONORACLE-COMPETING-TERMINAL-EVIDENCE-GATE"
+}
