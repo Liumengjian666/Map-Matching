@@ -34,6 +34,10 @@ endforeach()
 target_compile_definitions(p9_r2b_chart_self_test PRIVATE P9_R2B_CHART_TEST_MAIN)
 
 enable_testing()
+add_test(NAME p9_r3_visual_contract_self_test COMMAND ${Python3_EXECUTABLE}
+  ${CMAKE_CURRENT_SOURCE_DIR}/p9_r3_visual_contract.py)
+add_test(NAME p9_r3_blind_evidence_self_test COMMAND ${Python3_EXECUTABLE}
+  ${CMAKE_CURRENT_SOURCE_DIR}/build_r3_visual_evidence.py self-test)
 add_test(NAME p9_r2b_chart_self_test COMMAND p9_r2b_chart_self_test)
 add_test(NAME p9_r2b_evidence_self_test COMMAND ${Python3_EXECUTABLE}
   ${CMAKE_CURRENT_SOURCE_DIR}/p9_r2b_nonoracle_evidence.py self-test --library $<TARGET_FILE:p9_r2b_chart>)
