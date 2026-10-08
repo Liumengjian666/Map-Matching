@@ -1,0 +1,11 @@
+{
+  "GT_LOADED": false,
+  "NEW_VISUAL_EXTRACTION": 0,
+  "R4_CANDIDATE_CALLS": 0,
+  "R4_ORACLE_CALLS": 0,
+  "binary_sha256": "44837ab84857a9775429fba3c5f2bd6eb5ee67ecda05451a38a10aa9ca61702b",
+  "cache": "/tmp/p9_r4_same_objective_source_recovery.l6hlb3lc",
+  "returncode": 0,
+  "state": "COMPLETED",
+  "wall_seconds": 124.15120476100128
+}

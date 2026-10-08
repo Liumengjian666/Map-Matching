@@ -1,0 +1,17 @@
+metric,value,unit,category
+baseline_ndt_calls,4127,calls,OFFLINE_PROVENANCE_ONLY
+category,OFFLINE_PROVENANCE_ONLY,description,OFFLINE_PROVENANCE_ONLY
+cloud_io_seconds,4.429121815000019,seconds,OFFLINE_PROVENANCE_ONLY
+export_io_bound_definition,export-target untimed frame residual + wall outside timed frames; includes diagnostics/setup/polling,description,OFFLINE_PROVENANCE_ONLY
+export_io_seconds,,seconds,OFFLINE_PROVENANCE_ONLY
+export_io_status,NOT_SEPARATELY_MEASURED,description,OFFLINE_PROVENANCE_ONLY
+export_io_upper_bound_seconds,2.604194689001484,seconds,OFFLINE_PROVENANCE_ONLY
+frame_total_seconds,123.2197963229998,seconds,OFFLINE_PROVENANCE_ONLY
+ikfom_update_seconds,0.16541576600000024,seconds,OFFLINE_PROVENANCE_ONLY
+ndt_alignment_seconds,78.66958352800006,seconds,OFFLINE_PROVENANCE_ONLY
+ndt_total_seconds,90.08749444499978,seconds,OFFLINE_PROVENANCE_ONLY
+prediction_and_deskew_seconds,15.932621195999998,seconds,OFFLINE_PROVENANCE_ONLY
+synthetic_p7_test_align_calls,2,calls,OFFLINE_PROVENANCE_ONLY
+timing_units,seconds; original runtime CSV uses milliseconds,description,OFFLINE_PROVENANCE_ONLY
+wall_seconds,124.15120476100128,seconds,OFFLINE_PROVENANCE_ONLY
+wall_timing,wrapper elapsed; includes progress polling tail,description,OFFLINE_PROVENANCE_ONLY

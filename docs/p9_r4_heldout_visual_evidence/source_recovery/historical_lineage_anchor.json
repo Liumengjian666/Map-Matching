@@ -1,0 +1,8 @@
+{
+  "provenance_path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/frozen/objective_provenance.json",
+  "provenance_sha256": "7f2652bb568bb5958bfafcac3b4bfa09d8f6fab3ae381e26f1821a76eb64999e",
+  "receipt": "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r2a_predictor_conditioned_search/execution_manifest.json",
+  "receipt_commit": "3a98a3cd1d64d7aba6888d3136295a0b41c38fa6",
+  "receipt_sha256": "59247df257350a5eba6158c0362f346aebd7b592627a23f4acdbcd34e53de7c6",
+  "status": "PASS"
+}

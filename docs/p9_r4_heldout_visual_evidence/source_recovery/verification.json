@@ -1,0 +1,25 @@
+{
+  "GT_LOADED": false,
+  "csv_json_checks": {
+    "full_source_trajectory_parity.csv": {
+      "rows": 4127,
+      "status": "PASS"
+    },
+    "heldout_recovered_source_audit.csv": {
+      "rows": 160,
+      "status": "PASS"
+    },
+    "historical_raw_parity.csv": {
+      "rows": 32,
+      "status": "PASS"
+    },
+    "manifest_field_parity.csv": {
+      "rows": 2400,
+      "status": "PASS"
+    }
+  },
+  "old_artifact_count": 31,
+  "raw_hashes_verified": 192,
+  "replay_output_hashes_verified": 5,
+  "status": "PASS"
+}

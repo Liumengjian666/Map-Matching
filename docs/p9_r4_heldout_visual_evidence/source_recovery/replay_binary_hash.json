@@ -1,0 +1,110 @@
+{
+  "binary": "/tmp/p9_r4_same_objective_source_recovery.l6hlb3lc/build/p7_single_state_runner",
+  "binary_sha256": "44837ab84857a9775429fba3c5f2bd6eb5ee67ecda05451a38a10aa9ca61702b",
+  "build_full_context_export_patch_sha256": "b5263d915a1045339757ac3ec30c73acb0414ff4cd407ddf774b1e95f772a991",
+  "build_time_code_sha256": {
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r4_source_export_selection_test.cpp": "42f95ce8350379aa94739b58b7d4d7bc2fe10a4b9531ac16c1bd592b587c51e1",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r4_source_recovery.py": "a8550289a4882ae2d14eaa2ff5296e24b49ee07113e5d761e2cdff3dfb46632a",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r4_source_recovery.py": "7728e56dc17168bcf7847369089c8459cb47dce68fa5d1815ae44a39587a3b5b"
+  },
+  "build_type": "Release",
+  "code_sha256": {
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/audit_r4_source_recovery.py": "aa28ef6841319fdf880c967a42b77c62a8201cf95d836f2d0b31265a13d52623",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r4_source_export_selection_test.cpp": "42f95ce8350379aa94739b58b7d4d7bc2fe10a4b9531ac16c1bd592b587c51e1",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r4_source_recovery.py": "654d4205334398b769e681f443626c661c49c7c146a2994377ef74413c408cb3",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r4_source_recovery.py": "b8a84854299393c6fc8ad24203b028c3cbe01e0c1a76f3b0005ceb9832192097"
+  },
+  "command": [
+    "/tmp/p9_r4_same_objective_source_recovery.l6hlb3lc/build/p7_single_state_runner",
+    "/home/jian/livox_ws/p6_i1_recovery_assets_20260927/input/imu.csv",
+    "/home/jian/livox_ws/p6_i1_recovery_assets_20260927/input/filter_scans.csv",
+    "/tmp/p7_baseline_v2_floor01_raw_retry/raw_timed_scans.csv",
+    "/tmp/p7_baseline_v2_floor01_raw_retry/raw_timed_points.bin",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/map/frozen/floor01_h1_map_p5_frozen.pcd",
+    "/home/jian/livox_ws/p6_i1_recovery_assets_20260927/input/params.txt",
+    "/tmp/p9_r4_same_objective_source_recovery.l6hlb3lc/replay_trajectory.csv",
+    "/tmp/p9_r4_same_objective_source_recovery.l6hlb3lc/replay_registration.csv",
+    "/tmp/p9_r4_same_objective_source_recovery.l6hlb3lc/replay_runtime.csv",
+    "4127",
+    "0",
+    "--dual-u-shadow",
+    "/tmp/p9_r4_same_objective_source_recovery.l6hlb3lc/replay_dual_u_diagnostic.csv",
+    "--curvature-audit",
+    "/tmp/p9_r4_same_objective_source_recovery.l6hlb3lc/replay_curvature_diagnostic.csv",
+    "--objective-export",
+    "/tmp/p9_r4_same_objective_source_recovery.l6hlb3lc/source_clouds"
+  ],
+  "command_file_sha256": "88757f7c408bcbc96b78a7ea79269bc36ec8f32892be0b865dcec299660637a8",
+  "export_patch_format": "git diff --unified=0; apply with git apply --unidiff-zero",
+  "export_patch_sha256": "b73e6d7fe815364f0ecf8610c515d3866c399fd5b7935590839ea0d7f418d9d2",
+  "patched_runner_sha256": "4fe1e5cbc84c229de1aa45fcd3a04e33eeaaef2051c34899feaa33a2bb148ac8",
+  "source_auditor": "/tmp/p9_r4_release.Eirto1/p9_r4_source_audit",
+  "source_auditor_sha256": "ccb21b4c9f466ca8283112f59a130f7c038002e858c043fc527028b18ca66907",
+  "source_commit": "9945c4f5c3d7759104de108a594bcaf2553fd78c",
+  "verification": [
+    {
+      "command": [
+        "cmake",
+        "-S",
+        "/tmp/p9_r4_source_replay_ws.KUx4Q7/src/dog_prior_map_fastlio2_frontend_exp/scripts/p7",
+        "-B",
+        "/tmp/p9_r4_same_objective_source_recovery.l6hlb3lc/build",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DFASTLIO2_ROOT=/media/jian/HIKVISION/comparison algorithm/FAST_LIO2"
+      ],
+      "exit_code": 0,
+      "log_sha256": "a30f7a202a409f5bdff859cef15c6a08a8d943f29bf54796ba5f8c8e8425a85c",
+      "raw_stdout_sha256": "6790ded1f9008f2768c5c55f65eabc609609b968bf3f0e154ee1d3a41e53b64d"
+    },
+    {
+      "command": [
+        "cmake",
+        "--build",
+        "/tmp/p9_r4_same_objective_source_recovery.l6hlb3lc/build",
+        "--target",
+        "p7_single_state_runner",
+        "current_frame_ndt_test",
+        "p7_replay_io_test",
+        "dual_u_architecture_test",
+        "-j",
+        "2"
+      ],
+      "exit_code": 0,
+      "log_sha256": "05607048c561e4ac1b911fcaae9e0e4ad7df6aafa9364fac5d79fc8a68a60bb5",
+      "raw_stdout_sha256": "05607048c561e4ac1b911fcaae9e0e4ad7df6aafa9364fac5d79fc8a68a60bb5"
+    },
+    {
+      "command": [
+        "ctest",
+        "--output-on-failure"
+      ],
+      "exit_code": 0,
+      "log_sha256": "2c3873528635ab79201e1a27e9ca1842e3a54f97f8eb911d1c0ed7c01a69fd29",
+      "raw_stdout_sha256": "2c3873528635ab79201e1a27e9ca1842e3a54f97f8eb911d1c0ed7c01a69fd29"
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++14",
+        "-O3",
+        "-I",
+        "/tmp/p9_r4_same_objective_source_recovery.l6hlb3lc/build",
+        "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r4_source_export_selection_test.cpp",
+        "-o",
+        "/tmp/p9_r4_same_objective_source_recovery.l6hlb3lc/build/source_export_selection_test"
+      ],
+      "exit_code": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/p9_r4_same_objective_source_recovery.l6hlb3lc/build/source_export_selection_test",
+        "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r4_heldout_visual_evidence/source_recovery/source_export_targets.txt"
+      ],
+      "exit_code": 0,
+      "log_sha256": "1bdf87690d8163d41a5323f2c1d8c126e65493bab0481e032e1a1418d27a00e6",
+      "raw_stdout_sha256": "1bdf87690d8163d41a5323f2c1d8c126e65493bab0481e032e1a1418d27a00e6"
+    }
+  ]
+}

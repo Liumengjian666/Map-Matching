@@ -1,0 +1,12 @@
+{
+  "status": "INITIAL_TEST_INVOCATION_FAILED_ENVIRONMENT_LOADER",
+  "command": ["ctest", "--output-on-failure"],
+  "working_directory": "/tmp/p9_r4_release.Eirto1",
+  "exit_code": 8,
+  "passed": 36,
+  "total": 38,
+  "failed_tests": ["p9_r1c3a_contract_self_test", "p9_h2_proposal_self_test"],
+  "observed_error": "/lib/x86_64-linux-gnu/libpcl_io.so.1.10: undefined symbol: libusb_set_option",
+  "resolution": "Invoke tests with the same LD_LIBRARY_PATH=/lib/x86_64-linux-gnu used by frozen replay; no code, PCL, or scientific parameter changes.",
+  "scientific_replay_started": false
+}

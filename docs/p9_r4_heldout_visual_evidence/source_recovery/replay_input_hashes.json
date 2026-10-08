@@ -1,0 +1,99 @@
+{
+  "fastlio2_root": "/media/jian/HIKVISION/comparison algorithm/FAST_LIO2",
+  "fastlio2_sha": "7cc4175de6f8ba2edf34bab02a42195b141027e9",
+  "frame_count": 4127,
+  "gt_loaded": false,
+  "historical_command_log": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/run.log",
+  "historical_command_log_sha256": "83876734161600daebf64f0b2aeb175eb7a2d12d10f1c9dbf0e44eb06ba2f070",
+  "initialization_stamp_ns": 0,
+  "inputs": {
+    "current_frame_ndt_header": {
+      "historical_path": "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/current_frame_ndt.hpp",
+      "path": "/tmp/p9_r4_source_replay_ws.KUx4Q7/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/current_frame_ndt.hpp",
+      "sha256": "8b1219706a6465da29a383f9a4c99bb98a40dcafad5bfe52fc64415ace1e1013"
+    },
+    "current_frame_ndt_source": {
+      "historical_path": "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/src/current_frame_ndt.cpp",
+      "path": "/tmp/p9_r4_source_replay_ws.KUx4Q7/src/dog_prior_map_fastlio2_frontend_exp/src/current_frame_ndt.cpp",
+      "sha256": "57a2c4eab574e7afdc9c7b99c6e2f95b967645d1f22c1107fd21593abfe520a8"
+    },
+    "filter_scans_csv": {
+      "historical_path": "/home/jian/livox_ws/p6_i1_recovery_assets_20260927/input/filter_scans.csv",
+      "path": "/home/jian/livox_ws/p6_i1_recovery_assets_20260927/input/filter_scans.csv",
+      "sha256": "6cf05c6fb23571969263bb0e011c12adb09dcf73d8707420203459f9d41b1ec0"
+    },
+    "imu_csv": {
+      "historical_path": "/home/jian/livox_ws/p6_i1_recovery_assets_20260927/input/imu.csv",
+      "path": "/home/jian/livox_ws/p6_i1_recovery_assets_20260927/input/imu.csv",
+      "sha256": "faf83b341d6084df5a84e431d61a15f6680a7465d83e9fc7bba13a03961722c2"
+    },
+    "map_pcd": {
+      "historical_path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/map/frozen/floor01_h1_map_p5_frozen.pcd",
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/map/frozen/floor01_h1_map_p5_frozen.pcd",
+      "sha256": "2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570"
+    },
+    "p5_i1_clustering_source": {
+      "historical_path": "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p5_i1_cluster_modes.py",
+      "path": "/tmp/p9_r4_source_replay_ws.KUx4Q7/src/dog_prior_map_fastlio2_frontend_exp/scripts/p5_i1_cluster_modes.py",
+      "sha256": "13dd0a7fe9fe87506f1f3728a81a6c81faa5afbbd0789cc4e8fc4cc89fa38805"
+    },
+    "p5_i1_seed_source": {
+      "historical_path": "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p5_i1_ndt_mode_landscape.cpp",
+      "path": "/tmp/p9_r4_source_replay_ws.KUx4Q7/src/dog_prior_map_fastlio2_frontend_exp/scripts/p5_i1_ndt_mode_landscape.cpp",
+      "sha256": "e9cd18de6577f37adbeb48c9a0e79fdb3da3f7aca26b77f1845d79567bf35478"
+    },
+    "p7_runner_source": {
+      "historical_path": "/home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p7/p7_single_state_runner.cpp",
+      "path": "/tmp/p9_r4_source_replay_ws.KUx4Q7/src/dog_prior_map_fastlio2_frontend_exp/scripts/p7/p7_single_state_runner.cpp",
+      "sha256": "610b48160eda879b70e683ba6c530ba977338bc57c84e6027239c26b802de708"
+    },
+    "params_txt": {
+      "historical_path": "/home/jian/livox_ws/p6_i1_recovery_assets_20260927/input/params.txt",
+      "path": "/home/jian/livox_ws/p6_i1_recovery_assets_20260927/input/params.txt",
+      "sha256": "84819fc178c70a80de075ba02f5e05938b22879ae4238049f537631e7b121c8b"
+    },
+    "raw_timed_point_bin": {
+      "historical_path": "/tmp/p7_baseline_v2_floor01_raw_retry/raw_timed_points.bin",
+      "path": "/tmp/p7_baseline_v2_floor01_raw_retry/raw_timed_points.bin",
+      "sha256": "2c64e78c8b7faaf2b43f0e53fda95198de8472270bd9151acaafd12759bdf809"
+    },
+    "raw_timed_scan_index": {
+      "historical_path": "/tmp/p7_baseline_v2_floor01_raw_retry/raw_timed_scans.csv",
+      "path": "/tmp/p7_baseline_v2_floor01_raw_retry/raw_timed_scans.csv",
+      "sha256": "711ee35603a0026f2d04e65100dd8ba068b312e06ab0f992e191e6f55c0b8bd6"
+    },
+    "runtime_topic_bag": {
+      "historical_path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/p3_r10b_fix1_floor01_full_rerun_20260926/floor01_fix1_runtime_topics.bag",
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/p3_r10b_fix1_floor01_full_rerun_20260926/floor01_fix1_runtime_topics.bag",
+      "sha256": "860d41e88038165be469420b2c9e4db1e164ded4d58952b7b507ee01a4b0a9db"
+    }
+  },
+  "objective_contract": {
+    "actual_target_grid_leaf_m": [
+      0.800000011920929,
+      0.800000011920929,
+      0.800000011920929
+    ],
+    "baseline_sha": "70aa6859657c92404751cd354bd4292e9d30c617",
+    "configured_resolution_m": 0.8,
+    "deskew": "CURRENT_BASELINE_SCAN_END_DESKEW",
+    "map_sha256": "2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570",
+    "maximum_iterations": 80,
+    "objective": "PCL_1_10_NDT_SCORE_SUM_MAXIMIZED_BY_ALIGN",
+    "pcl_version": "1.10.0+dfsg-5ubuntu1",
+    "runtime_ndt_header_sha256": "8b1219706a6465da29a383f9a4c99bb98a40dcafad5bfe52fc64415ace1e1013",
+    "runtime_ndt_source_sha256": "57a2c4eab574e7afdc9c7b99c6e2f95b967645d1f22c1107fd21593abfe520a8",
+    "scan_cloud_frame": "LIDAR_SCAN_END_FRAME",
+    "scan_reference_time": "SCAN_END",
+    "source_preprocessing_config_sha256": "30a5d27d98e6e41af83c63d6242cc9cfbb4e7544ebe150be2f2c1cfa85ac784d",
+    "step_size": 0.08,
+    "target_point_count_expected": 549606,
+    "target_preprocessing_config_sha256": "2893fd722f02792af6540858d8e12d84af677a216c207fdf1bf98275568ea0d0",
+    "transformation_epsilon": 1e-05
+  },
+  "original_registration_sha256": "202bf4036513c32276bc2f5ef2bebfc239358edc90c1d1f52fa6b2540deb4672",
+  "provenance_path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/frozen/objective_provenance.json",
+  "provenance_sha256": "7f2652bb568bb5958bfafcac3b4bfa09d8f6fab3ae381e26f1821a76eb64999e",
+  "source_commit": "9945c4f5c3d7759104de108a594bcaf2553fd78c",
+  "status": "PASS"
+}

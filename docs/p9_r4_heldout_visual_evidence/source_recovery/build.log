@@ -1,0 +1,36 @@
+Scanning dependencies of target p7_dual_u_architecture
+[  8%] Building CXX object CMakeFiles/p7_dual_u_architecture.dir/tmp/p9_r4_source_replay_ws.KUx4Q7/src/dog_prior_map_fastlio2_frontend_exp/src/dual_u_architecture.cpp.o
+Scanning dependencies of target p7_current_frame_ndt
+[ 16%] Building CXX object CMakeFiles/p7_current_frame_ndt.dir/tmp/p9_r4_source_replay_ws.KUx4Q7/src/dog_prior_map_fastlio2_frontend_exp/src/current_frame_ndt.cpp.o
+[ 25%] Linking CXX static library libp7_dual_u_architecture.a
+[ 25%] Built target p7_dual_u_architecture
+Scanning dependencies of target p7_replay_io
+[ 33%] Building CXX object CMakeFiles/p7_replay_io.dir/tmp/p9_r4_source_replay_ws.KUx4Q7/src/dog_prior_map_fastlio2_frontend_exp/src/p7_replay_io.cpp.o
+[ 41%] Linking CXX static library libp7_replay_io.a
+[ 41%] Built target p7_replay_io
+[ 50%] Linking CXX static library libp7_current_frame_ndt.a
+[ 50%] Built target p7_current_frame_ndt
+Scanning dependencies of target p7_single_state_runner
+[ 66%] Building CXX object CMakeFiles/p7_single_state_runner.dir/p7_single_state_runner.cpp.o
+[ 66%] Building CXX object CMakeFiles/p7_single_state_runner.dir/tmp/p9_r4_source_replay_ws.KUx4Q7/src/dog_prior_map_fastlio2_frontend_exp/src/fastlio2_frontend_ikfom.cpp.o
+[ 75%] Building CXX object CMakeFiles/p7_single_state_runner.dir/tmp/p9_r4_source_replay_ws.KUx4Q7/src/dog_prior_map_fastlio2_frontend_exp/src/registration_geometry.cpp.o
+[ 83%] Building CXX object CMakeFiles/p7_single_state_runner.dir/tmp/p9_r4_source_replay_ws.KUx4Q7/src/dog_prior_map_fastlio2_frontend_exp/src/scan_processor.cpp.o
+[ 91%] Building CXX object CMakeFiles/p7_single_state_runner.dir/tmp/p9_r4_source_replay_ws.KUx4Q7/src/dog_prior_map_fastlio2_frontend_exp/src/lidar_deskew_geometry.cpp.o
+[100%] Linking CXX executable p7_single_state_runner
+[100%] Built target p7_single_state_runner
+[ 33%] Built target p7_dual_u_architecture
+[ 66%] Built target p7_current_frame_ndt
+Scanning dependencies of target current_frame_ndt_test
+[ 83%] Building CXX object CMakeFiles/current_frame_ndt_test.dir/tmp/p9_r4_source_replay_ws.KUx4Q7/src/dog_prior_map_fastlio2_frontend_exp/tests/current_frame_ndt_test.cpp.o
+[100%] Linking CXX executable current_frame_ndt_test
+[100%] Built target current_frame_ndt_test
+[ 50%] Built target p7_replay_io
+Scanning dependencies of target p7_replay_io_test
+[ 75%] Building CXX object CMakeFiles/p7_replay_io_test.dir/tmp/p9_r4_source_replay_ws.KUx4Q7/src/dog_prior_map_fastlio2_frontend_exp/tests/p7_replay_io_test.cpp.o
+[100%] Linking CXX executable p7_replay_io_test
+[100%] Built target p7_replay_io_test
+[ 50%] Built target p7_dual_u_architecture
+Scanning dependencies of target dual_u_architecture_test
+[ 75%] Building CXX object CMakeFiles/dual_u_architecture_test.dir/tmp/p9_r4_source_replay_ws.KUx4Q7/src/dog_prior_map_fastlio2_frontend_exp/tests/dual_u_architecture_test.cpp.o
+[100%] Linking CXX executable dual_u_architecture_test
+[100%] Built target dual_u_architecture_test

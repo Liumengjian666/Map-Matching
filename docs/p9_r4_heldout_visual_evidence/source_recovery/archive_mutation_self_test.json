@@ -1,0 +1,13 @@
+{
+  "NEW_NDT_CALLS": 0,
+  "cases": [
+    "duplicate_control",
+    "hash_last_bit",
+    "prepared_hash",
+    "extra_manifest_column",
+    "duplicate_field",
+    "swapped_raw_provenance"
+  ],
+  "fixture": "in-memory CSV mutations only; all physical source/CSV artifacts unchanged",
+  "status": "PASS"
+}

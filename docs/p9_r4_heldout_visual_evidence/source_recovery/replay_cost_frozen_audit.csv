@@ -1,0 +1,16 @@
+metric,value,category
+baseline_ndt_calls,4127,OFFLINE_PROVENANCE_ONLY
+synthetic_p7_test_align_calls,2,OFFLINE_PROVENANCE_ONLY
+wall_seconds,124.15120476100128,OFFLINE_PROVENANCE_ONLY
+wall_timing,wrapper elapsed; includes progress polling tail,OFFLINE_PROVENANCE_ONLY
+prediction_and_deskew_ms,15.932621195999998,OFFLINE_PROVENANCE_ONLY
+cloud_io_ms,4.429121815000019,OFFLINE_PROVENANCE_ONLY
+ndt_total_ms,90.08749444499978,OFFLINE_PROVENANCE_ONLY
+ndt_alignment_ms,78.66958352800006,OFFLINE_PROVENANCE_ONLY
+ikfom_update_ms,0.16541576600000024,OFFLINE_PROVENANCE_ONLY
+frame_total_ms,123.2197963229998,OFFLINE_PROVENANCE_ONLY
+export_io_seconds,,OFFLINE_PROVENANCE_ONLY
+export_io_status,NOT_SEPARATELY_MEASURED,OFFLINE_PROVENANCE_ONLY
+export_io_upper_bound_seconds,2.604194689001484,OFFLINE_PROVENANCE_ONLY
+export_io_bound_definition,export-target untimed frame residual + wall outside timed frames; includes diagnostics/setup/polling,OFFLINE_PROVENANCE_ONLY
+category,OFFLINE_PROVENANCE_ONLY,OFFLINE_PROVENANCE_ONLY

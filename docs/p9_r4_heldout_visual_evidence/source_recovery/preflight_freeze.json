@@ -1,0 +1,22 @@
+{
+  "GT_LOADED": false,
+  "NEW_VISUAL_EXTRACTION": 0,
+  "R4_CANDIDATE_CALLS": 0,
+  "R4_ORACLE_CALLS": 0,
+  "binary_sha256": "44837ab84857a9775429fba3c5f2bd6eb5ee67ecda05451a38a10aa9ca61702b",
+  "files_sha256": {
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r4_heldout_visual_evidence/source_recovery/THEORY.md": "c70956c46a7924a83efa94635fa096db668cb42197a3499f8ba9e854787dd1d3",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r4_heldout_visual_evidence/source_recovery/historical_lineage_anchor.json": "c2d9e49b6e406dcce6e67f94858d21434ba17cc33d09feb049d3c06568ff2944",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r4_heldout_visual_evidence/source_recovery/historical_lineage_anchor_final.json": "88ebc70d63b326cf3484a11d5f30231af1fc17ff6d63124af1c15a62ce52568d",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r4_heldout_visual_evidence/source_recovery/recovery_preparation.json": "9a0f83c8450c8fcba132d0ab165a4e9ae6b8a033c8ae3f75b20184c9cb8b0593",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r4_heldout_visual_evidence/source_recovery/replay_binary_hash.json": "c5c4cc21cbd2383e750a40cb28e50211475a9f36865c3e3c06639b770ceffe9b",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r4_heldout_visual_evidence/source_recovery/replay_input_hashes.json": "c4e4d3509b8d281f4cf56e8730ff1cda2dbbd45409ad90718398c6567dfd260c",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/audit_r4_source_recovery.py": "aa28ef6841319fdf880c967a42b77c62a8201cf95d836f2d0b31265a13d52623",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r2b_nonoracle_evidence.py": "6be41da57156b0fdffff812f4d27e79a8993ecc50b411244ca4a1aea45eaaf9a",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r4_contract.py": "00ce1d6f140574c2ae523a8f94e8019e54617f1d00119f9a6395ffeb04b4a057",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r4_source_export_selection_test.cpp": "42f95ce8350379aa94739b58b7d4d7bc2fe10a4b9531ac16c1bd592b587c51e1",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r4_source_recovery.py": "654d4205334398b769e681f443626c661c49c7c146a2994377ef74413c408cb3",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r4_source_recovery.py": "b8a84854299393c6fc8ad24203b028c3cbe01e0c1a76f3b0005ceb9832192097"
+  },
+  "state": "PASS_BEFORE_ONE_AUTHORIZED_REPLAY"
+}

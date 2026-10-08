@@ -1,0 +1,29 @@
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p7/p7_single_state_runner.cpp b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p7/p7_single_state_runner.cpp
+index 15846e1..c80e850 100644
+--- a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p7/p7_single_state_runner.cpp
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p7/p7_single_state_runner.cpp
+@@ -88,4 +88,14 @@ bool isCurvatureAuditFrame(uint64_t transaction_id) {
+-bool isP5I1CohortFrame(uint64_t transaction_id) {
+-  static const std::array<uint64_t, 32> ids{{120, 244, 368, 616, 740, 838, 839, 864,
+-      924, 925, 1111, 1235, 1359, 1497, 1498, 1556, 1557, 1606, 1730, 1854, 2102,
+-      2226, 2350, 2598, 2722, 2846, 3094, 3217, 3341, 3631, 3796, 3962}};
++bool isSourceExportTarget(uint64_t transaction_id) {
++  static const std::array<uint64_t, 192> ids{{24, 47, 68, 94, 110, 120, 142, 167, 184, 203, 223, 244, 255, 276, 293, 330, 359, 368, 393,
++      409, 427, 452, 476, 501, 518, 542, 569, 604, 616, 626, 655, 678, 695, 718, 740, 766, 786,
++      802, 825, 838, 839, 854, 864, 875, 898, 915, 924, 925, 951, 973, 997, 1016, 1033, 1057,
++      1080, 1097, 1111, 1130, 1166, 1186, 1209, 1235, 1245, 1273, 1312, 1334, 1359, 1369, 1397,
++      1413, 1445, 1469, 1497, 1498, 1515, 1537, 1556, 1557, 1572, 1591, 1606, 1615, 1632, 1669,
++      1686, 1721, 1730, 1752, 1780, 1807, 1845, 1854, 1866, 1886, 1903, 1920, 1944, 1979, 2016,
++      2054, 2085, 2102, 2111, 2132, 2160, 2176, 2193, 2213, 2226, 2241, 2257, 2283, 2311, 2330,
++      2350, 2374, 2398, 2417, 2445, 2467, 2483, 2506, 2522, 2547, 2579, 2598, 2637, 2654, 2675,
++      2699, 2722, 2742, 2768, 2796, 2814, 2837, 2846, 2859, 2889, 2914, 2932, 2964, 2997, 3028,
++      3049, 3069, 3094, 3119, 3147, 3169, 3200, 3217, 3238, 3256, 3276, 3301, 3317, 3341, 3367,
++      3396, 3413, 3430, 3461, 3481, 3526, 3554, 3578, 3609, 3631, 3653, 3673, 3690, 3719, 3747,
++      3764, 3783, 3796, 3813, 3829, 3855, 3880, 3899, 3929, 3951, 3962, 3974, 3999, 4021, 4038,
++      4063, 4079, 4110}};
+@@ -322 +332 @@ int main(int argc, char** argv) {
+-      if (objective_export && isP5I1CohortFrame(transaction)) {
++      if (objective_export && isSourceExportTarget(transaction)) {
+@@ -420 +430 @@ int main(int argc, char** argv) {
+-    if (objective_export && objective_export_frames != 32)
++    if (objective_export && objective_export_frames != 192)
