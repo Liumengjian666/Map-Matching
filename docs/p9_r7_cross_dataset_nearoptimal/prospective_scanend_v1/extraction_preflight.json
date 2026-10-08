@@ -1,0 +1,49 @@
+{
+  "protocol": "P9_CORRIDOR01_RAW_SCANEND_V1",
+  "inputs": [
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/raw_data_core_2023-07-25-03-01-44.bag",
+      "sha256": "c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811",
+      "bytes": 6473379689
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/velodyne/velodyne_pointcloud/params/VLP16db.yaml",
+      "sha256": "171e5fbf3c17256ca1fdc4098a3d190f668d414b1212a8f90bbf0fe6956a11bc",
+      "bytes": 4016
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd",
+      "sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+      "bytes": 4058751
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/config/corridor01_init.yaml",
+      "sha256": "d3e6f560895cb4f6a9efb7058bcff8a13313783e799d82c828e51adcd4bafd1e",
+      "bytes": 595
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/calibration/corridor01_extrinsics.yaml",
+      "sha256": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d",
+      "bytes": 922
+    }
+  ],
+  "raw_topic_counts": {
+    "/velodyne_packets": 2777,
+    "/imu/data": 55957
+  },
+  "command": [
+    "/tmp/p9_corridor_raw_scanend_build/p9_corridor_extract",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/raw_data_core_2023-07-25-03-01-44.bag",
+    "/home/jian/livox_ws/superloc_adapter_ws/src/velodyne/velodyne_pointcloud/params/VLP16db.yaml",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1"
+  ],
+  "storage_write_probe": "PASS",
+  "max_attempts": 1,
+  "GT_LOADED": false,
+  "initialization": "NOT_YET_ACCEPTED",
+  "time_contract": "packet sensor header + pinned single-return VLP16 firing offset",
+  "imu_frame": "epson unrotated",
+  "source_frame": "cmu_rc2_velodyne undeskewed",
+  "scan_end": "last packet sensor timestamp + last scheduled firing (1306368 ns)",
+  "packet_clock_tolerance_ns": 1000
+}

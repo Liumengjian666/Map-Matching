@@ -1,0 +1,53 @@
+{
+  "raw_time_representation": "PASS",
+  "real_scan_end_propagation_and_deskew": "NOT_RUN",
+  "reason": "INITIALIZATION_CONTRACT_BLOCKED",
+  "imu_frame": "epson",
+  "raw_point_frame": "cmu_rc2_velodyne",
+  "T_imu_lidar_direction": "laser_to_imu; maps LiDAR coordinates to IMU",
+  "pose_identity": "T_map_lidar = T_map_imu * T_imu_lidar",
+  "extrinsic_runtime_activation": "NOT_RUN; no double IMU rotation",
+  "map": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd",
+  "map_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+  "map_normalization": "inverse(T_historical_map_first_lidar) applied by historical map normalizer",
+  "initial_pose": "/home/jian/livox_ws/superloc_adapter_ws/config/corridor01_init.yaml",
+  "initial_pose_sha256": "d3e6f560895cb4f6a9efb7058bcff8a13313783e799d82c828e51adcd4bafd1e",
+  "initial_pose_in_normalized_map": "first-scan identity is a coordinate reference, NOT an accepted moving IMU state",
+  "timing_summary": {
+    "duration_ns": {
+      "min": 100726439,
+      "max": 100839450,
+      "sum": 280013831075
+    },
+    "point_count": {
+      "min": 21039,
+      "max": 29130,
+      "sum": 79932911
+    },
+    "causal_tail_gap_ns": {
+      "min": 2324,
+      "max": 5683412,
+      "sum": 6955464713
+    },
+    "previous_scan_overlap_ns": {
+      "min": 0,
+      "max": 40366,
+      "sum": 158602
+    },
+    "point_time_order_reversals": {
+      "min": 0,
+      "max": 2,
+      "sum": 276
+    }
+  },
+  "boundary_uncovered_transactions": [
+    1
+  ],
+  "scan_overlap_count": 4,
+  "scans_with_point_time_reversal": 272,
+  "zero_returns_omitted": 1103601,
+  "nonfinite_returns_omitted": 0,
+  "pinned_parser_not_emitted": 7456,
+  "packet_clock_max_error_ns": 119,
+  "future_or_GT_deskew": false
+}

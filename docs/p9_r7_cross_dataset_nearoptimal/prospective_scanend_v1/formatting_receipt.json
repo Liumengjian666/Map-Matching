@@ -1,0 +1,69 @@
+{
+  "original_archive_backup": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/archive_receipts_before_formatting",
+  "original_hash_book_sha256": "491350af29f68c7331ecd3835fd1af70575c3e1054bbfeb080cab891a7bc2b28",
+  "reason": "git diff --check rejects CRLF and log trailing spaces",
+  "changes": [
+    {
+      "file": "baseline_determinism.csv",
+      "before_sha256": "1ac3a36547292cb55e7413ade13ce38068113faf5f9f376c94152afa039b84d7",
+      "after_sha256": "351bc3ae6d35174e8102ea3a2e097e319a7fcef5eda3c42887fd14b4fcb98665",
+      "values_unchanged": true
+    },
+    {
+      "file": "baseline_runA.csv",
+      "before_sha256": "1ac3a36547292cb55e7413ade13ce38068113faf5f9f376c94152afa039b84d7",
+      "after_sha256": "351bc3ae6d35174e8102ea3a2e097e319a7fcef5eda3c42887fd14b4fcb98665",
+      "values_unchanged": true
+    },
+    {
+      "file": "baseline_runB.csv",
+      "before_sha256": "1ac3a36547292cb55e7413ade13ce38068113faf5f9f376c94152afa039b84d7",
+      "after_sha256": "351bc3ae6d35174e8102ea3a2e097e319a7fcef5eda3c42887fd14b4fcb98665",
+      "values_unchanged": true
+    },
+    {
+      "file": "extraction.log",
+      "before_sha256": "451bebb3d95127ab7fdf01f97b9b7b3e738dce90fceb424b3d3c974113e49dca",
+      "after_sha256": "388244de67413adf2f668a46280c14d30e9276bacb11178547840bccc8891266",
+      "values_unchanged": true
+    },
+    {
+      "file": "imu_timing_audit.csv",
+      "before_sha256": "b8c280a2e1f0e18d169a7b64275a02279822d8645d28cf3f172b73a0e8020fae",
+      "after_sha256": "0457745b9bfb1e8e3a2cc18857dc81ae42946f4bc9085d8d0ae57da3da26af16",
+      "values_unchanged": true
+    },
+    {
+      "file": "input_tests.log",
+      "before_sha256": "a5e4c8df2d299a06d54819eca123037de66729a8b488f48991468c6ed9aa7d4b",
+      "after_sha256": "088f6f67de21c6774e8a7d05ef526cd7183f89404aa994778e0a64b38e022942",
+      "values_unchanged": true
+    },
+    {
+      "file": "p9_tests.log",
+      "before_sha256": "ef46b2a5e450c388b1f5f43b0d79aa3e3e538efa7dc7c8c779631c783857d238",
+      "after_sha256": "ef46b2a5e450c388b1f5f43b0d79aa3e3e538efa7dc7c8c779631c783857d238",
+      "values_unchanged": true
+    },
+    {
+      "file": "runtime_breakdown.csv",
+      "before_sha256": "a77d16eec03efecc4f92eeda06533370f128a9cd5aa017e6b146c208e372edba",
+      "after_sha256": "d5a20debd59dee2e277ec1da741ccebe0aa2c556884976308a32c4cfc6414692",
+      "values_unchanged": true
+    },
+    {
+      "file": "scan_timing_audit.csv",
+      "before_sha256": "0f137f03d3141b9ce6d21199feba765ebaded987477083e34d8cc0c04293239e",
+      "after_sha256": "f63947589e01ec12c7f31748e73d866a40c93c32a79aebf99d6fef1b024847a9",
+      "values_unchanged": true
+    },
+    {
+      "file": "source_t0_uobs_parity.csv",
+      "before_sha256": "1ac3a36547292cb55e7413ade13ce38068113faf5f9f376c94152afa039b84d7",
+      "after_sha256": "351bc3ae6d35174e8102ea3a2e097e319a7fcef5eda3c42887fd14b4fcb98665",
+      "values_unchanged": true
+    }
+  ],
+  "persistent_sensor_files_changed": false,
+  "experiment_reexecuted": false
+}

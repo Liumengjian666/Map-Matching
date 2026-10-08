@@ -1,0 +1,2 @@
+samples,first_stamp_ns,last_stamp_ns,min_period_ns,median_period_ns,max_period_ns,serialized_numeric_and_stamp_parity,full_audit,full_audit_sha256
+55957,1517157219159216000,1517157499161280000,4880000,4992000.0,14992000,55957,/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/imu_timing_audit_full.csv,e145c9033b60a9bd88aeb384c4de54775d3f0d08242007bf6030cad68da307fa

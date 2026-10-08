@@ -1,0 +1,38 @@
+{
+  "status": "NOT_ACCEPTED",
+  "static_samples": 200,
+  "first_stamp_ns": 1517157219159216000,
+  "state_stamp_ns": 1517157220154144000,
+  "acceleration_mean": [
+    -0.3926349368132651,
+    -0.3128674400843693,
+    9.737592701911927
+  ],
+  "gyro_mean": [
+    -0.01030643572419649,
+    0.1065499354316853,
+    -0.47391835110785907
+  ],
+  "acceleration_std": [
+    2.212268454632858,
+    0.9218423246876286,
+    0.4682015974633759
+  ],
+  "gyro_std": [
+    0.15076466216577766,
+    0.2419326405604507,
+    0.40415768535021707
+  ],
+  "frozen_accel_std_limit": 0.5,
+  "frozen_gyro_std_limit": 0.05,
+  "p7_static_variance_gate_pass": false,
+  "measured_first_gyro_norm": 0.4562129741968268,
+  "initial_pose_file": "/home/jian/livox_ws/superloc_adapter_ws/config/corridor01_init.yaml",
+  "initial_pose_sha256": "d3e6f560895cb4f6a9efb7058bcff8a13313783e799d82c828e51adcd4bafd1e",
+  "historical_pose_reference": "first scan frame, estimated from 50 scans over first 5 seconds",
+  "historical_pose_is_current_state_at_end_of_5s": false,
+  "historical_pose_contains_velocity_or_bias": false,
+  "noncausal_backdating_permitted": false,
+  "params_txt_status": "NOT_CREATED_UNTIL_INITIAL_STATE_ACCEPTED",
+  "GT_LOADED": false
+}

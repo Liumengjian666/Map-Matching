@@ -1,0 +1,38 @@
+{
+  "release_build": "PASS",
+  "P9_tests": {
+    "passed": 41,
+    "total": 41
+  },
+  "input_frame_deskew_tests": {
+    "passed": 6,
+    "total": 6
+  },
+  "synthetic_bag_boundary_cases": {
+    "passed": 5,
+    "total": 5
+  },
+  "P7_real_reader": {
+    "scans": 2777,
+    "points": 79932911,
+    "imu": 55957,
+    "status": "PASS"
+  },
+  "P7_real_static_admission": {
+    "status": "FAIL",
+    "reason": "static_imu_variance_exceeds_gate",
+    "samples": 200
+  },
+  "probe_identity_poses": "Synthetic fixtures only; variance fails BEFORE pose use; no state is propagated",
+  "input_probe_sha256": "1463dfd8ac1218c9cc2c9c146259510864718883d855774bb78e62b81bb06a0a",
+  "build_config_sha256": "9fbdf232276643209e93fd9117d31a872755f325e2586b7f2aaea665cc08b546",
+  "NDT_calls": 0,
+  "GT_loaded": false,
+  "review": "Two read-only fresh-context passes; empty-topic and include-order guards fixed; packet test added",
+  "cross_model": "User declined this turn",
+  "noncaptured_receipts": "P7 input probe and synthetic-bag counts transcribed from tool output; CTest logs captured",
+  "build_repairs": [
+    "explicit ROS TopicQuery vector overload",
+    "upstream HAVE_NEW_YAMLCPP build definition"
+  ]
+}

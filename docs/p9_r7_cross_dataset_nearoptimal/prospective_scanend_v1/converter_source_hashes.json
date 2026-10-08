@@ -1,0 +1,22 @@
+{
+  "velodyne_commit": "29abd0e1361cb7f5eda451d2b51c35eeca45e0d5",
+  "binary": "/tmp/p9_corridor_raw_scanend_build/p9_corridor_extract",
+  "binary_sha256": "7177716f5d77ae3f3406cc297addd5189426d22863eb41c2066bdeebe17037c2",
+  "sources": {
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_raw_scanend/run_protocol.py": "4b6f44b2933e759de9ef4dd502bed086847b64dff393227a1bd3756eeca6dc97",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_raw_scanend/extract.cpp": "8849322c3c517f2c0234f290b71d9f78a558b50a1d94d8995da3b298ee9d4064",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_raw_scanend/CMakeLists.txt": "20515b46a8ffce46a44a3ef1c856fb5c2c6eefd5e059c58da8ec031b556b4bcc",
+    "/home/jian/livox_ws/superloc_adapter_ws/src/velodyne/velodyne_pointcloud/include/velodyne_pointcloud/pointcloudXYZIRT.h": "3a5b181d40f84081cccb62dcc8876bfd34a9ff50938412ecee6f72347bfad1a1",
+    "/home/jian/livox_ws/superloc_adapter_ws/src/velodyne/velodyne_pointcloud/include/velodyne_pointcloud/datacontainerbase.h": "f141dbc69a22b11cf4e1fdf3c13d93651c23953dbe9365279748543de8eb5a63",
+    "/home/jian/livox_ws/superloc_adapter_ws/src/velodyne/velodyne_pointcloud/include/velodyne_pointcloud/organized_cloudXYZIRT.h": "f77c10d893e2d7848b068df707d70b45b966ce197997196ad83732ab1c5ad55c",
+    "/home/jian/livox_ws/superloc_adapter_ws/src/velodyne/velodyne_pointcloud/include/velodyne_pointcloud/calibration.h": "95509bd523448e40e9b2b8ad5ec7168c32dcf1448c4897a27126e03eab48cbf7",
+    "/home/jian/livox_ws/superloc_adapter_ws/src/velodyne/velodyne_pointcloud/include/velodyne_pointcloud/rawdata.h": "467fa257d67c13b7fed7858b234c08b2f75eda79fa65b14f2c4b10341282b8b8",
+    "/home/jian/livox_ws/superloc_adapter_ws/src/velodyne/velodyne_pointcloud/include/velodyne_pointcloud/transform.h": "2217ed5d05d7b1d7a981a2d5823d5aed5409d54dd4744bcd5639b35e972af562",
+    "/home/jian/livox_ws/superloc_adapter_ws/src/velodyne/velodyne_pointcloud/src/lib/rawdata.cc": "88aab651f9506b1f2f744769bc8034310b5b28b25089cd48e101b5befe092c83",
+    "/home/jian/livox_ws/superloc_adapter_ws/src/velodyne/velodyne_pointcloud/src/lib/calibration.cc": "8e31932f91a4c6a76d39a3b70fcaf7e80f3e3971d4950b4f9a28c4dcddd023ea"
+  },
+  "compile_definitions": [
+    "HAVE_NEW_YAMLCPP"
+  ],
+  "no_adapter_used": true
+}

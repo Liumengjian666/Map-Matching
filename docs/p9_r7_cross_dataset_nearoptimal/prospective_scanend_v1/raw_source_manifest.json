@@ -1,0 +1,68 @@
+{
+  "protocol": "P9_CORRIDOR01_RAW_SCANEND_V1",
+  "historical_v1_equivalent": "NOT_CLAIMED",
+  "raw_bag_sha256": "c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811",
+  "scans": 2777,
+  "imu_samples": 55957,
+  "raw_points": 79932911,
+  "extraction_complete": true,
+  "output_structure_and_imu_roundtrip_audit": "PASS",
+  "independent_second_raw_packet_decode": "NOT_RUN",
+  "initialization": "NOT_ACCEPTED",
+  "scan_end_deskew": "NOT_RUN",
+  "boundary_uncovered_transactions": [
+    1
+  ],
+  "input_files": {
+    "EXTRACTION_COMPLETE": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/EXTRACTION_COMPLETE",
+      "sha256": "59ea2d60cfdbfa4ace9a519265f9fa1d5c30f15e9b65b5fee3faa39533740f9f",
+      "bytes": 42
+    },
+    "EXTRACTION_STARTED": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/EXTRACTION_STARTED",
+      "sha256": "f56ebd2fd3201e55dddf8046d1a42068ba0acf4b0081f2c3aab4b1de8dc36a7e",
+      "bytes": 29
+    },
+    "conversion_diagnostics.csv": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/conversion_diagnostics.csv",
+      "sha256": "eaafc2a290346ca9ca854c3ec65d95f9872bc31060fb80afb9224c35b1577230",
+      "bytes": 457553
+    },
+    "filter_scans.csv": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/filter_scans.csv",
+      "sha256": "41d0b2040a5de8a8bd428c382a7b6dc18fabcaa8d3e7d2cc331018e0585edf1d",
+      "bytes": 68342
+    },
+    "imu.csv": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/imu.csv",
+      "sha256": "21b94c0cb0ade931db1586799aa022dff2ba20b9ab76dc1e29eac0e948e132e6",
+      "bytes": 7984120
+    },
+    "imu_timing_audit_full.csv": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/imu_timing_audit_full.csv",
+      "sha256": "e145c9033b60a9bd88aeb384c4de54775d3f0d08242007bf6030cad68da307fa",
+      "bytes": 6200240
+    },
+    "raw_imu_index.csv": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/raw_imu_index.csv",
+      "sha256": "d909ded2dd7b252dba21fc48d3a5f1f913d5b5b5d3e9d47a78d67324c9dcb575",
+      "bytes": 3982823
+    },
+    "raw_imu_serialized.bin": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/raw_imu_serialized.bin",
+      "sha256": "959031726df5b960c5b00386737e5c4ef7e550be73621c1ddd5fc748a8df16a8",
+      "bytes": 17738369
+    },
+    "raw_timed_points.bin": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/raw_timed_points.bin",
+      "sha256": "ce8beed2303ea3de8715932c4d0644d6fe28317014e2383f65942d69bc5ace32",
+      "bytes": 1278926576
+    },
+    "raw_timed_scan_index.csv": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/raw_timed_scan_index.csv",
+      "sha256": "d49b7b81bb1f5c17eb2da9e5ad665dfb2b3b4813280de4e342eb3158d13c932a",
+      "bytes": 168725
+    }
+  }
+}

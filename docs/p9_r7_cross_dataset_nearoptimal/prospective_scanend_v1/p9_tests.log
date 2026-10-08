@@ -1,0 +1,670 @@
+Start testing: Oct 09 00:27 CST
+----------------------------------------------------------
+1/41 Testing: p9_r5_full263_admission_self_test
+1/41 Test: p9_r5_full263_admission_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r5_attribution.py" "self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r5_full263_admission_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R5_FULL263_ADMISSION_SELF_TEST=PASS
+<end of output>
+Test time =   0.28 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r5_full263_admission_self_test" end time: Oct 09 00:27 CST
+"p9_r5_full263_admission_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/41 Testing: p9_r4_recovered_source_guard_self_test
+2/41 Test: p9_r4_recovered_source_guard_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r4_recovered_oracle.py" "self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r4_recovered_source_guard_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R4_RECOVERED_SOURCE_ADMISSION_GUARD_SELF_TEST=PASS
+P9_R4_ORACLE_FAIL_FAST_NO_RETRY_SELF_TEST=PASS
+<end of output>
+Test time =   0.37 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r4_recovered_source_guard_self_test" end time: Oct 09 00:27 CST
+"p9_r4_recovered_source_guard_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/41 Testing: p9_r4_recovered_frame_statistics_self_test
+3/41 Test: p9_r4_recovered_frame_statistics_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/evaluate_r4_recovered.py" "self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r4_recovered_frame_statistics_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R4_SMALLEST_TIE_TRAIN_ONLY_LOFO_FRAME_STATISTICS_SELF_TEST=PASS
+<end of output>
+Test time =   0.45 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r4_recovered_frame_statistics_self_test" end time: Oct 09 00:27 CST
+"p9_r4_recovered_frame_statistics_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/41 Testing: p9_r4_selection_self_test
+4/41 Test: p9_r4_selection_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r4_contract.py" "self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r4_selection_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R4_LABEL_BLIND_SELECTION_SELF_TEST=PASS
+<end of output>
+Test time =   0.17 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r4_selection_self_test" end time: Oct 09 00:27 CST
+"p9_r4_selection_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/41 Testing: p9_r4_oracle_geometry_self_test
+5/41 Test: p9_r4_oracle_geometry_self_test
+Command: "/tmp/p9_r4_release.Eirto1/p9_r4_oracle_geometry_self_test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r4_oracle_geometry_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R4_FROZEN_ORACLE_FLOAT_BOUNDARY_SELF_TEST=PASS
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r4_oracle_geometry_self_test" end time: Oct 09 00:27 CST
+"p9_r4_oracle_geometry_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/41 Testing: p9_r4_ndt_proposal_self_test
+6/41 Test: p9_r4_ndt_proposal_self_test
+Command: "/tmp/p9_r4_release.Eirto1/p9_r4_ndt" "--self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r4_ndt_proposal_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R4_NDT_PROPOSAL_SELF_TEST=PASS
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r4_ndt_proposal_self_test" end time: Oct 09 00:27 CST
+"p9_r4_ndt_proposal_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/41 Testing: p9_r4_oracle_label_self_test
+7/41 Test: p9_r4_oracle_label_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r4_oracle_labels.py" "self-test" "--library" "/tmp/p9_r4_release.Eirto1/libp9_r4_oracle_geometry.so"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r4_oracle_label_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R4_ORACLE_LABEL_SELF_TEST=PASS
+<end of output>
+Test time =   0.17 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r4_oracle_label_self_test" end time: Oct 09 00:27 CST
+"p9_r4_oracle_label_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/41 Testing: p9_r4_blind_freeze_chain_self_test
+8/41 Test: p9_r4_blind_freeze_chain_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r4_evidence.py" "self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r4_blind_freeze_chain_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+Failed to load Python extension for LZ4 support. LZ4 compression will not be available.
+P9_R4_LABEL_BLIND_SELECTION_SELF_TEST=PASS
+SYNTHETIC_PNP_DIRECTION_AND_MEI_RECTIFICATION_PASS 1.459040168492593e-06
+P9_R3_PNP_DIRECTION_MEI_TRANSFORM_SELECTION_SELF_TEST=PASS
+P9_R4_LABEL_GT_INFORMATION_ISOLATION_SELF_TEST=PASS
+P9_R4_COHORT_CALIBRATION_FREEZE_CHAIN_SELF_TEST=PASS
+<end of output>
+Test time =   1.05 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r4_blind_freeze_chain_self_test" end time: Oct 09 00:27 CST
+"p9_r4_blind_freeze_chain_self_test" time elapsed: 00:00:01
+----------------------------------------------------------
+
+9/41 Testing: p9_r3b_admission_boundary_cheirality_self_test
+9/41 Test: p9_r3b_admission_boundary_cheirality_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r3b_pnp_frontend.py"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r3b_admission_boundary_cheirality_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R3B_ADMISSION_BOUNDARY_PARITY_CHEIRALITY_SELF_TEST=PASS
+<end of output>
+Test time =   0.27 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r3b_admission_boundary_cheirality_self_test" end time: Oct 09 00:27 CST
+"p9_r3b_admission_boundary_cheirality_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/41 Testing: p9_r3b_information_order_self_test
+10/41 Test: p9_r3b_information_order_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/evaluate_r3b_pnp_admission.py" "self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r3b_information_order_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+Failed to load Python extension for LZ4 support. LZ4 compression will not be available.
+P9_R3B_INFORMATION_ORDER_QUALITY_GATE_SELF_TEST=PASS
+<end of output>
+Test time =   0.73 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r3b_information_order_self_test" end time: Oct 09 00:27 CST
+"p9_r3b_information_order_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/41 Testing: p9_r3a_depth_geometry_self_test
+11/41 Test: p9_r3a_depth_geometry_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r3a_depth_completion.py"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r3a_depth_geometry_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R3A_DIRECT_PLANE_DISCONTINUITY_HULL_RAY_SELF_TEST=PASS
+<end of output>
+Test time =   0.25 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r3a_depth_geometry_self_test" end time: Oct 09 00:27 CST
+"p9_r3a_depth_geometry_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/41 Testing: p9_r3a_direct_pnp_self_test
+12/41 Test: p9_r3a_direct_pnp_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r3a_visual_frontend.py"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r3a_direct_pnp_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R3A_TRACKING_DIRECT_PNP_REPLAY_SELF_TEST=PASS
+<end of output>
+Test time =   0.31 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r3a_direct_pnp_self_test" end time: Oct 09 00:27 CST
+"p9_r3a_direct_pnp_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/41 Testing: p9_r3a_stage_gate_self_test
+13/41 Test: p9_r3a_stage_gate_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/evaluate_r3a_metric_depth_coverage.py" "self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r3a_stage_gate_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+Failed to load Python extension for LZ4 support. LZ4 compression will not be available.
+P9_R3A_COVERAGE_GEOMETRY_STAGE_GATE_SELF_TEST=PASS
+<end of output>
+Test time =   1.31 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r3a_stage_gate_self_test" end time: Oct 09 00:27 CST
+"p9_r3a_stage_gate_self_test" time elapsed: 00:00:01
+----------------------------------------------------------
+
+14/41 Testing: p9_r3_visual_contract_self_test
+14/41 Test: p9_r3_visual_contract_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r3_visual_contract.py"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r3_visual_contract_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+SYNTHETIC_PNP_DIRECTION_AND_MEI_RECTIFICATION_PASS 1.459040168492593e-06
+P9_R3_PNP_DIRECTION_MEI_TRANSFORM_SELECTION_SELF_TEST=PASS
+<end of output>
+Test time =   0.29 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r3_visual_contract_self_test" end time: Oct 09 00:27 CST
+"p9_r3_visual_contract_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+15/41 Testing: p9_r3_blind_evidence_self_test
+15/41 Test: p9_r3_blind_evidence_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/build_r3_visual_evidence.py" "self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r3_blind_evidence_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+SYNTHETIC_PNP_DIRECTION_AND_MEI_RECTIFICATION_PASS 1.459040168492593e-06
+P9_R3_PNP_DIRECTION_MEI_TRANSFORM_SELECTION_SELF_TEST=PASS
+P9_R3_BLIND_CONSTRUCTION_MISSING_EMPTY_SET_SELF_TEST=PASS
+<end of output>
+Test time =   0.29 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r3_blind_evidence_self_test" end time: Oct 09 00:27 CST
+"p9_r3_blind_evidence_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+16/41 Testing: p9_r3_frame_statistics_self_test
+16/41 Test: p9_r3_frame_statistics_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/evaluate_r3_visual_evidence.py" "self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r3_frame_statistics_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R3_COVERAGE_FRAME_STATISTICS_GATE_SELF_TEST=PASS
+<end of output>
+Test time =   0.51 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r3_frame_statistics_self_test" end time: Oct 09 00:27 CST
+"p9_r3_frame_statistics_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+17/41 Testing: p9_r2b_chart_self_test
+17/41 Test: p9_r2b_chart_self_test
+Command: "/tmp/p9_r4_release.Eirto1/p9_r2b_chart_self_test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r2b_chart_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R2B_MATRIX_PRODUCT_CHART_SELF_TEST=PASS
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r2b_chart_self_test" end time: Oct 09 00:27 CST
+"p9_r2b_chart_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+18/41 Testing: p9_r2b_evidence_self_test
+18/41 Test: p9_r2b_evidence_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r2b_nonoracle_evidence.py" "self-test" "--library" "/tmp/p9_r4_release.Eirto1/libp9_r2b_chart.so"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r2b_evidence_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R2B_NONORACLE_EVIDENCE_SELF_TEST=PASS
+<end of output>
+Test time =   0.16 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r2b_evidence_self_test" end time: Oct 09 00:27 CST
+"p9_r2b_evidence_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+19/41 Testing: p9_r2b_statistics_self_test
+19/41 Test: p9_r2b_statistics_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/evaluate_r2b_nonoracle_evidence.py" "self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r2b_statistics_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R2B_FRAME_STATISTICS_SELF_TEST=PASS
+<end of output>
+Test time =   0.42 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r2b_statistics_self_test" end time: Oct 09 00:27 CST
+"p9_r2b_statistics_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/41 Testing: p9_r1c3_self_test
+20/41 Test: p9_r1c3_self_test
+Command: "/tmp/p9_r4_release.Eirto1/p9_secondgen_branch_gate" "--self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r1c3_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R1C3_SELF_TEST=PASS
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r1c3_self_test" end time: Oct 09 00:27 CST
+"p9_r1c3_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+21/41 Testing: p9_r1c3a_contract_self_test
+21/41 Test: p9_r1c3a_contract_self_test
+Command: "/tmp/p9_r4_release.Eirto1/p9_r1c3a_contract_closure" "--self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r1c3a_contract_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R1C3A_SELF_TEST=PASS
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r1c3a_contract_self_test" end time: Oct 09 00:27 CST
+"p9_r1c3a_contract_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+22/41 Testing: p9_r1c3b_discrete_support_self_test
+22/41 Test: p9_r1c3b_discrete_support_self_test
+Command: "/tmp/p9_r4_release.Eirto1/p9_discrete_support_evidence" "--self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r1c3b_discrete_support_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R1C3B_DISCRETE_SUPPORT_SELF_TEST=PASS
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r1c3b_discrete_support_self_test" end time: Oct 09 00:27 CST
+"p9_r1c3b_discrete_support_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+23/41 Testing: p9_r1c3b_statistics_self_test
+23/41 Test: p9_r1c3b_statistics_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r1c3b_discrete_support_evidence.py" "--self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r1c3b_statistics_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R1C3B_STATISTICS_SELF_TEST=PASS
+<end of output>
+Test time =   0.17 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r1c3b_statistics_self_test" end time: Oct 09 00:27 CST
+"p9_r1c3b_statistics_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+24/41 Testing: p9_r2_terminal_stability_self_test
+24/41 Test: p9_r2_terminal_stability_self_test
+Command: "/tmp/p9_r4_release.Eirto1/p9_r2_terminal_stability" "--self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r2_terminal_stability_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R2_TERMINAL_STABILITY_SELF_TEST=PASS
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r2_terminal_stability_self_test" end time: Oct 09 00:27 CST
+"p9_r2_terminal_stability_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+25/41 Testing: p9_r2_terminal_stability_statistics_self_test
+25/41 Test: p9_r2_terminal_stability_statistics_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r2_terminal_stability.py" "self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r2_terminal_stability_statistics_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R2_STATISTICS_SELF_TEST=PASS
+<end of output>
+Test time =   0.19 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r2_terminal_stability_statistics_self_test" end time: Oct 09 00:27 CST
+"p9_r2_terminal_stability_statistics_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+26/41 Testing: p9_r2a_proposal_self_test
+26/41 Test: p9_r2a_proposal_self_test
+Command: "/tmp/p9_r4_release.Eirto1/p9_r2a_predictor_search" "--self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r2a_proposal_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R2A_PROPOSAL_SELF_TEST=PASS
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r2a_proposal_self_test" end time: Oct 09 00:27 CST
+"p9_r2a_proposal_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+27/41 Testing: p9_r2a_orchestration_self_test
+27/41 Test: p9_r2a_orchestration_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r2a_predictor_search.py" "self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r2a_orchestration_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+R2A_ORCHESTRATION_SELF_TEST=PASS
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r2a_orchestration_self_test" end time: Oct 09 00:27 CST
+"p9_r2a_orchestration_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+28/41 Testing: p9_r2a_statistics_self_test
+28/41 Test: p9_r2a_statistics_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/summarize_r2a_predictor_search.py" "self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r2a_statistics_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+R2A_STATISTICS_SELF_TEST=PASS
+<end of output>
+Test time =   0.16 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r2a_statistics_self_test" end time: Oct 09 00:27 CST
+"p9_r2a_statistics_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+29/41 Testing: p9_r1c3a_audit_self_test
+29/41 Test: p9_r1c3a_audit_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r1c3a_contract_closure.py" "self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r1c3a_audit_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R1C3A_AUDIT_SELF_TEST=PASS
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r1c3a_audit_self_test" end time: Oct 09 00:27 CST
+"p9_r1c3a_audit_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+30/41 Testing: p9_r1c3_audit_self_test
+30/41 Test: p9_r1c3_audit_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r1c3_branch_gate.py" "self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r1c3_audit_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R1C3_AUDIT_SELF_TEST=PASS
+<end of output>
+Test time =   0.14 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r1c3_audit_self_test" end time: Oct 09 00:27 CST
+"p9_r1c3_audit_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+31/41 Testing: p9_h2_proposal_self_test
+31/41 Test: p9_h2_proposal_self_test
+Command: "/tmp/p9_r4_release.Eirto1/p9_h2_matched_discovery" "--self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_h2_proposal_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+H2_PROPOSAL_SELF_TEST=PASS
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p9_h2_proposal_self_test" end time: Oct 09 00:27 CST
+"p9_h2_proposal_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+32/41 Testing: p9_h2_statistics_self_test
+32/41 Test: p9_h2_statistics_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_h2_discovery.py" "self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_h2_statistics_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+H2_STATISTICS_SELF_TEST=PASS
+<end of output>
+Test time =   0.46 sec
+----------------------------------------------------------
+Test Passed.
+"p9_h2_statistics_self_test" end time: Oct 09 00:27 CST
+"p9_h2_statistics_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+33/41 Testing: p9_math_self_test
+33/41 Test: p9_math_self_test
+Command: "/tmp/p9_r4_release.Eirto1/p9_ndt_energy_contract" "--self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_math_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_MATH_SELF_TEST=PASS
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p9_math_self_test" end time: Oct 09 00:27 CST
+"p9_math_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+34/41 Testing: p9_r1a_self_test
+34/41 Test: p9_r1a_self_test
+Command: "/tmp/p9_r4_release.Eirto1/p9_true_profile_closure" "--self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r1a_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R1A_SELF_TEST=PASS
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r1a_self_test" end time: Oct 09 00:27 CST
+"p9_r1a_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+35/41 Testing: p9_r1b_self_test
+35/41 Test: p9_r1b_self_test
+Command: "/tmp/p9_r4_release.Eirto1/p9_strong_attractor_closure" "--self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r1b_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R1B_REUSE_SELF_TEST=PASS
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r1b_self_test" end time: Oct 09 00:27 CST
+"p9_r1b_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+36/41 Testing: p9_r1c_self_test
+36/41 Test: p9_r1c_self_test
+Command: "/tmp/p9_r4_release.Eirto1/p9_support_aware_continuation" "--self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r1c_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R1C_FROZEN_BRANCH_SELF_TEST=PASS
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r1c_self_test" end time: Oct 09 00:27 CST
+"p9_r1c_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+37/41 Testing: p9_r1c2_numerical_self_test
+37/41 Test: p9_r1c2_numerical_self_test
+Command: "/tmp/p9_r4_release.Eirto1/p9_numerical_stationarity" "--self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r1c2_numerical_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R1C2_NUMERICAL_SELF_TEST=PASS
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r1c2_numerical_self_test" end time: Oct 09 00:27 CST
+"p9_r1c2_numerical_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+38/41 Testing: p9_r1c2_multih_audit_self_test
+38/41 Test: p9_r1c2_multih_audit_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_numerical_stationarity.py" "--self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r1c2_multih_audit_self_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+R1C2_MULTIH_AUDIT_SELF_TEST=PASS
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r1c2_multih_audit_self_test" end time: Oct 09 00:27 CST
+"p9_r1c2_multih_audit_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+39/41 Testing: p9_r1c_certificate_audit
+39/41 Test: p9_r1c_certificate_audit
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_support_aware_continuation.py" "--self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r1c_certificate_audit" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+P9_R1C_CERTIFICATE_AUDIT_SELF_TEST=PASS
+<end of output>
+Test time =   0.15 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r1c_certificate_audit" end time: Oct 09 00:27 CST
+"p9_r1c_certificate_audit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+40/41 Testing: p9_r1b_orchestration_test
+40/41 Test: p9_r1b_orchestration_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_strong_attractor_experiment.py" "--self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r1b_orchestration_test" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+R1B_ORCHESTRATION_SELF_TEST=PASS
+<end of output>
+Test time =   0.14 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r1b_orchestration_test" end time: Oct 09 00:27 CST
+"p9_r1b_orchestration_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+41/41 Testing: p9_r1b_inference_regression
+41/41 Test: p9_r1b_inference_regression
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/summarize_strong_attractor_closure.py" "--self-test"
+Directory: /tmp/p9_r4_release.Eirto1
+"p9_r1b_inference_regression" start time: Oct 09 00:27 CST
+Output:
+----------------------------------------------------------
+R1B_INFERENCE_REGRESSION_TEST=PASS
+<end of output>
+Test time =   0.16 sec
+----------------------------------------------------------
+Test Passed.
+"p9_r1b_inference_regression" end time: Oct 09 00:27 CST
+"p9_r1b_inference_regression" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 09 00:27 CST

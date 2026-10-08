@@ -1,0 +1,29 @@
+cmake_minimum_required(VERSION 3.10)
+project(p9_corridor_raw_scanend LANGUAGES C CXX)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(VELODYNE_ROOT "" CACHE PATH "Pinned read-only Velodyne checkout")
+execute_process(COMMAND git -C "${VELODYNE_ROOT}" rev-parse HEAD
+  OUTPUT_VARIABLE PIN OUTPUT_STRIP_TRAILING_WHITESPACE RESULT_VARIABLE RC)
+execute_process(COMMAND git -C "${VELODYNE_ROOT}" diff HEAD --exit-code
+  RESULT_VARIABLE DIRTY OUTPUT_QUIET)
+if(NOT RC EQUAL 0 OR NOT DIRTY EQUAL 0 OR NOT PIN STREQUAL "29abd0e1361cb7f5eda451d2b51c35eeca45e0d5")
+  message(FATAL_ERROR "Velodyne source pin/cleanliness failed")
+endif()
+find_package(catkin REQUIRED COMPONENTS roscpp rosbag roslib sensor_msgs velodyne_msgs tf2_ros)
+find_package(Eigen3 REQUIRED)
+find_package(yaml-cpp REQUIRED)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(YAML_CPP REQUIRED yaml-cpp>=0.5)
+add_executable(p9_corridor_extract extract.cpp
+  "${VELODYNE_ROOT}/velodyne_pointcloud/src/lib/rawdata.cc"
+  "${VELODYNE_ROOT}/velodyne_pointcloud/src/lib/calibration.cc")
+target_include_directories(p9_corridor_extract PRIVATE
+  "${VELODYNE_ROOT}/velodyne_pointcloud/include" ${catkin_INCLUDE_DIRS})
+target_link_libraries(p9_corridor_extract PRIVATE ${catkin_LIBRARIES} Eigen3::Eigen yaml-cpp)
+target_compile_options(p9_corridor_extract PRIVATE -Wall -Wextra)
+target_compile_definitions(p9_corridor_extract PRIVATE HAVE_NEW_YAMLCPP)
+enable_testing()
+add_test(NAME raw_timing_self_test COMMAND p9_corridor_extract --self-test)
+add_test(NAME pinned_packet_test COMMAND p9_corridor_extract --packet-test
+  "${VELODYNE_ROOT}/velodyne_pointcloud/params/VLP16db.yaml")
