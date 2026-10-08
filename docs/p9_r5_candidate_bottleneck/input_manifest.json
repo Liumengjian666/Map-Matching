@@ -1,0 +1,32 @@
+{
+  "BASELINE_REPLAY_CALLS": 0,
+  "NEW_NDT_CALLS": 0,
+  "VISUAL_EXTRACTION": 0,
+  "chart_library_sha256": "2a71c945f5b23b1eacdf4f73a63aba86fd509d2c556392652a0eda7c723cb711",
+  "code_sha256": "a7807fa051631ad7e586481764ac540123a3940d905ac742db0e2c7cb1d03c66",
+  "frozen_code_sha256": {
+    "p9_r2b_chart.cpp": "ab9409c4d99a69d37aedfb954bd0eb99dcd9948ba8a3170a3ebeb880cb11c6cc",
+    "p9_r2b_nonoracle_evidence.py": "6be41da57156b0fdffff812f4d27e79a8993ecc50b411244ca4a1aea45eaaf9a",
+    "p9_r4_oracle_labels.py": "486b37246b6aade4ccda91f26e775451b64483e7aba0fc8da6f4c053d3a6409e"
+  },
+  "gt_loaded": false,
+  "input_sha256": {
+    "artifact_hashes.json": "f06ca819daff4325e77afe44845847848822e57b705b02995a0cfb702798d33b",
+    "candidate/conditioned_weak_runs.csv": "619fb9b03b444205d4118de84b5ea4b1589828937e3caad290e1a51784b9d93b",
+    "candidate/lidar_nonoracle_evidence.csv": "6e187b93feeefe7807ebc23ec0d074ab95de267d654f4259e22cbb06df00860c",
+    "candidate/terminal_clusters.csv": "18290697042425ecb50a1614c123d27230a4725ce0a7152d79b3e4f2db807215",
+    "cohort_selection_freeze.json": "174ddbcd13c8b1e0b87b2d0118fe5f0ad2bb86da3c8c7b4867cc32dbda1bc236",
+    "evaluation/candidate_admission.csv": "8378fd55ad5c89a3a7bed1eefc5f9b345d39f97be9ef103e8b3620f84a90c746",
+    "evaluation/candidate_per_frame.csv": "40b1ebda7a10fdfcbc568029f168bacb367e8751d2999283b27fed248b0f4a70",
+    "heldout_final_cohort.csv": "a5448256057045f6f6f2ed3f05acf543aa055f54af7cc42b64125d7ee5b379e7",
+    "lidar_evidence_freeze.json": "2f2b26a7a752f68f00485c00502e38410640775d7f154a4de1e956debf8800ba",
+    "oracle/oracle_candidates.csv": "9897c21d47a03354ee859e3ab8fb5ed402a15024d22320fad77fc13fde556c3b",
+    "oracle/oracle_clusters.csv": "dbf3378b7fd4b2cfa64d19269a4174432cee5031f20637232c18635b55f9d26d",
+    "oracle/oracle_labels.csv": "fb5254e4cf2de67e917aeeae5f3af61989fe34d9055611abc8170bbd9f28263a",
+    "results.json": "559cc0e4888e1cb389eee497a638c9c35052b750a48ce2f7392f20e1e31f61b1",
+    "source_recovery/heldout_source_manifest_recovered.csv": "2bdb251833dfd8930b818fa526c1ba9ff494cf4ac50c81a5fd379590c6a72308"
+  },
+  "start_sha": "06ff017831d2654a62c72f854926b9d3b459ce40",
+  "theory_sha256": "d1201b14a92a00f4b347b61fa92bb7fb65f28adab175aaa5b8dc99dc18b591f7",
+  "workers": 4
+}

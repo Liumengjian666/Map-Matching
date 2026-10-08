@@ -1,0 +1,26 @@
+Scanning dependencies of target p9_r4_oracle_geometry_self_test
+[  5%] Built target p9_r2b_chart_self_test
+[  8%] Building CXX object CMakeFiles/p9_r4_oracle_geometry_self_test.dir/p9_r4_oracle_geometry.cpp.o
+[ 14%] Built target p9_h2_matched_discovery
+[ 20%] Built target p9_ndt_energy_contract
+[ 32%] Built target p9_strong_attractor_closure
+[ 32%] Built target p9_r2b_chart
+[ 38%] Built target p9_support_aware_continuation
+[ 50%] Built target p9_numerical_stationarity
+[ 50%] Built target p9_r1c3a_contract_closure
+[ 55%] Built target p9_discrete_support_evidence
+[ 67%] Built target p9_r2a_predictor_search
+[ 67%] Built target p9_secondgen_branch_gate
+[ 73%] Built target p9_true_profile_closure
+Scanning dependencies of target p9_r4_oracle_geometry
+Scanning dependencies of target p9_r4_ndt
+[ 76%] Building CXX object CMakeFiles/p9_r4_oracle_geometry.dir/p9_r4_oracle_geometry.cpp.o
+[ 82%] Built target p9_r2_terminal_stability
+[ 85%] Building CXX object CMakeFiles/p9_r4_ndt.dir/p9_r4_ndt.cpp.o
+[ 91%] Built target p9_r4_source_audit
+[ 97%] Linking CXX shared library libp9_r4_oracle_geometry.so
+[ 97%] Linking CXX executable p9_r4_oracle_geometry_self_test
+[ 97%] Built target p9_r4_oracle_geometry
+[ 97%] Built target p9_r4_oracle_geometry_self_test
+[100%] Linking CXX executable p9_r4_ndt
+[100%] Built target p9_r4_ndt

@@ -1,0 +1,30 @@
+{
+  "artifacts": {
+    "REPORT.md": "4a035fe48ccb6ba9f23f79b9703f4c932d8f9dbd84fbf1f57fde601dd7c1d8e6",
+    "THEORY.md": "d1201b14a92a00f4b347b61fa92bb7fb65f28adab175aaa5b8dc99dc18b591f7",
+    "analysis_freeze.json": "741d31f08ccd35c75b007163cbe0d828e435662d31db5182d0badf953b48e7e2",
+    "b12_failure_funnel.csv": "2399c7ab602eb3ba2d55a8c145fe01a5c939f19385cefbc94078b10efd6242fa",
+    "candidate_contract_parity.csv": "18f1d5987d9ecd0546ce3449aae0297f62768414d95990e2ad85c070fed9aaa5",
+    "full263_strict_candidate.csv": "12ef6150349d945e98defcf0b8538e2aac81206b7f09d97214d2cabc032f89cf",
+    "full263_terminal_clusters.csv": "1bb3a3ea8352bdd1d6022f6661f288acc44db7f6f8d5436abb6709cd94ffc9ea",
+    "id_disagreement_frame_summary.csv": "229ea72f991c1f8e5ffc68507c603490ede36180b83f38402b8ff8abc0598635",
+    "id_recovery_disagreement.csv": "16889560bbc53016d80174391d891e5c2a32f66f8e764067572505aab6c2b798",
+    "input_audit.csv": "aff10267147a37f53037866dfd07239e75c00193458fe1d62bf8323875f8a86a",
+    "input_manifest.json": "7f214d83d2784fe1dae2b22a6842c97095a5984cfb15d121ac4317f394aed5d5",
+    "no_major_controls.csv": "5d125ef9cf62f8571dccfe1e8ad7c121ebdc2656d6a1d364da0aa75133ab0266",
+    "no_major_positive_details.csv": "f2eede512b114a69e470ac3f0e12da2f8f1e4ccbb9cbca547e7ea4b6dc73c1e1",
+    "oracle_online_score_comparison.csv": "211d0249d120975dd337ac6f8aa39ef62fd9ffdbfb5e7d03b05d5abd854b2d02",
+    "results.json": "a20416b4ddff150701dbc29f3988f9dd6d68b08f479b936f2c971a5555d9afe6",
+    "summary_statistics.csv": "b9de5fb45c9fe9af0f699ed9d25692e926bf22e877ca03061e98c19b894f9bce",
+    "terminal_diagnostics.csv": "c4a931237b5f5db8333303a6577d3bd44b4cf305c9bc490758e05802dcd4fcae",
+    "verification/VERIFICATION.md": "ba25e160f1ea856bab1a0a4c1f7ce86b7d66ac62e417d985915d4af408b05bac",
+    "verification/p9_tests.log": "e9a86cbc7612efc918fa92a4d0df89b6170c77222b2484ac3f528b553131833f",
+    "verification/release_build.log": "40ebe15a2332a062c64b8e38c5581d35b11db8c0bec142d37d835627ed45c296",
+    "verification/release_configure.log": "edc411d5c3e3c0a738fdd6b5346b96d92e31f587a570e5cdd0c528a54b421406"
+  },
+  "sources": {
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/CMakeLists.txt": "2ba46055a62b40f1fcc5b10da74d921dfbfa70e08dacca7844093e41f82b231b",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r5_attribution.py": "a7807fa051631ad7e586481764ac540123a3940d905ac742db0e2c7cb1d03c66",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/summarize_r5_attribution.py": "0af3d11fcf7f9f276e473028af5b527b0e99560f7259cef4997bbe0e19e4d496"
+  }
+}
