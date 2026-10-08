@@ -370,6 +370,70 @@ bool FastLio2IkfomFrontend::initializeStatic(
   return postconditionsValid(failure_reason);
 }
 
+bool FastLio2IkfomFrontend::initializeMoving(
+    const MovingInitializationState& initial, std::string* failure_reason) {
+  if (failure_reason) failure_reason->clear();
+  if (impl_->is_initialized) return fail(failure_reason, "already_initialized");
+  if (!initial.stamp_ns || !finitePose(initial.map_T_imu) ||
+      !finitePose(initial.T_imu_lidar) || !initial.velocity_map.allFinite() ||
+      !initial.gyro_bias_imu.allFinite() || !initial.accel_bias_imu.allFinite() ||
+      !initial.gravity_map.allFinite() ||
+      !std::isfinite(impl_->parameters.gravity_mps2) ||
+      std::abs(initial.gravity_map.norm() - impl_->parameters.gravity_mps2) > 1e-8)
+    return fail(failure_reason, "invalid_moving_state");
+  const auto& basis = initial.gravity_tangent_basis;
+  if (!basis.allFinite() ||
+      (basis.transpose() * basis - Eigen::Matrix2d::Identity()).norm() > 1e-8 ||
+      (basis.transpose() * initial.gravity_map).norm() > 1e-8)
+    return fail(failure_reason, "invalid_gravity_tangent_basis");
+  const auto& input_covariance = initial.covariance;
+  if (!input_covariance.allFinite() ||
+      (input_covariance - input_covariance.transpose()).cwiseAbs().maxCoeff() > 1e-10 ||
+      Eigen::LLT<Eigen::Matrix<double, 17, 17>>(input_covariance).info() != Eigen::Success)
+    return fail(failure_reason, "invalid_moving_covariance");
+
+  state_ikfom state;
+  state.pos = vect3(initial.map_T_imu.position);
+  state.rot = SO3(initial.map_T_imu.orientation.toRotationMatrix());
+  state.vel = vect3(initial.velocity_map);
+  state.bg = vect3(initial.gyro_bias_imu);
+  state.ba = vect3(initial.accel_bias_imu);
+  state.grav = S2(initial.gravity_map);
+  if (std::abs(state.grav.get_vect().norm() - initial.gravity_map.norm()) > 1e-8 ||
+      std::abs(state.grav.get_vect().norm() - impl_->parameters.gravity_mps2) > 1e-8)
+    return fail(failure_reason, "moving_gravity_incompatible_with_ikfom_S2");
+  state.offset_R_L_I = SO3(initial.T_imu_lidar.orientation.toRotationMatrix());
+  state.offset_T_L_I = vect3(initial.T_imu_lidar.position);
+
+  Eigen::Matrix<double, state_ikfom::DOF, 17> lift =
+      Eigen::Matrix<double, state_ikfom::DOF, 17>::Zero();
+  const int indices[] = {MTK::getStartIdx(&state_ikfom::pos),
+      MTK::getStartIdx(&state_ikfom::rot), MTK::getStartIdx(&state_ikfom::vel),
+      MTK::getStartIdx(&state_ikfom::bg), MTK::getStartIdx(&state_ikfom::ba)};
+  for (int block = 0; block < 5; ++block)
+    lift.block<3, 3>(indices[block], 3 * block).setIdentity();
+  Eigen::Matrix<double, 2, 3> gravity_cartesian_to_S2;
+  state.grav.S2_Nx_yy(gravity_cartesian_to_S2);
+  lift.block<2, 2>(MTK::getStartIdx(&state_ikfom::grav), 15) =
+      gravity_cartesian_to_S2 * basis;
+  Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> covariance =
+      lift * input_covariance * lift.transpose();
+  enforceFixedExtrinsicConstraint(state, covariance, state.offset_R_L_I,
+                                  state.offset_T_L_I);
+  if (!covariance.allFinite() ||
+      (covariance-covariance.transpose()).cwiseAbs().maxCoeff() > 1e-8 ||
+      Eigen::LLT<decltype(covariance)>(covariance).info() != Eigen::Success)
+    return fail(failure_reason, "invalid_lifted_moving_covariance");
+  // All validation precedes mutation. No candidate/commit initialization bypass.
+  impl_->filter.change_x(state);
+  impl_->filter.change_P(covariance);
+  impl_->fixed_rotation = state.offset_R_L_I;
+  impl_->fixed_translation = state.offset_T_L_I;
+  impl_->stamp_ns = initial.stamp_ns;
+  impl_->is_initialized = true;
+  return postconditionsValid(failure_reason);
+}
+
 bool FastLio2IkfomFrontend::predictInterval(
     const ImuSample& head, const ImuSample& tail, std::string* failure_reason) {
   if (failure_reason) failure_reason->clear();

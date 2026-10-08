@@ -65,6 +65,26 @@ struct FilterSnapshot {
   Eigen::MatrixXd covariance;
 };
 
+// A caller must first validate the causal estimator/observability contract.
+// This API validates and injects a state; it does not estimate a moving state.
+struct MovingInitializationState {
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+  uint64_t stamp_ns = 0;
+  Pose3d map_T_imu;
+  Eigen::Vector3d velocity_map = Eigen::Vector3d::Zero();
+  Eigen::Vector3d gyro_bias_imu = Eigen::Vector3d::Zero();
+  Eigen::Vector3d accel_bias_imu = Eigen::Vector3d::Zero();
+  Eigen::Vector3d gravity_map = Eigen::Vector3d::Zero();
+  Pose3d T_imu_lidar;
+  // Orthonormal map-frame gravity perturbation basis, perpendicular to gravity.
+  // Covariance order: p(map), R(right/body), v(map), bg(IMU), ba(IMU),
+  // gravity perturbation in this basis (m/s^2, NOT IKFoM angular S2 coordinates).
+  Eigen::Matrix<double, 3, 2> gravity_tangent_basis =
+      Eigen::Matrix<double, 3, 2>::Zero();
+  Eigen::Matrix<double, 17, 17> covariance =
+      Eigen::Matrix<double, 17, 17>::Zero();
+};
+
 struct PoseCorrectionDelta {
   Eigen::Vector3d position = Eigen::Vector3d::Zero();
   Eigen::Vector3d rotation = Eigen::Vector3d::Zero();

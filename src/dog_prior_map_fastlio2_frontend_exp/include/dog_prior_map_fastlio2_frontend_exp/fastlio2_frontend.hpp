@@ -48,6 +48,9 @@ class FastLio2IkfomFrontend {
       const Pose3d& T_imu_lidar,
       std::string* failure_reason);
 
+  bool initializeMoving(const MovingInitializationState& initial,
+                        std::string* failure_reason);
+
   bool predictInterval(const ImuSample& head, const ImuSample& tail,
                        std::string* failure_reason);
   bool predictImuSequence(
