@@ -1,0 +1,26 @@
+{
+  "artifacts": {
+    "oracle_parity.csv": "83e1db585d9028e89d54f941b00c2eae8d4cdcc8de27c9b54629f11f223cd44b"
+  },
+  "cluster_git_sha": "9945c4f5c3d7759104de108a594bcaf2553fd78c",
+  "cluster_source_sha256": "13dd0a7fe9fe87506f1f3728a81a6c81faa5afbbd0789cc4e8fc4cc89fa38805",
+  "extractor_sha256": "486b37246b6aade4ccda91f26e775451b64483e7aba0fc8da6f4c053d3a6409e",
+  "frames": 24,
+  "frozen_geometry_library": "/tmp/p9_r4_release.Eirto1/libp9_r4_oracle_geometry.so",
+  "frozen_geometry_library_sha256": "bf46ffcc35ba07e5200d9ddb2d7623af69e69d69154d9cbc41545f607d84dd91",
+  "gt_loaded": false,
+  "input_sha256": {
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/candidates.csv": "c5f3d1b61f9a799c0f02009a8ae8ef8c52a40ac9b350165bdfd6c7d95bdce62f",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/clusters/mode_clusters.csv": "5e3b29e8c179894dca0437e99ebeb6f8b875ea768b08d7afa93d6088df3e05ef",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/dual_u.csv": "42b281ef9aca9ecc494e1ca448a3a15cb58b7d66e89dee2cd2b52d5e438a9966",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/frozen/cohort_frozen.csv": "24513cc9ffe73b817e5da7f40d4e025551a006220fc7f0ea44996d7f89d44a42"
+  },
+  "major": 9,
+  "major_definition_source": "p9_ndt_energy_contract.cpp: energy_gap_limit/separated/gap",
+  "major_definition_source_sha256": "a33c050749cdaf11ecf3e6fe2853a78a3b9fdc5f843bac14967a835962df6dbf",
+  "major_ids": 22,
+  "new_ndt_calls": 0,
+  "no_major": 15,
+  "ordered_pool_sha256": "e877aeec2b6df1fa49dd11bc837b748612ec17b0b5a2d850fa018ed99b624d37",
+  "status": "PASS"
+}

@@ -1,0 +1,986 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="(empty)"
+	BuildStamp="20261008-0559-Experimental"
+	Name="(empty)"
+	Generator="ctest-3.16.3"
+	CompilerName=""
+	CompilerVersion=""
+	OSName="Linux"
+	Hostname="jian-Lenovo-ThinkBook-14p-Gen-2"
+	OSRelease="5.15.0-139-generic"
+	OSVersion="#149~20.04.1-Ubuntu SMP Wed Apr 16 08:29:56 UTC 2025"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="AuthenticAMD"
+	VendorID="Advanced Micro Devices"
+	FamilyID="25"
+	ModelID="80"
+	ProcessorCacheSize="512"
+	NumberOfLogicalCPU="16"
+	NumberOfPhysicalCPU="8"
+	TotalVirtualMemory="2047"
+	TotalPhysicalMemory="13832"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="1300"
+	>
+	<Testing>
+		<StartDateTime>Oct 08 14:05 CST</StartDateTime>
+		<StartTestTime>1791439534</StartTestTime>
+		<TestList>
+			<Test>./p9_r4_selection_self_test</Test>
+			<Test>./p9_r4_oracle_geometry_self_test</Test>
+			<Test>./p9_r4_ndt_proposal_self_test</Test>
+			<Test>./p9_r4_oracle_label_self_test</Test>
+			<Test>./p9_r4_blind_freeze_chain_self_test</Test>
+			<Test>./p9_r3b_admission_boundary_cheirality_self_test</Test>
+			<Test>./p9_r3b_information_order_self_test</Test>
+			<Test>./p9_r3a_depth_geometry_self_test</Test>
+			<Test>./p9_r3a_direct_pnp_self_test</Test>
+			<Test>./p9_r3a_stage_gate_self_test</Test>
+			<Test>./p9_r3_visual_contract_self_test</Test>
+			<Test>./p9_r3_blind_evidence_self_test</Test>
+			<Test>./p9_r3_frame_statistics_self_test</Test>
+			<Test>./p9_r2b_chart_self_test</Test>
+			<Test>./p9_r2b_evidence_self_test</Test>
+			<Test>./p9_r2b_statistics_self_test</Test>
+			<Test>./p9_r1c3_self_test</Test>
+			<Test>./p9_r1c3a_contract_self_test</Test>
+			<Test>./p9_r1c3b_discrete_support_self_test</Test>
+			<Test>./p9_r1c3b_statistics_self_test</Test>
+			<Test>./p9_r2_terminal_stability_self_test</Test>
+			<Test>./p9_r2_terminal_stability_statistics_self_test</Test>
+			<Test>./p9_r2a_proposal_self_test</Test>
+			<Test>./p9_r2a_orchestration_self_test</Test>
+			<Test>./p9_r2a_statistics_self_test</Test>
+			<Test>./p9_r1c3a_audit_self_test</Test>
+			<Test>./p9_r1c3_audit_self_test</Test>
+			<Test>./p9_h2_proposal_self_test</Test>
+			<Test>./p9_h2_statistics_self_test</Test>
+			<Test>./p9_math_self_test</Test>
+			<Test>./p9_r1a_self_test</Test>
+			<Test>./p9_r1b_self_test</Test>
+			<Test>./p9_r1c_self_test</Test>
+			<Test>./p9_r1c2_numerical_self_test</Test>
+			<Test>./p9_r1c2_multih_audit_self_test</Test>
+			<Test>./p9_r1c_certificate_audit</Test>
+			<Test>./p9_r1b_orchestration_test</Test>
+			<Test>./p9_r1b_inference_regression</Test>
+		</TestList>
+		<Test Status="passed">
+			<Name>p9_r4_selection_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r4_selection_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r4_contract.py" "self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.22279</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r4_contract.py" "self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R4_LABEL_BLIND_SELECTION_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r4_oracle_geometry_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r4_oracle_geometry_self_test</FullName>
+			<FullCommandLine>/tmp/p9_r4_release.Eirto1/p9_r4_oracle_geometry_self_test</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.00340444</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/tmp/p9_r4_release.Eirto1/p9_r4_oracle_geometry_self_test</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R4_FROZEN_ORACLE_FLOAT_BOUNDARY_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r4_ndt_proposal_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r4_ndt_proposal_self_test</FullName>
+			<FullCommandLine>/tmp/p9_r4_release.Eirto1/p9_r4_ndt "--self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.0282843</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/tmp/p9_r4_release.Eirto1/p9_r4_ndt "--self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R4_NDT_PROPOSAL_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r4_oracle_label_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r4_oracle_label_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r4_oracle_labels.py" "self-test" "--library" "/tmp/p9_r4_release.Eirto1/libp9_r4_oracle_geometry.so"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.193081</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r4_oracle_labels.py" "self-test" "--library" "/tmp/p9_r4_release.Eirto1/libp9_r4_oracle_geometry.so"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R4_ORACLE_LABEL_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r4_blind_freeze_chain_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r4_blind_freeze_chain_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r4_evidence.py" "self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.966236</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r4_evidence.py" "self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value encoding="base64" compression="gzip">eJx1jrtuwyAUhvc8BS9Qy2lIVA8dMIEaiWAELM1y5DRUtUSNZbu3t69NOlStsp3/6PsvvGmDP6MpohCbM9Jf00vskP+cfDe28/UcBySPGI1vfR+HKUviKb72gx8T8NGGgLo4oZNHzfuc1pyCz1a6AINBkpJJKKVQe7BMMupErZaLg2PW3Wti7co+KlcxJyhopWEvzA9GZtOBCUiaC0rSd7GgdYa3RY7z9e4OF7fbYuNv8l3q3PwJWQKcIcry2hyub/g998GBUAt+KRS2luS6h9ZVbRxQIkVpLhw3jB0Z0IqIf6ZvUPpwtA==</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r3b_admission_boundary_cheirality_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r3b_admission_boundary_cheirality_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r3b_pnp_frontend.py"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.325338</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r3b_pnp_frontend.py"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R3B_ADMISSION_BOUNDARY_PARITY_CHEIRALITY_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r3b_information_order_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r3b_information_order_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/evaluate_r3b_pnp_admission.py" "self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.899202</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/evaluate_r3b_pnp_admission.py" "self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>Failed to load Python extension for LZ4 support. LZ4 compression will not be available.
+P9_R3B_INFORMATION_ORDER_QUALITY_GATE_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r3a_depth_geometry_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r3a_depth_geometry_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r3a_depth_completion.py"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.299933</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r3a_depth_completion.py"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R3A_DIRECT_PLANE_DISCONTINUITY_HULL_RAY_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r3a_direct_pnp_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r3a_direct_pnp_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r3a_visual_frontend.py"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.317852</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r3a_visual_frontend.py"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R3A_TRACKING_DIRECT_PNP_REPLAY_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r3a_stage_gate_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r3a_stage_gate_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/evaluate_r3a_metric_depth_coverage.py" "self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>1.41662</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/evaluate_r3a_metric_depth_coverage.py" "self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>Failed to load Python extension for LZ4 support. LZ4 compression will not be available.
+P9_R3A_COVERAGE_GEOMETRY_STAGE_GATE_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r3_visual_contract_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r3_visual_contract_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r3_visual_contract.py"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.307954</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r3_visual_contract.py"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>SYNTHETIC_PNP_DIRECTION_AND_MEI_RECTIFICATION_PASS 1.459040168492593e-06
+P9_R3_PNP_DIRECTION_MEI_TRANSFORM_SELECTION_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r3_blind_evidence_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r3_blind_evidence_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/build_r3_visual_evidence.py" "self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.333933</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/build_r3_visual_evidence.py" "self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value encoding="base64" compression="gzip">eJxdjTEOgzAQBPu8Ih9IZIJBcZHCMUdyEj5bvqOguir//0IMckW3u9LM8kbyBcGgmbJOWCAIJlJPk0ZAPfqMwR9r9szX7m4HZ6zpxqd1j8H1v5sZL9lp6U+SXSDFE8+pRGVY2l7TrAIsr13Y0PeC9TMkYilr45EZ6aMQs2yVkjP5B01QNxU=</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r3_frame_statistics_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r3_frame_statistics_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/evaluate_r3_visual_evidence.py" "self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.595449</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/evaluate_r3_visual_evidence.py" "self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R3_COVERAGE_FRAME_STATISTICS_GATE_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r2b_chart_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r2b_chart_self_test</FullName>
+			<FullCommandLine>/tmp/p9_r4_release.Eirto1/p9_r2b_chart_self_test</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.00276742</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/tmp/p9_r4_release.Eirto1/p9_r2b_chart_self_test</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R2B_MATRIX_PRODUCT_CHART_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r2b_evidence_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r2b_evidence_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r2b_nonoracle_evidence.py" "self-test" "--library" "/tmp/p9_r4_release.Eirto1/libp9_r2b_chart.so"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.177808</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r2b_nonoracle_evidence.py" "self-test" "--library" "/tmp/p9_r4_release.Eirto1/libp9_r2b_chart.so"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R2B_NONORACLE_EVIDENCE_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r2b_statistics_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r2b_statistics_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/evaluate_r2b_nonoracle_evidence.py" "self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.473467</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/evaluate_r2b_nonoracle_evidence.py" "self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R2B_FRAME_STATISTICS_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r1c3_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r1c3_self_test</FullName>
+			<FullCommandLine>/tmp/p9_r4_release.Eirto1/p9_secondgen_branch_gate "--self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.03093</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/tmp/p9_r4_release.Eirto1/p9_secondgen_branch_gate "--self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R1C3_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r1c3a_contract_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r1c3a_contract_self_test</FullName>
+			<FullCommandLine>/tmp/p9_r4_release.Eirto1/p9_r1c3a_contract_closure "--self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.0187714</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/tmp/p9_r4_release.Eirto1/p9_r1c3a_contract_closure "--self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R1C3A_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r1c3b_discrete_support_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r1c3b_discrete_support_self_test</FullName>
+			<FullCommandLine>/tmp/p9_r4_release.Eirto1/p9_discrete_support_evidence "--self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.0192122</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/tmp/p9_r4_release.Eirto1/p9_discrete_support_evidence "--self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R1C3B_DISCRETE_SUPPORT_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r1c3b_statistics_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r1c3b_statistics_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r1c3b_discrete_support_evidence.py" "--self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.146348</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r1c3b_discrete_support_evidence.py" "--self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R1C3B_STATISTICS_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r2_terminal_stability_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r2_terminal_stability_self_test</FullName>
+			<FullCommandLine>/tmp/p9_r4_release.Eirto1/p9_r2_terminal_stability "--self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.0194808</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/tmp/p9_r4_release.Eirto1/p9_r2_terminal_stability "--self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R2_TERMINAL_STABILITY_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r2_terminal_stability_statistics_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r2_terminal_stability_statistics_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r2_terminal_stability.py" "self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.244393</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r2_terminal_stability.py" "self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R2_STATISTICS_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r2a_proposal_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r2a_proposal_self_test</FullName>
+			<FullCommandLine>/tmp/p9_r4_release.Eirto1/p9_r2a_predictor_search "--self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.019394</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/tmp/p9_r4_release.Eirto1/p9_r2a_predictor_search "--self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R2A_PROPOSAL_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r2a_orchestration_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r2a_orchestration_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r2a_predictor_search.py" "self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.113437</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r2a_predictor_search.py" "self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>R2A_ORCHESTRATION_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r2a_statistics_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r2a_statistics_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/summarize_r2a_predictor_search.py" "self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.188204</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/summarize_r2a_predictor_search.py" "self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>R2A_STATISTICS_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r1c3a_audit_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r1c3a_audit_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r1c3a_contract_closure.py" "self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.04414</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r1c3a_contract_closure.py" "self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R1C3A_AUDIT_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r1c3_audit_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r1c3_audit_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r1c3_branch_gate.py" "self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.180533</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_r1c3_branch_gate.py" "self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R1C3_AUDIT_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_h2_proposal_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_h2_proposal_self_test</FullName>
+			<FullCommandLine>/tmp/p9_r4_release.Eirto1/p9_h2_matched_discovery "--self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.0188704</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/tmp/p9_r4_release.Eirto1/p9_h2_matched_discovery "--self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>H2_PROPOSAL_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_h2_statistics_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_h2_statistics_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_h2_discovery.py" "self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.426369</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_h2_discovery.py" "self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>H2_STATISTICS_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_math_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_math_self_test</FullName>
+			<FullCommandLine>/tmp/p9_r4_release.Eirto1/p9_ndt_energy_contract "--self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.0240777</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/tmp/p9_r4_release.Eirto1/p9_ndt_energy_contract "--self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_MATH_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r1a_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r1a_self_test</FullName>
+			<FullCommandLine>/tmp/p9_r4_release.Eirto1/p9_true_profile_closure "--self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.0191637</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/tmp/p9_r4_release.Eirto1/p9_true_profile_closure "--self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R1A_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r1b_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r1b_self_test</FullName>
+			<FullCommandLine>/tmp/p9_r4_release.Eirto1/p9_strong_attractor_closure "--self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.0243176</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/tmp/p9_r4_release.Eirto1/p9_strong_attractor_closure "--self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R1B_REUSE_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r1c_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r1c_self_test</FullName>
+			<FullCommandLine>/tmp/p9_r4_release.Eirto1/p9_support_aware_continuation "--self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.0273884</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/tmp/p9_r4_release.Eirto1/p9_support_aware_continuation "--self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R1C_FROZEN_BRANCH_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r1c2_numerical_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r1c2_numerical_self_test</FullName>
+			<FullCommandLine>/tmp/p9_r4_release.Eirto1/p9_numerical_stationarity "--self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.0188733</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/tmp/p9_r4_release.Eirto1/p9_numerical_stationarity "--self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R1C2_NUMERICAL_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r1c2_multih_audit_self_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r1c2_multih_audit_self_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_numerical_stationarity.py" "--self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.100387</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_numerical_stationarity.py" "--self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>R1C2_MULTIH_AUDIT_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r1c_certificate_audit</Name>
+			<Path>.</Path>
+			<FullName>./p9_r1c_certificate_audit</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_support_aware_continuation.py" "--self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.170559</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_support_aware_continuation.py" "--self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>P9_R1C_CERTIFICATE_AUDIT_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r1b_orchestration_test</Name>
+			<Path>.</Path>
+			<FullName>./p9_r1b_orchestration_test</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_strong_attractor_experiment.py" "--self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.177358</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/run_strong_attractor_experiment.py" "--self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>R1B_ORCHESTRATION_SELF_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<Test Status="passed">
+			<Name>p9_r1b_inference_regression</Name>
+			<Path>.</Path>
+			<FullName>./p9_r1b_inference_regression</FullName>
+			<FullCommandLine>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/summarize_strong_attractor_closure.py" "--self-test"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.16541</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/usr/bin/python3.8 "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/summarize_strong_attractor_closure.py" "--self-test"</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value>R1B_INFERENCE_REGRESSION_TEST=PASS
+</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<EndDateTime>Oct 08 14:05 CST</EndDateTime>
+		<EndTestTime>1791439543</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>

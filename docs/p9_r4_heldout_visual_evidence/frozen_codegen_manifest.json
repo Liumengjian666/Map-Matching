@@ -1,0 +1,13 @@
+{
+  "extraction": "verbatim contiguous frozen regions, no rewriting",
+  "generated_sha256": {
+    "p9_r4_frozen_geometry.hpp": "17cae4221ea8b659787e9f23a10cc54054c447b545b385fb14c9441174acb70a",
+    "p9_r4_frozen_seeds.hpp": "2ca721ba4704c84f73982b03b9474df0504a493007d72a7e86ddcc53f6189ad4"
+  },
+  "generator_git_sha": "9945c4f5c3d7759104de108a594bcaf2553fd78c",
+  "source_sha256": {
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p7/dual_u_r1_multistart_runner.cpp": "7a7cb338e3270fee74af4dc06aa89a4415942879cdb25d49352b523fdd32deac",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_ndt_energy_contract.cpp": "a33c050749cdaf11ecf3e6fe2853a78a3b9fdc5f843bac14967a835962df6dbf"
+  },
+  "start_sha": "3a98a3cd1d64d7aba6888d3136295a0b41c38fa6"
+}

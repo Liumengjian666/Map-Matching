@@ -1,0 +1,62 @@
+{
+  "artifacts": {
+    "heldout_ordered_pool.csv": "e877aeec2b6df1fa49dd11bc837b748612ec17b0b5a2d850fa018ed99b624d37"
+  },
+  "branch": "research/p9-r4-heldout-visual-evidence",
+  "construction_source_sha256": {
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r4_heldout_visual_evidence/THEORY.md": "7d754f6f48875d0e15011b5615c7c1f1b7a14156c0e1a951ed2c1febc01a6442",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r4_contract.py": "00ce1d6f140574c2ae523a8f94e8019e54617f1d00119f9a6395ffeb04b4a057"
+  },
+  "development": [
+    120,
+    244,
+    368,
+    616,
+    740,
+    838,
+    839,
+    864,
+    924,
+    925,
+    1111,
+    1235,
+    1359,
+    1497,
+    1498,
+    1556,
+    1557,
+    1606,
+    1730,
+    1854,
+    2102,
+    2226,
+    2350,
+    2598,
+    2722,
+    2846,
+    3094,
+    3217,
+    3341,
+    3631,
+    3796,
+    3962
+  ],
+  "development_exclusion_radius": 8,
+  "eligible_count": 3630,
+  "gt_loaded": false,
+  "hash_prefix": "P9_R4_FLOOR01_HELDOUT_V1_20261008:",
+  "input_sha256": {
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/registration.csv": "202bf4036513c32276bc2f5ef2bebfc239358edc90c1d1f52fa6b2540deb4672"
+  },
+  "minimum_target_separation": 16,
+  "oracle_labels_loaded": false,
+  "ordered_pool_count": 160,
+  "prefix_sizes": [
+    96,
+    128,
+    160
+  ],
+  "selection_rule": "SHA256 lexicographic, greedy separation, no outcome filtering",
+  "start_sha": "3a98a3cd1d64d7aba6888d3136295a0b41c38fa6",
+  "visual_measurements_loaded": false
+}

@@ -1,0 +1,63 @@
+{
+  "GT_LOADED": false,
+  "NEW_NDT_CALLS": 0,
+  "build_type": "Release",
+  "commands": [
+    {
+      "command": [
+        "cmake",
+        "-S",
+        "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9",
+        "-B",
+        "/tmp/p9_r4_release.Eirto1",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "cwd": "/tmp/dog_loc_paper_r4_ws.Fq21k2",
+      "exit_code": 0,
+      "log_sha256": "edc411d5c3e3c0a738fdd6b5346b96d92e31f587a570e5cdd0c528a54b421406",
+      "raw_command_output_sha256": "edc411d5c3e3c0a738fdd6b5346b96d92e31f587a570e5cdd0c528a54b421406",
+      "trailing_whitespace_normalized": true
+    },
+    {
+      "command": [
+        "cmake",
+        "--build",
+        "/tmp/p9_r4_release.Eirto1",
+        "-j",
+        "2"
+      ],
+      "cwd": "/tmp/dog_loc_paper_r4_ws.Fq21k2",
+      "exit_code": 0,
+      "log_sha256": "a35854a016a57ae5e761970756b835b16f0670fa7906d1a3ba4dad249dddd71d",
+      "raw_command_output_sha256": "a35854a016a57ae5e761970756b835b16f0670fa7906d1a3ba4dad249dddd71d",
+      "trailing_whitespace_normalized": true
+    },
+    {
+      "command": [
+        "ctest",
+        "--output-on-failure",
+        "-T",
+        "Test"
+      ],
+      "cwd": "/tmp/p9_r4_release.Eirto1",
+      "exit_code": 0,
+      "log_sha256": "b0f201b854f23f4dc088d9c8507d2d2cdb4ded491c3cefb284e1eef3932ab735",
+      "raw_command_output_sha256": "92a14ba7ef07ea3b03c367b1930ced54ca2e683fd39a567c328fb48956ead4b6",
+      "trailing_whitespace_normalized": true
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/tmp/dog_loc_paper_r4_ws.Fq21k2",
+      "exit_code": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "raw_command_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "trailing_whitespace_normalized": true
+    }
+  ],
+  "passed": 38,
+  "test_count": 38
+}

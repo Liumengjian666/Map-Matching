@@ -18,12 +18,16 @@ add_executable(p9_r1c3a_contract_closure p9_r1c3a_contract_closure.cpp)
 add_executable(p9_discrete_support_evidence p9_discrete_support_evidence.cpp)
 add_executable(p9_r2_terminal_stability p9_r2_terminal_stability.cpp)
 add_executable(p9_r2a_predictor_search p9_r2a_predictor_search.cpp)
-foreach(p9_target p9_ndt_energy_contract p9_true_profile_closure p9_strong_attractor_closure p9_support_aware_continuation p9_numerical_stationarity p9_h2_matched_discovery p9_secondgen_branch_gate p9_r1c3a_contract_closure p9_discrete_support_evidence p9_r2_terminal_stability p9_r2a_predictor_search)
+add_executable(p9_r4_ndt p9_r4_ndt.cpp)
+add_executable(p9_r4_source_audit p9_r4_source_audit.cpp)
+foreach(p9_target p9_ndt_energy_contract p9_true_profile_closure p9_strong_attractor_closure p9_support_aware_continuation p9_numerical_stationarity p9_h2_matched_discovery p9_secondgen_branch_gate p9_r1c3a_contract_closure p9_discrete_support_evidence p9_r2_terminal_stability p9_r2a_predictor_search p9_r4_ndt p9_r4_source_audit)
   target_compile_features(${p9_target} PRIVATE cxx_std_14)
   target_include_directories(${p9_target} PRIVATE ${PCL_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${LIBUSB_INCLUDE_DIRS})
   target_compile_definitions(${p9_target} PRIVATE ${PCL_DEFINITIONS})
   target_link_libraries(${p9_target} PRIVATE ${PCL_LIBRARIES} ${LIBUSB_LIBRARIES})
 endforeach()
+target_include_directories(p9_r4_ndt PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/r4_frozen
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 
 add_library(p9_r2b_chart SHARED p9_r2b_chart.cpp)
 add_executable(p9_r2b_chart_self_test p9_r2b_chart.cpp)
@@ -33,7 +37,29 @@ foreach(math_target p9_r2b_chart p9_r2b_chart_self_test)
 endforeach()
 target_compile_definitions(p9_r2b_chart_self_test PRIVATE P9_R2B_CHART_TEST_MAIN)
 
+execute_process(COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/p9_r4_codegen.py
+  ${CMAKE_CURRENT_BINARY_DIR}/r4_frozen RESULT_VARIABLE r4_codegen_status)
+if(NOT r4_codegen_status EQUAL 0)
+  message(FATAL_ERROR "R4 frozen source extraction failed")
+endif()
+add_library(p9_r4_oracle_geometry SHARED p9_r4_oracle_geometry.cpp)
+add_executable(p9_r4_oracle_geometry_self_test p9_r4_oracle_geometry.cpp)
+foreach(math_target p9_r4_oracle_geometry p9_r4_oracle_geometry_self_test)
+  target_compile_features(${math_target} PRIVATE cxx_std_14)
+  target_include_directories(${math_target} PRIVATE ${EIGEN3_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR}/r4_frozen)
+endforeach()
+target_compile_definitions(p9_r4_oracle_geometry_self_test PRIVATE P9_R4_ORACLE_GEOMETRY_TEST_MAIN)
+
 enable_testing()
+add_test(NAME p9_r4_selection_self_test COMMAND ${Python3_EXECUTABLE}
+  ${CMAKE_CURRENT_SOURCE_DIR}/p9_r4_contract.py self-test)
+add_test(NAME p9_r4_oracle_geometry_self_test COMMAND p9_r4_oracle_geometry_self_test)
+add_test(NAME p9_r4_ndt_proposal_self_test COMMAND p9_r4_ndt --self-test)
+set_tests_properties(p9_r4_ndt_proposal_self_test PROPERTIES ENVIRONMENT "LD_LIBRARY_PATH=/lib/x86_64-linux-gnu")
+add_test(NAME p9_r4_oracle_label_self_test COMMAND ${Python3_EXECUTABLE}
+  ${CMAKE_CURRENT_SOURCE_DIR}/p9_r4_oracle_labels.py self-test --library $<TARGET_FILE:p9_r4_oracle_geometry>)
+add_test(NAME p9_r4_blind_freeze_chain_self_test COMMAND ${Python3_EXECUTABLE}
+  ${CMAKE_CURRENT_SOURCE_DIR}/run_r4_evidence.py self-test)
 add_test(NAME p9_r3b_admission_boundary_cheirality_self_test COMMAND ${Python3_EXECUTABLE}
   ${CMAKE_CURRENT_SOURCE_DIR}/p9_r3b_pnp_frontend.py)
 add_test(NAME p9_r3b_information_order_self_test COMMAND ${Python3_EXECUTABLE}
