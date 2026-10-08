@@ -1,0 +1,17 @@
+[  5%] Built target p9_r2b_chart_self_test
+[ 11%] Built target p9_r4_oracle_geometry_self_test
+[ 17%] Built target p9_h2_matched_discovery
+[ 23%] Built target p9_ndt_energy_contract
+[ 29%] Built target p9_r2b_chart
+[ 35%] Built target p9_support_aware_continuation
+[ 41%] Built target p9_strong_attractor_closure
+[ 47%] Built target p9_r1c3a_contract_closure
+[ 52%] Built target p9_numerical_stationarity
+[ 70%] Built target p9_secondgen_branch_gate
+[ 70%] Built target p9_discrete_support_evidence
+[ 70%] Built target p9_r2a_predictor_search
+[ 76%] Built target p9_true_profile_closure
+[ 82%] Built target p9_r4_oracle_geometry
+[ 88%] Built target p9_r4_ndt
+[ 94%] Built target p9_r2_terminal_stability
+[100%] Built target p9_r4_source_audit

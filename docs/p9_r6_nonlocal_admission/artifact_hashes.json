@@ -1,0 +1,29 @@
+{
+  "artifacts": {
+    "REPORT.md": "0e6b2074843439fdf5e616b8e14c5f8bd45c29a461530e3c3e2299f5f4a5cda8",
+    "THEORY.md": "836feab07c120744007b4cb185584bf31a934f1d0617d542410f14ae164a48c8",
+    "boundary_straddling.csv": "e6804b3eeda611f7968b48fba3fb8bc87e7e824785aa4e617fc64c53ff2e06d1",
+    "cluster_representative_parity.csv": "686597ad98f4e6249141e7d80ba8ab272b514447e62d95934d456a154caad53d",
+    "evidence_freeze.json": "f97ddb803c6b5cfe4e16c2f057b7c9281880ed8d59d0d800006554c827449b95",
+    "exploratory_evaluation.json": "dbd03ee74b536a1485e1f122d0baaee0152d1d6877539f7e4a3bbd38b4d256e0",
+    "frame_level_evidence.csv": "38c0526e188f25c5c8de8502ffe9c4e8cdf60f1563ceab7f8b1528938cee5456",
+    "major_no_major_statistics.csv": "29a3294f76642c0e6bc13bf52cb4c47a133629bee8f42edd21f3b8fb36c801ce",
+    "nearoptimal_candidates.csv": "ca50c4b75224180541588a2535ee9f7ba023acea347546a1f55d51a1fd07fdef",
+    "no_major_safety.csv": "78f035982b3c127388bc9403fa2f00e0ab4a1903839fad0a7271ad63807d7d3a",
+    "nominal_disfavored.csv": "becf0874ae4f11cc60ed29d80f85c10db47212ea9ca965db98d5566910f72721",
+    "r5_failure_case_transition.csv": "25b9736b4cd2a5e8a185c9b23fc6b1c770bd24ebb8cbca49c76f6ea511c310bb",
+    "results.json": "8207172b0fe31c6bbd199f72ebe5d440ff15558e6aec3d5ad5d8feb896fe86ac",
+    "runtime_breakdown.csv": "93b8fe1681561d215c2244d17b8ff113796dc343b96a82160801011e0c83659b",
+    "strict_parity.csv": "726d1352625852753f52985e9965a555e026231b743babfbcbaabc01d07e39b4",
+    "verification/VERIFICATION.md": "6cd357e27fec5e2704469e1a067d6a19981bbd19febf2382fc8c8b810e452c75",
+    "verification/isolation_self_test.log": "a0874943f4e46e6509419b80f288943e4469fdfcfb8a4541bc90ca06483fc662",
+    "verification/numerical_self_test.log": "3222d953350a69b1bb211771c9a9e13976b60721dede7944c092765e561eb3c8",
+    "verification/p9_tests.log": "00448f431bae2087cde049c3eb6d870f11b0294b099710482768b866be2c2f5c",
+    "verification/release_build.log": "a0490840bf5a366495d5da07fe70f7e27b2e073a776061fbe194344d0f36918f",
+    "verification/statistics_self_test.log": "05b1c780e83451aa884d40bcc4639ebf0b9f2490dd011a4bda16cb60fc0e4cf5"
+  },
+  "sources": {
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r6_nearoptimal.py": "f439ca6100fe5c38d093cffac21b0a6f0a730f3e49880a12adb270196fe059bc",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/summarize_r6_admission.py": "f8f9a224500b5b8e75a0bda2049d46eaf31f4bd9172c17b673b9450c9a74e9cc"
+  }
+}

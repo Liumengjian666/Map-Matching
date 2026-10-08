@@ -1,0 +1,58 @@
+{
+  "BASELINE_REPLAY_CALLS": 0,
+  "GT_LOADED": false,
+  "NEW_NDT_CALLS": 0,
+  "ORACLE_LABELS_LOADED_BY_EVIDENCE": false,
+  "VISUAL_EXTRACTION": 0,
+  "allowed_data_reads": [
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r4_heldout_visual_evidence/artifact_hashes.json",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r4_heldout_visual_evidence/candidate/conditioned_weak_runs.csv",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r4_heldout_visual_evidence/candidate/terminal_clusters.csv",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r4_heldout_visual_evidence/heldout_final_cohort.csv",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r4_heldout_visual_evidence/oracle/oracle_candidates.csv",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r5_candidate_bottleneck/artifact_hashes.json",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r5_candidate_bottleneck/full263_terminal_clusters.csv",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r6_nonlocal_admission/THEORY.md",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r6_nonlocal_admission/boundary_straddling.csv",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r6_nonlocal_admission/cluster_representative_parity.csv",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r6_nonlocal_admission/frame_level_evidence.csv",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r6_nonlocal_admission/nearoptimal_candidates.csv",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r6_nonlocal_admission/nominal_disfavored.csv",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r6_nonlocal_admission/runtime_breakdown.csv",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r2b_chart.cpp",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r2b_nonoracle_evidence.py",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r4_contract.py",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r6_nearoptimal.py",
+    "/tmp/p9_r4_release.Eirto1/libp9_r2b_chart.so"
+  ],
+  "artifacts": {
+    "boundary_straddling.csv": "e6804b3eeda611f7968b48fba3fb8bc87e7e824785aa4e617fc64c53ff2e06d1",
+    "cluster_representative_parity.csv": "686597ad98f4e6249141e7d80ba8ab272b514447e62d95934d456a154caad53d",
+    "frame_level_evidence.csv": "38c0526e188f25c5c8de8502ffe9c4e8cdf60f1563ceab7f8b1528938cee5456",
+    "nearoptimal_candidates.csv": "ca50c4b75224180541588a2535ee9f7ba023acea347546a1f55d51a1fd07fdef",
+    "nominal_disfavored.csv": "becf0874ae4f11cc60ed29d80f85c10db47212ea9ca965db98d5566910f72721",
+    "runtime_breakdown.csv": "93b8fe1681561d215c2244d17b8ff113796dc343b96a82160801011e0c83659b"
+  },
+  "chart_library_sha256": "2a71c945f5b23b1eacdf4f73a63aba86fd509d2c556392652a0eda7c723cb711",
+  "code_sha256": "f439ca6100fe5c38d093cffac21b0a6f0a730f3e49880a12adb270196fe059bc",
+  "frozen_source_sha256": {
+    "p9_r2b_chart.cpp": "ab9409c4d99a69d37aedfb954bd0eb99dcd9948ba8a3170a3ebeb880cb11c6cc",
+    "p9_r2b_nonoracle_evidence.py": "6be41da57156b0fdffff812f4d27e79a8993ecc50b411244ca4a1aea45eaaf9a",
+    "p9_r4_contract.py": "00ce1d6f140574c2ae523a8f94e8019e54617f1d00119f9a6395ffeb04b4a057"
+  },
+  "gamma": 0.05,
+  "input_hash_and_load_seconds": 1.0597146899672225,
+  "input_sha256": {
+    "docs/p9_r4_heldout_visual_evidence/artifact_hashes.json": "f06ca819daff4325e77afe44845847848822e57b705b02995a0cfb702798d33b",
+    "docs/p9_r4_heldout_visual_evidence/candidate/conditioned_weak_runs.csv": "619fb9b03b444205d4118de84b5ea4b1589828937e3caad290e1a51784b9d93b",
+    "docs/p9_r4_heldout_visual_evidence/candidate/terminal_clusters.csv": "18290697042425ecb50a1614c123d27230a4725ce0a7152d79b3e4f2db807215",
+    "docs/p9_r4_heldout_visual_evidence/heldout_final_cohort.csv": "a5448256057045f6f6f2ed3f05acf543aa055f54af7cc42b64125d7ee5b379e7",
+    "docs/p9_r4_heldout_visual_evidence/oracle/oracle_candidates.csv": "9897c21d47a03354ee859e3ab8fb5ed402a15024d22320fad77fc13fde556c3b",
+    "docs/p9_r5_candidate_bottleneck/artifact_hashes.json": "44f8f921ad3442dd3ca1619ec0d8287b54ef27eb5879bf4fd2e22b54f4fb16f6",
+    "docs/p9_r5_candidate_bottleneck/full263_terminal_clusters.csv": "1bb3a3ea8352bdd1d6022f6661f288acc44db7f6f8d5436abb6709cd94ffc9ea"
+  },
+  "offline_build_wall_seconds": 4.130221828003414,
+  "start_sha": "5a95362861464d9b8756e444ea3dcf999e032d6a",
+  "state": "EVIDENCE_FROZEN_BEFORE_LABELS",
+  "theory_sha256": "836feab07c120744007b4cb185584bf31a934f1d0617d542410f14ae164a48c8"
+}

@@ -1,0 +1,87 @@
+Test project /tmp/p9_r4_release.Eirto1
+      Start  3: p9_r4_recovered_frame_statistics_self_test
+      Start 13: p9_r3a_stage_gate_self_test
+      Start  8: p9_r4_blind_freeze_chain_self_test
+      Start  2: p9_r4_recovered_source_guard_self_test
+ 1/41 Test  #2: p9_r4_recovered_source_guard_self_test ...........   Passed    0.39 sec
+      Start  1: p9_r5_full263_admission_self_test
+ 2/41 Test  #3: p9_r4_recovered_frame_statistics_self_test .......   Passed    0.49 sec
+      Start 10: p9_r3b_information_order_self_test
+ 3/41 Test  #1: p9_r5_full263_admission_self_test ................   Passed    0.21 sec
+      Start 16: p9_r3_frame_statistics_self_test
+ 4/41 Test  #8: p9_r4_blind_freeze_chain_self_test ...............   Passed    0.82 sec
+      Start 19: p9_r2b_statistics_self_test
+ 5/41 Test #16: p9_r3_frame_statistics_self_test .................   Passed    0.60 sec
+      Start 32: p9_h2_statistics_self_test
+ 6/41 Test #10: p9_r3b_information_order_self_test ...............   Passed    0.76 sec
+      Start 15: p9_r3_blind_evidence_self_test
+ 7/41 Test #13: p9_r3a_stage_gate_self_test ......................   Passed    1.29 sec
+      Start 12: p9_r3a_direct_pnp_self_test
+ 8/41 Test #19: p9_r2b_statistics_self_test ......................   Passed    0.49 sec
+      Start 14: p9_r3_visual_contract_self_test
+ 9/41 Test #15: p9_r3_blind_evidence_self_test ...................   Passed    0.36 sec
+      Start  9: p9_r3b_admission_boundary_cheirality_self_test
+10/41 Test #14: p9_r3_visual_contract_self_test ..................   Passed    0.32 sec
+      Start 11: p9_r3a_depth_geometry_self_test
+11/41 Test #12: p9_r3a_direct_pnp_self_test ......................   Passed    0.34 sec
+      Start 25: p9_r2_terminal_stability_statistics_self_test
+12/41 Test #32: p9_h2_statistics_self_test .......................   Passed    0.45 sec
+      Start  4: p9_r4_selection_self_test
+13/41 Test  #4: p9_r4_selection_self_test ........................   Passed    0.21 sec
+      Start 28: p9_r2a_statistics_self_test
+14/41 Test #25: p9_r2_terminal_stability_statistics_self_test ....   Passed    0.25 sec
+      Start 18: p9_r2b_evidence_self_test
+15/41 Test  #9: p9_r3b_admission_boundary_cheirality_self_test ...   Passed    0.30 sec
+      Start 30: p9_r1c3_audit_self_test
+16/41 Test #11: p9_r3a_depth_geometry_self_test ..................   Passed    0.30 sec
+      Start 41: p9_r1b_inference_regression
+17/41 Test #28: p9_r2a_statistics_self_test ......................   Passed    0.19 sec
+      Start  7: p9_r4_oracle_label_self_test
+18/41 Test #18: p9_r2b_evidence_self_test ........................   Passed    0.18 sec
+      Start 39: p9_r1c_certificate_audit
+19/41 Test #30: p9_r1c3_audit_self_test ..........................   Passed    0.17 sec
+      Start 40: p9_r1b_orchestration_test
+20/41 Test #41: p9_r1b_inference_regression ......................   Passed    0.18 sec
+      Start 23: p9_r1c3b_statistics_self_test
+21/41 Test #39: p9_r1c_certificate_audit .........................   Passed    0.17 sec
+      Start 27: p9_r2a_orchestration_self_test
+22/41 Test  #7: p9_r4_oracle_label_self_test .....................   Passed    0.19 sec
+      Start 38: p9_r1c2_multih_audit_self_test
+23/41 Test #23: p9_r1c3b_statistics_self_test ....................   Passed    0.15 sec
+      Start 29: p9_r1c3a_audit_self_test
+24/41 Test #40: p9_r1b_orchestration_test ........................   Passed    0.18 sec
+      Start  6: p9_r4_ndt_proposal_self_test
+25/41 Test  #6: p9_r4_ndt_proposal_self_test .....................   Passed    0.02 sec
+      Start 20: p9_r1c3_self_test
+26/41 Test #20: p9_r1c3_self_test ................................   Passed    0.02 sec
+      Start 21: p9_r1c3a_contract_self_test
+27/41 Test #29: p9_r1c3a_audit_self_test .........................   Passed    0.05 sec
+      Start 31: p9_h2_proposal_self_test
+28/41 Test #21: p9_r1c3a_contract_self_test ......................   Passed    0.02 sec
+      Start 22: p9_r1c3b_discrete_support_self_test
+29/41 Test #31: p9_h2_proposal_self_test .........................   Passed    0.02 sec
+      Start 35: p9_r1b_self_test
+30/41 Test #38: p9_r1c2_multih_audit_self_test ...................   Passed    0.11 sec
+      Start 33: p9_math_self_test
+31/41 Test #27: p9_r2a_orchestration_self_test ...................   Passed    0.11 sec
+      Start 24: p9_r2_terminal_stability_self_test
+32/41 Test #22: p9_r1c3b_discrete_support_self_test ..............   Passed    0.02 sec
+      Start 34: p9_r1a_self_test
+33/41 Test #35: p9_r1b_self_test .................................   Passed    0.02 sec
+      Start 37: p9_r1c2_numerical_self_test
+34/41 Test #24: p9_r2_terminal_stability_self_test ...............   Passed    0.02 sec
+      Start 26: p9_r2a_proposal_self_test
+35/41 Test #33: p9_math_self_test ................................   Passed    0.02 sec
+      Start 36: p9_r1c_self_test
+36/41 Test #34: p9_r1a_self_test .................................   Passed    0.02 sec
+      Start 17: p9_r2b_chart_self_test
+37/41 Test #37: p9_r1c2_numerical_self_test ......................   Passed    0.02 sec
+      Start  5: p9_r4_oracle_geometry_self_test
+38/41 Test #17: p9_r2b_chart_self_test ...........................   Passed    0.00 sec
+39/41 Test  #5: p9_r4_oracle_geometry_self_test ..................   Passed    0.00 sec
+40/41 Test #26: p9_r2a_proposal_self_test ........................   Passed    0.02 sec
+41/41 Test #36: p9_r1c_self_test .................................   Passed    0.02 sec
+
+100% tests passed, 0 tests failed out of 41
+
+Total Test time (real) =   2.39 sec
