@@ -1,0 +1,18 @@
+{
+  "sha256": {
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery/REPORT.md": "09f7f70d712be28b9b921273c4a5f39ce3c2b8a372f93e09d7ef9ec8ed37837a",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery/THEORY.md": "3636a88f160845ce832ad25834754d10b207f922bd0c1baf283d66b64e435a7e",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery/conversion_source_manifest.json": "add07ae41083deff6d010be4096f0f09d7785d92ed86c50a5485575cf9780c0a",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery/cost.csv": "1dbe685ebc7a9c84d5beb4fa6ddbcc5805677bb34c6299316e1e7a05b031ebc7",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery/historical_input_search.csv": "d8de70e0f1498e844f3b6b00b8afcea0a96e6c510e67e0190072ad676fa06dd1",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery/message_content_parity.csv": "0f1abfc5959f2048f8f77afa77f9d88f92b43440b1a67a04342257981d946535",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery/raw_bag_hash.json": "e483ff177b4fc9d271cdb83cb65ea70ded1bc6489eebc3b626b8917e279460f7",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery/recovered_bag_manifest.json": "066ac14e828ef23619c8ef4085b9d6ee973d570bec6a388181eea308323ec30c",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery/recovery_command.txt": "0367fe78e50cbd1cc9e5e90282ea7885e41274647ad979d60f220950217fdff9",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery/results.json": "7a4fa4bc2c815f0b2ba4a0178445d37f09b68327e6fdf8439796434bc5d18cfe",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery/scan_end_contract.md": "363e7a68b4e4983bbba1a27fcc55939d212b766804589f008206fbd4a8d7a08a",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery/timestamp_parity.csv": "ed604700d4fb524b832c07b3cc0bd75e3b1fd138c15af68551cb6dc763fe6a79",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery/verification.json": "95a8e497da9a8e1cd453654e96b58baacb2332a10a04f0230f01af91e9ebf8dd"
+  },
+  "self_excluded": true
+}

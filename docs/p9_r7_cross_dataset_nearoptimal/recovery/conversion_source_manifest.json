@@ -1,0 +1,121 @@
+{
+  "historical_manifest_sha256": "ba74130902364db5568cae767985a5cf5e0b5f10ca214fb96b418e4c2ecedcb3",
+  "files": [
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/CMakeLists.txt",
+      "expected_sha256": "9910c5187236ff4103e19837c25033dcfbbfc42c8b6c87f39d50c99ed8f5acea",
+      "actual_sha256": "22dfeb84e7e190fa28ceb1037bd25d487a5ebfcb3b87b93e3f1901dbd93fc7e8",
+      "status": "HASH_MISMATCH"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/config/corridor01_frozen_baseline.yaml",
+      "expected_sha256": "d737f60d97e784d4dc17ec380d2e860377bf31e6f945d4c20eecb47f530adf3f",
+      "actual_sha256": "d737f60d97e784d4dc17ec380d2e860377bf31e6f945d4c20eecb47f530adf3f",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/launch/superloc_corridor_adapter.launch",
+      "expected_sha256": "ecc0c4875b500f8c36670e42e5da99be76bb1bb13c8298be7d0520e2cdb758d7",
+      "actual_sha256": "1ffab453b932cddd18f9068255d0c117684ececaec759b57d6d3dfe9a66be288",
+      "status": "HASH_MISMATCH"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/package.xml",
+      "expected_sha256": "bf34725b6353b4751ae2b9eb75e94918f4398677032af4a96357b771ad2f756f",
+      "actual_sha256": "2a2b31f8f21030dbc72e16029f42640b10f25cbe0af8db5dd87effde84fe5f05",
+      "status": "HASH_MISMATCH"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/scripts/evaluate_corridor01.py",
+      "expected_sha256": "0a25dea23ba9d9e005f3d9b3d2dc22c3c0b62c164fa7ea43681694073cb1f8e1",
+      "actual_sha256": "0a25dea23ba9d9e005f3d9b3d2dc22c3c0b62c164fa7ea43681694073cb1f8e1",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/scripts/test_frame_math.py",
+      "expected_sha256": "85cbdb662696c9ad60187567539bf54d9cffeb783433dc27c5a15db0320eff15",
+      "actual_sha256": "85cbdb662696c9ad60187567539bf54d9cffeb783433dc27c5a15db0320eff15",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/src/superloc_corridor_sensor_adapter.cpp",
+      "expected_sha256": "de3effb5cbec3b3312d57e300c4b346c92b34c6c0e05d7ce7344f7dd9a11c55e",
+      "actual_sha256": "de3effb5cbec3b3312d57e300c4b346c92b34c6c0e05d7ce7344f7dd9a11c55e",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/src/superloc_first_segment_initializer.cpp",
+      "expected_sha256": "deb58aeb3bd76f802568469f50d33f91b8026924b3fe299fa93b8fa8f9dc266d",
+      "actual_sha256": "deb58aeb3bd76f802568469f50d33f91b8026924b3fe299fa93b8fa8f9dc266d",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/src/superloc_holdout_sanity.cpp",
+      "expected_sha256": "4e4c1b0e62a53629cb95828064a3adc960949ee0b5cce6ecfc3c4424d0572807",
+      "actual_sha256": "4e4c1b0e62a53629cb95828064a3adc960949ee0b5cce6ecfc3c4424d0572807",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/src/superloc_map_normalizer.cpp",
+      "expected_sha256": "5c38a755fc015abffabafab7ed71f343716ca29028b9f93b4ce35fba24abe808",
+      "actual_sha256": "5c38a755fc015abffabafab7ed71f343716ca29028b9f93b4ce35fba24abe808",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_adapter/src/superloc_sensor_adapter.cpp",
+      "expected_sha256": null,
+      "actual_sha256": "58c4073839247098b6f0f545065056be647336cc64631563f5d070d7dcd3b4e8",
+      "status": "CURRENT_SNAPSHOT_ONLY"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/include/superloc_corridor_adapter/full_se3_deskew.hpp",
+      "expected_sha256": null,
+      "actual_sha256": "0cba8177a3542bbc9589e0e9418bc1db1727a66c572cad18eac592fe419f596e",
+      "status": "CURRENT_SNAPSHOT_ONLY"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/scripts/hash_derived_bag.py",
+      "expected_sha256": null,
+      "actual_sha256": "f15f574b9d1151d2536fcd45ce58bec77a4c1ae098f8a12e8f34acc7d33b5a0e",
+      "status": "CURRENT_SNAPSHOT_ONLY"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/velodyne/velodyne_pointcloud/params/VLP16db.yaml",
+      "expected_sha256": "171e5fbf3c17256ca1fdc4098a3d190f668d414b1212a8f90bbf0fe6956a11bc",
+      "actual_sha256": "171e5fbf3c17256ca1fdc4098a3d190f668d414b1212a8f90bbf0fe6956a11bc",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/velodyne/velodyne_pointcloud/src/lib/rawdata.cc",
+      "expected_sha256": null,
+      "actual_sha256": "88aab651f9506b1f2f744769bc8034310b5b28b25089cd48e101b5befe092c83",
+      "status": "CURRENT_SNAPSHOT_ONLY"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/velodyne/velodyne_pointcloud/src/conversions/transform.cc",
+      "expected_sha256": null,
+      "actual_sha256": "daac16d713a348859ad6ce0abbadf0f5c4f871f73fbcf420e6286ba519b5b768",
+      "status": "CURRENT_SNAPSHOT_ONLY"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/devel/lib/superloc_corridor_adapter/superloc_corridor_sensor_adapter",
+      "expected_sha256": null,
+      "actual_sha256": "3378349bb91f11f6a4e830bad0b9c62b665a8de653e0a5fa3c9c00510664aaf9",
+      "status": "CURRENT_SNAPSHOT_ONLY"
+    }
+  ],
+  "velodyne_commit": "29abd0e1361cb7f5eda451d2b51c35eeca45e0d5",
+  "velodyne_worktree": "",
+  "lineage_status": "NOT_CLOSED",
+  "reason": "Historical wrapper manifest does not pin included implementation; current implementation publishes full-SE3 and waits for prior odometry. No reconstruction attempted.",
+  "environment": {
+    "gcc": "9.4.0",
+    "python": "3.8.10",
+    "cmake": "3.16.3",
+    "Eigen": "3.3.7-2",
+    "PCL": "1.10.0+dfsg-5ubuntu1",
+    "rosbag": "1.17.4-1focal.20250519.234429",
+    "roscpp": "1.17.4-1focal.20250519.225343",
+    "note": "Current installed versions, not proof of historical environment parity."
+  }
+}

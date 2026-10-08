@@ -1,0 +1,71 @@
+{
+  "task": "PAPER-P9-R7-R1-CORRIDOR01-INPUT-AND-BASELINE-RECOVERY",
+  "git": {
+    "branch": "research/p9-r4-heldout-visual-evidence",
+    "start_sha": "11966f46fff946984012510e0bbaca103c472efc",
+    "end_sha": "CONTAINING_COMMIT",
+    "workspace": "/tmp/dog_loc_paper_r4_ws.Fq21k2"
+  },
+  "final_result": "CROSS_DATASET_INPUT_RECOVERY_BLOCKED",
+  "next": "RESOLVE_DATASET_PROVENANCE",
+  "input_recovery": "BLOCKED_BEFORE_RECONSTRUCTION",
+  "blockers": [
+    "PERSISTENT_OUTPUT_NOT_AUTHORIZED_BY_SESSION_FILESYSTEM_POLICY",
+    "HISTORICAL_ADAPTER_LINEAGE_NOT_CLOSED"
+  ],
+  "storage": {
+    "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01",
+    "free_capacity_df_h": "459G",
+    "mode_bits": "drwxrwxrwx",
+    "write_authorized_by_session": false,
+    "write_probe_attempted": false,
+    "reason": "Only workspace and /tmp are writable roots; approvals unavailable. DAC mode does not override session policy."
+  },
+  "raw_bag_hash": "PASS",
+  "recovered_bag_hash": null,
+  "message_parity": {
+    "cloud": "NOT_RUN",
+    "IMU": "NOT_RUN",
+    "timestamp": "NOT_RUN",
+    "historical_expected_cloud_count": 2776,
+    "historical_expected_imu_count": 55946
+  },
+  "scan_end": "NOT_RUN_INPUT_BLOCKED",
+  "baseline": {
+    "required_frames": 2776,
+    "runA_frames": 0,
+    "runB_frames": 0,
+    "source_parity": "NOT_RUN",
+    "T0_parity": "NOT_RUN",
+    "U_obs_parity": "NOT_RUN",
+    "weak_subspace_parity": "NOT_RUN"
+  },
+  "tracking_risk": {
+    "historical": "NOMINAL_TRACKING_RISK",
+    "new_findings": "NONE_NO_REPLAY",
+    "GT_risk": "GT_RISK_NOT_AVAILABLE"
+  },
+  "cost": {
+    "reconstruction_attempts": 0,
+    "baseline_ndt_calls": 0,
+    "oracle263_calls": 0,
+    "B12_calls": 0,
+    "visual_extraction": 0,
+    "baseline_wall_seconds": null,
+    "mean_align_seconds": null,
+    "p95_align_seconds": null,
+    "baseline_peak_rss": null,
+    "category": "CROSS_DATASET_BASELINE_PREPARATION_COST"
+  },
+  "R6_PRIMARY_STATISTICS": "NOT_RUN",
+  "GT_LOADED": false,
+  "push_executed": false,
+  "not_produced": [
+    "baseline_input_manifest.json",
+    "baseline_runA.csv",
+    "baseline_runB.csv",
+    "baseline_determinism.csv",
+    "source_nominal_uobs.csv"
+  ],
+  "note": "No content-equivalence verdict was made; no reconstruction means neither equivalence nor mismatch can be measured. Storage stop is operational, not a scientific failure."
+}

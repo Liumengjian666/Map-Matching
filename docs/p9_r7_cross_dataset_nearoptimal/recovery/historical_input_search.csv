@@ -1,0 +1,6 @@
+root,method,patterns,matching_bag_candidates,scope_limit
+/media/jian/HIKVISION/paper rosbag/SuperLoc,rg --files,*adapted*v1*.bag,0,named tree only
+/home/jian/livox_ws/superloc_adapter_ws,rg --files,*adapted*v1*.bag,0,named tree only
+/media/jian/HIKVISION/paper,rg --files,*corridor* OR *adapted*v1*,0,named tree only
+/media/jian/HIKVISION/paper rosbag/cross_sequence_analysis,rg --files,*adapted*v1* OR *corridor*bag*,0,named tree only
+/media/jian/HIKVISION/paper rosbag/imu_deskew_experiments,rg --files,*adapted*v1* OR *corridor*bag*,0,named tree only

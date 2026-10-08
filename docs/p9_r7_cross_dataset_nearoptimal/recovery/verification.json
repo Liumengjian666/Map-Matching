@@ -1,0 +1,24 @@
+{
+  "Release_build": {
+    "command": "cmake --build /tmp/p9_r4_release.Eirto1 -j 2",
+    "status": "PASS"
+  },
+  "P9_tests": {
+    "command": "ctest --output-on-failure",
+    "cwd": "/tmp/p9_r4_release.Eirto1",
+    "passed": 41,
+    "failed": 0,
+    "wall_seconds": 9.79
+  },
+  "frame_transform_synthetic": {
+    "script": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/scripts/test_frame_math.py",
+    "status": "PASS",
+    "max_vector_round_trip_error": 1.439e-15,
+    "pose_composition_round_trip_error": 3.846e-16
+  },
+  "R7_input_guard_self_test": "PASS",
+  "actual_recovered_source_parity": "NOT_RUN",
+  "actual_dataset_frame_contract": "NOT_RUN",
+  "actual_two_run_determinism": "NOT_RUN",
+  "note": "Software/synthetic checks do not establish dataset-level recovery. No new implementation was built for an unauthorized storage target."
+}

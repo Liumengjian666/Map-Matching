@@ -1,0 +1,8 @@
+{
+  "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/raw_data_core_2023-07-25-03-01-44.bag",
+  "size_bytes": 6473379689,
+  "expected_sha256": "c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811",
+  "actual_sha256": "c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811",
+  "status": "PASS",
+  "method": "Fresh sha256sum over entire raw bag; no topic payload decoding."
+}

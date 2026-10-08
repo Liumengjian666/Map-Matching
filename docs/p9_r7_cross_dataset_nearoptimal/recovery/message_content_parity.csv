@@ -1,0 +1,3 @@
+channel,expected_messages,checked_messages,status,reason
+PointCloud2,2776,0,NOT_RUN,no_recovered_bag
+IMU,55946,0,NOT_RUN,no_recovered_bag

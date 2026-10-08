@@ -1,0 +1,15 @@
+RECONSTRUCTION_COMMAND = NOT_RUN
+No executable reconstruction command is certified. Do not launch the current
+full-SE3 adapter as a v1 recovery generator.
+
+Read-only commands actually used:
+git -C /tmp/dog_loc_paper_r4_ws.Fq21k2 rev-parse HEAD
+df -h '/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01'
+sha256sum '/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/raw_data_core_2023-07-25-03-01-44.bag'
+git -C /home/jian/livox_ws/superloc_adapter_ws/src/velodyne rev-parse HEAD
+git -C /home/jian/livox_ws/superloc_adapter_ws/src/velodyne status --short
+
+Search roots/patterns: historical_input_search.csv. No whole-root scan.
+Current source hashes: conversion_source_manifest.json (Python hashlib SHA256
+of each listed file; expected hashes parsed from P2B_ADAPTER_SOURCE_MANIFEST.md).
+No write probe outside allowed roots. No chmod/remount/permission bypass.

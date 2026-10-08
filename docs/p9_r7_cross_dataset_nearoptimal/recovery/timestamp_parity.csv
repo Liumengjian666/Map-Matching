@@ -1,0 +1,3 @@
+channel,expected_messages,checked_messages,status
+PointCloud2,2776,0,NOT_RUN
+IMU,55946,0,NOT_RUN

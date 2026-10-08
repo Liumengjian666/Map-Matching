@@ -1,0 +1,9 @@
+{
+  "status": "NOT_RUN",
+  "expected_original_sha256": "60048c6369ea1065cc4dee2484ff38360620fa6b7321abc05b71e874f2b06345",
+  "recovered_path": null,
+  "recovered_sha256": null,
+  "rebuild_attempts": 0,
+  "original_v1_found": false,
+  "reason": "Persistent output is outside session writable roots; historical transitive adapter lineage not closed."
+}
