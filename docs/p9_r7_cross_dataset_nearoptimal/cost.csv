@@ -1,0 +1,2 @@
+scope,oracle_calls,candidate_calls,baseline_replay_calls,visual_extraction_calls,input_audit_wall_seconds,ndt_mean_seconds,ndt_p95_seconds,ndt_peak_rss
+OFFLINE_INPUT_AUDIT_ONLY,0,0,0,0,0.016386589035391808,,,

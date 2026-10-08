@@ -1,0 +1,13 @@
+{
+  "status": "NOT_CLOSED_FOR_R7",
+  "historical_laser_to_imu_direction": "T_imu_lidar",
+  "historical_v1_deskew": "ROTATION_ONLY_SCAN_START",
+  "historical_header_time_used": true,
+  "bag_record_time_forbidden": true,
+  "historical_initialization": "FIRST_FIVE_SECONDS_SENSOR_ONLY_WITH_OFFICIAL_PRIOR",
+  "official_world_darpa_semantics": "UNRESOLVED_IN_REVIEWED_P2_ARCHIVE",
+  "current_dataset_pose_payload_read": false,
+  "map_gt_transform_independently_verified_this_run": false,
+  "gt_risk_validation": "NOT_AVAILABLE",
+  "note": "Partial historical semantics are not a new SAME_OBJECTIVE baseline certificate."
+}

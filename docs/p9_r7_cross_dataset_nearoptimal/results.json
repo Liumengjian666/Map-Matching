@@ -1,0 +1,101 @@
+{
+  "task": "PAPER-P9-R7-CROSS-DATASET-NEAROPTIMAL-VALIDATION",
+  "git": {
+    "branch": "research/p9-r4-heldout-visual-evidence",
+    "start_sha": "df2e0a2f48ed77457f056c14ef097a955e9984d4",
+    "end_sha": "CONTAINING_COMMIT",
+    "workspace": "/tmp/dog_loc_paper_r4_ws.Fq21k2"
+  },
+  "scientific_execution": "NOT_RUN",
+  "final_result": "CROSS_DATASET_INPUT_CONTRACT_BLOCKED",
+  "next": "RESTORE_CROSS_DATASET_BASELINE_CONTRACT",
+  "blocker": "Required corridor01_adapted_v1.bag is missing; extant metadata is not payload parity.",
+  "gates": {
+    "DATA_HASH": "FAIL_REQUIRED_BAG_MISSING",
+    "FRAME_TRANSFORM": "NOT_CLOSED_FOR_R7",
+    "SOURCE_NOMINAL_CONTRACT": "NOT_RUN_INPUT_BLOCKED",
+    "DETERMINISTIC_REPLAY": "NOT_RUN_INPUT_BLOCKED",
+    "NDT_PARAMETER_PARITY": "NOT_RUN_ON_CORRIDOR01",
+    "U_OBS_CHART_PARITY": "NOT_RUN_ON_CORRIDOR01"
+  },
+  "dataset": {
+    "name": "SuperLoc Corridor01",
+    "historical_sensor": "VLP16 + Epson IMU",
+    "required_bag": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/derived/corridor01_adapted_v1.bag",
+      "expected_sha256": "60048c6369ea1065cc4dee2484ff38360620fa6b7321abc05b71e874f2b06345",
+      "actual_sha256": null,
+      "status": "MISSING"
+    },
+    "available_manifest_files_matching": 7,
+    "available_manifest_files_audited": 7,
+    "alternative_v2_used": false
+  },
+  "baseline": {
+    "historical_frames": 2776,
+    "new_frames": 0,
+    "historical_determinism": "P2B_R1_PASS_NOT_RECERTIFIED",
+    "source_T0_U_obs": "NOT_ESTABLISHED_THIS_RUN",
+    "tracking_risk": "NOMINAL_TRACKING_RISK_FROM_HISTORICAL_FULL_SEGMENT",
+    "new_GT_analysis": false
+  },
+  "cohort": {
+    "prefix": null,
+    "major": null,
+    "no_major": null,
+    "status": "NOT_SELECTED_INPUT_BLOCKED"
+  },
+  "primary": {
+    "status": "NOT_RUN",
+    "type_A_major": null,
+    "type_A_no_major": null,
+    "strict_major": null,
+    "strict_no_major": null,
+    "AUC": null,
+    "permutation_p": null,
+    "LOFO_BA": null,
+    "delete_one_major_AUC": null
+  },
+  "GT_RISK": {
+    "status": "GT_RISK_VALIDATION_NOT_AVAILABLE",
+    "reason": "Input gate blocked; no GT poses loaded or independently closed map/GT risk evaluation."
+  },
+  "cost": {
+    "oracle_calls": 0,
+    "B12_calls": 0,
+    "baseline_replay_calls": 0,
+    "visual_extraction": 0,
+    "gt_loaded": false,
+    "input_audit_wall_seconds": 0.016386589035391808,
+    "mean_ndt_time": null,
+    "p95_ndt_time": null,
+    "ndt_peak_RSS": null,
+    "scope": "OFFLINE_INPUT_AUDIT_ONLY"
+  },
+  "verification": {
+    "Release_build": "PASS",
+    "P9_tests": "41/41 PASS",
+    "P9_ctest_seconds": 9.67,
+    "R6_rule_self_test": "PASS",
+    "R6_label_GT_isolation_self_test": "PASS",
+    "R7_input_audit_self_test": "PASS",
+    "dataset_runtime_tests": "NOT_RUN_INPUT_BLOCKED",
+    "note": "Generic tests do not certify Corridor01 gates."
+  },
+  "unproduced_artifacts": [
+    "selection_pool.csv",
+    "selection_freeze.json",
+    "oracle_labels.csv",
+    "oracle_candidates.csv",
+    "b12_candidates.csv",
+    "terminal_clusters.csv",
+    "blind_evidence.csv",
+    "evidence_freeze.json",
+    "primary_metrics.csv",
+    "lofo.csv",
+    "delete_one_major.csv",
+    "temporal_block_statistics.csv",
+    "posthoc_gt_risk.csv"
+  ],
+  "push_executed": false
+}

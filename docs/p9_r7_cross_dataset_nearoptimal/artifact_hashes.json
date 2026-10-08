@@ -1,0 +1,27 @@
+{
+  "sha256": {
+    "docs/p9_r7_cross_dataset_nearoptimal/THEORY.md": "baa8a63fc52e55a73e5a5e025afa47785e53a796974c39fe1d9520fabcc6dbd3",
+    "docs/p9_r7_cross_dataset_nearoptimal/results.json": "dc9f7f7f9f23abe58aa076356740c5fdccacc0d6d74d355d9d19dc2d33439256",
+    "docs/p9_r7_cross_dataset_nearoptimal/source_nominal_parity.csv": "38172337ab85dc0755a5b99108154182df91b7cdb079672cca5facb5f002eb7e",
+    "docs/p9_r7_cross_dataset_nearoptimal/DATASET_CONTRACT.md": "792763fe9b9fa46ccb56b639b7080f8669aea74d6ebb7e33e01b0ec1ddc0952b",
+    "docs/p9_r7_cross_dataset_nearoptimal/REPORT.md": "61898ad97ac6d840a2a4b5aec5c12a0e37614ffe0db40f0033b96ccd8ba99578",
+    "docs/p9_r7_cross_dataset_nearoptimal/frame_transform_receipt.json": "799d964b52b3f69b296077317c242151bbe47a76eda8c6e50f471a6d70640553",
+    "docs/p9_r7_cross_dataset_nearoptimal/input_manifest.json": "38cd93a17e3cc4c6b2fefafb90bfc99cc1235585b101305b5aebf19970508741",
+    "docs/p9_r7_cross_dataset_nearoptimal/cost.csv": "3afff5c3695e66310fd1c5fd7a102fde24c2d9a9a1b39b8b16269a2c77790b36",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/audit_r7_input.py": "e94678e6f6263c23b8719594bbde2744ac268aa07a13aae24c90e6be2c2cb386",
+    "docs/superloc_corridor01/derived_bag_manifest.txt": "0ba8c393c339124e29f13c00f3205563938f122d4e1e87cc87557c1c11abd261",
+    "docs/superloc_corridor01/P2B_ADAPTER_SOURCE_MANIFEST.md": "ba74130902364db5568cae767985a5cf5e0b5f10ca214fb96b418e4c2ecedcb3",
+    "docs/superloc_corridor01/P2B_OFFICIAL_PROTOCOL.md": "349ff765f9d5c894cf3666854da7fd05600f56d5ea925bb10bfa091c1bd2f30c",
+    "docs/superloc_corridor01/P2B_ADAPTER_REPORT.md": "065285bc78379b1f51fb34ad53700cf7abb6077f4087f893bec4a9b431561df6",
+    "docs/superloc_corridor01/P2A_DATASET_AUDIT.md": "7dd82e2af5b7a96d98ca74274318866b82cdc552477c1f7b534fb7aee704f6f2",
+    "docs/superloc_corridor01/P2B_BASELINE_RESULTS.md": "cdfddef0d8125cbc9b3e9afe5c453015d19e0d5d94036a477401c57f0eacac24",
+    "docs/superloc_corridor01/P2B_R1_DETERMINISM.md": "8ab6a3430ca1ca958c7772c0716e12ada9b8670095a274289137fefe8f1c71cb",
+    "docs/superloc_corridor01/P2B_R1_EVALUATION_AUDIT.md": "c177f06da98bfae1078622a23c481d2317586c23bd9fbf807238214658249bbc",
+    "docs/superloc_corridor01/P2B_R1_FAILURE_ONSET.md": "5f2c8857d92da1573a08611a7287a7e00ab9e67b661b75b8d9aa008391f98cd7",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r6_nearoptimal.py": "f439ca6100fe5c38d093cffac21b0a6f0a730f3e49880a12adb270196fe059bc",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r2b_chart.cpp": "ab9409c4d99a69d37aedfb954bd0eb99dcd9948ba8a3170a3ebeb880cb11c6cc",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/CMakeLists.txt": "2ba46055a62b40f1fcc5b10da74d921dfbfa70e08dacca7844093e41f82b231b"
+  },
+  "self_excluded": true,
+  "frozen_algorithm_tracked_diff": ""
+}

@@ -1,0 +1,63 @@
+{
+  "dataset": "SuperLoc Corridor01",
+  "files": [
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/derived/corridor01_adapted_v1.bag",
+      "expected_sha256": "60048c6369ea1065cc4dee2484ff38360620fa6b7321abc05b71e874f2b06345",
+      "actual_sha256": null,
+      "status": "MISSING"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/corridor01.pcd",
+      "expected_sha256": "4b5231d58ebd4aeb4fc293559051dc30a18b6f07376237938d064962bfe8f40a",
+      "actual_sha256": "4b5231d58ebd4aeb4fc293559051dc30a18b6f07376237938d064962bfe8f40a",
+      "status": "PASS"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd",
+      "expected_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+      "actual_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+      "status": "PASS"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/calibration/corridor01_extrinsics.yaml",
+      "expected_sha256": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d",
+      "actual_sha256": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/config/corridor01_frozen_baseline.yaml",
+      "expected_sha256": "d737f60d97e784d4dc17ec380d2e860377bf31e6f945d4c20eecb47f530adf3f",
+      "actual_sha256": "d737f60d97e784d4dc17ec380d2e860377bf31e6f945d4c20eecb47f530adf3f",
+      "status": "PASS"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/derived/derived_cloud_hashes.csv",
+      "expected_sha256": "845c922e14d73cab8cba4331541ec5bfc94470b6acb1adce047098d2a90f77e8",
+      "actual_sha256": "845c922e14d73cab8cba4331541ec5bfc94470b6acb1adce047098d2a90f77e8",
+      "status": "PASS"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/derived/derived_imu_hashes.csv",
+      "expected_sha256": "3b1f45fd1a870c44aaa91bfd53052074c626d06c14aeb49f0995f14224526fd7",
+      "actual_sha256": "3b1f45fd1a870c44aaa91bfd53052074c626d06c14aeb49f0995f14224526fd7",
+      "status": "PASS"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/derived/derived_timestamp_audit.json",
+      "expected_sha256": "109333795f0a96798d8af68d1cd14e5ab67d9b3d1407d12398a4242e59d28408",
+      "actual_sha256": "109333795f0a96798d8af68d1cd14e5ab67d9b3d1407d12398a4242e59d28408",
+      "status": "PASS"
+    }
+  ],
+  "expected_hash_sources": {
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/superloc_corridor01/derived_bag_manifest.txt": "0ba8c393c339124e29f13c00f3205563938f122d4e1e87cc87557c1c11abd261",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/superloc_corridor01/P2B_ADAPTER_SOURCE_MANIFEST.md": "ba74130902364db5568cae767985a5cf5e0b5f10ca214fb96b418e4c2ecedcb3"
+  },
+  "input_files_verified": false,
+  "scientific_gate_authorized": false,
+  "note": "File audit alone never closes frame/source/replay/chart contracts.",
+  "gt_pose_loaded": false,
+  "new_ndt_calls": 0,
+  "audit_wall_seconds": 0.016386589035391808
+}
