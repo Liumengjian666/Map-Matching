@@ -1,0 +1,71 @@
+{
+  "artifacts": {
+    "coverage_by_pair.csv": "0d9cf361de0b495f699abf65cf368410d3aed24d145482028fde5aebce203c62",
+    "coverage_summary.csv": "79ec8faf42b80dcebb8a92da4c7974cb8d02c7aaa840ace1f669c48653eb74c3",
+    "depth_completion_correspondences.csv": "20ed37fc013410f76144bf88e75e3c608953af8321818f373541e9e9ca622da9",
+    "direct_parity.csv": "0c940a78194e7338681f2fdc3c396d33c7cce472dc983b74f3e26c98b6f18121",
+    "key_frame_funnel.csv": "e8073bbf12821e14d925543e93594dfce5d22becb750e0249d5630b406f97b4d",
+    "old_valid_regression.csv": "856cce03e47ee2967b83322e06d9dda27dc8676e1f62d1664045d3de15d2ba62",
+    "runtime_breakdown.csv": "55a8378ae8117a4512f968d921be8b5d0403e8ada62b550dab045700a5a93c39",
+    "selected_measurements.csv": "43af5383b4f12f39f4ca1341003a98477da5044ac6d4224edbb365c5514e34fd"
+  },
+  "auc_run": false,
+  "cohort": "DEVELOPMENT",
+  "coverage": [
+    {
+      "major_valid": 2,
+      "mode": "OLD_DIRECT_ONLY",
+      "no_major_valid": 10,
+      "total": 32,
+      "valid": 12
+    },
+    {
+      "major_valid": 4,
+      "mode": "NEW_AUGMENTED",
+      "no_major_valid": 13,
+      "total": 32,
+      "valid": 17
+    }
+  ],
+  "coverage_pass": false,
+  "early_stop_estimate_ms": {
+    "count": 32,
+    "max": 104.50771200703457,
+    "mean": 58.006421371828765,
+    "median": 58.35867649875581,
+    "p95": 96.28724456415512,
+    "rmse": 63.03310457817135
+  },
+  "four_lag_cost_ms": {
+    "count": 32,
+    "max": 241.65773706045002,
+    "mean": 124.58342731224548,
+    "median": 101.41952306730673,
+    "p95": 227.51433093799278,
+    "rmse": 141.48602807906207
+  },
+  "geometry": {
+    "lost_old_valid": 0,
+    "pass_flag": true,
+    "rotation": {
+      "count": 12,
+      "max": 0.11352643247522484,
+      "mean": 0.029250150324606632,
+      "median": 0.02062562480001926,
+      "p95": 0.07386268872038873,
+      "rmse": 0.04019370038597241
+    },
+    "translation": {
+      "count": 12,
+      "max": 0.04844223244723568,
+      "mean": 0.00721162006613445,
+      "median": 0.0029507461190297892,
+      "p95": 0.026153372807516385,
+      "rmse": 0.014620976720018282
+    }
+  },
+  "geometry_safety_pass": true,
+  "gt_loaded": false,
+  "label_source_sha256": "698322741198bb69db577c373623363552fa30bad1b8b9c60700858834dc97c6",
+  "measurement_freeze_sha256": "5af46cfd56e2860b3fc07fffe25781dd5ee425095662466e8680ffcd9aafa184"
+}

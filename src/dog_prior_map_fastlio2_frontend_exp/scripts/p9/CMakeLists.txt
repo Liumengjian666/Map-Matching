@@ -34,6 +34,12 @@ endforeach()
 target_compile_definitions(p9_r2b_chart_self_test PRIVATE P9_R2B_CHART_TEST_MAIN)
 
 enable_testing()
+add_test(NAME p9_r3a_depth_geometry_self_test COMMAND ${Python3_EXECUTABLE}
+  ${CMAKE_CURRENT_SOURCE_DIR}/p9_r3a_depth_completion.py)
+add_test(NAME p9_r3a_direct_pnp_self_test COMMAND ${Python3_EXECUTABLE}
+  ${CMAKE_CURRENT_SOURCE_DIR}/p9_r3a_visual_frontend.py)
+add_test(NAME p9_r3a_stage_gate_self_test COMMAND ${Python3_EXECUTABLE}
+  ${CMAKE_CURRENT_SOURCE_DIR}/evaluate_r3a_metric_depth_coverage.py self-test)
 add_test(NAME p9_r3_visual_contract_self_test COMMAND ${Python3_EXECUTABLE}
   ${CMAKE_CURRENT_SOURCE_DIR}/p9_r3_visual_contract.py)
 add_test(NAME p9_r3_blind_evidence_self_test COMMAND ${Python3_EXECUTABLE}

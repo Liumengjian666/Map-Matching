@@ -1,0 +1,17 @@
+{
+  "artifacts": {
+    "coverage_by_pair.csv": "0d9cf361de0b495f699abf65cf368410d3aed24d145482028fde5aebce203c62",
+    "depth_completion_correspondences.csv": "20ed37fc013410f76144bf88e75e3c608953af8321818f373541e9e9ca622da9",
+    "direct_parity.csv": "0c940a78194e7338681f2fdc3c396d33c7cce472dc983b74f3e26c98b6f18121",
+    "pair_manifest.csv": "8324ebe1ec6136794f6ae89bd2070c8c71b34b346241ce3d961ade23b49a9ba2",
+    "selected_cloud_hashes.csv": "f9a7d7b63645f5d392beaa38009c82db466927dbf148e3c35d46295718d59147",
+    "selected_image_hashes.csv": "5e2950683a8ce35cedc807b6d9211b294b8fe885e2552ee98de001c47a87b036"
+  },
+  "execution_manifest_sha256": "cd0754b92765d50b1478a8444f4f34d164c8f68cfc0387fc2c7d874ab688742b",
+  "gt_loaded": false,
+  "io_seconds": 58.22355235100258,
+  "labels_loaded": false,
+  "new_ndt_calls": 0,
+  "rows": 256,
+  "wall_seconds": 106.76183653401677
+}

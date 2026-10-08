@@ -1,0 +1,2 @@
+status,old_valid,total_pairs,new_valid,new_coverage,translation_rmse_m,rotation_rmse_deg,runtime_seconds
+NOT_RUN_PREREQUISITE_GATE_FAIL,1802,4126,,,,,

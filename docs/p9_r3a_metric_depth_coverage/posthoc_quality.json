@@ -1,0 +1,90 @@
+{
+  "artifacts": {
+    "newly_recovered_gt.csv": "99c7594b1b69b619bed9f99984b5fe4d8b677dc3ba4c5dddd4b6167ed78a05df"
+  },
+  "auc_run": false,
+  "development_gate_sha256": "80d4e583226ab053977cbbeb82400bdfa8359847dc2a17f4630037a73117beff",
+  "groups": [
+    {
+      "catastrophic_count": 0,
+      "catastrophic_rate": 0.0,
+      "group": "NEWLY_RECOVERED",
+      "gt_evaluable": 5,
+      "missing_gt": 0,
+      "mode": "NEW_AUGMENTED",
+      "rotation": {
+        "count": 5,
+        "max": 1.8083789944382929,
+        "mean": 0.8703442653778131,
+        "median": 0.8077833567113575,
+        "p95": 1.613195400902603,
+        "rmse": 1.002409582589583
+      },
+      "total": 5,
+      "translation": {
+        "count": 5,
+        "max": 0.07043202652975301,
+        "mean": 0.028073105139731148,
+        "median": 0.024408590744294717,
+        "p95": 0.061635511658615735,
+        "rmse": 0.03593603541063974
+      }
+    },
+    {
+      "catastrophic_count": 0,
+      "catastrophic_rate": 0.0,
+      "group": "OLD_VALID",
+      "gt_evaluable": 12,
+      "missing_gt": 0,
+      "mode": "NEW_AUGMENTED",
+      "rotation": {
+        "count": 12,
+        "max": 1.6248955493739778,
+        "mean": 0.6915572236525477,
+        "median": 0.7226999668243077,
+        "p95": 1.3350898508029658,
+        "rmse": 0.8294089712418398
+      },
+      "total": 12,
+      "translation": {
+        "count": 12,
+        "max": 0.037140757665238944,
+        "mean": 0.021423018867884586,
+        "median": 0.024874541791434855,
+        "p95": 0.03609614323376608,
+        "rmse": 0.024603064084961726
+      }
+    },
+    {
+      "catastrophic_count": 0,
+      "catastrophic_rate": 0.0,
+      "group": "OLD_VALID",
+      "gt_evaluable": 12,
+      "missing_gt": 0,
+      "mode": "OLD_DIRECT_ONLY",
+      "rotation": {
+        "count": 12,
+        "max": 1.6094352845796907,
+        "mean": 0.6956131850870095,
+        "median": 0.7258953064300413,
+        "p95": 1.325176021769972,
+        "rmse": 0.8304326325285363
+      },
+      "total": 12,
+      "translation": {
+        "count": 12,
+        "max": 0.05482568515152448,
+        "mean": 0.023861991511242353,
+        "median": 0.02346532032891064,
+        "p95": 0.0476508866374225,
+        "rmse": 0.028295634850653593
+      }
+    }
+  ],
+  "gt_sha256": "b8db2491cdb3ca3194f653cab90f31eae70b457e91b2f87f30ed7fe2d0e2ce9f",
+  "gt_source": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/gt/floor01_gt.txt",
+  "gt_used": "POSTHOC_FRONTEND_ONLY",
+  "missing_gt": 0,
+  "parameters_changed": false,
+  "quality_pass": true
+}
