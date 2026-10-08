@@ -1,0 +1,49 @@
+FROZEN_INPUT_REVERIFIED /home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r3_visual_nonlocal_evidence/extraction_manifest.json
+FROZEN_INPUT_REVERIFIED /home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r3_visual_nonlocal_evidence/multilag_visual_measurements.csv
+FROZEN_INPUT_REVERIFIED /home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r3_visual_nonlocal_evidence/pair_manifest.csv
+FROZEN_INPUT_REVERIFIED /home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r3_visual_nonlocal_evidence/selected_cloud_hashes.csv
+FROZEN_INPUT_REVERIFIED /home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r3_visual_nonlocal_evidence/selected_image_hashes.csv
+FROZEN_INPUT_REVERIFIED /home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/docs/p4_i3_visual_increment/sync_stats.csv
+FROZEN_INPUT_REVERIFIED /home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/docs/p4_i3_visual_increment/visual_increment.csv
+FROZEN_INPUT_REVERIFIED /media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/calibration/floor01_extrinsics.yaml
+FROZEN_INPUT_REVERIFIED /media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/calibration/floor01_intrinsics.yaml
+FROZEN_INPUT_REVERIFIED /media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/raw/extracted/Multi_Floor_Rosbag/raw_data_core_2022-08-18-17-16-31_0.bag
+FROZEN_INPUT_REVERIFIED /media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/raw/extracted/Multi_Floor_Rosbag/raw_data_core_2022-08-18-17-19-00_1.bag
+FROZEN_INPUT_REVERIFIED /media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/raw/extracted/Multi_Floor_Rosbag/raw_data_core_2022-08-18-17-21-29_2.bag
+FROZEN_INPUT_REVERIFIED /media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/p3_r10b_fix1_floor01_full_rerun_20260926/floor01_fix1_runtime_topics.bag
+FROZEN_INPUT_REVERIFIED /media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/p3_r7_floor01_full_baseline/floor01_canonical_input_manifest.csv
+R3B_FULL 200 VALID 186
+R3B_FULL 400 VALID 307
+R3B_FULL 600 VALID 384
+R3B_FULL 800 VALID 431
+R3B_FULL 1000 VALID 549
+R3B_FULL 1200 VALID 734
+R3B_FULL 1400 VALID 919
+R3B_FULL 1600 VALID 1105
+R3B_FULL 1800 VALID 1286
+R3B_FULL 2000 VALID 1451
+R3B_FULL 2200 VALID 1581
+R3B_FULL 2400 VALID 1713
+R3B_FULL 2600 VALID 1864
+R3B_FULL 2800 VALID 2023
+R3B_FULL 3000 VALID 2100
+R3B_FULL 3200 VALID 2143
+R3B_FULL 3400 VALID 2197
+R3B_FULL 3600 VALID 2300
+R3B_FULL 3800 VALID 2422
+R3B_FULL 4000 VALID 2600
+FROZEN_INPUT_REVERIFIED /home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r3_visual_nonlocal_evidence/extraction_manifest.json
+FROZEN_INPUT_REVERIFIED /home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r3_visual_nonlocal_evidence/multilag_visual_measurements.csv
+FROZEN_INPUT_REVERIFIED /home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r3_visual_nonlocal_evidence/pair_manifest.csv
+FROZEN_INPUT_REVERIFIED /home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r3_visual_nonlocal_evidence/selected_cloud_hashes.csv
+FROZEN_INPUT_REVERIFIED /home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r3_visual_nonlocal_evidence/selected_image_hashes.csv
+FROZEN_INPUT_REVERIFIED /home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/docs/p4_i3_visual_increment/sync_stats.csv
+FROZEN_INPUT_REVERIFIED /home/jian/livox_ws/dog_loc_paper_ws/src/dog_prior_map_fastlio2_frontend_exp/docs/p4_i3_visual_increment/visual_increment.csv
+FROZEN_INPUT_REVERIFIED /media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/calibration/floor01_extrinsics.yaml
+FROZEN_INPUT_REVERIFIED /media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/calibration/floor01_intrinsics.yaml
+FROZEN_INPUT_REVERIFIED /media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/raw/extracted/Multi_Floor_Rosbag/raw_data_core_2022-08-18-17-16-31_0.bag
+FROZEN_INPUT_REVERIFIED /media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/raw/extracted/Multi_Floor_Rosbag/raw_data_core_2022-08-18-17-19-00_1.bag
+FROZEN_INPUT_REVERIFIED /media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/raw/extracted/Multi_Floor_Rosbag/raw_data_core_2022-08-18-17-21-29_2.bag
+FROZEN_INPUT_REVERIFIED /media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/p3_r10b_fix1_floor01_full_rerun_20260926/floor01_fix1_runtime_topics.bag
+FROZEN_INPUT_REVERIFIED /media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/p3_r7_floor01_full_baseline/floor01_canonical_input_manifest.csv
+R3B_FULL_MEASUREMENTS_FROZEN 4126

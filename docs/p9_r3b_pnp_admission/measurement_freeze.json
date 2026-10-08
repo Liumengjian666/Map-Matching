@@ -1,0 +1,25 @@
+{
+  "artifacts": {
+    "admission_pairs.csv": "7987ca741f43cbf453b531f6b54eb2d9786e35082c96abf606c0c43c5fb87d65",
+    "existing_valid_regression.csv": "e8fe2d8b033af6f7c55140e03ad78a373a9c3d0c17879c100174ca808dd132c3",
+    "low_support_pnp.csv": "fb1d3ad827dd154d6348cf7cc576a2c5dd5e064c52489020d0fade26b1e078fa",
+    "parity.csv": "5321d6ff7a1c7039ae11fa3313bc0f332d820d81ef386b064244b10b2289dd77",
+    "selected_measurements.csv": "d4740ac3f700fc24399bf409f1627c03169be3f57a5aac009409ceca19197614"
+  },
+  "execution_manifest_sha256": "ed210d391f51806ab02279cb7d2c88d2165c5d555e5b061b722b6b7f1e55c77a",
+  "existing_valid": 17,
+  "gt_loaded": false,
+  "labels_loaded": false,
+  "lost_valid": 0,
+  "low_support_pairs": 18,
+  "new_depth_completion": 0,
+  "new_image_extraction": 0,
+  "new_ndt_calls": 0,
+  "pair_count": 128,
+  "parity_controls": 48,
+  "replay_wall_seconds": 0.8449740850483067,
+  "unlabelled_coverage": {
+    "total": 32,
+    "valid": 23
+  }
+}

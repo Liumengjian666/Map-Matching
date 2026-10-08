@@ -1,0 +1,33 @@
+{
+  "CSV_JSON_AUDIT": "PASS",
+  "admission_boundary_self_test": "PASS",
+  "archive_gate_final_quality_self_test": "PASS",
+  "binary_sha256": {
+    "/tmp/p9_r3_release_8JvFPZ/libp9_r2b_chart.so": "2a71c945f5b23b1eacdf4f73a63aba86fd509d2c556392652a0eda7c723cb711",
+    "/tmp/p9_r3_release_8JvFPZ/p9_discrete_support_evidence": "a86e518def47f95716e40241d9a88303dae70ff24be07103d028721988799fe3",
+    "/tmp/p9_r3_release_8JvFPZ/p9_h2_matched_discovery": "877ef05f33dffd9ee6260a62f53c455136459219c4092ff081a4000c9e47731d",
+    "/tmp/p9_r3_release_8JvFPZ/p9_ndt_energy_contract": "b61a22b1cdb3b25a7e9aefae71e6eb9cb80c3d62d1d073e8072c1cf381db686e",
+    "/tmp/p9_r3_release_8JvFPZ/p9_numerical_stationarity": "8edcccc93d102ce0c9b7d898e4e35f83415c8b51a4aee8518e830088000ba9d5",
+    "/tmp/p9_r3_release_8JvFPZ/p9_r1c3a_contract_closure": "3745bb976570af6c6a0e97234d6cc32535edcf15cb8667b47ab99df814f89908",
+    "/tmp/p9_r3_release_8JvFPZ/p9_r2_terminal_stability": "11584c01232daf5add40956c4f10496d9431554776a88d3e3ddf8d12722bf4d4",
+    "/tmp/p9_r3_release_8JvFPZ/p9_r2a_predictor_search": "3dd2d4f48c86aa9feb55c0ea6efe7128fa90c6c5a3c6c4c4364cc230cfd56db6",
+    "/tmp/p9_r3_release_8JvFPZ/p9_r2b_chart_self_test": "8fa3e500eb081f76f58bc485158ce0651e2fa0dd58c9f4f089150e54500d090c",
+    "/tmp/p9_r3_release_8JvFPZ/p9_secondgen_branch_gate": "98d54fbd30aab358cca8b84a1c602556660665fd518c4ea7b1a77cebb087d841",
+    "/tmp/p9_r3_release_8JvFPZ/p9_strong_attractor_closure": "704455b6ad8c340adf10ac8fc41203c267b95fe4cea008a919f023fdecfb0cbf",
+    "/tmp/p9_r3_release_8JvFPZ/p9_support_aware_continuation": "343b9cb1990d2efa059c18da254d67138ee604b8305e9ad882259b3335940278",
+    "/tmp/p9_r3_release_8JvFPZ/p9_true_profile_closure": "9c8ad20298786c6b75471c9c3e022c85a245d4b96486b43acfede26b5b59e5bf"
+  },
+  "build_dir": "/tmp/p9_r3_release_8JvFPZ",
+  "cheirality_self_test": "PASS",
+  "ctest_log_sha256": "c27e20fedb2e1753225c1a825fe94e95b07240273f90e36eea524bed306e20d6",
+  "fresh_context_review": "Frontend parity and stage-lineage independent read-only reviews; actionable findings fixed BEFORE replay; no external CLI",
+  "p9_tests_failed": 0,
+  "p9_tests_passed": 33,
+  "production_core_modified": false,
+  "release_build": "PASS",
+  "stable_workspace_modified": false,
+  "stage_tampering_once_only_self_test": "PASS",
+  "tracked_and_staged_scope_audit": "PASS",
+  "unrelated_untracked_files_modified": false,
+  "untracked_preservation_basis": "No task writes/staging/deletion of initial .vscode, Testing or anomalous files; not a baseline byte-hash proof"
+}

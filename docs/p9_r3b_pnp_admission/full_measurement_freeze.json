@@ -1,0 +1,13 @@
+{
+  "artifacts": {
+    "full_measurements.csv": "96a6d3de0791399e8eb572c17ea9e0fbfc82ab6b2184811fc30bc19c740427af"
+  },
+  "execution_manifest_sha256": "ed210d391f51806ab02279cb7d2c88d2165c5d555e5b061b722b6b7f1e55c77a",
+  "full_run_started_sha256": "c345ce43bc2f3145e6c7e336869df81eb7cb5dbecef5586ccd2494e361caedf3",
+  "gt_scoring_done": false,
+  "new_ndt_calls": 0,
+  "parameters_changed": false,
+  "posthoc_quality_sha256": "da3c1ed5ed421056e4610c6cb5a75c7bfea33a1d0ef6e0b9fa3877dd4600a32a",
+  "rows": 4126,
+  "wall_seconds": 193.38443869299954
+}

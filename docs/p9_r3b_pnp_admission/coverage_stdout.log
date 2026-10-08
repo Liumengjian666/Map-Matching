@@ -1,0 +1,1 @@
+R3B_COVERAGE [{'method': 'R3A_AUGMENTED30', 'total': 32, 'valid': 17, 'major_valid': 4, 'no_major_valid': 13}, {'method': 'R3B_AUGMENTED20', 'total': 32, 'valid': 23, 'major_valid': 6, 'no_major_valid': 17}] PASS True GT_LOADED=NO

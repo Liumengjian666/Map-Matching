@@ -1,0 +1,115 @@
+{
+  "ambiguity_auc_run": false,
+  "artifacts": {
+    "posthoc_gt.csv": "6c9006f6789432b6810157b0f9f7d36af702ba9eb204ac33a78171bbd83ff701"
+  },
+  "coverage_freeze_sha256": "86aff964f1c4889000c390a7d12f9f7f0fcc43144c534115bb0fd7cf143b29d6",
+  "development_pnp_coverage_gate": true,
+  "groups": [
+    {
+      "catastrophic_count": 1,
+      "catastrophic_rate": 0.09090909090909091,
+      "group": "ALL_LOW_SUPPORT_NEWLY_VALID",
+      "gt_evaluable": 11,
+      "missing_gt": 0,
+      "mode": "R3B20",
+      "rotation": {
+        "count": 11,
+        "max": 1.7206197112682435,
+        "mean": 0.8670274966744898,
+        "median": 0.7443494906852999,
+        "p95": 1.6224941001519302,
+        "rmse": 0.9743598998740032
+      },
+      "total": 11,
+      "translation": {
+        "count": 11,
+        "max": 0.4521969333585686,
+        "mean": 0.06738536445486608,
+        "median": 0.023812894663935463,
+        "p95": 0.2655288350476107,
+        "rmse": 0.14064523224373518
+      }
+    },
+    {
+      "catastrophic_count": 0,
+      "catastrophic_rate": 0.0,
+      "group": "NEWLY_AVAILABLE_SELECTED",
+      "gt_evaluable": 6,
+      "missing_gt": 0,
+      "mode": "R3B20",
+      "rotation": {
+        "count": 6,
+        "max": 1.7206197112682435,
+        "mean": 0.7369391102629118,
+        "median": 0.6317048906729664,
+        "p95": 1.4765521561225077,
+        "rmse": 0.8805096331759906
+      },
+      "total": 6,
+      "translation": {
+        "count": 6,
+        "max": 0.023812894663935463,
+        "mean": 0.014832893007634455,
+        "median": 0.014418359716008966,
+        "p95": 0.023291963889980952,
+        "rmse": 0.01630052122945292
+      }
+    },
+    {
+      "catastrophic_count": 0,
+      "catastrophic_rate": 0.0,
+      "group": "R3A_EXISTING_VALID_NEW_SELECTED_LAG",
+      "gt_evaluable": 17,
+      "missing_gt": 0,
+      "mode": "R3B20",
+      "rotation": {
+        "count": 17,
+        "max": 1.8083789944382929,
+        "mean": 0.7441416476893903,
+        "median": 0.7940171073641958,
+        "p95": 1.6615922383868407,
+        "rmse": 0.8838137864576543
+      },
+      "total": 17,
+      "translation": {
+        "count": 17,
+        "max": 0.07043202652975301,
+        "mean": 0.02337892659489828,
+        "median": 0.024408590744294717,
+        "p95": 0.04379901143814174,
+        "rmse": 0.02840952859372297
+      }
+    },
+    {
+      "catastrophic_count": 0,
+      "catastrophic_rate": 0.0,
+      "group": "R3A_EXISTING_VALID_ORIGINAL_LAG",
+      "gt_evaluable": 17,
+      "missing_gt": 0,
+      "mode": "R3B20_PARITY",
+      "rotation": {
+        "count": 17,
+        "max": 1.8083789944382929,
+        "mean": 0.7441416476893903,
+        "median": 0.7940171073641958,
+        "p95": 1.6615922383868407,
+        "rmse": 0.8838137864576543
+      },
+      "total": 17,
+      "translation": {
+        "count": 17,
+        "max": 0.07043202652975301,
+        "mean": 0.02337892659489828,
+        "median": 0.024408590744294717,
+        "p95": 0.04379901143814174,
+        "rmse": 0.02840952859372297
+      }
+    }
+  ],
+  "gt_sha256": "b8db2491cdb3ca3194f653cab90f31eae70b457e91b2f87f30ed7fe2d0e2ce9f",
+  "gt_source": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/gt/floor01_gt.txt",
+  "gt_used": "POSTHOC_FRONTEND_ONLY",
+  "parameters_changed": false,
+  "quality_pass": true
+}

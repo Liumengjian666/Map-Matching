@@ -1,0 +1,2 @@
+old_valid,total_pairs,new_valid,new_coverage,translation_rmse_m,rotation_rmse_deg,low_support_valid,low_support_valid_fraction,runtime_seconds,pass_flag
+1802,4126,2715,0.6580222976248182,0.03458481814862758,0.8485825983955364,278,0.10239410681399631,193.38443869299954,True

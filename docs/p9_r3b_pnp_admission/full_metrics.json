@@ -1,0 +1,97 @@
+{
+  "artifacts": {
+    "full_floor01_metrics.csv": "8c27e87e90eabc7e90d1eed03591c02a028228db7ded827f2982c9e2d417a0e9",
+    "full_gt.csv": "3e1388a10c20d82fcac32b10cb4b87dc6414e5271cfefbcc3987eca2d2586d0f"
+  },
+  "full_measurement_freeze_sha256": "7659f0e20230b00cc2cc40d174b58b7d96a5a1378b5ead2ebb9d129afba29d3d",
+  "groups": [
+    {
+      "catastrophic_count": 4,
+      "catastrophic_rate": 0.0014732965009208103,
+      "group": "FULL_ALL_VALID",
+      "gt_evaluable": 2715,
+      "missing_gt": 0,
+      "mode": "R3B20",
+      "rotation": {
+        "count": 2715,
+        "max": 10.173479167797538,
+        "mean": 0.6030027975516471,
+        "median": 0.47394399617436084,
+        "p95": 1.5873086989541174,
+        "rmse": 0.8485825983955364
+      },
+      "total": 2715,
+      "translation": {
+        "count": 2715,
+        "max": 0.6106246749093799,
+        "mean": 0.020345142088699794,
+        "median": 0.013620144348808073,
+        "p95": 0.057954252031129985,
+        "rmse": 0.03458481814862758
+      }
+    },
+    {
+      "catastrophic_count": 0,
+      "catastrophic_rate": 0.0,
+      "group": "FULL_LOW_SUPPORT_VALID",
+      "gt_evaluable": 278,
+      "missing_gt": 0,
+      "mode": "R3B20",
+      "rotation": {
+        "count": 278,
+        "max": 3.3013904351597043,
+        "mean": 0.7166332802963986,
+        "median": 0.660465350338685,
+        "p95": 1.5552534303238765,
+        "rmse": 0.8501115309078042
+      },
+      "total": 278,
+      "translation": {
+        "count": 278,
+        "max": 0.12045549837506293,
+        "mean": 0.018977858987355826,
+        "median": 0.01524746344286457,
+        "p95": 0.04398963117594513,
+        "rmse": 0.02424286222738465
+      }
+    },
+    {
+      "catastrophic_count": 1,
+      "catastrophic_rate": 0.000555247084952804,
+      "group": "HISTORICAL_VALID_INTERSECTION",
+      "gt_evaluable": 1801,
+      "missing_gt": 0,
+      "mode": "R3B20",
+      "rotation": {
+        "count": 1801,
+        "max": 7.516115148433022,
+        "mean": 0.5372243507594441,
+        "median": 0.39598165463637264,
+        "p95": 1.5124030772936041,
+        "rmse": 0.7613820055121462
+      },
+      "total": 1801,
+      "translation": {
+        "count": 1801,
+        "max": 0.3920588589557182,
+        "mean": 0.019310429518798834,
+        "median": 0.012383241258509276,
+        "p95": 0.05784213661473883,
+        "rmse": 0.031201590240096364
+      }
+    }
+  ],
+  "gt_sha256": "b8db2491cdb3ca3194f653cab90f31eae70b457e91b2f87f30ed7fe2d0e2ce9f",
+  "metric": {
+    "low_support_valid": 278,
+    "low_support_valid_fraction": 0.10239410681399631,
+    "new_coverage": 0.6580222976248182,
+    "new_valid": 2715,
+    "old_valid": 1802,
+    "pass_flag": true,
+    "rotation_rmse_deg": 0.8485825983955364,
+    "runtime_seconds": 193.38443869299954,
+    "total_pairs": 4126,
+    "translation_rmse_m": 0.03458481814862758
+  }
+}

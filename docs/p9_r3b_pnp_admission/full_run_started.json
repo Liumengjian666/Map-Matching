@@ -1,0 +1,18 @@
+{
+  "attempt_min": 20,
+  "completion_parameters": {
+    "depth_lower_factor": 0.9,
+    "depth_upper_factor": 1.1,
+    "max_neighbors": 12,
+    "min_neighbors": 6,
+    "planarity_ratio_max": 0.02,
+    "radius_px": 16.0,
+    "ray_dot_min": 0.1,
+    "residual_absolute_m": 0.05,
+    "residual_depth_fraction": 0.01,
+    "spread_absolute_m": 0.5,
+    "spread_depth_fraction": 0.1
+  },
+  "execution_manifest_sha256": "ed210d391f51806ab02279cb7d2c88d2165c5d555e5b061b722b6b7f1e55c77a",
+  "posthoc_quality_sha256": "da3c1ed5ed421056e4610c6cb5a75c7bfea33a1d0ef6e0b9fa3877dd4600a32a"
+}

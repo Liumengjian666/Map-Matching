@@ -1,0 +1,1 @@
+R3B_FULL_METRICS {'old_valid': 1802, 'total_pairs': 4126, 'new_valid': 2715, 'new_coverage': 0.6580222976248182, 'translation_rmse_m': 0.03458481814862758, 'rotation_rmse_deg': 0.8485825983955364, 'low_support_valid': 278, 'low_support_valid_fraction': 0.10239410681399631, 'runtime_seconds': 193.38443869299954, 'pass_flag': True}

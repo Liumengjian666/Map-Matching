@@ -1,0 +1,30 @@
+{
+  "ambiguity_auc_run": false,
+  "artifacts": {
+    "coverage_summary.csv": "bbf34cc2acb5ad8945781fa78ad926ecf909622a630663c0e2993b8c9ca6641a"
+  },
+  "coverage": [
+    {
+      "major_valid": 4,
+      "method": "R3A_AUGMENTED30",
+      "no_major_valid": 13,
+      "total": 32,
+      "valid": 17
+    },
+    {
+      "major_valid": 6,
+      "method": "R3B_AUGMENTED20",
+      "no_major_valid": 17,
+      "total": 32,
+      "valid": 23
+    }
+  ],
+  "coverage_pass": true,
+  "gt_loaded": false,
+  "label_sha256": "698322741198bb69db577c373623363552fa30bad1b8b9c60700858834dc97c6",
+  "label_source": "/home/jian/livox_ws/dog_loc_paper_ws/docs/p9_r3_visual_nonlocal_evidence/frame_statistics.csv",
+  "lost_valid": 0,
+  "measurement_freeze_sha256": "8f1ae4dff6e208f64d9eb4fa8f5a4232e38e3e4648fed60bec48b72a9ea8dd6b",
+  "parity_pass": true,
+  "regression_pass": true
+}
