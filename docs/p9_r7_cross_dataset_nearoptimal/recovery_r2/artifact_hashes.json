@@ -1,0 +1,14 @@
+{
+  "sha256": {
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery_r2/REPORT.md": "79fa1ac38fb610e9fb1dd75ce0eb975e78d8409470089664898709b8ec63d4b5",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery_r2/THEORY.md": "b0415c0030bf839ec48b56b07eb3ea66374772e71054ea0b5ed20ab6cdf77c0e",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery_r2/cost.csv": "b2d9f09d1e4e9a4cf5e41680b69efb71d9c9070cda838c871a124ebc0c169bc0",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery_r2/historical_adapter_git_search.csv": "840f2530df55787ced8c2d2bf59c8d85768451d3b408dedb2fb658d0d68b2f67",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery_r2/historical_adapter_source_manifest.json": "d1e9f252879679be6e951b2934648cf54c8fa368df8dbd1193e8c651ceee912f",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery_r2/results.json": "1f4fd0874a5a9152fb014f7e7b2dc928cb9d4a0043a2ee2afc4df7649b338fc3",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery_r2/storage_authorization_receipt.json": "f1c3101729f6f2c84635601d52e0b21ab9e8bb8ede991f259ec35b009c03ef0f",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery_r2/transitive_dependency_manifest.json": "7bd0838b4220b76d72a0c835873076aa164cd709eb9e4d29fa3ac419407930ee",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery_r2/verification.json": "310812e3683c24010bd8d30219976fe20a3a1fe4d6a60fb210713057e936c280"
+  },
+  "self_excluded": true
+}

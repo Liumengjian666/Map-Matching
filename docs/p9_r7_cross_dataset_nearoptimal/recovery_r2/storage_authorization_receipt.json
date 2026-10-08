@@ -1,0 +1,14 @@
+{
+  "status": "AUTHORIZED",
+  "session_policy": "danger-full-access; filesystem unrestricted",
+  "target_directory": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/",
+  "actual_directory": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_r7_r2_recovery.l8b521",
+  "creation": "mktemp -d with explicit target parent",
+  "write_probe": "storage_probe.txt",
+  "probe_sha256": "71917ce8d18da29822dc97690e36b363cdb8c813496dd924a5f59dea90631d91",
+  "write_readback": "PASS",
+  "free_capacity_df_h": "459G",
+  "permission_or_mount_changes": false,
+  "symlink_bypass": false,
+  "reconstruction_started": false
+}

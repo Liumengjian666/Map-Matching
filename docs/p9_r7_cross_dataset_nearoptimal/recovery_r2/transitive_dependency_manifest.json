@@ -1,0 +1,55 @@
+{
+  "status": "INCOMPLETE_FOR_HISTORICAL_V1",
+  "scope": "Current inspected project-level dependencies and build records only; not a complete historical compiler dependency closure.",
+  "edges": [
+    [
+      "superloc_corridor_sensor_adapter.cpp",
+      "../../superloc_adapter/src/superloc_sensor_adapter.cpp"
+    ],
+    [
+      "superloc_sensor_adapter.cpp",
+      "superloc_corridor_adapter/full_se3_deskew.hpp"
+    ]
+  ],
+  "files": [
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/build/superloc_corridor_adapter/CMakeFiles/superloc_corridor_sensor_adapter.dir/depend.make",
+      "sha256": "76ee268b55373316c7670428d49c4e14f38cae203481c446dbcfab8ad6e26c8c",
+      "historical_v1_identity": "NOT_PROVEN"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/build/superloc_corridor_adapter/CMakeFiles/superloc_corridor_sensor_adapter.dir/flags.make",
+      "sha256": "58424ab9a3c245076bb5ecb00372631e5a59bd9feb517459134e7e45e60a7216",
+      "historical_v1_identity": "NOT_PROVEN"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/build/superloc_corridor_adapter/CMakeFiles/superloc_corridor_sensor_adapter.dir/build.make",
+      "sha256": "545070bc4732e60d83342d0d949eed21fe3496390b97ad5beb8b8156e3bada28",
+      "historical_v1_identity": "NOT_PROVEN"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/src/superloc_corridor_sensor_adapter.cpp",
+      "sha256": "de3effb5cbec3b3312d57e300c4b346c92b34c6c0e05d7ce7344f7dd9a11c55e",
+      "historical_v1_identity": "NOT_PROVEN"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_adapter/src/superloc_sensor_adapter.cpp",
+      "sha256": "58c4073839247098b6f0f545065056be647336cc64631563f5d070d7dcd3b4e8",
+      "historical_v1_identity": "NOT_PROVEN"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/include/superloc_corridor_adapter/full_se3_deskew.hpp",
+      "sha256": "0cba8177a3542bbc9589e0e9418bc1db1727a66c572cad18eac592fe419f596e",
+      "historical_v1_identity": "NOT_PROVEN"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/scripts/hash_derived_bag.py",
+      "sha256": "f15f574b9d1151d2536fcd45ce58bec77a4c1ae098f8a12e8f34acc7d33b5a0e",
+      "historical_v1_identity": "NOT_PROVEN"
+    }
+  ],
+  "velodyne_commit": "29abd0e1361cb7f5eda451d2b51c35eeca45e0d5",
+  "velodyne_tracked_worktree": "CLEAN",
+  "historical_missing_source_blob": null,
+  "source_reconstruction_from_current_code": false
+}

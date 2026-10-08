@@ -1,0 +1,24 @@
+{
+  "release_build": {
+    "status": "PASS",
+    "command": "cmake --build /tmp/p9_r4_release.Eirto1 -j 2"
+  },
+  "P9_tests": {
+    "status": "PASS",
+    "passed": 41,
+    "failed": 0,
+    "wall_seconds": 8.56,
+    "command": "ctest --output-on-failure",
+    "cwd": "/tmp/p9_r4_release.Eirto1",
+    "environment": "PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 LD_LIBRARY_PATH=/lib/x86_64-linux-gnu"
+  },
+  "source_hash_checks": "PASS_CURRENT_BYTES_EQUAL_R1_RECEIPTS",
+  "historical_manifest_git_blob_sha256": "ba74130902364db5568cae767985a5cf5e0b5f10ca214fb96b418e4c2ecedcb3",
+  "storage_write_readback": "PASS",
+  "R7_input_audit_self_test": "PASS",
+  "JSON_CSV_source_storage_receipt_audit": "PASS",
+  "historical_v1_lineage": "FAIL_NOT_RECOVERED",
+  "actual_message_parity": "NOT_RUN",
+  "actual_baseline_determinism": "NOT_RUN",
+  "note": "Software/hash guards do not certify historical source identity or dataset equivalence."
+}

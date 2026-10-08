@@ -1,0 +1,18 @@
+scope,operation,result,limitation
+/home/jian/livox_ws/superloc_adapter_ws,rev-parse and .git discovery,NOT_A_GIT_REPOSITORY,only nested Velodyne repository found at depth <=5
+/home/jian/livox_ws/superloc_adapter_ws/src/superloc_adapter,git rev-parse,NOT_A_GIT_REPOSITORY,no adapter log/branch/reflog available
+/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter,git rev-parse,NOT_A_GIT_REPOSITORY,no adapter log/branch/reflog available
+/home/jian/livox_ws/superloc_adapter_ws/src/velodyne,log --all and branch -a and reflog,EXPECTED_COMMIT_CHECKOUT,converter only not custom adapter history
+/tmp/dog_loc_paper_r4_ws.Fq21k2,log --all --reflog for both adapter cpp names and corridor launch,NO_FILE_HISTORY_MATCH,all locally available refs/reflogs
+/home/jian/livox_ws/dog_loc_paper_ws,log --all --reflog for both adapter cpp names and corridor launch,NO_FILE_HISTORY_MATCH,read-only search; original worktree unchanged
+/home/jian/livox_ws/dog_loc_paper_ws_p6i4_20260928,log --all --reflog and branch -a and reflog,NO_FILE_HISTORY_MATCH,broken origin/HEAD warning retained; no refs repaired
+/tmp/dog_loc_paper_r4_ws.Fq21k2,rev-list --all --reflog --objects filtered adapter/snapshot/backup,ONLY_LATER_HASH_MANIFEST_AND_CORRIDOR02_DOC,not historical source bytes
+/home/jian/livox_ws/superloc_adapter_ws,rg --files --hidden for snapshots archives backups and adapter sources,CURRENT_IMPLEMENTATION_ONLY,no original v1 source snapshot found
+/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01,scoped archive/backup filename scan,V1_SIDECARS_AND_OFFICIAL_GT_ZIP,zip listing only; no GT contents loaded
+/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p3_reference_lineage_closure/official_source_gt_archive.zip,unzip -l,GT_CSV_AND_MAP_PNG_ONLY,no adapter source; no extraction
+/media/jian/HIKVISION/paper rosbag/imu_deskew_experiments,scoped source/snapshot/backup filename scan,NO_HISTORICAL_ADAPTER_CANDIDATE,named tree only
+/media/jian/HIKVISION/paper rosbag/cross_sequence_analysis,scoped source/snapshot/backup filename scan,NO_HISTORICAL_ADAPTER_CANDIDATE,named tree only
+/media/jian/HIKVISION/paper,scoped archive/adapter/backup filename scan,NO_HISTORICAL_ADAPTER_CANDIDATE,named tree only
+/home/jian/livox_ws/p6_i1_recovery_assets_20260927,scoped archive/adapter/backup filename scan,NO_HISTORICAL_ADAPTER_CANDIDATE,named tree only
+/home/jian/livox_ws/superloc_adapter_ws/build,dependency and flags inspection plus .i/.ii/.bak search,CURRENT_FULL_SE3_BUILD_REFERENCES,no preserved preprocessed historical source
+/tmp,depth-2 name discovery only,LATER_P7_P8_DATA_PATHS,systemd/snap/tracker private dirs inaccessible; no permissions changed
