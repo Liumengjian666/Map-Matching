@@ -1,0 +1,177 @@
+{
+  "profile_rank": 5,
+  "profile_dimension": 5,
+  "velocity_nuisance_rank": 90,
+  "singular_values": [
+    0.35501195967844096,
+    0.35500775225665915,
+    0.1795880869718105,
+    0.013912154488810835,
+    0.013890400158478014
+  ],
+  "condition": 25.558080086106028,
+  "normal_condition": 653.2154576878095,
+  "perturbation_frobenius_bound": 0.28128525229720036,
+  "sigma_min_lower_bound": 0.0,
+  "robust_condition": null,
+  "weakest_scaled_direction": [
+    -0.42570848758495555,
+    0.262536753774817,
+    -0.6715301512723193,
+    0.5435144258403759,
+    -0.05904287722573685
+  ],
+  "rank_interpretation": "DIAGNOSTIC_ONLY; untrusted raw-scan poses; lower-bound-zero is not proof of physical rank deficiency",
+  "gyro_bias_tentative": [
+    0.014757770393505289,
+    -0.0227254095831836,
+    -0.0005834863036689103
+  ],
+  "accel_bias_tentative": [
+    0.8430275827681445,
+    -0.7016591854909091,
+    0.021292611373825095
+  ],
+  "gravity_tentative": [
+    -0.32080508832139465,
+    -1.2437970527987572,
+    -9.72453258448735
+  ],
+  "last_velocity_tentative": [
+    1.8640406748236784,
+    -0.2049499896808759,
+    -0.13370686375000176
+  ],
+  "gyro_residual_rmse_deg": 1.3007960832433956,
+  "position_residual_rmse_m": 0.04023601563612718,
+  "velocity_residual_rmse_m_s": 0.0006851187404397612,
+  "fit_start_ns": 1517157224130795313,
+  "fit_end_ns": 1517157227055552317,
+  "IMU_max_loaded_stamp_ns": 1517157227083712000,
+  "solver_success": true,
+  "state_accepted": false,
+  "covariance": "NOT_ACCEPTED; full coupled covariance NOT_RUN after upstream quality rejection",
+  "split_diagnostics": [
+    {
+      "profile_rank": 5,
+      "profile_dimension": 5,
+      "velocity_nuisance_rank": 45,
+      "singular_values": [
+        0.24187262329287493,
+        0.24186516587065263,
+        0.12198718970929101,
+        0.0014674592897488301,
+        0.001174220770376173
+      ],
+      "condition": 205.98564545523132,
+      "normal_condition": 42430.08613360826,
+      "perturbation_frobenius_bound": 0.26369383138913394,
+      "sigma_min_lower_bound": 0.0,
+      "robust_condition": null,
+      "weakest_scaled_direction": [
+        -0.5042947644119721,
+        -0.004859651567131973,
+        0.573985765639434,
+        0.27481039814772396,
+        0.5836803579755968
+      ],
+      "rank_interpretation": "DIAGNOSTIC_ONLY; untrusted raw-scan poses; lower-bound-zero is not proof of physical rank deficiency",
+      "gyro_bias_tentative": [
+        0.016985411115329783,
+        -0.0038333323508067596,
+        0.026792652972625768
+      ],
+      "accel_bias_tentative": [
+        -4.090124873362843,
+        -4.82996882377723,
+        16.81736995156148
+      ],
+      "gravity_tentative": [
+        -6.439952125885355,
+        -1.8925470220628289,
+        7.152745164311798
+      ],
+      "last_velocity_tentative": [
+        1.480868884178581,
+        -0.020058020794597627,
+        -0.08108308444837183
+      ],
+      "gyro_residual_rmse_deg": 0.5361474783390046,
+      "position_residual_rmse_m": 0.018725607338140802,
+      "velocity_residual_rmse_m_s": 5.7503586847425575e-05,
+      "fit_start_ns": 1517157224130795313,
+      "fit_end_ns": 1517157225542773319,
+      "IMU_max_loaded_stamp_ns": 1517157225583840000,
+      "solver_success": true,
+      "state_accepted": false,
+      "covariance": "NOT_ACCEPTED; full coupled covariance NOT_RUN after upstream quality rejection"
+    },
+    {
+      "profile_rank": 5,
+      "profile_dimension": 5,
+      "velocity_nuisance_rank": 45,
+      "singular_values": [
+        0.11335917844199578,
+        0.11335436437020366,
+        0.05722102112142148,
+        0.002345572948218162,
+        0.00229901649928662
+      ],
+      "condition": 49.30768373222676,
+      "normal_condition": 2431.247675037299,
+      "perturbation_frobenius_bound": 0.3033465812888171,
+      "sigma_min_lower_bound": 0.0,
+      "robust_condition": null,
+      "weakest_scaled_direction": [
+        0.31222624606071653,
+        0.3942021970044921,
+        -0.6310793416082952,
+        -0.5885631159139366,
+        0.04951486977245589
+      ],
+      "rank_interpretation": "DIAGNOSTIC_ONLY; untrusted raw-scan poses; lower-bound-zero is not proof of physical rank deficiency",
+      "gyro_bias_tentative": [
+        0.0034071487404357076,
+        -0.03873044887864369,
+        -0.016724112426086082
+      ],
+      "accel_bias_tentative": [
+        0.6530728123299941,
+        -0.3677697057706821,
+        -0.2034834796589605
+      ],
+      "gravity_tentative": [
+        -0.5186400362287605,
+        -0.7550491016166812,
+        -9.766135078267578
+      ],
+      "last_velocity_tentative": [
+        1.8702492569899125,
+        -0.12581588809165123,
+        -0.03418732070352092
+      ],
+      "gyro_residual_rmse_deg": 1.7484481188350856,
+      "position_residual_rmse_m": 0.05087520590880396,
+      "velocity_residual_rmse_m_s": 0.0010364101351873563,
+      "fit_start_ns": 1517157225643633438,
+      "fit_end_ns": 1517157227055552317,
+      "IMU_max_loaded_stamp_ns": 1517157227083712000,
+      "solver_success": true,
+      "state_accepted": false,
+      "covariance": "NOT_ACCEPTED; full coupled covariance NOT_RUN after upstream quality rejection"
+    }
+  ],
+  "split_bg_change_rad_s": 0.0574098146822076,
+  "split_ba_change_m_s2": 18.224121289691556,
+  "split_gravity_angle_deg": 132.5668961240433,
+  "validation_translation_rmse_m": 0.4614496431437547,
+  "validation_rotation_rmse_deg": 5.460500513951139,
+  "raw_odometry_pairs": 98,
+  "raw_odometry_quality_pass_pairs": 32,
+  "raw_odometry_solver_converged_pairs": 98,
+  "first_quality_failure_tx": 2,
+  "formal_initialization_status": "REJECTED_AT_BOOTSTRAP_REGISTRATION_QUALITY_GATE",
+  "offline_diagnostics_wall_s": 4.388888899004087,
+  "new_NDT_calls": 0,
+  "GT_LOADED": false
+}

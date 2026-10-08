@@ -1,0 +1,10 @@
+{
+  "status": "NOT_ACCEPTED",
+  "stamp_ns": 1517157229072630478,
+  "reason": "bootstrap registration quality failed; diagnostic fits do not constitute an accepted initial state",
+  "velocity": null,
+  "bg": null,
+  "ba": null,
+  "gravity": null,
+  "covariance": "NOT_RUN"
+}

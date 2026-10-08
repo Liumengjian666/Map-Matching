@@ -1,0 +1,19 @@
+{
+  "mode": "DIAGNOSTIC_ONLY; never eligible for state injection",
+  "gate_freeze_sha256": "39c5422bc1cf000e3b2f8fa57d95e64777f5f7b3c74fd145bb6bd0c552630fbe",
+  "input_hash_recheck": "PASS",
+  "sources": {
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/preintegration.py": "8831a2a04693d579361645ead6358ca94b0a57e273f6d8b512af86c40ef74017",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/prepare_bootstrap.py": "eb457495645810ce24f63c1c2ef6f3d8105a982eddb5c76cfc421e32880ace04",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/test_preintegration.py": "8ebd9d7951e31cdf3dc0deafb70f6ccac9a65dfbfbbc7fc68b87f389395deb9a",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/diagnose_motion.py": "9d7bd01ad6f397fc4c7fe30239a858b74f926e7b8a9173c7cd3e17a006917479",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/bootstrap_lidar.cpp": "d22eae9ca7f8d47e64545c15e52f64592030b94fb68db0067b2435ed27e55a3c"
+  },
+  "diagnostic_executable_sha256": "b22794fec1bb34685a62e692860ecdf303824866e1b9507fa82fecbdc37536ec",
+  "diagnostic_binary_receipt_timing": "POST_RUN before subsequent build; original freeze binds first rejected execution",
+  "raw_odometry_sha256": "c9f382180506dcedece8e5c876504176b2d9bd02bcf48d798c759bf5f735b1f6",
+  "first_rejected_odometry_sha256": "68e308f42e7cb570e231da88728b4817e77447252c019dbf6c49d50e815466d5",
+  "command": "bootstrap_lidar INPUT diagnostic_lidar_odometry.csv --diagnostic-only",
+  "GT_LOADED": false,
+  "NDT_CALLS": 0
+}

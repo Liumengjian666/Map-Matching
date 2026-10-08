@@ -1,0 +1,3 @@
+test,status,scope
+synthetic_full_state_and_covariance_injection,PASS,synthetic fixture only
+real_Corridor01_state_injection,NOT_RUN,bootstrap quality gate failed

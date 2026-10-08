@@ -1,0 +1,1011 @@
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/fastlio2_frontend.hpp b/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/fastlio2_frontend.hpp
+index 0dc49fe..a41141f 100644
+--- a/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/fastlio2_frontend.hpp
++++ b/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/fastlio2_frontend.hpp
+@@ -50,0 +51,3 @@ class FastLio2IkfomFrontend {
++  bool initializeMoving(const MovingInitializationState& initial,
++                        std::string* failure_reason);
++
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/frontend_types.hpp b/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/frontend_types.hpp
+index dbcf8bf..5e6a5c5 100644
+--- a/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/frontend_types.hpp
++++ b/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/frontend_types.hpp
+@@ -67,0 +68,20 @@ struct FilterSnapshot {
++// A caller must first validate the causal estimator/observability contract.
++// This API validates and injects a state; it does not estimate a moving state.
++struct MovingInitializationState {
++  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
++  uint64_t stamp_ns = 0;
++  Pose3d map_T_imu;
++  Eigen::Vector3d velocity_map = Eigen::Vector3d::Zero();
++  Eigen::Vector3d gyro_bias_imu = Eigen::Vector3d::Zero();
++  Eigen::Vector3d accel_bias_imu = Eigen::Vector3d::Zero();
++  Eigen::Vector3d gravity_map = Eigen::Vector3d::Zero();
++  Pose3d T_imu_lidar;
++  // Orthonormal map-frame gravity perturbation basis, perpendicular to gravity.
++  // Covariance order: p(map), R(right/body), v(map), bg(IMU), ba(IMU),
++  // gravity perturbation in this basis (m/s^2, NOT IKFoM angular S2 coordinates).
++  Eigen::Matrix<double, 3, 2> gravity_tangent_basis =
++      Eigen::Matrix<double, 3, 2>::Zero();
++  Eigen::Matrix<double, 17, 17> covariance =
++      Eigen::Matrix<double, 17, 17>::Zero();
++};
++
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/CMakeLists.txt b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/CMakeLists.txt
+new file mode 100644
+index 0000000..4e4e37a
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/CMakeLists.txt
+@@ -0,0 +1,29 @@
++cmake_minimum_required(VERSION 3.10)
++project(p9_corridor_moving_init LANGUAGES C CXX)
++set(CMAKE_CXX_STANDARD 14)
++set(FASTLIO2_ROOT "" CACHE PATH "Pinned read-only FAST-LIO2")
++execute_process(COMMAND git -C "${FASTLIO2_ROOT}" rev-parse HEAD
++  OUTPUT_VARIABLE PIN OUTPUT_STRIP_TRAILING_WHITESPACE RESULT_VARIABLE RC)
++if(NOT RC EQUAL 0 OR NOT PIN STREQUAL "7cc4175de6f8ba2edf34bab02a42195b141027e9")
++  message(FATAL_ERROR "FAST-LIO2 pin mismatch")
++endif()
++find_package(Eigen3 REQUIRED)
++find_package(OpenMP REQUIRED)
++find_package(PCL 1.10 REQUIRED COMPONENTS common filters registration)
++find_package(Python3 REQUIRED COMPONENTS Interpreter)
++set(PKG "${CMAKE_CURRENT_SOURCE_DIR}/../../..")
++add_library(moving_input_core STATIC "${PKG}/src/p7_replay_io.cpp"
++  "${PKG}/src/fastlio2_frontend_ikfom.cpp" "${PKG}/src/registration_geometry.cpp"
++  "${PKG}/src/scan_processor.cpp" "${PKG}/src/lidar_deskew_geometry.cpp")
++target_include_directories(moving_input_core PUBLIC "${PKG}/include" PRIVATE "${FASTLIO2_ROOT}/include")
++target_link_libraries(moving_input_core PUBLIC Eigen3::Eigen OpenMP::OpenMP_CXX)
++enable_testing()
++add_test(NAME moving_preintegration_contract COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/test_preintegration.py")
++add_executable(p9_bootstrap_lidar bootstrap_lidar.cpp)
++target_include_directories(p9_bootstrap_lidar PRIVATE ${PCL_INCLUDE_DIRS})
++target_link_libraries(p9_bootstrap_lidar PRIVATE moving_input_core ${PCL_LIBRARIES})
++foreach(TEST moving_initialization_test p7_replay_io_test scan_end_deskew_runtime_test fastlio2_propagation_contract_test registration_geometry_test)
++  add_executable(${TEST} "${PKG}/tests/${TEST}.cpp")
++  target_link_libraries(${TEST} PRIVATE moving_input_core)
++  add_test(NAME ${TEST} COMMAND ${TEST})
++endforeach()
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/audit_archive.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/audit_archive.py
+new file mode 100644
+index 0000000..64de74d
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/audit_archive.py
+@@ -0,0 +1,74 @@
++"""Real input/time revalidation and strict CSV/JSON/hash audit of this STOP."""
++import csv
++import json
++import pathlib
++import shutil
++import sys
++import numpy as np
++from preintegration import integrate, log
++from diagnose_motion import stage_imu
++from prepare_bootstrap import ARCHIVE, INPUT, OUTPUT, sha, write_csv, write_json, verify_input
++
++def revalidate():
++    freeze=json.loads((ARCHIVE/"bootstrap_freeze.json").read_text())
++    manifest=json.loads((INPUT/"input_manifest.json").read_text())
++    verify_input(manifest,freeze["input_manifest_sha256"])
++    if sha(ARCHIVE/"bootstrap_config.json")!=freeze["config_sha256"]:
++        raise RuntimeError("quality gates changed after observed outcomes")
++    diagnostics=json.loads((ARCHIVE/"motion_diagnostics.json").read_text())
++    imu=list(csv.DictReader((INPUT/"imu.csv").open()))
++    config=json.loads((ARCHIVE/"bootstrap_config.json").read_text())["preintegration"]
++    stamps,samples=stage_imu(imu,freeze["estimation_end_ns"])
++    bg=np.array(diagnostics["gyro_bias_tentative"])
++    checked=[]
++    for row in csv.DictReader((ARCHIVE/"imu_preintegration.csv").open()):
++        begin,end=int(row["start_ns"]),int(row["end_ns"])
++        DR,dv,dp,_,_=integrate(stamps,samples,begin,end,bg,config["maximum_imu_gap_s"],config["maximum_endpoint_hold_s"])
++        expected=np.array([float(row[p+str(i)]) for p in ["dR","dv","dp"] for i in range(3)])
++        actual=np.concatenate((log(DR),dv,dp)); diff=float(np.max(np.abs(actual-expected)))
++        if diff>1e-12:raise RuntimeError("stored diagnostics changed after gap guard")
++        checked.append({"start_ns":begin,"end_ns":end,"guard":"PASS","stored_integral_max_diff":diff})
++    stamps,samples=stage_imu(imu,freeze["boot_stamp_ns"])
++    for row in csv.DictReader((ARCHIVE/"bootstrap_validation.csv").open()):
++        begin,end=int(row["fit_end_ns"]),int(row["stamp_ns"])
++        integrate(stamps,samples,begin,end,bg,config["maximum_imu_gap_s"],config["maximum_endpoint_hold_s"])
++        checked.append({"start_ns":begin,"end_ns":end,"guard":"PASS","stored_integral_max_diff":"NOT_APPLICABLE_VALIDATION_GUARD_ONLY"})
++    write_csv(ARCHIVE/"preintegration_guard_revalidation.csv",checked)
++    # Make executed diagnostic sources reproducible despite a subsequently
++    # added guard. Unused test files in the old provenance are not execution dependencies.
++    provenance=json.loads((ARCHIVE/"diagnostic_provenance.json").read_text())
++    snapshots=OUTPUT/"estimator_source_at_corrected_fit"
++    for name in ["preintegration.py","diagnose_motion.py","prepare_bootstrap.py"]:
++        expected=provenance["sources"][str(pathlib.Path(__file__).parent/name)]
++        if sha(snapshots/name)!=expected:raise RuntimeError("executed estimator snapshot hash mismatch")
++    shutil.copyfile("/tmp/p9_corridor_moving_init_build/Testing/Temporary/LastTest.log",ARCHIVE/"moving_tests.log")
++
++def audit(freeze_hashes=False):
++    for path in ARCHIVE.glob("*.json"):
++        value=json.loads(path.read_text(),parse_constant=lambda x: (_ for _ in ()).throw(ValueError(x)))
++    for path in ARCHIVE.glob("*.csv"):
++        rows=list(csv.reader(path.open()))
++        if not rows or len(set(rows[0]))!=len(rows[0]) or any(len(r)!=len(rows[0]) for r in rows[1:]):
++            raise RuntimeError("malformed CSV: "+str(path))
++    results=json.loads((ARCHIVE/"results.json").read_text())
++    if results["final_result"]!="BOOTSTRAP_REGISTRATION_QUALITY_FAIL" or results["GT_LOADED"]:
++        raise RuntimeError("incorrect result or GT scope")
++    if any(results[k]!=0 for k in ["NEW_ORACLE263_CALLS","NEW_B12_CALLS","VISUAL_EXTRACTION"]):
++        raise RuntimeError("forbidden experiment")
++    rows=list(csv.DictReader((ARCHIVE/"bootstrap_lidar_odometry.csv").open()))
++    if len(rows)!=99 or sum(r["solver_converged"]=="1" for r in rows[1:])!=98 or sum(r["quality_pass"]=="1" for r in rows[1:])!=32:
++        raise RuntimeError("bootstrap funnel count mismatch")
++    if any(r["accepted_moving_state"]!="NO" for r in rows):raise RuntimeError("untrusted pose accepted")
++    ledger=list(csv.DictReader((ARCHIVE/"formal_frame_ledger.csv").open()))
++    if len(ledger)!=2777 or sum(r["role"]=="BOOTSTRAP" for r in ledger)!=99:
++        raise RuntimeError("raw frames dropped")
++    hashes={p.name:sha(p) for p in sorted(ARCHIVE.iterdir()) if p.is_file() and p.name!="artifact_hashes.json"}
++    if freeze_hashes:write_json(ARCHIVE/"artifact_hashes.json",hashes)
++    elif hashes!=json.loads((ARCHIVE/"artifact_hashes.json").read_text()):
++        raise RuntimeError("archive hash mismatch")
++    print("CSV_JSON_HASH_AUDIT=PASS artifacts="+str(len(hashes))+" RAW_FRAMES=2777 GT=NO REAL_NDT=0")
++
++if __name__=="__main__":
++    if sys.argv[1]=="revalidate":revalidate()
++    elif sys.argv[1]=="freeze":audit(True)
++    else:audit()
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/bootstrap_lidar.cpp b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/bootstrap_lidar.cpp
+new file mode 100644
+index 0000000..15b7e9f
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/bootstrap_lidar.cpp
+@@ -0,0 +1,68 @@
++// Startup-only local odometry. No NDT, GT, baseline update, or source deskew.
++#include "dog_prior_map_fastlio2_frontend_exp/p7_replay_io.hpp"
++#include <pcl/filters/voxel_grid.h>
++#include <pcl/registration/gicp.h>
++#include <chrono>
++#include <fstream>
++#include <iomanip>
++#include <iostream>
++#include <stdexcept>
++namespace p = dog_prior_map_fastlio2_frontend_exp;
++using Cloud = pcl::PointCloud<pcl::PointXYZ>;
++Cloud::Ptr cloud(const p::P7TimedLidarVector& raw) {
++  Cloud::Ptr in(new Cloud), out(new Cloud);
++  for(const auto& point:raw) {
++    const double range=point.position.norm();
++    if(point.position.allFinite() && range>=.5 && range<=80.)
++      in->push_back(pcl::PointXYZ(point.position.x(),point.position.y(),point.position.z()));
++  }
++  pcl::VoxelGrid<pcl::PointXYZ> voxel;
++  voxel.setInputCloud(in); voxel.setLeafSize(.25f,.25f,.25f); voxel.filter(*out);
++  return out;
++}
++int main(int argc,char** argv) {
++  try {
++    if(argc!=3 && (argc!=4 || std::string(argv[3])!="--diagnostic-only"))
++      throw std::runtime_error("usage: INPUT_DIRECTORY NEW_ODOMETRY_CSV [--diagnostic-only]");
++    const bool diagnostic_only=argc==4;
++    std::ifstream exists(argv[2]); if(exists.good())throw std::runtime_error("output_already_exists");
++    const std::string dir=argv[1];
++    const auto scans=p::readP7TimedScans(dir+"/filter_scans.csv",dir+"/raw_timed_scan_index.csv");
++    const uint64_t deadline=scans.front().scan_start_ns+10000000000ULL;
++    std::ofstream out(argv[2]); if(!out)throw std::runtime_error("output_write_failed");
++    out<<"transaction_id,scan_start_ns,stamp_ns,raw_points,voxel_points,converged,solver_converged,diagnostic_only,fitness_m2,pair_translation_m,pair_rotation_deg,wall_s";
++    for(int i=0;i<4;++i)for(int j=0;j<4;++j)out<<",T"<<i<<j;
++    out<<'\n'<<std::setprecision(17);
++    Cloud::Ptr previous; Eigen::Matrix4f pose=Eigen::Matrix4f::Identity();
++    for(const auto& scan:scans) {
++      if(scan.scan_end_ns>deadline)break;
++      const auto start=std::chrono::steady_clock::now();
++      auto current=cloud(p::readP7PackedTimedCloud(dir+"/raw_timed_points.bin",scan));
++      bool ok=true,solver_ok=true; double fitness=0,translation=0,rotation=0;
++      if(previous) {
++        pcl::GeneralizedIterativeClosestPoint<pcl::PointXYZ,pcl::PointXYZ> gicp;
++        gicp.setInputSource(current); gicp.setInputTarget(previous);
++        gicp.setMaxCorrespondenceDistance(2.5); gicp.setMaximumIterations(40);
++        gicp.setTransformationEpsilon(1e-6); Cloud aligned;
++        gicp.align(aligned,Eigen::Matrix4f::Identity());
++        const Eigen::Matrix4f relative=gicp.getFinalTransformation();
++        translation=relative.block<3,1>(0,3).norm();
++        rotation=Eigen::AngleAxisf(relative.block<3,3>(0,0)).angle()*180./M_PI;
++        fitness=gicp.getFitnessScore();
++        solver_ok=gicp.hasConverged()&&relative.allFinite();
++        ok=solver_ok&&fitness<=.10&&translation<3&&rotation<45;
++        if(ok || (diagnostic_only&&solver_ok))pose=pose*relative;
++      }
++      const double elapsed=std::chrono::duration<double>(std::chrono::steady_clock::now()-start).count();
++      out<<scan.transaction_id<<','<<scan.scan_start_ns<<','<<scan.scan_end_ns<<','<<scan.cloud_point_count<<','
++         <<current->size()<<','<<ok<<','<<solver_ok<<','<<diagnostic_only<<','<<fitness<<','<<translation<<','<<rotation<<','<<elapsed;
++      for(int i=0;i<4;++i)for(int j=0;j<4;++j)out<<','<<pose(i,j);
++      out<<'\n'; out.flush();
++      std::cout<<"BOOTSTRAP_ONLY tx="<<scan.transaction_id<<" accepted="<<ok<<" wall="<<elapsed<<'\n';
++      if(!solver_ok || (!ok&&!diagnostic_only))
++        throw std::runtime_error("local_odometry_admission_failed; no gap skipping permitted");
++      previous=current;
++    }
++    return 0;
++  }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 1;}
++}
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/diagnose_motion.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/diagnose_motion.py
+new file mode 100644
+index 0000000..03afdbe
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/diagnose_motion.py
+@@ -0,0 +1,170 @@
++"""Post-rejection attribution only. NEVER produces an accepted moving state."""
++import csv
++import json
++import pathlib
++import shutil
++import sys
++import time
++import numpy as np
++from scipy.optimize import least_squares
++from scipy.spatial.transform import Rotation
++from preintegration import integrate, log, tangent, motion_system, profile_diagnostics
++from prepare_bootstrap import ARCHIVE, INPUT, OUTPUT, sha, write_json, write_csv, verify_input
++
++def stage_imu(rows, horizon):
++    selected=[r for r in rows if int(r["stamp_ns"])<=horizon]
++    return (np.array([int(r["stamp_ns"]) for r in selected], dtype=np.int64),
++            np.array([[float(r[k]) for k in ["ax","ay","az","gx","gy","gz"]] for r in selected]))
++
++def fit(poses, stamps, imu_stamps, imu, pose_sigma, rotation_sigma, cfg):
++    def integrals(bg):
++        return [integrate(imu_stamps, imu, int(a), int(b), bg,
++                          cfg["maximum_imu_gap_s"], cfg["maximum_endpoint_hold_s"])
++                for a,b in zip(stamps[:-1],stamps[1:])]
++    def gyro_residual(bg):
++        return np.concatenate([log(d[0].T @ (a[:3,:3].T @ b[:3,:3]))
++                               for a,b,d in zip(poses[:-1],poses[1:],integrals(bg))])
++    gyro=least_squares(gyro_residual, np.zeros(3), xtol=1e-10, ftol=1e-10, gtol=1e-10, max_nfev=100)
++    terms=integrals(gyro.x); dt=np.diff(stamps)*1e-9
++    n=len(poses); sigma=[]
++    # Conservative marginal uncertainty, including lever-arm translation and
++    # reference rotation acting on preintegrated force. Across-block correlation
++    # is bounded by Nblocks*diag(Ci), not treated as independent observations.
++    for i,(_,dv,dp,_,_) in enumerate(terms):
++        sp=np.sqrt(pose_sigma[i]**2+pose_sigma[i+1]**2+(rotation_sigma[i]*np.linalg.norm(dp))**2)
++        sv=max(cfg["imu_accel_noise"]*dt[i], rotation_sigma[i]*np.linalg.norm(dv), 1e-6)
++        sigma.append([sp,sv])
++    sigma=np.array(sigma)*np.sqrt(2*(n-1))
++    A,y,rawA,rawy=motion_system(poses,stamps,terms,sigma)
++    x=np.linalg.lstsq(A,y,rcond=cfg["svd_relative_rank_tolerance"])[0]
++    g=x[3*n:3*n+3]; norm=np.linalg.norm(g)
++    if norm<1e-8: raise RuntimeError("gravity tentative solution has zero norm")
++    g=g/norm*cfg["gravity_norm_m_s2"]; x[3*n:3*n+3]=g
++    for _ in range(10):
++        basis=tangent(g)
++        J=np.column_stack((A[:,:3*n], A[:,3*n:3*n+3]@basis, A[:,3*n+3:]))
++        delta=np.linalg.lstsq(J,y-A@x,rcond=cfg["svd_relative_rank_tolerance"])[0]
++        x[:3*n]+=delta[:3*n]; x[3*n+3:]+=delta[3*n+2:]
++        g+=basis@delta[3*n:3*n+2]; g=g/np.linalg.norm(g)*cfg["gravity_norm_m_s2"]
++        x[3*n:3*n+3]=g
++        if np.linalg.norm(delta)<1e-9:break
++    scales=[cfg["gravity_norm_m_s2"]*np.deg2rad(cfg["gravity_direction_std_max_deg"])]*2+[cfg["accel_bias_std_max_m_s2"]]*3
++    d=profile_diagnostics(A,n,g,scales,np.maximum(rotation_sigma[:-1],rotation_sigma[1:]),dt,sigma,
++                          cfg["svd_relative_rank_tolerance"])
++    residual=(rawA@x-rawy).reshape(-1,6)
++    d.update({"gyro_bias_tentative":gyro.x.tolist(),"accel_bias_tentative":x[3*n+3:].tolist(),
++              "gravity_tentative":g.tolist(),"last_velocity_tentative":x[3*n-3:3*n].tolist(),
++              "gyro_residual_rmse_deg":float(np.rad2deg(np.sqrt(np.mean(gyro.fun.reshape(-1,3)**2)*3))),
++              "position_residual_rmse_m":float(np.sqrt(np.mean(np.sum(residual[:,:3]**2,axis=1)))),
++              "velocity_residual_rmse_m_s":float(np.sqrt(np.mean(np.sum(residual[:,3:]**2,axis=1)))),
++              "fit_start_ns":int(stamps[0]),"fit_end_ns":int(stamps[-1]),
++              "IMU_max_loaded_stamp_ns":int(imu_stamps[-1]),"solver_success":bool(gyro.success),
++              "state_accepted":False,"covariance":"NOT_ACCEPTED; full coupled covariance NOT_RUN after upstream quality rejection"})
++    pre=[]
++    for i,(DR,dv,dp,_,_) in enumerate(terms):
++        row={"start_ns":int(stamps[i]),"end_ns":int(stamps[i+1]),"dt_s":float(dt[i]),
++             "endpoint_hold_ns":max(0,int(stamps[i+1]-imu_stamps[-1])),"role":"DIAGNOSTIC_FIT_ONLY"}
++        row.update({"dR"+str(k):float(v) for k,v in enumerate(log(DR))})
++        row.update({"dv"+str(k):float(v) for k,v in enumerate(dv)})
++        row.update({"dp"+str(k):float(v) for k,v in enumerate(dp)})
++        pre.append(row)
++    return d,x,pre
++
++def diagnose():
++    started=time.monotonic()
++    freeze=json.loads((ARCHIVE/"bootstrap_freeze.json").read_text())
++    if sha(ARCHIVE/"bootstrap_config.json")!=freeze["config_sha256"]:
++        raise RuntimeError("bootstrap gates changed after freeze")
++    manifest=json.loads((INPUT/"input_manifest.json").read_text())
++    verify_input(manifest,freeze["input_manifest_sha256"])
++    if any(manifest["input_files"][name]!=receipt for name,receipt in freeze["input_hashes"].items()
++           if name in manifest["input_files"]):
++        raise RuntimeError("input hash receipts changed")
++    sources={str(p):sha(p) for p in pathlib.Path(__file__).parent.glob("*.py")}
++    sources[str(pathlib.Path(__file__).parent/"bootstrap_lidar.cpp")]=sha(pathlib.Path(__file__).parent/"bootstrap_lidar.cpp")
++    write_json(ARCHIVE/"diagnostic_provenance.json",{
++        "mode":"DIAGNOSTIC_ONLY; never eligible for state injection",
++        "gate_freeze_sha256":sha(ARCHIVE/"bootstrap_freeze.json"),
++        "input_hash_recheck":"PASS", "sources":sources,
++        "diagnostic_executable_sha256":sha(freeze["binary"]),
++        "diagnostic_binary_receipt_timing":"POST_RUN before subsequent build; original freeze binds first rejected execution",
++        "raw_odometry_sha256":sha(OUTPUT/"diagnostic_lidar_odometry.csv"),
++        "first_rejected_odometry_sha256":sha(OUTPUT/"bootstrap_lidar_odometry.csv"),
++        "command":"bootstrap_lidar INPUT diagnostic_lidar_odometry.csv --diagnostic-only",
++        "GT_LOADED":False,"NDT_CALLS":0})
++    rows=list(csv.DictReader((OUTPUT/"diagnostic_lidar_odometry.csv").open()))
++    if len(rows)!=freeze["bootstrap_scan_count"] or any(r["solver_converged"]!="1" for r in rows):
++        raise RuntimeError("incomplete/unconverged diagnostic odometry; no interpolation permitted")
++    if max(int(r["stamp_ns"]) for r in rows)>freeze["boot_stamp_ns"]:
++        raise RuntimeError("future scan in bootstrap")
++    poses=np.array([[float(r["T"+str(i)+str(j)]) for i in range(4) for j in range(4)] for r in rows]).reshape(-1,4,4)
++    # Correct small float-carrier orthogonality error only; no pose/trajectory fit.
++    for T in poses:T[:3,:3]=Rotation.from_matrix(T[:3,:3]).as_matrix()
++    ext=np.array(freeze["T_imu_lidar"]); imu_poses=poses@np.linalg.inv(ext)
++    stamps=np.array([int(r["stamp_ns"]) for r in rows],dtype=np.int64)
++    all_imu=list(csv.DictReader((INPUT/"imu.csv").open()))
++    cfg=json.loads((ARCHIVE/"bootstrap_config.json").read_text())
++    c=cfg["preintegration"]; lc=cfg["lidar"]
++    train=(stamps>=freeze["estimation_start_ns"])&(stamps<freeze["estimation_end_ns"])
++    valid=(stamps>=freeze["estimation_end_ns"])&(stamps<=freeze["boot_stamp_ns"])
++    ts,measurements=stage_imu(all_imu,freeze["estimation_end_ns"])
++    rotation_sigma=[]; position_sigma=[]
++    for i,r in enumerate(rows):
++        duration=(int(r["stamp_ns"])-int(r["scan_start_ns"]))*1e-9
++        local=[s for s in all_imu if int(r["scan_start_ns"])<=int(s["stamp_ns"])<=int(r["stamp_ns"])]
++        speed=max(np.linalg.norm([float(s[k]) for k in ["gx","gy","gz"]]) for s in local)
++        sr=max(np.deg2rad(lc["pose_rotation_sigma_deg"]),(speed+c["gyro_bias_std_max_rad_s"])*duration)
++        pair_dt=(stamps[i]-stamps[i-1])*1e-9 if i else duration
++        sp=max(lc["pose_position_sigma_m"],float(r["pair_translation_m"])*duration/pair_dt)
++        # T_map_imu translation carries uncertain R*lever_arm, including its
++        # contribution to marginal position sigma. No direct covariance copying.
++        position_sigma.append(np.hypot(sp,np.linalg.norm(ext[:3,3])*sr)); rotation_sigma.append(sr)
++    sr=np.array(rotation_sigma); sp=np.array(position_sigma)
++    d,x,pre=fit(imu_poses[train],stamps[train],ts,measurements,sp[train],sr[train],c)
++    splits=[]
++    for lower,upper in [(5.,6.5),(6.5,8.)]:
++        mask=(stamps>=freeze["first_sensor_stamp_ns"]+int(lower*1e9))&(stamps<freeze["first_sensor_stamp_ns"]+int(upper*1e9))
++        # Causal split: do not load even the other split's later IMU.
++        split_ts,split_imu=stage_imu(all_imu,freeze["first_sensor_stamp_ns"]+int(upper*1e9))
++        sd,_,_=fit(imu_poses[mask],stamps[mask],split_ts,split_imu,sp[mask],sr[mask],c)
++        splits.append(sd)
++    val_ts,val_imu=stage_imu(all_imu,freeze["boot_stamp_ns"])
++    initial=imu_poses[train][-1]; initial_time=int(stamps[train][-1]); vi=x[3*np.count_nonzero(train)-3:3*np.count_nonzero(train)]
++    g=np.array(d["gravity_tentative"]); ba=np.array(d["accel_bias_tentative"]); bg=np.array(d["gyro_bias_tentative"])
++    validation=[]
++    for T,t in zip(imu_poses[valid],stamps[valid]):
++        DR,dv,dp,Jv,Jp=integrate(val_ts,val_imu,initial_time,int(t),bg,c["maximum_imu_gap_s"],c["maximum_endpoint_hold_s"])
++        dt=(t-initial_time)*1e-9
++        predicted=initial[:3,3]+vi*dt+.5*g*dt*dt+initial[:3,:3]@(dp-Jp@ba)
++        validation.append({"stamp_ns":int(t),"fit_end_ns":initial_time,"translation_error_m":float(np.linalg.norm(T[:3,3]-predicted)),
++                           "rotation_error_deg":float(np.rad2deg(np.linalg.norm(log((initial[:3,:3]@DR).T@T[:3,:3])))),
++                           "status":"DIAGNOSTIC_ONLY_UNTRUSTED_RAW_SCAN_POSES","state_accepted":False})
++    d["split_diagnostics"]=splits
++    d["split_bg_change_rad_s"]=float(np.linalg.norm(np.array(splits[0]["gyro_bias_tentative"])-splits[1]["gyro_bias_tentative"]))
++    d["split_ba_change_m_s2"]=float(np.linalg.norm(np.array(splits[0]["accel_bias_tentative"])-splits[1]["accel_bias_tentative"]))
++    d["split_gravity_angle_deg"]=float(np.rad2deg(np.arccos(np.clip(np.dot(splits[0]["gravity_tentative"],splits[1]["gravity_tentative"])/c["gravity_norm_m_s2"]**2,-1,1))))
++    d["validation_translation_rmse_m"]=float(np.sqrt(np.mean([v["translation_error_m"]**2 for v in validation])))
++    d["validation_rotation_rmse_deg"]=float(np.sqrt(np.mean([v["rotation_error_deg"]**2 for v in validation])))
++    d["raw_odometry_pairs"]=len(rows)-1
++    d["raw_odometry_quality_pass_pairs"]=sum(r["converged"]=="1" for r in rows[1:])
++    d["raw_odometry_solver_converged_pairs"]=sum(r["solver_converged"]=="1" for r in rows[1:])
++    d["first_quality_failure_tx"]=next(int(r["transaction_id"]) for r in rows if r["converged"]!="1")
++    d["formal_initialization_status"]="REJECTED_AT_BOOTSTRAP_REGISTRATION_QUALITY_GATE"
++    d["offline_diagnostics_wall_s"]=time.monotonic()-started
++    d["new_NDT_calls"]=0; d["GT_LOADED"]=False
++    write_json(ARCHIVE/"motion_diagnostics.json",d)
++    write_json(ARCHIVE/"initial_state_estimate.json",{"status":"NOT_ACCEPTED", "stamp_ns":freeze["boot_stamp_ns"],
++               "reason":"bootstrap registration quality failed; diagnostic fits do not constitute an accepted initial state",
++               "velocity":None,"bg":None,"ba":None,"gravity":None,"covariance":"NOT_RUN"})
++    write_csv(ARCHIVE/"bootstrap_validation.csv",validation)
++    write_csv(ARCHIVE/"imu_preintegration.csv",pre)
++    write_csv(ARCHIVE/"observability_diagnostics.csv",[{
++        "profile":"gravity_tangent_and_accel_bias", "rank":d["profile_rank"],"dimension":5,
++        "condition":d["condition"],"sigma_min":d["singular_values"][-1],
++        "uncertainty_bound":d["perturbation_frobenius_bound"],"sigma_min_lower_bound":d["sigma_min_lower_bound"],
++        "acceptance":"FAIL", "interpretation":d["rank_interpretation"]}])
++    shutil.copyfile(OUTPUT/"diagnostic_lidar_odometry.csv",ARCHIVE/"bootstrap_lidar_odometry.csv")
++    shutil.copyfile(OUTPUT/"bootstrap_lidar_odometry.csv",ARCHIVE/"first_rejected_odometry.csv")
++    print(json.dumps(d,allow_nan=False))
++
++if __name__=="__main__":diagnose()
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/finalize_blocked.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/finalize_blocked.py
+new file mode 100644
+index 0000000..74029cf
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/finalize_blocked.py
+@@ -0,0 +1,134 @@
++"""Archive the user-authorized engineering STOP. No state acceptance/experiments."""
++import csv
++import json
++import pathlib
++import re
++import shutil
++import subprocess
++import numpy as np
++from prepare_bootstrap import ARCHIVE, ROOT, OUTPUT, sha
++
++def checked_path(path):
++    if path.parent!=ARCHIVE or (ARCHIVE/"artifact_hashes.json").exists():
++        raise RuntimeError("refuse writes outside this unpublished archive or after artifact freeze")
++    return path
++
++def write_csv(path,rows):
++    with checked_path(path).open("w",newline="") as stream:
++        writer=csv.DictWriter(stream,fieldnames=list(rows[0]),lineterminator="\n"); writer.writeheader(); writer.writerows(rows)
++
++def write_json(path,value):
++    with checked_path(path).open("w") as stream:
++        json.dump(value,stream,indent=2,allow_nan=False); stream.write("\n")
++
++def not_run(name, reason):
++    write_csv(ARCHIVE/name,[{"status":"NOT_RUN","reason":reason}])
++
++def finish():
++    for build,expected in [(pathlib.Path("/tmp/p9_corridor_moving_init_build"),6),
++                           (pathlib.Path("/tmp/p9_r4_release.Eirto1"),41)]:
++        log=(build/"Testing/Temporary/LastTest.log").read_text()
++        if len(re.findall(r"Test Passed\.",log))!=expected or "Test Failed" in log:
++            raise RuntimeError("actual test receipt does not prove full suite PASS")
++        if "CMAKE_BUILD_TYPE:STRING=Release" not in (build/"CMakeCache.txt").read_text():
++            raise RuntimeError("not a Release build")
++    source="src/dog_prior_map_fastlio2_frontend_exp/src/fastlio2_frontend_ikfom.cpp"
++    original=subprocess.check_output(["git","show","c3e4a41c239b2c9bcf28497acd5b84a5d9ec2568:"+source],cwd=ROOT,text=True)
++    current=(ROOT/source).read_text()
++    start="bool FastLio2IkfomFrontend::initializeStatic("
++    old=original.split(start,1)[1].split("bool FastLio2IkfomFrontend::predictInterval(",1)[0].rstrip()
++    new=current.split(start,1)[1].split("bool FastLio2IkfomFrontend::initializeMoving(",1)[0].rstrip()
++    if old!=new:raise RuntimeError("static initialization body changed")
++    d=json.loads((ARCHIVE/"motion_diagnostics.json").read_text())
++    freeze=json.loads((ARCHIVE/"bootstrap_freeze.json").read_text())
++    rows=list(csv.DictReader((OUTPUT/"diagnostic_lidar_odometry.csv").open()))
++    normalized=[]
++    for row in rows:
++        row=dict(row); row["quality_pass"]=row.pop("converged")
++        row["accepted_moving_state"]="NO"; row["pose_semantics"]="UNTRUSTED_RAW_SCAN_END_APPROXIMATION"
++        normalized.append(row)
++    # The copied CSV was not a frozen evidence artifact; normalize confusing
++    # legacy column semantics without changing any pose/count/score values.
++    write_csv(ARCHIVE/"bootstrap_lidar_odometry.csv",normalized)
++    for name in ["initial_covariance.csv","baseline_runA.csv","baseline_runB.csv",
++                 "baseline_determinism.csv","source_t0_uobs_parity.csv"]:
++        not_run(name,"real moving-state rejected at bootstrap quality gate")
++    write_csv(ARCHIVE/"ikfom_initialization_test.csv",[
++        {"test":"synthetic_full_state_and_covariance_injection","status":"PASS","scope":"synthetic fixture only"},
++        {"test":"real_Corridor01_state_injection","status":"NOT_RUN","scope":"bootstrap quality gate failed"}])
++    ledger=list(csv.DictReader((ARCHIVE/"formal_frame_ledger.csv").open()))
++    for row in ledger:
++        if row["role"]!="BOOTSTRAP": row["role"]="POST_BOOT_INPUT_NOT_RUN_INITIALIZATION_BLOCKED"
++    write_csv(ARCHIVE/"formal_frame_ledger.csv",ledger)
++    elapsed=[float(r["wall_s"]) for r in rows]
++    costs=[{"phase":"first_rejected_bootstrap","wall_s":.05,"NDT_calls":0,"status":"QUALITY_FAIL","peak_RSS_KiB":18832},
++           {"phase":"diagnostic_GICP_only","wall_s":2.82,"NDT_calls":0,"status":"UNTRUSTED_DIAGNOSTIC_ONLY","peak_RSS_KiB":19344},
++           {"phase":"diagnostic_fits_before_endpoint_fix","wall_s":3.58348551299423,"NDT_calls":0,"status":"SUPERSEDED_PRESERVED_EXTERNALLY","peak_RSS_KiB":"NOT_MEASURED"},
++           {"phase":"corrected_diagnostic_fits_including_hash_guard","wall_s":d["offline_diagnostics_wall_s"],"NDT_calls":0,"status":"DIAGNOSTIC_ONLY","peak_RSS_KiB":"NOT_MEASURED"}]
++    for phase in ["formal_NDT_smoke","baseline_A","baseline_B"]:
++        costs.append({"phase":phase,"wall_s":"NOT_RUN","NDT_calls":0,"status":"NOT_RUN","peak_RSS_KiB":"NOT_RUN"})
++    write_csv(ARCHIVE/"runtime_breakdown.csv",costs)
++    for source,dest in [("bootstrap_lidar.log","first_rejected_execution.log"),
++                        ("bootstrap_resource.txt","first_rejected_resource.txt"),
++                        ("diagnostic_lidar.log","diagnostic_execution.log"),
++                        ("diagnostic_resource.txt","diagnostic_resource.txt")]:
++        shutil.copyfile(OUTPUT/source,ARCHIVE/dest)
++    reference_paths=[
++        "/media/jian/HIKVISION/comparison algorithm/FAST_LIO2/src/IMU_Processing.hpp",
++        "/media/jian/HIKVISION/comparison algorithm/LIO-SAM/src/imuPreintegration.cpp",
++        "/media/jian/HIKVISION/comparison algorithm/SuperLoc_SuperOdom/super_odometry/include/super_odometry/ImuPreintegration/imuPreintegration.h",
++        "/media/jian/HIKVISION/comparison algorithm/Point-LIO/src/li_initialization.cpp",
++        "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/src/superloc_first_segment_initializer.cpp",
++        "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/src/superloc_map_normalizer.cpp"]
++    write_json(ARCHIVE/"mature_implementation_receipt.json",{
++        "reference_files":{p:sha(p) for p in reference_paths},
++        "FASTLIO2_commit":"7cc4175de6f8ba2edf34bab02a42195b141027e9",
++        "PCL_version":"1.10.0", "GTSAM_standard_install":"NOT_FOUND; no package installed",
++        "LI_Init_available":"NOT_FOUND_IN_BOUNDED_RELEVANT_SOURCE_SEARCH",
++        "reuse":"PCL GICP, project replay readers, existing IKFoM/deskew; midpoint kinematics adapter, not GTSAM runtime or a new full LIO optimizer"})
++    report={"task":"PAPER-P9-R7-R4-CAUSAL-MOVING-INITIALIZATION",
++            "git":{"branch":"research/p9-r4-heldout-visual-evidence","start_sha":"c3e4a41c239b2c9bcf28497acd5b84a5d9ec2568",
++                   "end_sha":"CONTAINING_COMMIT","worktree":str(ROOT)},
++            "raw_input":{"hash":"PASS","scans":2777,"IMU":55957,"points":79932911,"extraction_repeated":False},
++            "protocol":"P9_CORRIDOR01_RAW_SCANEND_V1","bootstrap":{"first_stamp_ns":freeze["first_sensor_stamp_ns"],
++                "boot_stamp_ns":freeze["boot_stamp_ns"],"duration_s":(freeze["boot_stamp_ns"]-freeze["first_sensor_stamp_ns"])*1e-9,
++                "scans":99,"solver_converged_pairs":98,"quality_pass_pairs":32,"accepted_moving_states":0,
++                "first_failure_tx":2,"first_failure_fitness_m2":.7044974191705593,"frozen_fitness_max_m2":.10},
++            "diagnostics":{"status":"UNTRUSTED_ONLY_NOT_ACCEPTED_STATE",
++                "profile_rank":d["profile_rank"],"profile_dimension":5,"condition":d["condition"],
++                "sigma_min":d["singular_values"][-1],"perturbation_bound":d["perturbation_frobenius_bound"],
++                "sigma_min_lower_bound":d["sigma_min_lower_bound"],
++                "split_bg_change":d["split_bg_change_rad_s"],"split_ba_change":d["split_ba_change_m_s2"],
++                "split_gravity_angle_deg":d["split_gravity_angle_deg"],
++                "validation_translation_RMSE_m":d["validation_translation_rmse_m"],
++                "validation_rotation_RMSE_deg":d["validation_rotation_rmse_deg"]},
++            "moving_state":{"stamp_ns":"NOT_ACCEPTED","velocity":"NOT_ACCEPTED","bg":"NOT_ACCEPTED",
++                            "ba":"NOT_ACCEPTED","gravity":"NOT_ACCEPTED","covariance":"NOT_RUN"},
++            "IKFoM":{"initializeMoving_synthetic":"PASS","real_state_injection":"NOT_RUN"},
++            "scan_end_runtime":"NOT_RUN","baseline_A":"NOT_RUN","baseline_B":"NOT_RUN",
++            "source_hash_parity":"NOT_RUN","T0_parity":"NOT_RUN","Uobs_parity":"NOT_RUN","W2_parity":"NOT_RUN",
++            "frame_ledger":{"total":2777,"bootstrap":99,"post_boot_input_NOT_RUN":2678,"missing_leading_IMU_bootstrap_tx":[1]},
++            "cost":{"scope":"CROSS_DATASET_PREPARATION_ONLY","bootstrap_GICP_wall_s":2.87,
++                    "diagnostic_GICP_mean_s":float(np.mean(elapsed[1:])),"diagnostic_GICP_P95_s":float(np.quantile(elapsed[1:],.95)),
++                    "diagnostic_fit_wall_s":d["offline_diagnostics_wall_s"],"peak_RSS_GICP_KiB":19344,
++                    "peak_RSS_fit":"NOT_MEASURED","smoke_NDT_calls":0,"runA_NDT_calls":0,"runB_NDT_calls":0},
++            "NEW_ORACLE263_CALLS":0,"NEW_B12_CALLS":0,"VISUAL_EXTRACTION":0,"GT_LOADED":False,
++            "validation":{"release_build":"PASS","P9_tests":"41/41 PASS","moving_and_P7_tests":"6/6 PASS",
++                          "hash_audit":"see artifact_hashes.json and audit output","static_initializer_body":"UNCHANGED"},
++            "tracking_risk":"historical NOMINAL_TRACKING_RISK retained; no new formal trajectory or GT result",
++            "final_result":"BOOTSTRAP_REGISTRATION_QUALITY_FAIL",
++            "result_authorization":"user explicitly authorized this engineering category after original five-way contract did not cover first quality failure",
++            "next":"REASSESS_MOVING_INITIALIZATION_MODEL","push_executed":False}
++    write_json(ARCHIVE/"results.json",report)
++    for build,name in [(pathlib.Path("/tmp/p9_corridor_moving_init_build"),"moving_tests.log"),
++                       (pathlib.Path("/tmp/p9_r4_release.Eirto1"),"p9_tests.log")]:
++        shutil.copyfile(build/"Testing/Temporary/LastTest.log",ARCHIVE/name)
++    write_json(ARCHIVE/"release_build_receipt.json",{
++        "build_type":"Release", "CMakeCaches":{p:sha(p) for p in ["/tmp/p9_corridor_moving_init_build/CMakeCache.txt","/tmp/p9_r4_release.Eirto1/CMakeCache.txt"]},
++        "binaries":{p:sha(p) for p in ["/tmp/p9_corridor_moving_init_build/p9_bootstrap_lidar","/tmp/p9_corridor_moving_init_build/moving_initialization_test","/tmp/p9_r4_release.Eirto1/p9_r4_ndt"]},
++        "P9_test_environment":"LD_LIBRARY_PATH=/lib/x86_64-linux-gnu; avoids incompatible /opt/MVS/lib/64/libusb-1.0.so.0",
++        "P9_command":"env LD_LIBRARY_PATH=/lib/x86_64-linux-gnu ctest --output-on-failure",
++        "moving_command":"ctest --output-on-failure", "all_tests_PASS":True})
++    print(json.dumps(report,allow_nan=False))
++
++if __name__=="__main__":finish()
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/preintegration.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/preintegration.py
+new file mode 100644
+index 0000000..7f4e963
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/preintegration.py
+@@ -0,0 +1,101 @@
++"""Standard midpoint IMU kinematics for bootstrap diagnostics (not a new LIO)."""
++import numpy as np
++from scipy.spatial.transform import Rotation
++
++def exp(w):
++    return Rotation.from_rotvec(w).as_matrix()
++
++def log(R):
++    return Rotation.from_matrix(R).as_rotvec()
++
++def integrate(stamps, measurements, begin, end, bg, max_gap=.02, endpoint_hold=.01):
++    """Integer ns times. Samples already restricted to the causal stage horizon.
++
++    Midpoint interpolation is only inside observed IMU coverage; a terminal
++    hold uses the last real sample for <= frozen endpoint_hold. No backfill.
++    Returns DR, Dv, Dp and exact linear accelerometer-bias integral coefficients.
++    """
++    # Never let interpolation consume a sample after the requested interval end,
++    # even when the enclosing bootstrap stage already possesses that sample.
++    causal = stamps <= end
++    stamps, measurements = stamps[causal], measurements[causal]
++    if not len(stamps) or end <= begin or begin < stamps[0] or end-stamps[-1] > int(endpoint_hold*1e9):
++        raise ValueError("IMU interval not causally covered")
++    first = max(0, int(np.searchsorted(stamps, begin, side="right"))-1)
++    # The real pair bracketing begin is also consumed by interpolation. Checking
++    # only artificial [begin, interior stamps, end] knots can hide a long gap.
++    used_stamps = stamps[first:]
++    if len(used_stamps)>1 and np.max(np.diff(used_stamps))*1e-9 > max_gap:
++        raise ValueError("real IMU interpolation bracket exceeds frozen gap")
++    ids = np.flatnonzero((stamps > begin) & (stamps < end))
++    knots = np.concatenate(([begin], stamps[ids], [end])).astype(np.int64)
++    if np.max(np.diff(knots))*1e-9 > max_gap:
++        raise ValueError("IMU gap exceeds frozen gate")
++    # Subtract epoch before converting to float; never float-cast absolute ns.
++    local_stamps = (stamps-begin)*1e-9
++    samples = np.column_stack([np.interp((knots-begin)*1e-9, local_stamps, measurements[:, i])
++                               for i in range(6)])
++    R = np.eye(3); v = np.zeros(3); p = np.zeros(3)
++    Jv = np.zeros((3, 3)); Jp = np.zeros((3, 3))
++    for i, dt_ns in enumerate(np.diff(knots)):
++        dt = dt_ns*1e-9
++        a = .5*(samples[i, :3]+samples[i+1, :3])
++        w = .5*(samples[i, 3:]+samples[i+1, 3:])-bg
++        mid = R @ exp(w*dt*.5)
++        force = mid @ a
++        p += v*dt + .5*force*dt*dt
++        Jp += Jv*dt + .5*mid*dt*dt
++        v += force*dt; Jv += mid*dt
++        R = R @ exp(w*dt)
++    return R, v, p, Jv, Jp
++
++def tangent(g):
++    u = g / np.linalg.norm(g)
++    axis = np.eye(3)[np.argmin(np.abs(u))]
++    a = np.cross(u, axis); a /= np.linalg.norm(a)
++    return np.column_stack((a, np.cross(u, a)))
++
++def motion_system(poses, stamps, integrals, sigmas):
++    """Standard p/v preintegration linear system for unknown per-knot v,g,ba."""
++    n = len(poses); A = np.zeros((6*(n-1), 3*n+6)); y = np.zeros(6*(n-1))
++    for i, (_, dv, dp, Jv, Jp) in enumerate(integrals):
++        dt = (stamps[i+1]-stamps[i])*1e-9
++        Ri = poses[i, :3, :3]; start=6*i
++        A[start:start+3, 3*i:3*i+3] = np.eye(3)*dt
++        A[start:start+3, 3*n:3*n+3] = .5*dt*dt*np.eye(3)
++        A[start:start+3, 3*n+3:] = -Ri @ Jp
++        y[start:start+3] = poses[i+1, :3, 3]-poses[i, :3, 3]-Ri @ dp
++        A[start+3:start+6, 3*i:3*i+3] = -np.eye(3)
++        A[start+3:start+6, 3*(i+1):3*(i+1)+3] = np.eye(3)
++        A[start+3:start+6, 3*n:3*n+3] = -dt*np.eye(3)
++        A[start+3:start+6, 3*n+3:] = Ri @ Jv
++        y[start+3:start+6] = Ri @ dv
++    W = np.repeat(np.asarray(sigmas).reshape(-1), 3)
++    return A/W[:, None], y/W, A, y
++
++def profile_diagnostics(A, n, g, scales, rotation_uncertainty, intervals, sigmas, rank_tol=1e-6):
++    """No inverse for uncertified directions. No covariance-as-certainty shortcut."""
++    Uv, sv, _ = np.linalg.svd(A[:, :3*n], full_matrices=True)
++    rank_v = np.count_nonzero(sv > sv[0]*rank_tol)
++    Q = Uv[:, rank_v:]
++    D = np.diag(scales)
++    B = Q.T @ np.column_stack((A[:, 3*n:3*n+3] @ tangent(g), A[:, 3*n+3:])) @ D
++    _, s, Vt = np.linalg.svd(B, full_matrices=False)
++    rank = int(np.count_nonzero(s > s[0]*rank_tol))
++    # Conditional on stated orientation uncertainty: ||delta R|| <= 2 sin(theta/2).
++    # Frobenius upper bound, nuisance velocity columns independent of rotation.
++    # This is an uncertainty rejection certificate, NOT proof physical rank is zero.
++    error_squared = 0.
++    for dt, angle, (sp, sv_) in zip(intervals, rotation_uncertainty, sigmas):
++        bound = min(2., 2*np.sin(min(np.pi, 3*angle)/2))
++        error_squared += 3*scales[2]**2*bound**2*((.5*dt*dt/sp)**2+(dt/sv_)**2)
++    error_bound = np.sqrt(error_squared)
++    lower = max(0., float(s[-1]-error_bound))
++    condition = float(s[0]/s[-1]) if s[-1] > 0 else None
++    robust_condition = float((s[0]+error_bound)/lower) if lower else None
++    return {"profile_rank": rank, "profile_dimension": 5, "velocity_nuisance_rank": int(rank_v),
++            "singular_values": s.tolist(), "condition": condition,
++            "normal_condition": condition**2 if condition else None,
++            "perturbation_frobenius_bound": float(error_bound), "sigma_min_lower_bound": lower,
++            "robust_condition": robust_condition, "weakest_scaled_direction": Vt[-1].tolist(),
++            "rank_interpretation": "DIAGNOSTIC_ONLY; untrusted raw-scan poses; lower-bound-zero is not proof of physical rank deficiency"}
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/prepare_bootstrap.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/prepare_bootstrap.py
+new file mode 100644
+index 0000000..d1b6c31
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/prepare_bootstrap.py
+@@ -0,0 +1,102 @@
++"""One-shot causal bootstrap admission/freeze. Does not estimate or align."""
++import csv
++import hashlib
++import json
++import pathlib
++import re
++import sys
++import time
++import numpy as np
++
++ROOT = pathlib.Path(__file__).resolve().parents[5]
++ARCHIVE = ROOT / "docs/p9_r7_cross_dataset_nearoptimal/moving_initialization"
++INPUT = pathlib.Path("/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1")
++OUTPUT = INPUT.parent / "p9_corridor01_moving_init_v1"
++CALIB = INPUT.parents[1] / "calibration/corridor01_extrinsics.yaml"
++MAP = INPUT.parents[1] / "map/derived/corridor01_map_normalized.pcd"
++ANCHOR = pathlib.Path("/home/jian/livox_ws/superloc_adapter_ws/config/corridor01_init.yaml")
++
++def sha(path):
++    h = hashlib.sha256()
++    with pathlib.Path(path).open("rb") as stream:
++        for chunk in iter(lambda: stream.read(1 << 20), b""):
++            h.update(chunk)
++    return h.hexdigest()
++
++def write_json(path, value):
++    with pathlib.Path(path).open("x") as stream:
++        json.dump(value, stream, indent=2, allow_nan=False)
++        stream.write("\n")
++
++def write_csv(path, rows, columns=None):
++    with pathlib.Path(path).open("x", newline="") as stream:
++        writer = csv.DictWriter(stream, fieldnames=columns or list(rows[0]), lineterminator="\n")
++        writer.writeheader()
++        writer.writerows(rows)
++
++def verify_input(manifest, expected_manifest_sha=None):
++    required={"imu.csv", "filter_scans.csv", "raw_timed_scan_index.csv", "raw_timed_points.bin"}
++    if not required.issubset(manifest["input_files"]):
++        raise RuntimeError("manifest omitted a consumed input")
++    if expected_manifest_sha and sha(INPUT/"input_manifest.json")!=expected_manifest_sha:
++        raise RuntimeError("frozen input manifest changed")
++    for name, receipt in manifest["input_files"].items():
++        path=INPUT/name
++        if str(path)!=receipt["path"] or path.stat().st_size!=receipt["bytes"] or sha(path)!=receipt["sha256"]:
++            raise RuntimeError("raw input hash mismatch: "+name)
++
++def prepare(binary):
++    started = time.monotonic()
++    manifest = json.loads((INPUT / "input_manifest.json").read_text())
++    if not manifest["extraction_complete"] or manifest["protocol"] != "P9_CORRIDOR01_RAW_SCANEND_V1":
++        raise RuntimeError("unaccepted raw input protocol")
++    verify_input(manifest)
++    hashes = {}
++    for name, receipt in manifest["input_files"].items():
++        hashes[name] = receipt
++    for path, expected in [(CALIB, "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d"),
++                           (MAP, "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f"),
++                           (ANCHOR, "d3e6f560895cb4f6a9efb7058bcff8a13313783e799d82c828e51adcd4bafd1e")]:
++        if sha(path) != expected:
++            raise RuntimeError("map/anchor/calibration mismatch: " + str(path))
++        hashes[str(path)] = {"sha256": expected}
++    scans = list(csv.DictReader((INPUT / "raw_timed_scan_index.csv").open()))
++    imu = list(csv.DictReader((INPUT / "imu.csv").open()))
++    first = int(scans[0]["scan_start_ns"])
++    deadline = first + 10_000_000_000
++    boot = max(int(s["scan_end_ns"]) for s in scans if int(s["scan_end_ns"]) <= deadline)
++    data = re.search(r"laser_to_imu:.*?data:\s*\[(.*?)\]", CALIB.read_text(), re.S).group(1)
++    extrinsic = np.array([float(v) for v in data.split(",")]).reshape(4, 4)
++    U, _, V = np.linalg.svd(extrinsic[:3, :3])
++    projected = U @ np.diag([1, 1, np.linalg.det(U @ V)]) @ V
++    rotation_projection_change = float(np.linalg.norm(projected - extrinsic[:3, :3]))
++    extrinsic[:3, :3] = projected
++    OUTPUT.mkdir()  # Refuse repeat/overwrite of the experiment cache.
++    config = ARCHIVE / "bootstrap_config.json"
++    freeze = {"protocol": "P9_CORRIDOR01_CAUSAL_MOVING_INIT_V1", "RAW_HASH": "PASS",
++              "input_manifest_sha256": sha(INPUT / "input_manifest.json"), "input_hashes": hashes,
++              "config_sha256": sha(config), "binary": str(pathlib.Path(binary).resolve()),
++              "binary_sha256": sha(binary), "first_sensor_stamp_ns": first, "deadline_ns": deadline,
++              "boot_stamp_ns": boot, "bootstrap_scan_count": sum(int(s["scan_end_ns"]) <= boot for s in scans),
++              "estimation_start_ns": first + 5_000_000_000, "estimation_end_ns": first + 8_000_000_000,
++              "T_imu_lidar": extrinsic.tolist(), "extrinsic_SO3_projection_frobenius": rotation_projection_change,
++              "map_anchor": "historical sensor-only first-frame anchor; normalized map, first local LiDAR frame identity",
++              "anchor_reference_tx": 1, "anchor_stamp_ns": int(scans[0]["scan_end_ns"]),
++              "anchor_epoch_difference_s": abs(int(scans[0]["scan_end_ns"])*1e-9 - 1517157219.18898),
++              "anchor_epoch_is_approximate": True, "GT_LOADED": False,
++              "ORACLE263_CALLS": 0, "B12_CALLS": 0, "VISUAL_EXTRACTION": 0,
++              "formal_state_accepted": False, "input_hash_wall_s": time.monotonic() - started,
++              "output_directory": str(OUTPUT)}
++    write_json(ARCHIVE / "bootstrap_freeze.json", freeze)
++    write_json(OUTPUT / "bootstrap_freeze.json", freeze)
++    write_csv(ARCHIVE / "formal_frame_ledger.csv", [
++        {"transaction_id": s["transaction_id"], "scan_start_ns": s["scan_start_ns"],
++         "scan_end_ns": s["scan_end_ns"], "raw_points": s["cloud_point_count"],
++         "role": "BOOTSTRAP" if int(s["scan_end_ns"]) <= boot else "FORMAL_PENDING_INITIALIZATION_GATE",
++         "boundary_reason": "missing_leading_IMU_bootstrap_only" if int(s["scan_start_ns"]) < int(imu[0]["stamp_ns"]) else "",
++         "formal_NDT_run": "NO"} for s in scans])
++    print(json.dumps({"RAW_HASH": "PASS", "boot": boot, "bootstrap_scans": freeze["bootstrap_scan_count"],
++                      "freeze_sha": sha(ARCHIVE / "bootstrap_freeze.json"), "output": str(OUTPUT)}))
++
++if __name__ == "__main__":
++    prepare(sys.argv[1])
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/test_preintegration.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/test_preintegration.py
+new file mode 100644
+index 0000000..f05bbb8
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/test_preintegration.py
+@@ -0,0 +1,81 @@
++import unittest
++import numpy as np
++from preintegration import integrate, motion_system, profile_diagnostics, exp
++from prepare_bootstrap import verify_input
++
++class PreintegrationTests(unittest.TestCase):
++    def test_consumed_input_cannot_be_omitted_from_manifest(self):
++        with self.assertRaisesRegex(RuntimeError,"omitted"):
++            verify_input({"input_files":{}})
++    def test_constant_motion_with_real_bias(self):
++        stamps=np.arange(0, 1000000001, 5000000, dtype=np.int64)
++        measurements=np.tile([1.,2.,3.,.01,-.02,.03],(len(stamps),1))
++        R,v,p,Jv,Jp=integrate(stamps,measurements,0,1000000000,np.array([.01,-.02,.03]))
++        np.testing.assert_allclose(R,np.eye(3),atol=1e-14)
++        np.testing.assert_allclose(v,[1,2,3],atol=1e-13)
++        np.testing.assert_allclose(p,[.5,1,1.5],atol=1e-13)
++        np.testing.assert_allclose(Jv,np.eye(3),atol=1e-13)
++        np.testing.assert_allclose(Jp,.5*np.eye(3),atol=1e-13)
++
++    def test_no_backfill_and_bounded_hold(self):
++        stamps=np.array([1000000,6000000,11000000],dtype=np.int64)
++        measurements=np.zeros((3,6))
++        with self.assertRaises(ValueError): integrate(stamps,measurements,0,11000000,np.zeros(3))
++        with self.assertRaises(ValueError): integrate(stamps,measurements,1000000,22000000,np.zeros(3))
++        integrate(stamps,measurements,1000000,16000000,np.zeros(3))
++
++    def test_future_sample_cannot_change_endpoint(self):
++        stamps=np.array([1000000,6000000,11000000],dtype=np.int64)
++        measurements=np.zeros((3,6)); altered=measurements.copy(); altered[-1]=1000.
++        first=integrate(stamps,measurements,1000000,8000000,np.zeros(3))
++        second=integrate(stamps,altered,1000000,8000000,np.zeros(3))
++        for a,b in zip(first,second):np.testing.assert_array_equal(a,b)
++
++    def test_begin_bracket_cannot_hide_missing_imu(self):
++        stamps=np.array([-100000000,5000000,10000000],dtype=np.int64)
++        with self.assertRaisesRegex(ValueError,"bracket"):
++            integrate(stamps,np.zeros((3,6)),0,10000000,np.zeros(3))
++
++    def test_accel_bias_integrals_and_motion_equation_signs(self):
++        stamps=np.arange(0,1000000001,5000000,dtype=np.int64)
++        samples=np.tile([1.,2.,9.,.1,.2,.3],(len(stamps),1))
++        ba=np.array([.3,-.2,.1]); bg=np.array([.01,.02,.03])
++        corrected=samples.copy(); corrected[:,:3]-=ba
++        R,v,p,Jv,Jp=integrate(stamps,samples,0,1000000000,bg)
++        _,vc,pc,_,_=integrate(stamps,corrected,0,1000000000,bg)
++        np.testing.assert_allclose(v-Jv@ba,vc,atol=1e-12)
++        np.testing.assert_allclose(p-Jp@ba,pc,atol=1e-12)
++        poses=np.tile(np.eye(4),(2,1,1)); poses[0,:3,:3]=exp(np.array([.4,.1,-.3]))
++        gravity=np.array([.2,.3,-np.sqrt(9.809**2-.2**2-.3**2)])
++        vi=np.array([1.,-.2,.3]); R0=poses[0,:3,:3]
++        poses[1,:3,:3]=R0@R
++        poses[1,:3,3]=vi+.5*gravity+R0@pc
++        vj=vi+gravity+R0@vc
++        _,_,A,y=motion_system(poses,np.array([0,1000000000]),[(R,v,p,Jv,Jp)],[[1.,1.]])
++        np.testing.assert_allclose(A@np.concatenate((vi,vj,gravity,ba)),y,atol=1e-12)
++
++    def test_constant_orientation_cannot_separate_g_and_ba(self):
++        times=np.arange(6,dtype=np.int64)*500000000
++        poses=np.tile(np.eye(4),(6,1,1)); poses[:,0,3]=times*1e-9
++        integral=(np.eye(3),np.array([0,0,9.809])*.5,np.array([0,0,9.809])*.125,
++                  np.eye(3)*.5,np.eye(3)*.125)
++        sigmas=np.tile([.05,.2],(5,1))
++        A,_,_,_=motion_system(poses,times,[integral]*5,sigmas)
++        d=profile_diagnostics(A,6,np.array([0,0,-9.809]),[.856,.856,.5,.5,.5],
++                              np.zeros(5),np.ones(5)*.5,sigmas)
++        self.assertEqual(d['profile_rank'],3)
++        self.assertLess(d['sigma_min_lower_bound'],1e-10)
++
++    def test_perturbation_cannot_certify_zero_excitation(self):
++        times=np.arange(6,dtype=np.int64)*500000000
++        poses=np.tile(np.eye(4),(6,1,1))
++        for i in range(6): poses[i,:3,:3]=exp(np.array([.1*i,.01*i*i,.03*i]))
++        integral=(np.eye(3),np.zeros(3),np.zeros(3),np.eye(3)*.5,np.eye(3)*.125)
++        sigmas=np.tile([.05,.2],(5,1))
++        A,_,_,_=motion_system(poses,times,[integral]*5,sigmas)
++        d=profile_diagnostics(A,6,np.array([0,0,-9.809]),[.856,.856,.5,.5,.5],
++                              np.ones(5)*.5,np.ones(5)*.5,sigmas)
++        self.assertEqual(d['sigma_min_lower_bound'],0)
++        self.assertIsNone(d['robust_condition'])
++
++if __name__=='__main__': unittest.main()
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/src/fastlio2_frontend_ikfom.cpp b/src/dog_prior_map_fastlio2_frontend_exp/src/fastlio2_frontend_ikfom.cpp
+index a537834..99acccd 100644
+--- a/src/dog_prior_map_fastlio2_frontend_exp/src/fastlio2_frontend_ikfom.cpp
++++ b/src/dog_prior_map_fastlio2_frontend_exp/src/fastlio2_frontend_ikfom.cpp
+@@ -372,0 +373,64 @@ bool FastLio2IkfomFrontend::initializeStatic(
++bool FastLio2IkfomFrontend::initializeMoving(
++    const MovingInitializationState& initial, std::string* failure_reason) {
++  if (failure_reason) failure_reason->clear();
++  if (impl_->is_initialized) return fail(failure_reason, "already_initialized");
++  if (!initial.stamp_ns || !finitePose(initial.map_T_imu) ||
++      !finitePose(initial.T_imu_lidar) || !initial.velocity_map.allFinite() ||
++      !initial.gyro_bias_imu.allFinite() || !initial.accel_bias_imu.allFinite() ||
++      !initial.gravity_map.allFinite() ||
++      !std::isfinite(impl_->parameters.gravity_mps2) ||
++      std::abs(initial.gravity_map.norm() - impl_->parameters.gravity_mps2) > 1e-8)
++    return fail(failure_reason, "invalid_moving_state");
++  const auto& basis = initial.gravity_tangent_basis;
++  if (!basis.allFinite() ||
++      (basis.transpose() * basis - Eigen::Matrix2d::Identity()).norm() > 1e-8 ||
++      (basis.transpose() * initial.gravity_map).norm() > 1e-8)
++    return fail(failure_reason, "invalid_gravity_tangent_basis");
++  const auto& input_covariance = initial.covariance;
++  if (!input_covariance.allFinite() ||
++      (input_covariance - input_covariance.transpose()).cwiseAbs().maxCoeff() > 1e-10 ||
++      Eigen::LLT<Eigen::Matrix<double, 17, 17>>(input_covariance).info() != Eigen::Success)
++    return fail(failure_reason, "invalid_moving_covariance");
++
++  state_ikfom state;
++  state.pos = vect3(initial.map_T_imu.position);
++  state.rot = SO3(initial.map_T_imu.orientation.toRotationMatrix());
++  state.vel = vect3(initial.velocity_map);
++  state.bg = vect3(initial.gyro_bias_imu);
++  state.ba = vect3(initial.accel_bias_imu);
++  state.grav = S2(initial.gravity_map);
++  if (std::abs(state.grav.get_vect().norm() - initial.gravity_map.norm()) > 1e-8 ||
++      std::abs(state.grav.get_vect().norm() - impl_->parameters.gravity_mps2) > 1e-8)
++    return fail(failure_reason, "moving_gravity_incompatible_with_ikfom_S2");
++  state.offset_R_L_I = SO3(initial.T_imu_lidar.orientation.toRotationMatrix());
++  state.offset_T_L_I = vect3(initial.T_imu_lidar.position);
++
++  Eigen::Matrix<double, state_ikfom::DOF, 17> lift =
++      Eigen::Matrix<double, state_ikfom::DOF, 17>::Zero();
++  const int indices[] = {MTK::getStartIdx(&state_ikfom::pos),
++      MTK::getStartIdx(&state_ikfom::rot), MTK::getStartIdx(&state_ikfom::vel),
++      MTK::getStartIdx(&state_ikfom::bg), MTK::getStartIdx(&state_ikfom::ba)};
++  for (int block = 0; block < 5; ++block)
++    lift.block<3, 3>(indices[block], 3 * block).setIdentity();
++  Eigen::Matrix<double, 2, 3> gravity_cartesian_to_S2;
++  state.grav.S2_Nx_yy(gravity_cartesian_to_S2);
++  lift.block<2, 2>(MTK::getStartIdx(&state_ikfom::grav), 15) =
++      gravity_cartesian_to_S2 * basis;
++  Eigen::Matrix<double, state_ikfom::DOF, state_ikfom::DOF> covariance =
++      lift * input_covariance * lift.transpose();
++  enforceFixedExtrinsicConstraint(state, covariance, state.offset_R_L_I,
++                                  state.offset_T_L_I);
++  if (!covariance.allFinite() ||
++      (covariance-covariance.transpose()).cwiseAbs().maxCoeff() > 1e-8 ||
++      Eigen::LLT<decltype(covariance)>(covariance).info() != Eigen::Success)
++    return fail(failure_reason, "invalid_lifted_moving_covariance");
++  // All validation precedes mutation. No candidate/commit initialization bypass.
++  impl_->filter.change_x(state);
++  impl_->filter.change_P(covariance);
++  impl_->fixed_rotation = state.offset_R_L_I;
++  impl_->fixed_translation = state.offset_T_L_I;
++  impl_->stamp_ns = initial.stamp_ns;
++  impl_->is_initialized = true;
++  return postconditionsValid(failure_reason);
++}
++
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/tests/moving_initialization_test.cpp b/src/dog_prior_map_fastlio2_frontend_exp/tests/moving_initialization_test.cpp
+new file mode 100644
+index 0000000..d260a90
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/tests/moving_initialization_test.cpp
+@@ -0,0 +1,96 @@
++#include "dog_prior_map_fastlio2_frontend_exp/fastlio2_frontend.hpp"
++#include <cmath>
++#include <iostream>
++#include <stdexcept>
++using namespace dog_prior_map_fastlio2_frontend_exp;
++void require(bool ok, const char* message) { if (!ok) throw std::runtime_error(message); }
++MovingInitializationState fixture() {
++  MovingInitializationState s;
++  s.stamp_ns = 1000000000;
++  s.map_T_imu.position << 1., 2., 3.;
++  s.map_T_imu.orientation = Eigen::Quaterniond(Eigen::AngleAxisd(.3, Eigen::Vector3d::UnitY()));
++  s.T_imu_lidar.position << .08, .029, .03;
++  s.T_imu_lidar.orientation = Eigen::Quaterniond(Eigen::AngleAxisd(.15, Eigen::Vector3d::UnitX()));
++  s.velocity_map << .7, -.2, .1;
++  s.gyro_bias_imu << .01, -.02, .03;
++  s.accel_bias_imu << .04, -.05, .06;
++  s.gravity_map << 0, 0, -9.809;
++  s.gravity_tangent_basis.col(0) = Eigen::Vector3d::UnitX();
++  s.gravity_tangent_basis.col(1) = Eigen::Vector3d::UnitY();
++  s.covariance.setIdentity(); s.covariance *= .04;
++  s.covariance(16,16)=.09;
++  s.covariance(0, 15) = s.covariance(15, 0) = .005;
++  s.covariance(0, 16) = s.covariance(16, 0) = -.007;
++  return s;
++}
++int main() {
++  try {
++    RuntimeParameters p; std::string reason;
++    auto s = fixture(); FastLio2IkfomFrontend f(p);
++    require(f.initializeMoving(s, &reason), reason.c_str());
++    auto x = f.getState();
++    require(x.stamp_ns == s.stamp_ns, "stamp");
++    require((x.velocity-s.velocity_map).norm()<1e-14 && (x.gyro_bias-s.gyro_bias_imu).norm()<1e-14 &&
++            (x.accel_bias-s.accel_bias_imu).norm()<1e-14 && (x.gravity-s.gravity_map).norm()<1e-12, "state");
++    require((x.map_T_imu.position-s.map_T_imu.position).norm()<1e-14 &&
++        x.map_T_imu.orientation.angularDistance(s.map_T_imu.orientation)<1e-14, "pose");
++    require((x.T_imu_lidar_translation-s.T_imu_lidar.position).norm()<1e-14 &&
++        (x.T_imu_lidar_rotation-s.T_imu_lidar.orientation.toRotationMatrix()).norm()<1e-14, "extrinsic");
++    require(std::abs(x.covariance(21,21)-.04/(9.809*9.809))<1e-14, "S2 covariance units");
++    require(std::abs(x.covariance(0,21)+.005/9.809)<1e-14 &&
++            std::abs(x.covariance(0,22)+.007/9.809)<1e-14, "signed S2 gravity cross covariance");
++    require(std::abs(x.covariance(22,22)-.09/(9.809*9.809))<1e-14, "anisotropic S2 covariance");
++    for(int i=6;i<12;++i) {
++      require(std::abs(x.covariance(i,i)-1e-12)<1e-20, "extrinsic variance");
++      auto row=x.covariance.row(i).eval(); row(i)=0;
++      require(row.norm()==0, "fixed extrinsic cross covariance");
++    }
++    require(!f.initializeMoving(s,&reason) && f.getState().stamp_ns==s.stamp_ns, "reinitialization");
++    auto tilted=s;
++    const Eigen::Matrix3d tilt=Eigen::AngleAxisd(.7,Eigen::Vector3d(1.,2.,3.).normalized()).toRotationMatrix();
++    tilted.gravity_map=tilt*s.gravity_map; tilted.gravity_tangent_basis=tilt*s.gravity_tangent_basis;
++    FastLio2IkfomFrontend tilted_filter(p);
++    require(tilted_filter.initializeMoving(tilted,&reason),reason.c_str());
++    // Independently reconstruct Cartesian covariance through pinned S2 type-1
++    // boxplus Jacobian M=-hat(g)*Bx, including signed position/gravity cross.
++    const auto g=tilted.gravity_map; const double l=g.norm(); Eigen::Matrix<double,3,2> B;
++    B << -g.y(),-g.z(), l-g.y()*g.y()/(l+g.x()),-g.z()*g.y()/(l+g.x()),
++         -g.z()*g.y()/(l+g.x()),l-g.z()*g.z()/(l+g.x()); B/=l;
++    Eigen::Matrix3d hat; hat<<0,-g.z(),g.y(),g.z(),0,-g.x(),-g.y(),g.x(),0;
++    const Eigen::Matrix<double,3,2> M=-hat*B;
++    const auto P=tilted_filter.getState().covariance;
++    require((M*P.block<2,2>(21,21)*M.transpose()-tilted.gravity_tangent_basis*
++        tilted.covariance.block<2,2>(15,15)*tilted.gravity_tangent_basis.transpose()).norm()<1e-13,
++        "non-axis Cartesian gravity covariance");
++    require((P.block<1,2>(0,21)*M.transpose()-tilted.covariance.block<1,2>(0,15)*
++        tilted.gravity_tangent_basis.transpose()).norm()<1e-13, "non-axis gravity cross covariance");
++    for(int bad=0;bad<7;++bad) {
++      auto invalid=s;
++      if(bad==0)invalid.stamp_ns=0;
++      if(bad==1)invalid.gravity_map*=.9;
++      if(bad==2)invalid.map_T_imu.orientation.coeffs()*=2;
++      if(bad==3)invalid.covariance(0,0)=-1;
++      if(bad==4)invalid.covariance(0,1)=.01;
++      if(bad==5)invalid.gravity_tangent_basis.col(0)=Eigen::Vector3d::UnitZ();
++      if(bad==6)invalid.velocity_map.x()=std::numeric_limits<double>::quiet_NaN();
++      FastLio2IkfomFrontend fresh(p);
++      require(!fresh.initializeMoving(invalid,&reason) && !fresh.initialized(), "invalid state not atomic");
++    }
++    RuntimeParameters incompatible=p; incompatible.gravity_mps2=9.809+1.5e-8;
++    FastLio2IkfomFrontend rejected(incompatible); auto near_boundary=s;
++    near_boundary.gravity_map*= (9.809+.75e-8)/9.809;
++    const auto before=rejected.getState();
++    require(!rejected.initializeMoving(near_boundary,&reason) && !rejected.initialized(),
++        "pinned S2/runtime tolerance must reject before mutation");
++    require(rejected.getState().stamp_ns==before.stamp_ns &&
++        (rejected.getState().covariance-before.covariance).norm()==0, "failed injection mutated state");
++    ImuSample a,b; a.stamp_ns=s.stamp_ns; b.stamp_ns=s.stamp_ns+10000000;
++    a.acceleration=b.acceleration=s.map_T_imu.orientation.conjugate()*(-s.gravity_map)+s.accel_bias_imu;
++    a.angular_velocity=b.angular_velocity=s.gyro_bias_imu;
++    require(f.predictInterval(a,b,&reason), reason.c_str());
++    require((f.getState().map_T_imu.position-(s.map_T_imu.position+.01*s.velocity_map)).norm()<1e-10,
++        "nonzero moving velocity propagation");
++    std::cout<<"MOVING_INITIALIZATION_SYNTHETIC_PASS; REAL_STATE_NOT_ACCEPTED_BY_THIS_TEST\n";
++    return 0;
++  } catch(const std::exception& e) { std::cerr<<e.what()<<'\n'; return 1; }
++}

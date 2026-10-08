@@ -1,0 +1,15 @@
+{
+  "reference_files": {
+    "/media/jian/HIKVISION/comparison algorithm/FAST_LIO2/src/IMU_Processing.hpp": "a456016e268680555919f58ae066354fd297a27f49be197292452f4147e1e0f5",
+    "/media/jian/HIKVISION/comparison algorithm/LIO-SAM/src/imuPreintegration.cpp": "3226de72d4a8ab06601e11d73b4884ad0301ce5742e341a44835d2f2bca23735",
+    "/media/jian/HIKVISION/comparison algorithm/SuperLoc_SuperOdom/super_odometry/include/super_odometry/ImuPreintegration/imuPreintegration.h": "7ae4134919f9fe39aff5f55a60fe7bcb67abddf2b64cf2bc7328f288e4e99137",
+    "/media/jian/HIKVISION/comparison algorithm/Point-LIO/src/li_initialization.cpp": "032ba810d38ecbd256edd2e8a205452e746dce84cb174e6ba78d3be59f21747b",
+    "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/src/superloc_first_segment_initializer.cpp": "deb58aeb3bd76f802568469f50d33f91b8026924b3fe299fa93b8fa8f9dc266d",
+    "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/src/superloc_map_normalizer.cpp": "5c38a755fc015abffabafab7ed71f343716ca29028b9f93b4ce35fba24abe808"
+  },
+  "FASTLIO2_commit": "7cc4175de6f8ba2edf34bab02a42195b141027e9",
+  "PCL_version": "1.10.0",
+  "GTSAM_standard_install": "NOT_FOUND; no package installed",
+  "LI_Init_available": "NOT_FOUND_IN_BOUNDED_RELEVANT_SOURCE_SEARCH",
+  "reuse": "PCL GICP, project replay readers, existing IKFoM/deskew; midpoint kinematics adapter, not GTSAM runtime or a new full LIO optimizer"
+}

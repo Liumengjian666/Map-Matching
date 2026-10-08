@@ -1,0 +1,8 @@
+phase,wall_s,NDT_calls,status,peak_RSS_KiB
+first_rejected_bootstrap,0.05,0,QUALITY_FAIL,18832
+diagnostic_GICP_only,2.82,0,UNTRUSTED_DIAGNOSTIC_ONLY,19344
+diagnostic_fits_before_endpoint_fix,3.58348551299423,0,SUPERSEDED_PRESERVED_EXTERNALLY,NOT_MEASURED
+corrected_diagnostic_fits_including_hash_guard,4.388888899004087,0,DIAGNOSTIC_ONLY,NOT_MEASURED
+formal_NDT_smoke,NOT_RUN,0,NOT_RUN,NOT_RUN
+baseline_A,NOT_RUN,0,NOT_RUN,NOT_RUN
+baseline_B,NOT_RUN,0,NOT_RUN,NOT_RUN

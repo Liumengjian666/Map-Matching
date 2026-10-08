@@ -1,0 +1,25 @@
+{
+  "correction": "CRLF_TO_LF_ONLY",
+  "csv_file_count": 14,
+  "csv_decoded_content_parity": "PASS",
+  "semantic_sha256": {
+    "baseline_determinism.csv": "914c07863f46c821259580ca76156c325a0acb451c89ef9bf1fbb877ecf0e5fc",
+    "baseline_runA.csv": "914c07863f46c821259580ca76156c325a0acb451c89ef9bf1fbb877ecf0e5fc",
+    "baseline_runB.csv": "914c07863f46c821259580ca76156c325a0acb451c89ef9bf1fbb877ecf0e5fc",
+    "bootstrap_lidar_odometry.csv": "53b7cd16eaeebea227e1bbbfc113667c69ae117680336a48fd41c08588d2eea3",
+    "bootstrap_validation.csv": "ddfd364fed16546bde4fc012c4210f42103121b0ae39f7bcb72fa80451def3a3",
+    "first_rejected_odometry.csv": "483072713937d84ddf7c9fa8cafb9ade488a1d7e9985958e245668e697d17280",
+    "formal_frame_ledger.csv": "201d055a0bb949edc13117affebade581b851e557bf7361f78d996554277d98f",
+    "ikfom_initialization_test.csv": "4deeecd86f8d7b415c6fda78da9bd5f9401cce47892bd6afd502357c7ddd9cc2",
+    "imu_preintegration.csv": "ba52e800b8d3f6cf97b01a062f5d4664fa55f928f31730563bcaed46a45a3bb5",
+    "initial_covariance.csv": "914c07863f46c821259580ca76156c325a0acb451c89ef9bf1fbb877ecf0e5fc",
+    "observability_diagnostics.csv": "c29bcc2d61926fe9d919700f30a116d3d355e5ddaf8275c378adda0d2948bf01",
+    "preintegration_guard_revalidation.csv": "3626f8fb9e93621ce87c95a1fa8cd3d1503ca4c03b744c098df6cc7781dc9580",
+    "runtime_breakdown.csv": "bc254ccb1da4228bd045286f07dc6f22a02c4b2a7d3f73758981a44ced7e0b9a",
+    "source_t0_uobs_parity.csv": "914c07863f46c821259580ca76156c325a0acb451c89ef9bf1fbb877ecf0e5fc"
+  },
+  "predecessor_artifact_hashes_sha256": "c7dfc6179f044620e4473da33d5245716f2198604890f9450d85aa76863d3185",
+  "predecessor_artifact_hashes_path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_moving_init_v1/archive_formatting_predecessor_hashes.json",
+  "result_or_numeric_changes": false,
+  "source_change": "CSV writers now request LF; no estimation, quality gate, or algorithm change"
+}

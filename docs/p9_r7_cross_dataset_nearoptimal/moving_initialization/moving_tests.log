@@ -1,0 +1,103 @@
+Start testing: Oct 09 01:52 CST
+----------------------------------------------------------
+1/6 Testing: moving_preintegration_contract
+1/6 Test: moving_preintegration_contract
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/test_preintegration.py"
+Directory: /tmp/p9_corridor_moving_init_build
+"moving_preintegration_contract" start time: Oct 09 01:52 CST
+Output:
+----------------------------------------------------------
+........
+----------------------------------------------------------------------
+Ran 8 tests in 0.040s
+
+OK
+<end of output>
+Test time =   0.24 sec
+----------------------------------------------------------
+Test Passed.
+"moving_preintegration_contract" end time: Oct 09 01:52 CST
+"moving_preintegration_contract" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/6 Testing: moving_initialization_test
+2/6 Test: moving_initialization_test
+Command: "/tmp/p9_corridor_moving_init_build/moving_initialization_test"
+Directory: /tmp/p9_corridor_moving_init_build
+"moving_initialization_test" start time: Oct 09 01:52 CST
+Output:
+----------------------------------------------------------
+MOVING_INITIALIZATION_SYNTHETIC_PASS; REAL_STATE_NOT_ACCEPTED_BY_THIS_TEST
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"moving_initialization_test" end time: Oct 09 01:52 CST
+"moving_initialization_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/6 Testing: p7_replay_io_test
+3/6 Test: p7_replay_io_test
+Command: "/tmp/p9_corridor_moving_init_build/p7_replay_io_test"
+Directory: /tmp/p9_corridor_moving_init_build
+"p7_replay_io_test" start time: Oct 09 01:52 CST
+Output:
+----------------------------------------------------------
+p7_replay_io_test PASS
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p7_replay_io_test" end time: Oct 09 01:52 CST
+"p7_replay_io_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/6 Testing: scan_end_deskew_runtime_test
+4/6 Test: scan_end_deskew_runtime_test
+Command: "/tmp/p9_corridor_moving_init_build/scan_end_deskew_runtime_test"
+Directory: /tmp/p9_corridor_moving_init_build
+"scan_end_deskew_runtime_test" start time: Oct 09 01:52 CST
+Output:
+----------------------------------------------------------
+SCAN_END_DESKEW_RUNTIME_CONTRACT_PASS points=44 raw_mean_m=0.119288 raw_p95_m=0.263083 raw_max_m=0.29239 deskew_mean_m=0.000601596 deskew_p95_m=0.00584186 deskew_max_m=0.00722311 imu_tail_gap_ns=5000000 exact_end_ns=1100000000
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"scan_end_deskew_runtime_test" end time: Oct 09 01:52 CST
+"scan_end_deskew_runtime_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/6 Testing: fastlio2_propagation_contract_test
+5/6 Test: fastlio2_propagation_contract_test
+Command: "/tmp/p9_corridor_moving_init_build/fastlio2_propagation_contract_test"
+Directory: /tmp/p9_corridor_moving_init_build
+"fastlio2_propagation_contract_test" start time: Oct 09 01:52 CST
+Output:
+----------------------------------------------------------
+FASTLIO2_PROPAGATION_CONTRACT_PASS position_error_m=6.16712e-05 velocity_error_mps=0.000316786 rotation_error_rad=0.02925
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"fastlio2_propagation_contract_test" end time: Oct 09 01:52 CST
+"fastlio2_propagation_contract_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/6 Testing: registration_geometry_test
+6/6 Test: registration_geometry_test
+Command: "/tmp/p9_corridor_moving_init_build/registration_geometry_test"
+Directory: /tmp/p9_corridor_moving_init_build
+"registration_geometry_test" start time: Oct 09 01:52 CST
+Output:
+----------------------------------------------------------
+registration_geometry PASS max_fd_error=1.64171e-09
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"registration_geometry_test" end time: Oct 09 01:52 CST
+"registration_geometry_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 09 01:52 CST

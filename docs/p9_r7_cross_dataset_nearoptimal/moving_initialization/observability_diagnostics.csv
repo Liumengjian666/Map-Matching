@@ -1,0 +1,2 @@
+profile,rank,dimension,condition,sigma_min,uncertainty_bound,sigma_min_lower_bound,acceptance,interpretation
+gravity_tangent_and_accel_bias,5,5,25.558080086106028,0.013890400158478014,0.28128525229720036,0.0,FAIL,DIAGNOSTIC_ONLY; untrusted raw-scan poses; lower-bound-zero is not proof of physical rank deficiency

@@ -1,0 +1,16 @@
+{
+  "build_type": "Release",
+  "CMakeCaches": {
+    "/tmp/p9_corridor_moving_init_build/CMakeCache.txt": "14b2324b2102cf6eccea33666c077da44e812738df966596d94d08710d3014a6",
+    "/tmp/p9_r4_release.Eirto1/CMakeCache.txt": "de38adbd1bb773fcc950520ba63e12c8132c6d2301de34558dd0378b2480bb35"
+  },
+  "binaries": {
+    "/tmp/p9_corridor_moving_init_build/p9_bootstrap_lidar": "b22794fec1bb34685a62e692860ecdf303824866e1b9507fa82fecbdc37536ec",
+    "/tmp/p9_corridor_moving_init_build/moving_initialization_test": "fc1a9b5398b504d1881adad84d482995aac9b8e966d041218acdf72025720398",
+    "/tmp/p9_r4_release.Eirto1/p9_r4_ndt": "61c753acfb84fbbb9622918fc5bca2d15379d708abef6140109c635de7401e02"
+  },
+  "P9_test_environment": "LD_LIBRARY_PATH=/lib/x86_64-linux-gnu; avoids incompatible /opt/MVS/lib/64/libusb-1.0.so.0",
+  "P9_command": "env LD_LIBRARY_PATH=/lib/x86_64-linux-gnu ctest --output-on-failure",
+  "moving_command": "ctest --output-on-failure",
+  "all_tests_PASS": true
+}
