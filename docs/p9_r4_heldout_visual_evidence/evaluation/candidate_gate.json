@@ -1,0 +1,19 @@
+{
+  "GT_LOADED": false,
+  "artifacts": {
+    "candidate_admission.csv": "8378fd55ad5c89a3a7bed1eefc5f9b345d39f97be9ef103e8b3620f84a90c746",
+    "candidate_per_frame.csv": "40b1ebda7a10fdfcbc568029f168bacb367e8751d2999283b27fed248b0f4a70"
+  },
+  "budget": 12,
+  "candidate_gate": false,
+  "cohort_sha256": "174ddbcd13c8b1e0b87b2d0118fe5f0ad2bb86da3c8c7b4867cc32dbda1bc236",
+  "frames": 96,
+  "freeze_sha256": "2f2b26a7a752f68f00485c00502e38410640775d7f154a4de1e956debf8800ba",
+  "macro_recall": 0.51625,
+  "major_frames": 40,
+  "major_ids": 84,
+  "micro_recall": 0.4642857142857143,
+  "recovered_ids": 39,
+  "strict_candidate_coverage": 0.425,
+  "strict_candidate_frames": 17
+}

@@ -1,179 +1,200 @@
 {
-  "archived_source_exports": {
-    "count": 32,
-    "heldout_exports_found": 0,
-    "transaction_ids": [
-      120,
-      244,
-      368,
-      616,
-      740,
-      838,
-      839,
-      864,
-      924,
-      925,
-      1111,
-      1235,
-      1359,
-      1497,
-      1498,
-      1556,
-      1557,
-      1606,
-      1730,
-      1854,
-      2102,
-      2226,
-      2350,
-      2598,
-      2722,
-      2846,
-      3094,
-      3217,
-      3341,
-      3631,
-      3796,
-      3962
-    ]
+  "CACHE_GATE": {
+    "TX2932": {
+      "actual_hash": "3530993910003886054",
+      "actual_points": "413",
+      "expected_hash": "3530993910003886054",
+      "expected_points": "413",
+      "parity": "PASS",
+      "transaction_id": "2932"
+    },
+    "cache": "/tmp/p9_r4_same_objective_source_recovery.l6hlb3lc",
+    "closure_raw_hashes_verified": 192,
+    "heldout_prepared_source_pass": 160,
+    "heldout_raw_hashes_pass": 160
   },
-  "attempted_oracle_batch_prefix": 96,
-  "blocker": "SOURCE_HASH_COUNT_MISMATCH_BEFORE_NDT",
-  "branch": "research/p9-r4-heldout-visual-evidence",
-  "candidate_calls": 0,
-  "cause": "R4 decoded cloud_end_frame from the historical R10B topic bag; SAME_OBJECTIVE T0/U_obs/source hashes belong to the later current-baseline scan-end deskew replay. The frozen P7 runner exports only the32 development source clouds.",
-  "diagnostic_sha256": {
-    "frozen_codegen_manifest.json": "20afbb988dc1d826a9931e885bdf7843795e0999e1616dadb0c8a3d038fb4ade",
-    "frozen_p7_source_export_reference.txt": "610b48160eda879b70e683ba6c530ba977338bc57c84e6027239c26b802de708",
-    "heldout_source_audit.csv": "3b09489693e226a4ee094c6835f1240e7aa62703c9a604025f9275092b5a658a",
-    "historical_source_audit.csv": "94ff51c2186660f8aa06696a512bebbb7cad6112a10bba7eb20f4c9b8b862256",
-    "topic_vs_same_objective_raw_parity.csv": "c37d240f3f0ac51b19e982e6673c94754003216943663c54a7df4a6b0470b79d"
+  "CANDIDATE": {
+    "P95_alignment_ms": 189.2504215000001,
+    "alignment_sum_seconds": 79.40609471900001,
+    "calls": 1152,
+    "frames": 96,
+    "iterations_total": 32696,
+    "mean_alignment_ms": 68.92890166579862,
+    "mean_alignment_ms_per_frame": 827.1468199895835,
+    "mean_iterations": 28.381944444444443,
+    "mean_iterations_per_frame": 340.5833333333333,
+    "median_alignment_ms": 55.806476,
+    "nonconverged": 0,
+    "status_counts": {
+      "ITERATION_LIMIT": 50,
+      "SUCCESS": 1102
+    },
+    "wall_seconds": 84.17560710897669
   },
-  "evidence_oracle_labels_loaded": false,
-  "final_cohort_prefix": null,
-  "first_frame": {
-    "actual_hash": "1188874421812550009",
-    "actual_points": "427",
-    "expected_hash": "3530993910003886054",
-    "expected_points": "413",
-    "parity": "FAIL",
-    "transaction_id": "2932"
-  },
-  "frozen_runner_source": {
-    "git_sha": "9945c4f5c3d7759104de108a594bcaf2553fd78c",
-    "path": "src/dog_prior_map_fastlio2_frontend_exp/scripts/p7/p7_single_state_runner.cpp",
-    "sha256": "610b48160eda879b70e683ba6c530ba977338bc57c84e6027239c26b802de708"
-  },
-  "gt_loaded": false,
-  "heldout_selection": {
+  "CANDIDATE_GENERATOR": {
+    "GT_LOADED": false,
     "artifacts": {
-      "heldout_ordered_pool.csv": "e877aeec2b6df1fa49dd11bc837b748612ec17b0b5a2d850fa018ed99b624d37"
+      "candidate_admission.csv": "8378fd55ad5c89a3a7bed1eefc5f9b345d39f97be9ef103e8b3620f84a90c746",
+      "candidate_per_frame.csv": "40b1ebda7a10fdfcbc568029f168bacb367e8751d2999283b27fed248b0f4a70"
     },
-    "branch": "research/p9-r4-heldout-visual-evidence",
-    "construction_source_sha256": {
-      "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r4_heldout_visual_evidence/THEORY.md": "7d754f6f48875d0e15011b5615c7c1f1b7a14156c0e1a951ed2c1febc01a6442",
-      "src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/p9_r4_contract.py": "00ce1d6f140574c2ae523a8f94e8019e54617f1d00119f9a6395ffeb04b4a057"
+    "budget": 12,
+    "candidate_gate": false,
+    "cohort_sha256": "174ddbcd13c8b1e0b87b2d0118fe5f0ad2bb86da3c8c7b4867cc32dbda1bc236",
+    "frames": 96,
+    "freeze_sha256": "2f2b26a7a752f68f00485c00502e38410640775d7f154a4de1e956debf8800ba",
+    "macro_recall": 0.51625,
+    "major_frames": 40,
+    "major_ids": 84,
+    "micro_recall": 0.4642857142857143,
+    "recovered_ids": 39,
+    "strict_candidate_coverage": 0.425,
+    "strict_candidate_frames": 17
+  },
+  "FINAL_RESULT": "HELDOUT_LIDAR_CANDIDATE_GENERATOR_NOT_GENERALIZED",
+  "GT_LOADED": false,
+  "HELDOUT_SELECTION": {
+    "development_exclusion": 8,
+    "eligible": 3630,
+    "final_prefix": 96,
+    "major_count": 40,
+    "min_target_separation": 16,
+    "no_major_count": 56,
+    "ordered_pool": 160,
+    "ordered_pool_sha256": "e877aeec2b6df1fa49dd11bc837b748612ec17b0b5a2d850fa018ed99b624d37",
+    "prefix_decision": "LABEL_COUNTS_ONLY"
+  },
+  "LIDAR_SECONDARY": {
+    "AUC": null,
+    "Spearman": null,
+    "permutation_p": null,
+    "status": "NOT_RUN_UPSTREAM_CANDIDATE_GATE_FAIL"
+  },
+  "NEW_VISUAL_EXTRACTION": 0,
+  "NEXT": "REASSESS_NONLOCAL_CANDIDATE_GENERATOR",
+  "ORACLE": {
+    "P95_alignment_ms": 220.02452259999998,
+    "alignment_sum_seconds": 2292.1492656719997,
+    "calls": 25248,
+    "frames": 96,
+    "iterations_total": 877624,
+    "mean_alignment_ms": 90.78537966064637,
+    "mean_alignment_ms_per_frame": 23876.554850749995,
+    "mean_iterations": 34.76013941698352,
+    "mean_iterations_per_frame": 9141.916666666666,
+    "median_alignment_ms": 76.5713655,
+    "nonconverged": 0,
+    "status_counts": {
+      "ITERATION_LIMIT": 1546,
+      "SUCCESS": 23702
     },
-    "development": [
-      120,
-      244,
-      368,
-      616,
-      740,
-      838,
-      839,
-      864,
-      924,
-      925,
-      1111,
-      1235,
-      1359,
-      1497,
-      1498,
-      1556,
-      1557,
-      1606,
-      1730,
-      1854,
-      2102,
-      2226,
-      2350,
-      2598,
-      2722,
-      2846,
-      3094,
-      3217,
-      3341,
-      3631,
-      3796,
-      3962
-    ],
-    "development_exclusion_radius": 8,
-    "eligible_count": 3630,
-    "gt_loaded": false,
-    "hash_prefix": "P9_R4_FLOOR01_HELDOUT_V1_20261008:",
-    "input_sha256": {
-      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/registration.csv": "202bf4036513c32276bc2f5ef2bebfc239358edc90c1d1f52fa6b2540deb4672"
-    },
-    "minimum_target_separation": 16,
-    "oracle_labels_loaded": false,
-    "ordered_pool_count": 160,
-    "prefix_sizes": [
-      96,
-      128,
-      160
-    ],
-    "selection_rule": "SHA256 lexicographic, greedy separation, no outcome filtering",
-    "start_sha": "3a98a3cd1d64d7aba6888d3136295a0b41c38fa6",
-    "visual_measurements_loaded": false
+    "wall_seconds": 758.7271171889734
   },
-  "heldout_sources": {
-    "failed": 160,
-    "passed": 0,
-    "total": 160
-  },
-  "historical_sources": {
-    "passed": 32,
-    "total": 32
-  },
-  "local_clone": "PASS",
-  "next": "R4_SOURCE_CLOUD_PROVENANCE_CLOSURE",
-  "not_established": [
-    "heldout labels",
-    "candidate generalization",
-    "visual coverage",
-    "AUC",
-    "LOFO",
-    "GT sanity"
-  ],
-  "oracle_calls": 0,
-  "oracle_parity": {
-    "frames": 24,
+  "ORACLE_PARITY": {
+    "historical_frames": 24,
     "major": 9,
     "major_ids": 22,
+    "new_historical_oracle_calls": 0,
     "no_major": 15,
-    "status": "PASS"
+    "status": "PASS_FROZEN_PREREQUISITE_HASH_VERIFIED"
   },
-  "original_seed_parity": {
-    "candidate_generator_parity": "PASS",
-    "new_ndt_calls": 0,
-    "original_seed_count": 8416,
-    "original_seed_parity": "PASS",
-    "start_rotation_max": 6.556881449863406e-15,
-    "start_translation_max": 0.0
+  "POSTHOC_GT": {
+    "GT_LOADED": false,
+    "improved": null,
+    "same": null,
+    "status": "NOT_RUN_UPSTREAM_CANDIDATE_GATE_FAIL",
+    "worse": null
   },
-  "push_executed": false,
-  "remote_start_verified": true,
-  "requires_authority": "Recover/export exact SAME_OBJECTIVE heldout scan-end sources with source count/FNV parity. Do not substitute source hashes, W2, T0, source preprocessing, oracle or heldout selection; any additional baseline replay NDT calls require explicit budget/authorization.",
-  "scientific_final_result": null,
-  "source_auditor_sha256": "ccb21b4c9f466ca8283112f59a130f7c038002e858c043fc527028b18ca66907",
-  "start_sha": "3a98a3cd1d64d7aba6888d3136295a0b41c38fa6",
-  "state": "STOPPED_BEFORE_FIRST_ALIGNMENT",
-  "task": "PAPER-P9-R4-LOCAL-CLONE-RECOVERY-AND-RESUME",
-  "topic_vs_same_objective_raw_parity": {
-    "passed": 0,
-    "tested": 6
+  "PRIMARY": {
+    "AUC": null,
+    "LOFO_balanced_accuracy": null,
+    "delete_one_major_AUC_max": null,
+    "delete_one_major_AUC_min": null,
+    "permutation_p": null,
+    "status": "NOT_RUN_UPSTREAM_CANDIDATE_GATE_FAIL"
   },
-  "visual_pairs_extracted": 0,
-  "workspace": "/tmp/dog_loc_paper_r4_ws.Fq21k2"
+  "PUSH_EXECUTED": false,
+  "R4_SCIENTIFIC_RESULT": "HELDOUT_LIDAR_CANDIDATE_GENERATOR_NOT_GENERALIZED",
+  "SOURCE_PROVENANCE": "RECOVERED_SAME_OBJECTIVE_SCAN_END_DESKEW",
+  "SOURCE_RECOVERY_COST": {
+    "baseline_ndt_calls": 4127,
+    "category": "OFFLINE_PROVENANCE_ONLY",
+    "cloud_io_seconds": 4.429121815000019,
+    "export_io_bound_definition": "export-target untimed frame residual + wall outside timed frames; includes diagnostics/setup/polling",
+    "export_io_seconds": null,
+    "export_io_status": "NOT_SEPARATELY_MEASURED",
+    "export_io_upper_bound_seconds": 2.604194689001484,
+    "frame_total_seconds": 123.2197963229998,
+    "ikfom_update_seconds": 0.16541576600000024,
+    "included_in_oracle_candidate_or_online_cost": false,
+    "ndt_alignment_seconds": 78.66958352800006,
+    "ndt_total_seconds": 90.08749444499978,
+    "new_baseline_replay_calls": 0,
+    "prediction_and_deskew_seconds": 15.932621195999998,
+    "synthetic_p7_test_align_calls": 2,
+    "timing_units": "seconds; original runtime CSV uses milliseconds",
+    "wall_seconds": 124.15120476100128,
+    "wall_timing": "wrapper elapsed; includes progress polling tail"
+  },
+  "VISUAL_COST": {
+    "extractions": 0,
+    "runtime_seconds": null,
+    "status": "NOT_RUN_UPSTREAM_CANDIDATE_GATE_FAIL"
+  },
+  "VISUAL_COVERAGE": {
+    "major_available": null,
+    "no_major_available": null,
+    "status": "NOT_RUN_UPSTREAM_CANDIDATE_GATE_FAIL"
+  },
+  "branch": "research/p9-r4-heldout-visual-evidence",
+  "end_sha_note": "Read the containing commit SHA from Git; no self-referential end SHA in artifacts.",
+  "isolation": {
+    "candidate_inputs_canonical_poses_loaded": false,
+    "candidate_inputs_gt_loaded": false,
+    "candidate_inputs_oracle_labels_loaded": false,
+    "lidar_evidence_frozen_before_label_diagnostics": true,
+    "visual_label_evidence_joint_freeze": "NOT_RUN_UPSTREAM_STOP"
+  },
+  "start_sha": "86ec15a279b84cc970530976a7e998af354a6d33",
+  "task": "PAPER-P9-R4-RESUME-HELDOUT-SCIENTIFIC-GATE-FROM-RECOVERED-SOURCES",
+  "upstream_counterexamples": {
+    "major_without_strict_candidate": [
+      2932,
+      3813,
+      3929,
+      2398,
+      1944,
+      1097,
+      3783,
+      2417,
+      2374,
+      2768,
+      184,
+      655,
+      3200,
+      2675,
+      2889,
+      2506,
+      2699,
+      3899,
+      2483,
+      4110,
+      542,
+      3829,
+      3301
+    ],
+    "major_zero_ID_recall": [
+      3430,
+      1097,
+      2417,
+      2768,
+      2283,
+      2506,
+      2699,
+      569,
+      718,
+      3461,
+      3301
+    ]
+  },
+  "worktree": "/tmp/dog_loc_paper_r4_ws.Fq21k2"
 }

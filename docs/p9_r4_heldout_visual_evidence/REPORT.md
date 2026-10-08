@@ -1,135 +1,109 @@
-# P9-R4 local recovery and pre-alignment input STOP
+# P9-R4 recovered-source held-out candidate gate
 
-## Decision status
+FINAL_RESULT = `HELDOUT_LIDAR_CANDIDATE_GENERATOR_NOT_GENERALIZED`
 
-Local Git recovery succeeded. **The held-out scientific experiment has not run.**
-The first oracle frame failed the frozen source point-count/FNV check before
-`ndt.align()`. This is an input-provenance blocker, not a held-out visual evidence
-failure. None of the six R4 scientific result classes is established.
+NEXT = `REASSESS_NONLOCAL_CANDIDATE_GENERATOR`
 
-`scientific_final_result = null`
+The final prefix is **96 held-out frames: 40 MAJOR and 56 NO_MAJOR**.
+The prefix stopped at the first sufficient label count; it was not expanded or
+selected using candidate recall, visual evidence or GT. None of the32 development
+frames contributes to these scientific statistics.
 
-`NEXT = R4_SOURCE_CLOUD_PROVENANCE_CLOSURE`
+The fixed B12 predictor-conditioned WEAK2 generator produced a strict separated,
+objective-competitive alternative in **17/40 MAJOR frames (42.5%)**, below the
+predeclared60% gate. Therefore **no visual extraction, visual coverage assessment,
+primary AUC/permutation/LOFO, delete-one-major test, post-hoc GT or LiDAR secondary
+classification was run**. These are NOT_RUN, not zero scores or visual failures.
 
-No NDT parameters, frontend parameters, source hashes, T0, U_obs, selection rules,
-budgets, clustering rules or success gates were substituted. No baseline replay
-or source reconstruction was started. Extra baseline NDT replay calls require
-explicit authorization and accounting before proceeding.
+## Scientific interpretation and limits
 
-## Git and environment
+- Frozen-ID macro frame recall = **0.51625000**.
+- Frozen-ID micro recall = **39/84 = 0.46428571**.
+- Strict-candidate frame coverage = **17/40**.
+- 23 MAJOR frames lack a usable strict objective-competitive candidate.
+- This is upstream candidate-generator non-generalization, not a visual evidence
+  failure, a source provenance failure, or a rejection of DUAL-U or H1.
+- Oracle ID admission retains the frozen .2m/2deg neighborhood and its overlap
+  limitation. ID recall does not prove strict dynamic local-minimum identity.
+- NO_MAJOR is a frozen BASE263 oracle proxy, not proof of absence of ambiguity.
+- No pose switching, EKF, covariance fusion, new frontend/score tuning or budget
+  expansion was performed. The unique NEXT is a research decision, not permission
+  for this execution turn to implement a new candidate mechanism.
 
-- Independent workspace: `/tmp/dog_loc_paper_r4_ws.Fq21k2`.
-- Branch: `research/p9-r4-heldout-visual-evidence`.
-- Start: `3a98a3cd1d64d7aba6888d3136295a0b41c38fa6`.
-- Local clone used `--local --no-hardlinks`; source `.git` remained read-only.
-- Writable `.git` and `git update-index --refresh` passed.
-- Origin URL is `https://github.com/Liumengjian666/Map-Matching.git`; no
-  clone/fetch/pull/push network operation was performed during this recovery.
-- The original paper workspace, stable workspace, and all datasets were not
-  modified. Historical unrelated untracked files were not copied into this clone.
-- Local commit identity copies the original repo's scoped `Codex / codex@local`;
-  no global configuration was changed.
-- Portable delivery is `/tmp/p9_r4_heldout_visual_evidence.bundle`. In addition to
-  branch ancestry it must include frozen source commit
-  `9945c4f5c3d7759104de108a594bcaf2553fd78c`, which is present in the source object
-  database but is not an ancestor of the R4 branch. Bundle validation is a Git
-  delivery check, not an experiment result. End SHA is obtained from Git after
-  commit; it is deliberately not inserted into its own committed artifacts.
+## Frozen contracts
 
-## Completed pre-experiment gates
+Source closure commit: `86ec15a279b84cc970530976a7e998af354a6d33`. Authorized source cache:
+`/tmp/p9_r4_same_objective_source_recovery.l6hlb3lc`. Held-out raw/prepared parity160/160; closure raw SHA checks192/192.
+TX2932 remains413 points / FNV3530993910003886054. Prior32/32 raw parity,
+4127/4127 trajectory parity and2400/2400 manifest-field parity remain frozen.
+No baseline replay was repeated. T0, U_obs/W2 and nominal scores remain the
+original SAME_OBJECTIVE archives, not recovery replay replacements.
 
-The fully label-blind ordered pool has 3,630 eligible transactions and 160
-accepted targets. Development +/-8 exclusion and target separation >=16 remain
-unchanged. Ordered pool SHA256:
+Ordered pool SHA256:
+`e877aeec2b6df1fa49dd11bc837b748612ec17b0b5a2d850fa018ed99b624d37`.
+Eligible3630; pool160; development exclusion+/-8; targets separated>=16.
+Historical oracle parity24/9/15/22 and original seed/B12 order parity are frozen
+prerequisites, hash-verified without new historical NDT calls.
 
-`e877aeec2b6df1fa49dd11bc837b748612ec17b0b5a2d850fa018ed99b624d37`
+NDT: PCL1.10, resolution .8, step .08, epsilon1e-5, max iterations80.
+Oracle: original BASE263 and original right/body seed convention.
+Candidates: fixed B12 predictor-conditioned WEAK2, seed122 first, original
+deterministic farthest-point ordering, no adaptive/oracle selection.
+Clustering: frozen deterministic complete-link .2m AND2deg; representative maximum
+raw score; competitive score>=S0+2.747604276e-4. Strict alternative center:
+translation>.2m OR rotation>2deg. Converged iteration-limit rows are retained.
 
-The frozen C++ geometry carrier and original complete-link implementation
-reproduce **24 historical BASE263 frames: 9 MAJOR, 15 NO_MAJOR, all 22 major IDs**.
-Iteration-limit converged terminals are retained. The float boundary regression
-uses the original Eigen float subtraction/norm, not a double approximation.
+## Calls and costs
 
-The literal frozen BASE263 seed generator reproduces 8,416 historical start
-poses (32 x 263): maximum translation difference 0 m, maximum rotation difference
-`6.556881449863406e-15` deg. Frozen R2A conditioned proposal matrices and first-12
-farthest-point order match historical rows. The 42,080 held-out proposals are
-geometry only; no candidate alignment was run.
+| Stage | Frames | Calls | Wall seconds | Mean align ms/call | Alignment sum seconds |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Oracle |96 |25248 |758.727117 |90.785380 |2292.149266 |
+| Candidate B12 |96 |1152 |84.175607 |68.928902 |79.406095 |
 
-## Actual blocker and read-only diagnosis
+Oracle uses4 processes; its wall includes clustering/dispatch and is not the sum
+of alignment times. Candidate wall includes dispatch. Mean B12 alignment cost per
+frame is827.146820ms; mean iterations/call
+28.381944, iterations/frame340.583333.
+Oracle status counts: `{'ITERATION_LIMIT': 1546, 'SUCCESS': 23702}`; candidate: `{'SUCCESS': 1102, 'ITERATION_LIMIT': 50}`.
+All returned PCL converged=1; iteration limits do not get silently deleted.
 
-The attempted oracle batch was the first 96 ordered targets. It stopped at the
-first target, **TX2932**, before any alignment:
+Historical source recovery4127 baseline calls /124.151205s remain
+**OFFLINE_PROVENANCE_ONLY**, not oracle, candidate, online-method or paper runtime.
+This resume performed0 new baseline calls and0 visual extractions.
 
-| Source property | Frozen SAME_OBJECTIVE baseline | Topic-bag extraction |
-| --- | ---: | ---: |
-| Prepared source points | 413 | 427 |
-| FNV source hash | 3530993910003886054 | 1188874421812550009 |
+## Information isolation and audit trail
 
-The read-only source audit applies the frozen source preprocessing to existing
-raw XYZ float files; it calls neither NDT alignment nor the visual frontend.
+`candidate_freeze.json` and `lidar_evidence_freeze.json` bind blind candidate
+outputs and builder SHA before `evaluation/candidate_gate.json` reads labels.
+Candidate stage permission is ID/hash-only. No visual-stage permission was issued
+after the candidate gate failed. GT was never loaded.
 
-- Historical archived source admission: **32/32 PASS**.
-- Decoded held-out source admission: **0/160 PASS**; all 160 differ in source hash
-  and/or point count. These source paths are **invalid experimental inputs**.
-- Exact raw XYZ parity, original SAME_OBJECTIVE export vs R10B topic-bag decoded
-  cloud: **0/6**, tested TX120/368/616/2226/2350/3341.
-- SAME_OBJECTIVE exported sources found: **32**, all development frames.
-- Exported held-out sources found: **0**.
+All96 per-frame outcomes, including the23 upstream counterexamples, remain in
+`evaluation/candidate_per_frame.csv`. These are not visual classifier false
+positives/negatives because that classifier was not evaluated. No frames removed.
 
-The actual source-generation code is archived verbatim in
-`frozen_p7_source_export_reference.txt`, Git `9945c4...`, SHA256
-`610b48160eda879b70e683ba6c530ba977338bc57c84e6027239c26b802de708`.
-It builds sources through the later P7 current-baseline timed-cloud scan-end
-deskew replay, then exports only `isP5I1CohortFrame(transaction)`—the 32 historical
-development targets. The prior R10B runtime topic bag is valid historical input
-context, but its `cloud_end_frame` bytes are not these later replay's source bytes.
+The old blocked topic-source manifest, source audit, topic parity, stop receipt,
+original execution manifest and oracle/engine_96.log remain untouched. Previous
+root REPORT/results/hash manifests are additionally preserved byte-exact under
+`prior_blocker_receipts/`. The accepted source_recovery archive is unchanged.
 
-Consequently, the topic-bag extraction in `run_r4_oracle.py prepare` must not be
-treated as a recovered SAME_OBJECTIVE source. Merely accepting its new hashes
-would violate the experiment's objective/input identity. The immutable preparation
-receipt is retained as the attempted input record, not marked admitted or repaired.
+New resumed outputs are in oracle/, candidate/, and evaluation/. Visual and
+unreached evaluation CSVs are header-only with explicit NOT_RUN JSON/coverage
+receipts; they do not claim visual-unavailable measurements for96 frames.
 
-## What did not execute
+Verification: Release build;40/40 P9 CTest; recovered cache/source admission;
+oracle input/source guard; candidate parity; frozen frontend SHA/environment;
+label/GT read denial tests; independent code review; CSV/JSON/hash audit;
+git diff --check. A failed pre-alignment hash guard was resealed before any align
+after the reviewed runner fix, retaining the original preflight receipt. The
+earlier incorrect CTest invocation found no tests and is preserved separately;
+it is not counted as a test pass.
 
-| Requested output | Status |
-| --- | --- |
-| Final 96/128/160 cohort selection | Not reached; no held-out labels |
-| Oracle263 calls | 0 |
-| Candidate B12 calls | 0 |
-| New visual pair extraction | 0 |
-| Blind non-oracle evidence freeze | Not reached |
-| Coverage, recall, AUC, permutation, LOFO | Not computed |
-| False positive/negative and GT arbitration | Not computed |
-| GT loaded | NO |
-| Push executed | NO |
+## Git delivery
 
-Historical labels were read by the isolated parity process and read-only archive
-verification, never by the evidence builder. The unexecuted blind evidence
-scaffold has no oracle/canonical/GT inputs. Its entry points refuse
-execution when the input STOP receipt exists. No synthetic empty experimental
-CSVs or statistical zeros stand in for missing results.
-
-## Verification and independent review
-
-The offline Release build, historical P9 tests and R4 self-tests are rerun by
-`verify_r4_input_stop.py`. Actual command logs, CTest XML, CSV/JSON consistency,
-frozen input/source/binary hashes and frontend numerical carrier audit are saved
-under `verification/` and `artifact_hashes.json`. An audit PASS means the archive
-truthfully reproduces the input FAIL; it does not mean source admission PASS.
-
-Fresh-context read-only reviews led to concrete corrections: literal float
-oracle boundary math; partial/repeated-call guards and truthful zero-iteration
-status; exact cohort hash/coverage binding; revalidation of reused calibration;
-and readable append/canonical-file isolation regressions. Synthetic tests cover
-these corrections. The evidence scaffold remains **unexecuted and not
-experimentally validated**. No external CLI second opinion was run.
-
-## Required next authorization
-
-Recover/export exact current-baseline SAME_OBJECTIVE scan-end sources for the
-already frozen held-out IDs, and require point-count/FNV parity against the
-existing registration/U_obs records before any oracle alignment. Keep source
-preprocessing, T0, W2, oracle seeds, held-out order, B12, EPS_SCORE, visual frontend
-and all scientific gates unchanged. If a faithful baseline replay is required,
-first approve its scope and additional nominal NDT cost. Do not resume R4 by
-changing a source hash or removing a selected frame.
+Workspace: `/tmp/dog_loc_paper_r4_ws.Fq21k2`; branch `research/p9-r4-heldout-visual-evidence`; start `86ec15a279b84cc970530976a7e998af354a6d33`.
+End SHA is the containing commit, obtained from Git after commit.
+PUSH_EXECUTED=NO. Portable bundle `/tmp/p9_r4_heldout_visual_evidence.bundle` must
+contain the completed branch and frozen source commit `9945c4f5c3d7759104de108a594bcaf2553fd78c`.
+Only execution/guard/archive code changed; frozen solver and frontend algorithms
+were not modified. Original read-only paper/stable workspaces remain untouched.

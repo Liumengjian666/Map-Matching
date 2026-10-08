@@ -1,0 +1,20 @@
+{
+  "final_cohort_sha256": "a5448256057045f6f6f2ed3f05acf543aa055f54af7cc42b64125d7ee5b379e7",
+  "final_prefix": 96,
+  "gt_loaded": false,
+  "major": 40,
+  "no_major": 56,
+  "oracle_artifact_sha256": {
+    "oracle_candidates.csv": "9897c21d47a03354ee859e3ab8fb5ed402a15024d22320fad77fc13fde556c3b",
+    "oracle_clusters.csv": "dbf3378b7fd4b2cfa64d19269a4174432cee5031f20637232c18635b55f9d26d",
+    "oracle_labels.csv": "fb5254e4cf2de67e917aeeae5f3af61989fe34d9055611abc8170bbd9f28263a",
+    "prefix_counts.csv": "ece1be18d5fe71b7f1d4a84aaf26f0d07327f0b59afa810c48d3cdd3e677bd42"
+  },
+  "oracle_calls": 25248,
+  "oracle_wall_seconds": 758.7271171889734,
+  "selection": "first sufficient96/128/160 LABEL COUNTS ONLY",
+  "source_provenance": "RECOVERED_SAME_OBJECTIVE_SCAN_END_DESKEW",
+  "sufficient": true,
+  "visual_evidence_loaded": false,
+  "workers": 4
+}

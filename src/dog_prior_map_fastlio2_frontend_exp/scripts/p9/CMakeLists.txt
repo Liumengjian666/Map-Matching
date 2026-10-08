@@ -51,6 +51,10 @@ endforeach()
 target_compile_definitions(p9_r4_oracle_geometry_self_test PRIVATE P9_R4_ORACLE_GEOMETRY_TEST_MAIN)
 
 enable_testing()
+add_test(NAME p9_r4_recovered_source_guard_self_test COMMAND ${Python3_EXECUTABLE}
+  ${CMAKE_CURRENT_SOURCE_DIR}/run_r4_recovered_oracle.py self-test)
+add_test(NAME p9_r4_recovered_frame_statistics_self_test COMMAND ${Python3_EXECUTABLE}
+  ${CMAKE_CURRENT_SOURCE_DIR}/evaluate_r4_recovered.py self-test)
 add_test(NAME p9_r4_selection_self_test COMMAND ${Python3_EXECUTABLE}
   ${CMAKE_CURRENT_SOURCE_DIR}/p9_r4_contract.py self-test)
 add_test(NAME p9_r4_oracle_geometry_self_test COMMAND p9_r4_oracle_geometry_self_test)

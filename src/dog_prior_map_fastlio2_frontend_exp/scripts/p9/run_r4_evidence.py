@@ -3,6 +3,8 @@
 import argparse
 from collections import defaultdict
 import hashlib
+import csv
+import io
 import json
 import os
 from pathlib import Path
@@ -12,6 +14,7 @@ import time
 
 import numpy as np
 import p9_r4_contract as c
+import p9_r4_recovered_inputs as recovered
 import p9_r2b_nonoracle_evidence as lidar
 import p9_r3_visual_contract as visual
 import p4_i3_visual_increment as p4
@@ -39,19 +42,20 @@ def information_guard(event,args):
     mode=args[1]
     if isinstance(mode,str) and "+" not in mode and any(key in mode for key in ("w","a","x")):
         return
-    if (c.OUT/"oracle") in path.parents or path.name.startswith("oracle_") and path.suffix==".csv" or \
+    if (c.OUT/"oracle") in path.parents or (c.OUT/"evaluation") in path.parents or path.name.startswith("oracle_") and path.suffix==".csv" or \
             path.name=="cohort_selection_freeze.json" or (c.DATA/"gt") in path.parents or \
             path.name in ("frame_projection_statistics.csv","oracle_recovery.csv") or \
             c.ARCHIVE in path.parents and path not in (c.REGISTRATION,c.ARCHIVE/"dual_u.csv") or \
             (c.ROOT/"docs") in path.parents and c.OUT not in path.parents and path not in HISTORICAL_DOC_INPUTS:
         raise RuntimeError("blind evidence denied label/canonical/GT read: "+str(path))
-    if c.OUT in path.parents or c.DATA in path.parents:
+    if c.OUT in path.parents or c.DATA in path.parents or recovered.CACHE in path.parents:
         READ_TRACE.add(str(path))
 
 
 def final_ids():
-    c.require(not (c.OUT/"input_stop_freeze.json").exists(),
-              "R4 input provenance is STOPPED; no candidate, visual or evidence execution")
+    # The immutable topic-source STOP receipt remains; only the accepted recovery may supersede it.
+    c.require(recovered.MANIFEST.exists(), "recovered execution pre-gate required")
+    recovered.verify(for_evidence=True)
     path=c.OUT/"heldout_final_cohort.csv"
     rows=c.read_csv(path)
     c.require(rows and set(rows[0])=={"transaction_id"},"evidence cohort must contain IDs only")
@@ -62,6 +66,9 @@ def final_ids():
     pool=[int(row["transaction_id"]) for row in c.read_csv(c.OUT/"heldout_ordered_pool.csv")]
     c.require(len(ids) in c.PREFIXES and ids==pool[:len(ids)] and not set(ids)&set(c.DEVELOPMENT),
               "evidence cohort differs from frozen held-out prefix")
+    permission=json.loads((c.OUT/"candidate_stage_authorization.json").read_text())
+    c.require(permission==dict(permission="RUN_FROZEN_B12_STAGE",cohort_sha256=c.digest(path),
+        source_manifest_sha256=c.digest(recovered.SOURCE_MANIFEST)),"blind sufficient-cohort authorization invalid")
     return ids
 
 
@@ -104,12 +111,26 @@ def frontend_guard():
     return hashes,actual
 
 
+def chart_guard(library):
+    old=json.loads(c.git_bytes(c.OUT/"artifact_hashes.json",recovered.CLOSURE_SHA))
+    expected=old["binary_sha256"]["/tmp/p9_r4_release.Eirto1/libp9_r2b_chart.so"]
+    c.require(c.digest(library)==expected,"frozen map-product-chart library changed")
+
+
+def verify_csv_bytes(name,rows,expected,fields=None):
+    stream=io.StringIO(newline="")
+    writer=csv.DictWriter(stream,list(fields or rows[0]),lineterminator="\n")
+    writer.writeheader();writer.writerows(rows)
+    c.require(hashlib.sha256(stream.getvalue().encode()).hexdigest()==expected,
+              "recomputed evidence differs from frozen CSV; preserved original: "+name)
+
+
 def candidate_stage():
     ids=final_ids()
     c.require(not (c.OUT/"candidate_freeze.json").exists(),"candidate results already frozen")
-    manifest=json.loads((c.OUT/"execution_manifest.json").read_text())
+    manifest=recovered.verify(for_evidence=True)
     c.require(not manifest["gt_loaded"] and c.digest(manifest["binary"])==manifest["binary_sha256"],"prepared engine hash mismatch")
-    for name in ("heldout_ordered_pool.csv","heldout_source_manifest.csv","conditioned_proposal_pool.csv"):
+    for name in ("heldout_ordered_pool.csv","source_recovery/heldout_source_manifest_recovered.csv","conditioned_proposal_pool.csv"):
         c.require(c.digest(c.OUT/name)==manifest["artifacts"][name],"prepared blind input changed")
     groups=defaultdict(list)
     for row in c.read_csv(c.OUT/"conditioned_proposal_pool.csv"):
@@ -119,7 +140,7 @@ def candidate_stage():
         for rank,seed,distance,row in farthest(groups[tx],12):
             probes.append(dict(row,probe_rank=rank,selection_distance=format(distance,".17g")))
     c.write_csv(c.OUT/"probe_manifest.csv",probes)
-    source={int(row["transaction_id"]):row for row in c.read_csv(c.OUT/"heldout_source_manifest.csv")}
+    source={int(row["transaction_id"]):row for row in c.read_csv(recovered.SOURCE_MANIFEST)}
     c.write_csv(c.OUT/"candidate_source_manifest.csv",[source[tx] for tx in ids])
     directory=c.OUT/"candidate_runs"
     c.require(not directory.exists(),"candidate execution already started; no repeat")
@@ -152,9 +173,44 @@ def candidate_stage():
         input_read_trace=sorted(READ_TRACE),binary_sha256=manifest["binary_sha256"]))
 
 
+def lidar_stage(library):
+    """Freeze candidate-only evidence before the separate candidate diagnostic loads labels."""
+    ids=final_ids()
+    c.require(not (c.OUT/"lidar_evidence_freeze.json").exists(), "LiDAR evidence already frozen")
+    receipt=json.loads((c.OUT/"candidate_freeze.json").read_text())
+    validate_stage_receipt(receipt,ids,c.digest(c.OUT/"heldout_final_cohort.csv"))
+    for name,sha in receipt["artifacts"].items():
+        c.require(c.digest(c.OUT/name)==sha,"candidate freeze changed")
+    chart_guard(library)
+    chart=lidar.chart_function(library);lidar.self_test(chart)
+    groups=defaultdict(list)
+    for row in c.read_csv(c.OUT/"conditioned_weak_runs.csv"):
+        groups[int(row["frame"])].append(row)
+    clusters=[];competitors=[];evidence=[]
+    for tx in ids:
+        rows=sorted(groups[tx],key=lambda r:int(r["probe_rank"]))
+        cs,ks,es=lidar.evidence_for_frame(tx,12,rows[0]["nominal_pose_matrix16"],rows,chart)
+        es["strict_candidate_count"]=sum(int(k["representative_outside_nominal_ball"]) for k in ks)
+        clusters.extend(cs);competitors.extend(ks);evidence.append(es)
+    c.write_csv(c.OUT/"terminal_clusters.csv",clusters)
+    c.write_csv(c.OUT/"competitive_terminals.csv",competitors,list(clusters[0])+["xi","xi_norm","score_advantage_per_source"])
+    c.write_csv(c.OUT/"lidar_nonoracle_evidence.csv",evidence)
+    files=("conditioned_weak_runs.csv","terminal_clusters.csv","competitive_terminals.csv",
+           "lidar_nonoracle_evidence.csv","heldout_final_cohort.csv")
+    c.save_json(c.OUT/"lidar_evidence_freeze.json",dict(frames=len(ids),budget=12,cohort_ids=ids,
+        gt_loaded=False,oracle_labels_loaded_by_evidence=False,canonical_inputs_loaded=False,
+        builder_sha256=c.digest(__file__),chart_library_sha256=c.digest(library),
+        artifacts={name:c.digest(c.OUT/name) for name in files},input_read_trace=sorted(READ_TRACE)))
+    print("R4_BLIND_LIDAR_EVIDENCE_FROZEN GT_LOADED=NO ORACLE_LABELS_LOADED_BY_EVIDENCE=NO",flush=True)
+
+
 def measurement_stage():
     ids=final_ids()
     c.require(not (c.OUT/"visual_measurement_freeze.json").exists(),"visual measurements already frozen")
+    permission=json.loads((c.OUT/"visual_stage_authorization.json").read_text())
+    c.require(permission==dict(permission="RUN_FROZEN_VISUAL_STAGE",
+        cohort_sha256=c.digest(c.OUT/"heldout_final_cohort.csv"),
+        lidar_freeze_sha256=c.digest(c.OUT/"lidar_evidence_freeze.json")),"blind visual stage authorization invalid")
     source_hashes,environment=frontend_guard()
     calibration=p4.load_calibration(c.DATA/"calibration");p4.cv2.setNumThreads(1);p4.sanity(calibration);visual.self_test()
     sync_path=visual.P4/"sync_stats.csv";c.pinned(sync_path)
@@ -252,7 +308,11 @@ def freeze_evidence(library):
         validate_stage_receipt(receipt,ids,c.digest(c.OUT/"heldout_final_cohort.csv"))
         verify_frozen_inputs(receipt)
         for artifact,sha in receipt["artifacts"].items():c.require(c.digest(c.OUT/artifact)==sha,"frozen blind input changed")
+    chart_guard(library)
     chart=lidar.chart_function(library);lidar.self_test(chart);visual.self_test()
+    earlier=json.loads((c.OUT/"lidar_evidence_freeze.json").read_text())
+    for name,sha in earlier["artifacts"].items():
+        c.require(c.digest(c.OUT/name)==sha,"earlier blind candidate evidence changed")
     runs=defaultdict(list);pairs=defaultdict(list)
     for row in c.read_csv(c.OUT/"conditioned_weak_runs.csv"):runs[int(row["frame"])].append(row)
     for row in c.read_csv(c.OUT/"visual_measurements.csv"):pairs[int(row["frame"])].append(row)
@@ -263,6 +323,7 @@ def freeze_evidence(library):
         rows=sorted(runs[tx],key=lambda r:int(r["probe_rank"]))
         nominal=rows[0]["nominal_pose_matrix16"]
         cs,ks,ls=lidar.evidence_for_frame(tx,12,nominal,rows,chart)
+        ls["strict_candidate_count"]=sum(int(k["representative_outside_nominal_ball"]) for k in ks)
         clusters.extend(cs);competitors.extend(ks);lidar_evidence.append(ls)
         nominal_imu=visual.rigid_matrix(nominal)@inverse_il
         strict=[k for k in ks if visual.strict_separation(visual.rigid_matrix(nominal),visual.rigid_matrix(k["representative_pose_matrix16"]))[2]]
@@ -286,9 +347,10 @@ def freeze_evidence(library):
             inliers=int(chosen["pnp_inliers"]) if available else "",reprojection=chosen["reprojection_rmse_px"] if available else "",
             cluster_count=len(cs),competitive_cluster_count=len(ks),strict_candidate_count=len(strict),
             nominal_rotation_residual_deg=nominal_rotation,U_comp=ls["U_comp"],**scalars))
-    c.write_csv(c.OUT/"terminal_clusters.csv",clusters)
-    c.write_csv(c.OUT/"competitive_terminals.csv",competitors,list(clusters[0])+["xi","xi_norm","score_advantage_per_source"])
-    c.write_csv(c.OUT/"lidar_nonoracle_evidence.csv",lidar_evidence)
+    verify_csv_bytes("terminal_clusters.csv",clusters,earlier["artifacts"]["terminal_clusters.csv"])
+    verify_csv_bytes("competitive_terminals.csv",competitors,earlier["artifacts"]["competitive_terminals.csv"],
+                     list(clusters[0])+["xi","xi_norm","score_advantage_per_source"])
+    verify_csv_bytes("lidar_nonoracle_evidence.csv",lidar_evidence,earlier["artifacts"]["lidar_nonoracle_evidence.csv"])
     c.write_csv(c.OUT/"candidate_residuals.csv",residuals,["frame","selected_lag","cluster_id","is_nominal","map_T_imu","r_t_m",
               "r_r_deg","separation_translation_m","separation_rotation_deg"])
     c.write_csv(c.OUT/"nonoracle_evidence.csv",evidence)
@@ -305,6 +367,7 @@ def freeze_evidence(library):
 def self_test():
     c.selection_self_test();visual.self_test()
     for path in (c.OUT/"oracle/oracle_labels.csv",c.OUT/"oracle_clusters.csv",c.DATA/"gt/floor01_gt.txt",
+                 c.OUT/"evaluation/candidate_gate.json",c.OUT/"evaluation/frame_evaluation.csv",
                  c.ARCHIVE/"candidates.csv",c.ARCHIVE/"clusters.csv",
                  c.ROOT/"docs/p9_foundation_weak_discovery/h1/major_projection_statistics.csv"):
         for mode in ("r","a+","w+",None):
@@ -328,18 +391,21 @@ def self_test():
     denied(lambda:validate_stage_rows(ids[:1],runs,pairs))
     pairs[ids[1]]=pairs[ids[1]][:3]
     denied(lambda:validate_stage_rows(ids,runs,pairs))
-    if (c.OUT/"input_stop_freeze.json").exists():denied(final_ids)
+    if not recovered.MANIFEST.exists():denied(final_ids)
     print("P9_R4_LABEL_GT_INFORMATION_ISOLATION_SELF_TEST=PASS")
     print("P9_R4_COHORT_CALIBRATION_FREEZE_CHAIN_SELF_TEST=PASS")
 
 
 if __name__=="__main__":
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("stage",choices=("self-test","candidate","visual","freeze"))
+    parser.add_argument("stage",choices=("self-test","candidate","lidar","visual","freeze"))
     parser.add_argument("--library",type=Path)
     args=parser.parse_args();sys.addaudithook(information_guard)
     if args.stage=="self-test":self_test()
     elif args.stage=="candidate":candidate_stage()
+    elif args.stage=="lidar":
+        c.require(args.library is not None,"chart library required")
+        lidar_stage(args.library)
     elif args.stage=="visual":measurement_stage()
     else:
         c.require(args.library is not None,"chart library required")
