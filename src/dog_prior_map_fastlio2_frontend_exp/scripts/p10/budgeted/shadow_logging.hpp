@@ -80,6 +80,37 @@ struct Logger {
     }
   }
 };
+// Opt-in R3 receipts; the historical R2 logger and its column meanings stay intact.
+struct EventLogger {
+  std::ofstream events, costs, end;
+  explicit EventLogger(const std::string& dir): events(output(dir+"/events.csv")),
+      costs(output(dir+"/frame_cost.csv")), end(output(dir+"/pending_end.csv")) {
+    events << "transaction_id,mode,event,innovation_trigger,innovation_translation_m,innovation_rotation_deg,recommendation_available,pending_before,pending_after,confirmation_count,pending_candidate_id,nonlocal_terminals,eligible_nonlocal_terminals,propagated_alternative,temporal_terminal,temporal_score,temporal_iterations,temporal_converged,temporal_successful,temporal_status,temporal_translation_residual_m,temporal_rotation_residual_deg,pending_pose,pending_prediction,pending_stamp_ns,pending_confirmations\n";
+    costs << "transaction_id,processing_and_logging_ms,cpu_ms,logging_ms\n";
+    end << "active,status,stamp_ns,confirmations,pose,prediction\n";
+  }
+  void write(uint64_t tx, const paper::CoupledEventResult& r, const paper::PendingCandidate& pending) {
+    events << tx << ',' << r.mode << ',' << r.event << ',' << r.innovation_trigger << ','
+      << r.innovation_translation_m << ',' << r.innovation_rotation_deg << ',' << r.recommendation_available
+      << ',' << r.pending_before << ',' << r.pending_after << ',' << r.confirmation_count << ','
+      << r.pending_candidate_id << ',' << r.nonlocal_terminals << ',' << r.eligible_nonlocal_terminals << ','
+      << values(r.propagated_alternative) << ',' << values(r.temporal_terminal.pose) << ',';
+    scalar(events,r.temporal_terminal.score_sum);
+    events << ',' << r.temporal_terminal.iterations << ',' << r.temporal_terminal.converged << ','
+      << r.temporal_terminal.successful << ',' << r.temporal_terminal.status << ','
+      << r.temporal_translation_residual_m << ',' << r.temporal_rotation_residual_deg << ','
+      << values(pending.pose) << ',' << values(pending.imu_prediction) << ',' << pending.stamp_ns << ','
+      << pending.confirmations << '\n';
+  }
+  void cost(uint64_t tx, double total, double cpu, double logging) {
+    costs << tx << ',' << total << ',' << cpu << ',' << logging << '\n';
+  }
+  void finish(const paper::PendingCandidate& pending) {
+    end << pending.active << ',' << (pending.active ? "UNCONFIRMED_END_OF_SEQUENCE" : "NONE") << ','
+      << pending.stamp_ns << ',' << pending.confirmations << ',' << values(pending.pose) << ','
+      << values(pending.imu_prediction) << '\n';
+  }
+};
 inline paper::CoupledNdtConfig config(const std::string& method, bool fixed) {
   paper::CoupledNdtConfig c; c.fixed_maximum_budget=fixed;
   if(method=="A") c.method=paper::CoupledMethod::WEAK_ONLY;

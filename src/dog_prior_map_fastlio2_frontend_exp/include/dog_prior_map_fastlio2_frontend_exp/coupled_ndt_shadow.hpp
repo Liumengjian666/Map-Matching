@@ -2,6 +2,7 @@
 
 #include <Eigen/Core>
 #include <cstddef>
+#include <cstdint>
 #include <functional>
 #include <limits>
 #include <string>
@@ -80,4 +81,37 @@ CoupledShadowResult runCoupledNdtShadow(const Eigen::Matrix4f& nominal,
     const Eigen::Matrix4f& prediction, std::size_t source_count,
     const CoupledNdtBackend& backend, const CoupledNdtConfig& config);
 bool coupledNdtSelfTest();
+
+// R3 scheduling is opt-in; R2 search and the production state update stay intact.
+struct CoupledEventConfig {
+  CoupledNdtConfig search;
+  double trigger_translation_m = .12, trigger_rotation_deg = 3.0;
+  double confirmation_translation_m = .2, confirmation_rotation_deg = 2.0;
+  double maximum_prediction_gap_s = .25;
+  double local_rotation_tolerance_deg = 1e-6;
+  int required_confirmations = 2;
+};
+struct PendingCandidate {
+  Eigen::Matrix4f pose = Eigen::Matrix4f::Identity();
+  Eigen::Matrix4f imu_prediction = Eigen::Matrix4f::Identity();
+  uint64_t stamp_ns = 0;
+  int confirmations = 0;
+  bool active = false;
+};
+struct CoupledEventResult {
+  CoupledShadowResult shadow;
+  double innovation_translation_m = 0, innovation_rotation_deg = 0;
+  bool innovation_trigger = false, pending_before = false, pending_after = false;
+  bool recommendation_available = false;
+  int confirmation_count = 0, pending_candidate_id = -1;
+  int nonlocal_terminals = 0, eligible_nonlocal_terminals = 0;
+  Eigen::Matrix4f propagated_alternative = Eigen::Matrix4f::Identity();
+  CoupledRefinement temporal_terminal;
+  double temporal_translation_residual_m = 0, temporal_rotation_residual_deg = 0;
+  std::string mode = "INVALID", event = "NOT_RUN";
+};
+CoupledEventResult runEventCoupledNdtShadow(const Eigen::Matrix4f& nominal,
+    const Eigen::Matrix4f& prediction, uint64_t stamp_ns, std::size_t source_count,
+    bool nominal_effective, const CoupledNdtBackend& backend,
+    const CoupledEventConfig& config, PendingCandidate* pending);
 }  // namespace dog_prior_map_fastlio2_frontend_exp

@@ -209,6 +209,34 @@ struct CurrentFrameNdtRegistration::Impl {
   ObservableNdt ndt;
   CurrentFrameNdtResult nominal;
   bool nominal_available = false;
+  CoupledNdtBackend shadowBackend() {
+    CoupledNdtBackend backend;
+    backend.jet = [this](const Eigen::Matrix4f& pose, const CoupledVector6& native) {
+      return ndt.nativeJet(source, pose, native);
+    };
+    backend.score = [this](const Eigen::Matrix4f& pose) {
+      return ndt.dynamicScore(source, pose);
+    };
+    backend.refine = [this](const Eigen::Matrix4f& initial) {
+      CoupledRefinement refined;
+      Cloud aligned;
+      ndt.align(aligned, initial);
+      refined.iterations = ndt.getFinalNumIteration();
+      refined.converged = ndt.hasConverged();
+      const Eigen::Matrix4f raw = ndt.getFinalTransformation();
+      Pose3d pose;
+      pose.position = raw.block<3, 1>(0, 3).cast<double>();
+      pose.orientation = Eigen::Quaterniond(raw.block<3, 3>(0, 0).cast<double>()).normalized();
+      const bool finite = raw.allFinite() && pose.orientation.coeffs().allFinite();
+      refined.pose = finite ? poseCarrier(pose) : raw;
+      const auto status = classifyNdtTerminal(refined.converged, refined.iterations,
+          parameters.maximum_iterations, finite, std::isfinite(ndt.getFitnessScore()));
+      refined.status = currentFrameNdtStatusName(status);
+      refined.successful = status == CurrentFrameNdtStatus::SUCCESS;
+      return refined;
+    };
+    return backend;
+  }
 };
 
 CurrentFrameNdtRegistration::CurrentFrameNdtRegistration(const CurrentFrameNdtParameters& p)
@@ -310,10 +338,8 @@ bool CurrentFrameNdtRegistration::align(uint64_t stamp_ns, const RegistrationClo
   }
 }
 
-bool CurrentFrameNdtRegistration::shadow(const CurrentFrameNdtResult& nominal,
-    const CoupledNdtConfig& config, CoupledShadowResult* result, std::string* reason) {
-  if (reason) reason->clear();
-  if (!result) return fail(reason, "null_shadow_result");
+bool CurrentFrameNdtRegistration::validateShadowNominal(const CurrentFrameNdtResult& nominal,
+    std::string* reason) const {
   if (!ready() || !impl_->source || !impl_->nominal_available)
     return fail(reason, "shadow_requires_current_nominal_source");
   const auto& stored = impl_->nominal;
@@ -329,40 +355,38 @@ bool CurrentFrameNdtRegistration::shadow(const CurrentFrameNdtResult& nominal,
       nominal.initial_map_T_lidar.position != stored.initial_map_T_lidar.position ||
       nominal.initial_map_T_lidar.orientation.coeffs() != stored.initial_map_T_lidar.orientation.coeffs())
     return fail(reason, "shadow_nominal_source_identity_mismatch");
+  return true;
+}
+
+bool CurrentFrameNdtRegistration::shadow(const CurrentFrameNdtResult& nominal,
+    const CoupledNdtConfig& config, CoupledShadowResult* result, std::string* reason) {
+  if (reason) reason->clear();
+  if (!result) return fail(reason, "null_shadow_result");
+  if (!validateShadowNominal(nominal, reason)) return false;
   try {
-    CoupledNdtBackend backend;
-    backend.jet = [this](const Eigen::Matrix4f& pose, const CoupledVector6& native) {
-      return impl_->ndt.nativeJet(impl_->source, pose, native);
-    };
-    backend.score = [this](const Eigen::Matrix4f& pose) {
-      return impl_->ndt.dynamicScore(impl_->source, pose);
-    };
-    backend.refine = [this](const Eigen::Matrix4f& initial) {
-      CoupledRefinement refined;
-      Cloud aligned;
-      impl_->ndt.align(aligned, initial);
-      refined.iterations = impl_->ndt.getFinalNumIteration();
-      refined.converged = impl_->ndt.hasConverged();
-      const Eigen::Matrix4f raw = impl_->ndt.getFinalTransformation();
-      Pose3d pose;
-      pose.position = raw.block<3, 1>(0, 3).cast<double>();
-      pose.orientation = Eigen::Quaterniond(raw.block<3, 3>(0, 0).cast<double>()).normalized();
-      const bool finite = raw.allFinite() && pose.orientation.coeffs().allFinite();
-      refined.pose = finite ? poseCarrier(pose) : raw;
-      // The core performs and accounts for one explicit terminal score
-      // evaluation after refinement; this callback only owns the PCL align.
-      const auto status = classifyNdtTerminal(refined.converged, refined.iterations,
-          impl_->parameters.maximum_iterations, finite,
-          std::isfinite(impl_->ndt.getFitnessScore()));
-      refined.status = currentFrameNdtStatusName(status);
-      refined.successful = status == CurrentFrameNdtStatus::SUCCESS;
-      return refined;
-    };
     *result = runCoupledNdtShadow(poseCarrier(nominal.raw_map_T_lidar),
-        poseCarrier(nominal.initial_map_T_lidar), nominal.source_point_count, backend, config);
+        poseCarrier(nominal.initial_map_T_lidar), nominal.source_point_count, impl_->shadowBackend(), config);
     return true;
   } catch (const std::exception& error) {
     return fail(reason, std::string("shadow_internal_error:") + error.what());
+  }
+}
+
+bool CurrentFrameNdtRegistration::eventShadow(const CurrentFrameNdtResult& nominal,
+    const CoupledEventConfig& config, PendingCandidate* pending,
+    CoupledEventResult* result, std::string* reason) {
+  if (reason) reason->clear();
+  if (!result || !pending) return fail(reason, "null_event_shadow_state");
+  if (nominal.effective && !validateShadowNominal(nominal, reason)) return false;
+  try {
+    *result = runEventCoupledNdtShadow(poseCarrier(nominal.raw_map_T_lidar),
+        poseCarrier(nominal.initial_map_T_lidar), nominal.stamp_ns, nominal.source_point_count,
+        nominal.effective, impl_->shadowBackend(), config, pending);
+    if (nominal.status == CurrentFrameNdtStatus::INSUFFICIENT_POINTS)
+      result->shadow.complete_ndt_calls = 0;
+    return true;
+  } catch (const std::exception& error) {
+    return fail(reason, std::string("event_shadow_internal_error:") + error.what());
   }
 }
 

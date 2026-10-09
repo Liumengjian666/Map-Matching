@@ -71,10 +71,16 @@ int main(int argc, char** argv) {
     const uint64_t limit = unsignedArgument(argv[10]);
     const uint64_t initialization_stamp = unsignedArgument(argv[11]);
     const bool enable_shadow = std::string(argv[12]) == "shadow";
-    if (!enable_shadow && std::string(argv[12]) != "control") throw std::runtime_error("invalid_mode");
+    const bool enable_event = std::string(argv[12]) == "event";
+    if (!enable_shadow && !enable_event && std::string(argv[12]) != "control") throw std::runtime_error("invalid_mode");
     const std::string log_directory = std::string(argv[7]).substr(0,std::string(argv[7]).find_last_of('/'));
     p10log::Logger shadow_log(log_directory);
+    p10log::EventLogger event_log(log_directory);
     const auto shadow_config = p10log::config(argv[13],false);
+    paper::CoupledEventConfig event_config;
+    event_config.search = shadow_config;
+    if (enable_event && std::string(argv[13]) != "C") throw std::runtime_error("event_requires_R2_residual_predictor");
+    paper::PendingCandidate pending;
     if (limit == 0 || limit > scans.size()) throw std::runtime_error("invalid_frame_limit");
     paper::Pose3d initial_lidar, extrinsic;
     const auto parameters = paper::readP7Parameters(argv[6], &initial_lidar, &extrinsic);
@@ -164,6 +170,14 @@ int main(int argc, char** argv) {
       if(enable_shadow && result.effective && !registration.shadow(result,shadow_config,&shadow,&reason))
         throw std::runtime_error("shadow_failed:"+reason);
       if(enable_shadow && !result.effective) shadow.status="NOMINAL_INEFFECTIVE_SHADOW_SKIPPED";
+      paper::CoupledEventResult event;
+      event.mode="CONTROL"; event.event="CONTROL_NO_SHADOW";
+      event.recommendation_available=result.effective;
+      if (enable_event) {
+        if (!registration.eventShadow(result,event_config,&pending,&event,&reason))
+          throw std::runtime_error("event_shadow_failed:"+reason);
+        shadow=event.shadow;
+      }
       const auto update_start = Clock::now();
       if (result.effective) {
         paper::PoseCorrectionDelta delta;
@@ -177,7 +191,9 @@ int main(int argc, char** argv) {
       if (corrected.stamp_ns != scan.scan_end_ns) throw std::runtime_error("state_timestamp_mismatch");
       if (!frontend.postconditionsValid(&reason)) throw std::runtime_error("postconditions_failed:" + reason);
       const double total_ms = elapsedMs(frame_start);
+      const auto logging_start = Clock::now();
       shadow_log.write(transaction,result,shadow,total_ms,1000.0*(std::clock()-frame_cpu)/CLOCKS_PER_SEC);
+      event_log.write(transaction,event,pending);
       trajectory << transaction << ',' << scan.scan_end_ns;
       poseColumns(trajectory, scan_end.predicted_map_T_imu); poseColumns(trajectory, corrected.map_T_imu);
       vectorColumns(trajectory, corrected.velocity); vectorColumns(trajectory, corrected.gyro_bias);
@@ -196,7 +212,10 @@ int main(int argc, char** argv) {
       runtime << transaction << ',' << prediction_ms << ',' << cloud_io_ms << ',' << ndt_total_ms
           << ',' << result.alignment_ms << ',' << update_ms << ',' << total_ms << ','
           << result.effective << ',' << result.effective << '\n';
+      event_log.cost(transaction,elapsedMs(frame_start),1000.0*(std::clock()-frame_cpu)/CLOCKS_PER_SEC,
+          elapsedMs(logging_start));
     }
+    event_log.finish(pending);
     trajectory.close(); observations.close(); runtime.close();
     p10log::resourceReceipt(log_directory);
     std::cout << "frames=" << limit << " lidar_updates=" << updates
