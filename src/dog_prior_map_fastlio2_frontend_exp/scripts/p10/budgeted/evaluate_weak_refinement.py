@@ -64,7 +64,7 @@ def verify(directory):
             dt,dr=distance(actual,candidate if used else nominal)
             ok=(int(r["jet_calls"])<=2 and int(r["value_calls"])<=3 and r["extra_align_calls"]=="0" and frame["full_ndt_calls"]=="1" and
                 (not quiet or r["jet_calls"]==r["value_calls"]=="0") and
-                (used==(n!=MODES[0] and rec)) and r["update_success"]=="1" and
+                (used==(n!=MODES[0] and rec)) and r["update_success"]==jobs[n]["registration"][index]["effective"] and
                 (not rec or r["weak_quality_valid"]=="1" and r["status"]=="LOCAL_REGULARIZED_REFINEMENT") and
                 (dt<=1e-6 and dr<=1e-5 if used else np.array_equal(actual,nominal)) and
                 np.isfinite(candidate).all() and np.isfinite(imu_pose(trajectory,"corrected_imu_")).all() and
@@ -73,6 +73,11 @@ def verify(directory):
                     r["anchor_after_valid"]=="0" and r["anchor_after_status"]=="FEEDBACK_CONSUMED")) and
                 (n!="weak_only_feedback" or int(r["jet_calls"])<=1 and r["strong_selected"]=="0"))
             error=0.;displaced_gap=0.
+            nom=jobs[n]["registration"][index]
+            if nom["effective"]!="1":
+                ok=ok and (all(r[k]=="0" for k in ("recommended","alternative_used","attempted","anchor_valid","jet_calls","value_calls","anchor_after_valid")) and
+                    nom["lidar_update_applied"]=="0" and
+                    all(trajectory["corrected_imu_"+k]==trajectory["predicted_imu_"+k] for k in ("x","y","z","qx","qy","qz","qw")))
             if r["anchor_valid"]=="1":
                 anchor=matrix(r["anchor_prediction"])
                 if f["rule"].get("retain_anchor_after_local_feedback",False):
@@ -127,6 +132,7 @@ def verify(directory):
 
 def statistics(name,tables,directory):
     result=dict(frames=4127,nominal_success=sum(r["effective"]=="1" for r in tables["registration"]),
+        prediction_only_frames=sum(r["effective"]!="1" for r in tables["registration"]),
         full_ndt_calls=sum(int(r["full_ndt_calls"]) for r in tables["frames"]),
         processing_ms=moments([float(r["processing_and_logging_ms"]) for r in tables["frame_cost"]]),
         cpu_ms=moments([float(r["cpu_ms"]) for r in tables["frame_cost"]]),
