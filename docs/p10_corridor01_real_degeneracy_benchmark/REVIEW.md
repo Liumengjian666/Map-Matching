@@ -49,3 +49,10 @@ or optimizer is copied into this benchmark; old source/archive remain intact.
 Translation deskew and full IKFoM remain unimplemented here and explicitly
 excluded from accuracy/online claims. This limitation is not hidden by the
 diagnostic name or by NDT convergence.
+
+One pre-launch interface repair: invoking the Python launcher via a relative
+script path produced `Path.relative_to()` failure while constructing source
+hash receipts. This happened before `RUN_STARTED`, any binary invocation, or
+any dataset NDT call. Canonicalize file paths before deriving repository-relative
+keys; added a relative/absolute invocation regression test. No scientific
+parameters or inputs changed. The first preflight failure is preserved below.

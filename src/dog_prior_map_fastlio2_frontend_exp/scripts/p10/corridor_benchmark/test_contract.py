@@ -18,6 +18,11 @@ class ContractTests(unittest.TestCase):
             path.write_bytes(data)
             self.assertEqual(run.sha(path), hashlib.sha256(data).hexdigest())
 
+    def test_relative_and_absolute_source_paths(self):
+        relative = Path(os.path.relpath(Path(__file__).parent, Path.cwd()))
+        self.assertEqual(run.source_hashes(relative), run.source_hashes(Path(__file__).parent.resolve()))
+        self.assertTrue(all(not Path(path).is_absolute() for path in run.source_hashes(relative)))
+
     def test_failure_receipt_without_data_or_ndt(self):
         self.assertIsNotNone(BINARY)
         with tempfile.TemporaryDirectory() as directory:

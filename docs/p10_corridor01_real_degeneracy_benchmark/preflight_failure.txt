@@ -1,0 +1,10 @@
+Launcher command (repository working directory):
+python3 src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/corridor_benchmark/run.py /tmp/p10_corridor_benchmark_build/p10_corridor_benchmark
+
+Failure before experiment freeze/RUN_STARTED/binary invocation:
+ValueError: 'src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/corridor_benchmark/benchmark.cpp' does not start with '/tmp/dog_loc_paper_r4_ws.Fq21k2'
+
+actual dataset NDT calls = 0
+only output = extrinsic.txt
+repair = resolve source path before repository-relative hash key extraction
+scientific parameter changes = NONE

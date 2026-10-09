@@ -26,6 +26,10 @@ def sha(path):
 def dump(path, value):
     path.write_text(json.dumps(value, indent=2, allow_nan=False) + '\n')
 
+def source_hashes(directory):
+    return {str(p.resolve().relative_to(REPO)): sha(p)
+            for p in Path(directory).iterdir() if p.is_file()}
+
 def check_inputs():
     manifest = json.loads((INPUT / 'input_manifest.json').read_text())
     expected_manifest = '591bfe3fd619966f40e4e2af6b9151937732483f0123c70eb34aa1031742991a'
@@ -118,7 +122,7 @@ def main():
         'input_counts': {key: manifest[key] for key in ('scans', 'imu_samples', 'raw_points')},
         'input_hashes': receipts, 'input_hash_audit_wall_s': time.monotonic() - before,
         'binary_sha256': sha(binary),
-        'source_hashes': {str(p.relative_to(REPO)): sha(p) for p in Path(__file__).parent.iterdir() if p.is_file()},
+        'source_hashes': source_hashes(Path(__file__).parent),
         'git_code_sha': subprocess.check_output(['git', '-C', str(REPO), 'rev-parse', 'HEAD'], text=True).strip(),
         'command': command, 'output': str(OUTPUT),
         'filesystem': subprocess.check_output(['findmnt', '-n', '-o', 'FSTYPE,OPTIONS', '-T', str(OUTPUT)], text=True).strip(),
