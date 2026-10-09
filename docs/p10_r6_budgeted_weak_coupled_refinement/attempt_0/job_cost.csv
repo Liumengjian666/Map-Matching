@@ -1,0 +1,4 @@
+mode,returncode,wall_s
+coupled_weak_shadow,0,106.18386145005934
+weak_only_feedback,0,106.80799781600945
+coupled_weak_feedback,0,106.79250046995003

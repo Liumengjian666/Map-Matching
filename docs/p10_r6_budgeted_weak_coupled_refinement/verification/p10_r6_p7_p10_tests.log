@@ -1,0 +1,19 @@
+Test project /tmp/p10_r2_build.CdJ4jf
+    Start 1: current_frame_ndt_test
+1/7 Test #1: current_frame_ndt_test ...........   Passed    0.19 sec
+    Start 2: p7_replay_io_test
+2/7 Test #2: p7_replay_io_test ................   Passed    0.01 sec
+    Start 3: p10_r2_shadow_test
+3/7 Test #3: p10_r2_shadow_test ...............   Passed    0.01 sec
+    Start 4: p10_r3_temporal_test
+4/7 Test #4: p10_r3_temporal_test .............   Passed    0.00 sec
+    Start 5: p10_r4_admission_test
+5/7 Test #5: p10_r4_admission_test ............   Passed    0.01 sec
+    Start 6: p10_r5_anchor_test
+6/7 Test #6: p10_r5_anchor_test ...............   Passed    0.00 sec
+    Start 7: p10_r6_weak_refinement_test
+7/7 Test #7: p10_r6_weak_refinement_test ......   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 7
+
+Total Test time (real) =   0.23 sec

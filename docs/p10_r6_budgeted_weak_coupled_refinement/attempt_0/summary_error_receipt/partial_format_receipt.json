@@ -1,0 +1,8 @@
+{
+  "original_partial_path": "/home/jian/livox_ws/dog_loc_paper_ws/.p9_experiment_cache/p10_r6_budgeted_weak_coupled_refinement/attempt_0/evaluation.partial.original.txt",
+  "original_sha256": "f5820d7da3d11708fa7db8d1ca34ccebb61b87df822504b93250d5b7ad73f6ae",
+  "archived_text_sha256": "508a8e4d953fcfb7163849cb8ee26a0e3f37e3cec98236e1cedcac3303311a5f",
+  "format_only_change": "Removed one final-line trailing space to pass git diff --check; original bytes retained outside Git",
+  "scientific_runtime_or_GT_change": false,
+  "partial_is_valid_JSON": false
+}

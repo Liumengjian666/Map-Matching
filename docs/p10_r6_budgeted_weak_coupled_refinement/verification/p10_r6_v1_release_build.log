@@ -1,0 +1,15 @@
+[  5%] Built target p7_replay_io
+[ 24%] Built target p7_current_frame_ndt
+[ 29%] Built target p7_replay_io_test
+[ 35%] Built target current_frame_ndt_test
+[ 40%] Built target p10_r2_single
+Scanning dependencies of target p10_r2_replay
+[ 43%] Building CXX object CMakeFiles/p10_r2_replay.dir/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/p10_r2_replay.cpp.o
+[ 48%] Built target p10_r3_temporal_test
+[ 64%] Built target p7_single_state_runner
+[ 70%] Built target p10_r2_shadow_test
+[ 75%] Built target p10_r4_admission_test
+[ 81%] Built target p10_r5_anchor_test
+[ 86%] Built target p10_r6_weak_refinement_test
+[ 89%] Linking CXX executable p10_r2_replay
+[100%] Built target p10_r2_replay

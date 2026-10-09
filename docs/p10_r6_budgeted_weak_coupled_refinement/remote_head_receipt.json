@@ -1,0 +1,10 @@
+{
+  "command": "git ls-remote origin refs/heads/research/p9-r4-heldout-visual-evidence",
+  "remote": "https://github.com/Liumengjian666/Map-Matching.git",
+  "remote_head": "392434a5e3945cc711abe183bfb4e4baad9d1891",
+  "returncode": 0,
+  "observation": "direct read-only query during attempt_1, before result commit",
+  "PUSH_EXECUTED": false,
+  "R6_remote_delivery": false,
+  "note": "Earlier query failed to connect; this later query succeeded. Network availability does not authorize push."
+}

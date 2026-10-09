@@ -1,0 +1,77 @@
+{
+  "task": "PAPER-P10-R6-BUDGETED-WEAK-COUPLED-REFINEMENT",
+  "attempt": 0,
+  "code_sha": "aef7da624b323ae539e9883c87679c051308469b",
+  "engineering": "PASS",
+  "statistics": {
+    "control": {
+      "frames": 4127,
+      "nominal_success": 4127,
+      "full_ndt_calls": 4127,
+      "processing_ms": {
+        "mean": 25.982289593893867,
+        "median": 23.514088,
+        "P95": 49.5957734,
+        "max": 139.290428,
+        "RMSE": 28.569062773803186
+      },
+      "cpu_ms": {
+        "mean": 25.95613544947904,
+        "median": 23.489,
+        "P95": 49.553399999999996,
+        "max": 139.111,
+        "RMSE": 28.541707413431027
+      },
+      "peak_rss_kib": 111976,
+      "large_jumps": 3
+    },
+    "coupled_weak_shadow": {
+      "frames": 4127,
+      "nominal_success": 4127,
+      "full_ndt_calls": 4127,
+      "processing_ms": {
+        "mean": 25.634161087230435,
+        "median": 23.315301,
+        "P95": 48.128815499999995,
+        "max": 131.277027,
+        "RMSE": 28.055185306130294
+      },
+      "cpu_ms": {
+        "mean": 25.614994911558032,
+        "median": 23.293,
+        "P95": 48.098499999999994,
+        "max": 131.052,
+        "RMSE": 28.03463415995784
+      },
+      "peak_rss_kib": 112504,
+      "large_jumps": 3,
+      "triggered": 776,
+      "anchor_valid": 3397,
+      "attempted": 377,
+      "weak_solve_valid": 377,
+      "weak_quality_valid": 357,
+      "strong_solve_valid": 357,
+      "strong_selected": 181,
+      "half_step": 34,
+      "recommended": 357,
+      "alternative_used": 0,
+      "anchor_valid_triggered": 377,
+      "jet_calls": 734,
+      "value_calls": 714,
+      "statuses": {
+        "UNTRIGGERED_NOMINAL": 3351,
+        "ANCHOR_UNAVAILABLE_NOMINAL": 399,
+        "LOCAL_REGULARIZED_REFINEMENT": 357,
+        "WEAK_OBJECTIVE_OR_NDT_QUALITY_REJECTED": 20
+      },
+      "strong_statuses": {
+        "NOT_RUN": 3770,
+        "OK": 303,
+        "STRONG_SUPPRESSED_BY_TOTAL_BOUND": 54
+      },
+      "weak_eta_mean_translation_m": 0.0682448705396021,
+      "weak_eta_mean_rotation_deg": 1.1858933668156615,
+      "strong_eta_mean_translation_m": 0.0020997721391833334,
+      "strong_eta_mean_rotation_deg": 0.16632305915821827,
+      "displaced_cross_nonzero": 357,
+      "strong_changes_candidate":

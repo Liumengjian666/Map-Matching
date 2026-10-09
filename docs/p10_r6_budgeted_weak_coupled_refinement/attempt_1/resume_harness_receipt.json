@@ -1,0 +1,43 @@
+{
+  "runtime_code_sha": "f03fe677b2105e911c57da47896fc3e0163d5e93",
+  "harness_code_sha": "4b7b80a0bd942801d450f41042d8711ad574fbb8",
+  "binary_sha256": "7939b8038e6c6f546d19ee9f4ad3f31c0af1264dd500c212aa1080adcf0487ed",
+  "GT_LOADED_BY_RESUME": false,
+  "error": "builder wrongly required update_success=1 for ineffective nominal TX1014",
+  "actual_runtime": "original runner correctly retained finite prediction; no filter failure",
+  "unchanged_completed_job_sha256": {
+    "coupled_weak_shadow/registration.csv": "a5f4115e49d59daaea681803096c19f5288972906f839a1626cbf2324e27998d",
+    "coupled_weak_shadow/runtime.csv": "1f6838368fe96820c12ce9771df78e764d9fe2c6e1d882706fc999254ab5c10e",
+    "coupled_weak_shadow/events.csv": "2de8b1549950dfedcfdf1ca452d1a2fe1a62c486d7e56baffa3a539feaa3432d",
+    "coupled_weak_shadow/trajectory.csv": "86d8de73bb5af2015fd37cf33584dcd3a1e54fba87d2e6a38c435eb949520bd9",
+    "coupled_weak_shadow/engine.log": "d7e604adf3d3ed585b550baf48bf46952620c9fa420cd31894063bd0ab0eeaab",
+    "coupled_weak_shadow/resources.csv": "9717c7257b0369ae8d329b2c9c2bc35e9445232bcecb0b06291d3c0dda8cfbed",
+    "coupled_weak_shadow/frame_cost.csv": "deb7f1e18a554a2cd6a1f1ec07c7b5b47d52d08ccb440ac510e29deb2d1cc336",
+    "coupled_weak_shadow/frames.csv": "7f93888f814da892905ee8f88de0918a46d6e037df10c7b9891651d1bb569c09",
+    "coupled_weak_shadow/models.csv": "1ecebd289df84b0fcdd9ba3754daf2529b99f4c4d6c84da7935b528ae0f52383",
+    "coupled_weak_shadow/receipt.json": "4f8208f78aff81cc7786fb8a42155efa4133880539b1ecd1959a16fffd270a2a",
+    "coupled_weak_shadow/command.json": "2ce252d176fd13d7c49a900074c67c4ab3e7c46689cdda8f34be650c6fe2d2ca",
+    "coupled_weak_shadow/pending_end.csv": "1666d61d1aaf5a71072370d0a8ea099bbe1b5636bc26d101522ac5a32d2abbf3",
+    "coupled_weak_shadow/candidates.csv": "db72f26800f64e0d0347d171231f040358cfa3f4f4685e56cce98799635bf95f",
+    "coupled_weak_shadow/job_blind_freeze.json": "115666a4b57124dc471848935a658a10c274bf407cbbf6c62a05ce17155dfbf6",
+    "coupled_weak_shadow/weak_refinement.csv": "9555a1bfdb0adde7c026f1a5781eb80da5475b8547b86eaa22fa3683efd271a9",
+    "weak_only_feedback/registration.csv": "89fb7a178d3902b7a8abcfd3ec916c8e672fb460d5e4a711e39660dc6773847f",
+    "weak_only_feedback/runtime.csv": "e51bd607def69e57ecd2c52e419dfd26c003dbd1ea755ecf108b5d4b7fd7ac0e",
+    "weak_only_feedback/events.csv": "18a79ecf5bd6c7b21745aea972c53b7ecaff024c67dc4bae7a2a745b1138532f",
+    "weak_only_feedback/trajectory.csv": "fe665a8e3267d8df7e89f136f6ce41053e48e053328b4d567835ba4095a42d2c",
+    "weak_only_feedback/engine.log": "c1bdfeed2d7015ecf763001a6162a08d42eee4b3a821da3fc023fa2983ceee92",
+    "weak_only_feedback/resources.csv": "daf10c4cdeaf0bbce4784decfeb908bf6bdd18d15a5ddfb066d09968dc202dc6",
+    "weak_only_feedback/frame_cost.csv": "c617c62b373b4a647f900a4d3e2ca6e27b96527c67d935f88b667a0ae4eddaf0",
+    "weak_only_feedback/frames.csv": "0cdca9b8b69d7decc6075a4b7e95a32d74d2480c85d5738d0f4ac5950713fc64",
+    "weak_only_feedback/models.csv": "e589affa7e4126ed6717424cab3e85ec20f919dda7169ce5f7c6d493c65b9913",
+    "weak_only_feedback/receipt.json": "e91701b84659f54a3e9ce12457bf4c1d27f1408bcd82e455d985a429835c74e0",
+    "weak_only_feedback/command.json": "ed368cc525815c750243ceef462692380bc8cb57ad56ad7373ccb84268195941",
+    "weak_only_feedback/pending_end.csv": "1666d61d1aaf5a71072370d0a8ea099bbe1b5636bc26d101522ac5a32d2abbf3",
+    "weak_only_feedback/candidates.csv": "db72f26800f64e0d0347d171231f040358cfa3f4f4685e56cce98799635bf95f",
+    "weak_only_feedback/weak_refinement.csv": "ecc542f1820d014c0d5382bf16eaeb952e90979dc59bb2f9f67bee35aa21f001"
+  },
+  "new_NDT_jobs": [
+    "coupled_weak_feedback"
+  ],
+  "completed_jobs_rerun": false
+}
