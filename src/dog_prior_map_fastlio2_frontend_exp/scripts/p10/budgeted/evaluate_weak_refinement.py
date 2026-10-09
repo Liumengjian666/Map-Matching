@@ -129,7 +129,12 @@ def statistics(name,tables,directory):
     for a,b in zip(tables["trajectory"],tables["trajectory"][1:]):
         dt,dr=distance(imu_pose(a,"corrected_imu_"),imu_pose(b,"corrected_imu_"))
         jumps.append(dict(transaction_id=b["transaction_id"],dt_m=dt,dr_deg=dr,large_jump=int(dt>.5 or dr>10)))
-    csv_write(directory/(name+"_jumps.csv"),jumps);result["large_jumps"]=sum(r["large_jump"] for r in jumps)
+    jump_path=directory/(name+"_jumps.csv")
+    if jump_path.exists():
+        expected=[{k:str(v) for k,v in row.items()} for row in jumps]
+        if read(jump_path)!=expected:raise RuntimeError("existing jump receipt changed")
+    else:csv_write(jump_path,jumps)
+    result["large_jumps"]=sum(r["large_jump"] for r in jumps)
     if name=="control":return result
     rows=tables["weak"]
     for key in ("triggered","anchor_valid","attempted","weak_solve_valid","weak_quality_valid","strong_solve_valid","strong_selected","half_step","recommended","alternative_used"):
@@ -142,7 +147,7 @@ def statistics(name,tables,directory):
         result[key+"_mean_translation_m"]=float(np.mean([.8*np.linalg.norm(vector(r[key])[:3]) for r in selected])) if selected else 0.
         result[key+"_mean_rotation_deg"]=float(np.mean([np.linalg.norm(vector(r[key])[3:])*180/np.pi for r in selected])) if selected else 0.
     result["displaced_cross_nonzero"]=sum(float(r["displaced_cross_norm"])>1e-8 for r in rows)
-    result["strong_changes_candidate"]=sum(r["strong_selected"]=="1" and np.linalg.norm(vector(r["strong_eta"]))>1e-9 for r in rows)
+    result["strong_changes_candidate"]=int(sum(r["strong_selected"]=="1" and np.linalg.norm(vector(r["strong_eta"]))>1e-9 for r in rows))
     result["score_delta_per_point"]=moments([(float(r["candidate_score"])-float(r["nominal_score"]))/float(f["source_count"])
         for r,f in zip(rows,tables["frames"]) if r["recommended"]=="1"]) if result["recommended"] else None
     result["wall_s"]=json.loads((directory/name/"receipt.json").read_text())["wall_s"]
@@ -183,9 +188,30 @@ def posthoc(directory,jobs):
         pre_GT_audit_freeze_sha256=sha(directory/"pre_GT_audit_freeze.json")))
     return metrics
 
-def evaluate(attempt):
-    directory=ARCHIVE/f"attempt_{attempt}";freeze,jobs=verify(directory)
-    stats={n:statistics(n,t,directory) for n,t in jobs.items()};gt=posthoc(directory,jobs)
+def evaluate(attempt,repair_summary=False):
+    directory=ARCHIVE/f"attempt_{attempt}"
+    if repair_summary:
+        # Serialization repair only: verify existing receipts, no new GT load,
+        # no repeated runtime or rules. The original partial JSON is preserved.
+        freeze=json.loads((directory/"execution_freeze.json").read_text())
+        audit=json.loads((directory/"pre_GT_audit_freeze.json").read_text())
+        if audit["GT_LOADED"] or audit["engineering"]!="PASS":raise RuntimeError("no prior valid pre-GT audit")
+        for p,d in audit["output_sha256"].items():
+            if sha(directory/p)!=d:raise RuntimeError("engineering receipt changed")
+        blind=json.loads((directory/"blind_outputs_freeze.json").read_text())
+        for p,d in blind["output_sha256"].items():
+            if sha(directory/p)!=d:raise RuntimeError("runtime output changed during repair")
+        jobs={"control":load(CONTROL)}
+        for n in MODES:jobs[n]=load(directory/n);jobs[n]["weak"]=read(directory/n/"weak_refinement.csv")
+        records=read(directory/"posthoc_gt.csv");gt={}
+        for n in jobs:
+            rows=[r for r in records if r["mode"]==n];gt[n]=dict(count=len(rows))
+            if len(rows)!=4126:raise RuntimeError("posthoc GT denominator changed")
+            for key in ("nominal_raw_translation_m","nominal_raw_rotation_deg","actual_raw_translation_m","actual_raw_rotation_deg","corrected_translation_m","corrected_rotation_deg"):
+                gt[n][key]=moments([float(r[key]) for r in rows])
+    else:freeze,jobs=verify(directory);gt=None
+    stats={n:statistics(n,t,directory) for n,t in jobs.items()}
+    if gt is None:gt=posthoc(directory,jobs)
     gain={n:1-gt[n]["corrected_translation_m"]["RMSE"]/gt["control"]["corrected_translation_m"]["RMSE"] for n in MODES[1:]}
     result=dict(task=freeze["task"],attempt=attempt,code_sha=freeze["code_sha"],engineering="PASS",statistics=stats,GT=gt,
         gain_vs_control=gain,coupled_vs_weak_fraction=1-gt[MODES[2]]["corrected_translation_m"]["RMSE"]/gt[MODES[1]]["corrected_translation_m"]["RMSE"],
@@ -195,4 +221,5 @@ def evaluate(attempt):
     print(json.dumps(result,indent=2))
 
 if __name__=="__main__":
-    p=argparse.ArgumentParser();p.add_argument("--attempt",type=int,default=0);a=p.parse_args();evaluate(a.attempt)
+    p=argparse.ArgumentParser();p.add_argument("--attempt",type=int,default=0);p.add_argument("--repair-summary",action="store_true")
+    a=p.parse_args();evaluate(a.attempt,a.repair_summary)
