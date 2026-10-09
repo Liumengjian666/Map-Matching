@@ -1,5 +1,6 @@
 """Finalize R4 receipts and audit all small artifacts; no new experiments."""
 import csv
+import argparse
 import json
 import hashlib
 import subprocess
@@ -76,4 +77,12 @@ def main():
     print(json.dumps({k:v for k,v in receipt.items() if k!="artifact_sha256"},indent=2))
 
 
-if __name__=="__main__":main()
+if __name__=="__main__":
+    parser=argparse.ArgumentParser();parser.add_argument("--audit-only",action="store_true")
+    if parser.parse_args().audit_only:
+        # This generated manifest excludes itself; blind receipts are never rewritten.
+        receipt=audit()
+        with (ARCHIVE/"artifact_hashes.json").open("w") as stream:
+            json.dump(receipt,stream,indent=2,allow_nan=False);stream.write("\n")
+        print(json.dumps({k:v for k,v in receipt.items() if k!="artifact_sha256"},indent=2))
+    else:main()

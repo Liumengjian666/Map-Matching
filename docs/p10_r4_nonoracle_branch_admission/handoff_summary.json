@@ -1,0 +1,201 @@
+{
+  "methods": [
+    {
+      "attempt": 0,
+      "mode": "event_admission",
+      "frames": 4127,
+      "trigger": 776,
+      "search": 545,
+      "pending": 180,
+      "temporal": 57,
+      "admitted": 35,
+      "used": 0,
+      "full_NDT_calls": 5129,
+      "jet_calls": 7505,
+      "preview_calls": 6960,
+      "mean_ms": 32.6341313835716,
+      "P95_ms": 77.94613009999999,
+      "max_ms": 190.674285,
+      "peak_RSS_KiB": 112372,
+      "corrected_translation_RMSE_m": 0.8693980486207069,
+      "corrected_translation_P95_m": 1.5357113897233639,
+      "corrected_translation_max_m": 1.7632955911973807,
+      "corrected_rotation_RMSE_deg": 2.6034541435152745,
+      "corrected_rotation_P95_deg": 5.7857837296768615,
+      "corrected_rotation_max_deg": 11.589847174719178,
+      "actual_raw_translation_RMSE_m": 0.8636100940917059,
+      "actual_raw_rotation_RMSE_deg": 4.479268533014402,
+      "large_jumps": 3,
+      "max_update_dt_m": 0.18757150281014892,
+      "max_update_dr_deg": 2.2026384710480107,
+      "max_admitted_nominal_dt_m": 1.220375306758826,
+      "max_admitted_nominal_dr_deg": 12.070770531828648
+    },
+    {
+      "attempt": 0,
+      "mode": "guarded_feedback",
+      "frames": 4127,
+      "trigger": 782,
+      "search": 550,
+      "pending": 187,
+      "temporal": 53,
+      "admitted": 35,
+      "used": 35,
+      "full_NDT_calls": 5137,
+      "jet_calls": 7558,
+      "preview_calls": 7008,
+      "mean_ms": 33.20289970147807,
+      "P95_ms": 80.02233409999994,
+      "max_ms": 173.745025,
+      "peak_RSS_KiB": 112180,
+      "corrected_translation_RMSE_m": 0.8707677991484153,
+      "corrected_translation_P95_m": 1.539771803173148,
+      "corrected_translation_max_m": 1.757364997256617,
+      "corrected_rotation_RMSE_deg": 2.586223043543604,
+      "corrected_rotation_P95_deg": 5.759198326701952,
+      "corrected_rotation_max_deg": 11.502701768674541,
+      "actual_raw_translation_RMSE_m": 0.8658007653184644,
+      "actual_raw_rotation_RMSE_deg": 4.547711235437189,
+      "large_jumps": 3,
+      "max_update_dt_m": 0.2600204457560165,
+      "max_update_dr_deg": 2.2026384710480107,
+      "max_admitted_nominal_dt_m": 1.4410636797615983,
+      "max_admitted_nominal_dr_deg": 13.766514800703815
+    },
+    {
+      "attempt": 1,
+      "mode": "event_admission",
+      "frames": 4127,
+      "trigger": 776,
+      "search": 545,
+      "pending": 180,
+      "temporal": 57,
+      "admitted": 5,
+      "used": 0,
+      "full_NDT_calls": 5129,
+      "jet_calls": 7505,
+      "preview_calls": 6960,
+      "mean_ms": 33.24111943300218,
+      "P95_ms": 79.28307129999997,
+      "max_ms": 198.824138,
+      "peak_RSS_KiB": 112172,
+      "corrected_translation_RMSE_m": 0.8693980486207069,
+      "corrected_translation_P95_m": 1.5357113897233639,
+      "corrected_translation_max_m": 1.7632955911973807,
+      "corrected_rotation_RMSE_deg": 2.6034541435152745,
+      "corrected_rotation_P95_deg": 5.7857837296768615,
+      "corrected_rotation_max_deg": 11.589847174719178,
+      "actual_raw_translation_RMSE_m": 0.8636100940917059,
+      "actual_raw_rotation_RMSE_deg": 4.479268533014402,
+      "large_jumps": 3,
+      "max_update_dt_m": 0.18757150281014892,
+      "max_update_dr_deg": 2.2026384710480107,
+      "max_admitted_nominal_dt_m": 1.0518613800891436,
+      "max_admitted_nominal_dr_deg": 7.724498291225372
+    },
+    {
+      "attempt": 1,
+      "mode": "guarded_feedback",
+      "frames": 4127,
+      "trigger": 761,
+      "search": 528,
+      "pending": 178,
+      "temporal": 56,
+      "admitted": 5,
+      "used": 5,
+      "full_NDT_calls": 5103,
+      "jet_calls": 7256,
+      "preview_calls": 6728,
+      "mean_ms": 33.46364312091108,
+      "P95_ms": 79.6228885,
+      "max_ms": 210.387503,
+      "peak_RSS_KiB": 112864,
+      "corrected_translation_RMSE_m": 0.8708793946133683,
+      "corrected_translation_P95_m": 1.5577812408816538,
+      "corrected_translation_max_m": 1.7494666152738851,
+      "corrected_rotation_RMSE_deg": 2.576895936259031,
+      "corrected_rotation_P95_deg": 5.7614464517916435,
+      "corrected_rotation_max_deg": 11.429902501614707,
+      "actual_raw_translation_RMSE_m": 0.8656388596962129,
+      "actual_raw_rotation_RMSE_deg": 4.430321232999068,
+      "large_jumps": 3,
+      "max_update_dt_m": 0.24847334871329632,
+      "max_update_dr_deg": 2.2026384710480107,
+      "max_admitted_nominal_dt_m": 1.3110531359379614,
+      "max_admitted_nominal_dr_deg": 11.871136232403552
+    }
+  ],
+  "details": {
+    "attempt_0": {
+      "code_sha": "434ae03c4a14076647d2e72b434a72b01601ac27",
+      "accuracy_improvement_percent": -0.15755159904964344,
+      "admission_outcomes": {
+        "event_admission": {
+          "WORSE": 26,
+          "IMPROVED": 9
+        },
+        "guarded_feedback": {
+          "WORSE": 22,
+          "IMPROVED": 13
+        }
+      },
+      "admission_status": {
+        "event_admission": {
+          "NOT_EVALUATED": 3806,
+          "AWAITING_FIRST_CONFIRMATION": 180,
+          "AWAITING_SECOND_CONFIRMATION": 84,
+          "BRANCH_COMPARISON_REJECTED": 22,
+          "ADMITTED": 35
+        },
+        "guarded_feedback": {
+          "NOT_EVALUATED": 3804,
+          "AWAITING_FIRST_CONFIRMATION": 187,
+          "AWAITING_SECOND_CONFIRMATION": 83,
+          "BRANCH_COMPARISON_REJECTED": 18,
+          "ADMITTED": 35
+        }
+      },
+      "first_used_tx": "510",
+      "prediction_divergence_count": 3617,
+      "branch_audit_rows": 644,
+      "max_branch_audit_difference": 7.494005416219807e-16
+    },
+    "attempt_1": {
+      "code_sha": "fa1912d3061800c67ef3ec6f33390af12ee97120",
+      "accuracy_improvement_percent": -0.1703875451539716,
+      "admission_outcomes": {
+        "event_admission": {
+          "WORSE": 4,
+          "IMPROVED": 1
+        },
+        "guarded_feedback": {
+          "WORSE": 4,
+          "IMPROVED": 1
+        }
+      },
+      "admission_status": {
+        "event_admission": {
+          "NOT_EVALUATED": 3806,
+          "AWAITING_FIRST_CONFIRMATION": 180,
+          "AWAITING_SECOND_CONFIRMATION": 84,
+          "BRANCH_COMPARISON_REJECTED": 22,
+          "ROTATION_PREDICTION_DISAGREEMENT": 30,
+          "ADMITTED": 5
+        },
+        "guarded_feedback": {
+          "NOT_EVALUATED": 3811,
+          "AWAITING_FIRST_CONFIRMATION": 178,
+          "AWAITING_SECOND_CONFIRMATION": 82,
+          "BRANCH_COMPARISON_REJECTED": 22,
+          "ROTATION_PREDICTION_DISAGREEMENT": 29,
+          "ADMITTED": 5
+        }
+      },
+      "first_used_tx": "591",
+      "prediction_divergence_count": 3536,
+      "branch_audit_rows": 637,
+      "max_branch_audit_difference": 7.494005416219807e-16
+    }
+  },
+  "total_real_NDT_calls": 20498
+}

@@ -1,0 +1,12 @@
+{
+  "push_executed": false,
+  "push_authorized": false,
+  "pre_run_query": "git ls-remote origin refs/heads/research/p9-r4-heldout-visual-evidence",
+  "pre_run_returncode": 0,
+  "pre_run_remote_head": "b87504877cab938fdfc606e4d93ed5ad5be931fc",
+  "final_query_returncode": 128,
+  "final_query_error": "Couldn't connect to server",
+  "final_remote_head": "NOT_VERIFIED",
+  "remote_contains_new_local_commits": "NOT_CONFIRMED",
+  "handoff": "Local commits and persistent portable Git bundle; user must import bundle to original workspace before the provided push command."
+}
