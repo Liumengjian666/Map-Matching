@@ -287,8 +287,8 @@ int main(int argc, char** argv) {
         paper::settleCoupledAnchor(&anchor,scan.scan_end_ns,
             preciseMatrix(corrected.map_T_imu)*preciseMatrix(extrinsic),stable,alternative_used);
       }
-      if(weak_refinement) paper::settleCoupledAnchor(&anchor,scan.scan_end_ns,
-          preciseMatrix(corrected.map_T_imu)*preciseMatrix(extrinsic),update_success && !weak_result.triggered,alternative_used);
+      if(weak_refinement) paper::settleWeakRefinementAnchor(&anchor,scan.scan_end_ns,
+          preciseMatrix(corrected.map_T_imu)*preciseMatrix(extrinsic),update_success && !weak_result.triggered);
       const double total_ms = elapsedMs(frame_start);
       const auto logging_start = Clock::now();
       shadow_log.write(transaction,result,shadow,total_ms,1000.0*(std::clock()-frame_cpu)/CLOCKS_PER_SEC);

@@ -47,4 +47,8 @@ WeakCoupledResult runWeakCoupledRefinement(const Eigen::Matrix4f& nominal,
     const Eigen::Matrix4f& prediction, uint64_t stamp_ns, std::size_t source_count,
     bool nominal_effective, const CoupledAnchorState&, const CoupledNdtBackend&,
     const WeakCoupledConfig&);
+// R6 local-feedback lifecycle: keep an existing inertial reference until its
+// original expiry. This never copies the local corrected pose into a live anchor.
+void settleWeakRefinementAnchor(CoupledAnchorState*, uint64_t stamp_ns,
+    const Eigen::Matrix4d& corrected_lidar, bool ordinary_stable_frame);
 }  // namespace dog_prior_map_fastlio2_frontend_exp

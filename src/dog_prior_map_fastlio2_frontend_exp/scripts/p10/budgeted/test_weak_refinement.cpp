@@ -71,6 +71,27 @@ int main() {try {
   backend.score=[](const Eigen::Matrix4f&) {return std::numeric_limits<double>::quiet_NaN();};
   const auto nonfinite=p::runWeakCoupledRefinement(nominal,prediction,1100000000,1,true,anchor,backend,config);
   require(!nonfinite.recommended && nonfinite.value_calls==2 && nonfinite.jet_calls==1,"nonfinite weak score cannot be rescued without comparison");
+  p::CoupledAnchorState lifecycle;
+  p::settleWeakRefinementAnchor(&lifecycle,1000000000,Eigen::Matrix4d::Identity(),true);
+  const auto origin=lifecycle.origin;const auto origin_stamp=lifecycle.origin_stamp_ns;
+  Eigen::Matrix4d interval=Eigen::Matrix4d::Identity();interval(0,3)=.03;
+  p::advanceCoupledAnchor(&lifecycle,1100000000,interval);
+  const auto propagated=lifecycle.prediction;
+  Eigen::Matrix4d corrected=propagated;corrected(0,3)+=.15;
+  p::settleWeakRefinementAnchor(&lifecycle,1100000000,corrected,false);
+  require(lifecycle.valid && lifecycle.origin_stamp_ns==origin_stamp &&
+      (lifecycle.origin-origin).norm()==0 && (lifecycle.prediction-propagated).norm()==0,
+      "local feedback must neither consume nor absorb live anchor");
+  p::advanceCoupledAnchor(&lifecycle,1200000000,interval);
+  require((lifecycle.prediction-propagated*interval).norm()<1e-12,"retained anchor causal propagation");
+  for(uint64_t t=1300000000;t<=3100000000;t+=100000000) p::advanceCoupledAnchor(&lifecycle,t,interval);
+  require(!lifecycle.valid && lifecycle.status=="EXPIRED","retained anchor expiry not renewed");
+  p::settleWeakRefinementAnchor(&lifecycle,3100000000,corrected,false);
+  require(!lifecycle.valid,"triggered frame cannot reseed expired anchor");
+  p::settleWeakRefinementAnchor(&lifecycle,3200000000,corrected,true);
+  require(lifecycle.valid && lifecycle.origin_stamp_ns==3200000000,"ordinary frame may reseed");
+  p::settleCoupledAnchor(&lifecycle,3300000000,corrected,true,true);
+  require(!lifecycle.valid && lifecycle.status=="FEEDBACK_CONSUMED","legacy R5 feedback consumption unchanged");
   // Neither static initialization nor a full NDT convergence claim is used.
   std::cout<<"weak/coupled, displaced jet, chart, caps, guards, budget PASS\n";
   return 0;

@@ -64,6 +64,8 @@ def run(build,attempt):
         input_sha256=hashes,control_sha256=controls,source_sha256={str(p.relative_to(ROOT)):sha(p) for p in paths},
         binary_sha256=sha(binary),binary_path=str(binary),theory_sha256=sha(ARCHIVE/"THEORY.md"),
         GT_LOADED=False,ORACLE_LOADED=False,PRODUCTION_CHANGED=False,total_frames=4127,
+        prior_version_posthoc_GT_already_seen=bool(attempt),
+        development_only=True,GT_LOADED_BY_REPLAY=False,
         max_extra_jets=2,max_extra_values=3,max_extra_aligns=0,maximum_total_aligns=1,
         raw_protocol="frozen SAME_OBJECTIVE scan-end replay",output_directory=str(cache),
         storage=dict(path=str(cache),free_bytes=shutil.disk_usage(cache).free,write_readback_delete="PASS",
@@ -71,7 +73,8 @@ def run(build,attempt):
         rule=dict(event_translation_m=.12,event_rotation_deg=3.,rho="max(mean_positive_weak_eigenvalue,1e-4)",
             translation_cap_m=.15,rotation_cap_deg=2.,strong_chart_cap=.10,quality_fraction=.05,
             regularized_objective_margin=1e-8,condition_cap=1e8,solve_residual_cap=1e-6,
-            displaced_score_gap_relative=1e-9,anchor_lifetime_s=2.,half_then_displaced_strong=True))
+            displaced_score_gap_relative=1e-9,anchor_lifetime_s=2.,half_then_displaced_strong=True,
+            retain_anchor_after_local_feedback=bool(attempt)))
     if attempt:freeze["improvement_contract_sha256"]=sha(ARCHIVE/"TARGETED_IMPROVEMENT_1.md")
     json_write(directory/"execution_freeze.json",freeze)
     csv_write(directory/"frame_selection.csv",[dict(transaction_id=i,selected=1) for i in ids])

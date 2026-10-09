@@ -8,6 +8,13 @@
 #include <ctime>
 
 namespace dog_prior_map_fastlio2_frontend_exp {
+void settleWeakRefinementAnchor(CoupledAnchorState* anchor, uint64_t stamp_ns,
+    const Eigen::Matrix4d& corrected_lidar, bool ordinary_stable_frame) {
+  // A bounded local correction is not consumption of a nonlocal Pending event.
+  // Existing settle refuses to overwrite a valid anchor or to seed on an
+  // unstable/triggered frame. Propagation and the 2 s lifetime remain unchanged.
+  settleCoupledAnchor(anchor,stamp_ns,corrected_lidar,ordinary_stable_frame,false);
+}
 namespace {
 using Clock=std::chrono::steady_clock;
 double ms(Clock::time_point start) {

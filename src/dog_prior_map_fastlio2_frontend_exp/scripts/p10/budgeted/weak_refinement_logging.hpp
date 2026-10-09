@@ -5,7 +5,7 @@ namespace p10log {
 struct WeakRefinementLogger {
   std::ofstream rows;
   explicit WeakRefinementLogger(const std::string& dir):rows(output(dir+"/weak_refinement.csv")) {
-    rows<<"transaction_id,experiment_mode,status,triggered,innovation_t_m,innovation_r_deg,anchor_valid,anchor_age_s,anchor_origin_stamp_ns,anchor_origin,anchor_prediction,anchor_after_valid,anchor_after_status,anchor_after_origin_stamp_ns,attempted,weak_solve_valid,weak_quality_valid,strong_solve_valid,strong_selected,half_step,recommended,weak_dimension,eigenvalues,eigenvectors,anchor_eta,u_anchor,delta_u,delta_v,weak_eta,strong_eta,candidate_eta,nominal_pose,prediction_pose,weak_pose,coupled_pose,candidate_pose,nominal_score,full_weak_score,weak_score,displaced_score,displaced_score_gap,coupled_score,candidate_score,rho,weak_damping,strong_damping,schur_condition,nominal_strong_condition,strong_condition,weak_solve_residual,strong_solve_residual,nominal_cross_norm,displaced_cross_norm,nominal_strong_gradient,displaced_strong_gradient,nominal_objective,candidate_objective,strong_status,jet_calls,value_calls,extra_align_calls,jet_ms,value_ms,solve_ms,total_ms,cpu_ms,actual_measurement,alternative_used,update_success,correction_t_m,correction_r_deg\n";
+    rows<<"transaction_id,experiment_mode,status,triggered,innovation_t_m,innovation_r_deg,anchor_valid,anchor_age_s,anchor_origin_stamp_ns,anchor_origin,anchor_prediction,anchor_after_valid,anchor_after_status,anchor_after_origin_stamp_ns,attempted,weak_solve_valid,weak_quality_valid,strong_solve_valid,strong_selected,half_step,recommended,weak_dimension,eigenvalues,eigenvectors,anchor_eta,u_anchor,delta_u,delta_v,weak_eta,strong_eta,candidate_eta,nominal_pose,prediction_pose,weak_pose,coupled_pose,candidate_pose,nominal_score,full_weak_score,weak_score,displaced_score,displaced_score_gap,coupled_score,candidate_score,rho,weak_damping,strong_damping,schur_condition,nominal_strong_condition,strong_condition,weak_solve_residual,strong_solve_residual,nominal_cross_norm,displaced_cross_norm,nominal_strong_gradient,displaced_strong_gradient,nominal_objective,candidate_objective,strong_status,jet_calls,value_calls,extra_align_calls,jet_ms,value_ms,solve_ms,total_ms,cpu_ms,actual_measurement,alternative_used,update_success,correction_t_m,correction_r_deg,anchor_after_origin,anchor_after_prediction\n";
   }
   void write(uint64_t tx,const std::string& mode,const paper::WeakCoupledResult& r,
       const paper::CoupledAnchorState& before,const paper::CoupledAnchorState& after,
@@ -25,7 +25,8 @@ struct WeakRefinementLogger {
       <<','<<r.nominal_strong_gradient<<','<<r.displaced_strong_gradient<<','<<r.nominal_objective<<','<<r.candidate_objective
       <<','<<r.strong_status<<','<<r.jet_calls<<','<<r.value_calls<<",0,"<<r.jet_ms<<','<<r.value_ms<<','<<r.solve_ms
       <<','<<r.total_ms<<','<<r.cpu_ms<<','<<values(matrix(actual))<<','<<used<<','<<success
-      <<','<<delta.position.norm()<<','<<delta.rotation.norm()*180/std::acos(-1.)<<'\n';
+      <<','<<delta.position.norm()<<','<<delta.rotation.norm()*180/std::acos(-1.)
+      <<','<<values(after.origin)<<','<<values(after.prediction)<<'\n';
   }
 };
 }  // namespace p10log

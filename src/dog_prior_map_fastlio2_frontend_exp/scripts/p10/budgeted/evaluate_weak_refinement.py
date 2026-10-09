@@ -68,11 +68,17 @@ def verify(directory):
                 (not rec or r["weak_quality_valid"]=="1" and r["status"]=="LOCAL_REGULARIZED_REFINEMENT") and
                 (dt<=1e-6 and dr<=1e-5 if used else np.array_equal(actual,nominal)) and
                 np.isfinite(candidate).all() and np.isfinite(imu_pose(trajectory,"corrected_imu_")).all() and
-                (not used or r["anchor_after_valid"]=="0" and r["anchor_after_status"]=="FEEDBACK_CONSUMED") and
+                (not used or (r["anchor_after_valid"]=="1" and r["anchor_after_origin_stamp_ns"]==r["anchor_origin_stamp_ns"]
+                    if f["rule"].get("retain_anchor_after_local_feedback",False) else
+                    r["anchor_after_valid"]=="0" and r["anchor_after_status"]=="FEEDBACK_CONSUMED")) and
                 (n!="weak_only_feedback" or int(r["jet_calls"])<=1 and r["strong_selected"]=="0"))
             error=0.;displaced_gap=0.
             if r["anchor_valid"]=="1":
                 anchor=matrix(r["anchor_prediction"])
+                if f["rule"].get("retain_anchor_after_local_feedback",False):
+                    ok=ok and (r["anchor_after_origin"]==r["anchor_origin"] and
+                        r["anchor_after_prediction"]==r["anchor_prediction"] and
+                        r["anchor_after_origin_stamp_ns"]==r["anchor_origin_stamp_ns"])
                 if previous and previous["anchor_after_valid"]=="1" and previous["anchor_after_origin_stamp_ns"]==r["anchor_origin_stamp_ns"]:
                     prior=matrix(previous["anchor_prediction"]) if previous["anchor_valid"]=="1" else matrix(r["anchor_origin"])
                     last_pose=imu_pose(jobs[n]["trajectory"][index-1],"corrected_imu_")
