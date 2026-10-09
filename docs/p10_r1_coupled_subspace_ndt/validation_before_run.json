@@ -1,0 +1,12 @@
+{
+  "release_build": "PASS",
+  "build_directory": "/tmp/p10_coupled_build.jxTN7w",
+  "prototype_ctest": {"passed": 2, "total": 2},
+  "p9_regression_ctest": {"passed": 41, "total": 41, "seconds": 11.13},
+  "p9_build_directory": "/tmp/p9_r4_release.Eirto1",
+  "environment": {"LD_LIBRARY_PATH": "/lib/x86_64-linux-gnu"},
+  "initial_test_environment_issue": "Two existing P9 executables could not start with inherited library path (libusb_set_option); all 41 passed using the same system library path as the P10 prototype. No algorithm or test threshold changed.",
+  "tests": ["coupling sign and quadratic solve", "singular and ill-conditioned fallback", "raw residual before capped prediction", "nonidentity base and nonzero global chart Hessian", "deterministic common weak grid", "optional missing numeric formatting", "blind raw-score selection with fixed tie", "missing successful terminal"],
+  "production_files_changed": false,
+  "GT_LOADED": false
+}
