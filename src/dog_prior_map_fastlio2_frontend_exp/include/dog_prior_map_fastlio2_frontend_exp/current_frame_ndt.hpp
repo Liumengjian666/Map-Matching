@@ -3,6 +3,7 @@
 #include "dog_prior_map_fastlio2_frontend_exp/frontend_types.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_shadow.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_weak_refinement.hpp"
 
 #include <cstddef>
 #include <cstdint>
@@ -91,6 +92,8 @@ class CurrentFrameNdtRegistration {
   bool anchoredEventShadow(const CurrentFrameNdtResult&, const CoupledEventConfig&,
       PendingCandidate*, CoupledEventResult*, std::string*, const Eigen::Matrix4d& causal_imu_interval,
       CoupledAnchorState*, CoupledAnchorReceipt*);
+  bool weakRefinement(const CurrentFrameNdtResult&, const CoupledAnchorState&,
+      const WeakCoupledConfig&, WeakCoupledResult*, std::string*);
 
  private:
   bool validateShadowNominal(const CurrentFrameNdtResult& nominal, std::string* reason) const;

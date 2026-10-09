@@ -1,5 +1,6 @@
 #include "shadow_logging.hpp"
 #include "anchor_logging.hpp"
+#include "weak_refinement_logging.hpp"
 #include <ctime>
 #include "dog_prior_map_fastlio2_frontend_exp/current_frame_ndt.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/fastlio2_frontend.hpp"
@@ -86,6 +87,9 @@ int main(int argc, char** argv) {
     const uint64_t initialization_stamp = unsignedArgument(argv[11]);
     const bool enable_shadow = std::string(argv[12]) == "shadow";
     const std::string experiment_mode = argv[12];
+    const bool weak_refinement = experiment_mode == "weak_only_feedback" ||
+        experiment_mode == "coupled_weak_feedback" || experiment_mode == "coupled_weak_shadow";
+    const bool weak_feedback = weak_refinement && experiment_mode != "coupled_weak_shadow";
     const bool anchored = experiment_mode == "anchored_shadow" || experiment_mode == "anchored_guarded_feedback";
     const bool rotation_guard = experiment_mode == "guarded_feedback_rotation_guard" ||
         experiment_mode == "event_admission_rotation_guard";
@@ -94,7 +98,7 @@ int main(int argc, char** argv) {
     const bool branch_admission = guarded_feedback || experiment_mode == "event_admission" ||
         experiment_mode == "event_admission_rotation_guard" || anchored;
     const bool enable_event = experiment_mode == "event" || branch_admission;
-    if (!enable_shadow && !enable_event && std::string(argv[12]) != "control") throw std::runtime_error("invalid_mode");
+    if (!enable_shadow && !enable_event && !weak_refinement && std::string(argv[12]) != "control") throw std::runtime_error("invalid_mode");
     const std::string log_directory = std::string(argv[7]).substr(0,std::string(argv[7]).find_last_of('/'));
     p10log::Logger shadow_log(log_directory);
     p10log::EventLogger event_log(log_directory);
@@ -102,6 +106,10 @@ int main(int argc, char** argv) {
     if (branch_admission) admission_log.reset(new p10log::AdmissionLogger(log_directory));
     std::unique_ptr<p10log::AnchorLogger> anchor_log;
     if (anchored) anchor_log.reset(new p10log::AnchorLogger(log_directory));
+    std::unique_ptr<p10log::WeakRefinementLogger> weak_log;
+    if (weak_refinement) weak_log.reset(new p10log::WeakRefinementLogger(log_directory));
+    paper::WeakCoupledConfig weak_config;
+    weak_config.coupled = experiment_mode != "weak_only_feedback";
     const auto shadow_config = p10log::config(argv[13],false);
     paper::CoupledEventConfig event_config;
     event_config.search = shadow_config;
@@ -201,8 +209,35 @@ int main(int argc, char** argv) {
       if(enable_shadow && !result.effective) shadow.status="NOMINAL_INEFFECTIVE_SHADOW_SKIPPED";
       paper::CoupledEventResult event;
       paper::CoupledAnchorReceipt anchor_receipt;
+      paper::WeakCoupledResult weak_result;
+      paper::CoupledAnchorState anchor_before;
       event.mode="CONTROL"; event.event="CONTROL_NO_SHADOW";
       event.recommendation_available=result.effective;
+      if (weak_refinement) {
+        const Eigen::Matrix4d previous_lidar=preciseMatrix(start.map_T_imu)*preciseMatrix(extrinsic);
+        const Eigen::Matrix4d imu_interval=previous_lidar.inverse()*preciseMatrix(scan_end.predicted_map_T_lidar);
+        paper::advanceCoupledAnchor(&anchor,scan.scan_end_ns,imu_interval);
+        anchor_before=anchor;
+        if(!registration.weakRefinement(result,anchor,weak_config,&weak_result,&reason))
+          throw std::runtime_error("weak_refinement_failed:"+reason);
+        if(!result.effective) {
+          anchor.valid=false;anchor.frozen=false;anchor.status="NOMINAL_INEFFECTIVE";
+          anchor.invalidated_stamp_ns=scan.scan_end_ns;
+        }
+        event.mode=weak_result.attempted ? "LOCAL_REFINEMENT":"NORMAL";
+        event.event=weak_result.status;event.innovation_trigger=weak_result.triggered;
+        event.innovation_translation_m=weak_result.innovation_translation_m;
+        event.innovation_rotation_deg=weak_result.innovation_rotation_deg;
+        shadow.status=weak_result.status;shadow.weak_dimension=weak_result.weak_dimension;
+        shadow.eigenvalues=weak_result.eigenvalues;shadow.eigenvectors=weak_result.eigenvectors;
+        shadow.jet_calls=weak_result.jet_calls;shadow.preview_score_calls=weak_result.value_calls;
+        shadow.jet_ms=weak_result.jet_ms;shadow.solve_ms=weak_result.solve_ms;shadow.preview_ms=weak_result.value_ms;
+        shadow.total_ms=weak_result.total_ms;shadow.cpu_ms=weak_result.cpu_ms;
+        if(std::isfinite(weak_result.nominal_score)) shadow.nominal_energy=-weak_result.nominal_score/result.source_point_count;
+        // Local regularized candidates have no old grid ID; the dedicated
+        // weak_refinement.csv is the authoritative candidate/recommendation log.
+        if(weak_result.recommended) shadow.recommended_pose=weak_result.candidate;
+      }
       if (enable_event) {
         // Actual previous corrected state -> current causal IMU-only prediction.
         // Unlike pred_prev^-1*pred_cur, this excludes the previous measurement update.
@@ -218,11 +253,17 @@ int main(int argc, char** argv) {
       }
       const auto update_start = Clock::now();
       paper::Pose3d actual_measurement = result.raw_map_T_lidar;
-      const bool alternative_used = guarded_feedback && event.admitted;
+      const bool alternative_used = (guarded_feedback && event.admitted) || (weak_feedback && weak_result.recommended);
       if (alternative_used) {
-        if (!event.temporally_supported || !event.admission_valid || pending.active)
-          throw std::runtime_error("invalid_admission_consumption");
-        actual_measurement = carrierPose(event.admitted_pose);
+        if(weak_feedback) {
+          if(weak_result.status!="LOCAL_REGULARIZED_REFINEMENT" || !weak_result.weak_quality_valid)
+            throw std::runtime_error("invalid_local_refinement_consumption");
+          actual_measurement=carrierPose(weak_result.candidate);
+        } else {
+          if (!event.temporally_supported || !event.admission_valid || pending.active)
+            throw std::runtime_error("invalid_admission_consumption");
+          actual_measurement = carrierPose(event.admitted_pose);
+        }
       }
       paper::PoseCorrectionDelta delta;
       bool update_success = false;
@@ -246,6 +287,8 @@ int main(int argc, char** argv) {
         paper::settleCoupledAnchor(&anchor,scan.scan_end_ns,
             preciseMatrix(corrected.map_T_imu)*preciseMatrix(extrinsic),stable,alternative_used);
       }
+      if(weak_refinement) paper::settleCoupledAnchor(&anchor,scan.scan_end_ns,
+          preciseMatrix(corrected.map_T_imu)*preciseMatrix(extrinsic),update_success && !weak_result.triggered,alternative_used);
       const double total_ms = elapsedMs(frame_start);
       const auto logging_start = Clock::now();
       shadow_log.write(transaction,result,shadow,total_ms,1000.0*(std::clock()-frame_cpu)/CLOCKS_PER_SEC);
@@ -253,6 +296,8 @@ int main(int argc, char** argv) {
       if (admission_log) admission_log->write(transaction,experiment_mode,event,
           actual_measurement,alternative_used,update_success,delta);
       if (anchor_log) anchor_log->write(transaction,anchor_receipt,anchor);
+      if (weak_log) weak_log->write(transaction,experiment_mode,weak_result,anchor_before,anchor,
+          actual_measurement,alternative_used,update_success,delta);
       trajectory << transaction << ',' << scan.scan_end_ns;
       poseColumns(trajectory, scan_end.predicted_map_T_imu); poseColumns(trajectory, corrected.map_T_imu);
       vectorColumns(trajectory, corrected.velocity); vectorColumns(trajectory, corrected.gyro_bias);

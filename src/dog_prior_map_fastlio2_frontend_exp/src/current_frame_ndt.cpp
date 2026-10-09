@@ -408,4 +408,20 @@ bool CurrentFrameNdtRegistration::anchoredEventShadow(const CurrentFrameNdtResul
   }
 }
 
+bool CurrentFrameNdtRegistration::weakRefinement(const CurrentFrameNdtResult& nominal,
+    const CoupledAnchorState& anchor,const WeakCoupledConfig& config,
+    WeakCoupledResult* result,std::string* reason) {
+  if(reason) reason->clear();
+  if(!result) return fail(reason,"null_weak_refinement_result");
+  if(nominal.effective && !validateShadowNominal(nominal,reason)) return false;
+  try {
+    *result=runWeakCoupledRefinement(poseCarrier(nominal.raw_map_T_lidar),
+        poseCarrier(nominal.initial_map_T_lidar),nominal.stamp_ns,nominal.source_point_count,
+        nominal.effective,anchor,impl_->shadowBackend(),config);
+    return true;
+  }catch(const std::exception& error) {
+    return fail(reason,std::string("weak_refinement_internal_error:")+error.what());
+  }
+}
+
 }  // namespace dog_prior_map_fastlio2_frontend_exp

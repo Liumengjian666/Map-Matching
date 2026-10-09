@@ -1,4 +1,5 @@
 #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_shadow.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_local_math.hpp"
 
 #include <Eigen/Cholesky>
 #include <Eigen/Eigenvalues>
@@ -338,6 +339,40 @@ bool validConfig(const CoupledNdtConfig& c) {
       c.maximum_candidates <= 16 && c.maximum_extra_aligns >= 0 && c.maximum_extra_aligns <= 2;
 }
 }  // namespace
+
+Eigen::Matrix4f coupledPoseAtEta(const Eigen::Matrix4f& base,
+    const CoupledVector6& eta, double scale) { return poseAtEta(base, eta, scale); }
+CoupledLocalJet coupledNominalJet(const Eigen::Matrix4f& base, double count,
+    const CoupledNdtBackend& backend, double scale) {
+  CoupledLocalJet out;
+  if (!(count>0) || !backend.jet) return out;
+  const auto pull=nominalPullback(base,scale);
+  if (!pull.valid) return out;
+  const auto joint=pullNativeJet(backend.jet(base,pull.parameters),pull,count);
+  out.gradient=joint.gradient;out.H=joint.H;out.score=joint.score;out.valid=joint.valid;
+  return out;
+}
+CoupledLocalJet coupledJointJet(const Eigen::Matrix4f& base, const CoupledVector6& eta,
+    const CoupledMatrix6& Q, double count, const CoupledNdtBackend& backend, double scale) {
+  CoupledLocalJet out;
+  if (!(count>0) || !backend.jet) return out;
+  const auto pull=jointPullback(base,eta,Q,scale);
+  if (!pull.valid) return out;
+  const auto joint=pullNativeJet(backend.jet(poseAtEta(base,eta,scale),pull.parameters),pull,count);
+  out.gradient=joint.gradient;out.H=joint.H;out.score=joint.score;out.valid=joint.valid;
+  return out;
+}
+CoupledLocalStrongStep coupledStrongStep(const CoupledLocalJet& model, int k,
+    const Eigen::VectorXd& du, double cap) {
+  CoupledLocalStrongStep out;
+  if (k<1 || k>2 || du.size()!=k) return out;
+  JointJet jet;jet.gradient=model.gradient;jet.H=model.H;jet.valid=model.valid;
+  const auto step=strongStep(jet,k,du,true,cap);
+  out.delta=step.coupling+step.gradient;out.damping=step.damping;
+  out.condition=step.condition;out.residual=step.residual;
+  out.valid=step.valid;out.capped=step.capped;out.status=step.reason;
+  return out;
+}
 
 CoupledShadowResult runCoupledNdtShadow(const Eigen::Matrix4f& nominal,
     const Eigen::Matrix4f& prediction, std::size_t source_count,
