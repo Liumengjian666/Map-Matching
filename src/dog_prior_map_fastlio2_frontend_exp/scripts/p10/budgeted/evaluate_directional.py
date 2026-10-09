@@ -142,8 +142,6 @@ def verify(directory):
     csv_write(directory/"engineering_guards.csv",guards);csv_write(directory/"covariance_parity.csv",covs)
     csv_write(directory/"causal_feedback_parity.csv",causal);csv_write(directory/"paired_candidates.csv",pairs)
     if not all(r["pass_guards"] for r in guards):raise RuntimeError("engineering failed BEFORE GT")
-    json_write(directory/"pre_GT_audit_freeze.json",dict(GT_LOADED=False,engineering="PASS",evaluator_sha256=sha(Path(__file__)),
-        output_sha256={p.name:sha(p) for p in directory.glob("*.csv")}))
     return freeze,jobs
 
 def evaluate():
@@ -163,7 +161,10 @@ def evaluate():
         s["curvature_degenerate_weak_rows"]=sum(r["mode"]==n and float(r["weak_relative_gap"])<=1e-6 for r in read(directory/"covariance_parity.csv"))
         s["candidate_score_better"]=sum(float(r["candidate_score"])>float(r["nominal_score"]) for r in jobs[n]["weak"] if r["recommended"]=="1")
         s["candidate_score_worse"]=sum(float(r["candidate_score"])<float(r["nominal_score"]) for r in jobs[n]["weak"] if r["recommended"]=="1")
-    gt=posthoc(directory,jobs)  # FIRST GT access: runtime and engineering frozen.
+    json_write(directory/"pre_GT_audit_freeze.json",dict(GT_LOADED=False,engineering="PASS",evaluator_sha256=sha(Path(__file__)),
+        audit_code_sha=subprocess.check_output(["git","-C",str(ROOT),"rev-parse","HEAD"],text=True).strip(),
+        engineering_statistics=stats,output_sha256={p.name:sha(p) for p in directory.glob("*.csv")}))
+    gt=posthoc(directory,jobs)  # FIRST GT access: runtime and all engineering outputs frozen.
     old=json.loads((R6/"evaluation.json").read_text())
     summaries=[]
     for n in ("control","R6_weak_only","R6_coupled",*MODES):
