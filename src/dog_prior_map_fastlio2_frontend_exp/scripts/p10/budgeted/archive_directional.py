@@ -14,6 +14,15 @@ from evaluate_event import moments
 
 def paired_posthoc(directory):
     if not (directory/"gt_contract_receipt.json").is_file():raise RuntimeError("primary GT evaluation must be complete")
+    prior=directory/"paired_candidates_posthoc_gt.csv"
+    if prior.is_file():
+        # Recover an interrupted summary serialization without rereading GT,
+        # rewriting the already produced CSV, or rerunning any scientific job.
+        rows=read(prior)
+        for row in rows:
+            for key in row:
+                if key not in ("transaction_id","t_outcome"):row[key]=float(row[key])
+        return paired_summary(rows)
     sys.path.insert(0,str(ROOT/"src/dog_prior_map_fastlio2_frontend_exp/scripts"))
     import p5_i1_posthoc_gt as gt
     import yaml
@@ -38,6 +47,9 @@ def paired_posthoc(directory):
             translation_gain_m=wt-ct,rotation_gain_deg=wr-cr,
             t_outcome="improved" if wt-ct>1e-8 else "worse" if ct-wt>1e-8 else "same"))
     csv_write(directory/"paired_candidates_posthoc_gt.csv",rows)
+    return paired_summary(rows)
+
+def paired_summary(rows):
     selected=[r for r in rows if r["strong_selected"]]
     return dict(GT_posthoc_only=True,not_executed_trajectory_accuracy=True,total=len(rows),strong_selected=len(selected),
         improved=sum(r["t_outcome"]=="improved" for r in selected),same=sum(r["t_outcome"]=="same" for r in selected),
@@ -96,7 +108,7 @@ def main(audit_only=False):
             remote_head_user_verified=START,remote_head_direct_query="UNAVAILABLE_NETWORK",PUSH_EXECUTED=False,
             paired_GT=paired,full_causal_runs=3,new_CONTROL_runs=0,oracle_calls=0,B12_calls=0,
             visual_extraction=0,Corridor_runs=0,single_map=True,production_adoption_recommended=False,
-            original_git_readonly=True,stop_after_this_task=True)
+            original_git_readonly=True)
         json_write(ARCHIVE/"results.json",results)
         runtime=[];causal=read(directory/"causal_feedback_parity.csv");causal_summary=[]
         for mode in MODES:
