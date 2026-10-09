@@ -83,6 +83,14 @@ def audit():
         if f["GT_LOADED"]:raise RuntimeError("freeze isolation failed")
         for path,h in f["output_sha256"].items():
             if sha(directory/path)!=h:raise RuntimeError("freeze chain changed "+path)
+    pre=json.loads((directory/"pre_GT_audit_freeze.json").read_text())
+    evaluator_path="src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/evaluate_directional.py"
+    evaluator_source=subprocess.check_output(["git","-C",str(ROOT),"show",pre["audit_code_sha"]+":"+evaluator_path])
+    if hashlib.sha256(evaluator_source).hexdigest()!=pre["evaluator_sha256"]:
+        raise RuntimeError("executed evaluator provenance failed")
+    gt_receipt=json.loads((directory/"gt_contract_receipt.json").read_text())
+    if gt_receipt["pre_GT_audit_freeze_sha256"]!=sha(directory/"pre_GT_audit_freeze.json"):
+        raise RuntimeError("GT access order chain failed")
     for path,h in freeze["input_sha256"].items():
         if sha(path)!=h:raise RuntimeError("input hash changed")
     for path,h in freeze["inherited_sha256"].items():
