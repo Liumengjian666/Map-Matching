@@ -77,6 +77,10 @@ def verify(directory):
     for n in MODES:
         jobs[n]=load(directory/n);jobs[n]["weak"]=read(directory/n/"weak_refinement.csv")
         jobs[n]["directional"]=read(directory/n/"directional_covariance.csv")
+    expected_ids=[str(i) for i in range(1,4128)]
+    for n,job in jobs.items():
+        for key in ("frames","events","frame_cost","registration","trajectory","runtime")+(("weak","directional") if n!="control" else ()):
+            if [r["transaction_id"] for r in job[key]]!=expected_ids:raise RuntimeError("complete ordered denominator failed: "+n+":"+key)
     parity=[]
     for table in ("registration","trajectory"):
         for a,b in zip(jobs["control"][table],jobs[MODES[0]][table]):
@@ -87,9 +91,6 @@ def verify(directory):
     guards=[];covs=[];causal=[];pairs=[]
     for n in MODES:
         job=jobs[n];first=None;previous=None
-        for rows in job.values():
-            if isinstance(rows,list) and len(rows)==4127 and "transaction_id" in rows[0]:
-                if [x["transaction_id"] for x in rows]!=[str(i) for i in range(1,4128)]:raise RuntimeError("ordered denominator failed")
         for i,(r,c,f,t,nom) in enumerate(zip(job["weak"],job["directional"],job["frames"],job["trajectory"],job["registration"])):
             used=r["alternative_used"]=="1";valid=c["valid"]=="1";rec=r["recommended"]=="1"
             quiet=r["triggered"]!="1" or r["anchor_valid"]!="1"
@@ -100,8 +101,12 @@ def verify(directory):
                 c["alternative_used"]==r["alternative_used"] and r["update_success"]==nom["effective"] and
                 np.isfinite(actual).all() and np.isfinite(imu_pose(t,"corrected_imu_")).all() and
                 (np.max(np.abs(cov-vector(c["covariance"]).reshape(6,6)))<1e-14 if used else np.max(np.abs(cov-R0))<1e-14))
-            expected_lidar=matrix(r["candidate_pose"] if used else r["nominal_pose"])
-            expected_lidar[:3,:3]=Rotation.from_quat(carrier_quaternion(expected_lidar[:3,:3])).as_matrix()
+            if used:
+                expected_lidar=matrix(r["candidate_pose"])
+                expected_lidar[:3,:3]=Rotation.from_quat(carrier_quaternion(expected_lidar[:3,:3])).as_matrix()
+            else:
+                # Real nominal Pose3d is consumed without a new float roundtrip.
+                expected_lidar=imu_pose(nom,"raw_")
             ok=ok and np.max(np.abs(actual-expected_lidar@np.linalg.inv(extr)))<1e-8
             if valid:
                 check=covariance_check(c,r,extr);covs.append(dict(mode=n,transaction_id=r["transaction_id"],**check))
@@ -155,8 +160,9 @@ def evaluate():
         s["multipliers"]=moments([x for r in rows if r["valid"]=="1" for x in vector(r["multipliers"])])
         s["covariance_ms_all_frames"]=moments([float(r["covariance_ms"]) for r in rows])
         s["covariance_ms_attempted"]=moments([float(r["covariance_ms"]) for r in rows if r["attempted"]=="1"])
-        s["filter_correction_translation_m"]=moments([float(r["correction_t_m"]) for r in rows if r["alternative_used"]=="1"])
-        s["filter_correction_rotation_deg"]=moments([float(r["correction_r_deg"]) for r in rows if r["alternative_used"]=="1"])
+        feedback=[r for r in rows if r["alternative_used"]=="1"]
+        s["filter_correction_translation_m"]=moments([float(r["correction_t_m"]) for r in feedback]) if feedback else None
+        s["filter_correction_rotation_deg"]=moments([float(r["correction_r_deg"]) for r in feedback]) if feedback else None
         s["abnormal_updates"]=sum(r["update_success"]!=nom["effective"] for r,nom in zip(rows,jobs[n]["registration"]))
         s["curvature_degenerate_weak_rows"]=sum(r["mode"]==n and float(r["weak_relative_gap"])<=1e-6 for r in read(directory/"covariance_parity.csv"))
         s["candidate_score_better"]=sum(float(r["candidate_score"])>float(r["nominal_score"]) for r in jobs[n]["weak"] if r["recommended"]=="1")
