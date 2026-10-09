@@ -1,0 +1,15 @@
+[ 15%] Built target p7_replay_io
+[ 53%] Built target p7_current_frame_ndt
+[100%] Built target p10_r2_replay
+[ 71%] Built target p7_current_frame_ndt
+[100%] Built target p10_r4_admission_test
+[ 71%] Built target p7_current_frame_ndt
+[100%] Built target p10_r3_temporal_test
+[ 71%] Built target p7_current_frame_ndt
+[ 85%] Linking CXX executable p10_r2_shadow_test
+[100%] Built target p10_r2_shadow_test
+[ 71%] Built target p7_current_frame_ndt
+[ 85%] Linking CXX executable current_frame_ndt_test
+[100%] Built target current_frame_ndt_test
+[ 50%] Built target p7_replay_io
+[100%] Built target p7_replay_io_test

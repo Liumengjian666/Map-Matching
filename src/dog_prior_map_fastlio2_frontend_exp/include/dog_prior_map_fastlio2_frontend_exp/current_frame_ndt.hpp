@@ -85,7 +85,8 @@ class CurrentFrameNdtRegistration {
   bool shadow(const CurrentFrameNdtResult& nominal, const CoupledNdtConfig& config,
       CoupledShadowResult* result, std::string* reason);
   bool eventShadow(const CurrentFrameNdtResult& nominal, const CoupledEventConfig& config,
-      PendingCandidate* pending, CoupledEventResult* result, std::string* reason);
+      PendingCandidate* pending, CoupledEventResult* result, std::string* reason,
+      const Eigen::Matrix4d* causal_imu_interval = nullptr);
 
  private:
   bool validateShadowNominal(const CurrentFrameNdtResult& nominal, std::string* reason) const;

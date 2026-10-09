@@ -111,6 +111,25 @@ struct EventLogger {
       << values(pending.imu_prediction) << '\n';
   }
 };
+// R4 experiment receipt. R2/R3 column meanings are preserved above.
+struct AdmissionLogger {
+  std::ofstream rows;
+  explicit AdmissionLogger(const std::string& dir): rows(output(dir+"/admission.csv")) {
+    rows << "transaction_id,experiment_mode,event,origin_stamp_ns,confirmation_count,admission_valid,temporally_supported,admitted,admission_status,D_E,D_M,D,nominal_energy,alternative_energy,nominal_motion_cost,alternative_motion_cost,previous_nominal,previous_alternative,imu_interval,candidate_pose,admitted_pose,actual_measurement,alternative_used,update_success,correction_translation_m,correction_rotation_deg\n";
+  }
+  void write(uint64_t tx, const std::string& mode, const paper::CoupledEventResult& r,
+      const paper::Pose3d& measurement, bool used, bool success, const paper::PoseCorrectionDelta& delta) {
+    rows << tx << ',' << mode << ',' << r.event << ',' << r.origin_stamp_ns << ','
+      << r.confirmation_count << ',' << r.admission_valid << ',' << r.temporally_supported << ','
+      << r.admitted << ',' << r.admission_status << ',' << r.energy_difference << ','
+      << r.motion_difference << ',' << r.branch_difference << ',' << r.nominal_branch_energy << ','
+      << r.alternative_branch_energy << ',' << r.nominal_motion_cost << ',' << r.alternative_motion_cost << ','
+      << values(r.previous_nominal) << ',' << values(r.previous_alternative) << ',' << values(r.imu_interval)
+      << ',' << values(r.candidate_pose) << ',' << values(r.admitted_pose) << ',' << values(matrix(measurement))
+      << ',' << used << ',' << success << ',' << delta.position.norm() << ','
+      << delta.rotation.norm()*180/std::acos(-1.0) << '\n';
+  }
+};
 inline paper::CoupledNdtConfig config(const std::string& method, bool fixed) {
   paper::CoupledNdtConfig c; c.fixed_maximum_budget=fixed;
   if(method=="A") c.method=paper::CoupledMethod::WEAK_ONLY;

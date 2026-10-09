@@ -65,7 +65,8 @@ if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
   add_library(p10_coupled_ndt_shadow STATIC
     src/current_frame_ndt.cpp
     src/coupled_ndt_shadow.cpp
-    src/coupled_ndt_temporal.cpp)
+    src/coupled_ndt_temporal.cpp
+    src/registration_geometry.cpp)
   target_include_directories(p10_coupled_ndt_shadow PUBLIC include
     PRIVATE ${PCL_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS})
   target_link_libraries(p10_coupled_ndt_shadow PUBLIC Eigen3::Eigen

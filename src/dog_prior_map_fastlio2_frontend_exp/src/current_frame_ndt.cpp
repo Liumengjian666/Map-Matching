@@ -374,14 +374,15 @@ bool CurrentFrameNdtRegistration::shadow(const CurrentFrameNdtResult& nominal,
 
 bool CurrentFrameNdtRegistration::eventShadow(const CurrentFrameNdtResult& nominal,
     const CoupledEventConfig& config, PendingCandidate* pending,
-    CoupledEventResult* result, std::string* reason) {
+    CoupledEventResult* result, std::string* reason,
+    const Eigen::Matrix4d* causal_imu_interval) {
   if (reason) reason->clear();
   if (!result || !pending) return fail(reason, "null_event_shadow_state");
   if (nominal.effective && !validateShadowNominal(nominal, reason)) return false;
   try {
     *result = runEventCoupledNdtShadow(poseCarrier(nominal.raw_map_T_lidar),
         poseCarrier(nominal.initial_map_T_lidar), nominal.stamp_ns, nominal.source_point_count,
-        nominal.effective, impl_->shadowBackend(), config, pending);
+        nominal.effective, impl_->shadowBackend(), config, pending, causal_imu_interval);
     if (nominal.status == CurrentFrameNdtStatus::INSUFFICIENT_POINTS)
       result->shadow.complete_ndt_calls = 0;
     return true;

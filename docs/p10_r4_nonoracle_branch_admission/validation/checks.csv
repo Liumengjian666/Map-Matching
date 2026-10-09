@@ -1,0 +1,5 @@
+check,cwd,command,returncode
+release_build,/tmp/p10_r2_build.CdJ4jf,cmake --build . --target p10_r2_replay p10_r4_admission_test p10_r3_temporal_test p10_r2_shadow_test current_frame_ndt_test p7_replay_io_test -j2,0
+p7_p10_tests,/tmp/p10_r2_build.CdJ4jf,ctest --output-on-failure,0
+p9_tests,/tmp/p9_r4_release.Eirto1,ctest --output-on-failure,0
+p10_r1_tests,/tmp/p10_coupled_build.jxTN7w,ctest --output-on-failure,0

@@ -10,6 +10,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <memory>
 #include <stdexcept>
 #include <string>
 
@@ -57,6 +58,18 @@ void poseColumns(std::ostream& out, const paper::Pose3d& pose) {
 void vectorColumns(std::ostream& out, const Eigen::Vector3d& vector) {
   out << ',' << vector.x() << ',' << vector.y() << ',' << vector.z();
 }
+Eigen::Matrix4d preciseMatrix(const paper::Pose3d& pose) {
+  Eigen::Matrix4d T = Eigen::Matrix4d::Identity();
+  T.block<3,3>(0,0) = pose.orientation.normalized().toRotationMatrix();
+  T.block<3,1>(0,3) = pose.position;
+  return T;
+}
+paper::Pose3d carrierPose(const Eigen::Matrix4f& T) {
+  paper::Pose3d pose;
+  pose.position = T.block<3,1>(0,3).cast<double>();
+  pose.orientation = Eigen::Quaterniond(T.block<3,3>(0,0).cast<double>()).normalized();
+  return pose;
+}
 }  // namespace
 
 int main(int argc, char** argv) {
@@ -71,14 +84,20 @@ int main(int argc, char** argv) {
     const uint64_t limit = unsignedArgument(argv[10]);
     const uint64_t initialization_stamp = unsignedArgument(argv[11]);
     const bool enable_shadow = std::string(argv[12]) == "shadow";
-    const bool enable_event = std::string(argv[12]) == "event";
+    const std::string experiment_mode = argv[12];
+    const bool guarded_feedback = experiment_mode == "guarded_feedback";
+    const bool branch_admission = guarded_feedback || experiment_mode == "event_admission";
+    const bool enable_event = experiment_mode == "event" || branch_admission;
     if (!enable_shadow && !enable_event && std::string(argv[12]) != "control") throw std::runtime_error("invalid_mode");
     const std::string log_directory = std::string(argv[7]).substr(0,std::string(argv[7]).find_last_of('/'));
     p10log::Logger shadow_log(log_directory);
     p10log::EventLogger event_log(log_directory);
+    std::unique_ptr<p10log::AdmissionLogger> admission_log;
+    if (branch_admission) admission_log.reset(new p10log::AdmissionLogger(log_directory));
     const auto shadow_config = p10log::config(argv[13],false);
     paper::CoupledEventConfig event_config;
     event_config.search = shadow_config;
+    event_config.branch_admission = branch_admission;
     if (enable_event && std::string(argv[13]) != "C") throw std::runtime_error("event_requires_R2_residual_predictor");
     paper::PendingCandidate pending;
     if (limit == 0 || limit > scans.size()) throw std::runtime_error("invalid_frame_limit");
@@ -174,16 +193,33 @@ int main(int argc, char** argv) {
       event.mode="CONTROL"; event.event="CONTROL_NO_SHADOW";
       event.recommendation_available=result.effective;
       if (enable_event) {
-        if (!registration.eventShadow(result,event_config,&pending,&event,&reason))
+        // Actual previous corrected state -> current causal IMU-only prediction.
+        // Unlike pred_prev^-1*pred_cur, this excludes the previous measurement update.
+        const Eigen::Matrix4d previous_lidar = preciseMatrix(start.map_T_imu) * preciseMatrix(extrinsic);
+        const Eigen::Matrix4d imu_interval = previous_lidar.inverse() * preciseMatrix(scan_end.predicted_map_T_lidar);
+        if (!registration.eventShadow(result,event_config,&pending,&event,&reason,
+            branch_admission ? &imu_interval : nullptr))
           throw std::runtime_error("event_shadow_failed:"+reason);
         shadow=event.shadow;
       }
       const auto update_start = Clock::now();
+      paper::Pose3d actual_measurement = result.raw_map_T_lidar;
+      const bool alternative_used = guarded_feedback && event.admitted;
+      if (alternative_used) {
+        if (!event.temporally_supported || !event.admission_valid || pending.active)
+          throw std::runtime_error("invalid_admission_consumption");
+        actual_measurement = carrierPose(event.admitted_pose);
+      }
+      paper::PoseCorrectionDelta delta;
+      bool update_success = false;
       if (result.effective) {
-        paper::PoseCorrectionDelta delta;
         if (!frontend.applyPoseMeasurement(
-            paper::lidarMeasurementToImu(result.raw_map_T_lidar, extrinsic), &delta, &reason))
+            paper::lidarMeasurementToImu(actual_measurement, extrinsic), &delta, &reason)) {
+          if (admission_log) admission_log->write(transaction,experiment_mode,event,
+              actual_measurement,alternative_used,false,delta);
           throw std::runtime_error("pose_update_failed:" + reason);
+        }
+        update_success = true;
         ++updates;
       }
       const double update_ms = elapsedMs(update_start);
@@ -194,6 +230,8 @@ int main(int argc, char** argv) {
       const auto logging_start = Clock::now();
       shadow_log.write(transaction,result,shadow,total_ms,1000.0*(std::clock()-frame_cpu)/CLOCKS_PER_SEC);
       event_log.write(transaction,event,pending);
+      if (admission_log) admission_log->write(transaction,experiment_mode,event,
+          actual_measurement,alternative_used,update_success,delta);
       trajectory << transaction << ',' << scan.scan_end_ns;
       poseColumns(trajectory, scan_end.predicted_map_T_imu); poseColumns(trajectory, corrected.map_T_imu);
       vectorColumns(trajectory, corrected.velocity); vectorColumns(trajectory, corrected.gyro_bias);

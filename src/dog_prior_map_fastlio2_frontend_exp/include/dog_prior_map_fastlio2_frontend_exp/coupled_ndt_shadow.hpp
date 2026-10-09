@@ -90,6 +90,9 @@ struct CoupledEventConfig {
   double maximum_prediction_gap_s = .25;
   double local_rotation_tolerance_deg = 1e-6;
   int required_confirmations = 2;
+  // Explicit R4 experiment only; legacy R3/production defaults stay unchanged.
+  bool branch_admission = false;
+  double branch_tie_tolerance = 1e-6;
 };
 struct PendingCandidate {
   Eigen::Matrix4f pose = Eigen::Matrix4f::Identity();
@@ -97,6 +100,12 @@ struct PendingCandidate {
   uint64_t stamp_ns = 0;
   int confirmations = 0;
   bool active = false;
+  Eigen::Matrix4f created_nominal = Eigen::Matrix4f::Identity();
+  Eigen::Matrix4f created_alternative = Eigen::Matrix4f::Identity();
+  Eigen::Matrix4f previous_nominal = Eigen::Matrix4f::Identity();
+  uint64_t origin_stamp_ns = 0;
+  double energy_difference = 0, motion_difference = 0;
+  bool admission_valid = false;
 };
 struct CoupledEventResult {
   CoupledShadowResult shadow;
@@ -109,9 +118,27 @@ struct CoupledEventResult {
   CoupledRefinement temporal_terminal;
   double temporal_translation_residual_m = 0, temporal_rotation_residual_deg = 0;
   std::string mode = "INVALID", event = "NOT_RUN";
+  bool temporally_supported = false, admitted = false;
+  bool admission_valid = false;
+  uint64_t origin_stamp_ns = 0;
+  Eigen::Matrix4f candidate_pose = Eigen::Matrix4f::Identity();
+  Eigen::Matrix4f admitted_pose = Eigen::Matrix4f::Identity();
+  Eigen::Matrix4f previous_nominal = Eigen::Matrix4f::Identity();
+  Eigen::Matrix4f previous_alternative = Eigen::Matrix4f::Identity();
+  Eigen::Matrix4d imu_interval = Eigen::Matrix4d::Identity();
+  double energy_difference = 0, motion_difference = 0, branch_difference = 0;
+  double nominal_motion_cost = 0, alternative_motion_cost = 0;
+  double nominal_branch_energy = 0, alternative_branch_energy = 0;
+  std::string admission_status = "DISABLED";
 };
 CoupledEventResult runEventCoupledNdtShadow(const Eigen::Matrix4f& nominal,
     const Eigen::Matrix4f& prediction, uint64_t stamp_ns, std::size_t source_count,
     bool nominal_effective, const CoupledNdtBackend& backend,
-    const CoupledEventConfig& config, PendingCandidate* pending);
+    const CoupledEventConfig& config, PendingCandidate* pending,
+    const Eigen::Matrix4d* causal_imu_interval = nullptr);
+
+// Reuses the existing SO(3) geometry for a true SE(3) logarithmic residual.
+bool coupledBranchMotionCost(const Eigen::Matrix4f& previous,
+    const Eigen::Matrix4f& current, const Eigen::Matrix4d& imu_interval,
+    const CoupledNdtConfig& config, double* cost);
 }  // namespace dog_prior_map_fastlio2_frontend_exp
