@@ -1,0 +1,29 @@
+{
+  "output_sha256": {
+    "frame_selection.csv": "ae04d40f7c4f6992f904b3f3263ff1b1a5f29c72788dfbd2833a1f211a1933e5",
+    "job_cost.csv": "358ea770f91efb5c7482831bf3b4ea878ff445cfff94a0aac1d4a31b81233661",
+    "event/registration.csv": "7ab2324b0531f3644f47da6276160e12976a0e3188f04f55f7c4b7bf77efc6c7",
+    "event/runtime.csv": "b1868c34be3ede497af35d2df806644f82c76c631b6ad1d2d4c8f99d08abbbf2",
+    "event/events.csv": "f794f2743d94a0a7e273cd6be9f14365b1c1fd08fd3c22e66875c35379b8fc3c",
+    "event/trajectory.csv": "86d8de73bb5af2015fd37cf33584dcd3a1e54fba87d2e6a38c435eb949520bd9",
+    "event/resources.csv": "0ba0d23291d615ac16fec901c35762e155b2990154e31da9783cc1a929a88ddb",
+    "event/frame_cost.csv": "ca63037191316981791a78502dc8bef35f6ba0960bb801672d708fca6e9cf985",
+    "event/frames.csv": "27a93ee7259b2ab68739927b9970d85adf8bdb70030395ae55c5956b74d472dd",
+    "event/models.csv": "93c7f9d745f805f5fa9e2eb0de13fea6d8e5648565d51845c247a2e9a977cf8b",
+    "event/pending_end.csv": "1666d61d1aaf5a71072370d0a8ea099bbe1b5636bc26d101522ac5a32d2abbf3",
+    "event/candidates.csv": "84a5612120110d751730717f2310278ef42d9f87e7ec9ab6d48acf5465e451a8",
+    "control/registration.csv": "850a46a648b2af16b6af37baba60461811191c9d39ff2931391f1a24dc31515c",
+    "control/runtime.csv": "9ce73376b0920da4e38b554336cdee0457f6eacf43169f122bdac8f8ea99253b",
+    "control/events.csv": "794d60a78f3ddd7a291f9cafac6f8efeb3ee2420a824e57fd2dabff16ba5a2e1",
+    "control/trajectory.csv": "86d8de73bb5af2015fd37cf33584dcd3a1e54fba87d2e6a38c435eb949520bd9",
+    "control/resources.csv": "fe8eddee02b820b8787f619b3247f8872aa352667863b30b8e8e1752895f2edc",
+    "control/frame_cost.csv": "62d5253a6dd9bf4c58f3e382c0c4199500cfe43878904cc533e03e23c1eb1d5a",
+    "control/frames.csv": "824df7417391bce90bf95aec0709ad8144c3cb7ac721c3480cbe5ba1fe94c6dd",
+    "control/models.csv": "24bbe70812e564647d8b3dda05f8ed3d9282823c1adaac548e191504d6ac1812",
+    "control/pending_end.csv": "1666d61d1aaf5a71072370d0a8ea099bbe1b5636bc26d101522ac5a32d2abbf3",
+    "control/candidates.csv": "db72f26800f64e0d0347d171231f040358cfa3f4f4685e56cce98799635bf95f"
+  },
+  "GT_LOADED": false,
+  "ORACLE_LOADED": false,
+  "NOMINAL_STATE_SWITCHED": false
+}

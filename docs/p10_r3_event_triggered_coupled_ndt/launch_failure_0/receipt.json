@@ -1,0 +1,8 @@
+{
+  "status": "REPLAY_NOT_STARTED",
+  "error": "PermissionError: copied binary had no execute bit because shutil.copyfile preserves bytes, not file mode",
+  "real_ndt_calls": 0,
+  "fix": "shutil.copy2 preserves executable mode",
+  "scientific_parameters_changed": false,
+  "original_frozen_receipts_retained": true
+}

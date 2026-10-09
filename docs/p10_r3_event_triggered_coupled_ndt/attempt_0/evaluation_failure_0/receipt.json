@@ -1,0 +1,10 @@
+{
+  "status": "POSTHOC_GT_TIME_RANGE_BOUNDARY_REJECTED",
+  "transaction_id": 4127,
+  "experiment_complete_and_blind_frozen": true,
+  "cause": "last frame is outside GT time range",
+  "resolution": "retain all 4127 experimental frames and explicitly report GT unavailable for TX4127; no extrapolation",
+  "new_ndt_calls": 0,
+  "algorithm_changed": false,
+  "original_intermediate_checks_retained": true
+}
