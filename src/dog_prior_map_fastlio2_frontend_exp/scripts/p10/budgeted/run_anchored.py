@@ -65,7 +65,11 @@ def run(build,attempt):
         feedback_anchor="invalidate after actual feedback, never same-frame reseed",
         alternative_propagation="unchanged R3 prediction-to-prediction, not asserted IMU-only",
         timing="full scan-end processing+logging except cost row; process wall includes startup")
-    if attempt:freeze["improvement_contract_sha256"]=sha(ARCHIVE/"TARGETED_IMPROVEMENT_1.md")
+    if attempt:
+        freeze["improvement_contract_sha256"]=sha(ARCHIVE/"TARGETED_IMPROVEMENT_1.md")
+        freeze["initial_pending_rank"]="lowest frozen-W anchor cost among existing eligible refined terminals; energy then ID ties"
+        freeze["prior_GT_inspected"]=True
+        freeze["improvement_basis"]="non-GT frozen terminal rank mismatch 33/160; no GT threshold/frame selection"
     json_write(directory/"execution_freeze.json",freeze)
     env=dict(os.environ,LD_LIBRARY_PATH="/lib/x86_64-linux-gnu",OMP_NUM_THREADS="1",OPENBLAS_NUM_THREADS="1")
     receipts=[]

@@ -47,6 +47,7 @@ def verify(directory,receipt_dir):
         data=subprocess.check_output(["git","-C",str(ROOT),"show",f["code_sha"]+":"+p])
         if hashlib.sha256(data).hexdigest()!=d:raise RuntimeError("executed source commit mismatch")
     if sha(f["binary_path"])!=f["binary_sha256"] or sha(ARCHIVE/"THEORY.md")!=f["theory_sha256"]:raise RuntimeError("binary/rules changed")
+    if f["attempt"] and sha(ARCHIVE/"TARGETED_IMPROVEMENT_1.md")!=f["improvement_contract_sha256"]:raise RuntimeError("improvement freeze changed")
     for p,d in f["control_sha256"].items():
         if sha(ROOT/p)!=d:raise RuntimeError("reference changed")
     jobs={"control":load(CONTROL)}

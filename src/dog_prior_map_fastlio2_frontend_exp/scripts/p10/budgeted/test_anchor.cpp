@@ -81,6 +81,15 @@ int main() {
     pending.admission_valid=false;  // Simulate an omitted diagnostic interval, with finite sums.
     run(.1f,1200000000);r=run(.2f,1300000000);
     require(r.admitted && !receipt.diagnostic_valid,"diagnostic validity cannot recover after missing interval");
+    // Two already-refined eligible terminals: IMU absolute merit prefers .5,
+    // but the inertial anchor at .6 selects .6 without any new alignment.
+    anchor={};p::settleCoupledAnchor(&anchor,1000000000,pose(.5f).cast<double>(),true,false);
+    pending={};int rank_aligns=0;
+    backend.refine=[&](const Eigen::Matrix4f&){p::CoupledRefinement t;
+      t.pose=pose(++rank_aligns==1?.5f:.6f);t.successful=t.converged=true;t.iterations=5;return t;};
+    r=run(0,1100000000);
+    require(rank_aligns==2 && r.candidate_pose(0,3)>.59f && receipt.alternative_cost<1e-12,
+        "anchor-aware terminal rank reuses same two calls, not old absolute prediction merit");
     std::cout<<"anchor lifecycle/chart/admission tests PASS\n";return 0;
   } catch(const std::exception& e) {std::cerr<<e.what()<<'\n';return 1;}
 }

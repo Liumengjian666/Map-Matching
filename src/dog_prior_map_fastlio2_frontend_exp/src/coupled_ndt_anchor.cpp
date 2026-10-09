@@ -123,7 +123,7 @@ CoupledEventResult runAnchoredCoupledNdtShadow(const Eigen::Matrix4f& nominal,
     double score=std::numeric_limits<double>::quiet_NaN();
     ++out.shadow.terminal_score_calls;
     try { score=backend.score(nominal); } catch (...) {}
-    const auto found=std::find_if(out.shadow.candidates.begin(),out.shadow.candidates.end(),
+    auto found=std::find_if(out.shadow.candidates.begin(),out.shadow.candidates.end(),
         [&](const CoupledCandidate& c) {return c.id==out.pending_candidate_id;});
     if (!std::isfinite(score) || score<=0 || found==out.shadow.candidates.end() ||
         -found->refinement.score_sum/count > -score/count +
@@ -132,6 +132,31 @@ CoupledEventResult runAnchoredCoupledNdtShadow(const Eigen::Matrix4f& nominal,
       out.pending_after=false;out.event="PENDING_CREATION_ADMISSION_FAILED";
       out.admission_status="INVALID_CREATION_SCORE";return out;
     }
+    // Version 1: use the new position evidence when choosing which existing
+    // terminal to track, not just as a veto after the other terminal is lost.
+    const int k=out.shadow.weak_dimension;
+    const auto W=out.shadow.eigenvectors.leftCols(k);
+    double best_cost=std::numeric_limits<double>::infinity(),best_energy=best_cost;
+    for (auto candidate=out.shadow.candidates.begin();candidate!=out.shadow.candidates.end();++candidate) {
+      const auto& terminal=candidate->refinement;
+      if (!candidate->selected_for_refinement || !terminal.successful || !terminal.converged ||
+          !rigid(terminal.pose.cast<double>()) || !std::isfinite(terminal.score_sum) || terminal.score_sum<=0 || k<1 || k>2) continue;
+      const double t=(terminal.pose.block<3,1>(0,3).cast<double>()-nominal.block<3,1>(0,3).cast<double>()).norm();
+      const double r=Eigen::Quaterniond(terminal.pose.block<3,3>(0,0).cast<double>()).normalized().angularDistance(
+          Eigen::Quaterniond(nominal.block<3,3>(0,0).cast<double>()).normalized())*180/std::acos(-1.0);
+      const double energy=-terminal.score_sum/count;
+      if (!(t>config.search.separation_m || r>config.search.separation_deg) ||
+          t>config.search.weak_translation_bound_m || r>config.search.weak_rotation_bound_deg ||
+          energy>out.shadow.nominal_energy+config.search.near_quality_fraction*std::max(1.0,std::abs(out.shadow.nominal_energy)) ||
+          energy>-score/count+config.search.near_quality_fraction*std::max(1.0,std::abs(score/count))) continue;
+      CoupledVector6 eta;
+      if (!coupledAnchorChart(terminal.pose.cast<double>(),anchor->prediction,&eta)) continue;
+      const double cost=(W.transpose()*eta).squaredNorm();
+      if (cost<best_cost || (cost==best_cost && (energy<best_energy || (energy==best_energy && candidate->id<found->id)))) {
+        best_cost=cost;best_energy=energy;found=candidate;
+      }
+    }
+    pending->pose=found->refinement.pose;out.pending_candidate_id=found->id;
     out.origin_stamp_ns=stamp;out.candidate_pose=pending->pose;
     pending->origin_stamp_ns=stamp;pending->previous_nominal=nominal;
     pending->created_nominal=nominal;pending->created_alternative=pending->pose;
