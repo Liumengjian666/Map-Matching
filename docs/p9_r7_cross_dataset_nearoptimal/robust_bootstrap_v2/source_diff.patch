@@ -1,0 +1,1724 @@
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/CMakeLists.txt b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/CMakeLists.txt
+new file mode 100644
+index 0000000..d9ae3d8
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/CMakeLists.txt
+@@ -0,0 +1,16 @@
++cmake_minimum_required(VERSION 3.10)
++project(p9_corridor_robust_bootstrap_v2 LANGUAGES C CXX)
++set(CMAKE_CXX_STANDARD 14)
++find_package(Eigen3 REQUIRED)
++find_package(Python3 REQUIRED COMPONENTS Interpreter)
++find_package(PCL 1.10 REQUIRED COMPONENTS common filters registration kdtree)
++set(PKG "${CMAKE_CURRENT_SOURCE_DIR}/../../..")
++add_executable(p9_bootstrap_v2 bootstrap_v2.cpp "${PKG}/src/p7_replay_io.cpp")
++target_include_directories(p9_bootstrap_v2 PRIVATE "${PKG}/include" ${PCL_INCLUDE_DIRS})
++target_link_libraries(p9_bootstrap_v2 PRIVATE Eigen3::Eigen ${PCL_LIBRARIES})
++enable_testing()
++add_test(NAME robust_bootstrap_geometry_time_test COMMAND p9_bootstrap_v2 --self-test)
++add_test(NAME robust_bootstrap_preparation_test COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/test_prepare.py")
++add_test(NAME robust_bootstrap_motion_adapter_test COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/test_motion.py")
++add_test(NAME inherited_preintegration_test COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/../corridor_moving_init/test_preintegration.py")
++add_test(NAME robust_bootstrap_one_shot_test COMMAND ${Python3_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/test_one_shot.py")
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/analyze_local.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/analyze_local.py
+new file mode 100644
+index 0000000..dc5a2aa
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/analyze_local.py
+@@ -0,0 +1,41 @@
++"""Frozen trajectory admission. Prediction records never count as observations."""
++import csv
++import json
++from prepare_v2 import ARCHIVE, OUTPUT, sha, write_json
++
++def analyze():
++    freeze = json.loads((ARCHIVE / "quality_gate_freeze.json").read_text())
++    config = json.loads((ARCHIVE / "bootstrap_v2_config.json").read_text())
++    if sha(ARCHIVE / "bootstrap_v2_config.json") != freeze["config_sha256"]:
++        raise RuntimeError("trajectory gates changed")
++    odometry = OUTPUT / "registration/robust_lidar_odometry.csv"
++    rows = list(csv.DictReader(odometry.open()))
++    if len(rows) != 99 or [int(r["transaction_id"]) for r in rows] != list(range(1, 100)):
++        raise RuntimeError("incomplete bootstrap ledger")
++    observed = lambda r: r["role"] == "LIDAR_OBSERVATION" and r["true_observation"] == "1" and r["quality_pass"] == "1"
++    if any((r["role"] == "LIDAR_OBSERVATION") != (r["true_observation"] == "1") for r in rows):
++        raise RuntimeError("observation provenance contradiction")
++    train = [r for r in rows if freeze["estimation_start_ns"] <= int(r["stamp_ns"]) < freeze["estimation_end_ns"]]
++    validation = [r for r in rows if freeze["estimation_end_ns"] <= int(r["stamp_ns"]) <= freeze["boot_stamp_ns"]]
++    accepted = sum(observed(r) for r in rows)
++    maximum = max(int(r["consecutive_failures"]) for r in rows if r["consecutive_failures"])
++    gates = {
++        "at_least_90_of_98": accepted >= 90,
++        "at_most_2_consecutive_failed": maximum <= 2,
++        "all_5_to_8s_real_observed": bool(train) and all(observed(r) for r in train),
++        "at_least_15_validation_observed": sum(observed(r) for r in validation) >= 15,
++        "no_runtime_input_guard_failure": all(r["role"] != "INPUT_RUNTIME_GUARD_FAIL" for r in rows)}
++    admission = {"status": "PASS" if all(gates.values()) else "FAIL", "gates": gates,
++        "total_pair_count": 98, "attempted_pairs": sum(bool(r["solver_converged"]) for r in rows[1:]),
++        "accepted_pair_count": accepted, "max_consecutive_failures": maximum,
++        "estimation_real_observations": sum(observed(r) for r in train), "estimation_targets": len(train),
++        "validation_real_observations": sum(observed(r) for r in validation), "validation_targets": len(validation),
++        "odometry_sha256": sha(odometry), "config_sha256": sha(ARCHIVE / "bootstrap_v2_config.json"),
++        "prediction_only_frames": sum(r["role"] == "CAUSAL_PREDICTION_ONLY" for r in rows),
++        "not_run_frames": sum(r["role"] == "NOT_RUN" for r in rows), "NDT_CALLS": 0, "GT_LOADED": False}
++    write_json(OUTPUT / "local_admission.json", admission)
++    write_json(ARCHIVE / "local_admission.json", admission)
++    print(json.dumps(admission))
++
++if __name__ == "__main__":
++    analyze()
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/archive_v2.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/archive_v2.py
+new file mode 100644
+index 0000000..bb29190
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/archive_v2.py
+@@ -0,0 +1,295 @@
++"""Archive the one-shot early-stop outcome; never calls an alignment or fitter.
++
++This post-run utility was added after the quality freeze. Frozen scientific
++source files remain unchanged. Artifact hashes exclude only their own manifest.
++"""
++import csv
++import json
++import math
++import pathlib
++import shutil
++import subprocess
++import sys
++
++import numpy as np
++
++from prepare_v2 import ARCHIVE, HERE, INPUT, OUTPUT, ROOT, sha, write_csv, write_json
++from execute_v2_once import verified_command
++
++START_SHA = "368b78f8cd2fa124f03103c3807b702197eac7ee"
++RESULT = "BOOTSTRAP_LOCAL_ODOMETRY_NOT_CERTIFIED"
++NEXT = "REASSESS_DATASET_BOOTSTRAP_FEASIBILITY"
++BUILD = pathlib.Path("/tmp/p9_corridor_robust_bootstrap_v2_build")
++
++
++def read_rows(path):
++    with path.open(newline="") as stream:
++        return list(csv.DictReader(stream))
++
++
++def copy_once(source, target):
++    with source.open("rb") as src, target.open("xb") as dst:
++        shutil.copyfileobj(src, dst)
++
++
++def check_outcome():
++    freeze, _, _ = verified_command()  # Hash validation only, no subprocess.
++    admission = json.loads((OUTPUT / "local_admission.json").read_text())
++    summary = json.loads((OUTPUT / "registration/registration_summary.json").read_text())
++    completed = json.loads((OUTPUT / "V2_ALIGNMENT_COMPLETED.json").read_text())
++    rows = read_rows(OUTPUT / "registration/robust_lidar_odometry.csv")
++    if admission["status"] != "FAIL" or not summary["stopped"]:
++        raise RuntimeError("this finalizer only accepts the observed early-stop outcome")
++    if completed["returncode"] != 0 or admission["attempted_pairs"] != 3:
++        raise RuntimeError("unexpected execution receipt")
++    if summary["true_observation_pairs"] != 0 or summary["maximum_consecutive_failures"] != 3:
++        raise RuntimeError("unexpected observed trajectory counts")
++    if len(rows) != 99 or [int(r["transaction_id"]) for r in rows] != list(range(1, 100)):
++        raise RuntimeError("missing or reordered 99-scan ledger")
++    expected_roles = ["COORDINATE_ANCHOR", "CAUSAL_PREDICTION_ONLY",
++                      "CAUSAL_PREDICTION_ONLY", "REJECTED_STOP"] + ["NOT_RUN"] * 95
++    if [r["role"] for r in rows] != expected_roles:
++        raise RuntimeError("prediction/observation/NOT_RUN ledger changed")
++    if any(r["true_observation"] != "0" for r in rows):
++        raise RuntimeError("unaccepted pose marked as a real observation")
++    if sha(OUTPUT / "registration/robust_lidar_odometry.csv") != admission["odometry_sha256"]:
++        raise RuntimeError("admission no longer binds odometry bytes")
++    quality = read_rows(OUTPUT / "registration/overlap_quality.csv")[1:]
++    if [r["transaction_id"] for r in quality] != ["2", "3", "4"]:
++        raise RuntimeError("unexpected attempted-pair quality rows")
++    if any(r["overlap_pass"] != "0" or r["trimmed_pass"] != "1" for r in quality):
++        raise RuntimeError("reported rejection factor differs from actual results")
++    if any(r["reason"] != "OVERLAP|" for r in rows[1:4]):
++        raise RuntimeError("additional failure factors need separate reporting")
++    if summary["NDT_CALLS"] != 0 or summary["GT_LOADED"]:
++        raise RuntimeError("forbidden scope consumed")
++    return freeze, admission, summary, completed, quality
++
++
++def finalize():
++    freeze, admission, summary, completed, quality = check_outcome()
++    if (ARCHIVE / "results.json").exists():
++        raise RuntimeError("refuse to overwrite archived one-shot result")
++    registration = OUTPUT / "registration"
++    for name in ("imu_rotation_prediction.csv", "robust_lidar_odometry.csv",
++                 "overlap_quality.csv", "bidirectional_consistency.csv",
++                 "registration_uncertainty.csv", "registration_runtime.csv",
++                 "registration_summary.json"):
++        copy_once(registration / name, ARCHIVE / name)
++    for name in ("V2_ALIGNMENT_STARTED.json", "V2_ALIGNMENT_COMPLETED.json",
++                 "runner_config.json", "cpp_input_preflight.csv",
++                 "registration_resource.txt", "registration_stdout.log",
++                 "registration_stderr.log"):
++        copy_once(OUTPUT / name, ARCHIVE / name)
++
++    runtime = read_rows(registration / "registration_runtime.csv")
++    cost_rows = []
++    phases = ("raw_read_s", "IMU_rotational_deskew_s", "submap_and_prefit_support_s",
++              "forward_GICP_s", "independent_reverse_GICP_s", "robust_quality_s", "total_s")
++    for phase in phases:
++        measured = runtime if phase in ("raw_read_s", "IMU_rotational_deskew_s", "total_s") else runtime[1:]
++        values = np.array([float(r[phase]) for r in measured])
++        cost_rows.append({"phase": phase, "status": "MEASURED_EARLY_STOP_ONLY",
++                          "sample_count": len(values), "total_s": float(values.sum()),
++                          "mean_s": float(values.mean()), "median_s": float(np.median(values)),
++                          "P95_s": float(np.percentile(values, 95)),
++                          "accounting": "CROSS_DATASET_BASELINE_PREPARATION_COST"})
++    for phase in ("moving_state_fit", "IKFoM_real_initialization", "NDT_smoke", "baseline_runA", "baseline_runB"):
++        cost_rows.append({"phase": phase, "status": "NOT_RUN", "sample_count": 0,
++                          "total_s": "", "mean_s": "", "median_s": "", "P95_s": "",
++                          "accounting": "CROSS_DATASET_BASELINE_PREPARATION_COST"})
++    write_csv(ARCHIVE / "runtime_breakdown.csv", cost_rows)
++    write_json(ARCHIVE / "motion_state_estimate.json", {
++        "status": "NOT_RUN", "reason": "local odometry admission FAIL before state fitting",
++        "state_accepted": False, "velocity": None, "gyro_bias": None,
++        "accel_bias": None, "gravity": None, "covariance": None})
++    for name, stage in (("observability_diagnostics.csv", "observability"),
++                        ("bootstrap_validation.csv", "8-to-10s independent validation"),
++                        ("ikfom_real_initialization.csv", "initializeMoving real state injection"),
++                        ("baseline_runA.csv", "formal Run A"), ("baseline_runB.csv", "formal Run B"),
++                        ("baseline_determinism.csv", "formal A/B determinism"),
++                        ("source_t0_uobs_parity.csv", "formal SAME_OBJECTIVE source/T0/U_obs/W2")):
++        write_csv(ARCHIVE / name, [{"status": "NOT_RUN", "stage": stage,
++                                  "reason": "BOOTSTRAP_LOCAL_ODOMETRY_NOT_CERTIFIED"}])
++
++    verification_logs = {
++        "v2_ctest.log": BUILD / "Testing/Temporary/LastTest.log",
++        "p9_ctest.log": pathlib.Path("/tmp/p9_r4_release.Eirto1/Testing/Temporary/LastTest.log"),
++        "inherited_initialization_ctest.log": pathlib.Path("/tmp/p9_corridor_moving_init_build/Testing/Temporary/LastTest.log")}
++    for name, source in verification_logs.items():
++        text = source.read_text()
++        expected = 5 if name == "v2_ctest.log" else 41 if name == "p9_ctest.log" else 6
++        if text.count("Test Passed.") != expected or "Test Failed." in text:
++            raise RuntimeError("missing actual passing CTest evidence: " + name)
++        copy_once(source, ARCHIVE / name)
++    cache = (BUILD / "CMakeCache.txt").read_text()
++    if "CMAKE_BUILD_TYPE:STRING=Release" not in cache:
++        raise RuntimeError("V2 runner not built as Release")
++    for name in ("CMakeCache.txt", "CTestTestfile.cmake"):
++        copy_once(BUILD / name, ARCHIVE / ("v2_" + name))
++    write_json(ARCHIVE / "verification_receipt.json", {
++        "Release_build": "PASS", "frozen_binary_sha256": freeze["binary_sha256"],
++        "P9_tests": "41/41 PASS", "V2_CTest_targets": "5/5 PASS",
++        "inherited_initialization_P7_tests": "6/6 PASS", "real_input_preflight": "99/99 PASS",
++        "compiled_input_preflight": "99/99 PASS", "one_shot_guard_tests": "PASS; mocked child only",
++        "wrong_directory_ctest": "No tests found; NOT counted as verification",
++        "frozen_scientific_sources_unchanged": True,
++        "postrun_additions": ["archive_v2.py", "test_archive.py", "documentation/statistical receipts"],
++        "cross_model_review": "SKIPPED per user's current-task reply; no external CLI",
++        "independent_review_limit": "implementation reviewer returned actionable findings, then service usage limit; not claimed complete"})
++
++    write_source_diff("x")
++
++    result = {
++        "task": "PAPER-P9-R7-R5-ROBUST-CAUSAL-LIDAR-BOOTSTRAP",
++        "environment_recovery": "PASS", "protocol": "P9_CORRIDOR01_BOOTSTRAP_V2",
++        "git": {"branch": "research/p9-r4-heldout-visual-evidence", "start_sha": START_SHA,
++                "worktree": str(ROOT), "end_sha_source": "Git commit containing this archive (self-hash not embedded)",
++                "push_executed": False, "remote_start_verification": "research controller provided; not newly network-verified"},
++        "persistent_output": str(OUTPUT), "RAW_INPUT": "SHA256 PASS; all 10 manifest files",
++        "raw_bag_sha256": "c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811",
++        "raw_bag_rehashed_this_turn": False,
++        "input_manifest_sha256": freeze["input_manifest_sha256"],
++        "raw_input_counts": {"scans": 2777, "IMU_samples": 55957, "timed_points": 79932911},
++        "bootstrap": {"start_ns": freeze["first_sensor_stamp_ns"], "end_ns": freeze["boot_stamp_ns"],
++                      "ledger_scans": 99, "pair_opportunities": 98, "attempted_pairs": 3,
++                      "forward_GICP_calls": 3, "independent_reverse_GICP_calls": 3,
++                      "accepted_observations": 0, "prediction_only_frames": 2,
++                      "rejected_stop_frames": 1, "NOT_RUN_frames": 95,
++                      "max_consecutive_failures": 3, "overlap_pass_count": 0,
++                      "trimmed_pass_count": 3, "independent_inverse_consistency_pass_count": 3,
++                      "IMU_rotation_consistency_pass_count": 3, "local_admission": "FAIL",
++                      "TX1_omitted_prefix_points": 20394, "TX1_raw_points": 28866,
++                      "TX1_voxel_anchor_points": 661,
++                      "reason": "three consecutive forward-overlap failures; STOP before TX5",
++                      "trajectory_admission": admission},
++        "TX2": quality[0],
++        "MOVING_STATE": "NOT_RUN", "OBSERVABILITY": "NOT_RUN",
++        "IKFOM_real_injection": "NOT_RUN", "SCAN_END_formal_runtime": "NOT_RUN",
++        "scan_end_deskew_preflight": "99/99 PASS (not formal IKFoM propagation)",
++        "BASELINE": {"Run_A": "NOT_RUN", "Run_B": "NOT_RUN", "source_T0_Uobs_W2_parity": "NOT_RUN",
++                     "preserved_post_boot_input_scans": 2678},
++        "cost": {"registration_child_wall_s": completed["wall_s"], "registration_runner_wall_s": summary["wall_s"],
++                 "GICP_alignment_total_s": summary["GICP_s"], "rotational_deskew_total_s": summary["rotational_deskew_s"],
++                 "quality_total_s": summary["quality_s"], "peak_RSS_KiB": summary["peak_RSS_KiB"],
++                 "NDT_smoke_calls": 0, "Run_A_NDT_calls": 0, "Run_B_NDT_calls": 0,
++                 "accounting": "BASELINE_PREPARATION_ONLY; not DUAL-U incremental/online cost",
++                 "runtime_summary": cost_rows},
++        "ORACLE263_CALLS": 0, "B12_CALLS": 0, "VISUAL_EXTRACTION": 0, "GT_LOADED": False,
++        "limitations": ["Only three real pairs attempted; 95 pairs unknown, not 95 measured failures",
++                        "TX1 partial cloud after causally unsupported prefix removal limits startup overlap; no ablation proving unique cause",
++                        "All three attempts used the single 661-point partial anchor; populated three-frame submap and accepted-history CV were not reached",
++                        "Small trimmed residual and inverse consistency do not compensate for low forward overlap",
++                        "No mathematical unobservability result: state fitting was not reached",
++                        "Marginal prediction uncertainties are engineering assumptions, not certified covariance",
++                        "Old R7-R4 result and all R4/R5/R6 scientific results unchanged",
++                        "No V3/tuning/repeated V2 permitted; next dataset choice remains research controller's decision"],
++        "FINAL_RESULT": RESULT, "NEXT": NEXT}
++    write_json(ARCHIVE / "results.json", result)
++    write_hash_manifest("x")
++    verify()
++
++
++def write_source_diff(mode):
++    patches = []
++    for source in sorted(HERE.iterdir()):
++        if source.is_file():
++            diff = subprocess.run(["git", "diff", "--no-index", "--", "/dev/null", str(source.relative_to(ROOT))],
++                                  cwd=ROOT, capture_output=True, text=True, check=False)
++            if diff.returncode not in (0, 1):
++                raise RuntimeError("source diff generation failed")
++            patches.append(diff.stdout)
++    with (ARCHIVE / "source_diff.patch").open(mode) as stream:
++        stream.write("".join(patches))
++
++
++def write_hash_manifest(mode):
++    files = list(ARCHIVE.iterdir()) + [p for p in HERE.iterdir() if p.is_file()]
++    hashes = {str(p.relative_to(ROOT)): sha(p) for p in sorted(files)
++              if p.is_file() and p.name != "artifact_hashes.json"}
++    with (ARCHIVE / "artifact_hashes.json").open(mode) as stream:
++        json.dump(hashes, stream, indent=2, allow_nan=False)
++        stream.write("\n")
++
++
++def normalize_snapshot(text):
++    return "\n".join(line.rstrip() for line in text.splitlines()).rstrip() + "\n"
++
++
++def refresh_postrun_archive():
++    """Mechanical pre-commit snapshot hygiene only; never alters frozen files."""
++    check_outcome()
++    result = json.loads((ARCHIVE / "results.json").read_text())
++    actual_tx2 = read_rows(OUTPUT / "registration/overlap_quality.csv")[1]
++    if result["TX2"] != actual_tx2 or result["FINAL_RESULT"] != RESULT or result["NEXT"] != NEXT:
++        raise RuntimeError("result changed during postrun snapshot hygiene")
++    receipts = []
++    for name in ("CMakeCache.txt", "CTestTestfile.cmake"):
++        source, target = BUILD / name, ARCHIVE / ("v2_" + name)
++        original = source.read_text()
++        normalized = normalize_snapshot(original)
++        if target.read_text() not in (original, normalized):
++            raise RuntimeError("archived build snapshot no longer matches actual build")
++        target.write_text(normalized)
++        receipts.append({"source": str(source), "source_sha256": sha(source),
++                         "archive": str(target.relative_to(ROOT)), "archive_sha256": sha(target),
++                         "normalization": "rstrip each line; strip final blank lines; final single newline"})
++    write_json(ARCHIVE / "build_snapshot_normalization.json", receipts)
++    write_source_diff("w")
++    write_hash_manifest("w")
++    verify()
++
++
++def check_csv(path):
++    with path.open(newline="") as stream:
++        rows = list(csv.reader(stream))
++    if not rows or not rows[0] or len(rows[0]) != len(set(rows[0])):
++        raise RuntimeError("bad CSV header: " + str(path))
++    if any(len(r) != len(rows[0]) for r in rows[1:]):
++        raise RuntimeError("ragged CSV: " + str(path))
++    for row in rows[1:]:
++        for cell in row:
++            try:
++                numeric = float(cell)
++            except ValueError:
++                continue
++            if not math.isfinite(numeric):
++                raise RuntimeError("nonfinite CSV metric: " + str(path))
++
++
++def verify():
++    check_outcome()
++    manifest = json.loads((ARCHIVE / "artifact_hashes.json").read_text())
++    actual = {str(p.relative_to(ROOT)) for p in ARCHIVE.iterdir() if p.is_file() and p.name != "artifact_hashes.json"}
++    actual |= {str(p.relative_to(ROOT)) for p in HERE.iterdir() if p.is_file()}
++    if set(manifest) != actual:
++        raise RuntimeError("artifact hash inventory incomplete or unexpected additions")
++    for relative, expected in manifest.items():
++        path = ROOT / relative
++        if sha(path) != expected:
++            raise RuntimeError("artifact changed: " + relative)
++        if path.suffix == ".csv":
++            check_csv(path)
++        elif path.suffix == ".json":
++            json.loads(path.read_text(), parse_constant=lambda v: (_ for _ in ()).throw(ValueError(v)))
++    ledger = read_rows(ARCHIVE / "formal_frame_ledger.csv")
++    if len(ledger) != 2777 or sum(r["role"] == "BOOTSTRAP" for r in ledger) != 99:
++        raise RuntimeError("raw frame inventory altered")
++    if any(r["formal_NDT_run"] != "NO" for r in ledger):
++        raise RuntimeError("formal NDT unexpectedly recorded")
++    result = json.loads((ARCHIVE / "results.json").read_text())
++    if result["FINAL_RESULT"] != RESULT or result["NEXT"] != NEXT or result["GT_LOADED"]:
++        raise RuntimeError("result/scope changed")
++    print(json.dumps({"artifact_hashes": "PASS", "files": len(manifest), "CSV_JSON": "PASS",
++                      "frozen_source_input_binary_hashes": "PASS", "FINAL_RESULT": RESULT}))
++
++
++if __name__ == "__main__":
++    if sys.argv[1:] == ["finalize"]:
++        finalize()
++    elif sys.argv[1:] == ["verify"]:
++        verify()
++    elif sys.argv[1:] == ["refresh-postrun"]:
++        refresh_postrun_archive()
++    else:
++        raise SystemExit("usage: archive_v2.py finalize|verify|refresh-postrun")
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/bootstrap_v2.cpp b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/bootstrap_v2.cpp
+new file mode 100644
+index 0000000..d7fb404
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/bootstrap_v2.cpp
+@@ -0,0 +1,611 @@
++// P9 startup-only V2. No NDT, GT, formal state update, or raw input mutation.
++#include "dog_prior_map_fastlio2_frontend_exp/p7_replay_io.hpp"
++#include <pcl/filters/voxel_grid.h>
++#include <pcl/registration/gicp.h>
++#include <pcl/kdtree/kdtree_flann.h>
++#include <boost/property_tree/json_parser.hpp>
++#include <boost/property_tree/ptree.hpp>
++#include <Eigen/Geometry>
++#include <algorithm>
++#include <chrono>
++#include <deque>
++#include <fstream>
++#include <iomanip>
++#include <iostream>
++#include <limits>
++#include <sstream>
++#include <stdexcept>
++#include <sys/resource.h>
++#include <sys/stat.h>
++
++namespace v2 {
++namespace p = dog_prior_map_fastlio2_frontend_exp;
++using Cloud = pcl::PointCloud<pcl::PointXYZ>;
++using Matrix = Eigen::Matrix4d;
++using Clock = std::chrono::steady_clock;
++constexpr double pi = 3.14159265358979323846;
++double seconds(Clock::time_point start) {
++  return std::chrono::duration<double>(Clock::now()-start).count();
++}
++double rotationDegrees(const Eigen::Matrix3d& R) {
++  return Eigen::AngleAxisd(R).angle()*180./pi;
++}
++Eigen::Matrix3d exp(const Eigen::Vector3d& w) {
++  const double angle=w.norm();
++  return angle<1e-15 ? Eigen::Matrix3d::Identity() :
++      Eigen::AngleAxisd(angle,w/angle).toRotationMatrix();
++}
++void require(bool condition, const std::string& reason) {
++  if(!condition) throw std::runtime_error(reason);
++}
++bool rigid(const Matrix& T, double tolerance=1e-5) {
++  return T.allFinite() &&
++      (T.row(3)-Eigen::RowVector4d(0,0,0,1)).norm()<tolerance &&
++      (T.block<3,3>(0,0).transpose()*T.block<3,3>(0,0)-Eigen::Matrix3d::Identity()).norm()<tolerance &&
++      std::abs(T.block<3,3>(0,0).determinant()-1)<tolerance;
++}
++Matrix inverse(const Matrix& T) {
++  require(rigid(T),"nonrigid_transform");
++  Matrix out=Matrix::Identity();
++  out.block<3,3>(0,0)=T.block<3,3>(0,0).transpose();
++  out.block<3,1>(0,3)=-out.block<3,3>(0,0)*T.block<3,1>(0,3);
++  return out;
++}
++
++// Interval midpoint SO3 integration. Future samples are excluded before any
++// interpolation. Beginning coverage is never fabricated; endpoint-only hold
++// is bounded, and the real pair bracketing begin is included in gap validation.
++struct RotationTimeline {
++  std::vector<uint64_t> knots;
++  std::vector<Eigen::Matrix3d> rotations;
++  uint64_t maximum_gap_ns=0, endpoint_hold_ns=0, max_consumed_stamp_ns=0;
++  RotationTimeline(const p::P7ImuVector& imu, uint64_t begin, uint64_t end,
++                   double max_gap_s=.02, double endpoint_hold_s=.01) {
++    require(end>begin,"invalid_rotation_interval");
++    auto upper=std::upper_bound(imu.begin(),imu.end(),end,
++        [](uint64_t t,const p::ImuSample& s){return t<s.stamp_ns;});
++    require(upper!=imu.begin(),"no_causal_IMU");
++    auto first=std::upper_bound(imu.begin(),upper,begin,
++        [](uint64_t t,const p::ImuSample& s){return t<s.stamp_ns;});
++    require(first!=imu.begin(),"missing_leading_IMU");
++    --first;
++    max_consumed_stamp_ns=(upper-1)->stamp_ns;
++    endpoint_hold_ns=end-max_consumed_stamp_ns;
++    require(endpoint_hold_ns<=uint64_t(std::llround(endpoint_hold_s*1e9)),"IMU_endpoint_hold_exceeds_gate");
++    for(auto it=first+1;it!=upper;++it)
++      maximum_gap_ns=std::max(maximum_gap_ns,it->stamp_ns-(it-1)->stamp_ns);
++    require(maximum_gap_ns<=uint64_t(std::llround(max_gap_s*1e9)),"real_IMU_gap_exceeds_gate");
++    auto gyro=[&](uint64_t t) -> Eigen::Vector3d {
++      auto hi=std::upper_bound(first,upper,t,
++          [](uint64_t time,const p::ImuSample& s){return time<s.stamp_ns;});
++      require(hi!=first,"rotation_interpolation_backfill");
++      if(hi==upper) return (upper-1)->angular_velocity;
++      auto lo=hi-1;
++      const double alpha=double(t-lo->stamp_ns)/double(hi->stamp_ns-lo->stamp_ns);
++      return (1-alpha)*lo->angular_velocity+alpha*hi->angular_velocity;
++    };
++    knots.push_back(begin);
++    for(auto it=first;it!=upper;++it)
++      if(it->stamp_ns>begin && it->stamp_ns<end)knots.push_back(it->stamp_ns);
++    knots.push_back(end);
++    rotations.push_back(Eigen::Matrix3d::Identity());
++    for(std::size_t i=1;i<knots.size();++i) {
++      const uint64_t dt=knots[i]-knots[i-1];
++      require(dt<=uint64_t(std::llround(max_gap_s*1e9)),"IMU_knot_gap_exceeds_gate");
++      const Eigen::Vector3d w=.5*(gyro(knots[i-1])+gyro(knots[i]));
++      rotations.push_back(rotations.back()*exp(w*(double(dt)*1e-9)));
++    }
++  }
++  Eigen::Matrix3d at(uint64_t time) const {
++    require(time>=knots.front() && time<=knots.back(),"rotation_query_outside_coverage");
++    if(time==knots.back()) return rotations.back();
++    const std::size_t i=std::upper_bound(knots.begin(),knots.end(),time)-knots.begin()-1;
++    const double alpha=double(time-knots[i])/double(knots[i+1]-knots[i]);
++    const Eigen::AngleAxisd delta(rotations[i].transpose()*rotations[i+1]);
++    return rotations[i]*exp(delta.axis()*delta.angle()*alpha);
++  }
++  Eigen::Matrix3d end_T_time(uint64_t time) const {
++    return rotations.back().transpose()*at(time);
++  }
++};
++
++Eigen::Vector3d deskewPoint(const Eigen::Vector3d& lidar_point,
++                          const Eigen::Matrix3d& R_Iend_It,
++                          const Matrix& T_imu_lidar,
++                          const Eigen::Matrix3d& R_local_Iend,
++                          const Eigen::Vector3d& previous_velocity_local_imu,
++                          double time_minus_end_s) {
++  const Eigen::Matrix3d R=T_imu_lidar.block<3,3>(0,0);
++  const Eigen::Vector3d lever=T_imu_lidar.block<3,1>(0,3);
++  // Full extrinsic conjugation accounts for lever-arm motion during rotation.
++  return R.transpose()*(R_Iend_It*(R*lidar_point+lever)-lever+
++      R_local_Iend.transpose()*previous_velocity_local_imu*time_minus_end_s);
++}
++Cloud::Ptr transformCloud(const Cloud::Ptr& in,const Matrix& T) {
++  Cloud::Ptr out(new Cloud);
++  out->reserve(in->size());
++  for(const auto& p:*in) {
++    const Eigen::Vector3d q=T.block<3,3>(0,0)*Eigen::Vector3d(p.x,p.y,p.z)+T.block<3,1>(0,3);
++    out->push_back(pcl::PointXYZ(q.x(),q.y(),q.z()));
++  }
++  return out;
++}
++Cloud::Ptr voxel(const Cloud::Ptr& in) {
++  Cloud::Ptr out(new Cloud);
++  pcl::VoxelGrid<pcl::PointXYZ> grid;
++  grid.setInputCloud(in);grid.setLeafSize(.25f,.25f,.25f);grid.filter(*out);
++  return out;
++}
++struct Overlap {
++  double fraction=std::numeric_limits<double>::quiet_NaN(), trimmed_rmse=std::numeric_limits<double>::infinity();
++  std::size_t population=0, overlapping=0, retained=0;
++};
++Overlap overlap(const Cloud::Ptr& source,const Cloud::Ptr& target,double radius=.5) {
++  Overlap out;out.population=source->size();
++  if(source->size()<20||target->size()<20)return out;
++  pcl::KdTreeFLANN<pcl::PointXYZ> tree;tree.setInputCloud(target);
++  std::vector<float> squared; std::vector<int> ids(1);std::vector<float> ds(1);
++  for(const auto& point:*source)
++    if(tree.nearestKSearch(point,1,ids,ds)>0 && ds[0]<=radius*radius)squared.push_back(ds[0]);
++  out.overlapping=squared.size();out.fraction=double(out.overlapping)/out.population;
++  if(squared.empty())return out;
++  std::sort(squared.begin(),squared.end());
++  out.retained=std::max<std::size_t>(1,std::ceil(.70*squared.size()));
++  double sum=0;for(std::size_t i=0;i<out.retained;++i)sum+=squared[i];
++  out.trimmed_rmse=std::sqrt(sum/out.retained);return out;
++}
++// Source and target are independently swapped through a second solver call.
++struct Registration {
++  Matrix T_target_source=Matrix::Identity();
++  bool converged=false, invoked=false, transform_valid=false;
++  double fitness=std::numeric_limits<double>::infinity(), wall_s=0;
++  std::string error;
++};
++void normalizeSolverResult(Registration& out,const Matrix& carrier,bool solver_converged,double fitness) {
++  out.T_target_source=carrier;out.transform_valid=rigid(carrier);
++  out.converged=solver_converged&&out.transform_valid;
++  out.fitness=out.transform_valid?fitness:std::numeric_limits<double>::infinity();
++  if(!out.transform_valid)out.error="NONFINITE_OR_NONRIGID_RESULT";
++  else if(!solver_converged)out.error="SOLVER_NOT_CONVERGED";
++}
++std::string updateOutcome(bool quality,int& failures,int& max_failures,std::size_t& observations,bool& stopped) {
++  if(quality) {failures=0;++observations;return "LIDAR_OBSERVATION";}
++  ++failures;max_failures=std::max(max_failures,failures);
++  if(failures>2) {stopped=true;return "REJECTED_STOP";}
++  return "CAUSAL_PREDICTION_ONLY";
++}
++Registration registerCloud(const Cloud::Ptr& source,const Cloud::Ptr& target,const Matrix& guess) {
++  Registration out; const auto start=Clock::now();
++  if(source->size()<20 || target->size()<20) {out.error="INSUFFICIENT_SUPPORT";return out;}
++  out.invoked=true;
++  try {
++    pcl::GeneralizedIterativeClosestPoint<pcl::PointXYZ,pcl::PointXYZ> solver;
++    solver.setInputSource(source);solver.setInputTarget(target);
++    solver.setMaxCorrespondenceDistance(2.5);solver.setMaximumIterations(40);
++    solver.setTransformationEpsilon(1e-6);
++    Cloud aligned;solver.align(aligned,guess.cast<float>());
++    const Matrix carrier=solver.getFinalTransformation().cast<double>();
++    const double fitness=rigid(carrier)?solver.getFitnessScore():std::numeric_limits<double>::infinity();
++    normalizeSolverResult(out,carrier,solver.hasConverged(),fitness);
++  }catch(const std::exception&) {
++    // A solver failure is a rejected LiDAR observation, not an input-contract
++    // failure. The caller still runs the independent reverse solver.
++    out.converged=false;out.transform_valid=false;out.error="SOLVER_EXCEPTION";
++  }
++  out.wall_s=seconds(start);return out;
++}
++
++Cloud::Ptr predictedSupport(const Cloud::Ptr& submap,const Cloud::Ptr& current,const Matrix& guess) {
++  // The population is chosen ONCE from the initial prediction, before either
++  // fit. It is never recomputed from the fitted pose, quality or failure status.
++  const auto predicted=transformCloud(current,guess);
++  Cloud::Ptr support(new Cloud);
++  if(predicted->empty())return support;
++  pcl::KdTreeFLANN<pcl::PointXYZ> tree;tree.setInputCloud(predicted);
++  std::vector<int> ids(1);std::vector<float> ds(1);
++  for(const auto& point:*submap)
++    if(tree.nearestKSearch(point,1,ids,ds)>0 && ds[0]<=2.5*2.5)support->push_back(point);
++  return support;
++}
++double allPointFitness(const Cloud::Ptr& source,const Cloud::Ptr& target) {
++  if(source->empty()||target->empty())return std::numeric_limits<double>::infinity();
++  pcl::KdTreeFLANN<pcl::PointXYZ> tree;tree.setInputCloud(target);
++  std::vector<int> ids(1);std::vector<float> ds(1);double sum=0;
++  for(const auto& point:*source) {
++    if(!tree.nearestKSearch(point,1,ids,ds))return std::numeric_limits<double>::infinity();
++    sum+=ds[0];
++  }
++  return sum/source->size();
++}
++struct Config {
++  uint64_t begin=0,end=0;std::size_t scans=0;
++  Matrix T_imu_lidar=Matrix::Identity(),map_anchor=Matrix::Identity();
++  double max_gap=.02,endpoint_hold=.01,bg_bound=.05;
++  std::string input_directory,output_directory;
++};
++Matrix readMatrix(const boost::property_tree::ptree& root,const std::string& key) {
++  Matrix T; std::size_t row=0;
++  for(const auto& r:root.get_child(key)) {
++    require(row<4,"too_many_matrix_rows:"+key);std::size_t col=0;
++    for(const auto& c:r.second) {
++      require(col<4,"too_many_matrix_columns:"+key);T(row,col++)=c.second.get_value<double>();
++    }
++    require(col==4,"incomplete_matrix_row:"+key);++row;
++  }
++  require(row==4 && rigid(T,1e-8),"invalid_matrix:"+key);return T;
++}
++Config readConfig(const std::string& path) {
++  boost::property_tree::ptree root;boost::property_tree::read_json(path,root);
++  Config out;out.begin=root.get<uint64_t>("bootstrap_start_ns");
++  out.input_directory=root.get<std::string>("input_directory");out.output_directory=root.get<std::string>("output_directory");
++  require(!out.input_directory.empty() && out.input_directory[0]=='/' && !out.output_directory.empty() && out.output_directory[0]=='/',
++          "frozen_input_output_paths_must_be_absolute");
++  out.end=root.get<uint64_t>("bootstrap_end_ns");out.scans=root.get<std::size_t>("bootstrap_scan_count");
++  require(out.scans==99 && out.end>out.begin && out.end-out.begin<=10000000000ULL,"invalid_bootstrap_window");
++  out.T_imu_lidar=readMatrix(root,"T_imu_lidar");out.map_anchor=readMatrix(root,"initial_map_T_lidar");
++  require(root.get<int>("submap_frames")==3,"unfrozen_submap_frames");
++  const std::vector<std::pair<std::string,double>> gates={
++    {"lidar.voxel_m",.25},{"lidar.min_range_m",.5},{"lidar.max_range_m",80.},
++    {"lidar.max_correspondence_m",2.5},{"lidar.max_iterations",40},
++    {"lidar.transformation_epsilon",1e-6},{"lidar.overlap_radius_m",.5},
++    {"lidar.min_overlap",.55},{"lidar.trim_fraction",.70},
++    {"lidar.max_trimmed_rmse_m",.25},{"lidar.max_inverse_translation_m",.10},
++    {"lidar.max_inverse_rotation_deg",1.},{"lidar.max_step_translation_m",3.},
++    {"lidar.max_step_rotation_deg",45.},{"lidar.max_imu_rotation_error_deg",5.}};
++  for(const auto& gate:gates)
++    require(root.get<double>(gate.first)==gate.second,"quality_config_mismatch:"+gate.first);
++  out.max_gap=root.get<double>("timing.max_gap_s");out.endpoint_hold=root.get<double>("timing.endpoint_hold_s");
++  out.bg_bound=root.get<double>("timing.provisional_bg_norm_bound_rad_s");
++  require(out.max_gap==.02 && out.endpoint_hold==.01 && out.bg_bound==.05,"timing_or_bias_bound_changed");
++  return out;
++}
++struct Accepted {
++  uint64_t stamp=0;
++  Matrix pose=Matrix::Identity();
++  Cloud::Ptr cloud;
++};
++Eigen::Vector3d pastImuVelocity(const std::deque<Accepted>& accepted,const Matrix& extrinsic) {
++  require(accepted.size()>=2,"past_velocity_needs_two_true_observations");
++  const auto& a=accepted[accepted.size()-2];const auto& b=accepted.back();
++  const Matrix A=a.pose*inverse(extrinsic),B=b.pose*inverse(extrinsic);
++  require(b.stamp>a.stamp,"nonmonotonic_accepted_history");
++  return (B.block<3,1>(0,3)-A.block<3,1>(0,3))/(double(b.stamp-a.stamp)*1e-9);
++}
++Cloud::Ptr deskewCloud(const p::P7TimedLidarVector& raw,const RotationTimeline& rotation,
++                      const Config& config,const Matrix& predicted_pose,
++                      const Eigen::Vector3d& velocity,std::size_t& omitted_prefix) {
++  Cloud::Ptr deskewed(new Cloud);omitted_prefix=0;
++  const Matrix predicted_imu=predicted_pose*inverse(config.T_imu_lidar);
++  for(const auto& point:raw) {
++    if(point.stamp_ns<rotation.knots.front()) {++omitted_prefix;continue;}
++    require(point.stamp_ns<=rotation.knots.back(),"point_after_scan_end");
++    const double range=point.position.norm();
++    if(!point.position.allFinite() || range<.5 || range>80.)continue;
++    const Eigen::Vector3d q=deskewPoint(point.position,rotation.end_T_time(point.stamp_ns),config.T_imu_lidar,
++        predicted_imu.block<3,3>(0,0),velocity,-double(rotation.knots.back()-point.stamp_ns)*1e-9);
++    require(q.allFinite(),"nonfinite_deskew_point");
++    deskewed->push_back(pcl::PointXYZ(q.x(),q.y(),q.z()));
++  }
++  return voxel(deskewed);
++}
++std::string scalar(double value) {
++  if(!std::isfinite(value))return "";
++  std::ostringstream out;out<<std::setprecision(17)<<value;return out.str();
++}
++void writeRow(std::ofstream& stream,const std::vector<std::string>& columns) {
++  for(std::size_t i=0;i<columns.size();++i)stream<<(i?",":"")<<columns[i];stream<<'\n';stream.flush();
++}
++void addMatrix(std::vector<std::string>& row,const Matrix* T) {
++  for(int i=0;i<4;++i)for(int j=0;j<4;++j)row.push_back(T?scalar((*T)(i,j)):"");
++}
++std::ofstream output(const std::string& dir,const std::string& name,const std::string& header) {
++  std::ofstream stream(dir+"/"+name);require(bool(stream),"output_open_failed:"+name);
++  stream<<header<<'\n';return stream;
++}
++std::string matrixHeader(const std::string& prefix) {
++  std::string result;for(int i=0;i<4;++i)for(int j=0;j<4;++j)result+=","+prefix+std::to_string(i)+std::to_string(j);
++  return result;
++}
++
++int inputSelfTest(const std::string& input,const std::string& config_path,const std::string& outfile) {
++  const Config cfg=readConfig(config_path);
++  require(input==cfg.input_directory,"preflight_input_path_not_frozen");
++  const auto scans=p::readP7TimedScans(input+"/filter_scans.csv",input+"/raw_timed_scan_index.csv");
++  const auto imu=p::readP7Imu(input+"/imu.csv");
++  require(scans.front().scan_start_ns==cfg.begin,"preflight_epoch_mismatch");
++  std::ifstream exists(outfile);require(!exists.good(),"preflight_receipt_already_exists");
++  std::ofstream out(outfile);require(bool(out),"preflight_not_writable");
++  out<<"transaction_id,scan_start_ns,scan_end_ns,raw_points,voxel_points,omitted_prefix_points,IMU_max_consumed_stamp_ns,IMU_max_gap_ns,endpoint_hold_ns,deskew_finite,NEW_GICP_CALLS\n";
++  std::size_t count=0;uint64_t last_stamp=0;
++  for(const auto& scan:scans) {
++    if(scan.scan_end_ns>cfg.end)break;
++    const auto raw=p::readP7PackedTimedCloud(input+"/raw_timed_points.bin",scan);
++    const uint64_t begin=count?scan.scan_start_ns:std::max(scan.scan_start_ns,imu.front().stamp_ns);
++    const RotationTimeline within(imu,begin,scan.scan_end_ns,cfg.max_gap,cfg.endpoint_hold);
++    if(count) {
++      const RotationTimeline pair(imu,last_stamp,scan.scan_end_ns,cfg.max_gap,cfg.endpoint_hold);
++      require(pair.max_consumed_stamp_ns<=scan.scan_end_ns,"preflight_pair_future_IMU");
++    }
++    std::size_t omitted=0;
++    const auto cloud=deskewCloud(raw,within,cfg,Matrix::Identity(),Eigen::Vector3d::Zero(),omitted);
++    require((count==0 || omitted==0) && cloud->size()>=20,"preflight_point_boundary_guard");
++    require(within.max_consumed_stamp_ns<=scan.scan_end_ns,"preflight_future_IMU");
++    for(const auto& point:*cloud)require(std::isfinite(point.x)&&std::isfinite(point.y)&&std::isfinite(point.z),"preflight_nonfinite_point");
++    writeRow(out,{std::to_string(scan.transaction_id),std::to_string(scan.scan_start_ns),std::to_string(scan.scan_end_ns),
++        std::to_string(raw.size()),std::to_string(cloud->size()),std::to_string(omitted),std::to_string(within.max_consumed_stamp_ns),
++        std::to_string(within.maximum_gap_ns),std::to_string(within.endpoint_hold_ns),"PASS","0"});
++    ++count;last_stamp=scan.scan_end_ns;
++  }
++  require(count==cfg.scans && last_stamp==cfg.end,"preflight_full99_count_guard");
++  std::cout<<"REAL_INPUT_PREFLIGHT PASS scans="<<count<<" NEW_GICP_CALLS=0 NEW_NDT_CALLS=0\n";return 0;
++}
++
++int run(const std::string& input,const std::string& config_path,const std::string& outdir) {
++  const auto global_start=Clock::now();const Config cfg=readConfig(config_path);
++  require(input==cfg.input_directory,"registration_input_path_not_frozen");
++  require(outdir==cfg.output_directory+"/registration","registration_output_path_not_frozen");
++  const auto all=p::readP7TimedScans(input+"/filter_scans.csv",input+"/raw_timed_scan_index.csv");
++  const auto imu=p::readP7Imu(input+"/imu.csv");
++  require(all.front().scan_start_ns==cfg.begin,"bootstrap_epoch_mismatch");
++  std::vector<p::P7TimedScanRecord> scans;
++  for(const auto& scan:all)if(scan.scan_end_ns<=cfg.end)scans.push_back(scan);
++  require(scans.size()==cfg.scans && scans.back().scan_end_ns==cfg.end,"bootstrap_scan_window_mismatch");
++  require(::mkdir(outdir.c_str(),0700)==0,"output_exists_or_not_writable; no overwrite or selective repeat");
++  auto odometry=output(outdir,"robust_lidar_odometry.csv",
++      "transaction_id,scan_start_ns,stamp_ns,raw_points,voxel_points,quality_pass,true_observation,role,reason,solver_converged,reverse_solver_converged,fitness_m2,pair_translation_m,pair_rotation_deg,imu_rotation_error_deg,position_sigma_m,rotation_sigma_deg,consecutive_failures,omitted_prefix_points,translation_prediction_status,wall_s"+matrixHeader("T"));
++  auto rotations=output(outdir,"imu_rotation_prediction.csv",
++      "transaction_id,scan_start_ns,stamp_ns,deskew_begin_ns,scan_integration_s,pair_integration_s,max_IMU_consumed_stamp_ns,IMU_max_gap_ns,endpoint_hold_ns,assumed_bg_norm_bound_rad_s,scan_bias_sensitivity_deg,pair_bias_sensitivity_deg,provisional_bg_status,translation_prediction_status,vx_local_imu,vy_local_imu,vz_local_imu"+matrixHeader("initial_local_T_lidar")+",pair_gyro_rx_rad,pair_gyro_ry_rad,pair_gyro_rz_rad");
++  auto qualities=output(outdir,"overlap_quality.csv",
++      "transaction_id,status,current_points,full_submap_points,predicted_support_points,predicted_support_fraction,forward_overlap_count,forward_population,forward_overlap,forward_trimmed_count,forward_trimmed_rmse_m,reverse_overlap_count,reverse_population,reverse_overlap,reverse_trimmed_count,reverse_trimmed_rmse_m,forward_support_allpoint_fitness_m2,forward_fullsubmap_allpoint_fitness_m2,reverse_support_allpoint_fitness_m2,reverse_fullsubmap_allpoint_fitness_m2,overlap_pass,trimmed_pass");
++  auto consistency=output(outdir,"bidirectional_consistency.csv",
++      "transaction_id,status,forward_converged,reverse_converged,composition_translation_m,composition_rotation_deg,imu_rotation_error_deg,independent_reverse_registration,composition_pass,imu_pass,forward_transform_valid,reverse_transform_valid,forward_error,reverse_error");
++  auto runtime=output(outdir,"registration_runtime.csv",
++      "transaction_id,role,raw_read_s,IMU_rotational_deskew_s,submap_and_prefit_support_s,forward_GICP_s,independent_reverse_GICP_s,robust_quality_s,total_s,peak_RSS_KiB");
++  auto uncertainty=output(outdir,"registration_uncertainty.csv",
++      "transaction_id,role,position_sigma_m,rotation_sigma_deg,scan_duration_s,pair_duration_s,translation_prediction_residual_m,translation_scan_sweep_m,provisional_gyro_sensitivity_deg,semantics");
++  std::deque<Accepted> accepted;Matrix last=Matrix::Identity();uint64_t last_stamp=0;
++  int failures=0,max_failures=0;std::size_t observations=0,attempted=0,forward_calls=0,reverse_calls=0;
++  bool stopped=false;std::string stop_reason;double total_read=0,total_deskew=0,total_submap=0,total_fit=0,total_quality=0;
++  double previous_position_sigma=.05,previous_rotation_sigma=.5;
++  for(std::size_t index=0;index<scans.size();++index) {
++    const auto& scan=scans[index];const auto started=Clock::now();
++    if(stopped) {
++      std::vector<std::string> row={std::to_string(scan.transaction_id),std::to_string(scan.scan_start_ns),std::to_string(scan.scan_end_ns),
++          std::to_string(scan.cloud_point_count),"","0","0","NOT_RUN",stop_reason};
++      row.resize(21);addMatrix(row,nullptr);writeRow(odometry,row);continue;
++    }
++    try {
++      auto phase=Clock::now();const auto raw=p::readP7PackedTimedCloud(input+"/raw_timed_points.bin",scan);
++      const double read_s=seconds(phase);phase=Clock::now();
++      const uint64_t deskew_begin=index==0?std::max(scan.scan_start_ns,imu.front().stamp_ns):scan.scan_start_ns;
++      const RotationTimeline within(imu,deskew_begin,scan.scan_end_ns,cfg.max_gap,cfg.endpoint_hold);
++      Matrix prediction=Matrix::Identity();Eigen::Vector3d velocity=Eigen::Vector3d::Zero(),gyro_rotation=Eigen::Vector3d::Zero();
++      const bool velocity_known=index>=2 && accepted.size()>=2;
++      if(velocity_known)velocity=pastImuVelocity(accepted,cfg.T_imu_lidar);
++      double pair_dt=0,pair_bias=0;uint64_t maximum_consumed=within.max_consumed_stamp_ns,
++          maximum_gap=within.maximum_gap_ns,maximum_hold=within.endpoint_hold_ns;
++      if(index>0) {
++        const RotationTimeline between(imu,last_stamp,scan.scan_end_ns,cfg.max_gap,cfg.endpoint_hold);
++        Matrix predicted_imu=last*inverse(cfg.T_imu_lidar);
++        predicted_imu.block<3,3>(0,0)=predicted_imu.block<3,3>(0,0)*between.rotations.back();
++        pair_dt=double(scan.scan_end_ns-last_stamp)*1e-9;
++        predicted_imu.block<3,1>(0,3)+=velocity*pair_dt;
++        prediction=predicted_imu*cfg.T_imu_lidar;
++        const Eigen::AngleAxisd aa(between.rotations.back());gyro_rotation=aa.axis()*aa.angle();
++        pair_bias=cfg.bg_bound*pair_dt*180/pi;
++        maximum_consumed=std::max(maximum_consumed,between.max_consumed_stamp_ns);
++        maximum_gap=std::max(maximum_gap,between.maximum_gap_ns);maximum_hold=std::max(maximum_hold,between.endpoint_hold_ns);
++      }
++      std::size_t omitted=0;const auto current=deskewCloud(raw,within,cfg,prediction,velocity,omitted);
++      require(index==0 || omitted==0,"unsupported_prefix_after_anchor");
++      require(current->size()>=20,"insufficient_current_points");
++      const double deskew_s=seconds(phase);const double scan_duration=double(scan.scan_end_ns-deskew_begin)*1e-9;
++      const std::string velocity_status=velocity_known?"HISTORICAL_ACCEPTED_IMU_ORIGIN_CV":"TRANSLATION_NOT_YET_ESTIMATED";
++      std::vector<std::string> rr={std::to_string(scan.transaction_id),std::to_string(scan.scan_start_ns),std::to_string(scan.scan_end_ns),
++          std::to_string(deskew_begin),scalar(scan_duration),scalar(pair_dt),std::to_string(maximum_consumed),
++          std::to_string(maximum_gap),std::to_string(maximum_hold),scalar(cfg.bg_bound),scalar(cfg.bg_bound*scan_duration*180/pi),
++          scalar(pair_bias),"ZERO_PROVISIONAL_NOT_ESTIMATED",velocity_status,scalar(velocity.x()),scalar(velocity.y()),scalar(velocity.z())};
++      addMatrix(rr,&prediction);for(int i=0;i<3;++i)rr.push_back(scalar(gyro_rotation[i]));writeRow(rotations,rr);
++      Matrix pose=prediction;Registration forward,reverse;Overlap fq,rq;
++      const double missing=std::numeric_limits<double>::quiet_NaN();
++      double full_fitness=missing,full_reverse_fitness=missing,submap_s=0,quality_s=0,composition_translation=missing,composition_rotation=missing,
++          step_translation=missing,step_rotation=missing,imu_error=missing,position_sigma=.05,rotation_sigma=.5,
++          cv_translation_residual=missing,translation_scan_sweep=missing;
++      std::size_t full_count=0,support_count=0;bool quality=true,overlap_pass=true,trimmed_pass=true,composition_pass=true,imu_pass=true;
++      std::string role="COORDINATE_ANCHOR",reason;
++      if(index>0) {
++        ++attempted;phase=Clock::now();Cloud::Ptr full(new Cloud);
++        for(const auto& past:accepted)*full+=*transformCloud(past.cloud,past.pose);
++        full=voxel(full);const auto support=predictedSupport(full,current,prediction);
++        full_count=full->size();support_count=support->size();submap_s=seconds(phase);
++        forward=registerCloud(current,support,prediction);forward_calls+=forward.invoked;
++        reverse=registerCloud(support,current,inverse(prediction));reverse_calls+=reverse.invoked;
++        phase=Clock::now();
++        fq.population=current->size();rq.population=support->size();
++        if(forward.transform_valid) {
++          const auto aligned=transformCloud(current,forward.T_target_source);
++          fq=overlap(aligned,support);full_fitness=allPointFitness(aligned,full);
++          const Matrix step=inverse(last)*forward.T_target_source;
++          step_translation=step.block<3,1>(0,3).norm();step_rotation=rotationDegrees(step.block<3,3>(0,0));
++          imu_error=rotationDegrees(prediction.block<3,3>(0,0).transpose()*forward.T_target_source.block<3,3>(0,0));
++          cv_translation_residual=(forward.T_target_source.block<3,1>(0,3)-prediction.block<3,1>(0,3)).norm();
++          translation_scan_sweep=(velocity_known?cv_translation_residual:step_translation)*scan_duration/std::max(pair_dt,1e-9);
++        }
++        if(reverse.transform_valid) {
++          rq=overlap(transformCloud(support,reverse.T_target_source),current);
++          full_reverse_fitness=allPointFitness(transformCloud(full,reverse.T_target_source),current);
++        }
++        if(forward.transform_valid&&reverse.transform_valid) {
++          const Matrix composition=reverse.T_target_source*forward.T_target_source;
++          composition_translation=composition.block<3,1>(0,3).norm();composition_rotation=rotationDegrees(composition.block<3,3>(0,0));
++        }
++        overlap_pass=fq.fraction>=.55 && rq.fraction>=.55;
++        trimmed_pass=fq.trimmed_rmse<=.25 && rq.trimmed_rmse<=.25;
++        composition_pass=composition_translation<=.10 && composition_rotation<=1.;imu_pass=imu_error<=5.;
++        const bool movement_pass=step_translation<3. && step_rotation<45.;
++        quality=forward.converged&&reverse.converged&&overlap_pass&&trimmed_pass&&composition_pass&&imu_pass&&movement_pass;
++        if(!forward.converged)reason+="FORWARD_"+forward.error+"|";
++        if(!reverse.converged)reason+="REVERSE_"+reverse.error+"|";
++        if(!overlap_pass)reason+="OVERLAP|";if(!trimmed_pass)reason+="TRIMMED_RMSE|";
++        if(!composition_pass)reason+="BIDIRECTIONAL|";if(!movement_pass)reason+="MOTION_GUARD|";if(!imu_pass)reason+="IMU_ROTATION|";
++        role=updateOutcome(quality,failures,max_failures,observations,stopped);
++        if(quality)pose=forward.T_target_source;
++        if(stopped)stop_reason="more_than_two_consecutive_failed_observations";
++        // Missing/invalid registration metrics never become fabricated zeros
++        // or infinite covariance. Prediction-only marginal uncertainty grows
++        // from the previous causal state; these are engineering diagnostics.
++        for(double candidate:{composition_translation,fq.trimmed_rmse,rq.trimmed_rmse,translation_scan_sweep})
++          if(std::isfinite(candidate))position_sigma=std::max(position_sigma,candidate);
++        for(double candidate:{composition_rotation,imu_error,cfg.bg_bound*scan_duration*180/pi})
++          if(std::isfinite(candidate))rotation_sigma=std::max(rotation_sigma,candidate);
++        if(!quality) {
++          position_sigma=std::max(position_sigma,previous_position_sigma+.05);
++          rotation_sigma=std::max(rotation_sigma,previous_rotation_sigma+.5);
++        }
++        quality_s=seconds(phase);
++      }
++      if(quality) {
++        accepted.push_back({scan.scan_end_ns,pose,current});while(accepted.size()>3)accepted.pop_front();
++      }
++      // A rejected cloud is never inserted into the local submap. At most two
++      // failed observations advance the explicitly labelled causal prediction.
++      if(!stopped) {last=pose;last_stamp=scan.scan_end_ns;previous_position_sigma=position_sigma;previous_rotation_sigma=rotation_sigma;}
++      const Matrix map_pose=cfg.map_anchor*pose;
++      std::vector<std::string> row={std::to_string(scan.transaction_id),std::to_string(scan.scan_start_ns),std::to_string(scan.scan_end_ns),
++          std::to_string(scan.cloud_point_count),std::to_string(current->size()),quality?"1":"0",index>0&&quality?"1":"0",role,reason,
++          index?forward.converged?"1":"0":"",index?reverse.converged?"1":"0":"",index?scalar(forward.fitness):"",scalar(step_translation),scalar(step_rotation),
++          scalar(imu_error),scalar(position_sigma),scalar(rotation_sigma),std::to_string(failures),std::to_string(omitted),velocity_status,scalar(seconds(started))};
++      addMatrix(row,&map_pose);writeRow(odometry,row);
++      writeRow(qualities,{std::to_string(scan.transaction_id),role,std::to_string(current->size()),std::to_string(full_count),std::to_string(support_count),
++          full_count?scalar(double(support_count)/full_count):"",forward.transform_valid?std::to_string(fq.overlapping):"",index?std::to_string(fq.population):"",scalar(fq.fraction),forward.transform_valid?std::to_string(fq.retained):"",scalar(fq.trimmed_rmse),
++          reverse.transform_valid?std::to_string(rq.overlapping):"",index?std::to_string(rq.population):"",scalar(rq.fraction),reverse.transform_valid?std::to_string(rq.retained):"",scalar(rq.trimmed_rmse),index?scalar(forward.fitness):"",index?scalar(full_fitness):"",
++          index?scalar(reverse.fitness):"",index?scalar(full_reverse_fitness):"",index?overlap_pass?"1":"0":"",index?trimmed_pass?"1":"0":""});
++      writeRow(consistency,{std::to_string(scan.transaction_id),role,index?forward.converged?"1":"0":"",index?reverse.converged?"1":"0":"",
++          index?scalar(composition_translation):"",index?scalar(composition_rotation):"",index?scalar(imu_error):"",index?reverse.invoked?"1":"0":"",index?composition_pass?"1":"0":"",index?imu_pass?"1":"0":"",
++          index?forward.transform_valid?"1":"0":"",index?reverse.transform_valid?"1":"0":"",forward.error,reverse.error});
++      struct rusage usage;getrusage(RUSAGE_SELF,&usage);
++      writeRow(runtime,{std::to_string(scan.transaction_id),role,scalar(read_s),scalar(deskew_s),scalar(submap_s),scalar(forward.wall_s),
++          scalar(reverse.wall_s),scalar(quality_s),scalar(seconds(started)),std::to_string(usage.ru_maxrss)});
++      writeRow(uncertainty,{std::to_string(scan.transaction_id),role,scalar(position_sigma),scalar(rotation_sigma),scalar(scan_duration),
++          scalar(pair_dt),index?scalar(cv_translation_residual):"",index?scalar(translation_scan_sweep):"",scalar(cfg.bg_bound*scan_duration*180/pi),
++          "CONSERVATIVE_ENGINEERING_MARGINAL_NOT_CALIBRATED_NOT_POSE_COVARIANCE"});
++      total_read+=read_s;total_deskew+=deskew_s;total_submap+=submap_s;total_fit+=forward.wall_s+reverse.wall_s;total_quality+=quality_s;
++      std::cout<<"V2_BOOTSTRAP_ONLY tx="<<scan.transaction_id<<" role="<<role<<" forward_overlap="<<fq.fraction<<" reverse_overlap="<<rq.fraction<<" quality="<<quality<<'\n';
++    }catch(const std::exception& e) {
++      stopped=true;stop_reason=std::string("INPUT_RUNTIME_GUARD:")+e.what();
++      std::vector<std::string> row={std::to_string(scan.transaction_id),std::to_string(scan.scan_start_ns),std::to_string(scan.scan_end_ns),
++          std::to_string(scan.cloud_point_count),"","0","0","INPUT_RUNTIME_GUARD_FAIL",stop_reason};
++      row.resize(21);addMatrix(row,nullptr);writeRow(odometry,row);
++      std::cerr<<stop_reason<<'\n';
++    }
++  }
++  struct rusage usage;getrusage(RUSAGE_SELF,&usage);
++  auto receipt=output(outdir,"registration_summary.json", "{");
++  receipt<<"  \"protocol\": \"P9_CORRIDOR01_BOOTSTRAP_V2\",\n"
++      <<"  \"bootstrap_scans\": "<<scans.size()<<",\n  \"attempted_pairs\": "<<attempted<<",\n"
++      <<"  \"true_observation_pairs\": "<<observations<<",\n  \"maximum_consecutive_failures\": "<<max_failures<<",\n"
++      <<"  \"forward_GICP_calls\": "<<forward_calls<<",\n  \"reverse_GICP_calls\": "<<reverse_calls<<",\n"
++      <<"  \"minimum_90_observations_gate\": "<<(observations>=90?"true":"false")<<",\n"
++      <<"  \"maximum_2_consecutive_failures_gate\": "<<(max_failures<=2?"true":"false")<<",\n"
++      <<"  \"stopped\": "<<(stopped?"true":"false")<<",\n  \"wall_s\": "<<scalar(seconds(global_start))<<",\n"
++      <<"  \"raw_read_s\": "<<scalar(total_read)<<",\n  \"rotational_deskew_s\": "<<scalar(total_deskew)<<",\n"
++      <<"  \"submap_support_s\": "<<scalar(total_submap)<<",\n  \"GICP_s\": "<<scalar(total_fit)<<",\n"
++      <<"  \"quality_s\": "<<scalar(total_quality)<<",\n  \"peak_RSS_KiB\": "<<usage.ru_maxrss<<",\n"
++      <<"  \"NDT_CALLS\": 0,\n  \"GT_LOADED\": false\n}\n";
++  receipt.close();return stop_reason.find("INPUT_RUNTIME_GUARD")==0?1:0;
++}
++
++void selfTest() {
++  Matrix E=Matrix::Identity(),T=Matrix::Identity();
++  E.block<3,3>(0,0)=exp(Eigen::Vector3d(.3,-.2,.4));
++  E.block<3,1>(0,3)=Eigen::Vector3d(.5,-.3,.2);
++  T.block<3,3>(0,0)=exp(Eigen::Vector3d(-.4,.1,.25));
++  T.block<3,1>(0,3)=Eigen::Vector3d(1.2,.7,-.1);
++  require((inverse(T)*T-Matrix::Identity()).norm()<1e-12,"SE3_inverse_test");
++  require(((T*E)*inverse(E)-T).norm()<1e-12,"extrinsic_direction_test");
++  const Eigen::Vector3d point(1,.4,2),v(.7,-.2,.5);
++  Matrix D=Matrix::Identity();D.block<3,3>(0,0)=exp(Eigen::Vector3d(.1,-.3,.2));
++  D.block<3,1>(0,3)=T.block<3,3>(0,0).transpose()*v*(-.07);
++  const Eigen::Vector4d p4(point.x(),point.y(),point.z(),1);
++  const Eigen::Vector3d expected=(inverse(E)*D*E*p4).head<3>();
++  require((deskewPoint(point,D.block<3,3>(0,0),E,T.block<3,3>(0,0),v,-.07)-expected).norm()<1e-12,
++          "nonidentity_extrinsic_deskew_test");
++  p::P7ImuVector imu;
++  for(uint64_t i=0;i<21;++i) {
++    p::ImuSample s;s.stamp_ns=100000000000ULL+i*5000000;
++    s.angular_velocity=Eigen::Vector3d(.2,.3,-.1);imu.push_back(s);
++  }
++  const uint64_t begin=imu[1].stamp_ns+1000000,end=imu[17].stamp_ns+2000000;
++  RotationTimeline a(imu,begin,end);
++  require((a.rotations.back()-exp(imu[0].angular_velocity*(double(end-begin)*1e-9))).norm()<1e-12,
++          "SO3_midpoint_real_time_test");
++  auto future=imu;for(auto& s:future)if(s.stamp_ns>end)s.angular_velocity=Eigen::Vector3d(500,-700,300);
++  RotationTimeline b(future,begin,end);
++  require((a.rotations.back()-b.rotations.back()).norm()<1e-12,"future_IMU_tamper_test");
++  require(a.max_consumed_stamp_ns<=end,"causal_sample_guard_test");
++  bool blocked=false;try{RotationTimeline bad(imu,imu.front().stamp_ns-1,end);}catch(...){blocked=true;}
++  require(blocked,"no_leading_backfill_test");
++  auto gap=imu;gap.erase(gap.begin()+1,gap.begin()+6);
++  blocked=false;try{RotationTimeline bad(gap,imu[5].stamp_ns-1000000,end);}catch(...){blocked=true;}
++  require(blocked,"real_start_bracket_gap_test");
++  Cloud::Ptr cloud(new Cloud);
++  for(int a=0;a<12;++a)for(int b=0;b<9;++b)for(int c=0;c<3;++c)
++    cloud->push_back(pcl::PointXYZ(.13*a+.015*b*b,.17*b+.011*a*a,.29*c+.021*a*b));
++  Matrix expected_T=Matrix::Identity();expected_T.block<3,3>(0,0)=exp(Eigen::Vector3d(.035,-.02,.055));
++  expected_T.block<3,1>(0,3)=Eigen::Vector3d(.08,-.04,.03);
++  const auto target=transformCloud(cloud,expected_T);
++  Matrix initial=expected_T;initial.block<3,1>(0,3)+=Eigen::Vector3d(.01,-.015,.008);
++  const auto forward=registerCloud(cloud,target,initial);
++  const auto reverse=registerCloud(target,cloud,inverse(initial));
++  require(forward.converged&&reverse.converged,"independent_GICP_convergence_test");
++  require((forward.T_target_source-expected_T).norm()<.02,"forward_direction_test");
++  const Matrix composed=reverse.T_target_source*forward.T_target_source;
++  require(composed.block<3,1>(0,3).norm()<.01 && rotationDegrees(composed.block<3,3>(0,0))<.2,
++          "independent_reverse_composition_test");
++  const auto quality=overlap(transformCloud(cloud,forward.T_target_source),target);
++  require(quality.fraction==1 && quality.trimmed_rmse<.01,"trimmed_overlap_test");
++  Cloud::Ptr far(new Cloud);far->push_back(pcl::PointXYZ(100,100,100));
++  require(!std::isfinite(overlap(far,target).fraction),"insufficient_population_is_missing_not_zero_test");
++  auto augmented=Cloud::Ptr(new Cloud(*target));augmented->push_back(pcl::PointXYZ(100,100,100));
++  const auto support=predictedSupport(augmented,cloud,initial);
++  require(support->size()==target->size(),"prefit_full_population_crop_test");
++  std::deque<Accepted> past;
++  Matrix I0=Matrix::Identity(),I1=Matrix::Identity();
++  I0.block<3,3>(0,0)=exp(Eigen::Vector3d(.4,-.1,.2));
++  I1.block<3,3>(0,0)=exp(Eigen::Vector3d(.5,-.2,.3));
++  I0.block<3,1>(0,3)=Eigen::Vector3d(.6,-.1,.2);I1.block<3,1>(0,3)=I0.block<3,1>(0,3)+v*.1;
++  past.push_back({1000000000,I0*E,cloud});past.push_back({1100000000,I1*E,cloud});
++  require((pastImuVelocity(past,E)-v).norm()<1e-12,"accepted_IMU_origin_CV_lever_arm_test");
++  Registration nonfinite,nonrigid;
++  Matrix bad=Matrix::Identity();bad(0,3)=std::numeric_limits<double>::quiet_NaN();
++  normalizeSolverResult(nonfinite,bad,true,0.);
++  bad=Matrix::Identity();bad(0,0)=2.;normalizeSolverResult(nonrigid,bad,true,0.);
++  require(!nonfinite.converged&&!nonfinite.transform_valid&&!nonrigid.converged&&!nonrigid.transform_valid,
++          "invalid_solver_result_normalization_test");
++  require(!std::isfinite(nonfinite.fitness)&&!std::isfinite(nonrigid.fitness),"invalid_metrics_missing_test");
++  int failed=0,max_failed=0;std::size_t count=0;bool stopped=false;
++  const std::size_t accepted_before=past.size();
++  for(int i=1;i<=3;++i) {
++    const bool quality=nonfinite.converged&&nonrigid.converged;
++    const auto role=updateOutcome(quality,failed,max_failed,count,stopped);
++    if(quality)past.push_back({1200000000ULL+uint64_t(i)*100000000,I1*E,cloud});
++    require(role==(i<=2?"CAUSAL_PREDICTION_ONLY":"REJECTED_STOP"),"failure_role_test");
++    require(stopped==(i==3),"only_third_failure_stops_test");
++  }
++  require(failed==3 && max_failed==3 && count==0 && past.size()==accepted_before,
++          "rejected_registration_never_changes_accepted_history_test");
++  const auto insufficient=registerCloud(far,cloud,Matrix::Identity());
++  require(!insufficient.invoked&&!insufficient.transform_valid&&insufficient.error=="INSUFFICIENT_SUPPORT",
++          "insufficient_solver_support_rejection_test");
++  std::cout<<"V2 synthetic geometry/time and independent GICP tests PASS\n";
++}
++} // namespace v2
++
++int main(int argc,char** argv) {
++  try {
++    if(argc==2 && std::string(argv[1])=="--self-test") {v2::selfTest();return 0;}
++    if(argc==5 && std::string(argv[1])=="--input-self-test")return v2::inputSelfTest(argv[2],argv[3],argv[4]);
++    if(argc==4)return v2::run(argv[1],argv[2],argv[3]);
++    throw std::runtime_error("usage: --self-test OR INPUT_DIRECTORY FROZEN_CONFIG_JSON NEW_OUTPUT_DIRECTORY");
++  }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 1;}
++}
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/evaluate_motion.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/evaluate_motion.py
+new file mode 100644
+index 0000000..b6a15b2
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/evaluate_motion.py
+@@ -0,0 +1,303 @@
++"""V2 admitted-observation adapter for the frozen moving-state diagnostics.
++
++No accepted full state or covariance is produced by this program.  Even when
++all reusable mean/observability gates pass, full coupled covariance and its
++propagation to boot remain a mandatory, separate prerequisite for injection.
++"""
++import argparse
++import csv
++import hashlib
++import json
++from pathlib import Path
++import sys
++import time
++
++import numpy as np
++from scipy.spatial.transform import Rotation
++
++OLD_DIRECTORY = Path(__file__).resolve().parent.parent / "corridor_moving_init"
++sys.path.insert(0, str(OLD_DIRECTORY))
++from diagnose_motion import fit, stage_imu  # Never execute diagnose().
++from preintegration import integrate, log
++
++ROOT = Path(__file__).resolve().parents[5]
++OLD_CONFIG = ROOT / "docs/p9_r7_cross_dataset_nearoptimal/moving_initialization/bootstrap_config.json"
++
++
++def require(condition, reason):
++    if not condition:
++        raise RuntimeError(reason)
++
++
++def sha(path):
++    h = hashlib.sha256()
++    with Path(path).open("rb") as stream:
++        for block in iter(lambda: stream.read(1 << 20), b""):
++            h.update(block)
++    return h.hexdigest()
++
++
++def load_json(path):
++    return json.loads(Path(path).read_text())
++
++
++def write_json(path, value):
++    with Path(path).open("x") as stream:
++        json.dump(value, stream, indent=2, allow_nan=False)
++        stream.write("\n")
++
++
++def write_csv(path, rows):
++    require(bool(rows), "empty CSV must use explicit NOT_RUN receipt")
++    with Path(path).open("x", newline="") as stream:
++        writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator="\n")
++        writer.writeheader()
++        writer.writerows(rows)
++
++
++def verify_inputs(input_dir, freeze):
++    input_dir = Path(input_dir)
++    manifest_path = input_dir / "input_manifest.json"
++    require(sha(manifest_path) == freeze["input_manifest_sha256"], "input manifest SHA mismatch")
++    manifest = load_json(manifest_path)
++    required = {"imu.csv", "filter_scans.csv", "raw_timed_scan_index.csv", "raw_timed_points.bin"}
++    require(required.issubset(manifest["input_files"]), "consumed input omitted from manifest")
++    for name, record in manifest["input_files"].items():
++        path = input_dir / name
++        require(path.resolve() == Path(record["path"]).resolve(), "manifest input path mismatch")
++        require(path.stat().st_size == record["bytes"] and sha(path) == record["sha256"],
++                "frozen input SHA mismatch: " + name)
++        require(freeze["input_hashes"].get(name) == record, "input receipt changed: " + name)
++    return manifest
++
++
++def numeric_gate(name, value, limit):
++    accepted = value is not None and np.isfinite(value) and value <= limit
++    return {"gate": name, "value": value, "limit": limit, "pass": bool(accepted)}
++
++
++def mean_gates(diagnostics, cfg):
++    gates = []
++    rank = diagnostics["profile_rank"]
++    gates.append({"gate": "profile_rank", "value": rank, "limit": 5, "pass": rank == 5})
++    lower = diagnostics["sigma_min_lower_bound"]
++    gates.append({"gate": "sigma_min_lower_bound_positive", "value": lower,
++                  "limit": 0, "pass": bool(np.isfinite(lower) and lower > 0)})
++    for value_key, limit_key in [
++        ("condition", "profile_condition_max"),
++        ("robust_condition", "profile_condition_max"),
++        ("gyro_residual_rmse_deg", "gyro_residual_rmse_max_deg"),
++        ("position_residual_rmse_m", "position_residual_rmse_max_m"),
++        ("velocity_residual_rmse_m_s", "velocity_residual_rmse_max_m_s"),
++        ("split_bg_change_rad_s", "split_gyro_bias_change_max_rad_s"),
++        ("split_ba_change_m_s2", "split_accel_bias_change_max_m_s2"),
++        ("split_gravity_angle_deg", "split_gravity_change_max_deg"),
++        ("validation_translation_rmse_m", "validation_position_rmse_max_m"),
++        ("validation_rotation_rmse_deg", "validation_rotation_rmse_max_deg"),
++    ]:
++        gates.append(numeric_gate(value_key, diagnostics[value_key], cfg[limit_key]))
++    gates.append({"gate": "gyro_solver_success", "value": diagnostics["solver_success"],
++                  "limit": True, "pass": bool(diagnostics["solver_success"])})
++    return gates
++
++
++def observation_uncertainty(row, lever_length, lidar_cfg):
++    """Conservative engineering marginal scales, not calibrated pose covariance.
++
++    Do not divide correspondence residual by sqrt(number of points): shared
++    scan, submap and gyro errors are correlated.  The reused fitter separately
++    retains the original worst-residual-block correlation inflation.
++    """
++    # The frozen V2 binary computes these from the separately archived actual
++    # overlap residual, inverse consistency, gyro mismatch/bias sensitivity and
++    # unknown-translation scan sweep. They remain engineering marginal scales.
++    terms = [float(row[key]) for key in ("position_sigma_m", "rotation_sigma_deg")]
++    require(all(np.isfinite(x) and x >= 0 for x in terms), "invalid observation uncertainty evidence")
++    position, angle = terms
++    require(position >= lidar_cfg["pose_position_sigma_m"]
++            and angle >= lidar_cfg["pose_rotation_sigma_deg"], "V2 uncertainty below frozen floor")
++    sr, sp = np.deg2rad(angle), position
++    return float(np.hypot(sp, lever_length * sr)), float(sr)
++
++
++def accepted_rows(rows):
++    """Prediction records remain ledger entries, never pose observations."""
++    return [r for r in rows if r["role"] == "LIDAR_OBSERVATION"
++            and r["true_observation"] == "1" and r["quality_pass"] == "1"]
++
++
++def validate_pose_rows(rows):
++    stamps = np.array([int(r["stamp_ns"]) for r in rows], dtype=np.int64)
++    require(len(stamps) >= 3 and np.all(np.diff(stamps) > 0), "insufficient or unordered real observations")
++    poses = np.array([[float(r["T" + str(i) + str(j)]) for i in range(4) for j in range(4)]
++                      for r in rows]).reshape(-1, 4, 4)
++    for T in poses:
++        require(np.isfinite(T).all() and np.linalg.norm(T[3] - [0, 0, 0, 1]) < 1e-8,
++                "invalid homogeneous pose")
++        R = T[:3, :3]
++        require(np.linalg.norm(R.T @ R - np.eye(3)) < 1e-5 and abs(np.linalg.det(R) - 1) < 1e-5,
++                "invalid pose rotation")
++        T[:3, :3] = Rotation.from_matrix(R).as_matrix()  # Only float-carrier SO3 cleanup.
++    return poses, stamps
++
++
++def validate_ledger(ledger, raw_scans, freeze):
++    expected = [r for r in raw_scans if int(r["scan_end_ns"]) <= freeze["boot_stamp_ns"]]
++    require(len(expected) == 99 and len(ledger) == 99, "must retain all original 99 bootstrap scans")
++    for actual, raw in zip(ledger, expected):
++        require(int(actual["transaction_id"]) == int(raw["transaction_id"])
++                and int(actual["scan_start_ns"]) == int(raw["scan_start_ns"])
++                and int(actual["stamp_ns"]) == int(raw["scan_end_ns"]),
++                "bootstrap ledger index/time mismatch")
++
++
++def evaluate(config_path, freeze_path, odometry_path, admission_path, input_dir, output_dir):
++    started = time.monotonic()
++    config, freeze, admission = map(load_json, (config_path, freeze_path, admission_path))
++    require(sha(config_path) == freeze["config_sha256"], "V2 config changed after freeze")
++    require(freeze["source_sha256"].get(Path(__file__).name) == sha(__file__),
++            "motion evaluator changed after pre-run freeze")
++    for name in ("diagnose_motion.py", "preintegration.py", "prepare_bootstrap.py"):
++        path = (OLD_DIRECTORY / name).resolve()
++        require(freeze["reused_motion_source_sha256"].get(str(path)) == sha(path),
++                "reused numerical dependency changed after freeze: " + name)
++    old = load_json(OLD_CONFIG)
++    require(config["preintegration"] == old["preintegration"], "frozen motion core gates changed")
++    for name in ("pose_position_sigma_m", "pose_rotation_sigma_deg"):
++        require(config["lidar"][name] == old["lidar"][name], "frozen pose uncertainty floor changed")
++    require(admission["status"] == "PASS", "local odometry must PASS before any moving-state fit")
++    require(admission["odometry_sha256"] == sha(odometry_path), "local admission/odometry mismatch")
++    require(admission["total_pair_count"] == 98 and admission["accepted_pair_count"] >= 90
++            and admission["max_consecutive_failures"] <= 2
++            and admission["validation_real_observations"] >= 15,
++            "local admission failed frozen trajectory counts")
++    verify_inputs(input_dir, freeze)
++    with Path(odometry_path).open() as stream:
++        ledger = list(csv.DictReader(stream))
++    with (Path(input_dir) / "raw_timed_scan_index.csv").open() as stream:
++        raw_scans = list(csv.DictReader(stream))
++    validate_ledger(ledger, raw_scans, freeze)
++    require(len(ledger) == 99, "must retain the full 99-scan bootstrap ledger")
++    roles = {"COORDINATE_ANCHOR", "LIDAR_OBSERVATION", "CAUSAL_PREDICTION_ONLY", "REJECTED_STOP", "NOT_RUN"}
++    require(all(r["role"] in roles for r in ledger), "unknown observation provenance")
++    require(len({int(r["transaction_id"]) for r in ledger}) == len(ledger), "duplicate ledger transactions")
++    require(all((r["role"] == "LIDAR_OBSERVATION") ==
++                (r["true_observation"] == "1" and r["quality_pass"] == "1") for r in ledger),
++            "inconsistent true-observation role")
++    train_ledger = [r for r in ledger if freeze["estimation_start_ns"] <= int(r["stamp_ns"])
++                    < freeze["estimation_end_ns"]]
++    require(bool(train_ledger) and len(accepted_rows(train_ledger)) == len(train_ledger),
++            "every 5--8s target must be a real accepted observation")
++    rows = accepted_rows(ledger)
++    require(len(rows) == admission["accepted_pair_count"], "observed-row count differs from admission")
++    lidar_poses, stamps = validate_pose_rows(rows)
++    require(int(stamps[-1]) <= freeze["boot_stamp_ns"], "future bootstrap observation")
++    ext = np.asarray(freeze["T_imu_lidar"], dtype=float)
++    require(ext.shape == (4, 4) and np.isfinite(ext).all()
++            and np.linalg.norm(ext[3] - [0, 0, 0, 1]) < 1e-8
++            and np.linalg.norm(ext[:3, :3].T @ ext[:3, :3] - np.eye(3)) < 1e-8
++            and abs(np.linalg.det(ext[:3, :3]) - 1) < 1e-8, "invalid frozen extrinsic")
++    imu_poses = lidar_poses @ np.linalg.inv(ext)
++    uncertainty = [observation_uncertainty(r, np.linalg.norm(ext[:3, 3]), config["lidar"])
++                   for r in rows]
++    sp, sr = np.asarray(uncertainty).T
++    c = config["preintegration"]
++    with (Path(input_dir) / "imu.csv").open() as stream:
++        all_imu = list(csv.DictReader(stream))
++    train = (stamps >= freeze["estimation_start_ns"]) & (stamps < freeze["estimation_end_ns"])
++    valid = (stamps >= freeze["estimation_end_ns"]) & (stamps <= freeze["boot_stamp_ns"])
++    require(np.count_nonzero(train) >= 3 and np.count_nonzero(valid) >= 15,
++            "not enough real estimation/validation observations")
++    output_dir = Path(output_dir)
++    output_dir.mkdir()  # A started fit cannot silently be overwritten or repeated.
++    write_json(output_dir / "motion_started.json", {
++        "odometry_sha256": sha(odometry_path), "admission_sha256": sha(admission_path),
++        "config_sha256": sha(config_path), "freeze_sha256": sha(freeze_path),
++        "sources": {str(p): sha(p) for p in
++                    (Path(__file__), OLD_DIRECTORY / "diagnose_motion.py",
++                     OLD_DIRECTORY / "preintegration.py", OLD_DIRECTORY / "prepare_bootstrap.py")},
++        "GT_LOADED": False, "NDT_CALLS": 0})
++    ts, imu = stage_imu(all_imu, freeze["estimation_end_ns"])
++    d, x, pre = fit(imu_poses[train], stamps[train], ts, imu, sp[train], sr[train], c)
++    d["rank_interpretation"] = (
++        "V2_ACCEPTED_LIDAR_OBSERVATIONS; numerical rank alone is not physical observability; "
++        "orientation-uncertainty lower bound, independent validation and full coupled covariance required")
++    splits = []
++    for lower, upper in ((5., c["state_split_s"]), (c["state_split_s"], 8.)):
++        start = freeze["first_sensor_stamp_ns"] + int(lower * 1e9)
++        end = freeze["first_sensor_stamp_ns"] + int(upper * 1e9)
++        mask = (stamps >= start) & (stamps < end)
++        require(np.count_nonzero(mask) >= 3, "insufficient real observations in state split")
++        split_stamps, split_imu = stage_imu(all_imu, end)
++        split, _, _ = fit(imu_poses[mask], stamps[mask], split_stamps, split_imu, sp[mask], sr[mask], c)
++        split["rank_interpretation"] = d["rank_interpretation"]
++        split["covariance"] = "NOT_RUN; coupled covariance is not provided by the reused mean fitter"
++        splits.append(split)
++    d["split_diagnostics"] = splits
++    d["split_bg_change_rad_s"] = float(np.linalg.norm(np.asarray(splits[0]["gyro_bias_tentative"])
++                                                    - splits[1]["gyro_bias_tentative"]))
++    d["split_ba_change_m_s2"] = float(np.linalg.norm(np.asarray(splits[0]["accel_bias_tentative"])
++                                                    - splits[1]["accel_bias_tentative"]))
++    a, b = (np.asarray(s["gravity_tentative"]) for s in splits)
++    d["split_gravity_angle_deg"] = float(np.rad2deg(np.arccos(np.clip(
++        a @ b / c["gravity_norm_m_s2"] ** 2, -1., 1.))))
++    initial = imu_poses[train][-1]
++    fit_end = int(stamps[train][-1])
++    vi = x[3 * np.count_nonzero(train) - 3:3 * np.count_nonzero(train)]
++    g, ba, bg = (np.asarray(d[key]) for key in
++                 ("gravity_tentative", "accel_bias_tentative", "gyro_bias_tentative"))
++    val_stamps, val_imu = stage_imu(all_imu, freeze["boot_stamp_ns"])
++    validation = []
++    for T, t in zip(imu_poses[valid], stamps[valid]):
++        DR, dv, dp, Jv, Jp = integrate(val_stamps, val_imu, fit_end, int(t), bg,
++                                      c["maximum_imu_gap_s"], c["maximum_endpoint_hold_s"])
++        dt = (int(t) - fit_end) * 1e-9
++        predicted_p = initial[:3, 3] + vi * dt + .5 * g * dt * dt + initial[:3, :3] @ (dp - Jp @ ba)
++        validation.append({"stamp_ns": int(t), "fit_end_ns": fit_end,
++                           "translation_error_m": float(np.linalg.norm(T[:3, 3] - predicted_p)),
++                           "rotation_error_deg": float(np.rad2deg(np.linalg.norm(
++                               log((initial[:3, :3] @ DR).T @ T[:3, :3])))),
++                           "observation_role": "ACCEPTED_LIDAR", "state_accepted": False})
++    d["validation_translation_rmse_m"] = float(np.sqrt(np.mean([r["translation_error_m"] ** 2 for r in validation])))
++    d["validation_rotation_rmse_deg"] = float(np.sqrt(np.mean([r["rotation_error_deg"] ** 2 for r in validation])))
++    gates = mean_gates(d, c)
++    for i, split in enumerate(splits):
++        gates.append({"gate": "split_" + str(i) + "_solver_success", "value": split["solver_success"],
++                      "limit": True, "pass": bool(split["solver_success"])})
++    all_pass = all(row["pass"] for row in gates)
++    d["mean_observability_validation_status"] = "PASS" if all_pass else "FAIL"
++    d["initialization_status"] = "FULL_COUPLED_COVARIANCE_REQUIRED" if all_pass else "MOVING_INITIALIZATION_NOT_CERTIFIED"
++    d["state_accepted"] = False
++    d["covariance"] = "NOT_RUN; no profile pseudoinverse or synthetic covariance may authorize injection"
++    d["standard_deviation_gates"] = "NOT_RUN until full coupled covariance including lever arm and boot propagation"
++    d["measurement_uncertainty_interpretation"] = (
++        "engineering marginal scales from floors, trimmed residual, closure, bias sensitivity and causal CV residual; "
++        "not calibrated GICP pose covariance; inherited worst-block correlation inflation retained")
++    d["real_estimation_observations"] = int(np.count_nonzero(train))
++    d["real_validation_observations"] = int(np.count_nonzero(valid))
++    d["predicted_ledger_rows_not_used_as_observations"] = sum(r["role"] == "CAUSAL_PREDICTION_ONLY" for r in ledger)
++    d["offline_motion_wall_s"] = time.monotonic() - started
++    d["GT_LOADED"] = False
++    d["NDT_CALLS"] = 0
++    write_json(output_dir / "motion_state_estimate.json", d)
++    write_csv(output_dir / "observability_diagnostics.csv", gates)
++    write_csv(output_dir / "bootstrap_validation.csv", validation)
++    write_csv(output_dir / "imu_preintegration.csv", pre)
++    write_csv(output_dir / "pose_uncertainty.csv", [{
++        "transaction_id": r["transaction_id"], "stamp_ns": r["stamp_ns"],
++        "position_sigma_m": float(p), "rotation_sigma_rad": float(q),
++        "provenance": "V2_ACCEPTED_LIDAR_ENGINEERING_MARGINAL_NOT_CALIBRATED_COVARIANCE"}
++        for r, p, q in zip(rows, sp, sr)])
++    print(json.dumps({"status": d["initialization_status"], "state_accepted": False,
++                      "rank": d["profile_rank"], "condition": d["condition"],
++                      "validation_position_rmse_m": d["validation_translation_rmse_m"],
++                      "validation_rotation_rmse_deg": d["validation_rotation_rmse_deg"]}, allow_nan=False))
++    return d
++
++
++if __name__ == "__main__":
++    parser = argparse.ArgumentParser(description=__doc__)
++    for key in ("config", "freeze", "odometry", "admission-json", "input-dir", "output-dir"):
++        parser.add_argument("--" + key, type=Path, required=True)
++    args = parser.parse_args()
++    evaluate(args.config, args.freeze, args.odometry, args.admission_json, args.input_dir, args.output_dir)
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/execute_v2_once.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/execute_v2_once.py
+new file mode 100644
+index 0000000..7100a75
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/execute_v2_once.py
+@@ -0,0 +1,64 @@
++"""Only supported scientific V2 entry: frozen hashes plus protocol-wide lock."""
++import csv
++import json
++import os
++import pathlib
++import subprocess
++import sys
++import time
++from prepare_v2 import ARCHIVE, HERE, INPUT, OUTPUT, sha, verify_input, write_json
++
++def verified_command():
++    freeze_path = ARCHIVE / "quality_gate_freeze.json"
++    freeze = json.loads(freeze_path.read_text())
++    config_path = ARCHIVE / "bootstrap_v2_config.json"
++    config = json.loads(config_path.read_text())
++    if sha(config_path) != freeze["config_sha256"] or freeze["output_directory"] != str(OUTPUT):
++        raise RuntimeError("changed gates/output after freeze")
++    if config["input_directory"] != str(INPUT) or config["output_directory"] != str(OUTPUT):
++        raise RuntimeError("changed input/output protocol paths")
++    if sha(OUTPUT / "runner_config.json") != freeze["runner_config_sha256"]:
++        raise RuntimeError("runner carrier changed")
++    if sha(freeze["binary"]) != freeze["binary_sha256"]:
++        raise RuntimeError("frozen Release binary changed")
++    for name, expected in freeze["source_sha256"].items():
++        if sha(HERE / name) != expected:
++            raise RuntimeError("frozen V2 source changed: " + name)
++    for path, expected in freeze["reused_motion_source_sha256"].items():
++        if sha(path) != expected:
++            raise RuntimeError("reused motion dependency changed")
++    for path, expected in freeze["compiled_project_source_sha256"].items():
++        if sha(path) != expected:
++            raise RuntimeError("compiled project dependency changed")
++    verify_input(json.loads((INPUT / "input_manifest.json").read_text()), freeze["input_manifest_sha256"])
++    for path, receipt in freeze["input_hashes"].items():
++        if pathlib.Path(path).is_absolute() and sha(path) != receipt["sha256"]:
++            raise RuntimeError("map/calibration/anchor changed")
++    rows = list(csv.DictReader((OUTPUT / "cpp_input_preflight.csv").open()))
++    if len(rows) != 99 or any(r["deskew_finite"] != "PASS" or r["NEW_GICP_CALLS"] != "0" for r in rows):
++        raise RuntimeError("real P7/IMU/deskew preflight missing or failed")
++    if any(int(r["IMU_max_consumed_stamp_ns"]) > int(r["scan_end_ns"]) for r in rows):
++        raise RuntimeError("noncausal preflight")
++    return freeze, config, [freeze["binary"], str(INPUT), str(OUTPUT / "runner_config.json"), str(OUTPUT / "registration")]
++
++def execute():
++    freeze, config, command = verified_command()
++    # Exclusive protocol-wide receipt makes changing a child directory unable
++    # to bypass the one-shot budget. Claim occurs before any real align call.
++    write_json(OUTPUT / "V2_ALIGNMENT_STARTED.json", {
++        "command": command, "freeze_sha256": sha(ARCHIVE / "quality_gate_freeze.json"),
++        "binary_sha256": freeze["binary_sha256"], "input_hashes": "PASS",
++        "environment": config["execution_environment"], "NDT_CALLS": 0, "GT_LOADED": False})
++    environment = dict(os.environ, **config["execution_environment"])
++    started = time.monotonic()
++    with (OUTPUT / "registration_stdout.log").open("x") as out, (OUTPUT / "registration_stderr.log").open("x") as err:
++        completed = subprocess.run(["/usr/bin/time", "-v", "-o", str(OUTPUT / "registration_resource.txt")] + command,
++                                   env=environment, stdout=out, stderr=err, check=False)
++    write_json(OUTPUT / "V2_ALIGNMENT_COMPLETED.json", {
++        "returncode": completed.returncode, "wall_s": time.monotonic()-started,
++        "scientific_repeats_permitted": False, "NDT_CALLS": 0, "GT_LOADED": False})
++    print(json.dumps({"registration_returncode": completed.returncode, "persistent_output": str(OUTPUT)}))
++    return completed.returncode
++
++if __name__ == "__main__":
++    sys.exit(execute())
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/preflight_input.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/preflight_input.py
+new file mode 100644
+index 0000000..a7b7596
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/preflight_input.py
+@@ -0,0 +1,56 @@
++"""Read-only real-input test; no registration, extraction or point reordering."""
++import csv
++import json
++import pathlib
++import sys
++import numpy as np
++from prepare_v2 import INPUT, ARCHIVE, OUTPUT, sha, write_csv
++
++def check():
++    config = json.loads((ARCHIVE / "bootstrap_v2_config.json").read_text())
++    scans = list(csv.DictReader((INPUT / "raw_timed_scan_index.csv").open()))
++    filters = list(csv.DictReader((INPUT / "filter_scans.csv").open()))
++    imu = list(csv.DictReader((INPUT / "imu.csv").open()))
++    times = np.array([int(r["stamp_ns"]) for r in imu], dtype=np.int64)
++    if len(scans) != 2777 or len(imu) != 55957 or np.any(np.diff(times) <= 0):
++        raise RuntimeError("raw frame/IMU contract changed")
++    if len(filters) != len(scans) or any(f["transaction_id"] != s["transaction_id"] or f["stamp_ns"] != s["scan_end_ns"] for f, s in zip(filters, scans)):
++        raise RuntimeError("filter/raw scan alignment mismatch")
++    layout = np.dtype([("x", "<f4"), ("y", "<f4"), ("z", "<f4"), ("offset_ns", "<u4")])
++    if layout.itemsize != 16:
++        raise RuntimeError("packed raw layout mismatch")
++    receipts = []
++    with (INPUT / "raw_timed_points.bin").open("rb") as stream:
++        for scan in scans:
++            if int(scan["scan_end_ns"]) > config["bootstrap_end_ns"]:
++                break
++            start, end = int(scan["scan_start_ns"]), int(scan["scan_end_ns"])
++            stream.seek(int(scan["cloud_byte_offset"]))
++            raw = np.fromfile(stream, dtype=layout, count=int(scan["cloud_point_count"]))
++            if len(raw) != int(scan["cloud_point_count"]) or not all(np.all(np.isfinite(raw[k])) for k in ("x", "y", "z")):
++                raise RuntimeError("invalid or incomplete raw point block")
++            if len(raw) == 0 or int(raw["offset_ns"].max()) > end-start:
++                raise RuntimeError("point timestamp outside scan")
++            first_used = max(start, int(times[0]))
++            right = int(np.searchsorted(times, end, side="right"))
++            left = max(0, int(np.searchsorted(times[:right], first_used, side="right"))-1)
++            observed = times[left:right]
++            if len(observed) < 2 or end-int(observed[-1]) > 10_000_000 or np.max(np.diff(observed)) > 20_000_000:
++                raise RuntimeError("causal scan IMU timing guard")
++            prefix = int(np.count_nonzero(raw["offset_ns"].astype(np.int64)+start < times[0]))
++            if prefix and int(scan["transaction_id"]) != 1:
++                raise RuntimeError("missing IMU outside declared TX1 boundary")
++            receipts.append({"transaction_id": scan["transaction_id"], "scan_start_ns": start, "scan_end_ns": end,
++                "raw_points": len(raw), "packed_point_bytes": layout.itemsize,
++                "unsupported_TX1_prefix_points": prefix, "imu_samples_not_later_than_end": len(observed),
++                "maximum_observed_imu_gap_ns": int(np.diff(observed).max()),
++                "endpoint_hold_ns": end-int(observed[-1]), "point_order": "UNCHANGED", "status": "PASS"})
++    if len(receipts) != 99 or len(filters) != len(scans):
++        raise RuntimeError("incorrect raw bootstrap/filter count")
++    write_csv(ARCHIVE / "real_input_preflight.csv", receipts)
++    write_csv(OUTPUT / "real_input_preflight.csv", receipts)
++    print(json.dumps({"real_input_tests": "PASS", "bootstrap_scans": len(receipts),
++        "TX1_unsupported_prefix_points": receipts[0]["unsupported_TX1_prefix_points"], "GICP_calls": 0, "NDT_calls": 0}))
++
++if __name__ == "__main__":
++    check()
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/prepare_v2.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/prepare_v2.py
+new file mode 100644
+index 0000000..bed13c9
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/prepare_v2.py
+@@ -0,0 +1,90 @@
++"""Bind one V2 run to its persistent output, input bytes and pre-run gates."""
++import csv
++import json
++import os
++import pathlib
++import re
++import sys
++import time
++import numpy as np
++from scipy.spatial.transform import Rotation
++
++HERE = pathlib.Path(__file__).resolve().parent
++sys.path.insert(0, str(HERE.parent / "corridor_moving_init"))
++from prepare_bootstrap import ROOT, INPUT, MAP, CALIB, ANCHOR, sha, write_json, write_csv, verify_input
++ARCHIVE = ROOT / "docs/p9_r7_cross_dataset_nearoptimal/robust_bootstrap_v2"
++OUTPUT = pathlib.Path("/home/jian/livox_ws/dog_loc_paper_ws/.p9_experiment_cache/p9_corridor01_bootstrap_v2")
++OLD = ROOT / "docs/p9_r7_cross_dataset_nearoptimal/moving_initialization"
++
++def prepare(binary):
++    start = time.monotonic()
++    config_path = ARCHIVE / "bootstrap_v2_config.json"
++    config = json.loads(config_path.read_text())
++    environment = json.loads((ARCHIVE / "environment_receipt.json").read_text())
++    if environment["environment"] != "PASS" or pathlib.Path(config["output_directory"]) != OUTPUT:
++        raise RuntimeError("unverified or changed persistent output")
++    if not OUTPUT.is_dir() or list(OUTPUT.iterdir()):
++        raise RuntimeError("one-shot output must exist and be empty before freeze")
++    if os.statvfs(OUTPUT).f_bavail * os.statvfs(OUTPUT).f_frsize < 10 * (1 << 30):
++        raise RuntimeError("persistent free capacity below predeclared 10GiB reserve")
++    previous = json.loads((OLD / "bootstrap_freeze.json").read_text())
++    old_config = json.loads((OLD / "bootstrap_config.json").read_text())
++    for key in ("preintegration", "covariance", "frozen_formal_contract"):
++        if config[key] != old_config[key]:
++            raise RuntimeError("inherited state/formal gate changed: " + key)
++    manifest = json.loads((INPUT / "input_manifest.json").read_text())
++    verify_input(manifest, previous["input_manifest_sha256"])
++    if not manifest["extraction_complete"] or manifest["protocol"] != config["input_protocol"]:
++        raise RuntimeError("wrong raw protocol")
++    for path in (MAP, CALIB, ANCHOR):
++        if sha(path) != previous["input_hashes"][str(path)]["sha256"]:
++            raise RuntimeError("map/calibration/anchor changed")
++    scans = list(csv.DictReader((INPUT / "raw_timed_scan_index.csv").open()))
++    first = int(scans[0]["scan_start_ns"])
++    end = max(int(r["scan_end_ns"]) for r in scans if int(r["scan_end_ns"]) <= first + 10_000_000_000)
++    count = sum(int(r["scan_end_ns"]) <= end for r in scans)
++    if (first, end, count) != (config["bootstrap_start_ns"], config["bootstrap_end_ns"], config["bootstrap_scan_count"]):
++        raise RuntimeError("changed first10s scan window")
++    text = ANCHOR.read_text()
++    translation = [float(v) for v in re.search(r"translation:\s*\[(.*?)\]", text).group(1).split(",")]
++    quaternion = [float(v) for v in re.search(r"quaternion_xyzw:\s*\[(.*?)\]", text).group(1).split(",")]
++    anchor = np.eye(4)
++    anchor[:3, :3] = Rotation.from_quat(quaternion).as_matrix()
++    anchor[:3, 3] = translation
++    runner = dict(config)
++    runner["T_imu_lidar"] = previous["T_imu_lidar"]
++    runner["initial_map_T_lidar"] = anchor.tolist()
++    runner_path = OUTPUT / "runner_config.json"
++    freeze = {
++        "protocol": config["protocol"], "config_sha256": sha(config_path),
++        "environment_sha256": sha(ARCHIVE / "environment_receipt.json"),
++        "input_manifest_sha256": sha(INPUT / "input_manifest.json"),
++        "input_hashes": previous["input_hashes"], "RAW_SHA": "PASS",
++        "first_sensor_stamp_ns": first, "boot_stamp_ns": end,
++        "estimation_start_ns": first + 5_000_000_000, "estimation_end_ns": first + 8_000_000_000,
++        "T_imu_lidar": previous["T_imu_lidar"], "initial_map_T_lidar": anchor.tolist(),
++        "output_directory": str(OUTPUT), "binary": str(pathlib.Path(binary).resolve()),
++        "binary_sha256": sha(binary), "source_sha256": {p.name: sha(p) for p in HERE.iterdir() if p.is_file()},
++        "reused_motion_source_sha256": {str(p): sha(p) for p in (
++            HERE.parent / "corridor_moving_init/diagnose_motion.py",
++            HERE.parent / "corridor_moving_init/preintegration.py",
++            HERE.parent / "corridor_moving_init/prepare_bootstrap.py")},
++        "compiled_project_source_sha256": {str(p): sha(p) for p in (
++            list((ROOT / "src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp").glob("*.hpp"))
++            + [ROOT / "src/dog_prior_map_fastlio2_frontend_exp/src/p7_replay_io.cpp"])},
++        "raw_hash_audit_wall_s": time.monotonic() - start,
++        "GT_LOADED": False, "ORACLE263_CALLS": 0, "B12_CALLS": 0, "VISUAL_EXTRACTION": 0,
++        "historical_v1_equivalence": "NOT_CLAIMED", "prior_R7_R4_conclusion": "UNCHANGED"
++    }
++    write_json(runner_path, runner)
++    freeze["runner_config_sha256"] = sha(runner_path)
++    write_json(OUTPUT / "quality_gate_freeze.json", freeze)
++    write_json(ARCHIVE / "quality_gate_freeze.json", freeze)
++    write_csv(ARCHIVE / "formal_frame_ledger.csv", [{
++        "transaction_id": r["transaction_id"], "scan_start_ns": r["scan_start_ns"], "scan_end_ns": r["scan_end_ns"],
++        "raw_points": r["cloud_point_count"], "role": "BOOTSTRAP" if int(r["scan_end_ns"]) <= end else "FORMAL_NOT_RUN",
++        "formal_NDT_run": "NO"} for r in scans])
++    print(json.dumps({"RAW_SHA": "PASS", "bootstrap_scans": count, "quality_gate_freeze_sha256": sha(ARCHIVE / "quality_gate_freeze.json"), "persistent_output": str(OUTPUT)}))
++
++if __name__ == "__main__":
++    prepare(sys.argv[1])
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/test_archive.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/test_archive.py
+new file mode 100644
+index 0000000..ba530e6
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/test_archive.py
+@@ -0,0 +1,34 @@
++"""Post-run audit fixtures; no input extraction, GICP or NDT."""
++import pathlib
++import tempfile
++import unittest
++from archive_v2 import check_csv, normalize_snapshot
++
++
++class ArchiveTests(unittest.TestCase):
++    def fixture(self, content):
++        root = tempfile.TemporaryDirectory(prefix="p9_v2_archive_test.")
++        self.addCleanup(root.cleanup)
++        path = pathlib.Path(root.name) / "data.csv"
++        path.write_text(content)
++        return path
++
++    def test_missing_metrics_are_not_fake_zero(self):
++        check_csv(self.fixture("status,value\nNOT_RUN,\nPASS,0.2\n"))
++
++    def test_reject_ragged_csv(self):
++        with self.assertRaises(RuntimeError):
++            check_csv(self.fixture("a,b\n1\n"))
++
++    def test_reject_nonfinite_and_duplicate_columns(self):
++        for content in ("a,b\nPASS,nan\n", "a,b\nPASS,inf\n", "a,a\n1,2\n"):
++            with self.subTest(content=content), self.assertRaises(RuntimeError):
++                check_csv(self.fixture(content))
++
++    def test_generated_snapshot_hygiene_keeps_values_and_final_newline(self):
++        self.assertEqual(normalize_snapshot("# comment  \nvalue=x\n\n"), "# comment\nvalue=x\n")
++        self.assertEqual(normalize_snapshot(normalize_snapshot("v=x\n\n")), "v=x\n")
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/test_motion.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/test_motion.py
+new file mode 100644
+index 0000000..55fc818
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/test_motion.py
+@@ -0,0 +1,78 @@
++import copy
++import json
++import unittest
++
++import numpy as np
++
++from evaluate_motion import (OLD_CONFIG, accepted_rows, mean_gates,
++                             observation_uncertainty, validate_ledger, validate_pose_rows)
++
++
++class MotionAdapterTests(unittest.TestCase):
++    def setUp(self):
++        self.cfg = json.loads(OLD_CONFIG.read_text())
++
++    def test_prediction_is_never_a_pose_observation(self):
++        rows = [{"role": role, "true_observation": str(int(role == "LIDAR_OBSERVATION")),
++                 "quality_pass": str(int(role == "LIDAR_OBSERVATION"))} for role in
++                ("COORDINATE_ANCHOR", "LIDAR_OBSERVATION", "CAUSAL_PREDICTION_ONLY", "LIDAR_OBSERVATION")]
++        self.assertEqual(len(accepted_rows(rows)), 2)
++
++    def test_uncertainty_has_floors_and_lever_arm(self):
++        row = {"position_sigma_m": ".05", "rotation_sigma_deg": ".5"}
++        sp, sr = observation_uncertainty(row, 2., self.cfg["lidar"])
++        self.assertAlmostEqual(sr, np.deg2rad(.5))
++        self.assertAlmostEqual(sp, np.hypot(.05, 2 * sr))
++        row["position_sigma_m"] = ".4"
++        row["rotation_sigma_deg"] = "2"
++        sp, sr = observation_uncertainty(row, 2., self.cfg["lidar"])
++        self.assertAlmostEqual(sr, np.deg2rad(2.))
++        self.assertGreaterEqual(sp, .4)
++        row["position_sigma_m"] = "0"
++        with self.assertRaisesRegex(RuntimeError, "floor"):
++            observation_uncertainty(row, 2., self.cfg["lidar"])
++
++    def test_missing_robust_condition_rejects_not_finite_certainty(self):
++        d = {"profile_rank": 5, "sigma_min_lower_bound": .001,
++             "condition": 25., "robust_condition": 30., "solver_success": True,
++             "gyro_residual_rmse_deg": 1., "position_residual_rmse_m": .1,
++             "velocity_residual_rmse_m_s": .3, "split_bg_change_rad_s": .02,
++             "split_ba_change_m_s2": .5, "split_gravity_angle_deg": 5.,
++             "validation_translation_rmse_m": .1, "validation_rotation_rmse_deg": 2.}
++        self.assertTrue(all(g["pass"] for g in mean_gates(d, self.cfg["preintegration"])))
++        bad = copy.deepcopy(d)
++        bad["robust_condition"] = None
++        self.assertFalse(all(g["pass"] for g in mean_gates(bad, self.cfg["preintegration"])))
++        bad = copy.deepcopy(d)
++        bad["sigma_min_lower_bound"] = 0.
++        self.assertFalse(all(g["pass"] for g in mean_gates(bad, self.cfg["preintegration"])))
++        bad = copy.deepcopy(d)
++        bad["validation_translation_rmse_m"] = .100001
++        self.assertFalse(all(g["pass"] for g in mean_gates(bad, self.cfg["preintegration"])))
++
++    def test_nonrigid_observations_cannot_be_orthogonalized_into_acceptance(self):
++        rows = []
++        for t in (1, 2, 3):
++            row = {"stamp_ns": str(t)}
++            row.update({"T" + str(i) + str(j): str(float(i == j))
++                        for i in range(4) for j in range(4)})
++            rows.append(row)
++        validate_pose_rows(rows)
++        rows[0]["T00"] = "2"
++        with self.assertRaisesRegex(RuntimeError, "rotation"):
++            validate_pose_rows(rows)
++
++    def test_ledger_must_reproduce_raw_indices_and_times(self):
++        raw = [{"transaction_id": str(i), "scan_start_ns": str(10 * i),
++                "scan_end_ns": str(10 * i + 9)} for i in range(1, 100)]
++        ledger = [{"transaction_id": r["transaction_id"], "scan_start_ns": r["scan_start_ns"],
++                   "stamp_ns": r["scan_end_ns"]} for r in raw]
++        freeze = {"boot_stamp_ns": 999}
++        validate_ledger(ledger, raw, freeze)
++        ledger[5]["stamp_ns"] = "71"
++        with self.assertRaisesRegex(RuntimeError, "index/time"):
++            validate_ledger(ledger, raw, freeze)
++
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/test_one_shot.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/test_one_shot.py
+new file mode 100644
+index 0000000..011133d
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/test_one_shot.py
+@@ -0,0 +1,36 @@
++"""Synthetic subprocess fixtures: never execute a real alignment."""
++import contextlib
++import io
++import json
++import pathlib
++import subprocess
++import tempfile
++import unittest
++from unittest.mock import patch
++import execute_v2_once as entry
++
++class OneShotTests(unittest.TestCase):
++    def check_repeat(self, returncode):
++        with tempfile.TemporaryDirectory(prefix="p9_v2_guard_test.") as scratch:
++            root = pathlib.Path(scratch)
++            (root / "quality_gate_freeze.json").write_text("{}\n")
++            verified = ({"binary_sha256": "SYNTHETIC"}, {"execution_environment": {}}, ["NEVER_EXECUTED_FAKE_ALIGN"])
++            with patch.object(entry, "OUTPUT", root), patch.object(entry, "ARCHIVE", root), \
++                 patch.object(entry, "verified_command", return_value=verified), \
++                 patch.object(entry.subprocess, "run", return_value=subprocess.CompletedProcess([], returncode)) as child, \
++                 contextlib.redirect_stdout(io.StringIO()):
++                self.assertEqual(entry.execute(), returncode)
++                with self.assertRaises(FileExistsError):
++                    entry.execute()
++                self.assertEqual(child.call_count, 1)
++            receipt = json.loads((root / "V2_ALIGNMENT_COMPLETED.json").read_text())
++            self.assertFalse(receipt["scientific_repeats_permitted"])
++
++    def test_success_cannot_repeat_by_changing_child_path(self):
++        self.check_repeat(0)
++
++    def test_crash_also_consumes_one_shot_no_silent_retry(self):
++        self.check_repeat(1)
++
++if __name__ == "__main__":
++    unittest.main()
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/test_prepare.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/test_prepare.py
+new file mode 100644
+index 0000000..1337636
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_robust_bootstrap_v2/test_prepare.py
+@@ -0,0 +1,28 @@
++"""Regress exact epoch carriers and inherited pre-run contracts."""
++import json
++import unittest
++from prepare_v2 import ARCHIVE, OLD
++
++class PreparationTests(unittest.TestCase):
++    def test_exact_integer_ns_not_floating_epoch(self):
++        c = json.loads((ARCHIVE / "bootstrap_v2_config.json").read_text())
++        self.assertIs(type(c["bootstrap_start_ns"]), int)
++        self.assertIs(type(c["bootstrap_end_ns"]), int)
++        self.assertEqual(c["bootstrap_start_ns"], 1517157219088119030)
++        self.assertEqual(c["bootstrap_end_ns"], 1517157229072630478)
++
++    def test_inherited_quality_gates_unchanged(self):
++        old = json.loads((OLD / "bootstrap_config.json").read_text())
++        new = json.loads((ARCHIVE / "bootstrap_v2_config.json").read_text())
++        for key in ("preintegration", "covariance", "frozen_formal_contract"):
++            self.assertEqual(old[key], new[key])
++
++    def test_single_scheme_conditional_support_is_fixed(self):
++        c = json.loads((ARCHIVE / "bootstrap_v2_config.json").read_text())
++        self.assertEqual(c["submap_frames"], 3)
++        self.assertTrue(c["support_definition"]["no_result_dependent_recrop"])
++        self.assertEqual(c["trajectory_gate"]["minimum_accepted_observations"], 90)
++        self.assertEqual(c["trajectory_gate"]["maximum_consecutive_failures"], 2)
++
++if __name__ == "__main__":
++    unittest.main()

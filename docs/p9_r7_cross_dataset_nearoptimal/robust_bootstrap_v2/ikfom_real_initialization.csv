@@ -1,0 +1,2 @@
+status,stage,reason
+NOT_RUN,initializeMoving real state injection,BOOTSTRAP_LOCAL_ODOMETRY_NOT_CERTIFIED

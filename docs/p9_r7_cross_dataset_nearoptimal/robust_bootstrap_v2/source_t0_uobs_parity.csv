@@ -1,0 +1,2 @@
+status,stage,reason
+NOT_RUN,formal SAME_OBJECTIVE source/T0/U_obs/W2,BOOTSTRAP_LOCAL_ODOMETRY_NOT_CERTIFIED

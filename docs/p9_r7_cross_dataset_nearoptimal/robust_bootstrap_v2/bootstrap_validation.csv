@@ -1,0 +1,2 @@
+status,stage,reason
+NOT_RUN,8-to-10s independent validation,BOOTSTRAP_LOCAL_ODOMETRY_NOT_CERTIFIED

@@ -1,0 +1,50 @@
+{
+  "task": "PAPER-P9-R7-R5-ENVIRONMENT-RECOVERY",
+  "environment": "PASS",
+  "original_output": {
+    "mount": "/media/jian/HIKVISION",
+    "device": "/dev/sda2",
+    "filesystem": "fuseblk/exfat",
+    "mount_options": "ro,nosuid,nodev,relatime,user_id=0,group_id=0,default_permissions,allow_other,blksize=4096",
+    "space_issue": false,
+    "path_missing": false,
+    "writable": false
+  },
+  "alternative_output": {
+    "absolute_path": "/home/jian/livox_ws/dog_loc_paper_ws/.p9_experiment_cache/p9_corridor01_bootstrap_v2",
+    "device": "/dev/nvme0n1p2",
+    "filesystem": "ext4",
+    "mount_options": "rw,nosuid,nodev,relatime,errors=remount-ro",
+    "available_capacity_bytes": 65310380032,
+    "minimum_capacity_bytes": 10737418240,
+    "persistent": true,
+    "sandbox_authorization": "within explicitly writable workspace root",
+    "write_readback_delete_test": "PASS",
+    "probe_sha256": "34cb6f72d9291c9a3ee8e14dac3f84fc621bb1512a3a589e3b1bd7956d16f599",
+    "probe_deleted": true,
+    "git_payload": false
+  },
+  "raw_input": {
+    "directory": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1",
+    "manifest_sha256": "591bfe3fd619966f40e4e2af6b9151937732483f0123c70eb34aa1031742991a",
+    "RAW_SHA": "PASS",
+    "manifest_files_verified": 10,
+    "input_files_modified": false,
+    "extraction_repeated": false,
+    "scans": 2777,
+    "imu_samples": 55957,
+    "timed_points": 79932911,
+    "map_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+    "calibration_sha256": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d",
+    "anchor_sha256": "d3e6f560895cb4f6a9efb7058bcff8a13313783e799d82c828e51adcd4bafd1e"
+  },
+  "remote_head": {
+    "sha": "368b78f8cd2fa124f03103c3807b702197eac7ee",
+    "verification": "provided by research controller; not newly network-verified"
+  },
+  "git": {
+    "branch": "research/p9-r4-heldout-visual-evidence",
+    "start_sha": "368b78f8cd2fa124f03103c3807b702197eac7ee",
+    "worktree": "/tmp/dog_loc_paper_r4_ws.Fq21k2"
+  }
+}

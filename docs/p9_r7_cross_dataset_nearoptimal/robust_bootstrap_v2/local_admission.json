@@ -1,0 +1,24 @@
+{
+  "status": "FAIL",
+  "gates": {
+    "at_least_90_of_98": false,
+    "at_most_2_consecutive_failed": false,
+    "all_5_to_8s_real_observed": false,
+    "at_least_15_validation_observed": false,
+    "no_runtime_input_guard_failure": true
+  },
+  "total_pair_count": 98,
+  "attempted_pairs": 3,
+  "accepted_pair_count": 0,
+  "max_consecutive_failures": 3,
+  "estimation_real_observations": 0,
+  "estimation_targets": 30,
+  "validation_real_observations": 0,
+  "validation_targets": 20,
+  "odometry_sha256": "32c8a9499eab30cd4d83f617937290c0a75203f0187ee05880583ff5d0ad005d",
+  "config_sha256": "2eceafc510ce8ed7bd9d4888eb1352e128520f9709afbad69fe85827574670e1",
+  "prediction_only_frames": 2,
+  "not_run_frames": 95,
+  "NDT_CALLS": 0,
+  "GT_LOADED": false
+}

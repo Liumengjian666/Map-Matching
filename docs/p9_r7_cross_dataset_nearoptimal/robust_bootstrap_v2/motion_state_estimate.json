@@ -1,0 +1,10 @@
+{
+  "status": "NOT_RUN",
+  "reason": "local odometry admission FAIL before state fitting",
+  "state_accepted": false,
+  "velocity": null,
+  "gyro_bias": null,
+  "accel_bias": null,
+  "gravity": null,
+  "covariance": null
+}

@@ -1,0 +1,168 @@
+{
+  "protocol": "P9_CORRIDOR01_BOOTSTRAP_V2",
+  "config_sha256": "2eceafc510ce8ed7bd9d4888eb1352e128520f9709afbad69fe85827574670e1",
+  "environment_sha256": "305a4c394e5c8fb5c74f872ebe29362532fd19c9eb9b59edaac4e64b9981d417",
+  "input_manifest_sha256": "591bfe3fd619966f40e4e2af6b9151937732483f0123c70eb34aa1031742991a",
+  "input_hashes": {
+    "EXTRACTION_COMPLETE": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/EXTRACTION_COMPLETE",
+      "sha256": "59ea2d60cfdbfa4ace9a519265f9fa1d5c30f15e9b65b5fee3faa39533740f9f",
+      "bytes": 42
+    },
+    "EXTRACTION_STARTED": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/EXTRACTION_STARTED",
+      "sha256": "f56ebd2fd3201e55dddf8046d1a42068ba0acf4b0081f2c3aab4b1de8dc36a7e",
+      "bytes": 29
+    },
+    "conversion_diagnostics.csv": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/conversion_diagnostics.csv",
+      "sha256": "eaafc2a290346ca9ca854c3ec65d95f9872bc31060fb80afb9224c35b1577230",
+      "bytes": 457553
+    },
+    "filter_scans.csv": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/filter_scans.csv",
+      "sha256": "41d0b2040a5de8a8bd428c382a7b6dc18fabcaa8d3e7d2cc331018e0585edf1d",
+      "bytes": 68342
+    },
+    "imu.csv": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/imu.csv",
+      "sha256": "21b94c0cb0ade931db1586799aa022dff2ba20b9ab76dc1e29eac0e948e132e6",
+      "bytes": 7984120
+    },
+    "imu_timing_audit_full.csv": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/imu_timing_audit_full.csv",
+      "sha256": "e145c9033b60a9bd88aeb384c4de54775d3f0d08242007bf6030cad68da307fa",
+      "bytes": 6200240
+    },
+    "raw_imu_index.csv": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/raw_imu_index.csv",
+      "sha256": "d909ded2dd7b252dba21fc48d3a5f1f913d5b5b5d3e9d47a78d67324c9dcb575",
+      "bytes": 3982823
+    },
+    "raw_imu_serialized.bin": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/raw_imu_serialized.bin",
+      "sha256": "959031726df5b960c5b00386737e5c4ef7e550be73621c1ddd5fc748a8df16a8",
+      "bytes": 17738369
+    },
+    "raw_timed_points.bin": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/raw_timed_points.bin",
+      "sha256": "ce8beed2303ea3de8715932c4d0644d6fe28317014e2383f65942d69bc5ace32",
+      "bytes": 1278926576
+    },
+    "raw_timed_scan_index.csv": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/raw_timed_scan_index.csv",
+      "sha256": "d49b7b81bb1f5c17eb2da9e5ad665dfb2b3b4813280de4e342eb3158d13c932a",
+      "bytes": 168725
+    },
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/calibration/corridor01_extrinsics.yaml": {
+      "sha256": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d"
+    },
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd": {
+      "sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f"
+    },
+    "/home/jian/livox_ws/superloc_adapter_ws/config/corridor01_init.yaml": {
+      "sha256": "d3e6f560895cb4f6a9efb7058bcff8a13313783e799d82c828e51adcd4bafd1e"
+    }
+  },
+  "RAW_SHA": "PASS",
+  "first_sensor_stamp_ns": 1517157219088119030,
+  "boot_stamp_ns": 1517157229072630478,
+  "estimation_start_ns": 1517157224088119030,
+  "estimation_end_ns": 1517157227088119030,
+  "T_imu_lidar": [
+    [
+      0.9999918597233475,
+      -0.0005161381080032746,
+      0.004001760674214531,
+      0.08
+    ],
+    [
+      0.0005196241852023933,
+      0.9999994864189835,
+      -0.0008701450879252283,
+      0.029
+    ],
+    [
+      -0.004001309503946919,
+      0.0008722174163330545,
+      0.9999916143443562,
+      0.03
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "initial_map_T_lidar": [
+    [
+      -0.1436434477388434,
+      0.987183952216491,
+      -0.06952988140308239,
+      1.71798264980316
+    ],
+    [
+      0.9890023141196963,
+      0.14069669418261777,
+      -0.04559454914755043,
+      -7.17616987228394
+    ],
+    [
+      -0.03522758276668471,
+      -0.07531457184576881,
+      -0.9965373714417863,
+      0.556529641151428
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "output_directory": "/home/jian/livox_ws/dog_loc_paper_ws/.p9_experiment_cache/p9_corridor01_bootstrap_v2",
+  "binary": "/tmp/p9_corridor_robust_bootstrap_v2_build/p9_bootstrap_v2",
+  "binary_sha256": "db0b3e1fb35d12aa9ecc2f3c1aa0effb8765e214395dec77919ec90d6fa3416a",
+  "source_sha256": {
+    "test_one_shot.py": "91201706782128a91330e0690451c13ea10f51503fc96f3d6e5f8fafe95385f5",
+    "analyze_local.py": "933d15a9e6ad3338ef2b12587173034ef18ffe6307f796b8b58eb51e4245b69a",
+    "test_motion.py": "ca1058b251a6ac227a750b66d1f2c77063112f52d308c716251bd5b4f9ba1dad",
+    "execute_v2_once.py": "b703d06f56cb6e14fd6bef3956975473b80a6353e1c4477bca57519422635e2d",
+    "bootstrap_v2.cpp": "1bde7d9a5bc34ff76027c46cc7066f5fc1c34cd2b5d31c3ef06cc32533bf04a7",
+    "evaluate_motion.py": "bd48e52f0b044ce0f26fc91d541b4247b6b50d0758ded177c6332430be0d034b",
+    "CMakeLists.txt": "a9d9251346dd8d239d7319f7dbe26444e5b3eb2733664a941816f97832ae1ca6",
+    "prepare_v2.py": "2981b4b3cd98a8d48ee9b9cf9d347da421a9a4030568459c73995e08f40b237a",
+    "test_prepare.py": "19655de3f06b93b1fae694880583c81b96e56905be93ffd2eae180a0e63f2659",
+    "preflight_input.py": "bbd0ac7121658d3806a0c1894c4a7987283b106061e31689f5e654dd5a8a13ac"
+  },
+  "reused_motion_source_sha256": {
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/diagnose_motion.py": "9d7bd01ad6f397fc4c7fe30239a858b74f926e7b8a9173c7cd3e17a006917479",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/preintegration.py": "bf3e7713fbd46d7a02c94e4486f52bb790c7c2c2e352e17631f837887da30a36",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/prepare_bootstrap.py": "1471f0031b302bee114bc1d58b8143f25641d1c0dd4a530e3d60151cc06bd682"
+  },
+  "compiled_project_source_sha256": {
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/scan_processor.hpp": "f5c3c1506e16eed86d44372d738bbb935ee46bad96cff89f3def20cdb0aa671c",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/fastlio2_frontend.hpp": "8396e8bbc457dbb111fe6761c89b75836c6d7caf17963b5ef513b8f803bda81c",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/registration_geometry.hpp": "5829a8b590d322e50a7a798c4aad9006f11210dfc28459f2cc006670d995dafd",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/frontend_types.hpp": "773bb805cc6fbad61e72376ef67f281fe3cfaf52071799502720dde41136275f",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/measurement_provenance.hpp": "c7b59d1bf7b9647391f563d54bb0f24be1f01d17f39e34941fd8e82331f4b4e6",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/reliability_metrics.hpp": "225a54f3d7378b39ad8d5161b72daa7770b0fda705f8bc8b2c20acd715bc3a84",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/dual_reliability.hpp": "1c97765fd1ad605ac8847c1fee94c6a87c2d3ba561a675db1a865a59373bc42c",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/current_frame_ndt.hpp": "c211e6c9ba747ab8ecf7a4ff2837bc6850aadbb69833ef68445a716833c1b431",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/lidar_deskew_geometry.hpp": "d22f04ce0f3423219a3364695d0923c63006cc1e447053a17a7e45289e98be3a",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/p7_replay_io.hpp": "76bd45d4013821c039164c0fb8ca119f62ea1248a2e0cbfe60a0a5873bff71ba",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/ikfom_pose_api_spike.hpp": "32ce9336690dd114cfd5173ac2228cff438953726c3785c595ebef59252f6b12",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/measurement_noise_model.hpp": "6b7eb35d3f689fb24ddf8b2491f9b5c5e28aef1f974341faa22592799332f6d0",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/frontend_runtime.hpp": "a06d46d51aa20312c6bbe25fb4bb24045139190e4d6786f89cd2b14d3ff60cee",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/src/p7_replay_io.cpp": "4727243167d56958158ff69126d94484f30fb7cf7b2796be21d50eaea8a7c21e"
+  },
+  "raw_hash_audit_wall_s": 1.1154702409403399,
+  "GT_LOADED": false,
+  "ORACLE263_CALLS": 0,
+  "B12_CALLS": 0,
+  "VISUAL_EXTRACTION": 0,
+  "historical_v1_equivalence": "NOT_CLAIMED",
+  "prior_R7_R4_conclusion": "UNCHANGED",
+  "runner_config_sha256": "9eb3b501ded9503b8a22974e8da9ca861279cae5d4162706efb055cc0319301f"
+}

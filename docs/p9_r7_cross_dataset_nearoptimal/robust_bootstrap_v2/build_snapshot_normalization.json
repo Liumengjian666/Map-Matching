@@ -1,0 +1,16 @@
+[
+  {
+    "source": "/tmp/p9_corridor_robust_bootstrap_v2_build/CMakeCache.txt",
+    "source_sha256": "6031f66ee901f5a9bd25a3fef4f49df42c84e2d470b2c3e2728f4632ae55dcad",
+    "archive": "docs/p9_r7_cross_dataset_nearoptimal/robust_bootstrap_v2/v2_CMakeCache.txt",
+    "archive_sha256": "6c153d6b6e468da28de245e77af6cf79f7737f4dbae1e70a03f384dcd338a899",
+    "normalization": "rstrip each line; strip final blank lines; final single newline"
+  },
+  {
+    "source": "/tmp/p9_corridor_robust_bootstrap_v2_build/CTestTestfile.cmake",
+    "source_sha256": "d25d1cf58a86b07779571b3bc274199ccfa1b46becb4b1ce996fd92c63fda902",
+    "archive": "docs/p9_r7_cross_dataset_nearoptimal/robust_bootstrap_v2/v2_CTestTestfile.cmake",
+    "archive_sha256": "3eddd31244f3f630f16fe8566452fc0aa959ab6bfb0d1c56694c47e110b05f25",
+    "normalization": "rstrip each line; strip final blank lines; final single newline"
+  }
+]

@@ -1,0 +1,5 @@
+transaction_id,status,forward_converged,reverse_converged,composition_translation_m,composition_rotation_deg,imu_rotation_error_deg,independent_reverse_registration,composition_pass,imu_pass,forward_transform_valid,reverse_transform_valid,forward_error,reverse_error
+1,COORDINATE_ANCHOR,,,,,,,,,,,,
+2,CAUSAL_PREDICTION_ONLY,1,1,0.0093501000538147583,0.17042866772522883,0.33147406282446934,1,1,1,1,1,,
+3,CAUSAL_PREDICTION_ONLY,1,1,0.011759717912604753,0.30549113759231572,0.26859641668593148,1,1,1,1,1,,
+4,REJECTED_STOP,1,1,0.0088576490544459308,0.42898386900154345,0.814909418873909,1,1,1,1,1,,

@@ -1,0 +1,4 @@
+V2_BOOTSTRAP_ONLY tx=1 role=COORDINATE_ANCHOR forward_overlap=nan reverse_overlap=nan quality=1
+V2_BOOTSTRAP_ONLY tx=2 role=CAUSAL_PREDICTION_ONLY forward_overlap=0.382217 reverse_overlap=0.962064 quality=0
+V2_BOOTSTRAP_ONLY tx=3 role=CAUSAL_PREDICTION_ONLY forward_overlap=0.359954 reverse_overlap=0.91528 quality=0
+V2_BOOTSTRAP_ONLY tx=4 role=REJECTED_STOP forward_overlap=0.335014 reverse_overlap=0.906832 quality=0

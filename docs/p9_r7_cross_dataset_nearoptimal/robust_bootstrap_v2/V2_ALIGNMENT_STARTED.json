@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/tmp/p9_corridor_robust_bootstrap_v2_build/p9_bootstrap_v2",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1",
+    "/home/jian/livox_ws/dog_loc_paper_ws/.p9_experiment_cache/p9_corridor01_bootstrap_v2/runner_config.json",
+    "/home/jian/livox_ws/dog_loc_paper_ws/.p9_experiment_cache/p9_corridor01_bootstrap_v2/registration"
+  ],
+  "freeze_sha256": "496cf243042e2914839f9788fcbed4f045d72a22eb77cdd6c681bdeb8da732be",
+  "binary_sha256": "db0b3e1fb35d12aa9ecc2f3c1aa0effb8765e214395dec77919ec90d6fa3416a",
+  "input_hashes": "PASS",
+  "environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "LD_LIBRARY_PATH": "/lib/x86_64-linux-gnu"
+  },
+  "NDT_CALLS": 0,
+  "GT_LOADED": false
+}

@@ -1,0 +1,21 @@
+{
+  "protocol": "P9_CORRIDOR01_BOOTSTRAP_V2",
+  "bootstrap_scans": 99,
+  "attempted_pairs": 3,
+  "true_observation_pairs": 0,
+  "maximum_consecutive_failures": 3,
+  "forward_GICP_calls": 3,
+  "reverse_GICP_calls": 3,
+  "minimum_90_observations_gate": false,
+  "maximum_2_consecutive_failures_gate": false,
+  "stopped": true,
+  "wall_s": 0.246438139,
+  "raw_read_s": 0.003548388,
+  "rotational_deskew_s": 0.021826788999999999,
+  "submap_support_s": 0.0025516739999999999,
+  "GICP_s": 0.111178635,
+  "quality_s": 0.015173158999999999,
+  "peak_RSS_KiB": 22168,
+  "NDT_CALLS": 0,
+  "GT_LOADED": false
+}

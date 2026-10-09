@@ -1,0 +1,119 @@
+{
+  "protocol": "P9_CORRIDOR01_BOOTSTRAP_V2",
+  "input_protocol": "P9_CORRIDOR01_RAW_SCANEND_V1",
+  "input_directory": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1",
+  "bootstrap_start_ns": 1517157219088119030,
+  "bootstrap_end_ns": 1517157229072630478,
+  "bootstrap_scan_count": 99,
+  "output_directory": "/home/jian/livox_ws/dog_loc_paper_ws/.p9_experiment_cache/p9_corridor01_bootstrap_v2",
+  "submap_frames": 3,
+  "execution_environment": {"OMP_NUM_THREADS": "1", "OPENBLAS_NUM_THREADS": "1", "LD_LIBRARY_PATH": "/lib/x86_64-linux-gnu"},
+  "lidar": {
+    "voxel_m": 0.25,
+    "min_range_m": 0.5,
+    "max_range_m": 80,
+    "max_correspondence_m": 2.5,
+    "max_iterations": 40,
+    "transformation_epsilon": 0.000001,
+    "overlap_radius_m": 0.5,
+    "min_overlap": 0.55,
+    "trim_fraction": 0.7,
+    "max_trimmed_rmse_m": 0.25,
+    "max_inverse_translation_m": 0.1,
+    "max_inverse_rotation_deg": 1,
+    "max_step_translation_m": 3,
+    "max_step_rotation_deg": 45,
+    "max_imu_rotation_error_deg": 5,
+    "pose_position_sigma_m": 0.05,
+    "pose_rotation_sigma_deg": 0.5
+  },
+  "timing": {
+    "max_gap_s": 0.02,
+    "endpoint_hold_s": 0.01,
+    "provisional_bg_norm_bound_rad_s": 0.05
+  },
+  "support_definition": {
+    "method": "ALL voxelized accepted-submap points with nearest distance <=2.5m to ALL current voxel points transformed by ORIGINAL causal IMU/CV guess",
+    "computed_once": "before forward AND reverse registration",
+    "reverse_initial_guess": "inverse ORIGINAL prediction; NOT inverse forward result",
+    "no_result_dependent_recrop": true,
+    "current_population": "ALL range-filtered and voxelized current points",
+    "target_population": "immutable prefit support; conditional overlap, NOT fraction of full submap",
+    "trim_rounding": "ceil(0.70 * count of finite nearest-neighbor distances <=0.50m)",
+    "empty_or_insufficient_support": "FAIL; blank/null metrics, never zero as quality",
+    "minimum_registration_points": 20,
+    "allpoint_fitness": "record both cropped target and full local-submap untruncated PCL scores; neither is sole admission"
+  },
+  "causal_policy": {
+    "gyro_bias_used_rad_s": [
+      0,
+      0,
+      0
+    ],
+    "gyro_bias_semantics": "provisional value, NOT estimated;0.05rad/s assumed norm sensitivity scenario, NOT guaranteed physical bound",
+    "rotation_deskew": "full T_imu_lidar^-1 * deltaT_IMU_end_point * T_imu_lidar; includes fixed lever arm",
+    "translation": "first TWO scans unknown; thereafter CV ONLY from last two accepted IMU-origin poses; never current scan registration result",
+    "TX1_missing_imu": "omit only points earlier than first observed IMU; retain raw/used/omitted counts; no backfill",
+    "prediction_rows": "NOT LiDAR observations; never enter submap, CV history or fitting"
+  },
+  "trajectory_gate": {
+    "registration_opportunities": 98,
+    "minimum_accepted_observations": 90,
+    "maximum_consecutive_failures": 2,
+    "on_third_failure": "STOP registration, remaining99-ledger rows NOT_RUN",
+    "estimation_interval": "[first+5s, first+8s); ALL target scans in interval must be accepted real observations",
+    "validation_interval": "[first+8s, boot_end]; minimum15 accepted real observations",
+    "minimum_validation_observations": 15
+  },
+  "preintegration": {
+    "method": "piecewise midpoint SO3 integration, fixed calibrated extrinsic, no gravity/bias prior in rank test",
+    "imu_accel_noise": 0.08,
+    "imu_gyro_noise": 0.004,
+    "noise_units": "discrete per-sample standard deviations (m/s^2 and rad/s), conservative pose uncertainty dominates; not continuous noise densities",
+    "maximum_imu_gap_s": 0.02,
+    "maximum_endpoint_hold_s": 0.01,
+    "gravity_norm_m_s2": 9.809,
+    "svd_relative_rank_tolerance": 0.000001,
+    "profile_condition_max": 10000,
+    "profile_condition_definition": "singular-value condition of velocity-eliminated residual-whitened profile, fixed scales: gravity tangent 9.809*radians(5), ba 0.50; normal equation condition is its square",
+    "robust_observability": "sigma_min lower bound max(0,sigma_min(profile)-Frobenius bound on profile perturbation from 3-sigma rotation uncertainty); require positive lower bound and robust condition <=10000",
+    "covariance_policy": "diagnostic profile with motion uncertainty and worst-correlation inflation; state acceptance additionally requires full coupled bg/v/ba/g covariance, lever-arm Jacobian and propagation to boot; no priors supplying rank",
+    "gyro_bias_std_max_rad_s": 0.02,
+    "accel_bias_std_max_m_s2": 0.5,
+    "gravity_direction_std_max_deg": 5,
+    "velocity_std_max_m_s": 0.3,
+    "gyro_residual_rmse_max_deg": 1,
+    "position_residual_rmse_max_m": 0.1,
+    "velocity_residual_rmse_max_m_s": 0.3,
+    "split_gyro_bias_change_max_rad_s": 0.02,
+    "split_accel_bias_change_max_m_s2": 0.5,
+    "split_gravity_change_max_deg": 5,
+    "state_split_s": 6.5,
+    "validation_position_rmse_max_m": 0.1,
+    "validation_rotation_rmse_max_deg": 2
+  },
+  "covariance": {
+    "order": "position map, rotation right/body, velocity map, bg IMU, ba IMU, gravity IKFoM S2 tangent",
+    "rank_deficient_policy": "NO_STATE_ACCEPTANCE; no pseudoinverse covariance passed as finite certainty",
+    "fixed_extrinsic_variance": 1e-12
+  },
+  "frozen_formal_contract": {
+    "ndt": [
+      0.8,
+      0.08,
+      0.00001,
+      80
+    ],
+    "T0_translation_tolerance_m": 0.00001,
+    "T0_rotation_tolerance_deg": 0.0001,
+    "score_relative_tolerance": 0.000001,
+    "uobs_eigenvalue_relative_tolerance": 0.000001,
+    "W2_projector_frobenius_tolerance": 0.00001,
+    "weak_gap_degeneracy_relative_tolerance": 0.000001
+  },
+  "gates_origin": "V2 engineering contract frozen before ANY real V2 registration. IMU mismatch<=5deg is a heuristic guard, NOT statistically calibrated. All inherited state gates unchanged.",
+  "GT_LOADED": false,
+  "ORACLE263_CALLS": 0,
+  "B12_CALLS": 0,
+  "VISUAL_EXTRACTION": 0
+}
