@@ -1,6 +1,7 @@
 #include "shadow_logging.hpp"
 #include "anchor_logging.hpp"
 #include "weak_refinement_logging.hpp"
+#include "directional_logging.hpp"
 #include <ctime>
 #include "dog_prior_map_fastlio2_frontend_exp/current_frame_ndt.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/fastlio2_frontend.hpp"
@@ -87,9 +88,12 @@ int main(int argc, char** argv) {
     const uint64_t initialization_stamp = unsignedArgument(argv[11]);
     const bool enable_shadow = std::string(argv[12]) == "shadow";
     const std::string experiment_mode = argv[12];
+    const bool directional = experiment_mode == "directional_weak_only_feedback" ||
+        experiment_mode == "directional_coupled_feedback" || experiment_mode == "directional_coupled_shadow";
     const bool weak_refinement = experiment_mode == "weak_only_feedback" ||
-        experiment_mode == "coupled_weak_feedback" || experiment_mode == "coupled_weak_shadow";
-    const bool weak_feedback = weak_refinement && experiment_mode != "coupled_weak_shadow";
+        experiment_mode == "coupled_weak_feedback" || experiment_mode == "coupled_weak_shadow" || directional;
+    const bool weak_feedback = weak_refinement && experiment_mode != "coupled_weak_shadow" &&
+        experiment_mode != "directional_coupled_shadow";
     const bool anchored = experiment_mode == "anchored_shadow" || experiment_mode == "anchored_guarded_feedback";
     const bool rotation_guard = experiment_mode == "guarded_feedback_rotation_guard" ||
         experiment_mode == "event_admission_rotation_guard";
@@ -108,8 +112,10 @@ int main(int argc, char** argv) {
     if (anchored) anchor_log.reset(new p10log::AnchorLogger(log_directory));
     std::unique_ptr<p10log::WeakRefinementLogger> weak_log;
     if (weak_refinement) weak_log.reset(new p10log::WeakRefinementLogger(log_directory));
+    std::unique_ptr<p10log::DirectionalLogger> directional_log;
+    if (directional) directional_log.reset(new p10log::DirectionalLogger(log_directory));
     paper::WeakCoupledConfig weak_config;
-    weak_config.coupled = experiment_mode != "weak_only_feedback";
+    weak_config.coupled = experiment_mode != "weak_only_feedback" && experiment_mode != "directional_weak_only_feedback";
     const auto shadow_config = p10log::config(argv[13],false);
     paper::CoupledEventConfig event_config;
     event_config.search = shadow_config;
@@ -121,6 +127,11 @@ int main(int argc, char** argv) {
     if (limit == 0 || limit > scans.size()) throw std::runtime_error("invalid_frame_limit");
     paper::Pose3d initial_lidar, extrinsic;
     const auto parameters = paper::readP7Parameters(argv[6], &initial_lidar, &extrinsic);
+    paper::CoupledMatrix6 fixed_noise = paper::CoupledMatrix6::Zero();
+    fixed_noise.topLeftCorner<3,3>().diagonal().setConstant(
+        parameters.pose_position_sigma_m*parameters.pose_position_sigma_m);
+    fixed_noise.bottomRightCorner<3,3>().diagonal().setConstant(
+        parameters.pose_rotation_sigma_rad*parameters.pose_rotation_sigma_rad);
     const auto initialization_imu = initializationSamples(
         all_imu, parameters.static_init_samples, initialization_stamp);
     paper::FastLio2IkfomFrontend frontend(parameters);
@@ -253,7 +264,21 @@ int main(int argc, char** argv) {
       }
       const auto update_start = Clock::now();
       paper::Pose3d actual_measurement = result.raw_map_T_lidar;
-      const bool alternative_used = (guarded_feedback && event.admitted) || (weak_feedback && weak_result.recommended);
+      paper::DirectionalCovarianceResult directional_result,paired_directional;
+      directional_result.baseline=fixed_noise;directional_result.covariance=fixed_noise;
+      if(directional && weak_result.recommended) {
+        directional_result=paper::buildDirectionalCovariance(weak_result.eigenvalues,
+            weak_result.eigenvectors,weak_result.weak_dimension,fixed_noise,
+            carrierPose(weak_result.nominal),carrierPose(weak_result.candidate),scan_end.predicted_map_T_imu,extrinsic);
+        // Same-input Shadow ablation uses the already evaluated legal weak pose:
+        // no second optimizer, source/map or extra objective call.
+        if(experiment_mode=="directional_coupled_shadow")
+          paired_directional=paper::buildDirectionalCovariance(weak_result.eigenvalues,
+              weak_result.eigenvectors,weak_result.weak_dimension,fixed_noise,
+              carrierPose(weak_result.nominal),carrierPose(weak_result.weak_pose),scan_end.predicted_map_T_imu,extrinsic);
+      }
+      const bool alternative_used = (guarded_feedback && event.admitted) ||
+          (weak_feedback && weak_result.recommended && (!directional || directional_result.valid));
       if (alternative_used) {
         if(weak_feedback) {
           if(weak_result.status!="LOCAL_REGULARIZED_REFINEMENT" || !weak_result.weak_quality_valid)
@@ -268,8 +293,11 @@ int main(int argc, char** argv) {
       paper::PoseCorrectionDelta delta;
       bool update_success = false;
       if (result.effective) {
-        if (!frontend.applyPoseMeasurement(
-            paper::lidarMeasurementToImu(actual_measurement, extrinsic), &delta, &reason)) {
+        const paper::Pose3d imu_measurement=paper::lidarMeasurementToImu(actual_measurement,extrinsic);
+        const bool update_ok = directional && alternative_used ?
+            frontend.applyPoseMeasurement(imu_measurement,directional_result.covariance,&delta,&reason) :
+            frontend.applyPoseMeasurement(imu_measurement,&delta,&reason);
+        if (!update_ok) {
           if (admission_log) admission_log->write(transaction,experiment_mode,event,
               actual_measurement,alternative_used,false,delta);
           throw std::runtime_error("pose_update_failed:" + reason);
@@ -298,6 +326,11 @@ int main(int argc, char** argv) {
       if (anchor_log) anchor_log->write(transaction,anchor_receipt,anchor);
       if (weak_log) weak_log->write(transaction,experiment_mode,weak_result,anchor_before,anchor,
           actual_measurement,alternative_used,update_success,delta);
+      if (directional_log) directional_log->write(transaction,experiment_mode,weak_result,
+          directional_result,paired_directional,scan_end.predicted_map_T_imu,
+          paper::lidarMeasurementToImu(carrierPose(weak_result.candidate),extrinsic),
+          paper::lidarMeasurementToImu(actual_measurement,extrinsic),
+          alternative_used,update_success,delta);
       trajectory << transaction << ',' << scan.scan_end_ns;
       poseColumns(trajectory, scan_end.predicted_map_T_imu); poseColumns(trajectory, corrected.map_T_imu);
       vectorColumns(trajectory, corrected.velocity); vectorColumns(trajectory, corrected.gyro_bias);
