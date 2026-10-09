@@ -115,7 +115,7 @@ struct EventLogger {
 struct AdmissionLogger {
   std::ofstream rows;
   explicit AdmissionLogger(const std::string& dir): rows(output(dir+"/admission.csv")) {
-    rows << "transaction_id,experiment_mode,event,origin_stamp_ns,confirmation_count,admission_valid,temporally_supported,admitted,admission_status,D_E,D_M,D,nominal_energy,alternative_energy,nominal_motion_cost,alternative_motion_cost,previous_nominal,previous_alternative,imu_interval,candidate_pose,admitted_pose,actual_measurement,alternative_used,update_success,correction_translation_m,correction_rotation_deg\n";
+    rows << "transaction_id,experiment_mode,event,origin_stamp_ns,confirmation_count,admission_valid,temporally_supported,admitted,admission_status,D_E,D_M,D,nominal_energy,alternative_energy,nominal_motion_cost,alternative_motion_cost,previous_nominal,previous_alternative,imu_interval,candidate_pose,admitted_pose,actual_measurement,alternative_used,update_success,correction_translation_m,correction_rotation_deg,rotation_consistent\n";
   }
   void write(uint64_t tx, const std::string& mode, const paper::CoupledEventResult& r,
       const paper::Pose3d& measurement, bool used, bool success, const paper::PoseCorrectionDelta& delta) {
@@ -127,7 +127,7 @@ struct AdmissionLogger {
       << values(r.previous_nominal) << ',' << values(r.previous_alternative) << ',' << values(r.imu_interval)
       << ',' << values(r.candidate_pose) << ',' << values(r.admitted_pose) << ',' << values(matrix(measurement))
       << ',' << used << ',' << success << ',' << delta.position.norm() << ','
-      << delta.rotation.norm()*180/std::acos(-1.0) << '\n';
+      << delta.rotation.norm()*180/std::acos(-1.0) << ',' << r.rotation_consistent << '\n';
   }
 };
 inline paper::CoupledNdtConfig config(const std::string& method, bool fixed) {

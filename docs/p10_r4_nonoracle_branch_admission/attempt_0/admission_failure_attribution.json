@@ -1,0 +1,40 @@
+{
+  "event_admission": {
+    "admitted": 35,
+    "negative_energy_difference": 32,
+    "motion_worse": 5,
+    "motion_not_worse_outcomes": {
+      "WORSE": 24,
+      "IMPROVED": 6
+    },
+    "motion_worse_outcomes": {
+      "WORSE": 2,
+      "IMPROVED": 3
+    },
+    "min_D_E": -0.29481203108735127,
+    "max_D_E": 0.005809198882613595,
+    "min_D_M": -0.3143974289129081,
+    "max_D_M": 0.010373753599458139,
+    "max_candidate_translation_m": 1.220375306758826,
+    "max_candidate_rotation_deg": 12.070770531828648
+  },
+  "guarded_feedback": {
+    "admitted": 35,
+    "negative_energy_difference": 33,
+    "motion_worse": 7,
+    "motion_not_worse_outcomes": {
+      "WORSE": 18,
+      "IMPROVED": 10
+    },
+    "motion_worse_outcomes": {
+      "WORSE": 4,
+      "IMPROVED": 3
+    },
+    "min_D_E": -0.2315914711806719,
+    "max_D_E": 0.011982652205835819,
+    "min_D_M": -0.32714094249714926,
+    "max_D_M": 0.009899526534704248,
+    "max_candidate_translation_m": 1.4410636797615983,
+    "max_candidate_rotation_deg": 13.766514800703815
+  }
+}

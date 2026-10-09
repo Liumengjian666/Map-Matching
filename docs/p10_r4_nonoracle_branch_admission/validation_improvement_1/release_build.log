@@ -1,0 +1,25 @@
+[ 15%] Built target p7_replay_io
+[ 53%] Built target p7_current_frame_ndt
+[100%] Built target p10_r2_replay
+[ 71%] Built target p7_current_frame_ndt
+[100%] Built target p10_r4_admission_test
+[ 71%] Built target p7_current_frame_ndt
+Scanning dependencies of target p10_r3_temporal_test
+[ 85%] Building CXX object CMakeFiles/p10_r3_temporal_test.dir/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/test_temporal.cpp.o
+[100%] Linking CXX executable p10_r3_temporal_test
+[100%] Built target p10_r3_temporal_test
+[ 71%] Built target p7_current_frame_ndt
+Scanning dependencies of target p10_r2_shadow_test
+[ 85%] Building CXX object CMakeFiles/p10_r2_shadow_test.dir/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/test_shadow.cpp.o
+[100%] Linking CXX executable p10_r2_shadow_test
+[100%] Built target p10_r2_shadow_test
+[ 71%] Built target p7_current_frame_ndt
+Scanning dependencies of target current_frame_ndt_test
+[ 85%] Building CXX object CMakeFiles/current_frame_ndt_test.dir/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/tests/current_frame_ndt_test.cpp.o
+[100%] Linking CXX executable current_frame_ndt_test
+[100%] Built target current_frame_ndt_test
+[ 50%] Built target p7_replay_io
+Scanning dependencies of target p7_replay_io_test
+[ 75%] Building CXX object CMakeFiles/p7_replay_io_test.dir/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/tests/p7_replay_io_test.cpp.o
+[100%] Linking CXX executable p7_replay_io_test
+[100%] Built target p7_replay_io_test

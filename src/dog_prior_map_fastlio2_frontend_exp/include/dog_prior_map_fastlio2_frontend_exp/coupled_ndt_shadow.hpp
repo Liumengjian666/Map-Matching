@@ -93,6 +93,7 @@ struct CoupledEventConfig {
   // Explicit R4 experiment only; legacy R3/production defaults stay unchanged.
   bool branch_admission = false;
   double branch_tie_tolerance = 1e-6;
+  bool branch_rotation_guard = false;
 };
 struct PendingCandidate {
   Eigen::Matrix4f pose = Eigen::Matrix4f::Identity();
@@ -106,6 +107,7 @@ struct PendingCandidate {
   uint64_t origin_stamp_ns = 0;
   double energy_difference = 0, motion_difference = 0;
   bool admission_valid = false;
+  bool rotation_consistent = true;
 };
 struct CoupledEventResult {
   CoupledShadowResult shadow;
@@ -120,6 +122,7 @@ struct CoupledEventResult {
   std::string mode = "INVALID", event = "NOT_RUN";
   bool temporally_supported = false, admitted = false;
   bool admission_valid = false;
+  bool rotation_consistent = true;
   uint64_t origin_stamp_ns = 0;
   Eigen::Matrix4f candidate_pose = Eigen::Matrix4f::Identity();
   Eigen::Matrix4f admitted_pose = Eigen::Matrix4f::Identity();

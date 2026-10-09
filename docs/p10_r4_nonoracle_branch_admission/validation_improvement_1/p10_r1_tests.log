@@ -1,0 +1,9 @@
+Test project /tmp/p10_coupled_build.jxTN7w
+    Start 1: p10_coupling_self_test
+1/2 Test #1: p10_coupling_self_test ...........   Passed    0.02 sec
+    Start 2: p10_pipeline_self_test
+2/2 Test #2: p10_pipeline_self_test ...........   Passed    0.14 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   0.17 sec

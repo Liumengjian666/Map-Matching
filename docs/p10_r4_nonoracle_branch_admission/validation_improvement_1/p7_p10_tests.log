@@ -1,0 +1,15 @@
+Test project /tmp/p10_r2_build.CdJ4jf
+    Start 1: current_frame_ndt_test
+1/5 Test #1: current_frame_ndt_test ...........   Passed    0.20 sec
+    Start 2: p7_replay_io_test
+2/5 Test #2: p7_replay_io_test ................   Passed    0.01 sec
+    Start 3: p10_r2_shadow_test
+3/5 Test #3: p10_r2_shadow_test ...............   Passed    0.01 sec
+    Start 4: p10_r3_temporal_test
+4/5 Test #4: p10_r3_temporal_test .............   Passed    0.01 sec
+    Start 5: p10_r4_admission_test
+5/5 Test #5: p10_r4_admission_test ............   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 5
+
+Total Test time (real) =   0.22 sec

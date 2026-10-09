@@ -85,8 +85,12 @@ int main(int argc, char** argv) {
     const uint64_t initialization_stamp = unsignedArgument(argv[11]);
     const bool enable_shadow = std::string(argv[12]) == "shadow";
     const std::string experiment_mode = argv[12];
-    const bool guarded_feedback = experiment_mode == "guarded_feedback";
-    const bool branch_admission = guarded_feedback || experiment_mode == "event_admission";
+    const bool rotation_guard = experiment_mode == "guarded_feedback_rotation_guard" ||
+        experiment_mode == "event_admission_rotation_guard";
+    const bool guarded_feedback = experiment_mode == "guarded_feedback" ||
+        experiment_mode == "guarded_feedback_rotation_guard";
+    const bool branch_admission = guarded_feedback || experiment_mode == "event_admission" ||
+        experiment_mode == "event_admission_rotation_guard";
     const bool enable_event = experiment_mode == "event" || branch_admission;
     if (!enable_shadow && !enable_event && std::string(argv[12]) != "control") throw std::runtime_error("invalid_mode");
     const std::string log_directory = std::string(argv[7]).substr(0,std::string(argv[7]).find_last_of('/'));
@@ -98,6 +102,7 @@ int main(int argc, char** argv) {
     paper::CoupledEventConfig event_config;
     event_config.search = shadow_config;
     event_config.branch_admission = branch_admission;
+    event_config.branch_rotation_guard = rotation_guard;
     if (enable_event && std::string(argv[13]) != "C") throw std::runtime_error("event_requires_R2_residual_predictor");
     paper::PendingCandidate pending;
     if (limit == 0 || limit > scans.size()) throw std::runtime_error("invalid_frame_limit");

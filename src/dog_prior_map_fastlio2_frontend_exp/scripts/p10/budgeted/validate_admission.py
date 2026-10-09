@@ -1,13 +1,14 @@
 """Bounded Release/test receipts; never starts any real NDT replay."""
 import os
+import argparse
 from pathlib import Path
 import subprocess
 from run_budgeted import csv_write
 from run_admission import ARCHIVE
 
 
-def main():
-    directory=ARCHIVE/"validation"
+def main(revision):
+    directory=ARCHIVE/("validation" if revision==0 else "validation_improvement_1")
     directory.mkdir(exist_ok=False)
     env=dict(os.environ,LD_LIBRARY_PATH="/lib/x86_64-linux-gnu",OMP_NUM_THREADS="1",OPENBLAS_NUM_THREADS="1")
     commands=[("release_build",Path("/tmp/p10_r2_build.CdJ4jf"),["cmake","--build",".","--target",
@@ -28,4 +29,6 @@ def main():
     csv_write(directory/"checks.csv",receipts)
 
 
-if __name__=="__main__":main()
+if __name__=="__main__":
+    parser=argparse.ArgumentParser();parser.add_argument("--revision",type=int,choices=(0,1),default=0)
+    main(parser.parse_args().revision)

@@ -1,0 +1,11 @@
+{
+  "GT_used_after_freeze": true,
+  "GT_FOR_ADMISSION": false,
+  "new_alignment_fitted": false,
+  "fixed_anchor": "0.99938206665456297;-0.010657365157578216;-0.033494856577573902;-0.07816728514188373;0.011018844175162917;0.99988282894244007;0.010626074491846393;-0.026897686333121243;0.033377685993754659;-0.010988582891384501;0.99938239984689625;-0.042082193927583444;0;0;0;1",
+  "input_sha256": {
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/gt/floor01_gt.txt": "b8db2491cdb3ca3194f653cab90f31eae70b457e91b2f87f30ed7fe2d0e2ce9f",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/calibration/floor01_extrinsics.yaml": "fd9fbfb209d6715b4812a92d458cdeb32cbfd75160356a87802c2bda5dfa7414"
+  },
+  "blind_freeze_sha256": "0006dd3c1950a2c8883b66a0dac528556baf067d793ff486bb6d5c6d85925f29"
+}

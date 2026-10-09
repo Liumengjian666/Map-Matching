@@ -77,6 +77,11 @@ def run(build, attempt):
         feedback="only admitted current alternative via existing lidarMeasurementToImu/applyPoseMeasurement",
         timing="full scan-end processing plus logging except cost row; process wall also provided",
         large_jump="consecutive corrected translation>0.5m OR rotation>10deg; descriptive")
+    freeze["rotation_guard_enabled"] = bool(attempt)
+    if attempt:
+        freeze["improvement_contract_sha256"] = sha(ARCHIVE/"TARGETED_IMPROVEMENT_1.md")
+        freeze["prior_posthoc_GT_inspected"] = True
+        freeze["improvement_basis"] = "persistent rotation offset not distinguishable by incremental residual; no per-frame GT rule"
     json_write(archive / "execution_freeze.json", freeze)
     env = dict(os.environ,LD_LIBRARY_PATH="/lib/x86_64-linux-gnu",OMP_NUM_THREADS="1",OPENBLAS_NUM_THREADS="1")
     receipts=[]
@@ -85,7 +90,7 @@ def run(build, attempt):
         destination.mkdir();record.mkdir()
         command=[str(binary),*[files[k] for k in keys[:4]],files["map_pcd"],files["params_txt"],
             str(destination/"trajectory.csv"),str(destination/"registration.csv"),str(destination/"runtime.csv"),
-            str(len(ids)),"0",mode,"C"]
+            str(len(ids)),"0",mode+"_rotation_guard" if attempt else mode,"C"]
         json_write(record/"command.json",command)
         began=time.monotonic()
         with (record/"engine.log").open("x") as log:

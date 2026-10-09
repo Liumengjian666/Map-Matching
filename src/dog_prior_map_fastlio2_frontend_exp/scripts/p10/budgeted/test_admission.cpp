@@ -15,6 +15,7 @@ int main() {
     int jets=0, scores=0, aligns=0;
     double score_gain=1;
     bool use_initial=false;
+    bool rotated_alternative=false;
     p::CoupledNdtBackend backend;
     backend.jet = [&](const Eigen::Matrix4f&, const p::CoupledVector6&) {
       ++jets; p::CoupledNativeJet j; j.valid=true; j.score_sum=100;
@@ -25,6 +26,8 @@ int main() {
     };
     backend.refine = [&](const Eigen::Matrix4f& initial) {
       ++aligns; p::CoupledRefinement r; r.pose=use_initial?initial:pose(.5f);
+      if (rotated_alternative && !use_initial)
+        r.pose.block<3,3>(0,0)=Eigen::AngleAxisf(.1f,Eigen::Vector3f::UnitX()).toRotationMatrix();
       r.successful=r.converged=true; r.iterations=5; r.status="SUCCESS"; return r;
     };
     const Eigen::Matrix4d increment=pose(.1f).cast<double>();
@@ -84,6 +87,11 @@ int main() {
     double nonzero;
     require(p::coupledBranchMotionCost(pose(0),d,Eigen::Matrix4d::Identity(),config.search,&nonzero) &&
         nonzero>std::pow(.1/2,2), "true SE3 residual includes SO3 Jacobian");
+    config.branch_rotation_guard=true; score_gain=1; rotated_alternative=true;
+    create(); use_initial=true; advance(.1f,1100000000); r=advance(.2f,1200000000);
+    require(r.temporally_supported && r.branch_difference<0 && !r.admitted &&
+        !r.rotation_consistent && r.admission_status=="ROTATION_PREDICTION_DISAGREEMENT",
+        "constant rotated branch may win incremental score but must pass independent rotation guard");
     std::cout << "three-frame admission tests PASS\n";
     return 0;
   } catch (const std::exception& e) { std::cerr<<e.what()<<'\n'; return 1; }

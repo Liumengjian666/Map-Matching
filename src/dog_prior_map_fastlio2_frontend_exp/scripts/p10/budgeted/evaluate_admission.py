@@ -3,6 +3,8 @@ import argparse
 import csv
 from collections import Counter
 import json
+import hashlib
+import subprocess
 import sys
 import numpy as np
 from scipy.spatial.transform import Rotation
@@ -43,7 +45,10 @@ def verify(archive):
     for path,digest in blind["output_sha256"].items():
         if sha(archive/path)!=digest:raise RuntimeError("blind receipt changed: "+path)
     for path,digest in freeze["source_sha256"].items():
-        if sha(ROOT/path)!=digest:raise RuntimeError("executed source changed: "+path)
+        committed=subprocess.check_output(["git","-C",str(ROOT),"show",freeze["code_sha"]+":"+path])
+        if hashlib.sha256(committed).hexdigest()!=digest:raise RuntimeError("executed source commit mismatch: "+path)
+    if freeze.get("rotation_guard_enabled") and sha(ARCHIVE/"TARGETED_IMPROVEMENT_1.md")!=freeze["improvement_contract_sha256"]:
+        raise RuntimeError("pre-run improvement contract changed")
     for path,digest in freeze["control_sha256"].items():
         if sha(ROOT/path)!=digest:raise RuntimeError("CONTROL changed")
     if sha(ARCHIVE/"THEORY.md")!=freeze["theory_sha256"] or sha(__import__("pathlib").Path(freeze["output_directory"])/"p10_r4_replay")!=freeze["binary_sha256"]:
@@ -64,6 +69,7 @@ def verify(archive):
     checks=[];branch_checks=[]
     for name in ("event_admission","guarded_feedback"):
         episodes_by_origin={}
+        orientation_by_origin={}
         for f,e,a in zip(jobs[name]["frames"],jobs[name]["events"],jobs[name]["admission"]):
             normal=e["mode"]=="NORMAL";pending=e["mode"]=="PENDING"
             actual=matrix(a["actual_measurement"]);nominal=matrix(f["nominal_pose"])
@@ -75,16 +81,21 @@ def verify(archive):
                 and (not pending or int(f["full_ndt_calls"])<=2 and int(f["jet_calls"])==0 and int(f["preview_count"])==0)
                 and (e["pending_before"]!="1" or e["mode"]!="SEARCH")
                 and (not admitted or a["temporally_supported"]=="1" and a["admission_valid"]=="1" and int(a["confirmation_count"])==2 and float(a["D"]) < -1e-6 and e["pending_after"]=="0")
+                and (not admitted or not freeze.get("rotation_guard_enabled") or a["rotation_consistent"]=="1")
                 and (used==(name=="guarded_feedback" and admitted)) and a["update_success"]=="1"
                 and (measurement_dt<=1e-6 and measurement_dr<=1e-5 if used else np.array_equal(actual,nominal)))
             checks.append(dict(mode=name,transaction_id=f["transaction_id"],hard_requirements_pass=int(ok)))
             if a["admission_valid"]!="1":continue
             origin=a["origin_stamp_ns"]
+            nominal_prediction_rotation=distance(nominal,matrix(f["prediction_pose"]))[1]
+            alternative_prediction_rotation=distance(matrix(a["candidate_pose"]),matrix(f["prediction_pose"]))[1]
+            current_orientation_ok=alternative_prediction_rotation<=nominal_prediction_rotation+1e-6
             de=(float(a["alternative_energy"])-float(a["nominal_energy"]))/max(1,abs(float(a["nominal_energy"])))
             dm=0;cost_error=0
             if e["event"]=="PENDING_CREATED":
                 if origin in episodes_by_origin:raise RuntimeError("duplicate origin")
                 episodes_by_origin[origin]=[0.,0.,0]
+                orientation_by_origin[origin]=True
             else:
                 if origin not in episodes_by_origin:raise RuntimeError("confirmation without creation")
                 imu=matrix(a["imu_interval"])
@@ -93,6 +104,9 @@ def verify(archive):
                 dm=am-nm
                 cost_error=max(abs(nm-float(a["nominal_motion_cost"])),abs(am-float(a["alternative_motion_cost"])))
             accumulator=episodes_by_origin[origin];accumulator[0]+=de;accumulator[1]+=dm;accumulator[2]+=1
+            orientation_by_origin[origin] = orientation_by_origin[origin] and current_orientation_ok
+            if freeze.get("rotation_guard_enabled") and (a["rotation_consistent"]=="1") != orientation_by_origin[origin]:
+                raise RuntimeError("three-frame orientation guard not reproducible")
             error=max(abs(accumulator[0]-float(a["D_E"])),abs(accumulator[1]-float(a["D_M"])),
                 abs(accumulator[0]+.05*accumulator[1]-float(a["D"])),cost_error)
             branch_checks.append(dict(mode=name,transaction_id=f["transaction_id"],origin_stamp_ns=origin,

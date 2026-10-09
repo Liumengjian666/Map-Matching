@@ -1,0 +1,31 @@
+{
+  "GT_LOADED": false,
+  "ORACLE_LOADED": false,
+  "FEEDBACK_EXPERIMENT_ONLY": true,
+  "output_sha256": {
+    "frame_selection.csv": "93339787239f03e677d3ad5fe1c7638a9e8478d32436ec1ea9c1e37372df4347",
+    "job_cost.csv": "877ac0332490182d1c707aef6373192874ba04d4f6faa93bac9cc65933b289d4",
+    "event_admission/registration.csv": "aa412c41916fefb4cda633accc8df71ec3bc5bbb4dc79946d2b038ce0f8132ba",
+    "event_admission/runtime.csv": "e066e27a1e179eec33981af2ad148f3fbf7299ecddbcc8be73fad0ff479a7352",
+    "event_admission/events.csv": "18ec91d602933cfc596b91a80c69bc89b182ba07fff0b8539507427d0c5f8b59",
+    "event_admission/trajectory.csv": "86d8de73bb5af2015fd37cf33584dcd3a1e54fba87d2e6a38c435eb949520bd9",
+    "event_admission/resources.csv": "a37b3fe2ea035fe25f9a79088523694a9c9fec14904c58c9df12dfc2a03be2cc",
+    "event_admission/frame_cost.csv": "47c91150f5ddf6c9bded118f0836a113701a8c2f9ad9a382d29595a39aedd5b6",
+    "event_admission/frames.csv": "3be1736a56b0c0b605add4b48944e31287ca4cd5afa76ed4ceca72897b9b7180",
+    "event_admission/models.csv": "93c7f9d745f805f5fa9e2eb0de13fea6d8e5648565d51845c247a2e9a977cf8b",
+    "event_admission/admission.csv": "062ae8b06aab2b4498e9c324bbe36003c6a3be8b0d91b6e5c01029cedd291dcb",
+    "event_admission/pending_end.csv": "1666d61d1aaf5a71072370d0a8ea099bbe1b5636bc26d101522ac5a32d2abbf3",
+    "event_admission/candidates.csv": "84a5612120110d751730717f2310278ef42d9f87e7ec9ab6d48acf5465e451a8",
+    "guarded_feedback/registration.csv": "c8ece18e6923617a1e977332827bd1aea5f21edd4eadc1b9d28247b031f7c25d",
+    "guarded_feedback/runtime.csv": "ab34c6e668878c27a5bf63e1041d400ef1124908ba90fbcefa0ac57a4e4c87a9",
+    "guarded_feedback/events.csv": "63159f82697d6dffa54f4039588582a14edb3c55558ddabbfb3d5d913c99e72c",
+    "guarded_feedback/trajectory.csv": "eaac3806b1670a57d3893d76ebc93cdbcb7959f5d8548a2d7310336eccf8f879",
+    "guarded_feedback/resources.csv": "200a50ce7482ede2218dca5185a1deaa67cd04daf7a45a4be162973194b844e3",
+    "guarded_feedback/frame_cost.csv": "940df40add6b24c779ede26df76262e46020420abf72287ab67ffdb0c485e7ee",
+    "guarded_feedback/frames.csv": "a43fcd4d0026920024a3d311d8fc8e12796c7079322dab063a5c59ae3e405155",
+    "guarded_feedback/models.csv": "fc81ad9044c90c7e79772f62d0bb248b67cf793843ffa914bc992499cf097ed5",
+    "guarded_feedback/admission.csv": "e5f25065bbe81da480dc9359750e970ff005b1a911343229627276a693e620d4",
+    "guarded_feedback/pending_end.csv": "1666d61d1aaf5a71072370d0a8ea099bbe1b5636bc26d101522ac5a32d2abbf3",
+    "guarded_feedback/candidates.csv": "8041a2d003c3218e17ca62a0370c6d06c3566c86ab5b9d858c5d5cf87059e271"
+  }
+}

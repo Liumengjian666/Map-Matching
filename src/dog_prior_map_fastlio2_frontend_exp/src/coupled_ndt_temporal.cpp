@@ -107,6 +107,7 @@ CoupledEventResult runEventCoupledNdtShadow(const Eigen::Matrix4f& nominal,
     out.previous_nominal = pending->previous_nominal;
     out.previous_alternative = pending->pose;
     out.candidate_pose = pending->pose;
+    out.rotation_consistent = pending->rotation_consistent;
     if (std::isfinite(pending->energy_difference) && std::isfinite(pending->motion_difference)) {
       out.energy_difference = pending->energy_difference;
       out.motion_difference = pending->motion_difference;
@@ -221,13 +222,20 @@ CoupledEventResult runEventCoupledNdtShadow(const Eigen::Matrix4f& nominal,
         return finish("PENDING_ADMISSION_INPUT_FAILED");
       }
       out.admission_status = "AWAITING_SECOND_CONFIRMATION";
+      pending->rotation_consistent = pending->rotation_consistent &&
+          dr(out.temporal_terminal.pose, prediction) <=
+              out.innovation_rotation_deg + config.local_rotation_tolerance_deg;
+      out.rotation_consistent = pending->rotation_consistent;
     }
     if (out.confirmation_count == config.required_confirmations) {
       out.temporally_supported = true;
       if (config.branch_admission) {
-        out.admitted = out.branch_difference < -config.branch_tie_tolerance;
+        const bool score_pass = out.branch_difference < -config.branch_tie_tolerance;
+        const bool orientation_pass = !config.branch_rotation_guard || out.rotation_consistent;
+        out.admitted = score_pass && orientation_pass;
         out.admitted_pose = out.admitted ? out.temporal_terminal.pose : nominal;
-        out.admission_status = out.admitted ? "ADMITTED" :
+        out.admission_status = out.admitted ? "ADMITTED" : score_pass && !orientation_pass ?
+            "ROTATION_PREDICTION_DISAGREEMENT" :
             std::abs(out.branch_difference) <= config.branch_tie_tolerance ? "NUMERICAL_TIE_NOMINAL" :
             "BRANCH_COMPARISON_REJECTED";
       }
@@ -298,6 +306,9 @@ CoupledEventResult runEventCoupledNdtShadow(const Eigen::Matrix4f& nominal,
     pending->energy_difference = (out.alternative_branch_energy - out.nominal_branch_energy) /
         std::max(1.0, std::abs(out.nominal_branch_energy));
     pending->motion_difference = 0;
+    pending->rotation_consistent = dr(pending->pose, prediction) <=
+        out.innovation_rotation_deg + config.local_rotation_tolerance_deg;
+    out.rotation_consistent = pending->rotation_consistent;
     pending->admission_valid = std::isfinite(pending->energy_difference);
     out.admission_valid = pending->admission_valid;
     out.energy_difference = out.branch_difference = pending->energy_difference;
