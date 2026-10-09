@@ -53,7 +53,7 @@ def run(build, attempt):
         "scripts/p7/CMakeLists.txt", "scripts/p10/budgeted/p10_r2_replay.cpp",
         "scripts/p10/budgeted/shadow_logging.hpp", "scripts/p10/budgeted/run_event.py")]
     binary = cache / "p10_r3_replay"
-    shutil.copyfile(build / "p10_r2_replay", binary)
+    shutil.copy2(build / "p10_r2_replay", binary)
     freeze = dict(task="PAPER-P10-R3-EVENT-TRIGGERED-COUPLED-NDT", start_sha=START_SHA,
         code_sha=code_sha, input_sha256=hashes,
         source_sha256={str(p.relative_to(ROOT)): sha(p) for p in paths}, binary_sha256=sha(binary),
