@@ -1,0 +1,23 @@
+	Command being timed: "/tmp/p10_coupled_build.jxTN7w/p10_coupled_subspace_ndt /media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/map/frozen/floor01_h1_map_p5_frozen.pcd /media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/frozen/cohort_frozen.csv /media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/dual_u.csv /home/jian/livox_ws/dog_loc_paper_ws/.p9_experiment_cache/p10_r1_coupled_subspace_ndt/attempt_0 0"
+	User time (seconds): 34.87
+	System time (seconds): 7.77
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:42.69
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 106060
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 4
+	Minor (reclaiming a frame) page faults: 27235
+	Voluntary context switches: 34
+	Involuntary context switches: 6860
+	Swaps: 0
+	File system inputs: 664
+	File system outputs: 2616
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

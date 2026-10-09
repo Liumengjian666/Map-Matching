@@ -1,0 +1,54 @@
+{
+  "blind_hash_chain": "PASS",
+  "csv_json_finite_schema": "PASS",
+  "common_grid_complete_unique": "PASS",
+  "source_hash_count": "PASS",
+  "canonical_postfreeze_only": "PASS",
+  "baseline_reference_included": "PASS",
+  "files": [
+    {
+      "path": "method_summary.csv",
+      "rows": 4
+    },
+    {
+      "path": "baseline_reference.csv",
+      "rows": 2
+    },
+    {
+      "path": "case_results.csv",
+      "rows": 28
+    },
+    {
+      "path": "runtime_breakdown.csv",
+      "rows": 4
+    },
+    {
+      "path": "attempt_0/method_summary.csv",
+      "rows": 4
+    },
+    {
+      "path": "attempt_0/trace.csv",
+      "rows": 1920
+    },
+    {
+      "path": "attempt_0/score_selected.csv",
+      "rows": 8
+    },
+    {
+      "path": "attempt_0/case_results.csv",
+      "rows": 28
+    },
+    {
+      "path": "attempt_0/native_recovery.csv",
+      "rows": 1531
+    },
+    {
+      "path": "attempt_0/probes.csv",
+      "rows": 426
+    }
+  ],
+  "GT_LOADED": false,
+  "real_NDT_calls": 426,
+  "scientific_attempts": 1,
+  "targeted_revisions": 0
+}

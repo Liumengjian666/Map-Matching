@@ -1,0 +1,5 @@
+method,pre_refine_recovered,recovered,denominator,score_selected_recovered,probe_count,NDT_calls,mean_probe_ms,P95_probe_ms,total_probe_ms,mean_frame_ms,P95_frame_ms,coupling_fallback_count,coupling_capped_count,pre_to_refine_geometric_escape_count,explicit_energy_evaluations,coupling_energy_evaluations,strong_energy_evaluations,strong_iterations
+A_WEAK_ONLY,0,6,7,1,106,106,28.48758023584906,76.84865300000001,3019.6835050000004,1509.8417525,2107.72707005,0,0,101,424,0,0,0
+B_WARM_NEWTON,1,7,7,2,106,106,168.58643728301885,252.4340805,17870.162352,8935.081176,10653.427987500001,0,0,101,16437,0,16013,2063
+C_COUPLED_PREDICTOR,0,7,7,2,106,106,31.44382796226415,79.85085950000001,3333.045764,1666.522882,2328.8879205999997,0,2,101,530,106,0,0
+D_COUPLED_CORRECTOR,1,7,7,2,106,106,169.21632166037736,246.73147175,17936.930096,8968.465048,10578.9009442,0,2,100,16646,106,16116,2076

@@ -1,0 +1,140 @@
+{
+  "revision": 0,
+  "methods": [
+    {
+      "method": "A_WEAK_ONLY",
+      "pre_refine_recovered": 0,
+      "recovered": 6,
+      "denominator": 7,
+      "score_selected_recovered": 1,
+      "probe_count": 106,
+      "NDT_calls": 106,
+      "mean_probe_ms": 28.48758023584906,
+      "P95_probe_ms": 76.84865300000001,
+      "total_probe_ms": 3019.6835050000004,
+      "mean_frame_ms": 1509.8417525,
+      "P95_frame_ms": 2107.72707005,
+      "coupling_fallback_count": 0,
+      "coupling_capped_count": 0,
+      "pre_to_refine_geometric_escape_count": 101,
+      "strong_termination": {
+        "WEAK_ONLY": 106
+      },
+      "stage_ms": {
+        "coupling_ms": 0.0,
+        "strong_ms": 0.0,
+        "diagnostic_ms": 343.1749700000001,
+        "refine_ms": 2670.7833820000005
+      },
+      "explicit_energy_evaluations": 424,
+      "coupling_energy_evaluations": 0,
+      "strong_energy_evaluations": 0,
+      "strong_iterations": 0
+    },
+    {
+      "method": "B_WARM_NEWTON",
+      "pre_refine_recovered": 1,
+      "recovered": 7,
+      "denominator": 7,
+      "score_selected_recovered": 2,
+      "probe_count": 106,
+      "NDT_calls": 106,
+      "mean_probe_ms": 168.58643728301885,
+      "P95_probe_ms": 252.4340805,
+      "total_probe_ms": 17870.162352,
+      "mean_frame_ms": 8935.081176,
+      "P95_frame_ms": 10653.427987500001,
+      "coupling_fallback_count": 0,
+      "coupling_capped_count": 0,
+      "pre_to_refine_geometric_escape_count": 101,
+      "strong_termination": {
+        "STEP_SMALL": 1,
+        "MAX_ITERATIONS": 67,
+        "TRUST_RADIUS_EXHAUSTED": 35,
+        "ENERGY_CHANGE_SMALL": 3
+      },
+      "stage_ms": {
+        "coupling_ms": 0.0,
+        "strong_ms": 14538.828902000005,
+        "diagnostic_ms": 352.72935599999994,
+        "refine_ms": 2970.982744000001
+      },
+      "explicit_energy_evaluations": 16437,
+      "coupling_energy_evaluations": 0,
+      "strong_energy_evaluations": 16013,
+      "strong_iterations": 2063
+    },
+    {
+      "method": "C_COUPLED_PREDICTOR",
+      "pre_refine_recovered": 0,
+      "recovered": 7,
+      "denominator": 7,
+      "score_selected_recovered": 2,
+      "probe_count": 106,
+      "NDT_calls": 106,
+      "mean_probe_ms": 31.44382796226415,
+      "P95_probe_ms": 79.85085950000001,
+      "total_probe_ms": 3333.045764,
+      "mean_frame_ms": 1666.522882,
+      "P95_frame_ms": 2328.8879205999997,
+      "coupling_fallback_count": 0,
+      "coupling_capped_count": 2,
+      "pre_to_refine_geometric_escape_count": 101,
+      "strong_termination": {
+        "PREDICTOR_ONLY": 106
+      },
+      "stage_ms": {
+        "coupling_ms": 113.88155199999999,
+        "strong_ms": 0.0,
+        "diagnostic_ms": 342.23559100000017,
+        "refine_ms": 2870.233142
+      },
+      "explicit_energy_evaluations": 530,
+      "coupling_energy_evaluations": 106,
+      "strong_energy_evaluations": 0,
+      "strong_iterations": 0
+    },
+    {
+      "method": "D_COUPLED_CORRECTOR",
+      "pre_refine_recovered": 1,
+      "recovered": 7,
+      "denominator": 7,
+      "score_selected_recovered": 2,
+      "probe_count": 106,
+      "NDT_calls": 106,
+      "mean_probe_ms": 169.21632166037736,
+      "P95_probe_ms": 246.73147175,
+      "total_probe_ms": 17936.930096,
+      "mean_frame_ms": 8968.465048,
+      "P95_frame_ms": 10578.9009442,
+      "coupling_fallback_count": 0,
+      "coupling_capped_count": 2,
+      "pre_to_refine_geometric_escape_count": 100,
+      "strong_termination": {
+        "STEP_SMALL": 1,
+        "MAX_ITERATIONS": 70,
+        "ENERGY_CHANGE_SMALL": 4,
+        "TRUST_RADIUS_EXHAUSTED": 31
+      },
+      "stage_ms": {
+        "coupling_ms": 119.882367,
+        "strong_ms": 14662.148751000002,
+        "diagnostic_ms": 352.8579739999999,
+        "refine_ms": 2794.0172590000006
+      },
+      "explicit_energy_evaluations": 16646,
+      "coupling_energy_evaluations": 106,
+      "strong_energy_evaluations": 16116,
+      "strong_iterations": 2076
+    }
+  ],
+  "development_target_met": true,
+  "D_better_than_Warm_recovery": false,
+  "FINAL_RESULT": "COUPLED_SUBSPACE_NDT_PROTOTYPE_SUPPORTED",
+  "GT_LOADED": false,
+  "online_pose_switching": false,
+  "scope": "development candidate-pool ID proximity recall; not localization success or independent generalization",
+  "oracle_loaded_only_by_postfreeze_evaluator": true,
+  "historical_R1A_oracle_u_comparison": "not a fair online initialization reference",
+  "P95_frame_sample_count": 2
+}

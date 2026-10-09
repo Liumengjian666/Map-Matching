@@ -1,0 +1,11 @@
+{
+  "output_sha256": {
+    "trace.csv": "8f8cc0a4f28930f94d727e1c8bcc4502343cce6e4820c48f47af891c559b56dd",
+    "score_selected.csv": "806823889405c6779d9ffd8c8da5bd90a348fda2c67ad9bb38ae5857d5405b16",
+    "probes.csv": "028a38579eb47dd2cfa78b40fa3ad88c4eaaa43c82b76a2392abc77535d68036"
+  },
+  "candidate_builder_read_oracle": false,
+  "GT_LOADED": false,
+  "score_selection": "max successful refined raw score, tie lowest visit_order; diagnostic only",
+  "evaluation_targets_loaded": false
+}

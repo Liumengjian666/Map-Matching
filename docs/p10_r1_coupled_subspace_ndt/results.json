@@ -1,0 +1,252 @@
+{
+  "revision": 0,
+  "methods": [
+    {
+      "method": "A_WEAK_ONLY",
+      "pre_refine_recovered": 0,
+      "recovered": 6,
+      "denominator": 7,
+      "score_selected_recovered": 1,
+      "probe_count": 106,
+      "NDT_calls": 106,
+      "mean_probe_ms": 28.48758023584906,
+      "P95_probe_ms": 76.84865300000001,
+      "total_probe_ms": 3019.6835050000004,
+      "mean_frame_ms": 1509.8417525,
+      "P95_frame_ms": 2107.72707005,
+      "coupling_fallback_count": 0,
+      "coupling_capped_count": 0,
+      "pre_to_refine_geometric_escape_count": 101,
+      "strong_termination": {
+        "WEAK_ONLY": 106
+      },
+      "stage_ms": {
+        "coupling_ms": 0.0,
+        "strong_ms": 0.0,
+        "diagnostic_ms": 343.1749700000001,
+        "refine_ms": 2670.7833820000005
+      },
+      "explicit_energy_evaluations": 424,
+      "coupling_energy_evaluations": 0,
+      "strong_energy_evaluations": 0,
+      "strong_iterations": 0
+    },
+    {
+      "method": "B_WARM_NEWTON",
+      "pre_refine_recovered": 1,
+      "recovered": 7,
+      "denominator": 7,
+      "score_selected_recovered": 2,
+      "probe_count": 106,
+      "NDT_calls": 106,
+      "mean_probe_ms": 168.58643728301885,
+      "P95_probe_ms": 252.4340805,
+      "total_probe_ms": 17870.162352,
+      "mean_frame_ms": 8935.081176,
+      "P95_frame_ms": 10653.427987500001,
+      "coupling_fallback_count": 0,
+      "coupling_capped_count": 0,
+      "pre_to_refine_geometric_escape_count": 101,
+      "strong_termination": {
+        "STEP_SMALL": 1,
+        "MAX_ITERATIONS": 67,
+        "TRUST_RADIUS_EXHAUSTED": 35,
+        "ENERGY_CHANGE_SMALL": 3
+      },
+      "stage_ms": {
+        "coupling_ms": 0.0,
+        "strong_ms": 14538.828902000005,
+        "diagnostic_ms": 352.72935599999994,
+        "refine_ms": 2970.982744000001
+      },
+      "explicit_energy_evaluations": 16437,
+      "coupling_energy_evaluations": 0,
+      "strong_energy_evaluations": 16013,
+      "strong_iterations": 2063
+    },
+    {
+      "method": "C_COUPLED_PREDICTOR",
+      "pre_refine_recovered": 0,
+      "recovered": 7,
+      "denominator": 7,
+      "score_selected_recovered": 2,
+      "probe_count": 106,
+      "NDT_calls": 106,
+      "mean_probe_ms": 31.44382796226415,
+      "P95_probe_ms": 79.85085950000001,
+      "total_probe_ms": 3333.045764,
+      "mean_frame_ms": 1666.522882,
+      "P95_frame_ms": 2328.8879205999997,
+      "coupling_fallback_count": 0,
+      "coupling_capped_count": 2,
+      "pre_to_refine_geometric_escape_count": 101,
+      "strong_termination": {
+        "PREDICTOR_ONLY": 106
+      },
+      "stage_ms": {
+        "coupling_ms": 113.88155199999999,
+        "strong_ms": 0.0,
+        "diagnostic_ms": 342.23559100000017,
+        "refine_ms": 2870.233142
+      },
+      "explicit_energy_evaluations": 530,
+      "coupling_energy_evaluations": 106,
+      "strong_energy_evaluations": 0,
+      "strong_iterations": 0
+    },
+    {
+      "method": "D_COUPLED_CORRECTOR",
+      "pre_refine_recovered": 1,
+      "recovered": 7,
+      "denominator": 7,
+      "score_selected_recovered": 2,
+      "probe_count": 106,
+      "NDT_calls": 106,
+      "mean_probe_ms": 169.21632166037736,
+      "P95_probe_ms": 246.73147175,
+      "total_probe_ms": 17936.930096,
+      "mean_frame_ms": 8968.465048,
+      "P95_frame_ms": 10578.9009442,
+      "coupling_fallback_count": 0,
+      "coupling_capped_count": 2,
+      "pre_to_refine_geometric_escape_count": 100,
+      "strong_termination": {
+        "STEP_SMALL": 1,
+        "MAX_ITERATIONS": 70,
+        "ENERGY_CHANGE_SMALL": 4,
+        "TRUST_RADIUS_EXHAUSTED": 31
+      },
+      "stage_ms": {
+        "coupling_ms": 119.882367,
+        "strong_ms": 14662.148751000002,
+        "diagnostic_ms": 352.8579739999999,
+        "refine_ms": 2794.0172590000006
+      },
+      "explicit_energy_evaluations": 16646,
+      "coupling_energy_evaluations": 106,
+      "strong_energy_evaluations": 16116,
+      "strong_iterations": 2076
+    }
+  ],
+  "development_target_met": true,
+  "D_better_than_Warm_recovery": false,
+  "FINAL_RESULT": "COUPLED_SUBSPACE_NDT_PROTOTYPE_SUPPORTED",
+  "GT_LOADED": false,
+  "online_pose_switching": false,
+  "scope": "development candidate-pool ID proximity recall; not localization success or independent generalization",
+  "oracle_loaded_only_by_postfreeze_evaluator": true,
+  "historical_R1A_oracle_u_comparison": "not a fair online initialization reference",
+  "P95_frame_sample_count": 2,
+  "start_sha": "1327c767f92ef8a85eb05a3ef049ff396657cd54",
+  "branch": "research/p9-r4-heldout-visual-evidence",
+  "worktree": "/tmp/dog_loc_paper_r4_ws.Fq21k2",
+  "implementation_commit": "e4cfa6e4fa1eca312e7158d588751c3da79fcf3f",
+  "baseline": {
+    "method": "ORIGINAL_NDT",
+    "NDT_calls": 2,
+    "pre_refine_recovered": 0,
+    "recovered": 0,
+    "mean_probe_ms": 54.071951,
+    "P95_probe_ms": 96.85127659999999
+  },
+  "diagnostics": [
+    {
+      "method": "A_WEAK_ONLY",
+      "full_status": {
+        "SUCCESS": 106
+      },
+      "iterations_mean": 21.264150943396228,
+      "iterations_P95": 52.0,
+      "coupling_solve_residual_max": null,
+      "Hvv_condition_max": null,
+      "previous_strong_gradient_mean": null,
+      "previous_strong_gradient_max": null,
+      "adjacent_pre_endpoint_outside_neighborhood_count": 104,
+      "support_change_pre_to_refine_mean": 0.7432789464130851,
+      "full_refine_objective_worse_count": 1,
+      "conditional_correction_energy_increase_count": 0
+    },
+    {
+      "method": "B_WARM_NEWTON",
+      "full_status": {
+        "SUCCESS": 103,
+        "ITERATION_LIMIT": 3
+      },
+      "iterations_mean": 23.528301886792452,
+      "iterations_P95": 52.75,
+      "coupling_solve_residual_max": null,
+      "Hvv_condition_max": null,
+      "previous_strong_gradient_mean": null,
+      "previous_strong_gradient_max": null,
+      "adjacent_pre_endpoint_outside_neighborhood_count": 103,
+      "support_change_pre_to_refine_mean": 0.7693736517271024,
+      "full_refine_objective_worse_count": 6,
+      "conditional_correction_energy_increase_count": 0
+    },
+    {
+      "method": "C_COUPLED_PREDICTOR",
+      "full_status": {
+        "SUCCESS": 105,
+        "ITERATION_LIMIT": 1
+      },
+      "iterations_mean": 22.71698113207547,
+      "iterations_P95": 56.25,
+      "coupling_solve_residual_max": 2.884726161206325e-16,
+      "Hvv_condition_max": 30.856439800289756,
+      "previous_strong_gradient_mean": 1.8378998552699595,
+      "previous_strong_gradient_max": 4.5071509525254765,
+      "adjacent_pre_endpoint_outside_neighborhood_count": 104,
+      "support_change_pre_to_refine_mean": 0.7745591630424155,
+      "full_refine_objective_worse_count": 1,
+      "conditional_correction_energy_increase_count": 0
+    },
+    {
+      "method": "D_COUPLED_CORRECTOR",
+      "full_status": {
+        "SUCCESS": 105,
+        "ITERATION_LIMIT": 1
+      },
+      "iterations_mean": 22.07547169811321,
+      "iterations_P95": 48.75,
+      "coupling_solve_residual_max": 2.695663015538369e-16,
+      "Hvv_condition_max": 27.018564358644003,
+      "previous_strong_gradient_mean": 0.2218617728278637,
+      "previous_strong_gradient_max": 0.8247336757742859,
+      "adjacent_pre_endpoint_outside_neighborhood_count": 103,
+      "support_change_pre_to_refine_mean": 0.7702300392823318,
+      "full_refine_objective_worse_count": 5,
+      "conditional_correction_energy_increase_count": 0
+    }
+  ],
+  "scientific_attempts": 1,
+  "targeted_revisions": 0,
+  "real_full_NDT_calls": 426,
+  "NEW_ORACLE_CALLS": 0,
+  "BASELINE_REPLAY_CALLS": 0,
+  "experiment_wall_s": 42.694510650937445,
+  "peak_RSS_KiB": 106060,
+  "retained_weak_nodes": {
+    "616": 55,
+    "2226": 51
+  },
+  "planned_weak_grid_nodes_per_frame": 81,
+  "actual_source_counts": {
+    "616": 358,
+    "2226": 554
+  },
+  "candidate_algorithm_files": "src/dog_prior_map_fastlio2_frontend_exp/scripts/p10",
+  "NEXT": "P10_R2_BUDGETED_SINGLE_FRAME_COUPLED_NDT_INTEGRATION",
+  "integration_boundary": "shadow diagnostic adapter first; retain ordinary nominal result; no production state switch authorized",
+  "claim_limits": [
+    "existing development cohort: seven canonical IDs on two frames",
+    "D did not exceed warm-start recall",
+    "strong endpoints alone recover only 1/7 IDs",
+    "D uses extra predictor work, not equal CPU budget",
+    "full NDT can escape the initial neighborhood and can increase E",
+    "seven ID neighborhoods are not seven certified independent attractors",
+    "pool discovery is not objective-best pose-selection success",
+    "prototype 55/51 refinement calls per method per frame, not online competitive"
+  ],
+  "PUSH_EXECUTED": false,
+  "remote_delivery_confirmed": false
+}

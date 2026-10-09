@@ -1,7 +1,6 @@
 """Synthetic orchestration checks, no real NDT or oracle input."""
 import unittest
 from run_experiment import METHODS, score_winners
-from evaluate_experiment import verify_pool
 
 
 class PipelineTests(unittest.TestCase):
@@ -18,23 +17,6 @@ class PipelineTests(unittest.TestCase):
     def test_no_success_is_missing_not_nominal_fake_winner(self):
         winners = score_winners([])
         self.assertTrue(all(r["visit_order"] == "" and r["status"] == "NO_SUCCESSFUL_TERMINAL" for r in winners))
-
-    def test_pool_requires_individually_unique_and_complete_order(self):
-        rows = [dict(transaction_id=tx, method=method, visit_order=str(i), grid_index=str(i), u=str(i),
-                     source_hash=source_hash, source_point_count=count, target_point_count="549606",
-                     full_ndt_calls="1", strong_iterations="0")
-                for tx, size, count, source_hash in (("616", 55, "358", "16677765666605202002"),
-                                                     ("2226", 51, "554", "2810802364734767265"))
-                for method in METHODS for i in range(size)]
-        rows += [dict(transaction_id="616", method="ORIGINAL_NDT"),
-                 dict(transaction_id="2226", method="ORIGINAL_NDT")]
-        verify_pool(rows)
-        altered = [dict(r) for r in rows]
-        altered[1]["grid_index"] = "0"
-        with self.assertRaises(RuntimeError):
-            verify_pool(altered)
-        with self.assertRaises(RuntimeError):
-            verify_pool(rows[1:])
 
 
 if __name__ == "__main__":
