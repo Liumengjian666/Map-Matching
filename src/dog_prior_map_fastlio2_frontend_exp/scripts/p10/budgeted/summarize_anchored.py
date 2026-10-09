@@ -19,4 +19,6 @@ for directory in sorted(ARCHIVE.glob("attempt_*")):
             max_update_translation=s.get("max_update_translation_m"),max_update_rotation=s.get("max_update_rotation_deg"),
             admitted_GT=e["GT"]["admitted_outcomes"].get(n))
     print(json.dumps(dict(attempt=e["attempt"],code_sha=e["code_sha"],improvement=e["translation_RMSE_improvement_fraction"],
-        anchor_audit_max=e["max_anchor_audit_difference"],methods=result,windows=read(directory/"known_development_windows.csv")),indent=2))
+        anchor_audit_max=e["max_anchor_audit_difference"],methods=result,
+        group_cost={n:{k:dict(frames=s["frames"],cost=s.get("frame_processing_logging_ms")) for k,s in g.items()} for n,g in e["groups"].items()},
+        windows=read(directory/"known_development_windows.csv")),indent=2))

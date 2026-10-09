@@ -1,0 +1,22 @@
+[  5%] Built target p7_replay_io
+Scanning dependencies of target p7_current_frame_ndt
+[  8%] Building CXX object CMakeFiles/p7_current_frame_ndt.dir/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_anchor.cpp.o
+[ 14%] Built target p7_replay_io_test
+[ 17%] Linking CXX static library libp7_current_frame_ndt.a
+[ 29%] Built target p7_current_frame_ndt
+[ 32%] Linking CXX executable p10_r2_single
+[ 35%] Linking CXX executable current_frame_ndt_test
+[ 38%] Built target p10_r2_single
+[ 41%] Built target current_frame_ndt_test
+[ 44%] Linking CXX executable p10_r3_temporal_test
+[ 47%] Linking CXX executable p10_r2_replay
+[ 61%] Built target p10_r2_replay
+[ 64%] Linking CXX executable p7_single_state_runner
+[ 79%] Built target p7_single_state_runner
+[ 82%] Linking CXX executable p10_r2_shadow_test
+[ 85%] Built target p10_r3_temporal_test
+[ 88%] Linking CXX executable p10_r5_anchor_test
+[ 91%] Built target p10_r2_shadow_test
+[ 94%] Linking CXX executable p10_r4_admission_test
+[ 97%] Built target p10_r5_anchor_test
+[100%] Built target p10_r4_admission_test

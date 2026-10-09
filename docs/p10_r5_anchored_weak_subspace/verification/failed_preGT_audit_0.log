@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/evaluate_anchored.py", line 166, in <module>
+    p=argparse.ArgumentParser();p.add_argument("--attempt",type=int,default=0);evaluate(p.parse_args().attempt)
+  File "src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/evaluate_anchored.py", line 132, in evaluate
+    f,jobs=verify(directory)
+  File "src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/evaluate_anchored.py", line 116, in verify
+    if not all(r["hard_requirements_pass"] for r in checks) or not all(r["pass_parity"] for r in anchor_checks+diagnostics):raise RuntimeError("independent engineering/evidence audit failed before GT")
+RuntimeError: independent engineering/evidence audit failed before GT

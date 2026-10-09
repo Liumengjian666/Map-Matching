@@ -1,0 +1,17 @@
+{
+  "GT_LOADED": false,
+  "output_sha256": {
+    "anchor.csv": "831c1151b3490cb5057723ea1abae621d28d25242f6fae07a55355980485d1ac",
+    "registration.csv": "52f0a42a363c9b0b46de1dcba5158ba22f55ce3700bbec214d5b61c48efc2849",
+    "runtime.csv": "d09bf71caa0e968e725113f4d9ae0fb6ab96049d5acdb97ad7ee2e4a1f998e3c",
+    "events.csv": "11ebaec9563d3c4b471d658e81421963195db03410fdac58a8afe389affa730d",
+    "trajectory.csv": "fc77950238ee16c5a10b3c61670eabe8f9b15000b181867dfb4cff9be8db10e9",
+    "resources.csv": "20559483a7f2f9b2f26c4ad20226ff4b95a1e56adad2b3e851ed62dc2dd87579",
+    "frame_cost.csv": "b6d53ade32549f8e07ba8c53fabc477fa5a60b9126d14ed43f2a446bbd359fa4",
+    "frames.csv": "c4d3b77529b7b570df49c31702dd8de4450b4464aaa973bc1ef323d5035ad6cc",
+    "models.csv": "96d7e6922700387964713870c69c73ed0984e399b9ed1bd42be590ea07c3f241",
+    "admission.csv": "06639e191e008e79c0b0ac15e7e94f7a29940cf1caf39cab261ac5b2134a53e8",
+    "pending_end.csv": "1666d61d1aaf5a71072370d0a8ea099bbe1b5636bc26d101522ac5a32d2abbf3",
+    "candidates.csv": "c49e5724ad4e7b566d27ed81bec43310e5ab2a1f89f15b57bab20fce1998c1db"
+  }
+}

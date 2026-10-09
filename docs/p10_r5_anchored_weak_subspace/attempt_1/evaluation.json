@@ -1,0 +1,1125 @@
+{
+  "task": "PAPER-P10-R5-ANCHORED-WEAK-SUBSPACE-COUPLED-NDT",
+  "attempt": 1,
+  "start_sha": "65a416ec19069efa0405e9fc56a0505dc9c3018e",
+  "code_sha": "b4b4f6a65176a1c9fd27d99f0af1039bb2dbd339",
+  "engineering": "PASS",
+  "statistics": {
+    "control": {
+      "frames": 4127,
+      "modes": {
+        "CONTROL": 4127
+      },
+      "events": {
+        "CONTROL_NO_SHADOW": 4127
+      },
+      "nominal_effective": 4127,
+      "raw_trigger_count": 0,
+      "search_count": 0,
+      "full_ndt_calls": 4127,
+      "extra_ndt_calls": 0,
+      "max_full_ndt_calls": 1,
+      "jet_calls": 0,
+      "preview_calls": 0,
+      "terminal_score_calls": 0,
+      "max_previews": 0,
+      "local_recommendations": 0,
+      "nonlocal_terminals": 0,
+      "eligible_nonlocal_terminals": 0,
+      "pending_created": 0,
+      "pending_first_support": 0,
+      "temporally_supported": 0,
+      "frame_processing_logging_ms": {
+        "mean": 25.982289593893867,
+        "median": 23.514088,
+        "P95": 49.5957734,
+        "max": 139.290428,
+        "RMSE": 28.569062773803186
+      },
+      "frame_cpu_ms": {
+        "mean": 25.95613544947904,
+        "median": 23.489,
+        "P95": 49.553399999999996,
+        "max": 139.111,
+        "RMSE": 28.541707413431027
+      },
+      "logging_ms": {
+        "mean": 0.1049141766416283,
+        "median": 0.096731,
+        "P95": 0.14136,
+        "max": 0.348231,
+        "RMSE": 0.10755537921955832
+      },
+      "shadow_ms": {
+        "mean": 0.0,
+        "median": 0.0,
+        "P95": 0.0,
+        "max": 0.0,
+        "RMSE": 0.0
+      },
+      "shadow_cpu_ms": {
+        "mean": 0.0,
+        "median": 0.0,
+        "P95": 0.0,
+        "max": 0.0,
+        "RMSE": 0.0
+      },
+      "phase_mean_ms": {
+        "model_ms": 0.0,
+        "jet_ms": 0.0,
+        "solve_ms": 0.0,
+        "preview_ms": 0.0,
+        "refinement_ms": 0.0
+      },
+      "baseline_phase_mean_ms": {
+        "prediction_and_deskew_ms": 3.6564983181487762,
+        "cloud_io_ms": 0.5925085832323721,
+        "ndt_total_ms": 21.411565105161134,
+        "ndt_alignment_ms": 18.738877315483403,
+        "ikfom_update_ms": 0.03790891834262176
+      },
+      "large_jumps": 3,
+      "max_consecutive_dt_m": 0.22215666948237583,
+      "max_consecutive_dr_deg": 12.583382261322532,
+      "peak_rss_kib": 111976
+    },
+    "anchored_shadow": {
+      "frames": 4127,
+      "modes": {
+        "NORMAL": 3329,
+        "ANCHOR_SKIP": 400,
+        "SEARCH": 296,
+        "PENDING": 102
+      },
+      "events": {
+        "UNTRIGGERED_NOMINAL": 3329,
+        "ANCHOR_UNAVAILABLE_RETAINED_NOMINAL": 400,
+        "SEARCH_RETAINED_NOMINAL": 190,
+        "PENDING_CREATED": 75,
+        "PENDING_COLLAPSED_TO_NOMINAL": 25,
+        "PENDING_FIRST_SUPPORT": 33,
+        "TEMPORALLY_SUPPORTED": 23,
+        "PENDING_CONTINUITY_FAILED": 21,
+        "LOCAL_RECOMMENDED": 31
+      },
+      "nominal_effective": 4127,
+      "raw_trigger_count": 776,
+      "search_count": 296,
+      "full_ndt_calls": 4571,
+      "extra_ndt_calls": 444,
+      "max_full_ndt_calls": 3,
+      "jet_calls": 4216,
+      "preview_calls": 3920,
+      "terminal_score_calls": 621,
+      "max_previews": 16,
+      "local_recommendations": 34,
+      "nonlocal_terminals": 125,
+      "eligible_nonlocal_terminals": 113,
+      "pending_created": 75,
+      "pending_first_support": 33,
+      "temporally_supported": 23,
+      "frame_processing_logging_ms": {
+        "mean": 29.925242813908408,
+        "median": 24.645697,
+        "P95": 65.53667999999999,
+        "max": 195.434474,
+        "RMSE": 35.48207085176142
+      },
+      "frame_cpu_ms": {
+        "mean": 29.90189144657136,
+        "median": 24.628,
+        "P95": 65.48929999999999,
+        "max": 195.316,
+        "RMSE": 35.455437985708485
+      },
+      "logging_ms": {
+        "mean": 0.20447790356190937,
+        "median": 0.157843,
+        "P95": 0.547149,
+        "max": 0.97695,
+        "RMSE": 0.2572807152907689
+      },
+      "shadow_ms": {
+        "mean": 3.9683051177610857,
+        "median": 0.003352,
+        "P95": 39.64421959999997,
+        "max": 164.57738,
+        "RMSE": 15.08438773366474
+      },
+      "shadow_cpu_ms": {
+        "mean": 3.965456748243276,
+        "median": 0.003,
+        "P95": 39.62629999999997,
+        "max": 164.48,
+        "RMSE": 15.074960284953479
+      },
+      "phase_mean_ms": {
+        "model_ms": 0.02997535716016477,
+        "jet_ms": 1.4023639803731522,
+        "solve_ms": 0.006361433244487521,
+        "preview_ms": 0.9053660894111946,
+        "refinement_ms": 1.6146097569663194
+      },
+      "baseline_phase_mean_ms": {
+        "prediction_and_deskew_ms": 3.6178946607705353,
+        "cloud_io_ms": 0.5871801381148534,
+        "ndt_total_ms": 21.311046572570874,
+        "ndt_alignment_ms": 18.685735797916163,
+        "ikfom_update_ms": 0.03676154906711898
+      },
+      "large_jumps": 3,
+      "max_consecutive_dt_m": 0.22215666948237583,
+      "max_consecutive_dr_deg": 12.583382261322532,
+      "peak_rss_kib": 112752,
+      "admitted": 4,
+      "alternative_used": 0,
+      "update_success": 4127,
+      "admission_status_counts": {
+        "DISABLED": 3596,
+        "EXPIRED": 400,
+        "ANCHOR_AWAITING_CONFIRMATION": 108,
+        "ANCHOR_ADVANTAGE_INSUFFICIENT": 19,
+        "ANCHOR_ADMITTED": 4
+      },
+      "max_update_translation_m": 0.18757150281014892,
+      "max_update_rotation_deg": 2.2026384710480107,
+      "rejected_pending_outcomes": {
+        "PENDING_COLLAPSED_TO_NOMINAL": 25,
+        "TEMPORALLY_SUPPORTED": 23,
+        "PENDING_CONTINUITY_FAILED": 21,
+        "ANCHOR_UNAVAILABLE_RETAINED_NOMINAL": 6
+      },
+      "wall_s": 123.88343476096634,
+      "amortized_wall_ms": 30.017793739027464,
+      "pending_episodes": {
+        "created": 75,
+        "outcomes": {
+          "PENDING_COLLAPSED_TO_NOMINAL": 25,
+          "TEMPORALLY_SUPPORTED": 23,
+          "PENDING_CONTINUITY_FAILED": 21,
+          "ANCHOR_UNAVAILABLE_RETAINED_NOMINAL": 6
+        },
+        "max_confirmation_frames": 2
+      },
+      "anchor_valid_frames": 3397,
+      "anchor_established": 179,
+      "anchor_evaluations": 131,
+      "anchor_status_counts": {
+        "MISSING": 1,
+        "PROPAGATED": 3266,
+        "EXPIRED": 729,
+        "ANCHOR_AWAITING_CONFIRMATION": 108,
+        "ANCHOR_ADVANTAGE_INSUFFICIENT": 19,
+        "ANCHOR_ADMITTED": 4
+      },
+      "mean_weak_displacement_fraction": 0.7288084879969144
+    },
+    "anchored_guarded_feedback": {
+      "frames": 4127,
+      "modes": {
+        "NORMAL": 3339,
+        "ANCHOR_SKIP": 369,
+        "SEARCH": 303,
+        "PENDING": 116
+      },
+      "events": {
+        "UNTRIGGERED_NOMINAL": 3339,
+        "ANCHOR_UNAVAILABLE_RETAINED_NOMINAL": 369,
+        "SEARCH_RETAINED_NOMINAL": 185,
+        "PENDING_CREATED": 85,
+        "PENDING_COLLAPSED_TO_NOMINAL": 29,
+        "PENDING_FIRST_SUPPORT": 38,
+        "TEMPORALLY_SUPPORTED": 25,
+        "PENDING_CONTINUITY_FAILED": 23,
+        "LOCAL_RECOMMENDED": 33,
+        "PENDING_MATCH_QUALITY_FAILED": 1
+      },
+      "nominal_effective": 4127,
+      "raw_trigger_count": 765,
+      "search_count": 303,
+      "full_ndt_calls": 4604,
+      "extra_ndt_calls": 477,
+      "max_full_ndt_calls": 3,
+      "jet_calls": 4311,
+      "preview_calls": 4008,
+      "terminal_score_calls": 678,
+      "max_previews": 16,
+      "local_recommendations": 36,
+      "nonlocal_terminals": 132,
+      "eligible_nonlocal_terminals": 127,
+      "pending_created": 85,
+      "pending_first_support": 38,
+      "temporally_supported": 25,
+      "frame_processing_logging_ms": {
+        "mean": 29.760846575720866,
+        "median": 24.444482,
+        "P95": 66.20586439999998,
+        "max": 239.575651,
+        "RMSE": 35.30038773308194
+      },
+      "frame_cpu_ms": {
+        "mean": 29.73824472982796,
+        "median": 24.429,
+        "P95": 66.16419999999998,
+        "max": 239.452,
+        "RMSE": 35.27451752680294
+      },
+      "logging_ms": {
+        "mean": 0.20559962321298766,
+        "median": 0.1591,
+        "P95": 0.5608869999999991,
+        "max": 2.740809,
+        "RMSE": 0.2615664652991901
+      },
+      "shadow_ms": {
+        "mean": 4.083211965350133,
+        "median": 0.003352,
+        "P95": 39.54131479999998,
+        "max": 186.64996,
+        "RMSE": 15.471206031989258
+      },
+      "shadow_cpu_ms": {
+        "mean": 4.080161618609159,
+        "median": 0.003,
+        "P95": 39.50279999999998,
+        "max": 186.559,
+        "RMSE": 15.46114417222635
+      },
+      "phase_mean_ms": {
+        "model_ms": 0.031050755754785584,
+        "jet_ms": 1.3912927022049912,
+        "solve_ms": 0.006608732493336564,
+        "preview_ms": 0.874733676520475,
+        "refinement_ms": 1.7696753765447055
+      },
+      "baseline_phase_mean_ms": {
+        "prediction_and_deskew_ms": 3.632908696631936,
+        "cloud_io_ms": 0.5894749013811486,
+        "ndt_total_ms": 21.01171400387691,
+        "ndt_alignment_ms": 18.391638251029804,
+        "ikfom_update_ms": 0.03670949285195057
+      },
+      "large_jumps": 3,
+      "max_consecutive_dt_m": 0.22215666948237583,
+      "max_consecutive_dr_deg": 12.582999308473411,
+      "peak_rss_kib": 112188,
+      "admitted": 2,
+      "alternative_used": 2,
+      "update_success": 4127,
+      "admission_status_counts": {
+        "DISABLED": 3610,
+        "EXPIRED": 355,
+        "ANCHOR_AWAITING_CONFIRMATION": 123,
+        "ANCHOR_ADVANTAGE_INSUFFICIENT": 23,
+        "ANCHOR_ADMITTED": 2,
+        "FEEDBACK_CONSUMED": 14
+      },
+      "max_update_translation_m": 0.18757150281014892,
+      "max_update_rotation_deg": 2.2026384710480107,
+      "rejected_pending_outcomes": {
+        "PENDING_COLLAPSED_TO_NOMINAL": 29,
+        "TEMPORALLY_SUPPORTED": 25,
+        "PENDING_CONTINUITY_FAILED": 23,
+        "ANCHOR_UNAVAILABLE_RETAINED_NOMINAL": 7,
+        "PENDING_MATCH_QUALITY_FAILED": 1
+      },
+      "wall_s": 123.20612067705952,
+      "amortized_wall_ms": 29.853675957610736,
+      "pending_episodes": {
+        "created": 85,
+        "outcomes": {
+          "PENDING_COLLAPSED_TO_NOMINAL": 29,
+          "TEMPORALLY_SUPPORTED": 25,
+          "PENDING_CONTINUITY_FAILED": 23,
+          "ANCHOR_UNAVAILABLE_RETAINED_NOMINAL": 7,
+          "PENDING_MATCH_QUALITY_FAILED": 1
+        },
+        "max_confirmation_frames": 2
+      },
+      "anchor_valid_frames": 3420,
+      "anchor_established": 181,
+      "anchor_evaluations": 148,
+      "anchor_status_counts": {
+        "MISSING": 1,
+        "PROPAGATED": 3272,
+        "EXPIRED": 690,
+        "ANCHOR_AWAITING_CONFIRMATION": 123,
+        "ANCHOR_ADVANTAGE_INSUFFICIENT": 23,
+        "ANCHOR_ADMITTED": 2,
+        "FEEDBACK_CONSUMED": 16
+      },
+      "mean_weak_displacement_fraction": 0.7407858367856177
+    }
+  },
+  "groups": {
+    "anchored_shadow": {
+      "NORMAL": {
+        "frames": 3329,
+        "modes": {
+          "NORMAL": 3329
+        },
+        "events": {
+          "UNTRIGGERED_NOMINAL": 3329
+        },
+        "nominal_effective": 3329,
+        "raw_trigger_count": 0,
+        "search_count": 0,
+        "full_ndt_calls": 3329,
+        "extra_ndt_calls": 0,
+        "max_full_ndt_calls": 1,
+        "jet_calls": 0,
+        "preview_calls": 0,
+        "terminal_score_calls": 0,
+        "max_previews": 0,
+        "local_recommendations": 0,
+        "nonlocal_terminals": 0,
+        "eligible_nonlocal_terminals": 0,
+        "pending_created": 0,
+        "pending_first_support": 0,
+        "temporally_supported": 0,
+        "frame_processing_logging_ms": {
+          "mean": 26.992891098227695,
+          "median": 24.585424,
+          "P95": 49.478207399999995,
+          "max": 129.227493,
+          "RMSE": 29.280905994589634
+        },
+        "frame_cpu_ms": {
+          "mean": 26.971303694803243,
+          "median": 24.567,
+          "P95": 49.4416,
+          "max": 129.129,
+          "RMSE": 29.257516779705508
+        },
+        "logging_ms": {
+          "mean": 0.16395602973866027,
+          "median": 0.156097,
+          "P95": 0.19884039999999997,
+          "max": 0.613911,
+          "RMSE": 0.1669616802677659
+        },
+        "shadow_ms": {
+          "mean": 0.003473242114749174,
+          "median": 0.003352,
+          "P95": 0.00468,
+          "max": 0.015645,
+          "RMSE": 0.0036234971971590047
+        },
+        "shadow_cpu_ms": {
+          "mean": 0.003046860919194954,
+          "median": 0.003,
+          "P95": 0.004,
+          "max": 0.015,
+          "RMSE": 0.0031743660122067353
+        },
+        "phase_mean_ms": {
+          "model_ms": 0.0,
+          "jet_ms": 0.0,
+          "solve_ms": 0.0,
+          "preview_ms": 0.0,
+          "refinement_ms": 0.0
+        },
+        "baseline_phase_mean_ms": {
+          "prediction_and_deskew_ms": 3.5792070492640433,
+          "cloud_io_ms": 0.5810319068789427,
+          "ndt_total_ms": 22.44035827756083,
+          "ndt_alignment_ms": 19.588851316911985,
+          "ikfom_update_ms": 0.03672628116551517
+        }
+      },
+      "SEARCH": {
+        "frames": 296,
+        "modes": {
+          "SEARCH": 296
+        },
+        "events": {
+          "SEARCH_RETAINED_NOMINAL": 190,
+          "PENDING_CREATED": 75,
+          "LOCAL_RECOMMENDED": 31
+        },
+        "nominal_effective": 296,
+        "raw_trigger_count": 296,
+        "search_count": 296,
+        "full_ndt_calls": 638,
+        "extra_ndt_calls": 342,
+        "max_full_ndt_calls": 3,
+        "jet_calls": 4216,
+        "preview_calls": 3920,
+        "terminal_score_calls": 417,
+        "max_previews": 16,
+        "local_recommendations": 34,
+        "nonlocal_terminals": 125,
+        "eligible_nonlocal_terminals": 113,
+        "pending_created": 75,
+        "pending_first_support": 0,
+        "temporally_supported": 0,
+        "frame_processing_logging_ms": {
+          "mean": 77.7399723108108,
+          "median": 71.3813995,
+          "P95": 134.54288574999998,
+          "max": 195.434474,
+          "RMSE": 83.39626097548712
+        },
+        "frame_cpu_ms": {
+          "mean": 77.68742567567567,
+          "median": 71.33000000000001,
+          "P95": 134.46699999999998,
+          "max": 195.316,
+          "RMSE": 83.34061449010223
+        },
+        "logging_ms": {
+          "mean": 0.7346382668918918,
+          "median": 0.8286405,
+          "P95": 0.8794675,
+          "max": 0.97695,
+          "RMSE": 0.7510894912531184
+        },
+        "shadow_ms": {
+          "mean": 51.92430740540541,
+          "median": 49.0349345,
+          "P95": 84.50294325,
+          "max": 164.57738,
+          "RMSE": 55.79038882012356
+        },
+        "shadow_cpu_ms": {
+          "mean": 51.89148648648649,
+          "median": 49.0055,
+          "P95": 84.45425,
+          "max": 164.48,
+          "RMSE": 55.755472283905476
+        },
+        "phase_mean_ms": {
+          "model_ms": 0.4179334425675676,
+          "jet_ms": 19.552554550675676,
+          "solve_ms": 0.08869471283783785,
+          "preview_ms": 12.623127875000002,
+          "refinement_ms": 19.14903759797297
+        },
+        "baseline_phase_mean_ms": {
+          "prediction_and_deskew_ms": 3.7622577702702706,
+          "cloud_io_ms": 0.6143276756756757,
+          "ndt_total_ms": 20.317899689189186,
+          "ndt_alignment_ms": 18.45327862837838,
+          "ikfom_update_ms": 0.04072919594594594
+        }
+      },
+      "PENDING": {
+        "frames": 102,
+        "modes": {
+          "PENDING": 102
+        },
+        "events": {
+          "PENDING_COLLAPSED_TO_NOMINAL": 25,
+          "PENDING_FIRST_SUPPORT": 33,
+          "TEMPORALLY_SUPPORTED": 23,
+          "PENDING_CONTINUITY_FAILED": 21
+        },
+        "nominal_effective": 102,
+        "raw_trigger_count": 81,
+        "search_count": 0,
+        "full_ndt_calls": 204,
+        "extra_ndt_calls": 102,
+        "max_full_ndt_calls": 2,
+        "jet_calls": 0,
+        "preview_calls": 0,
+        "terminal_score_calls": 204,
+        "max_previews": 0,
+        "local_recommendations": 0,
+        "nonlocal_terminals": 0,
+        "eligible_nonlocal_terminals": 0,
+        "pending_created": 0,
+        "pending_first_support": 33,
+        "temporally_supported": 23,
+        "frame_processing_logging_ms": {
+          "mean": 27.205921960784316,
+          "median": 23.124993500000002,
+          "P95": 57.32158424999995,
+          "max": 86.213076,
+          "RMSE": 30.471848554665243
+        },
+        "frame_cpu_ms": {
+          "mean": 27.186519607843138,
+          "median": 23.1025,
+          "P95": 57.28559999999995,
+          "max": 86.169,
+          "RMSE": 30.451304954007487
+        },
+        "logging_ms": {
+          "mean": 0.17240288235294118,
+          "median": 0.1695065,
+          "P95": 0.20413755,
+          "max": 0.222586,
+          "RMSE": 0.1733296911175404
+        },
+        "shadow_ms": {
+          "mean": 9.765076529411765,
+          "median": 7.637849,
+          "P95": 28.957827899999888,
+          "max": 59.425186,
+          "RMSE": 13.185113295570165
+        },
+        "shadow_cpu_ms": {
+          "mean": 9.758990196078432,
+          "median": 7.6315,
+          "P95": 28.937199999999887,
+          "max": 59.4,
+          "RMSE": 13.177473726542788
+        },
+        "phase_mean_ms": {
+          "model_ms": 0.0,
+          "jet_ms": 0.0,
+          "solve_ms": 0.0,
+          "preview_ms": 0.0,
+          "refinement_ms": 9.758620960784313
+        },
+        "baseline_phase_mean_ms": {
+          "prediction_and_deskew_ms": 3.777453343137255,
+          "cloud_io_ms": 0.6164417254901962,
+          "ndt_total_ms": 12.640320833333334,
+          "ndt_alignment_ms": 11.122282764705881,
+          "ikfom_update_ms": 0.0372648137254902
+        }
+      },
+      "ANCHOR_SKIP": {
+        "frames": 400,
+        "modes": {
+          "ANCHOR_SKIP": 400
+        },
+        "events": {
+          "ANCHOR_UNAVAILABLE_RETAINED_NOMINAL": 400
+        },
+        "nominal_effective": 400,
+        "raw_trigger_count": 399,
+        "search_count": 0,
+        "full_ndt_calls": 400,
+        "extra_ndt_calls": 0,
+        "max_full_ndt_calls": 1,
+        "jet_calls": 0,
+        "preview_calls": 0,
+        "terminal_score_calls": 0,
+        "max_previews": 0,
+        "local_recommendations": 0,
+        "nonlocal_terminals": 0,
+        "eligible_nonlocal_terminals": 0,
+        "pending_created": 0,
+        "pending_first_support": 0,
+        "temporally_supported": 0,
+        "frame_processing_logging_ms": {
+          "mean": 19.6402669575,
+          "median": 17.263574,
+          "P95": 35.28680994999996,
+          "max": 91.253502,
+          "RMSE": 21.69322326616325
+        },
+        "frame_cpu_ms": {
+          "mean": 19.622832499999998,
+          "median": 17.252499999999998,
+          "P95": 35.26924999999996,
+          "max": 91.128,
+          "RMSE": 21.672180562935978
+        },
+        "logging_ms": {
+          "mean": 0.15758166,
+          "median": 0.151173,
+          "P95": 0.18764044999999996,
+          "max": 0.535828,
+          "RMSE": 0.16071445685110283
+        },
+        "shadow_ms": {
+          "mean": 0.0,
+          "median": 0.0,
+          "P95": 0.0,
+          "max": 0.0,
+          "RMSE": 0.0
+        },
+        "shadow_cpu_ms": {
+          "mean": 0.0,
+          "median": 0.0,
+          "P95": 0.0,
+          "max": 0.0,
+          "RMSE": 0.0
+        },
+        "phase_mean_ms": {
+          "model_ms": 0.0,
+          "jet_ms": 0.0,
+          "solve_ms": 0.0,
+          "preview_ms": 0.0,
+          "refinement_ms": 0.0
+        },
+        "baseline_phase_mean_ms": {
+          "prediction_and_deskew_ms": 3.7923561425,
+          "cloud_io_ms": 0.61079791,
+          "ndt_total_ms": 14.858313665,
+          "ndt_alignment_ms": 13.27025572,
+          "ikfom_update_ms": 0.033990675
+        }
+      }
+    },
+    "anchored_guarded_feedback": {
+      "NORMAL": {
+        "frames": 3339,
+        "modes": {
+          "NORMAL": 3339
+        },
+        "events": {
+          "UNTRIGGERED_NOMINAL": 3339
+        },
+        "nominal_effective": 3339,
+        "raw_trigger_count": 0,
+        "search_count": 0,
+        "full_ndt_calls": 3339,
+        "extra_ndt_calls": 0,
+        "max_full_ndt_calls": 1,
+        "jet_calls": 0,
+        "preview_calls": 0,
+        "terminal_score_calls": 0,
+        "max_previews": 0,
+        "local_recommendations": 0,
+        "nonlocal_terminals": 0,
+        "eligible_nonlocal_terminals": 0,
+        "pending_created": 0,
+        "pending_first_support": 0,
+        "temporally_supported": 0,
+        "frame_processing_logging_ms": {
+          "mean": 26.77006561245882,
+          "median": 24.342233,
+          "P95": 49.644472900000004,
+          "max": 134.278953,
+          "RMSE": 29.00178215983952
+        },
+        "frame_cpu_ms": {
+          "mean": 26.749315064390537,
+          "median": 24.325,
+          "P95": 49.6162,
+          "max": 134.159,
+          "RMSE": 28.979687943083974
+        },
+        "logging_ms": {
+          "mean": 0.16348789877208744,
+          "median": 0.156935,
+          "P95": 0.196535,
+          "max": 0.778249,
+          "RMSE": 0.16616338439220976
+        },
+        "shadow_ms": {
+          "mean": 0.003428006289308176,
+          "median": 0.003283,
+          "P95": 0.00468,
+          "max": 0.017251,
+          "RMSE": 0.0035584981024911005
+        },
+        "shadow_cpu_ms": {
+          "mean": 0.0029412997903563946,
+          "median": 0.003,
+          "P95": 0.004,
+          "max": 0.015,
+          "RMSE": 0.003053040158243363
+        },
+        "phase_mean_ms": {
+          "model_ms": 0.0,
+          "jet_ms": 0.0,
+          "solve_ms": 0.0,
+          "preview_ms": 0.0,
+          "refinement_ms": 0.0
+        },
+        "baseline_phase_mean_ms": {
+          "prediction_and_deskew_ms": 3.5859418787062,
+          "cloud_io_ms": 0.5816405564540281,
+          "ndt_total_ms": 22.21300718059299,
+          "ndt_alignment_ms": 19.37100021024259,
+          "ikfom_update_ms": 0.036560918837975444
+        }
+      },
+      "SEARCH": {
+        "frames": 303,
+        "modes": {
+          "SEARCH": 303
+        },
+        "events": {
+          "SEARCH_RETAINED_NOMINAL": 185,
+          "PENDING_CREATED": 85,
+          "LOCAL_RECOMMENDED": 33
+        },
+        "nominal_effective": 303,
+        "raw_trigger_count": 303,
+        "search_count": 303,
+        "full_ndt_calls": 664,
+        "extra_ndt_calls": 361,
+        "max_full_ndt_calls": 3,
+        "jet_calls": 4311,
+        "preview_calls": 4008,
+        "terminal_score_calls": 446,
+        "max_previews": 16,
+        "local_recommendations": 36,
+        "nonlocal_terminals": 132,
+        "eligible_nonlocal_terminals": 127,
+        "pending_created": 85,
+        "pending_first_support": 0,
+        "temporally_supported": 0,
+        "frame_processing_logging_ms": {
+          "mean": 77.21355230033004,
+          "median": 70.940312,
+          "P95": 131.85305559999995,
+          "max": 239.575651,
+          "RMSE": 82.97863575857993
+        },
+        "frame_cpu_ms": {
+          "mean": 77.15898679867986,
+          "median": 70.904,
+          "P95": 131.71269999999998,
+          "max": 239.452,
+          "RMSE": 82.92080326812062
+        },
+        "logging_ms": {
+          "mean": 0.7393033861386139,
+          "median": 0.824694,
+          "P95": 0.8893464999999999,
+          "max": 2.740809,
+          "RMSE": 0.7646819906997342
+        },
+        "shadow_ms": {
+          "mean": 52.25629001320133,
+          "median": 49.391408,
+          "P95": 85.1931107,
+          "max": 186.64996,
+          "RMSE": 56.758438850470284
+        },
+        "shadow_cpu_ms": {
+          "mean": 52.22197689768978,
+          "median": 49.367,
+          "P95": 85.1468,
+          "max": 186.559,
+          "RMSE": 56.721459744217185
+        },
+        "phase_mean_ms": {
+          "model_ms": 0.4229256402640267,
+          "jet_ms": 18.950049445544554,
+          "solve_ms": 0.0900139900990099,
+          "preview_ms": 11.91427684158416,
+          "refinement_ms": 20.785030003300328
+        },
+        "baseline_phase_mean_ms": {
+          "prediction_and_deskew_ms": 3.856954716171617,
+          "cloud_io_ms": 0.6268071056105611,
+          "ndt_total_ms": 19.315593052805283,
+          "ndt_alignment_ms": 17.462242415841583,
+          "ikfom_update_ms": 0.04152948514851485
+        }
+      },
+      "PENDING": {
+        "frames": 116,
+        "modes": {
+          "PENDING": 116
+        },
+        "events": {
+          "PENDING_COLLAPSED_TO_NOMINAL": 29,
+          "PENDING_FIRST_SUPPORT": 38,
+          "TEMPORALLY_SUPPORTED": 25,
+          "PENDING_CONTINUITY_FAILED": 23,
+          "PENDING_MATCH_QUALITY_FAILED": 1
+        },
+        "nominal_effective": 116,
+        "raw_trigger_count": 94,
+        "search_count": 0,
+        "full_ndt_calls": 232,
+        "extra_ndt_calls": 116,
+        "max_full_ndt_calls": 2,
+        "jet_calls": 0,
+        "preview_calls": 0,
+        "terminal_score_calls": 232,
+        "max_previews": 0,
+        "local_recommendations": 0,
+        "nonlocal_terminals": 0,
+        "eligible_nonlocal_terminals": 0,
+        "pending_created": 0,
+        "pending_first_support": 38,
+        "temporally_supported": 25,
+        "frame_processing_logging_ms": {
+          "mean": 26.51889695689656,
+          "median": 24.3185575,
+          "P95": 50.620905750000006,
+          "max": 63.399613,
+          "RMSE": 28.558483435140236
+        },
+        "frame_cpu_ms": {
+          "mean": 26.500913793103447,
+          "median": 24.3015,
+          "P95": 50.594,
+          "max": 63.363,
+          "RMSE": 28.540081371159648
+        },
+        "logging_ms": {
+          "mean": 0.17477833620689656,
+          "median": 0.1763855,
+          "P95": 0.2027865,
+          "max": 0.213507,
+          "RMSE": 0.17562257706413079
+        },
+        "shadow_ms": {
+          "mean": 8.675118913793105,
+          "median": 7.48245,
+          "P95": 17.005229,
+          "max": 29.483372,
+          "RMSE": 10.047576536285563
+        },
+        "shadow_cpu_ms": {
+          "mean": 8.67023275862069,
+          "median": 7.48,
+          "P95": 16.9985,
+          "max": 29.464,
+          "RMSE": 10.042015631319002
+        },
+        "phase_mean_ms": {
+          "model_ms": 0.0,
+          "jet_ms": 0.0,
+          "solve_ms": 0.0,
+          "preview_ms": 0.0,
+          "refinement_ms": 8.668846448275861
+        },
+        "baseline_phase_mean_ms": {
+          "prediction_and_deskew_ms": 3.7892692155172414,
+          "cloud_io_ms": 0.6256660862068963,
+          "ndt_total_ms": 13.012867439655173,
+          "ndt_alignment_ms": 11.46591036206897,
+          "ikfom_update_ms": 0.03632263793103449
+        }
+      },
+      "ANCHOR_SKIP": {
+        "frames": 369,
+        "modes": {
+          "ANCHOR_SKIP": 369
+        },
+        "events": {
+          "ANCHOR_UNAVAILABLE_RETAINED_NOMINAL": 369
+        },
+        "nominal_effective": 369,
+        "raw_trigger_count": 368,
+        "search_count": 0,
+        "full_ndt_calls": 369,
+        "extra_ndt_calls": 0,
+        "max_full_ndt_calls": 1,
+        "jet_calls": 0,
+        "preview_calls": 0,
+        "terminal_score_calls": 0,
+        "max_previews": 0,
+        "local_recommendations": 0,
+        "nonlocal_terminals": 0,
+        "eligible_nonlocal_terminals": 0,
+        "pending_created": 0,
+        "pending_first_support": 0,
+        "temporally_supported": 0,
+        "frame_processing_logging_ms": {
+          "mean": 18.87768656910569,
+          "median": 16.865161,
+          "P95": 36.13570739999996,
+          "max": 53.855567,
+          "RMSE": 20.387945238608516
+        },
+        "frame_cpu_ms": {
+          "mean": 18.863127371273713,
+          "median": 16.85,
+          "P95": 36.11239999999996,
+          "max": 53.825,
+          "RMSE": 20.372746478533294
+        },
+        "logging_ms": {
+          "mean": 0.1581038970189702,
+          "median": 0.153234,
+          "P95": 0.18790339999999997,
+          "max": 0.438957,
+          "RMSE": 0.1597146015218708
+        },
+        "shadow_ms": {
+          "mean": 0.0,
+          "median": 0.0,
+          "P95": 0.0,
+          "max": 0.0,
+          "RMSE": 0.0
+        },
+        "shadow_cpu_ms": {
+          "mean": 0.0,
+          "median": 0.0,
+          "P95": 0.0,
+          "max": 0.0,
+          "RMSE": 0.0
+        },
+        "phase_mean_ms": {
+          "model_ms": 0.0,
+          "jet_ms": 0.0,
+          "solve_ms": 0.0,
+          "preview_ms": 0.0,
+          "refinement_ms": 0.0
+        },
+        "baseline_phase_mean_ms": {
+          "prediction_and_deskew_ms": 3.8247743902439026,
+          "cloud_io_ms": 0.6183340948509485,
+          "ndt_total_ms": 14.048768021680216,
+          "ndt_alignment_ms": 12.469962888888887,
+          "ikfom_update_ms": 0.03421763956639566
+        }
+      }
+    }
+  },
+  "GT": {
+    "control": {
+      "count": 4126,
+      "nominal_raw_translation_m": {
+        "mean": 0.6970433440982533,
+        "median": 0.5668059656111311,
+        "P95": 1.533448187265713,
+        "max": 1.7845904715617922,
+        "RMSE": 0.8636100940917059
+      },
+      "nominal_raw_rotation_deg": {
+        "mean": 3.1584802626685806,
+        "median": 2.1117748175461033,
+        "P95": 11.013433986429256,
+        "max": 20.800057753207636,
+        "RMSE": 4.479268533014402
+      },
+      "actual_raw_translation_m": {
+        "mean": 0.6970433440982533,
+        "median": 0.5668059656111311,
+        "P95": 1.533448187265713,
+        "max": 1.7845904715617922,
+        "RMSE": 0.8636100940917059
+      },
+      "actual_raw_rotation_deg": {
+        "mean": 3.1584802626685806,
+        "median": 2.1117748175461033,
+        "P95": 11.013433986429256,
+        "max": 20.800057753207636,
+        "RMSE": 4.479268533014402
+      },
+      "corrected_translation_m": {
+        "mean": 0.7050140949379764,
+        "median": 0.5771221385318669,
+        "P95": 1.5357113897233639,
+        "max": 1.7632955911973807,
+        "RMSE": 0.8693980486207069
+      },
+      "corrected_rotation_deg": {
+        "mean": 2.114828000714015,
+        "median": 1.7330244454643005,
+        "P95": 5.7857837296768615,
+        "max": 11.589847174719178,
+        "RMSE": 2.6034541435152745
+      }
+    },
+    "anchored_shadow": {
+      "count": 4126,
+      "nominal_raw_translation_m": {
+        "mean": 0.6970433440982533,
+        "median": 0.5668059656111311,
+        "P95": 1.533448187265713,
+        "max": 1.7845904715617922,
+        "RMSE": 0.8636100940917059
+      },
+      "nominal_raw_rotation_deg": {
+        "mean": 3.1584802626685806,
+        "median": 2.1117748175461033,
+        "P95": 11.013433986429256,
+        "max": 20.800057753207636,
+        "RMSE": 4.479268533014402
+      },
+      "actual_raw_translation_m": {
+        "mean": 0.6970433440982533,
+        "median": 0.5668059656111311,
+        "P95": 1.533448187265713,
+        "max": 1.7845904715617922,
+        "RMSE": 0.8636100940917059
+      },
+      "actual_raw_rotation_deg": {
+        "mean": 3.1584802626685806,
+        "median": 2.1117748175461033,
+        "P95": 11.013433986429256,
+        "max": 20.800057753207636,
+        "RMSE": 4.479268533014402
+      },
+      "corrected_translation_m": {
+        "mean": 0.7050140949379764,
+        "median": 0.5771221385318669,
+        "P95": 1.5357113897233639,
+        "max": 1.7632955911973807,
+        "RMSE": 0.8693980486207069
+      },
+      "corrected_rotation_deg": {
+        "mean": 2.114828000714015,
+        "median": 1.7330244454643005,
+        "P95": 5.7857837296768615,
+        "max": 11.589847174719178,
+        "RMSE": 2.6034541435152745
+      }
+    },
+    "anchored_guarded_feedback": {
+      "count": 4126,
+      "nominal_raw_translation_m": {
+        "mean": 0.6963522935251395,
+        "median": 0.5639744862020528,
+        "P95": 1.5293910039665417,
+        "max": 1.747790227527833,
+        "RMSE": 0.8630957935620975
+      },
+      "nominal_raw_rotation_deg": {
+        "mean": 3.1481677825285446,
+        "median": 2.1102192669594895,
+        "P95": 11.006564301767785,
+        "max": 20.46495430233883,
+        "RMSE": 4.468854477879571
+      },
+      "actual_raw_translation_m": {
+        "mean": 0.6962657825796229,
+        "median": 0.5637124679430194,
+        "P95": 1.5293910039665417,
+        "max": 1.747790227527833,
+        "RMSE": 0.8630427382991693
+      },
+      "actual_raw_rotation_deg": {
+        "mean": 3.1473277719199997,
+        "median": 2.1102192669594895,
+        "P95": 11.006564301767785,
+        "max": 20.46495430233883,
+        "RMSE": 4.467472397770703
+      },
+      "corrected_translation_m": {
+        "mean": 0.7042016182838556,
+        "median": 0.5750402760523314,
+        "P95": 1.537219201509501,
+        "max": 1.7514691838742986,
+        "RMSE": 0.868705436903414
+      },
+      "corrected_rotation_deg": {
+        "mean": 2.1017566889472254,
+        "median": 1.727531105600522,
+        "P95": 5.74994748370104,
+        "max": 11.594126987104152,
+        "RMSE": 2.5874195936757673
+      }
+    },
+    "admitted_outcomes": {
+      "anchored_shadow": {
+        "IMPROVED": 3,
+        "WORSE": 1
+      },
+      "anchored_guarded_feedback": {
+        "IMPROVED": 2
+      }
+    },
+    "coverage": {
+      "full_frames": 4127,
+      "evaluated_frames": 4126,
+      "unavailable_tx": 4127,
+      "extrapolated": false
+    }
+  },
+  "translation_RMSE_improvement_fraction": 0.00079665662741224,
+  "accuracy_goal_pass": false,
+  "performance_goal_pass": true,
+  "verification_directory": ".",
+  "anchor_score_audit_rows": 279,
+  "max_anchor_audit_difference": 1.7763568394002505e-15,
+  "nominal_state_parity": "8254/8254 EXACT",
+  "GT_FOR_ADMISSION": false,
+  "SINGLE_MAP_INSTANCE": true,
+  "PRODUCTION_CHANGED": false
+}

@@ -1,0 +1,33 @@
+{
+  "GT_LOADED": false,
+  "ORACLE_LOADED": false,
+  "FEEDBACK_EXPERIMENT_ONLY": true,
+  "output_sha256": {
+    "frame_selection.csv": "93339787239f03e677d3ad5fe1c7638a9e8478d32436ec1ea9c1e37372df4347",
+    "job_cost.csv": "0a9d75e746710729f98337d89c793897bd3e99517970afdbf6b3647769ebfa18",
+    "anchored_guarded_feedback/anchor.csv": "831c1151b3490cb5057723ea1abae621d28d25242f6fae07a55355980485d1ac",
+    "anchored_guarded_feedback/registration.csv": "52f0a42a363c9b0b46de1dcba5158ba22f55ce3700bbec214d5b61c48efc2849",
+    "anchored_guarded_feedback/runtime.csv": "d09bf71caa0e968e725113f4d9ae0fb6ab96049d5acdb97ad7ee2e4a1f998e3c",
+    "anchored_guarded_feedback/events.csv": "11ebaec9563d3c4b471d658e81421963195db03410fdac58a8afe389affa730d",
+    "anchored_guarded_feedback/trajectory.csv": "fc77950238ee16c5a10b3c61670eabe8f9b15000b181867dfb4cff9be8db10e9",
+    "anchored_guarded_feedback/resources.csv": "20559483a7f2f9b2f26c4ad20226ff4b95a1e56adad2b3e851ed62dc2dd87579",
+    "anchored_guarded_feedback/frame_cost.csv": "b6d53ade32549f8e07ba8c53fabc477fa5a60b9126d14ed43f2a446bbd359fa4",
+    "anchored_guarded_feedback/frames.csv": "c4d3b77529b7b570df49c31702dd8de4450b4464aaa973bc1ef323d5035ad6cc",
+    "anchored_guarded_feedback/models.csv": "96d7e6922700387964713870c69c73ed0984e399b9ed1bd42be590ea07c3f241",
+    "anchored_guarded_feedback/admission.csv": "06639e191e008e79c0b0ac15e7e94f7a29940cf1caf39cab261ac5b2134a53e8",
+    "anchored_guarded_feedback/pending_end.csv": "1666d61d1aaf5a71072370d0a8ea099bbe1b5636bc26d101522ac5a32d2abbf3",
+    "anchored_guarded_feedback/candidates.csv": "c49e5724ad4e7b566d27ed81bec43310e5ab2a1f89f15b57bab20fce1998c1db",
+    "anchored_shadow/anchor.csv": "972bf328265ce213d6714ec89c9491e776cadbef0b1d06951c6ecc5bd1c350ce",
+    "anchored_shadow/registration.csv": "b223e5998b5f75900b1b4cf9d7fca8b28c5810e6398ac623583af4a89a5fc0c2",
+    "anchored_shadow/runtime.csv": "e0b32e9df9411a4db5c151ce84ae638c4727c10dd8db4d5fbd9344f560b71569",
+    "anchored_shadow/events.csv": "ad25c5e174288df2354d4861baa4ec6cb2a9c95496121c5c8a49d5d1f6a79c24",
+    "anchored_shadow/trajectory.csv": "86d8de73bb5af2015fd37cf33584dcd3a1e54fba87d2e6a38c435eb949520bd9",
+    "anchored_shadow/resources.csv": "ea54bb946cb4cb8b234d2715d82abe61fe5c301154c94d4f6ed6904f00736cdd",
+    "anchored_shadow/frame_cost.csv": "6fbbfa5dc62d6fcec4df24e15dc08a99e626ab245df1b01940b5203f06d153bd",
+    "anchored_shadow/frames.csv": "651b3c6aa9418c04286a9edf79b49eb25b9e6f4baee98c6801773f23a6fc9898",
+    "anchored_shadow/models.csv": "0f7253f5ff52fbc8c3594ba1d72acad57b81246e611e1dbc79c5981718a60866",
+    "anchored_shadow/admission.csv": "237439ff87a5a0bd529dd102426ee1bb212ac7d7dbc0f04d1789777b0d4c166e",
+    "anchored_shadow/pending_end.csv": "1666d61d1aaf5a71072370d0a8ea099bbe1b5636bc26d101522ac5a32d2abbf3",
+    "anchored_shadow/candidates.csv": "3c5b3df9ac36253c4642d22fbaa01596b8cb7bf8113dc07202b328c922424b80"
+  }
+}

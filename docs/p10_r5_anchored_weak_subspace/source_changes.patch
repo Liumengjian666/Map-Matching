@@ -1,0 +1,1089 @@
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/CMakeLists.txt b/src/dog_prior_map_fastlio2_frontend_exp/CMakeLists.txt
+index 4fce237..8b8a8d5 100644
+--- a/src/dog_prior_map_fastlio2_frontend_exp/CMakeLists.txt
++++ b/src/dog_prior_map_fastlio2_frontend_exp/CMakeLists.txt
+@@ -66,6 +66,7 @@ if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
+     src/current_frame_ndt.cpp
+     src/coupled_ndt_shadow.cpp
+     src/coupled_ndt_temporal.cpp
++    src/coupled_ndt_anchor.cpp
+     src/registration_geometry.cpp)
+   target_include_directories(p10_coupled_ndt_shadow PUBLIC include
+     PRIVATE ${PCL_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS})
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp b/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp
+new file mode 100644
+index 0000000..1a32bbd
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp
+@@ -0,0 +1,44 @@
++#pragma once
++#include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_shadow.hpp"
++
++namespace dog_prior_map_fastlio2_frontend_exp {
++// An experiment-only pose reference, NOT another filter or an absolute prior.
++struct CoupledAnchorState {
++  Eigen::Matrix4d origin = Eigen::Matrix4d::Identity();
++  Eigen::Matrix4d prediction = Eigen::Matrix4d::Identity();
++  uint64_t origin_stamp_ns = 0, propagated_stamp_ns = 0, event_stamp_ns = 0, invalidated_stamp_ns = 0;
++  bool valid = false, frozen = false;
++  Eigen::Matrix<double,6,2> weak_basis = Eigen::Matrix<double,6,2>::Zero();
++  int weak_dimension = 0, contributions = 0;
++  double nominal_sum = 0, alternative_sum = 0;
++  std::string status = "MISSING";
++};
++struct CoupledAnchorReceipt {
++  Eigen::Matrix4d origin = Eigen::Matrix4d::Identity();
++  Eigen::Matrix4d prediction = Eigen::Matrix4d::Identity();
++  Eigen::Matrix<double,6,2> weak_basis = Eigen::Matrix<double,6,2>::Zero();
++  uint64_t anchor_stamp_ns = 0, propagated_stamp_ns = 0;
++  int weak_dimension = 0, contributions = 0;
++  bool valid = false, frozen = false, evaluated = false, diagnostic_valid = false;
++  double age_s = 0, nominal_cost = 0, alternative_cost = 0;
++  double nominal_sum = 0, alternative_sum = 0, mean_advantage = 0;
++  double weak_fraction = 0, strong_fraction = 0;
++  std::string status = "NOT_EVALUATED";
++};
++// Fixed version-0 contract; changes require a separately frozen experiment.
++constexpr double kCoupledAnchorLifetimeS = 2.0;
++constexpr double kCoupledAnchorMeanMargin = .01;
++constexpr double kCoupledAnchorRelativeGain = .10;
++
++void advanceCoupledAnchor(CoupledAnchorState*, uint64_t stamp_ns,
++    const Eigen::Matrix4d& causal_imu_interval);
++void settleCoupledAnchor(CoupledAnchorState*, uint64_t stamp_ns,
++    const Eigen::Matrix4d& corrected_lidar, bool stable_ordinary, bool feedback_used);
++bool coupledAnchorChart(const Eigen::Matrix4d& candidate,
++    const Eigen::Matrix4d& reference, CoupledVector6* eta);
++CoupledEventResult runAnchoredCoupledNdtShadow(const Eigen::Matrix4f& nominal,
++    const Eigen::Matrix4f& prediction, uint64_t stamp_ns, std::size_t source_count,
++    bool nominal_effective, const CoupledNdtBackend&, const CoupledEventConfig&,
++    PendingCandidate*, const Eigen::Matrix4d& causal_imu_interval,
++    CoupledAnchorState*, CoupledAnchorReceipt*);
++}  // namespace dog_prior_map_fastlio2_frontend_exp
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/current_frame_ndt.hpp b/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/current_frame_ndt.hpp
+index aa34eda..49daa11 100644
+--- a/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/current_frame_ndt.hpp
++++ b/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/current_frame_ndt.hpp
+@@ -2,6 +2,7 @@
+ 
+ #include "dog_prior_map_fastlio2_frontend_exp/frontend_types.hpp"
+ #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_shadow.hpp"
++#include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp"
+ 
+ #include <cstddef>
+ #include <cstdint>
+@@ -87,6 +88,9 @@ class CurrentFrameNdtRegistration {
+   bool eventShadow(const CurrentFrameNdtResult& nominal, const CoupledEventConfig& config,
+       PendingCandidate* pending, CoupledEventResult* result, std::string* reason,
+       const Eigen::Matrix4d* causal_imu_interval = nullptr);
++  bool anchoredEventShadow(const CurrentFrameNdtResult&, const CoupledEventConfig&,
++      PendingCandidate*, CoupledEventResult*, std::string*, const Eigen::Matrix4d& causal_imu_interval,
++      CoupledAnchorState*, CoupledAnchorReceipt*);
+ 
+  private:
+   bool validateShadowNominal(const CurrentFrameNdtResult& nominal, std::string* reason) const;
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/anchor_logging.hpp b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/anchor_logging.hpp
+new file mode 100644
+index 0000000..e16130d
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/anchor_logging.hpp
+@@ -0,0 +1,20 @@
++#pragma once
++#include "shadow_logging.hpp"
++#include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp"
++namespace p10log {
++struct AnchorLogger {
++  std::ofstream rows;
++  explicit AnchorLogger(const std::string& dir): rows(output(dir+"/anchor.csv")) {
++    rows << "transaction_id,valid,frozen,evaluated,status,anchor_stamp_ns,propagated_stamp_ns,age_s,anchor_origin,anchor_prediction,weak_dimension,weak_basis,contributions,nominal_weak_cost,alternative_weak_cost,nominal_sum,alternative_sum,mean_advantage,weak_fraction,strong_fraction,after_valid,after_status,after_origin_stamp_ns,diagnostic_valid\n";
++  }
++  void write(uint64_t tx,const paper::CoupledAnchorReceipt& r,const paper::CoupledAnchorState& after) {
++    rows << tx << ',' << r.valid << ',' << r.frozen << ',' << r.evaluated << ',' << r.status << ','
++      << r.anchor_stamp_ns << ',' << r.propagated_stamp_ns << ',' << r.age_s << ','
++      << values(r.origin) << ',' << values(r.prediction) << ',' << r.weak_dimension << ','
++      << values(r.weak_basis) << ',' << r.contributions << ',' << r.nominal_cost << ',' << r.alternative_cost
++      << ',' << r.nominal_sum << ',' << r.alternative_sum << ',' << r.mean_advantage << ','
++      << r.weak_fraction << ',' << r.strong_fraction << ',' << after.valid << ',' << after.status << ','
++      << after.origin_stamp_ns << ',' << r.diagnostic_valid << '\n';
++  }
++};
++}
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/archive_anchored.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/archive_anchored.py
+new file mode 100644
+index 0000000..083bddd
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/archive_anchored.py
+@@ -0,0 +1,85 @@
++"""R5 finite CSV/JSON/hash audit and compact factual handoff; no experiments."""
++import argparse
++import csv
++import hashlib
++import json
++from pathlib import Path
++import subprocess
++from run_budgeted import ROOT,read,sha,csv_write,json_write
++from run_anchored import ARCHIVE,MODES
++
++def audit():
++    hashes={};nc=nj=rows=0
++    def reject(x):raise RuntimeError("nonfinite JSON "+x)
++    for p in sorted(ARCHIVE.rglob("*")):
++        if not p.is_file() or p.name=="artifact_hashes.json":continue
++        hashes[str(p.relative_to(ARCHIVE))]=sha(p)
++        if p.suffix==".json":json.loads(p.read_text(),parse_constant=reject);nj+=1
++        if p.suffix==".csv":
++            with p.open(newline="") as stream:
++                reader=csv.reader(stream);header=next(reader)
++                if len(header)!=len(set(header)):raise RuntimeError("duplicate CSV header")
++                for r in reader:
++                    if len(r)!=len(header):raise RuntimeError("CSV width "+str(p))
++                    rows+=1
++            nc+=1
++    attempts=sorted(ARCHIVE.glob("attempt_*"))
++    for d in attempts:
++        freeze=json.loads((d/"execution_freeze.json").read_text())
++        blind=json.loads((d/"blind_outputs_freeze.json").read_text())
++        if blind["GT_LOADED"] or blind["ORACLE_LOADED"]:raise RuntimeError("blind receipt invalid")
++        for p,digest in blind["output_sha256"].items():
++            if sha(d/p)!=digest:raise RuntimeError("blind chain changed")
++        for p,digest in freeze["source_sha256"].items():
++            data=subprocess.check_output(["git","-C",str(ROOT),"show",freeze["code_sha"]+":"+p])
++            if hashlib.sha256(data).hexdigest()!=digest:raise RuntimeError("code chain changed")
++        if sha(freeze["binary_path"])!=freeze["binary_sha256"]:raise RuntimeError("binary changed")
++        evaluation=json.loads((d/"evaluation.json").read_text())
++        verified=d/evaluation["verification_directory"]
++        parity=read(verified/"nominal_state_parity.csv");guards=read(verified/"engineering_guards.csv")
++        n=sum((d/m).is_dir() for m in MODES)
++        if len(parity)!=8254 or any(r["exact_parity"]!="1" for r in parity):raise RuntimeError("nominal parity failed")
++        if len(guards)!=4127*n or any(r["hard_requirements_pass"]!="1" for r in guards):raise RuntimeError("engineering denominator failed")
++        for p in (verified/"anchor_score_parity.csv",verified/"branch_diagnostic_parity.csv"):
++            if any(r["pass_parity"]!="1" for r in read(p)):raise RuntimeError("independent evidence mismatch")
++        for r in read(d/"gt_coverage.csv"):
++            if r["frames_retained"]!="1":raise RuntimeError("GT deleted frame")
++    return dict(artifact_sha256=hashes,hashed_files=len(hashes),JSON_files=nj,CSV_files=nc,CSV_data_rows=rows,
++        blind_chain="PASS",source_binary_chain="PASS",JSON_finite="PASS",CSV_width="PASS",full_denominators="PASS",self_hash_excluded=True)
++
++def main():
++    p=argparse.ArgumentParser();p.add_argument("--audit-only",action="store_true")
++    if p.parse_args().audit_only:
++        receipt=audit()
++        with (ARCHIVE/"artifact_hashes.json").open("w") as stream:json.dump(receipt,stream,indent=2,allow_nan=False);stream.write("\n")
++    else:
++        attempts=sorted(ARCHIVE.glob("attempt_*"));evaluations=[json.loads((d/"evaluation.json").read_text()) for d in attempts]
++        decision=json.loads((ARCHIVE/"decision_receipt.json").read_text())
++        result=dict(task="PAPER-P10-R5-ANCHORED-WEAK-SUBSPACE-COUPLED-NDT",branch="research/p9-r4-heldout-visual-evidence",
++            start_sha="65a416ec19069efa0405e9fc56a0505dc9c3018e",code_sha=evaluations[-1]["code_sha"],worktree=str(ROOT),
++            push_executed=False,remote_head="65a416ec19069efa0405e9fc56a0505dc9c3018e",remote_verified="git ls-remote before replay",
++            versions=evaluations,real_attempts=len(evaluations),targeted_improvements=len(evaluations)-1,
++            total_real_NDT_calls=sum(e["statistics"][m]["full_ndt_calls"] for e in evaluations for m in MODES if m in e["statistics"]),
++            new_CONTROL_replays=0,oracle_calls=0,B12_calls=0,visual_extraction=0,Corridor_runs=0,raw_extraction=0,
++            GT_used_for_admission=False,production_changed=False,single_map_instance=True,**decision)
++        json_write(ARCHIVE/"results.json",result)
++        # Generated exact source diff; no historical archive is rewritten.
++        (ARCHIVE/"source_changes.patch").write_bytes(subprocess.check_output(
++            ["git","-C",str(ROOT),"diff",result["start_sha"],"--","src/dog_prior_map_fastlio2_frontend_exp"]))
++        methods=[];runtime=[]
++        for e in evaluations:
++            for m,s in e["statistics"].items():
++                gt=e["GT"][m];t=s["frame_processing_logging_ms"]
++                methods.append(dict(attempt=e["attempt"],mode=m,frames=s["frames"],anchor_valid=s.get("anchor_valid_frames","NOT_APPLICABLE"),
++                    pending=s["pending_created"],supported=s["temporally_supported"],admitted=s.get("admitted",0),used=s.get("alternative_used",0),
++                    ndt_calls=s["full_ndt_calls"],mean_ms=t["mean"],P95_ms=t["P95"],max_ms=t["max"],peak_rss_kib=s["peak_rss_kib"],
++                    translation_RMSE=gt["corrected_translation_m"]["RMSE"],translation_P95=gt["corrected_translation_m"]["P95"],translation_max=gt["corrected_translation_m"]["max"],
++                    rotation_RMSE=gt["corrected_rotation_deg"]["RMSE"],rotation_P95=gt["corrected_rotation_deg"]["P95"],rotation_max=gt["corrected_rotation_deg"]["max"],large_jumps=s["large_jumps"]))
++                for phase,v in {**s["phase_mean_ms"],**s["baseline_phase_mean_ms"]}.items():
++                    runtime.append(dict(attempt=e["attempt"],mode=m,phase=phase,mean_ms=v,
++                        P95_ms="NOT_SEPARATELY_RECORDED",accounting="included in full scan-end processing; source/map shared"))
++        csv_write(ARCHIVE/"method_summary.csv",methods);csv_write(ARCHIVE/"runtime_breakdown.csv",runtime)
++        receipt=audit();json_write(ARCHIVE/"artifact_hashes.json",receipt)
++    print(json.dumps({k:v for k,v in receipt.items() if k!="artifact_sha256"},indent=2))
++
++if __name__=="__main__":main()
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/debug_anchor_carrier.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/debug_anchor_carrier.py
+new file mode 100644
+index 0000000..1c4c091
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/debug_anchor_carrier.py
+@@ -0,0 +1,18 @@
++"""Non-GT minimal reproduction of independent anchor-carrier audit differences."""
++import numpy as np
++from scipy.spatial.transform import Rotation
++from run_budgeted import read
++from run_anchored import ARCHIVE,MODES
++from evaluate_budgeted import matrix
++from evaluate_anchored import chart
++
++for mode in MODES:
++    d=ARCHIVE/"attempt_0"/mode
++    for f,a,r in zip(read(d/"frames.csv"),read(d/"admission.csv"),read(d/"anchor.csv")):
++        if r["evaluated"]!="1":continue
++        W=np.array([float(v) for v in r["weak_basis"].split(";")]).reshape(6,2)[:,:int(r["weak_dimension"])]
++        nom=matrix(f["nominal_pose"]);alt=matrix(a["candidate_pose"]);anchor=matrix(r["anchor_prediction"])
++        cn=float(np.linalg.norm(W.T@chart(nom,anchor))**2);ca=float(np.linalg.norm(W.T@chart(alt,anchor))**2)
++        diff=chart(alt,nom);wf=min(1.,float(np.linalg.norm(W.T@diff)**2/np.dot(diff,diff)))
++        errors=[abs(cn-float(r["nominal_weak_cost"])),abs(ca-float(r["alternative_weak_cost"])),abs(wf-float(r["weak_fraction"]))]
++        if max(errors)>1e-8:print(mode,f["transaction_id"],"nom/alt/fraction errors",errors)
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/diagnose_anchored.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/diagnose_anchored.py
+new file mode 100644
+index 0000000..b67dd6d
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/diagnose_anchored.py
+@@ -0,0 +1,48 @@
++"""Post-freeze NON-GT terminal-rank diagnosis; never selects replay frames."""
++import argparse
++import json
++import numpy as np
++from run_budgeted import read,sha,csv_write,json_write
++from run_anchored import ARCHIVE,MODES
++from evaluate_anchored import chart
++from evaluate_budgeted import matrix,distance
++from evaluate_admission import optional_table
++
++def diagnose(attempt):
++    directory=ARCHIVE/f"attempt_{attempt}"
++    freeze=json.loads((directory/"blind_outputs_freeze.json").read_text())
++    for p,d in freeze["output_sha256"].items():
++        if sha(directory/p)!=d:raise RuntimeError("blind receipt changed")
++    rows=[]
++    for mode in MODES:
++        d=directory/mode
++        if not d.is_dir():continue
++        candidates={}
++        for c in read(d/"candidates.csv"):
++            if c["selected_for_refinement"]=="1":candidates.setdefault(c["transaction_id"],[]).append(c)
++        for f,e,a,r in zip(read(d/"frames.csv"),read(d/"events.csv"),read(d/"admission.csv"),read(d/"anchor.csv")):
++            if e["event"]!="PENDING_CREATED" or r["valid"]!="1":continue
++            N=int(f["source_count"]);En=float(a["nominal_energy"])
++            W=np.asarray([float(v) for v in r["weak_basis"].split(";")]).reshape(6,2)[:,:int(r["weak_dimension"])]
++            eligible=[]
++            for c in candidates.get(f["transaction_id"],[]):
++                if c["refined_successful"]!="1" or c["refined_converged"]!="1" or not c["refined_score"]:continue
++                pose=matrix(c["refined_pose"]);dt,dr=distance(pose,matrix(f["nominal_pose"]))
++                E=-float(c["refined_score"])/N
++                if not (dt<=2 and dr<=15 and (dt>.2 or dr>2) and E<=En+.05*max(1,abs(En))):continue
++                cost=float(np.linalg.norm(W.T@chart(pose,matrix(r["anchor_prediction"])))**2)
++                eligible.append((int(c["candidate_id"]),cost))
++            selected=next((cost for i,cost in eligible if str(i)==e["pending_candidate_id"]),None)
++            if selected is None:raise RuntimeError("chosen terminal not eligible under same contract")
++            best=min(eligible,key=lambda x:(x[1],x[0]))
++            rows.append(dict(mode=mode,transaction_id=f["transaction_id"],eligible_refined_terminals=len(eligible),
++                selected_id=e["pending_candidate_id"],selected_anchor_cost=selected,best_anchor_id=best[0],best_anchor_cost=best[1],
++                ignored_lower_anchor_cost=int(selected-best[1]>1e-8),cost_difference=selected-best[1],GT_LOADED=0))
++    optional_table(directory/"nonGT_rank_diagnosis.csv",rows,["mode","transaction_id","eligible_refined_terminals","selected_id","selected_anchor_cost","best_anchor_id","best_anchor_cost","ignored_lower_anchor_cost","cost_difference","GT_LOADED"])
++    result=dict(attempt=attempt,GT_LOADED=False,creation_episodes=len(rows),dual_eligible=sum(r["eligible_refined_terminals"]>=2 for r in rows),
++        ignored_lower_anchor_cost=sum(r["ignored_lower_anchor_cost"] for r in rows),
++        maximum_cost_difference=max((r["cost_difference"] for r in rows),default=0),candidate_pool_changed=False)
++    json_write(directory/"nonGT_rank_diagnosis.json",result);print(json.dumps(result,indent=2))
++
++if __name__=="__main__":
++    p=argparse.ArgumentParser();p.add_argument("--attempt",type=int,default=0);diagnose(p.parse_args().attempt)
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/evaluate_anchored.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/evaluate_anchored.py
+new file mode 100644
+index 0000000..adbb0c6
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/evaluate_anchored.py
+@@ -0,0 +1,192 @@
++"""Independent anchor receipt/budget audit BEFORE any post-hoc GT load."""
++import argparse
++from collections import Counter
++import hashlib
++import json
++from pathlib import Path
++import subprocess
++import numpy as np
++from scipy.spatial.transform import Rotation
++from run_budgeted import ROOT,read,sha,csv_write,json_write
++from run_anchored import ARCHIVE,MODES
++from run_admission import CONTROL
++from evaluate_budgeted import matrix,distance
++from evaluate_admission import load,summary,posthoc,optional_table,motion_cost
++from evaluate_event import summarize,moments
++
++def carrier_quaternion(R):
++    # Independently reproduce the pinned Eigen 3.3 matrix->quaternion carrier.
++    # scipy.from_matrix uses a different orthogonalization for float NDT matrices.
++    q=np.zeros(4);t=float(np.trace(R))
++    if t>0:
++        z=np.sqrt(t+1);q[3]=.5*z;z=.5/z
++        q[:3]=np.array([R[2,1]-R[1,2],R[0,2]-R[2,0],R[1,0]-R[0,1]])*z
++    else:
++        i=int(np.argmax(np.diag(R)));j=(i+1)%3;k=(j+1)%3
++        z=np.sqrt(R[i,i]-R[j,j]-R[k,k]+1);q[i]=.5*z;z=.5/z
++        q[3]=(R[k,j]-R[j,k])*z;q[j]=(R[j,i]+R[i,j])*z;q[k]=(R[k,i]+R[i,k])*z
++    return q/np.linalg.norm(q)
++
++def chart(candidate,reference):
++    Rc=Rotation.from_quat(carrier_quaternion(candidate[:3,:3])).as_matrix()
++    Ra=Rotation.from_quat(carrier_quaternion(reference[:3,:3])).as_matrix()
++    q=carrier_quaternion(Rc@Ra.T)
++    if q[3]<0:q=-q
++    norm=np.linalg.norm(q[:3])
++    phi=2*q[:3] if norm<1e-12 else q[:3]*(2*np.arctan2(norm,np.clip(q[3],-1,1))/norm)
++    return np.r_[(candidate[:3,3]-reference[:3,3])/.8,
++        phi]
++
++def verify(directory,receipt_dir):
++    f=json.loads((directory/"execution_freeze.json").read_text())
++    blind=json.loads((directory/"blind_outputs_freeze.json").read_text())
++    if blind["GT_LOADED"] or blind["ORACLE_LOADED"] or not blind["FEEDBACK_EXPERIMENT_ONLY"]:raise RuntimeError("isolation failed")
++    for p,d in blind["output_sha256"].items():
++        if sha(directory/p)!=d:raise RuntimeError("blind receipt modified: "+p)
++    for p,d in f["source_sha256"].items():
++        data=subprocess.check_output(["git","-C",str(ROOT),"show",f["code_sha"]+":"+p])
++        if hashlib.sha256(data).hexdigest()!=d:raise RuntimeError("executed source commit mismatch")
++    if sha(f["binary_path"])!=f["binary_sha256"] or sha(ARCHIVE/"THEORY.md")!=f["theory_sha256"]:raise RuntimeError("binary/rules changed")
++    if f["attempt"] and sha(ARCHIVE/"TARGETED_IMPROVEMENT_1.md")!=f["improvement_contract_sha256"]:raise RuntimeError("improvement freeze changed")
++    for p,d in f["control_sha256"].items():
++        if sha(ROOT/p)!=d:raise RuntimeError("reference changed")
++    jobs={"control":load(CONTROL)}
++    for n in MODES:
++        if (directory/n).is_dir():jobs[n]=load(directory/n,True);jobs[n]["anchor"]=read(directory/n/"anchor.csv")
++    expected=[str(i) for i in range(1,4128)]
++    for n,t in jobs.items():
++        for key in ("frames","events","frame_cost","registration","trajectory","runtime")+(("admission","anchor") if n!="control" else ()):
++            if [r["transaction_id"] for r in t[key]]!=expected:raise RuntimeError("denominator/order failed")
++    parity=[]
++    for table in ("registration","trajectory"):
++        for a,b in zip(jobs["control"][table],jobs[MODES[0]][table]):
++            diff=[k for k in a if k!="alignment_ms" and a[k]!=b[k]]
++            parity.append(dict(transaction_id=a["transaction_id"],table=table,exact_parity=int(not diff),different_fields=";".join(diff)))
++    csv_write(receipt_dir/"nominal_state_parity.csv",parity)
++    if not all(r["exact_parity"] for r in parity):raise RuntimeError("anchored shadow changed nominal state/source")
++    checks=[];anchor_checks=[];diagnostics=[]
++    for n,t in jobs.items():
++        if n=="control":continue
++        accum={};previous=None;previous_event=None;previous_admission=None
++        for frame,e,a,r in zip(t["frames"],t["events"],t["admission"],t["anchor"]):
++            used=a["alternative_used"]=="1";admitted=a["admitted"]=="1";valid=r["valid"]=="1"
++            nominal=matrix(frame["nominal_pose"]);actual=matrix(a["actual_measurement"])
++            desired=matrix(a["admitted_pose"]) if used else nominal
++            dt,dr=distance(actual,desired)
++            quiet=e["mode"] in ("NORMAL","ANCHOR_SKIP")
++            pending=e["mode"]=="PENDING"
++            ok=(int(frame["full_ndt_calls"])<=3 and int(frame["preview_count"])<=16 and
++                frame["nonfinite_recommended"]=="0" and np.isfinite(actual).all() and
++                (not quiet or all(int(frame[k])==0 for k in ("jet_calls","preview_score_calls","terminal_score_calls")) and int(frame["full_ndt_calls"])==1) and
++                (not pending or int(frame["full_ndt_calls"])<=2 and int(frame["jet_calls"])==0 and int(frame["preview_count"])==0) and
++                (e["pending_before"]!="1" or e["mode"]!="SEARCH") and a["update_success"]=="1" and
++                (used==(n==MODES[1] and admitted)) and
++                (dt<=1e-6 and dr<=1e-5 if used else np.array_equal(actual,nominal)) and
++                (not admitted or valid and r["evaluated"]=="1" and a["temporally_supported"]=="1" and
++                 a["admission_valid"]=="1" and int(r["contributions"])==3 and int(a["confirmation_count"])==2 and
++                 e["pending_after"]=="0" and float(r["mean_advantage"])>.01 and float(r["alternative_sum"])<=.9*float(r["nominal_sum"])) and
++                (not used or r["after_valid"]=="0" and r["after_status"]=="FEEDBACK_CONSUMED"))
++            if r["after_status"]=="ESTABLISHED":
++                ok=ok and not valid and e["mode"]=="NORMAL" and e["innovation_trigger"]=="0" and e["pending_before"]=="0"
++            checks.append(dict(mode=n,transaction_id=frame["transaction_id"],hard_requirements_pass=int(ok)))
++            propagation_error=0
++            if valid:
++                if int(r["propagated_stamp_ns"])!=int(frame["stamp_ns"]) or not 0<=float(r["age_s"])<=2:raise RuntimeError("anchor time contract")
++                imu=matrix(a["imu_interval"])
++                if previous and previous["after_origin_stamp_ns"]==r["anchor_stamp_ns"] and previous["after_valid"]=="1":
++                    prior=matrix(previous["anchor_prediction"]) if previous["valid"]=="1" and previous["anchor_stamp_ns"]==r["anchor_stamp_ns"] else matrix(r["anchor_origin"])
++                    propagation_error=float(np.max(np.abs(prior@imu-matrix(r["anchor_prediction"]))))
++                if previous and previous["valid"]=="1" and previous["anchor_stamp_ns"]==r["anchor_stamp_ns"]:
++                    if previous["anchor_origin"]!=r["anchor_origin"]:raise RuntimeError("valid anchor absorbed NDT correction")
++            if r["evaluated"]=="1":
++                origin=a["origin_stamp_ns"];k=int(r["weak_dimension"])
++                W=np.array([float(v) for v in r["weak_basis"].split(";")]).reshape(6,2)[:,:k]
++                if k not in (1,2) or np.linalg.norm(W.T@W-np.eye(k))>1e-8:raise RuntimeError("invalid frozen weak basis")
++                anchor=matrix(r["anchor_prediction"]);alternative=matrix(a["candidate_pose"])
++                cn=float(np.linalg.norm(W.T@chart(nominal,anchor))**2)
++                ca=float(np.linalg.norm(W.T@chart(alternative,anchor))**2)
++                d=chart(alternative,nominal);wf=min(1.,float(np.linalg.norm(W.T@d)**2/np.dot(d,d))) if np.dot(d,d)>1e-20 else 0.
++                if e["event"]=="PENDING_CREATED":
++                    if origin in accum:raise RuntimeError("duplicate anchor episode")
++                    accum[origin]=[0.,0.,0,r["weak_basis"],r["anchor_stamp_ns"],0.,0.,True]
++                if origin not in accum:raise RuntimeError("no creation before anchor contribution")
++                item=accum[origin];item[0]+=cn;item[1]+=ca;item[2]+=1
++                if r["weak_basis"]!=item[3] or r["anchor_stamp_ns"]!=item[4]:raise RuntimeError("pending changed anchor or W")
++                error=max(propagation_error,abs(cn-float(r["nominal_weak_cost"])),abs(ca-float(r["alternative_weak_cost"])),
++                    abs(item[0]-float(r["nominal_sum"])),abs(item[1]-float(r["alternative_sum"])),
++                    abs((item[0]-item[1])/item[2]-float(r["mean_advantage"])),abs(wf-float(r["weak_fraction"])))
++                anchor_checks.append(dict(mode=n,transaction_id=frame["transaction_id"],origin_stamp_ns=origin,
++                    contributions=item[2],maximum_difference=error,pass_parity=int(error<=1e-8)))
++                if r["diagnostic_valid"]=="1":
++                    de=(float(a["alternative_energy"])-float(a["nominal_energy"]))/max(1.,abs(float(a["nominal_energy"])))
++                    dm=0.
++                    if item[2]>1:
++                        nm=motion_cost(matrix(a["previous_nominal"]),nominal,matrix(a["imu_interval"]))
++                        am=motion_cost(matrix(a["previous_alternative"]),alternative,matrix(a["imu_interval"]))
++                        dm=am-nm
++                    item[5]+=de;item[6]+=dm
++                    diag_error=max(abs(item[5]-float(a["D_E"])),abs(item[6]-float(a["D_M"])),abs(item[5]+.05*item[6]-float(a["D"])))
++                    diagnostics.append(dict(mode=n,transaction_id=frame["transaction_id"],maximum_difference=diag_error,pass_parity=int(diag_error<=1e-8)))
++                if admitted and item[2]!=3:raise RuntimeError("not three contributions")
++            elif propagation_error>1e-8:raise RuntimeError("ordinary causal anchor propagation mismatch")
++            previous=r;previous_event=e;previous_admission=a
++    csv_write(receipt_dir/"engineering_guards.csv",checks)
++    optional_table(receipt_dir/"anchor_score_parity.csv",anchor_checks,["mode","transaction_id","origin_stamp_ns","contributions","maximum_difference","pass_parity"])
++    optional_table(receipt_dir/"branch_diagnostic_parity.csv",diagnostics,["mode","transaction_id","maximum_difference","pass_parity"])
++    if not all(r["hard_requirements_pass"] for r in checks) or not all(r["pass_parity"] for r in anchor_checks+diagnostics):raise RuntimeError("independent engineering/evidence audit failed before GT")
++    if MODES[1] in jobs:
++        first=next((int(a["transaction_id"]) for a in jobs[MODES[1]]["admission"] if a["alternative_used"]=="1"),None)
++        causal=[]
++        for i,(a,b) in enumerate(zip(jobs[MODES[0]]["trajectory"],jobs[MODES[1]]["trajectory"]),1):
++            diff=any(a[k]!=b[k] for k in a if k.startswith("predicted_imu_"))
++            causal.append(dict(transaction_id=i,first_alternative_tx=first or "",prediction_differs=int(diff)))
++            if first and i<first and diff:raise RuntimeError("diverged before feedback")
++        csv_write(receipt_dir/"causal_feedback_parity.csv",causal)
++        if first and first<4127 and not causal[first]["prediction_differs"]:raise RuntimeError("feedback not causal")
++    json_write(receipt_dir/"pre_GT_audit_freeze.json",dict(GT_LOADED=False,engineering="PASS",
++        evaluator_sha256=sha(Path(__file__)),audit_code_sha=subprocess.check_output(["git","-C",str(ROOT),"rev-parse","HEAD"],text=True).strip(),
++        output_sha256={p.name:sha(p) for p in receipt_dir.glob("*parity.csv")}))
++    return f,jobs
++
++def evaluate(attempt,audit_revision):
++    directory=ARCHIVE/f"attempt_{attempt}"
++    receipt_dir=directory
++    if audit_revision:
++        receipt_dir=directory/f"audit_revision_{audit_revision}";receipt_dir.mkdir(exist_ok=False)
++    f,jobs=verify(directory,receipt_dir)
++    stats={n:summary(n,t,directory) for n,t in jobs.items()}
++    for n in MODES:
++        if n not in jobs:continue
++        t=jobs[n];r=t["anchor"]
++        stats[n].update(anchor_valid_frames=sum(x["valid"]=="1" for x in r),
++            anchor_established=sum(x["after_status"]=="ESTABLISHED" for x in r),
++            anchor_evaluations=sum(x["evaluated"]=="1" for x in r),anchor_status_counts=dict(Counter(x["status"] for x in r)),
++            mean_weak_displacement_fraction=float(np.mean([float(x["weak_fraction"]) for x in r if x["evaluated"]=="1"])) if any(x["evaluated"]=="1" for x in r) else None)
++    groups={n:{m:summarize(t,[i for i,e in enumerate(t["events"]) if e["mode"]==m]) for m in ("NORMAL","SEARCH","PENDING","ANCHOR_SKIP")}
++        for n,t in jobs.items() if n!="control"}
++    # First possible GT access; all experimental outputs and engineering audit frozen.
++    gt=posthoc(directory,jobs)
++    outcomes=read(directory/"admission_posthoc_gt.csv")
++    gt["admitted_outcomes"]={n:dict(Counter(r["outcome"] for r in outcomes if r["mode"]==n and r["admitted"]=="1")) for n in MODES if n in jobs}
++    windows=[]
++    for center in (616,2350,3341):
++        for n in jobs:
++            r=[x for x in read(directory/"posthoc_gt.csv") if x["mode"]==n and abs(int(x["transaction_id"])-center)<=10]
++            windows.append(dict(mode=n,center=center,frames=len(r),translation_RMSE=moments([float(x["corrected_translation_m"]) for x in r])["RMSE"],rotation_RMSE=moments([float(x["corrected_rotation_deg"]) for x in r])["RMSE"]))
++    csv_write(directory/"known_development_windows.csv",windows)
++    improvement=1-gt[MODES[1]]["corrected_translation_m"]["RMSE"]/gt["control"]["corrected_translation_m"]["RMSE"] if MODES[1] in jobs else None
++    result=dict(task=f["task"],attempt=attempt,start_sha=f["start_sha"],code_sha=f["code_sha"],engineering="PASS",
++        statistics=stats,groups=groups,GT=gt,translation_RMSE_improvement_fraction=improvement,
++        accuracy_goal_pass=improvement is not None and improvement>=.05,
++        performance_goal_pass=all(stats[n]["frame_processing_logging_ms"]["mean"]<=100 and stats[n]["frame_processing_logging_ms"]["P95"]<=150 for n in MODES if n in stats),
++        verification_directory=str(receipt_dir.relative_to(directory)),
++        anchor_score_audit_rows=len(read(receipt_dir/"anchor_score_parity.csv")),
++        max_anchor_audit_difference=max((float(x["maximum_difference"]) for x in read(receipt_dir/"anchor_score_parity.csv")),default=0),
++        nominal_state_parity="8254/8254 EXACT",GT_FOR_ADMISSION=False,SINGLE_MAP_INSTANCE=True,PRODUCTION_CHANGED=False)
++    json_write(directory/"evaluation.json",result)
++    print(json.dumps(dict(code_sha=result["code_sha"],accuracy_goal_pass=result["accuracy_goal_pass"],
++        improvement=improvement,statistics=stats,GT=gt),indent=2))
++
++if __name__=="__main__":
++    p=argparse.ArgumentParser();p.add_argument("--attempt",type=int,default=0);p.add_argument("--audit-revision",type=int,default=0)
++    a=p.parse_args();evaluate(a.attempt,a.audit_revision)
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/p10_r2_replay.cpp b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/p10_r2_replay.cpp
+index 1ebe212..5e4cf8b 100644
+--- a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/p10_r2_replay.cpp
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/p10_r2_replay.cpp
+@@ -1,4 +1,5 @@
+ #include "shadow_logging.hpp"
++#include "anchor_logging.hpp"
+ #include <ctime>
+ #include "dog_prior_map_fastlio2_frontend_exp/current_frame_ndt.hpp"
+ #include "dog_prior_map_fastlio2_frontend_exp/fastlio2_frontend.hpp"
+@@ -85,12 +86,13 @@ int main(int argc, char** argv) {
+     const uint64_t initialization_stamp = unsignedArgument(argv[11]);
+     const bool enable_shadow = std::string(argv[12]) == "shadow";
+     const std::string experiment_mode = argv[12];
++    const bool anchored = experiment_mode == "anchored_shadow" || experiment_mode == "anchored_guarded_feedback";
+     const bool rotation_guard = experiment_mode == "guarded_feedback_rotation_guard" ||
+         experiment_mode == "event_admission_rotation_guard";
+     const bool guarded_feedback = experiment_mode == "guarded_feedback" ||
+-        experiment_mode == "guarded_feedback_rotation_guard";
++        experiment_mode == "guarded_feedback_rotation_guard" || experiment_mode == "anchored_guarded_feedback";
+     const bool branch_admission = guarded_feedback || experiment_mode == "event_admission" ||
+-        experiment_mode == "event_admission_rotation_guard";
++        experiment_mode == "event_admission_rotation_guard" || anchored;
+     const bool enable_event = experiment_mode == "event" || branch_admission;
+     if (!enable_shadow && !enable_event && std::string(argv[12]) != "control") throw std::runtime_error("invalid_mode");
+     const std::string log_directory = std::string(argv[7]).substr(0,std::string(argv[7]).find_last_of('/'));
+@@ -98,6 +100,8 @@ int main(int argc, char** argv) {
+     p10log::EventLogger event_log(log_directory);
+     std::unique_ptr<p10log::AdmissionLogger> admission_log;
+     if (branch_admission) admission_log.reset(new p10log::AdmissionLogger(log_directory));
++    std::unique_ptr<p10log::AnchorLogger> anchor_log;
++    if (anchored) anchor_log.reset(new p10log::AnchorLogger(log_directory));
+     const auto shadow_config = p10log::config(argv[13],false);
+     paper::CoupledEventConfig event_config;
+     event_config.search = shadow_config;
+@@ -105,6 +109,7 @@ int main(int argc, char** argv) {
+     event_config.branch_rotation_guard = rotation_guard;
+     if (enable_event && std::string(argv[13]) != "C") throw std::runtime_error("event_requires_R2_residual_predictor");
+     paper::PendingCandidate pending;
++    paper::CoupledAnchorState anchor;
+     if (limit == 0 || limit > scans.size()) throw std::runtime_error("invalid_frame_limit");
+     paper::Pose3d initial_lidar, extrinsic;
+     const auto parameters = paper::readP7Parameters(argv[6], &initial_lidar, &extrinsic);
+@@ -195,6 +200,7 @@ int main(int argc, char** argv) {
+         throw std::runtime_error("shadow_failed:"+reason);
+       if(enable_shadow && !result.effective) shadow.status="NOMINAL_INEFFECTIVE_SHADOW_SKIPPED";
+       paper::CoupledEventResult event;
++      paper::CoupledAnchorReceipt anchor_receipt;
+       event.mode="CONTROL"; event.event="CONTROL_NO_SHADOW";
+       event.recommendation_available=result.effective;
+       if (enable_event) {
+@@ -202,8 +208,11 @@ int main(int argc, char** argv) {
+         // Unlike pred_prev^-1*pred_cur, this excludes the previous measurement update.
+         const Eigen::Matrix4d previous_lidar = preciseMatrix(start.map_T_imu) * preciseMatrix(extrinsic);
+         const Eigen::Matrix4d imu_interval = previous_lidar.inverse() * preciseMatrix(scan_end.predicted_map_T_lidar);
+-        if (!registration.eventShadow(result,event_config,&pending,&event,&reason,
+-            branch_admission ? &imu_interval : nullptr))
++        const bool event_ok = anchored ? registration.anchoredEventShadow(result,event_config,
++            &pending,&event,&reason,imu_interval,&anchor,&anchor_receipt) :
++            registration.eventShadow(result,event_config,&pending,&event,&reason,
++                branch_admission ? &imu_interval : nullptr);
++        if (!event_ok)
+           throw std::runtime_error("event_shadow_failed:"+reason);
+         shadow=event.shadow;
+       }
+@@ -231,12 +240,19 @@ int main(int argc, char** argv) {
+       const auto corrected = frontend.getState();
+       if (corrected.stamp_ns != scan.scan_end_ns) throw std::runtime_error("state_timestamp_mismatch");
+       if (!frontend.postconditionsValid(&reason)) throw std::runtime_error("postconditions_failed:" + reason);
++      if (anchored) {
++        const bool stable=update_success && event.mode=="NORMAL" && !event.innovation_trigger &&
++            !event.pending_before && !event.pending_after;
++        paper::settleCoupledAnchor(&anchor,scan.scan_end_ns,
++            preciseMatrix(corrected.map_T_imu)*preciseMatrix(extrinsic),stable,alternative_used);
++      }
+       const double total_ms = elapsedMs(frame_start);
+       const auto logging_start = Clock::now();
+       shadow_log.write(transaction,result,shadow,total_ms,1000.0*(std::clock()-frame_cpu)/CLOCKS_PER_SEC);
+       event_log.write(transaction,event,pending);
+       if (admission_log) admission_log->write(transaction,experiment_mode,event,
+           actual_measurement,alternative_used,update_success,delta);
++      if (anchor_log) anchor_log->write(transaction,anchor_receipt,anchor);
+       trajectory << transaction << ',' << scan.scan_end_ns;
+       poseColumns(trajectory, scan_end.predicted_map_T_imu); poseColumns(trajectory, corrected.map_T_imu);
+       vectorColumns(trajectory, corrected.velocity); vectorColumns(trajectory, corrected.gyro_bias);
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/run_anchored.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/run_anchored.py
+new file mode 100644
+index 0000000..a7640ca
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/run_anchored.py
+@@ -0,0 +1,107 @@
++"""R5 full causal builder: no GT, labels, canonical poses or input extraction."""
++import argparse
++import json
++import os
++from pathlib import Path
++import shutil
++import subprocess
++import time
++from run_budgeted import ROOT, sha, read, csv_write, json_write
++from run_admission import CONTROL
++
++ARCHIVE=ROOT/"docs/p10_r5_anchored_weak_subspace"
++CACHE=Path("/home/jian/livox_ws/dog_loc_paper_ws/.p9_experiment_cache/p10_r5_anchored_weak_subspace")
++START_SHA="65a416ec19069efa0405e9fc56a0505dc9c3018e"
++MODES=("anchored_shadow","anchored_guarded_feedback")
++
++def run(build,attempt):
++    if attempt not in (0,1):raise RuntimeError("at most one targeted improvement")
++    if attempt and not (ARCHIVE/"TARGETED_IMPROVEMENT_1.md").is_file():raise RuntimeError("freeze improvement first")
++    if subprocess.check_output(["git","-C",str(ROOT),"diff","--name-only","HEAD"],text=True).strip():
++        raise RuntimeError("commit executed code first")
++    subprocess.run(["git","-C",str(ROOT),"merge-base","--is-ancestor",START_SHA,"HEAD"],check=True)
++    lineage=ROOT/"docs/p9_r4_heldout_visual_evidence/source_recovery/replay_input_hashes.json"
++    inputs=json.loads(lineage.read_text())["inputs"]
++    keys=("imu_csv","filter_scans_csv","raw_timed_scan_index","raw_timed_point_bin","params_txt","map_pcd")
++    files={};hashes={str(lineage):sha(lineage)}
++    for key in keys:
++        p=inputs[key]["path"]
++        if sha(p)!=inputs[key]["sha256"]:raise RuntimeError("input SHA failure: "+key)
++        files[key]=p;hashes[p]=sha(p)
++    ids=[int(r["transaction_id"]) for r in read(files["raw_timed_scan_index"])]
++    if ids!=list(range(1,4128)):raise RuntimeError("full ordered denominator failed")
++    old=json.loads((CONTROL.parent/"blind_outputs_freeze.json").read_text())["output_sha256"]
++    control={}
++    for p in CONTROL.glob("*.csv"):
++        if sha(p)!=old["control/"+p.name]:raise RuntimeError("R3 CONTROL changed")
++        control[str(p.relative_to(ROOT))]=sha(p)
++    package=ROOT/"src/dog_prior_map_fastlio2_frontend_exp"
++    unchanged=["src/coupled_ndt_shadow.cpp","src/coupled_ndt_temporal.cpp","src/fastlio2_frontend_ikfom.cpp",
++        "src/p7_replay_io.cpp","src/scan_processor.cpp","src/lidar_deskew_geometry.cpp","src/registration_geometry.cpp"]
++    for n in unchanged:
++        p=package/n
++        if p.read_bytes()!=subprocess.check_output(["git","-C",str(ROOT),"show",START_SHA+":"+str(p.relative_to(ROOT))]):
++            raise RuntimeError("frozen implementation changed: "+n)
++    names=unchanged+["src/coupled_ndt_anchor.cpp","src/current_frame_ndt.cpp",
++        "include/dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp",
++        "include/dog_prior_map_fastlio2_frontend_exp/current_frame_ndt.hpp",
++        "include/dog_prior_map_fastlio2_frontend_exp/coupled_ndt_shadow.hpp","scripts/p7/CMakeLists.txt"]
++    paths=[package/n for n in names]+list((package/"scripts/p10/budgeted").glob("*.py"))+[
++        package/"scripts/p10/budgeted"/n for n in ("p10_r2_replay.cpp","shadow_logging.hpp","anchor_logging.hpp","test_anchor.cpp")]
++    directory=ARCHIVE/f"attempt_{attempt}";cache=CACHE/f"attempt_{attempt}"
++    directory.mkdir(parents=True,exist_ok=False);cache.mkdir(parents=True,exist_ok=False)
++    if shutil.disk_usage(cache).free<2*(1<<30):raise RuntimeError("persistent capacity insufficient")
++    csv_write(directory/"frame_selection.csv",[dict(transaction_id=i,selected=1) for i in ids])
++    binary=cache/"p10_r5_replay";shutil.copy2(Path(build)/"p10_r2_replay",binary)
++    freeze=dict(task="PAPER-P10-R5-ANCHORED-WEAK-SUBSPACE-COUPLED-NDT",attempt=attempt,start_sha=START_SHA,
++        code_sha=subprocess.check_output(["git","-C",str(ROOT),"rev-parse","HEAD"],text=True).strip(),
++        input_sha256=hashes,control_sha256=control,source_sha256={str(p.relative_to(ROOT)):sha(p) for p in paths},
++        binary_sha256=sha(binary),binary_path=str(binary),theory_sha256=sha(ARCHIVE/"THEORY.md"),output_directory=str(cache),
++        GT_LOADED=False,ORACLE_LOADED=False,PRODUCTION_CHANGED=False,total_frames=4127,anchor_lifetime_s=2.,
++        mean_margin=.01,relative_gain=.10,creation_W_frozen=True,reference_frame="map_T_lidar",
++        diagnostic_gate=False,initial_pending_rank="unchanged R3 non-oracle merit",max_previews=16,max_aligns=3,
++        anchor_seed="ordinary untriggered actual corrected lidar state, only when invalid; never valid reset",
++        anchor_propagation="anchor_prev*inverse(actual previous corrected lidar)*current predicted lidar",
++        feedback_anchor="invalidate after actual feedback, never same-frame reseed",
++        alternative_propagation="unchanged R3 prediction-to-prediction, not asserted IMU-only",
++        timing="full scan-end processing+logging except cost row; process wall includes startup")
++    if attempt:
++        freeze["improvement_contract_sha256"]=sha(ARCHIVE/"TARGETED_IMPROVEMENT_1.md")
++        freeze["initial_pending_rank"]="lowest frozen-W anchor cost among existing eligible refined terminals; energy then ID ties"
++        freeze["prior_GT_inspected"]=True
++        freeze["improvement_basis"]="non-GT frozen terminal rank mismatch 33/160; no GT threshold/frame selection"
++    json_write(directory/"execution_freeze.json",freeze)
++    env=dict(os.environ,LD_LIBRARY_PATH="/lib/x86_64-linux-gnu",OMP_NUM_THREADS="1",OPENBLAS_NUM_THREADS="1")
++    receipts=[]
++    for mode in MODES:
++        if mode==MODES[1]:
++            shadow=read(directory/MODES[0]/"admission.csv")
++            if not any(r["admitted"]=="1" for r in shadow):
++                json_write(directory/"feedback_not_run.json",dict(status="NOT_RUN",reason="no legal anchored shadow admission"));break
++        output=cache/mode;record=directory/mode;output.mkdir();record.mkdir()
++        command=[str(binary),*[files[k] for k in keys[:4]],files["map_pcd"],files["params_txt"],
++            str(output/"trajectory.csv"),str(output/"registration.csv"),str(output/"runtime.csv"),"4127","0",mode,"C"]
++        json_write(record/"command.json",command)
++        began=time.monotonic()
++        with (record/"engine.log").open("x") as log:proc=subprocess.run(command,stdout=log,stderr=subprocess.STDOUT,env=env)
++        receipt=dict(mode=mode,returncode=proc.returncode,wall_s=time.monotonic()-began)
++        json_write(record/"receipt.json",receipt);receipts.append(receipt)
++        for p in output.glob("*.csv"):shutil.copyfile(p,record/p.name)
++        print(json.dumps(receipt),flush=True)
++        if proc.returncode:raise RuntimeError("causal replay failed, preserve and stop")
++        for n in ("frames","events","trajectory","registration","admission","anchor"):
++            if [int(r["transaction_id"]) for r in read(record/(n+".csv"))]!=ids:raise RuntimeError("incomplete job")
++        for a,r in zip(read(record/"admission.csv"),read(record/"anchor.csv")):
++            if a["admitted"]=="1" and not (a["temporally_supported"]=="1" and a["admission_valid"]=="1" and
++                r["valid"]=="1" and r["evaluated"]=="1" and int(r["contributions"])==3 and
++                float(r["mean_advantage"])>.01 and float(r["alternative_sum"])<=.9*float(r["nominal_sum"])):
++                raise RuntimeError("illegal admission; do not start feedback")
++        json_write(record/"job_blind_freeze.json",dict(GT_LOADED=False,output_sha256={p.name:sha(p) for p in record.glob("*.csv")}))
++    csv_write(directory/"job_cost.csv",receipts)
++    json_write(directory/"blind_outputs_freeze.json",dict(GT_LOADED=False,ORACLE_LOADED=False,FEEDBACK_EXPERIMENT_ONLY=True,
++        output_sha256={str(p.relative_to(directory)):sha(p) for p in directory.rglob("*.csv")}))
++    print("BLIND_OUTPUTS_FROZEN",flush=True)
++
++if __name__=="__main__":
++    p=argparse.ArgumentParser();p.add_argument("build");p.add_argument("--attempt",type=int,default=0)
++    a=p.parse_args();run(a.build,a.attempt)
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/summarize_anchored.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/summarize_anchored.py
+new file mode 100644
+index 0000000..743667c
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/summarize_anchored.py
+@@ -0,0 +1,24 @@
++"""Compact factual R5 report, without new analysis or experiments."""
++import json
++from run_anchored import ARCHIVE,MODES
++from run_budgeted import read
++for directory in sorted(ARCHIVE.glob("attempt_*")):
++    if not (directory/"evaluation.json").is_file():continue
++    e=json.loads((directory/"evaluation.json").read_text());result={}
++    for n,s in e["statistics"].items():
++        gt=e["GT"][n];a=s["frame_processing_logging_ms"]
++        result[n]=dict(frames=s["frames"],anchor_valid=s.get("anchor_valid_frames"),anchor_established=s.get("anchor_established"),
++            trigger=s["raw_trigger_count"],search=s["search_count"],pending=s["pending_created"],support=s["temporally_supported"],
++            admitted=s.get("admitted",0),used=s.get("alternative_used",0),ndt_calls=s["full_ndt_calls"],jet=s["jet_calls"],preview=s["preview_calls"],
++            nonlocal_terminals=s["nonlocal_terminals"],eligible_nonlocal=s["eligible_nonlocal_terminals"],local=s["local_recommendations"],
++            mean=a["mean"],P95=a["P95"],max=a["max"],rss=s["peak_rss_kib"],wall=s.get("wall_s"),jumps=s["large_jumps"],
++            corrected_translation={k:gt["corrected_translation_m"][k] for k in ("RMSE","P95","max")},
++            corrected_rotation={k:gt["corrected_rotation_deg"][k] for k in ("RMSE","P95","max")},
++            raw_translation={k:gt["actual_raw_translation_m"][k] for k in ("RMSE","P95","max")},
++            raw_rotation={k:gt["actual_raw_rotation_deg"][k] for k in ("RMSE","P95","max")},
++            max_update_translation=s.get("max_update_translation_m"),max_update_rotation=s.get("max_update_rotation_deg"),
++            admitted_GT=e["GT"]["admitted_outcomes"].get(n))
++    print(json.dumps(dict(attempt=e["attempt"],code_sha=e["code_sha"],improvement=e["translation_RMSE_improvement_fraction"],
++        anchor_audit_max=e["max_anchor_audit_difference"],methods=result,
++        group_cost={n:{k:dict(frames=s["frames"],cost=s.get("frame_processing_logging_ms")) for k,s in g.items()} for n,g in e["groups"].items()},
++        windows=read(directory/"known_development_windows.csv")),indent=2))
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/test_anchor.cpp b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/test_anchor.cpp
+new file mode 100644
+index 0000000..b0c0a86
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/test_anchor.cpp
+@@ -0,0 +1,95 @@
++#include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp"
++#include <Eigen/Geometry>
++#include <iostream>
++#include <stdexcept>
++namespace p=dog_prior_map_fastlio2_frontend_exp;
++namespace {
++void require(bool ok,const char* text) { if(!ok) throw std::runtime_error(text); }
++Eigen::Matrix4f pose(float x) { auto T=Eigen::Matrix4f::Identity().eval();T(0,3)=x;return T; }
++}
++int main() {
++  try {
++    p::CoupledAnchorState anchor;
++    p::settleCoupledAnchor(&anchor,1000000000,pose(.5f).cast<double>(),true,false);
++    require(anchor.valid && anchor.status=="ESTABLISHED","stable seed after corrected update");
++    p::settleCoupledAnchor(&anchor,1100000000,pose(10).cast<double>(),true,false);
++    require(anchor.prediction(0,3)==.5,"valid anchor never absorbs latest NDT");
++    p::advanceCoupledAnchor(&anchor,1100000000,pose(.1f).cast<double>());
++    require(std::abs(anchor.prediction(0,3)-.6)<1e-7,"causal propagation adds inertial interval only");
++    p::advanceCoupledAnchor(&anchor,1100000000,Eigen::Matrix4d::Identity());
++    require(!anchor.valid,"duplicate propagation invalidates");
++    p::settleCoupledAnchor(&anchor,1000000000,pose(.5f).cast<double>(),true,false);
++    int jets=0,scores=0,aligns=0;
++    bool follow_initial=false;
++    p::CoupledNdtBackend backend;
++    backend.jet=[&](const Eigen::Matrix4f&,const p::CoupledVector6&) {
++      ++jets;p::CoupledNativeJet j;j.valid=true;j.score_sum=100;
++      j.score_hessian.diagonal()<<-.1,-2,-3,-4,-5,-6;return j;};
++    backend.score=[&](const Eigen::Matrix4f&){++scores;return 100.;};
++    backend.refine=[&](const Eigen::Matrix4f& initial){++aligns;p::CoupledRefinement r;
++      r.pose=follow_initial?initial:pose(.5f);r.successful=r.converged=true;r.iterations=5;return r;};
++    p::PendingCandidate pending;p::CoupledAnchorReceipt receipt;p::CoupledEventConfig config;
++    config.branch_admission=true;
++    auto run=[&](float x,uint64_t stamp) {return p::runAnchoredCoupledNdtShadow(pose(x),pose(x+.2f),
++      stamp,1,true,backend,config,&pending,pose(.1f).cast<double>(),&anchor,&receipt);};
++    auto r=run(0,1100000000);
++    require(r.event=="PENDING_CREATED" && anchor.frozen && receipt.evaluated && receipt.contributions==1,
++        "creation freezes valid W and anchor");
++    const auto W=anchor.weak_basis;follow_initial=true;
++    r=run(.1f,1200000000);
++    require(r.event=="PENDING_FIRST_SUPPORT" && !r.admitted && anchor.weak_basis==W,"fixed basis no early admission");
++    r=run(.2f,1300000000);
++    require(r.temporally_supported && r.admitted && receipt.contributions==3 && !pending.active &&
++      receipt.nominal_sum>receipt.alternative_sum && r.branch_difference>=-1e-6,
++      "anchor advantage admits without R4 score improvement and snapshots before clear");
++    p::settleCoupledAnchor(&anchor,1300000000,pose(.7f).cast<double>(),false,true);
++    require(!anchor.valid && !anchor.frozen,"actual feedback consumes anchor");
++    aligns=scores=jets=0;
++    r=run(.3f,1400000000);
++    require(!r.admitted && r.mode=="ANCHOR_SKIP" && !aligns && !scores && !jets,"missing anchor retains nominal zero work");
++    // Spatial map-product chart: never use body-frame inverse(reference)*candidate.
++    Eigen::Matrix4d ref=Eigen::Matrix4d::Identity(),cur=ref;
++    ref.block<3,3>(0,0)=Eigen::AngleAxisd(.7,Eigen::Vector3d::UnitY()).toRotationMatrix();
++    cur.block<3,3>(0,0)=Eigen::AngleAxisd(.2,Eigen::Vector3d::UnitX()).toRotationMatrix()*ref.block<3,3>(0,0);
++    cur(0,3)=.8;p::CoupledVector6 eta;
++    require(p::coupledAnchorChart(cur,ref,&eta) && std::abs(eta(0)-1)<1e-12 &&
++      std::abs(eta(3)-.2)<1e-12 && eta.tail<2>().norm()<1e-12,"spatial rotation and scaled map translation");
++    cur(3,3)=2;require(!p::coupledAnchorChart(cur,ref,&eta),"invalid rigid chart rejected");
++    // Even a frozen episode cannot extend the absolute anchor lifetime.
++    anchor={};p::settleCoupledAnchor(&anchor,1000000000,pose(0).cast<double>(),true,false);
++    for(int i=1;i<=20;++i) p::advanceCoupledAnchor(&anchor,1000000000+i*100000000ULL,Eigen::Matrix4d::Identity());
++    require(anchor.valid,"2 second boundary inclusive");anchor.frozen=true;
++    p::advanceCoupledAnchor(&anchor,3100000000,Eigen::Matrix4d::Identity());
++    require(!anchor.valid && !anchor.frozen,"expired pending cannot renew anchor");
++    p::settleCoupledAnchor(&anchor,3100000000,pose(0).cast<double>(),true,false);
++    require(!anchor.valid,"no same-frame expiry reseed even on normal frame");
++    p::settleCoupledAnchor(&anchor,3200000000,pose(0).cast<double>(),true,false);
++    require(anchor.valid,"later stable frame may renew");
++    // Exact/near-numerical equality cannot pass the meaningful cost margin.
++    anchor={};p::settleCoupledAnchor(&anchor,1000000000,pose(.15f).cast<double>(),true,false);
++    pending={};follow_initial=false;r=run(0,1100000000);follow_initial=true;
++    run(.1f,1200000000);r=run(.2f,1300000000);
++    require(r.temporally_supported && !r.admitted,"equal anchor costs retain nominal");
++    // R4 score/motion arithmetic is diagnostic, not an implicit R5 veto.
++    anchor={};p::settleCoupledAnchor(&anchor,1000000000,pose(.5f).cast<double>(),true,false);
++    pending={};follow_initial=false;run(0,1100000000);follow_initial=true;
++    pending.motion_difference=std::numeric_limits<double>::quiet_NaN();
++    r=run(.1f,1200000000);require(pending.active && !receipt.diagnostic_valid,"unavailable R4 diagnostic does not abort anchor");
++    r=run(.2f,1300000000);require(r.admitted && !receipt.diagnostic_valid,"anchor admission independent of R4 diagnostic validity");
++    anchor={};p::settleCoupledAnchor(&anchor,1000000000,pose(.5f).cast<double>(),true,false);
++    pending={};follow_initial=false;run(0,1100000000);follow_initial=true;
++    pending.admission_valid=false;  // Simulate an omitted diagnostic interval, with finite sums.
++    run(.1f,1200000000);r=run(.2f,1300000000);
++    require(r.admitted && !receipt.diagnostic_valid,"diagnostic validity cannot recover after missing interval");
++    // Two already-refined eligible terminals: IMU absolute merit prefers .5,
++    // but the inertial anchor at .6 selects .6 without any new alignment.
++    anchor={};p::settleCoupledAnchor(&anchor,1000000000,pose(.5f).cast<double>(),true,false);
++    pending={};int rank_aligns=0;
++    backend.refine=[&](const Eigen::Matrix4f&){p::CoupledRefinement t;
++      t.pose=pose(++rank_aligns==1?.5f:.6f);t.successful=t.converged=true;t.iterations=5;return t;};
++    r=run(0,1100000000);
++    require(rank_aligns==2 && r.candidate_pose(0,3)>.59f && receipt.alternative_cost<1e-12,
++        "anchor-aware terminal rank reuses same two calls, not old absolute prediction merit");
++    std::cout<<"anchor lifecycle/chart/admission tests PASS\n";return 0;
++  } catch(const std::exception& e) {std::cerr<<e.what()<<'\n';return 1;}
++}
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p7/CMakeLists.txt b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p7/CMakeLists.txt
+index 58a915a..849e966 100644
+--- a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p7/CMakeLists.txt
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p7/CMakeLists.txt
+@@ -24,7 +24,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+ add_library(p7_current_frame_ndt STATIC "${PACKAGE_ROOT}/src/current_frame_ndt.cpp"
+   "${PACKAGE_ROOT}/src/coupled_ndt_shadow.cpp" "${PACKAGE_ROOT}/src/coupled_ndt_temporal.cpp"
+-  "${PACKAGE_ROOT}/src/registration_geometry.cpp")
++  "${PACKAGE_ROOT}/src/registration_geometry.cpp" "${PACKAGE_ROOT}/src/coupled_ndt_anchor.cpp")
+ target_include_directories(p7_current_frame_ndt PUBLIC "${PACKAGE_ROOT}/include" PRIVATE ${PCL_INCLUDE_DIRS})
+ target_link_libraries(p7_current_frame_ndt PUBLIC Eigen3::Eigen PRIVATE ${PCL_LIBRARIES})
+ target_compile_options(p7_current_frame_ndt PRIVATE ${PCL_DEFINITIONS} -Wall -Wextra -Wpedantic)
+@@ -77,6 +77,9 @@ add_test(NAME p10_r3_temporal_test COMMAND p10_r3_temporal_test)
+ add_executable(p10_r4_admission_test "${P10_BUDGETED_ROOT}/test_admission.cpp")
+ target_link_libraries(p10_r4_admission_test PRIVATE p7_current_frame_ndt Eigen3::Eigen)
+ add_test(NAME p10_r4_admission_test COMMAND p10_r4_admission_test)
++add_executable(p10_r5_anchor_test "${P10_BUDGETED_ROOT}/test_anchor.cpp")
++target_link_libraries(p10_r5_anchor_test PRIVATE p7_current_frame_ndt Eigen3::Eigen)
++add_test(NAME p10_r5_anchor_test COMMAND p10_r5_anchor_test)
+ set_tests_properties(current_frame_ndt_test p7_replay_io_test p10_r2_shadow_test
+   p10_r3_temporal_test p10_r4_admission_test
+   PROPERTIES ENVIRONMENT "LD_LIBRARY_PATH=/lib/x86_64-linux-gnu")
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_anchor.cpp b/src/dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_anchor.cpp
+new file mode 100644
+index 0000000..fb8681b
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_anchor.cpp
+@@ -0,0 +1,228 @@
++#include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp"
++#include "dog_prior_map_fastlio2_frontend_exp/registration_geometry.hpp"
++#include <Eigen/Geometry>
++#include <algorithm>
++#include <cmath>
++
++namespace dog_prior_map_fastlio2_frontend_exp {
++namespace {
++bool rigid(const Eigen::Matrix4d& T) {
++  const Eigen::Matrix3d R=T.block<3,3>(0,0);
++  return T.allFinite() && (T.row(3)-Eigen::RowVector4d(0,0,0,1)).norm()<1e-6 &&
++      (R.transpose()*R-Eigen::Matrix3d::Identity()).norm()<1e-4 && std::abs(R.determinant()-1)<1e-4;
++}
++void invalidate(CoupledAnchorState* a, const std::string& status) {
++  a->valid=false; a->frozen=false; a->status=status;
++}
++void snapshot(const CoupledAnchorState& a, uint64_t stamp, CoupledAnchorReceipt* r) {
++  r->origin=a.origin; r->prediction=a.prediction; r->weak_basis=a.weak_basis;
++  r->anchor_stamp_ns=a.origin_stamp_ns; r->propagated_stamp_ns=a.propagated_stamp_ns;
++  r->valid=a.valid; r->frozen=a.frozen; r->weak_dimension=a.weak_dimension;
++  r->contributions=a.contributions; r->nominal_sum=a.nominal_sum; r->alternative_sum=a.alternative_sum;
++  r->age_s=stamp>=a.origin_stamp_ns && a.origin_stamp_ns ? (stamp-a.origin_stamp_ns)/1e9 : 0;
++  r->mean_advantage=a.contributions ? (a.nominal_sum-a.alternative_sum)/a.contributions : 0;
++  r->status=a.status;
++}
++bool accumulate(const Eigen::Matrix4f& nominal, const Eigen::Matrix4f& alternative,
++                CoupledAnchorState* a, CoupledAnchorReceipt* receipt) {
++  CoupledVector6 n,b,d;
++  if (!a->valid || a->weak_dimension<1 || a->weak_dimension>2 || !a->weak_basis.allFinite() ||
++      !coupledAnchorChart(nominal.cast<double>(),a->prediction,&n) ||
++      !coupledAnchorChart(alternative.cast<double>(),a->prediction,&b) ||
++      !coupledAnchorChart(alternative.cast<double>(),nominal.cast<double>(),&d)) return false;
++  const auto W=a->weak_basis.leftCols(a->weak_dimension);
++  if ((W.transpose()*W-Eigen::MatrixXd::Identity(a->weak_dimension,a->weak_dimension)).norm()>1e-8)
++    return false;
++  receipt->nominal_cost=(W.transpose()*n).squaredNorm();
++  receipt->alternative_cost=(W.transpose()*b).squaredNorm();
++  a->nominal_sum+=receipt->nominal_cost; a->alternative_sum+=receipt->alternative_cost;
++  ++a->contributions; receipt->evaluated=true;
++  receipt->weak_fraction=d.squaredNorm()>1e-20 ? std::min(1.0,(W.transpose()*d).squaredNorm()/d.squaredNorm()) : 0;
++  receipt->strong_fraction=d.squaredNorm()>1e-20 ? 1-receipt->weak_fraction : 0;
++  return std::isfinite(a->nominal_sum) && std::isfinite(a->alternative_sum);
++}
++}  // namespace
++
++bool coupledAnchorChart(const Eigen::Matrix4d& candidate,
++    const Eigen::Matrix4d& reference, CoupledVector6* eta) {
++  if (!eta || !rigid(candidate) || !rigid(reference)) return false;
++  eta->head<3>()=(candidate.block<3,1>(0,3)-reference.block<3,1>(0,3))/.8;
++  const Eigen::Matrix3d Rc=Eigen::Quaterniond(candidate.block<3,3>(0,0)).normalized().toRotationMatrix();
++  const Eigen::Matrix3d Ra=Eigen::Quaterniond(reference.block<3,3>(0,0)).normalized().toRotationMatrix();
++  eta->tail<3>()=so3Log((Rc*Ra.transpose()).eval());
++  return eta->allFinite();
++}
++
++void advanceCoupledAnchor(CoupledAnchorState* a, uint64_t stamp,
++    const Eigen::Matrix4d& imu) {
++  if (!a || !a->valid) return;
++  a->invalidated_stamp_ns=stamp;  // Prevent renewal on the frame causing invalidation.
++  if (!a->origin_stamp_ns || stamp<=a->propagated_stamp_ns || stamp<a->origin_stamp_ns ||
++      (stamp-a->propagated_stamp_ns)/1e9>.25 || !rigid(imu) || !rigid(a->prediction)) {
++    invalidate(a,"INVALID_PROPAGATION"); return;
++  }
++  if ((stamp-a->origin_stamp_ns)/1e9>kCoupledAnchorLifetimeS) {
++    invalidate(a,"EXPIRED"); return;
++  }
++  a->prediction=a->prediction*imu; a->propagated_stamp_ns=stamp;
++  if (!rigid(a->prediction)) invalidate(a,"INVALID_PROPAGATED_POSE");
++  else { a->status="PROPAGATED"; a->invalidated_stamp_ns=0; }
++}
++
++void settleCoupledAnchor(CoupledAnchorState* a, uint64_t stamp,
++    const Eigen::Matrix4d& corrected, bool stable, bool feedback) {
++  if (!a) return;
++  if (feedback) { invalidate(a,"FEEDBACK_CONSUMED"); a->invalidated_stamp_ns=stamp; return; }
++  if (!stable || a->valid || a->frozen || !stamp || stamp==a->invalidated_stamp_ns || !rigid(corrected)) return;
++  *a=CoupledAnchorState{}; a->origin=a->prediction=corrected;
++  a->origin_stamp_ns=a->propagated_stamp_ns=stamp; a->valid=true; a->status="ESTABLISHED";
++}
++
++CoupledEventResult runAnchoredCoupledNdtShadow(const Eigen::Matrix4f& nominal,
++    const Eigen::Matrix4f& prediction, uint64_t stamp, std::size_t count,
++    bool nominal_effective, const CoupledNdtBackend& backend, const CoupledEventConfig& config,
++    PendingCandidate* pending, const Eigen::Matrix4d& imu,
++    CoupledAnchorState* anchor, CoupledAnchorReceipt* receipt) {
++  CoupledEventResult out;
++  if (!anchor || !receipt || !pending) { out.event="INVALID_ANCHOR_INTERFACE"; return out; }
++  *receipt=CoupledAnchorReceipt{};
++  advanceCoupledAnchor(anchor,stamp,imu);
++  snapshot(*anchor,stamp,receipt);
++  const bool pending_before=pending->active;
++  const double innovation_t=(nominal.block<3,1>(0,3)-prediction.block<3,1>(0,3)).cast<double>().norm();
++  const double innovation_r=Eigen::Quaterniond(nominal.block<3,3>(0,0).cast<double>()).normalized().angularDistance(
++      Eigen::Quaterniond(prediction.block<3,3>(0,0).cast<double>()).normalized())*180/std::acos(-1.0);
++  const bool triggered=innovation_t>config.trigger_translation_m || innovation_r>config.trigger_rotation_deg;
++  if (nominal_effective && (!anchor->valid || (pending_before &&
++      (!anchor->frozen || anchor->event_stamp_ns!=pending->origin_stamp_ns))) && (triggered || pending_before)) {
++    out.shadow.nominal_pose=out.shadow.recommended_pose=nominal;
++    out.shadow.prediction_pose=prediction; out.recommendation_available=true;
++    out.pending_before=pending_before; out.origin_stamp_ns=pending->origin_stamp_ns;
++    out.innovation_translation_m=innovation_t; out.innovation_rotation_deg=innovation_r;
++    out.innovation_trigger=triggered; out.mode="ANCHOR_SKIP";
++    out.imu_interval=imu;
++    out.event="ANCHOR_UNAVAILABLE_RETAINED_NOMINAL"; out.shadow.status=out.event;
++    out.admission_status=receipt->status=anchor->valid ? "ANCHOR_EVENT_IDENTITY_FAILED" : anchor->status;
++    *pending=PendingCandidate{}; anchor->frozen=false;
++    return out;
++  }
++  // R3 provides quality/continuity. Do not allow R4 diagnostic validity to veto
++  // an anchor-valid episode. Save its minimal history before R3 clears state.
++  const PendingCandidate history=*pending;
++  CoupledEventConfig diagnostic=config; diagnostic.branch_admission=false;
++  diagnostic.branch_rotation_guard=false;
++  out=runEventCoupledNdtShadow(nominal,prediction,stamp,count,nominal_effective,backend,diagnostic,pending,&imu);
++  out.admitted=false; out.admitted_pose=nominal;
++  out.origin_stamp_ns=history.origin_stamp_ns;
++  out.previous_nominal=history.previous_nominal; out.previous_alternative=history.pose;
++  out.imu_interval=imu;
++  out.energy_difference=history.energy_difference; out.motion_difference=history.motion_difference;
++  out.branch_difference=out.energy_difference+config.search.motion_weight*out.motion_difference;
++  if (!nominal_effective) { invalidate(anchor,"NOMINAL_INEFFECTIVE"); anchor->invalidated_stamp_ns=stamp; }
++  if (out.event=="PENDING_CREATED") {
++    double score=std::numeric_limits<double>::quiet_NaN();
++    ++out.shadow.terminal_score_calls;
++    try { score=backend.score(nominal); } catch (...) {}
++    auto found=std::find_if(out.shadow.candidates.begin(),out.shadow.candidates.end(),
++        [&](const CoupledCandidate& c) {return c.id==out.pending_candidate_id;});
++    if (!std::isfinite(score) || score<=0 || found==out.shadow.candidates.end() ||
++        -found->refinement.score_sum/count > -score/count +
++          config.search.near_quality_fraction*std::max(1.0,std::abs(score/count))) {
++      *pending=PendingCandidate{};anchor->frozen=false;
++      out.pending_after=false;out.event="PENDING_CREATION_ADMISSION_FAILED";
++      out.admission_status="INVALID_CREATION_SCORE";return out;
++    }
++    // Version 1: use the new position evidence when choosing which existing
++    // terminal to track, not just as a veto after the other terminal is lost.
++    const int k=out.shadow.weak_dimension;
++    const auto W=out.shadow.eigenvectors.leftCols(k);
++    double best_cost=std::numeric_limits<double>::infinity(),best_energy=best_cost;
++    for (auto candidate=out.shadow.candidates.begin();candidate!=out.shadow.candidates.end();++candidate) {
++      const auto& terminal=candidate->refinement;
++      if (!candidate->selected_for_refinement || !terminal.successful || !terminal.converged ||
++          !rigid(terminal.pose.cast<double>()) || !std::isfinite(terminal.score_sum) || terminal.score_sum<=0 || k<1 || k>2) continue;
++      const double t=(terminal.pose.block<3,1>(0,3).cast<double>()-nominal.block<3,1>(0,3).cast<double>()).norm();
++      const double r=Eigen::Quaterniond(terminal.pose.block<3,3>(0,0).cast<double>()).normalized().angularDistance(
++          Eigen::Quaterniond(nominal.block<3,3>(0,0).cast<double>()).normalized())*180/std::acos(-1.0);
++      const double energy=-terminal.score_sum/count;
++      if (!(t>config.search.separation_m || r>config.search.separation_deg) ||
++          t>config.search.weak_translation_bound_m || r>config.search.weak_rotation_bound_deg ||
++          energy>out.shadow.nominal_energy+config.search.near_quality_fraction*std::max(1.0,std::abs(out.shadow.nominal_energy)) ||
++          energy>-score/count+config.search.near_quality_fraction*std::max(1.0,std::abs(score/count))) continue;
++      CoupledVector6 eta;
++      if (!coupledAnchorChart(terminal.pose.cast<double>(),anchor->prediction,&eta)) continue;
++      const double cost=(W.transpose()*eta).squaredNorm();
++      if (cost<best_cost || (cost==best_cost && (energy<best_energy || (energy==best_energy && candidate->id<found->id)))) {
++        best_cost=cost;best_energy=energy;found=candidate;
++      }
++    }
++    pending->pose=found->refinement.pose;out.pending_candidate_id=found->id;
++    out.origin_stamp_ns=stamp;out.candidate_pose=pending->pose;
++    pending->origin_stamp_ns=stamp;pending->previous_nominal=nominal;
++    pending->created_nominal=nominal;pending->created_alternative=pending->pose;
++    out.nominal_branch_energy=-score/count;
++    out.alternative_branch_energy=-found->refinement.score_sum/count;
++    out.energy_difference=(out.alternative_branch_energy-out.nominal_branch_energy)/std::max(1.0,std::abs(out.nominal_branch_energy));
++    out.motion_difference=0;
++    anchor->weak_dimension=out.shadow.weak_dimension;
++    anchor->weak_basis.setZero();
++    if (anchor->weak_dimension>=1 && anchor->weak_dimension<=2)
++      anchor->weak_basis.leftCols(anchor->weak_dimension)=out.shadow.eigenvectors.leftCols(anchor->weak_dimension);
++    anchor->frozen=true; anchor->event_stamp_ns=stamp;
++    anchor->nominal_sum=anchor->alternative_sum=0; anchor->contributions=0;
++  }
++  const bool contribution=out.event=="PENDING_CREATED" || out.event=="PENDING_FIRST_SUPPORT" || out.temporally_supported;
++  if (contribution) {
++    const double alternative_rotation=Eigen::Quaterniond(out.candidate_pose.block<3,3>(0,0).cast<double>()).normalized().angularDistance(
++        Eigen::Quaterniond(prediction.block<3,3>(0,0).cast<double>()).normalized())*180/std::acos(-1.0);
++    out.rotation_consistent=(!pending_before || history.rotation_consistent) &&
++        alternative_rotation<=out.innovation_rotation_deg+config.local_rotation_tolerance_deg;
++    if (pending_before) {
++      out.nominal_branch_energy=out.shadow.nominal_energy;
++      out.alternative_branch_energy=-out.temporal_terminal.score_sum/count;
++      const bool motion_valid=coupledBranchMotionCost(history.previous_nominal,nominal,imu,
++          config.search,&out.nominal_motion_cost) && coupledBranchMotionCost(history.pose,out.candidate_pose,imu,
++          config.search,&out.alternative_motion_cost);
++      if (motion_valid && std::isfinite(out.energy_difference) && std::isfinite(out.motion_difference)) {
++        out.energy_difference+=(out.alternative_branch_energy-out.nominal_branch_energy)/std::max(1.0,std::abs(out.nominal_branch_energy));
++        out.motion_difference+=out.alternative_motion_cost-out.nominal_motion_cost;
++      }
++      // Explicitly unavailable diagnostics do not enter anchor admission.
++      receipt->diagnostic_valid=history.admission_valid && motion_valid &&
++          std::isfinite(out.energy_difference) && std::isfinite(out.motion_difference);
++    } else receipt->diagnostic_valid=std::isfinite(out.energy_difference);
++    out.branch_difference=out.energy_difference+config.search.motion_weight*out.motion_difference;
++    receipt->diagnostic_valid=receipt->diagnostic_valid && std::isfinite(out.branch_difference);
++    if (pending->active) {
++      pending->energy_difference=out.energy_difference;pending->motion_difference=out.motion_difference;
++      pending->previous_nominal=nominal;
++      pending->rotation_consistent=out.rotation_consistent;
++      pending->admission_valid=receipt->diagnostic_valid;  // Sticky diagnostic validity only.
++    }
++    if (!(std::isfinite(out.nominal_branch_energy) && out.nominal_branch_energy<0)) {
++      *pending=PendingCandidate{};anchor->frozen=false;out.pending_after=false;
++      out.admission_status="INVALID_NOMINAL_MATCH_QUALITY";return out;
++    }
++    if (!accumulate(nominal,out.candidate_pose,anchor,receipt)) {
++      *pending=PendingCandidate{}; invalidate(anchor,"INVALID_ANCHOR_PROJECTION");
++      anchor->invalidated_stamp_ns=stamp;
++      out.admission_valid=false; out.admission_status="INVALID_ANCHOR_PROJECTION";
++    } else {
++      out.admission_valid=anchor->contributions==out.confirmation_count+1;
++      out.admission_status="ANCHOR_AWAITING_CONFIRMATION";
++      if (out.temporally_supported && out.admission_valid) {
++        const double gain=(anchor->nominal_sum-anchor->alternative_sum)/3;
++        out.admitted=anchor->contributions==3 && gain>kCoupledAnchorMeanMargin &&
++            anchor->alternative_sum<=(1-kCoupledAnchorRelativeGain)*anchor->nominal_sum;
++        out.admitted_pose=out.admitted ? out.candidate_pose : nominal;
++        out.admission_status=out.admitted ? "ANCHOR_ADMITTED" : "ANCHOR_ADVANTAGE_INSUFFICIENT";
++      }
++    }
++  }
++  snapshot(*anchor,stamp,receipt);
++  receipt->status=contribution ? out.admission_status : anchor->status;
++  if (!pending->active) anchor->frozen=false;
++  out.pending_after=pending->active;
++  return out;
++}
++}  // namespace dog_prior_map_fastlio2_frontend_exp
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/src/current_frame_ndt.cpp b/src/dog_prior_map_fastlio2_frontend_exp/src/current_frame_ndt.cpp
+index b46aa7f..b41beff 100644
+--- a/src/dog_prior_map_fastlio2_frontend_exp/src/current_frame_ndt.cpp
++++ b/src/dog_prior_map_fastlio2_frontend_exp/src/current_frame_ndt.cpp
+@@ -391,4 +391,21 @@ bool CurrentFrameNdtRegistration::eventShadow(const CurrentFrameNdtResult& nomin
+   }
+ }
+ 
++bool CurrentFrameNdtRegistration::anchoredEventShadow(const CurrentFrameNdtResult& nominal,
++    const CoupledEventConfig& config, PendingCandidate* pending, CoupledEventResult* result,
++    std::string* reason, const Eigen::Matrix4d& imu, CoupledAnchorState* anchor, CoupledAnchorReceipt* receipt) {
++  if (reason) reason->clear();
++  if (!result || !pending || !anchor || !receipt) return fail(reason,"null_anchored_shadow_state");
++  if (nominal.effective && !validateShadowNominal(nominal,reason)) return false;
++  try {
++    *result=runAnchoredCoupledNdtShadow(poseCarrier(nominal.raw_map_T_lidar),
++        poseCarrier(nominal.initial_map_T_lidar),nominal.stamp_ns,nominal.source_point_count,
++        nominal.effective,impl_->shadowBackend(),config,pending,imu,anchor,receipt);
++    if (nominal.status==CurrentFrameNdtStatus::INSUFFICIENT_POINTS) result->shadow.complete_ndt_calls=0;
++    return true;
++  } catch (const std::exception& error) {
++    return fail(reason,std::string("anchored_shadow_internal_error:")+error.what());
++  }
++}
++
+ }  // namespace dog_prior_map_fastlio2_frontend_exp

@@ -1,0 +1,39 @@
+Start testing: Oct 09 18:07 CST
+----------------------------------------------------------
+1/2 Testing: p10_coupling_self_test
+1/2 Test: p10_coupling_self_test
+Command: "/tmp/p10_coupled_build.jxTN7w/p10_coupled_subspace_ndt" "--self-test"
+Directory: /tmp/p10_coupled_build.jxTN7w
+"p10_coupling_self_test" start time: Oct 09 18:07 CST
+Output:
+----------------------------------------------------------
+P10_COUPLING_SELF_TEST=PASS
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p10_coupling_self_test" end time: Oct 09 18:07 CST
+"p10_coupling_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/2 Testing: p10_pipeline_self_test
+2/2 Test: p10_pipeline_self_test
+Command: "/usr/bin/python3.8" "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/test_pipeline.py"
+Directory: /tmp/p10_coupled_build.jxTN7w
+"p10_pipeline_self_test" start time: Oct 09 18:07 CST
+Output:
+----------------------------------------------------------
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.002s
+
+OK
+<end of output>
+Test time =   0.17 sec
+----------------------------------------------------------
+Test Passed.
+"p10_pipeline_self_test" end time: Oct 09 18:07 CST
+"p10_pipeline_self_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 09 18:07 CST

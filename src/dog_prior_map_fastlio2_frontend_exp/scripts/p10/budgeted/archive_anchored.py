@@ -63,6 +63,9 @@ def main():
             new_CONTROL_replays=0,oracle_calls=0,B12_calls=0,visual_extraction=0,Corridor_runs=0,raw_extraction=0,
             GT_used_for_admission=False,production_changed=False,single_map_instance=True,**decision)
         json_write(ARCHIVE/"results.json",result)
+        # Generated exact source diff; no historical archive is rewritten.
+        (ARCHIVE/"source_changes.patch").write_bytes(subprocess.check_output(
+            ["git","-C",str(ROOT),"diff",result["start_sha"],"--","src/dog_prior_map_fastlio2_frontend_exp"]))
         methods=[];runtime=[]
         for e in evaluations:
             for m,s in e["statistics"].items():

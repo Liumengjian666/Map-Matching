@@ -1,0 +1,12 @@
+{
+  "GT_LOADED": false,
+  "engineering": "PASS",
+  "evaluator_sha256": "65e06f5e9e353cfdd548122e98d0c770561697670f31eae5b3c18610e6eb3a9b",
+  "audit_code_sha": "b4b4f6a65176a1c9fd27d99f0af1039bb2dbd339",
+  "output_sha256": {
+    "causal_feedback_parity.csv": "100a681421a01a24921cc5140a68f3af61a469f3a1198287f5a18928272fa6b9",
+    "anchor_score_parity.csv": "56b7d64aea8d8b5370ca4382454283b0cbc8d228ba31de2b2040b8ad7f6f8b93",
+    "nominal_state_parity.csv": "32c7b3a818ac795a754a737e25958965926e54ca1a48e02927b2d670de830e15",
+    "branch_diagnostic_parity.csv": "b417d98ee2ff7485c9001b45c6d786043d0e2a9a57acacd97a0a11b1cd3d494f"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "branch": "research/p9-r4-heldout-visual-evidence",
+  "last_verified_remote_head": "65a416ec19069efa0405e9fc56a0505dc9c3018e",
+  "verification": "git ls-remote succeeded before R5 replay",
+  "end_query_status": "UNAVAILABLE",
+  "end_query_error": "fatal: unable to access https://github.com/Liumengjian666/Map-Matching.git/: Couldn't connect to server",
+  "push_executed": false,
+  "remote_delivery_confirmed": false,
+  "bundle": "/home/jian/livox_ws/dog_loc_paper_ws/.p9_experiment_cache/p10_r5_anchored_weak_subspace/p10_r5_anchored_weak_subspace.bundle",
+  "note": "Local END and bundle SHA are reported after final archive commit; remote START verification does not verify END publication."
+}

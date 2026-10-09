@@ -1,0 +1,9 @@
+{
+  "attempt": 0,
+  "GT_LOADED": false,
+  "creation_episodes": 160,
+  "dual_eligible": 81,
+  "ignored_lower_anchor_cost": 33,
+  "maximum_cost_difference": 2.289220388202209,
+  "candidate_pool_changed": false
+}
