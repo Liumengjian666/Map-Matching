@@ -50,3 +50,9 @@ Scientific versions contain one full shadow and one full feedback each; no
 extra CONTROL/source replay, raw extraction, Oracle/B12/Corridor/visual work.
 Full content hashes plus committed-source/binary/rule lineage and finite
 JSON/CSV-width/denominator audit are delivered in artifact_hashes.json.
+
+Final delivery inspection found whitespace-only context in the stored source
+diff receipt, not trailing whitespace in algorithm code. The receipt generator
+now emits an exact zero-context diff (git apply --unidiff-zero format); hashes
+and git diff --check are rerun. No algorithm, threshold, frozen runtime output
+or scientific replay changes accompany this archive-format correction.

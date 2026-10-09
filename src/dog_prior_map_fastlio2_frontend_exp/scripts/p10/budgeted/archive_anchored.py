@@ -47,9 +47,22 @@ def audit():
     return dict(artifact_sha256=hashes,hashed_files=len(hashes),JSON_files=nj,CSV_files=nc,CSV_data_rows=rows,
         blind_chain="PASS",source_binary_chain="PASS",JSON_finite="PASS",CSV_width="PASS",full_denominators="PASS",self_hash_excluded=True)
 
+def write_source_diff(start_sha):
+    # Zero-context exact diff avoids whitespace-only context in the stored
+    # patch being mistaken for newly introduced trailing whitespace.
+    # Apply this receipt with git apply --unidiff-zero if needed.
+    (ARCHIVE/"source_changes.patch").write_bytes(subprocess.check_output(
+        ["git","-C",str(ROOT),"diff","--unified=0",start_sha,"--","src/dog_prior_map_fastlio2_frontend_exp"]))
+
 def main():
     p=argparse.ArgumentParser();p.add_argument("--audit-only",action="store_true")
-    if p.parse_args().audit_only:
+    p.add_argument("--refresh-source-diff",action="store_true")
+    args=p.parse_args()
+    if args.refresh_source_diff and not args.audit_only:
+        p.error("--refresh-source-diff requires --audit-only; scientific summaries remain immutable")
+    if args.audit_only:
+        if args.refresh_source_diff:
+            write_source_diff(json.loads((ARCHIVE/"results.json").read_text())["start_sha"])
         receipt=audit()
         with (ARCHIVE/"artifact_hashes.json").open("w") as stream:json.dump(receipt,stream,indent=2,allow_nan=False);stream.write("\n")
     else:
@@ -63,9 +76,7 @@ def main():
             new_CONTROL_replays=0,oracle_calls=0,B12_calls=0,visual_extraction=0,Corridor_runs=0,raw_extraction=0,
             GT_used_for_admission=False,production_changed=False,single_map_instance=True,**decision)
         json_write(ARCHIVE/"results.json",result)
-        # Generated exact source diff; no historical archive is rewritten.
-        (ARCHIVE/"source_changes.patch").write_bytes(subprocess.check_output(
-            ["git","-C",str(ROOT),"diff",result["start_sha"],"--","src/dog_prior_map_fastlio2_frontend_exp"]))
+        write_source_diff(result["start_sha"])
         methods=[];runtime=[]
         for e in evaluations:
             for m,s in e["statistics"].items():
