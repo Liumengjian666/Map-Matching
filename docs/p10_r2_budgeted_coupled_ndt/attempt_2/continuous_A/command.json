@@ -1,0 +1,16 @@
+[
+  "/tmp/p10_r2_build.CdJ4jf/p10_r2_replay",
+  "/home/jian/livox_ws/p6_i1_recovery_assets_20260927/input/imu.csv",
+  "/home/jian/livox_ws/p6_i1_recovery_assets_20260927/input/filter_scans.csv",
+  "/tmp/p7_baseline_v2_floor01_raw_retry/raw_timed_scans.csv",
+  "/tmp/p7_baseline_v2_floor01_raw_retry/raw_timed_points.bin",
+  "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/map/frozen/floor01_h1_map_p5_frozen.pcd",
+  "/home/jian/livox_ws/p6_i1_recovery_assets_20260927/input/params.txt",
+  "/home/jian/livox_ws/dog_loc_paper_ws/.p9_experiment_cache/p10_r2_budgeted_coupled_ndt/attempt_2/continuous_A/trajectory.csv",
+  "/home/jian/livox_ws/dog_loc_paper_ws/.p9_experiment_cache/p10_r2_budgeted_coupled_ndt/attempt_2/continuous_A/registration.csv",
+  "/home/jian/livox_ws/dog_loc_paper_ws/.p9_experiment_cache/p10_r2_budgeted_coupled_ndt/attempt_2/continuous_A/runtime.csv",
+  "200",
+  "0",
+  "shadow",
+  "A"
+]

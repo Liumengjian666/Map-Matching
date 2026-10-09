@@ -1,0 +1,4 @@
+# Frozen source snapshots and raw command logs retain their byte hashes.
+# Permit terminal blank lines only in these archival receipts, not live code.
+attempt_*/source_snapshot/** whitespace=-blank-at-eof
+*.log whitespace=-blank-at-eof

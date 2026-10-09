@@ -1,0 +1,50 @@
+--- docs/p10_r2_budgeted_coupled_ndt/attempt_0/source_snapshot/src/dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_shadow.cpp	2026-10-09 12:41:51.659021006 +0800
++++ src/dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_shadow.cpp	2026-10-09 12:42:20.795425253 +0800
+@@ -446,8 +446,12 @@
+   };
+   const int initial = std::min(config.initial_candidates, static_cast<int>(proposals.size()));
+   runStage(0, initial, 1);
++  const auto initial_diverse = diverseQualityPreviews(result, config);
++  // A second stage spends budget only when the first stage exposes one
++  // usable near-quality alternative. Zero is an opportunity screen, not a
++  // certificate that unseen candidates cannot reach another good basin.
+   if (initial < static_cast<int>(proposals.size()) &&
+-      (config.fixed_maximum_budget || diverseQualityPreviews(result, config).size() < 2)) {
++      (config.fixed_maximum_budget || (!initial_diverse.empty() && initial_diverse.size() < 2))) {
+     result.expanded = true; runStage(initial, proposals.size(), 2);
+   }
+   const auto ranking = previewRanking(result.candidates);
+@@ -586,6 +590,33 @@
+   config.method = CoupledMethod::WEAK_ONLY; config.fixed_maximum_budget = false;
+   const auto adaptive = runCoupledNdtShadow(base, base, 1, backend, config);
+   if (adaptive.candidates.size() != 8 || adaptive.expanded || adaptive.preview_score_calls != 8 || adaptive.jet_calls != 1) return false;
++  const auto original_score = backend.score;
++  const Eigen::Matrix4f first_quality = adaptive.candidates[0].pose;
++  const Eigen::Matrix4f second_quality = adaptive.candidates[1].pose;
++  if (!separated(first_quality, second_quality, config)) return false;
++  backend.score = [](const Eigen::Matrix4f&) { return 90; };
++  const auto none_quality = runCoupledNdtShadow(base, base, 1, backend, config);
++  if (none_quality.candidates.size() != 8 || none_quality.expanded || none_quality.preview_score_calls != 8 ||
++      none_quality.complete_ndt_calls != 1 || none_quality.terminal_score_calls != 0 ||
++      !diverseQualityPreviews(none_quality, config).empty()) return false;
++  config.fixed_maximum_budget = true;
++  const auto forced_none_quality = runCoupledNdtShadow(base, base, 1, backend, config);
++  if (forced_none_quality.candidates.size() != 16 || !forced_none_quality.expanded ||
++      forced_none_quality.preview_score_calls != 16 || forced_none_quality.complete_ndt_calls != 1) return false;
++  config.fixed_maximum_budget = false;
++  backend.score = [&](const Eigen::Matrix4f& pose) {
++    return (pose - first_quality).norm() < 1e-7 ? 100 : 90;
++  };
++  const auto one_quality = runCoupledNdtShadow(base, base, 1, backend, config);
++  if (one_quality.candidates.size() != 16 || !one_quality.expanded || one_quality.preview_score_calls != 16 ||
++      diverseQualityPreviews(one_quality, config).size() != 1) return false;
++  backend.score = [&](const Eigen::Matrix4f& pose) {
++    return (pose - first_quality).norm() < 1e-7 || (pose - second_quality).norm() < 1e-7 ? 100 : 90;
++  };
++  const auto two_quality = runCoupledNdtShadow(base, base, 1, backend, config);
++  if (two_quality.candidates.size() != 8 || two_quality.expanded || two_quality.preview_score_calls != 8 ||
++      diverseQualityPreviews(two_quality, config).size() != 2) return false;
++  backend.score = original_score;
+   config.fixed_maximum_budget = true;
+   // Recommendation requires a successful terminal, the raw-score margin,
+   // and lower final merit. Even a high raw score cannot bypass either gate.

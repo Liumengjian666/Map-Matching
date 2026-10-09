@@ -56,8 +56,21 @@ if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
 
   find_package(Eigen3 REQUIRED)
   find_package(OpenMP REQUIRED)
+  find_package(PCL 1.10 REQUIRED COMPONENTS common io filters registration)
   set(CMAKE_CXX_STANDARD 14)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+  # Opt-in research module only. No production frontend state-update target
+  # links this shadow search unless explicitly selected by a caller.
+  add_library(p10_coupled_ndt_shadow STATIC
+    src/current_frame_ndt.cpp
+    src/coupled_ndt_shadow.cpp)
+  target_include_directories(p10_coupled_ndt_shadow PUBLIC include
+    PRIVATE ${PCL_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS})
+  target_link_libraries(p10_coupled_ndt_shadow PUBLIC Eigen3::Eigen
+    PRIVATE ${PCL_LIBRARIES})
+  target_compile_options(p10_coupled_ndt_shadow PRIVATE
+    ${PCL_DEFINITIONS} -Wall -Wextra -Wpedantic)
 
   add_executable(registration_geometry_test
     src/registration_geometry.cpp

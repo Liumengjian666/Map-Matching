@@ -1,0 +1,7 @@
+{
+  "reason": "restore attempt0 coverage after negative refinement-cost result; exact-order dynamicScore neighborhood buffer reuse",
+  "previous_attempt_preserved": true,
+  "previous_posthoc_GT_inspected": true,
+  "modification_basis": "cost and objective-preview diagnostics only; not GT tuning",
+  "contract_sha256": "965010279f506ba8fc0f9040d16be8bf8945c7d3abc15e93f40bdd136aac62bc"
+}

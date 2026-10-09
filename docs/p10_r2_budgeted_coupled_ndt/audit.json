@@ -1,0 +1,12 @@
+{
+  "CSV_JSON_AUDIT": "PASS",
+  "attempts": 3,
+  "nominal_state_comparisons": 3600,
+  "nonfinite_candidate_poses": 0,
+  "full_align_max": 3,
+  "preview_max": 16,
+  "source_snapshot_guards": "PASS",
+  "GT_POSTHOC_ONLY": true,
+  "historical_archives_modified": false,
+  "new_real_ndt_calls": 4156
+}

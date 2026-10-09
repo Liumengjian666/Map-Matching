@@ -1,0 +1,354 @@
+Matplotlib created a temporary cache directory at /tmp/matplotlib-mwspkewh because the default path (/home/jian/.config/matplotlib) is not a writable directory; it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+{
+  "attempt": 1,
+  "hard_engineering": "PASS",
+  "nominal_state_parity": "1200/1200 EXACT",
+  "statistics": {
+    "integration_C": {
+      "frames": 32,
+      "calls": 66,
+      "max_calls": 3,
+      "max_previews": 16,
+      "mean_previews": 12.0,
+      "expanded": 16,
+      "recommended_alternatives": 13,
+      "recommended_nonlocal": 2,
+      "mean_total_ms": 106.51089396875,
+      "P95_total_ms": 158.69218214999998,
+      "mean_frame_cpu_ms": 106.32478125,
+      "P95_frame_cpu_ms": 158.49454999999998,
+      "mean_increment_ms": 80.0839931875,
+      "P95_increment_ms": 121.2839252,
+      "mean_increment_cpu_ms": 80.03840625,
+      "P95_increment_cpu_ms": 121.22309999999999,
+      "mean_nominal_align_ms": 21.46180696875,
+      "phase_mean_ms": {
+        "model_ms": 0.36719440624999944,
+        "jet_ms": 30.693527312500002,
+        "solve_ms": 0.08175637499999999,
+        "preview_ms": 20.98595834375,
+        "refinement_ms": 27.879976687499997
+      },
+      "status": {
+        "RETAINED_NOMINAL": 19,
+        "RECOMMENDED_SHADOW": 13
+      },
+      "peak_rss_kib": 103768
+    },
+    "two_A": {
+      "frames": 2,
+      "calls": 6,
+      "max_calls": 3,
+      "max_previews": 16,
+      "mean_previews": 16.0,
+      "expanded": 2,
+      "recommended_alternatives": 2,
+      "recommended_nonlocal": 1,
+      "mean_total_ms": 96.573058,
+      "P95_total_ms": 137.7341134,
+      "mean_frame_cpu_ms": 96.194,
+      "P95_frame_cpu_ms": 137.1485,
+      "mean_increment_ms": 32.248104,
+      "P95_increment_ms": 36.0839328,
+      "mean_increment_cpu_ms": 32.218,
+      "P95_increment_cpu_ms": 36.0421,
+      "mean_nominal_align_ms": 60.39613799999999,
+      "phase_mean_ms": {
+        "model_ms": 0.04700399999999999,
+        "jet_ms": 1.077276,
+        "solve_ms": 0.0,
+        "preview_ms": 10.896769500000001,
+        "refinement_ms": 20.175721000000003
+      },
+      "status": {
+        "RECOMMENDED_SHADOW": 2
+      },
+      "peak_rss_kib": 103060
+    },
+    "two_B": {
+      "frames": 2,
+      "calls": 6,
+      "max_calls": 3,
+      "max_previews": 16,
+      "mean_previews": 16.0,
+      "expanded": 2,
+      "recommended_alternatives": 2,
+      "recommended_nonlocal": 1,
+      "mean_total_ms": 113.59520750000001,
+      "P95_total_ms": 152.16696515,
+      "mean_frame_cpu_ms": 113.412,
+      "P95_frame_cpu_ms": 151.9392,
+      "mean_increment_ms": 49.378088000000005,
+      "P95_increment_ms": 55.6596479,
+      "mean_increment_cpu_ms": 49.347,
+      "P95_increment_cpu_ms": 55.6218,
+      "mean_nominal_align_ms": 60.317147,
+      "phase_mean_ms": {
+        "model_ms": 0.49619300000000194,
+        "jet_ms": 17.323307,
+        "solve_ms": 0.0674335,
+        "preview_ms": 11.000797500000001,
+        "refinement_ms": 20.397259499999997
+      },
+      "status": {
+        "RECOMMENDED_SHADOW": 2
+      },
+      "peak_rss_kib": 103548
+    },
+    "two_C": {
+      "frames": 2,
+      "calls": 6,
+      "max_calls": 3,
+      "max_previews": 16,
+      "mean_previews": 16.0,
+      "expanded": 2,
+      "recommended_alternatives": 2,
+      "recommended_nonlocal": 1,
+      "mean_total_ms": 126.3664285,
+      "P95_total_ms": 173.72556925,
+      "mean_frame_cpu_ms": 125.576,
+      "P95_frame_cpu_ms": 172.3652,
+      "mean_increment_ms": 56.8851505,
+      "P95_increment_ms": 58.08708385,
+      "mean_increment_cpu_ms": 56.5845,
+      "P95_increment_cpu_ms": 57.55515,
+      "mean_nominal_align_ms": 63.845350499999995,
+      "phase_mean_ms": {
+        "model_ms": 0.5551745,
+        "jet_ms": 20.128681,
+        "solve_ms": 0.11764800000000002,
+        "preview_ms": 12.733889,
+        "refinement_ms": 23.249393499999996
+      },
+      "status": {
+        "RECOMMENDED_SHADOW": 2
+      },
+      "peak_rss_kib": 103512
+    },
+    "continuous_control": {
+      "frames": 200,
+      "calls": 200,
+      "max_calls": 1,
+      "max_previews": 0,
+      "mean_previews": 0.0,
+      "expanded": 0,
+      "recommended_alternatives": 0,
+      "recommended_nonlocal": 0,
+      "mean_total_ms": 26.966616690000002,
+      "P95_total_ms": 39.20124609999999,
+      "mean_frame_cpu_ms": 26.94542,
+      "P95_frame_cpu_ms": 39.18524999999999,
+      "mean_increment_ms": 0.0,
+      "P95_increment_ms": 0.0,
+      "mean_increment_cpu_ms": 0.0,
+      "P95_increment_cpu_ms": 0.0,
+      "mean_nominal_align_ms": 19.306728709999998,
+      "phase_mean_ms": {
+        "model_ms": 0.0,
+        "jet_ms": 0.0,
+        "solve_ms": 0.0,
+        "preview_ms": 0.0,
+        "refinement_ms": 0.0
+      },
+      "status": {
+        "CONTROL_NO_SHADOW": 200
+      },
+      "peak_rss_kib": 111932
+    },
+    "continuous_A": {
+      "frames": 200,
+      "calls": 586,
+      "max_calls": 3,
+      "max_previews": 16,
+      "mean_previews": 8.52,
+      "expanded": 13,
+      "recommended_alternatives": 124,
+      "recommended_nonlocal": 2,
+      "mean_total_ms": 132.28561607,
+      "P95_total_ms": 187.52046704999992,
+      "mean_frame_cpu_ms": 132.15018,
+      "P95_frame_cpu_ms": 187.38549999999995,
+      "mean_increment_ms": 104.89412598000001,
+      "P95_increment_ms": 156.6520482,
+      "mean_increment_cpu_ms": 104.78951,
+      "P95_increment_cpu_ms": 156.5701,
+      "mean_nominal_align_ms": 19.655932219999997,
+      "phase_mean_ms": {
+        "model_ms": 0.04309037999999999,
+        "jet_ms": 2.7149738550000007,
+        "solve_ms": 0.0,
+        "preview_ms": 16.15291675,
+        "refinement_ms": 85.94651601
+      },
+      "status": {
+        "RECOMMENDED_SHADOW": 124,
+        "RETAINED_NOMINAL": 76
+      },
+      "peak_rss_kib": 110992
+    },
+    "continuous_B": {
+      "frames": 200,
+      "calls": 586,
+      "max_calls": 3,
+      "max_previews": 16,
+      "mean_previews": 8.52,
+      "expanded": 13,
+      "recommended_alternatives": 117,
+      "recommended_nonlocal": 2,
+      "mean_total_ms": 153.776539705,
+      "P95_total_ms": 209.64588655,
+      "mean_frame_cpu_ms": 153.65089,
+      "P95_frame_cpu_ms": 209.4865,
+      "mean_increment_ms": 126.26646704999999,
+      "P95_increment_ms": 175.31129884999993,
+      "mean_increment_cpu_ms": 126.16552,
+      "P95_increment_cpu_ms": 175.18369999999996,
+      "mean_nominal_align_ms": 19.633130989999998,
+      "phase_mean_ms": {
+        "model_ms": 0.2835401599999996,
+        "jet_ms": 24.834898335,
+        "solve_ms": 0.048911365,
+        "preview_ms": 16.21865681,
+        "refinement_ms": 84.81954274
+      },
+      "status": {
+        "RECOMMENDED_SHADOW": 117,
+        "RETAINED_NOMINAL": 83
+      },
+      "peak_rss_kib": 112076
+    },
+    "continuous_C": {
+      "frames": 200,
+      "calls": 588,
+      "max_calls": 3,
+      "max_previews": 16,
+      "mean_previews": 8.48,
+      "expanded": 12,
+      "recommended_alternatives": 133,
+      "recommended_nonlocal": 2,
+      "mean_total_ms": 153.4534797,
+      "P95_total_ms": 210.15150029999998,
+      "mean_frame_cpu_ms": 153.336265,
+      "P95_frame_cpu_ms": 210.02289999999996,
+      "mean_increment_ms": 125.9462716,
+      "P95_increment_ms": 179.85144815,
+      "mean_increment_cpu_ms": 125.85331999999998,
+      "P95_increment_cpu_ms": 179.75840000000002,
+      "mean_nominal_align_ms": 19.636664605,
+      "phase_mean_ms": {
+        "model_ms": 0.282552575,
+        "jet_ms": 24.669089245,
+        "solve_ms": 0.064189595,
+        "preview_ms": 16.288208490000002,
+        "refinement_ms": 84.58215915499999
+      },
+      "status": {
+        "RECOMMENDED_SHADOW": 133,
+        "RETAINED_NOMINAL": 67
+      },
+      "peak_rss_kib": 111724
+    }
+  },
+  "recovery": {
+    "A": {
+      "preview_recovered": 0,
+      "refined_recovered": 0,
+      "recommended_recovered": 0
+    },
+    "B": {
+      "preview_recovered": 0,
+      "refined_recovered": 1,
+      "recommended_recovered": 0
+    },
+    "C": {
+      "preview_recovered": 0,
+      "refined_recovered": 1,
+      "recommended_recovered": 0
+    }
+  },
+  "GT": {
+    "continuous_A": {
+      "count": 200,
+      "outcomes": {
+        "WORSE": 51,
+        "IMPROVED": 73,
+        "SAME": 76
+      },
+      "nominal_translation_RMSE_m": 0.0433095483750126,
+      "recommended_translation_RMSE_m": 0.04273368621150612,
+      "nominal_rotation_RMSE_deg": 1.4781057544148413,
+      "recommended_rotation_RMSE_deg": 1.7182733385563302
+    },
+    "continuous_B": {
+      "count": 200,
+      "outcomes": {
+        "WORSE": 44,
+        "IMPROVED": 73,
+        "SAME": 83
+      },
+      "nominal_translation_RMSE_m": 0.0433095483750126,
+      "recommended_translation_RMSE_m": 0.04231118399457013,
+      "nominal_rotation_RMSE_deg": 1.4781057544148413,
+      "recommended_rotation_RMSE_deg": 1.7108229274928992
+    },
+    "continuous_C": {
+      "count": 200,
+      "outcomes": {
+        "WORSE": 57,
+        "IMPROVED": 76,
+        "SAME": 67
+      },
+      "nominal_translation_RMSE_m": 0.0433095483750126,
+      "recommended_translation_RMSE_m": 0.04301837081782899,
+      "nominal_rotation_RMSE_deg": 1.4781057544148413,
+      "recommended_rotation_RMSE_deg": 1.7533715197682314
+    },
+    "integration_C": {
+      "count": 32,
+      "outcomes": {
+        "SAME": 19,
+        "IMPROVED": 7,
+        "WORSE": 6
+      },
+      "nominal_translation_RMSE_m": 0.9771888434484651,
+      "recommended_translation_RMSE_m": 0.971637698960991,
+      "nominal_rotation_RMSE_deg": 4.065926446907495,
+      "recommended_rotation_RMSE_deg": 4.203327427881362
+    },
+    "two_A": {
+      "count": 2,
+      "outcomes": {
+        "IMPROVED": 1,
+        "WORSE": 1
+      },
+      "nominal_translation_RMSE_m": 0.8933473067465878,
+      "recommended_translation_RMSE_m": 0.8453956561018927,
+      "nominal_rotation_RMSE_deg": 6.705147904734427,
+      "recommended_rotation_RMSE_deg": 4.148711733796724
+    },
+    "two_B": {
+      "count": 2,
+      "outcomes": {
+        "IMPROVED": 1,
+        "WORSE": 1
+      },
+      "nominal_translation_RMSE_m": 0.8933473067465878,
+      "recommended_translation_RMSE_m": 0.8453956561018927,
+      "nominal_rotation_RMSE_deg": 6.705147904734427,
+      "recommended_rotation_RMSE_deg": 4.148711733796724
+    },
+    "two_C": {
+      "count": 2,
+      "outcomes": {
+        "IMPROVED": 1,
+        "WORSE": 1
+      },
+      "nominal_translation_RMSE_m": 0.8933473067465878,
+      "recommended_translation_RMSE_m": 0.8453956539911436,
+      "nominal_rotation_RMSE_deg": 6.705147904734427,
+      "recommended_rotation_RMSE_deg": 4.148712244644336
+    }
+  },
+  "GT_USED_FOR_SELECTION": false,
+  "POSE_SWITCHED": false
+}

@@ -1,0 +1,7 @@
+# Final targeted improvement2: restore better coverage, reuse value buffers
+
+Attempt1 reduced C continuous preview count16→8.48 but admitted588 total NDT calls versus296 in attempt0. C total mean/P95 became153.453/210.152ms rather than138.284/198.174ms. Seven-ID refined recovery declined2/7→1/7. Thus mixed-scale first-stage sampling did not meet the low-cost goal. Both full attempts and their source snapshots remain archived. GT had been inspected post-freeze, but this rollback is based on cost/candidate diagnostics, not a new GT-derived threshold.
+
+Before attempt2, freeze the final changes: restore exactly the attempt0 global-FPS coverage/traversal/expansion implementation. Keep residual math, quality screen, merit weights, carrier tolerance and NDT configuration unchanged. In the dynamic value-only kernel, move neighbor-leaf and distance vectors outside the point loop and clear/reuse storage. PCL1.10 radiusSearch clears leaf output and replaces distance results; retain identical neighbor ordering and scalar accumulation ordering. No parallel reduction, approximation, map copy, new objective or threshold.
+
+This is allocation-cost optimization, not a claim of meeting100/150ms. Re-run the full original job matrix, and compare all non-timing frame/candidate/model/nominal-state outputs to attempt0 exactly. Stop after this second targeted improvement regardless of outcome. No further tuning or extra dataset.

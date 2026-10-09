@@ -1,0 +1,7 @@
+{
+  "reason": "mixed-scale first8 from original weakgrid, preserve original expansion; cost and first-stage objective diagnostics only",
+  "previous_attempt_preserved": true,
+  "previous_posthoc_GT_inspected": true,
+  "modification_basis": "cost and objective-preview diagnostics only; not GT tuning",
+  "contract_sha256": "8e48f495ac9686619e6a66640507a0c0b8d377992ac0edfd14a3d43a4accbe17"
+}

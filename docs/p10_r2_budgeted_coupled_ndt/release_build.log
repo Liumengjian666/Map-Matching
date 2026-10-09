@@ -1,0 +1,12 @@
+[ 28%] Built target p7_replay_io
+[ 71%] Built target p7_current_frame_ndt
+[100%] Built target p10_r2_single
+[ 18%] Built target p7_replay_io
+[ 45%] Built target p7_current_frame_ndt
+[100%] Built target p10_r2_replay
+[ 60%] Built target p7_current_frame_ndt
+[100%] Built target p10_r2_shadow_test
+[ 60%] Built target p7_current_frame_ndt
+[100%] Built target current_frame_ndt_test
+[ 50%] Built target p7_replay_io
+[100%] Built target p7_replay_io_test

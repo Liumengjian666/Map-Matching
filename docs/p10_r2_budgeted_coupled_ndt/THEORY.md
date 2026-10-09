@@ -1,0 +1,21 @@
+# P10-R2 frozen development contract
+
+Start: 69d84d9ccef0776e2fdff9e88bb2783b34af3f1d. This is bounded algorithm development, not new held-out proof. R1 sources/results and all earlier conclusions remain unchanged.
+
+The module shares the caller's prepared scan-end LiDAR source and existing PCL NDT target/voxel grid. Nominal align and nominal IKFoM measurement are unchanged. Recommendations are log-only. No oracle pose/ID or GT enters proposals, preview ranking, refinement admission or recommendation. No production ROS protocol, state-update path, visual module or Corridor bootstrap is changed.
+
+Use the same P9 product chart: eta = W u + S v, p = p0 + 0.8 eta_translation, R = Exp(eta_rotation) R0. NDT mean energy is E=-raw_score/N. Full native Euler pullback retains H = J^T H_native J + sum_a g_native[a] K_a. Nominal W/S is the eigensystem of that same frame's Hessian. One weak direction if lambda1/lambda0 >=2, else two, as R1. Non-positive nominal curvature is logged and nominal retained.
+
+At the previous unrefined endpoint (u_previous,v_previous), evaluate jointJet. R1 uses Hvv dv=-Hvu du. R2 uses (Hvv+lambda I)dv=-(gv+Hvu du). LDLT with eigenvalue/condition/residual guards; damping raises minimum eigenvalue to 1e-4 max(1,max(abs(diag(Hvv)))). Cap the combined strong increment norm at0.10. Numeric failure falls back to R1, then warm start. There are no Newton20 iterations and no terminal feedback into the transport history. g*K and mixed second chart derivatives are not omitted.
+
+Proposal coverage: the original R1 admissible17-point line or9x9 weak grid, bounded to2m/15deg; zero excluded. Normalized-coordinate deterministic farthest-point coverage selects up to16 nodes, with zero as distance anchor and lowest original node ID for ties. Each stage visits its selected nodes by raw Euclidean nearest-previous weak coordinates. Stage1 has8 nodes. If fewer than2 mutually separated near-quality previews exist, extend to16. A preview is near-quality if E <= E_nom+0.05 max(1,abs(E_nom)). This is an engineering screen, not a probability or new ambiguity claim.
+
+Merit = E/max(1,abs(E_nom)) +0.05[(translation_to_IMU_prediction/2m)^2 +(rotation_to_prediction/15deg)^2]. Rank ascending, tie lowest node ID. Only finite, near-quality, nominal-separated previews can consume up to2 extra complete NDT calls; enforce mutual separation>0.2m OR>2deg. Recommend a successful converged refined terminal only if raw_score >= nominal_raw_score+2.747604276e-4 and merit strictly improves; otherwise retain nominal exactly. Even an alternative recommendation does not switch state.
+
+Hard budget: one nominal plus at most2 extra complete alignments/frame; at most16 distinct weak preview poses and16 preview value calls. Joint derivative queries (nominal plus transport) and terminal value queries are separately counted; they are additional objective work, not hidden NDT alignments. Each candidate has at most one residual-corrected step. True total/cpu costs, not predictor-only timing, are reported.
+
+R2-A: TX616 andTX2226, A weak-only / B R1 / C R2, identical forced16 proposal pools/order and max2 extra alignments. Same caps do not imply identical derivative work or actual refined counts; report both. Canonical7-ID recovery is post-freeze evaluation only, not independent localization success.
+
+R2-B: original32 historical SAME_OBJECTIVE single-frame inputs, then original causal P7 scan indicesTX1–200, fixed before GT. Run control and A/B/C on all200 scans from original static initialization. Nominal source/hash, trajectory/state, score, convergence and iterations must match exactly excluding timing. Invalid nominal frames remain in the ledger and skip extra search. No jumps between archived sources are represented as a causal replay.
+
+All builder outputs and recommendations are SHA256 frozen before canonical/GT evaluation. Optional GT uses the prior archived Floor01 fixed anchor and LiDAR/IMU extrinsic, not a newly fitted alignment; require32 historical baseline error parity. Candidate coverage and recommended-pose accuracy remain separate. Mean<=100ms andP95<=150ms are goals, not permission to omit source/deskew/refine costs. At most2 explicitly reasoned targeted improvements are allowed; preserve earlier attempts.

@@ -1,0 +1,7 @@
+{
+  "PARITY": "PASS",
+  "tables": 32,
+  "rows": 13460,
+  "timing_excluded": true,
+  "resource_RSS_excluded": true
+}

@@ -1,0 +1,410 @@
+{
+  "task": "PAPER-P10-R2-BUDGETED-COUPLED-NDT",
+  "analysis": "POSTRUN_READONLY_DIAGNOSTICS",
+  "GT_LOADED": false,
+  "CANONICAL_LOADED": false,
+  "NEW_NDT_CALLS": 0,
+  "numerical_tolerance_origin": "docs/p9_r7_cross_dataset_nearoptimal/prospective_scanend_v1/DATASET_PROTOCOL.md lines73-77; unchanged historical P9 comparison bounds, not a new scientific gate",
+  "parity": {
+    "rows": 32,
+    "passed": 32,
+    "source_passed": 32,
+    "max_translation_m": 0.0,
+    "max_rotation_deg": 1.7623167088824962e-06,
+    "max_eigenvalue_abs_difference": 0.00029389199016804923,
+    "max_eigenvalue_relative_component_difference": 1.2328434216585993e-07,
+    "max_active_weak_projector_frobenius_difference": 1.0100693554932724e-06,
+    "max_W2_projector_frobenius_difference": 1.0100693554932724e-06,
+    "max_mean_energy_difference_vs_archived_uobs": 0.0,
+    "max_mean_energy_gap_vs_pcl_probability": 2.204546176720612e-07,
+    "max_raw_score_gap_vs_pcl_probability": 0.0003086364647408857
+  },
+  "score_note": "Fresh objective mean energy exactly matches archived U_obs objective_per_source. PCL transformation_probability reports native terminal carrier; do not claim raw-score byte parity or gap <= EPS_SCORE. Recommendation compares the internally consistent re-evaluated nominal and terminal scores.",
+  "first8_C_continuous": {
+    "rows": 200,
+    "diverse_quality_count_0": 200,
+    "diverse_quality_count_1": 0,
+    "diverse_quality_count_ge2": 0,
+    "stage2_extra_alignments_among_stage1_count0": 96,
+    "final_recommendations_among_stage1_count0": 33,
+    "interpretation": "Stopping expansion on stage1 zero quality removes useful stage2 admissions as well as cost. It is an explicit recovery/performance tradeoff, not a result-preserving optimization."
+  },
+  "cost": {
+    "two_A": {
+      "frames": 2,
+      "preview_count": 32,
+      "full_ndt_calls": 5,
+      "recommended_count": 1,
+      "expanded_count": 2,
+      "model_ms": {
+        "mean": 0.06167099999999992,
+        "p95": 0.07782510000000001,
+        "sum": 0.12334199999999984
+      },
+      "jet_ms": {
+        "mean": 1.3854540000000002,
+        "p95": 1.3943172000000001,
+        "sum": 2.7709080000000004
+      },
+      "solve_ms": {
+        "mean": 0.0,
+        "p95": 0.0,
+        "sum": 0.0
+      },
+      "preview_ms": {
+        "mean": 12.4938085,
+        "p95": 13.67578525,
+        "sum": 24.987617
+      },
+      "refinement_ms": {
+        "mean": 17.502312,
+        "p95": 20.957412,
+        "sum": 35.004624
+      },
+      "shadow_ms": {
+        "mean": 31.494299500000004,
+        "p95": 33.79671505,
+        "sum": 62.98859900000001
+      },
+      "frame_total_ms": {
+        "mean": 123.13386499999999,
+        "p95": 194.16867799999997,
+        "sum": 246.26772999999997
+      },
+      "frame_cpu_ms": {
+        "mean": 122.949,
+        "p95": 193.9176,
+        "sum": 245.898
+      }
+    },
+    "two_B": {
+      "frames": 2,
+      "preview_count": 32,
+      "full_ndt_calls": 3,
+      "recommended_count": 1,
+      "expanded_count": 2,
+      "model_ms": {
+        "mean": 0.5098460000000014,
+        "p95": 0.5139302000000007,
+        "sum": 1.0196920000000027
+      },
+      "jet_ms": {
+        "mean": 17.81929,
+        "p95": 20.8038691,
+        "sum": 35.63858
+      },
+      "solve_ms": {
+        "mean": 0.07473199999999999,
+        "p95": 0.08114359999999998,
+        "sum": 0.14946399999999999
+      },
+      "preview_ms": {
+        "mean": 11.122603,
+        "p95": 13.139704599999998,
+        "sum": 22.245206
+      },
+      "refinement_ms": {
+        "mean": 7.0949245,
+        "p95": 13.48035655,
+        "sum": 14.189849
+      },
+      "shadow_ms": {
+        "mean": 36.710547500000004,
+        "p95": 38.08313975,
+        "sum": 73.42109500000001
+      },
+      "frame_total_ms": {
+        "mean": 103.7859805,
+        "p95": 152.13368395,
+        "sum": 207.571961
+      },
+      "frame_cpu_ms": {
+        "mean": 103.5635,
+        "p95": 151.84355,
+        "sum": 207.127
+      }
+    },
+    "two_C": {
+      "frames": 2,
+      "preview_count": 32,
+      "full_ndt_calls": 5,
+      "recommended_count": 1,
+      "expanded_count": 2,
+      "model_ms": {
+        "mean": 0.5119405000000012,
+        "p95": 0.5182877500000004,
+        "sum": 1.0238810000000025
+      },
+      "jet_ms": {
+        "mean": 17.793274999999998,
+        "p95": 20.6342546,
+        "sum": 35.586549999999995
+      },
+      "solve_ms": {
+        "mean": 0.11024699999999998,
+        "p95": 0.11606189999999997,
+        "sum": 0.22049399999999997
+      },
+      "preview_ms": {
+        "mean": 11.157105000000001,
+        "p95": 13.1814381,
+        "sum": 22.314210000000003
+      },
+      "refinement_ms": {
+        "mean": 24.2920275,
+        "p95": 25.278925649999998,
+        "sum": 48.584055
+      },
+      "shadow_ms": {
+        "mean": 53.965199999999996,
+        "p95": 59.819547899999996,
+        "sum": 107.93039999999999
+      },
+      "frame_total_ms": {
+        "mean": 120.08467250000001,
+        "p95": 160.77426335,
+        "sum": 240.16934500000002
+      },
+      "frame_cpu_ms": {
+        "mean": 119.8545,
+        "p95": 160.46294999999998,
+        "sum": 239.709
+      }
+    },
+    "integration_C": {
+      "frames": 32,
+      "preview_count": 488,
+      "full_ndt_calls": 45,
+      "recommended_count": 5,
+      "expanded_count": 29,
+      "model_ms": {
+        "mean": 0.4707956874999999,
+        "p95": 0.5210549500000022,
+        "sum": 15.065461999999997
+      },
+      "jet_ms": {
+        "mean": 37.94968240625,
+        "p95": 51.881333399999995,
+        "sum": 1214.389837
+      },
+      "solve_ms": {
+        "mean": 0.10291637499999999,
+        "p95": 0.12532625,
+        "sum": 3.2933239999999997
+      },
+      "preview_ms": {
+        "mean": 26.279687468749998,
+        "p95": 34.8876551,
+        "sum": 840.9499989999999
+      },
+      "refinement_ms": {
+        "mean": 12.658061875000001,
+        "p95": 68.11406619999998,
+        "sum": 405.05798000000004
+      },
+      "shadow_ms": {
+        "mean": 77.55307915624999,
+        "p95": 112.00700884999998,
+        "sum": 2481.6985329999998
+      },
+      "frame_total_ms": {
+        "mean": 104.47265971875,
+        "p95": 154.6789988,
+        "sum": 3343.125111
+      },
+      "frame_cpu_ms": {
+        "mean": 104.2555625,
+        "p95": 154.45969999999997,
+        "sum": 3336.178
+      }
+    },
+    "continuous_control": {
+      "frames": 200,
+      "preview_count": 0,
+      "full_ndt_calls": 200,
+      "recommended_count": 0,
+      "expanded_count": 0,
+      "model_ms": {
+        "mean": 0.0,
+        "p95": 0.0,
+        "sum": 0.0
+      },
+      "jet_ms": {
+        "mean": 0.0,
+        "p95": 0.0,
+        "sum": 0.0
+      },
+      "solve_ms": {
+        "mean": 0.0,
+        "p95": 0.0,
+        "sum": 0.0
+      },
+      "preview_ms": {
+        "mean": 0.0,
+        "p95": 0.0,
+        "sum": 0.0
+      },
+      "refinement_ms": {
+        "mean": 0.0,
+        "p95": 0.0,
+        "sum": 0.0
+      },
+      "shadow_ms": {
+        "mean": 0.0,
+        "p95": 0.0,
+        "sum": 0.0
+      },
+      "frame_total_ms": {
+        "mean": 27.46621244,
+        "p95": 39.88316484999997,
+        "sum": 5493.242488
+      },
+      "frame_cpu_ms": {
+        "mean": 27.44565,
+        "p95": 39.842349999999975,
+        "sum": 5489.13
+      }
+    },
+    "continuous_A": {
+      "frames": 200,
+      "preview_count": 3200,
+      "full_ndt_calls": 269,
+      "recommended_count": 28,
+      "expanded_count": 200,
+      "model_ms": {
+        "mean": 0.04239095000000001,
+        "p95": 0.04781040000000013,
+        "sum": 8.478190000000001
+      },
+      "jet_ms": {
+        "mean": 2.7257689600000004,
+        "p95": 2.7428667499999997,
+        "sum": 545.1537920000001
+      },
+      "solve_ms": {
+        "mean": 0.0,
+        "p95": 0.0,
+        "sum": 0.0
+      },
+      "preview_ms": {
+        "mean": 30.031169265,
+        "p95": 30.995596600000002,
+        "sum": 6006.233853
+      },
+      "refinement_ms": {
+        "mean": 27.573859064999997,
+        "p95": 90.64722294999994,
+        "sum": 5514.771812999999
+      },
+      "shadow_ms": {
+        "mean": 60.42569896,
+        "p95": 123.21661759999992,
+        "sum": 12085.139792
+      },
+      "frame_total_ms": {
+        "mean": 87.564140505,
+        "p95": 156.89241485,
+        "sum": 17512.828101
+      },
+      "frame_cpu_ms": {
+        "mean": 87.50805,
+        "p95": 156.81145,
+        "sum": 17501.61
+      }
+    },
+    "continuous_B": {
+      "frames": 200,
+      "preview_count": 3200,
+      "full_ndt_calls": 233,
+      "recommended_count": 16,
+      "expanded_count": 200,
+      "model_ms": {
+        "mean": 0.5026812049999997,
+        "p95": 0.5493160999999976,
+        "sum": 100.53624099999993
+      },
+      "jet_ms": {
+        "mean": 42.991538745,
+        "p95": 45.869322,
+        "sum": 8598.307749
+      },
+      "solve_ms": {
+        "mean": 0.082325695,
+        "p95": 0.09656099999999998,
+        "sum": 16.465139
+      },
+      "preview_ms": {
+        "mean": 30.274392865,
+        "p95": 31.286267599999995,
+        "sum": 6054.878573
+      },
+      "refinement_ms": {
+        "mean": 13.111097690000001,
+        "p95": 85.56741565,
+        "sum": 2622.2195380000003
+      },
+      "shadow_ms": {
+        "mean": 87.06036003499999,
+        "p95": 159.4920245,
+        "sum": 17412.072007
+      },
+      "frame_total_ms": {
+        "mean": 114.31627814500001,
+        "p95": 188.31260534999998,
+        "sum": 22863.255629000003
+      },
+      "frame_cpu_ms": {
+        "mean": 114.24321,
+        "p95": 188.20164999999997,
+        "sum": 22848.642
+      }
+    },
+    "continuous_C": {
+      "frames": 200,
+      "preview_count": 3200,
+      "full_ndt_calls": 296,
+      "recommended_count": 33,
+      "expanded_count": 200,
+      "model_ms": {
+        "mean": 0.4962058849999999,
+        "p95": 0.5194695499999901,
+        "sum": 99.24117699999998
+      },
+      "jet_ms": {
+        "mean": 42.82746729,
+        "p95": 45.442979499999986,
+        "sum": 8565.493458
+      },
+      "solve_ms": {
+        "mean": 0.111201045,
+        "p95": 0.1283148,
+        "sum": 22.240209
+      },
+      "preview_ms": {
+        "mean": 30.177009100000006,
+        "p95": 31.807062499999997,
+        "sum": 6035.401820000001
+      },
+      "refinement_ms": {
+        "mean": 37.65586897,
+        "p95": 89.88155734999995,
+        "sum": 7531.173794
+      },
+      "shadow_ms": {
+        "mean": 111.36483359999998,
+        "p95": 164.97445794999996,
+        "sum": 22272.966719999997
+      },
+      "frame_total_ms": {
+        "mean": 138.284320415,
+        "p95": 198.1738077,
+        "sum": 27656.864083
+      },
+      "frame_cpu_ms": {
+        "mean": 138.17798000000002,
+        "p95": 198.05864999999997,
+        "sum": 27635.596
+      }
+    }
+  }
+}

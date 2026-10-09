@@ -1,0 +1,24 @@
+[  8%] Built target p7_replay_io
+Scanning dependencies of target p7_current_frame_ndt
+[ 12%] Building CXX object CMakeFiles/p7_current_frame_ndt.dir/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/src/current_frame_ndt.cpp.o
+[ 20%] Built target p7_replay_io_test
+[ 24%] Building CXX object CMakeFiles/p7_current_frame_ndt.dir/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_shadow.cpp.o
+[ 28%] Linking CXX static library libp7_current_frame_ndt.a
+[ 28%] Built target p7_current_frame_ndt
+[ 32%] Linking CXX executable p10_r2_shadow_test
+Scanning dependencies of target p7_single_state_runner
+[ 36%] Building CXX object CMakeFiles/p7_single_state_runner.dir/p7_single_state_runner.cpp.o
+[ 40%] Built target p10_r2_shadow_test
+[ 44%] Linking CXX executable p10_r2_replay
+[ 48%] Building CXX object CMakeFiles/p7_single_state_runner.dir/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/src/fastlio2_frontend_ikfom.cpp.o
+[ 68%] Built target p10_r2_replay
+[ 72%] Linking CXX executable p10_r2_single
+[ 76%] Built target p10_r2_single
+[ 80%] Linking CXX executable current_frame_ndt_test
+[ 84%] Built target current_frame_ndt_test
+[ 88%] Building CXX object CMakeFiles/p7_single_state_runner.dir/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/src/registration_geometry.cpp.o
+[ 92%] Building CXX object CMakeFiles/p7_single_state_runner.dir/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/src/scan_processor.cpp.o
+[ 96%] Building CXX object CMakeFiles/p7_single_state_runner.dir/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/src/lidar_deskew_geometry.cpp.o
+[100%] Linking CXX executable p7_single_state_runner
+[100%] Built target p7_single_state_runner
+

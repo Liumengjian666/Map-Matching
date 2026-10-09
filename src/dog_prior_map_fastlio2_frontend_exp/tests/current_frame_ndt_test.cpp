@@ -108,6 +108,45 @@ void testActualNdt() {
   const std::size_t count = result.source_point_count;
   require(ndt.align(3, source, seed, &result, &reason) && result.source_cloud_hash == hash &&
       result.source_point_count == count, "actual NDT source nondeterminism");
+  const auto nominal = result;
+  CoupledNdtConfig config;
+  CoupledShadowResult shadow;
+  auto wrong_identity = nominal;
+  ++wrong_identity.stamp_ns;
+  require(!ndt.shadow(wrong_identity, config, &shadow, &reason) &&
+      reason == "shadow_nominal_source_identity_mismatch", "shadow accepted a stale nominal");
+  require(ndt.shadow(nominal, config, &shadow, &reason), "same-instance shadow failed");
+  require(std::abs(shadow.nominal_energy + nominal.transformation_probability) < 1e-5,
+      "shadow dynamic score differs from nominal PCL score/carrier");
+  require(shadow.complete_ndt_calls <= 3 && shadow.candidates.size() <= 16 &&
+      shadow.recommended_pose.allFinite(), "shadow exceeded budget or returned nonfinite pose");
+  require(result.source_cloud_hash == nominal.source_cloud_hash &&
+      result.status == nominal.status && result.iterations == nominal.iterations &&
+      result.fitness == nominal.fitness &&
+      result.transformation_probability == nominal.transformation_probability &&
+      result.raw_map_T_lidar.position == nominal.raw_map_T_lidar.position &&
+      result.raw_map_T_lidar.orientation.coeffs() == nominal.raw_map_T_lidar.orientation.coeffs(),
+      "shadow mutated the nominal payload");
+  CurrentFrameNdtResult next;
+  require(ndt.align(4, source, seed, &next, &reason), "nominal after shadow failed");
+  require(next.status == nominal.status && next.converged == nominal.converged &&
+      next.iterations == nominal.iterations && next.fitness == nominal.fitness &&
+      next.transformation_probability == nominal.transformation_probability &&
+      next.source_cloud_hash == nominal.source_cloud_hash &&
+      next.source_point_count == nominal.source_point_count &&
+      next.raw_map_T_lidar.position == nominal.raw_map_T_lidar.position &&
+      next.raw_map_T_lidar.orientation.coeffs() == nominal.raw_map_T_lidar.orientation.coeffs(),
+      "shadow changed the next nominal alignment");
+  require(ndt.align(5, {{1, 0, 0}}, seed, &next, &reason) &&
+      next.status == CurrentFrameNdtStatus::INSUFFICIENT_POINTS,
+      "ordinary insufficient-source rejection failed");
+  require(!ndt.shadow(nominal, config, &shadow, &reason) &&
+      reason == "shadow_requires_current_nominal_source", "shadow retained a stale source after rejection");
+  Pose3d invalid_seed = seed;
+  invalid_seed.position.x() = std::numeric_limits<double>::quiet_NaN();
+  require(!ndt.align(6, source, invalid_seed, &next, &reason), "invalid seed accepted");
+  require(!ndt.shadow(nominal, config, &shadow, &reason) &&
+      reason == "shadow_requires_current_nominal_source", "shadow retained a stale source after failure");
   std::cout << "actual PCL NDT PASS iterations=" << result.iterations << " count=" << count << '\n';
   std::remove(path.c_str());
   rmdir(directory);

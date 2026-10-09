@@ -1,0 +1,13 @@
+{
+  "fixed_reference_alignment": "0.99938206665456297;-0.010657365157578216;-0.033494856577573902;-0.07816728514188373;0.011018844175162917;0.99988282894244007;0.010626074491846393;-0.026897686333121243;0.033377685993754659;-0.010988582891384501;0.99938239984689625;-0.042082193927583444;0;0;0;1",
+  "anchor_stamp": "1660857393.702086449",
+  "GT_USED": "POSTHOC_ONLY",
+  "new_alignment_fitted": false,
+  "input_sha256": {
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/gt/floor01_gt.txt": "b8db2491cdb3ca3194f653cab90f31eae70b457e91b2f87f30ed7fe2d0e2ce9f",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/calibration/floor01_extrinsics.yaml": "fd9fbfb209d6715b4812a92d458cdeb32cbfd75160356a87802c2bda5dfa7414",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01/results/dual_u_r1_closure_20261003/same_objective/posthoc_gt/frame_mode_metrics.csv": "9a8841c5c6e0bee21da6dff155daaa988c4eba8e032efb98d90c5afc69a90cf1",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p9_r2a_predictor_conditioned_search/results.json": "fd3b25515f142ecbdcce0176a8eb4f9c76b363e3af52409e0fbbd4f1b73567ed",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_fastlio2_frontend_exp/scripts/p5_i1_posthoc_gt.py": "28cfda7d40e7d08c8ad40c70ac1a21616e191bcaf89a92602bbefad8fd883d13"
+  }
+}
