@@ -1,0 +1,53 @@
+{
+  "canonical_kernel_parity": [
+    {
+      "path": "src/dog_prior_map_fastlio2_frontend_exp/src/current_frame_ndt.cpp",
+      "code_commit_sha256": "42e463c2eacdb31874e56935df5ec0054d828c76fb23730d0051f8c38eab4104",
+      "current_sha256": "42e463c2eacdb31874e56935df5ec0054d828c76fb23730d0051f8c38eab4104",
+      "status": "PASS"
+    },
+    {
+      "path": "src/dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_weak_refinement.cpp",
+      "code_commit_sha256": "cfde0b5bb57635c8a47ec085ea4d4a4896e2d5e550aa6004cb76b56eaad5feed",
+      "current_sha256": "cfde0b5bb57635c8a47ec085ea4d4a4896e2d5e550aa6004cb76b56eaad5feed",
+      "status": "PASS"
+    },
+    {
+      "path": "src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/coupled_ndt_local_math.hpp",
+      "code_commit_sha256": "6a7b3b8cd1709f0f6d8152a3582a8c41933fca19943db155f0f67ea50c0d9114",
+      "current_sha256": "6a7b3b8cd1709f0f6d8152a3582a8c41933fca19943db155f0f67ea50c0d9114",
+      "status": "PASS"
+    },
+    {
+      "path": "src/dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_anchor.cpp",
+      "code_commit_sha256": "9f92812c4cf2c000d1388a065f32d991de393d1e8675ddab09587f719b5eebdf",
+      "current_sha256": "9f92812c4cf2c000d1388a065f32d991de393d1e8675ddab09587f719b5eebdf",
+      "status": "PASS"
+    },
+    {
+      "path": "src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/current_frame_ndt.hpp",
+      "code_commit_sha256": "87121ada2d8341daabe5de935797715e3e605ab0fd3b1a24dacd562ff2f8cdb7",
+      "current_sha256": "87121ada2d8341daabe5de935797715e3e605ab0fd3b1a24dacd562ff2f8cdb7",
+      "status": "PASS"
+    },
+    {
+      "path": "src/dog_prior_map_fastlio2_frontend_exp/src/p7_replay_io.cpp",
+      "code_commit_sha256": "4727243167d56958158ff69126d94484f30fb7cf7b2796be21d50eaea8a7c21e",
+      "current_sha256": "4727243167d56958158ff69126d94484f30fb7cf7b2796be21d50eaea8a7c21e",
+      "status": "PASS"
+    }
+  ],
+  "historical_prior_source_inspection": [
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/src/superloc_first_segment_initializer.cpp",
+      "sha256": "deb58aeb3bd76f802568469f50d33f91b8026924b3fe299fa93b8fa8f9dc266d",
+      "scope": "READ_ONLY_CURRENT_SOURCE_SUPPORTS_ARCHIVED_PRIOR_SEMANTICS_NOT_HISTORICAL_V1_LINEAGE_PROOF"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/src/superloc_map_normalizer.cpp",
+      "sha256": "5c38a755fc015abffabafab7ed71f343716ca29028b9f93b4ce35fba24abe808",
+      "scope": "READ_ONLY_CURRENT_SOURCE_SUPPORTS_ARCHIVED_PRIOR_SEMANTICS_NOT_HISTORICAL_V1_LINEAGE_PROOF"
+    }
+  ],
+  "binary_sha256": "5bfc39937198841d4fc939e8ce7c09f4fa95d75a35add2e9c306fa27d083b84b"
+}

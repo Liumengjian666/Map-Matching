@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "complete_common_source_frames": 2726,
+  "finite_rigid_pose_rows": 8178,
+  "ordinary_zero_extra_rows": 7736,
+  "jet_value_align_budget": "PASS",
+  "causal_IMU_and_timing": "PASS",
+  "GT_READ": false,
+  "IKFOM_RUN": false,
+  "map_instances": 1
+}

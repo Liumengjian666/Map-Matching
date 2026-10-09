@@ -56,3 +56,17 @@ hash receipts. This happened before `RUN_STARTED`, any binary invocation, or
 any dataset NDT call. Canonicalize file paths before deriving repository-relative
 keys; added a relative/absolute invocation regression test. No scientific
 parameters or inputs changed. The first preflight failure is preserved below.
+
+Bounded final statistics review found and fixed three reporting issues, without
+changing the running executor or repeating NDT:
+
+- Require receipt count, complete three-arm rows and source ledger to agree;
+  FULL status additionally requires all 2726 eligible scans. Compare actual
+  align counts against CSV and preserve partial exception rows separately.
+- R6 `strong_selected` is an intermediate candidate flag; a final pose-bound
+  guard can still reject it. Report candidate selection and accepted strong
+  feedback separately. Include feedback/final status in paired records and
+  check the recorded executed pose against the selected execution path.
+- The control arm never invokes R6, so its trigger flag is not a physical
+  no-innovation claim. Add the cheap innovation diagnostic from recorded poses
+  separately; do not compare A's zero invocation count as a zero event rate.

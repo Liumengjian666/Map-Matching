@@ -1,0 +1,207 @@
+{
+  "TASK": "P10-CORRIDOR01-REAL-DEGENERACY-BENCHMARK",
+  "protocol": "SENSOR_ONLY_PRIOR_SEEDED_SCAN_TO_MAP_DIAGNOSTIC",
+  "official_initialization": "UNRESOLVED_TIME_FRAME_NOT_USED_AS_CURRENT_POSE",
+  "GT_map_contract": "LEVEL2_CONSISTENCY_NOT_UNIQUE_NOT_USED",
+  "GT_LOADED": false,
+  "SINGLE_GT_INITIAL_POSE_DIAGNOSTIC": false,
+  "IKFOM_RUN": false,
+  "prior_pose_reference_ns": 1517157219188980000,
+  "prior_available_ns": 1517157224188980000,
+  "first_transaction": 52,
+  "first_scan": {
+    "transaction_id": "52",
+    "scan_start_ns": "1517157224231677055",
+    "scan_end_ns": "1517157224332516266",
+    "cloud_byte_offset": "23553184",
+    "cloud_point_count": "28836"
+  },
+  "initial_guess": "IDENTITY_IN_NORMALIZED_MAP_STALE_FIRST_SCAN_PRIOR_NOT_CURRENT_POSE_TRUTH",
+  "selection": "FIXED_POST_INITIALIZER_WINDOW_NO_GT_NO_SCORE_SELECTION",
+  "phase300": [
+    52,
+    351
+  ],
+  "conditional_full_end": 2777,
+  "extension_gate": "each arm >=270 effective NDT of first300; no nonfinite states",
+  "startup_gate": "first nominal must have existing SUCCESS status; no iteration-limit acceptance",
+  "source": "COMMON_CAUSAL_GYRO_ROTATION_ONLY_SCAN_END_WITH_FULL_EXTRINSIC_LEVER_ARM",
+  "translation_deskew": "NOT_PERFORMED",
+  "gyro_bias": "PROVISIONAL_ZERO_NOT_ESTIMATED",
+  "prediction": "CAUSAL_GYRO_ROTATION_AND_PREVIOUS_ACCEPTED_IMU_ORIGIN_CV_TRANSLATION",
+  "anchor_reference_limitation": "GYRO_CV_NOT_FULL_INERTIAL_STATE_PROPAGATION",
+  "first_velocity": "ZERO_PRIOR_NOT_ESTIMATED",
+  "anchor": "UNCHANGED_R6_LIFECYCLE_2s",
+  "quality": "UNCHANGED_R6_5PERCENT_NDT_BAND_AND_REGULARIZED_OBJECTIVE_DECREASE",
+  "weak_limit_m": 0.15,
+  "weak_limit_deg": 2.0,
+  "strong_step_cap": 0.1,
+  "rho": "max(mean_positive_weak_eigenvalues,1e-4)",
+  "event": "translation innovation >.12m OR rotation >3deg",
+  "jet_budget": 2,
+  "value_budget": 3,
+  "full_align_per_arm_frame": 1,
+  "ndt": {
+    "resolution": 0.8,
+    "step": 0.08,
+    "epsilon": 1e-05,
+    "max_iterations": 80
+  },
+  "ndt_preprocessing": {
+    "map_voxel_m": 0.15,
+    "target_voxel_m": 0.15,
+    "source_voxel_m": 0.25,
+    "max_source_points": 1400,
+    "min_range_m": 0.5,
+    "max_range_m": 80,
+    "min_effective_points": 50
+  },
+  "jump_diagnostic": "consecutive executed pose >.5m OR >10deg; not classified as wrong match",
+  "T_imu_lidar": [
+    [
+      0.9999918597233475,
+      -0.0005161381080032746,
+      0.004001760674214531,
+      0.08
+    ],
+    [
+      0.0005196241852023933,
+      0.9999994864189835,
+      -0.0008701450879252283,
+      0.029
+    ],
+    [
+      -0.004001309503946919,
+      0.0008722174163330545,
+      0.9999916143443562,
+      0.03
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "extrinsic_provenance_receipt_sha256": "496cf243042e2914839f9788fcbed4f045d72a22eb77cdd6c681bdeb8da732be",
+  "extrinsic_projection": "REUSED_EXISTING_FROZEN_NEAREST_PROPER_SO3_NOT_RAW_NONRIGID_MATRIX",
+  "input_manifest_sha256": "591bfe3fd619966f40e4e2af6b9151937732483f0123c70eb34aa1031742991a",
+  "input_counts": {
+    "scans": 2777,
+    "imu_samples": 55957,
+    "raw_points": 79932911
+  },
+  "input_hashes": [
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/EXTRACTION_COMPLETE",
+      "expected": "59ea2d60cfdbfa4ace9a519265f9fa1d5c30f15e9b65b5fee3faa39533740f9f",
+      "actual": "59ea2d60cfdbfa4ace9a519265f9fa1d5c30f15e9b65b5fee3faa39533740f9f",
+      "status": "PASS"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/EXTRACTION_STARTED",
+      "expected": "f56ebd2fd3201e55dddf8046d1a42068ba0acf4b0081f2c3aab4b1de8dc36a7e",
+      "actual": "f56ebd2fd3201e55dddf8046d1a42068ba0acf4b0081f2c3aab4b1de8dc36a7e",
+      "status": "PASS"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/conversion_diagnostics.csv",
+      "expected": "eaafc2a290346ca9ca854c3ec65d95f9872bc31060fb80afb9224c35b1577230",
+      "actual": "eaafc2a290346ca9ca854c3ec65d95f9872bc31060fb80afb9224c35b1577230",
+      "status": "PASS"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/filter_scans.csv",
+      "expected": "41d0b2040a5de8a8bd428c382a7b6dc18fabcaa8d3e7d2cc331018e0585edf1d",
+      "actual": "41d0b2040a5de8a8bd428c382a7b6dc18fabcaa8d3e7d2cc331018e0585edf1d",
+      "status": "PASS"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/imu.csv",
+      "expected": "21b94c0cb0ade931db1586799aa022dff2ba20b9ab76dc1e29eac0e948e132e6",
+      "actual": "21b94c0cb0ade931db1586799aa022dff2ba20b9ab76dc1e29eac0e948e132e6",
+      "status": "PASS"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/imu_timing_audit_full.csv",
+      "expected": "e145c9033b60a9bd88aeb384c4de54775d3f0d08242007bf6030cad68da307fa",
+      "actual": "e145c9033b60a9bd88aeb384c4de54775d3f0d08242007bf6030cad68da307fa",
+      "status": "PASS"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/raw_imu_index.csv",
+      "expected": "d909ded2dd7b252dba21fc48d3a5f1f913d5b5b5d3e9d47a78d67324c9dcb575",
+      "actual": "d909ded2dd7b252dba21fc48d3a5f1f913d5b5b5d3e9d47a78d67324c9dcb575",
+      "status": "PASS"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/raw_imu_serialized.bin",
+      "expected": "959031726df5b960c5b00386737e5c4ef7e550be73621c1ddd5fc748a8df16a8",
+      "actual": "959031726df5b960c5b00386737e5c4ef7e550be73621c1ddd5fc748a8df16a8",
+      "status": "PASS"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/raw_timed_points.bin",
+      "expected": "ce8beed2303ea3de8715932c4d0644d6fe28317014e2383f65942d69bc5ace32",
+      "actual": "ce8beed2303ea3de8715932c4d0644d6fe28317014e2383f65942d69bc5ace32",
+      "status": "PASS"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/raw_timed_scan_index.csv",
+      "expected": "d49b7b81bb1f5c17eb2da9e5ad665dfb2b3b4813280de4e342eb3158d13c932a",
+      "actual": "d49b7b81bb1f5c17eb2da9e5ad665dfb2b3b4813280de4e342eb3158d13c932a",
+      "status": "PASS"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd",
+      "expected": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+      "actual": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/config/corridor01_init.yaml",
+      "expected": "d3e6f560895cb4f6a9efb7058bcff8a13313783e799d82c828e51adcd4bafd1e",
+      "actual": "d3e6f560895cb4f6a9efb7058bcff8a13313783e799d82c828e51adcd4bafd1e",
+      "status": "PASS"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/calibration/corridor01_extrinsics.yaml",
+      "expected": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d",
+      "actual": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d",
+      "status": "PASS"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/initial_pose/corridor01.yaml",
+      "expected": "0670732e26f0d9ee19e6115110e29d0aeca5d26f62ab4848d1629c5f9a6eb62b",
+      "actual": "0670732e26f0d9ee19e6115110e29d0aeca5d26f62ab4848d1629c5f9a6eb62b",
+      "status": "PASS"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/corridor01.pcd",
+      "expected": "4b5231d58ebd4aeb4fc293559051dc30a18b6f07376237938d064962bfe8f40a",
+      "actual": "4b5231d58ebd4aeb4fc293559051dc30a18b6f07376237938d064962bfe8f40a",
+      "status": "PASS"
+    }
+  ],
+  "input_hash_audit_wall_s": 1.0412891700398177,
+  "binary_sha256": "5bfc39937198841d4fc939e8ce7c09f4fa95d75a35add2e9c306fa27d083b84b",
+  "source_hashes": {
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/corridor_benchmark/benchmark.cpp": "70b51a9c321ecf8f495594b0341b36c4e79e105c6fc629ed1d9f5c3050125462",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/corridor_benchmark/test_contract.py": "cbab0580d61765eead18de66635dfcd77d7585037dfca90151d57a624abafbe6",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/corridor_benchmark/run.py": "5b8d54965a00e3ddba8f0bd6af0d520fc3ef83d5fdba0d72855fb823c60610f6",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/corridor_benchmark/CMakeLists.txt": "b529db7c21ca4731835b512b46e762a6f23db76f35dd8bf65a320293996acdc2",
+    "src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/corridor_benchmark/causal_rotation.hpp": "46fc51c0b3fabb59a3da7e31444fb7354945c6d9f4953106e82b153c6f9b90f6"
+  },
+  "git_code_sha": "477465475803f8cab6b518887ee5fce55cc09c38",
+  "command": [
+    "/tmp/p10_corridor_benchmark_build/p10_corridor_benchmark",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd",
+    "/home/jian/livox_ws/dog_loc_paper_ws/.p9_experiment_cache/p10_corridor01_real_degeneracy_benchmark",
+    "/home/jian/livox_ws/dog_loc_paper_ws/.p9_experiment_cache/p10_corridor01_real_degeneracy_benchmark/extrinsic.txt"
+  ],
+  "output": "/home/jian/livox_ws/dog_loc_paper_ws/.p9_experiment_cache/p10_corridor01_real_degeneracy_benchmark",
+  "filesystem": "ext4   rw,nosuid,nodev,relatime,errors=remount-ro",
+  "available_bytes": 57531260928,
+  "write_readback": "PASS"
+}

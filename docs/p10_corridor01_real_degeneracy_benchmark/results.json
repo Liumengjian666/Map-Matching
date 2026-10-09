@@ -1,0 +1,684 @@
+{
+  "TASK": "P10-CORRIDOR01-REAL-DEGENERACY-BENCHMARK",
+  "FINAL_RESULT": "CORRIDOR01_BENCHMARK_EXECUTED_COUPLED_ADVANTAGE_NOT_ESTABLISHED",
+  "NEXT": "RESTORE_CORRIDOR01_CAUSAL_NOMINAL_TRACKING_CONTRACT",
+  "user_requested_start_sha": "ea12a9edd757bc08bebd83f75405c28982704b13",
+  "actual_start_sha": "d9b8b2f8c6d64618969f91853f412dd2cda4024a",
+  "CODE_SHA": "477465475803f8cab6b518887ee5fce55cc09c38",
+  "branch": "research/p9-r4-heldout-visual-evidence",
+  "PUSH_EXECUTED": false,
+  "GT_LOADED": false,
+  "SINGLE_GT_INITIAL_POSE": false,
+  "IKFOM_RUN": false,
+  "protocol": "SENSOR_ONLY_PRIOR_SEEDED_SCAN_TO_MAP_DIAGNOSTIC",
+  "first_transaction": 52,
+  "last_transaction": 2777,
+  "original_scans": 2777,
+  "pre_start_scans": 51,
+  "completed_scans": 2726,
+  "remaining_unprocessed_scans": 0,
+  "partial_arm_rows": 0,
+  "partial_source_ledger_rows": 0,
+  "execution": {
+    "frames_per_arm": 2726,
+    "full_align_calls": 8178,
+    "registration_align_attempts": 8178,
+    "wall_s": 1055.6465075620001,
+    "status": "FULL_ELIGIBLE_INPUT_PROCESSED",
+    "GT_LOADED": false,
+    "IKFOM_RUN": false,
+    "MAP_INSTANCES": 1
+  },
+  "input_hashes_passed": 15,
+  "audit": {
+    "status": "PASS",
+    "complete_common_source_frames": 2726,
+    "finite_rigid_pose_rows": 8178,
+    "ordinary_zero_extra_rows": 7736,
+    "jet_value_align_budget": "PASS",
+    "causal_IMU_and_timing": "PASS",
+    "GT_READ": false,
+    "IKFOM_RUN": false,
+    "map_instances": 1
+  },
+  "methods": {
+    "NOMINAL": {
+      "frames": 2726,
+      "effective": 818,
+      "effective_rate": 0.30007336757153336,
+      "pcl_converged_flag": 2726,
+      "terminal_status_counts": {
+        "SUCCESS": 818,
+        "ITERATION_LIMIT_EXHAUSTED": 38,
+        "ZERO_ITERATION_PASSTHROUGH": 1870
+      },
+      "last_strict_success_tx": 905,
+      "strict_success_mean_iterations": 13.484107579462103,
+      "strict_success_all_point_fitness_m2": {
+        "mean": 7.662329016056101,
+        "P95": 36.466987873004236,
+        "max": 232.086656314143
+      },
+      "strict_success_normalized_NDT_energy": {
+        "mean": -1.8731582018599555,
+        "P95": -0.6971651674923951,
+        "max": -0.3057222229643918
+      },
+      "rejected_or_failed": 1908,
+      "failure_episodes": 29,
+      "failure_to_success_transitions": 28,
+      "longest_failure_streak": 1872,
+      "true_wrong_matches": "NOT_AVAILABLE",
+      "true_localization_recoveries": "NOT_AVAILABLE",
+      "triggered": 0,
+      "trigger_field_meaning": "R6 invocation decision; NOMINAL does not invoke R6",
+      "nominal_innovation_events": 211,
+      "anchor_valid": 0,
+      "weak_attempted": 0,
+      "weak_quality": 0,
+      "feedback": 0,
+      "strong_candidate_selected": 0,
+      "strong_feedback_used": 0,
+      "strong_selected_but_final_rejected": 0,
+      "jet_calls": 0,
+      "value_calls": 0,
+      "extra_align_calls": 0,
+      "full_align_calls": 2726,
+      "weak_m": {
+        "mean": null,
+        "P95": null,
+        "max": null
+      },
+      "selected_strong_m": {
+        "mean": null,
+        "P95": null,
+        "max": null
+      },
+      "selected_strong_deg": {
+        "mean": null,
+        "P95": null,
+        "max": null
+      },
+      "selected_score_gain": {
+        "mean": null,
+        "P95": null,
+        "max": null
+      },
+      "dimension_counts": {},
+      "refinement_statuses": {
+        "NOMINAL_CONTROL": 2726
+      },
+      "strong_statuses": {
+        "NOT_RUN": 2726
+      },
+      "complete_ms": {
+        "mean": 325.1757108609685,
+        "P95": 492.00736,
+        "max": 535.6392989999999
+      },
+      "complete_cpu_ms": {
+        "mean": 324.7853939838591,
+        "P95": 491.48900000000003,
+        "max": 534.861
+      },
+      "align_ms": {
+        "mean": 17.62486580117388,
+        "P95": 103.4685025,
+        "max": 315.365412
+      },
+      "refinement_ms": {
+        "mean": 0.0,
+        "P95": 0.0,
+        "max": 0.0
+      },
+      "unsegmented_other_processing_ms": {
+        "mean": 303.59360179383714,
+        "P95": 486.441238,
+        "max": 530.27608
+      },
+      "peak_process_RSS_MiB": 52.01953125,
+      "jump_diagnostic": 2324,
+      "translation_RMSE_P95_max": "NOT_AVAILABLE_MAP_GT_TRANSFORM_NOT_CLOSED",
+      "rotation_RMSE_P95_max": "NOT_AVAILABLE_MAP_GT_TRANSFORM_NOT_CLOSED"
+    },
+    "WEAK_ONLY": {
+      "frames": 2726,
+      "effective": 885,
+      "effective_rate": 0.3246515040352164,
+      "pcl_converged_flag": 2726,
+      "terminal_status_counts": {
+        "SUCCESS": 885,
+        "ITERATION_LIMIT_EXHAUSTED": 20,
+        "ZERO_ITERATION_PASSTHROUGH": 1821
+      },
+      "last_strict_success_tx": 949,
+      "strict_success_mean_iterations": 11.158192090395481,
+      "strict_success_all_point_fitness_m2": {
+        "mean": 2.3514758538970613,
+        "P95": 11.350765658454726,
+        "max": 91.72172419023383
+      },
+      "strict_success_normalized_NDT_energy": {
+        "mean": -1.899877720424153,
+        "P95": -0.5565795330074932,
+        "max": -0.11042102926447582
+      },
+      "rejected_or_failed": 1841,
+      "failure_episodes": 11,
+      "failure_to_success_transitions": 10,
+      "longest_failure_streak": 1828,
+      "true_wrong_matches": "NOT_AVAILABLE",
+      "true_localization_recoveries": "NOT_AVAILABLE",
+      "triggered": 209,
+      "trigger_field_meaning": "R6 invocation decision; NOMINAL does not invoke R6",
+      "nominal_innovation_events": 209,
+      "anchor_valid": 766,
+      "weak_attempted": 160,
+      "weak_quality": 156,
+      "feedback": 133,
+      "strong_candidate_selected": 0,
+      "strong_feedback_used": 0,
+      "strong_selected_but_final_rejected": 0,
+      "jet_calls": 160,
+      "value_calls": 164,
+      "extra_align_calls": 0,
+      "full_align_calls": 2726,
+      "weak_m": {
+        "mean": 0.11725247029792596,
+        "P95": 0.15000000000000002,
+        "max": 0.15000000000000002
+      },
+      "selected_strong_m": {
+        "mean": null,
+        "P95": null,
+        "max": null
+      },
+      "selected_strong_deg": {
+        "mean": null,
+        "P95": null,
+        "max": null
+      },
+      "selected_score_gain": {
+        "mean": null,
+        "P95": null,
+        "max": null
+      },
+      "dimension_counts": {
+        "2": 117,
+        "1": 43
+      },
+      "refinement_statuses": {
+        "ANCHOR_UNAVAILABLE_NOMINAL": 49,
+        "UNTRIGGERED_NOMINAL": 676,
+        "LOCAL_REGULARIZED_REFINEMENT": 133,
+        "FINAL_POSE_BOUND_OR_RIGIDITY_FAILED": 23,
+        "INVALID_OR_INEFFECTIVE_NOMINAL": 1841,
+        "WEAK_OBJECTIVE_OR_NDT_QUALITY_REJECTED": 4
+      },
+      "strong_statuses": {
+        "NOT_RUN": 2726
+      },
+      "complete_ms": {
+        "mean": 37.90545452531182,
+        "P95": 83.97606075000002,
+        "max": 304.546896
+      },
+      "complete_cpu_ms": {
+        "mean": 37.71454292002935,
+        "P95": 83.8395,
+        "max": 304.149
+      },
+      "align_ms": {
+        "mean": 14.498715909391048,
+        "P95": 75.2437035,
+        "max": 297.29074
+      },
+      "refinement_ms": {
+        "mean": 0.2906429383712399,
+        "P95": 3.3173435000000002,
+        "max": 10.215918
+      },
+      "unsegmented_other_processing_ms": {
+        "mean": 19.158852411592076,
+        "P95": 28.341494750000003,
+        "max": 68.301879
+      },
+      "peak_process_RSS_MiB": 52.01953125,
+      "jump_diagnostic": 1997,
+      "translation_RMSE_P95_max": "NOT_AVAILABLE_MAP_GT_TRANSFORM_NOT_CLOSED",
+      "rotation_RMSE_P95_max": "NOT_AVAILABLE_MAP_GT_TRANSFORM_NOT_CLOSED"
+    },
+    "COUPLED": {
+      "frames": 2726,
+      "effective": 863,
+      "effective_rate": 0.3165810711665444,
+      "pcl_converged_flag": 2726,
+      "terminal_status_counts": {
+        "SUCCESS": 863,
+        "ITERATION_LIMIT_EXHAUSTED": 21,
+        "ZERO_ITERATION_PASSTHROUGH": 1842
+      },
+      "last_strict_success_tx": 932,
+      "strict_success_mean_iterations": 12.684820393974508,
+      "strict_success_all_point_fitness_m2": {
+        "mean": 5.033104106161277,
+        "P95": 21.24714612354853,
+        "max": 91.02410129360389
+      },
+      "strict_success_normalized_NDT_energy": {
+        "mean": -1.9067994975617986,
+        "P95": -0.6928839476794852,
+        "max": -0.24650007164751916
+      },
+      "rejected_or_failed": 1863,
+      "failure_episodes": 14,
+      "failure_to_success_transitions": 13,
+      "longest_failure_streak": 1845,
+      "true_wrong_matches": "NOT_AVAILABLE",
+      "true_localization_recoveries": "NOT_AVAILABLE",
+      "triggered": 233,
+      "trigger_field_meaning": "R6 invocation decision; NOMINAL does not invoke R6",
+      "nominal_innovation_events": 233,
+      "anchor_valid": 736,
+      "weak_attempted": 173,
+      "weak_quality": 172,
+      "feedback": 161,
+      "strong_candidate_selected": 79,
+      "strong_feedback_used": 77,
+      "strong_selected_but_final_rejected": 2,
+      "jet_calls": 345,
+      "value_calls": 318,
+      "extra_align_calls": 0,
+      "full_align_calls": 2726,
+      "weak_m": {
+        "mean": 0.11749117881533107,
+        "P95": 0.15000000000000002,
+        "max": 0.15000000000000002
+      },
+      "selected_strong_m": {
+        "mean": 0.0015452306740255182,
+        "P95": 0.004603916018008118,
+        "max": 0.0193954657454434
+      },
+      "selected_strong_deg": {
+        "mean": 0.07899835525297474,
+        "P95": 0.20239939507989038,
+        "max": 0.3570719653588296
+      },
+      "selected_score_gain": {
+        "mean": 0.6791595293919614,
+        "P95": 2.2127218276844363,
+        "max": 3.4774787417641164
+      },
+      "dimension_counts": {
+        "2": 126,
+        "1": 47
+      },
+      "refinement_statuses": {
+        "ANCHOR_UNAVAILABLE_NOMINAL": 60,
+        "UNTRIGGERED_NOMINAL": 630,
+        "LOCAL_REGULARIZED_REFINEMENT": 161,
+        "FINAL_POSE_BOUND_OR_RIGIDITY_FAILED": 11,
+        "INVALID_OR_INEFFECTIVE_NOMINAL": 1863,
+        "WEAK_OBJECTIVE_OR_NDT_QUALITY_REJECTED": 1
+      },
+      "strong_statuses": {
+        "NOT_RUN": 2554,
+        "OK": 144,
+        "STRONG_SUPPRESSED_BY_TOTAL_BOUND": 28
+      },
+      "complete_ms": {
+        "mean": 31.90169438334556,
+        "P95": 139.22345325,
+        "max": 332.735027
+      },
+      "complete_cpu_ms": {
+        "mean": 31.720172046955245,
+        "P95": 139.067,
+        "max": 332.37
+      },
+      "align_ms": {
+        "mean": 16.140400326118854,
+        "P95": 91.56632450000001,
+        "max": 308.580129
+      },
+      "refinement_ms": {
+        "mean": 0.6273256016140866,
+        "P95": 8.6849305,
+        "max": 19.478563
+      },
+      "unsegmented_other_processing_ms": {
+        "mean": 11.176725189655173,
+        "P95": 16.288558249999998,
+        "max": 186.097644
+      },
+      "peak_process_RSS_MiB": 52.01953125,
+      "jump_diagnostic": 2058,
+      "translation_RMSE_P95_max": "NOT_AVAILABLE_MAP_GT_TRANSFORM_NOT_CLOSED",
+      "rotation_RMSE_P95_max": "NOT_AVAILABLE_MAP_GT_TRANSFORM_NOT_CLOSED"
+    }
+  },
+  "phase300": {
+    "NOMINAL": {
+      "frames": 300,
+      "effective": 291,
+      "effective_rate": 0.97,
+      "pcl_converged_flag": 300,
+      "terminal_status_counts": {
+        "SUCCESS": 291,
+        "ITERATION_LIMIT_EXHAUSTED": 9
+      },
+      "last_strict_success_tx": 351,
+      "strict_success_mean_iterations": 13.560137457044673,
+      "strict_success_all_point_fitness_m2": {
+        "mean": 5.642601820436484,
+        "P95": 12.308850425051975,
+        "max": 232.086656314143
+      },
+      "strict_success_normalized_NDT_energy": {
+        "mean": -1.969166354654186,
+        "P95": -0.7202733480299937,
+        "max": -0.579555507772648
+      },
+      "rejected_or_failed": 9,
+      "failure_episodes": 8,
+      "failure_to_success_transitions": 8,
+      "longest_failure_streak": 2,
+      "true_wrong_matches": "NOT_AVAILABLE",
+      "true_localization_recoveries": "NOT_AVAILABLE",
+      "triggered": 0,
+      "trigger_field_meaning": "R6 invocation decision; NOMINAL does not invoke R6",
+      "nominal_innovation_events": 85,
+      "anchor_valid": 0,
+      "weak_attempted": 0,
+      "weak_quality": 0,
+      "feedback": 0,
+      "strong_candidate_selected": 0,
+      "strong_feedback_used": 0,
+      "strong_selected_but_final_rejected": 0,
+      "jet_calls": 0,
+      "value_calls": 0,
+      "extra_align_calls": 0,
+      "full_align_calls": 300,
+      "weak_m": {
+        "mean": null,
+        "P95": null,
+        "max": null
+      },
+      "selected_strong_m": {
+        "mean": null,
+        "P95": null,
+        "max": null
+      },
+      "selected_strong_deg": {
+        "mean": null,
+        "P95": null,
+        "max": null
+      },
+      "selected_score_gain": {
+        "mean": null,
+        "P95": null,
+        "max": null
+      },
+      "dimension_counts": {},
+      "refinement_statuses": {
+        "NOMINAL_CONTROL": 300
+      },
+      "strong_statuses": {
+        "NOT_RUN": 300
+      },
+      "complete_ms": {
+        "mean": 60.027245696666675,
+        "P95": 249.13591075,
+        "max": 322.887038
+      },
+      "complete_cpu_ms": {
+        "mean": 59.610389999999995,
+        "P95": 248.79975000000002,
+        "max": 322.52799999999996
+      },
+      "align_ms": {
+        "mean": 52.29290932666667,
+        "P95": 241.91351840000002,
+        "max": 315.365412
+      },
+      "refinement_ms": {
+        "mean": 0.0,
+        "P95": 0.0,
+        "max": 0.0
+      },
+      "unsegmented_other_processing_ms": {
+        "mean": 3.7235076499999997,
+        "P95": 5.439764000000001,
+        "max": 10.226673000000005
+      },
+      "peak_process_RSS_MiB": 52.01953125,
+      "jump_diagnostic": 166,
+      "translation_RMSE_P95_max": "NOT_AVAILABLE_MAP_GT_TRANSFORM_NOT_CLOSED",
+      "rotation_RMSE_P95_max": "NOT_AVAILABLE_MAP_GT_TRANSFORM_NOT_CLOSED"
+    },
+    "WEAK_ONLY": {
+      "frames": 300,
+      "effective": 299,
+      "effective_rate": 0.9966666666666667,
+      "pcl_converged_flag": 300,
+      "terminal_status_counts": {
+        "SUCCESS": 299,
+        "ITERATION_LIMIT_EXHAUSTED": 1
+      },
+      "last_strict_success_tx": 351,
+      "strict_success_mean_iterations": 10.080267558528428,
+      "strict_success_all_point_fitness_m2": {
+        "mean": 3.969690473211692,
+        "P95": 14.502573055783865,
+        "max": 91.72172419023383
+      },
+      "strict_success_normalized_NDT_energy": {
+        "mean": -2.0642130697580026,
+        "P95": -0.7471891523535806,
+        "max": -0.6485759741074892
+      },
+      "rejected_or_failed": 1,
+      "failure_episodes": 1,
+      "failure_to_success_transitions": 1,
+      "longest_failure_streak": 1,
+      "true_wrong_matches": "NOT_AVAILABLE",
+      "true_localization_recoveries": "NOT_AVAILABLE",
+      "triggered": 65,
+      "trigger_field_meaning": "R6 invocation decision; NOMINAL does not invoke R6",
+      "nominal_innovation_events": 65,
+      "anchor_valid": 262,
+      "weak_attempted": 50,
+      "weak_quality": 50,
+      "feedback": 46,
+      "strong_candidate_selected": 0,
+      "strong_feedback_used": 0,
+      "strong_selected_but_final_rejected": 0,
+      "jet_calls": 50,
+      "value_calls": 50,
+      "extra_align_calls": 0,
+      "full_align_calls": 300,
+      "weak_m": {
+        "mean": 0.11179716469807151,
+        "P95": 0.15000000000000002,
+        "max": 0.15000000000000002
+      },
+      "selected_strong_m": {
+        "mean": null,
+        "P95": null,
+        "max": null
+      },
+      "selected_strong_deg": {
+        "mean": null,
+        "P95": null,
+        "max": null
+      },
+      "selected_score_gain": {
+        "mean": null,
+        "P95": null,
+        "max": null
+      },
+      "dimension_counts": {
+        "2": 33,
+        "1": 17
+      },
+      "refinement_statuses": {
+        "ANCHOR_UNAVAILABLE_NOMINAL": 15,
+        "UNTRIGGERED_NOMINAL": 234,
+        "LOCAL_REGULARIZED_REFINEMENT": 46,
+        "FINAL_POSE_BOUND_OR_RIGIDITY_FAILED": 4,
+        "INVALID_OR_INEFFECTIVE_NOMINAL": 1
+      },
+      "strong_statuses": {
+        "NOT_RUN": 300
+      },
+      "complete_ms": {
+        "mean": 44.88912853666667,
+        "P95": 137.3616492,
+        "max": 304.546896
+      },
+      "complete_cpu_ms": {
+        "mean": 44.51021333333333,
+        "P95": 137.14005,
+        "max": 304.149
+      },
+      "align_ms": {
+        "mean": 36.39370886333334,
+        "P95": 125.11348525000004,
+        "max": 297.29074
+      },
+      "refinement_ms": {
+        "mean": 0.8786390866666667,
+        "P95": 5.6673537,
+        "max": 10.215918
+      },
+      "unsegmented_other_processing_ms": {
+        "mean": 3.6059518666666666,
+        "P95": 5.325611349999999,
+        "max": 6.845347000000005
+      },
+      "peak_process_RSS_MiB": 52.01953125,
+      "jump_diagnostic": 32,
+      "translation_RMSE_P95_max": "NOT_AVAILABLE_MAP_GT_TRANSFORM_NOT_CLOSED",
+      "rotation_RMSE_P95_max": "NOT_AVAILABLE_MAP_GT_TRANSFORM_NOT_CLOSED"
+    },
+    "COUPLED": {
+      "frames": 300,
+      "effective": 300,
+      "effective_rate": 1.0,
+      "pcl_converged_flag": 300,
+      "terminal_status_counts": {
+        "SUCCESS": 300
+      },
+      "last_strict_success_tx": 351,
+      "strict_success_mean_iterations": 11.476666666666667,
+      "strict_success_all_point_fitness_m2": {
+        "mean": 4.021006078007543,
+        "P95": 12.181285134352972,
+        "max": 80.31423847062071
+      },
+      "strict_success_normalized_NDT_energy": {
+        "mean": -1.9845463829290395,
+        "P95": -0.7227294283277783,
+        "max": -0.5854679857652101
+      },
+      "rejected_or_failed": 0,
+      "failure_episodes": 0,
+      "failure_to_success_transitions": 0,
+      "longest_failure_streak": 0,
+      "true_wrong_matches": "NOT_AVAILABLE",
+      "true_localization_recoveries": "NOT_AVAILABLE",
+      "triggered": 76,
+      "trigger_field_meaning": "R6 invocation decision; NOMINAL does not invoke R6",
+      "nominal_innovation_events": 76,
+      "anchor_valid": 254,
+      "weak_attempted": 55,
+      "weak_quality": 55,
+      "feedback": 52,
+      "strong_candidate_selected": 27,
+      "strong_feedback_used": 27,
+      "strong_selected_but_final_rejected": 0,
+      "jet_calls": 110,
+      "value_calls": 99,
+      "extra_align_calls": 0,
+      "full_align_calls": 300,
+      "weak_m": {
+        "mean": 0.10852800448589048,
+        "P95": 0.15000000000000002,
+        "max": 0.15000000000000002
+      },
+      "selected_strong_m": {
+        "mean": 0.002566805553781739,
+        "P95": 0.00899749292058928,
+        "max": 0.0193954657454434
+      },
+      "selected_strong_deg": {
+        "mean": 0.07054465403369704,
+        "P95": 0.1953773265467086,
+        "max": 0.3570719653588296
+      },
+      "selected_score_gain": {
+        "mean": 0.7053726812798939,
+        "P95": 2.431754631200033,
+        "max": 2.9855965178232964
+      },
+      "dimension_counts": {
+        "2": 34,
+        "1": 21
+      },
+      "refinement_statuses": {
+        "ANCHOR_UNAVAILABLE_NOMINAL": 21,
+        "UNTRIGGERED_NOMINAL": 224,
+        "LOCAL_REGULARIZED_REFINEMENT": 52,
+        "FINAL_POSE_BOUND_OR_RIGIDITY_FAILED": 3
+      },
+      "strong_statuses": {
+        "NOT_RUN": 245,
+        "OK": 44,
+        "STRONG_SUPPRESSED_BY_TOTAL_BOUND": 11
+      },
+      "complete_ms": {
+        "mean": 49.378081310000006,
+        "P95": 152.85609475000004,
+        "max": 332.735027
+      },
+      "complete_cpu_ms": {
+        "mean": 49.03670333333334,
+        "P95": 152.67025,
+        "max": 332.37
+      },
+      "align_ms": {
+        "mean": 39.90429626,
+        "P95": 132.68255795000005,
+        "max": 308.580129
+      },
+      "refinement_ms": {
+        "mean": 1.8423079333333332,
+        "P95": 11.0682344,
+        "max": 19.478563
+      },
+      "unsegmented_other_processing_ms": {
+        "mean": 3.6206483966666663,
+        "P95": 5.233901450000015,
+        "max": 6.328028
+      },
+      "peak_process_RSS_MiB": 52.01953125,
+      "jump_diagnostic": 68,
+      "translation_RMSE_P95_max": "NOT_AVAILABLE_MAP_GT_TRANSFORM_NOT_CLOSED",
+      "rotation_RMSE_P95_max": "NOT_AVAILABLE_MAP_GT_TRANSFORM_NOT_CLOSED"
+    }
+  },
+  "paired_same_input_strong_comparisons": 172,
+  "coupled_success_when_nominal_failed": 63,
+  "coupled_failed_when_nominal_succeeded": 18,
+  "cost_classification": "INDEPENDENT_SCAN_TO_MAP_DIAGNOSTIC_NOT_IKFOM_REALTIME_CLAIM",
+  "scientific_interpretation": "Initial300 convergence gains did not sustain full-sequence map matching; no validated localization accuracy advantage. Feedback curves diverge and cannot be attributed solely to one strong correction.",
+  "limitations": [
+    "map/GT frame not independently closed; no absolute accuracy/recovery claims",
+    "historical first-scan sensor-only prior is stale at TX52; not official current pose",
+    "gyro zero bias is provisional; no accelerometer integration/full translation deskew",
+    "unchanged R6 Anchor receives gyro/CV reference, not certified full inertial state",
+    "three independent scan-to-map pose recurrences; full IKFoM not executed",
+    "directional covariance fusion NOT used; no bootstrap rerun or raw extraction"
+  ]
+}
