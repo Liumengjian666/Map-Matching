@@ -128,8 +128,10 @@ def main(audit_only=False):
             causal_summary.append(dict(mode=mode,first_feedback_tx=next((r["first_feedback_tx"] for r in rows if r["first_feedback_tx"]),""),
                 changed_predictions=sum(r["prediction_differs"]=="1" for r in rows),changed_sources=sum(r["source_differs"]=="1" for r in rows)))
         csv_write(ARCHIVE/"runtime_breakdown.csv",runtime);csv_write(ARCHIVE/"causal_summary.csv",causal_summary)
-        patch=subprocess.check_output(["git","-C",str(ROOT),"diff","--unified=1",START,"--","src/dog_prior_map_fastlio2_frontend_exp"])
-        with (ARCHIVE/"source_changes.patch").open("xb") as stream:stream.write(patch)
+    # Source diff/inventory are refreshable archive metadata, not blind runtime
+    # outputs. Include committed verification/post-processing additions too.
+    patch=subprocess.check_output(["git","-C",str(ROOT),"diff","--unified=1",START,"--","src/dog_prior_map_fastlio2_frontend_exp"])
+    with (ARCHIVE/"source_changes.patch").open("wb" if audit_only else "xb") as stream:stream.write(patch)
     receipt=audit()
     if audit_only:
         with (ARCHIVE/"artifact_hashes.json").open("w") as stream:json.dump(receipt,stream,indent=2,allow_nan=False)
