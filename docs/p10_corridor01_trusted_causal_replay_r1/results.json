@@ -1,0 +1,69 @@
+{
+  "task": "P10-CORRIDOR01-TRUSTED-CAUSAL-REPLAY-R1",
+  "final_result": "TRUSTED_P2B_CAUSAL_CONTROL_BLOCKED",
+  "next": "RESTORE_P2B_HISTORICAL_RUNTIME_LINEAGE",
+  "git": {
+    "branch": "research/p9-r4-heldout-visual-evidence",
+    "start_sha": "49334584c1941b63a87eea1871a69391a3b844a3",
+    "code_sha": null,
+    "end_sha": "CONTAINING_COMMIT",
+    "remote_head_user_verified": "49334584c1941b63a87eea1871a69391a3b844a3",
+    "push_executed": false
+  },
+  "historical_p2b": {
+    "frozen_paper_commit": "8e0c1661a2ddac1d669d752d3b0a7ad771cb7409",
+    "historical_derived_bag_sha256": "60048c6369ea1065cc4dee2484ff38360620fa6b7321abc05b71e874f2b06345",
+    "clouds": 2776,
+    "imu_messages": 55946,
+    "run_c_run_d_ndt_determinism": "HISTORICAL_RECEIPT_PASS",
+    "prefix10_translation_mean_m": 0.1424,
+    "prefix10_translation_p95_m": 0.2929,
+    "prefix10_translation_max_m": 0.3490,
+    "persistent_drift_s": {
+      "0.5m": 11.2375,
+      "1m": 13.1537,
+      "2m": 16.4819
+    },
+    "derived_bag_currently_available": false,
+    "run_c_result_bag_available": false,
+    "run_c_ndt_determinism_csv_available": false
+  },
+  "source_contract": {
+    "accepted_r7_r2_lineage_result": "HISTORICAL_V1_LINEAGE_UNRECOVERABLE_IN_AVAILABLE_SOURCES",
+    "adapter_manifest_match": "7/10",
+    "wrapper_hash_matches_historical_manifest": true,
+    "transitive_shared_implementation_historically_pinned": false,
+    "current_transitive_implementation": "FULL_SE3_WITH_SEPARATE_ROTATION_ONLY_OUTPUT",
+    "historical_runtime_config_closed": false,
+    "scan_start_vs_mid_reference_resolved_for_r1": false
+  },
+  "available_p2c_slice": {
+    "duration_s": 35.0,
+    "cloud_messages": 346,
+    "imu_messages": 6997,
+    "first_scan_rejected_for_imu_coverage": true,
+    "valid_as_p2b_v1": false,
+    "valid_for_5s_startup_plus_35s_evaluation": false
+  },
+  "p10_discrepancy_diagnosis": {
+    "prior_run_was_full_ikfom_causal_feedback": false,
+    "identity_prior_represented": "TX1_OR_FIRST_SCAN",
+    "first_matched_transaction": "TX52_APPROX_5S_LATER",
+    "p2b_time_contract": "SCAN_START_ROTATION_ONLY",
+    "p10_time_contract": "P9_SCAN_END",
+    "translation_prefix_fit_rmse_m": 5.8036,
+    "rotation_prefix_fit_residual_deg_approx": 175.0,
+    "unique_rotation_root_cause_proven": false
+  },
+  "this_task": {
+    "raw_bag_hash_recomputed": false,
+    "input_conversion_runs": 0,
+    "control_replay_runs": 0,
+    "baseline_ndt_calls": 0,
+    "weak_only_runs": 0,
+    "coupled_runs": 0,
+    "gt_loaded": false,
+    "new_metrics": "NOT_RUN"
+  },
+  "classification": "ENGINEERING_PROVENANCE_BLOCKER_NOT_SCIENTIFIC_FAILURE"
+}

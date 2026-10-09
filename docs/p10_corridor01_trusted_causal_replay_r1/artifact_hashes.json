@@ -1,0 +1,40 @@
+{
+  "scope": "Read-only source and archive evidence used for this blocker receipt; not a data replay manifest.",
+  "historical_p2b_receipts": {
+    "docs/superloc_corridor01/P2B_R1_DETERMINISM.md": "8ab6a3430ca1ca958c7772c0716e12ada9b8670095a274289137fefe8f1c71cb",
+    "docs/superloc_corridor01/P2B_R1_EVALUATION_AUDIT.md": "c177f06da98bfae1078622a23c481d2317586c23bd9fbf807238214658249bbc",
+    "docs/superloc_corridor01/P2B_R1_FAILURE_ONSET.md": "5f2c8857d92da1573a08611a7287a7e00ab9e67b661b75b8d9aa008391f98cd7",
+    "docs/superloc_corridor01/P2B_BASELINE_RESULTS.md": "cdfddef0d8125cbc9b3e9afe5c453015d19e0d5d94036a477401c57f0eacac24",
+    "docs/superloc_corridor01/P2B_OFFICIAL_PROTOCOL.md": "349ff765f9d5c894cf3666854da7fd05600f56d5ea925bb10bfa091c1bd2f30c",
+    "docs/superloc_corridor01/P2B_ADAPTER_REPORT.md": "065285bc78379b1f51fb34ad53700cf7abb6077f4087f893bec4a9b431561df6",
+    "docs/superloc_corridor01/P2B_ADAPTER_SOURCE_MANIFEST.md": "ba74130902364db5568cae767985a5cf5e0b5f10ca214fb96b418e4c2ecedcb3",
+    "docs/superloc_corridor01/derived_bag_manifest.txt": "0ba8c393c339124e29f13c00f3205563938f122d4e1e87cc87557c1c11abd261"
+  },
+  "prior_lineage_closure": {
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery_r2/REPORT.md": "79fa1ac38fb610e9fb1dd75ce0eb975e78d8409470089664898709b8ec63d4b5",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery_r2/results.json": "1f4fd0874a5a9152fb014f7e7b2dc928cb9d4a0043a2ee2afc4df7649b338fc3",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery_r2/historical_adapter_source_manifest.json": "d1e9f252879679be6e951b2934648cf54c8fa368df8dbd1193e8c651ceee912f",
+    "docs/p9_r7_cross_dataset_nearoptimal/recovery_r2/transitive_dependency_manifest.json": "7bd0838b4220b76d72a0c835873076aa164cd709eb9e4d29fa3ac419407930ee"
+  },
+  "prior_p10_reports": {
+    "docs/p10_corridor01_real_degeneracy_benchmark/REPORT.md": "8ff24d46815bc9a9f9243f40f0a27498e18185c0124c7892c6f8157933ab37eb",
+    "docs/p10_corridor01_failure_onset/REPORT.md": "17e9af07f77a773c7f84ac1839a2598b53ea2b82366c29841703c32acd36aeff"
+  },
+  "current_adapter_workspace_not_historical_source_proof": {
+    "wrapper_actual_and_historical_expected": "de3effb5cbec3b3312d57e300c4b346c92b34c6c0e05d7ce7344f7dd9a11c55e",
+    "launch_historical_expected": "ecc0c4875b500f8c36670e42e5da99be76bb1bb13c8298be7d0520e2cdb758d7",
+    "launch_current_actual": "1ffab453b932cddd18f9068255d0c117684ececaec759b57d6d3dfe9a66be288",
+    "dataset_config_actual": "d737f60d97e784d4dc17ec380d2e860377bf31e6f945d4c20eecb47f530adf3f",
+    "shared_transitive_cpp_current_unpinned": "58c4073839247098b6f0f545065056be647336cc64631563f5d070d7dcd3b4e8",
+    "current_full_se3_adapter_binary": "3378349bb91f11f6a4e830bad0b9c62b665a8de653e0a5fa3c9c00510664aaf9",
+    "cmake_current_actual": "22dfeb84e7e190fa28ceb1037bd25d487a5ebfcb3b87b93e3f1901dbd93fc7e8",
+    "package_current_actual": "2a2b31f8f21030dbc72e16029f42640b10f25cbe0af8db5dd87effde84fe5f05"
+  },
+  "input_availability_checks": {
+    "historical_derived_v1_path": "ABSENT",
+    "historical_run_c_result_bag_path": "ABSENT",
+    "historical_run_c_ndt_determinism_path": "ABSENT",
+    "official_raw_bag": "PRESENT; known SHA is reused from prior R7-R2 receipt, not rehashed this task",
+    "p2c_syncdelay35s_replay_bag": "PRESENT; metadata inspected only; not used"
+  }
+}
