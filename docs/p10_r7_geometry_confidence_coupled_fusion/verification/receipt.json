@@ -1,0 +1,68 @@
+{
+  "Release": true,
+  "environment": {
+    "LD_LIBRARY_PATH": "/lib/x86_64-linux-gnu",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1"
+  },
+  "initial_unconfigured_P9_result": "39/41; two MVS libusb_set_option symbol failures",
+  "loader_diagnosis": "ldd without env selected /opt/MVS/lib/64/libusb-1.0.so.0; frozen env selects system library",
+  "algorithm_or_test_threshold_changed": false,
+  "GT_LOADED": false,
+  "scientific_replays_run": 0,
+  "commands": [
+    {
+      "name": "release_build",
+      "command": [
+        "cmake",
+        "--build",
+        "/tmp/p10_r2_build.CdJ4jf",
+        "-j2"
+      ],
+      "workdir": "/tmp/dog_loc_paper_r4_ws.Fq21k2",
+      "returncode": 0,
+      "log_sha256": "f1b7db0043c8672ea31deae3c6c7d322bf69766f2dbdd10501f3ebad33ecb47c"
+    },
+    {
+      "name": "p7_p10_tests",
+      "command": [
+        "ctest",
+        "--output-on-failure"
+      ],
+      "workdir": "/tmp/p10_r2_build.CdJ4jf",
+      "returncode": 0,
+      "log_sha256": "79b2bf425cfae690716bdf9b347347561fadaa7e234d5ec95fcec66b9a882207"
+    },
+    {
+      "name": "p9_tests",
+      "command": [
+        "ctest",
+        "--output-on-failure"
+      ],
+      "workdir": "/tmp/p9_r4_release.Eirto1",
+      "returncode": 0,
+      "log_sha256": "470a42c31545b2f12976508021d15eb9591ce71f1ed1d5fe996b67f9f960fc0e"
+    },
+    {
+      "name": "directional_harness",
+      "command": [
+        "python3",
+        "src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/test_directional_harness.py"
+      ],
+      "workdir": "/tmp/dog_loc_paper_r4_ws.Fq21k2",
+      "returncode": 0,
+      "log_sha256": "464e0ee629edf74de09ef21e4232fbcedc26588ff7cc23c470f47fe2da88c255"
+    },
+    {
+      "name": "diff_check",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "workdir": "/tmp/dog_loc_paper_r4_ws.Fq21k2",
+      "returncode": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

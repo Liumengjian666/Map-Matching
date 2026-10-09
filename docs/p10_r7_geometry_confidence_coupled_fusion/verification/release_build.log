@@ -1,0 +1,13 @@
+[  5%] Built target p7_replay_io
+[ 25%] Built target p7_current_frame_ndt
+[ 30%] Built target p7_replay_io_test
+[ 35%] Built target current_frame_ndt_test
+[ 40%] Built target p10_r2_single
+[ 60%] Built target p10_r2_replay
+[ 60%] Built target p10_r3_temporal_test
+[ 65%] Built target p10_r2_shadow_test
+[ 80%] Built target p7_single_state_runner
+[ 85%] Built target p10_r4_admission_test
+[ 90%] Built target p10_r5_anchor_test
+[ 95%] Built target p10_r6_weak_refinement_test
+[100%] Built target p10_r7_directional_test

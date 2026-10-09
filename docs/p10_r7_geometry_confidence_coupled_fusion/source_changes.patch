@@ -1,0 +1,856 @@
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/CMakeLists.txt b/src/dog_prior_map_fastlio2_frontend_exp/CMakeLists.txt
+index ed1951e..f7d552b 100644
+--- a/src/dog_prior_map_fastlio2_frontend_exp/CMakeLists.txt
++++ b/src/dog_prior_map_fastlio2_frontend_exp/CMakeLists.txt
+@@ -70,2 +70,3 @@ if(DOG_PRIOR_ENABLE_FASTLIO2_EXP)
+     src/coupled_ndt_weak_refinement.cpp
++    src/coupled_ndt_directional_covariance.cpp
+     src/registration_geometry.cpp)
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/coupled_ndt_directional_covariance.hpp b/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/coupled_ndt_directional_covariance.hpp
+new file mode 100644
+index 0000000..78fb39e
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/coupled_ndt_directional_covariance.hpp
+@@ -0,0 +1,23 @@
++#pragma once
++#include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_local_math.hpp"
++#include "dog_prior_map_fastlio2_frontend_exp/frontend_types.hpp"
++
++namespace dog_prior_map_fastlio2_frontend_exp {
++struct DirectionalCovarianceResult {
++  bool valid = false;
++  std::string status = "NOT_RUN";
++  CoupledMatrix6 jacobian = CoupledMatrix6::Zero();
++  CoupledMatrix6 baseline = CoupledMatrix6::Zero();
++  CoupledMatrix6 chart_baseline = CoupledMatrix6::Zero();
++  CoupledMatrix6 covariance = CoupledMatrix6::Zero();
++  Eigen::VectorXd multipliers, weak_variances;
++  double epsilon = 0, minimum_eigenvalue = 0, solve_residual = 0;
++  double strong_block_difference = 0, total_ms = 0;
++};
++// Translation-first P9 chart -> actual pose residual at the predicted state.
++// R is frozen for one existing iterated measurement update (no filter changes).
++DirectionalCovarianceResult buildDirectionalCovariance(
++    const CoupledVector6& curvature, const CoupledMatrix6& basis, int weak_dimension,
++    const CoupledMatrix6& baseline, const Pose3d& nominal_map_T_lidar, const Pose3d& measured_map_T_lidar,
++    const Pose3d& predicted_map_T_imu, const Pose3d& imu_T_lidar);
++}  // namespace dog_prior_map_fastlio2_frontend_exp
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/archive_directional.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/archive_directional.py
+new file mode 100644
+index 0000000..9c4614c
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/archive_directional.py
+@@ -0,0 +1,141 @@
++"""Factual R7 archive and paired post-hoc candidate analysis; no replay."""
++import csv
++import hashlib
++import json
++from pathlib import Path
++import subprocess
++import sys
++import numpy as np
++from run_budgeted import ROOT,read,sha,csv_write,json_write
++from run_directional import ARCHIVE,MODES,START
++from evaluate_directional import matrix
++from evaluate_weak_refinement import vector
++from evaluate_event import moments
++
++def paired_posthoc(directory):
++    if not (directory/"gt_contract_receipt.json").is_file():raise RuntimeError("primary GT evaluation must be complete")
++    prior=directory/"paired_candidates_posthoc_gt.csv"
++    if prior.is_file():
++        # Recover an interrupted summary serialization without rereading GT,
++        # rewriting the already produced CSV, or rerunning any scientific job.
++        rows=read(prior)
++        for row in rows:
++            for key in row:
++                if key not in ("transaction_id","t_outcome"):row[key]=float(row[key])
++        return paired_summary(rows)
++    sys.path.insert(0,str(ROOT/"src/dog_prior_map_fastlio2_frontend_exp/scripts"))
++    import p5_i1_posthoc_gt as gt
++    import yaml
++    receipt=json.loads((directory/"gt_contract_receipt.json").read_text())
++    if sha(gt.GT)!=receipt["GT_sha256"] or sha(gt.EXTRINSICS)!=receipt["extrinsic_sha256"]:raise RuntimeError("GT lineage changed")
++    fixed=matrix(receipt["fixed_alignment"])
++    extr=np.array(yaml.safe_load(gt.EXTRINSICS.read_text())["laser_to_imu"]["data"]).reshape(4,4)
++    from scipy.spatial.transform import Rotation
++    extr[:3,:3]=Rotation.from_matrix(extr[:3,:3]).as_matrix();inv_extr=np.linalg.inv(extr)
++    times,poses=gt.gt_data(gt.GT);rows=[]
++    source=directory/MODES[0]
++    for f,r in zip(read(source/"frames.csv"),read(source/"weak_refinement.csv")):
++        if r["recommended"]!="1":continue
++        raw=gt.interpolate_gt(times,poses,int(f["stamp_ns"])/1e9)
++        if raw is None:continue
++        target=fixed@raw
++        nt,nr=gt.pose_error(matrix(r["nominal_pose"])@inv_extr,target)
++        wt,wr=gt.pose_error(matrix(r["weak_pose"])@inv_extr,target)
++        ct,cr=gt.pose_error(matrix(r["candidate_pose"])@inv_extr,target)
++        rows.append(dict(transaction_id=r["transaction_id"],strong_selected=int(r["strong_selected"]),
++            nominal_t_m=nt,weak_t_m=wt,coupled_t_m=ct,nominal_r_deg=nr,weak_r_deg=wr,coupled_r_deg=cr,
++            translation_gain_m=wt-ct,rotation_gain_deg=wr-cr,
++            t_outcome="improved" if wt-ct>1e-8 else "worse" if ct-wt>1e-8 else "same"))
++    csv_write(directory/"paired_candidates_posthoc_gt.csv",rows)
++    return paired_summary(rows)
++
++def paired_summary(rows):
++    selected=[r for r in rows if r["strong_selected"]]
++    return dict(GT_posthoc_only=True,not_executed_trajectory_accuracy=True,total=len(rows),strong_selected=len(selected),
++        improved=sum(r["t_outcome"]=="improved" for r in selected),same=sum(r["t_outcome"]=="same" for r in selected),
++        worse=sum(r["t_outcome"]=="worse" for r in selected),
++        selected_translation_gain_m=moments([r["translation_gain_m"] for r in selected]),
++        selected_rotation_gain_deg=moments([r["rotation_gain_deg"] for r in selected]),
++        weak_candidate_t_RMSE_m=moments([r["weak_t_m"] for r in rows])["RMSE"],
++        coupled_candidate_t_RMSE_m=moments([r["coupled_t_m"] for r in rows])["RMSE"])
++
++def audit():
++    hashes={};nc=nj=nr=0
++    def reject(s):raise RuntimeError("nonfinite JSON "+s)
++    for p in sorted(ARCHIVE.rglob("*")):
++        if not p.is_file() or p.name=="artifact_hashes.json":continue
++        hashes[str(p.relative_to(ARCHIVE))]=sha(p)
++        if p.suffix==".json":json.loads(p.read_text(),parse_constant=reject);nj+=1
++        if p.suffix==".csv":
++            with p.open(newline="") as stream:
++                records=csv.reader(stream);header=next(records)
++                if len(header)!=len(set(header)):raise RuntimeError("duplicate CSV fields")
++                for row in records:
++                    if len(row)!=len(header):raise RuntimeError("CSV width "+str(p))
++                    if any(token.lower() in ("nan","inf","-inf","+inf","infinity") for cell in row for token in cell.split(";")):
++                        raise RuntimeError("nonfinite CSV "+str(p))
++                    nr+=1
++            nc+=1
++    directory=ARCHIVE/"attempt_0"
++    freeze=json.loads((directory/"execution_freeze.json").read_text())
++    for name in ("blind_outputs_freeze.json","pre_GT_audit_freeze.json"):
++        f=json.loads((directory/name).read_text())
++        if f["GT_LOADED"]:raise RuntimeError("freeze isolation failed")
++        for path,h in f["output_sha256"].items():
++            if sha(directory/path)!=h:raise RuntimeError("freeze chain changed "+path)
++    pre=json.loads((directory/"pre_GT_audit_freeze.json").read_text())
++    evaluator_path="src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/evaluate_directional.py"
++    evaluator_source=subprocess.check_output(["git","-C",str(ROOT),"show",pre["audit_code_sha"]+":"+evaluator_path])
++    if hashlib.sha256(evaluator_source).hexdigest()!=pre["evaluator_sha256"]:
++        raise RuntimeError("executed evaluator provenance failed")
++    gt_receipt=json.loads((directory/"gt_contract_receipt.json").read_text())
++    if gt_receipt["pre_GT_audit_freeze_sha256"]!=sha(directory/"pre_GT_audit_freeze.json"):
++        raise RuntimeError("GT access order chain failed")
++    for path,h in freeze["input_sha256"].items():
++        if sha(path)!=h:raise RuntimeError("input hash changed")
++    for path,h in freeze["inherited_sha256"].items():
++        if sha(ROOT/path)!=h:raise RuntimeError("historical outcome changed")
++    for path,h in freeze["source_sha256"].items():
++        data=subprocess.check_output(["git","-C",str(ROOT),"show",freeze["code_sha"]+":"+path])
++        if hashlib.sha256(data).hexdigest()!=h:raise RuntimeError("runtime source chain failed")
++    if sha(freeze["binary_path"])!=freeze["binary_sha256"]:raise RuntimeError("runtime binary changed")
++    guards=read(directory/"engineering_guards.csv");parity=read(directory/"nominal_state_parity.csv")
++    if len(guards)!=12381 or any(r["pass_guards"]!="1" for r in guards):raise RuntimeError("engineering guards failed")
++    if len(parity)!=8254 or any(r["exact"]!="1" for r in parity):raise RuntimeError("shadow parity failed")
++    if len(read(directory/"posthoc_gt.csv"))!=4*4126 or len(read(directory/"gt_coverage.csv"))!=4*4127:raise RuntimeError("GT denominator changed")
++    return dict(artifact_sha256=hashes,hashed_files=len(hashes),CSV_files=nc,JSON_files=nj,CSV_data_rows=nr,
++        CSV_JSON_finite="PASS",CSV_width="PASS",source_binary_input_chain="PASS",blind_GT_isolation_chain="PASS",
++        nominal_state_parity="8254/8254",engineering="12381/12381",self_hash_excluded=True)
++
++def main(audit_only=False):
++    if not audit_only:
++        directory=ARCHIVE/"attempt_0";e=json.loads((directory/"evaluation.json").read_text())
++        paired=paired_posthoc(directory)
++        decision=json.loads((ARCHIVE/"decision_receipt.json").read_text())
++        results=dict(**e,**decision,branch="research/p9-r4-heldout-visual-evidence",worktree=str(ROOT),
++            remote_head_user_verified=START,remote_head_direct_query="UNAVAILABLE_NETWORK",PUSH_EXECUTED=False,
++            paired_GT=paired,full_causal_runs=3,new_CONTROL_runs=0,oracle_calls=0,B12_calls=0,
++            visual_extraction=0,Corridor_runs=0,single_map=True,production_adoption_recommended=False,
++            original_git_readonly=True)
++        json_write(ARCHIVE/"results.json",results)
++        runtime=[];causal=read(directory/"causal_feedback_parity.csv");causal_summary=[]
++        for mode in MODES:
++            s=e["statistics"][mode]
++            for phase,values in dict(whole_processing=s["processing_ms"],whole_CPU=s["cpu_ms"],
++                covariance_all=s["covariance_ms_all_frames"],covariance_attempted=s["covariance_ms_attempted"],**s["phase_ms"]).items():
++                runtime.append(dict(mode=mode,phase=phase,**values))
++            rows=[r for r in causal if r["mode"]==mode]
++            causal_summary.append(dict(mode=mode,first_feedback_tx=next((r["first_feedback_tx"] for r in rows if r["first_feedback_tx"]),""),
++                changed_predictions=sum(r["prediction_differs"]=="1" for r in rows),changed_sources=sum(r["source_differs"]=="1" for r in rows)))
++        csv_write(ARCHIVE/"runtime_breakdown.csv",runtime);csv_write(ARCHIVE/"causal_summary.csv",causal_summary)
++    # Source diff/inventory are refreshable archive metadata, not blind runtime
++    # outputs. Include committed verification/post-processing additions too.
++    patch=subprocess.check_output(["git","-C",str(ROOT),"diff","--unified=1",START,"--","src/dog_prior_map_fastlio2_frontend_exp"])
++    with (ARCHIVE/"source_changes.patch").open("wb" if audit_only else "xb") as stream:stream.write(patch)
++    receipt=audit()
++    if audit_only:
++        with (ARCHIVE/"artifact_hashes.json").open("w") as stream:json.dump(receipt,stream,indent=2,allow_nan=False)
++    else:json_write(ARCHIVE/"artifact_hashes.json",receipt)
++    print(json.dumps({k:v for k,v in receipt.items() if k!="artifact_sha256"},indent=2))
++
++if __name__=="__main__":main("--audit-only" in sys.argv)
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/directional_logging.hpp b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/directional_logging.hpp
+new file mode 100644
+index 0000000..0671088
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/directional_logging.hpp
+@@ -0,0 +1,31 @@
++#pragma once
++#include "shadow_logging.hpp"
++#include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_directional_covariance.hpp"
++namespace p10log {
++struct DirectionalLogger {
++  static Eigen::Matrix4d precise(const paper::Pose3d& p) {
++    Eigen::Matrix4d T=Eigen::Matrix4d::Identity();T.block<3,3>(0,0)=p.orientation.toRotationMatrix();
++    T.block<3,1>(0,3)=p.position;return T;
++  }
++  std::ofstream rows;
++  explicit DirectionalLogger(const std::string& dir):rows(output(dir+"/directional_covariance.csv")) {
++    rows<<"transaction_id,mode,attempted,valid,status,weak_dimension,epsilon,multipliers,weak_variances,jacobian,baseline_covariance,chart_baseline,covariance,minimum_eigenvalue,solve_residual,strong_block_difference,covariance_ms,alternative_used,update_success,correction_t_m,correction_r_deg,weak_pose,candidate_pose,weak_score,candidate_score,strong_selected,predicted_imu_pose,candidate_imu_pose,weak_paired_covariance,weak_paired_valid,actual_imu_pose,consumed_covariance\n";
++  }
++  void write(uint64_t tx,const std::string& mode,const paper::WeakCoupledResult& weak,
++      const paper::DirectionalCovarianceResult& r,const paper::DirectionalCovarianceResult& paired,
++      const paper::Pose3d& predicted,const paper::Pose3d& measured,
++      const paper::Pose3d& actual,
++      bool used,bool success,const paper::PoseCorrectionDelta& delta) {
++    rows<<tx<<','<<mode<<','<<weak.recommended<<','<<r.valid<<','<<r.status<<','<<weak.weak_dimension
++      <<','<<r.epsilon<<','<<values(r.multipliers)<<','<<values(r.weak_variances)<<','<<values(r.jacobian)
++      <<','<<values(r.baseline)<<','<<values(r.chart_baseline)<<','<<values(r.covariance)
++      <<','<<r.minimum_eigenvalue<<','<<r.solve_residual<<','<<r.strong_block_difference<<','<<r.total_ms+paired.total_ms
++      <<','<<used<<','<<success<<','<<delta.position.norm()<<','<<delta.rotation.norm()*180/std::acos(-1.)
++      <<','<<values(weak.weak_pose)<<','<<values(weak.candidate)<<',';scalar(rows,weak.weak_score);
++    rows<<',';scalar(rows,weak.candidate_score);
++    rows<<','<<weak.strong_selected<<','<<values(precise(predicted))<<','<<values(precise(measured))
++      <<','<<values(paired.covariance)<<','<<paired.valid<<','<<values(precise(actual))
++      <<','<<values(used ? r.covariance:r.baseline)<<'\n';
++  }
++};
++}  // namespace p10log
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/evaluate_directional.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/evaluate_directional.py
+new file mode 100644
+index 0000000..ab5f38a
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/evaluate_directional.py
+@@ -0,0 +1,201 @@
++"""Independent R7 covariance/budget/causal audit, then fixed post-hoc GT."""
++import hashlib
++import json
++from collections import Counter
++from pathlib import Path
++import subprocess
++import numpy as np
++from scipy.spatial.transform import Rotation
++from run_budgeted import ROOT,read,sha,csv_write,json_write
++from run_directional import ARCHIVE,MODES,R6
++from run_admission import CONTROL
++from evaluate_admission import load
++from evaluate_budgeted import matrix,distance
++from evaluate_anchored import carrier_quaternion,chart
++from evaluate_weak_refinement import vector,imu_pose,statistics,posthoc
++from evaluate_event import moments
++
++def skew(v):
++    x,y,z=v;return np.array([[0,-z,y],[z,0,-x],[-y,x,0]])
++
++def left_jacobian(phi):
++    angle=np.linalg.norm(phi);K=skew(phi)
++    if angle<1e-6:return np.eye(3)+.5*K+K@K/6
++    return np.eye(3)+(1-np.cos(angle))/angle**2*K+(angle-np.sin(angle))/angle**3*K@K
++
++def covariance_check(c,r,extr):
++    Q=vector(r["eigenvectors"]).reshape(6,6);l=vector(r["eigenvalues"]);k=int(r["weak_dimension"])
++    W=Q[:,:k];S=Q[:,k:];J=vector(c["jacobian"]).reshape(6,6)
++    R0=vector(c["baseline_covariance"]).reshape(6,6);Rnew=vector(c["covariance"]).reshape(6,6)
++    pred=matrix(c["predicted_imu_pose"]);measured=matrix(c["candidate_imu_pose"])
++    nominal=matrix(r["nominal_pose"])
++    Rnom=Rotation.from_quat(carrier_quaternion(nominal[:3,:3])).as_matrix()
++    Rlid=measured[:3,:3]@extr[:3,:3]
++    theta=Rotation.from_matrix(Rlid@Rnom.T).as_rotvec()
++    phi=Rotation.from_matrix(pred[:3,:3].T@measured[:3,:3]).as_rotvec()
++    expected=np.zeros((6,6));expected[:3,:3]=.8*np.eye(3)
++    expected[:3,3:]=skew(measured[:3,:3]@extr[:3,3])@left_jacobian(theta)
++    expected[3:,3:]=np.linalg.solve(left_jacobian(phi),pred[:3,:3].T)@left_jacobian(theta)
++    chart0=np.linalg.solve(J,np.linalg.solve(J,R0).T).T
++    chart_new=np.linalg.solve(J,np.linalg.solve(J,Rnew).T).T
++    m=np.clip(l[k]/np.maximum(l[:k],1e-6*l[k]),1,20)
++    variances=np.diag(W.T@chart0@W)
++    rebuilt=R0.copy()
++    for i in range(k):rebuilt+=(m[i]-1)*variances[i]*np.outer(J@W[:,i],J@W[:,i])
++    error=max(np.max(np.abs(J-expected)),np.max(np.abs(Rnew-rebuilt)),
++        np.max(np.abs(m-vector(c["multipliers"]))),np.max(np.abs(variances-vector(c["weak_variances"]))),
++        np.max(np.abs(S.T@(chart_new-chart0)@S)),
++        np.max(np.abs(np.diag(W.T@chart_new@W)-m*variances)))
++    spd=np.linalg.eigvalsh(Rnew).min()>0
++    psd=np.linalg.eigvalsh(Rnew-R0).min()>-1e-10
++    ok=(error<=1e-8 and spd and psd and abs(float(c["epsilon"])-1e-6*l[k])<1e-12 and
++        np.max(np.abs(R0-np.diag([.04]*3+[.01]*3)))<1e-14 and
++        np.max(np.abs(Rnew-Rnew.T))<1e-10)
++    return dict(covariance_pass=int(ok),max_reconstruction_error=float(error),
++        minimum_eigenvalue=float(np.linalg.eigvalsh(Rnew).min()),
++        weak_relative_gap=float((l[1]-l[0])/max(l[1],1e-30)) if k==2 else 1.)
++
++def verify(directory):
++    freeze=json.loads((directory/"execution_freeze.json").read_text())
++    blind=json.loads((directory/"blind_outputs_freeze.json").read_text())
++    if blind["GT_LOADED"] or blind["ORACLE_LOADED"]:raise RuntimeError("isolation failed")
++    for p,h in blind["output_sha256"].items():
++        if sha(directory/p)!=h:raise RuntimeError("runtime output changed")
++    for p,h in freeze["inherited_sha256"].items():
++        if sha(ROOT/p)!=h:raise RuntimeError("historical outcome changed")
++    for p,h in freeze["source_sha256"].items():
++        data=subprocess.check_output(["git","-C",str(ROOT),"show",freeze["code_sha"]+":"+p])
++        if hashlib.sha256(data).hexdigest()!=h:raise RuntimeError("code provenance failed")
++    if sha(freeze["binary_path"])!=freeze["binary_sha256"] or sha(ARCHIVE/"THEORY.md")!=freeze["theory_sha256"]:
++        raise RuntimeError("binary/rules changed")
++    lineage=json.loads((ROOT/"docs/p9_r4_heldout_visual_evidence/source_recovery/replay_input_hashes.json").read_text())
++    params=Path(lineage["inputs"]["params_txt"]["path"])
++    values=np.array([float(x) for x in params.read_text().split()])
++    if len(values)!=27 or sha(params)!=freeze["input_sha256"][str(params)]:raise RuntimeError("parameter identity failed")
++    extr=np.eye(4);extr[:3,3]=values[-7:-4];extr[:3,:3]=Rotation.from_quat(values[-4:]).as_matrix()
++    jobs={"control":load(CONTROL)}
++    for n in MODES:
++        jobs[n]=load(directory/n);jobs[n]["weak"]=read(directory/n/"weak_refinement.csv")
++        jobs[n]["directional"]=read(directory/n/"directional_covariance.csv")
++    expected_ids=[str(i) for i in range(1,4128)]
++    for n,job in jobs.items():
++        for key in ("frames","events","frame_cost","registration","trajectory","runtime")+(("weak","directional") if n!="control" else ()):
++            if [r["transaction_id"] for r in job[key]]!=expected_ids:raise RuntimeError("complete ordered denominator failed: "+n+":"+key)
++    parity=[]
++    for table in ("registration","trajectory"):
++        for a,b in zip(jobs["control"][table],jobs[MODES[0]][table]):
++            different=[k for k in a if k!="alignment_ms" and a[k]!=b[k]]
++            parity.append(dict(transaction_id=a["transaction_id"],table=table,exact=int(not different),different_fields=";".join(different)))
++    csv_write(directory/"nominal_state_parity.csv",parity)
++    if len(parity)!=8254 or not all(r["exact"] for r in parity):raise RuntimeError("shadow nominal/state changed")
++    guards=[];covs=[];causal=[];pairs=[]
++    for n in MODES:
++        job=jobs[n];first=None;previous=None
++        for i,(r,c,f,t,nom) in enumerate(zip(job["weak"],job["directional"],job["frames"],job["trajectory"],job["registration"])):
++            used=r["alternative_used"]=="1";valid=c["valid"]=="1";rec=r["recommended"]=="1"
++            quiet=r["triggered"]!="1" or r["anchor_valid"]!="1"
++            actual=matrix(c["actual_imu_pose"]);cov=vector(c["consumed_covariance"]).reshape(6,6)
++            R0=np.diag([.04]*3+[.01]*3)
++            ok=(int(r["jet_calls"])<=2 and int(r["value_calls"])<=3 and r["extra_align_calls"]=="0" and f["full_ndt_calls"]=="1" and
++                (not quiet or r["jet_calls"]==r["value_calls"]=="0") and used==(n!=MODES[0] and rec and valid) and
++                c["alternative_used"]==r["alternative_used"] and r["update_success"]==nom["effective"] and
++                np.isfinite(actual).all() and np.isfinite(imu_pose(t,"corrected_imu_")).all() and
++                (np.max(np.abs(cov-vector(c["covariance"]).reshape(6,6)))<1e-14 if used else np.max(np.abs(cov-R0))<1e-14))
++            if used:
++                expected_lidar=matrix(r["candidate_pose"])
++                expected_lidar[:3,:3]=Rotation.from_quat(carrier_quaternion(expected_lidar[:3,:3])).as_matrix()
++            else:
++                # Real nominal Pose3d is consumed without a new float roundtrip.
++                expected_lidar=imu_pose(nom,"raw_")
++            ok=ok and np.max(np.abs(actual-expected_lidar@np.linalg.inv(extr)))<1e-8
++            if valid:
++                check=covariance_check(c,r,extr);covs.append(dict(mode=n,transaction_id=r["transaction_id"],**check))
++                ok=ok and bool(check["covariance_pass"]) and rec
++                if n==MODES[0]:ok=ok and c["weak_paired_valid"]=="1"
++            if used:
++                ok=ok and r["status"]=="LOCAL_REGULARIZED_REFINEMENT" and r["weak_quality_valid"]=="1"
++                if first is None:first=i+1
++            if rec:
++                k=int(r["weak_dimension"]);W=vector(r["eigenvectors"]).reshape(6,6)[:,:k]
++                eta=vector(r["candidate_eta"]);u=vector(r["u_anchor"]);rho=float(r["rho"])
++                count=float(f["source_count"]);s0=float(r["nominal_score"]);s=float(r["candidate_score"])
++                objective=-s/count+.5*rho*np.linalg.norm(W.T@eta-u)**2
++                objective0=-s0/count+.5*rho*np.dot(u,u)
++                ok=ok and objective<objective0-1e-8*max(1,abs(objective0)) and -s/count<=-s0/count+.05*max(1,abs(s0/count))
++                dt,dr=distance(matrix(r["candidate_pose"]),matrix(r["nominal_pose"]))
++                ok=ok and dt<=.15+1e-6 and dr<=2+1e-4
++                if n==MODES[0]:
++                    delta_t,delta_r=distance(matrix(r["weak_pose"]),matrix(r["candidate_pose"]))
++                    pairs.append(dict(transaction_id=r["transaction_id"],strong_selected=int(r["strong_selected"]),
++                        weak_score=float(r["weak_score"]),coupled_score=s,score_gain_per_point=(s-float(r["weak_score"]))/count,
++                        pose_difference_m=delta_t,pose_difference_deg=delta_r,paired_covariance_valid=int(c["weak_paired_valid"])))
++            if r["anchor_valid"]=="1":
++                ok=ok and r["anchor_after_origin"]==r["anchor_origin"] and r["anchor_after_prediction"]==r["anchor_prediction"] and r["anchor_after_origin_stamp_ns"]==r["anchor_origin_stamp_ns"]
++                if previous and previous["anchor_after_valid"]=="1" and previous["anchor_after_origin_stamp_ns"]==r["anchor_origin_stamp_ns"]:
++                    prior=matrix(previous["anchor_prediction"] if previous["anchor_valid"]=="1" else r["anchor_origin"])
++                    interval=np.linalg.inv(imu_pose(job["trajectory"][i-1],"corrected_imu_")@extr)@(imu_pose(t,"predicted_imu_")@extr)
++                    ok=ok and np.max(np.abs(prior@interval-matrix(r["anchor_prediction"])))<1e-8
++            if n==MODES[1]:ok=ok and int(r["jet_calls"])<=1 and r["strong_selected"]=="0"
++            if nom["effective"]!="1":ok=ok and not used and all(t["corrected_imu_"+a]==t["predicted_imu_"+a] for a in ("x","y","z","qx","qy","qz","qw"))
++            changed=any(t[a]!=jobs[MODES[0]]["trajectory"][i][a] for a in t if a.startswith("predicted_imu_"))
++            source_changed=nom["source_cloud_hash"]!=jobs[MODES[0]]["registration"][i]["source_cloud_hash"]
++            causal.append(dict(mode=n,transaction_id=r["transaction_id"],first_feedback_tx=first or "",prediction_differs=int(changed),source_differs=int(source_changed)))
++            guards.append(dict(mode=n,transaction_id=r["transaction_id"],pass_guards=int(ok),used=int(used)))
++            previous=r
++        if n!=MODES[0] and first and first<4127 and not any(x["mode"]==n and int(x["transaction_id"])==first+1 and x["prediction_differs"] for x in causal):
++            raise RuntimeError("feedback did not affect causal next prediction")
++    csv_write(directory/"engineering_guards.csv",guards);csv_write(directory/"covariance_parity.csv",covs)
++    csv_write(directory/"causal_feedback_parity.csv",causal);csv_write(directory/"paired_candidates.csv",pairs)
++    if not all(r["pass_guards"] for r in guards):raise RuntimeError("engineering failed BEFORE GT")
++    return freeze,jobs
++
++def evaluate():
++    directory=ARCHIVE/"attempt_0";freeze,jobs=verify(directory)
++    stats={n:statistics(n,t,directory) for n,t in jobs.items()}
++    for n in MODES:
++        rows=jobs[n]["directional"];s=stats[n]
++        s["covariance_attempts"]=sum(r["attempted"]=="1" for r in rows)
++        s["covariance_valid"]=sum(r["valid"]=="1" for r in rows)
++        s["covariance_statuses"]=dict(Counter(r["status"] for r in rows))
++        s["multipliers"]=moments([x for r in rows if r["valid"]=="1" for x in vector(r["multipliers"])])
++        s["covariance_ms_all_frames"]=moments([float(r["covariance_ms"]) for r in rows])
++        s["covariance_ms_attempted"]=moments([float(r["covariance_ms"]) for r in rows if r["attempted"]=="1"])
++        feedback=[r for r in rows if r["alternative_used"]=="1"]
++        s["filter_correction_translation_m"]=moments([float(r["correction_t_m"]) for r in feedback]) if feedback else None
++        s["filter_correction_rotation_deg"]=moments([float(r["correction_r_deg"]) for r in feedback]) if feedback else None
++        s["abnormal_updates"]=sum(r["update_success"]!=nom["effective"] for r,nom in zip(rows,jobs[n]["registration"]))
++        s["curvature_degenerate_weak_rows"]=sum(r["mode"]==n and float(r["weak_relative_gap"])<=1e-6 for r in read(directory/"covariance_parity.csv"))
++        s["candidate_score_better"]=sum(float(r["candidate_score"])>float(r["nominal_score"]) for r in jobs[n]["weak"] if r["recommended"]=="1")
++        s["candidate_score_worse"]=sum(float(r["candidate_score"])<float(r["nominal_score"]) for r in jobs[n]["weak"] if r["recommended"]=="1")
++    json_write(directory/"pre_GT_audit_freeze.json",dict(GT_LOADED=False,engineering="PASS",evaluator_sha256=sha(Path(__file__)),
++        audit_code_sha=subprocess.check_output(["git","-C",str(ROOT),"rev-parse","HEAD"],text=True).strip(),
++        engineering_statistics=stats,output_sha256={p.name:sha(p) for p in directory.glob("*.csv")}))
++    gt=posthoc(directory,jobs)  # FIRST GT access: runtime and all engineering outputs frozen.
++    old=json.loads((R6/"evaluation.json").read_text())
++    summaries=[]
++    for n in ("control","R6_weak_only","R6_coupled",*MODES):
++        historic=n.startswith("R6_")
++        key={"R6_weak_only":"weak_only_feedback","R6_coupled":"coupled_weak_feedback"}.get(n,n)
++        g=old["GT"][key] if historic else gt[key];s=old["statistics"][key] if historic else stats[key]
++        summaries.append(dict(method=n,frames=4127,GT_frames=g["count"],feedback=s.get("alternative_used",0),
++            translation_RMSE_m=g["corrected_translation_m"]["RMSE"],translation_P95_m=g["corrected_translation_m"]["P95"],translation_max_m=g["corrected_translation_m"]["max"],
++            rotation_RMSE_deg=g["corrected_rotation_deg"]["RMSE"],rotation_P95_deg=g["corrected_rotation_deg"]["P95"],rotation_max_deg=g["corrected_rotation_deg"]["max"],
++            large_jumps=s["large_jumps"],mean_ms=s["processing_ms"]["mean"],P95_ms=s["processing_ms"]["P95"],max_ms=s["processing_ms"]["max"],peak_rss_kib=s["peak_rss_kib"]))
++    csv_write(ARCHIVE/"method_summary.csv",summaries)
++    gain={n:1-gt[n]["corrected_translation_m"]["RMSE"]/gt["control"]["corrected_translation_m"]["RMSE"] for n in MODES[1:]}
++    paired=read(directory/"paired_candidates.csv")
++    result=dict(task=freeze["task"],start_sha=freeze["start_sha"],code_sha=freeze["code_sha"],engineering="PASS",statistics=stats,GT=gt,
++        method_summary=summaries,gain_vs_control=gain,
++        weak_drift_relief_vs_R6=1-gt[MODES[1]]["corrected_translation_m"]["RMSE"]/old["GT"]["weak_only_feedback"]["corrected_translation_m"]["RMSE"],
++        coupled_vs_directional_weak=1-gt[MODES[2]]["corrected_translation_m"]["RMSE"]/gt[MODES[1]]["corrected_translation_m"]["RMSE"],
++        paired_candidates=dict(total=len(paired),strong_changed=sum(r["strong_selected"]=="1" for r in paired),
++            score_gain_per_point=moments([float(r["score_gain_per_point"]) for r in paired]),
++            no_extra_paired_objective_calls=True),
++        accuracy_goal_pass=gain[MODES[2]]>=.01,
++        performance_goal_pass=all(stats[n]["processing_ms"]["mean"]<=100 and stats[n]["processing_ms"]["P95"]<=150 for n in MODES),
++        full_ndt_calls=sum(stats[n]["full_ndt_calls"] for n in MODES),extra_full_ndt_calls=0,
++        GT_FOR_ADMISSION=False,production_changed=False,independent_validation=False,targeted_runtime_repairs=0)
++    json_write(directory/"evaluation.json",result)
++    print(json.dumps(result,indent=2))
++
++if __name__=="__main__":evaluate()
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/p10_r2_replay.cpp b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/p10_r2_replay.cpp
+index 3057f78..e13dc8b 100644
+--- a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/p10_r2_replay.cpp
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/p10_r2_replay.cpp
+@@ -3,2 +3,3 @@
+ #include "weak_refinement_logging.hpp"
++#include "directional_logging.hpp"
+ #include <ctime>
+@@ -89,5 +90,8 @@ int main(int argc, char** argv) {
+     const std::string experiment_mode = argv[12];
++    const bool directional = experiment_mode == "directional_weak_only_feedback" ||
++        experiment_mode == "directional_coupled_feedback" || experiment_mode == "directional_coupled_shadow";
+     const bool weak_refinement = experiment_mode == "weak_only_feedback" ||
+-        experiment_mode == "coupled_weak_feedback" || experiment_mode == "coupled_weak_shadow";
+-    const bool weak_feedback = weak_refinement && experiment_mode != "coupled_weak_shadow";
++        experiment_mode == "coupled_weak_feedback" || experiment_mode == "coupled_weak_shadow" || directional;
++    const bool weak_feedback = weak_refinement && experiment_mode != "coupled_weak_shadow" &&
++        experiment_mode != "directional_coupled_shadow";
+     const bool anchored = experiment_mode == "anchored_shadow" || experiment_mode == "anchored_guarded_feedback";
+@@ -110,4 +114,6 @@ int main(int argc, char** argv) {
+     if (weak_refinement) weak_log.reset(new p10log::WeakRefinementLogger(log_directory));
++    std::unique_ptr<p10log::DirectionalLogger> directional_log;
++    if (directional) directional_log.reset(new p10log::DirectionalLogger(log_directory));
+     paper::WeakCoupledConfig weak_config;
+-    weak_config.coupled = experiment_mode != "weak_only_feedback";
++    weak_config.coupled = experiment_mode != "weak_only_feedback" && experiment_mode != "directional_weak_only_feedback";
+     const auto shadow_config = p10log::config(argv[13],false);
+@@ -123,2 +129,7 @@ int main(int argc, char** argv) {
+     const auto parameters = paper::readP7Parameters(argv[6], &initial_lidar, &extrinsic);
++    paper::CoupledMatrix6 fixed_noise = paper::CoupledMatrix6::Zero();
++    fixed_noise.topLeftCorner<3,3>().diagonal().setConstant(
++        parameters.pose_position_sigma_m*parameters.pose_position_sigma_m);
++    fixed_noise.bottomRightCorner<3,3>().diagonal().setConstant(
++        parameters.pose_rotation_sigma_rad*parameters.pose_rotation_sigma_rad);
+     const auto initialization_imu = initializationSamples(
+@@ -255,3 +266,17 @@ int main(int argc, char** argv) {
+       paper::Pose3d actual_measurement = result.raw_map_T_lidar;
+-      const bool alternative_used = (guarded_feedback && event.admitted) || (weak_feedback && weak_result.recommended);
++      paper::DirectionalCovarianceResult directional_result,paired_directional;
++      directional_result.baseline=fixed_noise;directional_result.covariance=fixed_noise;
++      if(directional && weak_result.recommended) {
++        directional_result=paper::buildDirectionalCovariance(weak_result.eigenvalues,
++            weak_result.eigenvectors,weak_result.weak_dimension,fixed_noise,
++            carrierPose(weak_result.nominal),carrierPose(weak_result.candidate),scan_end.predicted_map_T_imu,extrinsic);
++        // Same-input Shadow ablation uses the already evaluated legal weak pose:
++        // no second optimizer, source/map or extra objective call.
++        if(experiment_mode=="directional_coupled_shadow")
++          paired_directional=paper::buildDirectionalCovariance(weak_result.eigenvalues,
++              weak_result.eigenvectors,weak_result.weak_dimension,fixed_noise,
++              carrierPose(weak_result.nominal),carrierPose(weak_result.weak_pose),scan_end.predicted_map_T_imu,extrinsic);
++      }
++      const bool alternative_used = (guarded_feedback && event.admitted) ||
++          (weak_feedback && weak_result.recommended && (!directional || directional_result.valid));
+       if (alternative_used) {
+@@ -270,4 +295,7 @@ int main(int argc, char** argv) {
+       if (result.effective) {
+-        if (!frontend.applyPoseMeasurement(
+-            paper::lidarMeasurementToImu(actual_measurement, extrinsic), &delta, &reason)) {
++        const paper::Pose3d imu_measurement=paper::lidarMeasurementToImu(actual_measurement,extrinsic);
++        const bool update_ok = directional && alternative_used ?
++            frontend.applyPoseMeasurement(imu_measurement,directional_result.covariance,&delta,&reason) :
++            frontend.applyPoseMeasurement(imu_measurement,&delta,&reason);
++        if (!update_ok) {
+           if (admission_log) admission_log->write(transaction,experiment_mode,event,
+@@ -300,2 +328,7 @@ int main(int argc, char** argv) {
+           actual_measurement,alternative_used,update_success,delta);
++      if (directional_log) directional_log->write(transaction,experiment_mode,weak_result,
++          directional_result,paired_directional,scan_end.predicted_map_T_imu,
++          paper::lidarMeasurementToImu(carrierPose(weak_result.candidate),extrinsic),
++          paper::lidarMeasurementToImu(actual_measurement,extrinsic),
++          alternative_used,update_success,delta);
+       trajectory << transaction << ',' << scan.scan_end_ns;
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/run_directional.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/run_directional.py
+new file mode 100644
+index 0000000..f658207
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/run_directional.py
+@@ -0,0 +1,108 @@
++"""R7 one ordered three-mode causal experiment; no GT/oracle inputs."""
++import argparse
++import json
++import os
++from pathlib import Path
++import shutil
++import subprocess
++import time
++from run_budgeted import ROOT,sha,read,csv_write,json_write
++from run_admission import CONTROL
++
++ARCHIVE=ROOT/"docs/p10_r7_geometry_confidence_coupled_fusion"
++CACHE=Path("/home/jian/livox_ws/dog_loc_paper_ws/.p9_experiment_cache/p10_r7_geometry_confidence_coupled_fusion")
++START="ea12a9edd757bc08bebd83f75405c28982704b13"
++MODES=("directional_coupled_shadow","directional_weak_only_feedback","directional_coupled_feedback")
++R6=ROOT/"docs/p10_r6_budgeted_weak_coupled_refinement/attempt_1"
++
++def verify_job(record,mode,ids):
++    tables={n:read(record/(n+".csv")) for n in
++        ("frames","trajectory","registration","weak_refinement","directional_covariance","frame_cost")}
++    for rows in tables.values():
++        if [int(r["transaction_id"]) for r in rows]!=ids:raise RuntimeError("incomplete ordered run")
++    for f,r,c,n,t in zip(tables["frames"],tables["weak_refinement"],tables["directional_covariance"],tables["registration"],tables["trajectory"]):
++        if int(r["jet_calls"])>2 or int(r["value_calls"])>3 or r["extra_align_calls"]!="0" or f["full_ndt_calls"]!="1":
++            raise RuntimeError("budget failed")
++        if (r["triggered"]!="1" or r["anchor_valid"]!="1") and (r["jet_calls"]!="0" or r["value_calls"]!="0"):
++            raise RuntimeError("ordinary expensive work")
++        expected=mode!=MODES[0] and r["recommended"]=="1" and c["valid"]=="1"
++        if (r["alternative_used"]=="1")!=expected or c["alternative_used"]!=r["alternative_used"] or r["update_success"]!=n["effective"]:
++            raise RuntimeError("feedback/fallback failed")
++        if n["effective"]!="1" and (r["alternative_used"]!="0" or n["lidar_update_applied"]!="0" or
++            any(t["corrected_imu_"+a]!=t["predicted_imu_"+a] for a in ("x","y","z","qx","qy","qz","qw"))):
++            raise RuntimeError("ineffective nominal injected")
++    json_write(record/"job_blind_freeze.json",dict(GT_LOADED=False,ORACLE_LOADED=False,
++        output_sha256={p.name:sha(p) for p in record.glob("*.csv")}))
++
++def run(build):
++    if subprocess.check_output(["git","-C",str(ROOT),"diff","--name-only","HEAD"],text=True).strip():
++        raise RuntimeError("commit sources before scientific execution")
++    subprocess.run(["git","-C",str(ROOT),"merge-base","--is-ancestor",START,"HEAD"],check=True)
++    package=ROOT/"src/dog_prior_map_fastlio2_frontend_exp"
++    for name in ("coupled_ndt_weak_refinement.cpp","coupled_ndt_shadow.cpp","coupled_ndt_temporal.cpp",
++        "coupled_ndt_anchor.cpp","fastlio2_frontend_ikfom.cpp","registration_geometry.cpp",
++        "scan_processor.cpp","p7_replay_io.cpp","lidar_deskew_geometry.cpp"):
++        p=package/"src"/name
++        if p.read_bytes()!=subprocess.check_output(["git","-C",str(ROOT),"show",START+":"+str(p.relative_to(ROOT))]):
++            raise RuntimeError("frozen algorithm changed "+name)
++    lineage=ROOT/"docs/p9_r4_heldout_visual_evidence/source_recovery/replay_input_hashes.json"
++    inputs=json.loads(lineage.read_text())["inputs"]
++    keys=("imu_csv","filter_scans_csv","raw_timed_scan_index","raw_timed_point_bin","map_pcd","params_txt")
++    files={};hashes={}
++    for k in keys:
++        p=inputs[k]["path"];h=sha(p)
++        if h!=inputs[k]["sha256"]:raise RuntimeError("input hash failed "+k)
++        files[k]=p;hashes[p]=h
++    ids=[int(r["transaction_id"]) for r in read(files["raw_timed_scan_index"])]
++    if ids!=list(range(1,4128)):raise RuntimeError("full input order changed")
++    inherited={}
++    for directory in (CONTROL.parent,R6):
++        freeze=json.loads((directory/"blind_outputs_freeze.json").read_text())
++        for p,h in freeze["output_sha256"].items():
++            if sha(directory/p)!=h:raise RuntimeError("frozen historical output changed")
++            inherited[str((directory/p).relative_to(ROOT))]=h
++    for name in ("evaluation.json","execution_freeze.json"):
++        inherited[str((R6/name).relative_to(ROOT))]=sha(R6/name)
++    directory=ARCHIVE/"attempt_0";cache=CACHE/"attempt_0"
++    directory.mkdir(parents=True,exist_ok=False);cache.mkdir(parents=True,exist_ok=False)
++    if shutil.disk_usage(cache).free<2*(1<<30):raise RuntimeError("insufficient persistent reserve")
++    probe=cache/"storage_probe";probe.write_text("P10_R7_READBACK")
++    if probe.read_text()!="P10_R7_READBACK":raise RuntimeError("storage readback failed")
++    probe.unlink()
++    binary=cache/"p10_r7_replay";shutil.copy2(Path(build)/"p10_r2_replay",binary)
++    paths=[p for folder in (package/"src",package/"include",package/"scripts/p10/budgeted")
++        for p in folder.rglob("*") if p.is_file() and p.suffix in (".cpp",".hpp",".py")]
++    freeze=dict(task="PAPER-P10-R7-GEOMETRY-CONFIDENCE-COUPLED-FUSION",start_sha=START,
++        code_sha=subprocess.check_output(["git","-C",str(ROOT),"rev-parse","HEAD"],text=True).strip(),
++        input_sha256=hashes,inherited_sha256=inherited,binary_path=str(binary),binary_sha256=sha(binary),
++        source_sha256={str(p.relative_to(ROOT)):sha(p) for p in paths},theory_sha256=sha(ARCHIVE/"THEORY.md"),
++        GT_LOADED=False,ORACLE_LOADED=False,production_changed=False,modes=list(MODES),frames=4127,
++        rule=dict(epsilon_strong_relative=1e-6,multiplier_min=1,multiplier_max=20,
++            original_nominal_chart_transport=True,nonzero_residual_left_jacobian=True,
++            covariance_frozen_at_predicted_tangent=True,weak_PSD_additive=True,
++            R6_optimizer_unchanged=True,max_jets=2,max_values=3,max_extra_aligns=0),
++        storage=dict(path=str(cache),free_bytes=shutil.disk_usage(cache).free,write_readback_delete="PASS",
++            filesystem=subprocess.check_output(["findmnt","-T",str(cache),"-n","-o","SOURCE,FSTYPE,OPTIONS"],text=True).strip()))
++    json_write(directory/"execution_freeze.json",freeze)
++    env=dict(os.environ,LD_LIBRARY_PATH="/lib/x86_64-linux-gnu",OMP_NUM_THREADS="1",OPENBLAS_NUM_THREADS="1")
++    receipts=[]
++    for mode in MODES:
++        output=cache/mode;record=directory/mode;output.mkdir();record.mkdir()
++        cmd=[str(binary),*[files[k] for k in keys],str(output/"trajectory.csv"),str(output/"registration.csv"),
++            str(output/"runtime.csv"),"4127","0",mode,"C"]
++        json_write(record/"command.json",cmd);began=time.monotonic()
++        with (record/"engine.log").open("x") as stream:
++            proc=subprocess.run(cmd,stdout=stream,stderr=subprocess.STDOUT,env=env)
++        receipt=dict(mode=mode,returncode=proc.returncode,wall_s=time.monotonic()-began)
++        json_write(record/"receipt.json",receipt);receipts.append(receipt)
++        for p in output.glob("*.csv"):shutil.copyfile(p,record/p.name)
++        print(json.dumps(receipt),flush=True)
++        if proc.returncode:raise RuntimeError("real causal run failed: preserve and stop")
++        verify_job(record,mode,ids)
++    csv_write(directory/"job_cost.csv",receipts)
++    json_write(directory/"blind_outputs_freeze.json",dict(GT_LOADED=False,ORACLE_LOADED=False,
++        output_sha256={str(p.relative_to(directory)):sha(p) for p in directory.rglob("*.csv")}))
++    print("R7_THREE_CAUSAL_OUTPUTS_FROZEN_BEFORE_GT",flush=True)
++
++if __name__=="__main__":
++    p=argparse.ArgumentParser();p.add_argument("build");run(p.parse_args().build)
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/test_directional_covariance.cpp b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/test_directional_covariance.cpp
+new file mode 100644
+index 0000000..ff9963d
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/test_directional_covariance.cpp
+@@ -0,0 +1,59 @@
++#include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_directional_covariance.hpp"
++#include "dog_prior_map_fastlio2_frontend_exp/p7_replay_io.hpp"
++#include "dog_prior_map_fastlio2_frontend_exp/registration_geometry.hpp"
++#include <Eigen/Eigenvalues>
++#include <Eigen/QR>
++#include <iostream>
++#include <stdexcept>
++namespace p=dog_prior_map_fastlio2_frontend_exp;
++void require(bool ok,const char* why) {if(!ok) throw std::runtime_error(why);}
++Eigen::Matrix3d rotation(const Eigen::Vector3d& v) {return Eigen::AngleAxisd(v.norm(),v.normalized()).toRotationMatrix();}
++int main() {try {
++  p::Pose3d lidar,predicted,extr;
++  lidar.position<<1,2,3;lidar.orientation=rotation(Eigen::Vector3d(.2,-.4,.6));
++  extr.position<<.08,.03,-.12;extr.orientation=rotation(Eigen::Vector3d(.15,.1,-.2));
++  p::Pose3d nominal=lidar;
++  const Eigen::Vector3d theta(.01,-.015,.02);
++  lidar.orientation=rotation(theta)*nominal.orientation;
++  auto measured=p::lidarMeasurementToImu(lidar,extr);
++  predicted=measured;predicted.orientation=rotation(Eigen::Vector3d(.12,-.1,.05))*measured.orientation;
++  p::CoupledVector6 l;l<<.01,.02,1,2,3,4;
++  p::CoupledMatrix6 Q=p::CoupledMatrix6::Identity(),R0=Q;
++  R0.topLeftCorner<3,3>()*=.04;R0.bottomRightCorner<3,3>()*=.01;
++  // Mix translation/rotation, unlike a test where covariance stays diagonal.
++  Q(0,0)=Q(3,3)=std::cos(.4);Q(0,3)=-std::sin(.4);Q(3,0)=std::sin(.4);
++  auto r=p::buildDirectionalCovariance(l,Q,2,R0,nominal,lidar,predicted,extr);
++  require(r.valid && r.multipliers.minCoeff()==20 && r.minimum_eigenvalue>0,"SPD clipped inflation");
++  Eigen::Matrix<double,6,6> fd;
++  for(int c=0;c<6;++c) {
++    auto sample=[&](double h) {
++      p::Pose3d perturbed=lidar;
++      if(c<3) perturbed.position(c)+=.8*h;
++      else {Eigen::Vector3d d=theta;d(c-3)+=h;perturbed.orientation=rotation(d)*nominal.orientation;}
++      auto imu=p::lidarMeasurementToImu(perturbed,extr);
++      p::CoupledVector6 residual;residual.head<3>()=imu.position-predicted.position;
++      residual.tail<3>()=p::so3Log(predicted.orientation.toRotationMatrix().transpose()*imu.orientation.toRotationMatrix());
++      return residual;
++    };
++    fd.col(c)=(sample(1e-6)-sample(-1e-6))/2e-6;
++  }
++  require((fd-r.jacobian).cwiseAbs().maxCoeff()<2e-8,"real lidar/imu residual finite difference including lever and nonzero innovation");
++  require(r.strong_block_difference<1e-12,"strong chart block retained");
++  const auto solver=r.jacobian.colPivHouseholderQr();
++  p::CoupledMatrix6 left=solver.solve(r.covariance);
++  p::CoupledMatrix6 pulled=solver.solve(left.transpose()).transpose();
++  require((Q.rightCols<4>().transpose()*(pulled-r.chart_baseline)*Q.rightCols<4>()).norm()<1e-12,"independent emitted strong block");
++  for(int i=0;i<2;++i) require(std::abs(Q.col(i).dot(pulled*Q.col(i))-r.multipliers(i)*r.weak_variances(i))<1e-12,"actual weak variance multiplier");
++  Eigen::SelfAdjointEigenSolver<p::CoupledMatrix6> added(r.covariance-R0);
++  require(added.eigenvalues().minCoeff()>-1e-12,"inflation PSD not confidence gain");
++  nominal=lidar;predicted=measured;r=p::buildDirectionalCovariance(l,Q,2,R0,nominal,lidar,predicted,extr);
++  require((r.jacobian.bottomRightCorner<3,3>()-measured.orientation.toRotationMatrix().transpose()).norm()<1e-12,"zero innovation right tangent");
++  extr.position.setZero();measured=p::lidarMeasurementToImu(lidar,extr);
++  r=p::buildDirectionalCovariance(l,Q,2,R0,nominal,lidar,measured,extr);
++  require(r.valid && r.jacobian.topRightCorner<3,3>().norm()==0,"zero lever");
++  l(0)=-1;require(!p::buildDirectionalCovariance(l,Q,2,R0,nominal,lidar,predicted,extr).valid,"negative curvature nominal fallback");
++  l(0)=.01;Q(0,0)=2;require(!p::buildDirectionalCovariance(l,Q,2,R0,nominal,lidar,predicted,extr).valid,"invalid basis fallback");
++  Q.setIdentity();R0(0,0)=-1;require(!p::buildDirectionalCovariance(l,Q,2,R0,nominal,lidar,predicted,extr).valid,"invalid noise fallback");
++  std::cout<<"R7 actual residual Jacobian, SPD, lever, weak inflation/strong retention, fallbacks PASS\n";
++  return 0;
++}catch(const std::exception& e) {std::cerr<<e.what()<<'\n';return 1;}}
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/test_directional_harness.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/test_directional_harness.py
+new file mode 100644
+index 0000000..b52597a
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/test_directional_harness.py
+@@ -0,0 +1,31 @@
++"""Synthetic orchestration guards only; never scientific NDT/GT data."""
++import tempfile
++import unittest
++from pathlib import Path
++from run_budgeted import csv_write
++from run_directional import verify_job,MODES
++
++class DirectionalHarnessTests(unittest.TestCase):
++    def check(self,mode,changed=None):
++        with tempfile.TemporaryDirectory(prefix="p10_r7_harness_") as name:
++            root=Path(name)
++            tables=dict(frames=dict(full_ndt_calls="1"),
++                weak_refinement=dict(jet_calls="0",value_calls="0",extra_align_calls="0",triggered="0",anchor_valid="0",
++                    recommended="0",alternative_used="0",update_success="1"),
++                directional_covariance=dict(valid="0",alternative_used="0"),
++                registration=dict(effective="1",lidar_update_applied="1"),frame_cost=dict(cost="0"),
++                trajectory={prefix+a:"0" for prefix in ("corrected_imu_","predicted_imu_") for a in ("x","y","z","qx","qy","qz","qw")})
++            for table,fields in (changed or {}).items():tables[table].update(fields)
++            for n,r in tables.items():csv_write(root/(n+".csv"),[dict(transaction_id=1,**r)])
++            verify_job(root,mode,[1])
++    def test_ordinary_shadow(self):self.check(MODES[0])
++    def test_invalid_covariance_retains_nominal(self):
++        self.check(MODES[1],dict(weak_refinement=dict(recommended="1",triggered="1",anchor_valid="1",jet_calls="1")))
++    def test_ineffective_prediction_only(self):
++        self.check(MODES[1],dict(weak_refinement=dict(update_success="0"),registration=dict(effective="0",lidar_update_applied="0")))
++    def test_budget_overrun_rejected(self):
++        with self.assertRaises(RuntimeError):self.check(MODES[0],dict(weak_refinement=dict(jet_calls="3")))
++    def test_shadow_cannot_consume_candidate(self):
++        with self.assertRaises(RuntimeError):self.check(MODES[0],dict(weak_refinement=dict(alternative_used="1"),directional_covariance=dict(alternative_used="1")))
++
++if __name__=="__main__":unittest.main()
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/verify_directional.py b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/verify_directional.py
+new file mode 100644
+index 0000000..cbe91e4
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/verify_directional.py
+@@ -0,0 +1,30 @@
++"""Release/test receipts only. Never run scientific replay or access GT."""
++import os
++import subprocess
++from run_budgeted import ROOT,json_write,sha
++from run_directional import ARCHIVE
++
++def main():
++    directory=ARCHIVE/"verification";directory.mkdir(exist_ok=False)
++    env=dict(os.environ,LD_LIBRARY_PATH="/lib/x86_64-linux-gnu",OMP_NUM_THREADS="1",OPENBLAS_NUM_THREADS="1")
++    build="/tmp/p10_r2_build.CdJ4jf";p9="/tmp/p9_r4_release.Eirto1"
++    commands=[("release_build",["cmake","--build",build,"-j2"],str(ROOT)),
++        ("p7_p10_tests",["ctest","--output-on-failure"],build),
++        ("p9_tests",["ctest","--output-on-failure"],p9),
++        ("directional_harness",["python3","src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/budgeted/test_directional_harness.py"],str(ROOT)),
++        ("diff_check",["git","diff","--check"],str(ROOT))]
++    receipts=[]
++    for name,cmd,cwd in commands:
++        p=subprocess.run(cmd,cwd=cwd,env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
++        with (directory/(name+".log")).open("xb") as stream:stream.write(p.stdout)
++        receipts.append(dict(name=name,command=cmd,workdir=cwd,returncode=p.returncode,
++            log_sha256=sha(directory/(name+".log"))))
++        if p.returncode:raise RuntimeError("verification failed "+name)
++    json_write(directory/"receipt.json",dict(Release=True,
++        environment=dict(LD_LIBRARY_PATH=env["LD_LIBRARY_PATH"],OMP_NUM_THREADS="1",OPENBLAS_NUM_THREADS="1"),
++        initial_unconfigured_P9_result="39/41; two MVS libusb_set_option symbol failures",
++        loader_diagnosis="ldd without env selected /opt/MVS/lib/64/libusb-1.0.so.0; frozen env selects system library",
++        algorithm_or_test_threshold_changed=False,GT_LOADED=False,scientific_replays_run=0,commands=receipts))
++    print("Release + P7/P10 8/8 + P9 41/41 + harness5/5 + diff check PASS")
++
++if __name__=="__main__":main()
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p7/CMakeLists.txt b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p7/CMakeLists.txt
+index 4a7e6e5..b792165 100644
+--- a/src/dog_prior_map_fastlio2_frontend_exp/scripts/p7/CMakeLists.txt
++++ b/src/dog_prior_map_fastlio2_frontend_exp/scripts/p7/CMakeLists.txt
+@@ -27,3 +27,4 @@ add_library(p7_current_frame_ndt STATIC "${PACKAGE_ROOT}/src/current_frame_ndt.c
+   "${PACKAGE_ROOT}/src/registration_geometry.cpp" "${PACKAGE_ROOT}/src/coupled_ndt_anchor.cpp"
+-  "${PACKAGE_ROOT}/src/coupled_ndt_weak_refinement.cpp")
++  "${PACKAGE_ROOT}/src/coupled_ndt_weak_refinement.cpp"
++  "${PACKAGE_ROOT}/src/coupled_ndt_directional_covariance.cpp")
+ target_include_directories(p7_current_frame_ndt PUBLIC "${PACKAGE_ROOT}/include" PRIVATE ${PCL_INCLUDE_DIRS})
+@@ -86,2 +87,5 @@ target_link_libraries(p10_r6_weak_refinement_test PRIVATE p7_current_frame_ndt E
+ add_test(NAME p10_r6_weak_refinement_test COMMAND p10_r6_weak_refinement_test)
++add_executable(p10_r7_directional_test "${P10_BUDGETED_ROOT}/test_directional_covariance.cpp")
++target_link_libraries(p10_r7_directional_test PRIVATE p7_current_frame_ndt p7_replay_io Eigen3::Eigen)
++add_test(NAME p10_r7_directional_test COMMAND p10_r7_directional_test)
+ set_tests_properties(current_frame_ndt_test p7_replay_io_test p10_r2_shadow_test
+diff --git a/src/dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_directional_covariance.cpp b/src/dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_directional_covariance.cpp
+new file mode 100644
+index 0000000..0cc42ff
+--- /dev/null
++++ b/src/dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_directional_covariance.cpp
+@@ -0,0 +1,82 @@
++#include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_directional_covariance.hpp"
++#include "dog_prior_map_fastlio2_frontend_exp/registration_geometry.hpp"
++#include <Eigen/Cholesky>
++#include <Eigen/Eigenvalues>
++#include <Eigen/QR>
++#include <chrono>
++#include <algorithm>
++
++namespace dog_prior_map_fastlio2_frontend_exp {
++namespace {
++bool poseValid(const Pose3d& p) {
++  return p.position.allFinite() && p.orientation.coeffs().allFinite() &&
++      std::abs(p.orientation.norm()-1.)<=1e-8;
++}
++}
++DirectionalCovarianceResult buildDirectionalCovariance(
++    const CoupledVector6& l, const CoupledMatrix6& Q, int k,
++    const CoupledMatrix6& R0, const Pose3d& nominal, const Pose3d& lidar, const Pose3d& predicted,
++    const Pose3d& extrinsic) {
++  const auto began=std::chrono::steady_clock::now();
++  DirectionalCovarianceResult out;out.baseline=R0;out.covariance=R0;
++  auto finish=[&](const std::string& status) {
++    out.status=status;out.total_ms=std::chrono::duration<double,std::milli>(
++        std::chrono::steady_clock::now()-began).count();return out;
++  };
++  if((k!=1 && k!=2) || !l.allFinite() || l.minCoeff()<=0 ||
++      !Q.allFinite() || (Q.transpose()*Q-CoupledMatrix6::Identity()).norm()>1e-8 ||
++      !R0.allFinite() || (R0-R0.transpose()).cwiseAbs().maxCoeff()>1e-10 ||
++      !poseValid(nominal) || !poseValid(lidar) || !poseValid(predicted) || !poseValid(extrinsic))
++    return finish("INVALID_INPUT_NOMINAL");
++  for(int i=1;i<6;++i) if(l(i)<l(i-1)) return finish("UNSORTED_CURVATURE_NOMINAL");
++  Eigen::LLT<CoupledMatrix6> baseline_factor(R0);
++  if(baseline_factor.info()!=Eigen::Success) return finish("BASELINE_NOT_SPD_NOMINAL");
++  const Eigen::Matrix3d measured_R=lidar.orientation.toRotationMatrix()*
++      extrinsic.orientation.toRotationMatrix().transpose();
++  CoupledMatrix6 rotation_first;
++  std::string reason;
++  if(!normalizedRegistrationToPoseResidualJacobian(predicted.orientation.toRotationMatrix(),
++      measured_R,extrinsic.position,.8,&rotation_first,&reason))
++    return finish("RESIDUAL_JACOBIAN_INVALID_NOMINAL");
++  out.jacobian.leftCols<3>()=rotation_first.rightCols<3>();
++  out.jacobian.rightCols<3>()=rotation_first.leftCols<3>();
++  // Q lives in the ORIGINAL nominal product chart, not a recentered candidate
++  // chart. Exp(theta+dtheta) requires the SO(3) left-Jacobian transport.
++  const Eigen::Vector3d theta=so3Log(lidar.orientation.toRotationMatrix()*
++      nominal.orientation.toRotationMatrix().transpose());
++  Eigen::Matrix3d left_inverse;
++  if(!so3LeftJacobianInverse(theta,&left_inverse,&reason))
++    return finish("CHART_TRANSPORT_INVALID_NOMINAL");
++  const Eigen::Matrix3d left_jacobian=left_inverse.colPivHouseholderQr().solve(Eigen::Matrix3d::Identity());
++  out.jacobian.rightCols<3>()=(out.jacobian.rightCols<3>()*left_jacobian).eval();
++  Eigen::ColPivHouseholderQR<CoupledMatrix6> solver(out.jacobian);
++  if(solver.rank()!=6) return finish("JACOBIAN_RANK_FAILED_NOMINAL");
++  const CoupledMatrix6 left=solver.solve(R0);
++  out.chart_baseline=solver.solve(left.transpose()).transpose();
++  out.chart_baseline=(.5*(out.chart_baseline+out.chart_baseline.transpose())).eval();
++  out.solve_residual=(out.jacobian*out.chart_baseline*out.jacobian.transpose()-R0).norm()/R0.norm();
++  if(!out.chart_baseline.allFinite() || !std::isfinite(out.solve_residual) || out.solve_residual>1e-10)
++    return finish("CHART_SOLVE_FAILED_NOMINAL");
++  out.epsilon=1e-6*l(k);out.multipliers.resize(k);out.weak_variances.resize(k);
++  for(int i=0;i<k;++i) {
++    const double m=std::max(1.,std::min(20.,l(k)/std::max(l(i),out.epsilon)));
++    const double variance=Q.col(i).dot(out.chart_baseline*Q.col(i));
++    if(!std::isfinite(variance) || variance<=0) return finish("WEAK_VARIANCE_INVALID_NOMINAL");
++    out.multipliers(i)=m;out.weak_variances(i)=variance;
++    const Eigen::Matrix<double,6,1> direction=out.jacobian*Q.col(i);
++    out.covariance+=(m-1)*variance*(direction*direction.transpose());
++  }
++  out.covariance=(.5*(out.covariance+out.covariance.transpose())).eval();
++  if(!out.covariance.allFinite()) return finish("COVARIANCE_NONFINITE_NOMINAL");
++  Eigen::LLT<CoupledMatrix6> factor(out.covariance);
++  Eigen::SelfAdjointEigenSolver<CoupledMatrix6> eig(out.covariance);
++  if(factor.info()!=Eigen::Success || eig.info()!=Eigen::Success || eig.eigenvalues().minCoeff()<=0)
++    return finish("COVARIANCE_NOT_SPD_NOMINAL");
++  out.minimum_eigenvalue=eig.eigenvalues().minCoeff();out.valid=true;
++  const CoupledMatrix6 emitted_left=solver.solve(out.covariance);
++  const CoupledMatrix6 emitted_chart=solver.solve(emitted_left.transpose()).transpose();
++  out.strong_block_difference=(Q.rightCols(6-k).transpose()*
++      (emitted_chart-out.chart_baseline)*Q.rightCols(6-k)).norm();
++  return finish("DIRECTIONAL_HEURISTIC_SPD");
++}
++}  // namespace dog_prior_map_fastlio2_frontend_exp

@@ -1,0 +1,18 @@
+{
+  "GT_LOADED": false,
+  "ORACLE_LOADED": false,
+  "output_sha256": {
+    "registration.csv": "b75280c2cf876dad4e91962a496aa55dabfa7e824c6a227961988c693e812b99",
+    "runtime.csv": "2b541337bb4da2278ff0fda00c9642f148afba79a9d5d29b3e63533ffe7e8706",
+    "events.csv": "0a017b882b417c7cdbd5e08a0475fb5bb0c9dc2a05cd992ba6d4942863e03d8b",
+    "trajectory.csv": "3155132cbca7802998cb6776f3d6bca57080c7f27fef39e552521142e56b6561",
+    "directional_covariance.csv": "b316b226686993931e0e8b2ec8f3568ef58a5d6ecf2e819f9863ba88c5c6954f",
+    "resources.csv": "bed493c61bdf2b00ac94470e36e7fc4367cd3460677723d3a5a27c35e71d03ae",
+    "frame_cost.csv": "474babb46654eb838af7cc8af129be76667fb8c65e944cbca8a2216b32f8ab7f",
+    "frames.csv": "0d674bdc8041c3654e2ec57e85edf1b9094bdb0cd27eacc685e4b86fb23da1a9",
+    "models.csv": "8b7331b9bc7dd6193549b5d0c322c1b4cff2164bfe7110b1f2ff1ba481f38764",
+    "pending_end.csv": "1666d61d1aaf5a71072370d0a8ea099bbe1b5636bc26d101522ac5a32d2abbf3",
+    "candidates.csv": "db72f26800f64e0d0347d171231f040358cfa3f4f4685e56cce98799635bf95f",
+    "weak_refinement.csv": "683e8949bb719b433b478542a4363f6202ad6ea1088cf86b8d47d8d36fd9a65f"
+  }
+}

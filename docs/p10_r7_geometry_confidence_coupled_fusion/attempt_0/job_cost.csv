@@ -1,0 +1,4 @@
+mode,returncode,wall_s
+directional_coupled_shadow,0,111.3822581639979
+directional_weak_only_feedback,0,108.32109194295481
+directional_coupled_feedback,0,109.64289090398233
