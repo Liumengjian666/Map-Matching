@@ -1,4 +1,5 @@
 #include "shadow_logging.hpp"
+#include "anchor_logging.hpp"
 #include <ctime>
 #include "dog_prior_map_fastlio2_frontend_exp/current_frame_ndt.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/fastlio2_frontend.hpp"
@@ -85,12 +86,13 @@ int main(int argc, char** argv) {
     const uint64_t initialization_stamp = unsignedArgument(argv[11]);
     const bool enable_shadow = std::string(argv[12]) == "shadow";
     const std::string experiment_mode = argv[12];
+    const bool anchored = experiment_mode == "anchored_shadow" || experiment_mode == "anchored_guarded_feedback";
     const bool rotation_guard = experiment_mode == "guarded_feedback_rotation_guard" ||
         experiment_mode == "event_admission_rotation_guard";
     const bool guarded_feedback = experiment_mode == "guarded_feedback" ||
-        experiment_mode == "guarded_feedback_rotation_guard";
+        experiment_mode == "guarded_feedback_rotation_guard" || experiment_mode == "anchored_guarded_feedback";
     const bool branch_admission = guarded_feedback || experiment_mode == "event_admission" ||
-        experiment_mode == "event_admission_rotation_guard";
+        experiment_mode == "event_admission_rotation_guard" || anchored;
     const bool enable_event = experiment_mode == "event" || branch_admission;
     if (!enable_shadow && !enable_event && std::string(argv[12]) != "control") throw std::runtime_error("invalid_mode");
     const std::string log_directory = std::string(argv[7]).substr(0,std::string(argv[7]).find_last_of('/'));
@@ -98,6 +100,8 @@ int main(int argc, char** argv) {
     p10log::EventLogger event_log(log_directory);
     std::unique_ptr<p10log::AdmissionLogger> admission_log;
     if (branch_admission) admission_log.reset(new p10log::AdmissionLogger(log_directory));
+    std::unique_ptr<p10log::AnchorLogger> anchor_log;
+    if (anchored) anchor_log.reset(new p10log::AnchorLogger(log_directory));
     const auto shadow_config = p10log::config(argv[13],false);
     paper::CoupledEventConfig event_config;
     event_config.search = shadow_config;
@@ -105,6 +109,7 @@ int main(int argc, char** argv) {
     event_config.branch_rotation_guard = rotation_guard;
     if (enable_event && std::string(argv[13]) != "C") throw std::runtime_error("event_requires_R2_residual_predictor");
     paper::PendingCandidate pending;
+    paper::CoupledAnchorState anchor;
     if (limit == 0 || limit > scans.size()) throw std::runtime_error("invalid_frame_limit");
     paper::Pose3d initial_lidar, extrinsic;
     const auto parameters = paper::readP7Parameters(argv[6], &initial_lidar, &extrinsic);
@@ -195,6 +200,7 @@ int main(int argc, char** argv) {
         throw std::runtime_error("shadow_failed:"+reason);
       if(enable_shadow && !result.effective) shadow.status="NOMINAL_INEFFECTIVE_SHADOW_SKIPPED";
       paper::CoupledEventResult event;
+      paper::CoupledAnchorReceipt anchor_receipt;
       event.mode="CONTROL"; event.event="CONTROL_NO_SHADOW";
       event.recommendation_available=result.effective;
       if (enable_event) {
@@ -202,8 +208,11 @@ int main(int argc, char** argv) {
         // Unlike pred_prev^-1*pred_cur, this excludes the previous measurement update.
         const Eigen::Matrix4d previous_lidar = preciseMatrix(start.map_T_imu) * preciseMatrix(extrinsic);
         const Eigen::Matrix4d imu_interval = previous_lidar.inverse() * preciseMatrix(scan_end.predicted_map_T_lidar);
-        if (!registration.eventShadow(result,event_config,&pending,&event,&reason,
-            branch_admission ? &imu_interval : nullptr))
+        const bool event_ok = anchored ? registration.anchoredEventShadow(result,event_config,
+            &pending,&event,&reason,imu_interval,&anchor,&anchor_receipt) :
+            registration.eventShadow(result,event_config,&pending,&event,&reason,
+                branch_admission ? &imu_interval : nullptr);
+        if (!event_ok)
           throw std::runtime_error("event_shadow_failed:"+reason);
         shadow=event.shadow;
       }
@@ -231,12 +240,19 @@ int main(int argc, char** argv) {
       const auto corrected = frontend.getState();
       if (corrected.stamp_ns != scan.scan_end_ns) throw std::runtime_error("state_timestamp_mismatch");
       if (!frontend.postconditionsValid(&reason)) throw std::runtime_error("postconditions_failed:" + reason);
+      if (anchored) {
+        const bool stable=update_success && event.mode=="NORMAL" && !event.innovation_trigger &&
+            !event.pending_before && !event.pending_after;
+        paper::settleCoupledAnchor(&anchor,scan.scan_end_ns,
+            preciseMatrix(corrected.map_T_imu)*preciseMatrix(extrinsic),stable,alternative_used);
+      }
       const double total_ms = elapsedMs(frame_start);
       const auto logging_start = Clock::now();
       shadow_log.write(transaction,result,shadow,total_ms,1000.0*(std::clock()-frame_cpu)/CLOCKS_PER_SEC);
       event_log.write(transaction,event,pending);
       if (admission_log) admission_log->write(transaction,experiment_mode,event,
           actual_measurement,alternative_used,update_success,delta);
+      if (anchor_log) anchor_log->write(transaction,anchor_receipt,anchor);
       trajectory << transaction << ',' << scan.scan_end_ns;
       poseColumns(trajectory, scan_end.predicted_map_T_imu); poseColumns(trajectory, corrected.map_T_imu);
       vectorColumns(trajectory, corrected.velocity); vectorColumns(trajectory, corrected.gyro_bias);

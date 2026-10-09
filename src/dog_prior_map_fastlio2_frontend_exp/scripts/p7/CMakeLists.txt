@@ -24,7 +24,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(p7_current_frame_ndt STATIC "${PACKAGE_ROOT}/src/current_frame_ndt.cpp"
   "${PACKAGE_ROOT}/src/coupled_ndt_shadow.cpp" "${PACKAGE_ROOT}/src/coupled_ndt_temporal.cpp"
-  "${PACKAGE_ROOT}/src/registration_geometry.cpp")
+  "${PACKAGE_ROOT}/src/registration_geometry.cpp" "${PACKAGE_ROOT}/src/coupled_ndt_anchor.cpp")
 target_include_directories(p7_current_frame_ndt PUBLIC "${PACKAGE_ROOT}/include" PRIVATE ${PCL_INCLUDE_DIRS})
 target_link_libraries(p7_current_frame_ndt PUBLIC Eigen3::Eigen PRIVATE ${PCL_LIBRARIES})
 target_compile_options(p7_current_frame_ndt PRIVATE ${PCL_DEFINITIONS} -Wall -Wextra -Wpedantic)
@@ -77,6 +77,9 @@ add_test(NAME p10_r3_temporal_test COMMAND p10_r3_temporal_test)
 add_executable(p10_r4_admission_test "${P10_BUDGETED_ROOT}/test_admission.cpp")
 target_link_libraries(p10_r4_admission_test PRIVATE p7_current_frame_ndt Eigen3::Eigen)
 add_test(NAME p10_r4_admission_test COMMAND p10_r4_admission_test)
+add_executable(p10_r5_anchor_test "${P10_BUDGETED_ROOT}/test_anchor.cpp")
+target_link_libraries(p10_r5_anchor_test PRIVATE p7_current_frame_ndt Eigen3::Eigen)
+add_test(NAME p10_r5_anchor_test COMMAND p10_r5_anchor_test)
 set_tests_properties(current_frame_ndt_test p7_replay_io_test p10_r2_shadow_test
   p10_r3_temporal_test p10_r4_admission_test
   PROPERTIES ENVIRONMENT "LD_LIBRARY_PATH=/lib/x86_64-linux-gnu")

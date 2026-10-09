@@ -2,6 +2,7 @@
 
 #include "dog_prior_map_fastlio2_frontend_exp/frontend_types.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_shadow.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp"
 
 #include <cstddef>
 #include <cstdint>
@@ -87,6 +88,9 @@ class CurrentFrameNdtRegistration {
   bool eventShadow(const CurrentFrameNdtResult& nominal, const CoupledEventConfig& config,
       PendingCandidate* pending, CoupledEventResult* result, std::string* reason,
       const Eigen::Matrix4d* causal_imu_interval = nullptr);
+  bool anchoredEventShadow(const CurrentFrameNdtResult&, const CoupledEventConfig&,
+      PendingCandidate*, CoupledEventResult*, std::string*, const Eigen::Matrix4d& causal_imu_interval,
+      CoupledAnchorState*, CoupledAnchorReceipt*);
 
  private:
   bool validateShadowNominal(const CurrentFrameNdtResult& nominal, std::string* reason) const;

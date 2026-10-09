@@ -391,4 +391,21 @@ bool CurrentFrameNdtRegistration::eventShadow(const CurrentFrameNdtResult& nomin
   }
 }
 
+bool CurrentFrameNdtRegistration::anchoredEventShadow(const CurrentFrameNdtResult& nominal,
+    const CoupledEventConfig& config, PendingCandidate* pending, CoupledEventResult* result,
+    std::string* reason, const Eigen::Matrix4d& imu, CoupledAnchorState* anchor, CoupledAnchorReceipt* receipt) {
+  if (reason) reason->clear();
+  if (!result || !pending || !anchor || !receipt) return fail(reason,"null_anchored_shadow_state");
+  if (nominal.effective && !validateShadowNominal(nominal,reason)) return false;
+  try {
+    *result=runAnchoredCoupledNdtShadow(poseCarrier(nominal.raw_map_T_lidar),
+        poseCarrier(nominal.initial_map_T_lidar),nominal.stamp_ns,nominal.source_point_count,
+        nominal.effective,impl_->shadowBackend(),config,pending,imu,anchor,receipt);
+    if (nominal.status==CurrentFrameNdtStatus::INSUFFICIENT_POINTS) result->shadow.complete_ndt_calls=0;
+    return true;
+  } catch (const std::exception& error) {
+    return fail(reason,std::string("anchored_shadow_internal_error:")+error.what());
+  }
+}
+
 }  // namespace dog_prior_map_fastlio2_frontend_exp
