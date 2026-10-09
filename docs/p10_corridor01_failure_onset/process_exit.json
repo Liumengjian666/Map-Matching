@@ -1,0 +1,13 @@
+{
+  "exit_code": 0,
+  "wall_s": 21.526331885019317,
+  "GT_LOADED": false,
+  "command": [
+    "/tmp/p10_corridor_benchmark_build/p10_corridor_failure_onset",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p10_corridor01_failure_onset/common_predictor.csv",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p10_corridor01_failure_onset",
+    "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p10_corridor01_failure_onset/T_imu_lidar.txt"
+  ]
+}

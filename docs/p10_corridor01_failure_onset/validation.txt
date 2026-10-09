@@ -1,0 +1,19 @@
+Build type: Release
+Build command:
+  cmake -S src/dog_prior_map_fastlio2_frontend_exp/scripts/p10/corridor_benchmark -B /tmp/p10_corridor_benchmark_build -DCMAKE_BUILD_TYPE=Release
+  cmake --build /tmp/p10_corridor_benchmark_build --target p10_corridor_failure_onset p10_corridor_benchmark -j2
+  ctest --output-on-failure  # workdir=/tmp/p10_corridor_benchmark_build
+Existing CTest suite: 10/10 PASS
+Paired runner self-test: PASS (corridor_failure_onset_pair_test)
+Python contract/evaluator tests: 4/4 PASS
+One-shot paired real run: exit 0, 346 scans, 346 full nominal align calls
+Source count/hash parity: 346/346 PASS
+Historical nominal status/pose/raw-score replay parity: 346/346 PASS
+No-GT evidence freeze: PASS before post-hoc evaluator opened GT
+JSON/CSV and artifact SHA audit: recorded in artifact_hashes.json
+git diff --check: PASS before commit
+
+Environment note: PCL's libusb symbol resolution depends on the dynamic loader
+search path in this host. The two Corridor01 CTest entries set
+LD_LIBRARY_PATH=/lib/x86_64-linux-gnu explicitly; the paired runner also uses
+that path. This changes only test/runner environment, not NDT implementation.

@@ -7,3 +7,12 @@ add_executable(p10_corridor_benchmark benchmark.cpp)
 target_link_libraries(p10_corridor_benchmark PRIVATE p7_current_frame_ndt p7_replay_io)
 target_compile_options(p10_corridor_benchmark PRIVATE -Wall -Wextra -Wpedantic)
 add_test(NAME corridor_causal_rotation_test COMMAND p10_corridor_benchmark --self-test)
+set_tests_properties(corridor_causal_rotation_test PROPERTIES
+  ENVIRONMENT "LD_LIBRARY_PATH=/lib/x86_64-linux-gnu")
+add_executable(p10_corridor_failure_onset "${CMAKE_CURRENT_SOURCE_DIR}/../corridor_failure_onset/paired_replay.cpp")
+target_include_directories(p10_corridor_failure_onset PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+target_link_libraries(p10_corridor_failure_onset PRIVATE p7_current_frame_ndt p7_replay_io ${USB_10_LIBRARY})
+target_compile_options(p10_corridor_failure_onset PRIVATE -Wall -Wextra -Wpedantic)
+add_test(NAME corridor_failure_onset_pair_test COMMAND p10_corridor_failure_onset --self-test)
+set_tests_properties(corridor_failure_onset_pair_test PROPERTIES
+  ENVIRONMENT "LD_LIBRARY_PATH=/lib/x86_64-linux-gnu")

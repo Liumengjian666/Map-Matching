@@ -1,0 +1,3367 @@
+{
+  "TASK": "P10-CORRIDOR01-FAILURE-ONSET-COUPLED-BENCHMARK",
+  "phase": "POST_HOC_GT_EVALUATION",
+  "GT_LOADED": true,
+  "GT_sha256": "3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03",
+  "frame_count": 346,
+  "transaction_range": [
+    52,
+    397
+  ],
+  "time_origin_ns": 1517157224188979000,
+  "time_origin_source": "frozen P2B evaluation origin",
+  "evaluation_scope": "fixed 0-35 s whole scans; absolute map-to-GT transform is not closed",
+  "alignment": {
+    "method": "one proper rigid Kabsch on Control NOMINAL positions with elapsed_s <=10; same transform reused for every method and timestamp",
+    "translation_scale": 1.0,
+    "R": [
+      [
+        0.9294261243733806,
+        0.34005874494182836,
+        -0.143272919007278
+      ],
+      [
+        0.35293373467404693,
+        -0.9325473558919946,
+        0.07611312598939718
+      ],
+      [
+        -0.10772584769361139,
+        -0.12130737408515903,
+        -0.9867520776422292
+      ]
+    ],
+    "t": [
+      1.676778671266435,
+      -1.275014031146923,
+      -0.4984710112303954
+    ],
+    "prefix_samples": 98
+  },
+  "metrics_semantics": "PREFIX-ALIGNED RELATIVE DRIFT; paired per-frame measurement sequences, not causal trajectories",
+  "methods": {
+    "NOMINAL": {
+      "interpretation": "PREFIX-ALIGNED RELATIVE DRIFT of paired per-frame scan-to-map measurements; NOT a closed-loop trajectory",
+      "translation_m": {
+        "count": 346,
+        "rmse": 36.59562248953926,
+        "p95": 64.65978232007868,
+        "max": 75.67738962947196
+      },
+      "rotation_deg": {
+        "count": 346,
+        "rmse": 177.94972708977338,
+        "p95": 179.89454781619852,
+        "max": 179.99749169323314
+      },
+      "relative_drift_onset_s": {
+        "0.5": {
+          "first_crossing_s": 0.143537266,
+          "first_persistent_crossing_s": 0.143537266
+        },
+        "1.0": {
+          "first_crossing_s": 0.143537266,
+          "first_persistent_crossing_s": 2.4631953070000003
+        },
+        "2.0": {
+          "first_crossing_s": 0.143537266,
+          "first_persistent_crossing_s": 2.5640554260000004
+        }
+      },
+      "pose_jump_count_gt_0p5m_or_10deg": 212,
+      "pose_jumps": [
+        {
+          "transaction_id": 70,
+          "translation_m": 0.7177578461888916,
+          "rotation_deg": 4.878858535913545
+        },
+        {
+          "transaction_id": 74,
+          "translation_m": 2.192091660254944,
+          "rotation_deg": 8.209392315967543
+        },
+        {
+          "transaction_id": 75,
+          "translation_m": 1.660786577034357,
+          "rotation_deg": 4.129103644847363
+        },
+        {
+          "transaction_id": 76,
+          "translation_m": 1.9633030588411562,
+          "rotation_deg": 9.35132487691446
+        },
+        {
+          "transaction_id": 79,
+          "translation_m": 0.7626050927173144,
+          "rotation_deg": 1.2395048390758034
+        },
+        {
+          "transaction_id": 94,
+          "translation_m": 0.5789751470570247,
+          "rotation_deg": 1.4929443231295036
+        },
+        {
+          "transaction_id": 104,
+          "translation_m": 0.5925451823165097,
+          "rotation_deg": 4.123860930415644
+        },
+        {
+          "transaction_id": 107,
+          "translation_m": 1.9781708279477865,
+          "rotation_deg": 11.880923939595919
+        },
+        {
+          "transaction_id": 108,
+          "translation_m": 1.2946406021586252,
+          "rotation_deg": 2.441053620266791
+        },
+        {
+          "transaction_id": 133,
+          "translation_m": 1.0397922580187757,
+          "rotation_deg": 1.1467848004498038
+        },
+        {
+          "transaction_id": 134,
+          "translation_m": 1.8927717186588968,
+          "rotation_deg": 1.3767442466138258
+        },
+        {
+          "transaction_id": 135,
+          "translation_m": 1.891227468480664,
+          "rotation_deg": 0.10282065965477882
+        },
+        {
+          "transaction_id": 136,
+          "translation_m": 1.9673979346753327,
+          "rotation_deg": 0.36988025656493634
+        },
+        {
+          "transaction_id": 137,
+          "translation_m": 1.9765365900341578,
+          "rotation_deg": 1.314583674652483
+        },
+        {
+          "transaction_id": 138,
+          "translation_m": 1.891601870033211,
+          "rotation_deg": 0.671782614294574
+        },
+        {
+          "transaction_id": 139,
+          "translation_m": 1.8886957758384573,
+          "rotation_deg": 0.5332906063980687
+        },
+        {
+          "transaction_id": 140,
+          "translation_m": 1.8930538712064302,
+          "rotation_deg": 0.7395984449996158
+        },
+        {
+          "transaction_id": 141,
+          "translation_m": 1.5177255596506949,
+          "rotation_deg": 0.5773926671570867
+        },
+        {
+          "transaction_id": 142,
+          "translation_m": 1.5218740426553814,
+          "rotation_deg": 0.8615100245260786
+        },
+        {
+          "transaction_id": 143,
+          "translation_m": 1.970925461736766,
+          "rotation_deg": 0.5562711875328873
+        },
+        {
+          "transaction_id": 144,
+          "translation_m": 1.1421880002810223,
+          "rotation_deg": 0.35679372719088936
+        },
+        {
+          "transaction_id": 145,
+          "translation_m": 1.212051751567271,
+          "rotation_deg": 0.3124299670752355
+        },
+        {
+          "transaction_id": 146,
+          "translation_m": 1.2017542806738535,
+          "rotation_deg": 1.4230713477511752
+        },
+        {
+          "transaction_id": 147,
+          "translation_m": 1.2098182700739064,
+          "rotation_deg": 0.6025333158197779
+        },
+        {
+          "transaction_id": 148,
+          "translation_m": 1.2171698393859012,
+          "rotation_deg": 0.5506006225810696
+        },
+        {
+          "transaction_id": 149,
+          "translation_m": 1.1215439176589606,
+          "rotation_deg": 0.33825618539212526
+        },
+        {
+          "transaction_id": 150,
+          "translation_m": 1.5034264635686128,
+          "rotation_deg": 0.43763123580112445
+        },
+        {
+          "transaction_id": 151,
+          "translation_m": 1.5072153827760226,
+          "rotation_deg": 0.5802273563374949
+        },
+        {
+          "transaction_id": 152,
+          "translation_m": 1.9915381339043894,
+          "rotation_deg": 0.3781167407660081
+        },
+        {
+          "transaction_id": 153,
+          "translation_m": 1.4360455948340698,
+          "rotation_deg": 0.4695789280673317
+        },
+        {
+          "transaction_id": 154,
+          "translation_m": 1.4319407163726419,
+          "rotation_deg": 0.4104918848965428
+        },
+        {
+          "transaction_id": 155,
+          "translation_m": 2.0582929057196253,
+          "rotation_deg": 0.327471044516292
+        },
+        {
+          "transaction_id": 156,
+          "translation_m": 0.6844952511524554,
+          "rotation_deg": 0.43085816844980374
+        },
+        {
+          "transaction_id": 157,
+          "translation_m": 1.3721749031886208,
+          "rotation_deg": 0.44555967770512134
+        },
+        {
+          "transaction_id": 158,
+          "translation_m": 1.3886038429317302,
+          "rotation_deg": 0.4755125687390436
+        },
+        {
+          "transaction_id": 159,
+          "translation_m": 1.5176306843798586,
+          "rotation_deg": 0.4612492370051808
+        },
+        {
+          "transaction_id": 160,
+          "translation_m": 1.5491694053871,
+          "rotation_deg": 0.38730388800663457
+        },
+        {
+          "transaction_id": 161,
+          "translation_m": 1.574015969642224,
+          "rotation_deg": 0.7208037878026392
+        },
+        {
+          "transaction_id": 162,
+          "translation_m": 1.5980818628828024,
+          "rotation_deg": 0.7874887953169442
+        },
+        {
+          "transaction_id": 163,
+          "translation_m": 1.5932528350148136,
+          "rotation_deg": 0.5301641241760903
+        },
+        {
+          "transaction_id": 164,
+          "translation_m": 1.5370414904792908,
+          "rotation_deg": 1.0954602543348977
+        },
+        {
+          "transaction_id": 165,
+          "translation_m": 1.528418995796403,
+          "rotation_deg": 4.289175259759876
+        },
+        {
+          "transaction_id": 166,
+          "translation_m": 0.8791115849717671,
+          "rotation_deg": 4.369803910879055
+        },
+        {
+          "transaction_id": 167,
+          "translation_m": 2.3069354873819288,
+          "rotation_deg": 3.2176235039383148
+        },
+        {
+          "transaction_id": 168,
+          "translation_m": 1.59638465843348,
+          "rotation_deg": 1.2245746382198095
+        },
+        {
+          "transaction_id": 169,
+          "translation_m": 1.3671056411636624,
+          "rotation_deg": 2.725830309720007
+        },
+        {
+          "transaction_id": 170,
+          "translation_m": 1.3391400660405737,
+          "rotation_deg": 2.2388414998188546
+        },
+        {
+          "transaction_id": 171,
+          "translation_m": 1.3383646808257443,
+          "rotation_deg": 0.49580587483403255
+        },
+        {
+          "transaction_id": 172,
+          "translation_m": 1.3380431502900163,
+          "rotation_deg": 0.32861457028690655
+        },
+        {
+          "transaction_id": 173,
+          "translation_m": 1.3199631003505983,
+          "rotation_deg": 2.30700893198029
+        },
+        {
+          "transaction_id": 174,
+          "translation_m": 1.1057805659349187,
+          "rotation_deg": 2.312973439079045
+        },
+        {
+          "transaction_id": 175,
+          "translation_m": 1.1088715238304339,
+          "rotation_deg": 3.8528110916397105
+        },
+        {
+          "transaction_id": 176,
+          "translation_m": 1.1101859427555023,
+          "rotation_deg": 2.4149538124666177
+        },
+        {
+          "transaction_id": 177,
+          "translation_m": 1.0959456357825612,
+          "rotation_deg": 0.5492735705185078
+        },
+        {
+          "transaction_id": 178,
+          "translation_m": 0.7135477688047557,
+          "rotation_deg": 0.8928976498550162
+        },
+        {
+          "transaction_id": 179,
+          "translation_m": 0.5978821497510964,
+          "rotation_deg": 2.0796952822236556
+        },
+        {
+          "transaction_id": 180,
+          "translation_m": 0.5595040608077653,
+          "rotation_deg": 1.1625666779498394
+        },
+        {
+          "transaction_id": 181,
+          "translation_m": 0.5603357446032026,
+          "rotation_deg": 0.5861711245406186
+        },
+        {
+          "transaction_id": 182,
+          "translation_m": 0.5615052139590505,
+          "rotation_deg": 0.5959999810227915
+        },
+        {
+          "transaction_id": 183,
+          "translation_m": 0.5517042452146635,
+          "rotation_deg": 0.19557377457595135
+        },
+        {
+          "transaction_id": 184,
+          "translation_m": 0.6085696240035519,
+          "rotation_deg": 0.34632571882813057
+        },
+        {
+          "transaction_id": 185,
+          "translation_m": 0.6122324736716515,
+          "rotation_deg": 0.5302514739481715
+        },
+        {
+          "transaction_id": 186,
+          "translation_m": 0.8043744020616,
+          "rotation_deg": 0.33044708616668567
+        },
+        {
+          "transaction_id": 187,
+          "translation_m": 0.7816508142455435,
+          "rotation_deg": 0.2711163118592639
+        },
+        {
+          "transaction_id": 188,
+          "translation_m": 0.7761932200117959,
+          "rotation_deg": 0.6864827806964992
+        },
+        {
+          "transaction_id": 189,
+          "translation_m": 0.7771618870726017,
+          "rotation_deg": 0.4627518077905098
+        },
+        {
+          "transaction_id": 190,
+          "translation_m": 0.7807139872599632,
+          "rotation_deg": 0.13740376608707952
+        },
+        {
+          "transaction_id": 191,
+          "translation_m": 0.7782569553845012,
+          "rotation_deg": 0.21926432573525315
+        },
+        {
+          "transaction_id": 192,
+          "translation_m": 0.7869451827229376,
+          "rotation_deg": 0.5010533544003954
+        },
+        {
+          "transaction_id": 193,
+          "translation_m": 0.7834004664442792,
+          "rotation_deg": 0.6563001586239464
+        },
+        {
+          "transaction_id": 241,
+          "translation_m": 0.608425902439749,
+          "rotation_deg": 2.5213869063776984
+        },
+        {
+          "transaction_id": 242,
+          "translation_m": 0.6037380997107574,
+          "rotation_deg": 0.913846034271398
+        },
+        {
+          "transaction_id": 243,
+          "translation_m": 0.7251139157568989,
+          "rotation_deg": 0.6082373296885125
+        },
+        {
+          "transaction_id": 244,
+          "translation_m": 0.7189849520716016,
+          "rotation_deg": 2.160736068128239
+        },
+        {
+          "transaction_id": 245,
+          "translation_m": 0.7138567217712959,
+          "rotation_deg": 3.4032496888197827
+        },
+        {
+          "transaction_id": 246,
+          "translation_m": 0.7169233116693431,
+          "rotation_deg": 2.080126788616703
+        },
+        {
+          "transaction_id": 247,
+          "translation_m": 0.7995092833478884,
+          "rotation_deg": 0.7011835334596024
+        },
+        {
+          "transaction_id": 248,
+          "translation_m": 0.8007001048776238,
+          "rotation_deg": 0.4086092600839436
+        },
+        {
+          "transaction_id": 249,
+          "translation_m": 0.6258967139017437,
+          "rotation_deg": 1.0835321320588578
+        },
+        {
+          "transaction_id": 250,
+          "translation_m": 0.624705283818897,
+          "rotation_deg": 0.9755492891392928
+        },
+        {
+          "transaction_id": 251,
+          "translation_m": 0.6304582118745993,
+          "rotation_deg": 0.7205360512973348
+        },
+        {
+          "transaction_id": 252,
+          "translation_m": 0.6308754109028479,
+          "rotation_deg": 0.6023361596877327
+        },
+        {
+          "transaction_id": 261,
+          "translation_m": 0.5804858673583048,
+          "rotation_deg": 0.31237661697610847
+        },
+        {
+          "transaction_id": 262,
+          "translation_m": 0.5275257803940316,
+          "rotation_deg": 0.7544958790987825
+        },
+        {
+          "transaction_id": 265,
+          "translation_m": 0.592641450729328,
+          "rotation_deg": 0.15171577584981807
+        },
+        {
+          "transaction_id": 266,
+          "translation_m": 0.5869699327100645,
+          "rotation_deg": 0.4574329536969594
+        },
+        {
+          "transaction_id": 267,
+          "translation_m": 0.5075123597880515,
+          "rotation_deg": 0.36304735051236586
+        },
+        {
+          "transaction_id": 268,
+          "translation_m": 0.502819731898592,
+          "rotation_deg": 0.3325653856266537
+        },
+        {
+          "transaction_id": 269,
+          "translation_m": 0.506106152917026,
+          "rotation_deg": 0.23366684219031936
+        },
+        {
+          "transaction_id": 270,
+          "translation_m": 0.5066754933652805,
+          "rotation_deg": 0.5344600642835222
+        },
+        {
+          "transaction_id": 271,
+          "translation_m": 0.5243802344204456,
+          "rotation_deg": 0.16054959414333497
+        },
+        {
+          "transaction_id": 272,
+          "translation_m": 0.5026461790108168,
+          "rotation_deg": 0.4259052274831366
+        },
+        {
+          "transaction_id": 273,
+          "translation_m": 0.5032612192099342,
+          "rotation_deg": 0.32160595651537927
+        },
+        {
+          "transaction_id": 274,
+          "translation_m": 0.5000319896618945,
+          "rotation_deg": 0.44439944769691
+        },
+        {
+          "transaction_id": 278,
+          "translation_m": 0.5088434210049212,
+          "rotation_deg": 0.5429715371788225
+        },
+        {
+          "transaction_id": 279,
+          "translation_m": 0.9265150357814936,
+          "rotation_deg": 0.28545602994401675
+        },
+        {
+          "transaction_id": 280,
+          "translation_m": 0.9302654597677257,
+          "rotation_deg": 0.24408162552541543
+        },
+        {
+          "transaction_id": 281,
+          "translation_m": 0.927055284756084,
+          "rotation_deg": 0.28944224216458386
+        },
+        {
+          "transaction_id": 282,
+          "translation_m": 1.2766465072007742,
+          "rotation_deg": 0.6960946739964645
+        },
+        {
+          "transaction_id": 283,
+          "translation_m": 1.3237622480087983,
+          "rotation_deg": 0.6528611317525571
+        },
+        {
+          "transaction_id": 284,
+          "translation_m": 1.329035079257129,
+          "rotation_deg": 0.36019012537749556
+        },
+        {
+          "transaction_id": 285,
+          "translation_m": 1.338709406765186,
+          "rotation_deg": 0.4756726592181858
+        },
+        {
+          "transaction_id": 286,
+          "translation_m": 1.34330753953657,
+          "rotation_deg": 0.25046177810671066
+        },
+        {
+          "transaction_id": 287,
+          "translation_m": 1.3498425470077677,
+          "rotation_deg": 0.1248119516859832
+        },
+        {
+          "transaction_id": 288,
+          "translation_m": 1.351998736671242,
+          "rotation_deg": 0.25542227861113515
+        },
+        {
+          "transaction_id": 289,
+          "translation_m": 1.765643716220658,
+          "rotation_deg": 0.5943929452394913
+        },
+        {
+          "transaction_id": 290,
+          "translation_m": 1.9575696677300611,
+          "rotation_deg": 0.7061523136690504
+        },
+        {
+          "transaction_id": 291,
+          "translation_m": 1.9875963084323616,
+          "rotation_deg": 0.4613848196265684
+        },
+        {
+          "transaction_id": 292,
+          "translation_m": 1.9922029770453478,
+          "rotation_deg": 0.3231303589782596
+        },
+        {
+          "transaction_id": 293,
+          "translation_m": 1.9965028274587728,
+          "rotation_deg": 0.3269373497756441
+        },
+        {
+          "transaction_id": 294,
+          "translation_m": 1.991545315255532,
+          "rotation_deg": 0.43296804570892156
+        },
+        {
+          "transaction_id": 295,
+          "translation_m": 1.9121910589034254,
+          "rotation_deg": 0.4631710534525128
+        },
+        {
+          "transaction_id": 296,
+          "translation_m": 1.726850622671643,
+          "rotation_deg": 0.6354204260097478
+        },
+        {
+          "transaction_id": 297,
+          "translation_m": 1.7177073323916798,
+          "rotation_deg": 0.25770274896758605
+        },
+        {
+          "transaction_id": 298,
+          "translation_m": 1.7232466720801056,
+          "rotation_deg": 0.19368107607817633
+        },
+        {
+          "transaction_id": 299,
+          "translation_m": 1.732073853806209,
+          "rotation_deg": 0.4383821167278624
+        },
+        {
+          "transaction_id": 300,
+          "translation_m": 1.731140961600976,
+          "rotation_deg": 0.5990474107216102
+        },
+        {
+          "transaction_id": 301,
+          "translation_m": 1.731883565306151,
+          "rotation_deg": 0.3277536084545696
+        },
+        {
+          "transaction_id": 302,
+          "translation_m": 1.733827444076024,
+          "rotation_deg": 0.25448246058006385
+        },
+        {
+          "transaction_id": 303,
+          "translation_m": 1.7218566897535628,
+          "rotation_deg": 0.7295179771179287
+        },
+        {
+          "transaction_id": 304,
+          "translation_m": 1.718880200303367,
+          "rotation_deg": 2.2822678362707394
+        },
+        {
+          "transaction_id": 305,
+          "translation_m": 1.7181723475725807,
+          "rotation_deg": 5.4866231998751305
+        },
+        {
+          "transaction_id": 306,
+          "translation_m": 1.7320399735938983,
+          "rotation_deg": 4.253097085778474
+        },
+        {
+          "transaction_id": 307,
+          "translation_m": 1.5960055034162197,
+          "rotation_deg": 1.7472412489516307
+        },
+        {
+          "transaction_id": 308,
+          "translation_m": 1.598792928148861,
+          "rotation_deg": 1.1870428437975062
+        },
+        {
+          "transaction_id": 309,
+          "translation_m": 1.6003810257880198,
+          "rotation_deg": 1.1206994975329942
+        },
+        {
+          "transaction_id": 310,
+          "translation_m": 1.6026318182671413,
+          "rotation_deg": 0.7196798659219982
+        },
+        {
+          "transaction_id": 311,
+          "translation_m": 1.5984832752802167,
+          "rotation_deg": 0.12837196075382767
+        },
+        {
+          "transaction_id": 312,
+          "translation_m": 1.1515470705182953,
+          "rotation_deg": 2.2144523088155927
+        },
+        {
+          "transaction_id": 313,
+          "translation_m": 2.0433087030782047,
+          "rotation_deg": 5.553595827733675
+        },
+        {
+          "transaction_id": 314,
+          "translation_m": 1.5607410587050046,
+          "rotation_deg": 5.436799993544019
+        },
+        {
+          "transaction_id": 315,
+          "translation_m": 1.5787488228166664,
+          "rotation_deg": 1.1147846894047038
+        },
+        {
+          "transaction_id": 316,
+          "translation_m": 1.92358630206415,
+          "rotation_deg": 2.387122150361827
+        },
+        {
+          "transaction_id": 317,
+          "translation_m": 1.922891085952898,
+          "rotation_deg": 3.7620436015877963
+        },
+        {
+          "transaction_id": 318,
+          "translation_m": 1.9146548447620688,
+          "rotation_deg": 2.460325374423957
+        },
+        {
+          "transaction_id": 319,
+          "translation_m": 0.5835109959016178,
+          "rotation_deg": 1.2758940805800154
+        },
+        {
+          "transaction_id": 320,
+          "translation_m": 2.172465168191723,
+          "rotation_deg": 1.8460987224638914
+        },
+        {
+          "transaction_id": 321,
+          "translation_m": 2.976013515585155,
+          "rotation_deg": 0.640471435703438
+        },
+        {
+          "transaction_id": 322,
+          "translation_m": 1.2869980709253086,
+          "rotation_deg": 0.7058732706164803
+        },
+        {
+          "transaction_id": 323,
+          "translation_m": 2.6548475722408575,
+          "rotation_deg": 0.4869359183475048
+        },
+        {
+          "transaction_id": 324,
+          "translation_m": 1.5130223960078968,
+          "rotation_deg": 1.465103733824352
+        },
+        {
+          "transaction_id": 326,
+          "translation_m": 0.5300453360948325,
+          "rotation_deg": 0.44171711024455435
+        },
+        {
+          "transaction_id": 327,
+          "translation_m": 1.3701964077138216,
+          "rotation_deg": 0.6241396073322432
+        },
+        {
+          "transaction_id": 329,
+          "translation_m": 1.264089227933612,
+          "rotation_deg": 0.18837371162740393
+        },
+        {
+          "transaction_id": 330,
+          "translation_m": 1.2699862895583476,
+          "rotation_deg": 0.6946239947366353
+        },
+        {
+          "transaction_id": 331,
+          "translation_m": 1.3967702122437606,
+          "rotation_deg": 1.2608672644651742
+        },
+        {
+          "transaction_id": 332,
+          "translation_m": 2.4724220078623174,
+          "rotation_deg": 1.4506433076219747
+        },
+        {
+          "transaction_id": 333,
+          "translation_m": 0.6271566717443728,
+          "rotation_deg": 0.6085946811972445
+        },
+        {
+          "transaction_id": 334,
+          "translation_m": 2.363556714496274,
+          "rotation_deg": 0.7834803802142585
+        },
+        {
+          "transaction_id": 335,
+          "translation_m": 2.358700216002213,
+          "rotation_deg": 1.92574652549153
+        },
+        {
+          "transaction_id": 336,
+          "translation_m": 2.364284203302931,
+          "rotation_deg": 1.307450300830153
+        },
+        {
+          "transaction_id": 337,
+          "translation_m": 2.3193895481636027,
+          "rotation_deg": 1.114451719266414
+        },
+        {
+          "transaction_id": 338,
+          "translation_m": 2.5776753334356837,
+          "rotation_deg": 0.7836974139590986
+        },
+        {
+          "transaction_id": 339,
+          "translation_m": 2.5717441230489015,
+          "rotation_deg": 0.23809150447836652
+        },
+        {
+          "transaction_id": 340,
+          "translation_m": 2.855618787164362,
+          "rotation_deg": 0.8462804053841653
+        },
+        {
+          "transaction_id": 341,
+          "translation_m": 2.957811598070095,
+          "rotation_deg": 0.3897135235959077
+        },
+        {
+          "transaction_id": 342,
+          "translation_m": 3.063387974634869,
+          "rotation_deg": 2.246883218655298
+        },
+        {
+          "transaction_id": 343,
+          "translation_m": 3.059674173598886,
+          "rotation_deg": 4.439464389484205
+        },
+        {
+          "transaction_id": 344,
+          "translation_m": 3.073789556963297,
+          "rotation_deg": 4.970997132029092
+        },
+        {
+          "transaction_id": 345,
+          "translation_m": 3.0873118866643727,
+          "rotation_deg": 1.359282595637318
+        },
+        {
+          "transaction_id": 346,
+          "translation_m": 3.0927716323941477,
+          "rotation_deg": 0.6269490589707413
+        },
+        {
+          "transaction_id": 347,
+          "translation_m": 3.098739331556893,
+          "rotation_deg": 1.6491984425765844
+        },
+        {
+          "transaction_id": 348,
+          "translation_m": 3.935647489561853,
+          "rotation_deg": 1.292705365769376
+        },
+        {
+          "transaction_id": 349,
+          "translation_m": 2.270909913623527,
+          "rotation_deg": 2.4112930126084877
+        },
+        {
+          "transaction_id": 350,
+          "translation_m": 3.085236340736625,
+          "rotation_deg": 2.4622360013582507
+        },
+        {
+          "transaction_id": 351,
+          "translation_m": 2.552843544331866,
+          "rotation_deg": 1.3292263567121472
+        },
+        {
+          "transaction_id": 352,
+          "translation_m": 2.5378928912028953,
+          "rotation_deg": 1.331717854442759
+        },
+        {
+          "transaction_id": 353,
+          "translation_m": 2.5475299254879,
+          "rotation_deg": 2.0359951788926454
+        },
+        {
+          "transaction_id": 354,
+          "translation_m": 2.5468033402349035,
+          "rotation_deg": 4.015878966367264
+        },
+        {
+          "transaction_id": 355,
+          "translation_m": 2.5574949910126543,
+          "rotation_deg": 7.31842918929489
+        },
+        {
+          "transaction_id": 356,
+          "translation_m": 2.5602854719720947,
+          "rotation_deg": 7.375503462060326
+        },
+        {
+          "transaction_id": 357,
+          "translation_m": 2.6601222414818873,
+          "rotation_deg": 2.5427580785959885
+        },
+        {
+          "transaction_id": 358,
+          "translation_m": 2.6410287666193986,
+          "rotation_deg": 6.677081399536702
+        },
+        {
+          "transaction_id": 359,
+          "translation_m": 2.611453705406469,
+          "rotation_deg": 8.65246518105137
+        },
+        {
+          "transaction_id": 360,
+          "translation_m": 2.5399851493584578,
+          "rotation_deg": 8.155770886278875
+        },
+        {
+          "transaction_id": 361,
+          "translation_m": 2.5432762980541233,
+          "rotation_deg": 9.104411693438806
+        },
+        {
+          "transaction_id": 362,
+          "translation_m": 2.5274397352306712,
+          "rotation_deg": 8.073941010714547
+        },
+        {
+          "transaction_id": 363,
+          "translation_m": 2.5172008965899964,
+          "rotation_deg": 5.293056035357767
+        },
+        {
+          "transaction_id": 364,
+          "translation_m": 2.513468398563967,
+          "rotation_deg": 4.0101258689634705
+        },
+        {
+          "transaction_id": 365,
+          "translation_m": 2.5144742505619186,
+          "rotation_deg": 1.8235623631056295
+        },
+        {
+          "transaction_id": 366,
+          "translation_m": 2.5128239515653408,
+          "rotation_deg": 2.001703595918359
+        },
+        {
+          "transaction_id": 367,
+          "translation_m": 2.5052153639174133,
+          "rotation_deg": 2.1142713149793435
+        },
+        {
+          "transaction_id": 368,
+          "translation_m": 2.5071376278661366,
+          "rotation_deg": 2.100427360994747
+        },
+        {
+          "transaction_id": 369,
+          "translation_m": 2.5265920603063976,
+          "rotation_deg": 1.0086121255335012
+        },
+        {
+          "transaction_id": 370,
+          "translation_m": 2.5139716942768415,
+          "rotation_deg": 2.9241887825271937
+        },
+        {
+          "transaction_id": 371,
+          "translation_m": 2.534265956566006,
+          "rotation_deg": 4.315549868764952
+        },
+        {
+          "transaction_id": 372,
+          "translation_m": 2.5447545468278987,
+          "rotation_deg": 3.3598685689769296
+        },
+        {
+          "transaction_id": 373,
+          "translation_m": 2.47758844918228,
+          "rotation_deg": 2.1331150613937524
+        },
+        {
+          "transaction_id": 374,
+          "translation_m": 2.2948979873735293,
+          "rotation_deg": 1.9440763601858748
+        },
+        {
+          "transaction_id": 375,
+          "translation_m": 2.289501757753162,
+          "rotation_deg": 0.6598649914610222
+        },
+        {
+          "transaction_id": 376,
+          "translation_m": 2.28464888167472,
+          "rotation_deg": 1.5714348840462276
+        },
+        {
+          "transaction_id": 377,
+          "translation_m": 3.156075440509165,
+          "rotation_deg": 4.615432969063855
+        },
+        {
+          "transaction_id": 378,
+          "translation_m": 2.462672690902585,
+          "rotation_deg": 5.549598007311273
+        },
+        {
+          "transaction_id": 379,
+          "translation_m": 1.2462282211400828,
+          "rotation_deg": 5.538623245044584
+        },
+        {
+          "transaction_id": 380,
+          "translation_m": 1.98939339171798,
+          "rotation_deg": 5.505635608390971
+        },
+        {
+          "transaction_id": 381,
+          "translation_m": 1.6618696828986033,
+          "rotation_deg": 2.5642819480773675
+        },
+        {
+          "transaction_id": 382,
+          "translation_m": 1.6702318351200942,
+          "rotation_deg": 2.2717710868183394
+        },
+        {
+          "transaction_id": 383,
+          "translation_m": 1.70360741680237,
+          "rotation_deg": 0.5949908126392155
+        },
+        {
+          "transaction_id": 384,
+          "translation_m": 1.6964252404254494,
+          "rotation_deg": 0.13504292972428902
+        },
+        {
+          "transaction_id": 385,
+          "translation_m": 2.5467321226329642,
+          "rotation_deg": 0.2792671328629458
+        },
+        {
+          "transaction_id": 386,
+          "translation_m": 0.851346132179036,
+          "rotation_deg": 0.4690586431452989
+        },
+        {
+          "transaction_id": 387,
+          "translation_m": 1.708324663598607,
+          "rotation_deg": 0.2857042843212152
+        },
+        {
+          "transaction_id": 388,
+          "translation_m": 2.1185815671141084,
+          "rotation_deg": 1.5293401398762358
+        },
+        {
+          "transaction_id": 389,
+          "translation_m": 2.0443830408384303,
+          "rotation_deg": 2.931583251744309
+        },
+        {
+          "transaction_id": 390,
+          "translation_m": 2.0455309161648105,
+          "rotation_deg": 2.5931757492055962
+        },
+        {
+          "transaction_id": 391,
+          "translation_m": 2.0855085462465284,
+          "rotation_deg": 0.982018315218547
+        },
+        {
+          "transaction_id": 392,
+          "translation_m": 2.042977827571686,
+          "rotation_deg": 0.9147552908057519
+        },
+        {
+          "transaction_id": 393,
+          "translation_m": 2.0219935391559405,
+          "rotation_deg": 1.375930493658176
+        },
+        {
+          "transaction_id": 394,
+          "translation_m": 1.5764447185824713,
+          "rotation_deg": 1.7401277808730717
+        },
+        {
+          "transaction_id": 395,
+          "translation_m": 1.5737455496609425,
+          "rotation_deg": 2.2030008692240486
+        },
+        {
+          "transaction_id": 396,
+          "translation_m": 0.9544452370518106,
+          "rotation_deg": 2.0591716401159506
+        },
+        {
+          "transaction_id": 397,
+          "translation_m": 1.5188204606019597,
+          "rotation_deg": 1.9668426813045259
+        }
+      ],
+      "strict_nominal_ndt_success": 332,
+      "strict_nominal_ndt_total": 346,
+      "candidate_recommended": null
+    },
+    "WEAK_ONLY": {
+      "interpretation": "PREFIX-ALIGNED RELATIVE DRIFT of paired per-frame scan-to-map measurements; NOT a closed-loop trajectory",
+      "translation_m": {
+        "count": 346,
+        "rmse": 36.60335953880215,
+        "p95": 64.65978231969895,
+        "max": 75.67738962931114
+      },
+      "rotation_deg": {
+        "count": 346,
+        "rmse": 177.95647028151447,
+        "p95": 179.89164432691268,
+        "max": 180.0
+      },
+      "relative_drift_onset_s": {
+        "0.5": {
+          "first_crossing_s": 0.143537266,
+          "first_persistent_crossing_s": 0.143537266
+        },
+        "1.0": {
+          "first_crossing_s": 0.143537266,
+          "first_persistent_crossing_s": 2.4631953070000003
+        },
+        "2.0": {
+          "first_crossing_s": 0.143537266,
+          "first_persistent_crossing_s": 2.5640554260000004
+        }
+      },
+      "pose_jump_count_gt_0p5m_or_10deg": 212,
+      "pose_jumps": [
+        {
+          "transaction_id": 70,
+          "translation_m": 0.5875347542156328,
+          "rotation_deg": 4.833016258199658
+        },
+        {
+          "transaction_id": 74,
+          "translation_m": 2.1920916603738947,
+          "rotation_deg": 8.209385389090835
+        },
+        {
+          "transaction_id": 75,
+          "translation_m": 1.6607865764585648,
+          "rotation_deg": 4.129113109029643
+        },
+        {
+          "transaction_id": 76,
+          "translation_m": 1.9633030582844795,
+          "rotation_deg": 9.351333373908078
+        },
+        {
+          "transaction_id": 79,
+          "translation_m": 0.7626050930460105,
+          "rotation_deg": 1.2395147558964925
+        },
+        {
+          "transaction_id": 94,
+          "translation_m": 0.5406220998810476,
+          "rotation_deg": 1.9522662172678906
+        },
+        {
+          "transaction_id": 104,
+          "translation_m": 0.5925451813384901,
+          "rotation_deg": 4.123890021948067
+        },
+        {
+          "transaction_id": 107,
+          "translation_m": 1.9781708275547245,
+          "rotation_deg": 11.880923877320392
+        },
+        {
+          "transaction_id": 108,
+          "translation_m": 1.294640601753775,
+          "rotation_deg": 2.4410154631634216
+        },
+        {
+          "transaction_id": 133,
+          "translation_m": 0.8898797129476403,
+          "rotation_deg": 0.9979314125481473
+        },
+        {
+          "transaction_id": 134,
+          "translation_m": 1.8926560109437018,
+          "rotation_deg": 1.1938798239313044
+        },
+        {
+          "transaction_id": 135,
+          "translation_m": 2.0412294259323542,
+          "rotation_deg": 0.11884128136223648
+        },
+        {
+          "transaction_id": 136,
+          "translation_m": 1.9673979351142137,
+          "rotation_deg": 0.3698895369559983
+        },
+        {
+          "transaction_id": 137,
+          "translation_m": 1.9765365899822849,
+          "rotation_deg": 1.3146210870094908
+        },
+        {
+          "transaction_id": 138,
+          "translation_m": 1.8916018687714349,
+          "rotation_deg": 0.6717219213512031
+        },
+        {
+          "transaction_id": 139,
+          "translation_m": 1.8886957799532018,
+          "rotation_deg": 0.5333089388687384
+        },
+        {
+          "transaction_id": 140,
+          "translation_m": 1.8930538690000942,
+          "rotation_deg": 0.7395912903374157
+        },
+        {
+          "transaction_id": 141,
+          "translation_m": 1.3678083650163115,
+          "rotation_deg": 0.549337665342376
+        },
+        {
+          "transaction_id": 142,
+          "translation_m": 1.6718823788509554,
+          "rotation_deg": 0.8790958639218107
+        },
+        {
+          "transaction_id": 143,
+          "translation_m": 1.8209512805771677,
+          "rotation_deg": 0.5166862658295504
+        },
+        {
+          "transaction_id": 144,
+          "translation_m": 1.1423700662919702,
+          "rotation_deg": 0.5343796186383551
+        },
+        {
+          "transaction_id": 145,
+          "translation_m": 1.3617292516419373,
+          "rotation_deg": 0.46053421058325417
+        },
+        {
+          "transaction_id": 146,
+          "translation_m": 1.2017542836365342,
+          "rotation_deg": 1.4230886657050774
+        },
+        {
+          "transaction_id": 147,
+          "translation_m": 1.209818270851794,
+          "rotation_deg": 0.6028230064143746
+        },
+        {
+          "transaction_id": 148,
+          "translation_m": 1.2171698364448322,
+          "rotation_deg": 0.5508628350644105
+        },
+        {
+          "transaction_id": 149,
+          "translation_m": 1.1215439178911621,
+          "rotation_deg": 0.33825112216900544
+        },
+        {
+          "transaction_id": 150,
+          "translation_m": 1.3534561265145477,
+          "rotation_deg": 0.41607030012613067
+        },
+        {
+          "transaction_id": 151,
+          "translation_m": 1.6571888662871408,
+          "rotation_deg": 0.567470133844593
+        },
+        {
+          "transaction_id": 152,
+          "translation_m": 1.9915381370691658,
+          "rotation_deg": 0.3780364919265828
+        },
+        {
+          "transaction_id": 153,
+          "translation_m": 1.436045595072369,
+          "rotation_deg": 0.4695757926105745
+        },
+        {
+          "transaction_id": 154,
+          "translation_m": 1.431940715857448,
+          "rotation_deg": 0.4106828079516046
+        },
+        {
+          "transaction_id": 155,
+          "translation_m": 2.0582929045829155,
+          "rotation_deg": 0.3277059186082471
+        },
+        {
+          "transaction_id": 156,
+          "translation_m": 0.6844952500296201,
+          "rotation_deg": 0.43100554303135935
+        },
+        {
+          "transaction_id": 157,
+          "translation_m": 1.372174903461193,
+          "rotation_deg": 0.44565180594211085
+        },
+        {
+          "transaction_id": 158,
+          "translation_m": 1.3886038451548006,
+          "rotation_deg": 0.47564302555340765
+        },
+        {
+          "transaction_id": 159,
+          "translation_m": 1.4312677332436101,
+          "rotation_deg": 0.5519539005083232
+        },
+        {
+          "transaction_id": 160,
+          "translation_m": 1.6355393441716035,
+          "rotation_deg": 0.3979868207762989
+        },
+        {
+          "transaction_id": 161,
+          "translation_m": 1.5740159703743606,
+          "rotation_deg": 0.7209234240890164
+        },
+        {
+          "transaction_id": 162,
+          "translation_m": 1.5980818593615895,
+          "rotation_deg": 0.7874504547330295
+        },
+        {
+          "transaction_id": 163,
+          "translation_m": 1.5932528339457943,
+          "rotation_deg": 0.5300026624943454
+        },
+        {
+          "transaction_id": 164,
+          "translation_m": 1.5370414936396488,
+          "rotation_deg": 1.095440996951627
+        },
+        {
+          "transaction_id": 165,
+          "translation_m": 1.5284189953197311,
+          "rotation_deg": 4.2891692482126835
+        },
+        {
+          "transaction_id": 166,
+          "translation_m": 0.8791115834368376,
+          "rotation_deg": 4.369785015936924
+        },
+        {
+          "transaction_id": 167,
+          "translation_m": 2.306935487904366,
+          "rotation_deg": 3.2176022687786383
+        },
+        {
+          "transaction_id": 168,
+          "translation_m": 1.5963846597296003,
+          "rotation_deg": 1.2245238142372685
+        },
+        {
+          "transaction_id": 169,
+          "translation_m": 1.5039366464263646,
+          "rotation_deg": 2.7531056307935198
+        },
+        {
+          "transaction_id": 170,
+          "translation_m": 1.2023864266320123,
+          "rotation_deg": 2.2238434766237867
+        },
+        {
+          "transaction_id": 171,
+          "translation_m": 1.3383646796379274,
+          "rotation_deg": 0.49577791452209513
+        },
+        {
+          "transaction_id": 172,
+          "translation_m": 1.3380431513978508,
+          "rotation_deg": 0.32817900730544486
+        },
+        {
+          "transaction_id": 173,
+          "translation_m": 1.3199630993192482,
+          "rotation_deg": 2.30697384240181
+        },
+        {
+          "transaction_id": 174,
+          "translation_m": 1.255680875791718,
+          "rotation_deg": 2.3213403800986314
+        },
+        {
+          "transaction_id": 175,
+          "translation_m": 0.9588817972324991,
+          "rotation_deg": 3.837713111050521
+        },
+        {
+          "transaction_id": 176,
+          "translation_m": 1.110185942679249,
+          "rotation_deg": 2.4149635563799534
+        },
+        {
+          "transaction_id": 177,
+          "translation_m": 1.095945635358614,
+          "rotation_deg": 0.5491552302899454
+        },
+        {
+          "transaction_id": 178,
+          "translation_m": 0.8635148012901444,
+          "rotation_deg": 0.8980401467375793
+        },
+        {
+          "transaction_id": 180,
+          "translation_m": 0.5595040610903573,
+          "rotation_deg": 1.1626388062419195
+        },
+        {
+          "transaction_id": 181,
+          "translation_m": 0.560335744533102,
+          "rotation_deg": 0.5863243778967221
+        },
+        {
+          "transaction_id": 182,
+          "translation_m": 0.5615052116241561,
+          "rotation_deg": 0.5959302070298758
+        },
+        {
+          "transaction_id": 183,
+          "translation_m": 0.5517042448910261,
+          "rotation_deg": 0.1950491220052418
+        },
+        {
+          "transaction_id": 184,
+          "translation_m": 0.6085696274773511,
+          "rotation_deg": 0.3463728014066656
+        },
+        {
+          "transaction_id": 185,
+          "translation_m": 0.6122324735852854,
+          "rotation_deg": 0.5302972470666575
+        },
+        {
+          "transaction_id": 186,
+          "translation_m": 0.9543634307601699,
+          "rotation_deg": 0.329298141772546
+        },
+        {
+          "transaction_id": 187,
+          "translation_m": 0.6316895461863712,
+          "rotation_deg": 0.28710910434162235
+        },
+        {
+          "transaction_id": 188,
+          "translation_m": 0.7761932242824016,
+          "rotation_deg": 0.6864842674440292
+        },
+        {
+          "transaction_id": 189,
+          "translation_m": 0.7771618856002367,
+          "rotation_deg": 0.4628740838935924
+        },
+        {
+          "transaction_id": 190,
+          "translation_m": 0.78071398740387,
+          "rotation_deg": 0.13707299005175316
+        },
+        {
+          "transaction_id": 191,
+          "translation_m": 0.7782569547646245,
+          "rotation_deg": 0.2192201123849599
+        },
+        {
+          "transaction_id": 192,
+          "translation_m": 0.7869451842028167,
+          "rotation_deg": 0.5011754350899429
+        },
+        {
+          "transaction_id": 193,
+          "translation_m": 0.7834004642475801,
+          "rotation_deg": 0.6564357479177209
+        },
+        {
+          "transaction_id": 194,
+          "translation_m": 0.6325846823765034,
+          "rotation_deg": 0.6678313581244802
+        },
+        {
+          "transaction_id": 240,
+          "translation_m": 0.5045686982501554,
+          "rotation_deg": 4.5364055407675545
+        },
+        {
+          "transaction_id": 242,
+          "translation_m": 0.7534718029025061,
+          "rotation_deg": 0.9315124145961087
+        },
+        {
+          "transaction_id": 243,
+          "translation_m": 0.5753917531901032,
+          "rotation_deg": 0.609823116362009
+        },
+        {
+          "transaction_id": 244,
+          "translation_m": 0.8687441372550887,
+          "rotation_deg": 2.1477760929373555
+        },
+        {
+          "transaction_id": 245,
+          "translation_m": 0.7138567224388572,
+          "rotation_deg": 3.4032453465268055
+        },
+        {
+          "transaction_id": 246,
+          "translation_m": 0.7169233096522192,
+          "rotation_deg": 2.0801365577918056
+        },
+        {
+          "transaction_id": 247,
+          "translation_m": 0.7995092817901814,
+          "rotation_deg": 0.7011754505900849
+        },
+        {
+          "transaction_id": 248,
+          "translation_m": 0.8007001090561414,
+          "rotation_deg": 0.40868257078251835
+        },
+        {
+          "transaction_id": 250,
+          "translation_m": 0.7746065594707394,
+          "rotation_deg": 1.0263038814558505
+        },
+        {
+          "transaction_id": 251,
+          "translation_m": 0.6304582156030163,
+          "rotation_deg": 0.7205894069804021
+        },
+        {
+          "transaction_id": 252,
+          "translation_m": 0.6308754092367989,
+          "rotation_deg": 0.6023961417914079
+        },
+        {
+          "transaction_id": 253,
+          "translation_m": 0.5210167206088337,
+          "rotation_deg": 0.46703097074946787
+        },
+        {
+          "transaction_id": 260,
+          "translation_m": 0.5505680201223476,
+          "rotation_deg": 0.3280262391399572
+        },
+        {
+          "transaction_id": 262,
+          "translation_m": 0.6775108634401248,
+          "rotation_deg": 0.7243331129507611
+        },
+        {
+          "transaction_id": 265,
+          "translation_m": 0.592641452632849,
+          "rotation_deg": 0.15188682406766543
+        },
+        {
+          "transaction_id": 266,
+          "translation_m": 0.5869699347383247,
+          "rotation_deg": 0.457366032368715
+        },
+        {
+          "transaction_id": 267,
+          "translation_m": 0.5075123562892125,
+          "rotation_deg": 0.3631198918774356
+        },
+        {
+          "transaction_id": 268,
+          "translation_m": 0.5028197350700291,
+          "rotation_deg": 0.3325722546895426
+        },
+        {
+          "transaction_id": 269,
+          "translation_m": 0.5061061507802469,
+          "rotation_deg": 0.23350699445920456
+        },
+        {
+          "transaction_id": 270,
+          "translation_m": 0.5066754950933506,
+          "rotation_deg": 0.5343933145102943
+        },
+        {
+          "transaction_id": 271,
+          "translation_m": 0.5243802328946209,
+          "rotation_deg": 0.16015283210995637
+        },
+        {
+          "transaction_id": 272,
+          "translation_m": 0.5026461786903254,
+          "rotation_deg": 0.4256709346067956
+        },
+        {
+          "transaction_id": 273,
+          "translation_m": 0.5032612205461588,
+          "rotation_deg": 0.32111935776977835
+        },
+        {
+          "transaction_id": 274,
+          "translation_m": 0.5000319906313759,
+          "rotation_deg": 0.4441817731331676
+        },
+        {
+          "transaction_id": 278,
+          "translation_m": 0.5088434201262181,
+          "rotation_deg": 0.5431661602846671
+        },
+        {
+          "transaction_id": 279,
+          "translation_m": 0.7765099313625496,
+          "rotation_deg": 0.2911116262488889
+        },
+        {
+          "transaction_id": 280,
+          "translation_m": 1.0802740119225598,
+          "rotation_deg": 0.26126268058561486
+        },
+        {
+          "transaction_id": 281,
+          "translation_m": 0.9270552819540344,
+          "rotation_deg": 0.28948849426986184
+        },
+        {
+          "transaction_id": 282,
+          "translation_m": 1.1266421683377423,
+          "rotation_deg": 0.7050610400715281
+        },
+        {
+          "transaction_id": 283,
+          "translation_m": 1.4737580353925996,
+          "rotation_deg": 0.6679528200806871
+        },
+        {
+          "transaction_id": 284,
+          "translation_m": 1.3290350793466588,
+          "rotation_deg": 0.36024091823670096
+        },
+        {
+          "transaction_id": 285,
+          "translation_m": 1.3387094089856588,
+          "rotation_deg": 0.47583268357732156
+        },
+        {
+          "transaction_id": 286,
+          "translation_m": 1.3433075362833482,
+          "rotation_deg": 0.2504463550633373
+        },
+        {
+          "transaction_id": 287,
+          "translation_m": 1.3498425494873079,
+          "rotation_deg": 0.12428552191699554
+        },
+        {
+          "transaction_id": 288,
+          "translation_m": 1.3519987342880457,
+          "rotation_deg": 0.2553979265947939
+        },
+        {
+          "transaction_id": 289,
+          "translation_m": 1.61564815823451,
+          "rotation_deg": 0.554647065068984
+        },
+        {
+          "transaction_id": 290,
+          "translation_m": 1.9575718045631652,
+          "rotation_deg": 0.6993080895427907
+        },
+        {
+          "transaction_id": 291,
+          "translation_m": 2.1375935015721166,
+          "rotation_deg": 0.48925415772139746
+        },
+        {
+          "transaction_id": 292,
+          "translation_m": 1.9922029777952739,
+          "rotation_deg": 0.3231869327314365
+        },
+        {
+          "transaction_id": 293,
+          "translation_m": 1.9965028271112901,
+          "rotation_deg": 0.3268118188808116
+        },
+        {
+          "transaction_id": 294,
+          "translation_m": 1.9915453126768556,
+          "rotation_deg": 0.43300860138833935
+        },
+        {
+          "transaction_id": 295,
+          "translation_m": 1.9121910619234348,
+          "rotation_deg": 0.4632717214976547
+        },
+        {
+          "transaction_id": 296,
+          "translation_m": 1.8574963809300284,
+          "rotation_deg": 0.6117883233376542
+        },
+        {
+          "transaction_id": 297,
+          "translation_m": 1.5870678861996108,
+          "rotation_deg": 0.2656347266391933
+        },
+        {
+          "transaction_id": 298,
+          "translation_m": 1.7232466734342142,
+          "rotation_deg": 0.1932176081283609
+        },
+        {
+          "transaction_id": 299,
+          "translation_m": 1.7320738530898507,
+          "rotation_deg": 0.43811828444876477
+        },
+        {
+          "transaction_id": 300,
+          "translation_m": 1.7311409607871588,
+          "rotation_deg": 0.598905711216773
+        },
+        {
+          "transaction_id": 301,
+          "translation_m": 1.731883568275057,
+          "rotation_deg": 0.327563273847269
+        },
+        {
+          "transaction_id": 302,
+          "translation_m": 1.7338274435458283,
+          "rotation_deg": 0.25459009494495766
+        },
+        {
+          "transaction_id": 303,
+          "translation_m": 1.7218566910035336,
+          "rotation_deg": 0.7296591056560233
+        },
+        {
+          "transaction_id": 304,
+          "translation_m": 1.7188801981914228,
+          "rotation_deg": 2.2822603831876247
+        },
+        {
+          "transaction_id": 305,
+          "translation_m": 1.7181723485212455,
+          "rotation_deg": 5.48661594629251
+        },
+        {
+          "transaction_id": 306,
+          "translation_m": 1.732039974430974,
+          "rotation_deg": 4.2530948410818095
+        },
+        {
+          "transaction_id": 307,
+          "translation_m": 1.7460103599156445,
+          "rotation_deg": 1.7057543682928193
+        },
+        {
+          "transaction_id": 308,
+          "translation_m": 1.4488303869831198,
+          "rotation_deg": 1.252692129823249
+        },
+        {
+          "transaction_id": 309,
+          "translation_m": 1.6003810277144437,
+          "rotation_deg": 1.120716968040819
+        },
+        {
+          "transaction_id": 310,
+          "translation_m": 1.6026318142611562,
+          "rotation_deg": 0.7196839185042032
+        },
+        {
+          "transaction_id": 311,
+          "translation_m": 1.598483279006563,
+          "rotation_deg": 0.12845077817546857
+        },
+        {
+          "transaction_id": 312,
+          "translation_m": 1.1515470715435594,
+          "rotation_deg": 2.2144067923075843
+        },
+        {
+          "transaction_id": 313,
+          "translation_m": 2.043308698687656,
+          "rotation_deg": 5.553588017518486
+        },
+        {
+          "transaction_id": 314,
+          "translation_m": 1.560741061868474,
+          "rotation_deg": 5.436801738641975
+        },
+        {
+          "transaction_id": 315,
+          "translation_m": 1.5787488205860936,
+          "rotation_deg": 1.1148041685809187
+        },
+        {
+          "transaction_id": 316,
+          "translation_m": 1.7736174510969032,
+          "rotation_deg": 2.3939467006884647
+        },
+        {
+          "transaction_id": 317,
+          "translation_m": 2.07281390739437,
+          "rotation_deg": 3.7540604719179957
+        },
+        {
+          "transaction_id": 318,
+          "translation_m": 1.9146548460850468,
+          "rotation_deg": 2.4603586993953486
+        },
+        {
+          "transaction_id": 319,
+          "translation_m": 0.5835109959984467,
+          "rotation_deg": 1.2759207293093255
+        },
+        {
+          "transaction_id": 320,
+          "translation_m": 2.1724651675326556,
+          "rotation_deg": 1.8461394423681148
+        },
+        {
+          "transaction_id": 321,
+          "translation_m": 2.9760135171495694,
+          "rotation_deg": 0.6405130601389277
+        },
+        {
+          "transaction_id": 322,
+          "translation_m": 1.2869980693536827,
+          "rotation_deg": 0.7058411881866306
+        },
+        {
+          "transaction_id": 323,
+          "translation_m": 2.654847571637763,
+          "rotation_deg": 0.48688403438355193
+        },
+        {
+          "transaction_id": 324,
+          "translation_m": 1.5130223969595507,
+          "rotation_deg": 1.4650559544947719
+        },
+        {
+          "transaction_id": 326,
+          "translation_m": 0.5300453357945601,
+          "rotation_deg": 0.44155816997612074
+        },
+        {
+          "transaction_id": 327,
+          "translation_m": 1.370196406574505,
+          "rotation_deg": 0.6239554610775906
+        },
+        {
+          "transaction_id": 329,
+          "translation_m": 1.114120567574271,
+          "rotation_deg": 0.19112657062383928
+        },
+        {
+          "transaction_id": 330,
+          "translation_m": 1.4199884340876727,
+          "rotation_deg": 0.74241875879191
+        },
+        {
+          "transaction_id": 331,
+          "translation_m": 1.2467644514691085,
+          "rotation_deg": 1.256658398057305
+        },
+        {
+          "transaction_id": 332,
+          "translation_m": 2.6224028525735523,
+          "rotation_deg": 1.4732855780411398
+        },
+        {
+          "transaction_id": 333,
+          "translation_m": 0.6271566742564296,
+          "rotation_deg": 0.6085440181823155
+        },
+        {
+          "transaction_id": 334,
+          "translation_m": 2.3635567131830078,
+          "rotation_deg": 0.7834850541687879
+        },
+        {
+          "transaction_id": 335,
+          "translation_m": 2.358700217255839,
+          "rotation_deg": 1.9257624242888787
+        },
+        {
+          "transaction_id": 336,
+          "translation_m": 2.3642841994371713,
+          "rotation_deg": 1.3074335083322763
+        },
+        {
+          "transaction_id": 337,
+          "translation_m": 2.319389549820104,
+          "rotation_deg": 1.1143611551976906
+        },
+        {
+          "transaction_id": 338,
+          "translation_m": 2.4696569246845557,
+          "rotation_deg": 0.7828863953829903
+        },
+        {
+          "transaction_id": 339,
+          "translation_m": 2.6797632398213107,
+          "rotation_deg": 0.23851805195298356
+        },
+        {
+          "transaction_id": 340,
+          "translation_m": 2.7056268316051773,
+          "rotation_deg": 0.8697668003405769
+        },
+        {
+          "transaction_id": 341,
+          "translation_m": 3.107789241775553,
+          "rotation_deg": 0.3928088747929431
+        },
+        {
+          "transaction_id": 342,
+          "translation_m": 3.0633879736920133,
+          "rotation_deg": 2.2469090949684696
+        },
+        {
+          "transaction_id": 343,
+          "translation_m": 3.0596741748263088,
+          "rotation_deg": 4.439486703555932
+        },
+        {
+          "transaction_id": 344,
+          "translation_m": 3.0737895562933586,
+          "rotation_deg": 4.971023868798093
+        },
+        {
+          "transaction_id": 345,
+          "translation_m": 3.0873118878364676,
+          "rotation_deg": 1.359294265342621
+        },
+        {
+          "transaction_id": 346,
+          "translation_m": 3.0927716298603376,
+          "rotation_deg": 0.6270132579982143
+        },
+        {
+          "transaction_id": 347,
+          "translation_m": 3.0987393326572468,
+          "rotation_deg": 1.6492534539091597
+        },
+        {
+          "transaction_id": 348,
+          "translation_m": 3.9356474895104636,
+          "rotation_deg": 1.2926855319490274
+        },
+        {
+          "transaction_id": 349,
+          "translation_m": 2.270909914755793,
+          "rotation_deg": 2.4112981957300197
+        },
+        {
+          "transaction_id": 350,
+          "translation_m": 3.0852363367393485,
+          "rotation_deg": 2.462240968772248
+        },
+        {
+          "transaction_id": 351,
+          "translation_m": 2.7027553597968375,
+          "rotation_deg": 1.3375506694971326
+        },
+        {
+          "transaction_id": 352,
+          "translation_m": 2.387962147320552,
+          "rotation_deg": 1.3191196198082284
+        },
+        {
+          "transaction_id": 353,
+          "translation_m": 2.5475299278883,
+          "rotation_deg": 2.0359756934317574
+        },
+        {
+          "transaction_id": 354,
+          "translation_m": 2.5468033381321016,
+          "rotation_deg": 4.015864349838186
+        },
+        {
+          "transaction_id": 355,
+          "translation_m": 2.557494990620593,
+          "rotation_deg": 7.318419530627056
+        },
+        {
+          "transaction_id": 356,
+          "translation_m": 2.5602854732718505,
+          "rotation_deg": 7.375494221518566
+        },
+        {
+          "transaction_id": 357,
+          "translation_m": 2.6601222420575192,
+          "rotation_deg": 2.5427504101962772
+        },
+        {
+          "transaction_id": 358,
+          "translation_m": 2.6410287642336385,
+          "rotation_deg": 6.67707290380751
+        },
+        {
+          "transaction_id": 359,
+          "translation_m": 2.6114537071135286,
+          "rotation_deg": 8.652464346942136
+        },
+        {
+          "transaction_id": 360,
+          "translation_m": 2.539985147937521,
+          "rotation_deg": 8.155780922743377
+        },
+        {
+          "transaction_id": 361,
+          "translation_m": 2.5432763012313475,
+          "rotation_deg": 9.10441913529654
+        },
+        {
+          "transaction_id": 362,
+          "translation_m": 2.52743973146954,
+          "rotation_deg": 8.073935873966647
+        },
+        {
+          "transaction_id": 363,
+          "translation_m": 2.517200897006957,
+          "rotation_deg": 5.293019975850394
+        },
+        {
+          "transaction_id": 364,
+          "translation_m": 2.5134683993519458,
+          "rotation_deg": 4.010078971822863
+        },
+        {
+          "transaction_id": 365,
+          "translation_m": 2.514474254503563,
+          "rotation_deg": 1.8235740715840962
+        },
+        {
+          "transaction_id": 366,
+          "translation_m": 2.512823947404894,
+          "rotation_deg": 2.001755350468936
+        },
+        {
+          "transaction_id": 367,
+          "translation_m": 2.5052153664391255,
+          "rotation_deg": 2.114251927398349
+        },
+        {
+          "transaction_id": 368,
+          "translation_m": 2.5071376255098006,
+          "rotation_deg": 2.100401733714408
+        },
+        {
+          "transaction_id": 369,
+          "translation_m": 2.526592059371761,
+          "rotation_deg": 1.0085097408814674
+        },
+        {
+          "transaction_id": 370,
+          "translation_m": 2.513971695786654,
+          "rotation_deg": 2.924154307314816
+        },
+        {
+          "transaction_id": 371,
+          "translation_m": 2.534265956700884,
+          "rotation_deg": 4.315547504196064
+        },
+        {
+          "transaction_id": 372,
+          "translation_m": 2.5447545467006596,
+          "rotation_deg": 3.3598751089463126
+        },
+        {
+          "transaction_id": 373,
+          "translation_m": 2.4775884523105223,
+          "rotation_deg": 2.1331341765049916
+        },
+        {
+          "transaction_id": 374,
+          "translation_m": 2.4149396944292625,
+          "rotation_deg": 1.880592734210942
+        },
+        {
+          "transaction_id": 375,
+          "translation_m": 2.1694870828345247,
+          "rotation_deg": 0.8085864965806132
+        },
+        {
+          "transaction_id": 376,
+          "translation_m": 2.28464888081806,
+          "rotation_deg": 1.5713924787898146
+        },
+        {
+          "transaction_id": 377,
+          "translation_m": 3.1560754403838653,
+          "rotation_deg": 4.615418472158211
+        },
+        {
+          "transaction_id": 378,
+          "translation_m": 2.4626726930317977,
+          "rotation_deg": 5.549592433953895
+        },
+        {
+          "transaction_id": 379,
+          "translation_m": 1.24622822032134,
+          "rotation_deg": 5.5386216268547175
+        },
+        {
+          "transaction_id": 380,
+          "translation_m": 2.1393898973030563,
+          "rotation_deg": 5.516363209989504
+        },
+        {
+          "transaction_id": 381,
+          "translation_m": 1.661735163934111,
+          "rotation_deg": 2.6391097510494497
+        },
+        {
+          "transaction_id": 382,
+          "translation_m": 1.520587802734158,
+          "rotation_deg": 2.2434020046894405
+        },
+        {
+          "transaction_id": 383,
+          "translation_m": 1.7036074141979713,
+          "rotation_deg": 0.595132590176759
+        },
+        {
+          "transaction_id": 384,
+          "translation_m": 1.6964252409642169,
+          "rotation_deg": 0.13568665932118054
+        },
+        {
+          "transaction_id": 385,
+          "translation_m": 2.546732120419566,
+          "rotation_deg": 0.2793925235432874
+        },
+        {
+          "transaction_id": 386,
+          "translation_m": 0.8513461363255931,
+          "rotation_deg": 0.4689215758494913
+        },
+        {
+          "transaction_id": 387,
+          "translation_m": 1.7083246634333553,
+          "rotation_deg": 0.2856811384361168
+        },
+        {
+          "transaction_id": 388,
+          "translation_m": 1.9686099746424075,
+          "rotation_deg": 1.5467675019623792
+        },
+        {
+          "transaction_id": 389,
+          "translation_m": 2.194335004259009,
+          "rotation_deg": 2.938932871789883
+        },
+        {
+          "transaction_id": 390,
+          "translation_m": 2.045530920505865,
+          "rotation_deg": 2.5932046220551768
+        },
+        {
+          "transaction_id": 391,
+          "translation_m": 2.085508545375245,
+          "rotation_deg": 0.9821262377006796
+        },
+        {
+          "transaction_id": 392,
+          "translation_m": 2.042977827966198,
+          "rotation_deg": 0.9147644075243389
+        },
+        {
+          "transaction_id": 393,
+          "translation_m": 2.0219935361381247,
+          "rotation_deg": 1.3758834466628933
+        },
+        {
+          "transaction_id": 394,
+          "translation_m": 1.6473271134026735,
+          "rotation_deg": 1.6120846069250556
+        },
+        {
+          "transaction_id": 395,
+          "translation_m": 1.5030265969445897,
+          "rotation_deg": 2.2567635358520977
+        },
+        {
+          "transaction_id": 396,
+          "translation_m": 0.9544452359850899,
+          "rotation_deg": 2.059211021069151
+        },
+        {
+          "transaction_id": 397,
+          "translation_m": 1.5188204593489565,
+          "rotation_deg": 1.9668054294084596
+        }
+      ],
+      "strict_nominal_ndt_success": 332,
+      "strict_nominal_ndt_total": 346,
+      "candidate_recommended": 56
+    },
+    "COUPLED": {
+      "interpretation": "PREFIX-ALIGNED RELATIVE DRIFT of paired per-frame scan-to-map measurements; NOT a closed-loop trajectory",
+      "translation_m": {
+        "count": 346,
+        "rmse": 36.6033577381996,
+        "p95": 64.65978231969895,
+        "max": 75.67738962931114
+      },
+      "rotation_deg": {
+        "count": 346,
+        "rmse": 177.95649815987332,
+        "p95": 179.89164432691268,
+        "max": 179.99493671045144
+      },
+      "relative_drift_onset_s": {
+        "0.5": {
+          "first_crossing_s": 0.143537266,
+          "first_persistent_crossing_s": 0.143537266
+        },
+        "1.0": {
+          "first_crossing_s": 0.143537266,
+          "first_persistent_crossing_s": 2.4631953070000003
+        },
+        "2.0": {
+          "first_crossing_s": 0.143537266,
+          "first_persistent_crossing_s": 2.5640554260000004
+        }
+      },
+      "pose_jump_count_gt_0p5m_or_10deg": 212,
+      "pose_jumps": [
+        {
+          "transaction_id": 70,
+          "translation_m": 0.5875347542156328,
+          "rotation_deg": 4.833016258199658
+        },
+        {
+          "transaction_id": 74,
+          "translation_m": 2.1920916603738947,
+          "rotation_deg": 8.209385389090835
+        },
+        {
+          "transaction_id": 75,
+          "translation_m": 1.6607865764585648,
+          "rotation_deg": 4.129113109029643
+        },
+        {
+          "transaction_id": 76,
+          "translation_m": 1.9633030582844795,
+          "rotation_deg": 9.351333373908078
+        },
+        {
+          "transaction_id": 79,
+          "translation_m": 0.7626050930460105,
+          "rotation_deg": 1.2395147558964925
+        },
+        {
+          "transaction_id": 94,
+          "translation_m": 0.5389174702609953,
+          "rotation_deg": 1.9104879362943796
+        },
+        {
+          "transaction_id": 104,
+          "translation_m": 0.5925451813384901,
+          "rotation_deg": 4.123890021948067
+        },
+        {
+          "transaction_id": 107,
+          "translation_m": 1.9781708275547245,
+          "rotation_deg": 11.880923877320392
+        },
+        {
+          "transaction_id": 108,
+          "translation_m": 1.294640601753775,
+          "rotation_deg": 2.4410154631634216
+        },
+        {
+          "transaction_id": 133,
+          "translation_m": 0.8898797129476403,
+          "rotation_deg": 0.9979314125481473
+        },
+        {
+          "transaction_id": 134,
+          "translation_m": 1.89265581386821,
+          "rotation_deg": 1.193861471099775
+        },
+        {
+          "transaction_id": 135,
+          "translation_m": 2.04122948694532,
+          "rotation_deg": 0.11895222254892247
+        },
+        {
+          "transaction_id": 136,
+          "translation_m": 1.9673979351142137,
+          "rotation_deg": 0.3698895369559983
+        },
+        {
+          "transaction_id": 137,
+          "translation_m": 1.9765365899822849,
+          "rotation_deg": 1.3146210870094908
+        },
+        {
+          "transaction_id": 138,
+          "translation_m": 1.8916018687714349,
+          "rotation_deg": 0.6717219213512031
+        },
+        {
+          "transaction_id": 139,
+          "translation_m": 1.8886957799532018,
+          "rotation_deg": 0.5333089388687384
+        },
+        {
+          "transaction_id": 140,
+          "translation_m": 1.8930538690000942,
+          "rotation_deg": 0.7395912903374157
+        },
+        {
+          "transaction_id": 141,
+          "translation_m": 1.3678083650163115,
+          "rotation_deg": 0.549337665342376
+        },
+        {
+          "transaction_id": 142,
+          "translation_m": 1.6718823788509554,
+          "rotation_deg": 0.8790958639218107
+        },
+        {
+          "transaction_id": 143,
+          "translation_m": 1.8209512805771677,
+          "rotation_deg": 0.5166862658295504
+        },
+        {
+          "transaction_id": 144,
+          "translation_m": 1.1423700662919702,
+          "rotation_deg": 0.5343796186383551
+        },
+        {
+          "transaction_id": 145,
+          "translation_m": 1.3617292516419373,
+          "rotation_deg": 0.46053421058325417
+        },
+        {
+          "transaction_id": 146,
+          "translation_m": 1.2017542836365342,
+          "rotation_deg": 1.4230886657050774
+        },
+        {
+          "transaction_id": 147,
+          "translation_m": 1.209818270851794,
+          "rotation_deg": 0.6028230064143746
+        },
+        {
+          "transaction_id": 148,
+          "translation_m": 1.2171698364448322,
+          "rotation_deg": 0.5508628350644105
+        },
+        {
+          "transaction_id": 149,
+          "translation_m": 1.1215439178911621,
+          "rotation_deg": 0.33825112216900544
+        },
+        {
+          "transaction_id": 150,
+          "translation_m": 1.3534561265145477,
+          "rotation_deg": 0.41607030012613067
+        },
+        {
+          "transaction_id": 151,
+          "translation_m": 1.6571888662871408,
+          "rotation_deg": 0.567470133844593
+        },
+        {
+          "transaction_id": 152,
+          "translation_m": 1.9915381370691658,
+          "rotation_deg": 0.3780364919265828
+        },
+        {
+          "transaction_id": 153,
+          "translation_m": 1.436045595072369,
+          "rotation_deg": 0.4695757926105745
+        },
+        {
+          "transaction_id": 154,
+          "translation_m": 1.431940715857448,
+          "rotation_deg": 0.4106828079516046
+        },
+        {
+          "transaction_id": 155,
+          "translation_m": 2.0582929045829155,
+          "rotation_deg": 0.3277059186082471
+        },
+        {
+          "transaction_id": 156,
+          "translation_m": 0.6844952500296201,
+          "rotation_deg": 0.43100554303135935
+        },
+        {
+          "transaction_id": 157,
+          "translation_m": 1.372174903461193,
+          "rotation_deg": 0.44565180594211085
+        },
+        {
+          "transaction_id": 158,
+          "translation_m": 1.3886038451548006,
+          "rotation_deg": 0.47564302555340765
+        },
+        {
+          "transaction_id": 159,
+          "translation_m": 1.4312864437462904,
+          "rotation_deg": 0.6558817041372917
+        },
+        {
+          "transaction_id": 160,
+          "translation_m": 1.6355326049835412,
+          "rotation_deg": 0.4512125919074478
+        },
+        {
+          "transaction_id": 161,
+          "translation_m": 1.5740159703743606,
+          "rotation_deg": 0.7209234240890164
+        },
+        {
+          "transaction_id": 162,
+          "translation_m": 1.5980818593615895,
+          "rotation_deg": 0.7874504547330295
+        },
+        {
+          "transaction_id": 163,
+          "translation_m": 1.5932528339457943,
+          "rotation_deg": 0.5300026624943454
+        },
+        {
+          "transaction_id": 164,
+          "translation_m": 1.5370414936396488,
+          "rotation_deg": 1.095440996951627
+        },
+        {
+          "transaction_id": 165,
+          "translation_m": 1.5284189953197311,
+          "rotation_deg": 4.2891692482126835
+        },
+        {
+          "transaction_id": 166,
+          "translation_m": 0.8791115834368376,
+          "rotation_deg": 4.369785015936924
+        },
+        {
+          "transaction_id": 167,
+          "translation_m": 2.306935487904366,
+          "rotation_deg": 3.2176022687786383
+        },
+        {
+          "transaction_id": 168,
+          "translation_m": 1.5963846597296003,
+          "rotation_deg": 1.2245238142372685
+        },
+        {
+          "transaction_id": 169,
+          "translation_m": 1.5039738536499856,
+          "rotation_deg": 2.7117774178391127
+        },
+        {
+          "transaction_id": 170,
+          "translation_m": 1.2023284564639134,
+          "rotation_deg": 2.2532411713122866
+        },
+        {
+          "transaction_id": 171,
+          "translation_m": 1.3383646796379274,
+          "rotation_deg": 0.49577791452209513
+        },
+        {
+          "transaction_id": 172,
+          "translation_m": 1.3380431513978508,
+          "rotation_deg": 0.32817900730544486
+        },
+        {
+          "transaction_id": 173,
+          "translation_m": 1.3199630993192482,
+          "rotation_deg": 2.30697384240181
+        },
+        {
+          "transaction_id": 174,
+          "translation_m": 1.255680875791718,
+          "rotation_deg": 2.3213403800986314
+        },
+        {
+          "transaction_id": 175,
+          "translation_m": 0.9588817972324991,
+          "rotation_deg": 3.837713111050521
+        },
+        {
+          "transaction_id": 176,
+          "translation_m": 1.110185942679249,
+          "rotation_deg": 2.4149635563799534
+        },
+        {
+          "transaction_id": 177,
+          "translation_m": 1.095945635358614,
+          "rotation_deg": 0.5491552302899454
+        },
+        {
+          "transaction_id": 178,
+          "translation_m": 0.8635148012901444,
+          "rotation_deg": 0.8980401467375793
+        },
+        {
+          "transaction_id": 180,
+          "translation_m": 0.5595040610903573,
+          "rotation_deg": 1.1626388062419195
+        },
+        {
+          "transaction_id": 181,
+          "translation_m": 0.560335744533102,
+          "rotation_deg": 0.5863243778967221
+        },
+        {
+          "transaction_id": 182,
+          "translation_m": 0.5615052116241561,
+          "rotation_deg": 0.5959302070298758
+        },
+        {
+          "transaction_id": 183,
+          "translation_m": 0.5517042448910261,
+          "rotation_deg": 0.1950491220052418
+        },
+        {
+          "transaction_id": 184,
+          "translation_m": 0.6085696274773511,
+          "rotation_deg": 0.3463728014066656
+        },
+        {
+          "transaction_id": 185,
+          "translation_m": 0.6122324735852854,
+          "rotation_deg": 0.5302972470666575
+        },
+        {
+          "transaction_id": 186,
+          "translation_m": 0.9543634307601699,
+          "rotation_deg": 0.329298141772546
+        },
+        {
+          "transaction_id": 187,
+          "translation_m": 0.6316895461863712,
+          "rotation_deg": 0.28710910434162235
+        },
+        {
+          "transaction_id": 188,
+          "translation_m": 0.7761932242824016,
+          "rotation_deg": 0.6864842674440292
+        },
+        {
+          "transaction_id": 189,
+          "translation_m": 0.7771618856002367,
+          "rotation_deg": 0.4628740838935924
+        },
+        {
+          "transaction_id": 190,
+          "translation_m": 0.78071398740387,
+          "rotation_deg": 0.13707299005175316
+        },
+        {
+          "transaction_id": 191,
+          "translation_m": 0.7782569547646245,
+          "rotation_deg": 0.2192201123849599
+        },
+        {
+          "transaction_id": 192,
+          "translation_m": 0.7869451842028167,
+          "rotation_deg": 0.5011754350899429
+        },
+        {
+          "transaction_id": 193,
+          "translation_m": 0.7834004642475801,
+          "rotation_deg": 0.6564357479177209
+        },
+        {
+          "transaction_id": 194,
+          "translation_m": 0.6326184159752549,
+          "rotation_deg": 0.7452659722366873
+        },
+        {
+          "transaction_id": 240,
+          "translation_m": 0.5045686982501554,
+          "rotation_deg": 4.5364055407675545
+        },
+        {
+          "transaction_id": 242,
+          "translation_m": 0.7534718029025061,
+          "rotation_deg": 0.9315124145961087
+        },
+        {
+          "transaction_id": 243,
+          "translation_m": 0.5753917531901032,
+          "rotation_deg": 0.609823116362009
+        },
+        {
+          "transaction_id": 244,
+          "translation_m": 0.8687441372550887,
+          "rotation_deg": 2.1477760929373555
+        },
+        {
+          "transaction_id": 245,
+          "translation_m": 0.7138567224388572,
+          "rotation_deg": 3.4032453465268055
+        },
+        {
+          "transaction_id": 246,
+          "translation_m": 0.7169233096522192,
+          "rotation_deg": 2.0801365577918056
+        },
+        {
+          "transaction_id": 247,
+          "translation_m": 0.7995092817901814,
+          "rotation_deg": 0.7011754505900849
+        },
+        {
+          "transaction_id": 248,
+          "translation_m": 0.8007001090561414,
+          "rotation_deg": 0.40868257078251835
+        },
+        {
+          "transaction_id": 250,
+          "translation_m": 0.7746065594707394,
+          "rotation_deg": 1.0263038814558505
+        },
+        {
+          "transaction_id": 251,
+          "translation_m": 0.6304582156030163,
+          "rotation_deg": 0.7205894069804021
+        },
+        {
+          "transaction_id": 252,
+          "translation_m": 0.6308754092367989,
+          "rotation_deg": 0.6023961417914079
+        },
+        {
+          "transaction_id": 253,
+          "translation_m": 0.5210167206088337,
+          "rotation_deg": 0.46703097074946787
+        },
+        {
+          "transaction_id": 260,
+          "translation_m": 0.5505680201223476,
+          "rotation_deg": 0.3280262391399572
+        },
+        {
+          "transaction_id": 262,
+          "translation_m": 0.6775108634401248,
+          "rotation_deg": 0.7243331129507611
+        },
+        {
+          "transaction_id": 265,
+          "translation_m": 0.592641452632849,
+          "rotation_deg": 0.15188682406766543
+        },
+        {
+          "transaction_id": 266,
+          "translation_m": 0.5869699347383247,
+          "rotation_deg": 0.457366032368715
+        },
+        {
+          "transaction_id": 267,
+          "translation_m": 0.5075123562892125,
+          "rotation_deg": 0.3631198918774356
+        },
+        {
+          "transaction_id": 268,
+          "translation_m": 0.5028197350700291,
+          "rotation_deg": 0.3325722546895426
+        },
+        {
+          "transaction_id": 269,
+          "translation_m": 0.5061061507802469,
+          "rotation_deg": 0.23350699445920456
+        },
+        {
+          "transaction_id": 270,
+          "translation_m": 0.5066754950933506,
+          "rotation_deg": 0.5343933145102943
+        },
+        {
+          "transaction_id": 271,
+          "translation_m": 0.5243802328946209,
+          "rotation_deg": 0.16015283210995637
+        },
+        {
+          "transaction_id": 272,
+          "translation_m": 0.5026461786903254,
+          "rotation_deg": 0.4256709346067956
+        },
+        {
+          "transaction_id": 273,
+          "translation_m": 0.5032612205461588,
+          "rotation_deg": 0.32111935776977835
+        },
+        {
+          "transaction_id": 274,
+          "translation_m": 0.5000319906313759,
+          "rotation_deg": 0.4441817731331676
+        },
+        {
+          "transaction_id": 278,
+          "translation_m": 0.5088434201262181,
+          "rotation_deg": 0.5431661602846671
+        },
+        {
+          "transaction_id": 279,
+          "translation_m": 0.7765213990631025,
+          "rotation_deg": 0.2805707038794979
+        },
+        {
+          "transaction_id": 280,
+          "translation_m": 1.0802627855597589,
+          "rotation_deg": 0.277807482887404
+        },
+        {
+          "transaction_id": 281,
+          "translation_m": 0.9270552819540344,
+          "rotation_deg": 0.28948849426986184
+        },
+        {
+          "transaction_id": 282,
+          "translation_m": 1.1266426834536836,
+          "rotation_deg": 0.704972442455994
+        },
+        {
+          "transaction_id": 283,
+          "translation_m": 1.4737573594722067,
+          "rotation_deg": 0.6680138548356409
+        },
+        {
+          "transaction_id": 284,
+          "translation_m": 1.3290350793466588,
+          "rotation_deg": 0.36024091823670096
+        },
+        {
+          "transaction_id": 285,
+          "translation_m": 1.3387094089856588,
+          "rotation_deg": 0.47583268357732156
+        },
+        {
+          "transaction_id": 286,
+          "translation_m": 1.3433075362833482,
+          "rotation_deg": 0.2504463550633373
+        },
+        {
+          "transaction_id": 287,
+          "translation_m": 1.3498425494873079,
+          "rotation_deg": 0.12428552191699554
+        },
+        {
+          "transaction_id": 288,
+          "translation_m": 1.3519987342880457,
+          "rotation_deg": 0.2553979265947939
+        },
+        {
+          "transaction_id": 289,
+          "translation_m": 1.61564815823451,
+          "rotation_deg": 0.554647065068984
+        },
+        {
+          "transaction_id": 290,
+          "translation_m": 1.9575718045631652,
+          "rotation_deg": 0.6993080895427907
+        },
+        {
+          "transaction_id": 291,
+          "translation_m": 2.1375935015721166,
+          "rotation_deg": 0.48925415772139746
+        },
+        {
+          "transaction_id": 292,
+          "translation_m": 1.9922029777952739,
+          "rotation_deg": 0.3231869327314365
+        },
+        {
+          "transaction_id": 293,
+          "translation_m": 1.9965028271112901,
+          "rotation_deg": 0.3268118188808116
+        },
+        {
+          "transaction_id": 294,
+          "translation_m": 1.9915453126768556,
+          "rotation_deg": 0.43300860138833935
+        },
+        {
+          "transaction_id": 295,
+          "translation_m": 1.9121910619234348,
+          "rotation_deg": 0.4632717214976547
+        },
+        {
+          "transaction_id": 296,
+          "translation_m": 1.8574963809300284,
+          "rotation_deg": 0.6117883233376542
+        },
+        {
+          "transaction_id": 297,
+          "translation_m": 1.5870678861996108,
+          "rotation_deg": 0.2656347266391933
+        },
+        {
+          "transaction_id": 298,
+          "translation_m": 1.7232466734342142,
+          "rotation_deg": 0.1932176081283609
+        },
+        {
+          "transaction_id": 299,
+          "translation_m": 1.7320738530898507,
+          "rotation_deg": 0.43811828444876477
+        },
+        {
+          "transaction_id": 300,
+          "translation_m": 1.7311409607871588,
+          "rotation_deg": 0.598905711216773
+        },
+        {
+          "transaction_id": 301,
+          "translation_m": 1.731883568275057,
+          "rotation_deg": 0.327563273847269
+        },
+        {
+          "transaction_id": 302,
+          "translation_m": 1.7338274435458283,
+          "rotation_deg": 0.25459009494495766
+        },
+        {
+          "transaction_id": 303,
+          "translation_m": 1.7218566910035336,
+          "rotation_deg": 0.7296591056560233
+        },
+        {
+          "transaction_id": 304,
+          "translation_m": 1.7188801981914228,
+          "rotation_deg": 2.2822603831876247
+        },
+        {
+          "transaction_id": 305,
+          "translation_m": 1.7181723485212455,
+          "rotation_deg": 5.48661594629251
+        },
+        {
+          "transaction_id": 306,
+          "translation_m": 1.732039974430974,
+          "rotation_deg": 4.2530948410818095
+        },
+        {
+          "transaction_id": 307,
+          "translation_m": 1.7460103599156445,
+          "rotation_deg": 1.7057543682928193
+        },
+        {
+          "transaction_id": 308,
+          "translation_m": 1.4488303869831198,
+          "rotation_deg": 1.252692129823249
+        },
+        {
+          "transaction_id": 309,
+          "translation_m": 1.6003810277144437,
+          "rotation_deg": 1.120716968040819
+        },
+        {
+          "transaction_id": 310,
+          "translation_m": 1.6026318142611562,
+          "rotation_deg": 0.7196839185042032
+        },
+        {
+          "transaction_id": 311,
+          "translation_m": 1.598483279006563,
+          "rotation_deg": 0.12845077817546857
+        },
+        {
+          "transaction_id": 312,
+          "translation_m": 1.1515470715435594,
+          "rotation_deg": 2.2144067923075843
+        },
+        {
+          "transaction_id": 313,
+          "translation_m": 2.043308698687656,
+          "rotation_deg": 5.553588017518486
+        },
+        {
+          "transaction_id": 314,
+          "translation_m": 1.560741061868474,
+          "rotation_deg": 5.436801738641975
+        },
+        {
+          "transaction_id": 315,
+          "translation_m": 1.5787488205860936,
+          "rotation_deg": 1.1148041685809187
+        },
+        {
+          "transaction_id": 316,
+          "translation_m": 1.7736174510969032,
+          "rotation_deg": 2.3939467006884647
+        },
+        {
+          "transaction_id": 317,
+          "translation_m": 2.07281390739437,
+          "rotation_deg": 3.7540604719179957
+        },
+        {
+          "transaction_id": 318,
+          "translation_m": 1.9146548460850468,
+          "rotation_deg": 2.4603586993953486
+        },
+        {
+          "transaction_id": 319,
+          "translation_m": 0.5835109959984467,
+          "rotation_deg": 1.2759207293093255
+        },
+        {
+          "transaction_id": 320,
+          "translation_m": 2.1724651675326556,
+          "rotation_deg": 1.8461394423681148
+        },
+        {
+          "transaction_id": 321,
+          "translation_m": 2.9760135171495694,
+          "rotation_deg": 0.6405130601389277
+        },
+        {
+          "transaction_id": 322,
+          "translation_m": 1.2869980693536827,
+          "rotation_deg": 0.7058411881866306
+        },
+        {
+          "transaction_id": 323,
+          "translation_m": 2.654847571637763,
+          "rotation_deg": 0.48688403438355193
+        },
+        {
+          "transaction_id": 324,
+          "translation_m": 1.5130223969595507,
+          "rotation_deg": 1.4650559544947719
+        },
+        {
+          "transaction_id": 326,
+          "translation_m": 0.5300453357945601,
+          "rotation_deg": 0.44155816997612074
+        },
+        {
+          "transaction_id": 327,
+          "translation_m": 1.370196406574505,
+          "rotation_deg": 0.6239554610775906
+        },
+        {
+          "transaction_id": 329,
+          "translation_m": 1.114120567574271,
+          "rotation_deg": 0.19112657062383928
+        },
+        {
+          "transaction_id": 330,
+          "translation_m": 1.4199884340876727,
+          "rotation_deg": 0.74241875879191
+        },
+        {
+          "transaction_id": 331,
+          "translation_m": 1.2467644514691085,
+          "rotation_deg": 1.256658398057305
+        },
+        {
+          "transaction_id": 332,
+          "translation_m": 2.6224028525735523,
+          "rotation_deg": 1.4732855780411398
+        },
+        {
+          "transaction_id": 333,
+          "translation_m": 0.6271566742564296,
+          "rotation_deg": 0.6085440181823155
+        },
+        {
+          "transaction_id": 334,
+          "translation_m": 2.3635567131830078,
+          "rotation_deg": 0.7834850541687879
+        },
+        {
+          "transaction_id": 335,
+          "translation_m": 2.358700217255839,
+          "rotation_deg": 1.9257624242888787
+        },
+        {
+          "transaction_id": 336,
+          "translation_m": 2.3642841994371713,
+          "rotation_deg": 1.3074335083322763
+        },
+        {
+          "transaction_id": 337,
+          "translation_m": 2.319389549820104,
+          "rotation_deg": 1.1143611551976906
+        },
+        {
+          "transaction_id": 338,
+          "translation_m": 2.469661252262604,
+          "rotation_deg": 0.7629836311324218
+        },
+        {
+          "transaction_id": 339,
+          "translation_m": 2.679755789348187,
+          "rotation_deg": 0.25757402091549503
+        },
+        {
+          "transaction_id": 340,
+          "translation_m": 2.7056268316051773,
+          "rotation_deg": 0.8697668003405769
+        },
+        {
+          "transaction_id": 341,
+          "translation_m": 3.107789241775553,
+          "rotation_deg": 0.3928088747929431
+        },
+        {
+          "transaction_id": 342,
+          "translation_m": 3.0633879736920133,
+          "rotation_deg": 2.2469090949684696
+        },
+        {
+          "transaction_id": 343,
+          "translation_m": 3.0596741748263088,
+          "rotation_deg": 4.439486703555932
+        },
+        {
+          "transaction_id": 344,
+          "translation_m": 3.0737895562933586,
+          "rotation_deg": 4.971023868798093
+        },
+        {
+          "transaction_id": 345,
+          "translation_m": 3.0873118878364676,
+          "rotation_deg": 1.359294265342621
+        },
+        {
+          "transaction_id": 346,
+          "translation_m": 3.0927716298603376,
+          "rotation_deg": 0.6270132579982143
+        },
+        {
+          "transaction_id": 347,
+          "translation_m": 3.0987393326572468,
+          "rotation_deg": 1.6492534539091597
+        },
+        {
+          "transaction_id": 348,
+          "translation_m": 3.9356474895104636,
+          "rotation_deg": 1.2926855319490274
+        },
+        {
+          "transaction_id": 349,
+          "translation_m": 2.270909914755793,
+          "rotation_deg": 2.4112981957300197
+        },
+        {
+          "transaction_id": 350,
+          "translation_m": 3.0852363367393485,
+          "rotation_deg": 2.462240968772248
+        },
+        {
+          "transaction_id": 351,
+          "translation_m": 2.7027553597968375,
+          "rotation_deg": 1.3375506694971326
+        },
+        {
+          "transaction_id": 352,
+          "translation_m": 2.387962147320552,
+          "rotation_deg": 1.3191196198082284
+        },
+        {
+          "transaction_id": 353,
+          "translation_m": 2.5475299278883,
+          "rotation_deg": 2.0359756934317574
+        },
+        {
+          "transaction_id": 354,
+          "translation_m": 2.5468033381321016,
+          "rotation_deg": 4.015864349838186
+        },
+        {
+          "transaction_id": 355,
+          "translation_m": 2.557494990620593,
+          "rotation_deg": 7.318419530627056
+        },
+        {
+          "transaction_id": 356,
+          "translation_m": 2.5602854732718505,
+          "rotation_deg": 7.375494221518566
+        },
+        {
+          "transaction_id": 357,
+          "translation_m": 2.6601222420575192,
+          "rotation_deg": 2.5427504101962772
+        },
+        {
+          "transaction_id": 358,
+          "translation_m": 2.6410287642336385,
+          "rotation_deg": 6.67707290380751
+        },
+        {
+          "transaction_id": 359,
+          "translation_m": 2.6114537071135286,
+          "rotation_deg": 8.652464346942136
+        },
+        {
+          "transaction_id": 360,
+          "translation_m": 2.539985147937521,
+          "rotation_deg": 8.155780922743377
+        },
+        {
+          "transaction_id": 361,
+          "translation_m": 2.5432763012313475,
+          "rotation_deg": 9.10441913529654
+        },
+        {
+          "transaction_id": 362,
+          "translation_m": 2.52743973146954,
+          "rotation_deg": 8.073935873966647
+        },
+        {
+          "transaction_id": 363,
+          "translation_m": 2.517200897006957,
+          "rotation_deg": 5.293019975850394
+        },
+        {
+          "transaction_id": 364,
+          "translation_m": 2.5134683993519458,
+          "rotation_deg": 4.010078971822863
+        },
+        {
+          "transaction_id": 365,
+          "translation_m": 2.514474254503563,
+          "rotation_deg": 1.8235740715840962
+        },
+        {
+          "transaction_id": 366,
+          "translation_m": 2.512823947404894,
+          "rotation_deg": 2.001755350468936
+        },
+        {
+          "transaction_id": 367,
+          "translation_m": 2.5052153664391255,
+          "rotation_deg": 2.114251927398349
+        },
+        {
+          "transaction_id": 368,
+          "translation_m": 2.5071376255098006,
+          "rotation_deg": 2.100401733714408
+        },
+        {
+          "transaction_id": 369,
+          "translation_m": 2.526592059371761,
+          "rotation_deg": 1.0085097408814674
+        },
+        {
+          "transaction_id": 370,
+          "translation_m": 2.513971695786654,
+          "rotation_deg": 2.924154307314816
+        },
+        {
+          "transaction_id": 371,
+          "translation_m": 2.534265956700884,
+          "rotation_deg": 4.315547504196064
+        },
+        {
+          "transaction_id": 372,
+          "translation_m": 2.5447545467006596,
+          "rotation_deg": 3.3598751089463126
+        },
+        {
+          "transaction_id": 373,
+          "translation_m": 2.4775884523105223,
+          "rotation_deg": 2.1331341765049916
+        },
+        {
+          "transaction_id": 374,
+          "translation_m": 2.4149396944292625,
+          "rotation_deg": 1.880592734210942
+        },
+        {
+          "transaction_id": 375,
+          "translation_m": 2.1694870828345247,
+          "rotation_deg": 0.8085864965806132
+        },
+        {
+          "transaction_id": 376,
+          "translation_m": 2.28464888081806,
+          "rotation_deg": 1.5713924787898146
+        },
+        {
+          "transaction_id": 377,
+          "translation_m": 3.1560754403838653,
+          "rotation_deg": 4.615418472158211
+        },
+        {
+          "transaction_id": 378,
+          "translation_m": 2.4626726930317977,
+          "rotation_deg": 5.549592433953895
+        },
+        {
+          "transaction_id": 379,
+          "translation_m": 1.24622822032134,
+          "rotation_deg": 5.5386216268547175
+        },
+        {
+          "transaction_id": 380,
+          "translation_m": 2.1393898973030563,
+          "rotation_deg": 5.516363209989504
+        },
+        {
+          "transaction_id": 381,
+          "translation_m": 1.661735163934111,
+          "rotation_deg": 2.6391097510494497
+        },
+        {
+          "transaction_id": 382,
+          "translation_m": 1.520587802734158,
+          "rotation_deg": 2.2434020046894405
+        },
+        {
+          "transaction_id": 383,
+          "translation_m": 1.7036074141979713,
+          "rotation_deg": 0.595132590176759
+        },
+        {
+          "transaction_id": 384,
+          "translation_m": 1.6964252409642169,
+          "rotation_deg": 0.13568665932118054
+        },
+        {
+          "transaction_id": 385,
+          "translation_m": 2.546732120419566,
+          "rotation_deg": 0.2793925235432874
+        },
+        {
+          "transaction_id": 386,
+          "translation_m": 0.8513461363255931,
+          "rotation_deg": 0.4689215758494913
+        },
+        {
+          "transaction_id": 387,
+          "translation_m": 1.7083246634333553,
+          "rotation_deg": 0.2856811384361168
+        },
+        {
+          "transaction_id": 388,
+          "translation_m": 1.9686099746424075,
+          "rotation_deg": 1.5467675019623792
+        },
+        {
+          "transaction_id": 389,
+          "translation_m": 2.194335004259009,
+          "rotation_deg": 2.938932871789883
+        },
+        {
+          "transaction_id": 390,
+          "translation_m": 2.045530920505865,
+          "rotation_deg": 2.5932046220551768
+        },
+        {
+          "transaction_id": 391,
+          "translation_m": 2.085508545375245,
+          "rotation_deg": 0.9821262377006796
+        },
+        {
+          "transaction_id": 392,
+          "translation_m": 2.042977827966198,
+          "rotation_deg": 0.9147644075243389
+        },
+        {
+          "transaction_id": 393,
+          "translation_m": 2.0219935361381247,
+          "rotation_deg": 1.3758834466628933
+        },
+        {
+          "transaction_id": 394,
+          "translation_m": 1.6473271134026735,
+          "rotation_deg": 1.6120846069250556
+        },
+        {
+          "transaction_id": 395,
+          "translation_m": 1.5030265969445897,
+          "rotation_deg": 2.2567635358520977
+        },
+        {
+          "transaction_id": 396,
+          "translation_m": 0.9544452359850899,
+          "rotation_deg": 2.059211021069151
+        },
+        {
+          "transaction_id": 397,
+          "translation_m": 1.5188204593489565,
+          "rotation_deg": 1.9668054294084596
+        }
+      ],
+      "strict_nominal_ndt_success": 332,
+      "strict_nominal_ndt_total": 346,
+      "candidate_recommended": 57
+    }
+  },
+  "nominal_strict_failure": {
+    "first_strict_failure_s": 10.531506283,
+    "first_persistent_failure_s": null,
+    "longest_consecutive_failure_frames": 2
+  },
+  "common_paired_score": {
+    "paired_finite_candidate_score_rows": 61,
+    "coupled_minus_weak_score_mean": 0.2199640387988975,
+    "coupled_score_higher_rows": 21,
+    "coupled_score_lower_rows": 0
+  },
+  "runtime_ms": {
+    "nominal_complete_ms": {
+      "mean": 59.01245252890174,
+      "p95": 243.58631200000002,
+      "max": 280.80581
+    },
+    "weak_complete_ms": {
+      "mean": 59.915752184971105,
+      "p95": 243.59506000000002,
+      "max": 280.814959
+    },
+    "coupled_complete_ms": {
+      "mean": 60.686744962427746,
+      "p95": 244.35350925,
+      "max": 280.811467
+    },
+    "paired_total_ms": {
+      "mean": 61.62066026300578,
+      "p95": 245.76068675,
+      "max": 284.088944
+    }
+  },
+  "peak_RSS_KiB": 53352,
+  "weak_strong_selection_count": 0,
+  "coupled_strong_selection_count": 21,
+  "causal_feedback": false,
+  "evaluator_sha256": "566746d8073433a6dcb81531324916e9495156c813e85cb2239fbeece5fec348"
+}

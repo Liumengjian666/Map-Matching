@@ -1,0 +1,136 @@
+{
+  "TASK": "P10-CORRIDOR01-FAILURE-ONSET-COUPLED-BENCHMARK",
+  "FINAL_RESULT": "PAIRED_DIAGNOSTIC_NO_COUPLED_ACCURACY_GAIN_CAUSAL_FEEDBACK_BLOCKED",
+  "NEXT": "RESTORE_TRUSTED_P2B_CAUSAL_REPLAY_CHAIN",
+  "git": {
+    "branch": "research/p9-r4-heldout-visual-evidence",
+    "start_sha": "cd85a78abdeff49abaece571a9ba6ca9bda362d8",
+    "remote_head_last_user_verified": "cd85a78abdeff49abaece571a9ba6ca9bda362d8",
+    "push_executed": false
+  },
+  "historical_P2B": {
+    "persistent_translation_crossings_s": {
+      "0.5m": 11.2375,
+      "1m": 13.1537,
+      "2m": 16.4819
+    },
+    "source": "frozen P2B R1 failure-onset archive; unchanged"
+  },
+  "inputs": {
+    "protocol": "P9_CORRIDOR01_RAW_SCANEND_V1",
+    "P9_manifest_sha256": "591bfe3fd619966f40e4e2af6b9151937732483f0123c70eb34aa1031742991a",
+    "raw_timed_points_sha256": "ce8beed2303ea3de8715932c4d0644d6fe28317014e2383f65942d69bc5ace32",
+    "scan_index_sha256": "d49b7b81bb1f5c17eb2da9e5ad665dfb2b3b4813280de4e342eb3158d13c932a",
+    "imu_sha256": "21b94c0cb0ade931db1586799aa022dff2ba20b9ab76dc1e29eac0e948e132e6",
+    "normalized_map_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+    "T_imu_lidar_sha256": "496cf243042e2914839f9788fcbed4f045d72a22eb77cdd6c681bdeb8da732be",
+    "P10_historical_frames_sha256": "8043ae86bec1d6bd58993b88db99605b58b4f3332d41512b0710e316981d527e",
+    "P10_historical_source_ledger_sha256": "50b0dcaf12f44bd009b5e453727f80b714b87ab72e95377603daadb52c0c9dab"
+  },
+  "fixed_window": {
+    "evaluation_origin_ns": 1517157224188979000,
+    "duration_s": 35,
+    "first_transaction": 52,
+    "last_transaction": 397,
+    "frames": 346,
+    "first_scan_end_elapsed_s": 0.143537266,
+    "last_scan_end_elapsed_s": 34.938102467,
+    "selection": "whole scan interval in fixed time window; no GT, score, or candidate selection"
+  },
+  "experiment_A": {
+    "kind": "common-predictor paired per-frame diagnostic; not causal trajectory",
+    "source_count_hash_parity": "346/346 PASS",
+    "historical_nominal_pose_status_score_parity": "346/346 PASS",
+    "map_instances": 1,
+    "full_NDT_align_calls": 346,
+    "extra_candidate_NDT_align_calls": 0,
+    "nominal_strict_success": 332,
+    "nominal_strict_total": 346,
+    "nominal_strict_success_rate": 0.9595375722543352,
+    "strict_failure_first": {"transaction_id": 155, "elapsed_s": 10.531506283},
+    "strict_failure_count": 14,
+    "strict_failure_status": "ITERATION_LIMIT_EXHAUSTED",
+    "longest_consecutive_strict_failures": 2,
+    "persistent_5s_strict_failure": false,
+    "triggered_frames": 90,
+    "triggered_with_valid_anchor": 63,
+    "triggered_without_valid_anchor": 27,
+    "weak_only_recommendations": 56,
+    "coupled_recommendations": 57,
+    "coupled_strong_step_selected": 21,
+    "weak_extra_jet_calls": 63,
+    "weak_extra_value_calls": 65,
+    "coupled_extra_jet_calls": 124,
+    "coupled_extra_value_calls": 114,
+    "untriggered_extra_work": 0,
+    "causal_feedback": false
+  },
+  "posthoc_GT": {
+    "loaded_after_evidence_freeze": true,
+    "sha256": "3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03",
+    "alignment": "one unit-scale proper Kabsch transform fit only to Control nominal positions in first 10 s; reused for all methods",
+    "metric": "PREFIX-ALIGNED RELATIVE DRIFT; not absolute map-to-GT accuracy and not a closed-loop trajectory",
+    "control_prefix_translation_rmse_m": 5.803579376570747,
+    "control_prefix_translation_p95_m": 14.332274534927114,
+    "control_prefix_translation_max_m": 18.952323589058853,
+    "methods": {
+      "NOMINAL": {
+        "translation_rmse_p95_max_m": [36.59562248953926, 64.65978232007868, 75.67738962947196],
+        "rotation_rmse_p95_max_deg": [177.94972708977338, 179.89454781619852, 179.99749169323314],
+        "first_gt_error_crossing_0p5m_s": 0.143537266,
+        "prefix_0_10s_translation_rmse_p95_max_m": [5.803579376570747, 14.332274534927114, 18.952323589058853],
+        "pose_jumps_gt_0p5m_or_10deg": 212,
+        "candidate_recommendations": null
+      },
+      "WEAK_ONLY": {
+        "translation_rmse_p95_max_m": [36.6022516530166, 64.65978232007868, 75.67738962947196],
+        "rotation_rmse_p95_max_deg": [177.95613080811816, 179.89172970144799, 180.0],
+        "first_gt_error_crossing_0p5m_s": 0.143537266,
+        "prefix_0_10s_translation_rmse_p95_max_m": [5.793448559640896, 14.205250725540015, 18.952323589058853],
+        "pose_jumps_gt_0p5m_or_10deg": 213,
+        "candidate_recommendations": 56
+      },
+      "COUPLED": {
+        "translation_rmse_p95_max_m": [36.602485601676925, 64.65978232007868, 75.67738962947196],
+        "rotation_rmse_p95_max_deg": [177.95623087916843, 179.89172970144799, 179.98925053970825],
+        "first_gt_error_crossing_0p5m_s": 0.143537266,
+        "prefix_0_10s_translation_rmse_p95_max_m": [5.793407096312672, 14.205250725540015, 18.952323589058853],
+        "pose_jumps_gt_0p5m_or_10deg": 213,
+        "candidate_recommendations": 57
+      }
+    },
+    "accepted_candidate_translation_error_vs_nominal": {
+      "weak_only_improved_worse": [22, 34],
+      "coupled_improved_worse": [23, 34]
+    },
+    "coupled_vs_weak_selected_translation_error": {
+      "coupled_better_equal_worse": [10, 325, 11],
+      "mean_coupled_minus_weak_m": 0.0004104055222157812
+    },
+    "absolute_map_GT_closure": "not established"
+  },
+  "timing_ms": {
+    "nominal_mean_p95_max": [59.01245252890174, 243.58631200000002, 280.80581],
+    "weak_only_mean_p95_max": [59.915752184971105, 243.59506000000002, 280.814959],
+    "coupled_mean_p95_max": [60.686744962427746, 244.35350925, 280.811467],
+    "paired_sequential_total_mean_p95_max": [61.62066026300578, 245.76068675, 284.088944],
+    "wall_s": 21.526331885019317,
+    "peak_RSS_KiB": 53352
+  },
+  "experiment_B": {
+    "status": "NOT_RUN",
+    "reason": "historical P2B derived bag, frozen Run C result.bag, and ndt_determinism.csv are absent; substituting P10 gyro/CV diagnostic would violate causal-chain contract"
+  },
+  "conclusion": {
+    "coupled_accuracy_advantage": "NOT_ESTABLISHED",
+    "important_limitation": "common P10 predictor prefix fit RMSE is 5.8036 m and relative error already exceeds 0.5 m at first selected scan; do not equate this with historical P2B onset",
+    "next": "RESTORE_TRUSTED_P2B_CAUSAL_REPLAY_CHAIN"
+  },
+  "validation": {
+    "release_build": "PASS",
+    "existing_ctest": "10/10 PASS",
+    "python_contract_tests": "4/4 PASS",
+    "paired_runner_self_test": "PASS",
+    "git_diff_check": "PASS"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "TASK": "P10-CORRIDOR01-FAILURE-ONSET-COUPLED-BENCHMARK",
+  "phase": "NO_GT_PAIRED_EVIDENCE_FREEZE",
+  "GT_LOADED_BY_EXECUTION": false,
+  "oracle_labels_loaded": false,
+  "frame_count": 346,
+  "transaction_range": [
+    52,
+    397
+  ],
+  "source_and_nominal_replay_parity": "346/346 PASS",
+  "full_align_calls": 346,
+  "causal_feedback": false,
+  "paired_per_frame_only": true,
+  "artifact_hashes": {
+    "selection_freeze": {
+      "path": "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p10_corridor01_failure_onset/selection_freeze.json",
+      "sha256": "3378e7620e7db267c3aa415ce9fa4193323d1ef8b0f71f873cb4546dd6e86a0d"
+    },
+    "experiment_freeze": {
+      "path": "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p10_corridor01_failure_onset/experiment_freeze.json",
+      "sha256": "485f86c46e4ff213ba9b135f4d68f2ed9641e1220244ff8651e064c3c595650e"
+    },
+    "process_exit": {
+      "path": "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p10_corridor01_failure_onset/process_exit.json",
+      "sha256": "ca6a04d9092e44488e357412383f047878b0f4e5ee22197c89669128e8dc1801"
+    },
+    "paired_execution": {
+      "path": "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p10_corridor01_failure_onset/paired_execution.json",
+      "sha256": "f64924cff2ec3b927cde1374ac62e452c26ab9ecf903095d62715491256b9fc6"
+    },
+    "common_predictor": {
+      "path": "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p10_corridor01_failure_onset/common_predictor.csv",
+      "sha256": "5e2dcada871f4397657313a5eff0bf3061d540cf91e55ba0ec9f5c9e23158417"
+    },
+    "paired_candidates": {
+      "path": "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p10_corridor01_failure_onset/paired_candidates.csv",
+      "sha256": "75d68f058e6e6426c0d4adfe6762fe3cd2aabe3435c3a5995cb1989102db0bac"
+    },
+    "source_parity": {
+      "path": "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p10_corridor01_failure_onset/source_parity.csv",
+      "sha256": "f35221b910bdd8d8e555bcc1424b20d3f4f6a1b2ccbaa921e08524b91c9f21aa"
+    },
+    "run_log": {
+      "path": "/tmp/dog_loc_paper_r4_ws.Fq21k2/docs/p10_corridor01_failure_onset/run.log",
+      "sha256": "4348ccc4038b22159fed1a5d5dda8e08d6fcccd5991a6e1239902c9cce65c9f2"
+    },
+    "binary": {
+      "path": "/tmp/p10_corridor_benchmark_build/p10_corridor_failure_onset",
+      "sha256": "12e773d5647e515420f6d155ca63b5af6db5e3999d36cfa944ac79fe4bf65688"
+    }
+  }
+}
