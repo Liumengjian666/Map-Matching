@@ -14,11 +14,30 @@ from evaluate_budgeted import matrix,distance
 from evaluate_admission import load,summary,posthoc,optional_table,motion_cost
 from evaluate_event import summarize,moments
 
-def chart(candidate,reference):
-    return np.r_[(candidate[:3,3]-reference[:3,3])/.8,
-        (Rotation.from_matrix(candidate[:3,:3])*Rotation.from_matrix(reference[:3,:3]).inv()).as_rotvec()]
+def carrier_quaternion(R):
+    # Independently reproduce the pinned Eigen 3.3 matrix->quaternion carrier.
+    # scipy.from_matrix uses a different orthogonalization for float NDT matrices.
+    q=np.zeros(4);t=float(np.trace(R))
+    if t>0:
+        z=np.sqrt(t+1);q[3]=.5*z;z=.5/z
+        q[:3]=np.array([R[2,1]-R[1,2],R[0,2]-R[2,0],R[1,0]-R[0,1]])*z
+    else:
+        i=int(np.argmax(np.diag(R)));j=(i+1)%3;k=(j+1)%3
+        z=np.sqrt(R[i,i]-R[j,j]-R[k,k]+1);q[i]=.5*z;z=.5/z
+        q[3]=(R[k,j]-R[j,k])*z;q[j]=(R[j,i]+R[i,j])*z;q[k]=(R[k,i]+R[i,k])*z
+    return q/np.linalg.norm(q)
 
-def verify(directory):
+def chart(candidate,reference):
+    Rc=Rotation.from_quat(carrier_quaternion(candidate[:3,:3])).as_matrix()
+    Ra=Rotation.from_quat(carrier_quaternion(reference[:3,:3])).as_matrix()
+    q=carrier_quaternion(Rc@Ra.T)
+    if q[3]<0:q=-q
+    norm=np.linalg.norm(q[:3])
+    phi=2*q[:3] if norm<1e-12 else q[:3]*(2*np.arctan2(norm,np.clip(q[3],-1,1))/norm)
+    return np.r_[(candidate[:3,3]-reference[:3,3])/.8,
+        phi]
+
+def verify(directory,receipt_dir):
     f=json.loads((directory/"execution_freeze.json").read_text())
     blind=json.loads((directory/"blind_outputs_freeze.json").read_text())
     if blind["GT_LOADED"] or blind["ORACLE_LOADED"] or not blind["FEEDBACK_EXPERIMENT_ONLY"]:raise RuntimeError("isolation failed")
@@ -42,7 +61,7 @@ def verify(directory):
         for a,b in zip(jobs["control"][table],jobs[MODES[0]][table]):
             diff=[k for k in a if k!="alignment_ms" and a[k]!=b[k]]
             parity.append(dict(transaction_id=a["transaction_id"],table=table,exact_parity=int(not diff),different_fields=";".join(diff)))
-    csv_write(directory/"nominal_state_parity.csv",parity)
+    csv_write(receipt_dir/"nominal_state_parity.csv",parity)
     if not all(r["exact_parity"] for r in parity):raise RuntimeError("anchored shadow changed nominal state/source")
     checks=[];anchor_checks=[];diagnostics=[]
     for n,t in jobs.items():
@@ -110,9 +129,9 @@ def verify(directory):
                 if admitted and item[2]!=3:raise RuntimeError("not three contributions")
             elif propagation_error>1e-8:raise RuntimeError("ordinary causal anchor propagation mismatch")
             previous=r;previous_event=e;previous_admission=a
-    csv_write(directory/"engineering_guards.csv",checks)
-    optional_table(directory/"anchor_score_parity.csv",anchor_checks,["mode","transaction_id","origin_stamp_ns","contributions","maximum_difference","pass_parity"])
-    optional_table(directory/"branch_diagnostic_parity.csv",diagnostics,["mode","transaction_id","maximum_difference","pass_parity"])
+    csv_write(receipt_dir/"engineering_guards.csv",checks)
+    optional_table(receipt_dir/"anchor_score_parity.csv",anchor_checks,["mode","transaction_id","origin_stamp_ns","contributions","maximum_difference","pass_parity"])
+    optional_table(receipt_dir/"branch_diagnostic_parity.csv",diagnostics,["mode","transaction_id","maximum_difference","pass_parity"])
     if not all(r["hard_requirements_pass"] for r in checks) or not all(r["pass_parity"] for r in anchor_checks+diagnostics):raise RuntimeError("independent engineering/evidence audit failed before GT")
     if MODES[1] in jobs:
         first=next((int(a["transaction_id"]) for a in jobs[MODES[1]]["admission"] if a["alternative_used"]=="1"),None)
@@ -121,15 +140,19 @@ def verify(directory):
             diff=any(a[k]!=b[k] for k in a if k.startswith("predicted_imu_"))
             causal.append(dict(transaction_id=i,first_alternative_tx=first or "",prediction_differs=int(diff)))
             if first and i<first and diff:raise RuntimeError("diverged before feedback")
-        csv_write(directory/"causal_feedback_parity.csv",causal)
+        csv_write(receipt_dir/"causal_feedback_parity.csv",causal)
         if first and first<4127 and not causal[first]["prediction_differs"]:raise RuntimeError("feedback not causal")
-    json_write(directory/"pre_GT_audit_freeze.json",dict(GT_LOADED=False,engineering="PASS",
-        output_sha256={p.name:sha(p) for p in directory.glob("*parity.csv")}))
+    json_write(receipt_dir/"pre_GT_audit_freeze.json",dict(GT_LOADED=False,engineering="PASS",
+        evaluator_sha256=sha(Path(__file__)),audit_code_sha=subprocess.check_output(["git","-C",str(ROOT),"rev-parse","HEAD"],text=True).strip(),
+        output_sha256={p.name:sha(p) for p in receipt_dir.glob("*parity.csv")}))
     return f,jobs
 
-def evaluate(attempt):
+def evaluate(attempt,audit_revision):
     directory=ARCHIVE/f"attempt_{attempt}"
-    f,jobs=verify(directory)
+    receipt_dir=directory
+    if audit_revision:
+        receipt_dir=directory/f"audit_revision_{audit_revision}";receipt_dir.mkdir(exist_ok=False)
+    f,jobs=verify(directory,receipt_dir)
     stats={n:summary(n,t,directory) for n,t in jobs.items()}
     for n in MODES:
         if n not in jobs:continue
@@ -155,12 +178,14 @@ def evaluate(attempt):
         statistics=stats,groups=groups,GT=gt,translation_RMSE_improvement_fraction=improvement,
         accuracy_goal_pass=improvement is not None and improvement>=.05,
         performance_goal_pass=all(stats[n]["frame_processing_logging_ms"]["mean"]<=100 and stats[n]["frame_processing_logging_ms"]["P95"]<=150 for n in MODES if n in stats),
-        anchor_score_audit_rows=len(read(directory/"anchor_score_parity.csv")),
-        max_anchor_audit_difference=max((float(x["maximum_difference"]) for x in read(directory/"anchor_score_parity.csv")),default=0),
+        verification_directory=str(receipt_dir.relative_to(directory)),
+        anchor_score_audit_rows=len(read(receipt_dir/"anchor_score_parity.csv")),
+        max_anchor_audit_difference=max((float(x["maximum_difference"]) for x in read(receipt_dir/"anchor_score_parity.csv")),default=0),
         nominal_state_parity="8254/8254 EXACT",GT_FOR_ADMISSION=False,SINGLE_MAP_INSTANCE=True,PRODUCTION_CHANGED=False)
     json_write(directory/"evaluation.json",result)
     print(json.dumps(dict(code_sha=result["code_sha"],accuracy_goal_pass=result["accuracy_goal_pass"],
         improvement=improvement,statistics=stats,GT=gt),indent=2))
 
 if __name__=="__main__":
-    p=argparse.ArgumentParser();p.add_argument("--attempt",type=int,default=0);evaluate(p.parse_args().attempt)
+    p=argparse.ArgumentParser();p.add_argument("--attempt",type=int,default=0);p.add_argument("--audit-revision",type=int,default=0)
+    a=p.parse_args();evaluate(a.attempt,a.audit_revision)
