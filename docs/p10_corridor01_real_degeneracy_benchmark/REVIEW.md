@@ -27,6 +27,10 @@ Actionable code findings, fixed before the first real NDT call:
   the matrix from a historical JSON.
 - Check per-frame output writes and final receipt write. The Python launcher
   also preserves a process-exit receipt and never silently reruns.
+- Final bounded recheck distinguished an already committed in-memory arm
+  state from incomplete scientific archival acceptance. Failure receipts now
+  track `current_state_committed` truthfully and mark `archival_acceptance=false`;
+  receipt-write failures have a separate active stage.
 
 Tests include causal future-IMU tampering, missing leading coverage, nonidentity
 extrinsic lever arm, SO(3)/SE(3) round trip, streamed SHA256, and a synthetic

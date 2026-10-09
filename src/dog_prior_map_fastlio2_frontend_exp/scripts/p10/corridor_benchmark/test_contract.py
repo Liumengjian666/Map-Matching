@@ -32,6 +32,8 @@ class ContractTests(unittest.TestCase):
             self.assertEqual(receipt['attempted_align_calls'], 0)
             self.assertEqual(receipt['completed_frames_per_arm'], 0)
             self.assertFalse(receipt['GT_LOADED'])
+            self.assertFalse(receipt['current_state_committed'])
+            self.assertFalse(receipt['archival_acceptance'])
             self.assertFalse((root / 'frames.csv').exists())
 
     def test_canonical_algorithms_not_reimplemented(self):

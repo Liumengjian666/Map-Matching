@@ -68,7 +68,7 @@ int main(int argc,char** argv) {
   unsigned frames=0,align_calls=0,align_attempts=0;
   std::string active_arm="NONE",active_stage="SETUP";
   p::CurrentFrameNdtResult active_nominal;
-  bool nominal_completed=false;
+  bool nominal_completed=false,current_state_committed=false;
   const auto run_start=Clock::now();
   try {
     if(argc==2 && std::string(argv[1])=="--self-test") {selfTest();return 0;}
@@ -97,7 +97,7 @@ int main(int argc,char** argv) {
     for(const auto& scan:scans) {
       if(scan.transaction_id<52) continue;
       active_transaction=scan.transaction_id;
-      active_arm="NONE";active_stage="SOURCE_READ_AND_ROTATIONAL_DESKEW";nominal_completed=false;
+      active_arm="NONE";active_stage="SOURCE_READ_AND_ROTATIONAL_DESKEW";nominal_completed=false;current_state_committed=false;
       b::require(scan.scan_start_ns>=1517157224188980000ULL,"scan_before_prior_available");
       const auto source_start=Clock::now();
       const auto source_cpu_start=std::clock();
@@ -116,7 +116,7 @@ int main(int argc,char** argv) {
       for(std::size_t index=0;index<arms.size();++index) {
         auto& arm=arms[index];const auto start=Clock::now();
         const auto arm_cpu_start=std::clock();
-        active_arm=arm.name;active_stage="PREDICTION";nominal_completed=false;
+        active_arm=arm.name;active_stage="PREDICTION";nominal_completed=false;current_state_committed=false;
         Matrix prediction=arm.current;
         if(arm.stamp) {
           const b::RotationTimeline between(imu,arm.stamp,scan.scan_end_ns);
@@ -165,6 +165,7 @@ int main(int argc,char** argv) {
         const double step=(executed.block<3,1>(0,3)-arm.current.block<3,1>(0,3)).norm();
         const double step_deg=angle(executed,arm.current);
         arm.current=executed;arm.stamp=scan.scan_end_ns;
+        current_state_committed=true;
         struct rusage rss;getrusage(RUSAGE_SELF,&rss);
         log<<arm.name<<','<<scan.transaction_id<<','<<scan.scan_start_ns<<','<<scan.scan_end_ns
            <<','<<nominal.source_point_count<<','<<nominal.source_cloud_hash<<','<<nominal.target_point_count
@@ -201,6 +202,7 @@ int main(int argc,char** argv) {
       }
       if(frames%100==0) std::cout<<"PROGRESS frames="<<frames<<" tx="<<scan.transaction_id<<std::endl;
     }
+    active_stage="EXECUTION_RECEIPT_WRITE";
     std::ofstream receipt(outdir+"/execution.json");
     receipt<<std::setprecision(17)<<"{\"frames_per_arm\":"<<frames<<",\"full_align_calls\":"<<align_calls
            <<",\"registration_align_attempts\":"<<align_attempts
@@ -217,7 +219,8 @@ int main(int argc,char** argv) {
              <<",\"completed_frames_per_arm\":"<<frames<<",\"attempted_align_calls\":"<<align_attempts
              <<",\"completed_full_align_calls\":"<<align_calls<<",\"active_arm\":\""<<active_arm
              <<"\",\"active_stage\":\""<<active_stage<<"\",\"current_nominal_completed\":"<<(nominal_completed?"true":"false")
-             <<",\"current_nominal_accepted\":false,\"source_count\":"<<(nominal_completed?active_nominal.source_point_count:0)
+             <<",\"current_state_committed\":"<<(current_state_committed?"true":"false")
+             <<",\"archival_acceptance\":false,\"source_count\":"<<(nominal_completed?active_nominal.source_point_count:0)
              <<",\"source_hash\":\""<<(nominal_completed?active_nominal.source_cloud_hash:0)
              <<"\",\"current_nominal_status\":\""<<(nominal_completed?p::currentFrameNdtStatusName(active_nominal.status):"NOT_RUN")<<"\"";
       if(nominal_completed) {
