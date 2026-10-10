@@ -5,6 +5,7 @@
 #include <cstring>
 #include <fstream>
 #include <iomanip>
+#include <iterator>
 #include <limits>
 #include <mutex>
 #include <sstream>
@@ -30,6 +31,10 @@
 #include <tf/transform_broadcaster.h>
 #include "dog_prior_map_localization/external_ndt_transaction_server.hpp"
 #include "dog_prior_map_localization/core/frame_conversions.hpp"
+#include "dog_prior_map_localization/core/causal_pose_prediction.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_weak_refinement.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/observable_pcl_ndt.hpp"
 
 namespace dog_prior_map_localization
 {
@@ -113,6 +118,15 @@ public:
     ndt_step_limit_max_rotation_deg_ = getParam<double>("lidar_update/ndt_step_limit_max_rotation_deg", 5.0);
     local_imu_rotation_prior_enable_ = getParam<bool>(
         "lidar_update/local_imu_rotation_prior_enable", false);
+    coupled_mode_ = getParam<std::string>("coupled_mode", "CONTROL");
+    if (coupled_mode_ != "CONTROL" && coupled_mode_ != "COUPLED_SHADOW" &&
+        coupled_mode_ != "WEAK_ONLY_FEEDBACK" && coupled_mode_ != "COUPLED_FEEDBACK")
+      throw std::runtime_error("coupled_mode must be CONTROL, COUPLED_SHADOW, WEAK_ONLY_FEEDBACK, or COUPLED_FEEDBACK");
+    coupled_enabled_ = coupled_mode_ != "CONTROL";
+    ekf_high_rate_topic_ = getParam<std::string>("topics/odom_high_rate", "/dog_livo/odom_high_rate");
+    // Frozen to the existing 20 ms OOSM timestamp-alignment contract.
+    coupled_prediction_max_age_sec_ = 0.02;
+    coupled_ekf_history_keep_sec_ = 60.0;
     local_imu_gyro_to_lidar_enable_ = getParam<bool>(
         "lidar_update/local_imu_gyro_to_lidar_enable", false);
     if (local_imu_gyro_to_lidar_enable_)
@@ -203,9 +217,15 @@ public:
                                  &DogPriorMapNdtNode::livoxCallback, this);
     }
     sub_imu_ = nh_.subscribe(imu_topic_, 500, &DogPriorMapNdtNode::imuCallback, this);
+    if (coupled_enabled_)
+    {
+      sub_ekf_high_rate_ = nh_.subscribe(ekf_high_rate_topic_, 10000,
+          &DogPriorMapNdtNode::ekfHighRateCallback, this);
+    }
 
-    ROS_INFO("[DogPriorMap NDT] started: map=%s target=%zu lidar=%s output=%s",
-             map_pcd_path_.c_str(), target_cloud_->size(), lidar_topic_.c_str(), ndt_odom_topic_.c_str());
+    ROS_INFO("[DogPriorMap NDT] started: mode=%s map=%s target=%zu lidar=%s output=%s EKF=%s",
+             coupled_mode_.c_str(), map_pcd_path_.c_str(), target_cloud_->size(), lidar_topic_.c_str(),
+             ndt_odom_topic_.c_str(), coupled_enabled_ ? ekf_high_rate_topic_.c_str() : "disabled");
   }
 
   void imuCallback(const sensor_msgs::ImuConstPtr &msg)
@@ -232,7 +252,58 @@ public:
     {
       imu_history_.pop_front();
     }
-    if (local_imu_rotation_prior_enable_)
+    if (local_imu_rotation_prior_enable_ || coupled_enabled_)
+      processPendingCloudsLocked();
+  }
+
+  void ekfHighRateCallback(const nav_msgs::OdometryConstPtr &msg)
+  {
+    if (!msg || !coupled_enabled_) return;
+    std::lock_guard<std::mutex> lock(mutex_);
+    const uint64_t stamp_ns = msg->header.stamp.toNSec();
+    if (stamp_ns == 0) return;
+    if (!has_ekf_high_rate_watermark_ || stamp_ns > latest_ekf_high_rate_stamp_ns_)
+    {
+      latest_ekf_high_rate_stamp_ns_ = stamp_ns;
+      has_ekf_high_rate_watermark_ = true;
+    }
+    const Eigen::Vector3d position(msg->pose.pose.position.x,
+                                   msg->pose.pose.position.y,
+                                   msg->pose.pose.position.z);
+    const Eigen::Quaterniond orientation(msg->pose.pose.orientation.w,
+                                         msg->pose.pose.orientation.x,
+                                         msg->pose.pose.orientation.y,
+                                         msg->pose.pose.orientation.z);
+    const Eigen::Vector3d linear_velocity_lidar(msg->twist.twist.linear.x,
+        msg->twist.twist.linear.y, msg->twist.twist.linear.z);
+    const Eigen::Vector3d angular_velocity_lidar(msg->twist.twist.angular.x,
+        msg->twist.twist.angular.y, msg->twist.twist.angular.z);
+    if (msg->header.frame_id == map_frame_ && msg->child_frame_id == base_frame_ &&
+        position.allFinite() && orientation.coeffs().allFinite() && orientation.norm() > 1e-9 &&
+        linear_velocity_lidar.allFinite() && angular_velocity_lidar.allFinite())
+    {
+      Eigen::Matrix4d map_T_lidar = Eigen::Matrix4d::Identity();
+      map_T_lidar.block<3, 3>(0, 0) = orientation.normalized().toRotationMatrix();
+      map_T_lidar.block<3, 1>(0, 3) = position;
+      if (validRigidPose(map_T_lidar))
+      {
+        EkfPoseSample sample;
+        sample.stamp_ns = stamp_ns;
+        sample.map_T_lidar = map_T_lidar;
+        sample.linear_velocity_lidar = linear_velocity_lidar;
+        sample.angular_velocity_lidar = angular_velocity_lidar;
+        if (ekf_pose_history_.empty() || stamp_ns > ekf_pose_history_.back().stamp_ns)
+          ekf_pose_history_.push_back(sample);
+        else if (stamp_ns == ekf_pose_history_.back().stamp_ns)
+          ekf_pose_history_.back() = sample;
+      }
+    }
+    while (!ekf_pose_history_.empty() &&
+           latest_ekf_high_rate_stamp_ns_ > ekf_pose_history_.front().stamp_ns &&
+           (latest_ekf_high_rate_stamp_ns_ - ekf_pose_history_.front().stamp_ns) / 1e9 >
+               coupled_ekf_history_keep_sec_)
+      ekf_pose_history_.pop_front();
+    if (local_imu_rotation_prior_enable_ || coupled_enabled_)
       processPendingCloudsLocked();
   }
 
@@ -258,6 +329,25 @@ private:
     ros::Time reference_stamp;
     double min_offset_sec = 0.0;
     double max_offset_sec = 0.0;
+  };
+
+  struct EkfPoseSample
+  {
+    uint64_t stamp_ns = 0;
+    Eigen::Matrix4d map_T_lidar = Eigen::Matrix4d::Identity();
+    Eigen::Vector3d linear_velocity_lidar = Eigen::Vector3d::Zero();
+    Eigen::Vector3d angular_velocity_lidar = Eigen::Vector3d::Zero();
+  };
+
+  struct EkfPrediction
+  {
+    bool valid = false;
+    uint64_t sample_stamp_ns = 0;
+    uint64_t stamp_ns = 0;
+    double age_ms = std::numeric_limits<double>::quiet_NaN();
+    Eigen::Matrix4d map_T_lidar = Eigen::Matrix4d::Constant(
+        std::numeric_limits<double>::quiet_NaN());
+    std::string status = "NOT_REQUESTED";
   };
 
   struct DeterminismRow
@@ -308,7 +398,84 @@ private:
     double scan_duration_ms = std::numeric_limits<double>::quiet_NaN();
     size_t pending_lidar_count = 0;
     uint64_t pending_overflow_count = 0;
+    std::string coupled_mode = "CONTROL";
+    std::string ekf_prediction_status = "NOT_REQUESTED";
+    double ekf_prediction_stamp = std::numeric_limits<double>::quiet_NaN();
+    double ekf_prediction_target_stamp = std::numeric_limits<double>::quiet_NaN();
+    double ekf_prediction_age_ms = std::numeric_limits<double>::quiet_NaN();
+    Eigen::Matrix4d ekf_prediction_pose = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
+    std::string anchor_status = "NOT_REQUESTED";
+    bool anchor_valid = false;
+    bool anchor_valid_after = false;
+    double anchor_age_s = std::numeric_limits<double>::quiet_NaN();
+    double anchor_stamp = std::numeric_limits<double>::quiet_NaN();
+    std::string anchor_status_after = "NOT_REQUESTED";
+    std::string coupled_status = "NOT_RUN";
+    bool coupled_triggered = false;
+    bool coupled_attempted = false;
+    bool coupled_recommended = false;
+    bool coupled_feedback_applied = false;
+    bool coupled_feedback_changed_observation = false;
+    bool coupled_candidate_step_limited = false;
+    bool coupled_candidate_translation_limited = false;
+    bool coupled_candidate_rotation_limited = false;
+    bool coupled_strong_selected = false;
+    int coupled_weak_dimension = 0;
+    int coupled_jet_calls = 0;
+    int coupled_value_calls = 0;
+    Eigen::Matrix4d coupled_candidate = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
+    Eigen::Matrix4d coupled_weak_pose = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
+    Eigen::Matrix4d coupled_full_pose = Eigen::Matrix4d::Constant(std::numeric_limits<double>::quiet_NaN());
+    Eigen::Matrix<double, 6, 1> coupled_weak_eta = Eigen::Matrix<double, 6, 1>::Constant(
+        std::numeric_limits<double>::quiet_NaN());
+    Eigen::Matrix<double, 6, 1> coupled_strong_eta = Eigen::Matrix<double, 6, 1>::Constant(
+        std::numeric_limits<double>::quiet_NaN());
+    double coupled_score_sum = std::numeric_limits<double>::quiet_NaN();
+    double coupled_total_ms = 0.0;
   };
+
+  static bool validRigidPose(const Eigen::Matrix4d &pose)
+  {
+    return rigidMapPose(pose);
+  }
+
+  EkfPrediction ekfPredictionAtOrBeforeLocked(uint64_t reference_stamp_ns) const
+  {
+    EkfPrediction prediction;
+    prediction.status = "NO_CAUSAL_EKF_SAMPLE";
+    if (!reference_stamp_ns || ekf_pose_history_.empty()) return prediction;
+    const auto after = std::upper_bound(ekf_pose_history_.begin(), ekf_pose_history_.end(),
+        reference_stamp_ns, [](uint64_t stamp, const EkfPoseSample &sample) {
+          return stamp < sample.stamp_ns;
+        });
+    if (after == ekf_pose_history_.begin()) return prediction;
+    const EkfPoseSample &sample = *std::prev(after);
+    if (sample.stamp_ns > reference_stamp_ns || !validRigidPose(sample.map_T_lidar))
+    {
+      prediction.status = "INVALID_CAUSAL_EKF_SAMPLE";
+      return prediction;
+    }
+    prediction.sample_stamp_ns = sample.stamp_ns;
+    prediction.stamp_ns = reference_stamp_ns;
+    prediction.age_ms = static_cast<double>(reference_stamp_ns - sample.stamp_ns) / 1e6;
+    if (!std::isfinite(prediction.age_ms) ||
+        prediction.age_ms > 1000.0 * coupled_prediction_max_age_sec_)
+    {
+      prediction.status = "STALE_CAUSAL_EKF_SAMPLE";
+      return prediction;
+    }
+    if (!predictMapTLidarWithBodyTwist(sample.map_T_lidar, sample.linear_velocity_lidar,
+        sample.angular_velocity_lidar, prediction.age_ms / 1000.0,
+        coupled_prediction_max_age_sec_, &prediction.map_T_lidar))
+    {
+      prediction.status = "CAUSAL_EKF_TWIST_EXTRAPOLATION_INVALID";
+      return prediction;
+    }
+    prediction.valid = true;
+    prediction.status = prediction.age_ms > 0.0 ?
+        "CAUSAL_EKF_BODY_TWIST_TO_SCAN" : "CAUSAL_EKF_EXACT_SCAN_STAMP";
+    return prediction;
+  }
 
   static std::string determinismCsvHeader()
   {
@@ -330,7 +497,20 @@ private:
            "translation_limited,rotation_limited,final_used_tx,final_used_ty,final_used_tz,final_used_qx,final_used_qy,"
            "final_used_qz,final_used_qw,"
            "scan_start_stamp,scan_mid_stamp,scan_end_stamp,scan_min_offset_sec,scan_max_offset_sec,scan_duration_ms,"
-           "pending_lidar_count,pending_overflow_count";
+           "pending_lidar_count,pending_overflow_count,coupled_mode,ekf_prediction_status,ekf_prediction_stamp,"
+           "ekf_prediction_target_stamp,ekf_prediction_age_ms,ekf_prediction_tx,ekf_prediction_ty,ekf_prediction_tz,ekf_prediction_qx,"
+           "ekf_prediction_qy,ekf_prediction_qz,ekf_prediction_qw,anchor_status,anchor_valid,anchor_stamp,anchor_age_s,"
+           "anchor_status_after,anchor_valid_after,coupled_status,coupled_triggered,coupled_attempted,"
+           "coupled_recommended,coupled_feedback_applied,coupled_feedback_changed_observation,"
+           "coupled_weak_dimension,coupled_weak_eta0,coupled_weak_eta1,coupled_weak_eta2,coupled_weak_eta3,"
+           "coupled_weak_eta4,coupled_weak_eta5,coupled_strong_eta0,coupled_strong_eta1,coupled_strong_eta2,"
+           "coupled_strong_eta3,coupled_strong_eta4,coupled_strong_eta5,coupled_weak_pose_tx,coupled_weak_pose_ty,"
+           "coupled_weak_pose_tz,coupled_weak_pose_qx,coupled_weak_pose_qy,coupled_weak_pose_qz,coupled_weak_pose_qw,"
+           "coupled_full_pose_tx,coupled_full_pose_ty,coupled_full_pose_tz,coupled_full_pose_qx,coupled_full_pose_qy,"
+           "coupled_full_pose_qz,coupled_full_pose_qw,coupled_candidate_tx,coupled_candidate_ty,coupled_candidate_tz,"
+           "coupled_candidate_qx,coupled_candidate_qy,coupled_candidate_qz,coupled_candidate_qw,coupled_score_sum,"
+           "coupled_jet_calls,coupled_value_calls,coupled_total_ms,coupled_strong_selected,coupled_candidate_step_limited,"
+           "coupled_candidate_translation_limited,coupled_candidate_rotation_limited";
   }
 
   static void appendPoseCsv(std::ostream &out, const Eigen::Matrix4d &pose)
@@ -417,7 +597,28 @@ private:
     appendPoseCsv(out, row.final_used);
     out << "," << row.scan_start_stamp << "," << row.scan_mid_stamp << "," << row.scan_end_stamp << ","
         << row.scan_min_offset_sec << "," << row.scan_max_offset_sec << "," << row.scan_duration_ms << ","
-        << row.pending_lidar_count << "," << row.pending_overflow_count;
+        << row.pending_lidar_count << "," << row.pending_overflow_count << ","
+        << row.coupled_mode << "," << row.ekf_prediction_status << "," << row.ekf_prediction_stamp << ","
+        << row.ekf_prediction_target_stamp << "," << row.ekf_prediction_age_ms << ",";
+    appendPoseCsv(out, row.ekf_prediction_pose);
+    out << "," << row.anchor_status << "," << (row.anchor_valid ? 1 : 0) << ","
+        << row.anchor_stamp << "," << row.anchor_age_s << "," << row.anchor_status_after << ","
+        << (row.anchor_valid_after ? 1 : 0) << "," << row.coupled_status << ","
+        << (row.coupled_triggered ? 1 : 0) << "," << (row.coupled_attempted ? 1 : 0) << ","
+        << (row.coupled_recommended ? 1 : 0) << "," << (row.coupled_feedback_applied ? 1 : 0) << ","
+        << (row.coupled_feedback_changed_observation ? 1 : 0) << ","
+        << row.coupled_weak_dimension;
+    for (int i = 0; i < 6; ++i) out << "," << row.coupled_weak_eta(i);
+    for (int i = 0; i < 6; ++i) out << "," << row.coupled_strong_eta(i);
+    out << ","; appendPoseCsv(out, row.coupled_weak_pose);
+    out << ","; appendPoseCsv(out, row.coupled_full_pose);
+    out << ","; appendPoseCsv(out, row.coupled_candidate);
+    out << "," << row.coupled_score_sum << "," << row.coupled_jet_calls << ","
+        << row.coupled_value_calls << "," << row.coupled_total_ms << ","
+        << (row.coupled_strong_selected ? 1 : 0) << ","
+        << (row.coupled_candidate_step_limited ? 1 : 0) << ","
+        << (row.coupled_candidate_translation_limited ? 1 : 0) << ","
+        << (row.coupled_candidate_rotation_limited ? 1 : 0);
     out << "\n";
     determinism_csv_ << out.str();
   }
@@ -535,7 +736,7 @@ private:
   {
     if (!cloud || cloud->empty()) return;
     std::lock_guard<std::mutex> lock(mutex_);
-    if (!local_imu_rotation_prior_enable_)
+    if (!local_imu_rotation_prior_enable_ && !coupled_enabled_)
     {
       handleCloudLocked(cloud, timing.start_stamp, callback_start, timing, header_seq);
       return;
@@ -579,7 +780,10 @@ private:
       const PendingLidarFrame &front = pending_lidar_frames_.front();
       const bool imu_watermark_ready = !local_imu_rotation_prior_enable_ ||
           (has_imu_watermark_ && latest_imu_stamp_ >= front.reference_stamp);
-      if (!imu_watermark_ready)
+      const bool ekf_watermark_ready = !coupled_enabled_ ||
+          (has_ekf_high_rate_watermark_ &&
+           latest_ekf_high_rate_stamp_ns_ >= front.reference_stamp.toNSec());
+      if (!imu_watermark_ready || !ekf_watermark_ready)
       {
         break;
       }
@@ -723,6 +927,7 @@ private:
 
     DeterminismRow diagnostic_row;
     diagnostic_row.local_imu_prior_enabled = local_imu_rotation_prior_enable_;
+    diagnostic_row.coupled_mode = coupled_mode_;
     if (determinism_diagnostic_enable_)
     {
       diagnostic_row.frame_index = ++determinism_frame_index_;
@@ -766,6 +971,7 @@ private:
                          static_cast<int>(source->size()), target_cloud_->size(), 0.0, 0);
       diagnostic_row.initial_guess_source = "not_evaluated";
       diagnostic_row.initial_guess_reason = "insufficient_points";
+      diagnostic_row.coupled_status = coupled_enabled_ ? "INSUFFICIENT_POINTS" : "NOT_RUN";
       writeDeterminismRow(diagnostic_row);
       return;
     }
@@ -858,7 +1064,6 @@ private:
     if (ok)
     {
       const Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
-      Eigen::Matrix4d used_result = result;
       diagnostic_row.raw_ndt = result;
       const Eigen::Matrix4d raw_delta = initial_guess.inverse() * result;
       const Eigen::AngleAxisd raw_delta_angle(raw_delta.block<3, 3>(0, 0));
@@ -866,11 +1071,152 @@ private:
       diagnostic_row.raw_delta.tail<3>() = raw_delta_angle.axis() * raw_delta_angle.angle();
       diagnostic_row.raw_delta_translation = raw_delta.block<3, 1>(0, 3).norm();
       diagnostic_row.raw_delta_rotation_deg = rotationAngleDeg(raw_delta.block<3, 3>(0, 0));
-      diagnostic_row.used_before_step_limit = used_result;
-      step_limited = limitNdtStep(result, used_result,
+
+      EkfPrediction ekf_prediction;
+      dog_prior_map_fastlio2_frontend_exp::WeakCoupledResult coupled_result;
+      bool have_coupled_result = false;
+      bool feedback_candidate = false;
+      const uint64_t reference_stamp_ns = timing.reference_stamp.toNSec();
+      if (coupled_enabled_)
+      {
+        ekf_prediction = ekfPredictionAtOrBeforeLocked(reference_stamp_ns);
+        diagnostic_row.ekf_prediction_status = ekf_prediction.status;
+        diagnostic_row.ekf_prediction_stamp = ekf_prediction.sample_stamp_ns / 1e9;
+        diagnostic_row.ekf_prediction_target_stamp = reference_stamp_ns / 1e9;
+        diagnostic_row.ekf_prediction_age_ms = ekf_prediction.age_ms;
+        diagnostic_row.ekf_prediction_pose = ekf_prediction.map_T_lidar;
+
+        if (ekf_prediction.valid)
+        {
+          if (has_previous_coupled_ekf_pose_)
+          {
+            const uint64_t previous_stamp_ns = previous_coupled_ekf_pose_.stamp_ns;
+            const double interval_s = previous_stamp_ns < ekf_prediction.stamp_ns ?
+                (ekf_prediction.stamp_ns - previous_stamp_ns) / 1e9 : 0.0;
+            if (interval_s > 0.0 && interval_s <= 0.25 &&
+                reference_stamp_ns > coupled_anchor_.propagated_stamp_ns)
+            {
+              const Eigen::Matrix4d causal_interval =
+                  previous_coupled_ekf_pose_.map_T_lidar.inverse() * ekf_prediction.map_T_lidar;
+              dog_prior_map_fastlio2_frontend_exp::advanceCoupledAnchor(
+                  &coupled_anchor_, reference_stamp_ns, causal_interval);
+            }
+            else if (coupled_anchor_.valid)
+            {
+              coupled_anchor_.valid = false;
+              coupled_anchor_.frozen = false;
+              coupled_anchor_.status = "EKF_INTERVAL_INVALID";
+              coupled_anchor_.invalidated_stamp_ns = reference_stamp_ns;
+            }
+          }
+          else if (coupled_anchor_.valid)
+          {
+            coupled_anchor_.valid = false;
+            coupled_anchor_.frozen = false;
+            coupled_anchor_.status = "EKF_INTERVAL_UNAVAILABLE";
+            coupled_anchor_.invalidated_stamp_ns = reference_stamp_ns;
+          }
+          previous_coupled_ekf_pose_ = EkfPoseSample{ekf_prediction.stamp_ns,
+                                                      ekf_prediction.map_T_lidar};
+          has_previous_coupled_ekf_pose_ = true;
+        }
+        else
+        {
+          coupled_anchor_.valid = false;
+          coupled_anchor_.frozen = false;
+          coupled_anchor_.status = ekf_prediction.status;
+          coupled_anchor_.invalidated_stamp_ns = reference_stamp_ns;
+          has_previous_coupled_ekf_pose_ = false;
+        }
+
+        diagnostic_row.anchor_status = coupled_anchor_.status;
+        diagnostic_row.anchor_valid = coupled_anchor_.valid;
+        diagnostic_row.anchor_stamp = coupled_anchor_.origin_stamp_ns / 1e9;
+        diagnostic_row.anchor_age_s = coupled_anchor_.origin_stamp_ns &&
+            reference_stamp_ns >= coupled_anchor_.origin_stamp_ns ?
+            (reference_stamp_ns - coupled_anchor_.origin_stamp_ns) / 1e9 : 0.0;
+
+        if (ekf_prediction.valid)
+        {
+          dog_prior_map_fastlio2_frontend_exp::CoupledNdtBackend backend;
+          backend.jet = [this, source](const Eigen::Matrix4f &pose,
+              const dog_prior_map_fastlio2_frontend_exp::CoupledVector6 &native_parameters) {
+            return ndt_.nativeJet(source, pose, native_parameters);
+          };
+          backend.score = [this, source](const Eigen::Matrix4f &pose) {
+            return ndt_.dynamicScore(source, pose);
+          };
+          dog_prior_map_fastlio2_frontend_exp::WeakCoupledConfig refinement_config;
+          refinement_config.coupled = coupled_mode_ != "WEAK_ONLY_FEEDBACK";
+          coupled_result = dog_prior_map_fastlio2_frontend_exp::runWeakCoupledRefinement(
+              result.cast<float>(), ekf_prediction.map_T_lidar.cast<float>(), reference_stamp_ns,
+              source->size(), true, coupled_anchor_, backend, refinement_config);
+          diagnostic_row.coupled_total_ms = coupled_result.total_ms;
+          have_coupled_result = true;
+          diagnostic_row.coupled_status = coupled_result.status;
+          diagnostic_row.coupled_triggered = coupled_result.triggered;
+          diagnostic_row.coupled_attempted = coupled_result.attempted;
+          diagnostic_row.coupled_recommended = coupled_result.recommended;
+          diagnostic_row.coupled_strong_selected = coupled_result.strong_selected;
+          diagnostic_row.coupled_weak_dimension = coupled_result.weak_dimension;
+          diagnostic_row.coupled_jet_calls = coupled_result.jet_calls;
+          diagnostic_row.coupled_value_calls = coupled_result.value_calls;
+          diagnostic_row.coupled_weak_pose = coupled_result.weak_pose.cast<double>();
+          diagnostic_row.coupled_full_pose = coupled_result.coupled_pose.cast<double>();
+          diagnostic_row.coupled_candidate = coupled_result.candidate.cast<double>();
+          diagnostic_row.coupled_weak_eta = coupled_result.weak_eta;
+          diagnostic_row.coupled_strong_eta = coupled_result.strong_eta;
+          diagnostic_row.coupled_score_sum = coupled_result.candidate_score;
+          const bool feedback_mode = coupled_mode_ == "WEAK_ONLY_FEEDBACK" ||
+                                     coupled_mode_ == "COUPLED_FEEDBACK";
+          feedback_candidate = feedback_mode && coupled_result.recommended &&
+                               validRigidPose(coupled_result.candidate.cast<double>());
+          if (feedback_mode && coupled_result.recommended && !feedback_candidate)
+            diagnostic_row.coupled_status = "INVALID_RECOMMENDED_POSE_RETAIN_NOMINAL";
+        }
+        else
+        {
+          diagnostic_row.coupled_status = ekf_prediction.status;
+        }
+      }
+
+      Eigen::Matrix4d measurement_before_limit = feedback_candidate ?
+          coupled_result.candidate.cast<double>() : result;
+      Eigen::Matrix4d used_result = measurement_before_limit;
+      diagnostic_row.used_before_step_limit = measurement_before_limit;
+      step_limited = limitNdtStep(measurement_before_limit, used_result,
                                   diagnostic_row.translation_limited,
                                   diagnostic_row.rotation_limited);
+      diagnostic_row.coupled_feedback_applied = feedback_candidate;
+      diagnostic_row.coupled_candidate_step_limited = feedback_candidate && step_limited;
+      diagnostic_row.coupled_candidate_translation_limited = feedback_candidate &&
+          diagnostic_row.translation_limited;
+      diagnostic_row.coupled_candidate_rotation_limited = feedback_candidate &&
+          diagnostic_row.rotation_limited;
+      if (feedback_candidate)
+      {
+        Eigen::Matrix4d nominal_limited = result;
+        bool nominal_translation_limited = false, nominal_rotation_limited = false;
+        limitNdtStep(result, nominal_limited, nominal_translation_limited, nominal_rotation_limited);
+        const double translation_difference =
+            (used_result.block<3, 1>(0, 3) - nominal_limited.block<3, 1>(0, 3)).norm();
+        const double rotation_difference_deg = rotationAngleDeg(
+            nominal_limited.block<3, 3>(0, 0).transpose() * used_result.block<3, 3>(0, 0));
+        diagnostic_row.coupled_feedback_changed_observation =
+            translation_difference > 1e-9 || rotation_difference_deg > 1e-8;
+        dog_prior_map_fastlio2_frontend_exp::settleCoupledAnchor(
+            &coupled_anchor_, reference_stamp_ns, used_result, false, true);
+      }
+      else if (coupled_enabled_ && ekf_prediction.valid && have_coupled_result &&
+               !coupled_result.triggered && coupled_result.recommended == false)
+      {
+        dog_prior_map_fastlio2_frontend_exp::settleWeakRefinementAnchor(
+            &coupled_anchor_, reference_stamp_ns,
+            ekf_prediction.map_T_lidar, true);
+      }
       diagnostic_row.final_used = used_result;
+      diagnostic_row.anchor_status_after = coupled_anchor_.status;
+      diagnostic_row.anchor_valid_after = coupled_anchor_.valid;
       if (has_previous_pose_)
       {
         delta_pose_ = previous_pose_.inverse() * used_result;
@@ -1130,6 +1476,7 @@ private:
   ros::Subscriber sub_livox_;
   ros::Subscriber sub_pc2_;
   ros::Subscriber sub_imu_;
+  ros::Subscriber sub_ekf_high_rate_;
   ros::Publisher pub_odom_;
   ros::Publisher pub_pose_;
   ros::Publisher pub_path_;
@@ -1151,6 +1498,11 @@ private:
   std::string points_aligned_topic_;
   std::string map_pcd_path_;
   std::string imu_topic_;
+  std::string coupled_mode_ = "CONTROL";
+  std::string ekf_high_rate_topic_ = "/dog_livo/odom_high_rate";
+  bool coupled_enabled_ = false;
+  double coupled_prediction_max_age_sec_ = 0.02;
+  double coupled_ekf_history_keep_sec_ = 60.0;
 
   struct ImuSample
   {
@@ -1161,9 +1513,15 @@ private:
   std::deque<ImuSample> imu_history_;
   bool has_imu_watermark_ = false;
   ros::Time latest_imu_stamp_;
+  std::deque<EkfPoseSample> ekf_pose_history_;
+  bool has_ekf_high_rate_watermark_ = false;
+  uint64_t latest_ekf_high_rate_stamp_ns_ = 0;
+  bool has_previous_coupled_ekf_pose_ = false;
+  EkfPoseSample previous_coupled_ekf_pose_;
+  dog_prior_map_fastlio2_frontend_exp::CoupledAnchorState coupled_anchor_;
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr target_cloud_;
-  pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ> ndt_;
+  dog_prior_map_fastlio2_frontend_exp::ObservablePclNdt<pcl::PointXYZ> ndt_;
   nav_msgs::Path path_;
 
   Eigen::Vector3d p_ = Eigen::Vector3d::Zero();

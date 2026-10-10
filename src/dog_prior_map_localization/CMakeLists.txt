@@ -86,6 +86,15 @@ add_executable(frame_conversion_contract_test
 add_executable(dog_prior_map_ndt_node_cpp
   src/dog_prior_map_ndt_node.cpp
   src/external_ndt_transaction_server.cpp
+  ../dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_shadow.cpp
+  ../dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_temporal.cpp
+  ../dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_anchor.cpp
+  ../dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_weak_refinement.cpp
+  ../dog_prior_map_fastlio2_frontend_exp/src/registration_geometry.cpp
+)
+
+target_include_directories(dog_prior_map_ndt_node_cpp PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/../dog_prior_map_fastlio2_frontend_exp/include
 )
 
 target_link_libraries(dog_prior_map_ndt_node_cpp
@@ -100,6 +109,29 @@ add_dependencies(dog_prior_map_ndt_node_cpp
 )
 
 if(CATKIN_ENABLE_TESTING)
+  add_executable(observable_pcl_ndt_contract_test
+    tests/observable_pcl_ndt_contract_test.cpp
+  )
+  target_include_directories(observable_pcl_ndt_contract_test PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../dog_prior_map_fastlio2_frontend_exp/include
+    ${PCL_INCLUDE_DIRS}
+    ${EIGEN3_INCLUDE_DIRS}
+  )
+  target_link_libraries(observable_pcl_ndt_contract_test
+    ${PCL_LIBRARIES}
+    /lib/x86_64-linux-gnu/libusb-1.0.so.0
+  )
+  add_test(NAME observable_pcl_ndt_contract_test
+    COMMAND $<TARGET_FILE:observable_pcl_ndt_contract_test>)
+  set_tests_properties(observable_pcl_ndt_contract_test PROPERTIES
+    ENVIRONMENT "LD_PRELOAD=/lib/x86_64-linux-gnu/libusb-1.0.so.0")
+
+  add_executable(causal_pose_prediction_test
+    tests/causal_pose_prediction_test.cpp
+  )
+  add_test(NAME causal_pose_prediction_test
+    COMMAND $<TARGET_FILE:causal_pose_prediction_test>)
+
   add_executable(external_ndt_server_integration_test
     tests/external_ndt_server_integration_test.cpp
     src/external_ndt_transaction_server.cpp

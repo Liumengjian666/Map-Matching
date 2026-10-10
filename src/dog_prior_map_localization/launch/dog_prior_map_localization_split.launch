@@ -18,6 +18,7 @@
   <arg name="imu_deskew_csv_path" default="" />
   <arg name="diagnostic_determinism_enable" default="false" />
   <arg name="ndt_determinism_csv_path" default="" />
+  <arg name="coupled_mode" default="CONTROL" />
   <arg name="information_diagnostic_enable" default="false" />
   <arg name="local_vio_metric_enable" default="false" />
   <arg name="directional_fusion_enable" default="false" />
@@ -77,6 +78,7 @@
         type="dog_prior_map_ndt_node_cpp"
         name="dog_prior_map_ndt"
         output="screen">
+    <param name="coupled_mode" value="$(arg coupled_mode)" />
     <!-- MVS SDK会把/opt/MVS/lib/64放进LD_LIBRARY_PATH，其中旧版libusb会导致PCL/NDT启动时报
          symbol lookup error: libpcl_io.so.1.10: undefined symbol: libusb_set_option。
          这里只让定位节点优先使用系统libusb，不修改全局环境，也不影响相机驱动。 -->

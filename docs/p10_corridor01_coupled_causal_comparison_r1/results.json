@@ -1,0 +1,39 @@
+{
+  "task": "P10-CORRIDOR01-COUPLED-CAUSAL-COMPARISON-R1",
+  "stage": "SOURCE_INTEGRATION_AND_BUILD_READY_SHADOW_REPLAY_REQUIRED",
+  "git_start_sha": "aacd58533db8ec3b47ab734e03baf7604d4c3dd4",
+  "input": {
+    "slice_sha256": "f6e77c96d97402e551835e81a1ce8d780d075da2f18a9cb5e4fc0646628b86d6",
+    "map_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+    "extrinsics_sha256": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d",
+    "control_topics_bag_sha256": "2851892e14e852098808f78baf42d2e878782a268fae13f869091c9f4b556aa1"
+  },
+  "binary": {
+    "ndt_node_sha256": "9da66b47b89053e523f3ce2d18086395e565ef6d9353ebd34c4f4f315afd3db4",
+    "ekf_node_sha256": "4d1655cc3f7d3fdc6cac2372f380ca8fe7b0b250227235767947da3d4030f402",
+    "ekf_matches_frozen_control": true,
+    "build_profile": "existing -O2 optimized catkin build, CMAKE_BUILD_TYPE empty; temporary Release binaries not used"
+  },
+  "verification": {
+    "pcl_native_jet_value_parity": "PASS",
+    "causal_body_twist_prediction_contract": "PASS",
+    "oosm_replay_contract": "PASS",
+    "imu_interval_numeric": "PASS",
+    "frame_conversion_contract": "PASS",
+    "imu_deskew_contract": "PASS",
+    "optimized_node_build": "PASS",
+    "shadow_python_tool_startup": "PASS",
+    "fixed_control_alignment_evaluator_startup": "PASS",
+    "launch_xml": "PASS",
+    "git_diff_check": "PASS"
+  },
+  "runs": {
+    "control": "FROZEN_PRIOR_RESULT_REUSED",
+    "coupled_shadow": "NOT_RUN_USER_ORDINARY_ROS_TERMINAL_REQUIRED",
+    "weak_only_feedback": "NOT_RUN_SHADOW_PARITY_GATE_PENDING",
+    "coupled_feedback": "NOT_RUN_SHADOW_PARITY_GATE_PENDING"
+  },
+  "new_ndt_calls": 0,
+  "gt_loaded": false,
+  "next": "RUN_COUPLED_SHADOW_AND_RETURN_PARITY_OUTPUT"
+}
