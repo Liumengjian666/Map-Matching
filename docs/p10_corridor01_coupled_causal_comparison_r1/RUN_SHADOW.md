@@ -89,6 +89,7 @@ set -euo pipefail
 mkdir -p "$OUT/ros_home" "$OUT/logs"
 date --iso-8601=seconds | tee "$OUT/run_times.txt"
 source /opt/ros/noetic/setup.bash
+export ROS_MASTER_URI=http://127.0.0.1:11311 ROS_IP=127.0.0.1
 export ROS_HOME="$OUT/ros_home" ROS_LOG_DIR="$OUT/logs"
 set +e
 roscore 2>&1 | tee "$OUT/logs/roscore.log"
@@ -113,6 +114,7 @@ OUT="/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_coupled_causal_compari
 source /opt/ros/noetic/setup.bash
 source /home/jian/livox_ws/devel/setup.bash
 source /tmp/dog_loc_paper_r4_ws.Fq21k2/devel/setup.bash
+export ROS_MASTER_URI=http://127.0.0.1:11311 ROS_IP=127.0.0.1
 export ROS_HOME="$OUT/ros_home" ROS_LOG_DIR="$OUT/logs"
 set -euo pipefail
 PKG="$(rospack find dog_prior_map_localization)"
@@ -146,6 +148,7 @@ RUN_ID=shadow
 MODE=COUPLED_SHADOW
 OUT="/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_coupled_causal_comparison_r1/$RUN_ID"
 source /opt/ros/noetic/setup.bash
+export ROS_MASTER_URI=http://127.0.0.1:11311 ROS_IP=127.0.0.1
 export ROS_HOME="$OUT/ros_home" ROS_LOG_DIR="$OUT/logs"
 set -euo pipefail
 ACTUAL_MODE="$(rosparam get /dog_prior_map_ndt/coupled_mode)"
@@ -185,6 +188,7 @@ The player must reach end-of-bag naturally. Do not Ctrl-C it early.
 RUN_ID=shadow
 OUT="/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_coupled_causal_comparison_r1/$RUN_ID"
 source /opt/ros/noetic/setup.bash
+export ROS_MASTER_URI=http://127.0.0.1:11311 ROS_IP=127.0.0.1
 set -euo pipefail
 rosbag play --wait-for-subscribers --clock --rate 0.25 /home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/input/corridor01_p10_causal_startup5_eval35_v1.bag 2>&1 | tee "$OUT/logs/player.log"
 ~~~
