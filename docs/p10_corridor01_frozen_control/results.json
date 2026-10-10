@@ -1,0 +1,94 @@
+{
+  "task": "P10-CORRIDOR01-RUN-FROZEN-CONTROL",
+  "protocol": "P10_CORRIDOR01_PROSPECTIVE_CAUSAL_BASELINE_V1",
+  "result": "CONTROL_REPLAY_COMPLETED_TRACKING_RISK_CONFIRMED",
+  "git": {
+    "branch": "research/p9-r4-heldout-visual-evidence",
+    "start_sha": "953a895e4c8632df8e7b2d2ca18a82d085bafb71",
+    "end_sha_before_archive_commit": "953a895e4c8632df8e7b2d2ca18a82d085bafb71",
+    "push_executed": false
+  },
+  "execution": {
+    "codex_socket_test": "BLOCKED_EPERM",
+    "actual_replay": "USER_EXECUTED_IN_REGULAR_UBUNTU_TERMINAL",
+    "methods_run": ["NOMINAL_CONTROL"],
+    "methods_not_run": ["WEAK_ONLY", "COUPLED"],
+    "gt_loaded_after_runtime_hash_freeze": true
+  },
+  "input": {
+    "slice_bag_sha256": "f6e77c96d97402e551835e81a1ce8d780d075da2f18a9cb5e4fc0646628b86d6",
+    "slice_manifest_sha256": "fa49d5f7b3a4c20c5a1889d31c3ec86bb6f12a0275ee3dafe04eebb0dfae7f1e",
+    "window_duration_s": 39.962544,
+    "startup_s": 5,
+    "evaluation_s": 35,
+    "scan_count_total": 396,
+    "scan_count_evaluation": 346,
+    "imu_samples_including_boundary": 7989,
+    "raw_point_count": 11473279,
+    "map_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+    "extrinsics_sha256": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d",
+    "gt_sha256": "3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03"
+  },
+  "runtime_integrity": {
+    "ndt_calls": 396,
+    "ndt_converged": 396,
+    "ndt_source_points_per_scan": 1400,
+    "ndt_target_points": 226164,
+    "ndt_iterations_mean": 1.303030303030303,
+    "ndt_iterations_p95": 2,
+    "ndt_iterations_max": 16,
+    "ndt_fitness_mean": 2.5802358982687754,
+    "ndt_fitness_p95": 7.274267493031278,
+    "ndt_fitness_max": 88.78849506453075,
+    "ndt_step_limited_scans": 28,
+    "deskew_published": 396,
+    "deskew_input_output_point_count_exact": 396,
+    "deskew_current_scan_ndt_leakage": 0,
+    "deskew_post_scan_end_imu_used": 0,
+    "deskew_max_state_gap_ms": 9.999990463256836,
+    "deskew_processing_ms_mean": 13.605472856060612,
+    "deskew_processing_ms_p95": 18.1438975,
+    "deskew_processing_ms_max": 22.788855,
+    "oosm_applied": 396,
+    "oosm_lag_ms_mean": 108.41589804851648,
+    "oosm_lag_ms_p95": 110.68570613861084,
+    "oosm_lag_ms_max": 125.2291202545166,
+    "oosm_alignment_error_ms_max": 4.981040954589844,
+    "ekf_lineage_final_ndt_updates": 396,
+    "ekf_lineage_final_imu_samples": 7989,
+    "high_rate_odom_messages": 7988
+  },
+  "evaluation": {
+    "mode": "PREFIX_ALIGNED_RELATIVE_DRIFT",
+    "evaluation_origin_unix_s": 1517157224.188979,
+    "fit": "fixed full-pose SE3 left transform from corrected high-rate first 3 s; shared unchanged across streams",
+    "primary_interval_s": [3, 35],
+    "corrected_high_rate": {
+      "fit_0_3s": {"count": 600, "translation_rmse_m": 0.08426943621583935, "translation_p95_m": 0.19716684465082657, "translation_max_m": 0.21719599231104153, "rotation_rmse_deg": 1.3327647760958161, "rotation_p95_deg": 2.4370803750369805, "rotation_max_deg": 4.198069653643643},
+      "evaluation_0_10s": {"count": 1999, "translation_rmse_m": 0.4623126906713304, "translation_p95_m": 0.7782157362044968, "translation_max_m": 1.1183653303003709, "rotation_rmse_deg": 1.994561258492757, "rotation_p95_deg": 2.9245307442981066, "rotation_max_deg": 5.150434457640665},
+      "holdout_3_10s": {"count": 1399, "translation_rmse_m": 0.5498661297600085, "translation_p95_m": 0.8114849588326187, "translation_max_m": 1.1183653303003709, "rotation_rmse_deg": 2.218708835111169, "rotation_p95_deg": 3.0057567853324785, "rotation_max_deg": 5.150434457640665},
+      "primary_3_35s": {"count": 6388, "translation_rmse_m": 1.8846435045703738, "translation_p95_m": 5.004369457235495, "translation_max_m": 5.563365023461333, "rotation_rmse_deg": 3.033483224914379, "rotation_p95_deg": 3.692546688974255, "rotation_max_deg": 16.37545397910138},
+      "all_0_35s": {"count": 6988, "translation_rmse_m": 1.8020879863578358, "translation_p95_m": 4.972374023610799, "translation_max_m": 5.563365023461333, "rotation_rmse_deg": 2.9265054044340912, "rotation_p95_deg": 3.650087097906062, "rotation_max_deg": 16.37545397910138}
+    },
+    "ndt_topic_published_pose": {
+      "primary_3_35s": {"count": 316, "translation_rmse_m": 1.8628626552230425, "translation_p95_m": 4.904777700087876, "translation_max_m": 5.225716857335019, "rotation_rmse_deg": 3.029960313185583, "rotation_p95_deg": 3.536677947725891, "rotation_max_deg": 15.62878739064767},
+      "all_0_35s": {"count": 346, "translation_rmse_m": 1.7803887629727357, "translation_p95_m": 4.8838966731100415, "translation_max_m": 5.225716857335019, "rotation_rmse_deg": 2.91778942595501, "rotation_p95_deg": 3.4938776795781905, "rotation_max_deg": 15.62878739064767}
+    },
+    "position_kabsch_diagnostic": {
+      "position_cross_covariance_singular_values": [1026.217843538056, 7.917365229470759, 0.0016769444338843155],
+      "smallest_to_largest_ratio": 1.6341018083477984e-06,
+      "rotation_difference_from_primary_deg": 5.033950865830582
+    },
+    "corrected_translation_persistent_thresholds_s": {
+      "over_0_5m": {"first_s": 6.409564971923828, "sustained_5s_start_s": 6.409564971923828},
+      "over_1m": {"first_s": 6.634557008743286, "sustained_5s_start_s": 26.738332986831665},
+      "over_2m": {"first_s": 29.778141021728516, "sustained_5s_start_s": 29.778141021728516}
+    }
+  },
+  "performance_limits": {
+    "sampled_ndt_align_timing": "NOT_ARCHIVED",
+    "full_frame_latency": "NOT_RECORDED",
+    "peak_rss": "NOT_RECORDED"
+  },
+  "next": "WAIT_FOR_PI_DECISION_ON_COUPLED_COMPARISON"
+}

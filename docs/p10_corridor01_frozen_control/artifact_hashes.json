@@ -1,0 +1,84 @@
+{
+  "protocol": "P10_CORRIDOR01_PROSPECTIVE_CAUSAL_BASELINE_V1",
+  "run_workspace": "/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control",
+  "git_before_archive": {
+    "branch": "research/p9-r4-heldout-visual-evidence",
+    "head": "953a895e4c8632df8e7b2d2ca18a82d085bafb71",
+    "origin_tracking_head": "953a895e4c8632df8e7b2d2ca18a82d085bafb71"
+  },
+  "frozen_inputs": {
+    "slice_bag": {
+      "path": "/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/input/corridor01_p10_causal_startup5_eval35_v1.bag",
+      "sha256": "f6e77c96d97402e551835e81a1ce8d780d075da2f18a9cb5e4fc0646628b86d6"
+    },
+    "slice_manifest": {
+      "path": "/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/input/slice_manifest.json",
+      "sha256": "fa49d5f7b3a4c20c5a1889d31c3ec86bb6f12a0275ee3dafe04eebb0dfae7f1e"
+    },
+    "normalized_map": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd",
+      "sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f"
+    },
+    "extrinsics": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/calibration/corridor01_extrinsics.yaml",
+      "sha256": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d"
+    },
+    "sensor_only_initializer": {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/config/corridor01_init.yaml",
+      "sha256": "d3e6f560895cb4f6a9efb7058bcff8a13313783e799d82c828e51adcd4bafd1e"
+    },
+    "gt_imu_trajectory": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/gt/corridor01_gt.txt",
+      "sha256": "3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03",
+      "loaded_after_runtime_artifacts_frozen": true
+    },
+    "dataset_config_sha256": "fc5c262f4eacbb8b23d95a9adb5877e956fa215f84c675a378c62e2e63d94d6c",
+    "base_ndt_config_sha256": "482d11e26b998aad0fcb07840d9d8eede788291348c1a93a748a74edf1fe6b83",
+    "split_launch_sha256": "e4ec55b08c4291cce75c8571ef3b59607c760e33da8f3b1f1f28943d3a084971",
+    "ndt_binary_sha256": "dd9463bc1613a80e59a96c10675b59a0ed3b8092df760562421ca8feb7782cd3",
+    "ekf_binary_sha256": "4d1655cc3f7d3fdc6cac2372f380ca8fe7b0b250227235767947da3d4030f402"
+  },
+  "frozen_run_outputs": {
+    "control_topics_bag": {
+      "path": "/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/control_topics.bag",
+      "bytes": 7968629,
+      "sha256": "2851892e14e852098808f78baf42d2e878782a268fae13f869091c9f4b556aa1"
+    },
+    "ndt_diagnostics_csv": {
+      "path": "/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/ndt_diagnostics.csv",
+      "sha256": "aa3be25e06e3f8e287bf5e3d03fec31367b533ab8d63d995812101741c9ecb41"
+    },
+    "deskew_csv": {
+      "path": "/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/deskew.csv",
+      "sha256": "79690d557c0f0882691c7f5c6a23cdb9101698039c83762ce34ca7eb263214d8"
+    },
+    "oosm_csv": {
+      "path": "/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/oosm.csv",
+      "sha256": "9a47cc42e49c33d9da0d083c9962cae46309f499a4f6d1f64b491c3e79c16781"
+    },
+    "ekf_runtime_csv": {
+      "path": "/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/ekf_runtime.csv",
+      "sha256": "40be8fb8a648e90da94101349746470191159528a0a6d17c1265dbef411a41a9"
+    },
+    "ekf_lineage_csv_not_committed": {
+      "path": "/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/ekf_lineage.csv",
+      "sha256": "9cf4394d07204ed98a1adff0464a7f6647624a990a5a868471999cf6c4588f40"
+    }
+  },
+  "committed_archive_files": {
+    "REPORT.md": "d893379fa1fa564b63515c0423fb1cab94fa800171942eb9861b1bc49e08ba57",
+    "results.json": "369438395cfab5a106c3069a08314ef0b0ae04293de0989ea6f6b37167d22a0a",
+    "posthoc_metrics.json": "f6998574fb60e6b36eb3519e9228d17cc5209857054870557738d1affb11fe5d",
+    "posthoc_per_sample_errors.csv": "01c935971ce9e3dc839a1e4d3c4c878d625493d7c98c73ad2cfeaca3037258b2",
+    "control_diagnostics/ndt_diagnostics.csv": "aa3be25e06e3f8e287bf5e3d03fec31367b533ab8d63d995812101741c9ecb41",
+    "control_diagnostics/deskew.csv": "79690d557c0f0882691c7f5c6a23cdb9101698039c83762ce34ca7eb263214d8",
+    "control_diagnostics/oosm.csv": "9a47cc42e49c33d9da0d083c9962cae46309f499a4f6d1f64b491c3e79c16781",
+    "control_diagnostics/ekf_runtime.csv": "40be8fb8a648e90da94101349746470191159528a0a6d17c1265dbef411a41a9",
+    "src/dog_prior_map_localization/scripts/p10_corridor01_prospective/evaluate_frozen_control.py": "3fcec19cb67ecdedc71b3314606e881e3af5b3339bc1ccda155b88fb1fea9a54"
+  },
+  "not_committed": [
+    "7.97 MB control_topics.bag",
+    "3.5 MB full ekf_lineage.csv",
+    "ROS logs and the transient timing sample were not retained as an auditable artifact"
+  ]
+}
