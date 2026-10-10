@@ -269,6 +269,93 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   for (int i = 6; i < 9; ++i) P_(i, i) = init_rot_std * init_rot_std;
   for (int i = 9; i < 15; ++i) P_(i, i) = init_bias_std * init_bias_std;
 
+  // Explicit, dataset-provided startup state for causal offline replay.  This
+  // option is disabled by default, so existing robot/P2B initialization is
+  // unchanged.  The boundary IMU sample is an actual sample before the state
+  // timestamp; it seeds only the first midpoint interval and is not a bias
+  // estimate.
+  if (getParam<bool>("initialization/explicit_state_enable", false))
+  {
+    const int stamp_sec = getParam<int>("initialization/state_stamp_sec", -1);
+    const int stamp_nsec = getParam<int>("initialization/state_stamp_nsec", -1);
+    const int seed_sec = getParam<int>("initialization/boundary_imu_stamp_sec", -1);
+    const int seed_nsec = getParam<int>("initialization/boundary_imu_stamp_nsec", -1);
+    const auto position_values = getParam<std::vector<double>>(
+        "initialization/map_T_imu_translation_m", std::vector<double>());
+    const auto rotation_values = getParam<std::vector<double>>(
+        "initialization/map_T_imu_rotation_row_major", std::vector<double>());
+    const auto velocity_values = getParam<std::vector<double>>(
+        "initialization/velocity_map_mps", std::vector<double>());
+    const auto gyro_bias_values = getParam<std::vector<double>>(
+        "initialization/gyro_bias_imu_radps", std::vector<double>());
+    const auto accel_bias_values = getParam<std::vector<double>>(
+        "initialization/accel_bias_imu_mps2", std::vector<double>());
+    const auto gravity_values = getParam<std::vector<double>>(
+        "initialization/gravity_map_mps2", std::vector<double>());
+    const auto boundary_acc_values = getParam<std::vector<double>>(
+        "initialization/boundary_imu_accel_mps2", std::vector<double>());
+    const auto boundary_gyro_values = getParam<std::vector<double>>(
+        "initialization/boundary_imu_gyro_radps", std::vector<double>());
+    const auto asVector3 = [](const std::vector<double> &values, const char *name) {
+      if (values.size() != 3)
+        throw std::runtime_error(std::string("invalid explicit initialization vector: ") + name);
+      const Eigen::Vector3d vector(values[0], values[1], values[2]);
+      if (!vector.allFinite())
+        throw std::runtime_error(std::string("nonfinite explicit initialization vector: ") + name);
+      return vector;
+    };
+    if (!imu_deskew_enable_ || !oosm_enable_ || !ndt_observation_enable_ ||
+        stamp_sec < 0 || stamp_nsec < 0 || stamp_nsec >= 1000000000 ||
+        seed_sec < 0 || seed_nsec < 0 || seed_nsec >= 1000000000 ||
+        rotation_values.size() != 9)
+      throw std::runtime_error("explicit initialization requires valid IMU-deskew/OOSM state and timestamps");
+
+    Eigen::Matrix3d initial_rotation;
+    for (int row = 0; row < 3; ++row)
+      for (int column = 0; column < 3; ++column)
+        initial_rotation(row, column) = rotation_values[static_cast<std::size_t>(row * 3 + column)];
+    if (!initial_rotation.allFinite() || initial_rotation.determinant() <= 0.0 ||
+        (initial_rotation.transpose() * initial_rotation - Eigen::Matrix3d::Identity()).norm() > 1e-5 ||
+        std::abs(initial_rotation.determinant() - 1.0) > 1e-5)
+      throw std::runtime_error("explicit initialization map_T_imu rotation is not proper SO(3)");
+
+    const double initial_stamp = static_cast<double>(stamp_sec) + stamp_nsec * 1e-9;
+    const double boundary_stamp = static_cast<double>(seed_sec) + seed_nsec * 1e-9;
+    const double boundary_age = initial_stamp - boundary_stamp;
+    if (!std::isfinite(initial_stamp) || !std::isfinite(boundary_age) ||
+        boundary_age < 0.0 || boundary_age > max_imu_dt_ + 1e-9)
+      throw std::runtime_error("explicit initialization boundary IMU sample is outside max_dt");
+
+    p_ = asVector3(position_values, "map_T_imu_translation_m");
+    v_ = asVector3(velocity_values, "velocity_map_mps");
+    bg_ = asVector3(gyro_bias_values, "gyro_bias_imu_radps");
+    ba_ = asVector3(accel_bias_values, "accel_bias_imu_mps2");
+    g_ = asVector3(gravity_values, "gravity_map_mps2");
+    last_acc_measurement_ = asVector3(boundary_acc_values, "boundary_imu_accel_mps2");
+    last_gyro_measurement_ = asVector3(boundary_gyro_values, "boundary_imu_gyro_radps");
+    if (std::abs(g_.norm() - gravity_norm_) > std::max(1e-3, gravity_norm_ * 0.01))
+      throw std::runtime_error("explicit initialization gravity norm disagrees with imu/gravity");
+
+    R_ = initial_rotation;
+    last_interval_acc_input_.setZero();
+    last_interval_gyro_input_.setZero();
+    has_last_interval_input_ = false;
+    last_unbiased_gyro_ = last_gyro_measurement_ - bg_;
+    last_acc_world_ = R_ * (last_acc_measurement_ - ba_) + g_;
+    gravity_initialized_ = true;
+    gravity_init_completion_stamp_ = initial_stamp;
+    has_last_imu_ = true;
+    last_imu_time_ = initial_stamp;
+    has_state_stamp_ = true;
+    state_stamp_ = initial_stamp;
+    saveStateSnapshot(state_stamp_);
+    ROS_INFO("[DogPriorMap C++] explicit causal initial state: stamp=%.9f boundary_age_ms=%.3f p=(%.4f %.4f %.4f) v_prior=(%.4f %.4f %.4f) bg_prior=(%.5f %.5f %.5f) ba_prior=(%.5f %.5f %.5f) g_map=(%.4f %.4f %.4f)",
+             state_stamp_, boundary_age * 1000.0,
+             p_.x(), p_.y(), p_.z(), v_.x(), v_.y(), v_.z(),
+             bg_.x(), bg_.y(), bg_.z(), ba_.x(), ba_.y(), ba_.z(),
+             g_.x(), g_.y(), g_.z());
+  }
+
   // ------------------------- 2. ROS发布和订阅 -------------------------
   pub_high_ = nh_.advertise<nav_msgs::Odometry>(odom_high_rate_topic_, 50);
   if (publish_imu_propagate_alias_)

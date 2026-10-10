@@ -29,6 +29,7 @@
 #include <sensor_msgs/Imu.h>
 #include <tf/transform_broadcaster.h>
 #include "dog_prior_map_localization/external_ndt_transaction_server.hpp"
+#include "dog_prior_map_localization/core/frame_conversions.hpp"
 
 namespace dog_prior_map_localization
 {
@@ -112,6 +113,25 @@ public:
     ndt_step_limit_max_rotation_deg_ = getParam<double>("lidar_update/ndt_step_limit_max_rotation_deg", 5.0);
     local_imu_rotation_prior_enable_ = getParam<bool>(
         "lidar_update/local_imu_rotation_prior_enable", false);
+    local_imu_gyro_to_lidar_enable_ = getParam<bool>(
+        "lidar_update/local_imu_gyro_to_lidar_enable", false);
+    if (local_imu_gyro_to_lidar_enable_)
+    {
+      const std::vector<double> rotation = getParam<std::vector<double>>(
+          "lidar_update/T_imu_lidar_rotation_row_major", std::vector<double>());
+      if (!local_imu_rotation_prior_enable_ || rotation.size() != 9)
+        throw std::runtime_error("local IMU gyro frame conversion requires a 9-value T_imu_lidar and enabled rotation prior");
+      Eigen::Matrix3d R_imu_lidar;
+      for (int row = 0; row < 3; ++row)
+        for (int column = 0; column < 3; ++column)
+          R_imu_lidar(row, column) = rotation[static_cast<std::size_t>(row * 3 + column)];
+      if (!R_imu_lidar.allFinite() || R_imu_lidar.determinant() <= 0.0 ||
+          (R_imu_lidar.transpose() * R_imu_lidar - Eigen::Matrix3d::Identity()).norm() > 1e-5 ||
+          std::abs(R_imu_lidar.determinant() - 1.0) > 1e-5)
+        throw std::runtime_error("local IMU gyro T_imu_lidar rotation is not proper SO(3)");
+      T_imu_lidar_rotation_ = Eigen::Isometry3d::Identity();
+      T_imu_lidar_rotation_.linear() = R_imu_lidar;
+    }
     pending_lidar_max_frames_ = static_cast<size_t>(std::max(1,
         getParam<int>("lidar_update/pending_lidar_max_frames", 50)));
     lidar_subscriber_queue_size_ = static_cast<uint32_t>(std::max(1,
@@ -197,13 +217,16 @@ public:
       latest_imu_stamp_ = msg->header.stamp;
       has_imu_watermark_ = true;
     }
+    Eigen::Vector3d gyro(msg->angular_velocity.x,
+                         msg->angular_velocity.y,
+                         msg->angular_velocity.z);
+    if (local_imu_gyro_to_lidar_enable_)
+      gyro = imuGyroToLidarFrame(gyro, T_imu_lidar_rotation_);
     imu_history_.push_back(ImuSample{msg->header.stamp.toSec(),
                                      Eigen::Vector3d(msg->linear_acceleration.x,
                                                      msg->linear_acceleration.y,
                                                      msg->linear_acceleration.z),
-                                     Eigen::Vector3d(msg->angular_velocity.x,
-                                                     msg->angular_velocity.y,
-                                                     msg->angular_velocity.z)});
+                                     gyro});
     while (!imu_history_.empty() &&
            msg->header.stamp.toSec() - imu_history_.front().stamp > imu_history_keep_sec_)
     {
@@ -1174,6 +1197,8 @@ private:
   double ndt_step_limit_max_translation_ = 0.5;
   double ndt_step_limit_max_rotation_deg_ = 5.0;
   bool local_imu_rotation_prior_enable_ = false;
+  bool local_imu_gyro_to_lidar_enable_ = false;
+  Eigen::Isometry3d T_imu_lidar_rotation_ = Eigen::Isometry3d::Identity();
   size_t pending_lidar_max_frames_ = 50;
   uint32_t lidar_subscriber_queue_size_ = 100;
   bool determinism_diagnostic_enable_ = false;

@@ -1,0 +1,23 @@
+{
+  "repository_start_sha": "ea406767422af7f48818c1b9dc39c0b929e524df",
+  "tracked_source_artifacts": {
+    "src/dog_prior_map_localization/src/dog_prior_map_ekf_node_core.cpp": "e18c96acc00809897f3d829997c76880e3b4a4d7ae11a37ed3746f24d22a2cf8",
+    "src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp": "9a602a8dd9ba8e20081a4d497908ecdc68ab207f3c10f949adb851625cd6133c",
+    "src/dog_prior_map_localization/include/dog_prior_map_localization/core/frame_conversions.hpp": "569df879f2fb4cc7431d9ff90687fdd5b22c1b8f6b4b7211a51760c9e0b6d49d",
+    "src/dog_prior_map_localization/tests/frame_conversion_contract_test.cpp": "cd59d46dea13d249708ac45d8304254addcce6403aa773607f6b38758fd744bf",
+    "src/dog_prior_map_localization/config/p10_corridor01_prospective_causal.yaml": "fc5c262f4eacbb8b23d95a9adb5877e956fa215f84c675a378c62e2e63d94d6c",
+    "src/dog_prior_map_localization/scripts/p10_corridor01_prospective/pack_causal_slice.py": "b64cfd2120d05f20167e17b91822a502eb9004f1205c1326a15cabe6bd3e20b1"
+  },
+  "external_runtime_artifacts": {
+    "normalized_map": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+    "extrinsics": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d",
+    "sensor_only_initializer": "d3e6f560895cb4f6a9efb7058bcff8a13313783e799d82c828e51adcd4bafd1e",
+    "slice_bag": "f6e77c96d97402e551835e81a1ce8d780d075da2f18a9cb5e4fc0646628b86d6",
+    "slice_manifest": "fa49d5f7b3a4c20c5a1889d31c3ec86bb6f12a0275ee3dafe04eebb0dfae7f1e",
+    "ekf_binary_built_not_run": "4d1655cc3f7d3fdc6cac2372f380ca8fe7b0b250227235767947da3d4030f402",
+    "ndt_binary_built_not_run": "dd9463bc1613a80e59a96c10675b59a0ed3b8092df760562421ca8feb7782cd3",
+    "frame_conversion_test_binary": "c39e8f2f0ca72f8df7b6195a4477d1479fa9752b371f0773b2af6094f50f434a"
+  },
+  "gt_loaded": false,
+  "causal_runtime": "NOT_RUN_LOCAL_ROS_SOCKET_PERMISSION"
+}

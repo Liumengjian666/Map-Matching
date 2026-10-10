@@ -1,0 +1,50 @@
+{
+  "task": "P10-CORRIDOR01-PROSPECTIVE-CAUSAL-BASELINE",
+  "protocol": "P10_CORRIDOR01_PROSPECTIVE_CAUSAL_BASELINE_V1",
+  "result": "CONTROL_RUN_BLOCKED_LOCAL_ROS_SOCKET_PERMISSION",
+  "start_sha": "ea406767422af7f48818c1b9dc39c0b929e524df",
+  "input": {
+    "source_protocol": "P9_CORRIDOR01_RAW_SCANEND_V1",
+    "source_manifest_sha256": "591bfe3fd619966f40e4e2af6b9151937732483f0123c70eb34aa1031742991a",
+    "source_raw_bag_sha256": "c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811",
+    "source_points_sha256": "ce8beed2303ea3de8715932c4d0644d6fe28317014e2383f65942d69bc5ace32",
+    "source_imu_sha256": "21b94c0cb0ade931db1586799aa022dff2ba20b9ab76dc1e29eac0e948e132e6",
+    "map_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+    "extrinsics_sha256": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d",
+    "slice_bag_sha256": "f6e77c96d97402e551835e81a1ce8d780d075da2f18a9cb5e4fc0646628b86d6",
+    "slice_manifest_sha256": "fa49d5f7b3a4c20c5a1889d31c3ec86bb6f12a0275ee3dafe04eebb0dfae7f1e"
+  },
+  "window": {
+    "first_transaction_id": 2,
+    "start_ns": 1517157219188978910,
+    "startup_seconds": 5,
+    "evaluation_seconds": 35,
+    "scans_total": 396,
+    "scans_evaluation": 346,
+    "imu_messages_including_boundary": 7989,
+    "raw_points": 11473279,
+    "gt_loaded": false
+  },
+  "runtime": {
+    "roscore": "BLOCKED: XML-RPC socket creation returned EPERM, including loopback bind configuration",
+    "ndt_calls": "NOT_RUN",
+    "filter_updates": "NOT_RUN",
+    "control_metrics": "NOT_RUN",
+    "weak_only": "NOT_RUN",
+    "coupled": "NOT_RUN"
+  },
+  "build": {
+    "optimized_nodes": "PASS",
+    "frame_conversion_test": "PASS",
+    "imu_deskew_test": "PASS",
+    "imu_interval_test": "PASS",
+    "oosm_test": "PASS",
+    "ndt_protocol_test": "PASS",
+    "external_ndt_ros_integration_test": "NOT_RUN_REQUIRES_ROS_MASTER"
+  },
+  "conversion_cost": {
+    "wall_seconds": 6.30,
+    "peak_rss_kib": 303536
+  },
+  "next": "RUN_FROZEN_CONTROL_IN_LOCAL_ROS_SOCKET_ENABLED_ENVIRONMENT"
+}

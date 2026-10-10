@@ -41,4 +41,10 @@ inline LidarFrameTwist imuTwistToLidarFrame(const Eigen::Vector3d &v_world_imu,
   return result;
 }
 
+inline Eigen::Vector3d imuGyroToLidarFrame(const Eigen::Vector3d &omega_imu,
+                                           const Eigen::Isometry3d &T_imu_lidar)
+{
+  return T_imu_lidar.linear().transpose() * omega_imu;
+}
+
 }  // namespace dog_prior_map_localization

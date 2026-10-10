@@ -1,0 +1,124 @@
+# P10-CORRIDOR01-PROSPECTIVE-CAUSAL-BASELINE
+# New protocol only; not a byte-exact replay of historical P2B v1.
+# Loaded after dog_prior_map_localization_ndt.yaml by split.launch.
+
+frames:
+  map_frame: "camera_init"
+  base_frame: "cmu_rc2_velodyne"
+
+topics:
+  imu: "/imu/data"
+  lidar: "/p10/corridor01/deskewed_points"
+  lidar_msg_type: "pointcloud2"
+  ndt_odom: "/dog_livo/ndt_odom"
+  odom_high_rate: "/dog_livo/odom_high_rate"
+  odom_corrected: "/dog_livo/odom_corrected"
+
+map:
+  pcd_fallback_path: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd"
+  voxel_size: 0.15
+
+imu:
+  gravity: 9.80665
+  initialize_gravity_from_imu: false
+  initialize_gyro_bias_from_imu: false
+  midpoint_interval_input_enable: true
+  use_acc_for_position: true
+  max_dt: 0.05
+  history_keep_sec: 2.0
+  acc_noise: 2.0
+  gyro_noise: 0.1
+  acc_bias_noise: 0.0001
+  gyro_bias_noise: 0.0001
+
+ndt_observation:
+  enable: true
+  oosm_enable: true
+  apply_ratio: 1.0
+  z_apply_ratio: 1.0
+  roll_pitch_apply_ratio: 1.0
+  max_translation_correction: 2.0
+  max_rotation_correction_deg: 20.0
+  velocity_blend: 0.6
+  future_deferral_enable: false
+
+lidar_update:
+  deskew_enable: false
+  ndt_source_voxel_size: 0.25
+  ndt_source_voxel_z_size: 0.25
+  ndt_target_voxel_size: 0.15
+  ndt_target_voxel_z_size: 0.15
+  ndt_max_source_points: 1400
+  ndt_max_target_points: 0
+  min_effective_points: 50
+  scan_min_range: 0.5
+  scan_max_range: 80.0
+  ndt_max_iterations: 40
+  ndt_resolution: 0.8
+  ndt_step_size: 0.08
+  ndt_transformation_epsilon: 0.001
+  ndt_step_limit_enable: true
+  ndt_step_limit_max_translation: 0.5
+  ndt_step_limit_max_rotation_deg: 5.0
+  local_imu_rotation_prior_enable: true
+  local_imu_gyro_to_lidar_enable: true
+  T_imu_lidar_rotation_row_major:
+    [0.9999918597233475, -0.0005161381080032746, 0.004001760674214531,
+     0.0005196241852023933, 0.9999994864189835, -0.0008701450879252283,
+     -0.004001309503946919, 0.0008722174163330545, 0.9999916143443562]
+  scan_reference_time: "start"
+  lidar_subscriber_queue_size: 100
+
+filter:
+  init_pos_std: 0.5
+  init_rot_std_deg: 5.0
+  init_vel_std: 0.5
+  init_bias_std: 0.05
+
+deskew:
+  mode: "ekf_imu_fastlio"
+  input_topic: "/p10/corridor01/raw_timed_points"
+  output_topic: "/p10/corridor01/deskewed_points"
+  point_time_field: "time"
+  expected_lidar_frame: "cmu_rc2_velodyne"
+  reference_time: "start"
+  state_frame: "imu"
+  max_scan_duration_sec: 0.15
+  max_imu_gap_sec: 0.02
+  history_keep_sec: 2.0
+  max_pending_clouds: 8
+  input_subscriber_queue_size: 100
+  T_imu_lidar_translation_m: [0.08, 0.029, 0.03]
+  T_imu_lidar_rotation_row_major:
+    [0.9999918597233475, -0.0005161381080032746, 0.004001760674214531,
+     0.0005196241852023933, 0.9999994864189835, -0.0008701450879252283,
+     -0.004001309503946919, 0.0008722174163330545, 0.9999916143443562]
+
+# Pose origin: first initialized LiDAR frame used to normalize the supplied PCD.
+# T_map_imu = T_map_lidar * inverse(T_imu_lidar); at this origin T_map_lidar=I.
+# Velocity and biases are zero-mean priors, NOT measurements/estimates. Their
+# covariance remains the existing explicit filter initialization covariance.
+initialization:
+  explicit_state_enable: true
+  state_stamp_sec: 1517157219
+  state_stamp_nsec: 188978910
+  map_T_imu_translation_m: [-0.07989437859412032, -0.02898486058000034, -0.03029465507671805]
+  map_T_imu_rotation_row_major:
+    [0.999991859723348, 0.0005196241852028835, -0.004001309503946851,
+     -0.0005161381080027849, 0.999999486418985, 0.0008722174163331998,
+     0.004001760674214603, -0.000870145087925083, 0.9999916143443569]
+  velocity_map_mps: [0.0, 0.0, 0.0]
+  gyro_bias_imu_radps: [0.0, 0.0, 0.0]
+  accel_bias_imu_mps2: [0.0, 0.0, 0.0]
+  # Derived without GT: normalized-map gravity is the transpose of the
+  # sensor-only first-scan transform applied to +Z in the source map.
+  gravity_map_mps2: [-0.34546457, -0.73858365, -9.77269321]
+  boundary_imu_stamp_sec: 1517157219
+  boundary_imu_stamp_nsec: 184208000
+  boundary_imu_accel_mps2: [1.9142371416091919, -0.67058384418487549, 9.9607858657836914]
+  boundary_imu_gyro_radps: [-0.17004744708538055, 0.044107120484113693, -0.49772438406944275]
+
+output:
+  print_debug: false
+  publish_path: false
+  publish_tf: false

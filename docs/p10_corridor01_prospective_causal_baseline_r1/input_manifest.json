@@ -1,0 +1,88 @@
+{
+  "protocol": "P10_CORRIDOR01_PROSPECTIVE_CAUSAL_BASELINE_V1",
+  "historical_p2b_v1_equivalent": false,
+  "source_protocol": "P9_CORRIDOR01_RAW_SCANEND_V1",
+  "source_raw_bag_sha256": "c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811",
+  "source_manifest_sha256": "591bfe3fd619966f40e4e2af6b9151937732483f0123c70eb34aa1031742991a",
+  "source_files": {
+    "imu.csv": "21b94c0cb0ade931db1586799aa022dff2ba20b9ab76dc1e29eac0e948e132e6",
+    "filter_scans.csv": "41d0b2040a5de8a8bd428c382a7b6dc18fabcaa8d3e7d2cc331018e0585edf1d",
+    "raw_timed_scan_index.csv": "d49b7b81bb1f5c17eb2da9e5ad665dfb2b3b4813280de4e342eb3158d13c932a",
+    "raw_timed_points.bin": "ce8beed2303ea3de8715932c4d0644d6fe28317014e2383f65942d69bc5ace32"
+  },
+  "map": {
+    "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd",
+    "sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f"
+  },
+  "extrinsics": {
+    "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/calibration/corridor01_extrinsics.yaml",
+    "sha256": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d",
+    "T_imu_lidar_direction": "LiDAR coordinates to IMU coordinates"
+  },
+  "sensor_only_initializer": {
+    "path": "/home/jian/livox_ws/superloc_adapter_ws/config/corridor01_init.yaml",
+    "sha256": "d3e6f560895cb4f6a9efb7058bcff8a13313783e799d82c828e51adcd4bafd1e",
+    "GT_used": false,
+    "source_map_T_lidar_rotation_row3": [-0.03522758186, -0.07531456649, -0.9965373874],
+    "gravity_source_convention": "+Z-down inferred from sensor-only first-segment pose and VLP16 local +Z-up; not official map-world closure"
+  },
+  "slice": {
+    "path": "/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/input/corridor01_p10_causal_startup5_eval35_v1.bag",
+    "sha256": "f6e77c96d97402e551835e81a1ce8d780d075da2f18a9cb5e4fc0646628b86d6",
+    "manifest_sha256": "fa49d5f7b3a4c20c5a1889d31c3ec86bb6f12a0275ee3dafe04eebb0dfae7f1e",
+    "message_count": 8385,
+    "topics": {
+      "/p10/corridor01/raw_timed_points": 396,
+      "/imu/data": 7989
+    },
+    "duration_seconds": 39.962544,
+    "window_start_ns": 1517157219188978910,
+    "startup_seconds": 5,
+    "evaluation_seconds": 35,
+    "scan_count_total": 396,
+    "scan_count_evaluation": 346,
+    "raw_point_count": 11473279,
+    "boundary_imu_sample_ns": 1517157219184208000,
+    "tail_imu_after_last_scan_end_ns": 19670533
+  },
+  "point_contract": {
+    "frame_id": "cmu_rc2_velodyne",
+    "fields": "float32 x,y,z,time_seconds_from_scan_start",
+    "point_step": 16,
+    "raw_order_preserved": true,
+    "record_time_equals_sensor_header_stamp": true
+  },
+  "imu_contract": {
+    "frame_id": "epson",
+    "fields_used": ["linear_acceleration", "angular_velocity"],
+    "orientation_available": false,
+    "sensor_timestamps_preserved": true,
+    "boundary_sample_is_actual": true
+  },
+  "frozen_runtime_configuration": {
+    "dataset_config_path": "src/dog_prior_map_localization/config/p10_corridor01_prospective_causal.yaml",
+    "dataset_config_sha256": "fc5c262f4eacbb8b23d95a9adb5877e956fa215f84c675a378c62e2e63d94d6c",
+    "base_config_sha256": "482d11e26b998aad0fcb07840d9d8eede788291348c1a93a748a74edf1fe6b83",
+    "split_launch_sha256": "e4ec55b08c4291cce75c8571ef3b59607c760e33da8f3b1f1f28943d3a084971",
+    "gyro_frame_adapter": "omega_lidar = R_imu_lidar^T * omega_imu, enabled only for NDT local rotation prior; EKF input remains raw Epson IMU",
+    "ndt_resolution_m": 0.8,
+    "ndt_step_m": 0.08,
+    "ndt_epsilon": 0.001,
+    "ndt_max_iterations": 40,
+    "ekf_accelerometer_propagation": true,
+    "oosm_feedback": true
+  },
+  "initial_state": {
+    "epoch_ns": 1517157219188978910,
+    "pose_source": "sensor-only normalized-map first-scan coordinate anchor; not GT",
+    "T_map_lidar": "identity at first-scan origin",
+    "T_map_imu": "T_map_lidar * inverse(T_imu_lidar)",
+    "velocity": "zero-mean prior, not an estimate",
+    "gyro_bias": "zero-mean prior, not an estimate",
+    "accel_bias": "zero-mean prior, not an estimate",
+    "gravity_map_mps2": [-0.34546457, -0.73858365, -9.77269321],
+    "gravity_status": "transformed from inferred source-map +Z-down convention; not absolute world-verified",
+    "covariance": "existing EKF initialization covariance"
+  },
+  "GT_LOADED": false
+}

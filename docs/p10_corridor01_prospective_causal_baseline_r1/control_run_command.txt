@@ -1,0 +1,37 @@
+Frozen replay recipe (requires an environment where ROS 1 local TCP/XML-RPC sockets are permitted).
+
+Build, from the repository root:
+  source /opt/ros/noetic/setup.bash
+  source /home/jian/livox_ws/devel/setup.bash
+  catkin_make --source "$PWD/src" --build /tmp/p10_corridor01_causal_build --only-pkg-with-deps dog_prior_map_localization --cmake-args -DCATKIN_ENABLE_TESTING=ON
+
+Terminal 1:
+  source /opt/ros/noetic/setup.bash
+  export ROS_HOME=/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/ros_home
+  export ROS_LOG_DIR=/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/logs
+  roscore
+
+Terminal 2 (launch; paths are fixed by the archived slice manifest):
+  source /opt/ros/noetic/setup.bash
+  source /home/jian/livox_ws/devel/setup.bash
+  source /tmp/devel/setup.bash
+  export ROS_HOME=/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/ros_home
+  export ROS_LOG_DIR=/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/logs
+  rosparam set /use_sim_time true
+  roslaunch dog_prior_map_localization dog_prior_map_localization_split.launch config:=/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_localization/config/dog_prior_map_localization_ndt.yaml dataset_config:=/tmp/dog_loc_paper_r4_ws.Fq21k2/src/dog_prior_map_localization/config/p10_corridor01_prospective_causal.yaml rviz:=false publish_path:=false runtime_csv_path:=/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/ekf_runtime.csv ndt_diagnostics_csv_path:=/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/ndt_diagnostics.csv oosm_csv_path:=/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/oosm.csv ekf_prediction_diagnostics_csv_path:=/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/ekf_lineage.csv imu_deskew_csv_path:=/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/deskew.csv diagnostic_determinism_enable:=true scan_reference_time:=start oosm_enable:=true oosm_max_alignment_sec:=0.02
+
+Terminal 3 (record before playback):
+  source /opt/ros/noetic/setup.bash
+  export ROS_HOME=/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/ros_home
+  export ROS_LOG_DIR=/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/logs
+  rosbag record -O /home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/control_topics.bag /clock /dog_livo/ndt_odom /dog_livo/odom_high_rate /dog_livo/odom_corrected
+
+Terminal 4 (after all nodes/recorders are ready):
+  source /opt/ros/noetic/setup.bash
+  export ROS_HOME=/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/ros_home
+  export ROS_LOG_DIR=/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/run_control/logs
+  rosbag play --clock --rate 0.25 /home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/input/corridor01_p10_causal_startup5_eval35_v1.bag
+
+Do not run alternative algorithm modes until the Control logs establish complete
+input delivery, scan deskew coverage, NDT updates, OOSM replay success, and
+credible early prefix evaluation. Load GT only after freezing all those outputs.

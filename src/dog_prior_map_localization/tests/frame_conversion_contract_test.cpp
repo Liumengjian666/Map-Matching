@@ -78,11 +78,19 @@ int main()
   const Eigen::Vector3d expected_angular = T_imu_lidar.linear().transpose() * omega_imu;
   const double linear_error = (twist.linear - expected_linear).norm();
   const double angular_error = (twist.angular - expected_angular).norm();
+  const Eigen::Vector3d omega_lidar = dog_prior_map_localization::imuGyroToLidarFrame(
+      omega_imu, T_imu_lidar);
+  const double gyro_round_trip_error =
+      (T_imu_lidar.linear() * omega_lidar - omega_imu).norm();
   const bool twist_pass = linear_error < 1e-12 && angular_error < 1e-12;
   std::cout << "twist_child_lidar," << std::numeric_limits<double>::quiet_NaN() << ","
             << std::numeric_limits<double>::quiet_NaN() << "," << linear_error << ","
             << angular_error << "," << (twist_pass ? "PASS" : "FAIL") << "\n";
   if (!twist_pass) return 1;
+  std::cout << "gyro_imu_to_lidar," << std::numeric_limits<double>::quiet_NaN() << ","
+            << std::numeric_limits<double>::quiet_NaN() << "," << gyro_round_trip_error
+            << ",nan," << (gyro_round_trip_error < 1e-12 ? "PASS" : "FAIL") << "\n";
+  if (gyro_round_trip_error >= 1e-12) return 1;
 
   std::cerr << "FRAME_CONVERSION_AND_TWIST_CONTRACT_PASS\n";
   return 0;
