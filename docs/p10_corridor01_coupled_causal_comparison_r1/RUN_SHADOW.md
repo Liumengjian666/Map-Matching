@@ -90,8 +90,13 @@ mkdir -p "$OUT/ros_home" "$OUT/logs"
 date --iso-8601=seconds | tee "$OUT/run_times.txt"
 source /opt/ros/noetic/setup.bash
 export ROS_HOME="$OUT/ros_home" ROS_LOG_DIR="$OUT/logs"
+set +e
 roscore 2>&1 | tee "$OUT/logs/roscore.log"
+ROSCORE_STATUS=$?
+set -e
 date --iso-8601=seconds | tee -a "$OUT/run_times.txt"
+printf 'roscore_exit=%s\n' "$ROSCORE_STATUS" | tee -a "$OUT/run_times.txt"
+test "$ROSCORE_STATUS" -eq 130 || { echo "roscore exited unexpectedly; preserve this run and stop"; exit 1; }
 ~~~
 
 Leave it running.
