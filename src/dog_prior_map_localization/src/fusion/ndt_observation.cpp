@@ -24,6 +24,49 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
   writeEkfPredictionLineage("NDT_CALLBACK_ENTER", ros::Time::now().toSec(), 0,
                             t_ndt, t_now);
 
+  if (oosm_fixed_lag_enable_)
+  {
+    const uint64_t observation_id = msg->header.stamp.toNSec();
+    const double arrival_wall_sec = ros::WallTime::now().toSec();
+    const FixedLagEnqueueStatus enqueue_status = oosm_fixed_lag_scheduler_.enqueue(
+        observation_id, t_ndt, t_now, arrival_wall_sec);
+    const std::string status = fixedLagEnqueueStatusName(enqueue_status);
+    if (enqueue_status == FixedLagEnqueueStatus::kQueued)
+    {
+      const auto inserted = fixed_lag_ndt_messages_.emplace(observation_id, msg);
+      if (!inserted.second)
+      {
+        writeFixedLagDiagnostic(observation_id, t_ndt,
+            t_ndt + oosm_fixed_lag_sec_, t_now, arrival_wall_sec,
+            std::numeric_limits<double>::quiet_NaN(), ros::WallTime::now().toSec(),
+            0, false, "DUPLICATE_FIXED_LAG_MESSAGE_ID");
+        ROS_ERROR("[DogPriorMap EKF] duplicate fixed-lag NDT id=%llu",
+                  static_cast<unsigned long long>(observation_id));
+        return;
+      }
+      writeFixedLagDiagnostic(observation_id, t_ndt,
+          t_ndt + oosm_fixed_lag_sec_, t_now, arrival_wall_sec,
+          std::numeric_limits<double>::quiet_NaN(), arrival_wall_sec,
+          0, false, status);
+      return;
+    }
+
+    writeFixedLagDiagnostic(observation_id, t_ndt,
+        t_ndt + oosm_fixed_lag_sec_, t_now, arrival_wall_sec,
+        std::numeric_limits<double>::quiet_NaN(), arrival_wall_sec, 0, false, status);
+    if (enqueue_status == FixedLagEnqueueStatus::kLate)
+    {
+      ++fixed_lag_late_count_;
+      writeOosmDiagnostic(t_ndt, t_now,
+          std::numeric_limits<double>::quiet_NaN(), t_now - t_ndt,
+          std::numeric_limits<double>::quiet_NaN(), 0, state_history_.size(),
+          imu_history_.size(), "LATE_NDT_FOR_FIXED_LAG");
+      ROS_ERROR("[DogPriorMap EKF] NDT id=%llu arrived after fixed-lag cutoff; rejecting",
+                static_cast<unsigned long long>(observation_id));
+    }
+    return;
+  }
+
   if (oosm_enable_ && future_deferral_enable_ && has_state_stamp_ &&
       std::isfinite(t_ndt) && std::isfinite(t_now) && t_ndt > t_now + 1e-9)
   {
@@ -78,14 +121,22 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
 
 // 融合独立 NDT 节点的绝对位姿观测，同时用相邻观测估计并平滑速度。
 // 调用方必须已经持有 mutex_；该函数只保留一份原有校正、回滚和 replay 逻辑。
-void DogPriorMapEkfNode::processNdtObservationLocked(const nav_msgs::OdometryConstPtr &msg)
+void DogPriorMapEkfNode::processNdtObservationLocked(
+    const nav_msgs::OdometryConstPtr &msg,
+    double expected_release_state_stamp,
+    NdtObservationReceipt *receipt)
 {
-  if (!ndt_observation_enable_) return;
-  if (!msg) return;
+  if (receipt) *receipt = NdtObservationReceipt();
+  if (!ndt_observation_enable_ || !msg)
+  {
+    if (receipt) receipt->status = "NDT_OBSERVATION_DISABLED_OR_NULL";
+    return;
+  }
 
   const double t_ndt = msg->header.stamp.toSec();
   const double t_now = has_state_stamp_ ? state_stamp_ :
       std::numeric_limits<double>::quiet_NaN();
+  if (receipt) receipt->processed_state_stamp = t_now;
   const size_t state_history_count = state_history_.size();
   const size_t imu_history_count = imu_history_.size();
   double rollback_stamp = std::numeric_limits<double>::quiet_NaN();
@@ -117,7 +168,23 @@ void DogPriorMapEkfNode::processNdtObservationLocked(const nav_msgs::OdometryCon
                             std::numeric_limits<double>::quiet_NaN(),
                         alignment_error, replay_imu_count, state_history_count,
                         imu_history_count, result);
+    if (receipt)
+    {
+      receipt->status = result;
+      receipt->processed_state_stamp = t_now;
+      receipt->rollback_stamp = rollback_stamp;
+      receipt->replay_imu_count = replay_imu_count;
+      receipt->correction_applied = result == "APPLIED" &&
+          ndt_correction_count_ > ndt_correction_count_before;
+    }
   };
+
+  if (std::isfinite(expected_release_state_stamp) &&
+      (!std::isfinite(t_now) || std::abs(t_now - expected_release_state_stamp) > 1e-9))
+  {
+    writeOosmResult("FIXED_LAG_RELEASE_NODE_MISMATCH");
+    return;
+  }
 
   Eigen::Vector3d p_target(msg->pose.pose.position.x,
                            msg->pose.pose.position.y,

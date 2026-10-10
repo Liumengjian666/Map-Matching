@@ -1,0 +1,107 @@
+{
+  "GT_LOADED": false,
+  "deskew": {
+    "control_rows": 396,
+    "failure_count": 0,
+    "first_failures": [],
+    "processing_time_excluded": true,
+    "shadow_rows": 396
+  },
+  "fixed_lag": {
+    "control_rows": 792,
+    "failure_count": 0,
+    "first_failures": [],
+    "runs": [
+      {
+        "all_applied": true,
+        "all_arrivals_pre_deadline": true,
+        "applied": 396,
+        "late": 0,
+        "queued": 396,
+        "run": "control",
+        "unique_release_nodes": 396
+      },
+      {
+        "all_applied": true,
+        "all_arrivals_pre_deadline": true,
+        "applied": 396,
+        "late": 0,
+        "queued": 396,
+        "run": "shadow",
+        "unique_release_nodes": 396
+      }
+    ],
+    "shadow_rows": 792
+  },
+  "historical_first_discrepancy_reference": {
+    "nearest_v2_rows": [
+      {
+        "frame_index": "6",
+        "ndt_stamp": "1517157219.69328",
+        "run": "control",
+        "stamp_error_sec": 0.0
+      },
+      {
+        "frame_index": "6",
+        "ndt_stamp": "1517157219.69328",
+        "run": "shadow",
+        "stamp_error_sec": 0.0
+      }
+    ],
+    "note": "Sensor-time fixed release is audited in fixed_lag rows; state parity is checked over all recorded output poses.",
+    "old_ndt_stamp": 1517157219.69328
+  },
+  "ndt_diagnostics": {
+    "cloud_identity_fields": "PASS",
+    "failure_count": 0,
+    "first_failures": [],
+    "max_ndt_fitness_difference": 0.0,
+    "max_pose_rotation_difference_deg": 0.0,
+    "max_pose_translation_difference_m": 0.0,
+    "rows_control": 396,
+    "rows_shadow": 396,
+    "shadow_execution_counts": {
+      "anchor_valid": 346,
+      "attempted": 7,
+      "feedback_applied": 0,
+      "feedback_changed_observation": 0,
+      "jet_calls": 14,
+      "max_prediction_sample_age_ms": 4.981013,
+      "prediction_body_twist_extrapolated": 395,
+      "prediction_exact": 0,
+      "prediction_unavailable": 1,
+      "recommended": 7,
+      "triggered": 19,
+      "value_calls": 13
+    }
+  },
+  "oosm": {
+    "control_rows": 396,
+    "failure_count": 0,
+    "first_failures": [],
+    "shadow_rows": 396
+  },
+  "output_topics": {
+    "failure_count": 0,
+    "first_failures": [],
+    "topics": {
+      "/dog_livo/ndt_odom": {
+        "max_rotation_difference_deg": 0.0,
+        "max_translation_difference_m": 0.0,
+        "rows": 396
+      },
+      "/dog_livo/odom_corrected": {
+        "max_rotation_difference_deg": 0.0,
+        "max_translation_difference_m": 0.0,
+        "rows": 396
+      },
+      "/dog_livo/odom_high_rate": {
+        "max_rotation_difference_deg": 0.0,
+        "max_translation_difference_m": 0.0,
+        "rows": 8004
+      }
+    }
+  },
+  "protocol": "P10_CORRIDOR01_DETERMINISTIC_OOSM_REPLAY_V2",
+  "result": "PASS"
+}

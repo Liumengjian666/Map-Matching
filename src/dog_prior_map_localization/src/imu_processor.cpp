@@ -75,6 +75,8 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
     saveStateSnapshot(state_stamp_);
     if (future_deferral_enable_)
       processReadyDeferredNdtLocked();
+    if (oosm_fixed_lag_enable_)
+      processReadyFixedLagNdtLocked();
     processReadyImuDeskewCloudsLocked();
     return;
   }
@@ -99,6 +101,8 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
     saveStateSnapshot(state_stamp_);
     if (future_deferral_enable_)
       processReadyDeferredNdtLocked();
+    if (oosm_fixed_lag_enable_)
+      processReadyFixedLagNdtLocked();
     processReadyImuDeskewCloudsLocked();
     return;
   }
@@ -138,6 +142,8 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
   saveStateSnapshot(state_stamp_);
   if (future_deferral_enable_)
     processReadyDeferredNdtLocked();
+  if (oosm_fixed_lag_enable_)
+    processReadyFixedLagNdtLocked();
   processReadyImuDeskewCloudsLocked();
   if (publish_high_rate_) publishState(msg->header.stamp, false);
   maybePrintRuntime(msg->header.stamp);
@@ -164,6 +170,49 @@ void DogPriorMapEkfNode::processReadyDeferredNdtLocked()
     writeEkfPredictionLineage("NDT_DEFERRED_PROCESS", ros::Time::now().toSec(), 0,
                               deferred.stamp, state_stamp_);
     processNdtObservationLocked(deferred.msg);
+  }
+}
+
+void DogPriorMapEkfNode::processReadyFixedLagNdtLocked()
+{
+  if (!oosm_fixed_lag_enable_ || !has_state_stamp_ || !std::isfinite(state_stamp_)) return;
+  const FixedLagAdvanceResult advanced = oosm_fixed_lag_scheduler_.advance(state_stamp_);
+  if (!advanced.valid)
+  {
+    writeFixedLagDiagnostic(0, std::numeric_limits<double>::quiet_NaN(),
+        std::numeric_limits<double>::quiet_NaN(), state_stamp_,
+        ros::WallTime::now().toSec(), std::numeric_limits<double>::quiet_NaN(),
+        ros::WallTime::now().toSec(), 0, false, advanced.status);
+    ROS_ERROR("[DogPriorMap EKF] fixed-lag scheduler stopped: %s", advanced.status);
+    return;
+  }
+
+  for (const FixedLagObservation &event : advanced.ready)
+  {
+    auto message = fixed_lag_ndt_messages_.find(event.id);
+    if (message == fixed_lag_ndt_messages_.end())
+    {
+      writeFixedLagDiagnostic(event.id, event.measurement_stamp, event.deadline_stamp,
+          event.arrival_state_stamp, event.arrival_wall_sec, event.release_state_stamp,
+          ros::WallTime::now().toSec(), 0, false, "FIXED_LAG_MESSAGE_NOT_FOUND");
+      ROS_ERROR("[DogPriorMap EKF] fixed-lag message missing id=%llu",
+                static_cast<unsigned long long>(event.id));
+      continue;
+    }
+
+    const nav_msgs::OdometryConstPtr ndt_msg = message->second;
+    fixed_lag_ndt_messages_.erase(message);
+    NdtObservationReceipt receipt;
+    processNdtObservationLocked(ndt_msg, event.release_state_stamp, &receipt);
+    ++fixed_lag_processed_count_;
+    writeFixedLagDiagnostic(event.id, event.measurement_stamp, event.deadline_stamp,
+        event.arrival_state_stamp, event.arrival_wall_sec, event.release_state_stamp,
+        ros::WallTime::now().toSec(), receipt.replay_imu_count,
+        receipt.correction_applied, receipt.status);
+    if (receipt.status != "APPLIED")
+      ROS_WARN("[DogPriorMap EKF] fixed-lag OOSM id=%llu status=%s release=%.9f",
+               static_cast<unsigned long long>(event.id), receipt.status.c_str(),
+               event.release_state_stamp);
   }
 }
 

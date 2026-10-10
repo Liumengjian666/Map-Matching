@@ -8,6 +8,7 @@
 #include <fstream>
 #include <iomanip>
 #include <limits>
+#include <map>
 #include <mutex>
 #include <sstream>
 #include <string>
@@ -27,6 +28,7 @@
 #include "dog_prior_map_localization/core/estimator_types.hpp"
 #include "dog_prior_map_localization/core/imu_propagation.hpp"
 #include "dog_prior_map_localization/core/state_history.hpp"
+#include "dog_prior_map_localization/core/oosm_fixed_lag_scheduler.hpp"
 
 namespace dog_prior_map_localization
 {
@@ -36,6 +38,7 @@ class DogPriorMapEkfNode
 public:
   /// 读取参数、初始化状态并建立 ROS 订阅发布关系。
   DogPriorMapEkfNode();
+  ~DogPriorMapEkfNode();
 
 private:
   /// 优先从全局命名空间读取参数，再读取私有命名空间，均不存在时返回默认值。
@@ -88,9 +91,25 @@ private:
   /// 将独立 NDT 节点输出作为低频外部观测融合到 EKF 状态中。
   void ndtObservationCallback(const nav_msgs::OdometryConstPtr &msg);
   /// 在调用方已持有 mutex_ 时执行一条 NDT 观测的完整校正流程。
-  void processNdtObservationLocked(const nav_msgs::OdometryConstPtr &msg);
+  struct NdtObservationReceipt
+  {
+    std::string status = "NOT_PROCESSED";
+    double processed_state_stamp = std::numeric_limits<double>::quiet_NaN();
+    double rollback_stamp = std::numeric_limits<double>::quiet_NaN();
+    std::size_t replay_imu_count = 0;
+    bool correction_applied = false;
+  };
+  void processNdtObservationLocked(const nav_msgs::OdometryConstPtr &msg,
+      double expected_release_state_stamp = std::numeric_limits<double>::quiet_NaN(),
+      NdtObservationReceipt *receipt = nullptr);
   /// 在 IMU 状态推进后按传感器时间处理已到达 watermark 的 NDT 观测。
   void processReadyDeferredNdtLocked();
+  void processReadyFixedLagNdtLocked();
+  void writeFixedLagDiagnostic(uint64_t observation_id,
+      double ndt_stamp, double deadline_stamp, double arrival_state_stamp,
+      double arrival_wall_sec, double release_state_stamp,
+      double processing_wall_sec, std::size_t replay_imu_count,
+      bool correction_applied, const std::string &status);
   void writeDeferredDiagnostic(const std::string &event,
                               double ndt_stamp,
                               double state_now_stamp,
@@ -246,6 +265,15 @@ private:
   bool future_deferral_enable_ = false;
   double future_deferral_max_sec_ = 0.010;
   std::size_t future_deferral_max_queue_ = 20;
+  bool oosm_fixed_lag_enable_ = false;
+  double oosm_fixed_lag_sec_ = 0.15;
+  std::size_t oosm_fixed_lag_max_queue_ = 64;
+  OosmFixedLagScheduler oosm_fixed_lag_scheduler_;
+  std::map<uint64_t, nav_msgs::OdometryConstPtr> fixed_lag_ndt_messages_;
+  std::string fixed_lag_csv_path_;
+  std::ofstream fixed_lag_csv_;
+  uint64_t fixed_lag_late_count_ = 0;
+  uint64_t fixed_lag_processed_count_ = 0;
 
   struct DeferredNdtObservation
   {

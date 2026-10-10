@@ -11,8 +11,12 @@
   <arg name="future_deferral_enable" default="false" />
   <arg name="future_deferral_max_sec" default="0.01" />
   <arg name="future_deferral_max_queue" default="20" />
+  <arg name="oosm_fixed_lag_enable" default="false" />
+  <arg name="oosm_fixed_lag_sec" default="0.15" />
+  <arg name="oosm_fixed_lag_max_queue" default="64" />
   <arg name="scan_reference_time" default="" />
   <arg name="oosm_csv_path" default="" />
+  <arg name="oosm_fixed_lag_csv_path" default="" />
   <arg name="deferred_csv_path" default="" />
   <arg name="ekf_prediction_diagnostics_csv_path" default="" />
   <arg name="imu_deskew_csv_path" default="" />
@@ -50,6 +54,9 @@
   <param name="ndt_observation/future_deferral_enable" value="$(arg future_deferral_enable)" />
   <param name="ndt_observation/future_deferral_max_sec" value="$(arg future_deferral_max_sec)" />
   <param name="ndt_observation/future_deferral_max_queue" value="$(arg future_deferral_max_queue)" />
+  <param name="ndt_observation/oosm_fixed_lag_enable" value="$(arg oosm_fixed_lag_enable)" />
+  <param name="ndt_observation/oosm_fixed_lag_sec" value="$(arg oosm_fixed_lag_sec)" />
+  <param name="ndt_observation/oosm_fixed_lag_max_queue" value="$(arg oosm_fixed_lag_max_queue)" />
   <param name="lidar_update/scan_reference_time" value="$(arg scan_reference_time)"
          if="$(eval arg('scan_reference_time') != '')" />
   <param name="lidar_update/enable" value="false" />
@@ -57,6 +64,7 @@
   <param name="output/runtime_csv_path" value="$(arg runtime_csv_path)" />
   <param name="output/publish_path" value="$(arg publish_path)" />
   <param name="output/oosm_csv_path" value="$(arg oosm_csv_path)" />
+  <param name="output/oosm_fixed_lag_csv_path" value="$(arg oosm_fixed_lag_csv_path)" />
   <param name="output/deferred_csv_path" value="$(arg deferred_csv_path)" />
   <param name="output/ekf_prediction_diagnostics_csv_path" value="$(arg ekf_prediction_diagnostics_csv_path)" />
   <param name="output/imu_deskew_csv_path" value="$(arg imu_deskew_csv_path)" />

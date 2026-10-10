@@ -1,0 +1,1 @@
+resolved_package=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization

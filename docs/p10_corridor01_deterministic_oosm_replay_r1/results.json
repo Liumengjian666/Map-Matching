@@ -1,0 +1,105 @@
+{
+  "protocol": "P10_CORRIDOR01_DETERMINISTIC_OOSM_REPLAY_V2",
+  "result": "FIXED_LAG_DETERMINISM_PASS_COUPLED_ACCURACY_ADVANTAGE_NOT_SUPPORTED",
+  "git_start_sha": "ceb9ecd3a5c257cdfec5a08922d6c54120e6f7c5",
+  "gt_loaded_after_prefreeze": true,
+  "evaluation": {
+    "type": "PREFIX-ALIGNED RELATIVE DRIFT; not absolute map-frame ATE",
+    "fit": "Control_V2 corrected IMU first 3.0 s of evaluation; one shared full-pose SE(3) transform",
+    "primary_interval_s": [3.0, 35.0],
+    "samples_per_method": 6396,
+    "control_fit_translation_rmse_m": 0.08908576411274036,
+    "control_fit_rotation_rmse_deg": 1.3371461429428382,
+    "position_cross_covariance_smallest_to_largest_singular_ratio": 5.453683281181999e-08,
+    "position_only_kabsch_rotation_delta_deg": 4.82138186215706
+  },
+  "replay_integrity": {
+    "scans_per_mode": 396,
+    "evaluation_scans_per_mode": 346,
+    "high_rate_state_rows_per_mode": 8004,
+    "ndt_align_calls_per_mode": 396,
+    "ndt_converged_per_mode": 396,
+    "deskew_published_per_mode": 396,
+    "oosm_applied_per_mode": 396,
+    "fixed_lag_applied_per_mode": 396,
+    "late_fixed_lag_per_mode": 0,
+    "control_shadow_exact_topic_pose_parity": true,
+    "coupled_rosbag_complete": false,
+    "coupled_full_internal_lineage_rows": 8004,
+    "coupled_lineage_nonfinite_rows": 0
+  },
+  "feedback": {
+    "shadow": {"triggered": 19, "recommended": 7, "feedback_applied": 0, "joint_jet_calls": 14, "value_calls": 13},
+    "weak_only": {"triggered": 22, "recommended": 9, "feedback_applied": 9, "joint_jet_calls": 9, "value_calls": 9},
+    "coupled": {"triggered": 27, "recommended": 8, "feedback_applied": 8, "strong_selected": 6, "joint_jet_calls": 16, "value_calls": 15}
+  },
+  "primary_3_35s": {
+    "control_v2": {
+      "translation_rmse_m": 1.8878773199475662,
+      "translation_p95_m": 5.01103904419252,
+      "translation_max_m": 5.667156999562539,
+      "rotation_rmse_deg": 3.0262463004912794,
+      "rotation_p95_deg": 3.705964593218566,
+      "rotation_max_deg": 16.393782193573646,
+      "persistent_0_5m_s": 6.449565172195435,
+      "persistent_1m_s": 26.7833251953125,
+      "persistent_2m_s": 29.823069095611572
+    },
+    "weak_only_feedback_v2": {
+      "translation_rmse_m": 1.064473739482225,
+      "translation_p95_m": 2.212340271724629,
+      "translation_max_m": 4.529728808211904,
+      "rotation_rmse_deg": 2.67923245962037,
+      "rotation_p95_deg": 3.6464735757302904,
+      "rotation_max_deg": 13.1869843280647,
+      "persistent_0_5m_s": 6.449565172195435,
+      "persistent_1m_s": null,
+      "persistent_2m_s": null,
+      "first_brief_2m_crossing_s": 33.27287697792053
+    },
+    "coupled_feedback_v2": {
+      "translation_rmse_m": 6.398820510928912,
+      "translation_p95_m": 15.039884125897235,
+      "translation_max_m": 16.11998698209535,
+      "rotation_rmse_deg": 3.315928040297505,
+      "rotation_p95_deg": 3.5896772255203437,
+      "rotation_max_deg": 17.536672606260154,
+      "persistent_0_5m_s": 6.449565172195435,
+      "persistent_1m_s": 22.283565044403076,
+      "persistent_2m_s": 24.298444986343384
+    }
+  },
+  "translation_rmse_relative_change_percent": {
+    "weak_only_vs_control_improvement": 43.615311851313,
+    "coupled_vs_control_improvement": -238.94260200692662,
+    "coupled_vs_weak_only_improvement": -501.12525782377577
+  },
+  "runtime_ms": {
+    "control_stage_sum_mean_p95_max": [28.238976246919574, 35.434627490448, 91.71313481738281],
+    "shadow_stage_sum_mean_p95_max": [28.298435093836623, 36.27661324758911, 95.94134168688964],
+    "weak_only_stage_sum_mean_p95_max": [28.476458513797333, 35.748104511505126, 85.73756766064453],
+    "coupled_stage_sum_mean_p95_max": [28.169665433923278, 35.79546043893433, 90.36292029882813],
+    "stage_sum_definition": "deskew_processing_ms + NDT callback-to-odom-publish wall interval; staged per-frame service time, not a hard real-time guarantee",
+    "fixed_lag_arrival_to_application_wall_mean_p95_max_ms": {
+      "control_v2": [168.419, 178.024, 189.731],
+      "shadow_v2": [168.376, 178.672, 196.402],
+      "weak_only_feedback_v2": [168.106, 178.081, 195.271],
+      "coupled_feedback_v2": [168.476, 177.319, 195.842]
+    },
+    "peak_rss": "NOT_CAPTURED"
+  },
+  "input_hashes": {
+    "v1_bag_sha256": "f6e77c96d97402e551835e81a1ce8d780d075da2f18a9cb5e4fc0646628b86d6",
+    "v2_bag_sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+    "normalized_map_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+    "extrinsics_sha256": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d",
+    "gt_sha256": "3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03"
+  },
+  "limitations": [
+    "Corridor01 is a development sequence, not an independent validation set.",
+    "Evaluation is shared-prefix-aligned relative drift rather than absolute map-frame ATE.",
+    "Coupled topic bag is incomplete; full coupled trajectory uses the complete finite EKF lineage ledger and validated bag prefix.",
+    "Peak RSS was not captured.",
+    "The corrected posthoc OOSM counter was a stats-only field mapping fix after freeze; no replay or trajectory data changed."
+  ]
+}

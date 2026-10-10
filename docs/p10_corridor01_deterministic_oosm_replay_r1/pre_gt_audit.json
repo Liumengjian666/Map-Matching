@@ -1,0 +1,428 @@
+{
+  "GT_LOADED": false,
+  "notes": [
+    "NDT callback timing includes preprocessing and alignment; it is not a pure align-only measurement.",
+    "fixed-lag arrival-to-application wall delay is scheduling wait plus processing, not CPU time.",
+    "The Coupled topic bag was only partially finalized; its complete trajectory is the full state lineage ledger, with recorded prefix pose-checked against the actual published topic."
+  ],
+  "protocol": "P10_CORRIDOR01_DETERMINISTIC_OOSM_REPLAY_V2",
+  "runs": [
+    {
+      "all_arrivals_before_deadline": true,
+      "all_fixed_lag_applied": true,
+      "deskew_status": {
+        "PUBLISHED": 396
+      },
+      "expected_mode": "CONTROL",
+      "feedback": {
+        "anchor_valid_frames": 0,
+        "attempted": 0,
+        "feedback_applied": 0,
+        "feedback_changed_observation": 0,
+        "jet_calls": 0,
+        "recommended": 0,
+        "strong_selected": 0,
+        "triggered": 0,
+        "value_calls": 0
+      },
+      "fixed_lag_status": {
+        "APPLIED": 396,
+        "QUEUED": 396
+      },
+      "late_fixed_lag_count": 0,
+      "lineage_event_counts": {
+        "CORRECTED_PUBLISH": 396,
+        "IMU_HIGH_RATE_PUBLISH": 8004,
+        "NDT_CALLBACK_ENTER": 396,
+        "NDT_CORRECTION_APPLIED": 396,
+        "OOSM_REPLAY_COMPLETE": 396,
+        "OOSM_ROLLBACK": 396
+      },
+      "lineage_max_quaternion_norm_error": 2.220446049250313e-16,
+      "lineage_nonfinite_state_rows": 0,
+      "lineage_vs_bag_pose_parity": {
+        "/dog_livo/odom_corrected": {
+          "bag_count": 396,
+          "compared_prefix_count": 396,
+          "complete_bag": true,
+          "lineage_count": 396,
+          "max_rotation_difference_deg": 1.7075472925031877e-06,
+          "max_stamp_difference_ns": 127,
+          "max_translation_difference_m": 1.4245506936157285e-14
+        },
+        "/dog_livo/odom_high_rate": {
+          "bag_count": 8004,
+          "compared_prefix_count": 8004,
+          "complete_bag": true,
+          "lineage_count": 8004,
+          "max_rotation_difference_deg": 2.091309789151873e-06,
+          "max_stamp_difference_ns": 128,
+          "max_translation_difference_m": 1.4245506936157285e-14
+        }
+      },
+      "ndt_converged": 396,
+      "observed_modes": {
+        "CONTROL": 396
+      },
+      "oosm_status": {
+        "APPLIED": 396
+      },
+      "rows": {
+        "deskew": 396,
+        "fixed_lag": 792,
+        "ndt": 396,
+        "oosm": 396
+      },
+      "run": "control_v2",
+      "runtime": {
+        "deskew_processing_ms": {
+          "count": 396,
+          "max": 23.877009,
+          "mean": 14.221055343434344,
+          "p95": 18.628751
+        },
+        "fixed_lag_arrival_to_application_wall_ms_not_cpu": {
+          "count": 396,
+          "max": 189.73088264465332,
+          "mean": 168.4193725537772,
+          "p95": 178.0235767364502
+        },
+        "ndt_callback_to_align_complete_ms": {
+          "count": 396,
+          "max": 78.63092422485352,
+          "mean": 12.258114236773867,
+          "p95": 17.740964889526367
+        },
+        "ndt_callback_to_odom_publish_ms": {
+          "count": 396,
+          "max": 80.26313781738281,
+          "mean": 14.01792090348523,
+          "p95": 19.98305320739746
+        },
+        "peak_rss": "NOT_CAPTURED",
+        "whole_ros_run_wall_seconds": 1393.0
+      },
+      "topic_bag_complete": true,
+      "topic_bag_counts": {
+        "/clock": 15888,
+        "/dog_livo/ndt_odom": 396,
+        "/dog_livo/odom_corrected": 396,
+        "/dog_livo/odom_high_rate": 8004
+      },
+      "topic_bag_path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/topics.bag"
+    },
+    {
+      "all_arrivals_before_deadline": true,
+      "all_fixed_lag_applied": true,
+      "deskew_status": {
+        "PUBLISHED": 396
+      },
+      "expected_mode": "COUPLED_SHADOW",
+      "feedback": {
+        "anchor_valid_frames": 346,
+        "attempted": 7,
+        "feedback_applied": 0,
+        "feedback_changed_observation": 0,
+        "jet_calls": 14,
+        "recommended": 7,
+        "strong_selected": 3,
+        "triggered": 19,
+        "value_calls": 13
+      },
+      "fixed_lag_status": {
+        "APPLIED": 396,
+        "QUEUED": 396
+      },
+      "late_fixed_lag_count": 0,
+      "lineage_event_counts": {
+        "CORRECTED_PUBLISH": 396,
+        "IMU_HIGH_RATE_PUBLISH": 8004,
+        "NDT_CALLBACK_ENTER": 396,
+        "NDT_CORRECTION_APPLIED": 396,
+        "OOSM_REPLAY_COMPLETE": 396,
+        "OOSM_ROLLBACK": 396
+      },
+      "lineage_max_quaternion_norm_error": 2.220446049250313e-16,
+      "lineage_nonfinite_state_rows": 0,
+      "lineage_vs_bag_pose_parity": {
+        "/dog_livo/odom_corrected": {
+          "bag_count": 396,
+          "compared_prefix_count": 396,
+          "complete_bag": true,
+          "lineage_count": 396,
+          "max_rotation_difference_deg": 1.7075472925031877e-06,
+          "max_stamp_difference_ns": 127,
+          "max_translation_difference_m": 1.4245506936157285e-14
+        },
+        "/dog_livo/odom_high_rate": {
+          "bag_count": 8004,
+          "compared_prefix_count": 8004,
+          "complete_bag": true,
+          "lineage_count": 8004,
+          "max_rotation_difference_deg": 2.091309789151873e-06,
+          "max_stamp_difference_ns": 128,
+          "max_translation_difference_m": 1.4245506936157285e-14
+        }
+      },
+      "ndt_converged": 396,
+      "observed_modes": {
+        "COUPLED_SHADOW": 396
+      },
+      "oosm_status": {
+        "APPLIED": 396
+      },
+      "rows": {
+        "deskew": 396,
+        "fixed_lag": 792,
+        "ndt": 396,
+        "oosm": 396
+      },
+      "run": "shadow_v2",
+      "runtime": {
+        "deskew_processing_ms": {
+          "count": 396,
+          "max": 22.879879,
+          "mean": 14.132168464646464,
+          "p95": 18.671634
+        },
+        "fixed_lag_arrival_to_application_wall_ms_not_cpu": {
+          "count": 396,
+          "max": 196.40231132507324,
+          "mean": 168.37629585555106,
+          "p95": 178.67231369018555
+        },
+        "ndt_callback_to_align_complete_ms": {
+          "count": 396,
+          "max": 79.39362525939941,
+          "mean": 12.249619069725576,
+          "p95": 17.46964454650879
+        },
+        "ndt_callback_to_odom_publish_ms": {
+          "count": 396,
+          "max": 81.04681968688965,
+          "mean": 14.166266629190156,
+          "p95": 20.864009857177734
+        },
+        "peak_rss": "NOT_CAPTURED",
+        "whole_ros_run_wall_seconds": 967.0
+      },
+      "topic_bag_complete": true,
+      "topic_bag_counts": {
+        "/clock": 15888,
+        "/dog_livo/ndt_odom": 396,
+        "/dog_livo/odom_corrected": 396,
+        "/dog_livo/odom_high_rate": 8004
+      },
+      "topic_bag_path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/topics.bag"
+    },
+    {
+      "all_arrivals_before_deadline": true,
+      "all_fixed_lag_applied": true,
+      "deskew_status": {
+        "PUBLISHED": 396
+      },
+      "expected_mode": "WEAK_ONLY_FEEDBACK",
+      "feedback": {
+        "anchor_valid_frames": 342,
+        "attempted": 9,
+        "feedback_applied": 9,
+        "feedback_changed_observation": 9,
+        "jet_calls": 9,
+        "recommended": 9,
+        "strong_selected": 0,
+        "triggered": 22,
+        "value_calls": 9
+      },
+      "fixed_lag_status": {
+        "APPLIED": 396,
+        "QUEUED": 396
+      },
+      "late_fixed_lag_count": 0,
+      "lineage_event_counts": {
+        "CORRECTED_PUBLISH": 396,
+        "IMU_HIGH_RATE_PUBLISH": 8004,
+        "NDT_CALLBACK_ENTER": 396,
+        "NDT_CORRECTION_APPLIED": 396,
+        "OOSM_REPLAY_COMPLETE": 396,
+        "OOSM_ROLLBACK": 396
+      },
+      "lineage_max_quaternion_norm_error": 2.220446049250313e-16,
+      "lineage_nonfinite_state_rows": 0,
+      "lineage_vs_bag_pose_parity": {
+        "/dog_livo/odom_corrected": {
+          "bag_count": 396,
+          "compared_prefix_count": 396,
+          "complete_bag": true,
+          "lineage_count": 396,
+          "max_rotation_difference_deg": 1.7075472925031877e-06,
+          "max_stamp_difference_ns": 127,
+          "max_translation_difference_m": 1.4217791915866692e-14
+        },
+        "/dog_livo/odom_high_rate": {
+          "bag_count": 8004,
+          "compared_prefix_count": 8004,
+          "complete_bag": true,
+          "lineage_count": 8004,
+          "max_rotation_difference_deg": 2.091309789151873e-06,
+          "max_stamp_difference_ns": 128,
+          "max_translation_difference_m": 1.4266257867675778e-14
+        }
+      },
+      "ndt_converged": 396,
+      "observed_modes": {
+        "WEAK_ONLY_FEEDBACK": 396
+      },
+      "oosm_status": {
+        "APPLIED": 396
+      },
+      "rows": {
+        "deskew": 396,
+        "fixed_lag": 792,
+        "ndt": 396,
+        "oosm": 396
+      },
+      "run": "weak_only_feedback_v2",
+      "runtime": {
+        "deskew_processing_ms": {
+          "count": 396,
+          "max": 23.273523,
+          "mean": 14.184746383838384,
+          "p95": 18.872303
+        },
+        "fixed_lag_arrival_to_application_wall_ms_not_cpu": {
+          "count": 396,
+          "max": 195.27149200439453,
+          "mean": 168.10563838843143,
+          "p95": 178.08103561401367
+        },
+        "ndt_callback_to_align_complete_ms": {
+          "count": 396,
+          "max": 69.6718692779541,
+          "mean": 12.435877563977483,
+          "p95": 18.294811248779297
+        },
+        "ndt_callback_to_odom_publish_ms": {
+          "count": 396,
+          "max": 71.30908966064453,
+          "mean": 14.291712129958952,
+          "p95": 20.900487899780273
+        },
+        "peak_rss": "NOT_CAPTURED",
+        "whole_ros_run_wall_seconds": 510.0
+      },
+      "topic_bag_complete": true,
+      "topic_bag_counts": {
+        "/clock": 15887,
+        "/dog_livo/ndt_odom": 396,
+        "/dog_livo/odom_corrected": 396,
+        "/dog_livo/odom_high_rate": 8004
+      },
+      "topic_bag_path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/topics.bag"
+    },
+    {
+      "all_arrivals_before_deadline": true,
+      "all_fixed_lag_applied": true,
+      "deskew_status": {
+        "PUBLISHED": 396
+      },
+      "expected_mode": "COUPLED_FEEDBACK",
+      "feedback": {
+        "anchor_valid_frames": 339,
+        "attempted": 8,
+        "feedback_applied": 8,
+        "feedback_changed_observation": 8,
+        "jet_calls": 16,
+        "recommended": 8,
+        "strong_selected": 6,
+        "triggered": 27,
+        "value_calls": 15
+      },
+      "fixed_lag_status": {
+        "APPLIED": 396,
+        "QUEUED": 396
+      },
+      "late_fixed_lag_count": 0,
+      "lineage_event_counts": {
+        "CORRECTED_PUBLISH": 396,
+        "IMU_HIGH_RATE_PUBLISH": 8004,
+        "NDT_CALLBACK_ENTER": 396,
+        "NDT_CORRECTION_APPLIED": 396,
+        "OOSM_REPLAY_COMPLETE": 396,
+        "OOSM_ROLLBACK": 396
+      },
+      "lineage_max_quaternion_norm_error": 2.220446049250313e-16,
+      "lineage_nonfinite_state_rows": 0,
+      "lineage_vs_bag_pose_parity": {
+        "/dog_livo/odom_corrected": {
+          "bag_count": 366,
+          "compared_prefix_count": 366,
+          "complete_bag": false,
+          "lineage_count": 396,
+          "max_rotation_difference_deg": 1.7075472925031877e-06,
+          "max_stamp_difference_ns": 127,
+          "max_translation_difference_m": 3.5665644669189445e-15
+        },
+        "/dog_livo/odom_high_rate": {
+          "bag_count": 7391,
+          "compared_prefix_count": 7391,
+          "complete_bag": false,
+          "lineage_count": 8004,
+          "max_rotation_difference_deg": 2.091309789151873e-06,
+          "max_stamp_difference_ns": 128,
+          "max_translation_difference_m": 1.4245506936157285e-14
+        }
+      },
+      "ndt_converged": 396,
+      "observed_modes": {
+        "COUPLED_FEEDBACK": 396
+      },
+      "oosm_status": {
+        "APPLIED": 396
+      },
+      "rows": {
+        "deskew": 396,
+        "fixed_lag": 792,
+        "ndt": 396,
+        "oosm": 396
+      },
+      "run": "coupled_feedback_v2",
+      "runtime": {
+        "deskew_processing_ms": {
+          "count": 396,
+          "max": 23.065744,
+          "mean": 13.963939325757575,
+          "p95": 18.378661
+        },
+        "fixed_lag_arrival_to_application_wall_ms_not_cpu": {
+          "count": 396,
+          "max": 195.84155082702637,
+          "mean": 168.4755917751428,
+          "p95": 177.31904983520508
+        },
+        "ndt_callback_to_align_complete_ms": {
+          "count": 396,
+          "max": 71.68745994567871,
+          "mean": 12.22626127377905,
+          "p95": 17.544031143188477
+        },
+        "ndt_callback_to_odom_publish_ms": {
+          "count": 396,
+          "max": 73.38333129882812,
+          "mean": 14.205726108165702,
+          "p95": 20.427703857421875
+        },
+        "peak_rss": "NOT_CAPTURED",
+        "whole_ros_run_wall_seconds": 256.0
+      },
+      "topic_bag_complete": false,
+      "topic_bag_counts": {
+        "/clock": 14672,
+        "/dog_livo/ndt_odom": 366,
+        "/dog_livo/odom_corrected": 366,
+        "/dog_livo/odom_high_rate": 7391
+      },
+      "topic_bag_path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/reindexed_bag/topics.bag.active"
+    }
+  ],
+  "structural_result": "PASS"
+}

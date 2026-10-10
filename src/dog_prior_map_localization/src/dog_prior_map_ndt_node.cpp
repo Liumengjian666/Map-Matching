@@ -356,6 +356,8 @@ private:
     double lidar_header_stamp = std::numeric_limits<double>::quiet_NaN();
     double ros_now = std::numeric_limits<double>::quiet_NaN();
     double wall_time = std::numeric_limits<double>::quiet_NaN();
+    double ndt_align_complete_wall_sec = std::numeric_limits<double>::quiet_NaN();
+    double ndt_odom_publish_wall_sec = std::numeric_limits<double>::quiet_NaN();
     uint32_t cloud_seq = 0;
     size_t cloud_size_raw = 0;
     size_t cloud_size_after_filter = 0;
@@ -479,7 +481,8 @@ private:
 
   static std::string determinismCsvHeader()
   {
-    return "frame_index,lidar_header_stamp,ros_now,wall_time,cloud_seq,cloud_size_raw,cloud_size_after_filter,cloud_hash,"
+    return "frame_index,lidar_header_stamp,ros_now,wall_time,ndt_align_complete_wall_sec,ndt_odom_publish_wall_sec,"
+           "cloud_seq,cloud_size_raw,cloud_size_after_filter,cloud_hash,"
            "initial_guess_source,initial_guess_reason,"
            "local_imu_prior_enabled,local_imu_prior_used,local_imu_prior_reason,local_imu_t0,local_imu_t1,local_imu_dt,"
            "local_imu_history_first_stamp,local_imu_history_last_stamp,local_imu_delta_rotation_deg,"
@@ -570,7 +573,8 @@ private:
     std::ostringstream out;
     out << std::setprecision(17)
         << row.frame_index << "," << row.lidar_header_stamp << "," << row.ros_now << ","
-        << row.wall_time << "," << row.cloud_seq << "," << row.cloud_size_raw << ","
+        << row.wall_time << "," << row.ndt_align_complete_wall_sec << ","
+        << row.ndt_odom_publish_wall_sec << "," << row.cloud_seq << "," << row.cloud_size_raw << ","
         << row.cloud_size_after_filter << ","
         << std::hex << std::setw(16) << std::setfill('0') << row.cloud_hash << std::dec << std::setfill('0') << ","
         << row.initial_guess_source << "," << row.initial_guess_reason << ","
@@ -1051,6 +1055,7 @@ private:
     pcl::PointCloud<pcl::PointXYZ> aligned;
     const ros::WallTime align_start = ros::WallTime::now();
     ndt_.align(aligned, initial_guess.cast<float>());
+    diagnostic_row.ndt_align_complete_wall_sec = ros::WallTime::now().toSec();
     const double align_ms = (ros::WallTime::now() - align_start).toSec() * 1000.0;
     const bool ok = ndt_.hasConverged();
     const double score = ndt_.getFitnessScore();
@@ -1232,7 +1237,7 @@ private:
       R_ = used_result.block<3, 3>(0, 0);
       p_ = used_result.block<3, 1>(0, 3);
       localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
-      publishPose(timing.reference_stamp);
+      publishPose(timing.reference_stamp, &diagnostic_row.ndt_odom_publish_wall_sec);
       if (step_limited)
       {
         pcl::PointCloud<pcl::PointXYZ> limited_aligned = transformCloud(source, used_result);
@@ -1313,7 +1318,7 @@ private:
   }
 
   // 发布 NDT 位姿、里程计、可选轨迹以及 map 到 base 的 TF。
-  void publishPose(const ros::Time &stamp)
+  void publishPose(const ros::Time &stamp, double *odom_publish_wall_sec = nullptr)
   {
     Eigen::Quaterniond q(R_);
     q.normalize();
@@ -1329,6 +1334,8 @@ private:
     odom.pose.pose.orientation.y = q.y();
     odom.pose.pose.orientation.z = q.z();
     odom.pose.pose.orientation.w = q.w();
+    if (odom_publish_wall_sec)
+      *odom_publish_wall_sec = ros::WallTime::now().toSec();
     pub_odom_.publish(odom);
 
     geometry_msgs::PoseStamped pose;

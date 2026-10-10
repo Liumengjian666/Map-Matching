@@ -1,0 +1,48 @@
+{
+  "GT_LOADED": false,
+  "appended_tail_messages": 16,
+  "drain_margin_sec": 0.05,
+  "drain_target_ns": 1517157259226242018,
+  "fixed_lag_sec": 0.15,
+  "imu_tail_source": {
+    "fields": [
+      "ax",
+      "ay",
+      "az",
+      "gx",
+      "gy",
+      "gz"
+    ],
+    "frame_id": "epson",
+    "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/imu.csv",
+    "sha256": "21b94c0cb0ade931db1586799aa022dff2ba20b9ab76dc1e29eac0e948e132e6"
+  },
+  "input_v1": {
+    "cloud_messages": 396,
+    "imu_messages": 7989,
+    "path": "/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/input/corridor01_p10_causal_startup5_eval35_v1.bag",
+    "sha256": "f6e77c96d97402e551835e81a1ce8d780d075da2f18a9cb5e4fc0646628b86d6"
+  },
+  "last_fixed_lag_deadline_ns": 1517157259176242018,
+  "last_ndt_sensor_stamp_ns": 1517157259026242018,
+  "limitations": [
+    "This is a new V2 replay input, not byte-identical to V1.",
+    "All V1 messages are copied unchanged; only genuine IMU samples after the V1 end are appended.",
+    "No scans, cloud points, map, configuration, or pre-existing IMU sample are changed."
+  ],
+  "output": {
+    "cloud_messages": 396,
+    "imu_messages": 8005,
+    "last_imu_sensor_stamp_ns": 1517157259226752000,
+    "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/input_v2/corridor01_p10_causal_startup5_eval35_fixedlag_v2.bag",
+    "sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e"
+  },
+  "protocol": "P10_CORRIDOR01_FIXED_SENSOR_TIME_OOSM_V2",
+  "source_prefix_serialized_sha256": {
+    "/imu/data": "81fd6397053d27f3f8f20c70fe253af92caec883af5f7eaa553e48a36202cffe",
+    "/p10/corridor01/raw_timed_points": "d8a0510ba8d653140f7fab0c33d5c0e53b4d43c0e016114f0e8a9eb04754e34e"
+  },
+  "tail_first_sensor_stamp_ns": 1517157259151744000,
+  "tail_last_sensor_stamp_ns": 1517157259226752000,
+  "v1_last_imu_sensor_stamp_ns": 1517157259146752000
+}

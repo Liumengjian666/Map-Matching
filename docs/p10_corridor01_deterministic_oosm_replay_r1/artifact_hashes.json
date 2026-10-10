@@ -1,0 +1,61 @@
+{
+  "protocol": "P10_CORRIDOR01_DETERMINISTIC_OOSM_REPLAY_V2",
+  "pre_gt_freeze_sha256": "6003c30f823af93819f0cdc157e1b4f95f238d22a557ce2b744862543e62fea1",
+  "complete_external_run_inventory": {
+    "root": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs",
+    "files": 89,
+    "hash_source": "pre_gt_freeze.json:frozen_run_output_inventory"
+  },
+  "committed_archive_sha256": {
+    "PROTOCOL.md": "8cfeeffdd4015828f5e983af8bed0fdf79374a5f08c6e0519e6e313555297996",
+    "REPORT.md": "9612bf427d9d90da78ce1e1a6ed7b4e9c7b6a3bd8bbdbc25679d3a082d8874fa",
+    "THEORY.md": "f9757cbfe628aa123c12cf0ea77f5e88ed05bca0f24582d035adebd41f1bf69c",
+    "control_shadow_parity.json": "723811609ba2a81f3d3c23a9242f436eccfb11213fd36bf009ec0d2efead565c",
+    "fixed_lag_v2_input_manifest.json": "bd2c13a49a50d07ac0009e40ef25986d3cd538bec4c9108d51b917f69f99367e",
+    "per_sample_errors.csv": "d25390d8d7d0de314d1097bf4a3f3888cc8427b03f375b0314f9d19b5ea1bb14",
+    "posthoc_metrics.json": "50615d568f0cbe3e55962a4c1e99adc5b63d0877221794da92086f40b1eaaaba",
+    "pre_gt_audit.json": "e39608b78761c4bae1143e1f13972ff7db15202a22ef716c8979510dbb961005",
+    "pre_gt_freeze.json": "6003c30f823af93819f0cdc157e1b4f95f238d22a557ce2b744862543e62fea1",
+    "results.json": "4d1f0bef2c81704b04b93958ae16e79bfb549eb68ab1404c26ca36b3cac5c288",
+    "validation.txt": "13911abba3fafe475a082d2362a7caebfb3f38aeaa78515cab17f0d76eae491a"
+  },
+  "committed_run_csv_sha256": {
+    "control_v2/deskew.csv": "8679f2007868e890dfb8e1816f33cd90087d88c6ebfabe53b9063c1b2e906a8c",
+    "control_v2/ekf_lineage.csv": "c6afebaf62d8f6e131d9c516ff5b4f64bac640adc134944c44cce6f0656c9e69",
+    "control_v2/ekf_runtime.csv": "fafb369ec2885be2151d8a2ff68349eeed2d8e7c1a18d0186fc1fbc40d397d45",
+    "control_v2/ndt_diagnostics.csv": "7ae5beb5e192238003ff15d5a885191c2c3b2127b13945b637f88f8af700ae8a",
+    "control_v2/oosm.csv": "b494cea48f5c89b0553c12ca5bd0f82ed563261bb1fa62ca4350994b55595cf3",
+    "control_v2/oosm_fixed_lag.csv": "1dbf9156f5b9118075c1926da9c074421933212b42ffa5cfc3886c2fdc90562b",
+    "control_v2/package_resolution.txt": "b84f444ff2d4cb42ea1a6e8beb51db58d97835993b5dd927a7da6a0c46f9e6b7",
+    "control_v2/run_times.txt": "c58d2867d19e0b2f6639c014692fd3cbfc96c1aeb181beca1365360ed5560f9e",
+    "shadow_v2/deskew.csv": "f38d52e1aaa40c73c4dfd04618abb35f389e0a757e9e715400d5ab053a5d38a0",
+    "shadow_v2/ekf_lineage.csv": "0e46eb4664c6a951b97c878794c522898f751d8d8ad507100cc1a96fa1a2ce34",
+    "shadow_v2/ekf_runtime.csv": "fafb369ec2885be2151d8a2ff68349eeed2d8e7c1a18d0186fc1fbc40d397d45",
+    "shadow_v2/ndt_diagnostics.csv": "ddab9be58f55f680cd737d06e9b597b606c6ace617a825e25ec0fdc4960a3ae5",
+    "shadow_v2/oosm.csv": "b494cea48f5c89b0553c12ca5bd0f82ed563261bb1fa62ca4350994b55595cf3",
+    "shadow_v2/oosm_fixed_lag.csv": "99182063bdfa7b0456535c0fdc0b6e45a8bb262c297c796d20cd66d5c9966903",
+    "shadow_v2/package_resolution.txt": "b84f444ff2d4cb42ea1a6e8beb51db58d97835993b5dd927a7da6a0c46f9e6b7",
+    "shadow_v2/run_times.txt": "065ade3fe4a870fff1fdb07e16f094ca37474f421e75d3ce81e6c7981b325e5b",
+    "weak_only_feedback_v2/deskew.csv": "e4940f854d7701c37f8d9fa4692a8a9b1635d49e10f9714051f28fece466a433",
+    "weak_only_feedback_v2/ekf_lineage.csv": "9800e2e3a191ed33b3f2cb2a0f150c44968bb60d2ce4069e1f08a35a795a06d4",
+    "weak_only_feedback_v2/ekf_runtime.csv": "fafb369ec2885be2151d8a2ff68349eeed2d8e7c1a18d0186fc1fbc40d397d45",
+    "weak_only_feedback_v2/ndt_diagnostics.csv": "5371aaa6d12255f1b5c35d841dd1a53c29ee59cf3aefa125c932667af0fe13be",
+    "weak_only_feedback_v2/oosm.csv": "b494cea48f5c89b0553c12ca5bd0f82ed563261bb1fa62ca4350994b55595cf3",
+    "weak_only_feedback_v2/oosm_fixed_lag.csv": "440eb2543643c17cc42152ba3ccb32d34d69663823bd4f4a6bc4ea4a6b43fb9f",
+    "weak_only_feedback_v2/package_resolution.txt": "b84f444ff2d4cb42ea1a6e8beb51db58d97835993b5dd927a7da6a0c46f9e6b7",
+    "weak_only_feedback_v2/run_times.txt": "54b3517d35fa7ce7c8607cf2ab46b26f46498d857020da9a8edc4064cef6f80a",
+    "coupled_feedback_v2/deskew.csv": "a76a299345e583382d70d2066550c882b79bcb0f0005bbb1c976d12cd55b4586",
+    "coupled_feedback_v2/ekf_lineage.csv": "6de403c1546c9a3cc30ca459f3e4ae2d09ba82980351dff997b45ae13c24c2ba",
+    "coupled_feedback_v2/ekf_runtime.csv": "fafb369ec2885be2151d8a2ff68349eeed2d8e7c1a18d0186fc1fbc40d397d45",
+    "coupled_feedback_v2/ndt_diagnostics.csv": "9a0a41424171faf0d46d5744c63ad4d9847c9e1feea55c4730ce5bfb279c45ac",
+    "coupled_feedback_v2/oosm.csv": "b494cea48f5c89b0553c12ca5bd0f82ed563261bb1fa62ca4350994b55595cf3",
+    "coupled_feedback_v2/oosm_fixed_lag.csv": "c4498516d739bd2c19057d6069e1f3b89abe36a5d34ba0a2cc97ff3f87b20876",
+    "coupled_feedback_v2/package_resolution.txt": "b84f444ff2d4cb42ea1a6e8beb51db58d97835993b5dd927a7da6a0c46f9e6b7",
+    "coupled_feedback_v2/run_times.txt": "3a777621b77b1c2004b2e2e47275bfded03fcceca25381f0da05f64ab88201fb"
+  },
+  "posthoc_evaluator_sha256": "b6db2bf2353e8210edc98eb106b3e92decead03bced225aa78a787172c932ff8",
+  "runtime_binaries": {
+    "ndt": "d26fb63cb550b3ca4238b24c405c22d1bde0a677c8fdad429985c046c33c12cb",
+    "ekf": "b8359c3251daf73deb93754421a6d67fa79e2af3404c60dd8375c9d529a1993e"
+  }
+}

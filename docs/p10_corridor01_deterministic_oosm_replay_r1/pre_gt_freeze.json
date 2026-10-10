@@ -1,0 +1,645 @@
+{
+  "protocol": "P10_CORRIDOR01_DETERMINISTIC_OOSM_REPLAY_V2",
+  "frozen_at_utc": "2026-10-10T19:16:38.431214+00:00",
+  "GT_LOADED": false,
+  "evaluation_contract_frozen_before_GT": {
+    "fit_stream": "CONTROL_V2 IMU state lineage IMU_HIGH_RATE_PUBLISH",
+    "fit_interval": "first 3.0 seconds beginning at first NDT sensor stamp + 5.0 seconds startup",
+    "shared_transform": true,
+    "primary_metrics_interval": "evaluation origin + 3.0 seconds through +35.0 seconds",
+    "metric_interpretation": "PREFIX-ALIGNED RELATIVE DRIFT; not absolute map-frame ATE"
+  },
+  "repository": {
+    "branch": "research/p9-r4-heldout-visual-evidence",
+    "head": "ceb9ecd3a5c257cdfec5a08922d6c54120e6f7c5",
+    "working_tree_diff_sha256": "3e8b516c7ef0ece8f00ff6b2903c2c879d3b7d0ad0041ab28230bbb4a0d4c861",
+    "runtime_source_files": {
+      "src/dog_prior_map_localization/CMakeLists.txt": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/CMakeLists.txt",
+        "bytes": 5784,
+        "sha256": "acda5af69cbff545c422e1524ae4d524ce55c3eda07978fc0be80515858d8cba",
+        "relative_to_repository": "src/dog_prior_map_localization/CMakeLists.txt"
+      },
+      "src/dog_prior_map_localization/include/dog_prior_map_localization/core/oosm_fixed_lag_scheduler.hpp": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/include/dog_prior_map_localization/core/oosm_fixed_lag_scheduler.hpp",
+        "bytes": 1871,
+        "sha256": "6d932862b1da243e1a9a101b205f7cbf7992b2ea82efc31d75e5b35bbe8714ff",
+        "relative_to_repository": "src/dog_prior_map_localization/include/dog_prior_map_localization/core/oosm_fixed_lag_scheduler.hpp"
+      },
+      "src/dog_prior_map_localization/include/dog_prior_map_localization/dog_prior_map_ekf_node.hpp": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/include/dog_prior_map_localization/dog_prior_map_ekf_node.hpp",
+        "bytes": 14117,
+        "sha256": "a6b6a4beed8402cef111879e1937e69f20ff9547c727d8516730eb4b75ad8fc9",
+        "relative_to_repository": "src/dog_prior_map_localization/include/dog_prior_map_localization/dog_prior_map_ekf_node.hpp"
+      },
+      "src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch",
+        "bytes": 6544,
+        "sha256": "60132c21d5d626d76b66e4542b1e09ca81f6471a19d7c8706a14a83214e4b92f",
+        "relative_to_repository": "src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch"
+      },
+      "src/dog_prior_map_localization/scripts/p10_corridor01_deterministic_oosm/audit_replay_outputs.py": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p10_corridor01_deterministic_oosm/audit_replay_outputs.py",
+        "bytes": 10750,
+        "sha256": "d60d434d4e05b3abd7fe4614e047a4dce2600f30509dbf628dd3cd9d1cd1929b",
+        "relative_to_repository": "src/dog_prior_map_localization/scripts/p10_corridor01_deterministic_oosm/audit_replay_outputs.py"
+      },
+      "src/dog_prior_map_localization/scripts/p10_corridor01_deterministic_oosm/build_fixed_lag_v2_input.py": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p10_corridor01_deterministic_oosm/build_fixed_lag_v2_input.py",
+        "bytes": 9762,
+        "sha256": "eb630acb2e67128297b7bc1fb4b024e1340904984a0e2450289033776ec7422d",
+        "relative_to_repository": "src/dog_prior_map_localization/scripts/p10_corridor01_deterministic_oosm/build_fixed_lag_v2_input.py"
+      },
+      "src/dog_prior_map_localization/scripts/p10_corridor01_deterministic_oosm/compare_control_shadow_v2.py": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p10_corridor01_deterministic_oosm/compare_control_shadow_v2.py",
+        "bytes": 7507,
+        "sha256": "a959cde11097f928e255f6bc0b5d68e68b3713592bc4cd6d22bdbfc9c49876aa",
+        "relative_to_repository": "src/dog_prior_map_localization/scripts/p10_corridor01_deterministic_oosm/compare_control_shadow_v2.py"
+      },
+      "src/dog_prior_map_localization/scripts/p10_corridor01_deterministic_oosm/evaluate_frozen_v2.py": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p10_corridor01_deterministic_oosm/evaluate_frozen_v2.py",
+        "bytes": 15462,
+        "sha256": "873e31e134d236b3b052ac6b83fb8ad806dfabb31f7c7a642b525c11f17c5271",
+        "relative_to_repository": "src/dog_prior_map_localization/scripts/p10_corridor01_deterministic_oosm/evaluate_frozen_v2.py"
+      },
+      "src/dog_prior_map_localization/scripts/p10_corridor01_deterministic_oosm/freeze_pre_gt_outputs.py": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p10_corridor01_deterministic_oosm/freeze_pre_gt_outputs.py",
+        "bytes": 6677,
+        "sha256": "0239062b548e5bfb8c5e9bd2e6b65ebd00673ccbfaccc767619d55e86d07bcff",
+        "relative_to_repository": "src/dog_prior_map_localization/scripts/p10_corridor01_deterministic_oosm/freeze_pre_gt_outputs.py"
+      },
+      "src/dog_prior_map_localization/src/core/oosm_fixed_lag_scheduler.cpp": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/src/core/oosm_fixed_lag_scheduler.cpp",
+        "bytes": 3362,
+        "sha256": "1f805218e96688ef9189cfdcbc4b3f3aadf7095a418927d9ed0b43b6cdafe851",
+        "relative_to_repository": "src/dog_prior_map_localization/src/core/oosm_fixed_lag_scheduler.cpp"
+      },
+      "src/dog_prior_map_localization/src/dog_prior_map_ekf_node_core.cpp": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/src/dog_prior_map_ekf_node_core.cpp",
+        "bytes": 26585,
+        "sha256": "0eb7b9b9c1c64b91183bd47511f90bf7bdd8b13efc4f9c7b5fc46609406dceb8",
+        "relative_to_repository": "src/dog_prior_map_localization/src/dog_prior_map_ekf_node_core.cpp"
+      },
+      "src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp",
+        "bytes": 75173,
+        "sha256": "b3f2fab42698a69e9bcbcfbabf06160917f97dec05bf74d2fab0ae0216b2b056",
+        "relative_to_repository": "src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp"
+      },
+      "src/dog_prior_map_localization/src/fusion/ndt_observation.cpp": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/src/fusion/ndt_observation.cpp",
+        "bytes": 15107,
+        "sha256": "763c0693f40c86cfb74187b20db2202ced5fa00712695ac7153d810fd92d3fe2",
+        "relative_to_repository": "src/dog_prior_map_localization/src/fusion/ndt_observation.cpp"
+      },
+      "src/dog_prior_map_localization/src/imu_processor.cpp": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/src/imu_processor.cpp",
+        "bytes": 14392,
+        "sha256": "8e620822956a6ea8357bbf6586e8724a01df0d387761c2cde0855170b6ccc43c",
+        "relative_to_repository": "src/dog_prior_map_localization/src/imu_processor.cpp"
+      },
+      "src/dog_prior_map_localization/tests/oosm_fixed_lag_scheduler_contract_test.cpp": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/tests/oosm_fixed_lag_scheduler_contract_test.cpp",
+        "bytes": 5121,
+        "sha256": "e09eee6703fd8767ffd803bc1d84c850672891aa07fadc0614b6ef310a91273a",
+        "relative_to_repository": "src/dog_prior_map_localization/tests/oosm_fixed_lag_scheduler_contract_test.cpp"
+      }
+    }
+  },
+  "runtime_binaries": {
+    "ndt": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+      "bytes": 119462256,
+      "sha256": "d26fb63cb550b3ca4238b24c405c22d1bde0a677c8fdad429985c046c33c12cb",
+      "relative_to_repository": "devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp"
+    },
+    "ekf": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+      "bytes": 56656416,
+      "sha256": "b8359c3251daf73deb93754421a6d67fa79e2af3404c60dd8375c9d529a1993e",
+      "relative_to_repository": "devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp"
+    }
+  },
+  "frozen_inputs": {
+    "v1_bag": {
+      "path": "/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/input/corridor01_p10_causal_startup5_eval35_v1.bag",
+      "bytes": 186708344,
+      "sha256": "f6e77c96d97402e551835e81a1ce8d780d075da2f18a9cb5e4fc0646628b86d6"
+    },
+    "v1_manifest": {
+      "path": "/home/jian/livox_ws/dog_loc_paper_ws/.p10_corridor01_prospective_causal_replay_r1/input/slice_manifest.json",
+      "bytes": 6692,
+      "sha256": "fa49d5f7b3a4c20c5a1889d31c3ec86bb6f12a0275ee3dafe04eebb0dfae7f1e"
+    },
+    "v2_bag": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/input_v2/corridor01_p10_causal_startup5_eval35_fixedlag_v2.bag",
+      "bytes": 186714344,
+      "sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e"
+    },
+    "v2_manifest": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/input_v2/fixed_lag_v2_input_manifest.json",
+      "bytes": 2009,
+      "sha256": "bd2c13a49a50d07ac0009e40ef25986d3cd538bec4c9108d51b917f69f99367e"
+    },
+    "normalized_map": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd",
+      "bytes": 4058751,
+      "sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f"
+    },
+    "extrinsics": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/calibration/corridor01_extrinsics.yaml",
+      "bytes": 922,
+      "sha256": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d"
+    },
+    "sensor_only_initializer": {
+      "path": "/home/jian/livox_ws/superloc_adapter_ws/config/corridor01_init.yaml",
+      "bytes": 595,
+      "sha256": "d3e6f560895cb4f6a9efb7058bcff8a13313783e799d82c828e51adcd4bafd1e"
+    },
+    "source_imu_csv": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/imu.csv",
+      "bytes": 7984120,
+      "sha256": "21b94c0cb0ade931db1586799aa022dff2ba20b9ab76dc1e29eac0e948e132e6"
+    },
+    "dataset_config": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p10_corridor01_prospective_causal.yaml",
+      "bytes": 4243,
+      "sha256": "fc5c262f4eacbb8b23d95a9adb5877e956fa215f84c675a378c62e2e63d94d6c",
+      "relative_to_repository": "src/dog_prior_map_localization/config/p10_corridor01_prospective_causal.yaml"
+    },
+    "base_config": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/superloc_corridor01.yaml",
+      "bytes": 8123,
+      "sha256": "29941e279a800ee6854fca8dd2f5de3059ea8a71a7d937ea80e8f27943ea32a7",
+      "relative_to_repository": "src/dog_prior_map_localization/config/superloc_corridor01.yaml"
+    },
+    "split_launch": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch",
+      "bytes": 6544,
+      "sha256": "60132c21d5d626d76b66e4542b1e09ca81f6471a19d7c8706a14a83214e4b92f",
+      "relative_to_repository": "src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch"
+    }
+  },
+  "pre_gt_audit": {
+    "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/pre_gt_audit.json",
+    "bytes": 13494,
+    "sha256": "e39608b78761c4bae1143e1f13972ff7db15202a22ef716c8979510dbb961005"
+  },
+  "control_shadow_parity": {
+    "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_shadow_parity.json",
+    "bytes": 2742,
+    "sha256": "723811609ba2a81f3d3c23a9242f436eccfb11213fd36bf009ec0d2efead565c"
+  },
+  "frozen_run_output_inventory": {
+    "control_shadow_parity.json": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_shadow_parity.json",
+      "bytes": 2742,
+      "sha256": "723811609ba2a81f3d3c23a9242f436eccfb11213fd36bf009ec0d2efead565c"
+    },
+    "control_v2/deskew.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/deskew.csv",
+      "bytes": 153343,
+      "sha256": "8679f2007868e890dfb8e1816f33cd90087d88c6ebfabe53b9063c1b2e906a8c"
+    },
+    "control_v2/ekf_lineage.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/ekf_lineage.csv",
+      "bytes": 3616962,
+      "sha256": "c6afebaf62d8f6e131d9c516ff5b4f64bac640adc134944c44cce6f0656c9e69"
+    },
+    "control_v2/ekf_runtime.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/ekf_runtime.csv",
+      "bytes": 4904,
+      "sha256": "fafb369ec2885be2151d8a2ff68349eeed2d8e7c1a18d0186fc1fbc40d397d45"
+    },
+    "control_v2/live_binary_hashes.txt": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/live_binary_hashes.txt",
+      "bytes": 394,
+      "sha256": "0dc197563c09393e905541976b52dc1720edccc19c69f1660f4445c1cb863dc6"
+    },
+    "control_v2/logs/cd66edba-c4d9-11f1-a491-c1fbbfe59b27/master.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/logs/cd66edba-c4d9-11f1-a491-c1fbbfe59b27/master.log",
+      "bytes": 41442,
+      "sha256": "bb891c4ea2ef5ec6b8c9385aa8da8b498b2ab6d627b1a18a6b226b410c7ebe50"
+    },
+    "control_v2/logs/cd66edba-c4d9-11f1-a491-c1fbbfe59b27/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-11375.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/logs/cd66edba-c4d9-11f1-a491-c1fbbfe59b27/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-11375.log",
+      "bytes": 20066,
+      "sha256": "58efa3f14ad588f4a0911883bd97055425ba1e2699f46befad59cc03846cfea8"
+    },
+    "control_v2/logs/cd66edba-c4d9-11f1-a491-c1fbbfe59b27/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-11564.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/logs/cd66edba-c4d9-11f1-a491-c1fbbfe59b27/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-11564.log",
+      "bytes": 31051,
+      "sha256": "a1325769bee35c221a67671e2f7598bca49e5b2e893751609e01f0c04ca90b28"
+    },
+    "control_v2/logs/cd66edba-c4d9-11f1-a491-c1fbbfe59b27/rosout-1-stdout.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/logs/cd66edba-c4d9-11f1-a491-c1fbbfe59b27/rosout-1-stdout.log",
+      "bytes": 242,
+      "sha256": "fff57cfbd6b41bb3f9708ab5500b1f7fb29b1c200feff638b72fc702c783e92a"
+    },
+    "control_v2/logs/cd66edba-c4d9-11f1-a491-c1fbbfe59b27/rosout.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/logs/cd66edba-c4d9-11f1-a491-c1fbbfe59b27/rosout.log",
+      "bytes": 19525,
+      "sha256": "28033ba9573d6aea3bb40327ee421d1b5f555b65bf4fd14423cde4c0ace90ee7"
+    },
+    "control_v2/logs/launch.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/logs/launch.log",
+      "bytes": 4096,
+      "sha256": "c03061e7eb9e85c5f1a0c23acd74e4a868abfee2eb0d112613d16d0684b7ab05"
+    },
+    "control_v2/logs/player.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/logs/player.log",
+      "bytes": 753811,
+      "sha256": "75714c1aa9a4be134ea6f480244d5650c71cf771e83d2f5fd5a2587c521e08b9"
+    },
+    "control_v2/logs/record.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/logs/record.log",
+      "bytes": 114,
+      "sha256": "f50b7a877e81f4c8a7c938b3c1c9465496c4aa146af3418b09e08f44896db565"
+    },
+    "control_v2/logs/roscore.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/logs/roscore.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "control_v2/ndt_diagnostics.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/ndt_diagnostics.csv",
+      "bytes": 800074,
+      "sha256": "7ae5beb5e192238003ff15d5a885191c2c3b2127b13945b637f88f8af700ae8a"
+    },
+    "control_v2/oosm.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/oosm.csv",
+      "bytes": 46142,
+      "sha256": "b494cea48f5c89b0553c12ca5bd0f82ed563261bb1fa62ca4350994b55595cf3"
+    },
+    "control_v2/oosm_fixed_lag.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/oosm_fixed_lag.csv",
+      "bytes": 108447,
+      "sha256": "1dbf9156f5b9118075c1926da9c074421933212b42ffa5cfc3886c2fdc90562b"
+    },
+    "control_v2/package_resolution.txt": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/package_resolution.txt",
+      "bytes": 94,
+      "sha256": "b84f444ff2d4cb42ea1a6e8beb51db58d97835993b5dd927a7da6a0c46f9e6b7"
+    },
+    "control_v2/ros_home/roscore-11311.pid": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/ros_home/roscore-11311.pid",
+      "bytes": 5,
+      "sha256": "41c54842261c45f5a8313728774f5bf438a67f94f0b9aa0e3762a9f28c898c3c"
+    },
+    "control_v2/ros_home/rospack_cache_10481398251367141885": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/ros_home/rospack_cache_10481398251367141885",
+      "bytes": 8289,
+      "sha256": "f4774b41406ab3f2e9017dca693d6d74d6951882fe20656ed12e4d984edcc429"
+    },
+    "control_v2/ros_home/rospack_cache_18019822870472497271": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/ros_home/rospack_cache_18019822870472497271",
+      "bytes": 7536,
+      "sha256": "c8c31b48826ba3ede6d0004dae65e16c96bf585306bd57679492e18e52816cf7"
+    },
+    "control_v2/run_times.txt": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/run_times.txt",
+      "bytes": 78,
+      "sha256": "c58d2867d19e0b2f6639c014692fd3cbfc96c1aeb181beca1365360ed5560f9e"
+    },
+    "control_v2/topics.bag": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/topics.bag",
+      "bytes": 7983499,
+      "sha256": "fa76d5f3707af6115a71f4a475a28049a30afe4ddcd617f682c63c761404d52c"
+    },
+    "coupled_feedback_v2/deskew.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/deskew.csv",
+      "bytes": 153444,
+      "sha256": "a76a299345e583382d70d2066550c882b79bcb0f0005bbb1c976d12cd55b4586"
+    },
+    "coupled_feedback_v2/ekf_lineage.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/ekf_lineage.csv",
+      "bytes": 3616634,
+      "sha256": "6de403c1546c9a3cc30ca459f3e4ae2d09ba82980351dff997b45ae13c24c2ba"
+    },
+    "coupled_feedback_v2/ekf_runtime.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/ekf_runtime.csv",
+      "bytes": 4904,
+      "sha256": "fafb369ec2885be2151d8a2ff68349eeed2d8e7c1a18d0186fc1fbc40d397d45"
+    },
+    "coupled_feedback_v2/logs/7319bcc2-c4dc-11f1-a491-c1fbbfe59b27/master.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/logs/7319bcc2-c4dc-11f1-a491-c1fbbfe59b27/master.log",
+      "bytes": 43759,
+      "sha256": "351123a56fdb481e3973a85782ae75da4f7d1663e87e8ccebba6e05826d26209"
+    },
+    "coupled_feedback_v2/logs/7319bcc2-c4dc-11f1-a491-c1fbbfe59b27/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-13969.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/logs/7319bcc2-c4dc-11f1-a491-c1fbbfe59b27/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-13969.log",
+      "bytes": 20156,
+      "sha256": "68fc270137401d5fd73446531af40a53c02a6a53aed45a725ddfc8239c77e91a"
+    },
+    "coupled_feedback_v2/logs/7319bcc2-c4dc-11f1-a491-c1fbbfe59b27/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-14095.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/logs/7319bcc2-c4dc-11f1-a491-c1fbbfe59b27/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-14095.log",
+      "bytes": 31231,
+      "sha256": "da7c061496216ce2c23cc7a5dace0cedf8c8308f1dd24d3c8438e3611d78a8cd"
+    },
+    "coupled_feedback_v2/logs/7319bcc2-c4dc-11f1-a491-c1fbbfe59b27/rosout-1-stdout.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/logs/7319bcc2-c4dc-11f1-a491-c1fbbfe59b27/rosout-1-stdout.log",
+      "bytes": 251,
+      "sha256": "d0df25b1801ad8cd1e39c8e4b847e30538645329ed6cbf553c029453d6a6d8b3"
+    },
+    "coupled_feedback_v2/logs/7319bcc2-c4dc-11f1-a491-c1fbbfe59b27/rosout.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/logs/7319bcc2-c4dc-11f1-a491-c1fbbfe59b27/rosout.log",
+      "bytes": 19533,
+      "sha256": "b8484665cea7099b1854c62e28968b9392cb747b35b6e568c20649740d0c616e"
+    },
+    "coupled_feedback_v2/logs/launch.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/logs/launch.log",
+      "bytes": 4096,
+      "sha256": "b86160968bdc9d0af7f176e8a2e714a345bae247c7f60a7acf373620ccef107a"
+    },
+    "coupled_feedback_v2/logs/player.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/logs/player.log",
+      "bytes": 753722,
+      "sha256": "9749c5dc7c4fd3d296dbfa453de239e3a5e31db76025988453d6ddc215fe3546"
+    },
+    "coupled_feedback_v2/logs/record.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/logs/record.log",
+      "bytes": 114,
+      "sha256": "2e20b6903416ea441cbd9c81216293f2289f701252fb6745ee255bb3958597d4"
+    },
+    "coupled_feedback_v2/logs/roscore.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/logs/roscore.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "coupled_feedback_v2/ndt_diagnostics.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/ndt_diagnostics.csv",
+      "bytes": 1027938,
+      "sha256": "9a0a41424171faf0d46d5744c63ad4d9847c9e1feea55c4730ce5bfb279c45ac"
+    },
+    "coupled_feedback_v2/oosm.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/oosm.csv",
+      "bytes": 46142,
+      "sha256": "b494cea48f5c89b0553c12ca5bd0f82ed563261bb1fa62ca4350994b55595cf3"
+    },
+    "coupled_feedback_v2/oosm_fixed_lag.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/oosm_fixed_lag.csv",
+      "bytes": 108484,
+      "sha256": "c4498516d739bd2c19057d6069e1f3b89abe36a5d34ba0a2cc97ff3f87b20876"
+    },
+    "coupled_feedback_v2/package_resolution.txt": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/package_resolution.txt",
+      "bytes": 94,
+      "sha256": "b84f444ff2d4cb42ea1a6e8beb51db58d97835993b5dd927a7da6a0c46f9e6b7"
+    },
+    "coupled_feedback_v2/reindexed_bag/topics.bag.active": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/reindexed_bag/topics.bag.active",
+      "bytes": 7374529,
+      "sha256": "b626867a00b96ee52124fa045c7e8aaa49dc20a69314d603301f614af1165519"
+    },
+    "coupled_feedback_v2/ros_home/roscore-11311.pid": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/ros_home/roscore-11311.pid",
+      "bytes": 5,
+      "sha256": "5dfe89f12d12d70adfd6328e66fca3e53c7967c9044e6ece54a97fc2773ea92e"
+    },
+    "coupled_feedback_v2/ros_home/rospack_cache_10481398251367141885": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/ros_home/rospack_cache_10481398251367141885",
+      "bytes": 8289,
+      "sha256": "f4774b41406ab3f2e9017dca693d6d74d6951882fe20656ed12e4d984edcc429"
+    },
+    "coupled_feedback_v2/ros_home/rospack_cache_18019822870472497271": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/ros_home/rospack_cache_18019822870472497271",
+      "bytes": 7536,
+      "sha256": "c8c31b48826ba3ede6d0004dae65e16c96bf585306bd57679492e18e52816cf7"
+    },
+    "coupled_feedback_v2/run_times.txt": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/run_times.txt",
+      "bytes": 52,
+      "sha256": "3a777621b77b1c2004b2e2e47275bfded03fcceca25381f0da05f64ab88201fb"
+    },
+    "coupled_feedback_v2/topics.bag.active": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/coupled_feedback_v2/topics.bag.active",
+      "bytes": 7947526,
+      "sha256": "a105c8e7a21e6ac2c0dfdcba61d77a63640e1402dc5603c65791ab850f247a4f"
+    },
+    "pre_gt_audit.json": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/pre_gt_audit.json",
+      "bytes": 13494,
+      "sha256": "e39608b78761c4bae1143e1f13972ff7db15202a22ef716c8979510dbb961005"
+    },
+    "shadow_v2/deskew.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/deskew.csv",
+      "bytes": 153325,
+      "sha256": "f38d52e1aaa40c73c4dfd04618abb35f389e0a757e9e715400d5ab053a5d38a0"
+    },
+    "shadow_v2/ekf_lineage.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/ekf_lineage.csv",
+      "bytes": 3616909,
+      "sha256": "0e46eb4664c6a951b97c878794c522898f751d8d8ad507100cc1a96fa1a2ce34"
+    },
+    "shadow_v2/ekf_runtime.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/ekf_runtime.csv",
+      "bytes": 4904,
+      "sha256": "fafb369ec2885be2151d8a2ff68349eeed2d8e7c1a18d0186fc1fbc40d397d45"
+    },
+    "shadow_v2/logs/cb11c372-c4da-11f1-a491-c1fbbfe59b27/master.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/logs/cb11c372-c4da-11f1-a491-c1fbbfe59b27/master.log",
+      "bytes": 43759,
+      "sha256": "8d7c36f1f13f36381a439fc225031703cc5cadaaabd52bd63ea20520b27aabc7"
+    },
+    "shadow_v2/logs/cb11c372-c4da-11f1-a491-c1fbbfe59b27/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-12400.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/logs/cb11c372-c4da-11f1-a491-c1fbbfe59b27/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-12400.log",
+      "bytes": 20056,
+      "sha256": "4284487777adfb5eb4db7bfd8774f6bf1cdc5318ca2fada9c95f7a6f1d49d5e0"
+    },
+    "shadow_v2/logs/cb11c372-c4da-11f1-a491-c1fbbfe59b27/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-12570.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/logs/cb11c372-c4da-11f1-a491-c1fbbfe59b27/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-12570.log",
+      "bytes": 31039,
+      "sha256": "02c1fe5cd31c2a6a07ba372ba45bef84beb3ee1ee157ffd7fdbdc9a2706ed05c"
+    },
+    "shadow_v2/logs/cb11c372-c4da-11f1-a491-c1fbbfe59b27/rosout-1-stdout.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/logs/cb11c372-c4da-11f1-a491-c1fbbfe59b27/rosout-1-stdout.log",
+      "bytes": 241,
+      "sha256": "37043e1e4f7af7a770a136658bd105aa8c1f80aa466bab804f99c82a7166c3a1"
+    },
+    "shadow_v2/logs/cb11c372-c4da-11f1-a491-c1fbbfe59b27/rosout.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/logs/cb11c372-c4da-11f1-a491-c1fbbfe59b27/rosout.log",
+      "bytes": 19526,
+      "sha256": "d4b64acf7ed4dea92d29fa14874b80859b64306da6b61f46249eb26ff9b02bef"
+    },
+    "shadow_v2/logs/launch.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/logs/launch.log",
+      "bytes": 4096,
+      "sha256": "8518091032d935595c0a1de81fcabc36034ac172073dced8141cdfa60b869f49"
+    },
+    "shadow_v2/logs/player.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/logs/player.log",
+      "bytes": 753811,
+      "sha256": "16415a55513eea42503406e96507919ad3c09c656730060c5e39e3d002a0566b"
+    },
+    "shadow_v2/logs/record.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/logs/record.log",
+      "bytes": 114,
+      "sha256": "e1e550c70f1931ef47e054aa5aebeb6727db59cd121ab974f3cebbe31bfa47e3"
+    },
+    "shadow_v2/logs/roscore.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/logs/roscore.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "shadow_v2/ndt_diagnostics.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/ndt_diagnostics.csv",
+      "bytes": 1026364,
+      "sha256": "ddab9be58f55f680cd737d06e9b597b606c6ace617a825e25ec0fdc4960a3ae5"
+    },
+    "shadow_v2/oosm.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/oosm.csv",
+      "bytes": 46142,
+      "sha256": "b494cea48f5c89b0553c12ca5bd0f82ed563261bb1fa62ca4350994b55595cf3"
+    },
+    "shadow_v2/oosm_fixed_lag.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/oosm_fixed_lag.csv",
+      "bytes": 108452,
+      "sha256": "99182063bdfa7b0456535c0fdc0b6e45a8bb262c297c796d20cd66d5c9966903"
+    },
+    "shadow_v2/package_resolution.txt": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/package_resolution.txt",
+      "bytes": 94,
+      "sha256": "b84f444ff2d4cb42ea1a6e8beb51db58d97835993b5dd927a7da6a0c46f9e6b7"
+    },
+    "shadow_v2/ros_home/roscore-11311.pid": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/ros_home/roscore-11311.pid",
+      "bytes": 5,
+      "sha256": "ff21b44ef5765a55472fb0ac130dda19f80cd1652fe38970ac60d76f61937932"
+    },
+    "shadow_v2/ros_home/rospack_cache_10481398251367141885": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/ros_home/rospack_cache_10481398251367141885",
+      "bytes": 8289,
+      "sha256": "f4774b41406ab3f2e9017dca693d6d74d6951882fe20656ed12e4d984edcc429"
+    },
+    "shadow_v2/ros_home/rospack_cache_18019822870472497271": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/ros_home/rospack_cache_18019822870472497271",
+      "bytes": 7536,
+      "sha256": "c8c31b48826ba3ede6d0004dae65e16c96bf585306bd57679492e18e52816cf7"
+    },
+    "shadow_v2/run_times.txt": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/run_times.txt",
+      "bytes": 78,
+      "sha256": "065ade3fe4a870fff1fdb07e16f094ca37474f421e75d3ce81e6c7981b325e5b"
+    },
+    "shadow_v2/topics.bag": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/shadow_v2/topics.bag",
+      "bytes": 7983499,
+      "sha256": "1eb8ae9ce52b031ebbe91219bbd1cfdfc51f242610842c32a24d1b006ac775bb"
+    },
+    "weak_only_feedback_v2/deskew.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/deskew.csv",
+      "bytes": 153405,
+      "sha256": "e4940f854d7701c37f8d9fa4692a8a9b1635d49e10f9714051f28fece466a433"
+    },
+    "weak_only_feedback_v2/ekf_lineage.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/ekf_lineage.csv",
+      "bytes": 3617356,
+      "sha256": "9800e2e3a191ed33b3f2cb2a0f150c44968bb60d2ce4069e1f08a35a795a06d4"
+    },
+    "weak_only_feedback_v2/ekf_runtime.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/ekf_runtime.csv",
+      "bytes": 4904,
+      "sha256": "fafb369ec2885be2151d8a2ff68349eeed2d8e7c1a18d0186fc1fbc40d397d45"
+    },
+    "weak_only_feedback_v2/live_binary_hashes.txt": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/live_binary_hashes.txt",
+      "bytes": 394,
+      "sha256": "5cd530daf40c3cece0fbe4cad5f1fa3e2ce580f7f914ccf963ffcc0678b1879a"
+    },
+    "weak_only_feedback_v2/logs/db8bc85a-c4db-11f1-a491-c1fbbfe59b27/master.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/logs/db8bc85a-c4db-11f1-a491-c1fbbfe59b27/master.log",
+      "bytes": 41884,
+      "sha256": "7981cc5ea28557c5fc8d4325cb622bbc93429dd21520b9d9bd388cb72bbb6d94"
+    },
+    "weak_only_feedback_v2/logs/db8bc85a-c4db-11f1-a491-c1fbbfe59b27/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-13348.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/logs/db8bc85a-c4db-11f1-a491-c1fbbfe59b27/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-13348.log",
+      "bytes": 20176,
+      "sha256": "0cf6f7dce69e307716b199ffbd4f198f26867c82665aedd4c7ab056c0db592d3"
+    },
+    "weak_only_feedback_v2/logs/db8bc85a-c4db-11f1-a491-c1fbbfe59b27/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-13513.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/logs/db8bc85a-c4db-11f1-a491-c1fbbfe59b27/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-13513.log",
+      "bytes": 31271,
+      "sha256": "aec0832b9719dce7cb6f2a2f7a5affe606bdb00467b51c9962252bee60ea4517"
+    },
+    "weak_only_feedback_v2/logs/db8bc85a-c4db-11f1-a491-c1fbbfe59b27/rosout-1-stdout.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/logs/db8bc85a-c4db-11f1-a491-c1fbbfe59b27/rosout-1-stdout.log",
+      "bytes": 253,
+      "sha256": "dd74fafb1be56423b6b31053445c9a13bb0cf531d347ef9133f246c773aced10"
+    },
+    "weak_only_feedback_v2/logs/db8bc85a-c4db-11f1-a491-c1fbbfe59b27/rosout.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/logs/db8bc85a-c4db-11f1-a491-c1fbbfe59b27/rosout.log",
+      "bytes": 19534,
+      "sha256": "679c47e55b5881f7292f00c3e7b081e467a14de8503e8422300c0dd0fcb9d6ff"
+    },
+    "weak_only_feedback_v2/logs/launch.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/logs/launch.log",
+      "bytes": 4096,
+      "sha256": "d5dda46d3acd73a85d1c722d42140c3ddf3e22f76ded888469bc136b57e0a016"
+    },
+    "weak_only_feedback_v2/logs/player.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/logs/player.log",
+      "bytes": 753722,
+      "sha256": "26954bb17e08960a299972d8d4918951f2d17bd39a557eaa5d1de3885e21518a"
+    },
+    "weak_only_feedback_v2/logs/record.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/logs/record.log",
+      "bytes": 114,
+      "sha256": "1c1a46cc962123cfb9d7d239002581df5ad8b5a9be8e023e1f3d3f975b256f2a"
+    },
+    "weak_only_feedback_v2/logs/roscore.log": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/logs/roscore.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "weak_only_feedback_v2/ndt_diagnostics.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/ndt_diagnostics.csv",
+      "bytes": 1027910,
+      "sha256": "5371aaa6d12255f1b5c35d841dd1a53c29ee59cf3aefa125c932667af0fe13be"
+    },
+    "weak_only_feedback_v2/oosm.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/oosm.csv",
+      "bytes": 46142,
+      "sha256": "b494cea48f5c89b0553c12ca5bd0f82ed563261bb1fa62ca4350994b55595cf3"
+    },
+    "weak_only_feedback_v2/oosm_fixed_lag.csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/oosm_fixed_lag.csv",
+      "bytes": 108420,
+      "sha256": "440eb2543643c17cc42152ba3ccb32d34d69663823bd4f4a6bc4ea4a6b43fb9f"
+    },
+    "weak_only_feedback_v2/package_resolution.txt": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/package_resolution.txt",
+      "bytes": 94,
+      "sha256": "b84f444ff2d4cb42ea1a6e8beb51db58d97835993b5dd927a7da6a0c46f9e6b7"
+    },
+    "weak_only_feedback_v2/ros_home/roscore-11311.pid": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/ros_home/roscore-11311.pid",
+      "bytes": 5,
+      "sha256": "74a6f94777c0406ef65bf05caca9c5f78d97f9926e5f900023f9ce5183566f79"
+    },
+    "weak_only_feedback_v2/ros_home/rospack_cache_10481398251367141885": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/ros_home/rospack_cache_10481398251367141885",
+      "bytes": 8289,
+      "sha256": "f4774b41406ab3f2e9017dca693d6d74d6951882fe20656ed12e4d984edcc429"
+    },
+    "weak_only_feedback_v2/ros_home/rospack_cache_18019822870472497271": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/ros_home/rospack_cache_18019822870472497271",
+      "bytes": 7536,
+      "sha256": "c8c31b48826ba3ede6d0004dae65e16c96bf585306bd57679492e18e52816cf7"
+    },
+    "weak_only_feedback_v2/run_times.txt": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/run_times.txt",
+      "bytes": 52,
+      "sha256": "54b3517d35fa7ce7c8607cf2ab46b26f46498d857020da9a8edc4064cef6f80a"
+    },
+    "weak_only_feedback_v2/topics.bag": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/runs/weak_only_feedback_v2/topics.bag",
+      "bytes": 7983433,
+      "sha256": "de1c26436547f135707774efa26ddeac5a1c0d03699a0ebbdd22a866a26380f4"
+    }
+  },
+  "limitations": [
+    "No GT path or GT bytes are included in this pre-evaluation freeze.",
+    "Coupled feedback internal EKF lineage is complete (396 NDT correction events and 8004 high-rate publish events); its rosbag is partial and only the recorded prefix was pose-checked.",
+    "Peak RSS was not captured during these runs."
+  ]
+}

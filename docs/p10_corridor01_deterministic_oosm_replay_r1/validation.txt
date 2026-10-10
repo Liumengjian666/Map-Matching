@@ -1,0 +1,35 @@
+P10-CORRIDOR01-DETERMINISTIC-OOSM-REPLAY-R1 validation receipt
+
+PASS: task-clone package build targets
+  dog_prior_map_ekf_node_cpp
+  oosm_fixed_lag_scheduler_contract_test
+  observable_pcl_ndt_contract_test
+  causal_pose_prediction_test
+
+PASS: CTest from build/dog_prior_map_localization
+  3/3 tests: oosm_fixed_lag_scheduler_contract_test,
+  observable_pcl_ndt_contract_test, causal_pose_prediction_test
+
+PASS: direct contract tests
+  oosm_fixed_lag_scheduler_contract_test
+  oosm_replay_planner_contract_test
+  observable_pcl_ndt_contract_test
+  causal_pose_prediction_test
+
+PASS: fixed-lag regression assertions
+  historical observation deadline and endpoint pair
+  two arrival orders release at the same first IMU state node
+  existing OOSM planner consumes the same replay IMU sequence
+  late cutoff and queue bound
+
+PASS: full replay structural audit
+  4 modes x 396 scan/NDT/deskew/OOSM records
+  396 fixed-lag queued and applied per mode; no late events
+  no non-finite EKF lineage states
+  Control/Shadow V2 parity result PASS
+
+PASS: posthoc evaluation and archive JSON parse
+PASS: Python bytecode compilation for the new P10 replay scripts
+PASS: git diff --check
+
+NOTE: Peak RSS was not captured during live ROS runs.

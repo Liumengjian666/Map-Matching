@@ -61,6 +61,20 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   future_deferral_max_queue_ = static_cast<std::size_t>(std::max(1,
       getParam<int>("ndt_observation/future_deferral_max_queue", 20)));
   deferred_csv_path_ = getParam<std::string>("output/deferred_csv_path", "");
+  oosm_fixed_lag_enable_ = getParam<bool>("ndt_observation/oosm_fixed_lag_enable", false);
+  oosm_fixed_lag_sec_ = getParam<double>("ndt_observation/oosm_fixed_lag_sec", 0.15);
+  oosm_fixed_lag_max_queue_ = static_cast<std::size_t>(std::max(1,
+      getParam<int>("ndt_observation/oosm_fixed_lag_max_queue", 64)));
+  fixed_lag_csv_path_ = getParam<std::string>("output/oosm_fixed_lag_csv_path", "");
+  if (oosm_fixed_lag_enable_)
+  {
+    if (!oosm_enable_ || !ndt_observation_enable_ || future_deferral_enable_ ||
+        !oosm_fixed_lag_scheduler_.configure(oosm_fixed_lag_sec_, oosm_fixed_lag_max_queue_))
+    {
+      ROS_FATAL("[DogPriorMap C++] fixed-lag OOSM requires valid lag, external NDT, OOSM, and legacy future deferral disabled");
+      throw std::runtime_error("invalid fixed-lag OOSM configuration");
+    }
+  }
 
   deskew_mode_ = getParam<std::string>("deskew/mode", "legacy_prior_ndt_cv");
   if (deskew_mode_ != "legacy_prior_ndt_cv" && deskew_mode_ != "ekf_imu_fastlio")
@@ -211,6 +225,22 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     else
     {
       ROS_WARN("[DogPriorMap C++] failed to write OOSM CSV: %s", oosm_csv_path_.c_str());
+    }
+  }
+  if (!fixed_lag_csv_path_.empty())
+  {
+    fixed_lag_csv_.open(fixed_lag_csv_path_, std::ios::out);
+    if (fixed_lag_csv_.is_open())
+    {
+      fixed_lag_csv_ << std::setprecision(17)
+          << "observation_id,ndt_stamp,deadline_stamp,arrival_state_stamp,arrival_wall_sec,"
+             "release_state_stamp,processing_wall_sec,replay_imu_count,correction_applied,status\n";
+      fixed_lag_csv_.flush();
+    }
+    else
+    {
+      ROS_WARN("[DogPriorMap C++] failed to write fixed-lag OOSM CSV: %s",
+               fixed_lag_csv_path_.c_str());
     }
   }
   if (!deferred_csv_path_.empty())
@@ -393,6 +423,35 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
            future_deferral_enable_ ? 1 : 0,
            future_deferral_max_sec_ * 1000.0,
            future_deferral_max_queue_);
+  ROS_INFO("[DogPriorMap C++] fixed-lag OOSM=%d lag=%.3f s queue=%zu",
+           oosm_fixed_lag_enable_ ? 1 : 0, oosm_fixed_lag_sec_,
+           oosm_fixed_lag_max_queue_);
+}
+
+DogPriorMapEkfNode::~DogPriorMapEkfNode()
+{
+  if (!oosm_fixed_lag_enable_ || !fixed_lag_csv_.is_open()) return;
+  const double wall_now = ros::WallTime::now().toSec();
+  for (const auto &event : oosm_fixed_lag_scheduler_.pending())
+  {
+    writeFixedLagDiagnostic(event.id, event.measurement_stamp,
+        event.deadline_stamp, event.arrival_state_stamp, event.arrival_wall_sec,
+        std::numeric_limits<double>::quiet_NaN(), wall_now, 0, false,
+        "FIXED_LAG_DEADLINE_NOT_REACHED_AT_SHUTDOWN");
+  }
+}
+
+void DogPriorMapEkfNode::writeFixedLagDiagnostic(uint64_t observation_id,
+    double ndt_stamp, double deadline_stamp, double arrival_state_stamp,
+    double arrival_wall_sec, double release_state_stamp, double processing_wall_sec,
+    std::size_t replay_imu_count, bool correction_applied, const std::string &status)
+{
+  if (!fixed_lag_csv_.is_open()) return;
+  fixed_lag_csv_ << observation_id << "," << ndt_stamp << "," << deadline_stamp << ","
+      << arrival_state_stamp << "," << arrival_wall_sec << "," << release_state_stamp << ","
+      << processing_wall_sec << "," << replay_imu_count << ","
+      << (correction_applied ? 1 : 0) << "," << status << "\n";
+  fixed_lag_csv_.flush();
 }
 
 void DogPriorMapEkfNode::writeDeferredDiagnostic(const std::string &event,

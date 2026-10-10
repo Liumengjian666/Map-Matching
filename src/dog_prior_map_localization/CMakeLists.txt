@@ -40,6 +40,7 @@ include_directories(
 add_executable(dog_prior_map_ekf_node_cpp
   src/dog_prior_map_ekf_node.cpp
   src/dog_prior_map_ekf_node_core.cpp
+  src/core/oosm_fixed_lag_scheduler.cpp
   src/core/oosm_replay_planner.cpp
   src/core/state_history.cpp
   src/core/imu_propagation.cpp
@@ -63,6 +64,13 @@ add_dependencies(dog_prior_map_ekf_node_cpp
 # dependency accidentally.
 add_executable(oosm_replay_planner_contract_test
   tests/oosm_replay_planner_contract_test.cpp
+  src/core/oosm_replay_planner.cpp
+  src/core/state_history.cpp
+)
+
+add_executable(oosm_fixed_lag_scheduler_contract_test
+  tests/oosm_fixed_lag_scheduler_contract_test.cpp
+  src/core/oosm_fixed_lag_scheduler.cpp
   src/core/oosm_replay_planner.cpp
   src/core/state_history.cpp
 )
@@ -109,6 +117,9 @@ add_dependencies(dog_prior_map_ndt_node_cpp
 )
 
 if(CATKIN_ENABLE_TESTING)
+  add_test(NAME oosm_fixed_lag_scheduler_contract_test
+    COMMAND $<TARGET_FILE:oosm_fixed_lag_scheduler_contract_test>)
+
   add_executable(observable_pcl_ndt_contract_test
     tests/observable_pcl_ndt_contract_test.cpp
   )
