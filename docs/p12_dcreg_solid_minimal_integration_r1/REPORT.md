@@ -18,6 +18,12 @@ frozen protocol and corrected smoke launcher. Smoke binary was compiled under
 `c8ed91f29a5d9c0be51abe9fe143c1bfe9b0fed8`; the sole later code change removes
 an unintended convergence assertion from the launcher. The same binary,
 source, map, DB and author settings were used for all96 real registrations.
+The later archive-formatting change alters Git CSV line endings and the
+archive copy writer only; it does not alter the registration binary/experiment.
+Git samples/extraction CSVs use LF; the external frozen originals retain CRLF
+and their original hashes. Parsed rows are identical. The samples hash in
+freeze.json refers to the external immutable source; artifact_hashes.json
+records the normalized archive bytes separately.
 
 Only new files under `scripts/p12_dcreg_solid/` and this archive were added.
 NDT/EKF/OOSM, limitNdtStep, SOLiD, R6 and all historical archives are unchanged.

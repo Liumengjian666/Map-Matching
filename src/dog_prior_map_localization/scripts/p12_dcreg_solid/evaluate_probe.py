@@ -96,8 +96,10 @@ def main(experiment, archive, code_sha):
     archive.mkdir(parents=True, exist_ok=True)
     for name, records in [('registration.csv', registration), ('timing.csv', timing), ('source_parity.csv', parity)]:
         write_csv(archive/name, records)
-    for name in ('samples.csv', 'freeze.json', 'extraction.csv'):
-        shutil.copyfile(experiment/name, archive/name)
+    # Git archive uses LF; original external freeze bytes/hash remain immutable.
+    for name in ('samples.csv', 'extraction.csv'):
+        write_csv(archive/name, rows(experiment/name))
+    shutil.copyfile(experiment/'freeze.json', archive/'freeze.json')
     with (archive/'results.json').open('x') as stream:
         json.dump(output, stream, indent=2, allow_nan=False)
     print(json.dumps(output, indent=2, allow_nan=False))
