@@ -23,6 +23,11 @@
   <arg name="diagnostic_determinism_enable" default="false" />
   <arg name="ndt_determinism_csv_path" default="" />
   <arg name="coupled_mode" default="CONTROL" />
+  <arg name="mature_solid_shadow_enable" default="false" />
+  <arg name="solid_database_path" default="" />
+  <arg name="solid_shadow_csv_path" default="" />
+  <arg name="solid_shadow_input_topic" default="/dog_livo/filtered_points" />
+  <arg name="solid_shadow_top_k" default="5" />
   <arg name="information_diagnostic_enable" default="false" />
   <arg name="local_vio_metric_enable" default="false" />
   <arg name="directional_fusion_enable" default="false" />
@@ -97,6 +102,21 @@
         type="dog_prior_map_ekf_node_cpp"
         name="dog_prior_map_ekf"
         output="screen">
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+
+  <!-- Optional place-recognition diagnostics. This subscriber consumes the
+       exact preprocessed source cloud published by the NDT node and has no
+       output path back into NDT, OOSM, EKF, or TF. It is disabled by default. -->
+  <node pkg="dog_prior_map_localization"
+        type="solid_shadow_node_cpp"
+        name="dog_prior_map_solid_shadow"
+        output="screen"
+        if="$(arg mature_solid_shadow_enable)">
+    <param name="database_path" value="$(arg solid_database_path)" />
+    <param name="csv_path" value="$(arg solid_shadow_csv_path)" />
+    <param name="input_topic" value="$(arg solid_shadow_input_topic)" />
+    <param name="top_k" value="$(arg solid_shadow_top_k)" />
     <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
   </node>
 

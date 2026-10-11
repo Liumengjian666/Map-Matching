@@ -116,6 +116,54 @@ add_dependencies(dog_prior_map_ndt_node_cpp
   ${catkin_EXPORTED_TARGETS}
 )
 
+# P11 SOLiD place-recognition shadow module. The upstream descriptor is kept
+# isolated from the NDT/EKF runtime path and launched only by explicit opt-in.
+add_library(p11_solid_place_recognition
+  src/solid_place_recognition.cpp
+  third_party/solid/src/solid.cpp
+)
+target_include_directories(p11_solid_place_recognition PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/third_party/solid/include
+  ${PCL_INCLUDE_DIRS}
+  ${EIGEN3_INCLUDE_DIRS}
+)
+target_link_libraries(p11_solid_place_recognition
+  ${PCL_LIBRARIES}
+  /usr/lib/x86_64-linux-gnu/libusb-1.0.so
+)
+
+add_executable(solid_reference_database_builder
+  scripts/solid_reference_database_builder.cpp
+)
+target_link_libraries(solid_reference_database_builder
+  p11_solid_place_recognition
+  ${PCL_LIBRARIES}
+)
+
+add_executable(solid_shadow_node_cpp
+  src/solid_shadow_node.cpp
+)
+target_link_libraries(solid_shadow_node_cpp
+  p11_solid_place_recognition
+  ${catkin_LIBRARIES}
+  ${PCL_LIBRARIES}
+)
+add_dependencies(solid_shadow_node_cpp ${catkin_EXPORTED_TARGETS})
+
+install(TARGETS p11_solid_place_recognition
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
+
+add_executable(solid_adapter_contract_test
+  tests/solid_adapter_contract_test.cpp
+)
+target_link_libraries(solid_adapter_contract_test
+  p11_solid_place_recognition
+  ${PCL_LIBRARIES}
+)
+
 if(CATKIN_ENABLE_TESTING)
   add_test(NAME oosm_fixed_lag_scheduler_contract_test
     COMMAND $<TARGET_FILE:oosm_fixed_lag_scheduler_contract_test>)
@@ -154,6 +202,9 @@ if(CATKIN_ENABLE_TESTING)
     /usr/lib/x86_64-linux-gnu/libusb-1.0.so
   )
   add_dependencies(external_ndt_server_integration_test ${catkin_EXPORTED_TARGETS})
+
+  add_test(NAME solid_adapter_contract_test
+    COMMAND $<TARGET_FILE:solid_adapter_contract_test>)
 endif()
 
 if(DOG_PRIOR_BUILD_RESEARCH_TOOLS)
@@ -190,6 +241,7 @@ install(DIRECTORY config launch docs rviz
 )
 
 install(TARGETS dog_prior_map_ekf_node_cpp dog_prior_map_ndt_node_cpp
+        solid_reference_database_builder solid_shadow_node_cpp
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
