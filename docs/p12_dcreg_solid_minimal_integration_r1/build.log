@@ -1,0 +1,8 @@
+Scanning dependencies of target dcreg_solid_integration_probe
+[ 25%] Building CXX object CMakeFiles/dcreg_solid_integration_probe.dir/dcreg_solid_integration_probe.cpp.o
+[ 50%] Linking CXX executable dcreg_solid_integration_probe
+/usr/bin/ld: /usr/lib/x86_64-linux-gnu/libpcl_io.so: undefined reference to `libusb_set_option'
+collect2: error: ld returned 1 exit status
+make[2]: *** [CMakeFiles/dcreg_solid_integration_probe.dir/build.make:162：dcreg_solid_integration_probe] 错误 1
+make[1]: *** [CMakeFiles/Makefile2:78：CMakeFiles/dcreg_solid_integration_probe.dir/all] 错误 2
+make: *** [Makefile:95：all] 错误 2

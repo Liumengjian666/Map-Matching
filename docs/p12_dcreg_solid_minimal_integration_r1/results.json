@@ -1,0 +1,177 @@
+{
+  "task": "P12-DCREG-SOLID-MINIMAL-INTEGRATION-R1",
+  "final_result": "MINIMAL_INTEGRATION_PARTIAL",
+  "start_sha": "578291c999ea375ff72538da7b6a34fb54dc85bb",
+  "code_sha": "84625aec06778f630d82ca37fd3a265216a804b9",
+  "protocol": {
+    "protocol": "P12_DCREG_SOLID_MINIMAL_R1",
+    "samples": 24,
+    "top_k": 3,
+    "source_frame": "livox_frame",
+    "target_frame": "camera_init",
+    "deskew": false,
+    "reference_pose_status": "COARSE_POSITION_HYPOTHESIS",
+    "candidate_rotation_source": "recorded current NDT INITIAL guess, NOT raw/final pose",
+    "candidate_translation_source": "mapping IMU-origin coarse reference location; no claimed exact lever-arm/time transport",
+    "dcreg_sha": "8ce8451b15491a4bbe17cf85ab02a8bed6696861",
+    "dcreg_parameterization": "SO3",
+    "dcreg_parallel": "Serial",
+    "dcreg_parameters": "unmodified author SolverParameters defaults: radius1m, max30, convergence translation1e-3m/rotation1e-5rad",
+    "target": "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd",
+    "database": "/home/jian/rosbag/p11_solid_r1_20261011/solid_database.txt",
+    "source_filter": "finite XYZ; range0.5..80m; voxel0.25m; max1400 even-index cap",
+    "target_filter": "finite XYZ; voxel0.15m then voxel0.15m; no cap",
+    "input_bag": "/media/jian/HIKVISION/Jian_FASTLIVO_Data/dogrosbag/loop2_map_match_experiment_2026_08_08_17_36_19/dateset/loop3/bag/loop3_2026-08-11-16-09-07.bag",
+    "input_bag_size": 19241435099,
+    "input_bag_historical_sha256": "e7663609a90fd9e59552fefd7f2c4f9c339e8464610f86bfa1e8f2cff2e79df2",
+    "bag_hash_recomputed_this_round": false,
+    "gt_loaded": false,
+    "selection_uses_only_prior_p11_metadata": true,
+    "scene_coverage_limit": "straight-motion proxy is NOT independently verified corridor annotation",
+    "samples_sha256": "204e10da87d932a2e212fb8efaa5abf30367dbd0679305fcaa6dc9f1726bbf14",
+    "map_sha256": "016b7ae3ae494ad5d462a66d888a96b96dda5fe29d6058059aa2fa6bdf6b09ca",
+    "database_sha256": "065cd4b6568f331f717421c31060492493ce329d1b5414176428e10d4febd1b4"
+  },
+  "actual_scans": 24,
+  "references": 389,
+  "source_parity": 24,
+  "target_points": 459154,
+  "target_hash": "ea1e4e69cf9992c6",
+  "solid_valid_queries": 24,
+  "top3_prior_query_parity": 72,
+  "local": {
+    "calls": 24,
+    "converged": 12,
+    "valid_se3": 24,
+    "nonfinite_pose": 0,
+    "large_excursions": 0,
+    "degenerate_any_iteration": 9,
+    "failure_reasons": {
+      "reached max_iterations without convergence": 12
+    },
+    "iterations": {
+      "mean": 21.333333333333332,
+      "p95": 30.0,
+      "max": 30.0,
+      "min": 6.0
+    },
+    "native_preupdate_rmse_m": {
+      "mean": 0.11394432401810384,
+      "p95": 0.2705608924235595,
+      "max": 0.2765176173386997,
+      "min": 0.044390281829568015
+    },
+    "native_fitness": {
+      "mean": 0.9254810667030752,
+      "p95": 0.9991489747062714,
+      "max": 0.9991721854304636,
+      "min": 0.7585714285714286
+    },
+    "call_ms": {
+      "mean": 109.576595625,
+      "p95": 145.56929165,
+      "max": 146.410996,
+      "min": 74.131323
+    }
+  },
+  "solid_candidates": {
+    "calls": 72,
+    "converged": 12,
+    "valid_se3": 72,
+    "nonfinite_pose": 0,
+    "large_excursions": 0,
+    "degenerate_any_iteration": 25,
+    "failure_reasons": {
+      "reached max_iterations without convergence": 60
+    },
+    "iterations": {
+      "mean": 27.833333333333332,
+      "p95": 30.0,
+      "max": 30.0,
+      "min": 6.0
+    },
+    "native_preupdate_rmse_m": {
+      "mean": 0.2677995838587195,
+      "p95": 0.43873451980914957,
+      "max": 0.47326059656241243,
+      "min": 0.039809298033450895
+    },
+    "native_fitness": {
+      "mean": 0.7339369549600505,
+      "p95": 0.9985064877777325,
+      "max": 1.0,
+      "min": 0.21214285714285713
+    },
+    "call_ms": {
+      "mean": 143.20344593055557,
+      "p95": 182.76718495,
+      "max": 188.000916,
+      "min": 74.374513
+    }
+  },
+  "exact_reference_to_lidar_conversions": 0,
+  "coarse_hypotheses": 72,
+  "new_full_ndt_calls": 0,
+  "dcreg_calls": 96,
+  "feedback_calls": 0,
+  "gt_loaded": false,
+  "accuracy_result": "ACCURACY_GAIN_NOT_EVALUATED",
+  "next": "ESTABLISH_REFERENCE_TO_LIDAR_POSE_CONTRACT",
+  "stage_ms": {
+    "preprocessing_ms": {
+      "mean": 0.8356563333333332,
+      "p95": 0.9597548499999999,
+      "max": 0.968219,
+      "min": 0.740884
+    },
+    "descriptor_ms": {
+      "mean": 0.14826,
+      "p95": 0.22691709999999998,
+      "max": 0.232155,
+      "min": 0.086325
+    },
+    "search_ms": {
+      "mean": 0.08827449999999999,
+      "p95": 0.10339384999999997,
+      "max": 0.132071,
+      "min": 0.083462
+    },
+    "query_wall_ms": {
+      "mean": 0.24297725,
+      "p95": 0.31739319999999993,
+      "max": 0.32267,
+      "min": 0.17642
+    },
+    "local_dcreg_ms": {
+      "mean": 109.576595625,
+      "p95": 145.56929165,
+      "max": 146.410996,
+      "min": 74.131323
+    },
+    "top3_dcreg_ms": {
+      "mean": 429.6103377916667,
+      "p95": 518.3608859,
+      "max": 548.0713740000001,
+      "min": 296.77155600000003
+    },
+    "combination_ms": {
+      "mean": 430.0151914166666,
+      "p95": 518.7429953,
+      "max": 548.514731,
+      "min": 297.107216
+    },
+    "total_probe_ms": {
+      "mean": 546.0793474999999,
+      "p95": 650.6619660499999,
+      "max": 669.213962,
+      "min": 377.451473
+    }
+  },
+  "peak_rss_kib": 64664,
+  "limits": [
+    "No exact historical reference-state-to-LiDAR/time transform proof",
+    "No independent place labels or localization accuracy test",
+    "Straight-motion strata do not certify physical corridor annotation",
+    "Original baseline deskew=false remains unchanged"
+  ]
+}

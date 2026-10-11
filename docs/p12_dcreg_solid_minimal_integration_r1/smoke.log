@@ -1,0 +1,8 @@
+frame=16 rank=0 converged=0 rigid=1 ms=146.411
+frame=16 rank=1 converged=1 rigid=1 ms=74.3745
+frame=16 rank=2 converged=1 rigid=1 ms=125.493
+frame=16 rank=3 converged=0 rigid=1 ms=156.057
+frame=45 rank=0 converged=0 rigid=1 ms=139.814
+frame=45 rank=1 converged=0 rigid=1 ms=140.281
+frame=45 rank=2 converged=0 rigid=1 ms=148.751
+frame=45 rank=3 converged=0 rigid=1 ms=157.05

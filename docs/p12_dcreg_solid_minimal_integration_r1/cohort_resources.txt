@@ -1,0 +1,23 @@
+	Command being timed: "/home/jian/rosbag/p12_dcreg_solid_r1_20261011/build/dcreg_solid_integration_probe /home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd /home/jian/rosbag/p11_solid_r1_20261011/solid_database.txt /home/jian/rosbag/p12_dcreg_solid_r1_20261011/experiment/samples.csv /home/jian/rosbag/p12_dcreg_solid_r1_20261011/experiment/cohort 2 22 0"
+	User time (seconds): 11.23
+	System time (seconds): 0.82
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:12.07
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 64236
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 16039
+	Voluntary context switches: 2
+	Involuntary context switches: 2136
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 232
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

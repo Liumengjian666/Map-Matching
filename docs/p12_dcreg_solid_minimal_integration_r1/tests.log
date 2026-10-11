@@ -1,0 +1,7 @@
+Test project /home/jian/rosbag/p12_dcreg_solid_r1_20261011/build
+    Start 1: p12_coordinate_interface
+1/1 Test #1: p12_coordinate_interface .........   Passed    0.02 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.02 sec

@@ -1,0 +1,6 @@
+[ 25%] Linking CXX executable dcreg_solid_integration_probe
+[ 50%] Built target dcreg_solid_integration_probe
+Scanning dependencies of target interface_test
+[ 75%] Building CXX object CMakeFiles/interface_test.dir/interface_test.cpp.o
+[100%] Linking CXX executable interface_test
+[100%] Built target interface_test

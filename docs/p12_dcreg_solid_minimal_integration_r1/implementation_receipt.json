@@ -1,0 +1,19 @@
+{
+  "author_repository": "https://github.com/JokerJohn/DCReg",
+  "author_sha": "8ce8451b15491a4bbe17cf85ab02a8bed6696861",
+  "tracked_diff": "",
+  "license": "NOT_CONFIRMED; no LICENSE or license declaration found; external-only, no vendoring or binary publication",
+  "author_source_sha256": {
+    "DCReg/include/dcreg.hpp": "bda93fe6a9b8e542784aa26a1e3991d0d6e27649f858a4a6b50a603602dbb156",
+    "DCReg/include/utils.hpp": "dac169d3fbb2ac91541f71985fe9f1defeb053c4e6fdd8150acc62e8284b2df1"
+  },
+  "solid_author_sha": "9a4f2895e5211f69fbbd6d4732577e1a67e9b882",
+  "solid_source_changes_this_round": 0,
+  "build": "standalone CMake3.16.3, GCC9.4.0, Eigen3.3.7, PCL1.10, Release (-O3 -DNDEBUG), serial",
+  "runtime_ld_library_path": "/usr/lib/x86_64-linux-gnu:/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel/lib",
+  "algorithm_binary_unchanged_between_smoke_and_cohort": true,
+  "smoke_code_sha": "c8ed91f29a5d9c0be51abe9fe143c1bfe9b0fed8",
+  "cohort_code_sha": "84625aec06778f630d82ca37fd3a265216a804b9",
+  "code_difference": "launcher-only: remove scientific convergence outcome from interface smoke assertion; no binary, solver, sample or parameter change; smoke not repeated",
+  "outputs_persistent_directory": "/home/jian/rosbag/p12_dcreg_solid_r1_20261011/experiment"
+}
