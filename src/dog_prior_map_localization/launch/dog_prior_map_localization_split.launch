@@ -23,6 +23,9 @@
   <arg name="diagnostic_determinism_enable" default="false" />
   <arg name="ndt_determinism_csv_path" default="" />
   <arg name="coupled_mode" default="CONTROL" />
+  <arg name="visual_initial_guess_enable" default="false" />
+  <arg name="visual_initial_guess_csv" default="" />
+  <arg name="visual_geometry_csv" default="" />
   <arg name="mature_solid_shadow_enable" default="false" />
   <arg name="solid_database_path" default="" />
   <arg name="solid_shadow_csv_path" default="" />
@@ -92,6 +95,9 @@
         name="dog_prior_map_ndt"
         output="screen">
     <param name="coupled_mode" value="$(arg coupled_mode)" />
+    <param name="visual_initial_guess_enable" value="$(arg visual_initial_guess_enable)" />
+    <param name="visual_initial_guess_csv" value="$(arg visual_initial_guess_csv)" />
+    <param name="visual_geometry_csv" value="$(arg visual_geometry_csv)" />
     <!-- MVS SDK会把/opt/MVS/lib/64放进LD_LIBRARY_PATH，其中旧版libusb会导致PCL/NDT启动时报
          symbol lookup error: libpcl_io.so.1.10: undefined symbol: libusb_set_option。
          这里只让定位节点优先使用系统libusb，不修改全局环境，也不影响相机驱动。 -->

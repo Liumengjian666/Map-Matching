@@ -90,9 +90,14 @@ add_executable(imu_interval_numeric_test
 add_executable(frame_conversion_contract_test
   tests/frame_conversion_contract_test.cpp
 )
+add_executable(visual_initial_guess_test
+  tests/visual_initial_guess_test.cpp
+  src/visual_aided_initial_guess.cpp
+)
 
 add_executable(dog_prior_map_ndt_node_cpp
   src/dog_prior_map_ndt_node.cpp
+  src/visual_aided_initial_guess.cpp
   src/external_ndt_transaction_server.cpp
   ../dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_shadow.cpp
   ../dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_temporal.cpp
@@ -171,6 +176,11 @@ if(CATKIN_ENABLE_TESTING)
   add_executable(observable_pcl_ndt_contract_test
     tests/observable_pcl_ndt_contract_test.cpp
   )
+  add_executable(p17_ndt_readonly_test tests/p17_ndt_readonly_test.cpp)
+  target_include_directories(p17_ndt_readonly_test PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../dog_prior_map_fastlio2_frontend_exp/include)
+  target_link_libraries(p17_ndt_readonly_test ${PCL_LIBRARIES}
+    /usr/lib/x86_64-linux-gnu/libusb-1.0.so)
   target_include_directories(observable_pcl_ndt_contract_test PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../dog_prior_map_fastlio2_frontend_exp/include
     ${PCL_INCLUDE_DIRS}

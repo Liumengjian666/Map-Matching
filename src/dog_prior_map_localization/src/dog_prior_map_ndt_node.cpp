@@ -32,9 +32,11 @@
 #include "dog_prior_map_localization/external_ndt_transaction_server.hpp"
 #include "dog_prior_map_localization/core/frame_conversions.hpp"
 #include "dog_prior_map_localization/core/causal_pose_prediction.hpp"
+#include "dog_prior_map_localization/visual_aided_initial_guess.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_weak_refinement.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/observable_pcl_ndt.hpp"
+#include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_local_math.hpp"
 
 namespace dog_prior_map_localization
 {
@@ -123,6 +125,19 @@ public:
         coupled_mode_ != "WEAK_ONLY_FEEDBACK" && coupled_mode_ != "COUPLED_FEEDBACK")
       throw std::runtime_error("coupled_mode must be CONTROL, COUPLED_SHADOW, WEAK_ONLY_FEEDBACK, or COUPLED_FEEDBACK");
     coupled_enabled_ = coupled_mode_ != "CONTROL";
+    visual_initial_guess_enable_ = getParam<bool>("visual_initial_guess_enable", false);
+    if (visual_initial_guess_enable_)
+      visual_initial_guess_.load(getParam<std::string>("visual_initial_guess_csv", ""));
+    const std::string geometry_path = getParam<std::string>("visual_geometry_csv", "");
+    if (!geometry_path.empty()) {
+      visual_geometry_csv_.open(geometry_path);
+      if (!visual_geometry_csv_) throw std::runtime_error("visual geometry log unavailable");
+      visual_geometry_csv_ << "scan_ns,jet_valid,jet_ms";
+      for (int i=0; i<6; ++i) visual_geometry_csv_ << ",lambda" << i;
+      for (int i=0; i<6; ++i) for (int j=0; j<6; ++j)
+        visual_geometry_csv_ << ",basis" << i << j;
+      visual_geometry_csv_ << "\n";
+    }
     ekf_high_rate_topic_ = getParam<std::string>("topics/odom_high_rate", "/dog_livo/odom_high_rate");
     // Frozen to the existing 20 ms OOSM timestamp-alignment contract.
     coupled_prediction_max_age_sec_ = 0.02;
@@ -1049,6 +1064,14 @@ private:
         diagnostic_row.initial_guess_reason = imu_reason;
       }
     }
+    if (visual_initial_guess_enable_ && has_previous_pose_reference_stamp_ &&
+        diagnostic_row.local_imu_prior_used) {
+      std::string reason;
+      if (visual_initial_guess_.apply(previous_pose_reference_stamp_.toNSec(),
+            timing.reference_stamp.toNSec(), previous_pose_, initial_guess, reason))
+        diagnostic_row.initial_guess_source = "p4_visual_translation_imu_rotation";
+      diagnostic_row.initial_guess_reason = reason;
+    }
     diagnostic_row.initial_guess = initial_guess;
 
     ndt_.setInputSource(source);
@@ -1070,6 +1093,29 @@ private:
     {
       const Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
       diagnostic_row.raw_ndt = result;
+      if (visual_geometry_csv_.is_open()) {
+        namespace frontend = dog_prior_map_fastlio2_frontend_exp;
+        const auto start = ros::WallTime::now();
+        frontend::CoupledNdtBackend backend;
+        backend.jet = [this, source](const Eigen::Matrix4f& pose,
+            const frontend::CoupledVector6& parameters) {
+          return ndt_.nativeJet(source, pose, parameters);
+        };
+        backend.score = [this, source](const Eigen::Matrix4f& pose) {
+          return ndt_.dynamicScore(source, pose);
+        };
+        const auto jet = frontend::coupledNominalJet(result.cast<float>(), source->size(), backend, .8);
+        Eigen::SelfAdjointEigenSolver<frontend::CoupledMatrix6> solver;
+        if (jet.valid) solver.compute(jet.H);
+        const bool valid = jet.valid && solver.info() == Eigen::Success &&
+            solver.eigenvalues().allFinite() && solver.eigenvectors().allFinite();
+        visual_geometry_csv_ << std::setprecision(17) << timing.reference_stamp.toNSec()
+            << ',' << valid << ',' << (ros::WallTime::now()-start).toSec()*1000;
+        for (int i=0; i<6; ++i) visual_geometry_csv_ << ',' << (valid ? solver.eigenvalues()(i) : NAN);
+        for (int i=0; i<6; ++i) for (int j=0; j<6; ++j)
+          visual_geometry_csv_ << ',' << (valid ? solver.eigenvectors()(i,j) : NAN);
+        visual_geometry_csv_ << "\n"; visual_geometry_csv_.flush();
+      }
       const Eigen::Matrix4d raw_delta = initial_guess.inverse() * result;
       const Eigen::AngleAxisd raw_delta_angle(raw_delta.block<3, 3>(0, 0));
       diagnostic_row.raw_delta.head<3>() = raw_delta.block<3, 1>(0, 3);
@@ -1528,6 +1574,9 @@ private:
   dog_prior_map_fastlio2_frontend_exp::CoupledAnchorState coupled_anchor_;
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr target_cloud_;
+  bool visual_initial_guess_enable_ = false;
+  VisualAidedInitialGuess visual_initial_guess_;
+  std::ofstream visual_geometry_csv_;
   dog_prior_map_fastlio2_frontend_exp::ObservablePclNdt<pcl::PointXYZ> ndt_;
   nav_msgs::Path path_;
 
