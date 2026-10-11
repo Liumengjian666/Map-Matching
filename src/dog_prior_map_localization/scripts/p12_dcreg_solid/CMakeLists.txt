@@ -30,3 +30,14 @@ target_link_libraries(dcreg_solid_integration_probe PRIVATE Eigen3::Eigen
   ${PCL_LIBRARIES} ${PAPER_WORKSPACE}/devel/lib/libp11_solid_place_recognition.so
   /usr/lib/x86_64-linux-gnu/libusb-1.0.so)
 target_link_libraries(interface_test PRIVATE /usr/lib/x86_64-linux-gnu/libusb-1.0.so)
+add_executable(reference_pose_test reference_pose_test.cpp)
+target_link_libraries(reference_pose_test PRIVATE Eigen3::Eigen)
+add_test(NAME p12b_reference_pose_interface COMMAND reference_pose_test)
+add_executable(reference_pose_retry reference_pose_retry.cpp)
+target_include_directories(reference_pose_retry PRIVATE
+  ${DCREG_CHECKOUT}/DCReg/include ${PCL_INCLUDE_DIRS}
+  ${PAPER_WORKSPACE}/src/dog_prior_map_localization/include
+  ${PAPER_WORKSPACE}/src/dog_prior_map_localization/third_party/solid/include)
+target_link_libraries(reference_pose_retry PRIVATE Eigen3::Eigen ${PCL_LIBRARIES}
+  ${PAPER_WORKSPACE}/devel/lib/libp11_solid_place_recognition.so
+  /usr/lib/x86_64-linux-gnu/libusb-1.0.so)

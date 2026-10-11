@@ -20,4 +20,11 @@ inline Eigen::Matrix4d coarsePosition(const Eigen::Matrix4d& map_T_reference,
   hypothesis.block<3, 1>(0, 3) = map_T_reference.block<3, 1>(0, 3);
   return hypothesis;
 }
+// P12B diagnostic only: keep the reference IMU-state origin AND orientation.
+// Not an exact LiDAR pose: no unverified extrinsic or scan-time transport.
+inline Eigen::Matrix4d approximateReferenceStatePose(const Eigen::Matrix4d& map_T_reference) {
+  if (!rigid(map_T_reference))
+    throw std::invalid_argument("invalid approximate reference SE(3)");
+  return map_T_reference;
+}
 }  // namespace p12
