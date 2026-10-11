@@ -1,4 +1,5 @@
 #include "probe_io.hpp"
+#include "real_probe.hpp"
 #include <inlier_core/matcher.hpp>
 #include <inlier_core/verify.hpp>
 #include <Eigen/Geometry>
@@ -73,10 +74,11 @@ static void smoke(const std::string& fixture, const std::string& result) {
 int main(int argc, char** argv) {
   try {
     if (argc == 4 && std::string(argv[1]) == "--smoke") smoke(argv[2], argv[3]);
+    else if (argc == 3 && std::string(argv[1]) == "--real") p14::real(argv[2]);
     else if (argc == 4 && std::string(argv[1]) == "--preprocess") {
       auto out = p14::output(argv[3]);
       p14::writePoints(out, p14::preprocess(p14::load(argv[2])));
-    } else throw std::runtime_error("Usage: inlier_baseline --smoke FIXTURE_F64 OUTPUT_CSV | --preprocess PCD OUTPUT_F64");
+    } else throw std::runtime_error("Usage: inlier_baseline --smoke FIXTURE_F64 OUTPUT_CSV | --preprocess PCD OUTPUT_F64 | --real FROZEN_DIRECTORY");
     return 0;
   } catch (const std::exception& e) {
     std::cerr << "P14_ERROR: " << e.what() << '\n';
