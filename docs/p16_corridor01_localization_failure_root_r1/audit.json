@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "task": "P16-CORRIDOR01-LOCALIZATION-FAILURE-ROOT-R1",
+  "csv_rows": {
+    "frame_stages.csv": 692,
+    "weak_feedback_events.csv": 9
+  },
+  "json_finite": true,
+  "historical_input_hashes_unchanged": true,
+  "frozen_evaluation_transform_reused": true,
+  "first_3s_transform_refits": 0,
+  "different_causal_history_fields": {
+    "cloud_hash": 319,
+    "initial_guess_tx": 319,
+    "raw_ndt_tx": 319
+  },
+  "complete_ndt_rows_per_method": 396,
+  "complete_oosm_groups_per_method": 396,
+  "new_ros_runs": 0,
+  "new_registrations": 0,
+  "local_tests": "PASS",
+  "py_compile": "PASS",
+  "diff_check": "PASS before commit",
+  "cost_limit": "historical stage sum, not end-to-end latency or complete EKF cost; RSS NOT_CAPTURED",
+  "independent_reviews": "two bounded read-only reviews; time/frame findings incorporated; no unresolved substantive finding",
+  "cross_model": "user skipped; no external CLI"
+}
