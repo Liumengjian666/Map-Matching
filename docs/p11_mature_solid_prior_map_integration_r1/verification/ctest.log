@@ -1,0 +1,15 @@
+Test project /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/build
+    Start 1: ndt_protocol_contract_test
+1/5 Test #1: ndt_protocol_contract_test ...............   Passed    0.01 sec
+    Start 2: oosm_fixed_lag_scheduler_contract_test
+2/5 Test #2: oosm_fixed_lag_scheduler_contract_test ...   Passed    0.00 sec
+    Start 3: observable_pcl_ndt_contract_test
+3/5 Test #3: observable_pcl_ndt_contract_test .........   Passed    0.06 sec
+    Start 4: causal_pose_prediction_test
+4/5 Test #4: causal_pose_prediction_test ..............   Passed    0.01 sec
+    Start 5: solid_adapter_contract_test
+5/5 Test #5: solid_adapter_contract_test ..............   Passed    0.01 sec
+
+100% tests passed, 0 tests failed out of 5
+
+Total Test time (real) =   0.09 sec

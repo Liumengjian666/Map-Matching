@@ -1,0 +1,23 @@
+frame_conversion_contract_test exit=0
+contract,translation_error_m,rotation_error_rad,linear_twist_error,angular_twist_error,result
+identity,0,0,nan,nan,PASS
+pure_translation,0,0,nan,nan,PASS
+pure_rotation,0,3.10317e-17,nan,nan,PASS
+combined_rotation_translation,0,7.47342e-17,nan,nan,PASS
+ninety_degree_yaw,0,0,nan,nan,PASS
+nonzero_lever_arm,0,0,nan,nan,PASS
+twist_child_lidar,nan,nan,0,0,PASS
+gyro_imu_to_lidar,nan,nan,0,nan,PASS
+FRAME_CONVERSION_AND_TWIST_CONTRACT_PASS
+
+imu_deskew_contract_test exit=0
+IMU_DESKEW_CONTRACT_PASS
+
+imu_interval_numeric_test exit=0
+trajectory,imu_hz,lidar_hz,scan_duration_sec,orientation_error_rad,velocity_error_mps,position_error_m,deskew_point_error_m,result
+R9A_ZOH,200,10,0.1,3.43893e-18,0.000110963,5.54814e-06,1.25007e-06,MEASURED
+R9B_HEAD_TAIL_MEAN,200,10,0.1,3.43893e-18,5.54814e-05,2.77407e-06,6.24166e-07,PASS
+IMU_INTERVAL_NUMERIC_TEST_PASS
+
+oosm_replay_planner_contract_test exit=0
+OOSM_REPLAY_PLANNER_CONTRACT_PASS

@@ -1,0 +1,29 @@
+{
+  "CSV_JSON_HASH_AUDIT": "PASS",
+  "source_and_binary_identity_checked": 413,
+  "external_run_artifacts_checked": 33,
+  "csv_data_rows": {
+    "control_fixed_lag.csv": 11422,
+    "control_resources.csv": 2278,
+    "database_build.csv": 389,
+    "ndt_per_scan_cost.csv": 11634,
+    "nominal_parity.csv": 5817,
+    "query_results.csv": 5817,
+    "reference_pose_pairing.csv": 389,
+    "solid_shadow_fixed_lag.csv": 11384,
+    "solid_shadow_resources.csv": 3444,
+    "upstream_original_profile.csv": 4
+  },
+  "json_files": [
+    "control_execution.json",
+    "input_freeze.json",
+    "results.json",
+    "run_audit.json",
+    "solid_shadow_execution.json"
+  ],
+  "protected_implementation_changed": false,
+  "GT_LOADED": false,
+  "mainchain_parity": "FAIL",
+  "archive_text_normalization": "CSV/log archive copies use LF and no trailing whitespace; external original bytes remain unchanged.",
+  "note": "Artifact audit PASS does not override real EKF/OOSM parity FAIL."
+}

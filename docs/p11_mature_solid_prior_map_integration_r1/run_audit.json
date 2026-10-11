@@ -1,0 +1,358 @@
+{
+  "GT_LOADED": false,
+  "cost_semantics": {
+    "localization_time_ms": "NDT node callback-to-used-pose, including raw conversion, preprocessing and alignment; baseline deskew is disabled",
+    "solid_callback_compute_ms": "independent subscriber conversion/hash/descriptor/query/diagnostics; excludes CSV flush",
+    "process_cpu": "sampled cumulative process CPU including ROS and CSV overhead; not a matched per-frame CPU difference",
+    "end_to_end_EKF_latency": "NOT_MEASURED_AS_A_SINGLE_PER_FRAME_COMPUTE_DURATION"
+  },
+  "control": {
+    "diagnostic_rows": 5817,
+    "recorded_topic_counts": {
+      "/dog_livo/ndt_odom": 5817,
+      "/dog_livo/diagnostics": 5817,
+      "/dog_livo/odom_high_rate": 116130,
+      "/dog_livo/odom_corrected": 5603
+    },
+    "preprocess_ms": {
+      "count": 5817,
+      "mean": 2.1403315045556126,
+      "p95": 2.8601221999999997,
+      "max": 31.253344,
+      "min": 0.615388
+    },
+    "ndt_align_ms": {
+      "count": 5817,
+      "mean": 9.227586960632628,
+      "p95": 14.482972199999997,
+      "max": 92.738603,
+      "min": 1.898742
+    },
+    "ndt_localization_callback_ms": {
+      "count": 5817,
+      "mean": 12.768404994842701,
+      "p95": 18.7100248,
+      "max": 96.576509,
+      "min": 3.09801
+    },
+    "process_cpu_ms_per_scan": {
+      "dog_prior_map_ndt_node_cpp": 17.20302561457796,
+      "dog_prior_map_ekf_node_cpp": 11.239470517448856
+    },
+    "sum_separate_process_peak_rss_bytes_not_simultaneous": 112787456
+  },
+  "solid_shadow": {
+    "diagnostic_rows": 5817,
+    "recorded_topic_counts": {
+      "/dog_livo/diagnostics": 5817,
+      "/dog_livo/ndt_odom": 5817,
+      "/dog_livo/odom_high_rate": 116130,
+      "/dog_livo/odom_corrected": 5565
+    },
+    "preprocess_ms": {
+      "count": 5817,
+      "mean": 2.2781791567818463,
+      "p95": 2.8717304,
+      "max": 36.418823,
+      "min": 0.598332
+    },
+    "ndt_align_ms": {
+      "count": 5817,
+      "mean": 9.415088641567818,
+      "p95": 14.6819204,
+      "max": 89.321149,
+      "min": 2.203008
+    },
+    "ndt_localization_callback_ms": {
+      "count": 5817,
+      "mean": 13.1016357227093,
+      "p95": 18.8228184,
+      "max": 93.610286,
+      "min": 3.444788
+    },
+    "process_cpu_ms_per_scan": {
+      "dog_prior_map_ndt_node_cpp": 17.882069795427196,
+      "dog_prior_map_ekf_node_cpp": 11.786144060512292,
+      "solid_shadow_node_cpp": 2.310469314079422
+    },
+    "sum_separate_process_peak_rss_bytes_not_simultaneous": 156495872
+  },
+  "sensor_timestamp_matched_state_parity": {
+    "IMU_HIGH_RATE_PUBLISH": {
+      "A_unique_timestamps": 116130,
+      "B_unique_timestamps": 116130,
+      "A_rows": 116130,
+      "B_rows": 116130,
+      "A_duplicate_timestamps": 0,
+      "B_duplicate_timestamps": 0,
+      "matched_timestamps": 116130,
+      "differing_matched_states": 114603,
+      "first_difference": {
+        "state_stamp": "1786435756.0180912",
+        "fields": [
+          "p_x",
+          "p_y",
+          "p_z",
+          "q_x",
+          "q_y",
+          "q_z",
+          "q_w",
+          "v_x",
+          "v_y",
+          "v_z",
+          "last_ndt_observation_time",
+          "ndt_update_count"
+        ],
+        "A": {
+          "p_x": "-0.372625144363679",
+          "p_y": "-0.026128300051578891",
+          "p_z": "0.44316265393333865",
+          "q_x": "-0.059944467415233425",
+          "q_y": "0.14846033850701065",
+          "q_z": "0.01001028738377145",
+          "q_w": "0.98704912890047281",
+          "v_x": "-0.043926870566385792",
+          "v_y": "-0.012235537345161062",
+          "v_z": "0.045761334417792433",
+          "last_ndt_observation_time": "1786435755.7670288",
+          "ndt_update_count": "74"
+        },
+        "B": {
+          "p_x": "-0.37584433814060642",
+          "p_y": "-0.049388479135319067",
+          "p_z": "0.46186444529621801",
+          "q_x": "-0.058999714178247342",
+          "q_y": "0.12348228345933288",
+          "q_z": "0.0098524989923744234",
+          "q_w": "0.99054231997535547",
+          "v_x": "-0.053886137779154554",
+          "v_y": "-0.05719815966320746",
+          "v_z": "0.085090683889639279",
+          "last_ndt_observation_time": "1786435755.8664975",
+          "ndt_update_count": "75"
+        }
+      },
+      "PASS": false
+    },
+    "CORRECTED_PUBLISH": {
+      "A_unique_timestamps": 5603,
+      "B_unique_timestamps": 5565,
+      "A_rows": 5603,
+      "B_rows": 5565,
+      "A_duplicate_timestamps": 0,
+      "B_duplicate_timestamps": 0,
+      "matched_timestamps": 5427,
+      "differing_matched_states": 5353,
+      "first_difference": {
+        "state_stamp": "1786435756.1180534",
+        "fields": [
+          "p_x",
+          "p_y",
+          "p_z",
+          "q_x",
+          "q_y",
+          "q_z",
+          "q_w",
+          "v_x",
+          "v_y",
+          "v_z",
+          "ndt_update_count"
+        ],
+        "A": {
+          "p_x": "-0.39401448420193363",
+          "p_y": "-0.054387561488715902",
+          "p_z": "0.48713982500914277",
+          "q_x": "-0.041316933451582639",
+          "q_y": "0.12529702042866725",
+          "q_z": "0.0091930070250294503",
+          "q_w": "0.99121594837033045",
+          "v_x": "-0.057584758715793313",
+          "v_y": "-0.042462865249714189",
+          "v_z": "0.085693635145432295",
+          "ndt_update_count": "75"
+        },
+        "B": {
+          "p_x": "-0.39666403313781823",
+          "p_y": "-0.05417305692837223",
+          "p_z": "0.49088785723870765",
+          "q_x": "-0.041316933451582646",
+          "q_y": "0.12529702042866728",
+          "q_z": "0.0091930070250294468",
+          "q_w": "0.99121594837033034",
+          "v_x": "-0.06968309308364487",
+          "v_y": "-0.041483397439431885",
+          "v_z": "0.10280784901052696",
+          "ndt_update_count": "76"
+        }
+      },
+      "PASS": false
+    }
+  },
+  "external_run_artifacts": [
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/control/execution.json",
+      "bytes": 2079,
+      "sha256": "e66cd24fc225b3801c8ca603b980c970ab5888f161292a546d676c3bc20a0134"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/control/fixed_lag.csv",
+      "bytes": 1576668,
+      "sha256": "cdc12a6dfc1ede63ba31a2b212462b23f36625d0ab3b6033b2f7eac8cdfb0181"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/control/launch.log",
+      "bytes": 170166,
+      "sha256": "82a642bce9f5532daa0be5f25c5997dd1e0436f2223e1c3548021333d4ac9f8b"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/control/lineage.csv",
+      "bytes": 53117917,
+      "sha256": "e03b1b31fa147868e1440e69cd379673a31284fd618ec042e8f0aac03415e975"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/control/master.log",
+      "bytes": 926,
+      "sha256": "e84464d6fd54be33e67c131325dbda9ddcb63e28b9d77cc63396bf899d8a80f4"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/control/ndt.csv",
+      "bytes": 11800847,
+      "sha256": "e79a6e0ed9c621b3f72c4fe3c5d676f7b0201b3bd7f610e52ab90482dc12618e"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/control/oosm.csv",
+      "bytes": 683923,
+      "sha256": "b849c479d3bddd9f2d57bbff686ca1d91a323bb96acea653c91440bfb1fc1298"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/control/outputs.bag",
+      "bytes": 101906914,
+      "sha256": "faa4b4a34934e18b92236a9e59abe6519c2852999bb6252474def3b24e10ee9a"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/control/playback.log",
+      "bytes": 289,
+      "sha256": "308322109c54b63ca4f59c7e518eea8bad46d597d2e93aeee39073376a15c98b"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/control/record.log",
+      "bytes": 518,
+      "sha256": "d0034e269fff5d9ee655e9394c47d06bdba083c119624ec2dd9d584ded33035f"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/control/resources.csv",
+      "bytes": 176007,
+      "sha256": "2c287415384265bff7e6584ff7ce95e4238b39cc5215391b1dc24c96a782c1af"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/control/rosparams.yaml",
+      "bytes": 3423,
+      "sha256": "bb96232d2537b6f218bd6581d8a0dacc61e64d91a5ccf077db4cd8ebaded607f"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/control/runtime.csv",
+      "bytes": 16198,
+      "sha256": "f62eb2e7e16bf638189034b6ff364a0db1ca556a6faee0895f11dfbffc2f3720"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/execution.json",
+      "bytes": 2239,
+      "sha256": "820416fa2cf7ef79f83ec5bd97699ebcc6abff337de1e7bbe4c4c3c0b56c2f60"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/fixed_lag.csv",
+      "bytes": 1571611,
+      "sha256": "3d2b61408c4a076b57653db8ce1612a205e9714d42607a80e52c9f17f6c2c530"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/launch.log",
+      "bytes": 176713,
+      "sha256": "49e20b30bbf4ab07bc8b5e7c20080342f7405eda00c319fe607119cbd2192546"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/lineage.csv",
+      "bytes": 53053954,
+      "sha256": "c705321c5cec9b933baf79bac99da74a63d44ff0bde4b014bf9d798dcd858cb3"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/master.log",
+      "bytes": 934,
+      "sha256": "6862fbff1f372259a6a3c6fc8b5e2003a8bc470ff082f8d5932d3e217a2399c3"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/ndt.csv",
+      "bytes": 11800887,
+      "sha256": "33f6cd9483d2cd526f9abe7e693a94c452d151bf8050359e8128f2e97613795a"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/oosm.csv",
+      "bytes": 683332,
+      "sha256": "7aec64ecbee3fa4dfcf3fe82d4576dc25c52bcf60c6590a7d94915b9ccd0a8ae"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/outputs.bag",
+      "bytes": 101877559,
+      "sha256": "e3d8c7b9c81ee6c0ee17aeffdb84b05d9e550461a4fb33fa67c6b94bacfefdf9"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/playback.log",
+      "bytes": 289,
+      "sha256": "802aff20500c4ceaf4d63d00f994eebbfbffe04e14df105ceeffafb9aaa1a076"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/record.log",
+      "bytes": 523,
+      "sha256": "1fcaf8c4e2e92e542ee11b48609dfec57c2cf1bff2af32da8f91d8aa3154d365"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/resources.csv",
+      "bytes": 263116,
+      "sha256": "291fcd9372a76d7b31976ee0bb46800d7960ec622bd8ea87d5318d48857aee22"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/rosparams.yaml",
+      "bytes": 3679,
+      "sha256": "ea2e7da49c17a691247779414252bcbbce964d8f6898c8d0a4c13cd26414bf95"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/runtime.csv",
+      "bytes": 16193,
+      "sha256": "3cd1566f91c2d5f0ec23a0b74d27e1262db2fc907106cf1ae7db8b81114cddb0"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/solid.csv",
+      "bytes": 6042998,
+      "sha256": "b3142b7545f3ba2e8c5de383f1e593d45d3acdbc55c0585480d8c440090c79e4"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/solid_database.txt",
+      "bytes": 400864,
+      "sha256": "065cd4b6568f331f717421c31060492493ce329d1b5414176428e10d4febd1b4"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/database_build.csv",
+      "bytes": 23722,
+      "sha256": "528f75cf087e65531dacee03eb8dbf428a8781e46092088cd3cd0a74f82e5db4"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/database_build.log",
+      "bytes": 1208,
+      "sha256": "112f0684d7a241a15354507b9da5e4edbf253b81441755f0c091663302ee1c3f"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/input_freeze.json",
+      "bytes": 90199,
+      "sha256": "61bde02507464f18efb7ab6208251b36b4aea10c1b0bf64a2c907a7d84644391"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/reference_pose_pairing.csv",
+      "bytes": 24679,
+      "sha256": "5a77808447a91549d648130e3f775e8a6f3b40e534130ff1037211557c878e60"
+    },
+    {
+      "path": "/home/jian/rosbag/p11_solid_r1_20261011/upstream_original_profile.csv",
+      "bytes": 504,
+      "sha256": "80ad7dd13620be43da56eee8c639a2a61e0b969010ffa22cfcc972a4955a2dda"
+    }
+  ]
+}

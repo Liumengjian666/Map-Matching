@@ -1,0 +1,5 @@
+path,raw_points,range_points,down_points,finite,range_norm,top_height_fraction
+/home/jian/rosbag/p11_solid_r1_20261011/reference_scans/scans/key_000000.pcd,17699,2923,540,1,243.86144158855831,0.93888888888888888
+/home/jian/rosbag/p11_solid_r1_20261011/reference_scans/scans/key_000001.pcd,17623,3194,535,1,220.20561377086946,0.8654205607476636
+/home/jian/rosbag/p11_solid_r1_20261011/reference_scans/scans/key_000002.pcd,16915,2684,427,1,214.45031655033142,0.97423887587822011
+EMPTY_INPUT,0,0,0,0,-nan,0

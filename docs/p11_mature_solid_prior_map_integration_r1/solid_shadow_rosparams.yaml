@@ -1,0 +1,121 @@
+camera_update:
+  enable: false
+  local_vio_metric_enable: false
+dog_prior_map_ndt:
+  coupled_mode: CONTROL
+dog_prior_map_solid_shadow:
+  csv_path: /home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/solid.csv
+  database_path: /home/jian/rosbag/p11_solid_r1_20261011/solid_database.txt
+  input_topic: /dog_livo/filtered_points
+  top_k: 5
+frames:
+  base_frame: livox_frame
+  map_frame: camera_init
+fusion:
+  both_degraded_enter_frames: 3
+  degenerated_eigen_ratio: 0.03
+  directional_enable: false
+  lidar_degraded_enter_frames: 5
+  recovery_exit_frames: 5
+  state_machine_enable: false
+  visual_assisted_enter_frames: 3
+imu:
+  acc_bias_noise: 0.0001
+  acc_noise: 2.0
+  gravity: 9.80665
+  gyro_bias_noise: 0.0001
+  gyro_noise: 0.1
+  history_keep_sec: 2.0
+  init_imu_samples: 200
+  initialize_gravity_from_imu: true
+  max_dt: 0.05
+  publish_high_rate: true
+  publish_imu_propagate_alias: true
+  velocity_damping: 0.98
+lidar_update:
+  deskew_enable: false
+  enable: false
+  information_diagnostic_enable: false
+  lidar_subscriber_queue_size: 100
+  local_imu_rotation_prior_enable: true
+  ndt_max_iterations: 40
+  ndt_max_source_points: 1400
+  ndt_max_target_points: 0
+  ndt_resolution: 0.8
+  ndt_source_voxel_size: 0.25
+  ndt_source_voxel_z_size: 0.25
+  ndt_step_limit_enable: true
+  ndt_step_limit_max_rotation_deg: 5.0
+  ndt_step_limit_max_translation: 0.5
+  ndt_step_size: 0.08
+  ndt_target_voxel_size: 0.15
+  ndt_target_voxel_z_size: 0.15
+  ndt_transformation_epsilon: 0.001
+  offset_time_scale: 1.0e-09
+  pending_lidar_max_frames: 50
+  scan_reference_time: mid
+map:
+  load_in_ekf: false
+  pcd_fallback_path: /home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd
+  voxel_size: 0.15
+ndt_observation:
+  apply_ratio: 1.0
+  enable: true
+  future_deferral_enable: false
+  future_deferral_max_queue: 20
+  future_deferral_max_sec: 0.01
+  max_rotation_correction_deg: 20.0
+  max_translation_correction: 2.0
+  oosm_enable: true
+  oosm_fixed_lag_enable: true
+  oosm_fixed_lag_max_queue: 64
+  oosm_fixed_lag_sec: 0.15
+  oosm_max_alignment_sec: 0.02
+  roll_pitch_apply_ratio: 1.0
+  z_apply_ratio: 1.0
+output:
+  debug_interval_sec: 2.0
+  deferred_csv_path: ''
+  diagnostic_determinism_enable: true
+  ekf_prediction_diagnostics_csv_path: /home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/lineage.csv
+  imu_deskew_csv_path: ''
+  ndt_determinism_csv_path: ''
+  ndt_diagnostics_csv_path: /home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/ndt.csv
+  oosm_csv_path: /home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/oosm.csv
+  oosm_fixed_lag_csv_path: /home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/fixed_lag.csv
+  path_max_length: 5000
+  path_publish_rate_hz: 1.0
+  path_sample_rate_hz: 2.0
+  print_debug: true
+  publish_diagnostics: true
+  publish_filtered_points: true
+  publish_path: false
+  publish_tf: true
+  runtime_csv_path: /home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/runtime.csv
+rosdistro: 'noetic
+
+  '
+roslaunch:
+  uris:
+    host_127_0_0_1__35373: http://127.0.0.1:35373/
+    host_127_0_0_1__46877: http://127.0.0.1:46877/
+rosversion: '1.17.4
+
+  '
+run_id: e71e284c-c54a-11f1-95de-a19183074b38
+topics:
+  diagnostics: /dog_livo/diagnostics
+  filtered_points: /dog_livo/filtered_points
+  imu: /livox/imu
+  imu_propagate: /LIVO2/imu_propagate
+  lidar: /livox/lidar
+  lidar_msg_type: livox
+  ndt_odom: /dog_livo/ndt_odom
+  ndt_path: /dog_livo/ndt_path
+  ndt_pose: /dog_livo/ndt_pose
+  odom_corrected: /dog_livo/odom_corrected
+  odom_high_rate: /dog_livo/odom_high_rate
+  path_corrected: /dog_livo/path_corrected
+  path_high_rate: /dog_livo/path_high_rate
+  points_aligned: /dog_livo/points_aligned
+use_sim_time: true

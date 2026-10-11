@@ -1,0 +1,114 @@
+{
+  "PROTOCOL.md": {
+    "bytes": 3693,
+    "sha256": "99f7303f9747f2ead4577af941106f4a534a6753c34681ea0f5313f6a6ceb609"
+  },
+  "REPORT.md": {
+    "bytes": 12234,
+    "sha256": "9bac7edd6f912d45371848ca885e94950bf6be8be9fa8669d91d568e4a2452a5"
+  },
+  "REVIEW.md": {
+    "bytes": 1450,
+    "sha256": "8d6e06c7be7951b63487f43e03ed59d909c43eb9b6cdf067e9a5cfe260dfbe1f"
+  },
+  "THEORY.md": {
+    "bytes": 3841,
+    "sha256": "ad1d75ecc8fbf0bf78dcf5931167611e389ed846c6ddafd09f27f3802cf4ffed"
+  },
+  "audit_receipt.json": {
+    "bytes": 971,
+    "sha256": "aeed66214c26f517e816cf1dc6789dfda3c91d6ec1003c421fe4fca3b2be7e0e"
+  },
+  "control_execution.json": {
+    "bytes": 2079,
+    "sha256": "e66cd24fc225b3801c8ca603b980c970ab5888f161292a546d676c3bc20a0134"
+  },
+  "control_fixed_lag.csv": {
+    "bytes": 1576668,
+    "sha256": "cdc12a6dfc1ede63ba31a2b212462b23f36625d0ab3b6033b2f7eac8cdfb0181"
+  },
+  "control_resources.csv": {
+    "bytes": 173728,
+    "sha256": "dc48c3d4d8c676bc61f1f9411e2ef9fbe1b552b52e8a40a44d14b00ec7ffcb5a"
+  },
+  "control_rosparams.yaml": {
+    "bytes": 3423,
+    "sha256": "bb96232d2537b6f218bd6581d8a0dacc61e64d91a5ccf077db4cd8ebaded607f"
+  },
+  "database_build.csv": {
+    "bytes": 23722,
+    "sha256": "528f75cf087e65531dacee03eb8dbf428a8781e46092088cd3cd0a74f82e5db4"
+  },
+  "database_build.log": {
+    "bytes": 1208,
+    "sha256": "112f0684d7a241a15354507b9da5e4edbf253b81441755f0c091663302ee1c3f"
+  },
+  "input_freeze.json": {
+    "bytes": 90199,
+    "sha256": "61bde02507464f18efb7ab6208251b36b4aea10c1b0bf64a2c907a7d84644391"
+  },
+  "ndt_per_scan_cost.csv": {
+    "bytes": 678494,
+    "sha256": "60f418dc743f00d5fc10a623ab327be9bd4a5bec904159e72e02772da54db7cf"
+  },
+  "nominal_parity.csv": {
+    "bytes": 299625,
+    "sha256": "7d7f654e98636425735a37f508c4de20b7f741838a8990f165a98241cbbecafa"
+  },
+  "query_results.csv": {
+    "bytes": 6042998,
+    "sha256": "b3142b7545f3ba2e8c5de383f1e593d45d3acdbc55c0585480d8c440090c79e4"
+  },
+  "reference_pose_pairing.csv": {
+    "bytes": 24289,
+    "sha256": "a1994ae23de179138ca318098ac49effced45cae336d34feeb72c6422257eb59"
+  },
+  "results.json": {
+    "bytes": 19856,
+    "sha256": "732c3399d7e8676cc2e3712f15ac6e2b1eca480a7eb6b2369443665782e93c82"
+  },
+  "run_audit.json": {
+    "bytes": 12399,
+    "sha256": "882e2e6e445184ad3c63d4b24476fee131f6a8b4ce6e2047204b72962ec7a804"
+  },
+  "solid_database.txt": {
+    "bytes": 400864,
+    "sha256": "065cd4b6568f331f717421c31060492493ce329d1b5414176428e10d4febd1b4"
+  },
+  "solid_shadow_execution.json": {
+    "bytes": 2239,
+    "sha256": "820416fa2cf7ef79f83ec5bd97699ebcc6abff337de1e7bbe4c4c3c0b56c2f60"
+  },
+  "solid_shadow_fixed_lag.csv": {
+    "bytes": 1571611,
+    "sha256": "3d2b61408c4a076b57653db8ce1612a205e9714d42607a80e52c9f17f6c2c530"
+  },
+  "solid_shadow_resources.csv": {
+    "bytes": 259671,
+    "sha256": "1cf284ee009d633cc7e9dced974f6a4ee7c9f79b27fa01ca4ac2c2cd9cc45b40"
+  },
+  "solid_shadow_rosparams.yaml": {
+    "bytes": 3679,
+    "sha256": "ea2e7da49c17a691247779414252bcbbce964d8f6898c8d0a4c13cd26414bf95"
+  },
+  "upstream_original_profile.csv": {
+    "bytes": 504,
+    "sha256": "80ad7dd13620be43da56eee8c639a2a61e0b969010ffa22cfcc972a4955a2dda"
+  },
+  "verification/ctest.log": {
+    "bytes": 751,
+    "sha256": "fbe9abc490e217ac19e17cc458348e315ba3166ac08a11fcb73c09499907e3bd"
+  },
+  "verification/direct_contract_tests.log": {
+    "bytes": 962,
+    "sha256": "969fe3dcc51ea8ca432bd05d9eecb76f9f35fc83c337fa404068e282687684c4"
+  },
+  "verification/install_probe.log": {
+    "bytes": 29096,
+    "sha256": "ec9973c49828959eab959bdbef4947adbb193c4fd463050fc481a407b28281b1"
+  },
+  "verification/release_build.log": {
+    "bytes": 13683,
+    "sha256": "d8daedf5ca444873064dbe049210452868451d4a62df6c6a1e44a4dac9ba41dd"
+  }
+}

@@ -1,0 +1,233 @@
+-- Using CATKIN_DEVEL_PREFIX: /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel
+-- Using CMAKE_PREFIX_PATH: /opt/ros/noetic
+-- This workspace overlays: /opt/ros/noetic
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3")
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using Debian Python package layout
+-- Using empy: /home/jian/.local/lib/python3.8/site-packages/em.py
+-- Using CATKIN_ENABLE_TESTING: ON
+-- Call enable_testing()
+-- Using CATKIN_TEST_RESULTS_DIR: /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/build/test_results
+-- Forcing gtest/gmock from source, though one was otherwise available.
+-- Found gtest sources under '/usr/src/googletest': gtests will be built
+-- Found gmock sources under '/usr/src/googletest': gmock will be built
+-- Found PythonInterp: /usr/bin/python3 (found version "3.8.10")
+-- Using Python nosetests: /usr/bin/nosetests3
+-- catkin 0.8.12
+-- BUILD_SHARED_LIBS is on
+-- BUILD_SHARED_LIBS is on
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~  traversing 3 packages in topological order:
+-- ~~  - dog_prior_map_interfaces
+-- ~~  - dog_prior_map_fastlio2_frontend_exp
+-- ~~  - dog_prior_map_localization
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- +++ processing catkin package: 'dog_prior_map_interfaces'
+-- ==> add_subdirectory(dog_prior_map_interfaces)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- dog_prior_map_interfaces: 6 messages, 0 services
+-- +++ processing catkin package: 'dog_prior_map_fastlio2_frontend_exp'
+-- ==> add_subdirectory(dog_prior_map_fastlio2_frontend_exp)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- +++ processing catkin package: 'dog_prior_map_localization'
+-- ==> add_subdirectory(dog_prior_map_localization)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Eigen found (include: /usr/include/eigen3, version: 3.3.7)
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- OpenNI2 found (include: /usr/include/openni2, lib: /usr/lib/libOpenNI2.so)
+** WARNING ** io features related to pcap will be disabled
+** WARNING ** io features related to png will be disabled
+-- The imported target "vtkParseOGLExt" references the file
+   "/usr/bin/vtkParseOGLExt-7.1"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtkRenderingPythonTkWidgets" references the file
+   "/usr/lib/x86_64-linux-gnu/libvtkRenderingPythonTkWidgets.so"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtk" references the file
+   "/usr/bin/vtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "pvtk" references the file
+   "/usr/bin/pvtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+** WARNING ** io features related to libusb-1.0 will be disabled
+-- looking for PCL_COMMON
+-- looking for PCL_OCTREE
+-- looking for PCL_SEARCH
+-- looking for PCL_SAMPLE_CONSENSUS
+-- looking for PCL_FILTERS
+-- looking for PCL_IO
+-- looking for PCL_KDTREE
+-- looking for PCL_2D
+-- looking for PCL_FEATURES
+-- looking for PCL_REGISTRATION
+-- Installing devel-space wrapper /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/evaluate_runtime_and_accuracy.py to /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel/lib/dog_prior_map_localization
+-- Installing devel-space wrapper /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/build_livox_keyframe_scan_db.py to /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel/lib/dog_prior_map_localization
+-- Installing devel-space wrapper /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/run_dataset_evaluation.sh to /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel/lib/dog_prior_map_localization
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/build
+[  0%] Built target livox_ros_driver2_generate_messages_lisp
+[  0%] Built target sensor_msgs_generate_messages_py
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtSessionControlAck
+[  0%] Built target geometry_msgs_generate_messages_py
+[  0%] Built target std_msgs_generate_messages_py
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtSessionControl
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanRequest
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanResult
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanAck
+[  0%] Built target geometry_msgs_generate_messages_nodejs
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtServerStatus
+[  0%] Built target sensor_msgs_generate_messages_nodejs
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  0%] Built target geometry_msgs_generate_messages_cpp
+[  0%] Built target sensor_msgs_generate_messages_lisp
+[  0%] Built target sensor_msgs_generate_messages_cpp
+[  0%] Built target std_msgs_generate_messages_lisp
+[  0%] Built target geometry_msgs_generate_messages_eus
+[  0%] Built target std_msgs_generate_messages_cpp
+[  0%] Built target sensor_msgs_generate_messages_eus
+[  0%] Built target std_msgs_generate_messages_eus
+[  0%] Built target geometry_msgs_generate_messages_lisp
+[  0%] Built target actionlib_msgs_generate_messages_lisp
+[  0%] Built target actionlib_msgs_generate_messages_py
+[  0%] Built target actionlib_msgs_generate_messages_cpp
+[  0%] Built target nav_msgs_generate_messages_py
+[  0%] Built target roscpp_generate_messages_eus
+[  0%] Built target nav_msgs_generate_messages_nodejs
+[  0%] Built target rosgraph_msgs_generate_messages_nodejs
+[  0%] Built target roscpp_generate_messages_py
+[  0%] Built target rosgraph_msgs_generate_messages_cpp
+[  0%] Built target roscpp_generate_messages_nodejs
+[  0%] Built target rosgraph_msgs_generate_messages_eus
+[  0%] Built target actionlib_msgs_generate_messages_nodejs
+[  0%] Built target rosgraph_msgs_generate_messages_lisp
+[  0%] Built target actionlib_msgs_generate_messages_eus
+[  0%] Built target rosgraph_msgs_generate_messages_py
+[  0%] Built target roscpp_generate_messages_lisp
+[  0%] Built target roscpp_generate_messages_cpp
+[  0%] Built target nav_msgs_generate_messages_eus
+[  0%] Built target nav_msgs_generate_messages_cpp
+[  0%] Built target nav_msgs_generate_messages_lisp
+[  0%] Built target nodelet_topic_tools_gencfg
+[  0%] Built target pcl_msgs_generate_messages_cpp
+[  0%] Built target std_srvs_generate_messages_lisp
+[  0%] Built target dynamic_reconfigure_generate_messages_eus
+[  0%] Built target dynamic_reconfigure_gencfg
+[  0%] Built target nodelet_generate_messages_cpp
+[  0%] Built target dynamic_reconfigure_generate_messages_py
+[  0%] Built target tf2_msgs_generate_messages_nodejs
+[  0%] Built target bond_generate_messages_py
+[  0%] Built target livox_ros_driver2_generate_messages_nodejs
+[  0%] Built target pcl_ros_gencfg
+[  0%] Built target dynamic_reconfigure_generate_messages_lisp
+[  0%] Built target tf2_msgs_generate_messages_cpp
+[  0%] Built target diagnostic_msgs_generate_messages_cpp
+[  0%] Built target tf_generate_messages_eus
+[  0%] Built target std_srvs_generate_messages_cpp
+[  0%] Built target actionlib_generate_messages_nodejs
+[  0%] Built target nodelet_generate_messages_eus
+[  0%] Built target diagnostic_msgs_generate_messages_eus
+[  0%] Built target std_srvs_generate_messages_eus
+[  0%] Built target actionlib_generate_messages_eus
+[  0%] Built target diagnostic_msgs_generate_messages_nodejs
+[  0%] Built target tf_generate_messages_nodejs
+[  0%] Built target actionlib_generate_messages_lisp
+[  0%] Built target diagnostic_msgs_generate_messages_py
+[  0%] Built target tf_generate_messages_cpp
+[  0%] Built target dynamic_reconfigure_generate_messages_cpp
+[  0%] Built target tf_generate_messages_lisp
+[  0%] Built target topic_tools_generate_messages_eus
+[  0%] Built target tf2_msgs_generate_messages_lisp
+[  0%] Built target livox_ros_driver2_generate_messages_py
+[  0%] Built target diagnostic_msgs_generate_messages_lisp
+[  0%] Built target actionlib_generate_messages_py
+[  0%] Built target tf_generate_messages_py
+[  0%] Built target topic_tools_generate_messages_py
+[  0%] Built target livox_ros_driver2_generate_messages_eus
+[  0%] Built target tf2_msgs_generate_messages_eus
+[  0%] Built target topic_tools_generate_messages_nodejs
+[  0%] Built target actionlib_generate_messages_cpp
+[  0%] Built target nodelet_generate_messages_lisp
+[  0%] Built target nodelet_generate_messages_nodejs
+[  0%] Built target bond_generate_messages_nodejs
+[  0%] Built target dynamic_reconfigure_generate_messages_nodejs
+[  0%] Built target tf2_msgs_generate_messages_py
+[  0%] Built target bond_generate_messages_cpp
+[  0%] Built target bond_generate_messages_eus
+[  0%] Built target bond_generate_messages_lisp
+[  0%] Built target pcl_msgs_generate_messages_eus
+[  0%] Built target topic_tools_generate_messages_cpp
+[  0%] Built target pcl_msgs_generate_messages_lisp
+[  0%] Built target pcl_msgs_generate_messages_nodejs
+[  0%] Built target pcl_msgs_generate_messages_py
+[  0%] Built target nodelet_generate_messages_py
+[  0%] Built target std_srvs_generate_messages_nodejs
+[  0%] Built target std_srvs_generate_messages_py
+[  0%] Built target livox_ros_driver2_generate_messages_cpp
+[  0%] Built target topic_tools_generate_messages_lisp
+Scanning dependencies of target p11_solid_place_recognition
+[  2%] Built target frame_conversion_contract_test
+[  3%] Building CXX object dog_prior_map_localization/CMakeFiles/p11_solid_place_recognition.dir/src/solid_place_recognition.cpp.o
+[  5%] Built target causal_pose_prediction_test
+[  9%] Built target imu_interval_numeric_test
+[ 13%] Built target oosm_replay_planner_contract_test
+[ 19%] Built target imu_deskew_contract_test
+[ 21%] Built target observable_pcl_ndt_contract_test
+[ 27%] Built target oosm_fixed_lag_scheduler_contract_test
+[ 35%] Built target dog_prior_map_interfaces_generate_messages_py
+[ 42%] Built target dog_prior_map_interfaces_generate_messages_nodejs
+[ 49%] Built target dog_prior_map_interfaces_generate_messages_cpp
+[ 57%] Built target dog_prior_map_interfaces_generate_messages_eus
+[ 64%] Built target dog_prior_map_interfaces_generate_messages_lisp
+[ 67%] Built target external_ndt_server_integration_test
+[ 77%] Built target dog_prior_map_ndt_node_cpp
+[ 90%] Built target dog_prior_map_ekf_node_cpp
+[ 91%] Linking CXX shared library /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel/lib/libp11_solid_place_recognition.so
+[ 93%] Built target p11_solid_place_recognition
+Scanning dependencies of target solid_adapter_contract_test
+Scanning dependencies of target solid_reference_database_builder
+[ 95%] Building CXX object dog_prior_map_localization/CMakeFiles/solid_adapter_contract_test.dir/tests/solid_adapter_contract_test.cpp.o
+[ 95%] Building CXX object dog_prior_map_localization/CMakeFiles/solid_reference_database_builder.dir/scripts/solid_reference_database_builder.cpp.o
+[ 96%] Linking CXX executable /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel/lib/dog_prior_map_localization/solid_adapter_contract_test
+[ 96%] Built target solid_adapter_contract_test
+Scanning dependencies of target solid_shadow_node_cpp
+[ 97%] Building CXX object dog_prior_map_localization/CMakeFiles/solid_shadow_node_cpp.dir/src/solid_shadow_node.cpp.o
+[ 98%] Linking CXX executable /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel/lib/dog_prior_map_localization/solid_reference_database_builder
+[ 98%] Built target solid_reference_database_builder
+[100%] Linking CXX executable /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel/lib/dog_prior_map_localization/solid_shadow_node_cpp
+[100%] Built target solid_shadow_node_cpp
+Base path: /home/jian/livox_ws/p10_corridor01_oosm_r1_ws
+Source space: /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src
+Build space: /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/build
+Devel space: /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel
+Install space: /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/install
+####
+#### Running command: "cmake /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src -DCMAKE_BUILD_TYPE=Release -DCATKIN_DEVEL_PREFIX=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel -DCMAKE_INSTALL_PREFIX=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/install -G Unix Makefiles" in "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/build"
+####
+####
+#### Running command: "make -j2" in "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/build/dog_prior_map_localization"
+####

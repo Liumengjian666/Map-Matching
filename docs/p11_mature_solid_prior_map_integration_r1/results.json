@@ -1,0 +1,644 @@
+{
+  "GT_LOADED": false,
+  "ACCURACY_GAIN": "NOT_EVALUATED",
+  "reference_count": 389,
+  "database_text_bytes": 400864,
+  "descriptor_payload_bytes": 311200,
+  "descriptor_pose_payload_bytes": 367216,
+  "runtime_A": {
+    "ndt_calls": 5817,
+    "optimizer_converged": 5817,
+    "step_limited": 198,
+    "extra_jointJet": 0,
+    "extra_value_only": 0,
+    "feedback": 0,
+    "ndt_callback_ms": {
+      "count": 5817,
+      "mean": 12.21967673863212,
+      "p95": 18.097114562988278,
+      "max": 96.33493423461914,
+      "min": 2.8183460235595703
+    },
+    "fixed_lag_status": {
+      "INVALID_FIXED_LAG_OBSERVATION": 10,
+      "QUEUED": 5605,
+      "NO_HISTORY": 1,
+      "APPLIED": 5603,
+      "LATE_NDT_FOR_FIXED_LAG": 202,
+      "FIXED_LAG_DEADLINE_NOT_REACHED_AT_SHUTDOWN": 1
+    },
+    "late_count": 202,
+    "oosm_status": {
+      "NO_HISTORY": 1,
+      "APPLIED": 5603,
+      "LATE_NDT_FOR_FIXED_LAG": 202
+    },
+    "execution": {
+      "mode": "control",
+      "wall_seconds": 593.644582914,
+      "commands": [
+        [
+          "roscore",
+          "-p",
+          "11371"
+        ],
+        [
+          "roslaunch",
+          "dog_prior_map_localization",
+          "dog_prior_map_localization_split.launch",
+          "rviz:=false",
+          "publish_path:=false",
+          "coupled_mode:=CONTROL",
+          "oosm_fixed_lag_enable:=true",
+          "oosm_fixed_lag_sec:=0.15",
+          "diagnostic_determinism_enable:=true",
+          "ndt_diagnostics_csv_path:=/home/jian/rosbag/p11_solid_r1_20261011/control/ndt.csv",
+          "oosm_csv_path:=/home/jian/rosbag/p11_solid_r1_20261011/control/oosm.csv",
+          "oosm_fixed_lag_csv_path:=/home/jian/rosbag/p11_solid_r1_20261011/control/fixed_lag.csv",
+          "ekf_prediction_diagnostics_csv_path:=/home/jian/rosbag/p11_solid_r1_20261011/control/lineage.csv",
+          "runtime_csv_path:=/home/jian/rosbag/p11_solid_r1_20261011/control/runtime.csv",
+          "mature_solid_shadow_enable:=false",
+          "solid_database_path:=/home/jian/rosbag/p11_solid_r1_20261011/solid_database.txt",
+          "solid_shadow_csv_path:=/home/jian/rosbag/p11_solid_r1_20261011/control/solid.csv",
+          "solid_shadow_top_k:=5"
+        ],
+        [
+          "rosbag",
+          "record",
+          "-O",
+          "/home/jian/rosbag/p11_solid_r1_20261011/control/outputs.bag",
+          "/dog_livo/ndt_odom",
+          "/dog_livo/odom_corrected",
+          "/dog_livo/odom_high_rate",
+          "/dog_livo/diagnostics"
+        ],
+        [
+          "rosbag",
+          "play",
+          "--clock",
+          "--rate",
+          "1.0",
+          "--delay",
+          "2",
+          "--quiet",
+          "/media/jian/HIKVISION/Jian_FASTLIVO_Data/dogrosbag/loop2_map_match_experiment_2026_08_08_17_36_19/dateset/loop3/bag/loop3_2026-08-11-16-09-07.bag",
+          "--topics",
+          "/livox/lidar",
+          "/livox/imu"
+        ]
+      ],
+      "resources": {
+        "dog_prior_map_ndt_node_cpp": {
+          "pid": 9443,
+          "peak_rss_bytes": 97394688,
+          "cpu_seconds": 100.07
+        },
+        "dog_prior_map_ekf_node_cpp": {
+          "pid": 9444,
+          "peak_rss_bytes": 15392768,
+          "cpu_seconds": 65.38
+        }
+      },
+      "GT_LOADED": false,
+      "feedback_enabled": false
+    }
+  },
+  "runtime_B": {
+    "ndt_calls": 5817,
+    "optimizer_converged": 5817,
+    "step_limited": 198,
+    "extra_jointJet": 0,
+    "extra_value_only": 0,
+    "feedback": 0,
+    "ndt_callback_ms": {
+      "count": 5817,
+      "mean": 12.499508014224496,
+      "p95": 18.172931671142578,
+      "max": 93.00732612609863,
+      "min": 3.263711929321289
+    },
+    "fixed_lag_status": {
+      "INVALID_FIXED_LAG_OBSERVATION": 10,
+      "QUEUED": 5567,
+      "NO_HISTORY": 1,
+      "APPLIED": 5565,
+      "LATE_NDT_FOR_FIXED_LAG": 240,
+      "FIXED_LAG_DEADLINE_NOT_REACHED_AT_SHUTDOWN": 1
+    },
+    "late_count": 240,
+    "oosm_status": {
+      "NO_HISTORY": 1,
+      "APPLIED": 5565,
+      "LATE_NDT_FOR_FIXED_LAG": 240
+    },
+    "execution": {
+      "mode": "solid_shadow",
+      "wall_seconds": 598.412918368,
+      "commands": [
+        [
+          "roscore",
+          "-p",
+          "11371"
+        ],
+        [
+          "roslaunch",
+          "dog_prior_map_localization",
+          "dog_prior_map_localization_split.launch",
+          "rviz:=false",
+          "publish_path:=false",
+          "coupled_mode:=CONTROL",
+          "oosm_fixed_lag_enable:=true",
+          "oosm_fixed_lag_sec:=0.15",
+          "diagnostic_determinism_enable:=true",
+          "ndt_diagnostics_csv_path:=/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/ndt.csv",
+          "oosm_csv_path:=/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/oosm.csv",
+          "oosm_fixed_lag_csv_path:=/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/fixed_lag.csv",
+          "ekf_prediction_diagnostics_csv_path:=/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/lineage.csv",
+          "runtime_csv_path:=/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/runtime.csv",
+          "mature_solid_shadow_enable:=true",
+          "solid_database_path:=/home/jian/rosbag/p11_solid_r1_20261011/solid_database.txt",
+          "solid_shadow_csv_path:=/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/solid.csv",
+          "solid_shadow_top_k:=5"
+        ],
+        [
+          "rosbag",
+          "record",
+          "-O",
+          "/home/jian/rosbag/p11_solid_r1_20261011/solid_shadow/outputs.bag",
+          "/dog_livo/ndt_odom",
+          "/dog_livo/odom_corrected",
+          "/dog_livo/odom_high_rate",
+          "/dog_livo/diagnostics"
+        ],
+        [
+          "rosbag",
+          "play",
+          "--clock",
+          "--rate",
+          "1.0",
+          "--delay",
+          "2",
+          "--quiet",
+          "/media/jian/HIKVISION/Jian_FASTLIVO_Data/dogrosbag/loop2_map_match_experiment_2026_08_08_17_36_19/dateset/loop3/bag/loop3_2026-08-11-16-09-07.bag",
+          "--topics",
+          "/livox/lidar",
+          "/livox/imu"
+        ]
+      ],
+      "resources": {
+        "dog_prior_map_ndt_node_cpp": {
+          "pid": 11549,
+          "peak_rss_bytes": 96845824,
+          "cpu_seconds": 104.02
+        },
+        "dog_prior_map_ekf_node_cpp": {
+          "pid": 11550,
+          "peak_rss_bytes": 15405056,
+          "cpu_seconds": 68.56
+        },
+        "solid_shadow_node_cpp": {
+          "pid": 11551,
+          "peak_rss_bytes": 44244992,
+          "cpu_seconds": 13.44
+        }
+      },
+      "GT_LOADED": false,
+      "feedback_enabled": false
+    }
+  },
+  "parity": {
+    "ndt": {
+      "count_A": 5817,
+      "count_B": 5817,
+      "compared": 5817,
+      "differing_rows": 0,
+      "first_difference": null,
+      "fields": [
+        "frame_index",
+        "lidar_header_stamp",
+        "cloud_size_raw",
+        "cloud_size_after_filter",
+        "cloud_hash",
+        "initial_guess_source",
+        "ndt_fitness",
+        "ndt_has_converged",
+        "ndt_iterations",
+        "translation_limited",
+        "rotation_limited",
+        "initial_guess_reason",
+        "initial_guess_tx",
+        "initial_guess_ty",
+        "initial_guess_tz",
+        "initial_guess_qx",
+        "initial_guess_qy",
+        "initial_guess_qz",
+        "initial_guess_qw",
+        "raw_ndt_tx",
+        "raw_ndt_ty",
+        "raw_ndt_tz",
+        "raw_ndt_qx",
+        "raw_ndt_qy",
+        "raw_ndt_qz",
+        "raw_ndt_qw",
+        "final_used_tx",
+        "final_used_ty",
+        "final_used_tz",
+        "final_used_qx",
+        "final_used_qy",
+        "final_used_qz",
+        "final_used_qw"
+      ],
+      "PASS": true
+    },
+    "oosm_applied": {
+      "count_A": 5603,
+      "count_B": 5565,
+      "compared": 5565,
+      "differing_rows": 5475,
+      "first_difference": {
+        "index": 74,
+        "fields": [
+          "observation_id",
+          "ndt_stamp",
+          "deadline_stamp",
+          "release_state_stamp"
+        ],
+        "left": {
+          "observation_id": "1786435755966950736",
+          "ndt_stamp": "1786435755.9669507",
+          "deadline_stamp": "1786435756.1169508",
+          "release_state_stamp": "1786435756.1180534"
+        },
+        "right": {
+          "observation_id": "1786435755866497534",
+          "ndt_stamp": "1786435755.8664975",
+          "deadline_stamp": "1786435756.0164976",
+          "release_state_stamp": "1786435756.0180912"
+        }
+      },
+      "fields": [
+        "observation_id",
+        "ndt_stamp",
+        "deadline_stamp",
+        "release_state_stamp",
+        "replay_imu_count",
+        "correction_applied",
+        "status"
+      ],
+      "PASS": false
+    },
+    "ekf_states": {
+      "count_A": 121733,
+      "count_B": 121695,
+      "compared": 121695,
+      "differing_rows": 120094,
+      "first_difference": {
+        "index": 1601,
+        "fields": [
+          "event_type",
+          "p_x",
+          "p_y",
+          "p_z",
+          "q_x",
+          "q_y",
+          "q_z",
+          "q_w",
+          "v_x",
+          "v_y",
+          "v_z",
+          "last_ndt_observation_time",
+          "ndt_update_count",
+          "state_revision",
+          "high_rate_publish_seq"
+        ],
+        "left": {
+          "event_type": "IMU_HIGH_RATE_PUBLISH",
+          "p_x": "-0.372625144363679",
+          "p_y": "-0.026128300051578891",
+          "p_z": "0.44316265393333865",
+          "q_x": "-0.059944467415233425",
+          "q_y": "0.14846033850701065",
+          "q_z": "0.01001028738377145",
+          "q_w": "0.98704912890047281",
+          "v_x": "-0.043926870566385792",
+          "v_y": "-0.012235537345161062",
+          "v_z": "0.045761334417792433",
+          "last_ndt_observation_time": "1786435755.7670288",
+          "ndt_update_count": "74",
+          "state_revision": "74",
+          "high_rate_publish_seq": "1528"
+        },
+        "right": {
+          "event_type": "CORRECTED_PUBLISH",
+          "p_x": "-0.37584433814060642",
+          "p_y": "-0.049388479135319067",
+          "p_z": "0.46186444529621801",
+          "q_x": "-0.058999714178247342",
+          "q_y": "0.12348228345933288",
+          "q_z": "0.0098524989923744234",
+          "q_w": "0.99054231997535547",
+          "v_x": "-0.053886137779154554",
+          "v_y": "-0.05719815966320746",
+          "v_z": "0.085090683889639279",
+          "last_ndt_observation_time": "1786435755.8664975",
+          "ndt_update_count": "75",
+          "state_revision": "75",
+          "high_rate_publish_seq": "0"
+        }
+      },
+      "fields": [
+        "event_type",
+        "state_stamp",
+        "p_x",
+        "p_y",
+        "p_z",
+        "q_x",
+        "q_y",
+        "q_z",
+        "q_w",
+        "v_x",
+        "v_y",
+        "v_z",
+        "last_ndt_observation_time",
+        "ndt_update_count",
+        "state_revision",
+        "high_rate_publish_seq"
+      ],
+      "PASS": false
+    },
+    "query_is_exact_ndt_source": {
+      "count_A": 5817,
+      "count_B": 5817,
+      "compared": 5817,
+      "differing_rows": 0,
+      "first_difference": [],
+      "fields": [],
+      "PASS": true
+    }
+  },
+  "queries": 5817,
+  "successful_descriptors": 5816,
+  "status_counts": {
+    "OK": 5816,
+    "TOO_FEW_POINTS_AFTER_UPSTREAM_VOXEL": 1
+  },
+  "top5_queries": 5816,
+  "unique_top1_reference_ids": 379,
+  "top1_similarity": {
+    "count": 5816,
+    "mean": 0.9649917150820589,
+    "p95": 0.9931233375478119,
+    "max": 0.9996791647989711,
+    "min": 0.7745882178512761
+  },
+  "top1_minus_top2_similarity": {
+    "count": 5816,
+    "mean": 0.01221227869135133,
+    "p95": 0.04066281831326865,
+    "max": 0.12266712366954635,
+    "min": 1.6926220758328725e-07
+  },
+  "topk_reference_spread_m": {
+    "count": 5816,
+    "mean": 60.038648263931925,
+    "p95": 103.40570647060154,
+    "max": 114.37366339484501,
+    "min": 2.061153358472145
+  },
+  "queries_with_topk_reference_separation_gt5m": 5605,
+  "descriptor_ms": {
+    "count": 5817,
+    "mean": 0.37197177479800586,
+    "p95": 0.6989591999999999,
+    "max": 8.014091,
+    "min": 0.034292
+  },
+  "search_ms": {
+    "count": 5817,
+    "mean": 0.194940519167956,
+    "p95": 0.27872439999999993,
+    "max": 0.525556,
+    "min": 0.0
+  },
+  "callback_compute_ms_excluding_csv_flush": {
+    "count": 5817,
+    "mean": 0.665871184975073,
+    "p95": 1.0530862,
+    "max": 8.211325,
+    "min": 0.107625
+  },
+  "reference_exact_normalized_duplicate_pairs": 0,
+  "reference_cosine_gt099_pairs_gt5m": 2,
+  "retrieval_correctness": "NOT_EVALUATED_NO_INDEPENDENT_MAP_FRAME_PLACE_LABELS",
+  "reference_pose_contract": "FAST_LIVO2_MAPPING_STATE_POSE_NOT_EXACT_LIDAR_POSE",
+  "semantic_note": "Place candidates only; separated references do not prove distinct NDT basins or ambiguity.",
+  "mainchain_parity_certified": false,
+  "FINAL_RESULT": "SOLID_QUERY_FUNCTIONAL_MAINCHAIN_PARITY_NOT_CERTIFIED",
+  "TASK": "P11-MATURE-SOLID-PRIOR-MAP-INTEGRATION-R1",
+  "Repository": "Liumengjian666/Map-Matching",
+  "Branch": "research/p9-r4-heldout-visual-evidence",
+  "START_SHA": "0c594b11e68ed0e7f3a2b0b00aa9e6ce7584298e",
+  "CODE_SHA": "18c702afa3af1750ffecac27c668dca3eb176075",
+  "REMOTE_HEAD_observed": "0c594b11e68ed0e7f3a2b0b00aa9e6ce7584298e",
+  "PUSH_EXECUTED": false,
+  "NEXT": "CERTIFY_DETERMINISTIC_SOLID_SHADOW_REPLAY",
+  "upstream_sha": "9a4f2895e5211f69fbbd6d4732577e1a67e9b882",
+  "license": "BSD-3-Clause",
+  "sensor": "Livox MID-360",
+  "raw_reference_sequence": "Loop2 independent mapping",
+  "raw_query_sequence": "Loop3 independent recording",
+  "verified_ndt_nonlocal_terminal_count": "NOT_EVALUATED",
+  "baseline_deskew_enabled": false,
+  "cost_audit": {
+    "GT_LOADED": false,
+    "cost_semantics": {
+      "localization_time_ms": "NDT node callback-to-used-pose, including raw conversion, preprocessing and alignment; baseline deskew is disabled",
+      "solid_callback_compute_ms": "independent subscriber conversion/hash/descriptor/query/diagnostics; excludes CSV flush",
+      "process_cpu": "sampled cumulative process CPU including ROS and CSV overhead; not a matched per-frame CPU difference",
+      "end_to_end_EKF_latency": "NOT_MEASURED_AS_A_SINGLE_PER_FRAME_COMPUTE_DURATION"
+    },
+    "control": {
+      "diagnostic_rows": 5817,
+      "recorded_topic_counts": {
+        "/dog_livo/ndt_odom": 5817,
+        "/dog_livo/diagnostics": 5817,
+        "/dog_livo/odom_high_rate": 116130,
+        "/dog_livo/odom_corrected": 5603
+      },
+      "preprocess_ms": {
+        "count": 5817,
+        "mean": 2.1403315045556126,
+        "p95": 2.8601221999999997,
+        "max": 31.253344,
+        "min": 0.615388
+      },
+      "ndt_align_ms": {
+        "count": 5817,
+        "mean": 9.227586960632628,
+        "p95": 14.482972199999997,
+        "max": 92.738603,
+        "min": 1.898742
+      },
+      "ndt_localization_callback_ms": {
+        "count": 5817,
+        "mean": 12.768404994842701,
+        "p95": 18.7100248,
+        "max": 96.576509,
+        "min": 3.09801
+      },
+      "process_cpu_ms_per_scan": {
+        "dog_prior_map_ndt_node_cpp": 17.20302561457796,
+        "dog_prior_map_ekf_node_cpp": 11.239470517448856
+      },
+      "sum_separate_process_peak_rss_bytes_not_simultaneous": 112787456
+    },
+    "solid_shadow": {
+      "diagnostic_rows": 5817,
+      "recorded_topic_counts": {
+        "/dog_livo/diagnostics": 5817,
+        "/dog_livo/ndt_odom": 5817,
+        "/dog_livo/odom_high_rate": 116130,
+        "/dog_livo/odom_corrected": 5565
+      },
+      "preprocess_ms": {
+        "count": 5817,
+        "mean": 2.2781791567818463,
+        "p95": 2.8717304,
+        "max": 36.418823,
+        "min": 0.598332
+      },
+      "ndt_align_ms": {
+        "count": 5817,
+        "mean": 9.415088641567818,
+        "p95": 14.6819204,
+        "max": 89.321149,
+        "min": 2.203008
+      },
+      "ndt_localization_callback_ms": {
+        "count": 5817,
+        "mean": 13.1016357227093,
+        "p95": 18.8228184,
+        "max": 93.610286,
+        "min": 3.444788
+      },
+      "process_cpu_ms_per_scan": {
+        "dog_prior_map_ndt_node_cpp": 17.882069795427196,
+        "dog_prior_map_ekf_node_cpp": 11.786144060512292,
+        "solid_shadow_node_cpp": 2.310469314079422
+      },
+      "sum_separate_process_peak_rss_bytes_not_simultaneous": 156495872
+    },
+    "sensor_timestamp_matched_state_parity": {
+      "IMU_HIGH_RATE_PUBLISH": {
+        "A_unique_timestamps": 116130,
+        "B_unique_timestamps": 116130,
+        "A_rows": 116130,
+        "B_rows": 116130,
+        "A_duplicate_timestamps": 0,
+        "B_duplicate_timestamps": 0,
+        "matched_timestamps": 116130,
+        "differing_matched_states": 114603,
+        "first_difference": {
+          "state_stamp": "1786435756.0180912",
+          "fields": [
+            "p_x",
+            "p_y",
+            "p_z",
+            "q_x",
+            "q_y",
+            "q_z",
+            "q_w",
+            "v_x",
+            "v_y",
+            "v_z",
+            "last_ndt_observation_time",
+            "ndt_update_count"
+          ],
+          "A": {
+            "p_x": "-0.372625144363679",
+            "p_y": "-0.026128300051578891",
+            "p_z": "0.44316265393333865",
+            "q_x": "-0.059944467415233425",
+            "q_y": "0.14846033850701065",
+            "q_z": "0.01001028738377145",
+            "q_w": "0.98704912890047281",
+            "v_x": "-0.043926870566385792",
+            "v_y": "-0.012235537345161062",
+            "v_z": "0.045761334417792433",
+            "last_ndt_observation_time": "1786435755.7670288",
+            "ndt_update_count": "74"
+          },
+          "B": {
+            "p_x": "-0.37584433814060642",
+            "p_y": "-0.049388479135319067",
+            "p_z": "0.46186444529621801",
+            "q_x": "-0.058999714178247342",
+            "q_y": "0.12348228345933288",
+            "q_z": "0.0098524989923744234",
+            "q_w": "0.99054231997535547",
+            "v_x": "-0.053886137779154554",
+            "v_y": "-0.05719815966320746",
+            "v_z": "0.085090683889639279",
+            "last_ndt_observation_time": "1786435755.8664975",
+            "ndt_update_count": "75"
+          }
+        },
+        "PASS": false
+      },
+      "CORRECTED_PUBLISH": {
+        "A_unique_timestamps": 5603,
+        "B_unique_timestamps": 5565,
+        "A_rows": 5603,
+        "B_rows": 5565,
+        "A_duplicate_timestamps": 0,
+        "B_duplicate_timestamps": 0,
+        "matched_timestamps": 5427,
+        "differing_matched_states": 5353,
+        "first_difference": {
+          "state_stamp": "1786435756.1180534",
+          "fields": [
+            "p_x",
+            "p_y",
+            "p_z",
+            "q_x",
+            "q_y",
+            "q_z",
+            "q_w",
+            "v_x",
+            "v_y",
+            "v_z",
+            "ndt_update_count"
+          ],
+          "A": {
+            "p_x": "-0.39401448420193363",
+            "p_y": "-0.054387561488715902",
+            "p_z": "0.48713982500914277",
+            "q_x": "-0.041316933451582639",
+            "q_y": "0.12529702042866725",
+            "q_z": "0.0091930070250294503",
+            "q_w": "0.99121594837033045",
+            "v_x": "-0.057584758715793313",
+            "v_y": "-0.042462865249714189",
+            "v_z": "0.085693635145432295",
+            "ndt_update_count": "75"
+          },
+          "B": {
+            "p_x": "-0.39666403313781823",
+            "p_y": "-0.05417305692837223",
+            "p_z": "0.49088785723870765",
+            "q_x": "-0.041316933451582646",
+            "q_y": "0.12529702042866728",
+            "q_z": "0.0091930070250294468",
+            "q_w": "0.99121594837033034",
+            "v_x": "-0.06968309308364487",
+            "v_y": "-0.041483397439431885",
+            "v_z": "0.10280784901052696",
+            "ndt_update_count": "76"
+          }
+        },
+        "PASS": false
+      }
+    }
+  },
+  "comparison_is_not_accuracy_validation": true
+}
