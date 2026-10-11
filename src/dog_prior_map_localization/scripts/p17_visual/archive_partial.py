@@ -2,8 +2,6 @@
 """Preserve completed vision and actual failed launch, without opening GT."""
 import csv
 import json
-import shutil
-import subprocess
 from collections import Counter
 from pathlib import Path
 import numpy as np
@@ -20,6 +18,12 @@ def summary(values):
             'max':float(a.max())} if len(a) else None
 
 
+def archive_text(source, target):
+    # Archive text uses LF/no line-end blanks; raw execution files stay intact.
+    # Values, timestamps, statuses and CSV fields are not changed.
+    target.write_text('\n'.join(line.rstrip() for line in source.read_text().splitlines())+'\n')
+
+
 def main():
     repo=Path(__file__).resolve().parents[4]
     cache=repo/'.p17_visual_aided_ndt_r1'
@@ -30,14 +34,14 @@ def main():
         assert int(r['depth_max_point_ns'])<=int(r['ref_image_ns'])<=int(r['prev_scan_ns'])
         assert int(r['cur_image_ns'])<=int(r['scan_ns']) and int(r['max_imu_ns'])<=int(r['scan_ns'])
         assert np.isfinite([float(r[k]) for k in ('dx','dy','dz')]).all()
-    shutil.copyfile(cache/'visual_input/visual.csv',archive/'visual_measurements.csv')
+    archive_text(cache/'visual_input/visual.csv',archive/'visual_measurements.csv')
     failed=archive/'failed_control_smoke';failed.mkdir(exist_ok=True)
     for name in ('ndt_diagnostics.csv','oosm.csv','oosm_fixed_lag.csv','deskew.csv',
                  'ekf_lineage.csv','execution.json','resources.csv','rosparams.yaml','launch.log'):
-        shutil.copyfile(cache/'control_smoke'/name,failed/name)
+        archive_text(cache/'control_smoke'/name,failed/name)
     for source,target in (('build_final_tests.log','release_build.log'),('validation.txt','validation.txt'),
                           ('storage_kernel.log','storage_kernel.log')):
-        shutil.copyfile(cache/source,archive/target)
+        archive_text(cache/source,archive/target)
     old=json.loads((repo/'docs/p10_corridor01_deterministic_oosm_replay_r1/results.json').read_text())
     result={
       'task':'P17-VISUAL-AIDED-NDT-INTEGRATION-R1',
@@ -100,7 +104,9 @@ def main():
     (archive/'results.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n')
     hashes={str(p.relative_to(archive)):sha(p) for p in archive.rglob('*') if p.is_file() and p.name!='artifact_hashes.json'}
     source_files=['scripts/p4_i3_visual_frontend.py','scripts/p9/corridor_moving_init/preintegration.py']
-    receipt={'archive':hashes,'unchanged_reused_frontend_sources':{
+    receipt={'archive':hashes,'text_archival':'LF + removed line-end whitespace; raw cache files untouched; CSV parsed parity checked',
+      'raw_visual_csv_sha256':sha(cache/'visual_input/visual.csv'),
+      'unchanged_reused_frontend_sources':{
       n:sha(repo/'src/dog_prior_map_fastlio2_frontend_exp'/n) for n in source_files},
       'binary_sha256':{n:sha(repo/'devel/lib/dog_prior_map_localization'/n) for n in
         ('dog_prior_map_ndt_node_cpp','dog_prior_map_ekf_node_cpp')},'GT_RAW_LOADED':False}

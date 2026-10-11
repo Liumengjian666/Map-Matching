@@ -33,7 +33,7 @@ PARAMETERS
  * /deskew/reference_time: start
  * /deskew/state_frame: imu
  * /dog_prior_map_ndt/coupled_mode: CONTROL
- * /dog_prior_map_ndt/visual_geometry_csv: 
+ * /dog_prior_map_ndt/visual_geometry_csv:
  * /dog_prior_map_ndt/visual_initial_guess_csv: /home/jian/livox_...
  * /dog_prior_map_ndt/visual_initial_guess_enable: False
  * /filter/init_bias_std: 0.05
@@ -122,11 +122,11 @@ PARAMETERS
  * /ndt_observation/velocity_blend: 0.6
  * /ndt_observation/z_apply_ratio: 1.0
  * /output/debug_interval_sec: 2.0
- * /output/deferred_csv_path: 
+ * /output/deferred_csv_path:
  * /output/diagnostic_determinism_enable: True
  * /output/ekf_prediction_diagnostics_csv_path: /home/jian/livox_...
  * /output/imu_deskew_csv_path: /home/jian/livox_...
- * /output/ndt_determinism_csv_path: 
+ * /output/ndt_determinism_csv_path:
  * /output/ndt_diagnostics_csv_path: /home/jian/livox_...
  * /output/oosm_csv_path: /home/jian/livox_...
  * /output/oosm_fixed_lag_csv_path: /home/jian/livox_...

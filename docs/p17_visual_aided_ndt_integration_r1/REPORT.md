@@ -85,3 +85,7 @@ short parity and enabled short smoke, then the one fixed full visual replay.
 Do not retune visual, NDT, Anchor or EKF parameters based on these partial
 extraction statistics. No decision on formal visual-EKF fusion or originality
 is supported yet.
+
+Archive text is normalized to LF with line-end whitespace removed for
+`git diff --check`. The raw cache is untouched; parsed CSV field parity and
+updated archive hashes were checked. This is formatting, not altered results.
