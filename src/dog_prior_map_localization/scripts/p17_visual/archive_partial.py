@@ -58,6 +58,7 @@ def main():
         'gyro_bias':'UNESTIMATED_ZERO_BIAS_ROTATION_MODEL',
         'scan_time_bridge':'VISUAL_MEAN_VELOCITY_SHORT_ENDPOINT_APPROXIMATION',
         'valid_vision_ms':summary([float(r['vision_ms']) for r in valid]),
+        'vision_ms_scope':'depth transport + P4 estimate + scan-time bridge; excludes camera IO and rectify; not complete visual frontend latency',
         'all_pair_vision_ms':summary([float(r['vision_ms']) for r in data[1:]]),
         'valid_depth_transport_ms':summary([float(r['depth_transport_ms']) for r in valid]),
         'reprojection_rmse_px':summary([float(r['reprojection_rmse_px']) for r in valid]),

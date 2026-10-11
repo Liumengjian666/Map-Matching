@@ -28,6 +28,7 @@
       "p95": 84.21539920018402,
       "max": 251.5625319974788
     },
+    "vision_ms_scope": "depth transport + P4 estimate + scan-time bridge; excludes camera IO and rectify; not complete visual frontend latency",
     "all_pair_vision_ms": {
       "count": 395,
       "mean": 69.87548345063306,

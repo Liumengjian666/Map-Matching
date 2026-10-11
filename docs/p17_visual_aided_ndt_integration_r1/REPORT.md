@@ -22,6 +22,10 @@ No P17 accuracy advantage is claimed; no raw GT was opened.
   **251.563 ms**. Depth transport alone mean **54.716 ms**, P95 **59.542 ms**.
   This includes the declared gyro-only depth approximation and short endpoint
   translation bridge. It is offline precomputation, not realtime deployment.
+  The timer starts after image rectification: it excludes camera IO and MEI
+  rectification and is **not complete visual-frontend latency**. Across all
+  395 pairs the same staged timer mean/P95 is **69.875/81.745 ms**. Complete
+  new-system latency remains unmeasured.
 - Valid PnP reprojection RMSE mean **0.562 px**, max **1.035 px**; this is not
   translation/rotation GT error. Proposed scan displacement mean **0.199 m**,
   max **0.374 m**. Oldest depth points can be **201.659 ms** before the image.
