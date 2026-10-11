@@ -1,0 +1,24 @@
+test_future_imu_is_ignored (test_input.InputTests) ... ok
+test_interval_guard (test_input.InputTests) ... ok
+test_lever_arm_rotation (test_input.InputTests) ... ok
+test_no_backfill_or_long_hold (test_input.InputTests) ... ok
+test_time_scaling_and_reference_rotation (test_input.InputTests) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.004s
+
+OK
+VISUAL_INITIAL_GUESS_CONTRACT_PASS
+TWO_FRAME_NDT_READONLY_EXACT_PARITY_PASS
+fixed-lag scheduler contract PASS; deadline=1.51716e+09 release=1.51716e+09 replay_count=31
+IMU_DESKEW_CONTRACT_PASS
+contract,translation_error_m,rotation_error_rad,linear_twist_error,angular_twist_error,result
+identity,0,0,nan,nan,PASS
+pure_translation,0,0,nan,nan,PASS
+pure_rotation,0,3.10317e-17,nan,nan,PASS
+combined_rotation_translation,0,7.47342e-17,nan,nan,PASS
+ninety_degree_yaw,0,0,nan,nan,PASS
+nonzero_lever_arm,0,0,nan,nan,PASS
+twist_child_lidar,nan,nan,0,0,PASS
+gyro_imu_to_lidar,nan,nan,0,nan,PASS
+PCL native derivative/value objective parity PASS: 24084.3

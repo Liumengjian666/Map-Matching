@@ -1,0 +1,30 @@
+{
+  "archive": {
+    "release_build.log": "0c3902fea7637f29e6768d4ff4fb1693a9ec57fd853b1e5d9e57d0583ac23a64",
+    "storage_kernel.log": "0f5589d5956fb70755a2f362fe6342678d4e3ef5f1e6b02311f665751ee629b6",
+    "validation.txt": "11542bd95d0c299e5237db0bfb4f20b98d854e5f0cdea10a24156c3ef5d0784f",
+    "THEORY.md": "1296adefe7d05bc413a5d471826cf8a1ca31a567f7d8552a711fb51f9e19c9ba",
+    "results.json": "f6004a3d21888c17ba8aba3589eb7447c3d91618ff39225fd253205649975da9",
+    "visual_measurements.csv": "10869519890a5adcb6f3310bba05f379a959018cf123ea8a90c1cf4ea1314c79",
+    "REPORT.md": "08a4c9a846a30a7c0b271517838f6bb255ad0511e85f2bf93ff14d0d08d7eb4a",
+    "PROTOCOL.md": "340d8a062b8c51bef7ab8ecc8fc4c02fec7d5e8f10748b3f0c65353840444efd",
+    "failed_control_smoke/deskew.csv": "cf3a8d4ae68fd95e1b8eed0e914c9b7faf1e37dbc05fe3ef90324a624776aced",
+    "failed_control_smoke/ndt_diagnostics.csv": "c6516768a24a7d5c1a225745db7074c8c3042207758eb29ae35ae201cf5822bd",
+    "failed_control_smoke/resources.csv": "fab116030d247a0cc028b05095c075e0297f4b4b44f07859824c50ae838a95dc",
+    "failed_control_smoke/oosm.csv": "226d6f4ca2522e7217a7fcc360c011bb493efdf41f8b44dbd7ff0e3f3e3aa0fa",
+    "failed_control_smoke/rosparams.yaml": "97d1b4b063889417c7ba63037d371adf2b81ad83ea7fcfe6bb694358ffc46534",
+    "failed_control_smoke/oosm_fixed_lag.csv": "c401e1d98bf7e0f7118c1c542a037f6b421cbaee43e7a4e24b84f74add49fd7b",
+    "failed_control_smoke/execution.json": "7352713c22a7852cb56e50215968f3f55d415d03319f8c8498db0a4d6507c92a",
+    "failed_control_smoke/launch.log": "b58255761d6bb7834e6615ad5d090c19da0c68a621a725523d7016e1d1dce599",
+    "failed_control_smoke/ekf_lineage.csv": "af6f9f823893301dde29ce0a2edeaacc8b35f76c228d0fa527b260fadee0d802"
+  },
+  "unchanged_reused_frontend_sources": {
+    "scripts/p4_i3_visual_frontend.py": "8302181a2927cb38c2ea18d63902a034a55f92c17d260bed32bf49c9496cd99f",
+    "scripts/p9/corridor_moving_init/preintegration.py": "bf3e7713fbd46d7a02c94e4486f52bb790c7c2c2e352e17631f837887da30a36"
+  },
+  "binary_sha256": {
+    "dog_prior_map_ndt_node_cpp": "ba65e3e516a982c4c0083b866fc8e95c2dede4003fdc0f42cbf1a489da931cfb",
+    "dog_prior_map_ekf_node_cpp": "fbc1750dc605a7fd3b9549b310394fbff3a5781cad2272ef55b9f49df8c3435a"
+  },
+  "GT_RAW_LOADED": false
+}

@@ -1,0 +1,147 @@
+{
+  "task": "P17-VISUAL-AIDED-NDT-INTEGRATION-R1",
+  "FINAL_RESULT": "VISUAL_INPUT_GENERATED_CAUSAL_REPLAY_BLOCKED_STORAGE_IO",
+  "NEXT": "RESTORE_FROZEN_MAP_STORAGE_AND_RESUME_P17_REPLAY",
+  "start_sha": "5453aec8ad6158d41716ca3b6c5f805f1381c96d",
+  "code_sha": "4ec8b30d136bf86cd6969670b8e47afca7513315",
+  "PUSH_EXECUTED": false,
+  "GT_RAW_LOADED": false,
+  "vision": {
+    "scan_records": 396,
+    "eligible_pair_denominator": 395,
+    "valid_pairs": 169,
+    "pair_coverage_percent": 42.78481012658228,
+    "statuses": {
+      "NO_REFERENCE": 1,
+      "NO_COMPLETED_PAST_SCAN": 1,
+      "IMAGE_SCAN_LAG": 14,
+      "VALID": 169,
+      "INSUFFICIENT_CORRESPONDENCES": 211
+    },
+    "independent_depth_input": "raw P10 timed points + raw gyro; no NDT/GT input or publication gating",
+    "translation_deskew": "UNESTIMATED; rotation-only with official lever arm",
+    "gyro_bias": "UNESTIMATED_ZERO_BIAS_ROTATION_MODEL",
+    "scan_time_bridge": "VISUAL_MEAN_VELOCITY_SHORT_ENDPOINT_APPROXIMATION",
+    "valid_vision_ms": {
+      "count": 169,
+      "mean": 74.49934649112953,
+      "p95": 84.21539920018402,
+      "max": 251.5625319974788
+    },
+    "all_pair_vision_ms": {
+      "count": 395,
+      "mean": 69.87548345063306,
+      "p95": 81.74532830053067,
+      "max": 251.5625319974788
+    },
+    "valid_depth_transport_ms": {
+      "count": 169,
+      "mean": 54.71565078680225,
+      "p95": 59.54208680195734,
+      "max": 236.00976400121
+    },
+    "reprojection_rmse_px": {
+      "count": 169,
+      "mean": 0.5617758100815795,
+      "p95": 0.8930390737978003,
+      "max": 1.0351916282683806
+    },
+    "scan_displacement_m": {
+      "count": 169,
+      "mean": 0.19879685028396155,
+      "p95": 0.3383698335560101,
+      "max": 0.37430207492502665
+    },
+    "oldest_depth_point_age_ms": {
+      "count": 169,
+      "mean": 181.5837766568047,
+      "p95": 199.5545708,
+      "max": 201.659439
+    },
+    "increment_gt_error": "NOT_EVALUATED; GT not opened",
+    "peak_rss": "NOT_CAPTURED; sampled RSS 199132 KiB, not a peak measurement",
+    "fixed_risk_window_coverage": {
+      "6_12s": {
+        "pairs": 59,
+        "valid": 35,
+        "statuses": {
+          "VALID": 35,
+          "INSUFFICIENT_CORRESPONDENCES": 22,
+          "IMAGE_SCAN_LAG": 2
+        }
+      },
+      "26_30s": {
+        "pairs": 40,
+        "valid": 0,
+        "statuses": {
+          "INSUFFICIENT_CORRESPONDENCES": 36,
+          "IMAGE_SCAN_LAG": 4
+        }
+      },
+      "30_35s": {
+        "pairs": 48,
+        "valid": 0,
+        "statuses": {
+          "INSUFFICIENT_CORRESPONDENCES": 48
+        }
+      }
+    }
+  },
+  "actual_control_smoke": {
+    "ndt_rows": 0,
+    "oosm_rows": 0,
+    "fixed_lag_rows": 0,
+    "deskew_rows": 44,
+    "deskew_published": 44,
+    "imu_high_rate_publishes": 899,
+    "valid_baseline": false,
+    "reason": "NDT map load not completed; recorder/ROS registration is not readiness",
+    "old_receipt_warning": "pre-fix runner exited zero but NDT/OOSM files have headers only; never a successful baseline"
+  },
+  "storage": {
+    "filesystem": "/dev/sda2 fuseblk rw; HIKVISION",
+    "kernel_evidence": "UAS reset, commands waited 180s; blk_update_request READ I/O error dev sda",
+    "local_same_sha_map_copy": "NOT_FOUND",
+    "socket_test": "PASS; loopback bind/listen possible",
+    "camera_full_hash_recheck": "INCOMPLETE; process terminated after visual.csv was written; full bag hash attempt hit I/O wait",
+    "raw_original_historical_sha256": "c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811",
+    "map_historical_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f"
+  },
+  "runtime_changes": {
+    "default_off": true,
+    "ekf_oosm_source_changed": false,
+    "R6_or_Anchor_changed": false,
+    "ndt_parameters_changed": false,
+    "additional_aligns": 0,
+    "actual_visual_feedback_frames": 0,
+    "full_visual_feedback_replay": "NOT_RUN",
+    "actual_control_parity": "NOT_VALIDATED: zero NDT measurements in aborted startup"
+  },
+  "historical_control_primary_3_35s": {
+    "translation_rmse_m": 1.8878773199475662,
+    "translation_p95_m": 5.01103904419252,
+    "translation_max_m": 5.667156999562539,
+    "rotation_rmse_deg": 3.0262463004912794,
+    "rotation_p95_deg": 3.705964593218566,
+    "rotation_max_deg": 16.393782193573646,
+    "persistent_0_5m_s": 6.449565172195435,
+    "persistent_1m_s": 26.7833251953125,
+    "persistent_2m_s": 29.823069095611572
+  },
+  "new_visual_aided_metrics": "NOT_RUN; no precision improvement claimed",
+  "ndt_weak_direction_analysis": "NOT_RUN; read-only shared-backend hook compiled and synthetic two-frame parity passed",
+  "validation": [
+    "5 Python time/frame/causality tests PASS",
+    "C++ initial guess/fallback/future/NaN/stale-depth PASS",
+    "synthetic two-frame NDT derivative hook exact parity PASS",
+    "OOSM fixed-lag, deskew, frame and PCL objective tests PASS"
+  ],
+  "limits": [
+    "offline precomputed visual extraction, not a realtime frontend",
+    "depth translation uncompensated, oldest depth points up to 201.66 ms old",
+    "visual/scan endpoint translation uses a declared short-interval approximation",
+    "no new visual GT error, localization metrics, weak-direction complementarity or total-runtime evidence",
+    "Corridor01 is development data; frozen evaluation would be prefix-aligned relative drift, not absolute ATE"
+  ],
+  "frozen_input_sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e"
+}
