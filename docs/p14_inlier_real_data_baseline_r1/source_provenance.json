@@ -1,0 +1,38 @@
+{
+  "upstream_clean": true,
+  "upstream_sha": "515759c00fe1e2f6d4d4a005e8c3a6b3f71d17ac",
+  "binary_sha256": "d6d916a509d0e6d632f965f3e27409f66bfe681e552db362e616d84c9c0dc748",
+  "upstream_sources": {
+    "cpp/inlier_core/CMakeLists.txt": "d4129bc80e8653744addc092a5e444399a576657d20e389ea4e9ba4c0f392fb4",
+    "cpp/inlier_core/cmake/nanoflann.cmake": "9da80e2bb4a2764ee7aeba489d3b4cf9c27fa0d85c972c495884a9f44d293685",
+    "cpp/inlier_core/cmake/eigen.cmake": "2b69135cee040d3a5c2ee3eeb7c8c0b3fc883e5a906e808834501a5ea6a9bb09",
+    "cpp/inlier_core/include/inlier_core/plane.hpp": "665628bbaa0ec5eb846d09825babdf9cd44b54f8e36cdd4d4fe2ef240d3b5285",
+    "cpp/inlier_core/include/inlier_core/encoder.hpp": "dd3fd04f38119a097b4313413e9f6e7de31b47728393f864ccb73ad943e475fd",
+    "cpp/inlier_core/include/inlier_core/config.hpp": "be4b945977df197cf2c8353a32075ef61436a60488d779e6300bd46d72588701",
+    "cpp/inlier_core/include/inlier_core/matcher.hpp": "919db295f97fe188077da07a93018075de14f423b54341aa97364241ea587d7c",
+    "cpp/inlier_core/include/inlier_core/types.hpp": "f80b4f4e4474eaa0dbf6d5e7e09a3a105680248097e16c07da34e8211e975e73",
+    "cpp/inlier_core/include/inlier_core/shape_pca.hpp": "7170b35940964ec1cfb6fe75716088f89f6583726d24bfd56553fb614f745b39",
+    "cpp/inlier_core/include/inlier_core/verify.hpp": "c07dc3f8f8b07d4cf768b8a8a59c8ffd44226fcefd99f06c301610c456ff3b27",
+    "cpp/inlier_core/include/inlier_core/token.hpp": "0059e01c7003640d7769a25a3d83bc9db47bc3881e2ba105c9df45bf94828c98",
+    "cpp/inlier_core/src/shape_pca.cpp": "de2f4e105910357803e04295f69a3c7c83a996e56b9fcb475bc27227d66c9899",
+    "cpp/inlier_core/src/encoder.cpp": "5014670cff6fc93b67fffeb2b1aa858a05df5324c7ab8926bbe55da1fac58441",
+    "cpp/inlier_core/src/verify.cpp": "c2fec7d4660ee273646abcd7125a18c651581f69210670bff87b86d0f3ad291a",
+    "cpp/inlier_core/src/matcher.cpp": "30e2a35be4891b795372aad26c401b74a137beaf93b4ba8462443a705e4d85b3",
+    "cpp/inlier_core/src/plane.cpp": "57513004b695567d49d354c066cc4ff3ca7229083823f61a51182ed63c97f588",
+    "LICENSE": "66a32fd748e770638f33bf053018eb3546ed0d43500508b4b3d324efc54d6c7f",
+    "inlier/config/default.yaml": "6ba964ca539ce98ae308a383dd0644b9fe026693d26d971fff9fdcd39983de46"
+  },
+  "caller_sources": {
+    "real_probe.hpp": "aaf467864af2b472c9fba8928893cda11f370e5d47fd64f68c565fe59813562c",
+    "prepare.py": "ca06c0e438326e2565309836e0f881b0499be5c3d46357a3e8595e651413d8a7",
+    "probe.cpp": "5abcffb4515cbfdcf6a81b8f4861d387af1fcad2b6c591b12bb0b85add77dd67",
+    "run_frozen.py": "a492e5c1ac8576a408c2a9c0d206257b77b6c75fd072f4dd603ed581ee05db66",
+    "CMakeLists.txt": "010ea0993da523294a791a719109832dc315cb83745d8af9a72ce2fd5d874aba",
+    "test_input.py": "e94c869b12612decfb254f971aaf41d6c522a1ef5687b56daca74aba5c698214",
+    "probe_io.hpp": "26eb919ddaa903b4a57e7e9d281dfa8d62a6938e300b0f155e759f7c10335a61"
+  },
+  "external_database": {
+    "path": "/home/jian/rosbag/p14_inlier_r1_20261011/experiment/reference_tokens_keypoints.bin",
+    "sha256": "acb0a17b919632b555286ed0ce80924120c87ea340e7b6bbdb69f7c16714858e"
+  }
+}

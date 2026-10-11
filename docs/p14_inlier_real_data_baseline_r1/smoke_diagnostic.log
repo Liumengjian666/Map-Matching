@@ -1,0 +1,2 @@
+SMOKE_DIAGNOSTIC keypoints=324 tokens=324 identity_success=1 identity_fail_stage=0 direction_success=1 direction_fail_stage=0 identity_error=0.00492112 direction_error=0.00480111
+P14_ERROR: Author Verify smoke / transform direction failed

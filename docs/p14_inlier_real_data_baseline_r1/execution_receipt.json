@@ -1,0 +1,31 @@
+{
+  "code_sha": "294e6fd540922793540bcd2d4120d727c8973d89",
+  "binary_sha256": "d6d916a509d0e6d632f965f3e27409f66bfe681e552db362e616d84c9c0dc748",
+  "upstream_sha": "515759c00fe1e2f6d4d4a005e8c3a6b3f71d17ac",
+  "caller_source_sha256": {
+    "real_probe.hpp": "aaf467864af2b472c9fba8928893cda11f370e5d47fd64f68c565fe59813562c",
+    "prepare.py": "ca06c0e438326e2565309836e0f881b0499be5c3d46357a3e8595e651413d8a7",
+    "probe.cpp": "5abcffb4515cbfdcf6a81b8f4861d387af1fcad2b6c591b12bb0b85add77dd67",
+    "run_frozen.py": "a492e5c1ac8576a408c2a9c0d206257b77b6c75fd072f4dd603ed581ee05db66",
+    "CMakeLists.txt": "010ea0993da523294a791a719109832dc315cb83745d8af9a72ce2fd5d874aba",
+    "test_input.py": "e94c869b12612decfb254f971aaf41d6c522a1ef5687b56daca74aba5c698214",
+    "probe_io.hpp": "26eb919ddaa903b4a57e7e9d281dfa8d62a6938e300b0f155e759f7c10335a61"
+  },
+  "freeze_sha256": "8262357c364963b8ad34c10d8b0ff666e476526b9f513be188317cc271617895",
+  "command": [
+    "/home/jian/rosbag/p14_inlier_r1_20261011/build/inlier_baseline",
+    "--real",
+    "/home/jian/rosbag/p14_inlier_r1_20261011/experiment"
+  ],
+  "environment": {
+    "LD_LIBRARY_PATH": "/usr/lib/x86_64-linux-gnu",
+    "OMP_NUM_THREADS": "1",
+    "OMP_DYNAMIC": "FALSE"
+  },
+  "start_utc": "2026-10-11T12:52:48.011403+00:00",
+  "gt_loaded": false,
+  "full_cloud_registration_calls": 0,
+  "process_wall_seconds": 14.08878709999999,
+  "exit_code": 0,
+  "end_utc": "2026-10-11T12:53:02.100263+00:00"
+}

@@ -1,0 +1,228 @@
+{
+  "task": "P14-INLIER-REAL-DATA-BASELINE-R1",
+  "final_result": "INLIER_CPP_FUNCTIONAL_SINGLE_SCAN_GEOMETRY_NOT_CERTIFIED",
+  "next": "DECIDE_CAUSAL_ACCUMULATION_INPUT_PROTOCOL",
+  "repository": "Liumengjian666/Map-Matching",
+  "branch": "research/p9-r4-heldout-visual-evidence",
+  "start_sha": "f3a996da317a08bad0886f14dc499c0d24031ce6",
+  "code_sha": "294e6fd540922793540bcd2d4120d727c8973d89",
+  "end_sha": "REPORT_OWNING_COMMIT_REPORTED_AT_HANDOFF",
+  "push_executed": false,
+  "upstream": {
+    "sha": "515759c00fe1e2f6d4d4a005e8c3a6b3f71d17ac",
+    "license": "MIT",
+    "version": "README v1.1.0; CMake project 0.2.0",
+    "backend": "DIRECT_UNMODIFIED_AUTHOR_CPP",
+    "gicp": "NOT_RUN",
+    "author_smoke": "PASS",
+    "transform": "p_reference = T_sensor * p_query"
+  },
+  "data": {
+    "references": 389,
+    "reference_nonempty_tokens": 315,
+    "reference_empty_tokens": 74,
+    "reference_tokens_total": 2265,
+    "queries": 24,
+    "query_nonempty_tokens": 19,
+    "query_empty_tokens": 5,
+    "query_tokens_total": 195,
+    "query_ge32_tokens": 1,
+    "effective_mint_and_beam_queries": 5,
+    "effective_query_ids": [
+      1891,
+      1994,
+      2011,
+      4691,
+      4881
+    ],
+    "mint_returned_ids": 936,
+    "mint_positive_candidates": 195,
+    "beam_returned_ids": 480,
+    "beam_positive_queries": 18,
+    "beam_positive_candidates": 323,
+    "beam_positive_from_positive_mint": 100,
+    "verify_calls": 480,
+    "verify_successes": 0,
+    "queries_with_verify_success": 0,
+    "legal_relative_poses": 0,
+    "gicp_calls": 0,
+    "full_cloud_registration_calls": 0,
+    "multiframe_accumulation": false,
+    "gt_loaded": false,
+    "correctness_labels": "NONE",
+    "accuracy_gain": "NOT_EVALUATED"
+  },
+  "failure": {
+    "stages": {
+      "1": 480
+    },
+    "correspondences_min": 0,
+    "correspondences_max": 16,
+    "minimum_required_correspondences": 32,
+    "ransac_or_geometric_fit_entered_calls": 0,
+    "inlier_rmse": "NOT_AVAILABLE; all failed outputs carry author Inf sentinel",
+    "nonfinite_successful_poses": 0,
+    "failed_identity_outputs_are_not_estimates": true
+  },
+  "input_statistics": {
+    "reference": {
+      "raw_points": {
+        "mean": 16508.62467866324,
+        "p95": 17695.4,
+        "max": 19077.0,
+        "min": 11944.0,
+        "median": 16702.0
+      },
+      "prepared_points": {
+        "mean": 757.0,
+        "p95": 2342.999999999998,
+        "max": 3209.0,
+        "min": 182.0,
+        "median": 552.0
+      },
+      "tokens": {
+        "mean": 5.822622107969152,
+        "p95": 28.599999999999966,
+        "max": 60.0,
+        "min": 0.0,
+        "median": 3.0
+      },
+      "active_height_rows": {
+        "mean": 1.4858611825192802,
+        "p95": 5.0,
+        "max": 7.0,
+        "min": 0.0,
+        "median": 1.0
+      },
+      "ground_Rzz": {
+        "mean": 0.8808416601614317,
+        "p95": 0.9961573087715538,
+        "max": 0.9998786878203655,
+        "min": 0.0015348237490031558,
+        "median": 0.9586933492964086
+      }
+    },
+    "query": {
+      "raw_points": {
+        "mean": 20008.0,
+        "p95": 20145.6,
+        "max": 20160.0,
+        "min": 19968.0,
+        "median": 19968.0
+      },
+      "prepared_points": {
+        "mean": 877.5,
+        "p95": 2321.899999999999,
+        "max": 2895.0,
+        "min": 370.0,
+        "median": 539.5
+      },
+      "tokens": {
+        "mean": 8.125,
+        "p95": 29.799999999999983,
+        "max": 51.0,
+        "min": 0.0,
+        "median": 4.0
+      },
+      "active_height_rows": {
+        "mean": 1.7916666666666667,
+        "p95": 4.0,
+        "max": 8.0,
+        "min": 0.0,
+        "median": 1.0
+      },
+      "ground_Rzz": {
+        "mean": 0.9260760221575289,
+        "p95": 0.9983778415017875,
+        "max": 0.9989947493091828,
+        "min": 0.4801084516277997,
+        "median": 0.9586627028399877
+      }
+    }
+  },
+  "cost_ms": {
+    "load_ms": {
+      "mean": 0.4164550833333333,
+      "p95": 0.9178919499999989,
+      "max": 1.146462,
+      "min": 0.226219,
+      "median": 0.3537165
+    },
+    "preprocess_ms": {
+      "mean": 0.9175910416666665,
+      "p95": 2.067489949999997,
+      "max": 3.115665,
+      "min": 0.645273,
+      "median": 0.733903
+    },
+    "encode_ms": {
+      "mean": 0.9031630416666667,
+      "p95": 1.7417312999999992,
+      "max": 3.871988,
+      "min": 0.47856,
+      "median": 0.6605685
+    },
+    "mint_ms": {
+      "mean": 0.033250916666666665,
+      "p95": 0.11205494999999997,
+      "max": 0.126833,
+      "min": 0.011385,
+      "median": 0.014318
+    },
+    "beam_ms": {
+      "mean": 6.510499208333333,
+      "p95": 8.8382508,
+      "max": 11.906717,
+      "min": 0.012083,
+      "median": 7.685029
+    },
+    "verify_ms": {
+      "mean": 0.04353829166666667,
+      "p95": 0.07996969999999999,
+      "max": 0.08716299999999999,
+      "min": 0.027169,
+      "median": 0.0370525
+    },
+    "compute_ms": {
+      "mean": 8.408042499999999,
+      "p95": 12.998463549999997,
+      "max": 15.781218,
+      "min": 1.2334859999999999,
+      "median": 9.164427499999999
+    },
+    "end_to_end_ms": {
+      "mean": 8.989249333333333,
+      "p95": 13.535352099999995,
+      "max": 17.026507,
+      "min": 1.751715,
+      "median": 9.7017955
+    },
+    "cpu_ms": {
+      "mean": 8.96025,
+      "p95": 13.506049999999997,
+      "max": 17.004,
+      "min": 1.752,
+      "median": 9.626
+    }
+  },
+  "memory": {
+    "peak_rss_kib": 21648,
+    "serialized_database_bytes": 128512,
+    "resident_increment_kib_includes_allocator_and_encoder_workspace": 5244,
+    "matcher_index_increment_kib": 2108,
+    "matcher_dense_histogram_bytes": 2178400,
+    "exclusive_database_allocator_bytes": "NOT_SEPARATELY_MEASURED"
+  },
+  "offline_reference_db_wall_ms": 13853.070706,
+  "process_wall_seconds_including_offline_db": 14.08878709999999,
+  "comparability": "430-455ms P12/P12B DCReg is reference only: different candidates, point preprocessing and full-map solver; Verify480/480 exits before RANSAC, no demonstrated geometry speedup",
+  "no_production_files_changed": true,
+  "tests": {
+    "release_build": "PASS",
+    "author_api_smoke": "PASS",
+    "frame_direction": "PASS 1.7431442023888599e-15",
+    "author_preprocessing_exact_parity": "PASS",
+    "seeded_verify_repeat": "PASS",
+    "csv_json_pose_audit": "PASS"
+  }
+}

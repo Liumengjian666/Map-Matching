@@ -1,0 +1,32 @@
+{
+  "configure.log": {
+    "raw_path": "/home/jian/rosbag/p14_inlier_r1_20261011/configure.log",
+    "raw_sha256": "e4d593d356d278a6530085d14115352995d86a7f1ec43e4382dcdf630d93fd1d",
+    "archive_normalization": "trailing whitespace stripped; LF"
+  },
+  "configure_fixed.log": {
+    "raw_path": "/home/jian/rosbag/p14_inlier_r1_20261011/configure_fixed.log",
+    "raw_sha256": "67fe7dc875c906b154f0af08f84ebda82e0cd68f224abb52d45591fe2b3fea92",
+    "archive_normalization": "trailing whitespace stripped; LF"
+  },
+  "build_smoke.log": {
+    "raw_path": "/home/jian/rosbag/p14_inlier_r1_20261011/build_smoke.log",
+    "raw_sha256": "a877e06d4549ca3d40925208dfbd52098a9b328360b1f279406f448348c8005f",
+    "archive_normalization": "trailing whitespace stripped; LF"
+  },
+  "build_smoke_fixed.log": {
+    "raw_path": "/home/jian/rosbag/p14_inlier_r1_20261011/build_smoke_fixed.log",
+    "raw_sha256": "554028dfbb79f01f9aa0cd6eceee03fc1ee5aa5294d8f77cdfd80991236ae843",
+    "archive_normalization": "trailing whitespace stripped; LF"
+  },
+  "smoke_diagnostic.log": {
+    "raw_path": "/home/jian/rosbag/p14_inlier_r1_20261011/smoke_diagnostic.log",
+    "raw_sha256": "b2fbf0fd30e1c7a6a088b10f9ab94028a2555742f546d6e96aa328f184fcc920",
+    "archive_normalization": "trailing whitespace stripped; LF"
+  },
+  "build_final.log": {
+    "raw_path": "/home/jian/rosbag/p14_inlier_r1_20261011/build_final.log",
+    "raw_sha256": "268bb043664bdb404a28c2ec2b89dacbaec88c549fdf1a29d7e8f836f2d83b41",
+    "archive_normalization": "trailing whitespace stripped; LF"
+  }
+}

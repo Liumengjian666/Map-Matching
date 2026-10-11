@@ -1,0 +1,12 @@
+Scanning dependencies of target inlier_core
+[ 25%] Building CXX object author_core/CMakeFiles/inlier_core.dir/src/encoder.cpp.o
+[ 25%] Building CXX object author_core/CMakeFiles/inlier_core.dir/src/plane.cpp.o
+[ 37%] Building CXX object author_core/CMakeFiles/inlier_core.dir/src/shape_pca.cpp.o
+[ 50%] Building CXX object author_core/CMakeFiles/inlier_core.dir/src/matcher.cpp.o
+[ 62%] Building CXX object author_core/CMakeFiles/inlier_core.dir/src/verify.cpp.o
+[ 75%] Linking CXX static library libinlier_core.a
+[ 75%] Built target inlier_core
+Scanning dependencies of target inlier_baseline
+[ 87%] Building CXX object CMakeFiles/inlier_baseline.dir/probe.cpp.o
+[100%] Linking CXX executable inlier_baseline
+[100%] Built target inlier_baseline

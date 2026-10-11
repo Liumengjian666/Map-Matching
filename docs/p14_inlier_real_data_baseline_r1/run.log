@@ -1,0 +1,31 @@
+REFERENCE_ENCODED 50
+REFERENCE_ENCODED 100
+REFERENCE_ENCODED 150
+REFERENCE_ENCODED 200
+REFERENCE_ENCODED 250
+REFERENCE_ENCODED 300
+REFERENCE_ENCODED 350
+QUERY 16 tokens=1 MINT_positive=0 BEAM_positive=3 Verify=0/20 wall_ms=9.79371
+QUERY 45 tokens=2 MINT_positive=0 BEAM_positive=14 Verify=0/20 wall_ms=10.2032
+QUERY 124 tokens=8 MINT_positive=0 BEAM_positive=20 Verify=0/20 wall_ms=9.59242
+QUERY 708 tokens=6 MINT_positive=0 BEAM_positive=20 Verify=0/20 wall_ms=9.47558
+QUERY 1285 tokens=1 MINT_positive=0 BEAM_positive=0 Verify=0/20 wall_ms=9.57028
+QUERY 1891 tokens=31 MINT_positive=39 BEAM_positive=20 Verify=0/20 wall_ms=11.5361
+QUERY 1413 tokens=0 MINT_positive=0 BEAM_positive=0 Verify=0/20 wall_ms=1.77798
+QUERY 1994 tokens=23 MINT_positive=39 BEAM_positive=20 Verify=0/20 wall_ms=11.7345
+QUERY 2011 tokens=22 MINT_positive=39 BEAM_positive=20 Verify=0/20 wall_ms=11.4286
+QUERY 2237 tokens=0 MINT_positive=0 BEAM_positive=0 Verify=0/20 wall_ms=1.95691
+QUERY 2696 tokens=10 MINT_positive=0 BEAM_positive=20 Verify=0/20 wall_ms=9.56239
+QUERY 3058 tokens=0 MINT_positive=0 BEAM_positive=0 Verify=0/20 wall_ms=1.85578
+QUERY 3409 tokens=0 MINT_positive=0 BEAM_positive=0 Verify=0/20 wall_ms=1.75171
+QUERY 3493 tokens=5 MINT_positive=0 BEAM_positive=20 Verify=0/20 wall_ms=9.68748
+QUERY 3686 tokens=4 MINT_positive=0 BEAM_positive=20 Verify=0/20 wall_ms=9.98864
+QUERY 3914 tokens=1 MINT_positive=0 BEAM_positive=10 Verify=0/20 wall_ms=9.52132
+QUERY 4105 tokens=2 MINT_positive=0 BEAM_positive=16 Verify=0/20 wall_ms=13.8532
+QUERY 4586 tokens=0 MINT_positive=0 BEAM_positive=0 Verify=0/20 wall_ms=5.75172
+QUERY 4691 tokens=51 MINT_positive=39 BEAM_positive=20 Verify=0/20 wall_ms=17.0265
+QUERY 4800 tokens=7 MINT_positive=0 BEAM_positive=20 Verify=0/20 wall_ms=9.7555
+QUERY 4881 tokens=6 MINT_positive=39 BEAM_positive=20 Verify=0/20 wall_ms=10.7938
+QUERY 5726 tokens=3 MINT_positive=0 BEAM_positive=20 Verify=0/20 wall_ms=9.75152
+QUERY 5813 tokens=8 MINT_positive=0 BEAM_positive=20 Verify=0/20 wall_ms=9.65703
+QUERY 5814 tokens=4 MINT_positive=0 BEAM_positive=20 Verify=0/20 wall_ms=9.71611

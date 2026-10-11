@@ -1,0 +1,5 @@
+[ 75%] Built target inlier_core
+Scanning dependencies of target inlier_baseline
+[ 87%] Building CXX object CMakeFiles/inlier_baseline.dir/probe.cpp.o
+[100%] Linking CXX executable inlier_baseline
+[100%] Built target inlier_baseline

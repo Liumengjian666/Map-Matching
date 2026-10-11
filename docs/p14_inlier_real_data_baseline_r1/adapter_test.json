@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "boundary_points": 9,
+  "boundary_retained": 4,
+  "real_points": 17699,
+  "real_retained": 559,
+  "exact_point_and_order_parity": true,
+  "author_function": "prepare_points/voxel_downsample"
+}

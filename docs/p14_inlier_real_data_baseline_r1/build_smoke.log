@@ -1,0 +1,16 @@
+Scanning dependencies of target inlier_core
+[ 25%] Building CXX object author_core/CMakeFiles/inlier_core.dir/src/plane.cpp.o
+[ 25%] Building CXX object author_core/CMakeFiles/inlier_core.dir/src/encoder.cpp.o
+[ 37%] Building CXX object author_core/CMakeFiles/inlier_core.dir/src/shape_pca.cpp.o
+[ 50%] Building CXX object author_core/CMakeFiles/inlier_core.dir/src/matcher.cpp.o
+[ 62%] Building CXX object author_core/CMakeFiles/inlier_core.dir/src/verify.cpp.o
+[ 75%] Linking CXX static library libinlier_core.a
+[ 75%] Built target inlier_core
+Scanning dependencies of target inlier_baseline
+[ 87%] Building CXX object CMakeFiles/inlier_baseline.dir/probe.cpp.o
+[100%] Linking CXX executable inlier_baseline
+/usr/bin/ld: /usr/lib/x86_64-linux-gnu/libpcl_io.so: undefined reference to `libusb_set_option'
+collect2: error: ld returned 1 exit status
+make[2]: *** [CMakeFiles/inlier_baseline.dir/build.make:159：inlier_baseline] 错误 1
+make[1]: *** [CMakeFiles/Makefile2:116：CMakeFiles/inlier_baseline.dir/all] 错误 2
+make: *** [Makefile:130：all] 错误 2
