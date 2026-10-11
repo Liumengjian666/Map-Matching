@@ -1,0 +1,13 @@
+REFERENCE 50
+REFERENCE 100
+REFERENCE 150
+REFERENCE 200
+REFERENCE 250
+REFERENCE 300
+REFERENCE 350
+QUERY 16 tokens=3 positive=0 ransac=0 success=0
+QUERY 45 tokens=2 positive=0 ransac=0 success=0
+QUERY 708 tokens=2 positive=0 ransac=0 success=0
+QUERY 1891 tokens=43 positive=20 ransac=0 success=0
+QUERY 1994 tokens=49 positive=20 ransac=0 success=0
+QUERY 4691 tokens=71 positive=20 ransac=1 success=1

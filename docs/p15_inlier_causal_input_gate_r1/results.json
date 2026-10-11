@@ -1,0 +1,411 @@
+{
+  "task": "P15-INLIER-CAUSAL-INPUT-GATE-R1",
+  "final_result": "INLIER_CAUSAL_ACCUMULATION_GEOMETRY_OBSERVED",
+  "methods": {
+    "1": {
+      "queries": 6,
+      "reference_count": 389,
+      "tokens": {
+        "mean": 19.0,
+        "p95": 46.0,
+        "max": 51.0
+      },
+      "keypoints": {
+        "mean": 19.0,
+        "p95": 46.0,
+        "max": 51.0
+      },
+      "active_height_rows": {
+        "mean": 3.3333333333333335,
+        "p95": 7.0,
+        "max": 8.0
+      },
+      "mint_positive": 117,
+      "beam_positive": 97,
+      "evidence_positive_candidates": 60,
+      "positive_evidence_queries": 3,
+      "verify_calls": 120,
+      "ransac_entered": 0,
+      "correspondences": {
+        "mean": 3.6333333333333333,
+        "p95": 9.149999999999991,
+        "max": 16.0
+      },
+      "verify_success": 0,
+      "positive_evidence_verify_success": 0,
+      "legal_relative_poses": 0,
+      "nonfinite_success_poses": 0,
+      "peak_rss_kib": 21648,
+      "timing_ms": {
+        "load_ms": {
+          "mean": 0.43912166666666663,
+          "p95": 0.846087,
+          "max": 0.997837
+        },
+        "preprocess_ms": {
+          "mean": 1.1892281666666666,
+          "p95": 2.570965,
+          "max": 3.115665
+        },
+        "encode_ms": {
+          "mean": 1.4334203333333333,
+          "p95": 3.25730575,
+          "max": 3.871988
+        },
+        "mint_ms": {
+          "mean": 0.064092,
+          "p95": 0.12367275,
+          "max": 0.126833
+        },
+        "beam_ms": {
+          "mean": 8.301864,
+          "p95": 8.7580155,
+          "max": 8.780784
+        },
+        "verify_ms": {
+          "mean": 0.05596733333333332,
+          "p95": 0.0791315,
+          "max": 0.08122700000000001
+        },
+        "end_to_end_ms": {
+          "mean": 11.628267166666667,
+          "p95": 15.70350175,
+          "max": 17.026507
+        },
+        "cpu_ms": {
+          "mean": 11.6175,
+          "p95": 15.684750000000001,
+          "max": 17.004
+        }
+      },
+      "successful_verify_call_ms": {
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "accumulation_ms": null,
+      "failure_stage_counts": {
+        "0": 0,
+        "1": 120,
+        "2": 0,
+        "3": 0
+      }
+    },
+    "5": {
+      "queries": 6,
+      "reference_count": 388,
+      "tokens": {
+        "mean": 28.333333333333332,
+        "p95": 65.5,
+        "max": 71.0
+      },
+      "keypoints": {
+        "mean": 28.333333333333332,
+        "p95": 65.5,
+        "max": 71.0
+      },
+      "active_height_rows": {
+        "mean": 3.1666666666666665,
+        "p95": 5.75,
+        "max": 6.0
+      },
+      "mint_positive": 117,
+      "beam_positive": 108,
+      "evidence_positive_candidates": 60,
+      "positive_evidence_queries": 3,
+      "verify_calls": 120,
+      "ransac_entered": 1,
+      "correspondences": {
+        "mean": 7.033333333333333,
+        "p95": 18.049999999999997,
+        "max": 34.0
+      },
+      "verify_success": 1,
+      "positive_evidence_verify_success": 1,
+      "legal_relative_poses": 1,
+      "nonfinite_success_poses": 0,
+      "peak_rss_kib": 25784,
+      "timing_ms": {
+        "load_ms": {
+          "mean": 1.9708758333333332,
+          "p95": 3.7920404999999997,
+          "max": 4.436488
+        },
+        "preprocess_ms": {
+          "mean": 3.949923833333333,
+          "p95": 5.55451575,
+          "max": 6.083637
+        },
+        "encode_ms": {
+          "mean": 1.1316111666666666,
+          "p95": 2.16822025,
+          "max": 2.260429
+        },
+        "mint_ms": {
+          "mean": 0.07889800000000001,
+          "p95": 0.14331575,
+          "max": 0.144084
+        },
+        "beam_ms": {
+          "mean": 7.703022166666668,
+          "p95": 8.091534,
+          "max": 8.101015
+        },
+        "verify_ms": {
+          "mean": 0.09432166666666668,
+          "p95": 0.18391000000000002,
+          "max": 0.20631100000000002
+        },
+        "end_to_end_ms": {
+          "mean": 15.567018,
+          "p95": 20.2162035,
+          "max": 21.680139
+        },
+        "cpu_ms": {
+          "mean": 15.546333333333335,
+          "p95": 20.175,
+          "max": 21.627
+        }
+      },
+      "successful_verify_call_ms": {
+        "mean": 0.095264,
+        "p95": 0.095264,
+        "max": 0.095264
+      },
+      "accumulation_ms": {
+        "mean": 1.0733978336550838,
+        "p95": 1.3627172502310714,
+        "max": 1.3729490001423983
+      },
+      "failure_stage_counts": {
+        "0": 1,
+        "1": 119,
+        "2": 0,
+        "3": 0
+      }
+    },
+    "10": {
+      "queries": 6,
+      "reference_count": 388,
+      "tokens": {
+        "mean": 47.333333333333336,
+        "p95": 107.0,
+        "max": 111.0
+      },
+      "keypoints": {
+        "mean": 47.333333333333336,
+        "p95": 107.0,
+        "max": 111.0
+      },
+      "active_height_rows": {
+        "mean": 3.5,
+        "p95": 6.75,
+        "max": 7.0
+      },
+      "mint_positive": 117,
+      "beam_positive": 109,
+      "evidence_positive_candidates": 60,
+      "positive_evidence_queries": 3,
+      "verify_calls": 120,
+      "ransac_entered": 1,
+      "correspondences": {
+        "mean": 10.375,
+        "p95": 27.049999999999997,
+        "max": 43.0
+      },
+      "verify_success": 1,
+      "positive_evidence_verify_success": 1,
+      "legal_relative_poses": 1,
+      "nonfinite_success_poses": 0,
+      "peak_rss_kib": 32856,
+      "timing_ms": {
+        "load_ms": {
+          "mean": 2.8733015,
+          "p95": 3.94527375,
+          "max": 3.949831
+        },
+        "preprocess_ms": {
+          "mean": 6.9387205,
+          "p95": 7.281335,
+          "max": 7.289943
+        },
+        "encode_ms": {
+          "mean": 1.4675031666666667,
+          "p95": 2.7827225,
+          "max": 2.862604
+        },
+        "mint_ms": {
+          "mean": 0.09619533333333334,
+          "p95": 0.18396275,
+          "max": 0.188223
+        },
+        "beam_ms": {
+          "mean": 7.6926619999999994,
+          "p95": 8.1082965,
+          "max": 8.110933
+        },
+        "verify_ms": {
+          "mean": 0.11956933333333335,
+          "p95": 0.24524875000000004,
+          "max": 0.27112500000000006
+        },
+        "end_to_end_ms": {
+          "mean": 20.093357333333334,
+          "p95": 21.4879515,
+          "max": 21.789441
+        },
+        "cpu_ms": {
+          "mean": 20.081,
+          "p95": 21.4735,
+          "max": 21.774
+        }
+      },
+      "successful_verify_call_ms": {
+        "mean": 0.11915,
+        "p95": 0.11915,
+        "max": 0.11915
+      },
+      "accumulation_ms": {
+        "mean": 2.2026113332079453,
+        "p95": 3.1248079990291444,
+        "max": 3.2556739988649497
+      },
+      "failure_stage_counts": {
+        "0": 1,
+        "1": 119,
+        "2": 0,
+        "3": 0
+      }
+    }
+  },
+  "next": "DECISION_REVIEW_SUCCESSFUL_INLIER_CASES",
+  "start_sha": "01fee6a8d1743cb86b236e872ee5452993e2a9f2",
+  "code_sha": "a3f6e93b11694e0a3d754b25b638d005bc9396b0",
+  "remote_head": "01fee6a8d1743cb86b236e872ee5452993e2a9f2",
+  "push_executed": false,
+  "gt_loaded": false,
+  "accuracy": "NOT_EVALUATED_NO_INDEPENDENT_LABELS",
+  "approximation": "mapping body as lidar, unknown historical lever arm; raw scan midpoint/end mismatch; no deskew",
+  "n1_reused": true,
+  "n1_rss": "historical full P14 process peak, not six-query-only RSS",
+  "complete_query_timing": "actual C++ chain from preaccumulated PCD including I/O; accumulation separately measured, not ROS/online end-to-end",
+  "input_rejections": [
+    {
+      "side": "references",
+      "id": "0",
+      "n": "5",
+      "stamp_ns": "1786179479910634279",
+      "sensor_cutoff_ns": "1786179480009777171",
+      "status": "MISSING_CAUSAL_MAPPING_OR_NDT_POSE",
+      "accumulated_ms": "",
+      "member_count": "5",
+      "raw_points": "99840",
+      "cleaned_points": "",
+      "sha256": ""
+    },
+    {
+      "side": "references",
+      "id": "0",
+      "n": "10",
+      "stamp_ns": "1786179479910634279",
+      "sensor_cutoff_ns": "1786179480009777171",
+      "status": "MISSING_CAUSAL_MAPPING_OR_NDT_POSE",
+      "accumulated_ms": "",
+      "member_count": "6",
+      "raw_points": "119904",
+      "cleaned_points": "",
+      "sha256": ""
+    }
+  ],
+  "large_external_artifact": {
+    "path": "/home/jian/rosbag/p15_inlier_causal_r1_20261011/member_poses.csv",
+    "sha256": "b4bf62e4d1733533737d9ba5ac8d2ae8915f836258efaa3f3727587f706a255b",
+    "members": 5910
+  },
+  "successful_cases": [
+    {
+      "n": 5,
+      "query_id": 4691,
+      "reference_id": 308,
+      "correspondence_count": 34,
+      "ransac_inliers": 24,
+      "keypoint_inliers": 30,
+      "mint_score": 0.7336463332176208,
+      "beam_score": 0.24390243902439024,
+      "rmse_m": 0.7154549169757184,
+      "verify_ms": 0.095264,
+      "T_sensor": [
+        [
+          0.9770764741344472,
+          0.0012016323068330741,
+          0.2128852267603275,
+          -0.026229311903892494
+        ],
+        [
+          0.004671762381967306,
+          0.9996222362940042,
+          -0.027084300670696664,
+          -0.223764391764675
+        ],
+        [
+          -0.21283735181880864,
+          0.02745798219777701,
+          0.9767017563639289,
+          -0.6624520612328135
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "n": 10,
+      "query_id": 4691,
+      "reference_id": 308,
+      "correspondence_count": 43,
+      "ransac_inliers": 31,
+      "keypoint_inliers": 38,
+      "mint_score": 0.6941580772399902,
+      "beam_score": 0.25316455696202533,
+      "rmse_m": 0.6185756214077073,
+      "verify_ms": 0.11915,
+      "T_sensor": [
+        [
+          0.9940194023265922,
+          -0.006477959856242342,
+          0.10901130140671395,
+          -0.20938376382268153
+        ],
+        [
+          0.015500646082503896,
+          0.9965014165747754,
+          -0.08212585911569693,
+          -0.2742269182199396
+        ],
+        [
+          -0.10809790825593935,
+          0.0833244429958416,
+          0.9906421550843288,
+          0.505735221820838
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  ],
+  "cross_N_relative_pose_disagreement": [
+    {
+      "query_id": 4691,
+      "reference_id": 308,
+      "translation_delta_m": 1.1835343459833316,
+      "rotation_delta_deg": 6.853045953752975
+    }
+  ]
+}

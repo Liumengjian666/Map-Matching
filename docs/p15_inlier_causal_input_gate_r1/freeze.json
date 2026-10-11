@@ -1,0 +1,48 @@
+{
+  "protocol": "P15_CAUSAL_CURRENT_ANCHORED_APPROXIMATE_V1",
+  "queries": [
+    16,
+    45,
+    708,
+    1891,
+    1994,
+    4691
+  ],
+  "N": [
+    5,
+    10
+  ],
+  "upstream_sha": "515759c00fe1e2f6d4d4a005e8c3a6b3f71d17ac",
+  "parameters": "unchanged P14 official default YAML / min32",
+  "ordering": "current, previous1,...; original author build_submap; same for DB/query",
+  "reference_pose": "APPROXIMATE_BODY_AS_LIDAR: logged map_T_imu, current documented R_il=I assumption; historical extrinsic not certified; lever arm omitted",
+  "reference_time": "latest mapping state <= each raw scan end, hold-last max0.25s",
+  "query_pose": "APPROXIMATE_RAW_SCAN_POSE: corresponding P11 NDT final_used map_T_lidar; midpoint pose used on undeskewed scan",
+  "future_data": "FORBIDDEN: member scan end and pose timestamps <= anchor scan end",
+  "zero_guard": "drop raw zero/nonfinite before transforming; no-return zeros are not geometric points",
+  "boundary_policy": "reject incomplete, empty, missing-state or noncontiguous windows; preserve original reference IDs",
+  "maximum_scan_gap_s": 0.15,
+  "maximum_mapping_pose_age_s": 0.25,
+  "gicp": "NOT_RUN",
+  "gt_loaded": false,
+  "historical_bags": {
+    "raw_mapping_bag": {
+      "path": "/home/jian/rosbag/loop2/raw_restore_20260914_stage0/loop2_raw.bag",
+      "sha256": "d17bee3f8697dcb01cb4b9f6ea2483aa42a1a31ae277659c8a7869d9c69f13ae",
+      "verification": "WHOLE_FILE_RECOMPUTED_THIS_TASK"
+    },
+    "raw_query_bag": {
+      "path": "/media/jian/HIKVISION/Jian_FASTLIVO_Data/dogrosbag/loop2_map_match_experiment_2026_08_08_17_36_19/dateset/loop3/bag/loop3_2026-08-11-16-09-07.bag",
+      "sha256": "e7663609a90fd9e59552fefd7f2c4f9c339e8464610f86bfa1e8f2cff2e79df2",
+      "verification": "WHOLE_FILE_RECOMPUTED_THIS_TASK",
+      "scans": 5817,
+      "imu_samples": 116330
+    }
+  },
+  "whole_bag_hash_recomputed": false,
+  "pose_input_hashes": {
+    "/home/jian/rosbag/loop2/loop2mapping/pcd/lidar_poses.txt": "42d0c3060f77f83ea438916c0b305a9f7320c3ff7161148a7a475f4791022ed9",
+    "/home/jian/rosbag/p11_solid_r1_20261011/control/ndt.csv": "e79a6e0ed9c621b3f72c4fe3c5d676f7b0201b3bd7f610e52ab90482dc12618e"
+  },
+  "author_submaps_sha256": "a3dc54aa15864a47004581468a7da01c716dc9fc9a18bde3e5de33d5df33b313"
+}
