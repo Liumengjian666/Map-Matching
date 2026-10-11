@@ -1,0 +1,11 @@
+{
+  "LITERATURE.md": "314e61576a4f2026edc272fb66373becc3c86603c9f40267ab0da96230d07d73",
+  "REPORT.md": "4f950431e1d57db835ad9d5cbd7ebe9d834c0b6426eb82df7406573ef7e0c6d4",
+  "VERIFICATION.md": "13fd1c3341200c94ea4b127aa805b5f606cd667639c12699af0e135534eb30c1",
+  "analyze_existing.py": "aec661c1d44715ad2cf49515706a46d2bca0ae8f04b835cc4b205e6d05eec814",
+  "cost_breakdown.csv": "623340ed1d2c12db345936bb38e49407366f4abe68b1d4d833121f0545ef4df2",
+  "evidence_cases.csv": "b4ce8657abf502a3e3a43a04dc211f1e86c8f244af5c6fb02bb4b8ec336ac335",
+  "input_hashes.json": "42a680683bf506f776035e85b42a7142b94b2cb5ebc000ea1b76487b130ea548",
+  "metrics.json": "1685aa4be160e31f18c984bc7f009961f23171bace4557fe1fed14a7ee2e987b",
+  "results.json": "c8a220a6518aea76f50af5959d76c388daeb5a5b8c5f1796f136a977154a90d0"
+}

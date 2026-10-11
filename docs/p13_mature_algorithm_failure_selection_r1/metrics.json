@@ -1,0 +1,310 @@
+{
+  "cost_partition": {
+    "P12": {
+      "calls": 72,
+      "author_converged": 12,
+      "call_wall_ms": {
+        "count": 72,
+        "mean": 143.20344593055555,
+        "p95": 182.76718495,
+        "max": 188.000916
+      },
+      "author_iteration_ms": {
+        "count": 72,
+        "mean": 85.32701273611112,
+        "p95": 124.0528503,
+        "max": 131.356208
+      },
+      "setup_proxy_ms": {
+        "count": 72,
+        "mean": 57.876433194444445,
+        "p95": 61.88777695000001,
+        "max": 67.722554
+      },
+      "setup_share": 0.40415531077730354,
+      "nonconverged_calls": 60,
+      "nonconverged_wall_ms": 9124.950412999997,
+      "nonconverged_wall_share": 0.8850026029697379
+    },
+    "P12B": {
+      "calls": 18,
+      "author_converged": 4,
+      "call_wall_ms": {
+        "count": 18,
+        "mean": 151.11051094444446,
+        "p95": 194.9161365,
+        "max": 196.771015
+      },
+      "author_iteration_ms": {
+        "count": 18,
+        "mean": 91.38569472222223,
+        "p95": 134.715598,
+        "max": 138.598704
+      },
+      "setup_proxy_ms": {
+        "count": 18,
+        "mean": 59.724816222222216,
+        "p95": 67.6878797,
+        "max": 73.06219000000002
+      },
+      "setup_share": 0.3952393241803012,
+      "nonconverged_calls": 14,
+      "nonconverged_wall_ms": 2207.267798,
+      "nonconverged_wall_share": 0.8114987369929616
+    }
+  },
+  "p12_far_initial_hypotheses": 30,
+  "p11_valid_queries": 5816,
+  "p11_top5_spread_gt5m": 5605,
+  "reference_similar_far_pairs": [
+    {
+      "left_id": 37,
+      "right_id": 381,
+      "cosine": 0.9947877828707511,
+      "reference_state_distance_m": 6.256387079429629
+    },
+    {
+      "left_id": 41,
+      "right_id": 191,
+      "cosine": 0.9909440577308258,
+      "reference_state_distance_m": 104.89943892084857
+    }
+  ],
+  "corridor_evaluation_contract": "PREFIX-ALIGNED RELATIVE DRIFT; fixed full-pose SE(3) transform fit only on Control_V2 first 3.0 evaluation seconds, shared unchanged by every method; not absolute map-frame ATE",
+  "corridor": {
+    "control_v2": {
+      "primary_3_35s": {
+        "translation_m": {
+          "count": 6396,
+          "mean": 1.239834319722456,
+          "rmse": 1.8878773199475662,
+          "p95": 5.01103904419252,
+          "max": 5.667156999562539
+        },
+        "rotation_deg": {
+          "count": 6396,
+          "mean": 2.4325500837061016,
+          "rmse": 3.0262463004912794,
+          "p95": 3.705964593218566,
+          "max": 16.393782193573646
+        }
+      },
+      "first_0_10s": {
+        "translation_m": {
+          "count": 1999,
+          "mean": 0.3776695635112965,
+          "rmse": 0.4686198666748418,
+          "p95": 0.7846852282229955,
+          "max": 1.188767546930204
+        },
+        "rotation_deg": {
+          "count": 1999,
+          "mean": 1.8296852020845142,
+          "rmse": 2.0022717383354753,
+          "p95": 2.987527828039391,
+          "max": 5.235168445775805
+        }
+      },
+      "persistent_translation_thresholds": {
+        "0.5": {
+          "first_crossing_s": 6.449565172195435,
+          "persistent_crossing_s": 6.449565172195435,
+          "persistent_duration_s": 5.539615869522095
+        },
+        "1.0": {
+          "first_crossing_s": 6.649564981460571,
+          "persistent_crossing_s": 26.7833251953125,
+          "persistent_duration_s": 8.214447975158691
+        },
+        "2.0": {
+          "first_crossing_s": 29.823069095611572,
+          "persistent_crossing_s": 29.823069095611572,
+          "persistent_duration_s": 5.174704074859619
+        }
+      },
+      "runtime_integrity": {
+        "scan_rows": 396,
+        "evaluation_scan_rows": 346,
+        "strict_ndt_successes": 396,
+        "strict_ndt_success_rate": 1.0,
+        "deskew_published": 396,
+        "oosm_applied": 396,
+        "fixed_lag_queued": 396,
+        "fixed_lag_applied": 396,
+        "fixed_lag_late": 0,
+        "feedback_triggered": 0,
+        "feedback_attempted": 0,
+        "feedback_recommended": 0,
+        "feedback_applied": 0,
+        "feedback_changed_observation": 0,
+        "strong_selected": 0,
+        "jet_calls": 0,
+        "value_calls": 0,
+        "lineage_high_rate_rows": 8004,
+        "lineage_high_rate_state_stamp_start": 1517157219.189216,
+        "lineage_high_rate_state_stamp_end": 1517157259.226752,
+        "lineage_corrected_publish_rows": 396,
+        "lineage_oosm_replay_rows": 396,
+        "lineage_nonfinite_state_rows": 0,
+        "trajectory_source": "full EKF internal publication ledger; Coupled output rosbag is only a verified prefix"
+      }
+    },
+    "weak_only_feedback_v2": {
+      "primary_3_35s": {
+        "translation_m": {
+          "count": 6396,
+          "mean": 0.8348801590465881,
+          "rmse": 1.064473739482225,
+          "p95": 2.212340271724629,
+          "max": 4.529728808211904
+        },
+        "rotation_deg": {
+          "count": 6396,
+          "mean": 2.318238865105954,
+          "rmse": 2.67923245962037,
+          "p95": 3.6464735757302904,
+          "max": 13.1869843280647
+        }
+      },
+      "first_0_10s": {
+        "translation_m": {
+          "count": 1999,
+          "mean": 0.3765350534013839,
+          "rmse": 0.4664533318976622,
+          "p95": 0.791350299774855,
+          "max": 1.0852691926866707
+        },
+        "rotation_deg": {
+          "count": 1999,
+          "mean": 1.819739597659361,
+          "rmse": 1.9897327523148733,
+          "p95": 2.987903767146142,
+          "max": 5.200457880186165
+        }
+      },
+      "persistent_translation_thresholds": {
+        "0.5": {
+          "first_crossing_s": 6.449565172195435,
+          "persistent_crossing_s": 6.449565172195435,
+          "persistent_duration_s": 5.539615869522095
+        },
+        "1.0": {
+          "first_crossing_s": 6.684557199478149,
+          "persistent_crossing_s": null,
+          "persistent_duration_s": null
+        },
+        "2.0": {
+          "first_crossing_s": 33.27287697792053,
+          "persistent_crossing_s": null,
+          "persistent_duration_s": null
+        }
+      },
+      "runtime_integrity": {
+        "scan_rows": 396,
+        "evaluation_scan_rows": 346,
+        "strict_ndt_successes": 396,
+        "strict_ndt_success_rate": 1.0,
+        "deskew_published": 396,
+        "oosm_applied": 396,
+        "fixed_lag_queued": 396,
+        "fixed_lag_applied": 396,
+        "fixed_lag_late": 0,
+        "feedback_triggered": 22,
+        "feedback_attempted": 9,
+        "feedback_recommended": 9,
+        "feedback_applied": 9,
+        "feedback_changed_observation": 9,
+        "strong_selected": 0,
+        "jet_calls": 9,
+        "value_calls": 9,
+        "lineage_high_rate_rows": 8004,
+        "lineage_high_rate_state_stamp_start": 1517157219.189216,
+        "lineage_high_rate_state_stamp_end": 1517157259.226752,
+        "lineage_corrected_publish_rows": 396,
+        "lineage_oosm_replay_rows": 396,
+        "lineage_nonfinite_state_rows": 0,
+        "trajectory_source": "full EKF internal publication ledger; Coupled output rosbag is only a verified prefix"
+      }
+    },
+    "coupled_feedback_v2": {
+      "primary_3_35s": {
+        "translation_m": {
+          "count": 6396,
+          "mean": 3.8203628034348047,
+          "rmse": 6.398820510928912,
+          "p95": 15.039884125897235,
+          "max": 16.11998698209535
+        },
+        "rotation_deg": {
+          "count": 6396,
+          "mean": 2.464371376605912,
+          "rmse": 3.315928040297505,
+          "p95": 3.5896772255203437,
+          "max": 17.536672606260154
+        }
+      },
+      "first_0_10s": {
+        "translation_m": {
+          "count": 1999,
+          "mean": 0.37716076735537307,
+          "rmse": 0.4674797995747839,
+          "p95": 0.7835467900726848,
+          "max": 1.1150454600933564
+        },
+        "rotation_deg": {
+          "count": 1999,
+          "mean": 1.8320581860221443,
+          "rmse": 2.002632211193895,
+          "p95": 2.9602819267275766,
+          "max": 5.182250451470139
+        }
+      },
+      "persistent_translation_thresholds": {
+        "0.5": {
+          "first_crossing_s": 6.449565172195435,
+          "persistent_crossing_s": 6.449565172195435,
+          "persistent_duration_s": 5.539615869522095
+        },
+        "1.0": {
+          "first_crossing_s": 6.669565200805664,
+          "persistent_crossing_s": 22.283565044403076,
+          "persistent_duration_s": 12.714208126068115
+        },
+        "2.0": {
+          "first_crossing_s": 24.298444986343384,
+          "persistent_crossing_s": 24.298444986343384,
+          "persistent_duration_s": 10.699328184127808
+        }
+      },
+      "runtime_integrity": {
+        "scan_rows": 396,
+        "evaluation_scan_rows": 346,
+        "strict_ndt_successes": 396,
+        "strict_ndt_success_rate": 1.0,
+        "deskew_published": 396,
+        "oosm_applied": 396,
+        "fixed_lag_queued": 396,
+        "fixed_lag_applied": 396,
+        "fixed_lag_late": 0,
+        "feedback_triggered": 27,
+        "feedback_attempted": 8,
+        "feedback_recommended": 8,
+        "feedback_applied": 8,
+        "feedback_changed_observation": 8,
+        "strong_selected": 6,
+        "jet_calls": 16,
+        "value_calls": 15,
+        "lineage_high_rate_rows": 8004,
+        "lineage_high_rate_state_stamp_start": 1517157219.189216,
+        "lineage_high_rate_state_stamp_end": 1517157259.226752,
+        "lineage_corrected_publish_rows": 396,
+        "lineage_oosm_replay_rows": 396,
+        "lineage_nonfinite_state_rows": 0,
+        "trajectory_source": "full EKF internal publication ledger; Coupled output rosbag is only a verified prefix"
+      }
+    }
+  },
+  "new_registration_calls": 0,
+  "new_ros_replays": 0,
+  "independent_loop3_place_labels": false
+}

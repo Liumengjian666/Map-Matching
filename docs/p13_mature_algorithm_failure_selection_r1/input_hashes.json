@@ -1,0 +1,10 @@
+{
+  "docs/p12_dcreg_solid_minimal_integration_r1/registration.csv": "2cf6189e6d5b64305190e1643e17d4e1c125b3381943850eb4567280f733bd85",
+  "docs/p12b_reference_pose_candidate_retry_r1/retry.csv": "7e21892b6439a416ec7d98ad68c6b2e85eb7a00d5a5b038056d491581a34aaa6",
+  "docs/p11_mature_solid_prior_map_integration_r1/query_results.csv": "b3142b7545f3ba2e8c5de383f1e593d45d3acdbc55c0585480d8c440090c79e4",
+  "docs/p12_dcreg_solid_minimal_integration_r1/ndt_baseline.csv": "fb78700deab9956e66d11aa0d57b81af46af112094d92703b7421fab366ef21d",
+  "docs/p12_dcreg_solid_minimal_integration_r1/timing.csv": "cfbc863966d0cea64c599d74113ff0eecf9283a3a882c936f94ed279857c04fd",
+  "docs/p12b_reference_pose_candidate_retry_r1/timing.csv": "24c6800bd43445c4fe2c90d6eb0077393b5c35084a95eedf5bbab14801f5e64d",
+  "docs/p11_mature_solid_prior_map_integration_r1/solid_database.txt": "065cd4b6568f331f717421c31060492493ce329d1b5414176428e10d4febd1b4",
+  "docs/p10_corridor01_deterministic_oosm_replay_r1/posthoc_metrics.json": "50615d568f0cbe3e55962a4c1e99adc5b63d0877221794da92086f40b1eaaaba"
+}
