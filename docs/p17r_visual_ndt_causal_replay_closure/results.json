@@ -1,0 +1,71 @@
+{
+  "TASK": "P17R-VISUAL-NDT-CAUSAL-REPLAY-CLOSURE",
+  "FINAL_RESULT": "FROZEN_MAP_SAFE_COPY_FAILED_STORAGE_BLOCKED",
+  "NEXT": "RESTORE_FROZEN_MAP_ON_HEALTHY_STORAGE",
+  "repository": "Liumengjian666/Map-Matching",
+  "branch": "research/p9-r4-heldout-visual-evidence",
+  "START_SHA": "7430e4e30447d76bc2123b30fa48c7841ca36b21",
+  "CODE_SHA": "7430e4e30447d76bc2123b30fa48c7841ca36b21",
+  "REMOTE_HEAD_before_archive": "7430e4e30447d76bc2123b30fa48c7841ca36b21",
+  "PUSH_EXECUTED": false,
+  "runtime_source_changed": false,
+  "GT_LOADED": false,
+  "storage": {
+    "local_ssd_filesystem": "/dev/nvme0n1p2 ext4",
+    "local_ssd_available_GB_rounded": 58,
+    "external_mount": "/dev/sda2 /media/jian/HIKVISION fuseblk rw",
+    "metadata_read": "PASS",
+    "original_map_size_bytes_from_stat": 4058751,
+    "copy_attempts": 1,
+    "timeout_sec": 15,
+    "kill_after_sec": 2,
+    "copy_result": "TIMEOUT_KILLED_ZERO_BYTES",
+    "destination_size_bytes": 0,
+    "expected_map_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+    "incomplete_destination_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "map_sha_gate": "REJECTED",
+    "map_recovered": false,
+    "valid_local_map_path": null,
+    "incomplete_file_path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p17r_visual_ndt_causal_replay_closure/assets/corridor01_map_normalized.pcd.incomplete",
+    "kernel_evidence": "03:21:11 USB/UAS reset; 180s timeout; READ/WRITE I/O errors; no new recent entry does not establish recovery",
+    "filesystem_repair_or_remount": false,
+    "alternate_map_used": false
+  },
+  "inputs": {
+    "v2_bag_hash": "PASS",
+    "v2_bag_sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+    "saved_visual_csv_hash": "PASS",
+    "saved_visual_csv_sha256": "10869519890a5adcb6f3310bba05f379a959018cf123ea8a90c1cf4ea1314c79",
+    "visual_records": 396,
+    "valid_visual_pairs": 169,
+    "eligible_pairs": 395,
+    "reextraction": false,
+    "parameter_tuning": false
+  },
+  "loopback_socket": "BIND_LISTEN_PASS",
+  "new_runs": {
+    "short_control": "NOT_RUN",
+    "short_control_ndt_calls": 0,
+    "short_control_oosm_applied": 0,
+    "short_control_parity": "NOT_TESTED",
+    "short_visual": "NOT_RUN",
+    "short_visual_ndt_calls": 0,
+    "short_visual_applied": 0,
+    "full_visual": "NOT_RUN",
+    "full_visual_ndt_calls": 0,
+    "full_visual_oosm_applied": 0,
+    "full_visual_applied": 0,
+    "new_gt_evaluation": "NOT_RUN"
+  },
+  "historical_control_only": {
+    "translation_rmse_p95_max_m": [1.8878773199475662, 5.01103904419252, 5.667156999562539],
+    "rotation_rmse_p95_max_deg": [3.0262463004912794, 3.705964593218566, 16.393782193573646],
+    "metric": "PREFIX_ALIGNED_RELATIVE_DRIFT_3_35S"
+  },
+  "new_visual_accuracy": "NOT_MEASURED",
+  "new_localization_performance_and_peak_rss": "NOT_MEASURED",
+  "existing_binaries_not_run": {
+    "ndt_sha256": "ba65e3e516a982c4c0083b866fc8e95c2dede4003fdc0f42cbf1a489da931cfb",
+    "ekf_sha256": "fbc1750dc605a7fd3b9549b310394fbff3a5781cad2272ef55b9f49df8c3435a"
+  }
+}

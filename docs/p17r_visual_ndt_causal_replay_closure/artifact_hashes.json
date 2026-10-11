@@ -1,0 +1,17 @@
+{
+  "algorithm_source_changes": [],
+  "new_build_or_runtime_tests": "NOT_RUN: no runtime changes and required map recovery gate failed",
+  "JSON_parse": "PASS",
+  "saved_visual_csv_parse": {"rows": 396, "valid_pairs": 169},
+  "files_sha256": {
+    "REPORT.md": "d56925cb9e482594f9ef7905f89f0dbfd85994abeec68acc942b044f596796d2",
+    "results.json": "57620e68ccdebbdfe45b4ba3a6ef11079e7c0fc63c50529867072c64e077cbde",
+    "storage_evidence.txt": "1d7948c39252c37f8d784c5f3fd609f970429cb6e4cf9f1d004765a925b27578"
+  },
+  "external_input_sha256_checked": {
+    "saved_visual.csv": "10869519890a5adcb6f3310bba05f379a959018cf123ea8a90c1cf4ea1314c79",
+    "frozen_v2_input.bag": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e"
+  },
+  "rejected_incomplete_map_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "required_map_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f"
+}
