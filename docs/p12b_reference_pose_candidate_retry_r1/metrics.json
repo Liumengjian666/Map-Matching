@@ -1,0 +1,147 @@
+{
+  "task": "P12B-REFERENCE-POSE-CANDIDATE-RETRY-R1",
+  "exact_coordinate_conversion": false,
+  "GT_LOADED": false,
+  "accuracy": "ACCURACY_GAIN_NOT_EVALUATED",
+  "frames": [
+    16,
+    45,
+    124,
+    708,
+    1285,
+    1891
+  ],
+  "new_dcreg_calls": 18,
+  "new_ndt_calls": 0,
+  "feedback_calls": 0,
+  "overall": {
+    "calls": 18,
+    "A_converged": 3,
+    "B_converged": 4,
+    "newly_converged": 1,
+    "lost_convergence": 0
+  },
+  "near_le_5m": {
+    "calls": 10,
+    "A_converged": 3,
+    "B_converged": 4,
+    "newly_converged": 1,
+    "lost_convergence": 0
+  },
+  "far_gt_5m": {
+    "calls": 8,
+    "A_converged": 0,
+    "B_converged": 0,
+    "newly_converged": 0,
+    "lost_convergence": 0
+  },
+  "valid_se3": 18,
+  "nonfinite_pose": 0,
+  "rotation_change_deg": {
+    "count": 18,
+    "excluded_nonfinite": 0,
+    "mean": 50.95105846878153,
+    "p95": 175.1673950642999,
+    "max": 176.61718771081806,
+    "min": 5.270593680443862
+  },
+  "reference_state_offset_abs_sec": {
+    "count": 18,
+    "excluded_nonfinite": 0,
+    "mean": 0.024027149055555554,
+    "p95": 0.04186940214999999,
+    "max": 0.048163891,
+    "min": 0.000231028
+  },
+  "A_historical_call_ms": {
+    "count": 18,
+    "excluded_nonfinite": 0,
+    "mean": 139.4191001111111,
+    "p95": 156.20624279999998,
+    "max": 157.050303,
+    "min": 74.374513
+  },
+  "B_call_ms": {
+    "count": 18,
+    "excluded_nonfinite": 0,
+    "mean": 151.1105109444444,
+    "p95": 194.9161365,
+    "max": 196.771015,
+    "min": 102.22629
+  },
+  "B_author_iteration_ms": {
+    "count": 18,
+    "excluded_nonfinite": 0,
+    "mean": 91.38569472222223,
+    "p95": 134.715598,
+    "max": 138.598704,
+    "min": 35.486818
+  },
+  "B_api_setup_proxy_ms": {
+    "count": 18,
+    "excluded_nonfinite": 0,
+    "mean": 59.724816222222216,
+    "p95": 67.6878797,
+    "max": 73.06219000000002,
+    "min": 56.613091
+  },
+  "B_descriptor_ms": {
+    "count": 6,
+    "excluded_nonfinite": 0,
+    "mean": 1.8090566666666665,
+    "p95": 7.701224,
+    "max": 10.201879,
+    "min": 0.087511
+  },
+  "B_search_ms": {
+    "count": 6,
+    "excluded_nonfinite": 0,
+    "mean": 0.11132783333333333,
+    "p95": 0.200411,
+    "max": 0.237951,
+    "min": 0.084089
+  },
+  "B_combination_ms": {
+    "count": 6,
+    "excluded_nonfinite": 0,
+    "mean": 455.465972,
+    "p95": 545.6034637500001,
+    "max": 572.367865,
+    "min": 407.980382
+  },
+  "B_complete_scan_ms": {
+    "count": 6,
+    "excluded_nonfinite": 0,
+    "mean": 456.3312318333333,
+    "p95": 546.49686375,
+    "max": 573.25793,
+    "min": 408.824561
+  },
+  "B_delta_initial_m": {
+    "count": 18,
+    "excluded_nonfinite": 0,
+    "mean": 0.492673480364432,
+    "p95": 0.9174017160966417,
+    "max": 1.1565650757438424,
+    "min": 0.010895661446179166
+  },
+  "B_delta_initial_deg": {
+    "count": 18,
+    "excluded_nonfinite": 0,
+    "mean": 8.685198596000482,
+    "p95": 13.109781517348683,
+    "max": 16.53285755490227,
+    "min": 4.545635016584601
+  },
+  "wall_s": 2.82,
+  "peak_rss_kib": 64540,
+  "peak_rss_mib": 63.02734375,
+  "frames_with_A_convergence": 2,
+  "frames_with_B_convergence": 2,
+  "limits": [
+    "B is approximate IMU-origin reference pose, not calibrated LiDAR pose",
+    "A historical timing is not same-run paired timing",
+    "Author convergence is NOT verified location correctness",
+    "Setup proxy includes tree/copy/wrapper, not isolated KDtree measurement"
+  ]
+}

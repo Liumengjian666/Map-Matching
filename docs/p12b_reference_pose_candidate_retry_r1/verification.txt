@@ -1,0 +1,10 @@
+Release configure/build: PASS. Original author checkout SHA enforced and tracked diff clean.
+CTest in actual build directory:
+1/2 p12_coordinate_interface PASS (original DCReg synthetic three-plane registration)
+2/2 p12b_reference_pose_interface PASS (historical mode/full orientation/direction/invalid SE3)
+Python NaN regression: PASS mixed finite/NaN geometry, all-NaN unavailable values, strict timing rejection.
+Real execution exit status: 0. Six immutable source counts/hashes PASS; target count/hash PASS.
+Live SOLiD Top3/frozen P12 IDs, similarity, reference pose and original A initial: 18/18 PASS.
+14 unique selected reference state poses copy XYZ AND quaternion from active mapping log: exact PASS.
+GT and NDT/EKF online modifications: NOT_RUN.
+No author math, physical extrinsic estimate, time-transport invention or parameter changes.

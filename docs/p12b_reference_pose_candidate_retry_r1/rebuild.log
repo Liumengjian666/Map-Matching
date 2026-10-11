@@ -1,0 +1,4 @@
+Scanning dependencies of target reference_pose_retry
+[ 50%] Building CXX object CMakeFiles/reference_pose_retry.dir/reference_pose_retry.cpp.o
+[100%] Linking CXX executable reference_pose_retry
+[100%] Built target reference_pose_retry

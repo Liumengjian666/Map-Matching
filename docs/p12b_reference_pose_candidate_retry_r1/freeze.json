@@ -1,0 +1,41 @@
+{
+  "protocol": "P12B_APPROXIMATE_REFERENCE_STATE_POSE_R1",
+  "frozen_at_utc": "2026-10-11T10:08:33.119608+00:00",
+  "frames": [
+    16,
+    45,
+    124,
+    708,
+    1285,
+    1891
+  ],
+  "selection": {
+    "16": "previously_converged",
+    "124": "previously_converged",
+    "45": "near_failed_no_convergence",
+    "1891": "near_failed_no_convergence",
+    "708": "far_failed_no_convergence",
+    "1285": "far_failed_no_convergence"
+  },
+  "top_k": 3,
+  "new_registration_budget": 18,
+  "A": "unchanged frozen P12 coarsePosition results (not rerun)",
+  "B": "APPROXIMATE_REFERENCE_STATE_POSE: copy full mapping state; NO claimed extrinsic/time conversion",
+  "exact_conversion": false,
+  "gt_loaded": false,
+  "parameter_overrides": {},
+  "upstream_sha": "8ce8451b15491a4bbe17cf85ab02a8bed6696861",
+  "map_sha256": "016b7ae3ae494ad5d462a66d888a96b96dda5fe29d6058059aa2fa6bdf6b09ca",
+  "database_sha256": "065cd4b6568f331f717421c31060492493ce329d1b5414176428e10d4febd1b4",
+  "samples_sha256": "ab90166eae2f7e59c351ef0ea25d0446ff5a145bf92e4cd240332b8eaca0fc7c",
+  "expected_candidates_sha256": "8b072d01e8f20b31e45dcc8f4b75f96a0869a9e2c9590ff78088fe8d6e59084c",
+  "source_sha256": {
+    "/home/jian/rosbag/p12_dcreg_solid_r1_20261011/experiment/raw_scan_16.pcd": "4e737b7fe55f441d3a75de3a1bd057f26f90f9ff94e05437ed547306a0d441b5",
+    "/home/jian/rosbag/p12_dcreg_solid_r1_20261011/experiment/raw_scan_45.pcd": "b4622d430d73cb6add7487caf4314ecef0ef53895c62d9756d430247590d8681",
+    "/home/jian/rosbag/p12_dcreg_solid_r1_20261011/experiment/raw_scan_124.pcd": "3af3e494eb318ad323cf52254a4f9def3a521d076bae390a876a2a30cae0511b",
+    "/home/jian/rosbag/p12_dcreg_solid_r1_20261011/experiment/raw_scan_708.pcd": "90a38d60b4c2e4f93935bc0413236c799584186ef28914c20b57376267de748e",
+    "/home/jian/rosbag/p12_dcreg_solid_r1_20261011/experiment/raw_scan_1285.pcd": "facb4d05c2a09d1cf065fb391e954264b020f2d809becb0ac1c51eac4fba3aaf",
+    "/home/jian/rosbag/p12_dcreg_solid_r1_20261011/experiment/raw_scan_1891.pcd": "c3c3a1333606b8d662a0087c900d637d1116ccc93a24175f3b2be89031e9b72c"
+  },
+  "historical_registration_sha256": "2cf6189e6d5b64305190e1643e17d4e1c125b3381943850eb4567280f733bd85"
+}

@@ -2,6 +2,8 @@
 """Summarize only the frozen approximate-pose retry; no GT or candidate choice."""
 import csv
 import json
+import hashlib
+import shutil
 import sys
 from pathlib import Path
 import numpy as np
@@ -90,5 +92,19 @@ def evaluate(experiment, archive):
     print(json.dumps(result, indent=2))
 
 
+def archive_run(experiment, archive):
+    for source in [experiment / 'samples.csv', experiment / 'expected_candidates.csv', experiment / 'freeze.json',
+                   experiment / 'run/retry.csv', experiment / 'run/timing.csv',
+                   experiment.parent / 'run_resources.txt', experiment.parent / 'run.log',
+                   experiment.parent / 'configure.log', experiment.parent / 'build.log',
+                   experiment.parent / 'rebuild.log']:
+        shutil.copyfile(source, archive / source.name)
+    manifest = {str(p.relative_to(archive)): hashlib.sha256(p.read_bytes()).hexdigest()
+                for p in sorted(archive.rglob('*')) if p.is_file() and p.name != 'artifact_hashes.json'}
+    (archive / 'artifact_hashes.json').write_text(json.dumps(manifest, indent=2) + '\n')
+
+
 if __name__ == '__main__':
-    evaluate(Path(sys.argv[1]), Path(sys.argv[2]))
+    experiment, archive = Path(sys.argv[1]), Path(sys.argv[2])
+    evaluate(experiment, archive)
+    archive_run(experiment, archive)
