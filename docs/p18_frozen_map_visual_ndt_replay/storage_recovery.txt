@@ -1,0 +1,32 @@
+P18 checks, 2026-10-12 09:14 +0800. No map copy attempted.
+
+git branch --show-current
+research/p9-r4-heldout-visual-evidence
+git rev-parse HEAD
+3b3d53da8fe755c5f3c24dd8c99008579625b7a0
+git ls-remote origin refs/heads/research/p9-r4-heldout-visual-evidence
+3b3d53da8fe755c5f3c24dd8c99008579625b7a0 refs/heads/research/p9-r4-heldout-visual-evidence
+
+lsblk -f: loop0-loop20 and nvme0n1 only; no external storage device.
+nvme0n1p2 ext4 b15bff95-cfe3-4fa4-b5b5-49f61afa0c97 mounted /
+findmnt --mountpoint /media/jian/HIKVISION: no match
+df -hT /media/jian/HIKVISION: No such file or directory
+df -hT /home/jian/livox_ws: /dev/nvme0n1p2 ext4 468G 387G 58G 88% /
+ls -ld /media/jian/*: No such file or directory
+lsusb devices: Goodix fingerprint, integrated camera, Foxconn wireless,
+optical mouse and Linux root hubs; no USB mass-storage bridge detected.
+
+Kernel historical entries, NOT errors newly observed during the current run:
+Oct 12 04:32:25 usb 1-2: device descriptor read/64, error -110
+Oct 12 04:33:13 usb 1-2: device not accepting address 7, error -62
+Oct 12 04:33:24 usb usb1-port2: unable to enumerate USB device
+Query of preceding two hours produced no USB/storage event.
+
+Local frozen inputs, complete SHA checks:
+10869519890a5adcb6f3310bba05f379a959018cf123ea8a90c1cf4ea1314c79 .p17_visual_aided_ndt_r1/visual_input/visual.csv
+7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e .p10_corridor01_deterministic_oosm_replay_r1/input_v2/corridor01_p10_causal_startup5_eval35_fixedlag_v2.bag
+
+Target-name local search found only the old quarantined zero-byte file:
+.p17r_visual_ndt_causal_replay_closure/assets/corridor01_map_normalized.pcd.incomplete
+It was not used or copied. No current map SHA was obtained.
+No ROS process, external read or GT evaluation was started.

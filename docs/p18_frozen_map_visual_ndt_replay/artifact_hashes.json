@@ -1,0 +1,14 @@
+{
+  "files_sha256": {
+    "REPORT.md": "ba51613f62ffcbc56ba07ccc47b22cb462729c90c445acfc3f4c1c6a75cdcff5",
+    "results.json": "0cb7f7e44dc67c7a638126b86365e78da5d4c6dadb745ca90d9b9964ff3e9ae3",
+    "storage_recovery.txt": "d156fcc612b7c8a09533e6466e7a4a457a57144c296da1d1ab0cea9ad0760f85"
+  },
+  "checked_local_input_sha256": {
+    "visual.csv": "10869519890a5adcb6f3310bba05f379a959018cf123ea8a90c1cf4ea1314c79",
+    "input_v2.bag": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e"
+  },
+  "JSON_parse": "PASS",
+  "runtime_build_and_ROS_tests": "NOT_RUN: no runtime changes; storage device gate unavailable",
+  "unperformed_experiment_CSVs": "NOT_CREATED"
+}
