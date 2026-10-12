@@ -1,0 +1,31 @@
+Resumed observation, 2026-10-12 10:04 +0800.
+usb 2-2 enumerated HIKVISION at 10:04:25 as SuperSpeed Plus Gen 2x1.
+Actual device/mount: /dev/sda2, exfat label HIKVISION, UUID F627-4133,
+/media/jian/HIKVISION via fuseblk rw.
+No new reset/I/O timeout/disconnect was observed after this reconnect.
+This is target-read success evidence, not a whole-drive health certificate.
+
+Original map:
+/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/derived/corridor01_map_normalized.pcd
+New SSD destination:
+/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd
+One copy: timeout --signal=TERM --kill-after=2s 20s cp --no-clobber
+COPY_EXIT=0
+SIZE=4058751
+SHA=103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f
+Size and SHA exactly match frozen requirements.
+No retry, fsck, remount, format, regeneration or alternate map.
+
+Actual dataset config:
+src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml
+SHA=dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220
+YAML structure comparison: only map.pcd_fallback_path differs.
+All three actual ROS snapshots agree in physical parameter groups.
+Actual map path is SSD destination in each; vision flags false/true/true.
+
+Run outputs were frozen before posthoc GT access. After that, the small
+official GT and extrinsics files were copied once each to local posthoc_inputs;
+these are separate support-file copies, not additional map attempts.
+GT SHA=3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03
+Extrinsics SHA=59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d
+No original raw camera bag or full timed-points extraction was repeated.

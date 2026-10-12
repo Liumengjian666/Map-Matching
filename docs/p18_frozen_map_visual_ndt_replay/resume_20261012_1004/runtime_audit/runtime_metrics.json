@@ -1,0 +1,128 @@
+{
+  "runs": {
+    "control_short": {
+      "stages": {
+        "NDT_align_ms": {
+          "count": 183,
+          "mean": 10.035510524590164,
+          "p95": 14.4281992,
+          "max": 62.60221
+        },
+        "NDT_callback_to_publish_ms": {
+          "count": 183,
+          "mean": 13.499257343062938,
+          "p95": 18.147730827331543,
+          "max": 66.0097599029541
+        },
+        "Deskew_ms": {
+          "count": 183,
+          "mean": 13.642705650273225,
+          "p95": 18.390058500000002,
+          "max": 20.210681
+        },
+        "Deskew_plus_NDT_callback_ms": {
+          "count": 183,
+          "mean": 27.14196299333616,
+          "p95": 33.70043476354981,
+          "max": 83.7636159029541
+        }
+      },
+      "resources": {
+        "dog_prior_map_ndt_node_cpp": {
+          "peak_rss_bytes": 81510400,
+          "cpu_sec": 3.66
+        },
+        "dog_prior_map_ekf_node_cpp": {
+          "peak_rss_bytes": 18669568,
+          "cpu_sec": 4.4
+        }
+      },
+      "wall_sec": 83.3384476410065,
+      "node_RSS_peak_sum_upper_bound_MiB": 95.5390625
+    },
+    "visual_short": {
+      "stages": {
+        "NDT_align_ms": {
+          "count": 183,
+          "mean": 10.44163643169399,
+          "p95": 15.216189700000001,
+          "max": 64.909016
+        },
+        "NDT_callback_to_publish_ms": {
+          "count": 183,
+          "mean": 13.967497101246986,
+          "p95": 18.735718727111816,
+          "max": 68.5262680053711
+        },
+        "Deskew_ms": {
+          "count": 183,
+          "mean": 13.468590420765027,
+          "p95": 18.1467648,
+          "max": 20.780241
+        },
+        "Deskew_plus_NDT_callback_ms": {
+          "count": 183,
+          "mean": 27.436087522012013,
+          "p95": 32.863567846557615,
+          "max": 80.22679500537109
+        }
+      },
+      "resources": {
+        "dog_prior_map_ndt_node_cpp": {
+          "peak_rss_bytes": 81764352,
+          "cpu_sec": 3.75
+        },
+        "dog_prior_map_ekf_node_cpp": {
+          "peak_rss_bytes": 18616320,
+          "cpu_sec": 4.39
+        }
+      },
+      "wall_sec": 83.53689823400055,
+      "node_RSS_peak_sum_upper_bound_MiB": 95.73046875
+    },
+    "visual_full": {
+      "stages": {
+        "NDT_align_ms": {
+          "count": 396,
+          "mean": 10.488526651515153,
+          "p95": 15.6845155,
+          "max": 68.342028
+        },
+        "NDT_callback_to_publish_ms": {
+          "count": 396,
+          "mean": 13.92110911282626,
+          "p95": 20.379245281219482,
+          "max": 72.46899604797363
+        },
+        "Deskew_ms": {
+          "count": 396,
+          "mean": 13.613446063131315,
+          "p95": 18.51901025,
+          "max": 21.847473
+        },
+        "Deskew_plus_NDT_callback_ms": {
+          "count": 396,
+          "mean": 27.53455517595757,
+          "p95": 35.06032801068115,
+          "max": 83.35355104797364
+        }
+      },
+      "resources": {
+        "dog_prior_map_ndt_node_cpp": {
+          "peak_rss_bytes": 81797120,
+          "cpu_sec": 7.890000000000001
+        },
+        "dog_prior_map_ekf_node_cpp": {
+          "peak_rss_bytes": 18882560,
+          "cpu_sec": 9.52
+        }
+      },
+      "wall_sec": 169.39988519300096,
+      "node_RSS_peak_sum_upper_bound_MiB": 96.015625
+    }
+  },
+  "scope": "NDT+deskew stages and two localization processes only; no online camera frontend",
+  "EKF_time_scope": "cumulative process CPU from /proc; per-callback EKF latency not measured",
+  "RSS_scope": "VmHWM; sum of independent peaks is an upper bound and double-counts shared pages; not unique whole-system RAM",
+  "visual_interface_separate_timer": "NOT_MEASURED; included in NDT callback stage"
+}

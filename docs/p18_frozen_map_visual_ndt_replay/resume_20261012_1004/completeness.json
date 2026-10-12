@@ -1,0 +1,16 @@
+{
+  "control_short": {"ndt":183,"corrected":182,"high_rate":3698,"fixed_complete_transaction_gate":180,"parity":"PASS"},
+  "visual_short": {"ndt":183,"corrected":182,"high_rate":3698,"visual_applied":106,"smoke":"PASS"},
+  "visual_full": {"ndt":396,"corrected":396,"high_rate":8004,"visual_applied":169,"complete":true},
+  "bag_topic_counts_match_ledgers": true,
+  "full_Control_Visual_fixed_lag_release_and_replay_count_parity": "PASS",
+  "runtime_physical_parameter_groups": "EXACT_PARITY",
+  "runtime_visual_flags": [false,true,true],
+  "raw_pre_gt_artifact_hashes_rechecked": 84,
+  "nonfinite_states": 0,
+  "late_fixed_lag_observations": 0,
+  "additional_full_NDT_align_per_frame": 0,
+  "jump_diagnostic": "adjacent high-rate state delta >2m OR >20deg, using existing correction scales, not new selection math",
+  "primary_NDT_pose_samples":316,
+  "primary_highrate_pose_samples":6396
+}

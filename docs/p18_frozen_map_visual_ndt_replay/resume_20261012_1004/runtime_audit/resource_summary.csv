@@ -1,0 +1,7 @@
+run,process,peak_rss_bytes,peak_rss_MiB,process_cpu_sec,replay_orchestration_wall_sec
+control_short,dog_prior_map_ndt_node_cpp,81510400,77.734375,3.66,83.3384476410065
+control_short,dog_prior_map_ekf_node_cpp,18669568,17.8046875,4.4,83.3384476410065
+visual_short,dog_prior_map_ndt_node_cpp,81764352,77.9765625,3.75,83.53689823400055
+visual_short,dog_prior_map_ekf_node_cpp,18616320,17.75390625,4.39,83.53689823400055
+visual_full,dog_prior_map_ndt_node_cpp,81797120,78.0078125,7.890000000000001,169.39988519300096
+visual_full,dog_prior_map_ekf_node_cpp,18882560,18.0078125,9.52,169.39988519300096

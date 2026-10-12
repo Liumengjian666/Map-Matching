@@ -1,0 +1,254 @@
+{
+  "result": "FAIL",
+  "GT_LOADED": false,
+  "ndt_rows": 183,
+  "ndt_converged": 183,
+  "oosm_applied": 182,
+  "counters": {
+    "valid_input": 106,
+    "apply_calls": 182,
+    "applied": 106,
+    "rejected": 76,
+    "reject_INVALID_VISUAL_MEASUREMENT": 76
+  },
+  "late": 0,
+  "nonfinite_states": 0,
+  "max_used_scan_translation_jump_m": 0.3737396642330759,
+  "max_used_scan_rotation_jump_deg": 5.00000008186253,
+  "extra_align_calls": 0,
+  "extra_align_basis": "CONTROL mode, single existing ndt.align call in source",
+  "failures": [
+    {
+      "frame": "5",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "26",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "52",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "53",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "55",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "85",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "97",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "101",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "102",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "104",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "105",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "107",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "108",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "109",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "110",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "111",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "112",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "115",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "117",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "118",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "119",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "120",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "121",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "122",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "123",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "124",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "126",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "129",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "130",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "131",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "132",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "134",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "136",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "137",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "140",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "141",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "142",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "145",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "146",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "147",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "148",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "152",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "153",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "156",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "157",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "167",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "168",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "169",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "170",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "171",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "172",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "173",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "174",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "176",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "177",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "180",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "182",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    },
+    {
+      "frame": "183",
+      "reason": "VISUAL_CAUSAL_OR_COMPOSITION"
+    }
+  ]
+}

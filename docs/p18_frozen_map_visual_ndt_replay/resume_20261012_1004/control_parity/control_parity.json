@@ -1,0 +1,11 @@
+{
+  "result": "PASS",
+  "GT_LOADED": false,
+  "frozen_transaction_count": 180,
+  "actual_ndt_rows": 183,
+  "failure_count": 0,
+  "first_failures": [],
+  "late_count": 0,
+  "input_cutoff": 1517157237.684208,
+  "last_input_imu": 1517157237.683104
+}
