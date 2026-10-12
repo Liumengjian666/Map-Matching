@@ -1,0 +1,10 @@
+{
+  "TASK": "P22-R1-FIXED-SOURCE-NDT-INITIALIZATION-PAIR-TEST",
+  "GT_LOADED": false,
+  "selected": 8,
+  "source_matched": 0,
+  "NDT_align_calls": 0,
+  "SOURCE_RECONSTRUCTION": "SOURCE_RECONSTRUCTION_FAILED",
+  "coverage": "COVERAGE_INSUFFICIENT",
+  "next_gate": "STOP_NO_PAIR_TEST"
+}

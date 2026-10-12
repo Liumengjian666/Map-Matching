@@ -1,0 +1,27 @@
+{
+  "TASK": "P22-R1-FIXED-SOURCE-NDT-INITIALIZATION-PAIR-TEST",
+  "GT_LOADED": false,
+  "selected": 8,
+  "source_matched": 0,
+  "NDT_align_calls": 0,
+  "SOURCE_RECONSTRUCTION": "SOURCE_RECONSTRUCTION_FAILED",
+  "coverage": "COVERAGE_INSUFFICIENT",
+  "next_gate": "STOP_NO_PAIR_TEST",
+  "CODE_SHA": "10f23927d222aaf6de4ded074aedf571de8f329c",
+  "FINAL_RESULT": "PAIR_TEST_NOT_ESTABLISHED",
+  "EXPERIMENT_CONTRACT": "NOT_ESTABLISHED",
+  "OPTIMIZER_PARITY": "NOT_EVALUATED",
+  "PAIR_TEST": "NOT_EXECUTED",
+  "EKF_alternative_constructed": false,
+  "runtime": {
+    "stage": "SOURCE_RECOVERY_PROCESS_INCLUDING_STARTUP_NOT_NDT",
+    "samples": 8,
+    "mean_ms": 19.760291499551386,
+    "p95_ms": 23.6029464926105,
+    "max_ms": 24.172847988666035,
+    "NDT_align_calls": 0,
+    "NDT_runtime_ms": "NOT_EVALUATED",
+    "peak_RSS": "NOT_MEASURED"
+  },
+  "NEXT": "End initial-source replacement study; decision AI to define bounded Coupled Subspace Refinement experiment."
+}
