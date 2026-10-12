@@ -1,0 +1,14 @@
+{
+  "DEFAULT_OFF_PARITY": "DEFAULT_OFF_PARITY_PASS",
+  "counts": {
+    "NDT": 183,
+    "OOSM": 182,
+    "HighRate": 3698,
+    "Corrected": 182,
+    "Visual": 106,
+    "EKF": 0
+  },
+  "failures": [],
+  "failure_count": 0,
+  "GT_LOADED": false
+}

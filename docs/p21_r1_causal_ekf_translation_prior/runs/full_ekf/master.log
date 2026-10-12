@@ -1,0 +1,30 @@
+... logging to /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p21_r1_causal_ekf_translation_prior/runs/full_ekf/roslogs/a760eb1e-c611-11f1-a6f5-a98daced9c1b/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-54256.log
+Checking log directory for disk usage. This may take a while.
+Press Ctrl-C to interrupt
+Done checking log file disk usage. Usage is <1GB.
+]2;roscore
+[1mstarted roslaunch server http://127.0.0.1:34405/[0m
+ros_comm version 1.17.4
+
+
+SUMMARY
+========
+
+PARAMETERS
+ * /rosdistro: noetic
+ * /rosversion: 1.17.4
+
+NODES
+
+auto-starting new master
+[1mprocess[master]: started with pid [54279][0m
+[1mROS_MASTER_URI=http://127.0.0.1:11387/[0m
+]2;roscore http://127.0.0.1:11387/
+[1msetting /run_id to a760eb1e-c611-11f1-a6f5-a98daced9c1b[0m
+[1mprocess[rosout-1]: started with pid [54304][0m
+started core service [/rosout]
+[rosout-1] killing on exit
+[master] killing on exit
+shutting down processing monitor...
+... shutting down processing monitor complete
+[1mdone[0m

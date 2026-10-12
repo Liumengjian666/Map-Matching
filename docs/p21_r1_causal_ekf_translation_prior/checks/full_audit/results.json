@@ -1,0 +1,27 @@
+{
+  "CAUSAL_PREDICTION_CONTRACT": "CAUSAL_PREDICTION_CONTRACT_PASS",
+  "SHORT_TEST": "FULL_COMPLETENESS_PASS",
+  "counts": {
+    "NDT": 396,
+    "OOSM": 396,
+    "HighRate": 8004,
+    "Corrected": 396,
+    "Visual": 169,
+    "EKF": 226
+  },
+  "reasons": {
+    "NDT_HISTORY_FALLBACK": 1,
+    "VISUAL_APPLIED": 169,
+    "EKF_TRANSLATION_APPLIED": 226
+  },
+  "age_ms": {
+    "mean": 2.509287013274336,
+    "p95": 4.757265,
+    "max": 4.981013
+  },
+  "future_used": 0,
+  "unverified_provenance": 0,
+  "nonfinite": 0,
+  "late": 0,
+  "GT_LOADED": false
+}

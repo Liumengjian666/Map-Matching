@@ -1,0 +1,19 @@
+{
+  "TASK": "P21-R1-CAUSAL-EKF-TRANSLATION-PRIOR-ABLATION",
+  "START_SHA": "98c08420267d9a6dd969e850f3a5f9e640c47cb5",
+  "GT_LOADED": false,
+  "wall_sec": 1791790886.9468408,
+  "files_sha256": {
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/input_v2/corridor01_p10_causal_startup5_eval35_fixedlag_v2.bag": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p17_visual_aided_ndt_r1/visual_input/visual.csv": "10869519890a5adcb6f3310bba05f379a959018cf123ea8a90c1cf4ea1314c79",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp": "fbc1750dc605a7fd3b9549b310394fbff3a5781cad2272ef55b9f49df8c3435a",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p21_corridor01_ekf_translation.yaml": "39895248d850095e5f8c60966f627831177bcceccee055faa9ade2f64bff3376",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp": "edfb55928c12baa2193f2847b21d88c119df74af4d34631216886709cb85bfdc"
+  },
+  "config_difference": "lidar_update.experimental_ekf_translation_fallback_enable: absent/default false -> true",
+  "beta": 0.6,
+  "prediction_max_age_ms": 20.0,
+  "new_ndt_sha256": "edfb55928c12baa2193f2847b21d88c119df74af4d34631216886709cb85bfdc"
+}

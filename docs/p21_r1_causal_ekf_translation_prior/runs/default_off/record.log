@@ -1,0 +1,6 @@
+[WARN] [1791790999.956119625]: /use_sim_time set to true and no clock published.  Still waiting for valid time...
+[INFO] [1791790997.944111967]: Subscribing to /dog_livo/diagnostics
+[INFO] [1791790997.945741662]: Subscribing to /dog_livo/ndt_odom
+[INFO] [1791790997.946908933]: Subscribing to /dog_livo/odom_corrected
+[INFO] [1791790997.949479262]: Subscribing to /dog_livo/odom_high_rate
+[INFO] [1791791000.954046740, 1517157219.184557071]: Recording to '/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p21_r1_causal_ekf_translation_prior/runs/default_off/outputs.bag'.

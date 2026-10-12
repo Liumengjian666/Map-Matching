@@ -1,0 +1,191 @@
+[INFO] [1791790996.966968463]: [DogPriorMap C++] explicit causal initial state: stamp=1517157219.188978910 boundary_age_ms=4.771 p=(-0.0799 -0.0290 -0.0303) v_prior=(0.0000 0.0000 0.0000) bg_prior=(0.00000 0.00000 0.00000) ba_prior=(0.00000 0.00000 0.00000) g_map=(-0.3455 -0.7386 -9.7727)
+[INFO] [1791790996.970962593]: [DogPriorMap C++] experimental IMU deskew mode=ekf_imu_fastlio input=/p10/corridor01/raw_timed_points output=/p10/corridor01/deskewed_points ref=start T_imu_lidar=(0.080 0.029 0.030)
+[INFO] [1791790996.972000376]: [DogPriorMap C++] node started: external_ndt=/dog_livo/ndt_odom, imu=/imu/data
+[INFO] [1791790996.972013367]: [DogPriorMap C++] NDT OOSM=1 max_alignment=0.020 s
+[INFO] [1791790996.972023843]: [DogPriorMap C++] future NDT deferral=0 max=10.000 ms queue=20
+[INFO] [1791790996.972031316]: [DogPriorMap C++] fixed-lag OOSM=1 lag=0.150 s queue=64
+[INFO] [1791790997.057501419]: [DogPriorMap NDT] started: mode=CONTROL map=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd target=226164 lidar=/p10/corridor01/deskewed_points output=/dog_livo/ndt_odom EKF=disabled
+[INFO] [1791791001.475221096, 1517157219.315549989]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=226164 align=70.71ms score=0.6712 iter=16 p=(-0.52 -0.97 -0.03)
+[INFO] [1791791005.856363351, 1517157220.411465039]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=226164 align=12.55ms score=0.5337 iter=1 p=(0.07 -1.19 -0.03)
+[INFO] [1791791009.872736476, 1517157221.414035850]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=226164 align=11.78ms score=0.5278 iter=1 p=(0.10 -1.20 -0.04)
+[INFO] [1791791013.909040529, 1517157222.424497934]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=226164 align=8.48ms score=0.5232 iter=1 p=(0.13 -1.23 -0.03)
+[INFO] [1791791017.955274637, 1517157223.434672770]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=226164 align=8.84ms score=0.5334 iter=1 p=(0.14 -1.23 -0.03)
+[INFO] [1791791021.976704107, 1517157224.439764651]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=226164 align=14.96ms score=0.7152 iter=1 p=(0.19 -1.25 -0.03)
+[INFO] [1791791026.004828554, 1517157225.447244392]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=226164 align=4.35ms score=0.3384 iter=1 p=(0.98 -1.49 -0.06)
+[INFO] [1791791030.052496656, 1517157226.460200980]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=226164 align=14.56ms score=0.4994 iter=2 p=(2.72 -1.44 -0.10)
+[INFO] [1791791034.089570089, 1517157227.470296773]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=226164 align=12.12ms score=0.4630 iter=1 p=(4.64 -1.03 -0.19)
+[INFO] [1791791038.114637834, 1517157228.475363773]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=226164 align=6.47ms score=0.3985 iter=1 p=(6.47 -1.00 -0.27)
+[INFO] [1791791042.155235350, 1517157229.485542800]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=226164 align=14.86ms score=0.3435 iter=2 p=(8.06 -1.00 -0.33)
+[INFO] [1791791046.197625009, 1517157230.495764325]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=226164 align=14.09ms score=0.3532 iter=3 p=(9.95 -0.79 -0.39)
+[INFO] [1791791050.216259266, 1517157231.500879202]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=226164 align=13.15ms score=0.0976 iter=1 p=(11.79 -0.59 -0.48)
+[INFO] [1791791054.249313016, 1517157232.508568539]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=226164 align=9.18ms score=0.0463 iter=3 p=(13.66 -0.73 -0.56)
+[INFO] [1791791058.286494563, 1517157233.518725338]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=226164 align=9.14ms score=0.0292 iter=1 p=(15.75 -0.86 -0.63)
+[INFO] [1791791062.330846991, 1517157234.528904802]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=226164 align=11.79ms score=9.2063 iter=1 p=(18.10 -0.97 -0.71)
+[INFO] [1791791066.347847574, 1517157235.534123376]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=226164 align=8.39ms score=32.0772 iter=1 p=(21.02 -1.06 -0.82)
+[INFO] [1791791070.384608185, 1517157236.544038470]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=226164 align=7.59ms score=0.0181 iter=1 p=(24.14 -1.48 -0.92)
+[INFO] [1791791074.423601152, 1517157237.551732940]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=226164 align=7.97ms score=0.0107 iter=1 p=(27.38 -1.70 -1.03)
+... logging to /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p21_r1_causal_ekf_translation_prior/runs/default_off/roslogs/95a396b6-c610-11f1-a6f5-a98daced9c1b/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-53044.log
+Checking log directory for disk usage. This may take a while.
+Press Ctrl-C to interrupt
+Done checking log file disk usage. Usage is <1GB.
+]2;/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch
+[1mstarted roslaunch server http://127.0.0.1:42359/[0m
+
+SUMMARY
+========
+
+PARAMETERS
+ * /camera_update/enable: False
+ * /camera_update/local_vio_metric_enable: False
+ * /deskew/T_imu_lidar_rotation_row_major: [0.99999185972334...
+ * /deskew/T_imu_lidar_translation_m: [0.08, 0.029, 0.03]
+ * /deskew/expected_lidar_frame: cmu_rc2_velodyne
+ * /deskew/history_keep_sec: 2.0
+ * /deskew/input_subscriber_queue_size: 100
+ * /deskew/input_topic: /p10/corridor01/r...
+ * /deskew/max_imu_gap_sec: 0.02
+ * /deskew/max_pending_clouds: 8
+ * /deskew/max_scan_duration_sec: 0.15
+ * /deskew/mode: ekf_imu_fastlio
+ * /deskew/output_topic: /p10/corridor01/d...
+ * /deskew/point_time_field: time
+ * /deskew/reference_time: start
+ * /deskew/state_frame: imu
+ * /dog_prior_map_ndt/coupled_mode: CONTROL
+ * /dog_prior_map_ndt/visual_geometry_csv:
+ * /dog_prior_map_ndt/visual_initial_guess_csv: /home/jian/livox_...
+ * /dog_prior_map_ndt/visual_initial_guess_enable: True
+ * /filter/init_bias_std: 0.05
+ * /filter/init_pos_std: 0.5
+ * /filter/init_rot_std_deg: 5.0
+ * /filter/init_vel_std: 0.5
+ * /frames/base_frame: cmu_rc2_velodyne
+ * /frames/map_frame: camera_init
+ * /fusion/both_degraded_enter_frames: 3
+ * /fusion/degenerated_eigen_ratio: 0.03
+ * /fusion/directional_enable: False
+ * /fusion/lidar_degraded_enter_frames: 5
+ * /fusion/recovery_exit_frames: 5
+ * /fusion/state_machine_enable: False
+ * /fusion/visual_assisted_enter_frames: 3
+ * /imu/acc_bias_noise: 0.0001
+ * /imu/acc_noise: 2.0
+ * /imu/gravity: 9.80665
+ * /imu/gyro_bias_noise: 0.0001
+ * /imu/gyro_noise: 0.1
+ * /imu/history_keep_sec: 2.0
+ * /imu/init_imu_samples: 200
+ * /imu/initialize_gravity_from_imu: False
+ * /imu/initialize_gyro_bias_from_imu: False
+ * /imu/max_dt: 0.05
+ * /imu/midpoint_interval_input_enable: True
+ * /imu/publish_high_rate: True
+ * /imu/publish_imu_propagate_alias: True
+ * /imu/use_acc_for_position: True
+ * /imu/velocity_damping: 0.98
+ * /initialization/accel_bias_imu_mps2: [0.0, 0.0, 0.0]
+ * /initialization/boundary_imu_accel_mps2: [1.91423714160919...
+ * /initialization/boundary_imu_gyro_radps: [-0.1700474470853...
+ * /initialization/boundary_imu_stamp_nsec: 184208000
+ * /initialization/boundary_imu_stamp_sec: 1517157219
+ * /initialization/explicit_state_enable: True
+ * /initialization/gravity_map_mps2: [-0.34546457, -0....
+ * /initialization/gyro_bias_imu_radps: [0.0, 0.0, 0.0]
+ * /initialization/map_T_imu_rotation_row_major: [0.99999185972334...
+ * /initialization/map_T_imu_translation_m: [-0.0798943785941...
+ * /initialization/state_stamp_nsec: 188978910
+ * /initialization/state_stamp_sec: 1517157219
+ * /initialization/velocity_map_mps: [0.0, 0.0, 0.0]
+ * /lidar_update/T_imu_lidar_rotation_row_major: [0.99999185972334...
+ * /lidar_update/deskew_enable: False
+ * /lidar_update/enable: False
+ * /lidar_update/information_diagnostic_enable: False
+ * /lidar_update/lidar_subscriber_queue_size: 100
+ * /lidar_update/local_imu_gyro_to_lidar_enable: True
+ * /lidar_update/local_imu_rotation_prior_enable: True
+ * /lidar_update/min_effective_points: 50
+ * /lidar_update/ndt_max_iterations: 40
+ * /lidar_update/ndt_max_source_points: 1400
+ * /lidar_update/ndt_max_target_points: 0
+ * /lidar_update/ndt_resolution: 0.8
+ * /lidar_update/ndt_source_voxel_size: 0.25
+ * /lidar_update/ndt_source_voxel_z_size: 0.25
+ * /lidar_update/ndt_step_limit_enable: True
+ * /lidar_update/ndt_step_limit_max_rotation_deg: 5.0
+ * /lidar_update/ndt_step_limit_max_translation: 0.5
+ * /lidar_update/ndt_step_size: 0.08
+ * /lidar_update/ndt_target_voxel_size: 0.15
+ * /lidar_update/ndt_target_voxel_z_size: 0.15
+ * /lidar_update/ndt_transformation_epsilon: 0.001
+ * /lidar_update/offset_time_scale: 1e-09
+ * /lidar_update/pending_lidar_max_frames: 50
+ * /lidar_update/scan_max_range: 80.0
+ * /lidar_update/scan_min_range: 0.5
+ * /lidar_update/scan_reference_time: start
+ * /map/load_in_ekf: False
+ * /map/pcd_fallback_path: /home/jian/livox_...
+ * /map/voxel_size: 0.15
+ * /ndt_observation/apply_ratio: 1.0
+ * /ndt_observation/enable: True
+ * /ndt_observation/future_deferral_enable: False
+ * /ndt_observation/future_deferral_max_queue: 20
+ * /ndt_observation/future_deferral_max_sec: 0.01
+ * /ndt_observation/max_rotation_correction_deg: 20.0
+ * /ndt_observation/max_translation_correction: 2.0
+ * /ndt_observation/oosm_enable: True
+ * /ndt_observation/oosm_fixed_lag_enable: True
+ * /ndt_observation/oosm_fixed_lag_max_queue: 64
+ * /ndt_observation/oosm_fixed_lag_sec: 0.15
+ * /ndt_observation/oosm_max_alignment_sec: 0.02
+ * /ndt_observation/roll_pitch_apply_ratio: 1.0
+ * /ndt_observation/velocity_blend: 0.6
+ * /ndt_observation/z_apply_ratio: 1.0
+ * /output/debug_interval_sec: 2.0
+ * /output/deferred_csv_path:
+ * /output/diagnostic_determinism_enable: True
+ * /output/ekf_prediction_diagnostics_csv_path: /home/jian/livox_...
+ * /output/imu_deskew_csv_path: /home/jian/livox_...
+ * /output/ndt_determinism_csv_path:
+ * /output/ndt_diagnostics_csv_path: /home/jian/livox_...
+ * /output/oosm_csv_path: /home/jian/livox_...
+ * /output/oosm_fixed_lag_csv_path: /home/jian/livox_...
+ * /output/path_max_length: 5000
+ * /output/path_publish_rate_hz: 1.0
+ * /output/path_sample_rate_hz: 2.0
+ * /output/print_debug: False
+ * /output/publish_diagnostics: True
+ * /output/publish_filtered_points: True
+ * /output/publish_path: False
+ * /output/publish_tf: False
+ * /output/runtime_csv_path: /home/jian/livox_...
+ * /rosdistro: noetic
+ * /rosversion: 1.17.4
+ * /topics/diagnostics: /dog_livo/diagnos...
+ * /topics/filtered_points: /dog_livo/filtere...
+ * /topics/imu: /imu/data
+ * /topics/imu_propagate: /LIVO2/imu_propagate
+ * /topics/lidar: /p10/corridor01/d...
+ * /topics/lidar_msg_type: pointcloud2
+ * /topics/ndt_odom: /dog_livo/ndt_odom
+ * /topics/ndt_path: /dog_livo/ndt_path
+ * /topics/ndt_pose: /dog_livo/ndt_pose
+ * /topics/odom_corrected: /dog_livo/odom_co...
+ * /topics/odom_high_rate: /dog_livo/odom_hi...
+ * /topics/path_corrected: /dog_livo/path_co...
+ * /topics/path_high_rate: /dog_livo/path_hi...
+ * /topics/points_aligned: /dog_livo/points_...
+
+NODES
+  /
+    dog_prior_map_ekf (dog_prior_map_localization/dog_prior_map_ekf_node_cpp)
+    dog_prior_map_ndt (dog_prior_map_localization/dog_prior_map_ndt_node_cpp)
+
+[1mROS_MASTER_URI=http://127.0.0.1:11387[0m
+]2;/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch http://127.0.0.1:11387
+[1mprocess[dog_prior_map_ndt-1]: started with pid [53091][0m
+[1mprocess[dog_prior_map_ekf-2]: started with pid [53092][0m
+[dog_prior_map_ekf-2] killing on exit
+[dog_prior_map_ndt-1] killing on exit
+shutting down processing monitor...
+... shutting down processing monitor complete
+[1mdone[0m

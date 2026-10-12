@@ -1,0 +1,10 @@
+{
+  "result": "PARAMETER_PARITY_PASS",
+  "phase": "short",
+  "checked_before_playback": true,
+  "beta": 0.6,
+  "experimental_enable": true,
+  "high_rate_subscription": true,
+  "wall_sec": 1791791188.2915022,
+  "actual_map": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd"
+}

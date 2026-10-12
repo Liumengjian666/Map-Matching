@@ -1,0 +1,47 @@
+{
+  "stages": {
+    "NDT_align_ms": {
+      "count": 396,
+      "mean": 11.013541098484847,
+      "p95": 16.9380905,
+      "max": 63.72556
+    },
+    "Deskew_ms": {
+      "count": 396,
+      "mean": 13.341974454545452,
+      "p95": 18.10367,
+      "max": 20.43912
+    },
+    "NDT_callback_ms": {
+      "count": 396,
+      "mean": 14.383536396604596,
+      "p95": 20.330846309661865,
+      "max": 68.94254684448242
+    },
+    "Deskew_plus_NDT_callback_ms": {
+      "count": 396,
+      "mean": 27.725510851150048,
+      "p95": 35.19897838861084,
+      "max": 85.97784184448243
+    }
+  },
+  "resources": {
+    "dog_prior_map_ndt_node_cpp": {
+      "peak_rss_bytes": 81620992,
+      "cpu_sec": 8.9
+    },
+    "dog_prior_map_ekf_node_cpp": {
+      "peak_rss_bytes": 18501632,
+      "cpu_sec": 9.55
+    }
+  },
+  "wall_sec": 169.53149601099722,
+  "recorded_bag_counts": {
+    "/dog_livo/odom_high_rate": 8004,
+    "/dog_livo/ndt_odom": 396,
+    "/dog_livo/diagnostics": 396,
+    "/dog_livo/odom_corrected": 396
+  },
+  "scope": "Two node VmHWM and cumulative CPU; no per-EKF-callback latency, camera IO/rectification/online extraction",
+  "RSS_note": "Independent peaks; their sum double-counts shared pages and is not whole-system unique memory"
+}
