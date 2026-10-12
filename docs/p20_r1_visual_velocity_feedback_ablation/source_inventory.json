@@ -1,0 +1,212 @@
+[
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/runs/visual_blend0/ndt_diagnostics.csv",
+    "source_sha256": "d69253a777858d2e2fe0004381fb477224d1b53280be60c2ca9ee50d93cafbc4",
+    "archive": "runs/visual_blend0/ndt_diagnostics.csv",
+    "archive_sha256": "d69253a777858d2e2fe0004381fb477224d1b53280be60c2ca9ee50d93cafbc4"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/runs/visual_blend0/ekf_lineage.csv",
+    "source_sha256": "ed427cf49e1028a53736b12555fd3b1c047965ef1c8968f0ec5e67aba741b6e4",
+    "archive": "runs/visual_blend0/ekf_lineage.csv",
+    "archive_sha256": "ed427cf49e1028a53736b12555fd3b1c047965ef1c8968f0ec5e67aba741b6e4"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/runs/visual_blend0/deskew.csv",
+    "source_sha256": "d7889482fc348d6006c8015affd5ae73985b1a189891a4b61a6fdea39402ddfe",
+    "archive": "runs/visual_blend0/deskew.csv",
+    "archive_sha256": "d7889482fc348d6006c8015affd5ae73985b1a189891a4b61a6fdea39402ddfe"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/runs/visual_blend0/oosm.csv",
+    "source_sha256": "b494cea48f5c89b0553c12ca5bd0f82ed563261bb1fa62ca4350994b55595cf3",
+    "archive": "runs/visual_blend0/oosm.csv",
+    "archive_sha256": "b494cea48f5c89b0553c12ca5bd0f82ed563261bb1fa62ca4350994b55595cf3"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/runs/visual_blend0/oosm_fixed_lag.csv",
+    "source_sha256": "b9d6f4d2d50091426160804c908ecab2c8ec742b38f96c5c1f69c41dd4dbcd05",
+    "archive": "runs/visual_blend0/oosm_fixed_lag.csv",
+    "archive_sha256": "b9d6f4d2d50091426160804c908ecab2c8ec742b38f96c5c1f69c41dd4dbcd05"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/runs/visual_blend0/ekf_runtime.csv",
+    "source_sha256": "fafb369ec2885be2151d8a2ff68349eeed2d8e7c1a18d0186fc1fbc40d397d45",
+    "archive": "runs/visual_blend0/ekf_runtime.csv",
+    "archive_sha256": "fafb369ec2885be2151d8a2ff68349eeed2d8e7c1a18d0186fc1fbc40d397d45"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/runs/visual_blend0/resources.csv",
+    "source_sha256": "f1be6d3518558e43021643767871a000634b68cf75bf51673b6a86f54c5e0c56",
+    "archive": "runs/visual_blend0/resources.csv",
+    "archive_sha256": "9c4f7ecc63209b739136a466c9f4af69e88b5b1db6c78407eb2f449025e453c5"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/runs/visual_blend0/execution.json",
+    "source_sha256": "78120ca843de77d2f29e9b115ac3229acb9b7100f4a0ac26a8e9f0776e3a42ff",
+    "archive": "runs/visual_blend0/execution.json",
+    "archive_sha256": "78120ca843de77d2f29e9b115ac3229acb9b7100f4a0ac26a8e9f0776e3a42ff"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/runs/visual_blend0/rosparams.yaml",
+    "source_sha256": "c8c4f44535ecaff979b8480e19fc7dc2976f238e4edfc06f882c8dc934387d95",
+    "archive": "runs/visual_blend0/rosparams.yaml",
+    "archive_sha256": "c8c4f44535ecaff979b8480e19fc7dc2976f238e4edfc06f882c8dc934387d95"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/runs/visual_blend0/parameter_parity.json",
+    "source_sha256": "ae108a0a75170f5e680586a34e92e76b9a816890141ba661d2f7b1c6639b16f3",
+    "archive": "runs/visual_blend0/parameter_parity.json",
+    "archive_sha256": "ae108a0a75170f5e680586a34e92e76b9a816890141ba661d2f7b1c6639b16f3"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/runs/visual_blend0/launch.log",
+    "source_sha256": "159a4bbd83453743791fa2394d9c539d25e07dfe9e07fad4a8a528bbd0e2e535",
+    "archive": "runs/visual_blend0/launch.log",
+    "archive_sha256": "5f968f2e6a9573dc7a8163e050fae1e0107cd59c224b3cc2ebc2a93484d4d1c9"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/runs/visual_blend0/master.log",
+    "source_sha256": "85653a53340554ca14539840b5848e49250655ac97dc57ee0aa4eb75ed33fae7",
+    "archive": "runs/visual_blend0/master.log",
+    "archive_sha256": "85653a53340554ca14539840b5848e49250655ac97dc57ee0aa4eb75ed33fae7"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/runs/visual_blend0/record.log",
+    "source_sha256": "3da38698c85d696b72235e8fea8302a001e2e7ce2e0543e441735667668e3964",
+    "archive": "runs/visual_blend0/record.log",
+    "archive_sha256": "3da38698c85d696b72235e8fea8302a001e2e7ce2e0543e441735667668e3964"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/runs/visual_blend0/playback.log",
+    "source_sha256": "4da86328c61e44bc2d0c5d2cc5c3e7393862324bfeca05d4ad2ec22f121a80db",
+    "archive": "runs/visual_blend0/playback.log",
+    "archive_sha256": "4da86328c61e44bc2d0c5d2cc5c3e7393862324bfeca05d4ad2ec22f121a80db"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/input_freeze.json",
+    "source_sha256": "423a54aaa32fd431f50637cf80d577fa8421732306db24667aa6e1bb989b97ae",
+    "archive": "input_freeze.json",
+    "archive_sha256": "423a54aaa32fd431f50637cf80d577fa8421732306db24667aa6e1bb989b97ae"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/pre_gt_freeze.json",
+    "source_sha256": "11b34d4a839dc3508bb0859cf46e704cbbebf5c370738a523d2f5bc201515172",
+    "archive": "pre_gt_freeze.json",
+    "archive_sha256": "11b34d4a839dc3508bb0859cf46e704cbbebf5c370738a523d2f5bc201515172"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/config_diff.txt",
+    "source_sha256": "c5c45a1ff53b709d047008eeaebb57a7a7be736d937acc7911d2951a45d47b82",
+    "archive": "config_diff.txt",
+    "archive_sha256": "c5c45a1ff53b709d047008eeaebb57a7a7be736d937acc7911d2951a45d47b82"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/audit_checked/completeness.json",
+    "source_sha256": "091ff481a8e08fb8f1e34e9b8c4433dcdead87401df9c371b546154f50354108",
+    "archive": "completeness.json",
+    "archive_sha256": "091ff481a8e08fb8f1e34e9b8c4433dcdead87401df9c371b546154f50354108"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/mechanism_checked/mechanism.json",
+    "source_sha256": "77a896f1635e5ff950d347870a0bc2e47cfce51b87e4302f410645f282bf7b68",
+    "archive": "mechanism.json",
+    "archive_sha256": "77a896f1635e5ff950d347870a0bc2e47cfce51b87e4302f410645f282bf7b68"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/mechanism_checked/velocity_lineage.csv",
+    "source_sha256": "33269838fcd260b0258a29a8ba09d9de02924e63d6ad426abe0083261f0527fa",
+    "archive": "velocity_lineage.csv",
+    "archive_sha256": "33269838fcd260b0258a29a8ba09d9de02924e63d6ad426abe0083261f0527fa"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/mechanism_checked/first_divergence.csv",
+    "source_sha256": "76d70f45b888747207acb7d631e12c9b4d2facb295e82cff43e53026aaa78c4e",
+    "archive": "first_divergence.csv",
+    "archive_sha256": "76d70f45b888747207acb7d631e12c9b4d2facb295e82cff43e53026aaa78c4e"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/visual_audit/visual_application_audit.json",
+    "source_sha256": "22894afa544f20ad84ebac89d03cf3a6e2c477bf4cc7fca8493289379678f622",
+    "archive": "visual_application_audit.json",
+    "archive_sha256": "22894afa544f20ad84ebac89d03cf3a6e2c477bf4cc7fca8493289379678f622"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/visual_audit/visual_application_summary.csv",
+    "source_sha256": "416edd6b5a139fa4d235404c3fac612af60a90eda7ffc3c3e55277613a6c3089",
+    "archive": "visual_application_summary.csv",
+    "archive_sha256": "ede90aa77d2d61ef2575ca61b9799b2066d0846520984fa87dde4c5c6f79f5b5"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/runtime_analysis/runtime_metrics.json",
+    "source_sha256": "29c6347254886011de0cbb74ef117ad7c8058fd5788189353bf86a71c064adba",
+    "archive": "runtime_metrics.json",
+    "archive_sha256": "29c6347254886011de0cbb74ef117ad7c8058fd5788189353bf86a71c064adba"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/runtime_analysis/runtime_summary.csv",
+    "source_sha256": "3bf12006cf2530bd9a64d74717b49c5a35505ecd01850c3f2ebfcbdbf43c62de",
+    "archive": "runtime_summary.csv",
+    "archive_sha256": "3bf12006cf2530bd9a64d74717b49c5a35505ecd01850c3f2ebfcbdbf43c62de"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/runtime_analysis/resource_summary.csv",
+    "source_sha256": "be1738a4f577b50428ca5240910592b0da1f46bc3c41555b89976265913631fc",
+    "archive": "resource_summary.csv",
+    "archive_sha256": "be1738a4f577b50428ca5240910592b0da1f46bc3c41555b89976265913631fc"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/runs/visual_blend0/parameter_parity.json",
+    "source_sha256": "ae108a0a75170f5e680586a34e92e76b9a816890141ba661d2f7b1c6639b16f3",
+    "archive": "parameter_parity.json",
+    "archive_sha256": "ae108a0a75170f5e680586a34e92e76b9a816890141ba661d2f7b1c6639b16f3"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/posthoc_final/method_summary.csv",
+    "source_sha256": "1d90ece40ddcf1997fe2fd2c5dc27fdb64b8ebc9e9825251e903160cd7e883cc",
+    "archive": "method_summary.csv",
+    "archive_sha256": "1d90ece40ddcf1997fe2fd2c5dc27fdb64b8ebc9e9825251e903160cd7e883cc"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/posthoc_final/tail_peak_events.csv",
+    "source_sha256": "a1fe9e21bfaeb8901a710815744aeabc8f067dd059992d907d022eaff227a700",
+    "archive": "tail_peak_events.csv",
+    "archive_sha256": "a1fe9e21bfaeb8901a710815744aeabc8f067dd059992d907d022eaff227a700"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/posthoc_final/posthoc_metrics.json",
+    "source_sha256": "1f9f1adff38837ede4f9fcbcd90562015ea29bcca29582cf86e031bbb747e141",
+    "archive": "posthoc_metrics.json",
+    "archive_sha256": "1f9f1adff38837ede4f9fcbcd90562015ea29bcca29582cf86e031bbb747e141"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/posthoc_final/accuracy_comparison.csv",
+    "source_sha256": "f9fa8abdd9e4fb452e4b3a93b33c679e820bb0360c83209ce875226e1342aeb1",
+    "archive": "accuracy_comparison.csv",
+    "archive_sha256": "f9fa8abdd9e4fb452e4b3a93b33c679e820bb0360c83209ce875226e1342aeb1"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/posthoc_final/tail_window_summary.csv",
+    "source_sha256": "16b6694516a73fcc743927e2fa040dcd8acae99c2a936ffa6f51a687c8cd2618",
+    "archive": "tail_window_summary.csv",
+    "archive_sha256": "16b6694516a73fcc743927e2fa040dcd8acae99c2a936ffa6f51a687c8cd2618"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/posthoc_final/ndt_motion_summary.csv",
+    "source_sha256": "f1f67cbc00b4eb2852a8156d3f07c6c7c014d4737b08a92e4320940a686355c7",
+    "archive": "ndt_motion_summary.csv",
+    "archive_sha256": "f1f67cbc00b4eb2852a8156d3f07c6c7c014d4737b08a92e4320940a686355c7"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/posthoc_final/per_sample_errors.csv",
+    "source_sha256": "eb61b38bd58e6630bffb2ea4a95dfefa5bbfefe589d98b3f6e710411f45e981b",
+    "archive": "per_sample_errors.csv",
+    "archive_sha256": "eb61b38bd58e6630bffb2ea4a95dfefa5bbfefe589d98b3f6e710411f45e981b"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p20_r1_visual_velocity_feedback_ablation/posthoc_final/tail_peak_stages.csv",
+    "source_sha256": "fb19bbf84c7dee62cb484f5b0d46e06b3ad449b517f14309a29577d2b31eb8e1",
+    "archive": "tail_peak_stages.csv",
+    "archive_sha256": "fb19bbf84c7dee62cb484f5b0d46e06b3ad449b517f14309a29577d2b31eb8e1"
+  }
+]

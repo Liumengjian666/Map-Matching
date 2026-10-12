@@ -1,0 +1,8 @@
+{
+  "result": "PARAMETER_PARITY_PASS",
+  "actual_velocity_blend": 0.0,
+  "checked_before_playback": true,
+  "check_wall_epoch": 1791780298.8942058,
+  "only_physical_difference": "ndt_observation.velocity_blend: .6 -> 0",
+  "actual_map": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd"
+}

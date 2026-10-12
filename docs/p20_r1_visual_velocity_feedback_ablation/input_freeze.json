@@ -1,0 +1,49 @@
+{
+  "task": "P20-R1-VISUAL-VELOCITY-FEEDBACK-CAUSAL-ABLATION",
+  "GT_LOADED": false,
+  "START_SHA": "389243ae84cedb9a75964c8d43584cf60e233961",
+  "inputs": [
+    {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd",
+      "sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+      "size": 4058751
+    },
+    {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/input_v2/corridor01_p10_causal_startup5_eval35_fixedlag_v2.bag",
+      "sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+      "size": 186714344
+    },
+    {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p17_visual_aided_ndt_r1/visual_input/visual.csv",
+      "sha256": "10869519890a5adcb6f3310bba05f379a959018cf123ea8a90c1cf4ea1314c79",
+      "size": 202769
+    },
+    {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+      "sha256": "ba65e3e516a982c4c0083b866fc8e95c2dede4003fdc0f42cbf1a489da931cfb",
+      "size": 125665752
+    },
+    {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+      "sha256": "fbc1750dc605a7fd3b9549b310394fbff3a5781cad2272ef55b9f49df8c3435a",
+      "size": 56197576
+    },
+    {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml",
+      "sha256": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+      "size": 4263
+    },
+    {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p20_corridor01_visual_blend0.yaml",
+      "sha256": "9a253dc5bf58e2dc4c3495077a9549f4d67d376a6a4fa23aef74c5be7d2e4e18",
+      "size": 4263
+    }
+  ],
+  "config_diff": [
+    [
+      "ndt_observation.velocity_blend",
+      0.6,
+      0.0
+    ]
+  ]
+}

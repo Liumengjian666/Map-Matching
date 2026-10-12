@@ -1,0 +1,24 @@
+{
+  "result": "PASS",
+  "GT_LOADED": false,
+  "ndt_rows": 396,
+  "ndt_converged": 396,
+  "oosm_applied": 396,
+  "counters": {
+    "valid_input": 169,
+    "apply_calls": 395,
+    "applied": 169,
+    "rejected": 226,
+    "reject_INVALID_VISUAL_MEASUREMENT": 226
+  },
+  "late": 0,
+  "nonfinite_states": 0,
+  "highrate_states": 8004,
+  "corrected_states": 396,
+  "max_used_scan_translation_jump_m": 0.5000000000000023,
+  "max_used_scan_rotation_jump_deg": 5.000000155378336,
+  "csv_composition_residual_scope": "diagnostic only: normalized quaternion loses raw float-matrix entries; direct C++ apply test covers formula",
+  "extra_align_calls": 0,
+  "extra_align_basis": "CONTROL mode, single existing ndt.align call in source",
+  "failures": []
+}

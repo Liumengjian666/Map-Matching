@@ -1,0 +1,14 @@
+{
+  "EXPERIMENT_CONTRACT": "EXPERIMENT_CONTRACT_PASS",
+  "GT_LOADED": false,
+  "NDT": 396,
+  "NDT_converged": 396,
+  "OOSM_APPLIED": 396,
+  "EKF_Corrected": 396,
+  "EKF_HighRate": 8004,
+  "visual_applied": 169,
+  "nonfinite": 0,
+  "late": 0,
+  "actual_beta": 0.0,
+  "note": "Post-intervention poses/source hashes may differ; fixed raw inputs and sensor-time scheduling must not"
+}

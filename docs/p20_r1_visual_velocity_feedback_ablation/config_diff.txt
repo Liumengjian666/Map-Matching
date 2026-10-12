@@ -1,0 +1,2 @@
+CONFIG_CONTRACT_PASS
+1 changed key: ndt_observation.velocity_blend: 0.6 -> 0.0
