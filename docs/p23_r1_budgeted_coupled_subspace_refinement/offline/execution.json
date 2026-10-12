@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/tmp/p23_offline_probe",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/cases.txt",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline"
+  ],
+  "returncode": 0,
+  "wall_sec": 0.3566031840018695,
+  "GT_LOADED": false
+}

@@ -1,0 +1,9 @@
+{
+  "SOURCE_CAPTURE": "SOURCE_CAPTURE_PASS",
+  "BASELINE_PARITY": "PASS",
+  "captured": 8,
+  "valid": 8,
+  "failures": [],
+  "failure_count": 0,
+  "GT_LOADED": false
+}

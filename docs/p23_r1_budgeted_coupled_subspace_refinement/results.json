@@ -1,0 +1,118 @@
+{
+  "TASK": "P23-R1-BUDGETED-COUPLED-SUBSPACE-REFINEMENT",
+  "START_SHA": "805515a59df230f0742c91543c42dd3600b16bd3",
+  "CODE_SHA": "bc39306ec34c31176dff468dfb08a1af8a5f795a",
+  "PROTOTYPE_SHA": "ce1298a35fa5cef0af946a14ca44c994f33fb012",
+  "EXPERIMENT_CONTRACT": "PASS",
+  "SOURCE_CAPTURE": "PASS",
+  "BASELINE_PARITY": "PASS",
+  "OPTIMIZER_PARITY": "PASS",
+  "COUPLED_MATH": "EXISTING_R2_LOCAL_MATH_REUSED",
+  "GT_LOADED": true,
+  "selected": 8,
+  "primary_frames": 7,
+  "stats": {
+    "B_vs_A_gain_frames": 1,
+    "C_vs_B_gain_frames": 0,
+    "C_vs_B_risk_frames": 0,
+    "C_vs_B_objective_better_gt_worse": 0,
+    "C_vs_A_risk_frames": 0
+  },
+  "timing": {
+    "nominal_align_ms": {
+      "mean": 8.854333,
+      "p95": 25.04199809999999,
+      "max": 33.690181
+    },
+    "weak_setup_ms": {
+      "mean": 5.260330125,
+      "p95": 5.4556934,
+      "max": 5.478036
+    },
+    "eigen_ms": {
+      "mean": 0.004042,
+      "p95": 0.004804699999999999,
+      "max": 0.005098
+    },
+    "coupled_setup_ms": {
+      "mean": 1.9485056250000001,
+      "p95": 7.79843295,
+      "max": 7.808724
+    },
+    "strong_solve_ms": {
+      "mean": 0.004635874999999999,
+      "p95": 0.01911965,
+      "max": 0.020464
+    },
+    "B_align_ms": {
+      "mean": 4.595157374999999,
+      "p95": 4.8184606500000005,
+      "max": 4.819707
+    },
+    "C_align_ms": {
+      "mean": 4.586296750000001,
+      "p95": 4.8241463499999995,
+      "max": 4.825784
+    },
+    "B_incremental_ms": {
+      "mean": 12.59607675,
+      "p95": 12.986327900000001,
+      "max": 13.031697000000001
+    },
+    "C_incremental_ms": {
+      "mean": 14.52409325,
+      "p95": 20.655153,
+      "max": 20.695291
+    },
+    "value_ms": {
+      "mean": 8.126782625,
+      "p95": 10.4696828,
+      "max": 10.478703
+    },
+    "jet_ms": {
+      "mean": 3.4829714999999997,
+      "p95": 7.10128935,
+      "max": 7.101436
+    }
+  },
+  "calls": {
+    "value_calls": 44,
+    "jet_calls": 12,
+    "full_align_calls": 24
+  },
+  "ACCURACY": "COUPLED_LOCAL_GAIN_NOT_ESTABLISHED",
+  "RUNTIME": "COMPUTATIONAL_BUDGET_PASS",
+  "FINAL_RESULT": "COUPLED_LOCAL_GAIN_NOT_ESTABLISHED",
+  "evaluation_origin": 1517157224.188979,
+  "fit_rotation": [
+    [
+      0.9334059420031097,
+      -0.3504786641794061,
+      0.07692888526624234
+    ],
+    [
+      0.35609146134284037,
+      0.9311631844208601,
+      -0.07831982595693038
+    ],
+    [
+      -0.04418391779831284,
+      0.10049791009878015,
+      0.9939557090100994
+    ]
+  ],
+  "fit_translation": [
+    -0.2782890453193254,
+    1.1200824161808092,
+    0.16727956244769815
+  ],
+  "evaluation_contract": "Control V2 fixed 0-3s SE(3), IMU origin, prefix-aligned relative drift; seven fixed challenge frames, not trajectory RMSE",
+  "GT_sha256": "3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03",
+  "extrinsics_sha256": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d",
+  "notes": [
+    "No closed-loop feedback",
+    "Frame2 diagnostic only; earlier than first official GT, errors unavailable, not in primary counts",
+    "Explicit values/jets counted; PCL internal calls excluded",
+    "Offline CSV visual input; complete online camera frontend not measured"
+  ]
+}

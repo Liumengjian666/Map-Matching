@@ -1,0 +1,158 @@
+{
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_308.xyz": {
+    "bytes": 16800,
+    "sha256": "a23893d61d6944b6e7f2e51646b807929e27720fbea72b3adf15653b16743a6f"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_368.poses.f64": {
+    "bytes": 640,
+    "sha256": "20d60d7d962a5080832db3105b347f0317d175287993c7c55fb66ace21d756ed"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_284.poses.f64": {
+    "bytes": 640,
+    "sha256": "d45427616e844f2094966d6d6d857fb6c077d82651ab038c4fc69a62a53f26b3"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_284.xyz": {
+    "bytes": 16800,
+    "sha256": "fbd908785fce2d209d4dbfd1d0383bc562b1ce1fa491d91dd9d8fb32e05074e8"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_347.source.json": {
+    "bytes": 284,
+    "sha256": "d5d9f5374bcff30b9217417c147e284ea629c60de43b8bd8ffb98e827055b613"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_296.source.json": {
+    "bytes": 284,
+    "sha256": "973ce248cf67c0a8f00a103f819d5da5ec7680fef188924e85b39481b0b90de5"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_296.xyz": {
+    "bytes": 16800,
+    "sha256": "f26301608420d27eb9f30ddf660b9252ea8b5f5c646397428247e65119a31143"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_2.xyz": {
+    "bytes": 16800,
+    "sha256": "8b97c972a618f30fcf2e04127b21cae7ba479286fbb441f3a9ae26b8944b4b92"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_347.poses.f64": {
+    "bytes": 640,
+    "sha256": "3647c00e841c7f0d0acd5da07f00833cedb286fcf8aa963310dd7962792b824e"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_396.poses.f64": {
+    "bytes": 640,
+    "sha256": "7e35a7c545553760e77a468d7fa1fdd5922cf15540055f3b64c6a3ee270201f8"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_308.source.json": {
+    "bytes": 284,
+    "sha256": "8b86ed208dff9377307d95c649198d4fcf637aaa4c05bf37ef1d8098b0fdc58d"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_396.xyz": {
+    "bytes": 16800,
+    "sha256": "bb47d9c0f89f088bcda482c2a8d1eb5f77ee79efb28eb3941c755d0381400e2e"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_293.xyz": {
+    "bytes": 16800,
+    "sha256": "2dc2b00416cf0e7db74f1a33bfd2e2a73ce0e4ff562c461215a2a8e86a308f3d"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_284.source.json": {
+    "bytes": 284,
+    "sha256": "1ac3d9a5211a689186cf18abe378cfef1832f98af5f21986abfffe43d46dd74c"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_368.xyz": {
+    "bytes": 16800,
+    "sha256": "d454df20aaf5eaaf4656c37e2ee72f788874e6b01fae1bfc168b3d7ed055df86"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_347.xyz": {
+    "bytes": 16800,
+    "sha256": "c77f0b61e83e306ee6665c6b7f601dd10e52431574978a6ddded62ce9059b3ea"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_293.poses.f64": {
+    "bytes": 640,
+    "sha256": "ef5c719d55e3e68f7e433e2899c0d52e5090971f5f427282efa4358cdd282633"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_396.source.json": {
+    "bytes": 284,
+    "sha256": "b082d3848e37ab922d535c638ac0da00f13408e7d426cc370dd4bd9cc25e483b"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_296.poses.f64": {
+    "bytes": 640,
+    "sha256": "f4553cbefe2bafad9f87360818641851d408523fa089f5c4da9dfaf0d3236891"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_293.source.json": {
+    "bytes": 284,
+    "sha256": "e8cd0130fde17d8c7f854b25d1d62052a84adfd4afc22adaa8acbaba4a67e8c3"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_2.poses.f64": {
+    "bytes": 640,
+    "sha256": "c9b9be49d4a3e0e48afb0e0e5811c800cc8d120696b28abf678ca0bb7847b875"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_308.poses.f64": {
+    "bytes": 640,
+    "sha256": "f646c84d855e436b07f2c7678b0230fa76a706f8eb8dfa50c53240225cb550df"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_2.source.json": {
+    "bytes": 282,
+    "sha256": "e987f9e4a655ddad10f4bf5ca5ccc077beba33a7d9136b18efd4a7a9f7260059"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/sources/frame_368.source.json": {
+    "bytes": 284,
+    "sha256": "b103bf2977a882821b9c6f1ec6ae02e3d84b5f38ac85aeb1e9458ebb59d148b4"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/master.log": {
+    "bytes": 992,
+    "sha256": "0a836157b6d9ce12607154103130ae92c0380a79861f8259a974dcfe10550b58"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/deskew.csv": {
+    "bytes": 153529,
+    "sha256": "e44b983871e690bfd830aa2473f9ee9cd140ef7912909d8706be5e4b9184804a"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/ndt_diagnostics.csv": {
+    "bytes": 821454,
+    "sha256": "d2cbfeaa81b692351c7904234e9908c56357feb37ebf20cb8f9baa258181b216"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/outputs.bag": {
+    "bytes": 7098196,
+    "sha256": "68f6ae8edf8682b3f98b3e6faed8f3cb44a23b9950f33bb2039aad2870f6c3c0"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/resources.csv": {
+    "bytes": 96814,
+    "sha256": "ceacfefe3ddeddada438f82f6c773d375666deb334aa8f41799ec90d69e9e8cb"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/record.log": {
+    "bytes": 581,
+    "sha256": "227d35d298535a221b35504e36266755ad1dba90c0f09771576570721db93215"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/parameter_parity.json": {
+    "bytes": 130,
+    "sha256": "4089df5f20586948940b537768e92893f84752131aed614af61f4056f1541aab"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/ekf_runtime.csv": {
+    "bytes": 4904,
+    "sha256": "fafb369ec2885be2151d8a2ff68349eeed2d8e7c1a18d0186fc1fbc40d397d45"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/oosm.csv": {
+    "bytes": 46142,
+    "sha256": "b494cea48f5c89b0553c12ca5bd0f82ed563261bb1fa62ca4350994b55595cf3"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/playback.log": {
+    "bytes": 297,
+    "sha256": "2b3da84182f32e4f040c2d078ded275d14e89c4c8e21b825380e487c509bb8fd"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/rosparams.yaml": {
+    "bytes": 6794,
+    "sha256": "01a0c80824a2535c15fc5fc079c1449777fe27b956dbea94c193e74bb1cf2150"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/oosm_fixed_lag.csv": {
+    "bytes": 108492,
+    "sha256": "0fa564ec91056f23e2b372223c230a73f8364ba2f61f398d10a6bc2a3d4e4db4"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/execution.json": {
+    "bytes": 3573,
+    "sha256": "93b453f82567e5afd43285b24d79ad19810abfce488117edee8f1d74b89dc572"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/launch.log": {
+    "bytes": 15325,
+    "sha256": "5313a0401965a062b6d2ffdbec281da7d83ea21813f9197dfaec592531c7ec82"
+  },
+  "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/ekf_lineage.csv": {
+    "bytes": 3617779,
+    "sha256": "a42832fedc6211f948008d25dde37405ed0f470fa002118503040b5b4cabda96"
+  }
+}

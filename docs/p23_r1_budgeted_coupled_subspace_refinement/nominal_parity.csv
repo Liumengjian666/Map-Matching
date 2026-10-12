@@ -1,0 +1,9 @@
+frame_index,raw_translation_m,raw_rotation_deg,used_translation_m,used_rotation_deg,fitness_delta,discrete_match,status
+2,0,0,0,0,0,1,PASS
+284,0,0,0,0,0,1,PASS
+293,0,0,0,0,0,1,PASS
+296,0,0,0,0,0,1,PASS
+308,0,0,0,0,0,1,PASS
+347,0,0,0,0,0,1,PASS
+368,0,0,0,0,0,1,PASS
+396,0,0,0,0,0,1,PASS

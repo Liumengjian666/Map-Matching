@@ -1,0 +1,22 @@
+{
+  "TASK": "P23-R1-BUDGETED-COUPLED-SUBSPACE-REFINEMENT",
+  "protocol": "P23_PRE_GT_OUTPUT_FREEZE",
+  "GT_LOADED": false,
+  "completed": true,
+  "files_sha256": {
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/align_ledger.csv": "466fb7b96171112591193f2b7df7abb2442d7d6c69029aa93b9c1bc53f99a84f",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/resource_summary.csv": "0a6c79fcf65f920da3b149502c538040d78de0d701213e432dfee65124d5d429",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/ndt_paired_results.csv": "f279fbb52dbc7ba89a33a393750fb73ed1466e37b7775e5a1d7b69488ca4e456",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/weak_geometry.csv": "1f63bba81d9f0c939ff9da19632837c00a488a0fedadcddf9848f005f0737730",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/coupled_correction.csv": "7e4b0475fd63e89cffd8d4d6e91e4688b769f0100f943d1eaa0f6e1da6854ee9",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/nominal_parity.csv": "f08dabfe6710be69e608eb1b314ffaa97145b966c940710bbd8ec2261af91c14",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/weak_candidates.csv": "41ab79fd08f5c5070a7b542da3e768bdf9fd00277083cc8ba482545f121c00f7",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/cases.txt": "0e539ffdea33341c3269a168084e75f75f20abdb0052f2e6f09d49453fd12104",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/execution.json": "5bd1d195add6aa836ca974737e20a453f69b230ca3f66c8deeecf916f7a179f7",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/stdout.log": "c142bb146e4ec4e75ae2ecc47e97e1fadd5d5f9a98482bfa011e22775139fb85",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/runtime_breakdown.csv": "31f84ecd149463d8e1df5cde40645fadd65848f90d15df59b138f51e88e759b7",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/offline_started": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "input_freeze_sha256": "551894d980efbaeb7f03dbd12adf06e932d2f1362dba2da16656de0661eb2581"
+}

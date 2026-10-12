@@ -1,0 +1,3 @@
+# Preserve exact frozen runner bytes, not reformatted diagnostic evidence.
+runs/capture_visual/resources.csv -text whitespace=cr-at-eol
+runs/capture_visual/launch.log -text whitespace=-blank-at-eol

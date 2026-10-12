@@ -1,0 +1,217 @@
+[
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/input_freeze.json",
+    "archive": "input_freeze.json",
+    "sha256": "0e31e7369c18d9b8f6a8f21a61df75ea03c72f30a5f5c350bf144132aa43212d"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runtime_input_freeze.json",
+    "archive": "runtime_input_freeze.json",
+    "sha256": "5647347237a3cd00c125892082bf7c7297a3915c6ac706acb3ed1f6fd6e73778"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline_input_freeze.json",
+    "archive": "offline_input_freeze.json",
+    "sha256": "551894d980efbaeb7f03dbd12adf06e932d2f1362dba2da16656de0661eb2581"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/pre_gt_freeze.json",
+    "archive": "pre_gt_freeze.json",
+    "sha256": "fd5dbe654fc165c4e7caadd761797e177b6d2357700fc1e2fd26ab087f2f277a"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/capture_config.yaml",
+    "archive": "capture_config.yaml",
+    "sha256": "cad9f403fa30623dbeb7e9fee207f2ffa06deb66a53909d0d654e01352304f13"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/capture_gate/source_capture_summary.csv",
+    "archive": "source_capture_summary.csv",
+    "sha256": "06cad25fe3306946da9a56b96e74072436f34fb3af9bde9b947113b925336790"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/capture_gate/source_hash_parity.csv",
+    "archive": "source_hash_parity.csv",
+    "sha256": "06cad25fe3306946da9a56b96e74072436f34fb3af9bde9b947113b925336790"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/capture_gate/baseline_parity.csv",
+    "archive": "baseline_parity.csv",
+    "sha256": "3283f1428e8f53320517ff78d0766bfa06ba5971d321ad5f32feaff88660e306"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/capture_gate/results.json",
+    "archive": "capture_results.json",
+    "sha256": "b50d600d19070415ff356ad598dee5d818439f85827c6629830be1a03dc2ab02"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/align_ledger.csv",
+    "archive": "offline/align_ledger.csv",
+    "sha256": "466fb7b96171112591193f2b7df7abb2442d7d6c69029aa93b9c1bc53f99a84f"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/resource_summary.csv",
+    "archive": "offline/resource_summary.csv",
+    "sha256": "0a6c79fcf65f920da3b149502c538040d78de0d701213e432dfee65124d5d429"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/ndt_paired_results.csv",
+    "archive": "offline/ndt_paired_results.csv",
+    "sha256": "f279fbb52dbc7ba89a33a393750fb73ed1466e37b7775e5a1d7b69488ca4e456"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/stderr.log",
+    "archive": "offline/stderr.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/weak_geometry.csv",
+    "archive": "offline/weak_geometry.csv",
+    "sha256": "1f63bba81d9f0c939ff9da19632837c00a488a0fedadcddf9848f005f0737730"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/coupled_correction.csv",
+    "archive": "offline/coupled_correction.csv",
+    "sha256": "7e4b0475fd63e89cffd8d4d6e91e4688b769f0100f943d1eaa0f6e1da6854ee9"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/nominal_parity.csv",
+    "archive": "offline/nominal_parity.csv",
+    "sha256": "f08dabfe6710be69e608eb1b314ffaa97145b966c940710bbd8ec2261af91c14"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/weak_candidates.csv",
+    "archive": "offline/weak_candidates.csv",
+    "sha256": "41ab79fd08f5c5070a7b542da3e768bdf9fd00277083cc8ba482545f121c00f7"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/cases.txt",
+    "archive": "offline/cases.txt",
+    "sha256": "0e539ffdea33341c3269a168084e75f75f20abdb0052f2e6f09d49453fd12104"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/execution.json",
+    "archive": "offline/execution.json",
+    "sha256": "5bd1d195add6aa836ca974737e20a453f69b230ca3f66c8deeecf916f7a179f7"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/stdout.log",
+    "archive": "offline/stdout.log",
+    "sha256": "c142bb146e4ec4e75ae2ecc47e97e1fadd5d5f9a98482bfa011e22775139fb85"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/runtime_breakdown.csv",
+    "archive": "offline/runtime_breakdown.csv",
+    "sha256": "31f84ecd149463d8e1df5cde40645fadd65848f90d15df59b138f51e88e759b7"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/nominal_parity.csv",
+    "archive": "nominal_parity.csv",
+    "sha256": "f08dabfe6710be69e608eb1b314ffaa97145b966c940710bbd8ec2261af91c14"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/weak_geometry.csv",
+    "archive": "weak_geometry.csv",
+    "sha256": "1f63bba81d9f0c939ff9da19632837c00a488a0fedadcddf9848f005f0737730"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/weak_candidates.csv",
+    "archive": "weak_candidates.csv",
+    "sha256": "41ab79fd08f5c5070a7b542da3e768bdf9fd00277083cc8ba482545f121c00f7"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/coupled_correction.csv",
+    "archive": "coupled_correction.csv",
+    "sha256": "7e4b0475fd63e89cffd8d4d6e91e4688b769f0100f943d1eaa0f6e1da6854ee9"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/ndt_paired_results.csv",
+    "archive": "ndt_paired_results.csv",
+    "sha256": "f279fbb52dbc7ba89a33a393750fb73ed1466e37b7775e5a1d7b69488ca4e456"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/runtime_breakdown.csv",
+    "archive": "runtime_breakdown.csv",
+    "sha256": "31f84ecd149463d8e1df5cde40645fadd65848f90d15df59b138f51e88e759b7"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/offline/resource_summary.csv",
+    "archive": "resource_summary.csv",
+    "sha256": "0a6c79fcf65f920da3b149502c538040d78de0d701213e432dfee65124d5d429"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/posthoc_evaluation/per_frame_accuracy.csv",
+    "archive": "per_frame_accuracy.csv",
+    "sha256": "c7adc89772c5bfd3e6f4a1afd8409ebfb5f9a0911443128bf4cf81b694c496da"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/posthoc_evaluation/accuracy_comparison.csv",
+    "archive": "accuracy_comparison.csv",
+    "sha256": "a674dd71d95e91625edc15817560b24e2290c45e295bdd0b9d6ada91fcba86d8"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/posthoc_evaluation/step_limit_response.csv",
+    "archive": "step_limit_response.csv",
+    "sha256": "ec957e8ec81835de9cb381dce16fc7394c9fbf8951c46236b98ca0d6fad08a67"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/posthoc_evaluation/results.json",
+    "archive": "results.json",
+    "sha256": "0d748fce61b277553e1c5fa1873560f9c9035392327b390fffd738dceec0687a"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/ndt_diagnostics.csv",
+    "archive": "runs/capture_visual/ndt_diagnostics.csv",
+    "sha256": "d2cbfeaa81b692351c7904234e9908c56357feb37ebf20cb8f9baa258181b216"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/ekf_lineage.csv",
+    "archive": "runs/capture_visual/ekf_lineage.csv",
+    "sha256": "a42832fedc6211f948008d25dde37405ed0f470fa002118503040b5b4cabda96"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/deskew.csv",
+    "archive": "runs/capture_visual/deskew.csv",
+    "sha256": "e44b983871e690bfd830aa2473f9ee9cd140ef7912909d8706be5e4b9184804a"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/oosm.csv",
+    "archive": "runs/capture_visual/oosm.csv",
+    "sha256": "b494cea48f5c89b0553c12ca5bd0f82ed563261bb1fa62ca4350994b55595cf3"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/oosm_fixed_lag.csv",
+    "archive": "runs/capture_visual/oosm_fixed_lag.csv",
+    "sha256": "0fa564ec91056f23e2b372223c230a73f8364ba2f61f398d10a6bc2a3d4e4db4"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/rosparams.yaml",
+    "archive": "runs/capture_visual/rosparams.yaml",
+    "sha256": "01a0c80824a2535c15fc5fc079c1449777fe27b956dbea94c193e74bb1cf2150"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/execution.json",
+    "archive": "runs/capture_visual/execution.json",
+    "sha256": "93b453f82567e5afd43285b24d79ad19810abfce488117edee8f1d74b89dc572"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/resources.csv",
+    "archive": "runs/capture_visual/resources.csv",
+    "sha256": "ceacfefe3ddeddada438f82f6c773d375666deb334aa8f41799ec90d69e9e8cb"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/ekf_runtime.csv",
+    "archive": "runs/capture_visual/ekf_runtime.csv",
+    "sha256": "fafb369ec2885be2151d8a2ff68349eeed2d8e7c1a18d0186fc1fbc40d397d45"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/parameter_parity.json",
+    "archive": "runs/capture_visual/parameter_parity.json",
+    "sha256": "4089df5f20586948940b537768e92893f84752131aed614af61f4056f1541aab"
+  },
+  {
+    "source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p23_r1_budgeted_coupled_subspace_refinement/runs/capture_visual/launch.log",
+    "archive": "runs/capture_visual/launch.log",
+    "sha256": "5313a0401965a062b6d2ffdbec281da7d83ea21813f9197dfaec592531c7ec82"
+  }
+]
