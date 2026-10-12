@@ -1,4 +1,5 @@
 #include "dog_prior_map_localization/core/selective_relative_visual_update.hpp"
+#include "dog_prior_map_localization/core/positive_covariance_factor.hpp"
 
 #include <Eigen/Cholesky>
 #include <Eigen/Eigenvalues>
@@ -88,7 +89,8 @@ SelectiveRelativeVisualUpdateResult applySelectiveRelativeVisualUpdate(
     bool translation_degenerate,
     const Eigen::Matrix3d& translation_axes_map,
     bool rotation_degenerate,
-    const Eigen::Matrix3d& rotation_axes_map)
+    const Eigen::Matrix3d& rotation_axes_map,
+    bool covariance_stability_enable)
 {
   SelectiveRelativeVisualUpdateResult result;
   if (!current)
@@ -116,6 +118,14 @@ SelectiveRelativeVisualUpdateResult applySelectiveRelativeVisualUpdate(
         input_covariance_eigen.eigenvalues().minCoeff();
   result.input_state_covariance_asymmetry =
       (current->P - current->P.transpose()).cwiseAbs().maxCoeff();
+  PositiveCovarianceFactor current_factor15;
+  if (covariance_stability_enable) {
+    current_factor15 = factorPositiveCovariance(current->P);
+    if (!current_factor15.valid || !factorPositiveCovariance(reference.P).valid) {
+      result.status = "NON_PSD_INPUT_STATE_COVARIANCE";
+      return result;
+    }
+  }
   if (!translation_degenerate && !rotation_degenerate)
   {
     result.status = "SKIPPED_NO_LIDAR_DEGENERACY";
@@ -271,11 +281,30 @@ SelectiveRelativeVisualUpdateResult applySelectiveRelativeVisualUpdate(
     return result;
   }
 
-  Matrix15d updated_covariance = current->P + conditional_gain *
-      (ci_covariance - current_covariance) * conditional_gain.transpose();
-  updated_covariance = 0.5 * (updated_covariance + updated_covariance.transpose());
-  const Matrix15d conditional_covariance = current->P - conditional_gain *
-      current_covariance * conditional_gain.transpose();
+  Matrix15d conditional_covariance;
+  Matrix15d updated_covariance;
+  if (covariance_stability_enable) {
+    // Joseph/conditional form: replace subtraction of nearly equal large
+    // matrices by a sum of positive Gram products. Same conditional update.
+    const Matrix15d residual_map = Matrix15d::Identity() - conditional_gain * selector;
+    const Matrix15ld residual_root = residual_map.cast<long double>() * current_factor15.precise_root;
+    const Matrix15ld conditional_precise = residual_root * residual_root.transpose();
+    conditional_covariance = conditional_precise.cast<double>();
+    Eigen::LLT<Eigen::MatrixXd> ci_factor(ci_covariance);
+    if (ci_factor.info() != Eigen::Success) {
+      result.status = "CI_COVARIANCE_FACTOR_FAILED";
+      return result;
+    }
+    const Eigen::Matrix<long double,15,Eigen::Dynamic> ci_root = conditional_gain.cast<long double>() *
+        Eigen::MatrixXd(ci_factor.matrixL()).cast<long double>();
+    updated_covariance = (conditional_precise + ci_root * ci_root.transpose()).cast<double>();
+  } else {
+    updated_covariance = current->P + conditional_gain *
+        (ci_covariance - current_covariance) * conditional_gain.transpose();
+    conditional_covariance = current->P - conditional_gain *
+        current_covariance * conditional_gain.transpose();
+  }
+  updated_covariance = (0.5 * (updated_covariance + updated_covariance.transpose())).eval();
   Eigen::SelfAdjointEigenSolver<Matrix15d> conditional_eigen(
       0.5 * (conditional_covariance + conditional_covariance.transpose()),
       Eigen::EigenvaluesOnly);
@@ -284,8 +313,11 @@ SelectiveRelativeVisualUpdateResult applySelectiveRelativeVisualUpdate(
   Eigen::SelfAdjointEigenSolver<Matrix15d> updated_eigen(updated_covariance, Eigen::EigenvaluesOnly);
   if (updated_eigen.info() == Eigen::Success && updated_eigen.eigenvalues().allFinite())
     result.minimum_updated_covariance_eigenvalue = updated_eigen.eigenvalues().minCoeff();
-  if (!updated_covariance.allFinite() || updated_eigen.info() != Eigen::Success ||
-      !updated_eigen.eigenvalues().allFinite() || updated_eigen.eigenvalues().minCoeff() < -1e-8)
+  const bool invalid_covariance = covariance_stability_enable ?
+      !factorPositiveCovariance(updated_covariance).valid :
+      (updated_eigen.info() != Eigen::Success || !updated_eigen.eigenvalues().allFinite() ||
+       updated_eigen.eigenvalues().minCoeff() < -1e-8);
+  if (!updated_covariance.allFinite() || invalid_covariance)
   {
     result.status = "NON_PSD_CI_COVARIANCE";
     return result;

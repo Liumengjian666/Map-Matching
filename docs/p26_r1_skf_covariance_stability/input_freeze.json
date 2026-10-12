@@ -1,0 +1,19 @@
+{
+  "START_SHA": "d373783ead17eff3d3d6e851b404668f306fb01a",
+  "GT_LOADED": false,
+  "map_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+  "bag_sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+  "visual_sha256": "28e2fb5ccff6a9978d471ee37b7b475b349bc2090b96131b702fa657914610d9",
+  "dataset_sha256": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+  "P26_overlay_sha256": "5133400e1419932738350f0dab38dcd68181be66fe0a889288cbf8e97afe9729",
+  "binary_sha256": {
+    "dog_prior_map_ndt_node_cpp": {
+      "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+      "sha256": "f90d6aeaa0d3462f175c8d1d6dc8d9826330b94640dd930efcd510cc2afe59d9"
+    },
+    "dog_prior_map_ekf_node_cpp": {
+      "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+      "sha256": "56b7b9bb08fc1e3465abfe8a0c48d820ae56b272a64b3a60372f1b27532c8358"
+    }
+  }
+}

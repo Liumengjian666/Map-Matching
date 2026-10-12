@@ -1,0 +1,14 @@
+Final runtime package build: SUCCESS (catkin isolated workspace /tmp/p25-catkin-AY1eHd).
+Final actual-indefinite fixture test target build: SUCCESS.
+
+CTest executed from /tmp/p25-catkin-AY1eHd/build/dog_prior_map_localization:
+covariance_stability_regression_test: Passed
+selective_relative_visual_update_test: Passed
+oosm_fixed_lag_scheduler_contract_test: Passed
+100% tests passed, 0 tests failed out of 3.
+
+Python py_compile: run_replay.py and p26_covariance/summarize.py passed.
+
+Scientific covariance acceptance: FAILED, independent of these unit tests.
+Final prefix had 92 SKF APPLIED and 0 SKF PSD rejection, but 2 nonpositive covariance factor certificates during IMU propagation.
+80-digit test of first actual fault: before positive, after indefinite.

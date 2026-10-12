@@ -8,6 +8,10 @@ namespace dog_prior_map_localization
 // 构造完整定位节点：集中读取参数、初始化状态和发布订阅关系。
 DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
 {
+  covariance_stability_enable_ = getParam<bool>("filter/experimental_covariance_stability_enable", false);
+  covariance_audit_.useFactorCertificate(covariance_stability_enable_);
+  covariance_audit_.captureAt(getParam<double>("output/experimental_covariance_reference_stamp",0.0));
+  covariance_audit_.open(getParam<std::string>("output/experimental_covariance_audit_csv_path", ""));
   // ------------------------- 1. 读取ROS参数 -------------------------
   // These parameters are kept in the canonical NDT split YAML so deployment
   // changes remain configuration-only.

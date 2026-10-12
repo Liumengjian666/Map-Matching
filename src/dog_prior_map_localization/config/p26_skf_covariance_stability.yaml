@@ -1,0 +1,23 @@
+# P26: P25 mature policy unchanged; common covariance path in future A and B.
+mature_integration:
+  enable: true
+  dcreg_enable: true
+  multi_ndt_enable: true
+  skf_enable: false
+  p25_relative_visual_contract: true
+  translation_scale_m: 0.8
+  degeneracy_eigen_ratio: 0.03
+  weak_translation_step_m: 0.20
+  weak_rotation_step_deg: 2.0
+  score_improvement_margin: 0.0002747604276
+  motion_weight: 0.05
+  motion_translation_scale_m: 2.0
+  motion_rotation_scale_deg: 15.0
+  suspect_fitness_threshold: 10.0
+  maximum_quick_candidates: 4
+  maximum_extra_aligns: 2
+filter:
+  experimental_covariance_stability_enable: true
+output:
+  # Original P25 rejected observation current-image time, diagnostic capture only.
+  experimental_covariance_reference_stamp: 1517157237.537242

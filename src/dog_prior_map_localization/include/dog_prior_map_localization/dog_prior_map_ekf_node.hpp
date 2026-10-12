@@ -31,6 +31,7 @@
 #include "dog_prior_map_localization/core/state_history.hpp"
 #include "dog_prior_map_localization/core/oosm_fixed_lag_scheduler.hpp"
 #include "dog_prior_map_localization/core/selective_relative_visual_update.hpp"
+#include "dog_prior_map_localization/core/covariance_audit.hpp"
 
 namespace dog_prior_map_localization
 {
@@ -43,6 +44,8 @@ public:
   ~DogPriorMapEkfNode();
 
 private:
+  mutable CovarianceAudit covariance_audit_;
+  bool covariance_stability_enable_ = false;
   /// 优先从全局命名空间读取参数，再读取私有命名空间，均不存在时返回默认值。
   template <typename T>
   T getParam(const std::string &name, const T &default_value)

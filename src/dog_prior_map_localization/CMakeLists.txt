@@ -93,6 +93,10 @@ add_executable(selective_relative_visual_update_test
   tests/selective_relative_visual_update_test.cpp
   src/core/selective_relative_visual_update.cpp
 )
+add_executable(covariance_stability_regression_test
+  tests/covariance_stability_regression_test.cpp
+  src/core/selective_relative_visual_update.cpp
+)
 
 add_executable(frame_conversion_contract_test
   tests/frame_conversion_contract_test.cpp
@@ -179,6 +183,11 @@ target_link_libraries(solid_adapter_contract_test
 )
 
 if(CATKIN_ENABLE_TESTING)
+  add_test(NAME covariance_stability_regression_test
+    COMMAND $<TARGET_FILE:covariance_stability_regression_test>
+      ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/p26_r1_skf_covariance_stability/eigensolver_false_negative.csv
+      ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/p26_r1_skf_covariance_stability/double_LLT_false_negative.csv
+      ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/p26_r1_skf_covariance_stability/post_fix_actual_IMU_PSD_loss.csv)
   add_test(NAME selective_relative_visual_update_test
     COMMAND $<TARGET_FILE:selective_relative_visual_update_test>)
 

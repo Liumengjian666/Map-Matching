@@ -1,0 +1,1069 @@
+{
+  "task": "P26-R1-SKF-COVARIANCE-STABILITY-FIX",
+  "START_SHA": "d373783ead17eff3d3d6e851b404668f306fb01a",
+  "final_result": "SKF_COVARIANCE_STABILITY_NOT_ESTABLISHED",
+  "short_prefix_acceptance": false,
+  "GT_LOADED": false,
+  "full_40sec_replay_count": 0,
+  "19sec_prefix_count": 4,
+  "run_summaries": {
+    "diagnostic_prefix": {
+      "receipt": {
+        "protocol": "P26_R1_COVARIANCE_PREFIX",
+        "GT_LOADED": false,
+        "completed": false,
+        "error": "RuntimeError:P26_PREFIX_NUMERICAL_ERROR:NON_PSD_CI_COVARIANCE",
+        "skf_enabled": true,
+        "duration_sec": 19.0,
+        "wall_sec": 86.3296071740042,
+        "commands": [
+          [
+            "roscore",
+            "-p",
+            "11436"
+          ],
+          [
+            "roslaunch",
+            "dog_prior_map_localization",
+            "dog_prior_map_localization_split.launch",
+            "rviz:=false",
+            "publish_path:=false",
+            "coupled_mode:=CONTROL",
+            "camera_enable:=false",
+            "dataset_config:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml",
+            "mature_config:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p25_skf_visual_update.yaml",
+            "mature_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_prefix/mature_diagnostics.csv",
+            "mature_skf_enable_override:=true",
+            "skf_visual_measurement_csv:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/visual_covariance/visual.csv",
+            "skf_measurement_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_prefix/skf_measurements.csv",
+            "skf_update_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_prefix/skf_update_diagnostics.csv",
+            "scan_reference_time:=start",
+            "oosm_fixed_lag_enable:=true",
+            "oosm_fixed_lag_sec:=0.15",
+            "diagnostic_determinism_enable:=true",
+            "visual_initial_guess_enable:=false",
+            "visual_initial_guess_csv:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/visual_covariance/visual.csv",
+            "ndt_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_prefix/ndt_diagnostics.csv",
+            "ekf_prediction_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_prefix/ekf_lineage.csv",
+            "oosm_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_prefix/oosm.csv",
+            "oosm_fixed_lag_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_prefix/oosm_fixed_lag.csv",
+            "imu_deskew_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_prefix/deskew.csv",
+            "runtime_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_prefix/ekf_runtime.csv",
+            "experimental_covariance_audit_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_prefix/covariance_audit.csv"
+          ],
+          [
+            "rosbag",
+            "record",
+            "-O",
+            "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_prefix/outputs.bag",
+            "/dog_livo/ndt_odom",
+            "/dog_livo/odom_corrected",
+            "/dog_livo/odom_high_rate",
+            "/dog_livo/diagnostics",
+            "/dog_livo/skf_visual_measurement"
+          ],
+          [
+            "rosbag",
+            "play",
+            "--clock",
+            "--rate",
+            "0.25",
+            "--delay",
+            "2",
+            "--quiet",
+            "--duration",
+            "19.0",
+            "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/input_v2/corridor01_p10_causal_startup5_eval35_fixedlag_v2.bag"
+          ]
+        ],
+        "binary_hashes": {
+          "dog_prior_map_ndt_node_cpp": {
+            "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+            "sha256": "500e29b702f3efc5e04a9b2e8efa5c2bd8434a315fb311b65f0bfc298b7bfbdc"
+          },
+          "dog_prior_map_ekf_node_cpp": {
+            "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+            "sha256": "3425a7980fc0ca87d8f775e9aa6618f3f81055635a8e084702fc52d6e1791975"
+          }
+        },
+        "resources": {
+          "dog_prior_map_ndt_node_cpp": {
+            "peak_rss_bytes": 81924096,
+            "cpu_sec": 5.21
+          },
+          "dog_prior_map_ekf_node_cpp": {
+            "peak_rss_bytes": 19591168,
+            "cpu_sec": 5.38
+          }
+        },
+        "dataset_config": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml",
+        "dataset_config_sha256": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+        "mature_config": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p25_skf_visual_update.yaml",
+        "mature_config_sha256": "478af689ecfa6629705dc61dfc0b4148f8f1b9ee6b2a46c98c43d9acef3a3734",
+        "map_path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd",
+        "map_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+        "bag_sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+        "visual_csv_sha256": "28e2fb5ccff6a9978d471ee37b7b475b349bc2090b96131b702fa657914610d9",
+        "rosparams_path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_prefix/rosparams.yaml",
+        "ndt_subscriptions": [
+          "/clock",
+          "/imu/data",
+          "/p10/corridor01/deskewed_points"
+        ],
+        "ekf_subscriptions": [
+          "/clock",
+          "/dog_livo/ndt_odom",
+          "/dog_livo/skf_visual_measurement",
+          "/imu/data",
+          "/p10/corridor01/raw_timed_points"
+        ],
+        "runtime_root": "/tmp/p25-catkin-AY1eHd/devel",
+        "fixed_lag_sensor_time_contract": 0.15,
+        "visual_guess_enabled": false
+      },
+      "NDT": 188,
+      "NDT_converged": 188,
+      "NDT_OOSM_APPLIED": 187,
+      "high_rate": 3798,
+      "corrected": 273,
+      "visual_published": 92,
+      "SKF_status": {
+        "APPLIED": 86,
+        "NON_PSD_CI_COVARIANCE": 6
+      },
+      "nonfinite_pose_velocity": 0,
+      "late": 0,
+      "release_before_deadline": 0,
+      "unreleased_at_stop": 1,
+      "unreleased_due_before_watermark": 0,
+      "max_high_rate_jump_m": 2.3697926259967623,
+      "jumps_over_2m": 1,
+      "first_scan_stamp": "1517157219.1889789",
+      "last_scan_stamp": "1517157238.0486431",
+      "final_state_stamp": "1517157238.1830399",
+      "span_from_first_scan_sec": 18.99406099319458,
+      "audit": [
+        {
+          "event": "CAUSAL_PARTIAL_PROPAGATE",
+          "count": "122",
+          "invalid_before": "68",
+          "invalid_after": "11",
+          "min_before": "-0.015683006989256638",
+          "min_after": "-0.015555385133953683",
+          "max_asymmetry": "0.005859375"
+        },
+        {
+          "event": "IMU_PROPAGATE",
+          "count": "12258",
+          "invalid_before": "5333",
+          "invalid_after": "5457",
+          "min_before": "-0.01818599063333276",
+          "min_after": "-0.01818599063333276",
+          "max_asymmetry": "0.013671875"
+        },
+        {
+          "event": "NDT_DAMPING",
+          "count": "187",
+          "invalid_before": "72",
+          "invalid_after": "6",
+          "min_before": "-0.015982723688637256",
+          "min_after": "-0.015982723688637256",
+          "max_asymmetry": "0.005859375"
+        },
+        {
+          "event": "NDT_REPLAY_END",
+          "count": "187",
+          "invalid_before": "82",
+          "invalid_after": "82",
+          "min_before": "-0.016339015406398545",
+          "min_after": "-0.016339015406398545",
+          "max_asymmetry": "0.0107421875"
+        },
+        {
+          "event": "OOSM_RESTORE",
+          "count": "273",
+          "invalid_before": "72",
+          "invalid_after": "72",
+          "min_before": "-0.015982723688637256",
+          "min_after": "-0.015982723688637256",
+          "max_asymmetry": "0.005859375"
+        },
+        {
+          "event": "SKF_CURRENT_ENDPOINT",
+          "count": "92",
+          "invalid_before": "6",
+          "invalid_after": "6",
+          "min_before": "-0.015555385133953683",
+          "min_after": "-0.015555385133953683",
+          "max_asymmetry": "0"
+        },
+        {
+          "event": "SKF_REFERENCE_ENDPOINT",
+          "count": "92",
+          "invalid_before": "5",
+          "invalid_after": "5",
+          "min_before": "-0.015555385133953683",
+          "min_after": "-0.015555385133953683",
+          "max_asymmetry": "1.7347234759768071e-18"
+        },
+        {
+          "event": "SKF_REPLAY_END",
+          "count": "86",
+          "invalid_before": "48",
+          "invalid_after": "48",
+          "min_before": "-0.0016607178751093434",
+          "min_after": "-0.0016607178751093434",
+          "max_asymmetry": "0.0068359375"
+        },
+        {
+          "event": "SKF_UPDATE",
+          "count": "92",
+          "invalid_before": "6",
+          "invalid_after": "6",
+          "min_before": "-0.015555385133953683",
+          "min_after": "-0.015555385133953683",
+          "max_asymmetry": "1.7347234759768071e-18"
+        }
+      ]
+    },
+    "diagnostic_psd_prefix": {
+      "receipt": {
+        "protocol": "P26_R1_COVARIANCE_PREFIX",
+        "GT_LOADED": false,
+        "completed": false,
+        "error": "RuntimeError:P26_PREFIX_NUMERICAL_ERROR:NON_PSD_CI_COVARIANCE",
+        "skf_enabled": true,
+        "duration_sec": 19.0,
+        "wall_sec": 86.18266788299661,
+        "commands": [
+          [
+            "roscore",
+            "-p",
+            "11437"
+          ],
+          [
+            "roslaunch",
+            "dog_prior_map_localization",
+            "dog_prior_map_localization_split.launch",
+            "rviz:=false",
+            "publish_path:=false",
+            "coupled_mode:=CONTROL",
+            "camera_enable:=false",
+            "dataset_config:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml",
+            "mature_config:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p25_skf_visual_update.yaml",
+            "mature_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_psd_prefix/mature_diagnostics.csv",
+            "mature_skf_enable_override:=true",
+            "skf_visual_measurement_csv:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/visual_covariance/visual.csv",
+            "skf_measurement_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_psd_prefix/skf_measurements.csv",
+            "skf_update_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_psd_prefix/skf_update_diagnostics.csv",
+            "scan_reference_time:=start",
+            "oosm_fixed_lag_enable:=true",
+            "oosm_fixed_lag_sec:=0.15",
+            "diagnostic_determinism_enable:=true",
+            "visual_initial_guess_enable:=false",
+            "visual_initial_guess_csv:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/visual_covariance/visual.csv",
+            "ndt_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_psd_prefix/ndt_diagnostics.csv",
+            "ekf_prediction_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_psd_prefix/ekf_lineage.csv",
+            "oosm_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_psd_prefix/oosm.csv",
+            "oosm_fixed_lag_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_psd_prefix/oosm_fixed_lag.csv",
+            "imu_deskew_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_psd_prefix/deskew.csv",
+            "runtime_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_psd_prefix/ekf_runtime.csv",
+            "experimental_covariance_audit_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_psd_prefix/covariance_audit.csv"
+          ],
+          [
+            "rosbag",
+            "record",
+            "-O",
+            "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_psd_prefix/outputs.bag",
+            "/dog_livo/ndt_odom",
+            "/dog_livo/odom_corrected",
+            "/dog_livo/odom_high_rate",
+            "/dog_livo/diagnostics",
+            "/dog_livo/skf_visual_measurement"
+          ],
+          [
+            "rosbag",
+            "play",
+            "--clock",
+            "--rate",
+            "0.25",
+            "--delay",
+            "2",
+            "--quiet",
+            "--duration",
+            "19.0",
+            "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/input_v2/corridor01_p10_causal_startup5_eval35_fixedlag_v2.bag"
+          ]
+        ],
+        "binary_hashes": {
+          "dog_prior_map_ndt_node_cpp": {
+            "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+            "sha256": "500e29b702f3efc5e04a9b2e8efa5c2bd8434a315fb311b65f0bfc298b7bfbdc"
+          },
+          "dog_prior_map_ekf_node_cpp": {
+            "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+            "sha256": "ae9762a790e96df8e879d01a86c6141ec3cb70f0aa19df69dc3e2b8de1458a9f"
+          }
+        },
+        "resources": {
+          "dog_prior_map_ndt_node_cpp": {
+            "peak_rss_bytes": 81252352,
+            "cpu_sec": 5.18
+          },
+          "dog_prior_map_ekf_node_cpp": {
+            "peak_rss_bytes": 19460096,
+            "cpu_sec": 5.37
+          }
+        },
+        "dataset_config": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml",
+        "dataset_config_sha256": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+        "mature_config": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p25_skf_visual_update.yaml",
+        "mature_config_sha256": "478af689ecfa6629705dc61dfc0b4148f8f1b9ee6b2a46c98c43d9acef3a3734",
+        "map_path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd",
+        "map_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+        "bag_sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+        "visual_csv_sha256": "28e2fb5ccff6a9978d471ee37b7b475b349bc2090b96131b702fa657914610d9",
+        "rosparams_path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/diagnostic_psd_prefix/rosparams.yaml",
+        "ndt_subscriptions": [
+          "/clock",
+          "/imu/data",
+          "/p10/corridor01/deskewed_points"
+        ],
+        "ekf_subscriptions": [
+          "/clock",
+          "/dog_livo/ndt_odom",
+          "/dog_livo/skf_visual_measurement",
+          "/imu/data",
+          "/p10/corridor01/raw_timed_points"
+        ],
+        "runtime_root": "/tmp/p25-catkin-AY1eHd/devel",
+        "fixed_lag_sensor_time_contract": 0.15,
+        "visual_guess_enabled": false
+      },
+      "NDT": 188,
+      "NDT_converged": 188,
+      "NDT_OOSM_APPLIED": 187,
+      "high_rate": 3798,
+      "corrected": 273,
+      "visual_published": 92,
+      "SKF_status": {
+        "APPLIED": 86,
+        "NON_PSD_CI_COVARIANCE": 6
+      },
+      "nonfinite_pose_velocity": 0,
+      "late": 0,
+      "release_before_deadline": 0,
+      "unreleased_at_stop": 1,
+      "unreleased_due_before_watermark": 0,
+      "max_high_rate_jump_m": 2.3697926259967623,
+      "jumps_over_2m": 1,
+      "first_scan_stamp": "1517157219.1889789",
+      "last_scan_stamp": "1517157238.0486431",
+      "final_state_stamp": "1517157238.1830399",
+      "span_from_first_scan_sec": 18.99406099319458,
+      "audit": [
+        {
+          "event": "CAUSAL_PARTIAL_PROPAGATE",
+          "count": "122",
+          "invalid_before": "11",
+          "invalid_after": "11",
+          "min_before": "-0.015683006989256638",
+          "min_after": "-0.015555385133953683",
+          "max_asymmetry": "0.005859375"
+        },
+        {
+          "event": "IMU_PROPAGATE",
+          "count": "12258",
+          "invalid_before": "364",
+          "invalid_after": "366",
+          "min_before": "-0.01818599063333276",
+          "min_after": "-0.01818599063333276",
+          "max_asymmetry": "0.013671875"
+        },
+        {
+          "event": "NDT_DAMPING",
+          "count": "187",
+          "invalid_before": "6",
+          "invalid_after": "6",
+          "min_before": "-0.015982723688637256",
+          "min_after": "-0.015982723688637256",
+          "max_asymmetry": "0.005859375"
+        },
+        {
+          "event": "NDT_REPLAY_END",
+          "count": "187",
+          "invalid_before": "7",
+          "invalid_after": "7",
+          "min_before": "-0.016339015406398545",
+          "min_after": "-0.016339015406398545",
+          "max_asymmetry": "0.0107421875"
+        },
+        {
+          "event": "OOSM_RESTORE",
+          "count": "273",
+          "invalid_before": "6",
+          "invalid_after": "6",
+          "min_before": "-0.015982723688637256",
+          "min_after": "-0.015982723688637256",
+          "max_asymmetry": "0.005859375"
+        },
+        {
+          "event": "SKF_CURRENT_ENDPOINT",
+          "count": "92",
+          "invalid_before": "6",
+          "invalid_after": "6",
+          "min_before": "-0.015555385133953683",
+          "min_after": "-0.015555385133953683",
+          "max_asymmetry": "0"
+        },
+        {
+          "event": "SKF_REFERENCE_ENDPOINT",
+          "count": "92",
+          "invalid_before": "5",
+          "invalid_after": "5",
+          "min_before": "-0.015555385133953683",
+          "min_after": "-0.015555385133953683",
+          "max_asymmetry": "1.7347234759768071e-18"
+        },
+        {
+          "event": "SKF_REPLAY_END",
+          "count": "86",
+          "invalid_before": "1",
+          "invalid_after": "1",
+          "min_before": "-0.0016607178751093434",
+          "min_after": "-0.0016607178751093434",
+          "max_asymmetry": "0.0068359375"
+        },
+        {
+          "event": "SKF_UPDATE",
+          "count": "92",
+          "invalid_before": "6",
+          "invalid_after": "6",
+          "min_before": "-0.015555385133953683",
+          "min_after": "-0.015555385133953683",
+          "max_asymmetry": "1.7347234759768071e-18"
+        }
+      ]
+    },
+    "verification_prefix": {
+      "receipt": {
+        "protocol": "P26_R1_COVARIANCE_PREFIX",
+        "GT_LOADED": false,
+        "completed": false,
+        "error": "RuntimeError:P26_PREFIX_NUMERICAL_ERROR:NON_PSD_INPUT_STATE_COVARIANCE",
+        "skf_enabled": true,
+        "duration_sec": 19.0,
+        "wall_sec": 86.25031440000748,
+        "commands": [
+          [
+            "roscore",
+            "-p",
+            "11438"
+          ],
+          [
+            "roslaunch",
+            "dog_prior_map_localization",
+            "dog_prior_map_localization_split.launch",
+            "rviz:=false",
+            "publish_path:=false",
+            "coupled_mode:=CONTROL",
+            "camera_enable:=false",
+            "dataset_config:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml",
+            "mature_config:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p26_skf_covariance_stability.yaml",
+            "mature_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/verification_prefix/mature_diagnostics.csv",
+            "mature_skf_enable_override:=true",
+            "skf_visual_measurement_csv:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/visual_covariance/visual.csv",
+            "skf_measurement_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/verification_prefix/skf_measurements.csv",
+            "skf_update_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/verification_prefix/skf_update_diagnostics.csv",
+            "scan_reference_time:=start",
+            "oosm_fixed_lag_enable:=true",
+            "oosm_fixed_lag_sec:=0.15",
+            "diagnostic_determinism_enable:=true",
+            "visual_initial_guess_enable:=false",
+            "visual_initial_guess_csv:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/visual_covariance/visual.csv",
+            "ndt_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/verification_prefix/ndt_diagnostics.csv",
+            "ekf_prediction_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/verification_prefix/ekf_lineage.csv",
+            "oosm_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/verification_prefix/oosm.csv",
+            "oosm_fixed_lag_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/verification_prefix/oosm_fixed_lag.csv",
+            "imu_deskew_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/verification_prefix/deskew.csv",
+            "runtime_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/verification_prefix/ekf_runtime.csv",
+            "experimental_covariance_audit_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/verification_prefix/covariance_audit.csv"
+          ],
+          [
+            "rosbag",
+            "record",
+            "-O",
+            "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/verification_prefix/outputs.bag",
+            "/dog_livo/ndt_odom",
+            "/dog_livo/odom_corrected",
+            "/dog_livo/odom_high_rate",
+            "/dog_livo/diagnostics",
+            "/dog_livo/skf_visual_measurement"
+          ],
+          [
+            "rosbag",
+            "play",
+            "--clock",
+            "--rate",
+            "0.25",
+            "--delay",
+            "2",
+            "--quiet",
+            "--duration",
+            "19.0",
+            "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/input_v2/corridor01_p10_causal_startup5_eval35_fixedlag_v2.bag"
+          ]
+        ],
+        "binary_hashes": {
+          "dog_prior_map_ndt_node_cpp": {
+            "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+            "sha256": "f90d6aeaa0d3462f175c8d1d6dc8d9826330b94640dd930efcd510cc2afe59d9"
+          },
+          "dog_prior_map_ekf_node_cpp": {
+            "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+            "sha256": "0ccea4851bdb4f740479a0838fd34996a72855405bb60b9b62fee9838db39ca2"
+          }
+        },
+        "resources": {
+          "dog_prior_map_ndt_node_cpp": {
+            "peak_rss_bytes": 81399808,
+            "cpu_sec": 5.32
+          },
+          "dog_prior_map_ekf_node_cpp": {
+            "peak_rss_bytes": 19603456,
+            "cpu_sec": 5.59
+          }
+        },
+        "dataset_config": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml",
+        "dataset_config_sha256": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+        "mature_config": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p26_skf_covariance_stability.yaml",
+        "mature_config_sha256": "c56f4e560090b3c0d0ec8299ab2053a30364b1c15c5134c087bd7f7f61c5f4b5",
+        "map_path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd",
+        "map_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+        "bag_sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+        "visual_csv_sha256": "28e2fb5ccff6a9978d471ee37b7b475b349bc2090b96131b702fa657914610d9",
+        "rosparams_path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/verification_prefix/rosparams.yaml",
+        "ndt_subscriptions": [
+          "/clock",
+          "/imu/data",
+          "/p10/corridor01/deskewed_points"
+        ],
+        "ekf_subscriptions": [
+          "/clock",
+          "/dog_livo/ndt_odom",
+          "/dog_livo/skf_visual_measurement",
+          "/imu/data",
+          "/p10/corridor01/raw_timed_points"
+        ],
+        "runtime_root": "/tmp/p25-catkin-AY1eHd/devel",
+        "fixed_lag_sensor_time_contract": 0.15,
+        "visual_guess_enabled": false
+      },
+      "NDT": 188,
+      "NDT_converged": 188,
+      "NDT_OOSM_APPLIED": 187,
+      "high_rate": 3798,
+      "corrected": 272,
+      "visual_published": 92,
+      "SKF_status": {
+        "APPLIED": 85,
+        "NON_PSD_INPUT_STATE_COVARIANCE": 7
+      },
+      "nonfinite_pose_velocity": 0,
+      "late": 0,
+      "release_before_deadline": 0,
+      "unreleased_at_stop": 1,
+      "unreleased_due_before_watermark": 0,
+      "max_high_rate_jump_m": 2.3697926259967614,
+      "jumps_over_2m": 1,
+      "first_scan_stamp": "1517157219.1889789",
+      "last_scan_stamp": "1517157238.0486431",
+      "final_state_stamp": "1517157238.1830399",
+      "span_from_first_scan_sec": 18.99406099319458,
+      "audit": [
+        {
+          "event": "CAUSAL_PARTIAL_PROPAGATE",
+          "count": "123",
+          "invalid_before": "13",
+          "invalid_after": "13",
+          "min_before": "-0.014163151469589847",
+          "min_after": "-0.014499195867893206",
+          "max_asymmetry": "0",
+          "min_positive_bound_before": "3.3751359569322962e-06",
+          "min_positive_bound_after": "3.3429152435521534e-06",
+          "uncertified_before": "13",
+          "uncertified_after": "13"
+        },
+        {
+          "event": "IMU_PROPAGATE",
+          "count": "12227",
+          "invalid_before": "358",
+          "invalid_after": "360",
+          "min_before": "-0.020873136257751831",
+          "min_after": "-0.020873136257751831",
+          "max_asymmetry": "0",
+          "min_positive_bound_before": "2.4030820928000037e-07",
+          "min_positive_bound_after": "2.4030820928000037e-07",
+          "uncertified_before": "358",
+          "uncertified_after": "360"
+        },
+        {
+          "event": "NDT_DAMPING",
+          "count": "187",
+          "invalid_before": "6",
+          "invalid_after": "6",
+          "min_before": "-0.0080208803068652097",
+          "min_after": "-0.0080208803068652097",
+          "max_asymmetry": "0",
+          "min_positive_bound_before": "3.3424703268405298e-06",
+          "min_positive_bound_after": "3.1789251154428834e-06",
+          "uncertified_before": "6",
+          "uncertified_after": "6"
+        },
+        {
+          "event": "NDT_REPLAY_END",
+          "count": "187",
+          "invalid_before": "7",
+          "invalid_after": "7",
+          "min_before": "-0.01741862559328956",
+          "min_after": "-0.01741862559328956",
+          "max_asymmetry": "0",
+          "min_positive_bound_before": "3.1997993378049903e-06",
+          "min_positive_bound_after": "3.1997993378049903e-06",
+          "uncertified_before": "7",
+          "uncertified_after": "7"
+        },
+        {
+          "event": "OOSM_RESTORE",
+          "count": "272",
+          "invalid_before": "6",
+          "invalid_after": "6",
+          "min_before": "-0.0080208803068652097",
+          "min_after": "-0.0080208803068652097",
+          "max_asymmetry": "0",
+          "min_positive_bound_before": "3.3424703268405298e-06",
+          "min_positive_bound_after": "3.3424703268405298e-06",
+          "uncertified_before": "6",
+          "uncertified_after": "6"
+        },
+        {
+          "event": "SKF_CURRENT_ENDPOINT",
+          "count": "92",
+          "invalid_before": "7",
+          "invalid_after": "7",
+          "min_before": "-0.014499195867893206",
+          "min_after": "-0.014499195867893206",
+          "max_asymmetry": "0",
+          "min_positive_bound_before": "3.446883449478045e-06",
+          "min_positive_bound_after": "3.446883449478045e-06",
+          "uncertified_before": "7",
+          "uncertified_after": "7"
+        },
+        {
+          "event": "SKF_REFERENCE_ENDPOINT",
+          "count": "92",
+          "invalid_before": "6",
+          "invalid_after": "6",
+          "min_before": "-0.0087843245873915777",
+          "min_after": "-0.0087843245873915777",
+          "max_asymmetry": "0",
+          "min_positive_bound_before": "3.3429152435521534e-06",
+          "min_positive_bound_after": "3.3429152435521534e-06",
+          "uncertified_before": "6",
+          "uncertified_after": "6"
+        },
+        {
+          "event": "SKF_REPLAY_END",
+          "count": "85",
+          "invalid_before": "0",
+          "invalid_after": "0",
+          "min_before": "1.1092506799424475e-05",
+          "min_after": "1.1092506799424475e-05",
+          "max_asymmetry": "0",
+          "min_positive_bound_before": "3.5757777069188105e-06",
+          "min_positive_bound_after": "3.5757777069188105e-06",
+          "uncertified_before": "0",
+          "uncertified_after": "0"
+        },
+        {
+          "event": "SKF_UPDATE",
+          "count": "92",
+          "invalid_before": "7",
+          "invalid_after": "7",
+          "min_before": "-0.014499195867893206",
+          "min_after": "-0.014499195867893206",
+          "max_asymmetry": "0",
+          "min_positive_bound_before": "3.446883449478045e-06",
+          "min_positive_bound_after": "3.4420963931355947e-06",
+          "uncertified_before": "7",
+          "uncertified_after": "7"
+        }
+      ]
+    },
+    "final_verification_prefix": {
+      "receipt": {
+        "protocol": "P26_R1_COVARIANCE_PREFIX",
+        "GT_LOADED": false,
+        "completed": true,
+        "error": null,
+        "skf_enabled": true,
+        "duration_sec": 19.0,
+        "wall_sec": 86.38241365499562,
+        "commands": [
+          [
+            "roscore",
+            "-p",
+            "11439"
+          ],
+          [
+            "roslaunch",
+            "dog_prior_map_localization",
+            "dog_prior_map_localization_split.launch",
+            "rviz:=false",
+            "publish_path:=false",
+            "coupled_mode:=CONTROL",
+            "camera_enable:=false",
+            "dataset_config:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml",
+            "mature_config:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p26_skf_covariance_stability.yaml",
+            "mature_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/final_verification_prefix/mature_diagnostics.csv",
+            "mature_skf_enable_override:=true",
+            "skf_visual_measurement_csv:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/visual_covariance/visual.csv",
+            "skf_measurement_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/final_verification_prefix/skf_measurements.csv",
+            "skf_update_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/final_verification_prefix/skf_update_diagnostics.csv",
+            "scan_reference_time:=start",
+            "oosm_fixed_lag_enable:=true",
+            "oosm_fixed_lag_sec:=0.15",
+            "diagnostic_determinism_enable:=true",
+            "visual_initial_guess_enable:=false",
+            "visual_initial_guess_csv:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/visual_covariance/visual.csv",
+            "ndt_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/final_verification_prefix/ndt_diagnostics.csv",
+            "ekf_prediction_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/final_verification_prefix/ekf_lineage.csv",
+            "oosm_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/final_verification_prefix/oosm.csv",
+            "oosm_fixed_lag_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/final_verification_prefix/oosm_fixed_lag.csv",
+            "imu_deskew_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/final_verification_prefix/deskew.csv",
+            "runtime_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/final_verification_prefix/ekf_runtime.csv",
+            "experimental_covariance_audit_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/final_verification_prefix/covariance_audit.csv"
+          ],
+          [
+            "rosbag",
+            "record",
+            "-O",
+            "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/final_verification_prefix/outputs.bag",
+            "/dog_livo/ndt_odom",
+            "/dog_livo/odom_corrected",
+            "/dog_livo/odom_high_rate",
+            "/dog_livo/diagnostics",
+            "/dog_livo/skf_visual_measurement"
+          ],
+          [
+            "rosbag",
+            "play",
+            "--clock",
+            "--rate",
+            "0.25",
+            "--delay",
+            "2",
+            "--quiet",
+            "--duration",
+            "19.0",
+            "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/input_v2/corridor01_p10_causal_startup5_eval35_fixedlag_v2.bag"
+          ]
+        ],
+        "binary_hashes": {
+          "dog_prior_map_ndt_node_cpp": {
+            "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+            "sha256": "f90d6aeaa0d3462f175c8d1d6dc8d9826330b94640dd930efcd510cc2afe59d9"
+          },
+          "dog_prior_map_ekf_node_cpp": {
+            "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+            "sha256": "56b7b9bb08fc1e3465abfe8a0c48d820ae56b272a64b3a60372f1b27532c8358"
+          }
+        },
+        "resources": {
+          "dog_prior_map_ndt_node_cpp": {
+            "peak_rss_bytes": 81592320,
+            "cpu_sec": 5.23
+          },
+          "dog_prior_map_ekf_node_cpp": {
+            "peak_rss_bytes": 19693568,
+            "cpu_sec": 7.4
+          }
+        },
+        "dataset_config": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml",
+        "dataset_config_sha256": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+        "mature_config": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p26_skf_covariance_stability.yaml",
+        "mature_config_sha256": "5133400e1419932738350f0dab38dcd68181be66fe0a889288cbf8e97afe9729",
+        "map_path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd",
+        "map_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+        "bag_sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+        "visual_csv_sha256": "28e2fb5ccff6a9978d471ee37b7b475b349bc2090b96131b702fa657914610d9",
+        "rosparams_path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p26_r1_skf_covariance_stability/final_verification_prefix/rosparams.yaml",
+        "ndt_subscriptions": [
+          "/clock",
+          "/imu/data",
+          "/p10/corridor01/deskewed_points"
+        ],
+        "ekf_subscriptions": [
+          "/clock",
+          "/dog_livo/ndt_odom",
+          "/dog_livo/skf_visual_measurement",
+          "/imu/data",
+          "/p10/corridor01/raw_timed_points"
+        ],
+        "runtime_root": "/tmp/p25-catkin-AY1eHd/devel",
+        "fixed_lag_sensor_time_contract": 0.15,
+        "visual_guess_enabled": false
+      },
+      "NDT": 188,
+      "NDT_converged": 188,
+      "NDT_OOSM_APPLIED": 187,
+      "high_rate": 3798,
+      "corrected": 279,
+      "visual_published": 92,
+      "SKF_status": {
+        "APPLIED": 92
+      },
+      "nonfinite_pose_velocity": 0,
+      "late": 0,
+      "release_before_deadline": 0,
+      "unreleased_at_stop": 1,
+      "unreleased_due_before_watermark": 0,
+      "max_high_rate_jump_m": 2.36979262599676,
+      "jumps_over_2m": 1,
+      "first_scan_stamp": "1517157219.1889789",
+      "last_scan_stamp": "1517157238.0486431",
+      "final_state_stamp": "1517157238.1830399",
+      "span_from_first_scan_sec": 18.99406099319458,
+      "audit": [
+        {
+          "event": "CAUSAL_PARTIAL_PROPAGATE",
+          "count": "117",
+          "invalid_before": "0",
+          "invalid_after": "0",
+          "min_before": "1.0490374030615106e-05",
+          "min_after": "1.047400974072193e-05",
+          "max_asymmetry": "0",
+          "min_positive_bound_before": "3.3468369429592316e-06",
+          "min_positive_bound_after": "3.3611831837651513e-06",
+          "uncertified_before": "0",
+          "uncertified_after": "0"
+        },
+        {
+          "event": "IMU_PROPAGATE",
+          "count": "12444",
+          "invalid_before": "2",
+          "invalid_after": "2",
+          "min_before": "-0.00047629226721974396",
+          "min_after": "-0.00047629226721974396",
+          "max_asymmetry": "0",
+          "min_positive_bound_before": "2.2036252480063575e-06",
+          "min_positive_bound_after": "2.2036252480063575e-06",
+          "uncertified_before": "2",
+          "uncertified_after": "2"
+        },
+        {
+          "event": "NDT_DAMPING",
+          "count": "187",
+          "invalid_before": "0",
+          "invalid_after": "0",
+          "min_before": "1.0580794986471056e-05",
+          "min_after": "1.0099340255624314e-05",
+          "max_asymmetry": "0",
+          "min_positive_bound_before": "3.4205682364364463e-06",
+          "min_positive_bound_after": "3.2227356791202084e-06",
+          "uncertified_before": "0",
+          "uncertified_after": "0"
+        },
+        {
+          "event": "NDT_REPLAY_END",
+          "count": "187",
+          "invalid_before": "0",
+          "invalid_after": "0",
+          "min_before": "1.0586099352338434e-05",
+          "min_after": "1.0586099352338434e-05",
+          "max_asymmetry": "0",
+          "min_positive_bound_before": "3.3630675789002147e-06",
+          "min_positive_bound_after": "3.3630675789002147e-06",
+          "uncertified_before": "0",
+          "uncertified_after": "0"
+        },
+        {
+          "event": "OOSM_RESTORE",
+          "count": "279",
+          "invalid_before": "0",
+          "invalid_after": "0",
+          "min_before": "1.0472597242135852e-05",
+          "min_after": "1.0472597242135852e-05",
+          "max_asymmetry": "0",
+          "min_positive_bound_before": "3.3520136908746286e-06",
+          "min_positive_bound_after": "3.3520136908746286e-06",
+          "uncertified_before": "0",
+          "uncertified_after": "0"
+        },
+        {
+          "event": "SKF_CURRENT_ENDPOINT",
+          "count": "92",
+          "invalid_before": "0",
+          "invalid_after": "0",
+          "min_before": "1.047400974072193e-05",
+          "min_after": "1.047400974072193e-05",
+          "max_asymmetry": "0",
+          "min_positive_bound_before": "3.3611831837651513e-06",
+          "min_positive_bound_after": "3.3611831837651513e-06",
+          "uncertified_before": "0",
+          "uncertified_after": "0"
+        },
+        {
+          "event": "SKF_REFERENCE_ENDPOINT",
+          "count": "92",
+          "invalid_before": "0",
+          "invalid_after": "0",
+          "min_before": "1.0099340255624314e-05",
+          "min_after": "1.0099340255624314e-05",
+          "max_asymmetry": "0",
+          "min_positive_bound_before": "3.2227356791202084e-06",
+          "min_positive_bound_after": "3.2227356791202084e-06",
+          "uncertified_before": "0",
+          "uncertified_after": "0"
+        },
+        {
+          "event": "SKF_REPLAY_END",
+          "count": "92",
+          "invalid_before": "0",
+          "invalid_after": "0",
+          "min_before": "1.0871873799168514e-05",
+          "min_after": "1.0871873799168514e-05",
+          "max_asymmetry": "0",
+          "min_positive_bound_before": "3.5093486254892442e-06",
+          "min_positive_bound_after": "3.5093486254892442e-06",
+          "uncertified_before": "0",
+          "uncertified_after": "0"
+        },
+        {
+          "event": "SKF_UPDATE",
+          "count": "92",
+          "invalid_before": "0",
+          "invalid_after": "0",
+          "min_before": "1.047400974072193e-05",
+          "min_after": "1.0472597242135852e-05",
+          "max_asymmetry": "0",
+          "min_positive_bound_before": "3.3611831837651513e-06",
+          "min_positive_bound_after": "3.3520136908746286e-06",
+          "uncertified_before": "0",
+          "uncertified_after": "0"
+        }
+      ],
+      "new_jumps_over_2m": 0,
+      "peak_jump_change_from_diagnostic_m": -2.220446049250313e-15
+    }
+  },
+  "precision_evidence": [
+    {
+      "fixture": "eigensolver_false_negative",
+      "stage": "before",
+      "trace": 5249336950073.136,
+      "max_asymmetry": 0.00390625,
+      "numpy_double_min_eigenvalue": 1.0002412225345705e-05,
+      "mpmath_80digits_min_eigenvalue": "0.0000042215569224740730915145770595027615",
+      "mpmath_80digits_max_eigenvalue": "5249336949815.9497813991635754790067",
+      "mpmath_cholesky_positive": true,
+      "spectral_condition": "1243459947648778589.6"
+    },
+    {
+      "fixture": "eigensolver_false_negative",
+      "stage": "after",
+      "trace": 5276490964762.106,
+      "max_asymmetry": 0.00390625,
+      "numpy_double_min_eigenvalue": -1.0142520976883063e-06,
+      "mpmath_80digits_min_eigenvalue": "0.0000088845482285223487294568589792100258",
+      "mpmath_80digits_max_eigenvalue": "5276490964503.5857593400143288271242",
+      "mpmath_cholesky_positive": true,
+      "spectral_condition": "593895246982204274.17"
+    },
+    {
+      "fixture": "double_LLT_false_negative",
+      "stage": "before",
+      "trace": 5637342519674.664,
+      "max_asymmetry": 0.0,
+      "numpy_double_min_eigenvalue": 6.777326257074059e-07,
+      "mpmath_80digits_min_eigenvalue": "0.0000036318443019575887547802540989954242",
+      "mpmath_80digits_max_eigenvalue": "5637342519398.5886869264075490646188",
+      "mpmath_cholesky_positive": true,
+      "spectral_condition": "1552198291198778198.4"
+    },
+    {
+      "fixture": "double_LLT_false_negative",
+      "stage": "after",
+      "trace": 5666079278944.816,
+      "max_asymmetry": 0.0,
+      "numpy_double_min_eigenvalue": 7.120699519528387e-06,
+      "mpmath_80digits_min_eigenvalue": "0.0000039372594285160862769251997044216445",
+      "mpmath_80digits_max_eigenvalue": "5666079278667.329296927198922116026",
+      "mpmath_cholesky_positive": true,
+      "spectral_condition": "1439092186212077455.3"
+    },
+    {
+      "fixture": "fixed_original_P25_failure_window",
+      "stage": "before",
+      "trace": 7261152435013.284,
+      "max_asymmetry": 0.0,
+      "numpy_double_min_eigenvalue": 1.0666045926102083e-05,
+      "mpmath_80digits_min_eigenvalue": "0.000010666143702820214996678537240856216",
+      "mpmath_80digits_max_eigenvalue": "7261152434749.3298012842548996740063",
+      "mpmath_cholesky_positive": true,
+      "spectral_condition": "680766417278760471.04"
+    },
+    {
+      "fixture": "fixed_original_P25_failure_window",
+      "stage": "after",
+      "trace": 9585138931952.408,
+      "max_asymmetry": 0.0,
+      "numpy_double_min_eigenvalue": 1.0666665783795058e-05,
+      "mpmath_80digits_min_eigenvalue": "0.000010666335410705313914078796849386526",
+      "mpmath_80digits_max_eigenvalue": "9585138931688.4580960873659236359713",
+      "mpmath_cholesky_positive": true,
+      "spectral_condition": "898634682167250406.3"
+    },
+    {
+      "fixture": "post_fix_actual_IMU_PSD_loss",
+      "stage": "before",
+      "trace": 34435866427537.453,
+      "max_asymmetry": 0.0,
+      "numpy_double_min_eigenvalue": 1.0799086316597683e-05,
+      "mpmath_80digits_min_eigenvalue": "0.000010796751228133232402896429973002335",
+      "mpmath_80digits_max_eigenvalue": "34435866427235.98635094766741821268",
+      "mpmath_cholesky_positive": true,
+      "spectral_condition": "3189465580859732131.6"
+    },
+    {
+      "fixture": "post_fix_actual_IMU_PSD_loss",
+      "stage": "after",
+      "trace": 34611782514618.445,
+      "max_asymmetry": 0.0,
+      "numpy_double_min_eigenvalue": 1.0809719046487134e-05,
+      "mpmath_80digits_min_eigenvalue": "-0.000014585077666964965942132444050672557",
+      "mpmath_80digits_max_eigenvalue": "34611782514315.432387151182721452262",
+      "mpmath_cholesky_positive": false,
+      "spectral_condition": "INDEFINITE"
+    }
+  ],
+  "first_raw_negative_event": "IMU_PROPAGATE at 1517157237.428112 (raw Eigen sign, actual stored symmetric matrix is positive definite)",
+  "first_actual_PSD_loss_after_partial_fix": {
+    "event": "IMU_PROPAGATE",
+    "stamp": "1517157238.028048",
+    "before_min_eigenvalue": "-5.7461538591138943e-05",
+    "after_min_eigenvalue": "-0.00047629226721974396",
+    "before_asymmetry": "0",
+    "after_asymmetry": "0",
+    "before_trace": "34435866427537.445",
+    "after_trace": "34611782514618.438",
+    "before_valid": "1",
+    "after_valid": "0",
+    "before_positive_bound": "2.9938011495151814e-06",
+    "after_positive_bound": "nan",
+    "before_certified": "1",
+    "after_certified": "0"
+  },
+  "strict_15d_factor_failures_after_fix": 2,
+  "limitation": "Repeated fixed-weight conservative CI strongly inflates covariance; 19 s validation does not prove 40 s stability or localisation accuracy."
+}

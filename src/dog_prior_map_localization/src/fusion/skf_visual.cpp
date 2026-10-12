@@ -197,8 +197,15 @@ bool DogPriorMapEkfNode::stateAtCausalTimeLocked(double target_stamp,
     Q.block<3, 3>(6, 6) += kPartialIntervalVarianceInflation * dt * dt *
         delta_gyro * delta_gyro.transpose();
   }
+  const Matrix15d covariance_before_partial = (covariance_audit_.enabled() || covariance_stability_enable_) ? state.P : Matrix15d::Zero();
   const Matrix15d propagated_covariance = (F * state.P * F.transpose() + Q).eval();
   state.P = 0.5 * (propagated_covariance + propagated_covariance.transpose());
+  if (covariance_stability_enable_) {
+    const Matrix15ld precise_F=F.cast<long double>();
+    const Matrix15ld propagated = (precise_F * covariance_before_partial.cast<long double>() * precise_F.transpose() + Q.cast<long double>()).eval();
+    state.P=(0.5L*(propagated+propagated.transpose())).cast<double>();
+  }
+  covariance_audit_.check("CAUSAL_PARTIAL_PROPAGATE", target_stamp, covariance_before_partial, state.P);
   state.stamp = target_stamp;
   state.interval_acc_input = state.acc_measurement;
   state.interval_gyro_input = state.gyro_measurement;
@@ -310,10 +317,13 @@ void DogPriorMapEkfNode::processSkfVisualLocked(
     snapshot.P = P_; return snapshot;
   }();
   FilterStateSnapshot updated_state = current_state;
+  covariance_audit_.check("SKF_CURRENT_ENDPOINT", t_current, current_state.P, current_state.P);
+  covariance_audit_.check("SKF_REFERENCE_ENDPOINT", t_reference, reference_state.P, reference_state.P);
   const SelectiveRelativeVisualUpdateResult update = applySelectiveRelativeVisualUpdate(
       &updated_state, reference_state, relative, relative_covariance,
       msg->translation_degenerate, translation_axes,
-      msg->rotation_degenerate, rotation_axes);
+      msg->rotation_degenerate, rotation_axes, covariance_stability_enable_);
+  covariance_audit_.check("SKF_UPDATE", t_current, current_state.P, updated_state.P);
   if (receipt) receipt->update = update;
   if (!update.accepted)
   {
@@ -364,6 +374,7 @@ void DogPriorMapEkfNode::processSkfVisualLocked(
   }
 
   ++ekf_state_revision_;
+  covariance_audit_.check("SKF_REPLAY_END", state_stamp_, P_, P_);
   ++skf_visual_applied_count_;
   if (receipt)
   {

@@ -48,6 +48,7 @@ SelectiveRelativeVisualUpdateResult applySelectiveRelativeVisualUpdate(
     bool translation_degenerate,
     const Eigen::Matrix3d& translation_axes_map,
     bool rotation_degenerate,
-    const Eigen::Matrix3d& rotation_axes_map);
+    const Eigen::Matrix3d& rotation_axes_map,
+    bool covariance_stability_enable = false);
 
 }  // namespace dog_prior_map_localization

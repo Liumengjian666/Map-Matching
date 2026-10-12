@@ -317,9 +317,10 @@ void DogPriorMapEkfNode::processNdtObservationLocked(
   last_ndt_observation_p_map_ = p_target;
   last_ndt_observation_time_ = t_ndt;
 
-  if (skf_relative_visual_update_enable_)
+  const Matrix15d covariance_before_damping = covariance_audit_.enabled() ? P_ : Matrix15d::Zero();
+  if (covariance_stability_enable_ || skf_relative_visual_update_enable_)
   {
-    if (!applyPsdPoseCovarianceDamping(&P_, 0.85, 1e-4, 1e-5))
+    if (!applyPsdPoseCovarianceDamping(&P_, 0.85, 1e-4, 1e-5, covariance_stability_enable_))
       ROS_WARN_THROTTLE(1.0, "[DogPriorMap EKF] P25 retained covariance after PSD-preserving NDT damping rejected input");
   }
   else
@@ -330,6 +331,7 @@ void DogPriorMapEkfNode::processNdtObservationLocked(
 
   if (oosm_active)
   {
+    covariance_audit_.check("NDT_DAMPING", rollback_stamp, covariance_before_damping, P_);
     saveStateSnapshot(rollback_stamp);
     for (const auto &sample : replay_samples)
     {
@@ -346,6 +348,7 @@ void DogPriorMapEkfNode::processNdtObservationLocked(
       last_imu_time_ = sample.stamp;
       saveStateSnapshot(state_stamp_);
     }
+    covariance_audit_.check("NDT_REPLAY_END", state_stamp_, P_, P_);
 
     if (!has_state_stamp_ || std::abs(state_stamp_ - t_now) > 1e-4 ||
         !p_.allFinite() || !v_.allFinite() || !R_.allFinite() ||

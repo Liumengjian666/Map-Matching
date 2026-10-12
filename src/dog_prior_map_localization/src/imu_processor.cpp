@@ -280,6 +280,7 @@ void DogPriorMapEkfNode::restoreStateSnapshot(const FilterStateSnapshot &snapsho
   last_acc_world_ = snapshot.acc_world;
   last_unbiased_gyro_ = snapshot.gyro_unbiased;
   P_ = snapshot.P;
+  covariance_audit_.check("OOSM_RESTORE", snapshot.stamp, snapshot.P, P_);
   last_imu_time_ = snapshot.stamp;
   has_last_imu_ = true;
   state_stamp_ = snapshot.stamp;
@@ -339,7 +340,15 @@ void DogPriorMapEkfNode::propagateImu(const Eigen::Vector3d &acc_m, const Eigen:
   Q.block<3, 3>(6, 6) = Eigen::Matrix3d::Identity() * gyro_noise_ * gyro_noise_ * dt * dt;
   Q.block<3, 3>(9, 9) = Eigen::Matrix3d::Identity() * acc_bias_noise_ * acc_bias_noise_ * dt;
   Q.block<3, 3>(12, 12) = Eigen::Matrix3d::Identity() * gyro_bias_noise_ * gyro_bias_noise_ * dt;
-  P_ = F * P_ * F.transpose() + Q;
+  const Matrix15d before_covariance = covariance_audit_.enabled() ? P_ : Matrix15d::Zero();
+  if (covariance_stability_enable_) {
+    const Matrix15ld precise_F=F.cast<long double>();
+    const Matrix15ld propagated = (precise_F * P_.cast<long double>() * precise_F.transpose() + Q.cast<long double>()).eval();
+    P_ = (0.5L * (propagated + propagated.transpose())).cast<double>();
+  } else {
+    P_ = F * P_ * F.transpose() + Q;
+  }
+  covariance_audit_.check("IMU_PROPAGATE", state_stamp_ + dt, before_covariance, P_);
 }
 
 }  // namespace dog_prior_map_localization

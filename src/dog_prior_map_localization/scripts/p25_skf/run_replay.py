@@ -60,6 +60,8 @@ def main():
     parser.add_argument("--duration", type=float,
                         help="bounded smoke only; the accepted smoke contract is 18.5 seconds")
     parser.add_argument("--port", type=int, default=11425)
+    parser.add_argument("--p26-prefix", action="store_true",
+                        help="P26 covariance diagnostic/verification: fixed 19 s prefix, never GT")
     args = parser.parse_args()
 
     repo = args.repo.resolve()
@@ -68,7 +70,9 @@ def main():
     visual = args.visual.resolve()
     runtime_root = args.runtime_root.resolve()
     output = args.output.resolve()
-    if args.duration is not None and abs(args.duration - 18.5) > 1e-9:
+    if args.p26_prefix and (args.duration is None or abs(args.duration - 19.0) > 1e-9):
+        raise ValueError("P26_PREFIX_DURATION_MUST_BE_19_SECONDS")
+    if not args.p26_prefix and args.duration is not None and abs(args.duration - 18.5) > 1e-9:
         raise ValueError("P25_SMOKE_DURATION_MUST_BE_18_5_SECONDS")
     if not output.is_dir() or any(output.iterdir()):
         raise ValueError("P25_OUTPUT_MUST_BE_A_PRECREATED_EMPTY_UNIQUE_DIRECTORY")
@@ -147,6 +151,8 @@ def main():
             f"oosm_fixed_lag_csv_path:={output / 'oosm_fixed_lag.csv'}",
             f"imu_deskew_csv_path:={output / 'deskew.csv'}",
             f"runtime_csv_path:={output / 'ekf_runtime.csv'}"]
+        if args.p26_prefix:
+            command.append(f"experimental_covariance_audit_csv_path:={output / 'covariance_audit.csv'}")
         launch = spawn(command, "launch")
 
         ndt_subs = set()
@@ -310,6 +316,16 @@ def main():
                 if bad_updates:
                     raise RuntimeError("P25_SKF_NUMERICAL_OR_REPLAY_ERROR:" +
                                         ",".join(sorted(set(bad_updates))))
+        if args.p26_prefix:
+            with (output / "skf_update_diagnostics.csv").open() as stream:
+                updates = list(csv.DictReader(stream))
+            if not any(row.get("status") == "APPLIED" for row in updates):
+                raise RuntimeError("P26_NO_ACTUAL_SKF_UPDATE")
+            bad_updates = [row.get("status", "") for row in updates
+                           if any(token in row.get("status", "").upper() for token in
+                                  ("NON_PSD", "NONFINITE", "REPLAY_INCOMPLETE", "MISMATCH"))]
+            if bad_updates:
+                raise RuntimeError("P26_PREFIX_NUMERICAL_ERROR:" + ",".join(sorted(set(bad_updates))))
         completed = True
     except Exception as error:
         run_error = f"{type(error).__name__}:{error}"
@@ -320,7 +336,7 @@ def main():
         for stream in streams:
             stream.close()
         receipt = {
-            "protocol": "P25_R1_SKF_SELECTIVE_VISUAL_UPDATE",
+            "protocol": "P26_R1_COVARIANCE_PREFIX" if args.p26_prefix else "P25_R1_SKF_SELECTIVE_VISUAL_UPDATE",
             "GT_LOADED": False,
             "completed": completed,
             "error": run_error,
