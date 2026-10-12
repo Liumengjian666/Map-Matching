@@ -78,7 +78,10 @@ def main():
     applied_oosm=sum(r['oosm_result']=='APPLIED' for r in oosm)
     late=sum('LATE' in r['status'] for r in fixed)
     if not counts['applied'] or nonfinite or late:failures.append(dict(reason='NO_APPLICATION_OR_NONFINITE_OR_LATE'))
-    if args.full and (len(diag)!=396 or converged!=396 or applied_oosm!=396):
+    highrate_count=sum(r['event_type']=='IMU_HIGH_RATE_PUBLISH' for r in states)
+    corrected_count=sum(r['event_type']=='CORRECTED_PUBLISH' for r in states)
+    if args.full and (len(diag)!=396 or converged!=396 or applied_oosm!=396 or
+                      highrate_count!=8004 or corrected_count!=396):
         failures.append(dict(reason='FULL_REPLAY_INCOMPLETE'))
     args.output.mkdir(parents=True,exist_ok=True)
     with (args.output/'visual_application_summary.csv').open('w',newline='') as f:
@@ -86,6 +89,7 @@ def main():
     result=dict(result='PASS' if not failures else 'FAIL',GT_LOADED=False,
                 ndt_rows=len(diag),ndt_converged=converged,oosm_applied=applied_oosm,
                 counters=dict(counts),late=late,nonfinite_states=nonfinite,
+                highrate_states=highrate_count,corrected_states=corrected_count,
                 max_used_scan_translation_jump_m=maxjump,max_used_scan_rotation_jump_deg=maxrot,
                 csv_composition_residual_scope='diagnostic only: normalized quaternion loses raw float-matrix entries; direct C++ apply test covers formula',
                 extra_align_calls=0,extra_align_basis='CONTROL mode, single existing ndt.align call in source',
