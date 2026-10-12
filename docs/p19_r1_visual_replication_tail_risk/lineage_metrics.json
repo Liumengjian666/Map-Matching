@@ -1,0 +1,178 @@
+{
+  "first_divergence": {
+    "Initial_1e-09": {
+      "frame": 5,
+      "stamp": 1517157219.592419,
+      "relative_time_s": -4.596560001373291,
+      "separation_m": 0.015874214489234355,
+      "separation_deg": 0.0,
+      "visual_direct": true
+    },
+    "Raw_1e-09": {
+      "frame": 5,
+      "stamp": 1517157219.592419,
+      "relative_time_s": -4.596560001373291,
+      "separation_m": 0.006685658421498248,
+      "separation_deg": 0.05423511973316694,
+      "visual_direct": true
+    },
+    "Used_1e-09": {
+      "frame": 5,
+      "stamp": 1517157219.592419,
+      "relative_time_s": -4.596560001373291,
+      "separation_m": 0.006685175164173717,
+      "separation_deg": 0.051923945494296346,
+      "visual_direct": true
+    },
+    "source_hash": {
+      "frame": 6,
+      "stamp": 1517157219.69328,
+      "relative_time_s": -4.495698928833008,
+      "control": "4588dbb00d325a44",
+      "visual": "2e744b7454049d1c"
+    },
+    "Initial_0.12": {
+      "frame": 76,
+      "stamp": 1517157226.753055,
+      "relative_time_s": 2.5640761852264404,
+      "separation_m": 0.12494250635357573,
+      "separation_deg": 0.42233660564005654,
+      "visual_direct": false
+    },
+    "Raw_0.12": {
+      "frame": 178,
+      "stamp": 1517157237.040103,
+      "relative_time_s": 12.851124048233032,
+      "separation_m": 0.14292939535256333,
+      "separation_deg": 0.042635182565675014,
+      "visual_direct": false
+    },
+    "Used_0.12": {
+      "frame": 178,
+      "stamp": 1517157237.040103,
+      "relative_time_s": 12.851124048233032,
+      "separation_m": 0.14292939535256333,
+      "separation_deg": 0.042635182565675014,
+      "visual_direct": false
+    },
+    "Initial_0.5": {
+      "frame": 344,
+      "stamp": 1517157253.781888,
+      "relative_time_s": 29.59290909767151,
+      "separation_m": 0.5378876577195701,
+      "separation_deg": 0.2806468795174425,
+      "visual_direct": false
+    },
+    "Raw_0.5": {
+      "frame": 344,
+      "stamp": 1517157253.781888,
+      "relative_time_s": 29.59290909767151,
+      "separation_m": 0.5382623734651218,
+      "separation_deg": 0.22917840618700575,
+      "visual_direct": false
+    },
+    "Used_0.5": {
+      "frame": 344,
+      "stamp": 1517157253.781888,
+      "relative_time_s": 29.59290909767151,
+      "separation_m": 0.5382623734651218,
+      "separation_deg": 0.22917840618700575,
+      "visual_direct": false
+    },
+    "Initial_1.0": {
+      "frame": 348,
+      "stamp": 1517157254.185267,
+      "relative_time_s": 29.996288061141968,
+      "separation_m": 1.0033510374363193,
+      "separation_deg": 0.1123180055870578,
+      "visual_direct": false
+    },
+    "Raw_1.0": {
+      "frame": 348,
+      "stamp": 1517157254.185267,
+      "relative_time_s": 29.996288061141968,
+      "separation_m": 1.0034272453451065,
+      "separation_deg": 0.24559241161813414,
+      "visual_direct": false
+    },
+    "Used_1.0": {
+      "frame": 348,
+      "stamp": 1517157254.185267,
+      "relative_time_s": 29.996288061141968,
+      "separation_m": 1.0034272453451065,
+      "separation_deg": 0.24559241161813414,
+      "visual_direct": false
+    },
+    "EKF_1e-09": {
+      "index": 112,
+      "stamp": 1517157219.744208,
+      "relative_time_s": -4.444770812988281,
+      "separation_m": 0.0128293675148096,
+      "separation_deg": 0.05192394549429346
+    },
+    "EKF_0.12": {
+      "index": 1524,
+      "stamp": 1517157226.808784,
+      "relative_time_s": 2.619805097579956,
+      "separation_m": 0.12064912261680957,
+      "separation_deg": 0.42233660564006165
+    },
+    "EKF_0.5": {
+      "index": 6905,
+      "stamp": 1517157253.732112,
+      "relative_time_s": 29.543133020401,
+      "separation_m": 0.5014038497209997,
+      "separation_deg": 0.25316204600125736
+    },
+    "EKF_1.0": {
+      "index": 7005,
+      "stamp": 1517157254.232048,
+      "relative_time_s": 30.0430691242218,
+      "separation_m": 1.0041677453496165,
+      "separation_deg": 0.25723867379791443
+    }
+  },
+  "jumps": {
+    "Control": {
+      "maximum_m": 1.1278121341339014,
+      "max_32_35_m": 1.1278121341339014,
+      "count_over_2m": 0
+    },
+    "Visual": {
+      "maximum_m": 1.0979172916607365,
+      "max_32_35_m": 0.8578329303724538,
+      "count_over_2m": 0
+    }
+  },
+  "visual_application_layers": {
+    "6_12s": {
+      "count": 35,
+      "raw_improves_initial": 4,
+      "raw_worsens_initial": 31,
+      "before_visual_rmse_m": 0.6763930556970812,
+      "initial_rmse_m": 0.6496840536517559,
+      "raw_rmse_m": 0.6723070195875266,
+      "one_iteration": 25
+    },
+    "applied_primary": {
+      "count": 121,
+      "raw_improves_initial": 32,
+      "raw_worsens_initial": 89,
+      "before_visual_rmse_m": 0.531094002777533,
+      "initial_rmse_m": 0.5191637724018696,
+      "raw_rmse_m": 0.5287317717385195,
+      "one_iteration": 91
+    },
+    "32_35s": {
+      "count": 29,
+      "raw_improves_initial": 15,
+      "raw_worsens_initial": 14,
+      "before_visual_rmse_m": 3.1836609447649313,
+      "initial_rmse_m": 3.1836609447649313,
+      "raw_rmse_m": 3.1817459318021424,
+      "one_iteration": 19
+    }
+  },
+  "velocity_bookkeeping": "NDT_CORRECTION_APPLIED is before velocity_blend; v_mix=.4*v_before+.6*v_ndt; release includes actual IMU replay",
+  "limitation": "Separate causal histories; no controlled same-state optimizer or velocity intervention in this task"
+}

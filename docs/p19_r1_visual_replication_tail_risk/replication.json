@@ -1,0 +1,24 @@
+{
+  "REPLICATION_RESULT": "REPLAY_REPLICATION_PASS",
+  "GT_LOADED": false,
+  "failure_count": 0,
+  "first_differences": [],
+  "tolerance_translation_m": 1e-09,
+  "tolerance_rotation_deg": 1e-08,
+  "counts": {
+    "P18_NDT": 396,
+    "P19_NDT": 396
+  },
+  "exclusions": {
+    "NDT": [
+      "local_imu_history_first_stamp",
+      "local_imu_history_last_stamp",
+      "ndt_align_complete_wall_sec",
+      "ndt_odom_publish_wall_sec",
+      "pending_lidar_count",
+      "ros_now",
+      "wall_time"
+    ],
+    "callback_arrival": "legal arrival snapshots are not fixed sensor-time outputs"
+  }
+}
