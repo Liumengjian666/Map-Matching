@@ -1,0 +1,112 @@
+{
+  "protocol": "P25_R1_SKF_SELECTIVE_VISUAL_UPDATE",
+  "GT_LOADED": false,
+  "completed": true,
+  "error": null,
+  "skf_enabled": true,
+  "duration_sec": 18.5,
+  "wall_sec": 84.14963933100807,
+  "commands": [
+    [
+      "roscore",
+      "-p",
+      "11427"
+    ],
+    [
+      "roslaunch",
+      "dog_prior_map_localization",
+      "dog_prior_map_localization_split.launch",
+      "rviz:=false",
+      "publish_path:=false",
+      "coupled_mode:=CONTROL",
+      "camera_enable:=false",
+      "dataset_config:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml",
+      "mature_config:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p25_skf_visual_update.yaml",
+      "mature_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/smoke_B_skf_on_eval_fix/mature_diagnostics.csv",
+      "mature_skf_enable_override:=true",
+      "skf_visual_measurement_csv:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/visual_covariance/visual.csv",
+      "skf_measurement_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/smoke_B_skf_on_eval_fix/skf_measurements.csv",
+      "skf_update_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/smoke_B_skf_on_eval_fix/skf_update_diagnostics.csv",
+      "scan_reference_time:=start",
+      "oosm_fixed_lag_enable:=true",
+      "oosm_fixed_lag_sec:=0.15",
+      "diagnostic_determinism_enable:=true",
+      "visual_initial_guess_enable:=false",
+      "visual_initial_guess_csv:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/visual_covariance/visual.csv",
+      "ndt_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/smoke_B_skf_on_eval_fix/ndt_diagnostics.csv",
+      "ekf_prediction_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/smoke_B_skf_on_eval_fix/ekf_lineage.csv",
+      "oosm_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/smoke_B_skf_on_eval_fix/oosm.csv",
+      "oosm_fixed_lag_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/smoke_B_skf_on_eval_fix/oosm_fixed_lag.csv",
+      "imu_deskew_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/smoke_B_skf_on_eval_fix/deskew.csv",
+      "runtime_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/smoke_B_skf_on_eval_fix/ekf_runtime.csv"
+    ],
+    [
+      "rosbag",
+      "record",
+      "-O",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/smoke_B_skf_on_eval_fix/outputs.bag",
+      "/dog_livo/ndt_odom",
+      "/dog_livo/odom_corrected",
+      "/dog_livo/odom_high_rate",
+      "/dog_livo/diagnostics",
+      "/dog_livo/skf_visual_measurement"
+    ],
+    [
+      "rosbag",
+      "play",
+      "--clock",
+      "--rate",
+      "0.25",
+      "--delay",
+      "2",
+      "--quiet",
+      "--duration",
+      "18.5",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/input_v2/corridor01_p10_causal_startup5_eval35_fixedlag_v2.bag"
+    ]
+  ],
+  "binary_hashes": {
+    "dog_prior_map_ndt_node_cpp": {
+      "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+      "sha256": "500e29b702f3efc5e04a9b2e8efa5c2bd8434a315fb311b65f0bfc298b7bfbdc"
+    },
+    "dog_prior_map_ekf_node_cpp": {
+      "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+      "sha256": "9f91401624cdb968bd9e99916499c8990ea8ae709951551c80e81eaba058d6c2"
+    }
+  },
+  "resources": {
+    "dog_prior_map_ndt_node_cpp": {
+      "peak_rss_bytes": 81395712,
+      "cpu_sec": 5.08
+    },
+    "dog_prior_map_ekf_node_cpp": {
+      "peak_rss_bytes": 19779584,
+      "cpu_sec": 4.65
+    }
+  },
+  "dataset_config": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml",
+  "dataset_config_sha256": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+  "mature_config": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p25_skf_visual_update.yaml",
+  "mature_config_sha256": "478af689ecfa6629705dc61dfc0b4148f8f1b9ee6b2a46c98c43d9acef3a3734",
+  "map_path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd",
+  "map_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+  "bag_sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+  "visual_csv_sha256": "28e2fb5ccff6a9978d471ee37b7b475b349bc2090b96131b702fa657914610d9",
+  "rosparams_path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/smoke_B_skf_on_eval_fix/rosparams.yaml",
+  "ndt_subscriptions": [
+    "/clock",
+    "/imu/data",
+    "/p10/corridor01/deskewed_points"
+  ],
+  "ekf_subscriptions": [
+    "/clock",
+    "/dog_livo/ndt_odom",
+    "/dog_livo/skf_visual_measurement",
+    "/imu/data",
+    "/p10/corridor01/raw_timed_points"
+  ],
+  "runtime_root": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization",
+  "fixed_lag_sensor_time_contract": 0.15,
+  "visual_guess_enabled": false
+}

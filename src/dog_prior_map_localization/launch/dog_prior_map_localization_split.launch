@@ -3,6 +3,10 @@
   <arg name="dataset_config" default="" />
   <arg name="mature_config" default="" />
   <arg name="mature_diagnostics_csv_path" default="" />
+  <arg name="mature_skf_enable_override" default="" />
+  <arg name="skf_visual_measurement_csv" default="" />
+  <arg name="skf_measurement_csv_path" default="" />
+  <arg name="skf_update_diagnostics_csv_path" default="" />
   <arg name="rviz" default="false" />
   <arg name="camera_enable" default="false" />
   <arg name="publish_path" default="true" />
@@ -47,6 +51,10 @@
             if="$(eval arg('dataset_config') != '')" />
   <rosparam command="load" file="$(arg mature_config)"
             if="$(eval arg('mature_config') != '')" />
+  <param name="mature_integration/skf_enable" value="$(arg mature_skf_enable_override)"
+         if="$(eval arg('mature_skf_enable_override') != '')" />
+  <param name="mature_integration/skf_visual_measurement_csv" value="$(arg skf_visual_measurement_csv)" />
+  <param name="topics/skf_visual_measurement" value="/dog_livo/skf_visual_measurement" />
 
   <!--
     拆分版结构：
@@ -82,6 +90,8 @@
   <param name="output/imu_deskew_csv_path" value="$(arg imu_deskew_csv_path)" />
   <param name="output/ndt_diagnostics_csv_path" value="$(arg ndt_diagnostics_csv_path)" />
   <param name="output/mature_integration_diagnostics_csv_path" value="$(arg mature_diagnostics_csv_path)" />
+  <param name="output/skf_update_diagnostics_csv_path" value="$(arg skf_update_diagnostics_csv_path)" />
+  <param name="output/skf_measurement_csv_path" value="$(arg skf_measurement_csv_path)" />
   <param name="output/diagnostic_determinism_enable" value="$(arg diagnostic_determinism_enable)" />
   <param name="output/ndt_determinism_csv_path" value="$(arg ndt_determinism_csv_path)" />
   <param name="lidar_update/information_diagnostic_enable" value="$(arg information_diagnostic_enable)" />

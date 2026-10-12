@@ -45,9 +45,11 @@ add_executable(dog_prior_map_ekf_node_cpp
   src/core/state_history.cpp
   src/core/imu_propagation.cpp
   src/core/imu_deskew.cpp
+  src/core/selective_relative_visual_update.cpp
   src/imu_deskew_runtime.cpp
   src/imu_processor.cpp
   src/fusion/ndt_observation.cpp
+  src/fusion/skf_visual.cpp
   src/ros_output.cpp
 )
 
@@ -87,6 +89,11 @@ add_executable(imu_interval_numeric_test
   src/core/imu_propagation.cpp
 )
 
+add_executable(selective_relative_visual_update_test
+  tests/selective_relative_visual_update_test.cpp
+  src/core/selective_relative_visual_update.cpp
+)
+
 add_executable(frame_conversion_contract_test
   tests/frame_conversion_contract_test.cpp
 )
@@ -98,6 +105,7 @@ add_executable(visual_initial_guess_test
 add_executable(dog_prior_map_ndt_node_cpp
   src/dog_prior_map_ndt_node.cpp
   src/mature_ndt_algorithms.cpp
+  src/skf_visual_measurement.cpp
   src/visual_aided_initial_guess.cpp
   src/external_ndt_transaction_server.cpp
   ../dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_shadow.cpp
@@ -171,6 +179,9 @@ target_link_libraries(solid_adapter_contract_test
 )
 
 if(CATKIN_ENABLE_TESTING)
+  add_test(NAME selective_relative_visual_update_test
+    COMMAND $<TARGET_FILE:selective_relative_visual_update_test>)
+
   add_test(NAME oosm_fixed_lag_scheduler_contract_test
     COMMAND $<TARGET_FILE:oosm_fixed_lag_scheduler_contract_test>)
 

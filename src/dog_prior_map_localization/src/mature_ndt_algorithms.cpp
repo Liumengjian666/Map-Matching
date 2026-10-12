@@ -246,7 +246,7 @@ SkfGateDecision evaluateSkfGate(bool enabled, const DcregAdaptedReport& report,
     decision.status = "INTERFACE_READY_RELATIVE_VISUAL_NO_COVARIANCE";
     return decision;
   }
-  decision.status = "MEASUREMENT_MODEL_REQUIRED";
+  decision.status = "READY_RELATIVE_VISUAL_MEASUREMENT";
   return decision;
 }
 

@@ -1,0 +1,20 @@
+# header.stamp is the current endpoint image sensor time; frame_id is imu_cur.
+std_msgs/Header header
+time reference_stamp
+time depth_max_point_stamp
+time depth_max_imu_stamp
+uint64 scan_ns
+string reference_frame
+string current_frame
+geometry_msgs/Pose relative_pose
+float64[36] covariance_left_imu_ref
+bool translation_degenerate
+bool rotation_degenerate
+float64[9] translation_axes_map
+float64[9] rotation_axes_map
+uint32 pnp_inliers
+float64 inlier_ratio
+float64 reprojection_rmse_px
+float64 grid_occupancy
+float64 hull_fraction
+string covariance_model

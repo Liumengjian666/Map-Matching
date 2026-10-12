@@ -1,0 +1,14 @@
+run,stage,n,mean_ms,p95_ms,max_ms,cpu_sec,peak_rss_bytes,note
+P4_OFFLINE,visual_covariance_extraction,396,,,,,214020096,"total wall 33.315 s; 169 valid outputs; offline only, not per-frame latency"
+A_SKF_OFF,NDT_callback_preprocess_to_publish,396,22.220797611005377,28.999686241149902,83.66703987121582,,,"NDT row is callback elapsed, not isolated align time."
+A_SKF_OFF,Deskew,396,14.115563896464641,18.9930135,22.986901,,,"NDT row is callback elapsed, not isolated align time."
+A_SKF_OFF,DCReg_Multi_module,396,7.933891936868686,11.839482,17.338234,,,"NDT row is callback elapsed, not isolated align time."
+A_SKF_OFF,dog_prior_map_ndt_node_cpp,,,,,11.26,81080320,VmHWM peak and process CPU from P25 sampler.
+A_SKF_OFF,dog_prior_map_ekf_node_cpp,,,,,9.91,19103744,VmHWM peak and process CPU from P25 sampler.
+A_SKF_OFF,Replay_wall,,,,,,,170.43864251900231 s wall time; SKF-specific update time was not independently instrumented.
+B_SKF_ON,NDT_callback_preprocess_to_publish,396,21.670868300428292,28.736591339111328,79.83016967773438,,,"NDT row is callback elapsed, not isolated align time."
+B_SKF_ON,Deskew,396,14.340614568181824,19.044033,23.464968,,,"NDT row is callback elapsed, not isolated align time."
+B_SKF_ON,DCReg_Multi_module,396,7.6470799974747505,11.1781845,41.923604000000005,,,"NDT row is callback elapsed, not isolated align time."
+B_SKF_ON,dog_prior_map_ndt_node_cpp,,,,,11.09,81399808,VmHWM peak and process CPU from P25 sampler.
+B_SKF_ON,dog_prior_map_ekf_node_cpp,,,,,10.15,19013632,VmHWM peak and process CPU from P25 sampler.
+B_SKF_ON,Replay_wall,,,,,,,170.33378206999623 s wall time; SKF-specific update time was not independently instrumented.

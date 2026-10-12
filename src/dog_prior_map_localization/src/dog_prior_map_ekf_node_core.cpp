@@ -75,6 +75,17 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
       throw std::runtime_error("invalid fixed-lag OOSM configuration");
     }
   }
+  skf_relative_visual_update_enable_ = getParam<bool>("mature_integration/enable", false) &&
+      getParam<bool>("mature_integration/p25_relative_visual_contract", false) &&
+      getParam<bool>("mature_integration/skf_enable", false);
+  if (skf_relative_visual_update_enable_ &&
+      (!oosm_enable_ || !ndt_observation_enable_ || !oosm_fixed_lag_enable_ ||
+       future_deferral_enable_ || std::abs(oosm_fixed_lag_sec_ - 0.15) > 1e-9 ||
+       getParam<std::string>("lidar_update/scan_reference_time", "start") != "start" ||
+       getParam<bool>("camera_update/enable", false)))
+    throw std::runtime_error("P25 SKF requires CONTROL sensor-time OOSM with fixed 150 ms lag and camera disabled");
+  skf_visual_topic_ = getParam<std::string>("topics/skf_visual_measurement",
+      "/dog_livo/skf_visual_measurement");
 
   deskew_mode_ = getParam<std::string>("deskew/mode", "legacy_prior_ndt_cv");
   if (deskew_mode_ != "legacy_prior_ndt_cv" && deskew_mode_ != "ekf_imu_fastlio")
@@ -242,6 +253,25 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
       ROS_WARN("[DogPriorMap C++] failed to write fixed-lag OOSM CSV: %s",
                fixed_lag_csv_path_.c_str());
     }
+  }
+  if (skf_relative_visual_update_enable_)
+  {
+    skf_update_diagnostics_path_ = getParam<std::string>(
+        "output/skf_update_diagnostics_csv_path", "");
+    if (skf_update_diagnostics_path_.empty())
+      throw std::runtime_error("P25 SKF requires update diagnostic output path");
+    std::ifstream existing_skf_csv(skf_update_diagnostics_path_.c_str());
+    if (existing_skf_csv.good()) throw std::runtime_error("P25 SKF update diagnostics already exists");
+    skf_update_diagnostics_csv_.open(skf_update_diagnostics_path_, std::ios::out);
+    if (!skf_update_diagnostics_csv_)
+      throw std::runtime_error("P25 SKF update diagnostics output unavailable");
+    skf_update_diagnostics_csv_ << std::setprecision(17)
+        << "scan_ns,reference_ns,current_ns,processing_state_stamp,"
+           "reference_alignment_ms,current_alignment_ms,translation_degenerate,rotation_degenerate,"
+           "dimension,innovation_0,innovation_1,nis,current_covariance_trace,pseudo_covariance_trace,"
+           "min_input_P_eigenvalue,min_conditional_P_eigenvalue,min_updated_P_eigenvalue,"
+           "input_P_asymmetry,correction_p,corr_v,corr_theta,corr_ba,corr_bg,status\n";
+    skf_update_diagnostics_csv_.flush();
   }
   if (!deferred_csv_path_.empty())
   {
@@ -413,6 +443,11 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   {
     sub_ndt_observation_ = nh_.subscribe(
         ndt_observation_topic_, 10, &DogPriorMapEkfNode::ndtObservationCallback, this);
+  }
+  if (skf_relative_visual_update_enable_)
+  {
+    sub_skf_visual_ = nh_.subscribe(
+        skf_visual_topic_, 32, &DogPriorMapEkfNode::skfVisualMeasurementCallback, this);
   }
   ROS_INFO("[DogPriorMap C++] node started: external_ndt=%s, imu=%s",
            ndt_observation_enable_ ? ndt_observation_topic_.c_str() : "disabled",

@@ -128,7 +128,7 @@ def xyz_array(cloud):
     return np.column_stack([values[a].reshape(-1) for a in "xyz"]).astype(float)
 
 
-def associate_depth(cloud, features, calibration):
+def associate_depth(cloud, features, calibration, include_uncertainty=False):
     tick = time.perf_counter()
     xyz = xyz_array(cloud)
     transform = calibration["T_camera_lidar"]
@@ -141,12 +141,13 @@ def associate_depth(cloud, features, calibration):
     valid = (uv[:, 0] >= 0) & (uv[:, 0] < w - 1) & (uv[:, 1] >= 0) & (uv[:, 1] < h - 1)
     uv, xyz = uv[valid], xyz[valid]
     if not len(uv):
-        return (
+        empty = (
             np.zeros(len(features), dtype=bool),
             np.empty((0, 3)),
             (time.perf_counter() - tick) * 1000,
             0.0,
         )
+        return empty if not include_uncertainty else (empty[0], empty[1], np.empty((0, 3, 3)), empty[2], empty[3])
     pixels = np.rint(uv).astype(int)
     pixel_id = pixels[:, 1] * w + pixels[:, 0]
     order = np.lexsort((xyz[:, 2], pixel_id))
@@ -157,8 +158,143 @@ def associate_depth(cloud, features, calibration):
     distance, index = cKDTree(uv[chosen]).query(features, distance_upper_bound=2.0)
     good = np.isfinite(distance)
     rays = np.column_stack([features[good], np.ones(good.sum())]) @ np.linalg.inv(k).T
-    points = rays * xyz[chosen[index[good]], 2:3]
-    return good, points, projection_ms, (time.perf_counter() - tick) * 1000
+    depth_z = xyz[chosen[index[good]], 2]
+    points = rays * depth_z[:, None]
+    association_ms = (time.perf_counter() - tick) * 1000
+    if not include_uncertainty:
+        return good, points, projection_ms, association_ms
+
+    # Conservative sensor-local point uncertainty used only by the optional
+    # P25 covariance path.  The Corridor01 calibration does not publish a
+    # LiDAR range-noise covariance, so use a declared 5 cm floor and 1% of
+    # range; image feature coordinates use a 0.5 px quantization floor.
+    inverse_k = np.linalg.inv(k)
+    point_covariances = np.empty((len(points), 3, 3), dtype=np.float64)
+    for i, (uv_feature, ray, z) in enumerate(zip(features[good], rays, depth_z)):
+        jacobian = np.column_stack((z * inverse_k[:, 0], z * inverse_k[:, 1], ray))
+        sigma_depth = max(0.05, 0.01 * float(z))
+        input_covariance = np.diag([0.5 ** 2, 0.5 ** 2, sigma_depth ** 2])
+        point_covariances[i] = jacobian @ input_covariance @ jacobian.T
+    return good, points, point_covariances, projection_ms, association_ms
+
+
+def _skew(vector):
+    x, y, z = np.asarray(vector, dtype=float).reshape(3)
+    return np.array([[0.0, -z, y], [z, 0.0, -x], [-y, x, 0.0]])
+
+
+def _left_se3_log(transform):
+    rotation = transform[:3, :3]
+    cosine = np.clip((np.trace(rotation) - 1.0) * 0.5, -1.0, 1.0)
+    angle = np.arccos(cosine)
+    vee = np.array([rotation[2, 1] - rotation[1, 2],
+                    rotation[0, 2] - rotation[2, 0],
+                    rotation[1, 0] - rotation[0, 1]])
+    rotation_vector = (0.5 * vee if angle < 1e-6 else
+                       angle / (2.0 * np.sin(angle)) * vee)
+    angle = np.linalg.norm(rotation_vector)
+    omega = _skew(rotation_vector)
+    if angle < 1e-8:
+        left_jacobian = np.eye(3) + 0.5 * omega + (1.0 / 6.0) * omega @ omega
+    else:
+        left_jacobian = (np.eye(3) + (1.0 - np.cos(angle)) / angle ** 2 * omega +
+                         (angle - np.sin(angle)) / angle ** 3 * omega @ omega)
+    rho = np.linalg.solve(left_jacobian, transform[:3, 3])
+    return np.r_[rho, rotation_vector]
+
+
+def pnp_left_covariance(points, pixels, point_covariances, k, transform,
+                        inlier_indices, reprojection_rmse_px):
+    """Full 6x6 covariance from P4 inlier reprojection geometry.
+
+    Tangent ordering is [translation (m), left rotation (rad)] for a
+    left-multiplicative perturbation of T_Ccur_Cref.  Pixel residual noise is
+    floored at 0.75 px and the resulting information inverse is inflated by
+    four to cover unmodelled KLT/depth association correlation.
+    """
+    indices = np.asarray(inlier_indices, dtype=np.int64).reshape(-1)
+    if len(indices) < 20 or point_covariances.shape != (len(points), 3, 3):
+        return None
+    fx, fy = float(k[0, 0]), float(k[1, 1])
+    sigma_pixel = max(0.75, float(reprojection_rmse_px) / np.sqrt(2.0))
+    information = np.zeros((6, 6), dtype=np.float64)
+    rotation = transform[:3, :3]
+    translation = transform[:3, 3]
+    for index in indices:
+        point = points[index]
+        transformed = rotation @ point + translation
+        x, y, z = transformed
+        if not np.isfinite(transformed).all() or z <= 1e-6:
+            return None
+        projection_jacobian = np.array([
+            [fx / z, 0.0, -fx * x / (z * z)],
+            [0.0, fy / z, -fy * y / (z * z)],
+        ])
+        pose_jacobian = projection_jacobian @ np.column_stack((np.eye(3), -_skew(transformed)))
+        point_jacobian = projection_jacobian @ rotation
+        residual_covariance = (sigma_pixel ** 2 * np.eye(2) +
+                               point_jacobian @ point_covariances[index] @ point_jacobian.T)
+        residual_covariance = 0.5 * (residual_covariance + residual_covariance.T)
+        try:
+            weight = np.linalg.inv(residual_covariance)
+        except np.linalg.LinAlgError:
+            return None
+        information += pose_jacobian.T @ weight @ pose_jacobian
+
+    information = 0.5 * (information + information.T)
+    eigenvalues = np.linalg.eigvalsh(information)
+    if (not np.isfinite(eigenvalues).all() or eigenvalues[0] <= 1e-10 or
+            eigenvalues[-1] / eigenvalues[0] > 1e12):
+        return None
+    covariance = 4.0 * np.linalg.inv(information)
+    # Explicit conservative floors for unreported calibration/model error;
+    # these are not fitted from GT or presented as sensor-calibrated values.
+    covariance += np.diag([0.02 ** 2] * 3 + [np.deg2rad(0.5) ** 2] * 3)
+    covariance = 0.5 * (covariance + covariance.T)
+    if not np.isfinite(covariance).all() or np.linalg.eigvalsh(covariance)[0] <= 0.0:
+        return None
+    return covariance
+
+
+def relative_imu_covariance(transform_camera, covariance_camera, t_imu_camera):
+    """Propagate PnP left-tangent covariance through the calibrated conjugation."""
+    def to_relative(transform):
+        return t_imu_camera @ np.linalg.inv(transform) @ np.linalg.inv(t_imu_camera)
+
+    base = to_relative(transform_camera)
+    jacobian = np.zeros((6, 6), dtype=np.float64)
+    epsilon = 1e-6
+    for column in range(6):
+        delta = np.zeros(6)
+        delta[column] = epsilon
+        angle = np.linalg.norm(delta[3:])
+        perturbed = np.eye(4)
+        if angle > 1e-12:
+            perturbed[:3, :3] = cv2.Rodrigues(delta[3:])[0]
+            omega = _skew(delta[3:])
+            left_jacobian = np.eye(3) + (1.0 - np.cos(angle)) / angle ** 2 * omega + (angle - np.sin(angle)) / angle ** 3 * omega @ omega
+            perturbed[:3, 3] = left_jacobian @ delta[:3]
+        else:
+            perturbed[:3, 3] = delta[:3]
+        plus = to_relative(perturbed @ transform_camera)
+        delta[column] = -epsilon
+        angle = np.linalg.norm(delta[3:])
+        perturbed = np.eye(4)
+        if angle > 1e-12:
+            perturbed[:3, :3] = cv2.Rodrigues(delta[3:])[0]
+            omega = _skew(delta[3:])
+            left_jacobian = np.eye(3) + (1.0 - np.cos(angle)) / angle ** 2 * omega + (angle - np.sin(angle)) / angle ** 3 * omega @ omega
+            perturbed[:3, 3] = left_jacobian @ delta[:3]
+        else:
+            perturbed[:3, 3] = delta[:3]
+        minus = to_relative(perturbed @ transform_camera)
+        jacobian[:, column] = (_left_se3_log(plus @ np.linalg.inv(base)) -
+                               _left_se3_log(minus @ np.linalg.inv(base))) / (2.0 * epsilon)
+    covariance = jacobian @ covariance_camera @ jacobian.T
+    covariance = 0.5 * (covariance + covariance.T)
+    if not np.isfinite(covariance).all() or np.linalg.eigvalsh(covariance)[0] <= 0.0:
+        return None
+    return covariance
 
 
 def pnp(points, pixels, k, seed):
@@ -203,7 +339,7 @@ def feature_distribution(pixels, image_size):
     return float(occupancy), hull_fraction
 
 
-def estimate(ref, cur, cloud, calibration, seed):
+def estimate(ref, cur, cloud, calibration, seed, include_covariance=False):
     start = time.perf_counter()
     row = {
         "status": "NO_FEATURES",
@@ -262,9 +398,11 @@ def estimate(ref, cur, cloud, calibration, seed):
     row["tracked_count"] = len(a)
     row["klt_ms"] = (time.perf_counter() - tick) * 1000
     tick = time.perf_counter()
-    good, points, row["projection_ms"], row["association_ms"] = associate_depth(
-        cloud, a, calibration
-    )
+    if include_covariance:
+        good, points, point_covariances, row["projection_ms"], row["association_ms"] = associate_depth(
+            cloud, a, calibration, include_uncertainty=True)
+    else:
+        good, points, row["projection_ms"], row["association_ms"] = associate_depth(cloud, a, calibration)
     pixels = b[good].astype(float)
     row["depth_ms"] = (time.perf_counter() - tick) * 1000
     row["depth_associated"] = row["pnp_correspondences"] = len(points)
@@ -290,6 +428,15 @@ def estimate(ref, cur, cloud, calibration, seed):
         pnp_ms=(time.perf_counter() - tick) * 1000,
         status="VALID" if transform is not None else "PNP_REJECT",
     )
+    if include_covariance:
+        covariance = None if transform is None else pnp_left_covariance(
+            points, pixels, point_covariances, calibration["Krect"], transform,
+            inlier_indices, rmse)
+        row["pnp_covariance_valid"] = int(covariance is not None)
+        if covariance is not None:
+            for i in range(6):
+                for j in range(6):
+                    row[f"pnp_cov_{i}{j}"] = float(covariance[i, j])
     return row, transform
 
 

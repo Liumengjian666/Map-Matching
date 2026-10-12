@@ -4,6 +4,7 @@
 
 #include "dog_prior_map_localization/core/math_utils.hpp"
 #include "dog_prior_map_localization/core/frame_conversions.hpp"
+#include "dog_prior_map_localization/core/psd_covariance_damping.hpp"
 #include <utility>
 
 #include "dog_prior_map_localization/core/oosm_replay_planner.hpp"
@@ -316,8 +317,16 @@ void DogPriorMapEkfNode::processNdtObservationLocked(
   last_ndt_observation_p_map_ = p_target;
   last_ndt_observation_time_ = t_ndt;
 
-  for (int i = 0; i < 3; ++i) P_(i, i) = std::max(P_(i, i) * 0.85, 1e-4);
-  for (int i = 6; i < 9; ++i) P_(i, i) = std::max(P_(i, i) * 0.85, 1e-5);
+  if (skf_relative_visual_update_enable_)
+  {
+    if (!applyPsdPoseCovarianceDamping(&P_, 0.85, 1e-4, 1e-5))
+      ROS_WARN_THROTTLE(1.0, "[DogPriorMap EKF] P25 retained covariance after PSD-preserving NDT damping rejected input");
+  }
+  else
+  {
+    for (int i = 0; i < 3; ++i) P_(i, i) = std::max(P_(i, i) * 0.85, 1e-4);
+    for (int i = 6; i < 9; ++i) P_(i, i) = std::max(P_(i, i) * 0.85, 1e-5);
+  }
 
   if (oosm_active)
   {

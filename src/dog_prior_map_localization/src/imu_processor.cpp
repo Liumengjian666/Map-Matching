@@ -3,6 +3,10 @@
 
 namespace dog_prior_map_localization
 {
+namespace
+{
+constexpr uint64_t kSkfFixedLagIdMask = uint64_t{1} << 63;
+}
 
 // IMU 主回调：维护短时历史、完成重力初始化并驱动高频状态传播。
 void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
@@ -189,6 +193,27 @@ void DogPriorMapEkfNode::processReadyFixedLagNdtLocked()
 
   for (const FixedLagObservation &event : advanced.ready)
   {
+    if ((event.id & kSkfFixedLagIdMask) != 0)
+    {
+      auto message = fixed_lag_visual_messages_.find(event.id);
+      if (message == fixed_lag_visual_messages_.end())
+      {
+        writeFixedLagDiagnostic(event.id, event.measurement_stamp, event.deadline_stamp,
+            event.arrival_state_stamp, event.arrival_wall_sec, event.release_state_stamp,
+            ros::WallTime::now().toSec(), 0, false, "FIXED_LAG_SKF_VISUAL_MESSAGE_NOT_FOUND");
+        continue;
+      }
+      const auto visual_msg = message->second;
+      fixed_lag_visual_messages_.erase(message);
+      SkfVisualReceipt receipt;
+      processSkfVisualLocked(visual_msg, event.release_state_stamp, &receipt);
+      writeFixedLagDiagnostic(event.id, event.measurement_stamp, event.deadline_stamp,
+          event.arrival_state_stamp, event.arrival_wall_sec, event.release_state_stamp,
+          ros::WallTime::now().toSec(), receipt.replay_imu_count,
+          receipt.correction_applied, "SKF_" + receipt.status);
+      continue;
+    }
+
     auto message = fixed_lag_ndt_messages_.find(event.id);
     if (message == fixed_lag_ndt_messages_.end())
     {

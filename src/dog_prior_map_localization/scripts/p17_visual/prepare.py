@@ -80,10 +80,15 @@ def main():
     p.add_argument('--camera-bag', type=Path, required=True)
     p.add_argument('--calibration', type=Path, required=True)
     p.add_argument('--output', type=Path, required=True)
+    p.add_argument('--include-covariance', action='store_true',
+                   help='append model-based PnP/IMU relative 6x6 covariance for P25 SKF')
+    p.add_argument('--compare-visual-csv', type=Path,
+                   help='verify regenerated P4 poses against a frozen visual CSV')
     args = p.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     tick = time.perf_counter()
-    if sha(args.input) != '7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e':
+    input_sha256 = sha(args.input)
+    if input_sha256 != '7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e':
         raise ValueError('FROZEN_INPUT_HASH_MISMATCH')
     calib = visual.load_calibration(args.calibration, 'corridor01')
     visual.sanity(calib)
@@ -137,10 +142,12 @@ def main():
                     depth_tick = time.perf_counter()
                     depth, end = depth_at(old, tr, stamps, values, calib['T_imu_lidar'])
                     row.update(depth_max_point_ns=end, depth_scan_ns=old.header.stamp.to_nsec(),
+                               depth_max_imu_ns=int(stamps[stamps <= tr][-1]),
                                depth_points=old.width*old.height, depth_age_ms=(tr-end)*1e-6,
                                depth_oldest_age_ms=(tr-int(point_times(old).min()))*1e-6,
                                depth_transport_ms=(time.perf_counter()-depth_tick)*1000)
-                    metrics, T = visual.estimate(prev[2], cur[2], depth, calib, int(cloud.header.seq))
+                    metrics, T = visual.estimate(prev[2], cur[2], depth, calib,
+                        int(cloud.header.seq), include_covariance=args.include_covariance)
                     row.update(metrics)
                     if T is not None:
                         D = calib['T_imu_camera'] @ np.linalg.inv(T) @ np.linalg.inv(calib['T_imu_camera'])
@@ -155,6 +162,18 @@ def main():
                         q = Rotation.from_matrix(D[:3, :3]).as_quat()
                         for name, value in zip(('imu_dx','imu_dy','imu_dz','imu_qx','imu_qy','imu_qz','imu_qw'),
                                                list(D[:3, 3])+list(q)): row[name]=value
+                        if args.include_covariance and metrics.get('pnp_covariance_valid', 0):
+                            C_pnp = np.array([[metrics[f'pnp_cov_{i}{j}'] for j in range(6)]
+                                              for i in range(6)], dtype=float)
+                            C_relative = visual.relative_imu_covariance(T, C_pnp, calib['T_imu_camera'])
+                            row['skf_covariance_valid'] = int(C_relative is not None)
+                            row['skf_covariance_model'] = 'P4_REPROJECTION_JACOBIAN_RANGE_NOISE_FLOORS_COV4'
+                            if C_relative is not None:
+                                for i in range(6):
+                                    for j in range(6): row[f'imu_rel_cov_{i}{j}'] = float(C_relative[i, j])
+                    elif args.include_covariance:
+                        row.update(pnp_covariance_valid=0, skf_covariance_valid=0,
+                                   skf_covariance_model='REJECTED_GEOMETRY_OR_NONFINITE')
                 except ValueError as e: row['status'] = str(e)
             row['vision_ms'] = (time.perf_counter()-start)*1000
             rows.append(row); prev = cur
@@ -165,16 +184,50 @@ def main():
     keys = list(rows[0]) + sorted(set().union(*(r.keys() for r in rows))-set(rows[0]))
     with (args.output/'visual.csv').open('w', newline='') as f:
         w=csv.DictWriter(f,fieldnames=keys); w.writeheader(); w.writerows(rows)
+    parity = None
+    if args.compare_visual_csv:
+        with args.compare_visual_csv.open(newline='') as f:
+            frozen = {int(row['scan_ns']): row for row in csv.DictReader(f)}
+        if set(frozen) != {int(row['scan_ns']) for row in rows}:
+            raise ValueError('FROZEN_VISUAL_SCAN_SET_MISMATCH')
+        fields = ('valid', 'dx', 'dy', 'dz', 'imu_dx', 'imu_dy', 'imu_dz',
+                  'imu_qx', 'imu_qy', 'imu_qz', 'imu_qw')
+        max_abs = 0.0
+        compared = 0
+        for row in rows:
+            old = frozen[int(row['scan_ns'])]
+            for field in fields:
+                if field == 'valid':
+                    if int(row[field]) != int(old[field]):
+                        raise ValueError(f'FROZEN_VISUAL_VALIDITY_MISMATCH:{row["scan_ns"]}')
+                elif int(row['valid']):
+                    difference = abs(float(row[field]) - float(old[field]))
+                    max_abs = max(max_abs, difference)
+                    compared += 1
+        if max_abs > 1e-9:
+            raise ValueError(f'FROZEN_VISUAL_POSE_MISMATCH:{max_abs:.12g}')
+        parity = dict(valid_rows=sum(int(row['valid']) for row in rows),
+                      compared_values=compared, max_abs_difference=max_abs,
+                      result='P4_POSE_PARITY_PASS')
     receipt = dict(scans=len(rows), valid=sum(r['valid'] for r in rows),
         wall_sec=time.perf_counter()-tick, peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
-        input_sha256=sha(args.input), visual_sha256=sha(args.output/'visual.csv'),
+        input_sha256=input_sha256, visual_sha256=sha(args.output/'visual.csv'),
         camera_bag_expected_historical_sha256='c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811',
         camera_full_hash_recheck='NOT_RUN: bounded camera-header extraction, historical original bag receipt retained',
+        camera_file_size_bytes=args.camera_bag.stat().st_size,
+        camera_file_mtime_ns=args.camera_bag.stat().st_mtime_ns,
         reused_source_hashes={str(p):sha(p) for p in (Path(visual.__file__),
           FRONT/'p9/corridor_moving_init/preintegration.py', Path(__file__))},
         NDT_LOADED=False, GT_LOADED=False, translation_deskew='NOT_ESTIMATED',
         bridge='VISUAL_MEAN_VELOCITY_SHORT_ENDPOINT_APPROXIMATION',
-        calibration_hashes={p.name:sha(p) for p in args.calibration.glob('corridor01_*.yaml')})
+        calibration_hashes={p.name:sha(p) for p in args.calibration.glob('corridor01_*.yaml')},
+        covariance_enabled=args.include_covariance,
+        covariance_model='P4_REPROJECTION_JACOBIAN_RANGE_NOISE_FLOORS_COV4' if args.include_covariance else None,
+        covariance_assumptions=dict(pixel_sigma_floor_px=0.75, depth_sigma_floor_m=0.05,
+            depth_sigma_fraction=0.01, ref_pixel_sigma_floor_px=0.5,
+            covariance_inflation=4.0, translation_floor_m=0.02,
+            rotation_floor_deg=0.5) if args.include_covariance else None,
+        frozen_visual_pose_parity=parity)
     (args.output/'extraction.json').write_text(json.dumps(receipt,indent=2)+'\n')
     print(json.dumps(receipt),flush=True)
 

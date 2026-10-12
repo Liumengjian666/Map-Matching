@@ -18,6 +18,7 @@
 #include <Eigen/Geometry>
 
 #include <geometry_msgs/PoseStamped.h>
+#include <dog_prior_map_interfaces/VisualRelativeMeasurement.h>
 #include <nav_msgs/Odometry.h>
 #include <nav_msgs/Path.h>
 #include <ros/ros.h>
@@ -29,6 +30,7 @@
 #include "dog_prior_map_localization/core/imu_propagation.hpp"
 #include "dog_prior_map_localization/core/state_history.hpp"
 #include "dog_prior_map_localization/core/oosm_fixed_lag_scheduler.hpp"
+#include "dog_prior_map_localization/core/selective_relative_visual_update.hpp"
 
 namespace dog_prior_map_localization
 {
@@ -105,6 +107,27 @@ private:
   /// 在 IMU 状态推进后按传感器时间处理已到达 watermark 的 NDT 观测。
   void processReadyDeferredNdtLocked();
   void processReadyFixedLagNdtLocked();
+  void skfVisualMeasurementCallback(
+      const ros::MessageEvent<dog_prior_map_interfaces::VisualRelativeMeasurement const>& event);
+  bool stateAtCausalTimeLocked(double target_stamp, FilterStateSnapshot& state,
+                               double& sample_age_ms, std::string& reason) const;
+  struct SkfVisualReceipt
+  {
+    std::string status = "NOT_PROCESSED";
+    std::size_t replay_imu_count = 0;
+    bool correction_applied = false;
+    SelectiveRelativeVisualUpdateResult update;
+  };
+  void processSkfVisualLocked(
+      const dog_prior_map_interfaces::VisualRelativeMeasurementConstPtr& msg,
+      double expected_release_state_stamp,
+      SkfVisualReceipt* receipt);
+  void writeSkfVisualDiagnostic(
+      const dog_prior_map_interfaces::VisualRelativeMeasurement& msg,
+      const std::string& status,
+      double reference_alignment_ms,
+      double current_alignment_ms,
+      const SelectiveRelativeVisualUpdateResult& update);
   void writeFixedLagDiagnostic(uint64_t observation_id,
       double ndt_stamp, double deadline_stamp, double arrival_state_stamp,
       double arrival_wall_sec, double release_state_stamp,
@@ -151,6 +174,7 @@ private:
   ros::NodeHandle pnh_;
   ros::Subscriber sub_imu_;
   ros::Subscriber sub_ndt_observation_;
+  ros::Subscriber sub_skf_visual_;
   ros::Subscriber sub_imu_deskew_cloud_;
   ros::Publisher pub_high_;
   ros::Publisher pub_imu_propagate_;
@@ -270,10 +294,19 @@ private:
   std::size_t oosm_fixed_lag_max_queue_ = 64;
   OosmFixedLagScheduler oosm_fixed_lag_scheduler_;
   std::map<uint64_t, nav_msgs::OdometryConstPtr> fixed_lag_ndt_messages_;
+  std::map<uint64_t, dog_prior_map_interfaces::VisualRelativeMeasurementConstPtr>
+      fixed_lag_visual_messages_;
   std::string fixed_lag_csv_path_;
   std::ofstream fixed_lag_csv_;
   uint64_t fixed_lag_late_count_ = 0;
   uint64_t fixed_lag_processed_count_ = 0;
+  bool skf_relative_visual_update_enable_ = false;
+  std::string skf_visual_topic_ = "/dog_livo/skf_visual_measurement";
+  std::string skf_update_diagnostics_path_;
+  std::ofstream skf_update_diagnostics_csv_;
+  uint64_t skf_visual_received_count_ = 0;
+  uint64_t skf_visual_applied_count_ = 0;
+  uint64_t skf_visual_rejected_count_ = 0;
 
   struct DeferredNdtObservation
   {

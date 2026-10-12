@@ -1,0 +1,15 @@
+{
+  "protocol": "P25_PRE_GT_OUTPUT_FREEZE_FAILURE_RECORD",
+  "GT_LOADED": false,
+  "output_freeze_result": "B_SKF_NUMERICAL_CONTRACT_FAILED",
+  "A_completed": true,
+  "B_completed": false,
+  "A_NDT": 396,
+  "B_NDT": 396,
+  "B_SKF_status": {
+    "APPLIED": 95,
+    "NON_PSD_CI_COVARIANCE": 55
+  },
+  "first_non_psd_scan_ns": "1517157237544403076",
+  "accuracy_evaluation_started": false
+}

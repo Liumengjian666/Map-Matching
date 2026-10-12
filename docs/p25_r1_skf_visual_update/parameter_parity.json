@@ -1,0 +1,63 @@
+{
+  "protocol": "P25_AB_RUNTIME_PARAMETER_PARITY",
+  "only_physical_runtime_difference": "/mature_integration/skf_enable",
+  "A_skf_enabled": false,
+  "B_skf_enabled": true,
+  "visual_initial_guess_enabled_A_B": [
+    false,
+    false
+  ],
+  "shared_input_hashes": {
+    "bag_sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+    "map_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+    "visual_csv_sha256": "28e2fb5ccff6a9978d471ee37b7b475b349bc2090b96131b702fa657914610d9",
+    "dataset_config_sha256": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+    "mature_config_sha256": "478af689ecfa6629705dc61dfc0b4148f8f1b9ee6b2a46c98c43d9acef3a3734"
+  },
+  "shared_binary_hashes": {
+    "dog_prior_map_ndt_node_cpp": {
+      "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+      "sha256": "500e29b702f3efc5e04a9b2e8efa5c2bd8434a315fb311b65f0bfc298b7bfbdc"
+    },
+    "dog_prior_map_ekf_node_cpp": {
+      "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+      "sha256": "9f91401624cdb968bd9e99916499c8990ea8ae709951551c80e81eaba058d6c2"
+    }
+  },
+  "normalized_rosparameter_differences": [
+    "/mature_integration/skf_enable",
+    "/output/ekf_prediction_diagnostics_csv_path",
+    "/output/imu_deskew_csv_path",
+    "/output/mature_integration_diagnostics_csv_path",
+    "/output/ndt_diagnostics_csv_path",
+    "/output/oosm_csv_path",
+    "/output/oosm_fixed_lag_csv_path",
+    "/output/runtime_csv_path",
+    "/output/skf_measurement_csv_path",
+    "/output/skf_update_diagnostics_csv_path",
+    "/roslaunch/uris/host_127_0_0_1__33973",
+    "/roslaunch/uris/host_127_0_0_1__41091",
+    "/roslaunch/uris/host_127_0_0_1__45145",
+    "/roslaunch/uris/host_127_0_0_1__46655",
+    "/run_id"
+  ],
+  "excluded_output_paths": [
+    "/output/ekf_prediction_diagnostics_csv_path",
+    "/output/imu_deskew_csv_path",
+    "/output/mature_integration_diagnostics_csv_path",
+    "/output/ndt_diagnostics_csv_path",
+    "/output/oosm_csv_path",
+    "/output/oosm_fixed_lag_csv_path",
+    "/output/runtime_csv_path",
+    "/output/skf_measurement_csv_path",
+    "/output/skf_update_diagnostics_csv_path"
+  ],
+  "ignored_runtime_metadata": [
+    "/mature_integration/skf_enable",
+    "/roslaunch/uris/host_127_0_0_1__33973",
+    "/roslaunch/uris/host_127_0_0_1__41091",
+    "/roslaunch/uris/host_127_0_0_1__45145",
+    "/roslaunch/uris/host_127_0_0_1__46655",
+    "/run_id"
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "protocol": "P25_R1_INPUT_FREEZE",
+  "GT_LOADED": false,
+  "inputs": {
+    "map": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd",
+      "size_bytes": 4058751,
+      "sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+      "hash_source": "run_start_receipt"
+    },
+    "bag": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/input_v2/corridor01_p10_causal_startup5_eval35_fixedlag_v2.bag",
+      "size_bytes": 186714344,
+      "sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+      "hash_source": "run_start_receipt"
+    },
+    "run_visual_covariance_csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/visual_covariance/visual.csv",
+      "size_bytes": 520267,
+      "sha256": "28e2fb5ccff6a9978d471ee37b7b475b349bc2090b96131b702fa657914610d9"
+    },
+    "original_P17_visual_csv": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p17_visual_aided_ndt_r1/visual_input/visual.csv",
+      "size_bytes": 202769,
+      "sha256": "10869519890a5adcb6f3310bba05f379a959018cf123ea8a90c1cf4ea1314c79"
+    },
+    "dataset_config": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml",
+      "size_bytes": 4263,
+      "sha256": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+      "hash_source": "run_start_receipt"
+    },
+    "mature_config": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p25_skf_visual_update.yaml",
+      "size_bytes": 560,
+      "sha256": "478af689ecfa6629705dc61dfc0b4148f8f1b9ee6b2a46c98c43d9acef3a3734",
+      "hash_source": "run_start_receipt"
+    },
+    "GT_evaluation_contract": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/docs/p10_corridor01_deterministic_oosm_replay_r1",
+      "status": "frozen_contract_referenced_only; GT and evaluation files not opened"
+    }
+  },
+  "binaries": {
+    "dog_prior_map_ndt_node_cpp": {
+      "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+      "sha256": "500e29b702f3efc5e04a9b2e8efa5c2bd8434a315fb311b65f0bfc298b7bfbdc"
+    },
+    "dog_prior_map_ekf_node_cpp": {
+      "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+      "sha256": "9f91401624cdb968bd9e99916499c8990ea8ae709951551c80e81eaba058d6c2"
+    }
+  },
+  "camera_calibration_sha256": {
+    "corridor01_extrinsics.yaml": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d",
+    "corridor01_intrinsics.yaml": "083ff73553f6df25734bfddc439fbda7eb7b01c8baeede2b4949e960f72fd370"
+  },
+  "camera_bag_expected_historical_sha256": "c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811",
+  "camera_bag_hash_rechecked": false,
+  "note": "Frozen visual P4 pose parity passed. Full raw-camera SHA was not re-read; the raw camera extraction completed once without a new I/O failure."
+}

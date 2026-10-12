@@ -17,6 +17,7 @@
 #include <diagnostic_msgs/DiagnosticArray.h>
 #include <diagnostic_msgs/DiagnosticStatus.h>
 #include <diagnostic_msgs/KeyValue.h>
+#include <dog_prior_map_interfaces/VisualRelativeMeasurement.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <livox_ros_driver2/CustomMsg.h>
 #include <nav_msgs/Odometry.h>
@@ -36,6 +37,7 @@
 #include "dog_prior_map_localization/visual_aided_initial_guess.hpp"
 #include "dog_prior_map_localization/experimental_source_capture.hpp"
 #include "dog_prior_map_localization/mature_ndt_algorithms.hpp"
+#include "dog_prior_map_localization/skf_visual_measurement.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_weak_refinement.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/observable_pcl_ndt.hpp"
@@ -236,6 +238,8 @@ public:
         getParam<bool>("mature_integration/multi_ndt_enable", false);
     mature_skf_enable_ = mature_integration_enable_ &&
         getParam<bool>("mature_integration/skf_enable", false);
+    p25_relative_visual_contract_ = mature_integration_enable_ &&
+        getParam<bool>("mature_integration/p25_relative_visual_contract", false);
     mature_ndt_config_.degeneracy_eigen_ratio = getParam<double>(
         "mature_integration/degeneracy_eigen_ratio", 0.03);
     mature_ndt_config_.weak_translation_step_m = getParam<double>(
@@ -259,7 +263,12 @@ public:
     if (mature_integration_enable_)
     {
       if (coupled_enabled_ || experimental_ekf_translation_fallback_enable_ ||
-          !visual_initial_guess_enable_ || mature_ndt_config_.degeneracy_eigen_ratio <= 0.0 ||
+          (!visual_initial_guess_enable_ && !p25_relative_visual_contract_) ||
+          (p25_relative_visual_contract_ && (visual_initial_guess_enable_ ||
+           scan_reference_time_ != "start" ||
+           !getParam<bool>("ndt_observation/oosm_fixed_lag_enable", false) ||
+           std::abs(getParam<double>("ndt_observation/oosm_fixed_lag_sec", 0.0) - 0.15) > 1e-9)) ||
+          mature_ndt_config_.degeneracy_eigen_ratio <= 0.0 ||
           mature_ndt_config_.degeneracy_eigen_ratio >= 1.0 ||
           !std::isfinite(mature_ndt_config_.score_improvement_margin) ||
           mature_ndt_config_.score_improvement_margin < 0.0 ||
@@ -292,6 +301,25 @@ public:
           "rotation_weak_axis,recovery_suspicious,recovery_trigger_status,skf_status,skf_direction_selected,"
           "quick_candidate_count,quick_score_calls,jet_calls,preview_ms,jet_ms,extra_aligns,extra_align_ms,"
           "terminal_score_calls,candidate_details,selected_candidate,full_align_count,frame_module_ms\n";
+    }
+    if (p25_relative_visual_contract_ && mature_skf_enable_)
+    {
+      const std::string visual_path = getParam<std::string>(
+          "mature_integration/skf_visual_measurement_csv", "");
+      skf_visual_measurements_.load(visual_path);
+      skf_visual_topic_ = getParam<std::string>("topics/skf_visual_measurement",
+          "/dog_livo/skf_visual_measurement");
+      const std::string measurement_path = getParam<std::string>(
+          "output/skf_measurement_csv_path", "");
+      if (measurement_path.empty()) throw std::runtime_error("P25 requires SKF measurement output path");
+      std::ifstream existing_skf_csv(measurement_path.c_str());
+      if (existing_skf_csv.good()) throw std::runtime_error("P25 SKF diagnostic output already exists");
+      skf_update_csv_.open(measurement_path, std::ios::out);
+      if (!skf_update_csv_) throw std::runtime_error("P25 SKF diagnostics output unavailable");
+      skf_update_csv_ << "scan_ns,reference_ns,current_ns,pnp_inliers,inlier_ratio,reprojection_rmse_px,"
+          "covariance_model,translation_degenerate,rotation_degenerate,published\n";
+      pub_skf_visual_ = nh_.advertise<dog_prior_map_interfaces::VisualRelativeMeasurement>(
+          skf_visual_topic_, 32);
     }
     publish_tf_ = getParam<bool>("output/ndt_publish_tf", false);
     path_max_length_ = std::max(1, getParam<int>("output/path_max_length", 5000));
@@ -691,12 +719,16 @@ private:
       record.dcreg.status = "INVALID_NOMINAL_POSE";
     }
 
-    const bool valid_visual = visual_initial_guess_enable_ &&
-        visual_initial_guess_.hasValidMeasurement(scan_ns);
+    const SkfVisualMeasurement* relative_visual = p25_relative_visual_contract_ && mature_skf_enable_ ?
+        skf_visual_measurements_.find(scan_ns) : nullptr;
+    const bool valid_visual = p25_relative_visual_contract_ ? relative_visual != nullptr :
+        (visual_initial_guess_enable_ && visual_initial_guess_.hasValidMeasurement(scan_ns));
     const auto skf = evaluateSkfGate(mature_skf_enable_, record.dcreg,
-        valid_visual, visual_applied, false);
+        valid_visual, visual_applied, relative_visual != nullptr);
     record.skf_status = skf.status;
     record.skf_direction_selected = skf.direction_selected;
+    if (relative_visual && skf.status == "READY_RELATIVE_VISUAL_MEASUREMENT")
+      publishSkfVisual(*relative_visual, record.dcreg);
 
     const bool quality_suspect = !*converged || !std::isfinite(*fitness) ||
         *fitness > mature_ndt_config_.suspect_fitness_threshold || *iterations <= 1;
@@ -838,6 +870,55 @@ private:
 
     record.module_ms = (ros::WallTime::now() - module_start).toSec() * 1000.0;
     writeMatureDiagnostics(record);
+  }
+
+  void publishSkfVisual(const SkfVisualMeasurement& measurement,
+                        const DcregAdaptedReport& dcreg)
+  {
+    if (!pub_skf_visual_ || !skf_update_csv_.is_open()) return;
+    dog_prior_map_interfaces::VisualRelativeMeasurement message;
+    message.header.stamp.fromNSec(measurement.current_ns);
+    message.header.frame_id = "imu_cur";
+    message.reference_stamp.fromNSec(measurement.reference_ns);
+    message.depth_max_point_stamp.fromNSec(measurement.depth_max_point_ns);
+    message.depth_max_imu_stamp.fromNSec(measurement.depth_max_imu_ns);
+    message.scan_ns = measurement.scan_ns;
+    message.reference_frame = "imu_ref";
+    message.current_frame = "imu_cur";
+    message.relative_pose.position.x = measurement.relative_pose(0, 3);
+    message.relative_pose.position.y = measurement.relative_pose(1, 3);
+    message.relative_pose.position.z = measurement.relative_pose(2, 3);
+    Eigen::Quaterniond q(measurement.relative_pose.block<3, 3>(0, 0));
+    q.normalize();
+    message.relative_pose.orientation.x = q.x();
+    message.relative_pose.orientation.y = q.y();
+    message.relative_pose.orientation.z = q.z();
+    message.relative_pose.orientation.w = q.w();
+    for (int i = 0; i < 6; ++i)
+      for (int j = 0; j < 6; ++j)
+        message.covariance_left_imu_ref[static_cast<std::size_t>(i * 6 + j)] = measurement.covariance(i, j);
+    message.translation_degenerate = dcreg.translation_degenerate;
+    message.rotation_degenerate = dcreg.rotation_degenerate;
+    for (int i = 0; i < 3; ++i)
+      for (int j = 0; j < 3; ++j)
+      {
+        message.translation_axes_map[static_cast<std::size_t>(i * 3 + j)] = dcreg.translation_axes(i, j);
+        message.rotation_axes_map[static_cast<std::size_t>(i * 3 + j)] = dcreg.rotation_axes(i, j);
+      }
+    message.pnp_inliers = measurement.pnp_inliers;
+    message.inlier_ratio = measurement.inlier_ratio;
+    message.reprojection_rmse_px = measurement.reprojection_rmse_px;
+    message.grid_occupancy = measurement.grid_occupancy;
+    message.hull_fraction = measurement.hull_fraction;
+    message.covariance_model = measurement.covariance_model;
+    pub_skf_visual_.publish(message);
+    skf_update_csv_ << std::setprecision(17) << measurement.scan_ns << ','
+        << measurement.reference_ns << ',' << measurement.current_ns << ','
+        << measurement.pnp_inliers << ',' << measurement.inlier_ratio << ','
+        << measurement.reprojection_rmse_px << ',' << measurement.covariance_model << ','
+        << (dcreg.translation_degenerate ? 1 : 0) << ','
+        << (dcreg.rotation_degenerate ? 1 : 0) << ",1\n";
+    skf_update_csv_.flush();
   }
 
   void writeMatureDiagnostics(const MatureFrameRecord& record)
@@ -2093,6 +2174,11 @@ private:
   bool mature_dcreg_enable_ = false;
   bool mature_multi_ndt_enable_ = false;
   bool mature_skf_enable_ = false;
+  bool p25_relative_visual_contract_ = false;
+  SkfVisualMeasurementCatalog skf_visual_measurements_;
+  ros::Publisher pub_skf_visual_;
+  std::string skf_visual_topic_;
+  std::ofstream skf_update_csv_;
   MatureNdtConfig mature_ndt_config_;
   std::ofstream mature_diagnostics_csv_;
   std::string determinism_csv_path_;

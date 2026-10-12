@@ -1,0 +1,5 @@
+layer,translation_rmse_m,translation_p95_m,translation_max_m,rotation_rmse_deg,rotation_p95_deg,rotation_max_deg,sample_count,status,reason
+Initial_Guess,,,,,,,,NOT_EVALUATED_EXPERIMENT_CONTRACT_FAILED,B SKF run contains NON_PSD_CI_COVARIANCE rejections; GT evaluation was intentionally not started.
+Raw_NDT,,,,,,,,NOT_EVALUATED_EXPERIMENT_CONTRACT_FAILED,B SKF run contains NON_PSD_CI_COVARIANCE rejections; GT evaluation was intentionally not started.
+Final_Used,,,,,,,,NOT_EVALUATED_EXPERIMENT_CONTRACT_FAILED,B SKF run contains NON_PSD_CI_COVARIANCE rejections; GT evaluation was intentionally not started.
+EKF_HighRate,,,,,,,,NOT_EVALUATED_EXPERIMENT_CONTRACT_FAILED,B SKF run contains NON_PSD_CI_COVARIANCE rejections; GT evaluation was intentionally not started.

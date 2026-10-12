@@ -1,0 +1,283 @@
+{
+  "task": "P25-R1-SKF-SELECTIVE-VISUAL-UPDATE-INTEGRATION",
+  "final_result": "SKF_RUNTIME_NUMERICAL_CONTRACT_FAILED",
+  "experiment_valid": false,
+  "gt_loaded": false,
+  "inputs": {
+    "protocol": "P25_R1_INPUT_FREEZE",
+    "GT_LOADED": false,
+    "inputs": {
+      "map": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd",
+        "size_bytes": 4058751,
+        "sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+        "hash_source": "run_start_receipt"
+      },
+      "bag": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/input_v2/corridor01_p10_causal_startup5_eval35_fixedlag_v2.bag",
+        "size_bytes": 186714344,
+        "sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+        "hash_source": "run_start_receipt"
+      },
+      "run_visual_covariance_csv": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/visual_covariance/visual.csv",
+        "size_bytes": 520267,
+        "sha256": "28e2fb5ccff6a9978d471ee37b7b475b349bc2090b96131b702fa657914610d9"
+      },
+      "original_P17_visual_csv": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p17_visual_aided_ndt_r1/visual_input/visual.csv",
+        "size_bytes": 202769,
+        "sha256": "10869519890a5adcb6f3310bba05f379a959018cf123ea8a90c1cf4ea1314c79"
+      },
+      "dataset_config": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml",
+        "size_bytes": 4263,
+        "sha256": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+        "hash_source": "run_start_receipt"
+      },
+      "mature_config": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p25_skf_visual_update.yaml",
+        "size_bytes": 560,
+        "sha256": "478af689ecfa6629705dc61dfc0b4148f8f1b9ee6b2a46c98c43d9acef3a3734",
+        "hash_source": "run_start_receipt"
+      },
+      "GT_evaluation_contract": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/docs/p10_corridor01_deterministic_oosm_replay_r1",
+        "status": "frozen_contract_referenced_only; GT and evaluation files not opened"
+      }
+    },
+    "binaries": {
+      "dog_prior_map_ndt_node_cpp": {
+        "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+        "sha256": "500e29b702f3efc5e04a9b2e8efa5c2bd8434a315fb311b65f0bfc298b7bfbdc"
+      },
+      "dog_prior_map_ekf_node_cpp": {
+        "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+        "sha256": "9f91401624cdb968bd9e99916499c8990ea8ae709951551c80e81eaba058d6c2"
+      }
+    },
+    "camera_calibration_sha256": {},
+    "camera_bag_expected_historical_sha256": "c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811",
+    "camera_bag_hash_rechecked": false,
+    "note": "Frozen visual P4 pose parity passed. Full raw-camera SHA was not re-read; the raw camera extraction completed once without a new I/O failure."
+  },
+  "smoke": {
+    "ndt": 183,
+    "ndt_oosm_applied": 182,
+    "high_rate": 3698,
+    "published_visual": 87,
+    "skf_updates": {
+      "APPLIED": 86
+    },
+    "nonfinite_pose": 0
+  },
+  "A_SKF_OFF": {
+    "ndt_count": 396,
+    "ndt_converged": 396,
+    "ndt_iterations": {
+      "16": 1,
+      "2": 18,
+      "1": 359,
+      "3": 5,
+      "5": 4,
+      "4": 2,
+      "6": 2,
+      "9": 1,
+      "11": 1,
+      "17": 1,
+      "8": 1,
+      "7": 1
+    },
+    "ndt_oosm_applied": 396,
+    "high_rate_count": 8004,
+    "corrected_count": 396,
+    "nonfinite_pose_count": 0,
+    "late_count": 0,
+    "dcreg_status": {
+      "DCREG_DETECTION_ADAPTED": 396
+    },
+    "rotation_degenerate": 363,
+    "translation_degenerate": 0,
+    "multi_quick_score_calls": 664,
+    "multi_full_align_calls": 398,
+    "extra_full_align_calls": 2,
+    "multi_recovery_status": {
+      "NO_DEGENERATE_SUBSPACE": 33,
+      "TRIGGERED_NO_CANDIDATE_PASSED_PREVIEW": 330,
+      "NOMINAL_QUALITY_NOT_SUSPECT": 31,
+      "ALTERNATIVE_SELECTED": 1,
+      "REFINED_NOMINAL_RETAINED": 1
+    },
+    "published_visual_measurements": 0,
+    "skf_update_status": {},
+    "oosm_status": {
+      "APPLIED": 396
+    },
+    "fixed_lag_status": {
+      "QUEUED": 396,
+      "APPLIED": 396
+    },
+    "ndt_callback_ms": {
+      "n": 396,
+      "mean": 22.220797611005377,
+      "p95": 28.999686241149902,
+      "max": 83.66703987121582
+    },
+    "deskew_ms": {
+      "n": 396,
+      "mean": 14.115563896464641,
+      "p95": 18.9930135,
+      "max": 22.986901
+    },
+    "mature_module_ms": {
+      "n": 396,
+      "mean": 7.933891936868686,
+      "p95": 11.839482,
+      "max": 17.338234
+    },
+    "wall_sec": 170.43864251900231,
+    "resources": {
+      "dog_prior_map_ndt_node_cpp": {
+        "peak_rss_bytes": 81080320,
+        "cpu_sec": 11.26
+      },
+      "dog_prior_map_ekf_node_cpp": {
+        "peak_rss_bytes": 19103744,
+        "cpu_sec": 9.91
+      }
+    }
+  },
+  "B_SKF_ON": {
+    "ndt_count": 396,
+    "ndt_converged": 396,
+    "ndt_iterations": {
+      "16": 2,
+      "2": 27,
+      "1": 351,
+      "5": 4,
+      "7": 1,
+      "4": 3,
+      "6": 2,
+      "10": 1,
+      "9": 2,
+      "8": 1,
+      "3": 2
+    },
+    "ndt_oosm_applied": 396,
+    "high_rate_count": 8004,
+    "corrected_count": 491,
+    "nonfinite_pose_count": 0,
+    "late_count": 0,
+    "dcreg_status": {
+      "DCREG_DETECTION_ADAPTED": 395,
+      "DCREG_DETECTION_ADAPTED_NONCONVEX": 1
+    },
+    "rotation_degenerate": 363,
+    "translation_degenerate": 0,
+    "multi_quick_score_calls": 656,
+    "multi_full_align_calls": 401,
+    "extra_full_align_calls": 5,
+    "multi_recovery_status": {
+      "NO_DEGENERATE_SUBSPACE": 33,
+      "TRIGGERED_NO_CANDIDATE_PASSED_PREVIEW": 324,
+      "NOMINAL_QUALITY_NOT_SUSPECT": 35,
+      "ALTERNATIVE_SELECTED": 4
+    },
+    "published_visual_measurements": 150,
+    "skf_update_status": {
+      "APPLIED": 95,
+      "NON_PSD_CI_COVARIANCE": 55
+    },
+    "oosm_status": {
+      "APPLIED": 396,
+      "SKF_RELATIVE_VISUAL_APPLIED": 95,
+      "NON_PSD_CI_COVARIANCE": 55
+    },
+    "fixed_lag_status": {
+      "QUEUED": 396,
+      "APPLIED": 396,
+      "QUEUED_SKF_VISUAL": 150,
+      "SKF_APPLIED": 95,
+      "SKF_NON_PSD_CI_COVARIANCE": 55
+    },
+    "ndt_callback_ms": {
+      "n": 396,
+      "mean": 21.670868300428292,
+      "p95": 28.736591339111328,
+      "max": 79.83016967773438
+    },
+    "deskew_ms": {
+      "n": 396,
+      "mean": 14.340614568181824,
+      "p95": 19.044033,
+      "max": 23.464968
+    },
+    "mature_module_ms": {
+      "n": 396,
+      "mean": 7.6470799974747505,
+      "p95": 11.1781845,
+      "max": 41.923604000000005
+    },
+    "wall_sec": 170.33378206999623,
+    "resources": {
+      "dog_prior_map_ndt_node_cpp": {
+        "peak_rss_bytes": 81399808,
+        "cpu_sec": 11.09
+      },
+      "dog_prior_map_ekf_node_cpp": {
+        "peak_rss_bytes": 19013632,
+        "cpu_sec": 10.15
+      }
+    }
+  },
+  "B_execution_error": "RuntimeError:P25_SKF_NUMERICAL_OR_REPLAY_ERROR:NON_PSD_CI_COVARIANCE",
+  "visual_rows": 396,
+  "valid_pnp_rows": 169,
+  "valid_covariance_rows": 169,
+  "covariance_minimum_eigenvalue": 7.101750764955161e-05,
+  "covariance_trace_mean": 0.0019283827110677303,
+  "P4_extraction": {
+    "scans": 396,
+    "valid": 169,
+    "wall_sec": 33.315002706993255,
+    "peak_rss_kib": 209004,
+    "input_sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+    "visual_sha256": "28e2fb5ccff6a9978d471ee37b7b475b349bc2090b96131b702fa657914610d9",
+    "camera_bag_expected_historical_sha256": "c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811",
+    "camera_full_hash_recheck": "NOT_RUN: bounded camera-header extraction, historical original bag receipt retained",
+    "camera_file_size_bytes": 6473379689,
+    "camera_file_mtime_ns": 1701481414000000000,
+    "reused_source_hashes": {
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p4_i3_visual_frontend.py": "604d05e587ac52e1784cdc01933883cede806a979be308ec7bc42098babae58a",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_fastlio2_frontend_exp/scripts/p9/corridor_moving_init/preintegration.py": "bf3e7713fbd46d7a02c94e4486f52bb790c7c2c2e352e17631f837887da30a36",
+      "src/dog_prior_map_localization/scripts/p17_visual/prepare.py": "d1203e629bdd22e45442827fcc89eced85c3d82707e509264a379bf68b3b9e35"
+    },
+    "NDT_LOADED": false,
+    "GT_LOADED": false,
+    "translation_deskew": "NOT_ESTIMATED",
+    "bridge": "VISUAL_MEAN_VELOCITY_SHORT_ENDPOINT_APPROXIMATION",
+    "calibration_hashes": {
+      "corridor01_extrinsics.yaml": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d",
+      "corridor01_intrinsics.yaml": "083ff73553f6df25734bfddc439fbda7eb7b01c8baeede2b4949e960f72fd370"
+    },
+    "covariance_enabled": true,
+    "covariance_model": "P4_REPROJECTION_JACOBIAN_RANGE_NOISE_FLOORS_COV4",
+    "covariance_assumptions": {
+      "pixel_sigma_floor_px": 0.75,
+      "depth_sigma_floor_m": 0.05,
+      "depth_sigma_fraction": 0.01,
+      "ref_pixel_sigma_floor_px": 0.5,
+      "covariance_inflation": 4.0,
+      "translation_floor_m": 0.02,
+      "rotation_floor_deg": 0.5
+    },
+    "frozen_visual_pose_parity": {
+      "valid_rows": 169,
+      "compared_values": 1690,
+      "max_abs_difference": 0.0,
+      "result": "P4_POSE_PARITY_PASS"
+    }
+  },
+  "accuracy": "NOT_EVALUATED_GT_NOT_OPENED",
+  "note": "B completed all NDT/OOSM/high-rate counts but had NON_PSD_CI_COVARIANCE rejections. Its output is not accepted as a valid SKF comparison."
+}

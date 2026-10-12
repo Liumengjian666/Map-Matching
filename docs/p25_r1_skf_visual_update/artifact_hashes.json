@@ -1,0 +1,334 @@
+{
+  "protocol": "P25_PARTIAL_ARCHIVE_HASHES",
+  "GT_LOADED": false,
+  "archive_artifacts": {
+    "PROTOCOL.md": {
+      "size_bytes": 2417,
+      "sha256": "dc2dc395720732fa10d9399848058db41ee281a6ff850ec685b224b3d61ebe81"
+    },
+    "REPORT.md": {
+      "size_bytes": 9468,
+      "sha256": "fd6192b0516a67a9f6b7f3f154d815d7650bad0087ad48c7793782f09933f6fd"
+    },
+    "accuracy_comparison.csv": {
+      "size_bytes": 770,
+      "sha256": "d487a6b7073e9d1f1deb367d98dbf11da60f024a6fcff37bc665192a82ca5481"
+    },
+    "error_window_summary.csv": {
+      "size_bytes": 279,
+      "sha256": "824b9949e25212de50e643614b6960290e9c36511cfec23a50a0e149f6ad625f"
+    },
+    "input_freeze.json": {
+      "size_bytes": 3222,
+      "sha256": "92d6d059e5f8186f4da6577dcf10b902bed459eefe9117ae7ede2efcc7f5ba54"
+    },
+    "module_integration_status.csv": {
+      "size_bytes": 858,
+      "sha256": "98847825a6d7292f5ce6f35d94cb5349c286afc72ed02ec032736482eb88e67f"
+    },
+    "parameter_parity.json": {
+      "size_bytes": 2612,
+      "sha256": "5b3c23450cfedc40b7a531bd4b5e7060cc41fa90a6b5c4a28d34b223608dda34"
+    },
+    "pre_gt_freeze.json": {
+      "size_bytes": 388,
+      "sha256": "ee9aa17c46fead5b7806b06f6cda9b2f5f51cda303d809edd3c4d2b08985ed28"
+    },
+    "results.json": {
+      "size_bytes": 9891,
+      "sha256": "8793103e79599abc9ccf332dc5e893b4d290e013d6fe6a94fee9ad70e1db930e"
+    },
+    "runs/final_A_skf_off/deskew.csv": {
+      "size_bytes": 153499,
+      "sha256": "dd447c8a4573b3174cf8ae3e50674657acdbbd8648becba203200c221c40ad97"
+    },
+    "runs/final_A_skf_off/ekf_lineage.csv": {
+      "size_bytes": 3617656,
+      "sha256": "d43a9333fb5f17fe5464782eafe5b66dd7fb0d3b28ee7e3e25db61041ed02c96"
+    },
+    "runs/final_A_skf_off/ekf_runtime.csv": {
+      "size_bytes": 4904,
+      "sha256": "fafb369ec2885be2151d8a2ff68349eeed2d8e7c1a18d0186fc1fbc40d397d45"
+    },
+    "runs/final_A_skf_off/execution.json": {
+      "size_bytes": 5406,
+      "sha256": "c2c32f0536c99fd1168c65a0b49e63b99508f29865f131c032ad3efb81f390c7"
+    },
+    "runs/final_A_skf_off/launch.log.gz": {
+      "size_bytes": 4459,
+      "sha256": "cab7955960001b4467c9fa1900a1e63c38908a1e6e0397a2ed8a32c210daa18e"
+    },
+    "runs/final_A_skf_off/mature_diagnostics.csv": {
+      "size_bytes": 194270,
+      "sha256": "40c4be9ad116bff30810c1b2fbbcc342faed5652c0164a7f8395d2fc9e43bfc4"
+    },
+    "runs/final_A_skf_off/ndt_diagnostics.csv": {
+      "size_bytes": 810292,
+      "sha256": "7fe828a357850d0b1d84567c7bcf7b1ca44f6939476c656cf9546e8a449e1c0e"
+    },
+    "runs/final_A_skf_off/oosm.csv": {
+      "size_bytes": 46142,
+      "sha256": "b494cea48f5c89b0553c12ca5bd0f82ed563261bb1fa62ca4350994b55595cf3"
+    },
+    "runs/final_A_skf_off/oosm_fixed_lag.csv": {
+      "size_bytes": 108456,
+      "sha256": "36c6f32b93247e6c7d249e34e1f6a55ad8ce5377c5c011aaf4370c8c1c775c23"
+    },
+    "runs/final_A_skf_off/playback.log": {
+      "size_bytes": 297,
+      "sha256": "310289f741e1c14cc160dd473e3e2ae638d3522876a9140f58023a8fdc729c0a"
+    },
+    "runs/final_A_skf_off/resources.csv": {
+      "size_bytes": 95074,
+      "sha256": "2795880d2a97d312579ec4e88b60aa3970e59e3456e70c9d15e1da53c293d1a0"
+    },
+    "runs/final_A_skf_off/rosparams.yaml": {
+      "size_bytes": 7363,
+      "sha256": "20ebece79a78256048b144bf9045b52e0188f7a8a3598c8ffae3e6e3a1efb740"
+    },
+    "runs/final_B_skf_on/deskew.csv": {
+      "size_bytes": 153402,
+      "sha256": "64f89080266bba57919972108efba19d1a844a3e58d94493ee960e9f067acfa6"
+    },
+    "runs/final_B_skf_on/ekf_lineage.csv": {
+      "size_bytes": 3699157,
+      "sha256": "2bc3d1e2c10cb4cb7fb2f79ec063951ecdb437c441c8759f36a651d78f9b2191"
+    },
+    "runs/final_B_skf_on/ekf_runtime.csv": {
+      "size_bytes": 4908,
+      "sha256": "615365b29a86c1a1ed9c18984186de994738534a6be3336d24c358d80d89dcce"
+    },
+    "runs/final_B_skf_on/execution.json": {
+      "size_bytes": 5501,
+      "sha256": "9ed41acf10f60425c7d31c564165d63d715e4964931a784138257393dd11ad4c"
+    },
+    "runs/final_B_skf_on/launch.log.gz": {
+      "size_bytes": 4954,
+      "sha256": "f8365449843cbbbf35f684c7b63be3ad018940b5b24fc3b1c598a1be1951f92f"
+    },
+    "runs/final_B_skf_on/mature_diagnostics.csv": {
+      "size_bytes": 202032,
+      "sha256": "9c7b39ae46300973dd1a4f2d8c7d54c711eb435079715b1372f58e5e84d235d4"
+    },
+    "runs/final_B_skf_on/ndt_diagnostics.csv": {
+      "size_bytes": 810254,
+      "sha256": "3780bcd81a31fdd0ba35608536fc5e1d91c06d3bf05b79002cedb7789f1eff67"
+    },
+    "runs/final_B_skf_on/oosm.csv": {
+      "size_bytes": 66281,
+      "sha256": "27ea15983a835a50c09182faeb8b52fe5e03bcc73a1a553f0752b4bbc9d35c4a"
+    },
+    "runs/final_B_skf_on/oosm_fixed_lag.csv": {
+      "size_bytes": 152908,
+      "sha256": "37cb05219de527e2ae864ed84b9946a2af858d5c2df60d68ae53ad0bb07505d4"
+    },
+    "runs/final_B_skf_on/playback.log": {
+      "size_bytes": 297,
+      "sha256": "d15898b7bf94f56bafb25f1b8a6c25ae9d91d8bf901e692fa64ba233996f674c"
+    },
+    "runs/final_B_skf_on/resources.csv": {
+      "size_bytes": 95265,
+      "sha256": "03bdbc030b914b550629b0ca79f8f27b48abd2467e49b44c096f6daf52de9913"
+    },
+    "runs/final_B_skf_on/rosparams.yaml": {
+      "size_bytes": 7353,
+      "sha256": "d605ef4561b6a0a8cd6071877fcd6d3d3a096a9ecab8626826e080b076927593"
+    },
+    "runs/final_B_skf_on/skf_measurements.csv": {
+      "size_bytes": 23391,
+      "sha256": "1036c65c20d7dc64f6a8f23d5ed50b081d242f4a380d19a582aabb260f24a9f2"
+    },
+    "runs/final_B_skf_on/skf_update_diagnostics.csv": {
+      "size_bytes": 48864,
+      "sha256": "11d385a38a0ca458310fef21aff8bb110ed1e8f3e482999c3323d4cfe78da11b"
+    },
+    "runs/smoke_B_skf_on/deskew.csv": {
+      "size_bytes": 71294,
+      "sha256": "99e6b4040bf69ed07314d638b26015d93be0be9dc088ce6a5dcfe9d7ffedde6c"
+    },
+    "runs/smoke_B_skf_on/ekf_lineage.csv": {
+      "size_bytes": 1743558,
+      "sha256": "0611bee5baa13845b24af0942791802795c728f0dbd025a5fd8ca16e24a8aaec"
+    },
+    "runs/smoke_B_skf_on/ekf_runtime.csv": {
+      "size_bytes": 2447,
+      "sha256": "e7c959f62e105154474aee294c5e6941e311b900b9199cc9061d51f14007034a"
+    },
+    "runs/smoke_B_skf_on/execution.json": {
+      "size_bytes": 5509,
+      "sha256": "aa3a05520ebecfbe79a483510630918d1193d158149dbcfdef739e06eb940d45"
+    },
+    "runs/smoke_B_skf_on/launch.log.gz": {
+      "size_bytes": 3675,
+      "sha256": "b628dcbc672c992312a577fbc47ccec28ba8c32328e2d60ebd60cdcb97737000"
+    },
+    "runs/smoke_B_skf_on/mature_diagnostics.csv": {
+      "size_bytes": 91026,
+      "sha256": "db69310a33259a00bb29a199e77232b85ac3c2e3e1bca197f33667a7fb2188f6"
+    },
+    "runs/smoke_B_skf_on/ndt_diagnostics.csv": {
+      "size_bytes": 377042,
+      "sha256": "bc40241b3c85b67fa53628493bc242a16a2ad524342de14320dfc0ba4f4a4f9f"
+    },
+    "runs/smoke_B_skf_on/oosm.csv": {
+      "size_bytes": 32993,
+      "sha256": "bb175eaf9de6569f28d6d5afb538abed09775d391db21df9e7b7744bad35fdf8"
+    },
+    "runs/smoke_B_skf_on/oosm_fixed_lag.csv": {
+      "size_bytes": 75613,
+      "sha256": "4f05ba29647fa0025d33b107ba908efa91a766a0bf0a7a1e3b5b4a49996172a0"
+    },
+    "runs/smoke_B_skf_on/playback.log": {
+      "size_bytes": 297,
+      "sha256": "64f719cbc89aa76042bbbe912485cc2b2cc60ba5f50ab13619a400068ade34c3"
+    },
+    "runs/smoke_B_skf_on/resources.csv": {
+      "size_bytes": 44877,
+      "sha256": "f0a0511bf3e9fe725956023a43c97ed694a97bc09d6856a2470874a89fff9d5e"
+    },
+    "runs/smoke_B_skf_on/rosparams.yaml": {
+      "size_bytes": 7389,
+      "sha256": "2714e8f2b4488522f53c68fad4fe2527d73287f766642e103d363679f795d454"
+    },
+    "runs/smoke_B_skf_on/skf_measurements.csv": {
+      "size_bytes": 13478,
+      "sha256": "124fecc07f556d6820ecb94be47cbc3156bb99fb83589c18dd8d04d5acf3c754"
+    },
+    "runs/smoke_B_skf_on/skf_update_diagnostics.csv": {
+      "size_bytes": 31879,
+      "sha256": "5c9b9da6959c01c5ebf797cf9cd8b4188a93b84b2b7ad55ce0bf950a7e334f0a"
+    },
+    "runtime_summary.csv": {
+      "size_bytes": 1669,
+      "sha256": "192cee1e461e05065b8104d272008364be9417eff3b30817ff9ce6c0e1ca230e"
+    },
+    "skf_update_diagnostics.csv": {
+      "size_bytes": 48864,
+      "sha256": "11d385a38a0ca458310fef21aff8bb110ed1e8f3e482999c3323d4cfe78da11b"
+    },
+    "source_changes.md": {
+      "size_bytes": 1760,
+      "sha256": "b4258f05c01b20560473426b7e283121bac6dbaf6e68f40fbc53590fa23c08a3"
+    },
+    "visual_covariance_summary.csv": {
+      "size_bytes": 35902,
+      "sha256": "446b5121c33f463807e1c7f17d0eddf3811b9c707e92d0d9bd1d730c3b4c0d08"
+    },
+    "visual_measurement_summary.csv": {
+      "size_bytes": 89783,
+      "sha256": "f4793282c317805eab432d1b16ca53449941ca2e48a4d7d10deff6428208aee5"
+    }
+  },
+  "runtime_inputs": {
+    "protocol": "P25_R1_INPUT_FREEZE",
+    "GT_LOADED": false,
+    "inputs": {
+      "map": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd",
+        "size_bytes": 4058751,
+        "sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+        "hash_source": "run_start_receipt"
+      },
+      "bag": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/input_v2/corridor01_p10_causal_startup5_eval35_fixedlag_v2.bag",
+        "size_bytes": 186714344,
+        "sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+        "hash_source": "run_start_receipt"
+      },
+      "run_visual_covariance_csv": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p25_r1_skf_visual_update/visual_covariance/visual.csv",
+        "size_bytes": 520267,
+        "sha256": "28e2fb5ccff6a9978d471ee37b7b475b349bc2090b96131b702fa657914610d9"
+      },
+      "original_P17_visual_csv": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p17_visual_aided_ndt_r1/visual_input/visual.csv",
+        "size_bytes": 202769,
+        "sha256": "10869519890a5adcb6f3310bba05f379a959018cf123ea8a90c1cf4ea1314c79"
+      },
+      "dataset_config": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml",
+        "size_bytes": 4263,
+        "sha256": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+        "hash_source": "run_start_receipt"
+      },
+      "mature_config": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p25_skf_visual_update.yaml",
+        "size_bytes": 560,
+        "sha256": "478af689ecfa6629705dc61dfc0b4148f8f1b9ee6b2a46c98c43d9acef3a3734",
+        "hash_source": "run_start_receipt"
+      },
+      "GT_evaluation_contract": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/docs/p10_corridor01_deterministic_oosm_replay_r1",
+        "status": "frozen_contract_referenced_only; GT and evaluation files not opened"
+      }
+    },
+    "binaries": {
+      "dog_prior_map_ndt_node_cpp": {
+        "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+        "sha256": "500e29b702f3efc5e04a9b2e8efa5c2bd8434a315fb311b65f0bfc298b7bfbdc"
+      },
+      "dog_prior_map_ekf_node_cpp": {
+        "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+        "sha256": "9f91401624cdb968bd9e99916499c8990ea8ae709951551c80e81eaba058d6c2"
+      }
+    },
+    "camera_calibration_sha256": {},
+    "camera_bag_expected_historical_sha256": "c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811",
+    "camera_bag_hash_rechecked": false,
+    "note": "Frozen visual P4 pose parity passed. Full raw-camera SHA was not re-read; the raw camera extraction completed once without a new I/O failure."
+  },
+  "binary_sha256": {
+    "dog_prior_map_ndt_node_cpp": {
+      "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+      "sha256": "500e29b702f3efc5e04a9b2e8efa5c2bd8434a315fb311b65f0bfc298b7bfbdc"
+    },
+    "dog_prior_map_ekf_node_cpp": {
+      "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+      "sha256": "9f91401624cdb968bd9e99916499c8990ea8ae709951551c80e81eaba058d6c2"
+    }
+  },
+  "raw_rosbags_committed": false,
+  "copied_run_artifacts": [
+    "runs/final_A_skf_off/execution.json",
+    "runs/final_A_skf_off/rosparams.yaml",
+    "runs/final_A_skf_off/ndt_diagnostics.csv",
+    "runs/final_A_skf_off/mature_diagnostics.csv",
+    "runs/final_A_skf_off/deskew.csv",
+    "runs/final_A_skf_off/oosm.csv",
+    "runs/final_A_skf_off/oosm_fixed_lag.csv",
+    "runs/final_A_skf_off/ekf_lineage.csv",
+    "runs/final_A_skf_off/ekf_runtime.csv",
+    "runs/final_A_skf_off/resources.csv",
+    "runs/final_A_skf_off/launch.log",
+    "runs/final_A_skf_off/playback.log",
+    "runs/final_B_skf_on/execution.json",
+    "runs/final_B_skf_on/rosparams.yaml",
+    "runs/final_B_skf_on/ndt_diagnostics.csv",
+    "runs/final_B_skf_on/mature_diagnostics.csv",
+    "runs/final_B_skf_on/deskew.csv",
+    "runs/final_B_skf_on/oosm.csv",
+    "runs/final_B_skf_on/oosm_fixed_lag.csv",
+    "runs/final_B_skf_on/ekf_lineage.csv",
+    "runs/final_B_skf_on/ekf_runtime.csv",
+    "runs/final_B_skf_on/resources.csv",
+    "runs/final_B_skf_on/skf_measurements.csv",
+    "runs/final_B_skf_on/skf_update_diagnostics.csv",
+    "runs/final_B_skf_on/launch.log",
+    "runs/final_B_skf_on/playback.log",
+    "runs/smoke_B_skf_on/execution.json",
+    "runs/smoke_B_skf_on/rosparams.yaml",
+    "runs/smoke_B_skf_on/ndt_diagnostics.csv",
+    "runs/smoke_B_skf_on/mature_diagnostics.csv",
+    "runs/smoke_B_skf_on/deskew.csv",
+    "runs/smoke_B_skf_on/oosm.csv",
+    "runs/smoke_B_skf_on/oosm_fixed_lag.csv",
+    "runs/smoke_B_skf_on/ekf_lineage.csv",
+    "runs/smoke_B_skf_on/ekf_runtime.csv",
+    "runs/smoke_B_skf_on/resources.csv",
+    "runs/smoke_B_skf_on/skf_measurements.csv",
+    "runs/smoke_B_skf_on/skf_update_diagnostics.csv",
+    "runs/smoke_B_skf_on/launch.log",
+    "runs/smoke_B_skf_on/playback.log"
+  ],
+  "hash_scope_note": "Hashes all committed/lightweight archive files; excludes itself, GT and large bag/map binaries."
+}
