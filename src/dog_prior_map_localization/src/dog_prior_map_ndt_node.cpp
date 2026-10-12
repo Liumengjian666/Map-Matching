@@ -34,6 +34,7 @@
 #include "dog_prior_map_localization/core/causal_pose_prediction.hpp"
 #include "dog_prior_map_localization/core/ekf_translation_prior.hpp"
 #include "dog_prior_map_localization/visual_aided_initial_guess.hpp"
+#include "dog_prior_map_localization/experimental_source_capture.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_weak_refinement.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/observable_pcl_ndt.hpp"
@@ -217,6 +218,15 @@ public:
     {
       ROS_WARN("[DogPriorMap NDT] determinism diagnostics enabled without an output CSV path");
       determinism_diagnostic_enable_ = false;
+    }
+    experimental_source_capture_enable_ = getParam<bool>(
+        "output/experimental_ndt_source_capture_enable", false);
+    if (experimental_source_capture_enable_) {
+      if (!determinism_diagnostic_enable_ || !determinism_csv_.is_open())
+        throw std::runtime_error("Source capture requires live per-scan diagnostics");
+      experimental_source_capture_.configure(
+          getParam<std::string>("output/experimental_ndt_source_capture_directory", ""),
+          getParam<std::vector<std::string>>("output/experimental_ndt_source_capture_requests", {}));
     }
     publish_tf_ = getParam<bool>("output/ndt_publish_tf", false);
     path_max_length_ = std::max(1, getParam<int>("output/path_max_length", 5000));
@@ -1184,6 +1194,8 @@ private:
     diagnostic_row.initial_guess = initial_guess;
 
     ndt_.setInputSource(source);
+    if (experimental_source_capture_enable_ && experimental_source_capture_.requested(stamp.toNSec()))
+      experimental_source_capture_.save(diagnostic_row.frame_index, stamp.toNSec(), *source, diagnostic_row.cloud_hash);
     pcl::PointCloud<pcl::PointXYZ> aligned;
     const ros::WallTime align_start = ros::WallTime::now();
     ndt_.align(aligned, initial_guess.cast<float>());
@@ -1406,6 +1418,10 @@ private:
 
     publishDiagnostics(timing.reference_stamp, ok, align_ms, preprocess_ms, localization_ms,
                        static_cast<int>(source->size()), target_cloud_->size(), score, iterations, step_limited);
+    if (experimental_source_capture_enable_ && experimental_source_capture_.requested(stamp.toNSec()))
+      experimental_source_capture_.savePoses(diagnostic_row.frame_index,
+          {diagnostic_row.previous_pose, diagnostic_row.initial_guess, diagnostic_row.imu_rotation_guess,
+           diagnostic_row.raw_ndt, diagnostic_row.final_used});
     writeDeterminismRow(diagnostic_row);
     ROS_INFO_THROTTLE(1.0,
                       "[DogPriorMap NDT] conv=%d limited=%d source=%zu target=%zu align=%.2fms score=%.4f iter=%d p=(%.2f %.2f %.2f)",
@@ -1727,6 +1743,8 @@ private:
   size_t pending_lidar_max_frames_ = 50;
   uint32_t lidar_subscriber_queue_size_ = 100;
   bool determinism_diagnostic_enable_ = false;
+  bool experimental_source_capture_enable_ = false;
+  ExperimentalSourceCapture experimental_source_capture_;
   std::string determinism_csv_path_;
   std::ofstream determinism_csv_;
   uint64_t determinism_frame_index_ = 0;
