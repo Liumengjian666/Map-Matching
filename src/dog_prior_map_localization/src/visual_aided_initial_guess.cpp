@@ -45,6 +45,10 @@ void VisualAidedInitialGuess::load(const std::string& path) {
   }
   rows_.swap(loaded);
 }
+bool VisualAidedInitialGuess::hasValidMeasurement(uint64_t current) const {
+  const auto found = rows_.find(current);
+  return found != rows_.end() && found->second.valid;
+}
 bool VisualAidedInitialGuess::apply(uint64_t previous, uint64_t current,
     const Eigen::Matrix4d& previous_used, Eigen::Matrix4d& guess, std::string& reason) const {
   const auto found = rows_.find(current);

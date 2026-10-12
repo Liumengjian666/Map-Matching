@@ -1,0 +1,6 @@
+# P24 switchable baseline overlay; all experimental modules remain disabled.
+mature_integration:
+  enable: false
+  dcreg_enable: false
+  multi_ndt_enable: false
+  skf_enable: false

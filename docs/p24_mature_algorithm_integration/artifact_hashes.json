@@ -1,0 +1,102 @@
+{
+  "frozen_inputs": {
+    "map": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+    "bag": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+    "visual_csv": "10869519890a5adcb6f3310bba05f379a959018cf123ea8a90c1cf4ea1314c79",
+    "dataset_config": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+    "mature_config": "ecb0c2cd1c5ce9194ca3071833afe3d49b7c1708d2a7e4f14981a8dcf63d2d18"
+  },
+  "archive_documents": {
+    "REPORT.md": "48fd0c0361909ba3f0af95da61df33b4cbd12711407bbac58da189de4839e87d",
+    "PROTOCOL.md": "1629f7b9bfae2cc92c63a22ab7e25a811b4940b38c349a9b912a29e84535f625",
+    "source_changes.md": "3a7f4bf7c5fabd2cbab726b2e3c099541a2c2442bb29125dc745369e0ae5c59d"
+  },
+  "pre_gt_freeze_manifest": "6d7c02e9de084f812f3dd54c1a366497ef492db69f30947eb03c8f7e1fae680e",
+  "runtime_binaries": {
+    "dog_prior_map_ndt_node_cpp": "6e16596566da9e561e2b86c4d91dcb5aa2ce77cdb238c982ecb8fd3824e74f21",
+    "dog_prior_map_ekf_node_cpp": "fbc1750dc605a7fd3b9549b310394fbff3a5781cad2272ef55b9f49df8c3435a"
+  },
+  "current_build_binaries": {
+    "dog_prior_map_ndt_node_cpp": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+      "sha256": "0df9548b09eb75537a0c104384c18d358faaf1cc836804393d20a7b4890d6331"
+    },
+    "dog_prior_map_ekf_node_cpp": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+      "sha256": "fbc1750dc605a7fd3b9549b310394fbff3a5781cad2272ef55b9f49df8c3435a"
+    }
+  },
+  "frozen_run_files": {
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/ndt_diagnostics.csv": "648a9d11c056d89a6db848c1ce784dee391c053ef4514505b6e54df20ccbd0d4",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/ekf_lineage.csv": "98e56a93576ac9b3f9ea545e5210caaa485819acb88620ffa04152d8a12e3e01",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/oosm.csv": "b494cea48f5c89b0553c12ca5bd0f82ed563261bb1fa62ca4350994b55595cf3",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/oosm_fixed_lag.csv": "63b449c1001d342929a6e81773d10b1be06fc59cbd411af8b3bbdb01171b4f57",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/deskew.csv": "ce44432a8856d3f7cafd909bf0ccd980c732ec50e961971af8f3a8ea60422f2e",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/ekf_runtime.csv": "fafb369ec2885be2151d8a2ff68349eeed2d8e7c1a18d0186fc1fbc40d397d45",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/mature_diagnostics.csv": "68a4b807b6d9ca3b57ac29b10a2230ef02a90f962e88ac19f35bb48e67f4559c",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/resources.csv": "f6728b293c2319c8f230edaa8230a7112e873ab63f8e4971bb3e0968965d2ed5",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/rosparams.yaml": "c6fa25ad218c02e17cd49a234e950786be336f089b6ac5628707773526852925",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/execution.json": "0b1c251fcc9b3744a5f41c2f48525355d112b11147e371ff5393b6a8750b994d",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/outputs.bag": "eb31ece8b83773d968fef2b7a3535ac18e32bfb1000836d89d19d65c3578463c",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/playback.log": "f54da5ef6a90d3c0cc8ea9632580f8882a9d00e49531424339a61cdba4c5c729",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/record.log": "96567d6e691a0e3da9e99dd0205a138370dedbf651fa1d0d8eb7fb0e560b7eb8",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/launch.log": "73bbc65909e54770e3894f61e23121f69db4ec80b1526333f6c527cc9b7224f4",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/master.log": "414e25a6573205ccc2381cc9b694cf2f46266ce39b0b601cc294d49aca61a1d0",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/visual_full_audit/visual_application_summary.csv": "441fc9a36904e70299a434298902b986bcc735cff8b1012da9c235277de52432",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/docs/p10_corridor01_deterministic_oosm_replay_r1/posthoc_metrics.json": "50615d568f0cbe3e55962a4c1e99adc5b63d0877221794da92086f40b1eaaaba",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/docs/p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/ndt_diagnostics.csv": "7ae5beb5e192238003ff15d5a885191c2c3b2127b13945b637f88f8af700ae8a",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/docs/p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/ekf_lineage.csv": "c6afebaf62d8f6e131d9c516ff5b4f64bac640adc134944c44cce6f0656c9e69",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/docs/p19_r1_visual_replication_tail_risk/PROTOCOL.md": "1e471a49686d8bee17c00fd23368ce660834f3c62a8ebf7177234b9ed1b3708b",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/input_v2/corridor01_p10_causal_startup5_eval35_fixedlag_v2.bag": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p17_visual_aided_ndt_r1/visual_input/visual.csv": "10869519890a5adcb6f3310bba05f379a959018cf123ea8a90c1cf4ea1314c79",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p24_mature_full.yaml": "ecb0c2cd1c5ce9194ca3071833afe3d49b7c1708d2a7e4f14981a8dcf63d2d18",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p17_visual/evaluate_p18.py": "086ef31e598a9859dfd36235bee88bdb7a99640dda7b6300fdc8fcc078a37346"
+  },
+  "archived_run_files": {
+    "runs/full_visual/ndt_diagnostics.csv": "648a9d11c056d89a6db848c1ce784dee391c053ef4514505b6e54df20ccbd0d4",
+    "runs/full_visual/mature_diagnostics.csv": "68a4b807b6d9ca3b57ac29b10a2230ef02a90f962e88ac19f35bb48e67f4559c",
+    "runs/full_visual/ekf_lineage.csv": "98e56a93576ac9b3f9ea545e5210caaa485819acb88620ffa04152d8a12e3e01",
+    "runs/full_visual/oosm.csv": "b494cea48f5c89b0553c12ca5bd0f82ed563261bb1fa62ca4350994b55595cf3",
+    "runs/full_visual/oosm_fixed_lag.csv": "63b449c1001d342929a6e81773d10b1be06fc59cbd411af8b3bbdb01171b4f57",
+    "runs/full_visual/deskew.csv": "ce44432a8856d3f7cafd909bf0ccd980c732ec50e961971af8f3a8ea60422f2e",
+    "runs/full_visual/ekf_runtime.csv": "fafb369ec2885be2151d8a2ff68349eeed2d8e7c1a18d0186fc1fbc40d397d45",
+    "runs/full_visual/rosparams.yaml": "c6fa25ad218c02e17cd49a234e950786be336f089b6ac5628707773526852925",
+    "runs/full_visual/execution.json": "0b1c251fcc9b3744a5f41c2f48525355d112b11147e371ff5393b6a8750b994d",
+    "runs/full_visual/playback.log": "f54da5ef6a90d3c0cc8ea9632580f8882a9d00e49531424339a61cdba4c5c729",
+    "runs/full_visual/master.log": "414e25a6573205ccc2381cc9b694cf2f46266ce39b0b601cc294d49aca61a1d0",
+    "runs/full_visual/record.log": "96567d6e691a0e3da9e99dd0205a138370dedbf651fa1d0d8eb7fb0e560b7eb8",
+    "visual_application_summary.csv": "441fc9a36904e70299a434298902b986bcc735cff8b1012da9c235277de52432"
+  },
+  "p19_reference": {
+    "protocol": "1e471a49686d8bee17c00fd23368ce660834f3c62a8ebf7177234b9ed1b3708b",
+    "results": "7c2479fac0747fa411b06890cfdb050412c400d39321a09c62240d4491996fb2",
+    "runtime_run_ndt": "bfd50fc35ab51d7de8f2f61d74f71dfec1e090b4df5b074cd56673e41a5fcde7"
+  },
+  "analysis": {
+    "posthoc_metrics": "1b14ce5dfa8055c70c685c49c94373a24cbbd551bd009da058d33707478af482",
+    "evaluator": "086ef31e598a9859dfd36235bee88bdb7a99640dda7b6300fdc8fcc078a37346",
+    "accuracy_comparison": "fb74b972ff4f8654b62e9a32c78a01d0710221a177d2d4c8fa59391914d5f069",
+    "error_windows": "3d1920645bb3508f83cd2ed5a81d192ead02c046972b592ff059577942e85945",
+    "runtime_summary": "73de3fee204fae237df92cac7f40039cf9ae56b6949f742a484a2abf9b96ff98",
+    "module_status": "b333bc073fb3df566770d062a5ad28fb1033ef7984e2b2eb8fa2017ab34ec13a",
+    "results": "a5b3a187dc214040712465c44932940857fd3b5bb73d46617a586e96c4f8174f"
+  },
+  "source": {
+    "src/dog_prior_map_localization/CMakeLists.txt": "01887c127e1783ce7d4c3c040e390d6fc6885aa7f2dec834c6c4d82614515792",
+    "src/dog_prior_map_localization/include/dog_prior_map_localization/visual_aided_initial_guess.hpp": "a03b9c7463f0014190fe4547833738109016e34417efcd7c9cccb7f841da3ce5",
+    "src/dog_prior_map_localization/include/dog_prior_map_localization/mature_ndt_algorithms.hpp": "a48cb4e10d493b8f4e3673632f0c4c884827ce609f521ed1f932b246b445ed02",
+    "src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch": "47191b9beffefb917a76cde0aa723543564678b8a6abb37d92cd3883a6d8ee20",
+    "src/dog_prior_map_localization/scripts/p17_visual/run.py": "0f789d178848ce928ba0c55aaf982a8f13caeeb9a9b15996c2ae121794154bce",
+    "src/dog_prior_map_localization/scripts/p17_visual/evaluate_p18.py": "086ef31e598a9859dfd36235bee88bdb7a99640dda7b6300fdc8fcc078a37346",
+    "src/dog_prior_map_localization/scripts/p24_mature_integration/freeze_outputs.py": "dec717145ad2e8c4022eeb2e32f9df09db7fd45ab91101838ab04ffbaf279981",
+    "src/dog_prior_map_localization/scripts/p24_mature_integration/summarize.py": "215ebc5ab2cc0030e49d04fe397f1f1def9126dc23e977c3c0a2c343fd314f03",
+    "src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp": "ef43d1176b64d1189d7009919995c46e90e6989d9aabe7ee7d0e732af20a16a8",
+    "src/dog_prior_map_localization/src/mature_ndt_algorithms.cpp": "e105dcd20f993485ae24296e245aa562dbee099cd32132f068e94ab0aec784ed",
+    "src/dog_prior_map_localization/src/visual_aided_initial_guess.cpp": "343d0eed8076f8c7b4b2363e76477fb0110c13157bccd493dbd053da44bec05f",
+    "src/dog_prior_map_localization/tests/mature_ndt_algorithms_test.cpp": "fcc4995a0e41a01c3e583a89d46a681a781299425aff18570082e4078e9c27cb",
+    "src/dog_prior_map_localization/config/p24_mature_baseline.yaml": "077f9aaddbb169f845d490a350c7f1770840010a150e95ff6c308ddd4505417b",
+    "src/dog_prior_map_localization/config/p24_mature_full.yaml": "ecb0c2cd1c5ce9194ca3071833afe3d49b7c1708d2a7e4f14981a8dcf63d2d18"
+  }
+}

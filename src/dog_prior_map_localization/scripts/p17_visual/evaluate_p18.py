@@ -24,12 +24,14 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--repo',type=Path,required=True)
     p.add_argument('--run',type=Path,required=True);p.add_argument('--freeze',type=Path,required=True)
     p.add_argument('--gt',type=Path,required=True);p.add_argument('--extrinsics',type=Path,required=True)
+    p.add_argument('--visual-applications',type=Path,
+                   help='Optional application ledger; defaults to the historical P18/P19 location')
     p.add_argument('--output',type=Path,required=True);args=p.parse_args()
     receipt=json.loads(args.freeze.read_text())
     if receipt['GT_LOADED'] is not False or receipt['protocol']!='P18_PRE_GT_OUTPUT_FREEZE':
         raise ValueError('NOT_A_PRE_GT_FREEZE')
     historical=args.repo/'docs/p10_corridor01_deterministic_oosm_replay_r1'
-    application_path=args.run.parent.parent/'visual_full_audit/visual_application_summary.csv'
+    application_path=args.visual_applications or args.run.parent.parent/'visual_full_audit/visual_application_summary.csv'
     required=[args.run/name for name in ('ndt_diagnostics.csv','ekf_lineage.csv','deskew.csv',
               'oosm.csv','oosm_fixed_lag.csv','execution.json','rosparams.yaml',
               'ekf_runtime.csv','resources.csv','outputs.bag')]

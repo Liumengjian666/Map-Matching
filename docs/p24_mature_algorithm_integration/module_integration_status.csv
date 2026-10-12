@@ -1,0 +1,4 @@
+module,status,frames_called,activations,detail
+DCReg,DETECTOR_ONLY,396,362,NDT objective Hessian adapted to signed Schur observability; no DCReg solver/preconditioner applied.
+Multi-Hypothesis NDT,FULLY_INTEGRATED_OBSERVED,396,303,"606 quick objective scores, 1 extra full align(s), 1 replacement(s); nominal retained otherwise."
+SKF,INTERFACE_READY_DISABLED_BY_CONTRACT,396,0,No EKF visual measurement update: relative displacement is already used by NDT initial guess and has no calibrated covariance/correlation model.

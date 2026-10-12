@@ -97,6 +97,7 @@ add_executable(visual_initial_guess_test
 
 add_executable(dog_prior_map_ndt_node_cpp
   src/dog_prior_map_ndt_node.cpp
+  src/mature_ndt_algorithms.cpp
   src/visual_aided_initial_guess.cpp
   src/external_ndt_transaction_server.cpp
   ../dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_shadow.cpp
@@ -203,6 +204,16 @@ if(CATKIN_ENABLE_TESTING)
 
   add_executable(ekf_translation_prior_test tests/ekf_translation_prior_test.cpp)
   add_test(NAME ekf_translation_prior_test COMMAND $<TARGET_FILE:ekf_translation_prior_test>)
+
+  add_executable(mature_ndt_algorithms_test
+    tests/mature_ndt_algorithms_test.cpp
+    src/mature_ndt_algorithms.cpp
+  )
+  target_include_directories(mature_ndt_algorithms_test PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../dog_prior_map_fastlio2_frontend_exp/include
+    ${EIGEN3_INCLUDE_DIRS}
+  )
+  add_test(NAME mature_ndt_algorithms_test COMMAND $<TARGET_FILE:mature_ndt_algorithms_test>)
 
   add_executable(external_ndt_server_integration_test
     tests/external_ndt_server_integration_test.cpp

@@ -1,0 +1,243 @@
+{
+  "task": "P24-MATURE-ALGORITHM-INTEGRATED-LOCALIZATION",
+  "final_result": "MATURE_PIPELINE_RUNNABLE_PARTIAL_SKF_DISABLED_BY_CONTRACT",
+  "accuracy_status": "ONE_FROZEN_REPLAY_IMPROVED_VS_P19_VISUAL_ON_THIS_CORRIDOR",
+  "legacy_evaluator_label": "VISUAL_CAUSAL_BENEFIT_OBSERVED",
+  "legacy_label_note": "Not used as the P24 conclusion; the unchanged P18 evaluator labels all-layer improvement as visual benefit although P24 also changes NDT modules.",
+  "experiment_contract": "PASS",
+  "completeness": {
+    "ndt": 396,
+    "ndt_converged": 396,
+    "oosm_applied": 396,
+    "corrected": 396,
+    "high_rate": 8004,
+    "visual_applied": 169,
+    "nonfinite_states": 0,
+    "nonfinite_ndt": 0,
+    "late_fixed_lag": 0,
+    "fixed_lag_status": {
+      "QUEUED": 396,
+      "APPLIED": 396
+    }
+  },
+  "dcreg": {
+    "status": {
+      "DCREG_DETECTION_ADAPTED": 396
+    },
+    "translation_degenerate": 0,
+    "rotation_degenerate": 362,
+    "nonconvex_frames": 0
+  },
+  "multi_ndt": {
+    "recovery_status": {
+      "NO_DEGENERATE_SUBSPACE": 34,
+      "TRIGGERED_NO_CANDIDATE_PASSED_PREVIEW": 302,
+      "NOMINAL_QUALITY_NOT_SUSPECT": 59,
+      "ALTERNATIVE_SELECTED": 1
+    },
+    "quick_objective_score_calls": 606,
+    "max_quick_candidates_per_frame": 2,
+    "extra_full_aligns": 1,
+    "max_total_full_aligns_per_frame": 2,
+    "selected_candidates": [
+      {
+        "frame": 270,
+        "scan_ns": 1517157246318675041,
+        "candidate_id": 1,
+        "extra_aligns": 1
+      }
+    ]
+  },
+  "skf": {
+    "status": {
+      "SKIPPED_NO_LIDAR_DEGENERATION": 34,
+      "SKIPPED_NO_VALID_VISUAL_ROW": 212,
+      "SKIPPED_DOUBLE_COUNT_PREVENTED": 150
+    },
+    "actual_ekf_visual_updates": 0,
+    "selected_direction_count": 362
+  },
+  "ndt": {
+    "iterations": {
+      "16": 1,
+      "2": 48,
+      "1": 330,
+      "3": 5,
+      "5": 3,
+      "4": 2,
+      "7": 1,
+      "10": 1,
+      "11": 1,
+      "9": 1,
+      "6": 2,
+      "17": 1
+    },
+    "translation_step_limits": 3,
+    "rotation_step_limits": 29,
+    "fitness": {
+      "mean": 2.6147561912818564,
+      "p95": 7.539242252347028
+    },
+    "max_adjacent_ekf_position_jump_m": 1.1761774161182381,
+    "adjacent_jumps_over_2m": 0
+  },
+  "accuracy": {
+    "P19_Visual_3_35s_EKF_translation_m": {
+      "count": 6396,
+      "mean": 0.8931088193143801,
+      "rmse": 1.2481083256675167,
+      "p95": 2.552406529827499,
+      "max": 6.247121759931853
+    },
+    "P24_Integrated_3_35s_EKF_translation_m": {
+      "count": 6396,
+      "rmse": 1.1024789186417228,
+      "p95": 2.4571727950708677,
+      "max": 4.84903832236815
+    },
+    "P19_Visual_26_35s_EKF_translation_m": {
+      "count": 1799,
+      "rmse": 2.168788314866792,
+      "p95": 4.928895988973661,
+      "max": 6.247121759931853
+    },
+    "P24_Integrated_26_35s_EKF_translation_m": {
+      "count": 1799,
+      "rmse": 1.8710310555631338,
+      "p95": 3.766607918084294,
+      "max": 4.84903832236815
+    }
+  },
+  "selected_candidate_frame": {
+    "frame": 270,
+    "scan_ns": 1517157246318675041,
+    "candidate_id": 1,
+    "extra_aligns": 1
+  },
+  "input_freeze": {
+    "protocol": "P18_PRE_GT_OUTPUT_FREEZE",
+    "format_note": "Reuse the unchanged P18 evaluator freeze contract; task remains P24",
+    "task": "P24-MATURE-ALGORITHM-INTEGRATED-LOCALIZATION",
+    "GT_LOADED": false,
+    "replay_completed": true,
+    "frame_count": 396,
+    "visual_application_count": 169,
+    "map_path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd",
+    "map_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+    "bag_sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+    "visual_sha256": "10869519890a5adcb6f3310bba05f379a959018cf123ea8a90c1cf4ea1314c79",
+    "dataset_config_sha256": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+    "mature_config_sha256": "ecb0c2cd1c5ce9194ca3071833afe3d49b7c1708d2a7e4f14981a8dcf63d2d18",
+    "binaries": {
+      "dog_prior_map_ndt_node_cpp": "6e16596566da9e561e2b86c4d91dcb5aa2ce77cdb238c982ecb8fd3824e74f21",
+      "dog_prior_map_ekf_node_cpp": "fbc1750dc605a7fd3b9549b310394fbff3a5781cad2272ef55b9f49df8c3435a"
+    },
+    "current_build_binaries": {
+      "dog_prior_map_ndt_node_cpp": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+        "sha256": "0df9548b09eb75537a0c104384c18d358faaf1cc836804393d20a7b4890d6331"
+      },
+      "dog_prior_map_ekf_node_cpp": {
+        "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+        "sha256": "fbc1750dc605a7fd3b9549b310394fbff3a5781cad2272ef55b9f49df8c3435a"
+      }
+    },
+    "files_sha256": {
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/ndt_diagnostics.csv": "648a9d11c056d89a6db848c1ce784dee391c053ef4514505b6e54df20ccbd0d4",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/ekf_lineage.csv": "98e56a93576ac9b3f9ea545e5210caaa485819acb88620ffa04152d8a12e3e01",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/oosm.csv": "b494cea48f5c89b0553c12ca5bd0f82ed563261bb1fa62ca4350994b55595cf3",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/oosm_fixed_lag.csv": "63b449c1001d342929a6e81773d10b1be06fc59cbd411af8b3bbdb01171b4f57",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/deskew.csv": "ce44432a8856d3f7cafd909bf0ccd980c732ec50e961971af8f3a8ea60422f2e",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/ekf_runtime.csv": "fafb369ec2885be2151d8a2ff68349eeed2d8e7c1a18d0186fc1fbc40d397d45",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/mature_diagnostics.csv": "68a4b807b6d9ca3b57ac29b10a2230ef02a90f962e88ac19f35bb48e67f4559c",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/resources.csv": "f6728b293c2319c8f230edaa8230a7112e873ab63f8e4971bb3e0968965d2ed5",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/rosparams.yaml": "c6fa25ad218c02e17cd49a234e950786be336f089b6ac5628707773526852925",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/execution.json": "0b1c251fcc9b3744a5f41c2f48525355d112b11147e371ff5393b6a8750b994d",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/outputs.bag": "eb31ece8b83773d968fef2b7a3535ac18e32bfb1000836d89d19d65c3578463c",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/playback.log": "f54da5ef6a90d3c0cc8ea9632580f8882a9d00e49531424339a61cdba4c5c729",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/record.log": "96567d6e691a0e3da9e99dd0205a138370dedbf651fa1d0d8eb7fb0e560b7eb8",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/launch.log": "73bbc65909e54770e3894f61e23121f69db4ec80b1526333f6c527cc9b7224f4",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/full_visual/master.log": "414e25a6573205ccc2381cc9b694cf2f46266ce39b0b601cc294d49aca61a1d0",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_mature_algorithm_integration/visual_full_audit/visual_application_summary.csv": "441fc9a36904e70299a434298902b986bcc735cff8b1012da9c235277de52432",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/docs/p10_corridor01_deterministic_oosm_replay_r1/posthoc_metrics.json": "50615d568f0cbe3e55962a4c1e99adc5b63d0877221794da92086f40b1eaaaba",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/docs/p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/ndt_diagnostics.csv": "7ae5beb5e192238003ff15d5a885191c2c3b2127b13945b637f88f8af700ae8a",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/docs/p10_corridor01_deterministic_oosm_replay_r1/runs/control_v2/ekf_lineage.csv": "c6afebaf62d8f6e131d9c516ff5b4f64bac640adc134944c44cce6f0656c9e69",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/docs/p19_r1_visual_replication_tail_risk/PROTOCOL.md": "1e471a49686d8bee17c00fd23368ce660834f3c62a8ebf7177234b9ed1b3708b",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/input_v2/corridor01_p10_causal_startup5_eval35_fixedlag_v2.bag": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p17_visual_aided_ndt_r1/visual_input/visual.csv": "10869519890a5adcb6f3310bba05f379a959018cf123ea8a90c1cf4ea1314c79",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p24_mature_full.yaml": "ecb0c2cd1c5ce9194ca3071833afe3d49b7c1708d2a7e4f14981a8dcf63d2d18",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p17_visual/evaluate_p18.py": "086ef31e598a9859dfd36235bee88bdb7a99640dda7b6300fdc8fcc078a37346"
+    }
+  },
+  "runtime": {
+    "stages": {
+      "NDT_align_ms": {
+        "count": 396,
+        "mean": 11.240611709595958,
+        "p95": 17.202072,
+        "max": 67.869267
+      },
+      "Deskew_ms": {
+        "count": 396,
+        "mean": 13.434239989898991,
+        "p95": 18.5417415,
+        "max": 20.442258
+      },
+      "NDT_callback_ms": {
+        "count": 396,
+        "mean": 21.92102959661773,
+        "p95": 28.588175773620605,
+        "max": 73.49038124084473
+      },
+      "Deskew_plus_NDT_callback_ms": {
+        "count": 396,
+        "mean": 35.35526958651672,
+        "p95": 43.50283770263672,
+        "max": 88.91464924084472
+      }
+    },
+    "resources": {
+      "dog_prior_map_ndt_node_cpp": {
+        "peak_rss_bytes": 81731584,
+        "cpu_sec": 11.239999999999998
+      },
+      "dog_prior_map_ekf_node_cpp": {
+        "peak_rss_bytes": 18636800,
+        "cpu_sec": 9.65
+      }
+    },
+    "wall_sec": 169.38961905999167,
+    "recorded_bag_counts": {
+      "/dog_livo/odom_high_rate": 8004,
+      "/dog_livo/ndt_odom": 396,
+      "/dog_livo/diagnostics": 396,
+      "/dog_livo/odom_corrected": 396
+    },
+    "scope": "Two node VmHWM and cumulative CPU; no per-EKF-callback latency, camera IO/rectification/online extraction",
+    "RSS_note": "Independent peaks; their sum double-counts shared pages and is not whole-system unique memory"
+  },
+  "replay_binary_sha256": {
+    "dog_prior_map_ndt_node_cpp": "6e16596566da9e561e2b86c4d91dcb5aa2ce77cdb238c982ecb8fd3824e74f21",
+    "dog_prior_map_ekf_node_cpp": "fbc1750dc605a7fd3b9549b310394fbff3a5781cad2272ef55b9f49df8c3435a"
+  },
+  "current_build_binary_sha256": {
+    "dog_prior_map_ndt_node_cpp": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+      "sha256": "0df9548b09eb75537a0c104384c18d358faaf1cc836804393d20a7b4890d6331"
+    },
+    "dog_prior_map_ekf_node_cpp": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p24_devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+      "sha256": "fbc1750dc605a7fd3b9549b310394fbff3a5781cad2272ef55b9f49df8c3435a"
+    }
+  },
+  "review_followup": "A signed spectral inverse fallback for invertible indefinite Schur blocks was compiled and unit-tested after the frozen replay. The replay binary had valid Schur reports on all 396 rows, so the prior LDLT path succeeded throughout; the fallback branch was not required by this run. Near-singular blocks remain conservatively rejected.",
+  "caveats": [
+    "P19 is a single frozen same-scene reference, not an independent dataset.",
+    "Only one preview candidate received extra full NDT and one was selected; this does not establish general candidate reliability.",
+    "DCReg is an adapted degeneracy detector only; no DCReg optimization/preconditioner is applied.",
+    "SKF has a gate/direction interface but no measurement update under the current visual contract.",
+    "P24 visual input is an offline CSV; camera IO, rectification and online visual extraction are not included in replay timing."
+  ]
+}

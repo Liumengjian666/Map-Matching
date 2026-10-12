@@ -8,6 +8,7 @@ namespace dog_prior_map_localization {
 class VisualAidedInitialGuess {
  public:
   void load(const std::string& path);
+  bool hasValidMeasurement(uint64_t current_ns) const;
   bool apply(uint64_t previous_ns, uint64_t current_ns,
       const Eigen::Matrix4d& previous_used, Eigen::Matrix4d& guess, std::string& reason) const;
  private:

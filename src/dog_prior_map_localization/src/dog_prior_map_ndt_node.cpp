@@ -35,6 +35,7 @@
 #include "dog_prior_map_localization/core/ekf_translation_prior.hpp"
 #include "dog_prior_map_localization/visual_aided_initial_guess.hpp"
 #include "dog_prior_map_localization/experimental_source_capture.hpp"
+#include "dog_prior_map_localization/mature_ndt_algorithms.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_weak_refinement.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/observable_pcl_ndt.hpp"
@@ -227,6 +228,70 @@ public:
       experimental_source_capture_.configure(
           getParam<std::string>("output/experimental_ndt_source_capture_directory", ""),
           getParam<std::vector<std::string>>("output/experimental_ndt_source_capture_requests", {}));
+    }
+    mature_integration_enable_ = getParam<bool>("mature_integration/enable", false);
+    mature_dcreg_enable_ = mature_integration_enable_ &&
+        getParam<bool>("mature_integration/dcreg_enable", false);
+    mature_multi_ndt_enable_ = mature_integration_enable_ &&
+        getParam<bool>("mature_integration/multi_ndt_enable", false);
+    mature_skf_enable_ = mature_integration_enable_ &&
+        getParam<bool>("mature_integration/skf_enable", false);
+    mature_ndt_config_.degeneracy_eigen_ratio = getParam<double>(
+        "mature_integration/degeneracy_eigen_ratio", 0.03);
+    mature_ndt_config_.weak_translation_step_m = getParam<double>(
+        "mature_integration/weak_translation_step_m", 0.20);
+    mature_ndt_config_.weak_rotation_step_deg = getParam<double>(
+        "mature_integration/weak_rotation_step_deg", 2.0);
+    mature_ndt_config_.score_improvement_margin = getParam<double>(
+        "mature_integration/score_improvement_margin", 2.747604276e-4);
+    mature_ndt_config_.motion_weight = getParam<double>(
+        "mature_integration/motion_weight", 0.05);
+    mature_ndt_config_.motion_translation_scale_m = getParam<double>(
+        "mature_integration/motion_translation_scale_m", 2.0);
+    mature_ndt_config_.motion_rotation_scale_deg = getParam<double>(
+        "mature_integration/motion_rotation_scale_deg", 15.0);
+    mature_ndt_config_.suspect_fitness_threshold = getParam<double>(
+        "mature_integration/suspect_fitness_threshold", 10.0);
+    mature_ndt_config_.maximum_quick_candidates = getParam<int>(
+        "mature_integration/maximum_quick_candidates", 4);
+    mature_ndt_config_.maximum_extra_aligns = getParam<int>(
+        "mature_integration/maximum_extra_aligns", 2);
+    if (mature_integration_enable_)
+    {
+      if (coupled_enabled_ || experimental_ekf_translation_fallback_enable_ ||
+          !visual_initial_guess_enable_ || mature_ndt_config_.degeneracy_eigen_ratio <= 0.0 ||
+          mature_ndt_config_.degeneracy_eigen_ratio >= 1.0 ||
+          !std::isfinite(mature_ndt_config_.score_improvement_margin) ||
+          mature_ndt_config_.score_improvement_margin < 0.0 ||
+          !std::isfinite(mature_ndt_config_.motion_weight) || mature_ndt_config_.motion_weight < 0.0 ||
+          !std::isfinite(mature_ndt_config_.motion_translation_scale_m) ||
+          mature_ndt_config_.motion_translation_scale_m <= 0.0 ||
+          !std::isfinite(mature_ndt_config_.motion_rotation_scale_deg) ||
+          mature_ndt_config_.motion_rotation_scale_deg <= 0.0 ||
+          !std::isfinite(mature_ndt_config_.suspect_fitness_threshold) ||
+          mature_ndt_config_.suspect_fitness_threshold <= 0.0 ||
+          mature_ndt_config_.weak_translation_step_m <= 0.0 ||
+          mature_ndt_config_.weak_translation_step_m > 0.20 ||
+          mature_ndt_config_.weak_rotation_step_deg <= 0.0 ||
+          mature_ndt_config_.weak_rotation_step_deg > 2.0 ||
+          mature_ndt_config_.maximum_quick_candidates < 0 ||
+          mature_ndt_config_.maximum_quick_candidates > 4 ||
+          mature_ndt_config_.maximum_extra_aligns < 0 ||
+          mature_ndt_config_.maximum_extra_aligns > 2)
+        throw std::runtime_error("P24 requires CONTROL+Visual, no P21 fallback, and bounded mature-module parameters");
+      const std::string mature_csv_path = getParam<std::string>(
+          "output/mature_integration_diagnostics_csv_path", "");
+      if (mature_csv_path.empty()) throw std::runtime_error("P24 requires mature integration diagnostics path");
+      std::ifstream existing_mature_csv(mature_csv_path.c_str());
+      if (existing_mature_csv.good()) throw std::runtime_error("P24 diagnostics output already exists");
+      mature_diagnostics_csv_.open(mature_csv_path, std::ios::out);
+      if (!mature_diagnostics_csv_) throw std::runtime_error("P24 diagnostics output unavailable");
+      mature_diagnostics_csv_ << "frame_index,scan_ns,dcreg_status,translation_degenerate,rotation_degenerate,"
+          "translation_nonconvex,rotation_nonconvex,"
+          "translation_ratio,rotation_ratio,translation_eigenvalues,rotation_eigenvalues,translation_weak_axis,"
+          "rotation_weak_axis,recovery_suspicious,recovery_trigger_status,skf_status,skf_direction_selected,"
+          "quick_candidate_count,quick_score_calls,jet_calls,preview_ms,jet_ms,extra_aligns,extra_align_ms,"
+          "terminal_score_calls,candidate_details,selected_candidate,full_align_count,frame_module_ms\n";
     }
     publish_tf_ = getParam<bool>("output/ndt_publish_tf", false);
     path_max_length_ = std::max(1, getParam<int>("output/path_max_length", 5000));
@@ -527,9 +592,281 @@ private:
     double ekf_translation_change_m = 0.0;
   };
 
+  struct MatureCandidateRecord
+  {
+    dog_prior_map_localization::MatureNdtCandidate candidate;
+    bool attempted = false;
+    bool converged = false;
+    bool accepted = false;
+    bool translation_limited = false;
+    bool rotation_limited = false;
+    double terminal_score = std::numeric_limits<double>::quiet_NaN();
+    double fitness = std::numeric_limits<double>::quiet_NaN();
+    double align_ms = 0.0;
+    int iterations = 0;
+    std::string status = "PREVIEW_ONLY";
+  };
+
+  struct MatureFrameRecord
+  {
+    uint64_t frame_index = 0;
+    uint64_t scan_ns = 0;
+    dog_prior_map_localization::DcregAdaptedReport dcreg;
+    std::string recovery_status = "NOT_RUN";
+    std::string skf_status = "DISABLED";
+    bool recovery_suspicious = false;
+    bool skf_direction_selected = false;
+    int quick_score_calls = 0;
+    int terminal_score_calls = 0;
+    int jet_calls = 0;
+    int extra_aligns = 0;
+    int selected_candidate = -1;
+    double jet_ms = 0.0;
+    double preview_ms = 0.0;
+    double extra_align_ms = 0.0;
+    double module_ms = 0.0;
+    std::vector<MatureCandidateRecord> candidates;
+  };
+
   static bool validRigidPose(const Eigen::Matrix4d &pose)
   {
     return rigidMapPose(pose);
+  }
+
+  static std::string vectorText(const Eigen::Vector3d& value)
+  {
+    std::ostringstream out;
+    out << std::setprecision(9) << value.x() << ':' << value.y() << ':' << value.z();
+    return out.str();
+  }
+
+  static std::string candidateText(const MatureCandidateRecord& record)
+  {
+    std::ostringstream out;
+    out << std::setprecision(9) << record.candidate.id << ':' << record.candidate.kind << ':'
+        << record.candidate.score << ':' << record.candidate.merit << ':'
+        << (record.attempted ? 1 : 0) << ':' << record.status << ':'
+        << record.terminal_score << ':' << record.fitness << ':' << record.iterations << ':'
+        << record.align_ms << ':' << (record.translation_limited ? 1 : 0) << ':'
+        << (record.rotation_limited ? 1 : 0) << ':' << (record.accepted ? 1 : 0);
+    return out.str();
+  }
+
+  void runMatureIntegration(const pcl::PointCloud<pcl::PointXYZ>::Ptr& source,
+      const Eigen::Matrix4d& prediction, uint64_t frame_index, uint64_t scan_ns,
+      bool visual_applied, Eigen::Matrix4d* result,
+      pcl::PointCloud<pcl::PointXYZ>* aligned, bool* converged, double* fitness,
+      int* iterations, double* total_align_ms)
+  {
+    if (!mature_integration_enable_ || !source || !result || !aligned || !converged ||
+        !fitness || !iterations || !total_align_ms) return;
+    namespace frontend = dog_prior_map_fastlio2_frontend_exp;
+    MatureFrameRecord record;
+    record.frame_index = frame_index;
+    record.scan_ns = scan_ns;
+    const auto module_start = ros::WallTime::now();
+
+    if (mature_dcreg_enable_ && result->allFinite() && validRigidPose(*result))
+    {
+      frontend::CoupledNdtBackend backend;
+      backend.jet = [this, source](const Eigen::Matrix4f& pose,
+          const frontend::CoupledVector6& parameters) {
+        return ndt_.nativeJet(source, pose, parameters);
+      };
+      const auto jet_start = ros::WallTime::now();
+      const frontend::CoupledLocalJet jet = frontend::coupledNominalJet(
+          result->cast<float>(), static_cast<double>(source->size()), backend,
+          mature_ndt_config_.translation_scale_m);
+      record.jet_ms = (ros::WallTime::now() - jet_start).toSec() * 1000.0;
+      record.jet_calls = 1;
+      record.dcreg = analyzeDcregAdapted(jet.H, mature_ndt_config_.degeneracy_eigen_ratio);
+      if (!jet.valid) record.dcreg.status = "NDT_JET_INVALID";
+    }
+    else if (!mature_dcreg_enable_)
+    {
+      record.dcreg.status = "DISABLED";
+    }
+    else
+    {
+      record.dcreg.status = "INVALID_NOMINAL_POSE";
+    }
+
+    const bool valid_visual = visual_initial_guess_enable_ &&
+        visual_initial_guess_.hasValidMeasurement(scan_ns);
+    const auto skf = evaluateSkfGate(mature_skf_enable_, record.dcreg,
+        valid_visual, visual_applied, false);
+    record.skf_status = skf.status;
+    record.skf_direction_selected = skf.direction_selected;
+
+    const bool quality_suspect = !*converged || !std::isfinite(*fitness) ||
+        *fitness > mature_ndt_config_.suspect_fitness_threshold || *iterations <= 1;
+    record.recovery_suspicious = quality_suspect;
+    const bool weak = record.dcreg.valid &&
+        (record.dcreg.translation_degenerate || record.dcreg.rotation_degenerate);
+    if (!mature_multi_ndt_enable_)
+    {
+      record.recovery_status = "MULTI_NDT_DISABLED";
+    }
+    else if (!record.dcreg.valid)
+    {
+      record.recovery_status = "NO_VALID_DCREG_REPORT";
+    }
+    else if (!weak)
+    {
+      record.recovery_status = "NO_DEGENERATE_SUBSPACE";
+    }
+    else if (!quality_suspect)
+    {
+      record.recovery_status = "NOMINAL_QUALITY_NOT_SUSPECT";
+    }
+    else if (!prediction.allFinite() || !validRigidPose(prediction))
+    {
+      record.recovery_status = "INVALID_PREDICTION";
+    }
+    else
+    {
+      record.recovery_status = "TRIGGERED";
+      std::vector<MatureNdtCandidate> candidates = makeWeakDirectionCandidates(
+          record.dcreg, prediction.cast<float>(), mature_ndt_config_.weak_translation_step_m,
+          mature_ndt_config_.weak_rotation_step_deg);
+      if (static_cast<int>(candidates.size()) > mature_ndt_config_.maximum_quick_candidates)
+        candidates.resize(static_cast<std::size_t>(mature_ndt_config_.maximum_quick_candidates));
+
+      const double nominal_score = ndt_.dynamicScore(source, result->cast<float>());
+      ++record.terminal_score_calls;
+      const double nominal_energy_scale = std::max(1.0,
+          std::abs(nominal_score / static_cast<double>(source->size())));
+      const double nominal_merit = candidateMotionMerit(nominal_score, source->size(),
+          result->cast<float>(), prediction.cast<float>(), nominal_energy_scale, mature_ndt_config_);
+      const auto preview_start = ros::WallTime::now();
+      for (auto& candidate : candidates)
+      {
+        MatureCandidateRecord item;
+        item.candidate = candidate;
+        item.candidate.score = ndt_.dynamicScore(source, candidate.pose);
+        ++record.quick_score_calls;
+        item.candidate.merit = candidateMotionMerit(item.candidate.score, source->size(),
+            candidate.pose, prediction.cast<float>(), nominal_energy_scale, mature_ndt_config_);
+        item.candidate.finite = item.candidate.finite && std::isfinite(item.candidate.score) &&
+            std::isfinite(item.candidate.merit);
+        record.candidates.push_back(item);
+      }
+      record.preview_ms = (ros::WallTime::now() - preview_start).toSec() * 1000.0;
+      std::vector<MatureNdtCandidate> ranked;
+      for (const auto& item : record.candidates)
+        if (item.candidate.finite && item.candidate.score >=
+            nominal_score + mature_ndt_config_.score_improvement_margin &&
+            item.candidate.merit < nominal_merit)
+          ranked.push_back(item.candidate);
+      rankMatureCandidates(&ranked);
+
+      Eigen::Matrix4d nominal_used = *result;
+      bool nominal_translation_limited = false, nominal_rotation_limited = false;
+      limitNdtStep(*result, nominal_used, nominal_translation_limited, nominal_rotation_limited);
+      const double nominal_used_score = ndt_.dynamicScore(source, nominal_used.cast<float>());
+      ++record.terminal_score_calls;
+      const double nominal_used_merit = candidateMotionMerit(nominal_used_score, source->size(),
+          nominal_used.cast<float>(), prediction.cast<float>(), nominal_energy_scale, mature_ndt_config_);
+      double selected_merit = nominal_used_merit;
+      for (int rank = 0; rank < static_cast<int>(ranked.size()) &&
+           record.extra_aligns < mature_ndt_config_.maximum_extra_aligns; ++rank)
+      {
+        auto found = std::find_if(record.candidates.begin(), record.candidates.end(),
+            [&](const MatureCandidateRecord& item) { return item.candidate.id == ranked[rank].id; });
+        if (found == record.candidates.end()) continue;
+        found->attempted = true;
+        const auto align_start = ros::WallTime::now();
+        ndt_.setInputSource(source);
+        pcl::PointCloud<pcl::PointXYZ> candidate_aligned;
+        ndt_.align(candidate_aligned, found->candidate.pose);
+        found->align_ms = (ros::WallTime::now() - align_start).toSec() * 1000.0;
+        record.extra_align_ms += found->align_ms;
+        *total_align_ms += found->align_ms;
+        ++record.extra_aligns;
+        found->converged = ndt_.hasConverged();
+        found->fitness = ndt_.getFitnessScore();
+        found->iterations = ndt_.getFinalNumIteration();
+        Eigen::Matrix4d candidate_raw = ndt_.getFinalTransformation().cast<double>();
+        found->terminal_score = candidate_raw.allFinite() ?
+            ndt_.dynamicScore(source, candidate_raw.cast<float>()) :
+            std::numeric_limits<double>::quiet_NaN();
+        ++record.terminal_score_calls;
+        found->status = "REFINED_REJECTED";
+        if (!found->converged || !std::isfinite(found->fitness) ||
+            !candidate_raw.allFinite() || !validRigidPose(candidate_raw) ||
+            !std::isfinite(found->terminal_score))
+        {
+          found->status = "REFINEMENT_INVALID";
+          continue;
+        }
+        Eigen::Matrix4d candidate_used = candidate_raw;
+        limitNdtStep(candidate_raw, candidate_used, found->translation_limited,
+                     found->rotation_limited);
+        const double used_score = ndt_.dynamicScore(source, candidate_used.cast<float>());
+        ++record.terminal_score_calls;
+        const double used_merit = candidateMotionMerit(used_score, source->size(),
+            candidate_used.cast<float>(), prediction.cast<float>(), nominal_energy_scale, mature_ndt_config_);
+        const bool objective_gain = found->terminal_score >=
+            nominal_score + mature_ndt_config_.score_improvement_margin &&
+            used_score >= nominal_used_score + mature_ndt_config_.score_improvement_margin;
+        const bool motion_gain = std::isfinite(used_merit) && used_merit < selected_merit;
+        if (objective_gain && motion_gain)
+        {
+          *result = candidate_raw;
+          *aligned = candidate_aligned;
+          *converged = true;
+          *fitness = found->fitness;
+          *iterations = found->iterations;
+          selected_merit = used_merit;
+          record.selected_candidate = found->candidate.id;
+          found->accepted = true;
+          found->status = "ACCEPTED_AFTER_FULL_NDT_AND_STEP_LIMIT";
+        }
+        else if (!objective_gain)
+        {
+          found->status = "TERMINAL_OBJECTIVE_GAIN_NOT_PRESERVED";
+        }
+        else
+        {
+          found->status = "MOTION_MERIT_NOT_IMPROVED";
+        }
+      }
+      if (record.extra_aligns == 0) record.recovery_status = "TRIGGERED_NO_CANDIDATE_PASSED_PREVIEW";
+      else if (record.selected_candidate >= 0) record.recovery_status = "ALTERNATIVE_SELECTED";
+      else record.recovery_status = "REFINED_NOMINAL_RETAINED";
+    }
+
+    record.module_ms = (ros::WallTime::now() - module_start).toSec() * 1000.0;
+    writeMatureDiagnostics(record);
+  }
+
+  void writeMatureDiagnostics(const MatureFrameRecord& record)
+  {
+    if (!mature_diagnostics_csv_.is_open()) return;
+    std::ostringstream out;
+    out << std::setprecision(17) << record.frame_index << ',' << record.scan_ns << ','
+        << record.dcreg.status << ',' << (record.dcreg.translation_degenerate ? 1 : 0) << ','
+        << (record.dcreg.rotation_degenerate ? 1 : 0) << ','
+        << (record.dcreg.translation_nonconvex ? 1 : 0) << ','
+        << (record.dcreg.rotation_nonconvex ? 1 : 0) << ',' << record.dcreg.translation_ratio << ','
+        << record.dcreg.rotation_ratio << ',' << vectorText(record.dcreg.translation_eigenvalues) << ','
+        << vectorText(record.dcreg.rotation_eigenvalues) << ','
+        << vectorText(record.dcreg.translation_axes.col(0)) << ','
+        << vectorText(record.dcreg.rotation_axes.col(0)) << ','
+        << (record.recovery_suspicious ? 1 : 0) << ',' << record.recovery_status << ','
+        << record.skf_status << ',' << (record.skf_direction_selected ? 1 : 0) << ','
+        << record.candidates.size() << ',' << record.quick_score_calls << ',' << record.jet_calls << ','
+        << record.preview_ms << ',' << record.jet_ms << ',' << record.extra_aligns << ','
+        << record.extra_align_ms << ',' << record.terminal_score_calls << ',';
+    for (std::size_t i = 0; i < record.candidates.size(); ++i)
+    {
+      if (i) out << ';';
+      out << candidateText(record.candidates[i]);
+    }
+    out << ',' << record.selected_candidate << ',' << (1 + record.extra_aligns) << ','
+        << record.module_ms << '\n';
+    mature_diagnostics_csv_ << out.str();
+    mature_diagnostics_csv_.flush();
   }
 
   EkfPrediction ekfPredictionAtOrBeforeLocked(uint64_t reference_stamp_ns) const
@@ -1200,10 +1537,18 @@ private:
     const ros::WallTime align_start = ros::WallTime::now();
     ndt_.align(aligned, initial_guess.cast<float>());
     diagnostic_row.ndt_align_complete_wall_sec = ros::WallTime::now().toSec();
-    const double align_ms = (ros::WallTime::now() - align_start).toSec() * 1000.0;
-    const bool ok = ndt_.hasConverged();
-    const double score = ndt_.getFitnessScore();
-    const int iterations = ndt_.getFinalNumIteration();
+    double align_ms = (ros::WallTime::now() - align_start).toSec() * 1000.0;
+    bool ok = ndt_.hasConverged();
+    double score = ndt_.getFitnessScore();
+    int iterations = ndt_.getFinalNumIteration();
+    Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
+    if (mature_integration_enable_)
+    {
+      runMatureIntegration(source, initial_guess, diagnostic_row.frame_index,
+          timing.reference_stamp.toNSec(), diagnostic_row.visual_applied, &result,
+          &aligned, &ok, &score, &iterations, &align_ms);
+      diagnostic_row.ndt_align_complete_wall_sec = ros::WallTime::now().toSec();
+    }
     diagnostic_row.ndt_has_converged = ok;
     diagnostic_row.ndt_fitness = score;
     diagnostic_row.ndt_iterations = iterations;
@@ -1212,7 +1557,6 @@ private:
     double localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
     if (ok)
     {
-      const Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
       diagnostic_row.raw_ndt = result;
       if (visual_geometry_csv_.is_open()) {
         namespace frontend = dog_prior_map_fastlio2_frontend_exp;
@@ -1745,6 +2089,12 @@ private:
   bool determinism_diagnostic_enable_ = false;
   bool experimental_source_capture_enable_ = false;
   ExperimentalSourceCapture experimental_source_capture_;
+  bool mature_integration_enable_ = false;
+  bool mature_dcreg_enable_ = false;
+  bool mature_multi_ndt_enable_ = false;
+  bool mature_skf_enable_ = false;
+  MatureNdtConfig mature_ndt_config_;
+  std::ofstream mature_diagnostics_csv_;
   std::string determinism_csv_path_;
   std::ofstream determinism_csv_;
   uint64_t determinism_frame_index_ = 0;

@@ -1,6 +1,8 @@
 <launch>
   <arg name="config" default="$(find dog_prior_map_localization)/config/dog_prior_map_localization_ndt.yaml" />
   <arg name="dataset_config" default="" />
+  <arg name="mature_config" default="" />
+  <arg name="mature_diagnostics_csv_path" default="" />
   <arg name="rviz" default="false" />
   <arg name="camera_enable" default="false" />
   <arg name="publish_path" default="true" />
@@ -43,6 +45,8 @@
   <rosparam command="load" file="$(arg config)" />
   <rosparam command="load" file="$(arg dataset_config)"
             if="$(eval arg('dataset_config') != '')" />
+  <rosparam command="load" file="$(arg mature_config)"
+            if="$(eval arg('mature_config') != '')" />
 
   <!--
     拆分版结构：
@@ -77,6 +81,7 @@
   <param name="output/ekf_prediction_diagnostics_csv_path" value="$(arg ekf_prediction_diagnostics_csv_path)" />
   <param name="output/imu_deskew_csv_path" value="$(arg imu_deskew_csv_path)" />
   <param name="output/ndt_diagnostics_csv_path" value="$(arg ndt_diagnostics_csv_path)" />
+  <param name="output/mature_integration_diagnostics_csv_path" value="$(arg mature_diagnostics_csv_path)" />
   <param name="output/diagnostic_determinism_enable" value="$(arg diagnostic_determinism_enable)" />
   <param name="output/ndt_determinism_csv_path" value="$(arg ndt_determinism_csv_path)" />
   <param name="lidar_update/information_diagnostic_enable" value="$(arg information_diagnostic_enable)" />
