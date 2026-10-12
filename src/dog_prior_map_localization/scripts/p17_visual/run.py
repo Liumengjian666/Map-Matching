@@ -11,6 +11,7 @@ import time
 import xmlrpc.client
 from pathlib import Path
 import psutil
+import yaml
 from prepare import sha
 
 
@@ -22,16 +23,27 @@ def stop(p):
         os.killpg(p.pid, signal.SIGTERM); p.wait(timeout=10)
 
 
+def resolve_dataset_config(repo, override=None):
+    path = (override or repo/'src/dog_prior_map_localization/config/p10_corridor01_prospective_causal.yaml').resolve()
+    if not path.is_file(): raise ValueError('DATASET_CONFIG_NOT_FOUND')
+    return path
+
+
 def main():
     p=argparse.ArgumentParser()
     p.add_argument('--repo',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--visual',type=Path,required=True)
+    p.add_argument('--dataset-config',type=Path,
+                   help='Optional config override; defaults to the frozen P10 config')
     p.add_argument('--enable',action='store_true')
     p.add_argument('--duration',type=float,default=0)
     p.add_argument('--geometry',action='store_true')
     p.add_argument('--port',type=int,default=11387)
-    args=p.parse_args(); args.output.mkdir(parents=True,exist_ok=False)
+    args=p.parse_args()
+    dataset_config = resolve_dataset_config(args.repo, args.dataset_config)
+    config_sha256 = sha(dataset_config)
+    args.output.mkdir(parents=True,exist_ok=False)
     with socket.socket() as s: s.bind(('127.0.0.1',args.port))
     bag=args.repo/'.p10_corridor01_deterministic_oosm_replay_r1/input_v2/corridor01_p10_causal_startup5_eval35_fixedlag_v2.bag'
     if sha(bag) != '7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e':
@@ -56,7 +68,7 @@ def main():
         subprocess.run(['rosparam','set','/use_sim_time','true'],env=env,check=True)
         command=['roslaunch','dog_prior_map_localization','dog_prior_map_localization_split.launch',
           'rviz:=false','publish_path:=false','coupled_mode:=CONTROL','camera_enable:=false',
-          f'dataset_config:={args.repo}/src/dog_prior_map_localization/config/p10_corridor01_prospective_causal.yaml',
+          f'dataset_config:={dataset_config}',
           'scan_reference_time:=start','oosm_fixed_lag_enable:=true','oosm_fixed_lag_sec:=0.15',
           'diagnostic_determinism_enable:=true',
           f'visual_initial_guess_enable:={str(args.enable).lower()}',
@@ -87,6 +99,10 @@ def main():
                 node_processes.append(child)
         if len(binaries)!=2: raise RuntimeError('RUNTIME_BINARY_COUNT')
         subprocess.run(['rosparam','dump',str(args.output/'rosparams.yaml')],env=env,check=True)
+        if args.dataset_config:
+            expected_map = yaml.safe_load(dataset_config.read_text())['map']['pcd_fallback_path']
+            actual_map = subprocess.check_output(['rosparam','get','/map/pcd_fallback_path'],env=env,text=True).strip()
+            if actual_map != expected_map: raise RuntimeError('RUNTIME_MAP_PATH_MISMATCH')
         record=spawn(['rosbag','record','-O',str(args.output/'outputs.bag'),
             '/dog_livo/ndt_odom','/dog_livo/odom_corrected','/dog_livo/odom_high_rate',
             '/dog_livo/diagnostics'],'record')
@@ -126,7 +142,8 @@ def main():
         for child in reversed(processes): stop(child)
         for stream in streams: stream.close()
         receipt=dict(commands=commands,resources=resources,wall_sec=time.monotonic()-tick,
-            enable=args.enable,completed=completed,GT_LOADED=False,input_sha256=sha(bag),visual_sha256=sha(args.visual))
+            enable=args.enable,completed=completed,GT_LOADED=False,input_sha256=sha(bag),visual_sha256=sha(args.visual),
+            dataset_config=str(dataset_config),dataset_config_sha256=config_sha256)
         if 'binaries' in locals(): receipt['binaries']=binaries
         (args.output/'execution.json').write_text(json.dumps(receipt,indent=2)+'\n')
     print(json.dumps(receipt),flush=True)

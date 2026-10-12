@@ -1,0 +1,28 @@
+{
+  "task": "P18-FROZEN-MAP-RECOVERY-AND-VISUAL-NDT-REPLAY",
+  "original_P18_START_SHA": "3b3d53da8fe755c5f3c24dd8c99008579625b7a0",
+  "resume_START_SHA": "e43b07006c52a08eba0aeb7c0e651e1813d5c844",
+  "GT_LOADED": false,
+  "map": {
+    "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd",
+    "size_bytes": 4058751,
+    "sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+    "copy_attempts_this_resume": 1,
+    "copy_exit": 0,
+    "new_USB_or_IO_errors_observed": false
+  },
+  "input_bag_sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+  "visual_csv_sha256": "10869519890a5adcb6f3310bba05f379a959018cf123ea8a90c1cf4ea1314c79",
+  "dataset_config": "src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml",
+  "dataset_config_sha256": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+  "config_only_changed_field": "map.pcd_fallback_path",
+  "runtime_binary_ndt_sha256": "ba65e3e516a982c4c0083b866fc8e95c2dede4003fdc0f42cbf1a489da931cfb",
+  "runtime_binary_ekf_sha256": "fbc1750dc605a7fd3b9549b310394fbff3a5781cad2272ef55b9f49df8c3435a",
+  "short_playback_sec": 18.5,
+  "short_complete_transaction_gate": 180,
+  "short_expected_high_rate_states": 3698,
+  "short_expected_corrected_states": 182,
+  "evaluation_origin": 1517157224.188979,
+  "evaluation_fit": "reuse original Control V2 0-3s full-pose transform unchanged",
+  "primary_evaluation_sec": [3,35]
+}
