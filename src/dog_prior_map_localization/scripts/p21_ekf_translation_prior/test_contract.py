@@ -3,6 +3,7 @@ import unittest
 from pathlib import Path
 import yaml
 from run_guarded import check_parameters
+from gate import truncated_endpoint_valid
 
 
 class ContractTests(unittest.TestCase):
@@ -32,6 +33,14 @@ class ContractTests(unittest.TestCase):
         callback=node.split('void ekfHighRateCallback(')[1].split('\nprivate:')[0]
         self.assertLess(callback.index('quaternion_norm <= 1e-9'),callback.index('latest_ekf_high_rate_stamp_ns_ = stamp_ns'))
         self.assertIn('throw std::runtime_error("P21 causal EKF stream rejected:',callback)
+
+    def test_only_last_unreached_short_deadline_allowed(self):
+        row={'ndt_stamp':'10','deadline_stamp':'10.15'}
+        self.assertTrue(truncated_endpoint_valid('short',[row],'10',10.14))
+        self.assertFalse(truncated_endpoint_valid('short',[row],'9',10.14))
+        self.assertFalse(truncated_endpoint_valid('short',[row],'10',10.15))
+        self.assertFalse(truncated_endpoint_valid('full',[row],'10',10.14))
+        self.assertTrue(truncated_endpoint_valid('full',[],'10',10.16))
 
 
 if __name__=='__main__':unittest.main()

@@ -4,10 +4,16 @@ import json
 import sys
 from pathlib import Path
 import numpy as np
+import rosbag
 import yaml
 from run_guarded import check_parameters,SCRIPTS
 sys.path.insert(0,str(SCRIPTS/'p19_visual_tail'))
 from compare import Checks,rows,pose_delta,schedule_valid,write_csv
+
+
+def truncated_endpoint_valid(phase,shutdown,last_scan,last_state):
+    if phase=='full':return not shutdown
+    return len(shutdown)==1 and shutdown[0]['ndt_stamp']==last_scan and last_state<float(shutdown[0]['deadline_stamp'])
 
 
 def basic(run,phase):
@@ -27,7 +33,13 @@ def basic(run,phase):
         raise ValueError('NDT_OR_PENDING_CONTRACT')
     if any(not np.isfinite([float(r[k]) for k in ('p_x','p_y','p_z','q_x','q_y','q_z','q_w','v_x','v_y','v_z')]).all() for r in events):
         raise ValueError('NONFINITE_STATE')
-    for r in rows(run/'oosm_fixed_lag.csv'):
+    lag=rows(run/'oosm_fixed_lag.csv')
+    shutdown=[r for r in lag if r['status']=='FIXED_LAG_DEADLINE_NOT_REACHED_AT_SHUTDOWN']
+    latest=max(float(r['state_stamp']) for r in events if r['event_type']=='IMU_HIGH_RATE_PUBLISH')
+    if not truncated_endpoint_valid(phase,shutdown,diag[-1]['lidar_header_stamp'],latest):
+        raise ValueError('TRUNCATED_ENDPOINT_CONTRACT')
+    for r in lag:
+        if r in shutdown:continue
         if r['status'] not in ('QUEUED','APPLIED') or not schedule_valid(r):raise ValueError('FIXED_LAG_FAILURE')
     receipt=json.loads((run/'execution.json').read_text())
     if not receipt['completed']:raise ValueError('RUN_INCOMPLETE')
@@ -37,6 +49,24 @@ def basic(run,phase):
 def check(repo,run,phase,output):
     baseline=repo/'docs/p19_r1_visual_replication_tail_risk/runs/repeat_visual'
     diag,events,counts=basic(run,phase)
+    original_diag=rows(baseline/'ndt_diagnostics.csv')[:counts['NDT']]
+    if [r['lidar_header_stamp'] for r in diag]!=[r['lidar_header_stamp'] for r in original_diag]:
+        raise ValueError('NDT_SENSOR_TIME_ARRAY_CHANGED')
+    if [r['visual_applied']=='1' for r in diag]!=[r['initial_guess_source']=='p4_visual_translation_imu_rotation' for r in original_diag]:
+        raise ValueError('VISUAL_APPLICATION_ARRAY_CHANGED')
+    original_events=rows(baseline/'ekf_lineage.csv')
+    for event,count in [('IMU_HIGH_RATE_PUBLISH',counts['HighRate']),('CORRECTED_PUBLISH',counts['Corrected'])]:
+        if [r['state_stamp'] for r in events if r['event_type']==event]!=[r['state_stamp'] for r in original_events if r['event_type']==event][:count]:
+            raise ValueError('EKF_RELEASE_TIME_ARRAY_CHANGED')
+    old_oosm=rows(baseline/'oosm.csv')[:counts['OOSM']]
+    for a,b in zip(old_oosm,rows(run/'oosm.csv')):
+        if any(a[k]!=b[k] for k in ('ndt_stamp','state_now_stamp','rollback_stamp','replay_imu_count')):
+            raise ValueError('OOSM_SENSOR_SCHEDULE_CHANGED')
+    for a,b in zip(rows(baseline/'deskew.csv')[:counts['NDT']],rows(run/'deskew.csv')):
+        if any(a[k]!=b[k] for k in ('scan_start_stamp','scan_end_stamp','reference_stamp','point_count_in','point_count_out')) or b['status']!='PUBLISHED':
+            raise ValueError('DESKEW_SENSOR_INPUT_CHANGED')
+        if b['current_scan_ndt_leakage']!='0' or b['post_scan_end_imu_used']!='0':
+            raise ValueError('DESKEW_CAUSALITY_FAILURE')
     check_parameters(yaml.safe_load((baseline/'rosparams.yaml').read_text()),yaml.safe_load((run/'rosparams.yaml').read_text()),phase!='off')
     output.mkdir(parents=True,exist_ok=False)
     if phase=='off':
@@ -81,6 +111,23 @@ def check(repo,run,phase,output):
         if len(stamps)!=counts['HighRate'] or any(b<=a for a,b in zip(stamps,stamps[1:])):
             raise ValueError('CAUSAL_STREAM_INCOMPLETE_OR_AMBIGUOUS')
         sample_lookup={int(r['sample_ns']):r for r in samples}
+        # Compare received messages to the actual unchanged EKF output topic,
+        # not merely a frame-name or header-time assertion.
+        recorded={}
+        with rosbag.Bag(str(run/'outputs.bag')) as bag:
+            for _,msg,_ in bag.read_messages(topics=['/dog_livo/odom_high_rate']):
+                ns=msg.header.stamp.to_nsec()
+                if ns in recorded:raise ValueError('DUPLICATE_HIGH_RATE_MESSAGE')
+                recorded[ns]=msg
+        if set(recorded)!=set(sample_lookup):raise ValueError('RECEIVED_SOURCE_MESSAGE_COUNT')
+        for ns,sample in sample_lookup.items():
+            msg=recorded[ns]
+            data=[msg.pose.pose.position.x,msg.pose.pose.position.y,msg.pose.pose.position.z,
+                msg.pose.pose.orientation.x,msg.pose.pose.orientation.y,msg.pose.pose.orientation.z,msg.pose.pose.orientation.w,
+                msg.twist.twist.linear.x,msg.twist.twist.linear.y,msg.twist.twist.linear.z,
+                msg.twist.twist.angular.x,msg.twist.twist.angular.y,msg.twist.twist.angular.z]
+            if data!=[float(sample[k]) for k in ('tx','ty','tz','qx','qy','qz','qw','vx','vy','vz','wx','wy','wz')]:
+                raise ValueError('RECEIVED_SOURCE_MESSAGE_CHANGED')
         high=[r for r in events if r['event_type']=='IMU_HIGH_RATE_PUBLISH']
         if len(high)!=len(samples):raise ValueError('SOURCE_LINEAGE_COUNT')
         for sample,state in zip(samples,high):
@@ -101,6 +148,12 @@ def check(repo,run,phase,output):
                 if pose_delta([r['initial_guess_'+k] for k in ('tx','ty','tz','qx','qy','qz','qw')],
                     [r['imu_rotation_guess_'+k] for k in ('tx','ty','tz','qx','qy','qz','qw')])[1]>1e-8:
                     raise ValueError('EKF_REPLACED_IMU_ROTATION')
+                if any(r['initial_guess_'+k]!=r['ekf_prediction_'+k] for k in ('tx','ty','tz')):
+                    raise ValueError('EKF_TRANSLATION_NOT_ACTUALLY_USED')
+            elif r['visual_applied']!='1' and r['local_imu_prior_used']=='1':
+                if pose_delta([r['initial_guess_'+k] for k in ('tx','ty','tz','qx','qy','qz','qw')],
+                    [r['imu_rotation_guess_'+k] for k in ('tx','ty','tz','qx','qy','qz','qw')])[0]>1e-9:
+                    raise ValueError('HISTORY_FALLBACK_CHANGED')
             availability.append(dict(scan_ns=t,sample_ns=s,watermark_ns=w,age_ms=r['ekf_prediction_age_ms'],
                 visual=r['visual_applied'],ekf_applied=r['ekf_translation_applied'],reason=r['ekf_translation_reason'],
                 translation_change_m=r['ekf_translation_change_m'],query_ms=r['ekf_prediction_query_ms']))
