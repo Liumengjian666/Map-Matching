@@ -14,3 +14,16 @@ first 180 release nodes have complete coverage. Map SHA/size, map-path-only
 YAML diff and runtime map check before play were also verified. Final review
 had no unresolved actionable finding. Cross-model was offered; no CLI is
 authorized without an explicit command/input confirmation.
+
+The enabled short run actually applied vision 106 times. The first audit
+incorrectly required quaternion-reconstructed translation to match the raw
+PCL float-matrix computation within the unrelated pose-parity tolerance.
+Its original FAIL receipt is preserved in .p18_map_recovery/visual_smoke_audit.
+appendPoseCsv normalizes the quaternion and loses nonorthogonal float-matrix
+entries; the maximum reconstructed residual was 2.9833e-8 m, rotation change
+was zero. A second independent read-only review confirmed the source formula
+and serialization distinction, with no new divergence. This residual is now
+explicitly diagnostic-only; the frozen Control tolerance is unchanged.
+A direct C++ regression with a nonidentity, float-entry rotation checks the
+actual apply formula and unchanged guess rotation at 1e-12 m. It passed.
+Only that test target was rebuilt; both NDT/EKF binary hashes stayed fixed.

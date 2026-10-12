@@ -22,6 +22,20 @@ int main() {
     const auto before=guess;
     if (adapter.apply(1,1100000000,previous,guess,reason) || guess!=before)
       throw std::runtime_error("fallback changed guess");
+    // Runtime previous poses retain PCL float entries; CSV quaternion
+    // normalization must not be used to reconstruct this exact test input.
+    previous.block<3,3>(0,0) << 0.70710677f,-0.70710677f,0,
+                              0.70710677f,0.70710677f,0,
+                              0,0,1;
+    previous.block<3,1>(0,3) << 2,-1,.5;
+    guess=Eigen::Matrix4d::Identity();
+    const auto unchanged_rotation=guess.block<3,3>(0,0).eval();
+    const Eigen::Vector3d expected=previous.block<3,1>(0,3)+
+        previous.block<3,3>(0,0)*Eigen::Vector3d(.1,.2,.3);
+    if (!adapter.apply(1000000000,1100000000,previous,guess,reason) ||
+        (guess.block<3,1>(0,3)-expected).norm()>1e-12 ||
+        guess.block<3,3>(0,0)!=unchanged_rotation)
+      throw std::runtime_error("float-matrix rotated displacement contract");
     write("1100000000,1000000000,990000000,1110000000,1,0.1,0.2,0.3,980000000,1100000000");
     bool rejected=false;try {adapter.load(name);}catch(const std::exception&){rejected=true;}
     if (!rejected) throw std::runtime_error("future image accepted");
