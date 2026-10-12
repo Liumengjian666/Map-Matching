@@ -201,6 +201,9 @@ if(CATKIN_ENABLE_TESTING)
   add_test(NAME causal_pose_prediction_test
     COMMAND $<TARGET_FILE:causal_pose_prediction_test>)
 
+  add_executable(ekf_translation_prior_test tests/ekf_translation_prior_test.cpp)
+  add_test(NAME ekf_translation_prior_test COMMAND $<TARGET_FILE:ekf_translation_prior_test>)
+
   add_executable(external_ndt_server_integration_test
     tests/external_ndt_server_integration_test.cpp
     src/external_ndt_transaction_server.cpp

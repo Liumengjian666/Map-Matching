@@ -32,6 +32,7 @@
 #include "dog_prior_map_localization/external_ndt_transaction_server.hpp"
 #include "dog_prior_map_localization/core/frame_conversions.hpp"
 #include "dog_prior_map_localization/core/causal_pose_prediction.hpp"
+#include "dog_prior_map_localization/core/ekf_translation_prior.hpp"
 #include "dog_prior_map_localization/visual_aided_initial_guess.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_weak_refinement.hpp"
@@ -126,6 +127,17 @@ public:
       throw std::runtime_error("coupled_mode must be CONTROL, COUPLED_SHADOW, WEAK_ONLY_FEEDBACK, or COUPLED_FEEDBACK");
     coupled_enabled_ = coupled_mode_ != "CONTROL";
     visual_initial_guess_enable_ = getParam<bool>("visual_initial_guess_enable", false);
+    experimental_ekf_translation_fallback_enable_ = getParam<bool>(
+        "lidar_update/experimental_ekf_translation_fallback_enable", false);
+    if (experimental_ekf_translation_fallback_enable_ &&
+        (!visual_initial_guess_enable_ || coupled_enabled_ || !local_imu_rotation_prior_enable_ ||
+         scan_reference_time_ != "start" ||
+         getParam<std::string>("deskew/mode", "") != "ekf_imu_fastlio" ||
+         !getParam<bool>("imu/publish_high_rate", true) ||
+         !getParam<bool>("ndt_observation/oosm_fixed_lag_enable", false) ||
+         getParam<double>("ndt_observation/oosm_fixed_lag_sec", 0.0) != 0.15 ||
+         getParam<bool>("ndt_observation/future_deferral_enable", false)))
+      throw std::runtime_error("P21 requires frozen CONTROL/visual/IMU-rotation/LiDAR-body-twist/fixed-lag contract");
     if (visual_initial_guess_enable_)
       visual_initial_guess_.load(getParam<std::string>("visual_initial_guess_csv", ""));
     const std::string geometry_path = getParam<std::string>("visual_geometry_csv", "");
@@ -172,6 +184,17 @@ public:
     {
       determinism_csv_path_ = getParam<std::string>("output/ndt_diagnostics_csv_path", "");
     }
+    if (experimental_ekf_translation_fallback_enable_)
+    {
+      if (determinism_csv_path_.empty()) throw std::runtime_error("P21 requires per-scan diagnostics");
+      ekf_translation_samples_csv_.open(determinism_csv_path_ + ".ekf_samples.csv");
+      if (!ekf_translation_samples_csv_) throw std::runtime_error("P21 sample receipt log unavailable");
+      ekf_translation_samples_csv_ << "sample_ns,header_seq,publisher,callback_wall_sec,receipt_ros_sec,callback_ros_sec,"
+          "frame_id,child_frame_id,status,validation_ms";
+      for (const char* key : {"tx","ty","tz","qx","qy","qz","qw","vx","vy","vz","wx","wy","wz"})
+        ekf_translation_samples_csv_ << ',' << key;
+      ekf_translation_samples_csv_ << '\n';
+    }
     // Supplying an explicit CSV path is itself an opt-in for this observation
     // path.  With no path, the default remains completely behavior-neutral.
     determinism_diagnostic_enable_ = determinism_requested || !determinism_csv_path_.empty();
@@ -185,6 +208,8 @@ public:
       }
       else
       {
+        if (experimental_ekf_translation_fallback_enable_)
+          throw std::runtime_error("P21 per-scan diagnostics unavailable");
         ROS_WARN("[DogPriorMap NDT] failed to write determinism CSV: %s", determinism_csv_path_.c_str());
       }
     }
@@ -232,7 +257,7 @@ public:
                                  &DogPriorMapNdtNode::livoxCallback, this);
     }
     sub_imu_ = nh_.subscribe(imu_topic_, 500, &DogPriorMapNdtNode::imuCallback, this);
-    if (coupled_enabled_)
+    if (coupled_enabled_ || experimental_ekf_translation_fallback_enable_)
     {
       sub_ekf_high_rate_ = nh_.subscribe(ekf_high_rate_topic_, 10000,
           &DogPriorMapNdtNode::ekfHighRateCallback, this);
@@ -240,7 +265,8 @@ public:
 
     ROS_INFO("[DogPriorMap NDT] started: mode=%s map=%s target=%zu lidar=%s output=%s EKF=%s",
              coupled_mode_.c_str(), map_pcd_path_.c_str(), target_cloud_->size(), lidar_topic_.c_str(),
-             ndt_odom_topic_.c_str(), coupled_enabled_ ? ekf_high_rate_topic_.c_str() : "disabled");
+             ndt_odom_topic_.c_str(), (coupled_enabled_ || experimental_ekf_translation_fallback_enable_) ?
+             ekf_high_rate_topic_.c_str() : "disabled");
   }
 
   void imuCallback(const sensor_msgs::ImuConstPtr &msg)
@@ -271,12 +297,43 @@ public:
       processPendingCloudsLocked();
   }
 
-  void ekfHighRateCallback(const nav_msgs::OdometryConstPtr &msg)
+  void ekfHighRateCallback(const ros::MessageEvent<nav_msgs::Odometry const>& event)
   {
-    if (!msg || !coupled_enabled_) return;
+    const auto msg = event.getMessage();
+    if (!msg || (!coupled_enabled_ && !experimental_ekf_translation_fallback_enable_)) return;
     std::lock_guard<std::mutex> lock(mutex_);
+    const auto callback_start = ros::WallTime::now();
     const uint64_t stamp_ns = msg->header.stamp.toNSec();
     if (stamp_ns == 0) return;
+    if (experimental_ekf_translation_fallback_enable_)
+    {
+      const Eigen::Vector3d p(msg->pose.pose.position.x, msg->pose.pose.position.y, msg->pose.pose.position.z);
+      const Eigen::Quaterniond q(msg->pose.pose.orientation.w, msg->pose.pose.orientation.x,
+          msg->pose.pose.orientation.y, msg->pose.pose.orientation.z);
+      const Eigen::Vector3d v(msg->twist.twist.linear.x,msg->twist.twist.linear.y,msg->twist.twist.linear.z);
+      const Eigen::Vector3d w(msg->twist.twist.angular.x,msg->twist.twist.angular.y,msg->twist.twist.angular.z);
+      Eigen::Matrix4d accepted_pose = Eigen::Matrix4d::Identity();
+      const double quaternion_norm = q.norm();
+      if (std::isfinite(quaternion_norm) && quaternion_norm > 1e-9)
+        accepted_pose.block<3,3>(0,0) = q.normalized().toRotationMatrix();
+      accepted_pose.block<3,1>(0,3) = p;
+      std::string status = "ACCEPTED_CURRENT_EKF_SAMPLE";
+      if (event.getPublisherName() != "/dog_prior_map_ekf") status = "UNVERIFIED_EKF_PROVENANCE";
+      else if (msg->header.frame_id != map_frame_ || msg->child_frame_id != base_frame_) status = "INVALID_FRAME";
+      else if (!p.allFinite() || !q.coeffs().allFinite() || !std::isfinite(quaternion_norm) ||
+               quaternion_norm <= 1e-9 || !validRigidPose(accepted_pose) ||
+               !v.allFinite() || !w.allFinite()) status = "NONFINITE_PREDICTION";
+      else if (!orderedEkfSample(latest_ekf_high_rate_stamp_ns_, stamp_ns)) status = "AMBIGUOUS_EKF_STREAM_ORDER";
+      ekf_translation_samples_csv_ << std::setprecision(17) << stamp_ns << ',' << msg->header.seq << ','
+          << event.getPublisherName() << ',' << callback_start.toSec() << ',' << event.getReceiptTime().toSec()
+          << ',' << ros::Time::now().toSec()
+          << ',' << msg->header.frame_id << ',' << msg->child_frame_id << ',' << status << ','
+          << (ros::WallTime::now()-callback_start).toSec()*1000.0 << ','
+          << p.x() << ',' << p.y() << ',' << p.z() << ',' << q.x() << ',' << q.y() << ',' << q.z() << ',' << q.w()
+          << ',' << v.x() << ',' << v.y() << ',' << v.z() << ',' << w.x() << ',' << w.y() << ',' << w.z() << '\n';
+      if (status != "ACCEPTED_CURRENT_EKF_SAMPLE")
+        throw std::runtime_error("P21 causal EKF stream rejected: " + status);
+    }
     if (!has_ekf_high_rate_watermark_ || stamp_ns > latest_ekf_high_rate_stamp_ns_)
     {
       latest_ekf_high_rate_stamp_ns_ = stamp_ns;
@@ -318,7 +375,7 @@ public:
            (latest_ekf_high_rate_stamp_ns_ - ekf_pose_history_.front().stamp_ns) / 1e9 >
                coupled_ekf_history_keep_sec_)
       ekf_pose_history_.pop_front();
-    if (local_imu_rotation_prior_enable_ || coupled_enabled_)
+    if (local_imu_rotation_prior_enable_ || coupled_enabled_ || experimental_ekf_translation_fallback_enable_)
       processPendingCloudsLocked();
   }
 
@@ -449,6 +506,15 @@ private:
         std::numeric_limits<double>::quiet_NaN());
     double coupled_score_sum = std::numeric_limits<double>::quiet_NaN();
     double coupled_total_ms = 0.0;
+    std::string ekf_translation_reason = "DISABLED";
+    bool visual_applied = false;
+    bool ekf_translation_applied = false;
+    uint64_t ekf_sample_ns = 0;
+    uint64_t ekf_target_ns = 0;
+    uint64_t ekf_watermark_ns = 0;
+    double ekf_prediction_query_ms = 0.0;
+    double ekf_application_wall_sec = 0.0;
+    double ekf_translation_change_m = 0.0;
   };
 
   static bool validRigidPose(const Eigen::Matrix4d &pose)
@@ -465,7 +531,11 @@ private:
         reference_stamp_ns, [](uint64_t stamp, const EkfPoseSample &sample) {
           return stamp < sample.stamp_ns;
         });
-    if (after == ekf_pose_history_.begin()) return prediction;
+    if (after == ekf_pose_history_.begin())
+    {
+      if (experimental_ekf_translation_fallback_enable_) prediction.status = "FUTURE_SAMPLE_REJECTED";
+      return prediction;
+    }
     const EkfPoseSample &sample = *std::prev(after);
     if (sample.stamp_ns > reference_stamp_ns || !validRigidPose(sample.map_T_lidar))
     {
@@ -528,7 +598,9 @@ private:
            "coupled_full_pose_qz,coupled_full_pose_qw,coupled_candidate_tx,coupled_candidate_ty,coupled_candidate_tz,"
            "coupled_candidate_qx,coupled_candidate_qy,coupled_candidate_qz,coupled_candidate_qw,coupled_score_sum,"
            "coupled_jet_calls,coupled_value_calls,coupled_total_ms,coupled_strong_selected,coupled_candidate_step_limited,"
-           "coupled_candidate_translation_limited,coupled_candidate_rotation_limited";
+           "coupled_candidate_translation_limited,coupled_candidate_rotation_limited,"
+           "ekf_translation_reason,visual_applied,ekf_translation_applied,ekf_sample_ns,ekf_target_ns,"
+           "ekf_watermark_ns,ekf_prediction_query_ms,ekf_application_wall_sec,ekf_translation_change_m";
   }
 
   static void appendPoseCsv(std::ostream &out, const Eigen::Matrix4d &pose)
@@ -637,7 +709,10 @@ private:
         << (row.coupled_strong_selected ? 1 : 0) << ","
         << (row.coupled_candidate_step_limited ? 1 : 0) << ","
         << (row.coupled_candidate_translation_limited ? 1 : 0) << ","
-        << (row.coupled_candidate_rotation_limited ? 1 : 0);
+        << (row.coupled_candidate_rotation_limited ? 1 : 0) << ','
+        << row.ekf_translation_reason << ',' << row.visual_applied << ',' << row.ekf_translation_applied << ','
+        << row.ekf_sample_ns << ',' << row.ekf_target_ns << ',' << row.ekf_watermark_ns << ','
+        << row.ekf_prediction_query_ms << ',' << row.ekf_application_wall_sec << ',' << row.ekf_translation_change_m;
     out << "\n";
     determinism_csv_ << out.str();
   }
@@ -755,7 +830,7 @@ private:
   {
     if (!cloud || cloud->empty()) return;
     std::lock_guard<std::mutex> lock(mutex_);
-    if (!local_imu_rotation_prior_enable_ && !coupled_enabled_)
+    if (!local_imu_rotation_prior_enable_ && !coupled_enabled_ && !experimental_ekf_translation_fallback_enable_)
     {
       handleCloudLocked(cloud, timing.start_stamp, callback_start, timing, header_seq);
       return;
@@ -780,6 +855,8 @@ private:
 
     while (pending_lidar_frames_.size() > pending_lidar_max_frames_)
     {
+      if (experimental_ekf_translation_fallback_enable_)
+        throw std::runtime_error("P21 pending overflow: refusing an unwatermarked prediction");
       PendingLidarFrame overflow = pending_lidar_frames_.front();
       pending_lidar_frames_.pop_front();
       ++pending_overflow_count_;
@@ -799,7 +876,7 @@ private:
       const PendingLidarFrame &front = pending_lidar_frames_.front();
       const bool imu_watermark_ready = !local_imu_rotation_prior_enable_ ||
           (has_imu_watermark_ && latest_imu_stamp_ >= front.reference_stamp);
-      const bool ekf_watermark_ready = !coupled_enabled_ ||
+      const bool ekf_watermark_ready = !(coupled_enabled_ || experimental_ekf_translation_fallback_enable_) ||
           (has_ekf_high_rate_watermark_ &&
            latest_ekf_high_rate_stamp_ns_ >= front.reference_stamp.toNSec());
       if (!imu_watermark_ready || !ekf_watermark_ready)
@@ -1069,8 +1146,40 @@ private:
       std::string reason;
       if (visual_initial_guess_.apply(previous_pose_reference_stamp_.toNSec(),
             timing.reference_stamp.toNSec(), previous_pose_, initial_guess, reason))
+      {
+        diagnostic_row.visual_applied = true;
         diagnostic_row.initial_guess_source = "p4_visual_translation_imu_rotation";
+      }
       diagnostic_row.initial_guess_reason = reason;
+    }
+    if (experimental_ekf_translation_fallback_enable_)
+    {
+      EkfPrediction prediction;
+      const auto query_start = ros::WallTime::now();
+      if (!diagnostic_row.visual_applied && has_previous_pose_ && diagnostic_row.local_imu_prior_used)
+        prediction = ekfPredictionAtOrBeforeLocked(timing.reference_stamp.toNSec());
+      diagnostic_row.ekf_target_ns = timing.reference_stamp.toNSec();
+      diagnostic_row.ekf_sample_ns = prediction.sample_stamp_ns;
+      diagnostic_row.ekf_watermark_ns = latest_ekf_high_rate_stamp_ns_;
+      diagnostic_row.ekf_prediction_status = prediction.status;
+      diagnostic_row.ekf_prediction_stamp = prediction.sample_stamp_ns / 1e9;
+      diagnostic_row.ekf_prediction_target_stamp = timing.reference_stamp.toSec();
+      diagnostic_row.ekf_prediction_age_ms = prediction.age_ms;
+      diagnostic_row.ekf_prediction_pose = prediction.map_T_lidar;
+      const Eigen::Vector3d old_translation = initial_guess.block<3,1>(0,3);
+      diagnostic_row.ekf_translation_reason = applyEkfTranslationPrior(true, visual_initial_guess_enable_,
+          diagnostic_row.visual_applied, has_previous_pose_, diagnostic_row.local_imu_prior_used,
+          has_ekf_high_rate_watermark_ && latest_ekf_high_rate_stamp_ns_ >= timing.reference_stamp.toNSec(),
+          true, prediction.sample_stamp_ns, timing.reference_stamp.toNSec(), prediction.map_T_lidar, &initial_guess);
+      diagnostic_row.ekf_translation_applied = diagnostic_row.ekf_translation_reason == "EKF_TRANSLATION_APPLIED";
+      diagnostic_row.ekf_translation_change_m = (initial_guess.block<3,1>(0,3)-old_translation).norm();
+      diagnostic_row.ekf_prediction_query_ms = (ros::WallTime::now()-query_start).toSec()*1000.0;
+      diagnostic_row.ekf_application_wall_sec = ros::WallTime::now().toSec();
+      if (diagnostic_row.ekf_translation_applied)
+      {
+        diagnostic_row.initial_guess_source = "causal_ekf_translation_imu_rotation";
+        diagnostic_row.initial_guess_reason = diagnostic_row.ekf_translation_reason;
+      }
     }
     diagnostic_row.initial_guess = initial_guess;
 
@@ -1554,6 +1663,8 @@ private:
   std::string coupled_mode_ = "CONTROL";
   std::string ekf_high_rate_topic_ = "/dog_livo/odom_high_rate";
   bool coupled_enabled_ = false;
+  bool experimental_ekf_translation_fallback_enable_ = false;
+  std::ofstream ekf_translation_samples_csv_;
   double coupled_prediction_max_age_sec_ = 0.02;
   double coupled_ekf_history_keep_sec_ = 60.0;
 
