@@ -1,0 +1,7 @@
+method,process,peak_rss_bytes,cpu_sec,replay_wall_sec
+A,dog_prior_map_ndt_node_cpp,81326080,11.219999999999999,172.0247030009923
+A,dog_prior_map_ekf_node_cpp,70762496,24.39,172.0247030009923
+B,dog_prior_map_ndt_node_cpp,80961536,11.059999999999999,171.82251484700828
+B,dog_prior_map_ekf_node_cpp,70737920,29.08,171.82251484700828
+C,dog_prior_map_ndt_node_cpp,81121280,11.08,171.94860312200035
+C,dog_prior_map_ekf_node_cpp,70553600,29.32,171.94860312200035

@@ -1,0 +1,3 @@
+# Preserve the exact user-authorized CLI prompt bytes, including git-diff
+# blank context markers. This exception applies only to that immutable input.
+external_review/review_input.md -whitespace

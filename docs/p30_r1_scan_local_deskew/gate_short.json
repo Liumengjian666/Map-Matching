@@ -1,0 +1,135 @@
+{
+  "protocol": "P30_NUMERICAL_RUNTIME_GATE",
+  "GT_LOADED": false,
+  "stage": "short",
+  "status": "PASS",
+  "NDT": 208,
+  "converged": 208,
+  "OOSM_APPLIED": 207,
+  "HighRate": 4198,
+  "MSCKF": 148,
+  "captured": 2,
+  "root_invalid": 0,
+  "nonfinite": 0,
+  "future_imu": 0,
+  "timestamp_parity": true,
+  "physical_parameter_parity": true,
+  "jumps": {
+    "max_adjacent_jump_m": 1.1087780702097794,
+    "jumps_gt2m": 0
+  },
+  "reference_jumps": {
+    "max_adjacent_jump_m": 1.11095863917831,
+    "jumps_gt2m": 0
+  },
+  "source": [
+    {
+      "frame_index": "7",
+      "scan_ns": "1517157219794140100",
+      "C_hash": "7be9713b18be96a6",
+      "B_hash": "720ac7bf9bb68690",
+      "C_points": 1400,
+      "xyz_sha256": "2eaca6b413db149b34fbf03a6f4e996fee8869edd556bd67089df95c97436a97",
+      "hash_validation": "PASS",
+      "source_distance_method": "symmetric_nearest_neighbor_NOT_ordered_pair",
+      "nearest_rms_m": 0.1787089723652675,
+      "nearest_p95_m": 0.22599450200645144,
+      "nearest_max_m": 4.763569141318174
+    },
+    {
+      "frame_index": "193",
+      "scan_ns": "1517157238552942991",
+      "C_hash": "4b50b1021c0fb11e",
+      "B_hash": "d03793c94be02c77",
+      "C_points": 1400,
+      "xyz_sha256": "57fee0eeb43312dc7259f07be01148d1367d64c83921a0b4edf37eea54a79d60",
+      "hash_validation": "PASS",
+      "source_distance_method": "symmetric_nearest_neighbor_NOT_ordered_pair",
+      "nearest_rms_m": 0.1321528451951667,
+      "nearest_p95_m": 0.2527298703689836,
+      "nearest_max_m": 1.5846051916472514
+    }
+  ],
+  "points": [
+    {
+      "frame_index": "7",
+      "scan_ns": "1517157219794140100",
+      "comparison": "AB",
+      "points": 28874,
+      "rms_m": 0.00018026553389596879,
+      "p95_m": 0.0002965847350188987,
+      "max_m": 0.00031253647603021663
+    },
+    {
+      "frame_index": "7",
+      "scan_ns": "1517157219794140100",
+      "comparison": "BC",
+      "points": 28874,
+      "rms_m": 0.001844329228658229,
+      "p95_m": 0.003062616596412252,
+      "max_m": 0.00434529099626486
+    },
+    {
+      "frame_index": "7",
+      "scan_ns": "1517157219794140100",
+      "comparison": "AC",
+      "points": 28874,
+      "rms_m": 0.0017376732234634198,
+      "p95_m": 0.0028710673339914245,
+      "max_m": 0.004512894589156998
+    },
+    {
+      "frame_index": "193",
+      "scan_ns": "1517157238552942991",
+      "comparison": "AB",
+      "points": 29094,
+      "rms_m": 0.020040834733771714,
+      "p95_m": 0.03295908060213183,
+      "max_m": 0.034681801771669185
+    },
+    {
+      "frame_index": "193",
+      "scan_ns": "1517157238552942991",
+      "comparison": "BC",
+      "points": 29094,
+      "rms_m": 0.014779701916038368,
+      "p95_m": 0.024291436663470854,
+      "max_m": 0.025661983206356518
+    },
+    {
+      "frame_index": "193",
+      "scan_ns": "1517157238552942991",
+      "comparison": "AC",
+      "points": 29094,
+      "rms_m": 0.005434351621304323,
+      "p95_m": 0.008898469133686629,
+      "max_m": 0.01399250050587966
+    }
+  ],
+  "motion": [
+    {
+      "frame_index": "7",
+      "scan_ns": "1517157219794140100",
+      "nodes": 24,
+      "comparison": "local_vs_legacy_same_CURRENT_C_history_NOT_P29_reconstruction",
+      "history_relative_delta_m_max": 9.75395366333393e-06,
+      "history_relative_delta_deg_max": 0.003369439408356501,
+      "history_boundary_residual_m_max": 5.331969830852533e-06,
+      "history_boundary_residual_deg_max": 0.012069163217110908,
+      "local_boundary_residual_m_max": 1.1185098961580808e-10,
+      "local_boundary_residual_deg_max": 6.3711958999346175e-15
+    },
+    {
+      "frame_index": "193",
+      "scan_ns": "1517157238552942991",
+      "nodes": 24,
+      "comparison": "local_vs_legacy_same_CURRENT_C_history_NOT_P29_reconstruction",
+      "history_relative_delta_m_max": 3.5927411504126425e-05,
+      "history_relative_delta_deg_max": 0.006958461378073911,
+      "history_boundary_residual_m_max": 8.06311267108282e-06,
+      "history_boundary_residual_deg_max": 0.007096403697788615,
+      "local_boundary_residual_m_max": 1.1499984143278364e-11,
+      "local_boundary_residual_deg_max": 1.1927241825767741e-15
+    }
+  ]
+}

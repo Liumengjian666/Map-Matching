@@ -1,0 +1,13 @@
+Build: GNU9.4, final -O2 -g -Wall, isolated runtime /tmp/p30-build.Mk4FPk/devel PASS.
+SCAN_LOCAL_IMU_MATH_PASS: stationary, velocity, angular rate, combined reference, common-left, causal horizon, immutable anchor/query.
+IMU_DESKEW_CONTRACT_PASS: original disabled-path helper contracts preserved.
+Duplicate/out-of-order raw IMU regression PASS.
+Python syntax compilation PASS.
+21s real runtime gate PASS: NDT208 / due NDT OOSM207 / HighRate4198 / MSCKF148.
+40s real runtime gate PASS: NDT396 / due NDT OOSM396 / HighRate8004 / MSCKF315.
+No offline NDT pairing or additional align experiment was performed in P30.
+Actual captured Source: short2, full8; all own-online ordered hash/SHA identity PASS.
+Square-root invalid0 / nonfinite0 / future IMU0.
+P30_ARTIFACT_TEST_PASS: frozen outputs, real Source, clocks, due NDT/visual OOSM, PSD roots, window metrics/deltas, timing source/counts, normalized diagnostic rotations.
+One exact authorized external CLI invocation: exit0, No substantive issue.
+No A/B rerun, third replay, GT search or post-experiment parameter change.

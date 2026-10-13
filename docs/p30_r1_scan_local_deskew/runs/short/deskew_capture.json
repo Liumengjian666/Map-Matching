@@ -1,0 +1,22 @@
+{
+  "captured": 2,
+  "records": [
+    {
+      "frame_index": 7,
+      "scan_ns": "1517157219794140100",
+      "width": 28874,
+      "height": 1,
+      "bytes": 461984,
+      "is_dense": true
+    },
+    {
+      "frame_index": 193,
+      "scan_ns": "1517157238552942991",
+      "width": 29094,
+      "height": 1,
+      "bytes": 465504,
+      "is_dense": true
+    }
+  ],
+  "GT_LOADED": false
+}

@@ -1,0 +1,69 @@
+mature_integration:
+  enable: true
+  dcreg_enable: true
+  multi_ndt_enable: true
+  skf_enable: false
+  p25_relative_visual_contract: false
+  translation_scale_m: 0.8
+  degeneracy_eigen_ratio: 0.03
+  weak_translation_step_m: 0.2
+  weak_rotation_step_deg: 2.0
+  score_improvement_margin: 0.0002747604276
+  motion_weight: 0.05
+  motion_translation_scale_m: 2.0
+  motion_rotation_scale_deg: 15.0
+  suspect_fitness_threshold: 10.0
+  maximum_quick_candidates: 4
+  maximum_extra_aligns: 2
+filter:
+  experimental_covariance_stability_enable: true
+  experimental_square_root_covariance_enable: true
+mature_visual:
+  time_adapter_enable: true
+  enable: false
+  tracks_csv: /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p28_r2_mature_visual_module/feature_input_validated/tracks.csv
+  max_clones: 11
+  pixel_sigma: 1.0
+  rectified_K:
+  - 297.160965789772
+  - 0
+  - 317.73333375994946
+  - 0
+  - 265.24651866020713
+  - 233.53737010585292
+  - 0
+  - 0
+  - 1
+  T_imu_camera:
+  - -0.02050035
+  - -0.00037277
+  - 0.99978978
+  - 0.1796755
+  - -0.9995856
+  - -0.0202044
+  - -0.02050369
+  - 0.04727031
+  - 0.0202078
+  - -0.9997958
+  - 4.158e-05
+  - -0.01985536
+  - 0
+  - 0
+  - 0
+  - 1
+output:
+  experimental_covariance_reference_stamp: 1517157237.537242
+  experimental_ndt_source_capture_enable: true
+  experimental_ndt_source_capture_directory: /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p30_r1_scan_local_deskew/sources/short
+  experimental_ndt_source_capture_requests:
+  - 7:1517157219794140100
+  - 193:1517157238552942991
+  - 270:1517157246318675041
+  - 320:1517157251361368895
+  - 340:1517157253378448009
+  - 347:1517157254084407091
+  - 365:1517157255899825096
+  - 396:1517157259026242018
+  experimental_scan_local_motion_csv: /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p30_r1_scan_local_deskew/runs/short/scan_local_motion.csv
+deskew:
+  experimental_scan_local_imu_enable: true
