@@ -301,6 +301,7 @@ private:
   std::string deskew_csv_path_;
   bool imu_deskew_enable_ = false;
   bool experimental_scan_local_imu_enable_ = false;
+  bool experimental_history_nominal_consistent_enable_ = false;
   std::ofstream scan_local_motion_csv_;
   std::set<uint64_t> scan_local_diagnostic_stamps_;
   double deskew_max_scan_duration_sec_ = 0.15;

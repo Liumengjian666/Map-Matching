@@ -1,0 +1,4 @@
+# D overlay only; EKF/MSCKF global propagation is untouched.
+deskew:
+  experimental_scan_local_imu_enable: false
+  experimental_history_nominal_consistent_enable: true

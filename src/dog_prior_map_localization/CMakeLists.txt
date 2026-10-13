@@ -99,6 +99,13 @@ add_executable(scan_local_imu_test
   src/core/imu_deskew.cpp
 )
 
+add_executable(deskew_trajectory_mode_test
+  tests/deskew_trajectory_mode_test.cpp
+  src/core/state_history.cpp
+  src/core/imu_propagation.cpp
+  src/core/imu_deskew.cpp
+)
+
 add_executable(selective_relative_visual_update_test
   tests/selective_relative_visual_update_test.cpp
   src/core/selective_relative_visual_update.cpp

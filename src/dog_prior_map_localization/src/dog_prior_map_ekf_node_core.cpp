@@ -1,4 +1,5 @@
 #include "dog_prior_map_localization/dog_prior_map_ekf_node.hpp"
+#include "dog_prior_map_localization/core/deskew_trajectory_mode.hpp"
 
 #include <stdexcept>
 
@@ -106,8 +107,16 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   }
   imu_deskew_enable_ = deskew_mode_ == "ekf_imu_fastlio";
   experimental_scan_local_imu_enable_ = getParam<bool>("deskew/experimental_scan_local_imu_enable", false);
-  if (experimental_scan_local_imu_enable_ && !imu_deskew_enable_)
-    throw std::runtime_error("SCAN_LOCAL_REQUIRES_IMU_DESKEW");
+  experimental_history_nominal_consistent_enable_ = getParam<bool>(
+      "deskew/experimental_history_nominal_consistent_enable", false);
+  const auto trajectory_mode = deskewTrajectoryMode(experimental_scan_local_imu_enable_,
+      experimental_history_nominal_consistent_enable_);
+  if (trajectory_mode != DeskewTrajectoryMode::LEGACY_HISTORY) {
+    if (!imu_deskew_enable_) throw std::runtime_error("EXPERIMENTAL_TRAJECTORY_REQUIRES_IMU_DESKEW");
+    if (!getParam<bool>("mature_visual/time_adapter_enable", false))
+      throw std::runtime_error("EXPERIMENTAL_TRAJECTORY_REQUIRES_FROZEN_CAUSAL_IMU_MODEL");
+  }
+  ROS_INFO("[DogPriorMap C++] deskew trajectory=%s", deskewTrajectoryModeName(trajectory_mode));
   if (imu_deskew_enable_)
   {
     deskew_input_topic_ = getParam<std::string>("deskew/input_topic", "");

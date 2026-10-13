@@ -64,6 +64,8 @@ def main():
                         help="P29 only: record the eight requested deskew messages, not all clouds")
     parser.add_argument("--p30-scan-local", action="store_true",
                         help="P30 only: scan-local causal IMU trajectory, optional fixed 21s prefix")
+    parser.add_argument("--p31-group", choices=("D", "E"),
+                        help="P31: D historical-query ZOH ON; E scan-local visual OFF")
     parser.add_argument("--p26-prefix", action="store_true",
                         help="P28 covariance diagnostic/verification: fixed 19 s prefix, never GT")
     parser.add_argument("--p27-prefix", action="store_true",
@@ -76,6 +78,13 @@ def main():
     visual = args.visual.resolve()
     runtime_root = args.runtime_root.resolve()
     output = args.output.resolve()
+    if args.p31_group:
+        if args.p26_prefix or args.p27_prefix or args.p30_scan_local:
+            raise ValueError("P31_PROTOCOL_FLAGS_MUTUALLY_EXCLUSIVE")
+        if args.skf != ("on" if args.p31_group == "D" else "off"):
+            raise ValueError("P31_VISUAL_GROUP_CONTRACT")
+        if args.duration is not None and (args.p31_group != "D" or abs(args.duration-21.0)>1e-9):
+            raise ValueError("P31_ONLY_D_21S_SHORT_ALLOWED")
     if args.p26_prefix and args.p27_prefix:
         raise ValueError("PREFIX_PROTOCOL_FLAGS_ARE_MUTUALLY_EXCLUSIVE")
     if (args.p26_prefix or args.p27_prefix) and (args.duration is None or abs(args.duration - 19.0) > 1e-9):
@@ -84,7 +93,7 @@ def main():
         raise ValueError("P30_REQUIRES_MSCKF_ON_AND_NO_OTHER_PREFIX_MODE")
     if args.p30_scan_local and args.duration is not None and abs(args.duration-21.0)>1e-9:
         raise ValueError("P30_SHORT_DURATION_MUST_BE_21_SECONDS")
-    if not (args.p26_prefix or args.p27_prefix or args.p30_scan_local) and args.duration is not None and abs(args.duration - 18.5) > 1e-9:
+    if not (args.p26_prefix or args.p27_prefix or args.p30_scan_local or args.p31_group) and args.duration is not None and abs(args.duration - 18.5) > 1e-9:
         raise ValueError("P28_SMOKE_DURATION_MUST_BE_18_5_SECONDS")
     if not output.is_dir() or any(output.iterdir()):
         raise ValueError("P28_OUTPUT_MUST_BE_A_PRECREATED_EMPTY_UNIQUE_DIRECTORY")
@@ -235,6 +244,13 @@ def main():
             raise RuntimeError("P28_VELOCITY_BLEND_CONTRACT_FAILED")
         if args.p30_scan_local and rosparam("/deskew/experimental_scan_local_imu_enable") is not True:
             raise RuntimeError("P30_SCAN_LOCAL_PARAMETER_NOT_ENABLED")
+        if args.p31_group:
+            for path, expected in (("/deskew/experimental_scan_local_imu_enable", args.p31_group == "E"),
+                                   ("/deskew/experimental_history_nominal_consistent_enable", args.p31_group == "D"),
+                                   ("/mature_visual/time_adapter_enable", True),
+                                   ("/filter/experimental_square_root_covariance_enable", True)):
+                if rosparam(path) is not expected:
+                    raise RuntimeError("P31_RUNTIME_MODE_MISMATCH:" + path)
         if args.p27_prefix and rosparam("/filter/experimental_square_root_covariance_enable") is not True:
             raise RuntimeError("P28_SQUARE_ROOT_MODE_NOT_ENABLED")
         if args.p27_prefix and rosparam("/output/experimental_covariance_audit_csv_path"):
@@ -371,8 +387,8 @@ def main():
         for stream in streams:
             stream.close()
         receipt = {
-            "protocol": "P30_R1_SCAN_LOCAL_IMU_DESKEW" if args.p30_scan_local else (
-                "P29_R1_SOURCE_CAPTURE" if args.capture_deskew_selected else "P28_R2_MATURE_VISUAL_MODULE"),
+            "protocol": "P31_R1_DESKEW_VISUAL_ABLATION" if args.p31_group else ("P30_R1_SCAN_LOCAL_IMU_DESKEW" if args.p30_scan_local else (
+                "P29_R1_SOURCE_CAPTURE" if args.capture_deskew_selected else "P28_R2_MATURE_VISUAL_MODULE")),
             "GT_LOADED": False,
             "completed": completed,
             "error": run_error,
@@ -396,7 +412,8 @@ def main():
             "runtime_root": str(runtime_root),
             "fixed_lag_sensor_time_contract": 0.15,
             "visual_guess_enabled": False,
-            "experimental_scan_local_imu": args.p30_scan_local,
+            "experimental_scan_local_imu": args.p30_scan_local or args.p31_group == "E",
+            "p31_group": args.p31_group,
         }
         (output / "execution.json").write_text(json.dumps(receipt, indent=2) + "\n")
     print(json.dumps(receipt, indent=2))

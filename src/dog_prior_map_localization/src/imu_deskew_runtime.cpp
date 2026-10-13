@@ -1,6 +1,7 @@
 #include "dog_prior_map_localization/dog_prior_map_ekf_node.hpp"
 
 #include "dog_prior_map_localization/core/imu_deskew.hpp"
+#include "dog_prior_map_localization/core/deskew_trajectory_mode.hpp"
 
 #include <sensor_msgs/PointField.h>
 
@@ -235,22 +236,19 @@ void DogPriorMapEkfNode::processReadyImuDeskewCloudsLocked()
     const double reference_stamp = deskew_reference_time_ == "end" ?
         pending.scan_end : pending.scan_start;
     ScanLocalImuTrajectory scan_local;
-    ImuKinematicsConfig scan_local_config = imu_kinematics_config_;
-    // Match propagateMsckfImu(): its causal nominal model does not apply the
-    // legacy gravity-alignment heuristic. The configured gravity and biases
-    // themselves are unchanged.
-    if (experimental_scan_local_imu_enable_)
-      scan_local_config.continuous_gravity_correction_enable = false;
+    const auto trajectory_mode = deskewTrajectoryMode(experimental_scan_local_imu_enable_,
+        experimental_history_nominal_consistent_enable_);
+    const auto local_config = deskewTrajectoryConfig(imu_kinematics_config_, trajectory_mode);
     if (experimental_scan_local_imu_enable_ &&
         !buildScanLocalImuTrajectory(state_history_, imu_history_, pending.scan_start,
-            pending.scan_end, deskew_max_imu_gap_sec_, g_, scan_local_config,
+            pending.scan_end, deskew_max_imu_gap_sec_, g_, local_config,
             scan_local, reason))
       throw std::runtime_error("SCAN_LOCAL_TRAJECTORY_FAILED:" + reason);
     const auto pose_at = [&](double stamp, ImuDeskewPose &pose, std::string &why) {
       if (experimental_scan_local_imu_enable_)
         return scanLocalImuPoseAt(scan_local, stamp, pose, why);
       return interpolateImuDeskewPose(state_history_, stamp,
-          deskew_max_imu_gap_sec_, g_, imu_kinematics_config_, pose, why,
+          deskew_max_imu_gap_sec_, g_, local_config, pose, why,
           pending.scan_end);
     };
     ImuDeskewPose reference_pose;
