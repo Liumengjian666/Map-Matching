@@ -4,6 +4,8 @@
   <arg name="mature_config" default="" />
   <arg name="mature_diagnostics_csv_path" default="" />
   <arg name="mature_skf_enable_override" default="" />
+  <arg name="mature_visual_enable_override" default="" />
+  <arg name="mature_visual_diagnostics_csv_path" default="" />
   <arg name="skf_visual_measurement_csv" default="" />
   <arg name="skf_measurement_csv_path" default="" />
   <arg name="skf_update_diagnostics_csv_path" default="" />
@@ -55,6 +57,10 @@
             if="$(eval arg('mature_config') != '')" />
   <param name="mature_integration/skf_enable" value="$(arg mature_skf_enable_override)"
          if="$(eval arg('mature_skf_enable_override') != '')" />
+  <param name="mature_visual/enable" value="$(arg mature_visual_enable_override)"
+         if="$(eval arg('mature_visual_enable_override') != '')" />
+  <param name="mature_visual/diagnostics_csv" value="$(arg mature_visual_diagnostics_csv_path)"
+         if="$(eval arg('mature_visual_diagnostics_csv_path') != '')" />
   <param name="mature_integration/skf_visual_measurement_csv" value="$(arg skf_visual_measurement_csv)" />
   <param name="topics/skf_visual_measurement" value="/dog_livo/skf_visual_measurement" />
 

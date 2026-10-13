@@ -1,0 +1,67 @@
+Start testing: Oct 13 17:40 CST
+----------------------------------------------------------
+1/10 Testing: msckf_visual_measurement_test
+1/10 Test: msckf_visual_measurement_test
+Command: "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/msckf_visual_measurement_test"
+Directory: /tmp/p25-catkin-AY1eHd/build/dog_prior_map_localization
+"msckf_visual_measurement_test" start time: Oct 13 17:40 CST
+Output:
+----------------------------------------------------------
+runtime_imu_jacobian_max=2.27628e-11 shared_interval_cross_covariance=1.25e-07
+MSCKF_MEASUREMENT_CORE_PASS max_pixel_jacobian_error=2.74239e-08; triangulation nullspace gauge exact_clone_cross_covariance singular_factor joint_prediction Joseph marginalization causal_time
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"msckf_visual_measurement_test" end time: Oct 13 17:40 CST
+"msckf_visual_measurement_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/10 Testing: square_root_covariance_test
+2/10 Test: square_root_covariance_test
+Command: "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/square_root_covariance_test" "/tmp/p25-catkin-AY1eHd/src/research_src/dog_prior_map_localization/../../docs/p26_r1_skf_covariance_stability/post_fix_actual_IMU_PSD_loss.csv"
+Directory: /tmp/p25-catkin-AY1eHd/build/dog_prior_map_localization
+"square_root_covariance_test" start time: Oct 13 17:40 CST
+Output:
+----------------------------------------------------------
+SQUARE_ROOT_COVARIANCE_PASS real_P26_fixture normal_prediction zero_Q partial_Q SKF_Joseph DPD OOSM_factor_replay invalid_factor
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"square_root_covariance_test" end time: Oct 13 17:40 CST
+"square_root_covariance_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/10 Testing: selective_relative_visual_update_test
+4/10 Test: selective_relative_visual_update_test
+Command: "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/selective_relative_visual_update_test"
+Directory: /tmp/p25-catkin-AY1eHd/build/dog_prior_map_localization
+"selective_relative_visual_update_test" start time: Oct 13 17:40 CST
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"selective_relative_visual_update_test" end time: Oct 13 17:40 CST
+"selective_relative_visual_update_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/10 Testing: oosm_fixed_lag_scheduler_contract_test
+5/10 Test: oosm_fixed_lag_scheduler_contract_test
+Command: "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/oosm_fixed_lag_scheduler_contract_test"
+Directory: /tmp/p25-catkin-AY1eHd/build/dog_prior_map_localization
+"oosm_fixed_lag_scheduler_contract_test" start time: Oct 13 17:40 CST
+Output:
+----------------------------------------------------------
+fixed-lag scheduler contract PASS; deadline=1.51716e+09 release=1.51716e+09 replay_count=31
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"oosm_fixed_lag_scheduler_contract_test" end time: Oct 13 17:40 CST
+"oosm_fixed_lag_scheduler_contract_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 13 17:40 CST

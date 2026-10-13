@@ -2,6 +2,8 @@
 
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
+#include <vector>
+#include <cstdint>
 
 namespace dog_prior_map_localization
 {
@@ -9,6 +11,24 @@ namespace dog_prior_map_localization
 using Matrix15d = Eigen::Matrix<double, 15, 15>;
 using Vector15d = Eigen::Matrix<double, 15, 1>;
 using Matrix3x15d = Eigen::Matrix<double, 3, 15>;
+
+struct VisualPoseClone
+{
+  uint64_t image_ns = 0;
+  Eigen::Vector3d p = Eigen::Vector3d::Zero();
+  Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
+  Eigen::Vector3d p_fej = Eigen::Vector3d::Zero();
+  Eigen::Matrix3d R_fej = Eigen::Matrix3d::Identity();
+};
+// P28 only: joint authoritative factor. A held IMU-noise driver occupies the
+// final six rows until the next sensor boundary; clones occupy preceding rows.
+struct VisualJointState
+{
+  Eigen::MatrixXd factor;
+  std::vector<VisualPoseClone> clones;
+  bool driver_active = false;
+  double driver_head_stamp = 0.0;
+};
 
 // IMU sample used by the estimator's existing sensor-time history.
 // The acceleration and angular-rate vectors remain in the current IMU/body
@@ -48,6 +68,7 @@ struct FilterStateSnapshot
   // cache. Only covarianceView() may materialize the derived dense view.
   bool square_root_authoritative = false;
   Matrix15d S = Matrix15d::Identity();
+  VisualJointState visual_joint;
   Matrix15d covarianceView() const
   {
     if (square_root_authoritative) return S * S.transpose();

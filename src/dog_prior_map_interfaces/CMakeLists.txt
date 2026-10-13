@@ -17,6 +17,7 @@ add_message_files(
   NdtSessionControlAck.msg
   NdtScanAck.msg
   VisualRelativeMeasurement.msg
+  VisualDegeneracy.msg
 )
 
 generate_messages(

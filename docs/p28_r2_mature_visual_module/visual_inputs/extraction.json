@@ -1,0 +1,77 @@
+{
+  "method": "OPENVINS_STYLE_FAST_KLT_REAL_PIXEL_TRACKS_NO_PNP",
+  "frames": 396,
+  "completed_tracks": 10054,
+  "observations": 45545,
+  "wall_sec": 7.938436983997235,
+  "frontend_mean_ms": 10.21471777538395,
+  "frontend_p95_ms": 13.810166507028043,
+  "peak_rss_kib": 196704,
+  "GT_LOADED": false,
+  "NDT_POSES_LOADED": false,
+  "camera_path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/raw_data_core_2023-07-25-03-01-44.bag",
+  "camera_size": 6473379689,
+  "camera_mtime_ns": 1701481414000000000,
+  "camera_full_hash_rechecked": false,
+  "selected_equalized_rectified_image_sha256": "09adf27674b2f97e18e8888cb7bad177986d4048e723014428c18b50fc7048f8",
+  "tracks_sha256": "9873f7b570f72595d5ab3479f4f48a0bb42728024c3ee830eabeac6593e2441c",
+  "K_rect": [
+    [
+      297.160965789772,
+      0.0,
+      317.73333375994946
+    ],
+    [
+      0.0,
+      265.24651866020713,
+      233.53737010585292
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "T_imu_camera": [
+    [
+      -0.02050035,
+      -0.00037277,
+      0.99978978,
+      0.1796755
+    ],
+    [
+      -0.9995856,
+      -0.0202044,
+      -0.02050369,
+      0.04727031
+    ],
+    [
+      0.0202078,
+      -0.9997958,
+      4.158e-05,
+      -0.01985536
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "calibration_sha256": {
+    "corridor01_extrinsics.yaml": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d",
+    "corridor01_intrinsics.yaml": "083ff73553f6df25734bfddc439fbda7eb7b01c8baeede2b4949e960f72fd370"
+  },
+  "parameters": {
+    "max_tracks": 200,
+    "max_observations": 5,
+    "grid": 5,
+    "fast_threshold": 20,
+    "min_distance_px": 10,
+    "lk_window": 15,
+    "lk_pyramid_levels": 5,
+    "fb_max_px": 1.0,
+    "ransac_max_px": 1.0
+  },
+  "time_contract": "latest camera header <= scan, lag <=50ms; each track closes using no later image"
+}

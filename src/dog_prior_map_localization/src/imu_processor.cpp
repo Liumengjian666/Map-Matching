@@ -121,6 +121,7 @@ void DogPriorMapEkfNode::imuCallback(const sensor_msgs::ImuConstPtr &msg)
   }
   if (dt > max_imu_dt_)
   {
+    if(msckf_time_enable_) throw std::runtime_error("MSCKF_IMU_GAP_EXCEEDS_FROZEN_GATE");
     last_imu_time_ = t;
     if (midpoint_interval_input_enable_)
     {
@@ -180,6 +181,7 @@ void DogPriorMapEkfNode::processReadyDeferredNdtLocked()
 void DogPriorMapEkfNode::processReadyFixedLagNdtLocked()
 {
   if (!oosm_fixed_lag_enable_ || !has_state_stamp_ || !std::isfinite(state_stamp_)) return;
+  queueMsckfFramesLocked();
   const FixedLagAdvanceResult advanced = oosm_fixed_lag_scheduler_.advance(state_stamp_);
   if (!advanced.valid)
   {
@@ -193,6 +195,14 @@ void DogPriorMapEkfNode::processReadyFixedLagNdtLocked()
 
   for (const FixedLagObservation &event : advanced.ready)
   {
+    if ((event.id & (uint64_t{1} << 62)) != 0 && (event.id & kSkfFixedLagIdMask) == 0)
+    {
+      processMsckfLocked(event.id & ~(uint64_t{1} << 62));
+      writeFixedLagDiagnostic(event.id,event.measurement_stamp,event.deadline_stamp,event.arrival_state_stamp,
+          event.arrival_wall_sec,event.release_state_stamp,ros::WallTime::now().toSec(),msckf_last_replay_,
+          msckf_last_status_=="APPLIED_REPROJECTION_SELECTED_GAIN","MSCKF_"+msckf_last_status_);
+      continue;
+    }
     if ((event.id & kSkfFixedLagIdMask) != 0)
     {
       auto message = fixed_lag_visual_messages_.find(event.id);
@@ -260,6 +270,7 @@ void DogPriorMapEkfNode::saveStateSnapshot(double stamp)
   snapshot.acc_world = last_acc_world_;
   snapshot.gyro_unbiased = last_unbiased_gyro_;
   snapshot.P = P_;
+  if (msckf_time_enable_) snapshot.visual_joint = visual_joint_;
   snapshot.square_root_authoritative = square_root_covariance_enable_;
   if (square_root_covariance_enable_) {
     snapshot.S = S_;
@@ -272,6 +283,10 @@ void DogPriorMapEkfNode::saveStateSnapshot(double stamp)
 
 void DogPriorMapEkfNode::restoreStateSnapshot(const FilterStateSnapshot &snapshot)
 {
+  if (msckf_time_enable_) {
+    if(snapshot.visual_joint.factor.rows()<15) throw std::runtime_error("MSCKF_HISTORY_MISSING_JOINT_STATE");
+    visual_joint_=snapshot.visual_joint;
+  }
   if (snapshot.square_root_authoritative != square_root_covariance_enable_)
     throw std::runtime_error("OOSM_COVARIANCE_STORAGE_MODE_MISMATCH");
   if (square_root_covariance_enable_) {
@@ -314,6 +329,11 @@ void DogPriorMapEkfNode::eraseStateHistoryAfter(double stamp)
 void DogPriorMapEkfNode::propagateImu(const Eigen::Vector3d &acc_m, const Eigen::Vector3d &gyr_m, double dt)
 {
   const auto propagation_started = CovarianceClock::now();
+  if(msckf_time_enable_) {
+    propagateMsckfImu(acc_m,gyr_m,dt);
+    square_root_diagnostics_.record("IMU_PROPAGATE",state_stamp_,S_,covarianceMilliseconds(propagation_started));
+    return;
+  }
   // ------------------------- IMU高频传播 -------------------------
   // 机器狗端真正高频输出靠这一段：每个IMU到来就积分一次姿态、速度、位置。
   // 低频地图匹配只负责把漂移拉回来，不需要每帧都做重计算。

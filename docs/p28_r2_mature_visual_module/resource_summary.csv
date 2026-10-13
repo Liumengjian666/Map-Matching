@@ -1,0 +1,7 @@
+run,node,peak_rss_bytes,cpu_sec
+A,dog_prior_map_ndt_node_cpp,80973824,10.96
+A,dog_prior_map_ekf_node_cpp,70631424,24.38
+B,dog_prior_map_ndt_node_cpp,80723968,10.91
+B,dog_prior_map_ekf_node_cpp,70713344,29.12
+smoke,dog_prior_map_ndt_node_cpp,80683008,5.29
+smoke,dog_prior_map_ekf_node_cpp,70344704,13.36

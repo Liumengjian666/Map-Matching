@@ -1,0 +1,17 @@
+{
+  "GT_used_for_runtime_or_candidate_selection": false,
+  "focused_CTest_passed": 4,
+  "focused_CTest_failed": 0,
+  "max_pixel_jacobian_difference": 2.74239e-8,
+  "max_runtime_IMU_jacobian_difference": 2.27628e-11,
+  "scalar_partial_full_shared_noise_cross_covariance": 1.25e-7,
+  "pose_and_velocity_values_nonfinite": {"A": 0, "B": 0, "smoke": 0},
+  "published_states_checked": {"A": 8400, "B": 8400, "smoke": 3985},
+  "independently_recalculated_metrics": 144,
+  "max_recalculation_difference": 0.0,
+  "future_DCREG_sensor_support_count": 0,
+  "NDT_and_highrate_timestamp_sequences_equal_A_B": true,
+  "binary_identity_A_B": true,
+  "formal_filter_statistical_consistency_proven": false,
+  "note": "Actual root/geometry and runtime evidence, not a full official OpenVINS/SKF reproduction; frozen NDT pose fusion and DPD remain heuristic."
+}

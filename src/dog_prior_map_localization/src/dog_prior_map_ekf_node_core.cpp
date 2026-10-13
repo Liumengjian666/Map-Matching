@@ -346,6 +346,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     P_.setZero();
   }
 
+  initializeMsckf();
   // Explicit, dataset-provided startup state for causal offline replay.  This
   // option is disabled by default, so existing robot/P2B initialization is
   // unchanged.  The boundary IMU sample is an actual sample before the state

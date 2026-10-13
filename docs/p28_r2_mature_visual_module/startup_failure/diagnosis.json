@@ -1,0 +1,8 @@
+{
+  "playback_started": false,
+  "NDT_frames": 0,
+  "observed": "NDT process exited code 1 before bag playback; launch stopped",
+  "diagnosed_condition": "P24 mature gate: !visual_guess && !p25_relative_contract",
+  "fix": "Allow explicit P28 time-adapter mode without enabling old PnP",
+  "second_preflight": "B port 11428 bind EADDRINUSE before starting any process; switched unused port 11429"
+}

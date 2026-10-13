@@ -11,6 +11,7 @@
 #include <map>
 #include <mutex>
 #include <sstream>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -31,6 +32,8 @@
 #include "dog_prior_map_localization/core/state_history.hpp"
 #include "dog_prior_map_localization/core/oosm_fixed_lag_scheduler.hpp"
 #include "dog_prior_map_localization/core/selective_relative_visual_update.hpp"
+#include "dog_prior_map_localization/core/msckf_visual_measurement.hpp"
+#include <dog_prior_map_interfaces/VisualDegeneracy.h>
 #include "dog_prior_map_localization/core/covariance_audit.hpp"
 #include "dog_prior_map_localization/core/square_root_diagnostics.hpp"
 
@@ -113,6 +116,33 @@ private:
   /// 在 IMU 状态推进后按传感器时间处理已到达 watermark 的 NDT 观测。
   void processReadyDeferredNdtLocked();
   void processReadyFixedLagNdtLocked();
+  void initializeMsckf();
+  void propagateMsckfImu(const Eigen::Vector3d&, const Eigen::Vector3d&, double);
+  void synchronizeMsckfCoreRoot();
+  void queueMsckfFramesLocked();
+  void processMsckfLocked(uint64_t image_ns);
+  void visualDegeneracyCallback(const dog_prior_map_interfaces::VisualDegeneracyConstPtr&);
+  struct TrackPixel { uint64_t image_ns; Eigen::Vector2d pixel; };
+  struct VisualFrameInput {
+    uint64_t scan_ns = 0;
+    uint64_t image_ns = 0;
+    std::map<uint64_t, std::vector<TrackPixel>> tracks;
+    bool first_estimate_set = false;
+    VisualPoseClone first_estimate;
+  };
+  bool msckf_time_enable_ = false;
+  bool msckf_update_enable_ = false;
+  VisualJointState visual_joint_;
+  RectifiedCamera msckf_camera_;
+  std::map<uint64_t, VisualFrameInput> visual_frames_;
+  std::set<uint64_t> visual_queued_;
+  std::map<uint64_t, dog_prior_map_interfaces::VisualDegeneracyConstPtr> visual_degeneracy_;
+  ros::Subscriber sub_visual_degeneracy_;
+  std::ofstream msckf_csv_;
+  double msckf_pixel_sigma_ = 1.0;
+  int msckf_max_clones_ = 11;
+  std::string msckf_last_status_;
+  std::size_t msckf_last_replay_ = 0;
   void skfVisualMeasurementCallback(
       const ros::MessageEvent<dog_prior_map_interfaces::VisualRelativeMeasurement const>& event);
   bool stateAtCausalTimeLocked(double target_stamp, FilterStateSnapshot& state,

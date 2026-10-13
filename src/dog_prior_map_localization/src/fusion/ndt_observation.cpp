@@ -255,6 +255,7 @@ void DogPriorMapEkfNode::processNdtObservationLocked(
     state_before_oosm.acc_world = last_acc_world_;
     state_before_oosm.gyro_unbiased = last_unbiased_gyro_;
     state_before_oosm.P = P_;
+    if(msckf_time_enable_) state_before_oosm.visual_joint = visual_joint_;
     state_before_oosm.square_root_authoritative = square_root_covariance_enable_;
     if (square_root_covariance_enable_) state_before_oosm.S = S_;
     history_before_oosm = state_history_;
@@ -323,8 +324,16 @@ void DogPriorMapEkfNode::processNdtObservationLocked(
   if (square_root_covariance_enable_)
   {
     const double before_trace = S_.squaredNorm();
+    const Matrix15d root_before_damping = S_;
     if (!dampPoseCovarianceRoot(&S_,0.85,1e-4,1e-5))
       throw std::runtime_error("SQRT_NDT_DAMPING_FAILED");
+    if(msckf_time_enable_) {
+      for(int i=0;i<15;++i) {
+        const double scale=S_.row(i).norm()/root_before_damping.row(i).norm();
+        visual_joint_.factor.row(i)*=scale;
+      }
+      synchronizeMsckfCoreRoot();
+    }
     square_root_diagnostics_.record("NDT_DAMPING",oosm_active?rollback_stamp:state_stamp_,S_,0.0,before_trace);
   }
   else if (covariance_stability_enable_ || skf_relative_visual_update_enable_)

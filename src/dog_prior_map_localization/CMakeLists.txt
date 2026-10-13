@@ -51,6 +51,8 @@ add_executable(dog_prior_map_ekf_node_cpp
   src/imu_processor.cpp
   src/fusion/ndt_observation.cpp
   src/fusion/skf_visual.cpp
+  src/fusion/msckf_visual.cpp
+  src/core/msckf_visual_measurement.cpp
   src/ros_output.cpp
 )
 
@@ -105,6 +107,10 @@ add_executable(square_root_covariance_test
   src/core/square_root_covariance.cpp
   src/core/selective_relative_visual_update.cpp
   src/core/state_history.cpp
+)
+add_executable(msckf_visual_measurement_test
+  tests/msckf_visual_measurement_test.cpp
+  src/core/msckf_visual_measurement.cpp
 )
 
 add_executable(frame_conversion_contract_test
@@ -192,6 +198,7 @@ target_link_libraries(solid_adapter_contract_test
 )
 
 if(CATKIN_ENABLE_TESTING)
+  add_test(NAME msckf_visual_measurement_test COMMAND $<TARGET_FILE:msckf_visual_measurement_test>)
   add_test(NAME square_root_covariance_test
     COMMAND $<TARGET_FILE:square_root_covariance_test>
     ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/p26_r1_skf_covariance_stability/post_fix_actual_IMU_PSD_loss.csv)

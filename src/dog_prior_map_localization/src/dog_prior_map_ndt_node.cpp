@@ -18,6 +18,7 @@
 #include <diagnostic_msgs/DiagnosticStatus.h>
 #include <diagnostic_msgs/KeyValue.h>
 #include <dog_prior_map_interfaces/VisualRelativeMeasurement.h>
+#include <dog_prior_map_interfaces/VisualDegeneracy.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <livox_ros_driver2/CustomMsg.h>
 #include <nav_msgs/Odometry.h>
@@ -263,7 +264,8 @@ public:
     if (mature_integration_enable_)
     {
       if (coupled_enabled_ || experimental_ekf_translation_fallback_enable_ ||
-          (!visual_initial_guess_enable_ && !p25_relative_visual_contract_) ||
+          (!visual_initial_guess_enable_ && !p25_relative_visual_contract_ &&
+           !getParam<bool>("mature_visual/time_adapter_enable", false)) ||
           (p25_relative_visual_contract_ && (visual_initial_guess_enable_ ||
            scan_reference_time_ != "start" ||
            !getParam<bool>("ndt_observation/oosm_fixed_lag_enable", false) ||
@@ -302,6 +304,9 @@ public:
           "quick_candidate_count,quick_score_calls,jet_calls,preview_ms,jet_ms,extra_aligns,extra_align_ms,"
           "terminal_score_calls,candidate_details,selected_candidate,full_align_count,frame_module_ms\n";
     }
+    if (getParam<bool>("mature_visual/time_adapter_enable", false))
+      pub_visual_degeneracy_ = nh_.advertise<dog_prior_map_interfaces::VisualDegeneracy>(
+          "/dog_livo/visual_degeneracy", 32);
     if (p25_relative_visual_contract_ && mature_skf_enable_)
     {
       const std::string visual_path = getParam<std::string>(
@@ -681,7 +686,7 @@ private:
   }
 
   void runMatureIntegration(const pcl::PointCloud<pcl::PointXYZ>::Ptr& source,
-      const Eigen::Matrix4d& prediction, uint64_t frame_index, uint64_t scan_ns,
+      const Eigen::Matrix4d& prediction, uint64_t frame_index, uint64_t scan_ns, uint64_t scan_end_ns,
       bool visual_applied, Eigen::Matrix4d* result,
       pcl::PointCloud<pcl::PointXYZ>* aligned, bool* converged, double* fitness,
       int* iterations, double* total_align_ms)
@@ -719,6 +724,25 @@ private:
       record.dcreg.status = "INVALID_NOMINAL_POSE";
     }
 
+    if (pub_visual_degeneracy_)
+    {
+      dog_prior_map_interfaces::VisualDegeneracy message;
+      message.header.stamp.fromNSec(scan_ns);
+      message.header.frame_id = map_frame_;
+      message.scan_end_ns = scan_end_ns;
+      message.valid = record.dcreg.valid;
+      message.translation_degenerate = record.dcreg.translation_degenerate;
+      message.rotation_degenerate = record.dcreg.rotation_degenerate;
+      for (int i=0; i<3; ++i) {
+        message.translation_eigenvalues[i] = record.dcreg.translation_eigenvalues(i);
+        message.rotation_eigenvalues[i] = record.dcreg.rotation_eigenvalues(i);
+        for (int j=0; j<3; ++j) {
+          message.translation_axes[3*i+j] = record.dcreg.translation_axes(i,j);
+          message.rotation_axes[3*i+j] = record.dcreg.rotation_axes(i,j);
+        }
+      }
+      pub_visual_degeneracy_.publish(message);
+    }
     const SkfVisualMeasurement* relative_visual = p25_relative_visual_contract_ && mature_skf_enable_ ?
         skf_visual_measurements_.find(scan_ns) : nullptr;
     const bool valid_visual = p25_relative_visual_contract_ ? relative_visual != nullptr :
@@ -1626,7 +1650,7 @@ private:
     if (mature_integration_enable_)
     {
       runMatureIntegration(source, initial_guess, diagnostic_row.frame_index,
-          timing.reference_stamp.toNSec(), diagnostic_row.visual_applied, &result,
+          timing.reference_stamp.toNSec(), timing.end_stamp.toNSec(), diagnostic_row.visual_applied, &result,
           &aligned, &ok, &score, &iterations, &align_ms);
       diagnostic_row.ndt_align_complete_wall_sec = ros::WallTime::now().toSec();
     }
@@ -2177,6 +2201,7 @@ private:
   bool p25_relative_visual_contract_ = false;
   SkfVisualMeasurementCatalog skf_visual_measurements_;
   ros::Publisher pub_skf_visual_;
+  ros::Publisher pub_visual_degeneracy_;
   std::string skf_visual_topic_;
   std::ofstream skf_update_csv_;
   MatureNdtConfig mature_ndt_config_;
