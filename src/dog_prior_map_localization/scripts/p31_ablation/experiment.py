@@ -82,7 +82,7 @@ def gate(repo, stage):
     old_high=[r for r in rows(old/'ekf_lineage.csv') if r['event_type']=='IMU_HIGH_RATE_PUBLISH']
     if [r['state_stamp'] for r in high]!=[r['state_stamp'] for r in old_high[:len(high)]] or [r['scan_ns'] for r in mature]!=[r['scan_ns'] for r in rows(old/'mature_diagnostics.csv')[:len(mature)]]:
         raise ValueError('P31_SENSOR_TIMESTAMP_CONTRACT')
-    if any(not np.isfinite([float(r[k]) for k in ('p_x','p_y','p_z','q_x','q_y','q_z','q_w')]).all() for r in published):
+    if any(not np.isfinite([float(r[k]) for k in ('p_x','p_y','p_z','q_x','q_y','q_z','q_w','v_x','v_y','v_z')]).all() for r in published):
         raise ValueError('P31_NONFINITE_STATE')
     for r in ndt:
         for prefix in ('initial_guess_', 'raw_ndt_', 'final_used_'):
@@ -113,12 +113,14 @@ def gate(repo, stage):
     counts=(len(ndt),len(applied),len(high))
     if counts!=((208,207,4198) if stage=='D_short' else (396,396,8004)):
         raise ValueError('P31_FRAME_COMPLETENESS:'+repr(counts))
+    corrected=sum(r['event_type']=='CORRECTED_PUBLISH' for r in lineage)
+    if corrected!=len(applied): raise ValueError('P31_CORRECTED_STATE_MISSING')
     pos=np.array([[float(r[k]) for k in ('p_x','p_y','p_z')] for r in high])
     jump=np.linalg.norm(np.diff(pos,axis=0),axis=1)
     if (jump>2).any(): raise ValueError('P31_NEW_SEVERE_STATE_JUMP')
     result=dict(stage=stage,status='PASS',GT_LOADED=False,NDT=len(ndt),
         converged=sum(r['ndt_has_converged']=='1' for r in ndt),OOSM=len(applied),
-        HighRate=len(high),MSCKF_updates=actual,nonfinite=0,invalid_roots=0,Late=0,future_imu=0,
+        HighRate=len(high),Corrected=corrected,MSCKF_updates=actual,nonfinite=0,invalid_roots=0,Late=0,future_imu=0,
         timestamps_equal=True,physical_parameter_parity=True,visual_due=len(visual_due),
         max_adjacent_jump_m=float(jump.max()),jumps_over_2m=0,
         mode='HISTORY_NOMINAL_CONSISTENT' if visual else 'SCAN_LOCAL')
