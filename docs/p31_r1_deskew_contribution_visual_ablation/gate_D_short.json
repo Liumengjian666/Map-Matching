@@ -1,0 +1,21 @@
+{
+  "stage": "D_short",
+  "status": "PASS",
+  "GT_LOADED": false,
+  "NDT": 208,
+  "converged": 208,
+  "OOSM": 207,
+  "HighRate": 4198,
+  "Corrected": 207,
+  "MSCKF_updates": 144,
+  "nonfinite": 0,
+  "invalid_roots": 0,
+  "Late": 0,
+  "future_imu": 0,
+  "timestamps_equal": true,
+  "physical_parameter_parity": true,
+  "visual_due": 202,
+  "max_adjacent_jump_m": 1.1087780702097794,
+  "jumps_over_2m": 0,
+  "mode": "HISTORY_NOMINAL_CONSISTENT"
+}

@@ -1,0 +1,4 @@
+stage,DCReg_valid,DCReg_nonconvex,quick_scores,extra_aligns,replacements,total_full_aligns
+D_short,208,0,324,1,1,209
+D,396,0,644,1,1,397
+E,395,1,638,3,3,399

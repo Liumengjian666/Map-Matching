@@ -1,0 +1,4 @@
+# Preserve ROS raw launch receipts verbatim (empty parameter values end in a space).
+runs/D/launch.log whitespace=-blank-at-eol
+runs/D_short/launch.log whitespace=-blank-at-eol
+runs/E/launch.log whitespace=-blank-at-eol

@@ -1,0 +1,115 @@
+{
+  "protocol": "P31_R1_DESKEW_VISUAL_ABLATION",
+  "GT_LOADED": false,
+  "completed": true,
+  "error": null,
+  "skf_enabled": false,
+  "duration_sec": null,
+  "wall_sec": 170.70053552699392,
+  "commands": [
+    [
+      "roscore",
+      "-p",
+      "11431"
+    ],
+    [
+      "roslaunch",
+      "dog_prior_map_localization",
+      "dog_prior_map_localization_split.launch",
+      "rviz:=false",
+      "publish_path:=false",
+      "coupled_mode:=CONTROL",
+      "camera_enable:=false",
+      "dataset_config:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml",
+      "mature_config:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p31_r1_deskew_contribution_visual_ablation/E.yaml",
+      "mature_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p31_r1_deskew_contribution_visual_ablation/runs/E/mature_diagnostics.csv",
+      "mature_skf_enable_override:=false",
+      "mature_visual_enable_override:=false",
+      "mature_visual_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p31_r1_deskew_contribution_visual_ablation/runs/E/msckf_diagnostics.csv",
+      "skf_visual_measurement_csv:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p17_visual_aided_ndt_r1/visual_input/visual.csv",
+      "skf_measurement_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p31_r1_deskew_contribution_visual_ablation/runs/E/skf_measurements.csv",
+      "skf_update_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p31_r1_deskew_contribution_visual_ablation/runs/E/skf_update_diagnostics.csv",
+      "scan_reference_time:=start",
+      "oosm_fixed_lag_enable:=true",
+      "oosm_fixed_lag_sec:=0.15",
+      "diagnostic_determinism_enable:=true",
+      "visual_initial_guess_enable:=false",
+      "visual_initial_guess_csv:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p17_visual_aided_ndt_r1/visual_input/visual.csv",
+      "ndt_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p31_r1_deskew_contribution_visual_ablation/runs/E/ndt_diagnostics.csv",
+      "ekf_prediction_diagnostics_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p31_r1_deskew_contribution_visual_ablation/runs/E/ekf_lineage.csv",
+      "oosm_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p31_r1_deskew_contribution_visual_ablation/runs/E/oosm.csv",
+      "oosm_fixed_lag_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p31_r1_deskew_contribution_visual_ablation/runs/E/oosm_fixed_lag.csv",
+      "imu_deskew_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p31_r1_deskew_contribution_visual_ablation/runs/E/deskew.csv",
+      "runtime_csv_path:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p31_r1_deskew_contribution_visual_ablation/runs/E/ekf_runtime.csv",
+      "experimental_square_root_diagnostics_prefix:=/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p31_r1_deskew_contribution_visual_ablation/runs/E/sqrt_covariance"
+    ],
+    [
+      "rosbag",
+      "record",
+      "-O",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p31_r1_deskew_contribution_visual_ablation/runs/E/outputs.bag",
+      "/dog_livo/ndt_odom",
+      "/dog_livo/odom_corrected",
+      "/dog_livo/odom_high_rate",
+      "/dog_livo/diagnostics",
+      "/dog_livo/visual_degeneracy"
+    ],
+    [
+      "rosbag",
+      "play",
+      "--clock",
+      "--rate",
+      "0.25",
+      "--delay",
+      "2",
+      "--quiet",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p10_corridor01_deterministic_oosm_replay_r1/input_v2/corridor01_p10_causal_startup5_eval35_fixedlag_v2.bag"
+    ]
+  ],
+  "binary_hashes": {
+    "dog_prior_map_ndt_node_cpp": {
+      "path": "/tmp/p31-build.k3TwQd/devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+      "sha256": "a33586a425dac0b35f366ef4e3d7da0cfdbc9d76c00132eb59d843bc09883c1d"
+    },
+    "dog_prior_map_ekf_node_cpp": {
+      "path": "/tmp/p31-build.k3TwQd/devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+      "sha256": "0caef70419cb6b45f17295f5cc01901953a08fcd125425fdcecb1d228f3143a2"
+    }
+  },
+  "resources": {
+    "dog_prior_map_ndt_node_cpp": {
+      "peak_rss_bytes": 80945152,
+      "cpu_sec": 11.040000000000001
+    },
+    "dog_prior_map_ekf_node_cpp": {
+      "peak_rss_bytes": 70967296,
+      "cpu_sec": 23.53
+    }
+  },
+  "dataset_config": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml",
+  "dataset_config_sha256": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+  "mature_config": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p31_r1_deskew_contribution_visual_ablation/E.yaml",
+  "mature_config_sha256": "71b6dd2c56b220c50af02fe479c0f33205a5d06cf9df65ddbf9ada138bca7211",
+  "map_path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd",
+  "map_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+  "bag_sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+  "visual_csv_sha256": "10869519890a5adcb6f3310bba05f379a959018cf123ea8a90c1cf4ea1314c79",
+  "rosparams_path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p31_r1_deskew_contribution_visual_ablation/runs/E/rosparams.yaml",
+  "ndt_subscriptions": [
+    "/clock",
+    "/imu/data",
+    "/p10/corridor01/deskewed_points"
+  ],
+  "ekf_subscriptions": [
+    "/clock",
+    "/dog_livo/ndt_odom",
+    "/dog_livo/visual_degeneracy",
+    "/imu/data",
+    "/p10/corridor01/raw_timed_points"
+  ],
+  "runtime_root": "/tmp/p31-build.k3TwQd/devel",
+  "fixed_lag_sensor_time_contract": 0.15,
+  "visual_guess_enabled": false,
+  "experimental_scan_local_imu": true,
+  "p31_group": "E"
+}

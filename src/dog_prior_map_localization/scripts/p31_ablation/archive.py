@@ -9,6 +9,12 @@ from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'p29_feedback'))
 from prepare import rows,sha,write_csv
 
+def refresh_hashes(repo):
+    doc=repo/'docs/p31_r1_deskew_contribution_visual_ablation'
+    inventory={str(p.relative_to(repo)):sha(p) for p in sorted(doc.rglob('*')) if p.is_file() and p.name!='artifact_hashes.json'}
+    (doc/'artifact_hashes.json').write_text(json.dumps(inventory,indent=2)+'\n')
+    return inventory
+
 def main(repo):
     cache=repo/'.p31_r1_deskew_contribution_visual_ablation'
     doc=repo/'docs/p31_r1_deskew_contribution_visual_ablation'
@@ -124,9 +130,9 @@ def main(repo):
         'Execution stops here; no autonomous innovation, parameter search, scene extension or new feedback repair.'
     ]
     (doc/'REPORT.md').write_text('\n'.join(lines)+'\n')
-    inventory={str(p.relative_to(repo)):sha(p) for p in sorted(doc.rglob('*')) if p.is_file() and p.name!='artifact_hashes.json'}
-    (doc/'artifact_hashes.json').write_text(json.dumps(inventory,indent=2)+'\n')
+    inventory=refresh_hashes(repo)
     print(json.dumps(dict(FINAL_RESULT=result['FINAL_RESULT'],files=len(inventory),module_counts=module_counts)))
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--repo',type=Path,required=True);main(p.parse_args().repo.resolve())
+    p=argparse.ArgumentParser();p.add_argument('--repo',type=Path,required=True);p.add_argument('--rehash',action='store_true')
+    a=p.parse_args();refresh_hashes(a.repo.resolve()) if a.rehash else main(a.repo.resolve())
