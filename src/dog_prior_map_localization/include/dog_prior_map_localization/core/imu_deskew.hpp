@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <limits>
 #include <string>
+#include <vector>
 
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
@@ -40,6 +41,33 @@ struct ImuDeskewCoverage
   double max_gap_sec = 0.0;
   std::size_t samples_in_scan = 0;
 };
+
+// One immutable scan-start anchor followed by raw, causal head-sample IMU
+// intervals. No later EKF pose is used as a trajectory node. Point queries
+// never mutate this trajectory, so their result is independent of point order.
+struct ScanLocalImuTrajectory
+{
+  std::vector<ImuDeskewPose> nodes;
+  Eigen::Vector3d gravity_world = Eigen::Vector3d::Zero();
+  ImuKinematicsConfig config;
+  double scan_start = 0.0;
+  double scan_end = 0.0;
+  double anchor_state_stamp = 0.0;
+  double max_imu_source_stamp = 0.0;
+  double max_gap_sec = 0.0;
+};
+
+bool buildScanLocalImuTrajectory(const StateHistory &history,
+                                const std::deque<ImuSample> &imu_samples,
+                                double scan_start, double scan_end,
+                                double max_gap_sec,
+                                const Eigen::Vector3d &gravity_world,
+                                const ImuKinematicsConfig &config,
+                                ScanLocalImuTrajectory &trajectory,
+                                std::string &reason);
+
+bool scanLocalImuPoseAt(const ScanLocalImuTrajectory &trajectory, double stamp,
+                       ImuDeskewPose &pose, std::string &reason);
 
 // Checks that propagated EKF states bracket the full scan interval without
 // extrapolation and that every state interval used is below max_gap_sec.

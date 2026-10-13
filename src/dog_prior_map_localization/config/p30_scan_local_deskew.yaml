@@ -1,0 +1,4 @@
+# P30 overlay only. Load after unchanged p28_mature_visual.yaml.
+# The sole physical intervention; diagnostics are supplied by prepare.py.
+deskew:
+  experimental_scan_local_imu_enable: true

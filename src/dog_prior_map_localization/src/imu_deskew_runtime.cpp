@@ -234,10 +234,27 @@ void DogPriorMapEkfNode::processReadyImuDeskewCloudsLocked()
 
     const double reference_stamp = deskew_reference_time_ == "end" ?
         pending.scan_end : pending.scan_start;
+    ScanLocalImuTrajectory scan_local;
+    ImuKinematicsConfig scan_local_config = imu_kinematics_config_;
+    // Match propagateMsckfImu(): its causal nominal model does not apply the
+    // legacy gravity-alignment heuristic. The configured gravity and biases
+    // themselves are unchanged.
+    if (experimental_scan_local_imu_enable_)
+      scan_local_config.continuous_gravity_correction_enable = false;
+    if (experimental_scan_local_imu_enable_ &&
+        !buildScanLocalImuTrajectory(state_history_, imu_history_, pending.scan_start,
+            pending.scan_end, deskew_max_imu_gap_sec_, g_, scan_local_config,
+            scan_local, reason))
+      throw std::runtime_error("SCAN_LOCAL_TRAJECTORY_FAILED:" + reason);
+    const auto pose_at = [&](double stamp, ImuDeskewPose &pose, std::string &why) {
+      if (experimental_scan_local_imu_enable_)
+        return scanLocalImuPoseAt(scan_local, stamp, pose, why);
+      return interpolateImuDeskewPose(state_history_, stamp,
+          deskew_max_imu_gap_sec_, g_, imu_kinematics_config_, pose, why,
+          pending.scan_end);
+    };
     ImuDeskewPose reference_pose;
-    if (!interpolateImuDeskewPose(state_history_, reference_stamp,
-            deskew_max_imu_gap_sec_, g_, imu_kinematics_config_, reference_pose, reason,
-            pending.scan_end))
+    if (!pose_at(reference_stamp, reference_pose, reason))
     {
       writeImuDeskewDiagnostic(pending.scan_index, "REJECTED", "reference_" + reason,
           pending.scan_start, pending.scan_end, reference_stamp,
@@ -289,9 +306,7 @@ void DogPriorMapEkfNode::processReadyImuDeskewCloudsLocked()
         break;
       }
       ImuDeskewPose point_pose;
-      if (!interpolateImuDeskewPose(state_history_, point_stamp,
-              deskew_max_imu_gap_sec_, g_, imu_kinematics_config_, point_pose, reason,
-              pending.scan_end))
+      if (!pose_at(point_stamp, point_pose, reason))
       {
         valid = false;
         failure_reason = "point_" + reason;
@@ -359,6 +374,84 @@ void DogPriorMapEkfNode::processReadyImuDeskewCloudsLocked()
     const double displacement_mean = displacement_sum / static_cast<double>(displacements.size());
     const double displacement_median = percentile(displacements, 0.5);
     const double displacement_p95 = percentile(displacements, 0.95);
+    if (experimental_scan_local_imu_enable_ && scan_local_motion_csv_.is_open() &&
+        scan_local_diagnostic_stamps_.count(pending.msg->header.stamp.toNSec()))
+    {
+      // Read-only diagnostic: same anchor/state history and no extra Deskew
+      // publication, filter update or NDT optimization. Finite selected scans.
+      ImuDeskewPose old_reference;
+      std::string diagnostic_reason;
+      const bool old_reference_valid = interpolateImuDeskewPose(state_history_,
+          reference_stamp, deskew_max_imu_gap_sec_, g_, imu_kinematics_config_,
+          old_reference, diagnostic_reason, pending.scan_end);
+      std::set<double> diagnostic_times;
+      for (const auto &node : scan_local.nodes) diagnostic_times.insert(node.stamp);
+      for (const auto &state : state_history_.samples())
+        if (state.stamp >= pending.scan_start && state.stamp <= pending.scan_end)
+          diagnostic_times.insert(state.stamp);
+      for (double diagnostic_stamp : diagnostic_times)
+      {
+        ImuDeskewPose node;
+        if (!scanLocalImuPoseAt(scan_local, diagnostic_stamp, node, diagnostic_reason))
+          throw std::runtime_error("SCAN_LOCAL_DIAGNOSTIC_QUERY_FAILED");
+        Eigen::Isometry3d T_ref = Eigen::Isometry3d::Identity(), T_node = T_ref;
+        T_ref.linear() = reference_pose.R; T_ref.translation() = reference_pose.p;
+        T_node.linear() = node.R; T_node.translation() = node.p;
+        const Eigen::Isometry3d relative = (T_ref*T_imu_lidar_).inverse()*(T_node*T_imu_lidar_);
+        const Eigen::AngleAxisd aa(relative.linear());
+        const Eigen::Vector3d rv = aa.axis()*aa.angle();
+        ImuDeskewPose old_node;
+        const bool old_valid = old_reference_valid && interpolateImuDeskewPose(state_history_,
+            node.stamp, deskew_max_imu_gap_sec_, g_, imu_kinematics_config_,
+            old_node, diagnostic_reason, pending.scan_end);
+        double dp = std::numeric_limits<double>::quiet_NaN(), dr = dp;
+        if (old_valid)
+        {
+          Eigen::Isometry3d T_old_ref = Eigen::Isometry3d::Identity(), T_old_node = T_old_ref;
+          T_old_ref.linear() = old_reference.R; T_old_ref.translation() = old_reference.p;
+          T_old_node.linear() = old_node.R; T_old_node.translation() = old_node.p;
+          const Eigen::Isometry3d old_relative = (T_old_ref*T_imu_lidar_).inverse()*(T_old_node*T_imu_lidar_);
+          dp = (relative.translation()-old_relative.translation()).norm();
+          dr = Eigen::AngleAxisd(old_relative.linear().transpose()*relative.linear()).angle()*180.0/M_PI;
+        }
+        double old_boundary_m = std::numeric_limits<double>::quiet_NaN(), old_boundary_deg = old_boundary_m;
+        double local_boundary_m = old_boundary_m, local_boundary_deg = old_boundary_m;
+        // Residual across a 1us left limit, with physical propagation removed.
+        // Same-current-history counterfactual only, NOT reconstructed P29.
+        if (node.stamp > pending.scan_start+1e-6)
+        {
+          ImuDeskewPose left;
+          if (old_valid && interpolateImuDeskewPose(state_history_,node.stamp-1e-6,
+              deskew_max_imu_gap_sec_,g_,imu_kinematics_config_,left,diagnostic_reason,pending.scan_end))
+          {
+            propagateImuKinematics(left.p,left.v,left.R,left.ba,left.bg,
+                left.interval_acc_input,left.interval_gyro_input,node.stamp-left.stamp,
+                g_,imu_kinematics_config_,left.acc_world,left.gyro_unbiased);
+            old_boundary_m=(left.p-old_node.p).norm();
+            old_boundary_deg=Eigen::AngleAxisd(left.R.transpose()*old_node.R).angle()*180.0/M_PI;
+          }
+          if (scanLocalImuPoseAt(scan_local,node.stamp-1e-6,left,diagnostic_reason))
+          {
+            propagateImuKinematics(left.p,left.v,left.R,left.ba,left.bg,
+                left.acc_measurement,left.gyro_measurement,node.stamp-left.stamp,
+                g_,scan_local.config,left.acc_world,left.gyro_unbiased);
+            local_boundary_m=(left.p-node.p).norm();
+            local_boundary_deg=Eigen::AngleAxisd(left.R.transpose()*node.R).angle()*180.0/M_PI;
+          }
+        }
+        scan_local_motion_csv_ << std::setprecision(17) << pending.msg->header.stamp.toNSec()
+          << ',' << pending.scan_index << ',' << pending.scan_start << ',' << pending.scan_end
+          << ',' << scan_local.anchor_state_stamp << ',' << node.stamp << ',' << node.latest_source_stamp
+          << ',' << relative.translation().x() << ',' << relative.translation().y() << ',' << relative.translation().z()
+          << ',' << node.v.x() << ',' << node.v.y() << ',' << node.v.z()
+          << ',' << rv.x() << ',' << rv.y() << ',' << rv.z()
+          << ',' << dp << ',' << dr << ',' << old_valid << ',' << ekf_state_revision_
+          << ',' << scan_local.max_imu_source_stamp
+          << ',' << old_boundary_m << ',' << old_boundary_deg
+          << ',' << local_boundary_m << ',' << local_boundary_deg << '\n';
+      }
+      scan_local_motion_csv_.flush();
+    }
     pub_imu_deskew_cloud_.publish(output);
     writeImuDeskewDiagnostic(pending.scan_index, "PUBLISHED", "covered_and_deskewed",
         pending.scan_start, pending.scan_end, reference_stamp,

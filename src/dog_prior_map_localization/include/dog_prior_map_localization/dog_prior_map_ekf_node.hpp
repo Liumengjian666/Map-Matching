@@ -300,6 +300,9 @@ private:
   std::string deskew_state_frame_ = "lidar";
   std::string deskew_csv_path_;
   bool imu_deskew_enable_ = false;
+  bool experimental_scan_local_imu_enable_ = false;
+  std::ofstream scan_local_motion_csv_;
+  std::set<uint64_t> scan_local_diagnostic_stamps_;
   double deskew_max_scan_duration_sec_ = 0.15;
   double deskew_max_imu_gap_sec_ = 0.02;
   double deskew_history_keep_sec_ = 2.0;

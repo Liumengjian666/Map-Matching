@@ -105,6 +105,9 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     deskew_mode_ = "legacy_prior_ndt_cv";
   }
   imu_deskew_enable_ = deskew_mode_ == "ekf_imu_fastlio";
+  experimental_scan_local_imu_enable_ = getParam<bool>("deskew/experimental_scan_local_imu_enable", false);
+  if (experimental_scan_local_imu_enable_ && !imu_deskew_enable_)
+    throw std::runtime_error("SCAN_LOCAL_REQUIRES_IMU_DESKEW");
   if (imu_deskew_enable_)
   {
     deskew_input_topic_ = getParam<std::string>("deskew/input_topic", "");
@@ -173,6 +176,24 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     imu_kinematics_config_.gravity_correction_max_angle = gravity_correction_max_angle_;
     imu_kinematics_config_.gravity_correction_acc_tolerance = gravity_correction_acc_tolerance_;
     imu_kinematics_config_.gravity_correction_gyro_max = gravity_correction_gyro_max_;
+    if (experimental_scan_local_imu_enable_)
+    {
+      // This experiment follows the already-frozen P28 causal propagation.
+      // Do not silently apply it to an incompatible legacy interval policy.
+      if (!getParam<bool>("mature_visual/time_adapter_enable", false))
+        throw std::runtime_error("SCAN_LOCAL_REQUIRES_FROZEN_CAUSAL_IMU_MODEL");
+      const auto path = getParam<std::string>("output/experimental_scan_local_motion_csv", "");
+      if (!path.empty())
+      {
+        if (std::ifstream(path).good()) throw std::runtime_error("SCAN_LOCAL_DIAGNOSTIC_PATH_EXISTS");
+        scan_local_motion_csv_.open(path);
+        if (!scan_local_motion_csv_) throw std::runtime_error("SCAN_LOCAL_DIAGNOSTIC_OPEN_FAILED");
+        scan_local_motion_csv_ << "scan_ns,scan_index,scan_start,scan_end,anchor_state_stamp,node_stamp,imu_source_stamp,local_px,local_py,local_pz,local_vx,local_vy,local_vz,local_rx,local_ry,local_rz,history_relative_delta_m,history_relative_delta_deg,history_valid,state_revision,max_imu_source_stamp,history_boundary_residual_m,history_boundary_residual_deg,local_boundary_residual_m,local_boundary_residual_deg\n";
+      }
+      for (const auto &request : getParam<std::vector<std::string>>(
+          "output/experimental_ndt_source_capture_requests", std::vector<std::string>()))
+        scan_local_diagnostic_stamps_.insert(std::stoull(request.substr(request.find(':')+1)));
+    }
   }
   if (midpoint_interval_input_enable_ && !imu_deskew_enable_)
   {

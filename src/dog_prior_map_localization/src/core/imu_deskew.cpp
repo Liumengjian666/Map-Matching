@@ -191,6 +191,143 @@ bool interpolateImuDeskewPose(const StateHistory &history,
   return true;
 }
 
+bool buildScanLocalImuTrajectory(const StateHistory &history,
+                                const std::deque<ImuSample> &imu_samples,
+                                double scan_start, double scan_end,
+                                double max_gap_sec,
+                                const Eigen::Vector3d &gravity_world,
+                                const ImuKinematicsConfig &config,
+                                ScanLocalImuTrajectory &trajectory,
+                                std::string &reason)
+{
+  trajectory = ScanLocalImuTrajectory{};
+  if (!std::isfinite(scan_start) || !std::isfinite(scan_end) ||
+      scan_end < scan_start || !std::isfinite(max_gap_sec) || max_gap_sec <= 0 ||
+      !gravity_world.allFinite() || !config.use_acc_for_position)
+  {
+    reason = "invalid_scan_local_interval_or_model";
+    return false;
+  }
+  const auto &states = history.samples();
+  auto state = std::upper_bound(states.begin(), states.end(), scan_start,
+      [](double t, const FilterStateSnapshot &s) { return t < s.stamp; });
+  if (state == states.begin()) { reason = "no_causal_scan_start_state"; return false; }
+  --state;
+  if (scan_start - state->stamp > max_gap_sec)
+  { reason = "stale_scan_start_state"; return false; }
+  if (imu_samples.empty() || imu_samples.back().stamp < scan_end)
+  { reason = "waiting_for_raw_imu_end_coverage"; return false; }
+  for (std::size_t i=0; i<imu_samples.size(); ++i)
+    if (!std::isfinite(imu_samples[i].stamp) ||
+        (i && imu_samples[i].stamp <= imu_samples[i-1].stamp))
+    { reason = "nonmonotonic_raw_imu_history"; return false; }
+  auto head = std::upper_bound(imu_samples.begin(), imu_samples.end(), state->stamp,
+      [](double t, const ImuSample &s) { return t < s.stamp; });
+  if (head == imu_samples.begin()) { reason = "no_causal_anchor_imu"; return false; }
+  --head;
+  if (state->stamp - head->stamp > max_gap_sec)
+  { reason = "stale_anchor_imu"; return false; }
+
+  trajectory.scan_start = scan_start;
+  trajectory.scan_end = scan_end;
+  trajectory.anchor_state_stamp = state->stamp;
+  trajectory.gravity_world = gravity_world;
+  trajectory.config = config;
+  // P28's mature camera-time propagator uses causal ZOH, not the legacy
+  // midpoint flag. Retain its kinematics/physical parameters, with the same
+  // head-sample convention and without consuming a future tail measurement.
+  trajectory.config.midpoint_interval_input_enable = false;
+  ImuDeskewPose pose = toPose(*state);
+  if (!pose.p.allFinite() || !pose.v.allFinite() || !pose.R.allFinite() ||
+      !pose.ba.allFinite() || !pose.bg.allFinite() ||
+      (pose.R.transpose()*pose.R-Eigen::Matrix3d::Identity()).norm() > 1e-6 ||
+      pose.R.determinant() <= 0)
+  { reason = "invalid_scan_start_state"; return false; }
+  auto set_input = [&]() {
+    pose.acc_measurement = head->acc;
+    pose.gyro_measurement = head->gyro;
+    pose.interval_acc_input = head->acc;
+    pose.interval_gyro_input = head->gyro;
+    pose.has_interval_input = true;
+    pose.latest_source_stamp = head->stamp;
+    pose.acc_world = pose.R*(head->acc-pose.ba)+gravity_world;
+    pose.gyro_unbiased = head->gyro-pose.bg;
+    return head->acc.allFinite() && head->gyro.allFinite();
+  };
+  auto advance = [&](double target) {
+    const double dt = target - pose.stamp;
+    if (dt < 0 || dt > max_gap_sec || !set_input()) return false;
+    if (dt > 0)
+      propagateImuKinematics(pose.p, pose.v, pose.R, pose.ba, pose.bg,
+          head->acc, head->gyro, dt, gravity_world, trajectory.config,
+          pose.acc_world, pose.gyro_unbiased);
+    pose.stamp = target;
+    trajectory.max_imu_source_stamp = std::max(trajectory.max_imu_source_stamp, head->stamp);
+    return pose.p.allFinite() && pose.v.allFinite() && pose.R.allFinite();
+  };
+  // Advance the one historical anchor to scan_start. Raw IMU timestamps may
+  // fall between an image clone's timestamp and the start; do not skip them.
+  while (pose.stamp < scan_start)
+  {
+    auto next = head + 1;
+    const double target = next != imu_samples.end() ? std::min(scan_start, next->stamp) : scan_start;
+    if (next != imu_samples.end() &&
+        (!(next->stamp > head->stamp) || next->stamp-head->stamp > max_gap_sec))
+    { reason = "anchor_raw_imu_gap"; return false; }
+    if (!(target > pose.stamp) || !advance(target))
+    { reason = "anchor_partial_propagation_failed"; return false; }
+    if (next != imu_samples.end() && target == next->stamp) head = next;
+  }
+  if (!set_input()) { reason = "nonfinite_anchor_imu"; return false; }
+  trajectory.nodes.push_back(pose);
+  while (pose.stamp < scan_end)
+  {
+    auto next = head + 1;
+    if (next == imu_samples.end() || !(next->stamp > head->stamp) ||
+        next->stamp-head->stamp > max_gap_sec)
+    { reason = "scan_local_raw_imu_gap"; return false; }
+    trajectory.max_gap_sec = std::max(trajectory.max_gap_sec, next->stamp-head->stamp);
+    const double target = std::min(scan_end, next->stamp);
+    if (!(target > pose.stamp) || !advance(target))
+    { reason = "scan_local_propagation_failed"; return false; }
+    if (target == next->stamp)
+    {
+      head = next;
+      if (!set_input()) { reason = "nonfinite_scan_imu"; return false; }
+    }
+    trajectory.nodes.push_back(pose);
+  }
+  trajectory.max_imu_source_stamp = std::max(trajectory.max_imu_source_stamp, pose.latest_source_stamp);
+  if (trajectory.max_imu_source_stamp > scan_end)
+  { reason = "post_scan_end_imu_used"; return false; }
+  reason = "scan_local_imu_trajectory";
+  return true;
+}
+
+bool scanLocalImuPoseAt(const ScanLocalImuTrajectory &trajectory, double stamp,
+                       ImuDeskewPose &pose, std::string &reason)
+{
+  if (!std::isfinite(stamp) || trajectory.nodes.empty() ||
+      stamp < trajectory.scan_start || stamp > trajectory.scan_end)
+  { reason = "scan_local_query_outside_interval"; return false; }
+  const auto &nodes = trajectory.nodes;
+  auto upper = std::upper_bound(nodes.begin(), nodes.end(), stamp,
+      [](double t, const ImuDeskewPose &p) { return t < p.stamp; });
+  if (upper == nodes.begin()) { reason = "no_scan_local_query_anchor"; return false; }
+  pose = *(upper-1);
+  const double dt = stamp - pose.stamp;
+  if (dt > 0)
+    propagateImuKinematics(pose.p, pose.v, pose.R, pose.ba, pose.bg,
+        pose.acc_measurement, pose.gyro_measurement, dt,
+        trajectory.gravity_world, trajectory.config, pose.acc_world, pose.gyro_unbiased);
+  pose.stamp = stamp;
+  if (!pose.p.allFinite() || !pose.v.allFinite() || !pose.R.allFinite() ||
+      pose.latest_source_stamp > stamp)
+  { reason = "invalid_or_future_scan_local_prediction"; return false; }
+  reason = "scan_local_causal_query";
+  return true;
+}
+
 bool transformPointToReferenceLidar(const ImuDeskewPose &point_pose,
                                      const ImuDeskewPose &reference_pose,
                                      const Eigen::Isometry3d &T_imu_lidar,
