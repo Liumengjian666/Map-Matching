@@ -1,0 +1,4 @@
+stage,method,count,mean_ms,p95_ms,max_ms,wall_sec,peak_rss_bytes,cpu_sec
+capture_replay,A,396,,,,172.0247030009923,70762496,24.39
+capture_replay,B,396,,,,171.82251484700828,70737920,29.08
+native_offline_align,all_32,32,8.293362156250002,33.6187195,41.508844,,,

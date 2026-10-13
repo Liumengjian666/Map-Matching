@@ -30,7 +30,7 @@ def write_csv(path, records):
     if not records:
         raise ValueError('EMPTY_RESULT:' + str(path))
     with Path(path).open('w', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=list(dict.fromkeys(k for row in records for k in row)))
+        writer = csv.DictWriter(f, fieldnames=list(dict.fromkeys(k for row in records for k in row)), lineterminator='\n')
         writer.writeheader()
         writer.writerows(records)
 

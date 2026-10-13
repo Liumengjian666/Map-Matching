@@ -1,0 +1,11 @@
+codex exec --ignore-user-config --sandbox read-only --ephemeral --skip-git-repo-check --model gpt-6.1-sol -c 'model_reasoning_effort="xhigh"' --color never -C /tmp/p29-cli-review.IMwTmN -o /tmp/p29-cli-review.IMwTmN/review_result.md - < /tmp/p29-cli-review.IMwTmN/review_input.md
+
+User explicitly confirmed this exact command and SHA256 before execution.
+Input SHA256: e8cba347a7752077875162871e7f691aa3c4b5f55c42cd3d65dc9bc6ab9ff22f
+CLI0.159.2, model gpt-6.1-sol, xhigh, read-only, approval never, provider openai.
+Invocations1, exit0. Startup catalog refresh timeout warning; final review completed.
+
+The Git copy of review_input.md normalizes CRLF to LF only. Its archive hash is
+listed in artifact_hashes.json and need not equal the actual payload SHA above.
+The exact authorized 54614-byte payload remains at the stated /tmp path and in
+the local .p29_r1_fixed_source_feedback/external_review cache (not committed).

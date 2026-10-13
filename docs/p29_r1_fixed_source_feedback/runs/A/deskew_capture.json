@@ -1,0 +1,70 @@
+{
+  "captured": 8,
+  "records": [
+    {
+      "frame_index": 7,
+      "scan_ns": "1517157219794140100",
+      "width": 28874,
+      "height": 1,
+      "bytes": 461984,
+      "is_dense": true
+    },
+    {
+      "frame_index": 193,
+      "scan_ns": "1517157238552942991",
+      "width": 29094,
+      "height": 1,
+      "bytes": 465504,
+      "is_dense": true
+    },
+    {
+      "frame_index": 270,
+      "scan_ns": "1517157246318675041",
+      "width": 28994,
+      "height": 1,
+      "bytes": 463904,
+      "is_dense": true
+    },
+    {
+      "frame_index": 320,
+      "scan_ns": "1517157251361368895",
+      "width": 29075,
+      "height": 1,
+      "bytes": 465200,
+      "is_dense": true
+    },
+    {
+      "frame_index": 340,
+      "scan_ns": "1517157253378448009",
+      "width": 29040,
+      "height": 1,
+      "bytes": 464640,
+      "is_dense": true
+    },
+    {
+      "frame_index": 347,
+      "scan_ns": "1517157254084407091",
+      "width": 29001,
+      "height": 1,
+      "bytes": 464016,
+      "is_dense": true
+    },
+    {
+      "frame_index": 365,
+      "scan_ns": "1517157255899825096",
+      "width": 28963,
+      "height": 1,
+      "bytes": 463408,
+      "is_dense": true
+    },
+    {
+      "frame_index": 396,
+      "scan_ns": "1517157259026242018",
+      "width": 29030,
+      "height": 1,
+      "bytes": 464480,
+      "is_dense": true
+    }
+  ],
+  "GT_LOADED": false
+}

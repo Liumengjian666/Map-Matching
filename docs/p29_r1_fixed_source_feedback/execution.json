@@ -1,0 +1,12 @@
+{
+  "TASK": "P29-R1-FIXED-SOURCE-NDT-FEEDBACK-ISOLATION",
+  "GT_LOADED": false,
+  "command": [
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p29_r1_fixed_source_feedback/build/p29_offline_pair",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p29_r1_fixed_source_feedback"
+  ],
+  "returncode": 0,
+  "wall_sec": 0.5566569229995366,
+  "probe_sha256": "8435072b1d3f5cd7b1a3b9493119aab97ad071a14c06094f3ac19dde663d0ca6"
+}

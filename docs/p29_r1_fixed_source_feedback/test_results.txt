@@ -1,0 +1,15 @@
+Standalone CMake C++14 Release build: PASS (existing PCL1.10).
+Python syntax compilation: PASS.
+P29 exact integer-ns requests: 8 identities / PASS.
+Real Source capture: A8/8 and B8/8 ordered SHA/stable hash / PASS.
+P28 full replay parity: A PASS, B PASS, zero physical differences.
+Actual native align ledger: STARTED32 / COMPLETED32 / PASS.
+Same-source identity and same-initial matrix cells: PASS.
+Self-cell optimizer parity: 16/16 exact, all pose/fitness differences zero.
+Shared SE(3) left-transform displacement isometry: PASS.
+Nonzero .1m lever arm / 90deg rotation origin regression: PASS.
+Frozen input and pre-GT optimizer output hashes verified during analysis: PASS.
+No extra native align or new ROS run in these tests.
+Independent read-only origin finding fixed in derived analysis only.
+External Codex CLI reviewed corrected limited input once: exit0,
+No substantive issue. No second CLI invocation.

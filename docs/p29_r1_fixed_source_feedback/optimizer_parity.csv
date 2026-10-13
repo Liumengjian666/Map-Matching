@@ -1,0 +1,17 @@
+frame_index,method,raw_dt_m,raw_dr_deg,used_dt_m,used_dr_deg,fitness_delta,discrete_match,status
+7,A,0,0,0,0,0,1,PASS
+7,B,0,0,0,0,0,1,PASS
+193,A,0,0,0,0,0,1,PASS
+193,B,0,0,0,0,0,1,PASS
+270,A,0,0,0,0,0,1,PASS
+270,B,0,0,0,0,0,1,PASS
+320,A,0,0,0,0,0,1,PASS
+320,B,0,0,0,0,0,1,PASS
+340,A,0,0,0,0,0,1,PASS
+340,B,0,0,0,0,0,1,PASS
+347,A,0,0,0,0,0,1,PASS
+347,B,0,0,0,0,0,1,PASS
+365,A,0,0,0,0,0,1,PASS
+365,B,0,0,0,0,0,1,PASS
+396,A,0,0,0,0,0,1,PASS
+396,B,0,0,0,0,0,1,PASS
