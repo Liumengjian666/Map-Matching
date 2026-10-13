@@ -60,6 +60,8 @@ def main():
     parser.add_argument("--duration", type=float,
                         help="bounded smoke only; the accepted smoke contract is 18.5 seconds")
     parser.add_argument("--port", type=int, default=11425)
+    parser.add_argument("--capture-deskew-selected", action="store_true",
+                        help="P29 only: record the eight requested deskew messages, not all clouds")
     parser.add_argument("--p26-prefix", action="store_true",
                         help="P28 covariance diagnostic/verification: fixed 19 s prefix, never GT")
     parser.add_argument("--p27-prefix", action="store_true",
@@ -234,6 +236,22 @@ def main():
         if "/dog_livo/skf_visual_measurement" in ndt_subs:
             raise RuntimeError("P28_NDT_SKF_TOPIC_SELF_SUBSCRIPTION")
 
+        if args.capture_deskew_selected:
+            requests = rosparam("/output/experimental_ndt_source_capture_requests")
+            if not rosparam("/output/experimental_ndt_source_capture_enable") or len(requests) != 8:
+                raise RuntimeError("P29_BOUNDED_CAPTURE_CONTRACT_FAILED")
+            helper = Path(__file__).resolve().parents[1] / "p29_feedback/capture_deskew.py"
+            observer = spawn(["python3", str(helper), "--output", str(output),
+                              "--requests", json.dumps(requests)], "deskew_capture")
+            for _ in range(100):
+                if (output / "deskew_capture.ready").exists():
+                    break
+                if observer.poll() is not None:
+                    raise RuntimeError("P29_DESKEW_OBSERVER_DIED")
+                time.sleep(0.05)
+            else:
+                raise RuntimeError("P29_DESKEW_OBSERVER_NOT_READY")
+
         record_topics = ["/dog_livo/ndt_odom", "/dog_livo/odom_corrected",
                          "/dog_livo/odom_high_rate", "/dog_livo/diagnostics",
                          "/dog_livo/visual_degeneracy"]
@@ -345,7 +363,7 @@ def main():
         for stream in streams:
             stream.close()
         receipt = {
-            "protocol": "P28_R2_MATURE_VISUAL_MODULE",
+            "protocol": "P29_R1_SOURCE_CAPTURE" if args.capture_deskew_selected else "P28_R2_MATURE_VISUAL_MODULE",
             "GT_LOADED": False,
             "completed": completed,
             "error": run_error,
