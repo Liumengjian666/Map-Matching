@@ -1,0 +1,22 @@
+{
+  "task": "P27-R1-SQUARE-ROOT-COVARIANCE-INTEGRATION",
+  "GT_LOADED": false,
+  "receipt_inputs": {
+    "binary_hashes": {
+      "dog_prior_map_ndt_node_cpp": {
+        "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+        "sha256": "49a1815d49e7701ee3cb606d72fff116bd1bba65c7d4b0a21d7a62b4507162d8"
+      },
+      "dog_prior_map_ekf_node_cpp": {
+        "path": "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+        "sha256": "0bb698c845ea05147aa52e4e8768ad4ca25a94e39be6563bc9b97114e2a60ee3"
+      }
+    },
+    "dataset_config_sha256": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+    "mature_config_sha256": "8f835b511d95f0b88ac733787169174c0d7eea4c90bfa8f8151983f12275b93c",
+    "map_sha256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+    "bag_sha256": "7f72f808a9f2282c65705e7e1e731061bb2cc2950329e46da768608e4a7d552e",
+    "visual_csv_sha256": "28e2fb5ccff6a9978d471ee37b7b475b349bc2090b96131b702fa657914610d9"
+  },
+  "config_only_added_square_root_flag": true
+}

@@ -260,6 +260,11 @@ void DogPriorMapEkfNode::saveStateSnapshot(double stamp)
   snapshot.acc_world = last_acc_world_;
   snapshot.gyro_unbiased = last_unbiased_gyro_;
   snapshot.P = P_;
+  snapshot.square_root_authoritative = square_root_covariance_enable_;
+  if (square_root_covariance_enable_) {
+    snapshot.S = S_;
+    square_root_diagnostics_.record("HISTORY_SAVE", stamp, snapshot.S);
+  }
   state_history_.insertMonotonic(snapshot);
   pruneStateHistory(stamp);
   max_state_history_size_ = std::max<uint64_t>(max_state_history_size_, state_history_.size());
@@ -267,6 +272,12 @@ void DogPriorMapEkfNode::saveStateSnapshot(double stamp)
 
 void DogPriorMapEkfNode::restoreStateSnapshot(const FilterStateSnapshot &snapshot)
 {
+  if (snapshot.square_root_authoritative != square_root_covariance_enable_)
+    throw std::runtime_error("OOSM_COVARIANCE_STORAGE_MODE_MISMATCH");
+  if (square_root_covariance_enable_) {
+    square_root_diagnostics_.record("OOSM_RESTORE", snapshot.stamp, snapshot.S);
+    S_ = snapshot.S;
+  }
   p_ = snapshot.p;
   v_ = snapshot.v;
   R_ = snapshot.R;
@@ -302,6 +313,7 @@ void DogPriorMapEkfNode::eraseStateHistoryAfter(double stamp)
 // 惯性传播：扣除零偏后积分姿态，并更新速度、位置及 15 维协方差。
 void DogPriorMapEkfNode::propagateImu(const Eigen::Vector3d &acc_m, const Eigen::Vector3d &gyr_m, double dt)
 {
+  const auto propagation_started = CovarianceClock::now();
   // ------------------------- IMU高频传播 -------------------------
   // 机器狗端真正高频输出靠这一段：每个IMU到来就积分一次姿态、速度、位置。
   // 低频地图匹配只负责把漂移拉回来，不需要每帧都做重计算。
@@ -341,7 +353,12 @@ void DogPriorMapEkfNode::propagateImu(const Eigen::Vector3d &acc_m, const Eigen:
   Q.block<3, 3>(9, 9) = Eigen::Matrix3d::Identity() * acc_bias_noise_ * acc_bias_noise_ * dt;
   Q.block<3, 3>(12, 12) = Eigen::Matrix3d::Identity() * gyro_bias_noise_ * gyro_bias_noise_ * dt;
   const Matrix15d before_covariance = covariance_audit_.enabled() ? P_ : Matrix15d::Zero();
-  if (covariance_stability_enable_) {
+  if (square_root_covariance_enable_) {
+    const Matrix15d noise_root = diagonalImuNoiseRoot(dt,acc_noise_,gyro_noise_,acc_bias_noise_,gyro_bias_noise_);
+    if (!propagateCovarianceRoot(F,noise_root,&S_))
+      throw std::runtime_error("SQRT_IMU_PROPAGATION_FAILED");
+    square_root_diagnostics_.record("IMU_PROPAGATE",state_stamp_+dt,S_,covarianceMilliseconds(propagation_started));
+  } else if (covariance_stability_enable_) {
     const Matrix15ld precise_F=F.cast<long double>();
     const Matrix15ld propagated = (precise_F * P_.cast<long double>() * precise_F.transpose() + Q.cast<long double>()).eval();
     P_ = (0.5L * (propagated + propagated.transpose())).cast<double>();

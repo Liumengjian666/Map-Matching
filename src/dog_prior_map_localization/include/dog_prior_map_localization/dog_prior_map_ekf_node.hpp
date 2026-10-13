@@ -32,6 +32,7 @@
 #include "dog_prior_map_localization/core/oosm_fixed_lag_scheduler.hpp"
 #include "dog_prior_map_localization/core/selective_relative_visual_update.hpp"
 #include "dog_prior_map_localization/core/covariance_audit.hpp"
+#include "dog_prior_map_localization/core/square_root_diagnostics.hpp"
 
 namespace dog_prior_map_localization
 {
@@ -46,6 +47,8 @@ public:
 private:
   mutable CovarianceAudit covariance_audit_;
   bool covariance_stability_enable_ = false;
+  bool square_root_covariance_enable_ = false;
+  mutable SquareRootDiagnostics square_root_diagnostics_;
   /// 优先从全局命名空间读取参数，再读取私有命名空间，均不存在时返回默认值。
   template <typename T>
   T getParam(const std::string &name, const T &default_value)
@@ -210,6 +213,7 @@ private:
   Eigen::Vector3d bg_;
   Eigen::Vector3d g_;
   Matrix15d P_;
+  Matrix15d S_ = Matrix15d::Identity();
   Eigen::Vector3d last_acc_measurement_ = Eigen::Vector3d::Zero();
   Eigen::Vector3d last_gyro_measurement_ = Eigen::Vector3d::Zero();
   Eigen::Vector3d last_interval_acc_input_ = Eigen::Vector3d::Zero();

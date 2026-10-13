@@ -255,6 +255,8 @@ void DogPriorMapEkfNode::processNdtObservationLocked(
     state_before_oosm.acc_world = last_acc_world_;
     state_before_oosm.gyro_unbiased = last_unbiased_gyro_;
     state_before_oosm.P = P_;
+    state_before_oosm.square_root_authoritative = square_root_covariance_enable_;
+    if (square_root_covariance_enable_) state_before_oosm.S = S_;
     history_before_oosm = state_history_;
     eraseStateHistoryAfter(rollback_stamp);
     restoreStateSnapshot(state_history_.at(rollback_index));
@@ -318,7 +320,14 @@ void DogPriorMapEkfNode::processNdtObservationLocked(
   last_ndt_observation_time_ = t_ndt;
 
   const Matrix15d covariance_before_damping = covariance_audit_.enabled() ? P_ : Matrix15d::Zero();
-  if (covariance_stability_enable_ || skf_relative_visual_update_enable_)
+  if (square_root_covariance_enable_)
+  {
+    const double before_trace = S_.squaredNorm();
+    if (!dampPoseCovarianceRoot(&S_,0.85,1e-4,1e-5))
+      throw std::runtime_error("SQRT_NDT_DAMPING_FAILED");
+    square_root_diagnostics_.record("NDT_DAMPING",oosm_active?rollback_stamp:state_stamp_,S_,0.0,before_trace);
+  }
+  else if (covariance_stability_enable_ || skf_relative_visual_update_enable_)
   {
     if (!applyPsdPoseCovarianceDamping(&P_, 0.85, 1e-4, 1e-5, covariance_stability_enable_))
       ROS_WARN_THROTTLE(1.0, "[DogPriorMap EKF] P25 retained covariance after PSD-preserving NDT damping rejected input");
@@ -333,6 +342,7 @@ void DogPriorMapEkfNode::processNdtObservationLocked(
   {
     covariance_audit_.check("NDT_DAMPING", rollback_stamp, covariance_before_damping, P_);
     saveStateSnapshot(rollback_stamp);
+    const auto replay_started = CovarianceClock::now();
     for (const auto &sample : replay_samples)
     {
       if (sample.stamp <= state_stamp_ + 1e-9) continue;
@@ -349,10 +359,13 @@ void DogPriorMapEkfNode::processNdtObservationLocked(
       saveStateSnapshot(state_stamp_);
     }
     covariance_audit_.check("NDT_REPLAY_END", state_stamp_, P_, P_);
+    if (square_root_covariance_enable_)
+      square_root_diagnostics_.record("NDT_REPLAY_END",state_stamp_,S_,covarianceMilliseconds(replay_started));
 
     if (!has_state_stamp_ || std::abs(state_stamp_ - t_now) > 1e-4 ||
         !p_.allFinite() || !v_.allFinite() || !R_.allFinite() ||
-        !ba_.allFinite() || !bg_.allFinite() || !P_.allFinite())
+        !ba_.allFinite() || !bg_.allFinite() || !P_.allFinite() ||
+        (square_root_covariance_enable_ && !validCovarianceRoot(S_)))
     {
       restoreOosmAttempt();
       writeOosmResult("REPLAY_INCOMPLETE");

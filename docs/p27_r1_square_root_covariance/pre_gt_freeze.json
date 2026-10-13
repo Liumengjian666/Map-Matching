@@ -1,0 +1,29 @@
+{
+  "task": "P27-R1-SQUARE-ROOT-COVARIANCE-INTEGRATION",
+  "GT_LOADED": false,
+  "archive_text_normalization": "LF line endings; trailing whitespace removed from log/txt copies only; raw cache unchanged",
+  "raw_output_bag_local_only": {
+    "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p27_r1_square_root_covariance/square_root_prefix/outputs.bag",
+    "sha256": "cb48222bcbe56b22061bcdd5115e66b53e26a58adcd4ce4a6a0aa7e868317248"
+  },
+  "files": {
+    "execution.json": "f1066a642a0c7b77a252082fc910cdda7a584f4b627b1673cac063efbf58b7f9",
+    "rosparams.yaml": "8e83e7483d07d9dcb5e99225d96bdbd7873728453dde544f1edfaa9e9aca8ac9",
+    "ndt_diagnostics.csv": "69436fe0a2ad7bf7abb6821ea09cd1c83d8af09a5ccfe62ccabd6c719339eb82",
+    "ekf_lineage.csv": "6747c295af916c1752c0567b93f0b15e1a45965f38c459be53cae4342f20b45e",
+    "oosm.csv": "5533308c672e21c425338925defcffbb23d74c89e23860683b868f44158d4cba",
+    "oosm_fixed_lag.csv": "dcf5cd170b72282876427be01b63a5fe6f6b434c22ead9d78410cefe7852d314",
+    "deskew.csv": "513e3e1178ef5790d6f8b828d708fe6f8cad1d30ce6eaa05645cf5a2924cf4c4",
+    "resources.csv": "24895b8316aee046d7751520846ed59b789040ea3709b8536bf5e89d93f37b98",
+    "skf_measurements.csv": "3fe121cdb1702ca5863452abd05e419b91c2d3118005997d7adeccb541b7e839",
+    "skf_update_diagnostics.csv": "b50d0313a3191e0ca6fa2297a4840eb079e2de895d1c9fac891b2a31bc8265be",
+    "mature_diagnostics.csv": "9d835dedf765fb8298452f760416824232346ab415008eea854ef88e087044bd",
+    "launch.log": "4663bf8e573a164f26338159a6ba43b0847d15412b5a92b793b51773ada17ffd",
+    "playback.log": "72119948b55651e5f9e0786371c10f2a85c7092ab4ef91b3319a883970d96955",
+    "sqrt_covariance_summary.csv": "61e5c3b5c1d22004d00e4bd5e415db3fdd5e6971c5d3119ad14261f9d1e2434d",
+    "sqrt_covariance_scale.csv": "8f076f48af4d8b7d7ca3f12a99fb8da75ff294a4abce6c668ab12b74edb2b1d2",
+    "sqrt_covariance_factors.csv": "d0f52b4a2a5b26a271477c85310d07ad39b2063bb3c69a475b6b48d0bece1b3a",
+    "sqrt_covariance_updates.csv": "992a0868fa2669320f69cd0f07d798337c81e258cf5ec2e8143237870a08ae2f",
+    "ekf_runtime.csv": "e7c959f62e105154474aee294c5e6941e311b900b9199cc9061d51f14007034a"
+  }
+}

@@ -9,6 +9,12 @@ namespace dog_prior_map_localization
 DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
 {
   covariance_stability_enable_ = getParam<bool>("filter/experimental_covariance_stability_enable", false);
+  square_root_covariance_enable_ = getParam<bool>("filter/experimental_square_root_covariance_enable", false);
+  if (square_root_covariance_enable_) {
+    if (!getParam<std::string>("output/experimental_covariance_audit_csv_path", "").empty())
+      throw std::runtime_error("SQRT_MODE_REQUIRES_PER_STEP_DENSE_AUDIT_OFF");
+    square_root_diagnostics_.open(getParam<std::string>("output/experimental_square_root_diagnostics_prefix", ""));
+  }
   covariance_audit_.useFactorCertificate(covariance_stability_enable_);
   covariance_audit_.captureAt(getParam<double>("output/experimental_covariance_reference_stamp",0.0));
   covariance_audit_.open(getParam<std::string>("output/experimental_covariance_audit_csv_path", ""));
@@ -332,6 +338,13 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   for (int i = 3; i < 6; ++i) P_(i, i) = init_vel_std * init_vel_std;
   for (int i = 6; i < 9; ++i) P_(i, i) = init_rot_std * init_rot_std;
   for (int i = 9; i < 15; ++i) P_(i, i) = init_bias_std * init_bias_std;
+  if (square_root_covariance_enable_) {
+    S_ = P_.diagonal().cwiseSqrt().asDiagonal();
+    square_root_diagnostics_.record("INITIALIZATION", 0.0, S_);
+    square_root_diagnostics_.checkpoint("INITIALIZATION", 0.0, S_);
+    // P_ is legacy-only storage. All root-mode paths use S_ explicitly.
+    P_.setZero();
+  }
 
   // Explicit, dataset-provided startup state for causal offline replay.  This
   // option is disabled by default, so existing robot/P2B initialization is
@@ -469,6 +482,7 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
 
 DogPriorMapEkfNode::~DogPriorMapEkfNode()
 {
+  if (square_root_covariance_enable_) square_root_diagnostics_.finish();
   if (!oosm_fixed_lag_enable_ || !fixed_lag_csv_.is_open()) return;
   const double wall_now = ros::WallTime::now().toSec();
   for (const auto &event : oosm_fixed_lag_scheduler_.pending())

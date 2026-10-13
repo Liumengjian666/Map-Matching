@@ -1,0 +1,66 @@
+Start testing: Oct 13 15:38 CST
+----------------------------------------------------------
+1/9 Testing: square_root_covariance_test
+1/9 Test: square_root_covariance_test
+Command: "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/square_root_covariance_test" "/tmp/p25-catkin-AY1eHd/src/research_src/dog_prior_map_localization/../../docs/p26_r1_skf_covariance_stability/post_fix_actual_IMU_PSD_loss.csv"
+Directory: /tmp/p25-catkin-AY1eHd/build/dog_prior_map_localization
+"square_root_covariance_test" start time: Oct 13 15:38 CST
+Output:
+----------------------------------------------------------
+SQUARE_ROOT_COVARIANCE_PASS real_P26_fixture normal_prediction zero_Q partial_Q SKF_Joseph DPD OOSM_factor_replay invalid_factor
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"square_root_covariance_test" end time: Oct 13 15:38 CST
+"square_root_covariance_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/9 Testing: covariance_stability_regression_test
+2/9 Test: covariance_stability_regression_test
+Command: "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/covariance_stability_regression_test" "/tmp/p25-catkin-AY1eHd/src/research_src/dog_prior_map_localization/../../docs/p26_r1_skf_covariance_stability/eigensolver_false_negative.csv" "/tmp/p25-catkin-AY1eHd/src/research_src/dog_prior_map_localization/../../docs/p26_r1_skf_covariance_stability/double_LLT_false_negative.csv" "/tmp/p25-catkin-AY1eHd/src/research_src/dog_prior_map_localization/../../docs/p26_r1_skf_covariance_stability/post_fix_actual_IMU_PSD_loss.csv"
+Directory: /tmp/p25-catkin-AY1eHd/build/dog_prior_map_localization
+"covariance_stability_regression_test" start time: Oct 13 15:38 CST
+Output:
+----------------------------------------------------------
+COVARIANCE_STABILITY_REGRESSION_PASS raw_eigen=-5.00655e-06 certified_lower_bound=2.67575e-06
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"covariance_stability_regression_test" end time: Oct 13 15:38 CST
+"covariance_stability_regression_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/9 Testing: selective_relative_visual_update_test
+3/9 Test: selective_relative_visual_update_test
+Command: "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/selective_relative_visual_update_test"
+Directory: /tmp/p25-catkin-AY1eHd/build/dog_prior_map_localization
+"selective_relative_visual_update_test" start time: Oct 13 15:38 CST
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"selective_relative_visual_update_test" end time: Oct 13 15:38 CST
+"selective_relative_visual_update_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/9 Testing: oosm_fixed_lag_scheduler_contract_test
+4/9 Test: oosm_fixed_lag_scheduler_contract_test
+Command: "/tmp/p25-catkin-AY1eHd/devel/.private/dog_prior_map_localization/lib/dog_prior_map_localization/oosm_fixed_lag_scheduler_contract_test"
+Directory: /tmp/p25-catkin-AY1eHd/build/dog_prior_map_localization
+"oosm_fixed_lag_scheduler_contract_test" start time: Oct 13 15:38 CST
+Output:
+----------------------------------------------------------
+fixed-lag scheduler contract PASS; deadline=1.51716e+09 release=1.51716e+09 replay_count=31
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"oosm_fixed_lag_scheduler_contract_test" end time: Oct 13 15:38 CST
+"oosm_fixed_lag_scheduler_contract_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 13 15:38 CST

@@ -46,6 +46,7 @@ add_executable(dog_prior_map_ekf_node_cpp
   src/core/imu_propagation.cpp
   src/core/imu_deskew.cpp
   src/core/selective_relative_visual_update.cpp
+  src/core/square_root_covariance.cpp
   src/imu_deskew_runtime.cpp
   src/imu_processor.cpp
   src/fusion/ndt_observation.cpp
@@ -92,10 +93,18 @@ add_executable(imu_interval_numeric_test
 add_executable(selective_relative_visual_update_test
   tests/selective_relative_visual_update_test.cpp
   src/core/selective_relative_visual_update.cpp
+  src/core/square_root_covariance.cpp
 )
 add_executable(covariance_stability_regression_test
   tests/covariance_stability_regression_test.cpp
   src/core/selective_relative_visual_update.cpp
+  src/core/square_root_covariance.cpp
+)
+add_executable(square_root_covariance_test
+  tests/square_root_covariance_test.cpp
+  src/core/square_root_covariance.cpp
+  src/core/selective_relative_visual_update.cpp
+  src/core/state_history.cpp
 )
 
 add_executable(frame_conversion_contract_test
@@ -183,6 +192,9 @@ target_link_libraries(solid_adapter_contract_test
 )
 
 if(CATKIN_ENABLE_TESTING)
+  add_test(NAME square_root_covariance_test
+    COMMAND $<TARGET_FILE:square_root_covariance_test>
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/p26_r1_skf_covariance_stability/post_fix_actual_IMU_PSD_loss.csv)
   add_test(NAME covariance_stability_regression_test
     COMMAND $<TARGET_FILE:covariance_stability_regression_test>
       ${CMAKE_CURRENT_SOURCE_DIR}/../../docs/p26_r1_skf_covariance_stability/eigensolver_false_negative.csv

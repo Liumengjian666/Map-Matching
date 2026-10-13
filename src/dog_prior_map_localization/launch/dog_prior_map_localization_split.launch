@@ -8,6 +8,7 @@
   <arg name="skf_measurement_csv_path" default="" />
   <arg name="skf_update_diagnostics_csv_path" default="" />
   <arg name="experimental_covariance_audit_csv_path" default="" />
+  <arg name="experimental_square_root_diagnostics_prefix" default="" />
   <arg name="rviz" default="false" />
   <arg name="camera_enable" default="false" />
   <arg name="publish_path" default="true" />
@@ -93,6 +94,7 @@
   <param name="output/mature_integration_diagnostics_csv_path" value="$(arg mature_diagnostics_csv_path)" />
   <param name="output/skf_update_diagnostics_csv_path" value="$(arg skf_update_diagnostics_csv_path)" />
   <param name="output/experimental_covariance_audit_csv_path" value="$(arg experimental_covariance_audit_csv_path)" />
+  <param name="output/experimental_square_root_diagnostics_prefix" value="$(arg experimental_square_root_diagnostics_prefix)" />
   <param name="output/skf_measurement_csv_path" value="$(arg skf_measurement_csv_path)" />
   <param name="output/diagnostic_determinism_enable" value="$(arg diagnostic_determinism_enable)" />
   <param name="output/ndt_determinism_csv_path" value="$(arg ndt_determinism_csv_path)" />

@@ -17,7 +17,8 @@ constexpr uint64_t kSkfFixedLagIdMask = uint64_t{1} << 63;
 bool allFinite(const FilterStateSnapshot& state)
 {
   return state.p.allFinite() && state.v.allFinite() && state.R.allFinite() &&
-      state.ba.allFinite() && state.bg.allFinite() && state.P.allFinite();
+      state.ba.allFinite() && state.bg.allFinite() &&
+      (state.square_root_authoritative ? validCovarianceRoot(state.S) : state.P.allFinite());
 }
 
 }  // namespace
@@ -171,6 +172,9 @@ bool DogPriorMapEkfNode::stateAtCausalTimeLocked(double target_stamp,
   F.block<3, 3>(3, 9) = -state.R * dt;
   F.block<3, 3>(6, 12) = -Eigen::Matrix3d::Identity() * dt;
   Matrix15d Q = Matrix15d::Zero();
+  Eigen::Matrix<double,15,17> noise_root = Eigen::Matrix<double,15,17>::Zero();
+  if (state.square_root_authoritative)
+    noise_root.leftCols<15>() = diagonalImuNoiseRoot(dt,acc_noise_,gyro_noise_,acc_bias_noise_,gyro_bias_noise_);
   Q.block<3, 3>(3, 3) = Eigen::Matrix3d::Identity() * acc_noise_ * acc_noise_ * dt * dt;
   Q.block<3, 3>(6, 6) = Eigen::Matrix3d::Identity() * gyro_noise_ * gyro_noise_ * dt * dt;
   Q.block<3, 3>(9, 9) = Eigen::Matrix3d::Identity() * acc_bias_noise_ * acc_bias_noise_ * dt;
@@ -184,6 +188,14 @@ bool DogPriorMapEkfNode::stateAtCausalTimeLocked(double target_stamp,
     // midpoint interval. This affects only the cloned endpoint covariance.
     const Eigen::Vector3d delta_acc = state.acc_measurement - state.interval_acc_input;
     const Eigen::Vector3d delta_gyro = state.gyro_measurement - state.interval_gyro_input;
+    if (state.square_root_authoritative) {
+      // Exactly factor the existing rank-one local-variation Q contributions.
+      if (use_acc_for_position_) {
+        noise_root.block<3,1>(0,15) = dt*dt*delta_acc;
+        noise_root.block<3,1>(3,15) = 2.0*dt*delta_acc;
+      }
+      noise_root.block<3,1>(6,16) = 2.0*dt*delta_gyro;
+    }
     constexpr double kPartialIntervalVarianceInflation = 4.0;
     if (use_acc_for_position_)
     {
@@ -198,12 +210,19 @@ bool DogPriorMapEkfNode::stateAtCausalTimeLocked(double target_stamp,
         delta_gyro * delta_gyro.transpose();
   }
   const Matrix15d covariance_before_partial = (covariance_audit_.enabled() || covariance_stability_enable_) ? state.P : Matrix15d::Zero();
-  const Matrix15d propagated_covariance = (F * state.P * F.transpose() + Q).eval();
-  state.P = 0.5 * (propagated_covariance + propagated_covariance.transpose());
-  if (covariance_stability_enable_) {
+  if (state.square_root_authoritative) {
+    if (!propagateCovarianceRoot(F,noise_root,&state.S)) {
+      reason = "SQRT_CAUSAL_PARTIAL_PROPAGATION_FAILED";
+      return false;
+    }
+    square_root_diagnostics_.record("CAUSAL_PARTIAL_PROPAGATE",target_stamp,state.S);
+  } else if (covariance_stability_enable_) {
     const Matrix15ld precise_F=F.cast<long double>();
     const Matrix15ld propagated = (precise_F * covariance_before_partial.cast<long double>() * precise_F.transpose() + Q.cast<long double>()).eval();
     state.P=(0.5L*(propagated+propagated.transpose())).cast<double>();
+  } else {
+    const Matrix15d propagated_covariance = (F * state.P * F.transpose() + Q).eval();
+    state.P = 0.5 * (propagated_covariance + propagated_covariance.transpose());
   }
   covariance_audit_.check("CAUSAL_PARTIAL_PROPAGATE", target_stamp, covariance_before_partial, state.P);
   state.stamp = target_stamp;
@@ -314,16 +333,22 @@ void DogPriorMapEkfNode::processSkfVisualLocked(
     snapshot.interval_gyro_input = last_interval_gyro_input_;
     snapshot.has_interval_input = has_last_interval_input_;
     snapshot.acc_world = last_acc_world_; snapshot.gyro_unbiased = last_unbiased_gyro_;
-    snapshot.P = P_; return snapshot;
+    snapshot.P = P_;
+    snapshot.square_root_authoritative = square_root_covariance_enable_;
+    if (square_root_covariance_enable_) snapshot.S = S_;
+    return snapshot;
   }();
   FilterStateSnapshot updated_state = current_state;
   covariance_audit_.check("SKF_CURRENT_ENDPOINT", t_current, current_state.P, current_state.P);
   covariance_audit_.check("SKF_REFERENCE_ENDPOINT", t_reference, reference_state.P, reference_state.P);
+  const auto update_started = CovarianceClock::now();
   const SelectiveRelativeVisualUpdateResult update = applySelectiveRelativeVisualUpdate(
       &updated_state, reference_state, relative, relative_covariance,
       msg->translation_degenerate, translation_axes,
       msg->rotation_degenerate, rotation_axes, covariance_stability_enable_);
   covariance_audit_.check("SKF_UPDATE", t_current, current_state.P, updated_state.P);
+  if (square_root_covariance_enable_ && update.accepted)
+    square_root_diagnostics_.record("SKF_UPDATE",t_current,updated_state.S,covarianceMilliseconds(update_started),current_state.S.squaredNorm());
   if (receipt) receipt->update = update;
   if (!update.accepted)
   {
@@ -340,6 +365,7 @@ void DogPriorMapEkfNode::processSkfVisualLocked(
   eraseStateHistoryAfter(t_current);
   restoreStateSnapshot(updated_state);
   saveStateSnapshot(t_current);
+  const auto replay_started = CovarianceClock::now();
   std::size_t replay_count = 0;
   bool replay_ok = true;
   for (const ImuSample& sample : plan.replay_samples)
@@ -359,7 +385,8 @@ void DogPriorMapEkfNode::processSkfVisualLocked(
     ++replay_count;
   }
   if (!replay_ok || !has_state_stamp_ || std::abs(state_stamp_ - t_now) > 1e-4 ||
-      !p_.allFinite() || !v_.allFinite() || !R_.allFinite() || !P_.allFinite())
+      !p_.allFinite() || !v_.allFinite() || !R_.allFinite() || !P_.allFinite() ||
+      (square_root_covariance_enable_ && !validCovarianceRoot(S_)))
   {
     restoreStateSnapshot(live_state);
     state_history_ = history_before;
@@ -375,6 +402,8 @@ void DogPriorMapEkfNode::processSkfVisualLocked(
 
   ++ekf_state_revision_;
   covariance_audit_.check("SKF_REPLAY_END", state_stamp_, P_, P_);
+  if (square_root_covariance_enable_)
+    square_root_diagnostics_.record("SKF_REPLAY_END",state_stamp_,S_,covarianceMilliseconds(replay_started));
   ++skf_visual_applied_count_;
   if (receipt)
   {

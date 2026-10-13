@@ -1,5 +1,6 @@
 #include "dog_prior_map_localization/core/selective_relative_visual_update.hpp"
 #include "dog_prior_map_localization/core/positive_covariance_factor.hpp"
+#include "dog_prior_map_localization/core/square_root_covariance.hpp"
 
 #include <Eigen/Cholesky>
 #include <Eigen/Eigenvalues>
@@ -98,6 +99,12 @@ SelectiveRelativeVisualUpdateResult applySelectiveRelativeVisualUpdate(
     result.status = "INVALID_CURRENT_STATE";
     return result;
   }
+  const bool square_root = current->square_root_authoritative;
+  if (square_root != reference.square_root_authoritative ||
+      (square_root && (!validCovarianceRoot(current->S) || !validCovarianceRoot(reference.S)))) {
+    result.status = "INVALID_SQUARE_ROOT_STATE_OR_STORAGE_MODE";
+    return result;
+  }
   if (!current->p.allFinite() || !current->v.allFinite() || !properRotation(current->R) ||
       !current->ba.allFinite() || !current->bg.allFinite() || !current->P.allFinite() ||
       !reference.p.allFinite() || !properRotation(reference.R) || !reference.P.allFinite() ||
@@ -108,6 +115,7 @@ SelectiveRelativeVisualUpdateResult applySelectiveRelativeVisualUpdate(
     result.status = "INVALID_OR_NONFINITE_INPUT";
     return result;
   }
+  if (!square_root) {
   const Matrix15d input_covariance_symmetric = 0.5 *
       (current->P + current->P.transpose());
   Eigen::SelfAdjointEigenSolver<Matrix15d> input_covariance_eigen(
@@ -118,8 +126,9 @@ SelectiveRelativeVisualUpdateResult applySelectiveRelativeVisualUpdate(
         input_covariance_eigen.eigenvalues().minCoeff();
   result.input_state_covariance_asymmetry =
       (current->P - current->P.transpose()).cwiseAbs().maxCoeff();
+  }
   PositiveCovarianceFactor current_factor15;
-  if (covariance_stability_enable) {
+  if (covariance_stability_enable && !square_root) {
     current_factor15 = factorPositiveCovariance(current->P);
     if (!current_factor15.valid || !factorPositiveCovariance(reference.P).valid) {
       result.status = "NON_PSD_INPUT_STATE_COVARIANCE";
@@ -190,7 +199,11 @@ SelectiveRelativeVisualUpdateResult applySelectiveRelativeVisualUpdate(
 
   Eigen::MatrixXd selector(static_cast<Eigen::Index>(rows.size()), 15);
   for (std::size_t i = 0; i < rows.size(); ++i) selector.row(static_cast<Eigen::Index>(i)) = rows[i];
-  const Eigen::MatrixXd current_covariance = selector * current->P * selector.transpose();
+  Eigen::MatrixXd selected_root, current_covariance;
+  if (square_root) {
+    selected_root = selector * current->S;
+    current_covariance = selected_root * selected_root.transpose();
+  } else current_covariance = selector * current->P * selector.transpose();
   if (!covariancePositive(current_covariance))
   {
     result.status = "INVALID_CURRENT_SUBSPACE_COVARIANCE";
@@ -198,8 +211,11 @@ SelectiveRelativeVisualUpdateResult applySelectiveRelativeVisualUpdate(
   }
 
   const Eigen::Matrix<double, 6, 15> reference_pose_jacobian = poseJacobian(reference.R);
-  const Matrix6d reference_pose_covariance = reference_pose_jacobian * reference.P *
-      reference_pose_jacobian.transpose();
+  Matrix6d reference_pose_covariance;
+  if (square_root) {
+    const Eigen::Matrix<double,6,15> reference_pose_root = reference_pose_jacobian * reference.S;
+    reference_pose_covariance = reference_pose_root * reference_pose_root.transpose();
+  } else reference_pose_covariance = reference_pose_jacobian * reference.P * reference_pose_jacobian.transpose();
   const Matrix6d map_adjoint = adjoint(reference.R, reference.p);
   const Matrix6d relative_map_covariance = map_adjoint * relative_covariance * map_adjoint.transpose();
   // Cauchy-Schwarz upper bound for unknown correlation between historical EKF
@@ -271,9 +287,11 @@ SelectiveRelativeVisualUpdateResult applySelectiveRelativeVisualUpdate(
       ((1.0 - ci_weight) * pseudo_factor.solve(innovation));
 
   Eigen::LDLT<Eigen::MatrixXd> selector_factor(current_covariance);
-  const Eigen::Matrix<double, 15, Eigen::Dynamic> conditional_gain =
-      current->P * selector.transpose() * selector_factor.solve(
-          Eigen::MatrixXd::Identity(rows.size(), rows.size()));
+  Eigen::Matrix<double,15,Eigen::Dynamic> cross_covariance;
+  if (square_root) cross_covariance = current->S * selected_root.transpose();
+  else cross_covariance = current->P * selector.transpose();
+  const Eigen::Matrix<double, 15, Eigen::Dynamic> conditional_gain = cross_covariance *
+      selector_factor.solve(Eigen::MatrixXd::Identity(rows.size(), rows.size()));
   const Vector15d state_delta = conditional_gain * ci_delta;
   if (!ci_covariance.allFinite() || !state_delta.allFinite())
   {
@@ -283,7 +301,21 @@ SelectiveRelativeVisualUpdateResult applySelectiveRelativeVisualUpdate(
 
   Matrix15d conditional_covariance;
   Matrix15d updated_covariance;
-  if (covariance_stability_enable) {
+  Matrix15d updated_root;
+  if (square_root) {
+    Eigen::LLT<Eigen::MatrixXd> ci_factor(ci_covariance);
+    if (ci_factor.info()!=Eigen::Success) {
+      result.status = "CI_COVARIANCE_FACTOR_FAILED";
+      return result;
+    }
+    Eigen::MatrixXd columns(15,15+rows.size());
+    columns.leftCols<15>() = (Matrix15d::Identity()-conditional_gain*selector)*current->S;
+    columns.rightCols(rows.size()) = conditional_gain*Eigen::MatrixXd(ci_factor.matrixL());
+    if (!covarianceRootFromColumns(columns,&updated_root)) {
+      result.status = "INVALID_SQUARE_ROOT_CI_UPDATE";
+      return result;
+    }
+  } else if (covariance_stability_enable) {
     // Joseph/conditional form: replace subtraction of nearly equal large
     // matrices by a sum of positive Gram products. Same conditional update.
     const Matrix15d residual_map = Matrix15d::Identity() - conditional_gain * selector;
@@ -304,6 +336,7 @@ SelectiveRelativeVisualUpdateResult applySelectiveRelativeVisualUpdate(
     conditional_covariance = current->P - conditional_gain *
         current_covariance * conditional_gain.transpose();
   }
+  if (!square_root) {
   updated_covariance = (0.5 * (updated_covariance + updated_covariance.transpose())).eval();
   Eigen::SelfAdjointEigenSolver<Matrix15d> conditional_eigen(
       0.5 * (conditional_covariance + conditional_covariance.transpose()),
@@ -322,13 +355,17 @@ SelectiveRelativeVisualUpdateResult applySelectiveRelativeVisualUpdate(
     result.status = "NON_PSD_CI_COVARIANCE";
     return result;
   }
+  }
 
   current->p += state_delta.segment<3>(0);
   current->v += state_delta.segment<3>(3);
   current->R = current->R * expSo3(state_delta.segment<3>(6));
   current->ba += state_delta.segment<3>(9);
   current->bg += state_delta.segment<3>(12);
-  current->P = updated_covariance;
+  if (square_root) {
+    current->S = updated_root;
+    current->P.setZero();
+  } else current->P = updated_covariance;
   if (!current->p.allFinite() || !current->v.allFinite() || !properRotation(current->R) ||
       !current->ba.allFinite() || !current->bg.allFinite() || !current->P.allFinite())
   {

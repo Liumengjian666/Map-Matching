@@ -44,6 +44,15 @@ struct FilterStateSnapshot
   Eigen::Vector3d acc_world = Eigen::Vector3d::Zero();
   Eigen::Vector3d gyro_unbiased = Eigen::Vector3d::Zero();
   Matrix15d P = Matrix15d::Identity();
+  // Tagged covariance storage: in square-root mode P is cleared, not a stale
+  // cache. Only covarianceView() may materialize the derived dense view.
+  bool square_root_authoritative = false;
+  Matrix15d S = Matrix15d::Identity();
+  Matrix15d covarianceView() const
+  {
+    if (square_root_authoritative) return S * S.transpose();
+    return P;
+  }
 };
 
 }  // namespace dog_prior_map_localization

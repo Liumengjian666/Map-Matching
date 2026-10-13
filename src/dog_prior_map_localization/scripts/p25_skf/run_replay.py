@@ -62,6 +62,8 @@ def main():
     parser.add_argument("--port", type=int, default=11425)
     parser.add_argument("--p26-prefix", action="store_true",
                         help="P26 covariance diagnostic/verification: fixed 19 s prefix, never GT")
+    parser.add_argument("--p27-prefix", action="store_true",
+                        help="P27 square-root verification: fixed 19 s prefix, sparse factor metrics, never GT")
     args = parser.parse_args()
 
     repo = args.repo.resolve()
@@ -70,9 +72,11 @@ def main():
     visual = args.visual.resolve()
     runtime_root = args.runtime_root.resolve()
     output = args.output.resolve()
-    if args.p26_prefix and (args.duration is None or abs(args.duration - 19.0) > 1e-9):
+    if args.p26_prefix and args.p27_prefix:
+        raise ValueError("PREFIX_PROTOCOL_FLAGS_ARE_MUTUALLY_EXCLUSIVE")
+    if (args.p26_prefix or args.p27_prefix) and (args.duration is None or abs(args.duration - 19.0) > 1e-9):
         raise ValueError("P26_PREFIX_DURATION_MUST_BE_19_SECONDS")
-    if not args.p26_prefix and args.duration is not None and abs(args.duration - 18.5) > 1e-9:
+    if not (args.p26_prefix or args.p27_prefix) and args.duration is not None and abs(args.duration - 18.5) > 1e-9:
         raise ValueError("P25_SMOKE_DURATION_MUST_BE_18_5_SECONDS")
     if not output.is_dir() or any(output.iterdir()):
         raise ValueError("P25_OUTPUT_MUST_BE_A_PRECREATED_EMPTY_UNIQUE_DIRECTORY")
@@ -153,6 +157,8 @@ def main():
             f"runtime_csv_path:={output / 'ekf_runtime.csv'}"]
         if args.p26_prefix:
             command.append(f"experimental_covariance_audit_csv_path:={output / 'covariance_audit.csv'}")
+        if args.p27_prefix:
+            command.append(f"experimental_square_root_diagnostics_prefix:={output / 'sqrt_covariance'}")
         launch = spawn(command, "launch")
 
         ndt_subs = set()
@@ -216,6 +222,10 @@ def main():
             raise RuntimeError("P25_SCAN_REFERENCE_CONTRACT_FAILED")
         if abs(float(rosparam("/ndt_observation/velocity_blend")) - 0.6) > 1e-12:
             raise RuntimeError("P25_VELOCITY_BLEND_CONTRACT_FAILED")
+        if args.p27_prefix and rosparam("/filter/experimental_square_root_covariance_enable") is not True:
+            raise RuntimeError("P27_SQUARE_ROOT_MODE_NOT_ENABLED")
+        if args.p27_prefix and rosparam("/output/experimental_covariance_audit_csv_path"):
+            raise RuntimeError("P27_PER_STEP_DENSE_AUDIT_NOT_DISABLED")
         if ("/dog_livo/skf_visual_measurement" in ekf_subs) != skf_on:
             raise RuntimeError("P25_EKF_SKF_SUBSCRIPTION_MISMATCH")
         if "/dog_livo/skf_visual_measurement" in ndt_subs:
@@ -316,7 +326,7 @@ def main():
                 if bad_updates:
                     raise RuntimeError("P25_SKF_NUMERICAL_OR_REPLAY_ERROR:" +
                                         ",".join(sorted(set(bad_updates))))
-        if args.p26_prefix:
+        if args.p26_prefix or args.p27_prefix:
             with (output / "skf_update_diagnostics.csv").open() as stream:
                 updates = list(csv.DictReader(stream))
             if not any(row.get("status") == "APPLIED" for row in updates):
@@ -336,7 +346,8 @@ def main():
         for stream in streams:
             stream.close()
         receipt = {
-            "protocol": "P26_R1_COVARIANCE_PREFIX" if args.p26_prefix else "P25_R1_SKF_SELECTIVE_VISUAL_UPDATE",
+            "protocol": "P27_R1_SQUARE_ROOT_PREFIX" if args.p27_prefix else
+                        ("P26_R1_COVARIANCE_PREFIX" if args.p26_prefix else "P25_R1_SKF_SELECTIVE_VISUAL_UPDATE"),
             "GT_LOADED": False,
             "completed": completed,
             "error": run_error,
