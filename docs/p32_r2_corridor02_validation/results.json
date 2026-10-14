@@ -1,0 +1,115 @@
+{
+  "TASK": "P32-R2-CORRIDOR02-INIT-AND-HELDOUT-VALIDATION",
+  "START_SHA": "9c0399b7c7370a191e1ede127c611b216cf9639d",
+  "CODE_SHA": "48569e92d075c5f14598761ad2e349cce88ee167",
+  "END_SHA": "Containing archive commit; supplied in Git and final chat",
+  "REMOTE_HEAD_AT_START": "9c0399b7c7370a191e1ede127c611b216cf9639d",
+  "PUSH_EXECUTED": false,
+  "scene": "SuperLoc Corridor02",
+  "initialization": "FAIL_SOLE_ACTIVE_NUMERIC_SEED_GEOMETRY",
+  "GT_REFERENCE": "UNRESOLVED",
+  "initialization_screen": "FAIL",
+  "cross_scene_runtime": "NOT_RUN",
+  "GT_POSE_FILE_LOADED": false,
+  "GT_EVALUATION": "NOT_RUN",
+  "algorithm_math_modified": false,
+  "algorithm_parameters_modified": false,
+  "runtime_yaml": "NOT_CREATED_INIT_GATE_FAILED",
+  "normalized_map_created": false,
+  "sensor_probe_counts": {
+    "scans": 50,
+    "IMU": 968,
+    "Camera": 15
+  },
+  "camera_start_delay_sec": 4.423431105,
+  "geometry": {
+    "GT_LOADED": false,
+    "full_align_calls": 1,
+    "source_points": 1400,
+    "raw_map_points": 5223422,
+    "target_points": 3671146,
+    "converged": true,
+    "iterations": 0,
+    "fitness": 87002.22739955357,
+    "align_ms": 673.238949,
+    "seed_correction_m": 5.211876238214558e-07,
+    "seed_correction_deg": 6.971353949644272e-07,
+    "initial_nn_median_m": 293.6064147949219,
+    "initial_nn_p90_m": 305.3795166015625,
+    "initial_inlier_0_5m": 0,
+    "final_nn_median_m": 293.6064147949219,
+    "final_nn_p90_m": 305.3795166015625,
+    "final_inlier_0_5m": 0,
+    "result_T": [
+      [
+        0.8238004446029663,
+        -0.5668532252311707,
+        -0.005503414664417505,
+        39.92952346801758
+      ],
+      [
+        0.5658788084983826,
+        0.8228836059570312,
+        -0.05141758173704147,
+        -176.21714782714844
+      ],
+      [
+        0.03367489203810692,
+        0.039243560284376144,
+        0.9986620545387268,
+        -5.225427150726318
+      ],
+      [
+        0,
+        0,
+        0,
+        1
+      ]
+    ],
+    "peak_rss_kib": 736904,
+    "engineering_gate": "FAIL"
+  },
+  "complete_native_aligns": 1,
+  "alternative_seed_attempts": 0,
+  "ROS_replays": 0,
+  "new_visual_extractions": 0,
+  "engineering_transfer": "NOT_ESTABLISHED",
+  "visual_benefit": "NOT_EVALUATED",
+  "generalization": "NOT_EVALUATED",
+  "missing_frame_information": "Non-GT T_PCD_L3 at scan3 header1645999726479818106ns, or supported released-seed coordinate chain into PCD and this LiDAR scan",
+  "point_timing_semantics": "ENGINEERING_SECONDS_START_INTERPRETATION_SUPPORTED_BY_RANGE_CADENCE_NOT_DRIVER_OR_SYNC_CERTIFICATION",
+  "selected_scan_max_offset_s": 0.10083921253681183,
+  "prefix_max_offset_s": 0.10083945095539093,
+  "NEXT": "Obtain this single traceable scan3 startup/frame conversion; a scan1 pose also needs legal temporal transform toscan3, no inverse/grid/GT startup or new algorithm",
+  "FINAL_RESULT": "CORRIDOR02_INITIALIZATION_NOT_READY",
+  "external_review": {
+    "invocations": 1,
+    "exit_code": 0,
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "xhigh",
+    "receipt": "external_review/execution.json",
+    "scope": "Supplied evidence only, not new data validation"
+  },
+  "F": {
+    "short": "NOT_RUN_INIT_GATE_FAILED",
+    "full": "NOT_RUN_INIT_GATE_FAILED",
+    "NDT": null,
+    "OOSM": null,
+    "MSCKF_updates": null,
+    "translation": null,
+    "rotation": null,
+    "RPE": null,
+    "resources": null
+  },
+  "G": {
+    "short": "NOT_RUN_INIT_GATE_FAILED",
+    "full": "NOT_RUN_INIT_GATE_FAILED",
+    "NDT": null,
+    "OOSM": null,
+    "MSCKF_updates": null,
+    "translation": null,
+    "rotation": null,
+    "RPE": null,
+    "resources": null
+  }
+}

@@ -1,0 +1,3 @@
+group,status,actual_updates,rejected,reason
+F,NOT_RUN,,,INIT_GATE_FAILED
+G,NOT_RUN,,,INIT_GATE_FAILED

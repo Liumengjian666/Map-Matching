@@ -1,0 +1,33 @@
+{
+  "GT_LOADED": false,
+  "scene": "Corridor02",
+  "raw_bag": {
+    "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/raw/corridor02.bag",
+    "bytes": 24494797838,
+    "full_SHA256_rechecked": false,
+    "metadata_counts_source": "P32-R1 actual bag metadata; P32-R2 bounded sensor reads"
+  },
+  "calibration_and_probe_files": {
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/initial_pose/corridor02.yaml": "fc319ad99737a717456e11eb70383d4848eadf7e46587fee0643d6732cf1c3a1",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/calibration/corridor02_extrinsics.yaml": "892bf743dc0f51eabfe9d8ae71dc98663753f174910ae9cc40ee244c77a9e217",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/calibration/corridor02_intrinsics.yaml": "8d47e98aed48cf941c8ee642136514b50ea7e6dd0bd26de9266081bd8693fe12",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r2_corridor02_validation/probe/first_source.xyz": "b1e7f1f1d07b1ef8a63878f3688a00455683db59731239973b14e8d5b6fdf1c7",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r2_corridor02_validation/probe/seed.f64": "98d1437291f73078b3b3c71db9c75f7d288e4a075cb3175dd5068ca9409e9fb2"
+  },
+  "geometry_input_freeze": {
+    "GT_LOADED": false,
+    "full_align_budget": 1,
+    "selected_scan_ns": "1645999726479818106",
+    "seed_status": "OFFICIAL_ACTIVE_NUMERIC_ENGINEERING_SEED_NOT_CERTIFIED_MAP_LIDAR",
+    "files_sha256": {
+      "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/map/corridor02.pcd": "6c39e243556eddbef7a8b4bd2de25cf7c962c4ff0f52c94cfc1d994f178ae228",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r2_corridor02_validation/build/first_geometry": "33149fc350f2605cef931789402e5b6597792a65488431af2e4136ef08e6997c",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/docs/p32_r2_corridor02_validation/PROTOCOL.md": "b496fca66e4b9fc4b7264bed9b8225bd4919c7de009ce0a045cd213b97a5f04a",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r2_corridor02_validation/probe/sensor_probe.json": "02d2eac3b71e0fe217dc6a209e2881f7af3512db739f451b69f86be6b28d8b28",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r2_corridor02_validation/probe/seed.f64": "98d1437291f73078b3b3c71db9c75f7d288e4a075cb3175dd5068ca9409e9fb2",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r2_corridor02_validation/probe/first_source.xyz": "b1e7f1f1d07b1ef8a63878f3688a00455683db59731239973b14e8d5b6fdf1c7"
+    }
+  },
+  "actual_sensor_probe_source_sha256": "8183c007fb8d2abe07be1b7c5f226bbcc5b83456efe49bcec917eb6be9186002",
+  "current_guarded_adapter_sha256": "9b40443aa76b6fb72f2c5043ea5d1abb5a84c6624f46ce2314a7ce624d646481"
+}

@@ -1,0 +1,14 @@
+{
+  "scope": "Sole geometry check outputs only, not F/G localization",
+  "GT_LOADED": false,
+  "files_sha256": {
+    "docs/p32_r2_corridor02_validation/PROTOCOL.md": "b496fca66e4b9fc4b7264bed9b8225bd4919c7de009ce0a045cd213b97a5f04a",
+    "docs/p32_r2_corridor02_validation/runs/init_probe/geometry.json": "bc291c04b761cad720115791da2b7fb2f3a7126118a0f220477b35c608013158",
+    "docs/p32_r2_corridor02_validation/runs/init_probe/geometry_execution.json": "283ee9aab16cd347e9ebef13a17e9a814a3db466f97e247c39a5cdd18fc8cfd9",
+    "docs/p32_r2_corridor02_validation/runs/init_probe/geometry_input_freeze.json": "b7d60823c636f71775aff72a38c434a71109de7714a875e105320cf51d5c2880",
+    "docs/p32_r2_corridor02_validation/runs/init_probe/geometry_stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/p32_r2_corridor02_validation/runs/init_probe/geometry_stdout.log": "88c9cc000d00769a21838d883ab91e2af423d1d3f1c082610c0960e1157455e5",
+    "docs/p32_r2_corridor02_validation/runs/init_probe/prepare_probe_executed.py": "8183c007fb8d2abe07be1b7c5f226bbcc5b83456efe49bcec917eb6be9186002",
+    "docs/p32_r2_corridor02_validation/runs/init_probe/sensor_probe.json": "02d2eac3b71e0fe217dc6a209e2881f7af3512db739f451b69f86be6b28d8b28"
+  }
+}

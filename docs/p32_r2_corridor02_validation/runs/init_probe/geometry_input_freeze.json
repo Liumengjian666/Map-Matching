@@ -1,0 +1,14 @@
+{
+  "GT_LOADED": false,
+  "full_align_budget": 1,
+  "selected_scan_ns": "1645999726479818106",
+  "seed_status": "OFFICIAL_ACTIVE_NUMERIC_ENGINEERING_SEED_NOT_CERTIFIED_MAP_LIDAR",
+  "files_sha256": {
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/map/corridor02.pcd": "6c39e243556eddbef7a8b4bd2de25cf7c962c4ff0f52c94cfc1d994f178ae228",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r2_corridor02_validation/build/first_geometry": "33149fc350f2605cef931789402e5b6597792a65488431af2e4136ef08e6997c",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/docs/p32_r2_corridor02_validation/PROTOCOL.md": "b496fca66e4b9fc4b7264bed9b8225bd4919c7de009ce0a045cd213b97a5f04a",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r2_corridor02_validation/probe/sensor_probe.json": "02d2eac3b71e0fe217dc6a209e2881f7af3512db739f451b69f86be6b28d8b28",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r2_corridor02_validation/probe/seed.f64": "98d1437291f73078b3b3c71db9c75f7d288e4a075cb3175dd5068ca9409e9fb2",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r2_corridor02_validation/probe/first_source.xyz": "b1e7f1f1d07b1ef8a63878f3688a00455683db59731239973b14e8d5b6fdf1c7"
+  }
+}

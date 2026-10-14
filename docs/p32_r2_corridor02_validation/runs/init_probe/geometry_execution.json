@@ -1,0 +1,15 @@
+{
+  "command": [
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r2_corridor02_validation/build/first_geometry",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/map/corridor02.pcd",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r2_corridor02_validation/probe",
+    "28089"
+  ],
+  "returncode": 0,
+  "wall_sec": 3.0532931399939116,
+  "GT_LOADED": false,
+  "binary_sha256": "33149fc350f2605cef931789402e5b6597792a65488431af2e4136ef08e6997c",
+  "protocol_sha256": "b496fca66e4b9fc4b7264bed9b8225bd4919c7de009ce0a045cd213b97a5f04a",
+  "requested_points": 28089,
+  "pre_align_input_identity_checked": true
+}

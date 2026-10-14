@@ -1,0 +1,23 @@
+{
+  "task": "P32-R2-CORRIDOR02-INIT-AND-HELDOUT-VALIDATION",
+  "authorization": "User requested external CLI, was shown exact command and input SHA256, then confirmed 是的",
+  "invocations": 1,
+  "exit_code": 0,
+  "cli_version": "0.159.2",
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "xhigh",
+  "sandbox": "read-only",
+  "approval": "never",
+  "credential_content_read_or_disclosed": false,
+  "command": "/usr/bin/codex --no-daemon -a never exec --sandbox read-only --ignore-user-config --ignore-rules --ephemeral --skip-git-repo-check -C /tmp/p32-r2-cli-review.WIrWr8 -m gpt-6.1-sol -c 'model_reasoning_effort=\"xhigh\"' --color never -o /tmp/p32-r2-cli-review.WIrWr8/review_result.md - < /tmp/p32-r2-cli-review.WIrWr8/review_input.md > /tmp/p32-r2-cli-review.WIrWr8/cli.log 2>&1",
+  "input_file": "review_input.md",
+  "input_SHA256": "132c8aa588888f6d1c4529d9b3209c2dd26bc8fb3e5f111a26b95e8fce8cead8",
+  "result_file": "review_result.md",
+  "result_SHA256": "3eb657d3a7c69997ac83d73b9c075b60adbfafdcb965a693325a26f29b32c87e",
+  "log_file": "cli.log",
+  "log_SHA256": "e23016b24fccd22286819bdc2682f8db3abcbe50784a652dd3dca2641e34cc19",
+  "scope": "Only supplied bounded contract/evidence text. No raw point cloud, image, GT poses or credential content sent. No new asset validation, ROS replay or candidate trial.",
+  "findings": "Stop supported; scope failure to sole numeric interpretation, narrow C01 reuse, specify scan3 T_PCD_L3, distinguish coverage from timing semantics and screening from unrun localization. Conditional238ns discrepancy resolved as prefix-vs-scan maximum attribution.",
+  "findings_reconciled": true,
+  "git_push_authorized_by_this_confirmation": false
+}

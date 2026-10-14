@@ -1,0 +1,4 @@
+role,scan_ns,source_points,target_points,aligns,converged,iterations,fitness,initial_nn_median_m,raw_nn_median_m,raw_nn_p90_m,inlier_0_5m,status
+OFFLINE_INIT_GEOMETRY,1645999726479818106,1400,3671146,1,True,0,87002.22739955357,293.6064147949219,293.6064147949219,305.3795166015625,0,FAIL
+F_RUNTIME,,,,,,,,,,,,NOT_RUN
+G_RUNTIME,,,,,,,,,,,,NOT_RUN

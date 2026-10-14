@@ -1,0 +1,705 @@
+{
+  "GT_LOADED": false,
+  "selected_index": 3,
+  "selected_scan_ns": "1645999726479818106",
+  "prefix_sec": 5,
+  "scan_count": 50,
+  "imu_count": 968,
+  "image_count": 15,
+  "scans": [
+    {
+      "index": 1,
+      "scan_ns": "1645999726278098106",
+      "end_ns": "1645999726378937319",
+      "record_ns": "1724621084660315835",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28131,
+      "time_min_s": 2.3039999632601393e-06,
+      "time_max_s": 0.10083921253681183,
+      "imu_bracket_covered": false
+    },
+    {
+      "index": 2,
+      "scan_ns": "1645999726378957987",
+      "end_ns": "1645999726479797438",
+      "record_ns": "1724621084767901057",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28053,
+      "time_min_s": 2.3039999632601393e-06,
+      "time_max_s": 0.10083945095539093,
+      "imu_bracket_covered": false
+    },
+    {
+      "index": 3,
+      "scan_ns": "1645999726479818106",
+      "end_ns": "1645999726580657319",
+      "record_ns": "1724621084860818344",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28089,
+      "time_min_s": 2.3039999632601393e-06,
+      "time_max_s": 0.10083921253681183,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 4,
+      "scan_ns": "1645999726580677986",
+      "end_ns": "1645999726681517437",
+      "record_ns": "1724621084969107425",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28097,
+      "time_min_s": 2.3039999632601393e-06,
+      "time_max_s": 0.10083945095539093,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 5,
+      "scan_ns": "1645999726681538105",
+      "end_ns": "1645999726782376364",
+      "record_ns": "1724621085071042653",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28073,
+      "time_min_s": 2.3039999632601393e-06,
+      "time_max_s": 0.10083825886249542,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 6,
+      "scan_ns": "1645999726782397985",
+      "end_ns": "1645999726883236482",
+      "record_ns": "1724621085170842200",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28093,
+      "time_min_s": 2.3039999632601393e-06,
+      "time_max_s": 0.10083849728107452,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 7,
+      "scan_ns": "1645999726883256912",
+      "end_ns": "1645999726984096363",
+      "record_ns": "1724621085271830202",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28103,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083945095539093,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 8,
+      "scan_ns": "1645999726984117031",
+      "end_ns": "1645999727084904268",
+      "record_ns": "1724621085375593450",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28152,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10078723728656769,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 9,
+      "scan_ns": "1645999727084924936",
+      "end_ns": "1645999727185764387",
+      "record_ns": "1724621085472587636",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28128,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083945095539093,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 10,
+      "scan_ns": "1645999727185785055",
+      "end_ns": "1645999727286624268",
+      "record_ns": "1724621085567966122",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28150,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083921253681183,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 11,
+      "scan_ns": "1645999727286644936",
+      "end_ns": "1645999727387484387",
+      "record_ns": "1724621085675071253",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28142,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083945095539093,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 12,
+      "scan_ns": "1645999727387505054",
+      "end_ns": "1645999727488344267",
+      "record_ns": "1724621085775971817",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28137,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083921253681183,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 13,
+      "scan_ns": "1645999727488364935",
+      "end_ns": "1645999727589204386",
+      "record_ns": "1724621085876522174",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28126,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083945095539093,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 14,
+      "scan_ns": "1645999727589225054",
+      "end_ns": "1645999727690063313",
+      "record_ns": "1724621085974905248",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28112,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083825886249542,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 15,
+      "scan_ns": "1645999727690084934",
+      "end_ns": "1645999727790923431",
+      "record_ns": "1724621086079535091",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28111,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083849728107452,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 16,
+      "scan_ns": "1645999727790944099",
+      "end_ns": "1645999727891783312",
+      "record_ns": "1724621086182720398",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28100,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083921253681183,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 17,
+      "scan_ns": "1645999727891803980",
+      "end_ns": "1645999727992643431",
+      "record_ns": "1724621086280058366",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28142,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083945095539093,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 18,
+      "scan_ns": "1645999727992664099",
+      "end_ns": "1645999728093458489",
+      "record_ns": "1724621086372855048",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28101,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10079438984394073,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 19,
+      "scan_ns": "1645999728093478918",
+      "end_ns": "1645999728194318369",
+      "record_ns": "1724621086481207476",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28143,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083945095539093,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 20,
+      "scan_ns": "1645999728194339037",
+      "end_ns": "1645999728295178488",
+      "record_ns": "1724621086573294909",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28134,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083945095539093,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 21,
+      "scan_ns": "1645999728295198917",
+      "end_ns": "1645999728396038368",
+      "record_ns": "1724621086683992892",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28109,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083945095539093,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 22,
+      "scan_ns": "1645999728396059036",
+      "end_ns": "1645999728496898487",
+      "record_ns": "1724621086783881161",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28142,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083945095539093,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 23,
+      "scan_ns": "1645999728496918917",
+      "end_ns": "1645999728597757414",
+      "record_ns": "1724621086892238232",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28145,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083849728107452,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 24,
+      "scan_ns": "1645999728597779036",
+      "end_ns": "1645999728698617295",
+      "record_ns": "1724621086991201803",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28132,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083825886249542,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 25,
+      "scan_ns": "1645999728698637962",
+      "end_ns": "1645999728799477413",
+      "record_ns": "1724621087078948401",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28128,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083945095539093,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 26,
+      "scan_ns": "1645999728799498081",
+      "end_ns": "1645999728900337294",
+      "record_ns": "1724621087182710352",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28138,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083921253681183,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 27,
+      "scan_ns": "1645999728900357962",
+      "end_ns": "1645999729001197413",
+      "record_ns": "1724621087280875294",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28142,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083945095539093,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 28,
+      "scan_ns": "1645999729001172066",
+      "end_ns": "1645999729102011279",
+      "record_ns": "1724621087383073513",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28133,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083921253681183,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 29,
+      "scan_ns": "1645999729102031946",
+      "end_ns": "1645999729202871397",
+      "record_ns": "1724621087483995479",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28128,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083945095539093,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 30,
+      "scan_ns": "1645999729202892065",
+      "end_ns": "1645999729303731278",
+      "record_ns": "1724621087598196307",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28122,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083921253681183,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 31,
+      "scan_ns": "1645999729303751945",
+      "end_ns": "1645999729404591396",
+      "record_ns": "1724621087685822849",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28085,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083945095539093,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 32,
+      "scan_ns": "1645999729404612064",
+      "end_ns": "1645999729505450323",
+      "record_ns": "1724621087796587202",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28106,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083825886249542,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 33,
+      "scan_ns": "1645999729505471945",
+      "end_ns": "1645999729606310442",
+      "record_ns": "1724621087895386325",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28094,
+      "time_min_s": 2.3039999632601393e-06,
+      "time_max_s": 0.10083849728107452,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 34,
+      "scan_ns": "1645999729606331110",
+      "end_ns": "1645999729707170323",
+      "record_ns": "1724621087995452113",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28115,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083921253681183,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 35,
+      "scan_ns": "1645999729707190990",
+      "end_ns": "1645999729808030441",
+      "record_ns": "1724621088095619802",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28103,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083945095539093,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 36,
+      "scan_ns": "1645999729808051109",
+      "end_ns": "1645999729908890322",
+      "record_ns": "1724621088196040856",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28109,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083921253681183,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 37,
+      "scan_ns": "1645999729908910990",
+      "end_ns": "1645999730009705380",
+      "record_ns": "1724621088296989293",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28124,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10079438984394073,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 38,
+      "scan_ns": "1645999730009726048",
+      "end_ns": "1645999730110565261",
+      "record_ns": "1724621088398097042",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28149,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083921253681183,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 39,
+      "scan_ns": "1645999730110585928",
+      "end_ns": "1645999730211425379",
+      "record_ns": "1724621088490235059",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28134,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083945095539093,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 40,
+      "scan_ns": "1645999730211446047",
+      "end_ns": "1645999730312285260",
+      "record_ns": "1724621088599839064",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28125,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083921253681183,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 41,
+      "scan_ns": "1645999730312305927",
+      "end_ns": "1645999730413144424",
+      "record_ns": "1724621088700665346",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28151,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083849728107452,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 42,
+      "scan_ns": "1645999730413165092",
+      "end_ns": "1645999730514004305",
+      "record_ns": "1724621088801444553",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28138,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083921253681183,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 43,
+      "scan_ns": "1645999730514024973",
+      "end_ns": "1645999730614864424",
+      "record_ns": "1724621088902509067",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28135,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083945095539093,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 44,
+      "scan_ns": "1645999730614885092",
+      "end_ns": "1645999730715724305",
+      "record_ns": "1724621089002883652",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28126,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083921253681183,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 45,
+      "scan_ns": "1645999730715744972",
+      "end_ns": "1645999730816584423",
+      "record_ns": "1724621089104069598",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28126,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083945095539093,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 46,
+      "scan_ns": "1645999730816605091",
+      "end_ns": "1645999730917444304",
+      "record_ns": "1724621089204703281",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28141,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083921253681183,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 47,
+      "scan_ns": "1645999730917464972",
+      "end_ns": "1645999731018258408",
+      "record_ns": "1724621089306030365",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28109,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10079343616962433,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 48,
+      "scan_ns": "1645999731018279076",
+      "end_ns": "1645999731119118289",
+      "record_ns": "1724621089406355429",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28145,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083921253681183,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 49,
+      "scan_ns": "1645999731119138956",
+      "end_ns": "1645999731219977453",
+      "record_ns": "1724621089499997014",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28153,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083849728107452,
+      "imu_bracket_covered": true
+    },
+    {
+      "index": 50,
+      "scan_ns": "1645999731219999075",
+      "end_ns": "1645999731320837334",
+      "record_ns": "1724621089608745343",
+      "frame": "cmu_rc1_velodyne",
+      "points": 28145,
+      "time_min_s": 0.0,
+      "time_max_s": 0.10083825886249542,
+      "imu_bracket_covered": false
+    }
+  ],
+  "first_imu": {
+    "ns": 1645999726442864000,
+    "frame": "epson",
+    "accel": [
+      0.44660383462905884,
+      0.02233383059501648,
+      9.817770004272461
+    ],
+    "gyro": [
+      1.4090517652221024e-05,
+      0.00023221108131110668,
+      0.0014413970056921244
+    ]
+  },
+  "first_image": {
+    "ns": 1645999730701529211,
+    "frame": "d",
+    "width": 640,
+    "height": 480,
+    "encoding": "bgr8"
+  },
+  "camera_start_delay_sec": 4.423431105,
+  "T_seed": [
+    [
+      0.8238004328911623,
+      -0.5668532078001967,
+      -0.005503414845371544,
+      39.929523
+    ],
+    [
+      0.5658788284527784,
+      0.8228835785135646,
+      -0.05141758183365594,
+      -176.217148
+    ],
+    [
+      0.03367489090174089,
+      0.039243560227593934,
+      0.9986620773331784,
+      -5.225427
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "seed_rotation_rounding_norm": 1.056575849511715e-06,
+  "seed_status": "OFFICIAL_ACTIVE_NUMERIC_ENGINEERING_SEED_NOT_CERTIFIED_MAP_LIDAR",
+  "T_imu_lidar": [
+    [
+      0.9999548753393765,
+      0.0,
+      0.009499857104810995,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      -0.009499857104810995,
+      0.0,
+      0.9999548753393765,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "T_imu_camera": [
+    [
+      -0.01578308350096146,
+      -0.011243969208613322,
+      0.9998122160844198,
+      0.17313616
+    ],
+    [
+      -0.9997546256832803,
+      -0.015366419062725631,
+      -0.01595498637023367,
+      0.0476788
+    ],
+    [
+      0.015542930871856214,
+      -0.9998187067271876,
+      -0.010998680752173539,
+      -0.01933398
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "T_camera_lidar": [
+    [
+      -0.015930026916947886,
+      -0.9997546256832787,
+      0.015392292464443182,
+      0.050700230031961654
+    ],
+    [
+      -0.0017453269836932815,
+      -0.015366419062725498,
+      -0.9998804063481328,
+      -0.016651084806343898
+    ],
+    [
+      0.9998715857929676,
+      -0.01595498637023322,
+      -0.0015001112559911152,
+      -0.17255558148348632
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "calibration_rounding_norm": {
+    "laser_to_imu": 6.28080105870415e-16,
+    "rgb_camera_to_imu": 8.540476954830462e-09
+  },
+  "source_deskewed": false,
+  "source_role": "Raw first eligible scan geometry check only",
+  "IMU_post_scan_end_used_for_integration": false,
+  "imu_bracket_note": "Tail brackets coverage only; no IMU integration or runtime update is performed",
+  "time_unit_evidence": "Float32 offsets bounded by scan period in seconds; see scan rows",
+  "files_sha256": {
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/initial_pose/corridor02.yaml": "fc319ad99737a717456e11eb70383d4848eadf7e46587fee0643d6732cf1c3a1",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/calibration/corridor02_extrinsics.yaml": "892bf743dc0f51eabfe9d8ae71dc98663753f174910ae9cc40ee244c77a9e217",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/calibration/corridor02_intrinsics.yaml": "8d47e98aed48cf941c8ee642136514b50ea7e6dd0bd26de9266081bd8693fe12",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r2_corridor02_validation/probe/first_source.xyz": "b1e7f1f1d07b1ef8a63878f3688a00455683db59731239973b14e8d5b6fdf1c7",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r2_corridor02_validation/probe/seed.f64": "98d1437291f73078b3b3c71db9c75f7d288e4a075cb3175dd5068ca9409e9fb2"
+  }
+}
