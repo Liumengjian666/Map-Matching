@@ -90,6 +90,13 @@ def main():
                      'No heldout runtime, GT accuracy or mature fusion benefit evaluated'],
         NEXT='Obtain sourced world_darpa-to-PCD and seed reference/time semantics; decision AI must approve any next bounded hypothesis, no automatic expanded search',
         FINAL_RESULT='WORLD_FRAME_HYPOTHESIS_NOT_SUPPORTED')
+    review_path=HERE/'external_review/execution.json'
+    if review_path.exists():
+        review=json.loads(review_path.read_text())
+        assert review['invocations']==1
+        for role in ('input','result','log'):
+            assert sha(review_path.parent/review[role+'_file'])==review[role+'_SHA256']
+        result['external_review']=review
     save('results.json',result);save('input_freeze.json',frozen)
     save('tests.json',dict(build='PASS',math_test='PASS',math_test_invocations=1,
         actual_log='runs/world_once/math_test.log',

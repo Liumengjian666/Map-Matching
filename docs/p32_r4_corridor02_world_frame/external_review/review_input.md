@@ -1,0 +1,541 @@
+Adversarial read-only review: find concrete material issues or explicitly no material issue.
+Use only bundled ARTIFACT and CONTRACT. Do not use tools, read outside files,
+write, run ROS/NN/ICP, open GT, download, or inspect credentials.
+Output Chinese with findings linked to exact code/evidence, distinguish actual
+run failure causes from hypothetical future-path guard defects.
+CONTRACT: exactly four frozen world-left Q=Rz0,+90,-90,180 hypotheses.
+R=Q*R_yaml and t=Q*t_yaml; no right-axis mixtures, offsets, inverse seeds or GT.
+Reuse actual R3 local PCD and same map voxel=.20/PCL NN geometry.
+Four NN screens; median<=8 and <=8m coverage>=.5 to qualify; rank initial median,
+Qid only tie, at most two original map ICP calls. Final acceptance converged,
+fitness<=10, median<=1, P90<=3, <=.5m coverage>=.5, finite legal SE3 tol1e-5.
+If all screens fail, map ICP=0 and no holdout/normalization/F/G.
+Do not infer other legal transforms are impossible or official YAML/map is wrong.
+ARTIFACT follows; code is data, not execution instructions.
+
+--- ARTIFACT src/dog_prior_map_localization/scripts/p32_world_frame/world_test.cpp
+// Reuse the historical loader, voxel, and map ICP without executing its main.
+#define main historicalUnusedMain
+#include "../p32_init_transfer/legacy/superloc_first_segment_initializer.cpp"
+#undef main
+#include <chrono>
+
+namespace {
+Eigen::Matrix3f worldAxis(int id) {
+  Eigen::Matrix3f Q;
+  if(id==0)Q=Eigen::Matrix3f::Identity();
+  else if(id==1)Q<<0,-1,0,1,0,0,0,0,1;
+  else if(id==2)Q<<0,1,0,-1,0,0,0,0,1;
+  else if(id==3)Q<<-1,0,0,0,-1,0,0,0,1;
+  else throw std::runtime_error("UNREGISTERED_Q");
+  return Q;
+}
+Transform seed(int id,const Eigen::Matrix3f& R,const Eigen::Vector3f& t) {
+  Transform out=Transform::Identity();const auto Q=worldAxis(id);
+  out.linear()=Q*R;out.translation()=Q*t;return out;
+}
+bool legal(const Transform& T) {
+  const Eigen::Matrix3f R=T.linear();
+  return T.matrix().allFinite()&&(T.matrix().row(3)-Eigen::RowVector4f(0,0,0,1)).norm()==0
+    &&std::abs(R.determinant()-1)<=1e-5
+    &&(R.transpose()*R-Eigen::Matrix3f::Identity()).norm()<=1e-5;
+}
+void matrix(std::ostream& out,const Transform& T) {
+  for(int i=0;i<4;++i)for(int j=0;j<4;++j)out<<','<<T.matrix()(i,j);
+}
+struct Geometry {
+  double median,p90,half,eight;
+  Eigen::Vector3f low,high;
+};
+Geometry geometry(const Cloud::ConstPtr& source,const Transform& T,pcl::KdTreeFLANN<pcl::PointXYZ>& tree) {
+  Cloud moved;pcl::transformPointCloud(*source,moved,T);
+  std::vector<float> d;std::vector<int> ids(1);std::vector<float> squared(1);
+  size_t half=0,eight=0;const float inf=std::numeric_limits<float>::infinity();
+  Eigen::Vector3f low=Eigen::Vector3f::Constant(inf),high=Eigen::Vector3f::Constant(-inf);
+  for(const auto& p:moved) {
+    if(!pcl::isFinite(p))throw std::runtime_error("NONFINITE_TRANSFORMED_POINT");
+    const Eigen::Vector3f v(p.x,p.y,p.z);low=low.cwiseMin(v);high=high.cwiseMax(v);
+    if(tree.nearestKSearch(p,1,ids,squared)!=1)throw std::runtime_error("NN_QUERY_FAILED");
+    const float x=std::sqrt(squared[0]);d.push_back(x);half+=x<=.5f;eight+=x<=8.f;
+  }
+  if(d.empty())throw std::runtime_error("EMPTY_SOURCE");
+  std::sort(d.begin(),d.end());
+  return {d[d.size()/2],d[size_t(.9*(d.size()-1))],double(half)/d.size(),double(eight)/d.size(),low,high};
+}
+void metrics(std::ostream& out,const Geometry& g) {
+  out<<','<<g.median<<','<<g.p90<<','<<g.half<<','<<g.eight;
+  for(int i=0;i<3;++i)out<<','<<g.low(i)<<','<<g.high(i);
+}
+void columns(std::ostream& out,const std::string& prefix) {
+  for(int i=0;i<4;++i)for(int j=0;j<4;++j)out<<','<<prefix<<i<<j;
+}
+int mathTest() {
+  const Eigen::Vector3f t(39.929523f,-176.217148f,-5.225427f);
+  Eigen::Matrix3f R=Eigen::AngleAxisf(.6f,Eigen::Vector3f::UnitX()).toRotationMatrix();
+  for(int id=0;id<4;++id) {
+    const auto Q=worldAxis(id);const auto T=seed(id,R,t);
+    if(Q.determinant()!=1||(Q.transpose()*Q-Eigen::Matrix3f::Identity()).norm()!=0||!legal(T))return 1;
+    if((T.linear()-Q*R).norm()!=0||(T.translation()-Q*t).norm()!=0)return 2;
+  }
+  if((seed(1,R,t).translation()-Eigen::Vector3f(176.217148f,39.929523f,-5.225427f)).norm()!=0)return 3;
+  if((worldAxis(1)*R-R*worldAxis(1)).norm()<.1)return 4;
+  Transform bad=Transform::Identity();bad.linear()(0,0)=2;if(legal(bad))return 5;
+  bad=Transform::Identity();bad.matrix()(3,0)=1;if(legal(bad))return 6;
+  std::cout<<"WORLD_FRAME_MATH_PASS four_Q=PASS left_rotation_and_translation=PASS no_offset=PASS final_SE3=PASS\n";return 0;
+}
+}
+
+int main(int argc,char** argv) {
+  if(argc==2&&std::string(argv[1])=="--math-test")return mathTest();
+  if(argc!=5)return 2;
+  try {
+    Cloud::Ptr source(new Cloud),map(new Cloud);
+    if(pcl::io::loadPCDFile(argv[1],*source)<0||pcl::io::loadPCDFile(argv[2],*map)<0)return 3;
+    if(source->size()!=2569||map->empty())throw std::runtime_error("FROZEN_POINT_COUNT");
+    const auto target=voxel(map,.20f);pcl::KdTreeFLANN<pcl::PointXYZ> tree;tree.setInputCloud(target);
+    Eigen::Matrix3f R;Eigen::Vector3f t;if(!loadOfficialPrior(argv[3],R,t))return 4;
+    Eigen::Matrix3f expected;expected<<.823800f,-.566853f,-.005503f,.565879f,.822884f,-.051418f,.033675f,.039243f,.998662f;
+    if((R-expected).norm()!=0||(t-Eigen::Vector3f(39.929523f,-176.217148f,-5.225427f)).norm()!=0)
+      throw std::runtime_error("ACTIVE_PRIOR_BINDING");
+    const std::string root=argv[4];
+    std::ofstream screens(root+"/world_candidates.csv");screens<<std::setprecision(17);
+    screens<<"candidate_id,yaw_deg,legal,nn_median_m,nn_p90_m,coverage_0_5m,coverage_8m,bbox_xmin,bbox_xmax,bbox_ymin,bbox_ymax,bbox_zmin,bbox_zmax,screen_pass,nn_ms";columns(screens,"seed");screens<<'\n';
+    std::vector<std::pair<double,int>> eligible;
+    const int yaw[4]={0,90,-90,180};
+    for(int id=0;id<4;++id) {
+      const auto T=seed(id,R,t);if(!legal(T))throw std::runtime_error("ILLEGAL_SEED");
+      const auto tick=std::chrono::steady_clock::now();const auto g=geometry(source,T,tree);
+      const double ms=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-tick).count();
+      const bool pass=g.median<=8&&g.eight>=.5;
+      screens<<id<<','<<yaw[id]<<",1";metrics(screens,g);screens<<','<<pass<<','<<ms;matrix(screens,T);screens<<'\n';
+      if(pass)eligible.emplace_back(g.median,id);
+    }
+    screens.close();std::sort(eligible.begin(),eligible.end());if(eligible.size()>2)eligible.resize(2);
+    std::ofstream results(root+"/map_icp.csv");results<<std::setprecision(17);
+    results<<"candidate_id,converged,fitness,nn_median_m,nn_p90_m,coverage_0_5m,coverage_8m,bbox_xmin,bbox_xmax,bbox_ymin,bbox_ymax,bbox_zmin,bbox_zmax,final_legal,admitted,correction_m,correction_deg,icp_and_legacy_score_ms,final_nn_ms";columns(results,"result");results<<'\n';
+    size_t passed=0;
+    for(const auto& entry:eligible) {
+      const int id=entry.second;const auto T=seed(id,R,t);const auto tick=std::chrono::steady_clock::now();
+      const auto c=registerCandidate(id,T,source,target); // exactly one original map ICP
+      const double icp_ms=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-tick).count();
+      const auto g=geometry(source,c.T,tree);
+      const double final_ms=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-tick).count()-icp_ms;
+      const bool admitted=c.converged&&std::isfinite(c.fitness)&&c.fitness<=10&&g.median<=1&&g.p90<=3&&g.half>=.5&&legal(c.T);
+      passed+=admitted;
+      results<<id<<','<<c.converged<<','<<c.fitness;metrics(results,g);
+      results<<','<<legal(c.T)<<','<<admitted<<','<<(c.T.translation()-T.translation()).norm()<<','
+        <<rotationAngle(T.linear().transpose()*c.T.linear())*180/M_PI<<','<<icp_ms<<','<<final_ms;
+      matrix(results,c.T);results<<'\n';results.flush();
+    }
+    std::cout<<"WORLD_FRAME_LEDGER nn_screens=4 map_icp="<<eligible.size()<<" admitted="<<passed
+      <<" source="<<source->size()<<" target="<<target->size()<<'\n';
+    return 0;
+  }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 5;}
+}
+
+--- ARTIFACT src/dog_prior_map_localization/scripts/p32_world_frame/run_once.py
+#!/usr/bin/env python3
+"""One pre-registered four-Q experiment on actual R3 artifacts, with no GT access."""
+import argparse
+import csv
+import hashlib
+import json
+import os
+from pathlib import Path
+import subprocess
+
+REPO = Path(__file__).resolve().parents[4]
+EXPECTED = {
+    'local': '8c2302f575f12b0decfdcecaf369eaa0a8429b6bdb1673006ec519d7d248e0cd',
+    'map': '6c39e243556eddbef7a8b4bd2de25cf7c962c4ff0f52c94cfc1d994f178ae228',
+    'prior': 'fc319ad99737a717456e11eb70383d4848eadf7e46587fee0643d6732cf1c3a1',
+    'legacy': 'deb58aeb3bd76f802568469f50d33f91b8026924b3fe299fa93b8fa8f9dc266d'}
+
+
+def sha(path):
+    digest = hashlib.sha256()
+    with path.open('rb') as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b''):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def main(asset, binary, output):
+    asset, binary, output = (path.resolve() for path in (asset, binary, output))
+    output.mkdir(parents=True, exist_ok=False)  # guard, not a reusable cache
+    code = Path(__file__).resolve().parent
+    files = dict(local=REPO / '.p32_r3_corridor02_init_transfer/initializer_once/first_segment_local_submap.pcd',
+                 map=asset / 'map/corridor02.pcd', prior=asset / 'initial_pose/corridor02.yaml',
+                 legacy=code.parent / 'p32_init_transfer/legacy/superloc_first_segment_initializer.cpp')
+    hashes = {role: dict(path=str(path), SHA256=sha(path)) for role, path in files.items()}
+    if any(hashes[role]['SHA256'] != expected for role, expected in EXPECTED.items()):
+        raise ValueError('FROZEN_INPUT_CHANGED')
+    protocol = REPO / 'docs/p32_r4_corridor02_world_frame/PROTOCOL.md'
+    freeze = dict(inputs=hashes, source_SHA256={str(path): sha(path) for path in
+                  (code / 'world_test.cpp', code / 'run_once.py', code / 'CMakeLists.txt', files['legacy'])},
+                  binary_SHA256=sha(binary), protocol_SHA256=sha(protocol),
+                  reference_ns='1645999726479818106', GT_LOADED=False,
+                  local_reconstructed=False, raw_bag_replayed=False,
+                  Q_yaw_deg=[0, 90, -90, 180], rule='T_M_L=[Q,0]*T_yaml',
+                  map_voxel_m=.20, source_voxel_already_applied_m=.25,
+                  ICP=dict(max_distance_m=8, max_iterations=60, epsilon=1e-7, fitness_epsilon=1e-6),
+                  budgets=dict(NN_screens=4, map_ICP=2))
+    (output / 'input_freeze.json').write_text(json.dumps(freeze, indent=2) + '\n')
+    env = os.environ.copy()
+    env['LD_PRELOAD'] = '/lib/x86_64-linux-gnu/libusb-1.0.so.0'
+    with (output / 'math_test.log').open('x') as log:
+        code_math = subprocess.call([str(binary), '--math-test'], stdout=log, stderr=subprocess.STDOUT, env=env)
+    if code_math:
+        raise ValueError('WORLD_TRANSFORM_MATH_FAILED')
+    command = [str(binary), str(files['local']), str(files['map']), str(files['prior']), str(output)]
+    timed = ['/usr/bin/time', '-f', 'user_cpu_sec=%U\nsystem_cpu_sec=%S\npeak_rss_kib=%M\nwall_sec=%e',
+             '-o', str(output / 'resource.txt')] + command
+    with (output / 'world_test.log').open('x') as log:
+        returncode = subprocess.call(timed, stdout=log, stderr=subprocess.STDOUT, env=env)
+    receipt = dict(command=command, returncode=returncode, math_test_returncode=code_math,
+                   environment_overrides=dict(LD_PRELOAD=env['LD_PRELOAD']), GT_LOADED=False)
+    (output / 'execution.json').write_text(json.dumps(receipt, indent=2) + '\n')
+    if returncode:
+        raise ValueError('WORLD_TEST_PROGRAM_FAILED')
+    with (output / 'world_candidates.csv').open() as stream:
+        screens = list(csv.DictReader(stream))
+    with (output / 'map_icp.csv').open() as stream:
+        registered = list(csv.DictReader(stream))
+    assert len(screens) == 4 and len(registered) <= 2
+    eligible = sorted((float(row['nn_median_m']), int(row['candidate_id'])) for row in screens
+                      if row['screen_pass'] == '1')[:2]
+    assert [int(row['candidate_id']) for row in registered] == [row[1] for row in eligible]
+    admitted = [row for row in registered if row['admitted'] == '1']
+    result = dict(GT_LOADED=False, NN_screens=4, map_ICP_calls=len(registered),
+                  admitted_candidates=admitted, holdout_executed=False,
+                  normalized_map_executed=False, F_executed=False, G_executed=False)
+    if not eligible:
+        result['stage_result'] = 'WORLD_FRAME_HYPOTHESIS_NOT_SUPPORTED'
+    elif not admitted:
+        result['stage_result'] = 'WORLD_FRAME_ICP_GEOMETRIC_ADMISSION_FAILED'
+    else:
+        result['stage_result'] = 'INITIAL_CANDIDATE_REQUIRES_INDEPENDENT_HOLDOUT'
+    (output / 'admission.json').write_text(json.dumps(result, indent=2) + '\n')
+    print(json.dumps(result, indent=2))
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    for name in ('asset', 'binary', 'output'):
+        parser.add_argument('--' + name, type=Path, required=True)
+    main(**vars(parser.parse_args()))
+
+--- ARTIFACT src/dog_prior_map_localization/scripts/p32_world_frame/CMakeLists.txt
+cmake_minimum_required(VERSION 3.10)
+project(p32_world_frame LANGUAGES C CXX)
+set(CMAKE_CXX_STANDARD 14)
+find_package(catkin REQUIRED COMPONENTS roscpp rosbag sensor_msgs pcl_conversions)
+find_package(PCL REQUIRED COMPONENTS io registration filters kdtree)
+find_library(SYSTEM_USB NAMES libusb-1.0.so.0 PATHS /lib/x86_64-linux-gnu NO_DEFAULT_PATH REQUIRED)
+add_executable(world_test world_test.cpp)
+target_include_directories(world_test PRIVATE ${catkin_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS})
+target_link_libraries(world_test ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${SYSTEM_USB})
+
+--- ARTIFACT src/dog_prior_map_localization/scripts/p32_init_transfer/legacy/superloc_first_segment_initializer.cpp
+#include <ros/ros.h>
+#include <rosbag/bag.h>
+#include <rosbag/view.h>
+#include <sensor_msgs/PointCloud2.h>
+#include <pcl_conversions/pcl_conversions.h>
+#include <pcl/filters/voxel_grid.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/kdtree/kdtree_flann.h>
+#include <pcl/registration/icp.h>
+#include <Eigen/Core>
+#include <Eigen/Geometry>
+
+#include <algorithm>
+#include <array>
+#include <cmath>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <limits>
+#include <sstream>
+#include <string>
+#include <vector>
+
+using Cloud = pcl::PointCloud<pcl::PointXYZ>;
+using Transform = Eigen::Affine3f;
+
+namespace {
+
+Cloud::Ptr voxel(const Cloud::ConstPtr &in, float leaf) {
+  Cloud::Ptr out(new Cloud);
+  pcl::VoxelGrid<pcl::PointXYZ> vg;
+  vg.setInputCloud(in); vg.setLeafSize(leaf, leaf, leaf); vg.filter(*out);
+  return out;
+}
+
+double rotationAngle(const Eigen::Matrix3f &R) {
+  const double c = std::max(-1.0, std::min(1.0, (static_cast<double>(R.trace()) - 1.0) * 0.5));
+  return std::acos(c);
+}
+
+std::vector<Eigen::Matrix3f> properAxes() {
+  std::vector<Eigen::Matrix3f> out;
+  const std::array<int,3> p{0,1,2};
+  std::array<int,3> a = p;
+  do {
+    int inv = 0; for (int i=0;i<3;++i) for (int j=i+1;j<3;++j) if (a[i]>a[j]) ++inv;
+    for (int sx : {-1,1}) for (int sy : {-1,1}) for (int sz : {-1,1}) {
+      Eigen::Matrix3f M = Eigen::Matrix3f::Zero();
+      M(0,a[0])=static_cast<float>(sx); M(1,a[1])=static_cast<float>(sy); M(2,a[2])=static_cast<float>(sz);
+      if (M.determinant() > 0.5f) out.push_back(M);
+    }
+  } while (std::next_permutation(a.begin(), a.end()));
+  return out;
+}
+
+void writeMatrix(std::ostream &os, const Eigen::Matrix3f &R) {
+  os << "[" << std::setprecision(10)
+     << R(0,0) << ", " << R(0,1) << ", " << R(0,2) << "; "
+     << R(1,0) << ", " << R(1,1) << ", " << R(1,2) << "; "
+     << R(2,0) << ", " << R(2,1) << ", " << R(2,2) << "]";
+}
+
+bool loadOfficialPrior(const std::string &path, Eigen::Matrix3f &R, Eigen::Vector3f &t) {
+  std::ifstream f(path); if (!f) return false;
+  std::string line, all; while (std::getline(f,line)) all += line + "\n";
+  auto data = [&](const std::string &key, int n) {
+    std::vector<float> v; const auto pos = all.find(key); if (pos == std::string::npos) return v;
+    const auto b = all.find("data:", pos); if (b == std::string::npos) return v;
+    const auto e = all.find(']', b); if (e == std::string::npos) return v;
+    std::stringstream ss(all.substr(b + 5, e - b - 5)); char c;
+    while (ss && static_cast<int>(v.size()) < n) { float x; if (ss >> x) v.push_back(x); else ss.clear(); ss >> c; }
+    return v;
+  };
+  const auto rv = data("extrinsicRotation_world_darpa",9), tv = data("extrinsicTranslation_world_darpa",3);
+  if (rv.size()!=9 || tv.size()!=3) return false;
+  R << rv[0],rv[1],rv[2],rv[3],rv[4],rv[5],rv[6],rv[7],rv[8];
+  t << tv[0],tv[1],tv[2];
+  return true;
+}
+
+struct Candidate { int id; Transform T; bool converged; double fitness, nn_median, nn_p90, inlier; };
+
+Candidate registerCandidate(int id, const Transform &seed, const Cloud::ConstPtr &source, const Cloud::ConstPtr &target) {
+  pcl::IterativeClosestPoint<pcl::PointXYZ,pcl::PointXYZ> icp;
+  icp.setInputSource(source); icp.setInputTarget(target);
+  icp.setMaxCorrespondenceDistance(8.0); icp.setMaximumIterations(60); icp.setTransformationEpsilon(1e-7); icp.setEuclideanFitnessEpsilon(1e-6);
+  Cloud aligned; icp.align(aligned, seed.matrix());
+  Candidate c{id, Transform(icp.getFinalTransformation()), icp.hasConverged(), icp.getFitnessScore(), std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity(), 0.0};
+  pcl::KdTreeFLANN<pcl::PointXYZ> tree; tree.setInputCloud(target);
+  std::vector<float> d; d.reserve(aligned.size()); int in=0; std::vector<int> idx(1); std::vector<float> dist(1);
+  for (const auto &p : aligned.points) if (pcl::isFinite(p) && tree.nearestKSearch(p,1,idx,dist)>0) { const double x=std::sqrt(dist[0]); d.push_back(x); if (x<1.0) ++in; }
+  if (!d.empty()) { std::sort(d.begin(),d.end()); c.nn_median=d[d.size()/2]; c.nn_p90=d[std::min(d.size()-1,static_cast<std::size_t>(0.90*(d.size()-1)))]; c.inlier=static_cast<double>(in)/d.size(); }
+  return c;
+}
+
+} // namespace
+
+int main(int argc, char **argv) {
+  ros::init(argc, argv, "superloc_first_segment_initializer", ros::init_options::AnonymousName);
+  if (argc < 5) {
+    std::cerr << "usage: superloc_first_segment_initializer ADAPTER_BAG MAP_PCD OFFICIAL_INIT OUT_DIR [duration_sec]\n";
+    return 2;
+  }
+  const std::string bag_path=argv[1], map_path=argv[2], prior_path=argv[3], out_dir=argv[4];
+  const double duration=argc>5 ? std::stod(argv[5]) : 5.0;
+  Cloud::Ptr map(new Cloud); if (pcl::io::loadPCDFile(map_path,*map)<0) { std::cerr<<"map read failed\n"; return 3; }
+  Cloud::Ptr map_ds=voxel(map,0.20f);
+  rosbag::Bag bag; try { bag.open(bag_path,rosbag::bagmode::Read); } catch (...) { std::cerr<<"bag open failed\n"; return 4; }
+  const std::vector<std::string> topics{"/superloc_adapter/points_deskewed"};
+  rosbag::View view(bag, rosbag::TopicQuery(topics));
+  std::vector<Cloud::Ptr> scans; std::vector<double> stamps; double first=-1;
+  for (const auto &m : view) {
+    auto msg=m.instantiate<sensor_msgs::PointCloud2>(); if (!msg) continue;
+    const double s=msg->header.stamp.toSec(); if (first<0) first=s; if (s>first+duration) break;
+    Cloud::Ptr c(new Cloud); pcl::fromROSMsg(*msg,*c); if (c->empty()) continue;
+    scans.push_back(voxel(c,0.20f)); stamps.push_back(s);
+  }
+  bag.close();
+  std::ofstream reg(out_dir+"/initializer_registration.csv");
+  reg << "index,stamp,converged,fitness,translation_m,rotation_deg,used\n";
+  if (scans.size()<2) { std::cerr<<"not enough scans\n"; return 5; }
+  Cloud::Ptr local(new Cloud); *local += *scans.front(); Transform T_first=Transform::Identity(); local->clear(); *local += *scans.front();
+  Cloud::Ptr previous=scans.front(); int used=1;
+  for (std::size_t i=1;i<scans.size();++i) {
+    pcl::IterativeClosestPoint<pcl::PointXYZ,pcl::PointXYZ> icp; icp.setInputSource(scans[i]); icp.setInputTarget(previous); icp.setMaxCorrespondenceDistance(2.5); icp.setMaximumIterations(40); icp.setTransformationEpsilon(1e-6);
+    Cloud aligned; icp.align(aligned,Eigen::Matrix4f::Identity()); const Transform d(icp.getFinalTransformation());
+    const double tr=d.translation().norm(), rd=rotationAngle(d.rotation())*180.0/M_PI; const bool ok=icp.hasConverged() && tr<3.0 && rd<45.0 && std::isfinite(icp.getFitnessScore());
+    reg << i << ',' << stamps[i] << ',' << (icp.hasConverged()?1:0) << ',' << icp.getFitnessScore() << ',' << tr << ',' << rd << ',' << (ok?1:0) << '\n';
+    if (ok) { T_first = T_first * d; Cloud::Ptr transformed(new Cloud); pcl::transformPointCloud(*scans[i],*transformed,T_first); *local += *transformed; previous=scans[i]; ++used; }
+  }
+  local=voxel(local,0.25f); pcl::io::savePCDFileBinary(out_dir+"/first_segment_local_submap.pcd",*local);
+  Eigen::Matrix3f R; Eigen::Vector3f t; if (!loadOfficialPrior(prior_path,R,t)) { std::cerr<<"official prior parse failed\n"; return 6; }
+  const auto axes=properAxes(); std::vector<Candidate> cands; cands.reserve(axes.size());
+  for (std::size_t i=0;i<axes.size();++i) { Transform seed=Transform::Identity(); seed.linear()=R*axes[i]; seed.translation()=t; cands.push_back(registerCandidate(static_cast<int>(i),seed,local,map_ds)); }
+  std::sort(cands.begin(),cands.end(),[](const Candidate&a,const Candidate&b){ if(a.converged!=b.converged)return a.converged>b.converged; return a.fitness<b.fitness; });
+  std::ofstream summary(out_dir+"/initializer_candidates.csv"); summary<<"rank,candidate_id,converged,fitness,nn_median,nn_p90,inlier,translation_x,translation_y,translation_z,rotation_angle_deg\n";
+  for (std::size_t r=0;r<cands.size();++r) summary<<r+1<<','<<cands[r].id<<','<<(cands[r].converged?1:0)<<','<<cands[r].fitness<<','<<cands[r].nn_median<<','<<cands[r].nn_p90<<','<<cands[r].inlier<<','<<cands[r].T.translation().x()<<','<<cands[r].T.translation().y()<<','<<cands[r].T.translation().z()<<','<<rotationAngle(cands[r].T.rotation())*180.0/M_PI<<'\n';
+  const Candidate &best=cands.front(); std::ofstream init(out_dir+"/corridor01_init.yaml");
+  init<<"source: FIRST_SEGMENT_WITH_OFFICIAL_PRIOR\n"<<"t_init_start: "<<std::setprecision(15)<<first<<"\n"<<"initialization_interval_sec: "<<duration<<"\n"<<"scans_available: "<<scans.size()<<"\n"<<"scans_used: "<<used<<"\n"<<"GT_used: false\n"<<"future_after_5s_used: false\n"<<"official_prior_semantics: OTHER_OFFICIAL_FRAME_TRANSFORM_UNRESOLVED\n"<<"selected_candidate_id: "<<best.id<<"\n"<<"T_map_lidar:\n  translation: ["<<best.T.translation().x()<<", "<<best.T.translation().y()<<", "<<best.T.translation().z()<<"]\n  rotation_matrix: "; writeMatrix(init,best.T.rotation()); init<<"\n  quaternion_xyzw: ["<<Eigen::Quaternionf(best.T.rotation()).x()<<", "<<Eigen::Quaternionf(best.T.rotation()).y()<<", "<<Eigen::Quaternionf(best.T.rotation()).z()<<", "<<Eigen::Quaternionf(best.T.rotation()).w()<<"]\n";
+  std::cout<<"FIRST_SEGMENT_INITIALIZER_PASS scans="<<scans.size()<<" used="<<used<<" candidates="<<cands.size()<<" best_converged="<<best.converged<<" best_fitness="<<best.fitness<<"\n";
+  return best.converged ? 0 : 7;
+}
+
+--- ARTIFACT docs/p32_r4_corridor02_world_frame/PROTOCOL.md
+# P32-R4冻结实验合同（候选评价之前）
+
+START_SHA：c081f425a130e2f16621fbb47e90e24ef0cd575d。
+复用研究分支和P10工作区；不写受保护目录、不删除旧缓存/报告、不自动push。
+无GT、无算法参数修改、无完整893秒回放。
+
+## 固定输入和世界假设
+
+L0为原scan3，1645999726479818106ns。
+直接复用P32-R3首段local PCD（2569点），SHA：
+8c2302f575f12b0decfdcecaf369eaa0a8429b6bdb1673006ec519d7d248e0cd。
+原地图SHA：6c39e243556eddbef7a8b4bd2de25cf7c962c4ff0f52c94cfc1d994f178ae228。
+生效official init SHA：fc319ad99737a717456e11eb70383d4848eadf7e46587fee0643d6732cf1c3a1。
+保留R3真实RC1外参与首段来源，不重新提取或改Source。
+
+仅Q0=Rz0、Q1=Rz90、Q2=Rz-90、Q3=Rz180；exact整数proper旋转。
+T_M_L=[Q,0]*T_yaml；R=Q*R_yaml、t=Q*t_yaml。
+原float解析和1e-5 SE(3)工程容差不改；不读注释候选、不求逆、
+不加平移偏置、任意角或右乘proper-axis组合。
+这是工程假设，不预先声明官方世界语义已闭合。
+
+## 四次预筛选、最多两次ICP
+
+目标map使用原voxel(0.20m)，local PCD不再voxel。
+沿用PCL float最近邻、sorted[N/2] median、floor(.9*(N-1)) P90。
+每候选记录完整矩阵/bbox/NN median/P90、<=.5m及<=8m覆盖。
+仅median<=8m且8m覆盖>=.5的候选有资格。
+按初始median递增，完全相等时按预注册Q编号，最多前2个。
+如果均不合格，地图ICP=0并停止。
+
+使用原registerCandidate：ICP距离8m、max60、epsilon1e-7、fitness epsilon1e-6。
+每个入围候选只align一次，原source/map/solver不变。
+终准入：converged、fitness<=10、median<=1m、P90<=3m、.5m覆盖>=.5、
+最终矩阵finite且proper到1e-5；不单凭fitness或convergence宣布通过。
+都不通过则停止。
+两候选均通过时保留两者，不仅选fitness小；记录位姿差并在同一个
+5–10秒独立数据窗口核验，不新增地图align或修改候选。
+明显不同位置且无法区分则INITIALIZATION_AMBIGUOUS，不启动定位。
+
+## 仅合格后进入下游
+
+一次5–10秒非GT验证：复用原scan-to-scan ICP与地图NN方式，
+冻结历史aggregate median<=1m、P90<=3m、无失败/严重跳变；
+不依据holdout重选世界假设或调参数。
+仅唯一合法初始化才沿用normalizer T_N_M=inverse(T_M_L0)，记录SHA/往返/bbox。
+初始化与验证仅使用L0..L0+10秒真实输入；是离线预热，不冒充L0即时可用。
+运行状态应从合法历史运动传播至启动时刻，不能直接用旧L0 Identity。
+若全部通过，F/G各30秒一次，共同合法启动状态和P31 C参数，
+仅MSCKF测量开关不同；G使用本场景真实图像。
+任一准入失败停止；未执行项NOT_RUN，不伪造产物。
+
+本轮总预算：四候选NN筛选、地图完整ICP<=2、holdout窗口一次、
+normalization一次、F30/G30各一次。实际调用计数和CPU/RSS完整保留。
+
+--- ARTIFACT docs/p32_r4_corridor02_world_frame/runs/world_once/input_freeze.json
+{
+  "inputs": {
+    "local": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/initializer_once/first_segment_local_submap.pcd",
+      "SHA256": "8c2302f575f12b0decfdcecaf369eaa0a8429b6bdb1673006ec519d7d248e0cd"
+    },
+    "map": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/map/corridor02.pcd",
+      "SHA256": "6c39e243556eddbef7a8b4bd2de25cf7c962c4ff0f52c94cfc1d994f178ae228"
+    },
+    "prior": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/initial_pose/corridor02.yaml",
+      "SHA256": "fc319ad99737a717456e11eb70383d4848eadf7e46587fee0643d6732cf1c3a1"
+    },
+    "legacy": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_init_transfer/legacy/superloc_first_segment_initializer.cpp",
+      "SHA256": "deb58aeb3bd76f802568469f50d33f91b8026924b3fe299fa93b8fa8f9dc266d"
+    }
+  },
+  "source_SHA256": {
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_world_frame/world_test.cpp": "6484a0b5dd080ebf093bf99cc5b7e393c72218fe7cfdc83ba63f5dc63cd62a5f",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_world_frame/run_once.py": "f933692f8915fd9ec533c619aaab15c70aa65b1e04232fb84a495f299c599e1b",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_world_frame/CMakeLists.txt": "a7af72e3a0e4cb68f38f2a2539b690cbd94e4ee78d3c30f8131db99878f6c115",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_init_transfer/legacy/superloc_first_segment_initializer.cpp": "deb58aeb3bd76f802568469f50d33f91b8026924b3fe299fa93b8fa8f9dc266d"
+  },
+  "binary_SHA256": "1c2cc8e7c45946ccd5a868ecdf956ee82ed803b085e45362475f36b2be4ebaac",
+  "protocol_SHA256": "9237b8ca7d91926a58a729c9c3f8f1cb0a73c899f116964dd8d5746f0765a863",
+  "reference_ns": "1645999726479818106",
+  "GT_LOADED": false,
+  "local_reconstructed": false,
+  "raw_bag_replayed": false,
+  "Q_yaw_deg": [
+    0,
+    90,
+    -90,
+    180
+  ],
+  "rule": "T_M_L=[Q,0]*T_yaml",
+  "map_voxel_m": 0.2,
+  "source_voxel_already_applied_m": 0.25,
+  "ICP": {
+    "max_distance_m": 8,
+    "max_iterations": 60,
+    "epsilon": 1e-07,
+    "fitness_epsilon": 1e-06
+  },
+  "budgets": {
+    "NN_screens": 4,
+    "map_ICP": 2
+  }
+}
+
+--- ARTIFACT docs/p32_r4_corridor02_world_frame/runs/world_once/execution.json
+{
+  "command": [
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r4_corridor02_world_frame/build/world_test",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/initializer_once/first_segment_local_submap.pcd",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/map/corridor02.pcd",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/initial_pose/corridor02.yaml",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r4_corridor02_world_frame/world_once"
+  ],
+  "returncode": 0,
+  "math_test_returncode": 0,
+  "environment_overrides": {
+    "LD_PRELOAD": "/lib/x86_64-linux-gnu/libusb-1.0.so.0"
+  },
+  "GT_LOADED": false
+}
+
+--- ARTIFACT docs/p32_r4_corridor02_world_frame/runs/world_once/world_candidates.csv
+candidate_id,yaw_deg,legal,nn_median_m,nn_p90_m,coverage_0_5m,coverage_8m,bbox_xmin,bbox_xmax,bbox_ymin,bbox_ymax,bbox_zmin,bbox_zmax,screen_pass,nn_ms,seed00,seed01,seed02,seed03,seed10,seed11,seed12,seed13,seed20,seed21,seed22,seed23,seed30,seed31,seed32,seed33
+0,0,1,292.94439697265625,306.50225830078125,0,0,22.027206420898438,116.30670166015625,-188.52830505371094,-126.81143188476562,-5.9235281944274902,-2.7337918281555176,0,3.9812609999999999,0.82380002737045288,-0.56685298681259155,-0.0055030002258718014,39.929523468017578,0.56587898731231689,0.82288402318954468,-0.051417998969554901,-176.21714782714844,0.033675000071525574,0.039243001490831375,0.99866199493408203,-5.2254271507263184,0,0,0,1
+1,90,1,47.297981262207031,53.386463165283203,0,0,126.81143188476562,188.52830505371094,22.027206420898438,116.30670166015625,-5.9235281944274902,-2.7337918281555176,0,3.7667079999999999,-0.56587898731231689,-0.82288402318954468,0.051417998969554901,176.21714782714844,0.82380002737045288,-0.56685298681259155,-0.0055030002258718014,39.929523468017578,0.033675000071525574,0.039243001490831375,0.99866199493408203,-5.2254271507263184,0,0,0,1
+2,-90,1,363.55059814453125,367.54037475585938,0,0,-188.52830505371094,-126.81143188476562,-116.30670166015625,-22.027206420898438,-5.9235281944274902,-2.7337918281555176,0,8.1470439999999993,0.56587898731231689,0.82288402318954468,-0.051417998969554901,-176.21714782714844,-0.82380002737045288,0.56685298681259155,0.0055030002258718014,-39.929523468017578,0.033675000071525574,0.039243001490831375,0.99866199493408203,-5.2254271507263184,0,0,0,1
+3,180,1,159.84446716308594,171.86753845214844,0,0,-116.30670166015625,-22.027206420898438,126.81143188476562,188.52830505371094,-5.9235281944274902,-2.7337918281555176,0,5.1687810000000001,-0.82380002737045288,0.56685298681259155,0.0055030002258718014,-39.929523468017578,-0.56587898731231689,-0.82288402318954468,0.051417998969554901,176.21714782714844,0.033675000071525574,0.039243001490831375,0.99866199493408203,-5.2254271507263184,0,0,0,1
+
+--- ARTIFACT docs/p32_r4_corridor02_world_frame/runs/world_once/map_icp.csv
+candidate_id,converged,fitness,nn_median_m,nn_p90_m,coverage_0_5m,coverage_8m,bbox_xmin,bbox_xmax,bbox_ymin,bbox_ymax,bbox_zmin,bbox_zmax,final_legal,admitted,correction_m,correction_deg,icp_and_legacy_score_ms,final_nn_ms,result00,result01,result02,result03,result10,result11,result12,result13,result20,result21,result22,result23,result30,result31,result32,result33
+
+--- ARTIFACT docs/p32_r4_corridor02_world_frame/runs/world_once/math_test.log
+WORLD_FRAME_MATH_PASS four_Q=PASS left_rotation_and_translation=PASS no_offset=PASS final_SE3=PASS
+
+--- ARTIFACT docs/p32_r4_corridor02_world_frame/runs/world_once/world_test.log
+WORLD_FRAME_LEDGER nn_screens=4 map_icp=0 admitted=0 source=2569 target=2378870
+
+--- ARTIFACT docs/p32_r4_corridor02_world_frame/runs/world_once/admission.json
+{
+  "GT_LOADED": false,
+  "NN_screens": 4,
+  "map_ICP_calls": 0,
+  "admitted_candidates": [],
+  "holdout_executed": false,
+  "normalized_map_executed": false,
+  "F_executed": false,
+  "G_executed": false,
+  "stage_result": "WORLD_FRAME_HYPOTHESIS_NOT_SUPPORTED"
+}
+
+--- ARTIFACT docs/p32_r4_corridor02_world_frame/runs/world_once/resource.txt
+user_cpu_sec=1.06
+system_cpu_sec=0.25
+peak_rss_kib=345136
+wall_sec=1.32

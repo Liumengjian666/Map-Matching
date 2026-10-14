@@ -12,6 +12,8 @@ cmake --build .p32_r4_corridor02_world_frame/build -j2
 实际内部命令/环境/退出码见runs/world_once/execution.json，数学日志、
 GNU time与四候选CSV均保存。进程绑定系统libusb，不修改系统或全局环境。
 没有调用完整地图ICP、holdout、normalizer或F/G，因此不编造相应运行命令。
+经本轮精确确认的外部CLI仅执行一次，完整命令与输入SHA见
+external_review/execution.json；不将该命令当作重复调用授权。
 
 只重算归档（无NN/ICP/ROS/GT）：
 
