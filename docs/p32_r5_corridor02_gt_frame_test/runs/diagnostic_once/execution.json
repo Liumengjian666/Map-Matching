@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r5_corridor02_gt_frame_test/build/gt_geometry",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r5_corridor02_gt_frame_test/input",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/map/corridor02.pcd",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r5_corridor02_gt_frame_test/diagnostic_once"
+  ],
+  "exit_code": 0,
+  "math_test_exit_code": 0,
+  "GT_ASSISTED_DIAGNOSTIC": true,
+  "GT_RUNTIME_INITIALIZATION": false,
+  "ICP_calls": 0,
+  "NDT_calls": 0
+}

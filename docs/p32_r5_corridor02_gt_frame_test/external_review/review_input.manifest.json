@@ -1,0 +1,98 @@
+{
+  "input_file": "/tmp/p32-r5-cli-review.7K1HiG/review_input.md",
+  "input_SHA256": "7c2cc392a0dfdee85e6e117bd111aad77eb70c2ef24890ee1161cc1e1f6aaefd",
+  "input_bytes": 76467,
+  "files": [
+    {
+      "path": "docs/p32_r5_corridor02_gt_frame_test/PROTOCOL.md",
+      "SHA256": "d7fab3e8093c6a746574c2a87d5590e2387feffb37571873998179eaaf4ead5f",
+      "bytes": 2496
+    },
+    {
+      "path": "src/dog_prior_map_localization/scripts/p32_gt_frame/CMakeLists.txt",
+      "SHA256": "dac50fe4094362afe8795b6152644c1763a541a56841d00b06e1ca480ee50c0c",
+      "bytes": 436
+    },
+    {
+      "path": "src/dog_prior_map_localization/scripts/p32_gt_frame/gt_geometry.cpp",
+      "SHA256": "81d58b131909b5cc859b43c955ec68d956c056da0bf23066addf648a0c62b805",
+      "bytes": 4412
+    },
+    {
+      "path": "src/dog_prior_map_localization/scripts/p32_gt_frame/math_test.py",
+      "SHA256": "d758e3c1eec1cf9f1e77209eb755628a9ddec89ec3db1d5745c030001b6e0a54",
+      "bytes": 1289
+    },
+    {
+      "path": "src/dog_prior_map_localization/scripts/p32_gt_frame/prepare.py",
+      "SHA256": "bd6ad0f30fab7207074508eb26e10ad9072d37ecbc504fc0ad968972ff967433",
+      "bytes": 6288
+    },
+    {
+      "path": "src/dog_prior_map_localization/scripts/p32_gt_frame/run_once.py",
+      "SHA256": "e8f2d7d9afe8d4ceb68f807b92e499965e907b65b35672eac3a76fc4f686ba9a",
+      "bytes": 3315
+    },
+    {
+      "path": "src/dog_prior_map_localization/scripts/p32_corridor02/prepare_probe.py",
+      "SHA256": "9b40443aa76b6fb72f2c5043ea5d1abb5a84c6624f46ce2314a7ce624d646481",
+      "bytes": 7850
+    },
+    {
+      "path": "docs/p32_r5_corridor02_gt_frame_test/runs/diagnostic_once/selection_freeze.json",
+      "SHA256": "80ad2d28997313a62575128507f621a52681c5cdf805c12e87462fcacc4bb022",
+      "bytes": 8230
+    },
+    {
+      "path": "docs/p32_r5_corridor02_gt_frame_test/runs/diagnostic_once/input_freeze.json",
+      "SHA256": "6830023d14c9926ba51fc1dbc8535bfcd3c15fccb5f2c966a02ade3a493f9739",
+      "bytes": 9948
+    },
+    {
+      "path": "docs/p32_r5_corridor02_gt_frame_test/runs/diagnostic_once/execution.json",
+      "SHA256": "a61e8b332f04a7ff911065cda0bde070fd8fcea662cdf07a1ce4c055dd266070",
+      "bytes": 555
+    },
+    {
+      "path": "docs/p32_r5_corridor02_gt_frame_test/runs/diagnostic_once/geometry.csv",
+      "SHA256": "176e1801f570dc4082b9aeb983b6604044542eab2c055b0813c96ec4a2ca3761",
+      "bytes": 14282
+    },
+    {
+      "path": "docs/p32_r5_corridor02_gt_frame_test/runs/diagnostic_once/geometry.log",
+      "SHA256": "ec30658f533042e48225708d909bd2d8949f99a35f93e12a73b314e0af4dec56",
+      "bytes": 88
+    },
+    {
+      "path": "docs/p32_r5_corridor02_gt_frame_test/runs/diagnostic_once/math_test.log",
+      "SHA256": "31899811c8642f547eb3fe86518fb1a6ec0dbc0bd965468bc1c1553a0edbea5b",
+      "bytes": 147
+    },
+    {
+      "path": "docs/p32_r5_corridor02_gt_frame_test/runs/diagnostic_once/resource.txt",
+      "SHA256": "986ddec0b06e061c251cd4cf41421cbf0f4eedb7675350e5e52aa88c05b2ffef",
+      "bytes": 72
+    },
+    {
+      "path": "docs/p32_r5_corridor02_gt_frame_test/world_matrices.json",
+      "SHA256": "df0322e2cef6c1482716d69956a312390ec06e6dcca8311ba8e92adca1808de4",
+      "bytes": 1270
+    },
+    {
+      "path": "docs/p32_r5_corridor02_gt_frame_test/hypothesis_summary.csv",
+      "SHA256": "8759e9b0778888add80c303fee3c00df97f7949b9be9120114acd49a2ce1e6c1",
+      "bytes": 1330
+    },
+    {
+      "path": "docs/p32_r5_corridor02_gt_frame_test/reference_sensitivity.csv",
+      "SHA256": "4acf7aef7f09ef78c57466d1786c83276ce019eb82ab7bf5d338e21350877844",
+      "bytes": 1000
+    },
+    {
+      "path": "docs/p32_r5_corridor02_gt_frame_test/finalize_evidence.py",
+      "SHA256": "f761e29c051bb37753ef2e33f03cbade77d6ce6b2ec9f33c401db3f226ac230a",
+      "bytes": 7962
+    }
+  ],
+  "CLI_invocations": 0
+}

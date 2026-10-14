@@ -1,0 +1,7 @@
+{
+  "build": "PASS",
+  "math_test": "PASS",
+  "math_test_invocations": 2,
+  "actual_recorded_log": "runs/diagnostic_once/math_test.log",
+  "ICP_NDT_calls": 0
+}

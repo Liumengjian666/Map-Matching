@@ -1,0 +1,2 @@
+user_cpu_sec,system_cpu_sec,peak_rss_kib,wall_sec,CPU_sec,peak_rss_mib,NN_ms_sum
+2.4,0.41,334776.0,2.82,2.81,326.9296875,1523.0835590000004
