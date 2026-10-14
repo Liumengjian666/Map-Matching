@@ -1,0 +1,23 @@
+{
+  "docs/p32_r1_heldout_mature_validation/DATA_ASSET_INVENTORY.md": "feb554b04582488f8eedd31592863d6f3b4b8621c7d9c91240ff9b18d762788d",
+  "docs/p32_r1_heldout_mature_validation/GT_EVALUATION_PROTOCOL.md": "39a4f53094113f774ea2a253d3311e4f2c4ef6b543714048e8a5165e8d0e577a",
+  "docs/p32_r1_heldout_mature_validation/INDEPENDENT_REVIEW.md": "2ff93434c7ca138fc982baa33604ba9d8c6b57c44d180d916be0110ac7447177",
+  "docs/p32_r1_heldout_mature_validation/MAP_AND_FRAME_CONTRACT.md": "875922660d3d4e0479f2bf4f1fda7befefa4013b6faed329738e246db301c9c6",
+  "docs/p32_r1_heldout_mature_validation/PROTOCOL.md": "2c68b257bcce3f3387c3d0b5e9df16af206cad3d4122ed3a1b697fecdf03a3dd",
+  "docs/p32_r1_heldout_mature_validation/REPORT.md": "057bf377b9197034df95894400c34668205b1a629e3e1c08ea01130fc8f127e0",
+  "docs/p32_r1_heldout_mature_validation/accuracy_comparison.csv": "18b6c107bcda9f0f09f6f4bf0a0c0e1c226380ef165d430e4c1350b193620882",
+  "docs/p32_r1_heldout_mature_validation/algorithm_freeze.json": "6d07989b2b1cb796a9fa3d1ac07ac40e1e96a48a663de3f1be7f8a8579a642b6",
+  "docs/p32_r1_heldout_mature_validation/asset_evidence.json": "bb7e71689d3da5a433ace7cd8ee9c1efc068cbed85002b152a66bc9a0da83f28",
+  "docs/p32_r1_heldout_mature_validation/commands.md": "2143eccc397cee7a13062efddd21814eeeb20eacd1e3cc753e440cbad5d23c31",
+  "docs/p32_r1_heldout_mature_validation/external_review/cli.log": "aeb61eecbf74511a631f9b05a0f108120de62b13eeecd32d188ae75149286f3c",
+  "docs/p32_r1_heldout_mature_validation/external_review/execution.json": "f8a037a421ca1c81630b286fb051df315e63d70ef61fbb2c1698f7d1b00079d9",
+  "docs/p32_r1_heldout_mature_validation/external_review/review_input.md": "b9ab168f3f8841a079e1d7ad72bdfb3f9e4fed680be311a35e166ab88a8fac16",
+  "docs/p32_r1_heldout_mature_validation/external_review/review_result.md": "3b53c0b211ccf7565645452f43fe83aeac9b9dbd8cc966789eb05679a83a18b9",
+  "docs/p32_r1_heldout_mature_validation/resource_summary.csv": "11c23615e3cbb34c8bf62c0be99f79b43a4a4456b358f2f5f3d515f0a27a5a72",
+  "docs/p32_r1_heldout_mature_validation/results.json": "4c005750627beff60f1174d2ccaa4a4d47c1a2fde5f0067b0028bc7994e6c6a7",
+  "docs/p32_r1_heldout_mature_validation/run_status.csv": "1a8a6507113da3ad68576dfccf1446a2ad07c7d507fb2625a481d44bc6062911",
+  "docs/p32_r1_heldout_mature_validation/runtime_summary.csv": "673cbafcb5dfe9c0ee95b77f9b7fd89c06f6023c164f4b7fd3a69b27ad42995f",
+  "docs/p32_r1_heldout_mature_validation/source_changes.md": "b7f047afa8bd1e29fb4451edeeb50896a3ee07034e26b5c12114396ed7443c38",
+  "docs/p32_r1_heldout_mature_validation/verify_archive.py": "31871038af82108ddc001f0764ed2fdb190a644a565887a575ee05487323748d",
+  "docs/p32_r1_heldout_mature_validation/visual_update_summary.csv": "2c90854e7969e93f4bfa924008eed6c1e1f734835af15d47471b6f203297c173"
+}

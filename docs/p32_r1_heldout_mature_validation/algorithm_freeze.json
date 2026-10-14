@@ -1,0 +1,19 @@
+{
+  "code_commit": "2b5d7e6cad433e3830c8f1e03c5ded499b11d341",
+  "C_definition": "Accepted historical P30/P31 C, not a newly loaded P32 runtime configuration",
+  "physical_parameters_changed": false,
+  "files_sha256": {
+    "src/dog_prior_map_localization/config/p28_mature_visual.yaml": "ec757805fec3a1626ed17e47b79f65dc51c71977906affd6ee48b36e1ee324d7",
+    "src/dog_prior_map_localization/config/p30_scan_local_deskew.yaml": "dd0962ed88e757d4a39fbc1db913fd76cd9a53829bc034066a6dfe520f676545",
+    "src/dog_prior_map_localization/src/core/imu_deskew.cpp": "a9763ea606898d45b2a39141050ab2913b8279af39d64c63b5c3e6c84d9bf54c",
+    "src/dog_prior_map_localization/src/core/imu_propagation.cpp": "0ff8fdfb07841c3cefd24bc9fd387212cd471d5d2d70431db816b19435285895",
+    "src/dog_prior_map_localization/src/imu_deskew_runtime.cpp": "0044e0e4123a1632150e29a70a66c312afc245d24b641fcf41d8f75eb5a8c335",
+    "src/dog_prior_map_localization/src/fusion/msckf_visual.cpp": "b61f248484fcf7147fe4deadbb7d68c454a7bb1f43c3d41926a053f21a4bf57d",
+    "src/dog_prior_map_localization/src/mature_ndt_algorithms.cpp": "e61e4dc1f556fa3b5e93d64f7734a24567edb766ee7ea9f826e6adabce9a8f86",
+    "src/dog_prior_map_localization/src/core/msckf_visual_measurement.cpp": "38c2a1b380f278722246af05ecdfca709a058bfbfd9f4332ce7943d44d954a8f"
+  },
+  "available_binaries_identity_rechecked_not_executed": {
+    "/tmp/p31-build.k3TwQd/devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp": "0caef70419cb6b45f17295f5cc01901953a08fcd125425fdcecb1d228f3143a2",
+    "/tmp/p31-build.k3TwQd/devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp": "a33586a425dac0b35f366ef4e3d7da0cfdbc9d76c00132eb59d843bc09883c1d"
+  }
+}

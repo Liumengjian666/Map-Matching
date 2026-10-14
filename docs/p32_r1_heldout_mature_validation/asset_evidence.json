@@ -1,0 +1,86 @@
+{
+  "inspection_date": "2026-10-14 Asia/Shanghai",
+  "scope": "Bounded present-asset metadata, first Corridor02 messages, six small calibration/initialization hashes, one SSD map hash",
+  "Floor01": {
+    "root": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Floor01",
+    "raw_shards": [
+      {"name": "raw/extracted/Multi_Floor_Rosbag/raw_data_core_2022-08-18-17-16-31_0.bag", "bytes": 3422674923, "exists": true},
+      {"name": "raw/extracted/Multi_Floor_Rosbag/raw_data_core_2022-08-18-17-19-00_1.bag", "bytes": 3442739076, "exists": true},
+      {"name": "raw/extracted/Multi_Floor_Rosbag/raw_data_core_2022-08-18-17-21-29_2.bag", "bytes": 2783923015, "exists": true}
+    ],
+    "raw_map_bytes": 19791028,
+    "GT_file_bytes": 178532,
+    "GT_file_pose_data_read": false,
+    "sensor_modality_evidence_source": "Historical P3_R7D_FLOOR01_BAG_AND_SENSOR_AUDIT.md; not freshly revalidated full raw sequence",
+    "ssd_map": {
+      "path": "/home/jian/livox_ws/p6_i1_recovery_assets_20260927/floor01_h1_map_p5_frozen.pcd",
+      "bytes": 6595818,
+      "sha256": "2b571af236738a0664befacdc9c783246e991416a8915bcfebb9d2dc074e4570",
+      "hash_rechecked": true
+    },
+    "small_file_hashes_rechecked": {
+      "calibration/floor01_extrinsics.yaml": "fd9fbfb209d6715b4812a92d458cdeb32cbfd75160356a87802c2bda5dfa7414",
+      "calibration/floor01_intrinsics.yaml": "04c5865d2d1f3864c8b1a5f2348b8455d400394be94c58313e8d3323b446b059",
+      "initial_pose/multi-floor01.yaml": "6da3daf5194b30e27c2b07956738798b4e39d5b2e613c71206da683961737c98"
+    }
+  },
+  "Corridor02": {
+    "root": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02",
+    "bag": {
+      "relative_path": "raw/corridor02.bag",
+      "bytes": 24494797838,
+      "version": "2.0",
+      "indexed": true,
+      "compression": "none",
+      "record_duration_sec": 893.404680,
+      "record_start_sec": 1724621084.660316,
+      "record_end_sec": 1724621978.064996,
+      "message_count": 208697,
+      "counts": {"/velodyne_points": 8859, "/imu/data": 178499, "/camera_1/image_raw": 21339},
+      "full_SHA256_rechecked": false
+    },
+    "first_messages": [
+      {
+        "topic": "/velodyne_points",
+        "record_ns": "1724621084660315835",
+        "header_ns": "1645999726278098106",
+        "frame": "cmu_rc1_velodyne",
+        "points": 28131,
+        "fields": [
+          {"name": "x", "offset": 0, "datatype": 7},
+          {"name": "y", "offset": 4, "datatype": 7},
+          {"name": "z", "offset": 8, "datatype": 7},
+          {"name": "intensity", "offset": 12, "datatype": 7},
+          {"name": "ring", "offset": 16, "datatype": 4},
+          {"name": "time", "offset": 18, "datatype": 7}
+        ]
+      },
+      {"topic": "/imu/data", "record_ns": "1724621084717562099", "header_ns": "1645999726442864000", "frame": "epson"},
+      {"topic": "/camera_1/image_raw", "record_ns": "1724621089020473770", "header_ns": "1645999730701529211", "frame": "d", "width": 640, "height": 480, "encoding": "bgr8", "data_bytes": 921600}
+    ],
+    "map_file_bytes": 66056109,
+    "GT_file_bytes": 475805,
+    "GT_file_pose_data_read": false,
+    "historical_GT_time_range_sec": [1645999726.984117, 1646000619.653331],
+    "record_clock_compared_to_GT_for_rejection": false,
+    "small_file_hashes_rechecked": {
+      "calibration/corridor02_extrinsics.yaml": "892bf743dc0f51eabfe9d8ae71dc98663753f174910ae9cc40ee244c77a9e217",
+      "calibration/corridor02_intrinsics.yaml": "8d47e98aed48cf941c8ee642136514b50ea7e6dd0bd26de9266081bd8693fe12",
+      "initial_pose/corridor02.yaml": "fc319ad99737a717456e11eb70383d4848eadf7e46587fee0643d6732cf1c3a1"
+    }
+  },
+  "official_web_check": {
+    "url": "https://superodometry.com/superloc.html",
+    "accessed": "2026-10-14",
+    "relevant_sections": "Dataset lines192-209; published maps/calibration/GT/initialization links and TUM field order",
+    "GT_sensor_origin_or_initial_matrix_direction_closed_by_page": false,
+    "other_page_attempt": "https://superodometry.com/iccv2023_challenge_LIO.html inaccessible; no new evidence inferred"
+  },
+  "other_dataset_bag_search": {
+    "root": "/media/jian/HIKVISION/paper rosbag",
+    "directories": ["FusionPortable", "M3DGR", "ENWIDE", "GEODE", "NTNU_LiDAR_Degeneracy"],
+    "maxdepth": 2,
+    "bag_files_found_within_scope": 0,
+    "global_absence_claimed": false
+  }
+}
