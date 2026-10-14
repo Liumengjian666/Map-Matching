@@ -18,6 +18,9 @@ CUTOFF_NS=START_NS+5_000_000_000
 
 def main(asset, output):
     output.mkdir(parents=True,exist_ok=False)
+    source=Path(__file__).resolve()
+    decoder=source.parents[1]/'p32_corridor02/prepare_probe.py'
+    executed_sources={str(path):sha(path) for path in (source,decoder)}
     frames=[];imus=[];last={};first_three=[]
     topics=['/velodyne_points','/imu/data']
     with rosbag.Bag(str(asset/'raw/corridor02.bag')) as bag:
@@ -66,7 +69,10 @@ def main(asset, output):
     calibration=asset/'calibration/corridor02_extrinsics.yaml'
     original=np.array(yaml.safe_load(calibration.read_text())['laser_to_imu']['data']).reshape(4,4)
     original.astype('<f8').tofile(output/'T_imu_lidar.f64')
-    result=dict(GT_LOADED=False,first_raw_scan_ns=list(map(str,first_three)),reference_ns=str(START_NS),
+    if any(sha(Path(path))!=digest for path,digest in executed_sources.items()):
+        raise ValueError('EXTRACTION_SOURCE_CHANGED')
+    result=dict(GT_LOADED=False,executed_sources_sha256=executed_sources,
+        first_raw_scan_ns=list(map(str,first_three)),reference_ns=str(START_NS),
         cutoff_ns=str(CUTOFF_NS),scans=len(frames),imu=len(imus),scan_rows=frames,
         first_imu_ns=str(imus[0][0]),last_imu_ns=str(imus[-1][0]),last_scan_end_ns=str(frames[-1][1]),
         raw_calibration=original.tolist(),calibration_sha=sha(calibration),

@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import subprocess
 import time
+import numpy as np
 
 MAP_SHA = '6c39e243556eddbef7a8b4bd2de25cf7c962c4ff0f52c94cfc1d994f178ae228'
 PRIOR_SHA = 'fc319ad99737a717456e11eb70383d4848eadf7e46587fee0643d6732cf1c3a1'
@@ -20,6 +21,42 @@ def sha(path):
         for block in iter(lambda: stream.read(1024 * 1024), b''):
             digest.update(block)
     return digest.hexdigest()
+
+
+def validate_input_manifest(inputs, extraction):
+    # Bind the bytes being checked to exactly the directory consumed by bridge.
+    files = {Path(name).resolve(): digest for name, digest in extraction['files_sha256'].items()}
+    required = {inputs / name for name in ('scans.txt', 'imu.txt', 'T_imu_lidar.f64')}
+    for line in (inputs / 'scans.txt').read_text().splitlines():
+        _, _, count, name = line.split()
+        path = (inputs / name).resolve()
+        if path.parent != inputs or path.stat().st_size != int(count) * 16:
+            raise ValueError('POINT_FILE_BINDING')
+        required.add(path)
+    if set(files) != required or any(path.parent != inputs for path in files):
+        raise ValueError('INPUT_MANIFEST_DIRECTORY_BINDING')
+    for path, expected in files.items():
+        if sha(path) != expected:
+            raise ValueError('EXTRACTED_INPUT_HASH_CHANGED: ' + str(path))
+
+
+def result_is_legal(best):
+    T = np.array([[float(best['result' + str(i) + str(j)]) for j in range(4)] for i in range(4)])
+    R = T[:3, :3]
+    return bool(np.isfinite(T).all() and np.array_equal(T[3], [0, 0, 0, 1])
+                and abs(np.linalg.det(R) - 1) <= 1e-5
+                and np.linalg.norm(R.T @ R - np.eye(3)) <= 1e-5)
+
+
+def validate_extraction_sources(sources, extraction):
+    decoder = sources.parent / 'p32_corridor02/prepare_probe.py'
+    extracted = extraction['executed_sources_sha256']
+    required = {str((sources / 'prepare_input.py').resolve()), str(decoder.resolve())}
+    if set(extracted) != required:
+        raise ValueError('EXTRACTION_DEPENDENCY_NOT_BOUND')
+    if any(sha(Path(path)) != digest for path, digest in extracted.items()):
+        raise ValueError('EXTRACTION_DEPENDENCY_CHANGED')
+    return decoder
 
 
 def run(command, name, output, env):
@@ -40,9 +77,7 @@ def main(asset, inputs, build, output, protocol):
     # This directory is the one-shot guard. Never replace or reuse it.
     output.mkdir(parents=True, exist_ok=False)
     extraction = json.loads((inputs / 'extraction.json').read_text())
-    for filename, expected in extraction['files_sha256'].items():
-        if sha(Path(filename)) != expected:
-            raise ValueError('EXTRACTED_INPUT_HASH_CHANGED: ' + filename)
+    validate_input_manifest(inputs, extraction)
     if extraction['GT_LOADED'] or extraction['post_cutoff_sensor_measurement_used']:
         raise ValueError('INPUT_CAUSAL_CONTRACT')
     sources = Path(__file__).resolve().parent
@@ -58,6 +93,8 @@ def main(asset, inputs, build, output, protocol):
     for path in sorted(sources.rglob('*')):
         if path.is_file() and '__pycache__' not in path.parts:
             hashes[str(path)] = sha(path)
+    decoder = validate_extraction_sources(sources, extraction)
+    hashes[str(decoder.resolve())] = sha(decoder)
     freeze = dict(created_unix_ns=str(time.time_ns()), map_sha256=MAP_SHA,
                   prior_sha256=PRIOR_SHA, hashes=hashes, extraction=extraction,
                   raw_bag_path=str(asset / 'raw/corridor02.bag'),
@@ -85,6 +122,7 @@ def main(asset, inputs, build, output, protocol):
     best = diagnostics[int(ranked[0]['candidate_id'])]
     checks = dict(program_exit_zero=code == 0, converged=best['converged'] == '1',
                   legal_seed=best['seed_SE3_float_tolerance'] == '1',
+                  legal_result=result_is_legal(best),
                   fitness=float(best['fitness']) <= 10,
                   nn_median=float(best['nn_median_m']) <= 1,
                   nn_p90=float(best['nn_p90_m']) <= 3,
