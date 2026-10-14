@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.10)
+project(p32_gt_frame LANGUAGES C CXX)
+set(CMAKE_CXX_STANDARD 14)
+find_package(PCL REQUIRED COMPONENTS io filters kdtree)
+find_library(SYSTEM_USB NAMES libusb-1.0.so.0 PATHS /lib/x86_64-linux-gnu NO_DEFAULT_PATH REQUIRED)
+add_executable(gt_geometry gt_geometry.cpp)
+target_include_directories(gt_geometry PRIVATE ${PCL_INCLUDE_DIRS})
+target_link_libraries(gt_geometry ${PCL_LIBRARIES} ${SYSTEM_USB})
