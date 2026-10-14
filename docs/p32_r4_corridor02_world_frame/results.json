@@ -1,0 +1,325 @@
+{
+  "TASK": "P32-R4-CORRIDOR02-WORLD-FRAME-TRANSFORM-TEST",
+  "START_SHA": "c081f425a130e2f16621fbb47e90e24ef0cd575d",
+  "CODE_SHA": "30a29ae9c194aa907e33d2b7aa0af6b4d8d25fd3",
+  "END_SHA": "Containing archive commit; full SHA supplied in git and final handoff",
+  "REMOTE_HEAD_AT_START": "c081f425a130e2f16621fbb47e90e24ef0cd575d",
+  "PUSH_EXECUTED": false,
+  "input_local_sha256": "8c2302f575f12b0decfdcecaf369eaa0a8429b6bdb1673006ec519d7d248e0cd",
+  "input_map_sha256": "6c39e243556eddbef7a8b4bd2de25cf7c962c4ff0f52c94cfc1d994f178ae228",
+  "reference_ns": "1645999726479818106",
+  "source_points": 2569,
+  "target_voxel_points": 2378870,
+  "Q_yaw_deg": [
+    0,
+    90,
+    -90,
+    180
+  ],
+  "left_transforms_rotation_and_translation": true,
+  "no_translation_offset": true,
+  "GT_LOADED": false,
+  "candidate_geometry": [
+    {
+      "candidate_id": "0",
+      "yaw_deg": "0",
+      "legal": "1",
+      "nn_median_m": "292.94439697265625",
+      "nn_p90_m": "306.50225830078125",
+      "coverage_0_5m": "0",
+      "coverage_8m": "0",
+      "bbox_xmin": "22.027206420898438",
+      "bbox_xmax": "116.30670166015625",
+      "bbox_ymin": "-188.52830505371094",
+      "bbox_ymax": "-126.81143188476562",
+      "bbox_zmin": "-5.9235281944274902",
+      "bbox_zmax": "-2.7337918281555176",
+      "screen_pass": "0",
+      "nn_ms": "3.9812609999999999",
+      "seed00": "0.82380002737045288",
+      "seed01": "-0.56685298681259155",
+      "seed02": "-0.0055030002258718014",
+      "seed03": "39.929523468017578",
+      "seed10": "0.56587898731231689",
+      "seed11": "0.82288402318954468",
+      "seed12": "-0.051417998969554901",
+      "seed13": "-176.21714782714844",
+      "seed20": "0.033675000071525574",
+      "seed21": "0.039243001490831375",
+      "seed22": "0.99866199493408203",
+      "seed23": "-5.2254271507263184",
+      "seed30": "0",
+      "seed31": "0",
+      "seed32": "0",
+      "seed33": "1"
+    },
+    {
+      "candidate_id": "1",
+      "yaw_deg": "90",
+      "legal": "1",
+      "nn_median_m": "47.297981262207031",
+      "nn_p90_m": "53.386463165283203",
+      "coverage_0_5m": "0",
+      "coverage_8m": "0",
+      "bbox_xmin": "126.81143188476562",
+      "bbox_xmax": "188.52830505371094",
+      "bbox_ymin": "22.027206420898438",
+      "bbox_ymax": "116.30670166015625",
+      "bbox_zmin": "-5.9235281944274902",
+      "bbox_zmax": "-2.7337918281555176",
+      "screen_pass": "0",
+      "nn_ms": "3.7667079999999999",
+      "seed00": "-0.56587898731231689",
+      "seed01": "-0.82288402318954468",
+      "seed02": "0.051417998969554901",
+      "seed03": "176.21714782714844",
+      "seed10": "0.82380002737045288",
+      "seed11": "-0.56685298681259155",
+      "seed12": "-0.0055030002258718014",
+      "seed13": "39.929523468017578",
+      "seed20": "0.033675000071525574",
+      "seed21": "0.039243001490831375",
+      "seed22": "0.99866199493408203",
+      "seed23": "-5.2254271507263184",
+      "seed30": "0",
+      "seed31": "0",
+      "seed32": "0",
+      "seed33": "1"
+    },
+    {
+      "candidate_id": "2",
+      "yaw_deg": "-90",
+      "legal": "1",
+      "nn_median_m": "363.55059814453125",
+      "nn_p90_m": "367.54037475585938",
+      "coverage_0_5m": "0",
+      "coverage_8m": "0",
+      "bbox_xmin": "-188.52830505371094",
+      "bbox_xmax": "-126.81143188476562",
+      "bbox_ymin": "-116.30670166015625",
+      "bbox_ymax": "-22.027206420898438",
+      "bbox_zmin": "-5.9235281944274902",
+      "bbox_zmax": "-2.7337918281555176",
+      "screen_pass": "0",
+      "nn_ms": "8.1470439999999993",
+      "seed00": "0.56587898731231689",
+      "seed01": "0.82288402318954468",
+      "seed02": "-0.051417998969554901",
+      "seed03": "-176.21714782714844",
+      "seed10": "-0.82380002737045288",
+      "seed11": "0.56685298681259155",
+      "seed12": "0.0055030002258718014",
+      "seed13": "-39.929523468017578",
+      "seed20": "0.033675000071525574",
+      "seed21": "0.039243001490831375",
+      "seed22": "0.99866199493408203",
+      "seed23": "-5.2254271507263184",
+      "seed30": "0",
+      "seed31": "0",
+      "seed32": "0",
+      "seed33": "1"
+    },
+    {
+      "candidate_id": "3",
+      "yaw_deg": "180",
+      "legal": "1",
+      "nn_median_m": "159.84446716308594",
+      "nn_p90_m": "171.86753845214844",
+      "coverage_0_5m": "0",
+      "coverage_8m": "0",
+      "bbox_xmin": "-116.30670166015625",
+      "bbox_xmax": "-22.027206420898438",
+      "bbox_ymin": "126.81143188476562",
+      "bbox_ymax": "188.52830505371094",
+      "bbox_zmin": "-5.9235281944274902",
+      "bbox_zmax": "-2.7337918281555176",
+      "screen_pass": "0",
+      "nn_ms": "5.1687810000000001",
+      "seed00": "-0.82380002737045288",
+      "seed01": "0.56685298681259155",
+      "seed02": "0.0055030002258718014",
+      "seed03": "-39.929523468017578",
+      "seed10": "-0.56587898731231689",
+      "seed11": "-0.82288402318954468",
+      "seed12": "0.051417998969554901",
+      "seed13": "176.21714782714844",
+      "seed20": "0.033675000071525574",
+      "seed21": "0.039243001490831375",
+      "seed22": "0.99866199493408203",
+      "seed23": "-5.2254271507263184",
+      "seed30": "0",
+      "seed31": "0",
+      "seed32": "0",
+      "seed33": "1"
+    }
+  ],
+  "initial_matrices": {
+    "0": {
+      "yaw_deg": 0,
+      "T_M_L": [
+        [
+          0.8238000273704529,
+          -0.5668529868125916,
+          -0.005503000225871801,
+          39.92952346801758
+        ],
+        [
+          0.5658789873123169,
+          0.8228840231895447,
+          -0.0514179989695549,
+          -176.21714782714844
+        ],
+        [
+          0.033675000071525574,
+          0.039243001490831375,
+          0.998661994934082,
+          -5.225427150726318
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "1": {
+      "yaw_deg": 90,
+      "T_M_L": [
+        [
+          -0.5658789873123169,
+          -0.8228840231895447,
+          0.0514179989695549,
+          176.21714782714844
+        ],
+        [
+          0.8238000273704529,
+          -0.5668529868125916,
+          -0.005503000225871801,
+          39.92952346801758
+        ],
+        [
+          0.033675000071525574,
+          0.039243001490831375,
+          0.998661994934082,
+          -5.225427150726318
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "2": {
+      "yaw_deg": -90,
+      "T_M_L": [
+        [
+          0.5658789873123169,
+          0.8228840231895447,
+          -0.0514179989695549,
+          -176.21714782714844
+        ],
+        [
+          -0.8238000273704529,
+          0.5668529868125916,
+          0.005503000225871801,
+          -39.92952346801758
+        ],
+        [
+          0.033675000071525574,
+          0.039243001490831375,
+          0.998661994934082,
+          -5.225427150726318
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "3": {
+      "yaw_deg": 180,
+      "T_M_L": [
+        [
+          -0.8238000273704529,
+          0.5668529868125916,
+          0.005503000225871801,
+          -39.92952346801758
+        ],
+        [
+          -0.5658789873123169,
+          -0.8228840231895447,
+          0.0514179989695549,
+          176.21714782714844
+        ],
+        [
+          0.033675000071525574,
+          0.039243001490831375,
+          0.998661994934082,
+          -5.225427150726318
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  },
+  "NN_screen_calls": 4,
+  "underlying_point_NN_queries": 10276,
+  "map_ICP_calls": 0,
+  "local_submap_reconstruction_calls": 0,
+  "raw_bag_reads": 0,
+  "candidate_admitted_count": 0,
+  "T_M_L0": null,
+  "AMBIGUITY": "NOT_EVALUATED_NO_ELIGIBLE_CANDIDATE",
+  "WORLD_FRAME_HYPOTHESIS": "NOT_SUPPORTED_BY_FOUR_FROZEN_Q",
+  "INITIALIZATION": "NOT_ESTABLISHED",
+  "INDEPENDENT_VALIDATION": "NOT_RUN_SCREEN_FAILED",
+  "NORMALIZED_MAP": "NOT_RUN_SCREEN_FAILED",
+  "normalized_map_sha256": null,
+  "T_N_M": null,
+  "F": {
+    "status": "NOT_RUN_SCREEN_FAILED",
+    "NDT": null,
+    "OOSM": null,
+    "MSCKF": null
+  },
+  "G": {
+    "status": "NOT_RUN_SCREEN_FAILED",
+    "NDT": null,
+    "OOSM": null,
+    "MSCKF": null
+  },
+  "runtime_localization_replays": 0,
+  "algorithm_math_modified": false,
+  "algorithm_parameters_modified": false,
+  "resources": {
+    "user_cpu_sec": 1.06,
+    "system_cpu_sec": 0.25,
+    "peak_rss_kib": 345136.0,
+    "wall_sec": 1.32,
+    "CPU_sec": 1.31,
+    "peak_rss_mib": 337.046875,
+    "four_screen_nn_ms": 21.063793999999998
+  },
+  "binary_SHA256": "1c2cc8e7c45946ccd5a868ecdf956ee82ed803b085e45362475f36b2be4ebaac",
+  "external_review": {
+    "status": "NOT_EXECUTED_NO_EXACT_COMMAND_AUTHORIZATION",
+    "invocations": 0
+  },
+  "limitations": [
+    "Only four pure world yaw transforms tested; no exclusion of other legal transforms",
+    "Numerical seeds do not prove official world/pose semantics",
+    "Map bbox inclusion does not establish actual surface correspondence",
+    "No heldout runtime, GT accuracy or mature fusion benefit evaluated"
+  ],
+  "NEXT": "Obtain sourced world_darpa-to-PCD and seed reference/time semantics; decision AI must approve any next bounded hypothesis, no automatic expanded search",
+  "FINAL_RESULT": "WORLD_FRAME_HYPOTHESIS_NOT_SUPPORTED"
+}

@@ -1,0 +1,15 @@
+{
+  "build": "PASS",
+  "math_test": "PASS",
+  "math_test_invocations": 1,
+  "actual_log": "runs/world_once/math_test.log",
+  "checks": [
+    "four proper Q",
+    "left rotation and translation",
+    "no offset",
+    "invalid rotation rejected",
+    "non-SE3 homogeneous row rejected"
+  ],
+  "isolated_localization_runtime_modified": false,
+  "ICP_calls_in_tests": 0
+}

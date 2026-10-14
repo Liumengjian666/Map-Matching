@@ -1,0 +1,51 @@
+{
+  "inputs": {
+    "local": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/initializer_once/first_segment_local_submap.pcd",
+      "SHA256": "8c2302f575f12b0decfdcecaf369eaa0a8429b6bdb1673006ec519d7d248e0cd"
+    },
+    "map": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/map/corridor02.pcd",
+      "SHA256": "6c39e243556eddbef7a8b4bd2de25cf7c962c4ff0f52c94cfc1d994f178ae228"
+    },
+    "prior": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/initial_pose/corridor02.yaml",
+      "SHA256": "fc319ad99737a717456e11eb70383d4848eadf7e46587fee0643d6732cf1c3a1"
+    },
+    "legacy": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_init_transfer/legacy/superloc_first_segment_initializer.cpp",
+      "SHA256": "deb58aeb3bd76f802568469f50d33f91b8026924b3fe299fa93b8fa8f9dc266d"
+    }
+  },
+  "source_SHA256": {
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_world_frame/world_test.cpp": "6484a0b5dd080ebf093bf99cc5b7e393c72218fe7cfdc83ba63f5dc63cd62a5f",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_world_frame/run_once.py": "f933692f8915fd9ec533c619aaab15c70aa65b1e04232fb84a495f299c599e1b",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_world_frame/CMakeLists.txt": "a7af72e3a0e4cb68f38f2a2539b690cbd94e4ee78d3c30f8131db99878f6c115",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_init_transfer/legacy/superloc_first_segment_initializer.cpp": "deb58aeb3bd76f802568469f50d33f91b8026924b3fe299fa93b8fa8f9dc266d"
+  },
+  "binary_SHA256": "1c2cc8e7c45946ccd5a868ecdf956ee82ed803b085e45362475f36b2be4ebaac",
+  "protocol_SHA256": "9237b8ca7d91926a58a729c9c3f8f1cb0a73c899f116964dd8d5746f0765a863",
+  "reference_ns": "1645999726479818106",
+  "GT_LOADED": false,
+  "local_reconstructed": false,
+  "raw_bag_replayed": false,
+  "Q_yaw_deg": [
+    0,
+    90,
+    -90,
+    180
+  ],
+  "rule": "T_M_L=[Q,0]*T_yaml",
+  "map_voxel_m": 0.2,
+  "source_voxel_already_applied_m": 0.25,
+  "ICP": {
+    "max_distance_m": 8,
+    "max_iterations": 60,
+    "epsilon": 1e-07,
+    "fitness_epsilon": 1e-06
+  },
+  "budgets": {
+    "NN_screens": 4,
+    "map_ICP": 2
+  }
+}

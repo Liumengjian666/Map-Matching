@@ -1,0 +1,11 @@
+{
+  "GT_LOADED": false,
+  "NN_screens": 4,
+  "map_ICP_calls": 0,
+  "admitted_candidates": [],
+  "holdout_executed": false,
+  "normalized_map_executed": false,
+  "F_executed": false,
+  "G_executed": false,
+  "stage_result": "WORLD_FRAME_HYPOTHESIS_NOT_SUPPORTED"
+}

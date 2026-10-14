@@ -1,0 +1,1 @@
+candidate_id,converged,fitness,nn_median_m,nn_p90_m,coverage_0_5m,coverage_8m,bbox_xmin,bbox_xmax,bbox_ymin,bbox_ymax,bbox_zmin,bbox_zmax,final_legal,admitted,correction_m,correction_deg,icp_and_legacy_score_ms,final_nn_ms,result00,result01,result02,result03,result10,result11,result12,result13,result20,result21,result22,result23,result30,result31,result32,result33
