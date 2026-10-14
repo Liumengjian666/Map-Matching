@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/build/initializer",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/init_rotation_input.bag",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/map/corridor02.pcd",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/initial_pose/corridor02.yaml",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/initializer_once",
+    "5"
+  ],
+  "exit_code": 7,
+  "resource_text": "Command exited with non-zero status 7\nuser_cpu_sec=37.78\nsystem_cpu_sec=3.44\npeak_rss_kib=395820\nwall_sec=41.27\n"
+}

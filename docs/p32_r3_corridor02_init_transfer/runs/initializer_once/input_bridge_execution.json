@@ -1,0 +1,8 @@
+{
+  "command": [
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/build/input_bridge",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input"
+  ],
+  "exit_code": 0,
+  "resource_text": "user_cpu_sec=0.21\nsystem_cpu_sec=0.03\npeak_rss_kib=21404\nwall_sec=0.25\n"
+}

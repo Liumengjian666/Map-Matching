@@ -1,0 +1,13 @@
+source: FIRST_SEGMENT_WITH_OFFICIAL_PRIOR
+t_init_start: 1645999726.47982
+initialization_interval_sec: 5
+scans_available: 49
+scans_used: 49
+GT_used: false
+future_after_5s_used: false
+official_prior_semantics: OTHER_OFFICIAL_FRAME_TRANSFORM_UNRESOLVED
+selected_candidate_id: 2
+T_map_lidar:
+  translation: [39.9295234680176, -176.217147827148, -5.22542715072632]
+  rotation_matrix: [0.823800683, 0.5668532848, 0.005503550172; 0.5658786893, -0.8228833675, 0.05141744018; 0.03367477655, -0.03924375772, -0.9986621141]
+  quaternion_xyzw: [0.9546394944, 0.2966386676, 0.0102599794, -0.02374226041]

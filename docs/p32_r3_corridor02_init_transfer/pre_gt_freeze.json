@@ -1,0 +1,30 @@
+{
+  "GT_LOADED": false,
+  "scope": "Initialization outputs only",
+  "files_sha256": {
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/admission.json": "84232d1c44f3ff340916b38980bff8d63d96d88da1653d6771a9609f88a9af8f",
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/bridge.csv": "906a8396d7a79f8ecd60ed1d81bf9d2abd0f2a95f228f66ff6ff359cc5fdebe0",
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/candidate_diagnostics.csv": "477362a7161beeb55c4db699bfc9292e4fbe40fcca13a2c74099f8dc08418468",
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/corridor01_init.yaml": "e6a6b6db1a06cd90a84613050da4b08c73db1c798c8d518d4bc66230dc01668d",
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/extraction.json": "86e4847f9ab3764e0b235a888d1eb66226790f87f7b97b10090b3ee232149d36",
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/guard_test.log": "7b9611f43c3ff2c96097d4e4d5d98f3fbd87903b1b7834a14d3a9a486ca6bb1f",
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/initializer.log": "ee76d249daf176c01af782661eac1c8bdf7b169f9b3a47a562861e9589668a29",
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/initializer_candidates.csv": "2b7ad0701ca334c2ca2ab42ba1f8f5b8f222adbe4395ba407c9ea9608f9c2032",
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/initializer_execution.json": "b147686da71d54d6173727f66607bd55ededa2a32f36551830e33c51c0893869",
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/initializer_registration.csv": "b184c3cb35b6ecfcffb6f639b1c555120b5791e6b526a7653abfb89bfaae6174",
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/initializer_resource.txt": "d61fb143330af0e8f794861de3df320d590b588030575627c83ed823799e4846",
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/input_bridge.log": "52b1a313087a5205310aa2b5f02904a412538b97d3df05a991588e32a6befe53",
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/input_bridge_execution.json": "32f29cd9dd3e62af86beddaeab32766a4360e1383da9e5fd488bf6c074e46620",
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/input_bridge_resource.txt": "8b67fc1fde08765784af561d2f601391298210a4d838a128186fa1806cdb490e",
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/input_freeze.json": "a752b563151fbc1a36696849783663886132d57f57a829ad4176fe044f921bc6",
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/math_test.log": "1754c61b271630267c39b18ec675399c53150e2900370d9b81decc4275eb78dd",
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/math_test_execution.json": "5db7407c7d127d818504f0dbec3d76c640a9c7e74fe0426f9fc43798b381202b",
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/math_test_resource.txt": "b13b0fc7038f7cb7b31bfcd0506e4afc5324ea8ec66257185cadeaf8fe72aa6f",
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/prepare_input_executed.py": "c925444e32579999c96bfc2b21008ccf589dfae639bf01f00c353bba5963cea5",
+    "docs/p32_r3_corridor02_init_transfer/runs/initializer_once/run_once_executed.py": "c8343c5405d61d6df9435a9ba0e5e41220658cb3ab92ade7a4a5944188af0492"
+  },
+  "local_large_artifacts": {
+    ".p32_r3_corridor02_init_transfer/initializer_once/first_segment_local_submap.pcd": "8c2302f575f12b0decfdcecaf369eaa0a8429b6bdb1673006ec519d7d248e0cd",
+    ".p32_r3_corridor02_init_transfer/input/init_rotation_input.bag": "f15437ddb55e01046fb21d98e55f4f91d49cd8e3199c5647220c61b4486bfb95"
+  }
+}

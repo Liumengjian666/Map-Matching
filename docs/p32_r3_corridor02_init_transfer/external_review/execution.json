@@ -1,0 +1,22 @@
+{
+  "invocations": 1,
+  "exit_code": 0,
+  "CLI_version": "0.159.2",
+  "model": "gpt-6.1-sol",
+  "reasoning_effort": "xhigh",
+  "sandbox": "read-only",
+  "approval": "never",
+  "auth": "Existing login; no credentials copied or changed",
+  "exact_command_authorized_by_user": true,
+  "command": "/usr/bin/codex --no-daemon -a never exec --sandbox read-only --ignore-user-config --ignore-rules --ephemeral --skip-git-repo-check -C /tmp/p32-r3-cli-review.MxNsqO -m gpt-6.1-sol -c 'model_reasoning_effort=\"xhigh\"' --color never -o /tmp/p32-r3-cli-review.MxNsqO/review_result.md - < /tmp/p32-r3-cli-review.MxNsqO/review_input.md > /tmp/p32-r3-cli-review.MxNsqO/cli.log 2>&1",
+  "input_file": "review_input.md",
+  "input_SHA256": "31ae8b1a277363df066538676a37b677408e7edb580b2c523c0a5374814ab104",
+  "result_file": "review_result.md",
+  "result_SHA256": "2b11c14339b1f4a1fd9d31fb1aebb25a145e49458468992da88ec623ac93ef56",
+  "log_file": "cli.log",
+  "log_SHA256": "be4134c089d13ee3bfea0dae751efcff2506fb94dc050df842a163c9b576915c",
+  "scope": "Bundled code and finite initialization evidence only; no GT or new experiments",
+  "findings": 3,
+  "post_review_guard_replay": false,
+  "additional_ICP_calls": 0
+}

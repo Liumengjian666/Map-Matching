@@ -1,0 +1,424 @@
+{
+  "created_unix_ns": "1791974636982305957",
+  "map_sha256": "6c39e243556eddbef7a8b4bd2de25cf7c962c4ff0f52c94cfc1d994f178ae228",
+  "prior_sha256": "fc319ad99737a717456e11eb70383d4848eadf7e46587fee0643d6732cf1c3a1",
+  "hashes": {
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/map/corridor02.pcd": "6c39e243556eddbef7a8b4bd2de25cf7c962c4ff0f52c94cfc1d994f178ae228",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/initial_pose/corridor02.yaml": "fc319ad99737a717456e11eb70383d4848eadf7e46587fee0643d6732cf1c3a1",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_init_transfer/legacy/superloc_first_segment_initializer.cpp": "deb58aeb3bd76f802568469f50d33f91b8026924b3fe299fa93b8fa8f9dc266d",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/build/math_test": "2840c48a41389df6dcd562c03a6ab2d0d3ec62c842a3145066964ae308dc289e",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/build/input_bridge": "2a81ffd45683b4097321e0c8c9ffd63d0f236b2a5f0ba545fa752c8158163dbe",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/build/initializer": "7111a9792ad0601941a57831f1c7fbf5a3db3e1e086ad8db4f8b38b73c858ba4",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/docs/p32_r3_corridor02_init_transfer/PROTOCOL.md": "3bae50a2f3ccb76bce921ae015dd211066ac349dc22debd0cbc17e282901cb9c",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_init_transfer/CMakeLists.txt": "0b12d696f759b188f593eaf5481021453c5fc60e0f1088ea9af1007b760384a5",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_init_transfer/gyro_input.hpp": "0408e9192a117b090490e23e042dd52406120d8c14865dbe37fbae4c15a45467",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_init_transfer/initializer.cpp": "45625951b5c9d94516851729388b650b3995f86208a2e9782bad618e772617cb",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_init_transfer/input_bridge.cpp": "ffca9ca290c6fa58c31e24710ad254e2df63c379f85a66c1a97bea63d689a357",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_init_transfer/legacy/full_se3_deskew.hpp": "0cba8177a3542bbc9589e0e9418bc1db1727a66c572cad18eac592fe419f596e",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_init_transfer/legacy/superloc_holdout_sanity.cpp": "4e4c1b0e62a53629cb95828064a3adc960949ee0b5cce6ecfc3c4424d0572807",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_init_transfer/legacy/superloc_map_normalizer.cpp": "5c38a755fc015abffabafab7ed71f343716ca29028b9f93b4ce35fba24abe808",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_init_transfer/math_test.cpp": "12bd5107b7b43638adad4557f94f27e47ceacc9ca5c6bfb2c0e8923ac46ed82c",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_init_transfer/prepare_input.py": "c925444e32579999c96bfc2b21008ccf589dfae639bf01f00c353bba5963cea5",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_init_transfer/run_once.py": "c8343c5405d61d6df9435a9ba0e5e41220658cb3ab92ade7a4a5944188af0492",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/init_rotation_input.bag": "f15437ddb55e01046fb21d98e55f4f91d49cd8e3199c5647220c61b4486bfb95",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/bridge.csv": "906a8396d7a79f8ecd60ed1d81bf9d2abd0f2a95f228f66ff6ff359cc5fdebe0"
+  },
+  "extraction": {
+    "GT_LOADED": false,
+    "first_raw_scan_ns": [
+      "1645999726278098106",
+      "1645999726378957987",
+      "1645999726479818106"
+    ],
+    "reference_ns": "1645999726479818106",
+    "cutoff_ns": "1645999731479818106",
+    "scans": 49,
+    "imu": 1001,
+    "scan_rows": [
+      [
+        1645999726479818106,
+        1645999726580657319,
+        28089,
+        "scan_1645999726479818106.xyzt"
+      ],
+      [
+        1645999726580677986,
+        1645999726681517437,
+        28097,
+        "scan_1645999726580677986.xyzt"
+      ],
+      [
+        1645999726681538105,
+        1645999726782376364,
+        28073,
+        "scan_1645999726681538105.xyzt"
+      ],
+      [
+        1645999726782397985,
+        1645999726883236482,
+        28093,
+        "scan_1645999726782397985.xyzt"
+      ],
+      [
+        1645999726883256912,
+        1645999726984096363,
+        28103,
+        "scan_1645999726883256912.xyzt"
+      ],
+      [
+        1645999726984117031,
+        1645999727084904268,
+        28152,
+        "scan_1645999726984117031.xyzt"
+      ],
+      [
+        1645999727084924936,
+        1645999727185764387,
+        28128,
+        "scan_1645999727084924936.xyzt"
+      ],
+      [
+        1645999727185785055,
+        1645999727286624268,
+        28150,
+        "scan_1645999727185785055.xyzt"
+      ],
+      [
+        1645999727286644936,
+        1645999727387484387,
+        28142,
+        "scan_1645999727286644936.xyzt"
+      ],
+      [
+        1645999727387505054,
+        1645999727488344267,
+        28137,
+        "scan_1645999727387505054.xyzt"
+      ],
+      [
+        1645999727488364935,
+        1645999727589204386,
+        28126,
+        "scan_1645999727488364935.xyzt"
+      ],
+      [
+        1645999727589225054,
+        1645999727690063313,
+        28112,
+        "scan_1645999727589225054.xyzt"
+      ],
+      [
+        1645999727690084934,
+        1645999727790923431,
+        28111,
+        "scan_1645999727690084934.xyzt"
+      ],
+      [
+        1645999727790944099,
+        1645999727891783312,
+        28100,
+        "scan_1645999727790944099.xyzt"
+      ],
+      [
+        1645999727891803980,
+        1645999727992643431,
+        28142,
+        "scan_1645999727891803980.xyzt"
+      ],
+      [
+        1645999727992664099,
+        1645999728093458489,
+        28101,
+        "scan_1645999727992664099.xyzt"
+      ],
+      [
+        1645999728093478918,
+        1645999728194318369,
+        28143,
+        "scan_1645999728093478918.xyzt"
+      ],
+      [
+        1645999728194339037,
+        1645999728295178488,
+        28134,
+        "scan_1645999728194339037.xyzt"
+      ],
+      [
+        1645999728295198917,
+        1645999728396038368,
+        28109,
+        "scan_1645999728295198917.xyzt"
+      ],
+      [
+        1645999728396059036,
+        1645999728496898487,
+        28142,
+        "scan_1645999728396059036.xyzt"
+      ],
+      [
+        1645999728496918917,
+        1645999728597757414,
+        28145,
+        "scan_1645999728496918917.xyzt"
+      ],
+      [
+        1645999728597779036,
+        1645999728698617295,
+        28132,
+        "scan_1645999728597779036.xyzt"
+      ],
+      [
+        1645999728698637962,
+        1645999728799477413,
+        28128,
+        "scan_1645999728698637962.xyzt"
+      ],
+      [
+        1645999728799498081,
+        1645999728900337294,
+        28138,
+        "scan_1645999728799498081.xyzt"
+      ],
+      [
+        1645999728900357962,
+        1645999729001197413,
+        28142,
+        "scan_1645999728900357962.xyzt"
+      ],
+      [
+        1645999729001172066,
+        1645999729102011279,
+        28133,
+        "scan_1645999729001172066.xyzt"
+      ],
+      [
+        1645999729102031946,
+        1645999729202871397,
+        28128,
+        "scan_1645999729102031946.xyzt"
+      ],
+      [
+        1645999729202892065,
+        1645999729303731278,
+        28122,
+        "scan_1645999729202892065.xyzt"
+      ],
+      [
+        1645999729303751945,
+        1645999729404591396,
+        28085,
+        "scan_1645999729303751945.xyzt"
+      ],
+      [
+        1645999729404612064,
+        1645999729505450323,
+        28106,
+        "scan_1645999729404612064.xyzt"
+      ],
+      [
+        1645999729505471945,
+        1645999729606310442,
+        28094,
+        "scan_1645999729505471945.xyzt"
+      ],
+      [
+        1645999729606331110,
+        1645999729707170323,
+        28115,
+        "scan_1645999729606331110.xyzt"
+      ],
+      [
+        1645999729707190990,
+        1645999729808030441,
+        28103,
+        "scan_1645999729707190990.xyzt"
+      ],
+      [
+        1645999729808051109,
+        1645999729908890322,
+        28109,
+        "scan_1645999729808051109.xyzt"
+      ],
+      [
+        1645999729908910990,
+        1645999730009705380,
+        28124,
+        "scan_1645999729908910990.xyzt"
+      ],
+      [
+        1645999730009726048,
+        1645999730110565261,
+        28149,
+        "scan_1645999730009726048.xyzt"
+      ],
+      [
+        1645999730110585928,
+        1645999730211425379,
+        28134,
+        "scan_1645999730110585928.xyzt"
+      ],
+      [
+        1645999730211446047,
+        1645999730312285260,
+        28125,
+        "scan_1645999730211446047.xyzt"
+      ],
+      [
+        1645999730312305927,
+        1645999730413144424,
+        28151,
+        "scan_1645999730312305927.xyzt"
+      ],
+      [
+        1645999730413165092,
+        1645999730514004305,
+        28138,
+        "scan_1645999730413165092.xyzt"
+      ],
+      [
+        1645999730514024973,
+        1645999730614864424,
+        28135,
+        "scan_1645999730514024973.xyzt"
+      ],
+      [
+        1645999730614885092,
+        1645999730715724305,
+        28126,
+        "scan_1645999730614885092.xyzt"
+      ],
+      [
+        1645999730715744972,
+        1645999730816584423,
+        28126,
+        "scan_1645999730715744972.xyzt"
+      ],
+      [
+        1645999730816605091,
+        1645999730917444304,
+        28141,
+        "scan_1645999730816605091.xyzt"
+      ],
+      [
+        1645999730917464972,
+        1645999731018258408,
+        28109,
+        "scan_1645999730917464972.xyzt"
+      ],
+      [
+        1645999731018279076,
+        1645999731119118289,
+        28145,
+        "scan_1645999731018279076.xyzt"
+      ],
+      [
+        1645999731119138956,
+        1645999731219977453,
+        28153,
+        "scan_1645999731119138956.xyzt"
+      ],
+      [
+        1645999731219999075,
+        1645999731320837334,
+        28145,
+        "scan_1645999731219999075.xyzt"
+      ],
+      [
+        1645999731320858002,
+        1645999731421697453,
+        28146,
+        "scan_1645999731320858002.xyzt"
+      ]
+    ],
+    "first_imu_ns": "1645999726477872000",
+    "last_imu_ns": "1645999731477632000",
+    "last_scan_end_ns": "1645999731421697453",
+    "raw_calibration": [
+      [
+        0.999954875339377,
+        0.0,
+        0.009499857104811,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        -0.009499857104811,
+        0.0,
+        0.999954875339377,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "calibration_sha": "892bf743dc0f51eabfe9d8ae71dc98663753f174910ae9cc40ee244c77a9e217",
+    "time_interpretation": "Header scan start plus float seconds, matches R2 observed cadence; not driver sync certification",
+    "post_cutoff_sensor_measurement_used": false,
+    "files_sha256": {
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/imu.txt": "539cd16f553dc9c9d26b649a1a78d44303a6dd7c15a9b3acb8c2b1dd2db16db5",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999728093478918.xyzt": "70f103796ffe329e652ca4094cc109dd2ed7d0cd5945ff47a47e6705334bd02a",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999729404612064.xyzt": "a356896af30254e13ec3e616ed993136c0323f28f7e2b30ff20e52687ad9f829",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999728597779036.xyzt": "bc78fee1a686a6532170935385e61585cfee5d25832e7a30798e83e2ad7b2eb1",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999726984117031.xyzt": "686567a4e4c96009fd01b61098ba7312dfa608a3712faf6ee1aa8e754f7d9f07",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999727992664099.xyzt": "c863b388f97517a19e9617a509d6820855dd0df86adcbd5cfb0af874276aa4b9",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999727084924936.xyzt": "52e20daf06a75cb5a71efabd411b9cd4b4b73ba4d4560439f95d523ee5435b6f",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999729303751945.xyzt": "144a2a8e43edb060372cb077a09d8c7cd671bf9fc98aa3f84ae25ef3eac40dcb",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999730816605091.xyzt": "3e3ef328c61aaf7f7467cec6eacad49bd09034e2e34ba0156c7d341433dcf0ae",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999728698637962.xyzt": "c50d355ee178b6b777c7248e9590158e8a00c3ddc60bd6edeb9b228f953661e7",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999727891803980.xyzt": "8bc58c30a33670f89df6e2488ffdce94fd88ea88c36f1f9627cde27199a466ac",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999727185785055.xyzt": "3000f72552a2c3d440da6f54cc4cbf355e63a5cbd7df306f35d18e65ebe39aad",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999728194339037.xyzt": "293eb6d01d0de16835d43a1e3442288890797b19c141370e2c08064cb26f7258",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999726782397985.xyzt": "3499fd4e089c8e8995ce323d7bdf21575f8ccca9eb6c78affe8a5d137334f192",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999727286644936.xyzt": "7cf2ba7ccc196aa043d4bf9e649affb59dc52d92e6d9f476be5155931b4a0993",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999728799498081.xyzt": "6e9b26e9e1198e913638c5028c19cd8322f7d33062240b003a55308646347a8a",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999729606331110.xyzt": "af62dee4ce0798244847cd7f8ec07740bd361ea5f5cab5372d59a03013fecebf",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999729908910990.xyzt": "e33af6ad8ad47f00588ef470dfdac814914ca346abea555d862ad12787d1df69",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999730009726048.xyzt": "a3d57cd3187312316cae17bcec099812a09c25cb87600c3eeffc05d1023a9d39",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999726479818106.xyzt": "60d4d6ddde74a1dd05aaedc45df042f16aac09d4ae4cb7bd936dab4daf88a20b",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/T_imu_lidar.f64": "76180c005419f83326748bfa7123afc96425ee4aef0c22ade5c156f48b961b25",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999726580677986.xyzt": "fcb8eccd2f085f5be5709a0926ef1375b0911e101af0470900e684ae3af4c205",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999729102031946.xyzt": "0b78b04dd2b2130704edbc712d4affc1a783dc7b1a51342c08a50336b383de9f",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999727790944099.xyzt": "1386725a18a099269fe3ef0aef7dd930db43b60c03d55fb532f8452b15698824",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999728496918917.xyzt": "4b9e7ce7e84854ded53b03ca57d4e3182031b839e909698e2c9744b8203b9853",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999728295198917.xyzt": "4934946969f58ee41c6f778a1ff814b6409ec3a6817199428814e10a422454e3",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999728396059036.xyzt": "884c95c655852118dc9a8c06ba6a0cbd7453b4700e5b84530a8b559f31bcebec",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scans.txt": "93908e34893ea3935a4e96ee610bc5e4e6847602bda727af7efe6eed0947b4b9",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999731119138956.xyzt": "7aac4bd47cd54a5b39c7f37091ab130aa42a7b8a53cc106b55a922f5dc01e613",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999730211446047.xyzt": "1d395ffdc63526b27b6ab3d65ecc3ff88c7459be2c59b3a6f8e0d25042c6cb8c",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999727387505054.xyzt": "36f99ffec73274e043f59fda1340fd5e729688f40491df74d4d0340fb1dfb592",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999729808051109.xyzt": "b6ddb2e8e173874917e311354774a8442518454cd63636870588c53b3ab89205",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999730413165092.xyzt": "09576b229ed7f704c0c592485fc54fa7e52b6ba92a6310739bc737c9f9e6a929",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999726883256912.xyzt": "a55d4df5bf2d5ca39befb8a10ba263ce988d949e07ca2a4ddd38a75b75f4c41f",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999730917464972.xyzt": "96f5779032b4e47be60ca34c7dca6e9780fdeec6dbd65deed95bc76978996da4",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999728900357962.xyzt": "124957155c58a293befda21907c1b2b9d9d8a7a5abca2d1c79576849b8b43651",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999729001172066.xyzt": "e95685528e350ab30b9db95598981b87a7c03f26ae8e9eada009c31512986cfd",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999727488364935.xyzt": "de381dc41c8bdcaf05d18dc08f90e568262a807df754fce5e180505bd049a770",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999730514024973.xyzt": "041eb6cf738de2c4ad33507fc6944cb9005518db4a393088c93eb8646eecaab9",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999730110585928.xyzt": "1857461b49abe792082cc2b21c5e9ed57b43d8f7aed60a8bf90e6d220cc5d418",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999729505471945.xyzt": "d5ffda8d38ae5bc2412695e31d5f4291385e49d86206b64e3e864891f9085321",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999726681538105.xyzt": "5694e1e90ad74bede7979550089c62522a1bd801a80aefce1ad4bcb43b38d206",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999731018279076.xyzt": "ce400a0787a5f54de9c997cec9f245fdff556bcaca4eaba511ce315cf2829b20",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999730715744972.xyzt": "11d58bdb0a8d3bac560f954a46221e72246220b85c3e76ec59d4adad78a19d97",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999729707190990.xyzt": "642cf421f496c878ae9f1bb2f41e521e1aee86632dafa5351d10de494842e12d",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999730312305927.xyzt": "9cb15fccfc352234ac735d3ca0dd9abc9efea5ec0eea0507c2dbe4dbe0a630ba",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999727589225054.xyzt": "9020002f9f0ea8e88c3de3cbdda8ecd25348a54ad32ebfcbcce1f238c6b5085e",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999729202892065.xyzt": "3913c274b6440657a15d9122853a8cfdae33dee6429a46f8c5c2d0267a268096",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999731320858002.xyzt": "81d750c779357247b6e783a86d78998ff1d0106c935df74b4ced4314cac760d4",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999731219999075.xyzt": "0929e49412334fd2312f990c347e2f09ed4545549183ea642c82837814eeb07f",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999727690084934.xyzt": "5429d53457a2c7f0d29b40427ab73b5e3feef477a6f3eca7aac27ee08cb0188b",
+      "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/input/scan_1645999730614885092.xyzt": "c5e9c92f691d84e9814383107f2b57f2d8e0cac7dff0c5cdf614dfe3f03b505b"
+    }
+  },
+  "raw_bag_path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/raw/corridor02.bag",
+  "raw_bag_size_bytes": 24494797838,
+  "raw_bag_full_sha256_recomputed": false,
+  "GT_loaded": false
+}

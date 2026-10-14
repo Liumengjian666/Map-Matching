@@ -1,0 +1,15 @@
+{
+  "check_time_utc": "2026-10-14T11:02:18.639139+00:00",
+  "status": "POST_RUN_SUPPLEMENTARY_NOT_PRE_EXECUTION_FREEZE",
+  "manifest_actual_consumed_directory_match": true,
+  "actual_consumed_input_hashes_match": true,
+  "final_result_finite_proper_float_tolerance_count": 24,
+  "final_result_exact_seed_count": 24,
+  "decoder_sha256": "9b40443aa76b6fb72f2c5043ea5d1abb5a84c6624f46ce2314a7ce624d646481",
+  "decoder_matches_START_commit": true,
+  "decoder_hash_was_frozen_before_run": false,
+  "executed_code_sha": "aaef3d58ded3561710a8148807c700d0c24e2289",
+  "guard_changes_replayed": false,
+  "additional_ICP_calls": 0,
+  "GT_loaded": false
+}

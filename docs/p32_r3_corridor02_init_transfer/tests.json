@@ -1,0 +1,19 @@
+{
+  "build": "PASS",
+  "test_invocations": 1,
+  "checks": [
+    "active YAML matches expected",
+    "24 unique proper axes",
+    "fixed translation",
+    "trapezoidal gyro and slerp",
+    "static point unchanged",
+    "no extrapolation"
+  ],
+  "actual_log": "runs/initializer_once/math_test.log",
+  "guard_regression_invocations": 2,
+  "guard_regression": "PASS",
+  "guard_regression_log": "runs/initializer_once/guard_test.log",
+  "source_copy_sha256": "deb58aeb3bd76f802568469f50d33f91b8026924b3fe299fa93b8fa8f9dc266d",
+  "initial_compile_error": "Diagnostic Eigen dependent auto type; fixed explicit Matrix4f, no solver change",
+  "runtime_algorithm_test": "NOT_RUN_INIT_GATE_FAILED"
+}

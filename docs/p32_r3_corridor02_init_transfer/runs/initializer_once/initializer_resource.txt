@@ -1,0 +1,5 @@
+Command exited with non-zero status 7
+user_cpu_sec=37.78
+system_cpu_sec=3.44
+peak_rss_kib=395820
+wall_sec=41.27
