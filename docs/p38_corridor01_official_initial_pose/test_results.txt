@@ -1,0 +1,8 @@
+test_direct_pose_not_an_extra_world_or_extrinsic_product (__main__.InitialPoseTests) ... ok
+test_full_inverse_and_no_reflection (__main__.InitialPoseTests) ... ok
+test_preregistered_ndt_gate_requires_all_metrics (__main__.InitialPoseTests) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.004s
+
+OK

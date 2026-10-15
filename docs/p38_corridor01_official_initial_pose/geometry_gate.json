@@ -1,0 +1,23 @@
+{
+  "numeric_eligible_candidates": [],
+  "preferred_candidate_if_visual_structure_valid": null,
+  "criteria": "median<=1m AND P90<=3m AND coverage_0.5m>=0.5; visual structure must also be reasonable",
+  "preregistered_strict_geometry_gate_pass": false,
+  "conditional_NDT_budget": 0,
+  "GT_used_for_gate": false,
+  "plot_axis_limits_m": [
+    [
+      -172.21404056549073,
+      171.42390995025636
+    ],
+    [
+      -86.82862262725831,
+      256.8093278884888
+    ],
+    [
+      -156.66332416534425,
+      186.97462635040284
+    ]
+  ],
+  "common_axis_span_m": 343.6379505157471
+}

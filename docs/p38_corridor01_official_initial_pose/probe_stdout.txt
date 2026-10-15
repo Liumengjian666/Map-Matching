@@ -1,0 +1,1 @@
+NN_queries=2 full_NDT_aligns=0 source_points=1400 target_points=225826 source_stable_hash=3b51137e86e584c6

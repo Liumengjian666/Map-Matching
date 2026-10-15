@@ -1,0 +1,5 @@
+event,raw_index,header_ns,record_ns,relative_sensor_s,Y_time_binding_certified
+sensor_header_target,,1517157286088119030,,67,False
+selected_nearest_sensor_header,665,1517157286055073023,1517157286155912472,66.966953993,False
+original_bag_time_record_offset_67_P33_evidence,666,1517157286155932903,1690254179920640694,67.067813873,False
+decoded_bag_time_record_offset_67_P33_evidence,664,1517157285954282999,1517157286055052353,66.866163969,False

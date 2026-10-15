@@ -1,0 +1,8 @@
+{
+  "scope": "One process: map load, source/target preprocessing, two NN statistics",
+  "wall_time": "0:00.11",
+  "CPU_user_s": 0.07,
+  "CPU_system_s": 0.04,
+  "peak_RSS_KiB": 55840,
+  "preparation_and_plotting_separately_measured": false
+}

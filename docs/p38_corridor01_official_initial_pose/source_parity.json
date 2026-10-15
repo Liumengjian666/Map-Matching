@@ -1,0 +1,13 @@
+{
+  "raw_XYZ_SHA256": "567a5461d2fb1ec50718a2e15c1b2e204190787794916fda12c4b3036dc05aeb",
+  "preprocessed_XYZ_SHA256": "e18ba5458bf453a409f1a0606090c60c588485041692b33bc346f67374930b50",
+  "source_stable_hash": "3b51137e86e584c6",
+  "ordered_bytes_equal_P33": true,
+  "ordered_bytes_equal_P36": true,
+  "points": 1400,
+  "target_points": 225826,
+  "GT_used_for_candidates": false,
+  "NN_statistics": 2,
+  "NDT_align_calls_in_probe": 0,
+  "ICP_calls": 0
+}

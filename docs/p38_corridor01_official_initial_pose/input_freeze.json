@@ -1,0 +1,129 @@
+{
+  "task": "P38-CORRIDOR01-OFFICIAL-INITIAL-POSE-VALIDATION",
+  "input_hashes": {
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/corridor01.pcd": {
+      "SHA256": "4b5231d58ebd4aeb4fc293559051dc30a18b6f07376237938d064962bfe8f40a",
+      "bytes": 8121136,
+      "fresh": true
+    },
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/gt/corridor01_gt.txt": {
+      "SHA256": "3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03",
+      "bytes": 123311,
+      "fresh": true
+    },
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/initial_pose/corridor01.yaml": {
+      "SHA256": "0670732e26f0d9ee19e6115110e29d0aeca5d26f62ab4848d1629c5f9a6eb62b",
+      "bytes": 332,
+      "fresh": true
+    },
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/raw_timed_scan_index.csv": {
+      "SHA256": "d49b7b81bb1f5c17eb2da9e5ad665dfb2b3b4813280de4e342eb3158d13c932a",
+      "bytes": 168725,
+      "fresh": true
+    },
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/corridor01_decoded_raw_timed_full.bag": {
+      "SHA256": "89d29ce428bcd476813c1191910e862f8f1effa416cad35f9750086732a26937",
+      "bytes": 8135887915,
+      "fresh": false,
+      "inherited_from": "P34 full validation"
+    },
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/raw_data_core_2023-07-25-03-01-44.bag": {
+      "SHA256": "c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811",
+      "bytes": 6473379689,
+      "fresh": false,
+      "inherited_from": "P34 full validation"
+    },
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/raw_timed_points.bin": {
+      "SHA256": "ce8beed2303ea3de8715932c4d0644d6fe28317014e2383f65942d69bc5ace32",
+      "bytes": 1278926576,
+      "fresh": false,
+      "inherited_from": "P34 full validation"
+    }
+  },
+  "target_map": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/corridor01.pcd",
+  "Y": [
+    [
+      0.13599,
+      -0.990409,
+      -0.024406,
+      1.968147
+    ],
+    [
+      0.990705,
+      0.136027,
+      0.00014,
+      -6.879292
+    ],
+    [
+      0.003181,
+      -0.024198,
+      0.999702,
+      -0.896125
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "inverse_Y": [
+    [
+      0.13598995826701935,
+      0.990705211050541,
+      0.003181220195536068,
+      6.550552975292664
+    ],
+    [
+      -0.9904101008832246,
+      0.1360272170882239,
+      -0.02419820379727992,
+      2.8633589997424607
+    ],
+    [
+      -0.024405800607000545,
+      0.00014019510088913686,
+      0.9997022436716856,
+      0.9448568193935414
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "Y_certificate": {
+    "orthogonality_fro": 1.2379704056665196e-06,
+    "determinant": 0.999999216169924
+  },
+  "inverse_Y_certificate": {
+    "orthogonality_fro": 1.2379717298946844e-06,
+    "determinant": 1.0000007838306906
+  },
+  "YAML_original_text": "%YAML:1.0\n\n# s 67\nextrinsicRotation_world_darpa: !!opencv-matrix\n  rows: 3\n  cols: 3\n  dt: d\n  data: [0.135990, -0.990409, -0.024406,\n         0.990705, 0.136027, 0.000140,\n         0.003181, -0.024198, 0.999702]\n\nextrinsicTranslation_world_darpa: !!opencv-matrix\n  rows: 3\n  cols: 1\n  dt: d\n  data: [1.968147, -6.879292, -0.896125]",
+  "YAML_sensor_reference_certified": false,
+  "YAML_direction_certified": false,
+  "comment_s67_reference_certified": false,
+  "translation_unit": "Assumed metres consistently with point XYZ; YAML itself has no explicit unit",
+  "source_mode": "RAW_HEADER_REFERENCE_NO_DESKEW",
+  "raw_frame_index": 665,
+  "scan_ns": "1517157286055073023",
+  "scan_end_ns": "1517157286155912472",
+  "raw_point_count": 29067,
+  "first_LiDAR_ns": "1517157219088119030",
+  "target_sensor_ns": "1517157286088119030",
+  "relative_sensor_s": "66.966953993",
+  "target_error_ns": -33046007,
+  "raw_XYZ_SHA256": "567a5461d2fb1ec50718a2e15c1b2e204190787794916fda12c4b3036dc05aeb",
+  "P33_preprocessed_source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p33_frame_relation.a9l5g3/input_fixed/67/geometry/preprocessed_source.xyz",
+  "P36_preprocessed_source": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p36_world_planar.gDJzEB/input/67/geometry/preprocessed_source.xyz",
+  "preprocessed_XYZ_SHA256": "e18ba5458bf453a409f1a0606090c60c588485041692b33bc346f67374930b50",
+  "candidates_derived_from_GT": false,
+  "GT_text_file_poses_parsed_before_candidate_freeze": false,
+  "P33_archive_loaded_before_freeze_including_unused_GT_matrices": true,
+  "probe": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p34_gt_frame.XDwg1L/build/p34_geometry",
+  "probe_SHA256": "b26b25358a769788979120722e2a1502a61ecccf46a654442b83422d225f4571",
+  "protocol_SHA256": "e41546beb05ba28ac1c98fda77b4fb2307096d9249d58b1f86134a7643ffa10a",
+  "large_SHA_freshly_recomputed": false
+}

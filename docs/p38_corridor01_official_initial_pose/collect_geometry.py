@@ -85,7 +85,7 @@ def main(cache):
     save('geometry_gate.json', dict(numeric_eligible_candidates=eligible,
         preferred_candidate_if_visual_structure_valid=eligible[0] if eligible else None,
         criteria='median<=1m AND P90<=3m AND coverage_0.5m>=0.5; visual structure must also be reasonable',
-        initial_pose_geometric_support=False if not eligible else None,
+        preregistered_strict_geometry_gate_pass=bool(eligible),
         conditional_NDT_budget=1 if eligible else 0, GT_used_for_gate=False,
         plot_axis_limits_m=limits.tolist(), common_axis_span_m=span))
     match = re.search(r'source_stable_hash=([0-9a-f]+)', stdout)
