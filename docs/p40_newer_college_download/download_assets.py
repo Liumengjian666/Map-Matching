@@ -67,7 +67,7 @@ def content_url(file_id):
     return action + '?' + urlencode(values)
 
 
-def validate(path, entry):
+def validate(path, entry, previous=None):
     size = path.stat().st_size
     if size != entry['bytes']:
         raise RuntimeError('Size mismatch: %s: %s != %s' % (path, size, entry['bytes']))
@@ -79,8 +79,13 @@ def validate(path, entry):
         raise RuntimeError('Expected ZIP signature')
     if '.ply' in path.name and not prefix.startswith(b'ply\n'):
         raise RuntimeError('Expected PLY signature')
-    return {'bytes': size, 'sha256': digest(path), 'publisher_sha256': None,
-            'validation': 'OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256'}
+    result = {'bytes': size, 'sha256': digest(path), 'publisher_sha256': None,
+              'validation': 'OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256'}
+    if previous is not None and (previous['drive_id'] != entry['drive_id'] or
+                                 previous['bytes'] != size or
+                                 previous['sha256'] != result['sha256']):
+        raise RuntimeError('Recorded file identity or content changed: ' + str(path))
+    return result
 
 
 def main(plan_path):
@@ -102,10 +107,22 @@ def main(plan_path):
     free = os.statvfs('.').f_bavail * os.statvfs('.').f_frsize
     if free < remaining + reserve:
         raise RuntimeError('Insufficient space for the explicit download plan')
-    state = {'status': 'RUNNING', 'started_utc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
-             'root': str(ROOT), 'files': []}
     state_path = Path('downloads/download_status.json')
     state_path.parent.mkdir(parents=True, exist_ok=True)
+    if (state_path.is_symlink() or any(p.is_symlink() for p in state_path.parents) or
+            state_path.parent.stat().st_dev != device_id):
+        raise RuntimeError('Existing receipt path is not a safe external destination')
+    receipts = {}
+    if state_path.exists():
+        previous_state = json.loads(state_path.read_text())
+        if previous_state['root'] != str(ROOT):
+            raise RuntimeError('Existing receipt belongs to a different download root')
+        for receipt in previous_state['files']:
+            if receipt['path'] in receipts:
+                raise RuntimeError('Duplicate entry in existing download receipt')
+            receipts[receipt['path']] = receipt
+    state = {'status': 'RUNNING', 'started_utc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+             'root': str(ROOT), 'files': list(receipts.values())}
 
     def save():
         check_mount(device_id)
@@ -145,13 +162,14 @@ def main(plan_path):
                         '--speed-time', '180', '--retry', '2', '--retry-delay', '10',
                         '--output', str(part), url], check=True)
                 check_mount(device_id)
-                result = validate(part, entry)
+                result = validate(part, entry, receipts.get(entry['path']))
                 if dest.exists():
                     raise RuntimeError('Refuse to overwrite an existing final file')
                 os.rename(str(part), str(dest))
             else:
-                result = validate(dest, entry)
-            state['files'].append(dict(entry, **result, elapsed_s=time.monotonic() - started))
+                result = validate(dest, entry, receipts.get(entry['path']))
+            receipts[entry['path']] = dict(entry, **result, elapsed_s=time.monotonic() - started)
+            state['files'] = list(receipts.values())
             save()
             print('VERIFIED', str(dest), result['sha256'], flush=True)
         state['status'] = 'DOWNLOADS_COMPLETE_EXTRACTION_NOT_RUN'
@@ -161,7 +179,10 @@ def main(plan_path):
         raise
     finally:
         state['updated_utc'] = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())
-        save()
+        try:
+            save()
+        finally:
+            lock.close()
 
 
 if __name__ == '__main__':

@@ -1,6 +1,7 @@
 """Small offline safety tests; never download or access dataset payloads."""
 import hashlib
 import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -12,6 +13,32 @@ from prepare_pointclouds import validate_member
 
 
 class DownloadTests(unittest.TestCase):
+    def test_resume_rejects_changed_final_and_preserves_original_receipt(self):
+        original_cwd = os.getcwd()
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            (root / 'downloads').mkdir()
+            entry = {'path': 'data.csv', 'drive_id': 'official-file-id', 'bytes': 6}
+            old_hash = hashlib.sha256(b'1,2,3\n').hexdigest()
+            receipt = dict(entry, sha256=old_hash)
+            status = root / 'downloads/download_status.json'
+            status.write_text(json.dumps({'root': str(root), 'files': [receipt]}))
+            (root / 'data.csv').write_bytes(b'9,8,7\n')  # Same length, changed content.
+            plan = root / 'plan.json'
+            plan.write_text(json.dumps({'files': [entry]}))
+            try:
+                with patch.object(downloader, 'ROOT', root), \
+                        patch.object(downloader, 'MOUNT', root), \
+                        patch.object(downloader, 'check_mount'), \
+                        patch.object(downloader, 'content_url', side_effect=AssertionError('network forbidden')):
+                    with self.assertRaisesRegex(RuntimeError, 'Recorded.*changed'):
+                        downloader.main(str(plan))
+                saved = json.loads(status.read_text())
+                self.assertEqual(saved['files'][0]['sha256'], old_hash)
+                self.assertEqual((root / 'data.csv').read_bytes(), b'9,8,7\n')
+            finally:
+                os.chdir(original_cwd)
+
     def test_streaming_digest_and_size_validation(self):
         with tempfile.TemporaryDirectory() as name:
             path = Path(name) / 'data.csv'
