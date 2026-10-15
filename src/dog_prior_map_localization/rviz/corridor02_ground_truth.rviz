@@ -4,6 +4,19 @@ Panels:
 Visualization Manager:
   Class: ""
   Displays:
+    - Class: rviz/Grid
+      Name: Display Grid (not the prior map)
+      Enabled: true
+      Value: true
+      Reference Frame: <Fixed Frame>
+      Plane: XY
+      Plane Cell Count: 40
+      Cell Size: 1
+      Color: 100; 100; 100
+      Alpha: 0.5
+      Line Style:
+        Value: Lines
+        Line Width: 0.03
     - Class: rviz/Path
       Name: Corridor02 GT (native world, NOT map aligned)
       Enabled: true
@@ -12,7 +25,7 @@ Visualization Manager:
       Color: 0; 255; 255
       Alpha: 1
       Buffer Length: 1
-      Line Style: Lines
+      Line Style: Billboards
       Line Width: 0.08
       Pose Style: None
       Queue Size: 1
@@ -34,8 +47,13 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 20
+      Distance: 8
       Focal Point: {X: 0, Y: 0, Z: 0}
       Pitch: 0.7853981634
       Yaw: 0.7853981634
       Target Frame: <Fixed Frame>
+Window Geometry:
+  Width: 1100
+  Height: 800
+  X: 100
+  Y: 100

@@ -7,6 +7,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
+import xml.etree.ElementTree as ET
 
 import numpy as np
 import yaml
@@ -90,6 +91,22 @@ class GroundTruthVisualizationTest(unittest.TestCase):
                 ['roslaunch', '--dump-params', 'dog_prior_map_localization',
                  dataset + '_ground_truth.launch'], text=True, timeout=30))
             self.assertFalse(params['/' + dataset + '_gt_visualizer/enabled'])
+
+    def test_corridor02_visible_defaults_without_modal_dialog_or_fake_tf(self):
+        launch = ET.parse(PACKAGE / 'launch/corridor02_ground_truth.launch')
+        rviz = launch.find("node[@name='corridor02_gt_rviz']")
+        environment = {entry.get('name'): entry.get('value') for entry in rviz.findall('env')}
+        self.assertEqual(environment['DISABLE_ROS1_EOL_WARNINGS'], '1')
+        self.assertEqual(environment['LD_PRELOAD'], '/lib/x86_64-linux-gnu/libusb-1.0.so.0')
+        self.assertEqual({node.get('type') for node in launch.iter('node')},
+                         {'dataset_gt_path_publisher.py', 'rviz'})
+        manager = yaml.safe_load((PACKAGE / 'rviz/corridor02_ground_truth.rviz').read_text())[
+            'Visualization Manager']
+        self.assertEqual(manager['Global Options']['Fixed Frame'], 'corridor02_gt_world')
+        grid = next(display for display in manager['Displays'] if display['Class'] == 'rviz/Grid')
+        self.assertTrue(grid['Enabled'])
+        self.assertEqual(grid['Reference Frame'], '<Fixed Frame>')
+        self.assertEqual(manager['Views']['Current']['Distance'], 8)
 
     def test_rejects_nonfinite_nonmonotonic_and_wrong_input(self):
         for payload in (b'1.0 nan 0 0 0 0 0 1\n', b'1.0 0 0 0 0 0 0 0\n',

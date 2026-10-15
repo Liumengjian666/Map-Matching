@@ -1,0 +1,43 @@
+{
+  "task": "Corridor02 apparently blank RViz diagnosis and display-only fix",
+  "date": "2026-10-15",
+  "start_sha": "d184e390bbf3b92f21e71d98671aac60d9e9f22b",
+  "user_run_log": "ff3f0ca4-c886-11f1-a6f5-a98daced9c1b",
+  "user_run_clock_and_rviz_on_same_master_confirmed": true,
+  "reproduced_rviz_modal_title": "ROS 1 End-of-Life is May 31st, 2025",
+  "rviz_version": "1.14.26",
+  "fixes": [
+    "RViz-only DISABLE_ROS1_EOL_WARNINGS=1; no global environment change",
+    "Display grid clearly labelled as not the prior map",
+    "8m initial view distance and 1100x800 window",
+    "Billboard GT path with visible width"
+  ],
+  "real_bag_display_smoke": {
+    "master": "http://127.0.0.1:11439",
+    "duration_sec": 3,
+    "clock_messages": 308,
+    "path_messages_including_initial_empty": 19,
+    "marker_messages_including_initial_delete": 19,
+    "last_path_points": 18,
+    "last_path_stamp_ns": 1645999729202892000,
+    "last_clock_ns": 1645999729375745687,
+    "last_marker_position_m": [-0.007431, 0.003064, 0.005609],
+    "frame": "corridor02_gt_world",
+    "bag_exit_code": 0
+  },
+  "gt_prefix_motion": {
+    "maximum_displacement_first_30_sec_m": 0.014842039381432729,
+    "first_0_1m_displacement_after_gt_start_sec": 72.81747603416443,
+    "first_0_5m_displacement_after_gt_start_sec": 73.32172799110413
+  },
+  "actual_window_verified": "Visible grid and cyan GT arrow; modal absent",
+  "unit_tests_passed": 9,
+  "xml_and_roslaunch_rviz_environment_expansion": "PASS",
+  "algorithm_changes": false,
+  "localization_replays": 0,
+  "fake_tf_added": false,
+  "gt_injected_into_estimator": false,
+  "prior_map_or_algorithm_path_claimed_for_corridor02": false,
+  "local_evidence_directory": ".corridor02_gt_clock_check.AUZIeG",
+  "external_push_executed": false
+}

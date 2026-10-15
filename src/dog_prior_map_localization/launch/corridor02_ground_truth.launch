@@ -10,5 +10,7 @@
   <node pkg="rviz" type="rviz" name="corridor02_gt_rviz" if="$(arg rviz)"
         args="-d $(find dog_prior_map_localization)/rviz/corridor02_ground_truth.rviz">
     <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+    <!-- The installed RViz shows a modal EOL dialog before normal rendering. -->
+    <env name="DISABLE_ROS1_EOL_WARNINGS" value="1" />
   </node>
 </launch>
