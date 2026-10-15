@@ -1,0 +1,11 @@
+{
+  "initial_NN": 1,
+  "map_ICP": 1,
+  "admitted": 0,
+  "source_points": 2569,
+  "target_points": 2378870,
+  "initial_NN_ms": 6.274601,
+  "GT_reads": 0,
+  "holdout_executed": false,
+  "stage_result": "ICP_GATE_FAILED"
+}

@@ -1,0 +1,98 @@
+{
+  "input_file": "/tmp/p32-r7-cli-review.gMnKal/review_input.md",
+  "input_SHA256": "ad934ee117538f5541aa87fc4671c5c7213d95af3189edd2774480e4bc1868d1",
+  "input_bytes": 41801,
+  "files": [
+    {
+      "path": "docs/p32_r7_corridor02_annotated_pose/PROTOCOL.md",
+      "SHA256": "419f92dbf85499e3390ebb54239f7007bb65a25e5b7beee34217204a33bc2e7b",
+      "bytes": 2268
+    },
+    {
+      "path": "src/dog_prior_map_localization/scripts/p32_annotated_pose/CMakeLists.txt",
+      "SHA256": "16808b244cd4639d68ee66ef964afa7757645a9869bda2a24a4d10bebb17c83f",
+      "bytes": 593
+    },
+    {
+      "path": "src/dog_prior_map_localization/scripts/p32_annotated_pose/annotated_test.cpp",
+      "SHA256": "9c2f57ca2acf8954f6a85dda95a7933a569d99ee035e10f8b807382652147017",
+      "bytes": 5389
+    },
+    {
+      "path": "src/dog_prior_map_localization/scripts/p32_annotated_pose/run_once.py",
+      "SHA256": "4e46843f0023f46fc8736ee1ae756f5c0681c49727bbc5ed86dd74b3e5b21226",
+      "bytes": 6105
+    },
+    {
+      "path": "src/dog_prior_map_localization/scripts/p32_init_transfer/legacy/superloc_first_segment_initializer.cpp",
+      "SHA256": "deb58aeb3bd76f802568469f50d33f91b8026924b3fe299fa93b8fa8f9dc266d",
+      "bytes": 9182
+    },
+    {
+      "path": "docs/p32_r7_corridor02_annotated_pose/runs/annotated_once/original_prior.txt",
+      "SHA256": "fc319ad99737a717456e11eb70383d4848eadf7e46587fee0643d6732cf1c3a1",
+      "bytes": 1011
+    },
+    {
+      "path": "docs/p32_r7_corridor02_annotated_pose/runs/annotated_once/matrix_audit.json",
+      "SHA256": "beb37a96b041de4b772bec10ea43df9315354e45de4e87be30fd574054091f52",
+      "bytes": 742
+    },
+    {
+      "path": "docs/p32_r7_corridor02_annotated_pose/runs/annotated_once/input_freeze.json",
+      "SHA256": "22f3c4cca105db441ea14005b557d94e4f1c3e9bdce423ca40f310e1e491d92b",
+      "bytes": 2322
+    },
+    {
+      "path": "docs/p32_r7_corridor02_annotated_pose/runs/annotated_once/execution.json",
+      "SHA256": "8020ccd219d24ec2d1d6cb3394efbb341f0ebe18a440d410db191030079b3fac",
+      "bytes": 701
+    },
+    {
+      "path": "docs/p32_r7_corridor02_annotated_pose/runs/annotated_once/initial_nn.csv",
+      "SHA256": "e3ff0b451ebf6beed4db78fa87ae1b61324ac0955d37e4c83ecf56fa0397e055",
+      "bytes": 333
+    },
+    {
+      "path": "docs/p32_r7_corridor02_annotated_pose/runs/annotated_once/map_icp.csv",
+      "SHA256": "4ed329e7967f1a5183c429902abfbdddfb27c3f95c19cdc7aa8609b429528c40",
+      "bytes": 483
+    },
+    {
+      "path": "docs/p32_r7_corridor02_annotated_pose/runs/annotated_once/final_nn.csv",
+      "SHA256": "b13304edc8e767c2f1e0bbea709d1f53943f4db1b9a0099c81287e135da28b41",
+      "bytes": 334
+    },
+    {
+      "path": "docs/p32_r7_corridor02_annotated_pose/runs/annotated_once/ledger.json",
+      "SHA256": "3676381143adef166865fac05c044e20b26c71615d4e1500e47e59a38a463c1a",
+      "bytes": 135
+    },
+    {
+      "path": "docs/p32_r7_corridor02_annotated_pose/runs/annotated_once/admission.json",
+      "SHA256": "4c83361f1926fa5bfe2b87b90f847d080371e8c2a53befd625a137d23db9a41a",
+      "bytes": 220
+    },
+    {
+      "path": "docs/p32_r7_corridor02_annotated_pose/runs/annotated_once/annotated_test.log",
+      "SHA256": "25053ca7469f4e9e807ef64f272b6a3a17fc0d26284ca8eee181948de21609d9",
+      "bytes": 61
+    },
+    {
+      "path": "docs/p32_r7_corridor02_annotated_pose/runs/annotated_once/resource.txt",
+      "SHA256": "5623d270b7c61a1c374457c62774aa6c831640083462c2224458b7f1a3653dda",
+      "bytes": 72
+    },
+    {
+      "path": "docs/p32_r7_corridor02_annotated_pose/final_transform_audit.json",
+      "SHA256": "3241f679bb6bcc7c91e36ab8bada8077456842996922facf449debf65df61532",
+      "bytes": 621
+    },
+    {
+      "path": "docs/p32_r7_corridor02_annotated_pose/finalize_evidence.py",
+      "SHA256": "d3358e5b9a94e0191b204de1c7b07b6955836764873caa76b5854ab5ee11bbe0",
+      "bytes": 5640
+    }
+  ],
+  "CLI_invocations": 0
+}

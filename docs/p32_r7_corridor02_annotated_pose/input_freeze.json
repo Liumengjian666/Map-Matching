@@ -1,0 +1,40 @@
+{
+  "inputs": {
+    "local": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p32_r3_corridor02_init_transfer/initializer_once/first_segment_local_submap.pcd",
+      "SHA256": "8c2302f575f12b0decfdcecaf369eaa0a8429b6bdb1673006ec519d7d248e0cd"
+    },
+    "map": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/map/corridor02.pcd",
+      "SHA256": "6c39e243556eddbef7a8b4bd2de25cf7c962c4ff0f52c94cfc1d994f178ae228"
+    },
+    "prior": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/initial_pose/corridor02.yaml",
+      "SHA256": "fc319ad99737a717456e11eb70383d4848eadf7e46587fee0643d6732cf1c3a1"
+    },
+    "legacy": {
+      "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_init_transfer/legacy/superloc_first_segment_initializer.cpp",
+      "SHA256": "deb58aeb3bd76f802568469f50d33f91b8026924b3fe299fa93b8fa8f9dc266d"
+    }
+  },
+  "source_SHA256": {
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_annotated_pose/annotated_test.cpp": "9c2f57ca2acf8954f6a85dda95a7933a569d99ee035e10f8b807382652147017",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_annotated_pose/run_once.py": "4e46843f0023f46fc8736ee1ae756f5c0681c49727bbc5ed86dd74b3e5b21226",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_annotated_pose/CMakeLists.txt": "16808b244cd4639d68ee66ef964afa7757645a9869bda2a24a4d10bebb17c83f",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_init_transfer/legacy/superloc_first_segment_initializer.cpp": "deb58aeb3bd76f802568469f50d33f91b8026924b3fe299fa93b8fa8f9dc266d"
+  },
+  "binary_SHA256": "bd109d559e516ff16acf9aec5098dc78f38e14545131c1c992aab4224b3ca47b",
+  "matrix_SHA256": "9b1868720b7cdc594fdc089137b4673223a275d5efecfd9f21841d02f34037fb",
+  "reference_ns": "1645999726479818106",
+  "protocol_SHA256": "419f92dbf85499e3390ebb54239f7007bb65a25e5b7beee34217204a33bc2e7b",
+  "GT_LOADED": false,
+  "candidate": "FIRST_COMPLETE_COMMENTED_MATRIX_ONLY",
+  "map_voxel_m": 0.2,
+  "source_voxel_already_applied_m": 0.25,
+  "budgets": {
+    "initial_NN": 1,
+    "map_ICP": 1,
+    "holdout": 1,
+    "extra_candidates": 0
+  }
+}

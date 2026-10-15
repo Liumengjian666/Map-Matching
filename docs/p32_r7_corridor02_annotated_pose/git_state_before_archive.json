@@ -1,0 +1,14 @@
+{
+  "repository": "https://github.com/Liumengjian666/Map-Matching",
+  "branch": "research/p9-r4-heldout-visual-evidence",
+  "START_SHA": "33de6e37eafe032b736ce75a6c873262183c0353",
+  "CODE_SHA": "e10e133c12c73d75655b2a5c0e360adf7eac12c0",
+  "LOCAL_HEAD_BEFORE_ARCHIVE": "e10e133c12c73d75655b2a5c0e360adf7eac12c0",
+  "REMOTE_HEAD_VERIFIED_BEFORE_ARCHIVE": "33de6e37eafe032b736ce75a6c873262183c0353",
+  "PUSH_EXECUTED": false,
+  "END_SHA_RESOLUTION": "git log -1 --format=%H -- docs/p32_r7_corridor02_annotated_pose; full SHA in final chat handoff",
+  "tracked_changes_before_task": "none",
+  "old_untracked_caches": "preserved and excluded from staging",
+  "protected_workspaces_written": false,
+  "reset_clean_force_push": false
+}

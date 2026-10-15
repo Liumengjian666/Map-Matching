@@ -1,0 +1,189 @@
+{
+  "TASK": "P32-R7-CORRIDOR02-OFFICIAL-ANNOTATED-POSE-TEST",
+  "START_SHA": "33de6e37eafe032b736ce75a6c873262183c0353",
+  "CODE_SHA": "e10e133c12c73d75655b2a5c0e360adf7eac12c0",
+  "END_SHA": "Containing archive commit; full SHA in final chat handoff",
+  "REMOTE_HEAD_AT_START": "33de6e37eafe032b736ce75a6c873262183c0353",
+  "PUSH_EXECUTED": false,
+  "reference_ns": "1645999726479818106",
+  "source_points": 2569,
+  "target_points": 2378870,
+  "matrix_audit": {
+    "matrix": [
+      [
+        -0.57776,
+        -0.014115,
+        0.816085,
+        176.987457
+      ],
+      [
+        0.816198,
+        -0.005282,
+        0.577749,
+        198.518204
+      ],
+      [
+        -0.003845,
+        0.999887,
+        0.014572,
+        -4.614883
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "finite": true,
+    "homogeneous_row_exact": true,
+    "rotation_determinant": 1.0000013498784528,
+    "rotation_orthogonality_frobenius": 1.957642613462729e-06,
+    "tolerance": 1e-05,
+    "legal": true,
+    "first_line": 2,
+    "last_line": 5,
+    "context": "%YAML:1.0\n# -0.577760 -0.014115 0.816085 176.987457\n# 0.816198 -0.005282 0.577749 198.518204\n# -0.003845 0.999887 0.014572 -4.614883\n# 0.000000 0.000000 0.000000 1.000000\n\n"
+  },
+  "initial_NN": {
+    "nn_median_m": 1.0804466009140015,
+    "nn_p90_m": 4.500611305236816,
+    "coverage_0_5m": 0.2755936161930712,
+    "coverage_2m": 0.7477617750097314,
+    "coverage_8m": 0.9863760217983651,
+    "bbox_xmin": 123.45718383789062,
+    "bbox_xmax": 190.5746307373047,
+    "bbox_ymin": 181.5641632080078,
+    "bbox_ymax": 271.5843811035156,
+    "bbox_zmin": -10.787845611572266,
+    "bbox_zmax": -0.9743636846542358
+  },
+  "ICP": {
+    "converged": 1.0,
+    "fitness": 29.167241786773268,
+    "final_legal": 0.0,
+    "admitted": 0.0,
+    "correction_m": 2.0483314990997314,
+    "correction_deg": 88.83731955543219,
+    "icp_and_legacy_score_ms": 1546.665017,
+    "T00": -0.7178382277488708,
+    "T01": -0.6953409910202026,
+    "T02": 0.0349310077726841,
+    "T03": 175.6072998046875,
+    "T10": 0.6952281594276428,
+    "T11": -0.7185907363891602,
+    "T12": -0.017303507775068283,
+    "T13": 199.03172302246094,
+    "T20": 0.03713274002075195,
+    "T21": 0.011863536201417446,
+    "T22": 0.9992433786392212,
+    "T23": -6.038654327392578,
+    "T30": 0.0,
+    "T31": 0.0,
+    "T32": 0.0,
+    "T33": 1.0
+  },
+  "final_NN": {
+    "nn_median_m": 0.7909895777702332,
+    "nn_p90_m": 1.7567791938781738,
+    "coverage_0_5m": 0.33553912028026467,
+    "coverage_2m": 0.9435578045932269,
+    "coverage_8m": 0.9863760217983651,
+    "bbox_xmin": 112.64906311035156,
+    "bbox_xmax": 190.99342346191406,
+    "bbox_ymin": 183.61141967773438,
+    "bbox_ymax": 264.2674865722656,
+    "bbox_zmin": -6.567310333251953,
+    "bbox_zmax": -3.4498956203460693
+  },
+  "final_transform_audit": {
+    "matrix": [
+      [
+        -0.7178382277488708,
+        -0.6953409910202026,
+        0.0349310077726841,
+        175.6072998046875
+      ],
+      [
+        0.6952281594276428,
+        -0.7185907363891602,
+        -0.017303507775068283,
+        199.03172302246094
+      ],
+      [
+        0.03713274002075195,
+        0.011863536201417446,
+        0.9992433786392212,
+        -6.038654327392578
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "finite": true,
+    "rotation_determinant": 1.0000160777404514,
+    "rotation_orthogonality_frobenius": 1.9285473923166904e-05,
+    "homogeneous_exact": true,
+    "legal_at_frozen_1e_5": false
+  },
+  "counts": {
+    "initial_NN": 1,
+    "map_ICP": 1,
+    "holdout": 0,
+    "GT_reads": 0,
+    "extra_candidates": 0,
+    "NDT_align": 0,
+    "localization_replays": 0
+  },
+  "INITIAL_NN_GATE": "PASS",
+  "ICP_GATE": "FAIL_FITNESS_AND_HALF_METER_COVERAGE_AND_FINAL_ROTATION_TOLERANCE",
+  "independent_validation": "NOT_EXECUTED_ICP_GATE_FAILED",
+  "geometric_initialization_supported": false,
+  "official_semantics": "UNRESOLVED_COMMENTED_MATRIX_NOT_ACTIVE_INITIAL_POSE",
+  "official_time_reference": "UNRESOLVED",
+  "runtime": {
+    "user_cpu_sec": 2.5,
+    "system_cpu_sec": 0.45,
+    "peak_rss_kib": 500980.0,
+    "wall_sec": 2.96,
+    "CPU_sec": 2.95,
+    "peak_rss_MiB": 489.23828125
+  },
+  "binary_SHA256": "bd109d559e516ff16acf9aec5098dc78f38e14545131c1c992aab4224b3ca47b",
+  "runtime_scope": "Offline process includes map load/voxel/tree, one initial NN, one legacy ICP and final scores; hashing/build/review excluded",
+  "external_review": {
+    "invocations": 1,
+    "status": "COMPLETED",
+    "exit_code": 0,
+    "authorization": "User confirmed this exact P32-R7 command once with \u662f, after its limited input SHA256 and scope were displayed",
+    "command": "/usr/bin/codex --no-daemon -a never exec --sandbox read-only --ignore-user-config --ignore-rules --ephemeral --skip-git-repo-check -C /tmp/p32-r7-cli-review.gMnKal -m gpt-6.1-sol -c 'model_reasoning_effort=\"xhigh\"' --color never -o /tmp/p32-r7-cli-review.gMnKal/review_result.md - < /tmp/p32-r7-cli-review.gMnKal/review_input.md > /tmp/p32-r7-cli-review.gMnKal/cli.log 2>&1",
+    "CLI_version": "codex-cli 0.159.2",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "xhigh",
+    "sandbox": "read-only",
+    "auth": "Existing Codex login; no new credential or API key supplied",
+    "isolated_context": true,
+    "different_model_architecture_certified": false,
+    "input_file": "review_input.md",
+    "input_SHA256": "ad934ee117538f5541aa87fc4671c5c7213d95af3189edd2774480e4bc1868d1",
+    "input_bytes": 41801,
+    "result_file": "review_result.md",
+    "result_SHA256": "75fc4e9f2bcfd5f38281419f4545fb8e50369ced10cd6a3a1ec502db42c3f0a5",
+    "log_file": "cli.log",
+    "log_SHA256": "81b985a8f26bdea71f429aac71961b61012861558fb37b7c9fdfee1b13117da2",
+    "launch_observed_UTC": "2026-10-15 07:06:35 UTC",
+    "completed_confirmed_UTC": "2026-10-15 07:09:05 UTC",
+    "timing_note": "Observation/confirmation times, not exact independently measured CLI CPU or wall duration",
+    "result": "No material violation of the contract identified from the supplied artifact",
+    "extra_initial_NN": 0,
+    "extra_map_ICP": 0,
+    "holdout_calls": 0,
+    "GT_reads": 0,
+    "official_frame_semantics_certified": false
+  },
+  "FINAL_RESULT": "ANNOTATED_POSE_ICP_GEOMETRIC_ADMISSION_FAILED",
+  "NEXT": "Obtain a sourced frame/reference-time definition for the first commented official matrix; no automatic extra candidate or transform search"
+}
