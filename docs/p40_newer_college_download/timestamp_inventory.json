@@ -1,0 +1,11 @@
+{
+  "pcd_files": 15302,
+  "unique_lidar_timestamps": 15301,
+  "lidar_first_ns": 1583836591182590976,
+  "lidar_last_ns": 1583838121156355584,
+  "lidar_duration_s": 1529.973764608,
+  "gt_records": 15301,
+  "exact_timestamp_matches": 15301,
+  "lidar_timestamps_without_exact_gt": 0,
+  "gt_timestamps_without_exact_lidar": 0
+}

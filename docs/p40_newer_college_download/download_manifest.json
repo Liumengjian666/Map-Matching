@@ -1,0 +1,420 @@
+{
+  "started_utc": "2026-10-15T21:27:49Z",
+  "root": "/media/jian/HIKVISION/paper rosbag/NewerCollege",
+  "files": [
+    {
+      "drive_id": "11VWvHxjitd4ijARD4dJ3WjFuZ_QbInVy",
+      "bytes": 1330464,
+      "path": "01_short_experiment/ground_truth/registered_poses.csv",
+      "sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 0.0023653400130569935,
+      "source_page": "https://drive.google.com/file/d/11VWvHxjitd4ijARD4dJ3WjFuZ_QbInVy/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=11VWvHxjitd4ijARD4dJ3WjFuZ_QbInVy&export=download"
+    },
+    {
+      "drive_id": "10fsQyz_fF8SdIfl6fTfE1bykm1g0DUA9",
+      "bytes": 724,
+      "path": "01_short_experiment/calibration/april_6x6.yaml",
+      "sha256": "7f2d46585e3ceab9a2dd5ee2dd85f9df46f52d68fbc198822fc0048f9db22bf5",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 0.0002563900197856128,
+      "source_page": "https://drive.google.com/file/d/10fsQyz_fF8SdIfl6fTfE1bykm1g0DUA9/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=10fsQyz_fF8SdIfl6fTfE1bykm1g0DUA9&export=download"
+    },
+    {
+      "drive_id": "1u5ia_-CrroXQBoaauaGZSp-sQTHxDDwh",
+      "bytes": 1864,
+      "path": "01_short_experiment/calibration/beam_intrinsics.json",
+      "sha256": "f7993d2f680206b3ca338c39c36aced29e18cf7b2b8570e3f1db7f2efa00f125",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 0.0002909619943238795,
+      "source_page": "https://drive.google.com/file/d/1u5ia_-CrroXQBoaauaGZSp-sQTHxDDwh/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1u5ia_-CrroXQBoaauaGZSp-sQTHxDDwh&export=download"
+    },
+    {
+      "drive_id": "1BpyCuI3crkCrwIbL-5xYPXg-agFLbRPj",
+      "bytes": 433,
+      "path": "01_short_experiment/calibration/calibrate.sh",
+      "sha256": "ffe45283286f6677f8d1557fb69c34e375f506eeadcff5a48766fb73ee77eadf",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 0.0002795780310407281,
+      "source_page": "https://drive.google.com/file/d/1BpyCuI3crkCrwIbL-5xYPXg-agFLbRPj/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1BpyCuI3crkCrwIbL-5xYPXg-agFLbRPj&export=download"
+    },
+    {
+      "drive_id": "1vP0hPnuLE5oYrzDjetS6tUgIsM5-At7p",
+      "bytes": 231,
+      "path": "01_short_experiment/calibration/imu.yaml",
+      "sha256": "9aca0e80de7b68ffb91e63e2972401db92bc848731f43be3a789759184d3bab2",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 0.00022852298570796847,
+      "source_page": "https://drive.google.com/file/d/1vP0hPnuLE5oYrzDjetS6tUgIsM5-At7p/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1vP0hPnuLE5oYrzDjetS6tUgIsM5-At7p&export=download"
+    },
+    {
+      "drive_id": "1BsvzsGk3XF0g0zfw9hSGtNzxdw8Ywh7g",
+      "bytes": 239,
+      "path": "01_short_experiment/calibration/ouster_imu.yaml",
+      "sha256": "73d1fd17ddb206629b6f027e8f07c599267267fcdb7e7c02c5a52b88130077f4",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 0.00027804099954664707,
+      "source_page": "https://drive.google.com/file/d/1BsvzsGk3XF0g0zfw9hSGtNzxdw8Ywh7g/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1BsvzsGk3XF0g0zfw9hSGtNzxdw8Ywh7g&export=download"
+    },
+    {
+      "drive_id": "1KaP2jsAY0vmkcqkw1noZw5saODeH8SUm",
+      "bytes": 1037,
+      "path": "01_short_experiment/calibration/kalibr_output/camchain_D435i__SN844212071220rooster_2020-03-11-10-05-35_0.yaml",
+      "sha256": "5b4d73bdef7f2582694c9652c0a3c186d9fbf6107b27c2587e2ba71d2541692f",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 0.00029871397418901324,
+      "source_page": "https://drive.google.com/file/d/1KaP2jsAY0vmkcqkw1noZw5saODeH8SUm/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1KaP2jsAY0vmkcqkw1noZw5saODeH8SUm&export=download"
+    },
+    {
+      "drive_id": "1tL5FTMAWSOrbcruYWC4PJOV0mz6HZK21",
+      "bytes": 300,
+      "path": "01_short_experiment/calibration/kalibr_output/ouster_imu_lidar_transforms.yaml",
+      "sha256": "8fe56ff808c6c900db52ac1545819ef3da979818bfa392ba00aef43daf59a037",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 0.00024039699928835034,
+      "source_page": "https://drive.google.com/file/d/1tL5FTMAWSOrbcruYWC4PJOV0mz6HZK21/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1tL5FTMAWSOrbcruYWC4PJOV0mz6HZK21&export=download"
+    },
+    {
+      "drive_id": "1MvmMnm0iacRxKYnEsaZ5VxcShYFdWjSk",
+      "bytes": 2015135,
+      "path": "01_short_experiment/calibration/kalibr_output/report_D435i_SN844212071220rooster_2020-03-11-10-05-35_0.pdf",
+      "sha256": "2f3861f39f1f04982ee59079532d51ca6bd5592d9f9df3c3f7b1bd4376aa7a73",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 0.003167546004988253,
+      "source_page": "https://drive.google.com/file/d/1MvmMnm0iacRxKYnEsaZ5VxcShYFdWjSk/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1MvmMnm0iacRxKYnEsaZ5VxcShYFdWjSk&export=download"
+    },
+    {
+      "drive_id": "1Q6lSBdm9LdLsf1grCChHdPBXrttV_Mlr",
+      "bytes": 1259,
+      "path": "01_short_experiment/calibration/kalibr_output/results_D435i_SN844212071220rooster_2020-03-11-10-05-35_0.txt",
+      "sha256": "ae06a220a17666af7e29fce5a71a41d95f5f75c5e1bb1d01e47221eff71d08af",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 0.0003179909544996917,
+      "source_page": "https://drive.google.com/file/d/1Q6lSBdm9LdLsf1grCChHdPBXrttV_Mlr/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1Q6lSBdm9LdLsf1grCChHdPBXrttV_Mlr&export=download"
+    },
+    {
+      "drive_id": "1XnqwBW2u9YgjNiOOiPQ6yDnZTIVYaCQE",
+      "bytes": 1736,
+      "path": "01_short_experiment/calibration/kalibr_output/cam-ouster-imu/camchain-ouster_imu-cam-rooster_2020-03-11-10-05-35_0.yaml",
+      "sha256": "3bc13fa24af9ef8ca888c5523b1df57d1c53d0ca4052b818b7e02310fa781feb",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 0.000287679024040699,
+      "source_page": "https://drive.google.com/file/d/1XnqwBW2u9YgjNiOOiPQ6yDnZTIVYaCQE/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1XnqwBW2u9YgjNiOOiPQ6yDnZTIVYaCQE&export=download"
+    },
+    {
+      "drive_id": "1BXEFqCjG3M7_fmg1jUsE3NmwmNW1_tCn",
+      "bytes": 6027287,
+      "path": "01_short_experiment/calibration/kalibr_output/cam-ouster-imu/report-ouster_imu-cam-rooster_2020-03-11-10-05-35_0.pdf",
+      "sha256": "e7217bf517728080e99713526bd389be5996de5875737a339c4669b578b9bdbe",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 8.112444804981351,
+      "source_page": "https://drive.google.com/file/d/1BXEFqCjG3M7_fmg1jUsE3NmwmNW1_tCn/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1BXEFqCjG3M7_fmg1jUsE3NmwmNW1_tCn&export=download"
+    },
+    {
+      "drive_id": "1BhNR2OIZ9eYtBqyNG0fMpG3jtaBiuuqZ",
+      "bytes": 3093,
+      "path": "01_short_experiment/calibration/kalibr_output/cam-ouster-imu/results-ouster_imu-cam_2020-03-11-10-05-35_0.txt",
+      "sha256": "ac59e756e225127ac3ee11c0a658e55cba9f1f532f6170c015666486f7db1918",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 3.811135303985793,
+      "source_page": "https://drive.google.com/file/d/1BhNR2OIZ9eYtBqyNG0fMpG3jtaBiuuqZ/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1BhNR2OIZ9eYtBqyNG0fMpG3jtaBiuuqZ&export=download"
+    },
+    {
+      "drive_id": "1WZtKOZ_yeVl8ra_wu8l2YeONhQrfmcqm",
+      "bytes": 1758,
+      "path": "01_short_experiment/calibration/kalibr_output/cam-realsense-imu/camchain-realsense_imu-cam-rooster_2020-03-11-10-05-35_0.yaml",
+      "sha256": "b654d2e4ad402edaddb79eb1beb6d3b47f12c0927173b62572a5c7fb3176b101",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 4.185506404959597,
+      "source_page": "https://drive.google.com/file/d/1WZtKOZ_yeVl8ra_wu8l2YeONhQrfmcqm/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1WZtKOZ_yeVl8ra_wu8l2YeONhQrfmcqm&export=download"
+    },
+    {
+      "drive_id": "1W-OGg0LlYOMnAueqd8QTIi3MKaNrTkKt",
+      "bytes": 7172539,
+      "path": "01_short_experiment/calibration/kalibr_output/cam-realsense-imu/report-realsense_imu-cam-rooster_2020-03-11-10-05-35_0.pdf",
+      "sha256": "27142b22b558f105fe3ccc75eda35bcfcdb960fea8613777195e0036e5b235b7",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 10.927284616976976,
+      "source_page": "https://drive.google.com/file/d/1W-OGg0LlYOMnAueqd8QTIi3MKaNrTkKt/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1W-OGg0LlYOMnAueqd8QTIi3MKaNrTkKt&export=download"
+    },
+    {
+      "drive_id": "1h9amE7POwlaDbmjyoR8x4NPHmZBhNCMq",
+      "bytes": 3106,
+      "path": "01_short_experiment/calibration/kalibr_output/cam-realsense-imu/results-realsense_imu-cam-rooster_2020-03-11-10-05-35_0.txt",
+      "sha256": "cd80fe40b36aa55a7374e4f93b466990234c9872411faf3af3d417a3b3947a23",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 3.6871615989948623,
+      "source_page": "https://drive.google.com/file/d/1h9amE7POwlaDbmjyoR8x4NPHmZBhNCMq/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1h9amE7POwlaDbmjyoR8x4NPHmZBhNCMq&export=download"
+    },
+    {
+      "drive_id": "1ZAddzVTZLWafq99ElmmDvz0Av4IUZlFO",
+      "bytes": 1488,
+      "path": "01_short_experiment/time_offsets/time_offsets.csv",
+      "sha256": "19e8c4faf88ffd4b70494e7b91e63da04a918a79ea9ba11dbd12368d723862c6",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 4.177884615026414,
+      "source_page": "https://drive.google.com/file/d/1ZAddzVTZLWafq99ElmmDvz0Av4IUZlFO/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1ZAddzVTZLWafq99ElmmDvz0Av4IUZlFO&export=download"
+    },
+    {
+      "drive_id": "14gCRr3bGoc8PEb6wyib0LTF-10bijANa",
+      "bytes": 2175,
+      "path": "01_short_experiment/prior_map/README.txt",
+      "sha256": "d2af92e6fc52bfbbd6de5b60325e5a30d4ae5bf138f898f6a97fb0cd2edc4866",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 4.177889922983013,
+      "source_page": "https://drive.google.com/file/d/14gCRr3bGoc8PEb6wyib0LTF-10bijANa/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=14gCRr3bGoc8PEb6wyib0LTF-10bijANa&export=download"
+    },
+    {
+      "drive_id": "1CEjIzPDc7E437nxHw5xhx3Wl-ePJbAYM",
+      "bytes": 359695676,
+      "path": "01_short_experiment/prior_map/new-college-29-01-2020-5cm-resolution.ply",
+      "sha256": "e8bf6c7f2ddacde4f6f65ba7759b00bdca5c6bf5e706344ce8c3592529f04ab0",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 19.378787629015278,
+      "source_page": "https://drive.google.com/file/d/1CEjIzPDc7E437nxHw5xhx3Wl-ePJbAYM/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1CEjIzPDc7E437nxHw5xhx3Wl-ePJbAYM&export=download"
+    },
+    {
+      "drive_id": "1NTMFy0sQXz3MGA70TTkA3lCSouc5jUpn",
+      "bytes": 22589784,
+      "path": "01_short_experiment/raw_format/ouster_imu/data.csv",
+      "sha256": "b733ce23544ed23a3ab7a627acfd61ea329f882b12ef0cbcb501b6b13e5828be",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 6.169080921972636,
+      "source_page": "https://drive.google.com/file/d/1NTMFy0sQXz3MGA70TTkA3lCSouc5jUpn/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1NTMFy0sQXz3MGA70TTkA3lCSouc5jUpn&export=download"
+    },
+    {
+      "drive_id": "1bmvLyTzsdjGzTu8UdZ5hqGsr5zIJhshf",
+      "bytes": 56317512,
+      "path": "01_short_experiment/raw_format/realsense_imu/data.csv",
+      "sha256": "381919ac369306001d7f689056bb19576cf6a5060e21a004ac950d0e9a19ce2a",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 8.461192474002019,
+      "source_page": "https://drive.google.com/file/d/1bmvLyTzsdjGzTu8UdZ5hqGsr5zIJhshf/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1bmvLyTzsdjGzTu8UdZ5hqGsr5zIJhshf&export=download"
+    },
+    {
+      "drive_id": "11UPt_B_V-JKvUOxoAAvvg6sYsM-Ca8dM",
+      "bytes": 2146451157,
+      "path": "downloads/ouster_scan-001.zip",
+      "sha256": "10c98cff9864683ee04aac2ea13b081e35ea8e840cafe451e68640ff0a18a562",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 107.12316721898969,
+      "source_page": "https://drive.google.com/file/d/11UPt_B_V-JKvUOxoAAvvg6sYsM-Ca8dM/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=11UPt_B_V-JKvUOxoAAvvg6sYsM-Ca8dM&export=download"
+    },
+    {
+      "drive_id": "1rG_5oO11fYEfvVFpwVnRkIF5lxJzQ26a",
+      "bytes": 2146778834,
+      "path": "downloads/ouster_scan-002.zip",
+      "sha256": "df5c584a0523b09a07edecf1757c4562dec9e932ede7139c0e2adf08c207d969",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 110.70572377397912,
+      "source_page": "https://drive.google.com/file/d/1rG_5oO11fYEfvVFpwVnRkIF5lxJzQ26a/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1rG_5oO11fYEfvVFpwVnRkIF5lxJzQ26a&export=download"
+    },
+    {
+      "drive_id": "1uYy_GQ-kTvKK4810zVR4L2lSrrUG4jFl",
+      "bytes": 2146668735,
+      "path": "downloads/ouster_scan-003.zip",
+      "sha256": "0b7dafe02be4ab56d0c1dd5b559beff34d360f60662ce0e9a5205e65caf6ef5a",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 107.94572789495578,
+      "source_page": "https://drive.google.com/file/d/1uYy_GQ-kTvKK4810zVR4L2lSrrUG4jFl/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1uYy_GQ-kTvKK4810zVR4L2lSrrUG4jFl&export=download"
+    },
+    {
+      "drive_id": "1ZusD304v7oFz5fmfLBhYBFps2m3RdZkW",
+      "bytes": 2145997721,
+      "path": "downloads/ouster_scan-004.zip",
+      "sha256": "62c03c2553efc057a36fb7c4f8bcb5b34d1e05a662b66280de367b255c2ac36d",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 104.07278603699524,
+      "source_page": "https://drive.google.com/file/d/1ZusD304v7oFz5fmfLBhYBFps2m3RdZkW/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1ZusD304v7oFz5fmfLBhYBFps2m3RdZkW&export=download"
+    },
+    {
+      "drive_id": "1XgmPlpdMaddKJmG3YXQoXlGu3epnhI03",
+      "bytes": 2146104083,
+      "path": "downloads/ouster_scan-005.zip",
+      "sha256": "ee601dc69ddb87729946202938b927b92648ac18931414d82f16aee616392d27",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 106.66232618200593,
+      "source_page": "https://drive.google.com/file/d/1XgmPlpdMaddKJmG3YXQoXlGu3epnhI03/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1XgmPlpdMaddKJmG3YXQoXlGu3epnhI03&export=download"
+    },
+    {
+      "drive_id": "1yyTtBSBpC2Rg-cxWsDmjFCZKMvfCwn7V",
+      "bytes": 2146413576,
+      "path": "downloads/ouster_scan-006.zip",
+      "sha256": "91b4b2aae8436940f1ea3f1a7151539c0bbf4cccf6c43f1005e472bd8ab54e8f",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 104.04907264496433,
+      "source_page": "https://drive.google.com/file/d/1yyTtBSBpC2Rg-cxWsDmjFCZKMvfCwn7V/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1yyTtBSBpC2Rg-cxWsDmjFCZKMvfCwn7V&export=download"
+    },
+    {
+      "drive_id": "1d8fvYb5aD7vP1CxTXa8e76W64BV4WO64",
+      "bytes": 2028743003,
+      "path": "downloads/ouster_scan-007.zip",
+      "sha256": "2b85daaf3bb9901696060388f8115322e23c9df89b65821427c5a29e2e834a1b",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 99.34442835004302,
+      "source_page": "https://drive.google.com/file/d/1d8fvYb5aD7vP1CxTXa8e76W64BV4WO64/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1d8fvYb5aD7vP1CxTXa8e76W64BV4WO64&export=download"
+    },
+    {
+      "drive_id": "12n-bJrZ2Nxdi2_8-I98ZDD1OBL37yanY",
+      "bytes": 1778139507,
+      "path": "downloads/ouster_scan-008.zip",
+      "sha256": "575c5470882f70469b2e8b65414daaf409eae42d378baf5e83339d6334e95fd9",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 89.40357780997874,
+      "source_page": "https://drive.google.com/file/d/12n-bJrZ2Nxdi2_8-I98ZDD1OBL37yanY/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=12n-bJrZ2Nxdi2_8-I98ZDD1OBL37yanY&export=download"
+    },
+    {
+      "drive_id": "1G8jkKULBtmdOTtUmWhJErbaxacSvYKXd",
+      "bytes": 1608024800,
+      "path": "downloads/ouster_scan-009.zip",
+      "sha256": "fe74ed85ae2b69b59c53ff3991f44fe45635b25df70ca9c8d4a0041aa420f076",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 78.07639762799954,
+      "source_page": "https://drive.google.com/file/d/1G8jkKULBtmdOTtUmWhJErbaxacSvYKXd/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1G8jkKULBtmdOTtUmWhJErbaxacSvYKXd&export=download"
+    },
+    {
+      "drive_id": "1FtgKdZX5OC1w024KBvJoDSvtj95WrKPa",
+      "bytes": 621605476,
+      "path": "downloads/ouster_scan-010.zip",
+      "sha256": "d3ec23f9c14b890d6aceffb9578cce34c08b8e03abbc6c95b27cccf85c32d8c7",
+      "publisher_sha256": null,
+      "validation": "OFFICIAL_LISTING_SIZE_AND_LOCAL_SHA256",
+      "elapsed_s": 32.47391082899412,
+      "source_page": "https://drive.google.com/file/d/1FtgKdZX5OC1w024KBvJoDSvtj95WrKPa/view",
+      "public_download_entry": "https://drive.usercontent.google.com/uc?id=1FtgKdZX5OC1w024KBvJoDSvtj95WrKPa&export=download"
+    }
+  ],
+  "updated_utc": "2026-10-15T21:44:42Z",
+  "validation_scope": "Public listing byte sizes, local SHA256; publisher SHA256 unavailable. ZIP extraction/CRC checked separately.",
+  "network_payload_bytes": 19370094732,
+  "selected_lidar_archives": 10,
+  "download_receipt_status": "DOWNLOADS_COMPLETE_EXTRACTION_NOT_RUN",
+  "status": "VERIFIED_DOWNLOADS_AND_PCD_EXTRACTION_COMPLETE",
+  "pointcloud_validation": {
+    "status": "PCD_EXTRACTION_AND_ZIP_CRC_PASS",
+    "pcd_file_count": 15302,
+    "unique_scan_timestamps": 15301,
+    "extra_files_at_duplicate_timestamps": 1,
+    "point_count_including_duplicate_files": 1002831872,
+    "first_ns": 1583836591182590976,
+    "last_ns": 1583838121156355584,
+    "duration_s": 1529.973764608,
+    "uncompressed_bytes": 29144801280,
+    "schemas": {
+      "{\"COUNT\": \"1 1 1 1 1 1 1 1 1\", \"DATA\": \"binary\", \"FIELDS\": \"x y z intensity t reflectivity ring noise range\", \"HEIGHT\": \"64\", \"SIZE\": \"4 4 4 4 4 2 1 2 4\", \"TYPE\": \"F F F F U U U U U\", \"WIDTH\": \"1024\"}": 15302
+    },
+    "archives": [
+      {
+        "path": "downloads/ouster_scan-001.zip",
+        "pcd_file_count": 1734,
+        "uncompressed_bytes": 3302645760
+      },
+      {
+        "path": "downloads/ouster_scan-002.zip",
+        "pcd_file_count": 1738,
+        "uncompressed_bytes": 3310264320
+      },
+      {
+        "path": "downloads/ouster_scan-003.zip",
+        "pcd_file_count": 1738,
+        "uncompressed_bytes": 3310264320
+      },
+      {
+        "path": "downloads/ouster_scan-004.zip",
+        "pcd_file_count": 1733,
+        "uncompressed_bytes": 3300741120
+      },
+      {
+        "path": "downloads/ouster_scan-005.zip",
+        "pcd_file_count": 1734,
+        "uncompressed_bytes": 3302645760
+      },
+      {
+        "path": "downloads/ouster_scan-006.zip",
+        "pcd_file_count": 1738,
+        "uncompressed_bytes": 3310264320
+      },
+      {
+        "path": "downloads/ouster_scan-007.zip",
+        "pcd_file_count": 1642,
+        "uncompressed_bytes": 3127418880
+      },
+      {
+        "path": "downloads/ouster_scan-008.zip",
+        "pcd_file_count": 1441,
+        "uncompressed_bytes": 2744586240
+      },
+      {
+        "path": "downloads/ouster_scan-009.zip",
+        "pcd_file_count": 1300,
+        "uncompressed_bytes": 2476032000
+      },
+      {
+        "path": "downloads/ouster_scan-010.zip",
+        "pcd_file_count": 504,
+        "uncompressed_bytes": 959938560
+      }
+    ],
+    "elapsed_s": 365.37645655701635
+  }
+}

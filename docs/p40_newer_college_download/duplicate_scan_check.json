@@ -1,0 +1,10 @@
+{
+  "archive": "downloads/ouster_scan-009.zip",
+  "timestamp_ns": 1583837971358315008,
+  "files_sha256": {
+    "ouster_scan/cloud_1583837971_358315008(1).pcd": "206d99d4f693318a609c1f5a16d349eb94083264572751a6d33a90ce89e0dd93",
+    "ouster_scan/cloud_1583837971_358315008.pcd": "206d99d4f693318a609c1f5a16d349eb94083264572751a6d33a90ce89e0dd93"
+  },
+  "identical_payloads": true,
+  "action": "PRESERVE_BOTH_OFFICIAL_FILES_NO_DELETION"
+}

@@ -10,6 +10,9 @@ Dataset: **Newer College 2020, Ouster OS1-64 + RealSense,
 - Calibration and clock-drift correction: https://ori-drs.github.io/newer-college-dataset/stereo-cam/calibration-stereo/
 - Platform reference frames: https://ori-drs.github.io/newer-college-dataset/stereo-cam/platform-stereo/
 - Official robot description: https://github.com/ori-drs/frontier_description/tree/newer-college-dataset
+- DRS Ouster point type: https://github.com/ori-drs/ouster_example/blob/master/ouster_ros/include/ouster_ros/point.h
+- DRS Ouster scan-time assignment: https://github.com/ori-drs/ouster_example/blob/master/ouster_ros/src/ros.cpp
+- DRS Ouster nanosecond timestamp type: https://github.com/ori-drs/ouster_example/blob/master/ouster_client/include/ouster/lidar_scan.h
 - SOCC-ICP format reference only: https://github.com/josch14/socc_icp/blob/main/DATASETS.md
 
 The user authorized submitting their supplied email to the official access form.
@@ -58,3 +61,23 @@ listing byte sizes and **locally computed** SHA256; that is not publisher hash
 authentication. ZIP CRC checks and dataset field inspection are separate gates.
 The website distributes the data under CC BY-NC-SA 4.0; future use must retain
 the dataset attribution and comply with the noncommercial/share-alike terms.
+
+## Bounded sensor-definition findings
+
+The actual first ZIP has binary PCD fields
+`x y z intensity t reflectivity ring noise range`, with `t` an unsigned 32-bit
+field. One actual scan has 65,536 points (1024×64), 1,024 distinct timestamps,
+and `t` range 0–99,879,680. The official group's driver assigns the nanosecond
+column timestamp minus the scan timestamp to this field (`ros.cpp:77–82`,
+`lidar_scan.h:34` defines `ts_t` as `std::chrono::nanoseconds`). The exact
+historical PCD exporter commit was not identified. This source/value agreement
+supports interpreting `t` as scan-relative nanoseconds; the download does not
+deskew or otherwise rewrite it. The archived PCD field name is `noise`, whereas
+the currently visible driver calls that field `ambient`; do not rename it here.
+
+Official GT generation registers Ouster scans to the independently acquired
+Leica prior, rather than constructing an oracle map from this test trajectory.
+The stereo GT page identifies RS_C1, while the official description README
+specifies a left-camera-position base with robotics axes. Sensor-reference and
+axis conversion must be applied explicitly in a future input adapter. This task
+does not fit any map↔GT alignment or certify an untested pose-frame adapter.

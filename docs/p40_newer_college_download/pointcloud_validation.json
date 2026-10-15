@@ -1,0 +1,67 @@
+{
+  "status": "PCD_EXTRACTION_AND_ZIP_CRC_PASS",
+  "pcd_file_count": 15302,
+  "unique_scan_timestamps": 15301,
+  "extra_files_at_duplicate_timestamps": 1,
+  "point_count_including_duplicate_files": 1002831872,
+  "first_ns": 1583836591182590976,
+  "last_ns": 1583838121156355584,
+  "duration_s": 1529.973764608,
+  "uncompressed_bytes": 29144801280,
+  "schemas": {
+    "{\"COUNT\": \"1 1 1 1 1 1 1 1 1\", \"DATA\": \"binary\", \"FIELDS\": \"x y z intensity t reflectivity ring noise range\", \"HEIGHT\": \"64\", \"SIZE\": \"4 4 4 4 4 2 1 2 4\", \"TYPE\": \"F F F F U U U U U\", \"WIDTH\": \"1024\"}": 15302
+  },
+  "archives": [
+    {
+      "path": "downloads/ouster_scan-001.zip",
+      "pcd_file_count": 1734,
+      "uncompressed_bytes": 3302645760
+    },
+    {
+      "path": "downloads/ouster_scan-002.zip",
+      "pcd_file_count": 1738,
+      "uncompressed_bytes": 3310264320
+    },
+    {
+      "path": "downloads/ouster_scan-003.zip",
+      "pcd_file_count": 1738,
+      "uncompressed_bytes": 3310264320
+    },
+    {
+      "path": "downloads/ouster_scan-004.zip",
+      "pcd_file_count": 1733,
+      "uncompressed_bytes": 3300741120
+    },
+    {
+      "path": "downloads/ouster_scan-005.zip",
+      "pcd_file_count": 1734,
+      "uncompressed_bytes": 3302645760
+    },
+    {
+      "path": "downloads/ouster_scan-006.zip",
+      "pcd_file_count": 1738,
+      "uncompressed_bytes": 3310264320
+    },
+    {
+      "path": "downloads/ouster_scan-007.zip",
+      "pcd_file_count": 1642,
+      "uncompressed_bytes": 3127418880
+    },
+    {
+      "path": "downloads/ouster_scan-008.zip",
+      "pcd_file_count": 1441,
+      "uncompressed_bytes": 2744586240
+    },
+    {
+      "path": "downloads/ouster_scan-009.zip",
+      "pcd_file_count": 1300,
+      "uncompressed_bytes": 2476032000
+    },
+    {
+      "path": "downloads/ouster_scan-010.zip",
+      "pcd_file_count": 504,
+      "uncompressed_bytes": 959938560
+    }
+  ],
+  "elapsed_s": 365.37645655701635
+}

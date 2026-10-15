@@ -1,0 +1,40 @@
+/media/jian/HIKVISION/paper rosbag/NewerCollege/
+├── 01_short_experiment/
+│   ├── ground_truth/
+│   │   └── registered_poses.csv                 1,330,464 bytes; 15,301 records
+│   ├── calibration/                           15 original official files
+│   │   ├── april_6x6.yaml
+│   │   ├── beam_intrinsics.json
+│   │   ├── calibrate.sh                       retained, not executed
+│   │   ├── imu.yaml
+│   │   ├── ouster_imu.yaml
+│   │   └── kalibr_output/
+│   │       ├── camchain_D435i__SN844212071220rooster_2020-03-11-10-05-35_0.yaml
+│   │       ├── ouster_imu_lidar_transforms.yaml
+│   │       ├── report_D435i_SN844212071220rooster_2020-03-11-10-05-35_0.pdf
+│   │       ├── results_D435i_SN844212071220rooster_2020-03-11-10-05-35_0.txt
+│   │       ├── cam-ouster-imu/                 camchain YAML, report PDF, results TXT
+│   │       └── cam-realsense-imu/              camchain YAML, report PDF, results TXT
+│   ├── prior_map/
+│   │   ├── README.txt                         official map description
+│   │   └── new-college-29-01-2020-5cm-resolution.ply
+│   │                                           359,695,676 bytes; 10,277,007 vertices
+│   ├── raw_format/
+│   │   ├── ouster_scan/                       15,302 original binary PCD files
+│   │   │   ├── cloud_1583836591_182590976.pcd first unique timestamp
+│   │   │   ├── ...                            no scans cropped or discarded
+│   │   │   ├── cloud_1583837971_358315008.pcd
+│   │   │   ├── cloud_1583837971_358315008(1).pcd  identical official duplicate retained
+│   │   │   └── cloud_1583838121_156355584.pcd last unique timestamp
+│   │   ├── ouster_imu/data.csv                153,014 records
+│   │   └── realsense_imu/data.csv             382,114 records
+│   └── time_offsets/time_offsets.csv         49 official clock-offset records
+└── downloads/
+    ├── ouster_scan-001.zip ... ouster_scan-010.zip  18,914,926,892 bytes; all CRC PASS
+    ├── download_status.json                   per-file byte-size/SHA256 receipts
+    └── pointcloud_validation.json             scan/header/count/CRC summary
+
+This is a compact actual-layout summary, not a listing of all 15,302 PCD filenames.
+15,301 unique LiDAR timestamps exactly match all 15,301 GT timestamps.
+Archive files and the duplicate PCD are preserved; nothing has been deleted.
+No camera image archives, duplicate sequence rosbags or alternate map resolutions downloaded.
