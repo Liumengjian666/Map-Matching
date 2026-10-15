@@ -1,0 +1,84 @@
+<launch>
+  <!-- P18 CONTROL LiDAR/IMU chain. Replay a decoded raw timed-PointCloud2 bag,
+       NOT the original /velodyne_packets bag (that requires a decoder first). -->
+  <arg name="map_path" default="/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd" />
+  <arg name="use_sim_time" default="true" />
+  <arg name="rviz" default="true" />
+  <!-- Empty override reads enabled from corridor01_gt_visualization.yaml. -->
+  <arg name="gt_visualization" default="" />
+  <arg name="gt_file" default="/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/gt/corridor01_gt.txt" />
+  <arg name="rviz_config" default="$(find dog_prior_map_localization)/rviz/corridor01_with_gt.rviz" />
+  <arg name="raw_points_topic" default="/p10/corridor01/raw_timed_points" />
+  <arg name="imu_topic" default="/imu/data" />
+  <arg name="publish_path" default="true" />
+  <arg name="runtime_csv_path" default="" />
+  <arg name="ndt_diagnostics_csv_path" default="" />
+  <arg name="imu_deskew_csv_path" default="" />
+  <arg name="oosm_csv_path" default="" />
+  <arg name="oosm_fixed_lag_csv_path" default="" />
+
+  <param name="use_sim_time" value="$(arg use_sim_time)" />
+  <include file="$(find dog_prior_map_localization)/launch/dog_prior_map_localization_split.launch">
+    <arg name="dataset_config" value="$(find dog_prior_map_localization)/config/p18_corridor01_ssd_map.yaml" />
+    <arg name="rviz" value="false" />
+    <arg name="coupled_mode" value="CONTROL" />
+    <arg name="camera_enable" value="false" />
+    <arg name="visual_initial_guess_enable" value="false" />
+    <arg name="publish_path" value="$(arg publish_path)" />
+    <arg name="scan_reference_time" value="start" />
+    <arg name="oosm_enable" value="true" />
+    <arg name="oosm_fixed_lag_enable" value="true" />
+    <arg name="oosm_fixed_lag_sec" value="0.15" />
+    <arg name="future_deferral_enable" value="false" />
+    <arg name="runtime_csv_path" value="$(arg runtime_csv_path)" />
+    <arg name="ndt_diagnostics_csv_path" value="$(arg ndt_diagnostics_csv_path)" />
+    <arg name="imu_deskew_csv_path" value="$(arg imu_deskew_csv_path)" />
+    <arg name="oosm_csv_path" value="$(arg oosm_csv_path)" />
+    <arg name="oosm_fixed_lag_csv_path" value="$(arg oosm_fixed_lag_csv_path)" />
+  </include>
+
+  <!-- Overrides intentionally follow the include's YAML loads. Same normalized
+       XYZ in both consumers; PCD VIEWPOINT metadata is not another map transform. -->
+  <!-- NDT resolves root parameters before its private ones. Set both switches
+       here too, so a retained root value cannot override the include arguments. -->
+  <param name="coupled_mode" value="CONTROL" />
+  <param name="visual_initial_guess_enable" value="false" />
+  <param name="map/pcd_fallback_path" value="$(arg map_path)" />
+  <param name="frames/map_frame" value="camera_init" />
+  <param name="topics/imu" value="$(arg imu_topic)" />
+  <param name="deskew/input_topic" value="$(arg raw_points_topic)" />
+  <param name="output/publish_tf" value="true" />
+  <param name="output/ndt_publish_tf" value="false" />
+  <!-- Keep the P18 CONTROL baseline explicit even after a previous experiment
+       left feature switches on the same ROS master. No estimator math is edited. -->
+  <param name="mature_integration/enable" value="false" />
+  <param name="mature_visual/enable" value="false" />
+  <param name="mature_visual/time_adapter_enable" value="false" />
+  <param name="filter/experimental_covariance_stability_enable" value="false" />
+  <param name="filter/experimental_square_root_covariance_enable" value="false" />
+  <param name="deskew/experimental_scan_local_imu_enable" value="false" />
+  <param name="deskew/experimental_history_nominal_consistent_enable" value="false" />
+  <param name="lidar_update/experimental_ekf_translation_fallback_enable" value="false" />
+  <param name="output/experimental_ndt_source_capture_enable" value="false" />
+
+  <!-- Neither split node exposes its loaded target as a map topic. Load the PCD
+       once here for visualization only; EKF map loading remains disabled. -->
+  <node pkg="pcl_ros" type="pcd_to_pointcloud" name="corridor01_prior_map" output="screen" required="true">
+    <param name="file_name" value="$(arg map_path)" />
+    <param name="frame_id" value="camera_init" />
+    <param name="interval" value="0.0" />
+    <param name="latch" value="true" />
+    <remap from="cloud_pcd" to="/dog_livo/prior_map" />
+    <!-- MVS SDK ships an incompatible libusb; process-local preload only. -->
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+
+  <include file="$(find dog_prior_map_localization)/launch/corridor01_ground_truth.launch">
+    <arg name="gt_file" value="$(arg gt_file)" />
+    <arg name="enabled_override" value="$(arg gt_visualization)" />
+  </include>
+
+  <node pkg="rviz" type="rviz" name="corridor01_rviz" args="-d &quot;$(arg rviz_config)&quot;" if="$(arg rviz)">
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+</launch>
