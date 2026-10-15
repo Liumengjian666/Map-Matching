@@ -77,6 +77,7 @@ class GroundTruthVisualizationTest(unittest.TestCase):
         config = yaml.safe_load((PACKAGE / 'config/corridor02_gt_visualization.yaml').read_text())
         self.assertTrue(config['enabled'])
         self.assertEqual(config['alignment_mode'], 'PCD_VIEWPOINT_YAML_WORLD_FROM_GT')
+        self.assertIn('WHOLE_SEQUENCE_ALIGNMENT_UNRESOLVED', config['alignment_contract'])
         self.assertTrue(config['publish_full_path'])
         self.assertEqual(config['frame_id'], 'map')
         source = Path(config['alignment_source'])

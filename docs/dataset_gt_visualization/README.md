@@ -83,7 +83,20 @@ roslaunch dog_prior_map_localization corridor02_ground_truth.launch
 所有显示使用 `map`。算法必须实际输出同一地图坐标系下的轨迹；仅把别的坐标
 轨迹改名为 `map` 不成立。本入口**不启动定位器，不提供初始化，不创建 TF**。
 
-### 联网核查后的显示修复：PCD VIEWPOINT 与正向 YAML
+### 当前限制：首段吻合不等于全程坐标已闭合
+
+重新阅读 SubT-MRS 正文 §3.1.1、§3.2 和补充材料 B.3 后，未找到
+`world_darpa` 与发布 PCD/GT 文件之间的变换定义。官网将 Corridor02 来源列为
+SuperLoc，不能自动继承 Corridor01/SubT-MRS 的全部坐标语义。
+当前 `inverse(VIEWPOINT) * YAML` 保留为**显示假设**，不是官方认证变换。
+四帧实际 raw 扫描抽查：相对 GT 首时刻约 0/180/540/630 秒的 NN median
+分别为 0.1160/0.1414/2.1989/2.6327m。因此此前“显示修复”的结论只能用于
+首段，不能保证完整路径贴合地图；也没有证明是官方矩阵错误或 GT 漂移。
+配置已明确输出 `WHOLE_SEQUENCE_ALIGNMENT_UNRESOLVED`，矩阵数值未改。
+详见 [论文与实际发布链核查](subtmrs_frame_review.md) 和
+[四帧诊断](subtmrs_frame_review.json)。旧 JSON 为历史结果，不覆盖。
+
+### 历史首段显示修复：PCD VIEWPOINT 与正向 YAML（非全程认证）
 
 此前逆变换假设已被下面的来源支持组合替代。关键遗漏是 PCD 文件头：
 

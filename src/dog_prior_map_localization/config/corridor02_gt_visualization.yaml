@@ -1,6 +1,8 @@
-# Restore the PCD acquisition pose before interpreting its raw XYZ coordinates.
-# T_rawXYZ_GT = inverse(T_world_rawXYZ_VIEWPOINT) * T_world_GT_YAML.
-# Source-supported display composition, not a non-GT localization initializer.
+# Display hypothesis, NOT a certified whole-sequence frame calibration.
+# Numerically uses inverse(PCD_VIEWPOINT) * active_YAML * GT_pose.
+# Prefix scans agree, but later raw scans show metre-scale disagreement.
+# Neither SubT-MRS Sec.3.2 nor the release defines YAML as T_world_GT.
+# Keep the existing numbers for inspection; do not use as an initializer or ATE.
 enabled: true
 alignment_mode: "PCD_VIEWPOINT_YAML_WORLD_FROM_GT"
 publish_full_path: true
@@ -11,7 +13,7 @@ frame_id: "map"
 path_topic: "/dog_livo/gt_path"
 marker_topic: "/dog_livo/gt_current_pose"
 reference_point: "GT_AS_PUBLISHED_SENSOR_ORIGIN_UNCERTIFIED"
-alignment_contract: "DISPLAY_ONLY_PCD_VIEWPOINT_AND_FORWARD_YAML; GEOMETRICALLY_SUPPORTED; GT_SENSOR_ORIGIN_UNCERTIFIED"
+alignment_contract: "DISPLAY_ONLY_FRAME_HYPOTHESIS; PREFIX_GEOMETRY_SUPPORTED; WHOLE_SEQUENCE_ALIGNMENT_UNRESOLVED; GT_SENSOR_ORIGIN_UNCERTIFIED"
 alignment_source: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/initial_pose/corridor02.yaml"
 alignment_source_sha256: "fc319ad99737a717456e11eb70383d4848eadf7e46587fee0643d6732cf1c3a1"
 reference_map_file: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/map/corridor02.pcd"

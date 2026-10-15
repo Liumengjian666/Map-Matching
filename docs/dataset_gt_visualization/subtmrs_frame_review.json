@@ -1,0 +1,44 @@
+{
+  "status": "WHOLE_SEQUENCE_ALIGNMENT_UNRESOLVED",
+  "start_sha": "6772d854df911e85cfdd06784d81e305e5586572",
+  "scope": "Paper/source review, one existing display composition, four raw-scan NN checks; not localization accuracy",
+  "paper": "https://arxiv.org/html/2307.07607v5",
+  "paper_sections": ["3.1.1", "3.2", "B.3"],
+  "official_Corridor02_file_transform_defined_in_paper": false,
+  "source_SHA256": {
+    "src/dog_prior_map_localization/scripts/dataset_gt_path_publisher.py": "d93d39caed3b0c9d70df35637082c269927df0b07dc56656c2f4d44fc255b88c",
+    "src/dog_prior_map_localization/scripts/p32_gt_frame/prepare.py": "bd6ad0f30fab7207074508eb26e10ad9072d37ecbc504fc0ad968972ff967433",
+    "src/dog_prior_map_localization/scripts/p32_corridor02/prepare_probe.py": "9b40443aa76b6fb72f2c5043ea5d1abb5a84c6624f46ce2314a7ce624d646481"
+  },
+  "input_SHA256": {
+    "map": "6c39e243556eddbef7a8b4bd2de25cf7c962c4ff0f52c94cfc1d994f178ae228",
+    "active_yaml": "fc319ad99737a717456e11eb70383d4848eadf7e46587fee0643d6732cf1c3a1",
+    "gt": "cddb6739230ded86c57412e768e071e5cd6d62a5de5ff310618032ca2e38be0a",
+    "RC1_extrinsics": "892bf743dc0f51eabfe9d8ae71dc98663753f174910ae9cc40ee244c77a9e217"
+  },
+  "composition": "inverse(PCD_VIEWPOINT) * active_YAML * interpolated_GT * T_I_L",
+  "GT_is_IMU": "conditional, not officially certified for Corridor02",
+  "GT_IMU_vs_GT_LIDAR_path_origin_difference_m": 0,
+  "direct_vs_publisher_matrix_max_difference": 5.684341886080802e-14,
+  "target": "5223422 full-resolution raw PCD XYZ; Open3D + SciPy cKDTree",
+  "source": "raw XYZ, finite mask only; rigid header-time transform; no deskew",
+  "bag": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/raw/corridor02_decoded_raw_timed_full.bag",
+  "bag_full_SHA256_recomputed": false,
+  "scans": [
+    {"scan_ns": "1645999726984117031", "relative_GT_s": 0.000000031, "points": 28152, "raw_payload_SHA256": "443d541eb2bc2bf6ea977e465677e92006863a657979add1155a320fa0655e4e", "NN_median_m": 0.11602145192942238, "NN_P90_m": 0.2434478573314256, "coverage_0_5m": 0.9671426541631145, "median_point_minus_nearest_map_Z_m": -0.0037810712646502154},
+    {"scan_ns": "1645999907010623932", "relative_GT_s": 180.026506932, "points": 28696, "raw_payload_SHA256": "609e02d9ccdbf0634e1e2b663461e015dc3bc2f3e3a647930ed700f6014922a4", "NN_median_m": 0.14140460189134257, "NN_P90_m": 0.3098907295849011, "coverage_0_5m": 0.9641064956788402, "median_point_minus_nearest_map_Z_m": 0.0026683596623906514},
+    {"scan_ns": "1646000266962766886", "relative_GT_s": 539.978649886, "points": 16550, "raw_payload_SHA256": "95b0ac99dd5d7a504802e178214ad55bdb86600dd223e71152d2f6d8c7888ade", "NN_median_m": 2.1988955885576686, "NN_P90_m": 2.546280824961028, "coverage_0_5m": 0.0454380664652568, "median_point_minus_nearest_map_Z_m": -2.182027589986313},
+    {"scan_ns": "1646000357026402950", "relative_GT_s": 630.042285950, "points": 28797, "raw_payload_SHA256": "9da95580f08e2d2e696f2c554c742c79c7f687a3c6da1eae63ee94e75af79b48", "NN_median_m": 2.63266030381779, "NN_P90_m": 3.049000203397075, "coverage_0_5m": 0.016598951279647185, "median_point_minus_nearest_map_Z_m": -2.4072091111060576}
+  ],
+  "NN_diagnostic_elapsed_s": 4.625943105958868,
+  "diagnostic_process_peak_RSS_KiB": 823460,
+  "performance_scope": "offline map loading + KDTree + diagnostic; not online estimator or entire ROS system",
+  "ICP_calls": 0,
+  "NDT_align_calls": 0,
+  "transform_fit_calls": 0,
+  "new_transform_candidates": 0,
+  "matrix_coefficients_changed": false,
+  "localization_algorithm_changed": false,
+  "tests": {"GT_display_passed": 13, "Corridor01_launch_passed": 5, "JSON_parse": "PASS", "diff_check": "PASS"},
+  "push_executed": false
+}
