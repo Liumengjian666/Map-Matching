@@ -1,0 +1,54 @@
+{
+  "status": "SENSOR_TIME_COPY_AND_READBACK_PASS",
+  "date": "2026-10-15",
+  "start_sha": "6382346e2b407fae382b56cbb0643394d1391968",
+  "visualization_code_sha": "8f2a44e46cfb720460e7c88e821ec738b82a0887",
+  "source": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/raw/corridor02.bag",
+  "source_bytes": 24494797838,
+  "source_sha256_verified_preflight": "feffc760c45905d0b6dc42cff9671849a6b0c5229bcf9816d36a97c63e2a093c",
+  "output": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/raw/corridor02_decoded_raw_timed_full.bag",
+  "output_bytes": 24490008108,
+  "output_bag_record_duration_sec": 893.412119,
+  "output_sha256": "86a07b02dc1b57fa87b325b0785a8e24af98cd9ec1d8f7456f5c7639f19de44c",
+  "topic_counts": {
+    "/velodyne_points": 8859,
+    "/imu/data": 178499,
+    "/camera_1/image_raw": 21339
+  },
+  "total_points": 215963143,
+  "serialized_payload_sha256": {
+    "/velodyne_points": "3dcf667c2886afb94cb9dbe719b59e9058926e0f0ac3566cc51bb317e65bba32",
+    "/imu/data": "55f598e7b980c15607f18fa33d7ab423d208112a4759d479d7586613061d1a98",
+    "/camera_1/image_raw": "270ebe6f0166849307558287f723579e07ae7917375bee2de44d10c2f42e1481"
+  },
+  "first_sensor_stamp_ns": {
+    "/velodyne_points": 1645999726278098106,
+    "/imu/data": 1645999726442864000,
+    "/camera_1/image_raw": 1645999730701529211
+  },
+  "last_sensor_stamp_ns": {
+    "/velodyne_points": 1646000619653331041,
+    "/imu/data": 1646000619791056000,
+    "/camera_1/image_raw": 1646000619659187131
+  },
+  "maximum_point_time_seconds": 0.10083945095539093,
+  "cloud_frame": "cmu_rc1_velodyne",
+  "bag_record_time": "IMU/image header; LiDAR header + max(float32 time in seconds)",
+  "all_serialized_payloads_unchanged": true,
+  "packet_decoding_needed": false,
+  "deskew_performed": false,
+  "GT_used": false,
+  "localization_run": false,
+  "wall_sec": 511.6090865880251,
+  "peak_rss_kib": 252740,
+  "script_sha256": "4009f06a8cd737606d572210c07f9e7b197f5ec725cdba46f414ac676fd8e69f",
+  "new_unit_tests_passed": 3,
+  "shared_verifier_regression_tests_passed": 6,
+  "original_bag_retained": true,
+  "external_push_executed": false,
+  "limitations": [
+    "First two LiDAR scans lack complete preceding IMU coverage; preserved without fabrication.",
+    "Corridor02 non-GT map initialization and GT-map transform remain unresolved.",
+    "No complete localization replay, GT accuracy evaluation or deployment performance claim."
+  ]
+}
