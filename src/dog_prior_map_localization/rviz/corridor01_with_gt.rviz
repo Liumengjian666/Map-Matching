@@ -169,7 +169,7 @@ Visualization Manager:
       Unreliable: false
       Value: true
     - Class: rviz/Path
-      Name: GT Path (prefix aligned, display only)
+      Name: GT reference (prefix only - global UNVERIFIED)
       Enabled: true
       Value: true
       Topic: /dog_livo/gt_path

@@ -1,0 +1,11 @@
+Both rejections are justified: the first attempt fails 3/5 holdouts; the second fails all five despite fitting its 150 s anchor. **No failure-causing coordinate, time or registration bug is established.**
+
+- **Medium — conditional selection defect in the shown source.** `bag.read_messages(start_time=..., end_time=...)` filters by bag-record time, but `min(...header.stamp...)` selects by header time. Consequently, “nearest header” is guaranteed only within that record-time window. The 60 ms check does not prove global nearest-header selection. No record/header offsets are supplied, so actual misselection is unproven.
+
+- **Low — acceptance-rule mismatch.** The receipt declares “all heldout scans,” but `passed = all(row['geometry_pass'] for row in evaluation)` includes TRAIN rows. This adds a training requirement in the original mode; the supplement explicitly requires it for single-turn mode. It cannot explain either rejection because both already fail holdouts.
+
+- **No demonstrated transform-order defect.** `moved` implements \(Rp+t\); the displayed composition is correctly `T_map_GT @ T_GT_IMU @ E`. Source-to-target registration has the intended direction. The verified normalization and preserved VIEWPOINT provide no basis for applying another header transform. A negative vertical rotation entry does not establish reflection; `rigid()` requires determinant +1.
+
+The results establish that **these two candidates fail**, not why. They do not establish wrong axes, scale, extrinsic direction, GT interpolation, timestamp offset, map deformation, deskew as the sole cause, or absence of a fixed SE(3). For example, the second candidate achieves 0.198 m median at 150 s but 110.897 m at 45 s: strong anchor fit does not establish the correct corridor correspondence or official coordinate mapping. Observations about the shown source also cannot independently verify the two historical revisions from their SHA values alone.
+
+**One smallest next diagnostic:** audit only the existing 150 s selection, comparing its chosen header against the globally nearest same-topic header and their bag-record timestamps. This directly tests the concrete selection gap without another registration.

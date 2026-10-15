@@ -60,6 +60,14 @@ T_map_lidar = inverse(T_gt_map) * T_gt_imu * T_imu_lidar
 只看 GT 时可用 `corridor01_ground_truth.launch enabled_override:=true`，
 并手动打开 `rviz/corridor01_with_gt.rviz`；没有定位器时相关地图/轨迹显示自然无数据。
 
+### Corridor01 全程显示限制
+
+当前短前缀评价变换不能保证完整约279秒轨迹与地图重合；转弯处仍有明显错位。
+配置和 RViz 已标为 `WHOLE_SEQUENCE_ALIGNMENT_UNRESOLVED`，不应将青色全程线
+当作已认证的地图真值。两次离线 GT 辅助固定SE(3)估计均未通过未参与配准扫描
+检查，均未启用；不能据此宣布官方标定错误或不存在固定变换。
+详见 [本次显示排障结果](corridor01_alignment_report.md)。
+
 ## Corridor02：先显示地图和完整真值，再独立运行算法
 
 一个终端即可显示全部静态参考，**不用先播放 bag**：

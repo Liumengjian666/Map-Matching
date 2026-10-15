@@ -21,6 +21,7 @@ CONFIG = yaml.safe_load((PACKAGE / 'config/corridor01_gt_visualization.yaml').re
 
 class GroundTruthVisualizationTest(unittest.TestCase):
     def test_frozen_alignment_and_real_extrinsic_not_refitted(self):
+        self.assertIn('WHOLE_SEQUENCE_ALIGNMENT_UNRESOLVED', CONFIG['alignment_contract'])
         source = PACKAGE.parents[1] / CONFIG['alignment_source']
         self.assertEqual(hashlib.sha256(source.read_bytes()).hexdigest(), CONFIG['alignment_source_sha256'])
         frozen = json.loads(source.read_text())

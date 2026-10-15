@@ -1,0 +1,560 @@
+{
+  "task": "Corridor01 whole-map GT display alignment repair",
+  "status": "DISPLAY_ALIGNMENT_NOT_ESTABLISHED",
+  "applied_new_transform": false,
+  "localization_algorithm_modified": false,
+  "original_map_GT_calibration_modified": false,
+  "registration_attempts": [
+    {
+      "name": "calibration",
+      "status": "DISPLAY_ALIGNMENT_REJECTED",
+      "script_SHA256": "bde03ac2d5930f4de69049a23a83d65cb11749f8417ca6cb09fbf9865dab15da",
+      "train_seconds": [
+        20,
+        80,
+        150,
+        220
+      ],
+      "holdout_seconds": [
+        10,
+        60,
+        120,
+        180,
+        240
+      ],
+      "T_map_GT": [
+        [
+          -0.9612661002711466,
+          -0.2724073506305795,
+          0.04197284588793177,
+          196.1173710896938
+        ],
+        [
+          -0.2742535489604064,
+          0.9604937378538302,
+          -0.04729450735762205,
+          -11.197009866797647
+        ],
+        [
+          -0.0274312841865942,
+          -0.05697380859663973,
+          -0.9979987523949462,
+          -5.071513792661651
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "evaluation": [
+        {
+          "target_GT_seconds": 10,
+          "role": "HOLDOUT",
+          "before": {
+            "median_m": 0.27281851610477614,
+            "p90_m": 0.4565867133655088,
+            "coverage_0_5m": 0.9314822489294101,
+            "coverage_2m": 0.9992747617074181
+          },
+          "after": {
+            "median_m": 0.6199738505382539,
+            "p90_m": 2.448620014396149,
+            "coverage_0_5m": 0.42536952617764884,
+            "coverage_2m": 0.8312957590827462
+          },
+          "geometry_pass": false
+        },
+        {
+          "target_GT_seconds": 20,
+          "role": "TRAIN",
+          "before": {
+            "median_m": 0.21107206697858144,
+            "p90_m": 0.31331733732600753,
+            "coverage_0_5m": 0.982711211933732,
+            "coverage_2m": 0.9999312573039114
+          },
+          "after": {
+            "median_m": 0.05729383010932841,
+            "p90_m": 0.08526822483691508,
+            "coverage_0_5m": 0.9978002337251667,
+            "coverage_2m": 0.9997937719117344
+          },
+          "geometry_pass": true
+        },
+        {
+          "target_GT_seconds": 60,
+          "role": "HOLDOUT",
+          "before": {
+            "median_m": 0.7257290019557648,
+            "p90_m": 1.7929850727694947,
+            "coverage_0_5m": 0.4616866143898748,
+            "coverage_2m": 0.9546705186408034
+          },
+          "after": {
+            "median_m": 0.09084081767866838,
+            "p90_m": 0.14209821787098853,
+            "coverage_0_5m": 0.9983835465676159,
+            "coverage_2m": 1.0
+          },
+          "geometry_pass": true
+        },
+        {
+          "target_GT_seconds": 80,
+          "role": "TRAIN",
+          "before": {
+            "median_m": 0.514754932248227,
+            "p90_m": 1.3776973578270673,
+            "coverage_0_5m": 0.4874548083875633,
+            "coverage_2m": 0.9398409255242227
+          },
+          "after": {
+            "median_m": 0.15333561938755877,
+            "p90_m": 0.47232259647754227,
+            "coverage_0_5m": 0.9054229934924078,
+            "coverage_2m": 0.985936370209689
+          },
+          "geometry_pass": true
+        },
+        {
+          "target_GT_seconds": 120,
+          "role": "HOLDOUT",
+          "before": {
+            "median_m": 67.06016715619167,
+            "p90_m": 69.99064185287531,
+            "coverage_0_5m": 0.0,
+            "coverage_2m": 0.0
+          },
+          "after": {
+            "median_m": 27.24067589302772,
+            "p90_m": 30.15792023736695,
+            "coverage_0_5m": 0.0,
+            "coverage_2m": 0.00024206376651220694
+          },
+          "geometry_pass": false
+        },
+        {
+          "target_GT_seconds": 150,
+          "role": "TRAIN",
+          "before": {
+            "median_m": 72.81499665611844,
+            "p90_m": 75.35219734435384,
+            "coverage_0_5m": 0.0,
+            "coverage_2m": 0.0
+          },
+          "after": {
+            "median_m": 33.44524248345402,
+            "p90_m": 35.604788587121554,
+            "coverage_0_5m": 0.0,
+            "coverage_2m": 0.0
+          },
+          "geometry_pass": false
+        },
+        {
+          "target_GT_seconds": 180,
+          "role": "HOLDOUT",
+          "before": {
+            "median_m": 6.73391802336366,
+            "p90_m": 9.304060553858454,
+            "coverage_0_5m": 0.023146710821346027,
+            "coverage_2m": 0.07037152023181206
+          },
+          "after": {
+            "median_m": 1.2190166327066918,
+            "p90_m": 2.0466592071385326,
+            "coverage_0_5m": 0.13208458380765117,
+            "coverage_2m": 0.893476836041257
+          },
+          "geometry_pass": false
+        },
+        {
+          "target_GT_seconds": 220,
+          "role": "TRAIN",
+          "before": {
+            "median_m": 0.8301234371556863,
+            "p90_m": 2.693118855949076,
+            "coverage_0_5m": 0.15183789204329334,
+            "coverage_2m": 0.8164874304090736
+          },
+          "after": {
+            "median_m": 0.23515758457823105,
+            "p90_m": 2.2834383608611284,
+            "coverage_0_5m": 0.6272346899961962,
+            "coverage_2m": 0.8905909609599225
+          },
+          "geometry_pass": true
+        },
+        {
+          "target_GT_seconds": 240,
+          "role": "HOLDOUT",
+          "before": {
+            "median_m": 0.4639866094858101,
+            "p90_m": 0.5708058465767435,
+            "coverage_0_5m": 0.6909453557550123,
+            "coverage_2m": 1.0
+          },
+          "after": {
+            "median_m": 0.0702498047282421,
+            "p90_m": 0.13230028307410305,
+            "coverage_0_5m": 0.9941538567351009,
+            "coverage_2m": 1.0
+          },
+          "geometry_pass": true
+        }
+      ],
+      "elapsed_s": 7.444045734999236,
+      "peak_RSS_KiB": 569540
+    },
+    {
+      "name": "single_turn",
+      "status": "DISPLAY_ALIGNMENT_REJECTED",
+      "script_SHA256": "a1c884f5080a966f128b5576ce98d41dbd5078ab186897f2c3294d76b96422ad",
+      "train_seconds": [
+        150
+      ],
+      "holdout_seconds": [
+        45,
+        100,
+        160,
+        200,
+        260
+      ],
+      "T_map_GT": [
+        [
+          0.5608038502035586,
+          0.8241306651376882,
+          -0.07942095678455983,
+          -142.10522168659125
+        ],
+        [
+          0.8148059266258793,
+          -0.5663805125630645,
+          -0.1237110218377563,
+          -220.44342183460836
+        ],
+        [
+          -0.14693652892390127,
+          0.004664951072873103,
+          -0.9891349223939486,
+          19.428243700975116
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "evaluation": [
+        {
+          "target_GT_seconds": 45,
+          "role": "HOLDOUT",
+          "before": {
+            "median_m": 1.0615593816501616,
+            "p90_m": 1.1985702976757284,
+            "coverage_0_5m": 0.09310974140008953,
+            "coverage_2m": 0.9998622636961537
+          },
+          "after": {
+            "median_m": 110.89665829969023,
+            "p90_m": 113.3660324814037,
+            "coverage_0_5m": 0.0,
+            "coverage_2m": 0.0
+          },
+          "geometry_pass": false
+        },
+        {
+          "target_GT_seconds": 100,
+          "role": "HOLDOUT",
+          "before": {
+            "median_m": 24.07161143042032,
+            "p90_m": 26.770107029635636,
+            "coverage_0_5m": 0.0,
+            "coverage_2m": 0.0
+          },
+          "after": {
+            "median_m": 24.460041377215646,
+            "p90_m": 27.0401500133985,
+            "coverage_0_5m": 0.000722120972456243,
+            "coverage_2m": 0.00161617550978302
+          },
+          "geometry_pass": false
+        },
+        {
+          "target_GT_seconds": 150,
+          "role": "TRAIN",
+          "before": {
+            "median_m": 72.81499665611844,
+            "p90_m": 75.35219734435384,
+            "coverage_0_5m": 0.0,
+            "coverage_2m": 0.0
+          },
+          "after": {
+            "median_m": 0.19752929849269346,
+            "p90_m": 0.6669632664388876,
+            "coverage_0_5m": 0.8149528839184011,
+            "coverage_2m": 0.999585792689241
+          },
+          "geometry_pass": true
+        },
+        {
+          "target_GT_seconds": 160,
+          "role": "HOLDOUT",
+          "before": {
+            "median_m": 50.426907913794224,
+            "p90_m": 52.96007053640381,
+            "coverage_0_5m": 0.0,
+            "coverage_2m": 0.0
+          },
+          "after": {
+            "median_m": 1.0713171126958878,
+            "p90_m": 2.0984159109215503,
+            "coverage_0_5m": 0.2157795004306632,
+            "coverage_2m": 0.8586735572782085
+          },
+          "geometry_pass": false
+        },
+        {
+          "target_GT_seconds": 200,
+          "role": "HOLDOUT",
+          "before": {
+            "median_m": 0.40798771702396747,
+            "p90_m": 1.8742165552498888,
+            "coverage_0_5m": 0.5475111556954582,
+            "coverage_2m": 0.9171884188315058
+          },
+          "after": {
+            "median_m": 57.423746390215285,
+            "p90_m": 59.24649931495766,
+            "coverage_0_5m": 0.0,
+            "coverage_2m": 0.0
+          },
+          "geometry_pass": false
+        },
+        {
+          "target_GT_seconds": 260,
+          "role": "HOLDOUT",
+          "before": {
+            "median_m": 0.5057188424843664,
+            "p90_m": 0.7746647453479891,
+            "coverage_0_5m": 0.49597079688683793,
+            "coverage_2m": 0.9998278118327708
+          },
+          "after": {
+            "median_m": 197.99844197477006,
+            "p90_m": 201.39323897150587,
+            "coverage_0_5m": 0.0,
+            "coverage_2m": 0.0
+          },
+          "geometry_pass": false
+        }
+      ],
+      "elapsed_s": 7.284435141016729,
+      "peak_RSS_KiB": 569540
+    }
+  ],
+  "input_SHA256": {
+    "normalized_map": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+    "GT": "3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03",
+    "decoded_bag_from_previous_preparation_not_rehashed": "89d29ce428bcd476813c1191910e862f8f1effa416cad35f9750086732a26937"
+  },
+  "original_result_SHA256": {
+    "calibration": "226ea5f780e7e9075bdf2a8afc5308a10c27f2f50b20c37c2d0c03e77591af94",
+    "single_turn": "e60e3213e22980812828e51921c59d86f043091b0b901213b3da60780f08c3f9"
+  },
+  "header_selection_audit": {
+    "diagnostic_only": true,
+    "registration_calls": 0,
+    "all_headers_and_payloads_match": true,
+    "rows": [
+      {
+        "target_GT_seconds": 10,
+        "scan_ns": "1517157229778671026",
+        "record_ns": "1517157229879510475",
+        "record_minus_header_ns": 100839449,
+        "target_distance_ns": 15469074,
+        "original_scan_ns": "1517157229778671026",
+        "header_match": true,
+        "payload_SHA256": "478a4f7a637f09183a29988bc32174c34be14327f57b736f59f28e5e64106fa6",
+        "payload_match": true
+      },
+      {
+        "target_GT_seconds": 20,
+        "scan_ns": "1517157239763201952",
+        "record_ns": "1517157239864041401",
+        "record_minus_header_ns": 100839449,
+        "target_distance_ns": 30938148,
+        "original_scan_ns": "1517157239763201952",
+        "header_match": true,
+        "payload_SHA256": "b1b599537b73a163bad19d295beea9f8f15fef75bc7024a8d93d5b49c08416e7",
+        "payload_match": true
+      },
+      {
+        "target_GT_seconds": 45,
+        "scan_ns": "1517157264774966002",
+        "record_ns": "1517157264875805451",
+        "record_minus_header_ns": 100839449,
+        "target_distance_ns": 19174098,
+        "original_scan_ns": "1517157264774966002",
+        "header_match": true,
+        "payload_SHA256": "b263005530ae1496fc2b5781dce11cb4dbf1b73098778bbb996067c243db503e",
+        "payload_match": true
+      },
+      {
+        "target_GT_seconds": 60,
+        "scan_ns": "1517157279802181005",
+        "record_ns": "1517157279903020455",
+        "record_minus_header_ns": 100839450,
+        "target_distance_ns": 8040905,
+        "original_scan_ns": "1517157279802181005",
+        "header_match": true,
+        "payload_SHA256": "fc6ab9b09fb0a01b624e1bcaa19d8f91a0f652e2aa1475bd5a9ee4e98caf80b5",
+        "payload_match": true
+      },
+      {
+        "target_GT_seconds": 80,
+        "scan_ns": "1517157299771239996",
+        "record_ns": "1517157299872079445",
+        "record_minus_header_ns": 100839449,
+        "target_distance_ns": 22900104,
+        "original_scan_ns": "1517157299771239996",
+        "header_match": true,
+        "payload_SHA256": "5086686b6d5e4e891a99274b0eb151fc6f4beb36f1555ef01fbef69ebf6d68ea",
+        "payload_match": true
+      },
+      {
+        "target_GT_seconds": 100,
+        "scan_ns": "1517157319841161013",
+        "record_ns": "1517157319942000462",
+        "record_minus_header_ns": 100839449,
+        "target_distance_ns": 47020913,
+        "original_scan_ns": "1517157319841161013",
+        "header_match": true,
+        "payload_SHA256": "5e2044d18b7d7b31e2b35b65d73fd1a5e36c00960fd85251a1d91f38f8cb7f93",
+        "payload_match": true
+      },
+      {
+        "target_GT_seconds": 120,
+        "scan_ns": "1517157339810224056",
+        "record_ns": "1517157339911062313",
+        "record_minus_header_ns": 100838257,
+        "target_distance_ns": 16083956,
+        "original_scan_ns": "1517157339810224056",
+        "header_match": true,
+        "payload_SHA256": "34a5a8f7b0c6c2dc593834ad6a25a1a25963fb7a495d792c86ec1025955e00f6",
+        "payload_match": true
+      },
+      {
+        "target_GT_seconds": 150,
+        "scan_ns": "1517157369763828039",
+        "record_ns": "1517157369864667250",
+        "record_minus_header_ns": 100839211,
+        "target_distance_ns": 30312061,
+        "original_scan_ns": "1517157369763828039",
+        "header_match": true,
+        "payload_SHA256": "621eb1597c74001749e58d5e429b7bee93554ada4576ed5a621ea1ef1fc96c8f",
+        "payload_match": true
+      },
+      {
+        "target_GT_seconds": 160,
+        "scan_ns": "1517157379748353004",
+        "record_ns": "1517157379849192454",
+        "record_minus_header_ns": 100839450,
+        "target_distance_ns": 45787096,
+        "original_scan_ns": "1517157379748353004",
+        "header_match": true,
+        "payload_SHA256": "331c6fcb5362c63b09fc148f29b920863a9684ef11949b7af2dc6721ea0a828d",
+        "payload_match": true
+      },
+      {
+        "target_GT_seconds": 180,
+        "scan_ns": "1517157399818278074",
+        "record_ns": "1517157399919117285",
+        "record_minus_header_ns": 100839211,
+        "target_distance_ns": 24137974,
+        "original_scan_ns": "1517157399818278074",
+        "header_match": true,
+        "payload_SHA256": "a0ae38a2d412f22c74f099a5f53e5139e2af3eebdae163843d6dd768fdbca555",
+        "payload_match": true
+      },
+      {
+        "target_GT_seconds": 200,
+        "scan_ns": "1517157419787343979",
+        "record_ns": "1517157419888183428",
+        "record_minus_header_ns": 100839449,
+        "target_distance_ns": 6796121,
+        "original_scan_ns": "1517157419787343979",
+        "header_match": true,
+        "payload_SHA256": "49a9e7791160159129aa23bca028248ee1e3ecc4f9e8e572d726274f59111c86",
+        "payload_match": true
+      },
+      {
+        "target_GT_seconds": 220,
+        "scan_ns": "1517157439756412029",
+        "record_ns": "1517157439857251478",
+        "record_minus_header_ns": 100839449,
+        "target_distance_ns": 37728071,
+        "original_scan_ns": "1517157439756412029",
+        "header_match": true,
+        "payload_SHA256": "1d8aceae505cc3a7f5b74aa28486cc48ae580c329bc79c4488bf8e4cb578a19a",
+        "payload_match": true
+      },
+      {
+        "target_GT_seconds": 240,
+        "scan_ns": "1517157459826338053",
+        "record_ns": "1517157459927177263",
+        "record_minus_header_ns": 100839210,
+        "target_distance_ns": 32197953,
+        "original_scan_ns": "1517157459826338053",
+        "header_match": true,
+        "payload_SHA256": "24130ddb64f4417686acb32b0992046f6f10010487b232dd2c04e6badbbd00c2",
+        "payload_match": true
+      },
+      {
+        "target_GT_seconds": 260,
+        "scan_ns": "1517157479795403004",
+        "record_ns": "1517157479896242453",
+        "record_minus_header_ns": 100839449,
+        "target_distance_ns": 1262904,
+        "original_scan_ns": "1517157479795403004",
+        "header_match": true,
+        "payload_SHA256": "d17ede914e3f2d12e6a9314dc9f9d2de1d6b0fb763576588be2afbac4a34a8e3",
+        "payload_match": true
+      }
+    ]
+  },
+  "external_review": {
+    "executions": 1,
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "xhigh",
+    "exit_code": 0,
+    "input_SHA256": "032bd72ad1523ffd460ff7c0e4e7251510bf53305de96869cab481a6b68301d4",
+    "output_SHA256": "217430e6f9a62d591ea0958b0484996d0daf07aa4a6419fd5ae46cf9a820a350",
+    "bounded_input_only_requested": true,
+    "source_changed_after_review": "nearest header selector fixed; validation description clarified; no registration rerun"
+  },
+  "source_SHA256": {
+    "docs/dataset_gt_visualization/align_corridor01_map.py": "39ab7aff4578092f8e606146cab305a4adcaedf229d8cbcc11f57b001d568054",
+    "docs/dataset_gt_visualization/corridor01_alignment_test.py": "b7080a3349284f425842d31a5934b28fcc0af7e41484cf56ea6983cd264c3438"
+  },
+  "git": {
+    "branch": "research/p9-r4-heldout-visual-evidence",
+    "start_SHA": "41b9b15842a0f753892e7ff99ef1164f8e912b85",
+    "remote_verified_SHA": "6382346e2b407fae382b56cbb0643394d1391968",
+    "push_executed": false
+  },
+  "tests": {
+    "calibration_guards": 4,
+    "GT_visualization": 13,
+    "launch_contract": 5,
+    "passed": 22
+  },
+  "limitations": [
+    "Neither candidate has valid whole-sequence heldout geometry.",
+    "Failed registration does not prove absence of a fixed SE(3) or defective official data.",
+    "Header-time raw scans have no per-point deskew.",
+    "Historical source SHA values do not substitute for complete archived historical source snapshots.",
+    "Neither calibration is an official transform or a runtime estimator input."
+  ]
+}

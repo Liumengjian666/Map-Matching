@@ -8,7 +8,7 @@ gt_sha256: "3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03"
 frame_id: "camera_init"
 path_topic: "/dog_livo/gt_path"
 marker_topic: "/dog_livo/gt_current_pose"
-alignment_contract: "DISPLAY_ONLY_PREFIX_ALIGNED_CONTROL_V2; NOT_ABSOLUTE_MAP_GROUND_TRUTH"
+alignment_contract: "DISPLAY_ONLY_PREFIX_ALIGNED_CONTROL_V2; WHOLE_SEQUENCE_ALIGNMENT_UNRESOLVED; NOT_ABSOLUTE_MAP_GROUND_TRUTH"
 alignment_source: "docs/p10_corridor01_deterministic_oosm_replay_r1/posthoc_metrics.json"
 alignment_source_sha256: "50615d568f0cbe3e55962a4c1e99adc5b63d0877221794da92086f40b1eaaaba"
 # T_gt_map maps estimator map-frame IMU poses into GT world in the evaluator.
