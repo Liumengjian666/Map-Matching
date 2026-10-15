@@ -1,0 +1,19 @@
+{
+  "archive_SHA256": "b8e355f153e5d9124ff6b0b976c951598aadbf21dab5c152839acfa86c87e254",
+  "member_SHA256": "e4b6d79ac500d517dbb88c8933df31ca6b0bffb2fdf5e5988456be81f7280b64",
+  "member_header": [
+    "timestamp",
+    "p_w_b_x",
+    "p_w_b_y",
+    "p_w_b_z",
+    "q_w_b_x",
+    "q_w_b_y",
+    "q_w_b_z",
+    "q_w_b_w"
+  ],
+  "poses": 1385,
+  "all_translation_and_quaternion_numeric_values_exact": true,
+  "max_abs_timestamp_serialization_difference_ns": 239,
+  "exact_timestamp_rows": 1284,
+  "local_GT_SHA256": "3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03"
+}

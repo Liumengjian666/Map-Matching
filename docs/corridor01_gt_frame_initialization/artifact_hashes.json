@@ -1,0 +1,187 @@
+{
+  "files": {
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp": {
+      "SHA256": "b6035d977bfd1420c8699ce4ab240f77091b1bfafa1f325e3201801222678b59",
+      "bytes": 111374
+    },
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/src/dog_prior_map_ekf_node_core.cpp": {
+      "SHA256": "c2fe044c8fcf2c0cddc71ce71d8d9b05b36aef60c3ad041d2850334f5ef156a7",
+      "bytes": 32351
+    },
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/src/fusion/ndt_observation.cpp": {
+      "SHA256": "cdbeb3e7ca2e2f17488c46039c2097194298942d0ddbe18791391bacdbca7635",
+      "bytes": 16858
+    },
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/src/ros_output.cpp": {
+      "SHA256": "4315e1b2b380782e3aafd21db436169004447d46d1a00d411143466b8b08dd6f",
+      "bytes": 13423
+    },
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/include/dog_prior_map_localization/core/frame_conversions.hpp": {
+      "SHA256": "569df879f2fb4cc7431d9ff90687fdd5b22c1b8f6b4b7211a51760c9e0b6d49d",
+      "bytes": 1807
+    },
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/dataset_gt_path_publisher.py": {
+      "SHA256": "d93d39caed3b0c9d70df35637082c269927df0b07dc56656c2f4d44fc255b88c",
+      "bytes": 11529
+    },
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/corridor01_decode/verify_full.py": {
+      "SHA256": "791e4f53cf52c327f11f420f38a7c2e2be6ee755003ccc078a639938be04b03e",
+      "bytes": 10534
+    },
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p32_gt_frame/prepare.py": {
+      "SHA256": "bd6ad0f30fab7207074508eb26e10ad9072d37ecbc504fc0ad968972ff967433",
+      "bytes": 6288
+    },
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/scripts/p23_budgeted_coupled/frozen_ndt_rules.hpp": {
+      "SHA256": "ffdc7c75d308aa3da259bd461822134853fa5ffa4be28a705778a85e73e24e0e",
+      "bytes": 4573
+    },
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/launch/corridor01_localization.launch": {
+      "SHA256": "1dea0fd6d25b8b25db59c47b454503510f654180eb840adb0095bf6a2afb49a0",
+      "bytes": 5067
+    },
+    "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/src/superloc_first_segment_initializer.cpp": {
+      "SHA256": "deb58aeb3bd76f802568469f50d33f91b8026924b3fe299fa93b8fa8f9dc266d",
+      "bytes": 9182
+    },
+    "/home/jian/livox_ws/superloc_adapter_ws/src/superloc_corridor_adapter/src/superloc_map_normalizer.cpp": {
+      "SHA256": "5c38a755fc015abffabafab7ed71f343716ca29028b9f93b4ce35fba24abe808",
+      "bytes": 1589
+    },
+    "docs/corridor01_gt_frame_initialization/prepare_geometry.py": {
+      "SHA256": "70734568be60de3915f6aead2392e03956e51e54d37a0b403f98ff7d805ca7bb",
+      "bytes": 6297
+    },
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml": {
+      "SHA256": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+      "note": "hash at hypothesis freeze, before geometric queries"
+    },
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/calibration/corridor01_extrinsics.yaml": {
+      "SHA256": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d",
+      "note": "hash at hypothesis freeze, before geometric queries"
+    },
+    "/home/jian/livox_ws/superloc_adapter_ws/config/corridor01_init.yaml": {
+      "SHA256": "d3e6f560895cb4f6a9efb7058bcff8a13313783e799d82c828e51adcd4bafd1e",
+      "note": "hash at hypothesis freeze, before geometric queries"
+    },
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/initial_pose/corridor01.yaml": {
+      "SHA256": "0670732e26f0d9ee19e6115110e29d0aeca5d26f62ab4848d1629c5f9a6eb62b",
+      "note": "hash at hypothesis freeze, before geometric queries"
+    },
+    "docs/corridor01_gt_frame_initialization/CMakeLists.txt": {
+      "SHA256": "7b6c541232dfcd393b702a456b42dc780590ca881913e86c7b06504cb012fcd1",
+      "bytes": 466
+    },
+    "docs/corridor01_gt_frame_initialization/GT_REFERENCE_EVIDENCE.md": {
+      "SHA256": "8756501c44b8036b2612047b1e0f8e1e1eafc19380aa3a0a62eaa3cd322f69ce",
+      "bytes": 2195
+    },
+    "docs/corridor01_gt_frame_initialization/INDEPENDENT_REVIEW.md": {
+      "SHA256": "0b45a9c7933d6acd44f9171d21c8b375fb7bc42855b78df44bea4d996ab3c8fa",
+      "bytes": 1011
+    },
+    "docs/corridor01_gt_frame_initialization/PROTOCOL.md": {
+      "SHA256": "a9ada7b1777d1ba44edde07609de4dc2fc9aa8d98793618de1209be6968e2ef4",
+      "bytes": 2705
+    },
+    "docs/corridor01_gt_frame_initialization/REPORT.md": {
+      "SHA256": "10ea5364354b5faf7fb7d69e7c4854ae94e9c7f7a28c77873ee47d0235aee931",
+      "bytes": 6543
+    },
+    "docs/corridor01_gt_frame_initialization/REPRODUCE.md": {
+      "SHA256": "60557c3e2789d48698eaeaeacf195b2a7a6be7de1a366ece8529b535a79a6395",
+      "bytes": 2048
+    },
+    "docs/corridor01_gt_frame_initialization/SOURCE_CALL_CHAIN.md": {
+      "SHA256": "9931636e8d5263c7021f828292df97cbc0f0ec17bedfafb32ecc0dc0cf809777",
+      "bytes": 4474
+    },
+    "docs/corridor01_gt_frame_initialization/archive_evidence.py": {
+      "SHA256": "d71e9ed980fdbeed710b8a8f5f4b0e5d2e90e99d65e0967d1e0f1a3bce4e13c2",
+      "bytes": 9335
+    },
+    "docs/corridor01_gt_frame_initialization/audit_inputs.py": {
+      "SHA256": "769e4b9134b8d958573ee1ed627eefc8c8f13689c8a8dd90c0fa51a7708dfb33",
+      "bytes": 8540
+    },
+    "docs/corridor01_gt_frame_initialization/build_result.txt": {
+      "SHA256": "7fad87244245933f7c4657e7b203e448f05d624798da1526c8f7b5ed98b72e78",
+      "bytes": 197
+    },
+    "docs/corridor01_gt_frame_initialization/frame_selection.json": {
+      "SHA256": "ea81505d4869e330a7747414151e77da91924a9dce3e9021db2d425aa3c2b9cb",
+      "bytes": 1179
+    },
+    "docs/corridor01_gt_frame_initialization/geometry_probe.cpp": {
+      "SHA256": "331c6d649852c259f6f11be9409a050e81bba331444b099363e4651accfb5b8d",
+      "bytes": 6571
+    },
+    "docs/corridor01_gt_frame_initialization/geometry_resources.txt": {
+      "SHA256": "a176651890786af0537b19bc23ec5792c17055ca8f0d3a561407ec646fb52659",
+      "bytes": 947
+    },
+    "docs/corridor01_gt_frame_initialization/gt_lineage.json": {
+      "SHA256": "cfe5e18fc649ea8b8b5bbc91f2c88a41770e6edae0ed0a3fa0b2eb6cb26d1fd8",
+      "bytes": 582
+    },
+    "docs/corridor01_gt_frame_initialization/initial_geometry.csv": {
+      "SHA256": "db89a31cb93f4bf60cca3172a347c0453ea5bdc31b83a5f87e7c09b53ae7f760",
+      "bytes": 1192
+    },
+    "docs/corridor01_gt_frame_initialization/input_validation.json": {
+      "SHA256": "8a243a250b986ac2a10581b5f01172df6532948e56461ca54d533d271c4dd9b4",
+      "bytes": 1711
+    },
+    "docs/corridor01_gt_frame_initialization/ndt_test.json": {
+      "SHA256": "49229848662b5c2a74e96b2563c21d7b44d55df417dbdd92c2441c3c0b37cb5d",
+      "bytes": 387
+    },
+    "docs/corridor01_gt_frame_initialization/resource_summary.csv": {
+      "SHA256": "ab20bf46737d69834772ada35a5d44b3932eb14a95c88db3833b3377d83e815b",
+      "bytes": 236
+    },
+    "docs/corridor01_gt_frame_initialization/results.json": {
+      "SHA256": "a5f9c082f3104e54ae09f5baeab6058e183a67362b0ba8e03a318761273ac762",
+      "bytes": 6389
+    },
+    "docs/corridor01_gt_frame_initialization/test_contract.py": {
+      "SHA256": "efa80145f67045d731cfd3ddbf7623c014da6430f6565c1c958a3d264e10991f",
+      "bytes": 3469
+    },
+    "docs/corridor01_gt_frame_initialization/test_results.txt": {
+      "SHA256": "cdec7fea764187855387f240f8edfee726af2942bd5c096372433750c9ac409c",
+      "bytes": 443
+    },
+    "docs/corridor01_gt_frame_initialization/time_correspondence.csv": {
+      "SHA256": "a4f38375199f1609492ff34d01f46999e004da5c64c746840e31ddf460353151",
+      "bytes": 820
+    },
+    "docs/corridor01_gt_frame_initialization/transforms.json": {
+      "SHA256": "5f8290727e5835ef96a2dc228ccc61aab7487325d24835092147762e95414967",
+      "bytes": 7749
+    }
+  },
+  "binary": {
+    "path": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p34_gt_frame.XDwg1L/build/p34_geometry",
+    "SHA256": "b26b25358a769788979120722e2a1502a61ecccf46a654442b83422d225f4571"
+  },
+  "large_input_hashes": {
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/corridor01_decoded_raw_timed_full.bag": {
+      "SHA256": "89d29ce428bcd476813c1191910e862f8f1effa416cad35f9750086732a26937",
+      "bytes": 8135887915
+    },
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/raw_data_core_2023-07-25-03-01-44.bag": {
+      "SHA256": "c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811",
+      "bytes": 6473379689
+    },
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/raw_timed_scan_index.csv": {
+      "SHA256": "d49b7b81bb1f5c17eb2da9e5ad665dfb2b3b4813280de4e342eb3158d13c932a",
+      "bytes": 168725
+    },
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/raw_timed_points.bin": {
+      "SHA256": "ce8beed2303ea3de8715932c4d0644d6fe28317014e2383f65942d69bc5ace32",
+      "bytes": 1278926576
+    }
+  },
+  "self_excluded": true
+}

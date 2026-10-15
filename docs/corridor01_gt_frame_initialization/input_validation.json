@@ -1,0 +1,42 @@
+{
+  "status": "FULL_INPUT_REVALIDATION_PASS",
+  "counts": {
+    "/camera_1/image_raw": 6720,
+    "/imu/data": 55957,
+    "/p10/corridor01/raw_timed_points": 2777
+  },
+  "points": 79932911,
+  "first_sensor_ns": {
+    "/camera_1/image_raw": 1517157219043494976,
+    "/imu/data": 1517157219159216000,
+    "/p10/corridor01/raw_timed_points": 1517157219088119030
+  },
+  "last_sensor_ns": {
+    "/camera_1/image_raw": 1517157498994733142,
+    "/imu/data": 1517157499161280000,
+    "/p10/corridor01/raw_timed_points": 1517157499058448076
+  },
+  "hashes": {
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/corridor01_decoded_raw_timed_full.bag": {
+      "SHA256": "89d29ce428bcd476813c1191910e862f8f1effa416cad35f9750086732a26937",
+      "bytes": 8135887915
+    },
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/raw_data_core_2023-07-25-03-01-44.bag": {
+      "SHA256": "c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811",
+      "bytes": 6473379689
+    },
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/raw_timed_scan_index.csv": {
+      "SHA256": "d49b7b81bb1f5c17eb2da9e5ad665dfb2b3b4813280de4e342eb3158d13c932a",
+      "bytes": 168725
+    },
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/results/p9_corridor01_raw_scanend_v1/raw_timed_points.bin": {
+      "SHA256": "ce8beed2303ea3de8715932c4d0644d6fe28317014e2383f65942d69bc5ace32",
+      "bytes": 1278926576
+    }
+  },
+  "all_ordered_XYZ_time_equal": true,
+  "all_IMU_image_payloads_equal_original": true,
+  "full_trajectory_localization_runs": 0,
+  "elapsed_s": 109.51952273299685,
+  "peak_RSS_KiB": 685724
+}

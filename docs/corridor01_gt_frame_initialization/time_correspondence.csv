@@ -1,0 +1,10 @@
+event,stamp_ns,relative_to_first_LiDAR_s,evidence
+decoded_first_LiDAR,1517157219088119030,0,actual decoded header
+decoded_first_IMU,1517157219159216000,0.07109697,actual decoded header
+historical_init_and_explicit_EKF_seed,1517157219188978910,0.10085988,"raw2; integer frozen index/config, not CSV float inversion"
+first_full_IMU_scan_end,1517157219289818360,0.20169933,point-time max
+GT_first_and_selected_raw8,1517157219794140100,0.70602107,"exact GT time, no extrapolation"
+selected_raw8_end,1517157219894979311,0.806860281,point-time max
+historical_initializer_window_end,1517157224188978910,5.10085988,historical first+5s boundary
+conditional_bag_plus_67s_NOT_official_binding,1517157286088119030,67,only if comment zero means current first LiDAR
+GT_last,1517157498957649946,279.869530916,actual local GT timestamp

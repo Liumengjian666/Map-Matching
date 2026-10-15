@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.10)
+project(p34_gt_frame_diagnostic LANGUAGES C CXX)
+set(CMAKE_CXX_STANDARD 14)
+find_package(PCL REQUIRED COMPONENTS io registration filters kdtree)
+find_library(SYSTEM_USB NAMES libusb-1.0.so.0 PATHS /lib/x86_64-linux-gnu NO_DEFAULT_PATH REQUIRED)
+add_executable(p34_geometry geometry_probe.cpp)
+target_include_directories(p34_geometry PRIVATE ${PCL_INCLUDE_DIRS})
+target_link_libraries(p34_geometry ${PCL_LIBRARIES} ${SYSTEM_USB})

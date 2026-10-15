@@ -1,0 +1,50 @@
+{
+  "first_full_IMU_scan": {
+    "raw_frame_index": 2,
+    "scan_ns": 1517157219188978910,
+    "end_ns": 1517157219289818360,
+    "points": 28863
+  },
+  "selected_first_full_IMU_and_GT_scan": {
+    "raw_frame_index": 8,
+    "scan_ns": 1517157219794140100,
+    "end_ns": 1517157219894979311,
+    "points": 28874
+  },
+  "GT_bracket": {
+    "lower_ns": "1517157219794140100",
+    "upper_ns": "1517157219794140100",
+    "weight": 0.0
+  },
+  "T_W_GT": [
+    [
+      0.9989276333610849,
+      -0.0013961207410068802,
+      0.046277793319241284,
+      0.0
+    ],
+    [
+      -6.537281334532529e-07,
+      0.9995448228570792,
+      0.03016864430468738,
+      0.0
+    ],
+    [
+      -0.04629884779553939,
+      -0.03013632271008919,
+      0.9984729434222636,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "source_mode": "RAW_HEADER_REFERENCE_NO_DESKEW_NOT_HISTORICAL_NDT_SOURCE",
+  "GT_first_ns": 1517157219794140100,
+  "GT_last_ns": 1517157498957649946,
+  "raw_XYZ_SHA256": "15e35b3c41455d75416a782b2752dc84418de8a01708827634e2cda6a964541b",
+  "time_note": "No GT extrapolation. IMU coverage uses causal head/ZOH samples ending at or before scan_end."
+}

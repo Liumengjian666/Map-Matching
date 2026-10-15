@@ -1,0 +1,9 @@
+test_first_IMU_covered_scan_has_no_legal_GT_pose (__main__.ContractTest) ... ok
+test_matrix_order_and_missing_transforms_not_fabricated (__main__.ContractTest) ... ok
+test_official_matrix_not_silently_treated_as_proper (__main__.ContractTest) ... ok
+test_probe_rejects_bad_initial_matrices_before_any_map_or_align (__main__.ContractTest) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.155s
+
+OK

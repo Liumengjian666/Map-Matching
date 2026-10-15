@@ -1,0 +1,12 @@
+{
+  "status": "NOT_EXECUTED_REFERENCE_AND_WORLD_TRANSFORM_UNCERTIFIED",
+  "full_ndt_align_calls": 0,
+  "ICP_calls": 0,
+  "full_localization_runs": 0,
+  "pre_NN_decision": "--NN-only",
+  "reason": "GT export reference and T_M_W are not certified; NN cannot select a physically certified T_map_lidar",
+  "initial_pose": null,
+  "final_pose": null,
+  "converged": null,
+  "fitness": null
+}

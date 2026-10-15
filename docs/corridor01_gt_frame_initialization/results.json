@@ -1,0 +1,196 @@
+{
+  "task": "P34-CORRIDOR01-GT-FRAME-INITIALIZATION-R1",
+  "FINAL_RESULT": "INITIALIZATION_FRAME_UNRESOLVED",
+  "git": {
+    "START_SHA": "17b50a36f743ac1700ce5887c439accf9f9b2401",
+    "RUNTIME_CODE_SHA": "17b50a36f743ac1700ce5887c439accf9f9b2401",
+    "END_SHA": null,
+    "END_SHA_note": "Full final SHA is reported in chat; resolve archive commit via git log -1 --format=%H -- docs/corridor01_gt_frame_initialization",
+    "REMOTE_HEAD_observed": "6382346e2b407fae382b56cbb0643394d1391968",
+    "PUSH_EXECUTED": false,
+    "branch": "research/p9-r4-heldout-visual-evidence"
+  },
+  "input_validation": "FULL_INPUT_REVALIDATION_PASS",
+  "counts": {
+    "/camera_1/image_raw": 6720,
+    "/imu/data": 55957,
+    "/p10/corridor01/raw_timed_points": 2777
+  },
+  "points": 79932911,
+  "reference_evidence": {
+    "exact_official_GT_numeric_lineage": true,
+    "official_IMU_submission_convention": true,
+    "GT_physical_reference_certified": false,
+    "GT_LiDAR_reference_certified": false,
+    "T_M_W_certified": false,
+    "comment_s67_semantics_certified": false
+  },
+  "runtime_GT_used_for_initialization": false,
+  "initialization_transform_bug_confirmed": false,
+  "runtime_code_changed": false,
+  "original_data_changed": false,
+  "map_XYZ_transformed": true,
+  "map_roundtrip_note": "paired forward normalization checked, no new map written",
+  "map_parity": {
+    "points": 338210,
+    "max_error_m": 3.553908150771854e-05,
+    "median_error_m": 3.169503987477697e-06,
+    "threshold_m": 5e-05,
+    "raw_viewpoint": [
+      2.08626,
+      -9.77624,
+      0.0196389,
+      -0.0844444,
+      -0.00417902,
+      -0.00205154,
+      0.996417
+    ],
+    "normalized_viewpoint": [
+      2.08626,
+      -9.77624,
+      0.0196389,
+      -0.0844444,
+      -0.00417902,
+      -0.00205154,
+      0.996417
+    ],
+    "XYZ_transformed": true,
+    "viewpoint_was_not_a_second_applied_transform": true
+  },
+  "selection": {
+    "first_full_IMU_scan": {
+      "raw_frame_index": 2,
+      "scan_ns": 1517157219188978910,
+      "end_ns": 1517157219289818360,
+      "points": 28863
+    },
+    "selected_first_full_IMU_and_GT_scan": {
+      "raw_frame_index": 8,
+      "scan_ns": 1517157219794140100,
+      "end_ns": 1517157219894979311,
+      "points": 28874
+    },
+    "GT_bracket": {
+      "lower_ns": "1517157219794140100",
+      "upper_ns": "1517157219794140100",
+      "weight": 0.0
+    },
+    "T_W_GT": [
+      [
+        0.9989276333610849,
+        -0.0013961207410068802,
+        0.046277793319241284,
+        0.0
+      ],
+      [
+        -6.537281334532529e-07,
+        0.9995448228570792,
+        0.03016864430468738,
+        0.0
+      ],
+      [
+        -0.04629884779553939,
+        -0.03013632271008919,
+        0.9984729434222636,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "source_mode": "RAW_HEADER_REFERENCE_NO_DESKEW_NOT_HISTORICAL_NDT_SOURCE",
+    "GT_first_ns": 1517157219794140100,
+    "GT_last_ns": 1517157498957649946,
+    "raw_XYZ_SHA256": "15e35b3c41455d75416a782b2752dc84418de8a01708827634e2cda6a964541b",
+    "time_note": "No GT extrapolation. IMU coverage uses causal head/ZOH samples ending at or before scan_end."
+  },
+  "geometry": [
+    {
+      "hypothesis": "H1_GT_LIDAR_W_EQ_M",
+      "source_points": "1400",
+      "target_points": "226164",
+      "nn_median_m": "1.8195147514343262",
+      "nn_p90_m": "5.8939166069030762",
+      "coverage_0_5m": "0.18142857142857144",
+      "coverage_2m": "0.55428571428571427",
+      "coverage_8m": "0.96071428571428574",
+      "xmin": "-6.8005876541137695",
+      "xmax": "21.992740631103516",
+      "ymin": "-70.950408935546875",
+      "ymax": "70.93719482421875",
+      "zmin": "-2.9041309356689453",
+      "zmax": "3.5474190711975098",
+      "T00": "-0.14185921914094496",
+      "T01": "0.98981429756279427",
+      "T02": "-0.011984434998065622",
+      "T03": "7.3636308924092235",
+      "T10": "0.98961219410581636",
+      "T11": "0.14152428388643079",
+      "T12": "-0.025270242906910038",
+      "T13": "-0.64438557801982566",
+      "T20": "-0.023316745197586718",
+      "T21": "-0.015444760795551432",
+      "T22": "-0.99960880139848585",
+      "T23": "0.34685939126184007",
+      "T30": "0",
+      "T31": "0",
+      "T32": "0",
+      "T33": "1"
+    },
+    {
+      "hypothesis": "H2_GT_IMU_W_EQ_M",
+      "source_points": "1400",
+      "target_points": "226164",
+      "nn_median_m": "1.8124332427978516",
+      "nn_p90_m": "5.9309735298156738",
+      "coverage_0_5m": "0.18142857142857144",
+      "coverage_2m": "0.55928571428571427",
+      "coverage_8m": "0.95999999999999996",
+      "xmin": "-6.8214111328125",
+      "xmax": "22.048097610473633",
+      "ymin": "-70.871170043945312",
+      "ymax": "71.023689270019531",
+      "zmin": "-2.6839108467102051",
+      "zmax": "3.2658431529998779",
+      "T00": "-0.14129577948612551",
+      "T01": "0.98987655512900119",
+      "T02": "-0.013413303194136084",
+      "T03": "7.3806272364573271",
+      "T10": "0.98977879189258888",
+      "T11": "0.1409913934907441",
+      "T12": "-0.021432986498705089",
+      "T13": "-0.56187050554586115",
+      "T20": "-0.01932483666680946",
+      "T21": "-0.016304594408763976",
+      "T22": "-0.99968028787454077",
+      "T23": "0.31455788954100755",
+      "T30": "0",
+      "T31": "0",
+      "T32": "0",
+      "T33": "1"
+    }
+  ],
+  "H1_H2_translation_difference_m": 0.09022748976784219,
+  "H1_H2_rotation_difference_deg": 0.23651110319253055,
+  "full_ndt_align_calls": 0,
+  "ICP_calls": 0,
+  "localization_replays": 0,
+  "NN_hypotheses": 2,
+  "tests_passed": 4,
+  "numerical_input_contract": true,
+  "binary_SHA256": "b26b25358a769788979120722e2a1502a61ecccf46a654442b83422d225f4571",
+  "preprocessed_source_SHA256": "7ea82f4001620dc005ed9359e7403e9989530aa246057f633dd2881ce7128d33",
+  "preprocessed_source_stable_hash": "15ade92bba91ca60",
+  "local_cache": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p34_gt_frame.XDwg1L",
+  "limitations": [
+    "raw single scan without deskew, not archived online Source",
+    "conditional W_GT=M, not a certified map/GT transform",
+    "no physical GT exporter reference certification",
+    "raw2 has no legal GT pose; raw8 substituted and disclosed",
+    "standalone CONTROL launch is P18, not P31 C"
+  ],
+  "NEXT": "Obtain traceable GT export physical-reference and PCD-to-GT-world binding evidence; no additional search authorized"
+}

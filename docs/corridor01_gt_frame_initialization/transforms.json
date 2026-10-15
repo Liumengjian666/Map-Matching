@@ -1,0 +1,312 @@
+{
+  "target_map": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.p18_map_recovery/assets/recovery.oEmedI/corridor01_map_normalized.pcd",
+  "target_map_SHA256": "103a01b2c89ca2adbd2b2e22256acba6e91f40b1028857c2103f08c6c3eb8f8f",
+  "hypothesis_world_assumption": "W_GT equals original raw PCD XYZ frame M; TESTED CONDITION, NOT CERTIFIED",
+  "T_M_W_certified": null,
+  "formulas": {
+    "H1": "T_N_L = T_N_M * T_W_L_GT (conditional W=M)",
+    "H2": "T_N_L = T_N_M * T_W_I_GT * T_I_L (conditional W=M)"
+  },
+  "H3_status": "NOT_CONSTRUCTED_MISSING_BODY_TO_LIDAR_TRANSFORM",
+  "H4_status": "NOT_CONSTRUCTED_MISSING_CERTIFIED_MAP_TO_GT_WORLD_TRANSFORM",
+  "matrices": {
+    "T_I_L_original": {
+      "values": [
+        [
+          0.9992129,
+          -0.000519121,
+          0.004,
+          0.08
+        ],
+        [
+          0.000516111,
+          0.999218492,
+          -0.000939132,
+          0.029
+        ],
+        [
+          -0.004,
+          0.000802565,
+          0.999993652,
+          0.03
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "finite": true,
+      "rotation_orthogonality_error": 0.0022139659176038215,
+      "determinant": 0.9984426773247781,
+      "rigid": false
+    },
+    "T_I_L_frozen_proper": {
+      "values": [
+        [
+          0.9999918597233475,
+          -0.0005161381080032746,
+          0.004001760674214531,
+          0.08
+        ],
+        [
+          0.0005196241852023933,
+          0.9999994864189835,
+          -0.0008701450879252283,
+          0.029
+        ],
+        [
+          -0.004001309503946919,
+          0.0008722174163330545,
+          0.9999916143443562,
+          0.03
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "finite": true,
+      "rotation_orthogonality_error": 1.7942506031814754e-15,
+      "determinant": 0.9999999999999987,
+      "rigid": true
+    },
+    "T_M_L0": {
+      "values": [
+        [
+          -0.1436436027,
+          0.9871839285,
+          -0.06952988356,
+          1.71798264980316
+        ],
+        [
+          0.9890022874,
+          0.1406968534,
+          -0.04559455812,
+          -7.17616987228394
+        ],
+        [
+          -0.03522758186,
+          -0.07531456649,
+          -0.9965373874,
+          0.556529641151428
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "finite": true,
+      "rotation_orthogonality_error": 3.9457469884982255e-08,
+      "determinant": 1.0000000108488718,
+      "rigid": true
+    },
+    "T_N_M": {
+      "values": [
+        [
+          -0.1436436075233766,
+          0.9890022952995208,
+          -0.03522757878678331,
+          7.3636308924092235
+        ],
+        [
+          0.9871839309369308,
+          0.14069684936015334,
+          -0.07531457965828878,
+          -0.6443855780198257
+        ],
+        [
+          -0.06952986785823582,
+          -0.045594557823872915,
+          -0.9965373554706418,
+          0.34685939126184007
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "finite": true,
+      "rotation_orthogonality_error": 3.945746846522191e-08,
+      "determinant": 0.9999999891511282,
+      "rigid": true
+    },
+    "T_world_darpa_unknown_semantics": {
+      "values": [
+        [
+          0.13599,
+          -0.990409,
+          -0.024406,
+          1.968147
+        ],
+        [
+          0.990705,
+          0.136027,
+          0.00014,
+          -6.879292
+        ],
+        [
+          0.003181,
+          -0.024198,
+          0.999702,
+          -0.896125
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "finite": true,
+      "rotation_orthogonality_error": 1.2379704056665196e-06,
+      "determinant": 0.999999216169924,
+      "rigid": true
+    },
+    "T_W_GT": {
+      "values": [
+        [
+          0.9989276333610849,
+          -0.0013961207410068802,
+          0.046277793319241284,
+          0.0
+        ],
+        [
+          -6.537281334532529e-07,
+          0.9995448228570792,
+          0.03016864430468738,
+          0.0
+        ],
+        [
+          -0.04629884779553939,
+          -0.03013632271008919,
+          0.9984729434222636,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "finite": true,
+      "rotation_orthogonality_error": 1.1107662596571947e-16,
+      "determinant": 1.0,
+      "rigid": true
+    },
+    "H1_conditional_T_N_L": {
+      "values": [
+        [
+          -0.14185921914094496,
+          0.9898142975627943,
+          -0.011984434998065622,
+          7.3636308924092235
+        ],
+        [
+          0.9896121941058164,
+          0.1415242838864308,
+          -0.02527024290691004,
+          -0.6443855780198257
+        ],
+        [
+          -0.023316745197586718,
+          -0.015444760795551432,
+          -0.9996088013984858,
+          0.34685939126184007
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "finite": true,
+      "rotation_orthogonality_error": 3.9457468526769e-08,
+      "determinant": 0.9999999891511282,
+      "rigid": true
+    },
+    "H2_conditional_T_N_L": {
+      "values": [
+        [
+          -0.1412957794861255,
+          0.9898765551290012,
+          -0.013413303194136084,
+          7.380627236457327
+        ],
+        [
+          0.9897787918925889,
+          0.1409913934907441,
+          -0.02143298649870509,
+          -0.5618705055458612
+        ],
+        [
+          -0.01932483666680946,
+          -0.016304594408763976,
+          -0.9996802878745408,
+          0.31455788954100755
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "finite": true,
+      "rotation_orthogonality_error": 3.945746888169761e-08,
+      "determinant": 0.9999999891511269,
+      "rigid": true
+    }
+  },
+  "H1_H2_translation_difference_m": 0.09022748976784219,
+  "H1_H2_rotation_difference_deg": 0.23651110319253055,
+  "map_parity": {
+    "points": 338210,
+    "max_error_m": 3.553908150771854e-05,
+    "median_error_m": 3.169503987477697e-06,
+    "threshold_m": 5e-05,
+    "raw_viewpoint": [
+      2.08626,
+      -9.77624,
+      0.0196389,
+      -0.0844444,
+      -0.00417902,
+      -0.00205154,
+      0.996417
+    ],
+    "normalized_viewpoint": [
+      2.08626,
+      -9.77624,
+      0.0196389,
+      -0.0844444,
+      -0.00417902,
+      -0.00205154,
+      0.996417
+    ],
+    "XYZ_transformed": true,
+    "viewpoint_was_not_a_second_applied_transform": true
+  },
+  "source_SHA256": {
+    "docs/corridor01_gt_frame_initialization/prepare_geometry.py": "70734568be60de3915f6aead2392e03956e51e54d37a0b403f98ff7d805ca7bb",
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p18_corridor01_ssd_map.yaml": "dc0850f91b43a4afed2e692644ac292db96a599e33fdafb414f3a986bc743220",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/calibration/corridor01_extrinsics.yaml": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d",
+    "/home/jian/livox_ws/superloc_adapter_ws/config/corridor01_init.yaml": "d3e6f560895cb4f6a9efb7058bcff8a13313783e799d82c828e51adcd4bafd1e",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/initial_pose/corridor01.yaml": "0670732e26f0d9ee19e6115110e29d0aeca5d26f62ab4848d1629c5f9a6eb62b"
+  },
+  "ndt_choice": "H2 chosen by official IMU evaluation contract plus exact official GT numeric lineage, NOT by NN score",
+  "full_NDT_budget": 1,
+  "geometry_selection_GT_bracket": {
+    "lower_ns": "1517157219794140100",
+    "upper_ns": "1517157219794140100",
+    "weight": 0.0
+  }
+}

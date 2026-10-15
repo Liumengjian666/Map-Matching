@@ -1,0 +1,3 @@
+stage,wall_s,cpu_user_s,cpu_system_s,peak_RSS_KiB,note
+complete_input_revalidation,109.51952273299685,,,685724,"offline validation, not online performance"
+two_fixed_NN_queries_including_map_load,0.13,0.09,0.02,55484,no optimizer calls
