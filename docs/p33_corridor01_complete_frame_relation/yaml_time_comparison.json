@@ -1,0 +1,54 @@
+{
+  "exact_sensor_header_origin_plus67": {
+    "stamp_ns": "1517157286088119030",
+    "bracket": {
+      "lower_ns": "1517157285954282999",
+      "upper_ns": "1517157286155932903",
+      "weight": 0.6637049080866411
+    },
+    "T_G_GT": [
+      [
+        0.9421254878215256,
+        -0.33371108274547495,
+        0.03219438537843457,
+        156.38563280980375
+      ],
+      [
+        0.3348800521983703,
+        0.9412807053828753,
+        -0.042964919568565935,
+        54.266467310515694
+      ],
+      [
+        -0.01596608394908264,
+        0.05125960326377241,
+        0.9985577285448105,
+        -12.829613954068046
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "official_initialization_time_certified": false
+  },
+  "same_world_condition_only": true,
+  "exact_A_translation_difference_m": 166.51117669423076,
+  "exact_A_rotation_difference_deg": 62.78649847720373,
+  "exact_B_translation_difference_m": 166.59022586448677,
+  "exact_B_rotation_difference_deg": 62.76120037324423,
+  "nearest_scan_comparison": [
+    {
+      "hypothesis": "H_A_conditional",
+      "translation_difference_m": 166.40928738855115,
+      "rotation_difference_deg": 62.84385976010289
+    },
+    {
+      "hypothesis": "H_B_conditional",
+      "translation_difference_m": 166.4884041643211,
+      "rotation_difference_deg": 62.8188306085313
+    }
+  ]
+}

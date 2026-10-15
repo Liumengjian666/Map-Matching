@@ -1,0 +1,8 @@
+test_duplicate_and_unordered_headers_rejected (__main__.PreparationTest) ... ok
+test_original_cache_time_not_float_seconds (__main__.PreparationTest) ... ok
+test_unique_nearest_and_earlier_tie (__main__.PreparationTest) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+OK
