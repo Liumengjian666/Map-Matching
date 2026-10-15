@@ -1,0 +1,69 @@
+{
+  "status": "FULL_DECODE_AND_READBACK_PASS",
+  "source_bag": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/raw_data_core_2023-07-25-03-01-44.bag",
+  "source_sha256_verified_preflight": "c9e127402463eebee25c54bc967eb377e026bbbdfc979eae853a5af134180811",
+  "decoder_binary": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/.corridor01_full_decode.f2Q6nm/build/corridor01_decode_full",
+  "decoder_binary_sha256": "0f5879837f8a641b7e14ebbd49223d40282d0fd4138f2cdad42c608e33ed56b2",
+  "driver_repository": "https://github.com/ros-drivers/velodyne",
+  "driver_git_sha": "29abd0e1361cb7f5eda451d2b51c35eeca45e0d5",
+  "driver_license": "BSD; existing source read and linked, not modified",
+  "source_code_sha256": {
+    "decode_full.cpp": "a107e0fbd610d238c7d8dacf58d48deebaa4892673a360c56a19fa56458efaf0",
+    "CMakeLists.txt": "e92fa0068831598eabef1f7f801f117e8303f5e4c59ff3ba00e2c8e60631ed3f",
+    "verify_full.py": "791e4f53cf52c327f11f420f38a7c2e2be6ee755003ccc078a639938be04b03e"
+  },
+  "output_bag": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/raw/Long_Corridor_Rosbag/corridor01_decoded_raw_timed_full.bag",
+  "output_bytes": 8135887915,
+  "output_sha256": "89d29ce428bcd476813c1191910e862f8f1effa416cad35f9750086732a26937",
+  "topic_counts": {
+    "/camera_1/image_raw": 6720,
+    "/imu/data": 55957,
+    "/p10/corridor01/raw_timed_points": 2777
+  },
+  "points": 79932911,
+  "first_sensor_stamp_ns": {
+    "/camera_1/image_raw": 1517157219043495000,
+    "/imu/data": 1517157219159216000,
+    "/p10/corridor01/raw_timed_points": 1517157219088119000
+  },
+  "last_sensor_stamp_ns": {
+    "/camera_1/image_raw": 1517157498994733000,
+    "/imu/data": 1517157499161280000,
+    "/p10/corridor01/raw_timed_points": 1517157499058448100
+  },
+  "ring_range": [
+    0,
+    15
+  ],
+  "all_XYZ_time_equal_frozen_raw_decode": true,
+  "all_IMU_and_image_serialized_payloads_unchanged": true,
+  "copied_topic_payload_sha256": {
+    "/imu/data": "4dca1bfb2444fc7c1902b8cbde9e6d8bff711f35cc4626a5eeadf27dd61ccc2d",
+    "/camera_1/image_raw": "6143e29b72a54b66f1d83a6324f0eb2b66942263fc0ddde85d299e4f42fb2775"
+  },
+  "deskew_performed": false,
+  "GT_used": false,
+  "localization_run": false,
+  "time_field": "float32 seconds from scan header stamp",
+  "bag_record_time": "sensor header stamp for IMU/image; scan_end for complete LiDAR cloud",
+  "original_record_times_preserved": false,
+  "point_fields": [
+    "x",
+    "y",
+    "z",
+    "intensity",
+    "ring",
+    "time"
+  ],
+  "reference_cache_sha256_verified_preflight": {
+    "raw_timed_scan_index.csv": "d49b7b81bb1f5c17eb2da9e5ad665dfb2b3b4813280de4e342eb3158d13c932a",
+    "raw_timed_points.bin": "ce8beed2303ea3de8715932c4d0644d6fe28317014e2383f65942d69bc5ace32"
+  },
+  "verification_wall_sec": 87.07865196699277,
+  "verification_peak_rss_kib": 879276,
+  "limitations": [
+    "First scan has no complete preceding IMU coverage; retained rather than fabricated.",
+    "Dataset-end fixed-lag drain depends on genuine available IMU; no tail synthesized.",
+    "Complete localization and real-time performance were not tested."
+  ]
+}
