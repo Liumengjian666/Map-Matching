@@ -1,14 +1,30 @@
 <launch>
-  <!-- Dataset 02 GT in its native world only. This is not a localization launch. -->
+  <!-- Static map/full GT reference; no localization nodes or GT estimator input. -->
   <arg name="enabled_override" default="" />
   <arg name="rviz" default="true" />
+  <arg name="publish_map" default="true" />
+  <arg name="map_path" default="/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/map/corridor02.pcd" />
+  <arg name="map_frame" default="map" />
   <node pkg="dog_prior_map_localization" type="dataset_gt_path_publisher.py"
         name="corridor02_gt_visualizer" output="screen">
     <rosparam command="load" file="$(find dog_prior_map_localization)/config/corridor02_gt_visualization.yaml" />
+    <param name="frame_id" value="$(arg map_frame)" />
     <param name="enabled" value="$(arg enabled_override)" if="$(eval arg('enabled_override') != '')" />
   </node>
+  <node pkg="pcl_ros" type="pcd_to_pointcloud" name="corridor02_prior_map"
+        if="$(arg publish_map)" output="screen" required="true">
+    <param name="file_name" value="$(arg map_path)" />
+    <param name="frame_id" value="$(arg map_frame)" />
+    <param name="interval" value="0.0" />
+    <param name="latch" value="true" />
+    <!-- Static reference must not wait for bag /clock, even on a simulated-time master. -->
+    <param name="use_sim_time" value="false" />
+    <remap from="/use_sim_time" to="/corridor02_prior_map/use_sim_time" />
+    <remap from="cloud_pcd" to="/dog_livo/prior_map" />
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
   <node pkg="rviz" type="rviz" name="corridor02_gt_rviz" if="$(arg rviz)"
-        args="-d $(find dog_prior_map_localization)/rviz/corridor02_ground_truth.rviz">
+        args="-d $(find dog_prior_map_localization)/rviz/corridor02_ground_truth.rviz -f $(arg map_frame)">
     <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
     <!-- The installed RViz shows a modal EOL dialog before normal rendering. -->
     <env name="DISABLE_ROS1_EOL_WARNINGS" value="1" />

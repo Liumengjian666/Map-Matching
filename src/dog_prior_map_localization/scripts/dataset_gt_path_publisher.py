@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Clock-following display-only GT. No TF or estimator observation is published."""
+"""Optional full reference plus clock-following GT; never an estimator input."""
 import bisect
 from decimal import Decimal
 import hashlib
@@ -17,14 +17,14 @@ from tf.transformations import quaternion_from_matrix, quaternion_matrix
 from visualization_msgs.msg import Marker
 
 
-def transform(config):
+def transform(config, rotation_tolerance=1e-9):
     result = np.eye(4)
     result[:3, :3] = np.asarray(config['rotation_row_major'], dtype=float).reshape(3, 3)
     result[:3, 3] = config['translation_m']
     rotation = result[:3, :3]
     if (not np.isfinite(result).all() or
-            not np.allclose(rotation.T @ rotation, np.eye(3), atol=1e-9, rtol=0) or
-            not np.isclose(np.linalg.det(rotation), 1, atol=1e-9, rtol=0)):
+            not np.allclose(rotation.T @ rotation, np.eye(3), atol=rotation_tolerance, rtol=0) or
+            not np.isclose(np.linalg.det(rotation), 1, atol=rotation_tolerance, rtol=0)):
         raise ValueError('Invalid configured SE(3)')
     return result
 
@@ -54,6 +54,7 @@ def load_samples(filename, expected_sha, t_gt_map, t_imu_lidar):
         t_gt_imu[:3, 3] = values[:3]
         t_map_lidar = t_map_gt @ t_gt_imu @ t_imu_lidar
         quaternion = quaternion_from_matrix(t_map_lidar)
+        quaternion /= np.linalg.norm(quaternion)
         samples.append((stamp_ns, t_map_lidar[:3, 3].copy(), quaternion))
     if not samples:
         raise ValueError('Empty GT')
@@ -86,6 +87,15 @@ def make_pose(sample, frame):
     return pose
 
 
+def full_reference_path(poses, frame):
+    """Timeless display reference. Individual original sample times are retained."""
+    result = RosPath()
+    result.header.frame_id = frame
+    result.header.stamp = rospy.Time(0)
+    result.poses = list(poses)
+    return result
+
+
 class GroundTruthPublisher:
     def __init__(self):
         self.frame = rospy.get_param('~frame_id')
@@ -99,6 +109,11 @@ class GroundTruthPublisher:
             if self.frame == 'camera_init':
                 raise ValueError('Unaligned native GT must not be labelled as the localization map')
             alignment, extrinsic = np.eye(4), np.eye(4)
+        elif mode == 'YAML_GT_FROM_MAP':
+            # Original six-decimal coefficients are preserved, not fitted or
+            # orthogonalized. load_samples takes the actual 4x4 inverse.
+            alignment = transform(rospy.get_param('~T_gt_map'), rotation_tolerance=1e-5)
+            extrinsic = np.eye(4)
         else:
             raise ValueError('Unsupported GT display alignment mode')
         self.samples = load_samples(rospy.get_param('~gt_file'), rospy.get_param('~gt_sha256'),
@@ -116,11 +131,18 @@ class GroundTruthPublisher:
             raise ValueError('GT publishers are restricted to display-only topics')
         self.path_pub = rospy.Publisher(path_topic, RosPath, queue_size=1, latch=True)
         self.marker_pub = rospy.Publisher(marker_topic, Marker, queue_size=1, latch=True)
+        if rospy.get_param('~publish_full_path', False):
+            full_topic = rospy.get_param('~full_path_topic', '/dog_livo/gt_path_full')
+            if rospy.resolve_name(full_topic) != '/dog_livo/gt_path_full':
+                raise ValueError('Full GT reference is restricted to its display-only topic')
+            self.full_path_pub = rospy.Publisher(full_topic, RosPath, queue_size=1, latch=True)
+            self.full_path_pub.publish(full_reference_path(self.poses, self.frame))
         self.info_pub = rospy.Publisher('~info', String, queue_size=1, latch=True)
         self.info_pub.publish(String(data=json.dumps({
             'contract': rospy.get_param('~alignment_contract'),
             'alignment_source': rospy.get_param('~alignment_source'),
             'alignment_source_sha256': rospy.get_param('~alignment_source_sha256'),
+            'alignment_mode': mode, 'T_gt_map': alignment.tolist(),
             'reference_point': rospy.get_param('~reference_point'),
             'samples': len(self.samples), 'first_ns': self.samples[0][0],
             'last_ns': self.samples[-1][0], 'no_tf_or_estimator_output': True})))

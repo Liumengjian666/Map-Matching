@@ -73,24 +73,60 @@ class GroundTruthVisualizationTest(unittest.TestCase):
             self.assertTrue(np.isfinite(position).all())
             self.assertAlmostEqual(np.linalg.norm(quaternion), 1, places=12)
 
-    def test_corridor02_keeps_native_world_and_published_reference(self):
+    def test_corridor02_inverse_active_yaml_not_identity_or_transpose(self):
         config = yaml.safe_load((PACKAGE / 'config/corridor02_gt_visualization.yaml').read_text())
-        self.assertFalse(config['enabled'])
-        self.assertEqual(config['alignment_mode'], 'NATIVE_GT_WORLD')
-        self.assertEqual(config['frame_id'], 'corridor02_gt_world')
-        samples = GT.load_samples(config['gt_file'], config['gt_sha256'], np.eye(4), np.eye(4))
+        self.assertTrue(config['enabled'])
+        self.assertEqual(config['alignment_mode'], 'YAML_GT_FROM_MAP')
+        self.assertTrue(config['publish_full_path'])
+        self.assertEqual(config['frame_id'], 'map')
+        source = Path(config['alignment_source'])
+        self.assertEqual(hashlib.sha256(source.read_bytes()).hexdigest(),
+                         config['alignment_source_sha256'])
+        # SafeLoader handles OpenCV matrices after removing its nonstandard directive.
+        class OpenCvLoader(yaml.SafeLoader):
+            pass
+        OpenCvLoader.add_constructor('tag:yaml.org,2002:opencv-matrix',
+                                     lambda loader, node: loader.construct_mapping(node, deep=True))
+        active = yaml.load('\n'.join(source.read_text().splitlines()[1:]), Loader=OpenCvLoader)
+        matrix = GT.transform(config['T_gt_map'], rotation_tolerance=1e-5)
+        np.testing.assert_array_equal(matrix[:3, :3].ravel(),
+                                      active['extrinsicRotation_world_darpa']['data'])
+        np.testing.assert_array_equal(matrix[:3, 3], active['extrinsicTranslation_world_darpa']['data'])
+        samples = GT.load_samples(config['gt_file'], config['gt_sha256'], matrix, np.eye(4))
         self.assertEqual(len(samples), 5522)
         self.assertEqual(samples[0][0], 1645999726984117000)
         self.assertEqual(samples[-1][0], 1646000619653331000)
-        first = Path(config['gt_file']).read_text().splitlines()[0].split()
-        np.testing.assert_array_equal(samples[0][1], [float(value) for value in first[1:4]])
+        raw = np.loadtxt(config['gt_file'])
+        expected = np.linalg.solve(matrix[:3, :3], (raw[:, 1:4] - matrix[:3, 3]).T).T
+        np.testing.assert_allclose([sample[1] for sample in samples], expected, atol=1e-12, rtol=0)
+        np.testing.assert_allclose([np.linalg.norm(sample[2]) for sample in samples], 1, atol=1e-12)
+
+    def test_full_reference_is_complete_timeless_and_independent_of_rewind_path(self):
+        samples = [(1000000000, [1, 2, 3], [0, 0, 0, 1]),
+                   (2000000000, [4, 5, 6], [0, 0, 0, 1])]
+        poses = [GT.make_pose(sample, 'map') for sample in samples]
+        full = GT.full_reference_path(poses, 'map')
+        poses.clear()
+        self.assertEqual(full.header.frame_id, 'map')
+        self.assertEqual(full.header.stamp.to_nsec(), 0)
+        self.assertEqual([pose.header.stamp.to_nsec() for pose in full.poses],
+                         [1000000000, 2000000000])
+
+    def test_rounded_rotation_validation_does_not_accept_bad_transforms(self):
+        config = dict(rotation_row_major=[1, 0, 0, 0, 1, 0, 0, 0, -1], translation_m=[0, 0, 0])
+        with self.assertRaises(ValueError):
+            GT.transform(config, rotation_tolerance=1e-5)
+        config['rotation_row_major'][-1] = float('nan')
+        with self.assertRaises(ValueError):
+            GT.transform(config, rotation_tolerance=1e-5)
 
     def test_yaml_switch_defaults_and_native_launch(self):
         for dataset in ('corridor01', 'corridor02'):
             params = yaml.safe_load(subprocess.check_output(
                 ['roslaunch', '--dump-params', 'dog_prior_map_localization',
                  dataset + '_ground_truth.launch'], text=True, timeout=30))
-            self.assertFalse(params['/' + dataset + '_gt_visualizer/enabled'])
+            config = yaml.safe_load((PACKAGE / 'config' / (dataset + '_gt_visualization.yaml')).read_text())
+            self.assertEqual(params['/' + dataset + '_gt_visualizer/enabled'], config['enabled'])
 
     def test_corridor02_visible_defaults_without_modal_dialog_or_fake_tf(self):
         launch = ET.parse(PACKAGE / 'launch/corridor02_ground_truth.launch')
@@ -99,14 +135,22 @@ class GroundTruthVisualizationTest(unittest.TestCase):
         self.assertEqual(environment['DISABLE_ROS1_EOL_WARNINGS'], '1')
         self.assertEqual(environment['LD_PRELOAD'], '/lib/x86_64-linux-gnu/libusb-1.0.so.0')
         self.assertEqual({node.get('type') for node in launch.iter('node')},
-                         {'dataset_gt_path_publisher.py', 'rviz'})
+                         {'dataset_gt_path_publisher.py', 'rviz', 'pcd_to_pointcloud'})
+        map_node = launch.find("node[@name='corridor02_prior_map']")
+        self.assertEqual(map_node.find("param[@name='use_sim_time']").get('value'), 'false')
+        self.assertEqual(map_node.find("remap[@from='/use_sim_time']").get('to'),
+                         '/corridor02_prior_map/use_sim_time')
         manager = yaml.safe_load((PACKAGE / 'rviz/corridor02_ground_truth.rviz').read_text())[
             'Visualization Manager']
-        self.assertEqual(manager['Global Options']['Fixed Frame'], 'corridor02_gt_world')
+        self.assertEqual(manager['Global Options']['Fixed Frame'], 'map')
         grid = next(display for display in manager['Displays'] if display['Class'] == 'rviz/Grid')
         self.assertTrue(grid['Enabled'])
         self.assertEqual(grid['Reference Frame'], '<Fixed Frame>')
-        self.assertEqual(manager['Views']['Current']['Distance'], 8)
+        self.assertEqual(manager['Views']['Current']['Distance'], 850)
+        self.assertTrue(any(display.get('Topic') == '/dog_livo/gt_path_full'
+                            for display in manager['Displays']))
+        self.assertTrue(any(display.get('Topic') == '/dog_livo/prior_map'
+                            for display in manager['Displays']))
 
     def test_rejects_nonfinite_nonmonotonic_and_wrong_input(self):
         for payload in (b'1.0 nan 0 0 0 0 0 1\n', b'1.0 0 0 0 0 0 0 0\n',

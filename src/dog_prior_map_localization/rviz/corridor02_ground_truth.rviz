@@ -10,23 +10,60 @@ Visualization Manager:
       Value: true
       Reference Frame: <Fixed Frame>
       Plane: XY
-      Plane Cell Count: 40
-      Cell Size: 1
+      Plane Cell Count: 100
+      Cell Size: 10
       Color: 100; 100; 100
       Alpha: 0.5
       Line Style:
         Value: Lines
         Line Width: 0.03
     - Class: rviz/Path
-      Name: Corridor02 GT (native world, NOT map aligned)
+      Name: Complete GT (inverse YAML hypothesis)
       Enabled: true
       Value: true
-      Topic: /dog_livo/gt_path
+      Topic: /dog_livo/gt_path_full
       Color: 0; 255; 255
       Alpha: 1
       Buffer Length: 1
       Line Style: Billboards
-      Line Width: 0.08
+      Line Width: 1.0
+      Pose Style: None
+      Queue Size: 1
+    - Class: rviz/PointCloud2
+      Name: Corridor02 Prior Map
+      Enabled: true
+      Value: true
+      Topic: /dog_livo/prior_map
+      Queue Size: 1
+      Position Transformer: XYZ
+      Color Transformer: FlatColor
+      Color: 210; 210; 210
+      Alpha: 0.5
+      Style: Points
+      Size (Pixels): 1
+      Decay Time: 0
+    - Class: rviz/Path
+      Name: Algorithm Corrected Path (when running)
+      Enabled: true
+      Value: true
+      Topic: /dog_livo/path_corrected
+      Color: 0; 255; 0
+      Alpha: 1
+      Buffer Length: 1
+      Line Style: Billboards
+      Line Width: 1.0
+      Pose Style: None
+      Queue Size: 1
+    - Class: rviz/Path
+      Name: Algorithm High Rate Path (when running)
+      Enabled: false
+      Value: false
+      Topic: /dog_livo/path_high_rate
+      Color: 255; 170; 0
+      Alpha: 1
+      Buffer Length: 1
+      Line Style: Billboards
+      Line Width: 1.0
       Pose Style: None
       Queue Size: 1
     - Class: rviz/Marker
@@ -37,7 +74,7 @@ Visualization Manager:
       Queue Size: 1
   Enabled: true
   Global Options:
-    Fixed Frame: corridor02_gt_world
+    Fixed Frame: map
     Background Color: 48; 48; 48
     Frame Rate: 30
   Tools:
@@ -47,9 +84,9 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 8
-      Focal Point: {X: 0, Y: 0, Z: 0}
-      Pitch: 0.7853981634
+      Distance: 850
+      Focal Point: {X: 225, Y: 178, Z: 12}
+      Pitch: 1.3
       Yaw: 0.7853981634
       Target Frame: <Fixed Frame>
 Window Geometry:

@@ -1,13 +1,20 @@
-# Set this one YAML switch true to publish a clock-following GT path/arrow.
-# No trustworthy map/GT transform or published sensor origin is established.
-enabled: false
-alignment_mode: "NATIVE_GT_WORLD"
+# Display hypothesis requested by user: p_GT = R_yaml * p_map + t_yaml.
+# Thus p_map = inverse(R_yaml) * (p_GT - t_yaml). Never an estimator input.
+enabled: true
+alignment_mode: "YAML_GT_FROM_MAP"
+publish_full_path: true
+full_path_topic: "/dog_livo/gt_path_full"
 gt_file: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/gt/corridor02_gt.txt"
 gt_sha256: "cddb6739230ded86c57412e768e071e5cd6d62a5de5ff310618032ca2e38be0a"
-frame_id: "corridor02_gt_world"
+frame_id: "map"
 path_topic: "/dog_livo/gt_path"
 marker_topic: "/dog_livo/gt_current_pose"
 reference_point: "GT_AS_PUBLISHED_SENSOR_ORIGIN_UNCERTIFIED"
-alignment_contract: "DISPLAY_ONLY_NATIVE_GT_WORLD; MAP_OVERLAY_UNAVAILABLE"
-alignment_source: "Corridor02/gt/corridor02_gt.txt (as published; no map transform)"
-alignment_source_sha256: "cddb6739230ded86c57412e768e071e5cd6d62a5de5ff310618032ca2e38be0a"
+alignment_contract: "DISPLAY_ONLY_INVERSE_ACTIVE_YAML_HYPOTHESIS; NOT_CERTIFIED_ALIGNMENT"
+alignment_source: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/initial_pose/corridor02.yaml"
+alignment_source_sha256: "fc319ad99737a717456e11eb70383d4848eadf7e46587fee0643d6732cf1c3a1"
+T_gt_map:
+  rotation_row_major: [0.823800, -0.566853, -0.005503,
+                       0.565879, 0.822884, -0.051418,
+                       0.033675, 0.039243, 0.998662]
+  translation_m: [39.929523, -176.217148, -5.225427]

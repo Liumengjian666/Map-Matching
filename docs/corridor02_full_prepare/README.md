@@ -78,8 +78,10 @@ rosbag play --clock --rate 0.25 --delay 2 "/media/jian/HIKVISION/paper rosbag/Su
 ```
 
 或在 `config/corridor02_gt_visualization.yaml` 设置 `enabled: true`，省略命令行覆盖。
-Fixed Frame 为 `corridor02_gt_world`。这不启动 Corridor02 定位，不表示原地图
-初始化或 GT 参考点已经认证；不能伪造 static TF 把它叠加到 `camera_init`。
+当前显示入口已支持不依赖回放的静态地图和完整 GT，Fixed Frame 为 `map`。
+根据用户要求暂用生效 YAML 的逆变换作显示假设；真实画面仍不贴合，因此不是
+认证的地图—GT 对齐。细节与当前命令见 `docs/dataset_gt_visualization/README.md`。
+这不启动 Corridor02 定位，不将 GT 用于初始化，也不创建虚假 static TF。
 
 已知原前两帧缺少完整起点 IMU 覆盖，仍原样保留；没有合成起始或末尾观测。
 没有修改 NDT/EKF/IMU 数学、地图、标定、原始 bag 或历史研究归档。
