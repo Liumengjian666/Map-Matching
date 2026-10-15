@@ -69,14 +69,14 @@ def content_url(file_id):
 
 def validate(path, entry, previous=None):
     size = path.stat().st_size
-    if size != entry['bytes']:
-        raise RuntimeError('Size mismatch: %s: %s != %s' % (path, size, entry['bytes']))
     with open(path, 'rb') as f:
         prefix = f.read(256)
     if b'<html' in prefix.lower() or b'<!doctype html' in prefix.lower():
         raise RuntimeError('HTML is not a dataset payload: ' + str(path))
-    if path.name.startswith('ouster_scan-') and not prefix.startswith(b'PK\x03\x04'):
+    if (entry.get('format') == 'zip' or path.name.startswith('ouster_scan-')) and not prefix.startswith(b'PK\x03\x04'):
         raise RuntimeError('Expected ZIP signature')
+    if size != entry['bytes']:
+        raise RuntimeError('Size mismatch: %s: %s != %s' % (path, size, entry['bytes']))
     if '.ply' in path.name and not prefix.startswith(b'ply\n'):
         raise RuntimeError('Expected PLY signature')
     result = {'bytes': size, 'sha256': digest(path), 'publisher_sha256': None,
@@ -88,8 +88,26 @@ def validate(path, entry, previous=None):
     return result
 
 
-def main(plan_path):
+def quarantine_invalid_zip_partial(path, entry):
+    """Preserve a non-ZIP HTTP error body instead of appending to it on resume."""
+    if not path.exists() or not (entry.get('format') == 'zip' or path.name.startswith('ouster_scan-')):
+        return None
+    with path.open('rb') as partial:
+        if partial.read(4).startswith(b'PK\x03\x04'):
+            return None
+    suffix = time.strftime('%Y%m%dT%H%M%SZ', time.gmtime()) + '.' + str(os.getpid())
+    preserved = path.with_name(path.name + '.invalid_response.' + suffix)
+    if preserved.exists():
+        raise RuntimeError('Refuse to overwrite preserved invalid response: ' + str(preserved))
+    os.rename(str(path), str(preserved))
+    return preserved
+
+
+def main(plan_path, status_relative_path='downloads/download_status.json'):
     plan = json.loads(Path(plan_path).read_text())
+    state_relative = Path(status_relative_path)
+    if state_relative.is_absolute() or '..' in state_relative.parts:
+        raise RuntimeError('Unsafe status path')
     check_mount()
     if any(p.is_symlink() for p in [ROOT, *ROOT.parents]):
         raise RuntimeError('External destination ancestors must not be symlinks')
@@ -107,7 +125,7 @@ def main(plan_path):
     free = os.statvfs('.').f_bavail * os.statvfs('.').f_frsize
     if free < remaining + reserve:
         raise RuntimeError('Insufficient space for the explicit download plan')
-    state_path = Path('downloads/download_status.json')
+    state_path = state_relative
     state_path.parent.mkdir(parents=True, exist_ok=True)
     if (state_path.is_symlink() or any(p.is_symlink() for p in state_path.parents) or
             state_path.parent.stat().st_dev != device_id):
@@ -154,6 +172,9 @@ def main(plan_path):
                 part = dest.with_name(dest.name + '.part')
                 if part.is_symlink():
                     raise RuntimeError('Partial file symlink is not allowed')
+                preserved = quarantine_invalid_zip_partial(part, entry)
+                if preserved:
+                    print('PRESERVED_INVALID_PARTIAL', str(preserved), flush=True)
                 if not part.exists() or part.stat().st_size != entry['bytes']:
                     url = content_url(entry['drive_id'])
                     subprocess.run([
@@ -186,4 +207,6 @@ def main(plan_path):
 
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    if len(sys.argv) not in (2, 3):
+        raise SystemExit('usage: download_assets.py PLAN.json [STATUS_PATH_RELATIVE_TO_DATA_ROOT]')
+    main(sys.argv[1], sys.argv[2] if len(sys.argv) == 3 else 'downloads/download_status.json')

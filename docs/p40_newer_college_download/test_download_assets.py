@@ -13,6 +13,26 @@ from prepare_pointclouds import validate_member
 
 
 class DownloadTests(unittest.TestCase):
+    def test_custom_status_path_keeps_existing_receipt_isolated(self):
+        original_cwd = os.getcwd()
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            (root / 'downloads').mkdir()
+            old_receipt = root / 'downloads/download_status.json'
+            old_receipt.write_text('{"root":"p40","files":[]}\n')
+            plan = root / 'empty_plan.json'
+            plan.write_text('{"files":[]}\n')
+            try:
+                with patch.object(downloader, 'ROOT', root), \
+                        patch.object(downloader, 'MOUNT', root), \
+                        patch.object(downloader, 'check_mount'):
+                    downloader.main(str(plan), 'downloads/p42_stereo_download_status.json')
+                self.assertEqual(json.loads(old_receipt.read_text())['root'], 'p40')
+                new_receipt = root / 'downloads/p42_stereo_download_status.json'
+                self.assertEqual(json.loads(new_receipt.read_text())['files'], [])
+            finally:
+                os.chdir(original_cwd)
+
     def test_resume_rejects_changed_final_and_preserves_original_receipt(self):
         original_cwd = os.getcwd()
         with tempfile.TemporaryDirectory() as name:
@@ -62,6 +82,16 @@ class DownloadTests(unittest.TestCase):
             path.write_bytes(b'not a zip')
             with self.assertRaisesRegex(RuntimeError, 'ZIP signature'):
                 downloader.validate(path, {'bytes': 9})
+
+    def test_invalid_zip_partial_is_preserved_before_retry(self):
+        with tempfile.TemporaryDirectory() as name:
+            path = Path(name) / 'infra1_01.zip.part'
+            payload = b'<!DOCTYPE html>Quota exceeded'
+            path.write_bytes(payload)
+            preserved = downloader.quarantine_invalid_zip_partial(path, {'format': 'zip'})
+            self.assertFalse(path.exists())
+            self.assertIsNotNone(preserved)
+            self.assertEqual(preserved.read_bytes(), payload)
 
     def test_missing_external_mount_is_rejected(self):
         with patch.object(downloader.subprocess, 'check_output', return_value='wrong-uuid'):

@@ -1,0 +1,14 @@
+{
+  "dataset": "Newer College 2020 / 01_short_experiment / stereo camera images",
+  "purpose": "Continue official files that were not blocked by the per-file public download quota; infra1_04.zip is intentionally excluded.",
+  "publisher_sha256": null,
+  "files": [
+    {"drive_id":"1-ZMksOXFNLcmrqt-yfLp6IMRKfA-IHiz","bytes":2499951400,"format":"zip","side":"left/infra1","path":"downloads/stereo_camera/infra1_01.zip"},
+    {"drive_id":"1MQ4cRK8ZWehPaa8vjigUr7KPIidqV5Md","bytes":2499872911,"format":"zip","side":"left/infra1","path":"downloads/stereo_camera/infra1_02.zip"},
+    {"drive_id":"1SRq2OSWAHiKSjyePKNRIjXQJxM-bk0-l","bytes":2499737671,"format":"zip","side":"left/infra1","path":"downloads/stereo_camera/infra1_03.zip"},
+    {"drive_id":"16QBxzHEP2yP0bequTxO-fs0ROd-y1TvB","bytes":2500035011,"format":"zip","side":"right/infra2","path":"downloads/stereo_camera/infra2_01.zip"},
+    {"drive_id":"1TAnuqZ8xc4T9ds8I0JjMYNU-k33xM0aF","bytes":2499847678,"format":"zip","side":"right/infra2","path":"downloads/stereo_camera/infra2_02.zip"},
+    {"drive_id":"18lcP8o8c4GBbLL-AMliqwbn-MBU75mV0","bytes":2499818069,"format":"zip","side":"right/infra2","path":"downloads/stereo_camera/infra2_03.zip"},
+    {"drive_id":"1WbobG5Bot_6e8JFdEj-ZLf4xxnGKq1sa","bytes":1634661015,"format":"zip","side":"right/infra2","path":"downloads/stereo_camera/infra2_04.zip"}
+  ]
+}
