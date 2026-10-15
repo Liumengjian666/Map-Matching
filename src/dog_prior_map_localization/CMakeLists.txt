@@ -307,6 +307,7 @@ if(DOG_PRIOR_BUILD_RESEARCH_TOOLS)
 endif()
 
 catkin_install_python(PROGRAMS
+  scripts/dataset_gt_path_publisher.py
   scripts/evaluate_runtime_and_accuracy.py
   scripts/build_livox_keyframe_scan_db.py
   scripts/run_dataset_evaluation.sh

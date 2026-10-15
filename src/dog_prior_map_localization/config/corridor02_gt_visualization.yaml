@@ -1,0 +1,13 @@
+# Set this one YAML switch true to publish a clock-following GT path/arrow.
+# No trustworthy map/GT transform or published sensor origin is established.
+enabled: false
+alignment_mode: "NATIVE_GT_WORLD"
+gt_file: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/gt/corridor02_gt.txt"
+gt_sha256: "cddb6739230ded86c57412e768e071e5cd6d62a5de5ff310618032ca2e38be0a"
+frame_id: "corridor02_gt_world"
+path_topic: "/dog_livo/gt_path"
+marker_topic: "/dog_livo/gt_current_pose"
+reference_point: "GT_AS_PUBLISHED_SENSOR_ORIGIN_UNCERTIFIED"
+alignment_contract: "DISPLAY_ONLY_NATIVE_GT_WORLD; MAP_OVERLAY_UNAVAILABLE"
+alignment_source: "Corridor02/gt/corridor02_gt.txt (as published; no map transform)"
+alignment_source_sha256: "cddb6739230ded86c57412e768e071e5cd6d62a5de5ff310618032ca2e38be0a"

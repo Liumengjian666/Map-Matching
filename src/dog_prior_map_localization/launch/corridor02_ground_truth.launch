@@ -1,0 +1,14 @@
+<launch>
+  <!-- Dataset 02 GT in its native world only. This is not a localization launch. -->
+  <arg name="enabled_override" default="" />
+  <arg name="rviz" default="true" />
+  <node pkg="dog_prior_map_localization" type="dataset_gt_path_publisher.py"
+        name="corridor02_gt_visualizer" output="screen">
+    <rosparam command="load" file="$(find dog_prior_map_localization)/config/corridor02_gt_visualization.yaml" />
+    <param name="enabled" value="$(arg enabled_override)" if="$(eval arg('enabled_override') != '')" />
+  </node>
+  <node pkg="rviz" type="rviz" name="corridor02_gt_rviz" if="$(arg rviz)"
+        args="-d $(find dog_prior_map_localization)/rviz/corridor02_ground_truth.rviz">
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+</launch>

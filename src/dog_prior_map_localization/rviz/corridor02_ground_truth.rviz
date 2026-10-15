@@ -1,0 +1,41 @@
+Panels:
+  - Class: rviz/Displays
+    Name: Displays
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz/Path
+      Name: Corridor02 GT (native world, NOT map aligned)
+      Enabled: true
+      Value: true
+      Topic: /dog_livo/gt_path
+      Color: 0; 255; 255
+      Alpha: 1
+      Buffer Length: 1
+      Line Style: Lines
+      Line Width: 0.08
+      Pose Style: None
+      Queue Size: 1
+    - Class: rviz/Marker
+      Name: GT Moving Pose (published reference)
+      Enabled: true
+      Value: true
+      Marker Topic: /dog_livo/gt_current_pose
+      Queue Size: 1
+  Enabled: true
+  Global Options:
+    Fixed Frame: corridor02_gt_world
+    Background Color: 48; 48; 48
+    Frame Rate: 30
+  Tools:
+    - Class: rviz/MoveCamera
+    - Class: rviz/Select
+    - Class: rviz/FocusCamera
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Distance: 20
+      Focal Point: {X: 0, Y: 0, Z: 0}
+      Pitch: 0.7853981634
+      Yaw: 0.7853981634
+      Target Frame: <Fixed Frame>

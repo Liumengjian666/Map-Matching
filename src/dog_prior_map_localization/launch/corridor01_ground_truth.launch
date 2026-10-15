@@ -1,0 +1,11 @@
+<launch>
+  <!-- Display-only subscriber to the existing bag clock. No estimator/TF nodes. -->
+  <arg name="gt_file" default="/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/gt/corridor01_gt.txt" />
+  <arg name="enabled_override" default="" />
+  <node pkg="dog_prior_map_localization" type="dataset_gt_path_publisher.py"
+        name="corridor01_gt_visualizer" output="screen">
+    <rosparam command="load" file="$(find dog_prior_map_localization)/config/corridor01_gt_visualization.yaml" />
+    <param name="gt_file" value="$(arg gt_file)" />
+    <param name="enabled" value="$(arg enabled_override)" if="$(eval arg('enabled_override') != '')" />
+  </node>
+</launch>

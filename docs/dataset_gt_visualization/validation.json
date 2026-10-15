@@ -1,0 +1,41 @@
+{
+  "task": "Configurable Corridor01/Corridor02 clock-following display-only GT",
+  "date": "2026-10-15",
+  "start_sha": "6382346e2b407fae382b56cbb0643394d1391968",
+  "workspace": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws",
+  "math_time_config_unit_tests_passed": 8,
+  "corridor01_launch_contract_tests_passed": 5,
+  "xml_and_roslaunch_expansion": "PASS",
+  "gt_off_vs_on_estimator_parameters": "IDENTICAL",
+  "isolated_ros_master": "http://127.0.0.1:11438",
+  "real_rviz": {
+    "corridor01": {"status": "PASS", "samples": 1385, "frame": "camera_init"},
+    "corridor02": {"status": "PASS", "samples": 5522, "frame": "corridor02_gt_world"},
+    "path_and_marker_subscriptions_confirmed": true,
+    "manual_screen_acceptance": false,
+    "no_future_samples": true,
+    "rewind_clears_and_rebuilds": true,
+    "paused_clock_does_not_republish": true,
+    "end_of_gt_holds_actual_last_sample": true,
+    "gt_node_only_subscription": "/clock",
+    "no_tf_or_estimator_observations_published": true
+  },
+  "disabled_runtime": {
+    "nonexistent_gt_file": "NOT_READ",
+    "subscriptions": [],
+    "publications": ["/rosout"],
+    "status": "PASS"
+  },
+  "gt_sha256": {
+    "Corridor01": "3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03",
+    "Corridor02": "cddb6739230ded86c57412e768e071e5cd6d62a5de5ff310618032ca2e38be0a"
+  },
+  "corridor01_alignment": "Historical frozen Control V2 prefix alignment; not absolute map GT",
+  "corridor02_alignment": "None; native published GT world; reference point uncertified",
+  "new_localization_replays": 0,
+  "new_accuracy_evaluations": 0,
+  "algorithm_cpp_changes": 0,
+  "protected_workspaces_modified": false,
+  "external_push_executed": false,
+  "local_smoke_evidence": ".corridor01_gt_display.W3vaak"
+}

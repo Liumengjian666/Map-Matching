@@ -1,0 +1,26 @@
+# DISPLAY ONLY. This is the historical prefix-aligned reference, not an
+# officially certified absolute map/GT transform. Never load as estimator input.
+enabled: false  # Set true before launch to show clock-following GT topics.
+alignment_mode: "FROZEN_PREFIX_ALIGNED"
+reference_point: "IMU_GT_CONVERTED_TO_LIDAR_USING_AUDITED_RC2_EXTRINSIC"
+gt_file: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/gt/corridor01_gt.txt"
+gt_sha256: "3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03"
+frame_id: "camera_init"
+path_topic: "/dog_livo/gt_path"
+marker_topic: "/dog_livo/gt_current_pose"
+alignment_contract: "DISPLAY_ONLY_PREFIX_ALIGNED_CONTROL_V2; NOT_ABSOLUTE_MAP_GROUND_TRUTH"
+alignment_source: "docs/p10_corridor01_deterministic_oosm_replay_r1/posthoc_metrics.json"
+alignment_source_sha256: "50615d568f0cbe3e55962a4c1e99adc5b63d0877221794da92086f40b1eaaaba"
+# T_gt_map maps estimator map-frame IMU poses into GT world in the evaluator.
+# The visualizer uses its inverse, then right-multiplies T_imu_lidar.
+T_gt_map:
+  rotation_row_major: [0.9334059420031097, -0.3504786641794061, 0.07692888526624234,
+                       0.35609146134284037, 0.9311631844208601, -0.07831982595693038,
+                       -0.04418391779831284, 0.10049791009878015, 0.9939557090100994]
+  translation_m: [-0.2782890453193254, 1.1200824161808092, 0.16727956244769815]
+# Same audited RC2 extrinsic as p18_corridor01_ssd_map.yaml (p_imu=T_imu_lidar*p_lidar).
+T_imu_lidar:
+  rotation_row_major: [0.9999918597233475, -0.0005161381080032746, 0.004001760674214531,
+                       0.0005196241852023933, 0.9999994864189835, -0.0008701450879252283,
+                       -0.004001309503946919, 0.0008722174163330545, 0.9999916143443562]
+  translation_m: [0.08, 0.029, 0.03]
