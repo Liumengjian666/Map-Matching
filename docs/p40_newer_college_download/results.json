@@ -31,8 +31,18 @@
   "free_external_GiB": 277.475341796875,
   "filesystem": "exFAT via fuseblk",
   "filesystem_uuid": "F627-4133",
-  "minimum_tool_tests_passed": 8,
-  "external_cli_review": "REQUESTED_AWAITING_EXACT_COMMAND_CONFIRMATION",
+  "minimum_tool_tests_passed": 9,
+  "external_cli_review": {
+    "status": "COMPLETED_ONCE_EXIT_0",
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "xhigh",
+    "sandbox": "read-only",
+    "input_sha256": "788cd6f0719f14fba91be5ca38d5c5a0732dbf3be96883f8e068f8bf30063d43",
+    "invocations": 1,
+    "P1": "FIXED_LOCAL_RED_GREEN_REGRESSION",
+    "P2": "DOCUMENTED_FAIL_STOP_EXTRACTION_TRADEOFF",
+    "fix_externally_rereviewed": false
+  },
   "algorithms_modified": false,
   "ndt_align_calls": 0,
   "localization_replays": 0,
@@ -42,18 +52,26 @@
     "CODE_SHA": "2ac40b702e662b3a9cf7452b728931e67aac5808",
     "END_SHA": "See final receipt; commit containing this results.json is the final artifact commit.",
     "REMOTE_HEAD": "6382346e2b407fae382b56cbb0643394d1391968",
-    "PUSH_EXECUTED": false
-  },
-  "source_sha256": {
-    "download_assets.py": "27f333e381b23f2fe8f1e36dcc45d851dab7a9b51f518b554e576c481aa197e0",
-    "prepare_pointclouds.py": "8bbeedf9b23b257a18974f4bcc2422f623a46d2b0c42a3ef6c59f529933272a0",
-    "test_download_assets.py": "8fec6407b61bc1363fdd6de00798e072ffe2c731e3baa99424684d6fb8aaede6",
-    "download_plan.json": "c3cbee12752b490ad012ffa16ea74e5ec243c81b3754e159e4db20dedc0cd57c"
+    "PUSH_EXECUTED": false,
+    "POST_DOWNLOAD_TOOL_FIX_SHA": "d71ebef7457835a52daa6d3b810ecbe05cfe32c1"
   },
   "limitations": [
     "Selected LiDAR/GT/calibration/5cm prior bundle, not every sensor asset; no camera image ZIPs or original E57 downloaded.",
     "Official duplicate PCD retained byte-for-byte; future reader must avoid counting its timestamp twice.",
     "GT camera/base reference and PLY input require explicit later adapter; no localization accuracy or non-oracle initialization established.",
-    "No publisher SHA256 was found; local SHA256 and ZIP CRC are integrity records, not publisher authentication."
-  ]
+    "No publisher SHA256 was found; local SHA256 and ZIP CRC are integrity records, not publisher authentication.",
+    "Extraction is fail-stop, not resumable; existing extracted directories are never merged or overwritten automatically."
+  ],
+  "execution_validation_source_sha256": {
+    "download_assets.py": "27f333e381b23f2fe8f1e36dcc45d851dab7a9b51f518b554e576c481aa197e0",
+    "prepare_pointclouds.py": "8bbeedf9b23b257a18974f4bcc2422f623a46d2b0c42a3ef6c59f529933272a0",
+    "test_download_assets.py": "8fec6407b61bc1363fdd6de00798e072ffe2c731e3baa99424684d6fb8aaede6",
+    "download_plan.json": "c3cbee12752b490ad012ffa16ea74e5ec243c81b3754e159e4db20dedc0cd57c"
+  },
+  "delivered_source_sha256": {
+    "download_assets.py": "a7c118dab908ea78d2bfa2089cd4fbb80c0bc19a9480107e9157999d7b83425e",
+    "prepare_pointclouds.py": "8bbeedf9b23b257a18974f4bcc2422f623a46d2b0c42a3ef6c59f529933272a0",
+    "test_download_assets.py": "102d19ff0d82de029248e6d53e66ae808974c0ed033500ae38ef8e1f549e2dcc",
+    "download_plan.json": "c3cbee12752b490ad012ffa16ea74e5ec243c81b3754e159e4db20dedc0cd57c"
+  }
 }

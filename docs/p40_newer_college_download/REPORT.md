@@ -94,8 +94,11 @@ cd /home/jian/livox_ws/p10_corridor01_oosm_r1_ws/docs/p40_newer_college_download
 python3 -m unittest -v test_download_assets.py
 ```
 
-All **8** tests passed. They cover size/hash, HTML/ZIP rejection, mount and
+All **9** final tests passed (8 at acquisition time plus the post-review receipt
+regression). They cover size/hash, HTML/ZIP rejection, mount and
 symlink guards, mount replacement, safe archive members and plan uniqueness.
+The additional test proves a same-size changed final is rejected on resume
+without replacing its earlier recorded hash or changing its bytes.
 
 Extraction command used, only after full receipt/hash validation and free-space
 admission (it intentionally refuses an already existing extracted directory):
@@ -156,11 +159,20 @@ changed. NDT align=0, localization replay=0, registration/search=0.
 
 An independent bounded read-only review found path/status-file guards and
 resume accounting issues; these were fixed and covered by targeted tests.
-The user requested an additional Codex CLI review. Its exact invocation and
-input SHA256 `788cd6f0719f14fba91be5ca38d5c5a0732dbf3be96883f8e068f8bf30063d43`
-were presented separately; **execution is awaiting that exact-command
-confirmation**, not claimed completed here. No external CLI invocation has
-been made without confirmation.
+The user separately confirmed the exact additional Codex CLI command and input
+SHA256 `788cd6f0719f14fba91be5ca38d5c5a0732dbf3be96883f8e068f8bf30063d43`.
+It ran **once**, `gpt-6.1-sol / xhigh / read-only`, and exited 0. It found a real
+resume-receipt defect: prior hashes could be replaced by newly computed hashes
+of same-size changed files. This was reproduced by a failing tiny regression,
+then fixed by retaining and comparing prior receipts. All 9 tests passed.
+No dataset downloads or extraction were repeated for this fix.
+
+Its second finding is retained as an explicit fail-stop trade-off: interrupted
+extraction preserves partial output but does not automatically resume/merge an
+existing scan directory. The completed present extraction is unaffected.
+[EXTERNAL_REVIEW.md](EXTERNAL_REVIEW.md) records both findings, classification
+and the exact invocation. The post-review fix was **not** sent to another CLI
+call; it was validated locally. No unconfirmed or repeated CLI invocation ran.
 
 ## Git
 
@@ -168,6 +180,7 @@ Repository: `https://github.com/Liumengjian666/Map-Matching`.
 Branch: `research/p9-r4-heldout-visual-evidence`.
 START_SHA: `4a0c2ac90296638f89b21aff7e1bc3896ea50447`.
 CODE_SHA: `2ac40b702e662b3a9cf7452b728931e67aac5808`.
+POST_DOWNLOAD_TOOL_FIX_SHA: `d71ebef7457835a52daa6d3b810ecbe05cfe32c1`.
 END_SHA: the commit containing this final report; full SHA is in final receipt
 (`git log -1 --format=%H -- docs/p40_newer_college_download/REPORT.md`).
 REMOTE_HEAD rechecked after downloads (unchanged):
