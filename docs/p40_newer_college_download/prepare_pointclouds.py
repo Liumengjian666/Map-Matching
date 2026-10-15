@@ -13,9 +13,11 @@ import zipfile
 
 from download_assets import ROOT, check_mount, validate
 
+SCAN_PATTERN = re.compile(r'ouster_scan/cloud_(\d+)_(\d{9})(?:\([1-9]\d*\))?\.pcd')
+
 
 def validate_member(member, names):
-    if (not re.fullmatch(r'ouster_scan/cloud_\d+_\d{9}\.pcd', member.filename) or
+    if (not SCAN_PATTERN.fullmatch(member.filename) or
             stat.S_ISLNK(member.external_attr >> 16)):
         raise RuntimeError('Unexpected archive entry: ' + member.filename)
     if member.filename in names:
@@ -60,7 +62,7 @@ def main():
             for member in z.infolist():
                 validate_member(member, names)
                 total_bytes += member.file_size
-            metadata.append({'path': str(archive), 'scan_count': len(z.infolist()),
+            metadata.append({'path': str(archive), 'pcd_file_count': len(z.infolist()),
                              'uncompressed_bytes': sum(x.file_size for x in z.infolist())})
     raw = Path('01_short_experiment/raw_format')
     if any(p.is_symlink() for p in [raw, *raw.parents]) or raw.stat().st_dev != device_id:
@@ -76,7 +78,7 @@ def main():
         check_mount(device_id)
         # unzip verifies entry CRC while writing; -n additionally forbids overwrite.
         subprocess.run(['unzip', '-nq', archive['path'], '-d', str(raw)], check=True)
-        print('EXTRACTED_CRC_PASS', archive['path'], archive['scan_count'], flush=True)
+        print('EXTRACTED_CRC_PASS', archive['path'], archive['pcd_file_count'], flush=True)
     files = sorted(output.glob('*.pcd'))
     if len(files) != len(names):
         raise RuntimeError('Extracted scan count differs from official ZIP inventory')
@@ -100,10 +102,16 @@ def main():
         schema = json.dumps({k: header[k] for k in ['FIELDS', 'SIZE', 'TYPE', 'COUNT', 'WIDTH', 'HEIGHT', 'DATA']}, sort_keys=True)
         schemas[schema] = schemas.get(schema, 0) + 1
         point_total += int(header['POINTS'])
-    stamps = sorted(int(re.search(r'cloud_(\d+)_(\d+)\.pcd', p.name).group(1)) * 1000000000 +
-                    int(re.search(r'cloud_(\d+)_(\d+)\.pcd', p.name).group(2)) for p in files)
-    result = {'status': 'PCD_EXTRACTION_AND_ZIP_CRC_PASS', 'scan_count': len(files),
-              'point_count': point_total, 'first_ns': stamps[0], 'last_ns': stamps[-1],
+    stamps = []
+    for path in files:
+        match = SCAN_PATTERN.fullmatch('ouster_scan/' + path.name)
+        stamps.append(int(match.group(1)) * 1000000000 + int(match.group(2)))
+    stamps.sort()
+    result = {'status': 'PCD_EXTRACTION_AND_ZIP_CRC_PASS',
+              'pcd_file_count': len(files), 'unique_scan_timestamps': len(set(stamps)),
+              'extra_files_at_duplicate_timestamps': len(files) - len(set(stamps)),
+              'point_count_including_duplicate_files': point_total,
+              'first_ns': stamps[0], 'last_ns': stamps[-1],
               'duration_s': (stamps[-1] - stamps[0]) / 1e9,
               'uncompressed_bytes': total_bytes, 'schemas': schemas,
               'archives': metadata, 'elapsed_s': time.monotonic() - started}

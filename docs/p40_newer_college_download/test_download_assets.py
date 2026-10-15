@@ -75,6 +75,7 @@ class DownloadTests(unittest.TestCase):
         names = set()
         good = zipfile.ZipInfo('ouster_scan/cloud_1583836591_182590976.pcd')
         validate_member(good, names)
+        validate_member(zipfile.ZipInfo('ouster_scan/cloud_1583836591_182590976(1).pcd'), names)
         with self.assertRaisesRegex(RuntimeError, 'Duplicate'):
             validate_member(good, names)
         for name in ['../bad.pcd', '/tmp/bad.pcd', 'ouster_scan/../bad.pcd']:
