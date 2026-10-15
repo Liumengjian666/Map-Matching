@@ -1,0 +1,62 @@
+Panels:
+  - Class: rviz/Displays
+    Name: Displays
+  - Class: rviz/Views
+    Name: Views
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz/PointCloud2
+      Name: Original PCD XYZ - no transforms
+      Enabled: true
+      Value: true
+      Topic: /dog_livo/prior_map
+      Queue Size: 1
+      Position Transformer: XYZ
+      Color Transformer: FlatColor
+      Color: 210; 210; 210
+      Alpha: 0.8
+      Style: Points
+      Size (Pixels): 2
+      Decay Time: 0
+    - Class: rviz/Path
+      Name: Original GT LiDAR poses - no transforms
+      Enabled: true
+      Value: true
+      Topic: /dog_livo/gt_path_full
+      Color: 0; 255; 255
+      Alpha: 1
+      Buffer Length: 1
+      Line Style: Billboards
+      Line Width: 0.5
+      Pose Style: None
+      Queue Size: 1
+    - Class: rviz/Marker
+      Name: GT current LiDAR pose - follows bag clock
+      Enabled: true
+      Value: true
+      Marker Topic: /dog_livo/gt_current_pose
+      Queue Size: 1
+  Enabled: true
+  Global Options:
+    Fixed Frame: corridor01_raw_map
+    Background Color: 35; 35; 35
+    Frame Rate: 30
+  Tools:
+    - Class: rviz/MoveCamera
+    - Class: rviz/Select
+    - Class: rviz/FocusCamera
+    - Class: rviz/Measure
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Distance: 470
+      Focal Point: {X: 85, Y: 85, Z: 0}
+      Pitch: 1.5
+      Yaw: -1.5707963267948966
+      Target Frame: <Fixed Frame>
+Window Geometry:
+  Width: 1450
+  Height: 900
+  X: 80
+  Y: 60

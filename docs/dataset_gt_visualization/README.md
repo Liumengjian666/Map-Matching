@@ -68,6 +68,28 @@ T_map_lidar = inverse(T_gt_map) * T_gt_imu * T_imu_lidar
 检查，均未启用；不能据此宣布官方标定错误或不存在固定变换。
 详见 [本次显示排障结果](corridor01_alignment_report.md)。
 
+### 用户指定的直接对照：原始 PCD + 原始雷达 GT
+
+2026-10-15 按用户定义“GT 为地图系下 LiDAR 位姿”新增独立显示入口：
+
+```bash
+roslaunch dog_prior_map_localization corridor01_map_gt_direct.launch
+```
+
+它使用官方原始 `Corridor01/map/corridor01.pcd`，不是归一化地图；GT 原始 XYZ
+和朝向直接发布。复用 `NATIVE_GT_WORLD` 模式，两个变换均为 Identity；
+不使用 IMU 外参、前缀拟合、官方初值 YAML 或 VIEWPOINT，不发布 TF，不启动定位。
+单独的显示 frame 为 `corridor01_raw_map`，不能直接叠加 `camera_init` 中的算法轨迹。
+与其他地图/GT入口在同一 master 上互斥；本次实际运行于11438，不影响用户11311。
+启动会清理该显示节点的私有旧参数，其他节点和全局参数不清理。
+
+已核对实际ROS消息：地图338210个点的有序XYZ与原PCD逐点完全一致；
+1385个GT位置与原TXT完全一致，朝向仅作单位四元数规范化，旋转矩阵最大元素差
+`1.11e-15`。15项显示测试、5项原launch回归通过。实际RViz仍能看到明显整体
+方向差，**直接叠加未获得全程对齐支持**；同名显示坐标不构成物理标定证明。
+本次不据此判定GT参考点错误、官方文件错误或定位算法失败，也不再尝试其他变换。
+本次证据见 [corridor01_direct_map_display.json](corridor01_direct_map_display.json)。
+
 ## Corridor02：先显示地图和完整真值，再独立运行算法
 
 一个终端即可显示全部静态参考，**不用先播放 bag**：

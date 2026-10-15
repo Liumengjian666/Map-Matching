@@ -1,0 +1,18 @@
+# Display-only test of the user's definition: GT = LiDAR pose in raw PCD frame.
+# Keep the published XYZ unchanged. No prefix fit, IMU extrinsic or VIEWPOINT.
+# This input SHA pins the numeric poses, not their official frame semantics.
+enabled: true
+publish_full_path: true
+alignment_mode: "NATIVE_GT_WORLD"
+frame_id: "corridor01_raw_map"
+reference_point: "USER_DEFINED_LIDAR_POSE_IN_ORIGINAL_PCD_FRAME"
+gt_file: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/gt/corridor01_gt.txt"
+gt_sha256: "3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03"
+path_topic: "/dog_livo/gt_path"
+full_path_topic: "/dog_livo/gt_path_full"
+marker_topic: "/dog_livo/gt_current_pose"
+alignment_contract: "DISPLAY_ONLY_USER_DEFINED_GT_AS_RAW_MAP_LIDAR; IDENTITY_TRANSFORMS; NOT_ESTIMATOR_INPUT"
+alignment_source: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/gt/corridor01_gt.txt"
+alignment_source_sha256: "3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03"
+reference_map_file: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/corridor01.pcd"
+reference_map_sha256: "4b5231d58ebd4aeb4fc293559051dc30a18b6f07376237938d064962bfe8f40a"

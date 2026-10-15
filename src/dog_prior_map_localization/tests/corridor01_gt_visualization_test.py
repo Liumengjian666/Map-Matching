@@ -20,6 +20,36 @@ CONFIG = yaml.safe_load((PACKAGE / 'config/corridor01_gt_visualization.yaml').re
 
 
 class GroundTruthVisualizationTest(unittest.TestCase):
+    def test_direct_map_mode_preserves_all_original_gt_poses(self):
+        config = yaml.safe_load((PACKAGE / 'config/corridor01_gt_direct_map.yaml').read_text())
+        self.assertEqual(config['alignment_mode'], 'NATIVE_GT_WORLD')
+        self.assertNotEqual(config['frame_id'], 'camera_init')
+        self.assertTrue(config['publish_full_path'])
+        self.assertNotIn('T_gt_map', config)
+        self.assertNotIn('T_imu_lidar', config)
+        samples = GT.load_samples(config['gt_file'], config['gt_sha256'], np.eye(4), np.eye(4))
+        raw = np.loadtxt(config['gt_file'])
+        self.assertEqual(len(samples), len(raw))
+        np.testing.assert_array_equal(np.asarray([sample[1] for sample in samples]), raw[:, 1:4])
+        expected_q = raw[:, 4:8] / np.linalg.norm(raw[:, 4:8], axis=1)[:, None]
+        actual_q = np.asarray([sample[2] for sample in samples])
+        np.testing.assert_allclose(np.abs(np.sum(expected_q * actual_q, axis=1)), 1, atol=1e-12)
+
+    def test_direct_map_launch_is_display_only_and_not_normalized_map(self):
+        root = ET.parse(PACKAGE / 'launch/corridor01_map_gt_direct.launch')
+        nodes = root.findall('node')
+        self.assertEqual({node.get('type') for node in nodes},
+                         {'dataset_gt_path_publisher.py', 'pcd_to_pointcloud', 'rviz'})
+        self.assertEqual(root.find("node[@name='corridor01_gt_visualizer']").get('clear_params'), 'true')
+        map_node = root.find("node[@name='corridor01_prior_map']")
+        params = {entry.get('name'): entry.get('value') for entry in map_node.findall('param')}
+        self.assertTrue(params['file_name'].endswith('/Corridor01/map/corridor01.pcd'))
+        self.assertEqual(params['frame_id'], 'corridor01_raw_map')
+        self.assertEqual(params['interval'], '0.0')
+        self.assertEqual(params['use_sim_time'], 'false')
+        view = yaml.safe_load((PACKAGE / 'rviz/corridor01_map_gt_direct.rviz').read_text())
+        self.assertEqual(view['Visualization Manager']['Global Options']['Fixed Frame'], params['frame_id'])
+
     def test_frozen_alignment_and_real_extrinsic_not_refitted(self):
         self.assertIn('WHOLE_SEQUENCE_ALIGNMENT_UNRESOLVED', CONFIG['alignment_contract'])
         source = PACKAGE.parents[1] / CONFIG['alignment_source']

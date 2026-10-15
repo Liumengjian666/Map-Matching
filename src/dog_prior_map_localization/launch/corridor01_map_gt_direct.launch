@@ -1,0 +1,26 @@
+<launch>
+  <!-- Display only: raw PCD XYZ and raw GT, both under the user's map-frame definition. -->
+  <!-- Never run beside the historical GT/map display on the same ROS master. -->
+  <arg name="rviz" default="true" />
+  <arg name="publish_map" default="true" />
+  <node pkg="dog_prior_map_localization" type="dataset_gt_path_publisher.py"
+        name="corridor01_gt_visualizer" output="screen" required="true" clear_params="true">
+    <rosparam command="load" file="$(find dog_prior_map_localization)/config/corridor01_gt_direct_map.yaml" />
+  </node>
+  <node pkg="pcl_ros" type="pcd_to_pointcloud" name="corridor01_prior_map"
+        if="$(arg publish_map)" output="screen" required="true">
+    <param name="file_name" value="/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/corridor01.pcd" />
+    <param name="frame_id" value="corridor01_raw_map" />
+    <param name="interval" value="0.0" />
+    <param name="latch" value="true" />
+    <param name="use_sim_time" value="false" />
+    <remap from="/use_sim_time" to="/corridor01_prior_map/use_sim_time" />
+    <remap from="cloud_pcd" to="/dog_livo/prior_map" />
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+  <node pkg="rviz" type="rviz" name="corridor01_direct_map_rviz" if="$(arg rviz)"
+        args="-d $(find dog_prior_map_localization)/rviz/corridor01_map_gt_direct.rviz -f corridor01_raw_map">
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+    <env name="DISABLE_ROS1_EOL_WARNINGS" value="1" />
+  </node>
+</launch>
