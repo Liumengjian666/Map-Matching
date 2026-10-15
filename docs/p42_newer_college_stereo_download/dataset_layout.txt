@@ -1,0 +1,23 @@
+NewerCollege/
+└── 01_short_experiment/
+    ├── raw_format/
+    │   ├── infra1/                         # 37,480 verified left PNGs; partial time coverage
+    │   ├── infra2/                         # absent; right ZIPs blocked/unattempted
+    │   ├── ouster_scan/                    # existing P40 data, unchanged
+    │   ├── ouster_imu/                     # existing P40 data, unchanged
+    │   └── realsense_imu/                  # existing P40 data, unchanged
+    ├── calibration/                        # existing P40 official calibration, unchanged
+    ├── ground_truth/                       # existing P40 official GT, unchanged
+    ├── prior_map/                          # existing P40 prior map, unchanged
+    ├── time_offsets/                       # existing P40 official camera/LiDAR offsets
+    └── downloads/
+        └── stereo_camera/
+            ├── infra1_01.zip               # verified; local SHA in download_manifest.json
+            ├── infra1_02.zip               # verified; local SHA in download_manifest.json
+            ├── infra1_03.zip               # verified; local SHA in download_manifest.json
+            ├── infra1_04.zip.part*          # Google Drive quota-error HTML preserved, not image data
+            └── infra2_01.zip.part           # Google Drive quota-error HTML preserved, not image data
+
+The original 8-file official archive plan remains in download_plan.json. Only
+the first three infra1 archives passed download validation. `infra1/` contains
+the unmodified PNG payloads from those ZIPs. No right-camera image was extracted.

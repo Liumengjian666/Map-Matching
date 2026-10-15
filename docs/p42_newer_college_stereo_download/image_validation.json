@@ -1,0 +1,172 @@
+{
+  "status": "PARTIAL_LEFT_CAMERA_ARCHIVES_CRC_AND_SAMPLE_DECODE_PASS",
+  "dataset": "Newer College 2020 / 01_short_experiment / stereo camera images",
+  "selected_side": "left/infra1",
+  "download_status": "STOPPED_ERROR",
+  "download_error": "HTML is not a dataset payload: downloads/stereo_camera/infra2_01.zip.part",
+  "archive_count": 3,
+  "archive_summaries": [
+    {
+      "path": "downloads/stereo_camera/infra1_01.zip",
+      "drive_id": "1-ZMksOXFNLcmrqt-yfLp6IMRKfA-IHiz",
+      "compressed_bytes": 2499951400,
+      "sha256": "115e4e94de14098b9c16d70164e47cd58d7bbf79a8e47c598461c15c285c5171",
+      "zip_crc": "PASS",
+      "image_count": 13755,
+      "uncompressed_bytes": 2503388820,
+      "first_image_ns": 1583836591152386717,
+      "last_image_ns": 1583837049880066851
+    },
+    {
+      "path": "downloads/stereo_camera/infra1_02.zip",
+      "drive_id": "1MQ4cRK8ZWehPaa8vjigUr7KPIidqV5Md",
+      "compressed_bytes": 2499872911,
+      "sha256": "c386b8e8c0657f8fe4e1a80dbe2789c7db5511bc36688ad6fea536fc2f0fcc0e",
+      "zip_crc": "PASS",
+      "image_count": 12057,
+      "uncompressed_bytes": 2501234831,
+      "first_image_ns": 1583837049913382180,
+      "last_image_ns": 1583837452001988040
+    },
+    {
+      "path": "downloads/stereo_camera/infra1_03.zip",
+      "drive_id": "1SRq2OSWAHiKSjyePKNRIjXQJxM-bk0-l",
+      "compressed_bytes": 2499737671,
+      "sha256": "4e2aae3f9a0c30a24f4118b0819cbf2594e1272ae8e267b3b92e72338d91e63a",
+      "zip_crc": "PASS",
+      "image_count": 11668,
+      "uncompressed_bytes": 2500663176,
+      "first_image_ns": 1583837452037791451,
+      "last_image_ns": 1583837841149698525
+    }
+  ],
+  "extraction_already_complete_at_validation": true,
+  "left_image_count": 37480,
+  "right_image_count": 0,
+  "stereo_pair_count": 0,
+  "right_stream_missing": true,
+  "first_image_ns": 1583836591152386717,
+  "last_image_ns": 1583837841149698525,
+  "duration_s": 1249.997311808,
+  "median_frame_period_s": 0.03333634,
+  "median_fps": 29.997294244059187,
+  "mean_fps_over_span": 29.98326448061737,
+  "intervals_over_1_5x_median": 0,
+  "duplicate_timestamps": 0,
+  "image_filename_pattern": "infra1_<sec>_<nsec>.png",
+  "decoded_dimensions_width_height_channels": [
+    848,
+    480,
+    1
+  ],
+  "sample_image_decodes": [
+    {
+      "filename": "infra1_1583836591_152386717.png",
+      "timestamp_ns": 1583836591152386717,
+      "width": 848,
+      "height": 480,
+      "channels": 1,
+      "dtype": "uint8",
+      "decode": "PASS"
+    },
+    {
+      "filename": "infra1_1583836820_517995356.png",
+      "timestamp_ns": 1583836820517995356,
+      "width": 848,
+      "height": 480,
+      "channels": 1,
+      "dtype": "uint8",
+      "decode": "PASS"
+    },
+    {
+      "filename": "infra1_1583837049_880066851.png",
+      "timestamp_ns": 1583837049880066851,
+      "width": 848,
+      "height": 480,
+      "channels": 1,
+      "dtype": "uint8",
+      "decode": "PASS"
+    },
+    {
+      "filename": "infra1_1583837049_913382180.png",
+      "timestamp_ns": 1583837049913382180,
+      "width": 848,
+      "height": 480,
+      "channels": 1,
+      "dtype": "uint8",
+      "decode": "PASS"
+    },
+    {
+      "filename": "infra1_1583837250_956733986.png",
+      "timestamp_ns": 1583837250956733986,
+      "width": 848,
+      "height": 480,
+      "channels": 1,
+      "dtype": "uint8",
+      "decode": "PASS"
+    },
+    {
+      "filename": "infra1_1583837452_001988040.png",
+      "timestamp_ns": 1583837452001988040,
+      "width": 848,
+      "height": 480,
+      "channels": 1,
+      "dtype": "uint8",
+      "decode": "PASS"
+    },
+    {
+      "filename": "infra1_1583837452_037791451.png",
+      "timestamp_ns": 1583837452037791451,
+      "width": 848,
+      "height": 480,
+      "channels": 1,
+      "dtype": "uint8",
+      "decode": "PASS"
+    },
+    {
+      "filename": "infra1_1583837646_605523809.png",
+      "timestamp_ns": 1583837646605523809,
+      "width": 848,
+      "height": 480,
+      "channels": 1,
+      "dtype": "uint8",
+      "decode": "PASS"
+    },
+    {
+      "filename": "infra1_1583837841_149698525.png",
+      "timestamp_ns": 1583837841149698525,
+      "width": 848,
+      "height": 480,
+      "channels": 1,
+      "dtype": "uint8",
+      "decode": "PASS"
+    }
+  ],
+  "all_available_zip_crc_pass": true,
+  "uncompressed_bytes": 7505286827,
+  "free_bytes_at_validation_start": 465042407424,
+  "free_bytes_at_validation_end": 465042407424,
+  "lidar_time_range_ns": [
+    1583836591182590976,
+    1583838121156355584
+  ],
+  "raw_camera_lidar_time_overlap": true,
+  "realsense_imu_time_range_ns": [
+    1583836591185165882,
+    1583838121344531536
+  ],
+  "raw_camera_realsense_imu_time_overlap": true,
+  "official_camera_offset_table_range_ns": [
+    1583836606196353024,
+    1583838080450642688
+  ],
+  "camera_frames_with_interpolable_offset": 37029,
+  "offset_formula": "camera_corrected = camera_timestamp - time_offset_nsec",
+  "offset_corrected_camera_range_ns": [
+    1583836606140659118,
+    1583837841073900339
+  ],
+  "offset_corrected_camera_lidar_overlap": true,
+  "offset_not_extrapolated": true,
+  "wall_time_s": 61.15314342000056
+}
