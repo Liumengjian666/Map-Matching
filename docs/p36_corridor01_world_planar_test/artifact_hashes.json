@@ -1,0 +1,97 @@
+{
+  "files": {
+    "docs/p36_corridor01_world_planar_test/input_freeze.json": {
+      "SHA256": "0770b303fdbeb2550fc7be26ae31bf18e7be5e39ee43cb4c2345f3b3153e25f7",
+      "bytes": 14927
+    },
+    "docs/p36_corridor01_world_planar_test/source_parity.csv": {
+      "SHA256": "d104c60abab22ecec3ca1eadb452fa81c2246642d0159f65c922c4f92fdfff98",
+      "bytes": 743
+    },
+    "docs/p36_corridor01_world_planar_test/collect_results.py": {
+      "SHA256": "2e64a3481be8b50589bb81f9972069b4c7495f334c3ef957606d769a61a82167",
+      "bytes": 7140
+    },
+    "docs/p36_corridor01_world_planar_test/nn_comparison.csv": {
+      "SHA256": "7a833bff067d336a402974caae9a7fb42ab3fc6f819ee2e6470ae01a6af82f3e",
+      "bytes": 6010
+    },
+    "docs/p36_corridor01_world_planar_test/test_preparation.py": {
+      "SHA256": "8911f079aa4b9511f4b8ed824a064504656e818c24bcbe3977162ecf1a8915d8",
+      "bytes": 1438
+    },
+    "docs/p36_corridor01_world_planar_test/results.json": {
+      "SHA256": "6f8104552e44d3591dd734e7c03590af3be599fb2cfff841122a42098705e5ed",
+      "bytes": 3115
+    },
+    "docs/p36_corridor01_world_planar_test/REPRODUCE.md": {
+      "SHA256": "db4d51b7d974f77e6ee0e003cf9c39db2a8f077a42b761ebb5fabe25ce840ee8",
+      "bytes": 3006
+    },
+    "docs/p36_corridor01_world_planar_test/projection_evidence.json": {
+      "SHA256": "d4d5c782811ef7d47ca95e4d26c8b01863ba9d15ea8b3dbb01643f82729ce540",
+      "bytes": 15976
+    },
+    "docs/p36_corridor01_world_planar_test/xy_xz_projection.png": {
+      "SHA256": "ea5adc80f7ec7f1cee031945cacb18d288f6b97ed6c630378ea47720e6e4d7a4",
+      "bytes": 201686
+    },
+    "docs/p36_corridor01_world_planar_test/prepare_hypotheses.py": {
+      "SHA256": "782be28a3e2aed4229845e28b0fd10733f4904f30c49b604c8926b7ebc3c0ebc",
+      "bytes": 7729
+    },
+    "docs/p36_corridor01_world_planar_test/verify_archive.py": {
+      "SHA256": "2bab38c626578d4bc9927861cb701eb5f4f7e7ec8fd9413e19461d13cfdcfb66",
+      "bytes": 4496
+    },
+    "docs/p36_corridor01_world_planar_test/REPORT.md": {
+      "SHA256": "11d6cf3512b85713f46a489af21924a5071dd283026cd680c54502499c1d165f",
+      "bytes": 8047
+    },
+    "docs/p36_corridor01_world_planar_test/REVIEW.md": {
+      "SHA256": "d4c2016d2fa83eef87e2dde65b297a4a41db8d89235cefff563f27df610e8920",
+      "bytes": 1837
+    },
+    "docs/p36_corridor01_world_planar_test/PROTOCOL.md": {
+      "SHA256": "82a6dd85cd4c0311704d377f6b23591e05dfdd2d72d148b268917c55de56664b",
+      "bytes": 2662
+    },
+    "docs/p36_corridor01_world_planar_test/runtime_summary.csv": {
+      "SHA256": "390bf11fbd18f371037847a2568f738b893850232d8a15d855356950f3bce70b",
+      "bytes": 186
+    },
+    "docs/p33_corridor01_complete_frame_relation/input_freeze.json": {
+      "SHA256": "053b06e5a7b247d0760e9ebb1483246af59129004c71a53ed7e392717492cdd5",
+      "bytes": 11517
+    },
+    "docs/p33_corridor01_complete_frame_relation/direct_projection.csv": {
+      "SHA256": "bcf51cb80244eade797573f6c2f481180459285e8bd545189b187a7fcd73778d",
+      "bytes": 3023
+    },
+    "docs/p33_corridor01_complete_frame_relation/prepare.py": {
+      "SHA256": "a144739a2e9db5c8a05d100b995a81880bf6840a8b4f35cdb5e9a163ff069550",
+      "bytes": 9307
+    },
+    "docs/corridor01_gt_frame_initialization/geometry_probe.cpp": {
+      "SHA256": "331c6d649852c259f6f11be9409a050e81bba331444b099363e4651accfb5b8d",
+      "bytes": 6571
+    },
+    "src/dog_prior_map_localization/scripts/p23_budgeted_coupled/frozen_ndt_rules.hpp": {
+      "SHA256": "ffdc7c75d308aa3da259bd461822134853fa5ffa4be28a705778a85e73e24e0e",
+      "bytes": 4573
+    },
+    "src/dog_prior_map_localization/scripts/p32_gt_frame/prepare.py": {
+      "SHA256": "bd6ad0f30fab7207074508eb26e10ad9072d37ecbc504fc0ad968972ff967433",
+      "bytes": 6288
+    },
+    "src/dog_prior_map_localization/scripts/p10_corridor01_prospective/pack_causal_slice.py": {
+      "SHA256": "b64cfd2120d05f20167e17b91822a502eb9004f1205c1326a15cabe6bd3e20b1",
+      "bytes": 16862
+    },
+    ".p34_gt_frame.XDwg1L/build/p34_geometry": {
+      "SHA256": "b26b25358a769788979120722e2a1502a61ecccf46a654442b83422d225f4571",
+      "bytes": 187120
+    }
+  },
+  "input_hashes_reference": "input_freeze.json (fresh/inherited flags are authoritative)"
+}
