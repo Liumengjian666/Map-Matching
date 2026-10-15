@@ -29,6 +29,48 @@ def transform(config, rotation_tolerance=1e-9):
     return result
 
 
+def pcd_viewpoint(filename, expected_sha):
+    """Read the PCD acquisition pose, not point data, and pin the display map."""
+    digest = hashlib.sha256()
+    viewpoint = None
+    with Path(filename).open('rb') as stream:
+        for _ in range(64):
+            line = stream.readline(1024)
+            digest.update(line)
+            if not line.endswith(b'\n'):
+                raise ValueError('Invalid PCD header')
+            fields = line.split()
+            if fields and fields[0] == b'VIEWPOINT':
+                if viewpoint is not None or len(fields) != 8:
+                    raise ValueError('Invalid PCD VIEWPOINT')
+                viewpoint = np.asarray([float(value) for value in fields[1:]])
+            if fields and fields[0] == b'DATA':
+                break
+        else:
+            raise ValueError('PCD header budget exceeded')
+        for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+            digest.update(chunk)
+    if digest.hexdigest() != expected_sha:
+        raise ValueError('Reference map SHA256 mismatch')
+    if (viewpoint is None or not np.isfinite(viewpoint).all() or
+            not np.isclose(np.linalg.norm(viewpoint[3:]), 1, atol=1e-5, rtol=0)):
+        raise ValueError('Invalid PCD acquisition pose')
+    # PCD stores qw,qx,qy,qz; ROS transformations use qx,qy,qz,qw.
+    result = quaternion_matrix(viewpoint[[4, 5, 6, 3]])
+    result[:3, 3] = viewpoint[:3]
+    return result
+
+
+def pcd_yaml_alignment(yaml_config, filename, expected_sha):
+    """T_GT_rawXYZ = inverse(T_world_GT) * T_world_rawXYZ.
+
+    Keeps the published PCD XYZ unchanged. No fitted transform, fake TF or
+    change to the GT sensor reference point is introduced.
+    """
+    t_world_gt = transform(yaml_config, rotation_tolerance=1e-5)
+    return np.linalg.inv(t_world_gt) @ pcd_viewpoint(filename, expected_sha)
+
+
 def load_samples(filename, expected_sha, t_gt_map, t_imu_lidar):
     payload = Path(filename).read_bytes()
     if hashlib.sha256(payload).hexdigest() != expected_sha:
@@ -114,6 +156,11 @@ class GroundTruthPublisher:
             # orthogonalized. load_samples takes the actual 4x4 inverse.
             alignment = transform(rospy.get_param('~T_gt_map'), rotation_tolerance=1e-5)
             extrinsic = np.eye(4)
+        elif mode == 'PCD_VIEWPOINT_YAML_WORLD_FROM_GT':
+            alignment = pcd_yaml_alignment(rospy.get_param('~T_world_gt'),
+                                          rospy.get_param('~reference_map_file'),
+                                          rospy.get_param('~reference_map_sha256'))
+            extrinsic = np.eye(4)
         else:
             raise ValueError('Unsupported GT display alignment mode')
         self.samples = load_samples(rospy.get_param('~gt_file'), rospy.get_param('~gt_sha256'),
@@ -143,6 +190,8 @@ class GroundTruthPublisher:
             'alignment_source': rospy.get_param('~alignment_source'),
             'alignment_source_sha256': rospy.get_param('~alignment_source_sha256'),
             'alignment_mode': mode, 'T_gt_map': alignment.tolist(),
+            'T_map_gt': np.linalg.inv(alignment).tolist(),
+            'reference_map_sha256': rospy.get_param('~reference_map_sha256', ''),
             'reference_point': rospy.get_param('~reference_point'),
             'samples': len(self.samples), 'first_ns': self.samples[0][0],
             'last_ns': self.samples[-1][0], 'no_tf_or_estimator_output': True})))

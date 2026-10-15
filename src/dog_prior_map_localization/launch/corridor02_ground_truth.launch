@@ -9,6 +9,7 @@
         name="corridor02_gt_visualizer" output="screen">
     <rosparam command="load" file="$(find dog_prior_map_localization)/config/corridor02_gt_visualization.yaml" />
     <param name="frame_id" value="$(arg map_frame)" />
+    <param name="reference_map_file" value="$(arg map_path)" />
     <param name="enabled" value="$(arg enabled_override)" if="$(eval arg('enabled_override') != '')" />
   </node>
   <node pkg="pcl_ros" type="pcd_to_pointcloud" name="corridor02_prior_map"

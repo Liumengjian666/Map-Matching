@@ -76,7 +76,7 @@ class GroundTruthVisualizationTest(unittest.TestCase):
     def test_corridor02_inverse_active_yaml_not_identity_or_transpose(self):
         config = yaml.safe_load((PACKAGE / 'config/corridor02_gt_visualization.yaml').read_text())
         self.assertTrue(config['enabled'])
-        self.assertEqual(config['alignment_mode'], 'YAML_GT_FROM_MAP')
+        self.assertEqual(config['alignment_mode'], 'PCD_VIEWPOINT_YAML_WORLD_FROM_GT')
         self.assertTrue(config['publish_full_path'])
         self.assertEqual(config['frame_id'], 'map')
         source = Path(config['alignment_source'])
@@ -88,7 +88,7 @@ class GroundTruthVisualizationTest(unittest.TestCase):
         OpenCvLoader.add_constructor('tag:yaml.org,2002:opencv-matrix',
                                      lambda loader, node: loader.construct_mapping(node, deep=True))
         active = yaml.load('\n'.join(source.read_text().splitlines()[1:]), Loader=OpenCvLoader)
-        matrix = GT.transform(config['T_gt_map'], rotation_tolerance=1e-5)
+        matrix = GT.transform(config['T_world_gt'], rotation_tolerance=1e-5)
         np.testing.assert_array_equal(matrix[:3, :3].ravel(),
                                       active['extrinsicRotation_world_darpa']['data'])
         np.testing.assert_array_equal(matrix[:3, 3], active['extrinsicTranslation_world_darpa']['data'])
@@ -100,6 +100,41 @@ class GroundTruthVisualizationTest(unittest.TestCase):
         expected = np.linalg.solve(matrix[:3, :3], (raw[:, 1:4] - matrix[:3, 3]).T).T
         np.testing.assert_allclose([sample[1] for sample in samples], expected, atol=1e-12, rtol=0)
         np.testing.assert_allclose([np.linalg.norm(sample[2]) for sample in samples], 1, atol=1e-12)
+
+    def test_corridor02_pcd_origin_and_forward_yaml_all_real_samples(self):
+        config = yaml.safe_load((PACKAGE / 'config/corridor02_gt_visualization.yaml').read_text())
+        alignment = GT.pcd_yaml_alignment(config['T_world_gt'], config['reference_map_file'],
+                                          config['reference_map_sha256'])
+        samples = GT.load_samples(config['gt_file'], config['gt_sha256'], alignment, np.eye(4))
+        matrix = GT.transform(config['T_world_gt'], rotation_tolerance=1e-5)
+        raw = np.loadtxt(config['gt_file'])
+        expected = raw[:, 1:4] @ matrix[:3, :3].T + matrix[:3, 3] - [-137.59, -375.75, 0]
+        np.testing.assert_allclose([sample[1] for sample in samples], expected, atol=1e-12, rtol=0)
+        np.testing.assert_allclose(samples[0][1], [177.519523, 199.532852, -5.225427], atol=1e-9)
+
+    def test_pcd_viewpoint_rotation_order_hash_and_invalid_header(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'map.pcd'
+            # 180deg around X, with nonzero translation: order cannot commute.
+            payload = b'VERSION 0.7\nVIEWPOINT 2 3 4 0 1 0 0\nDATA ascii\n1 2 3\n'
+            path.write_bytes(payload)
+            digest = hashlib.sha256(payload).hexdigest()
+            yaml_pose = dict(rotation_row_major=[0, -1, 0, 1, 0, 0, 0, 0, 1],
+                             translation_m=[5, 6, 7])
+            alignment = GT.pcd_yaml_alignment(yaml_pose, path, digest)
+            v = np.diag([1., -1., -1., 1.]); v[:3, 3] = [2, 3, 4]
+            np.testing.assert_allclose(np.linalg.inv(alignment),
+                                       np.linalg.inv(v) @ GT.transform(yaml_pose), atol=1e-12)
+            with self.assertRaises(ValueError):
+                GT.pcd_viewpoint(path, 'wrong_hash')
+            for header in (b'VERSION 0.7\nDATA ascii\n',
+                           b'VIEWPOINT nan 0 0 1 0 0 0\nDATA ascii\n',
+                           b'VIEWPOINT 0 0 0 0 0 0 0\nDATA ascii\n',
+                           b'VIEWPOINT 0 0 0 1 0 0 0\nVIEWPOINT 0 0 0 1 0 0 0\nDATA ascii\n',
+                           b'x' * 1024):
+                path.write_bytes(header)
+                with self.assertRaises(ValueError):
+                    GT.pcd_viewpoint(path, hashlib.sha256(header).hexdigest())
 
     def test_full_reference_is_complete_timeless_and_independent_of_rewind_path(self):
         samples = [(1000000000, [1, 2, 3], [0, 0, 0, 1]),

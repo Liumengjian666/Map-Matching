@@ -1,7 +1,8 @@
-# Display hypothesis requested by user: p_GT = R_yaml * p_map + t_yaml.
-# Thus p_map = inverse(R_yaml) * (p_GT - t_yaml). Never an estimator input.
+# Restore the PCD acquisition pose before interpreting its raw XYZ coordinates.
+# T_rawXYZ_GT = inverse(T_world_rawXYZ_VIEWPOINT) * T_world_GT_YAML.
+# Source-supported display composition, not a non-GT localization initializer.
 enabled: true
-alignment_mode: "YAML_GT_FROM_MAP"
+alignment_mode: "PCD_VIEWPOINT_YAML_WORLD_FROM_GT"
 publish_full_path: true
 full_path_topic: "/dog_livo/gt_path_full"
 gt_file: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/gt/corridor02_gt.txt"
@@ -10,10 +11,12 @@ frame_id: "map"
 path_topic: "/dog_livo/gt_path"
 marker_topic: "/dog_livo/gt_current_pose"
 reference_point: "GT_AS_PUBLISHED_SENSOR_ORIGIN_UNCERTIFIED"
-alignment_contract: "DISPLAY_ONLY_INVERSE_ACTIVE_YAML_HYPOTHESIS; NOT_CERTIFIED_ALIGNMENT"
+alignment_contract: "DISPLAY_ONLY_PCD_VIEWPOINT_AND_FORWARD_YAML; GEOMETRICALLY_SUPPORTED; GT_SENSOR_ORIGIN_UNCERTIFIED"
 alignment_source: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/initial_pose/corridor02.yaml"
 alignment_source_sha256: "fc319ad99737a717456e11eb70383d4848eadf7e46587fee0643d6732cf1c3a1"
-T_gt_map:
+reference_map_file: "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/map/corridor02.pcd"
+reference_map_sha256: "6c39e243556eddbef7a8b4bd2de25cf7c962c4ff0f52c94cfc1d994f178ae228"
+T_world_gt:
   rotation_row_major: [0.823800, -0.566853, -0.005503,
                        0.565879, 0.822884, -0.051418,
                        0.033675, 0.039243, 0.998662]

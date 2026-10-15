@@ -83,7 +83,53 @@ roslaunch dog_prior_map_localization corridor02_ground_truth.launch
 所有显示使用 `map`。算法必须实际输出同一地图坐标系下的轨迹；仅把别的坐标
 轨迹改名为 `map` 不成立。本入口**不启动定位器，不提供初始化，不创建 TF**。
 
-### 本次只试用户指定的逆变换
+### 联网核查后的显示修复：PCD VIEWPOINT 与正向 YAML
+
+此前逆变换假设已被下面的来源支持组合替代。关键遗漏是 PCD 文件头：
+
+```text
+VIEWPOINT -137.59 -375.75 -0 1 0 0 0
+```
+
+[PCL 格式说明](https://pointclouds.org/documentation/tutorials/pcd_file_format.html)
+定义这是 acquisition viewpoint，不能无条件把任何 PCD 的该字段当成地图平移。
+但 [CloudCompare 2.12.4 PcdFilter.cpp](https://github.com/CloudCompare/CloudCompare/blob/v2.12.4/plugins/core/Standard/qPCL/PclIO/src/PcdFilter.cpp#L305-L307)
+会将此位姿应用到读入点，而 [ROS pcd_to_pointcloud](https://github.com/ros-perception/perception_pcl/blob/melodic-devel/pcl_ros/tools/pcd_to_pointcloud.cpp#L116-L127)
+仅加载原始 XYZ 并设置 frame_id，不执行这一步。
+因此软件间可以出现数百米的原点差异；这不是 R/t 文件错误的证据。
+
+本次保留 `/dog_livo/prior_map` 原始 XYZ，不改 PCD，不加 TF；只转换显示 GT：
+
+```text
+V = T_world_rawXYZ = PCD VIEWPOINT
+Y = T_world_GT = 官方生效 YAML 的 R/t（数据一致性支持的解释）
+T_rawXYZ_GT = inverse(V) * Y
+p_rawXYZ = R_yaml * p_GT + t_yaml - [-137.59,-375.75,0]
+```
+
+当前 VIEWPOINT 旋转为单位矩阵，GT 起点变为
+`[177.519523,199.532852,-5.225427]m`，整条轨迹进入地图范围。
+源码同时支持非单位 VIEWPOINT 旋转，按完整矩阵顺序组合，不硬编码该平移。
+地图 SHA256 固定并在运行时验证；换地图会拒绝，而不是静默使用旧偏移。
+
+使用 P32-R5 原先冻结的 5 帧真实 raw 扫描与合法 GT 插值，只进行该一个组合的
+全分辨率 NN 诊断：median `0.1151–0.1167m`、P90 `0.2070–0.2434m`，
+0.5m覆盖率 `96.714–96.922%`；没有 ICP、NDT、SE(3)拟合或参数搜索。
+它与旧 P32-R5 的 0.2m 体素目标不同，不能当作同一目标的精确数值消融。
+复现：source ROS 与本工作区 devel 后运行
+`OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python3 docs/dataset_gt_visualization/check_pcd_viewpoint.py`。
+
+这是**GT辅助坐标诊断与显示修复**，不是定位精度实验，也不是非GT初始化。
+官方网页只将 YAML 称为初始化配置，未给出完整 frame 语义说明；这里没有证明
+地图导出历史、GT=IMU 或其时间参考。旧P32结果不覆盖，也不再用缺少VIEWPOINT的
+诊断否定官方文件。定位启动适配应由科研总控另行决定。
+
+验证：13项GT显示定向测试、5项Corridor01 launch回归通过。独立master上
+`use_sim_time=true`、无bag/clock时，5,223,422点地图与5,522点完整GT均可晚订阅。
+全体GT显示XYZ符合上述组合（1e-12m容差）；GT节点未发布TF或估计器输入。
+真实RViz窗口已检查地图和青色完整路径。证据见 `pcd_viewpoint_fix.json`。
+
+### 历史尝试：用户指定的逆变换（已替代，保留负结果）
 
 用户于 2026-10-15 指定假设：
 
@@ -127,12 +173,12 @@ GT 仍是原 TXT 表，不在新传感器 bag 中；bag 只提供传感器数据
 本机 RViz 1.14.26 会先显示 ROS 1 生命周期模态提示，挡住正常显示。
 Corridor02 launch 已对 RViz 单进程设置 `DISABLE_ROS1_EOL_WARNINGS=1`，
 不修改系统环境或定位参数。保留明确标记为“非先验地图”的显示网格。
-默认整体视角覆盖地图和本次逆变换路径；可用鼠标滚轮缩放。
+默认整体视角覆盖地图和路径；可用鼠标滚轮缩放。
 
 地图复用 `pcl_ros/pcd_to_pointcloud`，只加载一份显示消息、单次发布并 latch。
 其 `/use_sim_time` 查询局部 remap 到自身 false 参数，不改 Master 的全局设置，
 因此全局仿真时间 true 且无 `/clock` 时仍能发布静态地图。GT 完整参考的
-Path 头时间为零，逐点原始 GT 时间保留。PCD VIEWPOINT 不作为附加变换。
+Path 头时间为零，逐点原始 GT 时间保留。PCD原始XYZ不变，VIEWPOINT在新的GT显示组合中处理。
 
 此前时钟增长路径的排障发现：**本序列前约 73 秒基本静止**。
 GT 起点后的前 30 秒最大位移
@@ -161,7 +207,7 @@ rostopic echo -n 1 /dog_livo/gt_current_pose/pose/position
 `[-0.007431, 0.003064, 0.005609]`。关闭提示后实际窗口确认可见青色箭头。
 这是显示排障，不是定位回放；不发布 TF、不将 GT 注入估计器。
 
-新静态模式在独立 Master 11441、全局 `/use_sim_time=true`、零 `/clock` 发布者
+历史逆变换静态模式曾在独立 Master 11441、全局 `/use_sim_time=true`、零 `/clock` 发布者
 下验证：地图 5,223,422 点、完整 Path 5,522 点均 latch 可晚订阅，两个 frame
 均为 `map`；全部显示 XYZ 等于 `solve(R,p_GT-t)`，误差容差 1e-12m。
 RViz 同时订阅地图、完整 GT 和算法 Path，真实窗口确认可见地图与整条青色路径。
