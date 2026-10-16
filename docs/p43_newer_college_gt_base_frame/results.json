@@ -1,0 +1,85 @@
+{
+  "task": "P43-NEWER-COLLEGE-GT-BASE-FRAME-CLOSURE",
+  "result": "BASE_FRAME_GEOMETRICALLY_SUPPORTED",
+  "official_semantics": "OFFICIAL_PAPER_AND_URDF_SUPPORT_BASE; CURRENT_GT_PAGE_LABELS_RS_C1; CSV_EXPORTER_NOT_FOUND_IN_SCOPED_REVIEW",
+  "scope": {
+    "fixed_frames": 3,
+    "hypotheses": ["A_GT_T_M_C_optical", "B_GT_T_M_B_base"],
+    "ICP_calls": 0,
+    "new_NDT_align_calls": 0,
+    "full_sequence_localization": 0,
+    "parameter_tuning": 0,
+    "raw_data_or_calibration_modified": false,
+    "P41_historical_NDT_rerun": false
+  },
+  "git": {
+    "branch": "research/p9-r4-heldout-visual-evidence",
+    "start_sha": "47c7da5d8c5c4f90513160423c8efd8d9041dfd6",
+    "push_executed": false
+  },
+  "dataset": {
+    "sequence": "Newer College 2020 / 01_short_experiment",
+    "map_original_points": 10277007,
+    "map_target_points": 3142751,
+    "source_raw_points_each": 65536,
+    "source_processed_points_each": 1400,
+    "source_preprocess": "finite XYZ; radial range [0.5,80]m; z unbounded; 0.25m PCL VoxelGrid; deterministic uniform cap 1400",
+    "target_preprocess": "P41 map voxel 0.15m followed by target voxel 0.15m; no target cap",
+    "GT_timestamp_matching": "exact nanosecond row for all selected scans; no interpolation",
+    "GT_quaternion_order": "qx,qy,qz,qw",
+    "input_manifest": "input_manifest.json"
+  },
+  "frames": [
+    {
+      "role": "P41_EXISTING_FIRST",
+      "scan_file": "cloud_1583836591_182590976.pcd",
+      "scan_ns": "1583836591182590976",
+      "relative_sec": 0.0,
+      "A_optical": {"nn_median_m": 19.107738009912861, "nn_p90_m": 41.083160173052505, "overlap_0p5m": 0.027142857142857142, "overlap_2m": 0.13071428571428573, "overlap_8m": 0.265, "lidar_z_tilt_deg": 88.89865317299703},
+      "B_base": {"nn_median_m": 0.17834181264263191, "nn_p90_m": 0.45475657813361736, "overlap_0p5m": 0.9128571428571428, "overlap_2m": 0.9992857142857143, "overlap_8m": 1.0, "lidar_z_tilt_deg": 2.035232354100664}
+    },
+    {
+      "role": "NEAREST_T0_PLUS_100S",
+      "scan_file": "cloud_1583836691_180687360.pcd",
+      "scan_ns": "1583836691180687360",
+      "relative_sec": 99.998096384,
+      "A_optical": {"nn_median_m": 8.669098390648147, "nn_p90_m": 23.233489706570396, "overlap_0p5m": 0.029285714285714286, "overlap_2m": 0.11928571428571429, "overlap_8m": 0.4707142857142857, "lidar_z_tilt_deg": 87.70851701166657},
+      "B_base": {"nn_median_m": 0.19187671879610499, "nn_p90_m": 0.42134307953621974, "overlap_0p5m": 0.9392857142857143, "overlap_2m": 0.9771428571428571, "overlap_8m": 0.9992857142857143, "lidar_z_tilt_deg": 2.039978399126242}
+    },
+    {
+      "role": "NEAREST_T0_PLUS_150S",
+      "scan_file": "cloud_1583836741_180127744.pcd",
+      "scan_ns": "1583836741180127744",
+      "relative_sec": 149.997536768,
+      "A_optical": {"nn_median_m": 8.39234790126687, "nn_p90_m": 29.433234746068727, "overlap_0p5m": 0.022857142857142857, "overlap_2m": 0.1392857142857143, "overlap_8m": 0.4835714285714286, "lidar_z_tilt_deg": 88.77866134638023},
+      "B_base": {"nn_median_m": 0.12204852863491064, "nn_p90_m": 0.40358487150828726, "overlap_0p5m": 0.9235714285714286, "overlap_2m": 0.9828571428571429, "overlap_8m": 1.0, "lidar_z_tilt_deg": 1.4253003656161376}
+    }
+  ],
+  "p41_archive_rechecked_without_rerun": {
+    "A_optical": {"nn_median_m": 19.29838525213557, "nn_p90_m": 40.77513274282884, "overlap_0p5m": 0.027142857142857142, "ndt_align_calls": 0},
+    "B_base": {"nn_median_m": 0.17877286869760933, "nn_p90_m": 0.44544684742604002, "overlap_0p5m": 0.925, "ndt_align_calls": 1, "ndt_converged": true, "iterations": 7, "fitness": 0.020694635776231474, "align_ms": 752.553341}
+  },
+  "aggregate_mean": {
+    "A_optical": {"nn_median_m": 12.056394767275961, "nn_p90_m": 31.24996154189721, "overlap_0p5m": 0.026428571428571426},
+    "B_base": {"nn_median_m": 0.16408902002454917, "nn_p90_m": 0.4265615097260415, "overlap_0p5m": 0.9252380952380953}
+  },
+  "runtime": {
+    "pcl_probe_wall_sec": 2.26,
+    "pcl_probe_max_rss_kb": 744256,
+    "pcl_probe_binary_sha256": "b7f5f9cdb10b05dfec809d0956c85199f683a7f57d9b6ec0e152b14a28d8eb48",
+    "MVS_LD_LIBRARY_PATH_workaround": "unset LD_LIBRARY_PATH for this temporary process only; no system library changes"
+  },
+  "artifact_sha256": {
+    "pcl_geometry_probe.cpp": "8160a65c04b980019c31821446fa52b57e14dae1b5109bf29d962ac52f6e996e",
+    "prepare_geometry_inputs.py": "30ebb0085ed6821c73ee9263915edc5b99ab55db08cd39e9e0ef6b6a78810d93",
+    "render_geometry_projection.py": "28f22258103e56ebb5738852b03fd4756ce1374cd18612672a454b90a4f634c9",
+    "three_frame_geometry.csv": "ea503f4976f42c8fc882ca79359aef52b58d92c1447aaaa99b506da3ecf80867",
+    "input_manifest.json": "9c3a3c59d99779e329dd8986a1cd36d8458f987ba613b2702d3b7b90c2347b6a",
+    "geometry_projection.png": "4b06cce72087fa01bafc3f045915124a9d550b4a4ee84257843ffb6b605c8ae4"
+  },
+  "limits": [
+    "Geometric correspondence supports but does not by itself authenticate CSV exporter axis semantics.",
+    "No full-sequence localization, accuracy metric, or deployment claim.",
+    "Official GT page terminology and paper/official URDF Base-frame wording are not perfectly aligned."
+  ]
+}
