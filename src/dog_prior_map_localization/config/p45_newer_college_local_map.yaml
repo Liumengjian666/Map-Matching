@@ -1,0 +1,19 @@
+# P45 map-manager overlay. All NDT, Deskew, EKF, OOSM and initialization
+# parameters remain loaded from the frozen P41/P44 configuration.
+map:
+  pcd_fallback_path: ""
+  tile_manifest_path: "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_manifest.json"
+  # Each predicted, preprocessed Source point is expanded by 10 m in XY.
+  # This covers the frozen 0.5 m translation step, 5 deg rotation at 80 m
+  # range (6.98 m), plus two 0.8 m NDT cells, rounded upward.
+  local_safety_margin_m: 10.0
+  # Rebuild with an extra tile of 20 m cache padding; reuse while the required
+  # 10 m footprint remains inside the active set.
+  local_hysteresis_margin_m: 30.0
+
+output:
+  local_map_diagnostics_csv_path: ""
+  publish_local_target: false
+
+topics:
+  local_target: "/newer_college/local_ndt_target"

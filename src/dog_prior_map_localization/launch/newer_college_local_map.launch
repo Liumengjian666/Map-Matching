@@ -1,0 +1,110 @@
+<launch>
+  <arg name="dataset_root" default="/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment" />
+  <arg name="scan_directory" default="$(arg dataset_root)/raw_format/ouster_scan" />
+  <arg name="imu_csv" default="$(arg dataset_root)/raw_format/ouster_imu/data.csv" />
+  <arg name="map_visualization_pcd" default="/media/jian/HIKVISION/paper rosbag/NewerCollege/.p41_first_ndt/prior_map_xyz_binary.pcd" />
+  <arg name="tile_manifest" default="/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_manifest.json" />
+  <arg name="runtime_config" default="$(find dog_prior_map_localization)/config/p41_newer_college_runtime.yaml" />
+  <arg name="initialization_config" default="$(find dog_prior_map_localization)/config/p44_newer_college_base_oracle_start.yaml" />
+  <arg name="map_overlay" default="$(find dog_prior_map_localization)/config/p45_newer_college_local_map.yaml" />
+  <arg name="scan_count" default="300" />
+  <arg name="start_stamp_ns" default="1583836591182590976" />
+  <arg name="output_dir" default="/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/run" />
+  <arg name="scan_ack_timeout_sec" default="120.0" />
+  <arg name="rviz" default="false" />
+
+  <param name="use_sim_time" value="false" />
+  <include file="$(find dog_prior_map_localization)/launch/dog_prior_map_localization_split.launch">
+    <arg name="config" value="$(find dog_prior_map_localization)/config/dog_prior_map_localization_ndt.yaml" />
+    <arg name="dataset_config" value="$(arg runtime_config)" />
+    <arg name="rviz" value="false" />
+    <arg name="coupled_mode" value="CONTROL" />
+    <arg name="camera_enable" value="false" />
+    <arg name="visual_initial_guess_enable" value="false" />
+    <arg name="publish_path" value="true" />
+    <arg name="scan_reference_time" value="start" />
+    <arg name="oosm_enable" value="true" />
+    <arg name="oosm_max_alignment_sec" value="0.02" />
+    <arg name="oosm_fixed_lag_enable" value="false" />
+    <arg name="future_deferral_enable" value="false" />
+    <arg name="diagnostic_determinism_enable" value="true" />
+    <arg name="ndt_determinism_csv_path" value="$(arg output_dir)/ndt_diagnostics.csv" />
+    <arg name="ndt_diagnostics_csv_path" value="$(arg output_dir)/ndt_callback_diagnostics.csv" />
+    <arg name="runtime_csv_path" value="$(arg output_dir)/ndt_runtime.csv" />
+    <arg name="oosm_csv_path" value="$(arg output_dir)/oosm_statistics.csv" />
+    <arg name="imu_deskew_csv_path" value="$(arg output_dir)/deskew_diagnostics.csv" />
+    <arg name="ekf_prediction_diagnostics_csv_path" value="$(arg output_dir)/ekf_prediction_diagnostics.csv" />
+    <arg name="output_directory" value="$(arg output_dir)" />
+    <arg name="output_directory_launch_prefix"
+         value="rosrun dog_prior_map_localization ensure_output_dir_exec.py" />
+  </include>
+
+  <rosparam command="load" file="$(arg initialization_config)" />
+  <rosparam command="load" file="$(arg map_overlay)" />
+  <param name="map/tile_manifest_path" value="$(arg tile_manifest)" />
+  <param name="map/pcd_fallback_path" value="" />
+  <param name="frames/map_frame" value="newer_college_map" />
+  <param name="frames/base_frame" value="os1_lidar" />
+  <param name="topics/imu" value="/newer_college/imu" />
+  <param name="topics/lidar" value="/newer_college/deskewed_points" />
+  <param name="topics/lidar_msg_type" value="pointcloud2" />
+  <param name="topics/points_aligned" value="/newer_college/points_aligned" />
+  <param name="topics/local_target" value="/newer_college/local_ndt_target" />
+  <param name="deskew/input_topic" value="/newer_college/raw_points" />
+  <param name="deskew/output_topic" value="/newer_college/deskewed_points" />
+  <param name="output/publish_local_target" value="$(arg rviz)" />
+  <param name="output/geometry_diagnostics_csv_path" value="$(arg output_dir)/geometry_diagnostics.csv" />
+  <param name="output/local_map_diagnostics_csv_path" value="$(arg output_dir)/local_map_diagnostics.csv" />
+  <param name="output/imu_watermark_topic" value="/newer_college/ndt_imu_watermark" />
+  <param name="p41/geometry_gate_enable" value="true" />
+  <param name="p41/geometry_gate_max_median_m" value="1.0" />
+  <param name="p41/geometry_gate_max_p90_m" value="3.0" />
+  <param name="p41/geometry_gate_min_overlap_05" value="0.50" />
+  <param name="mature_integration/enable" value="false" />
+  <param name="mature_visual/enable" value="false" />
+  <param name="visual_initial_guess_enable" value="false" />
+  <param name="coupled_mode" value="CONTROL" />
+
+  <!-- Visualization-only full map; the NDT node above receives tiles only. -->
+  <node pkg="pcl_ros" type="pcd_to_pointcloud" name="newer_college_prior_map_visualization"
+        output="screen" required="true" if="$(arg rviz)">
+    <param name="file_name" value="$(arg map_visualization_pcd)" />
+    <param name="frame_id" value="newer_college_map" />
+    <param name="interval" value="0.0" />
+    <param name="latch" value="true" />
+    <remap from="cloud_pcd" to="/newer_college/prior_map" />
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+
+  <node pkg="dog_prior_map_localization" type="newer_college_sequence_publisher"
+        name="newer_college_local_map_input" output="screen"
+        launch-prefix="rosrun dog_prior_map_localization ensure_output_dir_exec.py"
+        required="$(eval arg('rviz') == 'false')">
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+    <env name="P45_OUTPUT_DIRECTORY" value="$(arg output_dir)" />
+    <param name="scan_directory" value="$(arg scan_directory)" />
+    <param name="imu_csv" value="$(arg imu_csv)" />
+    <param name="lidar_frame" value="os1_lidar" />
+    <param name="imu_frame" value="os1_imu" />
+    <param name="cloud_topic" value="/newer_college/raw_points" />
+    <param name="imu_topic" value="/newer_college/imu" />
+    <param name="scan_count" value="$(arg scan_count)" type="int" />
+    <param name="start_stamp_ns" value="$(arg start_stamp_ns)" type="str" />
+    <param name="expected_boundary_imu_stamp_ns" value="1583836591178606952" type="str" />
+    <param name="diagnostics_topic" value="/dog_livo/diagnostics" />
+    <param name="ndt_odom_topic" value="/dog_livo/ndt_odom" />
+    <param name="ekf_high_rate_topic" value="/dog_livo/odom_high_rate" />
+    <param name="ekf_corrected_topic" value="/dog_livo/odom_corrected" />
+    <param name="ndt_imu_watermark_topic" value="/newer_college/ndt_imu_watermark" />
+    <param name="receipt_csv_path" value="$(arg output_dir)/publisher_receipts.csv" />
+    <param name="trajectory_csv_path" value="$(arg output_dir)/localization_trajectory.csv" />
+    <param name="readiness_timeout_sec" value="180.0" type="double" />
+    <param name="scan_ack_timeout_sec" value="$(arg scan_ack_timeout_sec)" type="double" />
+  </node>
+
+  <node pkg="rviz" type="rviz" name="newer_college_local_map_rviz"
+        args="-d $(find dog_prior_map_localization)/rviz/p45_newer_college_local_map.rviz"
+        if="$(arg rviz)" output="screen">
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+</launch>

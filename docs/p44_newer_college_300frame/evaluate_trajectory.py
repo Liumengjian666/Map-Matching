@@ -116,15 +116,16 @@ def compute_source_metrics(est, gt, scan_start_ns, scan_end_ns):
         err_stamps.append(int(stamp))
 
     # Fixed one-second relative-pose intervals; no trajectory re-alignment.
-    t0_ns = int(e_stamps[0])
+    interval_start_ns = int(e_stamps[0])
     t_end_ns = min(int(e_stamps[-1]), int(scan_end_ns))
     rpe_t, rpe_r, rpe_pairs = [], [], 0
-    target_ns = t0_ns + 1_000_000_000
-    while target_ns <= t_end_ns:
-        p_e0, r_e0 = pose_at(t0_ns, e_stamps, e_pos, e_rot)
-        p_e1, r_e1 = pose_at(target_ns, e_stamps, e_pos, e_rot)
-        p_g0, r_g0 = pose_at(t0_ns, g_stamps, g_pos, g_rot)
-        p_g1, r_g1 = pose_at(target_ns, g_stamps, g_pos, g_rot)
+    interval_duration_ns = 1_000_000_000
+    while interval_start_ns + interval_duration_ns <= t_end_ns:
+        interval_end_ns = interval_start_ns + interval_duration_ns
+        p_e0, r_e0 = pose_at(interval_start_ns, e_stamps, e_pos, e_rot)
+        p_e1, r_e1 = pose_at(interval_end_ns, e_stamps, e_pos, e_rot)
+        p_g0, r_g0 = pose_at(interval_start_ns, g_stamps, g_pos, g_rot)
+        p_g1, r_g1 = pose_at(interval_end_ns, g_stamps, g_pos, g_rot)
         de_p = r_e0.inv().apply(p_e1 - p_e0)
         dg_p = r_g0.inv().apply(p_g1 - p_g0)
         de_r = r_e0.inv() * r_e1
@@ -132,7 +133,7 @@ def compute_source_metrics(est, gt, scan_start_ns, scan_end_ns):
         rpe_t.append(float(np.linalg.norm(de_p - dg_p)))
         rpe_r.append(float((dg_r.inv() * de_r).magnitude() * 180.0 / math.pi))
         rpe_pairs += 1
-        target_ns += 1_000_000_000
+        interval_start_ns += interval_duration_ns
 
     jumps = np.linalg.norm(np.diff(e_pos, axis=0), axis=1) if len(e_pos) > 1 else np.array([])
     jump_index = int(np.argmax(jumps)) if len(jumps) else -1
@@ -174,13 +175,15 @@ def main():
     parser.add_argument("--receipts", required=True)
     parser.add_argument("--gt", required=True)
     parser.add_argument("--manifest", default="docs/p43_newer_college_gt_base_frame/input_manifest.json")
+    parser.add_argument("--frozen-hashes", help="checksum manifest for the already-frozen trajectory and receipts")
     parser.add_argument("--outdir", required=True)
     args = parser.parse_args()
     outdir = Path(args.outdir)
     outdir.mkdir(parents=True, exist_ok=True)
 
     # Require that the runtime output already has a frozen checksum receipt.
-    frozen = Path(args.trajectory).parent / "results_frozen.sha256"
+    frozen = (Path(args.frozen_hashes) if args.frozen_hashes else
+              Path(args.trajectory).parent / "results_frozen.sha256")
     if not frozen.is_file():
         raise RuntimeError("refusing GT evaluation before runtime output hashes are frozen")
     frozen_hashes = {}

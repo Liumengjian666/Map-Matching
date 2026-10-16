@@ -50,6 +50,8 @@
   <arg name="visual_assisted_enter_frames" default="3" />
   <arg name="both_degraded_enter_frames" default="3" />
   <arg name="recovery_exit_frames" default="5" />
+  <arg name="output_directory" default="" />
+  <arg name="output_directory_launch_prefix" default="" />
   <rosparam command="load" file="$(arg config)" />
   <rosparam command="load" file="$(arg dataset_config)"
             if="$(eval arg('dataset_config') != '')" />
@@ -118,7 +120,9 @@
   <node pkg="dog_prior_map_localization"
         type="dog_prior_map_ndt_node_cpp"
         name="dog_prior_map_ndt"
-        output="screen">
+        output="screen"
+        launch-prefix="$(arg output_directory_launch_prefix)">
+    <env name="P45_OUTPUT_DIRECTORY" value="$(arg output_directory)" />
     <param name="coupled_mode" value="$(arg coupled_mode)" />
     <param name="visual_initial_guess_enable" value="$(arg visual_initial_guess_enable)" />
     <param name="visual_initial_guess_csv" value="$(arg visual_initial_guess_csv)" />
@@ -132,7 +136,9 @@
   <node pkg="dog_prior_map_localization"
         type="dog_prior_map_ekf_node_cpp"
         name="dog_prior_map_ekf"
-        output="screen">
+        output="screen"
+        launch-prefix="$(arg output_directory_launch_prefix)">
+    <env name="P45_OUTPUT_DIRECTORY" value="$(arg output_directory)" />
     <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
   </node>
 

@@ -138,6 +138,7 @@ add_executable(visual_initial_guess_test
 
 add_executable(dog_prior_map_ndt_node_cpp
   src/dog_prior_map_ndt_node.cpp
+  src/local_map_tiles.cpp
   src/mature_ndt_algorithms.cpp
   src/skf_visual_measurement.cpp
   src/visual_aided_initial_guess.cpp
@@ -162,6 +163,29 @@ target_link_libraries(dog_prior_map_ndt_node_cpp
 
 add_dependencies(dog_prior_map_ndt_node_cpp
   ${catkin_EXPORTED_TARGETS}
+)
+
+# Offline P45 map preparation. It reproduces the two global P44 target
+# VoxelGrid passes before writing metadata-indexed 20 m XY tiles.
+add_executable(build_ndt_map_tiles
+  tools/offline/build_ndt_map_tiles.cpp
+)
+target_link_libraries(build_ndt_map_tiles
+  ${PCL_LIBRARIES}
+  OpenSSL::Crypto
+  /usr/lib/x86_64-linux-gnu/libusb-1.0.so
+)
+
+# Bounded component-only test for replacing the active local tile set. The
+# remote pose is a deterministic test fixture; this executable never calls NDT.
+add_executable(p45_local_map_switch_probe
+  tools/offline/p45_local_map_switch_probe.cpp
+  src/local_map_tiles.cpp
+)
+target_link_libraries(p45_local_map_switch_probe
+  ${PCL_LIBRARIES}
+  OpenSSL::Crypto
+  /usr/lib/x86_64-linux-gnu/libusb-1.0.so
 )
 
 # One-scan Newer College input adapter. It preserves the official PCD XYZ and
@@ -341,6 +365,8 @@ catkin_install_python(PROGRAMS
   scripts/dataset_gt_path_publisher.py
   scripts/evaluate_runtime_and_accuracy.py
   scripts/build_livox_keyframe_scan_db.py
+  scripts/monitor_p45_local_map_run.py
+  scripts/ensure_output_dir_exec.py
   scripts/run_dataset_evaluation.sh
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
@@ -351,7 +377,7 @@ install(DIRECTORY config launch docs rviz
 
 install(TARGETS dog_prior_map_ekf_node_cpp dog_prior_map_ndt_node_cpp
         newer_college_first_scan_publisher newer_college_sequence_publisher
-        solid_reference_database_builder solid_shadow_node_cpp
+        build_ndt_map_tiles solid_reference_database_builder solid_shadow_node_cpp
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

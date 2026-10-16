@@ -1,0 +1,41 @@
+{
+  "method": "fixed 1-second relative-pose intervals; evaluator advances using the requested interval instead of reusing a fixed first-frame index",
+  "verification": {
+    "P44_ATE_translation_rmse_unchanged_m": true,
+    "P44_ATE_rotation_rmse_unchanged_deg": true,
+    "P44_all_translation_and_rotation_ATE_fields_unchanged": true,
+    "P44_output_is_frozen_and_was_not_replayed": true
+  },
+  "P44_legacy_RPE_1s": {
+    "NDT_translation_rmse_m": 0.04378336845056972,
+    "NDT_rotation_rmse_deg": 0.6791148688389343,
+    "EKF_CORRECTED_translation_rmse_m": 0.044154436872968356,
+    "EKF_CORRECTED_rotation_rmse_deg": 0.6397469654017516,
+    "EKF_HIGH_RATE_translation_rmse_m": 0.06864382051037338,
+    "EKF_HIGH_RATE_rotation_rmse_deg": 1.8086244048466003
+  },
+  "P44_corrected_RPE_1s": {
+    "interval_count": 29,
+    "NDT_translation_rmse_m": 0.023898536145096887,
+    "NDT_translation_p95_m": 0.053392196964228526,
+    "NDT_rotation_rmse_deg": 0.9600937167858203,
+    "NDT_rotation_p95_deg": 2.112905505800288,
+    "EKF_CORRECTED_translation_rmse_m": 0.029446271291790903,
+    "EKF_CORRECTED_rotation_rmse_deg": 0.724794828037424,
+    "EKF_HIGH_RATE_translation_rmse_m": 0.028662725875194667,
+    "EKF_HIGH_RATE_translation_p95_m": 0.04390940908609246,
+    "EKF_HIGH_RATE_rotation_rmse_deg": 0.9571725675944741,
+    "EKF_HIGH_RATE_rotation_p95_deg": 1.9079750211115465
+  },
+  "P45_corrected_RPE_1s": {
+    "interval_count": 29,
+    "NDT_translation_rmse_m": 0.03769959055776962,
+    "NDT_rotation_rmse_deg": 0.9834367396723701,
+    "EKF_CORRECTED_translation_rmse_m": 0.03960757766051248,
+    "EKF_CORRECTED_rotation_rmse_deg": 0.7428196181334641,
+    "EKF_HIGH_RATE_translation_rmse_m": 0.03323283026693044,
+    "EKF_HIGH_RATE_translation_p95_m": 0.05929379135376876,
+    "EKF_HIGH_RATE_rotation_rmse_deg": 0.981657032301297,
+    "EKF_HIGH_RATE_rotation_p95_deg": 1.9292950503557702
+  }
+}

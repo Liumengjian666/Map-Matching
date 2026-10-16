@@ -1,0 +1,4 @@
+event_id,scope,scan_stamp_ns,updated,reason,loaded_tiles,target_points,tile_io_ms,target_merge_ms,target_rebuild_ms,pose_provenance,interpretation
+P45_FORMAL_INITIAL,300_frame_live_run,1583836591182590976,1,initial_tile_load,21,552716,13.7549,3.14365,101.2582,causal_P44_NDT_initial_guess,live initial target; all 300 frames then reused this cache
+P45_FORMAL_FRAMES_2_TO_300,300_frame_live_run,1583836591282592512_to_1583836621082438144,0,active_cache_covers_required_tiles,21,552716,0,0,0,causal_online_initial_guess,no tile switch occurred in this trajectory segment
+P45_REMOTE_SWITCH_PROBE,component_probe_only,1583836741180127744,1,required_tiles_outside_cache,22,1186101,28.360559,7.689713,NA,synthetic_test_pose_minus30_minus230_0,real frozen scan source; zero NDT align and zero GT; not a localization result

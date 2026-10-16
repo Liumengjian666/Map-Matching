@@ -1,0 +1,11 @@
+# P45 local-map design
+
+The implementation changes only the NDT target-map lifecycle. CONTROL NDT, source filtering, scan-local deskew, IMU state propagation, EKF, OOSM, initialization, step limit, and all P44 algorithm parameters remain unchanged.
+
+The offline builder consumes the same 10,277,007-point XYZ PCD used for the P44 global target. It filters non-finite points and applies the exact two sequential 0.15 m PCL VoxelGrid passes used by P44, producing 3,142,751 points before partitioning. The already-filtered target is assigned to 20 m XY tiles with the full Z span retained. No per-tile voxelization occurs. The manifest records source SHA256, PCL preprocessing, point counts, bounds, tile IDs, and tile SHA256. The 74 tile files are stored on HIKVISION, not Git.
+
+At runtime, the source cloud is already preprocessed to the same 1,400-point NDT source used in P44. The exact causal initial guess for this scan is used to transform each source point into map coordinates. Its projected footprint is expanded by 10 m in XY and mapped to tiles. Ten metres covers the 0.5 m translation step, 5 degrees of rotation at the 80 m valid source range (about 6.98 m), and two 0.8 m NDT cells, rounded upward. If the active target already covers the required set, it is reused. Otherwise the manager stages an expanded 30 m selection (one extra 20 m tile beyond the safety margin), verifies all file hashes and point counts, builds the merged target, then atomically replaces the active tile set. The NDT target is rebuilt only on these updates.
+
+The manager stores metadata for all 74 tiles and only the currently active merged point cloud; it never loads or retains the full map, global Target, or global KD-tree in local mode. Coverage/hash/read failure is fail-closed. The full PCD path is empty in the NDT configuration. When RViz is enabled, a separate visualization-only `pcl_ros/pcd_to_pointcloud` process publishes the full map; that process is outside headless NDT memory measurements.
+
+The observed live route stayed in its initial tile neighborhood for all 300 scans, so a component-only switch probe used a frozen remote scan and a synthetic test pose to trigger a remote tile-set replacement. The probe validates the manager API and tile I/O path only; it is not a remote NDT or localization test.

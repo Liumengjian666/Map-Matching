@@ -1,0 +1,102 @@
+{
+  "task": "P45-LOCAL-NDT-SUBMAP-LOW-MEMORY-R1",
+  "dataset": "Newer College 2020 / 01_short_experiment",
+  "initialization": "CONDITIONAL_BASE_FRAME / ORACLE_START_ONLY",
+  "scan_window": {
+    "count": 300,
+    "first_stamp_ns": "1583836591182590976",
+    "last_stamp_ns": "1583836621082438144",
+    "sensor_span_sec": 29.899847168,
+    "publisher_receipts": 300,
+    "ndt_ack": 300,
+    "ndt_converged": 300,
+    "oosm_applied": 300,
+    "geometry_gate_pass": 300,
+    "deskew_published": 300,
+    "future_imu_violations": 0
+  },
+  "map": {
+    "source_input_sha256": "57da358a7c3f52a132fd06afba69f2c3eff2e980b7dbad5b8751548665104e25",
+    "input_points": 10277007,
+    "preprocessed_global_target_points": 3142751,
+    "tile_count": 74,
+    "tile_size_xy_m": 20,
+    "tile_manifest_sha256": "ebd7089f20026a991af1a88679a133bce020ee7bc9a9a5439665cc3a413cbb04",
+    "tile_directory_bytes": 38022231,
+    "live_active_tiles_mean": 21,
+    "live_active_tiles_max": 21,
+    "live_local_target_points_mean": 552716,
+    "live_local_target_points_max": 552716,
+    "live_map_update_count": 1,
+    "coverage_pass_count": 300
+  },
+  "accuracy": {
+    "P44_global_EKF_high_rate_translation_rmse_m": 0.06798470772543988,
+    "P45_local_EKF_high_rate_translation_rmse_m": 0.06161207817272454,
+    "P44_global_EKF_high_rate_translation_p95_m": 0.08680817133698017,
+    "P45_local_EKF_high_rate_translation_p95_m": 0.07792692496242294,
+    "P44_global_EKF_high_rate_translation_max_m": 0.11967484993588882,
+    "P45_local_EKF_high_rate_translation_max_m": 0.2163958282669801,
+    "P44_global_EKF_high_rate_rotation_rmse_deg": 1.8180157614860082,
+    "P45_local_EKF_high_rate_rotation_rmse_deg": 1.8749520559340132,
+    "P44_global_EKF_high_rate_rotation_p95_deg": 2.4785709313427637,
+    "P45_local_EKF_high_rate_rotation_p95_deg": 2.5583729973411207,
+    "P44_global_EKF_high_rate_rotation_max_deg": 4.211998142034464,
+    "P45_local_EKF_high_rate_rotation_max_deg": 4.331848341019563,
+    "P44_global_max_adjacent_translation_jump_m": 0.09656559096373547,
+    "P45_local_max_adjacent_translation_jump_m": 0.20245110619844559
+  },
+  "runtime": {
+    "P44_global_NDT_steady_mean_ms": 7.086436675585284,
+    "P45_local_NDT_steady_mean_ms": 8.079189280936456,
+    "P45_local_NDT_steady_p95_ms": 12.76127,
+    "P45_local_NDT_steady_max_ms": 16.377535,
+    "P45_local_deskew_mean_ms": 21.11372,
+    "P45_local_deskew_p95_ms": 26.08672,
+    "P45_first_target_io_ms": 13.7549,
+    "P45_first_target_merge_ms": 3.14365,
+    "P45_first_target_rebuild_ms": 101.2582,
+    "P45_publish_to_final_ack_wall_sec": 33.819884,
+    "realtime_validated": false,
+    "cpu_total": null,
+    "cpu_total_note": "formal monitor missed ROS child process groups; not reportable"
+  },
+  "memory": {
+    "P44_global_NDT_VmHWM_KiB": 775308,
+    "P45_local_NDT_VmHWM_KiB": 138200,
+    "NDT_VmHWM_reduction_fraction": 0.8218,
+    "P45_EKF_VmHWM_KiB": 23940,
+    "local_target_point_payload_MiB": 8.4338,
+    "switch_probe_process_VmHWM_KiB": 444332,
+    "switch_probe_scope_note": "separate component-only PCL test, not live NDT memory"
+  },
+  "switch_validation": {
+    "live_route_switched_tiles": false,
+    "component_probe_updated": true,
+    "component_probe_loaded_tiles": 22,
+    "component_probe_target_points": 1186101,
+    "component_probe_ndt_align_calls": 0,
+    "component_probe_gt_reads": 0,
+    "component_probe_pose": [-30.0, -230.0, 0.0],
+    "component_probe_pose_is_synthetic": true,
+    "end_to_end_remote_localization_validated": false
+  },
+  "rviz": {
+    "launch_test": "PASS",
+    "scan_count": 1,
+    "ndt_converged": true,
+    "ndt_iterations": 4,
+    "ndt_fitness": 0.030953,
+    "ndt_align_ms": 98.941,
+    "screenshot": "rviz_acceptance.png",
+    "full_map_is_visualization_only": true
+  },
+  "final_result": "LOCAL_MAP_ACCURACY_AND_MEMORY_PASS",
+  "scope_caveats": [
+    "Only the frozen 300-scan segment was evaluated.",
+    "No live tile transition occurred; the remote switch was a component test with a synthetic pose, not a remote localization result.",
+    "Maximum translation error and startup adjacent-position jump increased versus P44, despite lower RMSE/P95.",
+    "Whole-system memory, CPU total, and 10 Hz real-time performance are not established.",
+    "Initialization remains conditional Base-frame with first-pose GT oracle only."
+  ]
+}

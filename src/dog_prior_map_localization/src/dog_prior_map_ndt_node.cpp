@@ -8,6 +8,7 @@
 #include <iterator>
 #include <limits>
 #include <mutex>
+#include <set>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -39,6 +40,7 @@
 #include "dog_prior_map_localization/core/ekf_translation_prior.hpp"
 #include "dog_prior_map_localization/visual_aided_initial_guess.hpp"
 #include "dog_prior_map_localization/experimental_source_capture.hpp"
+#include "dog_prior_map_localization/local_map_tiles.hpp"
 #include "dog_prior_map_localization/mature_ndt_algorithms.hpp"
 #include "dog_prior_map_localization/skf_visual_measurement.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp"
@@ -148,6 +150,15 @@ public:
     imu_history_keep_sec_ = getParam<double>("imu/history_keep_sec", 2.0);
 
     map_pcd_path_ = getParam<std::string>("map/pcd_fallback_path", "");
+    local_map_manifest_path_ = getParam<std::string>("map/tile_manifest_path", "");
+    local_map_safety_margin_m_ = getParam<double>("map/local_safety_margin_m", 10.0);
+    local_map_hysteresis_margin_m_ = getParam<double>("map/local_hysteresis_margin_m", 30.0);
+    local_map_enable_ = !local_map_manifest_path_.empty();
+    if (local_map_enable_ &&
+        (!std::isfinite(local_map_safety_margin_m_) || local_map_safety_margin_m_ < 0.0 ||
+         !std::isfinite(local_map_hysteresis_margin_m_) ||
+         local_map_hysteresis_margin_m_ < local_map_safety_margin_m_))
+      throw std::runtime_error("invalid local map safety/hysteresis margins");
     map_voxel_size_ = getParam<double>("map/voxel_size", 0.30);
     map_voxel_z_size_ = getParam<double>("map/voxel_z_size", map_voxel_size_);
     scan_voxel_size_ = getParam<double>("lidar_update/ndt_source_voxel_size", 0.35);
@@ -389,6 +400,8 @@ public:
     geometry_gate_min_overlap_05_ = getParam<double>("p41/geometry_gate_min_overlap_05", 0.50);
     if (geometry_gate_enable_ && geometry_diagnostics_csv_path_.empty())
       throw std::runtime_error("P41 geometry gate requires output/geometry_diagnostics_csv_path");
+    if (local_map_enable_ && (!geometry_gate_enable_ || geometry_diagnostics_csv_path_.empty()))
+      throw std::runtime_error("P45 local map requires the P41 geometry coverage gate and its diagnostic tree");
     if (!geometry_diagnostics_csv_path_.empty())
     {
       std::ifstream existing_geometry_csv(geometry_diagnostics_csv_path_.c_str());
@@ -404,6 +417,25 @@ public:
           "used_overlap_0p5m,used_overlap_2m,used_overlap_8m,step_limited\n";
       geometry_diagnostics_csv_.flush();
     }
+    local_map_diagnostics_csv_path_ = getParam<std::string>(
+        "output/local_map_diagnostics_csv_path", "");
+    if (local_map_enable_ && local_map_diagnostics_csv_path_.empty())
+      throw std::runtime_error("P45 local map requires output/local_map_diagnostics_csv_path");
+    if (!local_map_diagnostics_csv_path_.empty())
+    {
+      std::ifstream existing_local_csv(local_map_diagnostics_csv_path_.c_str());
+      if (existing_local_csv.good()) throw std::runtime_error("local map diagnostics output already exists");
+      local_map_diagnostics_csv_.open(local_map_diagnostics_csv_path_.c_str(), std::ios::out);
+      if (!local_map_diagnostics_csv_)
+        throw std::runtime_error("local map diagnostics output unavailable");
+      local_map_diagnostics_csv_
+          << "scan_ns,local_mode,map_updated,update_reason,update_error,coverage_status,loaded_tile_count,loaded_tile_ids,"
+             "source_points,target_points,projected_x_min,projected_x_max,projected_y_min,projected_y_max,"
+             "projected_z_min,projected_z_max,tile_io_ms,target_build_ms,target_rebuild_ms,"
+             "initial_nn_median_m,initial_nn_p90_m,initial_overlap_0p5m,"
+             "estimated_target_payload_mib,vmrss_kib,vmhwm_kib\n";
+      local_map_diagnostics_csv_.flush();
+    }
 
     loadMap();
 
@@ -411,6 +443,10 @@ public:
     pub_pose_ = nh_.advertise<geometry_msgs::PoseStamped>(ndt_pose_topic_, 20);
     pub_path_ = nh_.advertise<nav_msgs::Path>(ndt_path_topic_, 5);
     pub_aligned_ = nh_.advertise<sensor_msgs::PointCloud2>(points_aligned_topic_, 5);
+    publish_local_target_ = getParam<bool>("output/publish_local_target", false);
+    if (publish_local_target_ && local_map_enable_)
+      pub_local_target_ = nh_.advertise<sensor_msgs::PointCloud2>(
+          getParam<std::string>("topics/local_target", "/newer_college/local_ndt_target"), 1, true);
     if (publish_filtered_points_)
     {
       pub_filtered_ = nh_.advertise<sensor_msgs::PointCloud2>(filtered_points_topic_, 5);
@@ -441,7 +477,8 @@ public:
     }
 
     ROS_INFO("[DogPriorMap NDT] started: mode=%s map=%s target=%zu lidar=%s output=%s EKF=%s",
-             coupled_mode_.c_str(), map_pcd_path_.c_str(), target_cloud_->size(), lidar_topic_.c_str(),
+             coupled_mode_.c_str(), local_map_enable_ ? local_map_manifest_path_.c_str() : map_pcd_path_.c_str(),
+             target_cloud_->size(), lidar_topic_.c_str(),
              ndt_odom_topic_.c_str(), (coupled_enabled_ || experimental_ekf_translation_fallback_enable_) ?
              ekf_high_rate_topic_.c_str() : "disabled");
   }
@@ -1258,34 +1295,91 @@ private:
   // 加载先验 PCD 地图，去除非法点并生成 NDT 使用的降采样目标点云。
   void loadMap()
   {
-    if (map_pcd_path_.empty()) throw std::runtime_error("map/pcd_fallback_path is empty");
-
-    pcl::PointCloud<pcl::PointXYZ>::Ptr raw(new pcl::PointCloud<pcl::PointXYZ>());
-    if (pcl::io::loadPCDFile(map_pcd_path_, *raw) != 0)
+    if (local_map_enable_)
     {
-      throw std::runtime_error("failed to load map pcd: " + map_pcd_path_);
+      std::string error;
+      if (!local_map_tiles_.loadManifest(local_map_manifest_path_, &error))
+        throw std::runtime_error("failed to load local map manifest: " + error);
+      target_cloud_ = local_map_tiles_.target();
+      ROS_INFO("[DogPriorMap NDT] local map metadata loaded: manifest=%s tiles=%zu tile=%.1fm; global XYZ was not loaded",
+               local_map_manifest_path_.c_str(), local_map_tiles_.tileCount(), local_map_tiles_.tileSize());
     }
-
-    pcl::PointCloud<pcl::PointXYZ>::Ptr xyz(new pcl::PointCloud<pcl::PointXYZ>());
-    xyz->reserve(raw->size());
-    for (const auto &pt : raw->points)
+    else
     {
-      if (std::isfinite(pt.x) && std::isfinite(pt.y) && std::isfinite(pt.z)) xyz->push_back(pt);
+      if (map_pcd_path_.empty()) throw std::runtime_error("map/pcd_fallback_path is empty");
+      pcl::PointCloud<pcl::PointXYZ>::Ptr raw(new pcl::PointCloud<pcl::PointXYZ>());
+      if (pcl::io::loadPCDFile(map_pcd_path_, *raw) != 0)
+        throw std::runtime_error("failed to load map pcd: " + map_pcd_path_);
+
+      pcl::PointCloud<pcl::PointXYZ>::Ptr xyz(new pcl::PointCloud<pcl::PointXYZ>());
+      xyz->reserve(raw->size());
+      for (const auto &pt : raw->points)
+      {
+        if (std::isfinite(pt.x) && std::isfinite(pt.y) && std::isfinite(pt.z)) xyz->push_back(pt);
+      }
+      finalizeCloud(xyz);
+      const pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud =
+          voxelDown(xyz, map_voxel_size_, map_voxel_z_size_, 0);
+      target_cloud_ = voxelDown(map_cloud, target_voxel_size_, target_voxel_z_size_, max_target_points_);
+      ndt_.setInputTarget(target_cloud_);
     }
-    finalizeCloud(xyz);
-    const pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud =
-        voxelDown(xyz, map_voxel_size_, map_voxel_z_size_, 0);
-    target_cloud_ = voxelDown(map_cloud, target_voxel_size_, target_voxel_z_size_, max_target_points_);
-    ndt_.setInputTarget(target_cloud_);
     ndt_.setResolution(ndt_resolution_);
     ndt_.setStepSize(ndt_step_size_);
     ndt_.setTransformationEpsilon(ndt_transformation_epsilon_);
     ndt_.setMaximumIterations(ndt_max_iterations_);
-    if (!geometry_diagnostics_csv_path_.empty())
+    if (!geometry_diagnostics_csv_path_.empty() && !local_map_enable_)
     {
       map_geometry_tree_.reset(new pcl::KdTreeFLANN<pcl::PointXYZ>());
       map_geometry_tree_->setInputCloud(target_cloud_);
     }
+  }
+
+  std::pair<long, long> processMemoryKiB() const
+  {
+    long rss = -1, hwm = -1;
+    std::ifstream status("/proc/self/status");
+    std::string key;
+    while (status >> key)
+    {
+      if (key == "VmRSS:") status >> rss;
+      else if (key == "VmHWM:") status >> hwm;
+      std::string rest;
+      std::getline(status, rest);
+      if (rss >= 0 && hwm >= 0) break;
+    }
+    return std::make_pair(rss, hwm);
+  }
+
+  void writeLocalMapDiagnostics(uint64_t scan_ns,
+                                const LocalMapUpdate &update,
+                                std::size_t source_points,
+                                const std::string &coverage_status,
+                                const GeometryStats &geometry,
+                                double target_rebuild_ms)
+  {
+    if (!local_map_diagnostics_csv_.is_open()) return;
+    std::ostringstream ids;
+    for (std::size_t i = 0; i < update.loaded_tile_ids.size(); ++i)
+    {
+      if (i) ids << ';';
+      ids << update.loaded_tile_ids[i];
+    }
+    const std::pair<long, long> memory = processMemoryKiB();
+    const std::size_t point_count = update.target ? update.target->size() :
+        (target_cloud_ ? target_cloud_->size() : 0);
+    const double payload_mib = static_cast<double>(point_count * sizeof(pcl::PointXYZ)) /
+        (1024.0 * 1024.0);
+    local_map_diagnostics_csv_ << std::setprecision(17) << scan_ns << ",1,"
+        << (update.updated ? 1 : 0) << ',' << update.reason << ',' << update.error << ','
+        << coverage_status << ',' << update.loaded_tile_ids.size() << ',' << ids.str() << ','
+        << source_points << ',' << point_count << ','
+        << update.projected_min.x() << ',' << update.projected_max.x() << ','
+        << update.projected_min.y() << ',' << update.projected_max.y() << ','
+        << update.projected_min.z() << ',' << update.projected_max.z() << ','
+        << update.tile_io_ms << ',' << update.target_merge_ms << ',' << target_rebuild_ms << ','
+        << geometry.median << ',' << geometry.p90 << ',' << geometry.overlap_05 << ','
+        << payload_mib << ',' << memory.first << ',' << memory.second << '\n';
+    local_map_diagnostics_csv_.flush();
   }
 
   GeometryStats measureGeometry(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
@@ -1639,6 +1733,16 @@ private:
       diagnostic_row.initial_guess_source = "not_evaluated";
       diagnostic_row.initial_guess_reason = "insufficient_points";
       diagnostic_row.coupled_status = coupled_enabled_ ? "INSUFFICIENT_POINTS" : "NOT_RUN";
+      if (local_map_enable_)
+      {
+        LocalMapUpdate update;
+        update.ok = true;
+        update.reason = "insufficient_source_points";
+        update.loaded_tile_ids = local_map_tiles_.activeTileIds();
+        update.target = target_cloud_;
+        writeLocalMapDiagnostics(stamp.toNSec(), update, source->size(),
+            "NOT_EVALUATED", GeometryStats(), 0.0);
+      }
       writeDeterminismRow(diagnostic_row);
       return;
     }
@@ -1754,6 +1858,44 @@ private:
     }
     diagnostic_row.initial_guess = initial_guess;
 
+    LocalMapUpdate local_map_update;
+    double local_target_rebuild_ms = 0.0;
+    if (local_map_enable_)
+    {
+      local_map_update = local_map_tiles_.ensureCoverage(
+          source, initial_guess, local_map_safety_margin_m_, local_map_hysteresis_margin_m_);
+      if (!local_map_update.ok)
+      {
+        ROS_ERROR("[DogPriorMap NDT] local map update failed; refusing align: %s",
+                  local_map_update.error.c_str());
+        local_map_update.reason = "selection_or_tile_load_error";
+        if (geometry_diagnostics_csv_.is_open())
+          geometry_diagnostics_csv_ << std::setprecision(17) << stamp.toNSec() << ','
+              << source->size() << ',' << target_cloud_->size() << ",LOCAL_MAP_ERROR,nan,nan,nan,nan,nan,"
+              << "0,nan,0,0,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0\n";
+        writeLocalMapDiagnostics(stamp.toNSec(), local_map_update, source->size(),
+            "ERROR", GeometryStats(), 0.0);
+        const double elapsed_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
+        publishDiagnostics(timing.reference_stamp, false, 0.0, preprocess_ms, elapsed_ms,
+                           static_cast<int>(source->size()), target_cloud_->size(), 0.0, 0);
+        diagnostic_row.initial_guess_reason = "p45_local_map_update_failed";
+        writeDeterminismRow(diagnostic_row);
+        return;
+      }
+      if (local_map_update.updated)
+      {
+        const ros::WallTime target_rebuild_start = ros::WallTime::now();
+        map_geometry_tree_.reset();
+        target_cloud_ = local_map_update.target;
+        ndt_.setInputTarget(target_cloud_);
+        map_geometry_tree_.reset(new pcl::KdTreeFLANN<pcl::PointXYZ>());
+        map_geometry_tree_->setInputCloud(target_cloud_);
+        local_target_rebuild_ms = (ros::WallTime::now() - target_rebuild_start).toSec() * 1000.0;
+        if (publish_local_target_ && pub_local_target_)
+          publishCloud(target_cloud_, timing.reference_stamp, map_frame_, pub_local_target_);
+      }
+    }
+
     const GeometryStats initial_geometry = map_geometry_tree_ ?
         measureGeometry(source, initial_guess) : GeometryStats();
     const bool geometry_gate_passed = !geometry_gate_enable_ ||
@@ -1762,6 +1904,10 @@ private:
          initial_geometry.median <= geometry_gate_max_median_m_ &&
          initial_geometry.p90 <= geometry_gate_max_p90_m_ &&
          initial_geometry.overlap_05 >= geometry_gate_min_overlap_05_);
+    if (local_map_enable_)
+      writeLocalMapDiagnostics(stamp.toNSec(), local_map_update, source->size(),
+          geometry_gate_passed ? "COVERAGE_PASS" : "GEOMETRY_GUARD_REJECTED",
+          initial_geometry, local_target_rebuild_ms);
     if (!geometry_gate_passed)
     {
       ROS_ERROR("[DogPriorMap NDT] startup geometry gate rejected scan: median=%.3f m p90=%.3f m overlap0.5=%.3f; NDT align was not called",
@@ -2277,6 +2423,7 @@ private:
   ros::Publisher pub_path_;
   ros::Publisher pub_filtered_;
   ros::Publisher pub_aligned_;
+  ros::Publisher pub_local_target_;
   ros::Publisher pub_diagnostics_;
   ros::Publisher pub_imu_watermark_;
   tf::TransformBroadcaster tf_broadcaster_;
@@ -2294,6 +2441,8 @@ private:
   std::string ndt_path_topic_;
   std::string points_aligned_topic_;
   std::string map_pcd_path_;
+  std::string local_map_manifest_path_;
+  std::string local_map_diagnostics_csv_path_;
   std::string imu_topic_;
   std::string coupled_mode_ = "CONTROL";
   std::string ekf_high_rate_topic_ = "/dog_livo/odom_high_rate";
@@ -2321,8 +2470,14 @@ private:
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr target_cloud_;
   pcl::KdTreeFLANN<pcl::PointXYZ>::Ptr map_geometry_tree_;
+  LocalMapTiles local_map_tiles_;
+  bool local_map_enable_ = false;
+  bool publish_local_target_ = false;
+  double local_map_safety_margin_m_ = 10.0;
+  double local_map_hysteresis_margin_m_ = 30.0;
   std::string geometry_diagnostics_csv_path_;
   std::ofstream geometry_diagnostics_csv_;
+  std::ofstream local_map_diagnostics_csv_;
   bool geometry_gate_enable_ = false;
   double geometry_gate_max_median_m_ = 1.0;
   double geometry_gate_max_p90_m_ = 3.0;

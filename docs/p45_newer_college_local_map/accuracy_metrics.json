@@ -1,0 +1,238 @@
+{
+  "NDT": {
+    "sample_count": 300,
+    "translation_error_m": {
+      "mean": 0.060402036934301864,
+      "median": 0.05976337007647597,
+      "p95": 0.07487030475997283,
+      "max": 0.20226555349832034,
+      "rmse": 0.061695093108036246
+    },
+    "rotation_error_deg": {
+      "mean": 1.5819503935968948,
+      "median": 1.5200353263419855,
+      "p95": 2.4350306860936333,
+      "max": 4.027888373584727,
+      "rmse": 1.638868459522774
+    },
+    "rpe_1s": {
+      "interval_count": 29,
+      "translation_m": {
+        "mean": 0.021444583263789462,
+        "median": 0.012071139310830566,
+        "p95": 0.06641670602034148,
+        "max": 0.16485067327625436,
+        "rmse": 0.03769959055776962
+      },
+      "rotation_deg": {
+        "mean": 0.5933289838199807,
+        "median": 0.13058160930357457,
+        "p95": 2.136016807749133,
+        "max": 3.1528684120834707,
+        "rmse": 0.9834367396723701
+      }
+    },
+    "tail_last_5s": {
+      "sample_count": 50,
+      "translation_error_m": {
+        "mean": 0.05213454454869611,
+        "median": 0.051771498298860116,
+        "p95": 0.06293571075291801,
+        "max": 0.07058270807443552,
+        "rmse": 0.052555553568766684
+      },
+      "rotation_error_deg": {
+        "mean": 1.6715046519992467,
+        "median": 1.7177577486345827,
+        "p95": 2.3896315596141586,
+        "max": 2.764145622201986,
+        "rmse": 1.7374695741804713
+      }
+    },
+    "maximum_adjacent_translation_jump_m": 0.113190992437083,
+    "maximum_adjacent_jump_end_stamp_ns": 1583836591282592512,
+    "first_translation_error_m": 0.20226555349832034,
+    "last_translation_error_m": 0.047326269027822464,
+    "first_rotation_error_deg": 0.8425427906083208,
+    "last_rotation_error_deg": 2.2775486597915355
+  },
+  "EKF_CORRECTED": {
+    "sample_count": 298,
+    "translation_error_m": {
+      "mean": 0.05993864992721083,
+      "median": 0.06000487341871333,
+      "p95": 0.07536260501089939,
+      "max": 0.20380024659915422,
+      "rmse": 0.06139859925683426
+    },
+    "rotation_error_deg": {
+      "mean": 1.746579860238356,
+      "median": 1.695804301244171,
+      "p95": 2.5135438655970512,
+      "max": 4.107392902787079,
+      "rmse": 1.7949906321663038
+    },
+    "rpe_1s": {
+      "interval_count": 29,
+      "translation_m": {
+        "mean": 0.02697093334065854,
+        "median": 0.021581259597531703,
+        "p95": 0.053360495535558806,
+        "max": 0.1679380105383997,
+        "rmse": 0.03960757766051248
+      },
+      "rotation_deg": {
+        "mean": 0.46873017018960944,
+        "median": 0.08782348502868632,
+        "p95": 1.6633132785503169,
+        "max": 1.8958662390574845,
+        "rmse": 0.7428196181334641
+      }
+    },
+    "tail_last_5s": {
+      "sample_count": 50,
+      "translation_error_m": {
+        "mean": 0.0511447623275394,
+        "median": 0.05036546991851276,
+        "p95": 0.06355072047889505,
+        "max": 0.06665516620569321,
+        "rmse": 0.05180322502468848
+      },
+      "rotation_error_deg": {
+        "mean": 1.840963071142828,
+        "median": 1.8652053926681589,
+        "p95": 2.6320335229403824,
+        "max": 2.9065619195552745,
+        "rmse": 1.8983391305352824
+      }
+    },
+    "maximum_adjacent_translation_jump_m": 0.1866196064942938,
+    "maximum_adjacent_jump_end_stamp_ns": 1583836591388576746,
+    "first_translation_error_m": 0.20380024659915422,
+    "last_translation_error_m": 0.060648702597416074,
+    "first_rotation_error_deg": 1.0431853794033787,
+    "last_rotation_error_deg": 0.9270774689958797
+  },
+  "EKF_HIGH_RATE": {
+    "sample_count": 2990,
+    "translation_error_m": {
+      "mean": 0.059772894873077825,
+      "median": 0.059624324094301975,
+      "p95": 0.07792692496242294,
+      "max": 0.2163958282669801,
+      "rmse": 0.06161207817272454
+    },
+    "rotation_error_deg": {
+      "mean": 1.8275424904460136,
+      "median": 1.7956530574436824,
+      "p95": 2.5583729973411207,
+      "max": 4.331848341019563,
+      "rmse": 1.8749520559340132
+    },
+    "rpe_1s": {
+      "interval_count": 29,
+      "translation_m": {
+        "mean": 0.02876942901491935,
+        "median": 0.023068231066142295,
+        "p95": 0.05929379135376876,
+        "max": 0.07351195121869618,
+        "rmse": 0.03323283026693044
+      },
+      "rotation_deg": {
+        "mean": 0.6020352823020263,
+        "median": 0.11129514136175735,
+        "p95": 1.9292950503557702,
+        "max": 3.0612823144691528,
+        "rmse": 0.981657032301297
+      }
+    },
+    "tail_last_5s": {
+      "sample_count": 500,
+      "translation_error_m": {
+        "mean": 0.0510820916800613,
+        "median": 0.05037807289835493,
+        "p95": 0.06719569273154095,
+        "max": 0.07342914299270757,
+        "rmse": 0.05194393469996477
+      },
+      "rotation_error_deg": {
+        "mean": 1.9126768454574903,
+        "median": 1.9637996428790556,
+        "p95": 2.6105747561101222,
+        "max": 3.2199464631115524,
+        "rmse": 1.9608021009680872
+      }
+    },
+    "maximum_adjacent_translation_jump_m": 0.20245110619844559,
+    "maximum_adjacent_jump_end_stamp_ns": 1583836591298597245,
+    "first_translation_error_m": 0.00012514242046064621,
+    "last_translation_error_m": 0.07342914299270757,
+    "first_rotation_error_deg": 0.009891914151958659,
+    "last_rotation_error_deg": 2.6419045874421134
+  },
+  "execution": {
+    "scan_count": 300,
+    "scan_start_ns": "1583836591182590976",
+    "scan_end_ns": "1583836621082438144",
+    "sensor_span_sec": 29.899847168,
+    "ndt_ack_count": 300,
+    "ndt_converged_count": 300,
+    "ekf_correction_ack_count": 300,
+    "oosm_result_counts": {
+      "APPLIED": 300
+    },
+    "geometry_gate_counts": {
+      "PASS": 300
+    },
+    "deskew_status_counts": {
+      "PUBLISHED": 300
+    },
+    "future_imu_scan_end_violations": 0,
+    "ndt_align_ms": {
+      "mean": 8.333914716666666,
+      "median": 7.214684999999999,
+      "p95": 12.763246500000001,
+      "max": 84.49682,
+      "rmse": 9.617894476143114
+    },
+    "ndt_align_first_frame_ms": 84.49682,
+    "ndt_align_after_first_mean_ms": 8.079189280936456
+  },
+  "evaluation_contract": {
+    "initialization": "CONDITIONAL_BASE_FRAME / ORACLE_START_ONLY",
+    "gt_use": "post-run evaluation only; runtime outputs frozen before GT read",
+    "comparison_frame": "official map / LiDAR origin, using P43 conditional Base-to-LiDAR chain",
+    "trajectory_alignment": "none; direct map-coordinate errors",
+    "gt_interpolation": "linear translation + quaternion SLERP, no extrapolation",
+    "base_to_lidar_formula": "T_B_L = T_B_C * T_C_I * T_I_L",
+    "base_to_lidar_matrix": [
+      [
+        -0.703850921879071,
+        -0.7100423561242176,
+        0.020826240168402843,
+        -0.07207613788438523
+      ],
+      [
+        0.7099216283860768,
+        -0.7041416662469333,
+        -0.013992691115502887,
+        -0.0024978355832723717
+      ],
+      [
+        0.02460002682200807,
+        0.004936229792296243,
+        0.9996851866041602,
+        -0.008613836505025514
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "gt_sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+    "gt_sha256_expected_by_p43_manifest": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+    "runtime_hash_manifest": "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/docs/p45_newer_college_local_map/results_frozen.sha256"
+  }
+}

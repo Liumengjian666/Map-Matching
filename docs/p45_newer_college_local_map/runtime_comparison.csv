@@ -1,0 +1,14 @@
+group,phase,metric,n,mean,p95,max,unit,notes
+P44_GLOBAL,all_frames,NDT_align,300,8.970464,10.964492,572.294558,ms,global target; includes cold first frame
+P44_GLOBAL,steady_after_first,NDT_align,299,7.086437,10.955759,16.988184,ms,global target
+P45_LOCAL,all_frames,NDT_align,300,8.333915,12.763247,84.496820,ms,local target; includes cold first frame
+P45_LOCAL,steady_after_first,NDT_align,299,8.079189,12.761270,16.377535,ms,local target; steady mean +14.0% vs P44
+P44_GLOBAL,all_frames,Deskew,300,21.405139,26.613439,31.963668,ms,unchanged processing contract
+P45_LOCAL,all_frames,Deskew,300,21.113720,26.086720,31.927440,ms,unchanged processing contract
+P45_LOCAL,initial_map_update,tile_IO,1,13.754900,13.754900,13.754900,ms,one live update
+P45_LOCAL,initial_map_update,target_merge,1,3.143650,3.143650,3.143650,ms,one live update
+P45_LOCAL,initial_map_update,NDT_target_rebuild,1,101.258200,101.258200,101.258200,ms,setInputTarget plus local geometry tree; one live update
+P44_GLOBAL,publish_to_NDT_ack,wall_sec,300,0.048324,0.054673,0.615753,s,as recorded by P44
+P45_LOCAL,publish_to_EKF_OOSM_ack,wall_sec,300,0.049248,0.056250,0.251680,s,as recorded by P45 publisher receipts
+P45_LOCAL,whole_run,first_publish_to_final_ack,1,33.819884,33.819884,33.819884,s,29.899847 s sensor span; NOT_REALTIME_VALIDATED
+P45_LOCAL,whole_run,CPU_total,NA,NA,NA,NA,NA,not reportable: external process-tree monitor missed ROS child process groups

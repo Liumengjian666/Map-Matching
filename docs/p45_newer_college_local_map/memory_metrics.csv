@@ -1,0 +1,9 @@
+group,process_or_measurement,VmRSS_or_payload_kib,VmHWM_kib,scope,notes
+P44_GLOBAL,NDT_node,NA,775308,per_process,observed during run; approximately 757.1 MiB
+P45_LOCAL,NDT_node,NA,138200,per_process,observed after all 300 scans and before shutdown; approximately 135.0 MiB
+P44_GLOBAL,EKF_node,NA,23900,per_process,observed high-water
+P45_LOCAL,EKF_node,NA,23940,per_process,observed high-water
+P45_LOCAL,initial_local_target_XYZ_payload,8636,NA,payload_estimate,552716 points; 8.4338 MiB; not process RSS
+P45_LOCAL,all_tile_files_on_HIKVISION,37092,NA,disk_bytes_approx,74 tiles; directory total 38022231 bytes
+P45_LOCAL,switch_probe_standalone_process,NA,444332,component_test_only,includes PCL fixture/runtime; not NDT node or total-system memory
+P45_LOCAL,full_map_RViz_visualizer,NA,NA,separate_optional_process,loads 10277007-point PCD only when rviz:=true; not included in headless NDT figures
