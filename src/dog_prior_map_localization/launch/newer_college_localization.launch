@@ -4,6 +4,7 @@
   <arg name="imu_csv" default="$(arg dataset_root)/raw_format/ouster_imu/data.csv" />
   <arg name="map_pcd" default="/media/jian/HIKVISION/paper rosbag/NewerCollege/.p41_first_ndt/prior_map_xyz_binary.pcd" />
   <arg name="runtime_config" default="$(find dog_prior_map_localization)/config/p41_newer_college_runtime.yaml" />
+  <arg name="initialization_override" default="" />
   <arg name="rviz" default="true" />
 
   <param name="use_sim_time" value="false" />
@@ -22,6 +23,11 @@
     <arg name="future_deferral_enable" value="false" />
     <arg name="diagnostic_determinism_enable" value="true" />
   </include>
+
+  <!-- Optional partial initialization-only overlay for explicitly conditional
+       Oracle frame hypotheses; the default remains the documented RS_C1 chain. -->
+  <rosparam command="load" file="$(arg initialization_override)"
+            if="$(eval arg('initialization_override') != '')" />
 
   <!-- Keep the exact official-map XYZ frame; no static TF or extra map transform. -->
   <param name="map/pcd_fallback_path" value="$(arg map_pcd)" />
