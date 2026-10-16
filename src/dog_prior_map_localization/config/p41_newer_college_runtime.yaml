@@ -114,21 +114,19 @@ deskew:
   experimental_history_nominal_consistent_enable: false
 
 # Oracle pose at the first exact scan/GT timestamp: 1583836591.182590976.
-  # The GT position is at the RS_C1/base coincident origin. For this diagnostic,
-  # the GT quaternion is interpreted in the platform's robotics base axes; this
-  # operational frame interpretation is checked by the runtime geometry gate and
-  # is not claimed as a source-code-certified GT exporter convention. The base
-  # to RS_C1 optical rotation and calibrated RS_C1-to-Ouster-IMU transform are
-  # composed as T_B_I = inverse(T_C_B) * T_C_I, then T_M_I = T_M_B * T_B_I.
+# Official stereo GT poses are expressed in RS_C1 (left-camera optical) frame.
+# Compose that pose with the calibrated camera-from-IMU transform, then the
+# Ouster IMU-from-LiDAR transform: T_M_I=T_M_C*T_C_I and T_M_L=T_M_I*T_I_L.
+# This remains GT-assisted Oracle initialization, not autonomous initialization.
 initialization:
   explicit_state_enable: true
   state_stamp_sec: 1583836591
   state_stamp_nsec: 182590976
-  map_T_imu_translation_m: [-3.390665177277911, 8.322553993914036, 0.166335564691156]
+  map_T_imu_translation_m: [-3.37066155, 8.23471164, 0.07006124]
   map_T_imu_rotation_row_major:
-    [-0.497483062267601, 0.867450157435373, -0.006389610488644,
-     -0.866827293441045, -0.497383175942819, -0.034934504930046,
-     -0.033482026559375, -0.011840635725388, 0.999369177653132]
+    [0.213403346854, -0.181175124532, -0.960018013270,
+     -0.685679231963, 0.672196415767, -0.279277585003,
+     0.695918818833, 0.717863185350, 0.019220944628]
   velocity_map_mps: [0.0, 0.0, 0.0]
   gyro_bias_imu_radps: [0.0, 0.0, 0.0]
   accel_bias_imu_mps2: [0.0, 0.0, 0.0]
@@ -139,11 +137,11 @@ initialization:
   boundary_imu_gyro_radps: [-0.013715279613908078, -0.02716424311880823, 0.008122641324741676]
 
   ndt_seed_enable: true
-  ndt_seed_map_T_lidar_translation_m: [-3.377157862550456, 8.323114434181376, 0.137888504833233]
+  ndt_seed_map_T_lidar_translation_m: [-3.34673518, 8.25488349, 0.07361402]
   ndt_seed_map_T_lidar_rotation_row_major:
-    [0.497483062267601, -0.867450157435373, -0.006389610488644,
-     0.866827293441045, 0.497383175942819, -0.034934504930046,
-     0.033482026559375, 0.011840635725388, 0.999369177653132]
+    [-0.213403346854, 0.181175124532, -0.960018013270,
+     0.685679231963, -0.672196415767, -0.279277585003,
+     -0.695918818833, -0.717863185350, 0.019220944628]
 
 output:
   publish_tf: true

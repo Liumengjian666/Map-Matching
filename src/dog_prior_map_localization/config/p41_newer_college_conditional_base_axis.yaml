@@ -1,0 +1,27 @@
+# Conditional visualization/diagnostic profile only.
+# It reproduces the earlier one-scan NDT result by interpreting the GT
+# quaternion in robotics base axes. This is not the official RS_C1 optical
+# interpretation and must not be used as a certified GT/LiDAR transform.
+initialization:
+  explicit_state_enable: true
+  state_stamp_sec: 1583836591
+  state_stamp_nsec: 182590976
+  map_T_imu_translation_m: [-3.390665177277911, 8.322553993914036, 0.166335564691156]
+  map_T_imu_rotation_row_major:
+    [-0.497483062267601, 0.867450157435373, -0.006389610488644,
+     -0.866827293441045, -0.497383175942819, -0.034934504930046,
+     -0.033482026559375, -0.011840635725388, 0.999369177653132]
+  velocity_map_mps: [0.0, 0.0, 0.0]
+  gyro_bias_imu_radps: [0.0, 0.0, 0.0]
+  accel_bias_imu_mps2: [0.0, 0.0, 0.0]
+  gravity_map_mps2: [0.0, 0.0, -9.80665]
+  boundary_imu_stamp_sec: 1583836591
+  boundary_imu_stamp_nsec: 178606952
+  boundary_imu_accel_mps2: [-0.40462008056640625, -0.2825157958984375, 9.916783276367187]
+  boundary_imu_gyro_radps: [-0.013715279613908078, -0.02716424311880823, 0.008122641324741676]
+  ndt_seed_enable: true
+  ndt_seed_map_T_lidar_translation_m: [-3.377157862550456, 8.323114434181376, 0.137888504833233]
+  ndt_seed_map_T_lidar_rotation_row_major:
+    [0.497483062267601, -0.867450157435373, -0.006389610488644,
+     0.866827293441045, 0.497383175942819, -0.034934504930046,
+     0.033482026559375, 0.011840635725388, 0.999369177653132]
