@@ -1,0 +1,58 @@
+{
+  "command": [
+    "roslaunch",
+    "dog_prior_map_localization",
+    "newer_college_causal_record.launch",
+    "scan_count:=1800",
+    "start_stamp_ns:=1583836591182590976",
+    "output_dir:=/media/jian/HIKVISION/paper rosbag/NewerCollege/.p49_causal_record/formal1800_run1",
+    "rviz:=false"
+  ],
+  "sampled_process_group_id": 336897,
+  "return_code": 0,
+  "wall_time_sec": 233.69666749198223,
+  "sample_period_sec": 0.1,
+  "input_publisher_seen": true,
+  "input_publisher_complete_marker_seen": true,
+  "processes": {
+    "ndt": {
+      "pid_count": 1,
+      "peak_sampled_rss_kib": 369908,
+      "peak_observed_vmhwm_kib": 369908,
+      "cpu_time_sec": 51.16
+    },
+    "ekf": {
+      "pid_count": 1,
+      "peak_sampled_rss_kib": 23804,
+      "peak_observed_vmhwm_kib": 23888,
+      "cpu_time_sec": 49.11
+    },
+    "publisher": {
+      "pid_count": 1,
+      "peak_sampled_rss_kib": 44212,
+      "peak_observed_vmhwm_kib": 45980,
+      "cpu_time_sec": 13.88
+    },
+    "map_visualizer": {
+      "pid_count": 0,
+      "peak_sampled_rss_kib": 0,
+      "peak_observed_vmhwm_kib": 0,
+      "cpu_time_sec": 0.0
+    },
+    "rviz": {
+      "pid_count": 0,
+      "peak_sampled_rss_kib": 0,
+      "peak_observed_vmhwm_kib": 0,
+      "cpu_time_sec": 0.0
+    }
+  },
+  "peak_synchronized_roslaunch_group_rss_kib": 509140,
+  "roslaunch_group_cpu_time_sec": 118.69,
+  "last_sample_rss_kib": {
+    "ndt": 0,
+    "ekf": 0,
+    "publisher": 0,
+    "map_visualizer": 0,
+    "rviz": 0
+  }
+}

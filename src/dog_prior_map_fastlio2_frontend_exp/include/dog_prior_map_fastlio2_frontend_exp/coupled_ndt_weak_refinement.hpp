@@ -1,4 +1,7 @@
 #pragma once
+#include <cmath>
+#include <limits>
+#include <Eigen/Geometry>
 #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_local_math.hpp"
 
@@ -10,6 +13,37 @@ struct WeakCoupledConfig {
   double minimum_rho = 1e-4, objective_margin = 1e-8;
   double maximum_condition = 1e8, solve_residual_limit = 1e-6;
 };
+struct WeakCoupledInnovation {
+  double translation_m = std::numeric_limits<double>::quiet_NaN();
+  double rotation_deg = std::numeric_limits<double>::quiet_NaN();
+  bool valid = false;
+  bool triggered = false;
+};
+inline bool weakCoupledInnovationTriggered(double translation_m, double rotation_deg) {
+  return translation_m > 0.12 || rotation_deg > 3.0;
+}
+
+// Shared pure gate for production Shadow and CONTROL Record-Only. Keep the
+// frozen strict comparisons in one place so observation cannot drift from the
+// refinement path. This performs no NDT, score, jet, or candidate work.
+inline WeakCoupledInnovation evaluateWeakCoupledInnovation(
+    const Eigen::Matrix4f& nominal, const Eigen::Matrix4f& prediction) {
+  WeakCoupledInnovation out;
+  if (!nominal.allFinite() || !prediction.allFinite()) return out;
+  const Eigen::Quaterniond nominal_q(nominal.block<3,3>(0,0).cast<double>());
+  const Eigen::Quaterniond prediction_q(prediction.block<3,3>(0,0).cast<double>());
+  if (!nominal_q.coeffs().allFinite() || !prediction_q.coeffs().allFinite() ||
+      nominal_q.norm() < 1e-12 || prediction_q.norm() < 1e-12) return out;
+  out.translation_m = (nominal.block<3,1>(0,3).cast<double>() -
+                       prediction.block<3,1>(0,3).cast<double>()).norm();
+  out.rotation_deg = nominal_q.normalized().angularDistance(prediction_q.normalized()) *
+                     180.0 / std::acos(-1.0);
+  out.valid = std::isfinite(out.translation_m) && std::isfinite(out.rotation_deg);
+  if (out.valid)
+    out.triggered = weakCoupledInnovationTriggered(out.translation_m, out.rotation_deg);
+  return out;
+}
+
 struct WeakCoupledResult {
   Eigen::Matrix4f nominal = Eigen::Matrix4f::Identity();
   Eigen::Matrix4f prediction = Eigen::Matrix4f::Identity();

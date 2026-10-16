@@ -267,6 +267,15 @@ target_link_libraries(solid_adapter_contract_test
 )
 
 if(CATKIN_ENABLE_TESTING)
+  add_executable(p49_causal_trigger_contract_test
+    tests/p49_causal_trigger_contract_test.cpp
+  )
+  target_include_directories(p49_causal_trigger_contract_test PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../dog_prior_map_fastlio2_frontend_exp/include
+  )
+  add_test(NAME p49_causal_trigger_contract_test
+    COMMAND $<TARGET_FILE:p49_causal_trigger_contract_test>)
+
   add_test(NAME msckf_visual_measurement_test COMMAND $<TARGET_FILE:msckf_visual_measurement_test>)
   add_test(NAME square_root_covariance_test
     COMMAND $<TARGET_FILE:square_root_covariance_test>

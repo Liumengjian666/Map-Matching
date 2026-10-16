@@ -33,6 +33,8 @@
   <arg name="diagnostic_determinism_enable" default="false" />
   <arg name="ndt_determinism_csv_path" default="" />
   <arg name="coupled_mode" default="CONTROL" />
+  <arg name="causal_record_only_enable" default="false" />
+  <arg name="causal_record_directory" default="" />
   <arg name="visual_initial_guess_enable" default="false" />
   <arg name="visual_initial_guess_csv" default="" />
   <arg name="visual_geometry_csv" default="" />
@@ -124,6 +126,8 @@
         launch-prefix="$(arg output_directory_launch_prefix)">
     <env name="P45_OUTPUT_DIRECTORY" value="$(arg output_directory)" />
     <param name="coupled_mode" value="$(arg coupled_mode)" />
+    <param name="coupled_causal_record_only_enable" value="$(arg causal_record_only_enable)" />
+    <param name="coupled_causal_record_directory" value="$(arg causal_record_directory)" />
     <param name="visual_initial_guess_enable" value="$(arg visual_initial_guess_enable)" />
     <param name="visual_initial_guess_csv" value="$(arg visual_initial_guess_csv)" />
     <param name="visual_geometry_csv" value="$(arg visual_geometry_csv)" />

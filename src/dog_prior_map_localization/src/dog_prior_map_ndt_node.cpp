@@ -1,9 +1,12 @@
 #include <algorithm>
+#include <cerrno>
 #include <cmath>
 #include <cstdint>
 #include <deque>
 #include <cstring>
+#include <ctime>
 #include <fstream>
+#include <fcntl.h>
 #include <iomanip>
 #include <iterator>
 #include <limits>
@@ -12,6 +15,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <unistd.h>
 
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
@@ -186,7 +190,17 @@ public:
         coupled_mode_ != "WEAK_ONLY_FEEDBACK" && coupled_mode_ != "COUPLED_FEEDBACK")
       throw std::runtime_error("coupled_mode must be CONTROL, COUPLED_SHADOW, WEAK_ONLY_FEEDBACK, or COUPLED_FEEDBACK");
     coupled_enabled_ = coupled_mode_ != "CONTROL";
+    coupled_causal_record_only_enable_ = getParam<bool>(
+        "coupled_causal_record_only_enable", false);
+    coupled_causal_record_directory_ = getParam<std::string>(
+        "coupled_causal_record_directory", "");
+    if (coupled_causal_record_only_enable_ && coupled_mode_ != "CONTROL")
+      throw std::runtime_error("causal Record-Only requires coupled_mode=CONTROL");
+    if (coupled_causal_record_only_enable_ && coupled_causal_record_directory_.empty())
+      throw std::runtime_error("causal Record-Only requires an explicit fresh output directory");
     visual_initial_guess_enable_ = getParam<bool>("visual_initial_guess_enable", false);
+    if (coupled_causal_record_only_enable_ && visual_initial_guess_enable_)
+      throw std::runtime_error("causal Record-Only forbids visual initial-guess branches");
     experimental_ekf_translation_fallback_enable_ = getParam<bool>(
         "lidar_update/experimental_ekf_translation_fallback_enable", false);
     if (experimental_ekf_translation_fallback_enable_ &&
@@ -202,6 +216,8 @@ public:
       visual_initial_guess_.load(getParam<std::string>("visual_initial_guess_csv", ""));
     const std::string geometry_path = getParam<std::string>("visual_geometry_csv", "");
     if (!geometry_path.empty()) {
+      if (coupled_causal_record_only_enable_)
+        throw std::runtime_error("causal Record-Only forbids visual geometry jet diagnostics");
       visual_geometry_csv_.open(geometry_path);
       if (!visual_geometry_csv_) throw std::runtime_error("visual geometry log unavailable");
       visual_geometry_csv_ << "scan_ns,jet_valid,jet_ms";
@@ -278,6 +294,23 @@ public:
       ROS_WARN("[DogPriorMap NDT] determinism diagnostics enabled without an output CSV path");
       determinism_diagnostic_enable_ = false;
     }
+    if (coupled_causal_record_only_enable_)
+    {
+      if (!local_map_enable_)
+        throw std::runtime_error("causal Record-Only requires the frozen Local Target manager");
+      if (experimental_ekf_translation_fallback_enable_)
+        throw std::runtime_error("causal Record-Only forbids the experimental EKF fallback branch");
+      if (!determinism_diagnostic_enable_ || !determinism_csv_.is_open())
+        throw std::runtime_error("causal Record-Only requires live per-scan CONTROL diagnostics");
+      openFreshCausalRecordCsv(causal_prediction_csv_, "prediction_records.csv",
+          "frame_index,scan_stamp_ns,scan_reference_stamp_ns,ndt_align_complete_wall_sec,prediction_query_wall_sec,ndt_odom_publish_wall_sec,query_before_same_frame_ndt_publish,ekf_prediction_status,prediction_valid,causal_delivery_valid,ekf_sample_stamp_ns,ekf_message_seq,ekf_publisher,ekf_frame_id,ekf_child_frame_id,ekf_receipt_ros_sec,ekf_callback_receive_wall_sec,ekf_callback_accept_wall_sec,subscriber_history_revision,ekf_sample_state_revision,ekf_pose_tx,ekf_pose_ty,ekf_pose_tz,ekf_pose_qx,ekf_pose_qy,ekf_pose_qz,ekf_pose_qw,ekf_linear_velocity_x,ekf_linear_velocity_y,ekf_linear_velocity_z,ekf_angular_velocity_x,ekf_angular_velocity_y,ekf_angular_velocity_z,twist_frame_definition,prediction_age_ms,prediction_target_stamp_ns,predicted_map_T_lidar_row_major,source_hash64,target_tile_ids,target_cloud_hash64,target_points,ndt_converged");
+      openFreshCausalRecordCsv(causal_anchor_csv_, "anchor_records.csv",
+          "frame_index,scan_stamp_ns,anchor_before_valid,anchor_before_frozen,anchor_before_status,anchor_origin_stamp_ns,anchor_propagated_stamp_ns,anchor_age_sec,anchor_prediction_row_major,propagation_interval_start_ns,propagation_interval_end_ns,propagation_interval_sec,propagation_attempted,propagation_interval_valid,propagation_reason,anchor_after_propagation_valid,anchor_after_propagation_frozen,anchor_after_propagation_status,anchor_after_propagation_origin_stamp_ns,anchor_after_propagation_stamp_ns,anchor_after_propagation_prediction_row_major,anchor_after_settle_valid,anchor_after_settle_frozen,anchor_after_settle_status,anchor_after_settle_origin_stamp_ns,anchor_after_settle_stamp_ns,anchor_after_settle_prediction_row_major,anchor_invalid_reason");
+      openFreshCausalRecordCsv(causal_trigger_csv_, "trigger_eligibility.csv",
+          "frame_index,scan_stamp_ns,ndt_status,ndt_effective,innovation_translation_m,innovation_rotation_deg,trigger_translation_threshold_m,trigger_rotation_threshold_deg,triggered,prediction_valid,causal_delivery_valid,anchor_valid_before_refinement,anchor_frozen,anchor_origin_stamp_ns,anchor_propagated_stamp_ns,anchor_age_sec,first_frame,pair_eligible,eligibility_reason,nominal_ndt_pose_row_major,causal_prediction_pose_row_major");
+      openFreshCausalRecordCsv(causal_record_overhead_csv_, "record_overhead.csv",
+          "frame_index,scan_stamp_ns,record_write_wall_ms,record_write_cpu_ms");
+    }
     experimental_source_capture_enable_ = getParam<bool>(
         "output/experimental_ndt_source_capture_enable", false);
     if (experimental_source_capture_enable_) {
@@ -288,6 +321,8 @@ public:
           getParam<std::vector<std::string>>("output/experimental_ndt_source_capture_requests", {}));
     }
     mature_integration_enable_ = getParam<bool>("mature_integration/enable", false);
+    if (coupled_causal_record_only_enable_ && mature_integration_enable_)
+      throw std::runtime_error("causal Record-Only forbids mature extra-align branches");
     mature_dcreg_enable_ = mature_integration_enable_ &&
         getParam<bool>("mature_integration/dcreg_enable", false);
     mature_multi_ndt_enable_ = mature_integration_enable_ &&
@@ -470,7 +505,8 @@ public:
                                  &DogPriorMapNdtNode::livoxCallback, this);
     }
     sub_imu_ = nh_.subscribe(imu_topic_, 500, &DogPriorMapNdtNode::imuCallback, this);
-    if (coupled_enabled_ || experimental_ekf_translation_fallback_enable_)
+    if (coupled_enabled_ || experimental_ekf_translation_fallback_enable_ ||
+        coupled_causal_record_only_enable_)
     {
       sub_ekf_high_rate_ = nh_.subscribe(ekf_high_rate_topic_, 10000,
           &DogPriorMapNdtNode::ekfHighRateCallback, this);
@@ -479,7 +515,8 @@ public:
     ROS_INFO("[DogPriorMap NDT] started: mode=%s map=%s target=%zu lidar=%s output=%s EKF=%s",
              coupled_mode_.c_str(), local_map_enable_ ? local_map_manifest_path_.c_str() : map_pcd_path_.c_str(),
              target_cloud_->size(), lidar_topic_.c_str(),
-             ndt_odom_topic_.c_str(), (coupled_enabled_ || experimental_ekf_translation_fallback_enable_) ?
+             ndt_odom_topic_.c_str(), (coupled_enabled_ || experimental_ekf_translation_fallback_enable_ ||
+                                      coupled_causal_record_only_enable_) ?
              ekf_high_rate_topic_.c_str() : "disabled");
   }
 
@@ -520,8 +557,10 @@ public:
 
   void ekfHighRateCallback(const ros::MessageEvent<nav_msgs::Odometry const>& event)
   {
+    const ros::WallTime callback_receive_wall = ros::WallTime::now();
     const auto msg = event.getMessage();
-    if (!msg || (!coupled_enabled_ && !experimental_ekf_translation_fallback_enable_)) return;
+    if (!msg || (!coupled_enabled_ && !experimental_ekf_translation_fallback_enable_ &&
+                 !coupled_causal_record_only_enable_)) return;
     std::lock_guard<std::mutex> lock(mutex_);
     const auto callback_start = ros::WallTime::now();
     const uint64_t stamp_ns = msg->header.stamp.toNSec();
@@ -585,10 +624,20 @@ public:
         sample.map_T_lidar = map_T_lidar;
         sample.linear_velocity_lidar = linear_velocity_lidar;
         sample.angular_velocity_lidar = angular_velocity_lidar;
+        sample.message_seq = msg->header.seq;
+        sample.publisher = event.getPublisherName();
+        sample.frame_id = msg->header.frame_id;
+        sample.child_frame_id = msg->child_frame_id;
+        sample.receipt_ros_sec = event.getReceiptTime().toSec();
+        sample.callback_receive_wall_sec = callback_receive_wall.toSec();
+        sample.callback_accept_wall_sec = ros::WallTime::now().toSec();
+        sample.subscriber_history_revision = ++ekf_pose_history_revision_;
         if (ekf_pose_history_.empty() || stamp_ns > ekf_pose_history_.back().stamp_ns)
           ekf_pose_history_.push_back(sample);
         else if (stamp_ns == ekf_pose_history_.back().stamp_ns)
           ekf_pose_history_.back() = sample;
+        else
+          --ekf_pose_history_revision_;
       }
     }
     while (!ekf_pose_history_.empty() &&
@@ -596,7 +645,8 @@ public:
            (latest_ekf_high_rate_stamp_ns_ - ekf_pose_history_.front().stamp_ns) / 1e9 >
                coupled_ekf_history_keep_sec_)
       ekf_pose_history_.pop_front();
-    if (local_imu_rotation_prior_enable_ || coupled_enabled_ || experimental_ekf_translation_fallback_enable_)
+    if (local_imu_rotation_prior_enable_ || coupled_enabled_ ||
+        experimental_ekf_translation_fallback_enable_)
       processPendingCloudsLocked();
   }
 
@@ -630,6 +680,14 @@ private:
     Eigen::Matrix4d map_T_lidar = Eigen::Matrix4d::Identity();
     Eigen::Vector3d linear_velocity_lidar = Eigen::Vector3d::Zero();
     Eigen::Vector3d angular_velocity_lidar = Eigen::Vector3d::Zero();
+    uint32_t message_seq = 0;
+    uint64_t subscriber_history_revision = 0;
+    double receipt_ros_sec = std::numeric_limits<double>::quiet_NaN();
+    double callback_receive_wall_sec = std::numeric_limits<double>::quiet_NaN();
+    double callback_accept_wall_sec = std::numeric_limits<double>::quiet_NaN();
+    std::string publisher;
+    std::string frame_id;
+    std::string child_frame_id;
   };
 
   struct EkfPrediction
@@ -640,6 +698,8 @@ private:
     double age_ms = std::numeric_limits<double>::quiet_NaN();
     Eigen::Matrix4d map_T_lidar = Eigen::Matrix4d::Constant(
         std::numeric_limits<double>::quiet_NaN());
+    EkfPoseSample sample;
+    bool sample_available = false;
     std::string status = "NOT_REQUESTED";
   };
 
@@ -649,6 +709,7 @@ private:
     double lidar_header_stamp = std::numeric_limits<double>::quiet_NaN();
     double ros_now = std::numeric_limits<double>::quiet_NaN();
     double wall_time = std::numeric_limits<double>::quiet_NaN();
+    double ndt_align_start_wall_sec = std::numeric_limits<double>::quiet_NaN();
     double ndt_align_complete_wall_sec = std::numeric_limits<double>::quiet_NaN();
     double ndt_odom_publish_wall_sec = std::numeric_limits<double>::quiet_NaN();
     uint32_t cloud_seq = 0;
@@ -736,6 +797,46 @@ private:
     double ekf_prediction_query_ms = 0.0;
     double ekf_application_wall_sec = 0.0;
     double ekf_translation_change_m = 0.0;
+  };
+
+  struct AnchorPropagationRecord
+  {
+    uint64_t interval_start_ns = 0;
+    uint64_t interval_end_ns = 0;
+    double interval_sec = std::numeric_limits<double>::quiet_NaN();
+    bool attempted = false;
+    bool interval_valid = false;
+    std::string reason = "NOT_ATTEMPTED";
+    Eigen::Matrix4d relative_prediction = Eigen::Matrix4d::Identity();
+  };
+
+  struct CausalRecordFrame
+  {
+    uint64_t frame_index = 0;
+    uint64_t scan_stamp_ns = 0;
+    uint64_t scan_reference_stamp_ns = 0;
+    uint64_t source_hash64 = 0;
+    uint64_t target_cloud_hash64 = 0;
+    std::size_t source_points = 0;
+    std::size_t target_points = 0;
+    std::vector<std::string> target_tile_ids;
+    bool ndt_effective = false;
+    bool ndt_converged = false;
+    std::string ndt_status = "NOT_RUN";
+    double prediction_query_wall_sec = std::numeric_limits<double>::quiet_NaN();
+    bool query_before_same_frame_ndt_publish = false;
+    bool causal_delivery_valid = false;
+    bool anchor_valid_for_pair = false;
+    bool pair_eligible = false;
+    std::string eligibility_reason = "PREDICTION_UNAVAILABLE";
+    dog_prior_map_fastlio2_frontend_exp::WeakCoupledInnovation innovation;
+    Eigen::Matrix4d nominal_ndt_pose = Eigen::Matrix4d::Constant(
+        std::numeric_limits<double>::quiet_NaN());
+    EkfPrediction prediction;
+    dog_prior_map_fastlio2_frontend_exp::CoupledAnchorState anchor_before;
+    dog_prior_map_fastlio2_frontend_exp::CoupledAnchorState anchor_after_propagation;
+    dog_prior_map_fastlio2_frontend_exp::CoupledAnchorState anchor_after_settle;
+    AnchorPropagationRecord propagation;
   };
 
   struct MatureCandidateRecord
@@ -1108,6 +1209,8 @@ private:
       return prediction;
     }
     prediction.sample_stamp_ns = sample.stamp_ns;
+    prediction.sample = sample;
+    prediction.sample_available = true;
     prediction.stamp_ns = reference_stamp_ns;
     prediction.age_ms = static_cast<double>(reference_stamp_ns - sample.stamp_ns) / 1e6;
     if (!std::isfinite(prediction.age_ms) ||
@@ -1127,6 +1230,76 @@ private:
     prediction.status = prediction.age_ms > 0.0 ?
         "CAUSAL_EKF_BODY_TWIST_TO_SCAN" : "CAUSAL_EKF_EXACT_SCAN_STAMP";
     return prediction;
+  }
+
+  void advanceCoupledAnchorFromPrediction(uint64_t reference_stamp_ns,
+      const EkfPrediction &prediction, AnchorPropagationRecord *record)
+  {
+    if (record) *record = AnchorPropagationRecord{};
+    if (prediction.valid)
+    {
+      if (has_previous_coupled_ekf_pose_)
+      {
+        const uint64_t previous_stamp_ns = previous_coupled_ekf_pose_.stamp_ns;
+        const double interval_s = previous_stamp_ns < prediction.stamp_ns ?
+            (prediction.stamp_ns - previous_stamp_ns) / 1e9 : 0.0;
+        if (record)
+        {
+          record->interval_start_ns = previous_stamp_ns;
+          record->interval_end_ns = prediction.stamp_ns;
+          record->interval_sec = interval_s;
+        }
+        if (interval_s > 0.0 && interval_s <= 0.25 &&
+            reference_stamp_ns > coupled_anchor_.propagated_stamp_ns)
+        {
+          const Eigen::Matrix4d causal_interval =
+              previous_coupled_ekf_pose_.map_T_lidar.inverse() * prediction.map_T_lidar;
+          if (record)
+          {
+            record->attempted = true;
+            record->relative_prediction = causal_interval;
+            record->interval_valid = validRigidPose(causal_interval);
+            record->reason = record->interval_valid ? "ADVANCE_ATTEMPTED" : "INVALID_RELATIVE_POSE";
+          }
+          dog_prior_map_fastlio2_frontend_exp::advanceCoupledAnchor(
+              &coupled_anchor_, reference_stamp_ns, causal_interval);
+        }
+        else if (coupled_anchor_.valid)
+        {
+          coupled_anchor_.valid = false;
+          coupled_anchor_.frozen = false;
+          coupled_anchor_.status = "EKF_INTERVAL_INVALID";
+          coupled_anchor_.invalidated_stamp_ns = reference_stamp_ns;
+          if (record) record->reason = "EKF_INTERVAL_INVALID";
+        }
+        else if (record)
+          record->reason = interval_s > 0.25 ? "EKF_INTERVAL_TOO_LARGE" : "EKF_INTERVAL_NOT_INCREASING";
+      }
+      else if (coupled_anchor_.valid)
+      {
+        coupled_anchor_.valid = false;
+        coupled_anchor_.frozen = false;
+        coupled_anchor_.status = "EKF_INTERVAL_UNAVAILABLE";
+        coupled_anchor_.invalidated_stamp_ns = reference_stamp_ns;
+        if (record) record->reason = "EKF_INTERVAL_UNAVAILABLE";
+      }
+      else if (record)
+        record->reason = "NO_PREVIOUS_CAUSAL_PREDICTION";
+
+      previous_coupled_ekf_pose_ = EkfPoseSample{};
+      previous_coupled_ekf_pose_.stamp_ns = prediction.stamp_ns;
+      previous_coupled_ekf_pose_.map_T_lidar = prediction.map_T_lidar;
+      has_previous_coupled_ekf_pose_ = true;
+    }
+    else
+    {
+      coupled_anchor_.valid = false;
+      coupled_anchor_.frozen = false;
+      coupled_anchor_.status = prediction.status;
+      coupled_anchor_.invalidated_stamp_ns = reference_stamp_ns;
+      has_previous_coupled_ekf_pose_ = false;
+      if (record) record->reason = prediction.status;
+    }
   }
 
   static std::string determinismCsvHeader()
@@ -1217,6 +1390,157 @@ private:
       mixU32(bits);
     }
     return hash;
+  }
+
+  void openFreshCausalRecordCsv(std::ofstream &stream, const std::string &name,
+                                std::string header)
+  {
+    if (name == "prediction_records.csv")
+    {
+      const std::string marker = "scan_reference_stamp_ns,";
+      const std::size_t position = header.find(marker);
+      if (position != std::string::npos)
+        header.insert(position + marker.size(), "ndt_align_start_wall_sec,");
+    }
+    const std::string path = coupled_causal_record_directory_ +
+        (coupled_causal_record_directory_.back() == '/' ? "" : "/") + name;
+    const int descriptor = ::open(path.c_str(), O_WRONLY | O_CREAT | O_EXCL, 0644);
+    if (descriptor < 0)
+      throw std::runtime_error("cannot create fresh causal record output " + path +
+          ": " + std::strerror(errno));
+    ::close(descriptor);
+    stream.open(path.c_str(), std::ios::out | std::ios::app);
+    if (!stream) throw std::runtime_error("causal record output unavailable: " + path);
+    stream << header << '\n';
+    stream.flush();
+    if (!stream) throw std::runtime_error("failed to initialize causal record output: " + path);
+  }
+
+  static std::string hash64Text(uint64_t value)
+  {
+    std::ostringstream out;
+    out << std::hex << std::setw(16) << std::setfill('0') << value;
+    return out.str();
+  }
+
+  static std::string tileIdsText(const std::vector<std::string> &ids)
+  {
+    std::ostringstream out;
+    for (std::size_t i = 0; i < ids.size(); ++i)
+    {
+      if (i) out << ';';
+      out << ids[i];
+    }
+    return out.str();
+  }
+
+  static void appendMatrixCsv(std::ostream &out, const Eigen::Matrix4d &pose)
+  {
+    out << '"';
+    for (int row = 0; row < 4; ++row)
+      for (int col = 0; col < 4; ++col)
+      {
+        if (row || col) out << ';';
+        out << (pose.allFinite() ? pose(row, col) :
+            std::numeric_limits<double>::quiet_NaN());
+      }
+    out << '"';
+  }
+
+  void writeCausalRecord(const CausalRecordFrame &record,
+                         const DeterminismRow &diagnostic_row)
+  {
+    if (!coupled_causal_record_only_enable_) return;
+    const ros::WallTime write_start = ros::WallTime::now();
+    const std::clock_t cpu_start = std::clock();
+    std::ostringstream prediction, anchor, trigger;
+    prediction << std::setprecision(17)
+        << record.frame_index << ',' << record.scan_stamp_ns << ',' << record.scan_reference_stamp_ns << ','
+        << diagnostic_row.ndt_align_start_wall_sec << ',' << diagnostic_row.ndt_align_complete_wall_sec << ','
+        << record.prediction_query_wall_sec << ','
+        << diagnostic_row.ndt_odom_publish_wall_sec << ','
+        << (record.query_before_same_frame_ndt_publish ? 1 : 0) << ','
+        << record.prediction.status << ',' << (record.prediction.valid ? 1 : 0) << ','
+        << (record.causal_delivery_valid ? 1 : 0) << ',';
+    if (record.prediction.sample_available)
+    {
+      const EkfPoseSample &sample = record.prediction.sample;
+      Eigen::Quaterniond q(sample.map_T_lidar.block<3,3>(0,0));
+      q.normalize();
+      prediction << sample.stamp_ns << ',' << sample.message_seq << ',' << sample.publisher << ','
+          << sample.frame_id << ',' << sample.child_frame_id << ',' << sample.receipt_ros_sec << ','
+          << sample.callback_receive_wall_sec << ',' << sample.callback_accept_wall_sec << ','
+          << sample.subscriber_history_revision << ",NOT_EXPOSED," << sample.map_T_lidar(0,3) << ','
+          << sample.map_T_lidar(1,3) << ',' << sample.map_T_lidar(2,3) << ',' << q.x() << ','
+          << q.y() << ',' << q.z() << ',' << q.w() << ','
+          << sample.linear_velocity_lidar.x() << ',' << sample.linear_velocity_lidar.y() << ','
+          << sample.linear_velocity_lidar.z() << ',' << sample.angular_velocity_lidar.x() << ','
+          << sample.angular_velocity_lidar.y() << ',' << sample.angular_velocity_lidar.z() << ','
+          << "child_frame_id_axes (nav_msgs/Odometry twist convention)";
+    }
+    else
+    {
+      prediction << std::string(9, ',') << "NOT_EXPOSED" << std::string(14, ',')
+                 << "child_frame_id_axes (nav_msgs/Odometry twist convention)";
+    }
+    prediction << ',' << record.prediction.age_ms << ',' << record.prediction.stamp_ns << ',';
+    appendMatrixCsv(prediction, record.prediction.map_T_lidar);
+    prediction << ',' << hash64Text(record.source_hash64) << ',' << tileIdsText(record.target_tile_ids) << ','
+        << hash64Text(record.target_cloud_hash64) << ',' << record.target_points << ','
+        << (record.ndt_converged ? 1 : 0) << '\n';
+
+    const auto anchorAge = [&record](const dog_prior_map_fastlio2_frontend_exp::CoupledAnchorState &state) {
+      return state.origin_stamp_ns && record.scan_reference_stamp_ns >= state.origin_stamp_ns ?
+          (record.scan_reference_stamp_ns - state.origin_stamp_ns) / 1e9 : 0.0;
+    };
+    anchor << std::setprecision(17) << record.frame_index << ',' << record.scan_stamp_ns << ','
+        << (record.anchor_before.valid ? 1 : 0) << ',' << (record.anchor_before.frozen ? 1 : 0) << ','
+        << record.anchor_before.status << ',' << record.anchor_before.origin_stamp_ns << ','
+        << record.anchor_before.propagated_stamp_ns << ',' << anchorAge(record.anchor_before) << ',';
+    appendMatrixCsv(anchor, record.anchor_before.prediction);
+    anchor << ',' << record.propagation.interval_start_ns << ',' << record.propagation.interval_end_ns << ','
+        << record.propagation.interval_sec << ',' << (record.propagation.attempted ? 1 : 0) << ','
+        << (record.propagation.interval_valid ? 1 : 0) << ',' << record.propagation.reason << ','
+        << (record.anchor_after_propagation.valid ? 1 : 0) << ','
+        << (record.anchor_after_propagation.frozen ? 1 : 0) << ','
+        << record.anchor_after_propagation.status << ','
+        << record.anchor_after_propagation.origin_stamp_ns << ','
+        << record.anchor_after_propagation.propagated_stamp_ns << ',';
+    appendMatrixCsv(anchor, record.anchor_after_propagation.prediction);
+    anchor << ',' << (record.anchor_after_settle.valid ? 1 : 0) << ','
+        << (record.anchor_after_settle.frozen ? 1 : 0) << ',' << record.anchor_after_settle.status << ','
+        << record.anchor_after_settle.origin_stamp_ns << ','
+        << record.anchor_after_settle.propagated_stamp_ns << ',';
+    appendMatrixCsv(anchor, record.anchor_after_settle.prediction);
+    anchor << ',' << (record.anchor_after_settle.valid ? "" : record.anchor_after_settle.status) << '\n';
+
+    trigger << std::setprecision(17) << record.frame_index << ',' << record.scan_stamp_ns << ','
+        << record.ndt_status << ',' << (record.ndt_effective ? 1 : 0) << ','
+        << record.innovation.translation_m << ',' << record.innovation.rotation_deg << ",0.12,3.0,"
+        << (record.innovation.valid && record.innovation.triggered ? 1 : 0) << ','
+        << (record.prediction.valid ? 1 : 0) << ',' << (record.causal_delivery_valid ? 1 : 0) << ','
+        << (record.anchor_valid_for_pair ? 1 : 0) << ','
+        << (record.anchor_after_propagation.frozen ? 1 : 0) << ','
+        << record.anchor_after_propagation.origin_stamp_ns << ','
+        << record.anchor_after_propagation.propagated_stamp_ns << ','
+        << anchorAge(record.anchor_after_propagation) << ',' << (record.frame_index == 1 ? 1 : 0) << ','
+        << (record.pair_eligible ? 1 : 0) << ',' << record.eligibility_reason << ',';
+    appendMatrixCsv(trigger, record.nominal_ndt_pose);
+    trigger << ',';
+    appendMatrixCsv(trigger, record.prediction.map_T_lidar);
+    trigger << '\n';
+
+    causal_prediction_csv_ << prediction.str();
+    causal_anchor_csv_ << anchor.str();
+    causal_trigger_csv_ << trigger.str();
+    causal_prediction_csv_.flush();
+    causal_anchor_csv_.flush();
+    causal_trigger_csv_.flush();
+    const double wall_ms = (ros::WallTime::now() - write_start).toSec() * 1000.0;
+    const double cpu_ms = 1000.0 * static_cast<double>(std::clock() - cpu_start) / CLOCKS_PER_SEC;
+    causal_record_overhead_csv_ << std::setprecision(17) << record.frame_index << ','
+        << record.scan_stamp_ns << ',' << wall_ms << ',' << cpu_ms << '\n';
+    causal_record_overhead_csv_.flush();
   }
 
   void writeDeterminismRow(const DeterminismRow &row)
@@ -1495,7 +1819,8 @@ private:
   {
     if (!cloud || cloud->empty()) return;
     std::lock_guard<std::mutex> lock(mutex_);
-    if (!local_imu_rotation_prior_enable_ && !coupled_enabled_ && !experimental_ekf_translation_fallback_enable_)
+    if (!local_imu_rotation_prior_enable_ && !coupled_enabled_ &&
+        !experimental_ekf_translation_fallback_enable_)
     {
       handleCloudLocked(cloud, timing.start_stamp, callback_start, timing, header_seq);
       return;
@@ -1521,7 +1846,7 @@ private:
     while (pending_lidar_frames_.size() > pending_lidar_max_frames_)
     {
       if (experimental_ekf_translation_fallback_enable_)
-        throw std::runtime_error("P21 pending overflow: refusing an unwatermarked prediction");
+        throw std::runtime_error("P21 pending overflow: refusing an unwatermarked scan");
       PendingLidarFrame overflow = pending_lidar_frames_.front();
       pending_lidar_frames_.pop_front();
       ++pending_overflow_count_;
@@ -1687,11 +2012,21 @@ private:
     if (!cloud || cloud->empty()) return;
 
     DeterminismRow diagnostic_row;
+    CausalRecordFrame causal_record;
+    causal_record.scan_stamp_ns = stamp.toNSec();
+    causal_record.scan_reference_stamp_ns = timing.reference_stamp.toNSec();
+    causal_record.anchor_before = coupled_anchor_;
+    causal_record.anchor_after_propagation = coupled_anchor_;
+    causal_record.anchor_after_settle = coupled_anchor_;
+    causal_record.target_tile_ids = local_map_tiles_.activeTileIds();
+    causal_record.target_cloud_hash64 = active_target_hash64_;
+    causal_record.target_points = target_cloud_ ? target_cloud_->size() : 0;
     diagnostic_row.local_imu_prior_enabled = local_imu_rotation_prior_enable_;
     diagnostic_row.coupled_mode = coupled_mode_;
     if (determinism_diagnostic_enable_)
     {
       diagnostic_row.frame_index = ++determinism_frame_index_;
+      causal_record.frame_index = diagnostic_row.frame_index;
       diagnostic_row.lidar_header_stamp = stamp.toSec();
       diagnostic_row.scan_start_stamp = timing.start_stamp.toSec();
       diagnostic_row.scan_mid_stamp = timing.mid_stamp.toSec();
@@ -1723,6 +2058,8 @@ private:
       diagnostic_row.cloud_size_after_filter = source->size();
       diagnostic_row.cloud_hash = stableCloudHash(source);
     }
+    causal_record.source_points = source->size();
+    causal_record.source_hash64 = diagnostic_row.cloud_hash;
     const double preprocess_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
     publishCloud(source, stamp, base_frame_, pub_filtered_);
     if (static_cast<int>(source->size()) < min_effective_points_)
@@ -1744,6 +2081,11 @@ private:
             "NOT_EVALUATED", GeometryStats(), 0.0);
       }
       writeDeterminismRow(diagnostic_row);
+      causal_record.ndt_status = "INSUFFICIENT_SOURCE_POINTS";
+      causal_record.anchor_after_propagation = coupled_anchor_;
+      causal_record.anchor_after_settle = coupled_anchor_;
+      causal_record.eligibility_reason = "NDT_NOT_EFFECTIVE";
+      writeCausalRecord(causal_record, diagnostic_row);
       return;
     }
 
@@ -1880,6 +2222,14 @@ private:
                            static_cast<int>(source->size()), target_cloud_->size(), 0.0, 0);
         diagnostic_row.initial_guess_reason = "p45_local_map_update_failed";
         writeDeterminismRow(diagnostic_row);
+        causal_record.ndt_status = "LOCAL_MAP_UPDATE_FAILED";
+        causal_record.eligibility_reason = "NDT_NOT_EFFECTIVE";
+        causal_record.target_tile_ids = local_map_tiles_.activeTileIds();
+        causal_record.target_cloud_hash64 = active_target_hash64_;
+        causal_record.target_points = target_cloud_ ? target_cloud_->size() : 0;
+        causal_record.anchor_after_propagation = coupled_anchor_;
+        causal_record.anchor_after_settle = coupled_anchor_;
+        writeCausalRecord(causal_record, diagnostic_row);
         return;
       }
       if (local_map_update.updated)
@@ -1888,6 +2238,8 @@ private:
         map_geometry_tree_.reset();
         target_cloud_ = local_map_update.target;
         ndt_.setInputTarget(target_cloud_);
+        if (coupled_causal_record_only_enable_)
+          active_target_hash64_ = stableCloudHash(target_cloud_);
         map_geometry_tree_.reset(new pcl::KdTreeFLANN<pcl::PointXYZ>());
         map_geometry_tree_->setInputCloud(target_cloud_);
         local_target_rebuild_ms = (ros::WallTime::now() - target_rebuild_start).toSec() * 1000.0;
@@ -1895,6 +2247,10 @@ private:
           publishCloud(target_cloud_, timing.reference_stamp, map_frame_, pub_local_target_);
       }
     }
+    causal_record.target_tile_ids = local_map_enable_ ? local_map_tiles_.activeTileIds() :
+        std::vector<std::string>();
+    causal_record.target_cloud_hash64 = active_target_hash64_;
+    causal_record.target_points = target_cloud_ ? target_cloud_->size() : 0;
 
     const GeometryStats initial_geometry = map_geometry_tree_ ?
         measureGeometry(source, initial_guess) : GeometryStats();
@@ -1926,6 +2282,11 @@ private:
                          static_cast<int>(source->size()), target_cloud_->size(), 0.0, 0);
       diagnostic_row.initial_guess_reason = "p41_initial_geometry_gate_rejected";
       writeDeterminismRow(diagnostic_row);
+      causal_record.ndt_status = "GEOMETRY_GATE_REJECTED";
+      causal_record.eligibility_reason = "NDT_NOT_EFFECTIVE";
+      causal_record.anchor_after_propagation = coupled_anchor_;
+      causal_record.anchor_after_settle = coupled_anchor_;
+      writeCausalRecord(causal_record, diagnostic_row);
       return;
     }
 
@@ -1934,6 +2295,7 @@ private:
       experimental_source_capture_.save(diagnostic_row.frame_index, stamp.toNSec(), *source, diagnostic_row.cloud_hash);
     pcl::PointCloud<pcl::PointXYZ> aligned;
     const ros::WallTime align_start = ros::WallTime::now();
+    diagnostic_row.ndt_align_start_wall_sec = align_start.toSec();
     ndt_.align(aligned, initial_guess.cast<float>());
     diagnostic_row.ndt_align_complete_wall_sec = ros::WallTime::now().toSec();
     double align_ms = (ros::WallTime::now() - align_start).toSec() * 1000.0;
@@ -1941,6 +2303,10 @@ private:
     double score = ndt_.getFitnessScore();
     int iterations = ndt_.getFinalNumIteration();
     Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
+    causal_record.ndt_effective = ok;
+    causal_record.ndt_converged = ok;
+    causal_record.ndt_status = ok ? "NDT_CONVERGED" : "NDT_NOT_CONVERGED";
+    causal_record.nominal_ndt_pose = result;
     const GeometryStats raw_geometry = map_geometry_tree_ && result.allFinite() ?
         measureGeometry(source, result) : GeometryStats();
     if (mature_integration_enable_)
@@ -2002,49 +2368,7 @@ private:
         diagnostic_row.ekf_prediction_target_stamp = reference_stamp_ns / 1e9;
         diagnostic_row.ekf_prediction_age_ms = ekf_prediction.age_ms;
         diagnostic_row.ekf_prediction_pose = ekf_prediction.map_T_lidar;
-
-        if (ekf_prediction.valid)
-        {
-          if (has_previous_coupled_ekf_pose_)
-          {
-            const uint64_t previous_stamp_ns = previous_coupled_ekf_pose_.stamp_ns;
-            const double interval_s = previous_stamp_ns < ekf_prediction.stamp_ns ?
-                (ekf_prediction.stamp_ns - previous_stamp_ns) / 1e9 : 0.0;
-            if (interval_s > 0.0 && interval_s <= 0.25 &&
-                reference_stamp_ns > coupled_anchor_.propagated_stamp_ns)
-            {
-              const Eigen::Matrix4d causal_interval =
-                  previous_coupled_ekf_pose_.map_T_lidar.inverse() * ekf_prediction.map_T_lidar;
-              dog_prior_map_fastlio2_frontend_exp::advanceCoupledAnchor(
-                  &coupled_anchor_, reference_stamp_ns, causal_interval);
-            }
-            else if (coupled_anchor_.valid)
-            {
-              coupled_anchor_.valid = false;
-              coupled_anchor_.frozen = false;
-              coupled_anchor_.status = "EKF_INTERVAL_INVALID";
-              coupled_anchor_.invalidated_stamp_ns = reference_stamp_ns;
-            }
-          }
-          else if (coupled_anchor_.valid)
-          {
-            coupled_anchor_.valid = false;
-            coupled_anchor_.frozen = false;
-            coupled_anchor_.status = "EKF_INTERVAL_UNAVAILABLE";
-            coupled_anchor_.invalidated_stamp_ns = reference_stamp_ns;
-          }
-          previous_coupled_ekf_pose_ = EkfPoseSample{ekf_prediction.stamp_ns,
-                                                      ekf_prediction.map_T_lidar};
-          has_previous_coupled_ekf_pose_ = true;
-        }
-        else
-        {
-          coupled_anchor_.valid = false;
-          coupled_anchor_.frozen = false;
-          coupled_anchor_.status = ekf_prediction.status;
-          coupled_anchor_.invalidated_stamp_ns = reference_stamp_ns;
-          has_previous_coupled_ekf_pose_ = false;
-        }
+        advanceCoupledAnchorFromPrediction(reference_stamp_ns, ekf_prediction, nullptr);
 
         diagnostic_row.anchor_status = coupled_anchor_.status;
         diagnostic_row.anchor_valid = coupled_anchor_.valid;
@@ -2094,6 +2418,93 @@ private:
         else
         {
           diagnostic_row.coupled_status = ekf_prediction.status;
+        }
+      }
+      else if (coupled_causal_record_only_enable_)
+      {
+        causal_record.anchor_before = coupled_anchor_;
+        causal_record.prediction_query_wall_sec = ros::WallTime::now().toSec();
+        causal_record.prediction = ekfPredictionAtOrBeforeLocked(reference_stamp_ns);
+        diagnostic_row.ekf_prediction_status = causal_record.prediction.status;
+        diagnostic_row.ekf_prediction_stamp = causal_record.prediction.sample_stamp_ns / 1e9;
+        diagnostic_row.ekf_prediction_target_stamp = reference_stamp_ns / 1e9;
+        diagnostic_row.ekf_prediction_age_ms = causal_record.prediction.age_ms;
+        diagnostic_row.ekf_prediction_pose = causal_record.prediction.map_T_lidar;
+
+        const EkfPoseSample &sample = causal_record.prediction.sample;
+        causal_record.causal_delivery_valid = causal_record.prediction.valid &&
+            causal_record.prediction.sample_available && sample.stamp_ns <= reference_stamp_ns &&
+            std::isfinite(sample.callback_receive_wall_sec) &&
+            std::isfinite(sample.callback_accept_wall_sec) &&
+            sample.callback_receive_wall_sec <= sample.callback_accept_wall_sec &&
+            sample.callback_accept_wall_sec <= diagnostic_row.ndt_align_start_wall_sec &&
+            diagnostic_row.ndt_align_start_wall_sec <= causal_record.prediction_query_wall_sec &&
+            sample.publisher == "/dog_prior_map_ekf" && sample.frame_id == map_frame_ &&
+            sample.child_frame_id == base_frame_;
+
+        EkfPrediction anchor_prediction = causal_record.prediction;
+        if (!causal_record.causal_delivery_valid)
+        {
+          // An unverified or late-delivered sample must never establish an Anchor.
+          // Reuse the production invalid-prediction lifecycle to invalidate stale state.
+          anchor_prediction.valid = false;
+          anchor_prediction.status = "CAUSAL_EKF_DELIVERY_INVALID";
+        }
+        advanceCoupledAnchorFromPrediction(reference_stamp_ns, anchor_prediction,
+                                            &causal_record.propagation);
+        causal_record.anchor_after_propagation = coupled_anchor_;
+        diagnostic_row.anchor_status = coupled_anchor_.status;
+        diagnostic_row.anchor_valid = coupled_anchor_.valid;
+        diagnostic_row.anchor_stamp = coupled_anchor_.origin_stamp_ns / 1e9;
+        diagnostic_row.anchor_age_s = coupled_anchor_.origin_stamp_ns &&
+            reference_stamp_ns >= coupled_anchor_.origin_stamp_ns ?
+            (reference_stamp_ns - coupled_anchor_.origin_stamp_ns) / 1e9 : 0.0;
+
+        const bool valid_nominal = validRigidPose(result);
+        const bool valid_prediction_pose = causal_record.causal_delivery_valid &&
+            validRigidPose(causal_record.prediction.map_T_lidar);
+        if (causal_record.causal_delivery_valid && valid_nominal && valid_prediction_pose)
+          causal_record.innovation = dog_prior_map_fastlio2_frontend_exp::evaluateWeakCoupledInnovation(
+              result.cast<float>(), causal_record.prediction.map_T_lidar.cast<float>());
+
+        causal_record.anchor_valid_for_pair = causal_record.causal_delivery_valid &&
+            coupled_anchor_.valid && !coupled_anchor_.frozen && coupled_anchor_.origin_stamp_ns &&
+            coupled_anchor_.propagated_stamp_ns == reference_stamp_ns &&
+            reference_stamp_ns >= coupled_anchor_.origin_stamp_ns &&
+            (reference_stamp_ns - coupled_anchor_.origin_stamp_ns) / 1e9 <=
+                dog_prior_map_fastlio2_frontend_exp::kCoupledAnchorLifetimeS;
+
+        if (causal_record.causal_delivery_valid && causal_record.prediction.valid &&
+            (!causal_record.innovation.valid || !causal_record.innovation.triggered))
+          dog_prior_map_fastlio2_frontend_exp::settleWeakRefinementAnchor(
+              &coupled_anchor_, reference_stamp_ns, causal_record.prediction.map_T_lidar, true);
+        causal_record.anchor_after_settle = coupled_anchor_;
+        diagnostic_row.anchor_status_after = coupled_anchor_.status;
+        diagnostic_row.anchor_valid_after = coupled_anchor_.valid;
+
+        causal_record.nominal_ndt_pose = result;
+        if (!causal_record.prediction.valid)
+          causal_record.eligibility_reason = causal_record.prediction.status == "NO_CAUSAL_EKF_SAMPLE" ?
+              "PREDICTION_UNAVAILABLE" :
+              (causal_record.prediction.status == "STALE_CAUSAL_EKF_SAMPLE" ?
+                  "PREDICTION_STALE" : causal_record.prediction.status);
+        else if (!causal_record.causal_delivery_valid)
+          causal_record.eligibility_reason = "PREDICTION_CAUSALITY_INVALID";
+        else if (!causal_record.innovation.valid)
+          causal_record.eligibility_reason = "NDT_PREDICTION_INVALID";
+        else if (!causal_record.innovation.triggered)
+          causal_record.eligibility_reason = "NOT_TRIGGERED";
+        else if (coupled_anchor_.frozen)
+          causal_record.eligibility_reason = "ANCHOR_FROZEN";
+        else if (!causal_record.anchor_valid_for_pair)
+          causal_record.eligibility_reason = "TRIGGERED_BUT_ANCHOR_UNAVAILABLE";
+        else if (causal_record.frame_index == 1)
+          causal_record.eligibility_reason = "FIRST_FRAME_TRIGGER_NO_PAIR";
+        else
+        {
+          causal_record.pair_eligible = causal_record.ndt_effective;
+          causal_record.eligibility_reason = causal_record.pair_eligible ?
+              "LEGAL_CAUSAL_TRIGGER" : "NDT_NOT_EFFECTIVE";
         }
       }
 
@@ -2159,6 +2570,13 @@ private:
       {
         publishAlignedCloud(aligned, stamp);
       }
+
+    if (!ok)
+    {
+      causal_record.eligibility_reason = "NDT_NOT_EFFECTIVE";
+      causal_record.anchor_after_propagation = coupled_anchor_;
+      causal_record.anchor_after_settle = coupled_anchor_;
+    }
     }
 
     const GeometryStats used_geometry = map_geometry_tree_ && ok && diagnostic_row.final_used.allFinite() ?
@@ -2186,6 +2604,17 @@ private:
           {diagnostic_row.previous_pose, diagnostic_row.initial_guess, diagnostic_row.imu_rotation_guess,
            diagnostic_row.raw_ndt, diagnostic_row.final_used});
     writeDeterminismRow(diagnostic_row);
+    causal_record.query_before_same_frame_ndt_publish =
+        std::isfinite(causal_record.prediction_query_wall_sec) &&
+        std::isfinite(diagnostic_row.ndt_odom_publish_wall_sec) &&
+        causal_record.prediction_query_wall_sec < diagnostic_row.ndt_odom_publish_wall_sec;
+    if (!causal_record.query_before_same_frame_ndt_publish && causal_record.prediction.valid)
+    {
+      causal_record.causal_delivery_valid = false;
+      causal_record.pair_eligible = false;
+      causal_record.eligibility_reason = "PREDICTION_QUERY_NOT_BEFORE_NDT_PUBLISH";
+    }
+    writeCausalRecord(causal_record, diagnostic_row);
     ROS_INFO_THROTTLE(1.0,
                       "[DogPriorMap NDT] conv=%d limited=%d source=%zu target=%zu align=%.2fms score=%.4f iter=%d p=(%.2f %.2f %.2f)",
                       ok ? 1 : 0, step_limited ? 1 : 0, source->size(), target_cloud_->size(), align_ms, score, iterations, p_.x(), p_.y(), p_.z());
@@ -2447,6 +2876,12 @@ private:
   std::string coupled_mode_ = "CONTROL";
   std::string ekf_high_rate_topic_ = "/dog_livo/odom_high_rate";
   bool coupled_enabled_ = false;
+  bool coupled_causal_record_only_enable_ = false;
+  std::string coupled_causal_record_directory_;
+  std::ofstream causal_prediction_csv_;
+  std::ofstream causal_anchor_csv_;
+  std::ofstream causal_trigger_csv_;
+  std::ofstream causal_record_overhead_csv_;
   bool experimental_ekf_translation_fallback_enable_ = false;
   std::ofstream ekf_translation_samples_csv_;
   double coupled_prediction_max_age_sec_ = 0.02;
@@ -2462,6 +2897,7 @@ private:
   bool has_imu_watermark_ = false;
   ros::Time latest_imu_stamp_;
   std::deque<EkfPoseSample> ekf_pose_history_;
+  uint64_t ekf_pose_history_revision_ = 0;
   bool has_ekf_high_rate_watermark_ = false;
   uint64_t latest_ekf_high_rate_stamp_ns_ = 0;
   bool has_previous_coupled_ekf_pose_ = false;
@@ -2471,6 +2907,7 @@ private:
   pcl::PointCloud<pcl::PointXYZ>::Ptr target_cloud_;
   pcl::KdTreeFLANN<pcl::PointXYZ>::Ptr map_geometry_tree_;
   LocalMapTiles local_map_tiles_;
+  uint64_t active_target_hash64_ = 0;
   bool local_map_enable_ = false;
   bool publish_local_target_ = false;
   double local_map_safety_margin_m_ = 10.0;

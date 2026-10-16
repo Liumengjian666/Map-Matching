@@ -12,6 +12,8 @@
   <arg name="output_dir" default="/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/run" />
   <arg name="scan_ack_timeout_sec" default="120.0" />
   <arg name="rviz" default="false" />
+  <arg name="causal_record_only_enable" default="false" />
+  <arg name="causal_record_directory" default="" />
 
   <param name="use_sim_time" value="false" />
   <include file="$(find dog_prior_map_localization)/launch/dog_prior_map_localization_split.launch">
@@ -19,6 +21,8 @@
     <arg name="dataset_config" value="$(arg runtime_config)" />
     <arg name="rviz" value="false" />
     <arg name="coupled_mode" value="CONTROL" />
+    <arg name="causal_record_only_enable" value="$(arg causal_record_only_enable)" />
+    <arg name="causal_record_directory" value="$(arg causal_record_directory)" />
     <arg name="camera_enable" value="false" />
     <arg name="visual_initial_guess_enable" value="false" />
     <arg name="publish_path" value="true" />

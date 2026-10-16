@@ -1,0 +1,101 @@
+{
+  "dataset": "Newer College 2020 / 01_short_experiment",
+  "run_dir": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p49_causal_record/formal1800_run1",
+  "scan_count": 1800,
+  "first_scan_stamp_ns": "1583836591182590976",
+  "last_scan_stamp_ns": "1583836771078157312",
+  "p46_scan_timestamps_identical": true,
+  "initialization": "CONDITIONAL_BASE_FRAME / ORACLE_START_ONLY; first-frame seed only",
+  "gt_read_during_run_or_freeze": false,
+  "git_head_at_run": "0c03b24c2b6908ecde57749799c8dc31a043d07d",
+  "remote_head_at_run": "0c03b24c2b6908ecde57749799c8dc31a043d07d",
+  "code_sha": "47fdc06728ab9e832e148560de8f5de53879331bee6abfd36bb1e6ec88684f7e",
+  "hashes": {
+    "scan_sha256_manifest": {
+      "path": "docs/p46_newer_college_real_tile_switch/input_scan_sha256.csv",
+      "sha256": "995ba277066297630281aef1836a37adb3ce6acb04331c7510c6891d13da1070"
+    },
+    "ouster_imu_csv": {
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_imu/data.csv",
+      "sha256": "b733ce23544ed23a3ab7a627acfd61ea329f882b12ef0cbcb501b6b13e5828be"
+    },
+    "tile_manifest": {
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_manifest.json",
+      "sha256": "ebd7089f20026a991af1a88679a133bce020ee7bc9a9a5439665cc3a413cbb04"
+    },
+    "runtime_config": {
+      "path": "src/dog_prior_map_localization/config/p41_newer_college_runtime.yaml",
+      "sha256": "6dd20a08e21f7d1dfe9408fe3652c1b78c5f9d89a6adae8c3cc1352d6d7426e9"
+    },
+    "initialization_config": {
+      "path": "src/dog_prior_map_localization/config/p44_newer_college_base_oracle_start.yaml",
+      "sha256": "7615762083b4041ac41b9a80737b36e798189d3ce6e803b22402e0d7465f1a3a"
+    },
+    "ndt_binary": {
+      "path": "devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+      "sha256": "47fdc06728ab9e832e148560de8f5de53879331bee6abfd36bb1e6ec88684f7e"
+    },
+    "ekf_binary": {
+      "path": "devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+      "sha256": "930a3ca96e178d63afd58874ca3974dadcbd87908e58e39a3d15c85807d25d2d"
+    },
+    "publisher_binary": {
+      "path": "devel/lib/dog_prior_map_localization/newer_college_sequence_publisher",
+      "sha256": "024b8f679c16a325acb73bf6b4e91698f4a7a025dd47ed90de3cfb6fef565e66"
+    },
+    "source_files": [
+      {
+        "path": "src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp",
+        "sha256": "941c15a4455c47b8d9c9aa742dc1dcdbde82cc2bac81fb4a54075e98f307b609"
+      },
+      {
+        "path": "src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/coupled_ndt_weak_refinement.hpp",
+        "sha256": "d565091d0387a96ab25d7fdd16d029e391b5bf611305e35b9de3fb01f46d1a3c"
+      },
+      {
+        "path": "src/dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_weak_refinement.cpp",
+        "sha256": "bb19724ea962621f33aece000bb50d01f6161690ca7a3bfe16596a0a8a389aa5"
+      },
+      {
+        "path": "src/dog_prior_map_localization/CMakeLists.txt",
+        "sha256": "a2806b6ea7b13c1a56cde1b0e0b68dc98819b4bfdec1978d71e6c3a8d7c24e28"
+      },
+      {
+        "path": "src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch",
+        "sha256": "50412d4e3daf31fb5ffdccd9bae3447fe75e8393b6906eabf69b83eab2211247"
+      },
+      {
+        "path": "src/dog_prior_map_localization/launch/newer_college_local_map.launch",
+        "sha256": "8482f7048f5f38d3dc8b8cd392a984a4e4ab64007852eab785e562d18e5f10c7"
+      },
+      {
+        "path": "src/dog_prior_map_localization/launch/newer_college_causal_record.launch",
+        "sha256": "5902c37e8fdc398478e9e4bc2ce6b6ff768b31df1732d4856e19ff4a1ae166b0"
+      },
+      {
+        "path": "src/dog_prior_map_localization/scripts/monitor_p45_local_map_run.py",
+        "sha256": "73bb23d1e47080411af1d9e3f65cb695083c6c50aeb97f5b237327023b196f93"
+      },
+      {
+        "path": "src/dog_prior_map_localization/tests/p49_causal_trigger_contract_test.cpp",
+        "sha256": "551de6d444831929e670b75adc124e834d8076b025a9f14b2ae739b13c6404e3"
+      },
+      {
+        "path": "docs/p49_newer_college_causal_record/verify_smoke_contract.py",
+        "sha256": "779707dae8169473b5096ace863306b5e9981033b2b13533546d5e7f8d351fcc"
+      },
+      {
+        "path": "docs/p49_newer_college_causal_record/summarize_record_run.py",
+        "sha256": "71c700346c6f81b0972221a139bd29bba9cc1b195572eaf5a661c46affc4aca2"
+      }
+    ],
+    "control_parity_json": {
+      "path": "docs/p49_newer_college_causal_record/formal_control_parity_results.json",
+      "sha256": "c3bd4519dc756becbf71f725a4add21d424a515053070450c4d84ad9f82df446"
+    },
+    "control_parity_csv": {
+      "path": "docs/p49_newer_college_causal_record/formal_control_parity_results.csv",
+      "sha256": "7beb196262170f0de7e490c64a4b62f9b5e83a2311eb06eccd62ef1c9ef430b0"
+    }
+  }
+}

@@ -1,0 +1,293 @@
+{
+  "classification": "CAUSAL_RECORD_VALID_NO_ELIGIBLE_PAIRS",
+  "gt_read": false,
+  "scan_count": 1800,
+  "first_scan_stamp_ns": "1583836591182590976",
+  "last_scan_stamp_ns": "1583836771078157312",
+  "table_row_counts": {
+    "publisher_receipts": 1800,
+    "ndt_diagnostics": 1800,
+    "oosm_statistics": 1800,
+    "prediction_records": 1800,
+    "anchor_records": 1800,
+    "trigger_eligibility": 1800,
+    "deskew_diagnostics": 1800,
+    "local_map_diagnostics": 1800,
+    "record_overhead": 1800
+  },
+  "ndt_converged": 1800,
+  "oosm_results": {
+    "APPLIED": 1800
+  },
+  "pending_overflow_max": 0,
+  "coupled_calls": {
+    "jet_calls": 0,
+    "value_calls": 0,
+    "attempted": 0,
+    "feedback_applied": 0
+  },
+  "valid_predictions": 1799,
+  "causal_delivery_valid": 1799,
+  "prediction_statuses": {
+    "NO_CAUSAL_EKF_SAMPLE": 1,
+    "CAUSAL_EKF_BODY_TWIST_TO_SCAN": 1799
+  },
+  "prediction_age_ms": {
+    "count": 1799,
+    "mean": 2.427375564202333,
+    "p95_nearest_lower": 4.015968,
+    "max": 9.996019
+  },
+  "causal_wall_order_pass": true,
+  "innovation_translation_m": {
+    "count": 1799,
+    "mean": 0.022165344956440295,
+    "p95_nearest_lower": 0.03884136867828003,
+    "max": 0.1196286152267843
+  },
+  "innovation_rotation_deg": {
+    "count": 1799,
+    "mean": 0.433901289966589,
+    "p95_nearest_lower": 0.5133579109193322,
+    "max": 1.144147376553321
+  },
+  "production_triggered_frames": 0,
+  "frozen_trigger_thresholds": {
+    "translation_strictly_greater_than_m": 0.12,
+    "rotation_strictly_greater_than_deg": 3.0
+  },
+  "anchor_counts": {
+    "valid_before": 1715,
+    "valid_after_propagation": 1632,
+    "valid_after_settle": 1716,
+    "frozen_after_settle": 0
+  },
+  "anchor_age_sec": {
+    "count": 1800,
+    "mean": 1.1279695839288908,
+    "p95_nearest_lower": 2.099821568,
+    "max": 2.200913152
+  },
+  "anchor_invalid_reasons": {
+    "CAUSAL_EKF_DELIVERY_INVALID": 1,
+    "EXPIRED": 83
+  },
+  "eligibility_reasons": {
+    "PREDICTION_UNAVAILABLE": 1,
+    "NOT_TRIGGERED": 1799
+  },
+  "legal_nonfirst_frame_pairs": 0,
+  "noninitial_tile_updates": 5,
+  "tile_update_reasons": {
+    "initial_tile_load": 1,
+    "active_cache_covers_required_tiles": 1794,
+    "required_tiles_outside_cache": 5
+  },
+  "tile_count_min_max": [
+    21,
+    50
+  ],
+  "target_points_min_max": [
+    552716,
+    2313118
+  ],
+  "deskew_processing_ms": {
+    "count": 1800,
+    "mean": 20.91181023722218,
+    "p95_nearest_lower": 26.104765,
+    "max": 37.454894
+  },
+  "ndt_align_ms": {
+    "count": 1800,
+    "mean": 8.783292471111114,
+    "p95_nearest_lower": 11.295023,
+    "max": 311.286672
+  },
+  "record_write_wall_ms": {
+    "count": 1800,
+    "mean": 0.35509444333333356,
+    "p95_nearest_lower": 0.7643480000000001,
+    "max": 1.9754760000000002
+  },
+  "record_write_cpu_ms": {
+    "count": 1800,
+    "mean": 0.08959944444444409,
+    "p95_nearest_lower": 0.13,
+    "max": 0.347
+  },
+  "runtime_metrics": {
+    "command": [
+      "roslaunch",
+      "dog_prior_map_localization",
+      "newer_college_causal_record.launch",
+      "scan_count:=1800",
+      "start_stamp_ns:=1583836591182590976",
+      "output_dir:=/media/jian/HIKVISION/paper rosbag/NewerCollege/.p49_causal_record/formal1800_run1",
+      "rviz:=false"
+    ],
+    "sampled_process_group_id": 336897,
+    "return_code": 0,
+    "wall_time_sec": 233.69666749198223,
+    "sample_period_sec": 0.1,
+    "input_publisher_seen": true,
+    "input_publisher_complete_marker_seen": true,
+    "processes": {
+      "ndt": {
+        "pid_count": 1,
+        "peak_sampled_rss_kib": 369908,
+        "peak_observed_vmhwm_kib": 369908,
+        "cpu_time_sec": 51.16
+      },
+      "ekf": {
+        "pid_count": 1,
+        "peak_sampled_rss_kib": 23804,
+        "peak_observed_vmhwm_kib": 23888,
+        "cpu_time_sec": 49.11
+      },
+      "publisher": {
+        "pid_count": 1,
+        "peak_sampled_rss_kib": 44212,
+        "peak_observed_vmhwm_kib": 45980,
+        "cpu_time_sec": 13.88
+      },
+      "map_visualizer": {
+        "pid_count": 0,
+        "peak_sampled_rss_kib": 0,
+        "peak_observed_vmhwm_kib": 0,
+        "cpu_time_sec": 0.0
+      },
+      "rviz": {
+        "pid_count": 0,
+        "peak_sampled_rss_kib": 0,
+        "peak_observed_vmhwm_kib": 0,
+        "cpu_time_sec": 0.0
+      }
+    },
+    "peak_synchronized_roslaunch_group_rss_kib": 509140,
+    "roslaunch_group_cpu_time_sec": 118.69,
+    "last_sample_rss_kib": {
+      "ndt": 0,
+      "ekf": 0,
+      "publisher": 0,
+      "map_visualizer": 0,
+      "rviz": 0
+    }
+  },
+  "control_parity": {
+    "frames": 1800,
+    "control_parity_pass": true,
+    "worst_differences": {
+      "initial_guess_translation_m": 0.0,
+      "initial_guess_rotation_deg": 0.0,
+      "raw_ndt_translation_m": 0.0,
+      "raw_ndt_rotation_deg": 0.0,
+      "final_used_translation_m": 0.0,
+      "final_used_rotation_deg": 0.0,
+      "fitness_abs": 0.0
+    },
+    "valid_predictions": 1799,
+    "causal_delivery_valid": 1799,
+    "legal_pairs": 0,
+    "causal_wall_order_pass": true,
+    "trajectory_output_rows": 21600,
+    "trajectory_expected_rows": 21600,
+    "trajectory_missing_rows": 0,
+    "trajectory_extra_rows": 0,
+    "trajectory_source_counts_expected": {
+      "EKF_HIGH_RATE": 18000,
+      "EKF_CORRECTED": 1800,
+      "NDT": 1800
+    },
+    "trajectory_source_counts_observed": {
+      "EKF_HIGH_RATE": 18000,
+      "EKF_CORRECTED": 1800,
+      "NDT": 1800
+    },
+    "trajectory_worst_translation_m": 0.0,
+    "trajectory_worst_rotation_deg": 0.0
+  },
+  "localization_trajectory_rows": 21600,
+  "output_file_sha256": [
+    {
+      "file": "anchor_records.csv",
+      "size_bytes": 1900288,
+      "sha256": "6dd5be82581696eaad2d4910c2df8e7eedce3ff531e0562220faad15fbeb177c"
+    },
+    {
+      "file": "deskew_diagnostics.csv",
+      "size_bytes": 705174,
+      "sha256": "4b9ce31bf8e0f34358976d1fbab7cffdee2ee1990c3f3cc5ae751ecf6dc28094"
+    },
+    {
+      "file": "ekf_prediction_diagnostics.csv",
+      "size_bytes": 10047071,
+      "sha256": "ae32edba7b035c9341c6ef6017595effc84f66c8bc2e6f2b01103850a70c8c8e"
+    },
+    {
+      "file": "geometry_diagnostics.csv",
+      "size_bytes": 605667,
+      "sha256": "d7b2b0fc0dfed506ec07e96260728a56ecef23b31b90c97d661e2a4443222972"
+    },
+    {
+      "file": "local_map_diagnostics.csv",
+      "size_bytes": 1676676,
+      "sha256": "b4d80f1b7deb2f32035006ba3f7521501eb06b380b07d6f9ca01a52ad30684a1"
+    },
+    {
+      "file": "localization_trajectory.csv",
+      "size_bytes": 7331687,
+      "sha256": "42a3248f7d6b53fef9d65c0a9ce3e4f10841ddef913cb461d99eb2bff44f65fa"
+    },
+    {
+      "file": "memory_timeseries.csv",
+      "size_bytes": 235284,
+      "sha256": "cb4fd1b6f4e6066db76f4cfad2ecbc57a2772d1a3f3158e29b3131b0c44e38e3"
+    },
+    {
+      "file": "ndt_diagnostics.csv",
+      "size_bytes": 4013692,
+      "sha256": "864b27c0222db1572ee37ae89b664251d2b612fc12d3c72f17d4e2301b84e464"
+    },
+    {
+      "file": "ndt_runtime.csv",
+      "size_bytes": 21494,
+      "sha256": "a36c6929c61d1344535ad827a1d58393cfeb14e490e5ee4d6fc2a6044c237708"
+    },
+    {
+      "file": "oosm_statistics.csv",
+      "size_bytes": 212417,
+      "sha256": "b7cd1aebce742b3d30495429ce8d9a0f38a3a0d898e75a3b9e4c00b46525c851"
+    },
+    {
+      "file": "prediction_records.csv",
+      "size_bytes": 2864421,
+      "sha256": "1924a24856b3ddf34d8a5c245858592f4da4b24282d40f1584eb4389e464e368"
+    },
+    {
+      "file": "publisher_receipts.csv",
+      "size_bytes": 615154,
+      "sha256": "65291c9b7668b703110a231fe180183b2c621b51a171235d302c7af72e7b27d4"
+    },
+    {
+      "file": "record_overhead.csv",
+      "size_bytes": 110140,
+      "sha256": "5d12627ccd53359f2d31076611aba04c0f4dd46fbf0152256ab0f4da7896a370"
+    },
+    {
+      "file": "trigger_eligibility.csv",
+      "size_bytes": 1239390,
+      "sha256": "8326f17f7d75f3b7306b4542eac4a7d6780353b8b1e93ab390923cc938693da1"
+    },
+    {
+      "file": "runtime_metrics.json",
+      "size_bytes": 1480,
+      "sha256": "1e1e4c3b43407c1200dd4db2eb88377867b2af1b6f28c664711236a00222d19b"
+    },
+    {
+      "file": "monitor.log",
+      "size_bytes": 418803,
+      "sha256": "5995877033a9443c8578a601cd737ebbb27193e81df7ec8ed51a4438ee2722d5"
+    }
+  ],
+  "input_freeze_sha256": "fb7028023e5b600ccf105e7ce0b6498fd5ac752b3c9a936c503889406db55003"
+}

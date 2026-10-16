@@ -66,9 +66,11 @@ WeakCoupledResult runWeakCoupledRefinement(const Eigen::Matrix4f& nominal,
   };
   if(!validConfig(config) || !effective || !rigid(nominal) || !rigid(prediction) || !stamp || !source_count)
     return finish("INVALID_OR_INEFFECTIVE_NOMINAL");
-  out.innovation_translation_m=(nominal.block<3,1>(0,3).cast<double>()-prediction.block<3,1>(0,3).cast<double>()).norm();
-  out.innovation_rotation_deg=angle(nominal,prediction);
-  out.triggered=out.innovation_translation_m>.12 || out.innovation_rotation_deg>3;
+  const WeakCoupledInnovation innovation = evaluateWeakCoupledInnovation(nominal, prediction);
+  if (!innovation.valid) return finish("INVALID_OR_INEFFECTIVE_NOMINAL");
+  out.innovation_translation_m=innovation.translation_m;
+  out.innovation_rotation_deg=innovation.rotation_deg;
+  out.triggered=innovation.triggered;
   out.anchor_valid=anchor.valid && !anchor.frozen && anchor.origin_stamp_ns &&
       anchor.propagated_stamp_ns==stamp && stamp>=anchor.origin_stamp_ns &&
       (stamp-anchor.origin_stamp_ns)/1e9<=kCoupledAnchorLifetimeS;

@@ -76,13 +76,13 @@ def main():
     supported_launches = (
         "newer_college_local_map.launch",
         "newer_college_300frame.launch",
+        "newer_college_causal_record.launch",
     )
     if not launch_args or not any(
         launch_name in value for launch_name in supported_launches for value in launch_args
     ):
         parser.error(
-            "pass roslaunch arguments after --, including newer_college_local_map.launch "
-            "or newer_college_300frame.launch"
+            "pass roslaunch arguments after --, including a supported Newer College launch file"
         )
     if args.sample_period <= 0:
         parser.error("sample period must be positive")
