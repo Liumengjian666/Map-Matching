@@ -1,0 +1,132 @@
+Panels:
+  - Class: rviz/Displays
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /Prior Map1
+        - /Deskewed Current Scan1
+        - /NDT Aligned Scan1
+        - /NDT Path1
+        - /EKF High-Rate Path1
+        - /EKF Corrected Path1
+      Splitter Ratio: 0.5
+    Tree Height: 500
+  - Class: rviz/Views
+    Name: Views
+    Expanded:
+      - /Current View1
+    Splitter Ratio: 0.5
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz/TF
+      Enabled: true
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Value: true
+    - Class: rviz/PointCloud2
+      Name: Prior Map
+      Enabled: true
+      Topic: /newer_college/prior_map
+      Queue Size: 1
+      Decay Time: 0
+      Style: Flat Squares
+      Size (Pixels): 1
+      Size (m): 0.04
+      Color Transformer: FlatColor
+      Color: 160; 160; 160
+      Alpha: 0.45
+      Selectable: true
+      Value: true
+    - Class: rviz/PointCloud2
+      Name: Deskewed Current Scan
+      Enabled: true
+      Topic: /newer_college/deskewed_points
+      Queue Size: 1
+      Decay Time: 0
+      Style: Points
+      Size (Pixels): 3
+      Size (m): 0.04
+      Color Transformer: FlatColor
+      Color: 255; 210; 0
+      Alpha: 1
+      Selectable: true
+      Value: true
+    - Class: rviz/PointCloud2
+      Name: NDT Aligned Scan
+      Enabled: true
+      Topic: /newer_college/points_aligned
+      Queue Size: 2
+      Decay Time: 0
+      Style: Points
+      Size (Pixels): 3
+      Size (m): 0.04
+      Color Transformer: FlatColor
+      Color: 255; 45; 45
+      Alpha: 1
+      Selectable: true
+      Value: true
+    - Class: rviz/Pose
+      Name: NDT Pose
+      Enabled: true
+      Topic: /dog_livo/ndt_pose
+      Shape: Axes
+      Axes Length: 1
+      Axes Radius: 0.1
+      Value: true
+    - Class: rviz/Path
+      Name: NDT Path
+      Enabled: true
+      Topic: /dog_livo/ndt_path
+      Color: 0; 255; 0
+      Line Style: Lines
+      Line Width: 0.08
+      Value: true
+    - Class: rviz/Path
+      Name: EKF High-Rate Path
+      Enabled: true
+      Topic: /dog_livo/path_high_rate
+      Color: 0; 160; 255
+      Line Style: Lines
+      Line Width: 0.04
+      Value: true
+    - Class: rviz/Path
+      Name: EKF Corrected Path
+      Enabled: true
+      Topic: /dog_livo/path_corrected
+      Color: 255; 180; 0
+      Line Style: Lines
+      Line Width: 0.05
+      Value: true
+  Enabled: true
+  Global Options:
+    Background Color: 35; 35; 35
+    Default Light: true
+    Fixed Frame: newer_college_map
+    Frame Rate: 20
+  Name: P44 CONDITIONAL_BASE_FRAME / ORACLE_START_ONLY
+  Tools:
+    - Class: rviz/Interact
+    - Class: rviz/MoveCamera
+    - Class: rviz/Select
+    - Class: rviz/FocusCamera
+    - Class: rviz/Measure
+  Value: true
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Distance: 80
+      Focal Point:
+        X: -3.4
+        Y: 8.3
+        Z: 0.1
+      Pitch: 0.9
+      Yaw: 0.8
+      Value: true
+Window Geometry:
+  Height: 900
+  Width: 1400
+  X: 80
+  Y: 50

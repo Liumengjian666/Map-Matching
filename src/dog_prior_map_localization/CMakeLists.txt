@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   nav_msgs
   geometry_msgs
   diagnostic_msgs
+  std_msgs
   tf
   pcl_ros
   pcl_conversions
@@ -27,7 +28,7 @@ find_package(OpenSSL REQUIRED)
 set(CMAKE_CXX_FLAGS "-O2 -g -Wall ${CMAKE_CXX_FLAGS}")
 
 catkin_package(
-  CATKIN_DEPENDS roscpp sensor_msgs nav_msgs geometry_msgs diagnostic_msgs tf pcl_ros pcl_conversions livox_ros_driver2 dog_prior_map_interfaces
+  CATKIN_DEPENDS roscpp sensor_msgs nav_msgs geometry_msgs diagnostic_msgs std_msgs tf pcl_ros pcl_conversions livox_ros_driver2 dog_prior_map_interfaces
 )
 
 include_directories(
@@ -175,6 +176,21 @@ target_link_libraries(newer_college_first_scan_publisher
   /usr/lib/x86_64-linux-gnu/libusb-1.0.so
 )
 add_dependencies(newer_college_first_scan_publisher
+  ${catkin_EXPORTED_TARGETS}
+)
+
+# Backpressured multi-scan PCD/IMU input mode used by the P44 continuous run.
+# It shares the P41 single-scan adapter implementation and acknowledges each
+# scan through NDT diagnostics rather than relying on a guessed delay.
+add_executable(newer_college_sequence_publisher
+  src/newer_college_first_scan_publisher.cpp
+)
+target_link_libraries(newer_college_sequence_publisher
+  ${catkin_LIBRARIES}
+  ${PCL_LIBRARIES}
+  /usr/lib/x86_64-linux-gnu/libusb-1.0.so
+)
+add_dependencies(newer_college_sequence_publisher
   ${catkin_EXPORTED_TARGETS}
 )
 
@@ -334,7 +350,7 @@ install(DIRECTORY config launch docs rviz
 )
 
 install(TARGETS dog_prior_map_ekf_node_cpp dog_prior_map_ndt_node_cpp
-        newer_college_first_scan_publisher
+        newer_college_first_scan_publisher newer_college_sequence_publisher
         solid_reference_database_builder solid_shadow_node_cpp
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

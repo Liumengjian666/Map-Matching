@@ -31,6 +31,7 @@
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <sensor_msgs/Imu.h>
+#include <std_msgs/Header.h>
 #include <tf/transform_broadcaster.h>
 #include "dog_prior_map_localization/external_ndt_transaction_server.hpp"
 #include "dog_prior_map_localization/core/frame_conversions.hpp"
@@ -130,6 +131,7 @@ public:
     imu_topic_ = getParam<std::string>("topics/imu", "/livox/imu");
     filtered_points_topic_ = getParam<std::string>("topics/filtered_points", "/dog_livo/filtered_points");
     diagnostics_topic_ = getParam<std::string>("topics/diagnostics", "/dog_livo/diagnostics");
+    imu_watermark_topic_ = getParam<std::string>("output/imu_watermark_topic", "");
     ndt_odom_topic_ = getParam<std::string>("topics/ndt_odom", "/dog_livo/ndt_odom");
     ndt_pose_topic_ = getParam<std::string>("topics/ndt_pose", "/dog_livo/ndt_pose");
     ndt_path_topic_ = getParam<std::string>("topics/ndt_path", "/dog_livo/ndt_path");
@@ -417,6 +419,8 @@ public:
     {
       pub_diagnostics_ = nh_.advertise<diagnostic_msgs::DiagnosticArray>(diagnostics_topic_, 5);
     }
+    if (!imu_watermark_topic_.empty())
+      pub_imu_watermark_ = nh_.advertise<std_msgs::Header>(imu_watermark_topic_, 1000, false);
     path_.header.frame_id = map_frame_;
 
     if (lidar_msg_type_ == "pointcloud2")
@@ -468,6 +472,13 @@ public:
     }
     if (local_imu_rotation_prior_enable_ || coupled_enabled_)
       processPendingCloudsLocked();
+    if (pub_imu_watermark_)
+    {
+      std_msgs::Header watermark;
+      watermark.stamp = msg->header.stamp;
+      watermark.frame_id = msg->header.frame_id;
+      pub_imu_watermark_.publish(watermark);
+    }
   }
 
   void ekfHighRateCallback(const ros::MessageEvent<nav_msgs::Odometry const>& event)
@@ -2267,6 +2278,7 @@ private:
   ros::Publisher pub_filtered_;
   ros::Publisher pub_aligned_;
   ros::Publisher pub_diagnostics_;
+  ros::Publisher pub_imu_watermark_;
   tf::TransformBroadcaster tf_broadcaster_;
   mutable std::mutex mutex_;
 
@@ -2276,6 +2288,7 @@ private:
   std::string lidar_msg_type_;
   std::string filtered_points_topic_;
   std::string diagnostics_topic_;
+  std::string imu_watermark_topic_;
   std::string ndt_odom_topic_;
   std::string ndt_pose_topic_;
   std::string ndt_path_topic_;

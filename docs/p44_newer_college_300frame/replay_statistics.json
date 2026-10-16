@@ -1,0 +1,96 @@
+{
+  "replay": {
+    "scan_count": 300,
+    "unique_scan_count": 300,
+    "strictly_increasing": true,
+    "first_scan_ns": "1583836591182590976",
+    "last_scan_ns": "1583836621082438144",
+    "sensor_span_sec": 29.899847168,
+    "frames_per_second_input": 10.033496101648034,
+    "wall_publish_to_final_ack_sec": 33.819884061813354,
+    "wall_over_sensor_span": 1.1311055829746426,
+    "publisher_receipts": 300,
+    "ndt_diagnostic_ack": 300,
+    "ndt_converged": 300,
+    "ekf_oosm_correction_ack": 300,
+    "ndt_output_rate": 1.0,
+    "oosm_results": {
+      "APPLIED": 300
+    },
+    "deskew_status": {
+      "PUBLISHED": 300
+    },
+    "geometry_gate": {
+      "PASS": 300
+    },
+    "step_limited_count": 0,
+    "deskew_future_imu_use_count": 0,
+    "deskew_current_scan_ndt_leakage_count": 0,
+    "trajectory_rows_by_source": {
+      "EKF_HIGH_RATE": 3001,
+      "NDT": 300,
+      "EKF_CORRECTED": 300
+    },
+    "finite_pose_rows": 3601,
+    "nonfinite_pose_rows": 0
+  },
+  "latency": {
+    "deskew_processing_ms": {
+      "mean": 21.405139353333333,
+      "median": 20.642658,
+      "p95": 26.613439000000003,
+      "max": 31.963668
+    },
+    "control_ndt_align_ms_all_frames": {
+      "mean": 8.970463746666667,
+      "median": 6.0434475,
+      "p95": 10.96449195,
+      "max": 572.294558
+    },
+    "control_ndt_align_ms_after_first_frame": {
+      "mean": 7.086436675585284,
+      "median": 6.03566,
+      "p95": 10.9557585,
+      "max": 16.988184
+    },
+    "publish_to_ndt_diagnostic_ack_sec": {
+      "mean": 0.04832422971725464,
+      "median": 0.04604756832122803,
+      "p95": 0.05467303991317749,
+      "max": 0.615753173828125
+    },
+    "publish_to_ekf_oosm_ack_sec": {
+      "mean": 0.04833013772964478,
+      "median": 0.04605245590209961,
+      "p95": 0.054678714275360106,
+      "max": 0.6157584190368652
+    },
+    "ndt_iterations": {
+      "7": 1,
+      "1": 282,
+      "2": 17
+    }
+  },
+  "resource_observations": {
+    "sample_elapsed_sec_approx": 11.0,
+    "process_vm_hwm_kib_observed_by_midrun_sample": {
+      "ndt": 775308,
+      "ekf": 23900,
+      "publisher": 44320
+    },
+    "process_cpu_percent_ps_snapshot_average_since_start": {
+      "ndt": 39.0,
+      "ekf": 18.9,
+      "publisher": 8.3
+    },
+    "interpretation": "VmHWM values are peaks observed up to a mid-run sample, not guaranteed exit-time maxima; CPU values are one ps snapshot, not whole-run integral CPU time.",
+    "realtime_status": "NOT_REALTIME_VALIDATED"
+  },
+  "oosm_statistics_rows": 300,
+  "diagnostic_files": {
+    "ndt_rows": 300,
+    "deskew_rows": 300,
+    "geometry_rows": 300,
+    "trajectory_rows": 3601
+  }
+}
