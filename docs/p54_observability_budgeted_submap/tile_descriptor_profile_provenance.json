@@ -1,0 +1,29 @@
+{
+  "protocol": "P54_POSTFREEZE_TILE_DESCRIPTOR_PROFILE_PROVENANCE_V1",
+  "gt_used": false,
+  "tile_selection_calls": 0,
+  "ndt_align_calls": 0,
+  "native_jet_calls": 0,
+  "profile_runtime_ms": 140.873501,
+  "active_tiles_profiled": 51,
+  "tile_point_count_sum": 2313122,
+  "descriptor_payload_bytes_sum": 3110720,
+  "descriptor_payload_bytes_per_tile": {
+    "min": 12,
+    "median": 43616,
+    "max": 247204
+  },
+  "descriptor_payload_definition": "occupied XYZ floats plus surfel XYZ, normal XYZ, and scalar planarity float arrays; excludes vector capacity, Eigen/PCL objects, KD-tree index structures, allocator overhead, and process RSS",
+  "sample_manifest_sha256": "c6af0e7c8ea6958e46d76e33cd566ad68be8b87b95118f11ae0393d7af745822",
+  "tile_catalog_sha256": "9bce82df31847d1947044a6fa1046f1702b36d82ba6e17cc5ef535754c1a6ea4",
+  "profile_source_sha256": "6b01acab045b21afafce5251f7dc0c17da177beff08cabc94564683b26a19b51",
+  "profile_binary_sha256": "6fe136299746b435c80b08a3fecdf0bf3427dc3e5627f6e849d2923c47260040",
+  "profile_csv_sha256": "27aa5b9f72f4762d9032d8e40b68b9a1654eb1e8979dd069a8e3edee8e99f960",
+  "profile_manifest_sha256": "ef085d77275c096590ac1953726a7895b3dc2e5c7e018563598738f63cb9c135",
+  "main_probe_source_sha256_unchanged": "1b49f377d115082330efb17a88fbaa945bcf1ba1fd4d1beb6afacf295ab8c9db",
+  "main_probe_binary_sha256_unchanged": "5646dab51e063628a27129d5f17e8e41761a68c776a2972a27bbb610a594daac",
+  "cmake_at_main_pre_gt_freeze_sha256": "d237eba5dbe98071e099f58e769e838035ed28b1f8e588c56fac1ee757da5a3d",
+  "cmake_after_postfreeze_profile_target_sha256": "be45f27d8e9402ec7028dbd832d971a02d2ca5ce02bcd053560ddcb5412d51c0",
+  "main_input_freeze_sha256": "0d2f34f1926a4388c4acde8c03716afd71b4808b111dfb92782e3625a49f8926",
+  "external_output_directory": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p54_observability_budgeted_submap/run1/descriptor"
+}

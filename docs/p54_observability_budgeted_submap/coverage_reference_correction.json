@@ -1,0 +1,16 @@
+{
+  "P47_sample_manifest_sha256": "c6af0e7c8ea6958e46d76e33cd566ad68be8b87b95118f11ae0393d7af745822",
+  "correct_P46_local_geometry_path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p46_real_tile_switch/formal1800/geometry_diagnostics.csv",
+  "correct_P46_local_geometry_sha256": "bb726bb1e7c9ac6c6e258e8b186f6dc539d7186e5a57cab0a013a847c71ecd79",
+  "corrected_coverage_path": "/home/jian/livox_ws/p54_observability_budgeted_submap_ws/docs/p54_observability_budgeted_submap/coverage_comparison.csv",
+  "corrected_coverage_sha256": "cbcd4475a0253263b4190b2478e3bd413eac7aa6cc5f43ea88730e2a81b7bb12",
+  "gt_used": false,
+  "original_coverage_frozen_sha256": "af4eeeffbef3e167fd485490ae7b2c63a7dce0ac268e45e2dae55f9f0961035b",
+  "preserved_original_path": "/home/jian/livox_ws/p54_observability_budgeted_submap_ws/docs/p54_observability_budgeted_submap/coverage_comparison_frozen_original.csv",
+  "preserved_original_sha256": "af4eeeffbef3e167fd485490ae7b2c63a7dce0ac268e45e2dae55f9f0961035b",
+  "protocol": "P54_POST_FREEZE_BASELINE_COVERAGE_REFERENCE_CORRECTION_V1",
+  "reason": "The first exported comparison column referenced P46 Global diagnostics; this derivative uses the correct P46 Local formal1800 diagnostics.",
+  "reference_target_points_matched_all_samples": true,
+  "rows": 616,
+  "selection_or_ndt_outputs_changed": false
+}

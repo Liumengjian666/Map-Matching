@@ -1,0 +1,9 @@
+{
+  "protocol": "P54_TILE_DESCRIPTOR_PROFILE_V1",
+  "gt_used": false,
+  "ndt_align_calls": 0,
+  "tile_count": 51,
+  "descriptor_payload_bytes_sum": 3110720,
+  "descriptor_build_total_ms": 140.873501,
+  "csv": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p54_observability_budgeted_submap/run1/descriptor/tile_descriptor_metrics.csv"
+}

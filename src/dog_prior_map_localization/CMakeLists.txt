@@ -374,6 +374,27 @@ if(DOG_PRIOR_BUILD_RESEARCH_TOOLS)
     ${PCL_LIBRARIES} ${OPENSSL_LIBRARIES} ${LIBUSB_LIBRARIES}
   )
 
+  add_executable(p54_observability_budgeted_submap_probe
+    ../../docs/p54_observability_budgeted_submap/tools/p54_budgeted_submap_probe.cpp
+  )
+  target_include_directories(p54_observability_budgeted_submap_probe PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../dog_prior_map_fastlio2_frontend_exp/include
+  )
+  target_link_libraries(p54_observability_budgeted_submap_probe
+    ${PCL_LIBRARIES} ${OPENSSL_LIBRARIES} ${LIBUSB_LIBRARIES}
+  )
+
+  # Post-freeze cost profiler; includes the exact P54 descriptor implementation.
+  add_executable(p54_tile_descriptor_profile
+    ../../docs/p54_observability_budgeted_submap/tools/p54_tile_descriptor_profile.cpp
+  )
+  target_include_directories(p54_tile_descriptor_profile PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../dog_prior_map_fastlio2_frontend_exp/include
+  )
+  target_link_libraries(p54_tile_descriptor_profile
+    ${PCL_LIBRARIES} ${OPENSSL_LIBRARIES} ${LIBUSB_LIBRARIES}
+  )
+
   # Offline-only probes are intentionally independent of the runtime
   # localization nodes and are never linked into their execution path.
   add_executable(ndt_uncertainty_probe
@@ -393,6 +414,11 @@ if(DOG_PRIOR_BUILD_RESEARCH_TOOLS)
     ${PCL_LIBRARIES}
     /usr/lib/x86_64-linux-gnu/libusb-1.0.so
   )
+endif()
+
+if(CATKIN_ENABLE_TESTING AND DOG_PRIOR_BUILD_RESEARCH_TOOLS)
+  add_test(NAME p54_budgeted_submap_contract_test
+    COMMAND $<TARGET_FILE:p54_observability_budgeted_submap_probe> --self-test)
 endif()
 
 catkin_install_python(PROGRAMS
@@ -417,6 +443,7 @@ install(TARGETS dog_prior_map_ekf_node_cpp dog_prior_map_ndt_node_cpp
 
 if(DOG_PRIOR_BUILD_RESEARCH_TOOLS)
   install(TARGETS p47_reconstruct_frozen_sources p47_coupled_shadow_probe
+    p54_observability_budgeted_submap_probe
     ndt_uncertainty_probe ndt_direction_alignment_probe
     RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
   )

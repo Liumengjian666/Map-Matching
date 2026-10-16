@@ -1,0 +1,2761 @@
+{
+  "active_tile_count": 51,
+  "active_tiles": [
+    {
+      "bytes": 1580682,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00002_yp00003.pcd",
+      "point_count": 131709,
+      "sha256": "ebef44e7251bf32b904b8e3f860f8de3b5c627cb87d90564e10a0e6fc9410fe6",
+      "tile_id": "tile_xp00002_yp00003"
+    },
+    {
+      "bytes": 187864,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00002_yp00004.pcd",
+      "point_count": 15641,
+      "sha256": "605989fb2cac28faa41583ee2ff26f5c1537bcaa64ada0fd6ff5bc1acf468613",
+      "tile_id": "tile_xp00002_yp00004"
+    },
+    {
+      "bytes": 7884,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00002_yp00005.pcd",
+      "point_count": 643,
+      "sha256": "73d4e76d6f5011188e14f71fda41cebeb78bbce9a9f8601e87233958b10fdb14",
+      "tile_id": "tile_xp00002_yp00005"
+    },
+    {
+      "bytes": 110306,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00002_yp00006.pcd",
+      "point_count": 9178,
+      "sha256": "e8fc16e548f7c12914c4eb58d0642114c04b634b2819000a18466c02771cbb0c",
+      "tile_id": "tile_xp00002_yp00006"
+    },
+    {
+      "bytes": 59534,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00002_yp00007.pcd",
+      "point_count": 4947,
+      "sha256": "413e3f8fbda5d6ad5bec0273706dd6da0aca1fd28a478e0f730e1d321b3e07aa",
+      "tile_id": "tile_xp00002_yp00007"
+    },
+    {
+      "bytes": 346,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00002_yp00008.pcd",
+      "point_count": 15,
+      "sha256": "501faca5942401de5d41c4271842479a8713ba29d51e10fe8b97e0bee6aa53a9",
+      "tile_id": "tile_xp00002_yp00008"
+    },
+    {
+      "bytes": 211252,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00002_yp00010.pcd",
+      "point_count": 17590,
+      "sha256": "8eaf2b0475f8075bef85ddbdbf04309ecabd934646e12d1ec6e8f7c1afe4eb7c",
+      "tile_id": "tile_xp00002_yp00010"
+    },
+    {
+      "bytes": 341824,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00002_yp00011.pcd",
+      "point_count": 28471,
+      "sha256": "bec1a8ac0958f257ae6bc7343782765950e59788fb6ff958e764a13afa6d83b4",
+      "tile_id": "tile_xp00002_yp00011"
+    },
+    {
+      "bytes": 386992,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00002_yp00012.pcd",
+      "point_count": 32235,
+      "sha256": "148661c5f4ab5fad4caf5129ff58bf86e7713b9d46f785c6a63e9a70f8885f03",
+      "tile_id": "tile_xp00002_yp00012"
+    },
+    {
+      "bytes": 327736,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00002_yp00013.pcd",
+      "point_count": 27297,
+      "sha256": "3256cf84c54c83d0247bc69bd4b5805f063977db5ba20439d5e474a58bf3d2f3",
+      "tile_id": "tile_xp00002_yp00013"
+    },
+    {
+      "bytes": 1018144,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00003_yp00003.pcd",
+      "point_count": 84831,
+      "sha256": "b4b84bb930acc6a51ad8c87f6662c1899efd9056066deb09355a16443c5c842d",
+      "tile_id": "tile_xp00003_yp00003"
+    },
+    {
+      "bytes": 534580,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00003_yp00004.pcd",
+      "point_count": 44534,
+      "sha256": "3e373e534664cad63eefb2158e6d0c998ff24f3ddded1d6f36d791b563d05e27",
+      "tile_id": "tile_xp00003_yp00004"
+    },
+    {
+      "bytes": 79922,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00003_yp00005.pcd",
+      "point_count": 6646,
+      "sha256": "a410e70d1fc8c853091ff2a915b1d0240b21e77e53370538113ad561cde7ea98",
+      "tile_id": "tile_xp00003_yp00005"
+    },
+    {
+      "bytes": 718828,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00003_yp00006.pcd",
+      "point_count": 59888,
+      "sha256": "7b7a81b46b89bf92f8af716dc06d8d29b3d1ba04021df91997e5c81cb4775c89",
+      "tile_id": "tile_xp00003_yp00006"
+    },
+    {
+      "bytes": 463600,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00003_yp00007.pcd",
+      "point_count": 38619,
+      "sha256": "b24ac773825625b773a8c7002381e80a023b8a158c69145b393a2766a8783771",
+      "tile_id": "tile_xp00003_yp00007"
+    },
+    {
+      "bytes": 318892,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00003_yp00008.pcd",
+      "point_count": 26560,
+      "sha256": "69545e99c057be434347fea323c6e9173ed98500a0648695177ddd5276731090",
+      "tile_id": "tile_xp00003_yp00008"
+    },
+    {
+      "bytes": 292864,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00003_yp00009.pcd",
+      "point_count": 24391,
+      "sha256": "f35b1933a1076e941a47f5b61832b246fa9da5ac20fb148234f0a262b5f52ffe",
+      "tile_id": "tile_xp00003_yp00009"
+    },
+    {
+      "bytes": 625996,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00003_yp00010.pcd",
+      "point_count": 52152,
+      "sha256": "c26f283c2e538f61e1828d93cef3a772fe4077db1be03bdadc8ee4e8f1119f12",
+      "tile_id": "tile_xp00003_yp00010"
+    },
+    {
+      "bytes": 232720,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00003_yp00011.pcd",
+      "point_count": 19379,
+      "sha256": "dcd17c75bfdfa5823f2f57c01305f76b9b96720816a2388dc71dc65ced18d8cf",
+      "tile_id": "tile_xp00003_yp00011"
+    },
+    {
+      "bytes": 397024,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00003_yp00012.pcd",
+      "point_count": 33071,
+      "sha256": "777352f2b73cd4d6aa39bb69d8732c395b834efe2aa8bed4b44b280db6967d53",
+      "tile_id": "tile_xp00003_yp00012"
+    },
+    {
+      "bytes": 541816,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00003_yp00013.pcd",
+      "point_count": 45137,
+      "sha256": "3ac5dc313aa6dd572d3c52f817067f5dddd5b3f7ac0fbe97f7537e7ab32789fd",
+      "tile_id": "tile_xp00003_yp00013"
+    },
+    {
+      "bytes": 611140,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00004_yp00003.pcd",
+      "point_count": 50914,
+      "sha256": "a0c6e61cf7c21d644f2d98a1718cf189d20f05aad3894e9e40be9f60def10aee",
+      "tile_id": "tile_xp00004_yp00003"
+    },
+    {
+      "bytes": 1902018,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00004_yp00004.pcd",
+      "point_count": 158487,
+      "sha256": "030c62702951f05dbcb89d51a9d87374f659ba4404f6f60adb6dda12859f9a64",
+      "tile_id": "tile_xp00004_yp00004"
+    },
+    {
+      "bytes": 1324290,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00004_yp00005.pcd",
+      "point_count": 110343,
+      "sha256": "70463835fd18bdca4d65e2f0f662b2eb20ed0571ab1ce05507ec39c46d0d3a25",
+      "tile_id": "tile_xp00004_yp00005"
+    },
+    {
+      "bytes": 641452,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00004_yp00006.pcd",
+      "point_count": 53440,
+      "sha256": "9214916046e2d6dea6217a025d383584a74fdfec170e912fae4141d46cd15fca",
+      "tile_id": "tile_xp00004_yp00006"
+    },
+    {
+      "bytes": 416992,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00004_yp00007.pcd",
+      "point_count": 34735,
+      "sha256": "7de6733ac5412a0d00db8f0f6b49f6d43f197bb891a45f38119218aa420d7b0b",
+      "tile_id": "tile_xp00004_yp00007"
+    },
+    {
+      "bytes": 346696,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00004_yp00008.pcd",
+      "point_count": 28877,
+      "sha256": "aa225bfcc81d228ee52bffedd6592c3e2f079a221188c7afcb397dd012d94706",
+      "tile_id": "tile_xp00004_yp00008"
+    },
+    {
+      "bytes": 372988,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00004_yp00009.pcd",
+      "point_count": 31068,
+      "sha256": "03d4c58482af8c5c2f9f5bbceace26b90f3db1849792bd87418d6b126ae05859",
+      "tile_id": "tile_xp00004_yp00009"
+    },
+    {
+      "bytes": 410596,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00004_yp00010.pcd",
+      "point_count": 34202,
+      "sha256": "4903da2714322da93fb48bc26ae3864f98850012063a3a2f87da5f07a48bb4c2",
+      "tile_id": "tile_xp00004_yp00010"
+    },
+    {
+      "bytes": 544072,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00004_yp00011.pcd",
+      "point_count": 45325,
+      "sha256": "66ff8591e2b2cc5d2fe2d194c7a0b71ef2ae40ebc5b0c05c43ab569ee056d083",
+      "tile_id": "tile_xp00004_yp00011"
+    },
+    {
+      "bytes": 566248,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00004_yp00012.pcd",
+      "point_count": 47173,
+      "sha256": "d3aed400daaf3880069e7f7bc7d43beb000622d3b890e8da56554a0db5167202",
+      "tile_id": "tile_xp00004_yp00012"
+    },
+    {
+      "bytes": 36026,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00004_yp00013.pcd",
+      "point_count": 2988,
+      "sha256": "3c661de876ebd99ea16860cea261a3729729463f553d723a85792081a66d93c1",
+      "tile_id": "tile_xp00004_yp00013"
+    },
+    {
+      "bytes": 212,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00004_yp00014.pcd",
+      "point_count": 4,
+      "sha256": "b1643dae277af2f84eda51e1ebf141404e7337e603b5c7bb579126fc6bde11fc",
+      "tile_id": "tile_xp00004_yp00014"
+    },
+    {
+      "bytes": 1242534,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00005_yp00003.pcd",
+      "point_count": 103530,
+      "sha256": "2b51b35d951f9208e97af8a5def879576caeefd68b2aa163929ca343c5db945b",
+      "tile_id": "tile_xp00005_yp00003"
+    },
+    {
+      "bytes": 1017604,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00005_yp00004.pcd",
+      "point_count": 84786,
+      "sha256": "4694c3e1154f4c91119a020da8a7a2cb0c653a6e8cb9be32f56a7eaead8f5111",
+      "tile_id": "tile_xp00005_yp00004"
+    },
+    {
+      "bytes": 1311030,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00005_yp00005.pcd",
+      "point_count": 109238,
+      "sha256": "b2d71ac2afb39b0e39189ce673bcb9252d88bc577bb6438f35124f7ffe6fef28",
+      "tile_id": "tile_xp00005_yp00005"
+    },
+    {
+      "bytes": 228952,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00005_yp00006.pcd",
+      "point_count": 19065,
+      "sha256": "a073b2dbb920763ed844896670c83221405afc7a00dbd64ef6d25ed1a7d4171b",
+      "tile_id": "tile_xp00005_yp00006"
+    },
+    {
+      "bytes": 640924,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00005_yp00007.pcd",
+      "point_count": 53396,
+      "sha256": "2ee550ca864aadea59a1ce8478f346be50a0fceae77633828b2a8649b9b0fe7a",
+      "tile_id": "tile_xp00005_yp00007"
+    },
+    {
+      "bytes": 662248,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00005_yp00008.pcd",
+      "point_count": 55173,
+      "sha256": "ad6ac71ef97bf91364e258e66bb99e5577b14abf977374e90c1aaea1a5dedada",
+      "tile_id": "tile_xp00005_yp00008"
+    },
+    {
+      "bytes": 18038,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00005_yp00009.pcd",
+      "point_count": 1489,
+      "sha256": "523c5cbd066e219b95a7b7740ab985eb214ebab23674cc61ef3f517743cdf8a3",
+      "tile_id": "tile_xp00005_yp00009"
+    },
+    {
+      "bytes": 1668990,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00006_yp00003.pcd",
+      "point_count": 139068,
+      "sha256": "257dbc9debc79eba0597791b3d28be39f3ce952ec6a69989bfb288249c36c0d0",
+      "tile_id": "tile_xp00006_yp00003"
+    },
+    {
+      "bytes": 1951506,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00006_yp00004.pcd",
+      "point_count": 162611,
+      "sha256": "aa9c33828e0fbb7102fc0aaf48ca934e9c6eb81c09be7024dd507d59e9ffb023",
+      "tile_id": "tile_xp00006_yp00004"
+    },
+    {
+      "bytes": 856936,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00006_yp00005.pcd",
+      "point_count": 71397,
+      "sha256": "f188aad8f2a4a4c2e517ec2d7dd8f8d0147d982e75869063835b03d080ac4a94",
+      "tile_id": "tile_xp00006_yp00005"
+    },
+    {
+      "bytes": 577744,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00006_yp00006.pcd",
+      "point_count": 48131,
+      "sha256": "55e36e43ac2ab087c0bebe09ad973499e736ba55c98f4de66e5577dcc5071059",
+      "tile_id": "tile_xp00006_yp00006"
+    },
+    {
+      "bytes": 576868,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00006_yp00007.pcd",
+      "point_count": 48058,
+      "sha256": "5217a1f4067000c6f4204590521aefd02066ad50c579f4452edeb45f30d85d67",
+      "tile_id": "tile_xp00006_yp00007"
+    },
+    {
+      "bytes": 313012,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00006_yp00008.pcd",
+      "point_count": 26070,
+      "sha256": "ed15bd8029e7da068e1025745403cf21e36b8d348919445d8bc17b15da458396",
+      "tile_id": "tile_xp00006_yp00008"
+    },
+    {
+      "bytes": 1596,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00006_yp00009.pcd",
+      "point_count": 119,
+      "sha256": "4d7f23d0e67646bd27b1370e0aa83941d041b915180dc5e93c7c1ed88edd8786",
+      "tile_id": "tile_xp00006_yp00009"
+    },
+    {
+      "bytes": 668788,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00007_yp00004.pcd",
+      "point_count": 55718,
+      "sha256": "c807f8053d6ec2427b19dea87f84312dc2d7d8a947c254417380cc113298d2bc",
+      "tile_id": "tile_xp00007_yp00004"
+    },
+    {
+      "bytes": 289612,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00007_yp00005.pcd",
+      "point_count": 24120,
+      "sha256": "677d14a9fbfd073b2bccec26fc1c41b377acf3921b365b96b3d76093fe2c8754",
+      "tile_id": "tile_xp00007_yp00005"
+    },
+    {
+      "bytes": 95954,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00007_yp00006.pcd",
+      "point_count": 7982,
+      "sha256": "fbd82f39f23f31418ecad11ba0a8db5f7fcca9efc06e6bce9f29ccbfdd69868b",
+      "tile_id": "tile_xp00007_yp00006"
+    },
+    {
+      "bytes": 32342,
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_xp00008_yp00004.pcd",
+      "point_count": 2681,
+      "sha256": "86cd67a5c2e21b8c3a8776256211a25d5112e3009579e019c55e582c8e33c2d9",
+      "tile_id": "tile_xp00008_yp00004"
+    }
+  ],
+  "alignment_rows": 616,
+  "frozen_sample_count": 154,
+  "frozen_sources": [
+    {
+      "bytes": 16970,
+      "frame_index": "1",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1.pcd",
+      "scan_ns": "1583836591182590976",
+      "sha256": "b70757f85fef2273a0586afae06102495e1014f60fc67ebb831ca4b804a24f2a",
+      "stable_hash": "b8191bc3a3063105"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "2",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_2.pcd",
+      "scan_ns": "1583836591282592512",
+      "sha256": "eaa03981582ceaa9190e10718ddac1e80ebc72e11244294d0366f7e63c64c779",
+      "stable_hash": "f665ca443147f9ad"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "3",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_3.pcd",
+      "scan_ns": "1583836591382579456",
+      "sha256": "96c5bacc4914e27a8278498feebf138cee6b48fc770f5f9c5f5ea25a3db94838",
+      "stable_hash": "148727813e6f1615"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "4",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_4.pcd",
+      "scan_ns": "1583836591482568704",
+      "sha256": "10464d1daf19b2fcd83004c6b0b8dc74739d72857aecf7ce1dcfcb4f06e43693",
+      "stable_hash": "9ec55e6d1f9b77d0"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "5",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_5.pcd",
+      "scan_ns": "1583836591582553088",
+      "sha256": "89e21fb0185665c787d77a240d5eba8f34ed37eefffd0a701162368c1c085b48",
+      "stable_hash": "08c9f1ea992a9f0e"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "6",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_6.pcd",
+      "scan_ns": "1583836591682529024",
+      "sha256": "263c17c4cd272d8fec1a6551f4417d7a370507cb2fd0c4bab29b88903d1537fb",
+      "stable_hash": "8b237e7bb1bb7320"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "7",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_7.pcd",
+      "scan_ns": "1583836591782496512",
+      "sha256": "09b1805709b4011d614c62ffb6dd1dd40e6d0aabb809271e063f8230917a0d78",
+      "stable_hash": "3e5ab47a2a702e10"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "8",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_8.pcd",
+      "scan_ns": "1583836591882515968",
+      "sha256": "94e9fdf3e7d186f975e5c112ab71b50b6ef8d144dda84bdd41bd90dc0decdb01",
+      "stable_hash": "bd9f6a19740ee517"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "9",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_9.pcd",
+      "scan_ns": "1583836591982548736",
+      "sha256": "d5d5e28fc22e8745e51527042d2c3a5420e98a5977069894f76d0093d8408f36",
+      "stable_hash": "10ebb94ba4aa5546"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "10",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_10.pcd",
+      "scan_ns": "1583836592082589184",
+      "sha256": "092ccf0c558042469537bf107fadce964dddf0e15e1b68189b899814baf790fc",
+      "stable_hash": "f31531c0423c5752"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "15",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_15.pcd",
+      "scan_ns": "1583836592582788608",
+      "sha256": "e768f76a97fd5bdbb07d2fe10c7ac1e6bfcfc8498018a6cba03c1155401ee801",
+      "stable_hash": "54d6d356795560c9"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "30",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_30.pcd",
+      "scan_ns": "1583836594082806528",
+      "sha256": "8bd64029360ea296e41ae5d7c08eb59a066d557fac2cb0cdc42d044e176feee6",
+      "stable_hash": "97f7058d29f538ba"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "45",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_45.pcd",
+      "scan_ns": "1583836595582657280",
+      "sha256": "4049b7357e943165a3672df911aa6f2be846db95423e3a11f2105a00e1f28550",
+      "stable_hash": "5178b56021c25a41"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "60",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_60.pcd",
+      "scan_ns": "1583836597082532096",
+      "sha256": "df08b3ded442c2c4f3e12644f0beccb6034bbb447bce8aafbe6e50451e7c8d7a",
+      "stable_hash": "bc6589cefe59fd61"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "75",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_75.pcd",
+      "scan_ns": "1583836598582885120",
+      "sha256": "7bf949686839e4a55e8212ccd88c0142cc7992d9887cc96168b8c5a67d843ee3",
+      "stable_hash": "8b81e2c323df8f5a"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "90",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_90.pcd",
+      "scan_ns": "1583836600082809088",
+      "sha256": "c957e678bfae09930f05deda4cd249aa260b07915abb1eb65d7d9b28cfe378f8",
+      "stable_hash": "7273cae6d3f5e281"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "105",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_105.pcd",
+      "scan_ns": "1583836601582682368",
+      "sha256": "1e1d377146db8e89ccd1d5e5b48be1f7779189df9b02e8ce9e7d81505499815b",
+      "stable_hash": "7879488ccab1ee2b"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "120",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_120.pcd",
+      "scan_ns": "1583836603082465280",
+      "sha256": "b0d0baa91e919c4613d6d3b2089f62345777e7340fe2f9fd7a5a3e43540a63c7",
+      "stable_hash": "0a33b3eb86ffb8df"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "135",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_135.pcd",
+      "scan_ns": "1583836604582573568",
+      "sha256": "7cb2363a8df0b1622fc26a7d55863b6b7d9a13516edf9804e1663d84a8fa9c42",
+      "stable_hash": "6598ed64096e24bb"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "150",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_150.pcd",
+      "scan_ns": "1583836606082640128",
+      "sha256": "dde10487b7a17fb208953a7f4497eac28f583a530047fbeb3aa2d563d5d34336",
+      "stable_hash": "1316ce5075dc5329"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "165",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_165.pcd",
+      "scan_ns": "1583836607582448640",
+      "sha256": "9dbde659f33d395c12421058076193f672753fe238d043a5b24df512628abd36",
+      "stable_hash": "bd34c976590c727f"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "180",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_180.pcd",
+      "scan_ns": "1583836609082375936",
+      "sha256": "84a2de38cdc16a1a37f30beb021c0afd754be52ae9d775f1bc2720ce3a057baa",
+      "stable_hash": "2b7e2b045b362586"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "195",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_195.pcd",
+      "scan_ns": "1583836610582651392",
+      "sha256": "c4154ed315cc767b23e4a49c5875e020cee91c0de9372670be74f3fc61de3884",
+      "stable_hash": "2db9a579ce4111aa"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "210",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_210.pcd",
+      "scan_ns": "1583836612082368000",
+      "sha256": "5ca2d6a495588978c38c13d88b835faf5ad4e1425faf719866a106c050136aa7",
+      "stable_hash": "9d70da63e22df70b"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "225",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_225.pcd",
+      "scan_ns": "1583836613582252800",
+      "sha256": "8e3e09ebe4069dffd640e8dcc0efef08166b3e12c31a8ea9142eea2c91654100",
+      "stable_hash": "aeb99996d424f924"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "240",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_240.pcd",
+      "scan_ns": "1583836615082719744",
+      "sha256": "8e426995389cdc77ff3590572862e49e6950dacd9b2e4d6c0272d380d81ae0b9",
+      "stable_hash": "6df301e9e68d824b"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "255",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_255.pcd",
+      "scan_ns": "1583836616582660864",
+      "sha256": "3e76a843197c7585eccf9613b2f3573eeccf60c3face3b1fda0f33ce4ba663c2",
+      "stable_hash": "878673be4164c8f8"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "270",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_270.pcd",
+      "scan_ns": "1583836618082726912",
+      "sha256": "ab85335563d4e2e821c592d9dbb032d23c5a979b2f0ba67423ff23585ff1cc24",
+      "stable_hash": "e390664d3394fe14"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "285",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_285.pcd",
+      "scan_ns": "1583836619582656512",
+      "sha256": "1055483c6e4693a0eaebe4bd9a6faf616d1ef0bbf009b40851fe1fb102206b50",
+      "stable_hash": "8cf33f7cbf607a3d"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "300",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_300.pcd",
+      "scan_ns": "1583836621082438144",
+      "sha256": "681182961d1a77b8678c5d33ebbe6d94cb5e412da9795ef4b3a6398aebe306e0",
+      "stable_hash": "c8ef97d7ac34842e"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "315",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_315.pcd",
+      "scan_ns": "1583836622582748928",
+      "sha256": "23bf046a5061ae33758f2613085ac294a38a8cccb52a2fc96260d950d2e6bd3a",
+      "stable_hash": "1284a7fd41a96267"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "330",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_330.pcd",
+      "scan_ns": "1583836624082775040",
+      "sha256": "7869efbb6f1047da13f881bd672a061ff69c742fdc7227233b224a09b7a0b6b2",
+      "stable_hash": "3a54a7345afcd580"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "345",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_345.pcd",
+      "scan_ns": "1583836625582126592",
+      "sha256": "ce2ee4302e468433be4f3ce5e8128552bfa6c664978ce830ac90877561da315c",
+      "stable_hash": "207e812c19dcb6ca"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "360",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_360.pcd",
+      "scan_ns": "1583836627081886720",
+      "sha256": "e69d6820391764a8aaa86efc163f3193a22f05e734676cacec9517b008a18868",
+      "stable_hash": "5dde000da82f1a26"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "375",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_375.pcd",
+      "scan_ns": "1583836628582005504",
+      "sha256": "078e98e9da5e432cb63bbe6e407914f637f1a55fb4499718bcf41258b5f58818",
+      "stable_hash": "da6d01fad3f7aff7"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "390",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_390.pcd",
+      "scan_ns": "1583836630082863872",
+      "sha256": "5ec1871d88335982843c00a4781684c183f57f9da08f9da7a709676f073e744f",
+      "stable_hash": "ad39ffa0481cf375"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "405",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_405.pcd",
+      "scan_ns": "1583836631582851584",
+      "sha256": "8ec2b8ff59121ed76a0aefa25fa0a3c31568f179e71794d39059ce6371772095",
+      "stable_hash": "458e3a041911d975"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "420",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_420.pcd",
+      "scan_ns": "1583836633082176256",
+      "sha256": "5646c10135b98120293353d468e67d0729be152ac5da53b483b9aca095af3114",
+      "stable_hash": "34bb2c5667737f94"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "435",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_435.pcd",
+      "scan_ns": "1583836634581727488",
+      "sha256": "9bdb067f9bc79ca8975b9b882c0abf65c709f8932e8aa868719c7f26e66e9299",
+      "stable_hash": "ff9d114f1db4e382"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "450",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_450.pcd",
+      "scan_ns": "1583836636081021440",
+      "sha256": "9a597bbfefe8e57d91901c370b0c5214d2f6687db55b5c1e9a7d2a7df24b3635",
+      "stable_hash": "05a3b44b70bd7b11"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "465",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_465.pcd",
+      "scan_ns": "1583836637580777728",
+      "sha256": "7bb19e6f2484473a9b7577743d7f1090427116558ba6b61dd8d746051486a9d3",
+      "stable_hash": "1142bf8ccd91b801"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "480",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_480.pcd",
+      "scan_ns": "1583836639081173504",
+      "sha256": "a31ba2c2177df3cf44316f7743e23a3b6b5c8819847dcff1aa4344a0ed57d5c5",
+      "stable_hash": "2cda168dc2133a38"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "495",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_495.pcd",
+      "scan_ns": "1583836640581031168",
+      "sha256": "9f079ad7cd2e918963f9814dff5bae37dd03eff1f2fd7dec0c43be71b0a21bf9",
+      "stable_hash": "0aaa7cf8f2a2b579"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "510",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_510.pcd",
+      "scan_ns": "1583836642080992256",
+      "sha256": "435fc4eff1ffa9c50044eb2e88daa040f8253e663a2520a7f5e719a214050cec",
+      "stable_hash": "10933ce370f10ad1"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "525",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_525.pcd",
+      "scan_ns": "1583836643581188864",
+      "sha256": "ed4512c6df1c256ac2e3fe952ccc15396493223c56cfff0f137afe0d5a5290ee",
+      "stable_hash": "84bc94c013276a0f"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "540",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_540.pcd",
+      "scan_ns": "1583836645082116608",
+      "sha256": "03316db10ccf6928e3b077605924f7bd40ac98efa5e17acf5f30c41c8bc0ea8b",
+      "stable_hash": "e3285cfecb7cbc81"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "555",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_555.pcd",
+      "scan_ns": "1583836646583020032",
+      "sha256": "ce3bf5c69f8f5f757304edc5ce1f14384741c1f11ee7c78e91bf86cd6bc6fa79",
+      "stable_hash": "fe4cb2b9cb6f37e9"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "570",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_570.pcd",
+      "scan_ns": "1583836648082055936",
+      "sha256": "6b8bbf0c033f2c98b20d1034a168533b64f5f9f77e2fd1f6f01dd9d0170303db",
+      "stable_hash": "d2b14a13216786df"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "585",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_585.pcd",
+      "scan_ns": "1583836649580702208",
+      "sha256": "a81d07d8634690c9efd772f0566fae61f7c6abbd095739eaae1d74104cb96cec",
+      "stable_hash": "0101dce4f6a7e320"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "600",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_600.pcd",
+      "scan_ns": "1583836651081350656",
+      "sha256": "3060a0aabe47bdc552f8043a9e7fed517bde5a6c548bf036773f84a8f72455af",
+      "stable_hash": "2d33c114b3591dbf"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "615",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_615.pcd",
+      "scan_ns": "1583836652582255616",
+      "sha256": "cc1063b9cc5aecc916040b9ea7240620ceb17395134ae831caf3f4e61655a996",
+      "stable_hash": "42cff5783aa914bb"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "630",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_630.pcd",
+      "scan_ns": "1583836654081786624",
+      "sha256": "3cde85449d24dde776b33b77ec294e65fb5b976a8e58cf15a24eced05f68a878",
+      "stable_hash": "15894e94d34f90fd"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "645",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_645.pcd",
+      "scan_ns": "1583836655580479232",
+      "sha256": "0f37b1508e7ec39ebb13822c53869eccd1a08673a5fed265ffa1c71e9af648d6",
+      "stable_hash": "fa0255aa9e445786"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "660",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_660.pcd",
+      "scan_ns": "1583836657081097728",
+      "sha256": "f9afe70e2bcba7e4c8ba95fa84765eae1bd899ccba57faf0b1e18d05c24a6fdf",
+      "stable_hash": "488494938d08ee7b"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "675",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_675.pcd",
+      "scan_ns": "1583836658582223872",
+      "sha256": "f362a04da5e216273d06acfb2c5d0292b67c430d231ed8d81d1c690898ff3909",
+      "stable_hash": "07041380ec591308"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "690",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_690.pcd",
+      "scan_ns": "1583836660081003264",
+      "sha256": "cc0fbc4311f8c0eb1556f7b1358c48138ae62d806da8d1ba43f37139fa78d432",
+      "stable_hash": "0d3d116a17039f11"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "705",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_705.pcd",
+      "scan_ns": "1583836661580827392",
+      "sha256": "6b7f8c545cdeb8fb1810983e673bf28f3cbedc4db97aa3d202fab9db4b782bba",
+      "stable_hash": "ef96ea25b69f49ba"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "720",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_720.pcd",
+      "scan_ns": "1583836663081295616",
+      "sha256": "e50cda16fb57b47295b4a38f475e10c8dad65574701b4728a269fd31a42d9a95",
+      "stable_hash": "d9b5573f1693582e"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "735",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_735.pcd",
+      "scan_ns": "1583836664582047744",
+      "sha256": "5b12c7f220fb305922f96547d404a47b18971d6faad1d1486a0a870b9112f724",
+      "stable_hash": "547a22e878b7a38e"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "750",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_750.pcd",
+      "scan_ns": "1583836666081167616",
+      "sha256": "bd8524740c6011f5d93c3867c3f2ac8146de91dc0199e3dbbf849691ad9c5080",
+      "stable_hash": "1093a4f8d4a6370b"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "765",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_765.pcd",
+      "scan_ns": "1583836667580271104",
+      "sha256": "229b46c61ea571702597c659edb948356665ef53f7ad15e29e54872e1160541c",
+      "stable_hash": "e00f2b90a04da94c"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "780",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_780.pcd",
+      "scan_ns": "1583836669081148672",
+      "sha256": "897be98e1253db03096291771ce3abef78b041309ef83ee26ac142f12dc379b6",
+      "stable_hash": "d559e5d2f3e69918"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "795",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_795.pcd",
+      "scan_ns": "1583836670581720576",
+      "sha256": "8c17b66c81a64ebf0ec1ed59e6284867b29f6197bf6548a6edb83b89916ccc6b",
+      "stable_hash": "6c9f60e4b79bdced"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "810",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_810.pcd",
+      "scan_ns": "1583836672080243456",
+      "sha256": "666624c5e9983304fe5e1394c8a463838740eb418efaba1dc4112c5111b2bfc5",
+      "stable_hash": "3f96a850c97585ac"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "825",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_825.pcd",
+      "scan_ns": "1583836673580862208",
+      "sha256": "3eb3804621444150df488ce40a977dfbe6614a37db6a29c29419e26e718b6df1",
+      "stable_hash": "3d5a62eb6265735f"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "840",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_840.pcd",
+      "scan_ns": "1583836675081275648",
+      "sha256": "b242a41afd1e8f79f54dd0582d2ab98ffc0f3b3a3185656a2964f2fa86ddc3b0",
+      "stable_hash": "3f343b30bb707f40"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "855",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_855.pcd",
+      "scan_ns": "1583836676580667392",
+      "sha256": "51099625416c512a1a149482b12e7746a90302bc33860cde6e13322d20c7d129",
+      "stable_hash": "c514c97384995934"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "870",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_870.pcd",
+      "scan_ns": "1583836678080629760",
+      "sha256": "0a334c26c81a5bccb9b5d0e14a882ceb4bc7ff2de3a16ecd2950d063f33f2534",
+      "stable_hash": "fa86f86babe089b8"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "885",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_885.pcd",
+      "scan_ns": "1583836679581180160",
+      "sha256": "9dd9830396df1926a7f0b972ab7f64a1c8fb7bb179153063c8a20c0312306d93",
+      "stable_hash": "5dcfa9de6e941eab"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "900",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_900.pcd",
+      "scan_ns": "1583836681080589824",
+      "sha256": "16bd2c079a5a2f438564203dbef40f5800d6169e5e7f334fbe16ce2dfa5bc7ae",
+      "stable_hash": "2d72ac3930cb6255"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "915",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_915.pcd",
+      "scan_ns": "1583836682579997696",
+      "sha256": "477048eff5473cda484b494ca68698c5621482e7e1047fddc54713509f2a3b49",
+      "stable_hash": "55ddb54a39150159"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "930",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_930.pcd",
+      "scan_ns": "1583836684080681216",
+      "sha256": "9146de490cc321d73af97fe9fa676f4643e3b43eb561797dc7808f5fecbf6cd2",
+      "stable_hash": "399583e935c024de"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "945",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_945.pcd",
+      "scan_ns": "1583836685581422848",
+      "sha256": "36d7ccb7098f837901be7905beba8c02bdffbee323e4d30d97583caae210c1a7",
+      "stable_hash": "450c92295955139c"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "960",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_960.pcd",
+      "scan_ns": "1583836687080360192",
+      "sha256": "bd852a589cd470eeca680cf1ca2b38645a7c3d8f49db4266542a4b610dfa38d3",
+      "stable_hash": "4def0a3d23b00610"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "975",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_975.pcd",
+      "scan_ns": "1583836688580500224",
+      "sha256": "f3c3f8a405bc73ba69adc36a2ddce239d563b314c5f86deb8f7a0476007ca339",
+      "stable_hash": "7ab2c2ec783d9837"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "990",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_990.pcd",
+      "scan_ns": "1583836690081162496",
+      "sha256": "6365ecb92ea011ccb9a985576487afd3ee6cbb667a123c1bd13994c8d04301d7",
+      "stable_hash": "e1d7f2c3b284293f"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1005",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1005.pcd",
+      "scan_ns": "1583836691581093376",
+      "sha256": "3ac709953bda04be7285e4cccd2e5ea6dbadc6db2b5b2e455d044cf59998ea64",
+      "stable_hash": "a7050d0aaec7f433"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1020",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1020.pcd",
+      "scan_ns": "1583836693079835136",
+      "sha256": "713226ff17adcc732216e4a8e97b4527749eb7193ad824585533e5de1886e4a6",
+      "stable_hash": "0673dc6d66979751"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1035",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1035.pcd",
+      "scan_ns": "1583836694580529920",
+      "sha256": "06400408828099a65ef821173f5101a43b7e61b94027b99e2cb6680d5db78934",
+      "stable_hash": "a8e1ef6afdb2cbb3"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1050",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1050.pcd",
+      "scan_ns": "1583836696081198336",
+      "sha256": "6232a5f526f6de27f68a25d32d155dee92b6ff6f4c914907ef0ef84a35bb93ae",
+      "stable_hash": "a31ffb5cca5afe36"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1065",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1065.pcd",
+      "scan_ns": "1583836697580365312",
+      "sha256": "1d8f9406ac2437aac06130bc1ade156af390b8a1d6270d968a6130159aef3fef",
+      "stable_hash": "352910c70c48bfc5"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1068",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1068.pcd",
+      "scan_ns": "1583836697879774720",
+      "sha256": "47e12c1cbf5a749570dc79ba2d634aef4175af3359271f155088817b498de6d6",
+      "stable_hash": "c0b68acbdac019d6"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1069",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1069.pcd",
+      "scan_ns": "1583836697979978240",
+      "sha256": "aa9421d4c074f0289064db3354915bdc2bbd529aa9d9577015cd9106622e3c5f",
+      "stable_hash": "824f4d8448849599"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1070",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1070.pcd",
+      "scan_ns": "1583836698080250368",
+      "sha256": "cfc699214189de7be2b5173f42ce3622fb49321e06c6b8b56e2677a7cda01ef8",
+      "stable_hash": "6eb7b9a28ccbfbd5"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1071",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1071.pcd",
+      "scan_ns": "1583836698180489472",
+      "sha256": "61f96d1ca2df43209f51f830091072c96234517f8667d8d5a9e6027bf75ef479",
+      "stable_hash": "96d2de3f81f7a0aa"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1072",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1072.pcd",
+      "scan_ns": "1583836698280719872",
+      "sha256": "282404dea4ac215fbcd33a3f7e7ca4a5047c622de3fed91ea2b28bee8ae3c1e1",
+      "stable_hash": "69155abe1ebf5698"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1080",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1080.pcd",
+      "scan_ns": "1583836699079739648",
+      "sha256": "5b437d16783260e6a55dcd4317dac86f18fbb7678e1e6478db753b451e83d752",
+      "stable_hash": "51c6c8c4c62e5974"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1095",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1095.pcd",
+      "scan_ns": "1583836700580905472",
+      "sha256": "aabdca2134c9c9f0780dd1df5e081a8be0d2cb81d9d49de3b051f0ed76d3c20a",
+      "stable_hash": "9c786878432c3cfd"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1110",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1110.pcd",
+      "scan_ns": "1583836702081256448",
+      "sha256": "b075c0f9f9a6a1da04400bb61ea94b7268474f13789773dc88e5afdfdf4d6020",
+      "stable_hash": "5bd62b632bad5f82"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1125",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1125.pcd",
+      "scan_ns": "1583836703579932928",
+      "sha256": "7fe4f5a8c8cf03f74f1b2d40dbd4f28a7f827d9d2c724a0f8c331393e82de4c5",
+      "stable_hash": "066fb4adfb32d2bd"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1140",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1140.pcd",
+      "scan_ns": "1583836705079830784",
+      "sha256": "19f54fd4a7c42e69f2ecc7d9f17516773282caab3880010fc972ab183fa84597",
+      "stable_hash": "0dd54f41d713cf48"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1155",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1155.pcd",
+      "scan_ns": "1583836706580817152",
+      "sha256": "aacba858a773e557a9d0304e5af225249ddc3cc255c44df25df639f6e0ac4fd3",
+      "stable_hash": "50b681f430122ac4"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1170",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1170.pcd",
+      "scan_ns": "1583836708080395264",
+      "sha256": "57d673eece7af55df55f572c715b72a19e115be016b89d0da722856187cf0c40",
+      "stable_hash": "46f02b27ed924421"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1185",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1185.pcd",
+      "scan_ns": "1583836709579571968",
+      "sha256": "d96ac5b7eb41716c2280a16bc8b6f31463afcfb681d4c2222e3e8d0dc3d8f4da",
+      "stable_hash": "4b361091f3e2959e"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1195",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1195.pcd",
+      "scan_ns": "1583836710579639552",
+      "sha256": "150f50342663e0580e67700e6b0c6e60e8b7a1c276dafa5494e1920db7701cc6",
+      "stable_hash": "1850d8c66dec0c6b"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1196",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1196.pcd",
+      "scan_ns": "1583836710679414016",
+      "sha256": "7084bb2695ecad015e2938f728d2dfd2c67e6111163b32cbc62022a800dcf877",
+      "stable_hash": "35dfd2a8b06521bd"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1197",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1197.pcd",
+      "scan_ns": "1583836710779573760",
+      "sha256": "9cda829c1f7edac158ee8ae65430e324c0a55618554c32995976c8ad0fa39dce",
+      "stable_hash": "8b6d7f5de7333aba"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1198",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1198.pcd",
+      "scan_ns": "1583836710879768832",
+      "sha256": "90b65cd7d55494e648bd6aefcea02d6f7d8858af094e272a665f8f8523c8f32e",
+      "stable_hash": "c9b8353f9e7fb680"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1199",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1199.pcd",
+      "scan_ns": "1583836710980087296",
+      "sha256": "1d84851e85e10a08b4936d91b7b52158ef066bc506d693bc8c22b67b5bfb66c1",
+      "stable_hash": "e71da7ff1a9b9b98"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1200",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1200.pcd",
+      "scan_ns": "1583836711080367104",
+      "sha256": "73ffcff9cc78a0e0b223f82ee69febb73fff1e768c3add6ad4e3b3f741c62347",
+      "stable_hash": "705c7325d51f56b7"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1215",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1215.pcd",
+      "scan_ns": "1583836712581371904",
+      "sha256": "0aaa63132d5b8307165d610ad6448de6dbc06055cf686c0f11123efa28750781",
+      "stable_hash": "23726caa5cfd24bc"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1230",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1230.pcd",
+      "scan_ns": "1583836714080167936",
+      "sha256": "be6648e338ac205bb96a7a331d655c1aaae28ac7e7d7585215d4f9dbb8d3d587",
+      "stable_hash": "9859c46c9e14dfbe"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1245",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1245.pcd",
+      "scan_ns": "1583836715580379392",
+      "sha256": "b9392f42759e8c487d1efac596579eb727a0e81a4c12355e302fbc16ad12130c",
+      "stable_hash": "be050306cb89272c"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1260",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1260.pcd",
+      "scan_ns": "1583836717080819968",
+      "sha256": "66910ec4ac451bcd85275ace161d088b0d31901f5800bcc92e9ab19499c93dd1",
+      "stable_hash": "a1c7a0d31c48ff59"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1275",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1275.pcd",
+      "scan_ns": "1583836718580099328",
+      "sha256": "3e5ac566caab4525a24e5add2d7a9d31e595548224cf45be1179f70fc2fa8103",
+      "stable_hash": "064dfaac623fccc0"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1290",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1290.pcd",
+      "scan_ns": "1583836720080453888",
+      "sha256": "3928ee12fb24cff857e1d0fecda197c0d979c51363238f74f165af97328484aa",
+      "stable_hash": "96dc62668e81b34f"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1305",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1305.pcd",
+      "scan_ns": "1583836721581371648",
+      "sha256": "3e567d20767742379f230da2c03b6859519cbb1047ee0a5d2cb1db7889a03980",
+      "stable_hash": "1d9a8e6941caf3ac"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1320",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1320.pcd",
+      "scan_ns": "1583836723080273408",
+      "sha256": "721539ea95316de10a13b1b5529f9f583644c160dd817cd3178ab26c39091af8",
+      "stable_hash": "f5815579c3763757"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1335",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1335.pcd",
+      "scan_ns": "1583836724579943424",
+      "sha256": "e7e8ca1329e87e0a52829eb56fbab7753681bb2df8c91b8c4f4df262b177fde6",
+      "stable_hash": "698c9ef137b61b66"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1350",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1350.pcd",
+      "scan_ns": "1583836726080539392",
+      "sha256": "b961b76ebf641e420af9431b8c070b86765f3d29d323cbdab3a3055258a8ae5f",
+      "stable_hash": "579f768770033558"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1365",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1365.pcd",
+      "scan_ns": "1583836727580535552",
+      "sha256": "291df8d9d43f4b9ba21ce6b642b4608a8132027fa46cf5bed9434550d43f2caa",
+      "stable_hash": "642493d6abb3acfc"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1380",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1380.pcd",
+      "scan_ns": "1583836729078655744",
+      "sha256": "cc562e99a28cd3abced1caa4a2070b61e5e9b418812b4d4d10bcfce96f3953a3",
+      "stable_hash": "50d4f3d177e4d298"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1395",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1395.pcd",
+      "scan_ns": "1583836730580154112",
+      "sha256": "4ef7dc9f69f254cccf2593d17ea32e2c3551c9354823a65a1ca4379dc36ee4aa",
+      "stable_hash": "d5417c5d0bfe92c7"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1402",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1402.pcd",
+      "scan_ns": "1583836731278993152",
+      "sha256": "d4a7bc7a9cd44eb81b704330c32597c36ad955c0e78ee8c3d8326bec8285e4e0",
+      "stable_hash": "8d003c7ee795204a"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1403",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1403.pcd",
+      "scan_ns": "1583836731379486976",
+      "sha256": "4e72c5be6ab78bd51eec0dab2725a895aeffb350b7451733fc830deda66fc241",
+      "stable_hash": "0f0a0d076e2760e9"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1404",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1404.pcd",
+      "scan_ns": "1583836731479865600",
+      "sha256": "96bae07f0b68bd6b9fde0b6b3628cfcdb1b1e2786dacc2bcabd7f349a78e29a2",
+      "stable_hash": "52579ef919f73ae6"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1405",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1405.pcd",
+      "scan_ns": "1583836731580089600",
+      "sha256": "2d03e871724da855e03a201f607e686425d5e31e1c58aaa02c6f2748a6935428",
+      "stable_hash": "93409790078f5bd6"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1406",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1406.pcd",
+      "scan_ns": "1583836731680158464",
+      "sha256": "405e5bb83f7c675aa94aa2c48718a61c43cc5ee88775414e229e97c4dfd09bff",
+      "stable_hash": "3a6e6a0d8ef05bdd"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1409",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1409.pcd",
+      "scan_ns": "1583836731980482304",
+      "sha256": "86be4029b2ac5b2291f8466f28bf91584be5f9467538f5325ee6c71a59e29700",
+      "stable_hash": "4b67f27af0254dcf"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1410",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1410.pcd",
+      "scan_ns": "1583836732080147456",
+      "sha256": "e91c2a002160ae7ca785c4a7bdd726e9d12e11858d90f5acbb3e0a905d86bfa5",
+      "stable_hash": "5bdfe7d8466b8adb"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1411",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1411.pcd",
+      "scan_ns": "1583836732179759104",
+      "sha256": "0d97fa62b2552aa1522c42de416c3ae732226d425547ae35307186b499125671",
+      "stable_hash": "4fda37d230d6008b"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1412",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1412.pcd",
+      "scan_ns": "1583836732279380224",
+      "sha256": "adac8f714736582cbf4ec3c15b66f9b8accb050de05fa0a13682e46260f44e16",
+      "stable_hash": "373202c892943dc1"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1413",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1413.pcd",
+      "scan_ns": "1583836732378936320",
+      "sha256": "8bc1ae8dc6b2cd7409b6c50e6b8c5b2d41c6b1393619d082c5881484eb30a3bb",
+      "stable_hash": "2b91305c8287f80c"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1425",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1425.pcd",
+      "scan_ns": "1583836733578692864",
+      "sha256": "75f7bd3dc1426bc426ec2d8287188e6fd4e75fce92d253b3b0b1d134694309b1",
+      "stable_hash": "738072d6ee9b7418"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1440",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1440.pcd",
+      "scan_ns": "1583836735079533056",
+      "sha256": "d135c4010cbc832ce630d0ee3e282fb9147565d82c9d2a24dfb76dafda6fe2e7",
+      "stable_hash": "6a04f4982c3d0a2d"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1445",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1445.pcd",
+      "scan_ns": "1583836735579784448",
+      "sha256": "fdca79376274cf8dced6750ab5212df147df08662250856c9a9e0ed65c0bf8ba",
+      "stable_hash": "cb0ab697eff0a10b"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1446",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1446.pcd",
+      "scan_ns": "1583836735679345152",
+      "sha256": "a8b0139a4860741e5bd453e5c3782b0992e238d3b44cc1312c3062e06915a09a",
+      "stable_hash": "af0f6f1e5a5b9535"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1447",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1447.pcd",
+      "scan_ns": "1583836735778991104",
+      "sha256": "7d7fb62758d41dac7aed7598e4cba284203121157bc528b5c50d7e9a90f751d3",
+      "stable_hash": "a4c6fced0b206105"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1448",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1448.pcd",
+      "scan_ns": "1583836735879025152",
+      "sha256": "b9922166e18ffc65bf53188968ff0b79c3bb941d4368986bdb38ba5452e05ced",
+      "stable_hash": "3ba9bd328a6c4217"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1449",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1449.pcd",
+      "scan_ns": "1583836735979098112",
+      "sha256": "80e83d82b4dda280aa802242f7a820211d8c8c7673f710c3eac202620f7a4715",
+      "stable_hash": "034e87dba983d442"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1455",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1455.pcd",
+      "scan_ns": "1583836736580272896",
+      "sha256": "402fb9778bf7aff8738a120dee13d709c6b43c56d4f6da6eefdf9a728bb1f905",
+      "stable_hash": "7f9bb54af53b0666"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1470",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1470.pcd",
+      "scan_ns": "1583836738078871296",
+      "sha256": "936c6ab148f60f8feddc157e4813a211f8412f8928a8ec45f5a207406088e49d",
+      "stable_hash": "0c159af7e6563bbe"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1485",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1485.pcd",
+      "scan_ns": "1583836739579296512",
+      "sha256": "3ff4916228a9ff6d8cbc18ca6d64903ce0a7c435f8bb3ea5eaaa74dbaf45d09f",
+      "stable_hash": "0ff1737c93560216"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1500",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1500.pcd",
+      "scan_ns": "1583836741080181760",
+      "sha256": "18782c9cbd44bd58cea24e8c7053d8923a773bae040b53cc46c43713084367be",
+      "stable_hash": "f1961018af435906"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1515",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1515.pcd",
+      "scan_ns": "1583836742579347200",
+      "sha256": "e16753c4de66821d8cc8bb0545646aad38fd3e2569b9ca09208182c24f1fc349",
+      "stable_hash": "e387fcb4eeb96e8d"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1530",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1530.pcd",
+      "scan_ns": "1583836744079346688",
+      "sha256": "d63af85efa1dbfb6d4a76a6e2282131e33f4e9df9a01dde853027f38598881e7",
+      "stable_hash": "5bf507a67594135d"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1545",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1545.pcd",
+      "scan_ns": "1583836745580327680",
+      "sha256": "27f6ee84b69623cf0f6b256f98801884da1585763d65556d94cff8c6fc357d5a",
+      "stable_hash": "fb26b1d011eabbe3"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1560",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1560.pcd",
+      "scan_ns": "1583836747079424768",
+      "sha256": "4b8fecf1b2c5fe3543ae154d94f8ba5359e60d8b3c17c79796f00da031d368ee",
+      "stable_hash": "c7b68891e12b42ee"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1575",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1575.pcd",
+      "scan_ns": "1583836748578976000",
+      "sha256": "f7a9443846d9a2f7b880a74b119b780c3178d3d50ebe1fc84a9ece053520842e",
+      "stable_hash": "2c52605c98ebbf2f"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1590",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1590.pcd",
+      "scan_ns": "1583836750079990528",
+      "sha256": "0f7d7c19e4612c1fd3bc7f5bf665d41f4e1f2b90e8923f9549893f240d490a2f",
+      "stable_hash": "01976fde390cf4a5"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1605",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1605.pcd",
+      "scan_ns": "1583836751580150528",
+      "sha256": "a39c318f6370c6eae3ab40edeb5f063a6060d4984dd43b90516b4c8db6ea20a7",
+      "stable_hash": "c0473ddb472606f3"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1620",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1620.pcd",
+      "scan_ns": "1583836753078880256",
+      "sha256": "a6d0d5e2ee78f1a516e011654f4380c32705f9c6e1bec41bfa6d5350e581e97d",
+      "stable_hash": "57e752c682d8e364"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1635",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1635.pcd",
+      "scan_ns": "1583836754579401472",
+      "sha256": "cd6ecce931dea26aabdc20e42387a9bc2659e5edea29fe35b7b6773c1edd80c3",
+      "stable_hash": "1cd1ae04e493853e"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1650",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1650.pcd",
+      "scan_ns": "1583836756080388096",
+      "sha256": "ab2d8da17664a76c64212d55d3d11bb596ccb18767fa955a97fdc5cc019a7f98",
+      "stable_hash": "6101dae778ba04c5"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1665",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1665.pcd",
+      "scan_ns": "1583836757579987456",
+      "sha256": "a2f29dea94d3a2583c60c6bb22124d9b17a51e25f14c208c028cb5c9d2ee524d",
+      "stable_hash": "bf379c88632f609d"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1680",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1680.pcd",
+      "scan_ns": "1583836759078494464",
+      "sha256": "2826c82c41af57ad34a8d0ce180ae0a389c3b60b4956bb5770599551d53ee27e",
+      "stable_hash": "13e58ae4aa8728bd"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1695",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1695.pcd",
+      "scan_ns": "1583836760579224576",
+      "sha256": "2374f23864cde14e91abe57ae9bc20d7e6e31bfdae4525eb6bc58526e28e1708",
+      "stable_hash": "ea45c26e1d84ab04"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1710",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1710.pcd",
+      "scan_ns": "1583836762080004864",
+      "sha256": "74fa48c78db65380ee5f6412d4b0ad9b349df8c5607759e17c33592a35d3d002",
+      "stable_hash": "16ecccdc5f464d6c"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1725",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1725.pcd",
+      "scan_ns": "1583836763579746304",
+      "sha256": "f6051ffb6340c3cd4200150b4a74ae1869ee09aaab6437a88f52fc3defabef4b",
+      "stable_hash": "3052da948d8d8045"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1740",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1740.pcd",
+      "scan_ns": "1583836765078805504",
+      "sha256": "1b66dc7d7634c432c08079a3eec2e9719bd9156a5364abcded837e54a68a770a",
+      "stable_hash": "d32659c7ea8655f3"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1755",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1755.pcd",
+      "scan_ns": "1583836766579281408",
+      "sha256": "3c5d34583e3bede2f4fde2d01cd1ec820a7723ee562baeebcd580bba9a8f2746",
+      "stable_hash": "ad69b890e3805632"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1770",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1770.pcd",
+      "scan_ns": "1583836768079759360",
+      "sha256": "d96f3a4ade2edf8105c85f26be05b4ad2f746f456ea4333ad2002a1907134d2e",
+      "stable_hash": "2a403c04a1cfce7a"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1785",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1785.pcd",
+      "scan_ns": "1583836769579835392",
+      "sha256": "a6cd071ccd9fc20ea45a624ed506dcec48e5e8dc011c397fe1e826112a6d30ef",
+      "stable_hash": "8de160e0e3c6b203"
+    },
+    {
+      "bytes": 16970,
+      "frame_index": "1800",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/sources/source_frame_1800.pcd",
+      "scan_ns": "1583836771078157312",
+      "sha256": "8649aafb8e3ed58142a414f451e11725f8a9636ec15098041f00068b5cadecaa",
+      "stable_hash": "76998f318ad03aac"
+    }
+  ],
+  "gt_opened": false,
+  "inputs_and_outputs": [
+    {
+      "bytes": 237419,
+      "kind": "frozen_P47_sample_manifest",
+      "path": "/home/jian/livox_ws/p54_observability_budgeted_submap_ws/docs/p54_observability_budgeted_submap/sample_manifest.csv",
+      "sha256": "c6af0e7c8ea6958e46d76e33cd566ad68be8b87b95118f11ae0393d7af745822"
+    },
+    {
+      "bytes": 13766,
+      "kind": "P47_P45_tile_catalog",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/frozen/tile_catalog.csv",
+      "sha256": "9bce82df31847d1947044a6fa1046f1702b36d82ba6e17cc5ef535754c1a6ea4"
+    },
+    {
+      "bytes": 34417,
+      "kind": "P45_tile_manifest",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_manifest.json",
+      "sha256": "ebd7089f20026a991af1a88679a133bce020ee7bc9a9a5439665cc3a413cbb04"
+    },
+    {
+      "bytes": 207048,
+      "kind": "P47_native_NDT_curvature_diagnostics",
+      "path": "/home/jian/livox_ws/p54_observability_budgeted_submap_ws/docs/p47_newer_college_coupled_shadow/degeneracy_metrics.csv",
+      "sha256": "ece8373c2fd79df6b2e6dbe2490263f70412d521c8bcc6611146a9d7841b8b58"
+    },
+    {
+      "bytes": 605727,
+      "kind": "P46_geometry_diagnostics",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p46_real_tile_switch/formal1800/geometry_diagnostics.csv",
+      "sha256": "bb726bb1e7c9ac6c6e258e8b186f6dc539d7186e5a57cab0a013a847c71ecd79"
+    },
+    {
+      "bytes": 39805272,
+      "kind": "P54_executable",
+      "path": "/home/jian/livox_ws/p54_observability_budgeted_submap_ws/devel/lib/dog_prior_map_localization/p54_observability_budgeted_submap_probe",
+      "sha256": "5646dab51e063628a27129d5f17e8e41761a68c776a2972a27bbb610a594daac"
+    },
+    {
+      "bytes": 46611,
+      "kind": "P54_source_code",
+      "path": "/home/jian/livox_ws/p54_observability_budgeted_submap_ws/docs/p54_observability_budgeted_submap/tools/p54_budgeted_submap_probe.cpp",
+      "sha256": "1b49f377d115082330efb17a88fbaa945bcf1ba1fd4d1beb6afacf295ab8c9db"
+    },
+    {
+      "bytes": 14865,
+      "kind": "research_build_gate",
+      "path": "/home/jian/livox_ws/p54_observability_budgeted_submap_ws/src/dog_prior_map_localization/CMakeLists.txt",
+      "sha256": "d237eba5dbe98071e099f58e769e838035ed28b1f8e588c56fac1ee757da5a3d"
+    },
+    {
+      "bytes": 962728,
+      "kind": "selection_output",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p54_observability_budgeted_submap/run1/selection/selection_manifest.csv",
+      "sha256": "2367b5fb4bdba0820a5de8398fdd085086aecd16930278476ab76a13aa7bb59f"
+    },
+    {
+      "bytes": 157330,
+      "kind": "information_output",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p54_observability_budgeted_submap/run1/selection/information_metrics.csv",
+      "sha256": "32fcb828e38a053a1756553ab8d7a5aac8daafdc04d3c38b7519b0372eca2625"
+    },
+    {
+      "bytes": 318359,
+      "kind": "NDT_output",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p54_observability_budgeted_submap/run1/alignment/align_results.csv",
+      "sha256": "7fde67aaa6fb9021a54449bd99bc113fddc030746bf9fefb8a46227c30db6430"
+    },
+    {
+      "bytes": 146249,
+      "kind": "coverage_output",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p54_observability_budgeted_submap/run1/alignment/coverage_comparison.csv",
+      "sha256": "af4eeeffbef3e167fd485490ae7b2c63a7dce0ac268e45e2dae55f9f0961035b"
+    },
+    {
+      "bytes": 61660,
+      "kind": "runtime_output",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p54_observability_budgeted_submap/run1/alignment/runtime_comparison.csv",
+      "sha256": "a6ebdfed69e677e77561416c0989a7d1caef79ae8a42ffc9a6022054262a825d"
+    }
+  ],
+  "protocol": "P54_PRE_GT_OUTPUT_FREEZE_V1",
+  "raw_scans": [
+    {
+      "bytes": 1904640,
+      "frame_index": "1",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836591_182590976.pcd",
+      "scan_ns": "1583836591182590976",
+      "sha256": "7c2fc3a20ef266c2ac3196173c534a1acdb4436224c264bc8f2dc1b1909803a2"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "2",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836591_282592512.pcd",
+      "scan_ns": "1583836591282592512",
+      "sha256": "e2180b833590902b4a2f31e4ce7d8027658a41bc954f3d50e1d87b97805621e9"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "3",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836591_382579456.pcd",
+      "scan_ns": "1583836591382579456",
+      "sha256": "d20c26d0bd12e224363ad041a856b40754cc6ab208852f454bb22dd341ba3a7a"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "4",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836591_482568704.pcd",
+      "scan_ns": "1583836591482568704",
+      "sha256": "d03ccf2b9fb4c3291635c6a64b09efbb7d7929c7257bbd0afae26fb67a0a4edb"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "5",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836591_582553088.pcd",
+      "scan_ns": "1583836591582553088",
+      "sha256": "2896dc53ac27ec5d011460a2eccbf8be5fa069657081a47573adda53cc7c3e2e"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "6",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836591_682529024.pcd",
+      "scan_ns": "1583836591682529024",
+      "sha256": "02234e98fb3541aac715260326498d13020b9286ab4709622b4d09668cc94f85"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "7",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836591_782496512.pcd",
+      "scan_ns": "1583836591782496512",
+      "sha256": "b3f5a8de2621a7996fa501fff5a5ec717d37f3a7ee6f61da93c9088990fb872f"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "8",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836591_882515968.pcd",
+      "scan_ns": "1583836591882515968",
+      "sha256": "2c5266a80a4c81a6fddd33e2d78dadf82271952c027b73a83a1ebffe6a15b353"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "9",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836591_982548736.pcd",
+      "scan_ns": "1583836591982548736",
+      "sha256": "dccb4087045b10c3169fc7eeee0ebb5b08e0a1eb901bce7a78896bfa047c4a1d"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "10",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836592_082589184.pcd",
+      "scan_ns": "1583836592082589184",
+      "sha256": "710a036cb691ecaa17f6d7f4e75fd8ec8b8c3f3e3e39f59f47fd05252f61a6b8"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "15",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836592_582788608.pcd",
+      "scan_ns": "1583836592582788608",
+      "sha256": "795ddbc76282f504613c3b0e71a0aef232dd9d0ecc6f34b0efb33412904c2323"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "30",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836594_082806528.pcd",
+      "scan_ns": "1583836594082806528",
+      "sha256": "5c3314d70625d1274890c0f001f5acdd350f50f1f6c1184fc85cdddcefdf3399"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "45",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836595_582657280.pcd",
+      "scan_ns": "1583836595582657280",
+      "sha256": "c22d952709d8a8e415c9ea901bc4071dfece809df8dfe0b4cdbbce66b10d6c1b"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "60",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836597_082532096.pcd",
+      "scan_ns": "1583836597082532096",
+      "sha256": "e021c51097e2e4cd6ead1298dbcea15d78a3f63ab5dcb157c180c31a475374d3"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "75",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836598_582885120.pcd",
+      "scan_ns": "1583836598582885120",
+      "sha256": "72777421569a546690e5984d7909d18d0dbccde17ac8e1f85101d5881ac33abd"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "90",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836600_082809088.pcd",
+      "scan_ns": "1583836600082809088",
+      "sha256": "eb30596d3a2509adf564a5f3ed1aa0bea4a054107918772a4fa63e2c890757e4"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "105",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836601_582682368.pcd",
+      "scan_ns": "1583836601582682368",
+      "sha256": "cbcf67e6c44b582105f61268095fd4d76a2964dca56062c3f2acc06fec69c04e"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "120",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836603_082465280.pcd",
+      "scan_ns": "1583836603082465280",
+      "sha256": "e01aa7c375e844b8c4764ef2193863781663672a14246f6c3f03a037cd7a3f17"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "135",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836604_582573568.pcd",
+      "scan_ns": "1583836604582573568",
+      "sha256": "a7298a150340dd9a1aa682c962b2c266a305f90c76e02f021ae2a9e35a753330"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "150",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836606_082640128.pcd",
+      "scan_ns": "1583836606082640128",
+      "sha256": "cfc141aee23e22e9be64d66a617eca4c63304501296b18e33f8d90a8cf399b57"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "165",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836607_582448640.pcd",
+      "scan_ns": "1583836607582448640",
+      "sha256": "30433638fc7aae3e3b6dc572cf1a5fbd1c4bdc3e9f9d727ea2ae095d8a9d326e"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "180",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836609_082375936.pcd",
+      "scan_ns": "1583836609082375936",
+      "sha256": "af78e4b4f967ce760a999a410a7b01cb4675b4a4eae980f7423dbcf90f65121e"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "195",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836610_582651392.pcd",
+      "scan_ns": "1583836610582651392",
+      "sha256": "c4ff3d923c250c795df6904892e72dfaa1b77b6f3ccc8d7b4bac14731ebc1bc1"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "210",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836612_082368000.pcd",
+      "scan_ns": "1583836612082368000",
+      "sha256": "bf2f408c496d0b0254389b09ee3fbe30a70ffb8cca2eac467c44dc3275880b6a"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "225",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836613_582252800.pcd",
+      "scan_ns": "1583836613582252800",
+      "sha256": "066fb411fb11bf805c381a54924e87716592369eb8904599fc2b10fa54bb8f66"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "240",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836615_082719744.pcd",
+      "scan_ns": "1583836615082719744",
+      "sha256": "75aa9aca13522d50d192d6259e0f3805ba63d1b689adc77dde7d8b173249dae9"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "255",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836616_582660864.pcd",
+      "scan_ns": "1583836616582660864",
+      "sha256": "5d5d80ee4c53418bb312f774d1d52cd68e43eabe14faa2d5617b82fe28682f7a"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "270",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836618_082726912.pcd",
+      "scan_ns": "1583836618082726912",
+      "sha256": "b00ffc51a0be96e439a7c9d9101e4a1d431307c0850866453e5a0bffee820789"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "285",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836619_582656512.pcd",
+      "scan_ns": "1583836619582656512",
+      "sha256": "d67f3553daaf6ea3d3d45c7f45292f736657beeff6698ebce7cba08fac442cb5"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "300",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836621_082438144.pcd",
+      "scan_ns": "1583836621082438144",
+      "sha256": "d0de0b16107c10904c6a7c12e7459b22c604341b8ba600c224ced04f063789f4"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "315",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836622_582748928.pcd",
+      "scan_ns": "1583836622582748928",
+      "sha256": "28c85e0c07132be23c300db724f280c087b38f6a56ba588fcfe44c3fa51e82b0"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "330",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836624_082775040.pcd",
+      "scan_ns": "1583836624082775040",
+      "sha256": "e32b0022a33e65422935deb121b366bddf1e82a97221f2141ce23aabb6342006"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "345",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836625_582126592.pcd",
+      "scan_ns": "1583836625582126592",
+      "sha256": "2b3a4eaf35193bb340392785fc3d244722e8386adfdd6d51f2edc43ab99de024"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "360",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836627_081886720.pcd",
+      "scan_ns": "1583836627081886720",
+      "sha256": "14431716c7f8c052f85a120a371bc6dfa76dc628592e7c9310e34c0d7017a769"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "375",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836628_582005504.pcd",
+      "scan_ns": "1583836628582005504",
+      "sha256": "0b42aacf0832b0c97e7e861bb4e2b7eb416791057767c30ce341e20fbc48a923"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "390",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836630_082863872.pcd",
+      "scan_ns": "1583836630082863872",
+      "sha256": "269435a8c79abd28051c520a705cbc50e7232644e1f69261e70e7c1a59d2468c"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "405",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836631_582851584.pcd",
+      "scan_ns": "1583836631582851584",
+      "sha256": "0c20b47240155afc7163b69a2a8c75c65d09397d0e4e84a28f636c34c04e73e2"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "420",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836633_082176256.pcd",
+      "scan_ns": "1583836633082176256",
+      "sha256": "6405b8c6a04d5efae825cefb91817bc6f7011ba0e534e0e69c09e1e60d4be253"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "435",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836634_581727488.pcd",
+      "scan_ns": "1583836634581727488",
+      "sha256": "9dd952b9cc0b834641445f6281ddb74f5a1f966a23df117bc26f7384603cab0d"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "450",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836636_081021440.pcd",
+      "scan_ns": "1583836636081021440",
+      "sha256": "1b9e645cccaf0e32769c36cd446927ccc7be10892d567019c4fb1c4ada5885e1"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "465",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836637_580777728.pcd",
+      "scan_ns": "1583836637580777728",
+      "sha256": "5ed3014b4a2fed74965313dd4ccca8dd078a910e64f9c6727dd9f54886d26c66"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "480",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836639_081173504.pcd",
+      "scan_ns": "1583836639081173504",
+      "sha256": "c0589bcf3ab31c7eb62f1045d4298d0661d1f50f3c53c9484f10b2075908e80d"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "495",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836640_581031168.pcd",
+      "scan_ns": "1583836640581031168",
+      "sha256": "85658733481690565130a8ce889cc9f8b4ce7eeb1502f54070a5b5e30f58d94e"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "510",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836642_080992256.pcd",
+      "scan_ns": "1583836642080992256",
+      "sha256": "e98cd94c5ae19328a4c6d4681d881702d7323bf9f69b33da706ef672ddcc8e5b"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "525",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836643_581188864.pcd",
+      "scan_ns": "1583836643581188864",
+      "sha256": "e45aa199186d7e6de9dc8400066ac2b82fb69afeafa122cfdde9766a3639a468"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "540",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836645_082116608.pcd",
+      "scan_ns": "1583836645082116608",
+      "sha256": "700f3be9379bf16aea2b210f9480be796801b3c6a39fd74b3c0c318c7364e0e2"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "555",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836646_583020032.pcd",
+      "scan_ns": "1583836646583020032",
+      "sha256": "39098de5a333626d93263e637a540f11ac465afbc1e94d5dc09a86a126696d60"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "570",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836648_082055936.pcd",
+      "scan_ns": "1583836648082055936",
+      "sha256": "c71a31fa8d60af475deba22e24d188f983e03a8acce503d617ccdacc5fc1f464"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "585",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836649_580702208.pcd",
+      "scan_ns": "1583836649580702208",
+      "sha256": "5e31c07ba4ab3bba312703a6389dd566998fe6575724ddf51ee5272e7650a489"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "600",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836651_081350656.pcd",
+      "scan_ns": "1583836651081350656",
+      "sha256": "952289e0e1f05f0d9316097722fc95bdc2d47d228fedc06a436979b7e5b9ce5f"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "615",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836652_582255616.pcd",
+      "scan_ns": "1583836652582255616",
+      "sha256": "6c9b40ebb1ff552c999c8fe11cd8b5a8d69e6e2a40cf29eb613a39fe4a663de7"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "630",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836654_081786624.pcd",
+      "scan_ns": "1583836654081786624",
+      "sha256": "d830029f0c596370ac47dcb1afebd71c5bcd6542def2d0a0bbd30ce817c769ea"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "645",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836655_580479232.pcd",
+      "scan_ns": "1583836655580479232",
+      "sha256": "fd0770170a77f887f0b7589b3941ecd7bc5eea3bafb36e92c3da534784b6de94"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "660",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836657_081097728.pcd",
+      "scan_ns": "1583836657081097728",
+      "sha256": "dbe678078445c795b3cbc512782c131252d8fc618e03b946ed9d632a65c78ba3"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "675",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836658_582223872.pcd",
+      "scan_ns": "1583836658582223872",
+      "sha256": "a13fa49bf882b3aa15fdf2c8182750a54f84d834d296dbf94f0ffcb67dbbf312"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "690",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836660_081003264.pcd",
+      "scan_ns": "1583836660081003264",
+      "sha256": "5debe3d4e6c0dfb751dbf1836032dc6821ebf8408b2991e192cd782b6727e2f6"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "705",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836661_580827392.pcd",
+      "scan_ns": "1583836661580827392",
+      "sha256": "68cebd121d22a8551fa7f006311a405b690e81cda44b740f1d22c3c3bdc99c4b"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "720",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836663_081295616.pcd",
+      "scan_ns": "1583836663081295616",
+      "sha256": "2e860742196c1888a08ab3fa862777b23b548a81cedbbb56ae41c9cb645ec01a"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "735",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836664_582047744.pcd",
+      "scan_ns": "1583836664582047744",
+      "sha256": "d7f641134717b58c4f31e10be8105a423e817dda8978274d39d6ac19d790b125"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "750",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836666_081167616.pcd",
+      "scan_ns": "1583836666081167616",
+      "sha256": "30fb85f647db1162a9040efbe4565cacd31a45bc17e3a5c4d02492f3e5abec0c"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "765",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836667_580271104.pcd",
+      "scan_ns": "1583836667580271104",
+      "sha256": "788172368b6ddf1b82dc8d8dd38854667e0a2796d6b1c6d8e86f4c20163273c2"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "780",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836669_081148672.pcd",
+      "scan_ns": "1583836669081148672",
+      "sha256": "0d9d7c73b71386ceecef042bc20e6a554b4c2ba1c2578a425f80a93027f5ba97"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "795",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836670_581720576.pcd",
+      "scan_ns": "1583836670581720576",
+      "sha256": "8c0eb1af67f3d262163fbb07aa3e45a6d62e8080e8024032e4eb00fb5e9dbee8"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "810",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836672_080243456.pcd",
+      "scan_ns": "1583836672080243456",
+      "sha256": "acb6f8664828b3ff9a238333ba122380f3f7a031809fddd51153b81b847f846a"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "825",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836673_580862208.pcd",
+      "scan_ns": "1583836673580862208",
+      "sha256": "f0a149f3bcf5bffb140d7b9531327529144bf49d0c2660c27fef53020b9bd47d"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "840",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836675_081275648.pcd",
+      "scan_ns": "1583836675081275648",
+      "sha256": "d3180e31b86ccb06055369fee8df512245261c685fd7fd39f2e2a0fb9c1c9ae6"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "855",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836676_580667392.pcd",
+      "scan_ns": "1583836676580667392",
+      "sha256": "84aba3352dfad93fb1f9c7b3802ad562de1273375ac05923e03309ccad3a1fbf"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "870",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836678_080629760.pcd",
+      "scan_ns": "1583836678080629760",
+      "sha256": "1c5b905d6fffd4aee2dd9cd51606792eb99b0e946b49aeb5b70a4da1fe5e2d78"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "885",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836679_581180160.pcd",
+      "scan_ns": "1583836679581180160",
+      "sha256": "fb68b687cecdaf9a22645f1aa4de6582b350e22f3c3451b04c04e9f1e492c951"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "900",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836681_080589824.pcd",
+      "scan_ns": "1583836681080589824",
+      "sha256": "6904f12648b55b900bf6a9741610a742ccf3c09b73f8c4c3673234b12065249a"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "915",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836682_579997696.pcd",
+      "scan_ns": "1583836682579997696",
+      "sha256": "b125d8db685433cea022804e23e6496d05f74deb511e17fabf26fcdb5526789a"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "930",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836684_080681216.pcd",
+      "scan_ns": "1583836684080681216",
+      "sha256": "30f39b44a5f5b5af46ce8ea5c0e770a2c9d9a0a1994e957a468a079daf509fc7"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "945",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836685_581422848.pcd",
+      "scan_ns": "1583836685581422848",
+      "sha256": "3c283b68458f07ec62f977238663d97a4ae5f16aaf3dc39c7e924d89ed699cb1"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "960",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836687_080360192.pcd",
+      "scan_ns": "1583836687080360192",
+      "sha256": "be1c9274984e05bc6a5f1c3b05b22c5bfcdffccb72b04d3eb2e3840db89f569a"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "975",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836688_580500224.pcd",
+      "scan_ns": "1583836688580500224",
+      "sha256": "fc8cb8f07625cd6b29752b5e1a839b3869effef02472cc58b19fc7c875629aba"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "990",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836690_081162496.pcd",
+      "scan_ns": "1583836690081162496",
+      "sha256": "a2e29950cfc106efca8d548189812307906f23d5bf50ff99ce07b5e5be598755"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1005",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836691_581093376.pcd",
+      "scan_ns": "1583836691581093376",
+      "sha256": "a2ff8b5982e4b299f2bf3f271ecfc277e7104cae54fc7e1d0d627e202b746d5e"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1020",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836693_079835136.pcd",
+      "scan_ns": "1583836693079835136",
+      "sha256": "ba6625b8c4d8169bc42589a47f06ee9afd9a4056b83fa9ef76fbfc47cbf6da9e"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1035",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836694_580529920.pcd",
+      "scan_ns": "1583836694580529920",
+      "sha256": "bbeb85076a417738609e5472146dc1493000c0bdf9ef9b25a60d6d9e3dcc9ef6"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1050",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836696_081198336.pcd",
+      "scan_ns": "1583836696081198336",
+      "sha256": "5d8e9ab7c30287215dcfe5deb3aeb6e91f9677747f5c0fbc8855049c6e45eafd"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1065",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836697_580365312.pcd",
+      "scan_ns": "1583836697580365312",
+      "sha256": "a2cb0bf521963104108c7a3baa7b35d85dbf3fbd012d820ace92bf78a9fc5d99"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1068",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836697_879774720.pcd",
+      "scan_ns": "1583836697879774720",
+      "sha256": "50cf6d15bfd0651b725c76ae16c4465247fc9637726c9b22688ad941f563e644"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1069",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836697_979978240.pcd",
+      "scan_ns": "1583836697979978240",
+      "sha256": "bfc404e0b951bd9ad1523b25f06e4a44ced9dd844d6363328a1a70cd14514ffa"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1070",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836698_080250368.pcd",
+      "scan_ns": "1583836698080250368",
+      "sha256": "d412be2e54dcb131acd6bfb1968106f390968b18af5417e355224e4f0a881ff8"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1071",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836698_180489472.pcd",
+      "scan_ns": "1583836698180489472",
+      "sha256": "ef5a80e02652e5ecc72e5026c0820a3134e3c611ee82c80f8d4b199c082db2e2"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1072",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836698_280719872.pcd",
+      "scan_ns": "1583836698280719872",
+      "sha256": "a4ea88f7d3f0e0be350fca4c8217ce6d3f2b094fb21b17243626da72f9cbccf9"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1080",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836699_079739648.pcd",
+      "scan_ns": "1583836699079739648",
+      "sha256": "14afcde8eff2cec23a8b23ded8700be6852d54d8dc94125236e7d55bc111a8ce"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1095",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836700_580905472.pcd",
+      "scan_ns": "1583836700580905472",
+      "sha256": "7b4a6d82219b5dd1ce531ab55f9f183365e012e357e6802999236b1ea33d6ce1"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1110",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836702_081256448.pcd",
+      "scan_ns": "1583836702081256448",
+      "sha256": "699daeb9dbcbde1f183db1b8b2af5f193a8d6c1142d2f1d4b1f06dd9862cfb5b"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1125",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836703_579932928.pcd",
+      "scan_ns": "1583836703579932928",
+      "sha256": "a89ef7ea2983582801ac4fc5cfc64b3879dce3aa83f959677769b0257bc4f0b1"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1140",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836705_079830784.pcd",
+      "scan_ns": "1583836705079830784",
+      "sha256": "220cead38e10d4db7b5e9640ddca7accf8542f4f889c90e7cc4943a8c6c68c20"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1155",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836706_580817152.pcd",
+      "scan_ns": "1583836706580817152",
+      "sha256": "555dd40371254a3e84677222d1133a042b2a5d084c3aeb2156b2ed7fb16808ce"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1170",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836708_080395264.pcd",
+      "scan_ns": "1583836708080395264",
+      "sha256": "87da9350a1ac5024e38f05982461c855fc474b95d9504b4cf292111a7864d8db"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1185",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836709_579571968.pcd",
+      "scan_ns": "1583836709579571968",
+      "sha256": "5d444297948a39c571ab3f99dce6844fc52c78c08700f61725b9a40be78c2075"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1195",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836710_579639552.pcd",
+      "scan_ns": "1583836710579639552",
+      "sha256": "401aaa139ff174dfa98767d4b966db68a98ba4c16b8062ff2dccdd900157cf1b"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1196",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836710_679414016.pcd",
+      "scan_ns": "1583836710679414016",
+      "sha256": "9e52ccbf667cc7d894d1cce23a6d6591a867d43e317963770d1bdd9bb4e78d87"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1197",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836710_779573760.pcd",
+      "scan_ns": "1583836710779573760",
+      "sha256": "f4b9e2def1d6e40f7a4ee9b0b7c42264e492f58b58a32fd506c3c25b1fcff4ce"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1198",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836710_879768832.pcd",
+      "scan_ns": "1583836710879768832",
+      "sha256": "ef0eb4866631605f3f7d019b6a4e564573c1de52aacfd7d3ab22245378842d74"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1199",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836710_980087296.pcd",
+      "scan_ns": "1583836710980087296",
+      "sha256": "4fe7dc7f909a3bf5bc24ae52afe8dd4ea9fe588cb4002c81b146f818d8a8f271"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1200",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836711_080367104.pcd",
+      "scan_ns": "1583836711080367104",
+      "sha256": "fd175e17a364ae500d2ffee3c0255e451903d663239d72b6dbd35a2420239728"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1215",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836712_581371904.pcd",
+      "scan_ns": "1583836712581371904",
+      "sha256": "9e231751fa8ee298d410e8bce844bac91716fe7c15ac9806d33b83fb17a947ae"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1230",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836714_080167936.pcd",
+      "scan_ns": "1583836714080167936",
+      "sha256": "729412caeedc4f8854a261ba4112172c2ba14c9dd5bd918d3dbf74409d20754a"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1245",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836715_580379392.pcd",
+      "scan_ns": "1583836715580379392",
+      "sha256": "60d0743b5aa9f7b4aa1ed630dd860ef7376e94769444e547f4779c674bb4c9fb"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1260",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836717_080819968.pcd",
+      "scan_ns": "1583836717080819968",
+      "sha256": "4a379e14dfc9b1dc76e397904958fe1925eda9020a3a82ab409a2b95e5e38c9b"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1275",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836718_580099328.pcd",
+      "scan_ns": "1583836718580099328",
+      "sha256": "56e880ab9ad92ca29f17a1c656631f8d56e10ebbd7c7998ca86dc3c83be53270"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1290",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836720_080453888.pcd",
+      "scan_ns": "1583836720080453888",
+      "sha256": "9873ef527ad2e54151dcbf2ed039d8fde0840ad66164d5ddb9ffd5af7c5f831a"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1305",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836721_581371648.pcd",
+      "scan_ns": "1583836721581371648",
+      "sha256": "c257fe1826255e250fd81d540657eaa5403a94245ff7fa89ec6590b309d2be99"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1320",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836723_080273408.pcd",
+      "scan_ns": "1583836723080273408",
+      "sha256": "3a5668f6a3891e4242c8a466a1eebfb6bdb34dbe59f6abfa608997ce252b0f21"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1335",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836724_579943424.pcd",
+      "scan_ns": "1583836724579943424",
+      "sha256": "ed45ef9c5e788114d730efa150fb39b31ddb5a3a47634ed48aa9ab76f8e4138f"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1350",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836726_080539392.pcd",
+      "scan_ns": "1583836726080539392",
+      "sha256": "1114451231914f0075629f2227c304897bf6e11734906cb461bb83b1dcbd0957"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1365",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836727_580535552.pcd",
+      "scan_ns": "1583836727580535552",
+      "sha256": "d235a0e77a794773697d672d2b140b33210a95d0a27519cd8a660793d4bb2ed3"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1380",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836729_078655744.pcd",
+      "scan_ns": "1583836729078655744",
+      "sha256": "856bc4a43354f53f8e7b9f68adfd55fa1b8742120d094da2abca70d0934cdf70"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1395",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836730_580154112.pcd",
+      "scan_ns": "1583836730580154112",
+      "sha256": "f26ec8550635b15eafe36821a1edb43521fa6bf184ad88f564149fff17ebc778"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1402",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836731_278993152.pcd",
+      "scan_ns": "1583836731278993152",
+      "sha256": "bf4c999dd98f9eadc3de850a4ed19409c49718675494c6c5764a4f83930b55cb"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1403",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836731_379486976.pcd",
+      "scan_ns": "1583836731379486976",
+      "sha256": "4d13531b3a616b5a1500c288c1262a55336851f57dab2108bdede97e5fb5ebaa"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1404",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836731_479865600.pcd",
+      "scan_ns": "1583836731479865600",
+      "sha256": "390c40d73d86958aaf2bf9821f185b1d649a8bcb17200971f8eb3d27c21dd04a"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1405",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836731_580089600.pcd",
+      "scan_ns": "1583836731580089600",
+      "sha256": "783ecb74e2349de03d069068cbddb0667ec59b25076963a643c54d791df7f48c"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1406",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836731_680158464.pcd",
+      "scan_ns": "1583836731680158464",
+      "sha256": "729f06871face23c790be83cdea0d3be930b5d8ba84e3135bc11c4b7c1ccac5d"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1409",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836731_980482304.pcd",
+      "scan_ns": "1583836731980482304",
+      "sha256": "55cc41e15ea0dc1e3368829dd18e45d4ed79cc0af88124cb1852a2fdef8c5a52"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1410",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836732_080147456.pcd",
+      "scan_ns": "1583836732080147456",
+      "sha256": "6992b68235fa5391a1707eca1bb556e519c6285426ea424285636cdac9b2406b"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1411",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836732_179759104.pcd",
+      "scan_ns": "1583836732179759104",
+      "sha256": "a8418707c28f7c1d5076810b6cf6fc8ce21db30b87e59c3ac7d1d7a939ae0cb4"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1412",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836732_279380224.pcd",
+      "scan_ns": "1583836732279380224",
+      "sha256": "8c53a0488486f57584eb0d2b62cf1ac2cd888446cface4e29cfdf6deb1a28012"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1413",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836732_378936320.pcd",
+      "scan_ns": "1583836732378936320",
+      "sha256": "5a0fdf579131676ff3ea0084154abc2a6f63e4e5a0c98579baeac0fd7f9a129d"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1425",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836733_578692864.pcd",
+      "scan_ns": "1583836733578692864",
+      "sha256": "cee826fe9108a09f2d8b06daba79f66cd66b6402e99514c2fd9cef7012706e88"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1440",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836735_079533056.pcd",
+      "scan_ns": "1583836735079533056",
+      "sha256": "a98f019eb1e49ebe0f9533c9d91accd45a431c897833ffbf665b99cc591207ad"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1445",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836735_579784448.pcd",
+      "scan_ns": "1583836735579784448",
+      "sha256": "4fe9795ff02b958793876647401225721c113f5d74cd4f0205756797f9c1b16b"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1446",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836735_679345152.pcd",
+      "scan_ns": "1583836735679345152",
+      "sha256": "6ae673e781a7a882201ca2f48adda1879d6853107035c1c55314cdef56e60a29"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1447",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836735_778991104.pcd",
+      "scan_ns": "1583836735778991104",
+      "sha256": "faf5ceb5de80746b45b018d5eefe453c2d51a53b1513a9660bc7e88d66e8595c"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1448",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836735_879025152.pcd",
+      "scan_ns": "1583836735879025152",
+      "sha256": "eaa4279fb8cc3133290f13388514a0c1086a2de4cce19ed4f866057d6ede62f1"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1449",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836735_979098112.pcd",
+      "scan_ns": "1583836735979098112",
+      "sha256": "05661c2e57a46320cdbf6be91546a32373239a56c36b4c02ae3c851e3dbb3773"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1455",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836736_580272896.pcd",
+      "scan_ns": "1583836736580272896",
+      "sha256": "1edaee7e5b595070500051f886aa59d4ae731519aa3b712a27909cd6aea2fa21"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1470",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836738_078871296.pcd",
+      "scan_ns": "1583836738078871296",
+      "sha256": "8e85a461941bfb8af411a77a38b47e359e710a3cd0410cd58279249882abb5a7"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1485",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836739_579296512.pcd",
+      "scan_ns": "1583836739579296512",
+      "sha256": "eca9606ea2cbb43ab1e8b5513df329beec1fad438ea0e28a6ecedba0ba6bc90f"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1500",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836741_080181760.pcd",
+      "scan_ns": "1583836741080181760",
+      "sha256": "d07c0ef8471c0fb7b8a4acbc6e2851fd5fc50882534ebf729e8939389d996d81"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1515",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836742_579347200.pcd",
+      "scan_ns": "1583836742579347200",
+      "sha256": "a64d2fb3daaeae82965a0857fbbb630f4d8830e320961ff0e9dd0d0dba8f3d7f"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1530",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836744_079346688.pcd",
+      "scan_ns": "1583836744079346688",
+      "sha256": "71b9ca1b79174899ce0558e32fd33dc7434d394db384009277c3cc963db53d7d"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1545",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836745_580327680.pcd",
+      "scan_ns": "1583836745580327680",
+      "sha256": "9d1c7cd0fae067484617d9d7144b73aee27c21f8035c0f6baece48ac4ead930b"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1560",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836747_079424768.pcd",
+      "scan_ns": "1583836747079424768",
+      "sha256": "3a4d357eed528ad0ed13c226b83ceb401fdec1f0db51cab0156d927994ae8a8f"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1575",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836748_578976000.pcd",
+      "scan_ns": "1583836748578976000",
+      "sha256": "cb764184f903dd055f754ea9405f9dc37e0cd9cf9791d17bfb6814644deaf3a9"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1590",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836750_079990528.pcd",
+      "scan_ns": "1583836750079990528",
+      "sha256": "35a9f5e7eca0931326b1d76a7c64311c509b97513151c9170d0e4e2df7d73585"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1605",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836751_580150528.pcd",
+      "scan_ns": "1583836751580150528",
+      "sha256": "7289c130140a70e9c8ef8141e40853ce6baa877adb230c6733f1e32de853221b"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1620",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836753_078880256.pcd",
+      "scan_ns": "1583836753078880256",
+      "sha256": "2a3d1c62666c03453329753ca9d533e1090027a5400827fdee4d11fc4b9d4b41"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1635",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836754_579401472.pcd",
+      "scan_ns": "1583836754579401472",
+      "sha256": "61744818912558f85945f6396caf667301367d4290d119fd0aef4250acc02a53"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1650",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836756_080388096.pcd",
+      "scan_ns": "1583836756080388096",
+      "sha256": "98b6296ab8640cf585356b98461a3c0da31501f6db113d44fac6b26686951cd5"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1665",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836757_579987456.pcd",
+      "scan_ns": "1583836757579987456",
+      "sha256": "d9bf183a7e6780ff810d005ae6c6890d78e71fb2720770b5e248292205e102ad"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1680",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836759_078494464.pcd",
+      "scan_ns": "1583836759078494464",
+      "sha256": "6030552ebfff933d9e5554ae82157fbd2488c02134df98216feeb105912b3503"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1695",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836760_579224576.pcd",
+      "scan_ns": "1583836760579224576",
+      "sha256": "c6ff40236de6f4597c9096f8b694ff4e17849444130c4330940751a9588b24b8"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1710",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836762_080004864.pcd",
+      "scan_ns": "1583836762080004864",
+      "sha256": "8cf0b6630808bb41cd2c39c61bbb20df5f9399fa6382ef3e4844809651c31d3c"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1725",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836763_579746304.pcd",
+      "scan_ns": "1583836763579746304",
+      "sha256": "008ced92f9a105bc77c7d4f1a9b62f1fa365a1f5f4fd674a53c17999f6da1b39"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1740",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836765_078805504.pcd",
+      "scan_ns": "1583836765078805504",
+      "sha256": "122c98faab780a6bcce1084f2fb0e81e05d9f493a42735f0b9e810d4ffee0948"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1755",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836766_579281408.pcd",
+      "scan_ns": "1583836766579281408",
+      "sha256": "9230322a3fdcae842953c97fc59f6415f06f0f342c76a1b7568c98304bb6ef03"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1770",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836768_079759360.pcd",
+      "scan_ns": "1583836768079759360",
+      "sha256": "baba1bbf41770d293b16996144b716a986cafcb8e3bbc2071b0783693246ffe9"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1785",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836769_579835392.pcd",
+      "scan_ns": "1583836769579835392",
+      "sha256": "e27272136d513e7e4a91b64cc6bd44ce95f8285db719bac30308897eb3a07fa3"
+    },
+    {
+      "bytes": 1904640,
+      "frame_index": "1800",
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment/raw_format/ouster_scan/cloud_1583836771_078157312.pcd",
+      "scan_ns": "1583836771078157312",
+      "sha256": "13ed5aa71bc5e9cc228cca49e8e625f63f444e7ea8ba189c447c04ae5a71da74"
+    }
+  ],
+  "selection_rows": 616
+}
