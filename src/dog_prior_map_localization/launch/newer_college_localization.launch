@@ -1,0 +1,81 @@
+<launch>
+  <arg name="dataset_root" default="/media/jian/HIKVISION/paper rosbag/NewerCollege/01_short_experiment" />
+  <arg name="scan_pcd" default="$(arg dataset_root)/raw_format/ouster_scan/cloud_1583836591_182590976.pcd" />
+  <arg name="imu_csv" default="$(arg dataset_root)/raw_format/ouster_imu/data.csv" />
+  <arg name="map_pcd" default="/media/jian/HIKVISION/paper rosbag/NewerCollege/.p41_first_ndt/prior_map_xyz_binary.pcd" />
+  <arg name="runtime_config" default="$(find dog_prior_map_localization)/config/p41_newer_college_runtime.yaml" />
+  <arg name="rviz" default="true" />
+
+  <param name="use_sim_time" value="false" />
+  <include file="$(find dog_prior_map_localization)/launch/dog_prior_map_localization_split.launch">
+    <arg name="config" value="$(find dog_prior_map_localization)/config/dog_prior_map_localization_ndt.yaml" />
+    <arg name="dataset_config" value="$(arg runtime_config)" />
+    <arg name="rviz" value="false" />
+    <arg name="coupled_mode" value="CONTROL" />
+    <arg name="camera_enable" value="false" />
+    <arg name="visual_initial_guess_enable" value="false" />
+    <arg name="publish_path" value="true" />
+    <arg name="scan_reference_time" value="start" />
+    <arg name="oosm_enable" value="true" />
+    <arg name="oosm_max_alignment_sec" value="0.02" />
+    <arg name="oosm_fixed_lag_enable" value="false" />
+    <arg name="future_deferral_enable" value="false" />
+    <arg name="diagnostic_determinism_enable" value="true" />
+  </include>
+
+  <!-- Keep the exact official-map XYZ frame; no static TF or extra map transform. -->
+  <param name="map/pcd_fallback_path" value="$(arg map_pcd)" />
+  <param name="frames/map_frame" value="newer_college_map" />
+  <param name="frames/base_frame" value="os1_lidar" />
+  <param name="topics/imu" value="/newer_college/imu" />
+  <param name="topics/lidar" value="/newer_college/deskewed_points" />
+  <param name="topics/lidar_msg_type" value="pointcloud2" />
+  <param name="topics/points_aligned" value="/newer_college/points_aligned" />
+  <param name="deskew/input_topic" value="/newer_college/raw_points" />
+  <param name="deskew/output_topic" value="/newer_college/deskewed_points" />
+  <param name="initialization/explicit_state_enable" value="true" />
+  <param name="initialization/ndt_seed_enable" value="true" />
+  <param name="output/geometry_diagnostics_csv_path" value="/tmp/p41_geometry_$(anon p41_geometry).csv" />
+  <param name="output/ndt_diagnostics_csv_path" value="/tmp/p41_ndt_$(anon p41_ndt).csv" />
+  <param name="output/imu_deskew_csv_path" value="/tmp/p41_deskew_$(anon p41_deskew).csv" />
+  <param name="output/oosm_csv_path" value="/tmp/p41_oosm_$(anon p41_oosm).csv" />
+  <param name="output/ekf_prediction_diagnostics_csv_path" value="/tmp/p41_ekf_$(anon p41_ekf).csv" />
+  <param name="p41/geometry_gate_enable" value="true" />
+  <param name="p41/geometry_gate_max_median_m" value="1.0" />
+  <param name="p41/geometry_gate_max_p90_m" value="3.0" />
+  <param name="p41/geometry_gate_min_overlap_05" value="0.50" />
+  <param name="mature_integration/enable" value="false" />
+  <param name="mature_visual/enable" value="false" />
+  <param name="visual_initial_guess_enable" value="false" />
+  <param name="coupled_mode" value="CONTROL" />
+
+  <node pkg="pcl_ros" type="pcd_to_pointcloud" name="newer_college_prior_map" output="screen" required="true">
+    <param name="file_name" value="$(arg map_pcd)" />
+    <param name="frame_id" value="newer_college_map" />
+    <param name="interval" value="0.0" />
+    <param name="latch" value="true" />
+    <remap from="cloud_pcd" to="/newer_college/prior_map" />
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+
+  <node pkg="dog_prior_map_localization" type="newer_college_first_scan_publisher"
+        name="newer_college_first_scan_input" output="screen" required="true">
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+    <param name="scan_pcd" value="$(arg scan_pcd)" />
+    <param name="imu_csv" value="$(arg imu_csv)" />
+    <param name="lidar_frame" value="os1_lidar" />
+    <param name="imu_frame" value="os1_imu" />
+    <param name="cloud_topic" value="/newer_college/raw_points" />
+    <param name="imu_topic" value="/newer_college/imu" />
+    <param name="ndt_ready_topic" value="/dog_livo/ndt_odom" />
+    <param name="readiness_timeout_sec" value="120.0" />
+    <param name="scan_stamp_sec" value="1583836591" />
+    <param name="scan_stamp_nsec" value="182590976" />
+  </node>
+
+  <node pkg="rviz" type="rviz" name="newer_college_rviz"
+        args="-d $(find dog_prior_map_localization)/rviz/p41_newer_college.rviz"
+        if="$(arg rviz)" output="screen">
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+</launch>

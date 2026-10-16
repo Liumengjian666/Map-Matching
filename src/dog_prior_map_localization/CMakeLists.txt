@@ -163,6 +163,21 @@ add_dependencies(dog_prior_map_ndt_node_cpp
   ${catkin_EXPORTED_TARGETS}
 )
 
+# One-scan Newer College input adapter. It preserves the official PCD XYZ and
+# uint32 scan-relative nanosecond field, exposing only the float32 seconds field
+# required by the existing IMU deskew node.
+add_executable(newer_college_first_scan_publisher
+  src/newer_college_first_scan_publisher.cpp
+)
+target_link_libraries(newer_college_first_scan_publisher
+  ${catkin_LIBRARIES}
+  ${PCL_LIBRARIES}
+  /usr/lib/x86_64-linux-gnu/libusb-1.0.so
+)
+add_dependencies(newer_college_first_scan_publisher
+  ${catkin_EXPORTED_TARGETS}
+)
+
 # P11 SOLiD place-recognition shadow module. The upstream descriptor is kept
 # isolated from the NDT/EKF runtime path and launched only by explicit opt-in.
 add_library(p11_solid_place_recognition
@@ -319,6 +334,7 @@ install(DIRECTORY config launch docs rviz
 )
 
 install(TARGETS dog_prior_map_ekf_node_cpp dog_prior_map_ndt_node_cpp
+        newer_college_first_scan_publisher
         solid_reference_database_builder solid_shadow_node_cpp
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

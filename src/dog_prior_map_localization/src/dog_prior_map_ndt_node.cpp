@@ -24,6 +24,7 @@
 #include <nav_msgs/Odometry.h>
 #include <nav_msgs/Path.h>
 #include <pcl/filters/voxel_grid.h>
+#include <pcl/kdtree/kdtree_flann.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/registration/ndt.h>
 #include <pcl_conversions/pcl_conversions.h>
@@ -73,6 +74,24 @@ double rotationAngleDeg(const Eigen::Matrix3d &R)
   return std::abs(angle_axis.angle()) * 180.0 / M_PI;
 }
 
+struct GeometryStats
+{
+  std::size_t points = 0;
+  double median = std::numeric_limits<double>::quiet_NaN();
+  double p90 = std::numeric_limits<double>::quiet_NaN();
+  double overlap_05 = std::numeric_limits<double>::quiet_NaN();
+  double overlap_2 = std::numeric_limits<double>::quiet_NaN();
+  double overlap_8 = std::numeric_limits<double>::quiet_NaN();
+};
+
+double sortedPercentile(const std::vector<double> &values, double fraction)
+{
+  if (values.empty()) return std::numeric_limits<double>::quiet_NaN();
+  const std::size_t index = static_cast<std::size_t>(
+      std::floor(fraction * static_cast<double>(values.size() - 1)));
+  return values[index];
+}
+
 }  // namespace
 
 class DogPriorMapNdtNode
@@ -83,6 +102,29 @@ public:
   {
     map_frame_ = getParam<std::string>("frames/map_frame", "camera_init");
     base_frame_ = getParam<std::string>("frames/base_frame", "livox_frame");
+    if (getParam<bool>("initialization/ndt_seed_enable", false))
+    {
+      const auto translation = getParam<std::vector<double>>(
+          "initialization/ndt_seed_map_T_lidar_translation_m", std::vector<double>());
+      const auto rotation = getParam<std::vector<double>>(
+          "initialization/ndt_seed_map_T_lidar_rotation_row_major", std::vector<double>());
+      if (translation.size() != 3 || rotation.size() != 9)
+        throw std::runtime_error("NDT startup seed requires 3 translation and 9 rotation values");
+      Eigen::Matrix3d seed_rotation;
+      for (int row = 0; row < 3; ++row)
+        for (int column = 0; column < 3; ++column)
+          seed_rotation(row, column) = rotation[static_cast<std::size_t>(row * 3 + column)];
+      const Eigen::Vector3d seed_translation(translation[0], translation[1], translation[2]);
+      Eigen::Matrix4d seed_pose = Eigen::Matrix4d::Identity();
+      seed_pose.block<3, 3>(0, 0) = seed_rotation;
+      seed_pose.block<3, 1>(0, 3) = seed_translation;
+      if (!seed_pose.allFinite() || !validRigidPose(seed_pose))
+        throw std::runtime_error("NDT startup seed is not a finite proper SE(3) pose");
+      R_ = seed_rotation;
+      p_ = seed_translation;
+      ROS_WARN("[DogPriorMap NDT] using explicit startup pose seed (diagnostic/Oracle if configured): p=(%.6f %.6f %.6f)",
+               p_.x(), p_.y(), p_.z());
+    }
     lidar_topic_ = getParam<std::string>("topics/lidar", "/livox/lidar");
     lidar_msg_type_ = getParam<std::string>("topics/lidar_msg_type", "livox");
     imu_topic_ = getParam<std::string>("topics/imu", "/livox/imu");
@@ -337,6 +379,29 @@ public:
     publish_path_ = getParam<bool>("output/publish_path", false);
     publish_filtered_points_ = getParam<bool>("output/publish_filtered_points", true);
     publish_diagnostics_ = getParam<bool>("output/publish_diagnostics", true);
+    geometry_diagnostics_csv_path_ = getParam<std::string>(
+        "output/geometry_diagnostics_csv_path", "");
+    geometry_gate_enable_ = getParam<bool>("p41/geometry_gate_enable", false);
+    geometry_gate_max_median_m_ = getParam<double>("p41/geometry_gate_max_median_m", 1.0);
+    geometry_gate_max_p90_m_ = getParam<double>("p41/geometry_gate_max_p90_m", 3.0);
+    geometry_gate_min_overlap_05_ = getParam<double>("p41/geometry_gate_min_overlap_05", 0.50);
+    if (geometry_gate_enable_ && geometry_diagnostics_csv_path_.empty())
+      throw std::runtime_error("P41 geometry gate requires output/geometry_diagnostics_csv_path");
+    if (!geometry_diagnostics_csv_path_.empty())
+    {
+      std::ifstream existing_geometry_csv(geometry_diagnostics_csv_path_.c_str());
+      if (existing_geometry_csv.good())
+        throw std::runtime_error("geometry diagnostic output already exists");
+      geometry_diagnostics_csv_.open(geometry_diagnostics_csv_path_, std::ios::out);
+      if (!geometry_diagnostics_csv_)
+        throw std::runtime_error("geometry diagnostic output unavailable");
+      geometry_diagnostics_csv_ << "scan_ns,source_points,target_points,gate_status,"
+          "initial_nn_median_m,initial_nn_p90_m,initial_overlap_0p5m,initial_overlap_2m,initial_overlap_8m,"
+          "ndt_converged,fitness,iterations,align_ms,raw_nn_median_m,raw_nn_p90_m,"
+          "raw_overlap_0p5m,raw_overlap_2m,raw_overlap_8m,used_nn_median_m,used_nn_p90_m,"
+          "used_overlap_0p5m,used_overlap_2m,used_overlap_8m,step_limited\n";
+      geometry_diagnostics_csv_.flush();
+    }
 
     loadMap();
 
@@ -1205,6 +1270,49 @@ private:
     ndt_.setStepSize(ndt_step_size_);
     ndt_.setTransformationEpsilon(ndt_transformation_epsilon_);
     ndt_.setMaximumIterations(ndt_max_iterations_);
+    if (!geometry_diagnostics_csv_path_.empty())
+    {
+      map_geometry_tree_.reset(new pcl::KdTreeFLANN<pcl::PointXYZ>());
+      map_geometry_tree_->setInputCloud(target_cloud_);
+    }
+  }
+
+  GeometryStats measureGeometry(const pcl::PointCloud<pcl::PointXYZ>::Ptr &source,
+                                const Eigen::Matrix4d &map_T_lidar) const
+  {
+    GeometryStats stats;
+    if (!source || source->empty() || !map_geometry_tree_ || !map_T_lidar.allFinite()) return stats;
+    std::vector<double> distances;
+    distances.reserve(source->size());
+    std::vector<int> indices(1);
+    std::vector<float> squared_distances(1);
+    std::size_t within_05 = 0, within_2 = 0, within_8 = 0;
+    const Eigen::Matrix3d R = map_T_lidar.block<3, 3>(0, 0);
+    const Eigen::Vector3d p = map_T_lidar.block<3, 1>(0, 3);
+    for (const auto &point : source->points)
+    {
+      if (!std::isfinite(point.x) || !std::isfinite(point.y) || !std::isfinite(point.z)) continue;
+      const Eigen::Vector3d map_point = R * Eigen::Vector3d(point.x, point.y, point.z) + p;
+      const pcl::PointXYZ query(static_cast<float>(map_point.x()),
+                                static_cast<float>(map_point.y()),
+                                static_cast<float>(map_point.z()));
+      if (map_geometry_tree_->nearestKSearch(query, 1, indices, squared_distances) != 1 ||
+          squared_distances[0] < 0.0f) continue;
+      const double distance = std::sqrt(static_cast<double>(squared_distances[0]));
+      distances.push_back(distance);
+      within_05 += distance <= 0.5 ? 1 : 0;
+      within_2 += distance <= 2.0 ? 1 : 0;
+      within_8 += distance <= 8.0 ? 1 : 0;
+    }
+    if (distances.empty()) return stats;
+    std::sort(distances.begin(), distances.end());
+    stats.points = distances.size();
+    stats.median = sortedPercentile(distances, 0.50);
+    stats.p90 = sortedPercentile(distances, 0.90);
+    stats.overlap_05 = static_cast<double>(within_05) / distances.size();
+    stats.overlap_2 = static_cast<double>(within_2) / distances.size();
+    stats.overlap_8 = static_cast<double>(within_8) / distances.size();
+    return stats;
   }
 
   // 按 XYZ 分辨率执行各向异性体素降采样，并可限制最终点数。
@@ -1635,6 +1743,35 @@ private:
     }
     diagnostic_row.initial_guess = initial_guess;
 
+    const GeometryStats initial_geometry = map_geometry_tree_ ?
+        measureGeometry(source, initial_guess) : GeometryStats();
+    const bool geometry_gate_passed = !geometry_gate_enable_ ||
+        (std::isfinite(initial_geometry.median) && std::isfinite(initial_geometry.p90) &&
+         std::isfinite(initial_geometry.overlap_05) &&
+         initial_geometry.median <= geometry_gate_max_median_m_ &&
+         initial_geometry.p90 <= geometry_gate_max_p90_m_ &&
+         initial_geometry.overlap_05 >= geometry_gate_min_overlap_05_);
+    if (!geometry_gate_passed)
+    {
+      ROS_ERROR("[DogPriorMap NDT] startup geometry gate rejected scan: median=%.3f m p90=%.3f m overlap0.5=%.3f; NDT align was not called",
+                initial_geometry.median, initial_geometry.p90, initial_geometry.overlap_05);
+      if (geometry_diagnostics_csv_.is_open())
+      {
+        geometry_diagnostics_csv_ << std::setprecision(17) << stamp.toNSec() << ','
+            << source->size() << ',' << target_cloud_->size() << ",REJECTED,"
+            << initial_geometry.median << ',' << initial_geometry.p90 << ','
+            << initial_geometry.overlap_05 << ',' << initial_geometry.overlap_2 << ','
+            << initial_geometry.overlap_8 << ",0,nan,0,0,nan,nan,nan,nan,nan,nan,nan,nan,nan,nan,0\n";
+        geometry_diagnostics_csv_.flush();
+      }
+      const double elapsed_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
+      publishDiagnostics(timing.reference_stamp, false, 0.0, elapsed_ms, elapsed_ms,
+                         static_cast<int>(source->size()), target_cloud_->size(), 0.0, 0);
+      diagnostic_row.initial_guess_reason = "p41_initial_geometry_gate_rejected";
+      writeDeterminismRow(diagnostic_row);
+      return;
+    }
+
     ndt_.setInputSource(source);
     if (experimental_source_capture_enable_ && experimental_source_capture_.requested(stamp.toNSec()))
       experimental_source_capture_.save(diagnostic_row.frame_index, stamp.toNSec(), *source, diagnostic_row.cloud_hash);
@@ -1647,6 +1784,8 @@ private:
     double score = ndt_.getFitnessScore();
     int iterations = ndt_.getFinalNumIteration();
     Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
+    const GeometryStats raw_geometry = map_geometry_tree_ && result.allFinite() ?
+        measureGeometry(source, result) : GeometryStats();
     if (mature_integration_enable_)
     {
       runMatureIntegration(source, initial_guess, diagnostic_row.frame_index,
@@ -1863,6 +2002,24 @@ private:
       {
         publishAlignedCloud(aligned, stamp);
       }
+    }
+
+    const GeometryStats used_geometry = map_geometry_tree_ && ok && diagnostic_row.final_used.allFinite() ?
+        measureGeometry(source, diagnostic_row.final_used) : GeometryStats();
+    if (geometry_diagnostics_csv_.is_open())
+    {
+      geometry_diagnostics_csv_ << std::setprecision(17) << stamp.toNSec() << ','
+          << source->size() << ',' << target_cloud_->size() << ",PASS,"
+          << initial_geometry.median << ',' << initial_geometry.p90 << ','
+          << initial_geometry.overlap_05 << ',' << initial_geometry.overlap_2 << ','
+          << initial_geometry.overlap_8 << ',' << (ok ? 1 : 0) << ',' << score << ','
+          << iterations << ',' << align_ms << ',' << raw_geometry.median << ','
+          << raw_geometry.p90 << ',' << raw_geometry.overlap_05 << ','
+          << raw_geometry.overlap_2 << ',' << raw_geometry.overlap_8 << ','
+          << used_geometry.median << ',' << used_geometry.p90 << ','
+          << used_geometry.overlap_05 << ',' << used_geometry.overlap_2 << ','
+          << used_geometry.overlap_8 << ',' << (step_limited ? 1 : 0) << '\n';
+      geometry_diagnostics_csv_.flush();
     }
 
     publishDiagnostics(timing.reference_stamp, ok, align_ms, preprocess_ms, localization_ms,
@@ -2150,6 +2307,13 @@ private:
   dog_prior_map_fastlio2_frontend_exp::CoupledAnchorState coupled_anchor_;
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr target_cloud_;
+  pcl::KdTreeFLANN<pcl::PointXYZ>::Ptr map_geometry_tree_;
+  std::string geometry_diagnostics_csv_path_;
+  std::ofstream geometry_diagnostics_csv_;
+  bool geometry_gate_enable_ = false;
+  double geometry_gate_max_median_m_ = 1.0;
+  double geometry_gate_max_p90_m_ = 3.0;
+  double geometry_gate_min_overlap_05_ = 0.50;
   bool visual_initial_guess_enable_ = false;
   VisualAidedInitialGuess visual_initial_guess_;
   std::ofstream visual_geometry_csv_;
