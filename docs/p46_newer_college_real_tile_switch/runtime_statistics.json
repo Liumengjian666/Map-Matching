@@ -1,0 +1,313 @@
+{
+  "dataset": "Newer College 2020 / 01_short_experiment",
+  "scan_count": 1800,
+  "sensor_span_sec": 179.895566336,
+  "local_run_wall_sec": 208.39510327600874,
+  "global_run_wall_sec": 213.19642939802725,
+  "global": {
+    "ndt_target_points": [
+      3142751
+    ],
+    "ndt_align_ms_all": {
+      "mean": 7.189315759999997,
+      "p95_nearest_rank": 9.90848,
+      "max": 582.432463
+    },
+    "ndt_align_ms_steady_excluding_first": {
+      "mean": 6.869558590883821,
+      "p95_nearest_rank": 9.90848,
+      "max": 17.876413
+    },
+    "deskew_ms": {
+      "count": 1800,
+      "mean_ms": 20.631752933333345,
+      "p95_ms_nearest_rank": 26.287126,
+      "max_ms": 34.57684
+    },
+    "publisher_to_ndt_ack_ms": {
+      "count": 1800,
+      "mean_ms": 47.873349057303535,
+      "p95_ms_nearest_rank": 56.3504695892334,
+      "max_ms": 627.9182434082031
+    },
+    "ndt_process": {
+      "pid_count": 1,
+      "peak_sampled_rss_kib": 776088,
+      "peak_observed_vmhwm_kib": 776088,
+      "cpu_time_sec": 45.16,
+      "peak_rss_mib": 757.8984375,
+      "observed_vmhwm_mib": 757.8984375
+    },
+    "ekf_process": {
+      "pid_count": 1,
+      "peak_sampled_rss_kib": 23632,
+      "peak_observed_vmhwm_kib": 23656,
+      "cpu_time_sec": 47.35,
+      "peak_rss_mib": 23.078125,
+      "observed_vmhwm_mib": 23.1015625
+    },
+    "publisher_process": {
+      "pid_count": 1,
+      "peak_sampled_rss_kib": 45744,
+      "peak_observed_vmhwm_kib": 46064,
+      "cpu_time_sec": 13.33,
+      "peak_rss_mib": 44.671875,
+      "observed_vmhwm_mib": 44.984375
+    },
+    "launch_tree_rss_peak_estimate_mib": 894.20703125,
+    "launch_tree_cpu_sec": 110.31,
+    "system_mem_available_min_gib": 8.03097915649414
+  },
+  "local": {
+    "loaded_tile_count_mean": 29.86,
+    "loaded_tile_count_max": 50,
+    "local_target_point_count_mean": 1049176.326111111,
+    "local_target_point_count_max": 2313118,
+    "map_update_count_including_initial": 6,
+    "real_online_tile_switch_count": 5,
+    "ndt_align_ms_all": {
+      "mean": 8.761674400555536,
+      "p95_nearest_rank": 11.759426,
+      "max": 311.012077
+    },
+    "ndt_align_ms_ordinary_non_update": {
+      "mean": 8.120674036231867,
+      "p95_nearest_rank": 11.647014,
+      "max": 19.872832
+    },
+    "ndt_align_ms_update_frames_including_initial": {
+      "count": 6,
+      "mean": 200.42078333333333,
+      "p95": 311.012077,
+      "max": 311.012077
+    },
+    "deskew_ms": {
+      "count": 1800,
+      "mean": 20.924362310000046,
+      "p95": 26.483643,
+      "max": 41.68071
+    },
+    "publisher_to_ndt_ack_ms": {
+      "count": 1800,
+      "mean": 51.31522562768724,
+      "p95": 58.45832824707031,
+      "max": 893.2533264160156
+    },
+    "ndt_process": {
+      "pid_count": 1,
+      "peak_sampled_rss_kib": 382228,
+      "peak_observed_vmhwm_kib": 382228,
+      "cpu_time_sec": 47.84,
+      "peak_rss_mib": 373.26953125,
+      "observed_vmhwm_mib": 373.26953125
+    },
+    "ekf_process": {
+      "pid_count": 1,
+      "peak_sampled_rss_kib": 23828,
+      "peak_observed_vmhwm_kib": 23916,
+      "cpu_time_sec": 48.22,
+      "peak_rss_mib": 23.26953125,
+      "observed_vmhwm_mib": 23.35546875
+    },
+    "publisher_process": {
+      "pid_count": 1,
+      "peak_sampled_rss_kib": 44832,
+      "peak_observed_vmhwm_kib": 44832,
+      "cpu_time_sec": 13.2,
+      "peak_rss_mib": 43.78125,
+      "observed_vmhwm_mib": 43.78125
+    },
+    "launch_tree_rss_peak_estimate_mib": 516.37109375,
+    "launch_tree_cpu_sec": 113.57,
+    "system_mem_available_min_gib": 7.334903717041016,
+    "map_update_event_runtime": [
+      {
+        "kind": "INITIAL_TILE_LOAD",
+        "scan_index": "1",
+        "scan_ns": "1583836591182590976",
+        "update_reason": "initial_tile_load",
+        "relative_sensor_sec": 0.0,
+        "loaded_tile_count": "21",
+        "target_points": "552716",
+        "tile_io_ms": 16.870831000000003,
+        "target_merge_ms": 3.293243999999998,
+        "ndt_target_rebuild_ms": 103.866726,
+        "ndt_align_ms": 88.787443,
+        "sum_logged_update_and_align_components_ms": 212.818244,
+        "publisher_to_ndt_ack_ms": 251.6305446624756,
+        "ndt_vmhwm_from_map_diagnostic_kib": "106352",
+        "sampled_ndt_vmhwm_during_callback_kib": "123832",
+        "coverage_status": "COVERAGE_PASS",
+        "ndt_converged": "1",
+        "oosm_result": "APPLIED"
+      },
+      {
+        "kind": "REAL_ONLINE_TILE_SWITCH",
+        "scan_index": "1070",
+        "scan_ns": "1583836698080250368",
+        "update_reason": "required_tiles_outside_cache",
+        "relative_sensor_sec": 106.89765939200001,
+        "loaded_tile_count": "28",
+        "target_points": "825865",
+        "tile_io_ms": 24.504959,
+        "target_merge_ms": 6.173736000000002,
+        "ndt_target_rebuild_ms": 155.775238,
+        "ndt_align_ms": 111.745036,
+        "sum_logged_update_and_align_components_ms": 298.19896900000003,
+        "publisher_to_ndt_ack_ms": 349.84636306762695,
+        "ndt_vmhwm_from_map_diagnostic_kib": "152876",
+        "sampled_ndt_vmhwm_during_callback_kib": "163564",
+        "coverage_status": "COVERAGE_PASS",
+        "ndt_converged": "1",
+        "oosm_result": "APPLIED"
+      },
+      {
+        "kind": "REAL_ONLINE_TILE_SWITCH",
+        "scan_index": "1197",
+        "scan_ns": "1583836710779573760",
+        "update_reason": "required_tiles_outside_cache",
+        "relative_sensor_sec": 119.596982784,
+        "loaded_tile_count": "40",
+        "target_points": "1478561",
+        "tile_io_ms": 36.97494900000001,
+        "target_merge_ms": 9.633647999999994,
+        "ndt_target_rebuild_ms": 295.717321,
+        "ndt_align_ms": 225.202389,
+        "sum_logged_update_and_align_components_ms": 567.528307,
+        "publisher_to_ndt_ack_ms": 614.7716045379639,
+        "ndt_vmhwm_from_map_diagnostic_kib": "223640",
+        "sampled_ndt_vmhwm_during_callback_kib": "248628",
+        "coverage_status": "COVERAGE_PASS",
+        "ndt_converged": "1",
+        "oosm_result": "APPLIED"
+      },
+      {
+        "kind": "REAL_ONLINE_TILE_SWITCH",
+        "scan_index": "1404",
+        "scan_ns": "1583836731479865600",
+        "update_reason": "required_tiles_outside_cache",
+        "relative_sensor_sec": 140.297274624,
+        "loaded_tile_count": "41",
+        "target_points": "1724963",
+        "tile_io_ms": 40.813533,
+        "target_merge_ms": 10.030836999999998,
+        "ndt_target_rebuild_ms": 343.198104,
+        "ndt_align_ms": 246.305618,
+        "sum_logged_update_and_align_components_ms": 640.348092,
+        "publisher_to_ndt_ack_ms": 681.2746524810791,
+        "ndt_vmhwm_from_map_diagnostic_kib": "284324",
+        "sampled_ndt_vmhwm_during_callback_kib": "307596",
+        "coverage_status": "COVERAGE_PASS",
+        "ndt_converged": "1",
+        "oosm_result": "APPLIED"
+      },
+      {
+        "kind": "REAL_ONLINE_TILE_SWITCH",
+        "scan_index": "1411",
+        "scan_ns": "1583836732179759104",
+        "update_reason": "required_tiles_outside_cache",
+        "relative_sensor_sec": 140.997168128,
+        "loaded_tile_count": "41",
+        "target_points": "1549958",
+        "tile_io_ms": 35.940659,
+        "target_merge_ms": 9.342687000000005,
+        "ndt_target_rebuild_ms": 297.84177300000005,
+        "ndt_align_ms": 219.472137,
+        "sum_logged_update_and_align_components_ms": 562.597256,
+        "publisher_to_ndt_ack_ms": 610.1107597351074,
+        "ndt_vmhwm_from_map_diagnostic_kib": "307596",
+        "sampled_ndt_vmhwm_during_callback_kib": "307596",
+        "coverage_status": "COVERAGE_PASS",
+        "ndt_converged": "1",
+        "oosm_result": "APPLIED"
+      },
+      {
+        "kind": "REAL_ONLINE_TILE_SWITCH",
+        "scan_index": "1447",
+        "scan_ns": "1583836735778991104",
+        "update_reason": "required_tiles_outside_cache",
+        "relative_sensor_sec": 144.596400128,
+        "loaded_tile_count": "50",
+        "target_points": "2313118",
+        "tile_io_ms": 55.153685000000024,
+        "target_merge_ms": 14.586909999999975,
+        "ndt_target_rebuild_ms": 470.848839,
+        "ndt_align_ms": 311.012077,
+        "sum_logged_update_and_align_components_ms": 851.601511,
+        "publisher_to_ndt_ack_ms": 893.2533264160156,
+        "ndt_vmhwm_from_map_diagnostic_kib": "337084",
+        "sampled_ndt_vmhwm_during_callback_kib": "382228",
+        "coverage_status": "COVERAGE_PASS",
+        "ndt_converged": "1",
+        "oosm_result": "APPLIED"
+      }
+    ]
+  },
+  "paired_delta": {
+    "ndt_vmhwm_reduction_percent_local_vs_global": 50.749399552628056,
+    "ndt_hwm_local_over_250_mib_goal": true,
+    "launch_tree_rss_reduction_percent_estimate": 42.253742622872046
+  },
+  "interpretation": {
+    "rss_sum": "launch-tree sum is an estimate and may double-count shared mappings",
+    "realtime": "NOT_REALTIME_VALIDATED; controlled ack-paced replay wall time exceeds sensor span and tile updates exceed 100ms",
+    "rviz": "disabled in both resource runs; visualization-process RSS not included"
+  },
+  "file_hashes": {
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/launch/newer_college_300frame.launch": {
+      "available": true,
+      "size_bytes": 6131,
+      "sha256": "c3b2b6e138b53acec0bbdcc8e84670c57f20a1a44e8469e7d8f4b49e73920f7d"
+    },
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/launch/newer_college_local_map.launch": {
+      "available": true,
+      "size_bytes": 7145,
+      "sha256": "882b09b5e3ba74e011cbb7096958a495fe3741452e2eabe51323638163e127cc"
+    },
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/dog_prior_map_localization_ndt.yaml": {
+      "available": true,
+      "size_bytes": 2984,
+      "sha256": "482d11e26b998aad0fcb07840d9d8eede788291348c1a93a748a74edf1fe6b83"
+    },
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p41_newer_college_runtime.yaml": {
+      "available": true,
+      "size_bytes": 5181,
+      "sha256": "6dd20a08e21f7d1dfe9408fe3652c1b78c5f9d89a6adae8c3cc1352d6d7426e9"
+    },
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p44_newer_college_base_oracle_start.yaml": {
+      "available": true,
+      "size_bytes": 1511,
+      "sha256": "7615762083b4041ac41b9a80737b36e798189d3ce6e803b22402e0d7465f1a3a"
+    },
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/src/dog_prior_map_localization/config/p45_newer_college_local_map.yaml": {
+      "available": true,
+      "size_bytes": 817,
+      "sha256": "fb7a4459bda888f8cafac72c194af0d76cc5cb6aa6154c5c785b57de24468d98"
+    },
+    "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p41_first_ndt/prior_map_xyz_binary.pcd": {
+      "available": true,
+      "size_bytes": 369976348,
+      "sha256": "57da358a7c3f52a132fd06afba69f2c3eff2e980b7dbad5b8751548665104e25"
+    },
+    "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_manifest.json": {
+      "available": true,
+      "size_bytes": 34417,
+      "sha256": "ebd7089f20026a991af1a88679a133bce020ee7bc9a9a5439665cc3a413cbb04"
+    },
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp": {
+      "available": true,
+      "size_bytes": 149704696,
+      "sha256": "c5e028637a38fb8877486c9c7ef783e40de071e61c981b874d82db8bfcbb266c"
+    },
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp": {
+      "available": true,
+      "size_bytes": 190920496,
+      "sha256": "930a3ca96e178d63afd58874ca3974dadcbd87908e58e39a3d15c85807d25d2d"
+    },
+    "/home/jian/livox_ws/p10_corridor01_oosm_r1_ws/devel/lib/dog_prior_map_localization/newer_college_sequence_publisher": {
+      "available": true,
+      "size_bytes": 5138080,
+      "sha256": "024b8f679c16a325acb73bf6b4e91698f4a7a025dd47ed90de3cfb6fef565e66"
+    }
+  }
+}

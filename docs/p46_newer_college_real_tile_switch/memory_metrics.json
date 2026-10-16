@@ -1,0 +1,15 @@
+{
+  "monitor_sample_count": 1408,
+  "monitor_sample_period_sec": 0.1,
+  "ndt_peak_rss_kib": 382228,
+  "ndt_peak_vmhwm_kib": 382228,
+  "ekf_peak_rss_kib": 23828,
+  "ekf_peak_vmhwm_kib": 23916,
+  "publisher_peak_rss_kib": 44832,
+  "publisher_peak_vmhwm_kib": 44832,
+  "launch_tree_rss_estimate_peak_kib": 528764,
+  "launch_tree_cpu_sec": 113.57,
+  "system_mem_total_kib": 14163984,
+  "system_mem_available_min_kib": 7691204,
+  "rss_sum_warning": "Process RSS sum is an estimate and can double-count shared pages; not a unique physical-memory total."
+}

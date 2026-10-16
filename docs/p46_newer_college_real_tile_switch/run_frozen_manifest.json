@@ -1,0 +1,85 @@
+{
+  "dataset": "Newer College 2020 / 01_short_experiment",
+  "run_dir": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p46_real_tile_switch/formal1800",
+  "frozen_before_gt_evaluation": true,
+  "scan_start_ns": 1583836591182590976,
+  "scan_end_ns": 1583836771078157312,
+  "scan_count": 1800,
+  "runtime_command": [
+    "roslaunch",
+    "dog_prior_map_localization",
+    "newer_college_local_map.launch",
+    "scan_count:=1800",
+    "start_stamp_ns:=1583836591182590976",
+    "output_dir:=/media/jian/HIKVISION/paper rosbag/NewerCollege/.p46_real_tile_switch/formal1800",
+    "rviz:=false"
+  ],
+  "binary_sha256": {
+    "ndt": "c5e028637a38fb8877486c9c7ef783e40de071e61c981b874d82db8bfcbb266c",
+    "ekf": "930a3ca96e178d63afd58874ca3974dadcbd87908e58e39a3d15c85807d25d2d",
+    "publisher": "024b8f679c16a325acb73bf6b4e91698f4a7a025dd47ed90de3cfb6fef565e66"
+  },
+  "runtime_outputs": [
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p46_real_tile_switch/formal1800/deskew_diagnostics.csv",
+      "size_bytes": 705431,
+      "sha256": "897c8877f59295acf307d6c778d2b1cace047e88dd2a29cbec60fa588142cf31"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p46_real_tile_switch/formal1800/ekf_prediction_diagnostics.csv",
+      "size_bytes": 10047203,
+      "sha256": "505dd13766a4d771a640a427b449fa3ca86959fcac6bb9118e371f1fb83dadf1"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p46_real_tile_switch/formal1800/geometry_diagnostics.csv",
+      "size_bytes": 605727,
+      "sha256": "bb726bb1e7c9ac6c6e258e8b186f6dc539d7186e5a57cab0a013a847c71ecd79"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p46_real_tile_switch/formal1800/local_map_diagnostics.csv",
+      "size_bytes": 1676635,
+      "sha256": "265fa11ba7abe4bce80b8a2e7ca9ae9a26a935221d11213a6508e4bf1d514101"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p46_real_tile_switch/formal1800/localization_trajectory.csv",
+      "size_bytes": 7331641,
+      "sha256": "bae7e5ba418a95dc9bc2343e71801b659c1ecf74205ffbcc6fd099096949869c"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p46_real_tile_switch/formal1800/memory_timeseries.csv",
+      "size_bytes": 211603,
+      "sha256": "ba15b07b89140e4d0bb1a33fc288177c75bebf5f36056b1134450f7cc2a16fdf"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p46_real_tile_switch/formal1800/ndt_diagnostics.csv",
+      "size_bytes": 3653640,
+      "sha256": "0f1b8b10facb7daa23f474757b01214b99b10f5beef4f6da2e17c53238675400"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p46_real_tile_switch/formal1800/ndt_runtime.csv",
+      "size_bytes": 21494,
+      "sha256": "a36c6929c61d1344535ad827a1d58393cfeb14e490e5ee4d6fc2a6044c237708"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p46_real_tile_switch/formal1800/oosm_statistics.csv",
+      "size_bytes": 212417,
+      "sha256": "b7cd1aebce742b3d30495429ce8d9a0f38a3a0d898e75a3b9e4c00b46525c851"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p46_real_tile_switch/formal1800/publisher_receipts.csv",
+      "size_bytes": 615100,
+      "sha256": "8ceff4f430d88ef73126dfe0c65fc72dd2de7dc7b675d749831ca202fc5a34b7"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p46_real_tile_switch/formal1800/roslaunch.log",
+      "size_bytes": 415784,
+      "sha256": "32c74e2bd4e034c7bcd87832cd56f1292469fdb791f55728d5e7b574931f3fe0"
+    },
+    {
+      "path": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p46_real_tile_switch/formal1800/runtime_statistics.json",
+      "size_bytes": 1473,
+      "sha256": "dce40ab4db53623ff9f0c8af55b2a1a8ba7cb1933cc195fb8302347fe5bf4930"
+    }
+  ],
+  "freeze_note": "GT has not been opened by this validator; runtime CSVs are frozen before offline accuracy evaluation."
+}

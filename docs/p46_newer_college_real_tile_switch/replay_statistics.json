@@ -1,0 +1,122 @@
+{
+  "scan_count": 1800,
+  "scan_start_ns": 1583836591182590976,
+  "scan_end_ns": 1583836771078157312,
+  "sensor_span_sec": 179.895566336,
+  "source_canonical_scan_count": 15301,
+  "ignored_noncanonical_cloud_names": [
+    "cloud_1583837971_358315008(1).pcd"
+  ],
+  "receipt_count": 1800,
+  "ndt_ack_count": 1800,
+  "ndt_converged_count": 1800,
+  "oosm_counts": {
+    "APPLIED": 1800
+  },
+  "deskew_status_counts": {
+    "PUBLISHED": 1800
+  },
+  "geometry_gate_counts": {
+    "PASS": 1800
+  },
+  "real_tile_switch_count": 5,
+  "map_update_count_including_initial": 6,
+  "loaded_tile_count_mean": 29.86,
+  "loaded_tile_count_max": 50,
+  "local_target_points_mean": 1049176.326111111,
+  "local_target_points_max": 2313118,
+  "ndt_align_ms_all": {
+    "count": 1800,
+    "mean": 8.761674400555565,
+    "p95": 11.759426,
+    "max": 311.012077
+  },
+  "ndt_align_ms_ordinary_non_update_frames": {
+    "count": 1794,
+    "mean": 8.120674036231893,
+    "p95": 11.647014,
+    "max": 19.872832
+  },
+  "ndt_align_ms_update_frames_including_initial": {
+    "count": 6,
+    "mean": 200.42078333333333,
+    "p95": 311.012077,
+    "max": 311.012077
+  },
+  "deskew_ms": {
+    "count": 1800,
+    "mean": 20.924362310000046,
+    "p95": 26.483643,
+    "max": 41.68071
+  },
+  "publisher_to_ndt_ack_ms": {
+    "count": 1800,
+    "mean": 51.31522562768724,
+    "p95": 58.45832824707031,
+    "max": 893.2533264160156
+  },
+  "publisher_to_ekf_ack_ms": {
+    "count": 1800,
+    "mean": 51.32085972362094,
+    "p95": 58.46381187438965,
+    "max": 893.258810043335
+  },
+  "run_monitor": {
+    "command": [
+      "roslaunch",
+      "dog_prior_map_localization",
+      "newer_college_local_map.launch",
+      "scan_count:=1800",
+      "start_stamp_ns:=1583836591182590976",
+      "output_dir:=/media/jian/HIKVISION/paper rosbag/NewerCollege/.p46_real_tile_switch/formal1800",
+      "rviz:=false"
+    ],
+    "sampled_process_group_id": 312326,
+    "return_code": 0,
+    "wall_time_sec": 208.39510327600874,
+    "sample_period_sec": 0.1,
+    "input_publisher_seen": true,
+    "input_publisher_complete_marker_seen": true,
+    "processes": {
+      "ndt": {
+        "pid_count": 1,
+        "peak_sampled_rss_kib": 382228,
+        "peak_observed_vmhwm_kib": 382228,
+        "cpu_time_sec": 47.84
+      },
+      "ekf": {
+        "pid_count": 1,
+        "peak_sampled_rss_kib": 23828,
+        "peak_observed_vmhwm_kib": 23916,
+        "cpu_time_sec": 48.22
+      },
+      "publisher": {
+        "pid_count": 1,
+        "peak_sampled_rss_kib": 44832,
+        "peak_observed_vmhwm_kib": 44832,
+        "cpu_time_sec": 13.2
+      },
+      "map_visualizer": {
+        "pid_count": 0,
+        "peak_sampled_rss_kib": 0,
+        "peak_observed_vmhwm_kib": 0,
+        "cpu_time_sec": 0.0
+      },
+      "rviz": {
+        "pid_count": 0,
+        "peak_sampled_rss_kib": 0,
+        "peak_observed_vmhwm_kib": 0,
+        "cpu_time_sec": 0.0
+      }
+    },
+    "peak_synchronized_roslaunch_group_rss_kib": 528764,
+    "roslaunch_group_cpu_time_sec": 113.57,
+    "last_sample_rss_kib": {
+      "ndt": 0,
+      "ekf": 0,
+      "publisher": 0,
+      "map_visualizer": 0,
+      "rviz": 0
+    }
+  }
+}

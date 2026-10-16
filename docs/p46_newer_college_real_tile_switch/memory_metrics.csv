@@ -1,0 +1,15 @@
+group,scope,process,peak_rss_kib,peak_rss_mib,observed_vmhwm_kib,observed_vmhwm_mib,cpu_sec,sampling_period_sec,note
+GLOBAL,process,ndt,776088,757.8984375,776088,757.8984375,45.16,0.1,per-process; VmHWM observed during live run
+GLOBAL,process,ekf,23632,23.078125,23656,23.1015625,47.35,0.1,per-process; VmHWM observed during live run
+GLOBAL,process,publisher,45744,44.671875,46064,44.984375,13.33,0.1,per-process; VmHWM observed during live run
+GLOBAL,launch_tree_estimate,roslaunch descendants,915668,894.20703125,,,110.31,0.1,synchronized RSS sum estimate; shared pages may be double-counted
+LOCAL,process,ndt,382228,373.26953125,382228,373.26953125,47.84,0.1,per-process; VmHWM observed during live run
+LOCAL,process,ekf,23828,23.26953125,23916,23.35546875,48.22,0.1,per-process; VmHWM observed during live run
+LOCAL,process,publisher,44832,43.78125,44832,43.78125,13.2,0.1,per-process; VmHWM observed during live run
+LOCAL,launch_tree_estimate,roslaunch descendants,528764,516.37109375,,,113.57,0.1,synchronized RSS sum estimate; shared pages may be double-counted
+LOCAL,tile_update_window,1,123832,120.9296875,123832,120.9296875,,0.1,INITIAL_TILE_LOAD; callback interval; 100ms monitor sampling
+LOCAL,tile_update_window,1070,150936,147.3984375,163564,159.73046875,,0.1,REAL_ONLINE_TILE_SWITCH; callback interval; 100ms monitor sampling
+LOCAL,tile_update_window,1197,239008,233.40625,248628,242.80078125,,0.1,REAL_ONLINE_TILE_SWITCH; callback interval; 100ms monitor sampling
+LOCAL,tile_update_window,1404,282964,276.33203125,307596,300.38671875,,0.1,REAL_ONLINE_TILE_SWITCH; callback interval; 100ms monitor sampling
+LOCAL,tile_update_window,1411,294476,287.57421875,307596,300.38671875,,0.1,REAL_ONLINE_TILE_SWITCH; callback interval; 100ms monitor sampling
+LOCAL,tile_update_window,1447,382228,373.26953125,382228,373.26953125,,0.1,REAL_ONLINE_TILE_SWITCH; callback interval; 100ms monitor sampling

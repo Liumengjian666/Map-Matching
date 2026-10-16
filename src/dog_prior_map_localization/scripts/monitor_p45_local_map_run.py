@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
-"""Run one P45 roslaunch trial while sampling synchronized process RSS/CPU."""
+"""Run a P45/P46 Newer College roslaunch trial and sample process RSS/CPU."""
 
 import argparse
+import csv
+from datetime import datetime, timezone
 import json
 import os
 import signal
@@ -48,25 +50,49 @@ def read_proc(pid):
         return None
 
 
+def read_system_memory_kib():
+    values = {}
+    try:
+        for line in Path("/proc/meminfo").read_text().splitlines():
+            key, value, *_ = line.replace(":", "").split()
+            if key in ("MemTotal", "MemAvailable"):
+                values[key] = int(value)
+    except (OSError, ValueError):
+        pass
+    return values
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--log", required=True)
     parser.add_argument("--metrics", required=True)
+    parser.add_argument("--timeseries", required=True)
     parser.add_argument("--sample-period", type=float, default=0.1)
     parser.add_argument("launch_args", nargs=argparse.REMAINDER)
     args = parser.parse_args()
     launch_args = list(args.launch_args)
     if launch_args and launch_args[0] == "--":
         launch_args = launch_args[1:]
-    if not launch_args or not any("newer_college_local_map.launch" in value for value in launch_args):
-        parser.error("pass roslaunch arguments after --, including newer_college_local_map.launch")
+    supported_launches = (
+        "newer_college_local_map.launch",
+        "newer_college_300frame.launch",
+    )
+    if not launch_args or not any(
+        launch_name in value for launch_name in supported_launches for value in launch_args
+    ):
+        parser.error(
+            "pass roslaunch arguments after --, including newer_college_local_map.launch "
+            "or newer_college_300frame.launch"
+        )
     if args.sample_period <= 0:
         parser.error("sample period must be positive")
 
     log_path = Path(args.log)
     metrics_path = Path(args.metrics)
+    timeseries_path = Path(args.timeseries)
     log_path.parent.mkdir(parents=True, exist_ok=True)
     metrics_path.parent.mkdir(parents=True, exist_ok=True)
+    timeseries_path.parent.mkdir(parents=True, exist_ok=True)
     command = ["roslaunch", "dog_prior_map_localization"] + launch_args
     start = time.monotonic()
     role_pid_samples = {role: {} for role in ROLE_MATCH}
@@ -78,7 +104,18 @@ def main():
     stop_signal_sent = False
     visualization_mode = any(value == "rviz:=true" for value in launch_args)
     group_processes = {}
-    with log_path.open("w") as log:
+    with log_path.open("w") as log, timeseries_path.open("w", newline="") as timeseries_file:
+        timeseries = csv.writer(timeseries_file, lineterminator="\n")
+        timeseries.writerow([
+            "elapsed_sec", "wall_time_utc", "launch_tree_process_count",
+            "launch_tree_rss_kib_estimate", "launch_tree_cpu_sec",
+            "system_mem_total_kib", "system_mem_available_kib",
+            "ndt_pids", "ndt_rss_kib", "ndt_vmhwm_kib",
+            "ekf_pids", "ekf_rss_kib", "ekf_vmhwm_kib",
+            "publisher_pids", "publisher_rss_kib", "publisher_vmhwm_kib",
+            "map_visualizer_pids", "map_visualizer_rss_kib", "map_visualizer_vmhwm_kib",
+            "rviz_pids", "rviz_rss_kib", "rviz_vmhwm_kib",
+        ])
         child = subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT,
                                  start_new_session=True, close_fds=True)
         while child.poll() is None:
@@ -91,6 +128,8 @@ def main():
                 pids = []
             all_processes = {}
             children = {}
+            role_current = {role: {"pids": [], "rss": 0, "hwm": 0}
+                            for role in ROLE_MATCH}
             for pid in pids:
                 proc = read_proc(pid)
                 if proc is None:
@@ -128,10 +167,27 @@ def main():
                         record["max_hwm_kib"] = max(record["max_hwm_kib"], hwm)
                         record["last_cpu_ticks"] = max(record["last_cpu_ticks"], ticks)
                         current[role] += rss
+                        role_current[role]["pids"].append(pid)
+                        role_current[role]["rss"] += rss
+                        role_current[role]["hwm"] = max(role_current[role]["hwm"], hwm)
                         if role == "publisher":
                             found_publisher = True
             last_rss = current
             group_rss_peak_kib = max(group_rss_peak_kib, current_group_rss)
+            launch_cpu_ticks = sum(p["last_cpu_ticks"] for p in group_processes.values())
+            system_memory = read_system_memory_kib()
+            row = [
+                time.monotonic() - start,
+                datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
+                len(launch_tree), current_group_rss, launch_cpu_ticks / os.sysconf(os.sysconf_names["SC_CLK_TCK"]),
+                system_memory.get("MemTotal", ""), system_memory.get("MemAvailable", ""),
+            ]
+            for role in ROLE_MATCH:
+                item = role_current[role]
+                row.extend([";".join(str(pid) for pid in sorted(item["pids"])),
+                            item["rss"], item["hwm"]])
+            timeseries.writerow(row)
+            timeseries_file.flush()
             if found_publisher:
                 publisher_seen = True
                 publisher_gone_since = None
