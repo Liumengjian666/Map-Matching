@@ -1,0 +1,2 @@
+frame_index,ndt_stamp,state_now_stamp,rollback_stamp,lag_ms,alignment_error_ms,replay_imu_count,state_history_count,imu_history_count,oosm_result
+1,1583836591.182591,1583836591.2885962,1583836591.182591,106.00519180297852,0,11,12,11,APPLIED

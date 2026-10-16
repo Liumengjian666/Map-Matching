@@ -1,0 +1,83 @@
+{
+  "task": "P41-NEWER-COLLEGE-CONTROL-NDT-FIRST-RUN",
+  "result": "SINGLE_FRAME_NDT_AND_RVIZ_PASS",
+  "scope": "one scan; GT-assisted Oracle initialization; no sequence accuracy evaluation",
+  "git": {
+    "branch": "research/p9-r4-heldout-visual-evidence",
+    "start_sha": "c08dc9daff1f81ff3f5f3417489d5a13468b8d7a",
+    "code_sha": "2990d45d90cf31e14fac7ad88127499eaf5b9b94",
+    "remote_head_at_start": "c08dc9daff1f81ff3f5f3417489d5a13468b8d7a",
+    "push_executed": false
+  },
+  "input": {
+    "lidar_scan_stamp_ns": 1583836591182590976,
+    "lidar_scan_points": 65536,
+    "lidar_point_time_field": "uint32 nanoseconds from scan start; preserved; seconds float32 adapter field added",
+    "scan_duration_sec": 0.09990476816892624,
+    "imu_samples_published": 11,
+    "imu_boundary_age_ms": 3.984,
+    "post_scan_end_imu_used": false,
+    "official_prior_map_points": 10277007,
+    "ndt_target_points_after_existing_voxel_filter": 3142751,
+    "ndt_source_points_after_existing_filter": 1400,
+    "xyz_lossless_conversion": true
+  },
+  "initial_geometry": {
+    "status": "PASS",
+    "nn_median_m": 0.17877286869760933,
+    "nn_p90_m": 0.44544684742604002,
+    "overlap_0p5m": 0.925,
+    "overlap_2m": 1.0,
+    "overlap_8m": 1.0
+  },
+  "ndt": {
+    "align_calls": 1,
+    "converged": true,
+    "fitness": 0.020694635776231474,
+    "iterations": 7,
+    "align_ms": 752.553341,
+    "translation_correction_m": 0.09640249639227679,
+    "rotation_correction_deg": 1.3182492656841081,
+    "step_limited": false,
+    "final_used_equals_raw": true,
+    "raw_nn_median_m": 0.07318978660368466,
+    "raw_nn_p90_m": 0.13184299450106551,
+    "raw_overlap_0p5m": 0.99
+  },
+  "oosm": {
+    "transactions": 1,
+    "applied": 1,
+    "late": 0
+  },
+  "visual_updates": 0,
+  "runtime": {
+    "deskew_ms_single_observation": 21.323518,
+    "ndt_vm_hwm_kb": 774528,
+    "ekf_vm_hwm_kb": 20576,
+    "map_publisher_vm_hwm_kb": 745140,
+    "rviz_vm_hwm_kb": 1538868,
+    "cpu_aggregate": null,
+    "realtime_rate_hz_validated": false
+  },
+  "oracle_initialization": {
+    "enabled": true,
+    "non_oracle_validated": false,
+    "frame_axis_interpretation_fully_certified": false,
+    "geometry_gate_passed": true
+  },
+  "rviz": {
+    "launched": true,
+    "map_topic": "/newer_college/prior_map",
+    "aligned_cloud_topic": "/newer_college/points_aligned",
+    "screenshot": "rviz_acceptance.png"
+  },
+  "input_sha256": {
+    "scan_pcd": "7c2fc3a20ef266c2ac3196173c534a1acdb4436224c264bc8f2dc1b1909803a2",
+    "ouster_imu_csv": "b733ce23544ed23a3ab7a627acfd61ea329f882b12ef0cbcb501b6b13e5828be",
+    "gt_csv": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+    "prior_map_ply": "e8bf6c7f2ddacde4f6f65ba7759b00bdca5c6bf5e706344ce8c3592529f04ab0",
+    "prior_map_ndt_pcd": "57da358a7c3f52a132fd06afba69f2c3eff2e980b7dbad5b8751548665104e25",
+    "ouster_lidar_imu_calibration": "8fe56ff808c6c900db52ac1545819ef3da979818bfa392ba00aef43daf59a037",
+    "cam_imu_calibration": "3bc13fa24af9ef8ca888c5523b1df57d1c53d0ca4052b818b7e02310fa781feb"
+  }
+}

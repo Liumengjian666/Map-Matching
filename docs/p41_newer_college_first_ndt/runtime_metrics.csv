@@ -1,0 +1,10 @@
+component,metric,value,unit,notes
+imu_deskew,processing_time,21.323518,ms,one scan only
+ndt,align_time,752.553341,ms,one actual PCL-NDT align call
+ndt,VmHWM,774528,kB,per-process high-water mark sampled after align
+ndt,RSS,451556,kB,per-process current RSS sampled after align
+ekf,VmHWM,20576,kB,per-process high-water mark
+map_publisher,VmHWM,745140,kB,full 10277007-point map publisher
+rviz,VmHWM,1538868,kB,full prior map and aligned cloud visible
+input_adapter,RSS,38700,kB,observed process RSS during one-shot publish; not a sampled high-water mark
+cpu,aggregate,,not_measured,no cumulative CPU measurement; no real-time claim
