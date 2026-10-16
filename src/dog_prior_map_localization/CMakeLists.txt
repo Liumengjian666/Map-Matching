@@ -340,6 +340,31 @@ if(CATKIN_ENABLE_TESTING)
 endif()
 
 if(DOG_PRIOR_BUILD_RESEARCH_TOOLS)
+  find_package(PkgConfig REQUIRED)
+  pkg_check_modules(LIBUSB REQUIRED libusb-1.0)
+  add_executable(p47_reconstruct_frozen_sources
+    ../../docs/p47_newer_college_coupled_shadow/tools/reconstruct_frozen_sources.cpp
+    src/core/state_history.cpp
+    src/core/imu_propagation.cpp
+    src/core/imu_deskew.cpp
+  )
+  target_link_libraries(p47_reconstruct_frozen_sources ${PCL_LIBRARIES} ${LIBUSB_LIBRARIES})
+
+  add_executable(p47_coupled_shadow_probe
+    ../../docs/p47_newer_college_coupled_shadow/tools/coupled_shadow_probe.cpp
+    ../dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_shadow.cpp
+    ../dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_temporal.cpp
+    ../dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_anchor.cpp
+    ../dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_weak_refinement.cpp
+    ../dog_prior_map_fastlio2_frontend_exp/src/registration_geometry.cpp
+  )
+  target_include_directories(p47_coupled_shadow_probe PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../dog_prior_map_fastlio2_frontend_exp/include
+  )
+  target_link_libraries(p47_coupled_shadow_probe
+    ${PCL_LIBRARIES} ${OPENSSL_LIBRARIES} ${LIBUSB_LIBRARIES}
+  )
+
   # Offline-only probes are intentionally independent of the runtime
   # localization nodes and are never linked into their execution path.
   add_executable(ndt_uncertainty_probe
@@ -382,7 +407,8 @@ install(TARGETS dog_prior_map_ekf_node_cpp dog_prior_map_ndt_node_cpp
 )
 
 if(DOG_PRIOR_BUILD_RESEARCH_TOOLS)
-  install(TARGETS ndt_uncertainty_probe ndt_direction_alignment_probe
+  install(TARGETS p47_reconstruct_frozen_sources p47_coupled_shadow_probe
+    ndt_uncertainty_probe ndt_direction_alignment_probe
     RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
   )
 endif()

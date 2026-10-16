@@ -1,0 +1,34 @@
+{
+  "task": "P47-LOCAL-NDT-DEGENERACY-COUPLED-SHADOW-R1",
+  "run_id": "retry3_nominal_replay_parity",
+  "gt_read_before_freeze": false,
+  "sample_count": 154,
+  "paired_sample_count": 1,
+  "nominal_parity_align_count": 155,
+  "parity_tolerance": {
+    "translation_m": 0.001,
+    "rotation_deg": 0.01,
+    "pcl_fitness_absolute": 0.00001,
+    "iteration_count": "exact",
+    "converged": true
+  },
+  "frozen_inputs": {
+    "sample_freeze.json": "5339d10ae6c0729adbe4d7b9593f7591e5d765928c4e198e5529342a62d0fa5a",
+    "sample_manifest.csv": "c6af0e7c8ea6958e46d76e33cd566ad68be8b87b95118f11ae0393d7af745822",
+    "source_parity_retry1.csv": "17aeae90d4e2fffc43f84805ba04921c7f5a7244101355feb1cf12ef35a0ebf5",
+    "tile_catalog.csv": "9bce82df31847d1947044a6fa1046f1702b36d82ba6e17cc5ef535754c1a6ea4"
+  },
+  "frozen_shadow_outputs": {
+    "degeneracy_metrics_retry3.csv": "ece8373c2fd79df6b2e6dbe2490263f70412d521c8bcc6611146a9d7841b8b58",
+    "paired_shadow_comparison_retry3.csv": "bd1f2b0b623441d7b200fc5cda1f756cfc974b676dbb4d98f9c65ef1ce750ba5",
+    "candidate_diagnostics_retry3.csv": "03c0023490cab935690d441ce46e72231d14ba852700dc56ed10c81f7fadf57b",
+    "runtime_breakdown_retry3.csv": "dc89542b9f1e08c1a16748340edee49f495d6fa27b0837b4e7c1acaca2207fd5",
+    "nominal_replay_parity_retry3.csv": "54dc5e28609992ab78eee58de4dfab1d2b6aa762924af0b901345d442fe279a3"
+  },
+  "binaries": {
+    "p47_reconstruct_frozen_sources": "eb6531e7559b8cb1ef74020889ae663235d251d0a5cfb4d4169185b40393ff60",
+    "p47_coupled_shadow_probe": "907b9de2649581ed0c37180a2cbff236d6bcd3c9e7fdab732e01af5be229406f"
+  },
+  "external_artifact_root": "/media/jian/HIKVISION/paper rosbag/NewerCollege/.p47_coupled_shadow_r1/frozen",
+  "note": "Shadow results and source/target/nominal identity receipts were hashed before any P43 conditional GT was opened for post-hoc evaluation. Earlier failed probe outputs were preserved under separate filenames and are not substituted for this frozen run."
+}

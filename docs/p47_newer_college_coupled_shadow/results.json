@@ -1,0 +1,182 @@
+{
+  "task": "P47-LOCAL-NDT-DEGENERACY-COUPLED-SHADOW-R1",
+  "final_result": "COUPLED_SHADOW_MECHANISM_SUPPORTED",
+  "interpretation": "finite one-frame shadow evidence only; no EKF feedback and no continuous localization gain claim",
+  "dataset": "Newer College 2020 / 01_short_experiment",
+  "p46_window": {
+    "frames": 1800,
+    "start_stamp_ns": 1583836591182590976,
+    "end_stamp_ns": 1583836771078157312,
+    "real_tile_switch_frames": [1070, 1197, 1404, 1411, 1447],
+    "p46_replay_performed": false
+  },
+  "sampling": {
+    "rule": "one-based frames 1-10, every 15th frame, and offsets -2..+2 around each of five real tile switches; deduplicated before geometry/GT analysis",
+    "unique_samples": 154,
+    "weak_hessian_samples": 154,
+    "paired_samples_eligible_by_frozen_trigger": 1,
+    "paired_frame_indices": [1],
+    "gt_used_for_sample_selection": false
+  },
+  "input_parity": {
+    "reconstructed_source_hash_matches_p46": 154,
+    "source_points_each": 1400,
+    "active_local_target_tile_ids_reused_from_p46": true,
+    "target_point_count_matches_p46": true,
+    "global_target_used": false,
+    "p45_tile_sha_checks": "pass"
+  },
+  "nominal_replay_gate": {
+    "align_calls": 155,
+    "passed": 155,
+    "iterations_exact_match": 155,
+    "tolerances": {
+      "translation_m": 0.001,
+      "rotation_deg": 0.01,
+      "pcl_fitness_absolute": 0.00001
+    },
+    "max_translation_error_m": 0.0000730464162694,
+    "max_rotation_error_deg": 0.00055109,
+    "max_fitness_error": 0.0000033889,
+    "purpose": "initialize PCL target-grid/derivative state and verify frozen P46 CONTROL nominal reproduction; replay results never replace frozen nominal"
+  },
+  "hessian_chart": {
+    "pose_chart": "p=p0+0.8m*eta_translation; R=Exp(eta_rotation_rad)*R0",
+    "translation_coordinate_scale_m": 0.8,
+    "rotation_coordinate_scale": "1 rad per coordinate",
+    "objective": "negative exact PCL NDT score divided by source point count",
+    "hessian_coordinates": "dimensionless normalized local pose eta; not raw mixed meter/radian coordinates",
+    "valid_positive_definite_hessians": 154,
+    "weak_dimension_by_frozen_lambda1_over_lambda0_split": {
+      "dimension_1": 0,
+      "dimension_2": 154,
+      "threshold_rule": "k=1 iff lambda1/lambda0 >= 2; otherwise k=2"
+    },
+    "lambda_min_over_lambda_max": {
+      "min": 0.00010281860111939449,
+      "median": 0.0005097832156553534,
+      "p95": 0.0008805676088966025,
+      "max": 0.0009766272600006674
+    },
+    "lambda1_over_lambda0": {
+      "min": 1.0168309623075784,
+      "median": 1.210460747938852,
+      "p95": 1.473096044255085,
+      "max": 1.6920468226213474
+    },
+    "local_subspace_repeatability": {
+      "startup_frames_1_to_10_adjacent_principal_angle_median_deg": 0.3475854998486043,
+      "startup_frames_1_to_10_adjacent_principal_angle_max_deg": 2.0362634177206065,
+      "tile_switch_neighborhood_max_angle_deg": {
+        "1070": 11.511314744072399,
+        "1197": 2.2877566787875705,
+        "1404": 1.6651325818684657,
+        "1411": 1.960860583184817,
+        "1447": 0.9942862585808723
+      },
+      "all_153_adjacent_stored_sample_angle_median_deg": 2.3176114530127507,
+      "all_153_adjacent_stored_sample_angle_p95_deg": 12.95513135262231,
+      "all_153_adjacent_stored_sample_angle_max_deg": 68.12340459526753
+    },
+    "qualification": "relative anisotropic curvature and locally repeatable 2D weak subspaces observed; all Hessians remain positive definite and the weak directions are not one globally fixed world axis"
+  },
+  "paired_shadow": {
+    "frame_index": 1,
+    "scan_stamp_ns": 1583836591182590976,
+    "source_hash": "b8191bc3a3063105",
+    "local_target_points": 552716,
+    "local_target_hash": "b8f6482b240aad86",
+    "local_target_tile_count": 21,
+    "nominal_fitness": 0.030952871717242616,
+    "nominal_iterations": 4,
+    "initial_to_nominal_translation_m": 0.2022655492618094,
+    "initial_to_nominal_rotation_deg": 0.8425417062357232,
+    "weak_dimension": 2,
+    "weak_only_candidates": 1,
+    "coupled_candidates": 1,
+    "weak_only_valid": true,
+    "coupled_valid": true,
+    "strong_correction_selected": true,
+    "raw_ndt_score_sum": {
+      "nominal": 3135.9335254970269,
+      "weak_only": 3139.1538534923252,
+      "coupled": 3251.3243713647662
+    },
+    "regularized_objective": {
+      "nominal": -2.1710795726290435,
+      "weak_only": -2.2311172016643579,
+      "coupled": -2.3112390001446728,
+      "coupled_minus_weak": -0.08012179848031487,
+      "lower_is_better": true
+    },
+    "coupled_strong_step": {
+      "delta_u": [0.14675085943596294, 0.027142171030314452],
+      "delta_v": [-0.022145287724340493, 0.0041589325735855685, 0.0028675393153061854, 0.00020784134042957229],
+      "strong_eta": [0.013356663541674897, -0.017188405284593457, 0.0040838898201775555, -0.0047517490149825235, 0.0016711306054882581, -0.00029116805248914846],
+      "physical_translation_norm_m": 0.017718146959657784,
+      "rotation_norm_deg": 0.28908304374397825,
+      "nominal_cross_block_norm": 1.5229661581314465e-12,
+      "displaced_cross_block_norm": 6.923637474799785,
+      "displaced_strong_gradient_norm": 23.577233542615197,
+      "solver_condition": 1707.7294674046591,
+      "solver_residual": 1.5068407717890521e-16,
+      "damping": 0,
+      "status": "OK"
+    },
+    "mechanism_note": "both arms use the same weak update from the existing Schur-complement solve, which itself includes nominal weak/strong coupling; the Coupled arm additionally re-evaluates the joint jet at the displaced weak candidate, then solves the strong residual there with zero additional weak increment. This is nonlinear relinearization, not a direct nominal H_vu*delta_u solve"
+  },
+  "conditional_gt_post_freeze": {
+    "gt_sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+    "output_csv_sha256": "d0886458a3ed85473d3dab8cc8b231d961048b782d3e352b1d6921b940fc3f49",
+    "reference": "P43 BASE_FRAME_GEOMETRICALLY_SUPPORTED; not exporter-source certified",
+    "exact_gt_row_at_pair_timestamp": true,
+    "errors": {
+      "CONTROL_NOMINAL": {"translation_m": 0.20226555349832034, "rotation_deg": 0.8425427906083208, "weak_coordinate_error_norm": 0.2491122120722153},
+      "WEAK_ONLY": {"translation_m": 0.08733017321927479, "rotation_deg": 0.8125826691463038, "weak_coordinate_error_norm": 0.10016744013038777},
+      "COUPLED": {"translation_m": 0.0819210705999672, "rotation_deg": 1.083951512327438, "weak_coordinate_error_norm": 0.10016744013038775}
+    },
+    "coupled_minus_weak_translation_error_m": -0.00540910261930759,
+    "coupled_minus_weak_rotation_error_deg": 0.2713688431811341,
+    "evaluation_scope": "one frozen frame; diagnostic only; GT read only after all shadow output hashes were frozen; no candidate selection or tuning"
+  },
+  "runtime": {
+    "hessian": {"n": 154, "native_jet_calls": 154, "mean_ms": 3.345568350649351, "p95_ms": 3.6588623499999997, "max_ms": 9.114645},
+    "weak_only": {"n": 1, "jet_calls": 1, "value_calls": 1, "total_ms": 5.234998},
+    "coupled": {"n": 1, "jet_calls": 2, "value_calls": 2, "total_ms": 10.481031},
+    "nominal_parity_align": {"n": 155, "mean_ms": 14.368466283870966, "median_ms": 6.616679, "p95_ms": 14.217983699999952, "max_ms": 300.209165, "max_frame": 1447},
+    "additional_align_calls": 155,
+    "total_native_jet_calls": 157,
+    "total_value_calls": 3,
+    "memory_profiled": false,
+    "alignment_max_note": "frame 1447 had the largest Local Target (2,313,118 points) and paid target-grid/update initialization; component wall time is in runtime_breakdown.csv"
+  },
+  "feedback": {
+    "shadow_candidate_to_ekf": false,
+    "continuous_replay": false,
+    "full_1800_frame_rerun": false,
+    "full_15301_frame_run": false,
+    "coupled_feedback_enabled": false
+  },
+  "paired_comparison_counts": {
+    "fixed_samples_with_valid_hessian": 154,
+    "eligible_weak_only_candidates": 1,
+    "eligible_coupled_candidates": 1,
+    "valid_weak_only_candidates": 1,
+    "valid_coupled_candidates": 1,
+    "nonzero_coupled_strong_corrections_selected": 1,
+    "coupled_objective_better_than_weak_only": 1,
+    "coupled_objective_worse_than_weak_only": 0,
+    "conditional_gt_translation_error_better_than_weak_only": 1,
+    "conditional_gt_translation_error_worse_than_weak_only": 0,
+    "conditional_gt_rotation_error_better_than_weak_only": 0,
+    "conditional_gt_rotation_error_worse_than_weak_only": 1,
+    "conditional_gt_pairs": 1
+  },
+  "limitations": [
+    "only one of 154 fixed samples passed the frozen innovation trigger for paired Weak-only/Coupled; conclusions about Q2 are one-frame and narrow",
+    "P46 CONTROL did not log a production CoupledAnchorState stream; its causal initial_guess is a zero-age diagnostic shadow reference, not the production EKF anchor contract",
+    "the weak split is relative curvature, not proof of singularity or absolute state uncertainty",
+    "P43 GT reference is geometrically supported but not exporter-source certified",
+    "no continuous trajectory accuracy or low-power deployment claim is made"
+  ]
+}
