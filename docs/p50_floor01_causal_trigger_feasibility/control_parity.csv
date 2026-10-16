@@ -1,0 +1,1 @@
+mode,frame_index,scan_stamp_ns,source_hash,initial_pose_hash,nominal_pose_hash,final_pose_hash,fitness,iterations,oosm_status,translation_delta_m,rotation_delta_deg,status

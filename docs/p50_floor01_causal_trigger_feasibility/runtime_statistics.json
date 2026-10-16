@@ -1,0 +1,21 @@
+{
+  "status": "NOT_RUN_INPUT_CONTRACT_BLOCKED",
+  "smoke_frames": null,
+  "formal_frames": null,
+  "control_parity": "NOT_RUN",
+  "ndt_align_calls": 0,
+  "extra_ndt_align_calls": 0,
+  "native_jet_calls": 0,
+  "dynamic_score_calls": 0,
+  "weak_only_calls": 0,
+  "coupled_calls": 0,
+  "equal_budget_calls": 0,
+  "recovery_calls": 0,
+  "candidate_feedback_calls": 0,
+  "gt_reads": 0,
+  "runtime_predictions_observed": null,
+  "runtime_triggers_observed": null,
+  "runtime_valid_anchors_observed": null,
+  "runtime_eligible_pairs_observed": null,
+  "note": "No runtime was started; null denotes unmeasured, not zero events."
+}

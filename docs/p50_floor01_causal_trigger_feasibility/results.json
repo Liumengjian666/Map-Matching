@@ -1,0 +1,35 @@
+{
+  "task": "P50-FLOOR01-CAUSAL-TRIGGER-FEASIBILITY-R1",
+  "final_result": "FLOOR01_INPUT_CONTRACT_BLOCKED",
+  "start_sha": "c28ecc95763e6f5bf7dacee80b68dd7a28b9a278",
+  "code_sha": "c28ecc95763e6f5bf7dacee80b68dd7a28b9a278",
+  "remote_head_at_start": "c28ecc95763e6f5bf7dacee80b68dd7a28b9a278",
+  "source_changes": [],
+  "inputs": {
+    "canonical_raw_bag": "MISSING",
+    "raw_velodyne_packets": "MISSING",
+    "timed_points_bin": "MISSING",
+    "timed_scan_index": "MISSING",
+    "frozen_map": "RECOVERED_COPY_HASH_VERIFIED",
+    "imu_csv": "RECOVERED_DERIVED_COPY_PRESENT_SOURCE_BAG_UNAVAILABLE",
+    "calibration_yaml": "MISSING_CONFIG_VALUES_AVAILABLE_ORIGINAL_HASH_UNVERIFIED"
+  },
+  "execution": {
+    "smoke_frames": 0,
+    "formal_frames": 0,
+    "gt_reads": 0,
+    "weak_only_calls": 0,
+    "coupled_calls": 0,
+    "equal_budget_calls": 0,
+    "recovery_calls": 0,
+    "extra_ndt_align_calls": 0,
+    "native_jet_calls": 0,
+    "dynamic_score_calls": 0,
+    "candidate_feedback_calls": 0
+  },
+  "trigger_and_anchor_counts": null,
+  "trigger_and_anchor_count_interpretation": "NOT_MEASURED; this is not a zero-event run",
+  "gt_read": false,
+  "control_output_modified": false,
+  "push_executed": false
+}
