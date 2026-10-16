@@ -1,11 +1,27 @@
 {
   "task": "P41-NEWER-COLLEGE-CONTROL-NDT-FIRST-RUN",
-  "result": "SINGLE_FRAME_NDT_AND_RVIZ_PASS",
-  "scope": "one scan; GT-assisted Oracle initialization; no sequence accuracy evaluation",
+  "result": "INPUT_FRAME_CONTRACT_BLOCKED",
+  "scope": "two bounded runs of the same scan; one conditional GT-assisted align; no sequence accuracy evaluation",
+  "runs": {
+    "conditional_base_axis": {
+      "description": "GT quaternion interpreted in robotics base axes; not certified by official RS_C1 frame wording",
+      "geometry_gate": "PASS",
+      "ndt_align_calls": 1,
+      "ndt_converged": true,
+      "rviz_map_and_aligned_cloud_visible": true
+    },
+    "official_RS_C1_optical": {
+      "description": "T_M_L = T_M_C * T_C_I * T_I_L per official frame label and calibration chain",
+      "geometry_gate": "REJECTED",
+      "ndt_align_calls": 0,
+      "rviz_map_visible": true,
+      "ndt_aligned_cloud_visible": false
+    }
+  },
   "git": {
     "branch": "research/p9-r4-heldout-visual-evidence",
     "start_sha": "c08dc9daff1f81ff3f5f3417489d5a13468b8d7a",
-    "code_sha": "2990d45d90cf31e14fac7ad88127499eaf5b9b94",
+    "code_sha": "fe5c327e907964cac2e73efb75660ad785788bb1",
     "remote_head_at_start": "c08dc9daff1f81ff3f5f3417489d5a13468b8d7a",
     "push_executed": false
   },
@@ -22,7 +38,7 @@
     "ndt_source_points_after_existing_filter": 1400,
     "xyz_lossless_conversion": true
   },
-  "initial_geometry": {
+  "conditional_base_axis_geometry": {
     "status": "PASS",
     "nn_median_m": 0.17877286869760933,
     "nn_p90_m": 0.44544684742604002,
@@ -30,7 +46,17 @@
     "overlap_2m": 1.0,
     "overlap_8m": 1.0
   },
+  "official_rs_c1_optical_geometry": {
+    "status": "REJECTED",
+    "nn_median_m": 19.29838525213557,
+    "nn_p90_m": 40.77513274282884,
+    "overlap_0p5m": 0.027142857142857142,
+    "overlap_2m": 0.12785714285714286,
+    "overlap_8m": 0.27,
+    "ndt_align_called": false
+  },
   "ndt": {
+    "pose_hypothesis": "conditional_base_axis; not official frame-contract acceptance",
     "align_calls": 1,
     "converged": true,
     "fitness": 0.020694635776231474,
@@ -45,9 +71,8 @@
     "raw_overlap_0p5m": 0.99
   },
   "oosm": {
-    "transactions": 1,
-    "applied": 1,
-    "late": 0
+    "conditional_base_axis": {"transactions": 1, "applied": 1, "late": 0},
+    "official_rs_c1_optical": {"ndt_transactions": 0, "oosm_applied": 0}
   },
   "visual_updates": 0,
   "runtime": {
@@ -62,14 +87,15 @@
   "oracle_initialization": {
     "enabled": true,
     "non_oracle_validated": false,
-    "frame_axis_interpretation_fully_certified": false,
-    "geometry_gate_passed": true
+    "official_RS_C1_optical_chain_gate_passed": false,
+    "conditional_base_axis_geometry_gate_passed": true
   },
   "rviz": {
     "launched": true,
     "map_topic": "/newer_college/prior_map",
     "aligned_cloud_topic": "/newer_college/points_aligned",
-    "screenshot": "rviz_acceptance.png"
+    "screenshot": "rviz_acceptance.png",
+    "screenshot_pose_hypothesis": "conditional_base_axis"
   },
   "input_sha256": {
     "scan_pcd": "7c2fc3a20ef266c2ac3196173c534a1acdb4436224c264bc8f2dc1b1909803a2",
