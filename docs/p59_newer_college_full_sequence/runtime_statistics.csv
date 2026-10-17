@@ -1,0 +1,8 @@
+metric,value,unit,status,details
+formal_run_count,0,count,NOT_RUN,Stopped before smoke due storage safety gate
+smoke_scan_count,0,scans,NOT_RUN,ROS was not started
+ndt_align_count,0,calls,NOT_RUN,No NDT process was started
+ndt_vmhwm,,MiB,NOT_MEASURED,
+ekf_vmhwm,,MiB,NOT_MEASURED,
+publisher_vmhwm,,MiB,NOT_MEASURED,
+wall_time,,s,NOT_MEASURED,Transfer duration is not localization runtime

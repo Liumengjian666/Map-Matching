@@ -1,0 +1,4 @@
+source,samples,status,translation_rmse_m,translation_mean_m,translation_median_m,translation_p95_m,translation_max_m,rotation_rmse_deg,rotation_p95_deg,rotation_max_deg,rpe1s_translation_rmse_m,rpe1s_translation_p95_m,rpe1s_rotation_rmse_deg,rpe1s_rotation_p95_deg
+NDT,0,NOT_RUN_INPUT_OR_STORAGE_BLOCKED,,,,,,,,,,,,
+EKF_CORRECTED,0,NOT_RUN_INPUT_OR_STORAGE_BLOCKED,,,,,,,,,,,,
+EKF_HIGH_RATE,0,NOT_RUN_INPUT_OR_STORAGE_BLOCKED,,,,,,,,,,,,

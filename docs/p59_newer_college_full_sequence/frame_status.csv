@@ -1,0 +1,2 @@
+scan_index,scan_stamp_ns,input_mirrored,deskewed,ndt_called,ndt_converged,oosm_result,estimate_status,reason
+,,NOT_COMPLETE,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,NOT_RUN,INPUT_OR_STORAGE_BLOCKED_BEFORE_SMOKE

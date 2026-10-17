@@ -1,0 +1,74 @@
+{
+  "TASK": "P59-NEWER-COLLEGE-FULL-SEQUENCE-LOCAL-NDT-R1",
+  "FINAL_RESULT": "INPUT_OR_STORAGE_BLOCKED",
+  "START_SHA": "a93d41d46ac60adc04552d76a09861e08f7ed87d",
+  "END_SHA": "a93d41d46ac60adc04552d76a09861e08f7ed87d",
+  "REMOTE_HEAD": "a93d41d46ac60adc04552d76a09861e08f7ed87d",
+  "PUSH_EXECUTED": false,
+  "worktree": "/home/jian/livox_ws/p59_newer_college_full_sequence_ws",
+  "branch": "research/p59-newer-college-full-sequence",
+  "algorithm_source_baseline": "a93d41d46ac60adc04552d76a09861e08f7ed87d",
+  "GT_LOADED": false,
+  "ROS_STARTED": false,
+  "smoke_scans": 0,
+  "formal_replay_count": 0,
+  "ndt_align_count": 0,
+  "localization_outputs_frozen": false,
+  "full_sequence_accuracy_evaluated": false,
+  "preflight": {
+    "external_device": "/dev/sda2",
+    "external_uuid": "F627-4133",
+    "external_fs": "exFAT/fuseblk",
+    "internal_device": "/dev/nvme0n1p2",
+    "internal_free_space_start_gib_approx": 135,
+    "planned_transfer_bytes": 29230076611,
+    "planned_canonical_scan_count": 15301,
+    "source_timestamp_start_ns": "1583836591182590976",
+    "source_timestamp_end_ns": "1583838121156355584",
+    "source_max_scan_gap_ms": "<=150"
+  },
+  "transfer": {
+    "rate_limit_bytes_per_sec": 2097152,
+    "completed_canonical_scans": 170,
+    "completed_scan_bytes": 323788800,
+    "all_completed_scans_match_P46_frozen_hashes": true,
+    "retained_partial_files": 2,
+    "each_partial_bytes": 1048576,
+    "copied_imu": false,
+    "copied_gt": false,
+    "copied_P45_tiles": false,
+    "copied_P46_runtime_outputs": false,
+    "external_write_count": 0,
+    "stop_reason": "Observed transient D-state kernel worker during controlled read; per protocol no further external reads"
+  },
+  "safety": {
+    "D_state_observed": true,
+    "D_state_observations": 2,
+    "D_state_process": "kworker/u32:2+events_unbound",
+    "kernel_USB_or_block_IO_error_logged_before_second_D_state": false,
+    "kernel_logs_checked_after_second_D_state": false,
+    "copy_process_stopped": true,
+    "copy_process_exit_code": 130,
+    "device_corruption_confirmed": false,
+    "future_external_read_authorized": false
+  },
+  "checks": {
+    "P59_package_build": "PASS",
+    "launch_node_expansion": "PASS",
+    "mirror_tool_unit_tests": "7/7 PASS",
+    "P46_first_1800_input_hashes_verified": "only scans 1-170 copied and verified; full prefix check incomplete",
+    "P46_front_1800_output_parity": "NOT_RUN",
+    "external_CLI_review": "NOT_RUN"
+  },
+  "runtime_binary_sha256": {
+    "ndt": "f872f6cd317c1e0ae0790987479aad4245badc6e7a39ab5468282708a2d36dda",
+    "ekf": "fa699364c28589e298e24e8d1aaf3963544ee0f9ea02ba5b0c5e42aeb3a18401",
+    "publisher": "c4fe6e00a1f2ce3f2402b6d2d50526f1b19a8810f4d566de605c8fb1cd4b4fe3"
+  },
+  "code_sha256": {
+    "mirror_inputs.py": "8f5b1592d55776c7e49687331e7aea9aa0596d93340ee527e5c7f94a7c41c7ba",
+    "test_mirror_inputs.py": "00a76deb768d0de07aa67e95160f51603592274398a789e04a74e71036ca46e2",
+    "audit_partial_p59_mirror.py": "033da8230f4453ed959abe6b10efb5506ae8304755c0750347afa9c127e2089c",
+    "partial_scan_hash_verification.csv": "e1bef5fbea00adbffc40b5e4f274a9fc5a2ea9cc3889f0a1143cd6e483a72a16"
+  }
+}

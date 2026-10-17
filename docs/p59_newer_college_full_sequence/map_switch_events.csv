@@ -1,0 +1,2 @@
+event_index,scan_index,stamp_ns,event_type,status,details
+,,,,NOT_RUN,No localization process was started

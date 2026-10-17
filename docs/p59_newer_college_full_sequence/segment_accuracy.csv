@@ -1,0 +1,5 @@
+segment,relative_time_start_s,relative_time_end_s,samples,status,translation_rmse_m,translation_p95_m,translation_max_m,rotation_rmse_deg,rotation_p95_deg,rotation_max_deg
+0_180,0,180,0,NOT_RUN_INPUT_OR_STORAGE_BLOCKED,,,,,,
+180_600,180,600,0,NOT_RUN_INPUT_OR_STORAGE_BLOCKED,,,,,,
+600_1200,600,1200,0,NOT_RUN_INPUT_OR_STORAGE_BLOCKED,,,,,,
+1200_to_end,1200,,0,NOT_RUN_INPUT_OR_STORAGE_BLOCKED,,,,,,
