@@ -1,0 +1,65 @@
+{
+  "task": "P57-LONG-CORRIDOR-OFFICIAL-MAP-AND-BASELINE-R1",
+  "result": "SOURCE_RECOVERY_BLOCKED",
+  "dataset_identity": "DATASET_IDENTITY_UNCONFIRMED",
+  "map_frame_contract": "UNRESOLVED",
+  "worktree": "/home/jian/livox_ws/p57_long_corridor_official_baseline_ws",
+  "branch": "research/p57-long-corridor-official-baseline",
+  "start_sha": "05ac7cb397f8cf069bb8eb2d7f1d508b2fff7802",
+  "code_sha": "05ac7cb397f8cf069bb8eb2d7f1d508b2fff7802",
+  "source_code_modified": false,
+  "p56_subtmrs_partial": {
+    "path": "/media/jian/HIKVISION/paper rosbag/DegenerateBenchmarks/SubTMRS/LongCorridor/raw/SubT_MRS_Hawkins_Long_Corridor_RC.zip.part",
+    "checkpoint_bytes": 3480741223,
+    "expected_bytes": 3888497930,
+    "checkpoint_sha256": "6fb37b96d9ac80ebe3fd32cc113504d1c8c6c791919a30b073a0b4a8786f16fa",
+    "new_range_requests": 0,
+    "zip_validated": false
+  },
+  "superloc_raw_bag": {
+    "drive_id": "1aIIqPiE10nX3IhidpxKhc4Psq-AMER1X",
+    "advertised_bytes": 3903086488,
+    "downloaded": false
+  },
+  "official_assets": {
+    "gt": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/gt/corridor01_gt.txt",
+      "bytes": 123311,
+      "sha256": "3cabcc78ecea4d991aa6e3eddb811cefc4fdacf5f3387b98950fa09ad338dd03",
+      "rows": 1385,
+      "first_stamp": "1517157219.794140100",
+      "last_stamp": "1517157498.957649946"
+    },
+    "extrinsics": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/calibration/corridor01_extrinsics.yaml",
+      "bytes": 922,
+      "sha256": "59b02c1fe6103196ec46645c960f3908d092c0a4ba7d93c22762bcd61210b87d"
+    },
+    "initial_pose": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/initial_pose/corridor01.yaml",
+      "bytes": 332,
+      "sha256": "0670732e26f0d9ee19e6115110e29d0aeca5d26f62ab4848d1629c5f9a6eb62b",
+      "time_comment": "# s 67"
+    },
+    "map": {
+      "path": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor01/map/corridor01.pcd",
+      "bytes": 8121136,
+      "sha256": "4b5231d58ebd4aeb4fc293559051dc30a18b6f07376237938d064962bfe8f40a",
+      "points": 338210,
+      "format": "PCD 0.7 binary"
+    }
+  },
+  "runtime": {
+    "smoke_scans": 0,
+    "full_replay_scans": 0,
+    "ndt_align_calls": 0,
+    "gt_evaluation": false
+  },
+  "storage_incident": {
+    "uuid": "F627-4133",
+    "observed_initial_free_gib_approx": 428,
+    "usb_block_io_errors": true,
+    "filesystem_responsive_after_incident": false
+  },
+  "push_executed": false
+}
