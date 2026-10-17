@@ -22,9 +22,9 @@
 ## Git
 
 - `START_SHA`: `a93d41d46ac60adc04552d76a09861e08f7ed87d`
-- `CODE_SHA`: 见 `results.json`（源码文件 SHA256；没有形成新 commit）
-- `END_SHA`: `a93d41d46ac60adc04552d76a09861e08f7ed87d`
-- `REMOTE_HEAD`: `a93d41d46ac60adc04552d76a09861e08f7ed87d`
+- `CODE_SHA`: `05bd1190d171b37787de88e48ee157b497f4ed44`（P59本地代码/归档提交）
+- `END_SHA`: 最终交付HEAD在此报告提交后生成，见执行回执；不在提交内容内自引用
+- `REMOTE_HEAD`: `research/p9-r4-heldout-visual-evidence` 仍为 `a93d41d46ac60adc04552d76a09861e08f7ed87d`；P59分支尚未push
 - `PUSH_EXECUTED`: `false`
 
 具体协议、存储事件、输入清单和未执行指标见本目录其他文件。
