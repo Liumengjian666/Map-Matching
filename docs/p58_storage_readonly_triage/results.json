@@ -83,5 +83,13 @@
     "disconnect_intent_known": false,
     "data_file_read_or_transfer_started": false
   },
-  "next_action": "链路未验证降速且断连时出现SCSI cache sync失败；停止外盘数据访问。先确保设备由操作系统安全弹出，再使用明确的USB 2.0接口/Hub连接；之后仅复查系统状态，待稳定并获科研总控批准后再考虑限速只读文件核验。"
+  "latest_process_recheck": {
+    "observed_at_local": "2026-10-17T19:10:18+08:00",
+    "d_state_process_found": true,
+    "pid": 383253,
+    "command": "kworker/u32:2+events_unbound",
+    "causal_relation_to_external_drive_confirmed": false,
+    "stopped_before_device_or_file_queries": true
+  },
+  "next_action": "当前仍观察到D-state worker，且此前反复USB断连和SCSI cache sync失败；停止外盘数据访问。待状态安全稳定并获得科研总控重新批准后，再做新一轮有界只读复查。"
 }
