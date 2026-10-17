@@ -39,5 +39,20 @@
   "download_copy_extract_or_zip_test_run": false,
   "filesystem_repair_or_format_run": false,
   "forced_unmount_usb_disconnect_reboot_or_shutdown_run": false,
-  "next_action": "用户先安全检查线缆、接口、供电、硬盘盒及设备物理状态；在用户确认并取得科研总控重新批准前，不再访问外盘数据文件。"
+  "user_reported_device_physically_checked_and_requested_retry": true,
+  "post_report_recheck": {
+    "result": "STORAGE_UNSAFE",
+    "observed_kernel_log_window_local": "2026-10-17 16:55-17:01:08+08:00",
+    "d_state_worker_observed": {
+      "pid": 377357,
+      "command": "[kworker/u32:2+events_unbound]",
+      "causal_relation_to_external_drive_confirmed": false
+    },
+    "repeated_uas_resets_and_write_failures": true,
+    "usb_disconnect_local": "2026-10-17T17:01:04.593+08:00",
+    "device_reenumeration_local": "2026-10-17T17:01:08+08:00",
+    "partial_size_sha_zip_test_or_data_file_read_performed": false,
+    "stopped_after_detecting_new_storage_errors": true
+  },
+  "next_action": "本次重查仍见持续存储错误与USB断连；停止所有外盘数据访问和续传。不要强制拔盘或卸载。待系统与设备状态由用户安全处理并稳定、且科研总控重新批准后，再安排新的只读检查。"
 }

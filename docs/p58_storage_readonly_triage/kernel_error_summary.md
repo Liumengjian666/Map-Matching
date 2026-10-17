@@ -16,3 +16,9 @@
 在本次筛选结果中没有明确的 `device offline`、USB disconnect 或 exFAT 专属错误文本。由于这是按关键词筛选的日志摘要，不能将其解释为对所有内核消息的绝对不存在证明。无论这些项是否出现，已观察到的重复 reset 和写 I/O 错误足以判定当前状态不安全。
 
 本轮没有运行 fsck、SMART 测试或任何写入/修复工具。
+
+## 用户报告设备已检查后的再次复查
+
+仅查看 P58 上次核查时间之后的系统内核日志。`16:55:11` 至 `17:00:49` 多次继续出现 UAS reset/abort 和 USB 设备 reset；期间有写命令 timeout、`blk_update_request: I/O error` 及 `lost async page write`。`17:01:04.593` 记录 `usb 2-2: USB disconnect, device number 2`。`17:01:08` 设备以新设备号重新枚举为 HIKVISION，内核重新识别 `/dev/sda` 及分区。重枚举只表示设备再次被发现，不表示存储健康。
+
+检测到这些新错误后即停止后续外盘相关检查；没有查询目录、读取数据文件或执行任何恢复操作。
