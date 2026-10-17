@@ -21,3 +21,5 @@
 最新一次（18:32）复查没有查询 `findmnt` 或 `lsblk`，因为内核日志刚记录 18:31:59 USB disconnect 和 cache synchronization failure。日志显示设备于 18:32:02 重新枚举，但当前分区是否挂载及 UUID 是否仍可读未核实。不要把重枚举当成挂载或健康确认。
 
 18:58 后的日志显示 HIKVISION 再次枚举在 `usb 4-2`，协议为 UAS、链路为 `SuperSpeed Plus Gen 2x1`，不是已验证的 USB 2.0 低速链路。该信息来自内核连接日志；本轮没有调用 `lsusb -t` 或访问挂载目录。断连后 cache sync 失败，挂载状态仍未核验。
+
+用户确认后重新检查：`lsusb -t` 显示 HIKVISION 仍接在 UAS、`10000M` 的 Gen 2x1 链路；不是 USB 2.0。`findmnt` 显示 `/dev/sda2` 挂载为 exFAT/fuseblk、UUID `F627-4133`、`/media/jian/HIKVISION`，元数据选项为 `rw`。这仅是链路和挂载元数据，不能证明写入健康。之后完成了一次受限顺序只读读取；相关日志和 D-state 查询没有新故障信号。

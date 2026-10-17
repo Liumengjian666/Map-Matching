@@ -1,6 +1,6 @@
 {
   "task": "P58-HIKVISION-STORAGE-READONLY-TRIAGE-R1",
-  "result": "STORAGE_UNSAFE",
+  "result": "STORAGE_READY_FOR_USER_INSPECTION",
   "observed_at_local": "2026-10-17T16:47:07+08:00",
   "disk": {
     "device": "/dev/sda",
@@ -91,5 +91,32 @@
     "causal_relation_to_external_drive_confirmed": false,
     "stopped_before_device_or_file_queries": true
   },
-  "next_action": "当前仍观察到D-state worker，且此前反复USB断连和SCSI cache sync失败；停止外盘数据访问。待状态安全稳定并获得科研总控重新批准后，再做新一轮有界只读复查。"
+  "post_reboot_bounded_read_check": {
+    "system_check_local": "2026-10-17T19:24:12+08:00",
+    "post_check_d_state_process_found": false,
+    "usb_link": "SuperSpeed Plus Gen 2x1 / 10000M / UAS",
+    "usb2_link_confirmed": false,
+    "uuid": "F627-4133",
+    "mountpoint": "/media/jian/HIKVISION",
+    "filesystem": "exfat",
+    "mount_metadata_includes_rw": true,
+    "partial_path": "/media/jian/HIKVISION/paper rosbag/DegenerateBenchmarks/SubTMRS/LongCorridor/raw/SubT_MRS_Hawkins_Long_Corridor_RC.zip.part",
+    "partial_size_bytes": 3480741223,
+    "previously_frozen_sha256": "6fb37b96d9ac80ebe3fd32cc113504d1c8c6c791919a30b073a0b4a8786f16fa",
+    "rate_limited_sequential_read": {
+      "rate_limit_bytes_per_second": 2097152,
+      "bytes_read": 3480741223,
+      "elapsed_seconds": 1659.7,
+      "sha256": "6fb37b96d9ac80ebe3fd32cc113504d1c8c6c791919a30b073a0b4a8786f16fa",
+      "exit_code": 0
+    },
+    "official_expected_full_zip_bytes": 3888497930,
+    "bytes_missing": 407756707,
+    "zip_integrity_test_run": false,
+    "kernel_error_since_start_of_check": false,
+    "post_read_d_state_process_found": false,
+    "write_path_tested": false,
+    "range_resume_run": false
+  },
+  "next_action": "本次2 MiB/s只读哈希成功且SHA与旧值一致，但USB总线仍为10Gb/s UAS、partial仍缺407756707 bytes且写路径未验证。等待科研总控明确批准后，才考虑一次限速Range续传；不得把此次只读成功解释为写路径健康。"
 }

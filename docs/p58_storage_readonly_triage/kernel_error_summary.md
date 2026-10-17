@@ -39,3 +39,7 @@
 在 `18:58:32.545`，`usb 2-2` 记录 disconnect；随后 `/dev/sda` 的 `Synchronize Cache(10)` 失败，错误为 `hostbyte=DID_ERROR`。`18:58:42.961`，HIKVISION 重新出现在 `usb 4-2`，日志报告 `SuperSpeed Plus Gen 2x1`，SCSI 驱动为 `uas`。因此日志没有证明 USB 链路已降到 USB 2.0；是否为用户主动移动连接导致这次 disconnect 无法从日志区分。
 
 新错误出现后立即停止，没有继续读取任何盘上文件或查询分区/挂载信息。
+
+## 系统重新启动后的低速读取窗口
+
+本次用户确认后检查中，`journalctl -k -b --since 2026-10-17 19:24:12` 未检出 HIKVISION、UAS reset/disconnect、块 I/O error、exFAT 或 lost async write 相关记录。2 MiB/s 应用层限速顺序读取约27分40秒期间，读取完整结束；结束后进程状态筛选无 D-state。历史故障仍然保留，不能由本次短期稳定窗口推断为根因已修复。
