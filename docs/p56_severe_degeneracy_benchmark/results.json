@@ -1,0 +1,70 @@
+{
+  "task": "P56-SEVERE-DEGENERACY-DATASET-BASELINE-R1",
+  "final_classification": "DOWNLOAD_BLOCKED",
+  "branch": "research/p56-severe-degeneracy-benchmark",
+  "git": {
+    "start_sha": "a93d41d46ac60adc04552d76a09861e08f7ed87d",
+    "code_sha": "a93d41d46ac60adc04552d76a09861e08f7ed87d",
+    "end_sha_recorded_in_execution_receipt": true,
+    "origin_p56_branch_exists": false,
+    "push_executed": false
+  },
+  "external_drive": {
+    "uuid": "F627-4133",
+    "mount": "/media/jian/HIKVISION",
+    "read_write": true,
+    "available_bytes_after_attempts": 459366203392
+  },
+  "datasets": {
+    "ground_challenge_corridor2": {
+      "official_estimated_size": "2.9 GB",
+      "download_status": "BLOCKED_MICROSOFT_AUTH",
+      "dataset_bytes_saved": 0,
+      "auth_response_bytes_not_saved": 58672,
+      "runtime_frames": 0,
+      "ndt_align_count": 0,
+      "hessian_samples": 0,
+      "map_contract": "NO_OFFICIAL_MAP_FOUND",
+      "calibration_sha256": "f8f591c46fa21c88d3986e65bf0558c7f79f2830b017165ec86b87190f745e08",
+      "lidar_imu_extrinsic": "NOT_PRESENT_IN_OFFICIAL_calibration.txt"
+    },
+    "ground_challenge_corridor1": {
+      "official_estimated_size": "2.9 GB",
+      "download_status": "NOT_ATTEMPTED_PRIORITY_GATE",
+      "runtime_frames": 0,
+      "ndt_align_count": 0
+    },
+    "subt_mrs_long_corridor": {
+      "official_expected_zip_bytes": 3888497930,
+      "attempt_count": 2,
+      "attempt1_bytes": 1699970593,
+      "attempt1_exit_code": 18,
+      "attempt2_incremental_bytes": 1780770630,
+      "attempt2_http_status": 206,
+      "attempt2_exit_code": 56,
+      "partial_bytes": 3480741223,
+      "partial_sha256": "6fb37b96d9ac80ebe3fd32cc113504d1c8c6c791919a30b073a0b4a8786f16fa",
+      "partial_preserved": true,
+      "zip_integrity_test": "NOT_RUN_INCOMPLETE",
+      "extracted": false,
+      "calibration_path": "/media/jian/HIKVISION/paper rosbag/DegenerateBenchmarks/SubTMRS/LongCorridor/calibration/SubT_MRS_Hawkins_Long_Corridor_RC_Extrinsics.yaml",
+      "calibration_bytes": 584,
+      "calibration_sha256": "03df4bc1d32ba7148fd90a35f370d319bb83531c774d1848b3da0acf25f390bc",
+      "calibration_direction": "UNCONFIRMED",
+      "gt_access": "LIMITED_ACCESS_NOT_READ",
+      "map_contract": "NO_OFFICIAL_MAP_FOUND",
+      "runtime_frames": 0,
+      "ndt_align_count": 0,
+      "hessian_samples": 0
+    }
+  },
+  "gt_read_count": 0,
+  "ros_started": false,
+  "localization_runs": 0,
+  "notes": [
+    "No localization or algorithm failure was observed; no sensor bag was fully recovered.",
+    "No HTML authentication response was saved as dataset content.",
+    "No GT was read, no map was generated, and no localization accuracy metric was computed.",
+    "No third download attempt or alternate source was used."
+  ]
+}
