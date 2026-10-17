@@ -22,3 +22,14 @@
 仅查看 P58 上次核查时间之后的系统内核日志。`16:55:11` 至 `17:00:49` 多次继续出现 UAS reset/abort 和 USB 设备 reset；期间有写命令 timeout、`blk_update_request: I/O error` 及 `lost async page write`。`17:01:04.593` 记录 `usb 2-2: USB disconnect, device number 2`。`17:01:08` 设备以新设备号重新枚举为 HIKVISION，内核重新识别 `/dev/sda` 及分区。重枚举只表示设备再次被发现，不表示存储健康。
 
 检测到这些新错误后即停止后续外盘相关检查；没有查询目录、读取数据文件或执行任何恢复操作。
+
+## 最新一次复查（2026-10-17 18:32）
+
+查询 `17:01:08` 之后的内核日志，发现：
+
+- `18:10:20.237`：USB 设备断开；紧接着 `Synchronize Cache(10) failed`，结果为 `hostbyte=DID_ERROR`。
+- `18:10:23`：HIKVISION 设备重新枚举并重新附加为 SCSI disk。
+- `18:31:59.925`：再次 USB disconnect；随后又出现 `Synchronize Cache(10) failed: hostbyte=DID_ERROR`。
+- `18:32:02`：设备再次重新枚举。检查时刻为 `18:32:34`，即最近一次枚举后约 32 秒。
+
+这是持续的 USB mass-storage/SCSI 通信异常证据，不只是 ZIP 下载或文件层面的错误。日志不能单独确定故障组件；不应仅凭重新枚举就继续读取大文件。此处记录后停止所有外盘查询。

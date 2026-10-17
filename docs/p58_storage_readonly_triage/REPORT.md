@@ -27,6 +27,12 @@
 
 因此用户所述的物理检查后，系统证据仍不满足恢复门槛，结论维持 **STORAGE_UNSAFE**。由于检测到新错误后立即停止，没有继续核验挂载状态、UUID、partial 大小、SHA256 或 ZIP 完整性，也没有尝试续传。
 
+## 用户再次要求复查后的最新证据
+
+在 `2026-10-17 18:32:34+08:00` 进行了一次有界只读复查。当前进程表未显示 D-state 进程，但内核日志在 `18:10:20` 和 `18:31:59` 两次记录 USB disconnect；每次断开后均出现 `Synchronize Cache(10) failed: hostbyte=DID_ERROR`，随后设备分别于 `18:10:23` 和 `18:32:02` 重新枚举为 HIKVISION。最近一次重新枚举发生在本次检查前约 32 秒。
+
+这足以确认 USB mass-storage/SCSI 通信链路仍不稳定，但不能区分线缆、接口、供电、USB桥接/硬盘盒或盘体故障。最新断连后没有再读取任何设备元数据或数据文件，因此当前挂载状态、UUID 和文件可读性均未核验。最终结果仍为 **STORAGE_UNSAFE**。
+
 ## Git 与归档
 
 - 分支：`research/p58-hikvision-storage-triage`

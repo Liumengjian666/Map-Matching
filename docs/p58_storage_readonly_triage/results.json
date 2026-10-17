@@ -54,5 +54,22 @@
     "partial_size_sha_zip_test_or_data_file_read_performed": false,
     "stopped_after_detecting_new_storage_errors": true
   },
+  "latest_user_requested_recheck": {
+    "observed_at_local": "2026-10-17T18:32:34+08:00",
+    "result": "STORAGE_UNSAFE",
+    "d_state_process_found": false,
+    "usb_disconnect_events_local": [
+      "2026-10-17T18:10:20.237+08:00",
+      "2026-10-17T18:31:59.925+08:00"
+    ],
+    "scsi_cache_sync_failed_after_disconnect": true,
+    "device_reenumeration_events_local": [
+      "2026-10-17T18:10:23+08:00",
+      "2026-10-17T18:32:02+08:00"
+    ],
+    "mount_uuid_and_data_files_checked_after_latest_disconnect": false,
+    "supported_failure_layer": "recurrent USB mass-storage/SCSI communication loss",
+    "specific_failed_component": "undetermined among cable, port, power, enclosure/bridge, or drive"
+  },
   "next_action": "本次重查仍见持续存储错误与USB断连；停止所有外盘数据访问和续传。不要强制拔盘或卸载。待系统与设备状态由用户安全处理并稳定、且科研总控重新批准后，再安排新的只读检查。"
 }
