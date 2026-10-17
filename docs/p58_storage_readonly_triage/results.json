@@ -71,5 +71,17 @@
     "supported_failure_layer": "recurrent USB mass-storage/SCSI communication loss",
     "specific_failed_component": "undetermined among cable, port, power, enclosure/bridge, or drive"
   },
-  "next_action": "本次重查仍见持续存储错误与USB断连；停止所有外盘数据访问和续传。不要强制拔盘或卸载。待系统与设备状态由用户安全处理并稳定、且科研总控重新批准后，再安排新的只读检查。"
+  "latest_speed_change_check": {
+    "observed_at_local": "2026-10-17T18:59:06+08:00",
+    "d_state_process_found": false,
+    "usb_disconnect_local": "2026-10-17T18:58:32.545+08:00",
+    "scsi_cache_sync_failed_after_disconnect": true,
+    "device_reenumeration_local": "2026-10-17T18:58:42.961+08:00",
+    "reenumerated_link": "SuperSpeed Plus Gen 2x1",
+    "reenumerated_driver": "uas",
+    "usb2_low_speed_link_confirmed": false,
+    "disconnect_intent_known": false,
+    "data_file_read_or_transfer_started": false
+  },
+  "next_action": "链路未验证降速且断连时出现SCSI cache sync失败；停止外盘数据访问。先确保设备由操作系统安全弹出，再使用明确的USB 2.0接口/Hub连接；之后仅复查系统状态，待稳定并获科研总控批准后再考虑限速只读文件核验。"
 }

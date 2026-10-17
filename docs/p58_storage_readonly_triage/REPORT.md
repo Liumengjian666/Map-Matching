@@ -33,6 +33,12 @@
 
 这足以确认 USB mass-storage/SCSI 通信链路仍不稳定，但不能区分线缆、接口、供电、USB桥接/硬盘盒或盘体故障。最新断连后没有再读取任何设备元数据或数据文件，因此当前挂载状态、UUID 和文件可读性均未核验。最终结果仍为 **STORAGE_UNSAFE**。
 
+## 用户要求尝试降低传输速率后的系统复查
+
+`2026-10-17 18:59:06+08:00` 的进程筛选未发现 D-state 进程。上次检查后，内核在 `18:58:32.545` 记录 USB disconnect，并报告 SCSI cache sync `hostbyte=DID_ERROR`。随后 HIKVISION 在 `18:58:42.961` 通过 `uas` 于 `usb 4-2` 以 `SuperSpeed Plus Gen 2x1` 重新枚举；日志没有显示设备降为 USB 2.0。断连是否为用户有意换口，系统日志无法判断。
+
+因此当前没有证据表明链路已降速；反而确认断连瞬间 cache 同步失败。未读取 UUID、挂载状态或任何数据文件，也未启动限速传输。结果仍为 **STORAGE_UNSAFE**，停止后续盘上检查。
+
 ## Git 与归档
 
 - 分支：`research/p58-hikvision-storage-triage`

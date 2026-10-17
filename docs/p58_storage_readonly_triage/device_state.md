@@ -19,3 +19,5 @@
 没有检查容量余量、目录、partial 文件大小、哈希或 ZIP 内容；这些都属于本轮禁止的外盘文件访问。
 
 最新一次（18:32）复查没有查询 `findmnt` 或 `lsblk`，因为内核日志刚记录 18:31:59 USB disconnect 和 cache synchronization failure。日志显示设备于 18:32:02 重新枚举，但当前分区是否挂载及 UUID 是否仍可读未核实。不要把重枚举当成挂载或健康确认。
+
+18:58 后的日志显示 HIKVISION 再次枚举在 `usb 4-2`，协议为 UAS、链路为 `SuperSpeed Plus Gen 2x1`，不是已验证的 USB 2.0 低速链路。该信息来自内核连接日志；本轮没有调用 `lsusb -t` 或访问挂载目录。断连后 cache sync 失败，挂载状态仍未核验。
