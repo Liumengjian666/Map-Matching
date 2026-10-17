@@ -1,0 +1,43 @@
+{
+  "task": "P58-HIKVISION-STORAGE-READONLY-TRIAGE-R1",
+  "result": "STORAGE_UNSAFE",
+  "observed_at_local": "2026-10-17T16:47:07+08:00",
+  "disk": {
+    "device": "/dev/sda",
+    "partition": "/dev/sda2",
+    "transport": "USB/UAS",
+    "filesystem": "exfat",
+    "uuid": "F627-4133",
+    "mountpoint": "/media/jian/HIKVISION",
+    "metadata_mount_options_include_rw": true,
+    "enumerated": true,
+    "enumeration_is_not_health_evidence": true
+  },
+  "processes": {
+    "original_copy_process_present": false,
+    "d_state_block_flush_worker_present": true,
+    "worker_pid": 371233,
+    "worker_command": "[kworker/u32:4+flush-8:0]"
+  },
+  "kernel_log_findings": {
+    "repeated_uas_or_usb_resets": true,
+    "write_command_timeouts": true,
+    "block_write_io_errors": true,
+    "lost_async_page_writes": true,
+    "explicit_offline_or_disconnect_observed_in_filtered_output": false,
+    "exfat_specific_error_observed_in_filtered_output": false,
+    "approximate_repeated_error_window_local": "2026-10-17 16:21-16:46",
+    "representative_events_local": [
+      "2026-10-17 16:37:16",
+      "2026-10-17 16:40:20",
+      "2026-10-17 16:43:24",
+      "2026-10-17 16:46:29"
+    ]
+  },
+  "p58_external_data_file_reads": 0,
+  "p58_external_data_file_writes": 0,
+  "download_copy_extract_or_zip_test_run": false,
+  "filesystem_repair_or_format_run": false,
+  "forced_unmount_usb_disconnect_reboot_or_shutdown_run": false,
+  "next_action": "用户先安全检查线缆、接口、供电、硬盘盒及设备物理状态；在用户确认并取得科研总控重新批准前，不再访问外盘数据文件。"
+}
