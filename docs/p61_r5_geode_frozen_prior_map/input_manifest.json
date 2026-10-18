@@ -1,0 +1,20 @@
+{
+  "source": "/home/jian/geode/Shield_tunnel1_gamma/Shield_tunnel1_gamma.bag",
+  "source_sha256": "162ed09ab6b262f89ac46c45bac36ad2335a6f869b360b80d80ddf59d0b22091",
+  "ledger_sha256": "21cba76ec059016700b5ac3f0a0851f769b338ee4550e19108910d3efd3902fb",
+  "bag": "/home/jian/livox_ws/p61_r5_geode_runs/mapping_only.bag",
+  "bag_sha256": "501eaabe1113aaf633641a54bb083429e511dde009e3c7074a2688b366fc4b00",
+  "bytes": 1122940703,
+  "window_start_ns": 1706671289400000810,
+  "window_end_ns": 1706671533569869338,
+  "verified_counts": {
+    "/livox/lidar": 2441,
+    "/imu/data": 24418
+  },
+  "lidar_first_ns": 1706671289400000810,
+  "lidar_last_ns": 1706671533399702548,
+  "imu_first_ns": 1706671289400330543,
+  "imu_last_ns": 1706671533565621852,
+  "whole_scan_guard": true,
+  "gt_read": false
+}

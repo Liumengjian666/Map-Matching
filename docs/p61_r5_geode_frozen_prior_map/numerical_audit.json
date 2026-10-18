@@ -1,0 +1,29 @@
+{
+  "consumed_scans": 2441,
+  "mapped_updates": 2438,
+  "max_so3_orthogonality_error": 5.895542186947263e-11,
+  "max_transform_chain_error": 2.220446049250313e-16,
+  "max_mapped_extrinsic_change": 0.0,
+  "measured_imu_bracketed_mapped_scans": 2438,
+  "imu_samples_delivered": 24412,
+  "map_count_busy_sentinel_frames": 2,
+  "map_count_busy_meaning": "author validnum() returns -1 when background rebuild owns its mutex, not a negative map size",
+  "mapping_processing_ms": {
+    "mean": 26.07070843532785,
+    "p95": 32.321514344221214,
+    "maximum": 75.73483401210979
+  },
+  "publisher_to_ack_ms": {
+    "mean": 36.284821119620354,
+    "p95": 47.62567700527143,
+    "maximum": 92.48715599824209
+  },
+  "first_mapped_scan_sequence": 4,
+  "last_mapped_scan_sequence": 2441,
+  "first_mapped_start_sec": 1706671289.7003083,
+  "last_state_end_sec": 1706671533.499544,
+  "gap_to_frozen_test_start_sec": 54.33029627799988,
+  "peak_rss_mib": 353.19921875,
+  "legal_mapped_se3": true,
+  "gt_read": false
+}

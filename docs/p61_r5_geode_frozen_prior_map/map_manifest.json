@@ -1,0 +1,147 @@
+{
+  "map_path": "/home/jian/livox_ws/p61_r5_geode_runs/formal_mapping/frozen_map.pcd",
+  "map_sha256": "4a279d822fd6090d3aa3fc0cec989b4f6fde5c9a43df476a29dba4494f6821b4",
+  "map_bytes": 10273947,
+  "map_points": 321053,
+  "xyz_min": [
+    -27.33899688720703,
+    -7.906076431274414,
+    -2.786097764968872
+  ],
+  "xyz_max": [
+    496.8119201660156,
+    110.61923217773438,
+    8.507054328918457
+  ],
+  "spatial_size_m": [
+    524.1509399414062,
+    118.52530670166016,
+    11.29315185546875
+  ],
+  "pcd_header": {
+    "VERSION": [
+      "0.7"
+    ],
+    "FIELDS": [
+      "x",
+      "y",
+      "z",
+      "intensity",
+      "normal_x",
+      "normal_y",
+      "normal_z",
+      "curvature"
+    ],
+    "SIZE": [
+      "4",
+      "4",
+      "4",
+      "4",
+      "4",
+      "4",
+      "4",
+      "4"
+    ],
+    "TYPE": [
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F",
+      "F"
+    ],
+    "COUNT": [
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1"
+    ],
+    "WIDTH": [
+      "321053"
+    ],
+    "HEIGHT": [
+      "1"
+    ],
+    "VIEWPOINT": [
+      "0",
+      "0",
+      "0",
+      "1",
+      "0",
+      "0",
+      "0"
+    ],
+    "POINTS": [
+      "321053"
+    ],
+    "DATA": [
+      "binary"
+    ]
+  },
+  "map_frame": "M=camera_init",
+  "point_frame": "M",
+  "origin": "actual final author ikd-Tree synchronized snapshot",
+  "map_voxel_m": 0.3,
+  "source_voxel_m": 0.3,
+  "raw_scans_processed": 2441,
+  "stages": {
+    "FIRST_SCAN": 1,
+    "IMU_INITIALIZATION": 1,
+    "TREE_INITIALIZED": 1,
+    "MAPPED": 2438
+  },
+  "admitted_scan_range": [
+    1,
+    2441
+  ],
+  "boundary_crossing_scan_excluded": 2442,
+  "mapping_window_ns": [
+    1706671289400000810,
+    1706671533569869338
+  ],
+  "raw_first_scan_ns": 1706671289400000810,
+  "raw_last_scan_ns": 1706671533399702548,
+  "raw_last_point_end_ns": 1706671533499543833,
+  "mapped_state_scan_start_range_ns": [
+    1706671289700308322,
+    1706671533399702548
+  ],
+  "original_trajectory_path": "/home/jian/livox_ws/p61_r5_geode_runs/formal_mapping/mapping_trajectory.csv",
+  "original_trajectory_sha256": "ba2bd1add899e8a545bf611b7d10cc0b22051bcd63e1841e3bd6235d741efc6d",
+  "archived_trajectory_sha256": "114e04c8276fe3806972d72a1bffa235fad4341847325cc2e3c28de4dd337548",
+  "input_bag_sha256": "501eaabe1113aaf633641a54bb083429e511dde009e3c7074a2688b366fc4b00",
+  "runtime_config_sha256": "bb9a89faca460036ff26840d8fb5c98766bf96268420bde0371fd05d4931d139",
+  "binary_sha256": "4b34dfc10a7bf2b28e0da84dfd2999b9813eb9ecc692bfa0b748538416d6db94",
+  "author_commit": "1f008a7249e36393a1752622de50660b77b5b7f4",
+  "gt_used": false,
+  "test_scans_in_mapping": 0,
+  "freeze_verified_before_test_query_unix": 1792342258.0410366,
+  "map_is_independent_traversal": false,
+  "initialization_status": "INITIALIZATION_NOT_ESTABLISHED",
+  "test_pointcloud_coverage_status": "POINTCLOUD_COVERAGE_NOT_CERTIFIED",
+  "mapping_wall_sec": 178.35898479199386,
+  "mapper_resources": {
+    "peak_rss_kib": 361676,
+    "user_cpu_sec": 168.032204,
+    "system_cpu_sec": 7.547447,
+    "exported_points": 321053
+  },
+  "mapper_position_min": [
+    -27.343442771537738,
+    -5.700470534895017,
+    0.040305554359914404
+  ],
+  "mapper_position_max": [
+    292.6891929301714,
+    63.630738679542624,
+    2.111838828385941
+  ],
+  "mapper_path_length_m": 490.17129795174407,
+  "max_adjacent_mapping_translation_m": 0.6501587167417902
+}

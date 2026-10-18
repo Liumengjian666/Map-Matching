@@ -1,0 +1,2 @@
+# Preserve author patch context bytes; trailing upstream spaces are patch data.
+author_observation.patch -whitespace
