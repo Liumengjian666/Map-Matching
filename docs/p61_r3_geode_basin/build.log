@@ -1,0 +1,5 @@
+Scanning dependencies of target basin_probe
+[ 66%] Building CXX object CMakeFiles/basin_probe.dir/home/jian/livox_ws/p61_r3_geode_basin_ws/src/dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_shadow.cpp.o
+[ 66%] Building CXX object CMakeFiles/basin_probe.dir/basin_probe.cpp.o
+[100%] Linking CXX executable basin_probe
+[100%] Built target basin_probe

@@ -1,0 +1,21 @@
+{
+  "scope": "offline_native_probe_not_ROS_or_realtime_validation",
+  "align_calls": 238,
+  "nominal_align_calls": 0,
+  "preflight_jet_calls": 20,
+  "final_jet_calls": 238,
+  "coupled_refinement_calls": 0,
+  "recovery_calls": 0,
+  "ekf_calls": 0,
+  "wall_seconds": 5.63,
+  "user_cpu_seconds": 4.57,
+  "system_cpu_seconds": 1.03,
+  "peak_rss_kib": 33596,
+  "peak_rss_mib": 32.80859375,
+  "align_mean_ms": 17.882813605042017,
+  "align_p95_ms": 31.623651449999997,
+  "align_max_ms": 93.408579,
+  "resource_evidence": "align_resources.txt",
+  "actual_grid_records": 776,
+  "actual_grid_check": "all three leaf axes equal float32(0.8)"
+}

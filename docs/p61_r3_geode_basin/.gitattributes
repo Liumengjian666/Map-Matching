@@ -1,0 +1,2 @@
+# Preserve generated CMake evidence byte-for-byte; its tool emits trailing spaces.
+cmake.log -text whitespace=-blank-at-eol

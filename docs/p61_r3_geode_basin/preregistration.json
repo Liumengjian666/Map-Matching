@@ -1,0 +1,1697 @@
+{
+  "source_start_sha": "71f12c062c38ff8489124cf8e648269422919776",
+  "selection": "nearest_uniform_sensor_time_in_R2_100_earlier_tie",
+  "indices": [
+    2,
+    276,
+    550,
+    879,
+    1153,
+    1427,
+    1701,
+    1975,
+    2304,
+    2578,
+    2851,
+    3125,
+    3454,
+    3728,
+    4002,
+    4276,
+    4550,
+    4879,
+    5153,
+    5427
+  ],
+  "starts": 240,
+  "ready": 238,
+  "out_of_bounds": 2,
+  "gt_read": false,
+  "bag_read": false,
+  "files": {
+    "/home/jian/livox_ws/p61_r2_geode_runs/build/native_geometry": {
+      "bytes": 284872,
+      "sha256": "2b56a6a231443b7b5318d955ba1d5be1ed0ca7b0ecb118b10ee73f594f47ec02"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/export_manifest.json": {
+      "bytes": 130470,
+      "sha256": "347bf99e60b7a35b2a64220afe973afb089cdf46f731f1cbdeeb0cd0f45bcdcc"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1.npy": {
+      "bytes": 456256,
+      "sha256": "ae32e017b5b61e2ef9678c23d895f279710abddfcf17b4e8ce36c06baf1f1acc"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1.pcd": {
+      "bytes": 288105,
+      "sha256": "6daf91c742fb35bbcbe5aae83cf2cdbab166ba65a90ed5692cd9727a9910ddef"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1042.npy": {
+      "bytes": 456256,
+      "sha256": "59d340e72bb305f426de36b5fd17242482ca7f4773896b38653fc7d02af4917d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1042.pcd": {
+      "bytes": 288105,
+      "sha256": "1b602223e236b1421b74247183c565d9223f96565cb00cb94fc230337d88f258"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1043.npy": {
+      "bytes": 456256,
+      "sha256": "2c7c91851fbe192f17c29089f3cdba564a774a838428505f33000d2aa42abd92"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1043.pcd": {
+      "bytes": 288105,
+      "sha256": "29e26b779906023b796ca6c8afa0e4bb3a9f7bcf8b7e89b4b01f4a0d95697830"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1097.npy": {
+      "bytes": 456256,
+      "sha256": "85a3499b1ca54d572f453d1c264c89429076dc7faccc44ebf02890b2f1133ba3"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1097.pcd": {
+      "bytes": 288105,
+      "sha256": "5f59374745c3b33d840109279a7d35b003c510c62e9be3faa2c1c46931ce31ec"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1098.npy": {
+      "bytes": 456256,
+      "sha256": "9c793c9fb1fbd08f37ed2380c87ed6beb9fce1d3987b2bddaf995da29b4faae3"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1098.pcd": {
+      "bytes": 288105,
+      "sha256": "30dcffa5dc813fe0b4959f207faedc3254da7093fa73d67d8f8f1754add322cb"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_111.npy": {
+      "bytes": 456256,
+      "sha256": "4d2ed200136ed58a54f2951282fa478c5fb822eebb93936103d4299dda66b1fa"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_111.pcd": {
+      "bytes": 288105,
+      "sha256": "fafcca6b698fd1b4e4a794cbfb5a28dd74858bc3bd647d1a18bc4850344c28bf"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_112.npy": {
+      "bytes": 456256,
+      "sha256": "486b228b468664f8da881a3735cd314dbef35d14ae36c3cf6dfd95e76c75177f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_112.pcd": {
+      "bytes": 288105,
+      "sha256": "088ed239c0927abf9b72e5827e5a099c06f7b2fd6e2557eb9596ddb1af113e23"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1152.npy": {
+      "bytes": 456256,
+      "sha256": "9fe6ded7bb7f87cbdd0bf9bb2d28341509f33a73887754be03bf5fba1f2f71a6"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1152.pcd": {
+      "bytes": 288105,
+      "sha256": "e1631b08ced7f896014284bdc1fd1e940d271e8c7523ba540e79d70e958584c1"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1153.npy": {
+      "bytes": 456256,
+      "sha256": "eb7aa1c590bf9c2f19890a45e98709710ffb4b6689212bc5c474502b79beef70"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1153.pcd": {
+      "bytes": 288105,
+      "sha256": "733c51429574597739fa5f36af243eb20c3f68305b9c05760fa50bd419e9459f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1207.npy": {
+      "bytes": 456256,
+      "sha256": "388b7f56f2a79adcc946ad58b79e73be6f146cd676e39caae032989afd76ad4e"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1207.pcd": {
+      "bytes": 288105,
+      "sha256": "491e24437f2af0a06f49837c5c1866e82875680b00af1a40a29d30b366a63fe7"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1208.npy": {
+      "bytes": 456256,
+      "sha256": "68f03b70c9fae63137626be0f6ab6f0ac93a0c3d23602819f795b5c69fba02d6"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1208.pcd": {
+      "bytes": 288105,
+      "sha256": "5986e113772067109a024adc9502d2df8826aa9201f64892149223d6ba50c437"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1261.npy": {
+      "bytes": 456256,
+      "sha256": "2c61d9b575b4942128ae21b9d4f2d6d64a06f0fd326f3087dbcaca0c332b40a6"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1261.pcd": {
+      "bytes": 288105,
+      "sha256": "b6b4fef12520775d02d214aacf84717c20779d433e6cf98aa5211f61bce198cd"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1262.npy": {
+      "bytes": 456256,
+      "sha256": "cd315a553d4e41144b37be8a396e5bfb5177d740bc60b1e694cd7eefa452c01e"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1262.pcd": {
+      "bytes": 288105,
+      "sha256": "a1c80e4c1e314ead7222e8c393095a3cdcc77bf0a56a3e0d5816d2fa5ec69ab5"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1316.npy": {
+      "bytes": 456256,
+      "sha256": "68e81db9d8e3c04e4ea4cc46743e2cdbcf87c4c5fa1f5fc5d8a70368ccf08db0"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1316.pcd": {
+      "bytes": 288105,
+      "sha256": "2c5f243f19bb7c97edef2bf8ea60a5ca914abf51a3cf48fc6dea731eb88902b8"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1317.npy": {
+      "bytes": 456256,
+      "sha256": "a7e88269640d453e37e1d3b8ff94243abc4931704fa205c3d2d74b1e3ec568ad"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1317.pcd": {
+      "bytes": 288105,
+      "sha256": "e7e62278cf8c1c9467fcc23244017231b370dc5b1212db0cb6701ee3bd47285f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1371.npy": {
+      "bytes": 456256,
+      "sha256": "38d7264afb1c422a15a4ffb8dce7a9c6dd5369764d5038cc50239ac8eece3d15"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1371.pcd": {
+      "bytes": 288105,
+      "sha256": "67b4c9a2809def598d7e3f2d37402a5c6fb207ffb9222043c3e4859846f0be12"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1372.npy": {
+      "bytes": 456256,
+      "sha256": "f656a93c03f879a8108c26bf1b1d710da6121834da1740759bdc8f68d68a3593"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1372.pcd": {
+      "bytes": 288105,
+      "sha256": "eff090376b4bd8962650c0e76700577cfed170bcb349242ac6dfa5b8058f9e9f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1426.npy": {
+      "bytes": 456256,
+      "sha256": "8607884b0e982c79f1f7d3fea210180341e584514200027ef146c507071d9553"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1426.pcd": {
+      "bytes": 288105,
+      "sha256": "162e8e49cdb3099eb795e18deac252dfa604120a99e11ca642708648a72a7622"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1427.npy": {
+      "bytes": 456256,
+      "sha256": "06da49e59d3fdf8b5b50591fc3cd954879d36b01ed670f6aafd5abcf2fa6a4ee"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1427.pcd": {
+      "bytes": 288105,
+      "sha256": "4d106cb91cd583a3460f4b3349e366250597bfd1b03e6a03aa09a2afb5c919cf"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1481.npy": {
+      "bytes": 456256,
+      "sha256": "038cf04a9f6f8aef2713b22e999935f5c9ed9234b944b652ca86f78f7c03ca4a"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1481.pcd": {
+      "bytes": 288105,
+      "sha256": "ca97fe4b779680436f1148b7de5ba8392cda433e68fdfb85be8f4d75c478e658"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1482.npy": {
+      "bytes": 456256,
+      "sha256": "033a216c338d0848ad1bc8203b48502e5db26d530a7a17120ef369fbb89f87d7"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1482.pcd": {
+      "bytes": 288105,
+      "sha256": "1568a9bda55b7c4b34f208b1179e24c85c288045db7e02618c504b70fabf492f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1535.npy": {
+      "bytes": 456256,
+      "sha256": "491004595e8ec579b462e11d9efade4d9b5474a1dc0cf2850cbe7a2d370246f1"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1535.pcd": {
+      "bytes": 288105,
+      "sha256": "7ebb2393c2fa0e4b220e90f694c60749e887d2cb93b21048d0574324368b686c"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1536.npy": {
+      "bytes": 456256,
+      "sha256": "e171dd3627556116eda0876059206f9821149618bd992336e3b4ad4dff9b2eff"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1536.pcd": {
+      "bytes": 288105,
+      "sha256": "1069d7923bd8e6112cb1ca778b4e1603b943e31f61444fb4be7c49540f3c0f7e"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1590.npy": {
+      "bytes": 456256,
+      "sha256": "076f15bdf761cc7f3467dcce7f1451aa3f09522c94421188447dbfb9a3221681"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1590.pcd": {
+      "bytes": 288105,
+      "sha256": "2d4029de23707ff932e2bf6216cf82320f790b6c042391d9d23ba3d753dddb0d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1591.npy": {
+      "bytes": 456256,
+      "sha256": "65a2fe57a613f9457f09b359737245bead38f3adef19ec0db8dff2449de60c86"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1591.pcd": {
+      "bytes": 288105,
+      "sha256": "d39c2e59f1c9dc3c495ecafe3d036c2ed24eb2df6717ec6a9ddb714ad61473a0"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1645.npy": {
+      "bytes": 456256,
+      "sha256": "c445f89ed04ef27abfbe33ee1cead0c4345d0caaf3701200c5648aa3e7ccb79f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1645.pcd": {
+      "bytes": 288105,
+      "sha256": "fb2123f3a5c6dc2695a3663769e1ff1a17f054d0fbd946b349dee963bccad324"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1646.npy": {
+      "bytes": 456256,
+      "sha256": "2f71a48bcbe1baea0611c8a7569afc8f980634a617f5d19d7cec067556584033"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1646.pcd": {
+      "bytes": 288105,
+      "sha256": "e51d62d4198af63caf8b387abadb4b8067c08a78ac59e80e835f8b6f64b8a786"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_165.npy": {
+      "bytes": 456256,
+      "sha256": "582ac61f8909dd1cdbe0f8f5affe7e95344566188507eb222dc9d29541b200ba"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_165.pcd": {
+      "bytes": 288105,
+      "sha256": "3280687764bd2d9eba33ae0627d5ec22736e701b0c6c73f3b5df1fbf212d7f1c"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_166.npy": {
+      "bytes": 456256,
+      "sha256": "ff4f23de4899c9b50dd8bca79632bf94dc2b70d6286f9ae15434c13645778262"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_166.pcd": {
+      "bytes": 288105,
+      "sha256": "ae5e6d24790175692557894c067246bebf129ae4702b02a8ac6b4aadae4754a1"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1700.npy": {
+      "bytes": 456256,
+      "sha256": "9768e4ea6da7b2801afcfc421113302f7cd8d32abffc34df3e6497c803b9894f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1700.pcd": {
+      "bytes": 288105,
+      "sha256": "fa7bd7c8000a56de61cf07a6a9f11667cb0a49b5043f518627cdfe5be0287ed8"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1701.npy": {
+      "bytes": 456256,
+      "sha256": "4d92cc3ef6ad0951e9ad31b32102b00847249add49c2c3db9893ac07bc12b51c"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1701.pcd": {
+      "bytes": 288105,
+      "sha256": "163a031fb6c1c925cfdee5c746540672654ed8320947f71d6da0ebb1aaa0f574"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1755.npy": {
+      "bytes": 456256,
+      "sha256": "23cce370b87a4f4262b0b6072e2c1659424d0a584d2cd10acc3fed70d0b561a1"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1755.pcd": {
+      "bytes": 288105,
+      "sha256": "34da182e66e510c88e94768a31bdc8a9298b34a0c97cdf754cee26e927c213f9"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1756.npy": {
+      "bytes": 456256,
+      "sha256": "603c864601b3fc8fca3375c9c3c8b949e98659551bfac7473e00a3f66e7e3c70"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1756.pcd": {
+      "bytes": 288105,
+      "sha256": "56bd986370482b431c61eaa64e1b3be38f265523e66438d8bf53a450ad12d6b7"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1809.npy": {
+      "bytes": 456256,
+      "sha256": "12a661d52e76d91f5d1da6fc12549b4ece2a1f007ec585c346c082667d049788"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1809.pcd": {
+      "bytes": 288105,
+      "sha256": "42e957822eada87ec5fccaa2dec6ed144255c0e25780fca70c816debdc104dd0"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1810.npy": {
+      "bytes": 456256,
+      "sha256": "08d8701bdf89ed11f20a832f781a302fcc85869904be05549bf941f7017a2347"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1810.pcd": {
+      "bytes": 288105,
+      "sha256": "66b28da123ae38854593bb5159fe61b9a5c2ff6d7df418da8286f80898008964"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1864.npy": {
+      "bytes": 456256,
+      "sha256": "88b9d8715fb992b6cf8dc9f86822a21b49dafe6f127bedb8dd3bcc6a26aa568f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1864.pcd": {
+      "bytes": 288105,
+      "sha256": "5bf7cb0578b14f29e49e1d4280256cea74a0638e1e8a1090aa6a1bbaea0d71c8"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1865.npy": {
+      "bytes": 456256,
+      "sha256": "671464ed97e64ad3d6a694067c49354d664ce77476d119e16ac8b4dcfa096eba"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1865.pcd": {
+      "bytes": 288105,
+      "sha256": "c20c43ec71027567601f0b7e649423bb960bea6b8e2669d316d86252962e2c3c"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1919.npy": {
+      "bytes": 456256,
+      "sha256": "567a5ff94e30e00832296a28ce173754c065af7b9c4e6dc418283fdd77ee3ca0"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1919.pcd": {
+      "bytes": 288105,
+      "sha256": "2b3d3fd90e0a4930235a9b86e24beadf8f991f22671c69d82c082e331372cb43"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1920.npy": {
+      "bytes": 456256,
+      "sha256": "28878be1a0722a9fd7bfb7176c00bc349f3280875eae4c804220a2b0831d02d2"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1920.pcd": {
+      "bytes": 288105,
+      "sha256": "5f6d7d7ac84300ac4b0ad0c3b42c5d3794106053ab4ec859cef03748ca9735b4"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1974.npy": {
+      "bytes": 456256,
+      "sha256": "4bad2c33e1e931872b2178515fc0825d9caef9940c8e19c1800ac4a9b01d6792"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1974.pcd": {
+      "bytes": 288105,
+      "sha256": "be48f162e385864853927e67f976975aa23e10718a6ae232df6eeb61057206bc"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1975.npy": {
+      "bytes": 456256,
+      "sha256": "274e45817cdff938cc5d7b9b745d93d0700d29df977c76018979776eb5aa10ff"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_1975.pcd": {
+      "bytes": 288105,
+      "sha256": "7889708aabc54e9e3ab69bf50d88f08c5369d19bd40974e19a108a206296fee4"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2.npy": {
+      "bytes": 456256,
+      "sha256": "494fb8264598306b514142bf4bbb4dcf4b4e77d5b77110b66bf7c4b45d772e0d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2.pcd": {
+      "bytes": 288105,
+      "sha256": "e785f17b24b8d7852c5916ca9542084f194518e10f4c80a8d7f724a2e2586e34"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2029.npy": {
+      "bytes": 456256,
+      "sha256": "1c319eae119480f52876fc8921d3d0c33c953bdad5e960b2d5afbbb85def23f4"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2029.pcd": {
+      "bytes": 288105,
+      "sha256": "69248c9c3bb0ca102ed82a7d1fd88b7230e9f7394d8b1362979f5dcf8358084e"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2030.npy": {
+      "bytes": 456256,
+      "sha256": "b43e09aa84f591ddf67cfc39655fb5cae4d95339b363a208e1898c124a51888a"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2030.pcd": {
+      "bytes": 288105,
+      "sha256": "211d348a1af22a09a6c4feb7bd078db6a1218e43596c39a8ebf98d70bfcce1cc"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2083.npy": {
+      "bytes": 456256,
+      "sha256": "9b0c513286c9852f17f925462c69a5471fccd663987530549a443eae660109e7"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2083.pcd": {
+      "bytes": 288105,
+      "sha256": "78db3f1a29eddf876f5869fa5ce0ddcdc7020b90badf85ec3c72f2573208b2d1"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2084.npy": {
+      "bytes": 456256,
+      "sha256": "625590bad619cb5af86225b3d65a6aeac229757024e74f18fca1e5021fd2f417"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2084.pcd": {
+      "bytes": 288105,
+      "sha256": "dfd5ed93a6d1a0eaa7326043cda621aa0957cd2067b6d95093ee0165b021cc08"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2138.npy": {
+      "bytes": 456256,
+      "sha256": "64ad9d7186b55a83670c05825ee5501c25ddbcda443914ac4e90f1fe121d54af"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2138.pcd": {
+      "bytes": 288105,
+      "sha256": "d078e5248cd365586abdf86abe932fbbb85f889f637245784f54a55599989807"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2139.npy": {
+      "bytes": 456256,
+      "sha256": "39e86a7a69c5bc0c58f72d8d716bf138bb9c8307d2bf19681f96eeb5ed6ea113"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2139.pcd": {
+      "bytes": 288105,
+      "sha256": "a1d6af3c006d18e46fa74bb6cc3ade436285ec4cc1ad0563213b3d2c35f161bf"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2193.npy": {
+      "bytes": 456256,
+      "sha256": "c63b2bf5076de0adb0ab352a003d20ef939bac6dbc5afdb9527696e0b707e247"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2193.pcd": {
+      "bytes": 288105,
+      "sha256": "c4696ed5656f022ed2fde2989b19fdb4af5164bc696266684ff8f220efc283d9"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2194.npy": {
+      "bytes": 456256,
+      "sha256": "5767fb84ee7424f8f7b4336c52ad53343f1eb4cdfdeeb50c94c2eba86fba5779"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2194.pcd": {
+      "bytes": 288105,
+      "sha256": "7d7b55a0e044a31ce00b49376ceb7f40adf654255d5cae64adc94e4c285dedab"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_220.npy": {
+      "bytes": 456256,
+      "sha256": "1b3e23e45882dc1eaa8c0e25120035263001cee203a066af4a11dd37ab2b3ffb"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_220.pcd": {
+      "bytes": 288105,
+      "sha256": "a343ace8f0b1366ca3b2d6fcce9c1eead0797dca573fa43b42e5f94b842c4a68"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_221.npy": {
+      "bytes": 456256,
+      "sha256": "ced55cabdbd9d347e41dcca6e999a7b48a118651a5eb6298e97f0e9d048f823f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_221.pcd": {
+      "bytes": 288105,
+      "sha256": "a878c1a72eacd3426d225a786922906f0052318b8afbc0c5d0d31a7d365d635c"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2248.npy": {
+      "bytes": 456256,
+      "sha256": "af95d4be845364dfaa64445e745ba972716749b14737e89fd29ecb8c153641e9"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2248.pcd": {
+      "bytes": 288105,
+      "sha256": "4a9fdd8e59a10bdf7766a59c1cea1edf290070a47bc54f8e4292626b6e4611bb"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2249.npy": {
+      "bytes": 456256,
+      "sha256": "b9d047f39eb669c59346078fe35f0b178baf2b870f1d1290846463d187165703"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2249.pcd": {
+      "bytes": 288105,
+      "sha256": "d441fbfd9d7c5a1afa13a631c685c83dd2f4b4f3b64c0cf984adc9ecea3f8eb1"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2303.npy": {
+      "bytes": 456256,
+      "sha256": "43037e49f8053475607b68185ba260ac42bd732c105870e46185a7d8bf3a2807"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2303.pcd": {
+      "bytes": 288105,
+      "sha256": "7bf8bb99050e3e6dfc15ce66658db5982524e9fcf5be9920c81fff56d7f99ac8"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2304.npy": {
+      "bytes": 456256,
+      "sha256": "28a42ec739b7c18f49a5fb8215622633418b47d20fccb839b33be9477b684ef6"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2304.pcd": {
+      "bytes": 288105,
+      "sha256": "19301fe730bc0865161b6690cf8f357cdff245600dba1c7cf299faad6c733a9e"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2357.npy": {
+      "bytes": 456256,
+      "sha256": "201bc757e911f0e96391fb50ac19136cd05aaded88d262094243fd6df5fe845b"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2357.pcd": {
+      "bytes": 288105,
+      "sha256": "ddf1c136dde7d1b6dc9f3f7f6887ca9ea3e33d44e88733d0564353a737273af9"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2358.npy": {
+      "bytes": 456256,
+      "sha256": "8d0ba46331d70e8ce96cf06e03efe16c48d780c566a47c094758cfc8a0e3671a"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2358.pcd": {
+      "bytes": 288105,
+      "sha256": "f74476a90033da01c54880150a1d93c05636fea0346b6e597106ff73493639fb"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2412.npy": {
+      "bytes": 456256,
+      "sha256": "e2cbb5d610b8b16f3b3c19a3e7f6296ee82b1c043f1205444f3628db95e4167f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2412.pcd": {
+      "bytes": 288105,
+      "sha256": "a85fbd2321fab5cfc8377129eb0b4a62b95a61a03db1bfe6275d15c5320cc26d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2413.npy": {
+      "bytes": 456256,
+      "sha256": "ea346a887964aa95bfef413024b14577909cd081d372dac989a2773d121f3c78"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2413.pcd": {
+      "bytes": 288105,
+      "sha256": "f002a9e355e616793eabe32340ae62b6d6723fc9da86c5e6a30583d389637d15"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2467.npy": {
+      "bytes": 456256,
+      "sha256": "51d97444078c61332ecc4887e7bebb472e2f82efd9a32e378296f83f16f48206"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2467.pcd": {
+      "bytes": 288105,
+      "sha256": "baa53c298b1df68274fb9cd66835f6bd1f0c09f652cee7bc28ae8db01cbb0a86"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2468.npy": {
+      "bytes": 456256,
+      "sha256": "27712c5a3314f3d6ae92ade949af6523cb6a658e2d838a725ab70f15623a2da1"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2468.pcd": {
+      "bytes": 288105,
+      "sha256": "7bb65336c60d63f4dba4d353b79e3ca6a4d93da2d577e137350395aa254b15dd"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2522.npy": {
+      "bytes": 456256,
+      "sha256": "4231e10318de94505c95076b8f1e0fdc00ac1295eb53a2d4b63423a10159ce3a"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2522.pcd": {
+      "bytes": 288105,
+      "sha256": "8883cdabf17da9385a0c9dded9e0249b5d7bef41fbb45ae71648bddbb5747f15"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2523.npy": {
+      "bytes": 456256,
+      "sha256": "23f0fc58edf4b1a33538682687a797630598efdc102f9cbc123c043920e28c8b"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2523.pcd": {
+      "bytes": 288105,
+      "sha256": "5bb546643444afb709c0bbf2b3da8e1434e5ba38709ac4e2a748385c08925e68"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2577.npy": {
+      "bytes": 456256,
+      "sha256": "997b184150bc7605c5934cef7c645fc4018919767fff8bf96b54390b2e9e3888"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2577.pcd": {
+      "bytes": 288105,
+      "sha256": "516d840fda5c79cba84e0df2419a7ba226038b18ae6488f17514edd97933f379"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2578.npy": {
+      "bytes": 456256,
+      "sha256": "abbc976fadac97298101ee427f5c712cdddbda1e05cfbef17f6e766235c6deaf"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2578.pcd": {
+      "bytes": 288105,
+      "sha256": "d38ef262889793a1acc0fe7844574897b7e20ef0ecd0f6f44c61b4ec0e1ce0f5"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2631.npy": {
+      "bytes": 456256,
+      "sha256": "2d8f9bf9e11c2eee8131c810addebfc25f79f2331e755abb706a17285c4d8f91"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2631.pcd": {
+      "bytes": 288105,
+      "sha256": "6cbc557301a3eb860c9449579f356ecd254b73f077de9921083d50627543ab76"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2632.npy": {
+      "bytes": 456256,
+      "sha256": "7ac77eed5f996f9ed8d81ae0fc64874d04c79415b2c6b5976ce6cb61c83e4f19"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2632.pcd": {
+      "bytes": 288105,
+      "sha256": "8c36c78f1adcb44d33d84a392bf05904a190ff815977e68d29cf695d32650668"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2686.npy": {
+      "bytes": 456256,
+      "sha256": "58c21fa7ddd77e659b1bd810cd696b6c4a80c33d22846eb508744161cba9f147"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2686.pcd": {
+      "bytes": 288105,
+      "sha256": "e627fe77295c02544cf1eb383911e3c8809f5c7c69d6df1a266344208d087f10"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2687.npy": {
+      "bytes": 456256,
+      "sha256": "a12c87297b351505cad42175904103df80eddf2fee7f149c4926d2d38b570a28"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2687.pcd": {
+      "bytes": 288105,
+      "sha256": "dffdf2939341fe3fbb37eaac53356aeefaa0f97ea5dff9d8fea2b658ab63ad1b"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2741.npy": {
+      "bytes": 456256,
+      "sha256": "06797ce65b8d0a7afaa619ad66a11b8bea515e13a9b7cd98817eb3a62bfc51ba"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2741.pcd": {
+      "bytes": 288105,
+      "sha256": "be97a161e6566d4dcb87914ea886e80a72460be11cfaea55496658f580f4fa30"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2742.npy": {
+      "bytes": 456256,
+      "sha256": "f6880914c912b9a7e758fd463bbca4717ff343fa61ac22608b2d46af5bf9d5da"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2742.pcd": {
+      "bytes": 288105,
+      "sha256": "b02caea9921f0cf0e364824a4d25081c6141e387cb736197527f8f34a854b96c"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_275.npy": {
+      "bytes": 456256,
+      "sha256": "4a160ae310daccc5ffa31f1d88aff2b0bdc426a1e1a25ac5939b84134fd7f391"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_275.pcd": {
+      "bytes": 288105,
+      "sha256": "a6878860441e0e6113f12fba1d7c8fdd8f9d6d8e6bfd5bdaddf8894c65bb3a94"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_276.npy": {
+      "bytes": 456256,
+      "sha256": "026e40b437401d8987a02015fbc3a0073f31c4d90d07c48869cc4fa1d20b7a44"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_276.pcd": {
+      "bytes": 288105,
+      "sha256": "cff3aaec18276b4218a9cacd98cb9914d7a836a158cb622a0e0136fcc6ba023e"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2796.npy": {
+      "bytes": 456256,
+      "sha256": "0515ad61b69f638cd770a756bf4c37233c99ae1beaf6e2c8cd004aecd011cdff"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2796.pcd": {
+      "bytes": 288105,
+      "sha256": "50516493b951327f0498e789938df5ba9f97acc1d632892887089ba017f1fd7d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2797.npy": {
+      "bytes": 456256,
+      "sha256": "2df00f5f9eaa4a101775029a34cbeeacb810fb103a24b8dad73eb2695eab0cd4"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2797.pcd": {
+      "bytes": 288105,
+      "sha256": "f03b48dc37a38db4d81a277c02bd84092aca9e588e916b23387fbb4c4258ccbb"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2850.npy": {
+      "bytes": 456256,
+      "sha256": "b84cd48d9107ad0cc08218f0ccc888d43e7589b7f7cddf9ed7213b5d487d7982"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2850.pcd": {
+      "bytes": 288105,
+      "sha256": "e8f21a75fcc5491d6f3cac36928e3092843d54a4bf7ca9a3cd9baf006b56108c"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2851.npy": {
+      "bytes": 456256,
+      "sha256": "508fd77f94db3c0d3a69ff58ee3cd84e6c46d3da19afb3f915c7017d68294a58"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2851.pcd": {
+      "bytes": 288105,
+      "sha256": "eed7ea3746205661d4af88e78aa72e0ffdce0753fe47e4d96299d3c9eac61962"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2905.npy": {
+      "bytes": 456256,
+      "sha256": "58acc43e5d7ff1bae1fb053884fbb7e7714ccdaf1ba6935af1f836d8744390c9"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2905.pcd": {
+      "bytes": 288105,
+      "sha256": "2c8d2b9c5dde0c8f2e2c1dc98ca30f30333c6264049f20bdd0b8baaa30f1d419"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2906.npy": {
+      "bytes": 456256,
+      "sha256": "fc119aa144a18fd461f155d37075c042de246b6650d6c590c037e52cd66a1a79"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2906.pcd": {
+      "bytes": 288105,
+      "sha256": "981f27913a044936e8a82dca4b4a1515dcea8e487c613d021e600257d793e791"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2960.npy": {
+      "bytes": 456256,
+      "sha256": "7f01e4588164f63c555986a2c80e33246dc175c481880cdaf6708dd5e38d8716"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2960.pcd": {
+      "bytes": 288105,
+      "sha256": "4cd95d3396e1b315ad4673195c05f8c93cd53a861737a271c60b390150dccedc"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2961.npy": {
+      "bytes": 456256,
+      "sha256": "4b798f8fe5f815c8197d53bd5aae33c8e9bb7e9b754d1f1b9ba86333b4a07ea4"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_2961.pcd": {
+      "bytes": 288105,
+      "sha256": "5b8567a64638d9c604e425dc3200652f0fdd74678f4d71cef48a581120e5395b"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3015.npy": {
+      "bytes": 456256,
+      "sha256": "14fe22990386b10e0de3c8d63a454ca43e2b2b1bbb37df9aa6cb5ea9fd393e62"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3015.pcd": {
+      "bytes": 288105,
+      "sha256": "ec200b83c37b0fb2e1c98a9147de73690b8e6da18a6b2c4a0114639049e25328"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3016.npy": {
+      "bytes": 456256,
+      "sha256": "f2fc1bf5977cfc9a925079eb009012b9e35c37666f5c72070170a5005f72d719"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3016.pcd": {
+      "bytes": 288105,
+      "sha256": "2e4efde42a673a7edbe7813e13de72e4f28989ec1682db04bdf2e7a03698d049"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3070.npy": {
+      "bytes": 456256,
+      "sha256": "a6086b4588d19f9edce6713331efa7b28580183499a9c1122db89f304ba24487"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3070.pcd": {
+      "bytes": 288105,
+      "sha256": "54799e3358579516e06a2fc4f645a68aa13cb75fb87e7ee1ae3a459f2c4a3e73"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3071.npy": {
+      "bytes": 456256,
+      "sha256": "17858bd4d06fc2e880ce7935afe4ab68dc37de82becb760701d4c425e6b9cb8a"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3071.pcd": {
+      "bytes": 288105,
+      "sha256": "702491a9ad6af5f1585b6cc9618cb5517fb7bc3b950fd43c725551416918c789"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3124.npy": {
+      "bytes": 456256,
+      "sha256": "1804207266427bfcb3a696e10c99bcf14222d8676ee1de2ba3d54610915b95a9"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3124.pcd": {
+      "bytes": 288105,
+      "sha256": "f7bce5e62cba53dbf3539d0674d40d15bea1023d29e6c72014e196ff08c0b4ce"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3125.npy": {
+      "bytes": 456256,
+      "sha256": "e1fd47abeed5820ce133a3d9dfcb646726a14376731dec0d49a2c5f781386462"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3125.pcd": {
+      "bytes": 288105,
+      "sha256": "5c9af0824411582ab1b3629d2f7e0e79b7ba304a93c32f0677f1a17d006137b1"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3179.npy": {
+      "bytes": 456256,
+      "sha256": "6757e0b76ab5a0d8c0f7e925488c679084de14722f663686db2b4081f5d0d3b0"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3179.pcd": {
+      "bytes": 288105,
+      "sha256": "b7a841b708dafcb204bc158bf051249593305747f38e8d458f03db0225951c1c"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3180.npy": {
+      "bytes": 456256,
+      "sha256": "29ab627df13a7bdf0c5d6b70a59ce851c8f999a96209ceb5d5bc8e8aae822738"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3180.pcd": {
+      "bytes": 288105,
+      "sha256": "ef810e4935679cdd012f6f39ade6c7d633298d0427cee99c2711003726be6f47"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3234.npy": {
+      "bytes": 456256,
+      "sha256": "564837415ebbf22d6766713a4dfd3b25f1dafea20c9233b0b1d02b53f8c73df9"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3234.pcd": {
+      "bytes": 288105,
+      "sha256": "4b0d8ec242116630a6d003b9e4d451cc9a813ca3aab84184fa13f25129a1ff1e"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3235.npy": {
+      "bytes": 456256,
+      "sha256": "2a90f97b212d2b4b39c67673fba3bb0474f1cb1c63149d252aeac1dda039ebab"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3235.pcd": {
+      "bytes": 288105,
+      "sha256": "07d6d1f98bff18733c0029a843ed60a3ab61da4fd31861c035acc64801346948"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3289.npy": {
+      "bytes": 456256,
+      "sha256": "75ba306efa395d0071aa4aef7a2f8127ff66c20e0387929dfd8f13b7acb9652f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3289.pcd": {
+      "bytes": 288105,
+      "sha256": "e11fdae7ebebad1a14c6aa4b1331408c519ff500abc8280fba2aab9c104d2603"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3290.npy": {
+      "bytes": 456256,
+      "sha256": "8c306d7d4786edccae2394fd81416ff275897662dc089238ef9dcb99b695231f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3290.pcd": {
+      "bytes": 288105,
+      "sha256": "2470e3fe90ced452d746adb4be5b1a2625d510b685e4c500b9380b833cbd3d99"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_330.npy": {
+      "bytes": 456256,
+      "sha256": "0cafdf219a7397d8ea332d7ec6fcfbdcc973bf0ba8ffcfca359f0561991f4fb1"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_330.pcd": {
+      "bytes": 288105,
+      "sha256": "2fffc13cbe951954fcbd4e03798c7138aea93489b4a219292d2f11e4717b9550"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_331.npy": {
+      "bytes": 456256,
+      "sha256": "30e124007de448a09774ca71bce2eb1aacb48bc7159d8f74be417f04f3809634"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_331.pcd": {
+      "bytes": 288105,
+      "sha256": "e4b5f6c92f9d13ee3af8f9fae8c27a12924ef445fe64c190fb893f89657120c1"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3344.npy": {
+      "bytes": 456256,
+      "sha256": "56b593afaa9b05a33d306ccc3ee406b140ab01238e5e0d0218e55b4ae043d8d3"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3344.pcd": {
+      "bytes": 288105,
+      "sha256": "b64ef2d32251fb1f2d3d1baf322bc50489c1116d09b19d324ed29109b932b046"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3345.npy": {
+      "bytes": 456256,
+      "sha256": "9f0c620d36592261db528bd28d62e62bc9e50cdad10ee344dd40acf33153f7f1"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3345.pcd": {
+      "bytes": 288105,
+      "sha256": "21bab793d0a810b4962206a78ce4a166687878859c4dd0c0dfd4d58910a53f81"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3398.npy": {
+      "bytes": 456256,
+      "sha256": "449f41868378f0440b89f8ababbe25694a0a4b3b94e1ec674d3f965debd88019"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3398.pcd": {
+      "bytes": 288105,
+      "sha256": "0bddf71e5e2b76196926f60286fb31b203bb934684bd3de94c27db33067bd5ec"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3399.npy": {
+      "bytes": 456256,
+      "sha256": "942ca375a70a431f9bd8b904cf9531727aa9b1a94eb52df1792cab7d4879f0ba"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3399.pcd": {
+      "bytes": 288105,
+      "sha256": "29b2460d69a0db09a44b53eebdab6d11b992a85f61645bdbdb85ddf1d99639d8"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3453.npy": {
+      "bytes": 456256,
+      "sha256": "14c75745cf9a17a74e69ab9b71aa35f611b0b0f2931388a39dd74b9fd8feaff6"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3453.pcd": {
+      "bytes": 288105,
+      "sha256": "52f753e0eaf2f208924c7b03db871feb1a9bfffdff5550446359cc2fae885b40"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3454.npy": {
+      "bytes": 456256,
+      "sha256": "8c1daf32fd7c6a84cd7dcf92a30b5f20ed5449cc64b370da8098150c35f6c29c"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3454.pcd": {
+      "bytes": 288105,
+      "sha256": "b6f298fbee5ceeeeedb8ab659202fb0a35967bc7c7026ba00637a08b62f472e4"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3508.npy": {
+      "bytes": 456256,
+      "sha256": "5b8077764655c3197277a946f7b9f1446d576e026fa35335b19ffdb4a7391d5f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3508.pcd": {
+      "bytes": 288105,
+      "sha256": "f7ce93e320d989d0cd1d8317126b16bf840ae20a0a9909d92fba13118f009348"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3509.npy": {
+      "bytes": 456256,
+      "sha256": "cf435fb6da8ddeb49330d5ef492237523a3e9aec47947ac6700e5b5d8d0e8906"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3509.pcd": {
+      "bytes": 288105,
+      "sha256": "a1bc951eca3cb4aecfc799637af56b61741aeef6e86193daa52b2106935d921a"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3563.npy": {
+      "bytes": 456256,
+      "sha256": "7caf0ad30f6b3388ad58e9a48011535a18399a3a2a4cf603e79cff5689522006"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3563.pcd": {
+      "bytes": 288105,
+      "sha256": "51b070225b3cc8beb21c75ad1cf622fea3824e8de7e9372b894c881971a9e239"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3564.npy": {
+      "bytes": 456256,
+      "sha256": "39d720464a2a22d4e7616d9474c4343b5a57c8b7f0137f471dc4ba4b7af8e87c"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3564.pcd": {
+      "bytes": 288105,
+      "sha256": "6e51febce7b48d964227646d9befd81a3e9122d38c1e3fb62d8cf57257c4c24a"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3618.npy": {
+      "bytes": 456256,
+      "sha256": "58e696170e7e2d972b5f582c11146ad4bdb7bb5daba5d44a6ac26d0a28ca4fbb"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3618.pcd": {
+      "bytes": 288105,
+      "sha256": "df676a6619ea19f335106cd6896ea2cff033fd43179bcc1d909ee55edf5de005"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3619.npy": {
+      "bytes": 456256,
+      "sha256": "3e7d47d8fad8df17d753607840cbf6abca4bfbe652371bf59c3b5efaa27a8068"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3619.pcd": {
+      "bytes": 288105,
+      "sha256": "2cf751be9630f9979439d42230ead18e838c4e65bf821d8be3092f1cf05f92db"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3672.npy": {
+      "bytes": 456256,
+      "sha256": "5f9be38d0a6212dd09b9c9963e2761573617b4f94295d2366fa81307b476e697"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3672.pcd": {
+      "bytes": 288105,
+      "sha256": "fd0befe2d023943c630750fe06782dd2ecf7449856eaee25caa6bc42ca9a96a3"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3673.npy": {
+      "bytes": 456256,
+      "sha256": "1b64cb99147dd228729c4385ab144548c8ab0d60587844a3c31ae6d1f415355b"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3673.pcd": {
+      "bytes": 288105,
+      "sha256": "092ba8012116573b0cd365e53a4b5a2a1a212bf8bf4a6213053de12039521f8c"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3727.npy": {
+      "bytes": 456256,
+      "sha256": "713d523e5a259e46ba2505283e900c6edbd9dcf947765b07d73d1de7e5365262"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3727.pcd": {
+      "bytes": 288105,
+      "sha256": "c1270ddaadf3503ca0f83db0b716dff1081c6e002fe77190cabd2ba56d395a2b"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3728.npy": {
+      "bytes": 456256,
+      "sha256": "1321bd3c303f935caf5800d8a7b4fb6074535e3022a5d10d9077fa3292db557a"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3728.pcd": {
+      "bytes": 288105,
+      "sha256": "92e0893e51d08ec4fd928284af27624710534e7390dd14bc652ba0010b23e97b"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3782.npy": {
+      "bytes": 456256,
+      "sha256": "6458cfaac15326fd4aeca91a198caddcdf367f574678f37cccfe9a3344e7f5f4"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3782.pcd": {
+      "bytes": 288105,
+      "sha256": "b533c34039898956ec0fce39414543e9b44e74200bef84d4c702e2aabb4f6a99"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3783.npy": {
+      "bytes": 456256,
+      "sha256": "ba15058ce281a1a94c9c4734b27f5997af13dbd2ea11f90f5f8a447b96f773e3"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3783.pcd": {
+      "bytes": 288105,
+      "sha256": "6220669399d2f475da7d57f782849fb6fde386c760d9de87b4cdbee76b1a1cb4"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3837.npy": {
+      "bytes": 456256,
+      "sha256": "69b855b446730b154862caceac972fef1c95ecf6b51d4edcc9479b569499a11d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3837.pcd": {
+      "bytes": 288105,
+      "sha256": "4325cb675e3057f2ba79a867bf9a852cb195e2a8b9dc8cdc4ad5a360b51a9368"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3838.npy": {
+      "bytes": 456256,
+      "sha256": "800cc92b033c38ad05b3d22ae1aa358d9fe878c5b90b7a6311b25eeb3a1d4bb3"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3838.pcd": {
+      "bytes": 288105,
+      "sha256": "8f1cc960bc3743f74c5e3533fbdf8596f6185757ae2999a8921dd3e3031a7745"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_385.npy": {
+      "bytes": 456256,
+      "sha256": "26366a6607d215a27022d9e7215950067bb62ebf34af214a4d04c302ec3e8569"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_385.pcd": {
+      "bytes": 288105,
+      "sha256": "d5934dbfda0813b21ce9305b82aabba675921659c4f4287fd15aeaa0910b2c92"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_386.npy": {
+      "bytes": 456256,
+      "sha256": "cd585c89534fed3f923c43c459fca3ae3ad3de37253ebbb442effe02e1edd479"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_386.pcd": {
+      "bytes": 288105,
+      "sha256": "6e7a21bf740624a987bb37e744f40651bb62d5892bf8974cd5041263ca52f0c5"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3892.npy": {
+      "bytes": 456256,
+      "sha256": "7a2fb1f784e5172a371dad6d3b5cfa421bcc288fecba08d059fe0f43c49e544d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3892.pcd": {
+      "bytes": 288105,
+      "sha256": "e0ba0142c274bc946ec6dd4212fd83f6e3f01ea37bebb745b536fc2d2afd902d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3893.npy": {
+      "bytes": 456256,
+      "sha256": "0fd034b607793211057258a83edeb05be66a4b79f7f0b4d6edd384cfd0e9dd23"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3893.pcd": {
+      "bytes": 288105,
+      "sha256": "5a11c673434ff117db24e7a6eb71a8a04be32b077a2e7334e35e56340f3c6594"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3946.npy": {
+      "bytes": 456256,
+      "sha256": "be3334459a8b65148fed8340f188b205a1e4c74d1ae379460d97e3614facc02a"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3946.pcd": {
+      "bytes": 288105,
+      "sha256": "d9bf4c0a452aa914e060d745d2ffdff4ecbc5c0a34630f5bb3269d054b554a82"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3947.npy": {
+      "bytes": 456256,
+      "sha256": "49d4abff6a228d0f3eac1819783d012c1eb9a283295ee5dfd3a52cdbc93790ca"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_3947.pcd": {
+      "bytes": 288105,
+      "sha256": "e3b9a8b17a53ab9c59d17ba824f60d2b32d022158a33e9fe35d4b210f7c6bbde"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4001.npy": {
+      "bytes": 456256,
+      "sha256": "bdce4be649a97d571f60fc4fbf8dfac87d1a243f11c6057fadb269cf48b817a2"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4001.pcd": {
+      "bytes": 288105,
+      "sha256": "be10aea5621ac556cfcd0e07cc4943e8898596b7072ef307573b6830393adc58"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4002.npy": {
+      "bytes": 456256,
+      "sha256": "bbc0299d246383e127f42df952f3784235bb020059c9d94712b2615066d1bc86"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4002.pcd": {
+      "bytes": 288105,
+      "sha256": "7bc72098d7d637969e0bf0bffafc04971d344ca6deb3426487d95d82593449d3"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4056.npy": {
+      "bytes": 456256,
+      "sha256": "7561af29b98fe67d9eb15b71587060b8e953a606f379e0b726577f0ddb7e176f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4056.pcd": {
+      "bytes": 288105,
+      "sha256": "aad20009c6e5d1906405f4a92e2899059ee6e097e9700e987dcb308bf91902d4"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4057.npy": {
+      "bytes": 456256,
+      "sha256": "43ca76bd31b6f991fdfddb21af868bfd339cab4fd0d9ca2e6a2a4a062a27f324"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4057.pcd": {
+      "bytes": 288105,
+      "sha256": "b376b64d7c2bf65117b9793dbc8779fb432cfa2900e355189ae14f95b7bb37f7"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4111.npy": {
+      "bytes": 456256,
+      "sha256": "90d910e388021a090798735f9dcbec15c80deda6bf44ce49be73cdc1901e9b92"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4111.pcd": {
+      "bytes": 288105,
+      "sha256": "2060c64b47f4d6623c75f42723e73e563ba9e6485d88bbc70b0961c32c0f4457"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4112.npy": {
+      "bytes": 456256,
+      "sha256": "c532e55c3116e1031adf97145d67f9d091cb70aaaa4f244ad3b89a373f5ad33d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4112.pcd": {
+      "bytes": 288105,
+      "sha256": "a45910ee6654e32820c16a686436c7a2a5e9e0ed2c6bc6fec12ba1c0f878e9a6"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4166.npy": {
+      "bytes": 456256,
+      "sha256": "37e0a18773494a36703e774ec6de56a7c6d0724756926e4f13dd633c1fa199a1"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4166.pcd": {
+      "bytes": 288105,
+      "sha256": "573e69748fbb4d84cde233c9840b3603261351dbb52493f082d6055d72fd319e"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4167.npy": {
+      "bytes": 456256,
+      "sha256": "ca086206cb45bedd24474970496a891686cde9131bf091c7421d29449164d83d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4167.pcd": {
+      "bytes": 288105,
+      "sha256": "c5a7f97b67ab1492b72efda99192312165da8bbdaffcd25b02e6a649fba98224"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4220.npy": {
+      "bytes": 456256,
+      "sha256": "59e72ce36420385c9f3cc0748350a9e8cd8102a18a912fec57b750e6c66368fa"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4220.pcd": {
+      "bytes": 288105,
+      "sha256": "1fac5d5bbfacbdf7aab9ffb3a9b5e3979c3f00bb1c9878c6cde3ae50564291d0"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4221.npy": {
+      "bytes": 456256,
+      "sha256": "335fe85e4f57f1a04a998739e7505ae24b7d1fdcd0f095e4f3a60e905f64fb15"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4221.pcd": {
+      "bytes": 288105,
+      "sha256": "1dec8c7170e90fa6a51bcff88fe8fa9896dfbc159eeb87097c5f1b79df5004d3"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4275.npy": {
+      "bytes": 456256,
+      "sha256": "763f677738fc94fc282f22cd594f4c06a387a54ad1ffbba90c2afbe67b0b61ee"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4275.pcd": {
+      "bytes": 288105,
+      "sha256": "a06f131819aa72969982b4d852ad7552bfc2082bbf806f4f84db1e307ee70ddc"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4276.npy": {
+      "bytes": 456256,
+      "sha256": "b77ef1dc8e5603d706985072f707f977371d9cea7e7f8fd5c066969eb936271a"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4276.pcd": {
+      "bytes": 288105,
+      "sha256": "73027321af56000df1edcd9902594ef909d90debcac28212c9ce576e08a278d9"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4330.npy": {
+      "bytes": 456256,
+      "sha256": "325a3d29ea6c3bc5725dc0288175bd710ac7b92981e8e009fae8bcd9eca3fb79"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4330.pcd": {
+      "bytes": 288105,
+      "sha256": "26dc4454ebfc6b103a905ce8e95e1aaad84e5e4244025a711fa5fe542012fe5f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4331.npy": {
+      "bytes": 456256,
+      "sha256": "1bf48d3e4ab0f6c15067aa5d04d7df6a479766b2183cf37126941bf63367ef2d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4331.pcd": {
+      "bytes": 288105,
+      "sha256": "a5449022382a30fbd5e58f12d927dc52692f5f4f8e8fc033381b40d7c285c630"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4385.npy": {
+      "bytes": 456256,
+      "sha256": "0fd160201c4d6b93ed45633a15fa8dab8e2669e6f247ec5ff450bb13f9a355f2"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4385.pcd": {
+      "bytes": 288105,
+      "sha256": "2ad4ac29e46fa5c6d4d24c79ef87cec4dcecbe508a0446cf66fa56f21c0c603d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4386.npy": {
+      "bytes": 456256,
+      "sha256": "d3f0f582e0cc99278b3cb42689143904d350471ba69bf5c08607ba64f803b481"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4386.pcd": {
+      "bytes": 288105,
+      "sha256": "834092500aa05d0e6d4c71aee6598e25def7d0bbdcfb263b78bf08206986e471"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_439.npy": {
+      "bytes": 456256,
+      "sha256": "7e6d42aad1f59aef78f4c7dd43eaa2dcb80ea729bff3cae98b57ff236aaa20dc"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_439.pcd": {
+      "bytes": 288105,
+      "sha256": "e3a087e3fe79e365ca5fdc4806b17f657a3af6149df21521ec008d776c33f6d4"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_440.npy": {
+      "bytes": 456256,
+      "sha256": "d142e186bc11ba834ce71ce3dab011596d2f129e400ba180c24943cb5e2412cc"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_440.pcd": {
+      "bytes": 288105,
+      "sha256": "c76608cf206bd2d9b4ff74ed1b42421bda50f6979ac0c946101ec47bb8aa96e8"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4440.npy": {
+      "bytes": 456256,
+      "sha256": "5b28d936ab5a5c6e8f7e51205eb4d48c06eec5393fc41502012cba93bdfc493d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4440.pcd": {
+      "bytes": 288105,
+      "sha256": "f3410daeb6cb40cf2af9c0199d4564e198584c648507c85e75d55dcc506ddc2d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4441.npy": {
+      "bytes": 456256,
+      "sha256": "aeb8ce7c28471c619043c8f74c0942bf62440e063e7dc996fb5dc6b985fdb7fa"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4441.pcd": {
+      "bytes": 288105,
+      "sha256": "515dcd6f1b226cd0754b644d5989e539e1627cdc6f94af714e21e8d3bb41af86"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4494.npy": {
+      "bytes": 456256,
+      "sha256": "90dbfe01b5f998dfd108ab3dc6370180df2858f25c3a5bc4aff58ff083368e62"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4494.pcd": {
+      "bytes": 288105,
+      "sha256": "7efccad3bfe439e25322eb07489657b04dcf0d0957dc368ec009a27c93fbe799"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4495.npy": {
+      "bytes": 456256,
+      "sha256": "379d8162445a84e8d1b2fa43157fed91373dc8243dd4afa1138fd4a4f5e4d8a0"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4495.pcd": {
+      "bytes": 288105,
+      "sha256": "c65ed9fef9d685d1b58cb838c3f4f41e3660590362d925df52417311b87247e7"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4549.npy": {
+      "bytes": 456256,
+      "sha256": "01396b25a7706a801284e9f6fb1ab6d3c943b50d6381826d4a79cdd753a39371"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4549.pcd": {
+      "bytes": 288105,
+      "sha256": "97fb2d48f8e10844c153f8b650f0a2e5ba72ad6c9107fea7d7df7088ab3e590e"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4550.npy": {
+      "bytes": 456256,
+      "sha256": "465ad1c067e75a63b51ccdde621969d1ef1ff7637b6dbe94fb7c40640035cf85"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4550.pcd": {
+      "bytes": 288105,
+      "sha256": "c8d7402dcf02a38687d78c11ece99292f2961a638a92fe26d91eef8cb36b7df5"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4604.npy": {
+      "bytes": 456256,
+      "sha256": "9845774a80719e16e0edc14adc81a7634ccc1d6d6301a86af1768279862f6768"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4604.pcd": {
+      "bytes": 288105,
+      "sha256": "1f9cc6b98c9b45eb23f8c28cf804d9dcd517e78b9621700bbaaed586ada6e1f6"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4605.npy": {
+      "bytes": 456256,
+      "sha256": "406aed8199b3ef7e42b2e9d3eab3e54c25c506f6d6896cc5775384b5b46b7d59"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4605.pcd": {
+      "bytes": 288105,
+      "sha256": "5795ec4794180371c722e379e6fa7deab45df69b044523f99aedcc8a0dfc2734"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4659.npy": {
+      "bytes": 456256,
+      "sha256": "5fcb111311e25ce3e2089feee9b4892bb06382845ecb532338c1f9298412fa26"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4659.pcd": {
+      "bytes": 288105,
+      "sha256": "0c30ad11f55e08e3d06f05fe36c19ca23c9520ec700d1b4495e62fc71f1b28c4"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4660.npy": {
+      "bytes": 456256,
+      "sha256": "711254d9399b37a15552b852d1ba285a21bc3bb3b99917d3fd0ceadfc50b3e4d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4660.pcd": {
+      "bytes": 288105,
+      "sha256": "ede7efef597b6ec77b321061aef38381d70635d6a318b450a15b7d82638b1388"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4714.npy": {
+      "bytes": 456256,
+      "sha256": "f2ecb722a232693d34061cd3c9aec914c2ab379209d585b731bd2a08a3517e8d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4714.pcd": {
+      "bytes": 288105,
+      "sha256": "50d4fe7541ce856cdd3fbdf00d1806af3a306a2b0275edc8089406ade53deeae"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4715.npy": {
+      "bytes": 456256,
+      "sha256": "f197a28d886d0aaab6b686b7737c1f103a53ce19777749c2ebf011b6de52d68c"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4715.pcd": {
+      "bytes": 288105,
+      "sha256": "a0d902effcccecdd46f8a26e6e321978d3ad488ca1a8eae4274421b4e8100a71"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4768.npy": {
+      "bytes": 456256,
+      "sha256": "c32bcbc284acb97b8d3a61b0e4dbf915b27401c3d5831b41b9b23a25fce34f5d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4768.pcd": {
+      "bytes": 288105,
+      "sha256": "46590e146aad17839aadab31a3838a3845641b654b2bbcf1b7430a12c13d0564"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4769.npy": {
+      "bytes": 456256,
+      "sha256": "756d2c0f54182289dafbcc9bcdd9a7c0ec01144f25fbaae6f6135ebf8d4918e8"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4769.pcd": {
+      "bytes": 288105,
+      "sha256": "967b252fb6237eff9e92751e7ef730925007c17cc863c2aa2ccc558a3a2c182b"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4823.npy": {
+      "bytes": 456256,
+      "sha256": "ef5d7783ba0f64f3172e72b33d43ade19a87ce4d9ea08a42e9bef28d5dbccb14"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4823.pcd": {
+      "bytes": 288105,
+      "sha256": "67f5b19dae9f89530eeeeec78b08abd2979db2e3d9f46d1b7966a570ccb0cff5"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4824.npy": {
+      "bytes": 456256,
+      "sha256": "84f3a3815fa9ea5f5aa4d00f269aa1485b649136d000d0720e559ac630cf2394"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4824.pcd": {
+      "bytes": 288105,
+      "sha256": "39a3ee7054d925b5bf1375b3b442ac298dda7b53efa82d360771afa55b1efc1d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4878.npy": {
+      "bytes": 456256,
+      "sha256": "77dc3ca9447aa6d5a0d9f9666b0a4c4296a9742a4f7bc400e1807c81fe8f9c32"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4878.pcd": {
+      "bytes": 288105,
+      "sha256": "cda9e283226723ca6b4551c562e27353198371961e0ce6dc629802c559e2fbf0"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4879.npy": {
+      "bytes": 456256,
+      "sha256": "cbef4d0032c0bf4c630a84b0af5699d6b4e8e5ae682a024e949cae862c1bb4cf"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4879.pcd": {
+      "bytes": 288105,
+      "sha256": "69fa78ed15b6a6ddee71210564b3599e65a19caaac4af778cf4fdc03a989d058"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4933.npy": {
+      "bytes": 456256,
+      "sha256": "0e42a31f6d0005491975235dee832411aeedf46b1d2a7a9042216bbbe4c56c2f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4933.pcd": {
+      "bytes": 288105,
+      "sha256": "e24d112dd64ae152499c331e82f2f271053eda931ebc5cc0aa1e67108b14014f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4934.npy": {
+      "bytes": 456256,
+      "sha256": "ce4fff597a1f49e41e95fa3ef483e995f4aa082ca71b4443b6dbb0ec4d2196ca"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4934.pcd": {
+      "bytes": 288105,
+      "sha256": "33773771703940632e4b289aa9acb76d5f8bc43343fe302fe7fb0d997fecf445"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_494.npy": {
+      "bytes": 456256,
+      "sha256": "da5be806e8ce6c3027d665efd6ef1864673dd1e23f01c9fe0aebef2a8737efd7"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_494.pcd": {
+      "bytes": 288105,
+      "sha256": "f35604157ed18c98d7537a9311a7a0cbcd9d742fd800b432c50573b011a9c8fd"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_495.npy": {
+      "bytes": 456256,
+      "sha256": "c7ad8e70874ce2f1ea0f48c85fe2c9a29f1f866f7b60d934862dc81491eb8f9b"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_495.pcd": {
+      "bytes": 288105,
+      "sha256": "29b0ce2336687417290602755bb16f11fdce0115d9d9b9cfe1b86d04170c39a4"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4988.npy": {
+      "bytes": 456256,
+      "sha256": "bdf2e66cc30c2ae5aab6d64382d1028aff5d4c789ec4996e3f0d4891cba7248c"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4988.pcd": {
+      "bytes": 288105,
+      "sha256": "311a351d9eaf2824da8f33bfa0aa1365e3ddd901e306bfb2c531ed7fc2a2c75e"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4989.npy": {
+      "bytes": 456256,
+      "sha256": "d99c6cabc2ac8ccf36c32eb18fb946ebaa0daa17834d2a400c559f9c81e99bb6"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_4989.pcd": {
+      "bytes": 288105,
+      "sha256": "6c0b266d6f3d0103ca78d5d28a793cb0b91e067a69f7e4e2aca6ee4b75842747"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5042.npy": {
+      "bytes": 456256,
+      "sha256": "d5a4089e6ef3d8bc0ac2b85e82c22e7581265df4c25a685eb805f17bc457c16e"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5042.pcd": {
+      "bytes": 288105,
+      "sha256": "b7804d3eeff75069fdf88dd0b05179b9a0a4cdead3fa248d8ea7918758164563"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5043.npy": {
+      "bytes": 456256,
+      "sha256": "01ef73a3a0690bdb94533fbefbfe500bf7a949dc447fa2b92ac7c06cc7372059"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5043.pcd": {
+      "bytes": 288105,
+      "sha256": "828b4636723ec80e10a5e59f5e685eaba97c867b61a2613f17c647363267bff8"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5097.npy": {
+      "bytes": 456256,
+      "sha256": "8fe25eca80a6cb62e103df4c064d14fdf43462a95fcfad61d49fd5942912ef31"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5097.pcd": {
+      "bytes": 288105,
+      "sha256": "cbb0083e982607d5f8896ca33e0f54b27092893248c7d6aabdcf3391cb57ffd6"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5098.npy": {
+      "bytes": 456256,
+      "sha256": "6395d40cb06b250141fadf2cef6f3a2fafa4c2f7e76c38ee607c229e8f785bf3"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5098.pcd": {
+      "bytes": 288105,
+      "sha256": "65e66ec77de3811de67b5f4320ec545a8b2df2c1822a9547ea5d143d3a97832f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5152.npy": {
+      "bytes": 456256,
+      "sha256": "1cd6c42f7582ff9992ad6e1d8dff1ab68b82a81a3cec53a8f562e7a04ba645c3"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5152.pcd": {
+      "bytes": 288105,
+      "sha256": "fa03899028de3ed01650e59ac36e72c035901da64aae7b84c36d6380c12765cd"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5153.npy": {
+      "bytes": 456256,
+      "sha256": "8554e0871eecaacf0e698f2c4c908d7c0fcdf6f0cbeb4fe7bf7d0cf924c6e661"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5153.pcd": {
+      "bytes": 288105,
+      "sha256": "ca3a668b90c58d381a8c4d3b878a58f58b7845c52443d4c01e9574e4fc14aaa5"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5207.npy": {
+      "bytes": 456256,
+      "sha256": "437a014c4211719d0a78ab2779176505dddb253ef4aba14eeca9ab17b91b26ce"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5207.pcd": {
+      "bytes": 288105,
+      "sha256": "4ed5cae73850382d727b0c6b4f5fdffcf28facb3c42483b74899fb03e9f09589"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5208.npy": {
+      "bytes": 456256,
+      "sha256": "248abbc3e87720ff5faf76e8e2aa6f464d9827d606bf032c11a1427a6739bbb7"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5208.pcd": {
+      "bytes": 288105,
+      "sha256": "2f113613381de47da3356ed5d0bad43afe1b97642baa2f3f99070c99a2d6b613"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5262.npy": {
+      "bytes": 456256,
+      "sha256": "267678ec912c2573ae051540bc5127813ce44440ebfebe98ddd1ec4c13be2194"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5262.pcd": {
+      "bytes": 288105,
+      "sha256": "38338149bbf8c4f98b4607f16e4a1245771a151c06cf9a193090b497ab5996d4"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5263.npy": {
+      "bytes": 456256,
+      "sha256": "accdf9e2d9f23f7e2d35e96c3319183b1ed65f7131b09ab919edd923ce89439d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5263.pcd": {
+      "bytes": 288105,
+      "sha256": "203b336dae4b1f9227d29db2ca4d55b47bde5e5feef83a6768f976a8e5d7904c"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5316.npy": {
+      "bytes": 456256,
+      "sha256": "abfcde74b2ae05f8417ec7f4f148995fd0fc234d1ef1481feb3f0c5cc2b521d2"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5316.pcd": {
+      "bytes": 288105,
+      "sha256": "b81b858ff1dd7fcf25103d45748cc17e4526509b30a07252b652aaff2875c2eb"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5317.npy": {
+      "bytes": 456256,
+      "sha256": "ea54af8624e722f63b3ecadeb2161dffe0bcf6a8450cc7e2020b5b1329f933e9"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5317.pcd": {
+      "bytes": 288105,
+      "sha256": "0a715171ff7d5b6461ccbcb822e47017f23b8ccdcce573422f9cb0bc788a9b05"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5371.npy": {
+      "bytes": 456256,
+      "sha256": "87eb6a0198f2a82a9e7b807c9029e4e9c8f5d3a05966041b714d951990805f49"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5371.pcd": {
+      "bytes": 288105,
+      "sha256": "f7237b5ef6c17f670a42af65640c5b3ec12a385515c9efbbe1b34bef3cc1780e"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5372.npy": {
+      "bytes": 456256,
+      "sha256": "c7d7ab2c1ff5dfa03366a53d0d88c410272c3d1de562fce8a56eb5c9cf23e722"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5372.pcd": {
+      "bytes": 288105,
+      "sha256": "78ff180b2ec9cfce4946e0942cb2f88039b52ca049c840f23174eeceadd37c03"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5426.npy": {
+      "bytes": 456256,
+      "sha256": "b51932c3efe12e331617c65148d0a147f13479b9cbd8bda49f8fc09f4253030a"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5426.pcd": {
+      "bytes": 288105,
+      "sha256": "cb8b2631301f3f3df30c4156a6d96c0096a1ac419b2c11cd1ca88c5c35809a44"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5427.npy": {
+      "bytes": 456256,
+      "sha256": "70bfdb4b820889620274dfc406f8124fc1f59bbb98bb6e90d39855b6bfc47936"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_5427.pcd": {
+      "bytes": 288105,
+      "sha256": "71eec2287c82d95575add20b4a22548cf3ed7661a0b668f37f3e7849477ee09a"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_549.npy": {
+      "bytes": 456256,
+      "sha256": "35406bacc4ab56e5abb563842e7dd9021faa39072dacfc417b8d4250b5aa8d69"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_549.pcd": {
+      "bytes": 288105,
+      "sha256": "9e63cff6e60b4bca80bcf68295f47e757bbc88d552701ff576b3ed89922b960b"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_550.npy": {
+      "bytes": 456256,
+      "sha256": "2e586d19dba2776ab885c43d8831380d96a3a2d499e97147c4cca0bef08f4a27"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_550.pcd": {
+      "bytes": 288105,
+      "sha256": "8e6c145a6abe23af859c14d9b243fad835c47e717d58f94ec4edf17f86f3099f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_56.npy": {
+      "bytes": 456256,
+      "sha256": "9d1cb499654cd31343edde2067c9dfb7ccc6271b1099c7d39600354f5ead3fd0"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_56.pcd": {
+      "bytes": 288105,
+      "sha256": "f2215ef7bb116a1aedbfff8ba4ae36bf8dfbe9d1e18b74610eaba4c053a3da40"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_57.npy": {
+      "bytes": 456256,
+      "sha256": "419954c047967346068dbc43fdcb3ef5cd44a977d15b86be991b1907b150cfe8"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_57.pcd": {
+      "bytes": 288105,
+      "sha256": "83d3672e959969b8b6193321aea29d13671037c2f0e4c586412a21964683074b"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_604.npy": {
+      "bytes": 456256,
+      "sha256": "0fc3c1ae2096af1fcf5e112c1d82701d6db803723f3d9af230dd3041dadd8460"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_604.pcd": {
+      "bytes": 288105,
+      "sha256": "f8732fc14f83deb506b9af6ae3a92ff87c2672592e525acd91ff5bece9ac5235"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_605.npy": {
+      "bytes": 456256,
+      "sha256": "bd62691b8111f49869963951b32cce3ea9351974c0d3fdea17c580d7b316a46a"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_605.pcd": {
+      "bytes": 288105,
+      "sha256": "58cdfc9459b8767a6748d4c349a9fa87a4fa02ae37e6be93a15ddb9ded845988"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_659.npy": {
+      "bytes": 456256,
+      "sha256": "a6e2a38ba077a866d81a5997b8a1e407de78d528232c2566e6b49795a4fa7103"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_659.pcd": {
+      "bytes": 288105,
+      "sha256": "b6adb9d20048ece8b9d297ef4afcac3e776dcdf50a862e556c5e0b9366ec4fa0"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_660.npy": {
+      "bytes": 456256,
+      "sha256": "466b7d89e1590db08816fd3580375e89d004508df030cc870229d778d794b75f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_660.pcd": {
+      "bytes": 288105,
+      "sha256": "2165f048423debcd34de4cffbaa6a7ac71404ce6a304f0f9247a22f298180ab4"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_713.npy": {
+      "bytes": 456256,
+      "sha256": "eefa498e240367545513b28599ced35b9c297224deea2093993b93bec228e80d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_713.pcd": {
+      "bytes": 288105,
+      "sha256": "e894460660799a77bd9010ea263ac7e86c7eacabe6b48fc0f834cad3cb559154"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_714.npy": {
+      "bytes": 456256,
+      "sha256": "82dddd25a18fe68e37935bb5dd1e781b00f89d5a9e880dd1703c667111b2c308"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_714.pcd": {
+      "bytes": 288105,
+      "sha256": "ef60ac96da2d8c40119a9aebb721bc593bfe509b82481d29500786c942294de0"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_768.npy": {
+      "bytes": 456256,
+      "sha256": "dd3435e80943faa4b044f5d2c930d06d6b8a01d4e5c222d20bd99fa57a89fec5"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_768.pcd": {
+      "bytes": 288105,
+      "sha256": "a7ff318805c20b129d8c57bf52cb0278b33e47dabc7566011e3a3f3b06e99fda"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_769.npy": {
+      "bytes": 456256,
+      "sha256": "30ce9f482d7988f9cab38be6fe6e9cf91c755cb501997b1966e7fe23a0d87906"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_769.pcd": {
+      "bytes": 288105,
+      "sha256": "7d3c56f6cd7c10a30fde07268c8126a8131493ec19b3b5e74dd62d02816b1326"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_823.npy": {
+      "bytes": 456256,
+      "sha256": "d0e063ca8ba9e54a05b1fbf7119673fe1d6e76d1c1f56dd0fb0617af7f25048f"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_823.pcd": {
+      "bytes": 288105,
+      "sha256": "8196f6692a5806e62329ead012a225bbe099259ddf8cdafa4f7bfc66ef743acb"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_824.npy": {
+      "bytes": 456256,
+      "sha256": "722823965594eaed2bc55c699297856d7a97512f6f0e696803d8b5d8821993f6"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_824.pcd": {
+      "bytes": 288105,
+      "sha256": "2da8bb93950b842ea4e1890b369d008bc71fdd8900db971a19237c3276434cd1"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_878.npy": {
+      "bytes": 456256,
+      "sha256": "c2ff73d39565f308ddd137df47b3ed9dd7ed64148021ea5a0381a46a056c378b"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_878.pcd": {
+      "bytes": 288105,
+      "sha256": "40b5a900f16c8fa724f65adaf1b436af3b981c812796722de68845b863437d5e"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_879.npy": {
+      "bytes": 456256,
+      "sha256": "2358693511a9142473789efb5f79cd501c207f364932a87d69c2689863190422"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_879.pcd": {
+      "bytes": 288105,
+      "sha256": "0710dd060d4ee0eace1d59c9eb749bcfd6dccb7979e8b132a2918f21e5b48151"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_933.npy": {
+      "bytes": 456256,
+      "sha256": "ef6a047c2ea8bc5dffa682fa8368c947f3e195206d30d935605dc85852eba085"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_933.pcd": {
+      "bytes": 288105,
+      "sha256": "c1cc3d54514c198acdc93e0b38d4fed4a93f45145832749fb13e5d62006ceb82"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_934.npy": {
+      "bytes": 456256,
+      "sha256": "37a6b10adba8dbf2931fa2cfef65845928ecb4858a2173ab2437cfac94e58a63"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_934.pcd": {
+      "bytes": 288105,
+      "sha256": "f8a72463c07ff7089ef52684f7e73383e68c0ceaed7a5377247885511ee50f81"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_987.npy": {
+      "bytes": 456256,
+      "sha256": "89466897824582ad92ed8c17d3d2731b5c75214782e7d7ae70ea508f79fe7984"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_987.pcd": {
+      "bytes": 288105,
+      "sha256": "1b6cee5c16b62d394641f2a3a096bb9032868f144a94ea02302baeef6fe01e54"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_988.npy": {
+      "bytes": 456256,
+      "sha256": "9cae753f4bcc3825065b06b7d2adfc13fdfcc11b9f084743b58ae9a9bf994da0"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/raw_scan_988.pcd": {
+      "bytes": 288105,
+      "sha256": "bd91a732a9a53c734eff7ba29d6138c5b0969e3d329898aa1ee2f52fbf73e303"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/sample_manifest.csv": {
+      "bytes": 31532,
+      "sha256": "0fffa5197af6ccf2cda126780fbd91d51ae2f20cb89a804eb7507540b9117530"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/selection_freeze.json": {
+      "bytes": 1303,
+      "sha256": "e8e01e6e5e94909d239a76ee506c9a7112bac891c248383ce719489748573a4d"
+    },
+    "/home/jian/livox_ws/p61_r3_geode_basin_ws/docs/p61_r2_geode_real_data_run/screen_input_freeze.json": {
+      "bytes": 77678,
+      "sha256": "fbceea4bc173fae9b51d3a34c3de606ed5f6ee4871516e8467c1032891d905b8"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen/alignments.csv": {
+      "bytes": 42218,
+      "sha256": "5107fd009c9f800ebef08a3245bc845197b7a7a8c498a8b601e2ec5de1777803"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen/grid_audit.csv": {
+      "bytes": 23577,
+      "sha256": "b17a16ca0af10794c12ffad6a9562ad9a2379f1bf04693c22a74b673cd716ed0"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen/hessian.csv": {
+      "bytes": 142561,
+      "sha256": "c18e93f69afc79d49df12745cf9b1bf5313d9154da35950dec26bc4814b08cc6"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_integrity.json": {
+      "bytes": 242,
+      "sha256": "6fdd655dc2ad296d6700ab1ef53001447dc478403ecab6c759e4371eace714be"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen.log": {
+      "bytes": 3419,
+      "sha256": "f15ce55293fd7b797646394c33053624693977b828f0acc97cbfa4e1cfece4d8"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_resource.txt": {
+      "bytes": 901,
+      "sha256": "18f7f40a5db21b207fa7c63291b943e3e07e317d9fc965ea450928e25def1a5a"
+    },
+    "/home/jian/livox_ws/p61_r3_geode_basin_ws/docs/p61_r2_geode_real_data_run/screen_output_freeze.json": {
+      "bytes": 1268,
+      "sha256": "74b471dd074896e401d0d12a190e12f01b31a3f22d826728ce67fb13eda769f2"
+    },
+    "/home/jian/livox_ws/p61_r3_geode_runs/preregistered_v2/effective_curvature.csv": {
+      "bytes": 54107,
+      "sha256": "4f5d6854f2c04a64bf7c8f43e6f6b6fe7a994ddf0dc8dd8a2cfc6a8698f12fab"
+    },
+    "/home/jian/livox_ws/p61_r3_geode_runs/preregistered_v2/initial_manifest.csv": {
+      "bytes": 423529,
+      "sha256": "00eb05cccae3daa4a3c9e5e2e55d7647ebf252cc9c06eefaaa2d05b47cdd686f"
+    },
+    "/home/jian/livox_ws/p61_r3_geode_runs/preregistered_v2/sample_manifest.csv": {
+      "bytes": 6380,
+      "sha256": "11bdcf530a39448ee8851a9b8ef86aea451455c05c5c3ccccc2bb4fb8fce4d39"
+    },
+    "/home/jian/livox_ws/p61_r3_geode_basin_ws/docs/p61_r3_geode_basin/PROTOCOL.md": {
+      "bytes": 3688,
+      "sha256": "98296bfe89b8e6eeb05784b0b100f5e6195d7dff2548de2ee43ce5de60e664ff"
+    }
+  }
+}

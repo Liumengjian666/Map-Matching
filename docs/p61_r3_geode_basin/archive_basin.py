@@ -20,7 +20,7 @@ def archive():
             copies.append((RUN/name, name))
     for path in sorted((RUN/'analysis').iterdir()):
         if path.suffix in ('.csv', '.json', '.png'): copies.append((path, path.name))
-    for name in ('cli_review_input.md', 'cli_review.log', 'cmake.log', 'build.log'):
+    for name in ('cli_review_input.md', 'cli_review.log', 'cmake.log', 'build.log', 'git_anchored_provenance.json'):
         if (RUN/name).exists(): copies.append((RUN/name, name))
     manifest = []
     for source, target in copies:

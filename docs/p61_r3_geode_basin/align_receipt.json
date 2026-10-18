@@ -1,0 +1,53 @@
+{
+  "mode": "align",
+  "code_sha": "37c40033e8d6fd1d3d7b091347fc020241e164d4",
+  "binary": {
+    "/home/jian/livox_ws/p61_r3_geode_runs/build/basin_probe": {
+      "bytes": 300616,
+      "sha256": "79e7edeec7609084272cdc4c8483093acd8547b5c55b1d391a6644074c86f17e"
+    }
+  },
+  "preregistration": {
+    "bytes": 80235,
+    "sha256": "876e6e1a7438cb2bd4425e55f2467cb62d3dd7804e2d572703945a4fe02eafe5"
+  },
+  "gt_read": false,
+  "coupled_refinement": false,
+  "exit_code": 0,
+  "command": [
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/jian/livox_ws/p61_r3_geode_runs/align_resources.txt",
+    "/home/jian/livox_ws/p61_r3_geode_runs/build/basin_probe",
+    "align",
+    "/home/jian/livox_ws/p61_r3_geode_runs/preregistered_v2/initial_manifest.csv",
+    "/home/jian/livox_ws/p61_r3_geode_runs/align"
+  ],
+  "outputs": {
+    "/home/jian/livox_ws/p61_r3_geode_runs/align/alignments.csv": {
+      "bytes": 96597,
+      "sha256": "7f02d37fce5dcb320ad70f171b6a561cc839920dd866822771a3bc906513173c"
+    },
+    "/home/jian/livox_ws/p61_r3_geode_runs/align/derivatives.csv": {
+      "bytes": 280166,
+      "sha256": "9301ba6e16b5fe3f4b773be06760b9c92e81442363ff6d5e02f5cb66eb5b939d"
+    },
+    "/home/jian/livox_ws/p61_r3_geode_runs/align/grid.csv": {
+      "bytes": 70592,
+      "sha256": "14200a1e80fd6f6c5d362bb2360a900fd3512c9395b69d945689c641bc0fef21"
+    },
+    "/home/jian/livox_ws/p61_r3_geode_runs/align/nominal_parity.csv": {
+      "bytes": 90,
+      "sha256": "5797a56fd5e3af821f8581e5d22a5e289a96b1798a925e13420262598d6b52d5"
+    },
+    "/home/jian/livox_ws/p61_r3_geode_runs/align.log": {
+      "bytes": 10042,
+      "sha256": "af15235d609203a13f949729a4308d58debd56b0d7634f872c9e9cd794f25020"
+    },
+    "/home/jian/livox_ws/p61_r3_geode_runs/align_resources.txt": {
+      "bytes": 900,
+      "sha256": "ceb148f8a68d8501a148c12d03fba9dc4d3c062fbb729c056b24bf6d4c72cdf8"
+    }
+  }
+}

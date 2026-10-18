@@ -4,9 +4,14 @@ from tempfile import TemporaryDirectory
 import unittest
 from prepare_basin import identity, write_csv
 from run_frozen import bind_preflight
+from verify_provenance import check_bytes
 
 
 class RunGuardTests(unittest.TestCase):
+    def test_mutable_manifests_cannot_replace_git_blob(self):
+        check_bytes(b'original', b'original')
+        with self.assertRaises(ValueError): check_bytes(b'changed-manifest', b'original')
+
     def test_preflight_rejects_changed_binary_or_manifest(self):
         with TemporaryDirectory(prefix='p61_r3_test_') as directory:
             binary, manifest = Path(directory)/'binary', Path(directory)/'manifest'
