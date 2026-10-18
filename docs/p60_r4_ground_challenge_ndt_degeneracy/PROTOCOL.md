@@ -22,6 +22,11 @@ This is RAW_ADJACENT_SCAN_REGISTRATION_DIAGNOSTIC, not prior-map accuracy.
   coordinates, PCL1.10 NDT resolution0.8m, step0.08, max_iterations40,
   transformation_epsilon0.001, native default outlier_ratio0.55. No state
   propagation between pairs, post-match step limit or candidate refinement.
+- Preserve R2 global loadMap order exactly: setInputTarget before setResolution,
+  with no input Source yet. PCL1.10 retains **1.0m Gaussian grid cells** despite
+  resolution parameter0.8m; record actual cell size. This implementation detail
+  was identified from code before any R4 align. Do not silently fix or describe
+  this as verified 0.8m Gaussian cells. It is an R2-compatible diagnostic only.
 - Exactly one align per frame/group (300 total maximum). First A (k=2) is
   checked against the existing production R2 first output, without extra align.
 - Primary Hessians for A/B/C are evaluated at the SAME A raw result. Secondary
