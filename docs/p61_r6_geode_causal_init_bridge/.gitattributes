@@ -1,0 +1,2 @@
+# Exact source patch context includes author whitespace.
+r6_author.patch -whitespace

@@ -1,0 +1,211 @@
+{
+  "upstream_author_commit": "1f008a7249e36393a1752622de50660b77b5b7f4",
+  "R5_source_archive_sha256": "023586059f21dbecc1dd80c600fb0122b442e88891e52e2f66033e258c2c4b71",
+  "binary": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/devel/lib/fast_lio/fastlio_mapping",
+  "binary_sha256": "1a337264f8c094563619af6992746c90a44dba42d220d22750e1f1728f032d68",
+  "source_files": [
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "eb728d50bac78519678090dbdb03222342c18268dd5e55373e140248beb4f069",
+      "bytes": 2381
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+      "bytes": 18092
+    },
+    {
+      "path": "README.md",
+      "sha256": "7f836745e6c93fe37b4aecd97a2b7e2e2eebdb4d9a1dffe036624600f55ff375",
+      "bytes": 10908
+    },
+    {
+      "path": "config/alpha.yaml",
+      "sha256": "30a2ee38e95b5f4585c62791af54b30dae0bddad279e2d09026b89bf79d9a6c4",
+      "bytes": 1849
+    },
+    {
+      "path": "config/bob.yaml",
+      "sha256": "514b874755f617634f2d25b9543f7482fc8e9b5b4e02fcee4fc684e9b1150739",
+      "bytes": 1837
+    },
+    {
+      "path": "config/carol.yaml",
+      "sha256": "5ce02d44635225ccf1fd4ef6780cfe7b4331784bc40fea018f9704b833383cb3",
+      "bytes": 1830
+    },
+    {
+      "path": "include/Exp_mat.h",
+      "sha256": "abce87e1fb0e60febf42f38b75f4c018bac24c1bf652e26b7a510a9296d3031d",
+      "bytes": 2743
+    },
+    {
+      "path": "include/IKFoM_toolkit/esekfom/esekfom.hpp",
+      "sha256": "8e4f0bf81cfb5d2aa22c192f3e616e1709f9bce17ca5786341ad368648570e8f",
+      "bytes": 68306
+    },
+    {
+      "path": "include/IKFoM_toolkit/esekfom/util.hpp",
+      "sha256": "3c4265d25ea3f8c7f586d1e34bc352e981e09e30555e42011cd23a0a147d6918",
+      "bytes": 2363
+    },
+    {
+      "path": "include/IKFoM_toolkit/mtk/build_manifold.hpp",
+      "sha256": "0e88522551d02e78dc995e6c9d7883d9ecca7190379ec047ab839fff7186ea0f",
+      "bytes": 9436
+    },
+    {
+      "path": "include/IKFoM_toolkit/mtk/src/SubManifold.hpp",
+      "sha256": "96709f0f453a0c8776b1969064275ebf14dc5234b7024e68eb1cfc51a513864f",
+      "bytes": 4886
+    },
+    {
+      "path": "include/IKFoM_toolkit/mtk/src/mtkmath.hpp",
+      "sha256": "f9627989cf578f35ec5594a6956b4e9283d4dd109b26e7d2621682c508546295",
+      "bytes": 10176
+    },
+    {
+      "path": "include/IKFoM_toolkit/mtk/src/vectview.hpp",
+      "sha256": "7855408124ea65df4423bae5f97d5104af5552318796bc6324bdbf98a45101f3",
+      "bytes": 6540
+    },
+    {
+      "path": "include/IKFoM_toolkit/mtk/startIdx.hpp",
+      "sha256": "79cdc368bb4e083f5fda7549094c0aba8b599aee1f88e9f2a8b7fa785bf1f757",
+      "bytes": 12515
+    },
+    {
+      "path": "include/IKFoM_toolkit/mtk/types/S2.hpp",
+      "sha256": "f861be0bbb1a80d968189c90f9ef6b8e56b5f4bb19a9043a2e41c9397c215d56",
+      "bytes": 9971
+    },
+    {
+      "path": "include/IKFoM_toolkit/mtk/types/SOn.hpp",
+      "sha256": "90a8384a05d656698e6826b892561dc6cd619b62a7e32f9e6e3a9253e5e0c8aa",
+      "bytes": 10624
+    },
+    {
+      "path": "include/IKFoM_toolkit/mtk/types/vect.hpp",
+      "sha256": "771ecededd51dc694bdadb57f8a49fad7bc6091c6f6112142096954649ac405f",
+      "bytes": 14226
+    },
+    {
+      "path": "include/IKFoM_toolkit/mtk/types/wrapped_cv_mat.hpp",
+      "sha256": "3040f43fcb4195a2572a8819be012ebd2c4b59a38cfae86fcac3e01d7039a589",
+      "bytes": 3236
+    },
+    {
+      "path": "include/common_lib.h",
+      "sha256": "8ba52138be2d523fbac056968614c00584dd8a6390866008a4de03f479ec1136",
+      "bytes": 7767
+    },
+    {
+      "path": "include/ikd-Tree/README.md",
+      "sha256": "a7f6feab008dc54a053963fb518e360389ee807af63ebddcc15e90b1ede78073",
+      "bytes": 73
+    },
+    {
+      "path": "include/ikd-Tree/ikd_Tree.cpp",
+      "sha256": "579901b7d6f8dec2ffd5bff6449154c2a5b3947fd5cccb2d21c8aa83fe27ab2a",
+      "bytes": 69156
+    },
+    {
+      "path": "include/ikd-Tree/ikd_Tree.h",
+      "sha256": "2332abeaac3afab5cf1f9cc88f38a44344946e3c4b1e7fdaa2d4fe9e053dd0ee",
+      "bytes": 10396
+    },
+    {
+      "path": "include/matplotlibcpp.h",
+      "sha256": "360d70cb9a7dd6cb981622871204c394b56f856ef42abd0e07a011a5e146f4d6",
+      "bytes": 81837
+    },
+    {
+      "path": "include/so3_math.h",
+      "sha256": "e02f73dc804c3f539a80fe49d4221a85dbfeaee4cf0b643d7af062b49148e9f7",
+      "bytes": 2936
+    },
+    {
+      "path": "include/use-ikfom.hpp",
+      "sha256": "1ee2c078ee757ff2dffedf48da764daec152baa79876a70785d010cc2e6165ab",
+      "bytes": 4337
+    },
+    {
+      "path": "launch/alpha.launch",
+      "sha256": "19b23549a0c6b25a8be928f97d2b2853247eb50235fed698514d69ca6c5bc749",
+      "bytes": 1293
+    },
+    {
+      "path": "launch/alpha_main.sh",
+      "sha256": "a9e2206c7446eede61f65525ef2349a63855149ab52b7f425c3c523b35b31eeb",
+      "bytes": 127
+    },
+    {
+      "path": "launch/bob.launch",
+      "sha256": "d39ce0aa4ee4d3e61b091524946cbb5584696a193a1292053b0e3960267fb885",
+      "bytes": 1284
+    },
+    {
+      "path": "launch/bob_main.sh",
+      "sha256": "f5ff9aa5c584ccfea2e3dd196bdc7c4a7f97a4be3d2e05ac338b2a41d0d374dc",
+      "bytes": 125
+    },
+    {
+      "path": "launch/carol.launch",
+      "sha256": "9bdf2f28d398be5809a5ae1b584cdf9b73a574448aa39fcde079e6a7f9d6ba24",
+      "bytes": 1298
+    },
+    {
+      "path": "launch/carol_main.sh",
+      "sha256": "4a8133d1e074b194ee47b8ce83f7049e85c2d1a86c5a643b59507ff092ecba12",
+      "bytes": 125
+    },
+    {
+      "path": "launch/test_geode.py",
+      "sha256": "947cab60be17deae135577ca81584dd7f5bf0d4d11328fa6134a87eddb3f0195",
+      "bytes": 6233
+    },
+    {
+      "path": "msg/Pose6D.msg",
+      "sha256": "91b5397207076295c2b20273552b80267e258a749ae1a932dc00f48cfc31334f",
+      "bytes": 597
+    },
+    {
+      "path": "package.xml",
+      "sha256": "193b7e780cc9d39d178bfb1c5f16d8153e85e92eaaca564dc3cf98cad7461da1",
+      "bytes": 1465
+    },
+    {
+      "path": "src/IMU_Processing.hpp",
+      "sha256": "73a505f97d091b293072ee687c322cd6d99373b2fb9b7613a2b46aa9c9222cd5",
+      "bytes": 13770
+    },
+    {
+      "path": "src/laserMapping.cpp",
+      "sha256": "9f117c1c2710442c930358d34e73531124ac261ba9f6538ea642595f7c5f72ae",
+      "bytes": 45116
+    },
+    {
+      "path": "src/p61_record.hpp",
+      "sha256": "dcd8961006af87589509baff0a6c92e61992b80edd60efa15ae706d628fcab31",
+      "bytes": 4284
+    },
+    {
+      "path": "src/preprocess.cpp",
+      "sha256": "3024133a7887895364c02461ec3fb5213df44351a7e7665063b372b6479636cc",
+      "bytes": 24424
+    },
+    {
+      "path": "src/preprocess.h",
+      "sha256": "e81bff40e3cc19ad89d168bd74c12954f81a183090404e6efbe643489612f3e8",
+      "bytes": 3661
+    },
+    {
+      "path": "src/r6_terminal.hpp",
+      "sha256": "b0e43764c0d428e592792660f1b4b1c02648bc9dfbe4e5021cc7c8fedf8fcc89",
+      "bytes": 3417
+    }
+  ],
+  "patch_sha256": "2d0e4994933a474fd53c7fc4de3cc2c3ad4a8620dd8c6cdf2f789f39cfe78871",
+  "production_math_changed": false,
+  "description": "Shared unchanged native IMU integration; terminal no-LiDAR wrapper; exact raw arrival watermark; research export paths."
+}

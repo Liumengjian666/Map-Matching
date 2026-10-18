@@ -1,0 +1,156 @@
+--- a/FAST_LIO/src/IMU_Processing.hpp
++++ b/FAST_LIO/src/IMU_Processing.hpp
+@@ -1,4 +1,5 @@
+ #include <cmath>
++#include <stdexcept>
+ #include <math.h>
+ #include <deque>
+ #include <mutex>
+@@ -50,6 +51,9 @@
+   void set_acc_bias_cov(const V3D &b_a);
+   Eigen::Matrix<double, 12, 12> Q;
+   void Process(const MeasureGroup &meas,  esekfom::esekf<state_ikfom, 12, input_ikfom> &kf_state, PointCloudXYZI::Ptr pcl_un_);
++  // R6 terminal IMU-only operation; no LiDAR message/point is synthesized.
++  void PropagateOnlyBefore(const deque<sensor_msgs::ImuConstPtr>& measured,
++      double target, esekfom::esekf<state_ikfom, 12, input_ikfom>& filter);
+ 
+   ofstream fout_imu;
+   V3D cov_acc;
+@@ -63,6 +67,9 @@
+  private:
+   void IMU_init(const MeasureGroup &meas, esekfom::esekf<state_ikfom, 12, input_ikfom> &kf_state, int &N);
+   void UndistortPcl(const MeasureGroup &meas, esekfom::esekf<state_ikfom, 12, input_ikfom> &kf_state, PointCloudXYZI &pcl_in_out);
++  void PropagateImu(const deque<sensor_msgs::ImuConstPtr>& v_imu,
++      double pcl_beg_time, double pcl_end_time,
++      esekfom::esekf<state_ikfom, 12, input_ikfom>& kf_state);
+ 
+   PointCloudXYZI::Ptr cur_pcl_un_;
+   sensor_msgs::ImuConstPtr last_imu_;
+@@ -211,22 +218,11 @@
+ 
+ }
+ 
+-void ImuProcess::UndistortPcl(const MeasureGroup &meas, esekfom::esekf<state_ikfom, 12, input_ikfom> &kf_state, PointCloudXYZI &pcl_out)
+-{
+-  /*** add the imu of the last frame-tail to the of current frame-head ***/
+-  auto v_imu = meas.imu;
+-  v_imu.push_front(last_imu_);
+-  const double &imu_beg_time = v_imu.front()->header.stamp.toSec();
++void ImuProcess::PropagateImu(const deque<sensor_msgs::ImuConstPtr>& v_imu,
++    double pcl_beg_time, double pcl_end_time,
++    esekfom::esekf<state_ikfom, 12, input_ikfom>& kf_state)
++{
+   const double &imu_end_time = v_imu.back()->header.stamp.toSec();
+-  const double &pcl_beg_time = meas.lidar_beg_time;
+-  const double &pcl_end_time = meas.lidar_end_time;
+-  
+-  /*** sort point clouds by offset time ***/
+-  pcl_out = *(meas.lidar);
+-  // std::cout << "num of pcl_out: " << pcl_out.points.size() << std::endl;
+-  sort(pcl_out.points.begin(), pcl_out.points.end(), time_list);
+-  // cout<<"[ IMU Process ]: Process lidar from "<<pcl_beg_time<<" to "<<pcl_end_time<<", " \
+-  //          <<meas.imu.size()<<" imu msgs from "<<imu_beg_time<<" to "<<imu_end_time<<endl;
+ 
+   /*** Initialize IMU pose ***/
+   state_ikfom imu_state = kf_state.get_x();
+@@ -294,8 +290,42 @@
+   kf_state.predict(dt, Q, in);
+   
+   imu_state = kf_state.get_x();
+-  last_imu_ = meas.imu.back();
++  last_imu_ = v_imu.back();
+   last_lidar_end_time_ = pcl_end_time;
++}
++
++void ImuProcess::PropagateOnlyBefore(const deque<sensor_msgs::ImuConstPtr>& measured,
++    double target, esekfom::esekf<state_ikfom, 12, input_ikfom>& filter)
++{
++  if (imu_need_init_ || measured.empty() || target < last_lidar_end_time_)
++    throw std::runtime_error("R6 invalid native propagation state");
++  double previous=last_imu_->header.stamp.toSec();
++  for (const auto& sample:measured) {
++    const double t=sample->header.stamp.toSec();
++    if (t<=previous || t>target) throw std::runtime_error("R6 noncausal IMU interval");
++    previous=t;
++  }
++  if (previous<=last_lidar_end_time_ || target-previous>0.020)
++    throw std::runtime_error("R6 IMU coverage/hold exceeds 20ms");
++  auto samples=measured;
++  samples.push_front(last_imu_);
++  PropagateImu(samples,last_lidar_end_time_,target,filter);
++}
++
++void ImuProcess::UndistortPcl(const MeasureGroup &meas,
++    esekfom::esekf<state_ikfom, 12, input_ikfom> &kf_state, PointCloudXYZI &pcl_out)
++{
++  auto v_imu=meas.imu;
++  v_imu.push_front(last_imu_);
++  const double &pcl_beg_time=meas.lidar_beg_time;
++  const double &pcl_end_time=meas.lidar_end_time;
++  pcl_out=*(meas.lidar);
++  sort(pcl_out.points.begin(),pcl_out.points.end(),time_list);
++  PropagateImu(v_imu,pcl_beg_time,pcl_end_time,kf_state);
++  state_ikfom imu_state=kf_state.get_x();
++  V3D acc_imu,vel_imu,pos_imu,angvel_avr;
++  M3D R_imu;
++  double dt=0;
+ 
+   /*** undistort each lidar point (backward propagation) ***/
+   if (pcl_out.points.begin() == pcl_out.points.end()) return;
+--- a/FAST_LIO/src/laserMapping.cpp
++++ b/FAST_LIO/src/laserMapping.cpp
+@@ -345,6 +345,7 @@
+     sig_buffer.notify_all();
+ }
+ 
++uint64_t r6_latest_raw_imu_ns=0; // observation-only arrival watermark before native rounding
+ void imu_cbk(const sensor_msgs::Imu::ConstPtr &msg_in) 
+ {
+     publish_count ++;
+@@ -361,6 +362,7 @@
+     double timestamp = msg->header.stamp.toSec();
+ 
+     mtx_buffer.lock();
++    r6_latest_raw_imu_ns=msg_in->header.stamp.toNSec();
+ 
+     if (timestamp < last_timestamp_imu)
+     {
+@@ -765,6 +767,7 @@
+ }
+ 
+ #include "p61_record.hpp"
++#include "r6_terminal.hpp"
+ 
+ int main(int argc, char** argv)
+ {
+@@ -872,6 +875,10 @@
+ //------------------------------------------------------------------------------------------------------
+     P61Record p61_record;
+     p61_record.start(nh);
++    std::string r6_target,r6_last;
++    nh.getParam("r6_target_ns",r6_target);nh.getParam("r6_last_imu_ns",r6_last);
++    R6Terminal r6_terminal{p61_record.directory,std::stoull(r6_target),std::stoull(r6_last),p61_record};
++    ros::ServiceServer r6_service=nh.advertiseService("/r6_finalize_init",&R6Terminal::finish,&r6_terminal);
+     signal(SIGINT, SigHandle);
+     ros::Rate rate(5000);
+     bool status = ros::ok();
+--- a/FAST_LIO/src/p61_record.hpp
++++ b/FAST_LIO/src/p61_record.hpp
+@@ -17,7 +17,7 @@
+     uint64_t count = 0;
+     void start(ros::NodeHandle& nh) {
+         nh.getParam("p61_output_directory", directory);
+-        if (directory.find("/home/jian/livox_ws/p61_r5_geode_runs/") != 0)
++        if (directory.find("/home/jian/livox_ws/p61_r6_geode_runs/") != 0)
+             throw std::runtime_error("P61 requires new internal run directory");
+         rows.open(directory + "/mapping_trajectory.csv", std::ios::out);
+         if (!rows) throw std::runtime_error("P61 CSV open failed");
+@@ -62,7 +62,7 @@
+         ikdtree.frozen_snapshot(points);
+         if (points.empty()) throw std::runtime_error("P61 final map is empty");
+         PointCloudXYZI cloud; cloud.points=points; cloud.width=points.size(); cloud.height=1;
+-        if (pcl::io::savePCDFileBinary(directory+"/frozen_map.pcd",cloud)!=0)
++        if (pcl::io::savePCDFileBinary(directory+"/temporary_bridge_map.pcd",cloud)!=0)
+             throw std::runtime_error("P61 final map export failed");
+         struct rusage usage;
+         getrusage(RUSAGE_SELF,&usage);
