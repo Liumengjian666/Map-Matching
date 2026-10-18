@@ -23,9 +23,10 @@ def table(path):
     with Path(path).open() as stream: return list(csv.DictReader(stream))
 
 
-def write_csv(path, rows):
+def write_csv(path, rows, fields=None):
     with Path(path).open('x', newline='') as stream:
-        writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator='\n')
+        if fields is None and not rows: raise ValueError('empty table requires explicit schema')
+        writer = csv.DictWriter(stream, fieldnames=fields or list(rows[0]), lineterminator='\n')
         writer.writeheader(); writer.writerows(rows)
 
 

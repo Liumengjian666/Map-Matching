@@ -7,22 +7,35 @@ import sys
 from prepare_basin import identity, table
 
 
+def bind_preflight(receipt, preregistration, binary):
+    if receipt['preregistration'] != identity(preregistration):
+        raise ValueError('preflight used different preregistration')
+    if receipt['binary'] != {str(binary): identity(binary)}:
+        raise ValueError('preflight used different native binary')
+
+
 def run(mode, preregistered, run_root):
     root, freeze_dir = Path(run_root), Path(preregistered)
     frozen = json.loads((freeze_dir / 'preregistration.json').read_text())
     for name, expected in frozen['files'].items():
         if identity(name) != expected: raise ValueError('frozen input conflict: ' + name)
     if mode not in ('verify', 'align'): raise ValueError('unknown mode')
+    binary = root / 'build/basin_probe'
+    code_dir = Path(__file__).resolve().parents[2]
     if mode == 'align':
         receipt = json.loads((root / 'verify_receipt.json').read_text())
         if receipt['exit_code'] != 0: raise ValueError('nominal preflight failed')
+        bind_preflight(receipt, freeze_dir / 'preregistration.json', binary)
+        # Documentation/runner safeguards may change; native implementation may not.
+        subprocess.run(['git', '-C', str(code_dir), 'diff', '--exit-code', receipt['code_sha'], 'HEAD', '--',
+                        'src', 'docs/p61_r3_geode_basin/tools',
+                        'docs/p60_r4_ground_challenge_ndt_degeneracy/tools',
+                        'docs/p60_r5_ndt_resolution_correction/tools'], check=True)
         for name, expected in receipt['outputs'].items():
             if identity(name) != expected: raise ValueError('preflight output changed')
         parity = table(root / 'verify/nominal_parity.csv')
         if len(parity) != 20 or any(r['pass'] != '1' for r in parity):
             raise ValueError('20 exact R2 input/objective checks required')
-    binary = root / 'build/basin_probe'
-    code_dir = Path(__file__).resolve().parents[2]
     git = lambda *args: subprocess.check_output(['git', '-C', str(code_dir), *args], text=True).strip()
     if git('status', '--porcelain'): raise ValueError('commit code before execution')
     record = {'mode': mode, 'code_sha': git('rev-parse', 'HEAD'),
