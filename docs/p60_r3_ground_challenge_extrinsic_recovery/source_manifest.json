@@ -1,0 +1,124 @@
+{
+  "sources": [
+    {
+      "repository": "https://github.com/sjtuyinjie/Ground-Challenge",
+      "commit": "46a7c19a8672cc9246ad8b14815b4006a374fae0",
+      "path": "README.md",
+      "bytes": 12930,
+      "sha256": "ce3ba3ff92dc447e21ee847c9ab988656e68221885832d74e514f68bd6664c38"
+    },
+    {
+      "repository": "https://github.com/sjtuyinjie/Ground-Challenge",
+      "commit": "46a7c19a8672cc9246ad8b14815b4006a374fae0",
+      "path": "calibration.txt",
+      "bytes": 932,
+      "sha256": "f8f591c46fa21c88d3986e65bf0558c7f79f2830b017165ec86b87190f745e08"
+    },
+    {
+      "repository": "https://github.com/sjtuyinjie/Ground-Challenge",
+      "commit": "46a7c19a8672cc9246ad8b14815b4006a374fae0",
+      "path": "config_files_gc/viwfusion/groundchallenge.yaml",
+      "bytes": 5818,
+      "sha256": "65195cf4faccad04bd841a2d5e9b1f873c0cc8c6f825711b2723763110e795b3"
+    },
+    {
+      "repository": "https://github.com/sjtuyinjie/Ground-Challenge",
+      "commit": "46a7c19a8672cc9246ad8b14815b4006a374fae0",
+      "path": "fig/robot.jpg",
+      "bytes": 1496035,
+      "sha256": "18b462f55e5f5009bd7f39c30a272f86a1d309f25b4a2286236b0a057c4473a9"
+    },
+    {
+      "repository": "https://github.com/SJTU-ViSYS/Ground-Fusion",
+      "commit": "665cecd17964d929fb9fa4c3a01e9c5b8cd2f7cb",
+      "path": "README.md",
+      "bytes": 10905,
+      "sha256": "109321d8caaeff0bdaab82839655efc79ca71873d187b1b9e773627da9ac3d24"
+    },
+    {
+      "repository": "https://github.com/SJTU-ViSYS/Ground-Fusion",
+      "commit": "665cecd17964d929fb9fa4c3a01e9c5b8cd2f7cb",
+      "path": "config/realsense/groundchallenge.yaml",
+      "bytes": 6039,
+      "sha256": "6743b80fc9c81f06f104a7c50494b26014fef00770834249d48f6b8582e83d6c"
+    },
+    {
+      "repository": "https://github.com/sjtuyinjie/Ground-Fusion2",
+      "commit": "aa1c8dc80b05df7a536f5759d2f7725ad12015a6",
+      "path": "README.md",
+      "bytes": 14502,
+      "sha256": "92917c99e85d41e2aa339c74956a74b3c1c312556370ccea1204a35540ddb498"
+    },
+    {
+      "repository": "https://github.com/sjtuyinjie/Ground-Fusion2",
+      "commit": "aa1c8dc80b05df7a536f5759d2f7725ad12015a6",
+      "path": "Ground-Fusion++/config/realsense/groundchallenge.yaml",
+      "bytes": 6039,
+      "sha256": "6743b80fc9c81f06f104a7c50494b26014fef00770834249d48f6b8582e83d6c"
+    },
+    {
+      "repository": "https://github.com/sjtuyinjie/Ground-Fusion2",
+      "commit": "aa1c8dc80b05df7a536f5759d2f7725ad12015a6",
+      "path": "Ground-Fusion++/lio/config/m2dgr.yaml",
+      "bytes": 1785,
+      "sha256": "2a030cfaa4a61ed7a81364f5d93bbea29734af1a671485dbb2806c59afe163d1"
+    },
+    {
+      "repository": "https://github.com/sjtuyinjie/Ground-Fusion2",
+      "commit": "aa1c8dc80b05df7a536f5759d2f7725ad12015a6",
+      "path": "Ground-Fusion++/lio/config/m2dgrp.yaml",
+      "bytes": 1872,
+      "sha256": "c3fc85d091c854be25a390a1afbf7f98b50b783d289531911925d73af1793a5d"
+    },
+    {
+      "repository": "https://github.com/sjtuyinjie/Ground-Fusion2",
+      "commit": "aa1c8dc80b05df7a536f5759d2f7725ad12015a6",
+      "path": "Ground-Fusion++/lio/config/m3dgr.yaml",
+      "bytes": 1925,
+      "sha256": "acb928e6efb77c5829812b5f0719267385dd22326506b3eca1d7c223c0ba098b"
+    },
+    {
+      "repository": "https://github.com/ros-drivers/velodyne",
+      "commit": "89faa698688a48d4a5080f73c04d7aed8117eec0",
+      "path": "velodyne_driver/src/driver/driver.cc",
+      "bytes": 11026,
+      "sha256": "031845651e7f075a030b47cee378450749b84cc541cbbc28c72c0e6cf9724371"
+    },
+    {
+      "repository": "https://github.com/ros-drivers/velodyne",
+      "commit": "89faa698688a48d4a5080f73c04d7aed8117eec0",
+      "path": "velodyne_pointcloud/src/conversions/transform.cc",
+      "bytes": 5502,
+      "sha256": "daac16d713a348859ad6ce0abbadf0f5c4f871f73fbcf420e6286ba519b5b768"
+    },
+    {
+      "repository": "https://github.com/ros-drivers/velodyne",
+      "commit": "89faa698688a48d4a5080f73c04d7aed8117eec0",
+      "path": "velodyne_pointcloud/src/lib/rawdata.cc",
+      "bytes": 31919,
+      "sha256": "88aab651f9506b1f2f744769bc8034310b5b28b25089cd48e101b5befe092c83"
+    },
+    {
+      "repository": "https://github.com/ros-drivers/velodyne",
+      "commit": "89faa698688a48d4a5080f73c04d7aed8117eec0",
+      "path": "velodyne_pointcloud/src/conversions/pointcloudXYZIRT.cc",
+      "bytes": 2018,
+      "sha256": "8189c67b10809e584988759227f0e4beada5ddb2105c4ea8d62062ed87acc36b"
+    },
+    {
+      "repository": "https://github.com/ros-drivers/velodyne",
+      "commit": "89faa698688a48d4a5080f73c04d7aed8117eec0",
+      "path": "velodyne_pointcloud/include/velodyne_pointcloud/datacontainerbase.h",
+      "bytes": 9544,
+      "sha256": "f141dbc69a22b11cf4e1fdf3c13d93651c23953dbe9365279748543de8eb5a63"
+    }
+  ],
+  "issue_api_status": "HTTP 403 for issues 10,11 and issue8 comments; bodies/replies not verified",
+  "paper_sources": [
+    "https://arxiv.org/html/2307.03890",
+    "https://arxiv.org/abs/2402.14308",
+    "https://arxiv.org/abs/2507.08364",
+    "https://arxiv.org/abs/2202.11006",
+    "https://arxiv.org/html/2312.14035"
+  ]
+}
