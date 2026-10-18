@@ -1,0 +1,19 @@
+{
+  "file_id": "11Z4tmdEXGMuiLDKazd9MoALYJEbiGpE9",
+  "attempts": 1,
+  "body_read_limit_bytes": 65536,
+  "requested_range": "bytes=0-65535",
+  "complete_bag": false,
+  "authenticated": false,
+  "confirmation_source_sha256": "6c43dd6205ed2ebc039ff6af4cc9825982d2185e67784d7dd0606cf0464abedd",
+  "status": 200,
+  "headers": {
+    "Content-Type": "text/html; charset=utf-8",
+    "Content-Length": "2040"
+  },
+  "retained_bytes": 2040,
+  "sha256": "c6727431d8666abf04ec3177f46fdd7cad3329c6d8ca3ea0b3223af27b76921c",
+  "rosbag_magic_pass": false,
+  "body_filename": "response_body.bin",
+  "quota_message": true
+}

@@ -45,6 +45,27 @@ class MetadataTests(unittest.TestCase):
                 with self.assertRaises(ValueError): snapshot(url, destination)
             request.assert_not_called()
 
+    def test_http_200_quota_is_not_sensor_input(self):
+        doc = Path(__file__).resolve().parent
+        result = json.loads((doc / 'results.json').read_text())
+        access = json.loads((doc / 'access_evidence/access_receipt.json').read_text())
+        body = (doc / 'access_evidence/response_body.bin').read_bytes()
+        self.assertEqual(access['status'], 200)
+        self.assertTrue(access['quota_message'])
+        self.assertFalse(body.startswith(b'#ROSBAG V2.0\n'))
+        self.assertFalse(result['complete_bag_obtained'])
+        self.assertIsNone(result['complete_bag_sha256'])
+        self.assertEqual(result['ndt_align_calls'], 0)
+
+    def test_map_and_calibration_not_silently_promoted(self):
+        doc = Path(__file__).resolve().parent
+        result = json.loads((doc / 'results.json').read_text())
+        manifest = json.loads((doc / 'source_manifest.json').read_text())
+        self.assertEqual([r['name'] for r in manifest['public_folder_listings']['map_listing']], ['stairs.las'])
+        self.assertFalse(result['independent_tunnel_map_found'])
+        self.assertFalse(result['extrinsic_approved'])
+        self.assertFalse(result['smoke_completed'])
+
 
 if __name__ == '__main__':
     unittest.main()

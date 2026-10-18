@@ -1,0 +1,13 @@
+{
+  "requested_url": "https://api.github.com/repos/PengYu-Team/GEODE_dataset/git/trees/c6e930623d4fed450d7fc50e16e3ffe0288b692b?recursive=1",
+  "attempt": 1,
+  "max_bytes": 8388608,
+  "status": 403,
+  "final_url": "https://api.github.com/repos/PengYu-Team/GEODE_dataset/git/trees/c6e930623d4fed450d7fc50e16e3ffe0288b692b?recursive=1",
+  "headers": {
+    "Content-Type": "application/json; charset=utf-8",
+    "Content-Length": "279"
+  },
+  "bytes": 279,
+  "sha256": "3b5cee0c854ba67e941da541e773f69d8271b9dc1624f27e7ab3d8e974518c2f"
+}

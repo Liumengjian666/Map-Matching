@@ -1,0 +1,141 @@
+{
+  "code_sha": "0ca33208b15d42a879ed0ad31226ba7407b68ea2",
+  "branch": "research/p61-geode-native-tunnel-entry",
+  "worktree_status": "M docs/p61_geode_native_tunnel_entry/test_metadata_tools.py\n?? docs/p61_geode_native_tunnel_entry/ACCESS_ERRORS.md\n?? docs/p61_geode_native_tunnel_entry/CALIBRATION_CONTRACT.md\n?? docs/p61_geode_native_tunnel_entry/DATASET_SOURCES.md\n?? docs/p61_geode_native_tunnel_entry/INPUT_CONTRACT.md\n?? docs/p61_geode_native_tunnel_entry/MAP_FRAME_CONTRACT.md\n?? docs/p61_geode_native_tunnel_entry/PROTOCOL.md\n?? docs/p61_geode_native_tunnel_entry/REPORT.md\n?? docs/p61_geode_native_tunnel_entry/access_evidence/\n?? docs/p61_geode_native_tunnel_entry/calibration_checks.json\n?? docs/p61_geode_native_tunnel_entry/collect_entry_evidence.py\n?? docs/p61_geode_native_tunnel_entry/official/\n?? docs/p61_geode_native_tunnel_entry/results.json\n?? docs/p61_geode_native_tunnel_entry/source_manifest.json",
+  "files": {
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/collect_entry_evidence.py": {
+      "bytes": 5599,
+      "sha256": "da6c7179e48cfc6c886177ddecf543361d5c1a9714ad5e0d1d95e50c3a744507"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/list_drive_metadata.py": {
+      "bytes": 1420,
+      "sha256": "6302c77c5b1047f60fdbe33dbf7bbf45f4a26af3fcdd20f57c5a48d74574ea91"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/probe_bag_access.py": {
+      "bytes": 3402,
+      "sha256": "7162aadc63dc3ec8d3cb5ec529595275631a1ba6ebd5521ad51add0d2b5c356b"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/snapshot_metadata.py": {
+      "bytes": 2063,
+      "sha256": "8c42ef9d861f4fe45e0d9b2c152fe27ea46b414a1e0998d9f5cc7538e05ddf5e"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/test_metadata_tools.py": {
+      "bytes": 3710,
+      "sha256": "9e2b03264bad9d467ee66331d38d77766845cf08cc690004a830e756b933f1eb"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/ACCESS_ERRORS.md": {
+      "bytes": 1779,
+      "sha256": "fdf981b01e4f75630a5f3d41620ca52f1c9b9625e8baf02b88d34c32dad4c9f5"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/CALIBRATION_CONTRACT.md": {
+      "bytes": 2088,
+      "sha256": "3618bb1984d63da93c6002a9b9cb470064db54a1dbba401b476cbc60bc49eb4f"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/DATASET_SOURCES.md": {
+      "bytes": 2437,
+      "sha256": "a0a52348da684b84749f84b89d44862a0479e4388bef9cd83193d776adc44b5d"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/INPUT_CONTRACT.md": {
+      "bytes": 1456,
+      "sha256": "973e7373e3c34ce0f72840b5c93f4a151b8017ec638bf37516f07539015287e9"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/MAP_FRAME_CONTRACT.md": {
+      "bytes": 1648,
+      "sha256": "624a471c2cad6f5b743f1ee8bdc0b24c860d713e80f58137809a95e9d7c03151"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/PROTOCOL.md": {
+      "bytes": 1772,
+      "sha256": "2d2d427b67e0cb7c23e44eceaeacbd8e7b529286d5338018c38a8cb07993759a"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/REPORT.md": {
+      "bytes": 5989,
+      "sha256": "0a1c4e6797385389a94a8867c43acf6f0f752ff74e0cb3f01aad30bbebc7831b"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/calibration_checks.json": {
+      "bytes": 1085,
+      "sha256": "e2996045512fbad37484623dae7c89cdf62d3c80008d911e49c4270b995ce549"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/results.json": {
+      "bytes": 2492,
+      "sha256": "ab0e4ef7914ba9e9013e5bf301f8fc6c06723dfa09ada8b66d2682c85c5abc77"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/source_manifest.json": {
+      "bytes": 32789,
+      "sha256": "50413b36b8a12988de8f160d5c46c5a277feaf8999776f0c997b4caf021b7725"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/GEODE_README.md": {
+      "bytes": 11543,
+      "sha256": "eac59895cbe45a1cff161bae0599c7ad15274054da74c9d1f60bfb4be6989586"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/GEODE_README.md.http.json": {
+      "bytes": 517,
+      "sha256": "1f1f79392b70fc88c43aa4fb5f55ba66bb4b2af122f787b2aac5a526a438e48a"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/drive_gamma_response.bin": {
+      "bytes": 2040,
+      "sha256": "68621d6238a53b29c3d5c0bcafbb75584e803c0944edebd4ce30137a36777cce"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/drive_gamma_response.bin.http.json": {
+      "bytes": 473,
+      "sha256": "3c2aadb2a5927cb75cbb56e46f9277101d076c1fab1fedc3dd6a6bd35103f473"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/gamma2gt_leica_404.txt": {
+      "bytes": 14,
+      "sha256": "d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/gamma2gt_leica_404.txt.http.json": {
+      "bytes": 542,
+      "sha256": "023950675ef439e520c196c78d66a1f5ab3dd48cbc1bcaa6b969126cb5e8a2da"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/gamma_config.yaml": {
+      "bytes": 4731,
+      "sha256": "19cda4d48f5b185d93293393846a387a2b093c67dc9ec3a646ed8f826b587dbe"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/gamma_config.yaml.http.json": {
+      "bytes": 542,
+      "sha256": "3e0348fca56f79dc0f79cc7c5dc03923be5549fd426b3080427e03bcecedf2a1"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/repository_tree.json": {
+      "bytes": 279,
+      "sha256": "3b5cee0c854ba67e941da541e773f69d8271b9dc1624f27e7ab3d8e974518c2f"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/repository_tree.json.http.json": {
+      "bytes": 534,
+      "sha256": "b8b5894831994299a192c9457c7692d2ad414970becff9a4d391d933f2fb7b03"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/ros_topics.png": {
+      "bytes": 158018,
+      "sha256": "ff07403826fdc9b3ed417011ea471ea052f1c121a12f36e2b4675d4f99b9fafc"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/ros_topics.png.http.json": {
+      "bytes": 568,
+      "sha256": "5f1858bdc8277540c7d672c7d71bf4de165c9e88bdd53754756c574ce9c068f1"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/access_evidence/access_receipt.json": {
+      "bytes": 607,
+      "sha256": "460f7e06f78318a15f2b22facb74d61eaf4ea785104c18c18b260b342a9e388e"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/access_evidence/bag_download_response.bin": {
+      "bytes": 2472,
+      "sha256": "6c43dd6205ed2ebc039ff6af4cc9825982d2185e67784d7dd0606cf0464abedd"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/access_evidence/bag_download_response.bin.http.json": {
+      "bytes": 473,
+      "sha256": "fa65b50b9007048a3677c40bbe5e33ebbfb8a36e2e43501716532a400b9a283a"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/access_evidence/gt_download_response.bin": {
+      "bytes": 2040,
+      "sha256": "fd3954307f9f244c7e51edd93842bb9b726984573750bbfa5a46853204f8985e"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/access_evidence/gt_download_response.bin.http.json": {
+      "bytes": 473,
+      "sha256": "c3dcef0e3b5493f7c27e0699150718d8eedaee01f0e99d8462d030dcf97b9f11"
+    },
+    "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/access_evidence/response_body.bin": {
+      "bytes": 2040,
+      "sha256": "c6727431d8666abf04ec3177f46fdd7cad3329c6d8ca3ea0b3223af27b76921c"
+    }
+  },
+  "gt_read": false,
+  "hikvision_access": false
+}

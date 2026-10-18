@@ -1,0 +1,13 @@
+{
+  "requested_url": "https://raw.githubusercontent.com/PengYu-Team/GEODE_dataset/c6e930623d4fed450d7fc50e16e3ffe0288b692b/cali/gamma_config.yaml",
+  "attempt": 1,
+  "max_bytes": 8388608,
+  "status": 200,
+  "final_url": "https://raw.githubusercontent.com/PengYu-Team/GEODE_dataset/c6e930623d4fed450d7fc50e16e3ffe0288b692b/cali/gamma_config.yaml",
+  "headers": {
+    "Content-Type": "text/plain; charset=utf-8",
+    "Content-Length": "1425"
+  },
+  "bytes": 4731,
+  "sha256": "19cda4d48f5b185d93293393846a387a2b093c67dc9ec3a646ed8f826b587dbe"
+}

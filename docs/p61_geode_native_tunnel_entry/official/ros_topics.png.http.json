@@ -1,0 +1,13 @@
+{
+  "requested_url": "https://raw.githubusercontent.com/PengYu-Team/GEODE_dataset/c6e930623d4fed450d7fc50e16e3ffe0288b692b/README.assets/image-20240717154348844.png",
+  "attempt": 1,
+  "max_bytes": 8388608,
+  "status": 200,
+  "final_url": "https://raw.githubusercontent.com/PengYu-Team/GEODE_dataset/c6e930623d4fed450d7fc50e16e3ffe0288b692b/README.assets/image-20240717154348844.png",
+  "headers": {
+    "Content-Type": "image/png",
+    "Content-Length": "158018"
+  },
+  "bytes": 158018,
+  "sha256": "ff07403826fdc9b3ed417011ea471ea052f1c121a12f36e2b4675d4f99b9fafc"
+}

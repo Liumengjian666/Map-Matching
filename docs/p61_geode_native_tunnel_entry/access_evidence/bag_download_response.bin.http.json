@@ -1,0 +1,13 @@
+{
+  "requested_url": "https://drive.google.com/uc?export=download&id=11Z4tmdEXGMuiLDKazd9MoALYJEbiGpE9",
+  "attempt": 1,
+  "max_bytes": 8388608,
+  "status": 200,
+  "final_url": "https://drive.usercontent.google.com/download?id=11Z4tmdEXGMuiLDKazd9MoALYJEbiGpE9&export=download",
+  "headers": {
+    "Content-Type": "text/html; charset=utf-8",
+    "Content-Length": "2472"
+  },
+  "bytes": 2472,
+  "sha256": "6c43dd6205ed2ebc039ff6af4cc9825982d2185e67784d7dd0606cf0464abedd"
+}

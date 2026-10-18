@@ -1,0 +1,886 @@
+{
+  "official_http_snapshots": [
+    {
+      "receipt": "/home/jian/geode_p61_data/official_metadata/bag_download_response.bin.http.json",
+      "requested_url": "https://drive.google.com/uc?export=download&id=11Z4tmdEXGMuiLDKazd9MoALYJEbiGpE9",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://drive.usercontent.google.com/download?id=11Z4tmdEXGMuiLDKazd9MoALYJEbiGpE9&export=download",
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "2472"
+      },
+      "bytes": 2472,
+      "sha256": "6c43dd6205ed2ebc039ff6af4cc9825982d2185e67784d7dd0606cf0464abedd"
+    },
+    {
+      "receipt": "/home/jian/geode_p61_data/official_metadata/calibration_files.html.http.json",
+      "requested_url": "https://drive.google.com/drive/folders/14VR6U0d4u6yN-qIiUpbH4bk9NRHV17QG",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://drive.google.com/drive/folders/14VR6U0d4u6yN-qIiUpbH4bk9NRHV17QG",
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8"
+      },
+      "bytes": 346689,
+      "sha256": "32764b0b13485cae06bf2f1ad7c79d3b1fc426f2fa41f4e924c002f5ee00fd7d"
+    },
+    {
+      "receipt": "/home/jian/geode_p61_data/official_metadata/drive_root.html.http.json",
+      "requested_url": "https://drive.google.com/drive/folders/1hEn3sBAvQhSdUFnGMZCCv-W0Ynj2rWBs",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://drive.google.com/drive/folders/1hEn3sBAvQhSdUFnGMZCCv-W0Ynj2rWBs",
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8"
+      },
+      "bytes": 324417,
+      "sha256": "3b25e0809f30f05aa8136c3bda4f0d29cecd686205e7d273b74a1b7142456fc9"
+    },
+    {
+      "receipt": "/home/jian/geode_p61_data/official_metadata/groundtruth.html.http.json",
+      "requested_url": "https://drive.google.com/drive/folders/1AW-QzSBa_Iza1H07RcDzzaRusJ9YPQYu",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://drive.google.com/drive/folders/1AW-QzSBa_Iza1H07RcDzzaRusJ9YPQYu",
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8"
+      },
+      "bytes": 314837,
+      "sha256": "9860f41d6dd66b91f8ef9cf0984986684031070461af93fc7aa1d8b236d7f3e7"
+    },
+    {
+      "receipt": "/home/jian/geode_p61_data/official_metadata/gt_download_response.bin.http.json",
+      "requested_url": "https://drive.google.com/uc?export=download&id=1wTdSus7r1CTLnr7G0s5Q0wYDXkqifTYd",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://drive.usercontent.google.com/download?id=1wTdSus7r1CTLnr7G0s5Q0wYDXkqifTYd&export=download",
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "2040"
+      },
+      "bytes": 2040,
+      "sha256": "fd3954307f9f244c7e51edd93842bb9b726984573750bbfa5a46853204f8985e"
+    },
+    {
+      "receipt": "/home/jian/geode_p61_data/official_metadata/map.html.http.json",
+      "requested_url": "https://drive.google.com/drive/folders/1WjJ5RpZg1IsiYpbwBvn0wBVXsPuUoSdX",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://drive.google.com/drive/folders/1WjJ5RpZg1IsiYpbwBvn0wBVXsPuUoSdX",
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8"
+      },
+      "bytes": 307095,
+      "sha256": "b6d7bf5f514e63207e951ee11057c6b10944dd4cc3a658ac04523c69af409901"
+    },
+    {
+      "receipt": "/home/jian/geode_p61_data/official_metadata/metro_gt.html.http.json",
+      "requested_url": "https://drive.google.com/drive/folders/18AObN_YJUIbnAA9yw_7rd6DetTn1tPv1",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://drive.google.com/drive/folders/18AObN_YJUIbnAA9yw_7rd6DetTn1tPv1",
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8"
+      },
+      "bytes": 451136,
+      "sha256": "a955c845cfe7b1f4408ed65a6738b91154044e20a652d06da7ad742f74ded6e6"
+    },
+    {
+      "receipt": "/home/jian/geode_p61_data/official_metadata/metro_tunnel.html.http.json",
+      "requested_url": "https://drive.google.com/drive/folders/1Hww_-msqO1PTvgAtXRG6x9L2eqDbM51N",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://drive.google.com/drive/folders/1Hww_-msqO1PTvgAtXRG6x9L2eqDbM51N",
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8"
+      },
+      "bytes": 509756,
+      "sha256": "126311606f83929c761657cb7ff7772b486601ded22095525e8e3043e679d2de"
+    },
+    {
+      "receipt": "/home/jian/geode_p61_data/official_metadata/sensor_data.html.http.json",
+      "requested_url": "https://drive.google.com/drive/folders/1w3mi2iUHVHQq3kytuJV3p4BPFYN2V2gL",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://drive.google.com/drive/folders/1w3mi2iUHVHQq3kytuJV3p4BPFYN2V2gL",
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8"
+      },
+      "bytes": 360983,
+      "sha256": "0424ed4eca4ff88c02fd3a617df494e39bf6afcd0a25cb1851beb96defb6f736"
+    },
+    {
+      "receipt": "/home/jian/geode_p61_data/official_metadata/shield_tunnel1_gamma.html.http.json",
+      "requested_url": "https://drive.google.com/drive/folders/1lxiNFxb208r4_7YgKDFQKJ_z5Vx5Xp37",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://drive.google.com/drive/folders/1lxiNFxb208r4_7YgKDFQKJ_z5Vx5Xp37",
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8"
+      },
+      "bytes": 334433,
+      "sha256": "a67d0748d2a23c6d5ad78739a99ee47be8b78f1d41473f477d39f3219bdf9e40"
+    },
+    {
+      "receipt": "/home/jian/geode_p61_data/official_metadata/traj.html.http.json",
+      "requested_url": "https://drive.google.com/drive/folders/12V6iQqSmH-ojkSDZpUQcn2x61XavkrOm",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://drive.google.com/drive/folders/12V6iQqSmH-ojkSDZpUQcn2x61XavkrOm",
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8"
+      },
+      "bytes": 361047,
+      "sha256": "3bb9835ea5a315faf7ed670900eb0ada0509e2e04525a798888a7279e645a23c"
+    },
+    {
+      "receipt": "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/GEODE_README.md.http.json",
+      "requested_url": "https://raw.githubusercontent.com/PengYu-Team/GEODE_dataset/c6e930623d4fed450d7fc50e16e3ffe0288b692b/README.md",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/PengYu-Team/GEODE_dataset/c6e930623d4fed450d7fc50e16e3ffe0288b692b/README.md",
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Content-Length": "4153"
+      },
+      "bytes": 11543,
+      "sha256": "eac59895cbe45a1cff161bae0599c7ad15274054da74c9d1f60bfb4be6989586"
+    },
+    {
+      "receipt": "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/drive_gamma_response.bin.http.json",
+      "requested_url": "https://drive.google.com/uc?export=download&id=1GheigvWF1YTTw-2y4XrN4f-5i5wh2m4s",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://drive.usercontent.google.com/download?id=1GheigvWF1YTTw-2y4XrN4f-5i5wh2m4s&export=download",
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8",
+        "Content-Length": "2040"
+      },
+      "bytes": 2040,
+      "sha256": "68621d6238a53b29c3d5c0bcafbb75584e803c0944edebd4ce30137a36777cce"
+    },
+    {
+      "receipt": "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/gamma2gt_leica_404.txt.http.json",
+      "requested_url": "https://raw.githubusercontent.com/PengYu-Team/GEODE_dataset/c6e930623d4fed450d7fc50e16e3ffe0288b692b/script/gamma2gt_leica.py",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 404,
+      "final_url": "https://raw.githubusercontent.com/PengYu-Team/GEODE_dataset/c6e930623d4fed450d7fc50e16e3ffe0288b692b/script/gamma2gt_leica.py",
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Content-Length": "14"
+      },
+      "bytes": 14,
+      "sha256": "d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed"
+    },
+    {
+      "receipt": "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/gamma_config.yaml.http.json",
+      "requested_url": "https://raw.githubusercontent.com/PengYu-Team/GEODE_dataset/c6e930623d4fed450d7fc50e16e3ffe0288b692b/cali/gamma_config.yaml",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/PengYu-Team/GEODE_dataset/c6e930623d4fed450d7fc50e16e3ffe0288b692b/cali/gamma_config.yaml",
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Content-Length": "1425"
+      },
+      "bytes": 4731,
+      "sha256": "19cda4d48f5b185d93293393846a387a2b093c67dc9ec3a646ed8f826b587dbe"
+    },
+    {
+      "receipt": "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/repository_tree.json.http.json",
+      "requested_url": "https://api.github.com/repos/PengYu-Team/GEODE_dataset/git/trees/c6e930623d4fed450d7fc50e16e3ffe0288b692b?recursive=1",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 403,
+      "final_url": "https://api.github.com/repos/PengYu-Team/GEODE_dataset/git/trees/c6e930623d4fed450d7fc50e16e3ffe0288b692b?recursive=1",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "Content-Length": "279"
+      },
+      "bytes": 279,
+      "sha256": "3b5cee0c854ba67e941da541e773f69d8271b9dc1624f27e7ab3d8e974518c2f"
+    },
+    {
+      "receipt": "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/ros_topics.png.http.json",
+      "requested_url": "https://raw.githubusercontent.com/PengYu-Team/GEODE_dataset/c6e930623d4fed450d7fc50e16e3ffe0288b692b/README.assets/image-20240717154348844.png",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/PengYu-Team/GEODE_dataset/c6e930623d4fed450d7fc50e16e3ffe0288b692b/README.assets/image-20240717154348844.png",
+      "headers": {
+        "Content-Type": "image/png",
+        "Content-Length": "158018"
+      },
+      "bytes": 158018,
+      "sha256": "ff07403826fdc9b3ed417011ea471ea052f1c121a12f36e2b4675d4f99b9fafc"
+    }
+  ],
+  "public_folder_listings": {
+    "calibration_files_listing": [
+      {
+        "id": "11m0fSJ342_RCZ9TwBNVq0rJCtBpXTWHu",
+        "name": "raw data",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1o-8QruxzEFKFX97cV3ZaSDPsI_RJeF5q",
+        "name": "alpha_config.yaml",
+        "mime": "application/x-yaml",
+        "size_bytes": 4801
+      },
+      {
+        "id": "1YkHYKRt8yNIOP_zm_wCK_ZldFQdXZaim",
+        "name": "beta_config.yaml",
+        "mime": "application/x-yaml",
+        "size_bytes": 4789
+      },
+      {
+        "id": "1GheigvWF1YTTw-2y4XrN4f-5i5wh2m4s",
+        "name": "gamma_config.yaml",
+        "mime": "application/x-yaml",
+        "size_bytes": 4682
+      },
+      {
+        "id": "1mkB0DFR0Fv3YcI1frnZNxi5AEhObKXbA",
+        "name": "metadata_beta.json",
+        "mime": "application/json",
+        "size_bytes": 7301
+      }
+    ],
+    "drive_root_listing": [
+      {
+        "id": "14VR6U0d4u6yN-qIiUpbH4bk9NRHV17QG",
+        "name": "calibration_files",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1AW-QzSBa_Iza1H07RcDzzaRusJ9YPQYu",
+        "name": "groundtruth",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1w3mi2iUHVHQq3kytuJV3p4BPFYN2V2gL",
+        "name": "sensor_data",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      }
+    ],
+    "groundtruth_listing": [
+      {
+        "id": "1WjJ5RpZg1IsiYpbwBvn0wBVXsPuUoSdX",
+        "name": "map",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "12V6iQqSmH-ojkSDZpUQcn2x61XavkrOm",
+        "name": "traj",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      }
+    ],
+    "map_listing": [
+      {
+        "id": "1hxAQe_rPNWHD1WaEjrKEB6r5EeI0-lmR",
+        "name": "stairs.las",
+        "mime": "application/octet-stream",
+        "size_bytes": 15633240915
+      }
+    ],
+    "metro_gt_listing": [
+      {
+        "id": "1wTdSus7r1CTLnr7G0s5Q0wYDXkqifTYd",
+        "name": "Shield_tunnel1.txt",
+        "mime": "text/plain",
+        "size_bytes": 86413
+      },
+      {
+        "id": "1uRsZ4nWrkcLAkkKVS8UxzKRX7unQO_ox",
+        "name": "Shield_tunnel2.txt",
+        "mime": "text/plain",
+        "size_bytes": 64280
+      },
+      {
+        "id": "1lGkaS4Wl-_KZix8hKBfSvte1ZHfwy7cv",
+        "name": "Shield_tunnel3.txt",
+        "mime": "text/plain",
+        "size_bytes": 50785
+      },
+      {
+        "id": "1H8L6PyP_qX7XOOozFL1s1-ljnyk-hL8j",
+        "name": "Shield_tunnel4.txt",
+        "mime": "text/plain",
+        "size_bytes": 50322
+      },
+      {
+        "id": "1mAWf--q43-cXSFMYvRU6cVzoG1mq_W5D",
+        "name": "Shield_tunnel5.txt",
+        "mime": "text/plain",
+        "size_bytes": 38087
+      },
+      {
+        "id": "1yB9-MpOFYPKiT-NVSJhqmet1WD6fyJTS",
+        "name": "Shield_tunnel6.txt",
+        "mime": "text/plain",
+        "size_bytes": 40140
+      },
+      {
+        "id": "1rXIBhqhgsSC2Go3nFYzfCCno8Bn6xyJI",
+        "name": "Shield_tunnel7.txt",
+        "mime": "text/plain",
+        "size_bytes": 73842
+      },
+      {
+        "id": "18EpeQxuOyaD-DPrvyExT3OcGqnDa05g_",
+        "name": "Shield_tunnel8.txt",
+        "mime": "text/plain",
+        "size_bytes": 82394
+      },
+      {
+        "id": "1N_IxdVMt7FBtLjFlnawd4MlsCiUpZcCi",
+        "name": "Shield_tunnel9.txt",
+        "mime": "text/plain",
+        "size_bytes": 50357
+      },
+      {
+        "id": "1mcy2GtIqKZvtKiPH4JHnnJcaBKaW5-8d",
+        "name": "Shield_tunnel10.txt",
+        "mime": "text/plain",
+        "size_bytes": 65599
+      },
+      {
+        "id": "1dihV6t25GNYIMZxdS8LgHHB5ElwT3lak",
+        "name": "Tunneling_tunnel1.txt",
+        "mime": "text/plain",
+        "size_bytes": 23505
+      },
+      {
+        "id": "16lGe4xYrQyfJ2wXgPaK9-quT8mRuIMg-",
+        "name": "Tunneling_tunnel2.txt",
+        "mime": "text/plain",
+        "size_bytes": 33377
+      },
+      {
+        "id": "1WpoWw7P0KdC3-KbS5mrXYWnAVY6tD_p7",
+        "name": "Tunneling_tunnel3.txt",
+        "mime": "text/plain",
+        "size_bytes": 25851
+      },
+      {
+        "id": "1jFfO-lbLRYxS18BB8qRHJ49AsCr5xThD",
+        "name": "Tunneling_tunnel4.txt",
+        "mime": "text/plain",
+        "size_bytes": 30016
+      },
+      {
+        "id": "16ievgTSOm_89_rEyAXFSTVAGFSzTjY2Y",
+        "name": "Tunneling_tunnel5.txt",
+        "mime": "text/plain",
+        "size_bytes": 34375
+      }
+    ],
+    "metro_tunnel_listing": [
+      {
+        "id": "1lxiNFxb208r4_7YgKDFQKJ_z5Vx5Xp37",
+        "name": "Shield_tunnel1_gamma",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1B81-y5VPSC2t5NVjWuSn0jkf-EqOysDa",
+        "name": "Shield_tunnel2_gamma",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1lvX0dPv39X6l4Zl7JeL7LJ-JmdOb0ZzQ",
+        "name": "Shield_tunnel3_gamma",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1Zft_eMCcvODdZ-WjLYE5BQf4ZBgF9e_Q",
+        "name": "Shield_tunnel4_gamma",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1CjBxsEm7vAg4hF7w3515lXSGyOQ1VXVh",
+        "name": "Shield_tunnel5_gamma",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1V1niyIWtYttSctKD_KJv4E3fWORqvTe3",
+        "name": "Shield_tunnel6_gamma",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1EcWWTBeBdXF4vVyGqaOJFTutMVdhP_Ya",
+        "name": "Shield_tunnel7_beta",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1Z8xekmeDRMClpyZGBK6pSCZYXYbCNHCc",
+        "name": "Shield_tunnel8_beta",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1uj0KpQGVpOqyNlqhNTb5frz9IX0psRFi",
+        "name": "Shield_tunnel9_beta",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1P36bfOA37hN-XnBE80HTE9XhYScx9YCY",
+        "name": "Shield_tunnel10_beta",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "14KZn_0_SIHho7YnS61AzcvOy-dfZ35RE",
+        "name": "Tunneling_tunnel1_gamma",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1ErTKPKOvOl_n0Zy3IOy5sdU8ib_A6pTo",
+        "name": "Tunneling_tunnel2_alpha",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1jb2avSme9aWwA8TZjAlR7Obc0Guy3G3s",
+        "name": "Tunneling_tunnel2_beta",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1SWFTeFgt3Lf3SOJI9KwpUQ_MTPpoKa_S",
+        "name": "Tunneling_tunnel2_gamma",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1q1hZa9tdsSP4n_0eoNWk-hCP2brkqcZ4",
+        "name": "Tunneling_tunnel3_alpha",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "14aIMAvkoESxWV6WaWEBTMlhiEcfchxQv",
+        "name": "Tunneling_tunnel3_beta",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1YPorRQ00cBDxGejAc7166jXSYR3x-b5F",
+        "name": "Tunneling_tunnel3_gamma",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1_prNW6g5v19HJpePIcv0RawqB-ks-XqL",
+        "name": "Tunneling_tunnel4_alpha",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1a_obsR-IKXauS3UaUULv-QENVBBtcpTK",
+        "name": "Tunneling_tunnel4_beta",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1sVB9j6w3TvKD4eiXPC5RwmpHVR2kWf6o",
+        "name": "Tunneling_tunnel4_gamma",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1c7ORVmFLA5hw74XxJ2mCoeKNB8jgmtaa",
+        "name": "Tunneling_tunnel5_alpha",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1uMx8q4Oj6zphlajqRJjrg6gBkoU6Jsd_",
+        "name": "Tunneling_tunnel5_beta",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1qRT1uHC2oL_kHVUS-lTOAQdFYrlmcvfC",
+        "name": "Tunneling_tunnel5_gamma",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      }
+    ],
+    "sensor_data_listing": [
+      {
+        "id": "18A1gLCRnjfqLIRwxvqlpGgukRJsUWVs3",
+        "name": "Bridge",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "18HfLmObuGHEXCKtA_FnkeYQ7l2Vtihvn",
+        "name": "Flat_Surfaces",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1sT2JC8A41Jfx4ybz16PPuSh_iJA-6bn3",
+        "name": "Inland_Waterways",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1Hww_-msqO1PTvgAtXRG6x9L2eqDbM51N",
+        "name": "Metro_tunnel",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1gqlN01iizL1OGYUent_6ZJr0L8B9saMu",
+        "name": "Offroad",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "11HUQeR8h0LKJhp3XOBeGM20FdwygoYMk",
+        "name": "Stairs",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1RWX-7lxel9O9xPv9cBv-9i_sQhTxX4Ts",
+        "name": "Urban_tunnel",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      }
+    ],
+    "shield_tunnel1_gamma_listing": [
+      {
+        "id": "1ccNjAtVaG3wv__FsImERbjv8te2sD3VS",
+        "name": "Camera",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1UNu_VC4LpCOGOnCQl6EudxsWJdWNVBhN",
+        "name": "imu",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1WejVvJ2_lOHjYWRI3HVS7KEhHcN4LNa3",
+        "name": "LiDAR",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "11Z4tmdEXGMuiLDKazd9MoALYJEbiGpE9",
+        "name": "Shield_tunnel1_gamma.bag",
+        "mime": "application/octet-stream",
+        "size_bytes": 4500527001
+      }
+    ],
+    "traj_listing": [
+      {
+        "id": "1rC0fuh8eic0XGvL1VlkQ0iRnyWRhiWqA",
+        "name": "Bridge",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "12j-TIeAw1ekUEYCuCTptUJ5x4l3tWUmB",
+        "name": "Flat_Surfaces",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1gCz6xHJWTAvoKKf_zfy1PKNpVAu-p_N7",
+        "name": "Inland_Waterways",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "18AObN_YJUIbnAA9yw_7rd6DetTn1tPv1",
+        "name": "metro_tunnel",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1P9coD-CjmbNn1OYwL5K7ySx0vY95bgaM",
+        "name": "offroad",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "14eQGxPz16EvwuaXfwCIVeFTyM2mfH3HC",
+        "name": "stairs",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      },
+      {
+        "id": "1WdL7-TCDHwxC_wjASR3ncuDlV3_5E9XC",
+        "name": "Urban_tunnel",
+        "mime": "application/vnd.google-apps.folder",
+        "size_bytes": null
+      }
+    ]
+  },
+  "internal_evidence_files": [
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/bag_download_response.bin",
+      "bytes": 2472,
+      "sha256": "6c43dd6205ed2ebc039ff6af4cc9825982d2185e67784d7dd0606cf0464abedd"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/bag_download_response.bin.http.json",
+      "bytes": 473,
+      "sha256": "fa65b50b9007048a3677c40bbe5e33ebbfb8a36e2e43501716532a400b9a283a"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/calibration_files.html",
+      "bytes": 346689,
+      "sha256": "32764b0b13485cae06bf2f1ad7c79d3b1fc426f2fa41f4e924c002f5ee00fd7d"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/calibration_files.html.http.json",
+      "bytes": 411,
+      "sha256": "b433b38192b3faf3a69ccd14aa78ab475e21ee66ec852ac6bfafa8923d4b5725"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/calibration_files_listing.json",
+      "bytes": 19604,
+      "sha256": "949a6277ef78656a5a4d202d01bdef1b2420a361ff2b3e4c0778df61f474e30a"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/drive_root.html",
+      "bytes": 324417,
+      "sha256": "3b25e0809f30f05aa8136c3bda4f0d29cecd686205e7d273b74a1b7142456fc9"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/drive_root.html.http.json",
+      "bytes": 411,
+      "sha256": "90d83e5829a25d9e224a7b1bc8cac92c84348c6b515720fe90f0cf2863d8a9aa"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/drive_root_listing.json",
+      "bytes": 11762,
+      "sha256": "75f0c15cf7aa31ee9814d9fb68394f79bd7b50ccc16ba3518872de3e7416086d"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/groundtruth.html",
+      "bytes": 314837,
+      "sha256": "9860f41d6dd66b91f8ef9cf0984986684031070461af93fc7aa1d8b236d7f3e7"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/groundtruth.html.http.json",
+      "bytes": 411,
+      "sha256": "2bb44b9fbd1ac4ee111d459b36b4e9af586f3a7939f5fc1af94232b0f15eae37"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/groundtruth_listing.json",
+      "bytes": 7803,
+      "sha256": "d070bceed99ad75dc7c2b1b1898d982bb75ad4f6b3f262f692a44ce6ecd2281d"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/gt_download_response.bin",
+      "bytes": 2040,
+      "sha256": "fd3954307f9f244c7e51edd93842bb9b726984573750bbfa5a46853204f8985e"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/gt_download_response.bin.http.json",
+      "bytes": 473,
+      "sha256": "c3dcef0e3b5493f7c27e0699150718d8eedaee01f0e99d8462d030dcf97b9f11"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/map.html",
+      "bytes": 307095,
+      "sha256": "b6d7bf5f514e63207e951ee11057c6b10944dd4cc3a658ac04523c69af409901"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/map.html.http.json",
+      "bytes": 411,
+      "sha256": "1fd6f04ae829086238e926b05809c1a7db4d2f577cce262bd974f3aed66a369b"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/map_listing.json",
+      "bytes": 3935,
+      "sha256": "85c401a44dfe28e56855f20c32b26a3cd07683f5df2370fc08517fb7612d4c56"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/metro_gt.html",
+      "bytes": 451136,
+      "sha256": "a955c845cfe7b1f4408ed65a6738b91154044e20a652d06da7ad742f74ded6e6"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/metro_gt.html.http.json",
+      "bytes": 411,
+      "sha256": "adf71aca1a625beea65bd685cb8d5f33c0f3ea0724ca538517d2fab22bef57c4"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/metro_gt_listing.json",
+      "bytes": 58667,
+      "sha256": "d733d107517e51d3826c2bd39d6b72d23d9dbe90c32602a17edd294f24251d3f"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/metro_tunnel.html",
+      "bytes": 509756,
+      "sha256": "126311606f83929c761657cb7ff7772b486601ded22095525e8e3043e679d2de"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/metro_tunnel.html.http.json",
+      "bytes": 411,
+      "sha256": "cd75fca8bf0116e99d1d9877d5e329368f8aaee46c34bac4048a8164e542607b"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/metro_tunnel_listing.json",
+      "bytes": 90546,
+      "sha256": "cedc8f71c40c628fe720d42c8b2ff2a1aaf1c94ec699875e72bedfa3c49e2a4a"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/sensor_data.html",
+      "bytes": 360983,
+      "sha256": "0424ed4eca4ff88c02fd3a617df494e39bf6afcd0a25cb1851beb96defb6f736"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/sensor_data.html.http.json",
+      "bytes": 411,
+      "sha256": "2442324bb7cef2e1925e088f58b2cb65d91a48736c2c6d8e152ce8280fb9cc5b"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/sensor_data_listing.json",
+      "bytes": 27409,
+      "sha256": "fd7d3cf788cbb42c7f51d6c3d6f394a484adc5c3ea551a86b7b0ac91f1eb075a"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/shield_tunnel1_gamma.html",
+      "bytes": 334433,
+      "sha256": "a67d0748d2a23c6d5ad78739a99ee47be8b78f1d41473f477d39f3219bdf9e40"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/shield_tunnel1_gamma.html.http.json",
+      "bytes": 411,
+      "sha256": "04e940ad9b4fdae3c2d6275d95e23a5181643a055b1864e3962408ecc8a85fa5"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/shield_tunnel1_gamma_listing.json",
+      "bytes": 15671,
+      "sha256": "5c6932be60dcdb9cff7a6d1aba12159d113a302594e315a356091a27dfbf1839"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/traj.html",
+      "bytes": 361047,
+      "sha256": "3bb9835ea5a315faf7ed670900eb0ada0509e2e04525a798888a7279e645a23c"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/traj.html.http.json",
+      "bytes": 411,
+      "sha256": "a97c5ac82ea10df62c9e40338e15131fa32f3cf6e3f990ad849ed310898c61b7"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/official_metadata/traj_listing.json",
+      "bytes": 27397,
+      "sha256": "0d017b1c9368f4808d4d9d7c3b9faed52ad95fd497e4896b2e99b70eb5bcd9d9"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/bag_access_probe/access_receipt.json",
+      "bytes": 607,
+      "sha256": "460f7e06f78318a15f2b22facb74d61eaf4ea785104c18c18b260b342a9e388e"
+    },
+    {
+      "path": "/home/jian/geode_p61_data/bag_access_probe/response_body.bin",
+      "bytes": 2040,
+      "sha256": "c6727431d8666abf04ec3177f46fdd7cad3329c6d8ca3ea0b3223af27b76921c"
+    }
+  ],
+  "official_small_assets": [
+    {
+      "path": "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/drive_gamma_response.bin.http.json",
+      "bytes": 473,
+      "sha256": "3c2aadb2a5927cb75cbb56e46f9277101d076c1fab1fedc3dd6a6bd35103f473"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/ros_topics.png.http.json",
+      "bytes": 568,
+      "sha256": "5f1858bdc8277540c7d672c7d71bf4de165c9e88bdd53754756c574ce9c068f1"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/gamma_config.yaml",
+      "bytes": 4731,
+      "sha256": "19cda4d48f5b185d93293393846a387a2b093c67dc9ec3a646ed8f826b587dbe"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/gamma2gt_leica_404.txt",
+      "bytes": 14,
+      "sha256": "d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/drive_gamma_response.bin",
+      "bytes": 2040,
+      "sha256": "68621d6238a53b29c3d5c0bcafbb75584e803c0944edebd4ce30137a36777cce"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/repository_tree.json",
+      "bytes": 279,
+      "sha256": "3b5cee0c854ba67e941da541e773f69d8271b9dc1624f27e7ab3d8e974518c2f"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/GEODE_README.md.http.json",
+      "bytes": 517,
+      "sha256": "1f1f79392b70fc88c43aa4fb5f55ba66bb4b2af122f787b2aac5a526a438e48a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/gamma_config.yaml.http.json",
+      "bytes": 542,
+      "sha256": "3e0348fca56f79dc0f79cc7c5dc03923be5549fd426b3080427e03bcecedf2a1"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/GEODE_README.md",
+      "bytes": 11543,
+      "sha256": "eac59895cbe45a1cff161bae0599c7ad15274054da74c9d1f60bfb4be6989586"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/gamma2gt_leica_404.txt.http.json",
+      "bytes": 542,
+      "sha256": "023950675ef439e520c196c78d66a1f5ab3dd48cbc1bcaa6b969126cb5e8a2da"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/repository_tree.json.http.json",
+      "bytes": 534,
+      "sha256": "b8b5894831994299a192c9457c7692d2ad414970becff9a4d391d933f2fb7b03"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_geode_native_tunnel_ws/docs/p61_geode_native_tunnel_entry/official/ros_topics.png",
+      "bytes": 158018,
+      "sha256": "ff07403826fdc9b3ed417011ea471ea052f1c121a12f36e2b4675d4f99b9fafc"
+    }
+  ],
+  "official_dataset_checksum_available": false,
+  "hash_scope": "local evidence bytes only; no complete bag checksum was obtained"
+}
