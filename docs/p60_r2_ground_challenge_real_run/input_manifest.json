@@ -1,0 +1,62 @@
+{
+  "task": "P60-R2-GROUND-CHALLENGE-CORRIDOR-REAL-RUN",
+  "dataset": "Ground-Challenge",
+  "source_uuid": "F627-4133",
+  "source_mount": "/media/jian/HIKVISION",
+  "external_writes": false,
+  "corridor1": {
+    "source": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/raw/corridor1.bag",
+    "bytes": 2932364225,
+    "magic": "#ROSBAG V2.0\n",
+    "indexed": true,
+    "indexed_messages": 81618,
+    "lidar_scans": 998,
+    "xsens_imu_records": 40281,
+    "record_start_sec": 1658917371.639781,
+    "record_end_sec": 1658917472.336074,
+    "copied_to_internal": false,
+    "full_payload_traversal": false,
+    "sha256": null
+  },
+  "corridor2": {
+    "source": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/raw/corridor2.bag",
+    "internal": "/home/jian/ground-challenge/corridor2/corridor2.bag",
+    "bytes": 2871922599,
+    "source_sha256": "6ef85c76a36bdcef4811d411ac0f09219803377f5b7b9bd0cf2a5258cc826cea",
+    "destination_sha256": "6ef85c76a36bdcef4811d411ac0f09219803377f5b7b9bd0cf2a5258cc826cea",
+    "publisher_checksum": null,
+    "full_payload_traversal": true,
+    "total_messages": 79658,
+    "raw_read_counts": {
+      "/velodyne_points": 974,
+      "/imu/data": 39315,
+      "/camera/imu": 19618,
+      "/odom": 4913,
+      "/tf": 11892,
+      "/camera/aligned_depth_to_color/image_raw": 1473,
+      "/camera/color/image_raw": 1473
+    },
+    "lidar_start_ns": 1658917771606140375,
+    "lidar_end_ns": 1658917869740242958,
+    "imu_start_ns": 1658917771516438961,
+    "imu_end_ns": 1658917869797182083,
+    "lidar_frame": "sensor",
+    "imu_frame": "imu",
+    "T_imu_lidar": null
+  },
+  "calibration": {
+    "official_repository_commit": "46a7c19a8672cc9246ad8b14815b4006a374fae0",
+    "path": "/home/jian/ground-challenge/calibration.txt",
+    "bytes": 932,
+    "sha256": "f8f591c46fa21c88d3986e65bf0558c7f79f2830b017165ec86b87190f745e08",
+    "contains_lidar_imu_transform": false
+  },
+  "raw_probe_map": {
+    "path": "/home/jian/livox_ws/p60_ground_challenge_runs/first_scan_map/first_scan_xyz.pcd",
+    "sha256": "a1fa95acc6a60a6681f8a932671c06ee31b6a28b53ef9afc65a1e3e38363d0bb",
+    "source_scan_index": 1,
+    "original_points": 24781,
+    "processed_target_points": 1827,
+    "label": "SAME_SEQUENCE_SELF_MAP_ENGINEERING_ONLY"
+  }
+}
