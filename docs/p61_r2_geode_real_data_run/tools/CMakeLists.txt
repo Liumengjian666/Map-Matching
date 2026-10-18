@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 3.10)
+project(p61_r2_native_geometry LANGUAGES C CXX)
+set(CMAKE_CXX_STANDARD 14)
+find_package(PCL 1.10 REQUIRED COMPONENTS common io filters registration kdtree)
+get_filename_component(REPO "${CMAKE_CURRENT_LIST_DIR}/../../.." ABSOLUTE)
+set(FRONTEND "${REPO}/src/dog_prior_map_fastlio2_frontend_exp")
+include_directories(${PCL_INCLUDE_DIRS} "${FRONTEND}/include"
+  "${REPO}/docs/p60_r4_ground_challenge_ndt_degeneracy/tools"
+  "${REPO}/docs/p60_r5_ndt_resolution_correction/tools")
+add_definitions(${PCL_DEFINITIONS})
+add_executable(native_geometry native_geometry.cpp ${FRONTEND}/src/coupled_ndt_shadow.cpp)
+target_compile_options(native_geometry PRIVATE -ffunction-sections -fdata-sections)
+set_target_properties(native_geometry PROPERTIES LINK_FLAGS "-Wl,--gc-sections")
+target_link_libraries(native_geometry ${PCL_LIBRARIES} usb-1.0)
+add_executable(test_native_grid ${REPO}/docs/p60_r5_ndt_resolution_correction/tools/test_grid.cpp)
+target_link_libraries(test_native_grid ${PCL_LIBRARIES} usb-1.0)
+enable_testing()
+add_test(NAME actual_native_target_grid COMMAND test_native_grid)
