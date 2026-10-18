@@ -1,0 +1,4 @@
+# Preserve the downloaded upstream reference bytes (CRLF included), not compiled code.
+official/livox_lddc.cpp -text -diff
+# Keep raw rosbag-info stdout byte-identical, including its terminal blank line.
+rosbag_info.yaml whitespace=-blank-at-eof

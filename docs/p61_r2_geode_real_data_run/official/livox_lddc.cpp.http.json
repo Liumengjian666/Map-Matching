@@ -1,0 +1,13 @@
+{
+  "requested_url": "https://raw.githubusercontent.com/Livox-SDK/livox_ros_driver/3d240d5666129e1a3052e78ee8487a04b08fdda3/livox_ros_driver/livox_ros_driver/lddc.cpp",
+  "attempt": 1,
+  "max_bytes": 8388608,
+  "status": 200,
+  "final_url": "https://raw.githubusercontent.com/Livox-SDK/livox_ros_driver/3d240d5666129e1a3052e78ee8487a04b08fdda3/livox_ros_driver/livox_ros_driver/lddc.cpp",
+  "headers": {
+    "Content-Type": "text/plain; charset=utf-8",
+    "Content-Length": "4810"
+  },
+  "bytes": 23554,
+  "sha256": "345b85c22536c56ddc64685f1d68e2f261f08c6222851283e4326118977d64df"
+}

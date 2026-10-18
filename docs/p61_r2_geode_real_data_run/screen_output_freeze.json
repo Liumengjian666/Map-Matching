@@ -1,0 +1,33 @@
+{
+  "code_sha": "25b24e607d50b9859b6609861f58a1ca4c7fa64a",
+  "branch": "research/p61-r2-geode-real-data-run",
+  "worktree_status": "",
+  "files": {
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen/alignments.csv": {
+      "bytes": 42218,
+      "sha256": "5107fd009c9f800ebef08a3245bc845197b7a7a8c498a8b601e2ec5de1777803"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen/grid_audit.csv": {
+      "bytes": 23577,
+      "sha256": "b17a16ca0af10794c12ffad6a9562ad9a2379f1bf04693c22a74b673cd716ed0"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen/hessian.csv": {
+      "bytes": 142561,
+      "sha256": "c18e93f69afc79d49df12745cf9b1bf5313d9154da35950dec26bc4814b08cc6"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_integrity.json": {
+      "bytes": 242,
+      "sha256": "6fdd655dc2ad296d6700ab1ef53001447dc478403ecab6c759e4371eace714be"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen.log": {
+      "bytes": 3419,
+      "sha256": "f15ce55293fd7b797646394c33053624693977b828f0acc97cbfa4e1cfece4d8"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/screen_resource.txt": {
+      "bytes": 901,
+      "sha256": "18f7f40a5db21b207fa7c63291b943e3e07e317d9fc965ea450928e25def1a5a"
+    }
+  },
+  "gt_read": false,
+  "hikvision_access": false
+}

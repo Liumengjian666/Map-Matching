@@ -1,0 +1,200 @@
+[
+  {
+    "source": "/home/jian/geode/Shield_tunnel1_gamma/input_freeze.json",
+    "archive": "bag_identity.json",
+    "bytes": 547,
+    "sha256": "5529cb1b5255919876c0cd116d7a4be75909ce47fc00fde1851afa6586fea328"
+  },
+  {
+    "source": "/home/jian/geode/Shield_tunnel1_gamma/rosbag_info.yaml",
+    "archive": "rosbag_info.yaml",
+    "bytes": 915,
+    "sha256": "056d31e548b999046e1daad41b4578c510ccbb811402f0c86cfe98456842a7cf"
+  },
+  {
+    "source": "/home/jian/geode/Shield_tunnel1_gamma/inspection/inspection.json",
+    "archive": "bag_inspection.json",
+    "bytes": 2429,
+    "sha256": "4f689e8972943df6cc18485aee9a0e7060eb53d533ef90fb909eeb453cb6f10e"
+  },
+  {
+    "source": "/home/jian/geode/Shield_tunnel1_gamma/inspection/message_definitions.json",
+    "archive": "message_definitions.json",
+    "bytes": 5783,
+    "sha256": "abe464d1d23359af24a172f4b6a9b170e542e116003106437b2f3e5f3a2d3620"
+  },
+  {
+    "source": "/home/jian/geode/Shield_tunnel1_gamma/inspection/scan_ledger.csv",
+    "archive": "scan_ledger.csv",
+    "bytes": 1057313,
+    "sha256": "21cba76ec059016700b5ac3f0a0851f769b338ee4550e19108910d3efd3902fb"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/time_contract_audit.json",
+    "archive": "time_contract_audit.json",
+    "bytes": 1008,
+    "sha256": "f1ac6bd99b56c7700613e6cbe1942a1e720cdaeb2a8e7d0ed2df584ec87c9206"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/smoke/alignments.csv",
+    "archive": "smoke_alignments.csv",
+    "bytes": 8746,
+    "sha256": "9b8bbab1029c0bc23007adb8f956ce1c0793bcb75d97116185fcbf27b3770b4e"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/smoke/grid_audit.csv",
+    "archive": "smoke_grid_audit.csv",
+    "bytes": 4619,
+    "sha256": "1bb65e142fce427bcb74433a7d7a643412ae6ff2d210b4710ab64eed26228664"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/smoke/hessian.csv",
+    "archive": "smoke_hessian.csv",
+    "bytes": 29018,
+    "sha256": "e947638f8eb7b1458c22e8f62979677c43a5fa8bf42eba8fdecc00533fee505a"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/sample_manifest.csv",
+    "archive": "smoke_sample_manifest.csv",
+    "bytes": 6213,
+    "sha256": "2841173fe0593e8f16a610e02f43ad4573db3582ea3d08d05ddd3450ffe74aec"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/selection_freeze.json",
+    "archive": "smoke_selection_freeze.json",
+    "bytes": 468,
+    "sha256": "f0ba101591d1c7d881251f2d9acc19d3859a9f7f04c3ba4e915d6c7a5a9a1c0b"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/smoke_resource.txt",
+    "archive": "smoke_resource.txt",
+    "bytes": 903,
+    "sha256": "28c5bc13fa5be18c5ff0540099ef3af269e565d0d1b7ac90bf1c8756b58b1c47"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/smoke_input_freeze.json",
+    "archive": "smoke_input_freeze.json",
+    "bytes": 9862,
+    "sha256": "e047641a67c73332feae28a5d96be24dd18a85020637a7e62c3e02450a5fccf7"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/smoke_output_freeze.json",
+    "archive": "smoke_output_freeze.json",
+    "bytes": 1253,
+    "sha256": "886a86a1862c346f6b57a67a33f4d0b1c97ca649d385cf5cd5c5a8cd8eeaf28e"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/screen/alignments.csv",
+    "archive": "screen_alignments.csv",
+    "bytes": 42218,
+    "sha256": "5107fd009c9f800ebef08a3245bc845197b7a7a8c498a8b601e2ec5de1777803"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/screen/grid_audit.csv",
+    "archive": "screen_grid_audit.csv",
+    "bytes": 23577,
+    "sha256": "b17a16ca0af10794c12ffad6a9562ad9a2379f1bf04693c22a74b673cd716ed0"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/screen/hessian.csv",
+    "archive": "screen_hessian.csv",
+    "bytes": 142561,
+    "sha256": "c18e93f69afc79d49df12745cf9b1bf5313d9154da35950dec26bc4814b08cc6"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/sample_manifest.csv",
+    "archive": "screen_sample_manifest.csv",
+    "bytes": 31532,
+    "sha256": "0fffa5197af6ccf2cda126780fbd91d51ae2f20cb89a804eb7507540b9117530"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/screen_inputs/selection_freeze.json",
+    "archive": "screen_selection_freeze.json",
+    "bytes": 1303,
+    "sha256": "e8e01e6e5e94909d239a76ee506c9a7112bac891c248383ce719489748573a4d"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/screen_resource.txt",
+    "archive": "screen_resource.txt",
+    "bytes": 901,
+    "sha256": "18f7f40a5db21b207fa7c63291b943e3e07e317d9fc965ea450928e25def1a5a"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/screen_input_freeze.json",
+    "archive": "screen_input_freeze.json",
+    "bytes": 77678,
+    "sha256": "fbceea4bc173fae9b51d3a34c3de606ed5f6ee4871516e8467c1032891d905b8"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/screen_output_freeze.json",
+    "archive": "screen_output_freeze.json",
+    "bytes": 1268,
+    "sha256": "74b471dd074896e401d0d12a190e12f01b31a3f22d826728ce67fb13eda769f2"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/analysis/geometry_comparison.csv",
+    "archive": "geometry_comparison.csv",
+    "bytes": 580,
+    "sha256": "5d1718443f4271ff798991c144d0e4b57f6c367f29aefb2fff4ef8a1f72d8f31"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/analysis/weak_direction_records.csv",
+    "archive": "weak_direction_records.csv",
+    "bytes": 17201,
+    "sha256": "01392957f90adfadc8973ce9cdcea3db689ab9f754c3ec183fee825bf1845089"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/analysis/smoke_screen_overlap_parity.csv",
+    "archive": "smoke_screen_overlap_parity.csv",
+    "bytes": 55,
+    "sha256": "e62f774432fc9a7599cc1b4495cf5c194e47f0030b3f09a481f02c146f0688fa"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/analysis/curvature_support_time.png",
+    "archive": "curvature_support_time.png",
+    "bytes": 212854,
+    "sha256": "431203529010a84cc0f7d4a26bccc52fbb6ede6c5f1b170664126a9902d8f89d"
+  },
+  {
+    "source": "/home/jian/livox_ws/p61_r2_geode_runs/analysis/weak_axes_and_spectrum.png",
+    "archive": "weak_axes_and_spectrum.png",
+    "bytes": 103324,
+    "sha256": "da24f233b775e877cdb1fa6ae694907353405ebc73c02f469bdc4542f793743c"
+  },
+  {
+    "source": "/home/jian/geode/Shield_tunnel1_gamma/storage_evidence/copy/receipt.json",
+    "archive": "storage_copy_receipt.json",
+    "bytes": 651,
+    "sha256": "778b80ecb1f4d14903cfcd6a5692a9aa60db6bc2cb2f18e9b72a4aa55c4899be"
+  },
+  {
+    "source": "/home/jian/geode/Shield_tunnel1_gamma/storage_evidence/copy/monitor.jsonl",
+    "archive": "storage_copy_monitor.jsonl",
+    "bytes": 25801,
+    "sha256": "eceb5b9fe00f0e3524b93cb4bc0a38ba8c7c0b4db44e247df3d5ae3f325a39e5"
+  },
+  {
+    "source": "/home/jian/geode/Shield_tunnel1_gamma/storage_evidence/copy/kernel.log",
+    "archive": "storage_copy_kernel.log",
+    "bytes": 102,
+    "sha256": "148b2ab49341c55f757ac1d1f408955e79d0a7db76bb1566ca2c34274b0ee1b5"
+  },
+  {
+    "source": "/home/jian/geode/Shield_tunnel1_gamma/storage_evidence/source_hash/receipt.json",
+    "archive": "storage_source_hash_receipt.json",
+    "bytes": 541,
+    "sha256": "8be213aaf11c2ede741e39317954e1431c07b1e5ae1a182b77d333693077c120"
+  },
+  {
+    "source": "/home/jian/geode/Shield_tunnel1_gamma/storage_evidence/source_hash/monitor.jsonl",
+    "archive": "storage_source_hash_monitor.jsonl",
+    "bytes": 23515,
+    "sha256": "805796a98d1e87ad4f413a4923c14cf4ba777e22a6b818ddfdcd5aefa65d034b"
+  },
+  {
+    "source": "/home/jian/geode/Shield_tunnel1_gamma/storage_evidence/source_hash/kernel.log",
+    "archive": "storage_source_hash_kernel.log",
+    "bytes": 102,
+    "sha256": "148b2ab49341c55f757ac1d1f408955e79d0a7db76bb1566ca2c34274b0ee1b5"
+  }
+]

@@ -1,0 +1,31 @@
+{
+  "phase": "smoke",
+  "source_indices": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21
+  ],
+  "selection": "consecutive",
+  "scan_ledger_sha256": "21cba76ec059016700b5ac3f0a0851f769b338ee4550e19108910d3efd3902fb",
+  "gt_read": false,
+  "imu_used": false,
+  "bag": "/home/jian/geode/Shield_tunnel1_gamma/Shield_tunnel1_gamma.bag",
+  "native_fov_no_crop": true
+}

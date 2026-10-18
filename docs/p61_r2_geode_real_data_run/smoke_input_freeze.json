@@ -1,0 +1,213 @@
+{
+  "code_sha": "25b24e607d50b9859b6609861f58a1ca4c7fa64a",
+  "branch": "research/p61-r2-geode-real-data-run",
+  "worktree_status": "",
+  "files": {
+    "/home/jian/geode/Shield_tunnel1_gamma/input_freeze.json": {
+      "bytes": 547,
+      "sha256": "5529cb1b5255919876c0cd116d7a4be75909ce47fc00fde1851afa6586fea328"
+    },
+    "/home/jian/geode/Shield_tunnel1_gamma/inspection/inspection.json": {
+      "bytes": 2429,
+      "sha256": "4f689e8972943df6cc18485aee9a0e7060eb53d533ef90fb909eeb453cb6f10e"
+    },
+    "/home/jian/geode/Shield_tunnel1_gamma/inspection/scan_ledger.csv": {
+      "bytes": 1057313,
+      "sha256": "21cba76ec059016700b5ac3f0a0851f769b338ee4550e19108910d3efd3902fb"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/build/native_geometry": {
+      "bytes": 284872,
+      "sha256": "2b56a6a231443b7b5318d955ba1d5be1ed0ca7b0ecb118b10ee73f594f47ec02"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_real_data_ws/docs/p61_r2_geode_real_data_run/tools/native_geometry.cpp": {
+      "bytes": 4001,
+      "sha256": "9615069805bc1b2ba630855281aff3eaa0d2050c5b2c97daeb06dd4023e9ad27"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_real_data_ws/docs/p61_r2_geode_real_data_run/PROTOCOL.md": {
+      "bytes": 3963,
+      "sha256": "4af721a7061511a649d5ea92fac480af4b5148c9fd844885f48863e05a3728c6"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/export_manifest.json": {
+      "bytes": 13520,
+      "sha256": "516e1abbf9a871d578ce379c6773646e625006af77dae03d1dc9921683b0aec8"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_1.npy": {
+      "bytes": 456256,
+      "sha256": "ae32e017b5b61e2ef9678c23d895f279710abddfcf17b4e8ce36c06baf1f1acc"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_1.pcd": {
+      "bytes": 288105,
+      "sha256": "6daf91c742fb35bbcbe5aae83cf2cdbab166ba65a90ed5692cd9727a9910ddef"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_10.npy": {
+      "bytes": 456256,
+      "sha256": "4d3e5c54483001aa4a25d2ba03e3dabf2aa0979b4befe83eea9a1b7468f4fb8c"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_10.pcd": {
+      "bytes": 288105,
+      "sha256": "875aa5e5f43b288d32df05edcee624b39f46608f7ddb519503bce75dd0295645"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_11.npy": {
+      "bytes": 456256,
+      "sha256": "070185e715f8c2308ea7a2262a142eb5de79898a2c84c2fb6c46b56dbbdaadf6"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_11.pcd": {
+      "bytes": 288105,
+      "sha256": "da56c03fce6d6ee6309c46c767c101c8eb346617fa88555f505a58e36e4bf7f9"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_12.npy": {
+      "bytes": 456256,
+      "sha256": "52c432cf71bc3fb41296443cd897472dd65d49124b328329636ca9f99e23d912"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_12.pcd": {
+      "bytes": 288105,
+      "sha256": "d4467b0b4256315c8c26e169d34093bea049466be3f41ab372e089fc67b589c5"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_13.npy": {
+      "bytes": 456256,
+      "sha256": "0476ee88665e61d0f677381b21296db3d1a861d186edf8bf7f1a5a23d04b26eb"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_13.pcd": {
+      "bytes": 288105,
+      "sha256": "507cbd50397c9b814abc2aff406ed307f40b5356ce87eee123cca40ea7385de1"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_14.npy": {
+      "bytes": 456256,
+      "sha256": "946f383e96ff396d2d1479c52796174b22780edac17a049d2db813fc6d857dd9"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_14.pcd": {
+      "bytes": 288105,
+      "sha256": "55542dce335b99235032e478e9df092585c0d84b740477471ec3c6ec2a956801"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_15.npy": {
+      "bytes": 456256,
+      "sha256": "fd5f281346fb73778447e46e027310b69d8387277bed3bfb747a0901f45c11bb"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_15.pcd": {
+      "bytes": 288105,
+      "sha256": "f29c2fe08c65908cfe82087fb6447e275fb317844d863b8baea8f7391da69f27"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_16.npy": {
+      "bytes": 456256,
+      "sha256": "7b0ef884d3e48e567446fbd99b3658aeda48e9308be9d3a2759daf41535c0a6a"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_16.pcd": {
+      "bytes": 288105,
+      "sha256": "35e8fcd78bcac5a8becad2b4c35af198b1bc88ccdf545551278381f16c023655"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_17.npy": {
+      "bytes": 456256,
+      "sha256": "9d078b15bc78d033b6c1a2f2907b2dfb89f2fe2b45f60b7f7648e16e0c81026e"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_17.pcd": {
+      "bytes": 288105,
+      "sha256": "e260400b45b470bed0e61af22f03954e979845a196e47468f99837e7d159bcc2"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_18.npy": {
+      "bytes": 456256,
+      "sha256": "3c6057b2fdf11d3b66990065b0f695d4594403d559acd6b0205b184072e6e0a8"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_18.pcd": {
+      "bytes": 288105,
+      "sha256": "73930caa96ff35a3d2e7c3c5d09bb714b5817d1f1e53a5930efb1e92decbf053"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_19.npy": {
+      "bytes": 456256,
+      "sha256": "64cf4969d794a7345ccf502b94812038b17db4256dc93d4d3384f5c5bef7fa38"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_19.pcd": {
+      "bytes": 288105,
+      "sha256": "4d9a2675f48a92d74d2ffe22adb0d8d7bcbf44f432e4ca666882e77311fe5000"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_2.npy": {
+      "bytes": 456256,
+      "sha256": "494fb8264598306b514142bf4bbb4dcf4b4e77d5b77110b66bf7c4b45d772e0d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_2.pcd": {
+      "bytes": 288105,
+      "sha256": "e785f17b24b8d7852c5916ca9542084f194518e10f4c80a8d7f724a2e2586e34"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_20.npy": {
+      "bytes": 456256,
+      "sha256": "5e9a632b4210d6b32a776ae4be29ff5650b147170278f4b8c700d3f57e3ff01d"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_20.pcd": {
+      "bytes": 288105,
+      "sha256": "b70dcf0668081b3d2483b237bd533ea5d63ac49f4a77741982a63ac595ffb6bb"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_21.npy": {
+      "bytes": 456256,
+      "sha256": "5b3b69b8c91c577092bb5a0dc3810e21ac98ec70abce25caafdd07951eb580b1"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_21.pcd": {
+      "bytes": 288105,
+      "sha256": "2b639422f4aa8b6895a46f8aa7b73aeba32ba6c1e5c865e5f6f9fff688177efc"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_3.npy": {
+      "bytes": 456256,
+      "sha256": "3fd6df67adef9447cd11b934e2bc55cfd7ecbc5f29885dc0acd131259e72c6bd"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_3.pcd": {
+      "bytes": 288105,
+      "sha256": "ee32461c0f1909a88decb7d8281a6b4d7b315e0aa1bf3009d3486e256b88007a"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_4.npy": {
+      "bytes": 456256,
+      "sha256": "b1f161bde16cfc7763d5c4bb5d02d82e8060824a236d8ea39ed5d18670759342"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_4.pcd": {
+      "bytes": 288105,
+      "sha256": "e71759e695262d369656be48e95a9b8ee2bbab892952197e925e6af7f962ba85"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_5.npy": {
+      "bytes": 456256,
+      "sha256": "dedfaa2fc24ba0675eee735a1396a6273e69b5636383ddb68bcbd883df3129c5"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_5.pcd": {
+      "bytes": 288105,
+      "sha256": "b4245589c44cf4acc4d535523ec4a254a388560722a1139495b4843f6a4c44c7"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_6.npy": {
+      "bytes": 456256,
+      "sha256": "f4fd10796a5059125bdd5033147f3d8ebee1d72e1821cc9e8b18a1110533a7ea"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_6.pcd": {
+      "bytes": 288105,
+      "sha256": "11b185f0c201b3241ce4bd4c55a8196099b4f7d5a8c89e58e4ea376e191688e4"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_7.npy": {
+      "bytes": 456256,
+      "sha256": "fe3c395ff8934a5b0d8232477cc66dd44560ebea430ba592ed28e805d0ce08f8"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_7.pcd": {
+      "bytes": 288105,
+      "sha256": "4d93c6c356738a3ba411861967fc2a6345ed2275442c1733a42ee60310cd8c66"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_8.npy": {
+      "bytes": 456256,
+      "sha256": "9862204a1bb3775189fc9d684dce5e90ba59ef34ddea5cde7fa129d98e6f3176"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_8.pcd": {
+      "bytes": 288105,
+      "sha256": "62a4d2e04a91fae695641a572f717cccae030dc3c61a0765e49e0f71d42c9105"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_9.npy": {
+      "bytes": 456256,
+      "sha256": "7b258ca5fbc119dbd38d74bf7a26eab262cc7f7f40e3d1c3b3371b7b1ae09a63"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/raw_scan_9.pcd": {
+      "bytes": 288105,
+      "sha256": "cd0a133f40b150ae10eecb8c426f01a518302d4bdd54185a48c5933f657e5bff"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/sample_manifest.csv": {
+      "bytes": 6213,
+      "sha256": "2841173fe0593e8f16a610e02f43ad4573db3582ea3d08d05ddd3450ffe74aec"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_inputs/selection_freeze.json": {
+      "bytes": 468,
+      "sha256": "f0ba101591d1c7d881251f2d9acc19d3859a9f7f04c3ba4e915d6c7a5a9a1c0b"
+    }
+  },
+  "gt_read": false,
+  "hikvision_access": false
+}

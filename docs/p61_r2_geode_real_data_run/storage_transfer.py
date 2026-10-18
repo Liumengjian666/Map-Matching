@@ -35,13 +35,21 @@ def kernel_since(epoch):
                                    text=True, timeout=8)
 
 
-def monitor(phase):
+def evidence_path(phase, attempt=None):
+    if phase not in ('copy', 'source_hash'): raise ValueError('unsupported phase')
+    if attempt is not None and not re.fullmatch(r'[A-Za-z0-9_-]{1,32}', attempt):
+        raise ValueError('invalid explicit attempt label')
+    return DEST / 'storage_evidence' / (phase if attempt is None else phase + '_' + attempt)
+
+
+def monitor(phase, attempt=None):
     if phase not in ('copy', 'source_hash'): raise ValueError('unsupported phase')
     if SOURCE.stat().st_size != SIZE: raise ValueError('unexpected source size')
     mount = subprocess.check_output(['findmnt', '-rn', '-o', 'UUID', '/media/jian/HIKVISION'], text=True, timeout=8).strip()
     if mount != 'F627-4133': raise ValueError('unexpected external UUID')
     if (DEST / 'Shield_tunnel1_gamma.bag').exists(): raise FileExistsError('verified destination must never be overwritten')
-    root = DEST / 'storage_evidence' / phase; root.mkdir(parents=True, exist_ok=False)
+    # Explicit new labels allow append-verify resume without erasing old evidence.
+    root = evidence_path(phase, attempt); root.mkdir(parents=True, exist_ok=False)
     epoch = int(time.time()); kernel_since(epoch)
     partial = DEST / 'Shield_tunnel1_gamma.bag.part'
     command = (['rsync', '--partial', '--append-verify', '--info=progress2', '--bwlimit=16384', str(SOURCE), str(partial)]
@@ -82,4 +90,4 @@ def monitor(phase):
 
 
 if __name__ == '__main__':
-    hash_worker() if sys.argv[1] == '--hash-worker' else monitor(sys.argv[1])
+    hash_worker() if sys.argv[1] == '--hash-worker' else monitor(sys.argv[1], sys.argv[2] if len(sys.argv)>2 else None)

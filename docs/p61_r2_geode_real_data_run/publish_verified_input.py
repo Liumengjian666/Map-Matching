@@ -5,18 +5,21 @@ import json
 import os
 from pathlib import Path
 import re
+import sys
 from storage_transfer import DEST, SIZE, SOURCE
 
 
-def main():
+def main(copy_name='copy', hash_name='source_hash'):
     partial = DEST / 'Shield_tunnel1_gamma.bag.part'
     final = DEST / 'Shield_tunnel1_gamma.bag'
     receipt = DEST / 'input_freeze.json'
     if final.exists() or receipt.exists(): raise FileExistsError('do not overwrite verified input')
-    for phase in ('copy', 'source_hash'):
+    if not all(re.fullmatch(r'[A-Za-z0-9_-]+', name) for name in (copy_name, hash_name)):
+        raise ValueError('invalid evidence directory name')
+    for phase in (copy_name, hash_name):
         status = json.loads((DEST / f'storage_evidence/{phase}/receipt.json').read_text())
         if not status['success']: raise ValueError('storage phase failed')
-    matches = re.findall(r'^SOURCE_SHA256 ([0-9a-f]{64})$', (DEST / 'storage_evidence/source_hash/worker.log').read_text(), re.M)
+    matches = re.findall(r'^SOURCE_SHA256 ([0-9a-f]{64})$', (DEST / 'storage_evidence' / hash_name / 'worker.log').read_text(), re.M)
     if len(matches) != 1 or partial.stat().st_size != SIZE: raise ValueError('incomplete source identity')
     digest = hashlib.sha256()
     with partial.open('rb') as stream:
@@ -30,4 +33,4 @@ def main():
     print(json.dumps(result, indent=2))
 
 
-if __name__ == '__main__': main()
+if __name__ == '__main__': main(*sys.argv[1:])

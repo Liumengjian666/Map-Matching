@@ -1,0 +1,33 @@
+{
+  "code_sha": "25b24e607d50b9859b6609861f58a1ca4c7fa64a",
+  "branch": "research/p61-r2-geode-real-data-run",
+  "worktree_status": "",
+  "files": {
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke/alignments.csv": {
+      "bytes": 8746,
+      "sha256": "9b8bbab1029c0bc23007adb8f956ce1c0793bcb75d97116185fcbf27b3770b4e"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke/grid_audit.csv": {
+      "bytes": 4619,
+      "sha256": "1bb65e142fce427bcb74433a7d7a643412ae6ff2d210b4710ab64eed26228664"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke/hessian.csv": {
+      "bytes": 29018,
+      "sha256": "e947638f8eb7b1458c22e8f62979677c43a5fa8bf42eba8fdecc00533fee505a"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_gate.json": {
+      "bytes": 233,
+      "sha256": "216fd6cc23930eb764e20378e4bf5b1a59f6262eda9e137b13f650e156eabdb6"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke.log": {
+      "bytes": 670,
+      "sha256": "9e767de26711b424b18f3a69cfa0017baf27584dc41cc443f2da3e6c10c9aab3"
+    },
+    "/home/jian/livox_ws/p61_r2_geode_runs/smoke_resource.txt": {
+      "bytes": 903,
+      "sha256": "28c5bc13fa5be18c5ff0540099ef3af269e565d0d1b7ac90bf1c8756b58b1c47"
+    }
+  },
+  "gt_read": false,
+  "hikvision_access": false
+}

@@ -1,0 +1,32 @@
+{
+  "timestamps_modified": false,
+  "deskew_applied": false,
+  "header_minus_device_timebase_min_ns": 1706671002200386206,
+  "header_minus_device_timebase_max_ns": 1706671002200386444,
+  "offset_variation_ns": 238,
+  "header_record_stamp_equal_count": 5427,
+  "max_delta_clock_difference_ns": 236,
+  "raw_device_timebase_is_ros_epoch": false,
+  "candidate_formula": "t_point_ros = header.stamp + offset_time_ns",
+  "candidate_formula_status": "SUPPORTED_BY_CLOCK_OFFSET_CONSTANCY_NOT_GEODE_EXPORTER_CERTIFIED",
+  "source_formula_not_applied": true,
+  "imu_coverage_under_header_anchor": {
+    "/imu/data": {
+      "count": 54276,
+      "fully_bracketed_scan_intervals": 5427,
+      "uncovered_indices": [],
+      "extrinsic_approved": false,
+      "fusion_approved": false
+    },
+    "/livox/imu": {
+      "count": 109966,
+      "fully_bracketed_scan_intervals": 5425,
+      "uncovered_indices": [
+        1,
+        5427
+      ],
+      "extrinsic_approved": false,
+      "fusion_approved": false
+    }
+  }
+}

@@ -1,8 +1,13 @@
 import unittest
-from storage_transfer import ERROR
+from storage_transfer import ERROR, evidence_path
 
 
 class StorageGuardTest(unittest.TestCase):
+    def test_resume_keeps_previous_evidence_separate(self):
+        self.assertNotEqual(evidence_path('copy'), evidence_path('copy', 'resume1'))
+        for attempt in ('../copy', '', 'a/b'):
+            with self.assertRaises(ValueError): evidence_path('copy', attempt)
+
     def test_associated_storage_faults_stop(self):
         for line in ('usb 4-2: reset SuperSpeed USB device', 'usb 4-2: USB disconnect',
                      'blk_update_request: I/O error, dev sda, sector 100',

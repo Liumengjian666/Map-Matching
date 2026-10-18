@@ -1,0 +1,88 @@
+{
+  "bag_path": "/home/jian/geode/Shield_tunnel1_gamma/Shield_tunnel1_gamma.bag",
+  "bag_bytes": 4500527001,
+  "magic": "#ROSBAG V2.0",
+  "full_raw_message_traversal": true,
+  "all_topic_counts_match_index": true,
+  "total_messages": 180523,
+  "topics": {
+    "/imu/data": {
+      "type": "sensor_msgs/Imu",
+      "count": 54276,
+      "frequency_hz": 96.15772942983563
+    },
+    "/left_camera/image/compressed": {
+      "type": "sensor_msgs/CompressedImage",
+      "count": 5427,
+      "frequency_hz": 10.003038375589966
+    },
+    "/livox/imu": {
+      "type": "sensor_msgs/Imu",
+      "count": 109966,
+      "frequency_hz": 200.10992366412214
+    },
+    "/livox/lidar": {
+      "type": "livox_ros_driver/CustomMsg",
+      "count": 5427,
+      "frequency_hz": 10.015698242245799
+    },
+    "/right_camera/image/compressed": {
+      "type": "sensor_msgs/CompressedImage",
+      "count": 5427,
+      "frequency_hz": 10.001905327405119
+    }
+  },
+  "record_range_sec": [
+    1706671289.3605947,
+    1706671832.1014986
+  ],
+  "actual_lidar_topic": "/livox/lidar",
+  "lidar_scans": 5427,
+  "lidar_first_ns": 1706671289400000810,
+  "lidar_last_ns": 1706671831999708652,
+  "lidar_duration_sec": 542.599707842,
+  "lidar_median_dt_sec": 0.099843264,
+  "lidar_max_dt_sec": 0.100674867,
+  "frames": {
+    "/imu/data": [
+      "imu_link"
+    ],
+    "/livox/lidar": [
+      "livox_frame"
+    ],
+    "/livox/imu": [
+      "livox_frame"
+    ]
+  },
+  "points_min": 24000,
+  "points_max": 24000,
+  "offset_min": 0,
+  "offset_max": 99871325,
+  "header_minus_timebase_min_ns": 1706671002200386206,
+  "header_minus_timebase_max_ns": 1706671002200386444,
+  "native_deserializer_crosschecks": 57,
+  "imu": {
+    "/imu/data": {
+      "count": 54276,
+      "first_ns": 1706671289360594749,
+      "last_ns": 1706671832101498603,
+      "strictly_increasing": true,
+      "median_dt_sec": 0.01039958,
+      "max_dt_sec": 0.015870094,
+      "full_point_time_span_covered_if_ns": false,
+      "scans_with_both_time_bounds_if_ns": 0
+    },
+    "/livox/imu": {
+      "count": 109966,
+      "first_ns": 1706671289404594898,
+      "last_ns": 1706671832099248647,
+      "strictly_increasing": true,
+      "median_dt_sec": 0.0049972540000000005,
+      "max_dt_sec": 0.0051095490000000006,
+      "full_point_time_span_covered_if_ns": false,
+      "scans_with_both_time_bounds_if_ns": 0
+    }
+  },
+  "gt_read": false,
+  "inspection_wall_sec": 15.149198010985856
+}

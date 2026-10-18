@@ -1,0 +1,10 @@
+{
+  "external_source": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/raw/Shield_tunnel1_gamma.bag",
+  "internal_bag": "/home/jian/geode/Shield_tunnel1_gamma/Shield_tunnel1_gamma.bag",
+  "bytes": 4500527001,
+  "external_sha256": "162ed09ab6b262f89ac46c45bac36ad2335a6f869b360b80d80ddf59d0b22091",
+  "internal_sha256": "162ed09ab6b262f89ac46c45bac36ad2335a6f869b360b80d80ddf59d0b22091",
+  "equal": true,
+  "partial_preserved_as_hardlink": "/home/jian/geode/Shield_tunnel1_gamma/Shield_tunnel1_gamma.bag.part",
+  "official_checksum": null
+}

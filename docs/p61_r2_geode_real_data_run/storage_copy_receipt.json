@@ -1,0 +1,20 @@
+{
+  "phase": "copy",
+  "source": "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/raw/Shield_tunnel1_gamma.bag",
+  "partial": "/home/jian/geode/Shield_tunnel1_gamma/Shield_tunnel1_gamma.bag.part",
+  "expected_bytes": 4500527001,
+  "rate_limit_bytes_sec": 16777216,
+  "wall_sec": 274.68732757099497,
+  "exit_code": 0,
+  "stop_reason": null,
+  "success": true,
+  "command": [
+    "rsync",
+    "--partial",
+    "--append-verify",
+    "--info=progress2",
+    "--bwlimit=16384",
+    "/media/jian/HIKVISION/paper rosbag/SuperLoc/Corridor02/raw/Shield_tunnel1_gamma.bag",
+    "/home/jian/geode/Shield_tunnel1_gamma/Shield_tunnel1_gamma.bag.part"
+  ]
+}
