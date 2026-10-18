@@ -1,0 +1,33 @@
+{
+  "code_sha": "641677b7f5677dcd3d5da98b48b9a7431e0f9bf7",
+  "branch": "research/p60-r5-ndt-target-resolution-correction",
+  "worktree_status": "",
+  "files": {
+    "/home/jian/livox_ws/p60_r5_ndt_resolution_runs/formal/input_parity.csv": {
+      "bytes": 8473,
+      "sha256": "7f56e058019b0497bee31d721822b243d79a0b4d23031a7dd5aec6f7a6629f9e"
+    },
+    "/home/jian/livox_ws/p60_r5_ndt_resolution_runs/formal/corrected_alignments.csv": {
+      "bytes": 138285,
+      "sha256": "f8c2658e093cf6624c2964192f1c3ce7a96a00dbb47ca700b53aaf75b6c97f16"
+    },
+    "/home/jian/livox_ws/p60_r5_ndt_resolution_runs/formal/corrected_hessian.csv": {
+      "bytes": 855832,
+      "sha256": "0c2225552e2f52264fda8aaae1f99e62e7b4fe52d46eed8e0a959580bcc1f076"
+    },
+    "/home/jian/livox_ws/p60_r5_ndt_resolution_runs/formal/grid_audit.csv": {
+      "bytes": 119459,
+      "sha256": "ba54e85c96d189999cf267be524e73d2cc7542cf73a0eab46779e90e193be4d1"
+    },
+    "/home/jian/livox_ws/p60_r5_ndt_resolution_runs/formal.log": {
+      "bytes": 3681,
+      "sha256": "d27add67f7f1eeb56f9fe38923cd371efdb632b272467c9ec870de0b17f0f902"
+    },
+    "/home/jian/livox_ws/p60_r5_ndt_resolution_runs/resource.txt": {
+      "bytes": 974,
+      "sha256": "145ecc08c1d7bd55188ed8979fd516eaf66a4d4e5ff43fd7736ec4f0325ffee5"
+    }
+  },
+  "gt_read": false,
+  "hikvision_access": false
+}

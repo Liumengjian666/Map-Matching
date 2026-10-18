@@ -1,0 +1,53 @@
+{
+  "code_sha": "641677b7f5677dcd3d5da98b48b9a7431e0f9bf7",
+  "branch": "research/p60-r5-ndt-target-resolution-correction",
+  "worktree_status": "",
+  "files": {
+    "/home/jian/livox_ws/p60_r5_ndt_resolution_runs/build/corrected_screen": {
+      "bytes": 304704,
+      "sha256": "de9d4f79676db5c43a66e3e0b74a27c861b3f7d7afd101c9d97588fb78aea318"
+    },
+    "/home/jian/livox_ws/p60_r5_ndt_resolution_runs/input_freeze.json": {
+      "bytes": 33209,
+      "sha256": "3c5ea5ac497625de41806bbf1c050fa86d022bbe92e1a934adca725d48cb68e9"
+    },
+    "/home/jian/livox_ws/p60_r5_ndt_resolution_ws/docs/p60_r5_ndt_resolution_correction/PROTOCOL.md": {
+      "bytes": 3453,
+      "sha256": "1cbf76477e04ef5f0b904c7b7dd97d01f32e5dd36c8a9efa78c791e7296c29ab"
+    },
+    "/home/jian/livox_ws/p60_r5_ndt_resolution_ws/docs/p60_r5_ndt_resolution_correction/tools/corrected_screen.cpp": {
+      "bytes": 7526,
+      "sha256": "a95c14ecaa3600bb29fb4b9da2b225ee3c4ef2f30495be1718adb5fe8d34e011"
+    },
+    "/home/jian/livox_ws/p60_r5_ndt_resolution_ws/docs/p60_r5_ndt_resolution_correction/tools/corrected_ndt.hpp": {
+      "bytes": 628,
+      "sha256": "e1764cf93bcb5ca51f9feba055037f572020fac82861bbb8afcf9071b15f1fe3"
+    },
+    "/home/jian/livox_ws/p60_r5_ndt_resolution_ws/docs/p60_r5_ndt_resolution_correction/tools/CMakeLists.txt": {
+      "bytes": 1056,
+      "sha256": "85174f9e96c2741088e6007252143b137c4ef40bd16ac6c9fa7d605e63188f8f"
+    },
+    "/home/jian/livox_ws/p60_r5_ndt_resolution_ws/docs/p60_r4_ground_challenge_ndt_degeneracy/tools/cloud_contract.hpp": {
+      "bytes": 3971,
+      "sha256": "69f7a074109bcc8c9aaeae20dec0597674d8f2e09938d843ed135e322ddd9e50"
+    },
+    "/home/jian/livox_ws/p60_r5_ndt_resolution_ws/docs/p60_r4_ground_challenge_ndt_degeneracy/tools/metrics.hpp": {
+      "bytes": 4414,
+      "sha256": "1cd74eaa67cc01c8d2fd1cd9aeb4d6981bc6d189ddd6261e19db635df8f78a10"
+    },
+    "/home/jian/livox_ws/p60_r5_ndt_resolution_ws/src/dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_shadow.cpp": {
+      "bytes": 38558,
+      "sha256": "0c331c89620d16f7683ed77074ee0bab86fdb75af1f59fb417e137d99c16850f"
+    },
+    "/home/jian/livox_ws/p60_r5_ndt_resolution_ws/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/observable_pcl_ndt.hpp": {
+      "bytes": 3698,
+      "sha256": "aa311032b230181e7a6bc25d089280c1e38a7837d861b40cf866b74347b46981"
+    },
+    "/home/jian/livox_ws/p60_r5_ndt_resolution_ws/src/dog_prior_map_fastlio2_frontend_exp/include/dog_prior_map_fastlio2_frontend_exp/coupled_ndt_local_math.hpp": {
+      "bytes": 1255,
+      "sha256": "6a7b3b8cd1709f0f6d8152a3582a8c41933fca19943db155f0f67ea50c0d9114"
+    }
+  },
+  "gt_read": false,
+  "hikvision_access": false
+}
