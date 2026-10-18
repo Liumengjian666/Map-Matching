@@ -1,0 +1,258 @@
+{
+  "official/Shield_tunnel1.txt": {
+    "source": "/home/jian/livox_ws/p61_r4_geode_evidence/gt_download_response.bin",
+    "bytes": 86413,
+    "sha256": "525462e9ce03829cebce2e5106b9fe39737b6c9e12800bc4d5d14d9b593f4f5e",
+    "http": {
+      "requested_url": "https://drive.google.com/uc?export=download&id=1wTdSus7r1CTLnr7G0s5Q0wYDXkqifTYd",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://drive.usercontent.google.com/download?id=1wTdSus7r1CTLnr7G0s5Q0wYDXkqifTYd&export=download",
+      "headers": {
+        "Content-Type": "application/octet-stream",
+        "Content-Length": "86413"
+      },
+      "bytes": 86413,
+      "sha256": "525462e9ce03829cebce2e5106b9fe39737b6c9e12800bc4d5d14d9b593f4f5e"
+    }
+  },
+  "official/gamma_drive.yaml": {
+    "source": "/home/jian/livox_ws/p61_r4_geode_evidence/drive_gamma_config_response.bin",
+    "bytes": 4682,
+    "sha256": "f67eaba499306f08d81a2f8dfe8459bb0246d4ee7294b03478f28affb56cc47a",
+    "http": {
+      "requested_url": "https://drive.google.com/uc?export=download&id=1GheigvWF1YTTw-2y4XrN4f-5i5wh2m4s",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://drive.usercontent.google.com/download?id=1GheigvWF1YTTw-2y4XrN4f-5i5wh2m4s&export=download",
+      "headers": {
+        "Content-Type": "application/octet-stream",
+        "Content-Length": "4682"
+      },
+      "bytes": 4682,
+      "sha256": "f67eaba499306f08d81a2f8dfe8459bb0246d4ee7294b03478f28affb56cc47a"
+    }
+  },
+  "official/gamma2GT_leica.py": {
+    "source": "/home/jian/livox_ws/p61_r4_geode_evidence/gamma2GT_leica.py",
+    "bytes": 5932,
+    "sha256": "cc8fd2ca405f2dfa662fe1e8a2b665a76c90017edfadc6f62547d1f669dc4433",
+    "http": {
+      "requested_url": "https://raw.githubusercontent.com/PengYu-Team/GEODE_dataset/c6e930623d4fed450d7fc50e16e3ffe0288b692b/script/gamma2GT_leica.py",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/PengYu-Team/GEODE_dataset/c6e930623d4fed450d7fc50e16e3ffe0288b692b/script/gamma2GT_leica.py",
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Content-Length": "1923"
+      },
+      "bytes": 5932,
+      "sha256": "cc8fd2ca405f2dfa662fe1e8a2b665a76c90017edfadc6f62547d1f669dc4433"
+    }
+  },
+  "official/rmse.py": {
+    "source": "/home/jian/livox_ws/p61_r4_geode_evidence/rmse.py",
+    "bytes": 1636,
+    "sha256": "2b0db56c90651512bd1f9f01a1772a2390b89b71f86b676e95f5c1b2ed3e38b5",
+    "http": {
+      "requested_url": "https://raw.githubusercontent.com/PengYu-Team/GEODE_dataset/c6e930623d4fed450d7fc50e16e3ffe0288b692b/script/rmse.py",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/PengYu-Team/GEODE_dataset/c6e930623d4fed450d7fc50e16e3ffe0288b692b/script/rmse.py",
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Content-Length": "918"
+      },
+      "bytes": 1636,
+      "sha256": "2b0db56c90651512bd1f9f01a1772a2390b89b71f86b676e95f5c1b2ed3e38b5"
+    }
+  },
+  "official/fastlio_carol.yaml": {
+    "source": "/home/jian/livox_ws/p61_r4_geode_evidence/fastlio_carol.yaml",
+    "bytes": 1830,
+    "sha256": "5ce02d44635225ccf1fd4ef6780cfe7b4331784bc40fea018f9704b833383cb3",
+    "http": {
+      "requested_url": "https://raw.githubusercontent.com/thisparticle/GEODE_Evaluation/1f008a7249e36393a1752622de50660b77b5b7f4/FAST_LIO/config/carol.yaml",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/thisparticle/GEODE_Evaluation/1f008a7249e36393a1752622de50660b77b5b7f4/FAST_LIO/config/carol.yaml",
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Content-Length": "896"
+      },
+      "bytes": 1830,
+      "sha256": "5ce02d44635225ccf1fd4ef6780cfe7b4331784bc40fea018f9704b833383cb3"
+    }
+  },
+  "official/fastlio_carol.launch": {
+    "source": "/home/jian/livox_ws/p61_r4_geode_evidence/fastlio_carol.launch",
+    "bytes": 1298,
+    "sha256": "9bdf2f28d398be5809a5ae1b584cdf9b73a574448aa39fcde079e6a7f9d6ba24",
+    "http": {
+      "requested_url": "https://raw.githubusercontent.com/thisparticle/GEODE_Evaluation/1f008a7249e36393a1752622de50660b77b5b7f4/FAST_LIO/launch/carol.launch",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/thisparticle/GEODE_Evaluation/1f008a7249e36393a1752622de50660b77b5b7f4/FAST_LIO/launch/carol.launch",
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Content-Length": "560"
+      },
+      "bytes": 1298,
+      "sha256": "9bdf2f28d398be5809a5ae1b584cdf9b73a574448aa39fcde079e6a7f9d6ba24"
+    }
+  },
+  "official/fastlio_test_geode.py": {
+    "source": "/home/jian/livox_ws/p61_r4_geode_evidence/fastlio_test_geode.py",
+    "bytes": 6233,
+    "sha256": "947cab60be17deae135577ca81584dd7f5bf0d4d11328fa6134a87eddb3f0195",
+    "http": {
+      "requested_url": "https://raw.githubusercontent.com/thisparticle/GEODE_Evaluation/1f008a7249e36393a1752622de50660b77b5b7f4/FAST_LIO/launch/test_geode.py",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/thisparticle/GEODE_Evaluation/1f008a7249e36393a1752622de50660b77b5b7f4/FAST_LIO/launch/test_geode.py",
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Content-Length": "1466"
+      },
+      "bytes": 6233,
+      "sha256": "947cab60be17deae135577ca81584dd7f5bf0d4d11328fa6134a87eddb3f0195"
+    }
+  },
+  "official/fastlio_laserMapping.cpp": {
+    "source": "/home/jian/livox_ws/p61_r4_geode_evidence/fastlio_laserMapping.cpp",
+    "bytes": 44106,
+    "sha256": "e1683fbe24988de262e645be8c16cfc2428c012e3205371bf9d0a39600dc0624",
+    "http": {
+      "requested_url": "https://raw.githubusercontent.com/thisparticle/GEODE_Evaluation/1f008a7249e36393a1752622de50660b77b5b7f4/FAST_LIO/src/laserMapping.cpp",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/thisparticle/GEODE_Evaluation/1f008a7249e36393a1752622de50660b77b5b7f4/FAST_LIO/src/laserMapping.cpp",
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Content-Length": "11003"
+      },
+      "bytes": 44106,
+      "sha256": "e1683fbe24988de262e645be8c16cfc2428c012e3205371bf9d0a39600dc0624"
+    }
+  },
+  "official/evaluation_README.md": {
+    "source": "/home/jian/livox_ws/p61_r4_geode_evidence/evaluation_README.md",
+    "bytes": 2280,
+    "sha256": "df667a1043f9be547bd6f3429153ed9cdee6cb46164d9ab91904e9600f874a47",
+    "http": {
+      "requested_url": "https://raw.githubusercontent.com/thisparticle/GEODE_Evaluation/1f008a7249e36393a1752622de50660b77b5b7f4/README.md",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://raw.githubusercontent.com/thisparticle/GEODE_Evaluation/1f008a7249e36393a1752622de50660b77b5b7f4/README.md",
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Content-Length": "1089"
+      },
+      "bytes": 2280,
+      "sha256": "df667a1043f9be547bd6f3429153ed9cdee6cb46164d9ab91904e9600f874a47"
+    }
+  },
+  "official/repository_head.json": {
+    "source": "/home/jian/livox_ws/p61_r4_geode_evidence/repository_head.json",
+    "bytes": 5603,
+    "sha256": "74925011cdb162c74eff9c8b4274bf4f24dc2f6580bc2af61cfd039b0a1a0035",
+    "http": {
+      "requested_url": "https://api.github.com/repos/PengYu-Team/GEODE_dataset/commits/main",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://api.github.com/repos/PengYu-Team/GEODE_dataset/commits/main",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "Content-Length": "2296"
+      },
+      "bytes": 5603,
+      "sha256": "74925011cdb162c74eff9c8b4274bf4f24dc2f6580bc2af61cfd039b0a1a0035"
+    }
+  },
+  "official/dataset_tree.json": {
+    "source": "/home/jian/livox_ws/p61_r4_geode_evidence/dataset_tree.json",
+    "bytes": 5328,
+    "sha256": "7fac146d17922d9f652ea1e6355affbcde9ac83fe211d1a8e5acde277d873385",
+    "http": {
+      "requested_url": "https://api.github.com/repos/PengYu-Team/GEODE_dataset/git/trees/c6e930623d4fed450d7fc50e16e3ffe0288b692b?recursive=1",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://api.github.com/repos/PengYu-Team/GEODE_dataset/git/trees/c6e930623d4fed450d7fc50e16e3ffe0288b692b?recursive=1",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "Content-Length": "1225"
+      },
+      "bytes": 5328,
+      "sha256": "7fac146d17922d9f652ea1e6355affbcde9ac83fe211d1a8e5acde277d873385"
+    }
+  },
+  "official/evaluation_repository.json": {
+    "source": "/home/jian/livox_ws/p61_r4_geode_evidence/evaluation_repository.json",
+    "bytes": 5548,
+    "sha256": "ad03cfe4041e08f6ec45b24ec873e25790fdad9092726bba9077f12a0eda9da3",
+    "http": {
+      "requested_url": "https://api.github.com/repos/thisparticle/GEODE_Evaluation",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://api.github.com/repos/thisparticle/GEODE_Evaluation",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "Content-Length": "1297"
+      },
+      "bytes": 5548,
+      "sha256": "ad03cfe4041e08f6ec45b24ec873e25790fdad9092726bba9077f12a0eda9da3"
+    }
+  },
+  "official/evaluation_wrong_branch_404.json": {
+    "source": "/home/jian/livox_ws/p61_r4_geode_evidence/evaluation_tree.json",
+    "bytes": 110,
+    "sha256": "8c177a38af7c68d455e9554231def022cc2bcf62c1d3dab3626aaf5c319a5e04",
+    "http": {
+      "requested_url": "https://api.github.com/repos/thisparticle/GEODE_Evaluation/git/trees/main?recursive=1",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 404,
+      "final_url": "https://api.github.com/repos/thisparticle/GEODE_Evaluation/git/trees/main?recursive=1",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "Content-Length": "117"
+      },
+      "bytes": 110,
+      "sha256": "8c177a38af7c68d455e9554231def022cc2bcf62c1d3dab3626aaf5c319a5e04"
+    }
+  },
+  "official/evaluation_master_tree.json": {
+    "source": "/home/jian/livox_ws/p61_r4_geode_evidence/evaluation_master_tree.json",
+    "bytes": 424805,
+    "sha256": "ba1cc787f699e13cea05f09af1437203a0b287090e36959c6fc9f18fbb3e1a60",
+    "http": {
+      "requested_url": "https://api.github.com/repos/thisparticle/GEODE_Evaluation/git/trees/master?recursive=1",
+      "attempt": 1,
+      "max_bytes": 8388608,
+      "status": 200,
+      "final_url": "https://api.github.com/repos/thisparticle/GEODE_Evaluation/git/trees/master?recursive=1",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      "bytes": 424805,
+      "sha256": "ba1cc787f699e13cea05f09af1437203a0b287090e36959c6fc9f18fbb3e1a60"
+    }
+  },
+  "official/map_listing.json": {
+    "source": "/home/jian/livox_ws/p61_r4_geode_evidence/map_listing.json",
+    "bytes": 3935,
+    "sha256": "85c401a44dfe28e56855f20c32b26a3cd07683f5df2370fc08517fb7612d4c56"
+  }
+}

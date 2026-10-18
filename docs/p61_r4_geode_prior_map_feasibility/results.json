@@ -1,0 +1,82 @@
+{
+  "task": "P61-R4-GEODE-PRIOR-MAP-FEASIBILITY",
+  "final_result": "GEODE_PRIOR_MAP_CONTRACT_NOT_READY",
+  "start_sha": "c916eaa7cb8dca831d6722ae6dcd4d47418f8616",
+  "code_sha": "41881ccb4c3d4d98e74c1391d3a5894769e1f5ef",
+  "official_dataset_sha": "c6e930623d4fed450d7fc50e16e3ffe0288b692b",
+  "official_evaluation_sha": "1f008a7249e36393a1752622de50660b77b5b7f4",
+  "official_gt_downloaded": true,
+  "gt_orientation_available": false,
+  "official_tunnel_map_found": false,
+  "map_folder_visible_files": [
+    "stairs.las"
+  ],
+  "position_only_revisit_evidence": true,
+  "actual_lidar_coverage_certified": false,
+  "non_gt_mapper_source_available": true,
+  "validated_mapping_trajectory_available": false,
+  "frozen_prior_map_available": false,
+  "legal_test_initial_pose_available": false,
+  "can_start_continuous_prior_map_ndt": false,
+  "primary_blocker": "NO_FROZEN_GT_INDEPENDENT_TUNNEL_PRIOR_MAP_WITH_COVERAGE_AND_MAP_FRAME",
+  "mapping_route": "CONDITIONAL_SAME_SEQUENCE_DISJOINT_TIME_WINDOWS_ONLY_NOT_INDEPENDENT_ACQUISITION",
+  "gt_feasibility": {
+    "gt_file_sha256": "525462e9ce03829cebce2e5106b9fe39737b6c9e12800bc4d5d14d9b593f4f5e",
+    "gt_bytes": 86413,
+    "rows": 1561,
+    "columns": 8,
+    "first_stamp_text": "1706671253.339999705",
+    "last_stamp_text": "1706671810.040000151",
+    "first_ns": 1706671253339999705,
+    "last_ns": 1706671810040000151,
+    "duration_sec": 556.700000446,
+    "dt_median_sec": 0.36000043600000003,
+    "dt_max_sec": 0.669999887,
+    "gaps_over_1_sec": 0,
+    "quaternion_zero_rows": 1561,
+    "quaternion_unit_rows": 0,
+    "gt_orientation_usable": false,
+    "xyz_min": [
+      981.0443,
+      2004.621,
+      7.3126
+    ],
+    "xyz_max": [
+      1000.128,
+      2348.6148,
+      10.9078
+    ],
+    "position_endpoint_separation_m": 0.07157583391059852,
+    "lidar_header_inside_gt_endpoint_range": 5207,
+    "mapping_window_gt_rows": 685,
+    "test_window_gt_rows": 568,
+    "split_chosen_without_gt": true,
+    "gt_used_for_map_or_initialization": false,
+    "overlap_means_reference_position_proximity_only": true,
+    "lidar_headers_within_100ms_of_gt_sample": 2767,
+    "test_to_mapping_reference_distance_m": {
+      "min": 0.02580387567779095,
+      "median": 0.2850824255736487,
+      "p95": 0.5364096412009586,
+      "max": 0.9108029918703819
+    },
+    "test_reference_position_proximity_fraction": {
+      "1": 1.0,
+      "2": 1.0,
+      "5": 1.0
+    }
+  },
+  "gt_used_for_mapping": false,
+  "gt_used_for_initialization": false,
+  "gt_trajectory_fit": false,
+  "map_generation_calls": 0,
+  "ndt_align_calls": 0,
+  "native_jet_calls": 0,
+  "ros_started": false,
+  "ekf_calls": 0,
+  "coupled_calls": 0,
+  "recovery_calls": 0,
+  "raw_bag_read": false,
+  "hikvision_access": false,
+  "push_executed": false
+}

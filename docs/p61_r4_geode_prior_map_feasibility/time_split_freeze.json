@@ -1,0 +1,13 @@
+{
+  "source": "R2 LiDAR ledger only; no GT coordinates read",
+  "lidar_frames": 5427,
+  "lidar_start_ns": 1706671289400000810,
+  "lidar_end_ns": 1706671831999708652,
+  "mapping_candidate_start_ns": 1706671289400000810,
+  "mapping_candidate_end_ns": 1706671533569869338,
+  "test_candidate_start_ns": 1706671587829840123,
+  "test_candidate_end_ns": 1706671831999708652,
+  "ledger_sha256": "21cba76ec059016700b5ac3f0a0851f769b338ee4550e19108910d3efd3902fb",
+  "protocol_sha256": "d889607988814d43601747b04b73a0c8b4d1a5a087456530681edcf4aeb2d908",
+  "actual_mapping_or_test_executed": false
+}

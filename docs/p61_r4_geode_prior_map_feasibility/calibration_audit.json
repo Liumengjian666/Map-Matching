@@ -1,0 +1,104 @@
+{
+  "drive_fields": {
+    "imu_topic": "/imu/data",
+    "pointcloud_topic": "/livox/lidar",
+    "VERT_RES": "6"
+  },
+  "old_git_fields": {
+    "imu_topic": "/imu/imu",
+    "pointcloud_topic": "/os1_cloud_node1/points",
+    "VERT_RES": "16"
+  },
+  "drive_sha256": "f67eaba499306f08d81a2f8dfe8459bb0246d4ee7294b03478f28affb56cc47a",
+  "drive_matches_actual_lidar_and_xsens_topics": true,
+  "drive_matrix_equals_old_git_numeric_matrix": true,
+  "drive_matrix_equals_author_fastlio_matrix": true,
+  "T_I_L": [
+    [
+      0.99962,
+      0.027463,
+      0.002445,
+      0.049258
+    ],
+    [
+      -0.027517,
+      0.999299,
+      0.025398,
+      -0.0125
+    ],
+    [
+      -0.001746,
+      -0.025456,
+      0.999674,
+      0.026946
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "T_I_L_inverse": [
+    [
+      0.9996196417516774,
+      -0.027516283726622168,
+      -0.0017457805744613758,
+      -0.04953617605662747
+    ],
+    [
+      0.027463681300845418,
+      0.9992982746256973,
+      -0.0254556248134132,
+      0.011824349685526406
+    ],
+    [
+      0.0024452485167091964,
+      0.025398373317186473,
+      0.999674847482146,
+      -0.026740206825225137
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "rotation_orthogonality_fro": 1.6552926776829896e-06,
+  "rotation_determinant": 1.0000001183073217,
+  "direction_evidence": "author FAST_LIO pointBodyToWorld maps p_L through offset_R_L_I and offset_T_L_I, then IMU pose",
+  "imu_instance": "external Xsens /imu/data, not integrated /livox/imu",
+  "applied_to_runtime": false,
+  "empirically_validated_on_this_bag": false,
+  "leica_script_T_raw": [
+    [
+      0.9996568186292758,
+      -0.023584633194633005,
+      0.011402131007190001,
+      0.00947221
+    ],
+    [
+      0.023471107825767,
+      0.999674601374935,
+      0.009989849100522,
+      -0.308202
+    ],
+    [
+      -0.011634028187250001,
+      -0.009718799550078002,
+      0.9998850903162507,
+      -0.365733
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "leica_script_quaternion_norm": 0.9999989411098817,
+  "leica_script_operation": "T_eval = T_device @ inverse(T); source operation, not executed; not T_GT_map",
+  "T_GT_map_available": false,
+  "GT_rotation_available": false
+}

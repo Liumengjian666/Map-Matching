@@ -1,0 +1,133 @@
+{
+  "code_sha": "41881ccb4c3d4d98e74c1391d3a5894769e1f5ef",
+  "branch": "research/p61-r4-geode-prior-map-feasibility",
+  "worktree_status": "?? docs/p61_r4_geode_prior_map_feasibility/.gitattributes\n?? docs/p61_r4_geode_prior_map_feasibility/FRAME_AND_INITIALIZATION.md\n?? docs/p61_r4_geode_prior_map_feasibility/OFFICIAL_EVIDENCE.md\n?? docs/p61_r4_geode_prior_map_feasibility/REPORT.md\n?? docs/p61_r4_geode_prior_map_feasibility/REVIEW.md\n?? docs/p61_r4_geode_prior_map_feasibility/calibration_audit.json\n?? docs/p61_r4_geode_prior_map_feasibility/gt_feasibility.json\n?? docs/p61_r4_geode_prior_map_feasibility/official/\n?? docs/p61_r4_geode_prior_map_feasibility/reference_split_feasibility.png\n?? docs/p61_r4_geode_prior_map_feasibility/results.json\n?? docs/p61_r4_geode_prior_map_feasibility/source_manifest.json\n?? docs/p61_r4_geode_prior_map_feasibility/time_split_freeze.json",
+  "files": {
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/source_manifest.json": {
+      "bytes": 11305,
+      "sha256": "9b71bc4ec1e9380550a1e0e35afb22cc1b0735fa6e1dbae6da3791e5e4bc499a"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/PROTOCOL.md": {
+      "bytes": 2478,
+      "sha256": "d889607988814d43601747b04b73a0c8b4d1a5a087456530681edcf4aeb2d908"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/REVIEW.md": {
+      "bytes": 1476,
+      "sha256": "54386c47e312b6917eefb5c3bcc9e6dbab607664ffb29071f0bf1253a3259dde"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/OFFICIAL_EVIDENCE.md": {
+      "bytes": 2338,
+      "sha256": "510697e55ec775d7abc00a4a69991e4da4f9fba937e65e1b4022f1e8f7fd19fd"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/REPORT.md": {
+      "bytes": 7679,
+      "sha256": "64c02f002c8996f4839da04a32a63e75bc4b02503f0ecbd6d11cd7c6400048fd"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/FRAME_AND_INITIALIZATION.md": {
+      "bytes": 2860,
+      "sha256": "0c756eb42323c0d6908b7c7f15d394698cf6477333fab9559e45663dd6a3cb93"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/gt_feasibility.json": {
+      "bytes": 1276,
+      "sha256": "85dcaae0c09cb3c6eb3507ffa3b8a640409766bb496886303d090821c480eb4a"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/.gitattributes": {
+      "bytes": 98,
+      "sha256": "6dc960f79b586c839251e67be659c6bb820ac6e4441d44c85d45cabc5dd2afa4"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/test_gt_contract.py": {
+      "bytes": 1439,
+      "sha256": "2a3c82cee34965dbd38db4b2778f5a115050462e2c7df65d8099037157a85ebf"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/results.json": {
+      "bytes": 2771,
+      "sha256": "4a284a424241119ed937a2988278c02580495e61c55c78777e0fd4d68430d514"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/calibration_audit.json": {
+      "bytes": 2262,
+      "sha256": "685b08dc10fca66b7d977b7b4cd21a9c82f0725ef613acd737cd0af68143b465"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/check_gt_and_split.py": {
+      "bytes": 6030,
+      "sha256": "f034f1e0db14d5e4c99f3ccd430bf55d552423bc0fc0957f00045756d382d91b"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/reference_split_feasibility.png": {
+      "bytes": 114176,
+      "sha256": "41fcb21e3668c43e9e1db9f164c14afc9242971e312e8c1e10e85931d2c71a1b"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/archive_evidence.py": {
+      "bytes": 4030,
+      "sha256": "fa41753e3de74cea034de45106ff47fa403e1a12a472d982327ff30694a0bb29"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/calibration_evidence.py": {
+      "bytes": 3420,
+      "sha256": "a4d1c237f8039091606a059f83fae255fc9c54578cb537241309ae943c2c35b8"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/time_split_freeze.json": {
+      "bytes": 588,
+      "sha256": "d1fd72695609933c6e45e28431642c955f218fac595bb927425286dc609dbefb"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/official/evaluation_master_tree.json": {
+      "bytes": 424805,
+      "sha256": "ba1cc787f699e13cea05f09af1437203a0b287090e36959c6fc9f18fbb3e1a60"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/official/fastlio_test_geode.py": {
+      "bytes": 6233,
+      "sha256": "947cab60be17deae135577ca81584dd7f5bf0d4d11328fa6134a87eddb3f0195"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/official/Shield_tunnel1.txt": {
+      "bytes": 86413,
+      "sha256": "525462e9ce03829cebce2e5106b9fe39737b6c9e12800bc4d5d14d9b593f4f5e"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/official/fastlio_carol.yaml": {
+      "bytes": 1830,
+      "sha256": "5ce02d44635225ccf1fd4ef6780cfe7b4331784bc40fea018f9704b833383cb3"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/official/gamma2GT_leica.py": {
+      "bytes": 5932,
+      "sha256": "cc8fd2ca405f2dfa662fe1e8a2b665a76c90017edfadc6f62547d1f669dc4433"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/official/map_listing.json": {
+      "bytes": 3935,
+      "sha256": "85c401a44dfe28e56855f20c32b26a3cd07683f5df2370fc08517fb7612d4c56"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/official/rmse.py": {
+      "bytes": 1636,
+      "sha256": "2b0db56c90651512bd1f9f01a1772a2390b89b71f86b676e95f5c1b2ed3e38b5"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/official/repository_head.json": {
+      "bytes": 5603,
+      "sha256": "74925011cdb162c74eff9c8b4274bf4f24dc2f6580bc2af61cfd039b0a1a0035"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/official/gamma_drive.yaml": {
+      "bytes": 4682,
+      "sha256": "f67eaba499306f08d81a2f8dfe8459bb0246d4ee7294b03478f28affb56cc47a"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/official/fastlio_laserMapping.cpp": {
+      "bytes": 44106,
+      "sha256": "e1683fbe24988de262e645be8c16cfc2428c012e3205371bf9d0a39600dc0624"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/official/evaluation_wrong_branch_404.json": {
+      "bytes": 110,
+      "sha256": "8c177a38af7c68d455e9554231def022cc2bcf62c1d3dab3626aaf5c319a5e04"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/official/fastlio_carol.launch": {
+      "bytes": 1298,
+      "sha256": "9bdf2f28d398be5809a5ae1b584cdf9b73a574448aa39fcde079e6a7f9d6ba24"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/official/dataset_tree.json": {
+      "bytes": 5328,
+      "sha256": "7fac146d17922d9f652ea1e6355affbcde9ac83fe211d1a8e5acde277d873385"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/official/evaluation_README.md": {
+      "bytes": 2280,
+      "sha256": "df667a1043f9be547bd6f3429153ed9cdee6cb46164d9ab91904e9600f874a47"
+    },
+    "/home/jian/livox_ws/p61_r4_geode_prior_map_ws/docs/p61_r4_geode_prior_map_feasibility/official/evaluation_repository.json": {
+      "bytes": 5548,
+      "sha256": "ad03cfe4041e08f6ec45b24ec873e25790fdad9092726bba9077f12a0eda9da3"
+    }
+  },
+  "gt_read": false,
+  "hikvision_access": false
+}

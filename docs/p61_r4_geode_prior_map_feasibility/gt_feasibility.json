@@ -1,0 +1,46 @@
+{
+  "gt_file_sha256": "525462e9ce03829cebce2e5106b9fe39737b6c9e12800bc4d5d14d9b593f4f5e",
+  "gt_bytes": 86413,
+  "rows": 1561,
+  "columns": 8,
+  "first_stamp_text": "1706671253.339999705",
+  "last_stamp_text": "1706671810.040000151",
+  "first_ns": 1706671253339999705,
+  "last_ns": 1706671810040000151,
+  "duration_sec": 556.700000446,
+  "dt_median_sec": 0.36000043600000003,
+  "dt_max_sec": 0.669999887,
+  "gaps_over_1_sec": 0,
+  "quaternion_zero_rows": 1561,
+  "quaternion_unit_rows": 0,
+  "gt_orientation_usable": false,
+  "xyz_min": [
+    981.0443,
+    2004.621,
+    7.3126
+  ],
+  "xyz_max": [
+    1000.128,
+    2348.6148,
+    10.9078
+  ],
+  "position_endpoint_separation_m": 0.07157583391059852,
+  "lidar_header_inside_gt_endpoint_range": 5207,
+  "mapping_window_gt_rows": 685,
+  "test_window_gt_rows": 568,
+  "split_chosen_without_gt": true,
+  "gt_used_for_map_or_initialization": false,
+  "overlap_means_reference_position_proximity_only": true,
+  "lidar_headers_within_100ms_of_gt_sample": 2767,
+  "test_to_mapping_reference_distance_m": {
+    "min": 0.02580387567779095,
+    "median": 0.2850824255736487,
+    "p95": 0.5364096412009586,
+    "max": 0.9108029918703819
+  },
+  "test_reference_position_proximity_fraction": {
+    "1": 1.0,
+    "2": 1.0,
+    "5": 1.0
+  }
+}
