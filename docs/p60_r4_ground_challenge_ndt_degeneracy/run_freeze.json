@@ -1,0 +1,44 @@
+{
+  "start_sha": "3693ef524ade148e9b76b9ae1523ecdebb7e869a",
+  "code_sha": "119be01e92f9efcc352cd58ad37d5099787d2b89",
+  "gt_read": false,
+  "hikvision_access": false,
+  "files": {
+    "/home/jian/livox_ws/p60_r4_ground_challenge_degeneracy_runs/formal/hessian_statistics.csv": {
+      "bytes": 852338,
+      "sha256": "4fd56dfcf82f9484883d37a3b628183f6f0297173d9b27bcb9a4f405e7ae037e"
+    },
+    "/home/jian/livox_ws/p60_r4_ground_challenge_degeneracy_runs/formal/control_replay_parity.csv": {
+      "bytes": 248,
+      "sha256": "dfe49f08f7e84a0cef22426b2f6e463c767f4f2ecc705f07cd20d3239261d27e"
+    },
+    "/home/jian/livox_ws/p60_r4_ground_challenge_degeneracy_runs/formal/alignments.csv": {
+      "bytes": 133129,
+      "sha256": "ab571885184d8dcf37c35aef78caafaa589d27f62662d303ef93e04af4e015f0"
+    },
+    "/home/jian/livox_ws/p60_r4_ground_challenge_degeneracy_runs/inputs/sample_manifest.csv": {
+      "bytes": 34264,
+      "sha256": "14f7f4be6a71161bb3c256e42a964d557831833be4859dbcaf55dca289c61e4e"
+    },
+    "/home/jian/livox_ws/p60_r4_ground_challenge_degeneracy_runs/inputs/frozen_indices.json": {
+      "bytes": 1129,
+      "sha256": "98efc29c6bef18a59e24d4929e163c1871a9d14c5574a7af7873d7a401c03666"
+    },
+    "/home/jian/livox_ws/p60_r4_ground_challenge_degeneracy_runs/build/p60_r4_screen": {
+      "bytes": 303688,
+      "sha256": "97850a02a185ae20e84afe8ecbb893a8628b3d8fe666d5b128771b9068ddbd0a"
+    },
+    "/home/jian/livox_ws/p60_r4_ground_challenge_degeneracy_runs/screen.log": {
+      "bytes": 3642,
+      "sha256": "01a044b98af4ab0b73a02ef66242fee191948b613007ed7348ecc69bd69ef9ec"
+    },
+    "/home/jian/livox_ws/p60_r4_ground_challenge_degeneracy_runs/screen_resource.txt": {
+      "bytes": 1126,
+      "sha256": "a6fd4c5003e543b5d7802f896ac084aaf85e0763ff5b1b68a963d469fe08c59d"
+    },
+    "/home/jian/livox_ws/p60_r4_ground_challenge_degeneracy_runs/loader_failure.log": {
+      "bytes": 179,
+      "sha256": "dcf9f8429770a46e81d62009920f327810017682d3030f7d25a0da59972def62"
+    }
+  }
+}

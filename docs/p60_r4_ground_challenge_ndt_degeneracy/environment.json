@@ -1,0 +1,15 @@
+{
+  "compiler": "c++ (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0",
+  "pcl_version": "1.10.0",
+  "cmake_version": "3.16",
+  "cxx_flags": "-O3 -DNDEBUG -ffunction-sections -fdata-sections -std=gnu++14",
+  "production_ndt_source_sha256": "941c15a4455c47b8d9c9aa742dc1dcdbde82cc2bac81fb4a54075e98f307b609",
+  "observable_ndt_header_sha256": "aa311032b230181e7a6bc25d089280c1e38a7837d861b40cf866b74347b46981",
+  "unchanged_chart_helper_source_sha256": "0c331c89620d16f7683ed77074ee0bab86fdb75af1f59fb417e137d99c16850f",
+  "system_libusb_sha256": "451c0a2b8806b71ddab9046470badc7665a467d511e87c1d5e1da7a343456586",
+  "libpcl_registration_sha256": "ddbbb8a37fa8e6bde8151edaadd37954dc601b4703826085c1936fdc108c29bf",
+  "runtime_ld_preload": "/lib/x86_64-linux-gnu/libusb-1.0.so.0",
+  "ros_nodes_started": 0,
+  "production_source_modified": false,
+  "external_cli_or_subagent_review": false
+}

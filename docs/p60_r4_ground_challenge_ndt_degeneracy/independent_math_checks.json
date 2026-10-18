@@ -1,0 +1,7 @@
+{
+  "hessians_independently_checked": 600,
+  "max_eigenvalue_absolute_error": 1.2505552149377763e-12,
+  "max_weak_eigenvector_residual": 1.5655331198386458e-13,
+  "r2_reconstructed_full_hessian_max_absolute_error": 1.1368683772161603e-13,
+  "pass_all": true
+}

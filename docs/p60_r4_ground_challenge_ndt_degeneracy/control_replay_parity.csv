@@ -1,0 +1,2 @@
+scan_index,source_hash_equal,source_count_equal,target_count_equal,converged_equal,iterations_equal,translation_difference_m,rotation_difference_deg,fitness_difference,hessian_max_relative_difference,pass
+2,1,1,1,1,1,0,4.0608535091661012e-08,0,0,1

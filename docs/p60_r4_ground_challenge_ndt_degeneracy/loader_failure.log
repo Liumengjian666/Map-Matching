@@ -1,0 +1,1 @@
+/home/jian/livox_ws/p60_r4_ground_challenge_degeneracy_runs/build/p60_r4_screen: symbol lookup error: /lib/x86_64-linux-gnu/libpcl_io.so.1.10: undefined symbol: libusb_set_option

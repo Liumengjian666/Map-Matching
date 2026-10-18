@@ -1,0 +1,122 @@
+{
+  "PROTOCOL.md": {
+    "bytes": 4466,
+    "sha256": "09476055055e970ed67aff1de00e82bd3b5d2b04c6d49bcfc5fef721b3785179"
+  },
+  "REPORT.md": {
+    "bytes": 10455,
+    "sha256": "d69c39880b42f0b9a0cfc33f7496491776acf356f5b30de715c2602d1d623b63"
+  },
+  "REPRODUCE.md": {
+    "bytes": 3302,
+    "sha256": "6c6557aa6a4675bcc81e77bcdfb4b4053e458135465b7dce133947907e718fbd"
+  },
+  "VALIDATION.md": {
+    "bytes": 2784,
+    "sha256": "ad85d1170ac4b5fff2fac287be980acf5f8509082a752dd1f7f7d55b997d76ad"
+  },
+  "alignments.csv": {
+    "bytes": 133129,
+    "sha256": "ab571885184d8dcf37c35aef78caafaa589d27f62662d303ef93e04af4e015f0"
+  },
+  "analyze_results.py": {
+    "bytes": 9427,
+    "sha256": "91fe864b53ab51a9217e6986e30a34fe033aa3143c060de94a5944241738ff33"
+  },
+  "common_pose_curvature_time.png": {
+    "bytes": 353572,
+    "sha256": "63ac22636eef27a57491ec4a7e9330115fddc34c8bde691f703bf9a383bf0a13"
+  },
+  "control_replay_parity.csv": {
+    "bytes": 248,
+    "sha256": "dfe49f08f7e84a0cef22426b2f6e463c767f4f2ecc705f07cd20d3239261d27e"
+  },
+  "eigenvalue_distribution.png": {
+    "bytes": 78092,
+    "sha256": "0f24e5bf46e742c22a27e8fc8e80b065ac0544cd873a52855163cd9e01c8422c"
+  },
+  "environment.json": {
+    "bytes": 878,
+    "sha256": "5a7e3de0fcaff1b868fea3e55e2454cc1b518da058bb1aa879504673d00f3245"
+  },
+  "frozen_indices.json": {
+    "bytes": 1129,
+    "sha256": "98efc29c6bef18a59e24d4929e163c1871a9d14c5574a7af7873d7a401c03666"
+  },
+  "group_comparison.csv": {
+    "bytes": 876,
+    "sha256": "0731661023706e36722e527b35fab5d75e93f2cfd9c5935657e431fc74f91625"
+  },
+  "hessian_statistics.csv": {
+    "bytes": 852338,
+    "sha256": "4fd56dfcf82f9484883d37a3b628183f6f0297173d9b27bcb9a4f405e7ae037e"
+  },
+  "independent_math_checks.json": {
+    "bytes": 260,
+    "sha256": "f560c82e4f4d69339c859cbf9185fd733275ffad0bd5a932ca37379492d372c2"
+  },
+  "loader_failure.log": {
+    "bytes": 179,
+    "sha256": "dcf9f8429770a46e81d62009920f327810017682d3030f7d25a0da59972def62"
+  },
+  "paired_comparison.csv": {
+    "bytes": 17198,
+    "sha256": "ef3c7c6681801a6a2b3f670414e39fd611dd6a15a4a78c0a09453383e0bc4f9b"
+  },
+  "prepare_inputs.py": {
+    "bytes": 4471,
+    "sha256": "a51e5ee7a51bc965d37727f059af5459d7b905c3fb05696baf64577f9b059d91"
+  },
+  "results.json": {
+    "bytes": 15118,
+    "sha256": "bdf82cc325608df754a4fb677908bfac082efd12bccbe53a1297791722405606"
+  },
+  "run_freeze.json": {
+    "bytes": 2020,
+    "sha256": "6cb6f40526e6bbc63126bdf2c9afa60e39df28e13a826b59ac8083982371cb41"
+  },
+  "sample_manifest.csv": {
+    "bytes": 34264,
+    "sha256": "14f7f4be6a71161bb3c256e42a964d557831833be4859dbcaf55dca289c61e4e"
+  },
+  "screen_resource.txt": {
+    "bytes": 1126,
+    "sha256": "a6fd4c5003e543b5d7802f896ac084aaf85e0763ff5b1b68a963d469fe08c59d"
+  },
+  "statistics_core.py": {
+    "bytes": 3717,
+    "sha256": "061eb3c8123e9b54cc214ba70da018767ba9c686f8b5384c81e322c73c354ec5"
+  },
+  "test_sampling.py": {
+    "bytes": 828,
+    "sha256": "a531630fb7f4ce40507d39c2eed73dc4138334d7dbaacffd7192598cecc45fe1"
+  },
+  "test_statistics.py": {
+    "bytes": 1915,
+    "sha256": "fed62ad224dcc8247c812bbce8906661a9fea2cc2ff4b293b8f01c44c25de30f"
+  },
+  "tools/CMakeLists.txt": {
+    "bytes": 909,
+    "sha256": "36e5e07ba0df574615dc765eae19b5a076bb937b07ee037c0cae63d626703ad2"
+  },
+  "tools/cloud_contract.hpp": {
+    "bytes": 3971,
+    "sha256": "69f7a074109bcc8c9aaeae20dec0597674d8f2e09938d843ed135e322ddd9e50"
+  },
+  "tools/metrics.hpp": {
+    "bytes": 4414,
+    "sha256": "1cd74eaa67cc01c8d2fd1cd9aeb4d6981bc6d189ddd6261e19db635df8f78a10"
+  },
+  "tools/screen.cpp": {
+    "bytes": 7048,
+    "sha256": "c3bc7f0435c7bd7d1f2d3934959201c29374425d36fb8287b87d6c662c63088c"
+  },
+  "tools/test_cloud.cpp": {
+    "bytes": 1351,
+    "sha256": "d5c094bb2e9d34d9b89133197dde10814c8c415eb1a03355a5ba5c3e38185993"
+  },
+  "weak_direction_visualization.png": {
+    "bytes": 133157,
+    "sha256": "17114c24569f59d7a669c4237b7055d3f7775561b9224202ecd4368bbd480342"
+  }
+}

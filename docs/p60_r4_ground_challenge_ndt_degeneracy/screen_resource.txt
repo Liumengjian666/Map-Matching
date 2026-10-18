@@ -1,0 +1,23 @@
+	Command being timed: "/home/jian/livox_ws/p60_r4_ground_challenge_degeneracy_runs/build/p60_r4_screen /home/jian/livox_ws/p60_r4_ground_challenge_degeneracy_runs/inputs/sample_manifest.csv /home/jian/livox_ws/p60_ground_challenge_runs/raw_probe_20_corrected/ndt_diagnostics.csv /home/jian/livox_ws/p60_ground_challenge_runs/raw_probe_20_corrected/hessian.csv /home/jian/livox_ws/p60_r4_ground_challenge_degeneracy_runs/formal"
+	User time (seconds): 2.14
+	System time (seconds): 0.59
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.74
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 29552
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 4
+	Minor (reclaiming a frame) page faults: 54620
+	Voluntary context switches: 5
+	Involuntary context switches: 274
+	Swaps: 0
+	File system inputs: 464
+	File system outputs: 1952
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
