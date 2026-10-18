@@ -1,0 +1,44 @@
+# SAME_SEQUENCE_SELF_MAP_ENGINEERING_ONLY; not the fused localization Smoke.
+# No IMU transform is configured; no Deskew or EKF is instantiated.
+frames: {map_frame: ground_challenge_first_scan_map, base_frame: sensor}
+topics:
+  lidar: /ground_challenge/raw_registration_probe
+  lidar_msg_type: pointcloud2
+  ndt_odom: /dog_livo/ndt_odom
+  ndt_path: /dog_livo/ndt_path
+  points_aligned: /ground_challenge/raw_points_aligned
+map: {voxel_size: 0.15, voxel_z_size: 0.15}
+lidar_update:
+  deskew_enable: false
+  local_imu_rotation_prior_enable: false
+  experimental_ekf_translation_fallback_enable: false
+  scan_reference_time: start
+  scan_min_range: 0.5
+  scan_max_range: 80.0
+  ndt_source_voxel_size: 0.25
+  ndt_source_voxel_z_size: 0.25
+  ndt_target_voxel_size: 0.15
+  ndt_target_voxel_z_size: 0.15
+  ndt_max_source_points: 1400
+  ndt_max_target_points: 0
+  ndt_resolution: 0.8
+  ndt_step_size: 0.08
+  ndt_max_iterations: 40
+  ndt_transformation_epsilon: 0.001
+  ndt_step_limit_enable: true
+  ndt_step_limit_max_translation: 0.5
+  ndt_step_limit_max_rotation_deg: 5.0
+coupled_mode: CONTROL
+coupled_causal_record_only_enable: false
+visual_initial_guess_enable: false
+mature_integration: {enable: false}
+mature_visual: {enable: false}
+p41:
+  geometry_gate_enable: true
+  geometry_gate_max_median_m: 1.0
+  geometry_gate_max_p90_m: 3.0
+  geometry_gate_min_overlap_05: 0.50
+output:
+  publish_diagnostics: true
+  publish_path: true
+  diagnostic_determinism_enable: true

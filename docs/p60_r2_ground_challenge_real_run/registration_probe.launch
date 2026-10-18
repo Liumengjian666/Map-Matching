@@ -1,0 +1,18 @@
+<launch>
+  <arg name="bag" default="/home/jian/ground-challenge/corridor2/corridor2.bag" />
+  <arg name="output_dir" />
+  <arg name="map_directory" />
+  <node pkg="dog_prior_map_localization" type="dog_prior_map_ndt_node_cpp"
+        name="p60_raw_registration_only" output="screen"
+        launch-prefix="/usr/bin/time -v -o $(arg output_dir)/ndt_process_resource.txt">
+    <rosparam command="load" file="$(dirname)/raw_registration_only.yaml" />
+    <param name="map/pcd_fallback_path" value="$(arg map_directory)/first_scan_xyz.pcd" />
+    <param name="output/ndt_determinism_csv_path" value="$(arg output_dir)/ndt_diagnostics.csv" />
+    <param name="output/geometry_diagnostics_csv_path" value="$(arg output_dir)/geometry.csv" />
+    <param name="visual_geometry_csv" value="$(arg output_dir)/hessian.csv" />
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+  <node pkg="dog_prior_map_localization" type="p60_raw_registration_probe.py"
+        name="p60_raw_probe_input" required="true" output="screen"
+        args="publish --bag $(arg bag) --directory $(arg output_dir) --map-directory $(arg map_directory)" />
+</launch>
