@@ -3,9 +3,15 @@ from tempfile import TemporaryDirectory
 import unittest
 import numpy as np
 from check_gt_and_split import ns, read_gt
+from calibration_evidence import opencv_matrix
 
 
 class GTContractTests(unittest.TestCase):
+    def test_calibration_duplicate_matrix_is_rejected(self):
+        text='T_IMU_LiDAR: !!opencv-matrix\n data: [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]\n'
+        np.testing.assert_array_equal(opencv_matrix(text,'T_IMU_LiDAR'),np.eye(4))
+        with self.assertRaises(ValueError):opencv_matrix(text+text,'T_IMU_LiDAR')
+
     def test_decimal_nanoseconds_not_float_rounding(self):
         self.assertEqual(ns('1706671253.339999705'),1706671253339999705)
 

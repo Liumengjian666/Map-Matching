@@ -47,7 +47,7 @@ def audit(evidence, output):
             'imu_instance':'external Xsens /imu/data, not integrated /livox/imu',
             'applied_to_runtime':False,'empirically_validated_on_this_bag':False,
             'leica_script_T_raw':A.tolist(),'leica_script_quaternion_norm':float(np.linalg.norm(q)),
-            'leica_script_operation':'T_eval = T_device @ solve(T, I); reference-point right composition, not T_GT_map',
+            'leica_script_operation':'T_eval = T_device @ inverse(T); source operation, not executed; not T_GT_map',
             'T_GT_map_available':False,'GT_rotation_available':False}
     with Path(output).open('x') as stream:json.dump(result,stream,indent=2,allow_nan=False)
     print(json.dumps({k:v for k,v in result.items() if not isinstance(v,list)},indent=2))
