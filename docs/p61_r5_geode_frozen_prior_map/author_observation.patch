@@ -1,0 +1,114 @@
+--- a/FAST_LIO/CMakeLists.txt
++++ b/FAST_LIO/CMakeLists.txt
+@@ -85,5 +85,7 @@
+ )
+ 
+ add_executable(fastlio_mapping src/laserMapping.cpp include/ikd-Tree/ikd_Tree.cpp src/preprocess.cpp)
++add_dependencies(fastlio_mapping ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+ target_link_libraries(fastlio_mapping ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${PYTHON_LIBRARIES})
+-target_include_directories(fastlio_mapping PRIVATE ${PYTHON_INCLUDE_DIRS})+target_link_libraries(fastlio_mapping /lib/x86_64-linux-gnu/libusb-1.0.so.0)
++target_include_directories(fastlio_mapping PRIVATE ${PYTHON_INCLUDE_DIRS})
+--- a/FAST_LIO/include/ikd-Tree/ikd_Tree.h
++++ b/FAST_LIO/include/ikd-Tree/ikd_Tree.h
+@@ -333,6 +333,8 @@
+     void Delete_Points(PointVector &PointToDel);
+     int Delete_Point_Boxes(vector<BoxPointType> &BoxPoints);
+     void flatten(KD_TREE_NODE *root, PointVector &Storage, delete_point_storage_set storage_type);
++    // P61 export only: caller has stopped foreground map insertion.
++    void frozen_snapshot(PointVector &Storage);
+     void acquire_removed_points(PointVector &removed_points);
+     BoxPointType tree_range();
+     PointVector PCL_Storage;
+--- a/FAST_LIO/include/ikd-Tree/ikd_Tree.cpp
++++ b/FAST_LIO/include/ikd-Tree/ikd_Tree.cpp
+@@ -219,6 +219,17 @@
+ }
+ 
+ template <typename PointType>
++void KD_TREE<PointType>::frozen_snapshot(PointVector &Storage)
++{
++    // Same lock order as rebuild; no tree mutation/search may be issued by the caller.
++    pthread_mutex_lock(&rebuild_ptr_mutex_lock);
++    pthread_mutex_lock(&working_flag_mutex);
++    flatten(Root_Node, Storage, NOT_RECORD);
++    pthread_mutex_unlock(&working_flag_mutex);
++    pthread_mutex_unlock(&rebuild_ptr_mutex_lock);
++}
++
++template <typename PointType>
+ void *KD_TREE<PointType>::multi_thread_ptr(void *arg)
+ {
+     KD_TREE *handle = (KD_TREE *)arg;
+--- a/FAST_LIO/src/laserMapping.cpp
++++ b/FAST_LIO/src/laserMapping.cpp
+@@ -764,6 +764,8 @@
+     solve_time += omp_get_wtime() - solve_start_;
+ }
+ 
++#include "p61_record.hpp"
++
+ int main(int argc, char** argv)
+ {
+     ros::init(argc, argv, "laserMapping");
+@@ -868,6 +870,8 @@
+     ros::Publisher pubPath          = nh.advertise<nav_msgs::Path> 
+             ("/path", 100000);
+ //------------------------------------------------------------------------------------------------------
++    P61Record p61_record;
++    p61_record.start(nh);
+     signal(SIGINT, SigHandle);
+     ros::Rate rate(5000);
+     bool status = ros::ok();
+@@ -877,8 +881,12 @@
+         ros::spinOnce();
+         if(sync_packages(Measures)) 
+         {
++            std::string p61_stage="INPUT_CONSUMED";
++            double p61_begin=omp_get_wtime();
++            P61Scope p61_scope{[&](){p61_record.record(p61_stage,p61_begin);}};
+             if (flg_first_scan)
+             {
++                p61_stage="FIRST_SCAN";
+                 first_lidar_time = Measures.lidar_beg_time;
+                 p_imu->first_lidar_time = first_lidar_time;
+                 flg_first_scan = false;
+@@ -900,6 +908,7 @@
+ 
+             if (feats_undistort->empty() || (feats_undistort == NULL))
+             {
++                p61_stage="IMU_INITIALIZATION";
+                 ROS_WARN("No point, skip this scan!\n");
+                 continue;
+             }
+@@ -926,6 +935,7 @@
+                         pointBodyToWorld(&(feats_down_body->points[i]), &(feats_down_world->points[i]));
+                     }
+                     ikdtree.Build(feats_down_world->points);
++                    p61_stage="TREE_INITIALIZED";
+                 }
+                 continue;
+             }
+@@ -937,6 +947,7 @@
+             /*** ICP and iterated Kalman filter update ***/
+             if (feats_down_size < 5)
+             {
++                p61_stage="INSUFFICIENT_POINTS";
+                 ROS_WARN("No point, skip this scan!\n");
+                 continue;
+             }
+@@ -983,6 +994,7 @@
+             /*** add the feature points to map kdtree ***/
+             t3 = omp_get_wtime();
+             map_incremental();
++            p61_stage="MAPPED";
+             t5 = omp_get_wtime();
+             
+             /******* Publish points *******/
+@@ -1027,6 +1039,7 @@
+         rate.sleep();
+     }
+ 
++    p61_record.save_map();
+     /**************** save map ****************/
+     /* 1. make sure you have enough memories
+     /* 2. pcd save will largely influence the real-time performences **/
