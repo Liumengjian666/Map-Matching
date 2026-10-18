@@ -1,0 +1,21 @@
+{
+  "phase": "POST_INITIALIZATION_RAW_GEOMETRY_ONLY",
+  "scan_index": 2986,
+  "scan_start_ns": 1706671587900364160,
+  "raw_point_end_ns": 1706671588000204345,
+  "initial_pose_time_ns": 1706671587829840123,
+  "scan_start_minus_initializer_ms": 70.524037,
+  "raw_point_tail_minus_initializer_ms": 170.364222,
+  "source_raw_sha256": "625ae25e5ff34a6676f49b74304828b5671feabf54d1f3a1fe912811b9853302",
+  "source_pcd": "/home/jian/livox_ws/p61_r6_geode_runs/probe_input/raw_scan_2986.pcd",
+  "source_pcd_sha256": "1da6c62840be562cda594fc8240f776fa0db92560f3ca8646f01cebc51e49e06",
+  "raw_fields_sha256": "379b4ebfe404c5e97bf5b21812473e1ed736fffbcaacaa3eec77b5a0e2297fae",
+  "initial_freeze_sha256": "9a5532ce3b7162e92b6a711c509d9a8e52d28eff81f6515fb3618067582b733d",
+  "initial_matrix_sha256": "269b0b200be2e4080922ae3d667a1705c04c970bd72e95bf292a3e9b07e894c1",
+  "map_sha256": "4a279d822fd6090d3aa3fc0cec989b4f6fde5c9a43df476a29dba4494f6821b4",
+  "initializer_in_map_xyz_bounds": true,
+  "deskewed": false,
+  "raw_sensor_timestamps_modified": false,
+  "initialization_modified_by_probe": false,
+  "gt_read": false
+}

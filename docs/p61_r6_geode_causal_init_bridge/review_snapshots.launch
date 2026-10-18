@@ -1,0 +1,15 @@
+<launch>
+  <!-- Frozen raw diagnostic snapshots ONLY; does not run mapping/localization. -->
+  <arg name="rviz" default="true" />
+  <node pkg="pcl_ros" type="pcd_to_pointcloud" name="r6_frozen_map" args="/home/jian/livox_ws/p61_r5_geode_runs/formal_mapping/frozen_map.pcd 1">
+    <param name="frame_id" value="camera_init"/><remap from="cloud_pcd" to="/r6/frozen_map"/>
+  </node>
+  <node pkg="pcl_ros" type="pcd_to_pointcloud" name="r6_initial_raw" args="/home/jian/livox_ws/p61_r6_geode_runs/visualization/initial_raw_projected.pcd 1">
+    <param name="frame_id" value="camera_init"/><remap from="cloud_pcd" to="/r6/initial_raw"/>
+  </node>
+  <node pkg="pcl_ros" type="pcd_to_pointcloud" name="r6_ndt_raw" args="/home/jian/livox_ws/p61_r6_geode_runs/visualization/ndt_raw_projected.pcd 1">
+    <param name="frame_id" value="camera_init"/><remap from="cloud_pcd" to="/r6/ndt_raw"/>
+  </node>
+  <node pkg="tf" type="static_transform_publisher" name="r6_frozen_initial_pose" args="328.54073254452902 71.786484103750595 3.0360057482115215 -0.022634685974678052 -0.019449396885514718 0.99205900448655204 -0.12218151893297477 camera_init r6_initial_lidar 100"/>
+  <node if="$(arg rviz)" pkg="rviz" type="rviz" name="r6_snapshot_rviz" args="-d /home/jian/livox_ws/p61_r6_geode_init_bridge_ws/docs/p61_r6_geode_causal_init_bridge/snapshots.rviz"/>
+</launch>

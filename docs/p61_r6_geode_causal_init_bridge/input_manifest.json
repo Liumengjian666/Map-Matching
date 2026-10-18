@@ -1,0 +1,22 @@
+{
+  "bag": "/home/jian/livox_ws/p61_r6_geode_runs/bridge_only.bag",
+  "bag_bytes": 1372733659,
+  "bag_sha256": "b2baeb7d91bafb48d51b580b41a33c8f4d324cce8bf3d95f9b1030acceb48fb8",
+  "original_bag_sha256": "162ed09ab6b262f89ac46c45bac36ad2335a6f869b360b80d80ddf59d0b22091",
+  "map_sha256": "4a279d822fd6090d3aa3fc0cec989b4f6fde5c9a43df476a29dba4494f6821b4",
+  "counts": {
+    "/livox/lidar": 2984,
+    "/imu/data": 29844
+  },
+  "start_ns": 1706671289400000810,
+  "test_start_ns": 1706671587829840123,
+  "first_scan_ns": 1706671289400000810,
+  "last_scan_ns": 1706671587699897289,
+  "last_scan_point_end_ns": 1706671587799724734,
+  "first_imu_ns": 1706671289400330543,
+  "last_imu_ns": 1706671587824846982,
+  "r5_prefix_scans": 2441,
+  "extra_bridge_scans": 543,
+  "test_scans_delivered": 0,
+  "gt_read": false
+}

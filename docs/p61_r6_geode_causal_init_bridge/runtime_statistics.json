@@ -1,0 +1,15 @@
+{
+  "bridge_wall_sec": 223.05819034700107,
+  "bridge_peak_rss_mib": 371.60546875,
+  "bridge_user_cpu_sec": 205.005741,
+  "bridge_system_cpu_sec": 8.95169,
+  "source_tree_temporary_map_points": 359920,
+  "native_ndt_align_ms": 60.558422,
+  "target_build_ms": 28.236478,
+  "diagnostic_jet_ms": 5.779268,
+  "jet_calls": 1,
+  "align_calls": 1,
+  "ndt_peak_rss_kib": 81484,
+  "ndt_memory_measurement_source": "probe_resource.txt (/usr/bin/time -v)",
+  "ndt_peak_rss_mib": 79.57421875
+}

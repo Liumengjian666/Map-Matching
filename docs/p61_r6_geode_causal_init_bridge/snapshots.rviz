@@ -1,0 +1,50 @@
+Panels:
+  - Class: rviz/Displays
+    Name: Displays
+Visualization Manager:
+  Class: ""
+  Global Options:
+    Fixed Frame: camera_init
+    Background Color: 35; 35; 35
+  Displays:
+    - Class: rviz/PointCloud2
+      Name: R5 immutable prior map
+      Enabled: true
+      Topic: /r6/frozen_map
+      Color Transformer: FlatColor
+      Color: 150; 150; 150
+      Style: Points
+      Size (Pixels): 2
+    - Class: rviz/PointCloud2
+      Name: Raw scan at earlier frozen initializer
+      Enabled: true
+      Topic: /r6/initial_raw
+      Color Transformer: FlatColor
+      Color: 50; 140; 255
+      Style: Points
+      Size (Pixels): 4
+    - Class: rviz/PointCloud2
+      Name: Single NDT raw diagnostic output - no feedback
+      Enabled: true
+      Topic: /r6/ndt_raw
+      Color Transformer: FlatColor
+      Color: 50; 255; 100
+      Style: Points
+      Size (Pixels): 3
+    - Class: rviz/TF
+      Name: Frozen causal initial pose only
+      Enabled: true
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Marker Scale: 0.8
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Distance: 45
+      Pitch: 0.5
+      Yaw: 0.3
+      Focal Point:
+        X: 328.54
+        Y: 71.79
+        Z: 3.04
