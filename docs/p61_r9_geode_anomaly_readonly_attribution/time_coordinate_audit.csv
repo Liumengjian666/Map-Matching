@@ -1,0 +1,1 @@
+scan_index,header_ns,offset_min_ns,offset_max_ns,scan_end_ns,deskew_reference_stamp,ndt_measurement_stamp,oosm_correction_stamp,replay_end_stamp,coordinate_roundtrip_error,status
