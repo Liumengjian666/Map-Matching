@@ -1,0 +1,24 @@
+test_deadline (test_recovery.Guards) ... ok
+test_exact_range (test_recovery.Guards) ... ok
+test_final_storage_receipt_failure_cannot_return_pass (test_recovery.Guards) ... ok
+test_finalization_preserves_primary_failure (test_recovery.Guards) ... ok
+test_full_success_bag_then_e57 (test_recovery.Guards) ... ok
+test_missing_frozen_linear_fails_closed (test_recovery.Guards) ... ok
+test_prefix_conflict_no_write (test_recovery.Guards) ... ok
+test_prefix_mismatch_stops (test_recovery.Guards) ... ok
+test_publish_and_no_overwrite (test_recovery.Guards) ... ok
+test_publish_bad_hash_no_link (test_recovery.Guards) ... ok
+test_reject_200 (test_recovery.Guards) ... ok
+test_reject_excess_body (test_recovery.Guards) ... ok
+test_reject_short_body (test_recovery.Guards) ... ok
+test_reject_wrong_range (test_recovery.Guards) ... ok
+test_reserve (test_recovery.Guards) ... ok
+test_second_run_does_not_overwrite (test_recovery.Guards) ... ok
+test_start_capacity_below_threshold (test_recovery.Guards) ... ok
+test_symlink_rejected (test_recovery.Guards) ... ok
+test_two_attempts_no_partial_append (test_recovery.Guards) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.174s
+
+OK

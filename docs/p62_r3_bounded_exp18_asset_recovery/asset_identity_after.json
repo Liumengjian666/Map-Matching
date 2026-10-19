@@ -1,0 +1,44 @@
+{
+  "old_partials": [
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/staging/exp18_corridor_lower_gallery_2.bag.part",
+      "bytes": 452984832,
+      "allocated_bytes": 452988928,
+      "st_blocks": 884744,
+      "type": "REGULAR_FILE",
+      "sha256": "2aa6b290c20ec150107c91ed0c987ef025c180d7f1d89c18cb49754358bd83a6"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/staging/exp18_corridor_lower_gallery_2.bag.ranged.part",
+      "bytes": 7576092054,
+      "allocated_bytes": 3665920,
+      "st_blocks": 7160,
+      "type": "REGULAR_FILE",
+      "sha256": "88a75e0e1503091f05605dc45279e1aa81e403d2aac582d72bde77c143db5c7c"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/staging/exp18_corridor_lower_gallery_2_imu.txt.cached.part",
+      "bytes": 88743,
+      "allocated_bytes": 90112,
+      "st_blocks": 176,
+      "type": "REGULAR_FILE",
+      "sha256": "138def6a40884a87372a4f18938cce5180d6aa7ad4e705349abf47ac4ec9fa32"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/staging/exp18_corridor_lower_gallery_2_imu_3dof.txt.cached.part",
+      "bytes": 185,
+      "allocated_bytes": 4096,
+      "st_blocks": 8,
+      "type": "REGULAR_FILE",
+      "sha256": "13f963c4a2e9d583532051b581a19cf73ade0aadc83f530ea3e66c6d52036dec"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/staging/lidar_calibration.yaml.cached.part",
+      "bytes": 747,
+      "allocated_bytes": 4096,
+      "st_blocks": 8,
+      "type": "REGULAR_FILE",
+      "sha256": "ea5127989317270d83d9a701318d7e284031a21bd9cbf466b8f9f169547db43c"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "result": "ASSET_RECOVERY_PASS_BOTH_FIXED_REVISION_FILES",
+  "revision": "e62017f907007fdc5ab8c721842e4ae7359d7f49",
+  "transfer_program_code_sha": "3d54bb08d9f712724c911cd5f8931e6063e90fb8",
+  "runtime_started_utc": "2026-10-19T09:17:37.342568+00:00",
+  "runtime_finished_utc": "2026-10-19T11:38:49.315190+00:00",
+  "runtime_wall_s": 8471.972622,
+  "old_partials_preserved": 5,
+  "network_requests": 206,
+  "data_segments": 205,
+  "prefix_probes": 1,
+  "retries": 0,
+  "failed_requests": 0,
+  "network_bytes_including_probe": 13652846668,
+  "storage": {
+    "initial_free_bytes": 48201134080,
+    "final_free_bytes": 34094829568,
+    "minimum_start_bytes": 48000000000,
+    "minimum_reserve_bytes": 21474836480,
+    "conversion_performed": false,
+    "new_dependencies_installed": false,
+    "old_partials_unchanged": true
+  },
+  "assets": [
+    {
+      "asset": "rosbags/exp18_corridor_lower_gallery_2.bag",
+      "size_bytes": 8657654860,
+      "sha256": "98373b52f207b9ace3914792b5604a6642f89441190cabca6acbaf1d17249280",
+      "data_segments": 123,
+      "network_data_bytes": 8204670028,
+      "data_request_elapsed_s": 5194.927672681923,
+      "data_request_throughput_MiB_s": 1.506196731368975,
+      "published_path": "/home/jian/livox_ws/p62_r3_exp18_recovery_data/assets/verified/rosbags/exp18_corridor_lower_gallery_2.bag",
+      "post_publish_size_sha_verified_by_recover": true
+    },
+    {
+      "asset": "laser_scans/sheldonian_full.e57",
+      "size_bytes": 5447128064,
+      "sha256": "46575d3eaf3169a24e24ba0013cc48610125ac842d6745e5e8156c6aecc59756",
+      "data_segments": 82,
+      "network_data_bytes": 5447128064,
+      "data_request_elapsed_s": 3208.0806630899315,
+      "data_request_throughput_MiB_s": 1.6192816448103367,
+      "published_path": "/home/jian/livox_ws/p62_r3_exp18_recovery_data/assets/verified/laser_scans/sheldonian_full.e57",
+      "post_publish_size_sha_verified_by_recover": true
+    }
+  ],
+  "audit": "PASS",
+  "boundary": {
+    "rosbag_play": 0,
+    "full_bag_traversal": 0,
+    "full_e57_decode": 0,
+    "ros_localization_nodes": 0,
+    "ndt_align": 0,
+    "ekf_runs": 0,
+    "trajectory_generation": 0,
+    "ate_rpe": 0,
+    "offset_search": 0,
+    "bias_fit": 0,
+    "production_algorithm_changes": 0,
+    "external_model_cli": 0,
+    "hikvision_access": 0,
+    "push_executed": false
+  },
+  "limits": [
+    "File identity only; coordinate/time/reference/initialization G0 gates remain untested.",
+    "Three existing small partials were hashed, not parsed as trajectory/calibration data.",
+    "Full file SHA checks were performed by recover.py before and after hardlink publication; this receipt audit does not repeat large-file hashing."
+  ]
+}

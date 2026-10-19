@@ -1,0 +1,77 @@
+{
+  "task": "P62-R3-BOUNDED-EXP18-ASSET-RECOVERY",
+  "revision": "e62017f907007fdc5ab8c721842e4ae7359d7f49",
+  "started_utc": "2026-10-19T09:17:37.342568+00:00",
+  "hard_deadline_utc": "2026-10-19T12:00:00+00:00",
+  "transfer_deadline_utc": "2026-10-19T11:59:00+00:00",
+  "initial_free_bytes": 48201134080,
+  "chunk_bytes": 67108864,
+  "socket_timeout_s": 90,
+  "max_attempts_per_chunk": 2,
+  "single_active_request": true,
+  "assets": [
+    {
+      "relative": "rosbags/exp18_corridor_lower_gallery_2.bag",
+      "url": "https://huggingface.co/datasets/Hilti-Research/hilti-slam-challenge-2022/resolve/e62017f907007fdc5ab8c721842e4ae7359d7f49/rosbags/exp18_corridor_lower_gallery_2.bag",
+      "expected_bytes": 8657654860,
+      "expected_sha256": "98373b52f207b9ace3914792b5604a6642f89441190cabca6acbaf1d17249280",
+      "staging_path": "/home/jian/livox_ws/p62_r3_exp18_recovery_data/staging/exp18_corridor_lower_gallery_2.bag.recovering.part",
+      "valid_prefix_bytes": 8657654860,
+      "identity": {
+        "staging": {
+          "path": "/home/jian/livox_ws/p62_r3_exp18_recovery_data/staging/exp18_corridor_lower_gallery_2.bag.recovering.part",
+          "bytes": 8657654860,
+          "allocated_bytes": 8657661952,
+          "st_blocks": 16909496,
+          "type": "REGULAR_FILE",
+          "sha256": "98373b52f207b9ace3914792b5604a6642f89441190cabca6acbaf1d17249280"
+        },
+        "published": {
+          "path": "/home/jian/livox_ws/p62_r3_exp18_recovery_data/assets/verified/rosbags/exp18_corridor_lower_gallery_2.bag",
+          "bytes": 8657654860,
+          "allocated_bytes": 8657661952,
+          "st_blocks": 16909496,
+          "type": "REGULAR_FILE",
+          "sha256": "98373b52f207b9ace3914792b5604a6642f89441190cabca6acbaf1d17249280"
+        },
+        "hardlink_verified": true
+      },
+      "status": "VERIFIED_AND_PUBLISHED"
+    },
+    {
+      "relative": "laser_scans/sheldonian_full.e57",
+      "url": "https://huggingface.co/datasets/Hilti-Research/hilti-slam-challenge-2022/resolve/e62017f907007fdc5ab8c721842e4ae7359d7f49/laser_scans/sheldonian_full.e57",
+      "expected_bytes": 5447128064,
+      "expected_sha256": "46575d3eaf3169a24e24ba0013cc48610125ac842d6745e5e8156c6aecc59756",
+      "staging_path": "/home/jian/livox_ws/p62_r3_exp18_recovery_data/staging/sheldonian_full.e57.recovering.part",
+      "valid_prefix_bytes": 5447128064,
+      "identity": {
+        "staging": {
+          "path": "/home/jian/livox_ws/p62_r3_exp18_recovery_data/staging/sheldonian_full.e57.recovering.part",
+          "bytes": 5447128064,
+          "allocated_bytes": 5447135232,
+          "st_blocks": 10638936,
+          "type": "REGULAR_FILE",
+          "sha256": "46575d3eaf3169a24e24ba0013cc48610125ac842d6745e5e8156c6aecc59756"
+        },
+        "published": {
+          "path": "/home/jian/livox_ws/p62_r3_exp18_recovery_data/assets/verified/laser_scans/sheldonian_full.e57",
+          "bytes": 5447128064,
+          "allocated_bytes": 5447135232,
+          "st_blocks": 10638936,
+          "type": "REGULAR_FILE",
+          "sha256": "46575d3eaf3169a24e24ba0013cc48610125ac842d6745e5e8156c6aecc59756"
+        },
+        "hardlink_verified": true
+      },
+      "status": "VERIFIED_AND_PUBLISHED"
+    }
+  ],
+  "prefix_probe": {
+    "bytes": 1048576,
+    "sha256": "2335571cd2cb5b6dca1da2b11a07e2751c80bb4995f46c399e400360fee7f5c4",
+    "exact_match": true
+  },
+  "result": "ASSET_RECOVERY_PASS_BOTH_FIXED_REVISION_FILES",
+  "finished_utc": "2026-10-19T11:38:49.315190+00:00"
+}

@@ -1,0 +1,9 @@
+{
+  "initial_free_bytes": 48201134080,
+  "final_free_bytes": 34094829568,
+  "minimum_start_bytes": 48000000000,
+  "minimum_reserve_bytes": 21474836480,
+  "conversion_performed": false,
+  "new_dependencies_installed": false,
+  "old_partials_unchanged": true
+}
