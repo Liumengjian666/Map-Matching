@@ -1,0 +1,126 @@
+{
+  "single_stream": {
+    "revision": "e62017f907007fdc5ab8c721842e4ae7359d7f49",
+    "initial_available_bytes": 48746586112,
+    "minimum_start_bytes": 48000000000,
+    "safety_reserve_bytes": 21474836480,
+    "attempt_limit_per_file": 1,
+    "assets": [
+      {
+        "relative": "rosbags/exp18_corridor_lower_gallery_2.bag",
+        "url": "https://huggingface.co/datasets/Hilti-Research/hilti-slam-challenge-2022/resolve/e62017f907007fdc5ab8c721842e4ae7359d7f49/rosbags/exp18_corridor_lower_gallery_2.bag",
+        "expected_bytes": 8657654860,
+        "expected_sha256": "98373b52f207b9ace3914792b5604a6642f89441190cabca6acbaf1d17249280",
+        "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/rosbags/exp18_corridor_lower_gallery_2.bag",
+        "network_attempts": 1,
+        "http_status": 200,
+        "final_host": "us.aws.cdn.hf.co",
+        "content_type": "application/octet-stream",
+        "content_length": "8657654860",
+        "transferred_bytes": 452984832,
+        "wall_s": 289.482186053996
+      }
+    ],
+    "final_available_bytes": 48210644992
+  },
+  "range_transfer": {
+    "initial_available_bytes": 48210587648,
+    "revision": "e62017f907007fdc5ab8c721842e4ae7359d7f49",
+    "transport_change": "Previous single-stream deliberately interrupted; original partial preserved",
+    "workers_per_asset": 8,
+    "attempts_per_range": 1,
+    "assets": [
+      {
+        "relative": "rosbags/exp18_corridor_lower_gallery_2.bag",
+        "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/rosbags/exp18_corridor_lower_gallery_2.bag",
+        "expected_bytes": 8657654860,
+        "expected_sha256": "98373b52f207b9ace3914792b5604a6642f89441190cabca6acbaf1d17249280",
+        "url": "https://huggingface.co/datasets/Hilti-Research/hilti-slam-challenge-2022/resolve/e62017f907007fdc5ab8c721842e4ae7359d7f49/rosbags/exp18_corridor_lower_gallery_2.bag",
+        "ranges": [
+          {
+            "start": 0,
+            "stop_exclusive": 1082206857,
+            "attempts": 1,
+            "http_status": 206,
+            "content_range": "bytes 0-1082206856/8657654860"
+          },
+          {
+            "start": 1082206857,
+            "stop_exclusive": 2164413715,
+            "attempts": 1,
+            "http_status": 206,
+            "content_range": "bytes 1082206857-2164413714/8657654860"
+          },
+          {
+            "start": 2164413715,
+            "stop_exclusive": 3246620572,
+            "attempts": 1,
+            "http_status": 206,
+            "content_range": "bytes 2164413715-3246620571/8657654860"
+          },
+          {
+            "start": 3246620572,
+            "stop_exclusive": 4328827430,
+            "attempts": 1,
+            "http_status": 206,
+            "content_range": "bytes 3246620572-4328827429/8657654860"
+          },
+          {
+            "start": 4328827430,
+            "stop_exclusive": 5411034287,
+            "attempts": 1,
+            "http_status": 206,
+            "content_range": "bytes 4328827430-5411034286/8657654860"
+          },
+          {
+            "start": 5411034287,
+            "stop_exclusive": 6493241145,
+            "attempts": 1,
+            "http_status": 206,
+            "content_range": "bytes 5411034287-6493241144/8657654860"
+          },
+          {
+            "start": 6493241145,
+            "stop_exclusive": 7575448002,
+            "attempts": 1,
+            "http_status": 206,
+            "content_range": "bytes 6493241145-7575448001/8657654860"
+          },
+          {
+            "start": 7575448002,
+            "stop_exclusive": 8657654860,
+            "attempts": 1,
+            "http_status": 206,
+            "content_range": "bytes 7575448002-8657654859/8657654860"
+          }
+        ],
+        "completed_bytes": 3627186,
+        "wall_s": 37.272014935995685,
+        "temporary_preserved": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/staging/exp18_corridor_lower_gallery_2.bag.ranged.part"
+      }
+    ],
+    "status": "STOPPED",
+    "error": "timeout:The read operation timed out",
+    "final_available_bytes": 48206716928
+  },
+  "clarification": "Single stream was deliberately interrupted with SIGINT at 289.48s; missing status in original receipt is NOT completion. Range attempt failed socket timeout, no automatic retries.",
+  "range_probe": {
+    "http_status": 206,
+    "content_range": "bytes 0-63/8657654860",
+    "body_bytes_read": 64
+  },
+  "actual_initial_acquisition_code_commit": "1519e8d679c55bedac841d8e88f4ac3218d787da",
+  "small_assets_publication": "publish_small.py staged and verified the three reused small assets separately; range worker stopped before reaching cache branch",
+  "source_receipt_identities": [
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/acquisition.json",
+      "bytes": 1024,
+      "sha256": "5fb9926e0d86855e608d57c8f1d03b11a272aa253d57d8a770d6df80305f8b56"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/range_acquisition.json",
+      "bytes": 2821,
+      "sha256": "ee390417ae509169972f406e6ef2311e92fc7e83d1ad89785f6ef556f656b3b3"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+label,timestamp_text_s,timestamp_ns,bag_time_support,sensor_pairing,within_dense_reference_time_support,reference_components,tip_conversion,extrapolation_performed,label_preserved
+1,1649856228.9143598,1649856228914359800,NOT_EVALUABLE_NO_COMPLETE_BAG,NOT_EVALUABLE,True,POSITION_ONLY; last four values are placeholders not measured attitude,NOT_CERTIFIED,NO,YES
+2,1649856287.0620654,1649856287062065400,NOT_EVALUABLE_NO_COMPLETE_BAG,NOT_EVALUABLE,True,POSITION_ONLY; last four values are placeholders not measured attitude,NOT_CERTIFIED,NO,YES
+3,1649856335.6804302,1649856335680430200,NOT_EVALUABLE_NO_COMPLETE_BAG,NOT_EVALUABLE,False,POSITION_ONLY; last four values are placeholders not measured attitude,NOT_CERTIFIED,NO,YES

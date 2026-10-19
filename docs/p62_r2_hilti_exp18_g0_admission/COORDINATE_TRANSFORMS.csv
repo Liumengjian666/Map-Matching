@@ -1,0 +1,5 @@
+transform,source_frame,target_frame,numerical_value,status,source
+T_M_W,W,M,NA,NOT_ESTABLISHED,No verified E57 export/world link; no fit performed
+T_I_base_URDF_ONLY,base,alphasense_imu,R_x(-pi); translation [0 0 0],OFFICIAL_URDF_VALUE_NOT_CERTIFIED_AS_EXP18_GT_CONVENTION,phasma_description@79002026e9b229cf9b4e95a403eaec4f00acfd79 urdf/phasma.urdf.xacro
+T_I_L,PandarXT-32,imu,"RAW_UNORDERED_QUAT=[0.7071068, -0.7071068, 0, 0]; xyz_m=[-0.001, -0.00855, 0.055]",NUMERIC_FIELDS_READ_QUATERNION_ORDER_DIRECTION_UNCERTIFIED,/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/calibration/calibration_files/lidar_calibration.yaml
+T_I_P,measurement_tip,imu,"RAW_UNORDERED_QUAT=[0, 0, 0, 1]; xyz_m=[0.059, -0.00855, 0.1964]",NUMERIC_FIELDS_READ_QUATERNION_ORDER_DIRECTION_UNCERTIFIED,/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/calibration/calibration_files/lidar_calibration.yaml

@@ -1,0 +1,81 @@
+{
+  "task": "P62-R2-HILTI-EXP18-G0-ADMISSION",
+  "date": "2026-10-19",
+  "G0_RESULT": "G0_BLOCKED_COORDINATE_CONTRACT",
+  "concurrent_blockers": ["G0_BLOCKED_TIME_CONTRACT", "G0_INITIALIZATION_NOT_ESTABLISHED"],
+  "classification_limit": "Contracts are NOT established; no actual time/coordinate violation was demonstrated. Complete input acquisition also did not finish.",
+  "ASSET_IDENTITY_STATUS": "INCOMPLETE_3_OF_5",
+  "COORDINATE_CONTRACT_STATUS": "COORDINATE_CONTRACT_NOT_ESTABLISHED",
+  "TIME_CONTRACT_STATUS": "TIME_CONTRACT_NOT_ESTABLISHED",
+  "REFERENCE_INDEPENDENCE_STATUS": "CONDITIONAL_REGISTERED_REFERENCE; SPARSE_POSITION_ONLY",
+  "INITIALIZATION_STATUS": "INITIALIZATION_NOT_ESTABLISHED",
+  "STORAGE_STATUS": "PASS_AT_BOTH_TRANSFER_STARTS",
+  "dataset_revision": "e62017f907007fdc5ab8c721842e4ae7359d7f49",
+  "acquisition": {
+    "single_stream": {
+      "http_status": 200,
+      "payload_bytes_preserved": 452984832,
+      "wall_s": 289.482186053996,
+      "stop": "DELIBERATE_SIGINT_FOR_TRANSPORT_CHANGE_NOT_SOURCE_FAILURE"
+    },
+    "range_probe": {"http_status": 206, "payload_bytes": 64},
+    "range_transfer": {
+      "requests": 8,
+      "http_206_headers_matching": 8,
+      "complete_ranges": 0,
+      "actual_written_bytes": 3627186,
+      "logical_sparse_partial_bytes": 7576092054,
+      "wall_s": 37.272014935995685,
+      "failure": "socket.timeout: The read operation timed out",
+      "automatic_retries": 0,
+      "failed_range_identity": "NOT_RECORDED_BY_INITIAL_TOOL"
+    },
+    "full_bag_identity_verified": false,
+    "e57_download_attempted": false,
+    "reused_small_assets_verified": 3,
+    "partials_deleted": false
+  },
+  "actual_parsing": {
+    "rosbag_full_message_traversal": "NOT_PERFORMED_NO_COMPLETE_VERIFIED_BAG",
+    "e57_all_scans_read": "NOT_PERFORMED_NO_E57",
+    "actual_lidar_topic": "NOT_AVAILABLE",
+    "actual_imu_topic": "NOT_AVAILABLE",
+    "scans_audited_for_imu_coverage": "NOT_EVALUABLE",
+    "dense_reference_schema_rows": 789,
+    "sparse_position_labels_preserved": 3,
+    "sparse_labels_pairable_to_bag": "NOT_EVALUABLE",
+    "reference_schema_files_inspected": 2
+  },
+  "verification": {
+    "synthetic_tests_passed": 17,
+    "synthetic_tests_failed": 0,
+    "verified_local_assets_before_after": "UNCHANGED_3_OF_5",
+    "preserved_partials_before_after": "UNCHANGED",
+    "cross_model_review": "DECLINED_BY_USER",
+    "external_cli_executions": 0
+  },
+  "boundaries": {
+    "production_cpp_changes": 0,
+    "production_parameter_changes": 0,
+    "ndt_align": 0,
+    "ekf_runs": 0,
+    "rosbag_play": 0,
+    "ros_localization_nodes": 0,
+    "new_localization_trajectories": 0,
+    "ate_or_rpe_evaluations": 0,
+    "clock_offset_search": 0,
+    "gyro_bias_fit": 0,
+    "hikvision_access": 0,
+    "gt_content_files_read": 2
+  },
+  "git": {
+    "branch": "research/p62-r2-hilti-exp18-g0-admission",
+    "start_sha": "97acc922c1d9073c2b28c1877eb61089a0ea4bfc",
+    "R1_remote_head_at_start": "97acc922c1d9073c2b28c1877eb61089a0ea4bfc",
+    "initial_transfer_code_sha": "1519e8d679c55bedac841d8e88f4ac3218d787da",
+    "analysis_code_sha": "1ec54a29f7ce0f99fe6f0eeeeea891833a006a77",
+    "end_sha_policy": "Actual final archive SHA supplied in final handoff; not self-referential",
+    "push_executed": false
+  },
+  "unique_next": "Controller decides whether to authorize bounded recovery of pinned complete bag/E57 while preserving the linear partial; then resume actual G0 metadata audit, not localization"
+}

@@ -1,0 +1,23 @@
+{
+  "files_read": [
+    "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/ground_truth/exp18_corridor_lower_gallery_2_imu.txt",
+    "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/ground_truth/exp18_corridor_lower_gallery_2_imu_3dof.txt"
+  ],
+  "content_inspection_unique_files": 2,
+  "dense_rows": 789,
+  "dense_columns": [
+    8
+  ],
+  "dense_first_timestamp_ns": 1649856227723471000,
+  "dense_last_timestamp_ns": 1649856314319139000,
+  "nonfinite_numeric_values": 0,
+  "last_four_columns_norm_min": 0.9999999999347858,
+  "last_four_columns_norm_max": 1.000000000065312,
+  "quaternion_order_and_direction": "NOT_CERTIFIED_BY_CONSUMER",
+  "sparse_rows": 3,
+  "sparse_columns": [
+    8
+  ],
+  "sparse_header": "# timestamp_s id x y z ",
+  "error_metrics_computed": false
+}

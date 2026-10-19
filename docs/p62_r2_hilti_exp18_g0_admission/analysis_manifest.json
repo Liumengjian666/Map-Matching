@@ -1,0 +1,170 @@
+{
+  "task": "P62-R2-HILTI-EXP18-G0-ADMISSION",
+  "numerical_analysis_code_sha": "1ec54a29f7ce0f99fe6f0eeeeea891833a006a77",
+  "initial_actual_transfer_code_sha": "1519e8d679c55bedac841d8e88f4ac3218d787da",
+  "reference_files_content_inspected": 2,
+  "GT_error_evaluations": 0,
+  "NDT_align": 0,
+  "EKF_runs": 0,
+  "rosbag_play": 0,
+  "external_cli": 0,
+  "R1_frozen_archive_check": [
+    ".gitignore: 成功",
+    "COORDINATE_AND_TIME_CONTRACT.md: 成功",
+    "DATASET_SELECTION.md: 成功",
+    "EXPERIMENT_PRE_REGISTRATION.md: 成功",
+    "EXTERNAL_REVIEW_REQUEST.md: 成功",
+    "LITERATURE_COMPARISON.csv: 成功",
+    "LITERATURE_REVIEW.md: 成功",
+    "LOCAL_REVIEW.md: 成功",
+    "MATHEMATICAL_FORMULATION.md: 成功",
+    "NOVELTY_ASSESSMENT.md: 成功",
+    "REPORT.md: 成功",
+    "archive_evidence.py: 成功",
+    "build_review_packet.py: 成功",
+    "capture_additional.py: 成功",
+    "capture_sources.py: 成功",
+    "offline_math.py: 成功",
+    "reproduction_commands.md: 成功",
+    "results.json: 成功",
+    "source_manifest.json: 成功",
+    "tests/test_offline_math.py: 成功",
+    "analysis_manifest.json: 成功"
+  ],
+  "verified_assets": 3,
+  "missing_assets": 2,
+  "present_assets_and_partials_unchanged": true,
+  "output_files": [
+    {
+      "path": ".gitignore",
+      "bytes": 32,
+      "sha256": "4d21bfccdadc6beeecb3216e768ec818eb9f6f095e830bcd2fef9ed332d3be6f"
+    },
+    {
+      "path": "ASSET_MANIFEST.json",
+      "bytes": 4521,
+      "sha256": "72adfeaecadabcb1fea8e53a082ecbb4739813cb512f4a392a2cc164d08c33da"
+    },
+    {
+      "path": "COORDINATE_AUDIT.md",
+      "bytes": 2418,
+      "sha256": "532ba1009a7c6eb91f86947c9b481919f70ab3e9e7b89128649af4de402a7d9b"
+    },
+    {
+      "path": "COORDINATE_TRANSFORMS.csv",
+      "bytes": 892,
+      "sha256": "58e9320f39e98c589017799d79cc0cc6ce8be9537345c80284fdcce3dc2207b7"
+    },
+    {
+      "path": "REFERENCE_INDEPENDENCE.md",
+      "bytes": 1484,
+      "sha256": "f60ecfc1853af885663c4a0540546965d1a596523661d638f0c466934eecd0d8"
+    },
+    {
+      "path": "REPORT.md",
+      "bytes": 6234,
+      "sha256": "d2f25e3436e5650f686d82a742e7110ee096ee817e5279e5affbe4bc2ceaa63b"
+    },
+    {
+      "path": "REVIEW_AND_LIMITS.md",
+      "bytes": 2476,
+      "sha256": "44ca96e90b3ac1893765abc62b251a241142249954f4d341e1ff7b90d16f78d6"
+    },
+    {
+      "path": "SPARSE_LABEL_AUDIT.csv",
+      "bytes": 731,
+      "sha256": "d3310716953748919b3940954e54182ecee2f0edd8088e3d814f4a7b9262fc90"
+    },
+    {
+      "path": "STORAGE_AUDIT.json",
+      "bytes": 608,
+      "sha256": "5783de3db0e5ca1fd1e5154572b516be0e1e62dce6f3f6423bf93f85d9b1c918"
+    },
+    {
+      "path": "TIME_CONTRACT_AUDIT.md",
+      "bytes": 1164,
+      "sha256": "1642e40080762299d99a54da4e872431c2cd61a82eef80980ddf83341579d496"
+    },
+    {
+      "path": "TIME_COVERAGE.csv",
+      "bytes": 195,
+      "sha256": "bb9f4556ef16c7b3419433fa15684de3f67e2f051f996397620c0aae0b964dd2"
+    },
+    {
+      "path": "acquire_assets.py",
+      "bytes": 7595,
+      "sha256": "e5c7749803498e595bb6c1b031a9427051417729bce13fcf45d7dbd021a00bdb"
+    },
+    {
+      "path": "acquire_ranges.py",
+      "bytes": 5915,
+      "sha256": "8c68c835114a9adb4be72398185519f49429aa708a393ec79ea786d4e2a29c82"
+    },
+    {
+      "path": "asset_gate_after.json",
+      "bytes": 4255,
+      "sha256": "565c3588896745400f5899b4d4273ef6b36dd6caa6e112ef74a06e1e5ad28a26"
+    },
+    {
+      "path": "asset_gate_before.json",
+      "bytes": 4255,
+      "sha256": "565c3588896745400f5899b4d4273ef6b36dd6caa6e112ef74a06e1e5ad28a26"
+    },
+    {
+      "path": "audit_available.py",
+      "bytes": 8595,
+      "sha256": "b026dbefadd93114aef444bf24e2da748f3bca24293bb8a112474efb192acc9d"
+    },
+    {
+      "path": "download_evidence.json",
+      "bytes": 5104,
+      "sha256": "5cd5eb75289771ef4e940fdcfeca69034a56450085504f607da22d5d12e35413"
+    },
+    {
+      "path": "freeze_archive.py",
+      "bytes": 2610,
+      "sha256": "6181906094af1592b30d72e83a49d110ffcd6304c052a66d9277b05753c0146b"
+    },
+    {
+      "path": "publish_small.py",
+      "bytes": 1609,
+      "sha256": "7f921c3c84496bb1b29e5abf9ff045db3fca7271846f96484b972b8c7a9bd28d"
+    },
+    {
+      "path": "reference_schema.json",
+      "bytes": 785,
+      "sha256": "9dae3966dba80da4f684aa7c728acdd0da6b8be55f1d5bdbea2d375c2b83091e"
+    },
+    {
+      "path": "reproduction_commands.md",
+      "bytes": 1710,
+      "sha256": "45af9f7a161bb4c9b74bd89e5b6cca3c2c478cc8c60a2cdc6fdf793440863e4f"
+    },
+    {
+      "path": "results.json",
+      "bytes": 3476,
+      "sha256": "aa4d9b03d8592f34c8595458101bed4aba8a1a8ea75d0a043f506b7c917b3cbc"
+    },
+    {
+      "path": "source_identity.json",
+      "bytes": 1301,
+      "sha256": "b603a7fa1b4d5c173d2bd3b8bce55ea78e39e5f183ac06fa77923533f00de4b9"
+    },
+    {
+      "path": "tests/test_acquisition.py",
+      "bytes": 4476,
+      "sha256": "10f62e04c282e1322c0f1c5a174f609546b4fc0fcea31fd5f01cd2236e7d1d01"
+    },
+    {
+      "path": "tests/test_ranges.py",
+      "bytes": 719,
+      "sha256": "bff65ff4ab56f4c37c9923bd04c14d47908f85a6924a30c0cb48f06ad5ddb690"
+    },
+    {
+      "path": "tests/test_small_publish.py",
+      "bytes": 1929,
+      "sha256": "8283f6058c97229b35de01a40f40493c77d1f5af2b5db743c6cc437defab6d69"
+    }
+  ],
+  "self_reference_policy": "Manifest excludes itself/checksums; END_SHA supplied in final handoff."
+}

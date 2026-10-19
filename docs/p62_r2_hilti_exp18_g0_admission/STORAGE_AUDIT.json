@@ -1,0 +1,15 @@
+{
+  "initial_df_available_bytes": 50324926464,
+  "single_stream_start_available_bytes": 48746586112,
+  "range_start_available_bytes": 48210587648,
+  "required_start_available_bytes": 48000000000,
+  "start_gate": "PASS",
+  "minimum_safety_reserve_bytes": 21474836480,
+  "current_available_bytes": 48206094336,
+  "max_conversion_workspace_bytes": 8589934592,
+  "conversion_performed": false,
+  "old_data_deleted": false,
+  "old_data_moved": false,
+  "hikvision_access": false,
+  "sparse_file_warning": "ranged partial logical length does not equal completed bytes; use receipt completed_bytes and st_blocks"
+}

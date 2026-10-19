@@ -1,0 +1,2 @@
+scan_index,header_ns,point_start_ns,point_end_ns,imu_before_ns,imu_after_ns,status,reason
+NA,NA,NA,NA,NA,NA,NOT_EVALUABLE,Complete bag absent; partial not parsed; no fabricated scan/IMU counts

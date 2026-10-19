@@ -1,0 +1,82 @@
+{
+  "revision": "e62017f907007fdc5ab8c721842e4ae7359d7f49",
+  "assets": [
+    {
+      "relative": "rosbags/exp18_corridor_lower_gallery_2.bag",
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/rosbags/exp18_corridor_lower_gallery_2.bag",
+      "expected_bytes": 8657654860,
+      "expected_sha256": "98373b52f207b9ace3914792b5604a6642f89441190cabca6acbaf1d17249280",
+      "url": "https://huggingface.co/datasets/Hilti-Research/hilti-slam-challenge-2022/resolve/e62017f907007fdc5ab8c721842e4ae7359d7f49/rosbags/exp18_corridor_lower_gallery_2.bag",
+      "revision": "e62017f907007fdc5ab8c721842e4ae7359d7f49",
+      "bytes": null,
+      "sha256": null,
+      "status": "NOT_AVAILABLE_NOT_VERIFIED"
+    },
+    {
+      "relative": "laser_scans/sheldonian_full.e57",
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/laser_scans/sheldonian_full.e57",
+      "expected_bytes": 5447128064,
+      "expected_sha256": "46575d3eaf3169a24e24ba0013cc48610125ac842d6745e5e8156c6aecc59756",
+      "url": "https://huggingface.co/datasets/Hilti-Research/hilti-slam-challenge-2022/resolve/e62017f907007fdc5ab8c721842e4ae7359d7f49/laser_scans/sheldonian_full.e57",
+      "revision": "e62017f907007fdc5ab8c721842e4ae7359d7f49",
+      "bytes": null,
+      "sha256": null,
+      "status": "NOT_AVAILABLE_NOT_VERIFIED"
+    },
+    {
+      "relative": "ground_truth/exp18_corridor_lower_gallery_2_imu.txt",
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/ground_truth/exp18_corridor_lower_gallery_2_imu.txt",
+      "expected_bytes": 88743,
+      "expected_sha256": "138def6a40884a87372a4f18938cce5180d6aa7ad4e705349abf47ac4ec9fa32",
+      "url": "https://huggingface.co/datasets/Hilti-Research/hilti-slam-challenge-2022/resolve/e62017f907007fdc5ab8c721842e4ae7359d7f49/ground_truth/exp18_corridor_lower_gallery_2_imu.txt",
+      "revision": "e62017f907007fdc5ab8c721842e4ae7359d7f49",
+      "bytes": 88743,
+      "sha256": "138def6a40884a87372a4f18938cce5180d6aa7ad4e705349abf47ac4ec9fa32",
+      "status": "LOCAL_IDENTITY_VERIFIED"
+    },
+    {
+      "relative": "ground_truth/exp18_corridor_lower_gallery_2_imu_3dof.txt",
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/ground_truth/exp18_corridor_lower_gallery_2_imu_3dof.txt",
+      "expected_bytes": 185,
+      "expected_sha256": "13f963c4a2e9d583532051b581a19cf73ade0aadc83f530ea3e66c6d52036dec",
+      "url": "https://huggingface.co/datasets/Hilti-Research/hilti-slam-challenge-2022/resolve/e62017f907007fdc5ab8c721842e4ae7359d7f49/ground_truth/exp18_corridor_lower_gallery_2_imu_3dof.txt",
+      "revision": "e62017f907007fdc5ab8c721842e4ae7359d7f49",
+      "bytes": 185,
+      "sha256": "13f963c4a2e9d583532051b581a19cf73ade0aadc83f530ea3e66c6d52036dec",
+      "status": "LOCAL_IDENTITY_VERIFIED"
+    },
+    {
+      "relative": "calibration/calibration_files/lidar_calibration.yaml",
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/calibration/calibration_files/lidar_calibration.yaml",
+      "expected_bytes": 747,
+      "expected_sha256": "ea5127989317270d83d9a701318d7e284031a21bd9cbf466b8f9f169547db43c",
+      "url": "https://huggingface.co/datasets/Hilti-Research/hilti-slam-challenge-2022/resolve/e62017f907007fdc5ab8c721842e4ae7359d7f49/calibration/calibration_files/lidar_calibration.yaml",
+      "revision": "e62017f907007fdc5ab8c721842e4ae7359d7f49",
+      "bytes": 747,
+      "sha256": "ea5127989317270d83d9a701318d7e284031a21bd9cbf466b8f9f169547db43c",
+      "status": "LOCAL_IDENTITY_VERIFIED"
+    }
+  ],
+  "preserved_incomplete_files": [
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/staging/exp18_corridor_lower_gallery_2.bag.part",
+      "bytes": 452984832,
+      "sha256": "2aa6b290c20ec150107c91ed0c987ef025c180d7f1d89c18cb49754358bd83a6",
+      "allocated_bytes": 452988928,
+      "meaning": "INCOMPLETE; SHA is partial-only, not compared to complete bag SHA"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/staging/exp18_corridor_lower_gallery_2.bag.ranged.part",
+      "bytes": 7576092054,
+      "sha256": "88a75e0e1503091f05605dc45279e1aa81e403d2aac582d72bde77c143db5c7c",
+      "allocated_bytes": 3665920,
+      "meaning": "INCOMPLETE; SHA is partial-only, not compared to complete bag SHA"
+    }
+  ],
+  "complete_bag_verified": false,
+  "e57_verified": false,
+  "verified_count": 3,
+  "expected_count": 5,
+  "rosbag_full_traversal": "NOT_PERFORMED_NO_VERIFIED_BAG",
+  "e57_full_read": "NOT_PERFORMED_NO_E57"
+}

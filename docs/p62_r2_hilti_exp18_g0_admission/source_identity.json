@@ -1,0 +1,24 @@
+{
+  "official_code": [
+    {
+      "repo": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/sources/phasma_description",
+      "commit": "79002026e9b229cf9b4e95a403eaec4f00acfd79",
+      "path": "urdf/phasma.urdf.xacro",
+      "bytes": 2022,
+      "sha256": "851d9371454fc5b096ff2468724cc8ef5ffb548b538900d2130b14aedd0ee216",
+      "url": "https://github.com/Hilti-Research/phasma_description/blob/79002026e9b229cf9b4e95a403eaec4f00acfd79/urdf/phasma.urdf.xacro"
+    },
+    {
+      "repo": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/sources/phasma_description",
+      "commit": "79002026e9b229cf9b4e95a403eaec4f00acfd79",
+      "path": "urdf/calibrations/20220322_calibration.yaml",
+      "bytes": 746,
+      "sha256": "2a04994055c8ccda3c87b19cfda8de3b46c41a6fdaaba00502c7b345e350bed7",
+      "url": "https://github.com/Hilti-Research/phasma_description/blob/79002026e9b229cf9b4e95a403eaec4f00acfd79/urdf/calibrations/20220322_calibration.yaml"
+    }
+  ],
+  "paper_cached_at": "/home/jian/livox_ws/p62_r1_source_cache/hilti2022.pdf",
+  "paper_sha256": "be8adc1b551661fefa0d8c6478e304e43d730d6f0affbef63729c648f7712367",
+  "parser_prepared": "pye57 0.4.5 internal --target install; E57 parser NOT executed",
+  "parser_source": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/parser/pye57/e57.py"
+}
