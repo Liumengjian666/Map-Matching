@@ -1,0 +1,3139 @@
+{
+  "task": "P61-R11-GEODE-CLOCK-BIAS-PROVENANCE-AUDIT",
+  "START_SHA": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+  "branch": "research/p61-r11-geode-clock-bias-provenance",
+  "message_read_CODE_SHA": "8fe5d08241be44c821b55f9d773e0eb11656eea8",
+  "message_read_script_sha256": "67b560a22b6c0f896d38df4e0ae399dddece8aca814e8ce72e663ba41abe2fb5",
+  "metadata_recovery_CODE_SHA": "fe652728fde4f06fa04202916a2465d1cc84dab1",
+  "archive_script_CODE_SHA": "625bd1ca760d36afffc5f8a3d1948a9910662b17",
+  "environment": {
+    "python": "3.8.10 (default, Mar 18 2025, 20:04:55) \n[GCC 9.4.0]",
+    "executable": "/usr/bin/python3",
+    "numpy": "1.24.4",
+    "platform": "Linux-5.15.0-139-generic-x86_64-with-glibc2.29"
+  },
+  "input_assets": [
+    {
+      "asset": "original_bag",
+      "path": "/home/jian/geode/Shield_tunnel1_gamma/Shield_tunnel1_gamma.bag",
+      "size_bytes": 4500527001,
+      "expected_sha256": "162ed09ab6b262f89ac46c45bac36ad2335a6f869b360b80d80ddf59d0b22091",
+      "sha256": "162ed09ab6b262f89ac46c45bac36ad2335a6f869b360b80d80ddf59d0b22091",
+      "frozen_source": "corrected R9 task + R8 input manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_input_manifest",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/input_manifest.json",
+      "size_bytes": 3759,
+      "expected_sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+      "sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+      "frozen_source": "R8 task literal",
+      "status": "PASS"
+    },
+    {
+      "asset": "prepared_input_bag",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/input/full_return.bag",
+      "size_bytes": 1416133574,
+      "expected_sha256": "a138b5ceb0e8ee4a2e5203e70b3943596811ff15d7a45495909934d3a1494331",
+      "sha256": "a138b5ceb0e8ee4a2e5203e70b3943596811ff15d7a45495909934d3a1494331",
+      "frozen_source": "R8 manifest bag_sha256",
+      "status": "PASS"
+    },
+    {
+      "asset": "runtime_input_manifest",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/input/manifest.json",
+      "size_bytes": 3759,
+      "expected_sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+      "sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+      "frozen_source": "R8 input manifest identity",
+      "status": "PASS"
+    },
+    {
+      "asset": "declared_input",
+      "path": "/home/jian/geode/Shield_tunnel1_gamma/Shield_tunnel1_gamma.bag",
+      "size_bytes": 4500527001,
+      "expected_sha256": "162ed09ab6b262f89ac46c45bac36ad2335a6f869b360b80d80ddf59d0b22091",
+      "sha256": "162ed09ab6b262f89ac46c45bac36ad2335a6f869b360b80d80ddf59d0b22091",
+      "frozen_source": "R8 manifest inputs",
+      "status": "PASS"
+    },
+    {
+      "asset": "declared_input",
+      "path": "/home/jian/livox_ws/p61_r5_geode_runs/formal_mapping/frozen_map.pcd",
+      "size_bytes": 10273947,
+      "expected_sha256": "4a279d822fd6090d3aa3fc0cec989b4f6fde5c9a43df476a29dba4494f6821b4",
+      "sha256": "4a279d822fd6090d3aa3fc0cec989b4f6fde5c9a43df476a29dba4494f6821b4",
+      "frozen_source": "R8 manifest inputs",
+      "status": "PASS"
+    },
+    {
+      "asset": "declared_input",
+      "path": "/home/jian/livox_ws/p61_r8_geode_full_return_ws/docs/p61_r2_geode_real_data_run/scan_ledger.csv",
+      "size_bytes": 1057313,
+      "expected_sha256": "21cba76ec059016700b5ac3f0a0851f769b338ee4550e19108910d3efd3902fb",
+      "sha256": "21cba76ec059016700b5ac3f0a0851f769b338ee4550e19108910d3efd3902fb",
+      "frozen_source": "R8 manifest inputs",
+      "status": "PASS"
+    },
+    {
+      "asset": "declared_input",
+      "path": "/home/jian/livox_ws/p61_r8_geode_full_return_ws/docs/p61_r6_geode_causal_init_bridge/initialization.json",
+      "size_bytes": 3352,
+      "expected_sha256": "9a5532ce3b7162e92b6a711c509d9a8e52d28eff81f6515fb3618067582b733d",
+      "sha256": "9a5532ce3b7162e92b6a711c509d9a8e52d28eff81f6515fb3618067582b733d",
+      "frozen_source": "R8 manifest inputs",
+      "status": "PASS"
+    },
+    {
+      "asset": "declared_input",
+      "path": "/home/jian/livox_ws/p61_r8_geode_full_return_ws/docs/p61_r6_geode_causal_init_bridge/initial_covariance.csv",
+      "size_bytes": 7352,
+      "expected_sha256": "55ac110fd02620c494e916fdb575bd514b734245b26d09764fc7de1116670f39",
+      "sha256": "55ac110fd02620c494e916fdb575bd514b734245b26d09764fc7de1116670f39",
+      "frozen_source": "R8 manifest inputs",
+      "status": "PASS"
+    },
+    {
+      "asset": "runtime_input_scans.csv",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/input/scans.csv",
+      "size_bytes": 695882,
+      "expected_sha256": "d337041a99b2269c6596f0a17d76c3a991271774e81a4cb68bc987e34e15109f",
+      "sha256": "d337041a99b2269c6596f0a17d76c3a991271774e81a4cb68bc987e34e15109f",
+      "frozen_source": "R8 input manifest scans_sha256",
+      "status": "PASS"
+    },
+    {
+      "asset": "runtime_input_imu.csv",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/input/imu.csv",
+      "size_bytes": 2441956,
+      "expected_sha256": "80639c15a571f0a385958bdc018e934a958281db6ccec933264fae70743e3d25",
+      "sha256": "80639c15a571f0a385958bdc018e934a958281db6ccec933264fae70743e3d25",
+      "frozen_source": "R8 input manifest imu_sha256",
+      "status": "PASS"
+    },
+    {
+      "asset": "runtime_input_initialization.yaml",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/input/initialization.yaml",
+      "size_bytes": 1463,
+      "expected_sha256": "084a1f4b04265c82b8fcf9e519bc35708692e5b409eb9c0fcb551955310ac6fa",
+      "sha256": "084a1f4b04265c82b8fcf9e519bc35708692e5b409eb9c0fcb551955310ac6fa",
+      "frozen_source": "R8 input manifest config_sha256",
+      "status": "PASS"
+    },
+    {
+      "asset": "R9_R6_initialization",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/initialization.json",
+      "size_bytes": 3352,
+      "expected_sha256": "9a5532ce3b7162e92b6a711c509d9a8e52d28eff81f6515fb3618067582b733d",
+      "sha256": "9a5532ce3b7162e92b6a711c509d9a8e52d28eff81f6515fb3618067582b733d",
+      "frozen_source": "R9 task",
+      "status": "PASS"
+    },
+    {
+      "asset": "R9_R6_covariance",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/initial_covariance.csv",
+      "size_bytes": 7352,
+      "expected_sha256": "55ac110fd02620c494e916fdb575bd514b734245b26d09764fc7de1116670f39",
+      "sha256": "55ac110fd02620c494e916fdb575bd514b734245b26d09764fc7de1116670f39",
+      "frozen_source": "R9 task",
+      "status": "PASS"
+    },
+    {
+      "asset": "R9_R2_ledger",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r2_geode_real_data_run/scan_ledger.csv",
+      "size_bytes": 1057313,
+      "expected_sha256": "21cba76ec059016700b5ac3f0a0851f769b338ee4550e19108910d3efd3902fb",
+      "sha256": "21cba76ec059016700b5ac3f0a0851f769b338ee4550e19108910d3efd3902fb",
+      "frozen_source": "R9 task",
+      "status": "PASS"
+    },
+    {
+      "asset": "numeric_config",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/src/dog_prior_map_localization/config/geode_r7_baseline.yaml",
+      "size_bytes": 2920,
+      "expected_sha256": "9d2e32ebf5bd89230d46b7af7b5d0cf9115cbe72d600634899337eab09eba0d3",
+      "sha256": "9d2e32ebf5bd89230d46b7af7b5d0cf9115cbe72d600634899337eab09eba0d3",
+      "frozen_source": "R8 runtime identity",
+      "status": "PASS"
+    },
+    {
+      "asset": "numeric_config",
+      "path": "/home/jian/livox_ws/p61_r7_geode_baseline_ws/src/dog_prior_map_localization/config/geode_r7_baseline.yaml",
+      "size_bytes": 2920,
+      "expected_sha256": "9d2e32ebf5bd89230d46b7af7b5d0cf9115cbe72d600634899337eab09eba0d3",
+      "sha256": "9d2e32ebf5bd89230d46b7af7b5d0cf9115cbe72d600634899337eab09eba0d3",
+      "frozen_source": "R8 runtime identity",
+      "status": "PASS"
+    },
+    {
+      "asset": "numeric_config",
+      "path": "/home/jian/livox_ws/p61_r8_geode_full_return_ws/src/dog_prior_map_localization/config/geode_r7_baseline.yaml",
+      "size_bytes": 2920,
+      "expected_sha256": "9d2e32ebf5bd89230d46b7af7b5d0cf9115cbe72d600634899337eab09eba0d3",
+      "sha256": "9d2e32ebf5bd89230d46b7af7b5d0cf9115cbe72d600634899337eab09eba0d3",
+      "frozen_source": "R8 runtime identity",
+      "status": "PASS"
+    },
+    {
+      "asset": "runtime_binary_only_hash",
+      "path": "/home/jian/livox_ws/p61_r7_geode_baseline_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+      "size_bytes": 1776024,
+      "expected_sha256": "89fdc9da728660df9958276f7fc61c216842a866c885a316f8ac0537b329c06b",
+      "sha256": "89fdc9da728660df9958276f7fc61c216842a866c885a316f8ac0537b329c06b",
+      "frozen_source": "R8 run identity, not executed",
+      "status": "PASS"
+    },
+    {
+      "asset": "runtime_binary_only_hash",
+      "path": "/home/jian/livox_ws/p61_r7_geode_baseline_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+      "size_bytes": 1533256,
+      "expected_sha256": "40942380de766d75022c5f09475680f6288a0124364160b7241f52ac375bd0f9",
+      "sha256": "40942380de766d75022c5f09475680f6288a0124364160b7241f52ac375bd0f9",
+      "frozen_source": "R8 run identity, not executed",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/connection_readiness.json",
+      "size_bytes": 4055,
+      "expected_sha256": "79e37548980a8e298d5fb2c632ea0375282f9dad75b9ab3c268d4d0df03c672e",
+      "sha256": "79e37548980a8e298d5fb2c632ea0375282f9dad75b9ab3c268d4d0df03c672e",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/deskew.csv",
+      "size_bytes": 960397,
+      "expected_sha256": "66c45b55323fadcdcb526f31daa2b94fd1cf6c53bfef92fb8185f0bb9a5c0915",
+      "sha256": "66c45b55323fadcdcb526f31daa2b94fd1cf6c53bfef92fb8185f0bb9a5c0915",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ekf_lineage.csv",
+      "size_bytes": 13566971,
+      "expected_sha256": "2b8a3b695ca3d44b8c08add171a91024f4294174ced6930381a0eab98d40d715",
+      "sha256": "2b8a3b695ca3d44b8c08add171a91024f4294174ced6930381a0eab98d40d715",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/frame_terminals.csv",
+      "size_bytes": 241252,
+      "expected_sha256": "0a3fa6ae589152a794321a74320cd1810acdf6fd06c321a9a150438016fe9a40",
+      "sha256": "0a3fa6ae589152a794321a74320cd1810acdf6fd06c321a9a150438016fe9a40",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/fusion.csv",
+      "size_bytes": 191168,
+      "expected_sha256": "d2c98ae10bc666043743861856683c4b84c6fee339717455d5582f02e9ff6ee3",
+      "sha256": "d2c98ae10bc666043743861856683c4b84c6fee339717455d5582f02e9ff6ee3",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/geometry.csv",
+      "size_bytes": 677494,
+      "expected_sha256": "57f1f8c5cc965235732986b44f40a4884f3ddf62efb801483470089198457f91",
+      "sha256": "57f1f8c5cc965235732986b44f40a4884f3ddf62efb801483470089198457f91",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/live_trajectories.csv",
+      "size_bytes": 7504113,
+      "expected_sha256": "c6ec2ba13af41ebd3f54e9b55bd7734a1012712b13029214e90bba161a7fe9b8",
+      "sha256": "c6ec2ba13af41ebd3f54e9b55bd7734a1012712b13029214e90bba161a7fe9b8",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/memory.csv",
+      "size_bytes": 4802911,
+      "expected_sha256": "1ae985a8761b9762543c3dbf7da73ba368383b00f5ed303548c96e01583533ba",
+      "sha256": "1ae985a8761b9762543c3dbf7da73ba368383b00f5ed303548c96e01583533ba",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ndt_diagnostics.csv",
+      "size_bytes": 4535566,
+      "expected_sha256": "0b85a31daff3f12f58a6e65849c191ed00269011ef7c1e2975fbd7dcb02457f5",
+      "sha256": "0b85a31daff3f12f58a6e65849c191ed00269011ef7c1e2975fbd7dcb02457f5",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ndt_performance.csv",
+      "size_bytes": 187356,
+      "expected_sha256": "c993409b7479af08a24b4611bc45c32857c1e0a3c0d064f2e4d44939b2e0c959",
+      "sha256": "c993409b7479af08a24b4611bc45c32857c1e0a3c0d064f2e4d44939b2e0c959",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ndt_runtime.csv",
+      "size_bytes": 29193,
+      "expected_sha256": "4e2eaa3f1adfefc26a2f4e2b4944c95199ffd178e577a8ee593a91a07c6cab8e",
+      "sha256": "4e2eaa3f1adfefc26a2f4e2b4944c95199ffd178e577a8ee593a91a07c6cab8e",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/oosm.csv",
+      "size_bytes": 285686,
+      "expected_sha256": "c11def1d0ac43b20e9271de0a039b4a6f00b625798fbfb90fa4f478feface411",
+      "sha256": "c11def1d0ac43b20e9271de0a039b4a6f00b625798fbfb90fa4f478feface411",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/pids.json",
+      "size_bytes": 108,
+      "expected_sha256": "dead18dbb0e72f4c3d73f8221dcb79c6525829ce826254d336ef9e7ed95c84b8",
+      "sha256": "dead18dbb0e72f4c3d73f8221dcb79c6525829ce826254d336ef9e7ed95c84b8",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/progress.json",
+      "size_bytes": 93,
+      "expected_sha256": "bd89e459ecd53ea56d7f7877d252e01df48a0294b0524ca54a0fc64666722181",
+      "sha256": "bd89e459ecd53ea56d7f7877d252e01df48a0294b0524ca54a0fc64666722181",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/replay.log",
+      "size_bytes": 476,
+      "expected_sha256": "9f188cbabd23dc881eba9bd47a2b27ca6e46dc8e72f538ac605f77d78d408ea8",
+      "sha256": "9f188cbabd23dc881eba9bd47a2b27ca6e46dc8e72f538ac605f77d78d408ea8",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/replay_summary.json",
+      "size_bytes": 170,
+      "expected_sha256": "f63bf1ed72defab31559574b6dd255ab89507c4ed57369f0679224cd098148e8",
+      "sha256": "f63bf1ed72defab31559574b6dd255ab89507c4ed57369f0679224cd098148e8",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ros_home/rospack_cache_12512256067081518489",
+      "size_bytes": 8285,
+      "expected_sha256": "693fa049d8e43935a4ceae68efbb7b1c9715da03724c4e7387468e261c98538a",
+      "sha256": "693fa049d8e43935a4ceae68efbb7b1c9715da03724c4e7387468e261c98538a",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ros_logs/bb2a6f36-cb65-11f1-b4af-1b930d869551/master.log",
+      "size_bytes": 42084,
+      "expected_sha256": "bb64f9f472b40eb38818b2425da0dbd5c08f6ea483471d00fce0486b668640a7",
+      "sha256": "bb64f9f472b40eb38818b2425da0dbd5c08f6ea483471d00fce0486b668640a7",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ros_logs/bb2a6f36-cb65-11f1-b4af-1b930d869551/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-102197.log",
+      "size_bytes": 58008,
+      "expected_sha256": "4b43b8460aa4b8470cc232d5a81b072120a6f3792e4ec94baaba1193709df9b3",
+      "sha256": "4b43b8460aa4b8470cc232d5a81b072120a6f3792e4ec94baaba1193709df9b3",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ros_logs/bb2a6f36-cb65-11f1-b4af-1b930d869551/rosout-1-stdout.log",
+      "size_bytes": 184,
+      "expected_sha256": "6248c6af3b727770f8b4a0fa01e22f1469dbe02c80be7e0eb59ccf1cf6cc22da",
+      "sha256": "6248c6af3b727770f8b4a0fa01e22f1469dbe02c80be7e0eb59ccf1cf6cc22da",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ros_logs/bb2a6f36-cb65-11f1-b4af-1b930d869551/rosout.log",
+      "size_bytes": 211931,
+      "expected_sha256": "11c7512023e9fc57a17f6e26e5fc3fc1d9fefea672d23ff6ca19351db1081b97",
+      "sha256": "11c7512023e9fc57a17f6e26e5fc3fc1d9fefea672d23ff6ca19351db1081b97",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ros_logs/geode_r8_full_input.log",
+      "size_bytes": 4441,
+      "expected_sha256": "3ce7c282f8b38b3a6cf8777a042008e3dca566fa8555a0ac2d52c18bcfb907b3",
+      "sha256": "3ce7c282f8b38b3a6cf8777a042008e3dca566fa8555a0ac2d52c18bcfb907b3",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/roslaunch.log",
+      "size_bytes": 68854,
+      "expected_sha256": "65e8244bd59a1dfad6295fa58bdbee6790a0893c38c8a322de3fb15f6613be23",
+      "sha256": "65e8244bd59a1dfad6295fa58bdbee6790a0893c38c8a322de3fb15f6613be23",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/rviz_full_return_finished.json",
+      "size_bytes": 193,
+      "expected_sha256": "013fa883da413aff99be6e6d26fe2b6daffdcd9bc9677d02f0b5f9e63c941a91",
+      "sha256": "013fa883da413aff99be6e6d26fe2b6daffdcd9bc9677d02f0b5f9e63c941a91",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/rviz_full_return_finished.png",
+      "size_bytes": 62331,
+      "expected_sha256": "8ba97d4cbda1ec56b37b9d662997b096299e9864f7840ab221dfbcc619236a31",
+      "sha256": "8ba97d4cbda1ec56b37b9d662997b096299e9864f7840ab221dfbcc619236a31",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/rviz_live_early.json",
+      "size_bytes": 215,
+      "expected_sha256": "2fb87898cc9407f616d4353256344d0df8038c588f62bbc5d9fe1d1b2777d59b",
+      "sha256": "2fb87898cc9407f616d4353256344d0df8038c588f62bbc5d9fe1d1b2777d59b",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/rviz_live_early.png",
+      "size_bytes": 60083,
+      "expected_sha256": "7ffe7aac3dfc90f88385b2e8a6042390c9b02daed6351e020c8cee9cf051d332",
+      "sha256": "7ffe7aac3dfc90f88385b2e8a6042390c9b02daed6351e020c8cee9cf051d332",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/rviz_live_late.json",
+      "size_bytes": 193,
+      "expected_sha256": "c84a234f58e4ce437cfb9656e463460a7b828c6f042648bdb846de351cc8458d",
+      "sha256": "c84a234f58e4ce437cfb9656e463460a7b828c6f042648bdb846de351cc8458d",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/rviz_live_late.png",
+      "size_bytes": 62443,
+      "expected_sha256": "556ad506431930cc10e39a18d8f12c69142d17a82b0474ce7a7b6ac95ddb3617",
+      "sha256": "556ad506431930cc10e39a18d8f12c69142d17a82b0474ce7a7b6ac95ddb3617",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/rviz_live_middle.json",
+      "size_bytes": 193,
+      "expected_sha256": "0f8521a586aff9d056cbfc0103ac0523f4af6e11ed9c7658bafafe8f5eb1e1f8",
+      "sha256": "0f8521a586aff9d056cbfc0103ac0523f4af6e11ed9c7658bafafe8f5eb1e1f8",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/rviz_live_middle.png",
+      "size_bytes": 61521,
+      "expected_sha256": "279ca1754af11857e1d1f14348fe932f032d706fb05d038f25b0a4ed9822d43c",
+      "sha256": "279ca1754af11857e1d1f14348fe932f032d706fb05d038f25b0a4ed9822d43c",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/geometry.csv",
+      "size_bytes": 677494,
+      "expected_sha256": "57f1f8c5cc965235732986b44f40a4884f3ddf62efb801483470089198457f91",
+      "sha256": "57f1f8c5cc965235732986b44f40a4884f3ddf62efb801483470089198457f91",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/scan_manifest.csv",
+      "size_bytes": 695882,
+      "expected_sha256": "d337041a99b2269c6596f0a17d76c3a991271774e81a4cb68bc987e34e15109f",
+      "sha256": "d337041a99b2269c6596f0a17d76c3a991271774e81a4cb68bc987e34e15109f",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/deskew.csv",
+      "size_bytes": 960397,
+      "expected_sha256": "66c45b55323fadcdcb526f31daa2b94fd1cf6c53bfef92fb8185f0bb9a5c0915",
+      "sha256": "66c45b55323fadcdcb526f31daa2b94fd1cf6c53bfef92fb8185f0bb9a5c0915",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/rviz_live_early.json",
+      "size_bytes": 215,
+      "expected_sha256": "2fb87898cc9407f616d4353256344d0df8038c588f62bbc5d9fe1d1b2777d59b",
+      "sha256": "2fb87898cc9407f616d4353256344d0df8038c588f62bbc5d9fe1d1b2777d59b",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/live_trajectories.csv",
+      "size_bytes": 7504113,
+      "expected_sha256": "c6ec2ba13af41ebd3f54e9b55bd7734a1012712b13029214e90bba161a7fe9b8",
+      "sha256": "c6ec2ba13af41ebd3f54e9b55bd7734a1012712b13029214e90bba161a7fe9b8",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/frame_terminals.csv",
+      "size_bytes": 241252,
+      "expected_sha256": "0a3fa6ae589152a794321a74320cd1810acdf6fd06c321a9a150438016fe9a40",
+      "sha256": "0a3fa6ae589152a794321a74320cd1810acdf6fd06c321a9a150438016fe9a40",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/diagnostic_intervals.csv",
+      "size_bytes": 13117,
+      "expected_sha256": "db0370ea39deb589c954e3cdb67ca53e07589076f18a62013eca8055c2b08d7c",
+      "sha256": "db0370ea39deb589c954e3cdb67ca53e07589076f18a62013eca8055c2b08d7c",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/anomalies.csv",
+      "size_bytes": 218924,
+      "expected_sha256": "afe775548a2bc9bf30ff6f872a918a681932806adbf8953513651b68445947bd",
+      "sha256": "afe775548a2bc9bf30ff6f872a918a681932806adbf8953513651b68445947bd",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/rviz_live_late.png",
+      "size_bytes": 62443,
+      "expected_sha256": "556ad506431930cc10e39a18d8f12c69142d17a82b0474ce7a7b6ac95ddb3617",
+      "sha256": "556ad506431930cc10e39a18d8f12c69142d17a82b0474ce7a7b6ac95ddb3617",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/results.json",
+      "size_bytes": 5215,
+      "expected_sha256": "ce601b24ed4f7c75f610978694f2cfcb94f8870a684d77e33734e21fe50118b6",
+      "sha256": "ce601b24ed4f7c75f610978694f2cfcb94f8870a684d77e33734e21fe50118b6",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/rviz_live_middle.png",
+      "size_bytes": 61521,
+      "expected_sha256": "279ca1754af11857e1d1f14348fe932f032d706fb05d038f25b0a4ed9822d43c",
+      "sha256": "279ca1754af11857e1d1f14348fe932f032d706fb05d038f25b0a4ed9822d43c",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/fusion.csv",
+      "size_bytes": 191168,
+      "expected_sha256": "d2c98ae10bc666043743861856683c4b84c6fee339717455d5582f02e9ff6ee3",
+      "sha256": "d2c98ae10bc666043743861856683c4b84c6fee339717455d5582f02e9ff6ee3",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/output_freeze.json",
+      "size_bytes": 4490,
+      "expected_sha256": "c8daa61065b7af376f39472c84a8bebb60b85ea33f7a96f75c106a1f53f84144",
+      "sha256": "c8daa61065b7af376f39472c84a8bebb60b85ea33f7a96f75c106a1f53f84144",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/frame_results.csv",
+      "size_bytes": 2804351,
+      "expected_sha256": "44c9ec061535c2040b3c92daae21b54020beaae1b251e42d4f2e976967f1411f",
+      "sha256": "44c9ec061535c2040b3c92daae21b54020beaae1b251e42d4f2e976967f1411f",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/rviz_full_return_finished.png",
+      "size_bytes": 62331,
+      "expected_sha256": "8ba97d4cbda1ec56b37b9d662997b096299e9864f7840ab221dfbcc619236a31",
+      "sha256": "8ba97d4cbda1ec56b37b9d662997b096299e9864f7840ab221dfbcc619236a31",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/oosm.csv",
+      "size_bytes": 285686,
+      "expected_sha256": "c11def1d0ac43b20e9271de0a039b4a6f00b625798fbfb90fa4f478feface411",
+      "sha256": "c11def1d0ac43b20e9271de0a039b4a6f00b625798fbfb90fa4f478feface411",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/rviz_live_late.json",
+      "size_bytes": 193,
+      "expected_sha256": "c84a234f58e4ce437cfb9656e463460a7b828c6f042648bdb846de351cc8458d",
+      "sha256": "c84a234f58e4ce437cfb9656e463460a7b828c6f042648bdb846de351cc8458d",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/process_memory.png",
+      "size_bytes": 75420,
+      "expected_sha256": "4fc75964546e65c4ca1eb6608dde01029945994688e5b1551466d302d7287397",
+      "sha256": "4fc75964546e65c4ca1eb6608dde01029945994688e5b1551466d302d7287397",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/run_identity.json",
+      "size_bytes": 724,
+      "expected_sha256": "8ef45eed2fa2522e43bc334d26f761c6306ade1194f215f8546a31254b850f45",
+      "sha256": "8ef45eed2fa2522e43bc334d26f761c6306ade1194f215f8546a31254b850f45",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/trajectory_increments.csv",
+      "size_bytes": 191433,
+      "expected_sha256": "e8da5221630b5c25fdf4fe0fe82132e680ba87c0612b95e7bea306b10757a58a",
+      "sha256": "e8da5221630b5c25fdf4fe0fe82132e680ba87c0612b95e7bea306b10757a58a",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/rviz_live_middle.json",
+      "size_bytes": 193,
+      "expected_sha256": "0f8521a586aff9d056cbfc0103ac0523f4af6e11ed9c7658bafafe8f5eb1e1f8",
+      "sha256": "0f8521a586aff9d056cbfc0103ac0523f4af6e11ed9c7658bafafe8f5eb1e1f8",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/rviz_live_early.png",
+      "size_bytes": 60083,
+      "expected_sha256": "7ffe7aac3dfc90f88385b2e8a6042390c9b02daed6351e020c8cee9cf051d332",
+      "sha256": "7ffe7aac3dfc90f88385b2e8a6042390c9b02daed6351e020c8cee9cf051d332",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/rviz_full_return_finished.json",
+      "size_bytes": 193,
+      "expected_sha256": "013fa883da413aff99be6e6d26fe2b6daffdcd9bc9677d02f0b5f9e63c941a91",
+      "sha256": "013fa883da413aff99be6e6d26fe2b6daffdcd9bc9677d02f0b5f9e63c941a91",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/trajectories_and_corrections.png",
+      "size_bytes": 111619,
+      "expected_sha256": "208b3c5ca7e0257b413317c42466c4e666bd589f4e8bc70b4b853806743e55ed",
+      "sha256": "208b3c5ca7e0257b413317c42466c4e666bd589f4e8bc70b4b853806743e55ed",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/r7_first20_parity.csv",
+      "size_bytes": 990,
+      "expected_sha256": "f61372294183d4cb98f43c67d9b92f78286bc5af9b074c8d282d3ab7e3a1a88f",
+      "sha256": "f61372294183d4cb98f43c67d9b92f78286bc5af9b074c8d282d3ab7e3a1a88f",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/runtime_statistics.json",
+      "size_bytes": 1968,
+      "expected_sha256": "47493adf71f115feb709ff7cdd4bfefc79fda9086c61d6d2aa027f2e0d86ed15",
+      "sha256": "47493adf71f115feb709ff7cdd4bfefc79fda9086c61d6d2aa027f2e0d86ed15",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/peak_cases.json",
+      "size_bytes": 7046,
+      "expected_sha256": "420d8f41a48ad023c211583c44081a229de66ad9ab25bcceff8cbb07e4dd49c6",
+      "sha256": "420d8f41a48ad023c211583c44081a229de66ad9ab25bcceff8cbb07e4dd49c6",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/input_manifest.json",
+      "size_bytes": 3759,
+      "expected_sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+      "sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/CLI_REVIEW.md",
+      "size_bytes": 3716,
+      "expected_sha256": "6fbd74e72030679f14f0f976dc4f03b63dfa11f6a3639a89b90d548fce87473d",
+      "sha256": "6fbd74e72030679f14f0f976dc4f03b63dfa11f6a3639a89b90d548fce87473d",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/CODE_AND_TESTS.md",
+      "size_bytes": 4444,
+      "expected_sha256": "07766be3b433ba773c03edc6e584f121b30867cc8cbe4c062f308bff5548350a",
+      "sha256": "07766be3b433ba773c03edc6e584f121b30867cc8cbe4c062f308bff5548350a",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/PROTOCOL.md",
+      "size_bytes": 2604,
+      "expected_sha256": "0008952f212709d8f6f9f2e44b833b6732de6d0f6bc59033f51f8bb12b0f0ebc",
+      "sha256": "0008952f212709d8f6f9f2e44b833b6732de6d0f6bc59033f51f8bb12b0f0ebc",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/REPORT.md",
+      "size_bytes": 11626,
+      "expected_sha256": "9d255fa4491ab988d234f84d58dbe1e6d20a25c1b330a57146a2b6b5eb122015",
+      "sha256": "9d255fa4491ab988d234f84d58dbe1e6d20a25c1b330a57146a2b6b5eb122015",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/REPRODUCE.md",
+      "size_bytes": 3386,
+      "expected_sha256": "8911fe647c2f4998db46aaba363cd4080999b349966ee4aa0a72eb1022ef89f0",
+      "sha256": "8911fe647c2f4998db46aaba363cd4080999b349966ee4aa0a72eb1022ef89f0",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/analyze_run.py",
+      "size_bytes": 16246,
+      "expected_sha256": "0e56014dc4c81fd3f56c1bb6a7bf0688f937822b0462826baa4647f1a83b3280",
+      "sha256": "0e56014dc4c81fd3f56c1bb6a7bf0688f937822b0462826baa4647f1a83b3280",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/anomalies.csv",
+      "size_bytes": 218924,
+      "expected_sha256": "afe775548a2bc9bf30ff6f872a918a681932806adbf8953513651b68445947bd",
+      "sha256": "afe775548a2bc9bf30ff6f872a918a681932806adbf8953513651b68445947bd",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/archive_hashes.json",
+      "size_bytes": 2602,
+      "expected_sha256": "256a57e5d2c2afb1085128ad676133154183599cf77f6695b97ab89f74a555eb",
+      "sha256": "256a57e5d2c2afb1085128ad676133154183599cf77f6695b97ab89f74a555eb",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/archive_run.py",
+      "size_bytes": 3761,
+      "expected_sha256": "ee0492048c09910df13b5cfe7d6590ad0e2e6ee19566d281041cb2e2125e3cb3",
+      "sha256": "ee0492048c09910df13b5cfe7d6590ad0e2e6ee19566d281041cb2e2125e3cb3",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/cli_review_prompt.md",
+      "size_bytes": 2194,
+      "expected_sha256": "966f544fdd52c747921135379e888d6e58887ce5c2af8d0b9c1302bbb45938dd",
+      "sha256": "966f544fdd52c747921135379e888d6e58887ce5c2af8d0b9c1302bbb45938dd",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/deskew.csv",
+      "size_bytes": 960397,
+      "expected_sha256": "66c45b55323fadcdcb526f31daa2b94fd1cf6c53bfef92fb8185f0bb9a5c0915",
+      "sha256": "66c45b55323fadcdcb526f31daa2b94fd1cf6c53bfef92fb8185f0bb9a5c0915",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/diagnostic_intervals.csv",
+      "size_bytes": 13117,
+      "expected_sha256": "db0370ea39deb589c954e3cdb67ca53e07589076f18a62013eca8055c2b08d7c",
+      "sha256": "db0370ea39deb589c954e3cdb67ca53e07589076f18a62013eca8055c2b08d7c",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/frame_results.csv",
+      "size_bytes": 2804351,
+      "expected_sha256": "44c9ec061535c2040b3c92daae21b54020beaae1b251e42d4f2e976967f1411f",
+      "sha256": "44c9ec061535c2040b3c92daae21b54020beaae1b251e42d4f2e976967f1411f",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/frame_terminals.csv",
+      "size_bytes": 241252,
+      "expected_sha256": "0a3fa6ae589152a794321a74320cd1810acdf6fd06c321a9a150438016fe9a40",
+      "sha256": "0a3fa6ae589152a794321a74320cd1810acdf6fd06c321a9a150438016fe9a40",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/fusion.csv",
+      "size_bytes": 191168,
+      "expected_sha256": "d2c98ae10bc666043743861856683c4b84c6fee339717455d5582f02e9ff6ee3",
+      "sha256": "d2c98ae10bc666043743861856683c4b84c6fee339717455d5582f02e9ff6ee3",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/geometry.csv",
+      "size_bytes": 677494,
+      "expected_sha256": "57f1f8c5cc965235732986b44f40a4884f3ddf62efb801483470089198457f91",
+      "sha256": "57f1f8c5cc965235732986b44f40a4884f3ddf62efb801483470089198457f91",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/input_manifest.json",
+      "size_bytes": 3759,
+      "expected_sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+      "sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/live_trajectories.csv",
+      "size_bytes": 7504113,
+      "expected_sha256": "c6ec2ba13af41ebd3f54e9b55bd7734a1012712b13029214e90bba161a7fe9b8",
+      "sha256": "c6ec2ba13af41ebd3f54e9b55bd7734a1012712b13029214e90bba161a7fe9b8",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/oosm.csv",
+      "size_bytes": 285686,
+      "expected_sha256": "c11def1d0ac43b20e9271de0a039b4a6f00b625798fbfb90fa4f478feface411",
+      "sha256": "c11def1d0ac43b20e9271de0a039b4a6f00b625798fbfb90fa4f478feface411",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/output_freeze.json",
+      "size_bytes": 4490,
+      "expected_sha256": "c8daa61065b7af376f39472c84a8bebb60b85ea33f7a96f75c106a1f53f84144",
+      "sha256": "c8daa61065b7af376f39472c84a8bebb60b85ea33f7a96f75c106a1f53f84144",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/peak_cases.json",
+      "size_bytes": 7046,
+      "expected_sha256": "420d8f41a48ad023c211583c44081a229de66ad9ab25bcceff8cbb07e4dd49c6",
+      "sha256": "420d8f41a48ad023c211583c44081a229de66ad9ab25bcceff8cbb07e4dd49c6",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/prepare_inputs.py",
+      "size_bytes": 5898,
+      "expected_sha256": "a6040c98fbecfd88afe496a9f598b8a9da48a71d1913760e952644c72d27b2d6",
+      "sha256": "a6040c98fbecfd88afe496a9f598b8a9da48a71d1913760e952644c72d27b2d6",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/process_memory.png",
+      "size_bytes": 75420,
+      "expected_sha256": "4fc75964546e65c4ca1eb6608dde01029945994688e5b1551466d302d7287397",
+      "sha256": "4fc75964546e65c4ca1eb6608dde01029945994688e5b1551466d302d7287397",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/r7_first20_parity.csv",
+      "size_bytes": 990,
+      "expected_sha256": "f61372294183d4cb98f43c67d9b92f78286bc5af9b074c8d282d3ab7e3a1a88f",
+      "sha256": "f61372294183d4cb98f43c67d9b92f78286bc5af9b074c8d282d3ab7e3a1a88f",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/replay_full.py",
+      "size_bytes": 14171,
+      "expected_sha256": "afd7ee24d6cc14b6baee816f6a89458e6955430530de7c359012f19e5b4f93fe",
+      "sha256": "afd7ee24d6cc14b6baee816f6a89458e6955430530de7c359012f19e5b4f93fe",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/results.json",
+      "size_bytes": 5215,
+      "expected_sha256": "ce601b24ed4f7c75f610978694f2cfcb94f8870a684d77e33734e21fe50118b6",
+      "sha256": "ce601b24ed4f7c75f610978694f2cfcb94f8870a684d77e33734e21fe50118b6",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/return_view.rviz",
+      "size_bytes": 1557,
+      "expected_sha256": "16bf01fa98f2d43099bb833b3330eff5ae0855cfc378c4c3dbbc3973da4278ee",
+      "sha256": "16bf01fa98f2d43099bb833b3330eff5ae0855cfc378c4c3dbbc3973da4278ee",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/reviews.md",
+      "size_bytes": 2323,
+      "expected_sha256": "58c6cce501026d0ddf8f4f891ee0fe773154fdac767be1affb2f57091374d35a",
+      "sha256": "58c6cce501026d0ddf8f4f891ee0fe773154fdac767be1affb2f57091374d35a",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/run.launch",
+      "size_bytes": 673,
+      "expected_sha256": "0c2e8e43a271f22a14ab405dbb260984b4f0026a772168e65d28d8755355a9f9",
+      "sha256": "0c2e8e43a271f22a14ab405dbb260984b4f0026a772168e65d28d8755355a9f9",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/run_identity.json",
+      "size_bytes": 724,
+      "expected_sha256": "8ef45eed2fa2522e43bc334d26f761c6306ade1194f215f8546a31254b850f45",
+      "sha256": "8ef45eed2fa2522e43bc334d26f761c6306ade1194f215f8546a31254b850f45",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/runtime_statistics.json",
+      "size_bytes": 1968,
+      "expected_sha256": "47493adf71f115feb709ff7cdd4bfefc79fda9086c61d6d2aa027f2e0d86ed15",
+      "sha256": "47493adf71f115feb709ff7cdd4bfefc79fda9086c61d6d2aa027f2e0d86ed15",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/rviz_full_return_finished.json",
+      "size_bytes": 193,
+      "expected_sha256": "013fa883da413aff99be6e6d26fe2b6daffdcd9bc9677d02f0b5f9e63c941a91",
+      "sha256": "013fa883da413aff99be6e6d26fe2b6daffdcd9bc9677d02f0b5f9e63c941a91",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/rviz_full_return_finished.png",
+      "size_bytes": 62331,
+      "expected_sha256": "8ba97d4cbda1ec56b37b9d662997b096299e9864f7840ab221dfbcc619236a31",
+      "sha256": "8ba97d4cbda1ec56b37b9d662997b096299e9864f7840ab221dfbcc619236a31",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/rviz_live_early.json",
+      "size_bytes": 215,
+      "expected_sha256": "2fb87898cc9407f616d4353256344d0df8038c588f62bbc5d9fe1d1b2777d59b",
+      "sha256": "2fb87898cc9407f616d4353256344d0df8038c588f62bbc5d9fe1d1b2777d59b",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/rviz_live_early.png",
+      "size_bytes": 60083,
+      "expected_sha256": "7ffe7aac3dfc90f88385b2e8a6042390c9b02daed6351e020c8cee9cf051d332",
+      "sha256": "7ffe7aac3dfc90f88385b2e8a6042390c9b02daed6351e020c8cee9cf051d332",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/rviz_live_late.json",
+      "size_bytes": 193,
+      "expected_sha256": "c84a234f58e4ce437cfb9656e463460a7b828c6f042648bdb846de351cc8458d",
+      "sha256": "c84a234f58e4ce437cfb9656e463460a7b828c6f042648bdb846de351cc8458d",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/rviz_live_late.png",
+      "size_bytes": 62443,
+      "expected_sha256": "556ad506431930cc10e39a18d8f12c69142d17a82b0474ce7a7b6ac95ddb3617",
+      "sha256": "556ad506431930cc10e39a18d8f12c69142d17a82b0474ce7a7b6ac95ddb3617",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/rviz_live_middle.json",
+      "size_bytes": 193,
+      "expected_sha256": "0f8521a586aff9d056cbfc0103ac0523f4af6e11ed9c7658bafafe8f5eb1e1f8",
+      "sha256": "0f8521a586aff9d056cbfc0103ac0523f4af6e11ed9c7658bafafe8f5eb1e1f8",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/rviz_live_middle.png",
+      "size_bytes": 61521,
+      "expected_sha256": "279ca1754af11857e1d1f14348fe932f032d706fb05d038f25b0a4ed9822d43c",
+      "sha256": "279ca1754af11857e1d1f14348fe932f032d706fb05d038f25b0a4ed9822d43c",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/scan_manifest.csv",
+      "size_bytes": 695882,
+      "expected_sha256": "d337041a99b2269c6596f0a17d76c3a991271774e81a4cb68bc987e34e15109f",
+      "sha256": "d337041a99b2269c6596f0a17d76c3a991271774e81a4cb68bc987e34e15109f",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/startup_log_excerpt.txt",
+      "size_bytes": 765,
+      "expected_sha256": "47c4ee57e043c56bcde7b8e6298286b04c7c0a1e23754eaafd943781f8f209d2",
+      "sha256": "47c4ee57e043c56bcde7b8e6298286b04c7c0a1e23754eaafd943781f8f209d2",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/terminal_contract.py",
+      "size_bytes": 1469,
+      "expected_sha256": "f6f178daff76cb6e70c216737bc1fd810c094440e57c2afdec0cb39d348b4402",
+      "sha256": "f6f178daff76cb6e70c216737bc1fd810c094440e57c2afdec0cb39d348b4402",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/test_contract.py",
+      "size_bytes": 2804,
+      "expected_sha256": "301e2718b84a4a6d4a934805de2789388806652cd16b52622f4ff466b096c726",
+      "sha256": "301e2718b84a4a6d4a934805de2789388806652cd16b52622f4ff466b096c726",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/trajectories_and_corrections.png",
+      "size_bytes": 111619,
+      "expected_sha256": "208b3c5ca7e0257b413317c42466c4e666bd589f4e8bc70b4b853806743e55ed",
+      "sha256": "208b3c5ca7e0257b413317c42466c4e666bd589f4e8bc70b4b853806743e55ed",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/trajectory_increments.csv",
+      "size_bytes": 191433,
+      "expected_sha256": "e8da5221630b5c25fdf4fe0fe82132e680ba87c0612b95e7bea306b10757a58a",
+      "sha256": "e8da5221630b5c25fdf4fe0fe82132e680ba87c0612b95e7bea306b10757a58a",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/verify_archive.py",
+      "size_bytes": 2396,
+      "expected_sha256": "a5465ae51341fc89eb6c360b61d443723857791fe8749fe3b818dedb443a7dc9",
+      "sha256": "a5465ae51341fc89eb6c360b61d443723857791fe8749fe3b818dedb443a7dc9",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/CLI_REQUEST.md",
+      "sha256": "870275c9467f54a2f6b669be22e96d58cb94ee8c626ffb094fd3d1025868b609",
+      "expected_sha256": "870275c9467f54a2f6b669be22e96d58cb94ee8c626ffb094fd3d1025868b609",
+      "size_bytes": 803,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/EXTERNAL_REVIEW_PROMPT.md",
+      "sha256": "22f30f49d8fb9d08f87c2517c469835dce21d742419e00673bd6d005a1a4b92f",
+      "expected_sha256": "22f30f49d8fb9d08f87c2517c469835dce21d742419e00673bd6d005a1a4b92f",
+      "size_bytes": 2351,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/EXTERNAL_REVIEW_RESULT.md",
+      "sha256": "8eb9c28019d58c371ba5249d1810ea89f83b286455d01f030aa78c2313522bb2",
+      "expected_sha256": "8eb9c28019d58c371ba5249d1810ea89f83b286455d01f030aa78c2313522bb2",
+      "size_bytes": 2299,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/PRE_REGISTRATION.md",
+      "sha256": "77ed3f022590ef05e2c05498a60156ad32a6b555b7ad342cf8eeaadb4f6655a2",
+      "expected_sha256": "77ed3f022590ef05e2c05498a60156ad32a6b555b7ad342cf8eeaadb4f6655a2",
+      "size_bytes": 4272,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/REPORT.md",
+      "sha256": "a8bcaabc7dc17aec443a7287cc920668542704e3acf569ba1df7cfad17d35cd6",
+      "expected_sha256": "a8bcaabc7dc17aec443a7287cc920668542704e3acf569ba1df7cfad17d35cd6",
+      "size_bytes": 10952,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/REVIEW_AND_TESTS.md",
+      "sha256": "4fcda3e17fcea1358c7e1f5662fdd02698d66681c8d82726f23a5b5d4a7a2a10",
+      "expected_sha256": "4fcda3e17fcea1358c7e1f5662fdd02698d66681c8d82726f23a5b5d4a7a2a10",
+      "size_bytes": 4898,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/analysis_manifest.json",
+      "sha256": "9ea559b82b2bc9f29c00de711a7a567c58a372db84894e99c545a6f7172250eb",
+      "expected_sha256": "9ea559b82b2bc9f29c00de711a7a567c58a372db84894e99c545a6f7172250eb",
+      "size_bytes": 79270,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/asset_gate_after.json",
+      "sha256": "b01dd032bd03585ad6a7b959b6d808236c8cd677e14ea2e49c90ddbe0c2ed749",
+      "expected_sha256": "b01dd032bd03585ad6a7b959b6d808236c8cd677e14ea2e49c90ddbe0c2ed749",
+      "size_bytes": 72202,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/asset_gate_before.json",
+      "sha256": "dba3c18f3812d01c4b12720825fe9f0ab601b89fc9c4bd83e09625b424702f0a",
+      "expected_sha256": "dba3c18f3812d01c4b12720825fe9f0ab601b89fc9c4bd83e09625b424702f0a",
+      "size_bytes": 72202,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/asset_gate_comparison.json",
+      "sha256": "c5a653ec3373ff739cf5c85356b629b300dc7ccca0f2491ad34f8d8222f7006c",
+      "expected_sha256": "c5a653ec3373ff739cf5c85356b629b300dc7ccca0f2491ad34f8d8222f7006c",
+      "size_bytes": 282,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/bind_gyro_bytes.py",
+      "sha256": "4361bff49d6ea52abd21fa163d129c22494bc0826335f713552bcf7ce156673a",
+      "expected_sha256": "4361bff49d6ea52abd21fa163d129c22494bc0826335f713552bcf7ce156673a",
+      "size_bytes": 1893,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/check_assets.py",
+      "sha256": "381f6371edb07de6e43c3444ae3d3d930689c1b4612ba16d18a0455c88a27326",
+      "expected_sha256": "381f6371edb07de6e43c3444ae3d3d930689c1b4612ba16d18a0455c88a27326",
+      "size_bytes": 1699,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/checksums.sha256",
+      "sha256": "933896ddafe908c5cbfdc37fbdb594634ec5fb3b8d0aedb7cb6a32fea51753c3",
+      "expected_sha256": "933896ddafe908c5cbfdc37fbdb594634ec5fb3b8d0aedb7cb6a32fea51753c3",
+      "size_bytes": 3057,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/coordinate_and_bias_audit.md",
+      "sha256": "d4b8ad91ec0020325082630f5bb4eec0d03f1a9b326a654819b3344d5d6bd880",
+      "expected_sha256": "d4b8ad91ec0020325082630f5bb4eec0d03f1a9b326a654819b3344d5d6bd880",
+      "size_bytes": 4039,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/extract_gyro.py",
+      "sha256": "463f0673e84f24ee113f2ae7b139b5d9801a174b6feed2019db21573d57108fe",
+      "expected_sha256": "463f0673e84f24ee113f2ae7b139b5d9801a174b6feed2019db21573d57108fe",
+      "size_bytes": 3056,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/finalize_archive.py",
+      "sha256": "34bf3b3ede50a4a9922cae2a625604341eabe7fd5a7c6f1693c7fddff1fa039a",
+      "expected_sha256": "34bf3b3ede50a4a9922cae2a625604341eabe7fd5a7c6f1693c7fddff1fa039a",
+      "size_bytes": 3300,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/freeze_inputs.py",
+      "sha256": "72d212376ffb597a246aa58516758bf17ed2928cad91a89694d1cc0997bd8615",
+      "expected_sha256": "72d212376ffb597a246aa58516758bf17ed2928cad91a89694d1cc0997bd8615",
+      "size_bytes": 3195,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/gyro_math.py",
+      "sha256": "924dc74c41ebfc51a4f1636456248be9dfe6489cfabf33818ba9b7998fca0cdf",
+      "expected_sha256": "924dc74c41ebfc51a4f1636456248be9dfe6489cfabf33818ba9b7998fca0cdf",
+      "size_bytes": 4836,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/gyro_payload_binding.json",
+      "sha256": "0b478bd1f8d27c150c6bd16ed5a3870acb99f7bc046d071763683655ce707098",
+      "expected_sha256": "0b478bd1f8d27c150c6bd16ed5a3870acb99f7bc046d071763683655ce707098",
+      "size_bytes": 51321,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/gyro_samples.json",
+      "sha256": "c765d61c157f09553eeb8db0dbacc6a6e62af316bc01cf074c949d2210ba8dd7",
+      "expected_sha256": "c765d61c157f09553eeb8db0dbacc6a6e62af316bc01cf074c949d2210ba8dd7",
+      "size_bytes": 37461,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/imu_coverage_audit.csv",
+      "sha256": "e3bf2bb5cb48201053c8c08ed21447541c58334fc415f62363e88335603edea7",
+      "expected_sha256": "e3bf2bb5cb48201053c8c08ed21447541c58334fc415f62363e88335603edea7",
+      "size_bytes": 2405,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/input_binding.py",
+      "sha256": "6c59570aad76cc3b77286b59d3a13c707f8efc0f31d7e05531fc48427ac5124a",
+      "expected_sha256": "6c59570aad76cc3b77286b59d3a13c707f8efc0f31d7e05531fc48427ac5124a",
+      "size_bytes": 2286,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/inputs_frozen.json",
+      "sha256": "a2f3b61260e727addc935fff38cdfee587a88ba806d4a3992e094af9bb8af690",
+      "expected_sha256": "a2f3b61260e727addc935fff38cdfee587a88ba806d4a3992e094af9bb8af690",
+      "size_bytes": 78256,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/integration_details.json",
+      "sha256": "5a2b11771c6509d204ec32aa5bbf64d455feb58d63d980adafa052db7ae80f4e",
+      "expected_sha256": "5a2b11771c6509d204ec32aa5bbf64d455feb58d63d980adafa052db7ae80f4e",
+      "size_bytes": 37442,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/interval_rotation_audit.csv",
+      "sha256": "9518ec7b0012b519b0739b88704f2bec360315e6c8129307a7ecb8018d796155",
+      "expected_sha256": "9518ec7b0012b519b0739b88704f2bec360315e6c8129307a7ecb8018d796155",
+      "size_bytes": 3927,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/literature_context.md",
+      "sha256": "01d536b580843c8a24e9d2ffbc69a9048f70bf80661071fb5a4e936172481069",
+      "expected_sha256": "01d536b580843c8a24e9d2ffbc69a9048f70bf80661071fb5a4e936172481069",
+      "size_bytes": 2856,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/numerical_results.json",
+      "sha256": "95aa9c2b40501e830bf9a2529cb5a567fd24e2077057de7740853684cd010841",
+      "expected_sha256": "95aa9c2b40501e830bf9a2529cb5a567fd24e2077057de7740853684cd010841",
+      "size_bytes": 4025,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/r8_assets_after.json",
+      "sha256": "b4b863e031ac6b1b7d5b94802cf4f8dd92e8cb9149ade0320bf3b031970e0808",
+      "expected_sha256": "b4b863e031ac6b1b7d5b94802cf4f8dd92e8cb9149ade0320bf3b031970e0808",
+      "size_bytes": 56840,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/r8_assets_before.json",
+      "sha256": "8cf2c1d2cba1b7503bc738baac1ac3e3804a9a50d12f8fc5b3dd08c265e79a78",
+      "expected_sha256": "8cf2c1d2cba1b7503bc738baac1ac3e3804a9a50d12f8fc5b3dd08c265e79a78",
+      "size_bytes": 56840,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/reproduction_commands.md",
+      "sha256": "d339dfd2bedbae05dca64a8b3c284d93495f43fe4374c4cfe14541fdd3e003ba",
+      "expected_sha256": "d339dfd2bedbae05dca64a8b3c284d93495f43fe4374c4cfe14541fdd3e003ba",
+      "size_bytes": 2495,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/results.json",
+      "sha256": "a5236675e8ad940e244ccb00cf8bbdb3149fe43af8eb8b5e59c391cc50f28f8e",
+      "expected_sha256": "a5236675e8ad940e244ccb00cf8bbdb3149fe43af8eb8b5e59c391cc50f28f8e",
+      "size_bytes": 4952,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/run_audit.py",
+      "sha256": "ab65d0522a58de5ad41f274d305098ac62c4ec97b6630833ccbd28ad1261236d",
+      "expected_sha256": "ab65d0522a58de5ad41f274d305098ac62c4ec97b6630833ccbd28ad1261236d",
+      "size_bytes": 7953,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/tests/test_byte_binding.py",
+      "sha256": "3102e17be9f75873ad014610e6a4aa3f9bcd8747440b0595cec76bf300f8e45c",
+      "expected_sha256": "3102e17be9f75873ad014610e6a4aa3f9bcd8747440b0595cec76bf300f8e45c",
+      "size_bytes": 2116,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/tests/test_gyro_math.py",
+      "sha256": "28cd4d614cf01134b67dd3c231c0c81603e14507c1dd149475a382d27e0470b6",
+      "expected_sha256": "28cd4d614cf01134b67dd3c231c0c81603e14507c1dd149475a382d27e0470b6",
+      "size_bytes": 4660,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/tests/test_input_contract.py",
+      "sha256": "75b1d62501a70b763bc19a818f5ffe7eaabda89b1bffa43812420ac8ae3d2281",
+      "expected_sha256": "75b1d62501a70b763bc19a818f5ffe7eaabda89b1bffa43812420ac8ae3d2281",
+      "size_bytes": 1812,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/tests/test_result_contract.py",
+      "sha256": "f0e5f86aad6bb709695057192f242ce86cc022df2ba2d55a36b4e0c7847b3145",
+      "expected_sha256": "f0e5f86aad6bb709695057192f242ce86cc022df2ba2d55a36b4e0c7847b3145",
+      "size_bytes": 2694,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/.gitattributes",
+      "sha256": "1de90b6c627db14950a7debcd081253417f320e5fe51abdbe97ff53cef28c9d4",
+      "expected_sha256": "1de90b6c627db14950a7debcd081253417f320e5fe51abdbe97ff53cef28c9d4",
+      "size_bytes": 117,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/BUILD_AND_COMMANDS.md",
+      "sha256": "3e675253ba546e6508fe78d88c12d5e96d3acd59f2097d13448f5b11430a9b64",
+      "expected_sha256": "3e675253ba546e6508fe78d88c12d5e96d3acd59f2097d13448f5b11430a9b64",
+      "size_bytes": 4170,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/GIT_RECEIPT.md",
+      "sha256": "7e8afc179e9459b265ba4bf255bdcd51847f818c1b04fd72d80e686f3700045e",
+      "expected_sha256": "7e8afc179e9459b265ba4bf255bdcd51847f818c1b04fd72d80e686f3700045e",
+      "size_bytes": 1107,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/PROTOCOL.md",
+      "sha256": "2580ba69d9f3c64f5f97dc4e14018062f2698392cccd1e84444484ee33a60938",
+      "expected_sha256": "2580ba69d9f3c64f5f97dc4e14018062f2698392cccd1e84444484ee33a60938",
+      "size_bytes": 3386,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/REPORT.md",
+      "sha256": "4c90617131e14574d1510c6345fbb9cbf1ceabc2fd6779ce3ad10c6d58e29227",
+      "expected_sha256": "4c90617131e14574d1510c6345fbb9cbf1ceabc2fd6779ce3ad10c6d58e29227",
+      "size_bytes": 10212,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/REVIEW.md",
+      "sha256": "938c6dd2d165626b837e4186642d2323e20d79dec243d3f47e5795c801bab9b3",
+      "expected_sha256": "938c6dd2d165626b837e4186642d2323e20d79dec243d3f47e5795c801bab9b3",
+      "size_bytes": 2215,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/analyze_frozen_map.py",
+      "sha256": "a1be15d521d65740b4bad50ee8dc193a33615ecf10ef34093cdb6559dcd0cc19",
+      "expected_sha256": "a1be15d521d65740b4bad50ee8dc193a33615ecf10ef34093cdb6559dcd0cc19",
+      "size_bytes": 8515,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/author_build_manifest.json",
+      "sha256": "59609a65928315e0d07a5bbd8c7a6734bf6c31a42ce0c774ee01916c7ef74ef8",
+      "expected_sha256": "59609a65928315e0d07a5bbd8c7a6734bf6c31a42ce0c774ee01916c7ef74ef8",
+      "size_bytes": 12250,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/author_observation.patch",
+      "sha256": "76f5516a4ae4d9344ccce8563a7cf9c2f715bb9019765041c4863e7c540e124d",
+      "expected_sha256": "76f5516a4ae4d9344ccce8563a7cf9c2f715bb9019765041c4863e7c540e124d",
+      "size_bytes": 4398,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/check_map_target.cpp",
+      "sha256": "3f2398f249d09bfeb421c89141b357ed4af4f6991a04480a04dd09ff82496c11",
+      "expected_sha256": "3f2398f249d09bfeb421c89141b357ed4af4f6991a04480a04dd09ff82496c11",
+      "size_bytes": 1262,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/freeze_author.py",
+      "sha256": "56932581b8d1be4d8bc83c79d07dbcdeb7391f80e24797da36a063e1d9d6688e",
+      "expected_sha256": "56932581b8d1be4d8bc83c79d07dbcdeb7391f80e24797da36a063e1d9d6688e",
+      "size_bytes": 2440,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/frozen_map_projection.png",
+      "sha256": "5b6f02ed0e9a11b0030ad8114b3ac22a4625d2a001d7d74f9b2260ab3a0f88e9",
+      "expected_sha256": "5b6f02ed0e9a11b0030ad8114b3ac22a4625d2a001d7d74f9b2260ab3a0f88e9",
+      "size_bytes": 65185,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/initialization_contract.md",
+      "sha256": "f7b450143b2fe420cff8de5b0cd24f80ec8a8fe30d0feef8aaf378ea3fbb7532",
+      "expected_sha256": "f7b450143b2fe420cff8de5b0cd24f80ec8a8fe30d0feef8aaf378ea3fbb7532",
+      "size_bytes": 2185,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/input_manifest.json",
+      "sha256": "d411e8c2adeef1c94d3bb3d07786494810861a75ec6a2bff86142ecc04fe3cc4",
+      "expected_sha256": "d411e8c2adeef1c94d3bb3d07786494810861a75ec6a2bff86142ecc04fe3cc4",
+      "size_bytes": 794,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/map_coverage.csv",
+      "sha256": "d746e07d2e7af9e08bba70327fd38c4939031ec24aebe11b495c1ae6e8d73c92",
+      "expected_sha256": "d746e07d2e7af9e08bba70327fd38c4939031ec24aebe11b495c1ae6e8d73c92",
+      "size_bytes": 8539,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/map_manifest.json",
+      "sha256": "4df0ed78110007c96c37f9196b6c26be922b37c0138df91ecc220a5b32327576",
+      "expected_sha256": "4df0ed78110007c96c37f9196b6c26be922b37c0138df91ecc220a5b32327576",
+      "size_bytes": 3425,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/mapping_config.yaml",
+      "sha256": "3860113338bf9e27361bf4b1219c25653b3c81e6a55bf858d0a94337402b6b6e",
+      "expected_sha256": "3860113338bf9e27361bf4b1219c25653b3c81e6a55bf858d0a94337402b6b6e",
+      "size_bytes": 858,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/mapping_trajectory.csv",
+      "sha256": "114e04c8276fe3806972d72a1bffa235fad4341847325cc2e3c28de4dd337548",
+      "expected_sha256": "114e04c8276fe3806972d72a1bffa235fad4341847325cc2e3c28de4dd337548",
+      "size_bytes": 3055574,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/numerical_audit.json",
+      "sha256": "e48458550debe82a631684acd40a4d4f275d2ae1c5a4c0b03c6c39ecd9fabc5f",
+      "expected_sha256": "e48458550debe82a631684acd40a4d4f275d2ae1c5a4c0b03c6c39ecd9fabc5f",
+      "size_bytes": 999,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/p61_record.hpp",
+      "sha256": "b064f4c96280a490c993f4b0c584dbe7aedfc78debf2b0d728c34148c23b7184",
+      "expected_sha256": "b064f4c96280a490c993f4b0c584dbe7aedfc78debf2b0d728c34148c23b7184",
+      "size_bytes": 4274,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/prepare_inputs.py",
+      "sha256": "127ba423d3bb4f657e52ad50578eb7c6820298ec92c8daf9461f8d9ae33417a0",
+      "expected_sha256": "127ba423d3bb4f657e52ad50578eb7c6820298ec92c8daf9461f8d9ae33417a0",
+      "size_bytes": 3815,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/results.json",
+      "sha256": "cf9cc93b821eaea97aff674901be53f3976ae915222f97e0fbeb165db1e0c1b7",
+      "expected_sha256": "cf9cc93b821eaea97aff674901be53f3976ae915222f97e0fbeb165db1e0c1b7",
+      "size_bytes": 5342,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/run_mapping.py",
+      "sha256": "2cea7ce260ebd457720d96b36ceaf7e7e292cc82e78e6a4af47d9643e2069f77",
+      "expected_sha256": "2cea7ce260ebd457720d96b36ceaf7e7e292cc82e78e6a4af47d9643e2069f77",
+      "size_bytes": 8388,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/target_grid_check.json",
+      "sha256": "9c160547f8c9a3385203a521a9669fbdeafb35c1d936de4b4592b760e461c40d",
+      "expected_sha256": "9c160547f8c9a3385203a521a9669fbdeafb35c1d936de4b4592b760e461c40d",
+      "size_bytes": 152,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/test_mapping_contract.py",
+      "sha256": "991191e8dd18dbc187bedfaa004e55a6b1897bb15e3e268754b538b3a07db6fd",
+      "expected_sha256": "991191e8dd18dbc187bedfaa004e55a6b1897bb15e3e268754b538b3a07db6fd",
+      "size_bytes": 2065,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/time_contract.md",
+      "sha256": "b55fbfbe65e1732d00de03747344d12cc480d258fd4bb49a3ef6fe68b9011433",
+      "expected_sha256": "b55fbfbe65e1732d00de03747344d12cc480d258fd4bb49a3ef6fe68b9011433",
+      "size_bytes": 3440,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r5_geode_frozen_prior_map/validate_run.py",
+      "sha256": "e09abfd0002e935f65bfc668cf4ac24f309dadfaaa92b77d774120d6c61f916c",
+      "expected_sha256": "e09abfd0002e935f65bfc668cf4ac24f309dadfaaa92b77d774120d6c61f916c",
+      "size_bytes": 3232,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/.gitattributes",
+      "sha256": "264a62986afba4730f5b56680072cb595d07408c1f294e6215e72ca7568de525",
+      "expected_sha256": "264a62986afba4730f5b56680072cb595d07408c1f294e6215e72ca7568de525",
+      "size_bytes": 85,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/GIT_RECEIPT.md",
+      "sha256": "6bc508177a562714459fefcd28b878c9f2b8f17c94e2737dc124958a7cc5a789",
+      "expected_sha256": "6bc508177a562714459fefcd28b878c9f2b8f17c94e2737dc124958a7cc5a789",
+      "size_bytes": 1365,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/PROTOCOL.md",
+      "sha256": "353f4a782a7d5db05739ff5302642e2ffaedd3aaaf680a4feacef20273f30985",
+      "expected_sha256": "353f4a782a7d5db05739ff5302642e2ffaedd3aaaf680a4feacef20273f30985",
+      "size_bytes": 3957,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/REPORT.md",
+      "sha256": "0c2e8d32f11e93e331f5f8addc2bd201aace51958ffd410aaa6202b208d49667",
+      "expected_sha256": "0c2e8d32f11e93e331f5f8addc2bd201aace51958ffd410aaa6202b208d49667",
+      "size_bytes": 11988,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/REPRODUCE.md",
+      "sha256": "fa99d33036e414892b889618c075ef44108dc61a2b8042fdf66c99eb4ff53930",
+      "expected_sha256": "fa99d33036e414892b889618c075ef44108dc61a2b8042fdf66c99eb4ff53930",
+      "size_bytes": 4758,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/analyze_results.py",
+      "sha256": "c6e10ae0de9f321e3c6f1d6cd2f7c24acf8ecd285bc2b25ed764acdb87cbeed4",
+      "expected_sha256": "c6e10ae0de9f321e3c6f1d6cd2f7c24acf8ecd285bc2b25ed764acdb87cbeed4",
+      "size_bytes": 8447,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/bridge_config.yaml",
+      "sha256": "72736026af8656b166f52d4cb8f2863b6452b5c5927d14760472e64fce10b62e",
+      "expected_sha256": "72736026af8656b166f52d4cb8f2863b6452b5c5927d14760472e64fce10b62e",
+      "size_bytes": 994,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/build_manifest.json",
+      "sha256": "9cebc52e37a90c7045f8874e8b5bad0107dfe8f24bd6909cbc8ef9ebf3f18eb9",
+      "expected_sha256": "9cebc52e37a90c7045f8874e8b5bad0107dfe8f24bd6909cbc8ef9ebf3f18eb9",
+      "size_bytes": 7038,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/fixed_50_coverage.csv",
+      "sha256": "d746e07d2e7af9e08bba70327fd38c4939031ec24aebe11b495c1ae6e8d73c92",
+      "expected_sha256": "d746e07d2e7af9e08bba70327fd38c4939031ec24aebe11b495c1ae6e8d73c92",
+      "size_bytes": 8539,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/freeze_source.py",
+      "sha256": "8b12ed6f5176cff009e44eec25450d59307e146b285c22b5bcac2b0e6ce062ad",
+      "expected_sha256": "8b12ed6f5176cff009e44eec25450d59307e146b285c22b5bcac2b0e6ce062ad",
+      "size_bytes": 1657,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/gaussian_grid.csv",
+      "sha256": "57adc7d051ac3d57917d90de67331f05d907413c8448be37dfee0503ee43602d",
+      "expected_sha256": "57adc7d051ac3d57917d90de67331f05d907413c8448be37dfee0503ee43602d",
+      "size_bytes": 95,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/geometry_statistics.csv",
+      "sha256": "17873cb790ae596cbdcecf693957a009dd29d618d59a8b386326603f5d4793f7",
+      "expected_sha256": "17873cb790ae596cbdcecf693957a009dd29d618d59a8b386326603f5d4793f7",
+      "size_bytes": 420,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/hessian_diagnostics.csv",
+      "sha256": "f0be33ce9ae1fe707e0aa449dba980ca18c4d3eb159b42c06d3c30a542600d6e",
+      "expected_sha256": "f0be33ce9ae1fe707e0aa449dba980ca18c4d3eb159b42c06d3c30a542600d6e",
+      "size_bytes": 2120,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/initial_covariance.csv",
+      "sha256": "55ac110fd02620c494e916fdb575bd514b734245b26d09764fc7de1116670f39",
+      "expected_sha256": "55ac110fd02620c494e916fdb575bd514b734245b26d09764fc7de1116670f39",
+      "size_bytes": 7352,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/initialization.json",
+      "sha256": "9a5532ce3b7162e92b6a711c509d9a8e52d28eff81f6515fb3618067582b733d",
+      "expected_sha256": "9a5532ce3b7162e92b6a711c509d9a8e52d28eff81f6515fb3618067582b733d",
+      "size_bytes": 3352,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/initialization_geometry.png",
+      "sha256": "4112352f0cea3a1b891bc8c25aed3dacfbcd3723cffc786aeae4cea35d1a559c",
+      "expected_sha256": "4112352f0cea3a1b891bc8c25aed3dacfbcd3723cffc786aeae4cea35d1a559c",
+      "size_bytes": 144463,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/input_manifest.json",
+      "sha256": "163f3c68438257bd426f72e1a5465d7523473b72f09f10b6ebad9af6bb4cd804",
+      "expected_sha256": "163f3c68438257bd426f72e1a5465d7523473b72f09f10b6ebad9af6bb4cd804",
+      "size_bytes": 810,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/ndt_smoke.csv",
+      "sha256": "4549c8a426a725561c9b88ca5ff34adb60eee99ed9c39924f5793c8f48fdfb9f",
+      "expected_sha256": "4549c8a426a725561c9b88ca5ff34adb60eee99ed9c39924f5793c8f48fdfb9f",
+      "size_bytes": 1163,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/prefix_parity.csv",
+      "sha256": "28513d408f292594a2533ca8ef6f986f8c8e74a6dab4af9ad152fa3b91490aec",
+      "expected_sha256": "28513d408f292594a2533ca8ef6f986f8c8e74a6dab4af9ad152fa3b91490aec",
+      "size_bytes": 42908,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/prepare_bridge.py",
+      "sha256": "e824a9cdf5c604b256e4c789f892ea87a4be25bf37d6d301cc933528027cc09b",
+      "expected_sha256": "e824a9cdf5c604b256e4c789f892ea87a4be25bf37d6d301cc933528027cc09b",
+      "size_bytes": 3320,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/prepare_probe.py",
+      "sha256": "254bd47d2247973f1129038629355a9dc786f729a3cabe9318222614fb080ef6",
+      "expected_sha256": "254bd47d2247973f1129038629355a9dc786f729a3cabe9318222614fb080ef6",
+      "size_bytes": 3279,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/probe_manifest.json",
+      "sha256": "a7f832ccc4011acddf7965b422768487ec3279777bc2cf4b8a60f446d71b4c13",
+      "expected_sha256": "a7f832ccc4011acddf7965b422768487ec3279777bc2cf4b8a60f446d71b4c13",
+      "size_bytes": 1112,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/r5_state_consistency.json",
+      "sha256": "64e66dbef46099ea6b1435172e54f05509adb67a46b5986b05d364c7c177e077",
+      "expected_sha256": "64e66dbef46099ea6b1435172e54f05509adb67a46b5986b05d364c7c177e077",
+      "size_bytes": 1273,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/r6_author.patch",
+      "sha256": "2d0e4994933a474fd53c7fc4de3cc2c3ad4a8620dd8c6cdf2f789f39cfe78871",
+      "expected_sha256": "2d0e4994933a474fd53c7fc4de3cc2c3ad4a8620dd8c6cdf2f789f39cfe78871",
+      "size_bytes": 6508,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/r6_terminal.hpp",
+      "sha256": "b0e43764c0d428e592792660f1b4b1c02648bc9dfbe4e5021cc7c8fedf8fcc89",
+      "expected_sha256": "b0e43764c0d428e592792660f1b4b1c02648bc9dfbe4e5021cc7c8fedf8fcc89",
+      "size_bytes": 3417,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/results.json",
+      "sha256": "bc40e71e5adae23e356774cbecddeca8fd63d489d512a1705e3404fb9059d3cc",
+      "expected_sha256": "bc40e71e5adae23e356774cbecddeca8fd63d489d512a1705e3404fb9059d3cc",
+      "size_bytes": 12959,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/review_snapshots.launch",
+      "sha256": "e89f120683007e2b883c5bcd26134d64040c5eb3127a7923da4b945b7b4aca21",
+      "expected_sha256": "e89f120683007e2b883c5bcd26134d64040c5eb3127a7923da4b945b7b4aca21",
+      "size_bytes": 1351,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/run_bridge.py",
+      "sha256": "d9e4ad8684ab925c1ac9e7a1c49f5b4aab7fad28112b86a2add7b2e8bdfb4cdb",
+      "expected_sha256": "d9e4ad8684ab925c1ac9e7a1c49f5b4aab7fad28112b86a2add7b2e8bdfb4cdb",
+      "size_bytes": 10547,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/runtime_statistics.json",
+      "sha256": "52bc3e8af44e837ff50d1c7042b0622e2144bd6fd461f218ce9ba2b67172f0e1",
+      "expected_sha256": "52bc3e8af44e837ff50d1c7042b0622e2144bd6fd461f218ce9ba2b67172f0e1",
+      "size_bytes": 481,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/rviz_snapshot.png",
+      "sha256": "abcac95a941efffa0a4715c53c74a5086201e19722f18c0491dcbb23cb486861",
+      "expected_sha256": "abcac95a941efffa0a4715c53c74a5086201e19722f18c0491dcbb23cb486861",
+      "size_bytes": 62378,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/snapshots.rviz",
+      "sha256": "ae16578c02a244cbf6cb820b290d022af75222f9ee4f84832d6a4990edc1914d",
+      "expected_sha256": "ae16578c02a244cbf6cb820b290d022af75222f9ee4f84832d6a4990edc1914d",
+      "size_bytes": 1214,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/state_bridge_trajectory.csv",
+      "sha256": "b1c73ae79dc57863836f017f8947c4628780547c84bfae94fd634c08800da8f2",
+      "expected_sha256": "b1c73ae79dc57863836f017f8947c4628780547c84bfae94fd634c08800da8f2",
+      "size_bytes": 3735755,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/test_bridge_contract.py",
+      "sha256": "ca6ec2d12539cc3a42d6101206fd2d11ed7810473ba68de2fa134df9afb25fe9",
+      "expected_sha256": "ca6ec2d12539cc3a42d6101206fd2d11ed7810473ba68de2fa134df9afb25fe9",
+      "size_bytes": 2730,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/test_native_time.cpp",
+      "sha256": "9e8016720713448aab0999df79008b68ecd6f92792cb78257071d2130bfea097",
+      "expected_sha256": "9e8016720713448aab0999df79008b68ecd6f92792cb78257071d2130bfea097",
+      "size_bytes": 706,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/time_contract.md",
+      "sha256": "9c8c7c04e5022b71db94b950b8539c37c92bbb2741eb94f77f01d785e16f20da",
+      "expected_sha256": "9c8c7c04e5022b71db94b950b8539c37c92bbb2741eb94f77f01d785e16f20da",
+      "size_bytes": 4865,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/tools/CMakeLists.txt",
+      "sha256": "9e02929baed1d814c4522835eda8385c9df9a4e774d28fd421c7f525f8205713",
+      "expected_sha256": "9e02929baed1d814c4522835eda8385c9df9a4e774d28fd421c7f525f8205713",
+      "size_bytes": 881,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/tools/single_frame.cpp",
+      "sha256": "a042f334ba699a92a2befcf8e3eb8ca5ae9a81bcf23b152943508788c2a20244",
+      "expected_sha256": "a042f334ba699a92a2befcf8e3eb8ca5ae9a81bcf23b152943508788c2a20244",
+      "size_bytes": 4793,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/validate_completed_bridge.py",
+      "sha256": "d6bd686354f074f807544996cd45213c3f661f60cd6f88b2190d3301dfa79edb",
+      "expected_sha256": "d6bd686354f074f807544996cd45213c3f661f60cd6f88b2190d3301dfa79edb",
+      "size_bytes": 4930,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r6_geode_causal_init_bridge/validation.json",
+      "sha256": "0f4b750f6010927953853ac0ebc0394b966cf5e8bf42baaee01b309e463474cc",
+      "expected_sha256": "0f4b750f6010927953853ac0ebc0394b966cf5e8bf42baaee01b309e463474cc",
+      "size_bytes": 1062,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/ASSET_GATE_RECHECK.md",
+      "sha256": "5f9a3591b1cd627047d8c759266f10151dd98aeca90104cf99a5b8ffa0f1fee5",
+      "expected_sha256": "5f9a3591b1cd627047d8c759266f10151dd98aeca90104cf99a5b8ffa0f1fee5",
+      "size_bytes": 3661,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/ATTRIBUTION_REPORT.md",
+      "sha256": "c15885dd4bfe12f44dbe0dadb11e48314c045d6cca1b25c4235db891df75c4f5",
+      "expected_sha256": "c15885dd4bfe12f44dbe0dadb11e48314c045d6cca1b25c4235db891df75c4f5",
+      "size_bytes": 14291,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/PROTOCOL_RESUMED.md",
+      "sha256": "1bd1789973cf05085fcd6c083367469c57fd84b3c4392a54bf6e9872bdea7a8c",
+      "expected_sha256": "1bd1789973cf05085fcd6c083367469c57fd84b3c4392a54bf6e9872bdea7a8c",
+      "size_bytes": 1967,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/REPORT.md",
+      "sha256": "c1e21ea60ff818b3db7ab0d110e02ed39f391baf32249989c34595e1aa4d79b7",
+      "expected_sha256": "c1e21ea60ff818b3db7ab0d110e02ed39f391baf32249989c34595e1aa4d79b7",
+      "size_bytes": 4270,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/REVIEW_AND_TESTS.md",
+      "sha256": "3174b7a08c6cf2dd3f53957ea26447b599331003f73e51c95807535af741cd3e",
+      "expected_sha256": "3174b7a08c6cf2dd3f53957ea26447b599331003f73e51c95807535af741cd3e",
+      "size_bytes": 2307,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/analysis_inputs_frozen.json",
+      "sha256": "2bf69f3273559f28b7aca43853fa275b448734ec46b91429129fd3970c8ac71b",
+      "expected_sha256": "2bf69f3273559f28b7aca43853fa275b448734ec46b91429129fd3970c8ac71b",
+      "size_bytes": 139032,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/analysis_manifest.json",
+      "sha256": "fc3ddd7efc40c6b76a25995d3e59942ddd57fc72d4cea1d85d0a2cbb1ce3788b",
+      "expected_sha256": "fc3ddd7efc40c6b76a25995d3e59942ddd57fc72d4cea1d85d0a2cbb1ce3788b",
+      "size_bytes": 7353,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/analysis_math.py",
+      "sha256": "12dfd56c43986832004fac9f6a790ce8d7fff278340caf890746ff96e1e84757",
+      "expected_sha256": "12dfd56c43986832004fac9f6a790ce8d7fff278340caf890746ff96e1e84757",
+      "size_bytes": 1413,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/analyze_frozen.py",
+      "sha256": "670b35240702f3e8b4b3a9b532ed1b9f31b35ec30768c4e38625a68b0e525939",
+      "expected_sha256": "670b35240702f3e8b4b3a9b532ed1b9f31b35ec30768c4e38625a68b0e525939",
+      "size_bytes": 15152,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/anomaly_frame_table.csv",
+      "sha256": "5196441668f654ad558b166635ee878202d5f8602d80fdcc925bc558cbc9864f",
+      "expected_sha256": "5196441668f654ad558b166635ee878202d5f8602d80fdcc925bc558cbc9864f",
+      "size_bytes": 161138,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/asset_gate.py",
+      "sha256": "1b0abff525477f775cb79206891b58b452c87770903aeb9099bf0f7a805a05f1",
+      "expected_sha256": "1b0abff525477f775cb79206891b58b452c87770903aeb9099bf0f7a805a05f1",
+      "size_bytes": 6161,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/asset_gate_after.json",
+      "sha256": "4c62a9a8c0fe3dbba3bddbf50b45e7660d0368070b4dbf6efe5d4a4b3dce776a",
+      "expected_sha256": "4c62a9a8c0fe3dbba3bddbf50b45e7660d0368070b4dbf6efe5d4a4b3dce776a",
+      "size_bytes": 56208,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/asset_gate_before.json",
+      "sha256": "afea76bc4d9967a461765171ec51cd001c53f5ec9c0288622d3801aba75343da",
+      "expected_sha256": "afea76bc4d9967a461765171ec51cd001c53f5ec9c0288622d3801aba75343da",
+      "size_bytes": 56208,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/asset_gate_comparison.json",
+      "sha256": "17f46d1afc74c2d99b8903fff3790fb582ac3b7ecfe8c9165ed5d5ab5f6ed59b",
+      "expected_sha256": "17f46d1afc74c2d99b8903fff3790fb582ac3b7ecfe8c9165ed5d5ab5f6ed59b",
+      "size_bytes": 288,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/blocked_cause_assessment.json",
+      "sha256": "dbb85eaaaba826e517fbb1f96897ea360b3353bf3251bbd4ba8e35c65213a4f0",
+      "expected_sha256": "dbb85eaaaba826e517fbb1f96897ea360b3353bf3251bbd4ba8e35c65213a4f0",
+      "size_bytes": 1255,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/build_cause_assessment.py",
+      "sha256": "9331ee619942f1173494db5893c73904797d865d4f509979c9982c3fd4b26e9f",
+      "expected_sha256": "9331ee619942f1173494db5893c73904797d865d4f509979c9982c3fd4b26e9f",
+      "size_bytes": 6052,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/candidate_increment_consistency.csv",
+      "sha256": "fd951ce87c6a284930b88707947a706f1f37e9f189ee772901edf86df6f996da",
+      "expected_sha256": "fd951ce87c6a284930b88707947a706f1f37e9f189ee772901edf86df6f996da",
+      "size_bytes": 59250,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/cause_assessment.json",
+      "sha256": "3c1b1ae2e664790e592d1d31a279c05f8759459b7428b7bfa2fefcaa39c8c184",
+      "expected_sha256": "3c1b1ae2e664790e592d1d31a279c05f8759459b7428b7bfa2fefcaa39c8c184",
+      "size_bytes": 8000,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/check_input_semantics.py",
+      "sha256": "beb1ea0d965fd734d792b3fca046d67f4783fec800cd1bcfd601568f75dd6f73",
+      "expected_sha256": "beb1ea0d965fd734d792b3fca046d67f4783fec800cd1bcfd601568f75dd6f73",
+      "size_bytes": 2131,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/checksums.sha256",
+      "sha256": "8ad2248d013e0b6723cb92e26b5880a85b17f0f6669f0c29c97d5a9a6e15b60f",
+      "expected_sha256": "8ad2248d013e0b6723cb92e26b5880a85b17f0f6669f0c29c97d5a9a6e15b60f",
+      "size_bytes": 2670,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/finalize_archive.py",
+      "sha256": "857c864d785f3eb58d38ecf0553c6fa47b373cadda07edab3ae7c3e60728edb0",
+      "expected_sha256": "857c864d785f3eb58d38ecf0553c6fa47b373cadda07edab3ae7c3e60728edb0",
+      "size_bytes": 3379,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/freeze_analysis_inputs.py",
+      "sha256": "836ba6a8edd59b70342a11044dd3dae8bd2cd8f3863248a4f0822c9c9cc7cf0d",
+      "expected_sha256": "836ba6a8edd59b70342a11044dd3dae8bd2cd8f3863248a4f0822c9c9cc7cf0d",
+      "size_bytes": 2575,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/input_semantic_check.json",
+      "sha256": "6bdb3a32b8e3a935a16db4d80d45d4c51667f83271a68c2ab5955234ba434e42",
+      "expected_sha256": "6bdb3a32b8e3a935a16db4d80d45d4c51667f83271a68c2ab5955234ba434e42",
+      "size_bytes": 489,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/inspect_point_times.py",
+      "sha256": "ae574044cce1bd349730f5322fcf3ec34982151c44246dd34606fc6f65384381",
+      "expected_sha256": "ae574044cce1bd349730f5322fcf3ec34982151c44246dd34606fc6f65384381",
+      "size_bytes": 2615,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/map_support_summary.csv",
+      "sha256": "5440306eea31f49f89735e95b4af7bf67235a24d177fcdb2afb7f4854423c38b",
+      "expected_sha256": "5440306eea31f49f89735e95b4af7bf67235a24d177fcdb2afb7f4854423c38b",
+      "size_bytes": 186074,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/metric_summary.json",
+      "sha256": "1a374bf5e2c169b734cfe19dce6f9330ec833f335eeef23e1c822843eebcb7e0",
+      "expected_sha256": "1a374bf5e2c169b734cfe19dce6f9330ec833f335eeef23e1c822843eebcb7e0",
+      "size_bytes": 8443,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/point_time_records.json",
+      "sha256": "b7774af9a6a13188c00649408cd341f4fc1f7877b1c1d4fb667fdaa8a30f73d8",
+      "expected_sha256": "b7774af9a6a13188c00649408cd341f4fc1f7877b1c1d4fb667fdaa8a30f73d8",
+      "size_bytes": 52300,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/reproduction_commands.md",
+      "sha256": "9636ea9b12444298c751470ed02ae1a1945745b54afbccce76a4acd6d617a72c",
+      "expected_sha256": "9636ea9b12444298c751470ed02ae1a1945745b54afbccce76a4acd6d617a72c",
+      "size_bytes": 3048,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/test_analysis_math.py",
+      "sha256": "5cf7208852ece154a7447f0eabf73e4fd6f4e147a4276fda016d0674edef87e5",
+      "expected_sha256": "5cf7208852ece154a7447f0eabf73e4fd6f4e147a4276fda016d0674edef87e5",
+      "size_bytes": 1437,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/test_derived_evidence.py",
+      "sha256": "309354cbc33e85b7c33758dca059cccd525adefea0c92547e2d40c940f437b4a",
+      "expected_sha256": "309354cbc33e85b7c33758dca059cccd525adefea0c92547e2d40c940f437b4a",
+      "size_bytes": 3784,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_Git_archive",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r9_geode_anomaly_readonly_attribution/time_coordinate_audit.csv",
+      "sha256": "7192956c650d94777946f17cc7c9e237b82036c20e6ec1feb10d6634363831a3",
+      "expected_sha256": "7192956c650d94777946f17cc7c9e237b82036c20e6ec1feb10d6634363831a3",
+      "size_bytes": 97399,
+      "frozen_source": "a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/CMakeLists.txt",
+      "sha256": "eb728d50bac78519678090dbdb03222342c18268dd5e55373e140248beb4f069",
+      "expected_sha256": "eb728d50bac78519678090dbdb03222342c18268dd5e55373e140248beb4f069",
+      "size_bytes": 2381,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/LICENSE",
+      "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+      "expected_sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+      "size_bytes": 18092,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/README.md",
+      "sha256": "7f836745e6c93fe37b4aecd97a2b7e2e2eebdb4d9a1dffe036624600f55ff375",
+      "expected_sha256": "7f836745e6c93fe37b4aecd97a2b7e2e2eebdb4d9a1dffe036624600f55ff375",
+      "size_bytes": 10908,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/config/alpha.yaml",
+      "sha256": "30a2ee38e95b5f4585c62791af54b30dae0bddad279e2d09026b89bf79d9a6c4",
+      "expected_sha256": "30a2ee38e95b5f4585c62791af54b30dae0bddad279e2d09026b89bf79d9a6c4",
+      "size_bytes": 1849,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/config/bob.yaml",
+      "sha256": "514b874755f617634f2d25b9543f7482fc8e9b5b4e02fcee4fc684e9b1150739",
+      "expected_sha256": "514b874755f617634f2d25b9543f7482fc8e9b5b4e02fcee4fc684e9b1150739",
+      "size_bytes": 1837,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/config/carol.yaml",
+      "sha256": "5ce02d44635225ccf1fd4ef6780cfe7b4331784bc40fea018f9704b833383cb3",
+      "expected_sha256": "5ce02d44635225ccf1fd4ef6780cfe7b4331784bc40fea018f9704b833383cb3",
+      "size_bytes": 1830,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/include/Exp_mat.h",
+      "sha256": "abce87e1fb0e60febf42f38b75f4c018bac24c1bf652e26b7a510a9296d3031d",
+      "expected_sha256": "abce87e1fb0e60febf42f38b75f4c018bac24c1bf652e26b7a510a9296d3031d",
+      "size_bytes": 2743,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/include/IKFoM_toolkit/esekfom/esekfom.hpp",
+      "sha256": "8e4f0bf81cfb5d2aa22c192f3e616e1709f9bce17ca5786341ad368648570e8f",
+      "expected_sha256": "8e4f0bf81cfb5d2aa22c192f3e616e1709f9bce17ca5786341ad368648570e8f",
+      "size_bytes": 68306,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/include/IKFoM_toolkit/esekfom/util.hpp",
+      "sha256": "3c4265d25ea3f8c7f586d1e34bc352e981e09e30555e42011cd23a0a147d6918",
+      "expected_sha256": "3c4265d25ea3f8c7f586d1e34bc352e981e09e30555e42011cd23a0a147d6918",
+      "size_bytes": 2363,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/include/IKFoM_toolkit/mtk/build_manifold.hpp",
+      "sha256": "0e88522551d02e78dc995e6c9d7883d9ecca7190379ec047ab839fff7186ea0f",
+      "expected_sha256": "0e88522551d02e78dc995e6c9d7883d9ecca7190379ec047ab839fff7186ea0f",
+      "size_bytes": 9436,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/include/IKFoM_toolkit/mtk/src/SubManifold.hpp",
+      "sha256": "96709f0f453a0c8776b1969064275ebf14dc5234b7024e68eb1cfc51a513864f",
+      "expected_sha256": "96709f0f453a0c8776b1969064275ebf14dc5234b7024e68eb1cfc51a513864f",
+      "size_bytes": 4886,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/include/IKFoM_toolkit/mtk/src/mtkmath.hpp",
+      "sha256": "f9627989cf578f35ec5594a6956b4e9283d4dd109b26e7d2621682c508546295",
+      "expected_sha256": "f9627989cf578f35ec5594a6956b4e9283d4dd109b26e7d2621682c508546295",
+      "size_bytes": 10176,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/include/IKFoM_toolkit/mtk/src/vectview.hpp",
+      "sha256": "7855408124ea65df4423bae5f97d5104af5552318796bc6324bdbf98a45101f3",
+      "expected_sha256": "7855408124ea65df4423bae5f97d5104af5552318796bc6324bdbf98a45101f3",
+      "size_bytes": 6540,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/include/IKFoM_toolkit/mtk/startIdx.hpp",
+      "sha256": "79cdc368bb4e083f5fda7549094c0aba8b599aee1f88e9f2a8b7fa785bf1f757",
+      "expected_sha256": "79cdc368bb4e083f5fda7549094c0aba8b599aee1f88e9f2a8b7fa785bf1f757",
+      "size_bytes": 12515,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/include/IKFoM_toolkit/mtk/types/S2.hpp",
+      "sha256": "f861be0bbb1a80d968189c90f9ef6b8e56b5f4bb19a9043a2e41c9397c215d56",
+      "expected_sha256": "f861be0bbb1a80d968189c90f9ef6b8e56b5f4bb19a9043a2e41c9397c215d56",
+      "size_bytes": 9971,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/include/IKFoM_toolkit/mtk/types/SOn.hpp",
+      "sha256": "90a8384a05d656698e6826b892561dc6cd619b62a7e32f9e6e3a9253e5e0c8aa",
+      "expected_sha256": "90a8384a05d656698e6826b892561dc6cd619b62a7e32f9e6e3a9253e5e0c8aa",
+      "size_bytes": 10624,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/include/IKFoM_toolkit/mtk/types/vect.hpp",
+      "sha256": "771ecededd51dc694bdadb57f8a49fad7bc6091c6f6112142096954649ac405f",
+      "expected_sha256": "771ecededd51dc694bdadb57f8a49fad7bc6091c6f6112142096954649ac405f",
+      "size_bytes": 14226,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/include/IKFoM_toolkit/mtk/types/wrapped_cv_mat.hpp",
+      "sha256": "3040f43fcb4195a2572a8819be012ebd2c4b59a38cfae86fcac3e01d7039a589",
+      "expected_sha256": "3040f43fcb4195a2572a8819be012ebd2c4b59a38cfae86fcac3e01d7039a589",
+      "size_bytes": 3236,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/include/common_lib.h",
+      "sha256": "8ba52138be2d523fbac056968614c00584dd8a6390866008a4de03f479ec1136",
+      "expected_sha256": "8ba52138be2d523fbac056968614c00584dd8a6390866008a4de03f479ec1136",
+      "size_bytes": 7767,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/include/ikd-Tree/README.md",
+      "sha256": "a7f6feab008dc54a053963fb518e360389ee807af63ebddcc15e90b1ede78073",
+      "expected_sha256": "a7f6feab008dc54a053963fb518e360389ee807af63ebddcc15e90b1ede78073",
+      "size_bytes": 73,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/include/ikd-Tree/ikd_Tree.cpp",
+      "sha256": "579901b7d6f8dec2ffd5bff6449154c2a5b3947fd5cccb2d21c8aa83fe27ab2a",
+      "expected_sha256": "579901b7d6f8dec2ffd5bff6449154c2a5b3947fd5cccb2d21c8aa83fe27ab2a",
+      "size_bytes": 69156,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/include/ikd-Tree/ikd_Tree.h",
+      "sha256": "2332abeaac3afab5cf1f9cc88f38a44344946e3c4b1e7fdaa2d4fe9e053dd0ee",
+      "expected_sha256": "2332abeaac3afab5cf1f9cc88f38a44344946e3c4b1e7fdaa2d4fe9e053dd0ee",
+      "size_bytes": 10396,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/include/matplotlibcpp.h",
+      "sha256": "360d70cb9a7dd6cb981622871204c394b56f856ef42abd0e07a011a5e146f4d6",
+      "expected_sha256": "360d70cb9a7dd6cb981622871204c394b56f856ef42abd0e07a011a5e146f4d6",
+      "size_bytes": 81837,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/include/so3_math.h",
+      "sha256": "e02f73dc804c3f539a80fe49d4221a85dbfeaee4cf0b643d7af062b49148e9f7",
+      "expected_sha256": "e02f73dc804c3f539a80fe49d4221a85dbfeaee4cf0b643d7af062b49148e9f7",
+      "size_bytes": 2936,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/include/use-ikfom.hpp",
+      "sha256": "1ee2c078ee757ff2dffedf48da764daec152baa79876a70785d010cc2e6165ab",
+      "expected_sha256": "1ee2c078ee757ff2dffedf48da764daec152baa79876a70785d010cc2e6165ab",
+      "size_bytes": 4337,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/launch/alpha.launch",
+      "sha256": "19b23549a0c6b25a8be928f97d2b2853247eb50235fed698514d69ca6c5bc749",
+      "expected_sha256": "19b23549a0c6b25a8be928f97d2b2853247eb50235fed698514d69ca6c5bc749",
+      "size_bytes": 1293,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/launch/alpha_main.sh",
+      "sha256": "a9e2206c7446eede61f65525ef2349a63855149ab52b7f425c3c523b35b31eeb",
+      "expected_sha256": "a9e2206c7446eede61f65525ef2349a63855149ab52b7f425c3c523b35b31eeb",
+      "size_bytes": 127,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/launch/bob.launch",
+      "sha256": "d39ce0aa4ee4d3e61b091524946cbb5584696a193a1292053b0e3960267fb885",
+      "expected_sha256": "d39ce0aa4ee4d3e61b091524946cbb5584696a193a1292053b0e3960267fb885",
+      "size_bytes": 1284,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/launch/bob_main.sh",
+      "sha256": "f5ff9aa5c584ccfea2e3dd196bdc7c4a7f97a4be3d2e05ac338b2a41d0d374dc",
+      "expected_sha256": "f5ff9aa5c584ccfea2e3dd196bdc7c4a7f97a4be3d2e05ac338b2a41d0d374dc",
+      "size_bytes": 125,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/launch/carol.launch",
+      "sha256": "9bdf2f28d398be5809a5ae1b584cdf9b73a574448aa39fcde079e6a7f9d6ba24",
+      "expected_sha256": "9bdf2f28d398be5809a5ae1b584cdf9b73a574448aa39fcde079e6a7f9d6ba24",
+      "size_bytes": 1298,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/launch/carol_main.sh",
+      "sha256": "4a8133d1e074b194ee47b8ce83f7049e85c2d1a86c5a643b59507ff092ecba12",
+      "expected_sha256": "4a8133d1e074b194ee47b8ce83f7049e85c2d1a86c5a643b59507ff092ecba12",
+      "size_bytes": 125,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/launch/test_geode.py",
+      "sha256": "947cab60be17deae135577ca81584dd7f5bf0d4d11328fa6134a87eddb3f0195",
+      "expected_sha256": "947cab60be17deae135577ca81584dd7f5bf0d4d11328fa6134a87eddb3f0195",
+      "size_bytes": 6233,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/msg/Pose6D.msg",
+      "sha256": "91b5397207076295c2b20273552b80267e258a749ae1a932dc00f48cfc31334f",
+      "expected_sha256": "91b5397207076295c2b20273552b80267e258a749ae1a932dc00f48cfc31334f",
+      "size_bytes": 597,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/package.xml",
+      "sha256": "193b7e780cc9d39d178bfb1c5f16d8153e85e92eaaca564dc3cf98cad7461da1",
+      "expected_sha256": "193b7e780cc9d39d178bfb1c5f16d8153e85e92eaaca564dc3cf98cad7461da1",
+      "size_bytes": 1465,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/src/IMU_Processing.hpp",
+      "sha256": "73a505f97d091b293072ee687c322cd6d99373b2fb9b7613a2b46aa9c9222cd5",
+      "expected_sha256": "73a505f97d091b293072ee687c322cd6d99373b2fb9b7613a2b46aa9c9222cd5",
+      "size_bytes": 13770,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/src/laserMapping.cpp",
+      "sha256": "9f117c1c2710442c930358d34e73531124ac261ba9f6538ea642595f7c5f72ae",
+      "expected_sha256": "9f117c1c2710442c930358d34e73531124ac261ba9f6538ea642595f7c5f72ae",
+      "size_bytes": 45116,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/src/p61_record.hpp",
+      "sha256": "dcd8961006af87589509baff0a6c92e61992b80edd60efa15ae706d628fcab31",
+      "expected_sha256": "dcd8961006af87589509baff0a6c92e61992b80edd60efa15ae706d628fcab31",
+      "size_bytes": 4284,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/src/preprocess.cpp",
+      "sha256": "3024133a7887895364c02461ec3fb5213df44351a7e7665063b372b6479636cc",
+      "expected_sha256": "3024133a7887895364c02461ec3fb5213df44351a7e7665063b372b6479636cc",
+      "size_bytes": 24424,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/src/preprocess.h",
+      "sha256": "e81bff40e3cc19ad89d168bd74c12954f81a183090404e6efbe643489612f3e8",
+      "expected_sha256": "e81bff40e3cc19ad89d168bd74c12954f81a183090404e6efbe643489612f3e8",
+      "size_bytes": 3661,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "actual_R6_author_source",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/src/FAST_LIO/src/r6_terminal.hpp",
+      "sha256": "b0e43764c0d428e592792660f1b4b1c02648bc9dfbe4e5021cc7c8fedf8fcc89",
+      "expected_sha256": "b0e43764c0d428e592792660f1b4b1c02648bc9dfbe4e5021cc7c8fedf8fcc89",
+      "size_bytes": 3417,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "R6_binary_hash_only",
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/author_ws/devel/lib/fast_lio/fastlio_mapping",
+      "sha256": "1a337264f8c094563619af6992746c90a44dba42d220d22750e1f1728f032d68",
+      "expected_sha256": "1a337264f8c094563619af6992746c90a44dba42d220d22750e1f1728f032d68",
+      "size_bytes": 1112560,
+      "frozen_source": "R6 build_manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "R10_input_pin",
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/inputs_frozen.json",
+      "sha256": "a2f3b61260e727addc935fff38cdfee587a88ba806d4a3992e094af9bb8af690",
+      "expected_sha256": "a2f3b61260e727addc935fff38cdfee587a88ba806d4a3992e094af9bb8af690",
+      "size_bytes": 78256,
+      "frozen_source": "R11 task",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_geode_native_tunnel_entry/official/GEODE_README.md",
+      "sha256": "eac59895cbe45a1cff161bae0599c7ad15274054da74c9d1f60bfb4be6989586",
+      "size_bytes": 11543,
+      "frozen_source": "Git a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_geode_native_tunnel_entry/official/GEODE_README.md.http.json",
+      "sha256": "1f1f79392b70fc88c43aa4fb5f55ba66bb4b2af122f787b2aac5a526a438e48a",
+      "size_bytes": 517,
+      "frozen_source": "Git a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_geode_native_tunnel_entry/official/gamma_config.yaml",
+      "sha256": "19cda4d48f5b185d93293393846a387a2b093c67dc9ec3a646ed8f826b587dbe",
+      "size_bytes": 4731,
+      "frozen_source": "Git a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r2_geode_real_data_run/official/livox_lddc.cpp",
+      "sha256": "345b85c22536c56ddc64685f1d68e2f261f08c6222851283e4326118977d64df",
+      "size_bytes": 23554,
+      "frozen_source": "Git a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r2_geode_real_data_run/official/livox_lddc.cpp.http.json",
+      "sha256": "d325aa47edf69bdc66fc18e71502943406a80d25112237106a43f1a5104652b7",
+      "size_bytes": 585,
+      "frozen_source": "Git a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r2_geode_real_data_run/livox_contract.py",
+      "sha256": "a0304392c4a571be8bacae5ad949bff07893d4f4c9c86db9d47c846e60d8ba64",
+      "size_bytes": 1668,
+      "frozen_source": "Git a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r2_geode_real_data_run/scan_ledger.csv",
+      "sha256": "21cba76ec059016700b5ac3f0a0851f769b338ee4550e19108910d3efd3902fb",
+      "size_bytes": 1057313,
+      "frozen_source": "Git a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r4_geode_prior_map_feasibility/official/gamma_drive.yaml",
+      "sha256": "f67eaba499306f08d81a2f8dfe8459bb0246d4ee7294b03478f28affb56cc47a",
+      "size_bytes": 4682,
+      "frozen_source": "Git a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r4_geode_prior_map_feasibility/official/fastlio_carol.yaml",
+      "sha256": "5ce02d44635225ccf1fd4ef6780cfe7b4331784bc40fea018f9704b833383cb3",
+      "size_bytes": 1830,
+      "frozen_source": "Git a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/prepare_inputs.py",
+      "sha256": "a6040c98fbecfd88afe496a9f598b8a9da48a71d1913760e952644c72d27b2d6",
+      "size_bytes": 5898,
+      "frozen_source": "Git a0275decc7862030c3581038ab87d09efe5aaa4e",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r8_geode_full_return_control/prepare_inputs.py",
+      "sha256": "a6040c98fbecfd88afe496a9f598b8a9da48a71d1913760e952644c72d27b2d6",
+      "size_bytes": 5898,
+      "frozen_source": "actual R8 prepare code1367e1d",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/bridge_only.bag",
+      "sha256": "b2baeb7d91bafb48d51b580b41a33c8f4d324cce8bf3d95f9b1030acceb48fb8",
+      "size_bytes": 1372733659,
+      "frozen_source": "R6 archived input manifest",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/bridge_input.json",
+      "sha256": "163f3c68438257bd426f72e1a5465d7523473b72f09f10b6ebad9af6bb4cd804",
+      "size_bytes": 810,
+      "frozen_source": "R6 archived input manifest bytes",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/bridge_run/config.yaml",
+      "sha256": "72736026af8656b166f52d4cb8f2863b6452b5c5927d14760472e64fce10b62e",
+      "size_bytes": 994,
+      "frozen_source": "R6 initialization config identity",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/bridge_run/initial_state.json",
+      "sha256": "163d1c6fbeec969c3b950dbc6c8cd86a45327cc0fac90bdaaeed2f81449c06b2",
+      "size_bytes": 1406,
+      "frozen_source": "R6 pre_geometry_hashes before probe",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/bridge_run/initial_covariance.csv",
+      "sha256": "55ac110fd02620c494e916fdb575bd514b734245b26d09764fc7de1116670f39",
+      "size_bytes": 7352,
+      "frozen_source": "R6 pre_geometry_hashes before probe",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/bridge_run/initialization_freeze.json",
+      "sha256": "9a5532ce3b7162e92b6a711c509d9a8e52d28eff81f6515fb3618067582b733d",
+      "size_bytes": 3352,
+      "frozen_source": "R6 pre_geometry_hashes before probe",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/bridge_run/mapping_trajectory.csv",
+      "sha256": "6cc1be563ecfd5363379b6a7e6461907e6b5e2e681becd709032be98cc71fc5e",
+      "size_bytes": 3616364,
+      "frozen_source": "R6 pre_geometry_hashes before probe",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r5_geode_runs/formal_mapping/frozen_map.pcd",
+      "sha256": "4a279d822fd6090d3aa3fc0cec989b4f6fde5c9a43df476a29dba4494f6821b4",
+      "size_bytes": 10273947,
+      "frozen_source": "R6 pre_geometry_hashes before probe",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/pre_geometry_hashes.sha256",
+      "sha256": "e1d96258ee610f36ba6f6ad89832a58f260fa9c8ffc4d374d5f80a9a2f0e3e13",
+      "size_bytes": 686,
+      "frozen_source": "existing R6 log; first R11 identity snapshot",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/bridge_run/mapper.log",
+      "sha256": "b91f2bd9e0d4d91be006700843957f19743c79ec0107de738e58f6f7d73cf3c0",
+      "size_bytes": 304,
+      "frozen_source": "existing R6 log; first R11 identity snapshot",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/bridge_run/replay.csv",
+      "sha256": "c345818abf993d80267d981b32c0f666320241d4d894be747cf5d41f5450ee3d",
+      "size_bytes": 196698,
+      "frozen_source": "existing R6 log; first R11 identity snapshot",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/bridge_run/author_logs/imu.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "frozen_source": "existing R6 log; first R11 identity snapshot",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/bridge_run/author_logs/dbg.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "frozen_source": "existing R6 log; first R11 identity snapshot",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/bridge_run/author_logs/mat_pre.txt",
+      "sha256": "fd475ec05608c2b49932d17d3d873f1a9e7fd48581d0cc67c9b63868d91f7a1d",
+      "size_bytes": 776003,
+      "frozen_source": "existing R6 log; first R11 identity snapshot",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/bridge_run/author_logs/mat_out.txt",
+      "sha256": "af2f9489811aa18c05f35817a1988350bebf306c611df3f79a5dffb76fca61bf",
+      "size_bytes": 794093,
+      "frozen_source": "existing R6 log; first R11 identity snapshot",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r6_geode_runs/bridge_run/ros_logs/r6_causal_bridge_replay.log",
+      "sha256": "ed36d9b3f785b9fa225f36a8dd4cd252ca565e1d4fba4c87e06db8d6665f5004",
+      "size_bytes": 2085,
+      "frozen_source": "existing R6 log; first R11 identity snapshot",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/geode/Shield_tunnel1_gamma/inspection/imu_records.csv",
+      "sha256": "f82c85a659438807ead60f18549d2f12b263be9ec1ecdebb71d6d8e383d95609",
+      "size_bytes": 29727243,
+      "frozen_source": "existing R2 traversal metadata; first R11 SHA snapshot; every selected record independently checked in frozen bag"
+    }
+  ],
+  "inherited_comparisons": 300,
+  "additional_comparisons": 28,
+  "total_identity_comparisons": 328,
+  "unique_input_paths": 291,
+  "asset_before_after_unchanged": true,
+  "scope": {
+    "start_ns": 1706671804799723787,
+    "end_ns": 1706671805899593546,
+    "lidar_header_indices": [
+      5155,
+      5156,
+      5157,
+      5158,
+      5159,
+      5160,
+      5161,
+      5162,
+      5163,
+      5164,
+      5165
+    ],
+    "target_imu_count": 110,
+    "separate_causal_head_ns": 1706671804791549444,
+    "historical_initialization_sample_count": 10
+  },
+  "results": {
+    "clock_sync": "CLOCK_SYNC_NOT_CERTIFIED",
+    "bias_stability": "BIAS_STABILITY_NOT_EVALUABLE",
+    "combined": "R10_CONTRADICTION_REMAINS_CONDITIONAL"
+  },
+  "boundaries": {
+    "gt_reads": 0,
+    "ros_localization_nodes": 0,
+    "rosbag_play": 0,
+    "new_ndt_align": 0,
+    "ekf_runs": 0,
+    "new_trajectory_estimates": 0,
+    "production_code_changes": 0,
+    "external_cli": 0,
+    "clock_offset_search": 0,
+    "gyro_bias_fit": 0
+  },
+  "tests": {
+    "command": "/usr/bin/python3 -m unittest discover -s docs/p61_r11_geode_clock_bias_provenance/tests -v",
+    "passed": 9,
+    "failed": 0
+  },
+  "outputs": [
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/EXECUTION_NOTES.md",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/EXECUTION_NOTES.md",
+      "sha256": "aefad2ef623cdcbbdc3a8a70f34fe8218ae0025bd3596e74a6f168bba71b29c3",
+      "size_bytes": 1170
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/PROTOCOL.md",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/PROTOCOL.md",
+      "sha256": "8ce826a0dcb50637cbdd7a99e1bae320cbb9196248c19caea9c1e71670745158",
+      "size_bytes": 3088
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/REPORT.md",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/REPORT.md",
+      "sha256": "157546521b64cbc6415d49dd63996f073c0e80767d0cbc2238bd1fe797357a57",
+      "size_bytes": 6361
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/asset_gate_after.json",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/asset_gate_after.json",
+      "sha256": "d1b71788b3d0102486eace38cdd4fbd92d3e62b39ab0da5c514b21e095c7d45f",
+      "size_bytes": 138625
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/asset_gate_before.json",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/asset_gate_before.json",
+      "sha256": "d1b71788b3d0102486eace38cdd4fbd92d3e62b39ab0da5c514b21e095c7d45f",
+      "size_bytes": 138625
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/audit_math.py",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/audit_math.py",
+      "sha256": "e6c11a2ca20abee3bf872f7229542423b706d3ef5df54a1a2cc176ef792833a6",
+      "size_bytes": 1302
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/bias_provenance.md",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/bias_provenance.md",
+      "sha256": "e9bd683f7d36f45604c199ebc83f3d84358ac16685334e1b80a8d9a2882ae3ac",
+      "size_bytes": 3908
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/check_assets.py",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/check_assets.py",
+      "sha256": "f470f0741eb59e4cedc8cec3514e1e3c812b2f82d223f6422f3c7d4d93710792",
+      "size_bytes": 2540
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/clock_source_chain.md",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/clock_source_chain.md",
+      "sha256": "c53929588ea2e48fd4419869f7f7240d01031bc8f11390355ee28d4704581b17",
+      "size_bytes": 4882
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/complete_saved_audit.py",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/complete_saved_audit.py",
+      "sha256": "8c6f19e2ae1f417c5130202810acd9c211c03a60ce6171a1a599906062b10f5b",
+      "size_bytes": 2849
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/evidence_gate_after.json",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/evidence_gate_after.json",
+      "sha256": "f14868a12c964cb875acb215d2e864405e6412271bc5a756cedc11f896a9587c",
+      "size_bytes": 9064
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/evidence_inputs_frozen.json",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/evidence_inputs_frozen.json",
+      "sha256": "9b0e1e7fa9fa0ad83c8799cb3ceb8248533a8c40d72a902b7825027ffc3ba5f0",
+      "size_bytes": 8933
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/finalize_archive.py",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/finalize_archive.py",
+      "sha256": "63ff3c086fc5d426710f4cba751ca4afabef5b4f469d4ea0ac41a4a814de7869",
+      "size_bytes": 4515
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/freeze_evidence.py",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/freeze_evidence.py",
+      "sha256": "7e6f7d80804591405406f80d03ceb96c6e25905d77e788da1e78d0c0b1337bf7",
+      "size_bytes": 3467
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/freeze_lookup.py",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/freeze_lookup.py",
+      "sha256": "912db46489291f3e783f828225d2ae6643b0d10e43aec6bd650c93a214dd649c",
+      "size_bytes": 675
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/initialization_imu_samples.csv",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/initialization_imu_samples.csv",
+      "sha256": "bebe653ea0bf38228a4fe761b4cd405f16cbd8c0d07608ac0ce1c768cb0fb0db",
+      "size_bytes": 2264
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/inspect_records.py",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/inspect_records.py",
+      "sha256": "414cb2bed07c6e5c9d3d6b856a1a470d02fedefa3aeb2bbfc503d0aedafaa434",
+      "size_bytes": 11417
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/lidar_timebase_audit.csv",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/lidar_timebase_audit.csv",
+      "sha256": "48686579e5f3fd4ba27037c70c84816bca1b22f14a2086e3b7317797de5c5af4",
+      "size_bytes": 928
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/lookup_inputs_frozen.json",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/lookup_inputs_frozen.json",
+      "sha256": "db7e85def88d9863b6d4a2d86940cce5d6e66e81131f0832c1fa8db3be386d6f",
+      "size_bytes": 389
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/r8_assets_after.json",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/r8_assets_after.json",
+      "sha256": "b065fa037b18cdbac690f2e47d0055921975e09a3ef9fd68ad0810b557c0d62e",
+      "size_bytes": 56919
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/r8_assets_before.json",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/r8_assets_before.json",
+      "sha256": "60b1a15284c5311ad3a5a461daaadb6b2928e5aaa5e081ce2798b2def1bfe8e0",
+      "size_bytes": 56919
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/record_audit.json",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/record_audit.json",
+      "sha256": "915db55a43c5cbd667a1c2044400ada91683d89d8330ddfd491ef01ae91eea95",
+      "size_bytes": 2402
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/record_audit_complete.json",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/record_audit_complete.json",
+      "sha256": "fa82b1e09a4334a3dca5cbb16c0b102962472dc059812b6023d35f7e8884a1e4",
+      "size_bytes": 3454
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/record_selection.py",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/record_selection.py",
+      "sha256": "e91ff6e5ca40ba290764a34b24a79c0deca513fe686a7dc6579508341687bb38",
+      "size_bytes": 1571
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/reproduction_commands.md",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/reproduction_commands.md",
+      "sha256": "dc1758df790a203e767d6a0ff69984901d599e25f44c25f372e22f1a5b41af89",
+      "size_bytes": 2629
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/stationarity_evidence.csv",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/stationarity_evidence.csv",
+      "sha256": "b42bc1685ed5c5df60aaaa2125820632249f5bfd72427d38bd782cf5ead779c3",
+      "size_bytes": 99
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/tests/test_contract.py",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/tests/test_contract.py",
+      "sha256": "3e8ffd1a94f48d0a177b7e15550bc47bc9dedd539d30260b8b2cffac5091d4db",
+      "size_bytes": 3151
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/timestamp_lag_summary.csv",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/timestamp_lag_summary.csv",
+      "sha256": "8505648d6e352a43575f11675c02cb816d4288c13c81f72fb810dfec4618e87f",
+      "size_bytes": 1127
+    },
+    {
+      "path": "/home/jian/livox_ws/p61_r11_geode_clock_bias_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/timestamp_records.csv",
+      "relative_path": "docs/p61_r11_geode_clock_bias_provenance/timestamp_records.csv",
+      "sha256": "ae314a8a66964c0439080553292c2d97858e51e853ac3da4120a94304e0f2768",
+      "size_bytes": 33303
+    }
+  ],
+  "failed_output_preserved": "record_audit.json (incomplete; not authoritative)",
+  "authoritative_data_summary": "record_audit_complete.json",
+  "PUSH_EXECUTED": false,
+  "NEXT": "Request the original session-bound acquisition clock/driver/sync and independent stationarity/bias provenance package; no new experiment authorized."
+}
