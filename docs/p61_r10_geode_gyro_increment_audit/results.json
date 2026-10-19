@@ -1,0 +1,206 @@
+{
+  "task": "P61-R10-GEODE-INDEPENDENT-GYRO-ANGULAR-INCREMENT-CHECK",
+  "numerical": {
+    "result": "ANGULAR_CONSISTENCY_CONTRADICTED",
+    "valid_intervals": 11,
+    "target_intervals": 11,
+    "median_imu_dt_ns": 10402680.0,
+    "median_residual_deg": 14.433498508587023,
+    "max_residual_deg": 44.83768695312652,
+    "descriptive_p95_linear_deg": 37.46486516242033,
+    "p95_is_decision_gate": false,
+    "consecutive_exceedance_pairs": [
+      [
+        [
+          5154,
+          5155
+        ],
+        [
+          5155,
+          5156
+        ]
+      ],
+      [
+        [
+          5155,
+          5156
+        ],
+        [
+          5156,
+          5157
+        ]
+      ],
+      [
+        [
+          5158,
+          5159
+        ],
+        [
+          5159,
+          5160
+        ]
+      ],
+      [
+        [
+          5159,
+          5160
+        ],
+        [
+          5160,
+          5161
+        ]
+      ],
+      [
+        [
+          5160,
+          5161
+        ],
+        [
+          5161,
+          5162
+        ]
+      ],
+      [
+        [
+          5161,
+          5162
+        ],
+        [
+          5162,
+          5163
+        ]
+      ],
+      [
+        [
+          5162,
+          5163
+        ],
+        [
+          5163,
+          5164
+        ]
+      ]
+    ],
+    "max_independent_agreement_deg": 7.439169280587521e-10,
+    "bias_fixed_radps": [
+      -0.0008725237314739192,
+      0.0023757483405765214,
+      -0.010976615256704694
+    ],
+    "T_I_L": [
+      0.9996198206617928,
+      0.027463349486431855,
+      0.002445117092812397,
+      0.049258,
+      -0.027516650513568146,
+      0.9992986370810932,
+      0.025398187217603792,
+      -0.0125,
+      -0.0017458829071876037,
+      -0.025455812782396205,
+      0.9996744237539305,
+      0.026946,
+      0,
+      0,
+      0,
+      1
+    ],
+    "extrinsic_det": 1.0000000000416869,
+    "extrinsic_orthogonality_error": 5.895427338000733e-11,
+    "code_sha": "da24a7ef962f02f9478d64cf612f6792dab202b0",
+    "script_sha256": "ab65d0522a58de5ad41f274d305098ac62c4ec97b6630833ccbd28ad1261236d",
+    "elapsed_sec": 6.130110014026286,
+    "inputs_frozen_sha256": "a2f3b61260e727addc935fff38cdfee587a88ba806d4a3992e094af9bb8af690",
+    "gyro_payload_binding_sha256": "0b478bd1f8d27c150c6bd16ed5a3870acb99f7bc046d071763683655ce707098",
+    "raw_pose_time_audit": [
+      {
+        "scan_index": 5154,
+        "scan_end_ns": 1706671804799723787,
+        "ndt_measurement_ns": 1706671804799723787,
+        "status": "PASS"
+      },
+      {
+        "scan_index": 5155,
+        "scan_end_ns": 1706671804899580989,
+        "ndt_measurement_ns": 1706671804899580989,
+        "status": "PASS"
+      },
+      {
+        "scan_index": 5156,
+        "scan_end_ns": 1706671805000215599,
+        "ndt_measurement_ns": 1706671805000215599,
+        "status": "PASS"
+      },
+      {
+        "scan_index": 5157,
+        "scan_end_ns": 1706671805100051028,
+        "ndt_measurement_ns": 1706671805100051028,
+        "status": "PASS"
+      },
+      {
+        "scan_index": 5158,
+        "scan_end_ns": 1706671805199899607,
+        "ndt_measurement_ns": 1706671805199899607,
+        "status": "PASS"
+      },
+      {
+        "scan_index": 5159,
+        "scan_end_ns": 1706671805299736074,
+        "ndt_measurement_ns": 1706671805299736074,
+        "status": "PASS"
+      },
+      {
+        "scan_index": 5160,
+        "scan_end_ns": 1706671805399568864,
+        "ndt_measurement_ns": 1706671805399568864,
+        "status": "PASS"
+      },
+      {
+        "scan_index": 5161,
+        "scan_end_ns": 1706671805500215801,
+        "ndt_measurement_ns": 1706671805500215801,
+        "status": "PASS"
+      },
+      {
+        "scan_index": 5162,
+        "scan_end_ns": 1706671805600043670,
+        "ndt_measurement_ns": 1706671805600043670,
+        "status": "PASS"
+      },
+      {
+        "scan_index": 5163,
+        "scan_end_ns": 1706671805699901556,
+        "ndt_measurement_ns": 1706671805699901556,
+        "status": "PASS"
+      },
+      {
+        "scan_index": 5164,
+        "scan_end_ns": 1706671805799747303,
+        "ndt_measurement_ns": 1706671805799747303,
+        "status": "PASS"
+      },
+      {
+        "scan_index": 5165,
+        "scan_end_ns": 1706671805899593546,
+        "ndt_measurement_ns": 1706671805899593546,
+        "status": "PASS"
+      }
+    ],
+    "gt_reads": 0,
+    "ros_localization_nodes": 0,
+    "rosbag_play": 0,
+    "new_ndt_align": 0,
+    "ekf_runs": 0,
+    "new_localization_trajectory_estimates": 0
+  },
+  "asset_gate": {
+    "status": "PASS",
+    "comparisons": 156,
+    "unique_paths": 126,
+    "all_original_assets_unchanged": true,
+    "before_sha256": "dba3c18f3812d01c4b12720825fe9f0ab601b89fc9c4bd83e09625b424702f0a",
+    "after_sha256": "b01dd032bd03585ad6a7b959b6d808236c8cd677e14ea2e49c90ddbe0c2ed749"
+  },
+  "push_executed": false,
+  "limitation": "Frozen-bias angular increment consistency only; no absolute pose/translation/basin certification."
+}

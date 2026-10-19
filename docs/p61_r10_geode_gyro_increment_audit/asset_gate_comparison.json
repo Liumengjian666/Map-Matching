@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "comparisons": 156,
+  "unique_paths": 126,
+  "all_original_assets_unchanged": true,
+  "before_sha256": "dba3c18f3812d01c4b12720825fe9f0ab601b89fc9c4bd83e09625b424702f0a",
+  "after_sha256": "b01dd032bd03585ad6a7b959b6d808236c8cd677e14ea2e49c90ddbe0c2ed749"
+}

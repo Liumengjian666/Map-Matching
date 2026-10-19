@@ -15,6 +15,10 @@ source /opt/ros/noetic/setup.bash
 /usr/bin/python3 docs/p61_r10_geode_gyro_increment_audit/bind_gyro_bytes.py
 /usr/bin/python3 docs/p61_r10_geode_gyro_increment_audit/run_audit.py
 /usr/bin/python3 docs/p61_r10_geode_gyro_increment_audit/check_assets.py after
+/usr/bin/python3 -m unittest discover -s docs/p61_r10_geode_gyro_increment_audit/tests -v
+/usr/bin/python3 docs/p61_r10_geode_gyro_increment_audit/finalize_archive.py
+cd docs/p61_r10_geode_gyro_increment_audit
+sha256sum -c checksums.sha256
 ```
 
 Noetic sourcing provides offline Python bag/message definitions only; it does

@@ -66,3 +66,16 @@ semantics are unchanged. No second CLI invocation or fourth review cycle is
 authorized or performed. The final calculation uses a NEW committed code SHA,
 not the earlier package's source identity. The external review is a static code
 second opinion, not an independent validation of sensor values or results.
+
+Actual final run code: da24a7ef962f02f9478d64cf612f6792dab202b0.
+All real precursor/current measurement timestamps5154–5165 match exact scan ends.
+All111 decoded gyro triples match their original payload bytes and frozen ledger.
+Post-result tests add exact output scope/threshold/coverage assertions, independent
+scipy.linalg.expm reconstruction of all11 ZOH products, and unchanged before/after
+asset/input-pin checks. Complete final suite:21tests, all pass.
+
+Final code-quality review: small offline-only modules, explicit units/source
+distinctions, bounded input decode, streamed hashes, no installed dependencies,
+credentials, network-driven data, dynamic execution or runtime integration.
+Required review findings are repaired and guarded. Static metadata and physical
+sensor truth remain distinct. No production build/runtime test was run or claimed.
