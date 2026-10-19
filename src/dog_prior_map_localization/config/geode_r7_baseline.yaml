@@ -1,0 +1,101 @@
+# GEODE R7 adapter only. Existing estimator and CONTROL optimization kernels.
+geode:
+  scan_end_bridge_enable: true
+frames: {map_frame: camera_init, base_frame: livox_frame}
+topics:
+  imu: /imu/data
+  lidar: /geode/deskewed_points
+  lidar_msg_type: pointcloud2
+  odom_high_rate: /dog_livo/odom_high_rate
+  odom_corrected: /dog_livo/odom_corrected
+  ndt_odom: /dog_livo/ndt_odom
+  points_aligned: /geode/points_aligned
+map:
+  pcd_fallback_path: /home/jian/livox_ws/p61_r5_geode_runs/formal_mapping/frozen_map.pcd
+  tile_manifest_path: ''
+  voxel_size: 0.15
+  voxel_z_size: 0.15
+imu:
+  gravity: 9.809
+  initialize_gravity_from_imu: false
+  initialize_gyro_bias_from_imu: false
+  midpoint_interval_input_enable: true
+  max_dt: 0.05
+  publish_high_rate: true
+  publish_imu_propagate_alias: true
+  use_acc_for_position: true
+  velocity_damping: 0.98
+  acc_noise: 2.0
+  gyro_noise: 0.1
+  acc_bias_noise: 0.0001
+  gyro_bias_noise: 0.0001
+  history_keep_sec: 2.0
+ndt_observation:
+  enable: true
+  oosm_enable: true
+  oosm_max_alignment_sec: 0.02
+  apply_ratio: 1.0
+  z_apply_ratio: 1.0
+  roll_pitch_apply_ratio: 1.0
+  max_translation_correction: 2.0
+  max_rotation_correction_deg: 20.0
+  velocity_blend: 0.6
+  future_deferral_enable: false
+  oosm_fixed_lag_enable: false
+lidar_update:
+  deskew_enable: false
+  scan_reference_time: end
+  ndt_source_voxel_size: 0.25
+  ndt_source_voxel_z_size: 0.25
+  ndt_target_voxel_size: 0.15
+  ndt_target_voxel_z_size: 0.15
+  ndt_max_source_points: 1400
+  ndt_max_target_points: 0
+  scan_min_range: 0.5
+  scan_max_range: 80.0
+  scan_min_z: -1000000.0
+  scan_max_z: 1000000.0
+  ndt_max_iterations: 40
+  ndt_resolution: 0.8
+  ndt_step_size: 0.08
+  ndt_transformation_epsilon: 0.001
+  ndt_step_limit_enable: true
+  ndt_step_limit_max_translation: 0.5
+  ndt_step_limit_max_rotation_deg: 5.0
+  local_imu_rotation_prior_enable: false
+  experimental_ekf_translation_fallback_enable: false
+filter:
+  init_pos_std: 0.5
+  init_rot_std_deg: 5.0
+  init_vel_std: 0.5
+  init_bias_std: 0.05
+  experimental_covariance_stability_enable: false
+  experimental_square_root_covariance_enable: false
+deskew:
+  mode: ekf_imu_fastlio
+  input_topic: /geode/raw_points
+  output_topic: /geode/deskewed_points
+  point_time_field: time
+  expected_lidar_frame: livox_frame
+  reference_time: end
+  state_frame: imu
+  max_scan_duration_sec: 0.15
+  max_imu_gap_sec: 0.02
+  history_keep_sec: 2.0
+  max_pending_clouds: 8
+  experimental_scan_local_imu_enable: false
+  experimental_history_nominal_consistent_enable: false
+output:
+  publish_tf: true
+  ndt_publish_tf: false
+  publish_path: true
+  publish_filtered_points: true
+  publish_diagnostics: true
+  path_max_length: 5000
+  path_sample_rate_hz: 100.0
+  path_publish_rate_hz: 10.0
+mature_integration: {enable: false}
+mature_visual: {enable: false, time_adapter_enable: false}
+visual_initial_guess_enable: false
+coupled_mode: CONTROL
+coupled_causal_record_only_enable: false

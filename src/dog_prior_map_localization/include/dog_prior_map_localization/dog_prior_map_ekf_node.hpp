@@ -216,6 +216,9 @@ private:
   ros::Publisher pub_imu_propagate_;
   ros::Publisher pub_corr_;
   ros::Publisher pub_imu_deskew_cloud_;
+  ros::Publisher pub_scan_prediction_;
+  bool geode_scan_end_bridge_enable_ = false;
+  std::ofstream geode_fusion_csv_;
   ros::Publisher pub_path_high_;
   ros::Publisher pub_path_corr_;
   tf::TransformBroadcaster tf_broadcaster_;

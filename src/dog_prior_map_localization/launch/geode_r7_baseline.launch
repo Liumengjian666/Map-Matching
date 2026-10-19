@@ -1,0 +1,31 @@
+<launch>
+  <arg name="run_dir" default="/home/jian/livox_ws/p61_r7_geode_runs/formal" />
+  <arg name="input_dir" default="/home/jian/livox_ws/p61_r7_geode_runs/input" />
+  <arg name="rviz" default="true" />
+  <!-- ACK wall scheduling; all propagation and OOSM use sensor stamps. -->
+  <param name="use_sim_time" value="false" />
+  <rosparam command="load" file="$(find dog_prior_map_localization)/config/geode_r7_baseline.yaml" />
+  <rosparam command="load" file="$(arg input_dir)/initialization.yaml" />
+  <param name="output/ndt_determinism_csv_path" value="$(arg run_dir)/ndt_diagnostics.csv" />
+  <param name="output/runtime_csv_path" value="$(arg run_dir)/ndt_runtime.csv" />
+  <param name="output/ndt_diagnostics_csv_path" value="$(arg run_dir)/ndt_callbacks.csv" />
+  <param name="output/oosm_csv_path" value="$(arg run_dir)/oosm.csv" />
+  <param name="output/imu_deskew_csv_path" value="$(arg run_dir)/deskew.csv" />
+  <param name="output/ekf_prediction_diagnostics_csv_path" value="$(arg run_dir)/ekf_lineage.csv" />
+  <param name="output/geode_fusion_csv" value="$(arg run_dir)/fusion.csv" />
+  <param name="output/geometry_diagnostics_csv_path" value="$(arg run_dir)/geometry.csv" />
+  <node pkg="dog_prior_map_localization" type="dog_prior_map_ndt_node_cpp" name="dog_prior_map_ndt" output="screen" required="true">
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+  <node pkg="dog_prior_map_localization" type="dog_prior_map_ekf_node_cpp" name="dog_prior_map_ekf" output="screen" required="true">
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+  <node pkg="pcl_ros" type="pcd_to_pointcloud" name="geode_frozen_map_visualization" args="/home/jian/livox_ws/p61_r5_geode_runs/formal_mapping/frozen_map.pcd 0" output="screen">
+    <param name="frame_id" value="camera_init" /><remap from="cloud_pcd" to="/geode/frozen_map" />
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+  <node pkg="rviz" type="rviz" name="geode_r7_rviz" if="$(arg rviz)" output="screen"
+        args="-d $(find dog_prior_map_localization)/rviz/geode_r7_baseline.rviz">
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+</launch>

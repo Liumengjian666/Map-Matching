@@ -1,0 +1,75 @@
+Panels:
+  - Class: rviz/Displays
+    Name: Displays
+Visualization Manager:
+  Class: ''
+  Global Options:
+    Fixed Frame: camera_init
+    Background Color: 25; 25; 30
+  Displays:
+    - Class: rviz/PointCloud2
+      Name: Frozen non-GT prior map
+      Enabled: true
+      Topic: /geode/frozen_map
+      Size (Pixels): 2
+      Style: Points
+      Color Transformer: FlatColor
+      Color: 150; 150; 150
+      Alpha: 0.3
+      Value: true
+    - Class: rviz/PointCloud2
+      Name: Live scan-end Deskew
+      Enabled: true
+      Topic: /geode/deskewed_points
+      Size (Pixels): 3
+      Style: Points
+      Color Transformer: FlatColor
+      Color: 255; 210; 0
+      Value: true
+    - Class: rviz/PointCloud2
+      Name: Real NDT aligned scan
+      Enabled: true
+      Topic: /geode/points_aligned
+      Size (Pixels): 3
+      Style: Points
+      Color Transformer: FlatColor
+      Color: 255; 65; 80
+      Value: true
+    - Class: rviz/Path
+      Name: Causal IMU prediction
+      Enabled: true
+      Topic: /geode/prediction_path
+      Color: 0; 220; 255
+      Line Style: Lines
+      Line Width: 0.05
+      Value: true
+    - Class: rviz/Path
+      Name: NDT trajectory
+      Enabled: true
+      Topic: /dog_livo/ndt_path
+      Color: 30; 255; 50
+      Line Style: Lines
+      Line Width: 0.05
+      Value: true
+    - Class: rviz/Path
+      Name: EKF OOSM corrected
+      Enabled: true
+      Topic: /dog_livo/path_corrected
+      Color: 255; 140; 20
+      Line Style: Lines
+      Line Width: 0.05
+      Value: true
+    - Class: rviz/TF
+      Name: Real EKF TF
+      Enabled: true
+      Value: true
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Distance: 35
+      Pitch: 0.75
+      Yaw: 0.8
+      Focal Point: {X: 325, Y: 71, Z: 3}
+Window Geometry:
+  Width: 1250
+  Height: 850

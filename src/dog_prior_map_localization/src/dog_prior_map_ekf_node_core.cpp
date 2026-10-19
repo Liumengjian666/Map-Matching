@@ -106,6 +106,11 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
     deskew_mode_ = "legacy_prior_ndt_cv";
   }
   imu_deskew_enable_ = deskew_mode_ == "ekf_imu_fastlio";
+  geode_scan_end_bridge_enable_ = getParam<bool>("geode/scan_end_bridge_enable", false);
+  if (geode_scan_end_bridge_enable_ &&
+      (!imu_deskew_enable_ || getParam<std::string>("deskew/reference_time", "") != "end" ||
+       !oosm_enable_ || !ndt_observation_enable_ || square_root_covariance_enable_))
+    throw std::runtime_error("GEODE bridge requires scan-end IMU deskew and baseline dense OOSM");
   experimental_scan_local_imu_enable_ = getParam<bool>("deskew/experimental_scan_local_imu_enable", false);
   experimental_history_nominal_consistent_enable_ = getParam<bool>(
       "deskew/experimental_history_nominal_consistent_enable", false);
@@ -480,6 +485,14 @@ DogPriorMapEkfNode::DogPriorMapEkfNode() : nh_(), pnh_("~")
   if (imu_deskew_enable_)
   {
     pub_imu_deskew_cloud_ = nh_.advertise<sensor_msgs::PointCloud2>(deskew_output_topic_, 8);
+    if (geode_scan_end_bridge_enable_) {
+      pub_scan_prediction_ = nh_.advertise<geometry_msgs::PoseStamped>("/geode/scan_end_prediction", 8);
+      const auto path = getParam<std::string>("output/geode_fusion_csv", "");
+      if (path.empty() || std::ifstream(path).good()) throw std::runtime_error("GEODE fusion log must be fresh");
+      geode_fusion_csv_.open(path);
+      if (!geode_fusion_csv_) throw std::runtime_error("GEODE fusion log unavailable");
+      geode_fusion_csv_ << "measurement_ns,prediction_now_sec,final_now_sec,update_applied,update_ms\n";
+    }
     sub_imu_deskew_cloud_ = nh_.subscribe(deskew_input_topic_, deskew_input_subscriber_queue_size_,
         &DogPriorMapEkfNode::imuDeskewCloudCallback, this);
     ROS_INFO("[DogPriorMap C++] experimental IMU deskew mode=%s input=%s output=%s ref=%s T_imu_lidar=(%.3f %.3f %.3f)",

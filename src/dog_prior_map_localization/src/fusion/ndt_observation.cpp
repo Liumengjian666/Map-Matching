@@ -117,7 +117,15 @@ void DogPriorMapEkfNode::ndtObservationCallback(const nav_msgs::OdometryConstPtr
                             0.0, "FUTURE_OVER_LIMIT");
   }
 
+  const auto started = ros::WallTime::now();
+  const auto count_before = ndt_correction_count_;
   processNdtObservationLocked(msg);
+  if (geode_fusion_csv_.is_open()) {
+    geode_fusion_csv_ << std::setprecision(17) << msg->header.stamp.toNSec() << ',' << t_now << ','
+        << state_stamp_ << ',' << (ndt_correction_count_ > count_before) << ','
+        << (ros::WallTime::now()-started).toSec()*1000.0 << '\n';
+    geode_fusion_csv_.flush();
+  }
 }
 
 // 融合独立 NDT 节点的绝对位姿观测，同时用相邻观测估计并平滑速度。
@@ -262,6 +270,16 @@ void DogPriorMapEkfNode::processNdtObservationLocked(
     eraseStateHistoryAfter(rollback_stamp);
     restoreStateSnapshot(state_history_.at(rollback_index));
     state_stamp_ = rollback_stamp;
+    if (geode_scan_end_bridge_enable_ && t_ndt > state_stamp_) {
+      // One time-boundary repair: old code applied a scan-end measurement to
+      // the preceding IMU state. Advance that fragment with the real held
+      // head measurement (no future tail), using the SAME propagation kernel.
+      const Eigen::Vector3d held_acc = last_acc_measurement_;
+      const Eigen::Vector3d held_gyro = last_gyro_measurement_;
+      propagateImu(held_acc, held_gyro, t_ndt-state_stamp_);
+      state_stamp_ = t_ndt;
+      last_imu_time_ = t_ndt;
+    }
     oosm_active = true;
     oosm_result = "APPLIED";
     writeEkfPredictionLineage("OOSM_ROLLBACK", ros::Time::now().toSec(), 0,
@@ -301,7 +319,8 @@ void DogPriorMapEkfNode::processNdtObservationLocked(
   applyPoseCorrection(dp, dtheta);
   writeEkfPredictionLineage("NDT_CORRECTION_APPLIED", ros::Time::now().toSec(), 0,
                             t_ndt, t_now,
-                            oosm_active ? std::numeric_limits<double>::quiet_NaN() : state_stamp_,
+                            oosm_active && !geode_scan_end_bridge_enable_ ?
+                                std::numeric_limits<double>::quiet_NaN() : state_stamp_,
                             rollback_stamp, replay_imu_count,
                             std::isfinite(t_now) && std::isfinite(t_ndt) ?
                                 (t_now - t_ndt) * 1000.0 :
@@ -350,7 +369,7 @@ void DogPriorMapEkfNode::processNdtObservationLocked(
   if (oosm_active)
   {
     covariance_audit_.check("NDT_DAMPING", rollback_stamp, covariance_before_damping, P_);
-    saveStateSnapshot(rollback_stamp);
+    saveStateSnapshot(geode_scan_end_bridge_enable_ ? state_stamp_ : rollback_stamp);
     const auto replay_started = CovarianceClock::now();
     for (const auto &sample : replay_samples)
     {

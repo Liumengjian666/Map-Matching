@@ -76,6 +76,11 @@ void DogPriorMapEkfNode::imuDeskewCloudCallback(const sensor_msgs::PointCloud2Co
   const auto *y_field = findField(*msg, "y");
   const auto *z_field = findField(*msg, "z");
   const auto *time_field = findField(*msg, deskew_time_field_);
+  const auto *exact_time_field = findField(*msg, "offset_time");
+  if (geode_scan_end_bridge_enable_ && (!exact_time_field ||
+      exact_time_field->datatype != sensor_msgs::PointField::UINT32 || exact_time_field->count != 1 ||
+      exact_time_field->offset + sizeof(uint32_t) > msg->point_step))
+    throw std::runtime_error("GEODE requires original uint32 offset_time nanoseconds");
   if (!std::isfinite(scan_start) || msg->header.frame_id != deskew_expected_lidar_frame_ ||
       point_count == 0 || msg->point_step == 0 || msg->row_step < msg->width * msg->point_step ||
       msg->data.size() < static_cast<std::size_t>(msg->row_step) * msg->height ||
@@ -130,7 +135,22 @@ void DogPriorMapEkfNode::imuDeskewCloudCallback(const sensor_msgs::PointCloud2Co
     min_offset = std::min(min_offset, static_cast<double>(point_time));
     max_offset = std::max(max_offset, static_cast<double>(point_time));
   }
-  const double scan_end = scan_start + max_offset;
+  if (geode_scan_end_bridge_enable_) {
+    uint32_t lo = std::numeric_limits<uint32_t>::max(), hi = 0;
+    for (std::size_t i = 0; i < point_count; ++i) {
+      uint32_t ns;
+      const auto at = (i / msg->width) * msg->row_step + (i % msg->width) * msg->point_step + exact_time_field->offset;
+      std::memcpy(&ns, msg->data.data() + at, sizeof(ns));
+      lo = std::min(lo, ns); hi = std::max(hi, ns);
+    }
+    min_offset = lo * 1e-9; max_offset = hi * 1e-9;
+  }
+  double scan_end = scan_start + max_offset;
+  if (geode_scan_end_bridge_enable_) {
+    ros::Time exact_end;
+    exact_end.fromNSec(msg->header.stamp.toNSec() + static_cast<uint64_t>(std::llround(max_offset*1e9)));
+    scan_end = exact_end.toSec();
+  }
   if (!std::isfinite(min_offset) || !std::isfinite(max_offset) ||
       min_offset < -kPointTimeToleranceSec || max_offset < 0.0 ||
       max_offset > deskew_max_scan_duration_sec_)
@@ -267,6 +287,9 @@ void DogPriorMapEkfNode::processReadyImuDeskewCloudsLocked()
 
     sensor_msgs::PointCloud2 output = *pending.msg;
     if (deskew_reference_time_ == "end") output.header.stamp.fromSec(reference_stamp);
+    if (geode_scan_end_bridge_enable_)
+      output.header.stamp.fromNSec(pending.msg->header.stamp.toNSec() +
+          static_cast<uint64_t>(std::llround(pending.point_time_max * 1e9)));
     std::vector<double> displacements;
     displacements.reserve(pending.point_count);
     double displacement_sum = 0.0;
@@ -295,7 +318,16 @@ void DogPriorMapEkfNode::processReadyImuDeskewCloudsLocked()
         failure_reason = "nonfinite_point_or_time";
         break;
       }
-      const double point_stamp = pending.scan_start + static_cast<double>(point_time);
+      double point_stamp = pending.scan_start + static_cast<double>(point_time);
+      if (geode_scan_end_bridge_enable_) {
+        uint32_t ns;
+        const auto *offset = findField(*pending.msg, "offset_time");
+        const auto at = row * pending.msg->row_step + column * pending.msg->point_step + offset->offset;
+        std::memcpy(&ns, pending.msg->data.data() + at, sizeof(ns));
+        ros::Time exact_point;
+        exact_point.fromNSec(pending.msg->header.stamp.toNSec() + ns);
+        point_stamp = exact_point.toSec();
+      }
       if (point_stamp < pending.scan_start - kPointTimeToleranceSec ||
           point_stamp > pending.scan_end + kPointTimeToleranceSec)
       {
@@ -449,6 +481,22 @@ void DogPriorMapEkfNode::processReadyImuDeskewCloudsLocked()
           << ',' << local_boundary_m << ',' << local_boundary_deg << '\n';
       }
       scan_local_motion_csv_.flush();
+    }
+    if (geode_scan_end_bridge_enable_) {
+      // reference_pose is IMU-origin: explicitly convert to LiDAR before NDT.
+      Eigen::Isometry3d map_T_imu = Eigen::Isometry3d::Identity();
+      map_T_imu.linear() = reference_pose.R;
+      map_T_imu.translation() = reference_pose.p;
+      const Eigen::Isometry3d map_T_lidar = map_T_imu * T_imu_lidar_;
+      geometry_msgs::PoseStamped prediction;
+      prediction.header = output.header; prediction.header.frame_id = map_frame_;
+      prediction.pose.position.x = map_T_lidar.translation().x();
+      prediction.pose.position.y = map_T_lidar.translation().y();
+      prediction.pose.position.z = map_T_lidar.translation().z();
+      const Eigen::Quaterniond q(map_T_lidar.linear());
+      prediction.pose.orientation.x = q.x(); prediction.pose.orientation.y = q.y();
+      prediction.pose.orientation.z = q.z(); prediction.pose.orientation.w = q.w();
+      pub_scan_prediction_.publish(prediction);
     }
     pub_imu_deskew_cloud_.publish(output);
     writeImuDeskewDiagnostic(pending.scan_index, "PUBLISHED", "covered_and_deskewed",

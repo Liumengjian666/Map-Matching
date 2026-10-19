@@ -10,6 +10,7 @@
 #include <iomanip>
 #include <iterator>
 #include <limits>
+#include <map>
 #include <mutex>
 #include <set>
 #include <sstream>
@@ -190,6 +191,11 @@ public:
         coupled_mode_ != "WEAK_ONLY_FEEDBACK" && coupled_mode_ != "COUPLED_FEEDBACK")
       throw std::runtime_error("coupled_mode must be CONTROL, COUPLED_SHADOW, WEAK_ONLY_FEEDBACK, or COUPLED_FEEDBACK");
     coupled_enabled_ = coupled_mode_ != "CONTROL";
+    geode_scan_end_bridge_enable_ = getParam<bool>("geode/scan_end_bridge_enable", false);
+    if (geode_scan_end_bridge_enable_ && (coupled_enabled_ || deskew_enable_ ||
+        getParam<std::string>("deskew/reference_time", "") != "end" ||
+        getParam<std::string>("deskew/mode", "") != "ekf_imu_fastlio"))
+      throw std::runtime_error("GEODE bridge requires CONTROL and upstream scan-end IMU deskew");
     coupled_causal_record_only_enable_ = getParam<bool>(
         "coupled_causal_record_only_enable", false);
     coupled_causal_record_directory_ = getParam<std::string>(
@@ -505,6 +511,23 @@ public:
                                  &DogPriorMapNdtNode::livoxCallback, this);
     }
     sub_imu_ = nh_.subscribe(imu_topic_, 500, &DogPriorMapNdtNode::imuCallback, this);
+    if (geode_scan_end_bridge_enable_)
+      sub_scan_prediction_ = nh_.subscribe<geometry_msgs::PoseStamped>("/geode/scan_end_prediction", 8,
+          [this](const geometry_msgs::PoseStampedConstPtr &msg) {
+            std::lock_guard<std::mutex> lock(mutex_);
+            Eigen::Quaterniond q(msg->pose.orientation.w, msg->pose.orientation.x,
+                                  msg->pose.orientation.y, msg->pose.orientation.z);
+            if (msg->header.frame_id != map_frame_ || !q.coeffs().allFinite() ||
+                std::abs(q.norm()-1.0) > 1e-6)
+              throw std::runtime_error("invalid scan-end prediction frame/rotation");
+            Eigen::Matrix4d pose = Eigen::Matrix4d::Identity();
+            pose.block<3,3>(0,0) = q.normalized().toRotationMatrix();
+            pose.block<3,1>(0,3) = Eigen::Vector3d(msg->pose.position.x, msg->pose.position.y, msg->pose.position.z);
+            if (!validRigidPose(pose) || scan_end_predictions_.size() >= 8)
+              throw std::runtime_error("invalid/overflowed scan-end prediction");
+            scan_end_predictions_.emplace(msg->header.stamp.toNSec(), pose);
+            processPendingCloudsLocked();
+          });
     if (coupled_enabled_ || experimental_ekf_translation_fallback_enable_ ||
         coupled_causal_record_only_enable_)
     {
@@ -1619,6 +1642,12 @@ private:
   // 加载先验 PCD 地图，去除非法点并生成 NDT 使用的降采样目标点云。
   void loadMap()
   {
+    const auto load_started = ros::WallTime::now();
+    if (geode_scan_end_bridge_enable_) {
+      // Target cells are constructed by setInputTarget, not getResolution().
+      ndt_.setResolution(ndt_resolution_);
+      ndt_.setOulierRatio(0.55);
+    }
     if (local_map_enable_)
     {
       std::string error;
@@ -1651,6 +1680,14 @@ private:
     ndt_.setStepSize(ndt_step_size_);
     ndt_.setTransformationEpsilon(ndt_transformation_epsilon_);
     ndt_.setMaximumIterations(ndt_max_iterations_);
+    if (geode_scan_end_bridge_enable_) {
+      const auto leaf = ndt_.targetGridLeafSizeMeters();
+      for (float size : leaf)
+        if (size != static_cast<float>(0.8)) throw std::runtime_error("actual GEODE Gaussian grid is not 0.8m");
+      ROS_INFO("[GEODE] actual target_cells_ leaf=(%.9g %.9g %.9g), target=%zu", leaf[0],leaf[1],leaf[2],target_cloud_->size());
+      ROS_INFO("[GEODE] map load + preprocessing + Gaussian build %.6f ms",
+               (ros::WallTime::now()-load_started).toSec()*1000.0);
+    }
     if (!geometry_diagnostics_csv_path_.empty() && !local_map_enable_)
     {
       map_geometry_tree_.reset(new pcl::KdTreeFLANN<pcl::PointXYZ>());
@@ -1819,7 +1856,7 @@ private:
   {
     if (!cloud || cloud->empty()) return;
     std::lock_guard<std::mutex> lock(mutex_);
-    if (!local_imu_rotation_prior_enable_ && !coupled_enabled_ &&
+    if (!geode_scan_end_bridge_enable_ && !local_imu_rotation_prior_enable_ && !coupled_enabled_ &&
         !experimental_ekf_translation_fallback_enable_)
     {
       handleCloudLocked(cloud, timing.start_stamp, callback_start, timing, header_seq);
@@ -1864,6 +1901,7 @@ private:
     while (!pending_lidar_frames_.empty())
     {
       const PendingLidarFrame &front = pending_lidar_frames_.front();
+      if (geode_scan_end_bridge_enable_ && !scan_end_predictions_.count(front.reference_stamp.toNSec())) break;
       const bool imu_watermark_ready = !local_imu_rotation_prior_enable_ ||
           (has_imu_watermark_ && latest_imu_stamp_ >= front.reference_stamp);
       const bool ekf_watermark_ready = !(coupled_enabled_ || experimental_ekf_translation_fallback_enable_) ||
@@ -2197,6 +2235,14 @@ private:
         diagnostic_row.initial_guess_source = "causal_ekf_translation_imu_rotation";
         diagnostic_row.initial_guess_reason = diagnostic_row.ekf_translation_reason;
       }
+    }
+    if (geode_scan_end_bridge_enable_) {
+      const auto found = scan_end_predictions_.find(timing.reference_stamp.toNSec());
+      if (found == scan_end_predictions_.end()) throw std::runtime_error("missing exact scan-end prediction");
+      initial_guess = found->second;
+      scan_end_predictions_.erase(found);
+      diagnostic_row.initial_guess_source = "same_scan_end_ekf_deskew_prediction";
+      diagnostic_row.initial_guess_reason = "exact_stamp_before_ndt";
     }
     diagnostic_row.initial_guess = initial_guess;
 
@@ -2847,6 +2893,9 @@ private:
   ros::Subscriber sub_pc2_;
   ros::Subscriber sub_imu_;
   ros::Subscriber sub_ekf_high_rate_;
+  ros::Subscriber sub_scan_prediction_;
+  bool geode_scan_end_bridge_enable_ = false;
+  std::map<uint64_t, Eigen::Matrix4d> scan_end_predictions_;
   ros::Publisher pub_odom_;
   ros::Publisher pub_pose_;
   ros::Publisher pub_path_;
