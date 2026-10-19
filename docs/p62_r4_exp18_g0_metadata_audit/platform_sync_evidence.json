@@ -1,0 +1,12 @@
+{
+  "path": "/home/jian/livox_ws/p62_r1_source_cache/hilti_page.html",
+  "bytes": 41298,
+  "sha256": "9dad17cabe011d5014987f3150154e0b806210eb011ee26fdbbad1e4b74497bc",
+  "source": "https://hilti-challenge.com/dataset-2022",
+  "frozen_identity_source": "R1 source_manifest.json hilti_page.html",
+  "short_verbatim_fragments": [
+    "synchronized via PTP",
+    "aligned to within 1 ms"
+  ],
+  "qualification": "Official platform-level description; not an Exp18 session synchronization log or measured error certificate"
+}

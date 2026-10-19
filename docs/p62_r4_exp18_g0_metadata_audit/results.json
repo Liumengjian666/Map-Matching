@@ -1,0 +1,58 @@
+{
+  "task": "P62-R4-EXP18-G0-METADATA-AUDIT",
+  "result": "G0_BLOCKED_COORDINATE_CONTRACT",
+  "primary_blocker": "T_M_W and published GT I/base attitude semantics are not established",
+  "coexisting_blockers": [
+    "G0_BLOCKED_CALIBRATION_CONTRACT",
+    "G0_BLOCKED_TIME_CONTRACT"
+  ],
+  "asset_identity_status": "PASS_5_INPUTS_BEFORE_AFTER_UNCHANGED",
+  "bag_parseability_status": "PASS_ALL_66633_MESSAGES",
+  "e57_parseability_status": "PASS_ALL_285455240_POINTS_ALL_7_FIELDS_STREAMED",
+  "coordinate_contract_status": "COORDINATE_CONTRACT_NOT_ESTABLISHED",
+  "calibration_contract_status": "OFFICIAL_YAML_PRESENT_BUT_CONSUMER_SEMANTICS_NOT_ESTABLISHED",
+  "time_contract_status": "TIME_CONTRACT_NOT_ESTABLISHED",
+  "seconds_encoding_evidence": "SUPPORTED_BY_FIXED_OFFICIAL_FORMAT_AND_FULL_DATA; recording configuration NOT_CERTIFIED",
+  "hypothetical_imu_coverage": {
+    "NO_START_BRACKET": 1,
+    "COVERED": 1093
+  },
+  "first_scan_missing_imu_start_ns_if_seconds": 47303251,
+  "reference_independence_status": {
+    "dense": "CONDITIONAL_REGISTERED_REFERENCE",
+    "sparse": "SURVEY_DERIVED_POSITION_ONLY_WITH_REFERENCE_POINT_CONTRACT_OPEN",
+    "sparse_bag_supported": 3,
+    "sparse_dense_supported": 2,
+    "independent_dense_6dof_truth": false
+  },
+  "initialization_status": "INITIALIZATION_NOT_ESTABLISHED",
+  "storage_status": "PASS",
+  "git": {
+    "branch": "research/p62-r4-exp18-g0-metadata-audit",
+    "start_sha": "1b53e7a4164c1e2871c077a4a6f1362e8c228a23",
+    "actual_bag_e57_parser_code_sha": "954c49741f7c20b31a2dcb2459825bbb5ed70e97",
+    "postprocessor_source_sha256": "96fd708a37231d289bea558ae3bd1e3e9a1c88f0650d36763f5a783dc796877c",
+    "postprocessor_uncommitted_when_run": true,
+    "archive_end_sha": "Containing final local archive commit; supplied as full SHA in final handoff",
+    "queried_R3_remote_head": "1b53e7a4164c1e2871c077a4a6f1362e8c228a23",
+    "queried_R4_remote_ref": "NOT_FOUND",
+    "push_executed": false
+  },
+  "unique_GT_files_semantically_read": 2,
+  "unit_tests_passed": 11,
+  "boundary": {
+    "rosbag_play": 0,
+    "ros_localization_nodes": 0,
+    "ndt_align": 0,
+    "ekf_runs": 0,
+    "localization_trajectory_generation": 0,
+    "ate_rpe_or_pose_error_metrics": 0,
+    "clock_offset_search": 0,
+    "gyro_bias_fit": 0,
+    "GT_coordinate_fit": 0,
+    "production_code_changes": 0,
+    "hikvision_access": 0,
+    "external_model_cli": 0
+  },
+  "next": "Stop. Request a narrowly scoped official export/consumer contract clarification before any localization."
+}

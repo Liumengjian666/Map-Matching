@@ -1,0 +1,354 @@
+{
+  "scope": "P62-R4 metadata only",
+  "fixed_dataset_revision": "e62017f907007fdc5ab8c721842e4ae7359d7f49",
+  "fixed_inputs": [
+    {
+      "path": "/home/jian/livox_ws/p62_r3_exp18_recovery_data/assets/verified/rosbags/exp18_corridor_lower_gallery_2.bag",
+      "bytes": 8657654860,
+      "sha256": "98373b52f207b9ace3914792b5604a6642f89441190cabca6acbaf1d17249280",
+      "expected_bytes": 8657654860,
+      "expected_sha256": "98373b52f207b9ace3914792b5604a6642f89441190cabca6acbaf1d17249280",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r3_exp18_recovery_data/assets/verified/laser_scans/sheldonian_full.e57",
+      "bytes": 5447128064,
+      "sha256": "46575d3eaf3169a24e24ba0013cc48610125ac842d6745e5e8156c6aecc59756",
+      "expected_bytes": 5447128064,
+      "expected_sha256": "46575d3eaf3169a24e24ba0013cc48610125ac842d6745e5e8156c6aecc59756",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/ground_truth/exp18_corridor_lower_gallery_2_imu.txt",
+      "bytes": 88743,
+      "sha256": "138def6a40884a87372a4f18938cce5180d6aa7ad4e705349abf47ac4ec9fa32",
+      "expected_bytes": 88743,
+      "expected_sha256": "138def6a40884a87372a4f18938cce5180d6aa7ad4e705349abf47ac4ec9fa32",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/ground_truth/exp18_corridor_lower_gallery_2_imu_3dof.txt",
+      "bytes": 185,
+      "sha256": "13f963c4a2e9d583532051b581a19cf73ade0aadc83f530ea3e66c6d52036dec",
+      "expected_bytes": 185,
+      "expected_sha256": "13f963c4a2e9d583532051b581a19cf73ade0aadc83f530ea3e66c6d52036dec",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/calibration/calibration_files/lidar_calibration.yaml",
+      "bytes": 747,
+      "sha256": "ea5127989317270d83d9a701318d7e284031a21bd9cbf466b8f9f169547db43c",
+      "expected_bytes": 747,
+      "expected_sha256": "ea5127989317270d83d9a701318d7e284031a21bd9cbf466b8f9f169547db43c",
+      "status": "PASS"
+    }
+  ],
+  "source_snapshots": [
+    {
+      "path": "/home/jian/livox_ws/p62_r4_exp18_g0_metadata_audit_ws/docs/p62_r4_exp18_g0_metadata_audit/sources/hesai_point_types.h",
+      "bytes": 1527,
+      "sha256": "3ac35fd1a5c3079bde262f62eb5f16ee7121403788ef12f168f75cf76325be73",
+      "source": "https://raw.githubusercontent.com/HesaiTechnology/HesaiLidar_General_ROS/f574bb8a680e215a6ade9bf35e0898932b2a2234/src/HesaiLidar_General_SDK/src/PandarGeneralRaw/include/pandarGeneral/point_types.h"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r4_exp18_g0_metadata_audit_ws/docs/p62_r4_exp18_g0_metadata_audit/sources/hesai_internal.cc",
+      "bytes": 83937,
+      "sha256": "ea3f4a7026a959ea15ff69e191954a5b3ee87a9119ca3ee3ea7175cfc8915b1a",
+      "source": "https://raw.githubusercontent.com/HesaiTechnology/HesaiLidar_General_ROS/f574bb8a680e215a6ade9bf35e0898932b2a2234/src/HesaiLidar_General_SDK/src/PandarGeneralRaw/src/pandarGeneral_internal.cc"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r4_exp18_g0_metadata_audit_ws/docs/p62_r4_exp18_g0_metadata_audit/sources/hilti_readme.md",
+      "bytes": 4147,
+      "sha256": "c0793921dfde23fc5c03a7b1d6bae19e4f42b48fd6f36c4d41198dbb3809c5b6",
+      "source": "https://raw.githubusercontent.com/Hilti-Research/hilti-slam-challenge-2022/e4aacf7c111ab832a0bdffe3f069255454068540/README.md"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r4_exp18_g0_metadata_audit_ws/docs/p62_r4_exp18_g0_metadata_audit/sources/dataset_readme.md",
+      "bytes": 5332,
+      "sha256": "89763db991f485e29f9c9b704eee4aa8c9d280bd353804589fb96a79930755cb",
+      "source": "https://huggingface.co/datasets/Hilti-Research/hilti-slam-challenge-2022/resolve/e62017f907007fdc5ab8c721842e4ae7359d7f49/README.md"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r4_exp18_g0_metadata_audit_ws/docs/p62_r4_exp18_g0_metadata_audit/sources/phasma.urdf.xacro",
+      "bytes": 2022,
+      "sha256": "851d9371454fc5b096ff2468724cc8ef5ffb548b538900d2130b14aedd0ee216",
+      "source": "https://github.com/Hilti-Research/phasma_description/blob/79002026e9b229cf9b4e95a403eaec4f00acfd79/urdf/phasma.urdf.xacro"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r4_exp18_g0_metadata_audit_ws/docs/p62_r4_exp18_g0_metadata_audit/sources/phasma.urdf",
+      "bytes": 5471,
+      "sha256": "cbbe68e893e6f0646fe07d1e4f9a821bc0094116daf9259f89b144c841245654",
+      "source": "https://github.com/Hilti-Research/phasma_description/blob/79002026e9b229cf9b4e95a403eaec4f00acfd79/urdf/phasma.urdf"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r4_exp18_g0_metadata_audit_ws/docs/p62_r4_exp18_g0_metadata_audit/sources/20220322_calibration.yaml",
+      "bytes": 746,
+      "sha256": "2a04994055c8ccda3c87b19cfda8de3b46c41a6fdaaba00502c7b345e350bed7",
+      "source": "https://github.com/Hilti-Research/phasma_description/blob/79002026e9b229cf9b4e95a403eaec4f00acfd79/urdf/calibrations/20220322_calibration.yaml"
+    }
+  ],
+  "paper_cache_identities": [
+    {
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/hilti2022.pdf",
+      "bytes": 10034610,
+      "sha256": "be8adc1b551661fefa0d8c6478e304e43d730d6f0affbef63729c648f7712367",
+      "source": "https://arxiv.org/abs/2208.09825",
+      "role": "Existing official-paper cache; read only for reference methodology"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/hilti2022.txt",
+      "bytes": 58463,
+      "sha256": "eae0dda3e0320fc72d493f4ce363623d17edad00e508d9dc9a5ef006dc41143e",
+      "source": "https://arxiv.org/abs/2208.09825",
+      "role": "Existing official-paper cache; read only for reference methodology"
+    }
+  ],
+  "platform_page_identity": {
+    "path": "/home/jian/livox_ws/p62_r1_source_cache/hilti_page.html",
+    "bytes": 41298,
+    "sha256": "9dad17cabe011d5014987f3150154e0b806210eb011ee26fdbbad1e4b74497bc",
+    "source": "https://hilti-challenge.com/dataset-2022",
+    "frozen_identity_source": "R1 source_manifest.json hilti_page.html",
+    "short_verbatim_fragments": [
+      "synchronized via PTP",
+      "aligned to within 1 ms"
+    ],
+    "qualification": "Official platform-level description; not an Exp18 session synchronization log or measured error certificate"
+  },
+  "output_files": [
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/.gitignore",
+      "bytes": 32,
+      "sha256": "4d21bfccdadc6beeecb3216e768ec818eb9f6f095e830bcd2fef9ed332d3be6f"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/COORDINATE_AUDIT.md",
+      "bytes": 4264,
+      "sha256": "0ab1ef138ca614a9bec9fdc5d421fbc09c546da40bfb19d14e374ea7642f22af"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/PROTOCOL.md",
+      "bytes": 2018,
+      "sha256": "2627020132181bdb862af114e7c6e774114e0f993fb2bff3ed85b7a0fd6ab0a7"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/REPORT.md",
+      "bytes": 8329,
+      "sha256": "8a2dace2109da282b475d2e7fd4beb032ab0675caa7e71406f19724a3d1e24a8"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/TESTS_AND_REVIEW.md",
+      "bytes": 1354,
+      "sha256": "60811e99cb877bf8981c8e2b6edda428fb18f50247dc21f5ae6e64d2ad2a84c6"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/TIME_CONTRACT_AUDIT.md",
+      "bytes": 4432,
+      "sha256": "adbc1a50cc0158bf915ba37a04eca396d138fdbd90a814212d2b488214f75e9e"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/asset_identity_after.json",
+      "bytes": 1973,
+      "sha256": "7818d8c1209103e4941b1ee6a729ee67538154a2190fbb34f178028759fd7ab0"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/asset_identity_before.json",
+      "bytes": 1973,
+      "sha256": "7818d8c1209103e4941b1ee6a729ee67538154a2190fbb34f178028759fd7ab0"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/assets.py",
+      "bytes": 3145,
+      "sha256": "955f394f01107e341cb262188b5bbcab9c2e557fef67570c034acb5280817e7e"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/audit_math.py",
+      "bytes": 2683,
+      "sha256": "58763b5ad74e60018e55cf0aa9363c0a93da52bb4cc00f13a2e45c4f82d2c1ba"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/bag_audit.py",
+      "bytes": 8074,
+      "sha256": "9d8f482df6d67df5f248707269844a800e009a320760e37b3db5f8065e871b11"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/bag_progress.json",
+      "bytes": 98,
+      "sha256": "841a5548da99ea811243b7ab99e59a55c6d2b278b1447749885601f0ba0ac204"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/bag_summary.json",
+      "bytes": 1795,
+      "sha256": "dd917db42098c158eec7b10de53957f3dd5a291fca40a2a23c954e5944a15241"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/capture_sources.py",
+      "bytes": 3426,
+      "sha256": "6a77363e8163d45b2d92e681020eeb78483022456d4eaa7dd0d6a57bddf8b52e"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/coordinate_transform_chain.csv",
+      "bytes": 1924,
+      "sha256": "17377ef25773dbe5fbe9702fa46417d7d927a0cff0e297649d75fa669a61cfbe"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/derived_metadata.json",
+      "bytes": 7761,
+      "sha256": "695b6b9d05d31ad06468788272d6b8f54e695983939135712fabb6e5c7c4f890"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/e57_audit.py",
+      "bytes": 7160,
+      "sha256": "cf0fd6c071610ea7c90ed0e5c78847521070b468f7af5d7719de377177a5177d"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/e57_bounds_scope.csv",
+      "bytes": 612,
+      "sha256": "c5ae47c3874df7bd97bef5e0d6c0b91ff4b029eaf9dc5090c3faa2f3a164c23a"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/e57_progress.json",
+      "bytes": 107,
+      "sha256": "c0c37f17da32b1ee5e07cbf228a318d45c9131c619ed0ff7689911ef52701a1f"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/e57_scan_metadata.csv",
+      "bytes": 931,
+      "sha256": "b7238b18b90dd3c9d7578775ade5ca76c1abcad92ffab18765b07df0e11ccc7d"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/e57_structure.json",
+      "bytes": 1744,
+      "sha256": "a8b80d11ca9b34438eba6cd65ead7a26f74f80c78712865b3c0e34a3f61f389b"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/e57_summary.json",
+      "bytes": 507,
+      "sha256": "92ca2de13c5ef41e98fdff5e134af8ee5e15615f6b010079f996de2cfc579b2c"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/freeze_archive.py",
+      "bytes": 9122,
+      "sha256": "b14cd68aa61fe6ebf253ee6f6ebe6c7a47db0863e2707fbc7a7cc2f5c6d7e6ad"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/imu_coverage.csv",
+      "bytes": 160966,
+      "sha256": "0f25c77e0e5c01041af07c89668066c06eed4a31f6c01d884be8ac32fd49f70c"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/imu_timestamps.csv",
+      "bytes": 1833582,
+      "sha256": "b2962fafa4463376f03dbb7cb54180ce08a04197a7caa51411d557f6faae2bfe"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/initialization_provenance.md",
+      "bytes": 726,
+      "sha256": "0c75dbaae6683773fcb930469b17c9e5087424366f61be0a569ed015fb4c79af"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/parser_environment.json",
+      "bytes": 7828,
+      "sha256": "799e057bd7d3969a73c3fa567773cc2e939860dc5d121bcd5eee10dff14a1550"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/parser_identity_after.json",
+      "bytes": 3676,
+      "sha256": "8d5d81e45f077d2413b64d7c811828ad7dd0099b12d9279056022eeef6735f8a"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/parser_runtime_details.json",
+      "bytes": 486,
+      "sha256": "477b4c3d8ab5a8b17bfceb938bcaa01df2479038e36713d0f5d98e773d52bfdd"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/platform_sync_evidence.json",
+      "bytes": 521,
+      "sha256": "5be0b739d9a3237c5c7e5a1738f06b5b6f02a9f32b47f3c5ddf2f482d1daea3f"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/reference_eligibility.md",
+      "bytes": 2611,
+      "sha256": "df1c6447acb4473a460d9b05da931e4d9f2d984ee10d5a9d9e5b9bf1cd2bc2e0"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/reproduction_commands.md",
+      "bytes": 1474,
+      "sha256": "51369d962a5d9dee5aabac106e17d05e265d2a17b307c7d63d98615e8c3a9341"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/results.json",
+      "bytes": 2521,
+      "sha256": "b127cd3188c70c8953fc49ea95be4b331b9c73622ae904c905599c7909958953"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/scan_time_audit.csv",
+      "bytes": 428419,
+      "sha256": "0cb43bf1edd74e9d7081878f4ff5d930adac602514fb9c36a5e6c1248c8b3e67"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/sources/20220322_calibration.yaml",
+      "bytes": 746,
+      "sha256": "2a04994055c8ccda3c87b19cfda8de3b46c41a6fdaaba00502c7b345e350bed7"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/sources/dataset_readme.md",
+      "bytes": 5332,
+      "sha256": "89763db991f485e29f9c9b704eee4aa8c9d280bd353804589fb96a79930755cb"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/sources/hesai_internal.cc",
+      "bytes": 83937,
+      "sha256": "ea3f4a7026a959ea15ff69e191954a5b3ee87a9119ca3ee3ea7175cfc8915b1a"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/sources/hesai_point_types.h",
+      "bytes": 1527,
+      "sha256": "3ac35fd1a5c3079bde262f62eb5f16ee7121403788ef12f168f75cf76325be73"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/sources/hilti_readme.md",
+      "bytes": 4147,
+      "sha256": "c0793921dfde23fc5c03a7b1d6bae19e4f42b48fd6f36c4d41198dbb3809c5b6"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/sources/phasma.urdf",
+      "bytes": 5471,
+      "sha256": "cbbe68e893e6f0646fe07d1e4f9a821bc0094116daf9259f89b144c841245654"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/sources/phasma.urdf.xacro",
+      "bytes": 2022,
+      "sha256": "851d9371454fc5b096ff2468724cc8ef5ffb548b538900d2130b14aedd0ee216"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/sparse_label_audit.csv",
+      "bytes": 1365,
+      "sha256": "12159489a9beef9583bf2f28ec878607650f33fca8c1a15bd64e8445093c639f"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/storage_audit.json",
+      "bytes": 808,
+      "sha256": "c8cd0b53e18e73e44c654e688e26c90a706a110a661460f788794e83c99407bd"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/summarize_metadata.py",
+      "bytes": 9874,
+      "sha256": "96fd708a37231d289bea558ae3bd1e3e9a1c88f0650d36763f5a783dc796877c"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/tests/test_audit_math.py",
+      "bytes": 2622,
+      "sha256": "e51cf55e1d1e708aa972d48b7373c7024ebc670d156a91e9cb817e5c99e9489d"
+    },
+    {
+      "path": "docs/p62_r4_exp18_g0_metadata_audit/topic_inventory.csv",
+      "bytes": 2795,
+      "sha256": "b672d9fd464edec7cdb0e1fca499285198d0decde7d629ff409af1c34ec39b94"
+    }
+  ],
+  "scripts_identified_by_content": true,
+  "parser_runtime_commit": "954c49741f7c20b31a2dcb2459825bbb5ed70e97",
+  "raw_sensor_and_reference_files_unchanged": true,
+  "no_G0_pass_inferred_from_parser_success": true
+}

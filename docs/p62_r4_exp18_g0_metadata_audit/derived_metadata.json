@@ -1,0 +1,224 @@
+{
+  "reference": {
+    "unique_GT_files_semantically_read": 2,
+    "files": [
+      {
+        "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/ground_truth/exp18_corridor_lower_gallery_2_imu.txt",
+        "rows": 789,
+        "columns": 8,
+        "first_timestamp_ns": 1649856227723471000,
+        "last_timestamp_ns": 1649856314319139000,
+        "duplicate_timestamps": 0,
+        "backwards_steps": 0,
+        "last_four_column_norm_min": 0.9999999999347858,
+        "last_four_column_norm_max": 1.000000000065312,
+        "quaternion_order_and_pose_direction": "NOT_CERTIFIED",
+        "header_lines": []
+      },
+      {
+        "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/ground_truth/exp18_corridor_lower_gallery_2_imu_3dof.txt",
+        "rows": 3,
+        "columns": 8,
+        "first_timestamp_ns": 1649856228914359800,
+        "last_timestamp_ns": 1649856335680430200,
+        "duplicate_timestamps": 0,
+        "backwards_steps": 0,
+        "last_four_column_norm_min": 1.0,
+        "last_four_column_norm_max": 1.0,
+        "quaternion_order_and_pose_direction": "NOT_CERTIFIED",
+        "header_lines": [
+          "# timestamp_s id x y z "
+        ]
+      }
+    ],
+    "dense_eligibility": "CONDITIONAL_REGISTERED_REFERENCE",
+    "sparse_eligibility": "SURVEY_DERIVED_POSITION_ONLY_WITH_REFERENCE_POINT_CONTRACT_OPEN",
+    "sparse_labels": [
+      {
+        "label_row_1based": 1,
+        "timestamp_decimal_s": "1649856228.9143598",
+        "timestamp_ns": 1649856228914359800,
+        "position_column_1": "106.9352",
+        "position_column_2": "33.96815",
+        "position_column_3": "-0.0497",
+        "bag_record_support": true,
+        "imu_bracket_support": "COVERED",
+        "dense_reference_time_support": true,
+        "corresponding_ordered_bag_marker_candidate": "P30",
+        "marker_record_ns": 1649856228914359853,
+        "marker_record_minus_text_time_ns": 53,
+        "association_limit": "Ordered marker/time association; no textual ID in GT body; no nearest scan substitution",
+        "sparse_orientation_last_four_columns": "0,0,0,1",
+        "orientation_used": false,
+        "reference_point_qualification": "IMU-labelled file; measurement_tip correction consumer NOT_CERTIFIED",
+        "map_reference_frame_qualification": "T_M_W_NOT_ESTABLISHED",
+        "position_errors_computed": false
+      },
+      {
+        "label_row_1based": 2,
+        "timestamp_decimal_s": "1649856287.0620654",
+        "timestamp_ns": 1649856287062065400,
+        "position_column_1": "112.3241",
+        "position_column_2": "33.5225",
+        "position_column_3": "1.57795",
+        "bag_record_support": true,
+        "imu_bracket_support": "COVERED",
+        "dense_reference_time_support": true,
+        "corresponding_ordered_bag_marker_candidate": "P7",
+        "marker_record_ns": 1649856287062065272,
+        "marker_record_minus_text_time_ns": -128,
+        "association_limit": "Ordered marker/time association; no textual ID in GT body; no nearest scan substitution",
+        "sparse_orientation_last_four_columns": "0,0,0,1",
+        "orientation_used": false,
+        "reference_point_qualification": "IMU-labelled file; measurement_tip correction consumer NOT_CERTIFIED",
+        "map_reference_frame_qualification": "T_M_W_NOT_ESTABLISHED",
+        "position_errors_computed": false
+      },
+      {
+        "label_row_1based": 3,
+        "timestamp_decimal_s": "1649856335.6804302",
+        "timestamp_ns": 1649856335680430200,
+        "position_column_1": "115.9635",
+        "position_column_2": "34.1852",
+        "position_column_3": "-0.8431",
+        "bag_record_support": true,
+        "imu_bracket_support": "COVERED",
+        "dense_reference_time_support": false,
+        "corresponding_ordered_bag_marker_candidate": "P36",
+        "marker_record_ns": 1649856335680430234,
+        "marker_record_minus_text_time_ns": 34,
+        "association_limit": "Ordered marker/time association; no textual ID in GT body; no nearest scan substitution",
+        "sparse_orientation_last_four_columns": "0,0,0,1",
+        "orientation_used": false,
+        "reference_point_qualification": "IMU-labelled file; measurement_tip correction consumer NOT_CERTIFIED",
+        "map_reference_frame_qualification": "T_M_W_NOT_ESTABLISHED",
+        "position_errors_computed": false
+      }
+    ],
+    "bag_time_support_ns": [
+      1649856227623466000,
+      1649856337028370317
+    ],
+    "pose_errors_computed": false
+  },
+  "e57_header": {
+    "signature": "ASTM-E57",
+    "version": [
+      1,
+      0
+    ],
+    "declared_physical_file_bytes": 5447128064,
+    "xml_physical_offset": 5447123768,
+    "xml_logical_length": 3620,
+    "page_size_bytes": 1024
+  },
+  "e57_T_M_S": [
+    [
+      -0.28059069558515914,
+      -0.9598275113022698,
+      -0.00010049043637283473,
+      112.229971
+    ],
+    [
+      0.9598275111280712,
+      -0.2805907035999258,
+      7.703889319195732e-05,
+      21.414423
+    ],
+    [
+      -0.00010214073137283502,
+      -7.483708880806968e-05,
+      0.9999999919833406,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "e57_pose_roundtrip_max_abs": 2.842170943040401e-14,
+  "e57_rotation_orthogonality_max_abs": 2.220446049250313e-16,
+  "e57_bounds_scope": [
+    {
+      "axis": "x",
+      "edge": "min",
+      "stored_cartesian_bound": -162.53662109375,
+      "decoded_scan_local_bound": -236.7252655029297,
+      "decoded_pose_applied_root_bound": -162.53660940171906,
+      "root_minus_stored_m": 1.1692030938093012e-05
+    },
+    {
+      "axis": "x",
+      "edge": "max",
+      "stored_cartesian_bound": 411.0055236816406,
+      "decoded_scan_local_bound": 295.1973571777344,
+      "decoded_pose_applied_root_bound": 411.005506110296,
+      "root_minus_stored_m": -1.7571344642419717e-05
+    },
+    {
+      "axis": "y",
+      "edge": "min",
+      "stored_cartesian_bound": -252.58599853515625,
+      "decoded_scan_local_bound": -295.8265380859375,
+      "decoded_pose_applied_root_bound": -252.5859952037494,
+      "root_minus_stored_m": 3.331406844608864e-06
+    },
+    {
+      "axis": "y",
+      "edge": "max",
+      "stored_cartesian_bound": 323.50494384765625,
+      "decoded_scan_local_bound": 296.1246032714844,
+      "decoded_pose_applied_root_bound": 323.5049442780962,
+      "root_minus_stored_m": 4.304399681132054e-07
+    },
+    {
+      "axis": "z",
+      "edge": "min",
+      "stored_cartesian_bound": -69.37488555908203,
+      "decoded_scan_local_bound": -69.40294647216797,
+      "decoded_pose_applied_root_bound": -69.3748835829476,
+      "root_minus_stored_m": 1.9761344276503223e-06
+    },
+    {
+      "axis": "z",
+      "edge": "max",
+      "stored_cartesian_bound": 79.808837890625,
+      "decoded_scan_local_bound": 79.79408264160156,
+      "decoded_pose_applied_root_bound": 79.80884181656918,
+      "root_minus_stored_m": 3.925944184857144e-06
+    }
+  ],
+  "total_lidar_points": 64227729,
+  "lidar_points_per_scan": {
+    "count": 1094,
+    "min": 52181.0,
+    "median": 58934.5,
+    "p95": 61790.7,
+    "max": 63013.0
+  },
+  "point_time_nonfinite_total": 0,
+  "xyz_nonfinite_scalar_total": 0,
+  "hypothetical_point_time_span_ns": {
+    "count": 1094,
+    "min": 96087933.0,
+    "median": 99996925.0,
+    "p95": 100753343.25,
+    "max": 103482962.0
+  },
+  "hypothetical_point_min_minus_header_ns": {
+    "count": 1094,
+    "min": 0.0,
+    "median": 861.5,
+    "p95": 989.0,
+    "max": 999.0
+  },
+  "hypothetical_coverage_counts": {
+    "NO_START_BRACKET": 1,
+    "COVERED": 1093
+  },
+  "first_scan_missing_start_ns_if_absolute_seconds": 47303251,
+  "formal_point_time_status": "SUPPORTED_SECONDS_ENCODING; RECORDING_DRIVER_PROVENANCE_AND_FIRST_SCAN_COVERAGE_OPEN",
+  "no_alignment_or_error_metrics": true
+}

@@ -1,0 +1,6 @@
+{
+  "messages_deserialized": 65000,
+  "lidar_scans": 1068,
+  "imu": 42585,
+  "completed": false
+}

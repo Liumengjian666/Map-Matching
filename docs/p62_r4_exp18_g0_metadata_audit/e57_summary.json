@@ -1,0 +1,18 @@
+{
+  "completed": true,
+  "error": null,
+  "scans_decoded": 1,
+  "decoded_points": 285455240,
+  "wall_s": 112.1073877250019,
+  "peak_RSS_KiB": 459356,
+  "capacity_points": 100000,
+  "whole_scan_arrays_used": false,
+  "pointcloud_exported": false,
+  "last_partial_progress": {
+    "completed": false,
+    "scan_index": 0,
+    "decoded_points": 285455240,
+    "declared_points": 285455240
+  },
+  "map_frame_definition": "E57 root frame after applying each stored scan pose; relation to GT world NOT assumed"
+}

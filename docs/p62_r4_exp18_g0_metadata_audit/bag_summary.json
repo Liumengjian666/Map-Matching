@@ -1,0 +1,84 @@
+{
+  "completed": true,
+  "messages_deserialized": 66633,
+  "scans": 1094,
+  "imu_messages": 43656,
+  "schemas": {
+    "4ddc0e0bed8998008bf5b9c3d5f69c82c61354b4e4f105bcddeecbc93186cb76": {
+      "topic": "/hesai/pandar",
+      "frame_id": "PandarXT-32",
+      "point_step": 48,
+      "is_bigendian": false,
+      "fields": [
+        {
+          "name": "x",
+          "datatype": 7,
+          "offset": 0,
+          "count": 1
+        },
+        {
+          "name": "y",
+          "datatype": 7,
+          "offset": 4,
+          "count": 1
+        },
+        {
+          "name": "z",
+          "datatype": 7,
+          "offset": 8,
+          "count": 1
+        },
+        {
+          "name": "intensity",
+          "datatype": 7,
+          "offset": 16,
+          "count": 1
+        },
+        {
+          "name": "timestamp",
+          "datatype": 8,
+          "offset": 24,
+          "count": 1
+        },
+        {
+          "name": "ring",
+          "datatype": 4,
+          "offset": 32,
+          "count": 1
+        }
+      ]
+    }
+  },
+  "imu_dt_ns": {
+    "count": 43655,
+    "min": 2473200.0,
+    "median": 2505000.0,
+    "p95": 2510100.0,
+    "max": 2535600.0
+  },
+  "imu_nonfinite_values": 0,
+  "imu_duplicate_timestamps": 0,
+  "imu_backwards_steps": 0,
+  "coverage_status_counts": {
+    "TIME_UNIT_NOT_CERTIFIED": 1094
+  },
+  "point_name_markers": [
+    {
+      "record_ns": 1649856228914359853,
+      "data": "P30"
+    },
+    {
+      "record_ns": 1649856287062065272,
+      "data": "P7"
+    },
+    {
+      "record_ns": 1649856335680430234,
+      "data": "P36"
+    }
+  ],
+  "wall_s": 41.604267840011744,
+  "peak_RSS_KiB": 459356,
+  "point_time_interpretation_not_certified_by_numeric_agreement_alone": true,
+  "quantiles": "numpy linear interpolation",
+  "no_ros_publication": true
+}

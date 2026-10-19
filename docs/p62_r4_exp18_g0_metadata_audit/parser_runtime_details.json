@@ -1,0 +1,10 @@
+{
+  "python": "3.8.10 (default, Mar 18 2025, 20:04:55) \n[GCC 9.4.0]",
+  "platform": "Linux-5.15.0-139-generic-x86_64-with-glibc2.29",
+  "rosbag_package_version": "1.17.4",
+  "rosbag_package_xml_sha256": "b90dd25388725bce06bfedaaaf999d73349a16233b79c6666982f4aa292d5935",
+  "libe57_reader_library_id": "pye57-0.4.5",
+  "e57_file_writer_library_id": "E57Format-2.1.0-x86_64-linux-gcc7",
+  "reader_and_writer_not_conflated": true,
+  "parser_software_files_before_after_unchanged": true
+}

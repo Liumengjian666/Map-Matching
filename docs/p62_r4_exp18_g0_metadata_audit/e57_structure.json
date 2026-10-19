@@ -1,0 +1,65 @@
+{
+  "formatName": "ASTM E57 3D Imaging Data File",
+  "guid": "{68a07a98-0a60-42db-96c6-d38a9385e0eb}",
+  "versionMajor": 1,
+  "versionMinor": 0,
+  "e57LibraryVersion": "E57Format-2.1.0-x86_64-linux-gcc7",
+  "coordinateMetadata": "",
+  "creationDateTime": {
+    "dateTimeValue": 0.0,
+    "isAtomicClockReferenced": 0
+  },
+  "data3D": {
+    "0": {
+      "pose": {
+        "rotation": {
+          "w": 0.5997538229970393,
+          "x": -6.330763397267112e-05,
+          "y": 6.879051607181e-07,
+          "z": 0.8001845710785146
+        },
+        "translation": {
+          "x": 112.229971,
+          "y": 21.414423,
+          "z": 0.0
+        }
+      },
+      "guid": "{43b7dc0c-3cdd-4115-803a-ec50a88d9dab}",
+      "name": "1",
+      "description": "Created by CloudCompare v2.11.1 (Anoia)",
+      "intensityLimits": {
+        "intensityMinimum": 5000.0,
+        "intensityMaximum": 5099520.0
+      },
+      "colorLimits": {
+        "colorRedMinimum": 0,
+        "colorRedMaximum": 255,
+        "colorGreenMinimum": 0,
+        "colorGreenMaximum": 255,
+        "colorBlueMinimum": 0,
+        "colorBlueMaximum": 255
+      },
+      "cartesianBounds": {
+        "xMinimum": -162.53662109375,
+        "xMaximum": 411.0055236816406,
+        "yMinimum": -252.58599853515625,
+        "yMaximum": 323.50494384765625,
+        "zMinimum": -69.37488555908203,
+        "zMaximum": 79.808837890625
+      },
+      "points": {
+        "compressed_vector_count": 285455240,
+        "prototype": {
+          "cartesianX": 124.23445,
+          "cartesianY": 35.459473,
+          "cartesianZ": 5.2169762,
+          "intensity": 5000.0,
+          "colorRed": 0,
+          "colorGreen": 0,
+          "colorBlue": 0
+        }
+      }
+    }
+  },
+  "images2D": {}
+}

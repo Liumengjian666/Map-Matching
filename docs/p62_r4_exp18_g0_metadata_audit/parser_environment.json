@@ -1,0 +1,151 @@
+{
+  "python": "3.8.10 (default, Mar 18 2025, 20:04:55) \n[GCC 9.4.0]",
+  "executable": "/usr/bin/python3",
+  "rosbag_path": "/opt/ros/noetic/lib/python3/dist-packages/rosbag/__init__.py",
+  "numpy_version": "1.24.4",
+  "pyquaternion_version": "0.9.9",
+  "yaml_version": "6.0.3",
+  "pye57_version": "0.4.5",
+  "pye57_files": [
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/parser/pye57/__init__.py",
+      "bytes": 92,
+      "sha256": "a7eca8eba11b969ea621529aba9b92d44dc140608d66b23de80a6aa05bac3a2f",
+      "source": "Existing R2 isolated target; no R4 installation"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/parser/pye57/__version__.py",
+      "bytes": 22,
+      "sha256": "12b90b908d930c15f5388aa2d8619adb408f7aee1972e9448be5df7d16cb53a3",
+      "source": "Existing R2 isolated target; no R4 installation"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/parser/pye57/e57.py",
+      "bytes": 18528,
+      "sha256": "ab496c7c8d7db2b78ec776081059fe9560da492b5eccf1b09f9954cf1821db44",
+      "source": "Existing R2 isolated target; no R4 installation"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/parser/pye57/exception.py",
+      "bytes": 47,
+      "sha256": "8633419c37fe3c9ac12d4ec4f1a0255a59746a8bd5213c2326837d7b1e0bc77a",
+      "source": "Existing R2 isolated target; no R4 installation"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/parser/pye57/libe57.cpython-38-x86_64-linux-gnu.so",
+      "bytes": 36952761,
+      "sha256": "d4b951a4eecc11cbdfc595f260fee8790778b8aa0ada3f265c00fe4671686831",
+      "source": "Existing R2 isolated target; no R4 installation"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/parser/pye57/scan_header.py",
+      "bytes": 5825,
+      "sha256": "7d2afca9df053deb0be530b6dc1d148cce802b49a6cd9feee191afbc180d5948",
+      "source": "Existing R2 isolated target; no R4 installation"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/parser/pye57/utils.py",
+      "bytes": 4181,
+      "sha256": "2ef073efe2d6dc4f56346bbb7366aeaeaad78be882768ad8f952c011c4ca19b5",
+      "source": "Existing R2 isolated target; no R4 installation"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/parser/pye57-0.4.5.dist-info/INSTALLER",
+      "bytes": 4,
+      "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508",
+      "source": "Existing R2 isolated target; no R4 installation"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/parser/pye57-0.4.5.dist-info/LICENSE",
+      "bytes": 1050,
+      "sha256": "7e4eba8170c2d4e56bba2c744c9ead1861fabda3ff54ecc13c44d9df1c6732c6",
+      "source": "Existing R2 isolated target; no R4 installation"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/parser/pye57-0.4.5.dist-info/METADATA",
+      "bytes": 4217,
+      "sha256": "df584511ce3b634958b2b4ebf9b962deaf62172fb65c12ee5b8103722f6e8904",
+      "source": "Existing R2 isolated target; no R4 installation"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/parser/pye57-0.4.5.dist-info/RECORD",
+      "bytes": 1471,
+      "sha256": "628b9c7f94018ab8b74752fa15cc8ec26898f11d8eb821c3b38c404b46d32597",
+      "source": "Existing R2 isolated target; no R4 installation"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/parser/pye57-0.4.5.dist-info/REQUESTED",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source": "Existing R2 isolated target; no R4 installation"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/parser/pye57-0.4.5.dist-info/WHEEL",
+      "bytes": 148,
+      "sha256": "2f4001067c4eff129147fc13ccced65965fc4517dd2912be7d9e5add91210ea4",
+      "source": "Existing R2 isolated target; no R4 installation"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/parser/pye57-0.4.5.dist-info/top_level.txt",
+      "bytes": 6,
+      "sha256": "c43f470f343705f18cbb3d64236b8d294474297711f91b4d10a8a0ae4878f0d9",
+      "source": "Existing R2 isolated target; no R4 installation"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/parser/pye57.libs/libxerces-c-3-bf000f70.2.so",
+      "bytes": 26722041,
+      "sha256": "0b723c50fbd7a1bdb063e94a4d103b80c57ddcb925386fe45c97d0c82f0e6c41",
+      "source": "Existing R2 isolated target; no R4 installation"
+    }
+  ],
+  "new_packages_installed": false,
+  "new_venv_created": false,
+  "original_wheel_file": "NOT_RETAINED_IN_EXISTING_R2_TARGET; installed-file SHA256 recorded instead",
+  "driver_snapshot_commit": "f574bb8a680e215a6ade9bf35e0898932b2a2234",
+  "actual_recording_driver_commit": "NOT_CERTIFIED",
+  "sources": [
+    {
+      "path": "/home/jian/livox_ws/p62_r4_exp18_g0_metadata_audit_ws/docs/p62_r4_exp18_g0_metadata_audit/sources/hesai_point_types.h",
+      "bytes": 1527,
+      "sha256": "3ac35fd1a5c3079bde262f62eb5f16ee7121403788ef12f168f75cf76325be73",
+      "source": "https://raw.githubusercontent.com/HesaiTechnology/HesaiLidar_General_ROS/f574bb8a680e215a6ade9bf35e0898932b2a2234/src/HesaiLidar_General_SDK/src/PandarGeneralRaw/include/pandarGeneral/point_types.h"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r4_exp18_g0_metadata_audit_ws/docs/p62_r4_exp18_g0_metadata_audit/sources/hesai_internal.cc",
+      "bytes": 83937,
+      "sha256": "ea3f4a7026a959ea15ff69e191954a5b3ee87a9119ca3ee3ea7175cfc8915b1a",
+      "source": "https://raw.githubusercontent.com/HesaiTechnology/HesaiLidar_General_ROS/f574bb8a680e215a6ade9bf35e0898932b2a2234/src/HesaiLidar_General_SDK/src/PandarGeneralRaw/src/pandarGeneral_internal.cc"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r4_exp18_g0_metadata_audit_ws/docs/p62_r4_exp18_g0_metadata_audit/sources/hilti_readme.md",
+      "bytes": 4147,
+      "sha256": "c0793921dfde23fc5c03a7b1d6bae19e4f42b48fd6f36c4d41198dbb3809c5b6",
+      "source": "https://raw.githubusercontent.com/Hilti-Research/hilti-slam-challenge-2022/e4aacf7c111ab832a0bdffe3f069255454068540/README.md"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r4_exp18_g0_metadata_audit_ws/docs/p62_r4_exp18_g0_metadata_audit/sources/dataset_readme.md",
+      "bytes": 5332,
+      "sha256": "89763db991f485e29f9c9b704eee4aa8c9d280bd353804589fb96a79930755cb",
+      "source": "https://huggingface.co/datasets/Hilti-Research/hilti-slam-challenge-2022/resolve/e62017f907007fdc5ab8c721842e4ae7359d7f49/README.md"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r4_exp18_g0_metadata_audit_ws/docs/p62_r4_exp18_g0_metadata_audit/sources/phasma.urdf.xacro",
+      "bytes": 2022,
+      "sha256": "851d9371454fc5b096ff2468724cc8ef5ffb548b538900d2130b14aedd0ee216",
+      "source": "https://github.com/Hilti-Research/phasma_description/blob/79002026e9b229cf9b4e95a403eaec4f00acfd79/urdf/phasma.urdf.xacro"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r4_exp18_g0_metadata_audit_ws/docs/p62_r4_exp18_g0_metadata_audit/sources/phasma.urdf",
+      "bytes": 5471,
+      "sha256": "cbbe68e893e6f0646fe07d1e4f9a821bc0094116daf9259f89b144c841245654",
+      "source": "https://github.com/Hilti-Research/phasma_description/blob/79002026e9b229cf9b4e95a403eaec4f00acfd79/urdf/phasma.urdf"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r4_exp18_g0_metadata_audit_ws/docs/p62_r4_exp18_g0_metadata_audit/sources/20220322_calibration.yaml",
+      "bytes": 746,
+      "sha256": "2a04994055c8ccda3c87b19cfda8de3b46c41a6fdaaba00502c7b345e350bed7",
+      "source": "https://github.com/Hilti-Research/phasma_description/blob/79002026e9b229cf9b4e95a403eaec4f00acfd79/urdf/calibrations/20220322_calibration.yaml"
+    }
+  ],
+  "high_level_pye57_constructor_used": false
+}
