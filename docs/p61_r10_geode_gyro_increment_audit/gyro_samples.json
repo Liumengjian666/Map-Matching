@@ -1,0 +1,1242 @@
+{
+  "topic": "/imu/data",
+  "message_type": "sensor_msgs/Imu",
+  "frame_id": "imu_link",
+  "gyro_field": "angular_velocity",
+  "gyro_units": "rad/s per sensor_msgs/Imu contract, used unchanged by R8",
+  "time_contract": "original ROS header epoch ns; input writer uses record=header; no device timebase",
+  "window_start_ns": 1706671804799723787,
+  "window_end_ns": 1706671805899593546,
+  "decoded_first_ns": 1706671804791549444,
+  "decoded_last_ns": 1706671805892444849,
+  "decoded_count": 111,
+  "samples": [
+    {
+      "stamp_ns": 1706671804791549444,
+      "gyro_radps": [
+        -0.06986671686172485,
+        -0.2688107788562775,
+        -2.146777629852295
+      ],
+      "serialized_sha256": "240bc60ee36cbcae3443645fb338dab9f984461493be9d27ef6d45c18d1375e9",
+      "frame_id": "imu_link",
+      "original_header_seq": 62126
+    },
+    {
+      "stamp_ns": 1706671804802015781,
+      "gyro_radps": [
+        -0.09488283097743988,
+        -0.28139504790306097,
+        -2.1629331111907963
+      ],
+      "serialized_sha256": "1a829e0d07b22bc7e203454aeda04470b790402c69f1d22efeb37a8ef63fc046",
+      "frame_id": "imu_link",
+      "original_header_seq": 62127
+    },
+    {
+      "stamp_ns": 1706671804812498569,
+      "gyro_radps": [
+        -0.08816774189472198,
+        -0.3072521388530732,
+        -2.189140796661377
+      ],
+      "serialized_sha256": "f09ac9200ad31cadea6bf1e80766e603ec118c98a52fd9fa1f4b16c68f349378",
+      "frame_id": "imu_link",
+      "original_header_seq": 62128
+    },
+    {
+      "stamp_ns": 1706671804822134733,
+      "gyro_radps": [
+        -0.09901319444179535,
+        -0.33058667182922363,
+        -2.2079117298126225
+      ],
+      "serialized_sha256": "c6b28d3bf6520bb0530344dd9ced5682610daae2bac2635b318d8360b45e5ff3",
+      "frame_id": "imu_link",
+      "original_header_seq": 62129
+    },
+    {
+      "stamp_ns": 1706671804832343816,
+      "gyro_radps": [
+        -0.08838080614805223,
+        -0.34137046337127686,
+        -2.2188160419464116
+      ],
+      "serialized_sha256": "2832f8ac35d1ede205ca5bd856048ac458806fb3852ba32b2f257773812c5c2e",
+      "frame_id": "imu_link",
+      "original_header_seq": 62130
+    },
+    {
+      "stamp_ns": 1706671804841739177,
+      "gyro_radps": [
+        -0.07418764382600786,
+        -0.3519037365913391,
+        -2.2299461364746094
+      ],
+      "serialized_sha256": "1ef0cc55ff76bc01b3df413d58e655ac0e4806acd0fbab986ac4226e459382c4",
+      "frame_id": "imu_link",
+      "original_header_seq": 62131
+    },
+    {
+      "stamp_ns": 1706671804852340221,
+      "gyro_radps": [
+        -0.06226533651351929,
+        -0.33433923125267034,
+        -2.2372350692749023
+      ],
+      "serialized_sha256": "29db883c48a8c69becd24407e39d5ac8ec4681483c81e898252a7ea1516b5f3d",
+      "frame_id": "imu_link",
+      "original_header_seq": 62132
+    },
+    {
+      "stamp_ns": 1706671804861790895,
+      "gyro_radps": [
+        -0.061677243560552604,
+        -0.3196495473384858,
+        -2.2421317100524902
+      ],
+      "serialized_sha256": "77fe00560f6def63eaa9f58fc0614c632cc0ea809bba2a262256ab5bbdf0fe45",
+      "frame_id": "imu_link",
+      "original_header_seq": 62133
+    },
+    {
+      "stamp_ns": 1706671804872335433,
+      "gyro_radps": [
+        -0.07560081779956818,
+        -0.32007762789726263,
+        -2.2429685592651367
+      ],
+      "serialized_sha256": "f99349327295647e9cb26e22125ac32dc919cc2ad60016462c90188b076c09d8",
+      "frame_id": "imu_link",
+      "original_header_seq": 62134
+    },
+    {
+      "stamp_ns": 1706671804881794452,
+      "gyro_radps": [
+        -0.08348091691732408,
+        -0.31414538621902466,
+        -2.248049259185791
+      ],
+      "serialized_sha256": "e40d3b9088a7fa3453381b8d1c83697a24ab1b64ff1e30926658135867e39032",
+      "frame_id": "imu_link",
+      "original_header_seq": 62135
+    },
+    {
+      "stamp_ns": 1706671804892311334,
+      "gyro_radps": [
+        -0.09487330913543701,
+        -0.3289268910884858,
+        -2.2429213523864746
+      ],
+      "serialized_sha256": "ced063072a1c7a350cd4bf247891a8ac85417717436afa852b01e43a906191ef",
+      "frame_id": "imu_link",
+      "original_header_seq": 62136
+    },
+    {
+      "stamp_ns": 1706671804901688575,
+      "gyro_radps": [
+        -0.07831370830535889,
+        -0.35023194551467896,
+        -2.2325160503387456
+      ],
+      "serialized_sha256": "4a6534dea5280b2c7ee9aa0634a1cde014e5f3e7b668b9cd617f2302802fe2cc",
+      "frame_id": "imu_link",
+      "original_header_seq": 62137
+    },
+    {
+      "stamp_ns": 1706671804912141799,
+      "gyro_radps": [
+        -0.06183151528239251,
+        -0.3447530269622803,
+        -2.225568056106568
+      ],
+      "serialized_sha256": "77cb37eb03ad6766d65eef4e281209c143f844584c071e70ad58ba35c4cc5da7",
+      "frame_id": "imu_link",
+      "original_header_seq": 62138
+    },
+    {
+      "stamp_ns": 1706671804922604322,
+      "gyro_radps": [
+        -0.04929991066455841,
+        -0.33125957846641546,
+        -2.2063810825347905
+      ],
+      "serialized_sha256": "9e03d0a51b4dd9b8ee8a833663be6faa5d205d060f55300652bb53411c700804",
+      "frame_id": "imu_link",
+      "original_header_seq": 62139
+    },
+    {
+      "stamp_ns": 1706671804931963205,
+      "gyro_radps": [
+        -0.05064567551016808,
+        -0.3206818103790283,
+        -2.1938765048980717
+      ],
+      "serialized_sha256": "0c57bf2bdc045053be4411c5a296a7ae39eca42c9bd8e2f8925dd110db231e48",
+      "frame_id": "imu_link",
+      "original_header_seq": 62140
+    },
+    {
+      "stamp_ns": 1706671804942427158,
+      "gyro_radps": [
+        -0.05651530623435974,
+        -0.322601318359375,
+        -2.187388181686402
+      ],
+      "serialized_sha256": "f6f34d67a9adf8aa73f4d14422c8576c73d694c99f331676c2a84cc795eaf3df",
+      "frame_id": "imu_link",
+      "original_header_seq": 62141
+    },
+    {
+      "stamp_ns": 1706671804952387809,
+      "gyro_radps": [
+        -0.0789841338992119,
+        -0.32534295320510864,
+        -2.159549474716187
+      ],
+      "serialized_sha256": "8dc2f361bea58b7c3e726f3b8dc62d4acd9e15c5248d1b7c09d19f6a8ec3c5d6",
+      "frame_id": "imu_link",
+      "original_header_seq": 62142
+    },
+    {
+      "stamp_ns": 1706671804961585521,
+      "gyro_radps": [
+        -0.05835266411304474,
+        -0.34103199839591986,
+        -2.1245400905609135
+      ],
+      "serialized_sha256": "b3a2bd1c02fad286a07402399ed10e6d37aa1d2569a0ce5c9ed97336c61d36f1",
+      "frame_id": "imu_link",
+      "original_header_seq": 62143
+    },
+    {
+      "stamp_ns": 1706671804972073316,
+      "gyro_radps": [
+        -0.05459661409258843,
+        -0.34572815895080566,
+        -2.084112882614136
+      ],
+      "serialized_sha256": "a05932c383c7321077f051510569b50838cf77d6e3597af5e4b420560f0e1382",
+      "frame_id": "imu_link",
+      "original_header_seq": 62144
+    },
+    {
+      "stamp_ns": 1706671804982553005,
+      "gyro_radps": [
+        -0.04338212683796883,
+        -0.3514224588871003,
+        -2.0601253509521484
+      ],
+      "serialized_sha256": "7c2d9aa354f4a1bf6702612cfb11679d1ded9ad65aa4176baecda641fb2ae3a5",
+      "frame_id": "imu_link",
+      "original_header_seq": 62145
+    },
+    {
+      "stamp_ns": 1706671804991974353,
+      "gyro_radps": [
+        -0.04986985772848129,
+        -0.3688137233257294,
+        -2.0190200805664062
+      ],
+      "serialized_sha256": "d90a046d3d6e9efb12b959d95250cb55bbe106d0c83009422fba76a4fa17bce8",
+      "frame_id": "imu_link",
+      "original_header_seq": 62146
+    },
+    {
+      "stamp_ns": 1706671805002409219,
+      "gyro_radps": [
+        -0.053465615957975395,
+        -0.3712640404701233,
+        -1.972696304321289
+      ],
+      "serialized_sha256": "a340294b8cd93610097bd8636628a556459b57b6e28eb1e0619cf2c910251bad",
+      "frame_id": "imu_link",
+      "original_header_seq": 62147
+    },
+    {
+      "stamp_ns": 1706671805011844396,
+      "gyro_radps": [
+        -0.05341826379299164,
+        -0.3681310117244721,
+        -1.9098584651947021
+      ],
+      "serialized_sha256": "775a381e67a1a90ebb6acb9aa0182e87e7a28e857c5fe40805fe1efb345b1867",
+      "frame_id": "imu_link",
+      "original_header_seq": 62148
+    },
+    {
+      "stamp_ns": 1706671805022294044,
+      "gyro_radps": [
+        -0.057520791888237,
+        -0.3646387457847595,
+        -1.8665860891342165
+      ],
+      "serialized_sha256": "7fffda3334055cb23d8c9512c10eb3abcf72fd1bd1d37c2f7380525fdea6c90d",
+      "frame_id": "imu_link",
+      "original_header_seq": 62149
+    },
+    {
+      "stamp_ns": 1706671805031712293,
+      "gyro_radps": [
+        -0.08224233239889146,
+        -0.3828469514846802,
+        -1.8303598165512087
+      ],
+      "serialized_sha256": "030ae4db5ce332667c62dc45ec2b65f927714029baac65831ffb65ce754f165e",
+      "frame_id": "imu_link",
+      "original_header_seq": 62150
+    },
+    {
+      "stamp_ns": 1706671805042109489,
+      "gyro_radps": [
+        -0.10691853612661363,
+        -0.41570329666137695,
+        -1.7893359661102295
+      ],
+      "serialized_sha256": "62bc69e4faf5361b98428975ade45a41a651f191a4b7c41e3d72ed347029b701",
+      "frame_id": "imu_link",
+      "original_header_seq": 62151
+    },
+    {
+      "stamp_ns": 1706671805052889823,
+      "gyro_radps": [
+        -0.11879877001047136,
+        -0.44412416219711304,
+        -1.731366038322449
+      ],
+      "serialized_sha256": "d1d9f5202b1b0eac975dfb8754a8d8629e8e691689215deeb8adc7a9579b0c7e",
+      "frame_id": "imu_link",
+      "original_header_seq": 62152
+    },
+    {
+      "stamp_ns": 1706671805062301397,
+      "gyro_radps": [
+        -0.09654097259044647,
+        -0.45633596181869507,
+        -1.6894146203994753
+      ],
+      "serialized_sha256": "78e9abbc5fbe5807a97e843d200e83eb6a09aaff1419c88f676bedc700d3fd9d",
+      "frame_id": "imu_link",
+      "original_header_seq": 62153
+    },
+    {
+      "stamp_ns": 1706671805071722269,
+      "gyro_radps": [
+        -0.10048525035381317,
+        -0.4497909843921662,
+        -1.6249089241027832
+      ],
+      "serialized_sha256": "885c49d03893ab89b03bda00def91cace5de25d852544c160c80308eadfe5cc9",
+      "frame_id": "imu_link",
+      "original_header_seq": 62154
+    },
+    {
+      "stamp_ns": 1706671805082365989,
+      "gyro_radps": [
+        -0.09822828322649003,
+        -0.4465554356575012,
+        -1.5803396701812744
+      ],
+      "serialized_sha256": "c892dc393503b8bce6b92680a2d96ac54622f47d88ec5ba858a4aa315b78335d",
+      "frame_id": "imu_link",
+      "original_header_seq": 62155
+    },
+    {
+      "stamp_ns": 1706671805091633558,
+      "gyro_radps": [
+        -0.12142690271139146,
+        -0.43809735774993896,
+        -1.5468000173568728
+      ],
+      "serialized_sha256": "0afea9ac38a620b43f8ad6d12db3ae2964ddeaa5ceefb21776a2afb60fc69e24",
+      "frame_id": "imu_link",
+      "original_header_seq": 62156
+    },
+    {
+      "stamp_ns": 1706671805102043390,
+      "gyro_radps": [
+        -0.15926268696784973,
+        -0.47654837369918823,
+        -1.522215008735657
+      ],
+      "serialized_sha256": "8ba9d6ff6b0adb1d5f91b9650dbcf343ee041689ae8c10fb626b8cc7c8bbb88b",
+      "frame_id": "imu_link",
+      "original_header_seq": 62157
+    },
+    {
+      "stamp_ns": 1706671805112536668,
+      "gyro_radps": [
+        -0.20062993466854098,
+        -0.5014750957489014,
+        -1.4901596307754519
+      ],
+      "serialized_sha256": "a195a66dd98985851020c37a87a05f162b35d6e89150ef27e60ca57474537832",
+      "frame_id": "imu_link",
+      "original_header_seq": 62158
+    },
+    {
+      "stamp_ns": 1706671805121900558,
+      "gyro_radps": [
+        -0.19793915748596191,
+        -0.4977888762950898,
+        -1.4689790010452273
+      ],
+      "serialized_sha256": "96cd4176aaed85d813be77d7f1af60ead50056c871b4ef5804a335e69c45c59f",
+      "frame_id": "imu_link",
+      "original_header_seq": 62159
+    },
+    {
+      "stamp_ns": 1706671805132325649,
+      "gyro_radps": [
+        -0.18489916622638705,
+        -0.4806373119354248,
+        -1.470279097557068
+      ],
+      "serialized_sha256": "0e34f8e475cc04af849785ed6b783a2ef8d4b2ab7ea88d8817c6c47d3b71a414",
+      "frame_id": "imu_link",
+      "original_header_seq": 62160
+    },
+    {
+      "stamp_ns": 1706671805141717910,
+      "gyro_radps": [
+        -0.18016266822814941,
+        -0.45854562520980835,
+        -1.493359684944153
+      ],
+      "serialized_sha256": "f47e234283b67d4dc36364d93dd68f27b6e9c8049fd70472cd812a307732a18c",
+      "frame_id": "imu_link",
+      "original_header_seq": 62161
+    },
+    {
+      "stamp_ns": 1706671805152292966,
+      "gyro_radps": [
+        -0.17730303108692172,
+        -0.43417829275131226,
+        -1.5121566057205202
+      ],
+      "serialized_sha256": "37d8928dfc819ad5205eaf5e0c9dc27d2484ea465e51a6af137f51c695d12bd7",
+      "frame_id": "imu_link",
+      "original_header_seq": 62162
+    },
+    {
+      "stamp_ns": 1706671805161623477,
+      "gyro_radps": [
+        -0.18803395330905917,
+        -0.42867976427078247,
+        -1.5314993858337402
+      ],
+      "serialized_sha256": "eac2f91dc7df4eb20ab5e5b36e4c3ad4182b247318f7225c936a42cb6636ce82",
+      "frame_id": "imu_link",
+      "original_header_seq": 62163
+    },
+    {
+      "stamp_ns": 1706671805172039270,
+      "gyro_radps": [
+        -0.1848512589931488,
+        -0.4418571889400483,
+        -1.5555684566497803
+      ],
+      "serialized_sha256": "c698af576a46df90a03420d9a08b23d6ded41789e856fff8d2d8eb4ed503825f",
+      "frame_id": "imu_link",
+      "original_header_seq": 62164
+    },
+    {
+      "stamp_ns": 1706671805182504653,
+      "gyro_radps": [
+        -0.2193586826324463,
+        -0.45756232738494873,
+        -1.5602532625198366
+      ],
+      "serialized_sha256": "414d437beeb64986c3b4f94d27fa274db664690cf6049a62bcfb3ad6449d9e83",
+      "frame_id": "imu_link",
+      "original_header_seq": 62165
+    },
+    {
+      "stamp_ns": 1706671805191873788,
+      "gyro_radps": [
+        -0.23208616673946383,
+        -0.46585142612457275,
+        -1.5833083391189577
+      ],
+      "serialized_sha256": "c2dd2a098a4c81fd464d90415b81c98ce57f0376d9e11d9b1eb46a3c8162e120",
+      "frame_id": "imu_link",
+      "original_header_seq": 62166
+    },
+    {
+      "stamp_ns": 1706671805202305555,
+      "gyro_radps": [
+        -0.22265347838401794,
+        -0.4547089636325837,
+        -1.5801371335983279
+      ],
+      "serialized_sha256": "bb6aacff106dfd025a8f2dfce3419b80b69ea2bd9276beb191feeb5caf9940f4",
+      "frame_id": "imu_link",
+      "original_header_seq": 62167
+    },
+    {
+      "stamp_ns": 1706671805211803674,
+      "gyro_radps": [
+        -0.2123709470033646,
+        -0.4157160520553589,
+        -1.5737184286117556
+      ],
+      "serialized_sha256": "df1a05d26a03943c7e61f64568359f9d467107878a82a60266cefd9246dfc23d",
+      "frame_id": "imu_link",
+      "original_header_seq": 62168
+    },
+    {
+      "stamp_ns": 1706671805222208976,
+      "gyro_radps": [
+        -0.21697531640529635,
+        -0.3957299888134003,
+        -1.5693039894104004
+      ],
+      "serialized_sha256": "c82bb6e6f9f1440414f55fb674c2ad9f3585878d18b9adf400ed346da03b696f",
+      "frame_id": "imu_link",
+      "original_header_seq": 62169
+    },
+    {
+      "stamp_ns": 1706671805231604099,
+      "gyro_radps": [
+        -0.20817163586616516,
+        -0.38916990160942083,
+        -1.5644950866699219
+      ],
+      "serialized_sha256": "d2923d39872e6c022f78466005d13926596699e19a008e4f36c23ee79e4fab5a",
+      "frame_id": "imu_link",
+      "original_header_seq": 62170
+    },
+    {
+      "stamp_ns": 1706671805242038726,
+      "gyro_radps": [
+        -0.2180217206478119,
+        -0.40413263440132147,
+        -1.5820497274398806
+      ],
+      "serialized_sha256": "70934ab72d2d9a8b3a1717f8fa5b00330d89c8f4af2bd67ba30e13d4c50f4728",
+      "frame_id": "imu_link",
+      "original_header_seq": 62171
+    },
+    {
+      "stamp_ns": 1706671805252557992,
+      "gyro_radps": [
+        -0.20396164059638977,
+        -0.43007311224937445,
+        -1.6114733219146729
+      ],
+      "serialized_sha256": "c557fffd51588ad88c54be7d4e903bf2fdfb4cdf77d8e900c1f49d59ebfa9ce2",
+      "frame_id": "imu_link",
+      "original_header_seq": 62172
+    },
+    {
+      "stamp_ns": 1706671805262130498,
+      "gyro_radps": [
+        -0.2203291356563568,
+        -0.43479806184768677,
+        -1.6308125257492068
+      ],
+      "serialized_sha256": "2d204d180f264057dbb02bd109249d1c3eef4db3bf2bbff950d74f33f638947e",
+      "frame_id": "imu_link",
+      "original_header_seq": 62173
+    },
+    {
+      "stamp_ns": 1706671805272521018,
+      "gyro_radps": [
+        -0.22917252779006958,
+        -0.4151241481304169,
+        -1.6522552967071533
+      ],
+      "serialized_sha256": "727dc317882b52791d54a7931b56b3432d93add1129ecf98bce68f8d2cc00eef",
+      "frame_id": "imu_link",
+      "original_header_seq": 62174
+    },
+    {
+      "stamp_ns": 1706671805281957626,
+      "gyro_radps": [
+        -0.24680982530117038,
+        -0.41058409214019775,
+        -1.6876246929168701
+      ],
+      "serialized_sha256": "052e8143f998f35f6a72086ff7161f8ebf065ba10127a9124f2e2f73f6814a29",
+      "frame_id": "imu_link",
+      "original_header_seq": 62175
+    },
+    {
+      "stamp_ns": 1706671805292369365,
+      "gyro_radps": [
+        -0.23158521950244906,
+        -0.3942676782608032,
+        -1.7130185365676882
+      ],
+      "serialized_sha256": "b52970cfebd57855edf2cdb3e605e1fa11e756ba0be7f589cc3640e6f04ea106",
+      "frame_id": "imu_link",
+      "original_header_seq": 62176
+    },
+    {
+      "stamp_ns": 1706671805301743984,
+      "gyro_radps": [
+        -0.22872868180274963,
+        -0.38338786363601685,
+        -1.7385202646255495
+      ],
+      "serialized_sha256": "ab6a149538406533fdd68ed7fdd39c19bc5c30eccff34319419fdd744158683e",
+      "frame_id": "imu_link",
+      "original_header_seq": 62177
+    },
+    {
+      "stamp_ns": 1706671805312200784,
+      "gyro_radps": [
+        -0.2115493565797806,
+        -0.3881545066833496,
+        -1.7713803052902224
+      ],
+      "serialized_sha256": "b433e63c39df3d9036941f37230a256d7f3559eddf2ad8e64cc9c8110f0db07a",
+      "frame_id": "imu_link",
+      "original_header_seq": 62178
+    },
+    {
+      "stamp_ns": 1706671805321571350,
+      "gyro_radps": [
+        -0.2292640954256058,
+        -0.3938308358192444,
+        -1.7859957218170166
+      ],
+      "serialized_sha256": "ddc27c12e06b5fd8e47d347f8950c50ed8d327657cda4f089aa75acf95f26133",
+      "frame_id": "imu_link",
+      "original_header_seq": 62179
+    },
+    {
+      "stamp_ns": 1706671805332022666,
+      "gyro_radps": [
+        -0.211110919713974,
+        -0.39899727702140814,
+        -1.8080859184265137
+      ],
+      "serialized_sha256": "52ee88670fcc64fb24432d0333c0715877f52569e4b8d7963bcac3d0a24f6758",
+      "frame_id": "imu_link",
+      "original_header_seq": 62180
+    },
+    {
+      "stamp_ns": 1706671805342491149,
+      "gyro_radps": [
+        -0.23950766026973727,
+        -0.40876427292823797,
+        -1.839818000793457
+      ],
+      "serialized_sha256": "c4c5bb37a6ef8bed8f4d5399e2653bc940673367ca48e4b66d192e2ae883ab0c",
+      "frame_id": "imu_link",
+      "original_header_seq": 62181
+    },
+    {
+      "stamp_ns": 1706671805351998805,
+      "gyro_radps": [
+        -0.23866628110408786,
+        -0.38798946142196655,
+        -1.8625770807266238
+      ],
+      "serialized_sha256": "bbeac467062ba005823bdf1884881f1c79223f9cd88745ee3e3abc368127a55a",
+      "frame_id": "imu_link",
+      "original_header_seq": 62182
+    },
+    {
+      "stamp_ns": 1706671805362432956,
+      "gyro_radps": [
+        -0.2562302350997925,
+        -0.36044433712959295,
+        -1.8847302198410036
+      ],
+      "serialized_sha256": "6b80200d1245efc4e0b5d42ac697f6f89529e589f9e65bfb2a8211120f84a1a4",
+      "frame_id": "imu_link",
+      "original_header_seq": 62183
+    },
+    {
+      "stamp_ns": 1706671805371805667,
+      "gyro_radps": [
+        -0.24580979347229004,
+        -0.35034862160682684,
+        -1.9051439762115479
+      ],
+      "serialized_sha256": "5591d77b1b37722275d0d04dcd87069d2f9f9fe85498c055b2d121a1cfad2777",
+      "frame_id": "imu_link",
+      "original_header_seq": 62184
+    },
+    {
+      "stamp_ns": 1706671805382260084,
+      "gyro_radps": [
+        -0.24620094895362854,
+        -0.35865938663482666,
+        -1.920612692832947
+      ],
+      "serialized_sha256": "8bb1a58added2eec68cd55902bbd2b168a2df7e99255c22af8b46adde09afa8b",
+      "frame_id": "imu_link",
+      "original_header_seq": 62185
+    },
+    {
+      "stamp_ns": 1706671805391674041,
+      "gyro_radps": [
+        -0.2339165955781937,
+        -0.36013907194137573,
+        -1.9334613084793093
+      ],
+      "serialized_sha256": "5056e4604a46fe925e00e5fcf6ac3d6a61f156ffc5465f75005e4aa6ce2f941d",
+      "frame_id": "imu_link",
+      "original_header_seq": 62186
+    },
+    {
+      "stamp_ns": 1706671805402042150,
+      "gyro_radps": [
+        -0.25096544623374945,
+        -0.36819136142730713,
+        -1.9156067371368408
+      ],
+      "serialized_sha256": "86eb5da37ae55046c448f00b48bf3adcfcee7d126fe2b391d615fb6d1ee21b6b",
+      "frame_id": "imu_link",
+      "original_header_seq": 62187
+    },
+    {
+      "stamp_ns": 1706671805412598371,
+      "gyro_radps": [
+        -0.23783122003078463,
+        -0.3651502728462219,
+        -1.889228701591492
+      ],
+      "serialized_sha256": "b674d3bde0239cd18179f1f465a91a79c2021f55d1c47860da51541b759b9e0d",
+      "frame_id": "imu_link",
+      "original_header_seq": 62188
+    },
+    {
+      "stamp_ns": 1706671805422011613,
+      "gyro_radps": [
+        -0.2499625235795975,
+        -0.3500209748744965,
+        -1.8708364963531494
+      ],
+      "serialized_sha256": "21743abce4aea87234bb20537f560677982f1e73ecb36a7cdf0fd79d3e9d9eee",
+      "frame_id": "imu_link",
+      "original_header_seq": 62189
+    },
+    {
+      "stamp_ns": 1706671805432442903,
+      "gyro_radps": [
+        -0.26690968871116644,
+        -0.3453858494758606,
+        -1.8600760698318484
+      ],
+      "serialized_sha256": "8c0d492624a68364074ec20eaf96591b391377ddd85b41c89ec05a4e1b00eb75",
+      "frame_id": "imu_link",
+      "original_header_seq": 62190
+    },
+    {
+      "stamp_ns": 1706671805441879034,
+      "gyro_radps": [
+        -0.2837671339511872,
+        -0.32297855615615845,
+        -1.8305995464324951
+      ],
+      "serialized_sha256": "5a57543f6049e582fbc578b7df4bfd0bd5ca63df1fbab5e307fa0c1b7f6f9a34",
+      "frame_id": "imu_link",
+      "original_header_seq": 62191
+    },
+    {
+      "stamp_ns": 1706671805452852964,
+      "gyro_radps": [
+        -0.2779937684535981,
+        -0.33327651023864746,
+        -1.7998415231704714
+      ],
+      "serialized_sha256": "6bdad6b0f917dffd59d6eac70752047368dca977a455205abaad8e7e535db478",
+      "frame_id": "imu_link",
+      "original_header_seq": 62192
+    },
+    {
+      "stamp_ns": 1706671805462267398,
+      "gyro_radps": [
+        -0.2900259494781494,
+        -0.33911770582199097,
+        -1.7687302827835085
+      ],
+      "serialized_sha256": "e35bc9f2c1fffe9bee37e36202848f3ce16b363d7c7cd45f75514860c611a671",
+      "frame_id": "imu_link",
+      "original_header_seq": 62193
+    },
+    {
+      "stamp_ns": 1706671805471770048,
+      "gyro_radps": [
+        -0.2974528670310974,
+        -0.33802697062492376,
+        -1.7443547248840332
+      ],
+      "serialized_sha256": "9d2535885ff854e929eb35e63a02651956a7def6185d377858c646734c912961",
+      "frame_id": "imu_link",
+      "original_header_seq": 62194
+    },
+    {
+      "stamp_ns": 1706671805482289075,
+      "gyro_radps": [
+        -0.31335926055908203,
+        -0.3434371650218964,
+        -1.7239228487014773
+      ],
+      "serialized_sha256": "e432d5edafc96400a8256d53ccfa9da34acb6f050d0a90addddb3c554817e392",
+      "frame_id": "imu_link",
+      "original_header_seq": 62195
+    },
+    {
+      "stamp_ns": 1706671805491655588,
+      "gyro_radps": [
+        -0.32066935300827026,
+        -0.3487482368946076,
+        -1.6973729133605957
+      ],
+      "serialized_sha256": "5ef5b9940fb4e70cd1335df8489d9e820ad3b900b56dd7e912a3dca9e5f02895",
+      "frame_id": "imu_link",
+      "original_header_seq": 62196
+    },
+    {
+      "stamp_ns": 1706671805502143383,
+      "gyro_radps": [
+        -0.3378144800662995,
+        -0.32371810078620916,
+        -1.6617562770843506
+      ],
+      "serialized_sha256": "2c311a96f14e56b3a181b94edee0c230cd146a0d0ea3216e853dbea0861c13b1",
+      "frame_id": "imu_link",
+      "original_header_seq": 62197
+    },
+    {
+      "stamp_ns": 1706671805512660503,
+      "gyro_radps": [
+        -0.36199107766151434,
+        -0.3065379858016968,
+        -1.6230510473251345
+      ],
+      "serialized_sha256": "160d214973cc4e4872490bb24634aa05b23bcc01b1e153f2661e64dbcb3ccb1b",
+      "frame_id": "imu_link",
+      "original_header_seq": 62198
+    },
+    {
+      "stamp_ns": 1706671805522042989,
+      "gyro_radps": [
+        -0.392833948135376,
+        -0.29255434870719915,
+        -1.58941924571991
+      ],
+      "serialized_sha256": "7a1638d52d9c3fc2b5fd6c2120ab33a4cfa440dd6c8df31767497b194f68c1e6",
+      "frame_id": "imu_link",
+      "original_header_seq": 62199
+    },
+    {
+      "stamp_ns": 1706671805532478094,
+      "gyro_radps": [
+        -0.39488351345062256,
+        -0.3011600077152253,
+        -1.5677287578582764
+      ],
+      "serialized_sha256": "3797c98be35235b7a1b8c2f2dd43b5b519c20ec7f559f1180fd1be32200b3550",
+      "frame_id": "imu_link",
+      "original_header_seq": 62200
+    },
+    {
+      "stamp_ns": 1706671805541862249,
+      "gyro_radps": [
+        -0.38967797160148626,
+        -0.3205032646656037,
+        -1.5305390357971191
+      ],
+      "serialized_sha256": "f453a36fa5bdae936965a5b335128c44b308ccd88584db39263cd6eabe8a72df",
+      "frame_id": "imu_link",
+      "original_header_seq": 62201
+    },
+    {
+      "stamp_ns": 1706671805552630186,
+      "gyro_radps": [
+        -0.3746979832649231,
+        -0.321245163679123,
+        -1.4875843524932861
+      ],
+      "serialized_sha256": "ec6bcc0da2f64b63b392fab6a227100d1ce92bfe27e383aa1ed10cafb5ff6a42",
+      "frame_id": "imu_link",
+      "original_header_seq": 62202
+    },
+    {
+      "stamp_ns": 1706671805561994314,
+      "gyro_radps": [
+        -0.38790327310562134,
+        -0.30638274550437933,
+        -1.4566720724105837
+      ],
+      "serialized_sha256": "d8a83b0ec3f183376acb5819ab0dcab189ef35a0a3147d3bc7e647f7b5d9887d",
+      "frame_id": "imu_link",
+      "original_header_seq": 62203
+    },
+    {
+      "stamp_ns": 1706671805572442054,
+      "gyro_radps": [
+        -0.39621481299400335,
+        -0.28298747539520264,
+        -1.4302929639816286
+      ],
+      "serialized_sha256": "cd820c99a542fb2d1ffcc24b4d65dfe011bf6eb108264d1be35bface084a635c",
+      "frame_id": "imu_link",
+      "original_header_seq": 62204
+    },
+    {
+      "stamp_ns": 1706671805581821680,
+      "gyro_radps": [
+        -0.40580096840858465,
+        -0.25968715548515325,
+        -1.426255702972412
+      ],
+      "serialized_sha256": "73ebed8116967c7cc07b97e25942f3558f7a8ecf9dac6572542c7e0d94eb791a",
+      "frame_id": "imu_link",
+      "original_header_seq": 62205
+    },
+    {
+      "stamp_ns": 1706671805592260122,
+      "gyro_radps": [
+        -0.38914462924003607,
+        -0.26700395345687866,
+        -1.414624333381653
+      ],
+      "serialized_sha256": "d6b96e8a431f71d88334cfd5ab6b8bc0170cd20595b6d1ea3450c2198a28a050",
+      "frame_id": "imu_link",
+      "original_header_seq": 62206
+    },
+    {
+      "stamp_ns": 1706671805601716041,
+      "gyro_radps": [
+        -0.3784866034984589,
+        -0.27513593435287476,
+        -1.403327226638794
+      ],
+      "serialized_sha256": "29ac10e2cce979f4d7a71a4e53aafa4a4eebfb446e10ab066a28c105842110f0",
+      "frame_id": "imu_link",
+      "original_header_seq": 62207
+    },
+    {
+      "stamp_ns": 1706671805612190723,
+      "gyro_radps": [
+        -0.34578278660774237,
+        -0.2985098958015442,
+        -1.3879033327102663
+      ],
+      "serialized_sha256": "f8760af0f6b061a11f9ef7aefc7b01c33075504b89b54604d2ffebe57aebbd17",
+      "frame_id": "imu_link",
+      "original_header_seq": 62208
+    },
+    {
+      "stamp_ns": 1706671805622708320,
+      "gyro_radps": [
+        -0.3250738084316254,
+        -0.30649676918983465,
+        -1.3807120323181152
+      ],
+      "serialized_sha256": "9f079882cfa21770c37797497bb9e328ef076d9987e5748d02df5f0db6a3378a",
+      "frame_id": "imu_link",
+      "original_header_seq": 62209
+    },
+    {
+      "stamp_ns": 1706671805632062435,
+      "gyro_radps": [
+        -0.3139182925224304,
+        -0.3062372505664826,
+        -1.374619722366333
+      ],
+      "serialized_sha256": "be09b45e4b5ca63b17b591d6858aaf669857fb98c0a12380982dfaf123a3cb75",
+      "frame_id": "imu_link",
+      "original_header_seq": 62210
+    },
+    {
+      "stamp_ns": 1706671805642474412,
+      "gyro_radps": [
+        -0.30923789739608765,
+        -0.29856827855110174,
+        -1.3625036478042605
+      ],
+      "serialized_sha256": "693a3ce998613be0e70242130d5f533e9251feb9b96e559e19362f1620d7a1f4",
+      "frame_id": "imu_link",
+      "original_header_seq": 62211
+    },
+    {
+      "stamp_ns": 1706671805651891469,
+      "gyro_radps": [
+        -0.29978802800178533,
+        -0.2847672700881958,
+        -1.3552850484848025
+      ],
+      "serialized_sha256": "32125f29aaf94d28c8063fee5a8c3ce0a905943b166e15aa47179f85331d0f7c",
+      "frame_id": "imu_link",
+      "original_header_seq": 62212
+    },
+    {
+      "stamp_ns": 1706671805661775588,
+      "gyro_radps": [
+        -0.3067320287227631,
+        -0.27735367417335516,
+        -1.3501849174499512
+      ],
+      "serialized_sha256": "c9cb1dc14abe502c23aad5e8dc63ceef27c20d5f31de55c8f6019771f67d659a",
+      "frame_id": "imu_link",
+      "original_header_seq": 62213
+    },
+    {
+      "stamp_ns": 1706671805672238349,
+      "gyro_radps": [
+        -0.29929763078689575,
+        -0.25858566164970404,
+        -1.354491949081421
+      ],
+      "serialized_sha256": "bab0201e567d452f571ef26b7d90211228b1045e4cda51c8b1a64dd60d587a77",
+      "frame_id": "imu_link",
+      "original_header_seq": 62214
+    },
+    {
+      "stamp_ns": 1706671805681639194,
+      "gyro_radps": [
+        -0.274841457605362,
+        -0.2683984041213989,
+        -1.3460698127746582
+      ],
+      "serialized_sha256": "ffb6a2a26c83a71e52d7dd1d63cf5bc93a46712f55308c043f1c09eb30a1d84b",
+      "frame_id": "imu_link",
+      "original_header_seq": 62215
+    },
+    {
+      "stamp_ns": 1706671805692150592,
+      "gyro_radps": [
+        -0.24733898043632507,
+        -0.25772818922996527,
+        -1.3333868980407715
+      ],
+      "serialized_sha256": "8e88edf9a75a263e38f15c2995137ea50c8d5c287ae43d3d9e1299f16605817d",
+      "frame_id": "imu_link",
+      "original_header_seq": 62216
+    },
+    {
+      "stamp_ns": 1706671805702571868,
+      "gyro_radps": [
+        -0.22745238244533542,
+        -0.27981719374656683,
+        -1.326406478881836
+      ],
+      "serialized_sha256": "5590a354688d1a84ac447fc4c7738754c5d4d3952c9aa4261c95c06cc3d457d3",
+      "frame_id": "imu_link",
+      "original_header_seq": 62217
+    },
+    {
+      "stamp_ns": 1706671805711974620,
+      "gyro_radps": [
+        -0.2243451476097107,
+        -0.29210314154624945,
+        -1.327301025390625
+      ],
+      "serialized_sha256": "5608d8ffda97488e09b8c89d938844cf98f96cbbeaeac5f6fc9052d529ea7fa5",
+      "frame_id": "imu_link",
+      "original_header_seq": 62218
+    },
+    {
+      "stamp_ns": 1706671805722437858,
+      "gyro_radps": [
+        -0.25034475326538086,
+        -0.27906653285026556,
+        -1.311561703681946
+      ],
+      "serialized_sha256": "f3d33e3a84774146cd414002fd7f91b850237b6c9c9240e97065abcbb235d7ff",
+      "frame_id": "imu_link",
+      "original_header_seq": 62219
+    },
+    {
+      "stamp_ns": 1706671805731784820,
+      "gyro_radps": [
+        -0.2681114077568054,
+        -0.28460916876792913,
+        -1.3257298469543457
+      ],
+      "serialized_sha256": "bdcad04db3c7f4063cb963974e59bc4381a7a029939cff11a39589f60f7dd39a",
+      "frame_id": "imu_link",
+      "original_header_seq": 62220
+    },
+    {
+      "stamp_ns": 1706671805742236852,
+      "gyro_radps": [
+        -0.2823024392127991,
+        -0.26268142461776733,
+        -1.3474959135055544
+      ],
+      "serialized_sha256": "16b73190a9400d5126d5fde7b826e68181bd4fdb7e741926cff5a5de8055ea15",
+      "frame_id": "imu_link",
+      "original_header_seq": 62221
+    },
+    {
+      "stamp_ns": 1706671805752088546,
+      "gyro_radps": [
+        -0.26206001639366155,
+        -0.22349882125854492,
+        -1.363714098930359
+      ],
+      "serialized_sha256": "160b4c020f028b5b9b27cfc2c93cde4d06640e363374bbd5d2eacf4c576b6b23",
+      "frame_id": "imu_link",
+      "original_header_seq": 62222
+    },
+    {
+      "stamp_ns": 1706671805762603998,
+      "gyro_radps": [
+        -0.22170886397361755,
+        -0.2139382511377335,
+        -1.3619903326034548
+      ],
+      "serialized_sha256": "2bd9c95bb324b65b9c6ca3e5963f9899958d804706571ea6f276a087303c2e81",
+      "frame_id": "imu_link",
+      "original_header_seq": 62223
+    },
+    {
+      "stamp_ns": 1706671805771969556,
+      "gyro_radps": [
+        -0.18155185878276828,
+        -0.20808812975883484,
+        -1.3526936769485476
+      ],
+      "serialized_sha256": "2e2b04b5b059b74ccdb2b86d1c0a37ebe9d7945a23cda2e25742e0ba568f6032",
+      "frame_id": "imu_link",
+      "original_header_seq": 62224
+    },
+    {
+      "stamp_ns": 1706671805782440185,
+      "gyro_radps": [
+        -0.17477120459079745,
+        -0.20750196278095248,
+        -1.3376257419586182
+      ],
+      "serialized_sha256": "3342a5df50c347418832f86b68c27e268e9c83d51ff4b467d087598a2854ea30",
+      "frame_id": "imu_link",
+      "original_header_seq": 62225
+    },
+    {
+      "stamp_ns": 1706671805791809320,
+      "gyro_radps": [
+        -0.1864268332719803,
+        -0.2227051854133606,
+        -1.3099647760391238
+      ],
+      "serialized_sha256": "dad05979787871d14790922157f3e4a59e6f840654978df4baf395c84e7c9481",
+      "frame_id": "imu_link",
+      "original_header_seq": 62226
+    },
+    {
+      "stamp_ns": 1706671805802239418,
+      "gyro_radps": [
+        -0.22253474593162537,
+        -0.21625323593616488,
+        -1.268313527107239
+      ],
+      "serialized_sha256": "055a56170e13771f61ed7de53b19065dc2c7963346374a2c78eb83b6d39bb0e1",
+      "frame_id": "imu_link",
+      "original_header_seq": 62227
+    },
+    {
+      "stamp_ns": 1706671805811698198,
+      "gyro_radps": [
+        -0.23401530086994174,
+        -0.19852739572525024,
+        -1.234652400016785
+      ],
+      "serialized_sha256": "9b142ce87109247fd6295c1b01181e1ef5f39a342c663b5b23c4041bb098ad8c",
+      "frame_id": "imu_link",
+      "original_header_seq": 62228
+    },
+    {
+      "stamp_ns": 1706671805822185039,
+      "gyro_radps": [
+        -0.22148314118385315,
+        -0.1534917950630188,
+        -1.1851636171340945
+      ],
+      "serialized_sha256": "f8c0da34dfbb1ae65685b6bbe6313282b16207b13cd3d78fdbf11eb403fa4829",
+      "frame_id": "imu_link",
+      "original_header_seq": 62229
+    },
+    {
+      "stamp_ns": 1706671805832689285,
+      "gyro_radps": [
+        -0.17736613750457764,
+        -0.1275116950273514,
+        -1.1406095027923584
+      ],
+      "serialized_sha256": "723a76bbb82d83d826ebdbe79d116f250b1f0f13e90796eef09f8202599e8500",
+      "frame_id": "imu_link",
+      "original_header_seq": 62230
+    },
+    {
+      "stamp_ns": 1706671805842024087,
+      "gyro_radps": [
+        -0.14122854173183444,
+        -0.08684735000133514,
+        -1.1077871322631836
+      ],
+      "serialized_sha256": "e873308ef3780bf4e942b6942b9801892bc48386e5152d790a487149f1ac5918",
+      "frame_id": "imu_link",
+      "original_header_seq": 62231
+    },
+    {
+      "stamp_ns": 1706671805852836132,
+      "gyro_radps": [
+        -0.10719704627990723,
+        -0.10517478734254838,
+        -1.076474666595459
+      ],
+      "serialized_sha256": "20c5e5703f6d722ae798ee43f4645c42b8b8ff3e38c150b6c218eae4d0a6c216",
+      "frame_id": "imu_link",
+      "original_header_seq": 62232
+    },
+    {
+      "stamp_ns": 1706671805862087488,
+      "gyro_radps": [
+        -0.1122153326869011,
+        -0.12853874266147616,
+        -1.0278587341308594
+      ],
+      "serialized_sha256": "b168389281243afd0c9335000f9bc046b9854e63298044d997940f1b6c55a9fc",
+      "frame_id": "imu_link",
+      "original_header_seq": 62233
+    },
+    {
+      "stamp_ns": 1706671805872555971,
+      "gyro_radps": [
+        -0.13741442561149597,
+        -0.13471366465091708,
+        -0.9671096801757812
+      ],
+      "serialized_sha256": "18ba42ab94576b175f9898e687c1a6ccfe40f81cf56901e98536eaa9f01766a6",
+      "frame_id": "imu_link",
+      "original_header_seq": 62234
+    },
+    {
+      "stamp_ns": 1706671805882042169,
+      "gyro_radps": [
+        -0.16645590960979464,
+        -0.13832852244377136,
+        -0.8913956880569458
+      ],
+      "serialized_sha256": "751d52829487e471db12b617a8a946b316ed5282cc9e3ecbcbfa9cb0704e36d5",
+      "frame_id": "imu_link",
+      "original_header_seq": 62235
+    },
+    {
+      "stamp_ns": 1706671805892444849,
+      "gyro_radps": [
+        -0.16662323474884033,
+        -0.121962808072567,
+        -0.8207502365112305
+      ],
+      "serialized_sha256": "d1de11c3cde73fab89b31a52608d8b84e02271537e8bd98250c0ea3d6d7dca08",
+      "frame_id": "imu_link",
+      "original_header_seq": 62236
+    }
+  ],
+  "input_bag_sha256": "a138b5ceb0e8ee4a2e5203e70b3943596811ff15d7a45495909934d3a1494331",
+  "inputs_frozen_sha256": "a2f3b61260e727addc935fff38cdfee587a88ba806d4a3992e094af9bb8af690",
+  "after_window_sample_decoded": false,
+  "orientation_used": false,
+  "accelerometer_used": false,
+  "ros_node_started": false
+}

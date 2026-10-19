@@ -6,6 +6,8 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 from check_assets import HERE,REPO,sha
 from gyro_math import angle_deg,independent_angle_deg,check_rotation,imu_relative_rotation,integrate_zoh,classify,samples_from_records
+from freeze_inputs import R8,RUN
+from input_binding import verify_gyro_binding,verify_raw_times
 
 
 def write_csv(name,rows):
@@ -19,6 +21,14 @@ def main():
     for a in pin['source_assets']:assert sha(a['path'])==a['sha256'],a['path']
     raw=json.loads((HERE/'gyro_samples.json').read_text());assert raw['inputs_frozen_sha256']==sha(HERE/'inputs_frozen.json')
     assert raw['topic']=='/imu/data' and raw['frame_id']=='imu_link' and raw['after_window_sample_decoded'] is False
+    binding=json.loads((HERE/'gyro_payload_binding.json').read_text())
+    assert binding['gyro_samples_sha256']==sha(HERE/'gyro_samples.json')
+    assert binding['inputs_frozen_sha256']==sha(HERE/'inputs_frozen.json')
+    with (RUN/'input/imu.csv').open() as f:ledger={int(r['stamp_ns']):r for r in csv.DictReader(f)}
+    verify_gyro_binding(raw['samples'],binding,ledger)
+    def indexed(path):
+        with path.open() as f:return {int(r['scan_index']):r for r in csv.DictReader(f)}
+    raw_time_audit=verify_raw_times(indexed(R8/'scan_manifest.csv'),indexed(R8/'frame_results.csv'))
     sample_error=None
     try:samples=samples_from_records(raw['samples'])
     except ValueError as exc:samples=[];sample_error=str(exc)
@@ -88,7 +98,8 @@ def main():
         extrinsic_orthogonality_error=float(np.linalg.norm(RIL.T@RIL-np.eye(3))),
         code_sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip(),
         script_sha256=sha(Path(__file__)),elapsed_sec=time.monotonic()-started,
-        raw_pose_strings_sha256=sha(HERE/'inputs_frozen.json'),gt_reads=0,ros_localization_nodes=0,rosbag_play=0,
+        inputs_frozen_sha256=sha(HERE/'inputs_frozen.json'),gyro_payload_binding_sha256=sha(HERE/'gyro_payload_binding.json'),
+        raw_pose_time_audit=raw_time_audit,gt_reads=0,ros_localization_nodes=0,rosbag_play=0,
         new_ndt_align=0,ekf_runs=0,new_localization_trajectory_estimates=0)
     write_csv('interval_rotation_audit.csv',rows);write_csv('imu_coverage_audit.csv',coverage)
     with (HERE/'integration_details.json').open('x') as f:json.dump(segments,f,indent=2);f.write('\n')

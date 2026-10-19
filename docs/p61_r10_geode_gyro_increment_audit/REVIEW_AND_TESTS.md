@@ -42,3 +42,27 @@ stamps.15 tests now pass. No scientific threshold, interval or bias changed.
 User requested a Codex CLI second opinion. The bounded final input archive and
 precise read-only command were supplied for separate confirmation. Review is
 limited to packaged source/contract/tests, not real sensor assets or execution.
+
+The user confirmed the exact one-shot CLI command. It completed exit0 with
+gpt-6.1-sol/xhigh, ephemeral/read-only, after matching package SHA
+c637106c7485d5e4784d9c8aed484d0b11e84745f07a6209521390b605e3e60c.
+Two Required findings were valid evidence-binding gaps, not findings of actual
+data tampering or an actual shifted measurement:
+
+1. Altering a finite gyro value in the decoded JSON while retaining its metadata
+   could previously pass run_audit. Fixed by preserving original serialized IMU
+   bytes for the same111 messages and checking each payload against the immutable
+   R8 ledger SHA. A pure-Python sensor_msgs/Imu layout decoder verifies header,
+   frame, sequence and the exact gyro double values against those verified bytes
+   before any integration. Synthetic finite-value/payload tampering is rejected.
+2. The original freeze checked current scans5155–5165 but not precursor5154's
+   measurement time. run_audit and new freeze calls now independently compare
+   all12 raw pose measurement times to exact integer scan ends. A synthetic
+   shifted5154 counterexample is rejected; the real audit must separately pass.
+
+The original immutable input pin and decoded gyro JSON are preserved; the new
+payload binding is an additive artifact. Runtime threshold/bias/pose/interval
+semantics are unchanged. No second CLI invocation or fourth review cycle is
+authorized or performed. The final calculation uses a NEW committed code SHA,
+not the earlier package's source identity. The external review is a static code
+second opinion, not an independent validation of sensor values or results.

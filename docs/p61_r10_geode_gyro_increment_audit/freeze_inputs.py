@@ -4,6 +4,7 @@ import csv,hashlib,json,subprocess
 import numpy as np
 import yaml
 from check_assets import HERE,REPO,R9,sha
+from input_binding import verify_raw_times
 
 R8=REPO/'docs/p61_r8_geode_full_return_control'
 RUN=REPO.parent/'p61_r8_geode_runs'
@@ -22,6 +23,7 @@ def main():
     def records(path):
         with path.open() as f:return {int(r['scan_index']):r for r in csv.DictReader(f)}
     scans=records(R8/'scan_manifest.csv');frames=records(R8/'frame_results.csv');r9=records(R9/'anomaly_frame_table.csv')
+    verify_raw_times(scans,frames)
     poses={str(i):frames[i]['raw_ndt_pose'] for i in range(5154,5166)}
     intervals=[]
     for i in range(5155,5166):
