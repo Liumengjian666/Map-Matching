@@ -4,7 +4,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 import numpy as np
 from scipy.spatial.transform import Rotation
 from scipy.linalg import logm
-from gyro_math import integrate_zoh,imu_relative_rotation,angle_deg,classify
+from gyro_math import integrate_zoh,imu_relative_rotation,angle_deg,independent_angle_deg,classify,samples_from_records
 
 
 class GyroMathTests(unittest.TestCase):
@@ -53,6 +53,7 @@ class GyroMathTests(unittest.TestCase):
             R=Rotation.from_rotvec(v).as_matrix();self.assertAlmostEqual(angle_deg(R),np.rad2deg(np.linalg.norm(v)),places=7)
             L=logm(R);independent=np.rad2deg(np.linalg.norm(L,'fro')/np.sqrt(2))
             self.assertAlmostEqual(angle_deg(R),independent,places=6)
+            self.assertAlmostEqual(angle_deg(R),independent_angle_deg(R),places=6)
         with self.assertRaisesRegex(ValueError,'NOT_SO3'):angle_deg(np.eye(3)*2)
 
     def test_formal_thresholds(self):
@@ -74,6 +75,11 @@ class GyroMathTests(unittest.TestCase):
         actual,info=integrate_zoh([(0,[1,0,0])],5,15,[0,0,0],10)
         np.testing.assert_allclose(actual,Rotation.from_rotvec([1e-8,0,0]).as_matrix(),atol=1e-15)
         self.assertEqual(info['max_gap_ns'],15)
+
+    def test_sample_timestamp_not_silently_truncated(self):
+        for t in (10.,10.5,True,'10'):
+            with self.assertRaisesRegex(ValueError,'NONINTEGER_SAMPLE_STAMP'):
+                samples_from_records([dict(stamp_ns=t,gyro_radps=[0,0,0])])
 
 
 if __name__=='__main__':unittest.main()

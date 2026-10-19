@@ -30,3 +30,15 @@ matrix log at exactpi; the angle remains the principal rotation magnitude.
 
 No real gyro residual or formal scientific decision was calculated while these
 tests failed. Further execution resumes only after the complete suite passes.
+
+Second bounded local review found two additional application-boundary issues:
+run_audit rejected the legitimate complex principal matrixlog branch at exactpi,
+and its JSON reader cast timestamps to int before validating their type. Fixed
+by using the same independently justified principal-log norm at the actual
+application call site, and rejecting noninteger raw sample stamps before any
+cast. Regressions test production helper paths, including boolean/string/float
+stamps.15 tests now pass. No scientific threshold, interval or bias changed.
+
+User requested a Codex CLI second opinion. The bounded final input archive and
+precise read-only command were supplied for separate confirmation. Review is
+limited to packaged source/contract/tests, not real sensor assets or execution.

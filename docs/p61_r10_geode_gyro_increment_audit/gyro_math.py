@@ -2,6 +2,7 @@
 import bisect
 import numpy as np
 from scipy.spatial.transform import Rotation
+from scipy.linalg import logm
 
 
 def check_rotation(R):
@@ -22,6 +23,20 @@ def angle_deg(R):
     q=Rotation.from_matrix(R).as_quat()
     if q[3]<0:q=-q
     return float(np.rad2deg(2*np.arctan2(np.linalg.norm(q[:3]),q[3])))
+
+
+def independent_angle_deg(R):
+    R=check_rotation(R);L=logm(R)
+    # The matrix-log principal branch at exact pi can be complex even for a
+    # legitimate real rotation. Its Frobenius norm still gives sqrt(2)*pi.
+    if np.max(np.abs(L.imag))>1e-7 and abs((np.trace(R)-1)/2+1)>1e-8:
+        raise ValueError('INDEPENDENT_LOGM_NONREAL_AWAY_FROM_PI')
+    return float(np.rad2deg(np.linalg.norm(L,'fro')/np.sqrt(2)))
+
+
+def samples_from_records(records):
+    if any(type(x['stamp_ns']) is not int for x in records):raise ValueError('NONINTEGER_SAMPLE_STAMP')
+    return [(x['stamp_ns'],x['gyro_radps']) for x in records]
 
 
 def imu_relative_rotation(RML_previous,RML_current,RIL):
