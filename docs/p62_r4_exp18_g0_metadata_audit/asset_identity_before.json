@@ -1,0 +1,44 @@
+{
+  "assets": [
+    {
+      "path": "/home/jian/livox_ws/p62_r3_exp18_recovery_data/assets/verified/rosbags/exp18_corridor_lower_gallery_2.bag",
+      "bytes": 8657654860,
+      "sha256": "98373b52f207b9ace3914792b5604a6642f89441190cabca6acbaf1d17249280",
+      "expected_bytes": 8657654860,
+      "expected_sha256": "98373b52f207b9ace3914792b5604a6642f89441190cabca6acbaf1d17249280",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r3_exp18_recovery_data/assets/verified/laser_scans/sheldonian_full.e57",
+      "bytes": 5447128064,
+      "sha256": "46575d3eaf3169a24e24ba0013cc48610125ac842d6745e5e8156c6aecc59756",
+      "expected_bytes": 5447128064,
+      "expected_sha256": "46575d3eaf3169a24e24ba0013cc48610125ac842d6745e5e8156c6aecc59756",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/ground_truth/exp18_corridor_lower_gallery_2_imu.txt",
+      "bytes": 88743,
+      "sha256": "138def6a40884a87372a4f18938cce5180d6aa7ad4e705349abf47ac4ec9fa32",
+      "expected_bytes": 88743,
+      "expected_sha256": "138def6a40884a87372a4f18938cce5180d6aa7ad4e705349abf47ac4ec9fa32",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/ground_truth/exp18_corridor_lower_gallery_2_imu_3dof.txt",
+      "bytes": 185,
+      "sha256": "13f963c4a2e9d583532051b581a19cf73ade0aadc83f530ea3e66c6d52036dec",
+      "expected_bytes": 185,
+      "expected_sha256": "13f963c4a2e9d583532051b581a19cf73ade0aadc83f530ea3e66c6d52036dec",
+      "status": "PASS"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/calibration/calibration_files/lidar_calibration.yaml",
+      "bytes": 747,
+      "sha256": "ea5127989317270d83d9a701318d7e284031a21bd9cbf466b8f9f169547db43c",
+      "expected_bytes": 747,
+      "expected_sha256": "ea5127989317270d83d9a701318d7e284031a21bd9cbf466b8f9f169547db43c",
+      "status": "PASS"
+    }
+  ]
+}
