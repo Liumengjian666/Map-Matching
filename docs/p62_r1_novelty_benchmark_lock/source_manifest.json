@@ -1,0 +1,346 @@
+{
+  "scope": "Finite primary-source receipts; papers and reference schema stay outside Git",
+  "date": "2026-10-19",
+  "sources": [
+    {
+      "name": "park2024.html",
+      "url": "https://onlinelibrary.wiley.com/doi/full/10.1002/rob.22392",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/park2024.html",
+      "status": "ACCESS_FAILED",
+      "error": "HTTP Error 403: Forbidden",
+      "http_status": 403,
+      "wall_sec": 0.47829393998836167
+    },
+    {
+      "name": "chiang2023.html",
+      "url": "https://researchoutput.ncku.edu.tw/en/publications/high-definition-map-based-lidar-localization-through-dynamic-time/",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/chiang2023.html",
+      "status": 200,
+      "bytes": 56129,
+      "sha256": "852e0d67112ea7ee34b9f58d96654380aea0ed6042ab2bb00f1a2e66fd4b9cb9",
+      "content_type": "text/html;charset=UTF-8",
+      "final_url": "https://researchoutput.ncku.edu.tw/en/publications/high-definition-map-based-lidar-localization-through-dynamic-time/",
+      "wall_sec": 1.2924557069782168
+    },
+    {
+      "name": "ica2025.html",
+      "url": "https://arxiv.org/html/2408.11809v2",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/ica2025.html",
+      "status": 200,
+      "bytes": 715640,
+      "sha256": "452e7ac0e61ce4594a30af6a027c9db4ff5cb4511edf4341271ae08ab31b0fac",
+      "content_type": "text/html; charset=utf-8",
+      "final_url": "https://arxiv.org/html/2408.11809v2",
+      "wall_sec": 0.6360935409902595
+    },
+    {
+      "name": "oce2026.html",
+      "url": "https://link.springer.com/article/10.1007/s43684-026-00144-1",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/oce2026.html",
+      "status": 200,
+      "bytes": 422381,
+      "sha256": "0e84ee7ded29d03d20f543fd4d3d07e10c0e57628b576e9fe1efa65c3d71680a",
+      "content_type": "text/html; charset=utf-8",
+      "final_url": "https://link.springer.com/article/10.1007/s43684-026-00144-1",
+      "wall_sec": 3.1468933970027138
+    },
+    {
+      "name": "dali_readme.md",
+      "url": "https://raw.githubusercontent.com/DCSI2022/DALI_SLAM/main/README.md",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/dali_readme.md",
+      "status": 200,
+      "bytes": 6338,
+      "sha256": "20c0cf9be9a355eee5df5dad1aa0a5540f1c28cd2ec94dfbd945455f2e880632",
+      "content_type": "text/plain; charset=utf-8",
+      "final_url": "https://raw.githubusercontent.com/DCSI2022/DALI_SLAM/main/README.md",
+      "wall_sec": 0.5617526230053045
+    },
+    {
+      "name": "dali_parameters.md",
+      "url": "https://raw.githubusercontent.com/DCSI2022/DALI_SLAM/main/Parameter_Descrip.md",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/dali_parameters.md",
+      "status": 200,
+      "bytes": 1279,
+      "sha256": "dfb91fba2cd84971cd98b280686b7573be6adf33dfcb92ffb23543ce93ec63fb",
+      "content_type": "text/plain; charset=utf-8",
+      "final_url": "https://raw.githubusercontent.com/DCSI2022/DALI_SLAM/main/Parameter_Descrip.md",
+      "wall_sec": 0.5937861540005542
+    },
+    {
+      "name": "dali_tree.json",
+      "url": "https://api.github.com/repos/DCSI2022/DALI_SLAM/git/trees/main?recursive=1",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/dali_tree.json",
+      "status": "ACCESS_FAILED",
+      "error": "HTTP Error 403: rate limit exceeded",
+      "http_status": 403,
+      "wall_sec": 0.618273707019398
+    },
+    {
+      "name": "multi_consensus2024.html",
+      "url": "https://link.springer.com/article/10.1186/s13634-024-01153-z",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/multi_consensus2024.html",
+      "status": 200,
+      "bytes": 456329,
+      "sha256": "2541f674b9f8a404acad18f25e7e874d19851d36344ffaf3a3ad45a4fabab217",
+      "content_type": "text/html; charset=utf-8",
+      "final_url": "https://link.springer.com/article/10.1186/s13634-024-01153-z",
+      "wall_sec": 3.1582971529860515
+    },
+    {
+      "name": "regscorer_readme.md",
+      "url": "https://raw.githubusercontent.com/WHU-USI3DV/RegScorer/main/readme.md",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/regscorer_readme.md",
+      "status": 200,
+      "bytes": 2194,
+      "sha256": "4ec8dd2eb13c7b288343282ae9b61f6d88be5be6ecc7d417ae4554a15e28671b",
+      "content_type": "text/plain; charset=utf-8",
+      "final_url": "https://raw.githubusercontent.com/WHU-USI3DV/RegScorer/main/readme.md",
+      "wall_sec": 0.6012513259775005
+    },
+    {
+      "name": "superloc.html",
+      "url": "https://superodometry.com/superloc.html",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/superloc.html",
+      "status": 200,
+      "bytes": 60585,
+      "sha256": "e19a617f8685849ce260a18e21e43d05e94bf3d64dd185467b4e0488d123cfa5",
+      "content_type": "text/html; charset=utf-8",
+      "final_url": "https://superodometry.com/superloc.html",
+      "wall_sec": 1.0711085259972606
+    },
+    {
+      "name": "coral2022.pdf",
+      "url": "https://arxiv.org/pdf/2205.05975",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/coral2022.pdf",
+      "status": 200,
+      "bytes": 7054763,
+      "sha256": "cebc13a2b43da4b34dc1154dc76e28b203cce56335a4c3c8bb577684d8cd72f4",
+      "content_type": "application/pdf",
+      "final_url": "https://arxiv.org/pdf/2205.05975",
+      "wall_sec": 4.2961218359996565
+    },
+    {
+      "name": "xicp.pdf",
+      "url": "https://arxiv.org/pdf/2211.16335",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/xicp.pdf",
+      "status": 200,
+      "bytes": 16744087,
+      "sha256": "30149456c4eb7c1437a7544218dc0ef2665055dd22a6f4235d5bac82d7b7d034",
+      "content_type": "application/pdf",
+      "final_url": "https://arxiv.org/pdf/2211.16335",
+      "wall_sec": 7.4029960009793285
+    },
+    {
+      "name": "genz.pdf",
+      "url": "https://arxiv.org/pdf/2411.06766",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/genz.pdf",
+      "status": 200,
+      "bytes": 3432158,
+      "sha256": "4adec7e7c1048bb9b0e816f1aef13c5ac0263922cc04975ade10b1bff0553a83",
+      "content_type": "application/pdf",
+      "final_url": "https://arxiv.org/pdf/2411.06766",
+      "wall_sec": 1.508424586005276
+    },
+    {
+      "name": "hilti2022.pdf",
+      "url": "https://arxiv.org/pdf/2208.09825",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/hilti2022.pdf",
+      "status": 200,
+      "bytes": 10034610,
+      "sha256": "be8adc1b551661fefa0d8c6478e304e43d730d6f0affbef63729c648f7712367",
+      "content_type": "application/pdf",
+      "final_url": "https://arxiv.org/pdf/2208.09825",
+      "wall_sec": 5.939829264010768
+    },
+    {
+      "name": "hilti_page.html",
+      "url": "https://hilti-challenge.com/dataset-2022",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/hilti_page.html",
+      "status": 200,
+      "bytes": 41298,
+      "sha256": "9dad17cabe011d5014987f3150154e0b806210eb011ee26fdbbad1e4b74497bc",
+      "content_type": "text/html; charset=UTF-8",
+      "final_url": "https://hilti-challenge.com/dataset-2022",
+      "wall_sec": 1.5512038930028211
+    },
+    {
+      "name": "hilti_readme.md",
+      "url": "https://raw.githubusercontent.com/Hilti-Research/hilti-slam-challenge-2022/main/README.md",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/hilti_readme.md",
+      "status": 200,
+      "bytes": 4147,
+      "sha256": "c0793921dfde23fc5c03a7b1d6bae19e4f42b48fd6f36c4d41198dbb3809c5b6",
+      "content_type": "text/plain; charset=utf-8",
+      "final_url": "https://raw.githubusercontent.com/Hilti-Research/hilti-slam-challenge-2022/main/README.md",
+      "wall_sec": 0.6595831259910483
+    },
+    {
+      "name": "hf_info.json",
+      "url": "https://huggingface.co/api/datasets/Hilti-Research/hilti-slam-challenge-2022",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/hf_info.json",
+      "status": 200,
+      "bytes": 5187,
+      "sha256": "20aee0819a476d338d9cbcf706015db593d6a7a17e5ef7747103fa827288007c",
+      "content_type": "application/json; charset=utf-8",
+      "final_url": "https://huggingface.co/api/datasets/Hilti-Research/hilti-slam-challenge-2022",
+      "wall_sec": 0.5286834790022112
+    },
+    {
+      "name": "hf_tree.json",
+      "url": "https://huggingface.co/api/datasets/Hilti-Research/hilti-slam-challenge-2022/tree/main?recursive=true&expand=false",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/hf_tree.json",
+      "status": 200,
+      "bytes": 15104,
+      "sha256": "1b6e8fd4c82c5f9a144cf224cfcaeaf1113fe07e5a23f989d55e3f5f36bcf438",
+      "content_type": "application/json; charset=utf-8",
+      "final_url": "https://huggingface.co/api/datasets/Hilti-Research/hilti-slam-challenge-2022/tree/main",
+      "wall_sec": 0.6745732520066667
+    },
+    {
+      "name": "hilti_lidar_calibration.yaml",
+      "url": "https://huggingface.co/datasets/Hilti-Research/hilti-slam-challenge-2022/resolve/main/calibration/calibration_files/lidar_calibration.yaml",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/hilti_lidar_calibration.yaml",
+      "status": 200,
+      "bytes": 747,
+      "sha256": "ea5127989317270d83d9a701318d7e284031a21bd9cbf466b8f9f169547db43c",
+      "content_type": "text/plain; charset=utf-8",
+      "final_url": "https://huggingface.co/api/resolve-cache/datasets/Hilti-Research/hilti-slam-challenge-2022/e62017f907007fdc5ab8c721842e4ae7359d7f49/calibration%2Fcalibration_files%2Flidar_calibration.yaml",
+      "wall_sec": 1.0568623520084657
+    },
+    {
+      "name": "nclt_page.html",
+      "url": "https://robots.engin.umich.edu/nclt/index.html",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/nclt_page.html",
+      "status": 200,
+      "bytes": 51874,
+      "sha256": "dc4b296a883fbd2a256b12994a3535c63db469340062e73de1afdb486e60b81e",
+      "content_type": "text/html",
+      "final_url": "https://robots.engin.umich.edu/nclt/index.html",
+      "wall_sec": 1.093654059979599
+    },
+    {
+      "name": "nclt.pdf",
+      "url": "https://robots.engin.umich.edu/nclt/nclt.pdf",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/nclt.pdf",
+      "status": 200,
+      "bytes": 3211107,
+      "sha256": "53f3f84dbbba756cbc085e1bb46477355b87df4c6d109b012b993a68250e7c94",
+      "content_type": "application/pdf",
+      "final_url": "https://robots.engin.umich.edu/nclt/nclt.pdf",
+      "wall_sec": 2.4775104309956077
+    },
+    {
+      "name": "hilti_exp18_6dof_schema.txt",
+      "url": "https://huggingface.co/datasets/Hilti-Research/hilti-slam-challenge-2022/resolve/e62017f907007fdc5ab8c721842e4ae7359d7f49/ground_truth/exp18_corridor_lower_gallery_2_imu.txt",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/hilti_exp18_6dof_schema.txt",
+      "status": 200,
+      "bytes": 88743,
+      "sha256": "138def6a40884a87372a4f18938cce5180d6aa7ad4e705349abf47ac4ec9fa32",
+      "content_type": "text/plain; charset=utf-8",
+      "final_url": "https://huggingface.co/api/resolve-cache/datasets/Hilti-Research/hilti-slam-challenge-2022/e62017f907007fdc5ab8c721842e4ae7359d7f49/ground_truth%2Fexp18_corridor_lower_gallery_2_imu.txt",
+      "wall_sec": 1.0523398229852319
+    },
+    {
+      "name": "hilti_exp18_3dof_schema.txt",
+      "url": "https://huggingface.co/datasets/Hilti-Research/hilti-slam-challenge-2022/resolve/e62017f907007fdc5ab8c721842e4ae7359d7f49/ground_truth/exp18_corridor_lower_gallery_2_imu_3dof.txt",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/hilti_exp18_3dof_schema.txt",
+      "status": 200,
+      "bytes": 185,
+      "sha256": "13f963c4a2e9d583532051b581a19cf73ade0aadc83f530ea3e66c6d52036dec",
+      "content_type": "text/plain; charset=utf-8",
+      "final_url": "https://huggingface.co/api/resolve-cache/datasets/Hilti-Research/hilti-slam-challenge-2022/e62017f907007fdc5ab8c721842e4ae7359d7f49/ground_truth%2Fexp18_corridor_lower_gallery_2_imu_3dof.txt",
+      "wall_sec": 1.0390357449941803
+    },
+    {
+      "name": "hf_readme.md",
+      "url": "https://huggingface.co/datasets/Hilti-Research/hilti-slam-challenge-2022/resolve/e62017f907007fdc5ab8c721842e4ae7359d7f49/README.md",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/hf_readme.md",
+      "status": 200,
+      "bytes": 5332,
+      "sha256": "89763db991f485e29f9c9b704eee4aa8c9d280bd353804589fb96a79930755cb",
+      "content_type": "text/plain; charset=utf-8",
+      "final_url": "https://huggingface.co/api/resolve-cache/datasets/Hilti-Research/hilti-slam-challenge-2022/e62017f907007fdc5ab8c721842e4ae7359d7f49/README.md",
+      "wall_sec": 1.02659518897417
+    },
+    {
+      "name": "superloc2025.pdf",
+      "url": "https://arxiv.org/pdf/2412.02901v2",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/superloc2025.pdf",
+      "status": 200,
+      "bytes": 4830817,
+      "sha256": "4504485bf93f5461c04b9773c9114e1bfadbb8b0a1467bb2d047efcc2fa5b9ff",
+      "content_type": "application/pdf",
+      "final_url": "https://arxiv.org/pdf/2412.02901v2",
+      "wall_sec": 2.6163761529896874
+    },
+    {
+      "name": "large_errors2024.pdf",
+      "url": "https://www.ee.bgu.ac.il/~francos/On_Minimizing_the_Probability_of_Large_Errors_in_Robust_Point_Cloud_Registration.pdf",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/large_errors2024.pdf",
+      "status": 200,
+      "bytes": 1703225,
+      "sha256": "234005d01bfc63616e667b0662d58c76c4670c0f662209295ef1b5b04a4b0aef",
+      "content_type": "application/pdf",
+      "final_url": "https://www.ee.bgu.ac.il/~francos/On_Minimizing_the_Probability_of_Large_Errors_in_Robust_Point_Cloud_Registration.pdf",
+      "wall_sec": 22.562144097988494
+    },
+    {
+      "name": "dali_mapping.cpp",
+      "url": "https://raw.githubusercontent.com/DCSI2022/DALI_SLAM/main/DA_LIO/src/laserMapping.cpp",
+      "attempts": 1,
+      "path": "/home/jian/livox_ws/p62_r1_source_cache/dali_mapping.cpp",
+      "status": 200,
+      "bytes": 81480,
+      "sha256": "602458eeaf87a8cee0754e1f9232fe8a54c486031cf17aef62f7586460ff2ba6",
+      "content_type": "text/plain; charset=utf-8",
+      "final_url": "https://raw.githubusercontent.com/DCSI2022/DALI_SLAM/main/DA_LIO/src/laserMapping.cpp",
+      "wall_sec": 0.7119942329882178
+    }
+  ],
+  "additional_web_reading": [
+    {
+      "url": "https://onlinelibrary.wiley.com/doi/full/10.1002/rob.22392",
+      "status": "METHODS_READ_VIA_WEB_TOOL; local capture HTTP403"
+    },
+    {
+      "url": "https://arxiv.org/html/2302.06843",
+      "status": "METHODS_4.4_4.5_READ_VIA_WEB_TOOL"
+    },
+    {
+      "url": "https://openaccess.thecvf.com/content/CVPR2023/html/Zhang_3D_Registration_With_Maximal_Cliques_CVPR_2023_paper.html",
+      "status": "FETCH_FAILED; indexed abstract only"
+    }
+  ],
+  "observed_official_code_heads": {
+    "Hilti-Research/hilti-slam-challenge-2022": "e4aacf7c111ab832a0bdffe3f069255454068540",
+    "DCSI2022/DALI_SLAM": "4d9b74655ec5896255d5f9ba75b61a52817a4305",
+    "WHU-USI3DV/RegScorer": "c907b16d75eb89374c4a837c1dbc0c535ac42329"
+  },
+  "mutable_source_warning": "Some fetched URLs used main; captured bytes are frozen by SHA, not claimed to be immutable URLs."
+}

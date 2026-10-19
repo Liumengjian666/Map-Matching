@@ -1,0 +1,61 @@
+{
+  "task": "P62-R1-NOVELTY-AND-BENCHMARK-LOCK",
+  "date": "2026-10-19",
+  "result": "RESEARCH_PREPARATION_WITH_OPEN_GATES",
+  "novelty_status": "NOT_ESTABLISHED",
+  "primary_recommendation": "Budgeted selective NDT recovery with structural holdout evidence and finite-pool abstention",
+  "secondary_hypothesis": "Coupled refinement; retain only if equal-budget ablation supports it",
+  "goals": {
+    "A": "BOUNDED_REVIEW_PREPARED_FULL_TEXT_GAPS_DISCLOSED",
+    "B": "PRIMARY_CANDIDATE_SELECTED_BUT_NOT_ADMITTED",
+    "C": "MATHEMATICAL_PROPOSAL_AND_PRE_REGISTRATION_PREPARED_NOT_VALIDATED"
+  },
+  "literature_rows": 14,
+  "source_receipts": 27,
+  "synthetic_tests": {"passed": 17, "failed": 0},
+  "dataset": {
+    "primary": "Hilti-Oxford 2022 Exp18 Corridor Lower Gallery 2",
+    "revision": "e62017f907007fdc5ab8c721842e4ae7359d7f49",
+    "bag_map_bytes_metadata": 14104782924,
+    "raw_bag_downloaded": false,
+    "e57_downloaded": false,
+    "dense_reference_rows": 789,
+    "dense_reference_independence": "TEST_SCAN_TO_TLS_REGISTRATION_DEPENDENT",
+    "sparse_position_labels": 3,
+    "evaluated_method_samples": 0,
+    "coordinate_contract": "NOT_ADMITTED",
+    "initialization": "NOT_ESTABLISHED",
+    "independent_dense_6dof_benchmark": "NOT_ESTABLISHED",
+    "only_fallback_reviewed": "NCLT; published joint-SLAM reference not certified independent"
+  },
+  "boundaries": {
+    "production_cpp_changes": 0,
+    "production_parameter_changes": 0,
+    "new_ndt_align": 0,
+    "ekf_runs": 0,
+    "ros_localization_nodes": 0,
+    "localization_replays": 0,
+    "new_geode_experiments": 0,
+    "hikvision_access": 0,
+    "clock_offset_search": 0,
+    "bias_fit": 0,
+    "reference_schema_files_read": 2,
+    "reference_error_evaluations": 0
+  },
+  "external_second_opinion": {
+    "selected_by_user": true,
+    "exact_command_confirmation": "PENDING",
+    "executions": 0,
+    "input_bytes": 43593,
+    "input_sha256": "cdebd3dd884b969c5e7bc4d75c7e5a4dc4b7c6bfac1608fe80b12c0bb950e702"
+  },
+  "git": {
+    "branch": "research/p62-r1-novelty-benchmark-lock",
+    "start_sha": "17d633000312227d7ced9f8f190bc72f6f520d7d",
+    "code_sha": "f103031ad4798a88755633cfd0d39c9d03a540e3",
+    "end_sha_policy": "Actual archive commit is supplied in final handoff; avoid self-referential commit field",
+    "remote_head_at_start": "NO_MATCHING_P62_REF; R12 equals start_sha",
+    "push_executed": false
+  },
+  "unique_next": "Seek controller approval for bounded Exp18 actual-file coordinate/time/reference admission; no automatic method implementation"
+}

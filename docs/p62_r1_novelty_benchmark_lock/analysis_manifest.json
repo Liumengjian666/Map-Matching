@@ -1,0 +1,115 @@
+{
+  "analysis_tree_head_at_archive_generation": "f103031ad4798a88755633cfd0d39c9d03a540e3",
+  "self_reference_policy": "Commit identity recorded in final handoff; this manifest excludes itself and checksums.",
+  "artifacts": [
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/.gitignore",
+      "bytes": 32,
+      "sha256": "4d21bfccdadc6beeecb3216e768ec818eb9f6f095e830bcd2fef9ed332d3be6f"
+    },
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/COORDINATE_AND_TIME_CONTRACT.md",
+      "bytes": 3164,
+      "sha256": "5d291d7909c090dbc373224499dc3555da64b4df1d9dc9c1fb5904ec3c7329d4"
+    },
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/DATASET_SELECTION.md",
+      "bytes": 6086,
+      "sha256": "42d98f6aa589447eb72417ac699540a8c12510ec8c2cfe364baaaa253980995b"
+    },
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/EXPERIMENT_PRE_REGISTRATION.md",
+      "bytes": 7627,
+      "sha256": "0a3f8c02b2b091341a699e2e1a63eb90aef0641feb363b9930431cc8609feef4"
+    },
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/EXTERNAL_REVIEW_REQUEST.md",
+      "bytes": 1786,
+      "sha256": "b97da37f9f8ce6af879708bf088fddbaa9c37a2a75d8ac9a6513b63cbdc6e814"
+    },
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/LITERATURE_COMPARISON.csv",
+      "bytes": 8579,
+      "sha256": "9dc00623871bc79fdc0b8c50988c9ba687a9e96176528f05f7376c33f5c5b814"
+    },
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/LITERATURE_REVIEW.md",
+      "bytes": 6622,
+      "sha256": "3ccb31629fcea653435d4f11df1989d030dcd0d13299a0fc001982208cac8b28"
+    },
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/LOCAL_REVIEW.md",
+      "bytes": 1684,
+      "sha256": "5f3774d525cbac9bfd797a2a6ae83a51e5fc9a9c8c08bfa46d177971c7b33914"
+    },
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/MATHEMATICAL_FORMULATION.md",
+      "bytes": 7576,
+      "sha256": "83a237344c32d21267a4d7473a499a16e0869fdab7573e09ddfdb400f831532f"
+    },
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/NOVELTY_ASSESSMENT.md",
+      "bytes": 3400,
+      "sha256": "75c14e24eea696c2b19978effaa9747471105d60429f59a37aa99dfebf88ae08"
+    },
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/REPORT.md",
+      "bytes": 4730,
+      "sha256": "e050dffd7496ebd9185ecef4558aaf8e5dfdf6152f767a6ffd4121cba7ce1254"
+    },
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/archive_evidence.py",
+      "bytes": 3849,
+      "sha256": "c7629c02a62ddc3c3e85571a19b28899244e61bf0dc5a0ce948f418f7a7e303d"
+    },
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/build_review_packet.py",
+      "bytes": 2097,
+      "sha256": "d8c76546c2912f5817b2977f60b55960edde6c79a78f1bc8b6dfdb0152766eb8"
+    },
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/capture_additional.py",
+      "bytes": 889,
+      "sha256": "cae97d3b0e155b33d6251c8a1fadde65860d3399121dede57fcc27539c4c1bc8"
+    },
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/capture_sources.py",
+      "bytes": 3679,
+      "sha256": "e0ca0de17567b32567289cad4450b57eec5c36ffdb74c5ac996636aa49557e3e"
+    },
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/offline_math.py",
+      "bytes": 2592,
+      "sha256": "0d9a73a9db60e45d31719914f4c26427b0798c98f7957bf804924b895de1b28f"
+    },
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/reproduction_commands.md",
+      "bytes": 1462,
+      "sha256": "6928831950b80f9211aa9d3162855a4ee1e4aeb344081714cb157aafc28e79e7"
+    },
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/results.json",
+      "bytes": 2551,
+      "sha256": "bb42e5ee25c672b57724d32007e9d55b05ff288eea0201bad12d34b2ab2b4f04"
+    },
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/source_manifest.json",
+      "bytes": 15496,
+      "sha256": "161a2628edebd9ee3ce3ad78341be592cadeb2d34fb4ea5b3ad1bbf0dc7de685"
+    },
+    {
+      "path": "docs/p62_r1_novelty_benchmark_lock/tests/test_offline_math.py",
+      "bytes": 3462,
+      "sha256": "aafa60f0287919602b3e700c4b4439d9185227fce596b7b45a19f8d95eeb64a3"
+    }
+  ],
+  "raw_bag_downloads": 0,
+  "sensor_file_reads": 0,
+  "hdd_reads": 0,
+  "reference_schema_files_read": 2,
+  "reference_error_evaluations": 0,
+  "new_ndt_align": 0,
+  "ros_localization_nodes": 0,
+  "ekf_runs": 0,
+  "production_code_changes": 0
+}
