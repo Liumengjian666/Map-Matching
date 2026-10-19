@@ -9,6 +9,7 @@ import time
 import urllib.request
 
 import acquire_assets as fixed
+from publish_small import publish
 
 
 def require_range(status, header, start, stop, size):
@@ -42,10 +43,7 @@ def main():
                 row.update(fixed.verify(destination, size, digest));row['status']='VERIFIED_EXISTING';continue
             if cache_name:
                 source = fixed.CACHE/cache_name
-                fixed.verify(source, size, digest)
-                with source.open('rb') as src, destination.open('xb') as dst:
-                    dst.write(src.read())
-                row.update(fixed.verify(destination,size,digest));row['status']='VERIFIED_CACHE_COPY';continue
+                row.update(publish(source,destination,size,digest));row['status']='VERIFIED_CACHE_COPY';continue
             temporary = fixed.ROOT/'staging'/(destination.name+'.ranged.part')
             fixed.internal_directory(temporary.parent)
             url = 'https://huggingface.co/datasets/Hilti-Research/hilti-slam-challenge-2022/resolve/'+fixed.REVISION+'/'+relative
