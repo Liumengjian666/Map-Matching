@@ -5,6 +5,7 @@ from pathlib import Path
 import numpy as np
 from check_assets import HERE,REPO,R6,sha
 from audit_math import ros_header,lag_ns,statistics,native_seconds
+from record_selection import verified_records,indexed_records
 
 sys.path.insert(0,str(REPO/'docs/p61_r2_geode_real_data_run'))
 from livox_contract import decode
@@ -27,14 +28,26 @@ def write(name,rows,fields=None):
 def main():
     import rosbag
     from genpy import Time
-    for p in ('asset_gate_before.json','evidence_inputs_frozen.json'):
+    for p in ('asset_gate_before.json','evidence_inputs_frozen.json','lookup_inputs_frozen.json'):
         pin=json.loads((HERE/p).read_text());assert pin['status']=='PASS'
         for a in pin['assets']:assert sha(a['path'])==a['sha256'],a['path']
     r10=REPO/'docs/p61_r10_geode_gyro_increment_audit'
     imu=json.loads((r10/'gyro_samples.json').read_text())['samples']
     imu_expected={x['stamp_ns']:x for x in imu if LO<=x['stamp_ns']<=HI}
+    causal_head=imu[0];assert causal_head['stamp_ns']==1706671804791549444
     scans={int(r['stamp_ns']):r for r in read(REPO/'docs/p61_r8_geode_full_return_control/scan_manifest.csv') if LO<=int(r['stamp_ns'])<=HI}
     assert len(imu_expected)==110 and len(scans)==11
+    # Only topic/header/record metadata are used from the historical full ledger.
+    # Actual message values and identities are verified against the frozen bags.
+    lookup_path=Path(json.loads((HERE/'lookup_inputs_frozen.json').read_text())['assets'][0]['path'])
+    # Retain only lookup fields, not full-sequence gyro values.
+    with lookup_path.open() as f:
+        imu_metadata=[{k:r[k] for k in ('topic','stamp_ns','record_ns')} for r in csv.DictReader(f)]
+    imu_lookup=indexed_records(imu_metadata,'/imu/data',lambda ns:ns in imu_expected or ns==causal_head['stamp_ns'])
+    assert set(imu_lookup)==set(imu_expected)|{causal_head['stamp_ns']}
+    r2_scans=indexed_records(read(REPO/'docs/p61_r2_geode_real_data_run/scan_ledger.csv'),'/livox/lidar',lambda ns:ns in scans)
+    assert set(r2_scans)==set(scans)
+    make_time=lambda ns:Time(ns//10**9,ns%10**9)
     lags=[];messages=[];connections={};timebase=[];metadata={}
     for label,path,topics in [('original',ORIGINAL,['/livox/lidar','/imu/data']),('R8_prepared',PREPARED,['/geode/raw_points','/imu/data'])]:
         with rosbag.Bag(str(path),'r') as bag:
@@ -42,7 +55,10 @@ def main():
             # Topic metadata only: never deserialize unrelated/GT payloads.
             metadata[label]=dict(sync_or_temperature_topics=[n for n in bag.get_type_and_topic_info().topics if any(s in n.lower() for s in ('pps','ptp','time_ref','sync','temperature'))])
             by_topic={t:[] for t in topics};found={t:set() for t in topics}
-            for topic,raw,record in bag.read_messages(topics=topics,raw=True,start_time=Time(LO//10**9,LO%10**9),end_time=Time(HI//10**9,HI%10**9)):
+            selection={topics[0]:{ns:(r2_scans[ns] if label=='original' else ns) for ns in scans},
+                '/imu/data':{ns:(imu_lookup[ns] if label=='original' else ns) for ns in imu_expected}}
+            selected=(r for topic in topics for r in verified_records(bag,topic,selection[topic],make_time))
+            for topic,raw,record in selected:
                 h=ros_header(raw[1]);ns=h['header_ns']
                 if not LO<=ns<=HI:continue # No outside-header-window semantic analysis.
                 if topic=='/imu/data':
@@ -62,8 +78,14 @@ def main():
                 value=lag_ns(ns,record.to_nsec());by_topic[topic].append(value);found[topic].add(ns)
                 messages.append(dict(source=label,topic=topic,header_ns=ns,record_ns=record.to_nsec(),header_minus_record_ns=value,
                     frame_id=h['frame_id'],serialized_sha256=hashlib.sha256(raw[1]).hexdigest()))
+            # Boundary identity only, not part of header-window lag statistics.
+            head_records=list(verified_records(bag,'/imu/data',{causal_head['stamp_ns']:
+                imu_lookup[causal_head['stamp_ns']] if label=='original' else causal_head['stamp_ns']},make_time))
+            assert len(head_records)==1
+            assert hashlib.sha256(head_records[0][1][1]).hexdigest()==causal_head['serialized_sha256']
             for topic in topics:
                 expected=set(imu_expected) if topic=='/imu/data' else set(scans)
+                assert found[topic]==expected and len(by_topic[topic])==len(expected)
                 s=statistics(by_topic[topic]);lags.append(dict(source=label,absolute_bag_path=str(path),topic=topic,
                     window_start_ns=LO,window_end_ns=HI,expected_count=len(expected),**s,
                     complete_expected_headers=found[topic]==expected,unit='ns',sign='header minus record',
@@ -78,7 +100,9 @@ def main():
     for label,path in [('original',ORIGINAL),('R6_prepared',R6/'bridge_only.bag')]:
         found=[]
         with rosbag.Bag(str(path),'r') as bag:
-            for _,raw,t in bag.read_messages(topics=['/imu/data'],raw=True,start_time=Time(begin//10**9,begin%10**9),end_time=Time(end//10**9,end%10**9)):
+            selection=indexed_records(imu_metadata,'/imu/data',lambda ns:begin<ns<=end)
+            assert len(selection)==10
+            for _,raw,t in verified_records(bag,'/imu/data',selection,make_time):
                 h=ros_header(raw[1]);ns=h['header_ns']
                 if not begin<ns<=end:continue
                 decoded=decode_imu_payload(raw[1]);assert decoded['frame_id']=='imu_link'
@@ -112,6 +136,8 @@ def main():
     write('initialization_imu_samples.csv',samples)
     write('stationarity_evidence.csv',[],fields=['evidence_id','path','sha256','time_start_ns','time_end_ns','independent_stationarity_basis','status','limitation'])
     result=dict(lag_summary=lags,connections=connections,topic_metadata=metadata,historical_bias_provenance=summary,
+        target_header_window=dict(start_ns=LO,end_ns=HI,lidar_indices=list(range(5155,5166)),lidar_count=11,imu_count=110),
+        boundary_imu_identity=dict(stamp_ns=causal_head['stamp_ns'],original_and_prepared_sha_match=True,excluded_from_lag_statistics=True),
         clock_sync='CLOCK_SYNC_NOT_CERTIFIED',bias_stability='BIAS_STABILITY_NOT_EVALUABLE',
         combined_result='R10_CONTRADICTION_REMAINS_CONDITIONAL',
         raw_gyro_bias_fit=0,clock_offset_search=0,gt_reads=0,localization_nodes=0,rosbag_play=0,new_ndt_align=0,ekf_runs=0,new_trajectory_estimates=0)

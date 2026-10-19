@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "assets": [
+    {
+      "path": "/home/jian/geode/Shield_tunnel1_gamma/inspection/imu_records.csv",
+      "sha256": "f82c85a659438807ead60f18549d2f12b263be9ec1ecdebb71d6d8e383d95609",
+      "size_bytes": 29727243,
+      "frozen_source": "existing R2 traversal metadata; first R11 SHA snapshot; every selected record independently checked in frozen bag"
+    }
+  ]
+}

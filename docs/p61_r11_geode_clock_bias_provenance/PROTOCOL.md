@@ -6,6 +6,14 @@ at this SHA, clean local tree. New independent worktree/branch as requested.
 Fixed target window1706671804799723787..1706671805899593546ns, scans5154–5165.
 Read only original /livox/lidar and external /imu/data messages in that window,
 plus the nearest frozen R10 causal-head IMU needed to verify message identity.
+Lag statistics select headers inside the fixed window: scans5155–5165 (11),
+110 Xsens messages. Scan5154 is a pose endpoint only, not an audited LiDAR
+message. The causal-head IMU1706671804791549444 is checked separately for
+original/prepared identity, excluded from lag statistics. Historical R2 lookup
+metadata locate exact record times; no assumption equates record/header time.
+Missing selected records, duplicate selected lookup rows, or duplicate occurrences
+at queried record times stop the data audit, not become zero lag. This is not a
+new full-bag traversal looking for header copies at unrelated record times.
 Compare exact original header and record time to frozen R8/10 metadata. Describe
 recording lag only, never infer physical clock offset from it.
 
