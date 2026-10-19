@@ -52,8 +52,8 @@
     },
     {
       "path": "COORDINATE_TRANSFORMS.csv",
-      "bytes": 892,
-      "sha256": "58e9320f39e98c589017799d79cc0cc6ce8be9537345c80284fdcce3dc2207b7"
+      "bytes": 887,
+      "sha256": "b58b227575b8ca860aab01f10bb5852e918978d5d0b072d39765a12954c22df1"
     },
     {
       "path": "REFERENCE_INDEPENDENCE.md",
@@ -67,13 +67,13 @@
     },
     {
       "path": "REVIEW_AND_LIMITS.md",
-      "bytes": 2476,
-      "sha256": "44ca96e90b3ac1893765abc62b251a241142249954f4d341e1ff7b90d16f78d6"
+      "bytes": 2759,
+      "sha256": "afcb81cf6652d675c37ba6841df07ec0ed5e3adf46d66705452359f82019eabd"
     },
     {
       "path": "SPARSE_LABEL_AUDIT.csv",
-      "bytes": 731,
-      "sha256": "d3310716953748919b3940954e54182ecee2f0edd8088e3d814f4a7b9262fc90"
+      "bytes": 727,
+      "sha256": "d9bbc48ae10423e2dba22198e114237932a0627ad52be1a7c31e0a2fa8878a87"
     },
     {
       "path": "STORAGE_AUDIT.json",
@@ -87,8 +87,8 @@
     },
     {
       "path": "TIME_COVERAGE.csv",
-      "bytes": 195,
-      "sha256": "bb9f4556ef16c7b3419433fa15684de3f67e2f051f996397620c0aae0b964dd2"
+      "bytes": 193,
+      "sha256": "00055defc1a101e56a8a689d4b7b089bbfe5f4031aa3336f55c90663f5d9093a"
     },
     {
       "path": "acquire_assets.py",
@@ -112,8 +112,8 @@
     },
     {
       "path": "audit_available.py",
-      "bytes": 8595,
-      "sha256": "b026dbefadd93114aef444bf24e2da748f3bca24293bb8a112474efb192acc9d"
+      "bytes": 8615,
+      "sha256": "005f94582d3886d9b660767f5c74baac52ffa36d54ddde08dfee67341a4a400a"
     },
     {
       "path": "download_evidence.json",

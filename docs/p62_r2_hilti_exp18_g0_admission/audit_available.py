@@ -20,7 +20,7 @@ def save(name,value):
 
 def table(name,columns,rows):
     with (HERE/name).open('w',newline='') as handle:
-        writer=csv.DictWriter(handle,fieldnames=columns);writer.writeheader();writer.writerows(rows)
+        writer=csv.DictWriter(handle,fieldnames=columns,lineterminator='\n');writer.writeheader();writer.writerows(rows)
 
 
 def snapshot():
