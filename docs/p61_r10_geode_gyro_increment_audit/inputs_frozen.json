@@ -1,0 +1,1564 @@
+{
+  "start_sha": "d1f9fa9464dac835598e72d52ea2484fd9aa801c",
+  "r9_remote_at_start": "d1f9fa9464dac835598e72d52ea2484fd9aa801c",
+  "intervals": [
+    {
+      "scan_prev": 5154,
+      "scan_curr": 5155,
+      "t_start_ns": 1706671804799723787,
+      "t_end_ns": 1706671804899580989,
+      "dt_ns": 99857202,
+      "raw_pose_rotation_correction_deg": "32.04641008570228"
+    },
+    {
+      "scan_prev": 5155,
+      "scan_curr": 5156,
+      "t_start_ns": 1706671804899580989,
+      "t_end_ns": 1706671805000215599,
+      "dt_ns": 100634610,
+      "raw_pose_rotation_correction_deg": "23.295682158728695"
+    },
+    {
+      "scan_prev": 5156,
+      "scan_curr": 5157,
+      "t_start_ns": 1706671805000215599,
+      "t_end_ns": 1706671805100051028,
+      "dt_ns": 99835429,
+      "raw_pose_rotation_correction_deg": "26.90741326989141"
+    },
+    {
+      "scan_prev": 5157,
+      "scan_curr": 5158,
+      "t_start_ns": 1706671805100051028,
+      "t_end_ns": 1706671805199899607,
+      "dt_ns": 99848579,
+      "raw_pose_rotation_correction_deg": "32.47398542118997"
+    },
+    {
+      "scan_prev": 5158,
+      "scan_curr": 5159,
+      "t_start_ns": 1706671805199899607,
+      "t_end_ns": 1706671805299736074,
+      "dt_ns": 99836467,
+      "raw_pose_rotation_correction_deg": "37.413231104275624"
+    },
+    {
+      "scan_prev": 5159,
+      "scan_curr": 5160,
+      "t_start_ns": 1706671805299736074,
+      "t_end_ns": 1706671805399568864,
+      "dt_ns": 99832790,
+      "raw_pose_rotation_correction_deg": "33.271677930982634"
+    },
+    {
+      "scan_prev": 5160,
+      "scan_curr": 5161,
+      "t_start_ns": 1706671805399568864,
+      "t_end_ns": 1706671805500215801,
+      "dt_ns": 100646937,
+      "raw_pose_rotation_correction_deg": "10.186818943913893"
+    },
+    {
+      "scan_prev": 5161,
+      "scan_curr": 5162,
+      "t_start_ns": 1706671805500215801,
+      "t_end_ns": 1706671805600043670,
+      "dt_ns": 99827869,
+      "raw_pose_rotation_correction_deg": "2.1873869192236968"
+    },
+    {
+      "scan_prev": 5162,
+      "scan_curr": 5163,
+      "t_start_ns": 1706671805600043670,
+      "t_end_ns": 1706671805699901556,
+      "dt_ns": 99857886,
+      "raw_pose_rotation_correction_deg": "15.404660603048413"
+    },
+    {
+      "scan_prev": 5163,
+      "scan_curr": 5164,
+      "t_start_ns": 1706671805699901556,
+      "t_end_ns": 1706671805799747303,
+      "dt_ns": 99845747,
+      "raw_pose_rotation_correction_deg": "19.090833538291353"
+    },
+    {
+      "scan_prev": 5164,
+      "scan_curr": 5165,
+      "t_start_ns": 1706671805799747303,
+      "t_end_ns": 1706671805899593546,
+      "dt_ns": 99846243,
+      "raw_pose_rotation_correction_deg": "12.01754061923673"
+    }
+  ],
+  "raw_pose_strings": {
+    "5154": "[338.9564208984375, 73.46984100341797, 1.336114525794983, 0.2567643747972248, -0.11437886549357892, 0.7885511039064494, 0.5469704630885585]",
+    "5155": "[339.7765197753906, 73.96208953857422, 1.3424791097640991, 0.17018618945706182, -0.26447849659246025, 0.8134503896274893, 0.4892711409567938]",
+    "5156": "[338.66119384765625, 73.7454605102539, 0.8505048155784607, 0.24508227444049976, -0.13846249424609158, 0.7837964990408068, 0.5535574627205354]",
+    "5157": "[337.8065490722656, 72.92264556884766, 1.32334566116333, 0.19908037362151976, -0.07986976296342539, 0.7354689622260814, 0.6427077340478898]",
+    "5158": "[336.8121032714844, 72.89479064941406, 1.0998808145523071, 0.24263193483324258, -0.10077432247875022, 0.6751460595687049, 0.6893127580256125]",
+    "5159": "[335.8494873046875, 73.13386535644531, 0.675205409526825, 0.3040235995446391, -0.11229700750467599, 0.6074212438291904, 0.7252575167279655]",
+    "5160": "[335.7533874511719, 72.33416748046875, 1.8085713386535645, 0.1702291464381443, -0.0312443753789402, 0.6072583986463238, 0.7754244411827776]",
+    "5161": "[337.58416748046875, 73.6409683227539, 0.8902908563613892, 0.26777876806326917, -0.09831816285706417, 0.7814310441031688, 0.5549717051695169]",
+    "5162": "[337.55438232421875, 73.55203247070312, 0.8306519985198975, 0.23040448314410747, -0.08657308284028783, 0.7727505403172609, 0.585043141925454]",
+    "5163": "[337.9164733886719, 72.92920684814453, 1.4187297821044922, 0.1357486362985807, -0.015064318848582666, 0.7870467628005088, 0.6015835496470489]",
+    "5164": "[339.2744445800781, 73.14855194091797, 1.8752955198287964, 0.1339220527473392, -0.018331325833697766, 0.8396206798437771, 0.5260855066049541]",
+    "5165": "[339.3874816894531, 72.66922760009766, 1.9923526048660278, 0.11120653911345228, -0.008929909795051677, 0.8298169899227582, 0.5467697189905394]"
+  },
+  "raw_pose_source_sha256": "44c9ec061535c2040b3c92daae21b54020beaae1b251e42d4f2e976967f1411f",
+  "gyro_bias_I_radps": [
+    -0.0008725237314739192,
+    0.0023757483405765214,
+    -0.010976615256704694
+  ],
+  "bias_display_round_decimals": 9,
+  "T_I_L": [
+    0.9996198206617928,
+    0.027463349486431855,
+    0.002445117092812397,
+    0.049258,
+    -0.027516650513568146,
+    0.9992986370810932,
+    0.025398187217603792,
+    -0.0125,
+    -0.0017458829071876037,
+    -0.025455812782396205,
+    0.9996744237539305,
+    0.026946,
+    0,
+    0,
+    0,
+    1
+  ],
+  "source_code_identity": [
+    {
+      "path": "src/dog_prior_map_localization/src/core/imu_propagation.cpp",
+      "commit": "17922f2b63dae1f2af34f353287728d50a312f73",
+      "sha256": "0ff8fdfb07841c3cefd24bc9fd387212cd471d5d2d70431db816b19435285895"
+    },
+    {
+      "path": "src/dog_prior_map_localization/src/imu_processor.cpp",
+      "commit": "17922f2b63dae1f2af34f353287728d50a312f73",
+      "sha256": "0f616421e23c78f75f04dc44e4a7a50bb5d9708a3c3656c92b5d3cb608ad4cfe"
+    },
+    {
+      "path": "src/dog_prior_map_localization/src/fusion/ndt_observation.cpp",
+      "commit": "17922f2b63dae1f2af34f353287728d50a312f73",
+      "sha256": "2274147a6ee04dc3a26e09f06b9c1a0f0e094780697c744491210d72a19b0cd3"
+    },
+    {
+      "path": "src/dog_prior_map_localization/include/dog_prior_map_localization/core/frame_conversions.hpp",
+      "commit": "17922f2b63dae1f2af34f353287728d50a312f73",
+      "sha256": "569df879f2fb4cc7431d9ff90687fdd5b22c1b8f6b4b7211a51760c9e0b6d49d"
+    }
+  ],
+  "source_assets": [
+    {
+      "asset": "original_bag",
+      "path": "/home/jian/geode/Shield_tunnel1_gamma/Shield_tunnel1_gamma.bag",
+      "size_bytes": 4500527001,
+      "expected_sha256": "162ed09ab6b262f89ac46c45bac36ad2335a6f869b360b80d80ddf59d0b22091",
+      "sha256": "162ed09ab6b262f89ac46c45bac36ad2335a6f869b360b80d80ddf59d0b22091",
+      "frozen_source": "corrected R9 task + R8 input manifest",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_input_manifest",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/input_manifest.json",
+      "size_bytes": 3759,
+      "expected_sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+      "sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+      "frozen_source": "R8 task literal",
+      "status": "PASS"
+    },
+    {
+      "asset": "prepared_input_bag",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/input/full_return.bag",
+      "size_bytes": 1416133574,
+      "expected_sha256": "a138b5ceb0e8ee4a2e5203e70b3943596811ff15d7a45495909934d3a1494331",
+      "sha256": "a138b5ceb0e8ee4a2e5203e70b3943596811ff15d7a45495909934d3a1494331",
+      "frozen_source": "R8 manifest bag_sha256",
+      "status": "PASS"
+    },
+    {
+      "asset": "runtime_input_manifest",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/input/manifest.json",
+      "size_bytes": 3759,
+      "expected_sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+      "sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+      "frozen_source": "R8 input manifest identity",
+      "status": "PASS"
+    },
+    {
+      "asset": "declared_input",
+      "path": "/home/jian/geode/Shield_tunnel1_gamma/Shield_tunnel1_gamma.bag",
+      "size_bytes": 4500527001,
+      "expected_sha256": "162ed09ab6b262f89ac46c45bac36ad2335a6f869b360b80d80ddf59d0b22091",
+      "sha256": "162ed09ab6b262f89ac46c45bac36ad2335a6f869b360b80d80ddf59d0b22091",
+      "frozen_source": "R8 manifest inputs",
+      "status": "PASS"
+    },
+    {
+      "asset": "declared_input",
+      "path": "/home/jian/livox_ws/p61_r5_geode_runs/formal_mapping/frozen_map.pcd",
+      "size_bytes": 10273947,
+      "expected_sha256": "4a279d822fd6090d3aa3fc0cec989b4f6fde5c9a43df476a29dba4494f6821b4",
+      "sha256": "4a279d822fd6090d3aa3fc0cec989b4f6fde5c9a43df476a29dba4494f6821b4",
+      "frozen_source": "R8 manifest inputs",
+      "status": "PASS"
+    },
+    {
+      "asset": "declared_input",
+      "path": "/home/jian/livox_ws/p61_r8_geode_full_return_ws/docs/p61_r2_geode_real_data_run/scan_ledger.csv",
+      "size_bytes": 1057313,
+      "expected_sha256": "21cba76ec059016700b5ac3f0a0851f769b338ee4550e19108910d3efd3902fb",
+      "sha256": "21cba76ec059016700b5ac3f0a0851f769b338ee4550e19108910d3efd3902fb",
+      "frozen_source": "R8 manifest inputs",
+      "status": "PASS"
+    },
+    {
+      "asset": "declared_input",
+      "path": "/home/jian/livox_ws/p61_r8_geode_full_return_ws/docs/p61_r6_geode_causal_init_bridge/initialization.json",
+      "size_bytes": 3352,
+      "expected_sha256": "9a5532ce3b7162e92b6a711c509d9a8e52d28eff81f6515fb3618067582b733d",
+      "sha256": "9a5532ce3b7162e92b6a711c509d9a8e52d28eff81f6515fb3618067582b733d",
+      "frozen_source": "R8 manifest inputs",
+      "status": "PASS"
+    },
+    {
+      "asset": "declared_input",
+      "path": "/home/jian/livox_ws/p61_r8_geode_full_return_ws/docs/p61_r6_geode_causal_init_bridge/initial_covariance.csv",
+      "size_bytes": 7352,
+      "expected_sha256": "55ac110fd02620c494e916fdb575bd514b734245b26d09764fc7de1116670f39",
+      "sha256": "55ac110fd02620c494e916fdb575bd514b734245b26d09764fc7de1116670f39",
+      "frozen_source": "R8 manifest inputs",
+      "status": "PASS"
+    },
+    {
+      "asset": "runtime_input_scans.csv",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/input/scans.csv",
+      "size_bytes": 695882,
+      "expected_sha256": "d337041a99b2269c6596f0a17d76c3a991271774e81a4cb68bc987e34e15109f",
+      "sha256": "d337041a99b2269c6596f0a17d76c3a991271774e81a4cb68bc987e34e15109f",
+      "frozen_source": "R8 input manifest scans_sha256",
+      "status": "PASS"
+    },
+    {
+      "asset": "runtime_input_imu.csv",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/input/imu.csv",
+      "size_bytes": 2441956,
+      "expected_sha256": "80639c15a571f0a385958bdc018e934a958281db6ccec933264fae70743e3d25",
+      "sha256": "80639c15a571f0a385958bdc018e934a958281db6ccec933264fae70743e3d25",
+      "frozen_source": "R8 input manifest imu_sha256",
+      "status": "PASS"
+    },
+    {
+      "asset": "runtime_input_initialization.yaml",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/input/initialization.yaml",
+      "size_bytes": 1463,
+      "expected_sha256": "084a1f4b04265c82b8fcf9e519bc35708692e5b409eb9c0fcb551955310ac6fa",
+      "sha256": "084a1f4b04265c82b8fcf9e519bc35708692e5b409eb9c0fcb551955310ac6fa",
+      "frozen_source": "R8 input manifest config_sha256",
+      "status": "PASS"
+    },
+    {
+      "asset": "R9_R6_initialization",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r6_geode_causal_init_bridge/initialization.json",
+      "size_bytes": 3352,
+      "expected_sha256": "9a5532ce3b7162e92b6a711c509d9a8e52d28eff81f6515fb3618067582b733d",
+      "sha256": "9a5532ce3b7162e92b6a711c509d9a8e52d28eff81f6515fb3618067582b733d",
+      "frozen_source": "R9 task",
+      "status": "PASS"
+    },
+    {
+      "asset": "R9_R6_covariance",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r6_geode_causal_init_bridge/initial_covariance.csv",
+      "size_bytes": 7352,
+      "expected_sha256": "55ac110fd02620c494e916fdb575bd514b734245b26d09764fc7de1116670f39",
+      "sha256": "55ac110fd02620c494e916fdb575bd514b734245b26d09764fc7de1116670f39",
+      "frozen_source": "R9 task",
+      "status": "PASS"
+    },
+    {
+      "asset": "R9_R2_ledger",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r2_geode_real_data_run/scan_ledger.csv",
+      "size_bytes": 1057313,
+      "expected_sha256": "21cba76ec059016700b5ac3f0a0851f769b338ee4550e19108910d3efd3902fb",
+      "sha256": "21cba76ec059016700b5ac3f0a0851f769b338ee4550e19108910d3efd3902fb",
+      "frozen_source": "R9 task",
+      "status": "PASS"
+    },
+    {
+      "asset": "numeric_config",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/src/dog_prior_map_localization/config/geode_r7_baseline.yaml",
+      "size_bytes": 2920,
+      "expected_sha256": "9d2e32ebf5bd89230d46b7af7b5d0cf9115cbe72d600634899337eab09eba0d3",
+      "sha256": "9d2e32ebf5bd89230d46b7af7b5d0cf9115cbe72d600634899337eab09eba0d3",
+      "frozen_source": "R8 runtime identity",
+      "status": "PASS"
+    },
+    {
+      "asset": "numeric_config",
+      "path": "/home/jian/livox_ws/p61_r7_geode_baseline_ws/src/dog_prior_map_localization/config/geode_r7_baseline.yaml",
+      "size_bytes": 2920,
+      "expected_sha256": "9d2e32ebf5bd89230d46b7af7b5d0cf9115cbe72d600634899337eab09eba0d3",
+      "sha256": "9d2e32ebf5bd89230d46b7af7b5d0cf9115cbe72d600634899337eab09eba0d3",
+      "frozen_source": "R8 runtime identity",
+      "status": "PASS"
+    },
+    {
+      "asset": "numeric_config",
+      "path": "/home/jian/livox_ws/p61_r8_geode_full_return_ws/src/dog_prior_map_localization/config/geode_r7_baseline.yaml",
+      "size_bytes": 2920,
+      "expected_sha256": "9d2e32ebf5bd89230d46b7af7b5d0cf9115cbe72d600634899337eab09eba0d3",
+      "sha256": "9d2e32ebf5bd89230d46b7af7b5d0cf9115cbe72d600634899337eab09eba0d3",
+      "frozen_source": "R8 runtime identity",
+      "status": "PASS"
+    },
+    {
+      "asset": "runtime_binary_only_hash",
+      "path": "/home/jian/livox_ws/p61_r7_geode_baseline_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp",
+      "size_bytes": 1776024,
+      "expected_sha256": "89fdc9da728660df9958276f7fc61c216842a866c885a316f8ac0537b329c06b",
+      "sha256": "89fdc9da728660df9958276f7fc61c216842a866c885a316f8ac0537b329c06b",
+      "frozen_source": "R8 run identity, not executed",
+      "status": "PASS"
+    },
+    {
+      "asset": "runtime_binary_only_hash",
+      "path": "/home/jian/livox_ws/p61_r7_geode_baseline_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp",
+      "size_bytes": 1533256,
+      "expected_sha256": "40942380de766d75022c5f09475680f6288a0124364160b7241f52ac375bd0f9",
+      "sha256": "40942380de766d75022c5f09475680f6288a0124364160b7241f52ac375bd0f9",
+      "frozen_source": "R8 run identity, not executed",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/connection_readiness.json",
+      "size_bytes": 4055,
+      "expected_sha256": "79e37548980a8e298d5fb2c632ea0375282f9dad75b9ab3c268d4d0df03c672e",
+      "sha256": "79e37548980a8e298d5fb2c632ea0375282f9dad75b9ab3c268d4d0df03c672e",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/deskew.csv",
+      "size_bytes": 960397,
+      "expected_sha256": "66c45b55323fadcdcb526f31daa2b94fd1cf6c53bfef92fb8185f0bb9a5c0915",
+      "sha256": "66c45b55323fadcdcb526f31daa2b94fd1cf6c53bfef92fb8185f0bb9a5c0915",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ekf_lineage.csv",
+      "size_bytes": 13566971,
+      "expected_sha256": "2b8a3b695ca3d44b8c08add171a91024f4294174ced6930381a0eab98d40d715",
+      "sha256": "2b8a3b695ca3d44b8c08add171a91024f4294174ced6930381a0eab98d40d715",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/frame_terminals.csv",
+      "size_bytes": 241252,
+      "expected_sha256": "0a3fa6ae589152a794321a74320cd1810acdf6fd06c321a9a150438016fe9a40",
+      "sha256": "0a3fa6ae589152a794321a74320cd1810acdf6fd06c321a9a150438016fe9a40",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/fusion.csv",
+      "size_bytes": 191168,
+      "expected_sha256": "d2c98ae10bc666043743861856683c4b84c6fee339717455d5582f02e9ff6ee3",
+      "sha256": "d2c98ae10bc666043743861856683c4b84c6fee339717455d5582f02e9ff6ee3",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/geometry.csv",
+      "size_bytes": 677494,
+      "expected_sha256": "57f1f8c5cc965235732986b44f40a4884f3ddf62efb801483470089198457f91",
+      "sha256": "57f1f8c5cc965235732986b44f40a4884f3ddf62efb801483470089198457f91",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/live_trajectories.csv",
+      "size_bytes": 7504113,
+      "expected_sha256": "c6ec2ba13af41ebd3f54e9b55bd7734a1012712b13029214e90bba161a7fe9b8",
+      "sha256": "c6ec2ba13af41ebd3f54e9b55bd7734a1012712b13029214e90bba161a7fe9b8",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/memory.csv",
+      "size_bytes": 4802911,
+      "expected_sha256": "1ae985a8761b9762543c3dbf7da73ba368383b00f5ed303548c96e01583533ba",
+      "sha256": "1ae985a8761b9762543c3dbf7da73ba368383b00f5ed303548c96e01583533ba",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ndt_diagnostics.csv",
+      "size_bytes": 4535566,
+      "expected_sha256": "0b85a31daff3f12f58a6e65849c191ed00269011ef7c1e2975fbd7dcb02457f5",
+      "sha256": "0b85a31daff3f12f58a6e65849c191ed00269011ef7c1e2975fbd7dcb02457f5",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ndt_performance.csv",
+      "size_bytes": 187356,
+      "expected_sha256": "c993409b7479af08a24b4611bc45c32857c1e0a3c0d064f2e4d44939b2e0c959",
+      "sha256": "c993409b7479af08a24b4611bc45c32857c1e0a3c0d064f2e4d44939b2e0c959",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ndt_runtime.csv",
+      "size_bytes": 29193,
+      "expected_sha256": "4e2eaa3f1adfefc26a2f4e2b4944c95199ffd178e577a8ee593a91a07c6cab8e",
+      "sha256": "4e2eaa3f1adfefc26a2f4e2b4944c95199ffd178e577a8ee593a91a07c6cab8e",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/oosm.csv",
+      "size_bytes": 285686,
+      "expected_sha256": "c11def1d0ac43b20e9271de0a039b4a6f00b625798fbfb90fa4f478feface411",
+      "sha256": "c11def1d0ac43b20e9271de0a039b4a6f00b625798fbfb90fa4f478feface411",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/pids.json",
+      "size_bytes": 108,
+      "expected_sha256": "dead18dbb0e72f4c3d73f8221dcb79c6525829ce826254d336ef9e7ed95c84b8",
+      "sha256": "dead18dbb0e72f4c3d73f8221dcb79c6525829ce826254d336ef9e7ed95c84b8",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/progress.json",
+      "size_bytes": 93,
+      "expected_sha256": "bd89e459ecd53ea56d7f7877d252e01df48a0294b0524ca54a0fc64666722181",
+      "sha256": "bd89e459ecd53ea56d7f7877d252e01df48a0294b0524ca54a0fc64666722181",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/replay.log",
+      "size_bytes": 476,
+      "expected_sha256": "9f188cbabd23dc881eba9bd47a2b27ca6e46dc8e72f538ac605f77d78d408ea8",
+      "sha256": "9f188cbabd23dc881eba9bd47a2b27ca6e46dc8e72f538ac605f77d78d408ea8",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/replay_summary.json",
+      "size_bytes": 170,
+      "expected_sha256": "f63bf1ed72defab31559574b6dd255ab89507c4ed57369f0679224cd098148e8",
+      "sha256": "f63bf1ed72defab31559574b6dd255ab89507c4ed57369f0679224cd098148e8",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ros_home/rospack_cache_12512256067081518489",
+      "size_bytes": 8285,
+      "expected_sha256": "693fa049d8e43935a4ceae68efbb7b1c9715da03724c4e7387468e261c98538a",
+      "sha256": "693fa049d8e43935a4ceae68efbb7b1c9715da03724c4e7387468e261c98538a",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ros_logs/bb2a6f36-cb65-11f1-b4af-1b930d869551/master.log",
+      "size_bytes": 42084,
+      "expected_sha256": "bb64f9f472b40eb38818b2425da0dbd5c08f6ea483471d00fce0486b668640a7",
+      "sha256": "bb64f9f472b40eb38818b2425da0dbd5c08f6ea483471d00fce0486b668640a7",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ros_logs/bb2a6f36-cb65-11f1-b4af-1b930d869551/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-102197.log",
+      "size_bytes": 58008,
+      "expected_sha256": "4b43b8460aa4b8470cc232d5a81b072120a6f3792e4ec94baaba1193709df9b3",
+      "sha256": "4b43b8460aa4b8470cc232d5a81b072120a6f3792e4ec94baaba1193709df9b3",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ros_logs/bb2a6f36-cb65-11f1-b4af-1b930d869551/rosout-1-stdout.log",
+      "size_bytes": 184,
+      "expected_sha256": "6248c6af3b727770f8b4a0fa01e22f1469dbe02c80be7e0eb59ccf1cf6cc22da",
+      "sha256": "6248c6af3b727770f8b4a0fa01e22f1469dbe02c80be7e0eb59ccf1cf6cc22da",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ros_logs/bb2a6f36-cb65-11f1-b4af-1b930d869551/rosout.log",
+      "size_bytes": 211931,
+      "expected_sha256": "11c7512023e9fc57a17f6e26e5fc3fc1d9fefea672d23ff6ca19351db1081b97",
+      "sha256": "11c7512023e9fc57a17f6e26e5fc3fc1d9fefea672d23ff6ca19351db1081b97",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/ros_logs/geode_r8_full_input.log",
+      "size_bytes": 4441,
+      "expected_sha256": "3ce7c282f8b38b3a6cf8777a042008e3dca566fa8555a0ac2d52c18bcfb907b3",
+      "sha256": "3ce7c282f8b38b3a6cf8777a042008e3dca566fa8555a0ac2d52c18bcfb907b3",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/roslaunch.log",
+      "size_bytes": 68854,
+      "expected_sha256": "65e8244bd59a1dfad6295fa58bdbee6790a0893c38c8a322de3fb15f6613be23",
+      "sha256": "65e8244bd59a1dfad6295fa58bdbee6790a0893c38c8a322de3fb15f6613be23",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/rviz_full_return_finished.json",
+      "size_bytes": 193,
+      "expected_sha256": "013fa883da413aff99be6e6d26fe2b6daffdcd9bc9677d02f0b5f9e63c941a91",
+      "sha256": "013fa883da413aff99be6e6d26fe2b6daffdcd9bc9677d02f0b5f9e63c941a91",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/rviz_full_return_finished.png",
+      "size_bytes": 62331,
+      "expected_sha256": "8ba97d4cbda1ec56b37b9d662997b096299e9864f7840ab221dfbcc619236a31",
+      "sha256": "8ba97d4cbda1ec56b37b9d662997b096299e9864f7840ab221dfbcc619236a31",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/rviz_live_early.json",
+      "size_bytes": 215,
+      "expected_sha256": "2fb87898cc9407f616d4353256344d0df8038c588f62bbc5d9fe1d1b2777d59b",
+      "sha256": "2fb87898cc9407f616d4353256344d0df8038c588f62bbc5d9fe1d1b2777d59b",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/rviz_live_early.png",
+      "size_bytes": 60083,
+      "expected_sha256": "7ffe7aac3dfc90f88385b2e8a6042390c9b02daed6351e020c8cee9cf051d332",
+      "sha256": "7ffe7aac3dfc90f88385b2e8a6042390c9b02daed6351e020c8cee9cf051d332",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/rviz_live_late.json",
+      "size_bytes": 193,
+      "expected_sha256": "c84a234f58e4ce437cfb9656e463460a7b828c6f042648bdb846de351cc8458d",
+      "sha256": "c84a234f58e4ce437cfb9656e463460a7b828c6f042648bdb846de351cc8458d",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/rviz_live_late.png",
+      "size_bytes": 62443,
+      "expected_sha256": "556ad506431930cc10e39a18d8f12c69142d17a82b0474ce7a7b6ac95ddb3617",
+      "sha256": "556ad506431930cc10e39a18d8f12c69142d17a82b0474ce7a7b6ac95ddb3617",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/rviz_live_middle.json",
+      "size_bytes": 193,
+      "expected_sha256": "0f8521a586aff9d056cbfc0103ac0523f4af6e11ed9c7658bafafe8f5eb1e1f8",
+      "sha256": "0f8521a586aff9d056cbfc0103ac0523f4af6e11ed9c7658bafafe8f5eb1e1f8",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "frozen_raw_output",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/formal/rviz_live_middle.png",
+      "size_bytes": 61521,
+      "expected_sha256": "279ca1754af11857e1d1f14348fe932f032d706fb05d038f25b0a4ed9822d43c",
+      "sha256": "279ca1754af11857e1d1f14348fe932f032d706fb05d038f25b0a4ed9822d43c",
+      "frozen_source": "R8 output_freeze.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/geometry.csv",
+      "size_bytes": 677494,
+      "expected_sha256": "57f1f8c5cc965235732986b44f40a4884f3ddf62efb801483470089198457f91",
+      "sha256": "57f1f8c5cc965235732986b44f40a4884f3ddf62efb801483470089198457f91",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/scan_manifest.csv",
+      "size_bytes": 695882,
+      "expected_sha256": "d337041a99b2269c6596f0a17d76c3a991271774e81a4cb68bc987e34e15109f",
+      "sha256": "d337041a99b2269c6596f0a17d76c3a991271774e81a4cb68bc987e34e15109f",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/deskew.csv",
+      "size_bytes": 960397,
+      "expected_sha256": "66c45b55323fadcdcb526f31daa2b94fd1cf6c53bfef92fb8185f0bb9a5c0915",
+      "sha256": "66c45b55323fadcdcb526f31daa2b94fd1cf6c53bfef92fb8185f0bb9a5c0915",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/rviz_live_early.json",
+      "size_bytes": 215,
+      "expected_sha256": "2fb87898cc9407f616d4353256344d0df8038c588f62bbc5d9fe1d1b2777d59b",
+      "sha256": "2fb87898cc9407f616d4353256344d0df8038c588f62bbc5d9fe1d1b2777d59b",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/live_trajectories.csv",
+      "size_bytes": 7504113,
+      "expected_sha256": "c6ec2ba13af41ebd3f54e9b55bd7734a1012712b13029214e90bba161a7fe9b8",
+      "sha256": "c6ec2ba13af41ebd3f54e9b55bd7734a1012712b13029214e90bba161a7fe9b8",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/frame_terminals.csv",
+      "size_bytes": 241252,
+      "expected_sha256": "0a3fa6ae589152a794321a74320cd1810acdf6fd06c321a9a150438016fe9a40",
+      "sha256": "0a3fa6ae589152a794321a74320cd1810acdf6fd06c321a9a150438016fe9a40",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/diagnostic_intervals.csv",
+      "size_bytes": 13117,
+      "expected_sha256": "db0370ea39deb589c954e3cdb67ca53e07589076f18a62013eca8055c2b08d7c",
+      "sha256": "db0370ea39deb589c954e3cdb67ca53e07589076f18a62013eca8055c2b08d7c",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/anomalies.csv",
+      "size_bytes": 218924,
+      "expected_sha256": "afe775548a2bc9bf30ff6f872a918a681932806adbf8953513651b68445947bd",
+      "sha256": "afe775548a2bc9bf30ff6f872a918a681932806adbf8953513651b68445947bd",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/rviz_live_late.png",
+      "size_bytes": 62443,
+      "expected_sha256": "556ad506431930cc10e39a18d8f12c69142d17a82b0474ce7a7b6ac95ddb3617",
+      "sha256": "556ad506431930cc10e39a18d8f12c69142d17a82b0474ce7a7b6ac95ddb3617",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/results.json",
+      "size_bytes": 5215,
+      "expected_sha256": "ce601b24ed4f7c75f610978694f2cfcb94f8870a684d77e33734e21fe50118b6",
+      "sha256": "ce601b24ed4f7c75f610978694f2cfcb94f8870a684d77e33734e21fe50118b6",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/rviz_live_middle.png",
+      "size_bytes": 61521,
+      "expected_sha256": "279ca1754af11857e1d1f14348fe932f032d706fb05d038f25b0a4ed9822d43c",
+      "sha256": "279ca1754af11857e1d1f14348fe932f032d706fb05d038f25b0a4ed9822d43c",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/fusion.csv",
+      "size_bytes": 191168,
+      "expected_sha256": "d2c98ae10bc666043743861856683c4b84c6fee339717455d5582f02e9ff6ee3",
+      "sha256": "d2c98ae10bc666043743861856683c4b84c6fee339717455d5582f02e9ff6ee3",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/output_freeze.json",
+      "size_bytes": 4490,
+      "expected_sha256": "c8daa61065b7af376f39472c84a8bebb60b85ea33f7a96f75c106a1f53f84144",
+      "sha256": "c8daa61065b7af376f39472c84a8bebb60b85ea33f7a96f75c106a1f53f84144",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/frame_results.csv",
+      "size_bytes": 2804351,
+      "expected_sha256": "44c9ec061535c2040b3c92daae21b54020beaae1b251e42d4f2e976967f1411f",
+      "sha256": "44c9ec061535c2040b3c92daae21b54020beaae1b251e42d4f2e976967f1411f",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/rviz_full_return_finished.png",
+      "size_bytes": 62331,
+      "expected_sha256": "8ba97d4cbda1ec56b37b9d662997b096299e9864f7840ab221dfbcc619236a31",
+      "sha256": "8ba97d4cbda1ec56b37b9d662997b096299e9864f7840ab221dfbcc619236a31",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/oosm.csv",
+      "size_bytes": 285686,
+      "expected_sha256": "c11def1d0ac43b20e9271de0a039b4a6f00b625798fbfb90fa4f478feface411",
+      "sha256": "c11def1d0ac43b20e9271de0a039b4a6f00b625798fbfb90fa4f478feface411",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/rviz_live_late.json",
+      "size_bytes": 193,
+      "expected_sha256": "c84a234f58e4ce437cfb9656e463460a7b828c6f042648bdb846de351cc8458d",
+      "sha256": "c84a234f58e4ce437cfb9656e463460a7b828c6f042648bdb846de351cc8458d",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/process_memory.png",
+      "size_bytes": 75420,
+      "expected_sha256": "4fc75964546e65c4ca1eb6608dde01029945994688e5b1551466d302d7287397",
+      "sha256": "4fc75964546e65c4ca1eb6608dde01029945994688e5b1551466d302d7287397",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/run_identity.json",
+      "size_bytes": 724,
+      "expected_sha256": "8ef45eed2fa2522e43bc334d26f761c6306ade1194f215f8546a31254b850f45",
+      "sha256": "8ef45eed2fa2522e43bc334d26f761c6306ade1194f215f8546a31254b850f45",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/trajectory_increments.csv",
+      "size_bytes": 191433,
+      "expected_sha256": "e8da5221630b5c25fdf4fe0fe82132e680ba87c0612b95e7bea306b10757a58a",
+      "sha256": "e8da5221630b5c25fdf4fe0fe82132e680ba87c0612b95e7bea306b10757a58a",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/rviz_live_middle.json",
+      "size_bytes": 193,
+      "expected_sha256": "0f8521a586aff9d056cbfc0103ac0523f4af6e11ed9c7658bafafe8f5eb1e1f8",
+      "sha256": "0f8521a586aff9d056cbfc0103ac0523f4af6e11ed9c7658bafafe8f5eb1e1f8",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/rviz_live_early.png",
+      "size_bytes": 60083,
+      "expected_sha256": "7ffe7aac3dfc90f88385b2e8a6042390c9b02daed6351e020c8cee9cf051d332",
+      "sha256": "7ffe7aac3dfc90f88385b2e8a6042390c9b02daed6351e020c8cee9cf051d332",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/rviz_full_return_finished.json",
+      "size_bytes": 193,
+      "expected_sha256": "013fa883da413aff99be6e6d26fe2b6daffdcd9bc9677d02f0b5f9e63c941a91",
+      "sha256": "013fa883da413aff99be6e6d26fe2b6daffdcd9bc9677d02f0b5f9e63c941a91",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/trajectories_and_corrections.png",
+      "size_bytes": 111619,
+      "expected_sha256": "208b3c5ca7e0257b413317c42466c4e666bd589f4e8bc70b4b853806743e55ed",
+      "sha256": "208b3c5ca7e0257b413317c42466c4e666bd589f4e8bc70b4b853806743e55ed",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/r7_first20_parity.csv",
+      "size_bytes": 990,
+      "expected_sha256": "f61372294183d4cb98f43c67d9b92f78286bc5af9b074c8d282d3ab7e3a1a88f",
+      "sha256": "f61372294183d4cb98f43c67d9b92f78286bc5af9b074c8d282d3ab7e3a1a88f",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/runtime_statistics.json",
+      "size_bytes": 1968,
+      "expected_sha256": "47493adf71f115feb709ff7cdd4bfefc79fda9086c61d6d2aa027f2e0d86ed15",
+      "sha256": "47493adf71f115feb709ff7cdd4bfefc79fda9086c61d6d2aa027f2e0d86ed15",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/peak_cases.json",
+      "size_bytes": 7046,
+      "expected_sha256": "420d8f41a48ad023c211583c44081a229de66ad9ab25bcceff8cbb07e4dd49c6",
+      "sha256": "420d8f41a48ad023c211583c44081a229de66ad9ab25bcceff8cbb07e4dd49c6",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "archived_R8_output",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/input_manifest.json",
+      "size_bytes": 3759,
+      "expected_sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+      "sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+      "frozen_source": "R8 archive_hashes.json",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/CLI_REVIEW.md",
+      "size_bytes": 3716,
+      "expected_sha256": "6fbd74e72030679f14f0f976dc4f03b63dfa11f6a3639a89b90d548fce87473d",
+      "sha256": "6fbd74e72030679f14f0f976dc4f03b63dfa11f6a3639a89b90d548fce87473d",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/CODE_AND_TESTS.md",
+      "size_bytes": 4444,
+      "expected_sha256": "07766be3b433ba773c03edc6e584f121b30867cc8cbe4c062f308bff5548350a",
+      "sha256": "07766be3b433ba773c03edc6e584f121b30867cc8cbe4c062f308bff5548350a",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/PROTOCOL.md",
+      "size_bytes": 2604,
+      "expected_sha256": "0008952f212709d8f6f9f2e44b833b6732de6d0f6bc59033f51f8bb12b0f0ebc",
+      "sha256": "0008952f212709d8f6f9f2e44b833b6732de6d0f6bc59033f51f8bb12b0f0ebc",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/REPORT.md",
+      "size_bytes": 11626,
+      "expected_sha256": "9d255fa4491ab988d234f84d58dbe1e6d20a25c1b330a57146a2b6b5eb122015",
+      "sha256": "9d255fa4491ab988d234f84d58dbe1e6d20a25c1b330a57146a2b6b5eb122015",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/REPRODUCE.md",
+      "size_bytes": 3386,
+      "expected_sha256": "8911fe647c2f4998db46aaba363cd4080999b349966ee4aa0a72eb1022ef89f0",
+      "sha256": "8911fe647c2f4998db46aaba363cd4080999b349966ee4aa0a72eb1022ef89f0",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/analyze_run.py",
+      "size_bytes": 16246,
+      "expected_sha256": "0e56014dc4c81fd3f56c1bb6a7bf0688f937822b0462826baa4647f1a83b3280",
+      "sha256": "0e56014dc4c81fd3f56c1bb6a7bf0688f937822b0462826baa4647f1a83b3280",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/anomalies.csv",
+      "size_bytes": 218924,
+      "expected_sha256": "afe775548a2bc9bf30ff6f872a918a681932806adbf8953513651b68445947bd",
+      "sha256": "afe775548a2bc9bf30ff6f872a918a681932806adbf8953513651b68445947bd",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/archive_hashes.json",
+      "size_bytes": 2602,
+      "expected_sha256": "256a57e5d2c2afb1085128ad676133154183599cf77f6695b97ab89f74a555eb",
+      "sha256": "256a57e5d2c2afb1085128ad676133154183599cf77f6695b97ab89f74a555eb",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/archive_run.py",
+      "size_bytes": 3761,
+      "expected_sha256": "ee0492048c09910df13b5cfe7d6590ad0e2e6ee19566d281041cb2e2125e3cb3",
+      "sha256": "ee0492048c09910df13b5cfe7d6590ad0e2e6ee19566d281041cb2e2125e3cb3",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/cli_review_prompt.md",
+      "size_bytes": 2194,
+      "expected_sha256": "966f544fdd52c747921135379e888d6e58887ce5c2af8d0b9c1302bbb45938dd",
+      "sha256": "966f544fdd52c747921135379e888d6e58887ce5c2af8d0b9c1302bbb45938dd",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/deskew.csv",
+      "size_bytes": 960397,
+      "expected_sha256": "66c45b55323fadcdcb526f31daa2b94fd1cf6c53bfef92fb8185f0bb9a5c0915",
+      "sha256": "66c45b55323fadcdcb526f31daa2b94fd1cf6c53bfef92fb8185f0bb9a5c0915",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/diagnostic_intervals.csv",
+      "size_bytes": 13117,
+      "expected_sha256": "db0370ea39deb589c954e3cdb67ca53e07589076f18a62013eca8055c2b08d7c",
+      "sha256": "db0370ea39deb589c954e3cdb67ca53e07589076f18a62013eca8055c2b08d7c",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/frame_results.csv",
+      "size_bytes": 2804351,
+      "expected_sha256": "44c9ec061535c2040b3c92daae21b54020beaae1b251e42d4f2e976967f1411f",
+      "sha256": "44c9ec061535c2040b3c92daae21b54020beaae1b251e42d4f2e976967f1411f",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/frame_terminals.csv",
+      "size_bytes": 241252,
+      "expected_sha256": "0a3fa6ae589152a794321a74320cd1810acdf6fd06c321a9a150438016fe9a40",
+      "sha256": "0a3fa6ae589152a794321a74320cd1810acdf6fd06c321a9a150438016fe9a40",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/fusion.csv",
+      "size_bytes": 191168,
+      "expected_sha256": "d2c98ae10bc666043743861856683c4b84c6fee339717455d5582f02e9ff6ee3",
+      "sha256": "d2c98ae10bc666043743861856683c4b84c6fee339717455d5582f02e9ff6ee3",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/geometry.csv",
+      "size_bytes": 677494,
+      "expected_sha256": "57f1f8c5cc965235732986b44f40a4884f3ddf62efb801483470089198457f91",
+      "sha256": "57f1f8c5cc965235732986b44f40a4884f3ddf62efb801483470089198457f91",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/input_manifest.json",
+      "size_bytes": 3759,
+      "expected_sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+      "sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/live_trajectories.csv",
+      "size_bytes": 7504113,
+      "expected_sha256": "c6ec2ba13af41ebd3f54e9b55bd7734a1012712b13029214e90bba161a7fe9b8",
+      "sha256": "c6ec2ba13af41ebd3f54e9b55bd7734a1012712b13029214e90bba161a7fe9b8",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/oosm.csv",
+      "size_bytes": 285686,
+      "expected_sha256": "c11def1d0ac43b20e9271de0a039b4a6f00b625798fbfb90fa4f478feface411",
+      "sha256": "c11def1d0ac43b20e9271de0a039b4a6f00b625798fbfb90fa4f478feface411",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/output_freeze.json",
+      "size_bytes": 4490,
+      "expected_sha256": "c8daa61065b7af376f39472c84a8bebb60b85ea33f7a96f75c106a1f53f84144",
+      "sha256": "c8daa61065b7af376f39472c84a8bebb60b85ea33f7a96f75c106a1f53f84144",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/peak_cases.json",
+      "size_bytes": 7046,
+      "expected_sha256": "420d8f41a48ad023c211583c44081a229de66ad9ab25bcceff8cbb07e4dd49c6",
+      "sha256": "420d8f41a48ad023c211583c44081a229de66ad9ab25bcceff8cbb07e4dd49c6",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/prepare_inputs.py",
+      "size_bytes": 5898,
+      "expected_sha256": "a6040c98fbecfd88afe496a9f598b8a9da48a71d1913760e952644c72d27b2d6",
+      "sha256": "a6040c98fbecfd88afe496a9f598b8a9da48a71d1913760e952644c72d27b2d6",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/process_memory.png",
+      "size_bytes": 75420,
+      "expected_sha256": "4fc75964546e65c4ca1eb6608dde01029945994688e5b1551466d302d7287397",
+      "sha256": "4fc75964546e65c4ca1eb6608dde01029945994688e5b1551466d302d7287397",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/r7_first20_parity.csv",
+      "size_bytes": 990,
+      "expected_sha256": "f61372294183d4cb98f43c67d9b92f78286bc5af9b074c8d282d3ab7e3a1a88f",
+      "sha256": "f61372294183d4cb98f43c67d9b92f78286bc5af9b074c8d282d3ab7e3a1a88f",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/replay_full.py",
+      "size_bytes": 14171,
+      "expected_sha256": "afd7ee24d6cc14b6baee816f6a89458e6955430530de7c359012f19e5b4f93fe",
+      "sha256": "afd7ee24d6cc14b6baee816f6a89458e6955430530de7c359012f19e5b4f93fe",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/results.json",
+      "size_bytes": 5215,
+      "expected_sha256": "ce601b24ed4f7c75f610978694f2cfcb94f8870a684d77e33734e21fe50118b6",
+      "sha256": "ce601b24ed4f7c75f610978694f2cfcb94f8870a684d77e33734e21fe50118b6",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/return_view.rviz",
+      "size_bytes": 1557,
+      "expected_sha256": "16bf01fa98f2d43099bb833b3330eff5ae0855cfc378c4c3dbbc3973da4278ee",
+      "sha256": "16bf01fa98f2d43099bb833b3330eff5ae0855cfc378c4c3dbbc3973da4278ee",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/reviews.md",
+      "size_bytes": 2323,
+      "expected_sha256": "58c6cce501026d0ddf8f4f891ee0fe773154fdac767be1affb2f57091374d35a",
+      "sha256": "58c6cce501026d0ddf8f4f891ee0fe773154fdac767be1affb2f57091374d35a",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/run.launch",
+      "size_bytes": 673,
+      "expected_sha256": "0c2e8e43a271f22a14ab405dbb260984b4f0026a772168e65d28d8755355a9f9",
+      "sha256": "0c2e8e43a271f22a14ab405dbb260984b4f0026a772168e65d28d8755355a9f9",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/run_identity.json",
+      "size_bytes": 724,
+      "expected_sha256": "8ef45eed2fa2522e43bc334d26f761c6306ade1194f215f8546a31254b850f45",
+      "sha256": "8ef45eed2fa2522e43bc334d26f761c6306ade1194f215f8546a31254b850f45",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/runtime_statistics.json",
+      "size_bytes": 1968,
+      "expected_sha256": "47493adf71f115feb709ff7cdd4bfefc79fda9086c61d6d2aa027f2e0d86ed15",
+      "sha256": "47493adf71f115feb709ff7cdd4bfefc79fda9086c61d6d2aa027f2e0d86ed15",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/rviz_full_return_finished.json",
+      "size_bytes": 193,
+      "expected_sha256": "013fa883da413aff99be6e6d26fe2b6daffdcd9bc9677d02f0b5f9e63c941a91",
+      "sha256": "013fa883da413aff99be6e6d26fe2b6daffdcd9bc9677d02f0b5f9e63c941a91",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/rviz_full_return_finished.png",
+      "size_bytes": 62331,
+      "expected_sha256": "8ba97d4cbda1ec56b37b9d662997b096299e9864f7840ab221dfbcc619236a31",
+      "sha256": "8ba97d4cbda1ec56b37b9d662997b096299e9864f7840ab221dfbcc619236a31",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/rviz_live_early.json",
+      "size_bytes": 215,
+      "expected_sha256": "2fb87898cc9407f616d4353256344d0df8038c588f62bbc5d9fe1d1b2777d59b",
+      "sha256": "2fb87898cc9407f616d4353256344d0df8038c588f62bbc5d9fe1d1b2777d59b",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/rviz_live_early.png",
+      "size_bytes": 60083,
+      "expected_sha256": "7ffe7aac3dfc90f88385b2e8a6042390c9b02daed6351e020c8cee9cf051d332",
+      "sha256": "7ffe7aac3dfc90f88385b2e8a6042390c9b02daed6351e020c8cee9cf051d332",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/rviz_live_late.json",
+      "size_bytes": 193,
+      "expected_sha256": "c84a234f58e4ce437cfb9656e463460a7b828c6f042648bdb846de351cc8458d",
+      "sha256": "c84a234f58e4ce437cfb9656e463460a7b828c6f042648bdb846de351cc8458d",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/rviz_live_late.png",
+      "size_bytes": 62443,
+      "expected_sha256": "556ad506431930cc10e39a18d8f12c69142d17a82b0474ce7a7b6ac95ddb3617",
+      "sha256": "556ad506431930cc10e39a18d8f12c69142d17a82b0474ce7a7b6ac95ddb3617",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/rviz_live_middle.json",
+      "size_bytes": 193,
+      "expected_sha256": "0f8521a586aff9d056cbfc0103ac0523f4af6e11ed9c7658bafafe8f5eb1e1f8",
+      "sha256": "0f8521a586aff9d056cbfc0103ac0523f4af6e11ed9c7658bafafe8f5eb1e1f8",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/rviz_live_middle.png",
+      "size_bytes": 61521,
+      "expected_sha256": "279ca1754af11857e1d1f14348fe932f032d706fb05d038f25b0a4ed9822d43c",
+      "sha256": "279ca1754af11857e1d1f14348fe932f032d706fb05d038f25b0a4ed9822d43c",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/scan_manifest.csv",
+      "size_bytes": 695882,
+      "expected_sha256": "d337041a99b2269c6596f0a17d76c3a991271774e81a4cb68bc987e34e15109f",
+      "sha256": "d337041a99b2269c6596f0a17d76c3a991271774e81a4cb68bc987e34e15109f",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/startup_log_excerpt.txt",
+      "size_bytes": 765,
+      "expected_sha256": "47c4ee57e043c56bcde7b8e6298286b04c7c0a1e23754eaafd943781f8f209d2",
+      "sha256": "47c4ee57e043c56bcde7b8e6298286b04c7c0a1e23754eaafd943781f8f209d2",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/terminal_contract.py",
+      "size_bytes": 1469,
+      "expected_sha256": "f6f178daff76cb6e70c216737bc1fd810c094440e57c2afdec0cb39d348b4402",
+      "sha256": "f6f178daff76cb6e70c216737bc1fd810c094440e57c2afdec0cb39d348b4402",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/test_contract.py",
+      "size_bytes": 2804,
+      "expected_sha256": "301e2718b84a4a6d4a934805de2789388806652cd16b52622f4ff466b096c726",
+      "sha256": "301e2718b84a4a6d4a934805de2789388806652cd16b52622f4ff466b096c726",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/trajectories_and_corrections.png",
+      "size_bytes": 111619,
+      "expected_sha256": "208b3c5ca7e0257b413317c42466c4e666bd589f4e8bc70b4b853806743e55ed",
+      "sha256": "208b3c5ca7e0257b413317c42466c4e666bd589f4e8bc70b4b853806743e55ed",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/trajectory_increments.csv",
+      "size_bytes": 191433,
+      "expected_sha256": "e8da5221630b5c25fdf4fe0fe82132e680ba87c0612b95e7bea306b10757a58a",
+      "sha256": "e8da5221630b5c25fdf4fe0fe82132e680ba87c0612b95e7bea306b10757a58a",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R8_git_blob",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r8_geode_full_return_control/verify_archive.py",
+      "size_bytes": 2396,
+      "expected_sha256": "a5465ae51341fc89eb6c360b61d443723857791fe8749fe3b818dedb443a7dc9",
+      "sha256": "a5465ae51341fc89eb6c360b61d443723857791fe8749fe3b818dedb443a7dc9",
+      "frozen_source": "R8 archive commit eba814000a06a2b110acf3835247cd6cffe9db6b",
+      "status": "PASS"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/ASSET_GATE_RECHECK.md",
+      "size_bytes": 3661,
+      "expected_sha256": "5f9a3591b1cd627047d8c759266f10151dd98aeca90104cf99a5b8ffa0f1fee5",
+      "sha256": "5f9a3591b1cd627047d8c759266f10151dd98aeca90104cf99a5b8ffa0f1fee5",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/ATTRIBUTION_REPORT.md",
+      "size_bytes": 14291,
+      "expected_sha256": "c15885dd4bfe12f44dbe0dadb11e48314c045d6cca1b25c4235db891df75c4f5",
+      "sha256": "c15885dd4bfe12f44dbe0dadb11e48314c045d6cca1b25c4235db891df75c4f5",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/PROTOCOL_RESUMED.md",
+      "size_bytes": 1967,
+      "expected_sha256": "1bd1789973cf05085fcd6c083367469c57fd84b3c4392a54bf6e9872bdea7a8c",
+      "sha256": "1bd1789973cf05085fcd6c083367469c57fd84b3c4392a54bf6e9872bdea7a8c",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/REPORT.md",
+      "size_bytes": 4270,
+      "expected_sha256": "c1e21ea60ff818b3db7ab0d110e02ed39f391baf32249989c34595e1aa4d79b7",
+      "sha256": "c1e21ea60ff818b3db7ab0d110e02ed39f391baf32249989c34595e1aa4d79b7",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/REVIEW_AND_TESTS.md",
+      "size_bytes": 2307,
+      "expected_sha256": "3174b7a08c6cf2dd3f53957ea26447b599331003f73e51c95807535af741cd3e",
+      "sha256": "3174b7a08c6cf2dd3f53957ea26447b599331003f73e51c95807535af741cd3e",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/analysis_inputs_frozen.json",
+      "size_bytes": 139032,
+      "expected_sha256": "2bf69f3273559f28b7aca43853fa275b448734ec46b91429129fd3970c8ac71b",
+      "sha256": "2bf69f3273559f28b7aca43853fa275b448734ec46b91429129fd3970c8ac71b",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/analysis_manifest.json",
+      "size_bytes": 7353,
+      "expected_sha256": "fc3ddd7efc40c6b76a25995d3e59942ddd57fc72d4cea1d85d0a2cbb1ce3788b",
+      "sha256": "fc3ddd7efc40c6b76a25995d3e59942ddd57fc72d4cea1d85d0a2cbb1ce3788b",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/analysis_math.py",
+      "size_bytes": 1413,
+      "expected_sha256": "12dfd56c43986832004fac9f6a790ce8d7fff278340caf890746ff96e1e84757",
+      "sha256": "12dfd56c43986832004fac9f6a790ce8d7fff278340caf890746ff96e1e84757",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/analyze_frozen.py",
+      "size_bytes": 15152,
+      "expected_sha256": "670b35240702f3e8b4b3a9b532ed1b9f31b35ec30768c4e38625a68b0e525939",
+      "sha256": "670b35240702f3e8b4b3a9b532ed1b9f31b35ec30768c4e38625a68b0e525939",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/anomaly_frame_table.csv",
+      "size_bytes": 161138,
+      "expected_sha256": "5196441668f654ad558b166635ee878202d5f8602d80fdcc925bc558cbc9864f",
+      "sha256": "5196441668f654ad558b166635ee878202d5f8602d80fdcc925bc558cbc9864f",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/asset_gate.py",
+      "size_bytes": 6161,
+      "expected_sha256": "1b0abff525477f775cb79206891b58b452c87770903aeb9099bf0f7a805a05f1",
+      "sha256": "1b0abff525477f775cb79206891b58b452c87770903aeb9099bf0f7a805a05f1",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/asset_gate_after.json",
+      "size_bytes": 56208,
+      "expected_sha256": "4c62a9a8c0fe3dbba3bddbf50b45e7660d0368070b4dbf6efe5d4a4b3dce776a",
+      "sha256": "4c62a9a8c0fe3dbba3bddbf50b45e7660d0368070b4dbf6efe5d4a4b3dce776a",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/asset_gate_before.json",
+      "size_bytes": 56208,
+      "expected_sha256": "afea76bc4d9967a461765171ec51cd001c53f5ec9c0288622d3801aba75343da",
+      "sha256": "afea76bc4d9967a461765171ec51cd001c53f5ec9c0288622d3801aba75343da",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/asset_gate_comparison.json",
+      "size_bytes": 288,
+      "expected_sha256": "17f46d1afc74c2d99b8903fff3790fb582ac3b7ecfe8c9165ed5d5ab5f6ed59b",
+      "sha256": "17f46d1afc74c2d99b8903fff3790fb582ac3b7ecfe8c9165ed5d5ab5f6ed59b",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/blocked_cause_assessment.json",
+      "size_bytes": 1255,
+      "expected_sha256": "dbb85eaaaba826e517fbb1f96897ea360b3353bf3251bbd4ba8e35c65213a4f0",
+      "sha256": "dbb85eaaaba826e517fbb1f96897ea360b3353bf3251bbd4ba8e35c65213a4f0",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/build_cause_assessment.py",
+      "size_bytes": 6052,
+      "expected_sha256": "9331ee619942f1173494db5893c73904797d865d4f509979c9982c3fd4b26e9f",
+      "sha256": "9331ee619942f1173494db5893c73904797d865d4f509979c9982c3fd4b26e9f",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/candidate_increment_consistency.csv",
+      "size_bytes": 59250,
+      "expected_sha256": "fd951ce87c6a284930b88707947a706f1f37e9f189ee772901edf86df6f996da",
+      "sha256": "fd951ce87c6a284930b88707947a706f1f37e9f189ee772901edf86df6f996da",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/cause_assessment.json",
+      "size_bytes": 8000,
+      "expected_sha256": "3c1b1ae2e664790e592d1d31a279c05f8759459b7428b7bfa2fefcaa39c8c184",
+      "sha256": "3c1b1ae2e664790e592d1d31a279c05f8759459b7428b7bfa2fefcaa39c8c184",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/check_input_semantics.py",
+      "size_bytes": 2131,
+      "expected_sha256": "beb1ea0d965fd734d792b3fca046d67f4783fec800cd1bcfd601568f75dd6f73",
+      "sha256": "beb1ea0d965fd734d792b3fca046d67f4783fec800cd1bcfd601568f75dd6f73",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/checksums.sha256",
+      "size_bytes": 2670,
+      "expected_sha256": "8ad2248d013e0b6723cb92e26b5880a85b17f0f6669f0c29c97d5a9a6e15b60f",
+      "sha256": "8ad2248d013e0b6723cb92e26b5880a85b17f0f6669f0c29c97d5a9a6e15b60f",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/finalize_archive.py",
+      "size_bytes": 3379,
+      "expected_sha256": "857c864d785f3eb58d38ecf0553c6fa47b373cadda07edab3ae7c3e60728edb0",
+      "sha256": "857c864d785f3eb58d38ecf0553c6fa47b373cadda07edab3ae7c3e60728edb0",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/freeze_analysis_inputs.py",
+      "size_bytes": 2575,
+      "expected_sha256": "836ba6a8edd59b70342a11044dd3dae8bd2cd8f3863248a4f0822c9c9cc7cf0d",
+      "sha256": "836ba6a8edd59b70342a11044dd3dae8bd2cd8f3863248a4f0822c9c9cc7cf0d",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/input_semantic_check.json",
+      "size_bytes": 489,
+      "expected_sha256": "6bdb3a32b8e3a935a16db4d80d45d4c51667f83271a68c2ab5955234ba434e42",
+      "sha256": "6bdb3a32b8e3a935a16db4d80d45d4c51667f83271a68c2ab5955234ba434e42",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/inspect_point_times.py",
+      "size_bytes": 2615,
+      "expected_sha256": "ae574044cce1bd349730f5322fcf3ec34982151c44246dd34606fc6f65384381",
+      "sha256": "ae574044cce1bd349730f5322fcf3ec34982151c44246dd34606fc6f65384381",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/map_support_summary.csv",
+      "size_bytes": 186074,
+      "expected_sha256": "5440306eea31f49f89735e95b4af7bf67235a24d177fcdb2afb7f4854423c38b",
+      "sha256": "5440306eea31f49f89735e95b4af7bf67235a24d177fcdb2afb7f4854423c38b",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/metric_summary.json",
+      "size_bytes": 8443,
+      "expected_sha256": "1a374bf5e2c169b734cfe19dce6f9330ec833f335eeef23e1c822843eebcb7e0",
+      "sha256": "1a374bf5e2c169b734cfe19dce6f9330ec833f335eeef23e1c822843eebcb7e0",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/point_time_records.json",
+      "size_bytes": 52300,
+      "expected_sha256": "b7774af9a6a13188c00649408cd341f4fc1f7877b1c1d4fb667fdaa8a30f73d8",
+      "sha256": "b7774af9a6a13188c00649408cd341f4fc1f7877b1c1d4fb667fdaa8a30f73d8",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/reproduction_commands.md",
+      "size_bytes": 3048,
+      "expected_sha256": "9636ea9b12444298c751470ed02ae1a1945745b54afbccce76a4acd6d617a72c",
+      "sha256": "9636ea9b12444298c751470ed02ae1a1945745b54afbccce76a4acd6d617a72c",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/test_analysis_math.py",
+      "size_bytes": 1437,
+      "expected_sha256": "5cf7208852ece154a7447f0eabf73e4fd6f4e147a4276fda016d0674edef87e5",
+      "sha256": "5cf7208852ece154a7447f0eabf73e4fd6f4e147a4276fda016d0674edef87e5",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/test_derived_evidence.py",
+      "size_bytes": 3784,
+      "expected_sha256": "309354cbc33e85b7c33758dca059cccd525adefea0c92547e2d40c940f437b4a",
+      "sha256": "309354cbc33e85b7c33758dca059cccd525adefea0c92547e2d40c940f437b4a",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    },
+    {
+      "asset": "R9_frozen_archive",
+      "path": "/home/jian/livox_ws/p61_r10_geode_gyro_increment_audit_ws/docs/p61_r9_geode_anomaly_readonly_attribution/time_coordinate_audit.csv",
+      "size_bytes": 97399,
+      "expected_sha256": "7192956c650d94777946f17cc7c9e237b82036c20e6ec1feb10d6634363831a3",
+      "sha256": "7192956c650d94777946f17cc7c9e237b82036c20e6ec1feb10d6634363831a3",
+      "status": "PASS",
+      "frozen_source": "R9 Git d1f9fa9464dac835598e72d52ea2484fd9aa801c"
+    }
+  ],
+  "pre_registration_sha256": "77ed3f022590ef05e2c05498a60156ad32a6b555b7ad342cf8eeaadb4f6655a2",
+  "no_gt": true,
+  "no_new_estimated_trajectory": true
+}
