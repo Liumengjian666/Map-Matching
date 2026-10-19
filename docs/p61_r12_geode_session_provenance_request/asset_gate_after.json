@@ -1,0 +1,187 @@
+{
+  "task": "P61-R12-GEODE-SESSION-PROVENANCE-REQUEST",
+  "phase": "after",
+  "status": "PASS",
+  "observed_at_utc": "2026-10-19 06:55:20 UTC",
+  "method": "sha256sum over the same22 explicit paths; actual output checked against before snapshot; no bag message decoding",
+  "comparisons": 22,
+  "all_before_sha_unchanged": true,
+  "assets": [
+    {
+      "id": "E01",
+      "path": "/home/jian/geode/Shield_tunnel1_gamma/Shield_tunnel1_gamma.bag",
+      "size_bytes": 4500527001,
+      "expected_sha256": "162ed09ab6b262f89ac46c45bac36ad2335a6f869b360b80d80ddf59d0b22091",
+      "sha256": "162ed09ab6b262f89ac46c45bac36ad2335a6f869b360b80d80ddf59d0b22091",
+      "status": "PASS"
+    },
+    {
+      "id": "E02",
+      "path": "/home/jian/livox_ws/p61_r8_geode_runs/input/full_return.bag",
+      "size_bytes": 1416133574,
+      "expected_sha256": "a138b5ceb0e8ee4a2e5203e70b3943596811ff15d7a45495909934d3a1494331",
+      "sha256": "a138b5ceb0e8ee4a2e5203e70b3943596811ff15d7a45495909934d3a1494331",
+      "status": "PASS"
+    },
+    {
+      "id": "E03",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_r8_geode_full_return_control/input_manifest.json",
+      "size_bytes": 3759,
+      "expected_sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+      "sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+      "status": "PASS"
+    },
+    {
+      "id": "E04",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_geode_native_tunnel_entry/official/GEODE_README.md",
+      "size_bytes": 11543,
+      "expected_sha256": "eac59895cbe45a1cff161bae0599c7ad15274054da74c9d1f60bfb4be6989586",
+      "sha256": "eac59895cbe45a1cff161bae0599c7ad15274054da74c9d1f60bfb4be6989586",
+      "status": "PASS"
+    },
+    {
+      "id": "E05",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_geode_native_tunnel_entry/official/GEODE_README.md.http.json",
+      "size_bytes": 517,
+      "expected_sha256": "1f1f79392b70fc88c43aa4fb5f55ba66bb4b2af122f787b2aac5a526a438e48a",
+      "sha256": "1f1f79392b70fc88c43aa4fb5f55ba66bb4b2af122f787b2aac5a526a438e48a",
+      "status": "PASS"
+    },
+    {
+      "id": "E06",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_r2_geode_real_data_run/official/livox_lddc.cpp",
+      "size_bytes": 23554,
+      "expected_sha256": "345b85c22536c56ddc64685f1d68e2f261f08c6222851283e4326118977d64df",
+      "sha256": "345b85c22536c56ddc64685f1d68e2f261f08c6222851283e4326118977d64df",
+      "status": "PASS"
+    },
+    {
+      "id": "E07",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_r2_geode_real_data_run/official/livox_lddc.cpp.http.json",
+      "size_bytes": 585,
+      "expected_sha256": "d325aa47edf69bdc66fc18e71502943406a80d25112237106a43f1a5104652b7",
+      "sha256": "d325aa47edf69bdc66fc18e71502943406a80d25112237106a43f1a5104652b7",
+      "status": "PASS"
+    },
+    {
+      "id": "E08",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_r4_geode_prior_map_feasibility/official/gamma_drive.yaml",
+      "size_bytes": 4682,
+      "expected_sha256": "f67eaba499306f08d81a2f8dfe8459bb0246d4ee7294b03478f28affb56cc47a",
+      "sha256": "f67eaba499306f08d81a2f8dfe8459bb0246d4ee7294b03478f28affb56cc47a",
+      "status": "PASS"
+    },
+    {
+      "id": "E09",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_r4_geode_prior_map_feasibility/official/fastlio_carol.yaml",
+      "size_bytes": 1830,
+      "expected_sha256": "5ce02d44635225ccf1fd4ef6780cfe7b4331784bc40fea018f9704b833383cb3",
+      "sha256": "5ce02d44635225ccf1fd4ef6780cfe7b4331784bc40fea018f9704b833383cb3",
+      "status": "PASS"
+    },
+    {
+      "id": "E10",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_r6_geode_causal_init_bridge/initialization.json",
+      "size_bytes": 3352,
+      "expected_sha256": "9a5532ce3b7162e92b6a711c509d9a8e52d28eff81f6515fb3618067582b733d",
+      "sha256": "9a5532ce3b7162e92b6a711c509d9a8e52d28eff81f6515fb3618067582b733d",
+      "status": "PASS"
+    },
+    {
+      "id": "E11",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_r6_geode_causal_init_bridge/build_manifest.json",
+      "size_bytes": 7038,
+      "expected_sha256": "9cebc52e37a90c7045f8874e8b5bad0107dfe8f24bd6909cbc8ef9ebf3f18eb9",
+      "sha256": "9cebc52e37a90c7045f8874e8b5bad0107dfe8f24bd6909cbc8ef9ebf3f18eb9",
+      "status": "PASS"
+    },
+    {
+      "id": "E12",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_r8_geode_full_return_control/prepare_inputs.py",
+      "size_bytes": 5898,
+      "expected_sha256": "a6040c98fbecfd88afe496a9f598b8a9da48a71d1913760e952644c72d27b2d6",
+      "sha256": "a6040c98fbecfd88afe496a9f598b8a9da48a71d1913760e952644c72d27b2d6",
+      "status": "PASS"
+    },
+    {
+      "id": "E13",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_r10_geode_gyro_increment_audit/inputs_frozen.json",
+      "size_bytes": 78256,
+      "expected_sha256": "a2f3b61260e727addc935fff38cdfee587a88ba806d4a3992e094af9bb8af690",
+      "sha256": "a2f3b61260e727addc935fff38cdfee587a88ba806d4a3992e094af9bb8af690",
+      "status": "PASS"
+    },
+    {
+      "id": "E14",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/clock_source_chain.md",
+      "size_bytes": 4882,
+      "expected_sha256": "c53929588ea2e48fd4419869f7f7240d01031bc8f11390355ee28d4704581b17",
+      "sha256": "c53929588ea2e48fd4419869f7f7240d01031bc8f11390355ee28d4704581b17",
+      "status": "PASS"
+    },
+    {
+      "id": "E15",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/bias_provenance.md",
+      "size_bytes": 3908,
+      "expected_sha256": "e9bd683f7d36f45604c199ebc83f3d84358ac16685334e1b80a8d9a2882ae3ac",
+      "sha256": "e9bd683f7d36f45604c199ebc83f3d84358ac16685334e1b80a8d9a2882ae3ac",
+      "status": "PASS"
+    },
+    {
+      "id": "E16",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/timestamp_lag_summary.csv",
+      "size_bytes": 1127,
+      "expected_sha256": "8505648d6e352a43575f11675c02cb816d4288c13c81f72fb810dfec4618e87f",
+      "sha256": "8505648d6e352a43575f11675c02cb816d4288c13c81f72fb810dfec4618e87f",
+      "status": "PASS"
+    },
+    {
+      "id": "E17",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/record_audit_complete.json",
+      "size_bytes": 3454,
+      "expected_sha256": "fa82b1e09a4334a3dca5cbb16c0b102962472dc059812b6023d35f7e8884a1e4",
+      "sha256": "fa82b1e09a4334a3dca5cbb16c0b102962472dc059812b6023d35f7e8884a1e4",
+      "status": "PASS"
+    },
+    {
+      "id": "E18",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/stationarity_evidence.csv",
+      "size_bytes": 99,
+      "expected_sha256": "b42bc1685ed5c5df60aaaa2125820632249f5bfd72427d38bd782cf5ead779c3",
+      "sha256": "b42bc1685ed5c5df60aaaa2125820632249f5bfd72427d38bd782cf5ead779c3",
+      "status": "PASS"
+    },
+    {
+      "id": "E19",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/analysis_manifest.json",
+      "size_bytes": 159831,
+      "expected_sha256": "d9b570981adccb605bb7e370da2fbf5b1779e1188c9e83d8b7646e3add5f5044",
+      "sha256": "d9b570981adccb605bb7e370da2fbf5b1779e1188c9e83d8b7646e3add5f5044",
+      "status": "PASS"
+    },
+    {
+      "id": "E20",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_r11_geode_clock_bias_provenance/checksums.sha256",
+      "size_bytes": 3854,
+      "expected_sha256": "1a9dd36c7d01d6a281eb7c9d7aee88f706f175f9e0110596a4e04fc1ff3c3423",
+      "sha256": "1a9dd36c7d01d6a281eb7c9d7aee88f706f175f9e0110596a4e04fc1ff3c3423",
+      "status": "PASS"
+    },
+    {
+      "id": "E21",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_r2_geode_real_data_run/bag_identity.json",
+      "size_bytes": 547,
+      "expected_sha256": "5529cb1b5255919876c0cd116d7a4be75909ce47fc00fde1851afa6586fea328",
+      "sha256": "5529cb1b5255919876c0cd116d7a4be75909ce47fc00fde1851afa6586fea328",
+      "status": "PASS"
+    },
+    {
+      "id": "E22",
+      "path": "/home/jian/livox_ws/p61_r12_geode_session_provenance_ws/docs/p61_r6_geode_causal_init_bridge/time_contract.md",
+      "size_bytes": 4865,
+      "expected_sha256": "9c8c7c04e5022b71db94b950b8539c37c92bbb2741eb94f77f01d785e16f20da",
+      "sha256": "9c8c7c04e5022b71db94b950b8539c37c92bbb2741eb94f77f01d785e16f20da",
+      "status": "PASS"
+    }
+  ]
+}

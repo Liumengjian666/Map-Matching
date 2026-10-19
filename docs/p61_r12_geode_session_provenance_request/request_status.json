@@ -1,0 +1,23 @@
+{
+  "task": "P61-R12-GEODE-SESSION-PROVENANCE-REQUEST",
+  "request_status": "DRAFT_NOT_SENT",
+  "send_authorization": false,
+  "sent": false,
+  "messages_sent": 0,
+  "recipient": "NOT_SELECTED",
+  "contact_channel": "Archived official README Contact suggests repository issues; current route/user choice not verified",
+  "request_item_count": 18,
+  "author_material_received": "NONE_DURING_R12",
+  "author_material_existence": "UNKNOWN",
+  "permitted_response_states": [
+    "EXISTS_AND_SHAREABLE",
+    "EXISTS_BUT_RESTRICTED",
+    "NOT_RECORDED",
+    "UNKNOWN",
+    "NOT_APPLICABLE"
+  ],
+  "reminders_scheduled": false,
+  "network_dataset_searches": 0,
+  "PUSH_EXECUTED": false,
+  "next": "User reviews draft and decides whether/how to send; no automatic external action"
+}
