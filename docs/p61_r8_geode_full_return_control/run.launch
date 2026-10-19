@@ -1,0 +1,12 @@
+<launch>
+  <!-- Execute the same already-frozen R7 C++ binaries through its overlay. -->
+  <include file="$(find dog_prior_map_localization)/launch/geode_r7_baseline.launch">
+    <arg name="run_dir" value="/home/jian/livox_ws/p61_r8_geode_runs/formal" />
+    <arg name="input_dir" value="/home/jian/livox_ws/p61_r8_geode_runs/input" />
+    <arg name="rviz" value="false" />
+  </include>
+  <node pkg="rviz" type="rviz" name="geode_r8_rviz" output="screen"
+        args="-d /home/jian/livox_ws/p61_r8_geode_full_return_ws/docs/p61_r8_geode_full_return_control/return_view.rviz">
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+</launch>
