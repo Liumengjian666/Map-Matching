@@ -1,0 +1,114 @@
+{
+  "lag_summary_csv": "timestamp_lag_summary.csv",
+  "connections": {
+    "original": [
+      {
+        "topic": "/imu/data",
+        "type": "sensor_msgs/Imu",
+        "md5sum": "6a62c6daae103f4ff57a132d6f95cec2",
+        "callerid": "NOT_RECORDED",
+        "latching": "NOT_RECORDED"
+      },
+      {
+        "topic": "/livox/lidar",
+        "type": "livox_ros_driver/CustomMsg",
+        "md5sum": "e4d6829bdfe657cb6c21a746c86b21a6",
+        "callerid": "NOT_RECORDED",
+        "latching": "NOT_RECORDED"
+      }
+    ],
+    "R8_prepared": [
+      {
+        "topic": "/imu/data",
+        "type": "sensor_msgs/Imu",
+        "md5sum": "6a62c6daae103f4ff57a132d6f95cec2",
+        "callerid": "NOT_RECORDED",
+        "latching": "NOT_RECORDED"
+      },
+      {
+        "topic": "/geode/raw_points",
+        "type": "sensor_msgs/PointCloud2",
+        "md5sum": "1158d486dd51d683ce2f1be655c3c181",
+        "callerid": "NOT_RECORDED",
+        "latching": "NOT_RECORDED"
+      }
+    ]
+  },
+  "topic_metadata": {
+    "original": {
+      "sync_or_temperature_topics": []
+    },
+    "R8_prepared": {
+      "sync_or_temperature_topics": []
+    }
+  },
+  "historical_bias_provenance": {
+    "raw_sample_count": 10,
+    "first_raw_sample_ns": 1706671289500390052,
+    "last_raw_sample_ns": 1706671289591141939,
+    "native_init_group_scan": 2,
+    "native_counter_initial": 1,
+    "native_counter_after": 11,
+    "exit_rule": "N>MAX_INI_COUNT10; no explicit stationary gate",
+    "logged_initial_seed_radps": [
+      -0.001874310302082449,
+      0.0036424783291295173,
+      -0.008585996209876611
+    ],
+    "historical_seed_mean_max_error_radps": 2.168404344971009e-19,
+    "delivered_bridge_imu_count": 29844,
+    "bridge_lidar_count": 2984,
+    "mapped_updates": 2981,
+    "bridge_input_first_ns": 1706671289400330543,
+    "bridge_input_last_ns": 1706671587824846982,
+    "final_bias_radps": [
+      -0.0008725237314739192,
+      0.0023757483405765214,
+      -0.010976615256704694
+    ],
+    "final_native_scan_bg_equal_export": true,
+    "final_state_stamp_ns": 1706671587829840123,
+    "bias_age_at_target_start_sec": 216.969883664,
+    "independent_stationarity_evidence": "NOT_EVALUABLE",
+    "bias_stability": "BIAS_STABILITY_NOT_EVALUABLE",
+    "limitation": "Estimator state evolution is provenance, not independent evidence of physical bias stability."
+  },
+  "target_header_window": {
+    "start_ns": 1706671804799723787,
+    "end_ns": 1706671805899593546,
+    "lidar_indices": [
+      5155,
+      5156,
+      5157,
+      5158,
+      5159,
+      5160,
+      5161,
+      5162,
+      5163,
+      5164,
+      5165
+    ],
+    "lidar_count": 11,
+    "imu_count": 110
+  },
+  "boundary_imu_identity": {
+    "stamp_ns": 1706671804791549444,
+    "original_and_prepared_sha_match": true,
+    "excluded_from_lag_statistics": true,
+    "evidence": "completed assertions at8fe5d082 before CSV publication; JSON write failure occurred later"
+  },
+  "clock_sync": "CLOCK_SYNC_NOT_CERTIFIED",
+  "bias_stability": "BIAS_STABILITY_NOT_EVALUABLE",
+  "combined_result": "R10_CONTRADICTION_REMAINS_CONDITIONAL",
+  "initial_read_CODE_SHA": "8fe5d08241be44c821b55f9d773e0eb11656eea8",
+  "serialization_failure_preserved": "record_audit.json (incomplete JSON); no sensor-message reread",
+  "raw_gyro_bias_fit": 0,
+  "clock_offset_search": 0,
+  "gt_reads": 0,
+  "localization_nodes": 0,
+  "rosbag_play": 0,
+  "new_ndt_align": 0,
+  "ekf_runs": 0,
+  "new_trajectory_estimates": 0
+}
