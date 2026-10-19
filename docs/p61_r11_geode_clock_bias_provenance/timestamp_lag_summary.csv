@@ -1,0 +1,5 @@
+source,absolute_bag_path,topic,window_start_ns,window_end_ns,expected_count,count,min_ns,median_ns,p95_linear_ns,max_ns,complete_expected_headers,unit,sign,meaning
+original,/home/jian/geode/Shield_tunnel1_gamma/Shield_tunnel1_gamma.bag,/livox/lidar,1706671804799723787,1706671805899593546,11,11,0,0.0,0.0,0,True,ns,header minus record,observable recording timestamp difference; NOT physical clock offset
+original,/home/jian/geode/Shield_tunnel1_gamma/Shield_tunnel1_gamma.bag,/imu/data,1706671804799723787,1706671805899593546,110,110,0,0.0,0.0,0,True,ns,header minus record,observable recording timestamp difference; NOT physical clock offset
+R8_prepared,/home/jian/livox_ws/p61_r8_geode_runs/input/full_return.bag,/geode/raw_points,1706671804799723787,1706671805899593546,11,11,0,0.0,0.0,0,True,ns,header minus record,observable recording timestamp difference; NOT physical clock offset
+R8_prepared,/home/jian/livox_ws/p61_r8_geode_runs/input/full_return.bag,/imu/data,1706671804799723787,1706671805899593546,110,110,0,0.0,0.0,0,True,ns,header minus record,observable recording timestamp difference; NOT physical clock offset

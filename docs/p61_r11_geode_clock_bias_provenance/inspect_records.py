@@ -4,7 +4,7 @@ import csv,hashlib,json,struct,sys
 from pathlib import Path
 import numpy as np
 from check_assets import HERE,REPO,R6,sha
-from audit_math import ros_header,lag_ns,statistics,native_seconds
+from audit_math import ros_header,lag_ns,statistics,native_seconds,metadata_text
 from record_selection import verified_records,indexed_records
 
 sys.path.insert(0,str(REPO/'docs/p61_r2_geode_real_data_run'))
@@ -23,6 +23,27 @@ def read(path):
 def write(name,rows,fields=None):
     with (HERE/name).open('x',newline='') as f:
         w=csv.DictWriter(f,fieldnames=fields or list(rows[0]),lineterminator='\n');w.writeheader();w.writerows(rows)
+
+
+def historical_bias_summary(samples,rows):
+    row=next(r for r in rows if r['stage']=='IMU_INITIALIZATION')
+    seed=[float(row['bg_'+str(j)]) for j in range(3)]
+    measured=np.array([[float(s[k]) for k in ('gyro_x_radps','gyro_y_radps','gyro_z_radps')] for s in samples])
+    mean_error=float(np.max(np.abs(measured.mean(0)-seed)));assert mean_error<1e-15
+    init=json.loads((REPO/'docs/p61_r6_geode_causal_init_bridge/initialization.json').read_text())
+    bridge=json.loads((R6/'bridge_input.json').read_text())
+    last_bg=[float(rows[-1]['bg_'+str(j)]) for j in range(3)];final_bg=init['initial_state']['gyro_bias_I']
+    assert last_bg==final_bg
+    return dict(raw_sample_count=10,first_raw_sample_ns=int(samples[0]['stamp_ns']),last_raw_sample_ns=int(samples[-1]['stamp_ns']),
+        native_init_group_scan=2,native_counter_initial=1,native_counter_after=11,exit_rule='N>MAX_INI_COUNT10; no explicit stationary gate',
+        logged_initial_seed_radps=seed,historical_seed_mean_max_error_radps=mean_error,
+        delivered_bridge_imu_count=bridge['counts']['/imu/data'],bridge_lidar_count=len(rows),mapped_updates=sum(r['stage']=='MAPPED' for r in rows),
+        bridge_input_first_ns=bridge['first_imu_ns'],bridge_input_last_ns=bridge['last_imu_ns'],
+        final_bias_radps=final_bg,final_native_scan_bg_equal_export=True,
+        final_state_stamp_ns=init['initial_state']['target_stamp_ns'],
+        bias_age_at_target_start_sec=(LO-init['initial_state']['target_stamp_ns'])*1e-9,
+        independent_stationarity_evidence='NOT_EVALUABLE',bias_stability='BIAS_STABILITY_NOT_EVALUABLE',
+        limitation='Estimator state evolution is provenance, not independent evidence of physical bias stability.')
 
 
 def main():
@@ -51,7 +72,7 @@ def main():
     lags=[];messages=[];connections={};timebase=[];metadata={}
     for label,path,topics in [('original',ORIGINAL,['/livox/lidar','/imu/data']),('R8_prepared',PREPARED,['/geode/raw_points','/imu/data'])]:
         with rosbag.Bag(str(path),'r') as bag:
-            connections[label]=[{k:c.header.get(k,'NOT_RECORDED') for k in ('topic','type','md5sum','callerid','latching')} for c in bag._get_connections(topics=topics)]
+            connections[label]=[{k:metadata_text(c.header.get(k,'NOT_RECORDED')) for k in ('topic','type','md5sum','callerid','latching')} for c in bag._get_connections(topics=topics)]
             # Topic metadata only: never deserialize unrelated/GT payloads.
             metadata[label]=dict(sync_or_temperature_topics=[n for n in bag.get_type_and_topic_info().topics if any(s in n.lower() for s in ('pps','ptp','time_ref','sync','temperature'))])
             by_topic={t:[] for t in topics};found={t:set() for t in topics}
@@ -116,23 +137,7 @@ def main():
         assert native_seconds(found[0])==float(row['imu_first_sec']) and native_seconds(found[-1])==float(row['imu_last_sec'])
     # Pure historical arithmetic verification of the source's mean_gyr seed.
     # It is NOT a new true-bias estimate and is never used by R10 or a filter.
-    seed=[float(row['bg_'+str(j)]) for j in range(3)]
-    measured=np.array([[s[k] for k in ('gyro_x_radps','gyro_y_radps','gyro_z_radps')] for s in samples])
-    mean_error=float(np.max(np.abs(measured.mean(0)-seed)));assert mean_error<1e-15
-    init=json.loads((REPO/'docs/p61_r6_geode_causal_init_bridge/initialization.json').read_text())
-    bridge=json.loads((R6/'bridge_input.json').read_text())
-    last_bg=[float(rows[-1]['bg_'+str(j)]) for j in range(3)];final_bg=init['initial_state']['gyro_bias_I']
-    assert last_bg==final_bg
-    summary=dict(raw_sample_count=10,first_raw_sample_ns=samples[0]['stamp_ns'],last_raw_sample_ns=samples[-1]['stamp_ns'],
-        native_init_group_scan=2,native_counter_initial=1,native_counter_after=11,exit_rule='N>MAX_INI_COUNT10; no explicit stationary gate',
-        logged_initial_seed_radps=seed,historical_seed_mean_max_error_radps=mean_error,
-        delivered_bridge_imu_count=bridge['counts']['/imu/data'],bridge_lidar_count=len(rows),mapped_updates=sum(r['stage']=='MAPPED' for r in rows),
-        bridge_input_first_ns=bridge['first_imu_ns'],bridge_input_last_ns=bridge['last_imu_ns'],
-        final_bias_radps=final_bg,final_native_scan_bg_equal_export=True,
-        final_state_stamp_ns=init['initial_state']['target_stamp_ns'],
-        bias_age_at_target_start_sec=(LO-init['initial_state']['target_stamp_ns'])*1e-9,
-        independent_stationarity_evidence='NOT_EVALUABLE',bias_stability='BIAS_STABILITY_NOT_EVALUABLE',
-        limitation='Estimator state evolution is provenance, not independent evidence of physical bias stability.')
+    summary=historical_bias_summary(samples,rows)
     write('initialization_imu_samples.csv',samples)
     write('stationarity_evidence.csv',[],fields=['evidence_id','path','sha256','time_start_ns','time_end_ns','independent_stationarity_basis','status','limitation'])
     result=dict(lag_summary=lags,connections=connections,topic_metadata=metadata,historical_bias_provenance=summary,

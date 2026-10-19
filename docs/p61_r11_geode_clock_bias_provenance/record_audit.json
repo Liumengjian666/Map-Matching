@@ -1,0 +1,75 @@
+{
+  "lag_summary": [
+    {
+      "source": "original",
+      "absolute_bag_path": "/home/jian/geode/Shield_tunnel1_gamma/Shield_tunnel1_gamma.bag",
+      "topic": "/livox/lidar",
+      "window_start_ns": 1706671804799723787,
+      "window_end_ns": 1706671805899593546,
+      "expected_count": 11,
+      "count": 11,
+      "min_ns": 0,
+      "median_ns": 0.0,
+      "p95_linear_ns": 0.0,
+      "max_ns": 0,
+      "complete_expected_headers": true,
+      "unit": "ns",
+      "sign": "header minus record",
+      "meaning": "observable recording timestamp difference; NOT physical clock offset"
+    },
+    {
+      "source": "original",
+      "absolute_bag_path": "/home/jian/geode/Shield_tunnel1_gamma/Shield_tunnel1_gamma.bag",
+      "topic": "/imu/data",
+      "window_start_ns": 1706671804799723787,
+      "window_end_ns": 1706671805899593546,
+      "expected_count": 110,
+      "count": 110,
+      "min_ns": 0,
+      "median_ns": 0.0,
+      "p95_linear_ns": 0.0,
+      "max_ns": 0,
+      "complete_expected_headers": true,
+      "unit": "ns",
+      "sign": "header minus record",
+      "meaning": "observable recording timestamp difference; NOT physical clock offset"
+    },
+    {
+      "source": "R8_prepared",
+      "absolute_bag_path": "/home/jian/livox_ws/p61_r8_geode_runs/input/full_return.bag",
+      "topic": "/geode/raw_points",
+      "window_start_ns": 1706671804799723787,
+      "window_end_ns": 1706671805899593546,
+      "expected_count": 11,
+      "count": 11,
+      "min_ns": 0,
+      "median_ns": 0.0,
+      "p95_linear_ns": 0.0,
+      "max_ns": 0,
+      "complete_expected_headers": true,
+      "unit": "ns",
+      "sign": "header minus record",
+      "meaning": "observable recording timestamp difference; NOT physical clock offset"
+    },
+    {
+      "source": "R8_prepared",
+      "absolute_bag_path": "/home/jian/livox_ws/p61_r8_geode_runs/input/full_return.bag",
+      "topic": "/imu/data",
+      "window_start_ns": 1706671804799723787,
+      "window_end_ns": 1706671805899593546,
+      "expected_count": 110,
+      "count": 110,
+      "min_ns": 0,
+      "median_ns": 0.0,
+      "p95_linear_ns": 0.0,
+      "max_ns": 0,
+      "complete_expected_headers": true,
+      "unit": "ns",
+      "sign": "header minus record",
+      "meaning": "observable recording timestamp difference; NOT physical clock offset"
+    }
+  ],
+  "connections": {
+    "original": [
+      {
+        "topic": 

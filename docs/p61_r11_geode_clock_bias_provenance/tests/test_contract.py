@@ -1,7 +1,7 @@
 import struct,sys,unittest
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
-from audit_math import ros_header,lag_ns,statistics,native_seconds
+from audit_math import ros_header,lag_ns,statistics,native_seconds,metadata_text
 from record_selection import verified_records,indexed_records
 
 
@@ -60,6 +60,12 @@ class TimestampTests(unittest.TestCase):
         rows=[dict(topic='/imu/data',stamp_ns=1,record_ns=t) for t in (2,3)]
         with self.assertRaisesRegex(ValueError,'DUPLICATE_LOOKUP'):
             indexed_records(rows,'/imu/data',lambda ns:ns==1)
+
+    def test_connection_bytes_are_json_safe(self):
+        import json
+        self.assertEqual(json.loads(json.dumps({'topic':metadata_text(b'/imu/data')}))['topic'],'/imu/data')
+        self.assertEqual(metadata_text('NOT_RECORDED'),'NOT_RECORDED')
+        with self.assertRaises(ValueError):metadata_text(None)
 
 
 if __name__=='__main__':unittest.main()

@@ -24,3 +24,10 @@ def statistics(values):
 
 
 def native_seconds(ns):return float(Decimal(ns)/Decimal(10**9))
+
+
+def metadata_text(value):
+    """ROS1 connection headers may expose byte values under Python3."""
+    if isinstance(value,bytes):return value.decode('utf8',errors='strict')
+    if not isinstance(value,str):raise ValueError('INVALID_CONNECTION_METADATA')
+    return value
