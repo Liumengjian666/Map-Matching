@@ -3,6 +3,7 @@
 import csv
 import hashlib
 import json
+from decimal import Decimal
 from pathlib import Path
 import numpy as np
 from scipy.spatial.transform import Rotation
@@ -37,7 +38,9 @@ def main():
     r=ROOT/'formal'
     # Freeze raw outputs before any derived interpretation. Never read GT.
     frozen={str(p):sha(p) for p in sorted(r.glob('*.csv'))}
-    (ROOT/'output_freeze.json').write_text(json.dumps(frozen,indent=2)+'\n')
+    freeze_path=ROOT/'output_freeze.json'
+    if freeze_path.exists(): assert json.loads(freeze_path.read_text())==frozen
+    else: freeze_path.write_text(json.dumps(frozen,indent=2)+'\n')
     m=json.loads((ROOT/'input/manifest.json').read_text())
     ndt=read(r/'ndt_diagnostics.csv'); deskew=read(r/'deskew.csv'); fusion=read(r/'fusion.csv')
     oosm=read(r/'oosm.csv'); receipts=read(r/'publisher_receipts.csv'); performance=read(r/'ndt_performance.csv')
@@ -62,7 +65,7 @@ def main():
         pp,pr=pose(p); np_,nr=pose(n,'raw_ndt'); cp,cr=pose(c)
         ip,ir=pose(n,'initial_guess')
         assert np.linalg.norm(ip-pp)<1e-9 and (ir.inv()*pr).magnitude()<1e-9
-        reference_errors.append(abs(float(a['state_stamp'])*1e9-end))
+        reference_errors.append(float(abs(Decimal.from_float(float(a['state_stamp']))*Decimal(10**9)-Decimal(end))))
         table.append(dict(scan_index=source['scan_index'],start_ns=source['stamp_ns'],end_ns=end,
             source_points=n['cloud_size_after_filter'],source_hash=n['cloud_hash'],deskew=d['status'],
             ndt_converged=n['ndt_has_converged'],iterations=n['ndt_iterations'],fitness=n['ndt_fitness'],
@@ -88,6 +91,9 @@ def main():
         'ndt_callback_ms':stats([float(x['localization_time_ms']) for x in performance]),
         'ekf_update_ms':stats([float(x['update_ms']) for x in fusion]),
         'publisher_to_fusion_ack_ms':stats([float(x['publish_to_ack_ms']) for x in receipts])}
+    durations['steady_ndt_align_ms_excluding_first']=stats([float(x['align_time_ms']) for x in performance[1:]])
+    durations['sum_deskew_ndt_callback_fusion_ms']=stats([float(d['deskew_processing_ms'])+
+        float(n['localization_time_ms'])+float(f['update_ms']) for d,n,f in zip(deskew,performance,fusion)])
     result={'TASK':'P61-R7-GEODE-CONTINUOUS-BASELINE-SMOKE',
         'FINAL_RESULT':'BASELINE_20_FRAME_READY' if all(x['ndt_has_converged']=='1' for x in ndt) else 'BASELINE_RUNNING_BUT_NDT_FAILED',
         'scans':20,'deskew_success':20,'ndt_align_calls':20,'ndt_converged':sum(x['ndt_has_converged']=='1' for x in ndt),
@@ -107,6 +113,12 @@ def main():
         'durations':durations,'resources':resources,'PUSH_EXECUTED':False,'accuracy_evaluated':False,
         'hessian_diagnosis':'not enabled in existing fusion runtime; no new jets added',
         'replay':json.loads((r/'replay_summary.json').read_text()),'raw_output_sha256':frozen}
+    identity=json.loads((ROOT/'run_identity.json').read_text())
+    result.update({key:identity[key] for key in ('START_SHA','CODE_SHA')})
+    result['binaries']=identity['binaries']
+    result['visualization_post_map_publish_resources']=json.loads((ROOT/'visualization_resources.json').read_text())
+    result['realtime_validation']='NOT_REALTIME_VALIDATED'
+    result['runtime_recorder_note']='Frozen receipts label 1..20 transport seq as scan_index; original indices 2986..3005 are bound by input SHA and frame_results. Archival reproducer fixes the log label only; no rerun.'
     (HERE/'results.json').write_text(json.dumps(result,indent=2)+'\n')
     import matplotlib
     matplotlib.use('Agg')

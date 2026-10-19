@@ -1,5 +1,6 @@
 <launch>
-  <arg name="run_dir" default="/home/jian/livox_ws/p61_r7_geode_runs/formal" />
+  <!-- A new default output directory on every launch protects the frozen run. -->
+  <arg name="run_dir" default="/home/jian/livox_ws/p61_r7_geode_runs/$(anon geode_r7_review)" />
   <arg name="input_dir" default="/home/jian/livox_ws/p61_r7_geode_runs/input" />
   <arg name="rviz" default="true" />
   <!-- ACK wall scheduling; all propagation and OOSM use sensor stamps. -->
@@ -14,14 +15,19 @@
   <param name="output/ekf_prediction_diagnostics_csv_path" value="$(arg run_dir)/ekf_lineage.csv" />
   <param name="output/geode_fusion_csv" value="$(arg run_dir)/fusion.csv" />
   <param name="output/geometry_diagnostics_csv_path" value="$(arg run_dir)/geometry.csv" />
-  <node pkg="dog_prior_map_localization" type="dog_prior_map_ndt_node_cpp" name="dog_prior_map_ndt" output="screen" required="true">
+  <node pkg="dog_prior_map_localization" type="dog_prior_map_ndt_node_cpp" name="dog_prior_map_ndt" output="screen" required="true"
+        launch-prefix="rosrun dog_prior_map_localization ensure_output_dir_exec.py">
+    <env name="P45_OUTPUT_DIRECTORY" value="$(arg run_dir)" />
     <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
   </node>
-  <node pkg="dog_prior_map_localization" type="dog_prior_map_ekf_node_cpp" name="dog_prior_map_ekf" output="screen" required="true">
+  <node pkg="dog_prior_map_localization" type="dog_prior_map_ekf_node_cpp" name="dog_prior_map_ekf" output="screen" required="true"
+        launch-prefix="rosrun dog_prior_map_localization ensure_output_dir_exec.py">
+    <env name="P45_OUTPUT_DIRECTORY" value="$(arg run_dir)" />
     <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
   </node>
   <node pkg="pcl_ros" type="pcd_to_pointcloud" name="geode_frozen_map_visualization" args="/home/jian/livox_ws/p61_r5_geode_runs/formal_mapping/frozen_map.pcd 0" output="screen">
     <param name="frame_id" value="camera_init" /><remap from="cloud_pcd" to="/geode/frozen_map" />
+    <param name="latch" value="true" />
     <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
   </node>
   <node pkg="rviz" type="rviz" name="geode_r7_rviz" if="$(arg rviz)" output="screen"

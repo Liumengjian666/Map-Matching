@@ -1,0 +1,21 @@
+{
+  "START_SHA": "c649c9fa1743aada3301ddb4f75bce54eaf08532",
+  "CODE_SHA": "17922f2b63dae1f2af34f353287728d50a312f73",
+  "binaries": {
+    "/home/jian/livox_ws/p61_r7_geode_baseline_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp": "89fdc9da728660df9958276f7fc61c216842a866c885a316f8ac0537b329c06b",
+    "/home/jian/livox_ws/p61_r7_geode_baseline_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp": "40942380de766d75022c5f09475680f6288a0124364160b7241f52ac375bd0f9"
+  },
+  "source_files": {
+    "src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp": "ffe283c0534d88078af1a0560b5c1da538b664f44f9c502085a889ece6d516b6",
+    "src/dog_prior_map_localization/src/imu_deskew_runtime.cpp": "12a5f7a6a8f75accfa20faf56a3adb9faef21314e7d690005c4f525af342a8c4",
+    "src/dog_prior_map_localization/src/dog_prior_map_ekf_node_core.cpp": "9c37d8b1aa27803d6127589e10b15af98123129044351d57aa482cfcae12b68c",
+    "src/dog_prior_map_localization/src/fusion/ndt_observation.cpp": "2274147a6ee04dc3a26e09f06b9c1a0f0e094780697c744491210d72a19b0cd3"
+  },
+  "compiler": "g++ (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0",
+  "compile_flags": "Release; existing -O2 -g -Wall followed by -g0; CMake Release flags; -j1",
+  "research_tools": false,
+  "ROS_MASTER_URI": "http://127.0.0.1:11398",
+  "gt_read": false,
+  "cli_review_sha256": "d6bf2bafb4413716c13911519afc273e55a3c93a932e450bc6a5c286a067f21f",
+  "runtime_delta_after_code": "passive diagnostic recorder guards/metrics frozen in CODE; visualization latch flag added after formal replay, no extra NDT input"
+}

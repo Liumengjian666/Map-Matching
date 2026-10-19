@@ -1,0 +1,5 @@
+[INFO] [1792373399.545109103]: [DogPriorMap C++] explicit causal initial state: stamp=1706671587.829840183 boundary_age_ms=4.993 p=(328.5927 71.7882 3.0114) v_prior=(4.2884 1.0779 0.1105) bg_prior=(-0.00087 0.00238 -0.01098) ba_prior=(0.02965 -0.04097 -0.00513) g_map=(0.0334 0.5468 -9.7937)
+[INFO] [1792373399.676905733]: [GEODE] actual target_cells_ leaf=(0.800000012 0.800000012 0.800000012), target=318377
+[INFO] [1792373399.677847348]: [GEODE] map load + preprocessing + Gaussian build 92.754072 ms
+[INFO] [1792373428.126563125]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=318377 align=72.05ms score=0.0205 iter=4 p=(329.22 72.14 3.16)
+[INFO] [1792373429.203313049]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=318377 align=14.11ms score=0.0209 iter=1 p=(334.37 73.31 3.30)

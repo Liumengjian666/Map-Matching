@@ -1,0 +1,116 @@
+{
+  "durations": {
+    "deskew_ms": {
+      "mean": 12.635596199999998,
+      "p95": 16.3854627,
+      "max": 18.148524,
+      "count": 20
+    },
+    "ndt_align_ms": {
+      "mean": 14.759617899999999,
+      "p95": 19.23164315000004,
+      "max": 72.054743,
+      "count": 20
+    },
+    "ndt_callback_ms": {
+      "mean": 23.8796829,
+      "p95": 28.85801085000004,
+      "max": 82.156276,
+      "count": 20
+    },
+    "ekf_update_ms": {
+      "mean": 0.19753790000000002,
+      "p95": 0.2570606000000001,
+      "max": 0.345764,
+      "count": 20
+    },
+    "publisher_to_fusion_ack_ms": {
+      "mean": 43.80282244965201,
+      "p95": 52.55413008853797,
+      "max": 99.1503210098017,
+      "count": 20
+    },
+    "steady_ndt_align_ms_excluding_first": {
+      "mean": 11.744084999999998,
+      "p95": 16.3148987,
+      "max": 16.45148,
+      "count": 19
+    },
+    "sum_deskew_ndt_callback_fusion_ms": {
+      "mean": 36.712816999999994,
+      "p95": 42.642193450000036,
+      "max": 91.75135,
+      "count": 20
+    }
+  },
+  "resources": {
+    "ekf": {
+      "peak_rss_mib": 17.7109375,
+      "vmhwm_mib": 18.32421875,
+      "sample_count": 156,
+      "cpu_ticks_start": 5,
+      "cpu_ticks_end": 37
+    },
+    "ndt": {
+      "peak_rss_mib": 106.82421875,
+      "vmhwm_mib": 106.82421875,
+      "sample_count": 156,
+      "cpu_ticks_start": 22,
+      "cpu_ticks_end": 74
+    },
+    "publisher": {
+      "peak_rss_mib": 68.2109375,
+      "vmhwm_mib": 68.2109375,
+      "sample_count": 156,
+      "cpu_ticks_start": 144,
+      "cpu_ticks_end": 173
+    },
+    "rviz": {
+      "peak_rss_mib": 177.36328125,
+      "vmhwm_mib": 177.36328125,
+      "sample_count": 156,
+      "cpu_ticks_start": 116,
+      "cpu_ticks_end": 150
+    }
+  },
+  "replay": {
+    "scans_sent": 20,
+    "imu_sent": 208,
+    "sensor_span_sec": 1.999181076,
+    "wall_sec": 1.7582128990034107,
+    "gt_read": false,
+    "candidate_feedback": 0
+  },
+  "visualization_post_map_publish_resources": {
+    "/dog_prior_map_ndt": {
+      "pid": 98013,
+      "memory_kib": {
+        "VmHWM": 109388,
+        "VmRSS": 109388
+      }
+    },
+    "/dog_prior_map_ekf": {
+      "pid": 98014,
+      "memory_kib": {
+        "VmHWM": 18764,
+        "VmRSS": 17016
+      }
+    },
+    "/geode_r7_rviz": {
+      "pid": 98018,
+      "memory_kib": {
+        "VmHWM": 219952,
+        "VmRSS": 218916
+      }
+    },
+    "/geode_frozen_map_visualization": {
+      "pid": 98741,
+      "memory_kib": {
+        "VmHWM": 42928,
+        "VmRSS": 42928
+      }
+    }
+  },
+  "realtime_validation": "NOT_REALTIME_VALIDATED",
+  "cpu_tick_hz": 100
+}

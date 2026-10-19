@@ -1,0 +1,204 @@
+{
+  "/dog_prior_map_ekf": [
+    [
+      0,
+      "/rosout",
+      "o",
+      "TCPROS",
+      "/rosout",
+      true,
+      "TCPROS connection on port 47313 to [127.0.0.1:57886 on socket 20]"
+    ],
+    [
+      4,
+      "/geode_r7_rviz",
+      "o",
+      "TCPROS",
+      "/tf",
+      true,
+      "TCPROS connection on port 47313 to [127.0.0.1:57906 on socket 23]"
+    ],
+    [
+      7,
+      "/geode_r7_bounded_input",
+      "o",
+      "TCPROS",
+      "/dog_livo/odom_high_rate",
+      true,
+      "TCPROS connection on port 47313 to [127.0.0.1:49350 on socket 16]"
+    ],
+    [
+      8,
+      "/geode_r7_bounded_input",
+      "o",
+      "TCPROS",
+      "/dog_livo/odom_corrected",
+      true,
+      "TCPROS connection on port 47313 to [127.0.0.1:49362 on socket 17]"
+    ],
+    [
+      6,
+      "/geode_r7_rviz",
+      "o",
+      "TCPROS",
+      "/dog_livo/path_corrected",
+      true,
+      "TCPROS connection on port 47313 to [127.0.0.1:57920 on socket 25]"
+    ],
+    [
+      2,
+      "/dog_prior_map_ndt",
+      "o",
+      "TCPROS",
+      "/geode/deskewed_points",
+      true,
+      "TCPROS connection on port 47313 to [127.0.0.1:57898 on socket 15]"
+    ],
+    [
+      5,
+      "/geode_r7_rviz",
+      "o",
+      "TCPROS",
+      "/geode/deskewed_points",
+      true,
+      "TCPROS connection on port 47313 to [127.0.0.1:57912 on socket 24]"
+    ],
+    [
+      3,
+      "/dog_prior_map_ndt",
+      "o",
+      "TCPROS",
+      "/geode/scan_end_prediction",
+      true,
+      "TCPROS connection on port 47313 to [127.0.0.1:57902 on socket 19]"
+    ],
+    [
+      9,
+      "/geode_r7_bounded_input",
+      "o",
+      "TCPROS",
+      "/geode/scan_end_prediction",
+      true,
+      "TCPROS connection on port 47313 to [127.0.0.1:49366 on socket 22]"
+    ],
+    [
+      10,
+      "http://127.0.0.1:42055/",
+      "i",
+      "TCPROS",
+      "/imu/data",
+      true,
+      "TCPROS connection on port 51478 to [127.0.0.1:36291 on socket 28]"
+    ],
+    [
+      11,
+      "http://127.0.0.1:42055/",
+      "i",
+      "TCPROS",
+      "/geode/raw_points",
+      true,
+      "TCPROS connection on port 51488 to [127.0.0.1:36291 on socket 29]"
+    ],
+    [
+      1,
+      "http://127.0.0.1:39735/",
+      "i",
+      "TCPROS",
+      "/dog_livo/ndt_odom",
+      true,
+      "TCPROS connection on port 46056 to [127.0.0.1:42303 on socket 21]"
+    ]
+  ],
+  "/dog_prior_map_ndt": [
+    [
+      1,
+      "/rosout",
+      "o",
+      "TCPROS",
+      "/rosout",
+      true,
+      "TCPROS connection on port 42303 to [127.0.0.1:46066 on socket 12]"
+    ],
+    [
+      4,
+      "/geode_r7_rviz",
+      "o",
+      "TCPROS",
+      "/tf",
+      true,
+      "TCPROS connection on port 42303 to [127.0.0.1:46074 on socket 19]"
+    ],
+    [
+      0,
+      "/dog_prior_map_ekf",
+      "o",
+      "TCPROS",
+      "/dog_livo/ndt_odom",
+      true,
+      "TCPROS connection on port 42303 to [127.0.0.1:46056 on socket 16]"
+    ],
+    [
+      7,
+      "/geode_r7_bounded_input",
+      "o",
+      "TCPROS",
+      "/dog_livo/ndt_odom",
+      true,
+      "TCPROS connection on port 42303 to [127.0.0.1:55034 on socket 13]"
+    ],
+    [
+      6,
+      "/geode_r7_rviz",
+      "o",
+      "TCPROS",
+      "/dog_livo/ndt_path",
+      true,
+      "TCPROS connection on port 42303 to [127.0.0.1:46092 on socket 21]"
+    ],
+    [
+      5,
+      "/geode_r7_rviz",
+      "o",
+      "TCPROS",
+      "/geode/points_aligned",
+      true,
+      "TCPROS connection on port 42303 to [127.0.0.1:46084 on socket 20]"
+    ],
+    [
+      8,
+      "/geode_r7_bounded_input",
+      "o",
+      "TCPROS",
+      "/dog_livo/diagnostics",
+      true,
+      "TCPROS connection on port 42303 to [127.0.0.1:55042 on socket 14]"
+    ],
+    [
+      2,
+      "http://127.0.0.1:46389/",
+      "i",
+      "TCPROS",
+      "/geode/deskewed_points",
+      true,
+      "TCPROS connection on port 57898 to [127.0.0.1:47313 on socket 15]"
+    ],
+    [
+      9,
+      "http://127.0.0.1:42055/",
+      "i",
+      "TCPROS",
+      "/imu/data",
+      true,
+      "TCPROS connection on port 51500 to [127.0.0.1:36291 on socket 23]"
+    ],
+    [
+      3,
+      "http://127.0.0.1:46389/",
+      "i",
+      "TCPROS",
+      "/geode/scan_end_prediction",
+      true,
+      "TCPROS connection on port 57902 to [127.0.0.1:47313 on socket 17]"
+    ]
+  ]
+}

@@ -1,0 +1,197 @@
+{
+  "TASK": "P61-R7-GEODE-CONTINUOUS-BASELINE-SMOKE",
+  "FINAL_RESULT": "BASELINE_20_FRAME_READY",
+  "scans": 20,
+  "deskew_success": 20,
+  "ndt_align_calls": 20,
+  "ndt_converged": 20,
+  "oosm_applied": 20,
+  "oosm_rejected": 0,
+  "non_gt": true,
+  "gt_read": false,
+  "extra_align_calls": 0,
+  "coupled_jet_calls": 0,
+  "coupled_value_calls": 0,
+  "candidate_feedback": 0,
+  "map_sha256": "4a279d822fd6090d3aa3fc0cec989b4f6fde5c9a43df476a29dba4494f6821b4",
+  "initialization_sha256": "9a5532ce3b7162e92b6a711c509d9a8e52d28eff81f6515fb3618067582b733d",
+  "covariance_policy": "existing fixed 15D restart prior; R6 23D covariance NOT imported",
+  "map_points": 321053,
+  "target_points": [
+    318377
+  ],
+  "sensor_window_ns": [
+    1706671587900364160,
+    1706671589899545236
+  ],
+  "initial_T_M_L": [
+    -0.9691186948547261,
+    0.24330301406358548,
+    -0.040157174352172226,
+    328.540732544529,
+    -0.24154209009870922,
+    -0.9693867948046679,
+    -0.04412097924993969,
+    71.7864841037506,
+    -0.04966260178838961,
+    -0.03305881799930049,
+    0.9982187839133095,
+    3.0360057482115215,
+    0,
+    0,
+    0,
+    1
+  ],
+  "final_corrected_lidar_pose": {
+    "stamp_ns": "1706671589905755281",
+    "px": "337.2430623171154",
+    "py": "74.01876572122809",
+    "pz": "3.379309134879685",
+    "qx": "-0.06132774488957222",
+    "qy": "-0.02287543814726658",
+    "qz": "0.9913837173824708",
+    "qw": "-0.11346341677053262"
+  },
+  "corrected_path_length_19_intervals_m": 8.223951751079198,
+  "max_adjacent_translation_m": 0.46005549609404417,
+  "max_adjacent_rotation_deg": 1.3380600463342525,
+  "max_raw_ndt_correction_m": 0.20380384655728256,
+  "max_raw_ndt_correction_deg": 1.1158858962958784,
+  "maximum_native_double_time_representation_error_ns": 118.024291992,
+  "durations": {
+    "deskew_ms": {
+      "mean": 12.635596199999998,
+      "p95": 16.3854627,
+      "max": 18.148524,
+      "count": 20
+    },
+    "ndt_align_ms": {
+      "mean": 14.759617899999999,
+      "p95": 19.23164315000004,
+      "max": 72.054743,
+      "count": 20
+    },
+    "ndt_callback_ms": {
+      "mean": 23.8796829,
+      "p95": 28.85801085000004,
+      "max": 82.156276,
+      "count": 20
+    },
+    "ekf_update_ms": {
+      "mean": 0.19753790000000002,
+      "p95": 0.2570606000000001,
+      "max": 0.345764,
+      "count": 20
+    },
+    "publisher_to_fusion_ack_ms": {
+      "mean": 43.80282244965201,
+      "p95": 52.55413008853797,
+      "max": 99.1503210098017,
+      "count": 20
+    },
+    "steady_ndt_align_ms_excluding_first": {
+      "mean": 11.744084999999998,
+      "p95": 16.3148987,
+      "max": 16.45148,
+      "count": 19
+    },
+    "sum_deskew_ndt_callback_fusion_ms": {
+      "mean": 36.712816999999994,
+      "p95": 42.642193450000036,
+      "max": 91.75135,
+      "count": 20
+    }
+  },
+  "resources": {
+    "ekf": {
+      "peak_rss_mib": 17.7109375,
+      "vmhwm_mib": 18.32421875,
+      "sample_count": 156,
+      "cpu_ticks_start": 5,
+      "cpu_ticks_end": 37
+    },
+    "ndt": {
+      "peak_rss_mib": 106.82421875,
+      "vmhwm_mib": 106.82421875,
+      "sample_count": 156,
+      "cpu_ticks_start": 22,
+      "cpu_ticks_end": 74
+    },
+    "publisher": {
+      "peak_rss_mib": 68.2109375,
+      "vmhwm_mib": 68.2109375,
+      "sample_count": 156,
+      "cpu_ticks_start": 144,
+      "cpu_ticks_end": 173
+    },
+    "rviz": {
+      "peak_rss_mib": 177.36328125,
+      "vmhwm_mib": 177.36328125,
+      "sample_count": 156,
+      "cpu_ticks_start": 116,
+      "cpu_ticks_end": 150
+    }
+  },
+  "PUSH_EXECUTED": false,
+  "accuracy_evaluated": false,
+  "hessian_diagnosis": "not enabled in existing fusion runtime; no new jets added",
+  "replay": {
+    "scans_sent": 20,
+    "imu_sent": 208,
+    "sensor_span_sec": 1.999181076,
+    "wall_sec": 1.7582128990034107,
+    "gt_read": false,
+    "candidate_feedback": 0
+  },
+  "raw_output_sha256": {
+    "/home/jian/livox_ws/p61_r7_geode_runs/formal/deskew.csv": "47af2ca30c5d48bd49cb06a500358048e03da51b480a8188d76a887f377b3395",
+    "/home/jian/livox_ws/p61_r7_geode_runs/formal/ekf_lineage.csv": "6b3fcfd1ebbd599233631acc408be6b429194b7b0b49a8c5741fbac0bb70ee73",
+    "/home/jian/livox_ws/p61_r7_geode_runs/formal/fusion.csv": "f401557e6e94e767e14bb3bf1842889698ad7c5a2b69ba6fa4b81aa8068b7d20",
+    "/home/jian/livox_ws/p61_r7_geode_runs/formal/geometry.csv": "798589742bf7fff8e255ce43a9de53810ff2e13ab323314cd9f9d6dbea29155b",
+    "/home/jian/livox_ws/p61_r7_geode_runs/formal/live_trajectories.csv": "583c0434b553f44b41771105470a993096f0f1da8d651fe46171edc26e96c4f2",
+    "/home/jian/livox_ws/p61_r7_geode_runs/formal/memory.csv": "0983b925d5065429b75463efeebb49fc1627d25830e43ef9bb73c5b18a72e516",
+    "/home/jian/livox_ws/p61_r7_geode_runs/formal/ndt_diagnostics.csv": "18664c9a14f96372794e5cfb7f58cce10d0bf3e63618cb5edee24b359db7f97c",
+    "/home/jian/livox_ws/p61_r7_geode_runs/formal/ndt_performance.csv": "5eb1c8dfd66cda3a62e917b2b9c1ecc69cac70dd93fa640d51e3b14e346c1e28",
+    "/home/jian/livox_ws/p61_r7_geode_runs/formal/ndt_runtime.csv": "92f9b41cfbf3a4e487244296be00380c41b6623119e4841654153d102dcd39e0",
+    "/home/jian/livox_ws/p61_r7_geode_runs/formal/oosm.csv": "d9989466f347432f953891d8f0ebf5ccdd2c5af2155a0610c8b62104af8e765e",
+    "/home/jian/livox_ws/p61_r7_geode_runs/formal/publisher_receipts.csv": "a54da0f84f4e0c92623f83fa9235e4009de7b5c92fdfaa743a99472a6185bc46"
+  },
+  "START_SHA": "c649c9fa1743aada3301ddb4f75bce54eaf08532",
+  "CODE_SHA": "17922f2b63dae1f2af34f353287728d50a312f73",
+  "binaries": {
+    "/home/jian/livox_ws/p61_r7_geode_baseline_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp": "89fdc9da728660df9958276f7fc61c216842a866c885a316f8ac0537b329c06b",
+    "/home/jian/livox_ws/p61_r7_geode_baseline_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp": "40942380de766d75022c5f09475680f6288a0124364160b7241f52ac375bd0f9"
+  },
+  "visualization_post_map_publish_resources": {
+    "/dog_prior_map_ndt": {
+      "pid": 98013,
+      "memory_kib": {
+        "VmHWM": 109388,
+        "VmRSS": 109388
+      }
+    },
+    "/dog_prior_map_ekf": {
+      "pid": 98014,
+      "memory_kib": {
+        "VmHWM": 18764,
+        "VmRSS": 17016
+      }
+    },
+    "/geode_r7_rviz": {
+      "pid": 98018,
+      "memory_kib": {
+        "VmHWM": 219952,
+        "VmRSS": 218916
+      }
+    },
+    "/geode_frozen_map_visualization": {
+      "pid": 98741,
+      "memory_kib": {
+        "VmHWM": 42928,
+        "VmRSS": 42928
+      }
+    }
+  },
+  "realtime_validation": "NOT_REALTIME_VALIDATED",
+  "runtime_recorder_note": "Frozen receipts label 1..20 transport seq as scan_index; original indices 2986..3005 are bound by input SHA and frame_results. Archival reproducer fixes the log label only; no rerun."
+}

@@ -1,0 +1,30 @@
+{
+  "/dog_prior_map_ndt": {
+    "pid": 98013,
+    "memory_kib": {
+      "VmHWM": 109388,
+      "VmRSS": 109388
+    }
+  },
+  "/dog_prior_map_ekf": {
+    "pid": 98014,
+    "memory_kib": {
+      "VmHWM": 18764,
+      "VmRSS": 17016
+    }
+  },
+  "/geode_r7_rviz": {
+    "pid": 98018,
+    "memory_kib": {
+      "VmHWM": 219952,
+      "VmRSS": 218916
+    }
+  },
+  "/geode_frozen_map_visualization": {
+    "pid": 98741,
+    "memory_kib": {
+      "VmHWM": 42928,
+      "VmRSS": 42928
+    }
+  }
+}

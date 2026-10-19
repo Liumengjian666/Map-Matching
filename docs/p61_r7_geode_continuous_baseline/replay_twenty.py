@@ -41,7 +41,7 @@ def new_corrected_at(corrected, watermark, sent):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--input-dir', type=Path, default=Path('/home/jian/livox_ws/p61_r7_geode_runs/input'))
-    ap.add_argument('--run-dir', type=Path, default=Path('/home/jian/livox_ws/p61_r7_geode_runs/formal'))
+    ap.add_argument('--run-dir', type=Path, default=None)
     args = ap.parse_args()
     assert hashlib.sha256((args.input_dir / 'manifest.json').read_bytes()).hexdigest() == \
         'dda2ac02550f6ee5f294261094ff0b42c5494c5c5b0b3c5bc6ca56ed2a880cb4', 'input manifest is not frozen R7 identity'
@@ -59,6 +59,8 @@ def main():
         assert cloud.header.stamp.to_nsec()==int(row['stamp_ns'])
         assert hashlib.sha256(cloud.data).hexdigest()==row['adapter_sha256']
     rospy.init_node('geode_r7_bounded_input')
+    if args.run_dir is None:
+        args.run_dir = Path(rospy.get_param('/output/geode_fusion_csv')).parent
     lock = threading.RLock()
     logging_open = [True]
     latest_high = [0]
@@ -195,9 +197,9 @@ def main():
             wait(ack,'same-measurement OOSM receipt and corrected stream')
             receipt = next(r for r in rows(run/'fusion.csv') if int(r['measurement_ns'])==end)
             status = 'APPLIED' if receipt['update_applied']=='1' else 'REJECTED'
-            writer.writerow([cloud.header.seq,cloud.header.stamp.to_nsec(),end,watermark,cursor,(time.monotonic()-sent)*1000,status])
+            writer.writerow([int(row['scan_index']),cloud.header.stamp.to_nsec(),end,watermark,cursor,(time.monotonic()-sent)*1000,status])
             completed += 1
-            print('scan',cloud.header.seq,status,'end_ns',end,flush=True)
+            print('scan',row['scan_index'],status,'end_ns',end,flush=True)
             if status!='APPLIED': raise RuntimeError('preserved rejected fusion measurement')
         assert completed==20
         (run/'replay_summary.json').write_text(json.dumps({'scans_sent':completed,'imu_sent':cursor,
