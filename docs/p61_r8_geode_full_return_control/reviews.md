@@ -19,3 +19,18 @@ Three input/terminal test methods passed, including delayed prediction, rejected
 fusion, fatal time/state, exact frozen boundary identities and actual input hash.
 No ROS input or NDT align was used in these tests. No C++ source was modified.
 Optional external second opinion offered; not run without a new explicit approval.
+
+Post-run analysis review (one bounded pass) found three required issues, fixed
+before the archived metrics were generated: ordinal NDT/deskew joins now use
+measurement time with unique same-frame evidence; missing fusion no longer shifts
+timing rows via zip; missing STOP-frame correction values render as gaps rather
+than crashing the plotter. No experiment rerun resulted from these changes.
+The actual2441 APPLIED rows pass the independent raw-archive event-order/hash
+verifier. This verifier additionally checks per-frame state revisions, prior
+correction counts and real corrected replay times, not just aggregate counts.
+
+The final post-run CLI review was separately selected and explicitly confirmed.
+It uses one immutable bounded archive and an immutable prompt, ephemeral/read-only
+mode and existing authentication. It is a post-run limited code/result consistency
+review, not an independent certification of all original raw measurements.
+No external review was a pre-run gate for this run. See CLI_REVIEW.md for receipt.

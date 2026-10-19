@@ -1,0 +1,87 @@
+{
+  "durations": {
+    "deskew_ms": {
+      "count": 2441,
+      "mean": 11.755634052027858,
+      "p95": 16.168517,
+      "max": 19.346163
+    },
+    "ndt_align_ms": {
+      "count": 2441,
+      "mean": 11.53395487914789,
+      "p95": 18.519168,
+      "max": 85.901504
+    },
+    "ndt_callback_ms": {
+      "count": 2441,
+      "mean": 19.637427600573535,
+      "p95": 27.195747,
+      "max": 108.312533
+    },
+    "ekf_update_replay_ms": {
+      "count": 2441,
+      "mean": 0.27812791069233916,
+      "p95": 0.36429500000000004,
+      "max": 0.711269
+    },
+    "publisher_to_ack_ms": {
+      "count": 2441,
+      "mean": 39.60987289780686,
+      "p95": 48.96716499933973,
+      "max": 154.97631698963232
+    },
+    "steady_ndt_align_ms_excluding_first": {
+      "count": 2440,
+      "mean": 11.508400821721311,
+      "p95": 18.511669649999998,
+      "max": 85.901504
+    },
+    "sum_deskew_ndt_callback_fusion_ms": {
+      "count": 2441,
+      "mean": 31.671189563293733,
+      "p95": 40.166267,
+      "max": 123.43515699999999
+    }
+  },
+  "resources": {
+    "ekf": {
+      "peak_rss_mib": 19.02734375,
+      "vmhwm_mib": 19.02734375,
+      "samples": 18041,
+      "cpu_seconds": 38.71
+    },
+    "map_visualization": {
+      "peak_rss_mib": 41.42578125,
+      "vmhwm_mib": 41.43359375,
+      "samples": 18041,
+      "cpu_seconds": 0.21
+    },
+    "ndt": {
+      "peak_rss_mib": 106.390625,
+      "vmhwm_mib": 106.390625,
+      "samples": 18041,
+      "cpu_seconds": 54.45
+    },
+    "publisher": {
+      "peak_rss_mib": 327.5078125,
+      "vmhwm_mib": 327.5078125,
+      "samples": 18041,
+      "cpu_seconds": 71.56
+    },
+    "rviz": {
+      "peak_rss_mib": 220.5,
+      "vmhwm_mib": 220.71484375,
+      "samples": 18041,
+      "cpu_seconds": 31.75
+    }
+  },
+  "replay": {
+    "sent": 2441,
+    "completed_terminals": 2441,
+    "imu_sent": 24418,
+    "wall_sec": 215.90806840799632,
+    "failure": null,
+    "gt_read": false,
+    "candidate_feedback": 0
+  }
+}

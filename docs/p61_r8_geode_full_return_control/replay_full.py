@@ -8,7 +8,7 @@ from geometry_msgs.msg import PoseStamped
 from nav_msgs.msg import Odometry,Path as RosPath
 from sensor_msgs.msg import Imu,PointCloud2
 from prepare_inputs import ROOT,REPO,sha
-from terminal_contract import terminal
+from terminal_contract import terminal,correction_evidence
 sys.path.insert(0,str(REPO/'docs/p61_r7_geode_continuous_baseline'))
 from replay_twenty import connected_edges,new_corrected_at
 
@@ -160,15 +160,17 @@ def main():
                     n=readers['ndt_diagnostics'].rows[ordinal-1] if len(readers['ndt_diagnostics'].rows)>=ordinal else None
                     o=next((x for x in reversed(readers['oosm'].rows) if abs(float(x['ndt_stamp'])-end/1e9)<1e-6),None)
                     f=next((x for x in reversed(readers['fusion'].rows) if int(x['measurement_ns'])==end),None)
-                    times=True
+                    times=True;evidence_pending=False
                     if d is not None:times=d['post_scan_end_imu_used']=='0'
                     if o is not None and o['oosm_result']=='APPLIED':
                         event=last_events.get('NDT_CORRECTION_APPLIED')
-                        times=times and event is not None and abs(float(event['ndt_measurement_stamp'])-end/1e9)<1e-6 and float(event['state_stamp'])==float(event['ndt_measurement_stamp'])
+                        evidence=correction_evidence(event,end)
+                        evidence_pending=evidence is None
+                        if not evidence_pending:times=times and evidence
                     with lock:
                         decision=terminal(state_valid=not bad_state[0],prediction_valid=end in predicted,
                             deskew=d['status'] if d else None,ndt=(n['ndt_has_converged']=='1') if n and end in diagnosed and end in predicted else None,
-                            oosm=o['oosm_result'] if o else None,fusion_applied=(f['update_applied']=='1') if f else None,
+                            oosm=o['oosm_result'] if o and not evidence_pending else None,fusion_applied=(f['update_applied']=='1') if f else None,
                             fresh_corrected=new_corrected_at(corrected,watermark,sent) and end in used,times_valid=times)
                     status,fatal=decision
                     if status is None:

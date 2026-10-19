@@ -1,7 +1,8 @@
 import csv,hashlib,json,unittest
 from pathlib import Path
-from terminal_contract import terminal
+from terminal_contract import terminal,correction_evidence
 from prepare_inputs import eligible
+from analyze_run import native_seconds
 
 
 class Contract(unittest.TestCase):
@@ -30,6 +31,18 @@ class Contract(unittest.TestCase):
         self.assertEqual(m['scan_count'],2441)
         self.assertEqual(hashlib.sha256((root/'scans.csv').read_bytes()).hexdigest(),m['scans_sha256'])
         self.assertGreaterEqual(m['imu_last_ns'],m['last_end_ns'])
+
+    def test_delayed_lineage_is_pending_not_time_failure(self):
+        end=1706671588000204345;target=end/1e9
+        self.assertIsNone(correction_evidence(None,end))
+        self.assertIsNone(correction_evidence({'ndt_measurement_stamp':target-.1,'state_stamp':target-.1},end))
+        self.assertTrue(correction_evidence({'ndt_measurement_stamp':target,'state_stamp':target},end))
+        self.assertFalse(correction_evidence({'ndt_measurement_stamp':target,'state_stamp':target-.005},end))
+
+    def test_epoch_ns_does_not_double_round_before_division(self):
+        ns=1706671588199869772
+        self.assertNotEqual(ns/1e9,native_seconds(ns))
+        self.assertEqual(native_seconds(ns),1706671588.1998699)
 
 
 if __name__=='__main__':unittest.main()

@@ -1,0 +1,198 @@
+{
+  "TASK": "P61-R8-GEODE-FULL-RETURN-CONTROL-BASELINE",
+  "FINAL_RESULT": "FULL_RETURN_CONTROL_COMPLETED_WITH_FAILURES",
+  "START_SHA": "aa8eadbff8c4238095105e2219669ff3eccbe12f",
+  "ALGORITHM_CODE_SHA": "17922f2b63dae1f2af34f353287728d50a312f73",
+  "CODE_SHA": "1367e1d9587d1f90a47bf6f44405239a7b65e4f6",
+  "PUSH_EXECUTED": false,
+  "input_scans": 2441,
+  "sent_scans": 2441,
+  "terminal_scans": 2441,
+  "sensor_span_sec": 244.099341972,
+  "imu_messages": 24418,
+  "deskew_published": 2441,
+  "ndt_align_calls": 2441,
+  "ndt_converged": 2441,
+  "ndt_not_converged": 0,
+  "oosm": {
+    "APPLIED": 2441
+  },
+  "correction_events": 2441,
+  "replay_imu_count": 2441,
+  "imu_watermark_messages_match": true,
+  "previous_correction_used_next_frame": true,
+  "terminal_counts": {
+    "APPLIED": 2441
+  },
+  "stream_counts": {
+    "HIGH_RATE": 24418,
+    "PREDICTION": 2441,
+    "NDT_USED": 2441,
+    "CORRECTED": 2441
+  },
+  "evidence_violations": [],
+  "unique_source_hashes": 2441,
+  "all_assets_unchanged": true,
+  "map_points": 321053,
+  "target_points": [
+    318377
+  ],
+  "initial_T_M_L": [
+    -0.9691186948547261,
+    0.24330301406358548,
+    -0.040157174352172226,
+    328.540732544529,
+    -0.24154209009870922,
+    -0.9693867948046679,
+    -0.04412097924993969,
+    71.7864841037506,
+    -0.04966260178838961,
+    -0.03305881799930049,
+    0.9982187839133095,
+    3.0360057482115215,
+    0,
+    0,
+    0,
+    1
+  ],
+  "final_corrected_pose": [
+    354.4137266963031,
+    78.02950519337575,
+    3.0397937214053123,
+    -0.006227675363221316,
+    -0.030793962408827223,
+    0.9956192955608352,
+    -0.08806342172366663
+  ],
+  "trajectory_length_m": 912.5726633846658,
+  "max_adjacent_translation_m": 0.5162870267444165,
+  "max_adjacent_rotation_deg": 5.097789361819667,
+  "max_raw_correction_m": {
+    "count": 2441,
+    "mean": 0.054440380042386764,
+    "p95": 0.13152700204946363,
+    "max": 2.9150016052105094
+  },
+  "max_raw_correction_deg": {
+    "count": 2441,
+    "mean": 0.5354856437806749,
+    "p95": 0.8800980391381759,
+    "max": 41.0432326899775
+  },
+  "translation_limited": 186,
+  "rotation_limited": 32,
+  "iteration_limit_frames": 16,
+  "fitness": {
+    "count": 2441,
+    "mean": 7.072112669072477,
+    "p95": 63.9660857103759,
+    "max": 393.5577509790576
+  },
+  "majority_points_beyond_recorded_8m_diagnostic": 5,
+  "classification_note": "WITH_FAILURES includes directly observed severe estimated-pose geometric mismatch; not a GT-certified localization error or nonconvergence claim",
+  "geometry_gate": {
+    "PASS": 2441
+  },
+  "used_overlap_0p5m": {
+    "count": 2441,
+    "mean": 0.9086948771685943,
+    "p95": 1.0,
+    "max": 1.0
+  },
+  "maximum_native_double_stamp_representation_error_ns": 119.185424805,
+  "gt_read": false,
+  "accuracy_evaluated": false,
+  "coupled_jet_calls": 0,
+  "coupled_value_calls": 0,
+  "extra_align_calls": 0,
+  "candidate_feedback": 0,
+  "covariance_policy": "R7 fixed 15D heuristic restart prior; not R6 full 23D posterior",
+  "durations": {
+    "deskew_ms": {
+      "count": 2441,
+      "mean": 11.755634052027858,
+      "p95": 16.168517,
+      "max": 19.346163
+    },
+    "ndt_align_ms": {
+      "count": 2441,
+      "mean": 11.53395487914789,
+      "p95": 18.519168,
+      "max": 85.901504
+    },
+    "ndt_callback_ms": {
+      "count": 2441,
+      "mean": 19.637427600573535,
+      "p95": 27.195747,
+      "max": 108.312533
+    },
+    "ekf_update_replay_ms": {
+      "count": 2441,
+      "mean": 0.27812791069233916,
+      "p95": 0.36429500000000004,
+      "max": 0.711269
+    },
+    "publisher_to_ack_ms": {
+      "count": 2441,
+      "mean": 39.60987289780686,
+      "p95": 48.96716499933973,
+      "max": 154.97631698963232
+    },
+    "steady_ndt_align_ms_excluding_first": {
+      "count": 2440,
+      "mean": 11.508400821721311,
+      "p95": 18.511669649999998,
+      "max": 85.901504
+    },
+    "sum_deskew_ndt_callback_fusion_ms": {
+      "count": 2441,
+      "mean": 31.671189563293733,
+      "p95": 40.166267,
+      "max": 123.43515699999999
+    }
+  },
+  "resources": {
+    "ekf": {
+      "peak_rss_mib": 19.02734375,
+      "vmhwm_mib": 19.02734375,
+      "samples": 18041,
+      "cpu_seconds": 38.71
+    },
+    "map_visualization": {
+      "peak_rss_mib": 41.42578125,
+      "vmhwm_mib": 41.43359375,
+      "samples": 18041,
+      "cpu_seconds": 0.21
+    },
+    "ndt": {
+      "peak_rss_mib": 106.390625,
+      "vmhwm_mib": 106.390625,
+      "samples": 18041,
+      "cpu_seconds": 54.45
+    },
+    "publisher": {
+      "peak_rss_mib": 327.5078125,
+      "vmhwm_mib": 327.5078125,
+      "samples": 18041,
+      "cpu_seconds": 71.56
+    },
+    "rviz": {
+      "peak_rss_mib": 220.5,
+      "vmhwm_mib": 220.71484375,
+      "samples": 18041,
+      "cpu_seconds": 31.75
+    }
+  },
+  "replay": {
+    "sent": 2441,
+    "completed_terminals": 2441,
+    "imu_sent": 24418,
+    "wall_sec": 215.90806840799632,
+    "failure": null,
+    "gt_read": false,
+    "candidate_feedback": 0
+  },
+  "realtime_validation": "NOT_REALTIME_VALIDATED",
+  "hessian": "not enabled in frozen R7 runtime; no extra derivatives computed",
+  "lock_loss": "No independent correctness reference; terminal failures, corrections and geometry diagnostics reported separately"
+}

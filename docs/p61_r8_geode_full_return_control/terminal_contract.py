@@ -3,6 +3,13 @@ TIME_FAILURES={'NO_HISTORY','FUTURE_MEASUREMENT','INVALID_MEASUREMENT',
                'REPLAY_INCOMPLETE','ALIGNMENT_TOO_LARGE','INVALID_TIMESTAMP'}
 
 
+def correction_evidence(event, end_ns):
+    """None means recorder delivery pending, not a production time violation."""
+    if event is None or abs(float(event['ndt_measurement_stamp'])-end_ns/1e9)>=1e-6:
+        return None
+    return float(event['state_stamp'])==float(event['ndt_measurement_stamp'])
+
+
 def terminal(*, state_valid, prediction_valid, deskew, ndt, oosm=None,
              fusion_applied=None, fresh_corrected=False, times_valid=True):
     if not state_valid:return 'NUMERICAL_FAILURE',True

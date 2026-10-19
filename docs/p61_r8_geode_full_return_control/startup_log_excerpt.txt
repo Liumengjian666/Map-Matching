@@ -1,0 +1,4 @@
+[INFO] [1792377322.545985863]: [DogPriorMap C++] explicit causal initial state: stamp=1706671587.829840183 boundary_age_ms=4.993 p=(328.5927 71.7882 3.0114) v_prior=(4.2884 1.0779 0.1105) bg_prior=(-0.00087 0.00238 -0.01098) ba_prior=(0.02965 -0.04097 -0.00513) g_map=(0.0334 0.5468 -9.7937)
+[INFO] [1792377367.980870397]: [DogP[INFO] [1792377322.715614775]: [GEODE] actual target_cells_ leaf=(0.800000012 0.800000012 0.800000012), target=318377
+[INFO] [1792377322.716441702]: [GEODE] map load + preprocessing + Gaussian build 87.955206 ms
+[INFO] [1792377322.772589414]: [DogPriorMap NDT] started: mode=CONTROL map=/home/jian/livox_ws/p61_r5_geode_runs/formal_mapping/frozen_map.pcd target=318377 lidar=/geode/deskewed_points output=/dog_livo/ndt_odom EKF=disabled

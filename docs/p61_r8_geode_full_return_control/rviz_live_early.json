@@ -1,0 +1,11 @@
+{
+  "unix_wall_time": 1792377351.658326,
+  "progress": {
+    "completed": 77,
+    "scan_index": 3062,
+    "end_ns": 1706671595599517529,
+    "terminal": "APPLIED"
+  },
+  "rviz_pid": 102259,
+  "window_id": 39845902
+}

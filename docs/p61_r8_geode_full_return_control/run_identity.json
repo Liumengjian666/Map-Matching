@@ -1,0 +1,11 @@
+{
+  "START_SHA": "aa8eadbff8c4238095105e2219669ff3eccbe12f",
+  "ALGORITHM_CODE_SHA": "17922f2b63dae1f2af34f353287728d50a312f73",
+  "binaries": {
+    "/home/jian/livox_ws/p61_r7_geode_baseline_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp": "89fdc9da728660df9958276f7fc61c216842a866c885a316f8ac0537b329c06b",
+    "/home/jian/livox_ws/p61_r7_geode_baseline_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp": "40942380de766d75022c5f09475680f6288a0124364160b7241f52ac375bd0f9"
+  },
+  "algorithm_config_sha256": "9d2e32ebf5bd89230d46b7af7b5d0cf9115cbe72d600634899337eab09eba0d3",
+  "manifest_sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+  "gt_read": false
+}
