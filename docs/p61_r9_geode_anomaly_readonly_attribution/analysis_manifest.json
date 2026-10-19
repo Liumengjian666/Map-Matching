@@ -1,0 +1,181 @@
+{
+  "task": "P61-R9-GEODE-ANOMALY-READONLY-ATTRIBUTION",
+  "result": "MIXED_OR_INCONCLUSIVE",
+  "branch": "research/p61-r9-geode-anomaly-readonly-attribution",
+  "original_start_sha": "eba814000a06a2b110acf3835247cd6cffe9db6b",
+  "resume_start_sha": "aea49024c5da5294b716bc17247713c4fca7b833",
+  "actual_numerical_analysis_code_sha": "f1d4ad321b6c77d7305ed42f015f95fc77c59e1f",
+  "packaging_parent_head": "f1d4ad321b6c77d7305ed42f015f95fc77c59e1f",
+  "immutable_input_manifest_sha256": "2bf69f3273559f28b7aca43853fa275b448734ec46b91429129fd3970c8ac71b",
+  "input_file_identities": "asset_gate_before.json: assets; analysis_inputs_frozen.json: actual_source_identity and selected_scan_identity",
+  "actual_scope": {
+    "unique_scans": 112,
+    "intervals": [
+      [
+        5035,
+        5045
+      ],
+      [
+        5140,
+        5240
+      ]
+    ],
+    "predecessors_only": [
+      5034,
+      5139
+    ]
+  },
+  "asset_gate": {
+    "status": "PASS",
+    "comparisons": 125,
+    "unique_absolute_paths": 95,
+    "all_frozen_assets_unchanged": true,
+    "before_sha256": "afea76bc4d9967a461765171ec51cd001c53f5ec9c0288622d3801aba75343da",
+    "after_sha256": "4c62a9a8c0fe3dbba3bddbf50b45e7660d0368070b4dbf6efe5d4a4b3dce776a"
+  },
+  "script_sha256": {
+    "analysis_math.py": "12dfd56c43986832004fac9f6a790ce8d7fff278340caf890746ff96e1e84757",
+    "analyze_frozen.py": "670b35240702f3e8b4b3a9b532ed1b9f31b35ec30768c4e38625a68b0e525939",
+    "asset_gate.py": "1b0abff525477f775cb79206891b58b452c87770903aeb9099bf0f7a805a05f1",
+    "build_cause_assessment.py": "9331ee619942f1173494db5893c73904797d865d4f509979c9982c3fd4b26e9f",
+    "check_input_semantics.py": "beb1ea0d965fd734d792b3fca046d67f4783fec800cd1bcfd601568f75dd6f73",
+    "finalize_archive.py": "857c864d785f3eb58d38ecf0553c6fa47b373cadda07edab3ae7c3e60728edb0",
+    "freeze_analysis_inputs.py": "836ba6a8edd59b70342a11044dd3dae8bd2cd8f3863248a4f0822c9c9cc7cf0d",
+    "inspect_point_times.py": "ae574044cce1bd349730f5322fcf3ec34982151c44246dd34606fc6f65384381",
+    "test_analysis_math.py": "5cf7208852ece154a7447f0eabf73e4fd6f4e147a4276fda016d0674edef87e5",
+    "test_derived_evidence.py": "309354cbc33e85b7c33758dca059cccd525adefea0c92547e2d40c940f437b4a"
+  },
+  "output_files": {
+    "ASSET_GATE_RECHECK.md": {
+      "sha256": "5f9a3591b1cd627047d8c759266f10151dd98aeca90104cf99a5b8ffa0f1fee5",
+      "size_bytes": 3661
+    },
+    "ATTRIBUTION_REPORT.md": {
+      "sha256": "c15885dd4bfe12f44dbe0dadb11e48314c045d6cca1b25c4235db891df75c4f5",
+      "size_bytes": 14291
+    },
+    "PROTOCOL_RESUMED.md": {
+      "sha256": "1bd1789973cf05085fcd6c083367469c57fd84b3c4392a54bf6e9872bdea7a8c",
+      "size_bytes": 1967
+    },
+    "REPORT.md": {
+      "sha256": "c1e21ea60ff818b3db7ab0d110e02ed39f391baf32249989c34595e1aa4d79b7",
+      "size_bytes": 4270
+    },
+    "REVIEW_AND_TESTS.md": {
+      "sha256": "3174b7a08c6cf2dd3f53957ea26447b599331003f73e51c95807535af741cd3e",
+      "size_bytes": 2307
+    },
+    "analysis_inputs_frozen.json": {
+      "sha256": "2bf69f3273559f28b7aca43853fa275b448734ec46b91429129fd3970c8ac71b",
+      "size_bytes": 139032
+    },
+    "analysis_math.py": {
+      "sha256": "12dfd56c43986832004fac9f6a790ce8d7fff278340caf890746ff96e1e84757",
+      "size_bytes": 1413
+    },
+    "analyze_frozen.py": {
+      "sha256": "670b35240702f3e8b4b3a9b532ed1b9f31b35ec30768c4e38625a68b0e525939",
+      "size_bytes": 15152
+    },
+    "anomaly_frame_table.csv": {
+      "sha256": "5196441668f654ad558b166635ee878202d5f8602d80fdcc925bc558cbc9864f",
+      "size_bytes": 161138
+    },
+    "asset_gate.py": {
+      "sha256": "1b0abff525477f775cb79206891b58b452c87770903aeb9099bf0f7a805a05f1",
+      "size_bytes": 6161
+    },
+    "asset_gate_after.json": {
+      "sha256": "4c62a9a8c0fe3dbba3bddbf50b45e7660d0368070b4dbf6efe5d4a4b3dce776a",
+      "size_bytes": 56208
+    },
+    "asset_gate_before.json": {
+      "sha256": "afea76bc4d9967a461765171ec51cd001c53f5ec9c0288622d3801aba75343da",
+      "size_bytes": 56208
+    },
+    "asset_gate_comparison.json": {
+      "sha256": "17f46d1afc74c2d99b8903fff3790fb582ac3b7ecfe8c9165ed5d5ab5f6ed59b",
+      "size_bytes": 288
+    },
+    "blocked_cause_assessment.json": {
+      "sha256": "dbb85eaaaba826e517fbb1f96897ea360b3353bf3251bbd4ba8e35c65213a4f0",
+      "size_bytes": 1255
+    },
+    "build_cause_assessment.py": {
+      "sha256": "9331ee619942f1173494db5893c73904797d865d4f509979c9982c3fd4b26e9f",
+      "size_bytes": 6052
+    },
+    "candidate_increment_consistency.csv": {
+      "sha256": "fd951ce87c6a284930b88707947a706f1f37e9f189ee772901edf86df6f996da",
+      "size_bytes": 59250
+    },
+    "cause_assessment.json": {
+      "sha256": "3c1b1ae2e664790e592d1d31a279c05f8759459b7428b7bfa2fefcaa39c8c184",
+      "size_bytes": 8000
+    },
+    "check_input_semantics.py": {
+      "sha256": "beb1ea0d965fd734d792b3fca046d67f4783fec800cd1bcfd601568f75dd6f73",
+      "size_bytes": 2131
+    },
+    "finalize_archive.py": {
+      "sha256": "857c864d785f3eb58d38ecf0553c6fa47b373cadda07edab3ae7c3e60728edb0",
+      "size_bytes": 3379
+    },
+    "freeze_analysis_inputs.py": {
+      "sha256": "836ba6a8edd59b70342a11044dd3dae8bd2cd8f3863248a4f0822c9c9cc7cf0d",
+      "size_bytes": 2575
+    },
+    "input_semantic_check.json": {
+      "sha256": "6bdb3a32b8e3a935a16db4d80d45d4c51667f83271a68c2ab5955234ba434e42",
+      "size_bytes": 489
+    },
+    "inspect_point_times.py": {
+      "sha256": "ae574044cce1bd349730f5322fcf3ec34982151c44246dd34606fc6f65384381",
+      "size_bytes": 2615
+    },
+    "map_support_summary.csv": {
+      "sha256": "5440306eea31f49f89735e95b4af7bf67235a24d177fcdb2afb7f4854423c38b",
+      "size_bytes": 186074
+    },
+    "metric_summary.json": {
+      "sha256": "1a374bf5e2c169b734cfe19dce6f9330ec833f335eeef23e1c822843eebcb7e0",
+      "size_bytes": 8443
+    },
+    "point_time_records.json": {
+      "sha256": "b7774af9a6a13188c00649408cd341f4fc1f7877b1c1d4fb667fdaa8a30f73d8",
+      "size_bytes": 52300
+    },
+    "reproduction_commands.md": {
+      "sha256": "9636ea9b12444298c751470ed02ae1a1945745b54afbccce76a4acd6d617a72c",
+      "size_bytes": 3048
+    },
+    "test_analysis_math.py": {
+      "sha256": "5cf7208852ece154a7447f0eabf73e4fd6f4e147a4276fda016d0674edef87e5",
+      "size_bytes": 1437
+    },
+    "test_derived_evidence.py": {
+      "sha256": "309354cbc33e85b7c33758dca059cccd525adefea0c92547e2d40c940f437b4a",
+      "size_bytes": 3784
+    },
+    "time_coordinate_audit.csv": {
+      "sha256": "7192956c650d94777946f17cc7c9e237b82036c20e6ec1feb10d6634363831a3",
+      "size_bytes": 97399
+    }
+  },
+  "provenance": {
+    "original_R8_metrics": "verbatim existing geometry and poses",
+    "new_metrics": "SE3 residuals, fixed-radius origin density, time/coordinate diagnostics",
+    "point_time_records": "inspection of frozen pre-deskew raw bytes, not recreated runtime Source",
+    "cause_assessment": "explicit evidence-limited human-readable scientific assessment"
+  },
+  "external_cli_review_executed": false,
+  "external_cli_status": "Optional offer sent; no confirmation received at packaging; no external CLI run",
+  "localization_replays": 0,
+  "gt_reads": 0,
+  "new_ndt_aligns": 0,
+  "new_ekf_runs": 0,
+  "new_ros_localization_nodes": 0,
+  "push_executed": false,
+  "hash_convention": "Manifest excludes its own bytes and checksums.sha256; checksums includes manifest but excludes itself."
+}

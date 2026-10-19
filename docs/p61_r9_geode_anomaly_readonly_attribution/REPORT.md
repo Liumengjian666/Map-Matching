@@ -68,3 +68,18 @@ Research control/user should confirm the full64-character bag SHA from the froze
 R8 manifest as the corrected R9 source identity. Only then repeat the asset gate
 and continue the already-approved bounded read-only attribution in this worktree.
 Do not replay localization, alter the map, tune a parameter, or enable a new module.
+
+## Authorized continuation after corrected contract
+
+The preceding text remains the historical blocked receipt, not the current
+resumed result. Research control subsequently explicitly approved the correct
+64-character original bag SHA and continuation in this same worktree/branch.
+All125 asset comparisons passed before resumed attribution; the full gate is
+repeated after it. See ASSET_GATE_RECHECK.md and both JSON snapshots.
+
+The completed bounded112-frame analysis is in ATTRIBUTION_REPORT.md and
+cause_assessment.json. Current conclusion: **MIXED_OR_INCONCLUSIVE**. Prediction
+geometric support loss and limiter interaction are observed, Raw candidates also
+show motion inconsistency, and absolute correctness/root causality is unresolved.
+GT/NDT align/EKF/ROS localization replay counts remain0. Original R8 assets and
+this report's earlier blocked history are not rewritten or erased.

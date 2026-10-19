@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "scan_count": 2441,
+  "first_index": 2986,
+  "last_index": 5426,
+  "first_header_ns": 1706671587900364160,
+  "last_end_ns": 1706671831999706132,
+  "imu_count": 24419,
+  "boundary_admission": {
+    "2985": false,
+    "2986": true,
+    "5426": true,
+    "5427": false
+  },
+  "source_manifest_sha256": "4444883c441f0c3c08650bf629c05812d34b1a069c7102d565053a47b976c76d",
+  "scope": "all input identities only; no out-of-scope trajectory analysis",
+  "gt_read": false
+}

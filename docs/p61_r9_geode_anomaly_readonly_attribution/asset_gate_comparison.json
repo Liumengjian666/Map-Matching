@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "comparisons": 125,
+  "unique_absolute_paths": 95,
+  "all_frozen_assets_unchanged": true,
+  "before_sha256": "afea76bc4d9967a461765171ec51cd001c53f5ec9c0288622d3801aba75343da",
+  "after_sha256": "4c62a9a8c0fe3dbba3bddbf50b45e7660d0368070b4dbf6efe5d4a4b3dce776a"
+}

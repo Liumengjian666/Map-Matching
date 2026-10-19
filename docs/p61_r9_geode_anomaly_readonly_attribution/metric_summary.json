@@ -1,0 +1,333 @@
+{
+  "selected_count": 112,
+  "predecessors": [
+    5034,
+    5139
+  ],
+  "phases": {
+    "main": {
+      "count": 71,
+      "header_first_ns": "1706671805199903249",
+      "end_last_ns": 1706671812299679066,
+      "overlap": {
+        "initial": {
+          "min": 0.011428571428571429,
+          "median": 0.26857142857142857,
+          "max": 0.46714285714285714
+        },
+        "raw": {
+          "min": 0.03428571428571429,
+          "median": 0.2892857142857143,
+          "max": 0.8158526821457166
+        },
+        "used": {
+          "min": 0.015714285714285715,
+          "median": 0.26857142857142857,
+          "max": 0.48642857142857143
+        }
+      },
+      "rho_m": {
+        "min": 0.017157334065365022,
+        "median": 0.23865065304730865,
+        "max": 3.984377664462023
+      },
+      "phi_deg": {
+        "min": 0.05015057449199384,
+        "median": 1.5527871690931008,
+        "max": 53.60630572264309
+      },
+      "density_5m": {
+        "initial": {
+          "min": 3667.0,
+          "median": 4761.0,
+          "max": 6005.0
+        },
+        "raw": {
+          "min": 3671.0,
+          "median": 4669.0,
+          "max": 5801.0
+        },
+        "used": {
+          "min": 3671.0,
+          "median": 4804.0,
+          "max": 6029.0
+        }
+      },
+      "limiter_translation": 35,
+      "limiter_rotation": 23
+    },
+    "pre": {
+      "count": 18,
+      "header_first_ns": "1706671803299693107",
+      "end_last_ns": 1706671805100051028,
+      "overlap": {
+        "initial": {
+          "min": 0.6605263157894737,
+          "median": 0.7625,
+          "max": 0.8207142857142857
+        },
+        "raw": {
+          "min": 0.7292857142857143,
+          "median": 0.7849999999999999,
+          "max": 0.8824884792626728
+        },
+        "used": {
+          "min": 0.6192857142857143,
+          "median": 0.7735714285714286,
+          "max": 0.8057142857142857
+        }
+      },
+      "rho_m": {
+        "min": 0.01781153877453239,
+        "median": 0.08815663583386799,
+        "max": 1.8958048545464246
+      },
+      "phi_deg": {
+        "min": 0.1249418100659692,
+        "median": 0.6669974559952596,
+        "max": 26.537266708500642
+      },
+      "density_5m": {
+        "initial": {
+          "min": 5104.0,
+          "median": 6028.5,
+          "max": 6141.0
+        },
+        "raw": {
+          "min": 4067.0,
+          "median": 6012.0,
+          "max": 6143.0
+        },
+        "used": {
+          "min": 5371.0,
+          "median": 6017.5,
+          "max": 6143.0
+        }
+      },
+      "limiter_translation": 5,
+      "limiter_rotation": 7
+    },
+    "transition": {
+      "count": 11,
+      "header_first_ns": "1706671804799726724",
+      "end_last_ns": 1706671805899593546,
+      "overlap": {
+        "initial": {
+          "min": 0.011428571428571429,
+          "median": 0.23214285714285715,
+          "max": 0.7521367521367521
+        },
+        "raw": {
+          "min": 0.03428571428571429,
+          "median": 0.5392857142857143,
+          "max": 0.8824884792626728
+        },
+        "used": {
+          "min": 0.024285714285714285,
+          "median": 0.2342857142857143,
+          "max": 0.7457264957264957
+        }
+      },
+      "rho_m": {
+        "min": 0.500821987451213,
+        "median": 1.2512938997482679,
+        "max": 2.956394185906732
+      },
+      "phi_deg": {
+        "min": 6.791800447526388,
+        "median": 15.119301178131193,
+        "max": 39.821544554378335
+      },
+      "density_5m": {
+        "initial": {
+          "min": 3767.0,
+          "median": 4927.0,
+          "max": 5879.0
+        },
+        "raw": {
+          "min": 4006.0,
+          "median": 4482.0,
+          "max": 5043.0
+        },
+        "used": {
+          "min": 4135.0,
+          "median": 5044.0,
+          "max": 5774.0
+        }
+      },
+      "limiter_translation": 10,
+      "limiter_rotation": 11
+    },
+    "severe": {
+      "count": 7,
+      "header_first_ns": "1706671806200306415",
+      "end_last_ns": 1706671806899588626,
+      "overlap": {
+        "initial": {
+          "min": 0.02857142857142857,
+          "median": 0.04428571428571428,
+          "max": 0.085
+        },
+        "raw": {
+          "min": 0.04,
+          "median": 0.09357142857142857,
+          "max": 0.13357142857142856
+        },
+        "used": {
+          "min": 0.022857142857142857,
+          "median": 0.041428571428571426,
+          "max": 0.10071428571428571
+        }
+      },
+      "rho_m": {
+        "min": 0.6447248956026498,
+        "median": 1.2091570229480564,
+        "max": 3.984377664462023
+      },
+      "phi_deg": {
+        "min": 9.641196216727815,
+        "median": 15.864619166423958,
+        "max": 53.60630572264309
+      },
+      "density_5m": {
+        "initial": {
+          "min": 5088.0,
+          "median": 5900.0,
+          "max": 6005.0
+        },
+        "raw": {
+          "min": 4174.0,
+          "median": 4708.0,
+          "max": 5653.0
+        },
+        "used": {
+          "min": 5185.0,
+          "median": 5941.0,
+          "max": 6029.0
+        }
+      },
+      "limiter_translation": 7,
+      "limiter_rotation": 7
+    },
+    "recovery": {
+      "count": 21,
+      "header_first_ns": "1706671811299703836",
+      "end_last_ns": 1706671813399554134,
+      "overlap": {
+        "initial": {
+          "min": 0.3914285714285714,
+          "median": 0.48142857142857143,
+          "max": 0.8214285714285714
+        },
+        "raw": {
+          "min": 0.39785714285714285,
+          "median": 0.5007142857142857,
+          "max": 0.8207142857142857
+        },
+        "used": {
+          "min": 0.39785714285714285,
+          "median": 0.5007142857142857,
+          "max": 0.83
+        }
+      },
+      "rho_m": {
+        "min": 0.009610206946543812,
+        "median": 0.0473343845361769,
+        "max": 0.6409054510556214
+      },
+      "phi_deg": {
+        "min": 0.024462380141690963,
+        "median": 0.23360597671262925,
+        "max": 2.553992862014487
+      },
+      "density_5m": {
+        "initial": {
+          "min": 3344.0,
+          "median": 3643.0,
+          "max": 4078.0
+        },
+        "raw": {
+          "min": 3355.0,
+          "median": 3642.0,
+          "max": 4070.0
+        },
+        "used": {
+          "min": 3355.0,
+          "median": 3642.0,
+          "max": 4070.0
+        }
+      },
+      "limiter_translation": 1,
+      "limiter_rotation": 0
+    },
+    "secondary": {
+      "count": 11,
+      "header_first_ns": "1706671792800150394",
+      "end_last_ns": 1706671793899998597,
+      "overlap": {
+        "initial": {
+          "min": 0.4685714285714286,
+          "median": 0.5057142857142857,
+          "max": 0.5621428571428572
+        },
+        "raw": {
+          "min": 0.4685714285714286,
+          "median": 0.51,
+          "max": 0.56
+        },
+        "used": {
+          "min": 0.4685714285714286,
+          "median": 0.51,
+          "max": 0.56
+        }
+      },
+      "rho_m": {
+        "min": 0.024385963834626132,
+        "median": 0.08432052022291564,
+        "max": 0.37167147331709666
+      },
+      "phi_deg": {
+        "min": 0.16282847749220214,
+        "median": 0.2895776278685071,
+        "max": 1.614780241587775
+      },
+      "density_5m": {
+        "initial": {
+          "min": 2003.0,
+          "median": 2172.0,
+          "max": 2337.0
+        },
+        "raw": {
+          "min": 2005.0,
+          "median": 2171.0,
+          "max": 2339.0
+        },
+        "used": {
+          "min": 2005.0,
+          "median": 2171.0,
+          "max": 2339.0
+        }
+      },
+      "limiter_translation": 0,
+      "limiter_rotation": 0
+    }
+  },
+  "label_problem_count": 112,
+  "time_record_failures": [],
+  "max_roundtrip_m": 5.695433295429594e-14,
+  "max_roundtrip_deg": 5.562697819458907e-15,
+  "max_initial_vs_rollback_m": 6.394884621840902e-14,
+  "max_initial_vs_rollback_deg": 2.2512444483919287e-11,
+  "max_used_vs_applied_imu_m": 4.850592728188979e-13,
+  "max_used_vs_applied_imu_deg": 2.476088454325908e-11,
+  "max_fused_vs_replay_lidar_m": 5.684341886080802e-14,
+  "max_fused_vs_replay_lidar_deg": 2.248105201538083e-11,
+  "max_roundtrip_matrix_frobenius_error": 5.895443413628347e-11,
+  "extrinsic_det": 1.0000000000416869,
+  "extrinsic_orth_error": 5.895427338000733e-11,
+  "source_cloud_status": "NO_SAVED_DESKEW_SOURCE; recorded R8 geometry used; no Source reconstruction",
+  "gt_reads": 0,
+  "new_ndt_aligns": 0,
+  "new_ekf_runs": 0,
+  "localization_replays": 0
+}

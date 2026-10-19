@@ -1,28 +1,211 @@
 {
-  "TASK": "P61-R9-GEODE-ANOMALY-READONLY-ATTRIBUTION",
-  "FINAL_RESULT": "MIXED_OR_INCONCLUSIVE",
-  "EXECUTION_STATUS": "ASSET_IDENTITY_CONTRACT_BLOCKED_BEFORE_ATTRIBUTION",
-  "result_interpretation": "No H1-H5 attribution performed; not an algorithm failure or evidence of mixed causes",
-  "START_SHA": "eba814000a06a2b110acf3835247cd6cffe9db6b",
-  "CODE_SHA": null,
-  "CODE_SHA_reason": "No R9 analysis program executed or frozen; documentation-only blocked receipt",
-  "PUSH_EXECUTED": false,
-  "source_expected_in_task": "162ed09ab6b262f89ac46c45bac36ad2335a6f869b360b80ddf59d0b22091",
-  "source_expected_length": 61,
-  "source_measured": "162ed09ab6b262f89ac46c45bac36ad2335a6f869b360b80d80ddf59d0b22091",
-  "source_measured_length": 64,
-  "measured_matches_R8_frozen_manifest": true,
-  "map_sha256_matches": true,
-  "remaining_preflight_checks": "NOT_REACHED",
-  "analyzed_frames": 0,
-  "new_ndt_align_calls": 0,
+  "task": "P61-R9-GEODE-ANOMALY-READONLY-ATTRIBUTION",
+  "final_result": "MIXED_OR_INCONCLUSIVE",
+  "hypotheses": {
+    "H1": {
+      "hypothesis": "Prediction loses map geometric support",
+      "status": "CONFIRMED",
+      "evidence_strength": "Direct geometric fact, not true-position divergence",
+      "supporting_evidence": [
+        "Initial overlap@.5:5157 .670506912;5158 .562184024;5159 .397117694;5160 .232142857;5165 .011428571.",
+        "Main71-frame median .268571429; severe7-frame median .044285714."
+      ],
+      "counter_evidence": [
+        "Prediction depends on earlier limited observations; no independent pose truth.",
+        "Pre5140-5157 already has motion disagreement and limiting."
+      ],
+      "unresolved_questions": [
+        "Attitude, translation, missing structure or earlier feedback: which caused support loss?"
+      ],
+      "relevant_scan_indices": [
+        5157,
+        5158,
+        5159,
+        5160,
+        5165,
+        5171,
+        5230,
+        5240
+      ],
+      "relevant_timestamps": "Exact header_ns/end_ns by scan_index in anomaly_frame_table.csv",
+      "source_files": [
+        "anomaly_frame_table.csv",
+        "candidate_increment_consistency.csv",
+        "map_support_summary.csv",
+        "time_coordinate_audit.csv"
+      ],
+      "source_code_locations": [
+        "dog_prior_map_ndt_node.cpp:1746-1781,2244"
+      ],
+      "conclusion_limitations": [
+        "CONFIRMED only for map-support loss, not physical motion error or sole root cause."
+      ]
+    },
+    "H2": {
+      "hypothesis": "Raw candidate reliability risk / possible basin ambiguity",
+      "status": "SUPPORTED",
+      "evidence_strength": "Multiple motion observations; actual wrong basin unproven",
+      "supporting_evidence": [
+        "5158/5159 Raw corrections2.336165m/32.473985deg and2.777344m/37.413231deg.",
+        "Relative-motion residual5161:2.956394186m/39.821544554deg;5172:3.984377664m/53.606305723deg.",
+        "5171 fitness393.557750979,40iterations,Raw overlap@.5=.043571429,converged=true."
+      ],
+      "counter_evidence": [
+        "5158-5160 Raw geometry improves over Used; prediction is not independent.",
+        "No GT, stationary-point, multistart or new Hessian evidence."
+      ],
+      "unresolved_questions": [
+        "Are large Raw rotations supported by independent gyro?",
+        "Wrong minimum or different valid correction?"
+      ],
+      "relevant_scan_indices": [
+        5158,
+        5159,
+        5160,
+        5161,
+        5171,
+        5172
+      ],
+      "relevant_timestamps": "Exact header_ns/end_ns by scan_index in anomaly_frame_table.csv",
+      "source_files": [
+        "anomaly_frame_table.csv",
+        "candidate_increment_consistency.csv",
+        "map_support_summary.csv",
+        "time_coordinate_audit.csv"
+      ],
+      "source_code_locations": [
+        "dog_prior_map_ndt_node.cpp:2345,2562"
+      ],
+      "conclusion_limitations": [
+        "SUPPORTED means reliability risk, not demonstrated wrong/competing basins or absolute error."
+      ]
+    },
+    "H3": {
+      "hypothesis": "Previous-Used limiter interacts with geometric support",
+      "status": "SUPPORTED",
+      "evidence_strength": "Clipping/support change confirmed; true-pose harm unresolved",
+      "supporting_evidence": [
+        "Previous-Used caps .5m/5deg match recorded steps to6.11733e-14m/1.52830e-6deg.",
+        "5159 Raw.815852682 -> Used.361088871, loss45.476381105percentage points.",
+        "Raw geometry better on33/112 frames."
+      ],
+      "counter_evidence": [
+        "Raw geometry worse on8/112 frames; large Raw motion residuals.",
+        "No counterfactual feedback test."
+      ],
+      "unresolved_questions": [
+        "Did limiting protect against a wrong candidate or suppress a valid correction?"
+      ],
+      "relevant_scan_indices": [
+        5153,
+        5158,
+        5159,
+        5160,
+        5161,
+        5169,
+        5175
+      ],
+      "relevant_timestamps": "Exact header_ns/end_ns by scan_index in anomaly_frame_table.csv",
+      "source_files": [
+        "anomaly_frame_table.csv",
+        "candidate_increment_consistency.csv",
+        "map_support_summary.csv",
+        "time_coordinate_audit.csv"
+      ],
+      "source_code_locations": [
+        "dog_prior_map_ndt_node.cpp:2562,2692-2725"
+      ],
+      "conclusion_limitations": [
+        "Absolute effect/causal dominance unresolved; no limiter change justified here."
+      ]
+    },
+    "H4": {
+      "hypothesis": "Frozen map local coverage insufficient",
+      "status": "NOT_EVALUABLE",
+      "evidence_strength": "Density available; full-FOV and true-pose coverage uncertified",
+      "supporting_evidence": [
+        "Severe Source-to-map NN support is poor under recorded poses."
+      ],
+      "counter_evidence": [
+        "5171 Used2m/5m counts204/6008; severe Used5m5185-6029.",
+        "Secondary Used5m2005-2339 but no limiting; motion residualmax .371671m/1.614780deg.",
+        "Origin inside global AABB does not certify Source coverage."
+      ],
+      "unresolved_questions": [
+        "Missing distant structure, wrong pose, or repetition cannot be distinguished."
+      ],
+      "relevant_scan_indices": [
+        5035,
+        5045,
+        5158,
+        5159,
+        5171,
+        5175,
+        5240
+      ],
+      "relevant_timestamps": "Exact header_ns/end_ns by scan_index in anomaly_frame_table.csv",
+      "source_files": [
+        "anomaly_frame_table.csv",
+        "candidate_increment_consistency.csv",
+        "map_support_summary.csv",
+        "time_coordinate_audit.csv"
+      ],
+      "source_code_locations": [
+        "dog_prior_map_ndt_node.cpp:1643-1781"
+      ],
+      "conclusion_limitations": [
+        "Gross nearby-map absence not supported; no saved deskew Source or independent pose truth.",
+        "Density pointset321053 differs from actual NN Target318377; no Source reconstruction."
+      ]
+    },
+    "H5": {
+      "hypothesis": "Actual time/coordinate violation caused anomaly",
+      "status": "NOT_SUPPORTED",
+      "evidence_strength": "112 recorded time/transform checks agree; not universal proof",
+      "supporting_evidence": [
+        "CSV label defect confirmed: input extrema labeled seconds_from_output_reference on112 rows."
+      ],
+      "counter_evidence": [
+        "Original uint32offset/header/end/adapter SHA match112 frames.",
+        "Causal held-head advancement, scanend correction, real-tail replay; no recorded time check fails.",
+        "Used-to-applied IMU max4.85059e-13m/2.47609e-11deg; matrixroundtrip5.89544e-11."
+      ],
+      "unresolved_questions": [
+        "Output message frame_ids not saved; exact source/config assignments only.",
+        "Physical extrinsic truth and out-of-scope behavior not independently certified."
+      ],
+      "relevant_scan_indices": [
+        5035,
+        5140,
+        5158,
+        5159,
+        5171,
+        5240
+      ],
+      "relevant_timestamps": "Exact header_ns/end_ns by scan_index in anomaly_frame_table.csv",
+      "source_files": [
+        "anomaly_frame_table.csv",
+        "candidate_increment_consistency.csv",
+        "map_support_summary.csv",
+        "time_coordinate_audit.csv"
+      ],
+      "source_code_locations": [
+        "imu_deskew_runtime.cpp:142-163,289-292,324-331,388,490,503-505,549-550",
+        "core/imu_deskew.cpp:351-354",
+        "fusion/ndt_observation.cpp:217,273-281,319-381",
+        "include/dog_prior_map_localization/core/frame_conversions.hpp",
+        "ros_output.cpp:19-31"
+      ],
+      "conclusion_limitations": [
+        "Label error is diagnostic, not an observed algorithmic time violation."
+      ]
+    }
+  },
+  "actual_analysis_code_sha": "f1d4ad321b6c77d7305ed42f015f95fc77c59e1f",
+  "new_ndt_aligns": 0,
   "new_ekf_runs": 0,
   "localization_replays": 0,
-  "gt_read": false,
-  "H1": "NOT_EVALUATED",
-  "H2": "NOT_EVALUATED",
-  "H3": "NOT_EVALUATED",
-  "H4": "NOT_EVALUATED",
-  "H5": "NOT_EVALUATED",
-  "unique_next": "Confirm corrected 64-character original-bag digest, then resume the same bounded read-only asset gate and attribution"
+  "gt_reads": 0,
+  "ros_localization_nodes": 0,
+  "unique_next": "Propose bounded independent Xsens angular-increment check5155-5165, pending approval; not executed."
 }
