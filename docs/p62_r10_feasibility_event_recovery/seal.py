@@ -51,7 +51,9 @@ def main():
         action='Record discrepancy and stop; never restore protected files or rerun native experiment'))
     result=json.loads((DOC/'results.json').read_text())
     result.update(final_archive_asset_gate=status,final_production_git_changed=production_git_changed,
-                  final_asset_differences=differences)
+                  final_asset_differences=differences,
+                  overall_status='EVENT_LOGIC_TESTED_ARCHIVAL_PROTECTION_GATE_BLOCKED' if status=='ARCHIVE_ASSET_DRIFT_DETECTED'
+                  else 'EVENT_LOGIC_TESTED_NO_ACCEPTABLE_RECOVERY')
     save('results.json',result)
     inputs=[identity(DOC/'OUTPUT_FREEZE.json'),identity(DOC/'raw/run_freeze.json')]
     code=[identity(DOC/name) for name in ['analyze.py','seal.py']]
