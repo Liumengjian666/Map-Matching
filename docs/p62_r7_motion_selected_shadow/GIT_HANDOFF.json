@@ -1,0 +1,12 @@
+{
+  "utc": "2026-10-20T10:42:36.351967+00:00",
+  "START_SHA": "1be4ad3c0070a0cd41f592498f1ae85795d76c4a",
+  "CODE_SHA": "9f96da00c0fbd7dbcc5b8de45837e5c9590310fb",
+  "selection_CODE_SHA": "781e79ec5f2b9c3cdee4682dce09e503c63bf3d6",
+  "analysis_CODE_SHA": "62d97eb741a0e1412fedb8c9ae24dc5ed8c3a5cb",
+  "branch": "research/p62-r7-motion-selected-shadow",
+  "END_SHA": "Resolve final archive commit from git log and final handoff, no self-referential digest",
+  "REMOTE_HEAD": "ABSENT",
+  "PUSH_EXECUTED": false,
+  "valid_upload_command": "git -C /home/jian/livox_ws/p62_r7_motion_shadow_ws push -u origin research/p62-r7-motion-selected-shadow"
+}
