@@ -1,0 +1,23 @@
+{
+  "task": "P62-R10",
+  "raw_indices": [
+    10641,
+    10740
+  ],
+  "input_manifest": {
+    "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r7_motion_selected_shadow/REAL_INPUT_MANIFEST.json",
+    "bytes": 107359,
+    "sha256": "55799603bd2f8a2b88851a0caa71d527314fbfd290db5bad62fc85685793805e"
+  },
+  "protocol": {
+    "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/PROTOCOL.md",
+    "bytes": 4648,
+    "sha256": "062ba6fd0e942465972a183fea53e1bf74196d5b3689da71770ce253f719abae"
+  },
+  "extra_budget": 20,
+  "baseline_aligns": 200,
+  "small_seeds_only": true,
+  "forced_diagnostics": false,
+  "GT_used": false,
+  "feedback": false
+}

@@ -1,4 +1,5 @@
 #include "events.hpp"
+#include "native_capture.hpp"
 #include <iostream>
 using namespace feasibility;
 bool has(const Event& e,const char* text){return std::find(e.reasons.begin(),e.reasons.end(),text)!=e.reasons.end();}
@@ -38,5 +39,8 @@ int main(){try{
   for(int n:{4,5}){Split partial;partial.training->resize(300);for(int b=0;b<n;++b)partial.blocks[b]->resize(10);Mask subset(partial);auto x=good();x.pose(0,3)=.81;x.eligible=false;auto y=good();y.id=1;y.pose(0,3)=.3;y.loss.fill(0);cs={x,y};
     selection=coverage::select(cs,subset);require(decide(cs,subset,p,selection).recovery_success,"state transition works with B4/B5");}
   Budget budget;for(int i=0;i<20;++i)require(budget.consume(),"shared token");require(!budget.consume(),"never over budget");
+  int fitness_calls=0;auto fitness=[&](){++fitness_calls;return .2;};c=good();c.pose(0,0)=NAN;finishFitness(c,fitness);require(fitness_calls==0&&!c.finite&&std::isnan(c.fitness),"nonfinite optimizer pose never enters fitness NN");
+  c=good();c.score=NAN;finishFitness(c,fitness);require(fitness_calls==0&&!c.finite,"nonfinite score never enters fitness NN");
+  c=good();finishFitness(c,fitness);require(fitness_calls==1&&c.finite&&c.fitness==.2,"safe native gets one fitness evaluation");
   std::cout<<"R10_EVENT_STATE_TESTS_PASS new_aligns=0\n";
 }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 1;}}
