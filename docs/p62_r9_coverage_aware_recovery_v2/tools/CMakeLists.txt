@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.10)
+project(p62_r9_coverage LANGUAGES C CXX)
+set(CMAKE_CXX_STANDARD 14)
+find_package(PCL 1.10 REQUIRED COMPONENTS common io filters registration kdtree)
+include_directories(${PCL_INCLUDE_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+add_executable(test_coverage test_coverage.cpp)
+target_link_libraries(test_coverage ${PCL_LIBRARIES} usb-1.0)
