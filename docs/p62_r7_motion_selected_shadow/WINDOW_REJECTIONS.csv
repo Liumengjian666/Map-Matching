@@ -1,0 +1,7 @@
+raw_start_index,raw_end_index,reason
+1,100,R6_FIRST100_EXCLUDED
+10802,10901,Missing/invalid causal initial identity
+10803,10902,Missing/invalid causal initial identity
+10804,10903,Missing/invalid causal initial identity
+10805,10904,Missing/invalid causal initial identity
+10806,10905,Missing/invalid causal initial identity
