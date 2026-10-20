@@ -1,0 +1,24 @@
+{
+  "files": [
+    {
+      "path": "/home/jian/livox_ws/p62_r8_structural_admission_runs/preflight/FULL_SCAN_ELIGIBILITY.csv",
+      "bytes": 1907177,
+      "sha256": "57f0435c860fde39859182cd6aa5bcfb41eb97c45a10565be4eb746d2d34a57c"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r8_structural_admission_runs/preflight_freeze.json",
+      "bytes": 21558,
+      "sha256": "df4925fa4886a65941357e87d4cbd1e5135ada839676f58b825a90843d714201"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r8_structural_admission_runs/preflight_completion.json",
+      "bytes": 238,
+      "sha256": "8349c1face52cd8b52d5a7f978d854e02acf9a9b2db6584ddbfdb327309abc9a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r8_structural_admission_runs/preflight.log",
+      "bytes": 297,
+      "sha256": "4d22700f3cd3cd1fba83f01158bcc0deb3385ef19531d17a2e997ecb3b7b8a29"
+    }
+  ]
+}

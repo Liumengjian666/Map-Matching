@@ -1,0 +1,149 @@
+{
+  "frames": 10905,
+  "structural_evaluable": 3338,
+  "training_below_300": 91,
+  "block_below_10": {
+    "0": 564,
+    "1": 3006,
+    "2": 921,
+    "3": 10,
+    "4": 0,
+    "5": 1189,
+    "6": 116,
+    "7": 4400
+  },
+  "raw_identity_frames": 10905,
+  "matching_source_history": 10900,
+  "causal_initial_legal": 10900,
+  "historical_parity_pass": 10900,
+  "historical_parity_fail": 0,
+  "original_R7_legal_windows": 10800,
+  "new_structural_rejected_windows": 10398,
+  "eligible_windows": 402,
+  "eligible_window_fraction": 0.03722222222222222,
+  "pure_structural_100_windows": 408,
+  "R6_first100": {
+    "frames": 100,
+    "structural_evaluable": 100,
+    "training_below_300": 0,
+    "block_below_10": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 0
+    }
+  },
+  "R7_high_motion100": {
+    "frames": 100,
+    "structural_evaluable": 4,
+    "training_below_300": 0,
+    "block_below_10": {
+      "0": 25,
+      "1": 22,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 76
+    }
+  },
+  "motion_bins": {
+    "[0,0.1)": {
+      "frames": 638,
+      "structural_evaluable": 396,
+      "training_below_300": 1,
+      "block_below_10": {
+        "0": 34,
+        "1": 120,
+        "2": 19,
+        "3": 0,
+        "4": 0,
+        "5": 22,
+        "6": 3,
+        "7": 144
+      }
+    },
+    "[0.1,0.3)": {
+      "frames": 5693,
+      "structural_evaluable": 1684,
+      "training_below_300": 65,
+      "block_below_10": {
+        "0": 274,
+        "1": 1614,
+        "2": 508,
+        "3": 6,
+        "4": 0,
+        "5": 542,
+        "6": 43,
+        "7": 2374
+      }
+    },
+    "[0.3,0.6)": {
+      "frames": 4150,
+      "structural_evaluable": 1110,
+      "training_below_300": 25,
+      "block_below_10": {
+        "0": 220,
+        "1": 1182,
+        "2": 386,
+        "3": 3,
+        "4": 0,
+        "5": 525,
+        "6": 57,
+        "7": 1773
+      }
+    },
+    "[0.6,inf)": {
+      "frames": 423,
+      "structural_evaluable": 147,
+      "training_below_300": 0,
+      "block_below_10": {
+        "0": 36,
+        "1": 90,
+        "2": 8,
+        "3": 1,
+        "4": 0,
+        "5": 100,
+        "6": 13,
+        "7": 109
+      }
+    },
+    "NOT_AVAILABLE": {
+      "frames": 1,
+      "structural_evaluable": 1,
+      "training_below_300": 0,
+      "block_below_10": {
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0
+      }
+    }
+  },
+  "original_top100_rejected": 100,
+  "original_top1000_rejected": 1000,
+  "selected_window": {
+    "raw_start_index": "4982",
+    "raw_end_index": "5081",
+    "start_ns": "1786179977510337353",
+    "end_ns": "1786179987510793986",
+    "weighted_p90_rad_s": "0.5323903214110374",
+    "weighted_median_rad_s": "0.2572961715123735",
+    "weights_ns": "10000456633",
+    "imu_samples": "2002",
+    "imu_first_ns": "1786179977509165764",
+    "imu_last_ns": "1786179987513189077",
+    "max_gap_ns": "8561373",
+    "original_R7_motion_rank": 1039,
+    "structural_bad_frames": 0
+  }
+}
