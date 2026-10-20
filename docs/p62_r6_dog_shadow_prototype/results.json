@@ -1,0 +1,281 @@
+{
+  "task": "P62-R6-DOG-SHADOW-PROTOTYPE-AND-NCLT-PREFLIGHT",
+  "A_result": "REAL_SHADOW_COMPLETED_WITHOUT_DISTINCT_CANDIDATES",
+  "A_additional_limitations": [
+    "REAL_DISTINCT_CANDIDATES_NOT_OBSERVED",
+    "HOLDOUT_DISCRIMINATION_NOT_DEMONSTRATED"
+  ],
+  "B_result": "NCLT_PREFLIGHT_BLOCKED",
+  "novelty": "NOT_ESTABLISHED",
+  "git": {
+    "branch": "research/p62-r6-dog-shadow-prototype",
+    "START_SHA": "c1769471f291932a749fc44705d8ddc30108cf31",
+    "CODE_SHA": "90954199d1f2e06128c6eaafca91bbc6a7c98979",
+    "prototype_cpp_commit": "4592128cf21c0c22d51c6a88fdb9a10ec0d64497",
+    "END_SHA": "Resolve final archive commit with git log -1; self-referential SHA cannot be embedded in its own commit",
+    "REMOTE_HEAD": "ABSENT at pre-run query; query again at handoff",
+    "PUSH_EXECUTED": false
+  },
+  "counts": {
+    "real_scans": 100,
+    "smoke_scans": 20,
+    "native_real_aligns": 200,
+    "control_full": 100,
+    "control_split": 100,
+    "requested_recovery_frames": 0,
+    "extra_native_aligns": 0,
+    "extra_budget": 20,
+    "generated_alternatives": 0,
+    "physical_deduplicated_alternative_branches": 0,
+    "robust_supported_recoveries": 0,
+    "ordinary_no_recovery_frames": 100,
+    "robust_recovery_abstentions": 100,
+    "same_pool_checks": 100,
+    "source_preprocessing_parity": 100,
+    "synthetic_native_aligns_separate": 2,
+    "loader_failures_before_main": 1,
+    "loader_failure_real_aligns": 0
+  },
+  "arms": {
+    "CONTROL_FULL": {
+      "aligns": 100,
+      "finite": 100,
+      "converged": 100,
+      "eligible": 100,
+      "iterations": {
+        "1": 100
+      },
+      "metrics": {
+        "native_mean_score": {
+          "count": 100,
+          "min": 1.7891849337586987,
+          "mean": 1.8766414798394826,
+          "p95_linear_type7": 1.9373218211411654,
+          "max": 1.9520450044633848
+        },
+        "fitness": {
+          "count": 100,
+          "min": 0.8634105107899631,
+          "mean": 1.1137432000943361,
+          "p95_linear_type7": 1.2778400584712817,
+          "max": 1.3212981131451436
+        },
+        "heldout_overlap_0p5m": {
+          "count": 100,
+          "min": 0.6919831223628692,
+          "mean": 0.7414797202387975,
+          "p95_linear_type7": 0.7713458755426917,
+          "max": 0.7747489239598279
+        },
+        "mean_block_loss": {
+          "count": 100,
+          "min": 0.15455819553211264,
+          "mean": 0.16716635149879333,
+          "p95_linear_type7": 0.17929612844375017,
+          "max": 0.19086487803634877
+        },
+        "translation_from_prediction_m": {
+          "count": 100,
+          "min": 0.002577023060279554,
+          "mean": 0.014635432040638906,
+          "p95_linear_type7": 0.023588148276045964,
+          "max": 0.027178244525618827
+        },
+        "rotation_from_prediction_deg": {
+          "count": 100,
+          "min": 0.043495428250698256,
+          "mean": 0.22094025645776644,
+          "p95_linear_type7": 0.40107263833215634,
+          "max": 0.5614679953086013
+        },
+        "align_ms": {
+          "count": 100,
+          "min": 5.327816,
+          "mean": 6.27191406,
+          "p95_linear_type7": 6.2403898999999985,
+          "max": 72.028039
+        },
+        "validation_ms": {
+          "count": 100,
+          "min": 0.794591,
+          "mean": 0.9191984000000001,
+          "p95_linear_type7": 0.94645095,
+          "max": 3.02066
+        }
+      }
+    },
+    "CONTROL_SPLIT_NOMINAL": {
+      "aligns": 100,
+      "finite": 100,
+      "converged": 100,
+      "eligible": 100,
+      "iterations": {
+        "1": 94,
+        "2": 6
+      },
+      "metrics": {
+        "native_mean_score": {
+          "count": 100,
+          "min": 1.949259324672358,
+          "mean": 2.035651153839619,
+          "p95_linear_type7": 2.0889746788890164,
+          "max": 2.1153316044690778
+        },
+        "fitness": {
+          "count": 100,
+          "min": 0.205234315938758,
+          "mean": 0.3066796122050036,
+          "p95_linear_type7": 0.36613322883705274,
+          "max": 0.3823457025630331
+        },
+        "heldout_overlap_0p5m": {
+          "count": 100,
+          "min": 0.6919831223628692,
+          "mean": 0.7412953452451468,
+          "p95_linear_type7": 0.7703051435562215,
+          "max": 0.7747489239598279
+        },
+        "mean_block_loss": {
+          "count": 100,
+          "min": 0.15610202747458293,
+          "mean": 0.1685819557588774,
+          "p95_linear_type7": 0.1806552317540818,
+          "max": 0.19314020951265193
+        },
+        "translation_from_prediction_m": {
+          "count": 100,
+          "min": 0.0028962692888921627,
+          "mean": 0.0223038573371168,
+          "p95_linear_type7": 0.03858868490531479,
+          "max": 0.04648832407091209
+        },
+        "rotation_from_prediction_deg": {
+          "count": 100,
+          "min": 0.449366736591746,
+          "mean": 1.0506662000577662,
+          "p95_linear_type7": 1.5666102419019696,
+          "max": 2.4967124743175555
+        },
+        "align_ms": {
+          "count": 100,
+          "min": 2.682347,
+          "mean": 3.0827396200000003,
+          "p95_linear_type7": 4.409667799999996,
+          "max": 7.156484
+        },
+        "validation_ms": {
+          "count": 100,
+          "min": 0.802692,
+          "mean": 0.9302396000000002,
+          "p95_linear_type7": 1.02160495,
+          "max": 2.665165
+        }
+      }
+    }
+  },
+  "runtime": {
+    "preprocess_ms": {
+      "count": 100,
+      "min": 1.125082,
+      "mean": 1.40120762,
+      "p95_linear_type7": 2.956765049999999,
+      "max": 4.192536
+    },
+    "control_full_align_ms": {
+      "count": 100,
+      "min": 5.327816,
+      "mean": 6.27191406,
+      "p95_linear_type7": 6.2403898999999985,
+      "max": 72.028039
+    },
+    "control_split_align_ms": {
+      "count": 100,
+      "min": 2.682347,
+      "mean": 3.0827396200000003,
+      "p95_linear_type7": 4.409667799999996,
+      "max": 7.156484
+    },
+    "extra_align_ms": {
+      "count": 100,
+      "min": 0.0,
+      "mean": 0.0,
+      "p95_linear_type7": 0.0,
+      "max": 0.0
+    },
+    "G_ms": {
+      "count": 100,
+      "min": 0.0,
+      "mean": 0.0,
+      "p95_linear_type7": 0.0,
+      "max": 0.0
+    },
+    "validation_ms": {
+      "count": 100,
+      "min": 1.597283,
+      "mean": 1.849438,
+      "p95_linear_type7": 1.9702074499999973,
+      "max": 3.95214
+    },
+    "selectors_ms": {
+      "count": 100,
+      "min": 0.000908,
+      "mean": 0.00138424,
+      "p95_linear_type7": 0.0014879499999999987,
+      "max": 0.002863
+    },
+    "frame_compute_ms": {
+      "count": 100,
+      "min": 12.507208,
+      "mean": 13.896561389999999,
+      "p95_linear_type7": 16.387136749999996,
+      "max": 79.440285
+    },
+    "process_ru_maxrss_KiB": {
+      "count": 100,
+      "min": 109048.0,
+      "mean": 109048.0,
+      "p95_linear_type7": 109048.0,
+      "max": 109048.0
+    }
+  },
+  "native_process_wall_seconds": 1.7688146849977784,
+  "native_peak_RSS_MiB": 106.4921875,
+  "nominal_median_block_loss": {
+    "count": 100,
+    "min": 0.015576490599981254,
+    "mean": 0.024957538084173413,
+    "p95_linear_type7": 0.038847101640389056,
+    "max": 0.047315783575540046
+  },
+  "full_vs_split_different_source_not_branch_evidence": {
+    "translation_m": {
+      "count": 100,
+      "min": 0.003149584241246577,
+      "mean": 0.010441208368812136,
+      "p95_linear_type7": 0.018141104395030198,
+      "max": 0.0221808477114389
+    },
+    "rotation_deg": {
+      "count": 100,
+      "min": 0.6901961345968943,
+      "mean": 1.020720516996639,
+      "p95_linear_type7": 1.3938231941759964,
+      "max": 2.220284513118817
+    }
+  },
+  "boundary": {
+    "GT_reads": 0,
+    "ROS_localization_nodes": 0,
+    "rosbag_play": 0,
+    "EKF_runs": 0,
+    "feedback_updates": 0,
+    "production_code_changes": 0,
+    "new_closed_loop_trajectory_estimates": 0,
+    "external_CLI": 0
+  },
+  "tests": "18 C++ assertion categories PASS; 2 synthetic native aligns separate from 200 real aligns",
+  "frozen_inputs_after": "ALL_SHA256_PASS_UNCHANGED",
+  "stable_after": "ALL_SHA256_AND_HEAD_AND_DIRTY_STATE_UNCHANGED",
+  "independent_offline_checks": "PASS: accounting, inputs, identical singleton pools and triggers; real paired comparisons=0; 70-vertex oracle not exercised on real data",
+  "NEXT": "Request approval for one predeclared real moving/risk window with the same frozen code and thresholds; no selection by candidate outputs or GT; do not execute now"
+}

@@ -1,0 +1,50 @@
+{
+  "actual_CODE_SHA": "90954199d1f2e06128c6eaafca91bbc6a7c98979",
+  "binary": {
+    "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/build/shadow",
+    "bytes": 287400,
+    "sha256": "6044fc23f931430245526da606c762ebb939e4501f3436235b9692dc962f3e85"
+  },
+  "input_manifest": {
+    "path": "/home/jian/livox_ws/p62_r6_dog_shadow_ws/docs/p62_r6_dog_shadow_prototype/REAL_INPUT_MANIFEST.json",
+    "bytes": 114466,
+    "sha256": "3950370b1de1af22e10f6a85d6f190d7723e72575c55869a9804efcdce958836"
+  },
+  "child_only_loader": {
+    "LD_PRELOAD": {
+      "path": "/lib/x86_64-linux-gnu/libusb-1.0.so.0",
+      "bytes": 109440,
+      "sha256": "451c0a2b8806b71ddab9046470badc7665a467d511e87c1d5e1da7a343456586"
+    },
+    "LD_BIND_NOW": "1"
+  },
+  "zero_align_loader_probe": {
+    "returncode": 1,
+    "stdout": "STOP usage: shadow FROZEN_SCANS_CSV FROZEN_MAP NEW_OUTPUT_DIR\n"
+  },
+  "frozen_inputs_gate": "ALL_SHA256_PASS_BEFORE_OPTIMIZATION",
+  "raw_scans": 100,
+  "PCL_source": [
+    {
+      "path": "/usr/include/pcl-1.10/pcl/registration/ndt.h",
+      "bytes": 23355,
+      "sha256": "2e86c66a9aa49329e69cd227b3312cc73714851bbae682062dbb76f281068133"
+    },
+    {
+      "path": "/usr/include/pcl-1.10/pcl/registration/impl/ndt.hpp",
+      "bytes": 31871,
+      "sha256": "e61be2ca7f1db2fe7171730146cdf493469e4e9e7e6d9c82d47f457d3b6006dc"
+    },
+    {
+      "path": "/usr/include/pcl-1.10/pcl/filters/impl/voxel_grid_covariance.hpp",
+      "bytes": 18209,
+      "sha256": "1d6de8ecb84b53ffdf2a4901c52f6479078da50c9d5359d7c1ee825bfd460b77"
+    }
+  ],
+  "args": [
+    "/home/jian/livox_ws/p62_r6_dog_shadow_runs/build/shadow",
+    "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scans.csv",
+    "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd",
+    "/home/jian/livox_ws/p62_r6_dog_shadow_runs/attempt02/formal"
+  ]
+}

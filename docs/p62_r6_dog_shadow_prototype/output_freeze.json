@@ -1,0 +1,105 @@
+{
+  "method": "SHA256 before offline analysis; no changes to original run files",
+  "files": [
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/attempt02/formal/CANDIDATE_POOL.csv",
+      "bytes": 145199,
+      "sha256": "317510c78dabdb5a4939390ae3f5c796f516759acfdb377d33bfef84812ec3fe"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/attempt02/formal/HELDOUT_BLOCK_LOSSES.csv",
+      "bytes": 55642,
+      "sha256": "949244111225a2cfabfc0be6e23dfc61fbd0b98116de7f1b809444d98d88789a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/attempt02/formal/NATIVE_ALIGN_CALLS.csv",
+      "bytes": 12819,
+      "sha256": "204e5785060bd30c5015b528d72a0f332cff8c839e661cee839ef20c0761107a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/attempt02/formal/RUNTIME_AND_MEMORY.csv",
+      "bytes": 10871,
+      "sha256": "32d8bea636595ce01533896ab7e95adbaadf5eaf328ef962ed8d7c6d6ceddc50"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/attempt02/formal/SELECTOR_COMPARISON.csv",
+      "bytes": 10448,
+      "sha256": "a0befe82e192b5011c601e3a32c6624b4c0cd7bd96cddafd6ffc752ea7d75a96"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/attempt02/formal/SHADOW_FRAME_RESULTS.csv",
+      "bytes": 13348,
+      "sha256": "5bf3a291c372c4500468406336f8caae3a636372ffbe95e606c8026f19d3327c"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/attempt02/formal/input_preflight.csv",
+      "bytes": 5894,
+      "sha256": "96e050dac7284981b4a0d4bba6abd48b389ad7f61ee3b24a81a23ed7a9494fcb"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/attempt02/formal/map_runtime.csv",
+      "bytes": 133,
+      "sha256": "acf8d3908892a481f63c72ac208e664133e6f66fc64cc1c0a779dab893f2682a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/attempt02/formal.log",
+      "bytes": 6138,
+      "sha256": "f95e10d3793c35c4f9dfb79e45a8f1fd490f3660f89edc9c0845617e409319be"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/attempt02/RUN_STARTED.json",
+      "bytes": 39,
+      "sha256": "69f8a3df7ec85f880c9f61a40c88ef5233423b70fd465fe70fea08d92aeff3e4"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/attempt02/run_freeze.json",
+      "bytes": 1877,
+      "sha256": "6d618ee34d5e4426fdb9860241f60ae745ecccfb0536bd8c83dcf39879d30003"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/attempt02/run_completion.json",
+      "bytes": 189,
+      "sha256": "10d875cc1db3c0024a27595d0939203db2ad72679e661ad978519a649021465a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/formal.log",
+      "bytes": 155,
+      "sha256": "066647e3e4bf0e3077568d9bf791dfcfa2eabae2a1e072e61b703907a91773aa"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/RUN_STARTED.json",
+      "bytes": 39,
+      "sha256": "5d861bba19f3d8579da3519b2e9bd301b335be310b7ac63568a59cfbb768d135"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/run_freeze.json",
+      "bytes": 1489,
+      "sha256": "1c243586dec91134cc68de5921b457ed170c02e869a022b72b63d9a56c8a7552"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/run_completion.json",
+      "bytes": 192,
+      "sha256": "54190503a29258b06abd1068c3ccc9ce9c1825dc61de709ff36c0e3d9a24235b"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/configure.log",
+      "bytes": 2444,
+      "sha256": "a079d1c473bbab1a7fc52e07b42bf40fc8abc70283aac7804827f738ade30585"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/build_final.log",
+      "bytes": 62,
+      "sha256": "34f48edba56e48f940d4a7ec85c8e7394fc073aa9aac1c930166ba0e2ef6000d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/build_rss_label.log",
+      "bytes": 200,
+      "sha256": "c404684905aa7ee1af8f967567675d2203783f1a6bd535e94c29db3590ad86b8"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/unit_native.log",
+      "bytes": 74,
+      "sha256": "6393a81b8d86b4b95c92f9524aa5b10393e8707d92cf00634e2d2583e0fffaff"
+    }
+  ]
+}

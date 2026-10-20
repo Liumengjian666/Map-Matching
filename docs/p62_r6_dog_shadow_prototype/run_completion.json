@@ -1,0 +1,6 @@
+{
+  "returncode": 0,
+  "wall_seconds": 1.7688146849977784,
+  "frozen_inputs_after": "ALL_SHA256_PASS_UNCHANGED",
+  "stable_sources_after": "ALL_SHA256_AND_HEAD_AND_DIRTY_STATE_UNCHANGED"
+}
