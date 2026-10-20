@@ -1,0 +1,272 @@
+{
+  "task": "P61-R9-GEODE-ANOMALY-READONLY-ATTRIBUTION",
+  "request_handling": "Read-only revalidation of already completed R9; no duplicate analysis/experiment",
+  "verification_date": "2026-10-20",
+  "start_sha": "d1f9fa9464dac835598e72d52ea2484fd9aa801c",
+  "queried_remote_R9_head": "d1f9fa9464dac835598e72d52ea2484fd9aa801c",
+  "original_R8_archive_sha": "eba814000a06a2b110acf3835247cd6cffe9db6b",
+  "original_R8_algorithm_sha": "17922f2b63dae1f2af34f353287728d50a312f73",
+  "original_R8_tools_sha": "1367e1d9587d1f90a47bf6f44405239a7b65e4f6",
+  "actual_R9_numerical_analysis_sha": "f1d4ad321b6c77d7305ed42f015f95fc77c59e1f",
+  "asset_comparisons": 125,
+  "unique_asset_paths": 95,
+  "assets_unchanged_against_original_R9": true,
+  "original_R9_artifacts_checked": [
+    {
+      "path": "ASSET_GATE_RECHECK.md",
+      "sha256": "5f9a3591b1cd627047d8c759266f10151dd98aeca90104cf99a5b8ffa0f1fee5",
+      "status": "PASS"
+    },
+    {
+      "path": "ATTRIBUTION_REPORT.md",
+      "sha256": "c15885dd4bfe12f44dbe0dadb11e48314c045d6cca1b25c4235db891df75c4f5",
+      "status": "PASS"
+    },
+    {
+      "path": "PROTOCOL_RESUMED.md",
+      "sha256": "1bd1789973cf05085fcd6c083367469c57fd84b3c4392a54bf6e9872bdea7a8c",
+      "status": "PASS"
+    },
+    {
+      "path": "REPORT.md",
+      "sha256": "c1e21ea60ff818b3db7ab0d110e02ed39f391baf32249989c34595e1aa4d79b7",
+      "status": "PASS"
+    },
+    {
+      "path": "REVIEW_AND_TESTS.md",
+      "sha256": "3174b7a08c6cf2dd3f53957ea26447b599331003f73e51c95807535af741cd3e",
+      "status": "PASS"
+    },
+    {
+      "path": "analysis_inputs_frozen.json",
+      "sha256": "2bf69f3273559f28b7aca43853fa275b448734ec46b91429129fd3970c8ac71b",
+      "status": "PASS"
+    },
+    {
+      "path": "analysis_manifest.json",
+      "sha256": "fc3ddd7efc40c6b76a25995d3e59942ddd57fc72d4cea1d85d0a2cbb1ce3788b",
+      "status": "PASS"
+    },
+    {
+      "path": "analysis_math.py",
+      "sha256": "12dfd56c43986832004fac9f6a790ce8d7fff278340caf890746ff96e1e84757",
+      "status": "PASS"
+    },
+    {
+      "path": "analyze_frozen.py",
+      "sha256": "670b35240702f3e8b4b3a9b532ed1b9f31b35ec30768c4e38625a68b0e525939",
+      "status": "PASS"
+    },
+    {
+      "path": "anomaly_frame_table.csv",
+      "sha256": "5196441668f654ad558b166635ee878202d5f8602d80fdcc925bc558cbc9864f",
+      "status": "PASS"
+    },
+    {
+      "path": "asset_gate.py",
+      "sha256": "1b0abff525477f775cb79206891b58b452c87770903aeb9099bf0f7a805a05f1",
+      "status": "PASS"
+    },
+    {
+      "path": "asset_gate_after.json",
+      "sha256": "4c62a9a8c0fe3dbba3bddbf50b45e7660d0368070b4dbf6efe5d4a4b3dce776a",
+      "status": "PASS"
+    },
+    {
+      "path": "asset_gate_before.json",
+      "sha256": "afea76bc4d9967a461765171ec51cd001c53f5ec9c0288622d3801aba75343da",
+      "status": "PASS"
+    },
+    {
+      "path": "asset_gate_comparison.json",
+      "sha256": "17f46d1afc74c2d99b8903fff3790fb582ac3b7ecfe8c9165ed5d5ab5f6ed59b",
+      "status": "PASS"
+    },
+    {
+      "path": "blocked_cause_assessment.json",
+      "sha256": "dbb85eaaaba826e517fbb1f96897ea360b3353bf3251bbd4ba8e35c65213a4f0",
+      "status": "PASS"
+    },
+    {
+      "path": "build_cause_assessment.py",
+      "sha256": "9331ee619942f1173494db5893c73904797d865d4f509979c9982c3fd4b26e9f",
+      "status": "PASS"
+    },
+    {
+      "path": "candidate_increment_consistency.csv",
+      "sha256": "fd951ce87c6a284930b88707947a706f1f37e9f189ee772901edf86df6f996da",
+      "status": "PASS"
+    },
+    {
+      "path": "cause_assessment.json",
+      "sha256": "3c1b1ae2e664790e592d1d31a279c05f8759459b7428b7bfa2fefcaa39c8c184",
+      "status": "PASS"
+    },
+    {
+      "path": "check_input_semantics.py",
+      "sha256": "beb1ea0d965fd734d792b3fca046d67f4783fec800cd1bcfd601568f75dd6f73",
+      "status": "PASS"
+    },
+    {
+      "path": "finalize_archive.py",
+      "sha256": "857c864d785f3eb58d38ecf0553c6fa47b373cadda07edab3ae7c3e60728edb0",
+      "status": "PASS"
+    },
+    {
+      "path": "freeze_analysis_inputs.py",
+      "sha256": "836ba6a8edd59b70342a11044dd3dae8bd2cd8f3863248a4f0822c9c9cc7cf0d",
+      "status": "PASS"
+    },
+    {
+      "path": "input_semantic_check.json",
+      "sha256": "6bdb3a32b8e3a935a16db4d80d45d4c51667f83271a68c2ab5955234ba434e42",
+      "status": "PASS"
+    },
+    {
+      "path": "inspect_point_times.py",
+      "sha256": "ae574044cce1bd349730f5322fcf3ec34982151c44246dd34606fc6f65384381",
+      "status": "PASS"
+    },
+    {
+      "path": "map_support_summary.csv",
+      "sha256": "5440306eea31f49f89735e95b4af7bf67235a24d177fcdb2afb7f4854423c38b",
+      "status": "PASS"
+    },
+    {
+      "path": "metric_summary.json",
+      "sha256": "1a374bf5e2c169b734cfe19dce6f9330ec833f335eeef23e1c822843eebcb7e0",
+      "status": "PASS"
+    },
+    {
+      "path": "point_time_records.json",
+      "sha256": "b7774af9a6a13188c00649408cd341f4fc1f7877b1c1d4fb667fdaa8a30f73d8",
+      "status": "PASS"
+    },
+    {
+      "path": "reproduction_commands.md",
+      "sha256": "9636ea9b12444298c751470ed02ae1a1945745b54afbccce76a4acd6d617a72c",
+      "status": "PASS"
+    },
+    {
+      "path": "test_analysis_math.py",
+      "sha256": "5cf7208852ece154a7447f0eabf73e4fd6f4e147a4276fda016d0674edef87e5",
+      "status": "PASS"
+    },
+    {
+      "path": "test_derived_evidence.py",
+      "sha256": "309354cbc33e85b7c33758dca059cccd525adefea0c92547e2d40c940f437b4a",
+      "status": "PASS"
+    },
+    {
+      "path": "time_coordinate_audit.csv",
+      "sha256": "7192956c650d94777946f17cc7c9e237b82036c20e6ec1feb10d6634363831a3",
+      "status": "PASS"
+    }
+  ],
+  "unique_scans": 112,
+  "predecessors_only": [
+    5034,
+    5139
+  ],
+  "existing_tests_passed": 7,
+  "final_result": "MIXED_OR_INCONCLUSIVE",
+  "hypothesis_statuses": {
+    "H1": "CONFIRMED",
+    "H2": "SUPPORTED",
+    "H3": "SUPPORTED",
+    "H4": "NOT_EVALUABLE",
+    "H5": "NOT_SUPPORTED"
+  },
+  "keyframes_copied_verbatim_from_verified_archive": [
+    {
+      "scan_index": "5158",
+      "header_ns": "1706671805100054502",
+      "end_ns": "1706671805199899607",
+      "fitness": "0.14495127342493302",
+      "iterations": "36",
+      "ndt_converged": "1",
+      "translation_limited": "1",
+      "rotation_limited": "1",
+      "initial_overlap_0p5m": "0.56218402426693626",
+      "raw_overlap_0p5m": "0.86450960566228519",
+      "used_overlap_0p5m": "0.5561172901921132",
+      "used_nn_median_m": "0.413885492601406",
+      "used_nn_p90_m": "1.4422978483988991",
+      "raw_vs_initial_translation_m": "2.3361654637409885",
+      "raw_vs_initial_rotation_deg": "32.47398542118997",
+      "raw_minus_used_overlap_0p5m": "0.308392315470172"
+    },
+    {
+      "scan_index": "5159",
+      "header_ns": "1706671805199903249",
+      "end_ns": "1706671805299736074",
+      "fitness": "0.25696219408428772",
+      "iterations": "40",
+      "ndt_converged": "1",
+      "translation_limited": "1",
+      "rotation_limited": "1",
+      "initial_overlap_0p5m": "0.39711769415532427",
+      "raw_overlap_0p5m": "0.8158526821457166",
+      "used_overlap_0p5m": "0.36108887109687748",
+      "used_nn_median_m": "0.89320415020639199",
+      "used_nn_p90_m": "2.4262732162033047",
+      "raw_vs_initial_translation_m": "2.7773437715590004",
+      "raw_vs_initial_rotation_deg": "37.413231104275624",
+      "raw_minus_used_overlap_0p5m": "0.4547638110488391"
+    },
+    {
+      "scan_index": "5160",
+      "header_ns": "1706671805299739599",
+      "end_ns": "1706671805399568864",
+      "fitness": "0.47639027419745356",
+      "iterations": "40",
+      "ndt_converged": "1",
+      "translation_limited": "1",
+      "rotation_limited": "1",
+      "initial_overlap_0p5m": "0.23214285714285715",
+      "raw_overlap_0p5m": "0.53928571428571426",
+      "used_overlap_0p5m": "0.23428571428571429",
+      "used_nn_median_m": "1.6541370373177424",
+      "used_nn_p90_m": "4.3989498185618787",
+      "raw_vs_initial_translation_m": "2.5144400629807393",
+      "raw_vs_initial_rotation_deg": "33.271677930982634",
+      "raw_minus_used_overlap_0p5m": "0.30499999999999994"
+    },
+    {
+      "scan_index": "5171",
+      "header_ns": "1706671806399974584",
+      "end_ns": "1706671806499800629",
+      "fitness": "393.55775097905757",
+      "iterations": "40",
+      "ndt_converged": "1",
+      "translation_limited": "1",
+      "rotation_limited": "1",
+      "initial_overlap_0p5m": "0.041428571428571426",
+      "raw_overlap_0p5m": "0.043571428571428573",
+      "used_overlap_0p5m": "0.040714285714285717",
+      "used_nn_median_m": "9.1561416775802389",
+      "used_nn_p90_m": "33.380730869161255",
+      "raw_vs_initial_translation_m": "0.9410023929355842",
+      "raw_vs_initial_rotation_deg": "13.075404273034513",
+      "raw_minus_used_overlap_0p5m": "0.0028571428571428567"
+    }
+  ],
+  "new_GT_reads": 0,
+  "new_ROS_localization_nodes": 0,
+  "new_rosbag_play": 0,
+  "new_NDT_align": 0,
+  "new_EKF_runs": 0,
+  "new_trajectory_estimates": 0,
+  "new_Hessian_jet_calls": 0,
+  "new_raw_sensor_message_inspection": 0,
+  "production_changes": 0,
+  "push_executed": false,
+  "conclusion_limits": [
+    "Support loss does not prove true-position error.",
+    "Raw reliability risk does not prove a wrong or competing basin.",
+    "Limiter clipping is observable; true-pose benefit/harm is not resolved.",
+    "No recorded time/coordinate violation found in scope; diagnostic CSV label defect remains.",
+    "Origin density does not certify full-FOV or true-pose map coverage."
+  ],
+  "next": "Stop for scientific-controller acceptance; do not repeat the already recorded R10-R12 follow-ups."
+}

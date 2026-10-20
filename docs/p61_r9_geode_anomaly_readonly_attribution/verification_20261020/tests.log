@@ -1,0 +1,12 @@
+test_identity_and_pure_translation (test_analysis_math.MathContract) ... ok
+test_log_matches_independent_matrix_log (test_analysis_math.MathContract) ... ok
+test_noncommuting_order_and_invariance (test_analysis_math.MathContract) ... ok
+test_history_and_assessment_contract (test_derived_evidence.EvidenceTests) ... ok
+test_logm_independent_motion (test_derived_evidence.EvidenceTests) ... ok
+test_scope_and_real_geometry (test_derived_evidence.EvidenceTests) ... ok
+test_time_limiter_and_density (test_derived_evidence.EvidenceTests) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.401s
+
+OK
