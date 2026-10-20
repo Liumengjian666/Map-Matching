@@ -1,0 +1,635 @@
+{
+  "result": "ALL_REHASHED_UNCHANGED",
+  "method": "full sequential SHA256; protected HEAD/status too",
+  "inputs": [
+    {
+      "path": "/home/jian/rosbag/loop2/raw_restore_20260914_stage0/loop2_raw.bag",
+      "bytes": 19677401800,
+      "sha256": "d17bee3f8697dcb01cb4b9f6ea2483aa42a1a31ae277659c8a7869d9c69f13ae"
+    },
+    {
+      "path": "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd",
+      "bytes": 7346648,
+      "sha256": "016b7ae3ae494ad5d462a66d888a96b96dda5fe29d6058059aa2fa6bdf6b09ca"
+    },
+    {
+      "path": "/home/jian/rosbag/loop2/final_delivery_run_A_20260922/ndt_determinism.csv",
+      "bytes": 20638557,
+      "sha256": "e5f749cbbc7fc514326cc61626945f4ac6347722e4ad769e676984e1d214102a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scans.csv",
+      "bytes": 58432,
+      "sha256": "c9dbf4e508cd45069ae0ebb1e4580a434711da433ecd8eefa86052d7a8b8090f"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/imu.csv",
+      "bytes": 354804,
+      "sha256": "328af7ed45944292eeef8dda1481bdfeccb7054cad1b724e5b6071a6bd9ea592"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_001.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "35ca6e70d6db17fe3d1e9fcbad97fb5d618523cc6736ffae089db4921d7f3d0b"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_002.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "e325d2e22f537a35a4acbd0bb2772843f9470bdc33246ed3c3e0dd29fe913c18"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_003.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "b85d1ea58ac7c3a60dfe5b9973a3f15f4f838bb4d73391cda1f5011fad396470"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_004.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "7a62e807103441608c68b6cef2c63d3209a3443352920ea5063666fba350f00a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_005.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "8dbc448b395b9a9d708ecb60db320ae7b5d56731580eedc93caa5310972959ca"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_006.xyz_offset.bin",
+      "bytes": 316416,
+      "sha256": "acbd0ee9c9d8c5a51dccd7eb0e6a746a828156bec2eb14fab276861347b7cd1d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_007.xyz_offset.bin",
+      "bytes": 317952,
+      "sha256": "2be1f7fa6c3431bd2f664e8f5413effc310c4fb8d27916503931b10f726ada3b"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_008.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "50ddbaa0086f7f8df3605e863141dd0cd564740e6f77a54290eb643d91fed12e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_009.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "954b9fc45dc9765cadf0998e26b6625393142523402d612a7801b2bfc7a7ed14"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_010.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "148fc7f0fcb387de610fd75b15e5b7017a4036904506352e6ea36794a4457ac1"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_011.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "6b95db6c8bf3b489118d90c4e7526e76751e3d4129873a20c45711a8c025602a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_012.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "1f5f24af0af522ed90acfc9fb3ad90449447ab969365aa2b6a1c59363a0cbbcd"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_013.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "75c00c8f2b3617b103a26eb5c8c22598bd76505a4c2649b458cc1849011df745"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_014.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "374e8f931d8294240ec2d971d8e5caf293aa69c64a4d2a9fcdb558760bb4cdab"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_015.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "38347ef8f1f3f8a148ffab58112bbda63d6cb1fab0fbefbbe800e68afa9b519f"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_016.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "5acaa6556f38b4757de61272aa9ec96156e90b97b8a893efde0126ddfcad5c48"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_017.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "388289e10f658e18ea74bc6d5372d3c5b56e7a0f3870ac2f944187b11a8581c5"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_018.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "4b25ba0e95eaf2b0228d7360c8ddb67c4ecdcc35817ea61f17c27dcf47d51f6e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_019.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "fad0d56236a4e89bf733d3f9f3ebbca6948a76c4ca6d523075ff5d5125b68d11"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_020.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "7619da79dae996ac536ca9acde39aba468df8f1270ae739b4c9d91e039fe8b2f"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_021.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "c0e5f6dbb2cf49e44b0d3faf4b772593ee78557cf0bed082ab5f6d659847d471"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_022.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "99ee9c752f60aa54feeedf3cdeb47f91082e1e5a1f03be597d68bc8cd5c2bf09"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_023.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "02a97fad19cd9f33adc74c7f5ecb1a1cf768fbdfce4f3f119225f304b0627b8a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_024.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "6de59b84418ce963c9a6bebaa5f4931b0354c818c184a4f54d4d0266d0b9ec6b"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_025.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "c2f762e1b0d4a154c614b08de8d727bd6e587c74b09b7589675a77416910e6c0"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_026.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "2dd693e360bdcfe482beba6e08e5effdf71c37e5972b43c528642cc4e06ded21"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_027.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "96f0342c6e4fb8a13eb2eacedfb8439e8680fe9e920e468a39dbae70324541e4"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_028.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "ac52c6ecbcfa93b820575987a934356890740c345e7704ea5f5b421eca9d20bf"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_029.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "c33a6a1701a7b99d7fc0ed9b19586f1dbf774d147678ba6e97f918dcff606340"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_030.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "4fe347f1569c2eafd12f069b18a5ab63040a848d70914c8daf23faab72f5e281"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_031.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "384e01e368cd9ae0a6d1816da0476d06424a2bf77e7cf8b2ecc792674f7927cd"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_032.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "225ee3f082fac39490635773841804bd17f4a4ef5e8fadb4dd7aa47a03cd51c3"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_033.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "ae4f81d96078c5c5ac84cf614c72825c09823f49a5dc44f9374d6b87c91dc1b2"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_034.xyz_offset.bin",
+      "bytes": 317952,
+      "sha256": "bcc12563e908ac7483c2f676a13112ce9601bcfbda1b291a735843d2b5aeda8b"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_035.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "140e3195d4dde5b5eb864ce0d291030e5f226c3530112073d29ea90916c58c64"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_036.xyz_offset.bin",
+      "bytes": 317952,
+      "sha256": "28577717ccdc665dcae69431b9bccea1142baa050936ae681c9a9b09d7a288f6"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_037.xyz_offset.bin",
+      "bytes": 316416,
+      "sha256": "943b23b4fed4a0eabf2f62b620702a041e4324135b5e5e9d29222f678f39a461"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_038.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "fc7b63fa013ddd4b279945d913126a755154427ddcbb478df19981fad1fa3a70"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_039.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "36a47f64fc73ce248238d78c167918050e7f7a88a9829fd65ce89c30380a7986"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_040.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "9711167fcdec48a92c73a861daf9837c5dc2dc62a1fc1c253a3d971ed060c538"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_041.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "a2785ffd2e7bb418915707146965535a872e056ca2c1d058d401151f9c26877c"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_042.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "a1380f0179b94c3dc1fbcebf3770f43626a2d16c64607fd48866216fca9e8e4d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_043.xyz_offset.bin",
+      "bytes": 317952,
+      "sha256": "bdfe3a11d59ebfc44706aa382175375364ced42ef13f068d4a50485261cbb70e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_044.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "90a69960a045ab4466363bfeb38e76a4ba1c19aac3413af8f47fbfd30f6dfc96"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_045.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "1103bb01c4a52444e5ec7d9d45ba2e27fd03b081f2ae300a63503a8428d951d6"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_046.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "dc170a11b0471411b94d03c8b3e0ffeef463a03d700fb19688130d85e29b339c"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_047.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "828f35521a74c1fbbe7f036895f6202224aa6678e2819c0946cf925892cbd807"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_048.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "569f3e5c5ae9e52b1265316f5e27f30a732efac37c1c0a51e77c0866452eebf9"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_049.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "10dbce1e86751bb9e03deebe3549dca5f93b427749cbbe97e0954ad62ddce0fd"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_050.xyz_offset.bin",
+      "bytes": 317952,
+      "sha256": "341742ab1b9b8024fb3f44b9ebe0d55997e9443d0d1076924c2803e7cd50dd40"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_051.xyz_offset.bin",
+      "bytes": 322560,
+      "sha256": "8ce90477ca7fd24d94b814f7f9f68ad86204d2574a78a843fe391921f5f274d8"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_052.xyz_offset.bin",
+      "bytes": 317952,
+      "sha256": "7a35263dfcc2087f7668db449ec42ed2856e75a683e61f1560eba2775ba71fad"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_053.xyz_offset.bin",
+      "bytes": 322560,
+      "sha256": "c6176c670f5fc3b554e0a494638ec2106405d30125da8f53ff39d309f5aa7eca"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_054.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "3072bb2f27a452f16c8245f867061bb185140ed67eec04a3393107de25354e3c"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_055.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "eeeaa852e9dc29978860d95bed9f5c63e0db8a5a8d99d88e6bc5291f541e0ac5"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_056.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "c1ab2ab5a54b5d33e4325d048f7e5a4905482d363de828755e8e13a90c764104"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_057.xyz_offset.bin",
+      "bytes": 317952,
+      "sha256": "9d1ee7c076ffd2e7def7391d584a7054bbe8f5ed263abb761b16b176941012aa"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_058.xyz_offset.bin",
+      "bytes": 325632,
+      "sha256": "aa09aaad94a0800fc0dfb6c95f2d1e3dbb293fa2ca87cb50bec38a6e7a536811"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_059.xyz_offset.bin",
+      "bytes": 322560,
+      "sha256": "028891897b0bc358434dcf929c8c461cafccb78a38e672354048161267436fb6"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_060.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "4290292ddec6afeb2b8de52a65b05e9010f88b793b5a724d80628cbee4b86858"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_061.xyz_offset.bin",
+      "bytes": 317952,
+      "sha256": "bdf2c3e5edd2a19a4e32db2ef15c8ae93b2b426eeff07b848a0518718a78adac"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_062.xyz_offset.bin",
+      "bytes": 316416,
+      "sha256": "4b13235ff163643c915566c59cc52bd7861350c7e3c84d1fbfc9edf2a9eab4f8"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_063.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "939d97ec18591ee1eebda80c7f4f528952817c288f7289a5697f0a779511fd30"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_064.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "ecc85442abd49428679b852930f83529e6698f6b86909ea40255bfb2876d8c06"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_065.xyz_offset.bin",
+      "bytes": 322560,
+      "sha256": "19ba7c4dfb1c6f785448a3e26adad95c4ad86f8a4ed51cc82fdc16ca8f34d506"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_066.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "555aaf53f2fc190636db11507c1584b9b5ca423417d95a907afbd99128bf5795"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_067.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "b49f45465640c67699d92f5ddbf8fa6f9edde0dbdd9421ca1e65048b55790c00"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_068.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "958418c434de7646a442f37050a53177ffacb3f50e199ce921725abf784ff942"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_069.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "5aa39106c4a6c390aa5ae543c80b8d659c7ce44bac3c3b3037b8a468afc9cb5f"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_070.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "99249a65a28eb4b4b3d36818e782fee6ac7ca1d8544b6efcba1c68101993119d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_071.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "eb443564fad16e8ab411a698c58f81274c187f4181ff17893e106017bdcf2df1"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_072.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "61dcaa194d3676ca402cbc1fd2dbdd980de480c498cb59a1088fc84622e63e14"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_073.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "fd137bec286660a74926e353a0125e2397e7d32e7574690dead7ccd964196686"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_074.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "02e05064e739739856be211e658054819249a212834204071c298f2c9b8ae943"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_075.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "94528e57c1914585e7155477e8a1cefaee63fca340290eb732b279242b63bed8"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_076.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "d7cd31af5353d9173df03632985acb23eb80e4d5d4f70279af7593436dab4db7"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_077.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "29cdd32c722dc5017e630902085ebb098dddad31908aa62cacac4f5fd198978c"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_078.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "479440ef93bcc1c71eae9b5e540b7607fd4dcb95a654c0e71a87127c87c3a780"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_079.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "278cb6f57ce098a20f149fd46cb0fe004cf3bffa578c96cf7a8dba051918f56b"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_080.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "8a6469ca270b8639699bbc1fe12d27bc861a2fc03f3c98e8ecfdc4003106caad"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_081.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "5d8522de13ab3b1f2825c91f63ea6d1a17a9797d70736e064847b79c952d42d6"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_082.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "d872faccc5601da1ff2bc72930874a7ec70424567067d486ab16ff927ae59276"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_083.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "06cc7214d77d86e0992f26575714e6f2dfc77d02ec539f94369cb456cfdbddbb"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_084.xyz_offset.bin",
+      "bytes": 317952,
+      "sha256": "5656b306105f791ddb672452352698fd361293145162bc5b16d94edfd02eaebf"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_085.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "857e1aa7a45104aabc8ae25195b58e5e24003e6ae08f88a98069e7622c12ccd0"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_086.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "ec5f95d6c5a36d1d0eb005b2bd94bef56563773a77fb8868f5227db17122f4b8"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_087.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "caad8bbcd0f1b23eee2737e3d69fde90683a414206ccc2cb9a285f1a6536be68"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_088.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "f5bb262e37c5495f6b90ea51820fc4b6b737626ba7d87092eee7a4b5ce157e70"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_089.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "58090037eaa95bae6cab2ae6fbaf4f2cc1d6ec2c1837e9a8f451d80233bc1e1e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_090.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "ae8382a14c0205a495ad101e31764edfa3547b020dbb9d3c2a5a7e9bcc3d5070"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_091.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "a9d809205e2f2140cce7111ee7f0f335be5d08f1a74c821b7f15db76a6190af8"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_092.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "d19ead44bf72ee8065af95f00ed5fe76318772257288dd1780447c9cdd7edb93"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_093.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "75047d4cd5114e3537761a6d52c64b0cc29d7096946db3ed5f7318457ab38b26"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_094.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "1bebc4cefebd9609abbecc30539a391fd03bf4d5e9fc2cfb81874e06dd957c6d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_095.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "58651df03e683788df8fe0ce532f9e9f3baaf5fde12c953e81d646939b255231"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_096.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "ea9b5eef8789f79bbc222598481b6b91cea2305f3455b21d2b417614f38b8cc3"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_097.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "2b2a6416da30b98bd4b02782c83c406c869a760ba605b6c9a2c0e1cfc6700fc2"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_098.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "323b44ead36b6feda48a3f92f79aecc59093d25dca0786593caad2eb5c6298be"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_099.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "b77a55ddb2cb8dcb648e91ef21f5f1580166107f42299fd736512675a5f90c95"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_runs/input/scan_100.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "8d0ee39cd7a1ebcdaf6704734a015ca33625741d642babd9e940ccb5e8f59894"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_ws/docs/p62_r1_novelty_benchmark_lock/MATHEMATICAL_FORMULATION.md",
+      "bytes": 7576,
+      "sha256": "83a237344c32d21267a4d7473a499a16e0869fdab7573e09ddfdb400f831532f"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_ws/docs/p62_r1_novelty_benchmark_lock/NOVELTY_ASSESSMENT.md",
+      "bytes": 3400,
+      "sha256": "75c14e24eea696c2b19978effaa9747471105d60429f59a37aa99dfebf88ae08"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r6_dog_shadow_ws/docs/p62_r1_novelty_benchmark_lock/EXPERIMENT_PRE_REGISTRATION.md",
+      "bytes": 7627,
+      "sha256": "0a3f8c02b2b091341a699e2e1a63eb90aef0641feb363b9930431cc8609feef4"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/config/dog_prior_map_localization_ndt.yaml",
+      "bytes": 2984,
+      "sha256": "482d11e26b998aad0fcb07840d9d8eede788291348c1a93a748a74edf1fe6b83"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/include/dog_prior_map_localization/core/estimator_types.hpp",
+      "bytes": 1330,
+      "sha256": "ea38ab1741345f69069684ce290d9a3b1b52d4a235d5c08c1a1516962c1189ac"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/include/dog_prior_map_localization/core/math_utils.hpp",
+      "bytes": 670,
+      "sha256": "684d827ad6055d42ee5cb1cef3929dc27245439f49e2a3b7f96d9492065cf0e4"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/include/dog_prior_map_localization/core/oosm_replay_planner.hpp",
+      "bytes": 1656,
+      "sha256": "70b19976a357751f13b6a4c9511fbc4ff51d717e9f57719df5af1d0335c0660c"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/include/dog_prior_map_localization/core/state_history.hpp",
+      "bytes": 961,
+      "sha256": "3476bfe317750ce74c012e557c6315b923f426d3986bb72cec00735d31063b36"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/include/dog_prior_map_localization/dog_prior_map_ekf_node.hpp",
+      "bytes": 8926,
+      "sha256": "9f99acda9868c5034569d6a198c0f3a811316021d3e0e44c7de2b890153fe8e2"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/include/dog_prior_map_localization/livox_imu_deskewer.hpp",
+      "bytes": 4266,
+      "sha256": "d142e313f1ac94019db5a7d3f12e0f41cf85c658e9c029bb152b755f4f9aa615"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch",
+      "bytes": 5513,
+      "sha256": "9330ebfe2e5b8c438f1d61e6445f8c1948aec554dc87fb3385e76af9e0bc31da"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/core/oosm_replay_planner.cpp",
+      "bytes": 3275,
+      "sha256": "7cfc8e11b78978a1486ebae631bf947cc320bec7fd4d6e458c70d40c4aca2693"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/core/state_history.cpp",
+      "bytes": 1952,
+      "sha256": "7adc0dd833eb4a215e1846409321e9a3badfb0baeaddbfb9a8141e894ac013a6"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/dog_prior_map_ekf_node.cpp",
+      "bytes": 460,
+      "sha256": "e69fade2af615cff00af87dc0e8860017cb236a80a80926bf384f108666fcc58"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/dog_prior_map_ekf_node_core.cpp",
+      "bytes": 11084,
+      "sha256": "7038444b77cac7987bfdc28acbef27eafbbd42475f6b7a5a942a7f73bf1f5d30"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp",
+      "bytes": 52693,
+      "sha256": "40cdf26f9dddb9d06dc16c0bfd89fc88a9dd33e42e5bbd4e9bc3b453f1e4277c"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/fusion/ndt_observation.cpp",
+      "bytes": 11418,
+      "sha256": "2036721e02ec84425dc6858660c39e980154e34f4b68f5133576905e7bdf48a4"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/imu_processor.cpp",
+      "bytes": 9179,
+      "sha256": "1e6b2dd5269241f5f87d665bc8151264b015fbae8bfa29045a92cbd9513ad6eb"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/livox_imu_deskewer.cpp",
+      "bytes": 15674,
+      "sha256": "965b1a7317b910edb9b8d8ae97a3ad58e15b3a155e6c5670d475ed9859c5149b"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/ros_output.cpp",
+      "bytes": 9323,
+      "sha256": "6e993a65f3f26e3e5b632c0b851ad8dd2d3394a58f646669a38d5b142da8d77c"
+    }
+  ],
+  "stable_HEAD": "41999ea700c66c4cadf0eca9e0c5d73caa2783fd",
+  "stable_dirty_status_unchanged": true,
+  "R1_unchanged": true,
+  "original_native_outputs_unchanged": true
+}

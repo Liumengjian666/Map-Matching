@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-20T09:04:44.000610+00:00",
+  "branch": "research/p62-r6-dog-shadow-prototype",
+  "START_SHA": "c1769471f291932a749fc44705d8ddc30108cf31",
+  "actual_execution_CODE_SHA": "90954199d1f2e06128c6eaafca91bbc6a7c98979",
+  "analysis_source_commit": "7ec62d620dce8c1c81acb7410f1aaa5b763614aa",
+  "END_SHA": "Final archive commit is resolved from git log, not embedded self-reference",
+  "remote_queries": {
+    "research/p62-r5-exp18-coordinate-closure-or-pivot": "c1769471f291932a749fc44705d8ddc30108cf31\trefs/heads/research/p62-r5-exp18-coordinate-closure-or-pivot",
+    "research/p62-r6-dog-shadow-prototype": ""
+  },
+  "REMOTE_HEAD": "ABSENT",
+  "PUSH_EXECUTED": false,
+  "valid_upload_command": "git -C /home/jian/livox_ws/p62_r6_dog_shadow_ws push -u origin research/p62-r6-dog-shadow-prototype",
+  "requested_original_path_command": "git -C /home/jian/livox_ws/dog_loc_paper_ws push -u origin research/p62-r6-dog-shadow-prototype",
+  "original_path_warning": "Different Git repository, R6 ref absent; do not use this original-path command without explicitly arranging branch availability"
+}
