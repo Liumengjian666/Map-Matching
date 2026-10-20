@@ -1,0 +1,10 @@
+{
+  "analysis_CODE_SHA": "1de8667a0effd1ca4f9b9245db5b17d2b53c70cd",
+  "analysis_returncode": 0,
+  "derived_results_reproduced_byte_identical": true,
+  "unit_test_returncode": 0,
+  "test_stdout": "",
+  "test_stderr": "test_all100_required (test_admission.AdmissionTests) ... ok\ntest_last_frame_is_not_omitted (test_admission.AdmissionTests) ... ok\ntest_no_initial_does_not_become_identity (test_admission.AdmissionTests) ... ok\ntest_no_reordering_of_original_motion_ranks (test_admission.AdmissionTests) ... ok\ntest_all_recovery_outputs_are_recorded_duplicates (test_result_audit.CompletedRunTests) ... ok\ntest_formal_and_forced_are_separate (test_result_audit.CompletedRunTests) ... ok\ntest_independent_common_weight_vertex_counterexample (test_result_audit.CompletedRunTests) ... ok\ntest_native_output_freeze_and_copies (test_result_audit.CompletedRunTests) ... ok\ntest_recorded_align_accounting (test_result_audit.CompletedRunTests) ... ok\ntest_same_pool_singleton_margin_is_missing (test_result_audit.CompletedRunTests) ... ok\n\n----------------------------------------------------------------------\nRan 10 tests in 0.007s\n\nOK\n",
+  "new_NDT_aligns": 0,
+  "EKF_runs": 0
+}

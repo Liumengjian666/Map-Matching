@@ -1,0 +1,16 @@
+{
+  "utc": "2026-10-20T11:53:01.481741+00:00",
+  "branch": "research/p62-r8-structural-admission",
+  "START_SHA": "b6c3bebb686697161cd645426d5d54ffe2927728",
+  "PRECHECK_CODE_SHA": "15e2bf1d8de8dd6877cf45c141eaa6f773ebdb90",
+  "SHADOW_CODE_SHA": "463816a63038948cac29ae45925cfa4030a88da4",
+  "analysis_CODE_SHA": "1de8667a0effd1ca4f9b9245db5b17d2b53c70cd",
+  "END_SHA": "Resolve the final archive commit from Git HEAD and final handoff; a commit cannot contain its own digest",
+  "REMOTE_HEAD": "ABSENT",
+  "remote_query_stdout": "b6c3bebb686697161cd645426d5d54ffe2927728\trefs/heads/research/p62-r7-motion-selected-shadow\n",
+  "R7_local_HEAD": "b6c3bebb686697161cd645426d5d54ffe2927728",
+  "R7_local_clean": true,
+  "PUSH_EXECUTED": false,
+  "valid_upload_command": "git -C /home/jian/livox_ws/p62_r8_structural_admission_ws push -u origin research/p62-r8-structural-admission",
+  "requested_original_workspace_note": "dog_loc_paper_ws is a separate repository without this research branch; do not fabricate or mirror refs there."
+}

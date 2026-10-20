@@ -1,0 +1,8 @@
+{
+  "returncode": 0,
+  "raw_scans_streamed": 10905,
+  "stream_sha256": "a1bdb0b02cb2549a978f9e37234179ee3cc3fccc0558255c217a0d3c5b607b51",
+  "wall_seconds": 36.74484668500372,
+  "NDT_aligns": 0,
+  "after_gate": "ALL_REHASHED_UNCHANGED"
+}
