@@ -1,0 +1,25 @@
+test_base_imu_attitudes_are_not_interchangeable (test_contracts.ContractTests) ... ok
+test_boundary_unchanged_and_conditional (test_contracts.ContractTests) ... ok
+test_invalid_quaternion_rejected (test_contracts.ContractTests) ... ok
+test_official_chain_axes (test_contracts.ContractTests) ... ok
+test_roundtrip_nontrivial_pose (test_contracts.ContractTests) ... ok
+test_snapshot_growth_stops_after_bounded_read (test_contracts.ContractTests) ... ERROR
+test_snapshot_refuses_oversize_without_open (test_contracts.ContractTests) ... ok
+test_snapshot_refuses_symlink_without_open (test_contracts.ContractTests) ... ok
+test_urdf_yaml_difference_not_silently_merged (test_contracts.ContractTests) ... ok
+test_yaml_profile_agree (test_contracts.ContractTests) ... ok
+
+======================================================================
+ERROR: test_snapshot_growth_stops_after_bounded_read (test_contracts.ContractTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/jian/livox_ws/p62_r5_exp18_coordinate_closure_ws/docs/p62_r5_exp18_coordinate_closure/tests/test_contracts.py", line 68, in test_snapshot_growth_stops_after_bounded_read
+    handle = path.open.return_value.__enter__.return_value = Mock()
+  File "/usr/lib/python3.8/unittest/mock.py", line 639, in __getattr__
+    raise AttributeError(name)
+AttributeError: __enter__
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.061s
+
+FAILED (errors=1)

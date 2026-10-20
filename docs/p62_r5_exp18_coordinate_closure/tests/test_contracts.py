@@ -1,11 +1,12 @@
 import sys
 import unittest
+from unittest.mock import Mock, MagicMock
 from pathlib import Path
 import numpy as np
 from scipy.spatial.transform import Rotation
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from audit_contracts import matrices, profile_transform, boundary_policy, from_quaternion
+from audit_contracts import matrices, profile_transform, boundary_policy, from_quaternion, small_bytes, SMALL_FILE_LIMIT
 
 
 class ContractTests(unittest.TestCase):
@@ -44,6 +45,31 @@ class ContractTests(unittest.TestCase):
         for q in [[0,0,0,0], [float('nan'),0,0,1], [1,2,3]]:
             with self.assertRaises(ValueError):
                 from_quaternion({'quaternion':q, 'translation':[0,0,0]})
+
+    def test_snapshot_refuses_symlink_without_open(self):
+        path = Mock()
+        path.is_symlink.return_value = True
+        with self.assertRaises(RuntimeError):
+            small_bytes(path)
+        path.open.assert_not_called()
+
+    def test_snapshot_refuses_oversize_without_open(self):
+        path = Mock()
+        path.is_symlink.return_value = False
+        path.stat.return_value.st_size = SMALL_FILE_LIMIT+1
+        with self.assertRaises(RuntimeError):
+            small_bytes(path)
+        path.open.assert_not_called()
+
+    def test_snapshot_growth_stops_after_bounded_read(self):
+        path = MagicMock()
+        path.is_symlink.return_value = False
+        path.stat.return_value.st_size = 1
+        handle = path.open.return_value.__enter__.return_value = Mock()
+        handle.read.return_value = b'a'*(SMALL_FILE_LIMIT+1)
+        with self.assertRaises(RuntimeError):
+            small_bytes(path)
+        handle.read.assert_called_once_with(SMALL_FILE_LIMIT+1)
 
 
 if __name__=='__main__':

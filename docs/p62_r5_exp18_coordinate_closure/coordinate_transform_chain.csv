@@ -1,0 +1,7 @@
+transform,meaning,direction,status,evidence,limitation
+T_I_L,LiDAR to Alphasense IMU,L_to_I,SUPPORTED_PUBLISHED_SEMANTICS,"official Issue4; fixed hesai+alphasense+phasma xacro; fixed MOLA profile/launch/loader","URDF translation differs from YAML by0.253mm; no physical recalibration"
+T_I_base,URDF base to IMU,base_to_I,DECLARED_RX_MINUS_PI,"R4 fixed phasma xacro49-56","does not resolve which attitude the GT exporter used"
+T_W_I,IMU pose in published reference world,I_to_W,EXPORT_SEMANTICS_NOT_CERTIFIED,"official FAQ says I; MOLA uses I; URDF comment says base","no choice made by GT fitting or observed accuracy"
+T_M_S,E57 stored scan to root,S_to_M,INHERITED_R4_FILE_METADATA,"R4 e57_structure.json; derived_metadata.json","internal E57 pose is not GT world transform"
+T_M_W,published reference world to E57 map root,W_to_M,NOT_ESTABLISHED,"R4 metadata; paperSecV; official Issues20/21/23; fixed MOLA sources","no identity or T_M_S substitution; no fitted matrix"
+T_I_P,measurement tip to IMU,P_to_I,REFERENCE_CONSUMPTION_OPEN,"published YAML; fixed official URDF chain","position differs0.253mm and axis convention180deg; sparse lever-arm processing unknown"

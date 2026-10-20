@@ -9,9 +9,9 @@
 
 结合 R4 已冻结 phasma commit `79002026e9b229cf9b4e95a403eaec4f00acfd79` 和官方 Alphasense commit `80c1b8675b3b9e03f9de9d1b5f420e5225f67a50`：
 
-- T_P_mount：[-0.065253,0,0.179]m，单位旋转，phasma.xacro:33–35。
+- T_P_mount：[-0.065253,0,0.179]m，单位旋转，phasma.xacro:31–33。
 - T_mount_I：[0.006,-0.00855,0.0174]m，Rx(pi)，alphasense.xacro:61–64。
-- T_P_hesai：[-0.06,0,0.095]m，单位旋转，phasma.xacro:69–71。
+- T_P_hesai：[-0.06,0,0.095]m，单位旋转，phasma.xacro:59–61。
 - T_hesai_L：[0,0,0.0464]m，Rz(pi/2)，hesai_parametric.xacro:55–61。
 - T_I_L = inverse(T_P_mount*T_mount_I) * T_P_hesai*T_hesai_L。
 
@@ -22,12 +22,12 @@
 固定 MOLA lidar_odometry commit `6e905f0dcec1221be94b747850fba09435db2605` 的 `sources/mola_hilti2022.sh`：
 
 - 17–24行注释明确按发布 YAML 解释四元数 xyzw、T_imu_pandar。
-- 53–55行选择 `/hesai/pandar`、`/alphasense/imu`；71–90行默认IMU为基准、固定雷达位姿，不依赖 bag TF 别名。
-- 78–83行使用 [-0.001,-0.00855,0.055]m，yaw=-90°、pitch=0°、roll=180°。
-- 93–106行的 LiDAR 基准分支使用其逆；没有把原数组按wxyz套用。
-- 128–132行是里程计首位姿规范固定，不是 TLS 地图中的真实初值。
+- 53–55行选择 `/hesai/pandar`、`/alphasense/imu`；65–81行默认IMU为基准、固定雷达位姿，不依赖 bag TF 别名。
+- 74–79行使用 [-0.001,-0.00855,0.055]m，yaw=-90°、pitch=0°、roll=180°。
+- 83–95行的 LiDAR 基准分支使用其逆；没有把原数组按wxyz套用。
+- 116–120行是里程计首位姿规范固定，不是 TLS 地图中的真实初值。
 
-同 commit `sources/mola_actual_rosbag1_launch.yaml:108–114,127–133` 将这些值传给 fixed_sensor_pose，字段顺序为x y z yaw_deg pitch_deg roll_deg。
+同 commit `sources/mola_actual_rosbag1_launch.yaml:96–101,112–117` 将这些值传给 fixed_sensor_pose，字段顺序为x y z yaw_deg pitch_deg roll_deg。
 固定 loader commit `d1079e427343b5eff108dce4e9ff34008aadda15` 的 `sources/mola_Rosbag1Dataset.cpp:605–612` 将其解析为 CPose3D；1218–1238行在固定值存在时直接采用，否则 lookupTransform(referenceFrame,frame)。1278–1282和1489–1495行分别设置点云和IMU时间及sensorPose。
 
 **重要区别**：profile是第三方当前固定消费者，硬编码了发布标定值，并不是本数据录制时驱动，也没有在此处动态读取原始 lidar_calibration.yaml。这里只读源码，从未 source/执行这些shell、launch或二进制。
@@ -39,7 +39,7 @@ YAML 的 xyzw 得到同一 R_I_L，平移为发布值 [-0.001,-0.00855,0.055]m�
 ## GT I / base 姿态仍未完全闭合
 
 官方 R4 FAQ明确说GT在I；MOLA亦按I消费。两项是支持I语义的证据。
-但固定 phasma.xacro:58–66仍注释GT在base，且T_I_base=Rx(-pi)、零平移。因此I与base不是可互换的姿态。
+但固定 phasma.xacro:49–56仍注释GT在base，且T_I_base=Rx(-pi)、零平移。因此I与base不是可互换的姿态。
 
 两种分支必须保留：若文件是T_W_I，不追加Rx(pi)；若是T_W_base，则T_W_I=T_W_base*inverse(T_I_base)。本轮没有生产GT文件的确切导出代码或权威更正来选择这一分支；MOLA的解释不是发布端文件生成证明。不得按轨迹外观、误差或重力选择。
 

@@ -15,6 +15,18 @@ from scipy.spatial.transform import Rotation
 HERE = Path(__file__).resolve().parent
 R4 = HERE.parent/'p62_r4_exp18_g0_metadata_audit'
 NS = '{http://www.ros.org/wiki/xacro}'
+SMALL_FILE_LIMIT = 8 * 1024 * 1024
+
+
+def small_bytes(path):
+    """Reject unexpected inputs before reading; bound even a concurrent growth."""
+    if path.is_symlink() or path.stat().st_size > SMALL_FILE_LIMIT:
+        raise RuntimeError('Refuse symlink/oversize metadata: '+str(path))
+    with path.open('rb') as handle:
+        content = handle.read(SMALL_FILE_LIMIT + 1)
+    if len(content) > SMALL_FILE_LIMIT:
+        raise RuntimeError('Metadata grew past read limit: '+str(path))
+    return content
 
 
 def origin(element):
@@ -89,7 +101,7 @@ def snapshot():
         path = Path(row['path'])
         stat = path.stat()
         large = stat.st_size > 100000000
-        current = None if large else hashlib.sha256(path.read_bytes()).hexdigest()
+        current = None if large else hashlib.sha256(small_bytes(path)).hexdigest()
         if stat.st_size != row['bytes'] or (not large and current != row['sha256']):
             raise RuntimeError('Asset mismatch: '+str(path))
         records.append({'path': str(path), 'bytes': stat.st_size, 'device': stat.st_dev,
@@ -99,7 +111,7 @@ def snapshot():
     frozen = {}
     for path in sorted(R4.rglob('*')):
         if path.is_file() and '__pycache__' not in path.parts:
-            frozen[str(path.relative_to(R4))] = hashlib.sha256(path.read_bytes()).hexdigest()
+            frozen[str(path.relative_to(R4))] = hashlib.sha256(small_bytes(path)).hexdigest()
     return {'assets': records, 'R4_files_sha256': frozen,
             'large_input_content_rereads': 0, 'GT_files_hashed_only': 2,
             'GT_numeric_semantic_reads_current_round': 0}
