@@ -16,6 +16,7 @@ int main(){try{
     std::vector<Candidate> c(2);for(auto& a:c){a.finite=a.eligible=a.loss_valid=true;a.loss.fill(NAN);for(int b:m.active)a.loss[b]=.5;}
     for(int b:m.active)c[1].loss[b]=.1;c[1].id=1;c[1].score=1;
     require(coverage::select(c,m).robust==1,"positive supported alternative");c[1].loss=c[0].loss;require(coverage::select(c,m).robust<0,"tie abstains");
+    c[0].finite=false;require(coverage::select(c,m).robust<0,"singleton alternative cannot win vacuously");
   }
   Split s;s.training->resize(299);for(auto& b:s.blocks)b->resize(10);coverage::Mask m(s);require(!m.evaluable(),"training still300");
   Vector6 v;v<<.2,-.3,.4,.1,.2,.3;

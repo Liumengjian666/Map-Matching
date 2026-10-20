@@ -38,7 +38,7 @@ inline Selection select(const std::vector<Candidate>& c,const Mask& m){
   for(int j:ids){if(!c[j].eligible)continue;
     if(out.native<0||c[j].score>c[out.native].score)out.native=j;
     if(out.heldout_mean<0||mean(c[j].loss,m)<mean(c[out.heldout_mean].loss,m))out.heldout_mean=j;
-    if(j==0)continue;bool dominates=true;for(int k:ids)if(k!=j&&!(paired(c[j].loss,c[k].loss,m)>.02))dominates=false;
+    if(j==0||ids.size()<2)continue;bool dominates=true;for(int k:ids)if(k!=j&&!(paired(c[j].loss,c[k].loss,m)>.02))dominates=false;
     if(dominates){require(out.robust<0,"nonunique strict winner");out.robust=j;}}
   return out;
 }
