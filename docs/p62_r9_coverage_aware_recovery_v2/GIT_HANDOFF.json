@@ -1,0 +1,12 @@
+{
+  "utc": "2026-10-20T12:45:31.151586+00:00",
+  "branch": "research/p62-r9-coverage-aware-recovery-v2",
+  "START_SHA": "36930e56bcd154d48d0f4cb79d66a7defcd43a0d",
+  "CODE_SHA": "28d0928ff6c32b2864abc901b3fae158be519eb0",
+  "analysis_CODE_SHA": "0cabe3ce638cc5a076ba2bd58e56d331d171e69a",
+  "END_SHA": "Resolve final archive commit from Git HEAD and final handoff; no self-referential hash",
+  "REMOTE_HEAD": "ABSENT",
+  "remote_query_stdout": "36930e56bcd154d48d0f4cb79d66a7defcd43a0d\trefs/heads/research/p62-r8-structural-admission\n",
+  "PUSH_EXECUTED": false,
+  "upload_command": "git -C /home/jian/livox_ws/p62_r9_coverage_aware_recovery_ws push -u origin research/p62-r9-coverage-aware-recovery-v2"
+}
