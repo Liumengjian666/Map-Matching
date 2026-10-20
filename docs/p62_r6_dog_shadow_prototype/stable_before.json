@@ -1,0 +1,91 @@
+{
+  "head": "41999ea700c66c4cadf0eca9e0c5d73caa2783fd",
+  "status": "A  .vscode/settings.json\nA  AGENTS.md\nA  PROJECT_PROGRESS.md\nA  src/dog_prior_map_localization.zip\nA  src/dog_prior_map_localization/.github/skills/academic-paper-translator/.gitignore\nA  src/dog_prior_map_localization/.github/skills/academic-paper-translator/README.md\nA  src/dog_prior_map_localization/.github/skills/academic-paper-translator/SKILL.md\nA  src/dog_prior_map_localization/.github/skills/academic-paper-translator/agents/openai.yaml\nA  src/dog_prior_map_localization/.github/skills/academic-paper-translator/references/content_type_rules.md\nA  src/dog_prior_map_localization/.github/skills/academic-paper-translator/references/translation_style.md\nA  src/dog_prior_map_localization/.github/skills/academic-paper-translator/scripts/check_manifest.py\nA  src/dog_prior_map_localization/.github/skills/academic-paper-translator/scripts/chunk_paper.py\nA  src/dog_prior_map_localization/.github/skills/academic-paper-translator/scripts/extract_source.py\nA  src/dog_prior_map_localization/.github/skills/academic-paper-translator/scripts/merge_translations.py\nA  src/dog_prior_map_localization/.github/skills/academic-paper-translator/scripts/qa_translation.py\nA  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/.gitattributes\nA  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/.gitignore\nA  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/LICENSE\nA  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/README.md\nA  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/SKILL.md\nA  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/agents/openai.yaml\nA  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/examples/release-notes-v1.0.0.md\nA  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/examples/sample-output-structure.md\nA  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/examples/sample-request.md\nA  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/exclusion-rules.md\nA  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/heading-structure.md\nA  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/layout-spec.md\nA  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/pdf-structure-extraction.md\nA  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/qa-checklist.md\nA  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/reference-splitting.md\nA  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/terminology-and-error-rules.md\nA  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/scripts/qa_translation_package.py\nA  src/dog_prior_map_localization/docs/stage0_determinism_diagnostics.md\nA  src/dog_prior_map_localization/include/dog_prior_map_localization/livox_imu_deskewer.hpp\n M src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch\nA  src/dog_prior_map_localization/scripts/make_translation_pdf.py\nA  src/dog_prior_map_localization/scripts/render_translation_pdf.py\nA  src/dog_prior_map_localization/scripts/run_loop2_determinism_trial.sh\nA  src/dog_prior_map_localization/scripts/run_loop5_deploy_light_odom_eval.sh\nA  src/dog_prior_map_localization/scripts/run_loop5_record_raw.sh\nA  src/dog_prior_map_localization/src/livox_imu_deskewer.cpp\nA  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/STAGE0_DIAGNOSTIC_GAP_REPORT.md\nA  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/audit_files_sha256.txt\nA  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/binary_and_build_info.txt\nA  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/git_diff_90209a8.patch\nA  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/git_diff_HEAD.patch\nA  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/git_diff_stats.txt\nA  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/git_log_oneline_10.txt\nA  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/git_status_after_audit.txt\nA  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/git_status_short.txt\nA  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/input_artifact_hashes.txt\nA  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/key_file_sha256.txt\nA  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/launch_dump_params_rviz_true.yaml\nA  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/live_master_11311_snapshot.yaml\nA  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/repo_identity.txt\nA  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/ros_environment_and_resolution.txt\nA  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/tracked_changed_sha256.txt\nA  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/untracked_inventory_and_sha256.txt\nA  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/verification.txt\n?? src/dog_prior_map_localization/Testing/\n?? src/dog_prior_map_localization/docs/architecture/pending/\n?? src/dog_prior_map_localization/docs/validation/pending/\n",
+  "files": [
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/config/dog_prior_map_localization_ndt.yaml",
+      "bytes": 2984,
+      "sha256": "482d11e26b998aad0fcb07840d9d8eede788291348c1a93a748a74edf1fe6b83"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/include/dog_prior_map_localization/core/estimator_types.hpp",
+      "bytes": 1330,
+      "sha256": "ea38ab1741345f69069684ce290d9a3b1b52d4a235d5c08c1a1516962c1189ac"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/include/dog_prior_map_localization/core/math_utils.hpp",
+      "bytes": 670,
+      "sha256": "684d827ad6055d42ee5cb1cef3929dc27245439f49e2a3b7f96d9492065cf0e4"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/include/dog_prior_map_localization/core/oosm_replay_planner.hpp",
+      "bytes": 1656,
+      "sha256": "70b19976a357751f13b6a4c9511fbc4ff51d717e9f57719df5af1d0335c0660c"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/include/dog_prior_map_localization/core/state_history.hpp",
+      "bytes": 961,
+      "sha256": "3476bfe317750ce74c012e557c6315b923f426d3986bb72cec00735d31063b36"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/include/dog_prior_map_localization/dog_prior_map_ekf_node.hpp",
+      "bytes": 8926,
+      "sha256": "9f99acda9868c5034569d6a198c0f3a811316021d3e0e44c7de2b890153fe8e2"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/include/dog_prior_map_localization/livox_imu_deskewer.hpp",
+      "bytes": 4266,
+      "sha256": "d142e313f1ac94019db5a7d3f12e0f41cf85c658e9c029bb152b755f4f9aa615"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch",
+      "bytes": 5513,
+      "sha256": "9330ebfe2e5b8c438f1d61e6445f8c1948aec554dc87fb3385e76af9e0bc31da"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/core/oosm_replay_planner.cpp",
+      "bytes": 3275,
+      "sha256": "7cfc8e11b78978a1486ebae631bf947cc320bec7fd4d6e458c70d40c4aca2693"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/core/state_history.cpp",
+      "bytes": 1952,
+      "sha256": "7adc0dd833eb4a215e1846409321e9a3badfb0baeaddbfb9a8141e894ac013a6"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/dog_prior_map_ekf_node.cpp",
+      "bytes": 460,
+      "sha256": "e69fade2af615cff00af87dc0e8860017cb236a80a80926bf384f108666fcc58"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/dog_prior_map_ekf_node_core.cpp",
+      "bytes": 11084,
+      "sha256": "7038444b77cac7987bfdc28acbef27eafbbd42475f6b7a5a942a7f73bf1f5d30"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp",
+      "bytes": 52693,
+      "sha256": "40cdf26f9dddb9d06dc16c0bfd89fc88a9dd33e42e5bbd4e9bc3b453f1e4277c"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/fusion/ndt_observation.cpp",
+      "bytes": 11418,
+      "sha256": "2036721e02ec84425dc6858660c39e980154e34f4b68f5133576905e7bdf48a4"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/imu_processor.cpp",
+      "bytes": 9179,
+      "sha256": "1e6b2dd5269241f5f87d665bc8151264b015fbae8bfa29045a92cbd9513ad6eb"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/livox_imu_deskewer.cpp",
+      "bytes": 15674,
+      "sha256": "965b1a7317b910edb9b8d8ae97a3ad58e15b3a155e6c5670d475ed9859c5149b"
+    },
+    {
+      "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/ros_output.cpp",
+      "bytes": 9323,
+      "sha256": "6e993a65f3f26e3e5b632c0b851ad8dd2d3394a58f646669a38d5b142da8d77c"
+    }
+  ]
+}
