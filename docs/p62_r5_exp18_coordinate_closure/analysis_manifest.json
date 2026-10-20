@@ -1,0 +1,265 @@
+{
+  "task": "P62-R5-EXP18-COORDINATE-CLOSURE-OR-PIVOT",
+  "scope": "Source snapshots and R4 frozen metadata only",
+  "git": {
+    "start_sha": "49a6733fb63b60fff06f001c4efc1e9c5441cbea",
+    "branch": "research/p62-r5-exp18-coordinate-closure-or-pivot",
+    "numerical_script_first_archive_sha": "dbd9ca37b9b5082d794167e21184157b9693f31a",
+    "numerical_script_first_run_was_uncommitted": true,
+    "read_guard_code_sha": "e730c4f3254920ecbc2c9844a434eb22f6fda2d3",
+    "archive_parent_sha": "e730c4f3254920ecbc2c9844a434eb22f6fda2d3",
+    "R4_remote_head_queried": "49a6733fb63b60fff06f001c4efc1e9c5441cbea",
+    "R5_remote_ref_queried": "NOT_FOUND",
+    "push_executed": false,
+    "end_sha": "Actual containing final commit reported in execution handoff; no self-reference fabricated"
+  },
+  "execution": {
+    "start_utc": "2026-10-20T07:56:35+00:00",
+    "finish_utc": "2026-10-20T08:09:09.547625+00:00",
+    "wall_seconds_to_archive": 754.547625,
+    "limit_seconds": 5400,
+    "python": "3.8.10 (default, Mar 18 2025, 20:04:55) \n[GCC 9.4.0]",
+    "numpy": "1.24.4",
+    "scipy": "1.10.1",
+    "pyyaml": "6.0.3",
+    "requests": "2.32.4"
+  },
+  "input_assets": [
+    {
+      "path": "/home/jian/livox_ws/p62_r3_exp18_recovery_data/assets/verified/rosbags/exp18_corridor_lower_gallery_2.bag",
+      "bytes": 8657654860,
+      "device": 66306,
+      "inode": 18758793,
+      "mtime_ns": 1792406676944586651,
+      "ctime_ns": 1792406687052706513,
+      "R4_verified_sha256": "98373b52f207b9ace3914792b5604a6642f89441190cabca6acbaf1d17249280",
+      "current_sha256": null,
+      "method": "STAT_ONLY_NO_NEW_CONTENT_HASH"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r3_exp18_recovery_data/assets/verified/laser_scans/sheldonian_full.e57",
+      "bytes": 5447128064,
+      "device": 66306,
+      "inode": 18758797,
+      "mtime_ns": 1792409915963075567,
+      "ctime_ns": 1792409919047112370,
+      "R4_verified_sha256": "46575d3eaf3169a24e24ba0013cc48610125ac842d6745e5e8156c6aecc59756",
+      "current_sha256": null,
+      "method": "STAT_ONLY_NO_NEW_CONTENT_HASH"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/ground_truth/exp18_corridor_lower_gallery_2_imu.txt",
+      "bytes": 88743,
+      "device": 66306,
+      "inode": 18758738,
+      "mtime_ns": 1792399245856186762,
+      "ctime_ns": 1792399245856186762,
+      "R4_verified_sha256": "138def6a40884a87372a4f18938cce5180d6aa7ad4e705349abf47ac4ec9fa32",
+      "current_sha256": "138def6a40884a87372a4f18938cce5180d6aa7ad4e705349abf47ac4ec9fa32",
+      "method": "SHA256_RECHECK"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/ground_truth/exp18_corridor_lower_gallery_2_imu_3dof.txt",
+      "bytes": 185,
+      "device": 66306,
+      "inode": 18758739,
+      "mtime_ns": 1792399245856186762,
+      "ctime_ns": 1792399245860186809,
+      "R4_verified_sha256": "13f963c4a2e9d583532051b581a19cf73ade0aadc83f530ea3e66c6d52036dec",
+      "current_sha256": "13f963c4a2e9d583532051b581a19cf73ade0aadc83f530ea3e66c6d52036dec",
+      "method": "SHA256_RECHECK"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r2_hilti_exp18_g0_data/assets/calibration/calibration_files/lidar_calibration.yaml",
+      "bytes": 747,
+      "device": 66306,
+      "inode": 18758742,
+      "mtime_ns": 1792399245860186809,
+      "ctime_ns": 1792399245860186809,
+      "R4_verified_sha256": "ea5127989317270d83d9a701318d7e284031a21bd9cbf466b8f9f169547db43c",
+      "current_sha256": "ea5127989317270d83d9a701318d7e284031a21bd9cbf466b8f9f169547db43c",
+      "method": "SHA256_RECHECK"
+    }
+  ],
+  "numerical_script_current_sha256": "17087536336ff665646fa15e3255f0d17dfeadd506d1f920fc49afdafa2d6d4d",
+  "numerical_script_initial_archived_version": "dbd9ca37b9b5082d794167e21184157b9693f31a",
+  "finalizer_sha256": "ab0fcf2a671bfd228cf07f72cf9269e761f3a113dbbe4407328bde97c3e7b900",
+  "finalizer_uncommitted_when_run": true,
+  "sources_manifests": [
+    "issue_identity.json",
+    "source_manifest.json",
+    "consumer_source_manifest.json"
+  ],
+  "outputs": [
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/.gitignore",
+      "bytes": 13,
+      "sha256": "32dae3052f331ee34d628ef535709b301259a45df7c7522c4d35dcf49873f00b"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/COORDINATE_CLOSURE.md",
+      "bytes": 6057,
+      "sha256": "9e633678aad70ec53c6661e9420ab1d8322dafe4d370c924e7fdb80772c8839c"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/IMU_BOUNDARY_AND_INITIALIZATION.md",
+      "bytes": 2723,
+      "sha256": "86a477fc63c1784f6d46b0b47348c924dde877712efbf6db632af459a2d0bece"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/PIVOT_DECISION.md",
+      "bytes": 1837,
+      "sha256": "6b714044ccd91ea196b39869d3f922fe8914ea55c586de2a32195d5007924c4a"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/PROTOCOL.md",
+      "bytes": 1780,
+      "sha256": "7cc024093fff8c74037dd3f8ea1fefe2c6ca07fa731c1852377ca9ab5b6c7d25"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/REPORT.md",
+      "bytes": 5613,
+      "sha256": "32059565fa99085bfcee5901fd1ab92b564e363a1a05c0bc3b6f30086e915489"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/TESTS_AND_REVIEW.md",
+      "bytes": 2509,
+      "sha256": "7950d61dfc222009af5115605b5b649842a15eb367e500b6b789296b972f4b30"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/asset_identity_after.json",
+      "bytes": 7202,
+      "sha256": "aad377737f92d02d701aaca8983e8e1bc70354d1b4eb90e5da556c015908e68f"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/asset_identity_before.json",
+      "bytes": 7202,
+      "sha256": "aad377737f92d02d701aaca8983e8e1bc70354d1b4eb90e5da556c015908e68f"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/audit_contracts.py",
+      "bytes": 7052,
+      "sha256": "17087536336ff665646fa15e3255f0d17dfeadd506d1f920fc49afdafa2d6d4d"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/capture_fixed_sources.py",
+      "bytes": 3194,
+      "sha256": "43806466af87c8696ca85bd944ec5ef49fabe83ac6ac9a2c24cd50afe69655a3"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/capture_issue.py",
+      "bytes": 1374,
+      "sha256": "996ea03d96c27427bb71cc49cae661c5aab4b5ca4c9f18d619c9529d1e8b2876"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/consumer_source_manifest.json",
+      "bytes": 1371,
+      "sha256": "e82e7309fb6cb513e9a1ad5b00bb33eec64a25db4d1eeebb8a3fe86d5459415d"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/coordinate_transform_chain.csv",
+      "bytes": 1167,
+      "sha256": "29868da04af5bf01999485461e6d829c4d0c25132085a73bfe3c1c33191a796d"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/finalize_archive.py",
+      "bytes": 6220,
+      "sha256": "ab0fcf2a671bfd228cf07f72cf9269e761f3a113dbbe4407328bde97c3e7b900"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/issue_identity.json",
+      "bytes": 405,
+      "sha256": "35ab0da3d247ebc843191502d17fa503dedf33112e56f3a63e40e1840058a1a5"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/numerical_contract_checks.json",
+      "bytes": 3332,
+      "sha256": "9b107277f47e4bbdab1702d962dc68cc20cc6846f77cf49a1d3f4aa93b462e10"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/reproduction_commands.md",
+      "bytes": 1399,
+      "sha256": "b261f024b702be8eed9a2bf5b17e30aabde539287367f4ee450b734e49ef0e96"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/results.json",
+      "bytes": 3816,
+      "sha256": "9e5e26a3d7e5ada3ae7a75c54d1fc0b95fd630d76cb0c75526b1fb9420cd0c15"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/source_manifest.json",
+      "bytes": 3486,
+      "sha256": "00efa11958512c77547209ac78446959892c4362cb9b5bba0c0392c3de7e31f7"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/sources/alphasense.xacro",
+      "bytes": 6108,
+      "sha256": "8a365ccb8071c3f1470ec601171322c51e176014b5b3fa53efd4ada0d0e90276"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/sources/hesai_issue4_fix.xacro",
+      "bytes": 2554,
+      "sha256": "992d2a62846a58c2df1f04a6a8009153d808201bc4f3cc10595784cef8f3ad2f"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/sources/hesai_parametric.xacro",
+      "bytes": 2590,
+      "sha256": "3447aa5a9f119be780ba8f06bd39211cbf7824e1261352e248cfa149ed759ab1"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/sources/mola_Rosbag1Dataset.cpp",
+      "bytes": 60393,
+      "sha256": "fe67d0c9f71854c45ef8dbc8854bdd434b9833d23c838a78d3ec9cd0ce98f450"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/sources/mola_Rosbag1Dataset.h",
+      "bytes": 12175,
+      "sha256": "e471bd9190e7ba09ac41290df447e8f4c677c5a38c4859c78dc4faf1c430d8b5"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/sources/mola_actual_rosbag1_launch.yaml",
+      "bytes": 6457,
+      "sha256": "ceee86ab3d70dc2d4c64372c315398ff6971e227b64a8183ffa807f82e81bcfc"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/sources/mola_hilti2022.sh",
+      "bytes": 5563,
+      "sha256": "85304df36bd74aabeb805c038673e52d307ef40e96c8262e95a3e8bfa4055439"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/sources/official_issue20.html",
+      "bytes": 289942,
+      "sha256": "ecc67b87c91bd8cb919ed00cdca922407b454b7e795930e61f79b586d2826c6b"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/sources/official_issue21.html",
+      "bytes": 274206,
+      "sha256": "1677067ce43013a7256f67685655a6f20c67b007a1c038347791a33025bc1d87"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/sources/official_issue23.html",
+      "bytes": 244022,
+      "sha256": "ccd288bcb8512a1aa9a9ec399d5b39b263361cc573ffa439ddfa175464383276"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/sources/official_issue4.html",
+      "bytes": 383670,
+      "sha256": "ee9d41af331daa084b9ab5af2c951d56c11163ccd6a5a6d3c58d197e77fa6ed8"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/tests/test_contracts.py",
+      "bytes": 3219,
+      "sha256": "f8de9285acebc38bd947f15edaccd1fade553623e94ba66af3ac81f3cd6c04d1"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/tests_after_guard.log",
+      "bytes": 1519,
+      "sha256": "63956bcccdcdabb328b4bd5652fc1ec2dfa12004b4f1460cdd970fa808b010ad"
+    },
+    {
+      "path": "docs/p62_r5_exp18_coordinate_closure/tests_final.log",
+      "bytes": 859,
+      "sha256": "584993194382d364f385e35449aa95990f15df4b91816918dd678fd79b8d5c46"
+    }
+  ]
+}

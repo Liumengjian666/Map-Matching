@@ -1,0 +1,96 @@
+{
+  "task": "P62-R5-EXP18-COORDINATE-CLOSURE-OR-PIVOT",
+  "result": "G0_BLOCKED_COORDINATE_CONTRACT",
+  "decision": "PIVOT_RECOMMENDED_NOT_EXECUTED",
+  "decisive_blocker": "T_M_W from fixed published E57 root to reference world is not established",
+  "conditional_development_admitted": false,
+  "T_I_L_status": "DIRECTION_XYZW_AND_RAW_AXES_SUPPORTED_BY_OFFICIAL_GEOMETRY_AND_MOLA_CONSUMER",
+  "GT_IMU_base_status": "FAQ_AND_MOLA_SUPPORT_IMU_BUT_EXPORT_CONFLICT_NOT_RESOLVED",
+  "T_M_W_status": "NOT_ESTABLISHED_NO_IDENTITY_ASSUMED",
+  "initialization_status": "INITIALIZATION_NOT_ESTABLISHED_BOUNDED_NON_GT_RECIPE_ONLY",
+  "time_status": "CONDITIONAL_ENCODING_SUPPORTED_FIRST_SCAN_POLICY_PROPOSED_NOT_EXECUTED",
+  "reference_status": "CONDITIONAL_REGISTERED_REFERENCE_NOT_INDEPENDENT_DENSE_TRUTH",
+  "boundary_policy": {
+    "raw_scans_preserved": 1094,
+    "prospective_complete_fusion_scans": 1093,
+    "first_eligible_scan": 2,
+    "last_eligible_scan": 1094,
+    "excluded_from_fusion_only": [
+      1
+    ],
+    "current_time_unit_certification": "STILL_CONDITIONAL",
+    "rule": "Proposed for next approval only: no point cropping, no extrapolation; retain scan 1 as unavailable",
+    "missing_start_ns": 47303251
+  },
+  "transform_comparisons": {
+    "T_I_L_YAML_xyzw__T_I_L_MOLA_profile": {
+      "translation_difference_m": 0.0,
+      "rotation_difference_deg": 1.4528904249413225e-14
+    },
+    "T_I_L_YAML_xyzw__T_I_L_URDF": {
+      "translation_difference_m": 0.00025300000000000924,
+      "rotation_difference_deg": 1.4528904249413225e-14
+    },
+    "T_I_P_YAML_xyzw__T_I_P_URDF": {
+      "translation_difference_m": 0.00025300000000001016,
+      "rotation_difference_deg": 180.0
+    }
+  },
+  "tests": {
+    "final_passed": 10,
+    "historical_R4_checksums_passed": 47,
+    "guard_fixture_failure_preserved": "tests_after_guard.log",
+    "final_test_log": "tests_final.log"
+  },
+  "asset_recheck": {
+    "small_external_inputs_sha256": 3,
+    "large_files_stat_only": 2,
+    "large_current_sha256_computed": false,
+    "R4_archive_unchanged": true
+  },
+  "git": {
+    "start_sha": "49a6733fb63b60fff06f001c4efc1e9c5441cbea",
+    "branch": "research/p62-r5-exp18-coordinate-closure-or-pivot",
+    "numerical_script_first_archive_sha": "dbd9ca37b9b5082d794167e21184157b9693f31a",
+    "numerical_script_first_run_was_uncommitted": true,
+    "read_guard_code_sha": "e730c4f3254920ecbc2c9844a434eb22f6fda2d3",
+    "archive_parent_sha": "e730c4f3254920ecbc2c9844a434eb22f6fda2d3",
+    "R4_remote_head_queried": "49a6733fb63b60fff06f001c4efc1e9c5441cbea",
+    "R5_remote_ref_queried": "NOT_FOUND",
+    "push_executed": false,
+    "end_sha": "Actual containing final commit reported in execution handoff; no self-reference fabricated"
+  },
+  "execution": {
+    "start_utc": "2026-10-20T07:56:35+00:00",
+    "finish_utc": "2026-10-20T08:09:09.547625+00:00",
+    "wall_seconds_to_archive": 754.547625,
+    "limit_seconds": 5400,
+    "python": "3.8.10 (default, Mar 18 2025, 20:04:55) \n[GCC 9.4.0]",
+    "numpy": "1.24.4",
+    "scipy": "1.10.1",
+    "pyyaml": "6.0.3",
+    "requests": "2.32.4"
+  },
+  "boundary": {
+    "large_bag_e57_content_reads": 0,
+    "large_downloads": 0,
+    "full_parses": 0,
+    "GT_files_hash_reads": 2,
+    "GT_numeric_semantic_reads": 0,
+    "ROS_localization_nodes": 0,
+    "rosbag_play": 0,
+    "NDT_align": 0,
+    "EKF": 0,
+    "localization_trajectories": 0,
+    "ATE_RPE": 0,
+    "clock_search": 0,
+    "gyro_bias_fit": 0,
+    "production_changes": 0,
+    "GT_fitted_transform": 0,
+    "HIKVISION_access": 0,
+    "external_model_CLI": 0,
+    "R9_R10_R11_R12_reruns": 0
+  },
+  "next": "Controller acceptance and decision on R1 backup NCLT cross-session platform contract; do not auto-run or relax reference independence",
+  "novelty": "R1 candidate unchanged; NOT_ESTABLISHED"
+}
