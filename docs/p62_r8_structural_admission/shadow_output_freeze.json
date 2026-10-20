@@ -1,0 +1,80 @@
+{
+  "files": [
+    {
+      "path": "/home/jian/livox_ws/p62_r8_structural_admission_runs/formal/CANDIDATE_POOL.csv",
+      "bytes": 150468,
+      "sha256": "30f3d7b9e2d386ef30cf121b8f57760850c160c2a05df415191cc6a50e677065"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r8_structural_admission_runs/formal/DIAGNOSTIC_PROBE_RESULTS.csv",
+      "bytes": 1179,
+      "sha256": "dcfee8f010829e3c0e79888c8e876561a68d90db941b43fdc35722cdff5768c2"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r8_structural_admission_runs/formal/FAILED_NATIVE_OUTPUT.csv",
+      "bytes": 371,
+      "sha256": "8801d7816284d7963f30a4be474c450aade23b1694affe9621abd0644ccb78ba"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r8_structural_admission_runs/formal/G_STATISTICS.csv",
+      "bytes": 7634,
+      "sha256": "f2c5f40f9a7398e50f96cd41d925e76e33e7073ed2b73828945088bacf6783ec"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r8_structural_admission_runs/formal/HELDOUT_BLOCK_LOSSES.csv",
+      "bytes": 73362,
+      "sha256": "21577a10b81efab7ef99dcbd8eae32483616d074da549f2c0fb10380f06cc40b"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r8_structural_admission_runs/formal/NATIVE_ALIGN_CALLS.csv",
+      "bytes": 16754,
+      "sha256": "61504d967a67f2d56490070b56a1506fa37cd516747ede97c894d87e9d68b91c"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r8_structural_admission_runs/formal/NATURAL_SHADOW_RESULTS.csv",
+      "bytes": 16359,
+      "sha256": "41c749bbd9c077af23255fe3d62eca329db964f998d118aba485651c79513527"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r8_structural_admission_runs/formal/PAIRWISE_ADVANTAGES.csv",
+      "bytes": 47,
+      "sha256": "8182895ac39962ddc944ef88464a7d5254523b21f3ee6214918778e8c1f68d21"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r8_structural_admission_runs/formal/RUNTIME_AND_MEMORY.csv",
+      "bytes": 12730,
+      "sha256": "b2e6f6f5c571d62968acf1f523be147dffcb79a2d4f6e087683e130783689af3"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r8_structural_admission_runs/formal/SELECTOR_COMPARISON.csv",
+      "bytes": 13590,
+      "sha256": "c94f313e134939b3e0b3b9933f704840e7adce84de8d0b4688aa017ec6684e12"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r8_structural_admission_runs/formal/input_preflight.csv",
+      "bytes": 6350,
+      "sha256": "be34a2884d2dc67183cc5aaf27da4aade2aa50edb183b184c7ab78f77415438c"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r8_structural_admission_runs/formal/map_runtime.csv",
+      "bytes": 122,
+      "sha256": "b5a0431c4338c4493747d353dd5bfe6f5aef1281716855c50378ed95c0eb345e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r8_structural_admission_runs/shadow.log",
+      "bytes": 4641,
+      "sha256": "92bf88262e9f9375ed08012be9fb6b67de638ea14c6a911c05323415317ca49c"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r8_structural_admission_runs/shadow_freeze.json",
+      "bytes": 43708,
+      "sha256": "6dfc2b519a457c7287b8f03bcb06279f22532b42018b591dc3696ade27aa2981"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r8_structural_admission_runs/shadow_completion.json",
+      "bytes": 140,
+      "sha256": "370278ffbd9158c8df59ee9ef67928c4630ad8b9424d10e0ece51585fca9a618"
+    }
+  ],
+  "stage": "BEFORE_DERIVED_ANALYSIS"
+}

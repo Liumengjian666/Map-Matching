@@ -1,0 +1,293 @@
+{
+  "task": "P62-R8-STRUCTURAL-ADMISSION-AND-SHADOW",
+  "result": "REAL_SHADOW_NO_NATURAL_TRIGGER",
+  "holdout_discrimination": "HOLDOUT_DISCRIMINATION_NOT_EVALUABLE",
+  "START_SHA": "b6c3bebb686697161cd645426d5d54ffe2927728",
+  "PRECHECK_CODE_SHA": "15e2bf1d8de8dd6877cf45c141eaa6f773ebdb90",
+  "SHADOW_CODE_SHA": "463816a63038948cac29ae45925cfa4030a88da4",
+  "pre_registration_sha256": "a5086e9eb4813eb46289638495bb8c0d92b759159686178c17abf35c14f921c1",
+  "structural": {
+    "frames": 10905,
+    "structural_evaluable": 3338,
+    "training_below_300": 91,
+    "block_below_10": {
+      "0": 564,
+      "1": 3006,
+      "2": 921,
+      "3": 10,
+      "4": 0,
+      "5": 1189,
+      "6": 116,
+      "7": 4400
+    },
+    "raw_identity_frames": 10905,
+    "matching_source_history": 10900,
+    "causal_initial_legal": 10900,
+    "historical_parity_pass": 10900,
+    "historical_parity_fail": 0,
+    "original_R7_legal_windows": 10800,
+    "new_structural_rejected_windows": 10398,
+    "eligible_windows": 402,
+    "eligible_window_fraction": 0.03722222222222222,
+    "pure_structural_100_windows": 408,
+    "R6_first100": {
+      "frames": 100,
+      "structural_evaluable": 100,
+      "training_below_300": 0,
+      "block_below_10": {
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0
+      }
+    },
+    "R7_high_motion100": {
+      "frames": 100,
+      "structural_evaluable": 4,
+      "training_below_300": 0,
+      "block_below_10": {
+        "0": 25,
+        "1": 22,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 76
+      }
+    },
+    "motion_bins": {
+      "[0,0.1)": {
+        "frames": 638,
+        "structural_evaluable": 396,
+        "training_below_300": 1,
+        "block_below_10": {
+          "0": 34,
+          "1": 120,
+          "2": 19,
+          "3": 0,
+          "4": 0,
+          "5": 22,
+          "6": 3,
+          "7": 144
+        }
+      },
+      "[0.1,0.3)": {
+        "frames": 5693,
+        "structural_evaluable": 1684,
+        "training_below_300": 65,
+        "block_below_10": {
+          "0": 274,
+          "1": 1614,
+          "2": 508,
+          "3": 6,
+          "4": 0,
+          "5": 542,
+          "6": 43,
+          "7": 2374
+        }
+      },
+      "[0.3,0.6)": {
+        "frames": 4150,
+        "structural_evaluable": 1110,
+        "training_below_300": 25,
+        "block_below_10": {
+          "0": 220,
+          "1": 1182,
+          "2": 386,
+          "3": 3,
+          "4": 0,
+          "5": 525,
+          "6": 57,
+          "7": 1773
+        }
+      },
+      "[0.6,inf)": {
+        "frames": 423,
+        "structural_evaluable": 147,
+        "training_below_300": 0,
+        "block_below_10": {
+          "0": 36,
+          "1": 90,
+          "2": 8,
+          "3": 1,
+          "4": 0,
+          "5": 100,
+          "6": 13,
+          "7": 109
+        }
+      },
+      "NOT_AVAILABLE": {
+        "frames": 1,
+        "structural_evaluable": 1,
+        "training_below_300": 0,
+        "block_below_10": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 0
+        }
+      }
+    },
+    "original_top100_rejected": 100,
+    "original_top1000_rejected": 1000,
+    "selected_window": {
+      "raw_start_index": "4982",
+      "raw_end_index": "5081",
+      "start_ns": "1786179977510337353",
+      "end_ns": "1786179987510793986",
+      "weighted_p90_rad_s": "0.5323903214110374",
+      "weighted_median_rad_s": "0.2572961715123735",
+      "weights_ns": "10000456633",
+      "imu_samples": "2002",
+      "imu_first_ns": "1786179977509165764",
+      "imu_last_ns": "1786179987513189077",
+      "max_gap_ns": "8561373",
+      "original_R7_motion_rank": 1039,
+      "structural_bad_frames": 0
+    }
+  },
+  "smoke20": "PASS_SAME_NATIVE_PROCESS",
+  "natural_frames": 100,
+  "natural_events": 0,
+  "natural_extra_aligns": 0,
+  "diagnostic_frames": 4,
+  "diagnostic_extra_aligns": 8,
+  "native_aligns": 208,
+  "control_full_aligns": 100,
+  "control_split_aligns": 100,
+  "total_extra_aligns": 8,
+  "natural_G_computed": 0,
+  "diagnostic_weak_counts": [
+    2,
+    2,
+    3,
+    2
+  ],
+  "distinct_alternatives": 0,
+  "recovery_converged": 8,
+  "all_actual_aligns_converged": 208,
+  "recovery_duplicate_of_nominal": 8,
+  "max_recovery_vs_nominal_m": 0.08283019585736584,
+  "max_recovery_vs_nominal_deg": 0.5547650915876962,
+  "max_seed_translation_m": 0.30000000000000365,
+  "max_seed_rotation_deg": 2.5764846838965876,
+  "selector_counts": {
+    "NATIVE_SCORE": {
+      "KEEP_NOMINAL": 104
+    },
+    "HELDOUT_MEAN": {
+      "KEEP_NOMINAL": 104
+    },
+    "ROBUST_PAIRED": {
+      "ABSTAIN": 104
+    }
+  },
+  "timing_ms": {
+    "preprocess_ms": {
+      "count": 100,
+      "mean": 2.28287845,
+      "median": 2.202105,
+      "p95": 2.3608687499999994,
+      "max": 6.7842,
+      "sum": 228.28784500000003
+    },
+    "full_align_ms": {
+      "count": 100,
+      "mean": 8.38894682,
+      "median": 6.5376245,
+      "p95": 11.802399699999999,
+      "max": 69.077009,
+      "sum": 838.894682
+    },
+    "nominal_align_ms": {
+      "count": 100,
+      "mean": 3.9435592700000006,
+      "median": 3.276303,
+      "p95": 5.14066695,
+      "max": 12.733445,
+      "sum": 394.35592700000007
+    },
+    "validation_ms": {
+      "count": 100,
+      "mean": 1.3891948599999997,
+      "median": 1.3481869999999998,
+      "p95": 1.4718509999999998,
+      "max": 2.647834,
+      "sum": 138.91948599999998
+    },
+    "selectors_and_pair_record_ms": {
+      "count": 100,
+      "mean": 0.10020660999999999,
+      "median": 0.0944955,
+      "p95": 0.11244169999999998,
+      "max": 0.300458,
+      "sum": 10.020660999999999
+    },
+    "frame_compute_ms": {
+      "count": 100,
+      "mean": 15.85312218,
+      "median": 13.615193999999999,
+      "p95": 20.331881399999997,
+      "max": 77.542434,
+      "sum": 1585.312218
+    },
+    "full_plus_split_with_preprocess_ms": {
+      "count": 100,
+      "mean": 18.136000629999998,
+      "median": 15.827565499999999,
+      "p95": 23.368878849999998,
+      "max": 80.081943,
+      "sum": 1813.6000629999999
+    },
+    "diagnostic_frame_ms": {
+      "count": 4,
+      "mean": 22.116571,
+      "median": 22.2421285,
+      "p95": 23.117634849999998,
+      "max": 23.233984,
+      "sum": 88.466284
+    },
+    "recovery_align_ms": {
+      "count": 8,
+      "mean": 9.065277875,
+      "median": 9.167334,
+      "p95": 9.607136950000001,
+      "max": 9.642117,
+      "sum": 72.522223
+    }
+  },
+  "quantile_method": "numpy.percentile linear interpolation",
+  "peak_native_ru_maxrss_KiB": 108884,
+  "map_runtime": {
+    "original_points": "459154",
+    "target_points": "459154",
+    "target_fnv": "ea1e4e69cf9992c6",
+    "actual_grid_m": "0.8",
+    "map_build_ms": "141.39752899999999"
+  },
+  "native_wall_seconds": 2.121103248995496,
+  "post_run_asset_gate": "ALL_INPUTS_SOURCE_BINARY_PCL_R6_OUTPUTS_PRODUCTION_UNCHANGED",
+  "prohibited_operations": {
+    "GT_reads": 0,
+    "EKF_runs": 0,
+    "ROS_localization_nodes": 0,
+    "rosbag_play": 0,
+    "production_changes": 0,
+    "feedback": 0,
+    "second_windows": 0,
+    "external_CLI": 0
+  },
+  "novelty": "NOT_ESTABLISHED",
+  "absolute_accuracy": "NOT_EVALUATED",
+  "PUSH_EXECUTED": false,
+  "NEXT": "Submit a mathematical redesign contract for sparse-field structural holdout; keep fixed16 only as a limited baseline. No new run without approval."
+}
