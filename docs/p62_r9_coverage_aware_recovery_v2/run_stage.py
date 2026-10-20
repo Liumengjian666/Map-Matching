@@ -69,7 +69,12 @@ def main():
     sources += [identity(DOC.parent/'p62_r7_motion_selected_shadow/tools/recovery.hpp'),identity(r8/'tools/preprocess.hpp')]
     pcl=[identity(Path('/usr/include/pcl-1.10')/n) for n in ['pcl/registration/ndt.h','pcl/registration/impl/ndt.hpp','pcl/filters/impl/voxel_grid_covariance.hpp']]
     if stage=='formal':
-        receipt=json.loads((RUN/'preflight_completion.json').read_text());assert receipt['returncode']==0 and receipt['after_gate']=='ALL_UNCHANGED'
+        receipt=json.loads((RUN/'preflight_completion.json').read_text());assert receipt['returncode']==0 and receipt['after_gate']=='ALL_UNCHANGED' and not receipt.get('error')
+        registration=json.loads((DOC/'WINDOW_PRE_REGISTRATION.json').read_text())
+        verify([registration[k] for k in ['coverage','rules','source_manifest']])
+        assert registration['original_R7_registration']==manifest['window_pre_registration']
+        previous=json.loads((RUN/'preflight_freeze.json').read_text())
+        verify([r for r in previous['sources'] if r['path'].endswith(('coverage.hpp','io.hpp','native_kernel.hpp','contract.hpp','preprocess.hpp'))])
         inputs += [identity(DOC/'WINDOW_PRE_REGISTRATION.json'),identity(RUN/'preflight/COVERAGE_COMPARISON.csv')]
     binary=identity(BUILD/('preflight' if stage=='preflight' else 'shadow'))
     test=subprocess.run([str(BUILD/'test_coverage')],env=env,capture_output=True,text=True,timeout=20)

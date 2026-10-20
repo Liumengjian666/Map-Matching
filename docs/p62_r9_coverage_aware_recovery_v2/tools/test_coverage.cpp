@@ -24,5 +24,16 @@ int main(){try{
     require(translation(p,Pose::Identity())<=(large?1.2:.30)+1e-12&&rotation(p,Pose::Identity())<=(large?8:3)+1e-9,"two physical seed limits");}
   require((coverage::scaledSeed(Pose::Identity(),v,1,false)-seed(Pose::Identity(),v,1)).norm()==0,"SMALL exact V1 seed");
   Budget budget;for(int i=0;i<20;++i)require(budget.consume(),"token");require(!budget.consume(),"shared budget exhaustion");
+  Split sparse;sparse.training->resize(300);for(int b:{1,3,4,7})for(int i=0;i<10;++i)sparse.blocks[b]->push_back(pcl::PointXYZ(0,0,0));sparse.blocks[0]->resize(9);
+  coverage::Mask sparse_mask(sparse);require(sparse_mask.active==std::vector<int>({1,3,4,7}),"noncontiguous mask, under10 excluded");
+  Cloud::Ptr map(new Cloud);map->push_back(pcl::PointXYZ(0,0,0));pcl::KdTreeFLANN<pcl::PointXYZ> tree;tree.setInputCloud(map);
+  Candidate a;a.finite=a.converged=true;a.pose(0,3)=.25;coverage::validate(a,sparse,sparse_mask,tree,Pose::Identity());
+  require(a.eligible&&coverage::mean(a.loss,sparse_mask)==.25&&a.overlap==1&&std::isnan(a.loss[0]),"active NN and missing losses");
+  Split complete;complete.training->resize(300);for(auto& block:complete.blocks)for(int i=0;i<10;++i)block->push_back(pcl::PointXYZ(0,0,0));coverage::Mask all(complete);
+  Candidate old=a,modern=a;old.loss.fill(NAN);modern.loss.fill(NAN);shadow::validate(old,complete,tree,Pose::Identity());coverage::validate(modern,complete,all,tree,Pose::Identity());
+  require(old.loss==modern.loss&&old.overlap==modern.overlap&&old.eligible==modern.eligible,"strict B8 NN-validation parity");
+  unsigned random=19467;for(int trial=0;trial<1000;++trial){Loss x,y;for(int b=0;b<8;++b){random=1664525U*random+1013904223U;x[b]=double(random)/UINT32_MAX;random=1664525U*random+1013904223U;y[b]=double(random)/UINT32_MAX;}
+    require(coverage::paired(x,y,all)==shadow::paired(x,y)&&coverage::mean(x,all)==shadow::mean(x)&&coverage::median(x,all)==shadow::median(x),"1000 exact B8 math fixtures");}
+  old.loss[1]=NAN;require(!all.valid(old.loss),"nonfinite active loss rejection");
   std::cout<<"V2_MATH_TESTS_PASS B0..8 strict_B8 independent_vertices seeds abstention budget new_aligns=0\n";
 }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 1;}}

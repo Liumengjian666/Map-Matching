@@ -1,0 +1,47 @@
+{
+  "fixed_R7_window": true,
+  "raw_indices": [
+    10641,
+    10740
+  ],
+  "original_R7_registration": {
+    "path": "/home/jian/livox_ws/p62_r7_motion_shadow_ws/docs/p62_r7_motion_selected_shadow/WINDOW_PRE_REGISTRATION.json",
+    "bytes": 108229,
+    "sha256": "f864f6926a4fcaf11c4c17e56919657f532dbd2e3968fcd73a541f3a7c92eaaf"
+  },
+  "coverage": {
+    "path": "/home/jian/livox_ws/p62_r9_coverage_runs/preflight/COVERAGE_COMPARISON.csv",
+    "bytes": 15591,
+    "sha256": "2bb978ce60bca6a797d908bb379b808a2e18927b8a469b4c7ece845d59156fce"
+  },
+  "source_manifest": {
+    "path": "/home/jian/livox_ws/p62_r9_coverage_aware_recovery_ws/docs/p62_r7_motion_selected_shadow/REAL_INPUT_MANIFEST.json",
+    "bytes": 107359,
+    "sha256": "55799603bd2f8a2b88851a0caa71d527314fbfd290db5bad62fc85685793805e"
+  },
+  "rules": {
+    "path": "/home/jian/livox_ws/p62_r9_coverage_aware_recovery_ws/docs/p62_r9_coverage_aware_recovery_v2/MATHEMATICAL_V2.md",
+    "bytes": 5086,
+    "sha256": "40c057e8a909dc6210d892d22325973dedb62553bc15fbaa8d33c6b10e6a7285"
+  },
+  "diagnostic_order": [
+    "20 SMALL+",
+    "20 SMALL-",
+    "20 LARGE+",
+    "20 LARGE-",
+    "40 SMALL+",
+    "40 SMALL-",
+    "40 LARGE+",
+    "40 LARGE-",
+    "60 SMALL+",
+    "60 SMALL-",
+    "60 LARGE+",
+    "60 LARGE-",
+    "80 SMALL+",
+    "80 SMALL-",
+    "80 LARGE+",
+    "80 LARGE-"
+  ],
+  "extra_budget": 20,
+  "coverage_target": 0.6
+}
