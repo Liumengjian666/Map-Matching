@@ -1,0 +1,30 @@
+{
+  "files": [
+    {
+      "path": "/home/jian/livox_ws/p62_r7_motion_shadow_runs/formal/input_preflight.csv",
+      "bytes": 6250,
+      "sha256": "c469dac8ab99551733997a44b2b958950e01508fa5e4671e63515b1593ce717d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r7_motion_shadow_runs/run_freeze.json",
+      "bytes": 41670,
+      "sha256": "90974d67bdfd0e2bd040242a9d3c0de9ff6296a437f3c2153d4c479e754d6a42"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r7_motion_shadow_runs/run_completion.json",
+      "bytes": 142,
+      "sha256": "45d8bd624ab973c5b62ee65f8e3facd64d8d2c66067bb78ed8bbab28f9af5f92"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r7_motion_shadow_runs/formal.log",
+      "bytes": 69,
+      "sha256": "427b59e85a600f7e1f7ccd473411c38768fc886d5d253cbc275307c49f97c8b4"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r7_motion_shadow_runs/RUN_STARTED.json",
+      "bytes": 56,
+      "sha256": "08972767e719888c795a6d3a671565825b789ba349e4fb20e5398e7d73940ec8"
+    }
+  ],
+  "native_output_only": "input_preflight.csv; all result schemas are derived blocked-state records"
+}

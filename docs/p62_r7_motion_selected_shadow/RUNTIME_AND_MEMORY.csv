@@ -1,0 +1,2 @@
+phase,native_process_wall_s,Source_preprocessed,NDT_align_calls,extra_align_calls,NDT_mean_ms,NDT_p95_ms,NDT_max_ms,G_ms,Peak_RSS_MiB,missing_reason
+INPUT_PREFLIGHT_ONLY,0.26930427699699067,100,0,0,NA,NA,NA,NA,NA,Stopped before per-frame RSS and NDT instrumentation

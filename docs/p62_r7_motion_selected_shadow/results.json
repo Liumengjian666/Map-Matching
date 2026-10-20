@@ -1,0 +1,125 @@
+{
+  "task": "P62-R7-MOTION-SELECTED-SHADOW-MECHANISM-TEST",
+  "engineering_result": "SELECTED_WINDOW_INPUT_CONTRACT_BLOCKED",
+  "scientific_classification": "NOT_EVALUABLE_A_B_C_D_PREREQUISITES_NOT_MET",
+  "formal_smoke": "NOT_RUN",
+  "source_parity_pass": 100,
+  "source_evaluable": 4,
+  "source_not_evaluable": 96,
+  "evaluable_local_indices": [
+    28,
+    29,
+    30,
+    85
+  ],
+  "training_point_range": [
+    417,
+    759
+  ],
+  "Source_point_range": [
+    814,
+    1400
+  ],
+  "blocks": {
+    "0": {
+      "min": 1,
+      "max": 30,
+      "frames_below_10": 25
+    },
+    "1": {
+      "min": 5,
+      "max": 145,
+      "frames_below_10": 22
+    },
+    "2": {
+      "min": 15,
+      "max": 123,
+      "frames_below_10": 0
+    },
+    "3": {
+      "min": 16,
+      "max": 294,
+      "frames_below_10": 0
+    },
+    "4": {
+      "min": 21,
+      "max": 451,
+      "frames_below_10": 0
+    },
+    "5": {
+      "min": 23,
+      "max": 383,
+      "frames_below_10": 0
+    },
+    "6": {
+      "min": 20,
+      "max": 252,
+      "frames_below_10": 0
+    },
+    "7": {
+      "min": 1,
+      "max": 15,
+      "frames_below_10": 76
+    }
+  },
+  "selected_window": {
+    "raw_start_index": 10641,
+    "raw_end_index": 10740,
+    "start_ns": 1786180543409424067,
+    "end_ns": 1786180553409787914,
+    "weighted_p90_rad_s": 0.8071989866894678,
+    "weighted_median_rad_s": 0.4153393072590976,
+    "weights_ns": 10000363847,
+    "imu_samples": 2003,
+    "imu_first_ns": 1786180543405114651,
+    "imu_last_ns": 1786180553415277243,
+    "max_gap_ns": 6510496
+  },
+  "pre_registration_SHA256": "f864f6926a4fcaf11c4c17e56919657f532dbd2e3968fcd73a541f3a7c92eaaf",
+  "counts": {
+    "new_native_aligns": 0,
+    "CONTROL_FULL_aligns": 0,
+    "CONTROL_SPLIT_aligns": 0,
+    "extra_aligns": 0,
+    "native_budget_used": 0,
+    "native_budget_limit": 20,
+    "diagnostic_aligns": 0,
+    "diagnostic_probes_executed": 0,
+    "natural_trigger_count": null,
+    "natural_trigger_rate": null,
+    "generated_seeds": null,
+    "physical_distinct_candidates": null,
+    "G_weak_directions": null,
+    "selector_discrimination": null
+  },
+  "count_semantics": "null means NOT_EVALUABLE, never observed zero natural events or collapse",
+  "native_process_wall_s": 0.26930427699699067,
+  "Peak_RSS_MiB": null,
+  "boundary": {
+    "GT_reads": 0,
+    "NDT_aligns": 0,
+    "EKF_runs": 0,
+    "ROS_localization_nodes": 0,
+    "rosbag_play": 0,
+    "feedback": 0,
+    "new_trajectory_estimates": 0,
+    "production_code_changes": 0,
+    "external_CLI": 0,
+    "runner_up_windows_executed": 0,
+    "threshold_changes": 0
+  },
+  "git": {
+    "START_SHA": "1be4ad3c0070a0cd41f592498f1ae85795d76c4a",
+    "CODE_SHA": "9f96da00c0fbd7dbcc5b8de45837e5c9590310fb",
+    "branch": "research/p62-r7-motion-selected-shadow",
+    "PUSH_EXECUTED": false
+  },
+  "binary": {
+    "path": "/home/jian/livox_ws/p62_r7_motion_shadow_runs/build/shadow",
+    "bytes": 301616,
+    "sha256": "bd94da1878e696f5511ed862b55bd40a12a59ce0d978fab8e8a8726eab49189f"
+  },
+  "after_gate": "ALL_INPUTS_SOURCE_BINARY_PCL_R6_OUTPUTS_PRODUCTION_UNCHANGED",
+  "independent_checks": "PASS selected weighted P90/median, all ranking order, Source parity, block admission, no-execution paths",
+  "NEXT": "Request a revised window-admission contract adding the unchanged block-count requirements BEFORE motion ranking; do not rerank or run another window now"
+}
