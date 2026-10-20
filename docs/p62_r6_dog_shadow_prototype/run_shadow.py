@@ -2,6 +2,8 @@
 """Mandatory frozen-identity gate and one offline Shadow execution; never ROS replay."""
 import hashlib
 import json
+import argparse
+import os
 import shutil
 import subprocess
 import time
@@ -12,6 +14,7 @@ REPO=DOC.parents[1]
 RUN=Path('/home/jian/livox_ws/p62_r6_dog_shadow_runs')
 BIN=RUN/'build/shadow'
 FORMAL=RUN/'formal'
+SYSTEM_USB=Path('/lib/x86_64-linux-gnu/libusb-1.0.so.0')
 R1_HASHES={
     'MATHEMATICAL_FORMULATION.md':'83a237344c32d21267a4d7473a499a16e0869fdab7573e09ddfdb400f831532f',
     'NOVELTY_ASSESSMENT.md':'75c14e24eea696c2b19978effaa9747471105d60429f59a37aa99dfebf88ae08',
@@ -54,9 +57,17 @@ def check_sources(stable):
 
 
 def main():
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--attempt-dir',type=Path,default=RUN)
+    args=parser.parse_args()
+    output=args.attempt_dir.resolve()
+    if output!=RUN:
+        if output.parent!=RUN:raise RuntimeError('Attempt must be a new direct child of frozen run root')
+        output.mkdir(exist_ok=False)
+    formal=output/'formal'
     # A run-start token is never removed, including on failed/preflight attempts.
-    with (RUN/'RUN_STARTED.json').open('x') as f:json.dump({'wall_start_unix':time.time()},f)
-    if FORMAL.exists():raise RuntimeError('Refuse formal output reuse')
+    with (output/'RUN_STARTED.json').open('x') as f:json.dump({'wall_start_unix':time.time()},f)
+    if formal.exists():raise RuntimeError('Refuse formal output reuse')
     if shutil.disk_usage(RUN).free<20*1024**3:raise RuntimeError('20GiB internal safety reserve unavailable')
     manifest=json.loads((DOC/'REAL_INPUT_MANIFEST.json').read_text())
     validate_manifest(manifest)
@@ -65,18 +76,27 @@ def main():
     code_sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip()
     if subprocess.check_output(['git','status','--porcelain=v1'],cwd=REPO,text=True).strip():
         raise RuntimeError('Commit actual source before native Shadow execution')
+    # Scope the corrected loader resolution to this research child, never the system/production environment.
+    child_env=os.environ.copy()
+    child_env['LD_PRELOAD']=str(SYSTEM_USB)
+    child_env['LD_BIND_NOW']='1'
+    probe=subprocess.run([str(BIN)],env=child_env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,timeout=15)
+    if probe.returncode!=1 or 'STOP usage: shadow' not in probe.stdout:
+        raise RuntimeError('Zero-align dynamic loader/argc guard probe failed: '+probe.stdout)
     receipt={'actual_CODE_SHA':code_sha,'binary':file_id(BIN),'input_manifest':file_id(DOC/'REAL_INPUT_MANIFEST.json'),
+             'child_only_loader':{'LD_PRELOAD':file_id(SYSTEM_USB),'LD_BIND_NOW':'1'},
+             'zero_align_loader_probe':{'returncode':probe.returncode,'stdout':probe.stdout},
              'frozen_inputs_gate':'ALL_SHA256_PASS_BEFORE_OPTIMIZATION','raw_scans':100,
              'PCL_source':[file_id(Path(p)) for p in ['/usr/include/pcl-1.10/pcl/registration/ndt.h',
                 '/usr/include/pcl-1.10/pcl/registration/impl/ndt.hpp',
                 '/usr/include/pcl-1.10/pcl/filters/impl/voxel_grid_covariance.hpp']],
-             'args':[str(BIN),manifest['scans_csv']['path'],manifest['map']['path'],str(FORMAL)]}
-    with (RUN/'run_freeze.json').open('x') as f:json.dump(receipt,f,indent=2);f.write('\n')
+             'args':[str(BIN),manifest['scans_csv']['path'],manifest['map']['path'],str(formal)]}
+    with (output/'run_freeze.json').open('x') as f:json.dump(receipt,f,indent=2);f.write('\n')
     start=time.monotonic()
     result={}
     try:
-        with (RUN/'formal.log').open('x') as log:
-            proc=subprocess.run(receipt['args'],stdout=log,stderr=subprocess.STDOUT,timeout=1800)
+        with (output/'formal.log').open('x') as log:
+            proc=subprocess.run(receipt['args'],env=child_env,stdout=log,stderr=subprocess.STDOUT,timeout=1800)
         result['returncode']=proc.returncode
     except Exception as error:
         result.update(returncode=None,execution_error=type(error).__name__+': '+str(error))
@@ -90,7 +110,7 @@ def main():
             result['stable_sources_after']='ALL_SHA256_AND_HEAD_AND_DIRTY_STATE_UNCHANGED'
         except Exception as error:
             result['after_gate_error']=type(error).__name__+': '+str(error)
-        with (RUN/'run_completion.json').open('x') as f:json.dump(result,f,indent=2);f.write('\n')
+        with (output/'run_completion.json').open('x') as f:json.dump(result,f,indent=2);f.write('\n')
     print(json.dumps(result),flush=True)
     if result.get('returncode')!=0 or 'after_gate_error' in result:
         raise SystemExit(1)
