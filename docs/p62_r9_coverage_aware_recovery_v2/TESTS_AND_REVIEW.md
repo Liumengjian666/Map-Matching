@@ -11,3 +11,11 @@
 9. Actual native preflight processed all100 fixed R7 inputs, count/FNV/training/8-block counts identical to R8's frozen full ledger. V1=4/100, V2=100/100, B6=27/B7=69/B8=4. This does not certify candidate correctness or selector discrimination.
 
 Full formal run, accounting, observed failures and post-run result review will be added without rewriting these facts. Any external CLI requires separate explicit authorization; none has been executed.
+
+## After the sole real run
+
+- Fixed100 and same-process SMOKE20_PASS/COMPLETE receipts are present. Formal returned0 with ALL_UNCHANGED. 208 START and208 RETURNED journal events account for FULL100/SPLIT100/diagnostic8; natural extras0. No retry or second window.
+- analyze.py checks native preflight/formal coverage tables are identical, masks/NA losses unchanged per candidate, all trigger bits from raw recorded active-block medians, physical seed limits, exact cached nominal matrices, three-selector common pools and singleton NA margins. Both real B7 pair records independently match exhaustive capped-simplex vertex enumeration. No native binary is called by analysis.
+- Local result reviewer independently recomputed all headline statistics, resource distributions, D(2,0), and polar-factor rotation at the1deg threshold. No material issue found. The reviewer read only records, did not execute native programs or write files.
+- Observed rejection cases are retained: eight planned seeds unavailable due NO_WEAK_DIRECTION; five formal nominals fail the5deg output gate without natural triggering; one threshold-sensitive diagnostic alternative fails both eligibility and robust margin. No failures were corrected or hidden.
+- User explicitly chose no external second opinion. External CLI executions remain0. Synthetic test success and coverage expansion are not accuracy or novelty claims.

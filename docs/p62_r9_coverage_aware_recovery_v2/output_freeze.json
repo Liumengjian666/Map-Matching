@@ -1,0 +1,95 @@
+{
+  "stage": "Completed run outputs, before archived report generation",
+  "files": [
+    {
+      "path": "/home/jian/livox_ws/p62_r9_coverage_runs/formal/CANDIDATE_SCALE_COMPARISON.csv",
+      "bytes": 155123,
+      "sha256": "2743255af0d6ea2167ad5914da21ccb7dc109f58d4a337b99c9afe14b87ce3b8"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r9_coverage_runs/formal/COVERAGE_COMPARISON.csv",
+      "bytes": 15591,
+      "sha256": "2bb978ce60bca6a797d908bb379b808a2e18927b8a469b4c7ece845d59156fce"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r9_coverage_runs/formal/DIAGNOSTIC_SCHEDULE.csv",
+      "bytes": 646,
+      "sha256": "1fcd01f2af8f28a8ae6b6f0cbd2a918357b1b9439738f2791314d75987747b8c"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r9_coverage_runs/formal/G_STATISTICS.csv",
+      "bytes": 7612,
+      "sha256": "8c1e8f2eef95d4d09ba7703545987b7014a33618e0f1bd4a5f24397f46c6ea81"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r9_coverage_runs/formal/HELDOUT_BLOCK_LOSSES.csv",
+      "bytes": 66143,
+      "sha256": "5f29b9bee0e8573549770dc2affef02a818d994f905e6b9905f6eff5e15d294d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r9_coverage_runs/formal/MAP_RUNTIME.csv",
+      "bytes": 103,
+      "sha256": "5865249c8e87b3c27e9e226122d55a4e3b529a6c6efd880548ebf57065594e05"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r9_coverage_runs/formal/NATIVE_ALIGN_CALLS.csv",
+      "bytes": 15475,
+      "sha256": "46a5e218f7178e0a5493e89d284395bcae0b7dc3d546cc32b868bdc84e75c89d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r9_coverage_runs/formal/NATURAL_SHADOW_RESULTS.csv",
+      "bytes": 9407,
+      "sha256": "0c05e71b981cd16d2298cc3809887467e8657b532c64477b554562d621ce1f43"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r9_coverage_runs/formal/PAIRWISE_EVIDENCE.csv",
+      "bytes": 145,
+      "sha256": "b39ad77543f64c3616e2253afc2dcbd9c9864a0b3e12192578d30bb5bc99a662"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r9_coverage_runs/formal/RUNTIME_AND_MEMORY.csv",
+      "bytes": 13047,
+      "sha256": "0e4b6d8b0e046442e8120d9c0f0c60e7abd751ccee2f6e51543c280a93886859"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r9_coverage_runs/formal/SELECTOR_COMPARISON.csv",
+      "bytes": 13732,
+      "sha256": "d063770ee6d3bffe535d7b74d93fa2ea24d5e04af51a9749b0b051a0416dc3af"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r9_coverage_runs/preflight.log",
+      "bytes": 63,
+      "sha256": "0d7b3410fefd2d485708d6da14ab54b94838d74211411543d56271c74a98693e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r9_coverage_runs/preflight_freeze.json",
+      "bytes": 37313,
+      "sha256": "f2e20bd685247af48a2b4b2231c0594b13d885cba59d97b0b447335d3e8c57e7"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r9_coverage_runs/preflight_completion.json",
+      "bytes": 101,
+      "sha256": "1ada96e6b64fe68480d7ba12072b10433f7a2eab8ab1fa6edc45fc58a4bfac70"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r9_coverage_runs/formal.log",
+      "bytes": 3930,
+      "sha256": "72f5f24d05c05817d5ff88c29b6943b201b08bb061464455ec990c2768ebef3e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r9_coverage_runs/formal_freeze.json",
+      "bytes": 38125,
+      "sha256": "16172afe9843352cc6a44663599d8ac1fca821587d30b358ff5ebdbc98c68da8"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r9_coverage_runs/formal_completion.json",
+      "bytes": 100,
+      "sha256": "ac9ceda9fdd4684144c038fbf3e1096edd3324e43d66e0bd18481e1bdcf58667"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r9_coverage_runs/preflight/BLOCK_SPATIAL_DISTRIBUTION.csv",
+      "bytes": 160664,
+      "sha256": "2de253967a94b3476b43fb35fa2c1d94c9eedeabd77a8139112302fbcffbca9f"
+    }
+  ]
+}
