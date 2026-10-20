@@ -1,0 +1,18 @@
+{
+  "test": "actual new stream preprocessor vs frozen R7 loadSource and frozen count/FNV",
+  "passed": true,
+  "fixture_count": 200,
+  "new_NDT_aligns": 0,
+  "stdout": "PREPROCESS_COMPATIBILITY_PASS frozen_real_fixtures=200 NDT_aligns=0",
+  "receipt_method": "Recorded from actual successful tool execution before full-sequence preflight, not a second execution",
+  "binary": {
+    "path": "/home/jian/livox_ws/p62_r8_structural_admission_build/test_compatibility",
+    "bytes": 310728,
+    "sha256": "d739e9c43967fbf812d37e3ed4e729dc5c9c1b6b924bb25c36f219d5027ea259"
+  },
+  "fixture_CSV_SHA256": [
+    "c9dbf4e508cd45069ae0ebb1e4580a434711da433ecd8eefa86052d7a8b8090f",
+    "75d95959285fefa2bd1c6536ac466afdc492834c74e90cf65e9b18911330f345"
+  ],
+  "comparison": "Source size/FNV and training/each validation-block FNV; original R6/R7 core must additionally match START_SHA"
+}

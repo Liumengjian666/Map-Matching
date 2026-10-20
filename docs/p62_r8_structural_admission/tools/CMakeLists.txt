@@ -1,0 +1,13 @@
+cmake_minimum_required(VERSION 3.10)
+project(p62_r8_preflight LANGUAGES C CXX)
+set(CMAKE_CXX_STANDARD 14)
+find_package(PCL 1.10 REQUIRED COMPONENTS common io filters registration kdtree)
+include_directories(${PCL_INCLUDE_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+add_executable(preflight preflight.cpp)
+target_link_libraries(preflight ${PCL_LIBRARIES} usb-1.0)
+add_executable(test_compatibility test_compatibility.cpp)
+target_link_libraries(test_compatibility ${PCL_LIBRARIES} usb-1.0)
+# Compile the frozen R7 driver unmodified; only input paths and output root will be new.
+add_executable(shadow ../../p62_r7_motion_selected_shadow/tools/shadow.cpp)
+target_link_libraries(shadow ${PCL_LIBRARIES} usb-1.0)
