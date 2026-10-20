@@ -1,0 +1,188 @@
+{
+  "transforms": {
+    "T_I_L_URDF": [
+      [
+        2.220446049250313e-16,
+        -1.0,
+        0.0,
+        -0.0007469999999999907
+      ],
+      [
+        -1.0,
+        -2.220446049250313e-16,
+        1.2246467991473532e-16,
+        -0.008550000000000007
+      ],
+      [
+        -1.2246467991473532e-16,
+        -2.719262146893782e-32,
+        -1.0,
+        0.05499999999999999
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_I_P_URDF": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.05925300000000001
+      ],
+      [
+        -0.0,
+        -1.0,
+        1.2246467991473532e-16,
+        -0.008550000000000025
+      ],
+      [
+        -0.0,
+        -1.2246467991473532e-16,
+        -1.0,
+        0.1964
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_I_L_YAML_xyzw": [
+      [
+        0.0,
+        -1.0000000000000002,
+        0.0,
+        -0.001
+      ],
+      [
+        -1.0000000000000002,
+        0.0,
+        -0.0,
+        -0.00855
+      ],
+      [
+        0.0,
+        0.0,
+        -1.0000000000000002,
+        0.055
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_I_P_YAML_xyzw": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.059
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        -0.00855
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.1964
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_I_base_URDF": [
+      [
+        1.0,
+        -0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        -1.0,
+        1.2246467991473532e-16,
+        0.0
+      ],
+      [
+        -0.0,
+        -1.2246467991473532e-16,
+        -1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "T_I_L_MOLA_profile": [
+      [
+        2.220446049250313e-16,
+        -1.0,
+        -1.2246467991473532e-16,
+        -0.001
+      ],
+      [
+        -1.0,
+        -2.220446049250313e-16,
+        -2.465190328815662e-32,
+        -0.00855
+      ],
+      [
+        0.0,
+        1.2246467991473532e-16,
+        -1.0,
+        0.055
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  "comparisons": {
+    "T_I_L_YAML_xyzw__T_I_L_MOLA_profile": {
+      "translation_difference_m": 0.0,
+      "rotation_difference_deg": 1.4528904249413225e-14
+    },
+    "T_I_L_YAML_xyzw__T_I_L_URDF": {
+      "translation_difference_m": 0.00025300000000000924,
+      "rotation_difference_deg": 1.4528904249413225e-14
+    },
+    "T_I_P_YAML_xyzw__T_I_P_URDF": {
+      "translation_difference_m": 0.00025300000000001016,
+      "rotation_difference_deg": 180.0
+    }
+  },
+  "boundary_policy": {
+    "raw_scans_preserved": 1094,
+    "prospective_complete_fusion_scans": 1093,
+    "first_eligible_scan": 2,
+    "last_eligible_scan": 1094,
+    "excluded_from_fusion_only": [
+      1
+    ],
+    "current_time_unit_certification": "STILL_CONDITIONAL",
+    "rule": "Proposed for next approval only: no point cropping, no extrapolation; retain scan 1 as unavailable",
+    "missing_start_ns": 47303251
+  },
+  "T_M_W": "NOT_ESTABLISHED_NO_MATRIX_ASSUMED",
+  "warning": "Algebra and consumer agreement do not certify physical accuracy or GT export semantics"
+}

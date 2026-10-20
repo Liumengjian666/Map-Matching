@@ -1,0 +1,65 @@
+[
+  {
+    "url": "https://raw.githubusercontent.com/Hilti-Research/hesai_description/64633725c701c2763c5787257f4e32b7bc3067d9/urdf/hesai.urdf.xacro",
+    "path": "/home/jian/livox_ws/p62_r5_exp18_coordinate_closure_ws/docs/p62_r5_exp18_coordinate_closure/sources/hesai_issue4_fix.xacro",
+    "http_status": 200,
+    "status": "CAPTURED",
+    "bytes": 2554,
+    "sha256": "992d2a62846a58c2df1f04a6a8009153d808201bc4f3cc10595784cef8f3ad2f"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Hilti-Research/hesai_description/ad175515d1d1ad4f5a0905b4fb57770d635928c5/urdf/hesai.urdf.xacro",
+    "path": "/home/jian/livox_ws/p62_r5_exp18_coordinate_closure_ws/docs/p62_r5_exp18_coordinate_closure/sources/hesai_parametric.xacro",
+    "http_status": 200,
+    "status": "CAPTURED",
+    "bytes": 2590,
+    "sha256": "3447aa5a9f119be780ba8f06bd39211cbf7824e1261352e248cfa149ed759ab1"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/Hilti-Research/alphasense_description/80c1b8675b3b9e03f9de9d1b5f420e5225f67a50/urdf/alphasense.urdf.xacro",
+    "path": "/home/jian/livox_ws/p62_r5_exp18_coordinate_closure_ws/docs/p62_r5_exp18_coordinate_closure/sources/alphasense.xacro",
+    "http_status": 200,
+    "status": "CAPTURED",
+    "bytes": 6108,
+    "sha256": "8a365ccb8071c3f1470ec601171322c51e176014b5b3fa53efd4ada0d0e90276"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/MOLAorg/mola_lidar_odometry/6e905f0dcec1221be94b747850fba09435db2605/scripts/lib/profiles/hilti2022.sh",
+    "path": "/home/jian/livox_ws/p62_r5_exp18_coordinate_closure_ws/docs/p62_r5_exp18_coordinate_closure/sources/mola_hilti2022.sh",
+    "http_status": 200,
+    "status": "CAPTURED",
+    "bytes": 5563,
+    "sha256": "85304df36bd74aabeb805c038673e52d307ef40e96c8262e95a3e8bfa4055439"
+  },
+  {
+    "url": "https://raw.githubusercontent.com/MOLAorg/mola_lidar_odometry/6e905f0dcec1221be94b747850fba09435db2605/ros2-launchs/lidar_odometry_from_rosbag1.yaml",
+    "path": "/home/jian/livox_ws/p62_r5_exp18_coordinate_closure_ws/docs/p62_r5_exp18_coordinate_closure/sources/mola_rosbag1.yaml",
+    "http_status": 404,
+    "status": "FAILED_NOT_EVIDENCE",
+    "error": "404 Client Error: Not Found for url: https://raw.githubusercontent.com/MOLAorg/mola_lidar_odometry/6e905f0dcec1221be94b747850fba09435db2605/ros2-launchs/lidar_odometry_from_rosbag1.yaml"
+  },
+  {
+    "url": "https://github.com/Hilti-Research/hilti-slam-challenge-2022/issues/20",
+    "path": "/home/jian/livox_ws/p62_r5_exp18_coordinate_closure_ws/docs/p62_r5_exp18_coordinate_closure/sources/official_issue20.html",
+    "http_status": 200,
+    "status": "CAPTURED",
+    "bytes": 289942,
+    "sha256": "ecc67b87c91bd8cb919ed00cdca922407b454b7e795930e61f79b586d2826c6b"
+  },
+  {
+    "url": "https://github.com/Hilti-Research/hilti-slam-challenge-2022/issues/21",
+    "path": "/home/jian/livox_ws/p62_r5_exp18_coordinate_closure_ws/docs/p62_r5_exp18_coordinate_closure/sources/official_issue21.html",
+    "http_status": 200,
+    "status": "CAPTURED",
+    "bytes": 274206,
+    "sha256": "1677067ce43013a7256f67685655a6f20c67b007a1c038347791a33025bc1d87"
+  },
+  {
+    "url": "https://github.com/Hilti-Research/hilti-slam-challenge-2022/issues/23",
+    "path": "/home/jian/livox_ws/p62_r5_exp18_coordinate_closure_ws/docs/p62_r5_exp18_coordinate_closure/sources/official_issue23.html",
+    "http_status": 200,
+    "status": "CAPTURED",
+    "bytes": 244022,
+    "sha256": "ccd288bcb8512a1aa9a9ec399d5b39b263361cc573ffa439ddfa175464383276"
+  }
+]
