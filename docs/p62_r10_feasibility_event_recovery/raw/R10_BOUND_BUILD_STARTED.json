@@ -1,0 +1,97 @@
+{
+  "source_commit": "591c7fe0081dfaea0e3db19a07d1a8df5cf65ae1",
+  "sources": [
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/tools/CMakeLists.txt",
+      "bytes": 460,
+      "sha256": "7aa4243f20db3292abebc8a0851d0b62f3cb4076a993933b541fea4ee22dd542"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/tools/events.hpp",
+      "bytes": 3714,
+      "sha256": "f7624d5a4c523e93c75793b8b69ab9d982438bbb68e0f653cb4b6e46b73d7868"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/tools/native_capture.hpp",
+      "bytes": 1298,
+      "sha256": "581f2dad0fae57cd82fc1d68e05d02fd025a8ce8841aaf4f07bedbd06bb5529c"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/tools/shadow.cpp",
+      "bytes": 13487,
+      "sha256": "def0867760be28c4edaad38762186c11909dc4c9c6151dffb0b988a90dae77c6"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/tools/test_events.cpp",
+      "bytes": 6448,
+      "sha256": "ca7f44c2893c89b88c5e78e1b81a7825c0c12f49bcb46a39c3b400db157dda67"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/run_experiment.py",
+      "bytes": 7164,
+      "sha256": "a18e932badf82668033386fcf8229a2cd15a29f873f52a279fc0b592856857a3"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/build.py",
+      "bytes": 2478,
+      "sha256": "77fc7ee1928bb56e1e82055bb8e3a88958c02b0767cad5c57d0e88a74fbe9e67"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/PROTOCOL.md",
+      "bytes": 4648,
+      "sha256": "062ba6fd0e942465972a183fea53e1bf74196d5b3689da71770ce253f719abae"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp",
+      "bytes": 3957,
+      "sha256": "727e2ed66a49f4f004f483491b4dbf748abd738b7c0b4fc576ffc813774f5af4"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r9_coverage_aware_recovery_v2/tools/direction.hpp",
+      "bytes": 1038,
+      "sha256": "f6758056924599ba3078a8499d7d9a2fc0f3cdde85139ef1860ef5896d8aa6db"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r9_coverage_aware_recovery_v2/tools/io.hpp",
+      "bytes": 2930,
+      "sha256": "3ed296c11a5f9a6ff46c6720e8fb6d4a9e7e101c6a7b6e366697ce2e11c6348e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r8_structural_admission/tools/preprocess.hpp",
+      "bytes": 803,
+      "sha256": "11225b3f0a044bfcbfba25fa9340f41d1e2dd6d2997c9de66773eeb531f3ada1"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r7_motion_selected_shadow/tools/recovery.hpp",
+      "bytes": 2598,
+      "sha256": "b18f9dd1b03f02f2a08b835a757c08e4385e881e9b2726e9354e3eaa053779b8"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r6_dog_shadow_prototype/tools/native_kernel.hpp",
+      "bytes": 5481,
+      "sha256": "4dbc81a42d6fcbb6275c85cfd8bd69a2e94f8b0775d00d6b338556903905cbac"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r6_dog_shadow_prototype/tools/contract.hpp",
+      "bytes": 4834,
+      "sha256": "c44a4e45aa12555763eab768f52d6e45109ccf9fb998893831c17c88d8b0446d"
+    }
+  ],
+  "commands": [
+    [
+      "cmake",
+      "-S",
+      "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/tools",
+      "-B",
+      "/home/jian/livox_ws/p62_r10_feasibility_build",
+      "-DCMAKE_BUILD_TYPE=Release"
+    ],
+    [
+      "cmake",
+      "--build",
+      "/home/jian/livox_ws/p62_r10_feasibility_build",
+      "--clean-first",
+      "-j2"
+    ]
+  ]
+}

@@ -1,0 +1,273 @@
+{
+  "task": "P62-R10-FEASIBILITY-COMPLETE-EVENT-RECOVERY",
+  "START_SHA": "340a42190c9101f98cd483849537ced23a2a20a0",
+  "CODE_SHA": "233152227ab9d0614cb98b4ec9e091ebd60c17e5",
+  "analysis_CODE_SHA": "553d0c793b03e32643de1f55c333b8486cb5c0b7",
+  "frames": 100,
+  "raw_range": [
+    10641,
+    10740
+  ],
+  "smoke20": "PASS",
+  "baseline_full_aligns": 100,
+  "baseline_split_aligns": 100,
+  "extra_aligns": 2,
+  "total_aligns": 202,
+  "extra_budget": 20,
+  "old_predicate_trigger_count": 0,
+  "old_predicate_definition": "R9 predicate evaluated on this new R10 nominal output; R9 was NOT rerun or re-audited",
+  "detected_events": 5,
+  "new_only_events": 5,
+  "event_local_indices": [
+    60,
+    61,
+    62,
+    63,
+    64
+  ],
+  "event_raw_indices": [
+    10700,
+    10701,
+    10702,
+    10703,
+    10704
+  ],
+  "permitted_events": 5,
+  "G_evaluations": 5,
+  "weak_direction_frames": 1,
+  "seeds_generated": 2,
+  "distinct_alternatives": 1,
+  "eligible_distinct_alternatives": 0,
+  "accepted_alternatives": 0,
+  "control_full_eligible": 96,
+  "final_status_counts": {
+    "ACCEPT_NOMINAL": 95,
+    "NO_ACCEPTABLE_MEASUREMENT": 5
+  },
+  "selector_outcomes": {
+    "NATIVE_SCORE": {
+      "KEEP_NOMINAL": 95,
+      "ABSTAIN": 5
+    },
+    "HELDOUT_MEAN": {
+      "KEEP_NOMINAL": 95,
+      "ABSTAIN": 5
+    },
+    "COVERAGE_ROBUST": {
+      "ABSTAIN": 100
+    }
+  },
+  "all_native_converged": true,
+  "invalid_native_results": 0,
+  "V2_evaluable": 100,
+  "active_block_counts": {
+    "7": 69,
+    "6": 27,
+    "8": 4
+  },
+  "timing_ms": {
+    "preprocess_ms": {
+      "n": 100,
+      "mean": 1.4123525000000001,
+      "p95": 3.5318501499999995,
+      "max": 4.816783
+    },
+    "full_align_ms": {
+      "n": 100,
+      "mean": 6.500545949999999,
+      "p95": 13.158932099999996,
+      "max": 70.83284
+    },
+    "nominal_align_ms": {
+      "n": 100,
+      "mean": 3.2812876400000004,
+      "p95": 6.3786078999999996,
+      "max": 15.927923
+    },
+    "extra_align_ms": {
+      "n": 100,
+      "mean": 0.17281877999999998,
+      "p95": 0.0,
+      "max": 17.281878
+    },
+    "G_ms": {
+      "n": 100,
+      "mean": 0.05283743999999999,
+      "p95": 0.04909879999999721,
+      "max": 1.136187
+    },
+    "validation_ms": {
+      "n": 100,
+      "mean": 1.3159154499999999,
+      "p95": 2.13460135,
+      "max": 2.718872
+    },
+    "selectors_and_record_ms": {
+      "n": 100,
+      "mean": 0.09615333000000001,
+      "p95": 0.11749144999999993,
+      "max": 0.297736
+    },
+    "frame_compute_ms": {
+      "n": 100,
+      "mean": 13.353723379999998,
+      "p95": 26.515607099999997,
+      "max": 77.425911
+    },
+    "full_native_per_call_ms": {
+      "n": 100,
+      "mean": 6.500545949999999,
+      "p95": 13.158932099999996,
+      "max": 70.83284
+    },
+    "split_native_per_call_ms": {
+      "n": 100,
+      "mean": 3.2812876400000004,
+      "p95": 6.3786078999999996,
+      "max": 15.927923
+    },
+    "extra_native_per_call_ms": {
+      "n": 2,
+      "mean": 8.640939,
+      "p95": 8.6622789,
+      "max": 8.66465
+    }
+  },
+  "percentile_definition": "numpy quantile linear (type 7); descriptive only",
+  "native_process_wall_s": 1.71858893398894,
+  "map_runtime": {
+    "raw_points": "459154",
+    "target_points": "459154",
+    "target_fnv": "ea1e4e69cf9992c6",
+    "actual_grid_m": "0.8",
+    "build_ms": "142.123074"
+  },
+  "peak_process_RSS_MiB": 104.30859375,
+  "tests": "ACTUAL_COLD_CPP_TESTS_AND_INDEPENDENT_OFFLINE_RECORD_CHECKS_PASS",
+  "engineering_result": "EVENT_ADMISSION_STATE_MACHINE_ESTABLISHED",
+  "recovery_result": "NO_ACCEPTABLE_RECOVERY_OBSERVED",
+  "selector_discrimination": "NOT_DEMONSTRATED_ON_LEGAL_ALTERNATIVES",
+  "boundaries": {
+    "GT_reads": 0,
+    "ROS_localization_nodes": 0,
+    "rosbag_play": 0,
+    "EKF_runs": 0,
+    "feedback": 0,
+    "forced_diagnostic_aligns": 0,
+    "LARGE_scale_aligns": 0,
+    "external_CLI_runs": 0,
+    "production_code_changes": 0,
+    "new_trajectory_estimates": 0
+  },
+  "asset_after_gate": "ALL_R10_INPUTS_SOURCE_BINARY_PRODUCTION_UNCHANGED",
+  "limitations": [
+    "No independent localization accuracy evaluation",
+    "Physical distinctness is not evidence of different minima or correct recovery",
+    "Only retained alternative differs from nominal by 1.0000271097 degrees, barely above the 1-degree dedup boundary; this is boundary-sensitive, not a robust branch claim",
+    "Comparator disagreement on singleton nominal pools is an abstention-policy difference, not alternative discrimination",
+    "Prediction fallback is Shadow bookkeeping only, never an executed EKF action",
+    "frame_compute_ms excludes Source precache and map construction; per-stage component timers omit some outer I/O/fitness overhead"
+  ],
+  "unique_NEXT": "Seek separate approval for bounded candidate-generation changes targeting admission-failed events; do not relax current acceptance thresholds or rerun now",
+  "final_archive_asset_gate": "ARCHIVE_ASSET_DRIFT_DETECTED",
+  "final_production_git_changed": true,
+  "final_asset_differences": [
+    {
+      "expected": {
+        "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/config/dog_prior_map_localization_ndt.yaml",
+        "bytes": 2984,
+        "sha256": "482d11e26b998aad0fcb07840d9d8eede788291348c1a93a748a74edf1fe6b83"
+      },
+      "actual": {
+        "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/config/dog_prior_map_localization_ndt.yaml",
+        "bytes": 3238,
+        "sha256": "08c5fbf67684892dbea7b61255de2acb0ad8fdd73bb5bd5b8c5960b92ffac183"
+      }
+    },
+    {
+      "expected": {
+        "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/include/dog_prior_map_localization/dog_prior_map_ekf_node.hpp",
+        "bytes": 9713,
+        "sha256": "64d688c53c77e93afbf83f12d66c6de2882384dcba2c2445a4026b04c612b084"
+      },
+      "actual": {
+        "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/include/dog_prior_map_localization/dog_prior_map_ekf_node.hpp",
+        "bytes": 8926,
+        "sha256": "9f99acda9868c5034569d6a198c0f3a811316021d3e0e44c7de2b890153fe8e2"
+      }
+    },
+    {
+      "expected": {
+        "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch",
+        "bytes": 5513,
+        "sha256": "9330ebfe2e5b8c438f1d61e6445f8c1948aec554dc87fb3385e76af9e0bc31da"
+      },
+      "actual": {
+        "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch",
+        "bytes": 5747,
+        "sha256": "bb0b3f0bdb3d009c75899511517c529f4f846db3390143bebc0279d553fb3f4f"
+      }
+    },
+    {
+      "expected": {
+        "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/dog_prior_map_ekf_node_core.cpp",
+        "bytes": 11136,
+        "sha256": "398c92300fef8cd3dbab1b1e5c6e923013c184ba77f9165320b21d985564937d"
+      },
+      "actual": {
+        "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/dog_prior_map_ekf_node_core.cpp",
+        "bytes": 11084,
+        "sha256": "7038444b77cac7987bfdc28acbef27eafbbd42475f6b7a5a942a7f73bf1f5d30"
+      }
+    },
+    {
+      "expected": {
+        "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp",
+        "bytes": 54000,
+        "sha256": "729ff355548ad2a246cb77f962c9e8c88675f6ea4fe8baf037f29dd7516592ba"
+      },
+      "actual": {
+        "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp",
+        "bytes": 52693,
+        "sha256": "40cdf26f9dddb9d06dc16c0bfd89fc88a9dd33e42e5bbd4e9bc3b453f1e4277c"
+      }
+    },
+    {
+      "expected": {
+        "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/fusion/ndt_observation.cpp",
+        "bytes": 11599,
+        "sha256": "2a38a15d3792a04f85a4cd1ed6da80739ae9e56d36cd558e6ef97b5376cdcab0"
+      },
+      "actual": {
+        "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/fusion/ndt_observation.cpp",
+        "bytes": 11418,
+        "sha256": "2036721e02ec84425dc6858660c39e980154e34f4b68f5133576905e7bdf48a4"
+      }
+    },
+    {
+      "expected": {
+        "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/imu_processor.cpp",
+        "bytes": 9803,
+        "sha256": "d9db9f7639049ca520875b0b1641d2085dd232a65d4c5766c8afe12be018c661"
+      },
+      "actual": {
+        "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/imu_processor.cpp",
+        "bytes": 9179,
+        "sha256": "1e6b2dd5269241f5f87d665bc8151264b015fbae8bfa29045a92cbd9513ad6eb"
+      }
+    },
+    {
+      "expected": {
+        "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/ros_output.cpp",
+        "bytes": 10178,
+        "sha256": "26d8f46904d156fd02ec13586268f34e8ca2bfaf7e065139f97778d7d5555eea"
+      },
+      "actual": {
+        "path": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/ros_output.cpp",
+        "bytes": 9323,
+        "sha256": "6e993a65f3f26e3e5b632c0b851ad8dd2d3394a58f646669a38d5b142da8d77c"
+      }
+    }
+  ],
+  "overall_status": "EVENT_LOGIC_TESTED_ARCHIVAL_PROTECTION_GATE_BLOCKED"
+}

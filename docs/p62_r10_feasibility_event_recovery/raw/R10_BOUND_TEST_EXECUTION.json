@@ -1,0 +1,10 @@
+{
+  "binary": {
+    "path": "/home/jian/livox_ws/p62_r10_feasibility_build/test_events",
+    "bytes": 78560,
+    "sha256": "d86444fa92174203c14b7f4cbb9192d80dc490bd2d27119aed705e5c3cf7e98a"
+  },
+  "returncode": 0,
+  "stdout": "R10_EVENT_STATE_TESTS_PASS new_aligns=0\n",
+  "stderr": ""
+}

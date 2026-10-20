@@ -1,0 +1,259 @@
+{
+  "task": "P62-R10",
+  "actual_run_CODE_SHA": "233152227ab9d0614cb98b4ec9e091ebd60c17e5",
+  "build_source_commit": "591c7fe0081dfaea0e3db19a07d1a8df5cf65ae1",
+  "analysis_CODE_SHA": "4aec6c6f3347545a9ee835f3d76110d6ae14eee6",
+  "sources": [
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/analyze.py",
+      "bytes": 18250,
+      "sha256": "ad0d8426fbffae957723aed96b01abe0e35e9f5bc871baa055a3440e077478cc"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/seal.py",
+      "bytes": 4527,
+      "sha256": "0ecee00422c5ea35fdae62e9ee3a73cfd36d60fe5de81c84bb5fd5c166551ddd"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/OUTPUT_FREEZE.json",
+      "bytes": 9642,
+      "sha256": "4a247074b27bc4958ada51a253294549810ac75a5d54efdacfe2e9a5960813be"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/run_freeze.json",
+      "bytes": 39502,
+      "sha256": "08ef0906eb78053eddb81c7c48851d5d7342cd225148dc0c22a81d7396a33454"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/ASSET_IDENTITY_AFTER.json",
+      "bytes": 42795,
+      "sha256": "44c8c071d3171791c13e776eea475311de165b4490c28c7aeb2fa32429c6179d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/ASSET_IDENTITY_BEFORE.json",
+      "bytes": 38872,
+      "sha256": "afac69b435613251d06b75cf04f3024260b9d40f78d5472a81ae53a0c16b686b"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/BUILD_PROVENANCE.json",
+      "bytes": 5388,
+      "sha256": "0f55c586b20c219f01c8a0ee6f29d7dc1f8ff0528ccd506f5c1546d1e74ee240"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/IMPLEMENTATION_DIFF.md",
+      "bytes": 2840,
+      "sha256": "27c43f0643987f13be80a8c831f9d7ccf4099c75ed20b348e5027aeb95d5a156"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/LOCAL_60_64.csv",
+      "bytes": 1131,
+      "sha256": "ceba92766a680b88c0d67fa0e978b208f8a1a5635cebddb04851f4b048ed516d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/OUTPUT_FREEZE.json",
+      "bytes": 9642,
+      "sha256": "4a247074b27bc4958ada51a253294549810ac75a5d54efdacfe2e9a5960813be"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/PRE_REGISTRATION.json",
+      "bytes": 713,
+      "sha256": "8fba450f0a5f91688fbac58c1d7c11a733dd28437a4fcf2be06d4871d305d3aa"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/PROTOCOL.md",
+      "bytes": 4648,
+      "sha256": "062ba6fd0e942465972a183fea53e1bf74196d5b3689da71770ce253f719abae"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/REPORT.md",
+      "bytes": 12347,
+      "sha256": "7a7095d78b9ab19319cb58c97a6c8d5f758059a0dffd8252e49f3b69f6e209da"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/TESTS_AND_REVIEW.md",
+      "bytes": 4555,
+      "sha256": "27a3c6013f0dfd897888ddd985d8471f986447c8f0bdc4491cbcb26b93e4f26a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/analyze.py",
+      "bytes": 18250,
+      "sha256": "ad0d8426fbffae957723aed96b01abe0e35e9f5bc871baa055a3440e077478cc"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/build.py",
+      "bytes": 2478,
+      "sha256": "77fc7ee1928bb56e1e82055bb8e3a88958c02b0767cad5c57d0e88a74fbe9e67"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/CANDIDATE_POOL.csv",
+      "bytes": 147704,
+      "sha256": "3bba25a860e49919bf0e0baa9b46e97eaf2b524d3f9411f409fcb7820f2ee0fb"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/COVERAGE_COMPARISON.csv",
+      "bytes": 15591,
+      "sha256": "2bb978ce60bca6a797d908bb379b808a2e18927b8a469b4c7ece845d59156fce"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/FINAL_OBSERVATIONS.csv",
+      "bytes": 51701,
+      "sha256": "b575805a36be9e12a00d44352527343dc65778d34c8c2f9c38b92bcc40a97a48"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/FRAME_RESULTS.csv",
+      "bytes": 15349,
+      "sha256": "14e297877d6810929151223b621fd741b74f9cac7f730d8ae7214a3a4ebad055"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/G_STATISTICS.csv",
+      "bytes": 7309,
+      "sha256": "d7ee3aa622be563569a831e226c5070f214be434b205c9cf39ec474edc5fc430"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/HELDOUT_BLOCK_LOSSES.csv",
+      "bytes": 62295,
+      "sha256": "9ca9a0d3dc4df986ee86ed05fc79da2d3a446c66f9bf01d20aa6120f04154daa"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/MAP_RUNTIME.csv",
+      "bytes": 105,
+      "sha256": "b7f5a227f0f891e0c1da7bb913e20752c7797153fc0fda7257d00764524f3d27"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/NATIVE_ALIGN_CALLS.csv",
+      "bytes": 14957,
+      "sha256": "8a8dfcba2e456662978f8941a46b4eaa86a53b895a83c7b0f4cab8441d6c29b2"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/PAIRWISE_EVIDENCE.csv",
+      "bytes": 129,
+      "sha256": "6f671d6affa68b019ae107db7ba8269c6fdcf2604df281b9a9368153764d849f"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/R10_BOUND_BUILD_STARTED.json",
+      "bytes": 4125,
+      "sha256": "24c8f8cbd740bac0705747850bba0cc859898fa738f37672405bd9c087b9fa65"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/R10_BOUND_TEST_EXECUTION.json",
+      "bytes": 288,
+      "sha256": "b5151b075e6fcc77ede57528ab3fac1fc89caa805115a33fddd6941f20ed240a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/RAW_NATIVE_OUTPUTS.csv",
+      "bytes": 120503,
+      "sha256": "becf6bc5caffc6a6aca98aa3570fcf27c9738659da268e350a9756b9a909eebd"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/RAW_OPTIMIZER_OUTPUTS.csv",
+      "bytes": 116793,
+      "sha256": "06ac3fe0d922f772a0ec46107a5213720e3af9538213629fa12d86d39d291076"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/RUNTIME_AND_MEMORY.csv",
+      "bytes": 12418,
+      "sha256": "c4c1b8d1f6c0febfc810ecfa56c745e17e3cda72f71a227cb7a7513b3fc6253e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/RUN_STARTED.json",
+      "bytes": 92,
+      "sha256": "c414354ef6b7d6ff0830a1b4c836c8b11a2d283b716375e9052ff930eb52db6f"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/SELECTOR_COMPARISON.csv",
+      "bytes": 13120,
+      "sha256": "266accec65f60fa3c0337f3948ccf73aa3f6cbbab472b3a23354cc6c4c6ee42f"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/VALIDATION_FAILURES.csv",
+      "bytes": 37,
+      "sha256": "ab8642e379f4ba55ec7c4f23bc9629ad17a4556f3df4f94f634a15c6d6a21c77"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/r10_bound_build.log",
+      "bytes": 2796,
+      "sha256": "6ea99a25a8555df699d970e42dd6e47776720bc1bf6610522f8156810fae8eae"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/run.log",
+      "bytes": 11878,
+      "sha256": "89f792c2c7e3c86e5a5d5b9347fae0868b495dc597c83e0725b1aadacc5b1002"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/run_completion.json",
+      "bytes": 134,
+      "sha256": "fd9e8cfbdbe76b0039fb27edc77b823cf978129471e5feb61dde2d2f4f36c380"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/raw/run_freeze.json",
+      "bytes": 39502,
+      "sha256": "08ef0906eb78053eddb81c7c48851d5d7342cd225148dc0c22a81d7396a33454"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/reproduction_commands.md",
+      "bytes": 1469,
+      "sha256": "bbdc37f430bd99b625837acc9484895538f5fbd8928348460867da2e3ba023ab"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/results.json",
+      "bytes": 9354,
+      "sha256": "b8c4be1f719e5d3d6bb30a48146ff53808f2b18f94e744dce6462ab1ed3b0a1c"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/run_experiment.py",
+      "bytes": 7164,
+      "sha256": "a18e932badf82668033386fcf8229a2cd15a29f873f52a279fc0b592856857a3"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/seal.py",
+      "bytes": 4527,
+      "sha256": "0ecee00422c5ea35fdae62e9ee3a73cfd36d60fe5de81c84bb5fd5c166551ddd"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/tools/CMakeLists.txt",
+      "bytes": 460,
+      "sha256": "7aa4243f20db3292abebc8a0851d0b62f3cb4076a993933b541fea4ee22dd542"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/tools/events.hpp",
+      "bytes": 3714,
+      "sha256": "f7624d5a4c523e93c75793b8b69ab9d982438bbb68e0f653cb4b6e46b73d7868"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/tools/native_capture.hpp",
+      "bytes": 1298,
+      "sha256": "581f2dad0fae57cd82fc1d68e05d02fd025a8ce8841aaf4f07bedbd06bb5529c"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/tools/shadow.cpp",
+      "bytes": 13487,
+      "sha256": "def0867760be28c4edaad38762186c11909dc4c9c6151dffb0b988a90dae77c6"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_recovery_ws/docs/p62_r10_feasibility_event_recovery/tools/test_events.cpp",
+      "bytes": 6448,
+      "sha256": "ca7f44c2893c89b88c5e78e1b81a7825c0c12f49bcb46a39c3b400db157dda67"
+    }
+  ],
+  "scope": "Only new R10 outputs; fixed raw10641-10740",
+  "no_push": true,
+  "GT_reads": 0,
+  "old_R9_replay_or_output_audit": false,
+  "final_archive_asset_gate": "ARCHIVE_ASSET_DRIFT_DETECTED",
+  "actual_test_receipt": {
+    "binary": {
+      "path": "/home/jian/livox_ws/p62_r10_feasibility_build/test_events",
+      "bytes": 78560,
+      "sha256": "d86444fa92174203c14b7f4cbb9192d80dc490bd2d27119aed705e5c3cf7e98a"
+    },
+    "returncode": 0,
+    "stdout": "R10_EVENT_STATE_TESTS_PASS new_aligns=0\n",
+    "stderr": ""
+  },
+  "reproduction": "python3 analyze.py --self-test; python3 analyze.py (offline only)",
+  "END_SHA": "Resolve the final archive commit containing this manifest with git log; no self-referential SHA claim"
+}
