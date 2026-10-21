@@ -1,0 +1,15 @@
+{
+  "source_CODE_SHA": "96c2028239d3de39404f65cf2732858c780d59d8",
+  "build_log": {
+    "path": "/home/jian/livox_ws/p62_r13_multihypothesis_build/frozen_01/build.log",
+    "bytes": 6236,
+    "sha256": "b8ad35eae09aeb25c6ea549549816055533f35da92f82f14caa58d6950df7d8b"
+  },
+  "link_command": {
+    "path": "/home/jian/livox_ws/p62_r13_multihypothesis_build/frozen_01/CMakeFiles/shadow.dir/link.txt",
+    "bytes": 4198,
+    "sha256": "5933df8bddf131dc04110c8a2375c631b99559165dfe74823c5e4991264489d5"
+  },
+  "reason": "cmake build exit2: libpcl_io unresolved libusb_set_option; explicit libusb linkage missing",
+  "actual_native_processes": 0
+}
