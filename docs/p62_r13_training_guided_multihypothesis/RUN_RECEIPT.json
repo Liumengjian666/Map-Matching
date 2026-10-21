@@ -1,0 +1,116 @@
+{
+  "status": "R13_REAL_EXPERIMENT_COMPLETED",
+  "returncode": 0,
+  "error": null,
+  "wall_s": 0.516286708007101,
+  "launch_attempts": 1,
+  "started_processes": 1,
+  "timed_out": false,
+  "actual_run_CODE_SHA": "b683263bd09ab995bac55b720a0cb107c660173a",
+  "outputs": [
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_runs/ASSET_IDENTITY_AFTER.json",
+      "bytes": 491312,
+      "sha256": "1e6bbfe2095d92997755e045a2424649c9dd55ee7f72794c60eca6e5269eea06"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_runs/PROCESS_EXIT.json",
+      "bytes": 142,
+      "sha256": "498520bb9833819a1ab935e1eec0a5ac3da2dbf35948b5eae9fb9f70e23d456a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_runs/STARTED.json",
+      "bytes": 30488,
+      "sha256": "3389276f8a3c3225c9ba067eaa3ebeceb0cbef4ca163e279fd9e32000d0b316b"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_runs/formal/ALIGN_CALLS.csv",
+      "bytes": 403,
+      "sha256": "8ae3ce20314be0bb5a84a1e02fa4ede52abd082c60f43c3ccd54a08f617ed17d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_runs/formal/CANDIDATE_POOL.csv",
+      "bytes": 11559,
+      "sha256": "a72c19d8192944dae186096d3a8836e1cf1c378d1fdbb1caf96f335450d902d2"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_runs/formal/COARSE_GRID_SCORES.csv",
+      "bytes": 144014,
+      "sha256": "ef13c9a68284e7495c48e7f6d663a779d0e57ae6029292b26d12f51de59922d3"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_runs/formal/COARSE_TRAINING_POINTS.csv",
+      "bytes": 86547,
+      "sha256": "001261081ac945aaa9ec8d26f0daac82421d2599711650052ee5eb13bde63715"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_runs/formal/FAILURES.csv",
+      "bytes": 31,
+      "sha256": "e98c11a956165227db0d205aa47786acc940719c17a75bbf2fe3a56c463aaaa5"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_runs/formal/FINAL_OBSERVATIONS.csv",
+      "bytes": 1977,
+      "sha256": "54204644332ab1a31d810524591e339bb8f3ee549b516a746ad05c6bc636c1d1"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_runs/formal/HELDOUT_BLOCK_LOSSES.csv",
+      "bytes": 3719,
+      "sha256": "50cd6a7fc6b4d4515990e6c6c79cf1f0f75f1cf6a21038bc7f2aa4505a30070a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_runs/formal/MAP_RUNTIME.csv",
+      "bytes": 122,
+      "sha256": "be9c8e90f6fe2090ee1b082189e5a549de4316a2320bbef1d91110ecd468a4dd"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_runs/formal/NATIVE_NDT_RESULTS.csv",
+      "bytes": 8099,
+      "sha256": "4e5fbbee63ec094ab054ae84594d583fd3a13857f09f9c13096a69cafeff5ed4"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_runs/formal/PAIRWISE_EVIDENCE.csv",
+      "bytes": 406,
+      "sha256": "679422ac41056204e7238cbece39bfe57d077643f7f2cbe5c07d05d3e297e693"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_runs/formal/RAW_OPTIMIZER_OUTPUTS.csv",
+      "bytes": 5929,
+      "sha256": "df6ab7a00b9ebe51c9fe9f11292032d36705622bda4a9f36df7e61328b45e4bd"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_runs/formal/RUNTIME_AND_MEMORY.csv",
+      "bytes": 1168,
+      "sha256": "3017cb6ff224519ffb23121b07861721ed9b0770fb05eee5801b551d9d7e5d0e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_runs/formal/SELECTED_SEEDS.csv",
+      "bytes": 6830,
+      "sha256": "5d7b65c33f92bacaabd8e26ccaba8fd6076022d98749aa2c552b4662179d5b2a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_runs/formal/SELECTOR_COMPARISON.csv",
+      "bytes": 1446,
+      "sha256": "f32ddde7a6ea151961f331680a3f0bc47c08bdef85aa0eb7ac4eda0e9a5edb34"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_runs/formal/SOURCE_IDENTITY.csv",
+      "bytes": 1059,
+      "sha256": "4d048a97f6955ebc18ec19f02403ec9037f4e57480d8c308fa161634eeecd836"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_runs/run.log",
+      "bytes": 634,
+      "sha256": "6f309acbf164d5bc878306230d89794ebc2559e582aff9e9e7f13f5d0dce05b3"
+    }
+  ],
+  "max_new_aligns": 10,
+  "actual_native_processes": 1,
+  "binary": {
+    "path": "/home/jian/livox_ws/p62_r13_multihypothesis_build/frozen_02/shadow",
+    "bytes": 315976,
+    "sha256": "7b0a43d1ed0c73cbb7c6ea99d45d240a8023d7a5a68d1ffa52840a493fad071f"
+  },
+  "assets_equal": true,
+  "archive_errors": []
+}

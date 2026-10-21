@@ -1,0 +1,275 @@
+{
+  "task": "P62-R13-TRAINING-GUIDED-MULTI-HYPOTHESIS-NDT",
+  "START_SHA": "58390fd173114e0e60a6dd9bf14d7c4be3f1106c",
+  "actual_run_CODE_SHA": "b683263bd09ab995bac55b720a0cb107c660173a",
+  "actual_build_CODE_SHA": "468b1b2504b9241c6bc8f1809f9dce2a0a0be246",
+  "numerical_analysis_CODE_SHA": "c5d575059f401332e4fa0be53157a7e38265244d",
+  "result": "DISTINCT_NDT_HYPOTHESES_OBSERVED",
+  "admissible_distinct_hypotheses_observed": false,
+  "robust_holdout_preference_observed": false,
+  "correct_recovery": "NOT_ESTABLISHED: no independent reference",
+  "events": [
+    {
+      "local_event": 60,
+      "raw_index": 10700,
+      "grids_scored": 45,
+      "training_points": 757,
+      "coarse_points": 256,
+      "selected_grid_ids": [
+        24,
+        39
+      ],
+      "new_native_calls": 2,
+      "converged": 2,
+      "raw_distinct_outputs": 2,
+      "unique_distinct_groups": 2,
+      "raw_eligible_outputs": 0,
+      "admissible_distinct_groups": 0,
+      "robust_distinct_preference": false,
+      "accepted_replacement": false,
+      "final_status": "NO_ACCEPTABLE_MEASUREMENT",
+      "coarse_loss_min": 0.06820105768019857,
+      "coarse_loss_max": 0.5465101156546552,
+      "distinct_coarse_losses": 45,
+      "saturated_seeds": 0
+    },
+    {
+      "local_event": 61,
+      "raw_index": 10701,
+      "grids_scored": 45,
+      "training_points": 759,
+      "coarse_points": 256,
+      "selected_grid_ids": [
+        24,
+        23
+      ],
+      "new_native_calls": 2,
+      "converged": 2,
+      "raw_distinct_outputs": 1,
+      "unique_distinct_groups": 1,
+      "raw_eligible_outputs": 0,
+      "admissible_distinct_groups": 0,
+      "robust_distinct_preference": false,
+      "accepted_replacement": false,
+      "final_status": "NO_ACCEPTABLE_MEASUREMENT",
+      "coarse_loss_min": 0.07611665279972613,
+      "coarse_loss_max": 0.5654882798007748,
+      "distinct_coarse_losses": 45,
+      "saturated_seeds": 0
+    },
+    {
+      "local_event": 62,
+      "raw_index": 10702,
+      "grids_scored": 45,
+      "training_points": 736,
+      "coarse_points": 256,
+      "selected_grid_ids": [
+        19,
+        24
+      ],
+      "new_native_calls": 2,
+      "converged": 2,
+      "raw_distinct_outputs": 0,
+      "unique_distinct_groups": 0,
+      "raw_eligible_outputs": 0,
+      "admissible_distinct_groups": 0,
+      "robust_distinct_preference": false,
+      "accepted_replacement": false,
+      "final_status": "NO_ACCEPTABLE_MEASUREMENT",
+      "coarse_loss_min": 0.09213638398409785,
+      "coarse_loss_max": 0.5855422256063321,
+      "distinct_coarse_losses": 45,
+      "saturated_seeds": 0
+    },
+    {
+      "local_event": 63,
+      "raw_index": 10703,
+      "grids_scored": 45,
+      "training_points": 715,
+      "coarse_points": 256,
+      "selected_grid_ids": [
+        24,
+        28
+      ],
+      "new_native_calls": 2,
+      "converged": 2,
+      "raw_distinct_outputs": 1,
+      "unique_distinct_groups": 1,
+      "raw_eligible_outputs": 0,
+      "admissible_distinct_groups": 0,
+      "robust_distinct_preference": false,
+      "accepted_replacement": false,
+      "final_status": "NO_ACCEPTABLE_MEASUREMENT",
+      "coarse_loss_min": 0.09440935880593315,
+      "coarse_loss_max": 0.5717134116304123,
+      "distinct_coarse_losses": 45,
+      "saturated_seeds": 0
+    },
+    {
+      "local_event": 64,
+      "raw_index": 10704,
+      "grids_scored": 45,
+      "training_points": 670,
+      "coarse_points": 256,
+      "selected_grid_ids": [
+        22,
+        24
+      ],
+      "new_native_calls": 2,
+      "converged": 2,
+      "raw_distinct_outputs": 1,
+      "unique_distinct_groups": 1,
+      "raw_eligible_outputs": 0,
+      "admissible_distinct_groups": 0,
+      "robust_distinct_preference": false,
+      "accepted_replacement": false,
+      "final_status": "NO_ACCEPTABLE_MEASUREMENT",
+      "coarse_loss_min": 0.07302826339673629,
+      "coarse_loss_max": 0.598436258997026,
+      "distinct_coarse_losses": 45,
+      "saturated_seeds": 0
+    }
+  ],
+  "new_native_aligns": 10,
+  "max_allowed": 10,
+  "native_converged": 10,
+  "raw_distinct_outputs": 5,
+  "distinct_groups": 5,
+  "admissible_distinct_groups": 0,
+  "accepted_replacements": 0,
+  "total_coarse_queries": 57600,
+  "independent_matrix_exponential_checks": 225,
+  "LP_verified_directed_rows": 12,
+  "coarse_score_audit": "Actual C++ query counter/Training-only guards and sample/rank lineage;225NN scores not independently recomputed",
+  "nearest_neighbor_queries": {
+    "coarse_instrumented": 57600,
+    "heldout_from_finite_active_records": 6600,
+    "native_internal": "NOT_INSTRUMENTED; no claim these counts include optimizer/fitness internals"
+  },
+  "selected_grid_same_initial_as_historical_nominal": 1,
+  "selected_grid_output_exactly_equal_nominal": 1,
+  "recorded_D_max": 0.0002106392900501697,
+  "independent_reference": "INDEPENDENT_REFERENCE_NOT_AVAILABLE",
+  "novelty": "NOT_ESTABLISHED",
+  "H1": "SUPPORTED:225 deterministic training-only scores",
+  "H2": "SUPPORTED:2 spaced seeds per event before first align",
+  "H3": "SUPPORTED:5 physically distinct non-nominal groups across4 events; not proof of different local minima",
+  "H4": "NOT_OBSERVED:all10 extra outputs fail unchanged5deg gate",
+  "H5": "NOT_OBSERVED:no eligible distinct candidate or accepted recovery",
+  "H6": "NOT_EVALUABLE:no qualified independent reference",
+  "runtime": {
+    "source_ms": {
+      "n": 5,
+      "mean": 1.4126904,
+      "p95": 2.1708654,
+      "max": 2.417784,
+      "sum": 7.063452
+    },
+    "coarse_45_ms": {
+      "n": 5,
+      "mean": 15.208989799999998,
+      "p95": 15.6369804,
+      "max": 15.696248,
+      "sum": 76.04494899999999
+    },
+    "seed_selection_ms": {
+      "n": 5,
+      "mean": 0.0097638,
+      "p95": 0.0113422,
+      "max": 0.011454,
+      "sum": 0.048819
+    },
+    "coarse_phase_wall_ms": {
+      "n": 5,
+      "mean": 16.742548,
+      "p95": 17.165104799999998,
+      "max": 17.222361,
+      "sum": 83.71274
+    },
+    "align_ms": {
+      "n": 5,
+      "mean": 26.412244200000004,
+      "p95": 66.6589212,
+      "max": 79.051079,
+      "sum": 132.06122100000002
+    },
+    "native_capture_and_fitness_aux_ms": {
+      "n": 5,
+      "mean": 1.3862477999999991,
+      "p95": 1.4609647999999982,
+      "max": 1.4621379999999977,
+      "sum": 6.931238999999995
+    },
+    "heldout_validation_ms": {
+      "n": 5,
+      "mean": 1.3136687999999999,
+      "p95": 1.372881,
+      "max": 1.3839160000000001,
+      "sum": 6.568344
+    },
+    "V3_decision_ms": {
+      "n": 5,
+      "mean": 0.0037018000000000003,
+      "p95": 0.005378,
+      "max": 0.005797,
+      "sum": 0.018509
+    },
+    "extra_event_wall_ms": {
+      "n": 5,
+      "mean": 46.0852428,
+      "p95": 86.4328408,
+      "max": 98.804367,
+      "sum": 230.42621400000002
+    },
+    "source_plus_extra_event_wall_ms": {
+      "n": 5,
+      "mean": 47.497933200000006,
+      "p95": 88.59644239999999,
+      "max": 101.222151,
+      "sum": 237.48966600000003
+    }
+  },
+  "per_call_align_ms": {
+    "n": 10,
+    "mean": 13.206122100000002,
+    "p95": 42.27870704999994,
+    "max": 67.057215,
+    "sum": 132.06122100000002
+  },
+  "process_wall_s": 0.516286708007101,
+  "map_runtime": {
+    "map_points": "459154",
+    "target_points": "459154",
+    "target_fnv": "ea1e4e69cf9992c6",
+    "actual_grid_m": "0.8",
+    "load_grid_tree_ms": "152.64639500000001"
+  },
+  "peak_process_RSS_MiB": 105.5625,
+  "timing_quantile": "numpy linear/type7 descriptive only; offline5 events, not full localization",
+  "production_and_history": "UNCHANGED",
+  "boundaries": {
+    "dedicated_nominal_baseline_aligns": 0,
+    "old_generator_aligns": 0,
+    "new_extra_aligns": 10,
+    "GT_data_reads": 0,
+    "EKF": 0,
+    "ROS_nodes": 0,
+    "new_trajectory_estimates": 0,
+    "production_changes": 0,
+    "reference_inventory_runs": 1,
+    "repeat_protection": 0,
+    "formal_R13_processes": 1,
+    "push_executed": false
+  },
+  "limitations": [
+    "No independent correctness or absolute pose evidence",
+    "Most raw physical differences are just above the frozen1deg threshold, not independent basin proof",
+    "Training coarse ordering is initializer evidence only; correlated structural holdout is not truth",
+    "All distinct results are inadmissible; no recovery/accuracy or10Hz claim",
+    "The known five events, same-record map and historical causal guesses are not a blind generalization experiment",
+    "One selected zero-grid TP start equals the historical nominal start and returns exactly T0; it still costs a real extra align",
+    "extra_event_wall_ms excludes separately recorded Source; source_plus_extra_event_wall_ms includes it and peaks above100ms",
+    "Initial libusb link failure preserved, zero actual native run then"
+  ],
+  "unique_NEXT": "Controller to freeze an independent correctness reference for bounded future evaluation before further recovery/accuracy claims; preserve this grid and gates, do not tune or launch another experiment now"
+}

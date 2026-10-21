@@ -1,0 +1,7 @@
+COARSE_SELECTION_FROZEN events=5 grids=225 new_aligns=0
+EVENT 60 selected=24|39 distinct=2 admissible_distinct=0 robust=-1 final=NO_ACCEPTABLE_MEASUREMENT
+EVENT 61 selected=24|23 distinct=1 admissible_distinct=0 robust=-1 final=NO_ACCEPTABLE_MEASUREMENT
+EVENT 62 selected=19|24 distinct=0 admissible_distinct=0 robust=-1 final=NO_ACCEPTABLE_MEASUREMENT
+EVENT 63 selected=24|28 distinct=1 admissible_distinct=0 robust=-1 final=NO_ACCEPTABLE_MEASUREMENT
+EVENT 64 selected=22|24 distinct=1 admissible_distinct=0 robust=-1 final=NO_ACCEPTABLE_MEASUREMENT
+R13_COMPLETE events=5 coarse_grids=225 new_ndt_align=10 nominal_align=0 feedback=0

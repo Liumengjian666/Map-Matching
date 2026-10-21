@@ -1,0 +1,11 @@
+{
+  "status": "R13_FINAL_FROZEN_ASSET_GATE_PASS",
+  "frozen_input_files": 103,
+  "stable_equal": true,
+  "historical_R11_R12_equal": true,
+  "all_runtime_sources_and_binaries_equal": true,
+  "raw_output_records": 19,
+  "native_processes": 1,
+  "new_aligns": 10,
+  "archive_errors": []
+}
