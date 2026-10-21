@@ -1,0 +1,71 @@
+{
+  "wrapper_CODE_SHA": "703382304429e753e66b612a412e3288636d1aea",
+  "actual_CXX_build_CODE_SHA": "e5890c64440a41bde5665adc2d2218e6e85b36fc",
+  "sources": [
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/tools/CMakeLists.txt",
+      "bytes": 548,
+      "sha256": "c5da2c1f8e7a15f7611da535db479aadd43596a43f09c4e698c6751add155ecb"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/tools/pool_v3.hpp",
+      "bytes": 4031,
+      "sha256": "fe43cd3080a37dbaa9b0b82adfd1f6f6f20f63dd4398c1a19b40eda750d9e976"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/tools/replay.cpp",
+      "bytes": 12217,
+      "sha256": "d57dd4ca85d4ea6bb62106b1df850bb201ccc004718199f82c1d3d0d6c0afdbe"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/tools/test_pool.cpp",
+      "bytes": 4829,
+      "sha256": "f7f567774ecddc2401d8a7e4f4d4c638d7ff206f443dd50ce78bdedc97a23946"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/execute.py",
+      "bytes": 10680,
+      "sha256": "6b4ad4d89b3868c5d903829809802214215abe5431c2d55ac498af987ead366a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/MATHEMATICAL_CONTRACT.md",
+      "bytes": 3808,
+      "sha256": "0a6615fc0f77c64a1348b6b1e405346aacc9446df43504fe8814dc9af7a7d25c"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r6_dog_shadow_prototype/tools/contract.hpp",
+      "bytes": 4834,
+      "sha256": "c44a4e45aa12555763eab768f52d6e45109ccf9fb998893831c17c88d8b0446d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r6_dog_shadow_prototype/tools/native_kernel.hpp",
+      "bytes": 5481,
+      "sha256": "4dbc81a42d6fcbb6275c85cfd8bd69a2e94f8b0775d00d6b338556903905cbac"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp",
+      "bytes": 3957,
+      "sha256": "727e2ed66a49f4f004f483491b4dbf748abd738b7c0b4fc576ffc813774f5af4"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r10_feasibility_event_recovery/tools/events.hpp",
+      "bytes": 3714,
+      "sha256": "f7624d5a4c523e93c75793b8b69ab9d982438bbb68e0f653cb4b6e46b73d7868"
+    }
+  ],
+  "build_receipt": {
+    "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/BUILD_PROVENANCE.json",
+    "bytes": 4072,
+    "sha256": "d9929632cc7f3cfb82752d1f8de5bb9ac8e1e8b4d8b183f968ebb9f5207745d6"
+  },
+  "wrapper_tests": {
+    "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/tests/test_execute.py",
+    "bytes": 1608,
+    "sha256": "82c045792fa485e29324801ddb07eb115a4299fa4f80648f2c625335c8673408"
+  },
+  "binary": {
+    "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_build/replay",
+    "bytes": 140032,
+    "sha256": "9656bdc150db87a375ec1d5908c1c649e46c630daaa49cb1c4e9a2bb193a3d20"
+  }
+}
