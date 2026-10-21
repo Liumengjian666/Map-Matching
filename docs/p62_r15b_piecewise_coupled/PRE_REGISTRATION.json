@@ -1,0 +1,74 @@
+{
+  "task": "P62-R15B-PIECEWISE-COUPLED-REFINEMENT",
+  "status": "FROZEN_BEFORE_REAL_25_FRAME_MODEL_RUN",
+  "repository": "https://github.com/Liumengjian666/Map-Matching",
+  "branch": "research/p62-r15b-piecewise-coupled-refinement",
+  "start_sha": "995b2aa6f8d33e7119f3e6fd4c84a3fc5b77efce",
+  "parent_remote_ref_verified_at_freeze": {
+    "ref": "refs/heads/research/p62-r15-coupled-subspace-refinement-r1",
+    "sha": "995b2aa6f8d33e7119f3e6fd4c84a3fc5b77efce"
+  },
+  "code_sha_definition": "sha256 over sorted lines relative-path + two spaces + file SHA256 + newline",
+  "code_sha": "8e4a671616a9b94c638bf29cae8d2c4701929293f59fe72aef08d514d0f7283b",
+  "frozen_inputs": {
+    "parent_manifest": "PARENT_INPUT_FREEZE.json",
+    "parent_manifest_sha256": "aeb6a0df8dabee4dcdc4d07d3a068591cece369b40a4a0a062f8cd68d4f72f45",
+    "verified_entries": 131,
+    "verification_status": "PASS",
+    "verification_artifact": "PARENT_INPUT_VERIFICATION.json",
+    "verification_sha256": "9e5c056d8ab19ecdd837987413dd4623dc182e1181ca15a345b251c8c90c08c9"
+  },
+  "fixed_frames": {
+    "GEODE_R13": {
+      "raw_scan_indices": [10700, 10701, 10702, 10703, 10704],
+      "archive_frame_keys": ["60", "61", "62", "63", "64"],
+      "frame_count": 5
+    },
+    "NEWER_COLLEGE_R14B": {
+      "raw_ordinals": [768, 769, 770, 771, 772, 773, 774, 775, 776, 777, 778, 779, 780, 781, 782, 783, 784, 785, 786, 787],
+      "frame_count": 20,
+      "reference_kind": "MAP_ANCHORED_BENCHMARK_REFERENCE",
+      "coordinate_assumption": "PAPER_SUPPORTED_BASE_FRAME_ASSUMPTION"
+    },
+    "total": 25
+  },
+  "fixed_method": {
+    "right_body_perturbation": "T(z)=T0 Exp(S z)",
+    "scales_m_rad": [0.30, 0.30, 0.30, 0.05235987755982989, 0.05235987755982989, 0.05235987755982989],
+    "fixed_association_at_nominal": true,
+    "training_source_only_for_local_model": true,
+    "dynamic_association_changes_are_diagnostic_only": true,
+    "formal_degeneracy_ratio": 0.01,
+    "probe_direction_count": 1,
+    "probe_semantics": "SPECTRAL_TAIL_MECHANISM_PROBE_NOT_FORMAL_WEAK_DIRECTION",
+    "alpha": [0.5, 1.0],
+    "lambda": 0.01,
+    "trust_region": "same unit normalized joint ball; only strong response is scaled",
+    "r12_robust_advantage_strict_gate": 0.02,
+    "formal_candidate_eligibility": "post-NDT refinements remain converged=false and ineligible",
+    "pcl_parameters": {
+      "version": "1.10.0",
+      "resolution_m": 0.8,
+      "step_size": 0.08,
+      "epsilon": 0.001,
+      "max_iterations": 40,
+      "outlier_ratio": 0.55
+    },
+    "map_gaussian_grid_initializations": 2,
+    "new_align_calls_allowed": 0,
+    "EKF_feedback_allowed": false
+  },
+  "pre_run_checks": {
+    "R15_archive_checksums": "PASS",
+    "R15_frozen_input_identities": "131/131 PASS",
+    "cold_release_build": "PASS",
+    "synthetic_mathematical_tests": "PASS",
+    "PCL_score_identity": "PASS",
+    "dynamic_boundary_does_not_gate_fixed_branch": "PASS"
+  },
+  "reference_access": {
+    "raw_registered_pose_values_read_before_this_freeze": false,
+    "non_blind_context": "R15 documentation discloses three prior R14B reference-error summary rows inspected before R15 candidate freeze; R14B report/reference summary and first historical reference-error rows have also been inspected for context here. No raw registered_poses.csv pose values were read or used to choose an algorithm setting. Any R15B reference-relative evaluation is exploratory and must retain MAP_ANCHORED_BENCHMARK_REFERENCE/PAPER_SUPPORTED_BASE_FRAME_ASSUMPTION limitations."
+  },
+  "candidate_outputs_are_not_created_yet": true
+}

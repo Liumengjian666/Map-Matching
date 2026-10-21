@@ -1,0 +1,13 @@
+{
+  "task": "P62-R15B-PIECEWISE-COUPLED-REFINEMENT",
+  "attempt": 2,
+  "status": "FAILED_EVALUATOR_NO_REFERENCE_ROW_KEY_AFTER_REFERENCE_READ",
+  "failure": "KeyError: raw_index while appending GEODE no-reference rows; the boundary table only has frame_key.",
+  "reference_pose_values_read": 20,
+  "unique_reference_rows": 20,
+  "error_csv_written": false,
+  "model_output_freeze_modified": false,
+  "NDT_align_calls": 0,
+  "EKF_runs": 0,
+  "corrective_action": "Use the frozen R15B preregistration mapping from GEODE frame_key to raw scan index for no-reference rows. No algorithm or model run is repeated."
+}

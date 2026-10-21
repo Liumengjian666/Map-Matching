@@ -1,0 +1,20 @@
+{
+  "task": "P62-R15B-PIECEWISE-COUPLED-REFINEMENT",
+  "status": "CODE_AND_INPUTS_FROZEN_BEFORE_REAL_RUN",
+  "branch": "research/p62-r15b-piecewise-coupled-refinement",
+  "start_sha": "995b2aa6f8d33e7119f3e6fd4c84a3fc5b77efce",
+  "algorithm_code_sha": "8e4a671616a9b94c638bf29cae8d2c4701929293f59fe72aef08d514d0f7283b",
+  "run_binary_sha256": "e2970fe131649a4bb1a425ae12e6feddf081774694145e65007214dbeeb5a6a8",
+  "test_binary_sha256": "0d092d873370fae2b05380ef7b4f4ddac717d6e34b1f727b0b1016f049e9ed7a",
+  "parent_input_manifest_sha256": "aeb6a0df8dabee4dcdc4d07d3a068591cece369b40a4a0a062f8cd68d4f72f45",
+  "input_identity_status": "131/131 PASS",
+  "pre_registration_file": "PRE_REGISTRATION.json",
+  "pre_registration_sha256": "397b06a64b75cd29de720a627fe058e5fe1737599c8c065e6b05910c2db8096e",
+  "test_log_sha256": "e22bcd6594ec8c5410510990d7672b0ab64538fd0e1ce33d47c04618ac55d768",
+  "frozen_output_directory": "run_01",
+  "frozen_frame_count": 25,
+  "new_ndt_align_calls_allowed": 0,
+  "EKF_runs_allowed": 0,
+  "GT_pose_values_before_model_output_freeze": 0,
+  "post_freeze_reference_evaluation": "exploratory only; MAP_ANCHORED_BENCHMARK_REFERENCE under PAPER_SUPPORTED_BASE_FRAME_ASSUMPTION"
+}

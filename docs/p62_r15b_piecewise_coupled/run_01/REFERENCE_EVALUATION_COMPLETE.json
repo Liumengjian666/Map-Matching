@@ -1,0 +1,12 @@
+{
+  "completed_utc": "2026-10-21T14:55:11.503606+00:00",
+  "coordinate_assumption": "PAPER_SUPPORTED_BASE_FRAME_ASSUMPTION",
+  "model_output_freeze_sha256": "3ab7077cbb4d09728bc577ca35b5867257bf23582d388dd379a97d49b5da7207",
+  "offline_evaluation_attempt": 3,
+  "prior_evaluator_failures_preserved": 2,
+  "reference_file_sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+  "reference_kind": "MAP_ANCHORED_BENCHMARK_REFERENCE",
+  "reference_pose_rows_used": 20,
+  "task": "P62-R15B-PIECEWISE-COUPLED-REFINEMENT",
+  "transform_fit": false
+}

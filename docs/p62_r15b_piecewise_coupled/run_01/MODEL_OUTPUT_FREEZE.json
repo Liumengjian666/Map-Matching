@@ -1,0 +1,183 @@
+{
+  "binary_sha256": "e2970fe131649a4bb1a425ae12e6feddf081774694145e65007214dbeeb5a6a8",
+  "code_sha": "8e4a671616a9b94c638bf29cae8d2c4701929293f59fe72aef08d514d0f7283b",
+  "ekf_runs": 0,
+  "formal_run_terminal": "R15B_PIECEWISE_COMPLETE frames=25 gaussian_grid_initializations=2 align=0 ekf=0 gt_reads=0",
+  "frame_count": 25,
+  "frozen_frame_keys": [
+    [
+      "GEODE_R13",
+      "60"
+    ],
+    [
+      "GEODE_R13",
+      "61"
+    ],
+    [
+      "GEODE_R13",
+      "62"
+    ],
+    [
+      "GEODE_R13",
+      "63"
+    ],
+    [
+      "GEODE_R13",
+      "64"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "768"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "769"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "770"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "771"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "772"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "773"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "774"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "775"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "776"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "777"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "778"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "779"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "780"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "781"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "782"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "783"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "784"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "785"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "786"
+    ],
+    [
+      "NEWER_COLLEGE_R14B",
+      "787"
+    ]
+  ],
+  "gt_pose_reads_before_freeze": 0,
+  "new_ndt_aligns": 0,
+  "note": "This seal covers the model outputs only. Newer College reference poses may be read only after this JSON is written; any resulting error analysis is exploratory MAP_ANCHORED_BENCHMARK_REFERENCE under PAPER_SUPPORTED_BASE_FRAME_ASSUMPTION.",
+  "outputs": [
+    {
+      "bytes": 4444,
+      "path": "ASSOCIATION_BOUNDARY_ANALYSIS.csv",
+      "sha256": "c34d43e7575d577dd2c473ddd5dc0a86ed0828c6c7179c65c29c718966e459a3"
+    },
+    {
+      "bytes": 123261,
+      "path": "CANDIDATE_OBJECTIVES.csv",
+      "sha256": "4ce85715f756918cd1e5617ae6ddb8d422d1024903c18e3e60dddc7afa0d68d5"
+    },
+    {
+      "bytes": 25666,
+      "path": "DYNAMIC_PCL_OBJECTIVE.csv",
+      "sha256": "ec7a64163e91ba30d8b5da5645ae08d9e6a2fe3ea0c9480ec9e1790ecddb6df7"
+    },
+    {
+      "bytes": 76471,
+      "path": "HELDOUT_COMPARISON.csv",
+      "sha256": "d73be90df19cc1103ee977237dfc31252c67ba4cfff6f34cc101993ee70a0616"
+    },
+    {
+      "bytes": 28123,
+      "path": "LOCAL_MODEL_DERIVATIVES.csv",
+      "sha256": "9eb0c842303b03e9ad9563204672cfca7c0ca60580f8fd321d6768d4c33be4f0"
+    },
+    {
+      "bytes": 935733,
+      "path": "NOMINAL_ASSOCIATION_IDENTITIES.csv",
+      "sha256": "50e0329bc85d7130b5bd25c45db5f841c6ab82f4894053b4ef3fef425b2c2146"
+    },
+    {
+      "bytes": 6788,
+      "path": "RUNTIME_AND_MEMORY.csv",
+      "sha256": "411875d82e513b7ad7602ee286b5a0b5e5cc70bfdbc34d16b69055b701d11585"
+    },
+    {
+      "bytes": 150844,
+      "path": "SUBSPACE_AND_COUPLING.csv",
+      "sha256": "fff6d88636e14f596814ffdb4b881c68dde0116fc0648c491a721c0979ad9ae9"
+    },
+    {
+      "bytes": 65074,
+      "path": "WEAK_ONLY_VS_COUPLED.csv",
+      "sha256": "7d366689dd46de31e50c7702ca0ce2fe83bb84f1274ba0ead1f72876cc5b11d2"
+    },
+    {
+      "bytes": 91,
+      "path": "formal_run.log",
+      "sha256": "454bded734a8c768807aef89e34fd1c8bf78ec65c94d2ffb94d72f2ca5e73089"
+    },
+    {
+      "bytes": 954,
+      "path": "process_timing.log",
+      "sha256": "172f2c3276f825b97704c2da39988bccb35f9db337fed930203c7616ae9a9ac9"
+    }
+  ],
+  "pre_registration_sha256": "397b06a64b75cd29de720a627fe058e5fe1737599c8c065e6b05910c2db8096e",
+  "reference_error_file_absent_at_freeze": true,
+  "row_counts": {
+    "ASSOCIATION_BOUNDARY_ANALYSIS.csv": 25,
+    "CANDIDATE_OBJECTIVES.csv": 150,
+    "DYNAMIC_PCL_OBJECTIVE.csv": 150,
+    "HELDOUT_COMPARISON.csv": 1200,
+    "LOCAL_MODEL_DERIVATIVES.csv": 25,
+    "NOMINAL_ASSOCIATION_IDENTITIES.csv": 17616,
+    "RUNTIME_AND_MEMORY.csv": 50,
+    "SUBSPACE_AND_COUPLING.csv": 50,
+    "WEAK_ONLY_VS_COUPLED.csv": 50
+  },
+  "status": "MODEL_OUTPUTS_FROZEN_BEFORE_REFERENCE_EVALUATION"
+}

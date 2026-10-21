@@ -1,0 +1,20 @@
+{
+  "task": "P62-R15B-PIECEWISE-COUPLED-REFINEMENT",
+  "source_baseline_sha": "995b2aa6f8d33e7119f3e6fd4c84a3fc5b77efce",
+  "historical_dependencies_are_unmodified": true,
+  "files": [
+    {"path":"docs/p62_r6_dog_shadow_prototype/tools/contract.hpp","bytes":4834,"sha256":"c44a4e45aa12555763eab768f52d6e45109ccf9fb998893831c17c88d8b0446d"},
+    {"path":"docs/p62_r6_dog_shadow_prototype/tools/native_kernel.hpp","bytes":5481,"sha256":"4dbc81a42d6fcbb6275c85cfd8bd69a2e94f8b0775d00d6b338556903905cbac"},
+    {"path":"docs/p62_r8_structural_admission/tools/preprocess.hpp","bytes":803,"sha256":"11225b3f0a044bfcbfba25fa9340f41d1e2dd6d2997c9de66773eeb531f3ada1"},
+    {"path":"docs/p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp","bytes":3957,"sha256":"727e2ed66a49f4f004f483491b4dbf748abd738b7c0b4fc576ffc813774f5af4"},
+    {"path":"docs/p62_r9_coverage_aware_recovery_v2/tools/direction.hpp","bytes":1038,"sha256":"f6758056924599ba3078a8499d7d9a2fc0f3cdde85139ef1860ef5896d8aa6db"},
+    {"path":"docs/p62_r9_coverage_aware_recovery_v2/tools/io.hpp","bytes":2930,"sha256":"3ed296c11a5f9a6ff46c6720e8fb6d4a9e7e101c6a7b6e366697ce2e11c6348e"},
+    {"path":"docs/p62_r10_feasibility_event_recovery/tools/events.hpp","bytes":3714,"sha256":"f7624d5a4c523e93c75793b8b69ab9d982438bbb68e0f653cb4b6e46b73d7868"},
+    {"path":"docs/p62_r10_feasibility_event_recovery/tools/native_capture.hpp","bytes":1298,"sha256":"581f2dad0fae57cd82fc1d68e05d02fd025a8ce8841aaf4f07bedbd06bb5529c"},
+    {"path":"docs/p62_r11_cause_aware_recovery/tools/se3.hpp","bytes":4047,"sha256":"411f67a0d728cfa8907c2940d57f2b30728e13d8351bf580c9ffdaf7b2d4a7cf"},
+    {"path":"docs/p62_r12_feasibility_preserving_pool/tools/pool_v3.hpp","bytes":4031,"sha256":"fe43cd3080a37dbaa9b0b82adfd1f6f6f20f63dd4398c1a19b40eda750d9e976"},
+    {"path":"docs/p62_r13_training_guided_multihypothesis/tools/coarse.hpp","bytes":4462,"sha256":"5e2c9191a3193e32db55eb47957e566c6bdc9cbefe48ca9f026cd91ac2d48a3a"},
+    {"path":"docs/p62_r14b_newer_college/conditional_base_pilot/tools/common.hpp","bytes":4241,"sha256":"bf02e7d9782f32d34b686de20ba9af4dcbc02a797510e65ac68690c676d42108"}
+  ],
+  "consumption_path": "R15B coupled.hpp includes the frozen R14B common.hpp; its includes resolve to the R13 coarse, R9 IO, R10 native capture, R12 pool, R11 SE(3), R6 NativeNdt and the R8/R9 preprocessing and coverage implementation above. No dependency was copied into a separate approximating implementation."
+}

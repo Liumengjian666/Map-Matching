@@ -1,0 +1,8 @@
+Scanning dependencies of target run_piecewise
+[ 25%] Building CXX object CMakeFiles/run_piecewise.dir/run_piecewise.cpp.o
+[ 50%] Linking CXX executable run_piecewise
+[ 50%] Built target run_piecewise
+Scanning dependencies of target test_piecewise
+[ 75%] Building CXX object CMakeFiles/test_piecewise.dir/test_piecewise.cpp.o
+[100%] Linking CXX executable test_piecewise
+[100%] Built target test_piecewise

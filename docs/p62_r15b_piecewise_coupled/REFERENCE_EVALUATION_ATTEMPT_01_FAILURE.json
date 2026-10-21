@@ -1,0 +1,13 @@
+{
+  "task": "P62-R15B-PIECEWISE-COUPLED-REFINEMENT",
+  "attempt": 1,
+  "status": "FAILED_EVALUATOR_KEY_JOIN_AFTER_REFERENCE_READ",
+  "failure": "KeyError: raw_index while joining ASSOCIATION_BOUNDARY_ANALYSIS.csv; that table uses frame_key.",
+  "reference_pose_values_read": 20,
+  "unique_reference_rows": 20,
+  "error_csv_written": false,
+  "model_output_freeze_modified": false,
+  "NDT_align_calls": 0,
+  "EKF_runs": 0,
+  "corrective_action": "Fix the offline evaluator to join using its actual frame_key; re-evaluate only the already sealed model outputs and same 20 fixed reference rows. No algorithm or model run is repeated."
+}

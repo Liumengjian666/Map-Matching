@@ -1,0 +1,32 @@
+{
+  "task": "P62-R15B-PIECEWISE-COUPLED-REFINEMENT",
+  "start_sha": "995b2aa6f8d33e7119f3e6fd4c84a3fc5b77efce",
+  "algorithm_code_sha": "8e4a671616a9b94c638bf29cae8d2c4701929293f59fe72aef08d514d0f7283b",
+  "algorithm_code_sha_definition": "sha256 of sorted relative-path + two spaces + file SHA256 + newline lines for tools/CMakeLists.txt, tools/coupled.hpp, tools/piecewise.hpp, tools/run_piecewise.cpp, tools/test_piecewise.cpp",
+  "build_command": [
+    "cmake -S docs/p62_r15b_piecewise_coupled/tools -B /tmp/p62_r15b_piecewise_build_frozen02 -DCMAKE_BUILD_TYPE=Release",
+    "cmake --build /tmp/p62_r15b_piecewise_build_frozen02 -j1",
+    "LD_PRELOAD=/lib/x86_64-linux-gnu/libusb-1.0.so.0 /tmp/p62_r15b_piecewise_build_frozen02/test_piecewise"
+  ],
+  "build_directory_was_fresh": true,
+  "compiler": "c++ (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0",
+  "language_standard": "C++14",
+  "build_type": "Release",
+  "pcl": "1.10.0",
+  "cmake_cache_sha256": "7ad87534cd0151fe43803fb5e6257ffb48292d8f1c2cb751b6c57f86a3570a84",
+  "sources": [
+    {"path":"tools/CMakeLists.txt","bytes":506,"sha256":"1ee45b488fc53e9fb9c6a4df6b8132e8809b292cff77b7a18f4579cecd58db71"},
+    {"path":"tools/coupled.hpp","bytes":30858,"sha256":"6871e4977f17cb493781409f5a87b6c6d15103def704ee88862bf13a015c2d96"},
+    {"path":"tools/piecewise.hpp","bytes":11944,"sha256":"733aec694d90a5e2f507e5fca16e339ff2a1c3430bdcafc6e4b89d70527e1dfa"},
+    {"path":"tools/run_piecewise.cpp","bytes":28357,"sha256":"a57a61237c19916eeb4863277b83422f4404fc44cebedecd9baf32968fb4a38e"},
+    {"path":"tools/test_piecewise.cpp","bytes":11417,"sha256":"4590d4cc928ca02777b66066f8701d9ab7fac9cf5faa3207ff257d54d771d7a7"}
+  ],
+  "binaries": [
+    {"path":"/tmp/p62_r15b_piecewise_build_frozen02/run_piecewise","bytes":560992,"sha256":"e2970fe131649a4bb1a425ae12e6feddf081774694145e65007214dbeeb5a6a8"},
+    {"path":"/tmp/p62_r15b_piecewise_build_frozen02/test_piecewise","bytes":413896,"sha256":"0d092d873370fae2b05380ef7b4f4ddac717d6e34b1f727b0b1016f049e9ed7a"}
+  ],
+  "test_result": "MATHEMATICAL_TESTS_PASS score_parity=0 geometry_rel=2.95402e-17 same_path_geometry_rel=2.95655e-17 derivative_rel=1.66913e-07 hessian_antisym=6.48887e-07 scalar_hessian_rel=6.45233e-06 step_spread=1.00002 boundary_changed_points=1",
+  "test_log": "final_test.log",
+  "align_calls_in_tests": 0,
+  "real_run": "NOT_RUN_AT_BUILD_FREEZE"
+}

@@ -1,0 +1,14 @@
+{
+  "axis_assumption": "PAPER_SUPPORTED_BASE_FRAME_ASSUMPTION",
+  "created_utc": "2026-10-21T14:54:00.755014+00:00",
+  "model_output_freeze_sha256": "3ab7077cbb4d09728bc577ca35b5867257bf23582d388dd379a97d49b5da7207",
+  "model_outputs_rechecked": true,
+  "r14b_preregistration_sha256": "1b7525585ef49204fcabf75e9c8096d4e43f18be34b982369bfe92ab36e000d1",
+  "reference_kind": "MAP_ANCHORED_BENCHMARK_REFERENCE",
+  "reference_pose_values_opened_at_this_point": false,
+  "registered_poses_bytes": 1330464,
+  "registered_poses_identity_rechecked_before_value_read": true,
+  "registered_poses_sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+  "task": "P62-R15B-PIECEWISE-COUPLED-REFINEMENT",
+  "warning": "Exploratory Reference-Relative Pose Error only; not independent mocap truth and no exporter-bound axis certification."
+}

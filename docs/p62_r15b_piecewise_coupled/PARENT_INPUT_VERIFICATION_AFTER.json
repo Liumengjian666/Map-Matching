@@ -1,0 +1,9 @@
+{
+  "task": "P62-R15B-PIECEWISE-COUPLED-REFINEMENT",
+  "manifest": "PARENT_INPUT_FREEZE.json",
+  "entries": 131,
+  "missing": [],
+  "mismatches": [],
+  "status": "PASS",
+  "method": "tools/verify_parent_inputs.py streaming SHA256 and byte-size check after the model run and reference evaluation"
+}

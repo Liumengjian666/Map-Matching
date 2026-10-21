@@ -1,0 +1,30 @@
+{
+  "task": "P62-R15B-PIECEWISE-COUPLED-REFINEMENT",
+  "status": "R15B_PIECEWISE_COMPLETE",
+  "repository": "https://github.com/Liumengjian666/Map-Matching",
+  "branch": "research/p62-r15b-piecewise-coupled-refinement",
+  "start_sha": "995b2aa6f8d33e7119f3e6fd4c84a3fc5b77efce",
+  "algorithm_code_sha": "8e4a671616a9b94c638bf29cae8d2c4701929293f59fe72aef08d514d0f7283b",
+  "run_binary_sha256": "e2970fe131649a4bb1a425ae12e6feddf081774694145e65007214dbeeb5a6a8",
+  "test_binary_sha256": "0d092d873370fae2b05380ef7b4f4ddac717d6e34b1f727b0b1016f049e9ed7a",
+  "pre_registration_sha256": "397b06a64b75cd29de720a627fe058e5fe1737599c8c065e6b05910c2db8096e",
+  "model_output_freeze_sha256": "3ab7077cbb4d09728bc577ca35b5867257bf23582d388dd379a97d49b5da7207",
+  "frames": 25,
+  "geode_raw_indices": [10700, 10701, 10702, 10703, 10704],
+  "newer_college_raw_ordinals": [768, 769, 770, 771, 772, 773, 774, 775, 776, 777, 778, 779, 780, 781, 782, 783, 784, 785, 786, 787],
+  "gaussian_grid_initializations": 2,
+  "new_native_pcl_ndt_aligns": 0,
+  "ekf_runs": 0,
+  "gt_pose_values_read_before_model_output_freeze": 0,
+  "reused_grid_nominal_score_match": "25/25 within 1e-9",
+  "formal_run_terminal_line": "R15B_PIECEWISE_COMPLETE frames=25 gaussian_grid_initializations=2 align=0 ekf=0 gt_reads=0",
+  "process_exit_status": 0,
+  "wall_seconds": 8.24,
+  "peak_rss_KiB": 89284,
+  "log_sha256": {
+    "formal_run.log": "454bded734a8c768807aef89e34fd1c8bf78ec65c94d2ffb94d72f2ca5e73089",
+    "process_timing.log": "172f2c3276f825b97704c2da39988bccb35f9db337fed930203c7616ae9a9ac9"
+  },
+  "model_output_freeze": "run_01/MODEL_OUTPUT_FREEZE.json",
+  "reference_error_evaluation": "post-freeze exploratory only; MAP_ANCHORED_BENCHMARK_REFERENCE / PAPER_SUPPORTED_BASE_FRAME_ASSUMPTION"
+}
