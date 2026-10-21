@@ -1,0 +1,15 @@
+{
+  "repository": "https://github.com/Liumengjian666/Map-Matching",
+  "worktree": "/home/jian/livox_ws/p62_r14_m3dgr_pilot_ws",
+  "branch": "research/p62-r14-m3dgr-mocap-pilot",
+  "start_sha": "cfae39344a17ac2ee5e598fd7875d33f8c109794",
+  "r13_local_head_at_start": "cfae39344a17ac2ee5e598fd7875d33f8c109794",
+  "r13_remote_head_at_start": "cfae39344a17ac2ee5e598fd7875d33f8c109794",
+  "r13_worktree_clean_at_start": true,
+  "preflight_code_sha": "5bb6ad76596a5046cb7461f3d7b84ed5d09b3cc5",
+  "remote_r14_query": "git ls-remote origin refs/heads/research/p62-r14-m3dgr-mocap-pilot",
+  "remote_r14_query_result": "No matching ref at final archive preparation",
+  "push_executed": false,
+  "end_sha_policy": "Containing final commit; reported separately after commit, not self-referential",
+  "default_workspace_note": "dog_loc_paper_ws has unrelated staged/untracked work and lacks this branch; do not change it or push from that unrelated repository"
+}

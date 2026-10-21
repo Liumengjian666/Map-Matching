@@ -1,0 +1,1 @@
+frame_index,stamp_ns,method,preprocess_ms,coarse_search_ms,align_ms,validation_ms,pool_decision_ms,total_ms,peak_rss_bytes,status

@@ -1,0 +1,13 @@
+{
+  "initial_free_bytes": 22944526336,
+  "reserve_bytes": 21474836480,
+  "headroom_bytes": 1469689856,
+  "official_sequence_row": "Wheel-float01|2024-11-24|1.5g|123s|Wheel Float|[OneDrive](https://1drv.ms/u/c/2b4bfc0edf421186/EYYRQt8O_EsggCvoDwAAAAABPfiAyZaMZKeDieNO6DWjNQ?e=UkQKrT)/[Alipan](https://www.alipan.com/s/aVQ24Hm4Xcm)|[OneDrive](https://1drv.ms/t/c/2b4bfc0edf421186/EYYRQt8O_EsggCsmEAAAAAABrgAChsxs_7wLR3YhrvfGGw?e=1dSi4p)/[Alipan](https://www.alipan.com/s/ZsdFZF1ueRW)",
+  "official_size_is_rounded": true,
+  "exact_bag_bytes": null,
+  "unpacked_peak_bytes": null,
+  "map_and_parser_peak_bytes": null,
+  "admission": "BLOCKED_PEAK_SIZE_NOT_CERTIFIED",
+  "optimistic_1_5_decimal_GB_remaining_bytes": 21444526336,
+  "note": "1.5g is not an exact byte identity; no certified download/extraction/map peak exists, so do not download"
+}

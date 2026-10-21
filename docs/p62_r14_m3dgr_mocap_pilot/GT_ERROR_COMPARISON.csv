@@ -1,0 +1,1 @@
+frame_index,stamp_ns,method,reference_stamp_ns,reference_time_difference_ns,translation_error_m,rotation_error_deg,reference_valid,accepted_map_observation

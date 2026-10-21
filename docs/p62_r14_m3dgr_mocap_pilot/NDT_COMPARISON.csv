@@ -1,0 +1,1 @@
+frame_index,stamp_ns,method,source_points,train_points,active_blocks,ndt_converged,ndt_iterations,ndt_fitness,pred_translation_correction_m,pred_rotation_correction_deg,overlap_0_5,status

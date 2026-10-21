@@ -1,0 +1,64 @@
+{
+  "result": "BLOCKED_ASSET_ACQUISITION",
+  "CODE_SHA": "5bb6ad76596a5046cb7461f3d7b84ed5d09b3cc5",
+  "official_revision": "e0cf7d59c9a5a3df515624034698d976abc26549",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/sjtuyinjie/M3DGR/e0cf7d59c9a5a3df515624034698d976abc26549/README.md",
+      "status": 200,
+      "identity": {
+        "path": "/home/jian/livox_ws/p62_r14_m3dgr_pilot_ws/docs/p62_r14_m3dgr_mocap_pilot/evidence/README.md",
+        "bytes": 50339,
+        "sha256": "98fbc418df5ee1f1524f2a95fed11ef561eda81a23724c13ae231702f097349b"
+      },
+      "seconds": 0.7290086970315315
+    },
+    {
+      "url": "https://raw.githubusercontent.com/sjtuyinjie/M3DGR/e0cf7d59c9a5a3df515624034698d976abc26549/checksums.txt",
+      "status": 200,
+      "identity": {
+        "path": "/home/jian/livox_ws/p62_r14_m3dgr_pilot_ws/docs/p62_r14_m3dgr_mocap_pilot/evidence/checksums.txt",
+        "bytes": 3416,
+        "sha256": "35803cb15cf3a4d9f965c5de4d29c6c2d141178a6120e586658b24fb6b9a31f8"
+      },
+      "seconds": 0.5607860260060988
+    }
+  ],
+  "official_sequence_row": "Wheel-float01|2024-11-24|1.5g|123s|Wheel Float|[OneDrive](https://1drv.ms/u/c/2b4bfc0edf421186/EYYRQt8O_EsggCvoDwAAAAABPfiAyZaMZKeDieNO6DWjNQ?e=UkQKrT)/[Alipan](https://www.alipan.com/s/aVQ24Hm4Xcm)|[OneDrive](https://1drv.ms/t/c/2b4bfc0edf421186/EYYRQt8O_EsggCsmEAAAAAABrgAChsxs_7wLR3YhrvfGGw?e=1dSi4p)/[Alipan](https://www.alipan.com/s/ZsdFZF1ueRW)",
+  "official_expected_bag_sha256": "366171a5f1d0c1e7bd602e2b664d85dbd89dd08570c4165142ef9849029c1cf6",
+  "local_payload_verified": false,
+  "bag_HEAD_probe": {
+    "url": "https://1drv.ms/u/c/2b4bfc0edf421186/EYYRQt8O_EsggCvoDwAAAAABPfiAyZaMZKeDieNO6DWjNQ?e=UkQKrT",
+    "method": "HEAD",
+    "payload_bytes_read": 0,
+    "status": 200,
+    "final_url": "https://onedrive.live.com/?id=2B4BFC0EDF421186%214072&cid=2B4BFC0EDF421186&spopath=2B4BFC0EDF421186%214072&listurl=%2Fpersonal%2F2b4bfc0edf421186%2FDocuments&e=UkQKrT&parent=%2Fpersonal%2F2b4bfc0edf421186%2FDocuments%2Fdatasets%2FM3DGR%2FDataset%2FWheel%5FSlippage%2FIndoor&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3UvYy8yYjRiZmMwZWRmNDIxMTg2L0VZWVJRdDhPX0VzZ2dDdm9Ed0FBQUFBQlBmaUF5WmFNWktlRGllTk82RFdqTlE_ZT1Va1FLclQ&reauth=1&ga=1",
+    "content_type": "text/html; charset=utf-8",
+    "content_length": "322312",
+    "seconds": 4.837062432023231
+  },
+  "GT_HEAD_probe": {
+    "status": "NOT_RUN_AFTER_BAG_ADMISSION_BLOCK"
+  },
+  "GT_link": "https://1drv.ms/t/c/2b4bfc0edf421186/EYYRQt8O_EsggCsmEAAAAAABrgAChsxs_7wLR3YhrvfGGw?e=1dSi4p",
+  "storage": {
+    "initial_free_bytes": 22944526336,
+    "reserve_bytes": 21474836480,
+    "headroom_bytes": 1469689856,
+    "official_sequence_row": "Wheel-float01|2024-11-24|1.5g|123s|Wheel Float|[OneDrive](https://1drv.ms/u/c/2b4bfc0edf421186/EYYRQt8O_EsggCvoDwAAAAABPfiAyZaMZKeDieNO6DWjNQ?e=UkQKrT)/[Alipan](https://www.alipan.com/s/aVQ24Hm4Xcm)|[OneDrive](https://1drv.ms/t/c/2b4bfc0edf421186/EYYRQt8O_EsggCsmEAAAAAABrgAChsxs_7wLR3YhrvfGGw?e=1dSi4p)/[Alipan](https://www.alipan.com/s/ZsdFZF1ueRW)",
+    "official_size_is_rounded": true,
+    "exact_bag_bytes": null,
+    "unpacked_peak_bytes": null,
+    "map_and_parser_peak_bytes": null,
+    "admission": "BLOCKED_PEAK_SIZE_NOT_CERTIFIED",
+    "optimistic_1_5_decimal_GB_remaining_bytes": 21444526336,
+    "note": "1.5g is not an exact byte identity; no certified download/extraction/map peak exists, so do not download"
+  },
+  "protected_assets_equal": true,
+  "payload_downloaded_bytes": 0,
+  "map_builds": 0,
+  "new_NDT_align": 0,
+  "GT_pose_files_read": 0,
+  "wheel_messages_read": 0,
+  "stop": "No further admission, map, localization or evaluation performed"
+}
