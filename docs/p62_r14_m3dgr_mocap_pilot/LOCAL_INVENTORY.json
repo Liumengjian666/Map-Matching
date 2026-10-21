@@ -1,0 +1,27 @@
+{
+  "command": [
+    "rg",
+    "--files",
+    "/home/jian/livox_ws",
+    "/home/jian/rosbag",
+    "/home/jian/geode",
+    "-g",
+    "*[Mm]3[Dd][Gg][Rr]*",
+    "-g",
+    "*[Ww]heel*[Ff]loat*",
+    "-g",
+    "*[Ww]heel-float*",
+    "-g",
+    "!build/**",
+    "-g",
+    "!devel/**",
+    "-g",
+    "!**/.git/**"
+  ],
+  "returncode": 1,
+  "matches": [],
+  "stderr": "",
+  "scope": "Filename search only, including this R14 directory after creation; not proof against renamed files",
+  "first_inventory_before_worktree": "Same bounded filename search found no matching filenames (rg exit1)",
+  "payload_files_locally_verified": false
+}

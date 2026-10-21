@@ -1,0 +1,12 @@
+{
+  "status": "NOT_BUILT",
+  "reason": "Asset admission blocked",
+  "map_path": null,
+  "map_sha256": null,
+  "map_points": null,
+  "map_build_time_range_ns": null,
+  "gt_build_time_range_ns": null,
+  "map_frame": "W (planned only)",
+  "map_type": "Oracle-Built Prior Map (planned only)",
+  "builds_executed": 0
+}

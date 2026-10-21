@@ -1,0 +1,8 @@
+{
+  "status": "NOT_SELECTED_AFTER_ASSET_BLOCK",
+  "planned_rule": "20 time-equally-spaced LiDAR frames in whole-sequence 65%-95%; only after all input gates",
+  "selected_frames": [],
+  "selected_frame_count": null,
+  "valid_reference_count": null,
+  "reason": "No bag/GT loaded; no timestamps/source hashes available; not a completed test registration"
+}
