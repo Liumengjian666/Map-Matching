@@ -1,0 +1,20 @@
+{
+  "CODE_SHA": "7eaa7309dd0f7ce0f4564ab3bac2fb459794946e",
+  "at_ns": 1792562294675646691,
+  "base": "9125c4f9b313994b08572bec143e20b7b81d1d3b",
+  "official_revision": "e0cf7d59c9a5a3df515624034698d976abc26549",
+  "free_bytes": 91412652032,
+  "reserve_bytes": 21474836480,
+  "limits_bytes": {
+    "bag": 6442450944,
+    "gt_aux": 1073741824,
+    "map_temp": 21474836480,
+    "run_results": 4294967296
+  },
+  "near_limit_stop_margin_bytes": 67108864,
+  "storage_status": "PASS_FOR_DECLARED_BOUNDED_BUDGET",
+  "url": "https://www.alipan.com/s/aVQ24Hm4Xcm",
+  "expected_sha256": "366171a5f1d0c1e7bd602e2b664d85dbd89dd08570c4165142ef9849029c1cf6",
+  "old_preflight_invocations": 0,
+  "old_OneDrive_requests": 0
+}

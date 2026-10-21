@@ -1,0 +1,7 @@
+{
+  "command": "bounded find Wheel/float identifiers over3roots",
+  "returncode": 0,
+  "matches": [],
+  "stderr": "",
+  "limitation": "No claim about renamed/out-of-scope assets; no matching payload candidates found before network access"
+}

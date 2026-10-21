@@ -1,0 +1,28 @@
+{
+  "files": [
+    {
+      "name": "acquire.py",
+      "source": "/home/jian/livox_ws/p62_r14_m3dgr_pilot_ws/docs/p62_r14_m3dgr_mocap_pilot/resume_20261021/acquire.py",
+      "bytes": 10029,
+      "sha256": "9358e6118ad783de2a135b58f8e59f22cadb120ad72a87cc4a9492538ea4ec56"
+    },
+    {
+      "name": "test_acquire.py",
+      "source": "/home/jian/livox_ws/p62_r14_m3dgr_pilot_ws/docs/p62_r14_m3dgr_mocap_pilot/resume_20261021/test_acquire.py",
+      "bytes": 5200,
+      "sha256": "31e95d420133d955c83bd8e7efdf4f39522940aa4168b6ff38ac14c0699648dd"
+    },
+    {
+      "name": "OFFICIAL_ACCESS_RECEIPT.json",
+      "source": "/home/jian/livox_ws/p62_r14_m3dgr_pilot_ws/docs/p62_r14_m3dgr_mocap_pilot/resume_20261021/OFFICIAL_ACCESS_RECEIPT.json",
+      "bytes": 532,
+      "sha256": "dcd23422af3110fec8eedf43d06e8297e78eab2bb42d48179f08c9ae504a04bb"
+    }
+  ],
+  "prompt_sha256": "2d04f6160305fe1d12a34b180facef43f9e0ccb247adba66420e028618fa531b",
+  "packet": "/home/jian/livox_ws/p62_r14_resume_cli_review_20261021_bdQHpf",
+  "CLI_version": "codex-cli0.159.2",
+  "status": "PENDING_EXACT_COMMAND_APPROVAL",
+  "external_inference_executed": false,
+  "excluded": "Stable protection snapshots, credentials, bags, GT, maps, old archives"
+}

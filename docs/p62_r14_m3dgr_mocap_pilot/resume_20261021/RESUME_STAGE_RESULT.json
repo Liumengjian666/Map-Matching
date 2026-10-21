@@ -1,0 +1,22 @@
+{
+  "status": "ASSET_ACCESS_REQUIRES_USER_ACTION",
+  "old_assets_unchanged": true,
+  "free_bytes_after": 91411668992,
+  "bag": {
+    "url": "https://www.alipan.com/s/aVQ24Hm4Xcm",
+    "method": "GET",
+    "initial_GET_attempts": 1,
+    "old_OneDrive_requests": 0,
+    "status": "ASSET_ACCESS_REQUIRES_USER_ACTION",
+    "error": "URLError: <urlopen error EOF occurred in violation of protocol (_ssl.c:1145)>",
+    "http_status": null,
+    "bag_payload_bytes": 0,
+    "wall_seconds": 0.3335484989802353,
+    "redirects_followed": [],
+    "acquisition_process_peak_rss_bytes": 530665472,
+    "memory_scope": "Whole Linux acquisition process incl protection snapshot; not NDT runtime"
+  },
+  "GT_files_read": 0,
+  "new_NDT_align": 0,
+  "note": "Stop after inaccessible bag; if bag is verified, subsequent authorized gates still required"
+}

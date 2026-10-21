@@ -1,0 +1,6 @@
+{
+  "status": "NOT_SELECTED_AFTER_ASSET_ACCESS_BLOCK",
+  "frames": [],
+  "count": null,
+  "planned_rule": "20 time-equally-spaced frames in65%-95% whole-sequence time; no result-dependent selection"
+}

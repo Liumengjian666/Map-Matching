@@ -1,0 +1,8 @@
+{
+  "unchanged": true,
+  "old_R14_files": 31,
+  "stable_HEAD": "41999ea700c66c4cadf0eca9e0c5d73caa2783fd",
+  "stable_files": 1766,
+  "free_bytes": 91457138688,
+  "method": "Compare full snapshot to continuation before; verify old30 and resume28 checksum entries"
+}

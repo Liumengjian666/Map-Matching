@@ -1,0 +1,152 @@
+{
+  "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/execute.py",
+  "sha256": "6b4ad4d89b3868c5d903829809802214215abe5431c2d55ac498af987ead366a",
+  "top_level_nodes": [
+    {
+      "type": "Expr",
+      "line": 2,
+      "text": "\"\"\"R12 identity/build/one offline decision replay; no optimizer invocation.\"\"\""
+    },
+    {
+      "type": "Import",
+      "line": 3,
+      "text": "import argparse"
+    },
+    {
+      "type": "Import",
+      "line": 4,
+      "text": "import hashlib"
+    },
+    {
+      "type": "Import",
+      "line": 5,
+      "text": "import json"
+    },
+    {
+      "type": "Import",
+      "line": 6,
+      "text": "import os"
+    },
+    {
+      "type": "ImportFrom",
+      "line": 7,
+      "text": "from pathlib import Path"
+    },
+    {
+      "type": "Import",
+      "line": 8,
+      "text": "import shutil"
+    },
+    {
+      "type": "Import",
+      "line": 9,
+      "text": "import subprocess"
+    },
+    {
+      "type": "Import",
+      "line": 10,
+      "text": "import time"
+    },
+    {
+      "type": "Assign",
+      "line": 12,
+      "text": "DOC=Path(__file__).resolve().parent"
+    },
+    {
+      "type": "Assign",
+      "line": 13,
+      "text": "REPO=DOC.parents[1]"
+    },
+    {
+      "type": "Assign",
+      "line": 14,
+      "text": "BASE='169771c332cf5e00cc1b532421db1b0be70dc370'"
+    },
+    {
+      "type": "Assign",
+      "line": 15,
+      "text": "R11=Path('/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery')"
+    },
+    {
+      "type": "Assign",
+      "line": 16,
+      "text": "STABLE=Path('/home/jian/livox_ws/dog_visual_loc_ws')"
+    },
+    {
+      "type": "Assign",
+      "line": 17,
+      "text": "BUILD=Path('/home/jian/livox_ws/p62_r12_feasibility_pool_build')"
+    },
+    {
+      "type": "Assign",
+      "line": 18,
+      "text": "RUN=Path('/home/jian/livox_ws/p62_r12_feasibility_pool_runs')"
+    },
+    {
+      "type": "FunctionDef",
+      "line": 20,
+      "text": "identity"
+    },
+    {
+      "type": "FunctionDef",
+      "line": 26,
+      "text": "write"
+    },
+    {
+      "type": "FunctionDef",
+      "line": 29,
+      "text": "git"
+    },
+    {
+      "type": "FunctionDef",
+      "line": 32,
+      "text": "stable_snapshot"
+    },
+    {
+      "type": "FunctionDef",
+      "line": 45,
+      "text": "frozen_sources"
+    },
+    {
+      "type": "FunctionDef",
+      "line": 53,
+      "text": "original_inputs"
+    },
+    {
+      "type": "FunctionDef",
+      "line": 66,
+      "text": "check"
+    },
+    {
+      "type": "FunctionDef",
+      "line": 70,
+      "text": "prepare"
+    },
+    {
+      "type": "FunctionDef",
+      "line": 78,
+      "text": "build"
+    },
+    {
+      "type": "FunctionDef",
+      "line": 95,
+      "text": "invoke_once"
+    },
+    {
+      "type": "FunctionDef",
+      "line": 104,
+      "text": "bind"
+    },
+    {
+      "type": "FunctionDef",
+      "line": 119,
+      "text": "run"
+    },
+    {
+      "type": "If",
+      "line": 164,
+      "text": "if __name__=='__main__':\n    parser=argparse.ArgumentParser();parser.add_argument('action',choices=['prepare','build','bind','run']);args=parser.parse_args()\n    try:globals()[args.action]()\n    except Exception as exc:\n        print('R12_STOP '+str(exc));raise SystemExit(1)"
+    }
+  ],
+  "limitation": "Current static inspection only; not retroactive proof of run-time helper identity; source not sent to CLI"
+}

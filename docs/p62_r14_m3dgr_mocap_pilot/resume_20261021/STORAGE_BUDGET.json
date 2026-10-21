@@ -1,0 +1,23 @@
+{
+  "status": "PASS_FOR_DECLARED_BOUNDED_BUDGET",
+  "before_available_bytes": 91412652032,
+  "after_available_bytes": 91410710528,
+  "reserve_bytes": 21474836480,
+  "limits_bytes": {
+    "bag": 6442450944,
+    "gt_aux": 1073741824,
+    "map_temp": 21474836480,
+    "run_results": 4294967296
+  },
+  "used_bytes_at_seal_start": {
+    "bag": 0,
+    "gt_aux": 0,
+    "map_temp": 0,
+    "run_results": 964917
+  },
+  "total_authorized_new_bytes": 33285996544,
+  "near_limit_margin_bytes": 67108864,
+  "actual_target": "/home/jian/livox_ws/p62_r14_m3dgr_data/resume_20261021",
+  "actual_device": 66306,
+  "note": "New report bytes increase slightly during sealing; all remain far below4GiB results budget"
+}
