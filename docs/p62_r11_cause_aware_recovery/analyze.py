@@ -246,7 +246,8 @@ def main():
             'Ordinary robust singleton abstention is not evidence of candidate discrimination',
             'A raw formally eligible candidate at64 is discarded by frozen physical dedup; its offline paired advantage is still negative',
             'Baseline single distinct result lies near1deg dedup boundary; not a basin proof'],
-        unique_NEXT='Ask research controller to reassess nominal-attractor candidate collapse and define a new bounded generation contract; no threshold relaxation or new run now')
+        engineering_status='COMPLETED_WITH_LEGACY_FLOAT_SEED_CAP_DEVIATION',
+        unique_NEXT='Ask research controller to define a bounded feasibility-preserving candidate-pool contract for eligible raw duplicate64/1 discarded against illegal nominal; retain dedup distances and D>0.02, note its diagnostic D is negative, and do not run or promise recovery now')
     save('results.json',summary);print(json.dumps(summary,ensure_ascii=False,indent=2))
 
 
