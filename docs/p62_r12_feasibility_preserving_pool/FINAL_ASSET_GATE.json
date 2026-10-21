@@ -1,0 +1,9 @@
+{
+  "status": "R12_FINAL_FROZEN_ASSET_GATE_PASS",
+  "frozen_input_files": 54,
+  "source_and_binary_unchanged": true,
+  "stable_snapshot_equal": true,
+  "R11_historical_worktree_unchanged": true,
+  "original_run_outputs": 8,
+  "repeat_Bundle_preservation": false
+}

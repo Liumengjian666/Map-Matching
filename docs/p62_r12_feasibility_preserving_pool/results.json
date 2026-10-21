@@ -1,0 +1,113 @@
+{
+  "task": "P62-R12-FEASIBILITY-PRESERVING-CANDIDATE-POOL",
+  "START_SHA": "169771c332cf5e00cc1b532421db1b0be70dc370",
+  "actual_run_CODE_SHA": "0d7f9a21e8448f386aee6f322f8abdd6b86c79eb",
+  "actual_CXX_build_CODE_SHA": "e5890c64440a41bde5665adc2d2218e6e85b36fc",
+  "analysis_CODE_SHA": "29d3c03e3d96ff5b9ee8e43383c9a118395372c2",
+  "result": "POOL_FEASIBILITY_REPAIRED_BUT_SUPPORTED_RECOVERY_NOT_ESTABLISHED",
+  "frames": 100,
+  "arms": {
+    "BASELINE_WEAK": {
+      "raw_rows": 102,
+      "raw_eligible": 95,
+      "old_discarded_eligible": 0,
+      "old_eligible_representatives": 95,
+      "new_eligible_representatives": 95,
+      "non_nominal_physical_groups": 1,
+      "robust_supported": 0,
+      "accepted_replacements": 0,
+      "old_accept_nominal": 95,
+      "new_accept_nominal": 95,
+      "old_rejections": 5,
+      "new_rejections": 5,
+      "final_acceptance_changes": 0,
+      "native_rank_changes": 0,
+      "mean_rank_changes": 0,
+      "robust_rank_changes": 0
+    },
+    "PROPOSED_DISAGREEMENT": {
+      "raw_rows": 110,
+      "raw_eligible": 96,
+      "old_discarded_eligible": 1,
+      "old_eligible_representatives": 95,
+      "new_eligible_representatives": 96,
+      "non_nominal_physical_groups": 0,
+      "robust_supported": 0,
+      "accepted_replacements": 0,
+      "old_accept_nominal": 95,
+      "new_accept_nominal": 95,
+      "old_rejections": 5,
+      "new_rejections": 5,
+      "final_acceptance_changes": 0,
+      "native_rank_changes": 1,
+      "mean_rank_changes": 1,
+      "robust_rank_changes": 0
+    }
+  },
+  "arm_candidate_rows": 212,
+  "unique_native_outputs_reused": 112,
+  "new_physical_candidates": 0,
+  "pairwise_LP_verified_directed_rows": 6,
+  "pairwise_check_semantics": "Numerical LP verification of6 directed variant rows including repeated values; not6 independent evidence samples",
+  "counterexample64": {
+    "representative": 1,
+    "raw_nominal_anchor": 0,
+    "D_1_0": -0.0010521137862698788,
+    "accepted_replacement": false
+  },
+  "engineering": {
+    "A1": "PASS",
+    "A2": "PASS",
+    "A3": "PASS",
+    "A4": "PASS: original duplicate()",
+    "A5": "PASS: original paired(), strict >.02",
+    "A6": "PASS",
+    "A7": "R12_FROZEN_INPUTS_AND_PRODUCTION_UNCHANGED",
+    "A8": "PASS:27 C++ checks and5 Python mock checks"
+  },
+  "science": {
+    "S1": "SUPPORTED: original feasible row1 preserved as representative at64",
+    "S2": "NONE: no optimizer run or new candidate",
+    "S3": "NOT_ESTABLISHED: previously excluded pair made explicit; no new independent evidence",
+    "S4": "UNCHANGED:95 nominal/5 rejected per arm"
+  },
+  "runtime": {
+    "control_ms": {
+      "n": 200,
+      "mean": 0.001577715,
+      "p95": 0.001956,
+      "max": 0.002864
+    },
+    "proposed_ms": {
+      "n": 200,
+      "mean": 0.00207957,
+      "p95": 0.002445,
+      "max": 0.006635
+    },
+    "peak_replay_process_RSS_MiB": 16.7890625,
+    "process_wall_s": 0.033653851016424596,
+    "quantile": "linear/type7; descriptive, offline decision cost only"
+  },
+  "boundaries": {
+    "new_NDT_align": 0,
+    "rosbag_play": 0,
+    "EKF_runs": 0,
+    "GT_data_reads": 0,
+    "new_trajectory_estimates": 0,
+    "production_code_changes": 0,
+    "new_seed_generation": 0,
+    "repeat_Bundle_preservation": 0,
+    "formal_offline_replay_processes": 1
+  },
+  "novelty": "NOT_ESTABLISHED",
+  "push_executed": false,
+  "retained_history": "R10 asset drift remains failed; R11 baseline float3.000000034180631deg deviation retained, not retroactively fixed",
+  "limitations": [
+    "Known frozen counterexample; not blind/generalization or accuracy evaluation",
+    "Structural sectors are correlated, not independent truth",
+    "Fixed-anchor greedy groups do not imply pairwise member or promoted-representative proximity",
+    "Representative promotion is not a different NDT basin",
+    "Runtime excludes NDT, geometry optimization and physical localization"
+  ],
+  "unique_NEXT": "Controller to pre-register one bounded mechanism for physically different NDT hypotheses together with an independent correctness evaluation contract; no further guard/dedup-threshold tuning or experiment now"
+}

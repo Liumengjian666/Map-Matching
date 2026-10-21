@@ -1,0 +1,58 @@
+{
+  "status": "OFFLINE_REPLAY_COMPLETED",
+  "process_exit": {
+    "returncode": 0,
+    "error": null,
+    "wall_s": 0.033653851016424596
+  },
+  "outputs": [
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_runs/PROCESS_EXIT.json",
+      "bytes": 73,
+      "sha256": "ca6c86ae5bbba8ac28a9fdada619e08e3398d991d671ef1d04d1fe04e3e1c00b"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_runs/STARTED.json",
+      "bytes": 16359,
+      "sha256": "decf4ebac6d6b4eca27ef041b5f45a6d75b2d33e5ce7f87814f36c6d4b579289"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_runs/formal/ACCEPTANCE_COMPARISON.csv",
+      "bytes": 20869,
+      "sha256": "1de7f186a35c45c75512b5980e78ffc7abab73552bec57bb15d3488d1ca1783d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_runs/formal/PAIRWISE_EVIDENCE.csv",
+      "bytes": 501,
+      "sha256": "05aa5dcd88f39a36582064d0ac1319462bdfcd956c4a1f518308b106e9226fdc"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_runs/formal/RAW_TO_GROUP_MAPPING.csv",
+      "bytes": 10687,
+      "sha256": "83cd81ca4557be411d9e0e70c6e10661a869b0825cf180124a809390c653073e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_runs/formal/REPRESENTATIVE_COMPARISON.csv",
+      "bytes": 8676,
+      "sha256": "fbae0473d74cdeb35e4858705594119dfb7e9c11de73641392399dca69066ade"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_runs/formal/RUNTIME_AND_MEMORY.csv",
+      "bytes": 12512,
+      "sha256": "99f1eb746bf0f7c706943d60672b58bca89f481485574fd9b6b32d3c3b634b1a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_runs/replay.log",
+      "bytes": 223,
+      "sha256": "163f98ab35e413f482184f15f5e9d752d89f1e806f20630823e42bf0e67f12ae"
+    }
+  ],
+  "after_gate": "R12_FROZEN_INPUTS_AND_PRODUCTION_UNCHANGED",
+  "new_ndt_align": 0,
+  "actual_run_CODE_SHA": "0d7f9a21e8448f386aee6f322f8abdd6b86c79eb",
+  "actual_binary": {
+    "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_build/replay",
+    "bytes": 140032,
+    "sha256": "9656bdc150db87a375ec1d5908c1c649e46c630daaa49cb1c4e9a2bb193a3d20"
+  }
+}
