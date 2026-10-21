@@ -1,0 +1,114 @@
+[
+  {
+    "path": "/home/jian/rosbag/FASTLIVO2-dogmapping/realtime_map_match/bag/realtime_map_match_20261007_143634.bag",
+    "sha256": "5d8b7ea6632f2a2230113b1a5041321c6e6bf47539ff725fa108030e071dfc5e",
+    "signature": {
+      "size": 6644924973,
+      "allocated": 6644932608,
+      "dev": 66306,
+      "inode": 18612921,
+      "nlink": 1,
+      "mtime_ns": 1791355570758144000,
+      "ctime_ns": 1791358680990912651,
+      "mode": 33204
+    }
+  },
+  {
+    "path": "/home/jian/rosbag/fastlio_location_tests/loop4_on_degen_map_2026_08_07_18_57_58/pcd/loop4_on_degen_map_2026_08_07_18_57_58/loop4_on_degen_map_2026_08_07_18_57_58_2026_08_07_19_09_07_all_raw_points.pcd",
+    "sha256": "34eec3debb8b3523e35a32e5b32a9550795eaddb17e3265945164aa7596436f8",
+    "signature": {
+      "size": 378979580,
+      "allocated": 378986496,
+      "dev": 66306,
+      "inode": 18107712,
+      "nlink": 1,
+      "mtime_ns": 1786100948788263333,
+      "ctime_ns": 1786100948812263693,
+      "mode": 33188
+    }
+  },
+  {
+    "path": "/home/jian/rosbag/fastlivo2_degen_tests/loop4_degen_2026_08_07_17_56_01/pcd/loop4_degen_2026_08_07_17_56_01/loop4_degen_2026_08_07_17_56_01_2026_08_07_18_07_09_all_raw_points.pcd",
+    "sha256": "b0aec1c29883af0eb57c915f17e92ad64fedfe5849d2a5697e978285aea8d88d",
+    "signature": {
+      "size": 397946924,
+      "allocated": 397955072,
+      "dev": 66306,
+      "inode": 18107646,
+      "nlink": 1,
+      "mtime_ns": 1786097230186837154,
+      "ctime_ns": 1786097230210837488,
+      "mode": 33188
+    }
+  },
+  {
+    "path": "/home/jian/rosbag/fastlivo2_degen_tests/loop4_degen_guard_2026_08_07_18_25_02/pcd/loop4_degen_guard_2026_08_07_18_25_02/loop4_degen_guard_2026_08_07_18_25_02_2026_08_07_18_36_07_all_raw_points.pcd",
+    "sha256": "bbbfb1550b5bcfb75b0c650bd29d0a18d0486a6569fe7011a221678c665f1280",
+    "signature": {
+      "size": 415573148,
+      "allocated": 415580160,
+      "dev": 66306,
+      "inode": 18107687,
+      "nlink": 1,
+      "mtime_ns": 1786098969703261779,
+      "ctime_ns": 1786098969735262239,
+      "mode": 33188
+    }
+  },
+  {
+    "path": "/home/jian/rosbag/fastlivo2_original_vs_improved_loop4_2026_08_07_21_25_03/loop1_raw_official_vs_improved_2026_08_07_22_26_58/improved_degen_guard/output/pcd/loop1_improved_degen/loop1_improved_degen_2026_08_07_22_57_21_all_raw_points.pcd",
+    "sha256": "16af451f94016bcf84d1212eea2b32142e7fabcc148654f2907fbe09eb39aa39",
+    "signature": {
+      "size": 540807004,
+      "allocated": 540811264,
+      "dev": 66306,
+      "inode": 18101446,
+      "nlink": 1,
+      "mtime_ns": 1786114642843212560,
+      "ctime_ns": 1786114642879213098,
+      "mode": 33188
+    }
+  },
+  {
+    "path": "/home/jian/rosbag/loop2/final_delivery_run_A_20260922/ndt_determinism.csv",
+    "sha256": "e5f749cbbc7fc514326cc61626945f4ac6347722e4ad769e676984e1d214102a",
+    "signature": {
+      "size": 20638557,
+      "allocated": 20639744,
+      "dev": 66306,
+      "inode": 18113132,
+      "nlink": 1,
+      "mtime_ns": 1790027036199179566,
+      "ctime_ns": 1790027036199179566,
+      "mode": 33204
+    }
+  },
+  {
+    "path": "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd",
+    "sha256": "016b7ae3ae494ad5d462a66d888a96b96dda5fe29d6058059aa2fa6bdf6b09ca",
+    "signature": {
+      "size": 7346648,
+      "allocated": 7348224,
+      "dev": 66306,
+      "inode": 18120989,
+      "nlink": 1,
+      "mtime_ns": 1786518902563031859,
+      "ctime_ns": 1786518902563031859,
+      "mode": 33188
+    }
+  },
+  {
+    "path": "/home/jian/rosbag/loop2/raw_restore_20260914_stage0/loop2_raw.bag",
+    "sha256": "d17bee3f8697dcb01cb4b9f6ea2483aa42a1a31ae277659c8a7869d9c69f13ae",
+    "signature": {
+      "size": 19677401800,
+      "allocated": 19677409280,
+      "dev": 66306,
+      "inode": 18366039,
+      "nlink": 1,
+      "mtime_ns": 1786180570000000000,
+      "ctime_ns": 1789380446959621833,
+      "mode": 33204
+    }
+  }
+]

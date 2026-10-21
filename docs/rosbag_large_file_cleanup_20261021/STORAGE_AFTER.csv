@@ -1,0 +1,2 @@
+path,before_available_bytes,after_available_bytes,actual_df_available_increase_bytes,actual_df_available_increase_GiB,deleted_files,deleted_bag_files,deleted_pcd_files,deleted_cropped_bags,deleted_duplicate_dataset_directories,duplicate_bag_content_groups,duplicate_pcd_content_groups,protected_assets_unchanged,large_files_remaining,note
+/home/jian/rosbag,22934634496,91418374144,68483739648,63.780452728271484,10,4,6,0,0,2,4,True,41,"df net available-byte increase, not logical-size sum; includes concurrent filesystem activity and audit-output allocation"

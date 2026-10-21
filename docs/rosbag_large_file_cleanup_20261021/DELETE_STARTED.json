@@ -1,0 +1,17 @@
+{
+  "at_ns": 1792560942535674378,
+  "plan_sha256": "56200f2449db162585ff82324fd6d1738842c8b517f8c2415d86eea6d4cb28e9",
+  "paths": [
+    "/home/jian/rosbag/fastlio_location_tests/loop4_on_degen_map_2026_08_07_18_57_58/pcd/loop4_on_degen_map_2026_08_07_18_57_58/loop4_on_degen_map_2026_08_07_18_57_58_2026_08_07_19_09_07_all_downsampled_points.pcd",
+    "/home/jian/rosbag/fastlivo2_degen_tests/loop4_degen_2026_08_07_17_56_01/pcd/loop4_degen_2026_08_07_17_56_01/loop4_degen_2026_08_07_17_56_01_2026_08_07_18_07_09_all_downsampled_points.pcd",
+    "/home/jian/rosbag/fastlivo2_original_vs_improved_loop4_2026_08_07_21_25_03/improved_degen_guard/pcd/improved_degen_guard_all_raw_points.pcd",
+    "/home/jian/rosbag/fastlivo2_original_vs_improved_loop4_2026_08_07_21_25_03/loop1_raw_official_vs_improved_2026_08_07_22_26_58/improved_degen_guard/output/pcd/loop1_improved_degen/loop1_improved_degen_2026_08_07_22_57_21_all_downsampled_points.pcd",
+    "/home/jian/rosbag/fastlivo2_original_vs_improved_loop4_2026_08_07_21_25_03/loop1_raw_official_vs_improved_2026_08_07_22_26_58/improved_degen_guard/pcd/improved_loop1_all_downsampled_points.pcd",
+    "/home/jian/rosbag/fastlivo2_original_vs_improved_loop4_2026_08_07_21_25_03/loop1_raw_official_vs_improved_2026_08_07_22_26_58/improved_degen_guard/pcd/improved_loop1_all_raw_points.pcd",
+    "/home/jian/rosbag/loop2/stage1_raw_20260918/loop2_raw.bag",
+    "/home/jian/rosbag/loop2/stage2b_raw_recovered_20260918/loop2_raw.bag",
+    "/home/jian/rosbag/loop2/stage3a7_raw_recovery_20260920/loop2_raw.bag",
+    "/home/jian/rosbag/realtime_map_match/realtime_map_match_20261007_143634.bag"
+  ],
+  "free_bytes": 22926888960
+}
