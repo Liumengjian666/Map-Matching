@@ -1,0 +1,160 @@
+{
+  "inputs": [
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/ground_truth/registered_poses.csv",
+      "bytes": 1330464,
+      "sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/prior_map/new-college-29-01-2020-5cm-resolution.ply",
+      "bytes": 359695676,
+      "sha256": "e8bf6c7f2ddacde4f6f65ba7759b00bdca5c6bf5e706344ce8c3592529f04ab0",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/kalibr_output/cam-ouster-imu/camchain-ouster_imu-cam-rooster_2020-03-11-10-05-35_0.yaml",
+      "bytes": 1736,
+      "sha256": "3bc13fa24af9ef8ca888c5523b1df57d1c53d0ca4052b818b7e02310fa781feb",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/kalibr_output/ouster_imu_lidar_transforms.yaml",
+      "bytes": 300,
+      "sha256": "8fe56ff808c6c900db52ac1545819ef3da979818bfa392ba00aef43daf59a037",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836667_780782336.pcd",
+      "bytes": 1904640,
+      "sha256": "60bfd126de13b639727c08a7f6057f83667ec25514a9fe8ee13ca995326cf694",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836667_881124096.pcd",
+      "bytes": 1904640,
+      "sha256": "6c2e54ef25df03c90d5e0e7c143a87d0094427adffbebc170240ce124912a6a3",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836667_981409792.pcd",
+      "bytes": 1904640,
+      "sha256": "8851f325f5ebb4f01e38ed772a6550679e27ecc50f4f8c87a2741721e306ac71",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_081744896.pcd",
+      "bytes": 1904640,
+      "sha256": "3df1537d08d1cfa6086e03222a6571c1436ce3a5b2f6acc55a3e072c3e9480ec",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_181790720.pcd",
+      "bytes": 1904640,
+      "sha256": "5239b074093755379c1700bb3e63cdbf9ff804e707fba830c2757877bca94efd",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_281504000.pcd",
+      "bytes": 1904640,
+      "sha256": "1bddd97556580b822bf5673bf6ff81a68f6961a32e62a29435bb545a0ae5138a",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_381186048.pcd",
+      "bytes": 1904640,
+      "sha256": "355f3e29f41e72df5cdbfcf850e2f2633e89ba8ba6b9a47ddaedab2274c56848",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_480734208.pcd",
+      "bytes": 1904640,
+      "sha256": "daa6728e17deec93d626bd5fe988d855ab7b8da700874cc2b57da75dd4fab849",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_580386304.pcd",
+      "bytes": 1904640,
+      "sha256": "d765eb2026fd80754778c6d1f9776592cc6702b84fbb4abfbaba0534df4b3281",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_680456704.pcd",
+      "bytes": 1904640,
+      "sha256": "c508a366c2c2e58e0659438d992a9e18923d34b344c43fe1c6bb0148a6fa4aaf",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_780376320.pcd",
+      "bytes": 1904640,
+      "sha256": "e1e124fc1cda1fd2b5e3f83247682fbc448eafacdaa30f60ae46e001859498f0",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_880560384.pcd",
+      "bytes": 1904640,
+      "sha256": "780f9384d4f64573e462b328fe42458804c69c3fdd8300e90ea3bc11d0eb2dd0",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_980829440.pcd",
+      "bytes": 1904640,
+      "sha256": "6cc6b7be8c64e35bc62d8338b9d933ae064149056059b131a8a263ee85c23b94",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836669_081148672.pcd",
+      "bytes": 1904640,
+      "sha256": "0d9d7c73b71386ceecef042bc20e6a554b4c2ba1c2578a425f80a93027f5ba97",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836669_181535488.pcd",
+      "bytes": 1904640,
+      "sha256": "ddc41b6af08b81a89d51f9686ebbf432442b70fd115a2864b163989fe1690bcc",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836669_281652736.pcd",
+      "bytes": 1904640,
+      "sha256": "f12ecba81adca9ed0ea85413789d7262f1c43dbaad16cfd7739f1d8657b347ed",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836669_381685504.pcd",
+      "bytes": 1904640,
+      "sha256": "a961f4af9e06b0c2db1a21606be2ec29de92b33839991fbe879cc49092ea930a",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836669_481361920.pcd",
+      "bytes": 1904640,
+      "sha256": "c723849b72603e30c9a299784c0ab9a0572e577be8727f84b67d08c7ef4c11b3",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836669_580962304.pcd",
+      "bytes": 1904640,
+      "sha256": "315f3a59979cc48f75b304a28935bbfa9d248e6c833a68e9cb90f72f0e58cb19",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836669_680536832.pcd",
+      "bytes": 1904640,
+      "sha256": "a4a6659e3e8d9e7980dc52b7c5f59ab525cc134699d1964009fa598bfd0081eb",
+      "unchanged": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836669_780126208.pcd",
+      "bytes": 1904640,
+      "sha256": "18e3d0bbfd305867fbc43e850aa1db644cfc1e6c2d060ce191c6e0d66986bd89",
+      "unchanged": true
+    }
+  ],
+  "map_sha256": "b9f285c27a31f2fb1d4079dc80773285176c50e68c15bcc6ce336a58772a3742",
+  "source_files_checked": 33,
+  "binary_sha256": "27d913d505a139b19e23f804f2c05a93099880f0350cbf0ecb44328dcddd3dff",
+  "production_snapshot_equal": true,
+  "historical_tracked_files_equal_to_base": true,
+  "scope": "155 tracked/nonignored production files plus HEAD/index/refs/status; ignored files not claimed"
+}

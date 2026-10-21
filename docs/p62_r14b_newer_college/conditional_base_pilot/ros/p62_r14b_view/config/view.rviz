@@ -1,0 +1,51 @@
+Panels:
+  - Class: rviz/Displays
+    Name: Displays
+Visualization Manager:
+  Class: ""
+  Global Options:
+    Fixed Frame: leica_map
+    Background Color: 30; 30; 30
+    Frame Rate: 20
+  Displays:
+    - Class: rviz/PointCloud2
+      Name: Frozen Leica ROI
+      Enabled: true
+      Topic: /r14b/map
+      Size (m): 0.05
+      Color Transformer: FlatColor
+      Color: 150; 150; 150
+    - Class: rviz/PointCloud2
+      Name: Test scan at CONTROL_FULL
+      Enabled: true
+      Topic: /r14b/scan_at_full
+      Size (m): 0.08
+      Color Transformer: FlatColor
+      Color: 255; 120; 20
+    - Class: rviz/Path
+      Name: CONTROL_FULL
+      Enabled: true
+      Topic: /r14b/full_path
+      Color: 40; 255; 40
+    - Class: rviz/Path
+      Name: Nominal CONTROL_SPLIT
+      Enabled: true
+      Topic: /r14b/split_path
+      Color: 40; 120; 255
+    - Class: rviz/Path
+      Name: PROPOSED valid observations only
+      Enabled: true
+      Topic: /r14b/proposed_path
+      Color: 255; 60; 180
+    - Class: rviz/Path
+      Name: Conditional Base benchmark reference
+      Enabled: true
+      Topic: /r14b/reference_path
+      Color: 255; 255; 255
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Distance: 35
+      Focal Point: {X: 18.55, Y: -11.68, Z: 0.35}
+      Pitch: 0.7
+      Yaw: 0.8

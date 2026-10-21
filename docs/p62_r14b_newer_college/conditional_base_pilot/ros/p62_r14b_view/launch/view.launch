@@ -1,0 +1,8 @@
+<launch>
+  <arg name="rviz" default="true"/>
+  <arg name="keep_alive" default="true"/>
+  <node pkg="p62_r14b_view" type="visualize.py" name="r14b_sealed_view" output="screen" required="true">
+    <param name="keep_alive" value="$(arg keep_alive)"/>
+  </node>
+  <node if="$(arg rviz)" pkg="rviz" type="rviz" name="r14b_rviz" args="-d $(find p62_r14b_view)/config/view.rviz"/>
+</launch>

@@ -1,0 +1,9 @@
+{
+  "data_root": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021",
+  "available_bytes": 89804861440,
+  "new_processing_files_logical_bytes": 5345346,
+  "archive_files_logical_bytes_before_final_docs": 471750,
+  "minimum_reserve_bytes": 21474836480,
+  "new_sensor_download_bytes": 0,
+  "data_filesystem_device": 66306
+}

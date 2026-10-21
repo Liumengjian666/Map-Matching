@@ -1,0 +1,161 @@
+{
+  "code_sha": "742bb5f6297d2eebd467db9123a36a744319c081",
+  "binary_path": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/build/pilot",
+  "binary_sha256": "27d913d505a139b19e23f804f2c05a93099880f0350cbf0ecb44328dcddd3dff",
+  "source_files": [
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r10_feasibility_event_recovery/tools/events.hpp",
+      "sha256": "f7624d5a4c523e93c75793b8b69ab9d982438bbb68e0f653cb4b6e46b73d7868"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r10_feasibility_event_recovery/tools/native_capture.hpp",
+      "sha256": "581f2dad0fae57cd82fc1d68e05d02fd025a8ce8841aaf4f07bedbd06bb5529c"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r11_cause_aware_recovery/tools/se3.hpp",
+      "sha256": "411f67a0d728cfa8907c2940d57f2b30728e13d8351bf580c9ffdaf7b2d4a7cf"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r12_feasibility_preserving_pool/tools/pool_v3.hpp",
+      "sha256": "fe43cd3080a37dbaa9b0b82adfd1f6f6f20f63dd4398c1a19b40eda750d9e976"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r13_training_guided_multihypothesis/tools/coarse.hpp",
+      "sha256": "5e2c9191a3193e32db55eb47957e566c6bdc9cbefe48ca9f026cd91ac2d48a3a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r14b_newer_college/conditional_base_pilot/evaluate.py",
+      "sha256": "a7c4c8e1be3e8046b35c05739a0cafdd4a5f81e7d1b962eb4fd2874739e8a5c1"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r14b_newer_college/conditional_base_pilot/freeze_execution.py",
+      "sha256": "409365759c42809efaffec1b55a4b3556866d21c1b06bffd0f3acb4953b8c133"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r14b_newer_college/conditional_base_pilot/prepare.py",
+      "sha256": "d0b2d815368292cef474b4be88e3c4a70c22aac7565ab6d3e8230ca859bb7bd8"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r14b_newer_college/conditional_base_pilot/run_stage.py",
+      "sha256": "85499ae90f29ad90d3900edc5019d6fcd9db682e2bc449ab1260df392eed4965"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r14b_newer_college/conditional_base_pilot/test_evaluation.py",
+      "sha256": "4c4bf0abd3c4a2d0d146f49f0f55003a3a36d6ed9f47ec93781ad1d3797d40af"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r14b_newer_college/conditional_base_pilot/test_prepare.py",
+      "sha256": "1a8df795c42fd71efd1bcc126af017e1d446b67d41e7a0076e02266711532932"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r14b_newer_college/conditional_base_pilot/tools/CMakeLists.txt",
+      "sha256": "7a72321033ef0670f2d1623fc08bea6164119d2ca9a9805ddcf79dc7fa9e4a73"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r14b_newer_college/conditional_base_pilot/tools/common.hpp",
+      "sha256": "bf02e7d9782f32d34b686de20ba9af4dcbc02a797510e65ac68690c676d42108"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r14b_newer_college/conditional_base_pilot/tools/pilot.cpp",
+      "sha256": "435d92808cd3195446f50dd52edbf3ece99cc07a3f20517d994f9ee505abbeb9"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r14b_newer_college/conditional_base_pilot/tools/preflight.cpp",
+      "sha256": "73da1ae775b32ce00eef4c27c1d227f7f9a68b558bf351aab40cb82f4acaede2"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r14b_newer_college/conditional_base_pilot/tools/records.hpp",
+      "sha256": "e67cb5fc8bd5e7b0ddde4d40c4f35f22dc9b0554572134704e07b8ebac6ca64a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r14b_newer_college/conditional_base_pilot/tools/test_pilot.cpp",
+      "sha256": "4829249491d35a4c96e0ca7564135086cbdc5c728abaf6d98a2b145af7eee364"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r14b_newer_college/inspect_inputs.py",
+      "sha256": "7b5d9bf802cd908d4de7a9657ccf115e6316ed564d280eaebdf64e58894b5f36"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r6_dog_shadow_prototype/tools/contract.hpp",
+      "sha256": "c44a4e45aa12555763eab768f52d6e45109ccf9fb998893831c17c88d8b0446d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r6_dog_shadow_prototype/tools/native_kernel.hpp",
+      "sha256": "4dbc81a42d6fcbb6275c85cfd8bd69a2e94f8b0775d00d6b338556903905cbac"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r8_structural_admission/tools/preprocess.hpp",
+      "sha256": "11225b3f0a044bfcbfba25fa9340f41d1e2dd6d2997c9de66773eeb531f3ada1"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp",
+      "sha256": "727e2ed66a49f4f004f483491b4dbf748abd738b7c0b4fc576ffc813774f5af4"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r9_coverage_aware_recovery_v2/tools/direction.hpp",
+      "sha256": "f6758056924599ba3078a8499d7d9a2fc0f3cdde85139ef1860ef5896d8aa6db"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r9_coverage_aware_recovery_v2/tools/io.hpp",
+      "sha256": "3ed296c11a5f9a6ff46c6720e8fb6d4a9e7e101c6a7b6e366697ce2e11c6348e"
+    },
+    {
+      "path": "/usr/include/pcl-1.10/pcl/registration/impl/ndt.hpp",
+      "sha256": "e61be2ca7f1db2fe7171730146cdf493469e4e9e7e6d9c82d47f457d3b6006dc"
+    },
+    {
+      "path": "/usr/include/pcl-1.10/pcl/registration/ndt.h",
+      "sha256": "2e86c66a9aa49329e69cd227b3312cc73714851bbae682062dbb76f281068133"
+    },
+    {
+      "path": "/usr/include/pcl-1.10/pcl/pcl_config.h",
+      "sha256": "d800305c2fcf5b35bf25e71ae19e86ba11276f77d6cd75aa6285e6405e9c126e"
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libusb-1.0.so.0",
+      "sha256": "451c0a2b8806b71ddab9046470badc7665a467d511e87c1d5e1da7a343456586"
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libpcl_common.so.1.10",
+      "sha256": "4befa1c2493c2318f3847142003513227417db6e5f10ade3192fbe0fe196836e"
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libpcl_registration.so.1.10",
+      "sha256": "ddbbb8a37fa8e6bde8151edaadd37954dc601b4703826085c1936fdc108c29bf"
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libpcl_io.so.1.10",
+      "sha256": "530467dd81b9d6769ca6065bb33b3392e79191804f83fc2a541f6df2eb4acdd9"
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libpcl_filters.so.1.10",
+      "sha256": "60295a79261e10dd516c0761a22f5b209d349a5cbb9065e8ac4a9bf8310216b2"
+    },
+    {
+      "path": "/lib/x86_64-linux-gnu/libpcl_kdtree.so.1.10",
+      "sha256": "9441578ae3cbb8edc7de558aefc8af0f23ed4b8866cc1c8b3ffc30bbd2e43631"
+    }
+  ],
+  "preregistration_sha256": "1b7525585ef49204fcabf75e9c8096d4e43f18be34b982369bfe92ab36e000d1",
+  "scans_csv_sha256": "642d8c56d52433d07c9e8488fd4f8a0f1c76a34587962b781cb0b9eaaca0f2d2",
+  "anchor_matrix_sha256": "fb0bc3fc8bc08be1368792768259d043cb1ec58baf5b0ee8eb351522dddc0bff",
+  "map_sha256": "b9f285c27a31f2fb1d4079dc80773285176c50e68c15bcc6ce336a58772a3742",
+  "native_runtime_env": {
+    "LD_PRELOAD": "/lib/x86_64-linux-gnu/libusb-1.0.so.0",
+    "LD_BIND_NOW": "1"
+  },
+  "pcl_version": "1.10.0",
+  "NDT_parameters": {
+    "resolution": 0.8,
+    "step_size": 0.08,
+    "epsilon": 0.001,
+    "max_iterations": 40,
+    "outlier_ratio": 0.55
+  },
+  "formal_frames": 20,
+  "full_calls": 20,
+  "split_calls": 20,
+  "max_extra_calls": 20,
+  "reference_pose_values_available_to_native": false,
+  "coordinate_assumption": "PAPER_SUPPORTED_BASE_FRAME_ASSUMPTION"
+}

@@ -1,0 +1,44 @@
+FRAME 1 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+FRAME 2 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+FRAME 3 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+FRAME 4 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+FRAME 5 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+FRAME 6 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+FRAME 7 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+FRAME 8 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+FRAME 9 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+FRAME 10 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+FRAME 11 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+FRAME 12 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+FRAME 13 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+FRAME 14 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+FRAME 15 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+FRAME 16 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+FRAME 17 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+FRAME 18 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+FRAME 19 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+FRAME 20 event=0 extra=0 status=ACCEPT_NOMINAL full_admitted=1
+PILOT_COMPLETE frames=20 FULL=20 SPLIT=20 EXTRA=0 total=40 events=0 proposed_observations=20 recoveries=0 process_wall_ms=688.642 peak_rss_KiB=67940
+	Command being timed: "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/build/pilot /home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r14b_newer_college/conditional_base_pilot/SCANS.csv /home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r14b_newer_college/conditional_base_pilot/ANCHOR_MATRIX.txt /home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/map/leica_roi50_leaf020.pcd /home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/native_preflight/PCL_READ_TEST.csv /home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/native_preflight/MAP_BUILD.csv /home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/run/native"
+	User time (seconds): 0.60
+	System time (seconds): 0.11
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.71
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 67940
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 6
+	Minor (reclaiming a frame) page faults: 48750
+	Voluntary context switches: 6
+	Involuntary context switches: 70
+	Swaps: 0
+	File system inputs: 920
+	File system outputs: 264
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

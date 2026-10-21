@@ -1,0 +1,75 @@
+{
+  "metrics": {
+    "PREDICTION": {
+      "translation_m": {
+        "count": 20,
+        "rmse": 0.12708263215224636,
+        "median": 0.10039962620314982,
+        "p95": 0.17437053190595614,
+        "max": 0.3502344175990848
+      },
+      "rotation_deg": {
+        "count": 20,
+        "rmse": 1.9991149717303494,
+        "median": 2.011629910331065,
+        "p95": 2.722026268209324,
+        "max": 3.3639276315464324
+      }
+    },
+    "CONTROL_FULL": {
+      "translation_m": {
+        "count": 20,
+        "rmse": 0.0976661967198162,
+        "median": 0.08839911956698437,
+        "p95": 0.12805788295908052,
+        "max": 0.1653901156742418
+      },
+      "rotation_deg": {
+        "count": 20,
+        "rmse": 1.708573958797932,
+        "median": 1.75121429623804,
+        "p95": 2.0652611675669683,
+        "max": 2.467996582376238
+      }
+    },
+    "CONTROL_SPLIT": {
+      "translation_m": {
+        "count": 20,
+        "rmse": 0.09562117184387642,
+        "median": 0.0866050015048061,
+        "p95": 0.13886000525000164,
+        "max": 0.15850656784233874
+      },
+      "rotation_deg": {
+        "count": 20,
+        "rmse": 1.706832828339047,
+        "median": 1.729234503727644,
+        "p95": 2.083449472163948,
+        "max": 2.5175204019416504
+      }
+    },
+    "PROPOSED": {
+      "translation_m": {
+        "count": 20,
+        "rmse": 0.09562117184387642,
+        "median": 0.0866050015048061,
+        "p95": 0.13886000525000164,
+        "max": 0.15850656784233874
+      },
+      "rotation_deg": {
+        "count": 20,
+        "rmse": 1.706832828339047,
+        "median": 1.729234503727644,
+        "p95": 2.083449472163948,
+        "max": 2.5175204019416504
+      }
+    }
+  },
+  "quantile": "NumPy linear,type7 at0.95",
+  "alignment_fitted": false,
+  "timestamp_matches": "exact integer ns,0 delta",
+  "evaluated_reference_pose_rows": 20,
+  "five_degree_rejections": [],
+  "reference_kind": "MAP_ANCHORED_BENCHMARK_REFERENCE",
+  "file_axes_certified": false
+}

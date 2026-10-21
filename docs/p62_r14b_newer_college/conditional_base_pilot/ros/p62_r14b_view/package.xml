@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>p62_r14b_view</name><version>0.0.1</version>
+  <description>Read-only replay of sealed conditional Base pilot, no localization.</description>
+  <maintainer email="l3106055683@gmail.com">Liumengjian666</maintainer>
+  <license>BSD-3-Clause</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>rospy</exec_depend><exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend><exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>rviz</exec_depend>
+</package>

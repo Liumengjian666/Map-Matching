@@ -1,0 +1,115 @@
+{
+  "pcd_read_convert_ms": {
+    "mean": 5.319413599999999,
+    "p95": 5.46020725,
+    "max": 5.48761,
+    "sum": 106.38827200000001,
+    "unit": "ms",
+    "n": 20
+  },
+  "source_preprocess_ms": {
+    "mean": 4.780137000000001,
+    "p95": 4.899269250000001,
+    "max": 4.913999,
+    "sum": 95.60274000000001,
+    "unit": "ms",
+    "n": 20
+  },
+  "prediction_ms": {
+    "mean": 0.0032093000000000004,
+    "p95": 0.0038699000000000003,
+    "max": 0.0044,
+    "sum": 0.064186,
+    "unit": "ms",
+    "n": 20
+  },
+  "full_align_ms": {
+    "mean": 11.222226050000002,
+    "p95": 17.693714950000015,
+    "max": 38.48891,
+    "sum": 224.44452100000004,
+    "unit": "ms",
+    "n": 20
+  },
+  "split_align_ms": {
+    "mean": 5.14325165,
+    "p95": 7.77183185,
+    "max": 7.978378,
+    "sum": 102.86503300000003,
+    "unit": "ms",
+    "n": 20
+  },
+  "event_ms": {
+    "mean": 0.00310455,
+    "p95": 0.0038897500000000017,
+    "max": 0.006146,
+    "sum": 0.06209099999999999,
+    "unit": "ms",
+    "n": 20
+  },
+  "coarse_grid_ms": {
+    "mean": 0.0,
+    "p95": 0.0,
+    "max": 0.0,
+    "sum": 0.0,
+    "unit": "ms",
+    "n": 20
+  },
+  "seed_selection_ms": {
+    "mean": 0.0,
+    "p95": 0.0,
+    "max": 0.0,
+    "sum": 0.0,
+    "unit": "ms",
+    "n": 20
+  },
+  "extra_align_ms": {
+    "mean": 0.0,
+    "p95": 0.0,
+    "max": 0.0,
+    "sum": 0.0,
+    "unit": "ms",
+    "n": 20
+  },
+  "fitness_aux_ms": {
+    "mean": 2.648733,
+    "p95": 2.7661300499999997,
+    "max": 2.8028199999999996,
+    "sum": 52.97466,
+    "unit": "ms",
+    "n": 20
+  },
+  "coverage_ms": {
+    "mean": 1.7123254500000002,
+    "p95": 1.8028799,
+    "max": 1.84103,
+    "sum": 34.246509,
+    "unit": "ms",
+    "n": 20
+  },
+  "V3_decision_ms": {
+    "mean": 0.005255649999999999,
+    "p95": 0.008694650000000002,
+    "max": 0.012013,
+    "sum": 0.10511300000000001,
+    "unit": "ms",
+    "n": 20
+  },
+  "frame_wall_ms": {
+    "mean": 31.0562119,
+    "p95": 40.09482370000001,
+    "max": 59.801485,
+    "sum": 621.124238,
+    "unit": "ms",
+    "n": 20
+  },
+  "peak_rss_KiB": {
+    "formal_process": 67940,
+    "map_preflight_process": 558504
+  },
+  "map_once_build_ms": 3419.64146,
+  "formal_load_grid_tree_ms": 54.374287,
+  "formal_launcher_wall_s": 1.3486049020430073,
+  "whole_native_process_wall_ms": 688.642,
+  "scope": "Measured pilot only; excludes source inspection/build/download; map build separately measured; no10Hz claim"
+}

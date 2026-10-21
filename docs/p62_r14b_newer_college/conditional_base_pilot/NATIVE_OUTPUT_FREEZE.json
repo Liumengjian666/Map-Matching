@@ -1,0 +1,67 @@
+{
+  "files": [
+    {
+      "path": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/run/native/ACCEPTANCE_AND_EVENTS.csv",
+      "bytes": 1996,
+      "sha256": "c4ad6ea23e6a700891e2b741579fb44ce670f77001eec601fce73a064581321c"
+    },
+    {
+      "path": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/run/native/ALIGN_CALLS.csv",
+      "bytes": 2770,
+      "sha256": "fd4c30173339e842b4b7141d1c15ddedaa6f16b37bb87a70abe8d03931d8aa31"
+    },
+    {
+      "path": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/run/native/BLOCK_LOSSES.csv",
+      "bytes": 14200,
+      "sha256": "dea331f23926c009659f4f26c2b0bb96ab82f205c03afd44a47979bce1193288"
+    },
+    {
+      "path": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/run/native/COARSE_GRID_SCORES.csv",
+      "bytes": 355,
+      "sha256": "13e593422254624dd1f75ed236281cd3ad8e2e199bd534bab9ab80b8344d510f"
+    },
+    {
+      "path": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/run/native/FINAL_OBSERVATIONS.csv",
+      "bytes": 22365,
+      "sha256": "3d1ac646bb7fb9d4bdc54b77e75b826061a9250c42aad2691cfdfe539a8ad5cd"
+    },
+    {
+      "path": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/run/native/MAP_RUNTIME.csv",
+      "bytes": 129,
+      "sha256": "45d9a9c37e78d9de389735e38c97bc840be1200a39ed8f57fdd1d3fdd9c79640"
+    },
+    {
+      "path": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/run/native/NATIVE_NDT_RESULTS.csv",
+      "bytes": 30281,
+      "sha256": "3c911c8d35aea45d7749f66aebb04f75fac9674ae18f0a58b6f1fb407a0bb0e9"
+    },
+    {
+      "path": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/run/native/PAIRWISE_EVIDENCE.csv",
+      "bytes": 18,
+      "sha256": "dca941cad42e77a50b5cb7101e84e9609dfb3e1284ba95229ab80048f6001829"
+    },
+    {
+      "path": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/run/native/RAW_OPTIMIZER_OUTPUTS.csv",
+      "bytes": 23911,
+      "sha256": "33d1adf58def4d2d7564720b54beb413557909ccdd7202363ffa9e278db7fc89"
+    },
+    {
+      "path": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/run/native/RUNTIME_AND_MEMORY.csv",
+      "bytes": 4048,
+      "sha256": "47375ee27cc153fc580324e5ab3537848611f7ef5afb7a1b875f55fa73b7fa63"
+    },
+    {
+      "path": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/run/native/SELECTOR_COMPARISON.csv",
+      "bytes": 685,
+      "sha256": "ee85376fb63cb448dd123c02545ad82cfe2809e374e0bbd4b3e34cff6cdbd38b"
+    },
+    {
+      "path": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/run/native/SOURCE_RUNTIME.csv",
+      "bytes": 1644,
+      "sha256": "304047bd1b1808897097cbd0fe6b29dc68ee832d6f30351b990b4b0275c10946"
+    }
+  ],
+  "formal_log_sha256": "23a99dbe4383e7b69d20c5208ad161b90a144f813dd37572d28ea5bc26d4fe54",
+  "evaluation_reference_values_read_by_this_stage": false,
+  "requires_counts_and_completion_check_before_evaluation": true
+}

@@ -1,0 +1,10 @@
+{
+  "native_output_freeze_sha256": "14622a5f8350af7b5747dfd61c0db4245a674620041a8eb35a33396a65069f65",
+  "actual_call_counts": {
+    "R13_EXTRA": 0,
+    "CONTROL_FULL": 20,
+    "CONTROL_SPLIT": 20
+  },
+  "formal_completed": true,
+  "reference_pose_values_opened_at_this_point": false
+}

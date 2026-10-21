@@ -1,0 +1,54 @@
+{
+  "map_path": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/map/leica_roi50_leaf020.pcd",
+  "map_bytes": 2695698,
+  "map_sha256": "b9f285c27a31f2fb1d4079dc80773285176c50e68c15bcc6ce336a58772a3742",
+  "native_output_dir": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/native_preflight",
+  "scope": "nativePCD21 equivalence/map construction; NDT align0",
+  "map_build_csv_sha256": "88ecb30f15173b1a9f12bea8d8e35a1d1daba6cc22d0b6d5398fae442605747c",
+  "source_preflight_csv_sha256": "29c95ea809fd2aa6ee75a9c676ae107f3512e68a9dc6670e6a46b64b668871fe",
+  "official_source": {
+    "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/prior_map/new-college-29-01-2020-5cm-resolution.ply",
+    "bytes": 359695676,
+    "sha256": "e8bf6c7f2ddacde4f6f65ba7759b00bdca5c6bf5e706344ce8c3592529f04ab0"
+  },
+  "map_frame": "official Leica M, no fitted transform",
+  "roi_center_M": [18.55146465788851, -11.67869717870314, 0.346672148540518],
+  "roi_center_definition": "translation of preregistered anchor T_M_L; one static sphere only",
+  "roi_radius_m": 50,
+  "voxel_leaf_m": 0.2,
+  "Gaussian_grid_m": 0.8,
+  "bounds_min_m": [
+    -19.61199951171875,
+    -61.63523864746094,
+    -3.5105013847351074
+  ],
+  "bounds_max_m": [
+    35.161224365234375,
+    20.086545944213867,
+    28.091510772705078
+  ],
+  "build": {
+    "raw_points": "10277007",
+    "finite_points": "10277007",
+    "roi_points": "1686024",
+    "target_points": "224627",
+    "target_fnv": "28dc95023de5a54c",
+    "leaf_m": "0.2",
+    "roi_radius_m": "50",
+    "center_x": "18.551464657888509",
+    "center_y": "-11.678697178703141",
+    "center_z": "0.34667214854051798",
+    "anchor_overlap_0p5m": "0.93785714285714283",
+    "build_ms": "3419.6414599999998",
+    "peak_rss_KiB": "558504"
+  },
+  "formal_grid_load": {
+    "target_points": "224627",
+    "target_fnv": "28dc95023de5a54c",
+    "Gaussian_grid_m": "0.8",
+    "map_load_grid_tree_ms": "54.374287000000002",
+    "peak_rss_KiB": "48220"
+  },
+  "anchor_support_is_not_accuracy": true,
+  "test_reference_used_for_ROI": false
+}
