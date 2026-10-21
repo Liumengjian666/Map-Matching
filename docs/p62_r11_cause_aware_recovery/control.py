@@ -13,7 +13,7 @@ import time
 
 DOC=Path(__file__).resolve().parent
 REPO=DOC.parents[1]
-BUILD=Path('/home/jian/livox_ws/p62_r11_cause_aware_build')
+BUILD=Path('/home/jian/livox_ws/p62_r11_cause_aware_build/frozen_build_01')
 RUN=Path('/home/jian/livox_ws/p62_r11_cause_aware_runs')
 PRESERVE=Path('/home/jian/livox_ws/r10_stable_preservation_20261021/object_export_retry_01')
 BASE='10edcc0703129a3c5444c672c5b7cbb938bf3f74'
@@ -79,6 +79,7 @@ def environment():
 def build():
     assert not git('status','--porcelain=v1').strip(),'Commit runtime source first'
     record=sources();head=git('rev-parse','HEAD').strip();stable=preservation_gate()
+    BUILD.mkdir(exist_ok=False)
     commands=[['cmake','-S',str(DOC/'tools'),'-B',str(BUILD),'-DCMAKE_BUILD_TYPE=Release'],
               ['cmake','--build',str(BUILD),'--clean-first','-j2']]
     write(BUILD/'BOUND_BUILD_STARTED.json',dict(CODE_SHA=head,sources=record))
@@ -93,6 +94,7 @@ def build():
     assert stable_snapshot()==stable
     write(DOC/'BUILD_PROVENANCE.json',dict(source_CODE_SHA=head,sources=record,commands=commands,tests=tests,
         shadow=ident(BUILD/'shadow'),build_log=ident(BUILD/'bound_build.log'),
+        cmake_cache=ident(BUILD/'CMakeCache.txt'),compiler_version=subprocess.check_output(['c++','--version'],text=True),
         library=ident('/lib/x86_64-linux-gnu/libusb-1.0.so.0')))
     print('R11_BOUND_BUILD_AND_TESTS_PASS new_aligns=0')
 

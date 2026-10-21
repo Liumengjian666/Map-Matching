@@ -1,0 +1,146 @@
+{
+  "source_CODE_SHA": "3ff3f349aba974973505fb13ee46a817554ec05f",
+  "sources": [
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/tools/CMakeLists.txt",
+      "bytes": 564,
+      "sha256": "e55f1360962523e6b923cf99aa63a9744108cf75a4e6cb1ed3ca21615c0b606d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/tools/se3.hpp",
+      "bytes": 3696,
+      "sha256": "9b7b27e7e35a50cdbfeac9b96697f4ce0a2edef67f1906fb74ad4be11eecc437"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/tools/shadow.cpp",
+      "bytes": 15480,
+      "sha256": "0724968c072330977c9a34ec47d52e42b9bddb66f94eeb98fa60a6afddcf3866"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/tools/test_decisions.cpp",
+      "bytes": 2584,
+      "sha256": "ec607225fc37c21b516fe18a8aaf142918a8c1fcde473e11cb3aebd342dd785e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/tools/test_se3.cpp",
+      "bytes": 3144,
+      "sha256": "a5b508821285b2e68fcc0ce00f14f69715571822e4341cba3ac195435e4bbd7a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/control.py",
+      "bytes": 8956,
+      "sha256": "ce29d938c1b0310eb0c9f25603f68ea3795b4bddc2d555b70598b701ddd4b31a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/MATHEMATICAL_FORMULATION.md",
+      "bytes": 2787,
+      "sha256": "30acaabe569716a4901cb4cc90cbe589cb554e15c6316508b8d2a6b5dea943bc"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/PRE_REGISTRATION.json",
+      "bytes": 948,
+      "sha256": "47a297157d4a925dab46b0dea9fd33cb8c602efb6cc29ea12d44fab712c93206"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r10_feasibility_event_recovery/tools/events.hpp",
+      "bytes": 3714,
+      "sha256": "f7624d5a4c523e93c75793b8b69ab9d982438bbb68e0f653cb4b6e46b73d7868"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r10_feasibility_event_recovery/tools/native_capture.hpp",
+      "bytes": 1298,
+      "sha256": "581f2dad0fae57cd82fc1d68e05d02fd025a8ce8841aaf4f07bedbd06bb5529c"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp",
+      "bytes": 3957,
+      "sha256": "727e2ed66a49f4f004f483491b4dbf748abd738b7c0b4fc576ffc813774f5af4"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r9_coverage_aware_recovery_v2/tools/direction.hpp",
+      "bytes": 1038,
+      "sha256": "f6758056924599ba3078a8499d7d9a2fc0f3cdde85139ef1860ef5896d8aa6db"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r9_coverage_aware_recovery_v2/tools/io.hpp",
+      "bytes": 2930,
+      "sha256": "3ed296c11a5f9a6ff46c6720e8fb6d4a9e7e101c6a7b6e366697ce2e11c6348e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r8_structural_admission/tools/preprocess.hpp",
+      "bytes": 803,
+      "sha256": "11225b3f0a044bfcbfba25fa9340f41d1e2dd6d2997c9de66773eeb531f3ada1"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r7_motion_selected_shadow/tools/recovery.hpp",
+      "bytes": 2598,
+      "sha256": "b18f9dd1b03f02f2a08b835a757c08e4385e881e9b2726e9354e3eaa053779b8"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r6_dog_shadow_prototype/tools/native_kernel.hpp",
+      "bytes": 5481,
+      "sha256": "4dbc81a42d6fcbb6275c85cfd8bd69a2e94f8b0775d00d6b338556903905cbac"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r6_dog_shadow_prototype/tools/contract.hpp",
+      "bytes": 4834,
+      "sha256": "c44a4e45aa12555763eab768f52d6e45109ccf9fb998893831c17c88d8b0446d"
+    }
+  ],
+  "commands": [
+    [
+      "cmake",
+      "-S",
+      "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/tools",
+      "-B",
+      "/home/jian/livox_ws/p62_r11_cause_aware_build",
+      "-DCMAKE_BUILD_TYPE=Release"
+    ],
+    [
+      "cmake",
+      "--build",
+      "/home/jian/livox_ws/p62_r11_cause_aware_build",
+      "--clean-first",
+      "-j2"
+    ]
+  ],
+  "tests": [
+    {
+      "name": "test_se3",
+      "exit": 0,
+      "stdout": "R11_SE3_TESTS_PASS new_aligns=0\n",
+      "stderr": "",
+      "binary": {
+        "path": "/home/jian/livox_ws/p62_r11_cause_aware_build/test_se3",
+        "bytes": 58488,
+        "sha256": "10e76417734ccfbbfc8bbe8c27aab45c02b5cb197b49c9cd1b84417118ca2775"
+      }
+    },
+    {
+      "name": "test_decisions",
+      "exit": 0,
+      "stdout": "R11_DECISION_TESTS_PASS new_aligns=0\n",
+      "stderr": "",
+      "binary": {
+        "path": "/home/jian/livox_ws/p62_r11_cause_aware_build/test_decisions",
+        "bytes": 64968,
+        "sha256": "e01b621b8ac2831c74a7eda82ce0462e1691bd3e151b3aefb5568d071b2021c6"
+      }
+    }
+  ],
+  "shadow": {
+    "path": "/home/jian/livox_ws/p62_r11_cause_aware_build/shadow",
+    "bytes": 348904,
+    "sha256": "2523708eba15f7d8678474266b15454fb89dc4363c92622ebf27c25fdc430d33"
+  },
+  "build_log": {
+    "path": "/home/jian/livox_ws/p62_r11_cause_aware_build/bound_build.log",
+    "bytes": 2859,
+    "sha256": "5ba32524e4254d458eae9fa29f54aeb7a35df1525d89194d5739faa7c2cbba26"
+  },
+  "library": {
+    "path": "/lib/x86_64-linux-gnu/libusb-1.0.so.0",
+    "bytes": 109440,
+    "sha256": "451c0a2b8806b71ddab9046470badc7665a467d511e87c1d5e1da7a343456586"
+  }
+}

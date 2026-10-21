@@ -18,7 +18,10 @@ int main(){try{
     const Pose plus=prediction.inverse()*s.poses[0],minus=prediction.inverse()*s.poses[1];
     require((plus*minus-Pose::Identity()).norm()<1e-12,"opposite right exponentials");
     Pose map_change=expSE3(.2*xi);auto transformed=disagreement(map_change*prediction,map_change*nominal);
-    require((transformed.poses[0]-map_change*s.poses[0]).norm()<1e-11,"right tangent map-frame equivariance");
+    // The explicit coordinate-precision cap is frame-coordinate-dependent;
+    // compare the unscaled right residual exactly, not its guarded amplitude.
+    require((transformed.xi-s.xi).norm()<1e-11,"right residual map-frame equivariance");
+    for(const auto& seed:s.poses){const Pose native=seed.cast<float>().cast<double>();require(translation(native,prediction)<=.30&&rotation(native,prediction)<=3.,"actual PCL float initial bounds");}
   }
   auto zero=disagreement(prediction,prediction);require(!zero.valid,"zero residual must reject");
   for(double world_x:{0.,20.,-30.,1000.}){

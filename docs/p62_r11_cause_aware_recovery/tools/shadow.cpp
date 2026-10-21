@@ -42,7 +42,7 @@ int main(int argc,char** argv){try{
   Csv event_file(root+"/EVENT_COMPARISON.csv","scan_index,raw_index,header_ns,reference_ns,old_trigger,new_event,reasons,nominal_eligible,prediction_disagreement,G_status,weak_count");
   Csv spectra(root+"/G_SPECTRA.csv","scan_index,status,weak_count,support,lambda0,lambda1,lambda2,lambda3,lambda4,lambda5");
   std::string seed_header="arm,scan_index,seed_id,sign,status,scale,rho_x,rho_y,rho_z,phi_x,phi_y,phi_z,reconstruction_error,translation_from_center_m,rotation_from_center_deg";
-  poseHeader(seed_header,"seed_");Csv seeds_file(root+"/SEED_COMPARISON.csv",seed_header);
+  poseHeader(seed_header,"seed_");poseHeader(seed_header,"native_seed_");Csv seeds_file(root+"/SEED_COMPARISON.csv",seed_header);
   Csv runtime(root+"/RUNTIME_AND_MEMORY.csv","arm,scan_index,preprocess_ms,native_align_ms,G_or_seed_ms,validation_ms,phase_wall_ms,process_high_water_rss_KiB");
   Csv calls(root+"/ALIGN_CALLS.csv","arm,scan_index,candidate_id,native_call_id,status,budget_used");
   std::string raw_header="arm,scan_index,candidate_id,native_call_id,pose_safe,score_finite,converged,iterations,native_score,align_ms";
@@ -106,13 +106,13 @@ int main(int argc,char** argv){try{
           if(residual.valid)guesses.assign(residual.poses.begin(),residual.poses.end());
         }else status="NOT_DISAGREEMENT_EVENT";
       }
-      if(guesses.empty()){seeds_file.stream<<arm<<','<<i+1<<",NA,NA,"<<status;for(int z=0;z<26;++z)seeds_file.stream<<",NA";seeds_file.end();}
+      if(guesses.empty()){seeds_file.stream<<arm<<','<<i+1<<",NA,NA,"<<status;for(int z=0;z<42;++z)seeds_file.stream<<",NA";seeds_file.end();}
       for(size_t k=0;k<guesses.size();++k){
         const Pose center=arm=="BASELINE_WEAK"?nominal[i].pose:p;
         require(rigid(guesses[k])&&translation(guesses[k],center)<=.30+1e-12&&rotation(guesses[k],center)<=3.+1e-10,"seed numerical failure STOP");
         seeds_file.stream<<arm<<','<<i+1<<','<<k+1<<','<<(k==0?1:-1)<<','<<status<<',';number(seeds_file.stream,residual.scale);
         for(int z=0;z<6;++z){seeds_file.stream<<',';number(seeds_file.stream,residual.xi[z]);}seeds_file.stream<<',';number(seeds_file.stream,residual.reconstruction_error);
-        seeds_file.stream<<','<<translation(guesses[k],center)<<','<<rotation(guesses[k],center);emitPose(seeds_file.stream,guesses[k]);seeds_file.end();++generated;
+        seeds_file.stream<<','<<translation(guesses[k],center)<<','<<rotation(guesses[k],center);emitPose(seeds_file.stream,guesses[k]);emitPose(seeds_file.stream,guesses[k].cast<float>().cast<double>());seeds_file.end();++generated;
         if(!budget.consume()){status="BUDGET_EXHAUSTED";break;}
         local.candidates.push_back(run(arm,i,guesses[k],int(local.candidates.size()),false));local.native_calls.push_back(total);++extra;
         if(!local.candidates.back().finite)break;

@@ -48,7 +48,9 @@ inline Seeds disagreement(const Pose& prediction,const Pose& nominal){
   if(t<=1e-10&&r<=1e-10)return out;
   // Coordinate-aware floating-point guard: subtraction of world positions
   // may lose more precision than s itself. Fixed formula, not a search.
-  const double eps=std::numeric_limits<double>::epsilon();
+  // Native PCL consumes float initial transforms, so the predetermined margin
+  // covers that conversion as well as subsequent double pose arithmetic.
+  const double eps=std::numeric_limits<float>::epsilon();
   const Eigen::Matrix3d rp=prediction.block<3,3>(0,0);
   const double inflation=std::max(1.,Eigen::JacobiSVD<Eigen::Matrix3d>(rp).singularValues().maxCoeff());
   const double orthogonal_error=(rp.transpose()*rp-Eigen::Matrix3d::Identity()).norm();
@@ -63,6 +65,8 @@ inline Seeds disagreement(const Pose& prediction,const Pose& nominal){
     out.poses[i]=prediction*expSE3((i==0?1.:-1.)*out.scale*out.xi);
     require(rigid(out.poses[i]),"invalid disagreement seed");
     require(translation(out.poses[i],prediction)<=.30&&rotation(out.poses[i],prediction)<=3.,"physical seed limit violation");
+    const Pose native=out.poses[i].cast<float>().cast<double>();
+    require(rigid(native)&&translation(native,prediction)<=.30&&rotation(native,prediction)<=3.,"native float seed limit violation");
   }
   out.valid=true;out.status="PREDICTION_DISAGREEMENT_DIRECTION";return out;
 }
