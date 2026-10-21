@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Stereo-Camera Platform | Newer College Dataset</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Stereo-Camera Platform" />
+<meta name="author" content="Dynamic Robot Systems Group" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The Newer College Dataset revisits New College, Oxford with modern stereo camera and LIDAR sensors as well as precise ground truth." />
+<meta property="og:description" content="The Newer College Dataset revisits New College, Oxford with modern stereo camera and LIDAR sensors as well as precise ground truth." />
+<link rel="canonical" href="https://ori-drs.github.io/newer-college-dataset/stereo-cam/platform-stereo/" />
+<meta property="og:url" content="https://ori-drs.github.io/newer-college-dataset/stereo-cam/platform-stereo/" />
+<meta property="og:site_name" content="Newer College Dataset" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Stereo-Camera Platform" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Dynamic Robot Systems Group"},"description":"The Newer College Dataset revisits New College, Oxford with modern stereo camera and LIDAR sensors as well as precise ground truth.","headline":"Stereo-Camera Platform","url":"https://ori-drs.github.io/newer-college-dataset/stereo-cam/platform-stereo/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/newer-college-dataset/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ori-drs.github.io/newer-college-dataset/feed.xml" title="Newer College Dataset" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/newer-college-dataset/">Newer College Dataset</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/newer-college-dataset/stereo-cam/">Stereo-Cam</a><a class="page-link" href="/newer-college-dataset/multi-cam/">Multi-Cam</a><a class="page-link" href="/newer-college-dataset/ground-truth/">Ground Truth</a><a class="page-link" href="/newer-college-dataset/usage/">Usage</a><a class="page-link" href="/newer-college-dataset/download/">Download</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Stereo-Camera Platform</h1>
+  </header>
+
+  <div class="post-content">
+    <table>
+  <tbody>
+    <tr>
+      <td><a href="../../stereo-cam"><strong>Stereo-Camera Main</strong></a></td>
+      <td>Platform</td>
+      <td><a href="../calibration-stereo"><strong>Calibration</strong></a></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The dataset is collected onboard a compact handheld device that includes:</p>
+<ul>
+  <li><a href="https://www.intel.co.uk/content/www/uk/en/products/boards-kits/nuc/kits/nuc8i7beh.html">Intel NUC8i7BEH</a></li>
+  <li>Ouster OS-1 (Gen 1) 64 beam LIDAR with embedded IMU</li>
+  <li>RealSense D435i stereo camera with embedded IMU</li>
+  <li>8000 mAh battery pack and onboard power electronics</li>
+</ul>
+
+<p>The Intel Realsense D435i is a commodity-grade stereo-inertial
+camera while the Ouster OS-1 LiDAR has 64 beams, which
+provides much denser data than many other LiDAR datasets.
+Both sensors have become commonly used in mobile
+robotics in the last 2 years, for example the ongoing DARPA
+Subterranean Challenge.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Sensor</th>
+      <th>Type</th>
+      <th>Rate [Hz]</th>
+      <th>Characteristics</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://data.ouster.io/downloads/datasheets/datasheet-gen1-v2p0-os1.pdf">Ouster OS-1-64</a></td>
+      <td>LiDAR</td>
+      <td>10</td>
+      <td>64 beams, 120 m max range, 33.2° nominal vertical FoV</td>
+    </tr>
+    <tr>
+      <td><a href="https://invensense.tdk.com/products/motion-tracking/9-axis/icm-20948">ICM-20948</a></td>
+      <td>IMU</td>
+      <td>100</td>
+      <td>Ouster embedded</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.intelrealsense.com/wp-content/uploads/2019/10/Intel-RealSense-D400-Series-Datasheet-Oct-2019.pdf?_ga=2.159649599.322300578.1583764967-1986940109.1561633671">Intel RealSense D435i</a></td>
+      <td>Stereo Camera</td>
+      <td>30</td>
+      <td>Global shutter (IR), 848 × 480</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmi055-ds000.pdf">Bosch BMI055</a></td>
+      <td>IMU</td>
+      <td>650 (400 gyro + 250 accel)</td>
+      <td>RealSense embedded</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The sensors are rigidly attached to a precisely 3D-printed base.
+The base has a modular design which allows to install up to 4 stereo cameras
+facing in opposite directions with variable downward facing directions.</p>
+
+<p><img src="../../assets/figures/handheld_device_new.png" alt="handheld_device" title="handheld device" /></p>
+
+<p>The current design has one RealSense with a 0 deg pitch angle.</p>
+
+<p>To distinguish the sensor frames, we use the following
+abbreviations:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">OS_I</code> : The IMU coordinate system in the LiDAR.</li>
+  <li><code class="language-plaintext highlighter-rouge">OS_L</code> : The LiDAR coordinate system with respect to which the point clouds are read</li>
+  <li><code class="language-plaintext highlighter-rouge">RS C1</code>: The left camera optical frame. <strong>Note</strong>: The <strong>base frame</strong> is defined to be coincident with the left camera frame; however, it follows the robotic frame (x-forward, y-left, z-up).</li>
+  <li><code class="language-plaintext highlighter-rouge">RS_I</code> : The IMU coordinate system in the stereo setup.</li>
+  <li><code class="language-plaintext highlighter-rouge">RS C2</code>: The right camera optical frame</li>
+</ul>
+
+<p>A URDF of the platform is publicly available at this repo <a href="https://github.com/ori-drs/frontier_description/tree/newer-college-dataset">https://github.com/ori-drs/frontier_description</a>, branch <code class="language-plaintext highlighter-rouge">newer-college-dataset</code>.
+To visualise the model you can run:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>roslaunch frontier_description view_urdf.launch
+</code></pre></div></div>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/newer-college-dataset/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/newer-college-dataset/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/newer-college-dataset/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">Dynamic Robot Systems Group</li>
+          <li><a class="u-email" href="mailto:newercollegedataset@robots.ox.ac.uk">newercollegedataset@robots.ox.ac.uk</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>The Newer College Dataset revisits New College, Oxford with modern stereo camera and LIDAR sensors as well as precise ground truth.
+</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/ori-drs" title="ori-drs"><svg class="svg-icon grey"><use xlink:href="/newer-college-dataset/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/dynamicrobots" title="dynamicrobots"><svg class="svg-icon grey"><use xlink:href="/newer-college-dataset/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

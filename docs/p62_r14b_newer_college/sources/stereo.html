@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Stereo-Cam | Newer College Dataset</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Stereo-Cam" />
+<meta name="author" content="Dynamic Robot Systems Group" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The Newer College Dataset revisits New College, Oxford with modern stereo camera and LIDAR sensors as well as precise ground truth." />
+<meta property="og:description" content="The Newer College Dataset revisits New College, Oxford with modern stereo camera and LIDAR sensors as well as precise ground truth." />
+<link rel="canonical" href="https://ori-drs.github.io/newer-college-dataset/stereo-cam/" />
+<meta property="og:url" content="https://ori-drs.github.io/newer-college-dataset/stereo-cam/" />
+<meta property="og:site_name" content="Newer College Dataset" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Stereo-Cam" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Dynamic Robot Systems Group"},"description":"The Newer College Dataset revisits New College, Oxford with modern stereo camera and LIDAR sensors as well as precise ground truth.","headline":"Stereo-Cam","url":"https://ori-drs.github.io/newer-college-dataset/stereo-cam/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/newer-college-dataset/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ori-drs.github.io/newer-college-dataset/feed.xml" title="Newer College Dataset" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/newer-college-dataset/">Newer College Dataset</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/newer-college-dataset/stereo-cam/">Stereo-Cam</a><a class="page-link" href="/newer-college-dataset/multi-cam/">Multi-Cam</a><a class="page-link" href="/newer-college-dataset/ground-truth/">Ground Truth</a><a class="page-link" href="/newer-college-dataset/usage/">Usage</a><a class="page-link" href="/newer-college-dataset/download/">Download</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Stereo-Cam</h1>
+  </header>
+
+  <div class="post-content">
+    <table>
+  <tbody>
+    <tr>
+      <td>Stereo-Camera Main</td>
+      <td><a href="platform-stereo"><strong>Platform</strong></a></td>
+      <td><a href="calibration-stereo"><strong>Calibration</strong></a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="stereo-vision-lidar-imu-dataset">Stereo Vision Lidar IMU Dataset:</h2>
+
+<p>The Newer College Dataset revisits New College, Oxford with modern stereo camera and LIDAR sensors as well as precise ground truth.</p>
+
+<p>Please cite:<br />
+<strong>The Newer College Dataset: Handheld LiDAR, Inertial and Vision with Ground Truth</strong><br />
+Milad Ramezani, Yiduo Wang, Marco Camurri, David Wisth, Matias Mattamala and Maurice Fallon<br />
+IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)<br />
+November 2021<br />
+[<a href="https://arxiv.org/abs/2003.05691">Preprint</a>] [<a href="https://arxiv.org/pdf/2003.05691">PDF</a>] [<a href="https://youtu.be/bqqxyBfbBL0" title="View Video">Video</a>]</p>
+
+<p>The primary dataset is provided in <a href="http://wiki.ros.org/rosbag">rosbag file format</a>. We also provide a version divided into raw files (pngs, pcds, csv).</p>
+
+<p><img src="../assets/figures/new_college_sections.jpg" alt="new_college_sections" title="New College sections" /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>n</th>
+      <th>name</th>
+      <th>description</th>
+      <th>video</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>short experiment</td>
+      <td>0.5 loop of the quad Q, loop of the mid-section, loop of parkland, loop of quad, loop of park (1530 seconds)</td>
+      <td><a href="https://youtu.be/yV8-UY91dP8">video</a></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>long experiment</td>
+      <td>original dataset. 3.5 loops of quad, 2 loops of the mid-section and quad. 3 loops of parkland (2180 seconds)</td>
+      <td><a href="https://youtu.be/EqLVTqBYStQ">video</a></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>prior map</td>
+      <td>accurate map of entire experimental area - 290 points. various other downsampled formats also available</td>
+      <td><a href="https://youtu.be/_jfHnYh8tbw">video</a></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>calibration</td>
+      <td>calibration log files for use in Kalibr</td>
+      <td>none</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>quad with dynamics</td>
+      <td>4 loops of quad with increasingly aggressive motion of device with swinging and fast walking (398 seconds)</td>
+      <td><a href="https://youtu.be/sAmaJlql-vs">video</a></td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>dynamic spinning</td>
+      <td>aggressive spinning of the device while point at a corner of the quad. speeds of up to 3.5 rad/sec</td>
+      <td><a href="https://youtu.be/9K-ljJt5mVY">video</a></td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>parkland mount</td>
+      <td>some laps of the parkland, up the mound’s staircase, one loop around the mound (500 seconds)</td>
+      <td><a href="https://youtu.be/OR3No3mn_oU">video</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="video-sample-playlist">Video sample playlist</h3>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/yV8-UY91dP8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<p>Videos showing the left camera images.</p>
+
+<!-- In more detail, we replicated the route of the original New College Dataset which consists of two experiments (Spring 2020):
+- `long_experiment` (The path followed in the original [New College Dataset](https://ori.ox.ac.uk/older-projects/new-college-dataset/)):   
+   In order:
+   - 3.5 clockwise loops in Q
+   - 1 counter-clockwise loop in M
+   - 1 counter-clockwise loop in Q
+   - 1 counter-clockwise in M
+   - 1 clockwise in Q
+   - 2 clockwise loops in P
+   - straight through M
+   - 1 counter-clockwise loop in Q
+   - straight through M
+   - 1 counter-clockwise loop in P
+   - straight through M
+   - 0.5 counter-clockwise loop in Q
+
+- `short_experiment` (shorter version of the above):  
+   In order:
+   - 0.5 clockwise loop in Q
+   - 1 counter-clockwise loop in M
+   - 1 clockwise loop in P
+   - straight through M
+   - 1 counter-clockwise loop in Q
+   - straight through M
+   - 1 counter-clockwise loop in P
+   - straight through M
+   - half a counter-clockwise loop in Q 
+
+We also collected a few challenging datasets in aggressive motions (in Summer 2020):
+- `quad_with_dynamics` (398 seconds)
+   In order:
+   - 2 clockwise loops in Q at a fast walking speed (~1.5 m/s). The device was held fixed in hand.
+   - 1 clockwise loop in Q at a fast speed (~1.5 m/s). The device was swinging left and right at a constant speed.
+   - 1 clockwise loop in Q at a fast speed (~1.5 m/s). The device was swinging left and right at a varied speed. 
+- `dynamic_spinning` (120 seconds)
+   - Aggressive motion of the device in different directions (horizontal, vertical, swinging around) while pointing at a corner of the Quad.
+   
+- `parkland_mound` (500 seconds)
+   - A few laps in the grassy area of the Parkland
+   - Up and down the Mound's stairs
+   - 1 clockwise loop around the Mound -->
+
+<!--    ## List of Files
+
+The folder tree structure is as follows:
+
+```
+├── 01_short_experiment
+│   └── ground_truth
+│   └── raw_format
+│       ├── infra1
+│       ├── infra2
+│       ├── ouster_imu
+│       ├── ouster_scan
+│       └── realsense_imu
+│   └── rosbag
+│   └── rosbag_compressed
+├── 02_long_experiment
+├── 03_new_college_prior_map
+└── 04_calibration
+    └── kalibr_output
+        └── kalibr_output
+            ├── cam-ouster-imu
+            └── cam-realsense-imu
+├── 05_quad_with_dynamics
+├── 06_dynamic_spinning
+└── 07_parkland_mound
+
+``` -->
+<!-- Where the logs are contained in `01_short_experiment`, `02_long_experiment`, `05_quad_with_dynamics`, `06_dynamic_spinning` and `07_parkland_mound`.
+For convenience, each experiment is split in 10 GB rosbag files. -->
+
+<!-- ### Data Format
+
+A typical output from `rosbag info` on a dataset file would look like the following:
+```
+path:        rooster_2020-02-17-08-45-09-0.bag
+version:     2.0
+duration:    2:59s (179s)
+start:       Feb 17 2020 08:45:09.24 (1581929109.24)
+end:         Feb 17 2020 08:48:09.24 (1581929289.24)
+size:        11.3 GB
+messages:    303232
+compression: none [7765/7765 chunks]
+types:       ouster_ros/PacketMsg        [4f7b5949e76f86d01e96b0e33ba9b5e3]
+             sensor_msgs/Image           [060021388200f6f0f447d0fcd9c64743]
+             sensor_msgs/Imu             [6a62c6daae103f4ff57a132d6f95cec2]
+             sensor_msgs/PointCloud2     [1158d486dd51d683ce2f1be655c3c181]
+             tf2_msgs/TFMessage          [94810edda583a504dfda3829e70d7eec]
+topics:      /camera/accel/sample                  45327 msgs    : sensor_msgs/Imu
+             /camera/gyro/sample                   72523 msgs    : sensor_msgs/Imu
+             /camera/imu                           45327 msgs    : sensor_msgs/Imu
+             /camera/infra1/image_rect_raw          5397 msgs    : sensor_msgs/Image
+             /camera/infra2/image_rect_raw          5397 msgs    : sensor_msgs/Image
+             /os1_cloud_node/imu                   18000 msgs    : sensor_msgs/Imu
+             /os1_cloud_node/points                 1800 msgs    : sensor_msgs/PointCloud2
+             /os1_node/imu_packets                 18000 msgs    : ouster_ros/PacketMsg
+             /os1_node/lidar_packets              115199 msgs    : ouster_ros/PacketMsg
+             /tf_static                                2 msgs    : tf2_msgs/TFMessage
+```
+ -->
+
+<h3 id="ros-topics">ROS Topics</h3>
+<p>Each file contains the following list of topics:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Topic</th>
+      <th>Frequency [Hz]</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/camera/accel/sample</code></td>
+      <td>250</td>
+      <td>RealSense accelerometer (Bosch BMI055)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/camera/gyro/sample</code></td>
+      <td>400</td>
+      <td>RealSense gyroscope (Bosch BMI055)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/camera/imu</code></td>
+      <td>250</td>
+      <td>RealSense IMU fused (see below)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/camera/infra1/image_rect_raw</code></td>
+      <td>30</td>
+      <td>RealSense rectified left camera image</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/camera/infra2/image_rect_raw</code></td>
+      <td>30</td>
+      <td>RealSense rectified right camera image</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/os1_cloud_node/imu</code></td>
+      <td>100</td>
+      <td>Ouster OS-1 IMU (InvenSense ICM-20948)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/os1_cloud_node/points</code></td>
+      <td>10</td>
+      <td>Point Cloud from Ouster OS-1</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/os1_node/imu_packets</code></td>
+      <td>100</td>
+      <td>raw Ouster IMU data (see definition <a href="https://github.com/ouster-lidar/ouster_example/blob/master/ouster_ros/msg/PacketMsg.msg">here</a>)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/os1_node/lidar_packets</code></td>
+      <td>650</td>
+      <td>raw Ouster LIDAR data (see definition <a href="https://github.com/ouster-lidar/ouster_example/blob/master/ouster_ros/msg/PacketMsg.msg">here</a>)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">/tf_static</code></td>
+      <td>once</td>
+      <td>TF transforms between devices</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="realsense-imu-interpolation">RealSense IMU interpolation</h3>
+<p>The RealSense SDK natively outputs two independent signals for gyro at 400 Hz and accelerometer at 250 Hz.
+Even though the driver provides some options to fuse the two messages together (either by copy or linear interpolation), we record the raw
+independent signals both for performance reasons and to give the dataset users the freedom to implement the interpolation of choice.</p>
+
+<p>For those who need a unified message, we augmented the rosbag in post processing with the <code class="language-plaintext highlighter-rouge">/camera/imu</code> topic, which contains the accelerometer messages at 250 Hz
+augmented with the linear interpolated values from the gyroscope. This gives a signal a nominal frequency of 250 Hz (same as accelerometer), rather than
+a stream of messages unevenly spaced in time at 650 Hz on average.</p>
+
+<h3 id="alternative-formats">Alternative Formats</h3>
+
+<p>We also provide the dataset as individual files within an organised folder system for use outside of ROS. This format matches that of the EuRoC dataset.</p>
+
+<ul>
+  <li>Images are saved as PNG with images numbered according to their timestamp</li>
+  <li>LIDAR data is saved in PCD pointclouds numbered according to their timestamp. These clouds are NOT motion corrected.</li>
+  <li>IMU messages are saved as a csv file.</li>
+</ul>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/newer-college-dataset/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/newer-college-dataset/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/newer-college-dataset/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">Dynamic Robot Systems Group</li>
+          <li><a class="u-email" href="mailto:newercollegedataset@robots.ox.ac.uk">newercollegedataset@robots.ox.ac.uk</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>The Newer College Dataset revisits New College, Oxford with modern stereo camera and LIDAR sensors as well as precise ground truth.
+</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/ori-drs" title="ori-drs"><svg class="svg-icon grey"><use xlink:href="/newer-college-dataset/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/dynamicrobots" title="dynamicrobots"><svg class="svg-icon grey"><use xlink:href="/newer-college-dataset/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

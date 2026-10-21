@@ -1,0 +1,515 @@
+{
+  "baseline": "a611f385025788481a747b3649ea4a90f3316540",
+  "dataset": "Newer College 2020 / 01_short_experiment",
+  "historical_manifest_path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/download_status.json",
+  "historical_manifest_sha256": "5f72b6bff6a52869ab1f3db2159130bc637a96731ed527e3881701941201ed68",
+  "assets": [
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/ground_truth/registered_poses.csv",
+      "size": 1330464,
+      "sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+      "historical_expected": {
+        "bytes": 1330464,
+        "drive_id": "11VWvHxjitd4ijARD4dJ3WjFuZ_QbInVy",
+        "sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/prior_map/README.txt",
+      "size": 2175,
+      "sha256": "d2af92e6fc52bfbbd6de5b60325e5a30d4ae5bf138f898f6a97fb0cd2edc4866",
+      "historical_expected": {
+        "bytes": 2175,
+        "drive_id": "14gCRr3bGoc8PEb6wyib0LTF-10bijANa",
+        "sha256": "d2af92e6fc52bfbbd6de5b60325e5a30d4ae5bf138f898f6a97fb0cd2edc4866",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/prior_map/new-college-29-01-2020-5cm-resolution.ply",
+      "size": 359695676,
+      "sha256": "e8bf6c7f2ddacde4f6f65ba7759b00bdca5c6bf5e706344ce8c3592529f04ab0",
+      "historical_expected": {
+        "bytes": 359695676,
+        "drive_id": "1CEjIzPDc7E437nxHw5xhx3Wl-ePJbAYM",
+        "sha256": "e8bf6c7f2ddacde4f6f65ba7759b00bdca5c6bf5e706344ce8c3592529f04ab0",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/prior_map/prior_map_xyz_binary.pcd",
+      "size": 369976348,
+      "sha256": "57da358a7c3f52a132fd06afba69f2c3eff2e980b7dbad5b8751548665104e25",
+      "historical_expected": null,
+      "matches_historical_manifest": null
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/time_offsets/time_offsets.csv",
+      "size": 1488,
+      "sha256": "19e8c4faf88ffd4b70494e7b91e63da04a918a79ea9ba11dbd12368d723862c6",
+      "historical_expected": {
+        "bytes": 1488,
+        "drive_id": "1ZAddzVTZLWafq99ElmmDvz0Av4IUZlFO",
+        "sha256": "19e8c4faf88ffd4b70494e7b91e63da04a918a79ea9ba11dbd12368d723862c6",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/april_6x6.yaml",
+      "size": 724,
+      "sha256": "7f2d46585e3ceab9a2dd5ee2dd85f9df46f52d68fbc198822fc0048f9db22bf5",
+      "historical_expected": {
+        "bytes": 724,
+        "drive_id": "10fsQyz_fF8SdIfl6fTfE1bykm1g0DUA9",
+        "sha256": "7f2d46585e3ceab9a2dd5ee2dd85f9df46f52d68fbc198822fc0048f9db22bf5",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/beam_intrinsics.json",
+      "size": 1864,
+      "sha256": "f7993d2f680206b3ca338c39c36aced29e18cf7b2b8570e3f1db7f2efa00f125",
+      "historical_expected": {
+        "bytes": 1864,
+        "drive_id": "1u5ia_-CrroXQBoaauaGZSp-sQTHxDDwh",
+        "sha256": "f7993d2f680206b3ca338c39c36aced29e18cf7b2b8570e3f1db7f2efa00f125",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/calibrate.sh",
+      "size": 433,
+      "sha256": "ffe45283286f6677f8d1557fb69c34e375f506eeadcff5a48766fb73ee77eadf",
+      "historical_expected": {
+        "bytes": 433,
+        "drive_id": "1BpyCuI3crkCrwIbL-5xYPXg-agFLbRPj",
+        "sha256": "ffe45283286f6677f8d1557fb69c34e375f506eeadcff5a48766fb73ee77eadf",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/imu.yaml",
+      "size": 231,
+      "sha256": "9aca0e80de7b68ffb91e63e2972401db92bc848731f43be3a789759184d3bab2",
+      "historical_expected": {
+        "bytes": 231,
+        "drive_id": "1vP0hPnuLE5oYrzDjetS6tUgIsM5-At7p",
+        "sha256": "9aca0e80de7b68ffb91e63e2972401db92bc848731f43be3a789759184d3bab2",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/kalibr_output/cam-ouster-imu/camchain-ouster_imu-cam-rooster_2020-03-11-10-05-35_0.yaml",
+      "size": 1736,
+      "sha256": "3bc13fa24af9ef8ca888c5523b1df57d1c53d0ca4052b818b7e02310fa781feb",
+      "historical_expected": {
+        "bytes": 1736,
+        "drive_id": "1XnqwBW2u9YgjNiOOiPQ6yDnZTIVYaCQE",
+        "sha256": "3bc13fa24af9ef8ca888c5523b1df57d1c53d0ca4052b818b7e02310fa781feb",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/kalibr_output/cam-ouster-imu/report-ouster_imu-cam-rooster_2020-03-11-10-05-35_0.pdf",
+      "size": 6027287,
+      "sha256": "e7217bf517728080e99713526bd389be5996de5875737a339c4669b578b9bdbe",
+      "historical_expected": {
+        "bytes": 6027287,
+        "drive_id": "1BXEFqCjG3M7_fmg1jUsE3NmwmNW1_tCn",
+        "sha256": "e7217bf517728080e99713526bd389be5996de5875737a339c4669b578b9bdbe",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/kalibr_output/cam-ouster-imu/results-ouster_imu-cam_2020-03-11-10-05-35_0.txt",
+      "size": 3093,
+      "sha256": "ac59e756e225127ac3ee11c0a658e55cba9f1f532f6170c015666486f7db1918",
+      "historical_expected": {
+        "bytes": 3093,
+        "drive_id": "1BhNR2OIZ9eYtBqyNG0fMpG3jtaBiuuqZ",
+        "sha256": "ac59e756e225127ac3ee11c0a658e55cba9f1f532f6170c015666486f7db1918",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/kalibr_output/cam-realsense-imu/camchain-realsense_imu-cam-rooster_2020-03-11-10-05-35_0.yaml",
+      "size": 1758,
+      "sha256": "b654d2e4ad402edaddb79eb1beb6d3b47f12c0927173b62572a5c7fb3176b101",
+      "historical_expected": {
+        "bytes": 1758,
+        "drive_id": "1WZtKOZ_yeVl8ra_wu8l2YeONhQrfmcqm",
+        "sha256": "b654d2e4ad402edaddb79eb1beb6d3b47f12c0927173b62572a5c7fb3176b101",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/kalibr_output/cam-realsense-imu/report-realsense_imu-cam-rooster_2020-03-11-10-05-35_0.pdf",
+      "size": 7172539,
+      "sha256": "27142b22b558f105fe3ccc75eda35bcfcdb960fea8613777195e0036e5b235b7",
+      "historical_expected": {
+        "bytes": 7172539,
+        "drive_id": "1W-OGg0LlYOMnAueqd8QTIi3MKaNrTkKt",
+        "sha256": "27142b22b558f105fe3ccc75eda35bcfcdb960fea8613777195e0036e5b235b7",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/kalibr_output/cam-realsense-imu/results-realsense_imu-cam-rooster_2020-03-11-10-05-35_0.txt",
+      "size": 3106,
+      "sha256": "cd80fe40b36aa55a7374e4f93b466990234c9872411faf3af3d417a3b3947a23",
+      "historical_expected": {
+        "bytes": 3106,
+        "drive_id": "1h9amE7POwlaDbmjyoR8x4NPHmZBhNCMq",
+        "sha256": "cd80fe40b36aa55a7374e4f93b466990234c9872411faf3af3d417a3b3947a23",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/kalibr_output/camchain_D435i__SN844212071220rooster_2020-03-11-10-05-35_0.yaml",
+      "size": 1037,
+      "sha256": "5b4d73bdef7f2582694c9652c0a3c186d9fbf6107b27c2587e2ba71d2541692f",
+      "historical_expected": {
+        "bytes": 1037,
+        "drive_id": "1KaP2jsAY0vmkcqkw1noZw5saODeH8SUm",
+        "sha256": "5b4d73bdef7f2582694c9652c0a3c186d9fbf6107b27c2587e2ba71d2541692f",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/kalibr_output/ouster_imu_lidar_transforms.yaml",
+      "size": 300,
+      "sha256": "8fe56ff808c6c900db52ac1545819ef3da979818bfa392ba00aef43daf59a037",
+      "historical_expected": {
+        "bytes": 300,
+        "drive_id": "1tL5FTMAWSOrbcruYWC4PJOV0mz6HZK21",
+        "sha256": "8fe56ff808c6c900db52ac1545819ef3da979818bfa392ba00aef43daf59a037",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/kalibr_output/report_D435i_SN844212071220rooster_2020-03-11-10-05-35_0.pdf",
+      "size": 2015135,
+      "sha256": "2f3861f39f1f04982ee59079532d51ca6bd5592d9f9df3c3f7b1bd4376aa7a73",
+      "historical_expected": {
+        "bytes": 2015135,
+        "drive_id": "1MvmMnm0iacRxKYnEsaZ5VxcShYFdWjSk",
+        "sha256": "2f3861f39f1f04982ee59079532d51ca6bd5592d9f9df3c3f7b1bd4376aa7a73",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/kalibr_output/results_D435i_SN844212071220rooster_2020-03-11-10-05-35_0.txt",
+      "size": 1259,
+      "sha256": "ae06a220a17666af7e29fce5a71a41d95f5f75c5e1bb1d01e47221eff71d08af",
+      "historical_expected": {
+        "bytes": 1259,
+        "drive_id": "1Q6lSBdm9LdLsf1grCChHdPBXrttV_Mlr",
+        "sha256": "ae06a220a17666af7e29fce5a71a41d95f5f75c5e1bb1d01e47221eff71d08af",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/ouster_imu.yaml",
+      "size": 239,
+      "sha256": "73d1fd17ddb206629b6f027e8f07c599267267fcdb7e7c02c5a52b88130077f4",
+      "historical_expected": {
+        "bytes": 239,
+        "drive_id": "1BsvzsGk3XF0g0zfw9hSGtNzxdw8Ywh7g",
+        "sha256": "73d1fd17ddb206629b6f027e8f07c599267267fcdb7e7c02c5a52b88130077f4",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    }
+  ],
+  "sampled_pcd": [
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836591_182590976.pcd",
+      "size": 1904640,
+      "sha256": "7c2fc3a20ef266c2ac3196173c534a1acdb4436224c264bc8f2dc1b1909803a2",
+      "header": {
+        "VERSION": [
+          "0.7"
+        ],
+        "FIELDS": [
+          "x",
+          "y",
+          "z",
+          "intensity",
+          "t",
+          "reflectivity",
+          "ring",
+          "noise",
+          "range"
+        ],
+        "SIZE": [
+          "4",
+          "4",
+          "4",
+          "4",
+          "4",
+          "2",
+          "1",
+          "2",
+          "4"
+        ],
+        "TYPE": [
+          "F",
+          "F",
+          "F",
+          "F",
+          "U",
+          "U",
+          "U",
+          "U",
+          "U"
+        ],
+        "COUNT": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "WIDTH": [
+          "1024"
+        ],
+        "HEIGHT": [
+          "64"
+        ],
+        "VIEWPOINT": [
+          "0",
+          "0",
+          "0",
+          "1",
+          "0",
+          "0",
+          "0"
+        ],
+        "POINTS": [
+          "65536"
+        ],
+        "DATA": [
+          "binary"
+        ]
+      },
+      "point_step": 29,
+      "declared_payload_bytes": 1900544,
+      "actual_payload_bytes": 1904390,
+      "trailing_bytes": 3846,
+      "trailing_all_zero": true,
+      "decode_status": "NONCANONICAL_LENGTH_NEEDS_INDEPENDENT_PCL_READ",
+      "finite_xyz_count": null,
+      "t_min": null,
+      "t_max": null
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837356_170264064.pcd",
+      "size": 1904640,
+      "sha256": "2c430b80812cd9209ba3098a6a0f888c812b6417c7d1d217c51994cebe62b346",
+      "header": {
+        "VERSION": [
+          "0.7"
+        ],
+        "FIELDS": [
+          "x",
+          "y",
+          "z",
+          "intensity",
+          "t",
+          "reflectivity",
+          "ring",
+          "noise",
+          "range"
+        ],
+        "SIZE": [
+          "4",
+          "4",
+          "4",
+          "4",
+          "4",
+          "2",
+          "1",
+          "2",
+          "4"
+        ],
+        "TYPE": [
+          "F",
+          "F",
+          "F",
+          "F",
+          "U",
+          "U",
+          "U",
+          "U",
+          "U"
+        ],
+        "COUNT": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "WIDTH": [
+          "1024"
+        ],
+        "HEIGHT": [
+          "64"
+        ],
+        "VIEWPOINT": [
+          "0",
+          "0",
+          "0",
+          "1",
+          "0",
+          "0",
+          "0"
+        ],
+        "POINTS": [
+          "65536"
+        ],
+        "DATA": [
+          "binary"
+        ]
+      },
+      "point_step": 29,
+      "declared_payload_bytes": 1900544,
+      "actual_payload_bytes": 1904390,
+      "trailing_bytes": 3846,
+      "trailing_all_zero": true,
+      "decode_status": "NONCANONICAL_LENGTH_NEEDS_INDEPENDENT_PCL_READ",
+      "finite_xyz_count": null,
+      "t_min": null,
+      "t_max": null
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583838121_156355584.pcd",
+      "size": 1904640,
+      "sha256": "6f3b8a768c4bbeb37d118d18a0e0c77d1e9b81f551a54e5ccd841b96cc5da1b8",
+      "header": {
+        "VERSION": [
+          "0.7"
+        ],
+        "FIELDS": [
+          "x",
+          "y",
+          "z",
+          "intensity",
+          "t",
+          "reflectivity",
+          "ring",
+          "noise",
+          "range"
+        ],
+        "SIZE": [
+          "4",
+          "4",
+          "4",
+          "4",
+          "4",
+          "2",
+          "1",
+          "2",
+          "4"
+        ],
+        "TYPE": [
+          "F",
+          "F",
+          "F",
+          "F",
+          "U",
+          "U",
+          "U",
+          "U",
+          "U"
+        ],
+        "COUNT": [
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1",
+          "1"
+        ],
+        "WIDTH": [
+          "1024"
+        ],
+        "HEIGHT": [
+          "64"
+        ],
+        "VIEWPOINT": [
+          "0",
+          "0",
+          "0",
+          "1",
+          "0",
+          "0",
+          "0"
+        ],
+        "POINTS": [
+          "65536"
+        ],
+        "DATA": [
+          "binary"
+        ]
+      },
+      "point_step": 29,
+      "declared_payload_bytes": 1900544,
+      "actual_payload_bytes": 1904390,
+      "trailing_bytes": 3846,
+      "trailing_all_zero": true,
+      "decode_status": "NONCANONICAL_LENGTH_NEEDS_INDEPENDENT_PCL_READ",
+      "finite_xyz_count": null,
+      "t_min": null,
+      "t_max": null
+    }
+  ],
+  "publisher_hash_authentication": "NOT_AVAILABLE; historical LOCAL hashes only",
+  "pcd_full_content_identity": "NOT_VERIFIED_FOR_ALL_SCANS",
+  "lidar_scan_count": 15301,
+  "lidar_file_bytes": 29142896640,
+  "lidar_filename_time_start_ns": 1583836591182590976,
+  "lidar_filename_time_end_ns": 1583838121156355584,
+  "reference_row_count": 15301,
+  "reference_time_start_ns": 1583836591182590976,
+  "reference_time_end_ns": 1583838121156355584,
+  "reference_quaternion_norm_max_error": 6.941737649146518e-07,
+  "exact_scan_reference_timestamp_pairs": 15301,
+  "time_semantic_closure": "NOT_CERTIFIED_BY_INTEGER_EQUALITY",
+  "test_frames_selected": false,
+  "ndt_align": 0,
+  "pose_errors_computed": false,
+  "reference_poses_read_for_format_audit": true,
+  "production_snapshot_equal": true,
+  "inspected_asset_before_after_equal": true
+}

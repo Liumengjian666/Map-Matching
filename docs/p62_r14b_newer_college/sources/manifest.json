@@ -1,0 +1,82 @@
+[
+  {
+    "name": "socc_DATASETS.md",
+    "url": "https://raw.githubusercontent.com/josch14/socc_icp/557a98e39a163f0b369a1612db7fc69f8b5aae60/DATASETS.md",
+    "status": 200,
+    "final_url": "https://raw.githubusercontent.com/josch14/socc_icp/557a98e39a163f0b369a1612db7fc69f8b5aae60/DATASETS.md",
+    "bytes": 7205,
+    "sha256": "7908cc19f79f54c2a0984856f0551df6fb37f155113608caa4ba297f1348563f"
+  },
+  {
+    "name": "socc_newer_college.py",
+    "url": "https://raw.githubusercontent.com/josch14/socc_icp/557a98e39a163f0b369a1612db7fc69f8b5aae60/src/socc_icp/socc_icp/dataset/newer_college.py",
+    "status": 200,
+    "final_url": "https://raw.githubusercontent.com/josch14/socc_icp/557a98e39a163f0b369a1612db7fc69f8b5aae60/src/socc_icp/socc_icp/dataset/newer_college.py",
+    "bytes": 4591,
+    "sha256": "bf63b95b98948858bf838f0ae5a4596ca8160019f9004b02d515396712f5540a"
+  },
+  {
+    "name": "socc_run.py",
+    "url": "https://raw.githubusercontent.com/josch14/socc_icp/557a98e39a163f0b369a1612db7fc69f8b5aae60/src/socc_icp/run/run_newer_college.py",
+    "status": 200,
+    "final_url": "https://raw.githubusercontent.com/josch14/socc_icp/557a98e39a163f0b369a1612db7fc69f8b5aae60/src/socc_icp/run/run_newer_college.py",
+    "bytes": 1017,
+    "sha256": "4c9e17f1f4f8ade53d38629ed28b4f96e47a1bfd46ba14beaf0e8e0cea38c416"
+  },
+  {
+    "name": "frontier_README.md",
+    "url": "https://raw.githubusercontent.com/ori-drs/frontier_description/0b039393334a7767e24a711bd05816bfc7f7485a/README.md",
+    "status": 200,
+    "final_url": "https://raw.githubusercontent.com/ori-drs/frontier_description/0b039393334a7767e24a711bd05816bfc7f7485a/README.md",
+    "bytes": 3488,
+    "sha256": "2e0f8349fb588712a529ec7de1ff24c393ece1db7ac76c66403d24e3ed9a8167"
+  },
+  {
+    "name": "ouster_ros.cpp",
+    "url": "https://raw.githubusercontent.com/ori-drs/ouster_example/fa9a53888b3ccd878e8b179c763363d8d3edfff9/ouster_ros/src/ros.cpp",
+    "status": 200,
+    "final_url": "https://raw.githubusercontent.com/ori-drs/ouster_example/fa9a53888b3ccd878e8b179c763363d8d3edfff9/ouster_ros/src/ros.cpp",
+    "bytes": 3867,
+    "sha256": "ca27346fe45ddac373ea6f101f52a3fa7844aead62a61f87ab67abe6bb032168"
+  },
+  {
+    "name": "ouster_lidar_scan.h",
+    "url": "https://raw.githubusercontent.com/ori-drs/ouster_example/fa9a53888b3ccd878e8b179c763363d8d3edfff9/ouster_client/include/ouster/lidar_scan.h",
+    "status": 200,
+    "final_url": "https://raw.githubusercontent.com/ori-drs/ouster_example/fa9a53888b3ccd878e8b179c763363d8d3edfff9/ouster_client/include/ouster/lidar_scan.h",
+    "bytes": 9356,
+    "sha256": "8418c6b0d912c5bc5e528e4c584625d8941122895fb0ac255567629b1da6398a"
+  },
+  {
+    "name": "ground_truth.html",
+    "url": "https://ori-drs.github.io/newer-college-dataset/ground-truth/",
+    "status": 200,
+    "final_url": "https://ori-drs.github.io/newer-college-dataset/ground-truth/",
+    "bytes": 7574,
+    "sha256": "28aaf7ead0b469c9c3604a02f18536fe036dedefb6f46d8b574f975336a17e48"
+  },
+  {
+    "name": "platform.html",
+    "url": "https://ori-drs.github.io/newer-college-dataset/stereo-cam/platform-stereo/",
+    "status": 200,
+    "final_url": "https://ori-drs.github.io/newer-college-dataset/stereo-cam/platform-stereo/",
+    "bytes": 9034,
+    "sha256": "8bd6d49c9dfdfe6b7dab7f21ddf19a15c526ffb52dfad5abaf088040dc41c804"
+  },
+  {
+    "name": "calibration.html",
+    "url": "https://ori-drs.github.io/newer-college-dataset/stereo-cam/calibration-stereo/",
+    "status": 200,
+    "final_url": "https://ori-drs.github.io/newer-college-dataset/stereo-cam/calibration-stereo/",
+    "bytes": 12687,
+    "sha256": "b3dcda2923a9dee866e6b0e297455a38f562d227398bb2c9458e3c7c4b35c744"
+  },
+  {
+    "name": "stereo.html",
+    "url": "https://ori-drs.github.io/newer-college-dataset/stereo-cam/",
+    "status": 200,
+    "final_url": "https://ori-drs.github.io/newer-college-dataset/stereo-cam/",
+    "bytes": 16432,
+    "sha256": "e99cded2dafcb4c4cd0ca3b9e8b6b3b9f2511e84bfc9868742489e5e4d590432"
+  }
+]

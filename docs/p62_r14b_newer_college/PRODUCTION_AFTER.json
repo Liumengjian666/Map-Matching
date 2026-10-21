@@ -1,0 +1,630 @@
+{
+  "head": "41999ea700c66c4cadf0eca9e0c5d73caa2783fd",
+  "branch": "feature/quadruped-localization-interface",
+  "index_sha256": "a151cd07a7debece9a0fff099339f6b08b7c396414e65ef2f2c1b636f644d1b8",
+  "refs": "0bc2c6c941c64d94af8c90395a38298e85f8647b refs/agents/b224d959-fb59-4a82-9b50-539c198434ac/checkpoints/turn/0\n178e63333999195d3a9c13e1a8528dddd512cb14 refs/codex/turn-diffs/captures/1790686207915/24c89313-926e-4d88-b2d9-dd5a94e64c7d/base\n178e63333999195d3a9c13e1a8528dddd512cb14 refs/codex/turn-diffs/captures/1790693635597/d648a60d-da73-468f-a422-9ede25e8515b/base\n178e63333999195d3a9c13e1a8528dddd512cb14 refs/codex/turn-diffs/checkpoints/a2fb445d795d75314d610164b806e2bc/242312003d97e62687b094a70cfc8a0e/1790753404553/a96e3a58-44d9-4d83-b74c-05a6ebd18ed2\n41999ea700c66c4cadf0eca9e0c5d73caa2783fd refs/heads/feature/quadruped-localization-interface\n41999ea700c66c4cadf0eca9e0c5d73caa2783fd refs/heads/feature/visual-factor-window\n6575a31222c5da812ce3d53efc1035703ec41242 refs/heads/master\n41999ea700c66c4cadf0eca9e0c5d73caa2783fd refs/remotes/github/feature/visual-factor-window\n6a1498b1ea49c644daadd526b95846cba399e038 refs/remotes/github/main\n395be7fbb96affbebf1d6491588ad232a0bc302a refs/remotes/mapmatching/main\n6575a31222c5da812ce3d53efc1035703ec41242 refs/remotes/origin/HEAD\n032b8660df3c62d3c2347824b212ff4b91c978f0 refs/remotes/origin/backup-loop4-anchor-032b866\ncbc8838c933bf1b0eb776eb1347b6147719a8898 refs/remotes/origin/feature/visual-factor-window\n6575a31222c5da812ce3d53efc1035703ec41242 refs/remotes/origin/master\n44e8b5de94ff2ad1fb13fafd1c5d3525194a7e71 refs/remotes/origin/research/paper-innovation\n47f2696639ace0f16be23ef5a65efbc8587412b3 refs/tags/delivery-v1.0-20260922\n41999ea700c66c4cadf0eca9e0c5d73caa2783fd refs/tags/delivery-v1.1-clean-20260922\n",
+  "reflog": "41999ea700c66c4cadf0eca9e0c5d73caa2783fd refs/heads/feature/quadruped-localization-interface@{0} reset: moving to 41999ea\n41999ea700c66c4cadf0eca9e0c5d73caa2783fd HEAD@{0} reset: moving to 41999ea\n82d7a5eddce666464e34a28c29768ea152049d72 refs/heads/feature/quadruped-localization-interface@{1} commit: feat: isolate local odometry and synchronize project estimator resets\n82d7a5eddce666464e34a28c29768ea152049d72 HEAD@{1} commit: feat: isolate local odometry and synchronize project estimator resets\n5e0bd7a98456fbf4453cf2e63f421ffdf649347f refs/heads/feature/quadruped-localization-interface@{2} commit: feat: define timestamped robot localization interface and health contract\n5e0bd7a98456fbf4453cf2e63f421ffdf649347f HEAD@{2} commit: feat: define timestamped robot localization interface and health contract\n41999ea700c66c4cadf0eca9e0c5d73caa2783fd refs/heads/feature/quadruped-localization-interface@{3} branch: Created from HEAD\n41999ea700c66c4cadf0eca9e0c5d73caa2783fd HEAD@{3} checkout: moving from feature/visual-factor-window to feature/quadruped-localization-interface\n395be7fbb96affbebf1d6491588ad232a0bc302a refs/remotes/mapmatching/main@{0} fetch mapmatching: storing head\n41999ea700c66c4cadf0eca9e0c5d73caa2783fd refs/remotes/github/feature/visual-factor-window@{0} update by push\n41999ea700c66c4cadf0eca9e0c5d73caa2783fd refs/heads/feature/visual-factor-window@{0} commit: docs: record code size reduction\n41999ea700c66c4cadf0eca9e0c5d73caa2783fd HEAD@{4} commit: docs: record code size reduction\n9b07fc2ee26135ca7dffca94172370a6d7b9f70a refs/heads/feature/visual-factor-window@{1} commit: docs: add corridor acceptance metrics\n9b07fc2ee26135ca7dffca94172370a6d7b9f70a HEAD@{5} commit: docs: add corridor acceptance metrics\n0a84435c8ec0d6610289bdd1199737012308f43a refs/heads/feature/visual-factor-window@{2} commit: docs: record final hygiene acceptance\n0a84435c8ec0d6610289bdd1199737012308f43a HEAD@{6} commit: docs: record final hygiene acceptance\n89d19bbd86feaf70850b8f6ad37a1ac3e6dae52a refs/heads/feature/visual-factor-window@{3} commit: cleanup: finalize delivery code hygiene\n89d19bbd86feaf70850b8f6ad37a1ac3e6dae52a HEAD@{7} commit: cleanup: finalize delivery code hygiene\nb0b14755bda27473519ea538ad97c0c6361ddeb4 refs/remotes/github/feature/visual-factor-window@{1} update by push\nb0b14755bda27473519ea538ad97c0c6361ddeb4 refs/heads/feature/visual-factor-window@{4} commit: release: freeze final prior-map localization delivery\nb0b14755bda27473519ea538ad97c0c6361ddeb4 HEAD@{8} commit: release: freeze final prior-map localization delivery\n3175f0849d4de81dce9334834f5e2c0e65bf7529 refs/heads/feature/visual-factor-window@{5} commit: cleanup: slim inactive NDT diagnostics\n3175f0849d4de81dce9334834f5e2c0e65bf7529 HEAD@{9} commit: cleanup: slim inactive NDT diagnostics\n1e16be0292d8b299773fb8f755d91895f6790198 refs/heads/feature/visual-factor-window@{6} commit: cleanup: remove dead delivery profiles and inline math helpers\n1e16be0292d8b299773fb8f755d91895f6790198 HEAD@{10} commit: cleanup: remove dead delivery profiles and inline math helpers\n6a1498b1ea49c644daadd526b95846cba399e038 refs/remotes/github/main@{0} fetch github: storing head\n2ff77b3501b19de64b150c0b2a493381787afefd refs/heads/feature/visual-factor-window@{7} commit: docs: validate cleanup4 runtime equivalence\n2ff77b3501b19de64b150c0b2a493381787afefd HEAD@{11} commit: docs: validate cleanup4 runtime equivalence\nd2e9f26508d41e1b13be7020531e3684baba8ee2 worktrees/dog_visual_before_cleanup4/HEAD@{0} \n1c038b5349b0698bf7cfffe4f91df18969304e41 refs/remotes/github/feature/visual-factor-window@{2} update by push\n1c038b5349b0698bf7cfffe4f91df18969304e41 refs/heads/feature/visual-factor-window@{8} commit: cleanup: remove legacy visual fusion from delivery EKF\n1c038b5349b0698bf7cfffe4f91df18969304e41 HEAD@{12} commit: cleanup: remove legacy visual fusion from delivery EKF\nd2e9f26508d41e1b13be7020531e3684baba8ee2 refs/remotes/github/feature/visual-factor-window@{3} update by push\nd2e9f26508d41e1b13be7020531e3684baba8ee2 refs/heads/feature/visual-factor-window@{9} commit: cleanup: remove integrated lidar path from delivery EKF\nd2e9f26508d41e1b13be7020531e3684baba8ee2 HEAD@{13} commit: cleanup: remove integrated lidar path from delivery EKF\n9d8bcb459ba63abfd825449dc7a54bced5012cd1 refs/remotes/github/feature/visual-factor-window@{4} update by push\n9d8bcb459ba63abfd825449dc7a54bced5012cd1 refs/heads/feature/visual-factor-window@{10} commit: refactor: isolate NDT observation fusion\n9d8bcb459ba63abfd825449dc7a54bced5012cd1 HEAD@{14} commit: refactor: isolate NDT observation fusion\nf8575437f32e753a10817264c30513f559f383c4 refs/remotes/github/feature/visual-factor-window@{5} update by push\nf8575437f32e753a10817264c30513f559f383c4 refs/heads/feature/visual-factor-window@{11} commit: cleanup: define canonical delivery runtime\nf8575437f32e753a10817264c30513f559f383c4 HEAD@{15} commit: cleanup: define canonical delivery runtime\n6f5a0d5b315fd5d77570327a3bd0b059ca5de2be refs/remotes/github/feature/visual-factor-window@{6} update by push\n6f5a0d5b315fd5d77570327a3bd0b059ca5de2be refs/heads/feature/visual-factor-window@{12} commit: fix: avoid duplicate EKF TF publication\n6f5a0d5b315fd5d77570327a3bd0b059ca5de2be HEAD@{16} commit: fix: avoid duplicate EKF TF publication\n5b50a651b818aee90ab6c2d7abe5ee5f5ac8063b refs/remotes/github/feature/visual-factor-window@{7} update by push\n5b50a651b818aee90ab6c2d7abe5ee5f5ac8063b refs/heads/feature/visual-factor-window@{13} commit: refactor: extract OOSM replay planner\n5b50a651b818aee90ab6c2d7abe5ee5f5ac8063b HEAD@{17} commit: refactor: extract OOSM replay planner\n5b4d508462532ae60e02b7ce86236faf725d9f31 refs/remotes/github/feature/visual-factor-window@{8} update by push\n5b4d508462532ae60e02b7ce86236faf725d9f31 refs/heads/feature/visual-factor-window@{14} commit: oosm: defer bounded future NDT measurements\n5b4d508462532ae60e02b7ce86236faf725d9f31 HEAD@{18} commit: oosm: defer bounded future NDT measurements\nefb6c32b3b79919cf2a5536189cf851f4e833833 refs/remotes/github/feature/visual-factor-window@{9} update by push\n64de1ed3695d4a0a787891ffe6933543bfb629bf worktrees/dog_arch1_verify_ws/HEAD@{0} \nefb6c32b3b79919cf2a5536189cf851f4e833833 refs/heads/feature/visual-factor-window@{15} commit: refactor: isolate EKF state history\nefb6c32b3b79919cf2a5536189cf851f4e833833 HEAD@{19} commit: refactor: isolate EKF state history\n64de1ed3695d4a0a787891ffe6933543bfb629bf refs/remotes/github/feature/visual-factor-window@{10} update by push\n64de1ed3695d4a0a787891ffe6933543bfb629bf refs/heads/feature/visual-factor-window@{16} commit: refactor: extract estimator core types\n64de1ed3695d4a0a787891ffe6933543bfb629bf HEAD@{20} commit: refactor: extract estimator core types\nd4e6cfbbe15e0c3bb15e84c5394db78ca2e1e5ff refs/remotes/github/feature/visual-factor-window@{11} update by push\nd4e6cfbbe15e0c3bb15e84c5394db78ca2e1e5ff refs/heads/feature/visual-factor-window@{17} commit: code-hygiene: disable legacy visual frontend in split baseline\nd4e6cfbbe15e0c3bb15e84c5394db78ca2e1e5ff HEAD@{21} commit: code-hygiene: disable legacy visual frontend in split baseline\n556f7af716b173b5553ad2c994b816860d7aa07b refs/remotes/github/feature/visual-factor-window@{12} update by push\n556f7af716b173b5553ad2c994b816860d7aa07b refs/heads/feature/visual-factor-window@{18} commit: code-hygiene: gate inactive prediction and split EKF map\n556f7af716b173b5553ad2c994b816860d7aa07b HEAD@{22} commit: code-hygiene: gate inactive prediction and split EKF map\nf9b91e7f5d44c67f325b09203ed228361e49d528 refs/remotes/github/feature/visual-factor-window@{13} update by push\nf9b91e7f5d44c67f325b09203ed228361e49d528 refs/heads/feature/visual-factor-window@{19} commit: stage3a8: add sparse offline NDT likelihood sampling\nf9b91e7f5d44c67f325b09203ed228361e49d528 HEAD@{23} commit: stage3a8: add sparse offline NDT likelihood sampling\n917969034a147a096671e9c8c0b2cbd0abad4596 refs/remotes/github/feature/visual-factor-window@{14} update by push\n917969034a147a096671e9c8c0b2cbd0abad4596 refs/heads/feature/visual-factor-window@{20} commit: stage3a7: support weak-only offline CSV input\n917969034a147a096671e9c8c0b2cbd0abad4596 HEAD@{24} commit: stage3a7: support weak-only offline CSV input\n81cbc43cc5502989760144b1f83f35b90a3bc1d6 refs/remotes/github/feature/visual-factor-window@{15} update by push\n81cbc43cc5502989760144b1f83f35b90a3bc1d6 refs/heads/feature/visual-factor-window@{21} commit: stage3a6a: fix NDT uncertainty eigenbasis ordering\n81cbc43cc5502989760144b1f83f35b90a3bc1d6 HEAD@{25} commit: stage3a6a: fix NDT uncertainty eigenbasis ordering\n2f7903d3e7744c92fdf7b8d8ff1232441d0e5dec refs/remotes/github/feature/visual-factor-window@{16} update by push\n2f7903d3e7744c92fdf7b8d8ff1232441d0e5dec refs/heads/feature/visual-factor-window@{22} commit: stage3a6: align Schur and NDT uncertainty directions\n2f7903d3e7744c92fdf7b8d8ff1232441d0e5dec HEAD@{26} commit: stage3a6: align Schur and NDT uncertainty directions\n647cbbecaa0f0e8b660888918730f3321cefd389 refs/remotes/github/feature/visual-factor-window@{17} update by push\n647cbbecaa0f0e8b660888918730f3321cefd389 refs/heads/feature/visual-factor-window@{23} commit: stage3a5: add offline NDT uncertainty probe\n647cbbecaa0f0e8b660888918730f3321cefd389 HEAD@{27} commit: stage3a5: add offline NDT uncertainty probe\nfbb641b72c2e520ba8f8f9d029ef545dd3fd4788 refs/remotes/github/feature/visual-factor-window@{18} update by push\nfbb641b72c2e520ba8f8f9d029ef545dd3fd4788 refs/heads/feature/visual-factor-window@{24} commit: stage3a3: log Schur weak subspace diagnostics\nfbb641b72c2e520ba8f8f9d029ef545dd3fd4788 HEAD@{28} commit: stage3a3: log Schur weak subspace diagnostics\n2d00bec291adf519024a96eabe0324fe54b89f6e refs/remotes/github/feature/visual-factor-window@{19} update by push\n2d00bec291adf519024a96eabe0324fe54b89f6e refs/heads/feature/visual-factor-window@{25} commit: stage3a1: build Schur kd-tree only when enabled\n2d00bec291adf519024a96eabe0324fe54b89f6e HEAD@{29} commit: stage3a1: build Schur kd-tree only when enabled\n2fad64fd4e464df840b93f9686b334ebb6a4b978 refs/remotes/github/feature/visual-factor-window@{20} update by push\n2fad64fd4e464df840b93f9686b334ebb6a4b978 refs/heads/feature/visual-factor-window@{26} commit: stage3a1: cache Schur target kd-tree\n2fad64fd4e464df840b93f9686b334ebb6a4b978 HEAD@{30} commit: stage3a1: cache Schur target kd-tree\n89bde5058a10fd23bbd64fb053e7e16ad0a31880 refs/remotes/github/feature/visual-factor-window@{21} update by push\n89bde5058a10fd23bbd64fb053e7e16ad0a31880 refs/heads/feature/visual-factor-window@{27} commit: stage3a: add Schur observability diagnostics\n89bde5058a10fd23bbd64fb053e7e16ad0a31880 HEAD@{31} commit: stage3a: add Schur observability diagnostics\n289596d943e9115eec1f99f805c930e4067928b0 refs/remotes/github/feature/visual-factor-window@{22} update by push\n289596d943e9115eec1f99f805c930e4067928b0 refs/heads/feature/visual-factor-window@{28} commit: stage2e: promote validated deterministic localization baseline\n289596d943e9115eec1f99f805c930e4067928b0 HEAD@{32} commit: stage2e: promote validated deterministic localization baseline\n62c9ee5933fdf79bf6c65bfcbca6117300b7f665 refs/remotes/github/feature/visual-factor-window@{23} update by push\n62c9ee5933fdf79bf6c65bfcbca6117300b7f665 refs/heads/feature/visual-factor-window@{29} commit: fix: timestamp NDT measurements at scan reference\n62c9ee5933fdf79bf6c65bfcbca6117300b7f665 HEAD@{33} commit: fix: timestamp NDT measurements at scan reference\n1e2a61df79d0f8b90ebb2c263be328c2ab0b98ae refs/remotes/github/feature/visual-factor-window@{24} update by push\ncbc8838c933bf1b0eb776eb1347b6147719a8898 refs/remotes/origin/feature/visual-factor-window@{0} fetch origin feature/visual-factor-window: forced-update\n1e2a61df79d0f8b90ebb2c263be328c2ab0b98ae refs/remotes/origin/feature/visual-factor-window@{1} update by push\n1e2a61df79d0f8b90ebb2c263be328c2ab0b98ae refs/heads/feature/visual-factor-window@{30} commit: stage2e-b1: add NDT-local IMU rotation prior\n1e2a61df79d0f8b90ebb2c263be328c2ab0b98ae HEAD@{34} commit: stage2e-b1: add NDT-local IMU rotation prior\n527d581febd74e5a8dca4f24964f017eab3dc70e refs/remotes/github/feature/visual-factor-window@{25} update by push\n527d581febd74e5a8dca4f24964f017eab3dc70e refs/heads/feature/visual-factor-window@{31} commit (amend): stage2d1: throttle path sampling and publishing\n527d581febd74e5a8dca4f24964f017eab3dc70e HEAD@{35} commit (amend): stage2d1: throttle path sampling and publishing\n87a8a8250431e5de80a25d9106372ab5d13769b7 refs/heads/feature/visual-factor-window@{32} commit: stage2d1: throttle path sampling and publishing\n87a8a8250431e5de80a25d9106372ab5d13769b7 HEAD@{36} commit: stage2d1: throttle path sampling and publishing\nd8c70785361e8dcc84c4df200d348b1d0d4239b8 refs/remotes/github/feature/visual-factor-window@{26} update by push\nd8c70785361e8dcc84c4df200d348b1d0d4239b8 refs/heads/feature/visual-factor-window@{33} commit: stage2d: trace EKF prediction state revisions\nd8c70785361e8dcc84c4df200d348b1d0d4239b8 HEAD@{37} commit: stage2d: trace EKF prediction state revisions\n35642d3ab7bac80f3409e41d56a03c84aaded21b refs/heads/feature/visual-factor-window@{34} commit: stage2c: support deterministic scan reference timing\n35642d3ab7bac80f3409e41d56a03c84aaded21b HEAD@{38} commit: stage2c: support deterministic scan reference timing\n618932b1eb59e85b19e98a0bd35b2d54cd05995c refs/remotes/github/feature/visual-factor-window@{27} update by push\n618932b1eb59e85b19e98a0bd35b2d54cd05995c refs/heads/feature/visual-factor-window@{35} commit: stage2b: make NDT prediction lookup timestamp deterministic\n618932b1eb59e85b19e98a0bd35b2d54cd05995c HEAD@{39} commit: stage2b: make NDT prediction lookup timestamp deterministic\n6e6ec6777cea79a242958fd44e7106a177ae3535 refs/remotes/github/feature/visual-factor-window@{28} update by push\n6e6ec6777cea79a242958fd44e7106a177ae3535 refs/heads/feature/visual-factor-window@{36} commit: stage1: fix delayed NDT OOSM with state rollback and IMU replay\n6e6ec6777cea79a242958fd44e7106a177ae3535 HEAD@{40} commit: stage1: fix delayed NDT OOSM with state rollback and IMU replay\n5c160119bd78f98d4dfc64d7d288a804604bc3e5 refs/heads/feature/visual-factor-window@{37} commit: fix: use consistent imu visual rotation convention\n5c160119bd78f98d4dfc64d7d288a804604bc3e5 HEAD@{41} commit: fix: use consistent imu visual rotation convention\n3edf3144c443b9a6c5495cfccd4e3a72f365eb07 refs/heads/feature/visual-factor-window@{38} commit: feat: add opt-in imu-scaled visual diagnostics\n3edf3144c443b9a6c5495cfccd4e3a72f365eb07 HEAD@{42} commit: feat: add opt-in imu-scaled visual diagnostics\n5a185d54c98c46d6c13979a7aca1ddda613bb052 refs/heads/feature/visual-factor-window@{39} commit: fix: align information projector coordinates\n5a185d54c98c46d6c13979a7aca1ddda613bb052 HEAD@{43} commit: fix: align information projector coordinates\nf8539980156ad05ecf789c1825e1b0f4df1adcf2 refs/heads/feature/visual-factor-window@{40} commit: feat: add diagnostic visual imu consistency\nf8539980156ad05ecf789c1825e1b0f4df1adcf2 HEAD@{44} commit: feat: add diagnostic visual imu consistency\n99e5c505a7a0a1a31984627591ae720d9c552329 refs/heads/feature/visual-factor-window@{41} commit: feat: add gated lidar subspace diagnostics\n99e5c505a7a0a1a31984627591ae720d9c552329 HEAD@{45} commit: feat: add gated lidar subspace diagnostics\n4055dfbd34b6bfadc3abc4babcb85efa493047c5 refs/heads/feature/visual-factor-window@{42} commit: chore: expose NDT diagnostic launch paths\n4055dfbd34b6bfadc3abc4babcb85efa493047c5 HEAD@{46} commit: chore: expose NDT diagnostic launch paths\n2781943e560301691f1c18600dc15c9a30cc700c refs/heads/feature/visual-factor-window@{43} commit: fix: label visual relative rotation as rpy\n2781943e560301691f1c18600dc15c9a30cc700c HEAD@{47} commit: fix: label visual relative rotation as rpy\ncf38ec927238aaf31c43aa2fe6ea4c11d085e436 refs/heads/feature/visual-factor-window@{44} commit: feat: add stage1 localization telemetry\ncf38ec927238aaf31c43aa2fe6ea4c11d085e436 HEAD@{48} commit: feat: add stage1 localization telemetry\n1dcc1d4e5609f5199bf0ce5e3198c647528beec1 refs/heads/feature/visual-factor-window@{45} commit: fix: keep information matrix diagnostic-only in stage zero\n1dcc1d4e5609f5199bf0ce5e3198c647528beec1 HEAD@{49} commit: fix: keep information matrix diagnostic-only in stage zero\n9c5d9d7b73a8635c97528e8920cd1da96ea1011c refs/heads/feature/visual-factor-window@{46} commit: revert: restore stable split NDT baseline\n9c5d9d7b73a8635c97528e8920cd1da96ea1011c HEAD@{50} commit: revert: restore stable split NDT baseline\n00b0d402dc3337786286148d220bbebeaf3fc0ca refs/heads/feature/visual-factor-window@{47} commit: feat: gate metric visual odometry by lidar degeneracy\n00b0d402dc3337786286148d220bbebeaf3fc0ca HEAD@{51} commit: feat: gate metric visual odometry by lidar degeneracy\n0c9f3b8295595d2828ff8305d8d7140e8bd3b37d refs/heads/feature/visual-factor-window@{48} commit: fix: isolate invalid metric visual PnP frames\n0c9f3b8295595d2828ff8305d8d7140e8bd3b37d HEAD@{52} commit: fix: isolate invalid metric visual PnP frames\n3354175ae8fc61c000e408bb8c3fb9d1d5e5b74c refs/heads/feature/visual-factor-window@{49} commit: feat: add gated temporal degeneracy experiments\n3354175ae8fc61c000e408bb8c3fb9d1d5e5b74c HEAD@{53} commit: feat: add gated temporal degeneracy experiments\nd050be6588f21fa943fb205b842e3b9173a7527e refs/heads/feature/visual-factor-window@{50} commit: feat: gate corridor scan fallback behind degeneracy detection\nd050be6588f21fa943fb205b842e3b9173a7527e HEAD@{54} commit: feat: gate corridor scan fallback behind degeneracy detection\n2a7343100a5d172de23f3f00d9785e657136c886 refs/heads/feature/visual-factor-window@{51} commit: feat: use temporal motion fallback in corridor degeneracy\n2a7343100a5d172de23f3f00d9785e657136c886 HEAD@{55} commit: feat: use temporal motion fallback in corridor degeneracy\n7004fca2274b6d878ec54ae7657941363cc45412 refs/heads/feature/visual-factor-window@{52} commit: tune: activate split NDT information degeneracy at condition 500\n7004fca2274b6d878ec54ae7657941363cc45412 HEAD@{56} commit: tune: activate split NDT information degeneracy at condition 500\n90209a8ba9b1426f03deb3ca3e4c8c27fcda967d refs/heads/feature/visual-factor-window@{53} commit: fix: disable over-triggered split NDT geometric degeneracy\n90209a8ba9b1426f03deb3ca3e4c8c27fcda967d HEAD@{57} commit: fix: disable over-triggered split NDT geometric degeneracy\ncf97bf0ac9c3e3260129a36729373e296f78d233 refs/heads/feature/visual-factor-window@{54} commit: chore: keep split NDT baseline features disabled\ncf97bf0ac9c3e3260129a36729373e296f78d233 HEAD@{58} commit: chore: keep split NDT baseline features disabled\nfc82208e462e32c4c52ec5e77fc1010b65e2aeae refs/heads/feature/visual-factor-window@{55} commit: feat: add IMU deskew and information degeneracy to split NDT\nfc82208e462e32c4c52ec5e77fc1010b65e2aeae HEAD@{59} commit: feat: add IMU deskew and information degeneracy to split NDT\nc01ff19493ddf9686ab962e9764d113a87006127 refs/heads/feature/visual-factor-window@{56} commit: feat: add IMU deskew to split NDT\nc01ff19493ddf9686ab962e9764d113a87006127 HEAD@{60} commit: feat: add IMU deskew to split NDT\n40579b3c91c1ece4324c7ce2baf79c5a856eb621 refs/heads/feature/visual-factor-window@{57} commit: fix: reuse split NDT coordinate configuration\n40579b3c91c1ece4324c7ce2baf79c5a856eb621 HEAD@{61} commit: fix: reuse split NDT coordinate configuration\n7c828812088538b61413b60662710b1944dea1d4 refs/heads/feature/visual-factor-window@{58} commit: fix: publish scan after pose correction\n7c828812088538b61413b60662710b1944dea1d4 HEAD@{62} commit: fix: publish scan after pose correction\n37e146d760b962026296f93bbacb4ecd979b01b9 refs/heads/feature/visual-factor-window@{59} commit: fix: publish complete trajectory during high-rate propagation\n37e146d760b962026296f93bbacb4ecd979b01b9 HEAD@{63} commit: fix: publish complete trajectory during high-rate propagation\nc2b5d28ee61ee85ba430bad2cae5f568a4e1e73f refs/heads/feature/visual-factor-window@{60} commit: fix: align full-launch scan display and retain path history\nc2b5d28ee61ee85ba430bad2cae5f568a4e1e73f HEAD@{64} commit: fix: align full-launch scan display and retain path history\n9a509c64b6eb541ae0bedc23d9dbb21a72ca703e refs/heads/feature/visual-factor-window@{61} commit: fix: use map frame for full localization rviz\n9a509c64b6eb541ae0bedc23d9dbb21a72ca703e HEAD@{65} commit: fix: use map frame for full localization rviz\n0726b49e7d256a37756ac12371377fa1012d6951 refs/heads/feature/visual-factor-window@{62} commit: feat: show map scan paths and tf in rviz\n0726b49e7d256a37756ac12371377fa1012d6951 HEAD@{66} commit: feat: show map scan paths and tf in rviz\na2d9d1060fa20d11c60fd80a460f8eca48f639c2 refs/heads/feature/visual-factor-window@{63} commit: feat: publish continuous lidar degeneracy score\na2d9d1060fa20d11c60fd80a460f8eca48f639c2 HEAD@{67} commit: feat: publish continuous lidar degeneracy score\n6589c44bb756a9749f2a8187c49f03acabb77a87 refs/heads/feature/visual-factor-window@{64} commit: debug: report local corridor anisotropy\n6589c44bb756a9749f2a8187c49f03acabb77a87 HEAD@{68} commit: debug: report local corridor anisotropy\n22106a4af0ceda440719ff742c93b9008d9e08b1 refs/heads/feature/visual-factor-window@{65} commit: tune: detect corridor anisotropy at moderate ratio\n22106a4af0ceda440719ff742c93b9008d9e08b1 HEAD@{69} commit: tune: detect corridor anisotropy at moderate ratio\n4b647839a212c9fc37b0876684669b0b1ecfbf4a refs/heads/feature/visual-factor-window@{66} commit: fix: support sparse local degeneracy statistics\n4b647839a212c9fc37b0876684669b0b1ecfbf4a HEAD@{70} commit: fix: support sparse local degeneracy statistics\ne1ec68f5c5a1d350872c104a49c92e590cec3f04 refs/heads/feature/visual-factor-window@{67} commit: feat: gate visual updates on ndt degeneracy\ne1ec68f5c5a1d350872c104a49c92e590cec3f04 HEAD@{71} commit: feat: gate visual updates on ndt degeneracy\nf6f317b1523b76b1ac4a91ebc57d3ea424d2decc refs/heads/feature/visual-factor-window@{68} commit: chore: restore visual workspace from stable light baseline\nf6f317b1523b76b1ac4a91ebc57d3ea424d2decc HEAD@{72} commit: chore: restore visual workspace from stable light baseline\n0e1422e5018744679cee49e30639a02616ccdcb2 refs/heads/feature/visual-factor-window@{69} commit: feat: use corridor sequence matcher in split NDT node\n0e1422e5018744679cee49e30639a02616ccdcb2 HEAD@{73} commit: feat: use corridor sequence matcher in split NDT node\nf55db57ef6223a162078e068bf7d3fca7524df03 refs/heads/feature/visual-factor-window@{70} commit: feat: add temporal corridor sequence localization\nf55db57ef6223a162078e068bf7d3fca7524df03 HEAD@{74} commit: feat: add temporal corridor sequence localization\n00a35e6fdd6a73a2e23fb6765787d754cd6f550f refs/heads/feature/visual-factor-window@{71} commit: fix: reject degenerate NDT corridor updates\n00a35e6fdd6a73a2e23fb6765787d754cd6f550f HEAD@{75} commit: fix: reject degenerate NDT corridor updates\n613d2125d5b3d542efca19a48393b713903755fd refs/heads/feature/visual-factor-window@{72} commit: fix: explicitly transform aligned scans to map frame\n613d2125d5b3d542efca19a48393b713903755fd HEAD@{76} commit: fix: explicitly transform aligned scans to map frame\n7ecc6c0c6ce85ca2cdfa205079c27279cdf4e986 refs/heads/feature/visual-factor-window@{73} commit: fix: reject low-quality NDT absolute matches\n7ecc6c0c6ce85ca2cdfa205079c27279cdf4e986 HEAD@{77} commit: fix: reject low-quality NDT absolute matches\n3c0ef8a85f71a8638b2f3943daf0a621cfe36190 refs/heads/feature/visual-factor-window@{74} commit: fix: disable duplicate NDT TF in split mode\n3c0ef8a85f71a8638b2f3943daf0a621cfe36190 HEAD@{78} commit: fix: disable duplicate NDT TF in split mode\n70023073799b77caec019d653804a9b395843e3e refs/heads/feature/visual-factor-window@{75} commit: fix: gate NDT candidates with IMU prediction\n70023073799b77caec019d653804a9b395843e3e HEAD@{79} commit: fix: gate NDT candidates with IMU prediction\n8f9d1abafc21b3982826cf70b65bb7b787c68704 refs/heads/feature/visual-factor-window@{76} commit: fix: reject large fused NDT frame jumps\n8f9d1abafc21b3982826cf70b65bb7b787c68704 HEAD@{80} commit: fix: reject large fused NDT frame jumps\ncbc8838c933bf1b0eb776eb1347b6147719a8898 refs/heads/feature/visual-factor-window@{77} \n6575a31222c5da812ce3d53efc1035703ec41242 refs/heads/master@{0} clone: from /home/jian/livox_ws/dog_light_loc_ws\n6575a31222c5da812ce3d53efc1035703ec41242 refs/remotes/origin/HEAD@{0} clone: from /home/jian/livox_ws/dog_light_loc_ws\n6575a31222c5da812ce3d53efc1035703ec41242 HEAD@{81} clone: from /home/jian/livox_ws/dog_light_loc_ws\n",
+  "status": "A  .vscode/settings.json\u0000A  AGENTS.md\u0000A  PROJECT_PROGRESS.md\u0000A  src/dog_prior_map_localization.zip\u0000A  src/dog_prior_map_localization/.github/skills/academic-paper-translator/.gitignore\u0000A  src/dog_prior_map_localization/.github/skills/academic-paper-translator/README.md\u0000A  src/dog_prior_map_localization/.github/skills/academic-paper-translator/SKILL.md\u0000A  src/dog_prior_map_localization/.github/skills/academic-paper-translator/agents/openai.yaml\u0000A  src/dog_prior_map_localization/.github/skills/academic-paper-translator/references/content_type_rules.md\u0000A  src/dog_prior_map_localization/.github/skills/academic-paper-translator/references/translation_style.md\u0000A  src/dog_prior_map_localization/.github/skills/academic-paper-translator/scripts/check_manifest.py\u0000A  src/dog_prior_map_localization/.github/skills/academic-paper-translator/scripts/chunk_paper.py\u0000A  src/dog_prior_map_localization/.github/skills/academic-paper-translator/scripts/extract_source.py\u0000A  src/dog_prior_map_localization/.github/skills/academic-paper-translator/scripts/merge_translations.py\u0000A  src/dog_prior_map_localization/.github/skills/academic-paper-translator/scripts/qa_translation.py\u0000A  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/.gitattributes\u0000A  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/.gitignore\u0000A  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/LICENSE\u0000A  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/README.md\u0000A  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/SKILL.md\u0000A  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/agents/openai.yaml\u0000A  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/examples/release-notes-v1.0.0.md\u0000A  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/examples/sample-output-structure.md\u0000A  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/examples/sample-request.md\u0000A  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/exclusion-rules.md\u0000A  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/heading-structure.md\u0000A  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/layout-spec.md\u0000A  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/pdf-structure-extraction.md\u0000A  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/qa-checklist.md\u0000A  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/reference-splitting.md\u0000A  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/terminology-and-error-rules.md\u0000A  src/dog_prior_map_localization/.github/skills/paper-pdf-translator/scripts/qa_translation_package.py\u0000 M src/dog_prior_map_localization/CMakeLists.txt\u0000 M src/dog_prior_map_localization/config/dog_prior_map_localization_ndt.yaml\u0000A  src/dog_prior_map_localization/docs/stage0_determinism_diagnostics.md\u0000A  src/dog_prior_map_localization/include/dog_prior_map_localization/livox_imu_deskewer.hpp\u0000 M src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch\u0000 M src/dog_prior_map_localization/package.xml\u0000A  src/dog_prior_map_localization/scripts/make_translation_pdf.py\u0000A  src/dog_prior_map_localization/scripts/render_translation_pdf.py\u0000A  src/dog_prior_map_localization/scripts/run_loop2_determinism_trial.sh\u0000A  src/dog_prior_map_localization/scripts/run_loop5_deploy_light_odom_eval.sh\u0000A  src/dog_prior_map_localization/scripts/run_loop5_record_raw.sh\u0000A  src/dog_prior_map_localization/src/livox_imu_deskewer.cpp\u0000A  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/STAGE0_DIAGNOSTIC_GAP_REPORT.md\u0000A  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/audit_files_sha256.txt\u0000A  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/binary_and_build_info.txt\u0000A  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/git_diff_90209a8.patch\u0000A  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/git_diff_HEAD.patch\u0000A  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/git_diff_stats.txt\u0000A  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/git_log_oneline_10.txt\u0000A  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/git_status_after_audit.txt\u0000A  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/git_status_short.txt\u0000A  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/input_artifact_hashes.txt\u0000A  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/key_file_sha256.txt\u0000A  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/launch_dump_params_rviz_true.yaml\u0000A  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/live_master_11311_snapshot.yaml\u0000A  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/repo_identity.txt\u0000A  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/ros_environment_and_resolution.txt\u0000A  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/tracked_changed_sha256.txt\u0000A  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/untracked_inventory_and_sha256.txt\u0000A  src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/verification.txt\u0000?? src/dog_prior_map_localization/Testing/Temporary/CTestCostData.txt\u0000?? src/dog_prior_map_localization/Testing/Temporary/LastTest.log\u0000?? src/dog_prior_map_localization/docs/architecture/pending/CODE_ARCH_3A_OOSM_DESIGN.md\u0000?? src/dog_prior_map_localization/docs/validation/pending/OOSM_TIMING_1_REPORT.md\u0000?? src/dog_prior_map_localization/docs/validation/pending/VIS_TRUST_0_REPORT.md\u0000?? src/dog_prior_map_localization/msg/LocalizationState.msg\u0000?? src/dog_prior_map_localization/src/dog_localization_state_node.cpp\u0000",
+  "files": {
+    ".catkin_workspace": {
+      "size": 98,
+      "sha256": "095f6554aab683a09c20a1d4aa28894cfa1133b4173a5ef73c496aeadc792dae"
+    },
+    ".gitignore": {
+      "size": 116,
+      "sha256": "a459f7fcc55f68a5f6144173ac2182a606f0ecdceb3c41212ec2f5a21ec6b8bb"
+    },
+    ".vscode/settings.json": {
+      "size": 76,
+      "sha256": "4d9f6dadd189dcad8d1b611044bfc49858ca03df72eacd7dff1e88b9384dffe1"
+    },
+    "AGENTS.md": {
+      "size": 324,
+      "sha256": "f1aa6ebf1e65c366b20df4e70e5563224219a1c0ea902de525d2ba53813bc0ce"
+    },
+    "PROJECT_PROGRESS.md": {
+      "size": 10573,
+      "sha256": "63cbbcdc4b34187f9fdcec9111129ecbf7ddeb4aaa9eeaac07cc63982b87661a"
+    },
+    "src/CMakeLists.txt": {
+      "symlink": "/opt/ros/noetic/share/catkin/cmake/toplevel.cmake"
+    },
+    "src/dog_prior_map_localization.zip": {
+      "size": 272937,
+      "sha256": "f03fbeab15955298a6476881aefbd75d93893943c0d491af1dc1c48085def363"
+    },
+    "src/dog_prior_map_localization/.github/skills/academic-paper-translator/.gitignore": {
+      "size": 29,
+      "sha256": "53f0c100a33a56ebada040287b3d0f5dbab21c6ec6b66209fec5515c508f1144"
+    },
+    "src/dog_prior_map_localization/.github/skills/academic-paper-translator/README.md": {
+      "size": 5491,
+      "sha256": "19d0e1f6ca142a0b5698874853b8ea4585ace918adfa4957bdd90a117614baaa"
+    },
+    "src/dog_prior_map_localization/.github/skills/academic-paper-translator/SKILL.md": {
+      "size": 6789,
+      "sha256": "d2b589c92d9f6b77a385ee68a6c45399c3a108e83f1da9015b656605554f1075"
+    },
+    "src/dog_prior_map_localization/.github/skills/academic-paper-translator/agents/openai.yaml": {
+      "size": 301,
+      "sha256": "203904789e1cea875bb194d756e650e76321493d7619e608200d496e913248df"
+    },
+    "src/dog_prior_map_localization/.github/skills/academic-paper-translator/references/content_type_rules.md": {
+      "size": 2156,
+      "sha256": "b38317e752ea9519e7511976ce7bfe0039516b3c3b8232d254c0e254af725e81"
+    },
+    "src/dog_prior_map_localization/.github/skills/academic-paper-translator/references/translation_style.md": {
+      "size": 1806,
+      "sha256": "39e5f3f20bd81039d5a2ce41d2951ec9550ed6bdd2756e9d066826ca4316f745"
+    },
+    "src/dog_prior_map_localization/.github/skills/academic-paper-translator/scripts/check_manifest.py": {
+      "size": 1710,
+      "sha256": "a6abfd460f7924458b4d6af53898e53cf1b995d88e0452a1191a07e2c6a9e7db"
+    },
+    "src/dog_prior_map_localization/.github/skills/academic-paper-translator/scripts/chunk_paper.py": {
+      "size": 6872,
+      "sha256": "68827e12118e0c66f18a144803c7efbf15c24e123ed746731b08d9bf82e7c2e9"
+    },
+    "src/dog_prior_map_localization/.github/skills/academic-paper-translator/scripts/extract_source.py": {
+      "size": 3676,
+      "sha256": "0a10f82dfc430d1d43b16fc65d1c8e3089ae92cc5bb95e6d0de8acec25b83089"
+    },
+    "src/dog_prior_map_localization/.github/skills/academic-paper-translator/scripts/merge_translations.py": {
+      "size": 1268,
+      "sha256": "9eae0acbdc1cfb4a54385bba5f18777bb7f2d4cce3b8b23810c6bdf032b8a080"
+    },
+    "src/dog_prior_map_localization/.github/skills/academic-paper-translator/scripts/qa_translation.py": {
+      "size": 4382,
+      "sha256": "8206a6e569aab68a357faf5b945124312367d02bead73b7e646cfdf58f2d63b4"
+    },
+    "src/dog_prior_map_localization/.github/skills/paper-pdf-translator/.gitattributes": {
+      "size": 90,
+      "sha256": "988720b79f0fb067887566c8dc0228d0b78ab8b187315e47757deae575f35483"
+    },
+    "src/dog_prior_map_localization/.github/skills/paper-pdf-translator/.gitignore": {
+      "size": 238,
+      "sha256": "6af3b892a3f66c9b87037821a9101ad915782ab82d3b856cc6a8a468bc32debe"
+    },
+    "src/dog_prior_map_localization/.github/skills/paper-pdf-translator/LICENSE": {
+      "size": 1056,
+      "sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685"
+    },
+    "src/dog_prior_map_localization/.github/skills/paper-pdf-translator/README.md": {
+      "size": 6023,
+      "sha256": "4e8b807f97a72b093a76460476751097571b74412f71cb5f1c9dfbc97c825dc7"
+    },
+    "src/dog_prior_map_localization/.github/skills/paper-pdf-translator/SKILL.md": {
+      "size": 10191,
+      "sha256": "fc4338f6bc94b3db1d28b694c72e4c40f55e6a170dde2942757a3078de750366"
+    },
+    "src/dog_prior_map_localization/.github/skills/paper-pdf-translator/agents/openai.yaml": {
+      "size": 370,
+      "sha256": "5d6d03b049ee3f0264af77e438aee7166627bd7acffeeded9f29534efaa77f65"
+    },
+    "src/dog_prior_map_localization/.github/skills/paper-pdf-translator/examples/release-notes-v1.0.0.md": {
+      "size": 598,
+      "sha256": "144573d4320420f974fbfffd9192377415ad9b67f4e1df0de790c64f4de3e71c"
+    },
+    "src/dog_prior_map_localization/.github/skills/paper-pdf-translator/examples/sample-output-structure.md": {
+      "size": 682,
+      "sha256": "d34dbf3b9750174e23e9c96cb6886b4103deeee35942b3bf263d6f09e2c7cb2d"
+    },
+    "src/dog_prior_map_localization/.github/skills/paper-pdf-translator/examples/sample-request.md": {
+      "size": 612,
+      "sha256": "fc35441fe525afb0511f748098bd7791a22e3b092da55561c660c4a89924ec36"
+    },
+    "src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/exclusion-rules.md": {
+      "size": 1550,
+      "sha256": "af54fa9a366aab16b8d53cda181f1f622a678561112d97b6ab7e274dae595b12"
+    },
+    "src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/heading-structure.md": {
+      "size": 1393,
+      "sha256": "13c4f12037a4968d403fc219b2dc62deebd8424bbee5d6895b33b1028bce3a7b"
+    },
+    "src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/layout-spec.md": {
+      "size": 5310,
+      "sha256": "952b1b5dd08adb12e157474205b0586db941e3a8ad7983ad1241229a679ea9b9"
+    },
+    "src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/pdf-structure-extraction.md": {
+      "size": 10005,
+      "sha256": "29bd29e9f05d7561488433f3b3bb3f326f51359be6ce80cd38256cb5a27943df"
+    },
+    "src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/qa-checklist.md": {
+      "size": 5231,
+      "sha256": "bce4ae021b7890ea09fd5dd46f03918d796d45df3d9a711f513d7a42a464531a"
+    },
+    "src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/reference-splitting.md": {
+      "size": 1840,
+      "sha256": "f27fcdc331d4dfd8650cc6467fe6d1c2c4c7e2a403c64543ee89cc6d943cc65b"
+    },
+    "src/dog_prior_map_localization/.github/skills/paper-pdf-translator/references/terminology-and-error-rules.md": {
+      "size": 2276,
+      "sha256": "ffb9f47170819f04480b84783721f546f2709fec750465c27927f2652a48bd99"
+    },
+    "src/dog_prior_map_localization/.github/skills/paper-pdf-translator/scripts/qa_translation_package.py": {
+      "size": 22965,
+      "sha256": "d8f96627e2e76c3bef200d3ec117f6f6176b605db94e4aec1ae4823b016d0acf"
+    },
+    "src/dog_prior_map_localization/AGENTS.md": {
+      "size": 3435,
+      "sha256": "6398fe2fae4fd17bddf590f59e7b8d4e983461a20b5c3a807442daf75abcfa5c"
+    },
+    "src/dog_prior_map_localization/CMakeLists.txt": {
+      "size": 3516,
+      "sha256": "ac5510ca5bb84a15191455cbfcbc629c092f2c882281acf742e17a8537af53a7"
+    },
+    "src/dog_prior_map_localization/README.md": {
+      "size": 4307,
+      "sha256": "0cbadebbcbfec2817c408625d707f34aca5222115ab6e0cd64dd7e8d88235b0a"
+    },
+    "src/dog_prior_map_localization/Testing/Temporary/CTestCostData.txt": {
+      "size": 4,
+      "sha256": "f52d711103d50a437830c6fbcd04fb4bab49a0f82f6d26d1c791c6e8488dd090"
+    },
+    "src/dog_prior_map_localization/Testing/Temporary/LastTest.log": {
+      "size": 121,
+      "sha256": "fffa97ca827b5faa731923c27175d6a45cf0424972d571f085a3138d30c6ca05"
+    },
+    "src/dog_prior_map_localization/config/dog_prior_map_localization_ndt.yaml": {
+      "size": 3238,
+      "sha256": "08c5fbf67684892dbea7b61255de2acb0ad8fdd73bb5bd5b8c5960b92ffac183"
+    },
+    "src/dog_prior_map_localization/docs/C++机器狗端先验地图定位验证报告_2026_08_12.md": {
+      "size": 15344,
+      "sha256": "63fb29b19809574b89c79ae1bd0838569cb11ae5bdf91b0811353f26436933f1"
+    },
+    "src/dog_prior_map_localization/docs/C++模块化代码结构说明_2026_08_12.md": {
+      "size": 2658,
+      "sha256": "aac63c013cc4007b9ec7e8b5a665bab3bcf9b582451734aed348c266686953a9"
+    },
+    "src/dog_prior_map_localization/docs/architecture/CODE_ARCH_1_CORE_TYPES.md": {
+      "size": 1738,
+      "sha256": "2397acfe1ea49d68ca81001fda7ff1dd0096a4094a36965463cd7bdc5a4ea088"
+    },
+    "src/dog_prior_map_localization/docs/architecture/CODE_ARCH_2_STATE_HISTORY.md": {
+      "size": 2666,
+      "sha256": "dc1029ebd8c4c18b516cb5fc3127e6c8578ee509caa1038fa67759efa5bb6b90"
+    },
+    "src/dog_prior_map_localization/docs/architecture/CODE_ARCH_3A_OOSM_DESIGN.md": {
+      "size": 3078,
+      "sha256": "0b4e83c91ec83c14277b3ac6d1f52a4f3ba81111281011cd5dc88fdea90a5e10"
+    },
+    "src/dog_prior_map_localization/docs/architecture/CODE_ARCH_3B_OOSM_REPLAY_PLANNER.md": {
+      "size": 3446,
+      "sha256": "b5739a4bec4701852d10b9e9f3b4c7d1ad99f5c773137ad28dad1b3a58015d11"
+    },
+    "src/dog_prior_map_localization/docs/architecture/DELIVERY_CLEANUP_2_NDT_OBSERVATION_EXTRACTION.md": {
+      "size": 4131,
+      "sha256": "d6cba1c9d5c05cf3231f417f81cde9f8e1ad8d21cdd81c85d1dc0e5241f8139e"
+    },
+    "src/dog_prior_map_localization/docs/architecture/DELIVERY_CLEANUP_3_REACHABILITY.md": {
+      "size": 2378,
+      "sha256": "b1eb0e7b9049cc44e45225d89f9a2923d1e3c24e225969e602acbf92db7141ba"
+    },
+    "src/dog_prior_map_localization/docs/architecture/DELIVERY_CLEANUP_3_REMOVE_INTEGRATED_LIDAR.md": {
+      "size": 1783,
+      "sha256": "594b7bfd4560e0e744febc7600b4ac983be3bfb9a92b6363a39e4cf3a3569e2f"
+    },
+    "src/dog_prior_map_localization/docs/architecture/DELIVERY_CLEANUP_4_REACHABILITY.md": {
+      "size": 1985,
+      "sha256": "342a3fa426ab481279a621068889e30baf090cb56018ee6ad16e4de4dba541e8"
+    },
+    "src/dog_prior_map_localization/docs/architecture/DELIVERY_CLEANUP_4_REMOVE_LEGACY_VISION.md": {
+      "size": 1579,
+      "sha256": "1b8b61420019484225f11b4bfcdbace59bcea3d0d67a9aa6835a570ce3ca14b4"
+    },
+    "src/dog_prior_map_localization/docs/architecture/DELIVERY_CLEANUP_NEXT.md": {
+      "size": 1936,
+      "sha256": "accd1dfee909d6566bcaaebf394d6812956b427d44cf57aaf014525460b47f14"
+    },
+    "src/dog_prior_map_localization/docs/architecture/DELIVERY_RUNTIME_MANIFEST.md": {
+      "size": 4045,
+      "sha256": "b5154acae5bd7146045ee419d47626fa679511eb1c8523a2f220a5b5866a30c8"
+    },
+    "src/dog_prior_map_localization/docs/architecture/FINAL_CLEANUP_6_NDT_RUNTIME_SLIMMING.md": {
+      "size": 3100,
+      "sha256": "e95347586c424752c0f97f51d9d69a5d44c501e396b268ceb2b6ecd5b4fcd268"
+    },
+    "src/dog_prior_map_localization/docs/architecture/FINAL_CODE_REACHABILITY.md": {
+      "size": 3595,
+      "sha256": "960573b49f36ae7b9427ffb6addd720fad9e61144b7bca779e5c663bef027b5b"
+    },
+    "src/dog_prior_map_localization/docs/architecture/FINAL_DELIVERY_ARCHITECTURE.md": {
+      "size": 2374,
+      "sha256": "33e543d6dc1122d136c20cb180861128284ce0906dea3bec18afffae7db4482d"
+    },
+    "src/dog_prior_map_localization/docs/architecture/FINAL_HYGIENE_1.md": {
+      "size": 2042,
+      "sha256": "d5995f5614a973183b214e0a9059350b7978482fca6ae939e40ef49e4af5df3f"
+    },
+    "src/dog_prior_map_localization/docs/architecture/FINAL_HYGIENE_1_REACHABILITY.md": {
+      "size": 3301,
+      "sha256": "b7fa16a827fa521a32efab016c29cb732002c1d3bc4ee752b2ffc2547a9aa00c"
+    },
+    "src/dog_prior_map_localization/docs/architecture/FUTURE_SENSOR_EXTENSION.md": {
+      "size": 826,
+      "sha256": "fdd52f03fc6d87096b5eae43cfb4b766bbed3e214d2d78dd3fa325e50d0f1893"
+    },
+    "src/dog_prior_map_localization/docs/architecture/code_arch0/CODE_ARCH_0_REPORT.md": {
+      "size": 9871,
+      "sha256": "b4476ba6b575d6d4908f4276a1f22a40e2885074c5085b08499e1f2a2cabb770"
+    },
+    "src/dog_prior_map_localization/docs/architecture/code_arch0/refactor_stage_plan.md": {
+      "size": 2942,
+      "sha256": "beeae5d5bd6e8fe9e22feed76ad5115ffc3e76525777235c7bef48f0eab49cd5"
+    },
+    "src/dog_prior_map_localization/docs/architecture/code_arch0/runtime_call_graph.md": {
+      "size": 3447,
+      "sha256": "9042bd92dec41d75d29c4bef12cec06693204dfdd9db1b48c8e4f9a3c4bcf336"
+    },
+    "src/dog_prior_map_localization/docs/architecture/code_arch0/state_ownership.md": {
+      "size": 4145,
+      "sha256": "91448f8161af8c4233d31d69eeca3030a1d9a07a8a61d793caa524c6cf157d4b"
+    },
+    "src/dog_prior_map_localization/docs/architecture/code_arch0/target_architecture.md": {
+      "size": 3191,
+      "sha256": "d68c9ed0b0739ba06cddcb5585e6b1fe717165e706ee43e8b40fa4e167c0f6bd"
+    },
+    "src/dog_prior_map_localization/docs/architecture/pending/CODE_ARCH_3A_OOSM_DESIGN.md": {
+      "size": 645,
+      "sha256": "f5347963db5f06b4623102540eac0ff6bc7b5febff3d076562ec64e3b254126f"
+    },
+    "src/dog_prior_map_localization/docs/stage0_determinism_diagnostics.md": {
+      "size": 5560,
+      "sha256": "6f64b92992726d6dc5a9363e2a5380eced3c8cea116833cce3d6da67a5b4bbd9"
+    },
+    "src/dog_prior_map_localization/docs/validation/DELIVERY_CLEANUP_4_RUNTIME_EQUIVALENCE.md": {
+      "size": 7612,
+      "sha256": "fb80c81b5af7195f56a6245fdbb61264c15a9aa53aed09da646f95cd145d5445"
+    },
+    "src/dog_prior_map_localization/docs/validation/FINAL_DELIVERY_ACCEPTANCE_20260922.md": {
+      "size": 4799,
+      "sha256": "76f592e481eef728c672e90132db5e1d48ea39f44731485f3e3d789fa7f7d77c"
+    },
+    "src/dog_prior_map_localization/docs/validation/FINAL_HYGIENE_1_ACCEPTANCE_20260922.md": {
+      "size": 4800,
+      "sha256": "ce8fe6922639da2d889055c78e6f77557226b539ff7e349f9919ee0bd650c087"
+    },
+    "src/dog_prior_map_localization/docs/validation/OOSM_TIMING_1_REPORT.md": {
+      "size": 2719,
+      "sha256": "6952c5a9c72e96e9bc0c482c57833ba0b6e789213a34897aed36e9d49733d948"
+    },
+    "src/dog_prior_map_localization/docs/validation/OOSM_TIMING_2_DEFERRAL.md": {
+      "size": 7080,
+      "sha256": "ed79a6b9f57820a15416d112027d5ec40f7f6a77b848875c796d330fb35a0ee4"
+    },
+    "src/dog_prior_map_localization/docs/validation/TF_HYGIENE_1.md": {
+      "size": 2995,
+      "sha256": "326ea2d831a68791540e3c29a5f7eb6091ffda946e4b206c776be52af712428f"
+    },
+    "src/dog_prior_map_localization/docs/validation/pending/OOSM_TIMING_1_REPORT.md": {
+      "size": 10742,
+      "sha256": "48e1f34abb99519314ce197a73b9a8af62eb169c77de9d4c110cbc29e8993e91"
+    },
+    "src/dog_prior_map_localization/docs/validation/pending/VIS_TRUST_0_REPORT.md": {
+      "size": 2590,
+      "sha256": "a309c7a98d589251818ff341930fe62ab1fc6315adc5354e43fb1254dbd7f20e"
+    },
+    "src/dog_prior_map_localization/docs/机器狗端低算力先验地图定位算法报告.md": {
+      "size": 6055,
+      "sha256": "176410de88506952427f68a4bf94af2896cbbf1629c63287b06c721b5890a6d7"
+    },
+    "src/dog_prior_map_localization/include/dog_prior_map_localization/core/estimator_types.hpp": {
+      "size": 1330,
+      "sha256": "ea38ab1741345f69069684ce290d9a3b1b52d4a235d5c08c1a1516962c1189ac"
+    },
+    "src/dog_prior_map_localization/include/dog_prior_map_localization/core/math_utils.hpp": {
+      "size": 670,
+      "sha256": "684d827ad6055d42ee5cb1cef3929dc27245439f49e2a3b7f96d9492065cf0e4"
+    },
+    "src/dog_prior_map_localization/include/dog_prior_map_localization/core/oosm_replay_planner.hpp": {
+      "size": 1656,
+      "sha256": "70b19976a357751f13b6a4c9511fbc4ff51d717e9f57719df5af1d0335c0660c"
+    },
+    "src/dog_prior_map_localization/include/dog_prior_map_localization/core/state_history.hpp": {
+      "size": 961,
+      "sha256": "3476bfe317750ce74c012e557c6315b923f426d3986bb72cec00735d31063b36"
+    },
+    "src/dog_prior_map_localization/include/dog_prior_map_localization/dog_prior_map_ekf_node.hpp": {
+      "size": 8926,
+      "sha256": "9f99acda9868c5034569d6a198c0f3a811316021d3e0e44c7de2b890153fe8e2"
+    },
+    "src/dog_prior_map_localization/include/dog_prior_map_localization/livox_imu_deskewer.hpp": {
+      "size": 4266,
+      "sha256": "d142e313f1ac94019db5a7d3f12e0f41cf85c658e9c029bb152b755f4f9aa615"
+    },
+    "src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch": {
+      "size": 5747,
+      "sha256": "bb0b3f0bdb3d009c75899511517c529f4f846db3390143bebc0279d553fb3f4f"
+    },
+    "src/dog_prior_map_localization/msg/LocalizationState.msg": {
+      "size": 668,
+      "sha256": "52040e1585890c9dad3db688279b9e5f28cd8ae8c5aebdb73038c42ed790657d"
+    },
+    "src/dog_prior_map_localization/package.xml": {
+      "size": 1927,
+      "sha256": "cb575e5897b9973a858f6042e01f372fc98e41b0c8f94a5777052354566b0d87"
+    },
+    "src/dog_prior_map_localization/rviz/dog_prior_map_localization.rviz": {
+      "size": 5598,
+      "sha256": "abd1823bf80970ac58a2b5f4b65164d126e6ffa7fecfacae1a9a90c9c8d0860f"
+    },
+    "src/dog_prior_map_localization/scripts/build_livox_keyframe_scan_db.py": {
+      "size": 5195,
+      "sha256": "cbbeea91ae4d4c5f579823c43155ed72973a58e97a3e06eb1a2149302e2e5aff"
+    },
+    "src/dog_prior_map_localization/scripts/compare_odom_to_reference.py": {
+      "size": 2630,
+      "sha256": "16b326e0f92a4cc8b4169e15953c3af7e749126e416155c230748978aa659ba7"
+    },
+    "src/dog_prior_map_localization/scripts/evaluate_runtime_and_accuracy.py": {
+      "size": 5865,
+      "sha256": "918c869126919f6bed65b312b69f5bb428779a1daab06117a9bbd55d5abfe528"
+    },
+    "src/dog_prior_map_localization/scripts/make_translation_pdf.py": {
+      "size": 5209,
+      "sha256": "8dc53c476d9b0fbafa9dff7bed96c065486ec2015b1cce57bfd18cd8234195e5"
+    },
+    "src/dog_prior_map_localization/scripts/render_translation_pdf.py": {
+      "size": 4427,
+      "sha256": "e06d04103f305c903c155f75456352f2a8e43ad4b41d7c6f5e99405b8becf736"
+    },
+    "src/dog_prior_map_localization/scripts/run_dataset_evaluation.sh": {
+      "size": 2239,
+      "sha256": "99a290f6936bdc9f9673dda3683bf07c7604e6d2e6a965b4758c8e132ffbda2f"
+    },
+    "src/dog_prior_map_localization/scripts/run_loop2_determinism_trial.sh": {
+      "size": 6859,
+      "sha256": "475f49a405ad780857677f3b3f5aa96177d1a9de6e6f394d6f42a490298fe21d"
+    },
+    "src/dog_prior_map_localization/scripts/run_loop5_deploy_light_odom_eval.sh": {
+      "size": 2039,
+      "sha256": "708ee4ddadc1f8e88296560d6b37bf71adf56ca1691b848f022a5238085aa8f0"
+    },
+    "src/dog_prior_map_localization/scripts/run_loop5_record_raw.sh": {
+      "size": 387,
+      "sha256": "f029953f6f69394e2c115dbeeccf4c7fb5a986c5368d6d96c3b71556cacec388"
+    },
+    "src/dog_prior_map_localization/src/core/oosm_replay_planner.cpp": {
+      "size": 3275,
+      "sha256": "7cfc8e11b78978a1486ebae631bf947cc320bec7fd4d6e458c70d40c4aca2693"
+    },
+    "src/dog_prior_map_localization/src/core/state_history.cpp": {
+      "size": 1952,
+      "sha256": "7adc0dd833eb4a215e1846409321e9a3badfb0baeaddbfb9a8141e894ac013a6"
+    },
+    "src/dog_prior_map_localization/src/dog_localization_state_node.cpp": {
+      "size": 10598,
+      "sha256": "6ceec573218aeb63d9e740354bfd8f1ef222f2cfd8bf0af2a428cf09f4b2878a"
+    },
+    "src/dog_prior_map_localization/src/dog_prior_map_ekf_node.cpp": {
+      "size": 460,
+      "sha256": "e69fade2af615cff00af87dc0e8860017cb236a80a80926bf384f108666fcc58"
+    },
+    "src/dog_prior_map_localization/src/dog_prior_map_ekf_node_core.cpp": {
+      "size": 11084,
+      "sha256": "7038444b77cac7987bfdc28acbef27eafbbd42475f6b7a5a942a7f73bf1f5d30"
+    },
+    "src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp": {
+      "size": 52693,
+      "sha256": "40cdf26f9dddb9d06dc16c0bfd89fc88a9dd33e42e5bbd4e9bc3b453f1e4277c"
+    },
+    "src/dog_prior_map_localization/src/fusion/ndt_observation.cpp": {
+      "size": 11418,
+      "sha256": "2036721e02ec84425dc6858660c39e980154e34f4b68f5133576905e7bdf48a4"
+    },
+    "src/dog_prior_map_localization/src/imu_processor.cpp": {
+      "size": 9179,
+      "sha256": "1e6b2dd5269241f5f87d665bc8151264b015fbae8bfa29045a92cbd9513ad6eb"
+    },
+    "src/dog_prior_map_localization/src/livox_imu_deskewer.cpp": {
+      "size": 15674,
+      "sha256": "965b1a7317b910edb9b8d8ae97a3ad58e15b3a155e6c5670d475ed9859c5149b"
+    },
+    "src/dog_prior_map_localization/src/ros_output.cpp": {
+      "size": 9323,
+      "sha256": "6e993a65f3f26e3e5b632c0b851ad8dd2d3394a58f646669a38d5b142da8d77c"
+    },
+    "src/dog_prior_map_localization/tests/oosm_replay_planner_contract_test.cpp": {
+      "size": 6069,
+      "sha256": "666e0b77025e3a49b194180eb156971ff7725235aa279430281dbb670d9b0a80"
+    },
+    "src/dog_prior_map_localization/tools/offline/ndt_direction_alignment_probe.cpp": {
+      "size": 26414,
+      "sha256": "7f007ee88b352428ae30894d3afdb9e35e9c8261db1e3e9ceedfa64483e1d833"
+    },
+    "src/dog_prior_map_localization/tools/offline/ndt_uncertainty_probe.cpp": {
+      "size": 34318,
+      "sha256": "ac160dc82c3b60ce72a314ea96d60caeeebf79cd1a464f6804b180975918f5f6"
+    },
+    "src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/STAGE0_DIAGNOSTIC_GAP_REPORT.md": {
+      "size": 19781,
+      "sha256": "085674b4b157f33113418c376899b2b0ffb629ef249bdc94c42712dfbcf00578"
+    },
+    "src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/audit_files_sha256.txt": {
+      "size": 3019,
+      "sha256": "ac9b6caa0d95d93a857d9c686895aa3a09df8e0dd3fe24be65a6b0491868e4e2"
+    },
+    "src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/binary_and_build_info.txt": {
+      "size": 22510,
+      "sha256": "3c3ffb9eb7de74a75e37bde9af8e83a01d4fb99956c8d8b58b2aece626c21cdd"
+    },
+    "src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/git_diff_90209a8.patch": {
+      "size": 61307,
+      "sha256": "44ddc2fc6a9ae7ebb92ae390c89ee5140039f72dc8ab71d3d8ee4aa46cb5ae07"
+    },
+    "src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/git_diff_HEAD.patch": {
+      "size": 60434,
+      "sha256": "697c4afd29849b26652e68de3b74f52c40a3ee610636e7a617beb73bcd0f6ff5"
+    },
+    "src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/git_diff_stats.txt": {
+      "size": 2706,
+      "sha256": "ff716995dc6d98e6eb8fb8676b4ffaa1b53065df3a8378ec05e6eab6f8cb4dfc"
+    },
+    "src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/git_log_oneline_10.txt": {
+      "size": 622,
+      "sha256": "28ecd5bfc6e771207970f382f0ec7e1adc26d1cda09a0b896a4172fc53d15027"
+    },
+    "src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/git_status_after_audit.txt": {
+      "size": 1115,
+      "sha256": "fc4c63c19036c55ec5ea581f9dc2ed8546ec7146ae9e0500241a0106c15f40f8"
+    },
+    "src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/git_status_short.txt": {
+      "size": 1069,
+      "sha256": "c0a8fb22409ad9437d336b4ef39497b7a9572021db8c5db9cbef13ae92806dad"
+    },
+    "src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/input_artifact_hashes.txt": {
+      "size": 1465,
+      "sha256": "0990558309187cc92e25515c1706b46d0a7cc2a591c1524fb156400640d8b89a"
+    },
+    "src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/key_file_sha256.txt": {
+      "size": 1783,
+      "sha256": "61191df38b29bb304ed0fe3c4eb9742dcba70aac08b29bf744615e010995b6db"
+    },
+    "src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/launch_dump_params_rviz_true.yaml": {
+      "size": 4884,
+      "sha256": "a93c7c778dbf7e61aeaa21cd1a1dc3fcc28039f4d839e05ae7ff3a7c0c11fb7a"
+    },
+    "src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/live_master_11311_snapshot.yaml": {
+      "size": 10285,
+      "sha256": "f27c201b87632c245a121a61768c667f24a4be05fb2247c11608449cf61298c0"
+    },
+    "src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/repo_identity.txt": {
+      "size": 163,
+      "sha256": "1aebc8ba3457f899dbe89bbd65c98b74c35d0948d53b7aa57c321061e8cf6f04"
+    },
+    "src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/ros_environment_and_resolution.txt": {
+      "size": 1258,
+      "sha256": "64f5666618796dd528a62e9ccdf4cbc9b3739329c0d125300356522c44e648ed"
+    },
+    "src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/tracked_changed_sha256.txt": {
+      "size": 1063,
+      "sha256": "10a8ea716f34bad5c6c7cb0ed14ae7120314ae23de4d8c46c1774bbf79fbbd91"
+    },
+    "src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/untracked_inventory_and_sha256.txt": {
+      "size": 5427,
+      "sha256": "dd375e404008380607564f5af872a1dd775dba5a758ba89b1d23ec15d8168730"
+    },
+    "src/dog_prior_map_localization/validation/loop2/stage0_readonly_audit_20260914_165636/verification.txt": {
+      "size": 520,
+      "sha256": "9533338350aac9d7adaddf65ca5c78e685ff09ecbf0efbe32d2fd43e0d986744"
+    },
+    "validation/loop3/figures/fastlivo2_alignment_check_20260828.png": {
+      "size": 180550,
+      "sha256": "9ae54db7adca16705415175b14d30d6c01c0272abd843b6c68c8ece7a5c1322b"
+    },
+    "validation/loop3/figures/local_mismatch.png": {
+      "size": 81053,
+      "sha256": "6b243436589ea5c91a361b74ad47d8421dbdb1e408bb371748bde5c75d7c7c54"
+    },
+    "validation/loop3/figures/ours_overall_path_20260828.png": {
+      "size": 304190,
+      "sha256": "108570056dfb11b3b04c17f94d2d100c8df2331f6e000537a909e864e11700ae"
+    },
+    "validation/loop3/figures/overall_path.png": {
+      "size": 53889,
+      "sha256": "ea8e1ca3a9e04fd6f3521f7fe01bfc394ba05fdbfb1f12071da71b94ab96e853"
+    },
+    "validation/loop3/figures/screen_video_20260828_152939.gif": {
+      "size": 17567057,
+      "sha256": "6225071aef6a1c76834bce4cdd84a9dfb934c97deddca4eada4ab7bf5def4244"
+    },
+    "validation/loop3/figures/screen_video_20260828_152939.mp4": {
+      "size": 30718265,
+      "sha256": "c9543bbbad5e8a42b0d1df27ba44c74f4b2154d8c585d78ba69dc5c4b4ae5a3a"
+    },
+    "validation/loop3/figures/screen_video_20260828_152939_cover.png": {
+      "size": 220482,
+      "sha256": "03e235deeea366892f707666dc10dd8bdd88301253791e63700da627d6d3e876"
+    },
+    "validation/loop3/figures/screen_video_20260828_152939_loop_small.gif": {
+      "size": 6912431,
+      "sha256": "d7ad9fb1288355a424161e2c029973f2a824d4e69595a58fe99ebe93e35ab735"
+    },
+    "validation/loop3/figures/screen_video_preview_20260828.html": {
+      "size": 698,
+      "sha256": "eb31834749ca5af0a6262d0bf46236fb381dd0e4086c33f8dd7b5166b2f84c5c"
+    },
+    "validation/loop3/figures/three_algo_loop3_3d_view_20260828.png": {
+      "size": 338608,
+      "sha256": "7ba27ae7841695e01eba2536a9b4f2fe4e63632dfd0c2796799a9b0a5f22d60d"
+    },
+    "validation/loop3/figures/three_algo_loop3_top_view_20260828.png": {
+      "size": 275555,
+      "sha256": "fd4811d205886a1bfe4ac432de3e909402f3fc1e438fe171a07cf7dcbd55aa3f"
+    },
+    "validation/loop3/ndt_acceptance_step_limit_trials_20260827.md": {
+      "size": 2567,
+      "sha256": "60e8620118a97fdab349e0d15cef48543f34ec7f2d82b5bbc7dfc1cda9ad8afe"
+    },
+    "validation/loop3/ndt_acceptance_threshold_experiments_20260827.md": {
+      "size": 2943,
+      "sha256": "46d0b517e10d86ca35c5d53f58504c176111f544ca0d986d72650455d6b37044"
+    },
+    "validation/loop3/ndt_candidate_imu_experiment_20260826.md": {
+      "size": 1989,
+      "sha256": "5fc7222d53a4808ded2ad1068ae9721e4dcf19fa3f2577ff57255d2a514cb534"
+    },
+    "validation/loop3/ndt_corner_guard_experiments_20260826.md": {
+      "size": 2349,
+      "sha256": "92ba8cc2b4e1e823d91062e13f90150c24c3ca7aa72e8c1c04dd93debaecd546"
+    },
+    "validation/loop3/ndt_corner_parameter_trials_20260827.md": {
+      "size": 4021,
+      "sha256": "360b7ce72f30ccf6346ad7c53cf45672fd48f23b0cd512f6def7fc8f1f1d7363"
+    },
+    "validation/loop3/ndt_dual_resolution_candidate_trials_20260827.md": {
+      "size": 2364,
+      "sha256": "ba93bdc1f331124ce3fef6fed444fa809b23de9abd1f647a79cd796164adc2d5"
+    },
+    "validation/loop3/ndt_motion_prior_candidate_experiments_20260827.md": {
+      "size": 4150,
+      "sha256": "4fd5fad696159d6d3294f0f8f211e59131102376e62c560eff4954fd44df292e"
+    },
+    "validation/loop3/ndt_parameter_combo_sweep_20260827.md": {
+      "size": 3326,
+      "sha256": "a1ddcd2b645bb3b9505b500388abcc43f9cdcd8819440a135da24a5a9cf52012"
+    },
+    "validation/loop3/ndt_self_try_corner_tuning_20260826.md": {
+      "size": 1897,
+      "sha256": "f2cd87c36ad8583cf6626a617ffe25975b525963f4d7dde90bdbd4b663c83844"
+    },
+    "validation/loop3/ndt_source_point_tuning_20260826.md": {
+      "size": 1774,
+      "sha256": "c66bac2b7e61cb90631f26ed31cf201a18f65c339a0b73d214bafa5a3089d66b"
+    },
+    "validation/loop3/ndt_temporal_consistency_experiments_20260827.md": {
+      "size": 3392,
+      "sha256": "679527e484b0edff124e16a18ea0b0e3b495c10ffd64a176e8597b7f711bc632"
+    },
+    "validation/loop3/ndt_voxel_tuning_20260826.md": {
+      "size": 2014,
+      "sha256": "fb934fbac26d7c08403db152ce07c1a21dfb71ad64cd984de13a48cd77fbe847"
+    },
+    "validation/loop3/rejected_ndt_methods_report_20260828.md": {
+      "size": 15100,
+      "sha256": "90e023174a42716e2da9feef5b8c7429650a3ac74fbd42eca4953d0bc5925ec2"
+    },
+    "validation/loop3/three_algorithm_localization_report_20260828.docx": {
+      "size": 7273705,
+      "sha256": "18a3e6f5b934eded54bb60687e85ca5c8046ce844ee1d0aae55cec5289d2c796"
+    },
+    "validation/loop3/three_algorithm_localization_report_20260828.md": {
+      "size": 7936,
+      "sha256": "f57d1c2975c5d8085844635dc6a53f3549e17c2c7eeeea5742b5c09f3d34f1c2"
+    },
+    "validation/snapshots/before_candidate_selection_20260826_024241.patch": {
+      "size": 227521,
+      "sha256": "72cc88e21eeffd915c428546ebdc671fd3c37415e514fc5fe5a5484fad596633"
+    },
+    "validation/snapshots/current_worktree_before_save_20260826_022849.patch": {
+      "size": 276198,
+      "sha256": "1d5f7d4f6c823f74286945a78abfdc7badd3fd6e0c6027e7686fabec7ac6ecf2"
+    },
+    "validation/snapshots/failed_candidate_imu_experiment_20260826_032518.patch": {
+      "size": 26218,
+      "sha256": "a6e24a6aa5fc0f8d2ef919ec9270fdfddc16f3f747cfa908d9c413fb5394a5c3"
+    }
+  },
+  "scope": "tracked and nonignored untracked files; ignored build files excluded"
+}
