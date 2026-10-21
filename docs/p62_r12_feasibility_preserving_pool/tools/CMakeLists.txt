@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.10)
+project(r12_frozen_pool_replay LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 14)
+find_package(PCL 1.10 REQUIRED COMPONENTS common registration filters kdtree)
+include_directories(${PCL_INCLUDE_DIRS})
+add_executable(test_pool test_pool.cpp)
+add_executable(replay replay.cpp)
+# Only header-defined frozen decision helpers are used. No optimizer object exists.
+target_link_libraries(test_pool ${PCL_LIBRARIES})
+target_link_libraries(replay ${PCL_LIBRARIES})
+enable_testing()
+add_test(NAME pool_contract COMMAND test_pool)
