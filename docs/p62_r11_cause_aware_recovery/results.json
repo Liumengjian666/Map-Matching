@@ -1,0 +1,166 @@
+{
+  "task": "P62-R11-PRESERVATION-RETRY-AND-ALGORITHM-RESUME",
+  "START_SHA": "10edcc0703129a3c5444c672c5b7cbb938bf3f74",
+  "actual_run_CODE_SHA": "ceafef11b97caf0aa09303e0ea0508cd73765f54",
+  "analysis_CODE_SHA": "a603e9c05ba6207c20d0d31f50b8c727c4e50f11",
+  "preservation": "PRESERVATION_PASS",
+  "frames": 100,
+  "full_native": 100,
+  "split_native": 100,
+  "extra_native": 12,
+  "total_native": 212,
+  "budget": 20,
+  "old_trigger_count": 0,
+  "natural_events": [
+    60,
+    61,
+    62,
+    63,
+    64
+  ],
+  "arms": {
+    "BASELINE_WEAK": {
+      "candidate_available_events": 1,
+      "seeds_generated": 2,
+      "extra_aligns": 2,
+      "distinct_alternatives": 1,
+      "eligible_distinct_alternatives": 0,
+      "eligible_extra_results_before_dedup": 0,
+      "supported_recoveries": 0,
+      "accepted_nominal": 95,
+      "no_acceptable_measurement": 5,
+      "extra_native_per_call_ms": {
+        "n": 2,
+        "mean": 8.63371,
+        "p95": 8.6658931,
+        "max": 8.669469
+      },
+      "phase_wall_ms": {
+        "n": 100,
+        "mean": 0.3200251,
+        "p95": 0.12708099999999722,
+        "max": 21.231573
+      },
+      "event_phase_wall_ms": {
+        "n": 5,
+        "mean": 5.141086400000001,
+        "p95": 17.218069399999997,
+        "max": 21.231573
+      }
+    },
+    "PROPOSED_DISAGREEMENT": {
+      "candidate_available_events": 5,
+      "seeds_generated": 10,
+      "extra_aligns": 10,
+      "distinct_alternatives": 0,
+      "eligible_distinct_alternatives": 0,
+      "eligible_extra_results_before_dedup": 1,
+      "supported_recoveries": 0,
+      "accepted_nominal": 95,
+      "no_acceptable_measurement": 5,
+      "extra_native_per_call_ms": {
+        "n": 10,
+        "mean": 8.9532504,
+        "p95": 15.102175649999996,
+        "max": 16.524582
+      },
+      "phase_wall_ms": {
+        "n": 100,
+        "mean": 1.0968060999999998,
+        "p95": 0.7393210999999631,
+        "max": 26.260187
+      },
+      "event_phase_wall_ms": {
+        "n": 5,
+        "mean": 20.7006356,
+        "p95": 25.6535406,
+        "max": 26.260187
+      }
+    }
+  },
+  "H1": "SUPPORTED_IN_THIS_WINDOW: availability expanded1/5 to5/5; four no-weak-direction events received seeds",
+  "H2": "NOT_DEMONSTRATED_FOR_PROPOSED: all10 extra results deduplicate to nominal",
+  "H3": "ONE_ELIGIBLE_RAW_DUPLICATE_OBSERVED; no eligible physically distinct alternative after frozen dedup",
+  "H4": "NOT_DEMONSTRATED: no accepted replacement",
+  "H5": "PASS:12/20 extras",
+  "result": "CANDIDATE_AVAILABILITY_EXPANDED_BUT_NO_SUPPORTED_RECOVERY",
+  "novelty": "NOT_ESTABLISHED",
+  "peak_process_RSS_MiB": 104.8984375,
+  "native_process_wall_s": 1.7695191189995967,
+  "map_runtime": {
+    "map_points": "459154",
+    "target_points": "459154",
+    "target_fnv": "ea1e4e69cf9992c6",
+    "actual_grid_m": "0.8",
+    "build_ms": "138.61044000000001"
+  },
+  "full_native_ms": {
+    "n": 100,
+    "mean": 6.1750616,
+    "p95": 12.2707208,
+    "max": 69.353097
+  },
+  "split_native_ms": {
+    "n": 100,
+    "mean": 3.0955367199999997,
+    "p95": 6.019480899999999,
+    "max": 10.275761
+  },
+  "common_phase_wall_ms": {
+    "n": 100,
+    "mean": 12.352088540000002,
+    "p95": 22.66471719999999,
+    "max": 75.799709
+  },
+  "source_preprocess_ms": {
+    "n": 100,
+    "mean": 1.2601816799999999,
+    "p95": 1.3241145499999984,
+    "max": 3.973163
+  },
+  "timing_quantile": "numpy linear/type7; descriptive only",
+  "after_gate": "ALL_INPUTS_SOURCE_BINARY_PRESERVATION_AND_STABLE_UNCHANGED",
+  "independent_matrix_exponential_checks": 10,
+  "unit_tests": "2 actual C++ zero-align executables plus offline verification",
+  "excluded_eligible_candidate_diagnostics": [
+    {
+      "arm": "PROPOSED_DISAGREEMENT",
+      "scan_index": 64,
+      "candidate_id": 1,
+      "duplicate_of": 0,
+      "D_candidate_vs_representative": -0.001052113786269879,
+      "D_representative_vs_candidate": 8.406563164323598e-05,
+      "role": "OFFLINE_EXCLUDED_PAIR_DIAGNOSTIC_NOT_USED_FOR_SELECTION"
+    }
+  ],
+  "seed_gate": {
+    "proposed_double_and_native_float": "PASS",
+    "baseline_double": "PASS",
+    "baseline_native_float_roundoff_exceedances": 1,
+    "baseline_native_float_max_rotation_deg": 3.000000034180631,
+    "note": "Frozen legacy generator unchanged; one float representation exceeds3deg by about3.42e-8deg. Retained, not silently clamped/re-run."
+  },
+  "pre_native_storage_blocked": true,
+  "pre_native_calls_at_block": 0,
+  "actual_native_subprocess_executions": 1,
+  "boundaries": {
+    "GT_reads": 0,
+    "EKF_runs": 0,
+    "ROS_nodes": 0,
+    "feedback": 0,
+    "forced_events": 0,
+    "third_generator": 0,
+    "production_changes": 0,
+    "new_trajectory_estimates": 0
+  },
+  "limitations": [
+    "Same-record map and fixed historical causal initials; no independent GT/accuracy claim",
+    "Candidate observations are not closed-loop trajectories",
+    "Global process high-water RSS cannot distinguish independent arm memory peaks",
+    "Ordinary robust singleton abstention is not evidence of candidate discrimination",
+    "A raw formally eligible candidate at64 is discarded by frozen physical dedup; its offline paired advantage is still negative",
+    "Baseline single distinct result lies near1deg dedup boundary; not a basin proof"
+  ],
+  "engineering_status": "COMPLETED_WITH_LEGACY_FLOAT_SEED_CAP_DEVIATION",
+  "unique_NEXT": "Ask research controller to define a bounded feasibility-preserving candidate-pool contract for eligible raw duplicate64/1 discarded against illegal nominal; retain dedup distances and D>0.02, note its diagnostic D is negative, and do not run or promise recovery now"
+}

@@ -1,0 +1,2 @@
+arm,scan_index,candidate_id,duplicate_of,D_candidate_vs_representative,D_representative_vs_candidate,role
+PROPOSED_DISAGREEMENT,64,1,0,-0.001052113786269879,8.406563164323598e-05,OFFLINE_EXCLUDED_PAIR_DIAGNOSTIC_NOT_USED_FOR_SELECTION

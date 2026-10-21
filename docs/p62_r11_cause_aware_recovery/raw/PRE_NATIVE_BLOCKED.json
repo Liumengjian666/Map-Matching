@@ -1,0 +1,13 @@
+{
+  "status": "PRE_NATIVE_STORAGE_BLOCKED",
+  "attempted_CODE_SHA": "444264e263301b4d9ddd7e17a3c542c77b5be4bd",
+  "phase": "before_input_hashing_and_before_native_subprocess",
+  "actual_native_calls": 0,
+  "formal_directory_created": false,
+  "native_run_log_created": false,
+  "freeze_created": false,
+  "exception": "control.py run preflight: disk_usage.free >= 20GiB assertion failed",
+  "observed_disk_free_bytes_after_failure": 21415682048,
+  "required_disk_free_bytes": 21474836480,
+  "action": "Preserve token and failed preflight. Sparse checkout only the new R11 worktree; no old assets deleted, no safety floor lowered. A one-time explicit pre-native continuation requires absence of any native execution artifacts."
+}

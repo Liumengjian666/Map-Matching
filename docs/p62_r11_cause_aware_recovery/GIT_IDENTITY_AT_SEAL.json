@@ -1,0 +1,17 @@
+{
+  "query_time_utc": "2026-10-21T01:40:17Z",
+  "repository": "https://github.com/Liumengjian666/Map-Matching.git",
+  "worktree": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws",
+  "branch": "research/p62-r11-cause-aware-candidate-recovery",
+  "START_SHA": "10edcc0703129a3c5444c672c5b7cbb938bf3f74",
+  "actual_run_CODE_SHA": "ceafef11b97caf0aa09303e0ea0508cd73765f54",
+  "analysis_and_seal_source_SHA": "a603e9c05ba6207c20d0d31f50b8c727c4e50f11",
+  "remote_query": "git ls-remote origin refs/heads/research/p62-r11-cause-aware-candidate-recovery",
+  "remote_query_exit_code": 0,
+  "remote_query_stdout": "",
+  "REMOTE_HEAD": "NOT_ADVERTISED_AT_QUERY",
+  "PUSH_EXECUTED": false,
+  "pre_archive_worktree_state": "Only new R11 result artifacts untracked; TESTS_AND_REVIEW.md appended before sealing",
+  "END_SHA": "Resolve the final archive commit containing this file; not self-referential",
+  "default_cwd_warning": "dog_loc_paper_ws is a different dirty repository; use this actual research worktree for any manually authorized push"
+}
