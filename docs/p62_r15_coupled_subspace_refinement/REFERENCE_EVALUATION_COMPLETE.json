@@ -1,0 +1,9 @@
+{
+  "candidate_freeze_sha256": "6eab721d11fedc1d99f54810c614d7f6eadabb3ff43e724f07de9fda8402677b",
+  "completed_utc": "2026-10-21T12:02:08.612985+00:00",
+  "reference_file_rows_parsed": 20,
+  "reference_kind": "MAP_ANCHORED_BENCHMARK_REFERENCE",
+  "reference_pose_rows_used": 20,
+  "reference_sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+  "task": "P62-R15-COUPLED-SUBSPACE-REFINEMENT-R1"
+}

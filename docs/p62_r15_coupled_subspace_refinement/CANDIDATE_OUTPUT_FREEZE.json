@@ -1,0 +1,104 @@
+{
+  "candidate_semantics": "post-NDT local refinements; converged=false and formal_eligible=false",
+  "created_utc": "2026-10-21T12:01:06.643537+00:00",
+  "csv_schemas": {
+    "COUPLED_RESULTS.csv": {
+      "columns": 29,
+      "rows": 50
+    },
+    "COUPLING_BLOCKS.csv": {
+      "columns": 24,
+      "rows": 50
+    },
+    "HELDOUT_COMPARISON.csv": {
+      "columns": 8,
+      "rows": 1200
+    },
+    "RUNTIME_AND_MEMORY.csv": {
+      "columns": 12,
+      "rows": 50
+    },
+    "TRAINING_OBJECTIVE_COMPARISON.csv": {
+      "columns": 16,
+      "rows": 50
+    },
+    "WEAK_ONLY_RESULTS.csv": {
+      "columns": 29,
+      "rows": 50
+    }
+  },
+  "expected_frame_sets": {
+    "GEODE_R13": [
+      "60",
+      "61",
+      "62",
+      "63",
+      "64"
+    ],
+    "NEWER_COLLEGE_R14B": [
+      "768",
+      "769",
+      "770",
+      "771",
+      "772",
+      "773",
+      "774",
+      "775",
+      "776",
+      "777",
+      "778",
+      "779",
+      "780",
+      "781",
+      "782",
+      "783",
+      "784",
+      "785",
+      "786",
+      "787"
+    ]
+  },
+  "operation_counts": {
+    "ekf_runs": 0,
+    "gt_pose_value_reads": 0,
+    "new_ndt_aligns": 0
+  },
+  "outputs": {
+    "docs/p62_r15_coupled_subspace_refinement/run_01/COUPLED_RESULTS.csv": {
+      "bytes": 9593,
+      "sha256": "0a38201b71fa9ded5cbc22ed6a375b10fa10e660f9c70a89589074d8ffb44352"
+    },
+    "docs/p62_r15_coupled_subspace_refinement/run_01/COUPLING_BLOCKS.csv": {
+      "bytes": 6011,
+      "sha256": "8d171a2c9e5efb4010641d748f8ade3a17eb013b7971b38bee6a4db32fae7e79"
+    },
+    "docs/p62_r15_coupled_subspace_refinement/run_01/HELDOUT_COMPARISON.csv": {
+      "bytes": 53198,
+      "sha256": "a7d18b43bc96e8169302ef92d168e82f18887a935acf65d25a2fe507c2340e2d"
+    },
+    "docs/p62_r15_coupled_subspace_refinement/run_01/RUNTIME_AND_MEMORY.csv": {
+      "bytes": 4902,
+      "sha256": "ee420ece4070cc3e49867813cf0ba4a99b3b420140e2718f5feeef9a2ae47f30"
+    },
+    "docs/p62_r15_coupled_subspace_refinement/run_01/SUBSPACE_DECOMPOSITION.csv": {
+      "bytes": 21942,
+      "sha256": "01bf4129d79cd016cb05bcd51d87a8b874c1a29aca217051497d8aeb3ffb1062"
+    },
+    "docs/p62_r15_coupled_subspace_refinement/run_01/TRAINING_OBJECTIVE_COMPARISON.csv": {
+      "bytes": 5626,
+      "sha256": "89c9a035276ebd90c6a28a4f2e031beeba1d9e49ec56dc3e3ee88c08391a02f5"
+    },
+    "docs/p62_r15_coupled_subspace_refinement/run_01/WEAK_ONLY_RESULTS.csv": {
+      "bytes": 9693,
+      "sha256": "1b0e49bee4989664d992f5eaea84bc640fdec18e650a58c76d8970878a39f3a9"
+    },
+    "docs/p62_r15_coupled_subspace_refinement/run_01/formal_run.log": {
+      "bytes": 60,
+      "sha256": "9516157742ece046c14aa4842f72bb0eaaac8411985b7db6a8f2e24eb02884e6"
+    }
+  },
+  "raw_reference_file_parsed": false,
+  "reference_pose_values_read": false,
+  "status": "CANDIDATE_AND_DECISION_OUTPUTS_FROZEN_BEFORE_REFERENCE_POSE_READ",
+  "task": "P62-R15-COUPLED-SUBSPACE-REFINEMENT-R1"
+}

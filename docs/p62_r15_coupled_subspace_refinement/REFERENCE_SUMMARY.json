@@ -1,0 +1,46 @@
+{
+  "T_M_L_reference": "T_M_B times frozen T_B_L",
+  "alignment_fitted": false,
+  "candidate_output_freeze_sha256": "6eab721d11fedc1d99f54810c614d7f6eadabb3ff43e724f07de9fda8402677b",
+  "coordinate_assumption": "PAPER_SUPPORTED_BASE_FRAME_ASSUMPTION",
+  "file_level_reference_axis_certified": false,
+  "metrics": {
+    "T0": {
+      "rotation_deg": {
+        "max": 2.5175204019416504,
+        "median": 1.729234503727644,
+        "n": 20,
+        "p95_linear": 2.083449472163948,
+        "rmse": 1.706832828339047
+      },
+      "translation_m": {
+        "max": 0.15850656784233874,
+        "median": 0.0866050015048061,
+        "n": 20,
+        "p95_linear": 0.13886000525000164,
+        "rmse": 0.09562117184387642
+      }
+    },
+    "TP": {
+      "rotation_deg": {
+        "max": 3.3639276315464324,
+        "median": 2.011629910331065,
+        "n": 20,
+        "p95_linear": 2.722026268209324,
+        "rmse": 1.9991149717303494
+      },
+      "translation_m": {
+        "max": 0.3502344175990848,
+        "median": 0.10039962620314982,
+        "n": 20,
+        "p95_linear": 0.17437053190595614,
+        "rmse": 0.12708263215224636
+      }
+    }
+  },
+  "not_independent_motion_capture_truth": true,
+  "quantile": "NumPy linear p95",
+  "reference_kind": "MAP_ANCHORED_BENCHMARK_REFERENCE",
+  "reference_pose_rows_used": 20,
+  "time_matching": "exact integer nanoseconds; zero delta; no interpolation"
+}

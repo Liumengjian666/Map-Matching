@@ -1,0 +1,113 @@
+{
+  "task": "P62-R15-COUPLED-SUBSPACE-REFINEMENT-R1",
+  "result": "REAL_LOCAL_MODEL_NOT_ESTABLISHED_NO_MEANINGFUL_POSE_REFINEMENT",
+  "branch": "research/p62-r15-coupled-subspace-refinement-r1",
+  "baseline": "fae8937cd72e8272111186e572c346bb76f92a4e",
+  "code_sha_definition": "sha256 of sorted relative-path + file-sha256 lines for tools/CMakeLists.txt, tools/coupled.hpp, tools/run_coupled.cpp, tools/test_coupled.cpp",
+  "code_sha": "322dd58ee84b7f25aae745e13e535e070cfa82ee5f7809c9f0e8c6b1f97dfe30",
+  "binary_sha256": {
+    "run_coupled": "f100c9d7e84a3d0aa0c615712d1841f59eb5f9b069297698cc258d7653258acc",
+    "test_coupled": "b5eaa859e7fe403c6d57665ec5ec60d892108e4d6fce338821014911deda2e89"
+  },
+  "build": {
+    "compiler": "Ubuntu c++ 9.4.0-1ubuntu1~20.04.2",
+    "pcl": "1.10.0",
+    "standard": "C++14",
+    "build_type": "Release",
+    "test_result": "MATHEMATICAL_TESTS_PASS",
+    "test_metrics": {
+      "score_parity_abs": 0.0,
+      "synthetic_geometry_relative": 2.95402e-17,
+      "synthetic_directional_derivative_relative": 0.000684582,
+      "synthetic_hessian_antisymmetry_relative": 0.0126312,
+      "synthetic_scalar_hessian_relative": 0.0185438,
+      "synthetic_hessian_step_spread": 1.01977
+    }
+  },
+  "frozen_inputs": {
+    "R13_frames": [60, 61, 62, 63, 64],
+    "R14B_raw_ordinals": [768, 769, 770, 771, 772, 773, 774, 775, 776, 777, 778, 779, 780, 781, 782, 783, 784, 785, 786, 787],
+    "R13_map_sha256": "016b7ae3ae494ad5d462a66d888a96b96dda5fe29d6058059aa2fa6bdf6b09ca",
+    "R14B_map_sha256": "b9f285c27a31f2fb1d4079dc80773285176c50e68c15bcc6ce336a58772a3742",
+    "R14B_reference_sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+    "input_freeze_sha256": "aeb6a0df8dabee4dcdc4d07d3a068591cece369b40a4a0a062f8cd68d4f72f45",
+    "after_asset_snapshot_sha256": "132d31ccfc03390d60004c67b2f88bfd3dab6518ca7086ed020d1f831a4dac95",
+    "candidate_output_freeze_sha256": "6eab721d11fedc1d99f54810c614d7f6eadabb3ff43e724f07de9fda8402677b",
+    "asset_and_production_checks": "PASS_BEFORE_AND_AFTER_LOCAL_MODEL_RUN"
+  },
+  "execution": {
+    "frames": 25,
+    "new_native_pcl_ndt_aligns": 0,
+    "EKF_runs": 0,
+    "trajectory_replays": 0,
+    "reference_pose_rows_read_after_candidate_freeze": 20,
+    "formal_accepted_refinements": 0,
+    "R13_reference": "INDEPENDENT_REFERENCE_NOT_AVAILABLE"
+  },
+  "real_local_model": {
+    "exact_PCL_score_parity_pass": 25,
+    "geometry_PSD_and_basis_pass": 25,
+    "geometry_condition_range": [29.664871196902958, 69.02360072081399],
+    "normalized_min_eigenvalue_ratio_range": [0.01448779822491137, 0.033709905340981255],
+    "frames_with_frozen_weak_direction_threshold_0p01": 0,
+    "frames_with_changed_gaussian_association_signature": 25,
+    "frames_with_R6_geometry_conversion_error_over_1e_7": 11,
+    "maximum_R6_geometry_conversion_relative_error": 2.2712073996664662e-7,
+    "direct_vs_R6_geometry_support_count_mismatches": 0,
+    "real_gradient_or_Hessian_established": 0,
+    "real_Hsw_available": 0,
+    "weak_only_pose_available": 0,
+    "coupled_pose_available": 0,
+    "robust_pairwise_evidence_available": 0,
+    "accepted_replacement": 0,
+    "status_counts": {
+      "LOCAL_ASSOCIATION_SET_CHANGED": 25
+    }
+  },
+  "newer_college_reference_relative_context": {
+    "reference_kind": "MAP_ANCHORED_BENCHMARK_REFERENCE",
+    "independent_motion_capture_truth": false,
+    "coordinate_assumption": "PAPER_SUPPORTED_BASE_FRAME_ASSUMPTION",
+    "CSV_file_level_axis_binding_certified": false,
+    "time_matching": "exact integer nanoseconds; zero delta; no interpolation",
+    "registered_reference_samples": 20,
+    "TP": {
+      "translation_m": {"rmse": 0.12708263215224636, "median": 0.10039962620314982, "p95_linear": 0.17437053190595614, "max": 0.3502344175990848},
+      "rotation_deg": {"rmse": 1.9991149717303494, "median": 2.011629910331065, "p95_linear": 2.722026268209324, "max": 3.3639276315464324}
+    },
+    "T0": {
+      "translation_m": {"rmse": 0.09562117184387642, "median": 0.0866050015048061, "p95_linear": 0.13886000525000164, "max": 0.15850656784233874},
+      "rotation_deg": {"rmse": 1.706832828339047, "median": 1.729234503727644, "p95_linear": 2.083449472163948, "max": 2.5175204019416504}
+    },
+    "WEAK_ONLY_and_COUPLED": "NO_POSES_AVAILABLE",
+    "blind_evaluation": false,
+    "non_blind_reason": "three rows from prior R14B REFERENCE_ERROR.csv were inspected before R15 candidate freeze; no raw reference pose values or R15 outputs were accessed then"
+  },
+  "runtime": {
+    "formal_run_wall_seconds": 1.54,
+    "formal_run_peak_RSS_KiB": 79040,
+    "per_frame_wall_ms_mean": 48.37424716,
+    "per_frame_wall_ms_p95_linear": 64.221363,
+    "per_frame_wall_ms_max": 70.255078,
+    "Gaussian_grid_init_ms_mean": 36.1997892,
+    "local_model_ms_mean": 10.05370896,
+    "successful_refinement_eval": "NOT_REACHED",
+    "comparison_baseline": "prior frozen R14B timing only: Full NDT mean 11.2222 ms; Split NDT mean 5.14325 ms; not a same-run benchmark"
+  },
+  "hypotheses": {
+    "H1_real_strong_weak_coupling_information": "NOT_SUPPORTED_ON_FROZEN_FRAMES",
+    "H2_nonzero_bounded_strong_response": "NOT_EVALUABLE",
+    "H3_actual_training_objective_benefit": "NOT_EVALUABLE",
+    "H4_heldout_geometry_benefit": "NOT_EVALUABLE",
+    "H5_reference_relative_pose_benefit": "NO_COUPLED_POSE; NOT_EVALUABLE; reference context exploratory/non-blind",
+    "H6_cost_below_repeated_NDT": "NOT_ESTABLISHED"
+  },
+  "scientific_claim": {
+    "synthetic_mathematical_prototype": "ESTABLISHED",
+    "real_coupled_response": "NOT_OBSERVED",
+    "geometric_benefit": "NOT_OBSERVED",
+    "accuracy_improvement": "NOT_ESTABLISHED",
+    "novelty": "NOT_ESTABLISHED"
+  },
+  "unique_next": "Scientific controller to decide whether to replace the fixed-association local derivative contract; any continuation requires a newly approved mathematically faithful treatment of PCL association boundaries."
+}

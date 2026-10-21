@@ -1,0 +1,42 @@
+{
+  "task": "P62-R15-COUPLED-SUBSPACE-REFINEMENT-R1",
+  "build_command": [
+    "cmake -S docs/p62_r15_coupled_subspace_refinement/tools -B /tmp/p62_r15_build -DCMAKE_BUILD_TYPE=Release",
+    "cmake --build /tmp/p62_r15_build -j2",
+    "LD_PRELOAD=/lib/x86_64-linux-gnu/libusb-1.0.so.0 /tmp/p62_r15_build/test_coupled"
+  ],
+  "language_standard": "C++14",
+  "build_type": "Release",
+  "compiler": "c++ (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0",
+  "pcl": "1.10.0",
+  "build_directory": "/tmp/p62_r15_build",
+  "cmake_cache_sha256": "d674badb7ee7de1678e59d7897189430b51f88c6ca424d6bcde770eaed01ec10",
+  "algorithm_code_sha_convention": "sha256 of sorted relative-path + SHA256 lines for tools/CMakeLists.txt, tools/coupled.hpp, tools/run_coupled.cpp, tools/test_coupled.cpp",
+  "algorithm_code_sha": "322dd58ee84b7f25aae745e13e535e070cfa82ee5f7809c9f0e8c6b1f97dfe30",
+  "sources": [
+    {"path": "tools/CMakeLists.txt", "bytes": 492, "sha256": "f34aa9a9b66d29173c4d836b155843d4f6b8f45cf51baaced5c225fdbbe4962f"},
+    {"path": "tools/coupled.hpp", "bytes": 22737, "sha256": "abd12b9856113bc7e8a7941a9d752678f71d91073a62c8e8a0bff80c40bd8e95"},
+    {"path": "tools/run_coupled.cpp", "bytes": 21120, "sha256": "27df931c03d8e272f84cf5ca114d990fa13dc8b369b78acd7a7b6a768fc85bf2"},
+    {"path": "tools/test_coupled.cpp", "bytes": 8666, "sha256": "8494659344c1e4c2a74dd03c7179e653600ac36e7e617f63e5bd3b6c4f10619e"}
+  ],
+  "binaries": [
+    {"path": "/tmp/p62_r15_build/run_coupled", "bytes": 463808, "sha256": "f100c9d7e84a3d0aa0c615712d1841f59eb5f9b069297698cc258d7653258acc"},
+    {"path": "/tmp/p62_r15_build/test_coupled", "bytes": 319648, "sha256": "b5eaa859e7fe403c6d57665ec5ec60d892108e4d6fce338821014911deda2e89"}
+  ],
+  "test_receipt": "MATHEMATICAL_TESTS_PASS score_parity=0 geometry_rel=2.95402e-17 derivative_rel=0.000684582 hessian_antisym=0.0126312 scalar_hessian_rel=0.0185438 step_spread=1.01977",
+  "real_run": {
+    "command": "LD_PRELOAD=/lib/x86_64-linux-gnu/libusb-1.0.so.0 /tmp/p62_r15_build/run_coupled docs/p62_r15_coupled_subspace_refinement/run_01 docs/p62_r13_training_guided_multihypothesis docs/p62_r14b_newer_college/conditional_base_pilot",
+    "terminal_receipt": "R15_LOCAL_MODEL_COMPLETE frames=25 align=0 ekf=0 gt_reads=0",
+    "log": "run_01/formal_run.log",
+    "process_timing": "run_01/process_timing.log",
+    "runtime": "1.54 s wall; peak RSS 79040 KiB",
+    "additional_NDT_aligns": 0,
+    "EKF_runs": 0,
+    "GT_pose_values_read_during_model": 0
+  },
+  "reference_script_post_freeze_fix": {
+    "explanation": "After the evaluator's first attempt failed before raw pose parsing due to an incorrect nested key, only the reference-evaluation Python reader was corrected. Candidate model C++ sources, binaries, frozen outputs, inputs, and decisions were unchanged.",
+    "pre_candidate_freeze_evaluator_sha256": "ac75e1145ad71669fb672d4cd1600c35fbeb1ba83f5fe748562e64e10290b10c",
+    "corrected_evaluator_sha256": "2b53f5073f5e99a2a755a3364076cc3c5d6609b4348e88911b3a337649567770"
+  }
+}

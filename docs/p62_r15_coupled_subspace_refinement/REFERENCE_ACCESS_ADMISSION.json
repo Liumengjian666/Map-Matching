@@ -1,0 +1,8 @@
+{
+  "candidate_output_freeze_sha256": "6eab721d11fedc1d99f54810c614d7f6eadabb3ff43e724f07de9fda8402677b",
+  "candidate_output_hashes_rechecked": true,
+  "created_utc": "2026-10-21T12:02:08.570471+00:00",
+  "reference_pose_values_opened_at_this_point": false,
+  "registered_poses_sha256_rechecked": true,
+  "task": "P62-R15-COUPLED-SUBSPACE-REFINEMENT-R1"
+}
