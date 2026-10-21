@@ -1,0 +1,2195 @@
+{
+  "task": "P62-R14B-BASE-CONVENTION-CONDITIONAL-PILOT",
+  "assumption": "PAPER_SUPPORTED_BASE_FRAME_ASSUMPTION",
+  "baseline": "c614f5fd1d8837b4c96ec10cc1199e41d5b2418b",
+  "rule": "first21 input-valid consecutive scans strictly after5% full time span; no alternate window",
+  "sequence_start_ns": 1583836591182590976,
+  "sequence_end_ns": 1583838121156355584,
+  "selected_start_zero_based": 766,
+  "frames": [
+    {
+      "local_index": 0,
+      "raw_ordinal_one_based": 767,
+      "stamp_ns": 1583836667780782336,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836667_780782336.pcd",
+      "bytes": 1904640,
+      "sha256": "60bfd126de13b639727c08a7f6057f83667ec25514a9fe8ee13ca995326cf694",
+      "role": "ANCHOR_ONLY",
+      "reference_match_ns": 1583836667780782336,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "a286d3c2dd375243dc4325f48ae1451a2d3056905fbc361b622ff3832deebff4",
+        "t_min_raw": 0,
+        "t_max_raw": 100244992
+      }
+    },
+    {
+      "local_index": 1,
+      "raw_ordinal_one_based": 768,
+      "stamp_ns": 1583836667881124096,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836667_881124096.pcd",
+      "bytes": 1904640,
+      "sha256": "6c2e54ef25df03c90d5e0e7c143a87d0094427adffbebc170240ce124912a6a3",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836667881124096,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "6642d164dd1607ac129e41bc3dd89b85c4a957dab5d82fb23aa7187600af0498",
+        "t_min_raw": 0,
+        "t_max_raw": 100188416
+      }
+    },
+    {
+      "local_index": 2,
+      "raw_ordinal_one_based": 769,
+      "stamp_ns": 1583836667981409792,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836667_981409792.pcd",
+      "bytes": 1904640,
+      "sha256": "8851f325f5ebb4f01e38ed772a6550679e27ecc50f4f8c87a2741721e306ac71",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836667981409792,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "c71f5deb924ca47da7b4077a6acc133b3d0a93af313047e40195872b67afe1a4",
+        "t_min_raw": 0,
+        "t_max_raw": 100238848
+      }
+    },
+    {
+      "local_index": 3,
+      "raw_ordinal_one_based": 770,
+      "stamp_ns": 1583836668081744896,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_081744896.pcd",
+      "bytes": 1904640,
+      "sha256": "3df1537d08d1cfa6086e03222a6571c1436ce3a5b2f6acc55a3e072c3e9480ec",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836668081744896,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "1c6561c644278ae6edd73f8544a9b4d3024bc4d1e16fdb9797ccf01296b6bffb",
+        "t_min_raw": 0,
+        "t_max_raw": 99949056
+      }
+    },
+    {
+      "local_index": 4,
+      "raw_ordinal_one_based": 771,
+      "stamp_ns": 1583836668181790720,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_181790720.pcd",
+      "bytes": 1904640,
+      "sha256": "5239b074093755379c1700bb3e63cdbf9ff804e707fba830c2757877bca94efd",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836668181790720,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "7356d3f0de3a77e7ad8c1479d3e62127583bbf0b521ba33a9516d955ef4a15ee",
+        "t_min_raw": 0,
+        "t_max_raw": 99616256
+      }
+    },
+    {
+      "local_index": 5,
+      "raw_ordinal_one_based": 772,
+      "stamp_ns": 1583836668281504000,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_281504000.pcd",
+      "bytes": 1904640,
+      "sha256": "1bddd97556580b822bf5673bf6ff81a68f6961a32e62a29435bb545a0ae5138a",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836668281504000,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "c49a1d2e91a5dbd5c0116177150298d987d1688c72925dc1a609bb8704fece25",
+        "t_min_raw": 0,
+        "t_max_raw": 99586560
+      }
+    },
+    {
+      "local_index": 6,
+      "raw_ordinal_one_based": 773,
+      "stamp_ns": 1583836668381186048,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_381186048.pcd",
+      "bytes": 1904640,
+      "sha256": "355f3e29f41e72df5cdbfcf850e2f2633e89ba8ba6b9a47ddaedab2274c56848",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836668381186048,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "c392c98469a74e88509d1cf9fb0313794a42da16a0448d083e85aef043208cdd",
+        "t_min_raw": 0,
+        "t_max_raw": 99451648
+      }
+    },
+    {
+      "local_index": 7,
+      "raw_ordinal_one_based": 774,
+      "stamp_ns": 1583836668480734208,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_480734208.pcd",
+      "bytes": 1904640,
+      "sha256": "daa6728e17deec93d626bd5fe988d855ab7b8da700874cc2b57da75dd4fab849",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836668480734208,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "c44998187376ee16eebb4b19ce52f02cd8f0dba866b6bf44ea47f0562e5c0351",
+        "t_min_raw": 0,
+        "t_max_raw": 99556096
+      }
+    },
+    {
+      "local_index": 8,
+      "raw_ordinal_one_based": 775,
+      "stamp_ns": 1583836668580386304,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_580386304.pcd",
+      "bytes": 1904640,
+      "sha256": "d765eb2026fd80754778c6d1f9776592cc6702b84fbb4abfbaba0534df4b3281",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836668580386304,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "ecbaf56dee172dfc2fa5c3cfa991e5f948a8d9b68e9fd336a49be0e441fc619e",
+        "t_min_raw": 0,
+        "t_max_raw": 99974144
+      }
+    },
+    {
+      "local_index": 9,
+      "raw_ordinal_one_based": 776,
+      "stamp_ns": 1583836668680456704,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_680456704.pcd",
+      "bytes": 1904640,
+      "sha256": "c508a366c2c2e58e0659438d992a9e18923d34b344c43fe1c6bb0148a6fa4aaf",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836668680456704,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "31221d800ec487a753385f98517e2a38891ef3fc8f3c8a7585a09f8039196088",
+        "t_min_raw": 0,
+        "t_max_raw": 99822336
+      }
+    },
+    {
+      "local_index": 10,
+      "raw_ordinal_one_based": 777,
+      "stamp_ns": 1583836668780376320,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_780376320.pcd",
+      "bytes": 1904640,
+      "sha256": "e1e124fc1cda1fd2b5e3f83247682fbc448eafacdaa30f60ae46e001859498f0",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836668780376320,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "35b96a1b2bb0735a8876ccfa987eab5d34e3f0d4ec50982a2605d135fd45ac69",
+        "t_min_raw": 0,
+        "t_max_raw": 100088064
+      }
+    },
+    {
+      "local_index": 11,
+      "raw_ordinal_one_based": 778,
+      "stamp_ns": 1583836668880560384,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_880560384.pcd",
+      "bytes": 1904640,
+      "sha256": "780f9384d4f64573e462b328fe42458804c69c3fdd8300e90ea3bc11d0eb2dd0",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836668880560384,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "f6a0334e583459efa16cc568e98d910a872dd3517b6a30d4c9c0b4b1bc296341",
+        "t_min_raw": 0,
+        "t_max_raw": 100171520
+      }
+    },
+    {
+      "local_index": 12,
+      "raw_ordinal_one_based": 779,
+      "stamp_ns": 1583836668980829440,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836668_980829440.pcd",
+      "bytes": 1904640,
+      "sha256": "6cc6b7be8c64e35bc62d8338b9d933ae064149056059b131a8a263ee85c23b94",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836668980829440,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "74028be6d0988cc73074514b4a5cc505caf7648bc22f7079b023aea1ae1d9f99",
+        "t_min_raw": 0,
+        "t_max_raw": 100222208
+      }
+    },
+    {
+      "local_index": 13,
+      "raw_ordinal_one_based": 780,
+      "stamp_ns": 1583836669081148672,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836669_081148672.pcd",
+      "bytes": 1904640,
+      "sha256": "0d9d7c73b71386ceecef042bc20e6a554b4c2ba1c2578a425f80a93027f5ba97",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836669081148672,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "ca8a214ee8bd35a3ecc2a4f448b6e7c4845d7519f627167fa24c4a60543d783e",
+        "t_min_raw": 0,
+        "t_max_raw": 100290048
+      }
+    },
+    {
+      "local_index": 14,
+      "raw_ordinal_one_based": 781,
+      "stamp_ns": 1583836669181535488,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836669_181535488.pcd",
+      "bytes": 1904640,
+      "sha256": "ddc41b6af08b81a89d51f9686ebbf432442b70fd115a2864b163989fe1690bcc",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836669181535488,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "d6128f60d73923362c82f12a5327eecdd171f2c65623c49ff8cd5e41c6221edd",
+        "t_min_raw": 0,
+        "t_max_raw": 100020224
+      }
+    },
+    {
+      "local_index": 15,
+      "raw_ordinal_one_based": 782,
+      "stamp_ns": 1583836669281652736,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836669_281652736.pcd",
+      "bytes": 1904640,
+      "sha256": "f12ecba81adca9ed0ea85413789d7262f1c43dbaad16cfd7739f1d8657b347ed",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836669281652736,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "ca62fb955b00ac1f7795a19858b04cd2caaedf8f8a54c431d17fbbd897d4fe39",
+        "t_min_raw": 0,
+        "t_max_raw": 99937024
+      }
+    },
+    {
+      "local_index": 16,
+      "raw_ordinal_one_based": 783,
+      "stamp_ns": 1583836669381685504,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836669_381685504.pcd",
+      "bytes": 1904640,
+      "sha256": "a961f4af9e06b0c2db1a21606be2ec29de92b33839991fbe879cc49092ea930a",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836669381685504,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "bc22151c47343843d86bdc4f72e315e235d7eea938d4c0e8ba2bf0703ac269c1",
+        "t_min_raw": 0,
+        "t_max_raw": 99579392
+      }
+    },
+    {
+      "local_index": 17,
+      "raw_ordinal_one_based": 784,
+      "stamp_ns": 1583836669481361920,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836669_481361920.pcd",
+      "bytes": 1904640,
+      "sha256": "c723849b72603e30c9a299784c0ab9a0572e577be8727f84b67d08c7ef4c11b3",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836669481361920,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "e897ac28e8acb5173c1706107357abe0bf618fd8d66a63c91445704ae9ba4b70",
+        "t_min_raw": 0,
+        "t_max_raw": 99504384
+      }
+    },
+    {
+      "local_index": 18,
+      "raw_ordinal_one_based": 785,
+      "stamp_ns": 1583836669580962304,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836669_580962304.pcd",
+      "bytes": 1904640,
+      "sha256": "315f3a59979cc48f75b304a28935bbfa9d248e6c833a68e9cb90f72f0e58cb19",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836669580962304,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "dfde5a92fa02eb16b955eed0c620b16186c1dac3a13d1a00a37f84752c9fffce",
+        "t_min_raw": 0,
+        "t_max_raw": 99480064
+      }
+    },
+    {
+      "local_index": 19,
+      "raw_ordinal_one_based": 786,
+      "stamp_ns": 1583836669680536832,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836669_680536832.pcd",
+      "bytes": 1904640,
+      "sha256": "a4a6659e3e8d9e7980dc52b7c5f59ab525cc134699d1964009fa598bfd0081eb",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836669680536832,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "37380adfe916842c1ac88b9b3f5b13fe5a24362e48370ae5f66b9a171062ca54",
+        "t_min_raw": 0,
+        "t_max_raw": 99492608
+      }
+    },
+    {
+      "local_index": 20,
+      "raw_ordinal_one_based": 787,
+      "stamp_ns": 1583836669780126208,
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583836669_780126208.pcd",
+      "bytes": 1904640,
+      "sha256": "18e3d0bbfd305867fbc43e850aa1db644cfc1e6c2d060ce191c6e0d66986bd89",
+      "role": "EVALUATION",
+      "reference_match_ns": 1583836669780126208,
+      "reference_delta_ns": 0,
+      "canonical_path": null,
+      "format": {
+        "header": {
+          "VERSION": [
+            "0.7"
+          ],
+          "FIELDS": [
+            "x",
+            "y",
+            "z",
+            "intensity",
+            "t",
+            "reflectivity",
+            "ring",
+            "noise",
+            "range"
+          ],
+          "SIZE": [
+            "4",
+            "4",
+            "4",
+            "4",
+            "4",
+            "2",
+            "1",
+            "2",
+            "4"
+          ],
+          "TYPE": [
+            "F",
+            "F",
+            "F",
+            "F",
+            "U",
+            "U",
+            "U",
+            "U",
+            "U"
+          ],
+          "COUNT": [
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1",
+            "1"
+          ],
+          "WIDTH": [
+            "1024"
+          ],
+          "HEIGHT": [
+            "64"
+          ],
+          "VIEWPOINT": [
+            "0",
+            "0",
+            "0",
+            "1",
+            "0",
+            "0",
+            "0"
+          ],
+          "POINTS": [
+            "65536"
+          ],
+          "DATA": [
+            "binary"
+          ]
+        },
+        "header_bytes": 250,
+        "point_step": 29,
+        "points": 65536,
+        "finite_xyz": 65536,
+        "declared_point_bytes": 1900544,
+        "tail_bytes": 3846,
+        "tail_all_zero": true,
+        "declared_records_sha256": "a2ba540fa93d116070f1b446612d4e7fbafccc47545801080eff869013e6814b",
+        "t_min_raw": 0,
+        "t_max_raw": 100189696
+      }
+    }
+  ],
+  "T_B_C": [
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    [
+      -1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      -1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "T_C_I": [
+    [
+      0.7099216283860768,
+      -0.7041416662469333,
+      0.013992691115502887,
+      0.015627525086609025
+    ],
+    [
+      0.02460002682200807,
+      0.004936229792296243,
+      -0.9996851866041602,
+      -0.01981648043281047
+    ],
+    [
+      0.703850921879071,
+      0.7100423561242176,
+      0.020826240168402843,
+      -0.07544143005003269
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "T_I_L": [
+    [
+      -1.0,
+      0.0,
+      0.0,
+      -0.006253
+    ],
+    [
+      0.0,
+      -1.0,
+      -0.0,
+      0.011775
+    ],
+    [
+      -0.0,
+      0.0,
+      1.0,
+      -0.028535
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "T_L_I": [
+    [
+      -1.0,
+      0.0,
+      0.0,
+      -0.006253
+    ],
+    [
+      0.0,
+      -1.0,
+      0.0,
+      0.011775
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.028535
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "T_B_L": [
+    [
+      -0.703850921879071,
+      -0.7100423561242176,
+      0.020826240168402843,
+      -0.07207613788438523
+    ],
+    [
+      0.7099216283860768,
+      -0.7041416662469333,
+      -0.013992691115502887,
+      -0.0024978355832723717
+    ],
+    [
+      0.02460002682200807,
+      0.004936229792296243,
+      0.9996851866041602,
+      -0.008613836505025514
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "T_M_B_anchor": [
+    [
+      0.17521260449262077,
+      0.9841076735201265,
+      0.028855331322238553,
+      18.5668
+    ],
+    [
+      -0.9845268507951793,
+      0.17521777218484125,
+      0.0023690449357237214,
+      -11.7492
+    ],
+    [
+      -0.0027245715697784,
+      -0.02882393500868323,
+      0.9995807908720415,
+      0.355014
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "T_M_L_anchor": [
+    [
+      0.5760256108201626,
+      -0.8172171509693166,
+      0.018724952359128324,
+      18.55146465788851
+    ],
+    [
+      0.81740929626749,
+      0.5756893248940465,
+      -0.020587461682388144,
+      -11.67869717870314
+    ],
+    [
+      0.006044671599471451,
+      0.02716485532135165,
+      0.9996126912862925,
+      0.346672148540518
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "anchor_raw_quaternion_norm": 0.9999995993904398,
+  "source_inputs": [
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/ground_truth/registered_poses.csv",
+      "bytes": 1330464,
+      "sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/prior_map/new-college-29-01-2020-5cm-resolution.ply",
+      "bytes": 359695676,
+      "sha256": "e8bf6c7f2ddacde4f6f65ba7759b00bdca5c6bf5e706344ce8c3592529f04ab0"
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/kalibr_output/cam-ouster-imu/camchain-ouster_imu-cam-rooster_2020-03-11-10-05-35_0.yaml",
+      "bytes": 1736,
+      "sha256": "3bc13fa24af9ef8ca888c5523b1df57d1c53d0ca4052b818b7e02310fa781feb"
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/kalibr_output/ouster_imu_lidar_transforms.yaml",
+      "bytes": 300,
+      "sha256": "8fe56ff808c6c900db52ac1545819ef3da979818bfa392ba00aef43daf59a037"
+    }
+  ],
+  "data_root": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021",
+  "initial_available_bytes": 89822097408,
+  "file_level_reference_axis_certified": false,
+  "deskew": false,
+  "test_pose_values_read": false
+}

@@ -1,0 +1,16 @@
+Scanning dependencies of target test_frozen_pool
+[ 12%] Building CXX object CMakeFiles/test_frozen_pool.dir/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r12_feasibility_preserving_pool/tools/test_pool.cpp.o
+[ 25%] Linking CXX executable test_frozen_pool
+[ 25%] Built target test_frozen_pool
+Scanning dependencies of target test_frozen_coarse
+[ 37%] Building CXX object CMakeFiles/test_frozen_coarse.dir/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r13_training_guided_multihypothesis/tools/test_coarse.cpp.o
+[ 50%] Linking CXX executable test_frozen_coarse
+[ 50%] Built target test_frozen_coarse
+Scanning dependencies of target test_pilot
+[ 62%] Building CXX object CMakeFiles/test_pilot.dir/test_pilot.cpp.o
+[ 75%] Linking CXX executable test_pilot
+[ 75%] Built target test_pilot
+Scanning dependencies of target preflight
+[ 87%] Building CXX object CMakeFiles/preflight.dir/preflight.cpp.o
+[100%] Linking CXX executable preflight
+[100%] Built target preflight
