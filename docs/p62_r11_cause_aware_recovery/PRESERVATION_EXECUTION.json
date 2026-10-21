@@ -1,0 +1,11 @@
+{
+  "actual_retry_process_exit_code": 0,
+  "receipt": {
+    "path": "/home/jian/livox_ws/r10_stable_preservation_20261021/object_export_retry_01/RECEIPT.json",
+    "bytes": 826,
+    "sha256": "8def14cd66431c45989a7a61acd4caebb8a32e45f20759369b6d6a1425fd2d2d"
+  },
+  "source": "Actual retry.py process exited0 and reported PRESERVATION_PASS; runtime gate rechecks artifacts",
+  "historical_partial_backup_status": "PRESERVATION_BLOCKED retained unchanged",
+  "historical_R10_status": "ARCHIVE_ASSET_DRIFT_DETECTED retained unchanged"
+}

@@ -1,0 +1,11 @@
+# R11 pre-run tests/review
+
+Preservation retry had two bounded local review cycles. Fixed PASS publication before final hashes; final receipt is now last, and R11 requires actual exit0 evidence, receipt SHA, checksum verification and unchanged stable snapshot. The previous failed partial backup is preserved, not overwritten. Bundle recovery is executed in another bare repository, fsck and all3 commit/tree comparisons passed, no alternates.
+
+SE3 math reviewed in3 bounded cycles. Exp/Log use full translation Jacobian and right/body chart. Added pure-translation world-coordinate regression after8-ULP scale-only guard failed an adversarial example; added rounded-TP translation and rotation regressions after the first coordinate guard missed tolerated float nonorthogonality. The final predetermined caps include rotation operator-norm inflation and orthogonality error, not optimization-score tuning. Mixed/zero/nearπ/map-frame tests retained. No fourth cycle.
+
+Runner reviewed in2 cycles. Fixed an ordinary test fixture whose .4 loss legitimately triggered the frozen>.25 rule (fixture now.2); enabled CSV failbit/badbit exceptions so a failed raw-output flush stops before fitness; renamed RSS as process high-water, never independent-arm peak. NaN/Inf native metrics are explicitly rejected and retained under frozen R10 semantics; invalid SE3 stops. An unexpected nominal result stops before any extra align at the event identity gate.
+
+Actual warm C++ test_se3 and test_decisions both passed with new_aligns=0. Initial driver compilation failed because installed Eigen3.3 has no vector begin/end for range-for; changed only six-value CSV iteration to indexed access, then build passed. Missing optional VTK/pcap/png CMake warnings did not fail compilation; no dependency installed. Cold committed-source build/test receipts will bind the actual run binary.
+
+User declined cross-model review; no external CLI. Production and historical research files are read-only. True run results will be appended, not substituted for these synthetic tests.
