@@ -1,0 +1,40 @@
+{
+  "EKF_runs": 0,
+  "R14B_test_preregistration_sha256": "1b7525585ef49204fcabf75e9c8096d4e43f18be34b982369bfe92ab36e000d1",
+  "R15B_model_output_freeze_sha256": "3ab7077cbb4d09728bc577ca35b5867257bf23582d388dd379a97d49b5da7207",
+  "R15C_binary_sha256": "0a4b33ac1f63dad5b646f4a23fe008a1405e3c4139994df6adee357eacaf95eb",
+  "candidate_evaluations": 200,
+  "frame_count": 25,
+  "gt_pose_values_read_before_freeze": 0,
+  "new_NDT_aligns": 0,
+  "note": "Model-side candidate and objective outputs frozen before opening Newer College reference pose values. Exploratory spectral-tail probes only; formal weak directions were zero in all 25 frames.",
+  "outputs": [
+    {
+      "bytes": 83768,
+      "path": "GRADIENT_ONLY_RESULTS.csv",
+      "sha256": "5126e05de338a55d251b82c146e127ce62124bdee1f9f9170c450378d15d5dde"
+    },
+    {
+      "bytes": 114041,
+      "path": "CANDIDATE_METRICS.csv",
+      "sha256": "08df8e318f50d2bef634dfaf2e49f6fee07888cf423b53289737341d3caa6dfb"
+    },
+    {
+      "bytes": 19773,
+      "path": "COUPLED_VS_GRADIENT_ONLY.csv",
+      "sha256": "87f70ef838a88bd2215a148624646d54f70b1b3933bb973a789a6690bbdfb490"
+    },
+    {
+      "bytes": 8395,
+      "path": "RUNTIME_AND_MEMORY.csv",
+      "sha256": "d08bb87b0cbbe4535b23f66e3fa7e966b9186cf236394434b7de6b60310700e0"
+    },
+    {
+      "bytes": 1281,
+      "path": "formal_run.log",
+      "sha256": "624f7f307a1fbc9ba2284884f0c6427fded794d46bfcb7a325d68d110b787af7"
+    }
+  ],
+  "status": "R15C_MODEL_OUTPUTS_FROZEN_BEFORE_REFERENCE_EVALUATION",
+  "task": "P62-R15C-COUPLING-ATTRIBUTION-AND-NOVELTY"
+}

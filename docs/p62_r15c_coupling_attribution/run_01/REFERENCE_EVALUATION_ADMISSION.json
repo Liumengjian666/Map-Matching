@@ -1,0 +1,12 @@
+{
+  "R14B_preregistration_sha256": "1b7525585ef49204fcabf75e9c8096d4e43f18be34b982369bfe92ab36e000d1",
+  "axis_assumption": "PAPER_SUPPORTED_BASE_FRAME_ASSUMPTION",
+  "model_output_freeze_sha256": "77157ae8dba63539223393bde221676bd13f60523fa873ff2a0d6a0b1475e778",
+  "model_outputs_rechecked": true,
+  "reference_kind": "MAP_ANCHORED_BENCHMARK_REFERENCE",
+  "reference_pose_values_opened_at_this_point": false,
+  "registered_poses_bytes": 1330464,
+  "registered_poses_sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+  "task": "P62-R15C-COUPLING-ATTRIBUTION-AND-NOVELTY",
+  "warning": "Exploratory Reference-Relative Pose Error only; map-anchored benchmark reference, not independent mocap truth; R14B base-axis interpretation is paper/model-supported but not exporter-bound."
+}
