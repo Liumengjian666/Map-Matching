@@ -1,0 +1,13 @@
+{
+  "roots": [
+    "/home/jian/rosbag/loop2",
+    "/home/jian/livox_ws/dog_visual_loc_ws"
+  ],
+  "max_depth": 4,
+  "seconds_limit": 30,
+  "file_limit": 20000,
+  "files_considered": 5728,
+  "candidates": [],
+  "truncated": false,
+  "method": "one metadata/name inventory; no symlink following; no fitting or GT data parsing"
+}

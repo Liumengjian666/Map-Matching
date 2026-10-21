@@ -1,0 +1,665 @@
+{
+  "task": "P62-R13",
+  "START_SHA": "58390fd173114e0e60a6dd9bf14d7c4be3f1106c",
+  "events": [
+    {
+      "scan_index": "60",
+      "raw_index": "10700",
+      "seq": "15435",
+      "header_ns": "1786180549310273647",
+      "point_start_ns": "1786180549310273647",
+      "point_end_ns": "1786180549410717345",
+      "reference_ns": "1786180549360495496",
+      "raw_points": "20064",
+      "frame_id": "livox_frame",
+      "timebase": "1786180549310273496",
+      "raw_serialized_sha256": "fa7d9691accbbaafd38c5db8477931d6c2fc8049247f26b242e441af1f821581",
+      "raw_xyz_offset_file": "/home/jian/livox_ws/p62_r7_motion_shadow_runs/input/scan_060.xyz_offset.bin",
+      "raw_sha256": "743bbf444f9f8bbc0004498eb4358e2c5cf6a5a1c72699429d1739b846222529",
+      "expected_processed_points": "1399",
+      "expected_processed_fnv": "9a73414ed51f3566",
+      "initial_source": "local_imu_rotation_prior",
+      "local_imu_prior_used": "1",
+      "tx": "-0.49361062967551556",
+      "ty": "0.10073099161019125",
+      "tz": "0.794804844358135",
+      "qx": "0.10453915324929927",
+      "qy": "-0.056063341043013394",
+      "qz": "-0.4020551714428061",
+      "qw": "0.9078987313269637"
+    },
+    {
+      "scan_index": "61",
+      "raw_index": "10701",
+      "seq": "15436",
+      "header_ns": "1786180549410477877",
+      "point_start_ns": "1786180549410477877",
+      "point_end_ns": "1786180549509848664",
+      "reference_ns": "1786180549460163271",
+      "raw_points": "19968",
+      "frame_id": "livox_frame",
+      "timebase": "1786180549410477917",
+      "raw_serialized_sha256": "44af0c94e1cfe37a002cd129b0daa77562ae6f863c81856de1eea36c55b4e8c2",
+      "raw_xyz_offset_file": "/home/jian/livox_ws/p62_r7_motion_shadow_runs/input/scan_061.xyz_offset.bin",
+      "raw_sha256": "82545ce189ae0a8f356eb951c0c4a6572bc73bb0dbf7f262952d47c6fd0d71e5",
+      "expected_processed_points": "1400",
+      "expected_processed_fnv": "a86841abfd2c00c8",
+      "initial_source": "local_imu_rotation_prior",
+      "local_imu_prior_used": "1",
+      "tx": "-0.4520258166190488",
+      "ty": "0.05443332298795196",
+      "tz": "0.8013218317541373",
+      "qx": "0.10058147554932874",
+      "qy": "-0.0522176994549055",
+      "qz": "-0.3715309770527792",
+      "qw": "0.9214778411498371"
+    },
+    {
+      "scan_index": "62",
+      "raw_index": "10702",
+      "seq": "15437",
+      "header_ns": "1786180549510318041",
+      "point_start_ns": "1786180549510318041",
+      "point_end_ns": "1786180549609837940",
+      "reference_ns": "1786180549560077991",
+      "raw_points": "19968",
+      "frame_id": "livox_frame",
+      "timebase": "1786180549510318113",
+      "raw_serialized_sha256": "ddba3c1d82f9983138b2fbaadc7536ce0ab8a8ed4fb529787bcf2db9e5ee0009",
+      "raw_xyz_offset_file": "/home/jian/livox_ws/p62_r7_motion_shadow_runs/input/scan_062.xyz_offset.bin",
+      "raw_sha256": "0e9e59c2bf37e9b152b99ad1da7fc1abe2343b211cdca8b76886698a360f33aa",
+      "expected_processed_points": "1392",
+      "expected_processed_fnv": "5ea1d6a3e9ea8264",
+      "initial_source": "local_imu_rotation_prior",
+      "local_imu_prior_used": "1",
+      "tx": "-0.3653553377159879",
+      "ty": "0.18983357025332426",
+      "tz": "0.8545239193840838",
+      "qx": "0.08876740949556343",
+      "qy": "-0.04693452593718201",
+      "qz": "-0.3416070040980161",
+      "qw": "0.9344635637828139"
+    },
+    {
+      "scan_index": "63",
+      "raw_index": "10703",
+      "seq": "15438",
+      "header_ns": "1786180549609592676",
+      "point_start_ns": "1786180549609592676",
+      "point_end_ns": "1786180549709830760",
+      "reference_ns": "1786180549659711718",
+      "raw_points": "19968",
+      "frame_id": "livox_frame",
+      "timebase": "1786180549609592589",
+      "raw_serialized_sha256": "16eac38e69f17373d1db614d7227f4335c85870591b902e8be29f53322302f31",
+      "raw_xyz_offset_file": "/home/jian/livox_ws/p62_r7_motion_shadow_runs/input/scan_063.xyz_offset.bin",
+      "raw_sha256": "767439c8cc3383c33e4d81878ec3863a255aabef5fd269d3c2f566113780bb49",
+      "expected_processed_points": "1398",
+      "expected_processed_fnv": "1dd913029bf0c25e",
+      "initial_source": "local_imu_rotation_prior",
+      "local_imu_prior_used": "1",
+      "tx": "-0.46256675541371617",
+      "ty": "-0.011498461954008818",
+      "tz": "0.7754691936189103",
+      "qx": "0.08016196912273367",
+      "qy": "-0.0468097101811674",
+      "qz": "-0.30627272648477166",
+      "qw": "0.9474069488613144"
+    },
+    {
+      "scan_index": "64",
+      "raw_index": "10704",
+      "seq": "15439",
+      "header_ns": "1786180549709609747",
+      "point_start_ns": "1786180549709609747",
+      "point_end_ns": "1786180549809800338",
+      "reference_ns": "1786180549759705043",
+      "raw_points": "19968",
+      "frame_id": "livox_frame",
+      "timebase": "1786180549709609835",
+      "raw_serialized_sha256": "bb29d88ef081ea5410fa22580f8750d6069a25bbe996196a7ddfa9354949de02",
+      "raw_xyz_offset_file": "/home/jian/livox_ws/p62_r7_motion_shadow_runs/input/scan_064.xyz_offset.bin",
+      "raw_sha256": "3251ff023a8d4a80935cd3194e673ebc5252b8cd93c18d5b5e0efe78faa75aa3",
+      "expected_processed_points": "1364",
+      "expected_processed_fnv": "cb82a7a6c063645a",
+      "initial_source": "local_imu_rotation_prior",
+      "local_imu_prior_used": "1",
+      "tx": "-0.4108772303088646",
+      "ty": "0.04980653703014182",
+      "tz": "0.7696849919345836",
+      "qx": "0.06380900323033037",
+      "qy": "-0.0540285347280898",
+      "qz": "-0.27027347758991194",
+      "qw": "0.959146274482335"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/checksums.sha256",
+      "bytes": 4604,
+      "sha256": "08185318b3f78fef2f59f36ccbbecb2e0087e0d4d8979e284e212507304fd783"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/ADMISSION_AND_SELECTION.csv",
+      "bytes": 19102,
+      "sha256": "2c4013943df7d2a4687832820711219b7cc72ae1832203fbec74e8b14a423b7f"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/ALIGN_CALLS.csv",
+      "bytes": 13760,
+      "sha256": "1a7244a22ad0b9adfe0817929e6fca1d0904186d95513669b293d4d276f90903"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/ASSET_IDENTITY_AFTER.json",
+      "bytes": 29381,
+      "sha256": "141f6613b6e89dedf7562047c777c666c6d5aab2cf58a19e764d1594fcd7a527"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/ASSET_IDENTITY_BEFORE.json",
+      "bytes": 29292,
+      "sha256": "344ce3e083aa7a59ffc251e854d44475adda37f411fab58c7fa2e9789e088e01"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/BLOCK_LOSSES.csv",
+      "bytes": 152206,
+      "sha256": "04224f0bb44b014907c0fd3778d38dc4acfae11939b394d5f31b25e44b16e3dd"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/BUILD_PROVENANCE.json",
+      "bytes": 6443,
+      "sha256": "21f5e834d3d4cad43cb868a2c0388ba3ceb716028f21dcfa7e1576da2507ed9e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/CANDIDATE_POOL.csv",
+      "bytes": 151614,
+      "sha256": "d591d648ca13aff20cf358cbecca47095997c731ae55e813a687acc0ebd7d5c4"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/COMMON_RESULTS.csv",
+      "bytes": 145612,
+      "sha256": "499b0b967470ab15c7d0f63fe4a42d026855a5b1a2453cca34450f1f1eeb9d68"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/COVERAGE.csv",
+      "bytes": 15591,
+      "sha256": "2bb978ce60bca6a797d908bb379b808a2e18927b8a469b4c7ece845d59156fce"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/EVENT_COMPARISON.csv",
+      "bytes": 8224,
+      "sha256": "da778bfeb2953aeaa4ebb423d566eae9ea8cbc0c464a23f4eec45ca0b8294a2a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/EXCLUDED_CANDIDATE_EVIDENCE.csv",
+      "bytes": 235,
+      "sha256": "14dd3753b3944d45d2c62ac1fbd9d5c76c607c21b8647b68437cc11bfefba94a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/FAILURES.csv",
+      "bytes": 35,
+      "sha256": "228ed9e2c642bd7512a0178fe93ee592c0d115606a76469b2866741af5d4cb03"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/FINAL_OBSERVATIONS.csv",
+      "bytes": 105117,
+      "sha256": "eef977edd741464ed9150353fee8ea19b247c34354a204aeeecffb96422e58c2"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/GIT_IDENTITY_AT_SEAL.json",
+      "bytes": 1043,
+      "sha256": "bac57b3a127e0d099bcc71e9316c97aa620ccbc1156b07ea0df698586c6ff1c8"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/G_SPECTRA.csv",
+      "bytes": 4574,
+      "sha256": "f86bc05322f9b1d7c10d68caf977fa256a75de59b40f5f9b21ca208243e8df96"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/IMPLEMENTATION_DIFF.md",
+      "bytes": 2225,
+      "sha256": "5972c9d395262136e6097e6ea96baea20c622914788585dd6a315fc0b13580df"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/MAP_RUNTIME.csv",
+      "bytes": 113,
+      "sha256": "c84af0850ea76714ad43b4873bcc2efa373cc31b3a87cf356f17eeb14a056034"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/MATHEMATICAL_FORMULATION.md",
+      "bytes": 3086,
+      "sha256": "5b24c83c3f18af7af1eea2c57e6e8e5a7100f14100ae16241938eeb81c53811f"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/OUTPUT_FREEZE.json",
+      "bytes": 9501,
+      "sha256": "0bf51f09ee2f3f731bfd9072c53cd1c90c09a4a4e97c30d4461985e6e61b3663"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/PAIRWISE_EVIDENCE.csv",
+      "bytes": 119,
+      "sha256": "0fc8f3e727ba437fccf8efb532c30549a7d2ad42b7117f90aaa4cc6f4813a4a5"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/PRESERVATION_EXECUTION.json",
+      "bytes": 535,
+      "sha256": "077192e779e9f905e0469b15cdf5751e98c27de4b1b52f27cf16fdb11003778a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/PRESERVATION_RECEIPT.md",
+      "bytes": 1846,
+      "sha256": "f821924d8d4ce016c872a15ccf4daca04f4052fdbf88d95d49f17978ce2c64c0"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/PRE_PREFLIGHT_BUILD_PROVENANCE.json",
+      "bytes": 6443,
+      "sha256": "b0e840fbcc021031fbd0892e896069e6d86b713c234173d7e46959f79a6ec9eb"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/PRE_REGISTRATION.json",
+      "bytes": 948,
+      "sha256": "47a297157d4a925dab46b0dea9fd33cb8c602efb6cc29ea12d44fab712c93206"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/RAW_NATIVE_METRICS.csv",
+      "bytes": 18223,
+      "sha256": "4383bd1882995ea6b5c2338156b7d42a8ec0968666251e3c90e36f4b6fea6784"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/RAW_OPTIMIZER_OUTPUTS.csv",
+      "bytes": 122819,
+      "sha256": "1e0a5be048b8a7f090b7c228e6b83a848ab49315c49c117ab0bd12a9ce9d47eb"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/REPORT.md",
+      "bytes": 10393,
+      "sha256": "f13bc76dcb2891998a6cd35124dacf9ce0fcbd5a12f2d9599e8373a8f78dcbc5"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/RUNTIME_AND_MEMORY.csv",
+      "bytes": 19820,
+      "sha256": "c11645303ad8575181222957e691071616e89976d346d7acdd271fc4c422e19b"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/SEED_COMPARISON.csv",
+      "bytes": 41914,
+      "sha256": "3eccce85c6175cb452acb2ace07219d7211f0dc1f1088339e90e31521289325e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/SEED_PRECISION_AUDIT.csv",
+      "bytes": 1430,
+      "sha256": "18aa7f40ca78b40ae126c5c6d682b4785252a05d58520228885bb43b33307e5f"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/SELECTORS.csv",
+      "bytes": 25443,
+      "sha256": "b2a9e14b9a5573bfa5e2bfc2e76352708790e177a4af65bb1708feb4eab81a35"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/TESTS_AND_REVIEW.md",
+      "bytes": 4921,
+      "sha256": "ad4d8041491a230b0831c35f77f680d1ca0c03a8477aff075be749aef8d3319e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/WARM_RECOMPILE_PROVENANCE.json",
+      "bytes": 5855,
+      "sha256": "7c42321246ac7689921337a04a334a35ac3c381a14561c053976ae55beba1c2d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/analysis_manifest.json",
+      "bytes": 13856,
+      "sha256": "aa050255ef9ba3ff8711cb5ff7a2de3c6b6f526750994bd4bc247c6ed1d8d3b1"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/analyze.py",
+      "bytes": 18426,
+      "sha256": "84b847ed55fc9c50894182929cd8cc7d4ab1f142a98b229959985116c75ef712"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/control.py",
+      "bytes": 9902,
+      "sha256": "1f2b6586dd1efd47c012e7df4eb827cd77299390cc8cdbe5aa00c52d20252d44"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/raw/BOUND_BUILD_STARTED.json",
+      "bytes": 4177,
+      "sha256": "0613dc52f5b552c9a3571ed82b9f0c5e083ad1fae67cd22601fb5e38c6e26aa4"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/raw/CMakeCache.txt",
+      "bytes": 37343,
+      "sha256": "141b6dd1380afef1ae4e31453b1c12bea5612b10477177627b3eb09636d1fcc9"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/raw/PREFLIGHT_CONTINUATION.json",
+      "bytes": 303,
+      "sha256": "82cb001db7e791e6b31bca2d11ad35b0b716208bf9dc381d0818028a66b06d9f"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/raw/PRE_NATIVE_BLOCKED.json",
+      "bytes": 729,
+      "sha256": "1a1446a102af0c03c05fa0f6fe83dd32572a348f4cae4a7ea468432ee377fcf2"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/raw/STARTED.json",
+      "bytes": 71,
+      "sha256": "2136af89de6c01e96f37b7d3de9ddcfc3da3e084c5f1b98140e10c02d446b3a2"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/raw/bound_build.log",
+      "bytes": 6420,
+      "sha256": "66c63ea823c21d9cc274b725ac57b575ad717031b55aa3e0d8f4cb257d64437b"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/raw/completion.json",
+      "bytes": 147,
+      "sha256": "7dbd6d623e356cf77dfabfbb3e9eacc8e136e897699538084da95d8855a13c48"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/raw/freeze.json",
+      "bytes": 577072,
+      "sha256": "4001da3678cbd1b77ba5ce55363e559d472eff8ca0ad6e7a1ffbf49868e2e697"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/raw/run.log",
+      "bytes": 1411,
+      "sha256": "45c0784d2e72744f0c6fa8b126398f00d906179a28d06461dea57daaf33bac42"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/reproduction_commands.md",
+      "bytes": 1805,
+      "sha256": "e92ad368cd0ae9a6cd84ae9809c62013669dc92873188f3bfbbc8be388e268d4"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/results.json",
+      "bytes": 5619,
+      "sha256": "2b67862fa150f0338144f0a317df10996f3730ca9e703f1c0b33ea2157211b0e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/seal.py",
+      "bytes": 3498,
+      "sha256": "3a916c29ee686c6d72b7cf1db044b4803d64b1a55ebac4c2cee5aaec295624a7"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/tools/CMakeLists.txt",
+      "bytes": 564,
+      "sha256": "e55f1360962523e6b923cf99aa63a9744108cf75a4e6cb1ed3ca21615c0b606d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/tools/se3.hpp",
+      "bytes": 4047,
+      "sha256": "411f67a0d728cfa8907c2940d57f2b30728e13d8351bf580c9ffdaf7b2d4a7cf"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/tools/shadow.cpp",
+      "bytes": 15587,
+      "sha256": "5031d623373e353da12ac67a9f50997ad3034eeeb757a607b9c40b0d3a8a5d38"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/tools/test_decisions.cpp",
+      "bytes": 2584,
+      "sha256": "ec607225fc37c21b516fe18a8aaf142918a8c1fcde473e11cb3aebd342dd785e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r11_cause_aware_recovery_ws/docs/p62_r11_cause_aware_recovery/tools/test_se3.cpp",
+      "bytes": 3477,
+      "sha256": "ece16ce92d413948c3199a530c7031fefff2e060ca48910a5b51232062306a4e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/checksums.sha256",
+      "bytes": 2838,
+      "sha256": "014793f0776ce102dc03089b471fa4d26f271858d7f965b3d314d71ded226742"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/ACCEPTANCE_COMPARISON.csv",
+      "bytes": 20869,
+      "sha256": "1de7f186a35c45c75512b5980e78ffc7abab73552bec57bb15d3488d1ca1783d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/ASSET_IDENTITY_AFTER.json",
+      "bytes": 477082,
+      "sha256": "1a98725f99d032730d119a20db09fcf99e5fd96f46365257086bac82a4fdadfb"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/ASSET_IDENTITY_BEFORE.json",
+      "bytes": 474245,
+      "sha256": "91894ec4ead16092b1c5305386bdd8014609d9fd3f8b73ea5b35bf698677b798"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/BUILD_PROVENANCE.json",
+      "bytes": 4072,
+      "sha256": "d9929632cc7f3cfb82752d1f8de5bb9ac8e1e8b4d8b183f968ebb9f5207745d6"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/COUNTEREXAMPLE_64.md",
+      "bytes": 1477,
+      "sha256": "e609720e300cd28eb7253699f8ef380bd6470e6b564cc3dd5442947aa7dc638b"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/FINAL_ASSET_GATE.json",
+      "bytes": 264,
+      "sha256": "c7f95966dc76059b42892afe10a5e3b3c4bc821c824d6fde31c4ce6f30443ddf"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/IMPLEMENTATION_DIFF.md",
+      "bytes": 2171,
+      "sha256": "1ae39da3def641850f7aa2b31decf09e4d339c0a98f2c35610a4d0b8566e0ad6"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/MATHEMATICAL_CONTRACT.md",
+      "bytes": 3808,
+      "sha256": "0a6615fc0f77c64a1348b6b1e405346aacc9446df43504fe8814dc9af7a7d25c"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/PAIRWISE_EVIDENCE.csv",
+      "bytes": 501,
+      "sha256": "05aa5dcd88f39a36582064d0ac1319462bdfcd956c4a1f518308b106e9226fdc"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/RAW_TO_GROUP_MAPPING.csv",
+      "bytes": 10687,
+      "sha256": "83cd81ca4557be411d9e0e70c6e10661a869b0825cf180124a809390c653073e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/REPLAY_RECEIPT.json",
+      "bytes": 2191,
+      "sha256": "fb4ff85679039b2d7517ccac23355debec886b84f96d5f1844f669c11ba55bbd"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/REPORT.md",
+      "bytes": 7168,
+      "sha256": "ccc0f029423885c64d7b78cc036048305c09f6853208001d87c81e2b8748738d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/REPRESENTATIVE_COMPARISON.csv",
+      "bytes": 8676,
+      "sha256": "fbae0473d74cdeb35e4858705594119dfb7e9c11de73641392399dca69066ade"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/RUNTIME_AND_MEMORY.csv",
+      "bytes": 12512,
+      "sha256": "99f1eb746bf0f7c706943d60672b58bca89f481485574fd9b6b32d3c3b634b1a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/RUNTIME_BINDING.json",
+      "bytes": 3264,
+      "sha256": "acaa1a3602d51738f05aa25f6be27b120e25d23d43aaa3501eb946b41421b775"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/TESTS_AND_REVIEW.md",
+      "bytes": 2635,
+      "sha256": "a18ac83b71376a3deecf6d97f5c37d287d9e299a9af4a2183acb8a3eb3fdc32f"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/WRAPPER_TESTS.json",
+      "bytes": 156,
+      "sha256": "541de8ab662371ef1f1bcedad0a5e86a913ab1cae6e70dcef41d46ecc0714426"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/analysis_manifest.json",
+      "bytes": 21247,
+      "sha256": "07e9eb7b22205807a70a4d4c379427a8e9b8aee10a262754530f508014e53810"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/execute.py",
+      "bytes": 10680,
+      "sha256": "6b4ad4d89b3868c5d903829809802214215abe5431c2d55ac498af987ead366a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/raw/CMakeCache.txt",
+      "bytes": 28980,
+      "sha256": "8e7cbd71cdefe42693f5d796063f5ffc89fd005a0053a01001a228dafb10d5fe"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/raw/PROCESS_EXIT.json",
+      "bytes": 73,
+      "sha256": "ca6c86ae5bbba8ac28a9fdada619e08e3398d991d671ef1d04d1fe04e3e1c00b"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/raw/STARTED.json",
+      "bytes": 16359,
+      "sha256": "decf4ebac6d6b4eca27ef041b5f45a6d75b2d33e5ce7f87814f36c6d4b579289"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/raw/build.log",
+      "bytes": 5204,
+      "sha256": "f4e3033063cd1e13164466e2e4e16b2bd91b46d14ddfa99ff410c050be408564"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/raw/replay.log",
+      "bytes": 223,
+      "sha256": "163f98ab35e413f482184f15f5e9d752d89f1e806f20630823e42bf0e67f12ae"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/reproduction_commands.md",
+      "bytes": 1266,
+      "sha256": "c543e082641be00801b72060f4eb94acdc86fc765bedbae24aece79bf439a29e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/results.json",
+      "bytes": 4132,
+      "sha256": "b7cc5a131b3ea66bd914ba24993f63f20789005ddc4c505dd3e5a7bb6466b4b7"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/seal.py",
+      "bytes": 3638,
+      "sha256": "ef0b58356dee5956fa57b0c6529a57cb5e35d237d8e4c74178edefb11b0c1677"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/summarize.py",
+      "bytes": 9376,
+      "sha256": "d1ba175513533ac8f3e6b75d47dac01c1adee07d4f8e7cf1c35739c376b67faa"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/tests/test_execute.py",
+      "bytes": 1608,
+      "sha256": "82c045792fa485e29324801ddb07eb115a4299fa4f80648f2c625335c8673408"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/tools/CMakeLists.txt",
+      "bytes": 548,
+      "sha256": "c5da2c1f8e7a15f7611da535db479aadd43596a43f09c4e698c6751add155ecb"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/tools/pool_v3.hpp",
+      "bytes": 4031,
+      "sha256": "fe43cd3080a37dbaa9b0b82adfd1f6f6f20f63dd4398c1a19b40eda750d9e976"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/tools/replay.cpp",
+      "bytes": 12217,
+      "sha256": "d57dd4ca85d4ea6bb62106b1df850bb201ccc004718199f82c1d3d0d6c0afdbe"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/tools/test_pool.cpp",
+      "bytes": 4829,
+      "sha256": "f7f567774ecddc2401d8a7e4f4d4c638d7ff206f443dd50ce78bdedc97a23946"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_ws/docs/p62_r7_motion_selected_shadow/REAL_INPUT_MANIFEST.json",
+      "bytes": 107359,
+      "sha256": "55799603bd2f8a2b88851a0caa71d527314fbfd290db5bad62fc85685793805e"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_ws/docs/p62_r13_training_guided_multihypothesis/LOCAL_REFERENCE_INVENTORY.json",
+      "bytes": 326,
+      "sha256": "cd82c3b736217c2159a996003c320c49ff9fa6cda8367ff643ee4e884dafcbd6"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r13_multihypothesis_ws/docs/p62_r6_dog_shadow_prototype/EXPERIMENT_LIMITATIONS.md",
+      "bytes": 2783,
+      "sha256": "2138f2fa8def15ec88b05d6df819ee55467332d0d2601f37c8031a74d9d6c3e4"
+    },
+    {
+      "path": "/home/jian/rosbag/loop2/raw_restore_20260914_stage0/loop2_raw.bag",
+      "bytes": 19677401800,
+      "sha256": "d17bee3f8697dcb01cb4b9f6ea2483aa42a1a31ae277659c8a7869d9c69f13ae"
+    },
+    {
+      "path": "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd",
+      "bytes": 7346648,
+      "sha256": "016b7ae3ae494ad5d462a66d888a96b96dda5fe29d6058059aa2fa6bdf6b09ca"
+    },
+    {
+      "path": "/home/jian/rosbag/loop2/final_delivery_run_A_20260922/ndt_determinism.csv",
+      "bytes": 20638557,
+      "sha256": "e5f749cbbc7fc514326cc61626945f4ac6347722e4ad769e676984e1d214102a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r7_motion_shadow_runs/input/scans.csv",
+      "bytes": 53181,
+      "sha256": "75d95959285fefa2bd1c6536ac466afdc492834c74e90cf65e9b18911330f345"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r7_motion_shadow_runs/input/scan_060.xyz_offset.bin",
+      "bytes": 321024,
+      "sha256": "743bbf444f9f8bbc0004498eb4358e2c5cf6a5a1c72699429d1739b846222529"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r7_motion_shadow_runs/input/scan_061.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "82545ce189ae0a8f356eb951c0c4a6572bc73bb0dbf7f262952d47c6fd0d71e5"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r7_motion_shadow_runs/input/scan_062.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "0e9e59c2bf37e9b152b99ad1da7fc1abe2343b211cdca8b76886698a360f33aa"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r7_motion_shadow_runs/input/scan_063.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "767439c8cc3383c33e4d81878ec3863a255aabef5fd269d3c2f566113780bb49"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r7_motion_shadow_runs/input/scan_064.xyz_offset.bin",
+      "bytes": 319488,
+      "sha256": "3251ff023a8d4a80935cd3194e673ebc5252b8cd93c18d5b5e0efe78faa75aa3"
+    },
+    {
+      "path": "/usr/include/pcl-1.10/pcl/registration/ndt.h",
+      "bytes": 23355,
+      "sha256": "2e86c66a9aa49329e69cd227b3312cc73714851bbae682062dbb76f281068133"
+    },
+    {
+      "path": "/usr/include/pcl-1.10/pcl/registration/impl/ndt.hpp",
+      "bytes": 31871,
+      "sha256": "e61be2ca7f1db2fe7171730146cdf493469e4e9e7e6d9c82d47f457d3b6006dc"
+    },
+    {
+      "path": "/usr/include/pcl-1.10/pcl/filters/impl/voxel_grid_covariance.hpp",
+      "bytes": 18209,
+      "sha256": "1d6de8ecb84b53ffdf2a4901c52f6479078da50c9d5359d7c1ee825bfd460b77"
+    }
+  ],
+  "map": {
+    "path": "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd",
+    "bytes": 7346648,
+    "sha256": "016b7ae3ae494ad5d462a66d888a96b96dda5fe29d6058059aa2fa6bdf6b09ca"
+  },
+  "source": "fixed R7 raw files and R11/R12 frozen results",
+  "time": "inherited raw/no-deskew midpoint",
+  "independent_reference": "INDEPENDENT_REFERENCE_NOT_AVAILABLE",
+  "reference_confirmation_runs": 1,
+  "nominal_native_runs": 0,
+  "max_new_aligns": 10,
+  "GT_data_reads": 0
+}
