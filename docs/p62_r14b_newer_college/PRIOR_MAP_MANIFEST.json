@@ -1,0 +1,40 @@
+{
+  "status": "EXISTING_OFFICIAL_5CM_PLY_IDENTIFIED; NO_R14B_MAP_CONSTRUCTED",
+  "map_processing": "NOT_RUN_AFTER_COORDINATE_STOP",
+  "roi": null,
+  "voxel_leaf": null,
+  "assets": [
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/prior_map/README.txt",
+      "size": 2175,
+      "sha256": "d2af92e6fc52bfbbd6de5b60325e5a30d4ae5bf138f898f6a97fb0cd2edc4866",
+      "historical_expected": {
+        "bytes": 2175,
+        "drive_id": "14gCRr3bGoc8PEb6wyib0LTF-10bijANa",
+        "sha256": "d2af92e6fc52bfbbd6de5b60325e5a30d4ae5bf138f898f6a97fb0cd2edc4866",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/prior_map/new-college-29-01-2020-5cm-resolution.ply",
+      "size": 359695676,
+      "sha256": "e8bf6c7f2ddacde4f6f65ba7759b00bdca5c6bf5e706344ce8c3592529f04ab0",
+      "historical_expected": {
+        "bytes": 359695676,
+        "drive_id": "1CEjIzPDc7E437nxHw5xhx3Wl-ePJbAYM",
+        "sha256": "e8bf6c7f2ddacde4f6f65ba7759b00bdca5c6bf5e706344ce8c3592529f04ab0",
+        "status": "VERIFIED_EXISTING"
+      },
+      "matches_historical_manifest": true
+    },
+    {
+      "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/prior_map/prior_map_xyz_binary.pcd",
+      "size": 369976348,
+      "sha256": "57da358a7c3f52a132fd06afba69f2c3eff2e980b7dbad5b8751548665104e25",
+      "historical_expected": null,
+      "matches_historical_manifest": null
+    }
+  ],
+  "derived_pcd": "historical local derivative, not freshly certified lossless in R14B"
+}

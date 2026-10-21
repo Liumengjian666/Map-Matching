@@ -75,6 +75,8 @@ def stable_snapshot():
 
 
 def pcd_sample(path):
+    if path.stat().st_size > 8 * 1024 * 1024:
+        raise ValueError('PCD header probe exceeds fixed8MiB sample read budget')
     with path.open('rb') as stream:
         header = {}
         for _ in range(64):
@@ -141,6 +143,15 @@ def main():
              SEQ / 'prior_map/new-college-29-01-2020-5cm-resolution.ply',
              SEQ / 'prior_map/prior_map_xyz_binary.pcd',
              SEQ / 'time_offsets/time_offsets.csv']
+    for path in paths:
+        if not path.is_file() or path.is_symlink():
+            raise ValueError(f'Required side asset missing or symlink: {path}')
+    for relative in (
+        'kalibr_output/ouster_imu_lidar_transforms.yaml',
+        'kalibr_output/cam-ouster-imu/camchain-ouster_imu-cam-rooster_2020-03-11-10-05-35_0.yaml',
+    ):
+        if not (SEQ / 'calibration' / relative).is_file():
+            raise ValueError(f'Required calibration missing: {relative}')
     paths.extend(sorted((SEQ / 'calibration').rglob('*')))
     paths = [p for p in paths if p.is_file()]
     assets = []

@@ -15,7 +15,7 @@ def data(extra=b'', encoding='binary', time_type='U'):
 
 class InspectionTests(unittest.TestCase):
     def inspect(self, value):
-        with tempfile.TemporaryDirectory(prefix='r14b_parser_test_') as folder:
+        with tempfile.TemporaryDirectory(prefix='r14b_parser_test_', dir=Path(__file__).parent) as folder:
             path = Path(folder) / 'synthetic.pcd'
             path.write_bytes(value)
             return pcd_sample(path)
@@ -49,6 +49,14 @@ class InspectionTests(unittest.TestCase):
     def test_time_storage_not_guessed(self):
         with self.assertRaises(ValueError):
             self.inspect(data(time_type='F'))
+
+    def test_read_budget(self):
+        with tempfile.TemporaryDirectory(prefix='r14b_parser_test_', dir=Path(__file__).parent) as folder:
+            path = Path(folder) / 'oversize.pcd'
+            with path.open('wb') as stream:
+                stream.truncate(8 * 1024 * 1024 + 1)
+            with self.assertRaises(ValueError):
+                pcd_sample(path)
 
 
 if __name__ == '__main__':

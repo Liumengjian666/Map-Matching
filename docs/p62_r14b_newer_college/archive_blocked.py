@@ -45,7 +45,12 @@ def main():
         'branch': 'research/p62-r14b-newer-college-prior-map',
         'workspace': str(ROOT.parent.parent),
         'ndt_code_sha': None,
-        'inspection_source_sha256': sha(ROOT / 'inspect_inputs.py'),
+        'inspection_run_code_archive': '168b9446e0cc81093f6af5054bc4ff5580d24960',
+        'inspection_executed_source_sha256': hashlib.sha256(subprocess.check_output([
+            'git', '-C', str(ROOT.parent.parent), 'show',
+            '168b9446e0cc81093f6af5054bc4ff5580d24960:docs/p62_r14b_newer_college/inspect_inputs.py'
+        ])).hexdigest(),
+        'inspection_hardened_source_sha256': sha(ROOT / 'inspect_inputs.py'),
         'source_snapshot_bytes': sum(s['bytes'] for s in sources),
         'large_dataset_download_bytes': 0,
         'local_scan_count': manifest['lidar_scan_count'],
@@ -64,7 +69,7 @@ def main():
         'test_frame_count': None, 'test_frame_selection': 'NOT_RUN',
         'map_builds': 0, 'new_ndt_align': 0, 'ekf_runs': 0, 'rosbag_play': 0,
         'production_changes': 0, 'new_trajectories': 0, 'external_cli_calls': 0,
-        'algorithms_compiled': False, 'synthetic_inspection_tests_passed': 6,
+        'algorithms_compiled': False, 'synthetic_inspection_tests_passed': 7,
         'inspection_protection_status': 'MATCH_WITHIN_RECORDED_SCOPE',
         'science': {'H1': 'BLOCKED', 'H2': 'NOT_ESTABLISHED', 'H3': 'NOT_RUN',
                     'H4': 'NOT_RUN', 'H5': 'NOT_RUN', 'H6': 'NOT_RUN', 'H7': 'NOT_RUN'},

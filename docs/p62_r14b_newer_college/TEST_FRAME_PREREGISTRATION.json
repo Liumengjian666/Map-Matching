@@ -1,0 +1,7 @@
+{
+  "status": "NOT_RUN_AFTER_COORDINATE_CONTRACT_BLOCK",
+  "selected_frames": null,
+  "authorized_rule": "first valid consecutive21 scans after5% full temporal span; anchor1/evaluate20",
+  "frames_used_for_ndt": 0,
+  "warning": "three inspected samples are header probes, NOT pilot selection"
+}
