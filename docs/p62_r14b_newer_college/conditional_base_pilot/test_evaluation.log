@@ -1,0 +1,21 @@
+test_accepted_matrix_must_be_eligible_candidate (__main__.EvaluationTests) ... ok
+test_bad_rejected_observation_not_disguised_as_valid_pose (__main__.EvaluationTests) ... ok
+test_complete_native_admission_without_reference_reader (__main__.EvaluationTests) ... ok
+test_duplicate_call_id_rejected_before_reference (__main__.EvaluationTests) ... ok
+test_incomplete_seal_stops_main_before_reference (__main__.EvaluationTests) ... ok
+test_invalid_pose_rejected (__main__.EvaluationTests) ... ok
+test_mismatched_execution_binding_stops_main_before_reference (__main__.EvaluationTests) ... ok
+test_missing_native_rejected_before_reference (__main__.EvaluationTests) ... ok
+test_negative_extra_rejected_before_reference (__main__.EvaluationTests) ... ok
+test_noncommuting_reference_extrinsic_chain (__main__.EvaluationTests) ... ok
+test_quantile_declared_linear (__main__.EvaluationTests) ... ok
+test_reference_relative_error (__main__.EvaluationTests) ... ok
+test_rejected_not_zero_statistic (__main__.EvaluationTests) ... ok
+test_unknown_method_rejected_before_reference (__main__.EvaluationTests) ... ok
+test_valid_but_different_final_matrix_rejected (__main__.EvaluationTests) ... ok
+test_zero_and_pi_rotation (__main__.EvaluationTests) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.038s
+
+OK

@@ -1,0 +1,9 @@
+{
+  "map_path": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/map/leica_roi50_leaf020.pcd",
+  "map_bytes": 2695698,
+  "map_sha256": "b9f285c27a31f2fb1d4079dc80773285176c50e68c15bcc6ce336a58772a3742",
+  "native_output_dir": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/native_preflight",
+  "scope": "nativePCD21 equivalence/map construction; NDT align0",
+  "map_build_csv_sha256": "88ecb30f15173b1a9f12bea8d8e35a1d1daba6cc22d0b6d5398fae442605747c",
+  "source_preflight_csv_sha256": "29c95ea809fd2aa6ee75a9c676ae107f3512e68a9dc6670e6a46b64b668871fe"
+}

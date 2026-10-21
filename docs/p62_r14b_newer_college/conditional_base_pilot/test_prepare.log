@@ -1,0 +1,10 @@
+test_field_type_rejected (__main__.PrepareTests) ... ok
+test_nonzero_tail_rejected (__main__.PrepareTests) ... ok
+test_padding_is_not_point (__main__.PrepareTests) ... ok
+test_rigid_rejects_reflection_and_millimeter_misuse_not_fitted (__main__.PrepareTests) ... ok
+test_truncated_record_rejected (__main__.PrepareTests) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.002s
+
+OK

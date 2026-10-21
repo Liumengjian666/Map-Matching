@@ -1,0 +1,11 @@
+{
+  "returncode": 0,
+  "stop_reason": null,
+  "wall_s": 4.377118279982824,
+  "storage_after_and_protection": {
+    "available_bytes": 89812078592,
+    "processing_workspace_bytes": 4340342,
+    "target_device": 66306,
+    "archive_device": 66306
+  }
+}

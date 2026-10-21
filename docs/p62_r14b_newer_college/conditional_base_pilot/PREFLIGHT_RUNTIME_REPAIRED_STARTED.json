@@ -1,0 +1,27 @@
+{
+  "stage": "preflight_runtime_repaired",
+  "binary": "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/build/preflight",
+  "binary_sha256": "077e9a40a3d96f1dc8620cf8bd29c68f250898e00f772d733897271997217b66",
+  "command": [
+    "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/build/preflight",
+    "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r14b_newer_college/conditional_base_pilot/SCANS.csv",
+    "/home/jian/livox_ws/p62_r14b_newer_college_ws/docs/p62_r14b_newer_college/conditional_base_pilot/ANCHOR_MATRIX.txt",
+    "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/prior_map/new-college-29-01-2020-5cm-resolution.ply",
+    "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/map/leica_roi50_leaf020.pcd",
+    "/home/jian/rosbag/public_datasets/newer_college_r14b/conditional_base_pilot_20261021/native_preflight"
+  ],
+  "preregistration_sha256": "1b7525585ef49204fcabf75e9c8096d4e43f18be34b982369bfe92ab36e000d1",
+  "storage_before": {
+    "available_bytes": 89814814720,
+    "processing_workspace_bytes": 1641361,
+    "target_device": 66306,
+    "archive_device": 66306
+  },
+  "epoch_start_ns": 1792574936352179401,
+  "launcher_sha256": "77c37ef437c4e29dedbb896891abfec5e19568a58f427fcea00f1c0045ca1178",
+  "child_runtime_env": {
+    "LD_PRELOAD": "/lib/x86_64-linux-gnu/libusb-1.0.so.0",
+    "LD_BIND_NOW": "1"
+  },
+  "system_libusb_sha256": "451c0a2b8806b71ddab9046470badc7665a467d511e87c1d5e1da7a343456586"
+}

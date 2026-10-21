@@ -1,0 +1,8 @@
+Scanning dependencies of target pilot
+[ 50%] Building CXX object CMakeFiles/pilot.dir/pilot.cpp.o
+[100%] Linking CXX executable pilot
+[100%] Built target pilot
+Scanning dependencies of target test_pilot
+[ 50%] Building CXX object CMakeFiles/test_pilot.dir/test_pilot.cpp.o
+[100%] Linking CXX executable test_pilot
+[100%] Built target test_pilot

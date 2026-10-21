@@ -11,3 +11,5 @@ add_executable(test_frozen_coarse ../../../p62_r13_training_guided_multihypothes
 target_link_libraries(test_frozen_coarse ${PCL_LIBRARIES} usb-1.0)
 add_executable(test_frozen_pool ../../../p62_r12_feasibility_preserving_pool/tools/test_pool.cpp)
 target_link_libraries(test_frozen_pool ${PCL_LIBRARIES} usb-1.0)
+add_executable(pilot pilot.cpp)
+target_link_libraries(pilot ${PCL_LIBRARIES} usb-1.0)

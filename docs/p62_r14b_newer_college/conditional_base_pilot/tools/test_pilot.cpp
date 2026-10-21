@@ -18,6 +18,9 @@ int main(){try{
   // Rejected map observations cannot silently become full-history states.
   Candidate far=c;far.pose(0,3)+=1.;const auto last=p.history.back().ns;
   p.completed(1400000000,far,m,before);require(p.history.back().ns==last&&p.hold,"far full rejected");
+  Candidate nonfinite=c;nonfinite.score=NAN;nonfinite.finite=false;
+  require(rigid(nonfinite.pose)&&!safeNative(nonfinite),"rigid alone must not pass native safety");
+  caught=false;try{require(rigid(nonfinite.pose)&&safeNative(nonfinite),"stop");}catch(...){caught=true;}require(caught,"nonfinite native metrics must stop");
   auto grid=training_grid::grid(before);require(grid.size()==45,"frozen grid reused");
   for(const auto& s:grid)require(translation(s.native_pose,before)<=.60&&rotation(s.native_pose,before)<=12.,"grid bounds");
   std::cout<<"PILOT_UNIT_PASS hold/body-CV/time/rejection/no-future/frozen45\n";
