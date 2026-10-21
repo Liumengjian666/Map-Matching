@@ -13,7 +13,7 @@ import time
 
 DOC=Path(__file__).resolve().parent
 REPO=DOC.parents[1]
-BUILD=Path('/home/jian/livox_ws/p62_r11_cause_aware_build/frozen_build_01')
+BUILD=Path('/home/jian/livox_ws/p62_r11_cause_aware_build/frozen_build_02')
 RUN=Path('/home/jian/livox_ws/p62_r11_cause_aware_runs')
 PRESERVE=Path('/home/jian/livox_ws/r10_stable_preservation_20261021/object_export_retry_01')
 BASE='10edcc0703129a3c5444c672c5b7cbb938bf3f74'
@@ -99,9 +99,16 @@ def build():
     print('R11_BOUND_BUILD_AND_TESTS_PASS new_aligns=0')
 
 
-def run():
-    RUN.mkdir(exist_ok=False)
-    write(RUN/'STARTED.json',dict(time_unix=time.time(),single_R11_experiment=True))
+def run(resume_preflight=False):
+    if resume_preflight:
+        assert {p.name for p in RUN.iterdir()}=={'STARTED.json','PRE_NATIVE_BLOCKED.json'},'No continuation after any native execution artifact'
+        blocked=json.loads((RUN/'PRE_NATIVE_BLOCKED.json').read_text())
+        assert blocked['actual_native_calls']==0 and blocked['status']=='PRE_NATIVE_STORAGE_BLOCKED'
+        assert not blocked['formal_directory_created'] and not blocked['native_run_log_created'] and not blocked['freeze_created']
+        write(RUN/'PREFLIGHT_CONTINUATION.json',dict(time_unix=time.time(),reason='Sparse new R11 worktree; no native rerun',original_gate=ident(RUN/'PRE_NATIVE_BLOCKED.json')))
+    else:
+        RUN.mkdir(exist_ok=False)
+        write(RUN/'STARTED.json',dict(time_unix=time.time(),single_R11_experiment=True))
     assert not git('status','--porcelain=v1').strip()
     assert all(p.startswith('docs/p62_r11_cause_aware_recovery/') for p in git('diff','--name-only',BASE).splitlines())
     assert shutil.disk_usage(RUN).free>=20*1024**3
@@ -160,5 +167,5 @@ def run():
 
 if __name__=='__main__':
     if not __debug__:raise RuntimeError('Assertions required')
-    parser=argparse.ArgumentParser();parser.add_argument('mode',choices=['build','run']);args=parser.parse_args()
-    build() if args.mode=='build' else run()
+    parser=argparse.ArgumentParser();parser.add_argument('mode',choices=['build','run']);parser.add_argument('--resume-preflight',action='store_true');args=parser.parse_args()
+    build() if args.mode=='build' else run(args.resume_preflight)
