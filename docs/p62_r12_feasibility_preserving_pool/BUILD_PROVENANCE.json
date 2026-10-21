@@ -1,0 +1,98 @@
+{
+  "source_CODE_SHA": "e5890c64440a41bde5665adc2d2218e6e85b36fc",
+  "sources": [
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/tools/CMakeLists.txt",
+      "bytes": 548,
+      "sha256": "c5da2c1f8e7a15f7611da535db479aadd43596a43f09c4e698c6751add155ecb"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/tools/pool_v3.hpp",
+      "bytes": 4031,
+      "sha256": "fe43cd3080a37dbaa9b0b82adfd1f6f6f20f63dd4398c1a19b40eda750d9e976"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/tools/replay.cpp",
+      "bytes": 12217,
+      "sha256": "d57dd4ca85d4ea6bb62106b1df850bb201ccc004718199f82c1d3d0d6c0afdbe"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/tools/test_pool.cpp",
+      "bytes": 4829,
+      "sha256": "f7f567774ecddc2401d8a7e4f4d4c638d7ff206f443dd50ce78bdedc97a23946"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/execute.py",
+      "bytes": 8293,
+      "sha256": "f588182c451d3b24208b82481baca59ec6d0ae22c61ecdb8e23d4bdd0efee013"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/MATHEMATICAL_CONTRACT.md",
+      "bytes": 3808,
+      "sha256": "0a6615fc0f77c64a1348b6b1e405346aacc9446df43504fe8814dc9af7a7d25c"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r6_dog_shadow_prototype/tools/contract.hpp",
+      "bytes": 4834,
+      "sha256": "c44a4e45aa12555763eab768f52d6e45109ccf9fb998893831c17c88d8b0446d"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r6_dog_shadow_prototype/tools/native_kernel.hpp",
+      "bytes": 5481,
+      "sha256": "4dbc81a42d6fcbb6275c85cfd8bd69a2e94f8b0775d00d6b338556903905cbac"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp",
+      "bytes": 3957,
+      "sha256": "727e2ed66a49f4f004f483491b4dbf748abd738b7c0b4fc576ffc813774f5af4"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r10_feasibility_event_recovery/tools/events.hpp",
+      "bytes": 3714,
+      "sha256": "f7624d5a4c523e93c75793b8b69ab9d982438bbb68e0f653cb4b6e46b73d7868"
+    }
+  ],
+  "commands": [
+    [
+      "cmake",
+      "-S",
+      "/home/jian/livox_ws/p62_r12_feasibility_pool_ws/docs/p62_r12_feasibility_preserving_pool/tools",
+      "-B",
+      "/home/jian/livox_ws/p62_r12_feasibility_pool_build",
+      "-DCMAKE_BUILD_TYPE=Release"
+    ],
+    [
+      "cmake",
+      "--build",
+      "/home/jian/livox_ws/p62_r12_feasibility_pool_build",
+      "-j2"
+    ]
+  ],
+  "compiler": "c++ (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0\nCopyright (C) 2019 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "build_log": {
+    "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_build/build.log",
+    "bytes": 5204,
+    "sha256": "f4e3033063cd1e13164466e2e4e16b2bd91b46d14ddfa99ff410c050be408564"
+  },
+  "cache": {
+    "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_build/CMakeCache.txt",
+    "bytes": 28980,
+    "sha256": "8e7cbd71cdefe42693f5d796063f5ffc89fd005a0053a01001a228dafb10d5fe"
+  },
+  "binary": {
+    "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_build/replay",
+    "bytes": 140032,
+    "sha256": "9656bdc150db87a375ec1d5908c1c649e46c630daaa49cb1c4e9a2bb193a3d20"
+  },
+  "test_binary": {
+    "path": "/home/jian/livox_ws/p62_r12_feasibility_pool_build/test_pool",
+    "bytes": 87968,
+    "sha256": "6d4238a1b968ab004cd4124b5edb38195aa9b4071f4d609fda997383a0df3274"
+  },
+  "test": {
+    "exit": 0,
+    "stdout": "R12_POOL_TESTS_PASS cases=27 new_ndt_align=0\n",
+    "stderr": ""
+  },
+  "new_ndt_align": 0
+}

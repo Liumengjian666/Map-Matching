@@ -92,43 +92,77 @@ def build():
     if test.returncode!=0 or 'R12_POOL_TESTS_PASS' not in test.stdout:raise RuntimeError('C++ tests failed')
     check(sources);print(test.stdout.strip())
 
+def invoke_once(argv,log_path,env):
+    start=time.monotonic();code=None;error=None
+    try:
+        with Path(log_path).open('x') as log:
+            process=subprocess.run(argv,stdout=log,stderr=subprocess.STDOUT,env=env,timeout=60)
+        code=process.returncode
+    except Exception as exc:error=type(exc).__name__+': '+str(exc)
+    return dict(returncode=code,error=error,wall_s=time.monotonic()-start)
+
+def bind():
+    if git(REPO,'status','--porcelain=v1').strip():raise RuntimeError('commit reviewed wrapper first')
+    build=json.loads((DOC/'BUILD_PROVENANCE.json').read_text())
+    # C++ source/binary is unchanged; guard-only Python review is separately bound,
+    # not misrepresented as having participated in the earlier C++ compilation.
+    check([r for r in build['sources'] if r['path']!=str(DOC/'execute.py')])
+    check([build['binary'],build['test_binary']])
+    tests=subprocess.run(['python3',str(DOC/'tests/test_execute.py')],capture_output=True,text=True,timeout=30)
+    write(DOC/'WRAPPER_TESTS.json',dict(exit=tests.returncode,stdout=tests.stdout,stderr=tests.stderr))
+    if tests.returncode!=0:raise RuntimeError('wrapper tests failed')
+    write(DOC/'RUNTIME_BINDING.json',dict(wrapper_CODE_SHA=git(REPO,'rev-parse','HEAD').strip(),
+        actual_CXX_build_CODE_SHA=build['source_CODE_SHA'],sources=frozen_sources(),build_receipt=identity(DOC/'BUILD_PROVENANCE.json'),
+        wrapper_tests=identity(DOC/'tests/test_execute.py'),binary=build['binary']))
+    print('R12_REVIEWED_WRAPPER_BOUND unchanged_CXX_binary new_ndt_align=0')
+
 def run():
     if git(REPO,'status','--porcelain=v1').strip():raise RuntimeError('commit receipts and source before replay')
     before=json.loads((DOC/'ASSET_IDENTITY_BEFORE.json').read_text());build=json.loads((DOC/'BUILD_PROVENANCE.json').read_text())
-    check(before['inputs']);check(build['sources']);check([build['binary'],build['test_binary']])
+    binding=json.loads((DOC/'RUNTIME_BINDING.json').read_text())
+    check(before['inputs']);check(binding['sources']);check([binding['build_receipt'],binding['wrapper_tests'],build['binary'],build['test_binary']])
     if stable_snapshot()!=before['stable']:raise RuntimeError('production snapshot drift before replay')
     if shutil.disk_usage(REPO).free<20*1024**3:raise RuntimeError('20GiB reserve')
     RUN.mkdir(exist_ok=False)
-    frozen=dict(CODE_SHA=git(REPO,'rev-parse','HEAD').strip(),inputs=before['inputs'],sources=build['sources'],binary=build['binary'],
+    frozen=dict(CODE_SHA=git(REPO,'rev-parse','HEAD').strip(),inputs=before['inputs'],sources=binding['sources'],binary=build['binary'],
+        actual_CXX_build_CODE_SHA=build['source_CODE_SHA'],runtime_binding=identity(DOC/'RUNTIME_BINDING.json'),
         argv=[str(BUILD/'replay'),str(R11),str(RUN/'formal')],new_ndt_align=0,scope='100 fixed frames x2 arms; frozen outputs only')
     write(RUN/'STARTED.json',frozen)
     env=os.environ.copy();env.update(LD_PRELOAD='/lib/x86_64-linux-gnu/libusb-1.0.so.0',LD_BIND_NOW='1')
-    start=time.monotonic()
-    with (RUN/'replay.log').open('x') as log:
-        process=subprocess.run(frozen['argv'],stdout=log,stderr=subprocess.STDOUT,env=env,timeout=60)
-    wall=time.monotonic()-start
-    write(RUN/'PROCESS_EXIT.json',dict(returncode=process.returncode,wall_s=wall))
-    if process.returncode!=0:raise RuntimeError('offline C++ replay failed; do not retry')
-    check(before['inputs']);check(build['sources']);check([build['binary'],build['test_binary']])
-    after_stable=stable_snapshot()
-    if after_stable!=before['stable']:raise RuntimeError('production drift after replay')
-    if git(R11.parents[1],'rev-parse','HEAD').strip()!=BASE or git(R11.parents[1],'status','--porcelain=v1').strip():raise RuntimeError('R11 worktree drift after replay')
-    after=dict(status='R12_FROZEN_INPUTS_AND_PRODUCTION_UNCHANGED',inputs=[identity(r['path']) for r in before['inputs']],
-        stable=after_stable,sources=build['sources'],binary=build['binary'])
+    exit_record=invoke_once(frozen['argv'],RUN/'replay.log',env);write(RUN/'PROCESS_EXIT.json',exit_record)
+    differences=[];actual=[];after_stable=None
+    for r in before['inputs']+binding['sources']+[build['binary'],build['test_binary']]:
+        try:
+            item=identity(r['path']);actual.append(item)
+            if item!=r:differences.append(dict(expected=r,actual=item))
+        except Exception as exc:differences.append(dict(path=r['path'],error=str(exc)))
+    try:
+        after_stable=stable_snapshot()
+        if after_stable!=before['stable']:differences.append(dict(error='production snapshot drift'))
+    except Exception as exc:differences.append(dict(error='production snapshot: '+str(exc)))
+    try:
+        if git(R11.parents[1],'rev-parse','HEAD').strip()!=BASE or git(R11.parents[1],'status','--porcelain=v1').strip():differences.append(dict(error='R11 worktree drift'))
+    except Exception as exc:differences.append(dict(error='historical state: '+str(exc)))
+    status='R12_FROZEN_INPUTS_AND_PRODUCTION_UNCHANGED' if not differences else 'R12_ASSET_DRIFT_DETECTED'
+    after=dict(status=status,files=actual,stable=after_stable,differences=differences,process_exit=exit_record)
     write(DOC/'ASSET_IDENTITY_AFTER.json',after)
     outputs=[identity(p) for p in sorted(RUN.rglob('*')) if p.is_file()]
-    for p in sorted((RUN/'formal').iterdir()):
+    for p in sorted((RUN/'formal').iterdir()) if (RUN/'formal').exists() else []:
         target=DOC/p.name
         if target.exists():raise RuntimeError('never overwrite R12 output')
         shutil.copy2(p,target)
     (DOC/'raw').mkdir(exist_ok=False)
-    for name in ['STARTED.json','PROCESS_EXIT.json','replay.log']:shutil.copy2(RUN/name,DOC/'raw'/name)
-    write(DOC/'REPLAY_RECEIPT.json',dict(returncode=0,wall_s=wall,outputs=outputs,after_gate=after['status'],new_ndt_align=0,
+    for name in ['STARTED.json','PROCESS_EXIT.json','replay.log']:
+        if (RUN/name).exists():shutil.copy2(RUN/name,DOC/'raw'/name)
+    success=exit_record['returncode']==0 and exit_record['error'] is None and not differences
+    write(DOC/'REPLAY_RECEIPT.json',dict(status='OFFLINE_REPLAY_COMPLETED' if success else 'OFFLINE_REPLAY_BLOCKED',
+        process_exit=exit_record,outputs=outputs,after_gate=after['status'],new_ndt_align=0,
         actual_run_CODE_SHA=frozen['CODE_SHA'],actual_binary=frozen['binary']))
+    if not success:raise RuntimeError('offline replay or protection failed; evidence retained, no retry')
     print('R12_OFFLINE_REPLAY_AND_ASSET_GATE_COMPLETE new_ndt_align=0')
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('action',choices=['prepare','build','run']);args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('action',choices=['prepare','build','bind','run']);args=parser.parse_args()
     try:globals()[args.action]()
     except Exception as exc:
         print('R12_STOP '+str(exc));raise SystemExit(1)
