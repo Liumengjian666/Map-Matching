@@ -6,7 +6,9 @@ import itertools
 import json
 import math
 from pathlib import Path
+import shutil
 import subprocess
+import sys
 import numpy as np
 from scipy.linalg import expm
 from scipy.spatial.transform import Rotation
@@ -54,7 +56,7 @@ def main():
     assert len(grid)==225 and len(samples)==1280 and len(selected)==len(native)==len(raw)==10 and len(calls)==20
     assert len(candidates)==15 and len(runtime)==len(observations)==5 and len(selectors)==15
     original=rows(R11/'CANDIDATE_POOL.csv');frozen_blocks=rows(R11/'BLOCK_LOSSES.csv')
-    manifest=json.loads((DOC/'EVENT_INPUT_MANIFEST.json').read_text());summary=[]
+    manifest=json.loads((DOC/'EVENT_INPUT_MANIFEST.json').read_text());summary=[];same_initial=0;same_output=0
     for event in range(60,65):
         e=str(event);gg=[r for r in grid if r['scan_index']==e];ss=[r for r in selected if r['scan_index']==e];nn=[r for r in native if r['scan_index']==e]
         cc=[r for r in candidates if r['scan_index']==e];sample=[r for r in samples if r['scan_index']==e]
@@ -74,6 +76,7 @@ def main():
             assert float(r['dx_m'])==dx and float(r['dy_m'])==dy and float(r['yaw_deg'])==yaw
             hat=np.zeros((4,4));z=np.radians(yaw);hat[0,1]=-z;hat[1,0]=z;hat[:3,3]=[dx,dy,0]
             independent=tp@expm(hat);double=matrix(r,'double_seed_');floated=matrix(r,'native_seed_')
+            assert np.isfinite(float(r['coarse_loss'])) and 0<=float(r['coarse_loss'])<=1 and 0<=float(r['coarse_overlap'])<=1
             assert np.linalg.norm(double-independent)<1e-12 and np.array_equal(double.astype(np.float32).astype(float),floated)
             t,angle=distance(floated,tp);assert t<=.60 and angle<=12
             near_t,near_angle=distance(floated,t0)
@@ -93,6 +96,7 @@ def main():
             assert c['source_call_or_grid']==seed['grid_id'] and np.array_equal(matrix(c,'seed_'),matrix(seed,'double_seed_'))
             assert np.array_equal(matrix(c,'final_'),matrix(source,'final_'))
             assert c['native_score']==source['native_score'] and c['converged']==source['converged']
+            same_initial+=np.array_equal(matrix(c,'seed_'),tp);same_output+=np.array_equal(matrix(c,'final_'),t0)
             journal=[r for r in calls if r['new_call_id']==source['new_call_id']]
             assert len(journal)==2 and [r['status'] for r in journal]==['START','RETURNED']
             assert all(r['scan_index']==e and r['candidate_id']==j and r['grid_id']==seed['grid_id'] for r in journal)
@@ -118,8 +122,10 @@ def main():
     assert all(r['final_status']=='NO_ACCEPTABLE_MEASUREMENT' for r in selectors)
     assert all(r['observation_valid']=='0' and all(r['accepted_'+str(a)+str(b)]=='NA' for a in range(4) for b in range(4)) for r in observations)
     assert sum(int(r['coarse_NN_queries']) for r in runtime)==45*256*5
+    assert all(r['finite']==r['converged']=='1' and float(r['translation_from_prediction_m'])<=.8 and float(r['overlap'])>=.50 and float(r['rotation_from_prediction_deg'])>5 for r in native)
     assert json.loads((DOC/'LOCAL_REFERENCE_INVENTORY.json').read_text())['files_considered']==5728
     phases={k:stats([float(r[k]) for r in runtime]) for k in ['source_ms','coarse_45_ms','seed_selection_ms','coarse_phase_wall_ms','align_ms','native_capture_and_fitness_aux_ms','heldout_validation_ms','V3_decision_ms','extra_event_wall_ms']}
+    phases['source_plus_extra_event_wall_ms']=stats([float(r['source_ms'])+float(r['extra_event_wall_ms']) for r in runtime])
     distinct=sum(e['unique_distinct_groups'] for e in summary);admissible=sum(e['admissible_distinct_groups'] for e in summary);supported=sum(e['robust_distinct_preference'] for e in summary)
     result=dict(task='P62-R13-TRAINING-GUIDED-MULTI-HYPOTHESIS-NDT',START_SHA='58390fd173114e0e60a6dd9bf14d7c4be3f1106c',
         actual_run_CODE_SHA=receipt['actual_run_CODE_SHA'],actual_build_CODE_SHA=build['source_CODE_SHA'],
@@ -130,6 +136,11 @@ def main():
         native_converged=sum(r['converged']=='1' for r in native),raw_distinct_outputs=sum(e['raw_distinct_outputs'] for e in summary),
         distinct_groups=distinct,admissible_distinct_groups=admissible,accepted_replacements=sum(e['accepted_replacement'] for e in summary),
         total_coarse_queries=45*256*5,independent_matrix_exponential_checks=225,LP_verified_directed_rows=len(pairs),
+        coarse_score_audit='Actual C++ query counter/Training-only guards and sample/rank lineage;225NN scores not independently recomputed',
+        nearest_neighbor_queries=dict(coarse_instrumented=57600,heldout_from_finite_active_records=sum(int(r['points']) for r in blocks if r['candidate_id']!='0' and r['active']=='1'),
+            native_internal='NOT_INSTRUMENTED; no claim these counts include optimizer/fitness internals'),
+        selected_grid_same_initial_as_historical_nominal=int(same_initial),selected_grid_output_exactly_equal_nominal=int(same_output),
+        recorded_D_max=max(float(r['D_j_k']) for r in pairs),
         independent_reference='INDEPENDENT_REFERENCE_NOT_AVAILABLE',novelty='NOT_ESTABLISHED',
         H1='SUPPORTED:225 deterministic training-only scores',H2='SUPPORTED:2 spaced seeds per event before first align',
         H3='SUPPORTED:5 physically distinct non-nominal groups across4 events; not proof of different local minima',
@@ -138,15 +149,24 @@ def main():
         per_call_align_ms=stats([float(r['align_ms']) for r in native]),process_wall_s=receipt['wall_s'],
         map_runtime=rows(DOC/'MAP_RUNTIME.csv')[0],peak_process_RSS_MiB=max(float(r['process_high_water_RSS_KiB']) for r in runtime)/1024,
         timing_quantile='numpy linear/type7 descriptive only; offline5 events, not full localization',
-        production_and_history='UNCHANGED',boundaries=dict(nominal_aligns=0,old_generator_aligns=0,new_extra_aligns=10,GT_data_reads=0,EKF=0,ROS_nodes=0,
+        production_and_history='UNCHANGED',boundaries=dict(dedicated_nominal_baseline_aligns=0,old_generator_aligns=0,new_extra_aligns=10,GT_data_reads=0,EKF=0,ROS_nodes=0,
             new_trajectory_estimates=0,production_changes=0,reference_inventory_runs=1,repeat_protection=0,formal_R13_processes=1,push_executed=False),
         limitations=['No independent correctness or absolute pose evidence',
             'Most raw physical differences are just above the frozen1deg threshold, not independent basin proof',
             'Training coarse ordering is initializer evidence only; correlated structural holdout is not truth',
             'All distinct results are inadmissible; no recovery/accuracy or10Hz claim',
             'The known five events, same-record map and historical causal guesses are not a blind generalization experiment',
+            'One selected zero-grid TP start equals the historical nominal start and returns exactly T0; it still costs a real extra align',
+            'extra_event_wall_ms excludes separately recorded Source; source_plus_extra_event_wall_ms includes it and peaks above100ms',
             'Initial libusb link failure preserved, zero actual native run then'],
         unique_NEXT='Controller to freeze an independent correctness reference for bounded future evaluation before further recovery/accuracy claims; preserve this grid and gates, do not tune or launch another experiment now')
-    save('results.json',result);print(json.dumps(result,ensure_ascii=False,indent=2))
+    if '--reviewed' in sys.argv:
+        # One offline reporting correction, not a second native experiment.
+        backup=DOC/'INITIAL_NUMERICAL_RESULTS.json'
+        if backup.exists():raise RuntimeError('report refinement already recorded')
+        shutil.copy2(DOC/'results.json',backup)
+        with (DOC/'results.json').open('w') as f:json.dump(result,f,indent=2,ensure_ascii=False,allow_nan=False);f.write('\n')
+    else:save('results.json',result)
+    print(json.dumps(result,ensure_ascii=False,indent=2))
 
 if __name__=='__main__':main()
