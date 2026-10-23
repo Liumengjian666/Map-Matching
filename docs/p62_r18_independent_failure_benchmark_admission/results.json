@@ -17,6 +17,8 @@
     "official_zip_bytes": 39247580582,
     "official_zip_uncompressed_member_bytes": 51320290669,
     "official_zip_entries": 727,
+    "seq1_raw_bag_head_bytes": 17922456346,
+    "seq2_raw_bag_head_bytes": 21404429889,
     "seq1_data_bag_head_bytes": 228005307,
     "map_5cm_alligned_pcd_head_bytes": 7582206,
     "sample_direct_npz_bytes": 4570825,
