@@ -21,6 +21,7 @@
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 #include <diagnostic_msgs/DiagnosticArray.h>
+#include <sensor_msgs/point_cloud2_iterator.h>
 #include <diagnostic_msgs/DiagnosticStatus.h>
 #include <diagnostic_msgs/KeyValue.h>
 #include <dog_prior_map_interfaces/VisualRelativeMeasurement.h>
@@ -478,6 +479,20 @@ public:
       local_map_diagnostics_csv_.flush();
     }
 
+    r23_enable_ = getParam<bool>("research/r23_enable", false);
+    if (r23_enable_) {
+      if (getParam<std::string>("research/r23_policy", "BASELINE") != "BASELINE")
+        throw std::runtime_error("R23 G1 Smoke permits BASELINE only before C/D integration");
+      const std::string path = getParam<std::string>("output/r23_lineage_csv", "");
+      if (path.empty() || coupled_enabled_ || geode_scan_end_bridge_enable_ || mature_integration_enable_)
+        throw std::runtime_error("R23 requires explicit log and existing CONTROL pipeline only");
+      r23_lineage_.open(path);
+      if (!r23_lineage_) throw std::runtime_error("R23 lineage unavailable");
+      r23_lineage_ << "scan_ns,reference_ns,ekf_sample_ns,ekf_sample_accept_wall,prediction_query_wall,prediction_age_ms,prediction_status,ndt_start_wall,ndt_complete_wall,measurement_published,step_limited,target_points,target_hash,callback_wall_ms";
+      for (const auto prefix : {"tp", "raw", "published"})
+        for (int i=0;i<4;++i)for(int j=0;j<4;++j)r23_lineage_ << ',' << prefix << i << j;
+      r23_lineage_ << '\n';
+    }
     loadMap();
 
     pub_odom_ = nh_.advertise<nav_msgs::Odometry>(ndt_odom_topic_, 20);
@@ -528,7 +543,7 @@ public:
             scan_end_predictions_.emplace(msg->header.stamp.toNSec(), pose);
             processPendingCloudsLocked();
           });
-    if (coupled_enabled_ || experimental_ekf_translation_fallback_enable_ ||
+    if (r23_enable_ || coupled_enabled_ || experimental_ekf_translation_fallback_enable_ ||
         coupled_causal_record_only_enable_)
     {
       sub_ekf_high_rate_ = nh_.subscribe(ekf_high_rate_topic_, 10000,
@@ -583,7 +598,7 @@ public:
     const ros::WallTime callback_receive_wall = ros::WallTime::now();
     const auto msg = event.getMessage();
     if (!msg || (!coupled_enabled_ && !experimental_ekf_translation_fallback_enable_ &&
-                 !coupled_causal_record_only_enable_)) return;
+                 !coupled_causal_record_only_enable_ && !r23_enable_)) return;
     std::lock_guard<std::mutex> lock(mutex_);
     const auto callback_start = ros::WallTime::now();
     const uint64_t stamp_ns = msg->header.stamp.toNSec();
@@ -668,7 +683,7 @@ public:
            (latest_ekf_high_rate_stamp_ns_ - ekf_pose_history_.front().stamp_ns) / 1e9 >
                coupled_ekf_history_keep_sec_)
       ekf_pose_history_.pop_front();
-    if (local_imu_rotation_prior_enable_ || coupled_enabled_ ||
+    if (r23_enable_ || local_imu_rotation_prior_enable_ || coupled_enabled_ ||
         experimental_ekf_translation_fallback_enable_)
       processPendingCloudsLocked();
   }
@@ -1857,7 +1872,7 @@ private:
     if (!cloud || cloud->empty()) return;
     std::lock_guard<std::mutex> lock(mutex_);
     if (!geode_scan_end_bridge_enable_ && !local_imu_rotation_prior_enable_ && !coupled_enabled_ &&
-        !experimental_ekf_translation_fallback_enable_)
+        !experimental_ekf_translation_fallback_enable_ && !r23_enable_)
     {
       handleCloudLocked(cloud, timing.start_stamp, callback_start, timing, header_seq);
       return;
@@ -1882,8 +1897,8 @@ private:
 
     while (pending_lidar_frames_.size() > pending_lidar_max_frames_)
     {
-      if (experimental_ekf_translation_fallback_enable_)
-        throw std::runtime_error("P21 pending overflow: refusing an unwatermarked scan");
+      if (experimental_ekf_translation_fallback_enable_ || r23_enable_)
+        throw std::runtime_error("P21/R23 pending overflow: refusing an unwatermarked scan");
       PendingLidarFrame overflow = pending_lidar_frames_.front();
       pending_lidar_frames_.pop_front();
       ++pending_overflow_count_;
@@ -1904,7 +1919,7 @@ private:
       if (geode_scan_end_bridge_enable_ && !scan_end_predictions_.count(front.reference_stamp.toNSec())) break;
       const bool imu_watermark_ready = !local_imu_rotation_prior_enable_ ||
           (has_imu_watermark_ && latest_imu_stamp_ >= front.reference_stamp);
-      const bool ekf_watermark_ready = !(coupled_enabled_ || experimental_ekf_translation_fallback_enable_) ||
+      const bool ekf_watermark_ready = !(r23_enable_ || coupled_enabled_ || experimental_ekf_translation_fallback_enable_) ||
           (has_ekf_high_rate_watermark_ &&
            latest_ekf_high_rate_stamp_ns_ >= front.reference_stamp.toNSec());
       if (!imu_watermark_ready || !ekf_watermark_ready)
@@ -2037,7 +2052,14 @@ private:
     const ros::WallTime callback_start = ros::WallTime::now();
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>());
     pcl::fromROSMsg(*msg, *cloud);
-    enqueueCloud(cloud, makeScanTiming(msg->header.stamp, 0.0, 0.0), callback_start, msg->header.seq);
+    double minimum = 0.0, maximum = 0.0;
+    if (r23_enable_) {
+      bool field=false;for(const auto& f:msg->fields)field=field||(f.name=="time"&&f.datatype==sensor_msgs::PointField::FLOAT32);
+      if (!field) throw std::runtime_error("R23 requires preserved scan-start-relative float point time");
+      sensor_msgs::PointCloud2ConstIterator<float> it(*msg,"time");
+      for(;it!=it.end();++it){if(!std::isfinite(*it)||*it<0||*it>.15f)throw std::runtime_error("R23 invalid point time");maximum=std::max(maximum,double(*it));}
+    }
+    enqueueCloud(cloud, makeScanTiming(msg->header.stamp, minimum, maximum), callback_start, msg->header.seq);
   }
 
   // 独立 NDT 主流程：预处理、确定性初值、配准、步长审核及结果发布。
@@ -2049,6 +2071,13 @@ private:
   {
     if (!cloud || cloud->empty()) return;
 
+    r23_measurement_published_ = false;
+    r23_frame_start_wall_ = callback_start.toSec();
+    r23_prediction_ = EkfPrediction();
+    r23_query_wall_ = 0;
+    r23_raw_ = Eigen::Matrix4d::Constant(NAN);
+    r23_published_ = Eigen::Matrix4d::Constant(NAN);
+    r23_scan_ns_ = stamp.toNSec();
     DeterminismRow diagnostic_row;
     CausalRecordFrame causal_record;
     causal_record.scan_stamp_ns = stamp.toNSec();
@@ -2244,6 +2273,19 @@ private:
       diagnostic_row.initial_guess_source = "same_scan_end_ekf_deskew_prediction";
       diagnostic_row.initial_guess_reason = "exact_stamp_before_ndt";
     }
+    if (r23_enable_) {
+      r23_query_wall_ = ros::WallTime::now().toSec();
+      r23_prediction_ = ekfPredictionAtOrBeforeLocked(timing.reference_stamp.toNSec());
+      const auto& sample = r23_prediction_.sample;
+      if (!r23_prediction_.valid || !r23_prediction_.sample_available ||
+          sample.publisher != "/dog_prior_map_ekf" || sample.frame_id != map_frame_ ||
+          sample.child_frame_id != base_frame_ || sample.callback_accept_wall_sec > r23_query_wall_ ||
+          sample.stamp_ns > timing.reference_stamp.toNSec())
+        throw std::runtime_error("R23 illegal causal IMU-EKF prediction: " + r23_prediction_.status);
+      initial_guess = r23_prediction_.map_T_lidar;
+      diagnostic_row.initial_guess_source = "R23_CAUSAL_IMU_EKF";
+      diagnostic_row.initial_guess_reason = r23_prediction_.status;
+    }
     diagnostic_row.initial_guess = initial_guess;
 
     LocalMapUpdate local_map_update;
@@ -2349,6 +2391,11 @@ private:
     double score = ndt_.getFitnessScore();
     int iterations = ndt_.getFinalNumIteration();
     Eigen::Matrix4d result = ndt_.getFinalTransformation().cast<double>();
+    if (r23_enable_) {
+      r23_raw_ = result;
+      r23_ndt_start_wall_ = diagnostic_row.ndt_align_start_wall_sec;
+      r23_ndt_complete_wall_ = diagnostic_row.ndt_align_complete_wall_sec;
+    }
     causal_record.ndt_effective = ok;
     causal_record.ndt_converged = ok;
     causal_record.ndt_status = ok ? "NDT_CONVERGED" : "NDT_NOT_CONVERGED";
@@ -2607,6 +2654,7 @@ private:
       p_ = used_result.block<3, 1>(0, 3);
       localization_ms = (ros::WallTime::now() - callback_start).toSec() * 1000.0;
       publishPose(timing.reference_stamp, &diagnostic_row.ndt_odom_publish_wall_sec);
+      if (r23_enable_) { r23_measurement_published_ = true; r23_published_ = used_result; }
       if (step_limited)
       {
         pcl::PointCloud<pcl::PointXYZ> limited_aligned = transformCloud(source, used_result);
@@ -2862,6 +2910,17 @@ private:
     status.message = converged ? "NDT converged" : "NDT not converged";
 
     addDiagnosticValue(status, "ndt_converged", converged ? "true" : "false");
+    if (r23_enable_) {
+      addDiagnosticValue(status, "ndt_measurement_published", r23_measurement_published_ ? "true" : "false");
+      r23_lineage_ << std::setprecision(17) << r23_scan_ns_ << ',' << stamp.toNSec() << ','
+          << r23_prediction_.sample_stamp_ns << ',' << r23_prediction_.sample.callback_accept_wall_sec << ','
+          << r23_query_wall_ << ',' << r23_prediction_.age_ms << ',' << r23_prediction_.status << ','
+          << r23_ndt_start_wall_ << ',' << r23_ndt_complete_wall_ << ',' << r23_measurement_published_ << ','
+          << step_limited << ',' << map_points << ',' << stableCloudHash(target_cloud_) << ',' << (ros::WallTime::now().toSec()-r23_frame_start_wall_)*1000.0;
+      for (const auto& pose : {r23_prediction_.map_T_lidar,r23_raw_,r23_published_})
+        for(int i=0;i<4;++i)for(int j=0;j<4;++j)r23_lineage_ << ',' << pose(i,j);
+      r23_lineage_ << '\n';r23_lineage_.flush();
+    }
     addDiagnosticValue(status, "align_time_ms", std::to_string(align_ms));
     addDiagnosticValue(status, "preprocess_time_ms", std::to_string(preprocess_ms));
     addDiagnosticValue(status, "localization_time_ms", std::to_string(localization_ms));
@@ -2894,6 +2953,14 @@ private:
   ros::Subscriber sub_imu_;
   ros::Subscriber sub_ekf_high_rate_;
   ros::Subscriber sub_scan_prediction_;
+  bool r23_enable_ = false;
+  bool r23_measurement_published_ = false;
+  uint64_t r23_scan_ns_ = 0;
+  double r23_query_wall_ = 0, r23_ndt_start_wall_ = 0, r23_ndt_complete_wall_ = 0, r23_frame_start_wall_ = 0;
+  EkfPrediction r23_prediction_;
+  Eigen::Matrix4d r23_raw_ = Eigen::Matrix4d::Constant(NAN);
+  Eigen::Matrix4d r23_published_ = Eigen::Matrix4d::Constant(NAN);
+  std::ofstream r23_lineage_;
   bool geode_scan_end_bridge_enable_ = false;
   std::map<uint64_t, Eigen::Matrix4d> scan_end_predictions_;
   ros::Publisher pub_odom_;

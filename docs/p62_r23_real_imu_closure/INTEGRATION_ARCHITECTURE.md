@@ -1,0 +1,9 @@
+# R23 staged real-IMU closure
+
+G0 input: R22 W1/W3 raw PCDs + actual Ouster IMU CSV, existing P45 tiles. Anchor reference only. Initialization T_map_imu=T_map_lidar*inverse(T_imu_lidar); C3 applied consistently. Initial v/bg/ba=0 are frozen existing priors, not observed zero motion. Input publisher starts real IMU at the anchor boundary but first LiDAR is the first evaluation frame, so no anchor NDT and no omitted100ms propagation interval.
+
+G1 baseline Smoke: existing newer_college_local_map.launch, existing Deskew/IMU propagation/EKF/OOSM/local map unchanged. Minimal R23 opt-in interface replaces the old NDT pose-increment initializer with the complete existing causal EKF pose/body-twist query (sample<=scan start, age<=20ms, verified publisher/frame). No second propagator. Subscriber watermark prevents a scan being processed before relevant EKF samples arrive. Full NDT baseline otherwise uses the existing measurement/step-limiter path. Explicit published-measurement ack replaces convergence-as-fusion-ack in the research input publisher. Default production behavior remains opt-out.
+
+G2/G3 only after G1 passes: R20 C and R21 D integration and independent trajectories. At this stage only BASELINE is executable; C/D mode requests throw before data processing. Rejecting a map observation must publish no NDT odom and must leave existing IMU propagation running. No prediction is published as NDT.
+
+Existing adjacent-measurement limit(.5m/5deg) and existing EKF observation limits are retained; raw NDT and actual published final_used are distinct recorded quantities. Map manager selection depends on each causal TP and may differ across policies; exact target hash/count and tile selection must be reported. Dataset reference remains conditional Base, map-anchored benchmark, no independent mocap claim.

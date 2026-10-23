@@ -1,0 +1,64 @@
+experiment:
+  initialization_contract: CONDITIONAL_BASE_FRAME
+  initialization_mode: ANCHOR_REFERENCE_ONLY_ZERO_VELOCITY_BIAS_PRIORS
+  window: W3
+  initialization_arm: C0
+initialization:
+  explicit_state_enable: true
+  state_stamp_sec: 1583837241
+  state_stamp_nsec: 72465152
+  map_T_imu_translation_m:
+  - 18.680551493056075
+  - -133.12617647734646
+  - -1.4520984641906975
+  map_T_imu_rotation_row_major:
+  - 0.5750266405583676
+  - -0.8145637006991134
+  - 0.07635666409373297
+  - 0.8176035205649349
+  - 0.5687825220169022
+  - -0.08950377538359276
+  - 0.02947619052697065
+  - 0.11389653265774831
+  - 0.993055252259692
+  velocity_map_mps:
+  - 0.0
+  - 0.0
+  - 0.0
+  gyro_bias_imu_radps:
+  - 0.0
+  - 0.0
+  - 0.0
+  accel_bias_imu_mps2:
+  - 0.0
+  - 0.0
+  - 0.0
+  gravity_map_mps2:
+  - 0.0
+  - 0.0
+  - -9.80665
+  boundary_imu_stamp_sec: 1583837241
+  boundary_imu_stamp_nsec: 68926621
+  boundary_imu_accel_mps2:
+  - 0.14125789794921875
+  - 1.915361328125
+  - 9.497797985839844
+  boundary_imu_gyro_radps:
+  - -0.06737797557900473
+  - -0.07017429472358792
+  - -0.3442135708927415
+  ndt_seed_enable: true
+  ndt_seed_map_T_lidar_translation_m:
+  - 18.66518552648702
+  - -133.12203754773324
+  - -1.479278478761248
+  ndt_seed_map_T_lidar_rotation_row_major:
+  - -0.5750266405583676
+  - 0.8145637006991134
+  - 0.07635666409373297
+  - -0.8176035205649349
+  - -0.5687825220169022
+  - -0.08950377538359276
+  - -0.02947619052697065
+  - -0.11389653265774831
+  - 0.993055252259692

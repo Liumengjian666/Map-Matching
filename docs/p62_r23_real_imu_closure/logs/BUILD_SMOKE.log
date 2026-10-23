@@ -1,0 +1,647 @@
+-- The C compiler identification is GNU 9.4.0
+-- The CXX compiler identification is GNU 9.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Using CATKIN_DEVEL_PREFIX: /home/jian/livox_ws/p62_r23_real_imu_closure_ws/devel
+-- Using CMAKE_PREFIX_PATH: /home/jian/livox_ws/devel;/opt/ros/noetic
+-- This workspace overlays: /home/jian/livox_ws/devel;/opt/ros/noetic
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using Debian Python package layout
+-- Found PY_em: /home/jian/.local/lib/python3.8/site-packages/em.py  
+-- Using empy: /home/jian/.local/lib/python3.8/site-packages/em.py
+-- Using CATKIN_ENABLE_TESTING: ON
+-- Call enable_testing()
+-- Using CATKIN_TEST_RESULTS_DIR: /home/jian/livox_ws/p62_r23_real_imu_closure_ws/build/test_results
+-- Forcing gtest/gmock from source, though one was otherwise available.
+-- Found gtest sources under '/usr/src/googletest': gtests will be built
+-- Found gmock sources under '/usr/src/googletest': gmock will be built
+-- Found PythonInterp: /usr/bin/python3 (found version "3.8.10") 
+-- Found Threads: TRUE  
+-- Using Python nosetests: /usr/bin/nosetests3
+-- catkin 0.8.12
+-- BUILD_SHARED_LIBS is on
+-- BUILD_SHARED_LIBS is on
+-- Using CATKIN_WHITELIST_PACKAGES: dog_prior_map_interfaces;dog_prior_map_localization
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~  traversing 2 packages in topological order:
+-- ~~  - dog_prior_map_interfaces
+-- ~~  - dog_prior_map_localization
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- +++ processing catkin package: 'dog_prior_map_interfaces'
+-- ==> add_subdirectory(dog_prior_map_interfaces)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- dog_prior_map_interfaces: 8 messages, 0 services
+-- +++ processing catkin package: 'dog_prior_map_localization'
+-- ==> add_subdirectory(dog_prior_map_localization)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Checking for module 'eigen3'
+--   Found eigen3, version 3.3.7
+-- Found Eigen: /usr/include/eigen3 (Required is at least version "3.1") 
+-- Eigen found (include: /usr/include/eigen3, version: 3.3.7)
+-- Found Boost: /usr/include (found suitable version "1.71.0", minimum required is "1.55.0") found components: system filesystem date_time iostreams regex 
+-- Checking for module 'flann'
+--   Found flann, version 1.9.1
+-- Found FLANN: /usr/lib/x86_64-linux-gnu/libflann_cpp.so  
+-- Checking for module 'libusb-1.0'
+--   Found libusb-1.0, version 1.0.23
+-- Found USB_10: /usr/lib/x86_64-linux-gnu/libusb-1.0.so  
+-- Found OpenNI: /usr/lib/libOpenNI.so  
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- Found OpenNI2: /usr/lib/libOpenNI2.so  
+-- OpenNI2 found (include: /usr/include/openni2, lib: /usr/lib/libOpenNI2.so)
+** WARNING ** io features related to pcap will be disabled
+** WARNING ** io features related to png will be disabled
+-- The imported target "vtkParseOGLExt" references the file
+   "/usr/bin/vtkParseOGLExt-7.1"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtkRenderingPythonTkWidgets" references the file
+   "/usr/lib/x86_64-linux-gnu/libvtkRenderingPythonTkWidgets.so"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtk" references the file
+   "/usr/bin/vtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "pvtk" references the file
+   "/usr/bin/pvtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- Found libusb-1.0: /usr/include  
+** WARNING ** io features related to libusb-1.0 will be disabled
+-- looking for PCL_COMMON
+-- Found PCL_COMMON: /usr/lib/x86_64-linux-gnu/libpcl_common.so  
+-- looking for PCL_OCTREE
+-- Found PCL_OCTREE: /usr/lib/x86_64-linux-gnu/libpcl_octree.so  
+-- looking for PCL_SEARCH
+-- Found PCL_SEARCH: /usr/lib/x86_64-linux-gnu/libpcl_search.so  
+-- looking for PCL_SAMPLE_CONSENSUS
+-- Found PCL_SAMPLE_CONSENSUS: /usr/lib/x86_64-linux-gnu/libpcl_sample_consensus.so  
+-- looking for PCL_FILTERS
+-- Found PCL_FILTERS: /usr/lib/x86_64-linux-gnu/libpcl_filters.so  
+-- looking for PCL_IO
+-- Found PCL_IO: /usr/lib/x86_64-linux-gnu/libpcl_io.so  
+-- looking for PCL_KDTREE
+-- Found PCL_KDTREE: /usr/lib/x86_64-linux-gnu/libpcl_kdtree.so  
+-- looking for PCL_2D
+-- Found PCL_2D: /usr/include/pcl-1.10  
+-- looking for PCL_FEATURES
+-- Found PCL_FEATURES: /usr/lib/x86_64-linux-gnu/libpcl_features.so  
+-- looking for PCL_REGISTRATION
+-- Found PCL_REGISTRATION: /usr/lib/x86_64-linux-gnu/libpcl_registration.so  
+-- Found PCL: pcl_common;pcl_octree;pcl_search;pcl_sample_consensus;pcl_filters;pcl_io;pcl_kdtree;pcl_features;pcl_registration;/usr/lib/x86_64-linux-gnu/libboost_system.so;/usr/lib/x86_64-linux-gnu/libboost_filesystem.so;/usr/lib/x86_64-linux-gnu/libboost_date_time.so;/usr/lib/x86_64-linux-gnu/libboost_iostreams.so;/usr/lib/x86_64-linux-gnu/libboost_regex.so;/usr/lib/libOpenNI.so;/usr/lib/libOpenNI2.so;vtkChartsCore;vtkCommonColor;vtkCommonCore;vtksys;vtkCommonDataModel;vtkCommonMath;vtkCommonMisc;vtkCommonSystem;vtkCommonTransforms;vtkCommonExecutionModel;vtkFiltersGeneral;vtkCommonComputationalGeometry;vtkFiltersCore;vtkInfovisCore;vtkFiltersExtraction;vtkFiltersStatistics;vtkImagingFourier;vtkImagingCore;vtkalglib;vtkRenderingContext2D;vtkRenderingCore;vtkFiltersGeometry;vtkFiltersSources;vtkRenderingFreeType;/usr/lib/x86_64-linux-gnu/libfreetype.so;/usr/lib/x86_64-linux-gnu/libz.so;vtkFiltersModeling;vtkImagingSources;vtkInteractionStyle;vtkInteractionWidgets;vtkFiltersHybrid;vtkImagingColor;vtkImagingGeneral;vtkImagingHybrid;vtkIOImage;vtkDICOMParser;vtkmetaio;/usr/lib/x86_64-linux-gnu/libjpeg.so;/usr/lib/x86_64-linux-gnu/libpng.so;/usr/lib/x86_64-linux-gnu/libtiff.so;vtkRenderingAnnotation;vtkRenderingVolume;vtkIOXML;vtkIOCore;vtkIOXMLParser;/usr/lib/x86_64-linux-gnu/libexpat.so;vtkIOGeometry;vtkIOLegacy;vtkIOPLY;vtkRenderingLOD;vtkViewsContext2D;vtkViewsCore;vtkRenderingContextOpenGL2;vtkRenderingOpenGL2;FLANN::FLANN  
+-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "1.1.1f")  
+-- Installing devel-space wrapper /home/jian/livox_ws/p62_r23_real_imu_closure_ws/src/dog_prior_map_localization/scripts/dataset_gt_path_publisher.py to /home/jian/livox_ws/p62_r23_real_imu_closure_ws/devel/lib/dog_prior_map_localization
+-- Installing devel-space wrapper /home/jian/livox_ws/p62_r23_real_imu_closure_ws/src/dog_prior_map_localization/scripts/evaluate_runtime_and_accuracy.py to /home/jian/livox_ws/p62_r23_real_imu_closure_ws/devel/lib/dog_prior_map_localization
+-- Installing devel-space wrapper /home/jian/livox_ws/p62_r23_real_imu_closure_ws/src/dog_prior_map_localization/scripts/build_livox_keyframe_scan_db.py to /home/jian/livox_ws/p62_r23_real_imu_closure_ws/devel/lib/dog_prior_map_localization
+-- Installing devel-space wrapper /home/jian/livox_ws/p62_r23_real_imu_closure_ws/src/dog_prior_map_localization/scripts/monitor_p45_local_map_run.py to /home/jian/livox_ws/p62_r23_real_imu_closure_ws/devel/lib/dog_prior_map_localization
+-- Installing devel-space wrapper /home/jian/livox_ws/p62_r23_real_imu_closure_ws/src/dog_prior_map_localization/scripts/ensure_output_dir_exec.py to /home/jian/livox_ws/p62_r23_real_imu_closure_ws/devel/lib/dog_prior_map_localization
+-- Installing devel-space wrapper /home/jian/livox_ws/p62_r23_real_imu_closure_ws/src/dog_prior_map_localization/scripts/run_dataset_evaluation.sh to /home/jian/livox_ws/p62_r23_real_imu_closure_ws/devel/lib/dog_prior_map_localization
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/jian/livox_ws/p62_r23_real_imu_closure_ws/build
+Scanning dependencies of target bond_generate_messages_lisp
+Scanning dependencies of target _dog_prior_map_interfaces_generate_messages_check_deps_NdtServerStatus
+[  0%] Built target bond_generate_messages_lisp
+Scanning dependencies of target _dog_prior_map_interfaces_generate_messages_check_deps_VisualDegeneracy
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtServerStatus
+Scanning dependencies of target sensor_msgs_generate_messages_py
+[  0%] Built target sensor_msgs_generate_messages_py
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_VisualDegeneracy
+Scanning dependencies of target _dog_prior_map_interfaces_generate_messages_check_deps_NdtSessionControlAck
+Scanning dependencies of target geometry_msgs_generate_messages_py
+[  0%] Built target geometry_msgs_generate_messages_py
+Scanning dependencies of target std_msgs_generate_messages_py
+[  0%] Built target std_msgs_generate_messages_py
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtSessionControlAck
+Scanning dependencies of target _dog_prior_map_interfaces_generate_messages_check_deps_VisualRelativeMeasurement
+Scanning dependencies of target _dog_prior_map_interfaces_generate_messages_check_deps_NdtSessionControl
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_VisualRelativeMeasurement
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtSessionControl
+Scanning dependencies of target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanRequest
+Scanning dependencies of target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanResult
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanRequest
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanResult
+Scanning dependencies of target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanAck
+Scanning dependencies of target geometry_msgs_generate_messages_nodejs
+[  0%] Built target geometry_msgs_generate_messages_nodejs
+Scanning dependencies of target sensor_msgs_generate_messages_nodejs
+[  0%] Built target sensor_msgs_generate_messages_nodejs
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanAck
+Scanning dependencies of target std_msgs_generate_messages_nodejs
+Scanning dependencies of target sensor_msgs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  0%] Built target sensor_msgs_generate_messages_lisp
+Scanning dependencies of target std_msgs_generate_messages_lisp
+Scanning dependencies of target geometry_msgs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_lisp
+[  0%] Built target geometry_msgs_generate_messages_lisp
+Scanning dependencies of target geometry_msgs_generate_messages_cpp
+Scanning dependencies of target sensor_msgs_generate_messages_cpp
+[  0%] Built target geometry_msgs_generate_messages_cpp
+[  0%] Built target sensor_msgs_generate_messages_cpp
+Scanning dependencies of target geometry_msgs_generate_messages_eus
+Scanning dependencies of target sensor_msgs_generate_messages_eus
+[  0%] Built target geometry_msgs_generate_messages_eus
+[  0%] Built target sensor_msgs_generate_messages_eus
+Scanning dependencies of target std_msgs_generate_messages_cpp
+Scanning dependencies of target std_msgs_generate_messages_eus
+[  0%] Built target std_msgs_generate_messages_cpp
+[  0%] Built target std_msgs_generate_messages_eus
+Scanning dependencies of target livox_ros_driver2_generate_messages_nodejs
+Scanning dependencies of target livox_ros_driver2_generate_messages_lisp
+[  0%] Built target livox_ros_driver2_generate_messages_nodejs
+[  0%] Built target livox_ros_driver2_generate_messages_lisp
+Scanning dependencies of target livox_ros_driver2_generate_messages_eus
+[  0%] Built target livox_ros_driver2_generate_messages_eus
+Scanning dependencies of target topic_tools_generate_messages_nodejs
+[  0%] Built target topic_tools_generate_messages_nodejs
+Scanning dependencies of target livox_ros_driver2_generate_messages_cpp
+[  0%] Built target livox_ros_driver2_generate_messages_cpp
+Scanning dependencies of target topic_tools_generate_messages_lisp
+[  0%] Built target topic_tools_generate_messages_lisp
+Scanning dependencies of target topic_tools_generate_messages_eus
+Scanning dependencies of target topic_tools_generate_messages_cpp
+[  0%] Built target topic_tools_generate_messages_eus
+[  0%] Built target topic_tools_generate_messages_cpp
+Scanning dependencies of target std_srvs_generate_messages_lisp
+Scanning dependencies of target std_srvs_generate_messages_eus
+[  0%] Built target std_srvs_generate_messages_lisp
+[  0%] Built target std_srvs_generate_messages_eus
+Scanning dependencies of target std_srvs_generate_messages_cpp
+Scanning dependencies of target pcl_msgs_generate_messages_py
+[  0%] Built target std_srvs_generate_messages_cpp
+[  0%] Built target pcl_msgs_generate_messages_py
+Scanning dependencies of target pcl_msgs_generate_messages_nodejs
+Scanning dependencies of target pcl_msgs_generate_messages_lisp
+[  0%] Built target pcl_msgs_generate_messages_nodejs
+[  0%] Built target pcl_msgs_generate_messages_lisp
+Scanning dependencies of target pcl_msgs_generate_messages_eus
+[  0%] Built target pcl_msgs_generate_messages_eus
+Scanning dependencies of target tf_generate_messages_nodejs
+[  0%] Built target tf_generate_messages_nodejs
+Scanning dependencies of target diagnostic_msgs_generate_messages_nodejs
+[  0%] Built target diagnostic_msgs_generate_messages_nodejs
+Scanning dependencies of target nav_msgs_generate_messages_eus
+[  0%] Built target nav_msgs_generate_messages_eus
+Scanning dependencies of target diagnostic_msgs_generate_messages_eus
+[  0%] Built target diagnostic_msgs_generate_messages_eus
+Scanning dependencies of target diagnostic_msgs_generate_messages_cpp
+[  0%] Built target diagnostic_msgs_generate_messages_cpp
+Scanning dependencies of target actionlib_msgs_generate_messages_py
+[  0%] Built target actionlib_msgs_generate_messages_py
+Scanning dependencies of target rosgraph_msgs_generate_messages_nodejs
+Scanning dependencies of target actionlib_generate_messages_cpp
+[  0%] Built target rosgraph_msgs_generate_messages_nodejs
+[  0%] Built target actionlib_generate_messages_cpp
+Scanning dependencies of target actionlib_msgs_generate_messages_cpp
+[  0%] Built target actionlib_msgs_generate_messages_cpp
+Scanning dependencies of target diagnostic_msgs_generate_messages_py
+Scanning dependencies of target nav_msgs_generate_messages_nodejs
+[  0%] Built target diagnostic_msgs_generate_messages_py
+[  0%] Built target nav_msgs_generate_messages_nodejs
+Scanning dependencies of target tf_generate_messages_eus
+Scanning dependencies of target rosgraph_msgs_generate_messages_lisp
+[  0%] Built target tf_generate_messages_eus
+[  0%] Built target rosgraph_msgs_generate_messages_lisp
+Scanning dependencies of target roscpp_generate_messages_eus
+[  0%] Built target roscpp_generate_messages_eus
+Scanning dependencies of target tf2_msgs_generate_messages_eus
+[  0%] Built target tf2_msgs_generate_messages_eus
+Scanning dependencies of target roscpp_generate_messages_py
+[  0%] Built target roscpp_generate_messages_py
+Scanning dependencies of target roscpp_generate_messages_nodejs
+[  0%] Built target roscpp_generate_messages_nodejs
+Scanning dependencies of target actionlib_generate_messages_eus
+Scanning dependencies of target rosgraph_msgs_generate_messages_cpp
+[  0%] Built target actionlib_generate_messages_eus
+[  0%] Built target rosgraph_msgs_generate_messages_cpp
+Scanning dependencies of target std_srvs_generate_messages_py
+Scanning dependencies of target rosgraph_msgs_generate_messages_eus
+[  0%] Built target std_srvs_generate_messages_py
+[  0%] Built target rosgraph_msgs_generate_messages_eus
+Scanning dependencies of target nav_msgs_generate_messages_cpp
+[  0%] Built target nav_msgs_generate_messages_cpp
+Scanning dependencies of target pcl_ros_gencfg
+Scanning dependencies of target tf_generate_messages_cpp
+[  0%] Built target pcl_ros_gencfg
+[  0%] Built target tf_generate_messages_cpp
+Scanning dependencies of target actionlib_msgs_generate_messages_lisp
+[  0%] Built target actionlib_msgs_generate_messages_lisp
+Scanning dependencies of target tf_generate_messages_py
+[  0%] Built target tf_generate_messages_py
+Scanning dependencies of target actionlib_msgs_generate_messages_nodejs
+[  0%] Built target actionlib_msgs_generate_messages_nodejs
+Scanning dependencies of target livox_ros_driver2_generate_messages_py
+[  0%] Built target livox_ros_driver2_generate_messages_py
+Scanning dependencies of target diagnostic_msgs_generate_messages_lisp
+[  0%] Built target diagnostic_msgs_generate_messages_lisp
+Scanning dependencies of target actionlib_generate_messages_py
+[  0%] Built target actionlib_generate_messages_py
+Scanning dependencies of target nav_msgs_generate_messages_py
+[  0%] Built target nav_msgs_generate_messages_py
+Scanning dependencies of target tf_generate_messages_lisp
+[  0%] Built target tf_generate_messages_lisp
+Scanning dependencies of target dynamic_reconfigure_generate_messages_cpp
+[  0%] Built target dynamic_reconfigure_generate_messages_cpp
+Scanning dependencies of target roscpp_generate_messages_lisp
+Scanning dependencies of target actionlib_generate_messages_lisp
+[  0%] Built target roscpp_generate_messages_lisp
+[  0%] Built target actionlib_generate_messages_lisp
+Scanning dependencies of target rosgraph_msgs_generate_messages_py
+Scanning dependencies of target topic_tools_generate_messages_py
+[  0%] Built target rosgraph_msgs_generate_messages_py
+[  0%] Built target topic_tools_generate_messages_py
+Scanning dependencies of target roscpp_generate_messages_cpp
+Scanning dependencies of target nav_msgs_generate_messages_lisp
+[  0%] Built target roscpp_generate_messages_cpp
+[  0%] Built target nav_msgs_generate_messages_lisp
+Scanning dependencies of target actionlib_generate_messages_nodejs
+[  0%] Built target actionlib_generate_messages_nodejs
+Scanning dependencies of target nodelet_generate_messages_eus
+[  0%] Built target nodelet_generate_messages_eus
+Scanning dependencies of target tf2_msgs_generate_messages_lisp
+[  0%] Built target tf2_msgs_generate_messages_lisp
+Scanning dependencies of target tf2_msgs_generate_messages_nodejs
+[  0%] Built target tf2_msgs_generate_messages_nodejs
+Scanning dependencies of target bond_generate_messages_py
+Scanning dependencies of target dynamic_reconfigure_generate_messages_eus
+[  0%] Built target bond_generate_messages_py
+[  0%] Built target dynamic_reconfigure_generate_messages_eus
+Scanning dependencies of target dynamic_reconfigure_gencfg
+[  0%] Built target dynamic_reconfigure_gencfg
+Scanning dependencies of target nodelet_generate_messages_cpp
+[  0%] Built target nodelet_generate_messages_cpp
+Scanning dependencies of target tf2_msgs_generate_messages_cpp
+Scanning dependencies of target dynamic_reconfigure_generate_messages_lisp
+[  0%] Built target tf2_msgs_generate_messages_cpp
+[  0%] Built target dynamic_reconfigure_generate_messages_lisp
+Scanning dependencies of target nodelet_topic_tools_gencfg
+Scanning dependencies of target pcl_msgs_generate_messages_cpp
+[  0%] Built target nodelet_topic_tools_gencfg
+[  0%] Built target pcl_msgs_generate_messages_cpp
+Scanning dependencies of target actionlib_msgs_generate_messages_eus
+Scanning dependencies of target dynamic_reconfigure_generate_messages_py
+[  0%] Built target actionlib_msgs_generate_messages_eus
+[  0%] Built target dynamic_reconfigure_generate_messages_py
+Scanning dependencies of target nodelet_generate_messages_lisp
+Scanning dependencies of target nodelet_generate_messages_nodejs
+[  0%] Built target nodelet_generate_messages_lisp
+[  0%] Built target nodelet_generate_messages_nodejs
+Scanning dependencies of target bond_generate_messages_nodejs
+[  0%] Built target bond_generate_messages_nodejs
+Scanning dependencies of target std_srvs_generate_messages_nodejs
+Scanning dependencies of target nodelet_generate_messages_py
+[  0%] Built target std_srvs_generate_messages_nodejs
+[  0%] Built target nodelet_generate_messages_py
+Scanning dependencies of target tf2_msgs_generate_messages_py
+Scanning dependencies of target dynamic_reconfigure_generate_messages_nodejs
+[  0%] Built target tf2_msgs_generate_messages_py
+[  0%] Built target dynamic_reconfigure_generate_messages_nodejs
+Scanning dependencies of target bond_generate_messages_cpp
+Scanning dependencies of target bond_generate_messages_eus
+[  0%] Built target bond_generate_messages_cpp
+[  0%] Built target bond_generate_messages_eus
+Scanning dependencies of target dog_prior_map_interfaces_generate_messages_py
+Scanning dependencies of target dog_prior_map_interfaces_generate_messages_nodejs
+[  3%] Generating Python from MSG dog_prior_map_interfaces/NdtScanRequest
+[  6%] Generating Javascript code from dog_prior_map_interfaces/NdtScanRequest.msg
+[  6%] Generating Javascript code from dog_prior_map_interfaces/NdtScanResult.msg
+[  6%] Generating Python from MSG dog_prior_map_interfaces/NdtScanResult
+[  9%] Generating Javascript code from dog_prior_map_interfaces/NdtServerStatus.msg
+[ 12%] Generating Javascript code from dog_prior_map_interfaces/NdtSessionControl.msg
+[ 15%] Generating Python from MSG dog_prior_map_interfaces/NdtServerStatus
+[ 15%] Generating Javascript code from dog_prior_map_interfaces/NdtSessionControlAck.msg
+[ 18%] Generating Javascript code from dog_prior_map_interfaces/NdtScanAck.msg
+[ 21%] Generating Python from MSG dog_prior_map_interfaces/NdtSessionControl
+[ 24%] Generating Javascript code from dog_prior_map_interfaces/VisualRelativeMeasurement.msg
+[ 24%] Generating Javascript code from dog_prior_map_interfaces/VisualDegeneracy.msg
+[ 24%] Built target dog_prior_map_interfaces_generate_messages_nodejs
+[ 24%] Generating Python from MSG dog_prior_map_interfaces/NdtSessionControlAck
+Scanning dependencies of target dog_prior_map_interfaces_generate_messages_lisp
+[ 27%] Generating Lisp code from dog_prior_map_interfaces/NdtScanRequest.msg
+[ 30%] Generating Lisp code from dog_prior_map_interfaces/NdtScanResult.msg
+[ 30%] Generating Lisp code from dog_prior_map_interfaces/NdtServerStatus.msg
+[ 33%] Generating Python from MSG dog_prior_map_interfaces/NdtScanAck
+[ 36%] Generating Lisp code from dog_prior_map_interfaces/NdtSessionControl.msg
+[ 36%] Generating Lisp code from dog_prior_map_interfaces/NdtSessionControlAck.msg
+[ 36%] Generating Python from MSG dog_prior_map_interfaces/VisualRelativeMeasurement
+[ 39%] Generating Lisp code from dog_prior_map_interfaces/NdtScanAck.msg
+[ 42%] Generating Lisp code from dog_prior_map_interfaces/VisualRelativeMeasurement.msg
+[ 45%] Generating Python from MSG dog_prior_map_interfaces/VisualDegeneracy
+[ 45%] Generating Lisp code from dog_prior_map_interfaces/VisualDegeneracy.msg
+[ 45%] Built target dog_prior_map_interfaces_generate_messages_lisp
+Scanning dependencies of target dog_prior_map_interfaces_generate_messages_cpp
+[ 48%] Generating C++ code from dog_prior_map_interfaces/NdtScanRequest.msg
+[ 51%] Generating Python msg __init__.py for dog_prior_map_interfaces
+[ 51%] Generating C++ code from dog_prior_map_interfaces/NdtScanResult.msg
+[ 51%] Built target dog_prior_map_interfaces_generate_messages_py
+Scanning dependencies of target dog_prior_map_interfaces_generate_messages_eus
+[ 51%] Generating EusLisp code from dog_prior_map_interfaces/NdtScanRequest.msg
+[ 54%] Generating C++ code from dog_prior_map_interfaces/NdtServerStatus.msg
+[ 57%] Generating EusLisp code from dog_prior_map_interfaces/NdtScanResult.msg
+[ 57%] Generating C++ code from dog_prior_map_interfaces/NdtSessionControl.msg
+[ 60%] Generating EusLisp code from dog_prior_map_interfaces/NdtServerStatus.msg
+[ 63%] Generating C++ code from dog_prior_map_interfaces/NdtSessionControlAck.msg
+[ 63%] Generating EusLisp code from dog_prior_map_interfaces/NdtSessionControl.msg
+[ 66%] Generating EusLisp code from dog_prior_map_interfaces/NdtSessionControlAck.msg
+[ 69%] Generating C++ code from dog_prior_map_interfaces/NdtScanAck.msg
+[ 69%] Generating EusLisp code from dog_prior_map_interfaces/NdtScanAck.msg
+[ 69%] Generating C++ code from dog_prior_map_interfaces/VisualRelativeMeasurement.msg
+[ 72%] Generating EusLisp code from dog_prior_map_interfaces/VisualRelativeMeasurement.msg
+[ 75%] Generating EusLisp code from dog_prior_map_interfaces/VisualDegeneracy.msg
+[ 78%] Generating C++ code from dog_prior_map_interfaces/VisualDegeneracy.msg
+[ 78%] Generating EusLisp manifest code for dog_prior_map_interfaces
+[ 78%] Built target dog_prior_map_interfaces_generate_messages_cpp
+[ 78%] Built target dog_prior_map_interfaces_generate_messages_eus
+Scanning dependencies of target dog_prior_map_ndt_node_cpp
+[ 78%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ndt_node_cpp.dir/src/dog_prior_map_ndt_node.cpp.o
+[ 81%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ndt_node_cpp.dir/src/local_map_tiles.cpp.o
+[ 84%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ndt_node_cpp.dir/src/mature_ndt_algorithms.cpp.o
+[ 84%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ndt_node_cpp.dir/src/skf_visual_measurement.cpp.o
+[ 87%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ndt_node_cpp.dir/src/visual_aided_initial_guess.cpp.o
+[ 87%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ndt_node_cpp.dir/src/external_ndt_transaction_server.cpp.o
+[ 90%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ndt_node_cpp.dir/__/dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_shadow.cpp.o
+[ 93%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ndt_node_cpp.dir/__/dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_temporal.cpp.o
+[ 93%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ndt_node_cpp.dir/__/dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_anchor.cpp.o
+[ 96%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ndt_node_cpp.dir/__/dog_prior_map_fastlio2_frontend_exp/src/coupled_ndt_weak_refinement.cpp.o
+[ 96%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ndt_node_cpp.dir/__/dog_prior_map_fastlio2_frontend_exp/src/registration_geometry.cpp.o
+[100%] Linking CXX executable /home/jian/livox_ws/p62_r23_real_imu_closure_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp
+[100%] Built target dog_prior_map_ndt_node_cpp
+[  0%] Built target bond_generate_messages_lisp
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtServerStatus
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_VisualDegeneracy
+[  0%] Built target sensor_msgs_generate_messages_py
+[  0%] Built target geometry_msgs_generate_messages_py
+[  0%] Built target std_msgs_generate_messages_py
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtSessionControlAck
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_VisualRelativeMeasurement
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtSessionControl
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanRequest
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanResult
+[  0%] Built target geometry_msgs_generate_messages_nodejs
+[  0%] Built target sensor_msgs_generate_messages_nodejs
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanAck
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  0%] Built target sensor_msgs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_lisp
+[  0%] Built target geometry_msgs_generate_messages_lisp
+[  0%] Built target geometry_msgs_generate_messages_cpp
+[  0%] Built target sensor_msgs_generate_messages_cpp
+[  0%] Built target sensor_msgs_generate_messages_eus
+[  0%] Built target geometry_msgs_generate_messages_eus
+[  0%] Built target std_msgs_generate_messages_cpp
+[  0%] Built target std_msgs_generate_messages_eus
+[  0%] Built target livox_ros_driver2_generate_messages_lisp
+[  0%] Built target livox_ros_driver2_generate_messages_nodejs
+[  0%] Built target livox_ros_driver2_generate_messages_eus
+[  0%] Built target topic_tools_generate_messages_nodejs
+[  0%] Built target livox_ros_driver2_generate_messages_cpp
+[  0%] Built target topic_tools_generate_messages_lisp
+[  0%] Built target topic_tools_generate_messages_eus
+[  0%] Built target topic_tools_generate_messages_cpp
+[  0%] Built target std_srvs_generate_messages_eus
+[  0%] Built target std_srvs_generate_messages_lisp
+[  0%] Built target std_srvs_generate_messages_cpp
+[  0%] Built target pcl_msgs_generate_messages_py
+[  0%] Built target pcl_msgs_generate_messages_lisp
+[  0%] Built target pcl_msgs_generate_messages_nodejs
+[  0%] Built target pcl_msgs_generate_messages_eus
+[  0%] Built target tf_generate_messages_nodejs
+[  0%] Built target diagnostic_msgs_generate_messages_nodejs
+[  0%] Built target nav_msgs_generate_messages_eus
+[  0%] Built target diagnostic_msgs_generate_messages_cpp
+[  0%] Built target diagnostic_msgs_generate_messages_eus
+[  0%] Built target actionlib_msgs_generate_messages_py
+[  0%] Built target rosgraph_msgs_generate_messages_nodejs
+[  0%] Built target actionlib_msgs_generate_messages_cpp
+[  0%] Built target actionlib_generate_messages_cpp
+[  0%] Built target nav_msgs_generate_messages_nodejs
+[  0%] Built target diagnostic_msgs_generate_messages_py
+[  0%] Built target tf_generate_messages_eus
+[  0%] Built target rosgraph_msgs_generate_messages_lisp
+[  0%] Built target roscpp_generate_messages_eus
+[  0%] Built target tf2_msgs_generate_messages_eus
+[  0%] Built target roscpp_generate_messages_py
+[  0%] Built target roscpp_generate_messages_nodejs
+[  0%] Built target actionlib_generate_messages_eus
+[  0%] Built target rosgraph_msgs_generate_messages_cpp
+[  0%] Built target rosgraph_msgs_generate_messages_eus
+[  0%] Built target std_srvs_generate_messages_py
+[  0%] Built target nav_msgs_generate_messages_cpp
+[  0%] Built target pcl_ros_gencfg
+[  0%] Built target actionlib_msgs_generate_messages_lisp
+[  0%] Built target tf_generate_messages_cpp
+[  0%] Built target tf_generate_messages_py
+[  0%] Built target actionlib_msgs_generate_messages_nodejs
+[  0%] Built target diagnostic_msgs_generate_messages_lisp
+[  0%] Built target livox_ros_driver2_generate_messages_py
+[  0%] Built target actionlib_generate_messages_py
+[  0%] Built target nav_msgs_generate_messages_py
+[  0%] Built target tf_generate_messages_lisp
+[  0%] Built target dynamic_reconfigure_generate_messages_cpp
+[  0%] Built target roscpp_generate_messages_lisp
+[  0%] Built target actionlib_generate_messages_lisp
+[  0%] Built target rosgraph_msgs_generate_messages_py
+[  0%] Built target topic_tools_generate_messages_py
+[  0%] Built target roscpp_generate_messages_cpp
+[  0%] Built target nav_msgs_generate_messages_lisp
+[  0%] Built target actionlib_generate_messages_nodejs
+[  0%] Built target nodelet_generate_messages_eus
+[  0%] Built target tf2_msgs_generate_messages_nodejs
+[  0%] Built target tf2_msgs_generate_messages_lisp
+[  0%] Built target bond_generate_messages_py
+[  0%] Built target dynamic_reconfigure_generate_messages_eus
+[  0%] Built target nodelet_generate_messages_cpp
+[  0%] Built target dynamic_reconfigure_gencfg
+[  0%] Built target tf2_msgs_generate_messages_cpp
+[  0%] Built target dynamic_reconfigure_generate_messages_lisp
+[  0%] Built target pcl_msgs_generate_messages_cpp
+[  0%] Built target nodelet_topic_tools_gencfg
+[  0%] Built target actionlib_msgs_generate_messages_eus
+[  0%] Built target dynamic_reconfigure_generate_messages_py
+[  0%] Built target nodelet_generate_messages_lisp
+[  0%] Built target nodelet_generate_messages_nodejs
+[  0%] Built target bond_generate_messages_nodejs
+[  0%] Built target std_srvs_generate_messages_nodejs
+[  0%] Built target nodelet_generate_messages_py
+[  0%] Built target tf2_msgs_generate_messages_py
+[  0%] Built target dynamic_reconfigure_generate_messages_nodejs
+[  0%] Built target bond_generate_messages_cpp
+[  2%] Built target bond_generate_messages_eus
+[ 16%] Built target dog_prior_map_interfaces_generate_messages_py
+[ 43%] Built target dog_prior_map_interfaces_generate_messages_nodejs
+[ 43%] Built target dog_prior_map_interfaces_generate_messages_lisp
+[ 56%] Built target dog_prior_map_interfaces_generate_messages_eus
+[ 70%] Built target dog_prior_map_interfaces_generate_messages_cpp
+Scanning dependencies of target dog_prior_map_ekf_node_cpp
+[ 75%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ekf_node_cpp.dir/src/dog_prior_map_ekf_node.cpp.o
+[ 75%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ekf_node_cpp.dir/src/dog_prior_map_ekf_node_core.cpp.o
+[ 75%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ekf_node_cpp.dir/src/core/oosm_fixed_lag_scheduler.cpp.o
+[ 78%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ekf_node_cpp.dir/src/core/oosm_replay_planner.cpp.o
+[ 81%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ekf_node_cpp.dir/src/core/state_history.cpp.o
+[ 81%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ekf_node_cpp.dir/src/core/imu_propagation.cpp.o
+[ 83%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ekf_node_cpp.dir/src/core/imu_deskew.cpp.o
+[ 83%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ekf_node_cpp.dir/src/core/selective_relative_visual_update.cpp.o
+[ 86%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ekf_node_cpp.dir/src/core/square_root_covariance.cpp.o
+[ 89%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ekf_node_cpp.dir/src/imu_deskew_runtime.cpp.o
+[ 89%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ekf_node_cpp.dir/src/imu_processor.cpp.o
+[ 91%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ekf_node_cpp.dir/src/fusion/ndt_observation.cpp.o
+[ 91%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ekf_node_cpp.dir/src/fusion/skf_visual.cpp.o
+[ 94%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ekf_node_cpp.dir/src/fusion/msckf_visual.cpp.o
+[ 97%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ekf_node_cpp.dir/src/core/msckf_visual_measurement.cpp.o
+[ 97%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ekf_node_cpp.dir/src/ros_output.cpp.o
+[100%] Linking CXX executable /home/jian/livox_ws/p62_r23_real_imu_closure_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp
+[100%] Built target dog_prior_map_ekf_node_cpp
+[  0%] Built target bond_generate_messages_lisp
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtServerStatus
+[  0%] Built target sensor_msgs_generate_messages_py
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_VisualDegeneracy
+[  0%] Built target geometry_msgs_generate_messages_py
+[  0%] Built target std_msgs_generate_messages_py
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtSessionControlAck
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_VisualRelativeMeasurement
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtSessionControl
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanRequest
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanResult
+[  0%] Built target geometry_msgs_generate_messages_nodejs
+[  0%] Built target sensor_msgs_generate_messages_nodejs
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanAck
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  0%] Built target sensor_msgs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_lisp
+[  0%] Built target geometry_msgs_generate_messages_lisp
+[  0%] Built target geometry_msgs_generate_messages_cpp
+[  0%] Built target sensor_msgs_generate_messages_cpp
+[  0%] Built target geometry_msgs_generate_messages_eus
+[  0%] Built target sensor_msgs_generate_messages_eus
+[  0%] Built target std_msgs_generate_messages_eus
+[  0%] Built target std_msgs_generate_messages_cpp
+[  0%] Built target livox_ros_driver2_generate_messages_nodejs
+[  0%] Built target livox_ros_driver2_generate_messages_lisp
+[  0%] Built target livox_ros_driver2_generate_messages_eus
+[  0%] Built target topic_tools_generate_messages_nodejs
+[  0%] Built target livox_ros_driver2_generate_messages_cpp
+[  0%] Built target topic_tools_generate_messages_lisp
+[  0%] Built target topic_tools_generate_messages_eus
+[  0%] Built target topic_tools_generate_messages_cpp
+[  0%] Built target std_srvs_generate_messages_lisp
+[  0%] Built target std_srvs_generate_messages_eus
+[  0%] Built target std_srvs_generate_messages_cpp
+[  0%] Built target pcl_msgs_generate_messages_py
+[  0%] Built target pcl_msgs_generate_messages_lisp
+[  0%] Built target pcl_msgs_generate_messages_nodejs
+[  0%] Built target pcl_msgs_generate_messages_eus
+[  0%] Built target tf_generate_messages_nodejs
+[  0%] Built target nav_msgs_generate_messages_eus
+[  0%] Built target diagnostic_msgs_generate_messages_nodejs
+[  0%] Built target diagnostic_msgs_generate_messages_eus
+[  0%] Built target diagnostic_msgs_generate_messages_cpp
+[  0%] Built target actionlib_msgs_generate_messages_py
+[  0%] Built target rosgraph_msgs_generate_messages_nodejs
+[  0%] Built target actionlib_generate_messages_cpp
+[  0%] Built target actionlib_msgs_generate_messages_cpp
+[  0%] Built target diagnostic_msgs_generate_messages_py
+[  0%] Built target nav_msgs_generate_messages_nodejs
+[  0%] Built target tf_generate_messages_eus
+[  0%] Built target rosgraph_msgs_generate_messages_lisp
+[  0%] Built target tf2_msgs_generate_messages_eus
+[  0%] Built target roscpp_generate_messages_eus
+[  0%] Built target roscpp_generate_messages_py
+[  0%] Built target roscpp_generate_messages_nodejs
+[  0%] Built target rosgraph_msgs_generate_messages_cpp
+[  0%] Built target actionlib_generate_messages_eus
+[  0%] Built target std_srvs_generate_messages_py
+[  0%] Built target rosgraph_msgs_generate_messages_eus
+[  0%] Built target nav_msgs_generate_messages_cpp
+[  0%] Built target pcl_ros_gencfg
+[  0%] Built target tf_generate_messages_cpp
+[  0%] Built target actionlib_msgs_generate_messages_lisp
+[  0%] Built target actionlib_msgs_generate_messages_nodejs
+[  0%] Built target tf_generate_messages_py
+[  0%] Built target diagnostic_msgs_generate_messages_lisp
+[  0%] Built target livox_ros_driver2_generate_messages_py
+[  0%] Built target nav_msgs_generate_messages_py
+[  0%] Built target actionlib_generate_messages_py
+[  0%] Built target dynamic_reconfigure_generate_messages_cpp
+[  0%] Built target tf_generate_messages_lisp
+[  0%] Built target roscpp_generate_messages_lisp
+[  0%] Built target actionlib_generate_messages_lisp
+[  0%] Built target rosgraph_msgs_generate_messages_py
+[  0%] Built target topic_tools_generate_messages_py
+[  0%] Built target roscpp_generate_messages_cpp
+[  0%] Built target nav_msgs_generate_messages_lisp
+[  0%] Built target actionlib_generate_messages_nodejs
+[  0%] Built target nodelet_generate_messages_eus
+[  0%] Built target tf2_msgs_generate_messages_nodejs
+[  0%] Built target tf2_msgs_generate_messages_lisp
+[  0%] Built target dynamic_reconfigure_generate_messages_eus
+[  0%] Built target bond_generate_messages_py
+[  0%] Built target dynamic_reconfigure_gencfg
+[  0%] Built target nodelet_generate_messages_cpp
+[  0%] Built target tf2_msgs_generate_messages_cpp
+[  0%] Built target dynamic_reconfigure_generate_messages_lisp
+[  0%] Built target nodelet_topic_tools_gencfg
+[  0%] Built target pcl_msgs_generate_messages_cpp
+[  0%] Built target dynamic_reconfigure_generate_messages_py
+[  0%] Built target actionlib_msgs_generate_messages_eus
+[  0%] Built target nodelet_generate_messages_lisp
+[  0%] Built target nodelet_generate_messages_nodejs
+[  0%] Built target std_srvs_generate_messages_nodejs
+[  0%] Built target bond_generate_messages_nodejs
+[  0%] Built target nodelet_generate_messages_py
+[  0%] Built target tf2_msgs_generate_messages_py
+[  0%] Built target dynamic_reconfigure_generate_messages_nodejs
+[  0%] Built target bond_generate_messages_cpp
+[  0%] Built target bond_generate_messages_eus
+[ 21%] Built target dog_prior_map_interfaces_generate_messages_py
+[ 39%] Built target dog_prior_map_interfaces_generate_messages_nodejs
+[ 57%] Built target dog_prior_map_interfaces_generate_messages_lisp
+[ 75%] Built target dog_prior_map_interfaces_generate_messages_cpp
+[ 92%] Built target dog_prior_map_interfaces_generate_messages_eus
+Scanning dependencies of target newer_college_sequence_publisher
+[ 96%] Building CXX object dog_prior_map_localization/CMakeFiles/newer_college_sequence_publisher.dir/src/newer_college_first_scan_publisher.cpp.o
+[100%] Linking CXX executable /home/jian/livox_ws/p62_r23_real_imu_closure_ws/devel/lib/dog_prior_map_localization/newer_college_sequence_publisher
+[100%] Built target newer_college_sequence_publisher
+Base path: /home/jian/livox_ws/p62_r23_real_imu_closure_ws
+Source space: /home/jian/livox_ws/p62_r23_real_imu_closure_ws/src
+Build space: /home/jian/livox_ws/p62_r23_real_imu_closure_ws/build
+Devel space: /home/jian/livox_ws/p62_r23_real_imu_closure_ws/devel
+Install space: /home/jian/livox_ws/p62_r23_real_imu_closure_ws/install
+####
+#### Running command: "cmake /home/jian/livox_ws/p62_r23_real_imu_closure_ws/src -DCMAKE_BUILD_TYPE=Release -DCATKIN_WHITELIST_PACKAGES=dog_prior_map_interfaces;dog_prior_map_localization -DCATKIN_DEVEL_PREFIX=/home/jian/livox_ws/p62_r23_real_imu_closure_ws/devel -DCMAKE_INSTALL_PREFIX=/home/jian/livox_ws/p62_r23_real_imu_closure_ws/install -G Unix Makefiles" in "/home/jian/livox_ws/p62_r23_real_imu_closure_ws/build"
+####
+####
+#### Running command: "make -j2 dog_prior_map_ndt_node_cpp dog_prior_map_ekf_node_cpp newer_college_sequence_publisher" in "/home/jian/livox_ws/p62_r23_real_imu_closure_ws/build"
+####

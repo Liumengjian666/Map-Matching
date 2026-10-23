@@ -1,0 +1,1 @@
+Initial input preparation stopped before IMU/PCD reads: stable workspace lacks research-only src/local_map_tiles.cpp. Corrected snapshot to preserve file absence explicitly rather than assume matching research source layout. No stable files modified, no ROS or NDT started.

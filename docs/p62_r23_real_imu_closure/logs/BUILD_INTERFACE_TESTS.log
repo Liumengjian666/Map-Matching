@@ -1,0 +1,8 @@
+Scanning dependencies of target causal_pose_prediction_test
+[  0%] Building CXX object dog_prior_map_localization/CMakeFiles/causal_pose_prediction_test.dir/tests/causal_pose_prediction_test.cpp.o
+[100%] Linking CXX executable /home/jian/livox_ws/p62_r23_real_imu_closure_ws/devel/lib/dog_prior_map_localization/causal_pose_prediction_test
+[100%] Built target causal_pose_prediction_test
+Scanning dependencies of target frame_conversion_contract_test
+[100%] Building CXX object dog_prior_map_localization/CMakeFiles/frame_conversion_contract_test.dir/tests/frame_conversion_contract_test.cpp.o
+[100%] Linking CXX executable /home/jian/livox_ws/p62_r23_real_imu_closure_ws/devel/lib/dog_prior_map_localization/frame_conversion_contract_test
+[100%] Built target frame_conversion_contract_test

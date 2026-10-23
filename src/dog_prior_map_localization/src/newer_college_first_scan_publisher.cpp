@@ -250,6 +250,8 @@ struct NdtReceipt
 {
   bool present = false;
   bool converged = false;
+  bool measurement_published_known = false;
+  bool measurement_published = false;
   double fitness = std::numeric_limits<double>::quiet_NaN();
   double align_ms = std::numeric_limits<double>::quiet_NaN();
   int iterations = -1;
@@ -259,6 +261,9 @@ struct NdtReceipt
 class SequenceCapture
 {
 public:
+  explicit SequenceCapture(bool admission_ack_enable = false)
+      : admission_ack_enable_(admission_ack_enable) {}
+
   bool open(const std::string &receipt_path, const std::string &trajectory_path)
   {
     if (std::ifstream(receipt_path.c_str()).good() ||
@@ -267,7 +272,7 @@ public:
     receipts_.open(receipt_path.c_str(), std::ios::out);
     trajectory_.open(trajectory_path.c_str(), std::ios::out);
     if (!receipts_ || !trajectory_) throw std::runtime_error("cannot create P44 output CSVs");
-    receipts_ << "scan_index,scan_stamp_ns,pcd_path,point_count,max_point_offset_ns,imu_first_ns,imu_last_ns,ekf_imu_watermark_ns,ndt_imu_watermark_ns,ndt_diagnostic_ack,ndt_converged,ndt_fitness,ndt_iterations,ndt_align_ms,ekf_correction_ack,wall_publish_sec,wall_ndt_ack_sec,wall_ekf_ack_sec\n";
+    receipts_ << "scan_index,scan_stamp_ns,pcd_path,point_count,max_point_offset_ns,imu_first_ns,imu_last_ns,ekf_imu_watermark_ns,ndt_imu_watermark_ns,ndt_diagnostic_ack,ndt_converged,ndt_fitness,ndt_iterations,ndt_align_ms,ekf_correction_ack,wall_publish_sec,wall_ndt_ack_sec,wall_ekf_ack_sec,ndt_measurement_published_known,ndt_measurement_published,ekf_ack_basis,ekf_ack_expected\n";
     trajectory_ << "source,stamp_ns,frame_id,child_frame_id,px,py,pz,qx,qy,qz,qw,vx,vy,vz,wx,wy,wz,receipt_wall_sec\n";
     receipts_.flush();
     trajectory_.flush();
@@ -286,6 +291,14 @@ public:
       for (const auto &value : status.values)
       {
         if (value.key == "ndt_converged") receipt.converged = value.value == "true";
+        else if (admission_ack_enable_ && value.key == "ndt_measurement_published")
+        {
+          if (receipt.measurement_published_known ||
+              (value.value != "true" && value.value != "false"))
+            throw std::runtime_error("R23 requires one explicit boolean ndt_measurement_published field");
+          receipt.measurement_published_known = true;
+          receipt.measurement_published = value.value == "true";
+        }
         else if (value.key == "fitness_score")
         {
           try { receipt.fitness = std::stod(value.value); } catch (...) {}
@@ -301,6 +314,8 @@ public:
       }
     }
     if (!receipt.present) return;
+    if (admission_ack_enable_ && !receipt.measurement_published_known)
+      throw std::runtime_error("R23 NDT diagnostic lacks ndt_measurement_published");
     const uint64_t stamp_ns = message->header.stamp.toNSec();
     if (!ndt_receipts_.emplace(stamp_ns, receipt).second) duplicate_ndt_diagnostic_ = true;
   }
@@ -362,7 +377,12 @@ public:
         << ekf_watermark_ns << ',' << ndt_watermark_ns << ",1,"
         << (ndt.converged ? 1 : 0) << ',' << std::setprecision(17) << ndt.fitness << ','
         << ndt.iterations << ',' << ndt.align_ms << ',' << (correction_ack ? 1 : 0) << ','
-        << wall_publish << ',' << wall_ndt_ack << ',' << wall_ekf_ack << '\n';
+        << wall_publish << ',' << wall_ndt_ack << ',' << wall_ekf_ack << ','
+        << (ndt.measurement_published_known ? 1 : 0) << ',';
+    if (ndt.measurement_published_known) receipts_ << (ndt.measurement_published ? 1 : 0);
+    else receipts_ << "NA";
+    receipts_ << ',' << (admission_ack_enable_ ? "EXPLICIT_MEASUREMENT_PUBLISHED" : "LEGACY_CONVERGED")
+        << ',' << ((admission_ack_enable_ ? ndt.measurement_published : ndt.converged) ? 1 : 0) << '\n';
     receipts_.flush();
   }
 
@@ -391,6 +411,7 @@ private:
   uint64_t corrected_count_ = 0;
   bool duplicate_ndt_diagnostic_ = false;
   bool watermark_order_error_ = false;
+  bool admission_ack_enable_ = false;
 };
 
 bool waitFor(const std::function<bool()> &condition, double timeout_sec,
@@ -414,14 +435,17 @@ void runSequencePublisher(ros::NodeHandle &nh, ros::NodeHandle &pnh,
                           const std::string &cloud_topic,
                           const std::string &imu_topic)
 {
-  std::string scan_directory, start_stamp_text, expected_boundary_text;
+  std::string scan_directory, start_stamp_text, expected_boundary_text, imu_replay_start_text;
   std::string diagnostic_topic, ndt_odom_topic, high_rate_topic, corrected_topic;
   std::string ndt_imu_watermark_topic, receipt_csv_path, trajectory_csv_path;
   int scan_count = 0;
+  bool r23_admission_ack_enable = false;
   double readiness_timeout_sec = 180.0, scan_ack_timeout_sec = 120.0;
   pnh.param<std::string>("scan_directory", scan_directory, "");
   pnh.param<std::string>("start_stamp_ns", start_stamp_text, "");
   pnh.param<std::string>("expected_boundary_imu_stamp_ns", expected_boundary_text, "");
+  pnh.param<std::string>("imu_replay_start_stamp_ns", imu_replay_start_text, "");
+  pnh.param("r23_admission_ack_enable", r23_admission_ack_enable, false);
   pnh.param("scan_count", scan_count, 0);
   pnh.param<std::string>("diagnostics_topic", diagnostic_topic, "/dog_livo/diagnostics");
   pnh.param<std::string>("ndt_odom_topic", ndt_odom_topic, "/dog_livo/ndt_odom");
@@ -442,6 +466,10 @@ void runSequencePublisher(ros::NodeHandle &nh, ros::NodeHandle &pnh,
     throw std::runtime_error("incomplete P44 continuous publisher parameters");
 
   const uint64_t start_stamp_ns = parseUnsignedNs(start_stamp_text, "start_stamp_ns");
+  const uint64_t imu_replay_start_ns = imu_replay_start_text.empty() ? start_stamp_ns :
+      parseUnsignedNs(imu_replay_start_text, "imu_replay_start_stamp_ns");
+  if (imu_replay_start_ns > start_stamp_ns)
+    throw std::runtime_error("IMU replay start must not follow the first LiDAR scan");
   const uint64_t expected_boundary_ns = parseUnsignedNs(
       expected_boundary_text, "expected_boundary_imu_stamp_ns");
   std::size_t ignored_names = 0;
@@ -458,13 +486,13 @@ void runSequencePublisher(ros::NodeHandle &nh, ros::NodeHandle &pnh,
       throw std::runtime_error("selected P44 scan timestamps are not strictly increasing");
 
   const std::vector<ImuRecord> imu_records = loadImuCsv(imu_csv);
-  const auto boundary_it = std::upper_bound(imu_records.begin(), imu_records.end(), start_stamp_ns,
+  const auto boundary_it = std::upper_bound(imu_records.begin(), imu_records.end(), imu_replay_start_ns,
       [](uint64_t stamp, const ImuRecord &record) { return stamp < record.stamp_ns; });
   if (boundary_it == imu_records.begin())
     throw std::runtime_error("P44 Ouster IMU has no sample at or before first scan");
   const std::size_t boundary_index = static_cast<std::size_t>(boundary_it - imu_records.begin() - 1);
   const ImuRecord &boundary = imu_records[boundary_index];
-  if (boundary.stamp_ns != expected_boundary_ns || start_stamp_ns - boundary.stamp_ns > 20000000ULL)
+  if (boundary.stamp_ns != expected_boundary_ns || imu_replay_start_ns - boundary.stamp_ns > 20000000ULL)
     throw std::runtime_error("P44 first-scan IMU boundary differs from frozen P41 initialization");
   const uint64_t imu_preflight_end_ns = scans.back().stamp_ns + 150000000ULL;
   if (imu_records.back().stamp_ns <= imu_preflight_end_ns)
@@ -480,7 +508,7 @@ void runSequencePublisher(ros::NodeHandle &nh, ros::NodeHandle &pnh,
   if (imu_records[covered_index + 1].stamp_ns - imu_records[covered_index].stamp_ns > 20000000ULL)
     throw std::runtime_error("P44 Ouster IMU bracket interval exceeds frozen 20 ms contract");
 
-  SequenceCapture capture;
+  SequenceCapture capture(r23_admission_ack_enable);
   capture.open(receipt_csv_path, trajectory_csv_path);
   ros::Publisher imu_pub = nh.advertise<sensor_msgs::Imu>(imu_topic, 500, false);
   ros::Publisher cloud_pub = nh.advertise<sensor_msgs::PointCloud2>(cloud_topic, 1, false);
@@ -506,6 +534,9 @@ void runSequencePublisher(ros::NodeHandle &nh, ros::NodeHandle &pnh,
            catalog.size(), ignored_names, scan_count,
            static_cast<unsigned long long>(scans.front().stamp_ns),
            static_cast<unsigned long long>(scans.back().stamp_ns));
+  ROS_INFO("IMU replay start_ns=%llu boundary_ns=%llu admission_ack=%d",
+           static_cast<unsigned long long>(imu_replay_start_ns),
+           static_cast<unsigned long long>(boundary.stamp_ns), r23_admission_ack_enable ? 1 : 0);
 
   std::size_t imu_cursor = boundary_index + 1;
   uint64_t last_imu_consumed_ns = boundary.stamp_ns;
@@ -560,7 +591,9 @@ void runSequencePublisher(ros::NodeHandle &nh, ros::NodeHandle &pnh,
     const double ndt_ack_wall = ros::WallTime::now().toSec();
     bool correction_ack = false;
     double ekf_ack_wall = std::numeric_limits<double>::quiet_NaN();
-    if (ndt_receipt.converged)
+    const bool measurement_expected = r23_admission_ack_enable ?
+        ndt_receipt.measurement_published : ndt_receipt.converged;
+    if (measurement_expected)
     {
       if (!waitFor([&]() {
             if (capture.correctedCount() <= corrected_before) return false;
@@ -572,7 +605,7 @@ void runSequencePublisher(ros::NodeHandle &nh, ros::NodeHandle &pnh,
             return corrected_ns >= imu_last_ns ||
                 imu_last_ns - corrected_ns <= kRosDoubleStampToleranceNs;
           }, scan_ack_timeout_sec, "waiting for OOSM-corrected EKF output at the consumed IMU watermark"))
-        throw std::runtime_error("P44 converged NDT output was not acknowledged by EKF/OOSM");
+        throw std::runtime_error("published NDT measurement was not acknowledged by EKF/OOSM");
       correction_ack = true;
       ekf_ack_wall = ros::WallTime::now().toSec();
     }
