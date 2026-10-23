@@ -1,0 +1,71 @@
+{
+  "task": "P62-R16-REAL-NDT-DEGENERACY-CASE",
+  "reference_status": "MAP_ANCHORED_BENCHMARK_REFERENCE_NOT_INDEPENDENT_MOCAP",
+  "coordinate_assumption": "PAPER_SUPPORTED_BASE_FRAME_ASSUMPTION; CSV export binding remains unverified",
+  "test_gt_used_for_selection_prediction_or_ndt": false,
+  "per_method": {
+    "PREDICTION": {
+      "translation_error_m": {
+        "n": 30,
+        "rmse": 0.2769827291807523,
+        "median": 0.2572974626060778,
+        "p95": 0.40536855477394235,
+        "max": 0.5036354618712741
+      },
+      "rotation_error_deg": {
+        "n": 30,
+        "rmse": 2.417264545005853,
+        "median": 2.152765123059889,
+        "p95": 3.8165235055643634,
+        "max": 4.8741067982865856
+      },
+      "native_converged_frames": 0,
+      "native_admissible_frames": 0
+    },
+    "CONTROL_FULL": {
+      "translation_error_m": {
+        "n": 30,
+        "rmse": 0.25174377292982514,
+        "median": 0.25306763322227455,
+        "p95": 0.31979458139881023,
+        "max": 0.320876343157107
+      },
+      "rotation_error_deg": {
+        "n": 30,
+        "rmse": 1.8200455537142743,
+        "median": 1.6764255895323057,
+        "p95": 2.9242915120444986,
+        "max": 3.39963523747845
+      },
+      "native_converged_frames": 30,
+      "native_admissible_frames": 29
+    },
+    "CONTROL_SPLIT": {
+      "translation_error_m": {
+        "n": 30,
+        "rmse": 0.27333917342731734,
+        "median": 0.2650973324568589,
+        "p95": 0.35690987585152045,
+        "max": 0.41451458372376554
+      },
+      "rotation_error_deg": {
+        "n": 30,
+        "rmse": 1.9134517424812378,
+        "median": 1.7690459645901724,
+        "p95": 2.661947965003138,
+        "max": 3.475723520461174
+      },
+      "native_converged_frames": 30,
+      "native_admissible_frames": 29
+    }
+  },
+  "event_frames": [
+    {
+      "frame": 18,
+      "raw_ordinal": 7570,
+      "stamp_ns": 1583837348070227968,
+      "reason": "ROTATION_LIMIT|NOMINAL_ADMISSION_REJECTED"
+    }
+  ],
+  "note": "No per-method trajectory alignment or post-hoc frame transform was fitted."
+}

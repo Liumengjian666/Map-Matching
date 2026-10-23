@@ -1,0 +1,43 @@
+{
+  "task": "P62-R16-REAL-NDT-DEGENERACY-CASE",
+  "frozen_at_utc": "2026-10-22T02:08:36.956134+00:00",
+  "native_align_calls": 60,
+  "extra_recovery_align_calls": 0,
+  "evaluation_reference_pose_values_read": false,
+  "files": {
+    "NDT_RESULTS.csv": {
+      "bytes": 30584,
+      "sha256": "ae2db1639cad51fd13c69821e2d3227e43cdc6d2df5a87252022f56aa528163e"
+    },
+    "GEOMETRY_AND_DEGENERACY.csv": {
+      "bytes": 32999,
+      "sha256": "427a2ec21483e57841b9f12f19aec4c412a79c12ecd3a19941a4bade15c8a5c2"
+    },
+    "PREDICTION_DISAGREEMENT.csv": {
+      "bytes": 23246,
+      "sha256": "ce7a94ac39190c6084aa4fa8539ca1b8e0b3e0b53cfd58797960639ffa014f76"
+    },
+    "EVENTS.csv": {
+      "bytes": 2288,
+      "sha256": "1b3c82c25bc24c6ac56a60f6b3e37edf87ed506fe103a6c3559d6c5ea316782b"
+    },
+    "RUNTIME_AND_MEMORY.csv": {
+      "bytes": 6509,
+      "sha256": "23c9d5b5370de049f79fe16ceb06e0e715eb7dd25dbe4c8df90e174061eaf47e"
+    },
+    "ALIGN_CALLS.csv": {
+      "bytes": 2973,
+      "sha256": "4760ea02e220522bffb7aa7ca86704cb06edfc5a6d26504afbb3588e9be85bf3"
+    },
+    "FORMAL_RUN_01.log": {
+      "bytes": 2515,
+      "sha256": "76c2fb98fd7999169f2a3491c7be451b7cc267c1a09a1703923a831f21eaf9b5"
+    }
+  },
+  "rows": {
+    "NDT_RESULTS.csv": 60,
+    "GEOMETRY_AND_DEGENERACY.csv": 30,
+    "EVENTS.csv": 30,
+    "ALIGN_CALLS.csv": 60
+  }
+}

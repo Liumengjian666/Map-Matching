@@ -1,0 +1,64 @@
+{
+  "task": "P62-R16-REAL-NDT-DEGENERACY-CASE",
+  "git_start_sha": "8cfbdb48fd4ceb540ade908364ce6d98ed4b9ffa",
+  "branch": "research/p62-r16-real-ndt-degeneracy-case",
+  "executable": "/tmp/p62_r16_build/run_ndt",
+  "executable_sha256": "3f838fc7620706caa02653b85bc31d950c396d2ef398d29a52f00d12a36c636d",
+  "pcl_version": "1.10.0",
+  "parameters": {
+    "resolution_m": 0.8,
+    "step_size": 0.08,
+    "epsilon": 0.001,
+    "max_iterations": 40,
+    "outlier_ratio": 0.55
+  },
+  "formal_geometry_weak_ratio_threshold": 0.01,
+  "formal_pose_admission": {
+    "translation_m": 0.8,
+    "rotation_deg": 5.0,
+    "overlap_at_0p5m": 0.5
+  },
+  "source_files": {
+    "/home/jian/livox_ws/p62_r16_degeneracy_ws/docs/p62_r16_real_degeneracy_case/tools/run_ndt.cpp": "1616e1db7ba8d5b1b92f113e9e56b3817f22600141256e2a7b02b6580bf7a8b6",
+    "/home/jian/livox_ws/p62_r16_degeneracy_ws/docs/p62_r16_real_degeneracy_case/tools/prepare_map.cpp": "58a65044541bced9ccce34305a6b009dc5f3297f61fa8ecd16ecd0df88f9190c",
+    "/home/jian/livox_ws/p62_r16_degeneracy_ws/docs/p62_r16_real_degeneracy_case/tools/CMakeLists.txt": "48fdbf521c4af967329e39c9b771e0af8194954980d738bdfca172cd0ce3b8a0",
+    "/home/jian/livox_ws/p62_r16_degeneracy_ws/docs/p62_r14b_newer_college/conditional_base_pilot/tools/common.hpp": "bf02e7d9782f32d34b686de20ba9af4dcbc02a797510e65ac68690c676d42108",
+    "/home/jian/livox_ws/p62_r16_degeneracy_ws/docs/p62_r13_training_guided_multihypothesis/tools/coarse.hpp": "5e2c9191a3193e32db55eb47957e566c6bdc9cbefe48ca9f026cd91ac2d48a3a",
+    "/home/jian/livox_ws/p62_r16_degeneracy_ws/docs/p62_r9_coverage_aware_recovery_v2/tools/io.hpp": "3ed296c11a5f9a6ff46c6720e8fb6d4a9e7e101c6a7b6e366697ce2e11c6348e",
+    "/home/jian/livox_ws/p62_r16_degeneracy_ws/docs/p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp": "727e2ed66a49f4f004f483491b4dbf748abd738b7c0b4fc576ffc813774f5af4",
+    "/home/jian/livox_ws/p62_r16_degeneracy_ws/docs/p62_r9_coverage_aware_recovery_v2/tools/direction.hpp": "f6758056924599ba3078a8499d7d9a2fc0f3cdde85139ef1860ef5896d8aa6db",
+    "/home/jian/livox_ws/p62_r16_degeneracy_ws/docs/p62_r8_structural_admission/tools/preprocess.hpp": "11225b3f0a044bfcbfba25fa9340f41d1e2dd6d2997c9de66773eeb531f3ada1",
+    "/home/jian/livox_ws/p62_r16_degeneracy_ws/docs/p62_r7_motion_selected_shadow/tools/recovery.hpp": "b18f9dd1b03f02f2a08b835a757c08e4385e881e9b2726e9354e3eaa053779b8",
+    "/home/jian/livox_ws/p62_r16_degeneracy_ws/docs/p62_r6_dog_shadow_prototype/tools/native_kernel.hpp": "4dbc81a42d6fcbb6275c85cfd8bd69a2e94f8b0775d00d6b338556903905cbac",
+    "/home/jian/livox_ws/p62_r16_degeneracy_ws/docs/p62_r6_dog_shadow_prototype/tools/contract.hpp": "c44a4e45aa12555763eab768f52d6e45109ccf9fb998893831c17c88d8b0446d",
+    "/home/jian/livox_ws/p62_r16_degeneracy_ws/docs/p62_r10_feasibility_event_recovery/tools/native_capture.hpp": "581f2dad0fae57cd82fc1d68e05d02fd025a8ce8841aaf4f07bedbd06bb5529c",
+    "/home/jian/livox_ws/p62_r16_degeneracy_ws/docs/p62_r10_feasibility_event_recovery/tools/events.hpp": "f7624d5a4c523e93c75793b8b69ab9d982438bbb68e0f653cb4b6e46b73d7868"
+  },
+  "map": {
+    "path": "/home/jian/livox_ws/p62_r16_degeneracy_data/newer_college_7552_7582_roi.pcd",
+    "bytes": 2877150,
+    "sha256": "ecc3b8d11e68ad28633e2aa4fb6effae1a5ccaeb6a8e1eb20d81e6fcc4ae7eca",
+    "target_points": 239748,
+    "target_fnv": "bac380ff897d34d3",
+    "voxel_m": 0.2,
+    "roi_radius_m": 50.0,
+    "gaussian_grid_resolution_m": 0.8
+  },
+  "scan_table": {
+    "path": "/home/jian/livox_ws/p62_r16_degeneracy_ws/docs/p62_r16_real_degeneracy_case/SCANS_V2.csv",
+    "sha256": "d3dae53b62642c60b249ffc9841b6c404fb032891014d2172759867a2093cfa7"
+  },
+  "preregistration_sha256": "c61498a2e0020d83788edb0b8ccc4b72999eba8c85fc6a0265ec300fe67ad9a5",
+  "anchor_matrix_sha256": "f319c9c2197999c243d087639480250894c374b39d49927a3a7fb61a2ba87faa",
+  "input_identity_sha256": "000c055e15caf3a9fc8e04cf5cefa75b909097fd586984b574c15a7c34e5d7e3",
+  "pcd_format_test_sha256": "56eb5f8df9008a70726936ffd8d7aa93dd19b024f31cbba01c129531e3194c67",
+  "map_build_csv_sha256": "27f342f966ccc16ca2c2845836d3b4b334799cf79c93cd9bf3495837b562b62f",
+  "experiment": {
+    "evaluation_frames": 30,
+    "anchor_frames": 1,
+    "expected_native_align_calls": 60,
+    "extra_align_calls": 0,
+    "full_and_split_share_causal_prediction": true,
+    "ground_truth_values_read_for_evaluation": false
+  }
+}

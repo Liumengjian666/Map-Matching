@@ -1,0 +1,50 @@
+{
+  "task": "P62-R16-REAL-NDT-DEGENERACY-CASE",
+  "phase": "RAW_INPUT_GEOMETRY_WINDOW_PRESCREEN",
+  "frozen_before_pcd_prescreen": true,
+  "git_start_sha": "8cfbdb48fd4ceb540ade908364ce6d98ed4b9ffa",
+  "branch": "research/p62-r16-real-ndt-degeneracy-case",
+  "source": {
+    "path": "docs/p62_r16_real_degeneracy_case/tools/prescreen.cpp",
+    "sha256": "b649d4d6418ad0cc646808f070bb4475cdb4eb94f294409cb5c45b45d0c4d732"
+  },
+  "build_file": {
+    "path": "docs/p62_r16_real_degeneracy_case/tools/CMakeLists.txt",
+    "sha256": "e70e1ce9a8632266b8556eb7f7e02934fe8f87a069d46fade03c78c91656b9c1"
+  },
+  "binary": {
+    "path": "/tmp/p62_r16_prescreen_build/prescreen",
+    "sha256": "1f3a3dc85fd05aea1ba7ac6fb7356d7ca3315fea8668cc5f58160782c8211fde"
+  },
+  "preprocessing_dependencies": [
+    {"path": "docs/p62_r14b_newer_college/LOCAL_SCAN_INVENTORY.csv", "sha256": "66c4ff9c6d07100a318a372b1ba37af22fc1f61101b6b3fb546c95f83bcc07a4"},
+    {"path": "docs/p62_r14b_newer_college/conditional_base_pilot/tools/common.hpp", "sha256": "bf02e7d9782f32d34b686de20ba9af4dcbc02a797510e65ac68690c676d42108"},
+    {"path": "docs/p62_r8_structural_admission/tools/preprocess.hpp", "sha256": "11225b3f0a044bfcbfba25fa9340f41d1e2dd6d2997c9de66773eeb531f3ada1"},
+    {"path": "docs/p62_r6_dog_shadow_prototype/tools/native_kernel.hpp", "sha256": "4dbc81a42d6fcbb6275c85cfd8bd69a2e94f8b0775d00d6b338556903905cbac"},
+    {"path": "docs/p62_r6_dog_shadow_prototype/tools/contract.hpp", "sha256": "c44a4e45aa12555763eab768f52d6e45109ccf9fb998893831c17c88d8b0446d"},
+    {"path": "docs/p62_r9_coverage_aware_recovery_v2/tools/io.hpp", "sha256": "3ed296c11a5f9a6ff46c6720e8fb6d4a9e7e101c6a7b6e366697ce2e11c6348e"},
+    {"path": "docs/p62_r14b_newer_college/conditional_base_pilot/TEST_FRAME_PREREGISTRATION.json", "sha256": "1b7525585ef49204fcabf75e9c8096d4e43f18be34b982369bfe92ab36e000d1"}
+  ],
+  "input_inventory": {
+    "canonical_rows": 15301,
+    "sha256": "66c4ff9c6d07100a318a372b1ba37af22fc1f61101b6b3fb546c95f83bcc07a4",
+    "extra_unlisted_duplicate_excluded": "cloud_1583837971_358315008(1).pcd"
+  },
+  "selection_contract": {
+    "sequence_fraction_start": 0.05,
+    "fixed_scan_stride": 20,
+    "max_unique_pcd_reads_including_window": 800,
+    "window_frames": 31,
+    "window_center": "sampled scan with minimum scanner-frame covariance lambda_min/lambda_max; tie earliest ordinal",
+    "raw_geometry_preprocessing": "R14B PCL binary PCD decode; finite XYZ; range 0.5-80m; 0.25m VoxelGrid; endpoint-uniform 1400 point cap",
+    "formal_ndt_degeneracy_claim_from_prescreen": false
+  },
+  "pre_screen_scope": {
+    "ndt_align_calls": 0,
+    "registered_pose_values_read": 0,
+    "map_accessed": false,
+    "gt_error_accessed": false,
+    "candidate_or_localization_results_accessed": false
+  },
+  "toolchain": {"compiler": "GCC 9.4.0", "pcl": "1.10.0", "language_standard": "C++14"}
+}

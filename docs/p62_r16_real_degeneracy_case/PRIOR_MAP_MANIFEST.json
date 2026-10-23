@@ -1,0 +1,17 @@
+{
+  "source": "/home/jian/livox_ws/p62_r16_degeneracy_data/newer_college_7552_7582_roi.pcd",
+  "bytes": 2877150,
+  "sha256": "ecc3b8d11e68ad28633e2aa4fb6effae1a5ccaeb6a8e1eb20d81e6fcc4ae7eca",
+  "target_points": 239748,
+  "target_fnv": "bac380ff897d34d3",
+  "roi_radius_m": 50.0,
+  "voxel_leaf_m": 0.2,
+  "roi_center_m": [
+    17.314602660501542,
+    -56.21804509426356,
+    -0.09963786084164694
+  ],
+  "map_frame": "official Leica M",
+  "source_leica_ply_sha256": "e8bf6c7f2ddacde4f6f65ba7759b00bdca5c6bf5e706344ce8c3592529f04ab0",
+  "build_metrics_csv_sha256": "27f342f966ccc16ca2c2845836d3b4b334799cf79c93cd9bf3495837b562b62f"
+}

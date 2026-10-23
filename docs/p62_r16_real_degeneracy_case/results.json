@@ -1,0 +1,168 @@
+{
+  "task": "P62-R16-REAL-NDT-DEGENERACY-CASE",
+  "git": {
+    "repository": "https://github.com/Liumengjian666/Map-Matching",
+    "workspace": "/home/jian/livox_ws/p62_r16_degeneracy_ws",
+    "branch": "research/p62-r16-real-ndt-degeneracy-case",
+    "start_sha": "8cfbdb48fd4ceb540ade908364ce6d98ed4b9ffa",
+    "source_archive_sha": "65b2c92edb0d5a48c02799f9a824653073d90ff8",
+    "source_archive_commit_created_after_run": true,
+    "pre_run_code_git_commit": null,
+    "native_source_sha256": "1616e1db7ba8d5b1b92f113e9e56b3817f22600141256e2a7b02b6580bf7a8b6",
+    "native_binary_sha256": "3f838fc7620706caa02653b85bc31d950c396d2ef398d29a52f00d12a36c636d",
+    "push_executed": false
+  },
+  "status": [
+    "FROZEN_G_WEAK_DIRECTIONS_OBSERVED",
+    "REFERENCE_RELATIVE_ADMISSION_FALSE_REJECTION_OBSERVED",
+    "NDT_WRONG_BASIN_NOT_ESTABLISHED",
+    "GEOMETRY_TO_ERROR_CAUSAL_LINK_UNKNOWN",
+    "NOVELTY_NOT_ESTABLISHED"
+  ],
+  "dataset": "Newer College 2020 / 01_short_experiment",
+  "prescreen": {
+    "canonical_frame_count": 15301,
+    "stride": 20,
+    "sampled_frames": 726,
+    "unique_pcd_reads_including_selected_window": 756,
+    "unique_read_cap": 800,
+    "selection_signal": "Scanner-frame covariance lambda_min/lambda_max after frozen Source preprocessing; input proxy only",
+    "winner_raw_ordinal_one_based": 7567,
+    "winner_ratio": 0.0062502250993394246,
+    "GT_pose_values_used": false,
+    "map_correspondences_or_NDT_results_used": false,
+    "raw_csv_zero_based_field_mislabeled_one_based": true,
+    "raw_csv_preserved": true
+  },
+  "window": {
+    "raw_ordinal_convention": "one-based canonical R14B inventory",
+    "anchor_ordinal": 7552,
+    "evaluation_ordinals_inclusive": [7553, 7582],
+    "anchor_stamp_ns": 1583837346270734080,
+    "evaluation_start_ns": 1583837346370362624,
+    "evaluation_end_ns": 1583837349270243328,
+    "preregistration_sha256": "c61498a2e0020d83788edb0b8ccc4b72999eba8c85fc6a0265ec300fe67ad9a5",
+    "window_count": 1,
+    "formal_experiment_count": 1,
+    "reference_evaluation_count": 1
+  },
+  "contracts": {
+    "coordinate_assumption": "PAPER_SUPPORTED_BASE_FRAME_ASSUMPTION",
+    "chain": "T_M_L = T_M_B * T_B_C * T_C_I * T_I_L",
+    "file_level_CSV_axis_binding": "NOT_ESTABLISHED",
+    "reference": "MAP_ANCHORED_BENCHMARK_REFERENCE",
+    "independent_mocap": false,
+    "reference_exact_time_pairs": 31,
+    "reference_match_delta_ns": 0,
+    "anchor_reference_poses_used_before_NDT": 1,
+    "evaluation_reference_poses_read_after_native_output_freeze": 30,
+    "GT_used_for_prediction_or_NDT_after_anchor": false,
+    "trajectory_alignment_fitted": false,
+    "new_deskew": false,
+    "point_cloud_format_pass_frames": 31,
+    "zero_tail_bytes_each": 3846,
+    "original_PCD_modified": false,
+    "selected_input_identities_unchanged": true,
+    "native_output_freeze_unchanged": true,
+    "historical_tracked_files_modified": false,
+    "stable_workspace_write_operations": 0,
+    "independent_stable_before_after_snapshot_collected": false
+  },
+  "map": {
+    "official_PLY_sha256": "e8bf6c7f2ddacde4f6f65ba7759b00bdca5c6bf5e706344ce8c3592529f04ab0",
+    "roi_radius_m": 50.0,
+    "voxel_leaf_m": 0.2,
+    "target_points": 239748,
+    "target_sha256": "ecc3b8d11e68ad28633e2aa4fb6effae1a5ccaeb6a8e1eb20d81e6fcc4ae7eca",
+    "anchor_overlap_at_0p5m": 0.7778571428571428,
+    "build_count": 1,
+    "evaluation_reference_used_for_roi": false
+  },
+  "native_experiment": {
+    "full_align_calls": 30,
+    "split_align_calls": 30,
+    "extra_align_calls": 0,
+    "coupled_calls": 0,
+    "EKF_calls": 0,
+    "native_converged_full": 30,
+    "native_converged_split": 30,
+    "admitted_full": 29,
+    "admitted_split": 29,
+    "R10_old_trigger_count": 0,
+    "R10_complete_event_count": 1,
+    "prediction_source": "Common causal R14B right/body constant velocity from past admitted CONTROL_FULL; hold after rejection",
+    "NDT_parameters": {"resolution_m": 0.8, "step_size": 0.08, "epsilon": 0.001, "max_iterations": 40, "outlier_ratio": 0.55}
+  },
+  "geometry": {
+    "source": "unchanged R6 NativeNdt.geometry on Training at final Split pose; not native Hessian",
+    "ratio_threshold": 0.01,
+    "valid_frames": 30,
+    "weak_direction_frames": 30,
+    "weak_directions_each_frame": 3,
+    "ratio0_min": 0.0013507781434187803,
+    "ratio0_median": 0.001633208308640215,
+    "ratio0_max": 0.0019561643165340813,
+    "ratio3_min": 0.021536508815678323,
+    "condition_number_min": 511.20449930903203,
+    "condition_number_median": 612.291814122322,
+    "condition_number_max": 740.3140218637452,
+    "interpretation_limit": "Inherited scale-dependent PSD geometry diagnostic; does not certify physical loss of observability or erroneous NDT."
+  },
+  "reference_relative_error": {
+    "PREDICTION": {
+      "n": 30,
+      "translation_m": {"rmse": 0.2769827291807523, "median": 0.2572974626060778, "p95": 0.40536855477394235, "max": 0.5036354618712741},
+      "rotation_deg": {"rmse": 2.417264545005853, "median": 2.152765123059889, "p95": 3.8165235055643634, "max": 4.8741067982865856}
+    },
+    "CONTROL_FULL": {
+      "n": 30,
+      "translation_m": {"rmse": 0.25174377292982514, "median": 0.25306763322227455, "p95": 0.31979458139881023, "max": 0.320876343157107},
+      "rotation_deg": {"rmse": 1.8200455537142743, "median": 1.6764255895323057, "p95": 2.9242915120444986, "max": 3.39963523747845}
+    },
+    "CONTROL_SPLIT": {
+      "n": 30,
+      "translation_m": {"rmse": 0.27333917342731734, "median": 0.2650973324568589, "p95": 0.35690987585152045, "max": 0.41451458372376554},
+      "rotation_deg": {"rmse": 1.9134517424812378, "median": 1.7690459645901724, "p95": 2.661947965003138, "max": 3.475723520461174}
+    }
+  },
+  "case": {
+    "frame": 18,
+    "raw_ordinal_one_based": 7570,
+    "stamp_ns": 1583837348070227968,
+    "event": "ROTATION_LIMIT|NOMINAL_ADMISSION_REJECTED",
+    "prediction_reference_error": {"translation_m": 0.29236612456708316, "rotation_deg": 4.8741067982865856},
+    "full_reference_error": {"translation_m": 0.23873130369495868, "rotation_deg": 1.8335337885737104},
+    "split_reference_error": {"translation_m": 0.26904351651313785, "rotation_deg": 1.9586940345436443},
+    "full_rotation_from_prediction_deg": 5.627696951694614,
+    "split_rotation_from_prediction_deg": 5.8297303628433417,
+    "full_overlap": 0.876984126984127,
+    "split_overlap": 0.8743386243386243,
+    "full_admitted": false,
+    "split_admitted": false,
+    "frame19_prediction_equals_frame17_full_max_abs": 0.0,
+    "frame19_prediction_translation_reference_error_m": 0.5036354618712741,
+    "causal_attribution": "Reference-relative prediction/admission limitation observed; geometry-caused matching failure UNKNOWN."
+  },
+  "runtime": {
+    "native_process_wall_ms": 69384.9,
+    "full_align_mean_ms": 1567.8085608666668,
+    "split_align_mean_ms": 690.9832157666667,
+    "geometry_mean_ms": 24.9153971,
+    "frame_wall_mean_ms": 2309.9237320666666,
+    "native_peak_rss_KiB": 70264,
+    "map_build_ms": 6269.837147,
+    "map_build_reported_peak_rss_KiB": 575084,
+    "map_load_and_gaussian_grid_init_ms": 43.652146,
+    "release_optimization_enabled": false,
+    "raw_startup_runtime_row_extra_field_disclosed_and_normalized": true,
+    "realtime_established": false
+  },
+  "hypotheses": {
+    "H1": "Frozen R9 criterion positive in 30/30 frames; physical unobservability not certified.",
+    "H2": "One conditional reference-relative admission false rejection; weak-geometry-to-NDT-error causal link UNKNOWN.",
+    "H3": "Prediction-relative admission/fallback is the concrete exposed limitation; wrong NDT basin not established."
+  },
+  "innovation_status": "NOT_ESTABLISHED",
+  "next": "Preregister one literature-established long-corridor case with traceable reference and reproduce an actual native NDT failure before approving another mitigation algorithm.",
+  "stopped_after_authorized_window": true
+}

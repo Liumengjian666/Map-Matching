@@ -1,0 +1,20 @@
+{
+  "compiler": "c++ (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0",
+  "pcl_version": "1.10.0",
+  "cmake_build_type": "",
+  "actual_cxx_flags": "-std=gnu++14",
+  "release_optimization_enabled": false,
+  "source_archive_commit": "65b2c92edb0d5a48c02799f9a824653073d90ff8",
+  "source_archive_commit_created_after_run": true,
+  "pre_run_native_source_sha256": "1616e1db7ba8d5b1b92f113e9e56b3817f22600141256e2a7b02b6580bf7a8b6",
+  "original_executable": "/tmp/p62_r16_build/run_ndt",
+  "preserved_executable": "/home/jian/livox_ws/p62_r16_degeneracy_data/run_ndt_frozen",
+  "executable_bytes": 5048848,
+  "executable_sha256": "3f838fc7620706caa02653b85bc31d950c396d2ef398d29a52f00d12a36c636d",
+  "preserved_copy_byte_comparison": "PASS",
+  "runtime_loader_environment": {
+    "LD_PRELOAD": "/lib/x86_64-linux-gnu/libusb-1.0.so.0",
+    "LD_BIND_NOW": "1"
+  },
+  "timing_interpretation": "Measured unoptimized research prototype; production realtime and optimized comparisons are not established."
+}
