@@ -1,0 +1,29 @@
+{
+  "G0": "PASS",
+  "G1": "PASS_WITH_DELAYED_PREDICTION_LIMITATION",
+  "scans": 20,
+  "ndt_published": 20,
+  "oosm_applied": 20,
+  "imu_high_rate_publishes": 210,
+  "extra_aligns": 0,
+  "test_reference_values_read": false,
+  "feedback_limitation": "19/19 subsequent TP samples lag latest completed map correction by one revision; causal historical EKF states, not latest-posterior history republishing",
+  "files_sha256": {
+    "ROSLAUNCH.log": "4f99a0b57524d4448bfac0323ddb3a4bbe801590e7a7f2e3c014383d4159dbdb",
+    "ndt_diagnostics.csv": "da46bf5c97090f7c0714f3d1f6f0cca6455ad49b8ae550a2c859b5f7d972a889",
+    "ekf_prediction_diagnostics.csv": "2a5e5602a9558de4cd83ee8c733bb5da0a72c272e588f694dc118447e8a00742",
+    "localization_trajectory.csv": "7da3811adf0afedaf411b602bfa30ac528fd8c95de3deb906bbdd01c47db334f",
+    "COMPLETED_INPUT_SHUTDOWN.json": "6374b508b7d737a1b1416a554cf94e59d461cbf54496b0bf54a58876e02e444f",
+    "RUN_COMMAND.json": "5cdfb72d9c90be2dc4866c39a78f44ab04be2a5511798e996085ec1a37f75887",
+    "geometry_diagnostics.csv": "24d337a8e5090aee2e1fed9cd24ec8ace31165a58c80bc15e722c66adc1cb765",
+    "local_map_diagnostics.csv": "21080118a710d36d119d5283079c953911c9c3c27eefa9749aadbf1e5ef8c7a2",
+    "RUN_RECEIPT.json": "e5d116e0e27f40279c52949532cce1305c98c53b8132f46e826edf1275b69deb",
+    "r23_ndt_lineage.csv": "ef02a546e8455f58dc8d85b418caad28987c9928e04dc973510c38c6e7f2d252",
+    "PROCESS_MEMORY.csv": "388162c5cb325403d2d73015d62a757a62a055d377a0d6cadae7504e34f723c3",
+    "oosm_statistics.csv": "62b1166fb72569c33fd61ca06d1f85931117a66b427fa1f6c00d9c17bd913af4",
+    "ndt_runtime.csv": "98c44505f2d0c5a2711827eb081a4ec0f4fd81665b9ec1b07c2cacf61ef116d3",
+    "deskew_diagnostics.csv": "cf45565dd3c0a4d79c92ff3f9184eaff0af293c583ed7600e31eea9be9b8dbd0",
+    "publisher_receipts.csv": "6b60d3609fc06036553b343846796db24190e539b5052365baf7a31fa216955d"
+  },
+  "shutdown": "20 completed inputs then explicit graceful shutdown of own ROS session; process wall includes idle inspection and is not algorithm wall"
+}

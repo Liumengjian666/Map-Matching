@@ -1,0 +1,5 @@
+{
+  "owned_roslaunch_pid": 503651,
+  "reason": "20 input frames completed and acknowledged; publisher exited but existing launch kept NDT/EKF alive; graceful owned-session shutdown only",
+  "wall_time": 1792766210.8100162
+}

@@ -1,0 +1,58 @@
+{
+  "window": "W1",
+  "arm": "C0",
+  "strategy": "BASELINE",
+  "scan_count": 20,
+  "run_dir": "/home/jian/livox_ws/p62_r23_real_imu_data/smoke_baseline_01",
+  "command_argv": [
+    "bash",
+    "--noprofile",
+    "--norc",
+    "-c",
+    "source /opt/ros/noetic/setup.bash && source /home/jian/livox_ws/p62_r23_real_imu_closure_ws/devel/setup.bash && exec roslaunch dog_prior_map_localization p62_r23_integrated_localization.launch strategy:=BASELINE initialization_config:=/home/jian/livox_ws/p62_r23_real_imu_closure_ws/docs/p62_r23_real_imu_closure/config/w1_c0_initialization.yaml start_stamp_ns:=1583836851179232512 imu_replay_start_stamp_ns:=1583836851078989056 expected_boundary_imu_stamp_ns:=1583836851078961159 scan_count:=20 output_dir:=/home/jian/livox_ws/p62_r23_real_imu_data/smoke_baseline_01 rviz:=false"
+  ],
+  "roslaunch_argv": [
+    "roslaunch",
+    "dog_prior_map_localization",
+    "p62_r23_integrated_localization.launch",
+    "strategy:=BASELINE",
+    "initialization_config:=/home/jian/livox_ws/p62_r23_real_imu_closure_ws/docs/p62_r23_real_imu_closure/config/w1_c0_initialization.yaml",
+    "start_stamp_ns:=1583836851179232512",
+    "imu_replay_start_stamp_ns:=1583836851078989056",
+    "expected_boundary_imu_stamp_ns:=1583836851078961159",
+    "scan_count:=20",
+    "output_dir:=/home/jian/livox_ws/p62_r23_real_imu_data/smoke_baseline_01",
+    "rviz:=false"
+  ],
+  "shell_command": "source /opt/ros/noetic/setup.bash && source /home/jian/livox_ws/p62_r23_real_imu_closure_ws/devel/setup.bash && exec roslaunch dog_prior_map_localization p62_r23_integrated_localization.launch strategy:=BASELINE initialization_config:=/home/jian/livox_ws/p62_r23_real_imu_closure_ws/docs/p62_r23_real_imu_closure/config/w1_c0_initialization.yaml start_stamp_ns:=1583836851179232512 imu_replay_start_stamp_ns:=1583836851078989056 expected_boundary_imu_stamp_ns:=1583836851078961159 scan_count:=20 output_dir:=/home/jian/livox_ws/p62_r23_real_imu_data/smoke_baseline_01 rviz:=false",
+  "ros_environment": {
+    "ROS_MASTER_URI": "http://127.0.0.1:11383",
+    "ROS_HOME": "/home/jian/livox_ws/p62_r23_real_imu_data/smoke_baseline_01/ros_home",
+    "ROS_LOG_DIR": "/home/jian/livox_ws/p62_r23_real_imu_data/smoke_baseline_01/ros_logs",
+    "ROS_IP": "127.0.0.1"
+  },
+  "timeout_seconds": 300,
+  "poll_interval_seconds": 0.05,
+  "input_contract_path": "/home/jian/livox_ws/p62_r23_real_imu_closure_ws/docs/p62_r23_real_imu_closure/input/INITIALIZATION_AND_TIME_CONTRACT.json",
+  "input_contract_sha256": "1c3188b4822888894ed8abdf5d11dec8218efc6830336ac8d962802d1df3aa70",
+  "initialization_sha256": "cc59fb3a6bfe99973beea8c9222f36479ba1d25531f87e54059652a5606304af",
+  "binaries_sha256": {
+    "ndt": "4677f5db6e7ce135a6b853f752848fb36e716773b2913e173455bb177542a5ba",
+    "ekf": "687d8b274600fd544660c8c01b1438c84314ad351cd1f30c8fbb16cd68479383"
+  },
+  "git_head_at_start": "c5909ca5bb9a631bbe601d98df9154abd7218a79",
+  "reference_access": "none; supervisor reads input contract and OS process accounting only",
+  "started_utc": "2026-10-23T14:33:40.989405+00:00",
+  "wall_seconds": 191.0484153110301,
+  "process_exit_code": 0,
+  "timed_out": false,
+  "interrupted": false,
+  "signal_escalation": [],
+  "rss_samples": 3813,
+  "ndt_peak_rss_KiB": 380788,
+  "ekf_peak_rss_KiB": 21232,
+  "simultaneous_ndt_ekf_peak_rss_KiB": 401948,
+  "all_owned_tree_peak_rss_KiB": 548100,
+  "supervisor_status": "PROCESS_FINISHED",
+  "localization_acceptance": "NOT_DECIDED_BY_SUPERVISOR; inspect real lineage/diagnostic receipts"
+}
