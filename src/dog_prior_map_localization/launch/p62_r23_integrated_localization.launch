@@ -1,11 +1,11 @@
 <launch>
-  <arg name="strategy" default="BASELINE" />
+  <arg name="strategy" default="MULTISTART_C" />
   <arg name="initialization_config" default="$(find dog_prior_map_localization)/../../docs/p62_r23_real_imu_closure/config/w1_c0_initialization.yaml" />
   <arg name="start_stamp_ns" default="1583836851179232512" />
   <arg name="imu_replay_start_stamp_ns" default="1583836851078989056" />
   <arg name="expected_boundary_imu_stamp_ns" default="1583836851078961159" />
-  <arg name="scan_count" default="20" />
-  <arg name="output_dir" default="/home/jian/livox_ws/p62_r23_real_imu_data/manual_baseline" />
+  <arg name="scan_count" default="60" />
+  <arg name="output_dir" default="/home/jian/livox_ws/p62_r23_real_imu_data/$(anon interactive_r23)" />
   <arg name="rviz" default="true" />
   <include file="$(find dog_prior_map_localization)/launch/newer_college_local_map.launch">
     <arg name="dataset_root" value="/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment" />
@@ -17,6 +17,7 @@
     <arg name="scan_count" value="$(arg scan_count)" />
     <arg name="output_dir" value="$(arg output_dir)" />
     <arg name="rviz" value="$(arg rviz)" />
+    <arg name="rviz_config" value="$(find dog_prior_map_localization)/rviz/p62_r23_integrated_localization.rviz" />
   </include>
   <param name="research/r23_enable" value="true" />
   <param name="research/r23_policy" value="$(arg strategy)" />
