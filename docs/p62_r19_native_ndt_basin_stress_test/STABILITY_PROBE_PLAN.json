@@ -1,0 +1,61 @@
+{
+  "selection_rule": "first persistent run ordered WEAK before STRONG, C1/C2/C3, earliest frame; first 3 frames; C0 and disturbed raw terminal starts",
+  "persistent_run": {
+    "role": "STRONG",
+    "arm": "C3",
+    "start_frame": 3,
+    "end_frame": 5,
+    "length": 3
+  },
+  "requests": [
+    {
+      "role": "STRONG",
+      "arm": "C0",
+      "frame": 3,
+      "raw_ordinal": "10975",
+      "stamp_ns": "1583837688564640000"
+    },
+    {
+      "role": "STRONG",
+      "arm": "C3",
+      "frame": 3,
+      "raw_ordinal": "10975",
+      "stamp_ns": "1583837688564640000"
+    },
+    {
+      "role": "STRONG",
+      "arm": "C0",
+      "frame": 4,
+      "raw_ordinal": "10976",
+      "stamp_ns": "1583837688664657664"
+    },
+    {
+      "role": "STRONG",
+      "arm": "C3",
+      "frame": 4,
+      "raw_ordinal": "10976",
+      "stamp_ns": "1583837688664657664"
+    },
+    {
+      "role": "STRONG",
+      "arm": "C0",
+      "frame": 5,
+      "raw_ordinal": "10977",
+      "stamp_ns": "1583837688764007424"
+    },
+    {
+      "role": "STRONG",
+      "arm": "C3",
+      "frame": 5,
+      "raw_ordinal": "10977",
+      "stamp_ns": "1583837688764007424"
+    }
+  ],
+  "extra_native_align_budget": 8,
+  "planned_extra_native_aligns": 6,
+  "native_output_freeze_sha256": "dbcfd8ca506d423eaf7b2f8feacd4c296c8b44ad6b4a8f5ac70e0f512adf1550",
+  "plan_csv_sha256": "c19a8c8bd7060508f4a9037c973c597c11a44dd4c1d583a2ffad57057771ed53",
+  "probe_source_sha256": "10dc3bb61f61590c08d40b989b7ab5c8603b0439e7541e78896b4d86d63ff997",
+  "probe_binary_sha256": "3904a3e2d4e9663392d7455087ea76ecb89e35409accf58c184ecad6b2b33933",
+  "reference_used_only_to_activate_preregistered_probe": true
+}
