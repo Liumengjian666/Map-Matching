@@ -41,6 +41,7 @@
 #include <std_msgs/Header.h>
 #include <tf/transform_broadcaster.h>
 #include "dog_prior_map_localization/external_ndt_transaction_server.hpp"
+#include "../../../docs/p62_r21_relative_temporal_admission/tools/policy.hpp"
 #include "dog_prior_map_localization/core/frame_conversions.hpp"
 #include "dog_prior_map_localization/core/causal_pose_prediction.hpp"
 #include "dog_prior_map_localization/core/ekf_translation_prior.hpp"
@@ -481,8 +482,9 @@ public:
 
     r23_enable_ = getParam<bool>("research/r23_enable", false);
     if (r23_enable_) {
-      if (getParam<std::string>("research/r23_policy", "BASELINE") != "BASELINE")
-        throw std::runtime_error("R23 G1 Smoke permits BASELINE only before C/D integration");
+      r23_policy_ = getParam<std::string>("research/r23_policy", "BASELINE");
+      if (r23_policy_!="BASELINE" && r23_policy_!="MULTISTART_C" && r23_policy_!="RELATIVE_D_EXPERIMENTAL")
+        throw std::runtime_error("R23 unknown explicit strategy");
       const std::string path = getParam<std::string>("output/r23_lineage_csv", "");
       if (path.empty() || coupled_enabled_ || geode_scan_end_bridge_enable_ || mature_integration_enable_)
         throw std::runtime_error("R23 requires explicit log and existing CONTROL pipeline only");
@@ -492,6 +494,14 @@ public:
       for (const auto prefix : {"tp", "raw", "published"})
         for (int i=0;i<4;++i)for(int j=0;j<4;++j)r23_lineage_ << ',' << prefix << i << j;
       r23_lineage_ << '\n';
+      const auto slash=path.find_last_of('/');const std::string dir=path.substr(0,slash+1);
+      r23_admission_.open(dir+"r23_admission.csv");r23_candidates_.open(dir+"r23_candidates.csv");
+      if(!r23_admission_||!r23_candidates_)throw std::runtime_error("R23 admission log unavailable");
+      r23_admission_ << "scan_ns,policy,nominal_attempted,nominal_converged,basic_quality,absolute_pass,quality_event,extra_aligns,budget_used,selected_id,relative_only,measurement_published,step_limited,nominal_score,nominal_overlap,nominal_coverage_mean,selected_score,selected_overlap,selected_coverage_mean,reason,target_hash,target_points\n";
+      r23_candidates_ << "scan_ns,policy,id,converged,finite,iterations,native_score,fitness,overlap,coverage_mean,basic_quality,absolute_pass,relative_dominance,selected,align_ms,validation_ms";
+      for(int b=0;b<8;++b)r23_candidates_ << ",loss" << b;
+      for(const auto prefix:{"seed","pose"})for(int i=0;i<4;++i)for(int j=0;j<4;++j)r23_candidates_ << ',' << prefix << i << j;
+      r23_candidates_ << '\n';
     }
     loadMap();
 
@@ -1268,6 +1278,56 @@ private:
     prediction.status = prediction.age_ms > 0.0 ?
         "CAUSAL_EKF_BODY_TWIST_TO_SCAN" : "CAUSAL_EKF_EXACT_SCAN_STAMP";
     return prediction;
+  }
+
+  void applyR23Admission(const pcl::PointCloud<pcl::PointXYZ>::Ptr& source,
+      const shadow::Split& split,const coverage::Mask& mask,const Eigen::Matrix4d& tp,uint64_t ns,
+      Eigen::Matrix4d* result,pcl::PointCloud<pcl::PointXYZ>* aligned,bool* ok,double* fitness,int* iterations,double* align_ms)
+  {
+    std::vector<shadow::Candidate> cs;
+    auto capture=[&](int id,const Eigen::Matrix4d& seed,double ms){
+      shadow::Candidate c;c.id=id;c.initial=seed;c.pose=ndt_.getFinalTransformation().cast<double>();
+      c.converged=ndt_.hasConverged();c.iterations=ndt_.getFinalNumIteration();
+      c.score=ndt_.getTransformationProbability();c.fitness=ndt_.getFitnessScore();c.align_ms=ms;
+      c.finite=shadow::rigid(c.pose)&&std::isfinite(c.score)&&std::isfinite(c.fitness);
+      if(c.finite)coverage::validate(c,split,mask,*map_geometry_tree_,tp);
+      return c;
+    };
+    cs.push_back(capture(0,tp,*align_ms));
+    r23_basic_=r17::quality(cs[0],mask);r23_absolute_=r20::accepted(cs[0],mask);r23_event_=!r23_absolute_;
+    r23_nominal_score_=cs[0].score;r23_nominal_overlap_=cs[0].overlap;r23_nominal_mean_=r20::lossMean(cs[0],mask);
+    if(r23_policy_!="BASELINE" && r23_event_ && r20::maySearch(true,true,r23_budget_)){
+      const std::array<Eigen::Matrix4d,2> seeds{{r20::yawSeed(tp,1),r20::yawSeed(tp,-1)}};
+      for(int k=0;k<2;++k){
+        const auto begin=ros::WallTime::now();pcl::PointCloud<pcl::PointXYZ> tmp;
+        ndt_.setInputSource(source);ndt_.align(tmp,seeds[k].cast<float>());
+        const double ms=(ros::WallTime::now()-begin).toSec()*1000.;
+        cs.push_back(capture(k+1,seeds[k],ms));*align_ms+=ms;++r23_budget_;++r23_frame_extra_;
+      }
+    }
+    int chosen=-1;
+    if(r23_policy_=="BASELINE")chosen=cs[0].finite&&cs[0].converged?0:-1;
+    else chosen=r20::choose(cs,mask,tp);
+    if(chosen<0&&r23_policy_=="RELATIVE_D_EXPERIMENTAL")chosen=r21::chooseRelative(cs,mask,tp);
+    r23_relative_=chosen>=0&&!r20::accepted(cs[chosen],mask)&&r23_policy_=="RELATIVE_D_EXPERIMENTAL";
+    r23_selected_id_=chosen>=0?cs[chosen].id:-1;
+    r23_reason_=chosen<0?"NO_ACCEPTABLE_MAP_MEASUREMENT":r23_relative_?"RELATIVE_ONLY_ADMISSION":
+        r23_policy_=="BASELINE"?"BASELINE_NATIVE":chosen==0?"ABSOLUTE_NOMINAL":"ABSOLUTE_MULTISTART";
+    if(chosen<0){*ok=false;}else{
+      *ok=true;*result=cs[chosen].pose;*fitness=cs[chosen].fitness;*iterations=cs[chosen].iterations;
+      *aligned=transformCloud(source,*result);
+      r23_selected_score_=cs[chosen].score;r23_selected_overlap_=cs[chosen].overlap;r23_selected_mean_=r20::lossMean(cs[chosen],mask);
+    }
+    if(r23_budget_>12||r23_frame_extra_>2)throw std::runtime_error("R23 extra budget exceeded");
+    for(const auto& c:cs){
+      r23_candidates_ << std::setprecision(17) << ns << ',' << r23_policy_ << ',' << c.id << ',' << c.converged << ',' << c.finite << ',' << c.iterations << ','
+          << c.score << ',' << c.fitness << ',' << c.overlap << ',' << r20::lossMean(c,mask) << ',' << r17::quality(c,mask) << ',' << r20::accepted(c,mask) << ','
+          << (c.id>0&&r21::dominates(c,cs[0],mask)) << ',' << (c.id==r23_selected_id_) << ',' << c.align_ms << ',' << c.validation_ms;
+      for(int b=0;b<8;++b)r23_candidates_ << ',' << (split.blocks[b]->size()>=10&&c.loss_valid?c.loss[b]:NAN);
+      for(const auto& pose:{c.initial,c.pose})for(int i=0;i<4;++i)for(int j=0;j<4;++j)r23_candidates_ << ',' << pose(i,j);
+      r23_candidates_ << '\n';
+    }
+    r23_candidates_.flush();
   }
 
   void advanceCoupledAnchorFromPrediction(uint64_t reference_stamp_ns,
@@ -2072,9 +2132,12 @@ private:
     if (!cloud || cloud->empty()) return;
 
     r23_measurement_published_ = false;
+    r23_attempted_=r23_nominal_converged_=r23_basic_=r23_absolute_=r23_event_=r23_relative_=false;
+    r23_frame_extra_=0;r23_selected_id_=-1;r23_reason_="NO_NATIVE_RESULT";
+    r23_nominal_score_=r23_nominal_overlap_=r23_nominal_mean_=r23_selected_score_=r23_selected_overlap_=r23_selected_mean_=NAN;
     r23_frame_start_wall_ = callback_start.toSec();
     r23_prediction_ = EkfPrediction();
-    r23_query_wall_ = 0;
+    r23_query_wall_ = 0;r23_ndt_start_wall_=r23_ndt_complete_wall_=0;
     r23_raw_ = Eigen::Matrix4d::Constant(NAN);
     r23_published_ = Eigen::Matrix4d::Constant(NAN);
     r23_scan_ns_ = stamp.toNSec();
@@ -2326,7 +2389,7 @@ private:
         map_geometry_tree_.reset();
         target_cloud_ = local_map_update.target;
         ndt_.setInputTarget(target_cloud_);
-        if (coupled_causal_record_only_enable_)
+        if (coupled_causal_record_only_enable_ || r23_enable_)
           active_target_hash64_ = stableCloudHash(target_cloud_);
         map_geometry_tree_.reset(new pcl::KdTreeFLANN<pcl::PointXYZ>());
         map_geometry_tree_->setInputCloud(target_cloud_);
@@ -2354,6 +2417,7 @@ private:
           initial_geometry, local_target_rebuild_ms);
     if (!geometry_gate_passed)
     {
+      if(r23_enable_)r23_reason_="EXISTING_GEOMETRY_GUARD_REJECTED_BEFORE_NDT";
       ROS_ERROR("[DogPriorMap NDT] startup geometry gate rejected scan: median=%.3f m p90=%.3f m overlap0.5=%.3f; NDT align was not called",
                 initial_geometry.median, initial_geometry.p90, initial_geometry.overlap_05);
       if (geometry_diagnostics_csv_.is_open())
@@ -2378,6 +2442,12 @@ private:
       return;
     }
 
+    // Freeze the scanner-frame activity mask before any native optimization.
+    shadow::Split r23_split;
+    if(r23_enable_) r23_split=shadow::splitSource(source);
+    coverage::Mask r23_mask(r23_split);
+    if(r23_enable_){const auto leaf=ndt_.targetGridLeafSizeMeters();
+      if(leaf[0]!=.8f||leaf[1]!=.8f||leaf[2]!=.8f)throw std::runtime_error("R23 actual Gaussian leaf is not0.8m");}
     ndt_.setInputSource(source);
     if (experimental_source_capture_enable_ && experimental_source_capture_.requested(stamp.toNSec()))
       experimental_source_capture_.save(diagnostic_row.frame_index, stamp.toNSec(), *source, diagnostic_row.cloud_hash);
@@ -2402,6 +2472,11 @@ private:
     causal_record.nominal_ndt_pose = result;
     const GeometryStats raw_geometry = map_geometry_tree_ && result.allFinite() ?
         measureGeometry(source, result) : GeometryStats();
+    if(r23_enable_){
+      r23_attempted_=true;r23_nominal_converged_=ok;
+      applyR23Admission(source,r23_split,r23_mask,initial_guess,timing.reference_stamp.toNSec(),
+          &result,&aligned,&ok,&score,&iterations,&align_ms);
+    }
     if (mature_integration_enable_)
     {
       runMatureIntegration(source, initial_guess, diagnostic_row.frame_index,
@@ -2909,17 +2984,22 @@ private:
     status.level = converged ? diagnostic_msgs::DiagnosticStatus::OK : diagnostic_msgs::DiagnosticStatus::WARN;
     status.message = converged ? "NDT converged" : "NDT not converged";
 
-    addDiagnosticValue(status, "ndt_converged", converged ? "true" : "false");
+    addDiagnosticValue(status, "ndt_converged", (r23_enable_?r23_nominal_converged_:converged) ? "true" : "false");
     if (r23_enable_) {
       addDiagnosticValue(status, "ndt_measurement_published", r23_measurement_published_ ? "true" : "false");
       r23_lineage_ << std::setprecision(17) << r23_scan_ns_ << ',' << stamp.toNSec() << ','
           << r23_prediction_.sample_stamp_ns << ',' << r23_prediction_.sample.callback_accept_wall_sec << ','
           << r23_query_wall_ << ',' << r23_prediction_.age_ms << ',' << r23_prediction_.status << ','
           << r23_ndt_start_wall_ << ',' << r23_ndt_complete_wall_ << ',' << r23_measurement_published_ << ','
-          << step_limited << ',' << map_points << ',' << stableCloudHash(target_cloud_) << ',' << (ros::WallTime::now().toSec()-r23_frame_start_wall_)*1000.0;
+          << step_limited << ',' << map_points << ',' << active_target_hash64_ << ',' << (ros::WallTime::now().toSec()-r23_frame_start_wall_)*1000.0;
       for (const auto& pose : {r23_prediction_.map_T_lidar,r23_raw_,r23_published_})
         for(int i=0;i<4;++i)for(int j=0;j<4;++j)r23_lineage_ << ',' << pose(i,j);
       r23_lineage_ << '\n';r23_lineage_.flush();
+      r23_admission_ << std::setprecision(17) << stamp.toNSec() << ',' << r23_policy_ << ',' << r23_attempted_ << ',' << r23_nominal_converged_ << ','
+          << r23_basic_ << ',' << r23_absolute_ << ',' << r23_event_ << ',' << r23_frame_extra_ << ',' << r23_budget_ << ',' << r23_selected_id_ << ',' << r23_relative_ << ','
+          << r23_measurement_published_ << ',' << step_limited << ',' << r23_nominal_score_ << ',' << r23_nominal_overlap_ << ',' << r23_nominal_mean_ << ','
+          << r23_selected_score_ << ',' << r23_selected_overlap_ << ',' << r23_selected_mean_ << ',' << r23_reason_ << ',' << active_target_hash64_ << ',' << map_points << '\n';
+      r23_admission_.flush();
     }
     addDiagnosticValue(status, "align_time_ms", std::to_string(align_ms));
     addDiagnosticValue(status, "preprocess_time_ms", std::to_string(preprocess_ms));
@@ -2953,6 +3033,12 @@ private:
   ros::Subscriber sub_imu_;
   ros::Subscriber sub_ekf_high_rate_;
   ros::Subscriber sub_scan_prediction_;
+  std::string r23_policy_="BASELINE",r23_reason_="NONE";
+  int r23_budget_=0,r23_frame_extra_=0,r23_selected_id_=-1;
+  bool r23_attempted_=false,r23_nominal_converged_=false,r23_basic_=false,r23_absolute_=false,r23_event_=false,r23_relative_=false;
+  double r23_nominal_score_=NAN,r23_nominal_overlap_=NAN,r23_nominal_mean_=NAN;
+  double r23_selected_score_=NAN,r23_selected_overlap_=NAN,r23_selected_mean_=NAN;
+  std::ofstream r23_admission_,r23_candidates_;
   bool r23_enable_ = false;
   bool r23_measurement_published_ = false;
   uint64_t r23_scan_ns_ = 0;

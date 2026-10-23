@@ -1,0 +1,13 @@
+# R23 formal integrated development comparison
+
+G1 Smoke PASS_WITH_DELAYED_PREDICTION_LIMITATION before C/D integration. W1 anchor2600, tests2601–2660; W3 anchor6500, tests6501–6560. No anchor NDT. Replay every real IMU from the anchor boundary. Existing zero initial velocity/bias/gravity priors and conditional Base reference remain. No reference CSV is available to the ROS runtime.
+
+Order: W1/C0 MULTISTART_C first establishes G2 (60-frame actual trajectory, not an extra smoke); after G2 legal integration passes run remaining W1 C0/C3 Baseline/C/D and W3 C0/C3 C/D, each once in a new directory. No E/Split/Coupled/EKF model change. C/D max12 extraFull per60 trajectory, max2/event, same +/-5deg map yaw, frozen0.30 and strict Pareto. BASELINE is the existing converged+finite native map observation followed by existing step limiter/EKF; C/D are evaluated before that same existing limiter. Raw nominal, raw chosen candidate and actual limited published observation remain distinguishable.
+
+Original startup geometry guard is inherited unchanged. If it pre-rejects a scan, NDT is not called, map observation absent, and IMU still propagates; report this separately from an attempted NDT quality rejection. Illegal time/frame/map loading failures stop that run. No future reference, alignment, retuning or changed candidate directions.
+
+All10 formal runtime outputs/decisions must be sealed before posthoc reference evaluation. EKF error is evaluated at actual current-state publication time (corrected for an accepted observation; watermark high-rate for rejected), not against scan-start GT. NDT raw error is at scan-start. Reference interpolation: bracket gap<=150ms, nearest endpoint<=50ms; report both distances and invalid samples, never fit clock/SE3 offsets. Reference is MAP_ANCHORED_BENCHMARK_REFERENCE with conditional Base semantics.
+
+D-vs-C deltas are descriptive; do not demand R22 RMSE values or label small run-to-run asynchronous differences a relative-admission benefit when no such admission occurred. C0, C3 and W3 side effects reported fully. Map target hashes/counts/tile IDs may differ with independent causal trajectories. Timing includes preprocessing/map setup/quality/search, and process RSS sums are not unique physical PSS. Separate first-map cost and steady frames; no10Hz system claim.
+
+Headless data runs measure resources. One RViz verification reuses an already registered input and is visual-only; any additional native calls for that replay must be counted separately and do not become another accuracy experiment. Dog bag mode is documented only unless actually run with matched assets. Stop after this finite closure task.

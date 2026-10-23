@@ -6,6 +6,7 @@ import datetime
 import hashlib
 import json
 import os
+import re
 import shlex
 import signal
 import socket
@@ -173,6 +174,12 @@ def main():
     samples = 0
     peak_ndt = peak_ekf = peak_pair = peak_tree = 0
     stop_time = None
+    completed_input = False
+    completion_seen_seconds = None
+    shutdown_requested_seconds = None
+    publisher_seen = False
+    log_position = 0
+    log_tail = ""
     with (run_dir / 'ROSLAUNCH.log').open('x') as output, (run_dir / 'PROCESS_MEMORY.csv').open('x', newline='') as memory:
         writer = csv.writer(memory, lineterminator='\n')
         writer.writerow(['elapsed_wall_sec', 'ndt_rss_KiB', 'ekf_rss_KiB',
@@ -194,6 +201,38 @@ def main():
                                  ndt_rss + ekf_rss, tree_rss,
                                  ';'.join(map(str, ndt_pids)), ';'.join(map(str, ekf_pids)), len(live)])
                 memory.flush()
+                # Completion is an input-process receipt, not localization acceptance.
+                publisher_alive = any(p['exe_name'] == 'newer_college_sequence_publisher' or
+                                      p['argv0_name'] == 'newer_college_sequence_publisher'
+                                      for p in live.values())
+                publisher_seen = publisher_seen or publisher_alive
+                with (run_dir / 'ROSLAUNCH.log').open() as log_reader:
+                    log_reader.seek(log_position)
+                    log_tail = (log_tail + log_reader.read())[-8192:]
+                    log_position = log_reader.tell()
+                matches = re.findall(r'P44 complete: published=(\d+) acknowledged=(\d+)', log_tail)
+                if any(int(published) == args.count and int(acked) == args.count
+                       for published, acked in matches):
+                    completed_input = True
+                    if completion_seen_seconds is None:
+                        completion_seen_seconds = began - start
+                if completed_input and not publisher_alive and stop_time is None:
+                    shutdown_requested_seconds = began - start
+                    stop_time = began
+                    running = process.poll() is None
+                    save_json(run_dir / 'COMPLETED_INPUT_SHUTDOWN.json', {
+                        'reason': 'input published and acknowledged requested count; publisher exited',
+                        'published': args.count, 'acknowledged': args.count,
+                        'publisher_seen_in_owned_tree': publisher_seen,
+                        'publisher_alive_at_shutdown': False,
+                        'active_completion_wall_seconds': completion_seen_seconds,
+                        'shutdown_requested_wall_seconds': shutdown_requested_seconds,
+                        'signal_sent_to_owned_tree': 'SIGINT' if running else 'NONE_ALREADY_EXITED',
+                        'not_a_timeout': True,
+                        'localization_acceptance': 'not inferred from publisher completion'})
+                    if running:
+                        owned.signal(signal.SIGINT)
+                        escalation.append('SIGINT_COMPLETED_INPUT_SHUTDOWN')
                 if process.poll() is not None:
                     break
                 if stop_time is None and began - start >= timeout:
@@ -247,10 +286,15 @@ def main():
     exit_code = process.returncode if process is not None else None
     result = dict(metadata, wall_seconds=time.monotonic() - start, process_exit_code=exit_code,
                   timed_out=timed_out, interrupted=interrupted, signal_escalation=escalation,
+                  input_completed=completed_input,
+                  active_completion_wall_seconds=completion_seen_seconds,
+                  shutdown_requested_wall_seconds=shutdown_requested_seconds,
+                  shutdown_duration_seconds=(time.monotonic() - start - shutdown_requested_seconds)
+                      if shutdown_requested_seconds is not None else None,
                   rss_samples=samples, ndt_peak_rss_KiB=peak_ndt, ekf_peak_rss_KiB=peak_ekf,
                   simultaneous_ndt_ekf_peak_rss_KiB=peak_pair,
                   all_owned_tree_peak_rss_KiB=peak_tree,
-                  supervisor_status='TIMEOUT' if timed_out else 'INTERRUPTED' if interrupted else 'PROCESS_FINISHED',
+                  supervisor_status='TIMEOUT' if timed_out else 'INTERRUPTED' if interrupted else 'COMPLETED_INPUT_SHUTDOWN' if completed_input else 'PROCESS_FINISHED',
                   localization_acceptance='NOT_DECIDED_BY_SUPERVISOR; inspect real lineage/diagnostic receipts')
     save_json(run_dir / 'RUN_RECEIPT.json', result)
     print(json.dumps({k: result[k] for k in ('supervisor_status', 'process_exit_code', 'wall_seconds',
