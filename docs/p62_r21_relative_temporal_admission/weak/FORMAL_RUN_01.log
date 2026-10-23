@@ -1,0 +1,5 @@
+TRAJECTORY_COMPLETE WEAK C0 SINGLE_FRAME_RELATIVE_ADMISSION extra=4 events=2 accepted_extra=1 relative=0 pending=0 confirm=0/0 fallbacks=1
+TRAJECTORY_COMPLETE WEAK C0 TWO_FRAME_SHADOW_CONFIRMATION extra=4 events=2 accepted_extra=1 relative=0 pending=0 confirm=0/0 fallbacks=1
+TRAJECTORY_COMPLETE WEAK C3 SINGLE_FRAME_RELATIVE_ADMISSION extra=8 events=4 accepted_extra=2 relative=0 pending=0 confirm=0/0 fallbacks=2
+TRAJECTORY_COMPLETE WEAK C3 TWO_FRAME_SHADOW_CONFIRMATION extra=8 events=4 accepted_extra=2 relative=0 pending=0 confirm=0/0 fallbacks=2
+R21_NATIVE_COMPLETE WEAK nominal=240 extra=24 wall_ms=5475.94 peak_rss_KiB=70080

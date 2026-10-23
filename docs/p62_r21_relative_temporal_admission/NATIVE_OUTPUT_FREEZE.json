@@ -1,0 +1,28 @@
+{
+  "native_output_frozen_before_reference_evaluation": true,
+  "input_identity_sha256": "d6da0e16cf64a7a865747893eb54f8572920758504217ae43eaa697d50f27159",
+  "files_sha256": {
+    "weak/formal_run_01/CAUSAL_RESULTS.csv": "cbeab8e796bb7e2801f7391eb8e110ef807b29d1e623033072b91f3c1bea21d5",
+    "weak/formal_run_01/ALIGN_CALLS.csv": "8381ebc4e1c8910750b1d45b260556cd3d629021b56dec2a60e7075633c87b68",
+    "weak/formal_run_01/RUNTIME_AND_MEMORY.csv": "a52eda094f60f188c1cf966e5d87e4d6fbbfbe47e4bf640e4dc3ff42ba76d9ae",
+    "weak/formal_run_01/RELATIVE_ADMISSION_LOG.csv": "d6eaf80bea59304bb1a47adc2c7d3611406a47f7a83af3214fa73e2151932d1f",
+    "weak/formal_run_01/TRAJECTORY_RECEIPT.csv": "ea62957023897a4a9ab2b46ba490c23fc4c6fce16aae3213648f2cd7f72e9c84",
+    "weak/formal_run_01/SHADOW_CONFIRMATION_LOG.csv": "5f492210e2853a424e585450c03d75310429e8d61065fe69b6e098b0342cc6f1",
+    "weak/FORMAL_RUN_01.log": "e80fd746fc7ac9e939a51517d1a78a058124b5ab2656a817d14ed874b42c1fc6",
+    "strong/formal_run_01/CAUSAL_RESULTS.csv": "229e22e90900ae2a3575a0e7bb75e0c4cd07815c48b98d3efe0ff54dfc4a2609",
+    "strong/formal_run_01/ALIGN_CALLS.csv": "2fc0f044dd220f201f8a2fab76fdf6da96fad88e5a0c9b6254f4ca68e8c27790",
+    "strong/formal_run_01/RUNTIME_AND_MEMORY.csv": "48677038e230b8c8ac9a429cbf7d746d7e90c44ce40782cc51f6ac7ba8106636",
+    "strong/formal_run_01/RELATIVE_ADMISSION_LOG.csv": "d8dd060054f2de783692136c3fc00f73f6213ab052f1870d5ce83f18063f301c",
+    "strong/formal_run_01/TRAJECTORY_RECEIPT.csv": "7d0482adc92925dcffeb7a29d4c6790473f2d98990db5059cf9588b9bc9efd6e",
+    "strong/formal_run_01/SHADOW_CONFIRMATION_LOG.csv": "c42cd1aaa9fef166f0e779ed736e5cddc04942dcfa79948d22dd00cc75084096",
+    "strong/FORMAL_RUN_01.log": "d86f838416d6be8d7983ad50781bb98b9f1129f2854de768b090adb288cebff4"
+  },
+  "nominal_full_aligns": 480,
+  "extra_full_aligns": 33,
+  "total_full_aligns": 513,
+  "reference_file_sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+  "all_frozen_inputs_unchanged": true,
+  "stable_snapshot_unchanged": true,
+  "split_calls": 0,
+  "ekf_calls": 0
+}

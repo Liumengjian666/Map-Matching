@@ -1,0 +1,5 @@
+role,arm,policy,nominal_calls,extra_calls,quality_events,accepted_extra,relative_only_admissions,pending_created,confirmation_attempts,confirmation_success,confirmation_failed,final_fallbacks,trajectory_wall_ms,peak_rss_KiB
+STRONG,C0,SINGLE_FRAME_RELATIVE_ADMISSION,60,0,0,0,0,0,0,0,0,0,1397.9742779999999,134852
+STRONG,C0,TWO_FRAME_SHADOW_CONFIRMATION,60,0,0,0,0,0,0,0,0,0,1289.13644,134852
+STRONG,C3,SINGLE_FRAME_RELATIVE_ADMISSION,60,4,2,2,1,0,0,0,0,0,1403.04909,134852
+STRONG,C3,TWO_FRAME_SHADOW_CONFIRMATION,60,5,3,2,1,1,1,1,0,1,1360.01855,134852
