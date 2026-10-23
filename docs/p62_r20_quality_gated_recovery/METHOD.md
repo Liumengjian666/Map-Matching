@@ -1,0 +1,25 @@
+# R20 fixed method and evaluation protocol
+
+Start: `5c0032194c9ec3cf15ed76bb72f8b6ce29d6b02e`. Development experiment on the two R19 windows, WEAK raw14542–14602 and STRONG raw10972–11032 (anchor then 60 tests), using only C0 and C3. The 0.30 threshold and these data have already been examined against reference: no independent generalization claim.
+
+## Causal policies (frozen before new native calls)
+
+BASELINE is cited from R19; it is never rerun. QUALITY_GATE_ONLY and QUALITY_TRIGGERED_MULTISTART each own an independent R14B Predictor initialized from the frozen R19 anchor (C3: `Rz(+8°) R_anchor`, same translation). Accept only R19 basic quality (`safeNative`, converged, finite score/fitness, valid Coverage V2 with >=4 active blocks and >=300 training points, Overlap>=0.50) AND active-block mean loss <=0.30. No 0.8 m or 5° admission bound is applied to optimizer feedback. No D>0.02 or R12 recovery pool is used in this explicitly approved simple baseline. The field `Candidate::eligible` from old validation is not the R20 decision.
+
+A quality event is failed basic quality OR mean loss >0.30. Gate-only rejects it. Multistart, if budget remains, evaluates exactly two Full-source NDT initializations fixed before either extra align: `R_seed=Rz(+/-5°)R_TP`, `p_seed=p_TP`. This is left map-axis rotation about the sensor origin; multiplying the entire homogeneous TP on the left would incorrectly rotate translation and is not used. Fixed order: nominal ID0, +5° ID1, -5° ID2. All raw candidates retained and tested by the same gate. Choose maximum native `getTransformationProbability()` (higher is better); exact score tie chooses minimum `hypot(||p-p_TP||/0.8, angle(R_TP^T R)/5deg)`; exact distance tie chooses lowest ID. Distance normalization is a tie-break definition, not an admission constraint. No GT, other arm output or C0 score enters selection.
+
+All NDT uses the FULL source. Thus the inherited `heldout_mean`/Coverage V2 field evaluates odd-sector blocks that also participated in Full optimization. It is an online geometric quality statistic, NOT statistically independent held-out validation. Report this limitation explicitly.
+
+Rejected poses never enter accepted Predictor history. The reported causal output for a rejection is the current TP; the stored accepted history remains unchanged and `hold=true`, so the next prediction uses its last accepted pose. This preserves R19 fallback semantics. Such outputs are labelled PREDICTION_FALLBACK and are not map observations. Every accepted output clears hold and updates only that policy/arm's history.
+
+Each 60-frame multistart trajectory has 12 extra-align slots, spent in pairs in temporal order; exhausted events fall back. Gate-only has zero extra aligns. Four trajectories per new policy => 480 nominal Full calls, <=48 extras, total<=528; no Split/EKF/Coupled. The two maps, 122 PCD identities, preprocessing, NDT params (0.8/.08/.001/40/.55) remain exactly R19. Release build once, fixed outputs, no threshold rerun. Native files are sealed before reference evaluation.
+
+## Counting and post-freeze evaluation
+
+A nominal rejection is any quality event; a final map-observation rejection is no legal selected result. An accepted extra candidate is algorithmic recovery acceptance, not proof of correct recovery. Diagnostic distinct terminal count uses finite native outputs and the unchanged <=0.10m AND <=1deg relation with ID-order greedy representatives; it does NOT affect maximum-score selection and is not statistical independence.
+
+Report every 60-frame output, including fallbacks, all candidate score/overlap/mean-loss values, per-frame timing and peak RSS, all budgets. Reference is MAP_ANCHORED_BENCHMARK_REFERENCE with conditional Base axes. No trajectory alignment. Native outputs and decisions seal first; only then read test reference values. Raw nominal, selected accepted observation, TP and actual causal output get separate error records. No rejected observation receives a zero error.
+
+Detection: reproduce R19's 21 suspect / 459 other labels with the fixed >0.30 statistic. In new trajectories report first output with translation>0.5m OR rotation>5deg, first quality alarm, and first three consecutive output frames <=0.3m AND <=3deg after that first bad output. Also report first three-frame low-error run regardless of whether a bad output occurred, signed alarm latency, post-recovery bad-frame count and longest bad run; no onset means recovery latency NOT_APPLICABLE. These are descriptive fixed reference-relative labels, not online decisions. Report rejected nominal errors separately to detect suppressed mistakes. R19 labels are developmental screening labels, not exhaustive independent truth.
+
+Strong C3 engineering targets: output translation RMSE<=0.35m and rotation RMSE<=3deg. Compare both with gate-only and historical baseline. C0 side-effect flag: translation RMSE increases >0.03m OR rotation RMSE increases >0.3deg versus same-window R19 C0. Show both windows, all four method/arm combinations. Dynamic events, fallback runs, newly reappearing high errors and budgets are reported without selecting successful portions.

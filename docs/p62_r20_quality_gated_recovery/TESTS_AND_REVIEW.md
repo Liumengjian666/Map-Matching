@@ -1,0 +1,7 @@
+# Necessary R20 checks
+
+CMake Release build passed. `ctest --output-on-failure` from the actual build directory passed 1/1 C++ test executable. It covers quality rejection, maximum-score and deterministic ties, empty legal pool fallback, map-axis yaw preserving translation, per-trajectory budget, causal reject/hold and policy-state isolation. No native NDT was called by synthetic tests.
+
+A separate local read-only review of policy.hpp, run_quality.cpp and inherited R19/R17/Predictor dependencies found no blocking contract error: all nominal and extra calls use Full, masks are pre-match, accepted history is policy-local, both seeds precede extra results, all candidates share the same gate, and no reference values enter the runner. Full-source Coverage is explicitly not independent held-out evidence.
+
+Pre-experiment failures retained: first compile passed Candidate instead of Pose to `duplicate`; corrected to `.pose` and rebuilt. The first `ctest --test-dir` invocation on this installed CTest did not change directories and found no tests; it is not counted as a pass. The actual build-directory CTest invocation produced the archived passing log. No dataset experiment was started during these corrections.
