@@ -1,0 +1,16 @@
+{
+  "stage": "G1_BASELINE_SMOKE_PRE_RUN",
+  "code_sha": "01af9138d418f7d90390195fa88dfe975ac29d36",
+  "files_sha256": {
+    "src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp": "cd58c11aa7e81ffa30651331083f62c00ffc68da5f450e6dbbf0344f27c38739",
+    "src/dog_prior_map_localization/src/newer_college_first_scan_publisher.cpp": "8f2ec421efe09b25c15ed0a3b59d67deb13c3d4507f09a9927e63ece1db138cc",
+    "src/dog_prior_map_localization/launch/newer_college_local_map.launch": "819d9e292bfd8c07bad434793cb071c27fc54f3d24cedbafcf19d83c27fd30e0",
+    "src/dog_prior_map_localization/launch/p62_r23_integrated_localization.launch": "47277136f39ebb25057858a67c1122f173910930d0fd5136b82ef32d6bd04d42",
+    "docs/p62_r23_real_imu_closure/input/INITIALIZATION_AND_TIME_CONTRACT.json": "1c3188b4822888894ed8abdf5d11dec8218efc6830336ac8d962802d1df3aa70",
+    "devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp": "4677f5db6e7ce135a6b853f752848fb36e716773b2913e173455bb177542a5ba",
+    "devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp": "687d8b274600fd544660c8c01b1438c84314ad351cd1f30c8fbb16cd68479383",
+    "devel/lib/dog_prior_map_localization/newer_college_sequence_publisher": "22c1f9021ba6f42dd471fc29b91e0b0fb6b9ded207f1fe68c49bc91489aa749f"
+  },
+  "C_D_integrated": false,
+  "reference_test_values_read": false
+}
