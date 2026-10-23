@@ -1,0 +1,19 @@
+Start testing: Oct 23 19:32 CST
+----------------------------------------------------------
+1/1 Testing: policy
+1/1 Test: policy
+Command: "/home/jian/livox_ws/p62_r20_quality_recovery_build/test_policy"
+Directory: /home/jian/livox_ws/p62_r20_quality_recovery_build
+"policy" start time: Oct 23 19:32 CST
+Output:
+----------------------------------------------------------
+R20_POLICY_TEST_PASS: yaw, quality, ranking, no-candidate, budget, causal fallback, isolation
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"policy" end time: Oct 23 19:32 CST
+"policy" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 23 19:32 CST

@@ -1,0 +1,5 @@
+[ 50%] Built target test_policy
+Scanning dependencies of target run_quality
+[ 75%] Building CXX object CMakeFiles/run_quality.dir/run_quality.cpp.o
+[100%] Linking CXX executable run_quality
+[100%] Built target run_quality

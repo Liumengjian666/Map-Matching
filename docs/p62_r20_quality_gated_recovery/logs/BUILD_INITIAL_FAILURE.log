@@ -1,0 +1,19 @@
+Scanning dependencies of target test_policy
+[ 50%] Building CXX object CMakeFiles/test_policy.dir/test_policy.cpp.o
+In file included from /home/jian/livox_ws/p62_r20_quality_recovery_ws/docs/p62_r20_quality_gated_recovery/tools/test_policy.cpp:1:
+/home/jian/livox_ws/p62_r20_quality_recovery_ws/docs/p62_r20_quality_gated_recovery/tools/policy.hpp: In function ‘int r20::distinctCount(const std::vector<shadow::Candidate>&)’:
+/home/jian/livox_ws/p62_r20_quality_recovery_ws/docs/p62_r20_quality_gated_recovery/tools/policy.hpp:45:60: error: invalid initialization of reference of type ‘const Pose&’ {aka ‘const Eigen::Matrix<double, 4, 4>&’} from expression of type ‘const value_type’ {aka ‘const shadow::Candidate’}
+   45 |     for(int j:reps)if(duplicate(candidates[i],candidates[j])){same=true;break;}
+      |                                                            ^
+In file included from /home/jian/livox_ws/p62_r20_quality_recovery_ws/docs/p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/../../p62_r11_cause_aware_recovery/tools/se3.hpp:2,
+                 from /home/jian/livox_ws/p62_r20_quality_recovery_ws/docs/p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/coarse.hpp:2,
+                 from /home/jian/livox_ws/p62_r20_quality_recovery_ws/docs/p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/common.hpp:2,
+                 from /home/jian/livox_ws/p62_r20_quality_recovery_ws/docs/p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r20_quality_recovery_ws/docs/p62_r20_quality_gated_recovery/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r20_quality_recovery_ws/docs/p62_r20_quality_gated_recovery/tools/test_policy.cpp:1:
+/home/jian/livox_ws/p62_r20_quality_recovery_ws/docs/p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/../../p62_r11_cause_aware_recovery/tools/../../p62_r6_dog_shadow_prototype/tools/contract.hpp:30:35: note: in passing argument 1 of ‘bool shadow::duplicate(const Pose&, const Pose&)’
+   30 | inline bool duplicate(const Pose& a,const Pose& b){return translation(a,b)<=.10 && rotation(a,b)<=1.;}
+      |                       ~~~~~~~~~~~~^
+make[2]: *** [CMakeFiles/test_policy.dir/build.make:63：CMakeFiles/test_policy.dir/test_policy.cpp.o] 错误 1
+make[1]: *** [CMakeFiles/Makefile2:76：CMakeFiles/test_policy.dir/all] 错误 2
+make: *** [Makefile:95：all] 错误 2

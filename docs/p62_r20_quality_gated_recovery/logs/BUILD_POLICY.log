@@ -1,0 +1,4 @@
+Scanning dependencies of target test_policy
+[ 50%] Building CXX object CMakeFiles/test_policy.dir/test_policy.cpp.o
+[100%] Linking CXX executable test_policy
+[100%] Built target test_policy
