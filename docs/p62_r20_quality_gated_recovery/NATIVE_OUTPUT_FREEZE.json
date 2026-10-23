@@ -1,0 +1,26 @@
+{
+  "native_output_frozen_before_reference_evaluation": true,
+  "input_identity_sha256": "ef062f060f809790949c5785ede85a2f399123eb6723917a5a26801ec6707046",
+  "files_sha256": {
+    "weak/formal_run_01/EVENT_AND_CANDIDATE_LOG.csv": "7978e7e0aede5c70064544523929dbefa60d059d9d6d97b442ef4eb53c5f127f",
+    "weak/formal_run_01/CAUSAL_RESULTS.csv": "687b360213e915e3acc266c1b0dc3e1e4e40562a517122ba52f3f005014cd012",
+    "weak/formal_run_01/ALIGN_CALLS.csv": "755c6b61fdc2df5fc1f4ccfb79e05edcb6f0d2cc30ecb5d90cfaae278958c50a",
+    "weak/formal_run_01/RUNTIME_AND_MEMORY.csv": "7a6385dcf33eec7615e9ae79ee50eb399f90d2c0bd4ca948105ccc2167620944",
+    "weak/formal_run_01/TRAJECTORY_RECEIPT.csv": "55a1ee13c44abc44c344afe3d8c2bcab132d1986b00ee4f55cea779e92f5a3b4",
+    "weak/FORMAL_RUN_01.log": "1b2116f844413434d3241252c9a1ada820efeb1d2d4dcb2858adddc603140e5f",
+    "strong/formal_run_01/EVENT_AND_CANDIDATE_LOG.csv": "e73e45ebd5f47c6ffefbb972867cc46d8e88342e9238c7055cd99b7ecdbcb1f3",
+    "strong/formal_run_01/CAUSAL_RESULTS.csv": "8ac1e6ae85b4fb2cada0f4fdbf168558880af9c41c0486ac3b7107d6acbfa133",
+    "strong/formal_run_01/ALIGN_CALLS.csv": "a47f82c51e3358ae88a583e64aeb9d7809d966ebea66df1ac9e16901dfa6d3a4",
+    "strong/formal_run_01/RUNTIME_AND_MEMORY.csv": "d332f6f74038a2a5c57ffa72bcc52454d7e7991993b9558fbdb090fe72de6df3",
+    "strong/formal_run_01/TRAJECTORY_RECEIPT.csv": "77c3c5b00077cc2cffd5b5fda5da749e4b511d56b7f8e1a7183e9d898d05fad1",
+    "strong/FORMAL_RUN_01.log": "d8a4894a1e197da655949fc99b4d68a5b4e06542d8756618b7e949586f28b36f"
+  },
+  "nominal_full_aligns": 480,
+  "extra_full_aligns": 24,
+  "total_full_aligns": 504,
+  "reference_file_sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+  "all_frozen_inputs_unchanged": true,
+  "stable_snapshot_unchanged": true,
+  "split_calls": 0,
+  "ekf_calls": 0
+}

@@ -1,0 +1,5 @@
+TRAJECTORY_COMPLETE STRONG C0 QUALITY_GATE_ONLY extra=0 events=0 accepted_extra=0 fallbacks=0
+TRAJECTORY_COMPLETE STRONG C0 QUALITY_TRIGGERED_MULTISTART extra=0 events=0 accepted_extra=0 fallbacks=0
+TRAJECTORY_COMPLETE STRONG C3 QUALITY_GATE_ONLY extra=0 events=12 accepted_extra=0 fallbacks=12
+TRAJECTORY_COMPLETE STRONG C3 QUALITY_TRIGGERED_MULTISTART extra=12 events=12 accepted_extra=0 fallbacks=12
+R20_NATIVE_COMPLETE STRONG nominal=240 extra=12 wall_ms=5992.59 peak_rss_KiB=134680
