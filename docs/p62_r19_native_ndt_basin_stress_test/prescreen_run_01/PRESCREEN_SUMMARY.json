@@ -1,0 +1,21 @@
+{
+  "inventory_frames": 15301,
+  "prescreen_stride": 10,
+  "sampled_scans": 459,
+  "unique_pcd_reads_including_windows": 567,
+  "read_cap": 800,
+  "final_30pct_eligible_index_zero_based": 10711,
+  "window_length": 61,
+  "geometry_valid_rows": 567,
+  "selection_metric": "scanner-frame preprocessed XYZ covariance lambda_min/lambda_max; raw-input prescreen proxy only",
+  "weak_sample_index_zero_based": 14571,
+  "strong_sample_index_zero_based": 11001,
+  "weak_score": 0.0068297672097776757,
+  "strong_score": 0.057669172879233066,
+  "weak_window_start_index_zero_based": 14541,
+  "strong_window_start_index_zero_based": 10971,
+  "ndt_align_calls": 0,
+  "gt_pose_values_read": 0,
+  "map_accessed": false,
+  "gt_error_accessed": false
+}
