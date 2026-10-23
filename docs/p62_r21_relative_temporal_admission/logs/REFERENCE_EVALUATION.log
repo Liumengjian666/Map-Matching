@@ -1,0 +1,88 @@
+{
+  "new_ndt_calls": 513,
+  "strong_c3": {
+    "BASELINE": {
+      "translation_rmse_m": 0.9477589884303009,
+      "rotation_rmse_deg": 7.7888944763345975,
+      "translation_target_le_0p35m": false,
+      "rotation_target_le_3deg": false,
+      "both_targets_met": false
+    },
+    "QUALITY_GATE_ONLY": {
+      "translation_rmse_m": 0.3511538665313135,
+      "rotation_rmse_deg": 4.1430018498504495,
+      "translation_target_le_0p35m": false,
+      "rotation_target_le_3deg": false,
+      "both_targets_met": false
+    },
+    "QUALITY_TRIGGERED_MULTISTART": {
+      "translation_rmse_m": 0.3511538665313135,
+      "rotation_rmse_deg": 4.1430018498504495,
+      "translation_target_le_0p35m": false,
+      "rotation_target_le_3deg": false,
+      "both_targets_met": false
+    },
+    "SINGLE_FRAME_RELATIVE_ADMISSION": {
+      "translation_rmse_m": 0.15869151272331994,
+      "rotation_rmse_deg": 2.0715667171004637,
+      "translation_target_le_0p35m": true,
+      "rotation_target_le_3deg": true,
+      "both_targets_met": true
+    },
+    "TWO_FRAME_SHADOW_CONFIRMATION": {
+      "translation_rmse_m": 0.16008778612664293,
+      "rotation_rmse_deg": 2.4433029871631047,
+      "translation_target_le_0p35m": true,
+      "rotation_target_le_3deg": true,
+      "both_targets_met": true
+    }
+  },
+  "E_vs_D": {
+    "WEAK/C0": {
+      "all_output_matrices_exactly_equal": true,
+      "translation_rmse_E_minus_D_m": 0.0,
+      "rotation_rmse_E_minus_D_deg": 0.0,
+      "extra_calls_E_minus_D": 0
+    },
+    "WEAK/C3": {
+      "all_output_matrices_exactly_equal": true,
+      "translation_rmse_E_minus_D_m": 0.0,
+      "rotation_rmse_E_minus_D_deg": 0.0,
+      "extra_calls_E_minus_D": 0
+    },
+    "STRONG/C0": {
+      "all_output_matrices_exactly_equal": true,
+      "translation_rmse_E_minus_D_m": 0.0,
+      "rotation_rmse_E_minus_D_deg": 0.0,
+      "extra_calls_E_minus_D": 0
+    },
+    "STRONG/C3": {
+      "all_output_matrices_exactly_equal": false,
+      "translation_rmse_E_minus_D_m": 0.0013962734033229895,
+      "rotation_rmse_E_minus_D_deg": 0.371736270062641,
+      "extra_calls_E_minus_D": 1
+    }
+  },
+  "c0_side_effects": {
+    "WEAK/SINGLE_FRAME_RELATIVE_ADMISSION": {
+      "translation_rmse_increase_m": 0.0038114731595476625,
+      "rotation_rmse_increase_deg": 0.031046477732701527,
+      "material_worsening": false
+    },
+    "WEAK/TWO_FRAME_SHADOW_CONFIRMATION": {
+      "translation_rmse_increase_m": 0.0038114731595476625,
+      "rotation_rmse_increase_deg": 0.031046477732701527,
+      "material_worsening": false
+    },
+    "STRONG/SINGLE_FRAME_RELATIVE_ADMISSION": {
+      "translation_rmse_increase_m": 0.0,
+      "rotation_rmse_increase_deg": 0.0,
+      "material_worsening": false
+    },
+    "STRONG/TWO_FRAME_SHADOW_CONFIRMATION": {
+      "translation_rmse_increase_m": 0.0,
+      "rotation_rmse_increase_deg": 0.0,
+      "material_worsening": false
+    }
+  }
+}
