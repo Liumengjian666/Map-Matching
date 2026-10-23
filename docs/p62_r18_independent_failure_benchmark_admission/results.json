@@ -1,0 +1,51 @@
+{
+  "task": "P62-R18-INDEPENDENT-FAILURE-BENCHMARK-ADMISSION",
+  "status": "BLOCKED",
+  "start_sha": "cae5b8dbaeb5f7d76ddd75de5c6f798d94165c16",
+  "branch": "research/p62-r18-independent-failure-benchmark-admission",
+  "official_code_sha": "dc78edad1cc08af2de333e2c7ec4e05f7bb213a2",
+  "dataset": "FEE Corridor",
+  "gates": {
+    "G1_raw_lidar": "PASS_AVAILABLE_NOT_ACQUIRED",
+    "G2_independent_prior_map": "PASS_PROVENANCE_NOT_ACQUIRED",
+    "G3_reference": "BLOCKED_FOR_INDEPENDENT_LIDAR_POSE",
+    "G4_map_reference_transform": "BLOCKED",
+    "G5_time_and_extrinsics": "BLOCKED",
+    "G6_resources": "NOT_EVALUABLE_RUNTIME_SELECTIVE_STORAGE_FEASIBLE"
+  },
+  "asset_observations": {
+    "official_zip_bytes": 39247580582,
+    "official_zip_uncompressed_member_bytes": 51320290669,
+    "official_zip_entries": 727,
+    "seq1_data_bag_head_bytes": 228005307,
+    "map_5cm_alligned_pcd_head_bytes": 7582206,
+    "sample_direct_npz_bytes": 4570825,
+    "sample_direct_npz_sha256": "395a6a80428231e9ae24e54cd1407e0f5d4dcf3cd2260c4eeb816607a841631b",
+    "sample_zip_member_uncompressed_bytes": 1606105,
+    "sample_cloud_points": 131072,
+    "sample_point_t_observed_min": 0,
+    "sample_point_t_observed_max": 99840000,
+    "sample_point_t_unit": "NOT_ESTABLISHED",
+    "seq1_pose_rows": 119,
+    "seq1_raw_tracker_xyz_rows": 119,
+    "raw_tracker_xyz_has_timestamp": false,
+    "tracker_independent_dof": "POSITION_OF_PRISM_ONLY",
+    "pose_csv_orientation_source": "LIDAR_SLAM_ALIGNMENT_TO_BLK360_MAP",
+    "disk_available_bytes_at_final_check": 80539389952,
+    "memory_available_bytes_at_final_check": 7415955456
+  },
+  "primary_blockers": [
+    "No certified numeric prism-to-LiDAR lever arm",
+    "Map-to-tracker transform has unresolved official seq1 launch TODO and no independent provenance",
+    "Exported tracker XYZ has no timestamps; original clock and per-scan pairing not verified",
+    "No independent 6DoF pose reference; published orientation comes from LiDAR alignment to test map"
+  ],
+  "actions": {
+    "large_dataset_downloads": 0,
+    "sample_npz_downloads": 1,
+    "native_ndt_align_calls": 0,
+    "production_changes": 0,
+    "next_experiment_run": false
+  },
+  "unique_next": "Obtain and verify official prism-to-LiDAR lever arm, map2subt physical provenance, and original tracker timestamps/frame/clock contract; then request research-lead decision on bounded readmission."
+}
