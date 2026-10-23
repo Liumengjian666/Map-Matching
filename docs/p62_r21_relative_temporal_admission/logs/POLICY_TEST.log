@@ -1,0 +1,19 @@
+Start testing: Oct 23 21:06 CST
+----------------------------------------------------------
+1/1 Testing: policy
+1/1 Test: policy
+Command: "/home/jian/livox_ws/p62_r21_relative_temporal_build/test_policy"
+Directory: /home/jian/livox_ws/p62_r21_relative_temporal_build
+"policy" start time: Oct 23 21:06 CST
+Output:
+----------------------------------------------------------
+R21_POLICY_TEST_PASS: strict Pareto, nominal comparability, distinctness, ranking, causal pending isolation, one-frame expiry, shared budget
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"policy" end time: Oct 23 21:06 CST
+"policy" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 23 21:06 CST

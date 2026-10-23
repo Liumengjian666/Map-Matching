@@ -1,0 +1,5 @@
+[ 50%] Built target test_policy
+Scanning dependencies of target run_relative
+[ 75%] Building CXX object CMakeFiles/run_relative.dir/run_relative.cpp.o
+[100%] Linking CXX executable run_relative
+[100%] Built target run_relative
