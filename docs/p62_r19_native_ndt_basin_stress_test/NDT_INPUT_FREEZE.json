@@ -1,0 +1,41 @@
+{
+  "task": "P62-R19-NATIVE-NDT-BASIN-STRESS-TEST",
+  "preregistration_sha256": "6d89a07a487828d03c09dc35aaf5a6624f4d58b8856ba5d554b19c5b18c3eae1",
+  "protocol_sha256": "b7c3aeb4a1e4ceb786d92b6e2c82509330e2a31bb819f14a615ce07c074908bd",
+  "initialization_contract_sha256": "fdd728ee488527657858fc7cb79ce82c4ea44c6240b1d6a89c00fe68c78d99c7",
+  "windows": {
+    "WEAK": {
+      "path": "/home/jian/livox_ws/p62_r19_ndt_basin_data/weak_roi.pcd",
+      "bytes": 2907834,
+      "sha256": "974056be8b2146b89fe6e8ec03326000498c5afe12d6aed65893e563d7fe95e1",
+      "target_points": 242305,
+      "target_fnv": "f9cf7eaadc77932f",
+      "anchor_overlap_0p5m": 0.7771428571428571,
+      "map_build_receipt_sha256": "adf74fdee2bcb34d5b40cd74030412d6493a20b69d813849786b11ee286b25e9"
+    },
+    "STRONG": {
+      "path": "/home/jian/livox_ws/p62_r19_ndt_basin_data/strong_roi.pcd",
+      "bytes": 8071074,
+      "sha256": "4cd10f10160eaf8f2570f7627e78a22491dea5f7a267a7dceaa56c0b68dcf3e7",
+      "target_points": 672575,
+      "target_fnv": "950f58dc33d7fc75",
+      "anchor_overlap_0p5m": 0.9371428571428572,
+      "map_build_receipt_sha256": "ef9c0cc147f34b53c3daf73f192c0630ff0b817c0e97f678f4d1b8952029253c"
+    }
+  },
+  "official_leica_source_sha256": "e8bf6c7f2ddacde4f6f65ba7759b00bdca5c6bf5e706344ce8c3592529f04ab0",
+  "reference_file_sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+  "reference_evaluation_values_read": false,
+  "r19_binary_sha256": "1da61251c00e0e85d0157d51abe30b70a620818cec5eb63f6dffa406b8963eaf",
+  "r19_code_and_frozen_headers_sha256": {
+    "docs/p62_r19_native_ndt_basin_stress_test/tools/run_basin.cpp": "fc9161703a32105f5c38fc98bb68caa4969c6a0aa4c0e35fe213500524c9349c",
+    "docs/p62_r6_dog_shadow_prototype/tools/native_kernel.hpp": "4dbc81a42d6fcbb6275c85cfd8bd69a2e94f8b0775d00d6b338556903905cbac",
+    "docs/p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp": "727e2ed66a49f4f004f483491b4dbf748abd738b7c0b4fc576ffc813774f5af4",
+    "docs/p62_r14b_newer_college/conditional_base_pilot/tools/common.hpp": "bf02e7d9782f32d34b686de20ba9af4dcbc02a797510e65ac68690c676d42108",
+    "docs/p62_r17_consensus_admission/tools/policy.hpp": "35b7e493463f125288409fb3ca438537f739a7bce8137c8ab1d061ef7754fd49"
+  },
+  "release_build": true,
+  "max_full_aligns": 480,
+  "max_extra_stability_aligns": 8,
+  "native_aligns_at_freeze": 0
+}
