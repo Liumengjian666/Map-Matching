@@ -1,0 +1,19 @@
+{
+  "task": "P62-R17-EVENT-TRIGGERED-CONSENSUS-ADMISSION",
+  "source_commit": "fffd28d0404f8f4653c51350475f5873e5087325",
+  "evaluated_reference_poses_read": false,
+  "code_and_output_sha256": {
+    "docs/p62_r17_consensus_admission/native_run_01/ADMISSION_DECISIONS.csv": "cd218e980dc8437716adcf61876b0c635818deb39e969dd6a93c51280b39a1a3",
+    "docs/p62_r17_consensus_admission/native_run_01/RUNTIME_AND_MEMORY.csv": "d820d6b2ca32d0261ca728ccc65e9bc6ef8806a69c6247deffb63ec22bec577b",
+    "docs/p62_r17_consensus_admission/native_run_01/ALIGN_CALLS.csv": "ae45f8fa51e5f90577baee32a517e9d62466b692ddc1de8c279ad3f5f525545a",
+    "docs/p62_r17_consensus_admission/RUN_LOG.txt": "3366b795ad831c14a56ece7c9d7863c7f795c4b35866fa817770af020e6c63f1",
+    "docs/p62_r17_consensus_admission/STATIC_RULE_REPLAY.csv": "39ede2cd9e635bd6bfdbcc78219f712700dc23cbaf7282957816e87532ed4461",
+    "docs/p62_r17_consensus_admission/tools/run_policies.cpp": "5aac8017050785f07896d22b4dd5df51e1ecee2acaf56449df1ac5c40cec42b3",
+    "docs/p62_r17_consensus_admission/tools/policy.hpp": "35b7e493463f125288409fb3ca438537f739a7bce8137c8ab1d061ef7754fd49",
+    "/home/jian/livox_ws/p62_r17_consensus_build/run_policies": "2b045ac5111bb37995a5aabe21745215f7e095bcff897fe52681d75c1e2f4e9b"
+  },
+  "decision_rows": 90,
+  "full_align_calls": 90,
+  "extra_split_align_calls": 1,
+  "same_relaxed_consensus_trajectory": true
+}

@@ -1,0 +1,110 @@
+{
+  "BASELINE_5DEG": {
+    "accepted": 29,
+    "rejected": 1,
+    "raw7570": {
+      "output_translation_m": 0.29236612456708316,
+      "output_rotation_deg": 4.874079249168368,
+      "prediction_translation_m": 0.29236612456708316,
+      "prediction_rotation_deg": 4.874079249168368,
+      "raw_full_translation_m": 0.23873130369495868,
+      "raw_full_rotation_deg": 1.8334955224437217,
+      "decision": "REJECT_PREDICTION_FALLBACK"
+    },
+    "raw7571": {
+      "output_translation_m": 0.320876343157107,
+      "output_rotation_deg": 1.3890608148016368,
+      "prediction_translation_m": 0.5036354618712741,
+      "prediction_rotation_deg": 2.5565800319948515,
+      "raw_full_translation_m": 0.320876343157107,
+      "raw_full_rotation_deg": 1.3890608148016368,
+      "decision": "ACCEPT_FULL"
+    },
+    "translation_m": {
+      "n": 30,
+      "rmse": 0.2536226285710577,
+      "p95": 0.31979458139881023,
+      "max": 0.320876343157107,
+      "median": 0.2546095606099148
+    },
+    "rotation_deg": {
+      "n": 30,
+      "rmse": 1.9980755449215202,
+      "p95": 3.285604332539412,
+      "max": 4.874079249168368,
+      "median": 1.6764077570543883
+    }
+  },
+  "RELAXED_6DEG": {
+    "accepted": 30,
+    "rejected": 0,
+    "raw7570": {
+      "output_translation_m": 0.23873130369495868,
+      "output_rotation_deg": 1.8334955224437217,
+      "prediction_translation_m": 0.29236612456708316,
+      "prediction_rotation_deg": 4.874079249168368,
+      "raw_full_translation_m": 0.23873130369495868,
+      "raw_full_rotation_deg": 1.8334955224437217,
+      "decision": "ACCEPT_FULL"
+    },
+    "raw7571": {
+      "output_translation_m": 0.24398205286269864,
+      "output_rotation_deg": 1.8447729330520524,
+      "prediction_translation_m": 0.25449742679486476,
+      "prediction_rotation_deg": 4.107536601733178,
+      "raw_full_translation_m": 0.24398205286269864,
+      "raw_full_rotation_deg": 1.8447729330520524,
+      "decision": "ACCEPT_FULL"
+    },
+    "translation_m": {
+      "n": 30,
+      "rmse": 0.2458133448668921,
+      "p95": 0.3051651610477643,
+      "max": 0.32087450704100373,
+      "median": 0.23839488935201258
+    },
+    "rotation_deg": {
+      "n": 30,
+      "rmse": 1.8393481884957383,
+      "p95": 2.92424580778328,
+      "max": 3.399597705638338,
+      "median": 1.71444792307638
+    }
+  },
+  "EVENT_CONSENSUS": {
+    "accepted": 30,
+    "rejected": 0,
+    "raw7570": {
+      "output_translation_m": 0.23873130369495868,
+      "output_rotation_deg": 1.8334955224437217,
+      "prediction_translation_m": 0.29236612456708316,
+      "prediction_rotation_deg": 4.874079249168368,
+      "raw_full_translation_m": 0.23873130369495868,
+      "raw_full_rotation_deg": 1.8334955224437217,
+      "decision": "CONDITIONAL_ACCEPT"
+    },
+    "raw7571": {
+      "output_translation_m": 0.24398205286269864,
+      "output_rotation_deg": 1.8447729330520524,
+      "prediction_translation_m": 0.25449742679486476,
+      "prediction_rotation_deg": 4.107536601733178,
+      "raw_full_translation_m": 0.24398205286269864,
+      "raw_full_rotation_deg": 1.8447729330520524,
+      "decision": "ACCEPT_FULL"
+    },
+    "translation_m": {
+      "n": 30,
+      "rmse": 0.2458133448668921,
+      "p95": 0.3051651610477643,
+      "max": 0.32087450704100373,
+      "median": 0.23839488935201258
+    },
+    "rotation_deg": {
+      "n": 30,
+      "rmse": 1.8393481884957383,
+      "p95": 2.92424580778328,
+      "max": 3.399597705638338,
+      "median": 1.71444792307638
+    }
+  }
+}

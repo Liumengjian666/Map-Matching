@@ -1,0 +1,8 @@
+{
+  "R16_scan_manifest": "docs/p62_r16_real_degeneracy_case/SCANS_V2.csv",
+  "fixed_scan_count": 31,
+  "all_selected_PCD_sha256_match_R16": true,
+  "map_sha256": "ecc3b8d11e68ad28633e2aa4fb6effae1a5ccaeb6a8e1eb20d81e6fcc4ae7eca",
+  "original_PCD_writes": 0,
+  "map_writes": 0
+}

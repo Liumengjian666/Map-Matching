@@ -1,0 +1,13 @@
+{
+  "build_type": "Release",
+  "actual_cxx_flags": "-O3 -DNDEBUG -std=gnu++14",
+  "pcl": "1.10.0",
+  "source_commit": "fffd28d0404f8f4653c51350475f5873e5087325",
+  "binary_path": "/home/jian/livox_ws/p62_r17_consensus_build/run_policies",
+  "binary_sha256": "2b045ac5111bb37995a5aabe21745215f7e095bcff897fe52681d75c1e2f4e9b",
+  "run_source_sha256": "5aac8017050785f07896d22b4dd5df51e1ecee2acaf56449df1ac5c40cec42b3",
+  "policy_header_sha256": "35b7e493463f125288409fb3ca438537f739a7bce8137c8ab1d061ef7754fd49",
+  "configure_command": "cmake -S docs/p62_r17_consensus_admission/tools -B /home/jian/livox_ws/p62_r17_consensus_build -DCMAKE_BUILD_TYPE=Release",
+  "build_command": "cmake --build /home/jian/livox_ws/p62_r17_consensus_build -j2",
+  "native_run_count": 1
+}
