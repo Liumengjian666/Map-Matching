@@ -11,6 +11,7 @@ from baseline_stats import errors,distribution,longest_run
 POLICIES=['BASELINE_NATIVE_NDT','QUALITY_GATE_ONLY','QUALITY_TRIGGERED_MULTISTART','SINGLE_FRAME_RELATIVE_ADMISSION']
 A,B,C,D=POLICIES
 
+def merge(a,b):return dict(a,**b)
 def rows(p):return list(csv.DictReader(Path(p).open()))
 def write(p,data):
  assert data
@@ -67,7 +68,7 @@ def main():
   k=key(r);er[k]={};groups[k[:3]].append(r)
   for prefix in ['tp','raw','selected','output']:
    a,b=error(pose(r,prefix),gt[int(r['stamp_ns'])]);er[k][prefix]=(a,b)
-   error_rows.append({x:r[x] for x in ['role','arm','policy','frame','raw_ordinal','stamp_ns']}|{'estimate':prefix,'valid':int(a is not None),'translation_m':a,'rotation_deg':b,'reference_type':'MAP_ANCHORED_BENCHMARK_REFERENCE; CONDITIONAL_BASE'})
+   error_rows.append(merge({x:r[x] for x in ['role','arm','policy','frame','raw_ordinal','stamp_ns']},{'estimate':prefix,'valid':int(a is not None),'translation_m':a,'rotation_deg':b,'reference_type':'MAP_ANCHORED_BENCHMARK_REFERENCE; CONDITIONAL_BASE'}))
  summary={};follow=[]
  for k,rs in groups.items():
   assert len(rs)==60 and [int(r['frame']) for r in rs]==list(range(1,61));tm=tg[k];cs=[c for r in rs for c in cm[key(r)]];ns=[cm[key(r)][0] for r in rs]
@@ -78,7 +79,7 @@ def main():
   for j,r in enumerate(rs):
    if r['relative_only_admitted']!='1':continue
    cr=next(x for x in groups.get((k[0],k[1],C),[]) if x['frame']==r['frame'])
-   follow.append({x:r[x] for x in ['role','arm','policy','frame','raw_ordinal','selected_id']}|{'output_translation_m':errs[j][0],'output_rotation_deg':errs[j][1],'nominal_translation_m':er[key(r)]['raw'][0],'nominal_rotation_deg':er[key(r)]['raw'][1],'C_output_translation_m':er[key(cr)]['output'][0],'C_output_rotation_deg':er[key(cr)]['output'][1],'subsequent_high_error_frames':sum(bad[j+1:]),'remaining_frames':59-j})
+   follow.append(merge({x:r[x] for x in ['role','arm','policy','frame','raw_ordinal','selected_id']},{'output_translation_m':errs[j][0],'output_rotation_deg':errs[j][1],'nominal_translation_m':er[key(r)]['raw'][0],'nominal_rotation_deg':er[key(r)]['raw'][1],'C_output_translation_m':er[key(cr)]['output'][0],'C_output_rotation_deg':er[key(cr)]['output'][1],'subsequent_high_error_frames':sum(bad[j+1:]),'remaining_frames':59-j}))
  comparisons=[];side=[];support=set();events=set();counter=False
  for role in ident['windows']:
   for arm in ['C0','C3']:
