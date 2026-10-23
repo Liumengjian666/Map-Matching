@@ -1,0 +1,9 @@
+TRAJECTORY_COMPLETE W2 C0 BASELINE_NATIVE_NDT extra=0 events=10 accepted_extra=0 fallbacks=0
+TRAJECTORY_COMPLETE W2 C0 QUALITY_GATE_ONLY extra=0 events=2 accepted_extra=0 fallbacks=2
+TRAJECTORY_COMPLETE W2 C0 QUALITY_TRIGGERED_MULTISTART extra=10 events=5 accepted_extra=5 fallbacks=0
+TRAJECTORY_COMPLETE W2 C0 SINGLE_FRAME_RELATIVE_ADMISSION extra=10 events=5 accepted_extra=5 fallbacks=0
+TRAJECTORY_COMPLETE W2 C3 BASELINE_NATIVE_NDT extra=0 events=56 accepted_extra=0 fallbacks=10
+TRAJECTORY_COMPLETE W2 C3 QUALITY_GATE_ONLY extra=0 events=2 accepted_extra=0 fallbacks=2
+TRAJECTORY_COMPLETE W2 C3 QUALITY_TRIGGERED_MULTISTART extra=12 events=7 accepted_extra=6 fallbacks=1
+TRAJECTORY_COMPLETE W2 C3 SINGLE_FRAME_RELATIVE_ADMISSION extra=12 events=7 accepted_extra=6 fallbacks=1
+R22_NATIVE_COMPLETE W2 nominal=480 extra=44 wall_ms=11893 peak_rss_KiB=128992
