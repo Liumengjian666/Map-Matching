@@ -1,0 +1,2 @@
+source_ply_points,finite_points,roi_points,target_points,target_fnv,leaf_m,roi_radius_m,center_x,center_y,center_z,anchor_overlap_0p5m,build_ms,peak_rss_KiB
+10277007,10277007,2922006,641521,edfeb25c17a77c47,0.2,50,0.82189207265021247,-222.55397064713833,-3.4333371847147647,0.85785714285714287,3641.935555,560596

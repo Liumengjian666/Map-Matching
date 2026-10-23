@@ -1,0 +1,10 @@
+Scanning dependencies of target run_holdout
+Scanning dependencies of target test_dispatch
+[ 12%] Building CXX object CMakeFiles/run_holdout.dir/run_holdout.cpp.o
+[ 25%] Building CXX object CMakeFiles/test_dispatch.dir/test_dispatch.cpp.o
+[ 37%] Linking CXX executable test_dispatch
+[ 37%] Built target test_dispatch
+[ 62%] Built target prepare_map
+[ 87%] Built target inspect_scans
+[100%] Linking CXX executable run_holdout
+[100%] Built target run_holdout

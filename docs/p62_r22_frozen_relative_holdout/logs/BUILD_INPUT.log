@@ -1,0 +1,8 @@
+Scanning dependencies of target inspect_scans
+Scanning dependencies of target prepare_map
+[ 25%] Building CXX object CMakeFiles/inspect_scans.dir/inspect_scans.cpp.o
+[ 50%] Building CXX object CMakeFiles/prepare_map.dir/home/jian/livox_ws/p62_r22_relative_holdout_ws/docs/p62_r19_native_ndt_basin_stress_test/tools/prepare_map.cpp.o
+[ 75%] Linking CXX executable inspect_scans
+[ 75%] Built target inspect_scans
+[100%] Linking CXX executable prepare_map
+[100%] Built target prepare_map

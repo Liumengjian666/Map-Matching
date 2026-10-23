@@ -1,0 +1,38 @@
+{
+  "W1": {
+    "confirmatory_eligible": true,
+    "documented_method_or_error_tuning_exposure": false,
+    "previous_input_only_geometry_ordinals": [
+      2607,
+      2627,
+      2647
+    ]
+  },
+  "W2": {
+    "confirmatory_eligible": true,
+    "documented_method_or_error_tuning_exposure": false,
+    "previous_input_only_geometry_ordinals": [
+      4807,
+      4827,
+      4847
+    ]
+  },
+  "W3": {
+    "confirmatory_eligible": true,
+    "documented_method_or_error_tuning_exposure": false,
+    "previous_input_only_geometry_ordinals": [
+      6507,
+      6527,
+      6547
+    ]
+  },
+  "W4": {
+    "confirmatory_eligible": true,
+    "documented_method_or_error_tuning_exposure": false,
+    "previous_input_only_geometry_ordinals": [
+      9407,
+      9427,
+      9447
+    ]
+  }
+}
