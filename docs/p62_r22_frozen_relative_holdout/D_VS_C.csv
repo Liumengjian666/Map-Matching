@@ -1,0 +1,9 @@
+role,arm,D_relative_events,D_minus_C_translation_rmse_m,D_minus_C_rotation_rmse_deg,D_minus_C_high_error_frames,D_minus_C_longest_fallback,D_minus_C_extra_calls,D_minus_C_mean_ms,net_benefit,event_safety_counterexample,same_output_matrices
+W1,C0,1,0.030641219040302287,0.19726811779988163,3,3,0,-1.1274192333333346,False,True,False
+W1,C3,1,-3.4235493983191843,-7.968016350424506,-60,-57,0,-8.873011933333313,True,False,False
+W2,C0,0,0.0,0.0,0,0,0,0.7487084499999916,False,False,True
+W2,C3,0,0.0,0.0,0,0,0,-0.7863068500000168,False,False,True
+W3,C0,0,0.0,0.0,0,0,0,-0.8337179833333401,False,False,True
+W3,C3,0,0.0,0.0,0,0,0,-0.028880949999997796,False,False,True
+W4,C0,0,0.0,0.0,0,0,0,-0.13489646666666388,False,False,True
+W4,C3,0,0.0,0.0,0,0,0,0.14663930000000036,False,False,True
