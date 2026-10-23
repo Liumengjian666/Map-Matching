@@ -1,0 +1,5 @@
+ARM_COMPLETE STRONG C0 aligns=60 rss_kib=134900
+ARM_COMPLETE STRONG C1 aligns=120 rss_kib=134900
+ARM_COMPLETE STRONG C2 aligns=180 rss_kib=134900
+ARM_COMPLETE STRONG C3 aligns=240 rss_kib=134900
+R19_NATIVE_COMPLETE STRONG aligns=240 quality=239 shadow_reject=5 wall_ms=6020.02 peak_rss_KiB=134900

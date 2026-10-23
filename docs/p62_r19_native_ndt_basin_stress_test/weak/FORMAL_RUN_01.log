@@ -1,0 +1,5 @@
+ARM_COMPLETE WEAK C0 aligns=60 rss_kib=70128
+ARM_COMPLETE WEAK C1 aligns=120 rss_kib=70128
+ARM_COMPLETE WEAK C2 aligns=180 rss_kib=70136
+ARM_COMPLETE WEAK C3 aligns=240 rss_kib=70140
+R19_NATIVE_COMPLETE WEAK aligns=240 quality=235 shadow_reject=0 wall_ms=5295.75 peak_rss_KiB=70140

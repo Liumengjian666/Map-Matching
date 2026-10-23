@@ -1,0 +1,37 @@
+{
+  "task": "P62-R19-NATIVE-NDT-BASIN-STRESS-TEST",
+  "input_freeze_sha256": "60353ec31d8505efc043ef53e7b49c11dcae11ce70835680675ae26b23d46095",
+  "native_output_frozen_before_evaluation_reference_values": true,
+  "total_native_full_aligns": 480,
+  "extra_stability_aligns_at_freeze": 0,
+  "split_aligns": 0,
+  "ekf_calls": 0,
+  "windows": {
+    "WEAK": {
+      "native_calls": 240,
+      "native_rows": 240,
+      "files_sha256": {
+        "NDT_RESULTS.csv": "f7394ca836fe8980a9368eff2110089cd522fa2e432a5711e44c835127e3dde0",
+        "RUNTIME_AND_MEMORY.csv": "d46c7a088fcd4a5aeb03a215c7cb95ad67db43971a5178accea75d2363302e59",
+        "ALIGN_CALLS.csv": "dd4ce34b42af86ff8e95acd131df21b7212fad0ba1c008c895d01c99d459f2b2",
+        "INITIALIZATION_AXES.csv": "94be9cc822ba958b97b6ed271caa5b69c2a5154ea90c08c4a52ba68869f9a304"
+      },
+      "log_sha256": "e4a558ab45a7b992a417cd03a858c2376f563e07894ca87cfc2c2ce819c68d32",
+      "quality_feedback_count": 235,
+      "admission_shadow_rejections": 0
+    },
+    "STRONG": {
+      "native_calls": 240,
+      "native_rows": 240,
+      "files_sha256": {
+        "NDT_RESULTS.csv": "0aff1148acc1be3733a0cb5fd48bc32a6f06ab5b8b26530d683075f6e6e4a38e",
+        "RUNTIME_AND_MEMORY.csv": "b37e404ab43831af26350dc3cca1825aec1f1c339d43ddfc6ab52afb433bd062",
+        "ALIGN_CALLS.csv": "11e156b4d94adb6f087a385e101d4b3d81ee9a7a534717dcf84a34a4cf847364",
+        "INITIALIZATION_AXES.csv": "1023204e9112ceb55d946e0adbdbd2192ecf803cf9ea64245c724155f975685f"
+      },
+      "log_sha256": "42117d1b11e84dd68dd12d19312230af974504a3337069d8649d33a76f889ff5",
+      "quality_feedback_count": 239,
+      "admission_shadow_rejections": 5
+    }
+  }
+}
