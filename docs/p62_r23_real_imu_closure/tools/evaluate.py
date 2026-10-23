@@ -416,6 +416,10 @@ def main():
         event_counts = Counter(e['event_type'] for e in events)
         for e in events:
             lineage_rows.append({**meta, 'record_type': 'EKF_EVENT', 'state_frame': 'IMU', **e})
+        attempts = sum(int(a['nominal_attempted']) for a in admissions)
+        converged_attempts = sum(truth(a['nominal_attempted']) and truth(a['nominal_converged']) for a in admissions)
+        pre_ndt_rejections = sum(not truth(a['nominal_attempted']) for a in admissions)
+        native_events = sum(truth(a['nominal_attempted']) and truth(a['quality_event']) for a in admissions)
         estimate_summary = {label: {'translation_m': stat([x[0] for x in es], True),
                                     'rotation_deg': stat([x[1] for x in es], True)}
                             for label, es in per_estimate.items()}
@@ -423,13 +427,19 @@ def main():
         nominals = [c for c in candidates if int(c['id']) == 0]
         summaries['/'.join((window, arm, policy))] = {
             'samples': 60, 'reference_relative_errors': estimate_summary,
-            'nominal_ndt_attempts': sum(int(a['nominal_attempted']) for a in admissions),
-            'nominal_ndt_converged': sum(truth(a['nominal_attempted']) and truth(a['nominal_converged']) for a in admissions),
+            'nominal_ndt_attempts': attempts,
+            'nominal_ndt_converged': converged_attempts,
+            'nominal_ndt_convergence_rate': converged_attempts / attempts if attempts else None,
             'all_native_converged': sum(truth(c['converged']) for c in candidates),
-            'pre_ndt_rejected_frames': sum(not truth(a['nominal_attempted']) for a in admissions),
+            'pre_ndt_rejected_frames': pre_ndt_rejections,
+            'pre_ndt_guard_rejections': pre_ndt_rejections,
+            'rejected_after_native_attempt_frames': sum(truth(a['nominal_attempted']) and not truth(a['measurement_published']) for a in admissions),
             'all_native_calls': len(candidates), 'extra_full_ndt': used,
-            'basic_quality_failures': sum(not truth(a['basic_quality']) for a in admissions),
-            'quality_events': event_count, 'map_observations_published': accepted,
+            'basic_quality_failures': sum(truth(a['nominal_attempted']) and not truth(a['basic_quality']) for a in admissions),
+            'nominal_basic_quality_failure_rate': sum(truth(a['nominal_attempted']) and not truth(a['basic_quality']) for a in admissions) / attempts if attempts else None,
+            'absolute_quality_rejections_after_basic_pass': sum(truth(a['nominal_attempted']) and truth(a['basic_quality']) and not truth(a['absolute_pass']) for a in admissions),
+            'quality_events': native_events,
+            'all_scan_quality_events_including_pre_ndt_guard': event_count, 'map_observations_published': accepted,
             'map_observations_rejected': 60 - accepted, 'relative_only_admissions': relative,
             'selected_extra_candidates': sum(int(a['selected_id']) > 0 for a in admissions),
             'imu_high_rate_propagations': event_counts['IMU_HIGH_RATE_PUBLISH'],
@@ -490,7 +500,8 @@ def main():
                               'Coverage Consistency Mean points participate in Full NDT',
                               'existing zero-velocity/bias anchor priors; no independent calibration or GT velocity',
                               'published historical EKF prediction samples retain observed one-frame map-feedback delay',
-                              'all native candidates precede reference evaluation; admission does not imply correctness']}
+                              'all native candidates precede reference evaluation; admission does not imply correctness',
+                              'pre-NDT geometry guard rejections are separate from optimizer/basic/absolute quality failures; zero attempts gives unavailable convergence rate']}
     with (HERE / 'EVALUATION_SUMMARY.json').open('x') as f:
         json.dump(result, f, indent=2, ensure_ascii=False, allow_nan=False)
         f.write('\n')

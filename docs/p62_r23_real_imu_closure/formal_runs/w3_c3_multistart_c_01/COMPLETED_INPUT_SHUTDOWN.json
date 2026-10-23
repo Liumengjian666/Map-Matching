@@ -1,0 +1,12 @@
+{
+  "reason": "input published and acknowledged requested count; publisher exited",
+  "published": 60,
+  "acknowledged": 60,
+  "publisher_seen_in_owned_tree": true,
+  "publisher_alive_at_shutdown": false,
+  "active_completion_wall_seconds": 9.06816623301711,
+  "shutdown_requested_wall_seconds": 9.06816623301711,
+  "signal_sent_to_owned_tree": "SIGINT",
+  "not_a_timeout": true,
+  "localization_acceptance": "not inferred from publisher completion"
+}
