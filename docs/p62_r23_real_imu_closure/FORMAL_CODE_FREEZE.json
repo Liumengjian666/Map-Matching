@@ -1,0 +1,26 @@
+{
+  "code_sha": "6da62ba328bbaecae259d729166533b5a383739d",
+  "files_sha256": {
+    "src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp": "debd8e9ecabcd360b059a6bbac46b042a4d0fac9ceb8a3066f44a3e3407ac582",
+    "src/dog_prior_map_localization/src/newer_college_first_scan_publisher.cpp": "8f2ec421efe09b25c15ed0a3b59d67deb13c3d4507f09a9927e63ece1db138cc",
+    "src/dog_prior_map_localization/launch/p62_r23_integrated_localization.launch": "47277136f39ebb25057858a67c1122f173910930d0fd5136b82ef32d6bd04d42",
+    "docs/p62_r20_quality_gated_recovery/tools/policy.hpp": "2cd244d5fa41b791bcbebb5f98682674c48b10cf67b021212ec1ab9ab4938946",
+    "docs/p62_r21_relative_temporal_admission/tools/policy.hpp": "97d1ae715209391e6a7a08d4374e35c9c52fc1aabb520913a3f39bddc1f1fba3",
+    "docs/p62_r6_dog_shadow_prototype/tools/native_kernel.hpp": "4dbc81a42d6fcbb6275c85cfd8bd69a2e94f8b0775d00d6b338556903905cbac",
+    "src/dog_prior_map_localization/src/fusion/ndt_observation.cpp": "2274147a6ee04dc3a26e09f06b9c1a0f0e094780697c744491210d72a19b0cd3",
+    "src/dog_prior_map_localization/src/imu_processor.cpp": "0f616421e23c78f75f04dc44e4a7a50bb5d9708a3c3656c92b5d3cb608ad4cfe",
+    "src/dog_prior_map_localization/src/core/imu_propagation.cpp": "0ff8fdfb07841c3cefd24bc9fd387212cd471d5d2d70431db816b19435285895",
+    "src/dog_prior_map_localization/src/imu_deskew_runtime.cpp": "12a5f7a6a8f75accfa20faf56a3adb9faef21314e7d690005c4f525af342a8c4",
+    "src/dog_prior_map_localization/src/local_map_tiles.cpp": "0d33ceae8b97abbed89f21e07dc0483102f9b3bf17e28ae67e432e9a617357a4",
+    "docs/p62_r23_real_imu_closure/FORMAL_PROTOCOL.md": "9372475980f99d4c17c341b3ec8b43f354bd87e4e55788e6740fd6b3c5ad6a6f",
+    "docs/p62_r23_real_imu_closure/tools/run_ros.py": "4832731c8d5b8e72a831a667d7a006e8641129ac0a44ca49ce4505fe2c95a097",
+    "devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp": "f67fce2c457a5eb1687064c95669eb4696f90ff892005a79b6cb24582433c889",
+    "devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp": "687d8b274600fd544660c8c01b1438c84314ad351cd1f30c8fbb16cd68479383",
+    "devel/lib/dog_prior_map_localization/newer_college_sequence_publisher": "22c1f9021ba6f42dd471fc29b91e0b0fb6b9ded207f1fe68c49bc91489aa749f"
+  },
+  "reference_values_read": false,
+  "formal_native_calls_at_freeze": 0,
+  "max_formal_extra": 96,
+  "max_formal_nominal": 600,
+  "smoke_native_calls": 20
+}
