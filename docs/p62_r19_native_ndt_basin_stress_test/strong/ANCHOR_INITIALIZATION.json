@@ -1,0 +1,65 @@
+{
+  "role": "STRONG",
+  "anchor_stamp_ns": 1583837688264113152,
+  "anchor_raw_ordinal": 10972,
+  "reference_file": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/ground_truth/registered_poses.csv",
+  "reference_sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+  "all_122_timestamps_exactly_matched": true,
+  "only_two_anchor_pose_values_read": true,
+  "evaluation_pose_values_read": false,
+  "coordinate_assumption": "PAPER_SUPPORTED_BASE_FRAME_ASSUMPTION",
+  "T_M_L_anchor": [
+    [
+      0.8297932779487466,
+      0.5479865049860569,
+      0.10561205529787374,
+      -16.530330553776516
+    ],
+    [
+      -0.5549001744230153,
+      0.8303139618766567,
+      0.0516189997771921,
+      -183.41865102229437
+    ],
+    [
+      -0.0594046487775345,
+      -0.1014372469355151,
+      0.9930667513504626,
+      -2.6842884636830657
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "T_B_L": [
+    [
+      -0.703850921879071,
+      -0.7100423561242176,
+      0.020826240168402843,
+      -0.07207613788438523
+    ],
+    [
+      0.7099216283860768,
+      -0.7041416662469333,
+      -0.013992691115502887,
+      -0.0024978355832723717
+    ],
+    [
+      0.02460002682200807,
+      0.004936229792296243,
+      0.9996851866041602,
+      -0.008613836505025514
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "anchor_matrix_sha256": "76669500e8541852c69a2347dd1346ef383f57dd48052e7675d00720d124dc48",
+  "preregistration_sha256": "6d89a07a487828d03c09dc35aaf5a6624f4d58b8856ba5d554b19c5b18c3eae1"
+}

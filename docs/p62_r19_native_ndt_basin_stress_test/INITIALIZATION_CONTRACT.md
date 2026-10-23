@@ -1,0 +1,9 @@
+# Four frozen optimizer-only initializations
+
+For each of the two preregistered 61-frame windows, official map-anchored benchmark pose values are read **only for local frame 0**. Under the R14B conditional Base convention, `T_M_L = T_M_B T_B_L`. Both anchor transforms and exact timestamp receipts are in `weak/ANCHOR_INITIALIZATION.json` and `strong/ANCHOR_INITIALIZATION.json`. The subsequent 60 pose values remain unread until every native output is frozen.
+
+The same native R14B point-cloud preprocessing produces the anchor Source. Its horizontal XY covariance's unique largest eigenvector is `u_L`; sign is fixed by positive X (or positive Y if X is zero). Rotate to map with anchor orientation: `u_M=R_M_L u_L`. C0 anchor is `T_M_L`; C1/C2 anchor translation changes by `+0.8u_M` / `-0.8u_M`; C3 anchor rotation is `Rz(+8°) R_M_L` about the map vertical axis, at unchanged translation. The scalar and direction are fixed before test NDT. The ROI is always centered on the unperturbed C0 anchor and identical across arms within each window.
+
+Each arm has its own R14B right/body constant-velocity state. Prediction uses only the previous two **basic quality accepted** native Full poses. With fewer than two histories or after rejection, it uses the previous accepted pose. Basic quality requires finite/rigid/converged native output, finite score and fitness, valid Coverage V2 and Overlap@0.5m >=0.50. It imposes **no** 0.8 m or 5° correction bound. Invalid outputs never update the predictor; the reported causal output uses prediction fallback, while the predictor's stored state holds at its last accepted pose. The unchanged 0.8 m/5° policy is separately logged as `admission_shadow_5deg` and has no feedback effect.
+
+No Split NDT, EKF, recovery, candidate selection or per-frame reference initialization is run. P45 tile switching is omitted because a changing target would confound convergence-basin comparison; each window uses one frozen 50 m Leica ROI.
