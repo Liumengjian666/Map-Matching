@@ -1,0 +1,45 @@
+{
+  "ndt_calls": 504,
+  "strong_c3": {
+    "BASELINE": {
+      "translation_rmse_m": 0.9477589884303009,
+      "rotation_rmse_deg": 7.7888944763345975,
+      "translation_target_le_0p35m": false,
+      "rotation_target_le_3deg": false
+    },
+    "QUALITY_GATE_ONLY": {
+      "translation_rmse_m": 0.3511538665313135,
+      "rotation_rmse_deg": 4.1430018498504495,
+      "translation_target_le_0p35m": false,
+      "rotation_target_le_3deg": false
+    },
+    "QUALITY_TRIGGERED_MULTISTART": {
+      "translation_rmse_m": 0.3511538665313135,
+      "rotation_rmse_deg": 4.1430018498504495,
+      "translation_target_le_0p35m": false,
+      "rotation_target_le_3deg": false
+    }
+  },
+  "c0_side_effects": {
+    "WEAK/QUALITY_GATE_ONLY": {
+      "translation_rmse_increase_m": 0.005618108473544714,
+      "rotation_rmse_increase_deg": 0.030611221420969725,
+      "material_worsening": false
+    },
+    "WEAK/QUALITY_TRIGGERED_MULTISTART": {
+      "translation_rmse_increase_m": 0.0038114731595476625,
+      "rotation_rmse_increase_deg": 0.031046477732701527,
+      "material_worsening": false
+    },
+    "STRONG/QUALITY_GATE_ONLY": {
+      "translation_rmse_increase_m": 0.0,
+      "rotation_rmse_increase_deg": 0.0,
+      "material_worsening": false
+    },
+    "STRONG/QUALITY_TRIGGERED_MULTISTART": {
+      "translation_rmse_increase_m": 0.0,
+      "rotation_rmse_increase_deg": 0.0,
+      "material_worsening": false
+    }
+  }
+}
