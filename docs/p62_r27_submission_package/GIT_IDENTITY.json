@@ -1,0 +1,13 @@
+{
+  "task": "P62-R27-SCI-MANUSCRIPT-SUBMISSION-PACKAGE",
+  "repository": "https://github.com/Liumengjian666/Map-Matching",
+  "workspace": "/home/jian/livox_ws/p62_r27_submission_ws",
+  "branch": "research/p62-r27-sci-submission-package",
+  "START_SHA": "79944df600e7cadefcdca3fae8d98838fa44116c",
+  "CODE_SHA": "0052faed3cdd00e3946a611360d3f4688157be11",
+  "CODE_SHA_meaning": "R27 final manuscript/typesetting content commit; packaging receipts finalized separately; estimator unchanged",
+  "historical_C_plus_G_runtime_CODE_SHA": "76244331014e8bef398818278d683facd69bb1be",
+  "END_SHA": "The final receipt commit is identified by git rev-parse HEAD, external FINAL_GIT_RECEIPT_R27.json and final handoff; no self-referential SHA is fabricated",
+  "push_performed": false,
+  "submission_performed": false
+}

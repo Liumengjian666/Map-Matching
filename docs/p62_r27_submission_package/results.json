@@ -1,0 +1,95 @@
+{
+  "task": "P62-R27-SCI-MANUSCRIPT-SUBMISSION-PACKAGE",
+  "status": "READY_FOR_ADVISOR_REVIEW_NOT_AUTHORIZED_FOR_SUBMISSION",
+  "git": {
+    "task": "P62-R27-SCI-MANUSCRIPT-SUBMISSION-PACKAGE",
+    "repository": "https://github.com/Liumengjian666/Map-Matching",
+    "workspace": "/home/jian/livox_ws/p62_r27_submission_ws",
+    "branch": "research/p62-r27-sci-submission-package",
+    "START_SHA": "79944df600e7cadefcdca3fae8d98838fa44116c",
+    "CODE_SHA": "0052faed3cdd00e3946a611360d3f4688157be11",
+    "CODE_SHA_meaning": "R27 final manuscript/typesetting content commit; packaging receipts finalized separately; estimator unchanged",
+    "historical_C_plus_G_runtime_CODE_SHA": "76244331014e8bef398818278d683facd69bb1be",
+    "END_SHA": "The final receipt commit is identified by git rev-parse HEAD, external FINAL_GIT_RECEIPT_R27.json and final handoff; no self-referential SHA is fabricated",
+    "push_performed": false,
+    "submission_performed": false
+  },
+  "target_journal": "IEEE Sensors Journal",
+  "backup_journal": "Measurement Science and Technology",
+  "manuscript": {
+    "title": "Gate-Aware Budgeted NDT Recovery for Prior-Map LiDAR–Inertial Localization",
+    "editable": "PAPER_SUBMISSION_DRAFT.tex",
+    "pdf": "PAPER_SUBMISSION_PDF.pdf",
+    "main_pages": 7,
+    "supplement_pages": 4,
+    "Chinese_advisor_memo_pages": 2,
+    "abstract_words": 198,
+    "keywords": 5,
+    "contributions": 3,
+    "core_tables": 3,
+    "published_context_tables": 1,
+    "main_numbered_figures": 3,
+    "numbered_equations": 8,
+    "resolved_references": 14,
+    "template": "standard IEEEtran journal1.8b; Sensors-specific selector/legacy download unavailable; no false template-certification claim",
+    "graphical_abstract": {
+      "pixels": [
+        660,
+        295
+      ],
+      "dpi_metadata": 300,
+      "bytes": 33321
+    }
+  },
+  "frozen_ablation": {
+    "original": {
+      "translation_RMSE_m": 7.986422,
+      "rotation_RMSE_deg": 13.052649
+    },
+    "G_only": {
+      "translation_RMSE_m": 7.986422,
+      "rotation_RMSE_deg": 13.052649,
+      "nominal_full": 60,
+      "extra_full": 0,
+      "map_updates": 0
+    },
+    "C_plus_G": {
+      "translation_RMSE_m": 0.209943,
+      "rotation_RMSE_deg": 2.984149,
+      "nominal_full": 60,
+      "extra_full": 8,
+      "map_updates": 57,
+      "scans": 60,
+      "max_rotation_deg": 11.245245
+    }
+  },
+  "P45_memory_scope": "82.2% historical matched-segment NDT-process high-water reduction, not whole system",
+  "new_native_NDT_calls": 0,
+  "new_external_algorithm_runs": 0,
+  "new_dataset_downloads": 0,
+  "algorithm_changes": false,
+  "validation_checks_passed": 49,
+  "production_and_history_unchanged": true,
+  "scientific_acceptance_or_novelty_certified": false,
+  "required_author_actions": [
+    "approve scientific scope and evidential adequacy",
+    "complete identities/funding/correspondence",
+    "confirm disclosure/release/originality statements",
+    "authorize any actual submission"
+  ],
+  "remaining_evidence_limits": [
+    "one exposed successful recovery window",
+    "conditional Base/CSV identity",
+    "map-anchored, not independent mocap reference",
+    "no same-protocol external benchmark",
+    "robot deployment unperformed"
+  ],
+  "unique_next": "提交导师审阅，由导师决定收窄主张是否达到目标期刊证据要求，或是否另行批准唯一必要的冻结确认实验；不自动投稿或进入R28",
+  "artifact_sha256": {
+    "PAPER_SUBMISSION_DRAFT.tex": "1d006467a79b485a2b8701aa864a6c017debb0f11242826b712c340bfb854b9c",
+    "PAPER_SUBMISSION_PDF.pdf": "40b6b6ef6d564e00e4661eca2b1b6e3cbcee723e945141b3901a472c8593de7a",
+    "ADVISOR_REVIEW_SUMMARY.pdf": "134e603cdc3d5ef4c1e3f2e415c72ffd6ac042e85abf26d8d148f7e87014e158",
+    "SUPPLEMENTARY_MATERIAL.pdf": "adb7c747632382374f06ecd02105b3d74dc24aea4ffd76dac3a19c1cab397fe3",
+    "REFERENCES.bib": "006f872a23bb18e837cd3c0c5290b849b0cec4046ff492379696f1d67433f286"
+  }
+}
