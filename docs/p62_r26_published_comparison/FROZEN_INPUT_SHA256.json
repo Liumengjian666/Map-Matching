@@ -1,0 +1,16 @@
+{
+  "docs/p62_r25_results_to_paper_closure/PAPER_DRAFT.md": "26fd22e2f4f57a83f5fad282164e08e093649a6385805e9748264a680aceebc7",
+  "docs/p62_r25_results_to_paper_closure/EVIDENCE_LEDGER.csv": "c9d36a9503a869caa0a5cc4a88988526ff74493d01c657fe9ade2a3c08888d59",
+  "docs/p62_r25_results_to_paper_closure/ALGORITHM_ABLATION.md": "64e32344b192d5688e3c9caac37826acd8aee202a2d036df5f4317083abdc227",
+  "docs/p62_r25_results_to_paper_closure/RESOURCE_COMPARISON.md": "b712d6a9c4b75626ef2a6ffecf0277a6ba25138743fde35bd19951ed93cb27d3",
+  "docs/p62_r25_results_to_paper_closure/DOG_VALIDATION.md": "0c847c3660d037643e631b68fc19a3ac468e4dcf78539f8ef447ce1003876a79",
+  "docs/p62_r25_results_to_paper_closure/figures/ablation_errors.pdf": "35795aa4218e8a51c6dc32e20fc3701f4b1a6275e6b9acd7096134cd46196649",
+  "docs/p62_r25_results_to_paper_closure/figures/local_map_memory.svg": "be16ac220d2a5172d953edef1a32bbe8ade0ea3d2dd497b328dc14389db917ad",
+  "docs/p62_r25_results_to_paper_closure/figures/coverage_admission.svg": "9ca79908a0105157591a99fc749fd0525e4cc6b1d83891ffb0b1d1a1e9073479",
+  "docs/p62_r25_results_to_paper_closure/figures/coverage_admission.png": "0644cbbf55a40a7743dd10541a4fdd1501c1bdc7dd9d0d56b97fb0b7e7b49ec8",
+  "docs/p62_r25_results_to_paper_closure/figures/coverage_admission.pdf": "c59b981cf3547d7ebde010b88e7aa80ddec7bb8440bc735eb7e514b3ae564d44",
+  "docs/p62_r25_results_to_paper_closure/figures/local_map_memory.pdf": "1b2d9234fe8df463c39ee685a9d402cd1077166832618af3e900ac3b0f365ddd",
+  "docs/p62_r25_results_to_paper_closure/figures/ablation_errors.png": "fdf07a187d3f6c0eb75ae54f429d897353e9d6c72f971df4ceb67666c3bf8b44",
+  "docs/p62_r25_results_to_paper_closure/figures/local_map_memory.png": "81c8976b703b3f6cb3ce908d3c1678f720ee33575fbfa441a72b7a6857fc0425",
+  "docs/p62_r25_results_to_paper_closure/figures/ablation_errors.svg": "9106ff22a6d7c88713c5c0cec0688698f3b93a5877bd64ee3fd103143fde731b"
+}

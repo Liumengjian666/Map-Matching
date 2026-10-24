@@ -1,0 +1,73 @@
+{
+  "task": "P62-R26-PUBLISHED-BASELINE-COMPARISON-AND-PAPER-FINALIZATION",
+  "status": "LITERATURE_AND_MANUSCRIPT_CLOSURE_COMPLETED",
+  "git": {
+    "START_SHA": "6aeecf2adbc77c233ee0febaed192643a20c2f54",
+    "branch": "research/p62-r26-published-comparison-paper",
+    "workspace": "/home/jian/livox_ws/p62_r26_published_comparison_ws",
+    "algorithm_source": "UNCHANGED_FROM_START",
+    "push_executed": false
+  },
+  "literature": {
+    "published_papers": 7,
+    "separate_software_projects": 1,
+    "metadata_fields_per_entry": 23,
+    "distinct_published_newer_college_method_task_rows": 6,
+    "external_grade_A_rows": 0,
+    "published_grade_B_rows": 6,
+    "available_public_trajectories_inspected": 2,
+    "rows_per_public_trajectory": 15301,
+    "public_timestamps_exactly_match_local_pcds": true,
+    "public_window_error_fit_performed": false,
+    "twofast_table7": {
+      "FAST_LIO2_quoted_m": 0.378,
+      "DLIO_quoted_m": 0.36,
+      "STEAM_LIO_quoted_m": 0.304,
+      "own_odometry_m": 0.262,
+      "own_prior_map_localization_m": 0.128,
+      "numeric_source": "public author v3, PDF p18; publisher Table7 separation confirmed, full publisher fetch blocked"
+    },
+    "original_values": {
+      "FAST_LIO2_run_by_Chen_m": 0.3775,
+      "DLIO_Continuous_m": 0.3606,
+      "STEAM_LIO_m": 0.3042,
+      "Singer_LIO_m": 0.302
+    }
+  },
+  "new_NDT_alignments": 0,
+  "external_algorithm_clones_builds_runs": 0,
+  "new_dataset_downloads": 0,
+  "new_algorithm_development": false,
+  "controlled_result_reused": {
+    "raw_evaluation": [
+      2601,
+      2660
+    ],
+    "frames": 60,
+    "original_and_G_only_t_rmse_m": 7.98642189306969,
+    "original_and_G_only_r_rmse_deg": 13.05264912208735,
+    "C_plus_G_t_rmse_m": 0.2099428424575639,
+    "C_plus_G_r_rmse_deg": 2.984149397247634,
+    "C_plus_G_extra_calls": 8,
+    "C_plus_G_map_updates": 57,
+    "C_plus_G_max_rotation_deg": 11.245245007295038
+  },
+  "memory_result_reused": {
+    "P45_NDT_global_HWM_KiB": 775308,
+    "P45_NDT_local_HWM_KiB": 138200,
+    "observed_reduction_percent_rounded": 82.2,
+    "scope": "matched historical300-scan process measurement, not complete-system or inter-paper result"
+  },
+  "manuscript": {
+    "file": "PAPER_FINAL_DRAFT.md",
+    "title": "Gate-Aware Budgeted NDT Recovery for Prior-Map LiDAR–Inertial Localization",
+    "words_whitespace_count": 6267,
+    "complete_English_draft": true,
+    "external_SOTA_superiority_claim": false,
+    "journal_novelty_established": false,
+    "reference": "MAP_ANCHORED_BENCHMARK_REFERENCE; CONDITIONAL_BASE",
+    "dog_validation": "BLOCKED: physical LiDAR–IMU calibration provenance; no new experiment",
+    "readiness": "AUTHOR_AND_SCIENTIFIC_REVIEW_DRAFT; not automatically submission approved"
+  },
+  "unique_next": "科研总控核查真实英文稿与证据，决定收窄主张后的目标期刊和作者审定／投稿格式整理；不自动追加算法或实验"
+}
