@@ -1,0 +1,52 @@
+{
+  "task": "P62-R24-GEOMETRY-GATE-AND-OOSM-REVISION-FRESHNESS",
+  "START_SHA": "cfac6f3b126f9d164aaa215f6a6a10e580a42c82",
+  "CODE_SHA": "76244331014e8bef398818278d683facd69bb1be",
+  "files_sha256": {
+    "src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp": "696588c860c5022abf72e43bd8f50c0376736489ab4205e68b2d54494f762890",
+    "src/dog_prior_map_localization/include/dog_prior_map_localization/core/ekf_revision_admission.hpp": "800796da877ff5840c2445d55b799c1169baf043813b77d6642fb7dd1f92de0e",
+    "src/dog_prior_map_localization/launch/p62_r24_geometry_oosm.launch": "a90d876310bf71955c1c815a1b4bf8edd8b89ee42126a905a672d1917af083c8",
+    "docs/p62_r24_geometry_oosm_freshness/tools/run_ros.py": "00e5870c58954257ecaa74e1071c56c7659e0adf194e7632edf48b02bc5015e9",
+    "docs/p62_r24_geometry_oosm_freshness/tools/run_all.py": "d0327eeadd6c539cf9ff5bd057ef2c2602777191f74c90f53dfa7a073b772131",
+    "docs/p62_r24_geometry_oosm_freshness/tools/evaluate.py": "73c777c053c2dc5556f9853693005b3a1ebc3788b4fa3883adb5ed9b64bf2a15",
+    "docs/p62_r24_geometry_oosm_freshness/METHOD.md": "9bf2b758aa9e0196e26ed8b82a9cf29f4b13388d81029e70602e0333276c2131",
+    "docs/p62_r24_geometry_oosm_freshness/input/INITIALIZATION_AND_TIME_CONTRACT.json": "1c3188b4822888894ed8abdf5d11dec8218efc6830336ac8d962802d1df3aa70",
+    "src/dog_prior_map_localization/src/newer_college_first_scan_publisher.cpp": "8f2ec421efe09b25c15ed0a3b59d67deb13c3d4507f09a9927e63ece1db138cc",
+    "src/dog_prior_map_localization/launch/p62_r23_integrated_localization.launch": "df66c3af05d38eb5a7ea251e00a712941218f2565b1946509551ae705fc49618",
+    "docs/p62_r20_quality_gated_recovery/tools/policy.hpp": "2cd244d5fa41b791bcbebb5f98682674c48b10cf67b021212ec1ab9ab4938946",
+    "docs/p62_r21_relative_temporal_admission/tools/policy.hpp": "97d1ae715209391e6a7a08d4374e35c9c52fc1aabb520913a3f39bddc1f1fba3",
+    "docs/p62_r6_dog_shadow_prototype/tools/native_kernel.hpp": "4dbc81a42d6fcbb6275c85cfd8bd69a2e94f8b0775d00d6b338556903905cbac",
+    "src/dog_prior_map_localization/src/fusion/ndt_observation.cpp": "2274147a6ee04dc3a26e09f06b9c1a0f0e094780697c744491210d72a19b0cd3",
+    "src/dog_prior_map_localization/src/imu_processor.cpp": "0f616421e23c78f75f04dc44e4a7a50bb5d9708a3c3656c92b5d3cb608ad4cfe",
+    "src/dog_prior_map_localization/src/core/imu_propagation.cpp": "0ff8fdfb07841c3cefd24bc9fd387212cd471d5d2d70431db816b19435285895",
+    "src/dog_prior_map_localization/src/imu_deskew_runtime.cpp": "12a5f7a6a8f75accfa20faf56a3adb9faef21314e7d690005c4f525af342a8c4",
+    "src/dog_prior_map_localization/src/local_map_tiles.cpp": "0d33ceae8b97abbed89f21e07dc0483102f9b3bf17e28ae67e432e9a617357a4",
+    "devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp": "bfa54a0c7b94efc1235b5828901ca7ce5651b0704042eb9f6f42e0664efb8667",
+    "devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp": "01550b9950f17798a57b0dcd8e707c6cdc6f6c76f78360286787bdfd79114ddc",
+    "devel/lib/dog_prior_map_localization/newer_college_sequence_publisher": "ba96d219248edb1ed4d5d9b1e6842145baed88097bd58607fc630100f0ab9a65"
+  },
+  "unchanged_source_sha256_against_START": {
+    "src/dog_prior_map_localization/src/newer_college_first_scan_publisher.cpp": "8f2ec421efe09b25c15ed0a3b59d67deb13c3d4507f09a9927e63ece1db138cc",
+    "src/dog_prior_map_localization/launch/p62_r23_integrated_localization.launch": "df66c3af05d38eb5a7ea251e00a712941218f2565b1946509551ae705fc49618",
+    "docs/p62_r20_quality_gated_recovery/tools/policy.hpp": "2cd244d5fa41b791bcbebb5f98682674c48b10cf67b021212ec1ab9ab4938946",
+    "docs/p62_r21_relative_temporal_admission/tools/policy.hpp": "97d1ae715209391e6a7a08d4374e35c9c52fc1aabb520913a3f39bddc1f1fba3",
+    "docs/p62_r6_dog_shadow_prototype/tools/native_kernel.hpp": "4dbc81a42d6fcbb6275c85cfd8bd69a2e94f8b0775d00d6b338556903905cbac",
+    "src/dog_prior_map_localization/src/fusion/ndt_observation.cpp": "2274147a6ee04dc3a26e09f06b9c1a0f0e094780697c744491210d72a19b0cd3",
+    "src/dog_prior_map_localization/src/imu_processor.cpp": "0f616421e23c78f75f04dc44e4a7a50bb5d9708a3c3656c92b5d3cb608ad4cfe",
+    "src/dog_prior_map_localization/src/core/imu_propagation.cpp": "0ff8fdfb07841c3cefd24bc9fd387212cd471d5d2d70431db816b19435285895",
+    "src/dog_prior_map_localization/src/imu_deskew_runtime.cpp": "12a5f7a6a8f75accfa20faf56a3adb9faef21314e7d690005c4f525af342a8c4",
+    "src/dog_prior_map_localization/src/local_map_tiles.cpp": "0d33ceae8b97abbed89f21e07dc0483102f9b3bf17e28ae67e432e9a617357a4"
+  },
+  "binaries_preserved": {
+    "dog_prior_map_ndt_node_cpp": "/home/jian/livox_ws/p62_r24_geometry_oosm_data/binaries/dog_prior_map_ndt_node_cpp",
+    "dog_prior_map_ekf_node_cpp": "/home/jian/livox_ws/p62_r24_geometry_oosm_data/binaries/dog_prior_map_ekf_node_cpp",
+    "newer_college_sequence_publisher": "/home/jian/livox_ws/p62_r24_geometry_oosm_data/binaries/newer_college_sequence_publisher"
+  },
+  "formal_native_calls_at_freeze": 0,
+  "max_nominal_full": 720,
+  "max_extra_full": 144,
+  "reference_access_before_native_seal": false,
+  "baseline": "four historical R23 MULTISTART_C trajectories, not rerun",
+  "correction_contract": "exact integer nanoseconds, no time tolerance or extrapolation from future corrected state",
+  "preparation_failure": "Two pre-run identity mismatches: intentionally modified NDT source; R23 display launch already changed after its older CODE freeze. Correct immutable comparison is against R24 START tree. No ROS/native calls occurred."
+}

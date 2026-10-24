@@ -1,0 +1,2 @@
+Pre-run AssertionError: src/dog_prior_map_localization/launch/p62_r23_integrated_localization.launch
+Cause: using older R23 algorithm freeze rather than actual R24 START tree for inherited display launch. Corrected comparison uses immutable START tree; original historical freeze remains unchanged. No ROS/native calls.
