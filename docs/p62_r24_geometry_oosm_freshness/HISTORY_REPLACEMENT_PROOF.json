@@ -1,0 +1,66 @@
+{
+  "all_received_corrected_messages_provenance_matched": true,
+  "received": 415,
+  "replacements": [
+    {
+      "run": "f_w3_c0_01",
+      "corrected_stamp_ns": 1583837242478779793,
+      "matched_high_rate_stamp_ns": 1583837242478779793,
+      "local_replacement_version": 1,
+      "OOSM_REPLAY_COMPLETE_before_publish": true,
+      "replay_imu_count": 11,
+      "next_query_raw_ordinal": 6514,
+      "next_query_scan_ns": 1583837242472756992,
+      "corrected_minus_next_scan_ns": 6022801,
+      "next_query_sample_ns": 1583837242468792333,
+      "next_query_sample_source": "ODOM_HIGH_RATE",
+      "next_query_sample_corrected_version": 0,
+      "note": "Posthoc provenance matching allows existing double-log rounding <=1us; online replacement itself requires exact0ns."
+    },
+    {
+      "run": "f_w3_c3_01",
+      "corrected_stamp_ns": 1583837242478779793,
+      "matched_high_rate_stamp_ns": 1583837242478779793,
+      "local_replacement_version": 1,
+      "OOSM_REPLAY_COMPLETE_before_publish": true,
+      "replay_imu_count": 11,
+      "next_query_raw_ordinal": 6514,
+      "next_query_scan_ns": 1583837242472756992,
+      "corrected_minus_next_scan_ns": 6022801,
+      "next_query_sample_ns": 1583837242468792333,
+      "next_query_sample_source": "ODOM_HIGH_RATE",
+      "next_query_sample_corrected_version": 0,
+      "note": "Posthoc provenance matching allows existing double-log rounding <=1us; online replacement itself requires exact0ns."
+    },
+    {
+      "run": "gf_w3_c0_01",
+      "corrected_stamp_ns": 1583837242478779793,
+      "matched_high_rate_stamp_ns": 1583837242478779793,
+      "local_replacement_version": 1,
+      "OOSM_REPLAY_COMPLETE_before_publish": true,
+      "replay_imu_count": 11,
+      "next_query_raw_ordinal": 6514,
+      "next_query_scan_ns": 1583837242472756992,
+      "corrected_minus_next_scan_ns": 6022801,
+      "next_query_sample_ns": 1583837242468792333,
+      "next_query_sample_source": "ODOM_HIGH_RATE",
+      "next_query_sample_corrected_version": 0,
+      "note": "Posthoc provenance matching allows existing double-log rounding <=1us; online replacement itself requires exact0ns."
+    },
+    {
+      "run": "gf_w3_c3_01",
+      "corrected_stamp_ns": 1583837242478779793,
+      "matched_high_rate_stamp_ns": 1583837242478779793,
+      "local_replacement_version": 1,
+      "OOSM_REPLAY_COMPLETE_before_publish": true,
+      "replay_imu_count": 11,
+      "next_query_raw_ordinal": 6514,
+      "next_query_scan_ns": 1583837242472756992,
+      "corrected_minus_next_scan_ns": 6022801,
+      "next_query_sample_ns": 1583837242468792333,
+      "next_query_sample_source": "ODOM_HIGH_RATE",
+      "next_query_sample_corrected_version": 0,
+      "note": "Posthoc provenance matching allows existing double-log rounding <=1us; online replacement itself requires exact0ns."
+    }
+  ]
+}

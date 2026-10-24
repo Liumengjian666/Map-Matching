@@ -1,0 +1,50 @@
+[
+  {
+    "window": "W1",
+    "arm": "C0",
+    "comparison": "F_vs_R23",
+    "EKF_and_TP_all_60_pose_matrices_identical": true
+  },
+  {
+    "window": "W1",
+    "arm": "C0",
+    "comparison": "GF_vs_G",
+    "EKF_and_TP_all_60_pose_matrices_identical": true
+  },
+  {
+    "window": "W1",
+    "arm": "C3",
+    "comparison": "F_vs_R23",
+    "EKF_and_TP_all_60_pose_matrices_identical": true
+  },
+  {
+    "window": "W1",
+    "arm": "C3",
+    "comparison": "GF_vs_G",
+    "EKF_and_TP_all_60_pose_matrices_identical": true
+  },
+  {
+    "window": "W3",
+    "arm": "C0",
+    "comparison": "F_vs_R23",
+    "EKF_and_TP_all_60_pose_matrices_identical": true
+  },
+  {
+    "window": "W3",
+    "arm": "C0",
+    "comparison": "GF_vs_G",
+    "EKF_and_TP_all_60_pose_matrices_identical": true
+  },
+  {
+    "window": "W3",
+    "arm": "C3",
+    "comparison": "F_vs_R23",
+    "EKF_and_TP_all_60_pose_matrices_identical": true
+  },
+  {
+    "window": "W3",
+    "arm": "C3",
+    "comparison": "GF_vs_G",
+    "EKF_and_TP_all_60_pose_matrices_identical": true
+  }
+]

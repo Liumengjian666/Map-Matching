@@ -1,0 +1,2765 @@
+{
+  "task": "P62-R24-GEOMETRY-GATE-AND-OOSM-REVISION-FRESHNESS",
+  "conclusion": {
+    "G": "PREOPTIMIZATION_GATE_BLOCKED_BENEFICIAL_C_RECOVERY; W1_C3_TARGET_MET",
+    "F": "LEGAL_REPLACEMENT_OBSERVED_BUT_QUERY_FRESHNESS_NOT_ESTABLISHED",
+    "GF": "W1_C3_TARGET_MET; IDENTICAL_TO_G",
+    "C0": "NO_MEASURED_SIDE_EFFECT_ON_BOTH_DEVELOPMENT_WINDOWS",
+    "novelty": "Engineering responsibility-boundary evidence; no new recovery algorithm or independent accuracy proof"
+  },
+  "git": {
+    "START_SHA": "cfac6f3b126f9d164aaa215f6a6a10e580a42c82",
+    "CODE_SHA": "76244331014e8bef398818278d683facd69bb1be",
+    "FREEZE_COMMIT": "003dc50d64754ad2667484cad1b7e544ff8498ed",
+    "NATIVE_SEAL_COMMIT": "3b89df047ea7c6c9bab3a5f443c4970ea4c50853",
+    "branch": "research/p62-r24-geometry-gate-oosm-freshness",
+    "END_SHA": "Final self-containing archive commit identified in final external Git receipt and user handoff",
+    "push_performed": false
+  },
+  "totals": {
+    "nominal_ndt_attempts": 660,
+    "nominal_ndt_converged": 660,
+    "all_native_calls": 694,
+    "all_native_converged": 694,
+    "extra_full_ndt": 34,
+    "map_observations_published": 651,
+    "map_observations_rejected": 69,
+    "imu_high_rate_propagations": 7332,
+    "ndt_corrections_applied": 651,
+    "original_geometry_gate_rejections": 68,
+    "originally_rejected_but_attempted": 8,
+    "corrected_messages_received": 415,
+    "corrected_latest_replacements": 4,
+    "queries_using_replaced_sample": 0
+  },
+  "evaluation": {
+    "task": "P62-R24-GEOMETRY-GATE-AND-OOSM-REVISION-FRESHNESS",
+    "formal_run_count": 12,
+    "nominal_full_calls": 660,
+    "extra_full_calls": 34,
+    "total_formal_full_calls": 694,
+    "reference_type": "MAP_ANCHORED_BENCHMARK_REFERENCE; CONDITIONAL_BASE",
+    "reference_sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+    "native_output_seal_sha256": "a0ad954fb067fe2cf016982dd868c187a365fd93469e66d833b52ed033f445e3",
+    "trajectories": {
+      "W1/C0/G": {
+        "samples": 60,
+        "reference_relative_errors": {
+          "IMU_EKF_PREDICTION": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.20890439252826618,
+              "p95": 0.3164178183688925,
+              "max": 0.3354656509784475,
+              "rmse": 0.21480502966389656,
+              "median": 0.20387356987555516
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.1882533018739845,
+              "p95": 3.141649487898454,
+              "max": 3.969444398941302,
+              "rmse": 2.2673125704420136,
+              "median": 2.110615319294515
+            }
+          },
+          "NDT_NOMINAL_RAW": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.17178045640581324,
+              "p95": 0.20982180868360353,
+              "max": 0.24301687661435678,
+              "rmse": 0.1742442678593591,
+              "median": 0.17393051325076103
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.9293997384298076,
+              "p95": 2.8923647455291714,
+              "max": 3.823982248086131,
+              "rmse": 2.0146262340485968,
+              "median": 1.8273957420071951
+            }
+          },
+          "NDT_SELECTED_RAW": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.17178045640581324,
+              "p95": 0.20982180868360353,
+              "max": 0.24301687661435678,
+              "rmse": 0.1742442678593591,
+              "median": 0.17393051325076103
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.9293997384298076,
+              "p95": 2.8923647455291714,
+              "max": 3.823982248086131,
+              "rmse": 2.0146262340485968,
+              "median": 1.8273957420071951
+            }
+          },
+          "NDT_PUBLISHED": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.17178045640581324,
+              "p95": 0.20982180868360353,
+              "max": 0.24301687661435678,
+              "rmse": 0.1742442678593591,
+              "median": 0.17393051325076103
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.9293997384298076,
+              "p95": 2.8923647455291714,
+              "max": 3.823982248086131,
+              "rmse": 2.0146262340485968,
+              "median": 1.8273957420071951
+            }
+          },
+          "EKF_CAUSAL_OUTPUT": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.18769632361423758,
+              "p95": 0.25830167337973964,
+              "max": 0.3248708342575638,
+              "rmse": 0.19197893661358703,
+              "median": 0.1861615678790969
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.0499872870608877,
+              "p95": 2.829333012980216,
+              "max": 3.690048353082187,
+              "rmse": 2.1152871780356697,
+              "median": 1.9920349788495004
+            }
+          }
+        },
+        "nominal_ndt_attempts": 60,
+        "nominal_ndt_converged": 60,
+        "nominal_ndt_convergence_rate": 1.0,
+        "all_native_converged": 60,
+        "pre_ndt_rejected_frames": 0,
+        "pre_ndt_guard_rejections": 0,
+        "rejected_after_native_attempt_frames": 0,
+        "all_native_calls": 60,
+        "extra_full_ndt": 0,
+        "basic_quality_failures": 0,
+        "nominal_basic_quality_failure_rate": 0.0,
+        "absolute_quality_rejections_after_basic_pass": 0,
+        "quality_events": 0,
+        "all_scan_quality_events_including_pre_ndt_guard": 0,
+        "map_observations_published": 60,
+        "map_observations_rejected": 0,
+        "relative_only_admissions": 0,
+        "selected_extra_candidates": 0,
+        "imu_high_rate_propagations": 611,
+        "imu_raw_message_count": 611,
+        "imu_propagations_including_oosm_replay": 1269,
+        "ndt_callbacks_into_ekf": 60,
+        "ndt_corrections_applied": 60,
+        "oosm_results": {
+          "APPLIED": 60
+        },
+        "replayed_imu_count": 658,
+        "oosm_alignment_error_ms": {
+          "n": 60,
+          "mean": 4.526567459106445,
+          "p95": 9.834706783294678,
+          "max": 9.990692138671875
+        },
+        "no_map_observation_frames": 0,
+        "longest_no_map_run": 0,
+        "no_map_frames_with_real_imu_state_time_advancing": 0,
+        "ekf_high_error_frames": 0,
+        "longest_high_error_run": 0,
+        "no_map_ekf_translation_m": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null,
+          "rmse": null,
+          "median": null
+        },
+        "no_map_ekf_rotation_deg": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null,
+          "rmse": null,
+          "median": null
+        },
+        "ndt_callback_wall_ms": {
+          "n": 60,
+          "mean": 53.497608502705894,
+          "p95": 42.5598382949829,
+          "max": 1201.8308639526367
+        },
+        "event_frame_callback_ms": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "scan_input_to_final_ack_ms": {
+          "n": 60,
+          "mean": 77.48641570409139,
+          "p95": 68.42856407165527,
+          "max": 1230.5710315704346
+        },
+        "process_wall_seconds": 10.00416093199965,
+        "ndt_node_peak_rss_KiB": 380900,
+        "ekf_node_peak_rss_KiB": 23348,
+        "simultaneous_node_peak_rss_KiB": 403108,
+        "actual_target_hashes": [
+          "4470398029999464252"
+        ],
+        "actual_target_points": [
+          2380375
+        ],
+        "native_nominal_score": {
+          "n": 60,
+          "mean": 2.4423385588327804,
+          "p95": 2.479112049529841,
+          "max": 2.5271688073056247
+        },
+        "native_nominal_overlap": {
+          "n": 60,
+          "mean": 0.9883266826985665,
+          "p95": 0.9944674965421854,
+          "max": 0.9945054945054945
+        },
+        "coverage_consistency_mean": {
+          "n": 60,
+          "mean": 0.06767926089025944,
+          "p95": 0.09088488359682796,
+          "max": 0.102922385713467
+        },
+        "recovery_success_not_equated_to_admission": true,
+        "original_geometry_gate_rejections": 0,
+        "originally_rejected_but_attempted": 0,
+        "corrected_messages_received": 0,
+        "corrected_latest_replacements": 0,
+        "queries_using_replaced_sample": 0,
+        "corrected_rejection_reasons": {}
+      },
+      "W1/C3/G": {
+        "samples": 60,
+        "reference_relative_errors": {
+          "IMU_EKF_PREDICTION": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.21965581182992933,
+              "p95": 0.3200029613348267,
+              "max": 0.5246064599345067,
+              "rmse": 0.2326444630631143,
+              "median": 0.20855058584116384
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.7745521917274587,
+              "p95": 8.650371035714347,
+              "max": 11.5090405482651,
+              "rmse": 3.4796138089407878,
+              "median": 2.1234239042179572
+            }
+          },
+          "NDT_NOMINAL_RAW": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.1956928943998128,
+              "p95": 0.47402919576592706,
+              "max": 0.6750108587605717,
+              "rmse": 0.22229305805917318,
+              "median": 0.17063521482728083
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.4626424668905007,
+              "p95": 8.549132505703108,
+              "max": 11.104597718304058,
+              "rmse": 3.2116952268606,
+              "median": 1.8741232297156298
+            }
+          },
+          "NDT_SELECTED_RAW": {
+            "translation_m": {
+              "n": 57,
+              "mean": 0.17210509575790423,
+              "p95": 0.22726705433076005,
+              "max": 0.3218995793368806,
+              "rmse": 0.1765326865491037,
+              "median": 0.1675945872867854
+            },
+            "rotation_deg": {
+              "n": 57,
+              "mean": 2.002610008639184,
+              "p95": 3.0497964506679134,
+              "max": 5.6434751625674275,
+              "rmse": 2.1388595074034513,
+              "median": 1.8637109513523293
+            }
+          },
+          "NDT_PUBLISHED": {
+            "translation_m": {
+              "n": 57,
+              "mean": 0.17210509575790423,
+              "p95": 0.22726705433076005,
+              "max": 0.3218995793368806,
+              "rmse": 0.1765326865491037,
+              "median": 0.1675945872867854
+            },
+            "rotation_deg": {
+              "n": 57,
+              "mean": 2.002610008639184,
+              "p95": 3.0497964506679134,
+              "max": 5.6434751625674275,
+              "rmse": 2.1388595074034513,
+              "median": 1.8637109513523293
+            }
+          },
+          "EKF_CAUSAL_OUTPUT": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.20034155827939307,
+              "p95": 0.3001243159696912,
+              "max": 0.4442817485815966,
+              "rmse": 0.2099428424575639,
+              "median": 0.18928142140352305
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.418973281210804,
+              "p95": 3.723286959829232,
+              "max": 11.245245007295038,
+              "rmse": 2.984149397247634,
+              "median": 2.054308694459488
+            }
+          }
+        },
+        "nominal_ndt_attempts": 60,
+        "nominal_ndt_converged": 60,
+        "nominal_ndt_convergence_rate": 1.0,
+        "all_native_converged": 68,
+        "pre_ndt_rejected_frames": 0,
+        "pre_ndt_guard_rejections": 0,
+        "rejected_after_native_attempt_frames": 3,
+        "all_native_calls": 68,
+        "extra_full_ndt": 8,
+        "basic_quality_failures": 0,
+        "nominal_basic_quality_failure_rate": 0.0,
+        "absolute_quality_rejections_after_basic_pass": 4,
+        "quality_events": 4,
+        "all_scan_quality_events_including_pre_ndt_guard": 4,
+        "map_observations_published": 57,
+        "map_observations_rejected": 3,
+        "relative_only_admissions": 0,
+        "selected_extra_candidates": 1,
+        "imu_high_rate_propagations": 611,
+        "imu_raw_message_count": 611,
+        "imu_propagations_including_oosm_replay": 1236,
+        "ndt_callbacks_into_ekf": 57,
+        "ndt_corrections_applied": 57,
+        "oosm_results": {
+          "APPLIED": 57
+        },
+        "replayed_imu_count": 625,
+        "oosm_alignment_error_ms": {
+          "n": 57,
+          "mean": 4.738669646413703,
+          "p95": 9.835243225097656,
+          "max": 9.990692138671875
+        },
+        "no_map_observation_frames": 3,
+        "longest_no_map_run": 2,
+        "no_map_frames_with_real_imu_state_time_advancing": 3,
+        "ekf_high_error_frames": 2,
+        "longest_high_error_run": 2,
+        "no_map_ekf_translation_m": {
+          "n": 3,
+          "mean": 0.3431714646719792,
+          "p95": 0.4307015906753764,
+          "max": 0.4442817485815966,
+          "rmse": 0.3507792373342947,
+          "median": 0.30848016951939505
+        },
+        "no_map_ekf_rotation_deg": {
+          "n": 3,
+          "mean": 8.728865065410114,
+          "p95": 11.244103192126843,
+          "max": 11.245245007295038,
+          "rmse": 9.42337749718073,
+          "median": 11.233826855613092
+        },
+        "ndt_callback_wall_ms": {
+          "n": 60,
+          "mean": 55.304392178853355,
+          "p95": 111.3020062446594,
+          "max": 1006.0310363769531
+        },
+        "event_frame_callback_ms": {
+          "n": 4,
+          "mean": 339.7783041000366,
+          "p95": 873.3279585838314,
+          "max": 1006.0310363769531
+        },
+        "scan_input_to_final_ack_ms": {
+          "n": 60,
+          "mean": 78.8544495900472,
+          "p95": 130.78415393829343,
+          "max": 1032.9930782318115
+        },
+        "process_wall_seconds": 9.655876075999913,
+        "ndt_node_peak_rss_KiB": 369096,
+        "ekf_node_peak_rss_KiB": 23516,
+        "simultaneous_node_peak_rss_KiB": 392536,
+        "actual_target_hashes": [
+          "11658115094751181825"
+        ],
+        "actual_target_points": [
+          2297615
+        ],
+        "native_nominal_score": {
+          "n": 60,
+          "mean": 2.3344692939918437,
+          "p95": 2.4750523274588603,
+          "max": 2.49067428707992
+        },
+        "native_nominal_overlap": {
+          "n": 60,
+          "mean": 0.9586893511833365,
+          "p95": 0.9932632621058946,
+          "max": 0.9958847736625515
+        },
+        "coverage_consistency_mean": {
+          "n": 60,
+          "mean": 0.09622445225411136,
+          "p95": 0.4432462226806205,
+          "max": 0.47833229465827687
+        },
+        "recovery_success_not_equated_to_admission": true,
+        "original_geometry_gate_rejections": 4,
+        "originally_rejected_but_attempted": 4,
+        "corrected_messages_received": 0,
+        "corrected_latest_replacements": 0,
+        "queries_using_replaced_sample": 0,
+        "corrected_rejection_reasons": {}
+      },
+      "W3/C0/G": {
+        "samples": 60,
+        "reference_relative_errors": {
+          "IMU_EKF_PREDICTION": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.18552141966702476,
+              "p95": 0.257040306379058,
+              "max": 0.4135234282058063,
+              "rmse": 0.19368729525191486,
+              "median": 0.1851836315513803
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.160066534528928,
+              "p95": 2.8361542163892537,
+              "max": 3.2565817743996255,
+              "rmse": 2.196089564572914,
+              "median": 2.1259639057136495
+            }
+          },
+          "NDT_NOMINAL_RAW": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.16216466313520486,
+              "p95": 0.20184483089292019,
+              "max": 0.2244805594691814,
+              "rmse": 0.16463547705250212,
+              "median": 0.1636189012438149
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.8973445622717535,
+              "p95": 2.6399048592930443,
+              "max": 2.9771410053892104,
+              "rmse": 1.9429949200939236,
+              "median": 1.773666062020056
+            }
+          },
+          "NDT_SELECTED_RAW": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.16216466313520486,
+              "p95": 0.20184483089292019,
+              "max": 0.2244805594691814,
+              "rmse": 0.16463547705250212,
+              "median": 0.1636189012438149
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.8973445622717535,
+              "p95": 2.6399048592930443,
+              "max": 2.9771410053892104,
+              "rmse": 1.9429949200939236,
+              "median": 1.773666062020056
+            }
+          },
+          "NDT_PUBLISHED": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.16216466313520486,
+              "p95": 0.20184483089292019,
+              "max": 0.2244805594691814,
+              "rmse": 0.16463547705250212,
+              "median": 0.1636189012438149
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.8973445622717535,
+              "p95": 2.6399048592930443,
+              "max": 2.9771410053892104,
+              "rmse": 1.9429949200939236,
+              "median": 1.773666062020056
+            }
+          },
+          "EKF_CAUSAL_OUTPUT": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.1704659052327613,
+              "p95": 0.22285925508127358,
+              "max": 0.36138212171671336,
+              "rmse": 0.17579057215615915,
+              "median": 0.17278971868394294
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.9752355721060417,
+              "p95": 2.720610369953873,
+              "max": 2.8803089517984524,
+              "rmse": 2.009151048678402,
+              "median": 1.908540452293624
+            }
+          }
+        },
+        "nominal_ndt_attempts": 60,
+        "nominal_ndt_converged": 60,
+        "nominal_ndt_convergence_rate": 1.0,
+        "all_native_converged": 60,
+        "pre_ndt_rejected_frames": 0,
+        "pre_ndt_guard_rejections": 0,
+        "rejected_after_native_attempt_frames": 0,
+        "all_native_calls": 60,
+        "extra_full_ndt": 0,
+        "basic_quality_failures": 0,
+        "nominal_basic_quality_failure_rate": 0.0,
+        "absolute_quality_rejections_after_basic_pass": 0,
+        "quality_events": 0,
+        "all_scan_quality_events_including_pre_ndt_guard": 0,
+        "map_observations_published": 60,
+        "map_observations_rejected": 0,
+        "relative_only_admissions": 0,
+        "selected_extra_candidates": 0,
+        "imu_high_rate_propagations": 611,
+        "imu_raw_message_count": 611,
+        "imu_propagations_including_oosm_replay": 1271,
+        "ndt_callbacks_into_ekf": 60,
+        "ndt_corrections_applied": 60,
+        "oosm_results": {
+          "APPLIED": 60
+        },
+        "replayed_imu_count": 660,
+        "oosm_alignment_error_ms": {
+          "n": 60,
+          "mean": 3.5271485646565757,
+          "p95": 4.192817211151123,
+          "max": 4.668951034545898
+        },
+        "no_map_observation_frames": 0,
+        "longest_no_map_run": 0,
+        "no_map_frames_with_real_imu_state_time_advancing": 0,
+        "ekf_high_error_frames": 0,
+        "longest_high_error_run": 0,
+        "no_map_ekf_translation_m": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null,
+          "rmse": null,
+          "median": null
+        },
+        "no_map_ekf_rotation_deg": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null,
+          "rmse": null,
+          "median": null
+        },
+        "ndt_callback_wall_ms": {
+          "n": 60,
+          "mean": 49.88661607106527,
+          "p95": 47.60882854461669,
+          "max": 985.0461483001709
+        },
+        "event_frame_callback_ms": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "scan_input_to_final_ack_ms": {
+          "n": 60,
+          "mean": 73.79927237828572,
+          "p95": 70.73673009872437,
+          "max": 1013.3640766143799
+        },
+        "process_wall_seconds": 9.496297607999622,
+        "ndt_node_peak_rss_KiB": 387872,
+        "ekf_node_peak_rss_KiB": 22836,
+        "simultaneous_node_peak_rss_KiB": 410628,
+        "actual_target_hashes": [
+          "14550786926841747385"
+        ],
+        "actual_target_points": [
+          2439500
+        ],
+        "native_nominal_score": {
+          "n": 60,
+          "mean": 2.408125797837627,
+          "p95": 2.520724373375751,
+          "max": 2.5329510236495496
+        },
+        "native_nominal_overlap": {
+          "n": 60,
+          "mean": 0.9901312487338283,
+          "p95": 1.0,
+          "max": 1.0
+        },
+        "coverage_consistency_mean": {
+          "n": 60,
+          "mean": 0.057766638183421364,
+          "p95": 0.13971151281615396,
+          "max": 0.2052462521142043
+        },
+        "recovery_success_not_equated_to_admission": true,
+        "original_geometry_gate_rejections": 0,
+        "originally_rejected_but_attempted": 0,
+        "corrected_messages_received": 0,
+        "corrected_latest_replacements": 0,
+        "queries_using_replaced_sample": 0,
+        "corrected_rejection_reasons": {}
+      },
+      "W3/C3/G": {
+        "samples": 60,
+        "reference_relative_errors": {
+          "IMU_EKF_PREDICTION": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.18425278995403235,
+              "p95": 0.26791481826334884,
+              "max": 0.36471603920319395,
+              "rmse": 0.19234206556196184,
+              "median": 0.17899867052271223
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.3219378632002843,
+              "p95": 3.271437288318797,
+              "max": 6.772919155342509,
+              "rmse": 2.496773687962342,
+              "median": 2.190631605388008
+            }
+          },
+          "NDT_NOMINAL_RAW": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.17146628303549757,
+              "p95": 0.2388131409693578,
+              "max": 0.3565104671250009,
+              "rmse": 0.1774352747486344,
+              "median": 0.16505048289192406
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.0932586775377593,
+              "p95": 3.036348001788503,
+              "max": 5.965445774482399,
+              "rmse": 2.254654382913191,
+              "median": 1.893429016633191
+            }
+          },
+          "NDT_SELECTED_RAW": {
+            "translation_m": {
+              "n": 59,
+              "mean": 0.16325056893742212,
+              "p95": 0.21034887937601945,
+              "max": 0.25744848056087016,
+              "rmse": 0.16634341906823774,
+              "median": 0.16356836150989462
+            },
+            "rotation_deg": {
+              "n": 59,
+              "mean": 1.9252531896703975,
+              "p95": 2.611318582029534,
+              "max": 2.997357557509961,
+              "rmse": 1.9686415883848019,
+              "median": 1.8296705296592177
+            }
+          },
+          "NDT_PUBLISHED": {
+            "translation_m": {
+              "n": 59,
+              "mean": 0.16325056893742212,
+              "p95": 0.21034887937601945,
+              "max": 0.25744848056087016,
+              "rmse": 0.16634341906823774,
+              "median": 0.16356836150989462
+            },
+            "rotation_deg": {
+              "n": 59,
+              "mean": 1.9252531896703975,
+              "p95": 2.611318582029534,
+              "max": 2.997357557509961,
+              "rmse": 1.9686415883848019,
+              "median": 1.8296705296592177
+            }
+          },
+          "EKF_CAUSAL_OUTPUT": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.1704509484904556,
+              "p95": 0.2302217857256891,
+              "max": 0.26014910141499364,
+              "rmse": 0.1746964010843274,
+              "median": 0.1749108630224645
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.9862185950248465,
+              "p95": 2.8145234345955665,
+              "max": 2.931799213408373,
+              "rmse": 2.0257604621003917,
+              "median": 1.9364075259602556
+            }
+          }
+        },
+        "nominal_ndt_attempts": 60,
+        "nominal_ndt_converged": 60,
+        "nominal_ndt_convergence_rate": 1.0,
+        "all_native_converged": 66,
+        "pre_ndt_rejected_frames": 0,
+        "pre_ndt_guard_rejections": 0,
+        "rejected_after_native_attempt_frames": 1,
+        "all_native_calls": 66,
+        "extra_full_ndt": 6,
+        "basic_quality_failures": 0,
+        "nominal_basic_quality_failure_rate": 0.0,
+        "absolute_quality_rejections_after_basic_pass": 3,
+        "quality_events": 3,
+        "all_scan_quality_events_including_pre_ndt_guard": 3,
+        "map_observations_published": 59,
+        "map_observations_rejected": 1,
+        "relative_only_admissions": 0,
+        "selected_extra_candidates": 2,
+        "imu_high_rate_propagations": 611,
+        "imu_raw_message_count": 611,
+        "imu_propagations_including_oosm_replay": 1260,
+        "ndt_callbacks_into_ekf": 59,
+        "ndt_corrections_applied": 59,
+        "oosm_results": {
+          "APPLIED": 59
+        },
+        "replayed_imu_count": 649,
+        "oosm_alignment_error_ms": {
+          "n": 59,
+          "mean": 3.530950869544078,
+          "p95": 4.19614315032959,
+          "max": 4.668951034545898
+        },
+        "no_map_observation_frames": 1,
+        "longest_no_map_run": 1,
+        "no_map_frames_with_real_imu_state_time_advancing": 1,
+        "ekf_high_error_frames": 0,
+        "longest_high_error_run": 0,
+        "no_map_ekf_translation_m": {
+          "n": 1,
+          "mean": 0.1853014850449256,
+          "p95": 0.1853014850449256,
+          "max": 0.1853014850449256,
+          "rmse": 0.1853014850449256,
+          "median": 0.1853014850449256
+        },
+        "no_map_ekf_rotation_deg": {
+          "n": 1,
+          "mean": 1.7795516435580099,
+          "p95": 1.7795516435580099,
+          "max": 1.7795516435580099,
+          "rmse": 1.7795516435580099,
+          "median": 1.7795516435580099
+        },
+        "ndt_callback_wall_ms": {
+          "n": 60,
+          "mean": 54.70887819925944,
+          "p95": 56.71231746673581,
+          "max": 1039.4701957702637
+        },
+        "event_frame_callback_ms": {
+          "n": 3,
+          "mean": 414.96944427490234,
+          "p95": 949.5093822479247,
+          "max": 1039.4701957702637
+        },
+        "scan_input_to_final_ack_ms": {
+          "n": 60,
+          "mean": 79.05546029408772,
+          "p95": 79.5540332794189,
+          "max": 1063.0607604980469
+        },
+        "process_wall_seconds": 9.847299418999683,
+        "ndt_node_peak_rss_KiB": 378372,
+        "ekf_node_peak_rss_KiB": 23104,
+        "simultaneous_node_peak_rss_KiB": 400108,
+        "actual_target_hashes": [
+          "7227405164119682066"
+        ],
+        "actual_target_points": [
+          2383209
+        ],
+        "native_nominal_score": {
+          "n": 60,
+          "mean": 2.355730051736517,
+          "p95": 2.5183711149740122,
+          "max": 2.5257325810155473
+        },
+        "native_nominal_overlap": {
+          "n": 60,
+          "mean": 0.9752108457594063,
+          "p95": 0.9987565445026177,
+          "max": 1.0
+        },
+        "coverage_consistency_mean": {
+          "n": 60,
+          "mean": 0.07769459394542959,
+          "p95": 0.22226756739595924,
+          "max": 0.4940902594204994
+        },
+        "recovery_success_not_equated_to_admission": true,
+        "original_geometry_gate_rejections": 0,
+        "originally_rejected_but_attempted": 0,
+        "corrected_messages_received": 0,
+        "corrected_latest_replacements": 0,
+        "queries_using_replaced_sample": 0,
+        "corrected_rejection_reasons": {}
+      },
+      "W1/C0/F": {
+        "samples": 60,
+        "reference_relative_errors": {
+          "IMU_EKF_PREDICTION": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.20890439252826618,
+              "p95": 0.3164178183688925,
+              "max": 0.3354656509784475,
+              "rmse": 0.21480502966389656,
+              "median": 0.20387356987555516
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.1882533018739845,
+              "p95": 3.141649487898454,
+              "max": 3.969444398941302,
+              "rmse": 2.2673125704420136,
+              "median": 2.110615319294515
+            }
+          },
+          "NDT_NOMINAL_RAW": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.17178045640581324,
+              "p95": 0.20982180868360353,
+              "max": 0.24301687661435678,
+              "rmse": 0.1742442678593591,
+              "median": 0.17393051325076103
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.9293997384298076,
+              "p95": 2.8923647455291714,
+              "max": 3.823982248086131,
+              "rmse": 2.0146262340485968,
+              "median": 1.8273957420071951
+            }
+          },
+          "NDT_SELECTED_RAW": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.17178045640581324,
+              "p95": 0.20982180868360353,
+              "max": 0.24301687661435678,
+              "rmse": 0.1742442678593591,
+              "median": 0.17393051325076103
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.9293997384298076,
+              "p95": 2.8923647455291714,
+              "max": 3.823982248086131,
+              "rmse": 2.0146262340485968,
+              "median": 1.8273957420071951
+            }
+          },
+          "NDT_PUBLISHED": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.17178045640581324,
+              "p95": 0.20982180868360353,
+              "max": 0.24301687661435678,
+              "rmse": 0.1742442678593591,
+              "median": 0.17393051325076103
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.9293997384298076,
+              "p95": 2.8923647455291714,
+              "max": 3.823982248086131,
+              "rmse": 2.0146262340485968,
+              "median": 1.8273957420071951
+            }
+          },
+          "EKF_CAUSAL_OUTPUT": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.18769632361423758,
+              "p95": 0.25830167337973964,
+              "max": 0.3248708342575638,
+              "rmse": 0.19197893661358703,
+              "median": 0.1861615678790969
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.0499872870608877,
+              "p95": 2.829333012980216,
+              "max": 3.690048353082187,
+              "rmse": 2.1152871780356697,
+              "median": 1.9920349788495004
+            }
+          }
+        },
+        "nominal_ndt_attempts": 60,
+        "nominal_ndt_converged": 60,
+        "nominal_ndt_convergence_rate": 1.0,
+        "all_native_converged": 60,
+        "pre_ndt_rejected_frames": 0,
+        "pre_ndt_guard_rejections": 0,
+        "rejected_after_native_attempt_frames": 0,
+        "all_native_calls": 60,
+        "extra_full_ndt": 0,
+        "basic_quality_failures": 0,
+        "nominal_basic_quality_failure_rate": 0.0,
+        "absolute_quality_rejections_after_basic_pass": 0,
+        "quality_events": 0,
+        "all_scan_quality_events_including_pre_ndt_guard": 0,
+        "map_observations_published": 60,
+        "map_observations_rejected": 0,
+        "relative_only_admissions": 0,
+        "selected_extra_candidates": 0,
+        "imu_high_rate_propagations": 611,
+        "imu_raw_message_count": 611,
+        "imu_propagations_including_oosm_replay": 1269,
+        "ndt_callbacks_into_ekf": 60,
+        "ndt_corrections_applied": 60,
+        "oosm_results": {
+          "APPLIED": 60
+        },
+        "replayed_imu_count": 658,
+        "oosm_alignment_error_ms": {
+          "n": 60,
+          "mean": 4.526567459106445,
+          "p95": 9.834706783294678,
+          "max": 9.990692138671875
+        },
+        "no_map_observation_frames": 0,
+        "longest_no_map_run": 0,
+        "no_map_frames_with_real_imu_state_time_advancing": 0,
+        "ekf_high_error_frames": 0,
+        "longest_high_error_run": 0,
+        "no_map_ekf_translation_m": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null,
+          "rmse": null,
+          "median": null
+        },
+        "no_map_ekf_rotation_deg": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null,
+          "rmse": null,
+          "median": null
+        },
+        "ndt_callback_wall_ms": {
+          "n": 60,
+          "mean": 49.979122479756676,
+          "p95": 42.50944852828979,
+          "max": 966.0165309906006
+        },
+        "event_frame_callback_ms": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "scan_input_to_final_ack_ms": {
+          "n": 60,
+          "mean": 74.04757738113403,
+          "p95": 66.457998752594,
+          "max": 1003.9103031158447
+        },
+        "process_wall_seconds": 9.45110849699995,
+        "ndt_node_peak_rss_KiB": 381096,
+        "ekf_node_peak_rss_KiB": 21788,
+        "simultaneous_node_peak_rss_KiB": 402808,
+        "actual_target_hashes": [
+          "4470398029999464252"
+        ],
+        "actual_target_points": [
+          2380375
+        ],
+        "native_nominal_score": {
+          "n": 60,
+          "mean": 2.4423385588327804,
+          "p95": 2.479112049529841,
+          "max": 2.5271688073056247
+        },
+        "native_nominal_overlap": {
+          "n": 60,
+          "mean": 0.9883266826985665,
+          "p95": 0.9944674965421854,
+          "max": 0.9945054945054945
+        },
+        "coverage_consistency_mean": {
+          "n": 60,
+          "mean": 0.06767926089025944,
+          "p95": 0.09088488359682796,
+          "max": 0.102922385713467
+        },
+        "recovery_success_not_equated_to_admission": true,
+        "original_geometry_gate_rejections": 0,
+        "originally_rejected_but_attempted": 0,
+        "corrected_messages_received": 60,
+        "corrected_latest_replacements": 0,
+        "queries_using_replaced_sample": 0,
+        "corrected_rejection_reasons": {
+          "LATER_HISTORY_EXISTS": 32,
+          "EXACT_STAMP_MISMATCH_CORRECTED_LATER": 28
+        }
+      },
+      "W1/C3/F": {
+        "samples": 60,
+        "reference_relative_errors": {
+          "IMU_EKF_PREDICTION": {
+            "translation_m": {
+              "n": 60,
+              "mean": 5.693129775850498,
+              "p95": 15.761044491994488,
+              "max": 17.921507938157223,
+              "rmse": 7.594582371470221,
+              "median": 3.928577178328383
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 12.570508774124155,
+              "p95": 16.951955884507587,
+              "max": 17.74080011687244,
+              "rmse": 12.888750243094837,
+              "median": 11.996475377682394
+            }
+          },
+          "NDT_NOMINAL_RAW": {
+            "translation_m": {
+              "n": 0,
+              "mean": null,
+              "p95": null,
+              "max": null,
+              "rmse": null,
+              "median": null
+            },
+            "rotation_deg": {
+              "n": 0,
+              "mean": null,
+              "p95": null,
+              "max": null,
+              "rmse": null,
+              "median": null
+            }
+          },
+          "NDT_SELECTED_RAW": {
+            "translation_m": {
+              "n": 0,
+              "mean": null,
+              "p95": null,
+              "max": null,
+              "rmse": null,
+              "median": null
+            },
+            "rotation_deg": {
+              "n": 0,
+              "mean": null,
+              "p95": null,
+              "max": null,
+              "rmse": null,
+              "median": null
+            }
+          },
+          "NDT_PUBLISHED": {
+            "translation_m": {
+              "n": 0,
+              "mean": null,
+              "p95": null,
+              "max": null,
+              "rmse": null,
+              "median": null
+            },
+            "rotation_deg": {
+              "n": 0,
+              "mean": null,
+              "p95": null,
+              "max": null,
+              "rmse": null,
+              "median": null
+            }
+          },
+          "EKF_CAUSAL_OUTPUT": {
+            "translation_m": {
+              "n": 60,
+              "mean": 6.017908484582324,
+              "p95": 16.421686200718504,
+              "max": 18.755586697766333,
+              "rmse": 7.98642189306969,
+              "median": 4.190729335493826
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 12.72844837423537,
+              "p95": 17.16624573430163,
+              "max": 18.375466352365613,
+              "rmse": 13.05264912208735,
+              "median": 12.147986137609777
+            }
+          }
+        },
+        "nominal_ndt_attempts": 0,
+        "nominal_ndt_converged": 0,
+        "nominal_ndt_convergence_rate": null,
+        "all_native_converged": 0,
+        "pre_ndt_rejected_frames": 60,
+        "pre_ndt_guard_rejections": 60,
+        "rejected_after_native_attempt_frames": 0,
+        "all_native_calls": 0,
+        "extra_full_ndt": 0,
+        "basic_quality_failures": 0,
+        "nominal_basic_quality_failure_rate": null,
+        "absolute_quality_rejections_after_basic_pass": 0,
+        "quality_events": 0,
+        "all_scan_quality_events_including_pre_ndt_guard": 0,
+        "map_observations_published": 0,
+        "map_observations_rejected": 60,
+        "relative_only_admissions": 0,
+        "selected_extra_candidates": 0,
+        "imu_high_rate_propagations": 611,
+        "imu_raw_message_count": 611,
+        "imu_propagations_including_oosm_replay": 611,
+        "ndt_callbacks_into_ekf": 0,
+        "ndt_corrections_applied": 0,
+        "oosm_results": {},
+        "replayed_imu_count": 0,
+        "oosm_alignment_error_ms": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "no_map_observation_frames": 60,
+        "longest_no_map_run": 60,
+        "no_map_frames_with_real_imu_state_time_advancing": 60,
+        "ekf_high_error_frames": 60,
+        "longest_high_error_run": 60,
+        "no_map_ekf_translation_m": {
+          "n": 60,
+          "mean": 6.017908484582324,
+          "p95": 16.421686200718504,
+          "max": 18.755586697766333,
+          "rmse": 7.98642189306969,
+          "median": 4.190729335493826
+        },
+        "no_map_ekf_rotation_deg": {
+          "n": 60,
+          "mean": 12.72844837423537,
+          "p95": 17.16624573430163,
+          "max": 18.375466352365613,
+          "rmse": 13.05264912208735,
+          "median": 12.147986137609777
+        },
+        "ndt_callback_wall_ms": {
+          "n": 60,
+          "mean": 31.50949478149414,
+          "p95": 40.88521003723144,
+          "max": 583.9745998382568
+        },
+        "event_frame_callback_ms": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "scan_input_to_final_ack_ms": {
+          "n": 60,
+          "mean": 55.83561261494955,
+          "p95": 66.81582927703857,
+          "max": 610.8191013336182
+        },
+        "process_wall_seconds": 8.457836655999927,
+        "ndt_node_peak_rss_KiB": 256992,
+        "ekf_node_peak_rss_KiB": 21940,
+        "simultaneous_node_peak_rss_KiB": 278856,
+        "actual_target_hashes": [
+          "11658115094751181825"
+        ],
+        "actual_target_points": [
+          2297615
+        ],
+        "native_nominal_score": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "native_nominal_overlap": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "coverage_consistency_mean": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "recovery_success_not_equated_to_admission": true,
+        "original_geometry_gate_rejections": 60,
+        "originally_rejected_but_attempted": 0,
+        "corrected_messages_received": 0,
+        "corrected_latest_replacements": 0,
+        "queries_using_replaced_sample": 0,
+        "corrected_rejection_reasons": {}
+      },
+      "W3/C0/F": {
+        "samples": 60,
+        "reference_relative_errors": {
+          "IMU_EKF_PREDICTION": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.18552141966702476,
+              "p95": 0.257040306379058,
+              "max": 0.4135234282058063,
+              "rmse": 0.19368729525191486,
+              "median": 0.1851836315513803
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.160066534528928,
+              "p95": 2.8361542163892537,
+              "max": 3.2565817743996255,
+              "rmse": 2.196089564572914,
+              "median": 2.1259639057136495
+            }
+          },
+          "NDT_NOMINAL_RAW": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.16216466313520486,
+              "p95": 0.20184483089292019,
+              "max": 0.2244805594691814,
+              "rmse": 0.16463547705250212,
+              "median": 0.1636189012438149
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.8973445622717535,
+              "p95": 2.6399048592930443,
+              "max": 2.9771410053892104,
+              "rmse": 1.9429949200939236,
+              "median": 1.773666062020056
+            }
+          },
+          "NDT_SELECTED_RAW": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.16216466313520486,
+              "p95": 0.20184483089292019,
+              "max": 0.2244805594691814,
+              "rmse": 0.16463547705250212,
+              "median": 0.1636189012438149
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.8973445622717535,
+              "p95": 2.6399048592930443,
+              "max": 2.9771410053892104,
+              "rmse": 1.9429949200939236,
+              "median": 1.773666062020056
+            }
+          },
+          "NDT_PUBLISHED": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.16216466313520486,
+              "p95": 0.20184483089292019,
+              "max": 0.2244805594691814,
+              "rmse": 0.16463547705250212,
+              "median": 0.1636189012438149
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.8973445622717535,
+              "p95": 2.6399048592930443,
+              "max": 2.9771410053892104,
+              "rmse": 1.9429949200939236,
+              "median": 1.773666062020056
+            }
+          },
+          "EKF_CAUSAL_OUTPUT": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.1704659052327613,
+              "p95": 0.22285925508127358,
+              "max": 0.36138212171671336,
+              "rmse": 0.17579057215615915,
+              "median": 0.17278971868394294
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.9752355721060417,
+              "p95": 2.720610369953873,
+              "max": 2.8803089517984524,
+              "rmse": 2.009151048678402,
+              "median": 1.908540452293624
+            }
+          }
+        },
+        "nominal_ndt_attempts": 60,
+        "nominal_ndt_converged": 60,
+        "nominal_ndt_convergence_rate": 1.0,
+        "all_native_converged": 60,
+        "pre_ndt_rejected_frames": 0,
+        "pre_ndt_guard_rejections": 0,
+        "rejected_after_native_attempt_frames": 0,
+        "all_native_calls": 60,
+        "extra_full_ndt": 0,
+        "basic_quality_failures": 0,
+        "nominal_basic_quality_failure_rate": 0.0,
+        "absolute_quality_rejections_after_basic_pass": 0,
+        "quality_events": 0,
+        "all_scan_quality_events_including_pre_ndt_guard": 0,
+        "map_observations_published": 60,
+        "map_observations_rejected": 0,
+        "relative_only_admissions": 0,
+        "selected_extra_candidates": 0,
+        "imu_high_rate_propagations": 611,
+        "imu_raw_message_count": 611,
+        "imu_propagations_including_oosm_replay": 1271,
+        "ndt_callbacks_into_ekf": 60,
+        "ndt_corrections_applied": 60,
+        "oosm_results": {
+          "APPLIED": 60
+        },
+        "replayed_imu_count": 660,
+        "oosm_alignment_error_ms": {
+          "n": 60,
+          "mean": 3.5271485646565757,
+          "p95": 4.192817211151123,
+          "max": 4.668951034545898
+        },
+        "no_map_observation_frames": 0,
+        "longest_no_map_run": 0,
+        "no_map_frames_with_real_imu_state_time_advancing": 0,
+        "ekf_high_error_frames": 0,
+        "longest_high_error_run": 0,
+        "no_map_ekf_translation_m": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null,
+          "rmse": null,
+          "median": null
+        },
+        "no_map_ekf_rotation_deg": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null,
+          "rmse": null,
+          "median": null
+        },
+        "ndt_callback_wall_ms": {
+          "n": 60,
+          "mean": 50.839789708455406,
+          "p95": 48.20156097412109,
+          "max": 992.1088218688965
+        },
+        "event_frame_callback_ms": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "scan_input_to_final_ack_ms": {
+          "n": 60,
+          "mean": 74.34868017832439,
+          "p95": 72.83525466918944,
+          "max": 1021.5647220611572
+        },
+        "process_wall_seconds": 9.56166651500007,
+        "ndt_node_peak_rss_KiB": 385608,
+        "ekf_node_peak_rss_KiB": 23776,
+        "simultaneous_node_peak_rss_KiB": 408328,
+        "actual_target_hashes": [
+          "14550786926841747385"
+        ],
+        "actual_target_points": [
+          2439500
+        ],
+        "native_nominal_score": {
+          "n": 60,
+          "mean": 2.408125797837627,
+          "p95": 2.520724373375751,
+          "max": 2.5329510236495496
+        },
+        "native_nominal_overlap": {
+          "n": 60,
+          "mean": 0.9901312487338283,
+          "p95": 1.0,
+          "max": 1.0
+        },
+        "coverage_consistency_mean": {
+          "n": 60,
+          "mean": 0.057766638183421364,
+          "p95": 0.13971151281615396,
+          "max": 0.2052462521142043
+        },
+        "recovery_success_not_equated_to_admission": true,
+        "original_geometry_gate_rejections": 0,
+        "originally_rejected_but_attempted": 0,
+        "corrected_messages_received": 60,
+        "corrected_latest_replacements": 1,
+        "queries_using_replaced_sample": 0,
+        "corrected_rejection_reasons": {
+          "EXACT_STAMP_MISMATCH_CORRECTED_LATER": 31,
+          "LATER_HISTORY_EXISTS": 28
+        }
+      },
+      "W3/C3/F": {
+        "samples": 60,
+        "reference_relative_errors": {
+          "IMU_EKF_PREDICTION": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.18425278995403235,
+              "p95": 0.26791481826334884,
+              "max": 0.36471603920319395,
+              "rmse": 0.19234206556196184,
+              "median": 0.17899867052271223
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.3219378632002843,
+              "p95": 3.271437288318797,
+              "max": 6.772919155342509,
+              "rmse": 2.496773687962342,
+              "median": 2.190631605388008
+            }
+          },
+          "NDT_NOMINAL_RAW": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.17146628303549757,
+              "p95": 0.2388131409693578,
+              "max": 0.3565104671250009,
+              "rmse": 0.1774352747486344,
+              "median": 0.16505048289192406
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.0932586775377593,
+              "p95": 3.036348001788503,
+              "max": 5.965445774482399,
+              "rmse": 2.254654382913191,
+              "median": 1.893429016633191
+            }
+          },
+          "NDT_SELECTED_RAW": {
+            "translation_m": {
+              "n": 59,
+              "mean": 0.16325056893742212,
+              "p95": 0.21034887937601945,
+              "max": 0.25744848056087016,
+              "rmse": 0.16634341906823774,
+              "median": 0.16356836150989462
+            },
+            "rotation_deg": {
+              "n": 59,
+              "mean": 1.9252531896703975,
+              "p95": 2.611318582029534,
+              "max": 2.997357557509961,
+              "rmse": 1.9686415883848019,
+              "median": 1.8296705296592177
+            }
+          },
+          "NDT_PUBLISHED": {
+            "translation_m": {
+              "n": 59,
+              "mean": 0.16325056893742212,
+              "p95": 0.21034887937601945,
+              "max": 0.25744848056087016,
+              "rmse": 0.16634341906823774,
+              "median": 0.16356836150989462
+            },
+            "rotation_deg": {
+              "n": 59,
+              "mean": 1.9252531896703975,
+              "p95": 2.611318582029534,
+              "max": 2.997357557509961,
+              "rmse": 1.9686415883848019,
+              "median": 1.8296705296592177
+            }
+          },
+          "EKF_CAUSAL_OUTPUT": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.1704509484904556,
+              "p95": 0.2302217857256891,
+              "max": 0.26014910141499364,
+              "rmse": 0.1746964010843274,
+              "median": 0.1749108630224645
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.9862185950248465,
+              "p95": 2.8145234345955665,
+              "max": 2.931799213408373,
+              "rmse": 2.0257604621003917,
+              "median": 1.9364075259602556
+            }
+          }
+        },
+        "nominal_ndt_attempts": 60,
+        "nominal_ndt_converged": 60,
+        "nominal_ndt_convergence_rate": 1.0,
+        "all_native_converged": 66,
+        "pre_ndt_rejected_frames": 0,
+        "pre_ndt_guard_rejections": 0,
+        "rejected_after_native_attempt_frames": 1,
+        "all_native_calls": 66,
+        "extra_full_ndt": 6,
+        "basic_quality_failures": 0,
+        "nominal_basic_quality_failure_rate": 0.0,
+        "absolute_quality_rejections_after_basic_pass": 3,
+        "quality_events": 3,
+        "all_scan_quality_events_including_pre_ndt_guard": 3,
+        "map_observations_published": 59,
+        "map_observations_rejected": 1,
+        "relative_only_admissions": 0,
+        "selected_extra_candidates": 2,
+        "imu_high_rate_propagations": 611,
+        "imu_raw_message_count": 611,
+        "imu_propagations_including_oosm_replay": 1260,
+        "ndt_callbacks_into_ekf": 59,
+        "ndt_corrections_applied": 59,
+        "oosm_results": {
+          "APPLIED": 59
+        },
+        "replayed_imu_count": 649,
+        "oosm_alignment_error_ms": {
+          "n": 59,
+          "mean": 3.530950869544078,
+          "p95": 4.19614315032959,
+          "max": 4.668951034545898
+        },
+        "no_map_observation_frames": 1,
+        "longest_no_map_run": 1,
+        "no_map_frames_with_real_imu_state_time_advancing": 1,
+        "ekf_high_error_frames": 0,
+        "longest_high_error_run": 0,
+        "no_map_ekf_translation_m": {
+          "n": 1,
+          "mean": 0.1853014850449256,
+          "p95": 0.1853014850449256,
+          "max": 0.1853014850449256,
+          "rmse": 0.1853014850449256,
+          "median": 0.1853014850449256
+        },
+        "no_map_ekf_rotation_deg": {
+          "n": 1,
+          "mean": 1.7795516435580099,
+          "p95": 1.7795516435580099,
+          "max": 1.7795516435580099,
+          "rmse": 1.7795516435580099,
+          "median": 1.7795516435580099
+        },
+        "ndt_callback_wall_ms": {
+          "n": 60,
+          "mean": 53.3542275428772,
+          "p95": 60.40244102478025,
+          "max": 1001.7130374908447
+        },
+        "event_frame_callback_ms": {
+          "n": 3,
+          "mean": 403.01744143168133,
+          "p95": 915.4874324798583,
+          "max": 1001.7130374908447
+        },
+        "scan_input_to_final_ack_ms": {
+          "n": 60,
+          "mean": 76.83223883310954,
+          "p95": 83.51559638977048,
+          "max": 1034.3952178955078
+        },
+        "process_wall_seconds": 9.36574789199949,
+        "ndt_node_peak_rss_KiB": 378756,
+        "ekf_node_peak_rss_KiB": 23508,
+        "simultaneous_node_peak_rss_KiB": 402264,
+        "actual_target_hashes": [
+          "7227405164119682066"
+        ],
+        "actual_target_points": [
+          2383209
+        ],
+        "native_nominal_score": {
+          "n": 60,
+          "mean": 2.355730051736517,
+          "p95": 2.5183711149740122,
+          "max": 2.5257325810155473
+        },
+        "native_nominal_overlap": {
+          "n": 60,
+          "mean": 0.9752108457594063,
+          "p95": 0.9987565445026177,
+          "max": 1.0
+        },
+        "coverage_consistency_mean": {
+          "n": 60,
+          "mean": 0.07769459394542959,
+          "p95": 0.22226756739595924,
+          "max": 0.4940902594204994
+        },
+        "recovery_success_not_equated_to_admission": true,
+        "original_geometry_gate_rejections": 0,
+        "originally_rejected_but_attempted": 0,
+        "corrected_messages_received": 59,
+        "corrected_latest_replacements": 1,
+        "queries_using_replaced_sample": 0,
+        "corrected_rejection_reasons": {
+          "EXACT_STAMP_MISMATCH_CORRECTED_LATER": 31,
+          "LATER_HISTORY_EXISTS": 27
+        }
+      },
+      "W1/C0/GF": {
+        "samples": 60,
+        "reference_relative_errors": {
+          "IMU_EKF_PREDICTION": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.20890439252826618,
+              "p95": 0.3164178183688925,
+              "max": 0.3354656509784475,
+              "rmse": 0.21480502966389656,
+              "median": 0.20387356987555516
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.1882533018739845,
+              "p95": 3.141649487898454,
+              "max": 3.969444398941302,
+              "rmse": 2.2673125704420136,
+              "median": 2.110615319294515
+            }
+          },
+          "NDT_NOMINAL_RAW": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.17178045640581324,
+              "p95": 0.20982180868360353,
+              "max": 0.24301687661435678,
+              "rmse": 0.1742442678593591,
+              "median": 0.17393051325076103
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.9293997384298076,
+              "p95": 2.8923647455291714,
+              "max": 3.823982248086131,
+              "rmse": 2.0146262340485968,
+              "median": 1.8273957420071951
+            }
+          },
+          "NDT_SELECTED_RAW": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.17178045640581324,
+              "p95": 0.20982180868360353,
+              "max": 0.24301687661435678,
+              "rmse": 0.1742442678593591,
+              "median": 0.17393051325076103
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.9293997384298076,
+              "p95": 2.8923647455291714,
+              "max": 3.823982248086131,
+              "rmse": 2.0146262340485968,
+              "median": 1.8273957420071951
+            }
+          },
+          "NDT_PUBLISHED": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.17178045640581324,
+              "p95": 0.20982180868360353,
+              "max": 0.24301687661435678,
+              "rmse": 0.1742442678593591,
+              "median": 0.17393051325076103
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.9293997384298076,
+              "p95": 2.8923647455291714,
+              "max": 3.823982248086131,
+              "rmse": 2.0146262340485968,
+              "median": 1.8273957420071951
+            }
+          },
+          "EKF_CAUSAL_OUTPUT": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.18769632361423758,
+              "p95": 0.25830167337973964,
+              "max": 0.3248708342575638,
+              "rmse": 0.19197893661358703,
+              "median": 0.1861615678790969
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.0499872870608877,
+              "p95": 2.829333012980216,
+              "max": 3.690048353082187,
+              "rmse": 2.1152871780356697,
+              "median": 1.9920349788495004
+            }
+          }
+        },
+        "nominal_ndt_attempts": 60,
+        "nominal_ndt_converged": 60,
+        "nominal_ndt_convergence_rate": 1.0,
+        "all_native_converged": 60,
+        "pre_ndt_rejected_frames": 0,
+        "pre_ndt_guard_rejections": 0,
+        "rejected_after_native_attempt_frames": 0,
+        "all_native_calls": 60,
+        "extra_full_ndt": 0,
+        "basic_quality_failures": 0,
+        "nominal_basic_quality_failure_rate": 0.0,
+        "absolute_quality_rejections_after_basic_pass": 0,
+        "quality_events": 0,
+        "all_scan_quality_events_including_pre_ndt_guard": 0,
+        "map_observations_published": 60,
+        "map_observations_rejected": 0,
+        "relative_only_admissions": 0,
+        "selected_extra_candidates": 0,
+        "imu_high_rate_propagations": 611,
+        "imu_raw_message_count": 611,
+        "imu_propagations_including_oosm_replay": 1269,
+        "ndt_callbacks_into_ekf": 60,
+        "ndt_corrections_applied": 60,
+        "oosm_results": {
+          "APPLIED": 60
+        },
+        "replayed_imu_count": 658,
+        "oosm_alignment_error_ms": {
+          "n": 60,
+          "mean": 4.526567459106445,
+          "p95": 9.834706783294678,
+          "max": 9.990692138671875
+        },
+        "no_map_observation_frames": 0,
+        "longest_no_map_run": 0,
+        "no_map_frames_with_real_imu_state_time_advancing": 0,
+        "ekf_high_error_frames": 0,
+        "longest_high_error_run": 0,
+        "no_map_ekf_translation_m": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null,
+          "rmse": null,
+          "median": null
+        },
+        "no_map_ekf_rotation_deg": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null,
+          "rmse": null,
+          "median": null
+        },
+        "ndt_callback_wall_ms": {
+          "n": 60,
+          "mean": 50.12174844741821,
+          "p95": 43.684232234954834,
+          "max": 965.8241271972656
+        },
+        "event_frame_callback_ms": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "scan_input_to_final_ack_ms": {
+          "n": 60,
+          "mean": 74.00668064753215,
+          "p95": 68.60170364379883,
+          "max": 992.6145076751709
+        },
+        "process_wall_seconds": 9.450836648000404,
+        "ndt_node_peak_rss_KiB": 380808,
+        "ekf_node_peak_rss_KiB": 23224,
+        "simultaneous_node_peak_rss_KiB": 402976,
+        "actual_target_hashes": [
+          "4470398029999464252"
+        ],
+        "actual_target_points": [
+          2380375
+        ],
+        "native_nominal_score": {
+          "n": 60,
+          "mean": 2.4423385588327804,
+          "p95": 2.479112049529841,
+          "max": 2.5271688073056247
+        },
+        "native_nominal_overlap": {
+          "n": 60,
+          "mean": 0.9883266826985665,
+          "p95": 0.9944674965421854,
+          "max": 0.9945054945054945
+        },
+        "coverage_consistency_mean": {
+          "n": 60,
+          "mean": 0.06767926089025944,
+          "p95": 0.09088488359682796,
+          "max": 0.102922385713467
+        },
+        "recovery_success_not_equated_to_admission": true,
+        "original_geometry_gate_rejections": 0,
+        "originally_rejected_but_attempted": 0,
+        "corrected_messages_received": 60,
+        "corrected_latest_replacements": 0,
+        "queries_using_replaced_sample": 0,
+        "corrected_rejection_reasons": {
+          "LATER_HISTORY_EXISTS": 32,
+          "EXACT_STAMP_MISMATCH_CORRECTED_LATER": 28
+        }
+      },
+      "W1/C3/GF": {
+        "samples": 60,
+        "reference_relative_errors": {
+          "IMU_EKF_PREDICTION": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.21965581182992933,
+              "p95": 0.3200029613348267,
+              "max": 0.5246064599345067,
+              "rmse": 0.2326444630631143,
+              "median": 0.20855058584116384
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.7745521917274587,
+              "p95": 8.650371035714347,
+              "max": 11.5090405482651,
+              "rmse": 3.4796138089407878,
+              "median": 2.1234239042179572
+            }
+          },
+          "NDT_NOMINAL_RAW": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.1956928943998128,
+              "p95": 0.47402919576592706,
+              "max": 0.6750108587605717,
+              "rmse": 0.22229305805917318,
+              "median": 0.17063521482728083
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.4626424668905007,
+              "p95": 8.549132505703108,
+              "max": 11.104597718304058,
+              "rmse": 3.2116952268606,
+              "median": 1.8741232297156298
+            }
+          },
+          "NDT_SELECTED_RAW": {
+            "translation_m": {
+              "n": 57,
+              "mean": 0.17210509575790423,
+              "p95": 0.22726705433076005,
+              "max": 0.3218995793368806,
+              "rmse": 0.1765326865491037,
+              "median": 0.1675945872867854
+            },
+            "rotation_deg": {
+              "n": 57,
+              "mean": 2.002610008639184,
+              "p95": 3.0497964506679134,
+              "max": 5.6434751625674275,
+              "rmse": 2.1388595074034513,
+              "median": 1.8637109513523293
+            }
+          },
+          "NDT_PUBLISHED": {
+            "translation_m": {
+              "n": 57,
+              "mean": 0.17210509575790423,
+              "p95": 0.22726705433076005,
+              "max": 0.3218995793368806,
+              "rmse": 0.1765326865491037,
+              "median": 0.1675945872867854
+            },
+            "rotation_deg": {
+              "n": 57,
+              "mean": 2.002610008639184,
+              "p95": 3.0497964506679134,
+              "max": 5.6434751625674275,
+              "rmse": 2.1388595074034513,
+              "median": 1.8637109513523293
+            }
+          },
+          "EKF_CAUSAL_OUTPUT": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.20034155827939307,
+              "p95": 0.3001243159696912,
+              "max": 0.4442817485815966,
+              "rmse": 0.2099428424575639,
+              "median": 0.18928142140352305
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.418973281210804,
+              "p95": 3.723286959829232,
+              "max": 11.245245007295038,
+              "rmse": 2.984149397247634,
+              "median": 2.054308694459488
+            }
+          }
+        },
+        "nominal_ndt_attempts": 60,
+        "nominal_ndt_converged": 60,
+        "nominal_ndt_convergence_rate": 1.0,
+        "all_native_converged": 68,
+        "pre_ndt_rejected_frames": 0,
+        "pre_ndt_guard_rejections": 0,
+        "rejected_after_native_attempt_frames": 3,
+        "all_native_calls": 68,
+        "extra_full_ndt": 8,
+        "basic_quality_failures": 0,
+        "nominal_basic_quality_failure_rate": 0.0,
+        "absolute_quality_rejections_after_basic_pass": 4,
+        "quality_events": 4,
+        "all_scan_quality_events_including_pre_ndt_guard": 4,
+        "map_observations_published": 57,
+        "map_observations_rejected": 3,
+        "relative_only_admissions": 0,
+        "selected_extra_candidates": 1,
+        "imu_high_rate_propagations": 611,
+        "imu_raw_message_count": 611,
+        "imu_propagations_including_oosm_replay": 1236,
+        "ndt_callbacks_into_ekf": 57,
+        "ndt_corrections_applied": 57,
+        "oosm_results": {
+          "APPLIED": 57
+        },
+        "replayed_imu_count": 625,
+        "oosm_alignment_error_ms": {
+          "n": 57,
+          "mean": 4.738669646413703,
+          "p95": 9.835243225097656,
+          "max": 9.990692138671875
+        },
+        "no_map_observation_frames": 3,
+        "longest_no_map_run": 2,
+        "no_map_frames_with_real_imu_state_time_advancing": 3,
+        "ekf_high_error_frames": 2,
+        "longest_high_error_run": 2,
+        "no_map_ekf_translation_m": {
+          "n": 3,
+          "mean": 0.3431714646719792,
+          "p95": 0.4307015906753764,
+          "max": 0.4442817485815966,
+          "rmse": 0.3507792373342947,
+          "median": 0.30848016951939505
+        },
+        "no_map_ekf_rotation_deg": {
+          "n": 3,
+          "mean": 8.728865065410114,
+          "p95": 11.244103192126843,
+          "max": 11.245245007295038,
+          "rmse": 9.42337749718073,
+          "median": 11.233826855613092
+        },
+        "ndt_callback_wall_ms": {
+          "n": 60,
+          "mean": 55.88980118433634,
+          "p95": 110.86797714233397,
+          "max": 1032.4907302856445
+        },
+        "event_frame_callback_ms": {
+          "n": 4,
+          "mean": 344.43289041519165,
+          "p95": 895.3111529350277,
+          "max": 1032.4907302856445
+        },
+        "scan_input_to_final_ack_ms": {
+          "n": 60,
+          "mean": 80.05581299463908,
+          "p95": 130.84691762924191,
+          "max": 1060.7717037200928
+        },
+        "process_wall_seconds": 9.866194328999882,
+        "ndt_node_peak_rss_KiB": 369088,
+        "ekf_node_peak_rss_KiB": 22056,
+        "simultaneous_node_peak_rss_KiB": 391068,
+        "actual_target_hashes": [
+          "11658115094751181825"
+        ],
+        "actual_target_points": [
+          2297615
+        ],
+        "native_nominal_score": {
+          "n": 60,
+          "mean": 2.3344692939918437,
+          "p95": 2.4750523274588603,
+          "max": 2.49067428707992
+        },
+        "native_nominal_overlap": {
+          "n": 60,
+          "mean": 0.9586893511833365,
+          "p95": 0.9932632621058946,
+          "max": 0.9958847736625515
+        },
+        "coverage_consistency_mean": {
+          "n": 60,
+          "mean": 0.09622445225411136,
+          "p95": 0.4432462226806205,
+          "max": 0.47833229465827687
+        },
+        "recovery_success_not_equated_to_admission": true,
+        "original_geometry_gate_rejections": 4,
+        "originally_rejected_but_attempted": 4,
+        "corrected_messages_received": 57,
+        "corrected_latest_replacements": 0,
+        "queries_using_replaced_sample": 0,
+        "corrected_rejection_reasons": {
+          "LATER_HISTORY_EXISTS": 31,
+          "EXACT_STAMP_MISMATCH_CORRECTED_LATER": 26
+        }
+      },
+      "W3/C0/GF": {
+        "samples": 60,
+        "reference_relative_errors": {
+          "IMU_EKF_PREDICTION": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.18552141966702476,
+              "p95": 0.257040306379058,
+              "max": 0.4135234282058063,
+              "rmse": 0.19368729525191486,
+              "median": 0.1851836315513803
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.160066534528928,
+              "p95": 2.8361542163892537,
+              "max": 3.2565817743996255,
+              "rmse": 2.196089564572914,
+              "median": 2.1259639057136495
+            }
+          },
+          "NDT_NOMINAL_RAW": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.16216466313520486,
+              "p95": 0.20184483089292019,
+              "max": 0.2244805594691814,
+              "rmse": 0.16463547705250212,
+              "median": 0.1636189012438149
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.8973445622717535,
+              "p95": 2.6399048592930443,
+              "max": 2.9771410053892104,
+              "rmse": 1.9429949200939236,
+              "median": 1.773666062020056
+            }
+          },
+          "NDT_SELECTED_RAW": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.16216466313520486,
+              "p95": 0.20184483089292019,
+              "max": 0.2244805594691814,
+              "rmse": 0.16463547705250212,
+              "median": 0.1636189012438149
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.8973445622717535,
+              "p95": 2.6399048592930443,
+              "max": 2.9771410053892104,
+              "rmse": 1.9429949200939236,
+              "median": 1.773666062020056
+            }
+          },
+          "NDT_PUBLISHED": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.16216466313520486,
+              "p95": 0.20184483089292019,
+              "max": 0.2244805594691814,
+              "rmse": 0.16463547705250212,
+              "median": 0.1636189012438149
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.8973445622717535,
+              "p95": 2.6399048592930443,
+              "max": 2.9771410053892104,
+              "rmse": 1.9429949200939236,
+              "median": 1.773666062020056
+            }
+          },
+          "EKF_CAUSAL_OUTPUT": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.1704659052327613,
+              "p95": 0.22285925508127358,
+              "max": 0.36138212171671336,
+              "rmse": 0.17579057215615915,
+              "median": 0.17278971868394294
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.9752355721060417,
+              "p95": 2.720610369953873,
+              "max": 2.8803089517984524,
+              "rmse": 2.009151048678402,
+              "median": 1.908540452293624
+            }
+          }
+        },
+        "nominal_ndt_attempts": 60,
+        "nominal_ndt_converged": 60,
+        "nominal_ndt_convergence_rate": 1.0,
+        "all_native_converged": 60,
+        "pre_ndt_rejected_frames": 0,
+        "pre_ndt_guard_rejections": 0,
+        "rejected_after_native_attempt_frames": 0,
+        "all_native_calls": 60,
+        "extra_full_ndt": 0,
+        "basic_quality_failures": 0,
+        "nominal_basic_quality_failure_rate": 0.0,
+        "absolute_quality_rejections_after_basic_pass": 0,
+        "quality_events": 0,
+        "all_scan_quality_events_including_pre_ndt_guard": 0,
+        "map_observations_published": 60,
+        "map_observations_rejected": 0,
+        "relative_only_admissions": 0,
+        "selected_extra_candidates": 0,
+        "imu_high_rate_propagations": 611,
+        "imu_raw_message_count": 611,
+        "imu_propagations_including_oosm_replay": 1271,
+        "ndt_callbacks_into_ekf": 60,
+        "ndt_corrections_applied": 60,
+        "oosm_results": {
+          "APPLIED": 60
+        },
+        "replayed_imu_count": 660,
+        "oosm_alignment_error_ms": {
+          "n": 60,
+          "mean": 3.5271485646565757,
+          "p95": 4.192817211151123,
+          "max": 4.668951034545898
+        },
+        "no_map_observation_frames": 0,
+        "longest_no_map_run": 0,
+        "no_map_frames_with_real_imu_state_time_advancing": 0,
+        "ekf_high_error_frames": 0,
+        "longest_high_error_run": 0,
+        "no_map_ekf_translation_m": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null,
+          "rmse": null,
+          "median": null
+        },
+        "no_map_ekf_rotation_deg": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null,
+          "rmse": null,
+          "median": null
+        },
+        "ndt_callback_wall_ms": {
+          "n": 60,
+          "mean": 49.33676719665527,
+          "p95": 47.6828098297119,
+          "max": 977.8976440429688
+        },
+        "event_frame_callback_ms": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "scan_input_to_final_ack_ms": {
+          "n": 60,
+          "mean": 73.5884149869283,
+          "p95": 70.79403400421141,
+          "max": 1009.6430778503418
+        },
+        "process_wall_seconds": 9.24988233699969,
+        "ndt_node_peak_rss_KiB": 387520,
+        "ekf_node_peak_rss_KiB": 22980,
+        "simultaneous_node_peak_rss_KiB": 408932,
+        "actual_target_hashes": [
+          "14550786926841747385"
+        ],
+        "actual_target_points": [
+          2439500
+        ],
+        "native_nominal_score": {
+          "n": 60,
+          "mean": 2.408125797837627,
+          "p95": 2.520724373375751,
+          "max": 2.5329510236495496
+        },
+        "native_nominal_overlap": {
+          "n": 60,
+          "mean": 0.9901312487338283,
+          "p95": 1.0,
+          "max": 1.0
+        },
+        "coverage_consistency_mean": {
+          "n": 60,
+          "mean": 0.057766638183421364,
+          "p95": 0.13971151281615396,
+          "max": 0.2052462521142043
+        },
+        "recovery_success_not_equated_to_admission": true,
+        "original_geometry_gate_rejections": 0,
+        "originally_rejected_but_attempted": 0,
+        "corrected_messages_received": 60,
+        "corrected_latest_replacements": 1,
+        "queries_using_replaced_sample": 0,
+        "corrected_rejection_reasons": {
+          "EXACT_STAMP_MISMATCH_CORRECTED_LATER": 31,
+          "LATER_HISTORY_EXISTS": 28
+        }
+      },
+      "W3/C3/GF": {
+        "samples": 60,
+        "reference_relative_errors": {
+          "IMU_EKF_PREDICTION": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.18425278995403235,
+              "p95": 0.26791481826334884,
+              "max": 0.36471603920319395,
+              "rmse": 0.19234206556196184,
+              "median": 0.17899867052271223
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.3219378632002843,
+              "p95": 3.271437288318797,
+              "max": 6.772919155342509,
+              "rmse": 2.496773687962342,
+              "median": 2.190631605388008
+            }
+          },
+          "NDT_NOMINAL_RAW": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.17146628303549757,
+              "p95": 0.2388131409693578,
+              "max": 0.3565104671250009,
+              "rmse": 0.1774352747486344,
+              "median": 0.16505048289192406
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 2.0932586775377593,
+              "p95": 3.036348001788503,
+              "max": 5.965445774482399,
+              "rmse": 2.254654382913191,
+              "median": 1.893429016633191
+            }
+          },
+          "NDT_SELECTED_RAW": {
+            "translation_m": {
+              "n": 59,
+              "mean": 0.16325056893742212,
+              "p95": 0.21034887937601945,
+              "max": 0.25744848056087016,
+              "rmse": 0.16634341906823774,
+              "median": 0.16356836150989462
+            },
+            "rotation_deg": {
+              "n": 59,
+              "mean": 1.9252531896703975,
+              "p95": 2.611318582029534,
+              "max": 2.997357557509961,
+              "rmse": 1.9686415883848019,
+              "median": 1.8296705296592177
+            }
+          },
+          "NDT_PUBLISHED": {
+            "translation_m": {
+              "n": 59,
+              "mean": 0.16325056893742212,
+              "p95": 0.21034887937601945,
+              "max": 0.25744848056087016,
+              "rmse": 0.16634341906823774,
+              "median": 0.16356836150989462
+            },
+            "rotation_deg": {
+              "n": 59,
+              "mean": 1.9252531896703975,
+              "p95": 2.611318582029534,
+              "max": 2.997357557509961,
+              "rmse": 1.9686415883848019,
+              "median": 1.8296705296592177
+            }
+          },
+          "EKF_CAUSAL_OUTPUT": {
+            "translation_m": {
+              "n": 60,
+              "mean": 0.1704509484904556,
+              "p95": 0.2302217857256891,
+              "max": 0.26014910141499364,
+              "rmse": 0.1746964010843274,
+              "median": 0.1749108630224645
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 1.9862185950248465,
+              "p95": 2.8145234345955665,
+              "max": 2.931799213408373,
+              "rmse": 2.0257604621003917,
+              "median": 1.9364075259602556
+            }
+          }
+        },
+        "nominal_ndt_attempts": 60,
+        "nominal_ndt_converged": 60,
+        "nominal_ndt_convergence_rate": 1.0,
+        "all_native_converged": 66,
+        "pre_ndt_rejected_frames": 0,
+        "pre_ndt_guard_rejections": 0,
+        "rejected_after_native_attempt_frames": 1,
+        "all_native_calls": 66,
+        "extra_full_ndt": 6,
+        "basic_quality_failures": 0,
+        "nominal_basic_quality_failure_rate": 0.0,
+        "absolute_quality_rejections_after_basic_pass": 3,
+        "quality_events": 3,
+        "all_scan_quality_events_including_pre_ndt_guard": 3,
+        "map_observations_published": 59,
+        "map_observations_rejected": 1,
+        "relative_only_admissions": 0,
+        "selected_extra_candidates": 2,
+        "imu_high_rate_propagations": 611,
+        "imu_raw_message_count": 611,
+        "imu_propagations_including_oosm_replay": 1260,
+        "ndt_callbacks_into_ekf": 59,
+        "ndt_corrections_applied": 59,
+        "oosm_results": {
+          "APPLIED": 59
+        },
+        "replayed_imu_count": 649,
+        "oosm_alignment_error_ms": {
+          "n": 59,
+          "mean": 3.530950869544078,
+          "p95": 4.19614315032959,
+          "max": 4.668951034545898
+        },
+        "no_map_observation_frames": 1,
+        "longest_no_map_run": 1,
+        "no_map_frames_with_real_imu_state_time_advancing": 1,
+        "ekf_high_error_frames": 0,
+        "longest_high_error_run": 0,
+        "no_map_ekf_translation_m": {
+          "n": 1,
+          "mean": 0.1853014850449256,
+          "p95": 0.1853014850449256,
+          "max": 0.1853014850449256,
+          "rmse": 0.1853014850449256,
+          "median": 0.1853014850449256
+        },
+        "no_map_ekf_rotation_deg": {
+          "n": 1,
+          "mean": 1.7795516435580099,
+          "p95": 1.7795516435580099,
+          "max": 1.7795516435580099,
+          "rmse": 1.7795516435580099,
+          "median": 1.7795516435580099
+        },
+        "ndt_callback_wall_ms": {
+          "n": 60,
+          "mean": 53.48609288533529,
+          "p95": 53.51889133453363,
+          "max": 1043.8008308410645
+        },
+        "event_frame_callback_ms": {
+          "n": 3,
+          "mean": 421.6868082682292,
+          "p95": 953.9758205413817,
+          "max": 1043.8008308410645
+        },
+        "scan_input_to_final_ack_ms": {
+          "n": 60,
+          "mean": 78.33663622538249,
+          "p95": 79.79282140731806,
+          "max": 1074.5267868041992
+        },
+        "process_wall_seconds": 9.747987949000162,
+        "ndt_node_peak_rss_KiB": 378636,
+        "ekf_node_peak_rss_KiB": 21640,
+        "simultaneous_node_peak_rss_KiB": 400096,
+        "actual_target_hashes": [
+          "7227405164119682066"
+        ],
+        "actual_target_points": [
+          2383209
+        ],
+        "native_nominal_score": {
+          "n": 60,
+          "mean": 2.355730051736517,
+          "p95": 2.5183711149740122,
+          "max": 2.5257325810155473
+        },
+        "native_nominal_overlap": {
+          "n": 60,
+          "mean": 0.9752108457594063,
+          "p95": 0.9987565445026177,
+          "max": 1.0
+        },
+        "coverage_consistency_mean": {
+          "n": 60,
+          "mean": 0.07769459394542959,
+          "p95": 0.22226756739595924,
+          "max": 0.4940902594204994
+        },
+        "recovery_success_not_equated_to_admission": true,
+        "original_geometry_gate_rejections": 0,
+        "originally_rejected_but_attempted": 0,
+        "corrected_messages_received": 59,
+        "corrected_latest_replacements": 1,
+        "queries_using_replaced_sample": 0,
+        "corrected_rejection_reasons": {
+          "EXACT_STAMP_MISMATCH_CORRECTED_LATER": 31,
+          "LATER_HISTORY_EXISTS": 27
+        }
+      }
+    },
+    "vs_R23_C": [
+      {
+        "window": "W1",
+        "arm": "C0",
+        "mode": "G",
+        "delta_translation_rmse_m": 0.0,
+        "delta_rotation_rmse_deg": 0.0,
+        "C0_side_effect": false,
+        "W1_C3_target_met": false
+      },
+      {
+        "window": "W1",
+        "arm": "C3",
+        "mode": "G",
+        "delta_translation_rmse_m": -7.776479050612126,
+        "delta_rotation_rmse_deg": -10.068499724839716,
+        "C0_side_effect": false,
+        "W1_C3_target_met": true
+      },
+      {
+        "window": "W3",
+        "arm": "C0",
+        "mode": "G",
+        "delta_translation_rmse_m": 0.0,
+        "delta_rotation_rmse_deg": 0.0,
+        "C0_side_effect": false,
+        "W1_C3_target_met": false
+      },
+      {
+        "window": "W3",
+        "arm": "C3",
+        "mode": "G",
+        "delta_translation_rmse_m": 0.0,
+        "delta_rotation_rmse_deg": 0.0,
+        "C0_side_effect": false,
+        "W1_C3_target_met": false
+      },
+      {
+        "window": "W1",
+        "arm": "C0",
+        "mode": "F",
+        "delta_translation_rmse_m": 0.0,
+        "delta_rotation_rmse_deg": 0.0,
+        "C0_side_effect": false,
+        "W1_C3_target_met": false
+      },
+      {
+        "window": "W1",
+        "arm": "C3",
+        "mode": "F",
+        "delta_translation_rmse_m": 0.0,
+        "delta_rotation_rmse_deg": 0.0,
+        "C0_side_effect": false,
+        "W1_C3_target_met": false
+      },
+      {
+        "window": "W3",
+        "arm": "C0",
+        "mode": "F",
+        "delta_translation_rmse_m": 0.0,
+        "delta_rotation_rmse_deg": 0.0,
+        "C0_side_effect": false,
+        "W1_C3_target_met": false
+      },
+      {
+        "window": "W3",
+        "arm": "C3",
+        "mode": "F",
+        "delta_translation_rmse_m": 0.0,
+        "delta_rotation_rmse_deg": 0.0,
+        "C0_side_effect": false,
+        "W1_C3_target_met": false
+      },
+      {
+        "window": "W1",
+        "arm": "C0",
+        "mode": "GF",
+        "delta_translation_rmse_m": 0.0,
+        "delta_rotation_rmse_deg": 0.0,
+        "C0_side_effect": false,
+        "W1_C3_target_met": false
+      },
+      {
+        "window": "W1",
+        "arm": "C3",
+        "mode": "GF",
+        "delta_translation_rmse_m": -7.776479050612126,
+        "delta_rotation_rmse_deg": -10.068499724839716,
+        "C0_side_effect": false,
+        "W1_C3_target_met": true
+      },
+      {
+        "window": "W3",
+        "arm": "C0",
+        "mode": "GF",
+        "delta_translation_rmse_m": 0.0,
+        "delta_rotation_rmse_deg": 0.0,
+        "C0_side_effect": false,
+        "W1_C3_target_met": false
+      },
+      {
+        "window": "W3",
+        "arm": "C3",
+        "mode": "GF",
+        "delta_translation_rmse_m": 0.0,
+        "delta_rotation_rmse_deg": 0.0,
+        "C0_side_effect": false,
+        "W1_C3_target_met": false
+      }
+    ],
+    "reference_time_rule": "exact or bracket gap<=150ms and nearest endpoint<=50ms; translation linear, rotation SLERP in Base then fixed T_B_L; no fitted offset/alignment",
+    "EKF_time_rule": "same-frame actual corrected current-state publication after accepted map measurement; otherwise actual high-rate watermark publication; never compared against scan-start reference",
+    "limitations": [
+      "known development windows",
+      "conditional Base reference exported by map registration, not independent mocap",
+      "Coverage Consistency Mean points participate in Full NDT",
+      "existing zero-velocity/bias anchor priors; no independent calibration or GT velocity",
+      "F only replaces exact latest corrected timestamp; actual query consumption separately measured",
+      "all native candidates precede reference evaluation; admission does not imply correctness",
+      "pre-NDT geometry guard rejections are separate from optimizer/basic/absolute quality failures; zero attempts gives unavailable convergence rate"
+    ]
+  },
+  "replacement_proof": [
+    {
+      "run": "f_w3_c0_01",
+      "corrected_stamp_ns": 1583837242478779793,
+      "matched_high_rate_stamp_ns": 1583837242478779793,
+      "local_replacement_version": 1,
+      "OOSM_REPLAY_COMPLETE_before_publish": true,
+      "replay_imu_count": 11,
+      "next_query_raw_ordinal": 6514,
+      "next_query_scan_ns": 1583837242472756992,
+      "corrected_minus_next_scan_ns": 6022801,
+      "next_query_sample_ns": 1583837242468792333,
+      "next_query_sample_source": "ODOM_HIGH_RATE",
+      "next_query_sample_corrected_version": 0,
+      "note": "Posthoc provenance matching allows existing double-log rounding <=1us; online replacement itself requires exact0ns."
+    },
+    {
+      "run": "f_w3_c3_01",
+      "corrected_stamp_ns": 1583837242478779793,
+      "matched_high_rate_stamp_ns": 1583837242478779793,
+      "local_replacement_version": 1,
+      "OOSM_REPLAY_COMPLETE_before_publish": true,
+      "replay_imu_count": 11,
+      "next_query_raw_ordinal": 6514,
+      "next_query_scan_ns": 1583837242472756992,
+      "corrected_minus_next_scan_ns": 6022801,
+      "next_query_sample_ns": 1583837242468792333,
+      "next_query_sample_source": "ODOM_HIGH_RATE",
+      "next_query_sample_corrected_version": 0,
+      "note": "Posthoc provenance matching allows existing double-log rounding <=1us; online replacement itself requires exact0ns."
+    },
+    {
+      "run": "gf_w3_c0_01",
+      "corrected_stamp_ns": 1583837242478779793,
+      "matched_high_rate_stamp_ns": 1583837242478779793,
+      "local_replacement_version": 1,
+      "OOSM_REPLAY_COMPLETE_before_publish": true,
+      "replay_imu_count": 11,
+      "next_query_raw_ordinal": 6514,
+      "next_query_scan_ns": 1583837242472756992,
+      "corrected_minus_next_scan_ns": 6022801,
+      "next_query_sample_ns": 1583837242468792333,
+      "next_query_sample_source": "ODOM_HIGH_RATE",
+      "next_query_sample_corrected_version": 0,
+      "note": "Posthoc provenance matching allows existing double-log rounding <=1us; online replacement itself requires exact0ns."
+    },
+    {
+      "run": "gf_w3_c3_01",
+      "corrected_stamp_ns": 1583837242478779793,
+      "matched_high_rate_stamp_ns": 1583837242478779793,
+      "local_replacement_version": 1,
+      "OOSM_REPLAY_COMPLETE_before_publish": true,
+      "replay_imu_count": 11,
+      "next_query_raw_ordinal": 6514,
+      "next_query_scan_ns": 1583837242472756992,
+      "corrected_minus_next_scan_ns": 6022801,
+      "next_query_sample_ns": 1583837242468792333,
+      "next_query_sample_source": "ODOM_HIGH_RATE",
+      "next_query_sample_corrected_version": 0,
+      "note": "Posthoc provenance matching allows existing double-log rounding <=1us; online replacement itself requires exact0ns."
+    }
+  ],
+  "baseline_summary_sha256": "518eb0ea5097a76efa7eb06518899cc6182cb3f8af09c2f24fe062a99584e4a4",
+  "input_contract_sha256": "1c3188b4822888894ed8abdf5d11dec8218efc6830336ac8d962802d1df3aa70",
+  "map_manifest_sha256": "ebd7089f20026a991af1a88679a133bce020ee7bc9a9a5439665cc3a413cbb04",
+  "map_source_sha256_from_manifest": "57da358a7c3f52a132fd06afba69f2c3eff2e980b7dbad5b8751548665104e25",
+  "imu_sha256": "b733ce23544ed23a3ab7a627acfd61ea329f882b12ef0cbcb501b6b13e5828be",
+  "binaries": {
+    "devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp": "bfa54a0c7b94efc1235b5828901ca7ce5651b0704042eb9f6f42e0664efb8667",
+    "devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp": "01550b9950f17798a57b0dcd8e707c6cdc6f6c76f78360286787bdfd79114ddc",
+    "devel/lib/dog_prior_map_localization/newer_college_sequence_publisher": "ba96d219248edb1ed4d5d9b1e6842145baed88097bd58607fc630100f0ab9a65"
+  },
+  "next": "冻结C+G研究配置、F保持关闭并明确新鲜度尚未修复；请科研总控制定一次有限机器狗真实rosbag闭环验收合同与论文整理计划，不再扩展候选搜索或OOSM修改。",
+  "final_validation": {
+    "checks": "PASS_WITH_F_FRESHNESS_NOT_ESTABLISHED",
+    "stable_snapshot_unchanged": true,
+    "stable_after": {
+      "HEAD": "41999ea700c66c4cadf0eca9e0c5d73caa2783fd",
+      "branch": "feature/quadruped-localization-interface",
+      "status_sha256": "aaeeb0ce6ba92e7423e0d5578331404f7e59b22086330da53ed2444d83932e63",
+      "index_sha256": "0d73adc5d9de6e7a63aa913d30da3c9aecde41b4882bb847e227157ac9dbb392",
+      "protected_files_sha256": {
+        "src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp": "40cdf26f9dddb9d06dc16c0bfd89fc88a9dd33e42e5bbd4e9bc3b453f1e4277c",
+        "src/dog_prior_map_localization/src/dog_prior_map_ekf_node.cpp": "e69fade2af615cff00af87dc0e8860017cb236a80a80926bf384f108666fcc58",
+        "src/dog_prior_map_localization/src/dog_prior_map_ekf_node_core.cpp": "7038444b77cac7987bfdc28acbef27eafbbd42475f6b7a5a942a7f73bf1f5d30",
+        "src/dog_prior_map_localization/src/local_map_tiles.cpp": null,
+        "src/dog_prior_map_localization/src/imu_processor.cpp": "1e6b2dd5269241f5f87d665bc8151264b015fbae8bfa29045a92cbd9513ad6eb",
+        "src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch": "bb0b3f0bdb3d009c75899511517c529f4f846db3390143bebc0279d553fb3f4f",
+        "src/dog_prior_map_localization/launch/newer_college_local_map.launch": null,
+        "src/dog_prior_map_localization/config/dog_prior_map_localization_ndt.yaml": "08c5fbf67684892dbea7b61255de2acb0ad8fdd73bb5bd5b8c5960b92ffac183"
+      }
+    },
+    "history_archives_unchanged_against_START": true,
+    "frozen_algorithm_and_binaries_match": true,
+    "native_artifacts_sha_verified": 228,
+    "all_12_runs_complete": true,
+    "all_720_queries_causal": true,
+    "received_corrected_provenance_matched": 415,
+    "exact_replacements": 4,
+    "queries_using_replaced_samples": 0,
+    "no_new_experiment_or_parameter_retry": true,
+    "reference_after_native_seal": true,
+    "all_required_outputs_present": true
+  },
+  "actual_pose_equality_checks": [
+    {
+      "window": "W1",
+      "arm": "C0",
+      "comparison": "F_vs_R23",
+      "EKF_and_TP_all_60_pose_matrices_identical": true
+    },
+    {
+      "window": "W1",
+      "arm": "C0",
+      "comparison": "GF_vs_G",
+      "EKF_and_TP_all_60_pose_matrices_identical": true
+    },
+    {
+      "window": "W1",
+      "arm": "C3",
+      "comparison": "F_vs_R23",
+      "EKF_and_TP_all_60_pose_matrices_identical": true
+    },
+    {
+      "window": "W1",
+      "arm": "C3",
+      "comparison": "GF_vs_G",
+      "EKF_and_TP_all_60_pose_matrices_identical": true
+    },
+    {
+      "window": "W3",
+      "arm": "C0",
+      "comparison": "F_vs_R23",
+      "EKF_and_TP_all_60_pose_matrices_identical": true
+    },
+    {
+      "window": "W3",
+      "arm": "C0",
+      "comparison": "GF_vs_G",
+      "EKF_and_TP_all_60_pose_matrices_identical": true
+    },
+    {
+      "window": "W3",
+      "arm": "C3",
+      "comparison": "F_vs_R23",
+      "EKF_and_TP_all_60_pose_matrices_identical": true
+    },
+    {
+      "window": "W3",
+      "arm": "C3",
+      "comparison": "GF_vs_G",
+      "EKF_and_TP_all_60_pose_matrices_identical": true
+    }
+  ]
+}

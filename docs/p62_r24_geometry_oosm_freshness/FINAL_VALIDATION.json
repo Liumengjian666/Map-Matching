@@ -1,0 +1,81 @@
+{
+  "checks": "PASS_WITH_F_FRESHNESS_NOT_ESTABLISHED",
+  "stable_snapshot_unchanged": true,
+  "stable_after": {
+    "HEAD": "41999ea700c66c4cadf0eca9e0c5d73caa2783fd",
+    "branch": "feature/quadruped-localization-interface",
+    "status_sha256": "aaeeb0ce6ba92e7423e0d5578331404f7e59b22086330da53ed2444d83932e63",
+    "index_sha256": "0d73adc5d9de6e7a63aa913d30da3c9aecde41b4882bb847e227157ac9dbb392",
+    "protected_files_sha256": {
+      "src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp": "40cdf26f9dddb9d06dc16c0bfd89fc88a9dd33e42e5bbd4e9bc3b453f1e4277c",
+      "src/dog_prior_map_localization/src/dog_prior_map_ekf_node.cpp": "e69fade2af615cff00af87dc0e8860017cb236a80a80926bf384f108666fcc58",
+      "src/dog_prior_map_localization/src/dog_prior_map_ekf_node_core.cpp": "7038444b77cac7987bfdc28acbef27eafbbd42475f6b7a5a942a7f73bf1f5d30",
+      "src/dog_prior_map_localization/src/local_map_tiles.cpp": null,
+      "src/dog_prior_map_localization/src/imu_processor.cpp": "1e6b2dd5269241f5f87d665bc8151264b015fbae8bfa29045a92cbd9513ad6eb",
+      "src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch": "bb0b3f0bdb3d009c75899511517c529f4f846db3390143bebc0279d553fb3f4f",
+      "src/dog_prior_map_localization/launch/newer_college_local_map.launch": null,
+      "src/dog_prior_map_localization/config/dog_prior_map_localization_ndt.yaml": "08c5fbf67684892dbea7b61255de2acb0ad8fdd73bb5bd5b8c5960b92ffac183"
+    }
+  },
+  "history_archives_unchanged_against_START": true,
+  "frozen_algorithm_and_binaries_match": true,
+  "native_artifacts_sha_verified": 228,
+  "all_12_runs_complete": true,
+  "all_720_queries_causal": true,
+  "received_corrected_provenance_matched": 415,
+  "exact_replacements": 4,
+  "queries_using_replaced_samples": 0,
+  "no_new_experiment_or_parameter_retry": true,
+  "reference_after_native_seal": true,
+  "all_required_outputs_present": true,
+  "actual_pose_equality_checks": [
+    {
+      "window": "W1",
+      "arm": "C0",
+      "comparison": "F_vs_R23",
+      "EKF_and_TP_all_60_pose_matrices_identical": true
+    },
+    {
+      "window": "W1",
+      "arm": "C0",
+      "comparison": "GF_vs_G",
+      "EKF_and_TP_all_60_pose_matrices_identical": true
+    },
+    {
+      "window": "W1",
+      "arm": "C3",
+      "comparison": "F_vs_R23",
+      "EKF_and_TP_all_60_pose_matrices_identical": true
+    },
+    {
+      "window": "W1",
+      "arm": "C3",
+      "comparison": "GF_vs_G",
+      "EKF_and_TP_all_60_pose_matrices_identical": true
+    },
+    {
+      "window": "W3",
+      "arm": "C0",
+      "comparison": "F_vs_R23",
+      "EKF_and_TP_all_60_pose_matrices_identical": true
+    },
+    {
+      "window": "W3",
+      "arm": "C0",
+      "comparison": "GF_vs_G",
+      "EKF_and_TP_all_60_pose_matrices_identical": true
+    },
+    {
+      "window": "W3",
+      "arm": "C3",
+      "comparison": "F_vs_R23",
+      "EKF_and_TP_all_60_pose_matrices_identical": true
+    },
+    {
+      "window": "W3",
+      "arm": "C3",
+      "comparison": "GF_vs_G",
+      "EKF_and_TP_all_60_pose_matrices_identical": true
+    }
+  ]
+}
