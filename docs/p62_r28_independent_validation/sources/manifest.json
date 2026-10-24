@@ -1,0 +1,92 @@
+[
+  {
+    "name": "ground_truth.html",
+    "url": "https://ori-drs.github.io/newer-college-dataset/ground-truth/",
+    "final_url": "https://ori-drs.github.io/newer-college-dataset/ground-truth/",
+    "status": 200,
+    "bytes": 7574,
+    "sha256": "28aaf7ead0b469c9c3604a02f18536fe036dedefb6f46d8b574f975336a17e48",
+    "retrieved_utc": "2026-10-24T08:41:13.163468+00:00"
+  },
+  {
+    "name": "stereo_platform.html",
+    "url": "https://ori-drs.github.io/newer-college-dataset/stereo-cam/platform-stereo/",
+    "final_url": "https://ori-drs.github.io/newer-college-dataset/stereo-cam/platform-stereo/",
+    "status": 200,
+    "bytes": 9034,
+    "sha256": "8bd6d49c9dfdfe6b7dab7f21ddf19a15c526ffb52dfad5abaf088040dc41c804",
+    "retrieved_utc": "2026-10-24T08:41:13.674588+00:00"
+  },
+  {
+    "name": "stereo_calibration.html",
+    "url": "https://ori-drs.github.io/newer-college-dataset/stereo-cam/calibration-stereo/",
+    "final_url": "https://ori-drs.github.io/newer-college-dataset/stereo-cam/calibration-stereo/",
+    "status": 200,
+    "bytes": 12687,
+    "sha256": "b3dcda2923a9dee866e6b0e297455a38f562d227398bb2c9458e3c7c4b35c744",
+    "retrieved_utc": "2026-10-24T08:41:14.188545+00:00"
+  },
+  {
+    "name": "frontier_README.md",
+    "url": "https://raw.githubusercontent.com/ori-drs/frontier_description/0b039393334a7767e24a711bd05816bfc7f7485a/README.md",
+    "final_url": "https://raw.githubusercontent.com/ori-drs/frontier_description/0b039393334a7767e24a711bd05816bfc7f7485a/README.md",
+    "status": 200,
+    "bytes": 3488,
+    "sha256": "2e0f8349fb588712a529ec7de1ff24c393ece1db7ac76c66403d24e3ed9a8167",
+    "retrieved_utc": "2026-10-24T08:41:15.003873+00:00"
+  },
+  {
+    "name": "frontier_standalone.urdf.xacro",
+    "url": "https://raw.githubusercontent.com/ori-drs/frontier_description/0b039393334a7767e24a711bd05816bfc7f7485a/urdf/frontier_standalone.urdf.xacro",
+    "final_url": "https://raw.githubusercontent.com/ori-drs/frontier_description/0b039393334a7767e24a711bd05816bfc7f7485a/urdf/frontier_standalone.urdf.xacro",
+    "status": 200,
+    "bytes": 1451,
+    "sha256": "aaded61760e3315a84ac1d651525858f1c3859c0f82de52b5f1f17243d36d689",
+    "retrieved_utc": "2026-10-24T08:41:15.599350+00:00"
+  },
+  {
+    "name": "frontier.urdf.xacro",
+    "url": "https://raw.githubusercontent.com/ori-drs/frontier_description/0b039393334a7767e24a711bd05816bfc7f7485a/urdf/frontier.urdf.xacro",
+    "final_url": "https://raw.githubusercontent.com/ori-drs/frontier_description/0b039393334a7767e24a711bd05816bfc7f7485a/urdf/frontier.urdf.xacro",
+    "status": 200,
+    "bytes": 6035,
+    "sha256": "c4e621322fc11ec1f8794c9103243d2d88145ff4807037cfe7eb670be34df099",
+    "retrieved_utc": "2026-10-24T08:41:16.175382+00:00"
+  },
+  {
+    "name": "fastlio_README.md",
+    "url": "https://raw.githubusercontent.com/HViktorTsoi/FAST_LIO_LOCALIZATION/main/README.md",
+    "final_url": "https://raw.githubusercontent.com/HViktorTsoi/FAST_LIO_LOCALIZATION/main/README.md",
+    "status": 200,
+    "bytes": 5395,
+    "sha256": "1f9062b9414ed31243631641811e9760ed7ef147e5e7639ae94401201dc61702",
+    "retrieved_utc": "2026-10-24T08:41:16.809507+00:00"
+  },
+  {
+    "name": "fastlio_global_localization.py",
+    "url": "https://raw.githubusercontent.com/HViktorTsoi/FAST_LIO_LOCALIZATION/main/scripts/global_localization.py",
+    "final_url": "https://raw.githubusercontent.com/HViktorTsoi/FAST_LIO_LOCALIZATION/main/scripts/global_localization.py",
+    "status": 200,
+    "bytes": 8548,
+    "sha256": "b31e70552a1882d670ba78072e978aa7e8085e5c31f979b46b6d923ea41c0625",
+    "retrieved_utc": "2026-10-24T08:41:17.405097+00:00"
+  },
+  {
+    "name": "fastlio_CMakeLists.txt",
+    "url": "https://raw.githubusercontent.com/HViktorTsoi/FAST_LIO_LOCALIZATION/main/CMakeLists.txt",
+    "final_url": "https://raw.githubusercontent.com/HViktorTsoi/FAST_LIO_LOCALIZATION/main/CMakeLists.txt",
+    "status": 200,
+    "bytes": 2219,
+    "sha256": "683db1b3af659cec6ef523649bfbb504f35bda0ea6d7b42be395a2a1288ba5f6",
+    "retrieved_utc": "2026-10-24T08:41:17.974322+00:00"
+  },
+  {
+    "name": "fastlio_preprocess.cpp",
+    "url": "https://raw.githubusercontent.com/HViktorTsoi/FAST_LIO_LOCALIZATION/main/src/preprocess.cpp",
+    "final_url": "https://raw.githubusercontent.com/HViktorTsoi/FAST_LIO_LOCALIZATION/main/src/preprocess.cpp",
+    "status": 200,
+    "bytes": 23472,
+    "sha256": "3078e09208972c13d73574b33e20ff83e66c2d690d7345330c4d9a40f3043e26",
+    "retrieved_utc": "2026-10-24T08:41:18.557736+00:00"
+  }
+]

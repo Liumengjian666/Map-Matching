@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Stereo-Camera Calibration | Newer College Dataset</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Stereo-Camera Calibration" />
+<meta name="author" content="Dynamic Robot Systems Group" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The Newer College Dataset revisits New College, Oxford with modern stereo camera and LIDAR sensors as well as precise ground truth." />
+<meta property="og:description" content="The Newer College Dataset revisits New College, Oxford with modern stereo camera and LIDAR sensors as well as precise ground truth." />
+<link rel="canonical" href="https://ori-drs.github.io/newer-college-dataset/stereo-cam/calibration-stereo/" />
+<meta property="og:url" content="https://ori-drs.github.io/newer-college-dataset/stereo-cam/calibration-stereo/" />
+<meta property="og:site_name" content="Newer College Dataset" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Stereo-Camera Calibration" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","author":{"@type":"Person","name":"Dynamic Robot Systems Group"},"description":"The Newer College Dataset revisits New College, Oxford with modern stereo camera and LIDAR sensors as well as precise ground truth.","headline":"Stereo-Camera Calibration","url":"https://ori-drs.github.io/newer-college-dataset/stereo-cam/calibration-stereo/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/newer-college-dataset/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://ori-drs.github.io/newer-college-dataset/feed.xml" title="Newer College Dataset" />
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/newer-college-dataset/">Newer College Dataset</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/newer-college-dataset/stereo-cam/">Stereo-Cam</a><a class="page-link" href="/newer-college-dataset/multi-cam/">Multi-Cam</a><a class="page-link" href="/newer-college-dataset/ground-truth/">Ground Truth</a><a class="page-link" href="/newer-college-dataset/usage/">Usage</a><a class="page-link" href="/newer-college-dataset/download/">Download</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Stereo-Camera Calibration</h1>
+  </header>
+
+  <div class="post-content">
+    <table>
+  <tbody>
+    <tr>
+      <td><a href="../../stereo-cam"><strong>Stereo-Camera Main</strong></a></td>
+      <td><a href="../platform-stereo"><strong>Platform</strong></a></td>
+      <td>Calibration</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>We use the open source camera and IMU calibration toolbox
+<a href="https://github.com/ethz-asl/kalibr">Kalibr</a> (commit <a href="https://github.com/ethz-asl/kalibr/commits/2999e186ec">#2999e186ec</a>) to compute the intrinsic calibration of the
+RealSense cameras as well as their extrinsics. As our device is not hardware
+synchronized, it is crucial to leverage as much software/network synchronization as possible. We
+perform spatio-temporal calibration between the
+cameras and the two IMUs embedded in the Realsense and the Ouster sensor. The temporal offsets 
+between measurements of the Realsense IMU and Ouster IMU with respect to the Realsense cameras 
+are estimated using batch, continuous-time,
+maximum-likelihood estimation. We provide this calibration dataset along with the main dataset.</p>
+
+<p>The Ouster LiDAR synchronizes with the recording computer using the 
+<a href="https://en.wikipedia.org/wiki/Precision_Time_Protocol">Precision Time Protocol (PTP)</a>,
+which achieves sub-microsecond accuracy.</p>
+
+<p>To get the most accurate timestamps for the IMU messages of the Realsense D435i, we used the following setup:</p>
+<ul>
+  <li>Ubuntu 18.04</li>
+  <li>Linux kernel <code class="language-plaintext highlighter-rouge">4.15.0-74-generic</code></li>
+  <li><a href="https://github.com/IntelRealSense/librealsense">librealsense</a> version <code class="language-plaintext highlighter-rouge">2.32.1.0</code></li>
+  <li><a href="https://github.com/IntelRealSense/realsense-ros">realsense-ros</a> version <code class="language-plaintext highlighter-rouge">2.2.7</code></li>
+  <li><a href="https://downloadcenter.intel.com/download/28377/Latest-Firmware-for-Intel-RealSense-D400-Product-Family">Firmware</a> version <code class="language-plaintext highlighter-rouge">0.5.10.13.00</code></li>
+</ul>
+
+<p>We found the Realsense to be sensitive to the right configuration, in particular for the IMU messages,
+hence care needs to be taken to achieve a reliable configuration.</p>
+
+<p>We also found that the beam intrinsics of the Ouster we used differ from the designed values. Hence we provided the JSON-formatted beam atitude and azimuth offsets, in degress, in file <a href="https://drive.google.com/file/d/1GHyKLgIcC2GeemOU5j0JYLY1Mmo6Ix7w/view?usp=sharing"><code class="language-plaintext highlighter-rouge">beam_intrinsics.json</code></a></p>
+
+<h3 id="calibration-files">Calibration files</h3>
+<p><a href="https://drive.google.com/open?id=1fb8HrTBjvCHxlj5qMvamrqvgC8qUj36Q">Here</a> you can find the files used for the Kalibr calibration:</p>
+<ul>
+  <li><a href="https://drive.google.com/open?id=1g4Pvo34U6NuzvVsGVqSOK3_2X1Hqn83M"><code class="language-plaintext highlighter-rouge">rooster_2020-03-11-10-05-35_0.bag</code></a> calibration rosbag, including RealSense camera images and Realsense and Ouster IMU messages captured in front of an april board (Note: Realsense IMU messages are at 650 Hz)</li>
+  <li><a href="https://drive.google.com/open?id=1XUpGmYZuBl1YSrc6xTH_ecnROo19vYLZ"><code class="language-plaintext highlighter-rouge">rooster_2020-03-11-09-59-32_0.bag</code></a> calibration rosbag, including RealSense camera images and Realsense IMU messages captured in front of an april board (Note: Realsense IMU messages are at 250 Hz and 400 Hz for accelerometer and gyroscope, respectively)</li>
+  <li><a href="https://drive.google.com/open?id=1qMWX5oxQzFae6keslRNC_r8WuEQxms1x"><code class="language-plaintext highlighter-rouge">rooster_2020-03-11-09-52-47_0.bag</code></a> calibration rosbag, including RealSense camera images and Realsense IMU messages captured in front of an april board (Note: Realsense IMU messages are at 650 Hz)</li>
+</ul>
+
+<p>Note: In all calibration rosbags, the Ouster was covered to avoid the reflection of LiDAR beams in the camera images.</p>
+
+<ul>
+  <li><a href="https://drive.google.com/open?id=1UOgRIKcy0o3bkSz5CgmSUfWM5g1jr7T8"><code class="language-plaintext highlighter-rouge">april_6x6.yaml</code></a> description of the checkerboard used for calibration</li>
+  <li><a href="https://drive.google.com/open?id=1OLPF63ZMRHYCYjm7yR17r8t0auozIzPX"><code class="language-plaintext highlighter-rouge">calibrate.sh</code></a> simple bash script to perform the calibration</li>
+  <li><a href="https://drive.google.com/open?id=10E8D9rFB9JvtlaVnSbyDxBkctN1UF3MV"><code class="language-plaintext highlighter-rouge">imu.yaml</code></a> configuration file for the RealSense IMU</li>
+  <li><a href="https://drive.google.com/open?id=1Bs52rdgGrMCrBEcOxnnCBwhBFzvtZW9h"><code class="language-plaintext highlighter-rouge">ouster_imu.yaml</code></a> configuration file for the Ouster IMU</li>
+</ul>
+
+<p>To reproduce the Kalibr report, just make the script executable and run it:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chmod +x calibrate.sh
+./calibrate.sh rooster_2020-03-11-10-05-35_0.bag
+</code></pre></div></div>
+
+<p>This will produce the following files (also available <a href="https://drive.google.com/open?id=1QILhJjfENdWkUL_5XvZPXc6IEqAUWPzo">here</a>):</p>
+<ul>
+  <li><a href="https://drive.google.com/open?id=1c2fTCM6TtSH-Y04baA4Zy-PMtAil5Ufg"><code class="language-plaintext highlighter-rouge">camchain_D435i_SN844212071220rooster_2020-03-11-10-05-35_0</code></a> : this file contains the intrinsic and extrinsic calibration parameters between the left and the right cameras.</li>
+  <li><a href="https://drive.google.com/open?id=1w-7f9jCM9hKTggYfs9Ua7fZ8PKMPEIOz"><code class="language-plaintext highlighter-rouge">results-realsense_imu-cam-rooster_2020-03-11-10-05-35_0.txt</code></a>: this file contains the intrinsic and extrinsic parameters between the right and the left cameras relative to the built-in IMU.</li>
+  <li><a href="https://drive.google.com/open?id=1e2qcmGsqVyJ3oaVWX3Bua1Gt6_KxFyVT"><code class="language-plaintext highlighter-rouge">results-ouster_imu-cam_2020-03-11-10-05-35_0.txt</code></a>: this file contains the intrinsic and extrinsic parameters between the right and the left cameras relative to the Ouster IMU.</li>
+</ul>
+
+<h3 id="time-offset-between-lidar-and-camera">Time Offset between LIDAR and Camera</h3>
+
+<p>After the experiments we noticed that the two sensor’s timestamps slowly drift relative to one another. As mentioned above the Ouster sensor is synchronised to the PC using PTP. We put this drift down to the RealSense - probably from the point its driver is started. Using the two sensor’s IMUs it is possible to estimate the relative drift using maximum correlation (breaking the data into 30 second chunks).</p>
+
+<p>Below are plots of the relative drift over time for experiments 1 and 2. Relative drift is about 58.78 ms/h.</p>
+
+<p><img src="../../assets/figures/linear_fit_both.png" alt="linear_fit_both" title="linear fit both" /></p>
+
+<p>A csv of the time offsets has been added to the folder of each experiment. The file format is:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">sec,nsec</code> - the time the offset should be applied.</li>
+  <li><code class="language-plaintext highlighter-rouge">time_offset_nsec</code> - the time offset (nanoseconds).</li>
+</ul>
+
+<p>This offset should be applied in the following manner:
+<code class="language-plaintext highlighter-rouge">time_camera_corrected = time_camera - time_offset</code></p>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/newer-college-dataset/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/newer-college-dataset/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/newer-college-dataset/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">Dynamic Robot Systems Group</li>
+          <li><a class="u-email" href="mailto:newercollegedataset@robots.ox.ac.uk">newercollegedataset@robots.ox.ac.uk</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>The Newer College Dataset revisits New College, Oxford with modern stereo camera and LIDAR sensors as well as precise ground truth.
+</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/ori-drs" title="ori-drs"><svg class="svg-icon grey"><use xlink:href="/newer-college-dataset/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/dynamicrobots" title="dynamicrobots"><svg class="svg-icon grey"><use xlink:href="/newer-college-dataset/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

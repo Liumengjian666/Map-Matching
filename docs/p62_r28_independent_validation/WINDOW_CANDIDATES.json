@@ -1,0 +1,920 @@
+{
+  "status": "INDEX_AND_RAW_IDENTITY_FROZEN_NOT_EXECUTION_READY",
+  "reason_A_replaced": "11000-11060 intersects R19 10972-11032; next multiple of 1000 after exposed window is 12000",
+  "reference_pose_values_read": false,
+  "known_prior_formal_intervals": [
+    [
+      767,
+      787
+    ],
+    [
+      7552,
+      7582
+    ],
+    [
+      10972,
+      11032
+    ],
+    [
+      14542,
+      14602
+    ],
+    [
+      2600,
+      2660
+    ],
+    [
+      4800,
+      4860
+    ],
+    [
+      6500,
+      6560
+    ],
+    [
+      9400,
+      9460
+    ]
+  ],
+  "input_geometry_prescreen_exposure": "R16/R19 used sparse geometry-only prescreens; not a claim of never-seen raw geometry",
+  "windows": {
+    "A": {
+      "anchor": 12000,
+      "evaluation": [
+        12001,
+        12060
+      ],
+      "frames": [
+        {
+          "raw_ordinal": 12000,
+          "stamp_ns": 1583837791062108416,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837791_062108416.pcd",
+          "pcd_sha256": "bc2fb5e6e0ca8357f650867a7a349370fa15041751851c896bb07b8ec9957c1e",
+          "role": "ANCHOR"
+        },
+        {
+          "raw_ordinal": 12001,
+          "stamp_ns": 1583837791161644032,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837791_161644032.pcd",
+          "pcd_sha256": "407d7a95c92eb4264ca24204a72319443c7a7d1621d8fe04a20da4ef1beed9fe",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12002,
+          "stamp_ns": 1583837791261157632,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837791_261157632.pcd",
+          "pcd_sha256": "2a29972a30a17b0d65de135918279c3d63ac2c7d2516bf026e0f1f4898f8e5ec",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12003,
+          "stamp_ns": 1583837791361457408,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837791_361457408.pcd",
+          "pcd_sha256": "f021ae1fad009fdeeaf18e7247b01da1be8636e92361f4fb0bf71778cfc7ef15",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12004,
+          "stamp_ns": 1583837791461337344,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837791_461337344.pcd",
+          "pcd_sha256": "ef24a236a66e10c70ac26d3830b6b299d2b5f4746564ede74b7a40e97c5f2990",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12005,
+          "stamp_ns": 1583837791561958656,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837791_561958656.pcd",
+          "pcd_sha256": "e9d02562f3fd429653d79b850620930f821bcc7e9d33decd67485bedc697a6dc",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12006,
+          "stamp_ns": 1583837791661871104,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837791_661871104.pcd",
+          "pcd_sha256": "07d6e7ba7a72850b9c5dfd9b671394b0ce0b1037fc82ab93087d828252e8f7cc",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12007,
+          "stamp_ns": 1583837791762165760,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837791_762165760.pcd",
+          "pcd_sha256": "cd679644b488bbd94dccfa33174396d6e3c7b96e93cc0e8aa8f11ea3c473614d",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12008,
+          "stamp_ns": 1583837791862490624,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837791_862490624.pcd",
+          "pcd_sha256": "d6793ec4fc55baee7fc72a1b1b9f869b5bb1d564067e00a435aa45e495b8b8ad",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12009,
+          "stamp_ns": 1583837791962822656,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837791_962822656.pcd",
+          "pcd_sha256": "48db96ace4c068d70ebacf2e6168788b35e65654beaad93bceef7a80630bf070",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12010,
+          "stamp_ns": 1583837792062534656,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837792_062534656.pcd",
+          "pcd_sha256": "9eb2dc5004f6ba75cf5df24c39ffe8f9a8ac441b9c1951ccad63044cd89f49af",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12011,
+          "stamp_ns": 1583837792162397696,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837792_162397696.pcd",
+          "pcd_sha256": "4a0f70ae4ff21c336de314b1038d912e3c093b5173d0bb314a57faeebd7876ca",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12012,
+          "stamp_ns": 1583837792262031360,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837792_262031360.pcd",
+          "pcd_sha256": "9c21f827d79e30ddb6b731df89a8a763230a5301b6233d148dce9c21629a4b36",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12013,
+          "stamp_ns": 1583837792361763584,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837792_361763584.pcd",
+          "pcd_sha256": "6e4fabc22f2ae9f1224b9570bc80e57d78eb414f97c556c47b91e86aa9e374ac",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12014,
+          "stamp_ns": 1583837792461238016,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837792_461238016.pcd",
+          "pcd_sha256": "f997e722f3c4edba55e93b8111ac8b081f50609ae27fe35da9dde2b59a307cba",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12015,
+          "stamp_ns": 1583837792561555968,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837792_561555968.pcd",
+          "pcd_sha256": "d2627b700ac0c901ed84fadbb6393d824fb9c6d6fb5aedf70cb6e803ad3deee0",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12016,
+          "stamp_ns": 1583837792661905408,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837792_661905408.pcd",
+          "pcd_sha256": "513e99e99b6970fdd9385bf30e62f3b7a3e0ecebed446ae1daeb79f739d70575",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12017,
+          "stamp_ns": 1583837792762116096,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837792_762116096.pcd",
+          "pcd_sha256": "dbf5a8a9a64c0553fe0ed9daec4f6be57f7064c42690e908a50d3ea6f15f5e0b",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12018,
+          "stamp_ns": 1583837792862445568,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837792_862445568.pcd",
+          "pcd_sha256": "6faffbcd9fe683b9f4950e673933c55232d95c2b3abe037dfeeb10493f777fd5",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12019,
+          "stamp_ns": 1583837792962607360,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837792_962607360.pcd",
+          "pcd_sha256": "d52c143bee1c6e084770b6c56562c55612dc21567d436dc22efa2222857ecd73",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12020,
+          "stamp_ns": 1583837793062777600,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837793_062777600.pcd",
+          "pcd_sha256": "b659a28fecd2f008c63efaf04647e25456bc3992c6ef10d718c17bdd30343012",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12021,
+          "stamp_ns": 1583837793162963200,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837793_162963200.pcd",
+          "pcd_sha256": "2e659e9dc7e146aed5e7fcb088de33420980a286be10dab31e0b687a3fbc6482",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12022,
+          "stamp_ns": 1583837793263267072,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837793_263267072.pcd",
+          "pcd_sha256": "a597aedd9e8feb38b362ec1ee6e04532832e5800601dbb31c9e8b350f5540199",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12023,
+          "stamp_ns": 1583837793362842624,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837793_362842624.pcd",
+          "pcd_sha256": "9a8a80cc1af0eeffbaf08997993a7cf987cd23c42000c4c7459e03895ebf2150",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12024,
+          "stamp_ns": 1583837793462501120,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837793_462501120.pcd",
+          "pcd_sha256": "88e8dcf041a36e8a22a63e12790633798762249481951af381884a571ec3724f",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12025,
+          "stamp_ns": 1583837793562155520,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837793_562155520.pcd",
+          "pcd_sha256": "e0c6a9d967de287e96560102488004e83a0ca9590cca6694c862c5b9b466f50d",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12026,
+          "stamp_ns": 1583837793661571328,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837793_661571328.pcd",
+          "pcd_sha256": "ce82fc36ae993cf2175db675f0cf06ec8fb1d94a5519327e1c034d537332a915",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12027,
+          "stamp_ns": 1583837793761401344,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837793_761401344.pcd",
+          "pcd_sha256": "61d0889f114cac803c5f65aa493f54ef9e3f99a3cb25d865a6923a79977244a7",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12028,
+          "stamp_ns": 1583837793861215744,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837793_861215744.pcd",
+          "pcd_sha256": "8e434cc8a544da3717e5180ffb52cf45fedc04bce7b9cd450b2afa7c9af54f22",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12029,
+          "stamp_ns": 1583837793961258752,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837793_961258752.pcd",
+          "pcd_sha256": "a9edd4b652a0472a6e5bea824aa4a6254797604c317f937c9de99ca5dbde49a4",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12030,
+          "stamp_ns": 1583837794062142720,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837794_062142720.pcd",
+          "pcd_sha256": "711d3feaccd88cc8f397a42d72deee27e18298b0f38c69b54efd337d2862950b",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12031,
+          "stamp_ns": 1583837794162244608,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837794_162244608.pcd",
+          "pcd_sha256": "2fd99946e6ae09c76d998bca9ee3ff99c6e36e42ba638ab25663c323a743dc3c",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12032,
+          "stamp_ns": 1583837794262770944,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837794_262770944.pcd",
+          "pcd_sha256": "c056ef480c63263b28c289ad91c6e67ebcd313505b39efa04698370fca907f49",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12033,
+          "stamp_ns": 1583837794362937600,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837794_362937600.pcd",
+          "pcd_sha256": "b72c18e8888b7bb811b2f73b3d7c9a7a9bb839d95f877c9e429be0c935d1d61d",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12034,
+          "stamp_ns": 1583837794463017216,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837794_463017216.pcd",
+          "pcd_sha256": "c320285745811500a7ffe2873df688e94093314a82bbf5593110cf32f83cc5fa",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12035,
+          "stamp_ns": 1583837794562711296,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837794_562711296.pcd",
+          "pcd_sha256": "15559cef6279ed9c9d7e59f316902f59b419d7d711b6134334c8328565c1948b",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12036,
+          "stamp_ns": 1583837794662551808,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837794_662551808.pcd",
+          "pcd_sha256": "75d04458c64a3fb5abc7067da0d19d1a8c910a2e80ad826a83a0458c2e8b9c6a",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12037,
+          "stamp_ns": 1583837794762208256,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837794_762208256.pcd",
+          "pcd_sha256": "e91ea395ae8677cf026bda501791628376b0b9a7f7287bc567542e19eabd4078",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12038,
+          "stamp_ns": 1583837794861948928,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837794_861948928.pcd",
+          "pcd_sha256": "cb747566bf9fff0b4b5b341a5a6d26f40ba7c3804e24b92fc892c576192d8cfa",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12039,
+          "stamp_ns": 1583837794961590528,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837794_961590528.pcd",
+          "pcd_sha256": "b51ddd95438032b3645269359b7df1d9498cf56dcb6bffe5da01b64ddf26cf6f",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12040,
+          "stamp_ns": 1583837795061361920,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837795_061361920.pcd",
+          "pcd_sha256": "44b74b83f934714be311c56204f6de65c58a72a71e34a11cb1a86e6e443c3573",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12041,
+          "stamp_ns": 1583837795161315584,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837795_161315584.pcd",
+          "pcd_sha256": "ccf40ba4a7f4b891e1d4032b0e7b04e13f4f7c033dfba716abd08225f02b27ac",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12042,
+          "stamp_ns": 1583837795261654784,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837795_261654784.pcd",
+          "pcd_sha256": "df5a0c30725a5284cf11751da666566811c4b640d73d1b9e5edadebbe9cd84c1",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12043,
+          "stamp_ns": 1583837795361826816,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837795_361826816.pcd",
+          "pcd_sha256": "86016932104f7f305ec2d7d9aca958b80e6066b5ed876002eca7271fc2e273c2",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12044,
+          "stamp_ns": 1583837795462220288,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837795_462220288.pcd",
+          "pcd_sha256": "7da28968b332eb1294183b3980d3b6867a4b260b633ad6d18503839b6be95684",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12045,
+          "stamp_ns": 1583837795562302976,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837795_562302976.pcd",
+          "pcd_sha256": "304c1f7887c103b629abbf553dbac70a67c987f8f527eaf9f90c6e7f8792665e",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12046,
+          "stamp_ns": 1583837795662506496,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837795_662506496.pcd",
+          "pcd_sha256": "942487c74a33c6a2c83edc548c6dc74ecc50c8b98ace617e756bd9841c25ca97",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12047,
+          "stamp_ns": 1583837795762476544,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837795_762476544.pcd",
+          "pcd_sha256": "f4f4c87e837798d592d604111e9f2f3c6acaa8852196fc05e95ad2d73c7c65bd",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12048,
+          "stamp_ns": 1583837795862107136,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837795_862107136.pcd",
+          "pcd_sha256": "7c6af0e38df02d9d83c3018daf8ee6cc6bafac3dc321debd6b5178134c523e32",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12049,
+          "stamp_ns": 1583837795961911040,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837795_961911040.pcd",
+          "pcd_sha256": "d8e9832fabe2082333fc5f1e6d5807baba70f8427300db1a5ab7327d5e0fcb21",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12050,
+          "stamp_ns": 1583837796061720320,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837796_061720320.pcd",
+          "pcd_sha256": "1c6f593337ab5608aed9ab6997b2b85f6420bbfe017a8b5413b221efebfa3b8d",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12051,
+          "stamp_ns": 1583837796161510144,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837796_161510144.pcd",
+          "pcd_sha256": "0becad8ddbf9be5be35f064c1b7ecb7a19db58aa87ff253b879f2c05002cd97a",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12052,
+          "stamp_ns": 1583837796261461760,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837796_261461760.pcd",
+          "pcd_sha256": "8c633125206c08ccd8b40f10653c591112664b88abfdabbd6e7bed6a15af3534",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12053,
+          "stamp_ns": 1583837796361339392,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837796_361339392.pcd",
+          "pcd_sha256": "795cb33c4133d499947cde7c7d7896638dd0ede668fb53e36dcf614feda36ddd",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12054,
+          "stamp_ns": 1583837796461616896,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837796_461616896.pcd",
+          "pcd_sha256": "72303835ad48691a8fb1fe5a2dcbaeac15e46b274086186160a2397f053732c1",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12055,
+          "stamp_ns": 1583837796562021632,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837796_562021632.pcd",
+          "pcd_sha256": "b245985ecdf244b9ec51895039873dc4b50d656d172cda9c5bcb21eceef26bb5",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12056,
+          "stamp_ns": 1583837796662012928,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837796_662012928.pcd",
+          "pcd_sha256": "535c1cf24863a2c78897b56aaa31a8777c1740bf7db8c2593b7d24d0f5728dd2",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12057,
+          "stamp_ns": 1583837796762195712,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837796_762195712.pcd",
+          "pcd_sha256": "5119c3572bb690facf6f9a8c183c56aebdd4be9f46731d9712a020a442b8e067",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12058,
+          "stamp_ns": 1583837796862271488,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837796_862271488.pcd",
+          "pcd_sha256": "c74c22a33a77de6997f2c0f160c465e7bd0d95de461df8c5d606fb6db2c55918",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12059,
+          "stamp_ns": 1583837796962452224,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837796_962452224.pcd",
+          "pcd_sha256": "ba94709da27a4912710e1ce578284b21f6ec79982847b4757ee66ed28702dc4b",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 12060,
+          "stamp_ns": 1583837797062371584,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837797_062371584.pcd",
+          "pcd_sha256": "0e0ac3a56ab3d9a27e52a5c74cd1fd775dc4ed815484ff3589bd0ffda916d6fd",
+          "role": "EVALUATION"
+        }
+      ],
+      "source_fnv": null,
+      "map_identity": null,
+      "initialization_matrix": null
+    },
+    "B": {
+      "anchor": 13500,
+      "evaluation": [
+        13501,
+        13560
+      ],
+      "frames": [
+        {
+          "raw_ordinal": 13500,
+          "stamp_ns": 1583837941058706432,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837941_058706432.pcd",
+          "pcd_sha256": "65544e5296d5aeedca61c174d08ac0d6eb3bf18f3d376530c47cd5b1986dcfce",
+          "role": "ANCHOR"
+        },
+        {
+          "raw_ordinal": 13501,
+          "stamp_ns": 1583837941158544384,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837941_158544384.pcd",
+          "pcd_sha256": "1f3f165ef585af722db82522fb30726ef93a1e78ba05a0cc0074ebb64b3afc69",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13502,
+          "stamp_ns": 1583837941258662144,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837941_258662144.pcd",
+          "pcd_sha256": "9ad247b33e5ffddd0e3505c13e307bdba77b7d92776d06080b9b4f0e2ffe4b4f",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13503,
+          "stamp_ns": 1583837941358851840,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837941_358851840.pcd",
+          "pcd_sha256": "e6905140e597d5607728e5b2f9a77a0c15b252e2d7638e1c9aa61b9f4bac4d2e",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13504,
+          "stamp_ns": 1583837941459121664,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837941_459121664.pcd",
+          "pcd_sha256": "af21209e64cf39dfe07c1fc800fcd434c738ff36166aa005674d81c2c31e85b0",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13505,
+          "stamp_ns": 1583837941559296768,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837941_559296768.pcd",
+          "pcd_sha256": "948053b9d156065d1ac63e2c202626b933e590def2142794f1104b4eb412ecab",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13506,
+          "stamp_ns": 1583837941659732224,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837941_659732224.pcd",
+          "pcd_sha256": "4e1ccb6a44fcdec6f9b982fc1c9cea6dcbf9c77509a58a0c33e5ad1cb22390b8",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13507,
+          "stamp_ns": 1583837941759613696,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837941_759613696.pcd",
+          "pcd_sha256": "071a8c24d7e76a09a0816373b9082828a0865c11839d7d9b0101326d85b5a3db",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13508,
+          "stamp_ns": 1583837941859417344,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837941_859417344.pcd",
+          "pcd_sha256": "1afe85152ac5160350274ec60afedc23b86a72404b12cbc73b202a793130b5cf",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13509,
+          "stamp_ns": 1583837941959118848,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837941_959118848.pcd",
+          "pcd_sha256": "2d08e08bc3d1d1f5f1c1655be0f5b665a072206d42a9f10259db957844c29b9a",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13510,
+          "stamp_ns": 1583837942058766336,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837942_058766336.pcd",
+          "pcd_sha256": "d959e1a72ce8d99205864dbcec127d0dbcd934159fb4135e41959ea46dc6a82b",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13511,
+          "stamp_ns": 1583837942158630656,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837942_158630656.pcd",
+          "pcd_sha256": "69941373ac2b8270e8ea75e8e9c896f1f435e6e987e405b0e14eb0b3aebcc644",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13512,
+          "stamp_ns": 1583837942258549504,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837942_258549504.pcd",
+          "pcd_sha256": "6a6c96c9d48d44f01ef7e08cdb761b237546fd40c169b619aed960883278d5f7",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13513,
+          "stamp_ns": 1583837942358746368,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837942_358746368.pcd",
+          "pcd_sha256": "f940a772255844b1f9d777c7f33cd6cb4c5895a45ba9e9e9e56d547aae31f237",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13514,
+          "stamp_ns": 1583837942459140608,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837942_459140608.pcd",
+          "pcd_sha256": "fc8a713166f8aac35c0a82e0dd70120241281d90e60f068c69bbb4aed342204f",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13515,
+          "stamp_ns": 1583837942559478528,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837942_559478528.pcd",
+          "pcd_sha256": "67ad36f59ce4faa3877cbce104990c28eb3792dca8d62374587cf82d7b787bf7",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13516,
+          "stamp_ns": 1583837942659750400,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837942_659750400.pcd",
+          "pcd_sha256": "5123d17af6bb17b005048bb380c588622c7c5bc3a6e3ff3fa883bc7cff281e54",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13517,
+          "stamp_ns": 1583837942760110336,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837942_760110336.pcd",
+          "pcd_sha256": "e2257dbda1f56972be48ae0511a29592ed9328f515550cff06d0ee6fb84b1f1b",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13518,
+          "stamp_ns": 1583837942860304128,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837942_860304128.pcd",
+          "pcd_sha256": "d1a7c4b29b159b2d4e1be9b5836e2750e228588187098ea17d63d5e927c21d00",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13519,
+          "stamp_ns": 1583837942959856640,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837942_959856640.pcd",
+          "pcd_sha256": "06dfe1683357f0b185f24cfd98d5ed058b58a61809a9055e17070a33f0236f63",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13520,
+          "stamp_ns": 1583837943059555328,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837943_059555328.pcd",
+          "pcd_sha256": "793879798fd69ac9522c576d84a4a2132ed36642bb9c971d2ffbf77b1035dda2",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13521,
+          "stamp_ns": 1583837943159152896,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837943_159152896.pcd",
+          "pcd_sha256": "798df84af5c0e7606757a2b71d49d91d4cc854ab160ca6e97f48d7a25ff0825f",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13522,
+          "stamp_ns": 1583837943258816000,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837943_258816000.pcd",
+          "pcd_sha256": "cbe924667c8439038219d570337fe8275e20d2966e349d69e7e98df8df979572",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13523,
+          "stamp_ns": 1583837943358596352,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837943_358596352.pcd",
+          "pcd_sha256": "147110d11ae136e37d2d2fd25c167c0e461be0aa0e7fafd367395f72b27c3de6",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13524,
+          "stamp_ns": 1583837943458634496,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837943_458634496.pcd",
+          "pcd_sha256": "4f0a277a4676858d19dd6ff8d16d228a458ab1d2c9fe5d65c76ea7904411a5cf",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13525,
+          "stamp_ns": 1583837943558826496,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837943_558826496.pcd",
+          "pcd_sha256": "ae3fa50266f4b3dd62b9da15a9574548057854f41afd91b23975a22742996b6b",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13526,
+          "stamp_ns": 1583837943659196416,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837943_659196416.pcd",
+          "pcd_sha256": "4992b162708bb901e46cd8953c4c9ab237184d1458bf23d704081a2bd76f60d3",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13527,
+          "stamp_ns": 1583837943759625984,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837943_759625984.pcd",
+          "pcd_sha256": "bb50849b20eb89b9a2d1745717364e93e8d9bb271adfd29f36204aca82422801",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13528,
+          "stamp_ns": 1583837943859978752,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837943_859978752.pcd",
+          "pcd_sha256": "c60ac554727e048145f59b09c5a7bc90d8a0181d05ae528d4119c7c1c74b4314",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13529,
+          "stamp_ns": 1583837943960258816,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837943_960258816.pcd",
+          "pcd_sha256": "1bcca80cd9139c21f566d45d32473639137c2abef3b6e5c6b61f3b012872621e",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13530,
+          "stamp_ns": 1583837944060018944,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837944_060018944.pcd",
+          "pcd_sha256": "525106a1f95f4726aaae7355289aa54737121bbe061d25bda8d8971caebb26e7",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13531,
+          "stamp_ns": 1583837944159675904,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837944_159675904.pcd",
+          "pcd_sha256": "1e30f02f0a102890bd9293b59b434e34ba6f2fd8cf3ea7675770f7892a6466c2",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13532,
+          "stamp_ns": 1583837944259439872,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837944_259439872.pcd",
+          "pcd_sha256": "3254a660aa53ecf807f1c8019c4519a8aff8e60ea27aa8c26c3edd059638717f",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13533,
+          "stamp_ns": 1583837944359014144,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837944_359014144.pcd",
+          "pcd_sha256": "39b764144f80b0ede8cd2c924cc031e9f467c2ab845354163bb91ec6206f6f50",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13534,
+          "stamp_ns": 1583837944458702848,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837944_458702848.pcd",
+          "pcd_sha256": "d5fc7e3b02a9bea4e8078896988019e48fdb97e5051657dabc85e7a9b573c517",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13535,
+          "stamp_ns": 1583837944558395648,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837944_558395648.pcd",
+          "pcd_sha256": "eef150fb1f802588c73dfd153b96649f708f0d57dffc5fb021acb521eab1e767",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13536,
+          "stamp_ns": 1583837944658441728,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837944_658441728.pcd",
+          "pcd_sha256": "2d48459019fed76ce5b6552c2ed3bd3d9ce440480a61d2f6ed227265f29e1df2",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13537,
+          "stamp_ns": 1583837944758730752,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837944_758730752.pcd",
+          "pcd_sha256": "2f84b0c1a3e38327de0e88d532029b15e90ef7cf18e96fc66bbd023a54902a4c",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13538,
+          "stamp_ns": 1583837944859068672,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837944_859068672.pcd",
+          "pcd_sha256": "e7bd56dba15f26cd6c7120b6ac57a2c770dbab8b4c89344a9f9700f6d8968bf8",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13539,
+          "stamp_ns": 1583837944959491328,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837944_959491328.pcd",
+          "pcd_sha256": "ac37aca280eaf991f85cbfb3f55b389ff835b5569f067b63ff9080f9e6d32506",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13540,
+          "stamp_ns": 1583837945059773184,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837945_059773184.pcd",
+          "pcd_sha256": "5a46b5d60d27a634391f4242716d2d743432afa44d6879fbf1847af7f8a769f2",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13541,
+          "stamp_ns": 1583837945159958016,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837945_159958016.pcd",
+          "pcd_sha256": "566fc01f89775129a096aae3ae3813c14ab576c5b89c4640167c23667b83c471",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13542,
+          "stamp_ns": 1583837945259635200,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837945_259635200.pcd",
+          "pcd_sha256": "71bdfd8b16be37ed13ef49473fdfb82d7e447a8cb5f6700e9305e717d5b7634a",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13543,
+          "stamp_ns": 1583837945359438592,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837945_359438592.pcd",
+          "pcd_sha256": "7d0bf297d180b803dc91be2032234fef000e9bd68a0fe080236a6120aa478111",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13544,
+          "stamp_ns": 1583837945459178752,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837945_459178752.pcd",
+          "pcd_sha256": "22b26aeccbbea90932c913acef1077a97d611b053de1cf66636d5ce87d829806",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13545,
+          "stamp_ns": 1583837945558775552,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837945_558775552.pcd",
+          "pcd_sha256": "00de7fff234f8e152db36a0ef9e4351dc62da7f4d52d46216eb30d015ffcea30",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13546,
+          "stamp_ns": 1583837945658543616,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837945_658543616.pcd",
+          "pcd_sha256": "8b0021bbd7d9556d303148409b25192420ce5afd995c9abccbc5ca30354c3af0",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13547,
+          "stamp_ns": 1583837945758269184,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837945_758269184.pcd",
+          "pcd_sha256": "8c8e36bb9a1fcf5d7ce9527c23f613fa595ac9ca064ffd6d45cbffe88ba98008",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13548,
+          "stamp_ns": 1583837945858459648,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837945_858459648.pcd",
+          "pcd_sha256": "a2f43c5073d978f663a7f3360210298b3294d1561ba74581f414527b166c49e0",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13549,
+          "stamp_ns": 1583837945958880768,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837945_958880768.pcd",
+          "pcd_sha256": "47903b0e4cc0fcb56987cf6d314badbc1a44122335799015fabc3559d306dfda",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13550,
+          "stamp_ns": 1583837946059190528,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837946_059190528.pcd",
+          "pcd_sha256": "79ff269a32569a0c5477837f2d60908a83ab32d4c5192856527a207123e1ba18",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13551,
+          "stamp_ns": 1583837946159384064,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837946_159384064.pcd",
+          "pcd_sha256": "df506af03f360fc598ee7001af081a844ab64c4bc3ef5c07e14a44f36a62bc22",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13552,
+          "stamp_ns": 1583837946259468544,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837946_259468544.pcd",
+          "pcd_sha256": "105d1d70a71df157315880bc9fc00ab8093028f2e3c445eb84b50e7e5653ac9c",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13553,
+          "stamp_ns": 1583837946359605248,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837946_359605248.pcd",
+          "pcd_sha256": "7ebcf8e4bbc52c5428b547174ab3daa8cb5ec3cf97f8402ed7c0cbaed5a280b5",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13554,
+          "stamp_ns": 1583837946459186688,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837946_459186688.pcd",
+          "pcd_sha256": "7385b3671b31ab4a328199c5b6ca597acedc8eabdcbd5494b1ab17083435bc1e",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13555,
+          "stamp_ns": 1583837946558926336,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837946_558926336.pcd",
+          "pcd_sha256": "cd632af3201ef9c08694c9ba444700df069fa74c8b9a8f05b7369df0dcc65d26",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13556,
+          "stamp_ns": 1583837946658708224,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837946_658708224.pcd",
+          "pcd_sha256": "40b1de65cfa40692f9af9f88562d202a9a2fd77bc996d9a8f5796340fa9002de",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13557,
+          "stamp_ns": 1583837946758475776,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837946_758475776.pcd",
+          "pcd_sha256": "7d26248954653c2a59de8f2816819120c0d9b24870c1ce5c0fcbe169816f1af1",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13558,
+          "stamp_ns": 1583837946858352640,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837946_858352640.pcd",
+          "pcd_sha256": "f06ac079f97ddb0f26a44b663b90301b5980ec27fecd32390c3f0fa5d65f229e",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13559,
+          "stamp_ns": 1583837946958506240,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837946_958506240.pcd",
+          "pcd_sha256": "a44687c43aba6ccf8b0a2e96a75d607e1dc0f0861458bdc931506d3a59175aff",
+          "role": "EVALUATION"
+        },
+        {
+          "raw_ordinal": 13560,
+          "stamp_ns": 1583837947058720768,
+          "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/raw_format/ouster_scan/cloud_1583837947_058720768.pcd",
+          "pcd_sha256": "14b5d184ea84772d0bebe3285faf8e97ad275986b3bd15db2e20cfb3ebfc2512",
+          "role": "EVALUATION"
+        }
+      ],
+      "source_fnv": null,
+      "map_identity": null,
+      "initialization_matrix": null
+    }
+  }
+}

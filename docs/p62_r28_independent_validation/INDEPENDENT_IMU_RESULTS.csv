@@ -1,0 +1,13 @@
+window,initialization,strategy,status,frames_executed,ndt_calls,extra_calls,translation_rmse_m,rotation_rmse_deg,mean_ms,peak_rss_kib
+A,C0,ORIGINAL,NOT_RUN_G0_BLOCKED,0,0,0,,,,
+A,C0,G_ONLY,NOT_RUN_G0_BLOCKED,0,0,0,,,,
+A,C0,C_PLUS_G,NOT_RUN_G0_BLOCKED,0,0,0,,,,
+A,C3,ORIGINAL,NOT_RUN_G0_BLOCKED,0,0,0,,,,
+A,C3,G_ONLY,NOT_RUN_G0_BLOCKED,0,0,0,,,,
+A,C3,C_PLUS_G,NOT_RUN_G0_BLOCKED,0,0,0,,,,
+B,C0,ORIGINAL,NOT_RUN_G0_BLOCKED,0,0,0,,,,
+B,C0,G_ONLY,NOT_RUN_G0_BLOCKED,0,0,0,,,,
+B,C0,C_PLUS_G,NOT_RUN_G0_BLOCKED,0,0,0,,,,
+B,C3,ORIGINAL,NOT_RUN_G0_BLOCKED,0,0,0,,,,
+B,C3,G_ONLY,NOT_RUN_G0_BLOCKED,0,0,0,,,,
+B,C3,C_PLUS_G,NOT_RUN_G0_BLOCKED,0,0,0,,,,

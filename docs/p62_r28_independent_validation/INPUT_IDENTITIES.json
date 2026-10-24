@@ -1,0 +1,42 @@
+[
+  {
+    "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/ground_truth/registered_poses.csv",
+    "bytes": 1330464,
+    "sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e"
+  },
+  {
+    "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/kalibr_output/cam-ouster-imu/camchain-ouster_imu-cam-rooster_2020-03-11-10-05-35_0.yaml",
+    "bytes": 1736,
+    "sha256": "3bc13fa24af9ef8ca888c5523b1df57d1c53d0ca4052b818b7e02310fa781feb"
+  },
+  {
+    "path": "/home/jian/livox_ws/p59_r3_newer_college_official_internal_recovery_data/01_short_experiment/calibration/kalibr_output/ouster_imu_lidar_transforms.yaml",
+    "bytes": 300,
+    "sha256": "8fe56ff808c6c900db52ac1545819ef3da979818bfa392ba00aef43daf59a037"
+  },
+  {
+    "path": "/home/jian/livox_ws/p62_r28_validation_ws/docs/p40_newer_college_download/download_manifest.json",
+    "bytes": 21565,
+    "sha256": "b2abc31cd11eda470acf392a197948e1516531b05aed6f65e19c82a30887efdf"
+  },
+  {
+    "path": "/home/jian/livox_ws/p62_r28_validation_ws/docs/p62_r19_native_ndt_basin_stress_test/WINDOW_PREREGISTRATION.json",
+    "bytes": 76648,
+    "sha256": "6d89a07a487828d03c09dc35aaf5a6624f4d58b8856ba5d554b19c5b18c3eae1"
+  },
+  {
+    "path": "/home/jian/livox_ws/p62_r28_validation_ws/docs/p62_r22_frozen_relative_holdout/WINDOW_IDENTITY.json",
+    "bytes": 149604,
+    "sha256": "8d65bd078da2465dfdf90c00b0accd6e503e0bb4e99392a8ec1e592ce386da26"
+  },
+  {
+    "path": "/home/jian/livox_ws/p62_r28_validation_ws/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp",
+    "bytes": 176056,
+    "sha256": "30fd45f387ed90396fdefecbb98b0cbdf8f45df1a243830e7b184222d1ed792e"
+  },
+  {
+    "path": "/home/jian/livox_ws/p62_r28_validation_ws/src/dog_prior_map_localization/src/dog_prior_map_ekf_node_core.cpp",
+    "bytes": 33329,
+    "sha256": "9c37d8b1aa27803d6127589e10b15af98123129044351d57aa482cfcae12b68c"
+  }
+]
