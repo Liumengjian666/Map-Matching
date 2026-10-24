@@ -44,6 +44,7 @@
 #include "../../../docs/p62_r21_relative_temporal_admission/tools/policy.hpp"
 #include "dog_prior_map_localization/core/frame_conversions.hpp"
 #include "dog_prior_map_localization/core/causal_pose_prediction.hpp"
+#include "dog_prior_map_localization/core/ekf_revision_admission.hpp"
 #include "dog_prior_map_localization/core/ekf_translation_prior.hpp"
 #include "dog_prior_map_localization/visual_aided_initial_guess.hpp"
 #include "dog_prior_map_localization/experimental_source_capture.hpp"
@@ -503,6 +504,24 @@ public:
       for(const auto prefix:{"seed","pose"})for(int i=0;i<4;++i)for(int j=0;j<4;++j)r23_candidates_ << ',' << prefix << i << j;
       r23_candidates_ << '\n';
     }
+    r24_enable_ = getParam<bool>("research/r24_enable", false);
+    r24_geometry_diagnostic_only_ = getParam<bool>("research/r24_geometry_diagnostic_only", false);
+    r24_revision_sync_ = getParam<bool>("research/r24_revision_sync", false);
+    if ((r24_geometry_diagnostic_only_ || r24_revision_sync_) && !r24_enable_)
+      throw std::runtime_error("R24 switches require explicit research mode");
+    if (r24_enable_) {
+      if (!r23_enable_ || r23_policy_ != "MULTISTART_C" || !geometry_gate_enable_ ||
+          geometry_gate_max_median_m_ != 1.0 || geometry_gate_max_p90_m_ != 3.0 ||
+          geometry_gate_min_overlap_05_ != .50 || !getParam<bool>("ndt_observation/oosm_enable", false))
+        throw std::runtime_error("R24 requires frozen C, geometry thresholds and existing OOSM");
+      const std::string log = getParam<std::string>("output/r23_lineage_csv", "");
+      const std::string dir = log.substr(0,log.find_last_of('/')+1);
+      r24_geometry_log_.open(dir+"r24_geometry.csv");
+      r24_revision_log_.open(dir+"r24_revision.csv");
+      if (!r24_geometry_log_ || !r24_revision_log_) throw std::runtime_error("R24 logs unavailable");
+      r24_geometry_log_ << "scan_ns,diagnostic_only,original_gate_passed,median_m,p90_m,overlap_05,median_limit,p90_limit,overlap_limit,continue_to_ndt\n";
+      r24_revision_log_ << "event,wall_sec,scan_ns,message_ns,latest_history_ns,delta_message_minus_latest_ns,history_revision,sample_revision,corrected_version,sample_corrected_version,source,accepted,reason,prediction_age_ms\n";
+    }
     loadMap();
 
     pub_odom_ = nh_.advertise<nav_msgs::Odometry>(ndt_odom_topic_, 20);
@@ -559,6 +578,10 @@ public:
       sub_ekf_high_rate_ = nh_.subscribe(ekf_high_rate_topic_, 10000,
           &DogPriorMapNdtNode::ekfHighRateCallback, this);
     }
+
+    if (r24_revision_sync_)
+      sub_ekf_corrected_ = nh_.subscribe(getParam<std::string>("topics/odom_corrected", "/dog_livo/odom_corrected"),
+          1000, &DogPriorMapNdtNode::ekfCorrectedCallback, this);
 
     ROS_INFO("[DogPriorMap NDT] started: mode=%s map=%s target=%zu lidar=%s output=%s EKF=%s",
              coupled_mode_.c_str(), local_map_enable_ ? local_map_manifest_path_.c_str() : map_pcd_path_.c_str(),
@@ -698,6 +721,45 @@ public:
       processPendingCloudsLocked();
   }
 
+  void ekfCorrectedCallback(const ros::MessageEvent<nav_msgs::Odometry const>& event)
+  {
+    const auto msg = event.getMessage();
+    if (!msg || !r24_revision_sync_) return;
+    std::lock_guard<std::mutex> lock(mutex_);
+    const uint64_t stamp = msg->header.stamp.toNSec();
+    const uint64_t latest = ekf_pose_history_.empty() ? 0 : ekf_pose_history_.back().stamp_ns;
+    const Eigen::Vector3d p(msg->pose.pose.position.x,msg->pose.pose.position.y,msg->pose.pose.position.z);
+    const Eigen::Quaterniond q(msg->pose.pose.orientation.w,msg->pose.pose.orientation.x,
+        msg->pose.pose.orientation.y,msg->pose.pose.orientation.z);
+    const Eigen::Vector3d v(msg->twist.twist.linear.x,msg->twist.twist.linear.y,msg->twist.twist.linear.z);
+    const Eigen::Vector3d w(msg->twist.twist.angular.x,msg->twist.twist.angular.y,msg->twist.twist.angular.z);
+    Eigen::Matrix4d pose = Eigen::Matrix4d::Identity();
+    if (q.coeffs().allFinite() && q.norm()>1e-9) pose.block<3,3>(0,0)=q.normalized().toRotationMatrix();
+    pose.block<3,1>(0,3)=p;
+    const bool source = event.getPublisherName()=="/dog_prior_map_ekf" && msg->header.frame_id==map_frame_ && msg->child_frame_id==base_frame_;
+    const bool finite = p.allFinite() && q.coeffs().allFinite() && std::abs(q.norm()-1.0)<1e-6 &&
+        validRigidPose(pose) && v.allFinite() && w.allFinite();
+    const bool was_corrected = !ekf_pose_history_.empty() && ekf_pose_history_.back().corrected_version>0;
+    const std::string reason = dog_prior_map_localization::correctedHistoryAdmission(source,finite,stamp,latest,was_corrected);
+    const bool accepted = reason=="REPLACED_EXACT_LATEST";
+    if (accepted) {
+      // odom_corrected from this verified existing OOSM path is emitted only
+      // after OOSM_REPLAY_COMPLETE. Do not republish odom or TF, or rewrite time.
+      auto& sample=ekf_pose_history_.back();
+      sample.map_T_lidar=pose;sample.linear_velocity_lidar=v;sample.angular_velocity_lidar=w;
+      sample.message_seq=msg->header.seq;sample.publisher=event.getPublisherName();
+      sample.receipt_ros_sec=event.getReceiptTime().toSec();
+      sample.callback_receive_wall_sec=sample.callback_accept_wall_sec=ros::WallTime::now().toSec();
+      sample.subscriber_history_revision=++ekf_pose_history_revision_;
+      sample.corrected_version=++r24_corrected_version_;
+    }
+    r24_revision_log_ << std::setprecision(17) << "CORRECTED," << ros::WallTime::now().toSec() << ",0," << stamp << ',' << latest << ','
+        << (static_cast<int64_t>(stamp)-static_cast<int64_t>(latest)) << ',' << ekf_pose_history_revision_ << ','
+        << (ekf_pose_history_.empty()?0:ekf_pose_history_.back().subscriber_history_revision) << ',' << r24_corrected_version_ << ','
+        << (ekf_pose_history_.empty()?0:ekf_pose_history_.back().corrected_version) << ",ODOM_CORRECTED," << accepted << ',' << reason << ",nan\n";
+    r24_revision_log_.flush();
+  }
+
 private:
   struct PendingLidarFrame
   {
@@ -730,6 +792,7 @@ private:
     Eigen::Vector3d angular_velocity_lidar = Eigen::Vector3d::Zero();
     uint32_t message_seq = 0;
     uint64_t subscriber_history_revision = 0;
+    uint64_t corrected_version = 0;
     double receipt_ros_sec = std::numeric_limits<double>::quiet_NaN();
     double callback_receive_wall_sec = std::numeric_limits<double>::quiet_NaN();
     double callback_accept_wall_sec = std::numeric_limits<double>::quiet_NaN();
@@ -2345,6 +2408,14 @@ private:
           sample.child_frame_id != base_frame_ || sample.callback_accept_wall_sec > r23_query_wall_ ||
           sample.stamp_ns > timing.reference_stamp.toNSec())
         throw std::runtime_error("R23 illegal causal IMU-EKF prediction: " + r23_prediction_.status);
+      if (r24_enable_) {
+        const uint64_t latest=ekf_pose_history_.empty()?0:ekf_pose_history_.back().stamp_ns;
+        r24_revision_log_ << std::setprecision(17) << "QUERY," << r23_query_wall_ << ',' << timing.reference_stamp.toNSec() << ','
+            << sample.stamp_ns << ',' << latest << ',' << (static_cast<int64_t>(sample.stamp_ns)-static_cast<int64_t>(latest)) << ','
+            << ekf_pose_history_revision_ << ',' << sample.subscriber_history_revision << ',' << r24_corrected_version_ << ',' << sample.corrected_version << ','
+            << (sample.corrected_version ? "CORRECTED_REPLACEMENT" : "ODOM_HIGH_RATE") << ",1," << r23_prediction_.status << ',' << r23_prediction_.age_ms << '\n';
+        r24_revision_log_.flush();
+      }
       initial_guess = r23_prediction_.map_T_lidar;
       diagnostic_row.initial_guess_source = "R23_CAUSAL_IMU_EKF";
       diagnostic_row.initial_guess_reason = r23_prediction_.status;
@@ -2415,7 +2486,14 @@ private:
       writeLocalMapDiagnostics(stamp.toNSec(), local_map_update, source->size(),
           geometry_gate_passed ? "COVERAGE_PASS" : "GEOMETRY_GUARD_REJECTED",
           initial_geometry, local_target_rebuild_ms);
-    if (!geometry_gate_passed)
+    if (r24_enable_) {
+      r24_geometry_log_ << std::setprecision(17) << stamp.toNSec() << ',' << r24_geometry_diagnostic_only_ << ',' << geometry_gate_passed << ','
+          << initial_geometry.median << ',' << initial_geometry.p90 << ',' << initial_geometry.overlap_05 << ','
+          << geometry_gate_max_median_m_ << ',' << geometry_gate_max_p90_m_ << ',' << geometry_gate_min_overlap_05_ << ','
+          << (geometry_gate_passed || r24_geometry_diagnostic_only_) << '\n';
+      r24_geometry_log_.flush();
+    }
+    if (!geometry_gate_passed && !r24_geometry_diagnostic_only_)
     {
       if(r23_enable_)r23_reason_="EXISTING_GEOMETRY_GUARD_REJECTED_BEFORE_NDT";
       ROS_ERROR("[DogPriorMap NDT] startup geometry gate rejected scan: median=%.3f m p90=%.3f m overlap0.5=%.3f; NDT align was not called",
@@ -2753,7 +2831,7 @@ private:
     if (geometry_diagnostics_csv_.is_open())
     {
       geometry_diagnostics_csv_ << std::setprecision(17) << stamp.toNSec() << ','
-          << source->size() << ',' << target_cloud_->size() << ",PASS,"
+          << source->size() << ',' << target_cloud_->size() << (geometry_gate_passed ? ",PASS," : ",DIAGNOSTIC_BYPASS,")
           << initial_geometry.median << ',' << initial_geometry.p90 << ','
           << initial_geometry.overlap_05 << ',' << initial_geometry.overlap_2 << ','
           << initial_geometry.overlap_8 << ',' << (ok ? 1 : 0) << ',' << score << ','
@@ -3032,6 +3110,10 @@ private:
   ros::Subscriber sub_pc2_;
   ros::Subscriber sub_imu_;
   ros::Subscriber sub_ekf_high_rate_;
+  ros::Subscriber sub_ekf_corrected_;
+  bool r24_enable_=false, r24_geometry_diagnostic_only_=false, r24_revision_sync_=false;
+  uint64_t r24_corrected_version_=0;
+  std::ofstream r24_geometry_log_,r24_revision_log_;
   ros::Subscriber sub_scan_prediction_;
   std::string r23_policy_="BASELINE",r23_reason_="NONE";
   int r23_budget_=0,r23_frame_extra_=0,r23_selected_id_=-1;

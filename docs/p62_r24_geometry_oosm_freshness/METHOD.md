@@ -1,0 +1,15 @@
+# R24 frozen method / pre-registration
+
+START cfac6f3b126f9d164aaa215f6a6a10e580a42c82. Independent research branch only. A is the four historical R23 MULTISTART_C runs, never rerun. B=G, C=F, D=GF are experiment labels, not the discontinued R21 D policy. All new runs use unchanged R20 MULTISTART_C; R21 D/E and Coupled are disabled.
+
+G is GEOMETRY_GATE_DIAGNOSTIC_ONLY: log the original median<=1m, p90<=3m, overlap@.5>=.50 decision; proceed to native Full NDT despite original failure, preserving all post-optimization quality/admission rules. It is not a lower threshold. Local-map load failures still reject. Raw geometry records remain separate from post-NDT quality.
+
+F subscribes only to the verified existing /dog_prior_map_ekf odom_corrected output, which the unchanged OOSM code publishes after OOSM_REPLAY_COMPLETE and real IMU replay. Frame, rigid finite pose, finite child-frame linear/angular velocity, and exact integer timestamp equality with the latest existing high-rate history sample are required. No tolerance or timestamp coercion. If later history exists, or corrected time is later/mismatched, log and reject. An accepted replacement copies corrected pose/twist into the latest same-stamp sample, increments local history revision and corrected version, without odom/TF publication. Query still uses original at-or-before scan-start selection and <=20ms age. Replacement and actual later query consumption are separate acceptance claims.
+
+Known before execution: existing corrected publication constructs ROS time from double seconds, whereas high-rate uses the original header timestamp. This may prevent exact matching. Also, the latest corrected current-state time may be later than the next scan start: such a replacement must not be used for that earlier scan. Neither limitation may be repaired by relaxing this contract or modifying OOSM.
+
+Fixed W1 anchor2600/test2601–2660 and W3 anchor6500/test6501–6560; C0 and C3 map-Z+8deg consistent IMU/LiDAR initialization; same R23 actual Ouster IMU, original Deskew/time/extrinsics, P45 map manager. No reference other than frozen anchor runtime initialization. All 12 independent runs sealed before posthoc reference evaluation. No new baseline/Smoke NDT experiment.
+
+Native .8m/.08/.001/40/.55; Full only. Each60 trajectory nominal<=60, extra<=12, <=2extra per event. Total nominal<=720, extra<=144, total<=864. Search map-yaw +5/-5 unchanged; Coverage Consistency Mean<=.30 unchanged. Zero accepted candidates means no fake map observation; existing IMU continues. Existing adjacent-NDT step limiter and EKF measurement path remain unchanged.
+
+Recovery target W1/C3: translationRMSE<=1m AND rotationRMSE<=5deg. C0 side-effect relative R23: translationRMSE increase>.03m OR rotationRMSE increase>.3deg. No changes/retries based on results. F success requires legal replacement AND later causal query consumption; not merely subscription. Reference is conditional-Base MAP_ANCHORED_BENCHMARK_REFERENCE, not independent mocap; Full Coverage points are not independent holdout evidence.
