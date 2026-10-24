@@ -25,7 +25,7 @@ box(ax,.45,.62,.16,.27,'Native Full NDT\nNominal seed\nfrom causal state',fontsi
 box(ax,.67,.62,.14,.27,'Unchanged\npost-quality\nadmission',green,8)
 box(ax,.86,.62,.13,.27,'Historical\nEKF update\n+ IMU replay',green,8)
 for a,b in [((.16,.755),(.22,.755)),((.39,.755),(.45,.755)),((.61,.755),(.67,.755)),((.81,.755),(.86,.755))]:arrow(ax,a,b)
-box(ax,.44,.12,.26,.25,'C: fixed map-yaw +5 / −5 deg\n≤2 extra/event; ≤12/run',orange,8)
+box(ax,.44,.12,.26,.25,'C: map-yaw ±5 deg\n≤2 extra/event; ≤12/run',orange,8)
 arrow(ax,(.74,.62),(.74,.25),orange);arrow(ax,(.74,.25),(.70,.25),orange)
 arrow(ax,(.44,.245),(.42,.245),orange);arrow(ax,(.42,.245),(.42,.58),orange);arrow(ax,(.42,.58),(.52,.62),orange)
 ax.text(.77,.39,'failure +\nbudget',fontsize=7.6,ha='left',color=orange)

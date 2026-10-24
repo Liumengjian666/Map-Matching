@@ -22,7 +22,8 @@ warning: PAPER_SUBMISSION_DRAFT.bbl:74: Underfull \hbox (badness 2310) in paragr
 warning: PAPER_SUBMISSION_DRAFT.bbl:74: Underfull \hbox (badness 1960) in paragraph at lines 69--74
 warning: PAPER_SUBMISSION_DRAFT.bbl:80: Underfull \hbox (badness 2990) in paragraph at lines 76--80
 warning: PAPER_SUBMISSION_DRAFT.bbl:80: Underfull \hbox (badness 3058) in paragraph at lines 76--80
-note: Rerunning TeX because "PAPER_SUBMISSION_DRAFT.out" changed ...
+warning: internal consistency problem when checking if PAPER_SUBMISSION_DRAFT.bbl changed
+note: Rerunning TeX because "PAPER_SUBMISSION_DRAFT.bbl" changed ...
 warning: PAPER_SUBMISSION_DRAFT.tex:61: Underfull \hbox (badness 10000) in paragraph at lines 61--61
 warning: PAPER_SUBMISSION_DRAFT.tex:61: Underfull \hbox (badness 3449) in paragraph at lines 61--61
 warning: PAPER_SUBMISSION_DRAFT.tex:142: Underfull \hbox (badness 10000) in paragraph at lines 141--142
@@ -100,9 +101,9 @@ warning: internal consistency problem when checking if PAPER_SUBMISSION_DRAFT.bb
 warning: TeX rerun seems needed, but stopping at 6 passes
 warning: warnings were issued by the TeX engine; use --print and/or --keep-logs for details.
 note: Running xdvipdfmx ...
-note: Writing `build/PAPER_SUBMISSION_DRAFT.out` (5.04 KiB)
 note: Writing `build/PAPER_SUBMISSION_DRAFT.log` (15.06 KiB)
-note: Writing `build/PAPER_SUBMISSION_DRAFT.bbl` (4.83 KiB)
-note: Writing `build/PAPER_SUBMISSION_DRAFT.aux` (8.77 KiB)
-note: Writing `build/PAPER_SUBMISSION_DRAFT.pdf` (142.28 KiB)
 note: Writing `build/PAPER_SUBMISSION_DRAFT.blg` (397 B)
+note: Writing `build/PAPER_SUBMISSION_DRAFT.aux` (8.77 KiB)
+note: Writing `build/PAPER_SUBMISSION_DRAFT.out` (5.04 KiB)
+note: Writing `build/PAPER_SUBMISSION_DRAFT.bbl` (4.83 KiB)
+note: Writing `build/PAPER_SUBMISSION_DRAFT.pdf` (142.30 KiB)
