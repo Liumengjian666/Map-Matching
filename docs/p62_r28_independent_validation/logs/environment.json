@@ -1,0 +1,18 @@
+{
+  "python": "3.8.10 (default, Mar 18 2025, 20:04:55) \n[GCC 9.4.0]",
+  "python2_path": "/usr/bin/python2",
+  "ros_distro": "noetic",
+  "modules": {
+    "rospy": true,
+    "ros_numpy": true,
+    "open3d": true,
+    "numpy": true,
+    "scipy": true
+  },
+  "pcl_pkg_config": {
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "Package pcl_registration was not found in the pkg-config search path.\nPerhaps you should add the directory containing `pcl_registration.pc'\nto the PKG_CONFIG_PATH environment variable\nNo package 'pcl_registration' found\n"
+  },
+  "pcl_custom_configs": []
+}

@@ -1,0 +1,1 @@
+SE3/calibration/inverse checks PASS; raw identity 122 scans frozen; G0 remains BLOCKED.

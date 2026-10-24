@@ -1,0 +1,26 @@
+{
+  "numpy": {
+    "import": "PASS",
+    "version": "1.24.4"
+  },
+  "open3d": {
+    "import": "PASS",
+    "version": "0.19.0",
+    "old_registration_namespace": false,
+    "pipelines_registration_namespace": true
+  },
+  "rospy": {
+    "import": "PASS",
+    "version": null
+  },
+  "ros_numpy": {
+    "import": "FAIL",
+    "error": "module 'numpy' has no attribute 'float'.\n`np.float` was a deprecated alias for the builtin `float`. To avoid this error in existing code, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.\nThe aliases was originally deprecated in NumPy 1.20; for more details and guidance see the original release note at:\n    https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations"
+  },
+  "python2_rospy": {
+    "returncode": 1,
+    "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/opt/ros/noetic/lib/python3/dist-packages/rospy/__init__.py\", line 47, in <module>\n    from std_msgs.msg import Header\n  File \"/opt/ros/noetic/lib/python3/dist-packages/std_msgs/msg/__init__.py\", line 1, in <module>\n    from ._Bool import *\n  File \"/opt/ros/noetic/lib/python3/dist-packages/std_msgs/msg/_Bool.py\", line 6, in <module>\n    import genpy\n  File \"/opt/ros/noetic/lib/python3/dist-packages/genpy/__init__.py\", line 34, in <module>\n    from . message import Message, SerializationError, DeserializationError, MessageException, struct_I\n  File \"/opt/ros/noetic/lib/python3/dist-packages/genpy/message.py\", line 48, in <module>\n    import yaml\nImportError: No module named yaml\n"
+  },
+  "pcl_gicp_header_exists": true,
+  "pcl_cmake_config_exists": true
+}

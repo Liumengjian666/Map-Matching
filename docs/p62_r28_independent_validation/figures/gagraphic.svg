@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="475.2pt" height="212.4pt" viewBox="0 0 475.2 212.4" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-24T15:10:34.605078</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.7.5, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 212.4
+L 475.2 212.4
+L 475.2 0
+L 0 0
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 20.4336 112.9968
+L 141.1344 112.9968
+Q 153.0144 112.9968 153.0144 107.6868
+L 153.0144 55.8612
+Q 153.0144 50.5512 141.1344 50.5512
+L 20.4336 50.5512
+Q 8.5536 50.5512 8.5536 55.8612
+L 8.5536 107.6868
+Q 8.5536 112.9968 20.4336 112.9968
+z
+" clip-path="url(#p18d47405a5)" style="fill: #ffffff; stroke: #19354b; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 177.2496 112.9968
+L 297.9504 112.9968
+Q 309.8304 112.9968 309.8304 107.6868
+L 309.8304 55.8612
+Q 309.8304 50.5512 297.9504 50.5512
+L 177.2496 50.5512
+Q 165.3696 50.5512 165.3696 55.8612
+L 165.3696 107.6868
+Q 165.3696 112.9968 177.2496 112.9968
+z
+" clip-path="url(#p18d47405a5)" style="fill: #ffffff; stroke: #19354b; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 334.0656 112.9968
+L 454.7664 112.9968
+Q 466.6464 112.9968 466.6464 107.6868
+L 466.6464 55.8612
+Q 466.6464 50.5512 454.7664 50.5512
+L 334.0656 50.5512
+Q 322.1856 50.5512 322.1856 55.8612
+L 322.1856 107.6868
+Q 322.1856 112.9968 334.0656 112.9968
+z
+" clip-path="url(#p18d47405a5)" style="fill: #ffffff; stroke: #17624f; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 149.310369 81.774
+Q 159.191031 81.774 167.95366 81.774
+" clip-path="url(#p18d47405a5)" style="fill: none; stroke: #19354b; stroke-linecap: round"/>
+    <path d="M 163.95366 79.774
+L 167.95366 81.774
+L 163.95366 83.774
+z
+" clip-path="url(#p18d47405a5)" style="fill: #19354b; stroke: #19354b; stroke-linecap: round"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 306.126369 81.774
+Q 316.007031 81.774 324.76966 81.774
+" clip-path="url(#p18d47405a5)" style="fill: none; stroke: #17624f; stroke-linecap: round"/>
+    <path d="M 320.76966 79.774
+L 324.76966 81.774
+L 320.76966 83.774
+z
+" clip-path="url(#p18d47405a5)" style="fill: #17624f; stroke: #17624f; stroke-linecap: round"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 129.7296 178.8408
+L 345.4704 178.8408
+Q 357.3504 178.8408 357.3504 173.5308
+L 357.3504 134.4492
+Q 357.3504 129.1392 345.4704 129.1392
+L 129.7296 129.1392
+Q 117.8496 129.1392 117.8496 134.4492
+L 117.8496 173.5308
+Q 117.8496 178.8408 129.7296 178.8408
+z
+" clip-path="url(#p18d47405a5)" style="fill: #ffffff; stroke: #9d4710; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 237.6 112.447028
+Q 237.6 121.069295 237.6 128.573527
+" clip-path="url(#p18d47405a5)" style="fill: none; stroke: #9d4710; stroke-linecap: round"/>
+    <path d="M 239.6 124.573527
+L 237.6 128.573527
+L 235.6 124.573527
+z
+" clip-path="url(#p18d47405a5)" style="fill: #9d4710; stroke: #9d4710; stroke-linecap: round"/>
+   </g>
+   <g id="text_1">
+    <text style="fill: #19354b; font: 700 16px 'DejaVu Sans'; text-anchor: middle" x="237.6" y="19.116" transform="rotate(-0 237.6 19.116)">Gate-aware prior-map localization</text>
+   </g>
+   <g id="text_2">
+    <text style="fill: #19354b; font: 12px 'DejaVu Sans'" transform="translate(50.865563 78.366563)">Geometry</text>
+    <text style="fill: #19354b; font: 12px 'DejaVu Sans'" transform="translate(49.904625 91.803938)">diagnostic</text>
+   </g>
+   <g id="text_3">
+    <text style="fill: #19354b; font: 12px 'DejaVu Sans'" transform="translate(203.491875 78.366563)">Native NDT</text>
+    <text style="fill: #19354b; font: 12px 'DejaVu Sans'" transform="translate(210.139687 91.803938)">+ quality</text>
+   </g>
+   <g id="text_4">
+    <text style="fill: #17624f; font: 12px 'DejaVu Sans'" transform="translate(366.066 78.366563)">IMU / EKF</text>
+    <text style="fill: #17624f; font: 12px 'DejaVu Sans'" transform="translate(358.03725 91.803938)">map update</text>
+   </g>
+   <g id="text_5">
+    <text style="fill: #9d4710; font: 12px 'DejaVu Sans'" transform="translate(155.873437 150.582562)">Rejected? Fixed ±5° retries</text>
+    <text style="fill: #9d4710; font: 12px 'DejaVu Sans'" transform="translate(168.458438 164.019937)">Strict extra-call budget</text>
+   </g>
+   <g id="text_6">
+    <text style="fill: #19354b; font: 10.5px 'DejaVu Sans'; text-anchor: middle" x="237.6" y="199.656" transform="rotate(-0 237.6 199.656)">Development case: 60 scans · 8 extra calls · 57 map updates</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p18d47405a5">
+   <rect x="0" y="0" width="475.2" height="212.4"/>
+  </clipPath>
+ </defs>
+</svg>

@@ -1,0 +1,13 @@
+{
+  "command": "/home/jian/livox_ws/p62_r27_typesetting_assets/tectonic -k --keep-logs --outdir build UPDATED_MANUSCRIPT.tex",
+  "cwd": "/home/jian/livox_ws/p62_r28_validation_ws/docs/p62_r28_independent_validation",
+  "exit_code": 0,
+  "engine_sha256": "4df19452c202c5bef9f7c7e4a01a3f2b9d5199f0a1f73b70b4fe1bffbc9837f6",
+  "tex_sha256": "f034fb690cd53ed9be137caaada34fdf55ed77654d4d584d115b7e85644102ab",
+  "pdf_sha256": "3789479471c9f0eafb53831275cef117ca648ef4b314ee18d83e6302ef8b74b7",
+  "pages": 8,
+  "abstract_whitespace_words": 198,
+  "resolved_citations": 16,
+  "warnings": "Tectonic bbl consistency/6-pass notice; inherited TU/ptm font substitution and underfull boxes; no undefined citation/reference, missing glyph or overfull box. Fonts embedded; rendered pages visually checked.",
+  "formal_localization_experiments": 0
+}

@@ -1,0 +1,13 @@
+{
+  "stable_unchanged": true,
+  "critical_input_hashes_match": true,
+  "archive_source_hashes_match": true,
+  "old_manuscript_front_matter_and_method_unchanged": true,
+  "new_result_matrix_rows": 12,
+  "external_results_file_absent": true,
+  "free_bytes": 42605703168,
+  "formal_native_calls": 0,
+  "scope": "new R28 docs only",
+  "validation_tool_sha256": "36fd2f9f62bfce893b1b06d0aa4551511d2f2c46af5c8742aeff67442825f653",
+  "note": "No repeated full dataset hashing; no future reference pose values decoded"
+}
