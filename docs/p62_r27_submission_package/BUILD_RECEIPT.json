@@ -1,0 +1,31 @@
+{
+  "engine": "Tectonic0.15.0",
+  "engine_sha256": "4df19452c202c5bef9f7c7e4a01a3f2b9d5199f0a1f73b70b4fe1bffbc9837f6",
+  "commands": [
+    {
+      "command": [
+        "/home/jian/livox_ws/p62_r27_typesetting_assets/tectonic",
+        "-k",
+        "--keep-logs",
+        "--outdir",
+        "build",
+        "PAPER_SUBMISSION_DRAFT.tex"
+      ],
+      "cwd": "/home/jian/livox_ws/p62_r27_submission_ws/docs/p62_r27_submission_package",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/home/jian/livox_ws/p62_r27_typesetting_assets/tectonic",
+        "-k",
+        "--keep-logs",
+        "--outdir",
+        "build",
+        "SUPPLEMENTARY_MATERIAL.tex"
+      ],
+      "cwd": "/home/jian/livox_ws/p62_r27_submission_ws/docs/p62_r27_submission_package",
+      "exit_code": 0
+    }
+  ],
+  "new_native_calls": 0
+}

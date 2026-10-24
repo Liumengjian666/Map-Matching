@@ -1,0 +1,22 @@
+note: Running TeX ...
+warning: SUPPLEMENTARY_MATERIAL.tex:17: Underfull \hbox (badness 10000) in paragraph at lines 17--17
+warning: SUPPLEMENTARY_MATERIAL.tex:18: Underfull \hbox (badness 1297) in paragraph at lines 18--18
+warning: SUPPLEMENTARY_MATERIAL.tex:18: Underfull \hbox (badness 1158) in paragraph at lines 18--18
+warning: SUPPLEMENTARY_MATERIAL.tex:19: Underfull \hbox (badness 1137) in paragraph at lines 19--19
+warning: SUPPLEMENTARY_MATERIAL.tex:20: Underfull \hbox (badness 10000) in paragraph at lines 19--20
+warning: SUPPLEMENTARY_MATERIAL.tex:21: Underfull \hbox (badness 1681) in paragraph at lines 20--21
+warning: SUPPLEMENTARY_MATERIAL.tex:21: Underfull \hbox (badness 1496) in paragraph at lines 21--21
+note: Rerunning TeX because "SUPPLEMENTARY_MATERIAL.out" changed ...
+warning: SUPPLEMENTARY_MATERIAL.tex:17: Underfull \hbox (badness 10000) in paragraph at lines 17--17
+warning: SUPPLEMENTARY_MATERIAL.tex:18: Underfull \hbox (badness 1297) in paragraph at lines 18--18
+warning: SUPPLEMENTARY_MATERIAL.tex:18: Underfull \hbox (badness 1158) in paragraph at lines 18--18
+warning: SUPPLEMENTARY_MATERIAL.tex:19: Underfull \hbox (badness 1137) in paragraph at lines 19--19
+warning: SUPPLEMENTARY_MATERIAL.tex:20: Underfull \hbox (badness 10000) in paragraph at lines 19--20
+warning: SUPPLEMENTARY_MATERIAL.tex:21: Underfull \hbox (badness 1681) in paragraph at lines 20--21
+warning: SUPPLEMENTARY_MATERIAL.tex:21: Underfull \hbox (badness 1496) in paragraph at lines 21--21
+warning: warnings were issued by the TeX engine; use --print and/or --keep-logs for details.
+note: Running xdvipdfmx ...
+note: Writing `build/SUPPLEMENTARY_MATERIAL.pdf` (54.85 KiB)
+note: Writing `build/SUPPLEMENTARY_MATERIAL.aux` (1.80 KiB)
+note: Writing `build/SUPPLEMENTARY_MATERIAL.log` (12.03 KiB)
+note: Writing `build/SUPPLEMENTARY_MATERIAL.out` (1.42 KiB)

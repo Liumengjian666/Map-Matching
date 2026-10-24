@@ -1,0 +1,23 @@
+{
+  "schematics": "measurement_path/gagraphic: new vector explanatory graphics; no experimental recomputation",
+  "memory_plot": {
+    "global_NDT_HWM_KiB": 775308,
+    "local_NDT_HWM_KiB": 138200,
+    "source": "R25 RESOURCE_COMPARISON.md citing frozen P45 record",
+    "change": "internal stage labels replaced by global/local target, measurements unchanged"
+  },
+  "error_plot": "R25 ablation_errors.pdf copied byte-identically",
+  "sha256": {
+    "ablation_errors.pdf": "35795aa4218e8a51c6dc32e20fc3701f4b1a6275e6b9acd7096134cd46196649",
+    "coverage_admission.pdf": "c59b981cf3547d7ebde010b88e7aa80ddec7bb8440bc735eb7e514b3ae564d44",
+    "gagraphic.pdf": "42ad87fa399bccaf35873d60d4886eed65f79dc69d8e60b9b683d199f91f1f2f",
+    "gagraphic.png": "73823f2ea76d752e95d2468b9e93428a0788462d8e03201556c9763a42ab4a91",
+    "gagraphic.svg": "db2e1169d5a2f8c94d6aa783cabe705c1bc7faaf539a1fbb986edff6f757e6d9",
+    "local_map_memory.pdf": "58ec120d612cbcc50e22fcaffd7ce6cf2b798ce7eb8dea5891e3ae641c51a872",
+    "local_map_memory.png": "8afa2326cb26750a735c74a371844edd150667cc748fc8771b19cb92a046f4cf",
+    "local_map_memory.svg": "707ecab57a7fd7b6b16b3dfd037fa2187a4ea5ca35e5ec319601b3edf2ed12cf",
+    "measurement_path.pdf": "2a1c4087eef4234586c802dc9c3439f953e18d06372fcae22cb753b7a083dee7",
+    "measurement_path.png": "13970aa16d329a587b363c0056cc36a12542138ed8c7fe29660b91cfe484b4d1",
+    "measurement_path.svg": "0b264d60a8ef6739821a714ca4b2bcff78eb94284664e39a1152a5440bb76331"
+  }
+}
