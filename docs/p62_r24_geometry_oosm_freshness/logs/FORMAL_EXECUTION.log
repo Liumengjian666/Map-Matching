@@ -1,0 +1,36 @@
+START G W1 C0
+{"supervisor_status": "COMPLETED_INPUT_SHUTDOWN", "process_exit_code": 0, "wall_seconds": 10.00416093199965, "ndt_peak_rss_KiB": 380900, "ekf_peak_rss_KiB": 23348, "simultaneous_ndt_ekf_peak_rss_KiB": 403108}
+DONE G W1 C0 attempts 60 extra 0 published 60
+START G W1 C3
+{"supervisor_status": "COMPLETED_INPUT_SHUTDOWN", "process_exit_code": 0, "wall_seconds": 9.655876075999913, "ndt_peak_rss_KiB": 369096, "ekf_peak_rss_KiB": 23516, "simultaneous_ndt_ekf_peak_rss_KiB": 392536}
+DONE G W1 C3 attempts 60 extra 8 published 57
+START G W3 C0
+{"supervisor_status": "COMPLETED_INPUT_SHUTDOWN", "process_exit_code": 0, "wall_seconds": 9.496297607999622, "ndt_peak_rss_KiB": 387872, "ekf_peak_rss_KiB": 22836, "simultaneous_ndt_ekf_peak_rss_KiB": 410628}
+DONE G W3 C0 attempts 60 extra 0 published 60
+START G W3 C3
+{"supervisor_status": "COMPLETED_INPUT_SHUTDOWN", "process_exit_code": 0, "wall_seconds": 9.847299418999683, "ndt_peak_rss_KiB": 378372, "ekf_peak_rss_KiB": 23104, "simultaneous_ndt_ekf_peak_rss_KiB": 400108}
+DONE G W3 C3 attempts 60 extra 6 published 59
+START F W1 C0
+{"supervisor_status": "COMPLETED_INPUT_SHUTDOWN", "process_exit_code": 0, "wall_seconds": 9.45110849699995, "ndt_peak_rss_KiB": 381096, "ekf_peak_rss_KiB": 21788, "simultaneous_ndt_ekf_peak_rss_KiB": 402808}
+DONE F W1 C0 attempts 60 extra 0 published 60
+START F W1 C3
+{"supervisor_status": "COMPLETED_INPUT_SHUTDOWN", "process_exit_code": 0, "wall_seconds": 8.457836655999927, "ndt_peak_rss_KiB": 256992, "ekf_peak_rss_KiB": 21940, "simultaneous_ndt_ekf_peak_rss_KiB": 278856}
+DONE F W1 C3 attempts 0 extra 0 published 0
+START F W3 C0
+{"supervisor_status": "COMPLETED_INPUT_SHUTDOWN", "process_exit_code": 0, "wall_seconds": 9.56166651500007, "ndt_peak_rss_KiB": 385608, "ekf_peak_rss_KiB": 23776, "simultaneous_ndt_ekf_peak_rss_KiB": 408328}
+DONE F W3 C0 attempts 60 extra 0 published 60
+START F W3 C3
+{"supervisor_status": "COMPLETED_INPUT_SHUTDOWN", "process_exit_code": 0, "wall_seconds": 9.36574789199949, "ndt_peak_rss_KiB": 378756, "ekf_peak_rss_KiB": 23508, "simultaneous_ndt_ekf_peak_rss_KiB": 402264}
+DONE F W3 C3 attempts 60 extra 6 published 59
+START GF W1 C0
+{"supervisor_status": "COMPLETED_INPUT_SHUTDOWN", "process_exit_code": 0, "wall_seconds": 9.450836648000404, "ndt_peak_rss_KiB": 380808, "ekf_peak_rss_KiB": 23224, "simultaneous_ndt_ekf_peak_rss_KiB": 402976}
+DONE GF W1 C0 attempts 60 extra 0 published 60
+START GF W1 C3
+{"supervisor_status": "COMPLETED_INPUT_SHUTDOWN", "process_exit_code": 0, "wall_seconds": 9.866194328999882, "ndt_peak_rss_KiB": 369088, "ekf_peak_rss_KiB": 22056, "simultaneous_ndt_ekf_peak_rss_KiB": 391068}
+DONE GF W1 C3 attempts 60 extra 8 published 57
+START GF W3 C0
+{"supervisor_status": "COMPLETED_INPUT_SHUTDOWN", "process_exit_code": 0, "wall_seconds": 9.24988233699969, "ndt_peak_rss_KiB": 387520, "ekf_peak_rss_KiB": 22980, "simultaneous_ndt_ekf_peak_rss_KiB": 408932}
+DONE GF W3 C0 attempts 60 extra 0 published 60
+START GF W3 C3
+{"supervisor_status": "COMPLETED_INPUT_SHUTDOWN", "process_exit_code": 0, "wall_seconds": 9.747987949000162, "ndt_peak_rss_KiB": 378636, "ekf_peak_rss_KiB": 21640, "simultaneous_ndt_ekf_peak_rss_KiB": 400096}
+DONE GF W3 C3 attempts 60 extra 6 published 59

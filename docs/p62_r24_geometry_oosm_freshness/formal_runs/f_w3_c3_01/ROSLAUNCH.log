@@ -1,0 +1,383 @@
+... logging to /home/jian/livox_ws/p62_r24_geometry_oosm_data/f_w3_c3_01/ros_logs/bd652ece-cf5e-11f1-9272-7305e9ccbb49/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-15408.log
+Checking log directory for disk usage. This may take a while.
+Press Ctrl-C to interrupt
+Done checking log file disk usage. Usage is <1GB.
+]2;/home/jian/livox_ws/p62_r24_geometry_oosm_ws/src/dog_prior_map_localization/launch/p62_r24_geometry_oosm.launch
+[1mstarted roslaunch server http://127.0.0.1:37981/[0m
+
+SUMMARY
+========
+
+PARAMETERS
+ * /camera_update/enable: False
+ * /camera_update/local_vio_metric_enable: False
+ * /coupled_mode: CONTROL
+ * /deskew/T_imu_lidar_rotation_row_major: [-1.0, 0.0, 0.0, ...
+ * /deskew/T_imu_lidar_translation_m: [-0.006253, 0.011...
+ * /deskew/expected_lidar_frame: os1_lidar
+ * /deskew/experimental_history_nominal_consistent_enable: False
+ * /deskew/experimental_scan_local_imu_enable: False
+ * /deskew/history_keep_sec: 2.0
+ * /deskew/input_subscriber_queue_size: 100
+ * /deskew/input_topic: /newer_college/ra...
+ * /deskew/max_imu_gap_sec: 0.02
+ * /deskew/max_pending_clouds: 8
+ * /deskew/max_scan_duration_sec: 0.15
+ * /deskew/mode: ekf_imu_fastlio
+ * /deskew/output_topic: /newer_college/de...
+ * /deskew/point_time_field: time
+ * /deskew/reference_time: start
+ * /deskew/state_frame: imu
+ * /dog_prior_map_ndt/coupled_causal_record_directory: 
+ * /dog_prior_map_ndt/coupled_causal_record_only_enable: False
+ * /dog_prior_map_ndt/coupled_mode: CONTROL
+ * /dog_prior_map_ndt/visual_geometry_csv: 
+ * /dog_prior_map_ndt/visual_initial_guess_csv: 
+ * /dog_prior_map_ndt/visual_initial_guess_enable: False
+ * /experiment/initialization_arm: C3
+ * /experiment/initialization_contract: CONDITIONAL_BASE_...
+ * /experiment/initialization_mode: ANCHOR_REFERENCE_...
+ * /experiment/window: W3
+ * /filter/experimental_covariance_stability_enable: False
+ * /filter/experimental_square_root_covariance_enable: False
+ * /filter/init_bias_std: 0.05
+ * /filter/init_pos_std: 0.5
+ * /filter/init_rot_std_deg: 5.0
+ * /filter/init_vel_std: 0.5
+ * /frames/base_frame: os1_lidar
+ * /frames/map_frame: newer_college_map
+ * /fusion/both_degraded_enter_frames: 3
+ * /fusion/degenerated_eigen_ratio: 0.03
+ * /fusion/directional_enable: False
+ * /fusion/lidar_degraded_enter_frames: 5
+ * /fusion/recovery_exit_frames: 5
+ * /fusion/state_machine_enable: False
+ * /fusion/visual_assisted_enter_frames: 3
+ * /imu/acc_bias_noise: 0.0001
+ * /imu/acc_noise: 2.0
+ * /imu/gravity: 9.80665
+ * /imu/gyro_bias_noise: 0.0001
+ * /imu/gyro_noise: 0.1
+ * /imu/history_keep_sec: 2.0
+ * /imu/init_imu_samples: 200
+ * /imu/initialize_gravity_from_imu: False
+ * /imu/initialize_gyro_bias_from_imu: False
+ * /imu/max_dt: 0.05
+ * /imu/midpoint_interval_input_enable: True
+ * /imu/publish_high_rate: True
+ * /imu/publish_imu_propagate_alias: True
+ * /imu/use_acc_for_position: True
+ * /imu/velocity_damping: 0.98
+ * /initialization/accel_bias_imu_mps2: [0.0, 0.0, 0.0]
+ * /initialization/boundary_imu_accel_mps2: [0.14125789794921...
+ * /initialization/boundary_imu_gyro_radps: [-0.0673779755790...
+ * /initialization/boundary_imu_stamp_nsec: 68926621
+ * /initialization/boundary_imu_stamp_sec: 1583837241
+ * /initialization/explicit_state_enable: True
+ * /initialization/gravity_map_mps2: [0.0, 0.0, -9.80665]
+ * /initialization/gyro_bias_imu_radps: [0.0, 0.0, 0.0]
+ * /initialization/map_T_imu_rotation_row_major: [0.45564210350779...
+ * /initialization/map_T_imu_translation_m: [18.6809779801946...
+ * /initialization/ndt_seed_enable: True
+ * /initialization/ndt_seed_map_T_lidar_rotation_row_major: [-0.4556421035077...
+ * /initialization/ndt_seed_map_T_lidar_translation_m: [18.6651855264870...
+ * /initialization/state_stamp_nsec: 72465152
+ * /initialization/state_stamp_sec: 1583837241
+ * /initialization/velocity_map_mps: [0.0, 0.0, 0.0]
+ * /lidar_update/T_imu_lidar_rotation_row_major: [-1.0, 0.0, 0.0, ...
+ * /lidar_update/deskew_enable: False
+ * /lidar_update/enable: False
+ * /lidar_update/information_diagnostic_enable: False
+ * /lidar_update/lidar_subscriber_queue_size: 100
+ * /lidar_update/local_imu_gyro_to_lidar_enable: True
+ * /lidar_update/local_imu_rotation_prior_enable: True
+ * /lidar_update/ndt_max_iterations: 40
+ * /lidar_update/ndt_max_source_points: 1400
+ * /lidar_update/ndt_max_target_points: 0
+ * /lidar_update/ndt_resolution: 0.8
+ * /lidar_update/ndt_source_voxel_size: 0.25
+ * /lidar_update/ndt_source_voxel_z_size: 0.25
+ * /lidar_update/ndt_step_limit_enable: True
+ * /lidar_update/ndt_step_limit_max_rotation_deg: 5.0
+ * /lidar_update/ndt_step_limit_max_translation: 0.5
+ * /lidar_update/ndt_step_size: 0.08
+ * /lidar_update/ndt_target_voxel_size: 0.15
+ * /lidar_update/ndt_target_voxel_z_size: 0.15
+ * /lidar_update/ndt_transformation_epsilon: 0.001
+ * /lidar_update/offset_time_scale: 1e-09
+ * /lidar_update/pending_lidar_max_frames: 50
+ * /lidar_update/scan_reference_time: start
+ * /map/load_in_ekf: False
+ * /map/local_hysteresis_margin_m: 30.0
+ * /map/local_safety_margin_m: 10.0
+ * /map/pcd_fallback_path: 
+ * /map/tile_manifest_path: /media/jian/HIKVI...
+ * /map/voxel_size: 0.15
+ * /map/voxel_z_size: 0.15
+ * /mature_integration/enable: False
+ * /mature_integration/skf_visual_measurement_csv: 
+ * /mature_visual/enable: False
+ * /mature_visual/time_adapter_enable: False
+ * /ndt_observation/apply_ratio: 1.0
+ * /ndt_observation/enable: True
+ * /ndt_observation/future_deferral_enable: False
+ * /ndt_observation/future_deferral_max_queue: 20
+ * /ndt_observation/future_deferral_max_sec: 0.01
+ * /ndt_observation/max_rotation_correction_deg: 20.0
+ * /ndt_observation/max_translation_correction: 2.0
+ * /ndt_observation/oosm_enable: True
+ * /ndt_observation/oosm_fixed_lag_enable: False
+ * /ndt_observation/oosm_fixed_lag_max_queue: 64
+ * /ndt_observation/oosm_fixed_lag_sec: 0.15
+ * /ndt_observation/oosm_max_alignment_sec: 0.02
+ * /ndt_observation/roll_pitch_apply_ratio: 1.0
+ * /ndt_observation/velocity_blend: 0.6
+ * /ndt_observation/z_apply_ratio: 1.0
+ * /newer_college_local_map_input/cloud_topic: /newer_college/ra...
+ * /newer_college_local_map_input/diagnostics_topic: /dog_livo/diagnos...
+ * /newer_college_local_map_input/ekf_corrected_topic: /dog_livo/odom_co...
+ * /newer_college_local_map_input/ekf_high_rate_topic: /dog_livo/odom_hi...
+ * /newer_college_local_map_input/expected_boundary_imu_stamp_ns: 1583837241068926621
+ * /newer_college_local_map_input/imu_csv: /home/jian/livox_...
+ * /newer_college_local_map_input/imu_frame: os1_imu
+ * /newer_college_local_map_input/imu_replay_start_stamp_ns: 1583837241072465152
+ * /newer_college_local_map_input/imu_topic: /newer_college/imu
+ * /newer_college_local_map_input/lidar_frame: os1_lidar
+ * /newer_college_local_map_input/ndt_imu_watermark_topic: /newer_college/nd...
+ * /newer_college_local_map_input/ndt_odom_topic: /dog_livo/ndt_odom
+ * /newer_college_local_map_input/r23_admission_ack_enable: True
+ * /newer_college_local_map_input/readiness_timeout_sec: 180.0
+ * /newer_college_local_map_input/receipt_csv_path: /home/jian/livox_...
+ * /newer_college_local_map_input/scan_ack_timeout_sec: 120.0
+ * /newer_college_local_map_input/scan_count: 60
+ * /newer_college_local_map_input/scan_directory: /home/jian/livox_...
+ * /newer_college_local_map_input/start_stamp_ns: 1583837241172360960
+ * /newer_college_local_map_input/trajectory_csv_path: /home/jian/livox_...
+ * /output/debug_interval_sec: 2.0
+ * /output/deferred_csv_path: 
+ * /output/diagnostic_determinism_enable: True
+ * /output/ekf_prediction_diagnostics_csv_path: /home/jian/livox_...
+ * /output/experimental_covariance_audit_csv_path: 
+ * /output/experimental_square_root_diagnostics_prefix: 
+ * /output/geometry_diagnostics_csv_path: /home/jian/livox_...
+ * /output/imu_deskew_csv_path: /home/jian/livox_...
+ * /output/imu_watermark_topic: /newer_college/nd...
+ * /output/local_map_diagnostics_csv_path: /home/jian/livox_...
+ * /output/mature_integration_diagnostics_csv_path: 
+ * /output/ndt_determinism_csv_path: /home/jian/livox_...
+ * /output/ndt_diagnostics_csv_path: /home/jian/livox_...
+ * /output/ndt_publish_tf: False
+ * /output/oosm_csv_path: /home/jian/livox_...
+ * /output/oosm_fixed_lag_csv_path: 
+ * /output/path_max_length: 5000
+ * /output/path_publish_rate_hz: 1.0
+ * /output/path_sample_rate_hz: 2.0
+ * /output/print_debug: True
+ * /output/publish_diagnostics: True
+ * /output/publish_filtered_points: True
+ * /output/publish_local_target: False
+ * /output/publish_path: True
+ * /output/publish_tf: True
+ * /output/r23_lineage_csv: /home/jian/livox_...
+ * /output/runtime_csv_path: /home/jian/livox_...
+ * /output/skf_measurement_csv_path: 
+ * /output/skf_update_diagnostics_csv_path: 
+ * /p41/geometry_gate_enable: True
+ * /p41/geometry_gate_max_median_m: 1.0
+ * /p41/geometry_gate_max_p90_m: 3.0
+ * /p41/geometry_gate_min_overlap_05: 0.5
+ * /research/r23_enable: True
+ * /research/r23_policy: MULTISTART_C
+ * /research/r24_enable: True
+ * /research/r24_geometry_diagnostic_only: False
+ * /research/r24_revision_sync: True
+ * /rosdistro: noetic
+ * /rosversion: 1.17.4
+ * /topics/diagnostics: /dog_livo/diagnos...
+ * /topics/filtered_points: /dog_livo/filtere...
+ * /topics/imu: /newer_college/imu
+ * /topics/imu_propagate: /LIVO2/imu_propagate
+ * /topics/lidar: /newer_college/de...
+ * /topics/lidar_msg_type: pointcloud2
+ * /topics/local_target: /newer_college/lo...
+ * /topics/ndt_odom: /dog_livo/ndt_odom
+ * /topics/ndt_path: /dog_livo/ndt_path
+ * /topics/ndt_pose: /dog_livo/ndt_pose
+ * /topics/odom_corrected: /dog_livo/odom_co...
+ * /topics/odom_high_rate: /dog_livo/odom_hi...
+ * /topics/path_corrected: /dog_livo/path_co...
+ * /topics/path_high_rate: /dog_livo/path_hi...
+ * /topics/points_aligned: /newer_college/po...
+ * /topics/skf_visual_measurement: /dog_livo/skf_vis...
+ * /use_sim_time: False
+ * /visual_initial_guess_enable: False
+
+NODES
+  /
+    dog_prior_map_ekf (dog_prior_map_localization/dog_prior_map_ekf_node_cpp)
+    dog_prior_map_ndt (dog_prior_map_localization/dog_prior_map_ndt_node_cpp)
+    newer_college_local_map_input (dog_prior_map_localization/newer_college_sequence_publisher)
+[WARN] [1792814124.470163468]: [DogPriorMap NDT] using explicit startup pose seed (diagnostic/Oracle if configured): p=(18.665186 -133.122038 -1.479278)
+[INFO] [1792814124.963147493]: P44 ready: mode=CONTROL init=CONDITIONAL_BASE_FRAME/ORACLE_START_ONLY canonical_scans=15301 ignored_noncanonical=1 selected=60 first_ns=1583837241172360960 last_ns=1583837247072120064
+[INFO] [1792814124.963966880]: IMU replay start_ns=1583837241072465152 boundary_ns=1583837241068926621 admission_ack=1
+[INFO] [1792814126.044609785]: P44 frame=1/60 stamp_ns=1583837241172360960 points=65536 ndt_ack=1 converged=1 iterations=3 align_ms=379.348 imu_watermark_ns=1583837241278894383 correction_ack=1
+[INFO] [1792814126.211258179]: P44 frame=2/60 stamp_ns=1583837241272771840 points=65536 ndt_ack=1 converged=1 iterations=6 align_ms=100.035 imu_watermark_ns=1583837241378901152 correction_ack=1
+[INFO] [1792814126.273714974]: P44 frame=3/60 stamp_ns=1583837241372804864 points=65536 ndt_ack=1 converged=1 iterations=4 align_ms=18.881 imu_watermark_ns=1583837241478881082 correction_ack=1
+[INFO] [1792814126.344461179]: P44 frame=4/60 stamp_ns=1583837241473108224 points=65536 ndt_ack=1 converged=1 iterations=4 align_ms=19.546 imu_watermark_ns=1583837241578876790 correction_ack=1
+[INFO] [1792814126.406788068]: P44 frame=5/60 stamp_ns=1583837241573075200 points=65536 ndt_ack=1 converged=1 iterations=3 align_ms=17.631 imu_watermark_ns=1583837241678874577 correction_ack=1
+[INFO] [1792814126.475153638]: P44 frame=6/60 stamp_ns=1583837241672877824 points=65536 ndt_ack=1 converged=1 iterations=4 align_ms=20.233 imu_watermark_ns=1583837241778862104 correction_ack=1
+[INFO] [1792814126.532674068]: P44 frame=7/60 stamp_ns=1583837241772680448 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=12.324 imu_watermark_ns=1583837241878854663 correction_ack=1
+[INFO] [1792814126.602716476]: P44 frame=8/60 stamp_ns=1583837241872232448 points=65536 ndt_ack=1 converged=1 iterations=5 align_ms=22.778 imu_watermark_ns=1583837241978829973 correction_ack=1
+[INFO] [1792814126.708542588]: P44 frame=9/60 stamp_ns=1583837241971687936 points=65536 ndt_ack=1 converged=1 iterations=5 align_ms=24.839 imu_watermark_ns=1583837242078831921 correction_ack=1
+[INFO] [1792814126.772796278]: P44 frame=10/60 stamp_ns=1583837242071366400 points=65536 ndt_ack=1 converged=1 iterations=5 align_ms=22.629 imu_watermark_ns=1583837242178814679 correction_ack=1
+[INFO] [1792814126.886184676]: P44 frame=11/60 stamp_ns=1583837242171360512 points=65536 ndt_ack=1 converged=1 iterations=5 align_ms=22.698 imu_watermark_ns=1583837242278820176 correction_ack=1
+[INFO] [1792814126.992142929]: P44 frame=12/60 stamp_ns=1583837242272080640 points=65536 ndt_ack=1 converged=1 iterations=4 align_ms=19.387 imu_watermark_ns=1583837242378812913 correction_ack=1
+[INFO] [1792814127.052991890]: P44 frame=13/60 stamp_ns=1583837242372165376 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=15.743 imu_watermark_ns=1583837242478779793 correction_ack=1
+[INFO] [1792814127.150699145]: P44 frame=14/60 stamp_ns=1583837242472756992 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=12.184 imu_watermark_ns=1583837242578772502 correction_ack=1
+[INFO] [1792814127.244247517]: P44 frame=15/60 stamp_ns=1583837242572915200 points=65536 ndt_ack=1 converged=1 iterations=1 align_ms=11.686 imu_watermark_ns=1583837242678774160 correction_ack=1
+[INFO] [1792814127.342453723]: P44 frame=16/60 stamp_ns=1583837242673441536 points=65536 ndt_ack=1 converged=1 iterations=1 align_ms=8.595 imu_watermark_ns=1583837242778763757 correction_ack=1
+[INFO] [1792814127.446441034]: P44 frame=17/60 stamp_ns=1583837242773089536 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=13.502 imu_watermark_ns=1583837242878756044 correction_ack=1
+[INFO] [1792814127.549445179]: P44 frame=18/60 stamp_ns=1583837242872868352 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=12.012 imu_watermark_ns=1583837242978753793 correction_ack=1
+[INFO] [1792814127.681418052]: P44 frame=19/60 stamp_ns=1583837242972546816 points=65536 ndt_ack=1 converged=1 iterations=8 align_ms=42.203 imu_watermark_ns=1583837243078769101 correction_ack=1
+[INFO] [1792814127.796246871]: P44 frame=20/60 stamp_ns=1583837243072002048 points=65536 ndt_ack=1 converged=1 iterations=4 align_ms=19.872 imu_watermark_ns=1583837243178724531 correction_ack=1
+[INFO] [1792814127.902953831]: P44 frame=21/60 stamp_ns=1583837243171684096 points=65536 ndt_ack=1 converged=1 iterations=4 align_ms=19.080 imu_watermark_ns=1583837243278720729 correction_ack=1
+[INFO] [1792814128.011163511]: P44 frame=22/60 stamp_ns=1583837243271588096 points=65536 ndt_ack=1 converged=1 iterations=5 align_ms=25.443 imu_watermark_ns=1583837243378710836 correction_ack=1
+[INFO] [1792814128.117076577]: P44 frame=23/60 stamp_ns=1583837243371770368 points=65536 ndt_ack=1 converged=1 iterations=4 align_ms=19.136 imu_watermark_ns=1583837243478697453 correction_ack=1
+[INFO] [1792814128.237512454]: P44 frame=24/60 stamp_ns=1583837243472251136 points=65536 ndt_ack=1 converged=1 iterations=8 align_ms=33.798 imu_watermark_ns=1583837243578726282 correction_ack=1
+[INFO] [1792814128.348364049]: P44 frame=25/60 stamp_ns=1583837243572175872 points=65536 ndt_ack=1 converged=1 iterations=4 align_ms=18.587 imu_watermark_ns=1583837243678684532 correction_ack=1
+[INFO] [1792814128.457337033]: P44 frame=26/60 stamp_ns=1583837243672388864 points=65536 ndt_ack=1 converged=1 iterations=4 align_ms=19.127 imu_watermark_ns=1583837243778658140 correction_ack=1
+[INFO] [1792814128.519622785]: P44 frame=27/60 stamp_ns=1583837243772396800 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=12.648 imu_watermark_ns=1583837243878652357 correction_ack=1
+[INFO] [1792814128.617315094]: P44 frame=28/60 stamp_ns=1583837243872812288 points=65536 ndt_ack=1 converged=1 iterations=1 align_ms=8.115 imu_watermark_ns=1583837243978644774 correction_ack=1
+[INFO] [1792814128.719031701]: P44 frame=29/60 stamp_ns=1583837243972543488 points=65536 ndt_ack=1 converged=1 iterations=3 align_ms=17.991 imu_watermark_ns=1583837244078638614 correction_ack=1
+[INFO] [1792814128.816666180]: P44 frame=30/60 stamp_ns=1583837244072313088 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=11.948 imu_watermark_ns=1583837244178633453 correction_ack=1
+[INFO] [1792814128.935072169]: P44 frame=31/60 stamp_ns=1583837244172232704 points=65536 ndt_ack=1 converged=1 iterations=5 align_ms=23.123 imu_watermark_ns=1583837244278615281 correction_ack=1
+[INFO] [1792814129.040633091]: P44 frame=32/60 stamp_ns=1583837244271933184 points=65536 ndt_ack=1 converged=1 iterations=3 align_ms=16.216 imu_watermark_ns=1583837244378612679 correction_ack=1
+[INFO] [1792814129.143338032]: P44 frame=33/60 stamp_ns=1583837244371736320 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=12.647 imu_watermark_ns=1583837244478607496 correction_ack=1
+[INFO] [1792814129.245998205]: P44 frame=34/60 stamp_ns=1583837244471629568 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=12.682 imu_watermark_ns=1583837244578591426 correction_ack=1
+[INFO] [1792814129.360714439]: P44 frame=35/60 stamp_ns=1583837244571540992 points=65536 ndt_ack=1 converged=1 iterations=6 align_ms=28.443 imu_watermark_ns=1583837244678584483 correction_ack=1
+[INFO] [1792814129.460463456]: P44 frame=36/60 stamp_ns=1583837244672234240 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=17.276 imu_watermark_ns=1583837244778578232 correction_ack=1
+[INFO] [1792814129.556194111]: P44 frame=37/60 stamp_ns=1583837244772195840 points=65536 ndt_ack=1 converged=1 iterations=1 align_ms=10.341 imu_watermark_ns=1583837244878605792 correction_ack=1
+[INFO] [1792814129.614367215]: P44 frame=38/60 stamp_ns=1583837244872561920 points=65536 ndt_ack=1 converged=1 iterations=1 align_ms=8.083 imu_watermark_ns=1583837244978649346 correction_ack=1
+[INFO] [1792814129.707808170]: P44 frame=39/60 stamp_ns=1583837244972617472 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=11.896 imu_watermark_ns=1583837245078693630 correction_ack=1
+[INFO] [1792814129.809454935]: P44 frame=40/60 stamp_ns=1583837245072936448 points=65536 ndt_ack=1 converged=1 iterations=1 align_ms=8.600 imu_watermark_ns=1583837245178720560 correction_ack=1
+[INFO] [1792814129.919247236]: P44 frame=41/60 stamp_ns=1583837245172627968 points=65536 ndt_ack=1 converged=1 iterations=4 align_ms=28.047 imu_watermark_ns=1583837245278761606 correction_ack=1
+[INFO] [1792814130.016643205]: P44 frame=42/60 stamp_ns=1583837245272602624 points=65536 ndt_ack=1 converged=1 iterations=1 align_ms=11.486 imu_watermark_ns=1583837245378794201 correction_ack=1
+[INFO] [1792814130.112444331]: P44 frame=43/60 stamp_ns=1583837245372420352 points=65536 ndt_ack=1 converged=1 iterations=1 align_ms=8.484 imu_watermark_ns=1583837245478822196 correction_ack=1
+[INFO] [1792814130.208247483]: P44 frame=44/60 stamp_ns=1583837245472037632 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=11.794 imu_watermark_ns=1583837245578859006 correction_ack=1
+[INFO] [1792814130.306157420]: P44 frame=45/60 stamp_ns=1583837245571828224 points=65536 ndt_ack=1 converged=1 iterations=1 align_ms=10.123 imu_watermark_ns=1583837245678898950 correction_ack=1
+[INFO] [1792814130.420615448]: P44 frame=46/60 stamp_ns=1583837245671774976 points=65536 ndt_ack=1 converged=1 iterations=7 align_ms=30.248 imu_watermark_ns=1583837245778949194 correction_ack=1
+[INFO] [1792814130.534763936]: P44 frame=47/60 stamp_ns=1583837245771958528 points=65536 ndt_ack=1 converged=1 iterations=5 align_ms=24.177 imu_watermark_ns=1583837245878953075 correction_ack=1
+[INFO] [1792814130.641512661]: P44 frame=48/60 stamp_ns=1583837245872364800 points=65536 ndt_ack=1 converged=1 iterations=3 align_ms=16.804 imu_watermark_ns=1583837245978951532 correction_ack=1
+[INFO] [1792814130.746458694]: P44 frame=49/60 stamp_ns=1583837245972331776 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=12.305 imu_watermark_ns=1583837246078966440 correction_ack=1
+[INFO] [1792814130.853217685]: P44 frame=50/60 stamp_ns=1583837246072412928 points=65536 ndt_ack=1 converged=1 iterations=3 align_ms=16.068 imu_watermark_ns=1583837246178908190 correction_ack=1
+[INFO] [1792814130.955175387]: P44 frame=51/60 stamp_ns=1583837246172871168 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=12.648 imu_watermark_ns=1583837246278900547 correction_ack=1
+[INFO] [1792814131.063264939]: P44 frame=52/60 stamp_ns=1583837246273031424 points=65536 ndt_ack=1 converged=1 iterations=5 align_ms=22.431 imu_watermark_ns=1583837246378892776 correction_ack=1
+[INFO] [1792814131.177896944]: P44 frame=53/60 stamp_ns=1583837246372813312 points=65536 ndt_ack=1 converged=1 iterations=5 align_ms=25.330 imu_watermark_ns=1583837246478878844 correction_ack=1
+[INFO] [1792814131.275644777]: P44 frame=54/60 stamp_ns=1583837246472493568 points=65536 ndt_ack=1 converged=1 iterations=1 align_ms=8.080 imu_watermark_ns=1583837246578878222 correction_ack=1
+[INFO] [1792814131.372570709]: P44 frame=55/60 stamp_ns=1583837246572262912 points=65536 ndt_ack=1 converged=1 iterations=1 align_ms=8.077 imu_watermark_ns=1583837246678863952 correction_ack=1
+[INFO] [1792814131.474282078]: P44 frame=56/60 stamp_ns=1583837246671799296 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=11.999 imu_watermark_ns=1583837246778846469 correction_ack=1
+[INFO] [1792814131.569390511]: P44 frame=57/60 stamp_ns=1583837246771558400 points=65536 ndt_ack=1 converged=1 iterations=1 align_ms=10.142 imu_watermark_ns=1583837246878847766 correction_ack=1
+[INFO] [1792814131.677131412]: P44 frame=58/60 stamp_ns=1583837246871759360 points=65536 ndt_ack=1 converged=1 iterations=4 align_ms=18.602 imu_watermark_ns=1583837246978839815 correction_ack=1
+[INFO] [1792814131.801769824]: P44 frame=59/60 stamp_ns=1583837246971882752 points=65536 ndt_ack=1 converged=1 iterations=8 align_ms=33.056 imu_watermark_ns=1583837247078879513 correction_ack=1
+[INFO] [1792814131.898796818]: P44 frame=60/60 stamp_ns=1583837247072120064 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=37.431 imu_watermark_ns=1583837247178821673 correction_ack=0
+[INFO] [1792814131.898828317]: P44 complete: published=60 acknowledged=60 EKF_high_rate_rows=1583837247178821673 NDT_odom_rows=1583837247178821673 EKF_corrected_rows=59
+[INFO] [1792814124.459034629]: [DogPriorMap C++] deskew trajectory=LEGACY_HISTORY
+[INFO] [1792814124.482493520]: [DogPriorMap C++] explicit causal initial state: stamp=1583837241.072465181 boundary_age_ms=3.539 p=(18.6810 -133.1240 -1.4521) v_prior=(0.0000 0.0000 0.0000) bg_prior=(0.00000 0.00000 0.00000) ba_prior=(0.00000 0.00000 0.00000) g_map=(0.0000 0.0000 -9.8066)
+[INFO] [1792814124.488485966]: [DogPriorMap C++] experimental IMU deskew mode=ekf_imu_fastlio input=/newer_college/raw_points output=/newer_college/deskewed_points ref=start T_imu_lidar=(-0.006 0.012 -0.029)
+[INFO] [1792814124.490294874]: [DogPriorMap C++] node started: external_ndt=/dog_livo/ndt_odom, imu=/newer_college/imu
+[INFO] [1792814124.490313383]: [DogPriorMap C++] NDT OOSM=1 max_alignment=0.020 s
+[INFO] [1792814124.490326373]: [DogPriorMap C++] future NDT deferral=0 max=10.000 ms queue=20
+[INFO] [1792814124.490337269]: [DogPriorMap C++] fixed-lag OOSM=0 lag=0.150 s queue=64
+[INFO] [1792814126.710717748]: [DogPriorMap C++] runtime: imu=100.0Hz corr=8.91Hz state_hist=103 imu_hist=102 pending=0
+[INFO] [1792814127.684323690]: [DogPriorMap C++] runtime: imu=100.0Hz corr=9.90Hz state_hist=201 imu_hist=201 pending=0
+[INFO] [1792814128.721305268]: [DogPriorMap C++] runtime: imu=100.0Hz corr=9.90Hz state_hist=201 imu_hist=201 pending=0
+[INFO] [1792814129.712098356]: [DogPriorMap C++] runtime: imu=100.0Hz corr=9.90Hz state_hist=201 imu_hist=201 pending=0
+[INFO] [1792814130.749633223]: [DogPriorMap C++] runtime: imu=100.0Hz corr=10.00Hz state_hist=200 imu_hist=200 pending=0
+[INFO] [1792814131.806119795]: [DogPriorMap C++] runtime: imu=100.0Hz corr=9.90Hz state_hist=200 imu_hist=200 pending=0
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+[INFO] [1792814124.503093008]: [DogPriorMap NDT] local map metadata loaded: manifest=/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_manifest.json tiles=74 tile=20.0m; global XYZ was not loaded
+[INFO] [1792814124.510273187]: [DogPriorMap NDT] started: mode=CONTROL map=/media/jian/HIKVISION/paper rosbag/NewerCollege/.p45_local_map/tiles/tile_manifest.json target=0 lidar=/newer_college/deskewed_points output=/dog_livo/ndt_odom EKF=disabled
+[INFO] [1792814126.043949918]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=2383209 align=379.35ms score=0.2157 iter=3 p=(18.67 -133.05 -1.44)
+[INFO] [1792814127.051164683]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=2383209 align=15.74ms score=0.0187 iter=2 p=(18.12 -132.06 -1.43)
+[INFO] [1792814128.114997938]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=2383209 align=19.14ms score=0.1227 iter=4 p=(17.66 -131.12 -1.42)
+[INFO] [1792814129.141367160]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=2383209 align=12.65ms score=0.0720 iter=2 p=(17.21 -130.23 -1.39)
+[INFO] [1792814130.207084124]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=2383209 align=11.79ms score=0.0229 iter=2 p=(16.72 -129.20 -1.33)
+[INFO] [1792814131.273639892]: [DogPriorMap NDT] conv=1 limited=0 source=1400 target=2383209 align=8.08ms score=0.0523 iter=1 p=(16.28 -128.23 -1.25)
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+Error in XmlRpcClient::writeRequest: write error (Connection refused).
+Error in XmlRpcDispatch::work: couldn't find source iterator
+
+auto-starting new master
+[1mprocess[master]: started with pid [15467][0m
+[1mROS_MASTER_URI=http://127.0.0.1:11384[0m
+]2;/home/jian/livox_ws/p62_r24_geometry_oosm_ws/src/dog_prior_map_localization/launch/p62_r24_geometry_oosm.launch http://127.0.0.1:11384
+[1msetting /run_id to bd652ece-cf5e-11f1-9272-7305e9ccbb49[0m
+[1mprocess[rosout-1]: started with pid [15492][0m
+started core service [/rosout]
+[1mprocess[dog_prior_map_ndt-2]: started with pid [15499][0m
+[1mprocess[dog_prior_map_ekf-3]: started with pid [15502][0m
+[1mprocess[newer_college_local_map_input-4]: started with pid [15505][0m
+[newer_college_local_map_input-4] killing on exit
+[dog_prior_map_ekf-3] killing on exit
+[dog_prior_map_ndt-2] killing on exit
+[rosout-1] killing on exit
+[master] killing on exit
+shutting down processing monitor...
+... shutting down processing monitor complete
+[1mdone[0m
