@@ -1,0 +1,46 @@
+[
+  {
+    "method": "steamlio",
+    "rows": 15301,
+    "sha256": "2e3bccfc2175745c0972b1424618c025d7708a3006f9af79fdb8899eeb7bba32",
+    "first_stamp_ns": 1583836591182590976,
+    "last_stamp_ns": 1583838121156355584,
+    "all_timestamps_equal_local_pcd_order": true,
+    "max_quaternion_squared_norm_error": 6.661338147750939e-16,
+    "first_translation_m": [
+      1.099807800386543e-09,
+      2.0438628602070796e-09,
+      0.0
+    ],
+    "first_xyzw": [
+      0.0,
+      0.0,
+      1.7948964863779158e-09,
+      1.0
+    ],
+    "coordinate_contract": "TUM schema and times verified; map-from-trajectory transform and sensor-frame binding to our conditional Base not certified",
+    "re_evaluation": "NOT_PERFORMED: no coordinate fitting, no matched C3 initial condition, no method run"
+  },
+  {
+    "method": "singer_inertial",
+    "rows": 15301,
+    "sha256": "f02eaa21ce3f33b8e215bde060f9dd88735a3aa0407fcb7e94e5243e05402ddc",
+    "first_stamp_ns": 1583836591182590976,
+    "last_stamp_ns": 1583838121156355584,
+    "all_timestamps_equal_local_pcd_order": true,
+    "max_quaternion_squared_norm_error": 4.440892098500626e-16,
+    "first_translation_m": [
+      1.099807800386543e-09,
+      2.0438628706154205e-09,
+      1.3877787807814457e-17
+    ],
+    "first_xyzw": [
+      0.0,
+      0.0,
+      1.794896486377916e-09,
+      1.0
+    ],
+    "coordinate_contract": "TUM schema and times verified; map-from-trajectory transform and sensor-frame binding to our conditional Base not certified",
+    "re_evaluation": "NOT_PERFORMED: no coordinate fitting, no matched C3 initial condition, no method run"
+  }
+]

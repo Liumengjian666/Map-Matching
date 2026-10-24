@@ -1,0 +1,26 @@
+[
+  {
+    "url": "https://github.com/utiasASRL/steam_icp/tree/master/results/newer_college_dataset/steamlio",
+    "sha256": "93abd9a508bb814e3631072ac40e23ff87f7f6625479b8e827b4b38e6fa0ef13",
+    "items": [
+      "results/newer_college_dataset/steamlio/01_short_experiment_tum.txt",
+      "results/newer_college_dataset/steamlio/02_long_experiment_tum.txt",
+      "results/newer_college_dataset/steamlio/05_quad_with_dynamics_tum.txt",
+      "results/newer_college_dataset/steamlio/06_dynamic_spinning_tum.txt",
+      "results/newer_college_dataset/steamlio/07_parkland_mound_tum.txt",
+      "results/newer_college_dataset/steamlio/steam_icp.obelisk.krb.log.WARNING.20231204-165513.12538"
+    ]
+  },
+  {
+    "url": "https://github.com/utiasASRL/steam_icp/tree/master/results/newer_college_dataset/singer_inertial",
+    "sha256": "ce8f8092afafb4fa59cf0c3180ae9908b81267c151ec5e73f343e36b088c82d9",
+    "items": [
+      "results/newer_college_dataset/singer_inertial/01_short_experiment_tum.txt",
+      "results/newer_college_dataset/singer_inertial/02_long_experiment_tum.txt",
+      "results/newer_college_dataset/singer_inertial/05_quad_with_dynamics_tum.txt",
+      "results/newer_college_dataset/singer_inertial/06_dynamic_spinning_tum.txt",
+      "results/newer_college_dataset/singer_inertial/07_parkland_mound_tum.txt",
+      "results/newer_college_dataset/singer_inertial/steam_icp.obelisk.krb.log.WARNING.20240917-011327.22062"
+    ]
+  }
+]

@@ -1,0 +1,238 @@
+[
+  {
+    "doi": "10.1177/02783649261451003",
+    "title": [
+      "2Fast-2Lamaa: Large-scale lidar-inertial localization and mapping with continuous distance fields"
+    ],
+    "container-title": [
+      "The International Journal of Robotics Research"
+    ],
+    "published": {
+      "date-parts": [
+        [
+          2026,
+          6,
+          12
+        ]
+      ]
+    },
+    "published-online": {
+      "date-parts": [
+        [
+          2026,
+          6,
+          12
+        ]
+      ]
+    },
+    "published-print": null,
+    "volume": null,
+    "issue": null,
+    "page": null,
+    "URL": "https://doi.org/10.1177/02783649261451003",
+    "author_names": [
+      "Cedric Le Gentil",
+      "Raphael Falque",
+      "Daniil Lisus",
+      "Timothy D. Barfoot"
+    ]
+  },
+  {
+    "doi": "10.1109/TRO.2024.3521856",
+    "title": [
+      "Continuous-Time Radar-Inertial and Lidar-Inertial Odometry Using a Gaussian Process Motion Prior"
+    ],
+    "container-title": [
+      "IEEE Transactions on Robotics"
+    ],
+    "published": {
+      "date-parts": [
+        [
+          2025
+        ]
+      ]
+    },
+    "published-online": null,
+    "published-print": {
+      "date-parts": [
+        [
+          2025
+        ]
+      ]
+    },
+    "volume": "41",
+    "issue": null,
+    "page": "1059-1076",
+    "URL": "https://doi.org/10.1109/tro.2024.3521856",
+    "author_names": [
+      "Keenan Burnett",
+      "Angela P. Schoellig",
+      "Timothy D. Barfoot"
+    ]
+  },
+  {
+    "doi": "10.1109/TRO.2022.3141876",
+    "error": "HTTP Error 429: Too Many Requests",
+    "author_names": []
+  },
+  {
+    "doi": "10.1109/ICRA48891.2023.10160508",
+    "title": [
+      "Direct LiDAR-Inertial Odometry: Lightweight LIO with Continuous-Time Motion Correction"
+    ],
+    "container-title": [
+      "2023 IEEE International Conference on Robotics and Automation (ICRA)"
+    ],
+    "published": {
+      "date-parts": [
+        [
+          2023,
+          5,
+          29
+        ]
+      ]
+    },
+    "published-online": null,
+    "published-print": {
+      "date-parts": [
+        [
+          2023,
+          5,
+          29
+        ]
+      ]
+    },
+    "volume": null,
+    "issue": null,
+    "page": "3983-3989",
+    "URL": "https://doi.org/10.1109/icra48891.2023.10160508",
+    "author_names": [
+      "Kenny Chen",
+      "Ryan Nemiroff",
+      "Brett T. Lopez"
+    ]
+  },
+  {
+    "doi": "10.1017/S0263574724002121",
+    "title": [
+      "IMU as an input versus a measurement of the state in inertial-aided state estimation"
+    ],
+    "container-title": [
+      "Robotica"
+    ],
+    "published": {
+      "date-parts": [
+        [
+          2025,
+          1,
+          3
+        ]
+      ]
+    },
+    "published-online": {
+      "date-parts": [
+        [
+          2025,
+          1,
+          3
+        ]
+      ]
+    },
+    "published-print": {
+      "date-parts": [
+        [
+          2025,
+          2
+        ]
+      ]
+    },
+    "volume": "43",
+    "issue": "2",
+    "page": "680-700",
+    "URL": "https://doi.org/10.1017/s0263574724002121",
+    "author_names": [
+      "Keenan Burnett",
+      "Angela P. Schoellig",
+      "Timothy D. Barfoot"
+    ]
+  },
+  {
+    "doi": "10.1109/ICRA55743.2025.11127720",
+    "title": [
+      "SuperLoc: The Key to Robust Lidar-Inertial Localization Lies in Predicting Alignment Risks Superodometry.Com/SuperLoc"
+    ],
+    "container-title": [
+      "2025 IEEE International Conference on Robotics and Automation (ICRA)"
+    ],
+    "published": {
+      "date-parts": [
+        [
+          2025,
+          5,
+          19
+        ]
+      ]
+    },
+    "published-online": null,
+    "published-print": {
+      "date-parts": [
+        [
+          2025,
+          5,
+          19
+        ]
+      ]
+    },
+    "volume": null,
+    "issue": null,
+    "page": "14080-14086",
+    "URL": "https://doi.org/10.1109/icra55743.2025.11127720",
+    "author_names": [
+      "Shibo Zhao",
+      "Honghao Zhu",
+      "Yuanjun Gao",
+      "Beomsoo Kim",
+      "Yuheng Qiu",
+      "Aaron M. Johnson",
+      "Sebastian Scherer"
+    ]
+  },
+  {
+    "doi": "10.1109/ICRA57147.2024.10611195",
+    "title": [
+      "Tightly Coupled Range Inertial Localization on a 3D Prior Map Based on Sliding Window Factor Graph Optimization"
+    ],
+    "container-title": [
+      "2024 IEEE International Conference on Robotics and Automation (ICRA)"
+    ],
+    "published": {
+      "date-parts": [
+        [
+          2024,
+          5,
+          13
+        ]
+      ]
+    },
+    "published-online": null,
+    "published-print": {
+      "date-parts": [
+        [
+          2024,
+          5,
+          13
+        ]
+      ]
+    },
+    "volume": null,
+    "issue": null,
+    "page": "1745-1751",
+    "URL": "https://doi.org/10.1109/icra57147.2024.10611195",
+    "author_names": [
+      "Kenji Koide",
+      "Shuji Oishi",
+      "Masashi Yokozuka",
+      "Atsuhiko Banno"
+    ]
+  }
+]

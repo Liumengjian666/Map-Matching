@@ -1,0 +1,102 @@
+[
+  {
+    "name": "2fast_publisher.html",
+    "requested_url": "https://journals.sagepub.com/doi/10.1177/02783649261451003",
+    "retrieved_utc": "2026-10-24T06:04:11Z",
+    "status": "FAILED",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  {
+    "name": "2fast_v2.pdf",
+    "requested_url": "https://arxiv.org/pdf/2410.05433v2",
+    "retrieved_utc": "2026-10-24T06:04:12Z",
+    "final_url": "https://arxiv.org/pdf/2410.05433v2",
+    "http_status": 200,
+    "content_type": "application/pdf",
+    "bytes": 11141614,
+    "sha256": "aa5014ece7faa5116628f55c4dde684da1180a765a0ceae1dfc5d772b57bea33",
+    "pdf_magic": true,
+    "status": "FETCHED"
+  },
+  {
+    "name": "steam_author.pdf",
+    "requested_url": "https://asrl.utias.utoronto.ca/~tdb/bib/burnett_tro24.pdf",
+    "retrieved_utc": "2026-10-24T06:04:18Z",
+    "status": "FAILED",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "name": "singer_publisher.pdf",
+    "requested_url": "https://www.cambridge.org/core/services/aop-cambridge-core/content/view/444D7B057346B86E789561DDA5FC305A/S0263574724002121a.pdf/imu-as-an-input-versus-a-measurement-of-the-state-in-inertial-aided-state-estimation.pdf",
+    "retrieved_utc": "2026-10-24T06:04:19Z",
+    "final_url": "https://www.cambridge.org/core/services/aop-cambridge-core/content/view/444D7B057346B86E789561DDA5FC305A/S0263574724002121a.pdf/imu-as-an-input-versus-a-measurement-of-the-state-in-inertial-aided-state-estimation.pdf",
+    "http_status": 200,
+    "content_type": "application/pdf",
+    "bytes": 1536079,
+    "sha256": "584ee14566a1e431dfa111a71c6ccdb3a1ff0357ce595e0f9c59b59074a9f97f",
+    "pdf_magic": true,
+    "status": "FETCHED"
+  },
+  {
+    "name": "fastlio2_author.pdf",
+    "requested_url": "https://jiaronglin.com/uploads/Fast_LIO_2.pdf",
+    "retrieved_utc": "2026-10-24T06:04:20Z",
+    "status": "FAILED",
+    "error": "<urlopen error EOF occurred in violation of protocol (_ssl.c:1145)>"
+  },
+  {
+    "name": "superloc.pdf",
+    "requested_url": "https://arxiv.org/pdf/2412.02901v2",
+    "retrieved_utc": "2026-10-24T06:04:31Z",
+    "final_url": "https://arxiv.org/pdf/2412.02901v2",
+    "http_status": 200,
+    "content_type": "application/pdf",
+    "bytes": 4830817,
+    "sha256": "4504485bf93f5461c04b9773c9114e1bfadbb8b0a1467bb2d047efcc2fa5b9ff",
+    "pdf_magic": true,
+    "status": "FETCHED"
+  },
+  {
+    "name": "range_localization_author.pdf",
+    "requested_url": "https://staff.aist.go.jp/k.koide/assets/pdf/icra2024_02.pdf",
+    "retrieved_utc": "2026-10-24T06:04:32Z",
+    "final_url": "https://staff.aist.go.jp/k.koide/assets/pdf/icra2024_02.pdf",
+    "http_status": 200,
+    "content_type": "application/pdf",
+    "bytes": 2628824,
+    "sha256": "65630db16c900172c077988e9ccd919df3a8a0d1b965c850922f007330b510f7",
+    "pdf_magic": true,
+    "status": "FETCHED"
+  },
+  {
+    "name": "dlio_readme.md",
+    "requested_url": "https://raw.githubusercontent.com/vectr-ucla/direct_lidar_inertial_odometry/main/README.md",
+    "retrieved_utc": "2026-10-24T06:04:35Z",
+    "status": "FAILED",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "name": "2fast_readme.md",
+    "requested_url": "https://raw.githubusercontent.com/clegenti/2fast2lamaa/main/README.md",
+    "retrieved_utc": "2026-10-24T06:04:35Z",
+    "final_url": "https://raw.githubusercontent.com/clegenti/2fast2lamaa/main/README.md",
+    "http_status": 200,
+    "content_type": "text/plain; charset=utf-8",
+    "bytes": 43275,
+    "sha256": "e0501bdf1727ad76bd894c76bcd0a33fd2843891299e076f7f701d7bfed6e117",
+    "pdf_magic": false,
+    "status": "FETCHED"
+  },
+  {
+    "name": "fastlio_loc_readme.md",
+    "requested_url": "https://raw.githubusercontent.com/HViktorTsoi/FAST_LIO_LOCALIZATION/main/README.md",
+    "retrieved_utc": "2026-10-24T06:04:36Z",
+    "final_url": "https://raw.githubusercontent.com/HViktorTsoi/FAST_LIO_LOCALIZATION/main/README.md",
+    "http_status": 200,
+    "content_type": "text/plain; charset=utf-8",
+    "bytes": 5395,
+    "sha256": "1f9062b9414ed31243631641811e9760ed7ef147e5e7639ae94401201dc61702",
+    "pdf_magic": false,
+    "status": "FETCHED"
+  }
+]

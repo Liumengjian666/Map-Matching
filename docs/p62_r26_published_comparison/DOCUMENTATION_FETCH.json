@@ -1,0 +1,32 @@
+[
+  {
+    "name": "steam_readme_master.md",
+    "url": "https://raw.githubusercontent.com/utiasASRL/steam_icp/master/README.md",
+    "bytes": 9816,
+    "sha256": "ab9aee7379e732288fc9a1b91e4015daf7b9fd7cc249cdc8d213b8a8c33434a1"
+  },
+  {
+    "name": "steam_results_listing.html",
+    "url": "https://github.com/utiasASRL/steam_icp/tree/master/results",
+    "bytes": 220080,
+    "sha256": "24816c9238ae8f9ddd769a1b443c728ce4de048412709184e184988cf5655165"
+  },
+  {
+    "name": "official_stereo.html",
+    "url": "https://ori-drs.github.io/newer-college-dataset/stereo-cam/",
+    "bytes": 16432,
+    "sha256": "e99cded2dafcb4c4cd0ca3b9e8b6b3b9f2511e84bfc9868742489e5e4d590432"
+  },
+  {
+    "name": "official_reference.html",
+    "url": "https://ori-drs.github.io/newer-college-dataset/ground-truth/",
+    "bytes": 7574,
+    "sha256": "28aaf7ead0b469c9c3604a02f18536fe036dedefb6f46d8b574f975336a17e48"
+  },
+  {
+    "name": "2fast_nc_launch.py",
+    "url": "https://raw.githubusercontent.com/clegenti/2fast2lamaa/main/launch/os1_localization.launch.py",
+    "bytes": 4003,
+    "sha256": "8a5d9f0784a34666ca76b31322004f7e80c564971412087ae7bfae8275d0ed0d"
+  }
+]
