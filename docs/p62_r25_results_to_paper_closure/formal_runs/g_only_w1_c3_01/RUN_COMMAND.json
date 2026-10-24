@@ -1,0 +1,44 @@
+{
+  "window": "W1",
+  "arm": "C3",
+  "strategy": "G_ONLY",
+  "scan_count": 60,
+  "run_dir": "/home/jian/livox_ws/p62_r25_results_paper_data/g_only_w1_c3_01",
+  "command_argv": [
+    "bash",
+    "--noprofile",
+    "--norc",
+    "-c",
+    "source /opt/ros/noetic/setup.bash && source /home/jian/livox_ws/p62_r25_results_paper_ws/devel/setup.bash && exec roslaunch dog_prior_map_localization p62_r25_g_only_ablation.launch initialization_config:=/home/jian/livox_ws/p62_r23_real_imu_closure_ws/docs/p62_r23_real_imu_closure/config/w1_c3_initialization.yaml start_stamp_ns:=1583836851179232512 imu_replay_start_stamp_ns:=1583836851078989056 expected_boundary_imu_stamp_ns:=1583836851078961159 scan_count:=60 output_dir:=/home/jian/livox_ws/p62_r25_results_paper_data/g_only_w1_c3_01"
+  ],
+  "roslaunch_argv": [
+    "roslaunch",
+    "dog_prior_map_localization",
+    "p62_r25_g_only_ablation.launch",
+    "initialization_config:=/home/jian/livox_ws/p62_r23_real_imu_closure_ws/docs/p62_r23_real_imu_closure/config/w1_c3_initialization.yaml",
+    "start_stamp_ns:=1583836851179232512",
+    "imu_replay_start_stamp_ns:=1583836851078989056",
+    "expected_boundary_imu_stamp_ns:=1583836851078961159",
+    "scan_count:=60",
+    "output_dir:=/home/jian/livox_ws/p62_r25_results_paper_data/g_only_w1_c3_01"
+  ],
+  "shell_command": "source /opt/ros/noetic/setup.bash && source /home/jian/livox_ws/p62_r25_results_paper_ws/devel/setup.bash && exec roslaunch dog_prior_map_localization p62_r25_g_only_ablation.launch initialization_config:=/home/jian/livox_ws/p62_r23_real_imu_closure_ws/docs/p62_r23_real_imu_closure/config/w1_c3_initialization.yaml start_stamp_ns:=1583836851179232512 imu_replay_start_stamp_ns:=1583836851078989056 expected_boundary_imu_stamp_ns:=1583836851078961159 scan_count:=60 output_dir:=/home/jian/livox_ws/p62_r25_results_paper_data/g_only_w1_c3_01",
+  "ros_environment": {
+    "ROS_MASTER_URI": "http://127.0.0.1:11385",
+    "ROS_HOME": "/home/jian/livox_ws/p62_r25_results_paper_data/g_only_w1_c3_01/ros_home",
+    "ROS_LOG_DIR": "/home/jian/livox_ws/p62_r25_results_paper_data/g_only_w1_c3_01/ros_logs",
+    "ROS_IP": "127.0.0.1"
+  },
+  "timeout_seconds": 600,
+  "poll_interval_seconds": 0.05,
+  "input_contract_path": "/home/jian/livox_ws/p62_r25_results_paper_ws/docs/p62_r25_results_to_paper_closure/input/INITIALIZATION_AND_TIME_CONTRACT.json",
+  "input_contract_sha256": "1c3188b4822888894ed8abdf5d11dec8218efc6830336ac8d962802d1df3aa70",
+  "initialization_sha256": "73c688d277971f86e1c755d8c4d1dd2ba520e79324fb28b3383a9846c5a62ef7",
+  "binaries_sha256": {
+    "ndt": "59ad81d56759c2d6064fb9f4137c52f611c1607203f4a84884b4af22a0eadfa8",
+    "ekf": "01550b9950f17798a57b0dcd8e707c6cdc6f6c76f78360286787bdfd79114ddc"
+  },
+  "git_head_at_start": "d86831e6fe608a9b2b7c83189c3db6f90258cdab",
+  "reference_access": "none; supervisor reads input contract and OS process accounting only",
+  "started_utc": "2026-10-24T05:19:00.690327+00:00"
+}

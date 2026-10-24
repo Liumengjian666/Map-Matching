@@ -1,0 +1,39 @@
+{
+  "all_formal_outputs_frozen_before_reference": true,
+  "reference_values_read": false,
+  "CODE_SHA": "131a900842e965305465220e777c8d6949c5f17a",
+  "nominal_full": 60,
+  "extra_full": 0,
+  "formal_runs": [
+    {
+      "window": "W1",
+      "arm": "C3",
+      "strategy": "G_ONLY",
+      "path": "/home/jian/livox_ws/p62_r25_results_paper_ws/docs/p62_r25_results_to_paper_closure/formal_runs/g_only_w1_c3_01",
+      "nominal_full": 60,
+      "extra_full": 0,
+      "fused": 0,
+      "files_sha256": {
+        "ROSLAUNCH.log": "9ce46261aee491b8a23af025d5102b546c8b939453097a2e70c6609132e7c9b5",
+        "ndt_diagnostics.csv": "1e87942fcfea8953fe8d8aabd668ee94f25d3a558bc4479cc1ae0bed2abfa537",
+        "ekf_prediction_diagnostics.csv": "df54eaee385cab8baf44e9ca1a5d55686f3f2d025f0aa6846f0f22fff246aab2",
+        "localization_trajectory.csv": "d6ab01feef850581af05cce22f7bcdc33b2bf22b94c696d43bfaaec6b86e8812",
+        "COMPLETED_INPUT_SHUTDOWN.json": "91a9fe50dc6c082b0827e4696da722aea912da06fdf4e7a11a6279a152572072",
+        "RUN_COMMAND.json": "65ea55fed58632c1cd203da00e89d691ed945423cc1b9a6ba85a6bbf310c35fb",
+        "geometry_diagnostics.csv": "5fcd852ea1696600e0d2e88f39bb55f35a78eccfadcb88dcbc0df0241718c2df",
+        "local_map_diagnostics.csv": "7622595ab8a79c7e985ac964c172f4b4824fc4d091fedc678ae922d0dc7cd46b",
+        "RUN_RECEIPT.json": "e49f8082540311c3f27a72d2ba7d50cc2a34516615b667dbfbb7cd5bce84769d",
+        "r23_candidates.csv": "85c1b8fe9d743cecfd8be26ebac557e2866a162cdf19226e9fab5b8f2a394807",
+        "r23_ndt_lineage.csv": "b04abbbb3aaac67a80b7772146502020b93b0ecdf5190384383f6af88c4a04db",
+        "r24_revision.csv": "8985bb04e0a66aa6c4ac5f3db76c703570486e64b0cd64f887d1207ca0ffbe4f",
+        "PROCESS_MEMORY.csv": "773996ef3b2268bd11bee1cad3e51b3b79c02a6bbefbe3ca1efa425201a84c7c",
+        "oosm_statistics.csv": "226d6f4ca2522e7217a7fcc360c011bb493efdf41f8b44dbd7ff0e3f3e3aa0fa",
+        "r24_geometry.csv": "9e5e18cdc3aa6141e21b696c4cff08646826776dc02b84344b7d69e29bba90f9",
+        "ndt_runtime.csv": "9f471ccdaf3b0c5a02a23dbea6799c532d4558fae5b97de479a8d19c680859fa",
+        "r23_admission.csv": "7f993c42f583d30c339895ffe526f43c73da8742a06df9afbf5d92113588e960",
+        "deskew_diagnostics.csv": "4301da402b3771d96f8fcf0f6058ed09a6d4d4fbb96fd346b41fd91dcab30a2a",
+        "publisher_receipts.csv": "631ba5781adba3c6248a3eea2712e874b2b12460f814430728eb12d39367c501"
+      }
+    }
+  ]
+}
