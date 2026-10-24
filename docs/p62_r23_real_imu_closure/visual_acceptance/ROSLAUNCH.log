@@ -1,0 +1,246 @@
+... logging to /home/jian/livox_ws/p62_r23_real_imu_data/rviz_baseline_20_01/ros_logs/29d87f56-cef2-11f1-b4af-1b930d869551/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-511073.log
+Checking log directory for disk usage. This may take a while.
+Press Ctrl-C to interrupt
+Done checking log file disk usage. Usage is <1GB.
+]2;/home/jian/livox_ws/p62_r23_real_imu_closure_ws/src/dog_prior_map_localization/launch/p62_r23_integrated_localization.launch
+[1mstarted roslaunch server http://127.0.0.1:35993/[0m
+
+SUMMARY
+========
+
+PARAMETERS
+ * /camera_update/enable: False
+ * /camera_update/local_vio_metric_enable: False
+ * /coupled_mode: CONTROL
+ * /deskew/T_imu_lidar_rotation_row_major: [-1.0, 0.0, 0.0, ...
+ * /deskew/T_imu_lidar_translation_m: [-0.006253, 0.011...
+ * /deskew/expected_lidar_frame: os1_lidar
+ * /deskew/experimental_history_nominal_consistent_enable: False
+ * /deskew/experimental_scan_local_imu_enable: False
+ * /deskew/history_keep_sec: 2.0
+ * /deskew/input_subscriber_queue_size: 100
+ * /deskew/input_topic: /newer_college/ra...
+ * /deskew/max_imu_gap_sec: 0.02
+ * /deskew/max_pending_clouds: 8
+ * /deskew/max_scan_duration_sec: 0.15
+ * /deskew/mode: ekf_imu_fastlio
+ * /deskew/output_topic: /newer_college/de...
+ * /deskew/point_time_field: time
+ * /deskew/reference_time: start
+ * /deskew/state_frame: imu
+ * /dog_prior_map_ndt/coupled_causal_record_directory: 
+ * /dog_prior_map_ndt/coupled_causal_record_only_enable: False
+ * /dog_prior_map_ndt/coupled_mode: CONTROL
+ * /dog_prior_map_ndt/visual_geometry_csv: 
+ * /dog_prior_map_ndt/visual_initial_guess_csv: 
+ * /dog_prior_map_ndt/visual_initial_guess_enable: False
+ * /experiment/initialization_arm: C0
+ * /experiment/initialization_contract: CONDITIONAL_BASE_...
+ * /experiment/initialization_mode: ANCHOR_REFERENCE_...
+ * /experiment/window: W1
+ * /filter/experimental_covariance_stability_enable: False
+ * /filter/experimental_square_root_covariance_enable: False
+ * /filter/init_bias_std: 0.05
+ * /filter/init_pos_std: 0.5
+ * /filter/init_rot_std_deg: 5.0
+ * /filter/init_vel_std: 0.5
+ * /frames/base_frame: os1_lidar
+ * /frames/map_frame: newer_college_map
+ * /fusion/both_degraded_enter_frames: 3
+ * /fusion/degenerated_eigen_ratio: 0.03
+ * /fusion/directional_enable: False
+ * /fusion/lidar_degraded_enter_frames: 5
+ * /fusion/recovery_exit_frames: 5
+ * /fusion/state_machine_enable: False
+ * /fusion/visual_assisted_enter_frames: 3
+ * /imu/acc_bias_noise: 0.0001
+ * /imu/acc_noise: 2.0
+ * /imu/gravity: 9.80665
+ * /imu/gyro_bias_noise: 0.0001
+ * /imu/gyro_noise: 0.1
+ * /imu/history_keep_sec: 2.0
+ * /imu/init_imu_samples: 200
+ * /imu/initialize_gravity_from_imu: False
+ * /imu/initialize_gyro_bias_from_imu: False
+ * /imu/max_dt: 0.05
+ * /imu/midpoint_interval_input_enable: True
+ * /imu/publish_high_rate: True
+ * /imu/publish_imu_propagate_alias: True
+ * /imu/use_acc_for_position: True
+ * /imu/velocity_damping: 0.98
+ * /initialization/accel_bias_imu_mps2: [0.0, 0.0, 0.0]
+ * /initialization/boundary_imu_accel_mps2: [-0.5243301635742...
+ * /initialization/boundary_imu_gyro_radps: [-0.1241033067976...
+ * /initialization/boundary_imu_stamp_nsec: 78961159
+ * /initialization/boundary_imu_stamp_sec: 1583836851
+ * /initialization/explicit_state_enable: True
+ * /initialization/gravity_map_mps2: [0.0, 0.0, -9.80665]
+ * /initialization/gyro_bias_imu_radps: [0.0, 0.0, 0.0]
+ * /initialization/map_T_imu_rotation_row_major: [0.84107072961670...
+ * /initialization/map_T_imu_translation_m: [47.9616260249062...
+ * /initialization/ndt_seed_enable: True
+ * /initialization/ndt_seed_map_T_lidar_rotation_row_major: [-0.8410707296167...
+ * /initialization/ndt_seed_map_T_lidar_translation_m: [47.9607300709185...
+ * /initialization/state_stamp_nsec: 78989056
+ * /initialization/state_stamp_sec: 1583836851
+ * /initialization/velocity_map_mps: [0.0, 0.0, 0.0]
+ * /lidar_update/T_imu_lidar_rotation_row_major: [-1.0, 0.0, 0.0, ...
+ * /lidar_update/deskew_enable: False
+ * /lidar_update/enable: False
+ * /lidar_update/information_diagnostic_enable: False
+ * /lidar_update/lidar_subscriber_queue_size: 100
+ * /lidar_update/local_imu_gyro_to_lidar_enable: True
+ * /lidar_update/local_imu_rotation_prior_enable: True
+ * /lidar_update/ndt_max_iterations: 40
+ * /lidar_update/ndt_max_source_points: 1400
+ * /lidar_update/ndt_max_target_points: 0
+ * /lidar_update/ndt_resolution: 0.8
+ * /lidar_update/ndt_source_voxel_size: 0.25
+ * /lidar_update/ndt_source_voxel_z_size: 0.25
+ * /lidar_update/ndt_step_limit_enable: True
+ * /lidar_update/ndt_step_limit_max_rotation_deg: 5.0
+ * /lidar_update/ndt_step_limit_max_translation: 0.5
+ * /lidar_update/ndt_step_size: 0.08
+ * /lidar_update/ndt_target_voxel_size: 0.15
+ * /lidar_update/ndt_target_voxel_z_size: 0.15
+ * /lidar_update/ndt_transformation_epsilon: 0.001
+ * /lidar_update/offset_time_scale: 1e-09
+ * /lidar_update/pending_lidar_max_frames: 50
+ * /lidar_update/scan_reference_time: start
+ * /map/load_in_ekf: False
+ * /map/local_hysteresis_margin_m: 30.0
+ * /map/local_safety_margin_m: 10.0
+ * /map/pcd_fallback_path: 
+ * /map/tile_manifest_path: /media/jian/HIKVI...
+ * /map/voxel_size: 0.15
+ * /map/voxel_z_size: 0.15
+ * /mature_integration/enable: False
+ * /mature_integration/skf_visual_measurement_csv: 
+ * /mature_visual/enable: False
+ * /mature_visual/time_adapter_enable: False
+ * /ndt_observation/apply_ratio: 1.0
+ * /ndt_observation/enable: True
+ * /ndt_observation/future_deferral_enable: False
+ * /ndt_observation/future_deferral_max_queue: 20
+ * /ndt_observation/future_deferral_max_sec: 0.01
+ * /ndt_observation/max_rotation_correction_deg: 20.0
+ * /ndt_observation/max_translation_correction: 2.0
+ * /ndt_observation/oosm_enable: True
+ * /ndt_observation/oosm_fixed_lag_enable: False
+ * /ndt_observation/oosm_fixed_lag_max_queue: 64
+ * /ndt_observation/oosm_fixed_lag_sec: 0.15
+ * /ndt_observation/oosm_max_alignment_sec: 0.02
+ * /ndt_observation/roll_pitch_apply_ratio: 1.0
+ * /ndt_observation/velocity_blend: 0.6
+ * /ndt_observation/z_apply_ratio: 1.0
+ * /newer_college_local_map_input/cloud_topic: /newer_college/ra...
+ * /newer_college_local_map_input/diagnostics_topic: /dog_livo/diagnos...
+ * /newer_college_local_map_input/ekf_corrected_topic: /dog_livo/odom_co...
+ * /newer_college_local_map_input/ekf_high_rate_topic: /dog_livo/odom_hi...
+ * /newer_college_local_map_input/expected_boundary_imu_stamp_ns: 1583836851078961159
+ * /newer_college_local_map_input/imu_csv: /home/jian/livox_...
+ * /newer_college_local_map_input/imu_frame: os1_imu
+ * /newer_college_local_map_input/imu_replay_start_stamp_ns: 1583836851078989056
+ * /newer_college_local_map_input/imu_topic: /newer_college/imu
+ * /newer_college_local_map_input/lidar_frame: os1_lidar
+ * /newer_college_local_map_input/ndt_imu_watermark_topic: /newer_college/nd...
+ * /newer_college_local_map_input/ndt_odom_topic: /dog_livo/ndt_odom
+ * /newer_college_local_map_input/r23_admission_ack_enable: True
+ * /newer_college_local_map_input/readiness_timeout_sec: 180.0
+ * /newer_college_local_map_input/receipt_csv_path: /home/jian/livox_...
+ * /newer_college_local_map_input/scan_ack_timeout_sec: 120.0
+ * /newer_college_local_map_input/scan_count: 20
+ * /newer_college_local_map_input/scan_directory: /home/jian/livox_...
+ * /newer_college_local_map_input/start_stamp_ns: 1583836851179232512
+ * /newer_college_local_map_input/trajectory_csv_path: /home/jian/livox_...
+ * /newer_college_prior_map_visualization/file_name: /media/jian/HIKVI...
+ * /newer_college_prior_map_visualization/frame_id: newer_college_map
+ * /newer_college_prior_map_visualization/interval: 0.0
+ * /newer_college_prior_map_visualization/latch: True
+ * /output/debug_interval_sec: 2.0
+ * /output/deferred_csv_path: 
+ * /output/diagnostic_determinism_enable: True
+ * /output/ekf_prediction_diagnostics_csv_path: /home/jian/livox_...
+ * /output/experimental_covariance_audit_csv_path: 
+ * /output/experimental_square_root_diagnostics_prefix: 
+ * /output/geometry_diagnostics_csv_path: /home/jian/livox_...
+ * /output/imu_deskew_csv_path: /home/jian/livox_...
+ * /output/imu_watermark_topic: /newer_college/nd...
+ * /output/local_map_diagnostics_csv_path: /home/jian/livox_...
+ * /output/mature_integration_diagnostics_csv_path: 
+ * /output/ndt_determinism_csv_path: /home/jian/livox_...
+ * /output/ndt_diagnostics_csv_path: /home/jian/livox_...
+ * /output/ndt_publish_tf: False
+ * /output/oosm_csv_path: /home/jian/livox_...
+ * /output/oosm_fixed_lag_csv_path: 
+ * /output/path_max_length: 5000
+ * /output/path_publish_rate_hz: 1.0
+ * /output/path_sample_rate_hz: 2.0
+ * /output/print_debug: True
+ * /output/publish_diagnostics: True
+ * /output/publish_filtered_points: True
+ * /output/publish_local_target: True
+ * /output/publish_path: True
+ * /output/publish_tf: True
+ * /output/r23_lineage_csv: /home/jian/livox_...
+ * /output/runtime_csv_path: /home/jian/livox_...
+ * /output/skf_measurement_csv_path: 
+ * /output/skf_update_diagnostics_csv_path: 
+ * /p41/geometry_gate_enable: True
+ * /p41/geometry_gate_max_median_m: 1.0
+ * /p41/geometry_gate_max_p90_m: 3.0
+ * /p41/geometry_gate_min_overlap_05: 0.5
+ * /research/r23_enable: True
+ * /research/r23_policy: BASELINE
+ * /rosdistro: noetic
+ * /rosversion: 1.17.4
+ * /topics/diagnostics: /dog_livo/diagnos...
+ * /topics/filtered_points: /dog_livo/filtere...
+ * /topics/imu: /newer_college/imu
+ * /topics/imu_propagate: /LIVO2/imu_propagate
+ * /topics/lidar: /newer_college/de...
+ * /topics/lidar_msg_type: pointcloud2
+ * /topics/local_target: /newer_college/lo...
+ * /topics/ndt_odom: /dog_livo/ndt_odom
+ * /topics/ndt_path: /dog_livo/ndt_path
+ * /topics/ndt_pose: /dog_livo/ndt_pose
+ * /topics/odom_corrected: /dog_livo/odom_co...
+ * /topics/odom_high_rate: /dog_livo/odom_hi...
+ * /topics/path_corrected: /dog_livo/path_co...
+ * /topics/path_high_rate: /dog_livo/path_hi...
+ * /topics/points_aligned: /newer_college/po...
+ * /topics/skf_visual_measurement: /dog_livo/skf_vis...
+ * /use_sim_time: False
+ * /visual_initial_guess_enable: False
+
+NODES
+  /
+    dog_prior_map_ekf (dog_prior_map_localization/dog_prior_map_ekf_node_cpp)
+    dog_prior_map_ndt (dog_prior_map_localization/dog_prior_map_ndt_node_cpp)
+    newer_college_local_map_input (dog_prior_map_localization/newer_college_sequence_publisher)
+    newer_college_local_map_rviz (rviz/rviz)
+    newer_college_prior_map_visualization (pcl_ros/pcd_to_pointcloud)
+[WARN] [1792767491.377552560]: [DogPriorMap NDT] using explicit startup pose seed (diagnostic/Oracle if configured): p=(47.960730 -105.581367 -1.058318)
+[INFO] [1792767491.782926529]: P44 ready: mode=CONTROL init=CONDITIONAL_BASE_FRAME/ORACLE_START_ONLY canonical_scans=15301 ignored_noncanonical=1 selected=20 first_ns=1583836851179232512 last_ns=1583836853077814784
+[INFO] [1792767491.783893697]: IMU replay start_ns=1583836851078989056 boundary_ns=1583836851078961159 admission_ack=1
+[INFO] [1792767493.094950064]: P44 frame=1/20 stamp_ns=1583836851179232512 points=65536 ndt_ack=1 converged=1 iterations=5 align_ms=400.340 imu_watermark_ns=1583836851288931675 correction_ack=1
+[INFO] [1792767493.173648757]: P44 frame=2/20 stamp_ns=1583836851279371008 points=65536 ndt_ack=1 converged=1 iterations=5 align_ms=24.735 imu_watermark_ns=1583836851388922683 correction_ack=1
+[INFO] [1792767493.244216889]: P44 frame=3/20 stamp_ns=1583836851379830016 points=65536 ndt_ack=1 converged=1 iterations=3 align_ms=19.176 imu_watermark_ns=1583836851488923581 correction_ack=1
+[INFO] [1792767493.351309267]: P44 frame=4/20 stamp_ns=1583836851479714560 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=13.825 imu_watermark_ns=1583836851588922928 correction_ack=1
+[INFO] [1792767493.460500880]: P44 frame=5/20 stamp_ns=1583836851579522304 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=14.313 imu_watermark_ns=1583836851688954765 correction_ack=1
+[INFO] [1792767493.566562533]: P44 frame=6/20 stamp_ns=1583836851679073280 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=14.740 imu_watermark_ns=1583836851778911708 correction_ack=1
+[INFO] [1792767493.668429070]: P44 frame=7/20 stamp_ns=1583836851778675968 points=65536 ndt_ack=1 converged=1 iterations=1 align_ms=10.881 imu_watermark_ns=1583836851878897475 correction_ack=1
+[INFO] [1792767493.774411942]: P44 frame=8/20 stamp_ns=1583836851878200832 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=16.437 imu_watermark_ns=1583836851978882864 correction_ack=1
+[INFO] [1792767493.878110569]: P44 frame=9/20 stamp_ns=1583836851978206720 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=13.075 imu_watermark_ns=1583836852078875482 correction_ack=1
+[INFO] [1792767493.938887652]: P44 frame=10/20 stamp_ns=1583836852078276608 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=13.136 imu_watermark_ns=1583836852178859869 correction_ack=1
+[INFO] [1792767494.037245757]: P44 frame=11/20 stamp_ns=1583836852178870016 points=65536 ndt_ack=1 converged=1 iterations=1 align_ms=9.536 imu_watermark_ns=1583836852288863596 correction_ack=1
+[INFO] [1792767494.141745958]: P44 frame=12/20 stamp_ns=1583836852279028992 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=13.903 imu_watermark_ns=1583836852388845805 correction_ack=1
+[INFO] [1792767494.239913744]: P44 frame=13/20 stamp_ns=1583836852379376384 points=65536 ndt_ack=1 converged=1 iterations=1 align_ms=10.188 imu_watermark_ns=1583836852488843273 correction_ack=1
+[INFO] [1792767494.353161279]: P44 frame=14/20 stamp_ns=1583836852479659008 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=15.118 imu_watermark_ns=1583836852588833911 correction_ack=1
+[INFO] [1792767494.462307773]: P44 frame=15/20 stamp_ns=1583836852579887872 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=14.505 imu_watermark_ns=1583836852688821378 correction_ack=1
+[INFO] [1792767494.563975471]: P44 frame=16/20 stamp_ns=1583836852679609344 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=14.040 imu_watermark_ns=1583836852788845485 correction_ack=1
+[INFO] [1792767494.663578506]: P44 frame=17/20 stamp_ns=1583836852779304192 points=65536 ndt_ack=1 converged=1 iterations=1 align_ms=9.881 imu_watermark_ns=1583836852878804338 correction_ack=1
+[INFO] [1792767494.771397239]: P44 frame=18/20 stamp_ns=1583836852878757120 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=16.284 imu_watermark_ns=1583836852978800385 correction_ack=1
+[INFO] [1792767494.879196346]: P44 frame=19/20 stamp_ns=1583836852978163456 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=16.120 imu_watermark_ns=1583836853078790534 correction_ack=1
+[INFO] [1792767494.989118923]: P44 frame=20/20 stamp_ns=1583836853077814784 points=65536 ndt_ack=1 converged=1 iterations=2 align_ms=14.582 imu_watermark_ns=1583836853178779162 correction_ack=1
+[INFO] [1792767494.989163203]: P44 complete: published=20 acknowledged=20 EKF_high_rate_rows=1583836853178779162 NDT_odom_rows=1583836853178779162 EKF_corrected_rows=20

@@ -1,0 +1,74 @@
+--------------------------------------------------------------------------------
+Node [/newer_college_local_map_rviz]
+Publications: 
+ * /rosout [rosgraph_msgs/Log]
+
+Subscriptions: 
+ * /dog_livo/ndt_path [nav_msgs/Path]
+ * /dog_livo/ndt_pose [geometry_msgs/PoseStamped]
+ * /dog_livo/path_corrected [nav_msgs/Path]
+ * /dog_livo/path_high_rate [nav_msgs/Path]
+ * /newer_college/deskewed_points [sensor_msgs/PointCloud2]
+ * /newer_college/local_ndt_target [sensor_msgs/PointCloud2]
+ * /newer_college/points_aligned [sensor_msgs/PointCloud2]
+ * /newer_college/prior_map [sensor_msgs/PointCloud2]
+ * /tf [tf2_msgs/TFMessage]
+ * /tf_static [tf2_msgs/TFMessage]
+
+Services: 
+ * /newer_college_local_map_rviz/get_loggers
+ * /newer_college_local_map_rviz/load_config
+ * /newer_college_local_map_rviz/load_config_discarding_changes
+ * /newer_college_local_map_rviz/reload_shaders
+ * /newer_college_local_map_rviz/save_config
+ * /newer_college_local_map_rviz/set_logger_level
+
+
+contacting node http://127.0.0.1:45169/ ...
+Pid: 511158
+Connections:
+ * topic: /rosout
+    * to: /rosout
+    * direction: outbound (36261 - 127.0.0.1:50440) [36]
+    * transport: TCPROS
+ * topic: /tf
+    * to: /dog_prior_map_ekf (http://127.0.0.1:35183/)
+    * direction: inbound (50440 - 127.0.0.1:58033) [50]
+    * transport: TCPROS
+ * topic: /tf
+    * to: /dog_prior_map_ndt (http://127.0.0.1:35825/)
+    * direction: inbound (42974 - 127.0.0.1:51919) [51]
+    * transport: TCPROS
+ * topic: /dog_livo/path_high_rate
+    * to: /dog_prior_map_ekf (http://127.0.0.1:35183/)
+    * direction: inbound (50448 - 127.0.0.1:58033) [52]
+    * transport: TCPROS
+ * topic: /newer_college/points_aligned
+    * to: /dog_prior_map_ndt (http://127.0.0.1:35825/)
+    * direction: inbound (42992 - 127.0.0.1:51919) [53]
+    * transport: TCPROS
+ * topic: /dog_livo/ndt_pose
+    * to: /dog_prior_map_ndt (http://127.0.0.1:35825/)
+    * direction: inbound (43018 - 127.0.0.1:51919) [37]
+    * transport: TCPROS
+ * topic: /newer_college/prior_map
+    * to: /newer_college_prior_map_visualization (http://127.0.0.1:37639/)
+    * direction: inbound (56404 - 127.0.0.1:46289) [44]
+    * transport: TCPROS
+ * topic: /dog_livo/ndt_path
+    * to: /dog_prior_map_ndt (http://127.0.0.1:35825/)
+    * direction: inbound (43024 - 127.0.0.1:51919) [38]
+    * transport: TCPROS
+ * topic: /newer_college/deskewed_points
+    * to: /dog_prior_map_ekf (http://127.0.0.1:35183/)
+    * direction: inbound (50472 - 127.0.0.1:58033) [39]
+    * transport: TCPROS
+ * topic: /newer_college/local_ndt_target
+    * to: /dog_prior_map_ndt (http://127.0.0.1:35825/)
+    * direction: inbound (43028 - 127.0.0.1:51919) [40]
+    * transport: TCPROS
+ * topic: /dog_livo/path_corrected
+    * to: /dog_prior_map_ekf (http://127.0.0.1:35183/)
+    * direction: inbound (50486 - 127.0.0.1:58033) [41]
+    * transport: TCPROS
+

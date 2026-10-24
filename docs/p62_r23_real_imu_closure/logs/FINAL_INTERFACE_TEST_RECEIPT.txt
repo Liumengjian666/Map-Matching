@@ -1,0 +1,7 @@
+Final direct invocation, both process exit codes 0; no ROS or NDT align.
+./devel/lib/dog_prior_map_localization/causal_pose_prediction_test
+CAUSAL_BODY_TWIST_PREDICTION_CONTRACT_PASS
+./devel/lib/dog_prior_map_localization/frame_conversion_contract_test
+FRAME_CONVERSION_AND_TWIST_CONTRACT_PASS
+identity, pure_translation, pure_rotation, combined_rotation_translation, ninety_degree_yaw, nonzero_lever_arm, twist_child_lidar, gyro_imu_to_lidar: PASS
+Unused contract fields are emitted as nan by this existing test formatter; not invalid output poses.

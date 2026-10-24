@@ -1,0 +1,16 @@
+{
+  "pid": 511073,
+  "command": [
+    "bash",
+    "--noprofile",
+    "--norc",
+    "-c",
+    "source /home/jian/livox_ws/p62_r23_real_imu_closure_ws/devel/setup.bash && exec roslaunch dog_prior_map_localization p62_r23_integrated_localization.launch strategy:=BASELINE scan_count:=20 rviz:=true output_dir:=/home/jian/livox_ws/p62_r23_real_imu_data/rviz_baseline_20_01"
+  ],
+  "strategy": "BASELINE",
+  "scan_count": 20,
+  "purpose": "visual acceptance only, not formal accuracy comparison",
+  "extra_align_budget": 0,
+  "code_sha": "028bdf40e19b0c0ed95b37ec4a28b7b5c6e132cc",
+  "binary_ndt_sha256": "f67fce2c457a5eb1687064c95669eb4696f90ff892005a79b6cb24582433c889"
+}

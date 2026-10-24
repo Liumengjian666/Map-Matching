@@ -116,5 +116,6 @@
         args="-d $(arg rviz_config)"
         if="$(arg rviz)" output="screen">
     <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+    <env name="DISABLE_ROS1_EOL_WARNINGS" value="1" />
   </node>
 </launch>

@@ -1,0 +1,2027 @@
+{
+  "task": "P62-R23-REAL-IMU-LOCALIZATION-CLOSURE",
+  "formal_run_count": 10,
+  "nominal_full_calls": 420,
+  "extra_full_calls": 12,
+  "total_formal_full_calls": 432,
+  "reference_type": "MAP_ANCHORED_BENCHMARK_REFERENCE; CONDITIONAL_BASE",
+  "reference_sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+  "native_output_seal_sha256": "a17ec6d1c0a902a1e3771e2cdabccdc23c266261dff6d1608a3763230ec77c70",
+  "trajectories": {
+    "W1/C0/BASELINE": {
+      "samples": 60,
+      "reference_relative_errors": {
+        "IMU_EKF_PREDICTION": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.20890439252826618,
+            "p95": 0.3164178183688925,
+            "max": 0.3354656509784475,
+            "rmse": 0.21480502966389656,
+            "median": 0.20387356987555516
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 2.1882533018739845,
+            "p95": 3.141649487898454,
+            "max": 3.969444398941302,
+            "rmse": 2.2673125704420136,
+            "median": 2.110615319294515
+          }
+        },
+        "NDT_NOMINAL_RAW": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.17178045640581324,
+            "p95": 0.20982180868360353,
+            "max": 0.24301687661435678,
+            "rmse": 0.1742442678593591,
+            "median": 0.17393051325076103
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 1.9293997384298076,
+            "p95": 2.8923647455291714,
+            "max": 3.823982248086131,
+            "rmse": 2.0146262340485968,
+            "median": 1.8273957420071951
+          }
+        },
+        "NDT_SELECTED_RAW": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.17178045640581324,
+            "p95": 0.20982180868360353,
+            "max": 0.24301687661435678,
+            "rmse": 0.1742442678593591,
+            "median": 0.17393051325076103
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 1.9293997384298076,
+            "p95": 2.8923647455291714,
+            "max": 3.823982248086131,
+            "rmse": 2.0146262340485968,
+            "median": 1.8273957420071951
+          }
+        },
+        "NDT_PUBLISHED": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.17178045640581324,
+            "p95": 0.20982180868360353,
+            "max": 0.24301687661435678,
+            "rmse": 0.1742442678593591,
+            "median": 0.17393051325076103
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 1.9293997384298076,
+            "p95": 2.8923647455291714,
+            "max": 3.823982248086131,
+            "rmse": 2.0146262340485968,
+            "median": 1.8273957420071951
+          }
+        },
+        "EKF_CAUSAL_OUTPUT": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.18769632361423758,
+            "p95": 0.25830167337973964,
+            "max": 0.3248708342575638,
+            "rmse": 0.19197893661358703,
+            "median": 0.1861615678790969
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 2.0499872870608877,
+            "p95": 2.829333012980216,
+            "max": 3.690048353082187,
+            "rmse": 2.1152871780356697,
+            "median": 1.9920349788495004
+          }
+        }
+      },
+      "nominal_ndt_attempts": 60,
+      "nominal_ndt_converged": 60,
+      "nominal_ndt_convergence_rate": 1.0,
+      "all_native_converged": 60,
+      "pre_ndt_rejected_frames": 0,
+      "pre_ndt_guard_rejections": 0,
+      "rejected_after_native_attempt_frames": 0,
+      "all_native_calls": 60,
+      "extra_full_ndt": 0,
+      "basic_quality_failures": 0,
+      "nominal_basic_quality_failure_rate": 0.0,
+      "absolute_quality_rejections_after_basic_pass": 0,
+      "quality_events": 0,
+      "all_scan_quality_events_including_pre_ndt_guard": 0,
+      "map_observations_published": 60,
+      "map_observations_rejected": 0,
+      "relative_only_admissions": 0,
+      "selected_extra_candidates": 0,
+      "imu_high_rate_propagations": 611,
+      "imu_raw_message_count": 611,
+      "imu_propagations_including_oosm_replay": 1269,
+      "ndt_callbacks_into_ekf": 60,
+      "ndt_corrections_applied": 60,
+      "oosm_results": {
+        "APPLIED": 60
+      },
+      "replayed_imu_count": 658,
+      "oosm_alignment_error_ms": {
+        "n": 60,
+        "mean": 4.526567459106445,
+        "p95": 9.834706783294678,
+        "max": 9.990692138671875
+      },
+      "no_map_observation_frames": 0,
+      "longest_no_map_run": 0,
+      "no_map_frames_with_real_imu_state_time_advancing": 0,
+      "ekf_high_error_frames": 0,
+      "longest_high_error_run": 0,
+      "no_map_ekf_translation_m": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null,
+        "rmse": null,
+        "median": null
+      },
+      "no_map_ekf_rotation_deg": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null,
+        "rmse": null,
+        "median": null
+      },
+      "ndt_callback_wall_ms": {
+        "n": 60,
+        "mean": 50.03035465876261,
+        "p95": 46.47878408432007,
+        "max": 1004.5664310455322
+      },
+      "event_frame_callback_ms": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "scan_input_to_final_ack_ms": {
+        "n": 60,
+        "mean": 72.64635562896729,
+        "p95": 76.8318772315979,
+        "max": 1031.3973426818848
+      },
+      "process_wall_seconds": 9.248721176001709,
+      "ndt_node_peak_rss_KiB": 381148,
+      "ekf_node_peak_rss_KiB": 21968,
+      "simultaneous_node_peak_rss_KiB": 403044,
+      "actual_target_hashes": [
+        "4470398029999464252"
+      ],
+      "actual_target_points": [
+        2380375
+      ],
+      "native_nominal_score": {
+        "n": 60,
+        "mean": 2.4423385588327804,
+        "p95": 2.479112049529841,
+        "max": 2.5271688073056247
+      },
+      "native_nominal_overlap": {
+        "n": 60,
+        "mean": 0.9883266826985665,
+        "p95": 0.9944674965421854,
+        "max": 0.9945054945054945
+      },
+      "coverage_consistency_mean": {
+        "n": 60,
+        "mean": 0.06767926089025944,
+        "p95": 0.09088488359682796,
+        "max": 0.102922385713467
+      },
+      "recovery_success_not_equated_to_admission": true
+    },
+    "W1/C0/MULTISTART_C": {
+      "samples": 60,
+      "reference_relative_errors": {
+        "IMU_EKF_PREDICTION": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.20890439252826618,
+            "p95": 0.3164178183688925,
+            "max": 0.3354656509784475,
+            "rmse": 0.21480502966389656,
+            "median": 0.20387356987555516
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 2.1882533018739845,
+            "p95": 3.141649487898454,
+            "max": 3.969444398941302,
+            "rmse": 2.2673125704420136,
+            "median": 2.110615319294515
+          }
+        },
+        "NDT_NOMINAL_RAW": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.17178045640581324,
+            "p95": 0.20982180868360353,
+            "max": 0.24301687661435678,
+            "rmse": 0.1742442678593591,
+            "median": 0.17393051325076103
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 1.9293997384298076,
+            "p95": 2.8923647455291714,
+            "max": 3.823982248086131,
+            "rmse": 2.0146262340485968,
+            "median": 1.8273957420071951
+          }
+        },
+        "NDT_SELECTED_RAW": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.17178045640581324,
+            "p95": 0.20982180868360353,
+            "max": 0.24301687661435678,
+            "rmse": 0.1742442678593591,
+            "median": 0.17393051325076103
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 1.9293997384298076,
+            "p95": 2.8923647455291714,
+            "max": 3.823982248086131,
+            "rmse": 2.0146262340485968,
+            "median": 1.8273957420071951
+          }
+        },
+        "NDT_PUBLISHED": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.17178045640581324,
+            "p95": 0.20982180868360353,
+            "max": 0.24301687661435678,
+            "rmse": 0.1742442678593591,
+            "median": 0.17393051325076103
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 1.9293997384298076,
+            "p95": 2.8923647455291714,
+            "max": 3.823982248086131,
+            "rmse": 2.0146262340485968,
+            "median": 1.8273957420071951
+          }
+        },
+        "EKF_CAUSAL_OUTPUT": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.18769632361423758,
+            "p95": 0.25830167337973964,
+            "max": 0.3248708342575638,
+            "rmse": 0.19197893661358703,
+            "median": 0.1861615678790969
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 2.0499872870608877,
+            "p95": 2.829333012980216,
+            "max": 3.690048353082187,
+            "rmse": 2.1152871780356697,
+            "median": 1.9920349788495004
+          }
+        }
+      },
+      "nominal_ndt_attempts": 60,
+      "nominal_ndt_converged": 60,
+      "nominal_ndt_convergence_rate": 1.0,
+      "all_native_converged": 60,
+      "pre_ndt_rejected_frames": 0,
+      "pre_ndt_guard_rejections": 0,
+      "rejected_after_native_attempt_frames": 0,
+      "all_native_calls": 60,
+      "extra_full_ndt": 0,
+      "basic_quality_failures": 0,
+      "nominal_basic_quality_failure_rate": 0.0,
+      "absolute_quality_rejections_after_basic_pass": 0,
+      "quality_events": 0,
+      "all_scan_quality_events_including_pre_ndt_guard": 0,
+      "map_observations_published": 60,
+      "map_observations_rejected": 0,
+      "relative_only_admissions": 0,
+      "selected_extra_candidates": 0,
+      "imu_high_rate_propagations": 611,
+      "imu_raw_message_count": 611,
+      "imu_propagations_including_oosm_replay": 1269,
+      "ndt_callbacks_into_ekf": 60,
+      "ndt_corrections_applied": 60,
+      "oosm_results": {
+        "APPLIED": 60
+      },
+      "replayed_imu_count": 658,
+      "oosm_alignment_error_ms": {
+        "n": 60,
+        "mean": 4.526567459106445,
+        "p95": 9.834706783294678,
+        "max": 9.990692138671875
+      },
+      "no_map_observation_frames": 0,
+      "longest_no_map_run": 0,
+      "no_map_frames_with_real_imu_state_time_advancing": 0,
+      "ekf_high_error_frames": 0,
+      "longest_high_error_run": 0,
+      "no_map_ekf_translation_m": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null,
+        "rmse": null,
+        "median": null
+      },
+      "no_map_ekf_rotation_deg": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null,
+        "rmse": null,
+        "median": null
+      },
+      "ndt_callback_wall_ms": {
+        "n": 60,
+        "mean": 49.60895776748657,
+        "p95": 43.305599689483635,
+        "max": 1045.3605651855469
+      },
+      "event_frame_callback_ms": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "scan_input_to_final_ack_ms": {
+        "n": 60,
+        "mean": 72.17153708140056,
+        "p95": 66.52342081069946,
+        "max": 1072.0601081848145
+      },
+      "process_wall_seconds": 9.406660927983467,
+      "ndt_node_peak_rss_KiB": 380184,
+      "ekf_node_peak_rss_KiB": 22752,
+      "simultaneous_node_peak_rss_KiB": 402328,
+      "actual_target_hashes": [
+        "4470398029999464252"
+      ],
+      "actual_target_points": [
+        2380375
+      ],
+      "native_nominal_score": {
+        "n": 60,
+        "mean": 2.4423385588327804,
+        "p95": 2.479112049529841,
+        "max": 2.5271688073056247
+      },
+      "native_nominal_overlap": {
+        "n": 60,
+        "mean": 0.9883266826985665,
+        "p95": 0.9944674965421854,
+        "max": 0.9945054945054945
+      },
+      "coverage_consistency_mean": {
+        "n": 60,
+        "mean": 0.06767926089025944,
+        "p95": 0.09088488359682796,
+        "max": 0.102922385713467
+      },
+      "recovery_success_not_equated_to_admission": true
+    },
+    "W1/C0/RELATIVE_D_EXPERIMENTAL": {
+      "samples": 60,
+      "reference_relative_errors": {
+        "IMU_EKF_PREDICTION": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.20890439252826618,
+            "p95": 0.3164178183688925,
+            "max": 0.3354656509784475,
+            "rmse": 0.21480502966389656,
+            "median": 0.20387356987555516
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 2.1882533018739845,
+            "p95": 3.141649487898454,
+            "max": 3.969444398941302,
+            "rmse": 2.2673125704420136,
+            "median": 2.110615319294515
+          }
+        },
+        "NDT_NOMINAL_RAW": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.17178045640581324,
+            "p95": 0.20982180868360353,
+            "max": 0.24301687661435678,
+            "rmse": 0.1742442678593591,
+            "median": 0.17393051325076103
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 1.9293997384298076,
+            "p95": 2.8923647455291714,
+            "max": 3.823982248086131,
+            "rmse": 2.0146262340485968,
+            "median": 1.8273957420071951
+          }
+        },
+        "NDT_SELECTED_RAW": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.17178045640581324,
+            "p95": 0.20982180868360353,
+            "max": 0.24301687661435678,
+            "rmse": 0.1742442678593591,
+            "median": 0.17393051325076103
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 1.9293997384298076,
+            "p95": 2.8923647455291714,
+            "max": 3.823982248086131,
+            "rmse": 2.0146262340485968,
+            "median": 1.8273957420071951
+          }
+        },
+        "NDT_PUBLISHED": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.17178045640581324,
+            "p95": 0.20982180868360353,
+            "max": 0.24301687661435678,
+            "rmse": 0.1742442678593591,
+            "median": 0.17393051325076103
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 1.9293997384298076,
+            "p95": 2.8923647455291714,
+            "max": 3.823982248086131,
+            "rmse": 2.0146262340485968,
+            "median": 1.8273957420071951
+          }
+        },
+        "EKF_CAUSAL_OUTPUT": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.18769632361423758,
+            "p95": 0.25830167337973964,
+            "max": 0.3248708342575638,
+            "rmse": 0.19197893661358703,
+            "median": 0.1861615678790969
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 2.0499872870608877,
+            "p95": 2.829333012980216,
+            "max": 3.690048353082187,
+            "rmse": 2.1152871780356697,
+            "median": 1.9920349788495004
+          }
+        }
+      },
+      "nominal_ndt_attempts": 60,
+      "nominal_ndt_converged": 60,
+      "nominal_ndt_convergence_rate": 1.0,
+      "all_native_converged": 60,
+      "pre_ndt_rejected_frames": 0,
+      "pre_ndt_guard_rejections": 0,
+      "rejected_after_native_attempt_frames": 0,
+      "all_native_calls": 60,
+      "extra_full_ndt": 0,
+      "basic_quality_failures": 0,
+      "nominal_basic_quality_failure_rate": 0.0,
+      "absolute_quality_rejections_after_basic_pass": 0,
+      "quality_events": 0,
+      "all_scan_quality_events_including_pre_ndt_guard": 0,
+      "map_observations_published": 60,
+      "map_observations_rejected": 0,
+      "relative_only_admissions": 0,
+      "selected_extra_candidates": 0,
+      "imu_high_rate_propagations": 611,
+      "imu_raw_message_count": 611,
+      "imu_propagations_including_oosm_replay": 1269,
+      "ndt_callbacks_into_ekf": 60,
+      "ndt_corrections_applied": 60,
+      "oosm_results": {
+        "APPLIED": 60
+      },
+      "replayed_imu_count": 658,
+      "oosm_alignment_error_ms": {
+        "n": 60,
+        "mean": 4.526567459106445,
+        "p95": 9.834706783294678,
+        "max": 9.990692138671875
+      },
+      "no_map_observation_frames": 0,
+      "longest_no_map_run": 0,
+      "no_map_frames_with_real_imu_state_time_advancing": 0,
+      "ekf_high_error_frames": 0,
+      "longest_high_error_run": 0,
+      "no_map_ekf_translation_m": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null,
+        "rmse": null,
+        "median": null
+      },
+      "no_map_ekf_rotation_deg": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null,
+        "rmse": null,
+        "median": null
+      },
+      "ndt_callback_wall_ms": {
+        "n": 60,
+        "mean": 50.217509269714355,
+        "p95": 43.90194416046141,
+        "max": 1044.503927230835
+      },
+      "event_frame_callback_ms": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "scan_input_to_final_ack_ms": {
+        "n": 60,
+        "mean": 73.42117230097453,
+        "p95": 68.57433319091795,
+        "max": 1079.833745956421
+      },
+      "process_wall_seconds": 9.315403265005443,
+      "ndt_node_peak_rss_KiB": 380452,
+      "ekf_node_peak_rss_KiB": 21200,
+      "simultaneous_node_peak_rss_KiB": 401580,
+      "actual_target_hashes": [
+        "4470398029999464252"
+      ],
+      "actual_target_points": [
+        2380375
+      ],
+      "native_nominal_score": {
+        "n": 60,
+        "mean": 2.4423385588327804,
+        "p95": 2.479112049529841,
+        "max": 2.5271688073056247
+      },
+      "native_nominal_overlap": {
+        "n": 60,
+        "mean": 0.9883266826985665,
+        "p95": 0.9944674965421854,
+        "max": 0.9945054945054945
+      },
+      "coverage_consistency_mean": {
+        "n": 60,
+        "mean": 0.06767926089025944,
+        "p95": 0.09088488359682796,
+        "max": 0.102922385713467
+      },
+      "recovery_success_not_equated_to_admission": true
+    },
+    "W1/C3/BASELINE": {
+      "samples": 60,
+      "reference_relative_errors": {
+        "IMU_EKF_PREDICTION": {
+          "translation_m": {
+            "n": 60,
+            "mean": 5.693129775850498,
+            "p95": 15.761044491994488,
+            "max": 17.921507938157223,
+            "rmse": 7.594582371470221,
+            "median": 3.928577178328383
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 12.570508774124155,
+            "p95": 16.951955884507587,
+            "max": 17.74080011687244,
+            "rmse": 12.888750243094837,
+            "median": 11.996475377682394
+          }
+        },
+        "NDT_NOMINAL_RAW": {
+          "translation_m": {
+            "n": 0,
+            "mean": null,
+            "p95": null,
+            "max": null,
+            "rmse": null,
+            "median": null
+          },
+          "rotation_deg": {
+            "n": 0,
+            "mean": null,
+            "p95": null,
+            "max": null,
+            "rmse": null,
+            "median": null
+          }
+        },
+        "NDT_SELECTED_RAW": {
+          "translation_m": {
+            "n": 0,
+            "mean": null,
+            "p95": null,
+            "max": null,
+            "rmse": null,
+            "median": null
+          },
+          "rotation_deg": {
+            "n": 0,
+            "mean": null,
+            "p95": null,
+            "max": null,
+            "rmse": null,
+            "median": null
+          }
+        },
+        "NDT_PUBLISHED": {
+          "translation_m": {
+            "n": 0,
+            "mean": null,
+            "p95": null,
+            "max": null,
+            "rmse": null,
+            "median": null
+          },
+          "rotation_deg": {
+            "n": 0,
+            "mean": null,
+            "p95": null,
+            "max": null,
+            "rmse": null,
+            "median": null
+          }
+        },
+        "EKF_CAUSAL_OUTPUT": {
+          "translation_m": {
+            "n": 60,
+            "mean": 6.017908484582324,
+            "p95": 16.421686200718504,
+            "max": 18.755586697766333,
+            "rmse": 7.98642189306969,
+            "median": 4.190729335493826
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 12.72844837423537,
+            "p95": 17.16624573430163,
+            "max": 18.375466352365613,
+            "rmse": 13.05264912208735,
+            "median": 12.147986137609777
+          }
+        }
+      },
+      "nominal_ndt_attempts": 0,
+      "nominal_ndt_converged": 0,
+      "nominal_ndt_convergence_rate": null,
+      "all_native_converged": 0,
+      "pre_ndt_rejected_frames": 60,
+      "pre_ndt_guard_rejections": 60,
+      "rejected_after_native_attempt_frames": 0,
+      "all_native_calls": 0,
+      "extra_full_ndt": 0,
+      "basic_quality_failures": 0,
+      "nominal_basic_quality_failure_rate": null,
+      "absolute_quality_rejections_after_basic_pass": 0,
+      "quality_events": 0,
+      "all_scan_quality_events_including_pre_ndt_guard": 0,
+      "map_observations_published": 0,
+      "map_observations_rejected": 60,
+      "relative_only_admissions": 0,
+      "selected_extra_candidates": 0,
+      "imu_high_rate_propagations": 611,
+      "imu_raw_message_count": 611,
+      "imu_propagations_including_oosm_replay": 611,
+      "ndt_callbacks_into_ekf": 0,
+      "ndt_corrections_applied": 0,
+      "oosm_results": {},
+      "replayed_imu_count": 0,
+      "oosm_alignment_error_ms": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "no_map_observation_frames": 60,
+      "longest_no_map_run": 60,
+      "no_map_frames_with_real_imu_state_time_advancing": 60,
+      "ekf_high_error_frames": 60,
+      "longest_high_error_run": 60,
+      "no_map_ekf_translation_m": {
+        "n": 60,
+        "mean": 6.017908484582324,
+        "p95": 16.421686200718504,
+        "max": 18.755586697766333,
+        "rmse": 7.98642189306969,
+        "median": 4.190729335493826
+      },
+      "no_map_ekf_rotation_deg": {
+        "n": 60,
+        "mean": 12.72844837423537,
+        "p95": 17.16624573430163,
+        "max": 18.375466352365613,
+        "rmse": 13.05264912208735,
+        "median": 12.147986137609777
+      },
+      "ndt_callback_wall_ms": {
+        "n": 60,
+        "mean": 30.466763178507488,
+        "p95": 39.015531539916985,
+        "max": 601.6640663146973
+      },
+      "event_frame_callback_ms": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "scan_input_to_final_ack_ms": {
+        "n": 60,
+        "mean": 53.052568435668945,
+        "p95": 62.349247932434075,
+        "max": 626.5647411346436
+      },
+      "process_wall_seconds": 8.099606395990122,
+      "ndt_node_peak_rss_KiB": 256644,
+      "ekf_node_peak_rss_KiB": 23544,
+      "simultaneous_node_peak_rss_KiB": 280188,
+      "actual_target_hashes": [
+        "11658115094751181825"
+      ],
+      "actual_target_points": [
+        2297615
+      ],
+      "native_nominal_score": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "native_nominal_overlap": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "coverage_consistency_mean": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "recovery_success_not_equated_to_admission": true
+    },
+    "W1/C3/MULTISTART_C": {
+      "samples": 60,
+      "reference_relative_errors": {
+        "IMU_EKF_PREDICTION": {
+          "translation_m": {
+            "n": 60,
+            "mean": 5.693129775850498,
+            "p95": 15.761044491994488,
+            "max": 17.921507938157223,
+            "rmse": 7.594582371470221,
+            "median": 3.928577178328383
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 12.570508774124155,
+            "p95": 16.951955884507587,
+            "max": 17.74080011687244,
+            "rmse": 12.888750243094837,
+            "median": 11.996475377682394
+          }
+        },
+        "NDT_NOMINAL_RAW": {
+          "translation_m": {
+            "n": 0,
+            "mean": null,
+            "p95": null,
+            "max": null,
+            "rmse": null,
+            "median": null
+          },
+          "rotation_deg": {
+            "n": 0,
+            "mean": null,
+            "p95": null,
+            "max": null,
+            "rmse": null,
+            "median": null
+          }
+        },
+        "NDT_SELECTED_RAW": {
+          "translation_m": {
+            "n": 0,
+            "mean": null,
+            "p95": null,
+            "max": null,
+            "rmse": null,
+            "median": null
+          },
+          "rotation_deg": {
+            "n": 0,
+            "mean": null,
+            "p95": null,
+            "max": null,
+            "rmse": null,
+            "median": null
+          }
+        },
+        "NDT_PUBLISHED": {
+          "translation_m": {
+            "n": 0,
+            "mean": null,
+            "p95": null,
+            "max": null,
+            "rmse": null,
+            "median": null
+          },
+          "rotation_deg": {
+            "n": 0,
+            "mean": null,
+            "p95": null,
+            "max": null,
+            "rmse": null,
+            "median": null
+          }
+        },
+        "EKF_CAUSAL_OUTPUT": {
+          "translation_m": {
+            "n": 60,
+            "mean": 6.017908484582324,
+            "p95": 16.421686200718504,
+            "max": 18.755586697766333,
+            "rmse": 7.98642189306969,
+            "median": 4.190729335493826
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 12.72844837423537,
+            "p95": 17.16624573430163,
+            "max": 18.375466352365613,
+            "rmse": 13.05264912208735,
+            "median": 12.147986137609777
+          }
+        }
+      },
+      "nominal_ndt_attempts": 0,
+      "nominal_ndt_converged": 0,
+      "nominal_ndt_convergence_rate": null,
+      "all_native_converged": 0,
+      "pre_ndt_rejected_frames": 60,
+      "pre_ndt_guard_rejections": 60,
+      "rejected_after_native_attempt_frames": 0,
+      "all_native_calls": 0,
+      "extra_full_ndt": 0,
+      "basic_quality_failures": 0,
+      "nominal_basic_quality_failure_rate": null,
+      "absolute_quality_rejections_after_basic_pass": 0,
+      "quality_events": 0,
+      "all_scan_quality_events_including_pre_ndt_guard": 0,
+      "map_observations_published": 0,
+      "map_observations_rejected": 60,
+      "relative_only_admissions": 0,
+      "selected_extra_candidates": 0,
+      "imu_high_rate_propagations": 611,
+      "imu_raw_message_count": 611,
+      "imu_propagations_including_oosm_replay": 611,
+      "ndt_callbacks_into_ekf": 0,
+      "ndt_corrections_applied": 0,
+      "oosm_results": {},
+      "replayed_imu_count": 0,
+      "oosm_alignment_error_ms": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "no_map_observation_frames": 60,
+      "longest_no_map_run": 60,
+      "no_map_frames_with_real_imu_state_time_advancing": 60,
+      "ekf_high_error_frames": 60,
+      "longest_high_error_run": 60,
+      "no_map_ekf_translation_m": {
+        "n": 60,
+        "mean": 6.017908484582324,
+        "p95": 16.421686200718504,
+        "max": 18.755586697766333,
+        "rmse": 7.98642189306969,
+        "median": 4.190729335493826
+      },
+      "no_map_ekf_rotation_deg": {
+        "n": 60,
+        "mean": 12.72844837423537,
+        "p95": 17.16624573430163,
+        "max": 18.375466352365613,
+        "rmse": 13.05264912208735,
+        "median": 12.147986137609777
+      },
+      "ndt_callback_wall_ms": {
+        "n": 60,
+        "mean": 30.352497100830078,
+        "p95": 39.25379514694213,
+        "max": 602.2243499755859
+      },
+      "event_frame_callback_ms": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "scan_input_to_final_ack_ms": {
+        "n": 60,
+        "mean": 52.85797516504923,
+        "p95": 60.289609432220445,
+        "max": 628.7102699279785
+      },
+      "process_wall_seconds": 8.05140879098326,
+      "ndt_node_peak_rss_KiB": 259060,
+      "ekf_node_peak_rss_KiB": 23208,
+      "simultaneous_node_peak_rss_KiB": 282196,
+      "actual_target_hashes": [
+        "11658115094751181825"
+      ],
+      "actual_target_points": [
+        2297615
+      ],
+      "native_nominal_score": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "native_nominal_overlap": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "coverage_consistency_mean": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "recovery_success_not_equated_to_admission": true
+    },
+    "W1/C3/RELATIVE_D_EXPERIMENTAL": {
+      "samples": 60,
+      "reference_relative_errors": {
+        "IMU_EKF_PREDICTION": {
+          "translation_m": {
+            "n": 60,
+            "mean": 5.693129775850498,
+            "p95": 15.761044491994488,
+            "max": 17.921507938157223,
+            "rmse": 7.594582371470221,
+            "median": 3.928577178328383
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 12.570508774124155,
+            "p95": 16.951955884507587,
+            "max": 17.74080011687244,
+            "rmse": 12.888750243094837,
+            "median": 11.996475377682394
+          }
+        },
+        "NDT_NOMINAL_RAW": {
+          "translation_m": {
+            "n": 0,
+            "mean": null,
+            "p95": null,
+            "max": null,
+            "rmse": null,
+            "median": null
+          },
+          "rotation_deg": {
+            "n": 0,
+            "mean": null,
+            "p95": null,
+            "max": null,
+            "rmse": null,
+            "median": null
+          }
+        },
+        "NDT_SELECTED_RAW": {
+          "translation_m": {
+            "n": 0,
+            "mean": null,
+            "p95": null,
+            "max": null,
+            "rmse": null,
+            "median": null
+          },
+          "rotation_deg": {
+            "n": 0,
+            "mean": null,
+            "p95": null,
+            "max": null,
+            "rmse": null,
+            "median": null
+          }
+        },
+        "NDT_PUBLISHED": {
+          "translation_m": {
+            "n": 0,
+            "mean": null,
+            "p95": null,
+            "max": null,
+            "rmse": null,
+            "median": null
+          },
+          "rotation_deg": {
+            "n": 0,
+            "mean": null,
+            "p95": null,
+            "max": null,
+            "rmse": null,
+            "median": null
+          }
+        },
+        "EKF_CAUSAL_OUTPUT": {
+          "translation_m": {
+            "n": 60,
+            "mean": 6.017908484582324,
+            "p95": 16.421686200718504,
+            "max": 18.755586697766333,
+            "rmse": 7.98642189306969,
+            "median": 4.190729335493826
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 12.72844837423537,
+            "p95": 17.16624573430163,
+            "max": 18.375466352365613,
+            "rmse": 13.05264912208735,
+            "median": 12.147986137609777
+          }
+        }
+      },
+      "nominal_ndt_attempts": 0,
+      "nominal_ndt_converged": 0,
+      "nominal_ndt_convergence_rate": null,
+      "all_native_converged": 0,
+      "pre_ndt_rejected_frames": 60,
+      "pre_ndt_guard_rejections": 60,
+      "rejected_after_native_attempt_frames": 0,
+      "all_native_calls": 0,
+      "extra_full_ndt": 0,
+      "basic_quality_failures": 0,
+      "nominal_basic_quality_failure_rate": null,
+      "absolute_quality_rejections_after_basic_pass": 0,
+      "quality_events": 0,
+      "all_scan_quality_events_including_pre_ndt_guard": 0,
+      "map_observations_published": 0,
+      "map_observations_rejected": 60,
+      "relative_only_admissions": 0,
+      "selected_extra_candidates": 0,
+      "imu_high_rate_propagations": 611,
+      "imu_raw_message_count": 611,
+      "imu_propagations_including_oosm_replay": 611,
+      "ndt_callbacks_into_ekf": 0,
+      "ndt_corrections_applied": 0,
+      "oosm_results": {},
+      "replayed_imu_count": 0,
+      "oosm_alignment_error_ms": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "no_map_observation_frames": 60,
+      "longest_no_map_run": 60,
+      "no_map_frames_with_real_imu_state_time_advancing": 60,
+      "ekf_high_error_frames": 60,
+      "longest_high_error_run": 60,
+      "no_map_ekf_translation_m": {
+        "n": 60,
+        "mean": 6.017908484582324,
+        "p95": 16.421686200718504,
+        "max": 18.755586697766333,
+        "rmse": 7.98642189306969,
+        "median": 4.190729335493826
+      },
+      "no_map_ekf_rotation_deg": {
+        "n": 60,
+        "mean": 12.72844837423537,
+        "p95": 17.16624573430163,
+        "max": 18.375466352365613,
+        "rmse": 13.05264912208735,
+        "median": 12.147986137609777
+      },
+      "ndt_callback_wall_ms": {
+        "n": 60,
+        "mean": 32.64220952987671,
+        "p95": 43.989479541778564,
+        "max": 714.8809432983398
+      },
+      "event_frame_callback_ms": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "scan_input_to_final_ack_ms": {
+        "n": 60,
+        "mean": 55.54133256276449,
+        "p95": 68.89669895172116,
+        "max": 739.9988174438477
+      },
+      "process_wall_seconds": 8.308037559967488,
+      "ndt_node_peak_rss_KiB": 256976,
+      "ekf_node_peak_rss_KiB": 23508,
+      "simultaneous_node_peak_rss_KiB": 280320,
+      "actual_target_hashes": [
+        "11658115094751181825"
+      ],
+      "actual_target_points": [
+        2297615
+      ],
+      "native_nominal_score": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "native_nominal_overlap": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "coverage_consistency_mean": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "recovery_success_not_equated_to_admission": true
+    },
+    "W3/C0/MULTISTART_C": {
+      "samples": 60,
+      "reference_relative_errors": {
+        "IMU_EKF_PREDICTION": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.18552141966702476,
+            "p95": 0.257040306379058,
+            "max": 0.4135234282058063,
+            "rmse": 0.19368729525191486,
+            "median": 0.1851836315513803
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 2.160066534528928,
+            "p95": 2.8361542163892537,
+            "max": 3.2565817743996255,
+            "rmse": 2.196089564572914,
+            "median": 2.1259639057136495
+          }
+        },
+        "NDT_NOMINAL_RAW": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.16216466313520486,
+            "p95": 0.20184483089292019,
+            "max": 0.2244805594691814,
+            "rmse": 0.16463547705250212,
+            "median": 0.1636189012438149
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 1.8973445622717535,
+            "p95": 2.6399048592930443,
+            "max": 2.9771410053892104,
+            "rmse": 1.9429949200939236,
+            "median": 1.773666062020056
+          }
+        },
+        "NDT_SELECTED_RAW": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.16216466313520486,
+            "p95": 0.20184483089292019,
+            "max": 0.2244805594691814,
+            "rmse": 0.16463547705250212,
+            "median": 0.1636189012438149
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 1.8973445622717535,
+            "p95": 2.6399048592930443,
+            "max": 2.9771410053892104,
+            "rmse": 1.9429949200939236,
+            "median": 1.773666062020056
+          }
+        },
+        "NDT_PUBLISHED": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.16216466313520486,
+            "p95": 0.20184483089292019,
+            "max": 0.2244805594691814,
+            "rmse": 0.16463547705250212,
+            "median": 0.1636189012438149
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 1.8973445622717535,
+            "p95": 2.6399048592930443,
+            "max": 2.9771410053892104,
+            "rmse": 1.9429949200939236,
+            "median": 1.773666062020056
+          }
+        },
+        "EKF_CAUSAL_OUTPUT": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.1704659052327613,
+            "p95": 0.22285925508127358,
+            "max": 0.36138212171671336,
+            "rmse": 0.17579057215615915,
+            "median": 0.17278971868394294
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 1.9752355721060417,
+            "p95": 2.720610369953873,
+            "max": 2.8803089517984524,
+            "rmse": 2.009151048678402,
+            "median": 1.908540452293624
+          }
+        }
+      },
+      "nominal_ndt_attempts": 60,
+      "nominal_ndt_converged": 60,
+      "nominal_ndt_convergence_rate": 1.0,
+      "all_native_converged": 60,
+      "pre_ndt_rejected_frames": 0,
+      "pre_ndt_guard_rejections": 0,
+      "rejected_after_native_attempt_frames": 0,
+      "all_native_calls": 60,
+      "extra_full_ndt": 0,
+      "basic_quality_failures": 0,
+      "nominal_basic_quality_failure_rate": 0.0,
+      "absolute_quality_rejections_after_basic_pass": 0,
+      "quality_events": 0,
+      "all_scan_quality_events_including_pre_ndt_guard": 0,
+      "map_observations_published": 60,
+      "map_observations_rejected": 0,
+      "relative_only_admissions": 0,
+      "selected_extra_candidates": 0,
+      "imu_high_rate_propagations": 611,
+      "imu_raw_message_count": 611,
+      "imu_propagations_including_oosm_replay": 1271,
+      "ndt_callbacks_into_ekf": 60,
+      "ndt_corrections_applied": 60,
+      "oosm_results": {
+        "APPLIED": 60
+      },
+      "replayed_imu_count": 660,
+      "oosm_alignment_error_ms": {
+        "n": 60,
+        "mean": 3.5271485646565757,
+        "p95": 4.192817211151123,
+        "max": 4.668951034545898
+      },
+      "no_map_observation_frames": 0,
+      "longest_no_map_run": 0,
+      "no_map_frames_with_real_imu_state_time_advancing": 0,
+      "ekf_high_error_frames": 0,
+      "longest_high_error_run": 0,
+      "no_map_ekf_translation_m": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null,
+        "rmse": null,
+        "median": null
+      },
+      "no_map_ekf_rotation_deg": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null,
+        "rmse": null,
+        "median": null
+      },
+      "ndt_callback_wall_ms": {
+        "n": 60,
+        "mean": 50.99130868911743,
+        "p95": 53.629553318023675,
+        "max": 1037.3516082763672
+      },
+      "event_frame_callback_ms": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "scan_input_to_final_ack_ms": {
+        "n": 60,
+        "mean": 74.37212467193604,
+        "p95": 76.92492008209229,
+        "max": 1066.185474395752
+      },
+      "process_wall_seconds": 9.609967535943724,
+      "ndt_node_peak_rss_KiB": 385700,
+      "ekf_node_peak_rss_KiB": 22752,
+      "simultaneous_node_peak_rss_KiB": 407080,
+      "actual_target_hashes": [
+        "14550786926841747385"
+      ],
+      "actual_target_points": [
+        2439500
+      ],
+      "native_nominal_score": {
+        "n": 60,
+        "mean": 2.408125797837627,
+        "p95": 2.520724373375751,
+        "max": 2.5329510236495496
+      },
+      "native_nominal_overlap": {
+        "n": 60,
+        "mean": 0.9901312487338283,
+        "p95": 1.0,
+        "max": 1.0
+      },
+      "coverage_consistency_mean": {
+        "n": 60,
+        "mean": 0.057766638183421364,
+        "p95": 0.13971151281615396,
+        "max": 0.2052462521142043
+      },
+      "recovery_success_not_equated_to_admission": true
+    },
+    "W3/C0/RELATIVE_D_EXPERIMENTAL": {
+      "samples": 60,
+      "reference_relative_errors": {
+        "IMU_EKF_PREDICTION": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.18552141966702476,
+            "p95": 0.257040306379058,
+            "max": 0.4135234282058063,
+            "rmse": 0.19368729525191486,
+            "median": 0.1851836315513803
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 2.160066534528928,
+            "p95": 2.8361542163892537,
+            "max": 3.2565817743996255,
+            "rmse": 2.196089564572914,
+            "median": 2.1259639057136495
+          }
+        },
+        "NDT_NOMINAL_RAW": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.16216466313520486,
+            "p95": 0.20184483089292019,
+            "max": 0.2244805594691814,
+            "rmse": 0.16463547705250212,
+            "median": 0.1636189012438149
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 1.8973445622717535,
+            "p95": 2.6399048592930443,
+            "max": 2.9771410053892104,
+            "rmse": 1.9429949200939236,
+            "median": 1.773666062020056
+          }
+        },
+        "NDT_SELECTED_RAW": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.16216466313520486,
+            "p95": 0.20184483089292019,
+            "max": 0.2244805594691814,
+            "rmse": 0.16463547705250212,
+            "median": 0.1636189012438149
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 1.8973445622717535,
+            "p95": 2.6399048592930443,
+            "max": 2.9771410053892104,
+            "rmse": 1.9429949200939236,
+            "median": 1.773666062020056
+          }
+        },
+        "NDT_PUBLISHED": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.16216466313520486,
+            "p95": 0.20184483089292019,
+            "max": 0.2244805594691814,
+            "rmse": 0.16463547705250212,
+            "median": 0.1636189012438149
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 1.8973445622717535,
+            "p95": 2.6399048592930443,
+            "max": 2.9771410053892104,
+            "rmse": 1.9429949200939236,
+            "median": 1.773666062020056
+          }
+        },
+        "EKF_CAUSAL_OUTPUT": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.1704659052327613,
+            "p95": 0.22285925508127358,
+            "max": 0.36138212171671336,
+            "rmse": 0.17579057215615915,
+            "median": 0.17278971868394294
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 1.9752355721060417,
+            "p95": 2.720610369953873,
+            "max": 2.8803089517984524,
+            "rmse": 2.009151048678402,
+            "median": 1.908540452293624
+          }
+        }
+      },
+      "nominal_ndt_attempts": 60,
+      "nominal_ndt_converged": 60,
+      "nominal_ndt_convergence_rate": 1.0,
+      "all_native_converged": 60,
+      "pre_ndt_rejected_frames": 0,
+      "pre_ndt_guard_rejections": 0,
+      "rejected_after_native_attempt_frames": 0,
+      "all_native_calls": 60,
+      "extra_full_ndt": 0,
+      "basic_quality_failures": 0,
+      "nominal_basic_quality_failure_rate": 0.0,
+      "absolute_quality_rejections_after_basic_pass": 0,
+      "quality_events": 0,
+      "all_scan_quality_events_including_pre_ndt_guard": 0,
+      "map_observations_published": 60,
+      "map_observations_rejected": 0,
+      "relative_only_admissions": 0,
+      "selected_extra_candidates": 0,
+      "imu_high_rate_propagations": 611,
+      "imu_raw_message_count": 611,
+      "imu_propagations_including_oosm_replay": 1271,
+      "ndt_callbacks_into_ekf": 60,
+      "ndt_corrections_applied": 60,
+      "oosm_results": {
+        "APPLIED": 60
+      },
+      "replayed_imu_count": 660,
+      "oosm_alignment_error_ms": {
+        "n": 60,
+        "mean": 3.5271485646565757,
+        "p95": 4.192817211151123,
+        "max": 4.668951034545898
+      },
+      "no_map_observation_frames": 0,
+      "longest_no_map_run": 0,
+      "no_map_frames_with_real_imu_state_time_advancing": 0,
+      "ekf_high_error_frames": 0,
+      "longest_high_error_run": 0,
+      "no_map_ekf_translation_m": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null,
+        "rmse": null,
+        "median": null
+      },
+      "no_map_ekf_rotation_deg": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null,
+        "rmse": null,
+        "median": null
+      },
+      "ndt_callback_wall_ms": {
+        "n": 60,
+        "mean": 50.27311245600382,
+        "p95": 44.80742216110227,
+        "max": 1034.9500179290771
+      },
+      "event_frame_callback_ms": {
+        "n": 0,
+        "mean": null,
+        "p95": null,
+        "max": null
+      },
+      "scan_input_to_final_ack_ms": {
+        "n": 60,
+        "mean": 72.98539479573567,
+        "p95": 72.98594713211058,
+        "max": 1062.9923343658447
+      },
+      "process_wall_seconds": 9.40897715499159,
+      "ndt_node_peak_rss_KiB": 385652,
+      "ekf_node_peak_rss_KiB": 23480,
+      "simultaneous_node_peak_rss_KiB": 409060,
+      "actual_target_hashes": [
+        "14550786926841747385"
+      ],
+      "actual_target_points": [
+        2439500
+      ],
+      "native_nominal_score": {
+        "n": 60,
+        "mean": 2.408125797837627,
+        "p95": 2.520724373375751,
+        "max": 2.5329510236495496
+      },
+      "native_nominal_overlap": {
+        "n": 60,
+        "mean": 0.9901312487338283,
+        "p95": 1.0,
+        "max": 1.0
+      },
+      "coverage_consistency_mean": {
+        "n": 60,
+        "mean": 0.057766638183421364,
+        "p95": 0.13971151281615396,
+        "max": 0.2052462521142043
+      },
+      "recovery_success_not_equated_to_admission": true
+    },
+    "W3/C3/MULTISTART_C": {
+      "samples": 60,
+      "reference_relative_errors": {
+        "IMU_EKF_PREDICTION": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.18425278995403235,
+            "p95": 0.26791481826334884,
+            "max": 0.36471603920319395,
+            "rmse": 0.19234206556196184,
+            "median": 0.17899867052271223
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 2.3219378632002843,
+            "p95": 3.271437288318797,
+            "max": 6.772919155342509,
+            "rmse": 2.496773687962342,
+            "median": 2.190631605388008
+          }
+        },
+        "NDT_NOMINAL_RAW": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.17146628303549757,
+            "p95": 0.2388131409693578,
+            "max": 0.3565104671250009,
+            "rmse": 0.1774352747486344,
+            "median": 0.16505048289192406
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 2.0932586775377593,
+            "p95": 3.036348001788503,
+            "max": 5.965445774482399,
+            "rmse": 2.254654382913191,
+            "median": 1.893429016633191
+          }
+        },
+        "NDT_SELECTED_RAW": {
+          "translation_m": {
+            "n": 59,
+            "mean": 0.16325056893742212,
+            "p95": 0.21034887937601945,
+            "max": 0.25744848056087016,
+            "rmse": 0.16634341906823774,
+            "median": 0.16356836150989462
+          },
+          "rotation_deg": {
+            "n": 59,
+            "mean": 1.9252531896703975,
+            "p95": 2.611318582029534,
+            "max": 2.997357557509961,
+            "rmse": 1.9686415883848019,
+            "median": 1.8296705296592177
+          }
+        },
+        "NDT_PUBLISHED": {
+          "translation_m": {
+            "n": 59,
+            "mean": 0.16325056893742212,
+            "p95": 0.21034887937601945,
+            "max": 0.25744848056087016,
+            "rmse": 0.16634341906823774,
+            "median": 0.16356836150989462
+          },
+          "rotation_deg": {
+            "n": 59,
+            "mean": 1.9252531896703975,
+            "p95": 2.611318582029534,
+            "max": 2.997357557509961,
+            "rmse": 1.9686415883848019,
+            "median": 1.8296705296592177
+          }
+        },
+        "EKF_CAUSAL_OUTPUT": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.1704509484904556,
+            "p95": 0.2302217857256891,
+            "max": 0.26014910141499364,
+            "rmse": 0.1746964010843274,
+            "median": 0.1749108630224645
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 1.9862185950248465,
+            "p95": 2.8145234345955665,
+            "max": 2.931799213408373,
+            "rmse": 2.0257604621003917,
+            "median": 1.9364075259602556
+          }
+        }
+      },
+      "nominal_ndt_attempts": 60,
+      "nominal_ndt_converged": 60,
+      "nominal_ndt_convergence_rate": 1.0,
+      "all_native_converged": 66,
+      "pre_ndt_rejected_frames": 0,
+      "pre_ndt_guard_rejections": 0,
+      "rejected_after_native_attempt_frames": 1,
+      "all_native_calls": 66,
+      "extra_full_ndt": 6,
+      "basic_quality_failures": 0,
+      "nominal_basic_quality_failure_rate": 0.0,
+      "absolute_quality_rejections_after_basic_pass": 3,
+      "quality_events": 3,
+      "all_scan_quality_events_including_pre_ndt_guard": 3,
+      "map_observations_published": 59,
+      "map_observations_rejected": 1,
+      "relative_only_admissions": 0,
+      "selected_extra_candidates": 2,
+      "imu_high_rate_propagations": 611,
+      "imu_raw_message_count": 611,
+      "imu_propagations_including_oosm_replay": 1260,
+      "ndt_callbacks_into_ekf": 59,
+      "ndt_corrections_applied": 59,
+      "oosm_results": {
+        "APPLIED": 59
+      },
+      "replayed_imu_count": 649,
+      "oosm_alignment_error_ms": {
+        "n": 59,
+        "mean": 3.530950869544078,
+        "p95": 4.19614315032959,
+        "max": 4.668951034545898
+      },
+      "no_map_observation_frames": 1,
+      "longest_no_map_run": 1,
+      "no_map_frames_with_real_imu_state_time_advancing": 1,
+      "ekf_high_error_frames": 0,
+      "longest_high_error_run": 0,
+      "no_map_ekf_translation_m": {
+        "n": 1,
+        "mean": 0.1853014850449256,
+        "p95": 0.1853014850449256,
+        "max": 0.1853014850449256,
+        "rmse": 0.1853014850449256,
+        "median": 0.1853014850449256
+      },
+      "no_map_ekf_rotation_deg": {
+        "n": 1,
+        "mean": 1.7795516435580099,
+        "p95": 1.7795516435580099,
+        "max": 1.7795516435580099,
+        "rmse": 1.7795516435580099,
+        "median": 1.7795516435580099
+      },
+      "ndt_callback_wall_ms": {
+        "n": 60,
+        "mean": 53.76370350519816,
+        "p95": 54.1002511978149,
+        "max": 1045.224905014038
+      },
+      "event_frame_callback_ms": {
+        "n": 3,
+        "mean": 418.4435208638509,
+        "p95": 954.9322366714476,
+        "max": 1045.224905014038
+      },
+      "scan_input_to_final_ack_ms": {
+        "n": 60,
+        "mean": 76.65562629699707,
+        "p95": 79.68866825103757,
+        "max": 1072.0593929290771
+      },
+      "process_wall_seconds": 9.5562434369931,
+      "ndt_node_peak_rss_KiB": 378520,
+      "ekf_node_peak_rss_KiB": 21920,
+      "simultaneous_node_peak_rss_KiB": 400276,
+      "actual_target_hashes": [
+        "7227405164119682066"
+      ],
+      "actual_target_points": [
+        2383209
+      ],
+      "native_nominal_score": {
+        "n": 60,
+        "mean": 2.355730051736517,
+        "p95": 2.5183711149740122,
+        "max": 2.5257325810155473
+      },
+      "native_nominal_overlap": {
+        "n": 60,
+        "mean": 0.9752108457594063,
+        "p95": 0.9987565445026177,
+        "max": 1.0
+      },
+      "coverage_consistency_mean": {
+        "n": 60,
+        "mean": 0.07769459394542959,
+        "p95": 0.22226756739595924,
+        "max": 0.4940902594204994
+      },
+      "recovery_success_not_equated_to_admission": true
+    },
+    "W3/C3/RELATIVE_D_EXPERIMENTAL": {
+      "samples": 60,
+      "reference_relative_errors": {
+        "IMU_EKF_PREDICTION": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.18425278995403235,
+            "p95": 0.26791481826334884,
+            "max": 0.36471603920319395,
+            "rmse": 0.19234206556196184,
+            "median": 0.17899867052271223
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 2.3219378632002843,
+            "p95": 3.271437288318797,
+            "max": 6.772919155342509,
+            "rmse": 2.496773687962342,
+            "median": 2.190631605388008
+          }
+        },
+        "NDT_NOMINAL_RAW": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.17146628303549757,
+            "p95": 0.2388131409693578,
+            "max": 0.3565104671250009,
+            "rmse": 0.1774352747486344,
+            "median": 0.16505048289192406
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 2.0932586775377593,
+            "p95": 3.036348001788503,
+            "max": 5.965445774482399,
+            "rmse": 2.254654382913191,
+            "median": 1.893429016633191
+          }
+        },
+        "NDT_SELECTED_RAW": {
+          "translation_m": {
+            "n": 59,
+            "mean": 0.16325056893742212,
+            "p95": 0.21034887937601945,
+            "max": 0.25744848056087016,
+            "rmse": 0.16634341906823774,
+            "median": 0.16356836150989462
+          },
+          "rotation_deg": {
+            "n": 59,
+            "mean": 1.9252531896703975,
+            "p95": 2.611318582029534,
+            "max": 2.997357557509961,
+            "rmse": 1.9686415883848019,
+            "median": 1.8296705296592177
+          }
+        },
+        "NDT_PUBLISHED": {
+          "translation_m": {
+            "n": 59,
+            "mean": 0.16325056893742212,
+            "p95": 0.21034887937601945,
+            "max": 0.25744848056087016,
+            "rmse": 0.16634341906823774,
+            "median": 0.16356836150989462
+          },
+          "rotation_deg": {
+            "n": 59,
+            "mean": 1.9252531896703975,
+            "p95": 2.611318582029534,
+            "max": 2.997357557509961,
+            "rmse": 1.9686415883848019,
+            "median": 1.8296705296592177
+          }
+        },
+        "EKF_CAUSAL_OUTPUT": {
+          "translation_m": {
+            "n": 60,
+            "mean": 0.1704509484904556,
+            "p95": 0.2302217857256891,
+            "max": 0.26014910141499364,
+            "rmse": 0.1746964010843274,
+            "median": 0.1749108630224645
+          },
+          "rotation_deg": {
+            "n": 60,
+            "mean": 1.9862185950248465,
+            "p95": 2.8145234345955665,
+            "max": 2.931799213408373,
+            "rmse": 2.0257604621003917,
+            "median": 1.9364075259602556
+          }
+        }
+      },
+      "nominal_ndt_attempts": 60,
+      "nominal_ndt_converged": 60,
+      "nominal_ndt_convergence_rate": 1.0,
+      "all_native_converged": 66,
+      "pre_ndt_rejected_frames": 0,
+      "pre_ndt_guard_rejections": 0,
+      "rejected_after_native_attempt_frames": 1,
+      "all_native_calls": 66,
+      "extra_full_ndt": 6,
+      "basic_quality_failures": 0,
+      "nominal_basic_quality_failure_rate": 0.0,
+      "absolute_quality_rejections_after_basic_pass": 3,
+      "quality_events": 3,
+      "all_scan_quality_events_including_pre_ndt_guard": 3,
+      "map_observations_published": 59,
+      "map_observations_rejected": 1,
+      "relative_only_admissions": 0,
+      "selected_extra_candidates": 2,
+      "imu_high_rate_propagations": 611,
+      "imu_raw_message_count": 611,
+      "imu_propagations_including_oosm_replay": 1260,
+      "ndt_callbacks_into_ekf": 59,
+      "ndt_corrections_applied": 59,
+      "oosm_results": {
+        "APPLIED": 59
+      },
+      "replayed_imu_count": 649,
+      "oosm_alignment_error_ms": {
+        "n": 59,
+        "mean": 3.530950869544078,
+        "p95": 4.19614315032959,
+        "max": 4.668951034545898
+      },
+      "no_map_observation_frames": 1,
+      "longest_no_map_run": 1,
+      "no_map_frames_with_real_imu_state_time_advancing": 1,
+      "ekf_high_error_frames": 0,
+      "longest_high_error_run": 0,
+      "no_map_ekf_translation_m": {
+        "n": 1,
+        "mean": 0.1853014850449256,
+        "p95": 0.1853014850449256,
+        "max": 0.1853014850449256,
+        "rmse": 0.1853014850449256,
+        "median": 0.1853014850449256
+      },
+      "no_map_ekf_rotation_deg": {
+        "n": 1,
+        "mean": 1.7795516435580099,
+        "p95": 1.7795516435580099,
+        "max": 1.7795516435580099,
+        "rmse": 1.7795516435580099,
+        "median": 1.7795516435580099
+      },
+      "ndt_callback_wall_ms": {
+        "n": 60,
+        "mean": 54.62552706400553,
+        "p95": 57.10176229476926,
+        "max": 1066.4920806884766
+      },
+      "event_frame_callback_ms": {
+        "n": 3,
+        "mean": 426.1229832967122,
+        "p95": 974.312400817871,
+        "max": 1066.4920806884766
+      },
+      "scan_input_to_final_ack_ms": {
+        "n": 60,
+        "mean": 77.90537277857463,
+        "p95": 85.17580032348631,
+        "max": 1095.1292514801025
+      },
+      "process_wall_seconds": 9.700845121988095,
+      "ndt_node_peak_rss_KiB": 378184,
+      "ekf_node_peak_rss_KiB": 23304,
+      "simultaneous_node_peak_rss_KiB": 399404,
+      "actual_target_hashes": [
+        "7227405164119682066"
+      ],
+      "actual_target_points": [
+        2383209
+      ],
+      "native_nominal_score": {
+        "n": 60,
+        "mean": 2.355730051736517,
+        "p95": 2.5183711149740122,
+        "max": 2.5257325810155473
+      },
+      "native_nominal_overlap": {
+        "n": 60,
+        "mean": 0.9752108457594063,
+        "p95": 0.9987565445026177,
+        "max": 1.0
+      },
+      "coverage_consistency_mean": {
+        "n": 60,
+        "mean": 0.07769459394542959,
+        "p95": 0.22226756739595924,
+        "max": 0.4940902594204994
+      },
+      "recovery_success_not_equated_to_admission": true
+    }
+  },
+  "D_vs_C": [
+    {
+      "window": "W1",
+      "arm": "C0",
+      "D_minus_C_translation_rmse_m": 0.0,
+      "D_minus_C_rotation_rmse_deg": 0.0,
+      "D_minus_C_high_error_frames": 0,
+      "D_minus_C_longest_no_map_run": 0,
+      "D_minus_C_extra_calls": 0,
+      "D_relative_only_admissions": 0,
+      "target_hash_sets_identical": true,
+      "no_R22_RMSE_target_applied": true
+    },
+    {
+      "window": "W1",
+      "arm": "C3",
+      "D_minus_C_translation_rmse_m": 0.0,
+      "D_minus_C_rotation_rmse_deg": 0.0,
+      "D_minus_C_high_error_frames": 0,
+      "D_minus_C_longest_no_map_run": 0,
+      "D_minus_C_extra_calls": 0,
+      "D_relative_only_admissions": 0,
+      "target_hash_sets_identical": true,
+      "no_R22_RMSE_target_applied": true
+    },
+    {
+      "window": "W3",
+      "arm": "C0",
+      "D_minus_C_translation_rmse_m": 0.0,
+      "D_minus_C_rotation_rmse_deg": 0.0,
+      "D_minus_C_high_error_frames": 0,
+      "D_minus_C_longest_no_map_run": 0,
+      "D_minus_C_extra_calls": 0,
+      "D_relative_only_admissions": 0,
+      "target_hash_sets_identical": true,
+      "no_R22_RMSE_target_applied": true
+    },
+    {
+      "window": "W3",
+      "arm": "C3",
+      "D_minus_C_translation_rmse_m": 0.0,
+      "D_minus_C_rotation_rmse_deg": 0.0,
+      "D_minus_C_high_error_frames": 0,
+      "D_minus_C_longest_no_map_run": 0,
+      "D_minus_C_extra_calls": 0,
+      "D_relative_only_admissions": 0,
+      "target_hash_sets_identical": true,
+      "no_R22_RMSE_target_applied": true
+    }
+  ],
+  "reference_time_rule": "exact or bracket gap<=150ms and nearest endpoint<=50ms; translation linear, rotation SLERP in Base then fixed T_B_L; no fitted offset/alignment",
+  "EKF_time_rule": "same-frame actual corrected current-state publication after accepted map measurement; otherwise actual high-rate watermark publication; never compared against scan-start reference",
+  "limitations": [
+    "known development windows",
+    "conditional Base reference exported by map registration, not independent mocap",
+    "Coverage Consistency Mean points participate in Full NDT",
+    "existing zero-velocity/bias anchor priors; no independent calibration or GT velocity",
+    "published historical EKF prediction samples retain observed one-frame map-feedback delay",
+    "all native candidates precede reference evaluation; admission does not imply correctness",
+    "pre-NDT geometry guard rejections are separate from optimizer/basic/absolute quality failures; zero attempts gives unavailable convergence rate"
+  ]
+}

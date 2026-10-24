@@ -1,0 +1,41 @@
+{
+  "validation": "PASS_WITH_DOCUMENTED_LIMITATIONS",
+  "formal_artifact_sha_checks": 170,
+  "real_deskew_scans_checked": 600,
+  "stable_snapshot_equal": true,
+  "stable_after": {
+    "HEAD": "41999ea700c66c4cadf0eca9e0c5d73caa2783fd",
+    "branch": "feature/quadruped-localization-interface",
+    "status_sha256": "aaeeb0ce6ba92e7423e0d5578331404f7e59b22086330da53ed2444d83932e63",
+    "index_sha256": "0d73adc5d9de6e7a63aa913d30da3c9aecde41b4882bb847e227157ac9dbb392",
+    "protected_files_sha256": {
+      "src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp": "40cdf26f9dddb9d06dc16c0bfd89fc88a9dd33e42e5bbd4e9bc3b453f1e4277c",
+      "src/dog_prior_map_localization/src/dog_prior_map_ekf_node.cpp": "e69fade2af615cff00af87dc0e8860017cb236a80a80926bf384f108666fcc58",
+      "src/dog_prior_map_localization/src/dog_prior_map_ekf_node_core.cpp": "7038444b77cac7987bfdc28acbef27eafbbd42475f6b7a5a942a7f73bf1f5d30",
+      "src/dog_prior_map_localization/src/local_map_tiles.cpp": null,
+      "src/dog_prior_map_localization/src/imu_processor.cpp": "1e6b2dd5269241f5f87d665bc8151264b015fbae8bfa29045a92cbd9513ad6eb",
+      "src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch": "bb0b3f0bdb3d009c75899511517c529f4f846db3390143bebc0279d553fb3f4f",
+      "src/dog_prior_map_localization/launch/newer_college_local_map.launch": null,
+      "src/dog_prior_map_localization/config/dog_prior_map_localization_ndt.yaml": "08c5fbf67684892dbea7b61255de2acb0ad8fdd73bb5bd5b8c5960b92ffac183"
+    }
+  },
+  "algorithm_cpp_policies_models_and_formal_binaries_match_freeze": true,
+  "expected_post_seal_display_changes": [
+    {
+      "path": "src/dog_prior_map_localization/launch/p62_r23_integrated_localization.launch",
+      "frozen_sha256": "47277136f39ebb25057858a67c1122f173910930d0fd5136b82ef32d6bd04d42",
+      "current_sha256": "df66c3af05d38eb5a7ea251e00a712941218f2565b1946509551ae705fc49618"
+    }
+  ],
+  "historical_archives_changed": false,
+  "required_outputs_present": true,
+  "private_ros_processes_remaining": [],
+  "no_further_native_calls": true,
+  "scope": "No GT reread; no NDT; final artifact validation only",
+  "root_workspace_before_final_commit": {
+    "HEAD": "cd85a78abdeff49abaece571a9ba6ca9bda362d8",
+    "branch": "research/p9-r4-heldout-visual-evidence",
+    "index_sha256": "cd2fe075cbb11ac7ab861821b42b9d977ea30dbd41770f9889b76f142a06ce68",
+    "status_sha256": "d9ff40ea7f732beb59d0e595a8e1fd7a47d9750d0f839749eb9790d39392659b"
+  }
+}

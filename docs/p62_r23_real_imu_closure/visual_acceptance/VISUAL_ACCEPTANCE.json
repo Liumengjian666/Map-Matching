@@ -1,0 +1,16 @@
+{
+  "task": "R23_GUI_ACCEPTANCE",
+  "strategy": "BASELINE",
+  "scan_count": 20,
+  "actual_full_ndt": 20,
+  "extra_full": 0,
+  "map_measurements": 20,
+  "ekf_correction_acks": 20,
+  "oosm_applied": 20,
+  "display_evidence": "RVIZ_ACCEPTANCE.png: Global Status Ok; RVIZ_NODE_INFO.txt: real map/scan/pose/path/TF subscribers",
+  "first_launch_interaction": "Noetic EOL modal dismissed with WM_DELETE; initial screenshot retained",
+  "eol_suppression_final_launch": "DISABLE_ROS1_EOL_WARNINGS=1; supported variable present in installed librviz; separate RViz-only test did not leave a completed receipt, so restart suppression is NOT_VERIFIED",
+  "no_further_native_experiment": true,
+  "shutdown_observation": "After session interruption, private 11383 processes no longer present at final verification; no preserved final graceful-shutdown receipt; do not infer exit status",
+  "formal_precision_evaluation_included": false
+}
