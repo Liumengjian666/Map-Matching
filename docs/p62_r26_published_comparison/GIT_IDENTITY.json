@@ -1,0 +1,16 @@
+{
+  "task": "P62-R26-PUBLISHED-BASELINE-COMPARISON-AND-PAPER-FINALIZATION",
+  "repository": "https://github.com/Liumengjian666/Map-Matching",
+  "workspace": "/home/jian/livox_ws/p62_r26_published_comparison_ws",
+  "branch": "research/p62-r26-published-comparison-paper",
+  "START_SHA": "6aeecf2adbc77c233ee0febaed192643a20c2f54",
+  "LITERATURE_LEDGER_COMMIT": "bcba22c57ee95156c8d5dc7420e4cd6dce707b67",
+  "CODE_SHA": "65d9b3fc4ab97b3f4aba0a00248298f79bc31bf2",
+  "CODE_SHA_semantics": "R26 complete documentation toolchain and manuscript commit; no new estimator compilation",
+  "algorithm_tree_unchanged_from_START": true,
+  "historical_C_plus_G_runtime_CODE_SHA": "76244331014e8bef398818278d683facd69bb1be",
+  "historical_G_only_runtime_CODE_SHA": "131a900842e965305465220e777c8d6949c5f17a",
+  "END_SHA": "Final receipt commit is resolved by git rev-parse HEAD, recorded in external FINAL_GIT_RECEIPT_R26.json and final user handoff; no self-referential SHA invented",
+  "push_executed": false,
+  "external_receipt_path": "/home/jian/livox_ws/p62_r26_published_baseline_sources/FINAL_GIT_RECEIPT_R26.json"
+}

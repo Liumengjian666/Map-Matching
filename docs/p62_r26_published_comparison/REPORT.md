@@ -10,7 +10,7 @@ START `6aeecf2adbc77c233ee0febaed192643a20c2f54`.
 Branch `research/p62-r26-published-comparison-paper`.
 Workspace `/home/jian/livox_ws/p62_r26_published_comparison_ws`.
 Repository `https://github.com/Liumengjian666/Map-Matching`.
-The final manuscript/review Git identities are in `GIT_IDENTITY.json` and the final handoff. The estimator code remains exactly at START. R26 changes only this new documentation/evidence/tools directory. Local commits only; no push, merge, publication, email or submission executed.
+R26 documentation/toolchain CODE_SHA `65d9b3fc4ab97b3f4aba0a00248298f79bc31bf2`. Historical C+G run CODE_SHA `76244331014e8bef398818278d683facd69bb1be`. The final receipt-commit identity is in the external `FINAL_GIT_RECEIPT_R26.json` and final handoff; `GIT_IDENTITY.json` distinguishes these roles. The estimator code remains exactly at START. R26 changes only this new documentation/evidence/tools directory. Local commits only; no push, merge, publication, email or submission executed.
 
 ## What was done
 

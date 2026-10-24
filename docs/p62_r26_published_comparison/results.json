@@ -6,7 +6,10 @@
     "branch": "research/p62-r26-published-comparison-paper",
     "workspace": "/home/jian/livox_ws/p62_r26_published_comparison_ws",
     "algorithm_source": "UNCHANGED_FROM_START",
-    "push_executed": false
+    "push_executed": false,
+    "CODE_SHA": "65d9b3fc4ab97b3f4aba0a00248298f79bc31bf2",
+    "historical_C_plus_G_runtime_CODE_SHA": "76244331014e8bef398818278d683facd69bb1be",
+    "END_SHA": "Final receipt commit is resolved by git rev-parse HEAD, recorded in external FINAL_GIT_RECEIPT_R26.json and final user handoff; no self-referential SHA invented"
   },
   "literature": {
     "published_papers": 7,
@@ -69,5 +72,11 @@
     "dog_validation": "BLOCKED: physical LiDAR–IMU calibration provenance; no new experiment",
     "readiness": "AUTHOR_AND_SCIENTIFIC_REVIEW_DRAFT; not automatically submission approved"
   },
-  "unique_next": "科研总控核查真实英文稿与证据，决定收窄主张后的目标期刊和作者审定／投稿格式整理；不自动追加算法或实验"
+  "unique_next": "科研总控核查真实英文稿与证据，决定收窄主张后的目标期刊和作者审定／投稿格式整理；不自动追加算法或实验",
+  "validation": {
+    "status": "PASS",
+    "necessary_checks": 49,
+    "stable_workspace_unchanged": true,
+    "frozen_algorithm_unchanged": true
+  }
 }
