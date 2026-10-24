@@ -1,0 +1,19 @@
+<launch>
+  <arg name="initialization_config" />
+  <arg name="start_stamp_ns" />
+  <arg name="imu_replay_start_stamp_ns" />
+  <arg name="expected_boundary_imu_stamp_ns" />
+  <arg name="scan_count" default="60" />
+  <arg name="output_dir" />
+  <include file="$(find dog_prior_map_localization)/launch/p62_r24_geometry_oosm.launch">
+    <arg name="geometry_diagnostic_only" value="true" />
+    <arg name="revision_sync" value="false" />
+    <arg name="initialization_config" value="$(arg initialization_config)" />
+    <arg name="start_stamp_ns" value="$(arg start_stamp_ns)" />
+    <arg name="imu_replay_start_stamp_ns" value="$(arg imu_replay_start_stamp_ns)" />
+    <arg name="expected_boundary_imu_stamp_ns" value="$(arg expected_boundary_imu_stamp_ns)" />
+    <arg name="scan_count" value="$(arg scan_count)" />
+    <arg name="output_dir" value="$(arg output_dir)" />
+  </include>
+  <param name="research/r25_disable_search" value="true" />
+</launch>

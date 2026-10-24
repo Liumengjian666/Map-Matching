@@ -507,6 +507,9 @@ public:
     r24_enable_ = getParam<bool>("research/r24_enable", false);
     r24_geometry_diagnostic_only_ = getParam<bool>("research/r24_geometry_diagnostic_only", false);
     r24_revision_sync_ = getParam<bool>("research/r24_revision_sync", false);
+    r25_disable_search_ = getParam<bool>("research/r25_disable_search", false);
+    if (r25_disable_search_ && (!r24_enable_ || !r24_geometry_diagnostic_only_ || r24_revision_sync_))
+      throw std::runtime_error("R25 G-only requires G on and F off");
     if ((r24_geometry_diagnostic_only_ || r24_revision_sync_) && !r24_enable_)
       throw std::runtime_error("R24 switches require explicit research mode");
     if (r24_enable_) {
@@ -1359,7 +1362,7 @@ private:
     cs.push_back(capture(0,tp,*align_ms));
     r23_basic_=r17::quality(cs[0],mask);r23_absolute_=r20::accepted(cs[0],mask);r23_event_=!r23_absolute_;
     r23_nominal_score_=cs[0].score;r23_nominal_overlap_=cs[0].overlap;r23_nominal_mean_=r20::lossMean(cs[0],mask);
-    if(r23_policy_!="BASELINE" && r23_event_ && r20::maySearch(true,true,r23_budget_)){
+    if(!r25_disable_search_ && r23_policy_!="BASELINE" && r23_event_ && r20::maySearch(true,true,r23_budget_)){
       const std::array<Eigen::Matrix4d,2> seeds{{r20::yawSeed(tp,1),r20::yawSeed(tp,-1)}};
       for(int k=0;k<2;++k){
         const auto begin=ros::WallTime::now();pcl::PointCloud<pcl::PointXYZ> tmp;
@@ -3112,6 +3115,7 @@ private:
   ros::Subscriber sub_ekf_high_rate_;
   ros::Subscriber sub_ekf_corrected_;
   bool r24_enable_=false, r24_geometry_diagnostic_only_=false, r24_revision_sync_=false;
+  bool r25_disable_search_=false;
   uint64_t r24_corrected_version_=0;
   std::ofstream r24_geometry_log_,r24_revision_log_;
   ros::Subscriber sub_scan_prediction_;

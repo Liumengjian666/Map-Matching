@@ -1,0 +1,38 @@
+path: /home/jian/rosbag/loop2/raw_restore_20260914_stage0/loop2_raw.bag
+version: 2.0
+duration: 1090.511421
+start: 1786179479.488303
+end: 1786180569.999725
+size: 19677401800
+messages: 255478
+indexed: True
+compression: none
+types:
+    - type: livox_ros_driver2/CustomMsg
+      md5: e4d6829bdfe657cb6c21a746c86b21a6
+    - type: sensor_msgs/CameraInfo
+      md5: c9a58c1b0b154e0e6da7578cb991d214
+    - type: sensor_msgs/Image
+      md5: 060021388200f6f0f447d0fcd9c64743
+    - type: sensor_msgs/Imu
+      md5: 6a62c6daae103f4ff57a132d6f95cec2
+topics:
+    - topic: /image_left/camera_info
+      type: sensor_msgs/CameraInfo
+      messages: 6618
+    - topic: /image_left/camera_info_rect
+      type: sensor_msgs/CameraInfo
+      messages: 6618
+    - topic: /image_left/image_raw
+      type: sensor_msgs/Image
+      messages: 6618
+    - topic: /image_left/image_rect
+      type: sensor_msgs/Image
+      messages: 6618
+    - topic: /livox/imu
+      type: sensor_msgs/Imu
+      messages: 218101
+    - topic: /livox/lidar
+      type: livox_ros_driver2/CustomMsg
+      messages: 10905
+

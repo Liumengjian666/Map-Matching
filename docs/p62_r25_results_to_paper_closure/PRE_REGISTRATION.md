@@ -1,0 +1,3 @@
+# R25 G-only frozen ablation
+
+START e2673afc388e56cf7ed2bbc1997391740fe23b33. Exactly one W1/C3 anchor2600/evaluation2601–2660, 60 scans, same R24 raw inputs/IMU/EKF/OOSM/Deskew/P45 maps/initialization/native parameters. G on, F off, frozen C post-quality basic+Coverage Consistency Mean<=.30 preserved, all additional search disabled. Maximum60 actual Full and exactly0 extra. Independent new causal state, no R24 candidate replay. Historical R23 A and R24 C+G reused for comparison, not rerun. Seal native outputs before evaluation reference reads; no trajectory alignment or threshold revision. Failed/no observation uses actual IMU state, never fake NDT prediction measurement. After ablation no algorithm changes.
