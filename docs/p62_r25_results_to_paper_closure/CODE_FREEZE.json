@@ -1,0 +1,39 @@
+{
+  "task": "P62-R25-RESULTS-TO-PAPER-CLOSURE",
+  "START_SHA": "e2673afc388e56cf7ed2bbc1997391740fe23b33",
+  "CODE_SHA": "131a900842e965305465220e777c8d6949c5f17a",
+  "files_sha256": {
+    "src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp": "30fd45f387ed90396fdefecbb98b0cbdf8f45df1a243830e7b184222d1ed792e",
+    "src/dog_prior_map_localization/launch/p62_r25_g_only_ablation.launch": "9bff2d45a07f32b564ddbc398eddc7c8c255e2bf7fd8a68d17061cac8cc9bcc0",
+    "docs/p62_r25_results_to_paper_closure/tools/run_ros.py": "1eacb81d0b6da23946e40ab3be34dcd62000e5cfc83f69c9b930579316280bc7",
+    "docs/p62_r25_results_to_paper_closure/tools/evaluate.py": "5a19e98623b21206f73a1cdacf9ddfb0c9009b5bf38a289aa4fb55eb37481fa0",
+    "docs/p62_r25_results_to_paper_closure/PRE_REGISTRATION.md": "735c643356fe1ab81db3935d70350845a412dec7b6fee863db7259149ba3d399",
+    "docs/p62_r25_results_to_paper_closure/input/INITIALIZATION_AND_TIME_CONTRACT.json": "1c3188b4822888894ed8abdf5d11dec8218efc6830336ac8d962802d1df3aa70",
+    "src/dog_prior_map_localization/src/fusion/ndt_observation.cpp": "2274147a6ee04dc3a26e09f06b9c1a0f0e094780697c744491210d72a19b0cd3",
+    "src/dog_prior_map_localization/src/imu_processor.cpp": "0f616421e23c78f75f04dc44e4a7a50bb5d9708a3c3656c92b5d3cb608ad4cfe",
+    "src/dog_prior_map_localization/src/core/imu_propagation.cpp": "0ff8fdfb07841c3cefd24bc9fd387212cd471d5d2d70431db816b19435285895",
+    "src/dog_prior_map_localization/src/imu_deskew_runtime.cpp": "12a5f7a6a8f75accfa20faf56a3adb9faef21314e7d690005c4f525af342a8c4",
+    "src/dog_prior_map_localization/src/local_map_tiles.cpp": "0d33ceae8b97abbed89f21e07dc0483102f9b3bf17e28ae67e432e9a617357a4",
+    "docs/p62_r20_quality_gated_recovery/tools/policy.hpp": "2cd244d5fa41b791bcbebb5f98682674c48b10cf67b021212ec1ab9ab4938946",
+    "src/dog_prior_map_localization/src/newer_college_first_scan_publisher.cpp": "8f2ec421efe09b25c15ed0a3b59d67deb13c3d4507f09a9927e63ece1db138cc",
+    "src/dog_prior_map_localization/launch/p62_r24_geometry_oosm.launch": "a90d876310bf71955c1c815a1b4bf8edd8b89ee42126a905a672d1917af083c8",
+    "devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp": "59ad81d56759c2d6064fb9f4137c52f611c1607203f4a84884b4af22a0eadfa8",
+    "devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp": "01550b9950f17798a57b0dcd8e707c6cdc6f6c76f78360286787bdfd79114ddc",
+    "devel/lib/dog_prior_map_localization/newer_college_sequence_publisher": "ba96d219248edb1ed4d5d9b1e6842145baed88097bd58607fc630100f0ab9a65"
+  },
+  "nominal_full_max": 60,
+  "extra_full_max": 0,
+  "native_calls_at_freeze": 0,
+  "reference_values_read": false,
+  "unchanged_source_verified_against_START": [
+    "src/dog_prior_map_localization/src/fusion/ndt_observation.cpp",
+    "src/dog_prior_map_localization/src/imu_processor.cpp",
+    "src/dog_prior_map_localization/src/core/imu_propagation.cpp",
+    "src/dog_prior_map_localization/src/imu_deskew_runtime.cpp",
+    "src/dog_prior_map_localization/src/local_map_tiles.cpp",
+    "docs/p62_r20_quality_gated_recovery/tools/policy.hpp",
+    "src/dog_prior_map_localization/src/newer_college_first_scan_publisher.cpp",
+    "src/dog_prior_map_localization/launch/p62_r24_geometry_oosm.launch"
+  ],
+  "EKF_and_publisher": "exact preserved R24 binaries reused; only NDT rebuilt Release"
+}
