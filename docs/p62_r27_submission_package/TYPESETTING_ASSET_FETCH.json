@@ -1,0 +1,32 @@
+[
+  {
+    "name": "jsen.zip",
+    "url": "https://journals.ieeeauthorcenter.ieee.org/wp-content/uploads/sites/7/jsen.zip",
+    "status": "FAILED",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  {
+    "name": "tectonic.tar.gz",
+    "url": "https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.15.0/tectonic-0.15.0-x86_64-unknown-linux-musl.tar.gz",
+    "final_url": "https://release-assets.githubusercontent.com/github-production-release-asset/74936681/9d0d51d6-95f4-41af-834e-2a72174da104?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-10-24T07%3A23%3A10Z&rscd=attachment%3B+filename%3Dtectonic-0.15.0-x86_64-unknown-linux-musl.tar.gz&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-10-24T06%3A22%3A29Z&ske=2026-10-24T07%3A23%3A10Z&sks=b&skv=2018-11-09&sig=2zWvZooEQ0JM66%2Bj7Yv0PDNMOem8IiqwUQzWaMCgtHk%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MjgyNTYyNCwibmJmIjoxNzkyODIzODI0LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.FJyVfOBOighYW04YczcH15Rjg_1RtZNgQv_Rl-uMs-s&response-content-disposition=attachment%3B%20filename%3Dtectonic-0.15.0-x86_64-unknown-linux-musl.tar.gz&response-content-type=application%2Foctet-stream",
+    "content_type": "application/octet-stream",
+    "bytes": 14175003,
+    "sha256": "dfb82876f2986862996e564fa507a9e576e0c1e3bee63c2c1bd677c2543e6407",
+    "status": "PASS"
+  },
+  {
+    "name": "autoware_ndt_README.md",
+    "url": "https://raw.githubusercontent.com/autowarefoundation/autoware_core/main/localization/autoware_ndt_scan_matcher/README.md",
+    "final_url": "https://raw.githubusercontent.com/autowarefoundation/autoware_core/main/localization/autoware_ndt_scan_matcher/README.md",
+    "content_type": "text/plain; charset=utf-8",
+    "bytes": 45001,
+    "sha256": "4a659890ac56ed53b196b71ab36acfe08f0df53e21f61ce4dc21b6c2e263b0ea",
+    "status": "PASS"
+  },
+  {
+    "name": "journal_guidelines.html",
+    "url": "https://ieee-sensors.org/ieee-sensors-journal/for-authors/",
+    "status": "FAILED",
+    "error": "HTTP Error 403: Forbidden"
+  }
+]

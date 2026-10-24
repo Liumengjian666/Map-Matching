@@ -1,0 +1,51 @@
+{
+  "checked_date": "2026-10-24",
+  "journal_guide": {
+    "url": "https://ieee-sensors.org/ieee-sensors-journal/for-authors/",
+    "access": "browser tool read successful; direct urllib403",
+    "facts": "double-column, normally8pages, mandatory graphical abstract, current Author Portal link"
+  },
+  "article_structure": {
+    "url": "https://journals.ieeeauthorcenter.ieee.org/create-your-ieee-journal-article/create-the-text-of-your-article/structure-your-article/",
+    "facts": "single paragraph abstract up to250words;3–5keywords"
+  },
+  "graphical_abstract": {
+    "url": "https://journals.ieeeauthorcenter.ieee.org/create-your-ieee-journal-article/prepare-supplementary-materials/",
+    "facts": "660x295px;300dpi minimum;recommended<45KB;peer-review upload"
+  },
+  "AI_policy": {
+    "url": "https://open.ieee.org/author-guidelines-for-artificial-intelligence-ai-generated-text/",
+    "facts": "disclose AI-generated content, system and scope in acknowledgments"
+  },
+  "backup_journal": {
+    "url": "https://publishingsupport.iopscience.iop.org/journals/measurement-science-and-technology/about-measurement-science-technology/",
+    "facts": "measurement-technique advance and measurement uncertainty/precision/accuracy expected"
+  },
+  "Autoware_documentation": {
+    "url": "https://autowarefoundation.github.io/autoware_core/main/localization/autoware_ndt_scan_matcher/",
+    "raw_url": "https://raw.githubusercontent.com/autowarefoundation/autoware_core/main/localization/autoware_ndt_scan_matcher/README.md",
+    "sha256": "4a659890ac56ed53b196b71ab36acfe08f0df53e21f61ce4dc21b6c2e263b0ea",
+    "bytes": 45001,
+    "scope": "documentation only, no algorithm clone/build/run"
+  },
+  "template": {
+    "official_selector": "https://template-selector.ieee.org/",
+    "selector_status": "HTTP418",
+    "legacy_JSEN_zip_status": "HTTP403",
+    "used": "standard IEEEtran journal class1.8b, CTAN maintainer distribution",
+    "url": "https://mirrors.ctan.org/macros/latex/contrib/IEEEtran.zip",
+    "zip_sha256": "e0cd4f5afbd42c8076092280e72b3e0a5111efe501d35de9f715cfb8da313cb4",
+    "class_sha256": "da751920a317ed318b7b5cd7fa585a6cc7d28502d457856382e9be24b10a3bd7",
+    "bst_sha256": "314f0ece704568faf827011bac498650691b2b5ee06320720830e782416d5a5f",
+    "license": "unmodified original LPPL notices retained",
+    "not_claimed": "Sensors-specific ieeecolor download or publisher-certified final production styling"
+  },
+  "typesetting_tool": {
+    "name": "Tectonic0.15.0",
+    "release_url": "https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.15.0/tectonic-0.15.0-x86_64-unknown-linux-musl.tar.gz",
+    "binary_sha256": "4df19452c202c5bef9f7c7e4a01a3f2b9d5199f0a1f73b70b4fe1bffbc9837f6",
+    "system_installation_changed": false
+  },
+  "new_estimator_calls": 0,
+  "external_matching_algorithm_runs": 0
+}
