@@ -1,0 +1,95 @@
+# 机器狗端低算力先验地图定位配置
+# 当前默认版本：FAST-LIVO2 离线建图，机器狗端加载先验地图后，用 IMU 传播初值 + NDT 全局先验地图匹配定位。
+
+frames:
+  map_frame: "camera_init"  # 与 FAST-LIVO2 建图/先验 PCD 坐标系保持一致
+  base_frame: "livox_frame" # MID360 雷达/IMU 一体，定位结果直接表示雷达坐标系
+
+topics:
+  imu: "/livox/imu"
+  lidar: "/livox/lidar"
+  lidar_msg_type: "livox"
+  odom_high_rate: "/dog_livo/odom_high_rate"
+  imu_propagate: "/LIVO2/imu_propagate"
+  odom_corrected: "/dog_livo/odom_corrected"
+  path_high_rate: "/dog_livo/path_high_rate"
+  path_corrected: "/dog_livo/path_corrected"
+  filtered_points: "/dog_livo/filtered_points"
+  diagnostics: "/dog_livo/diagnostics"
+  localization_state: "/dog_livo/localization_state"
+  ndt_odom: "/dog_livo/ndt_odom"
+  ndt_pose: "/dog_livo/ndt_pose"
+  ndt_path: "/dog_livo/ndt_path"
+  points_aligned: "/dog_livo/points_aligned"
+
+map:
+  pcd_fallback_path: "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd"
+  voxel_size: 0.15
+
+imu:
+  gravity: 9.80665
+  initialize_gravity_from_imu: true
+  init_imu_samples: 200
+  velocity_damping: 0.98
+  acc_noise: 2.0
+  gyro_noise: 0.1
+  acc_bias_noise: 0.0001
+  gyro_bias_noise: 0.0001
+  max_dt: 0.05
+  history_keep_sec: 2.0
+  publish_high_rate: true
+  publish_imu_propagate_alias: true
+
+ndt_observation:
+  # Validated deterministic split baseline:
+  # - OOSM enabled
+  # - midpoint scan reference
+  # - external EKF pose feedback is not consumed for NDT initialization
+  # - NDT-local gyro rotation prior enabled
+  oosm_enable: true
+  oosm_max_alignment_sec: 0.02
+
+lidar_update:
+  # Validated deterministic split baseline keeps deskew disabled.
+  deskew_enable: false
+  offset_time_scale: 0.000000001
+  ndt_source_voxel_size: 0.25
+  ndt_source_voxel_z_size: 0.25
+  ndt_target_voxel_size: 0.15
+  ndt_target_voxel_z_size: 0.15
+  ndt_max_source_points: 1400
+  ndt_max_target_points: 0
+  ndt_max_iterations: 40
+  ndt_resolution: 0.8
+  ndt_step_size: 0.08
+  ndt_transformation_epsilon: 0.001
+  ndt_step_limit_enable: true
+  ndt_step_limit_max_translation: 0.5
+  ndt_step_limit_max_rotation_deg: 5.0
+  # The validated baseline uses the local IMU gyro rotation prior and does not
+  # consume EKF pose feedback for NDT initialization.
+  local_imu_rotation_prior_enable: true
+  # Use the validated midpoint reference time for each multi-point Livox scan.
+  scan_reference_time: "mid"
+  pending_lidar_max_frames: 50
+  # The transport queue prevents ROS callback scheduling from silently
+  # dropping scans while one NDT alignment is running.
+  lidar_subscriber_queue_size: 100
+
+output:
+  path_max_length: 5000
+  path_sample_rate_hz: 2.0
+  path_publish_rate_hz: 1.0
+  publish_path: true
+  publish_tf: true
+  publish_filtered_points: true
+  publish_diagnostics: true
+  localization_state_rate_hz: 10.0
+  localization_state_timeout_sec: 2.0
+  localization_state_lost_failures: 5
+  localization_state_jump_translation_m: 0.25
+  localization_state_jump_rotation_deg: 3.0
+  print_debug: true
+  debug_interval_sec: 2.0
+  runtime_csv_path: "/home/jian/dog_prior_map_livo_ws/validation/latest_runtime.csv"
+  oosm_csv_path: ""

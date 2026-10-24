@@ -1,0 +1,378 @@
+{
+  "task": "P62-R25-RESULTS-TO-PAPER-CLOSURE",
+  "status": "ABLATION_AND_MANUSCRIPT_COMPLETE; DOG_DEPLOYMENT_BLOCKED",
+  "ablation_conclusion": "G_ONLY_INSUFFICIENT; FIXED_MULTISTART_ADDITIONAL_CONTRIBUTION_OBSERVED_ON_THIS_DEVELOPMENT_CASE",
+  "git": {
+    "START_SHA": "e2673afc388e56cf7ed2bbc1997391740fe23b33",
+    "CODE_SHA": "131a900842e965305465220e777c8d6949c5f17a",
+    "branch": "research/p62-r25-results-to-paper-closure",
+    "native_seal_commit": "0d4a56f55b6550a61d5c97fa6945d853cc8e49a5",
+    "END_SHA": "Final self-containing archive commit identified in external FINAL_GIT_RECEIPT.json and handoff",
+    "push_performed": false
+  },
+  "new_native_calls": 60,
+  "new_extra_calls": 0,
+  "new_dog_native_calls": 0,
+  "ablation": [
+    {
+      "method": "A_ORIGINAL_R23",
+      "samples": "60",
+      "translation_rmse_m": "7.98642189306969",
+      "translation_p95_m": "16.421686200718504",
+      "translation_max_m": "18.755586697766333",
+      "rotation_rmse_deg": "13.05264912208735",
+      "rotation_p95_deg": "17.16624573430163",
+      "rotation_max_deg": "18.375466352365613",
+      "ndt_attempts": "0",
+      "ndt_converged": "0",
+      "map_observations": "0",
+      "map_rejections": "60",
+      "extra_full": "0",
+      "high_error_frames": "60",
+      "longest_no_map_frames": "60",
+      "first_sustained_reference_low_error_raw": "",
+      "callback_mean_ms": "30.352497100830078",
+      "callback_p95_ms": "39.25379514694213",
+      "callback_max_ms": "602.2243499755859",
+      "ndt_peak_rss_KiB": "259060",
+      "ekf_peak_rss_KiB": "23208",
+      "pair_peak_rss_KiB": "282196",
+      "process_wall_s": "8.05140879098326"
+    },
+    {
+      "method": "B_G_ONLY_R25",
+      "samples": "60",
+      "translation_rmse_m": "7.98642189306969",
+      "translation_p95_m": "16.421686200718504",
+      "translation_max_m": "18.755586697766333",
+      "rotation_rmse_deg": "13.05264912208735",
+      "rotation_p95_deg": "17.16624573430163",
+      "rotation_max_deg": "18.375466352365613",
+      "ndt_attempts": "60",
+      "ndt_converged": "60",
+      "map_observations": "0",
+      "map_rejections": "60",
+      "extra_full": "0",
+      "high_error_frames": "60",
+      "longest_no_map_frames": "60",
+      "first_sustained_reference_low_error_raw": "",
+      "callback_mean_ms": "110.49617131551106",
+      "callback_p95_ms": "179.40559387207026",
+      "callback_max_ms": "977.301836013794",
+      "ndt_peak_rss_KiB": "369136",
+      "ekf_peak_rss_KiB": "21352",
+      "pair_peak_rss_KiB": "389380",
+      "process_wall_s": "13.308354980999866"
+    },
+    {
+      "method": "C_C_PLUS_G_R24",
+      "samples": "60",
+      "translation_rmse_m": "0.2099428424575639",
+      "translation_p95_m": "0.3001243159696912",
+      "translation_max_m": "0.4442817485815966",
+      "rotation_rmse_deg": "2.984149397247634",
+      "rotation_p95_deg": "3.723286959829232",
+      "rotation_max_deg": "11.245245007295038",
+      "ndt_attempts": "60",
+      "ndt_converged": "60",
+      "map_observations": "57",
+      "map_rejections": "3",
+      "extra_full": "8",
+      "high_error_frames": "2",
+      "longest_no_map_frames": "2",
+      "first_sustained_reference_low_error_raw": "2603",
+      "callback_mean_ms": "55.304392178853355",
+      "callback_p95_ms": "111.3020062446594",
+      "callback_max_ms": "1006.0310363769531",
+      "ndt_peak_rss_KiB": "369096",
+      "ekf_peak_rss_KiB": "23516",
+      "pair_peak_rss_KiB": "392536",
+      "process_wall_s": "9.655876075999913"
+    }
+  ],
+  "new_run_details": {
+    "task": "P62-R25-RESULTS-TO-PAPER-CLOSURE",
+    "formal_run_count": 1,
+    "nominal_full_calls": 60,
+    "extra_full_calls": 0,
+    "total_formal_full_calls": 60,
+    "reference_type": "MAP_ANCHORED_BENCHMARK_REFERENCE; CONDITIONAL_BASE",
+    "reference_sha256": "b2fdfab253ce19ae58e1566c4ef0b66fa04f6feb3798d11d41ca5e809cc4363e",
+    "native_output_seal_sha256": "bd1560d5443471c1d47b44902206f02f62d0d432163c4ddf6cc76efdb92a5ca1",
+    "trajectories": {
+      "W1/C3/G_ONLY": {
+        "samples": 60,
+        "reference_relative_errors": {
+          "IMU_EKF_PREDICTION": {
+            "translation_m": {
+              "n": 60,
+              "mean": 5.693129775850498,
+              "p95": 15.761044491994488,
+              "max": 17.921507938157223,
+              "rmse": 7.594582371470221,
+              "median": 3.928577178328383
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 12.570508774124155,
+              "p95": 16.951955884507587,
+              "max": 17.74080011687244,
+              "rmse": 12.888750243094837,
+              "median": 11.996475377682394
+            }
+          },
+          "NDT_NOMINAL_RAW": {
+            "translation_m": {
+              "n": 60,
+              "mean": 5.606786468124101,
+              "p95": 15.384421525638254,
+              "max": 18.200373008278735,
+              "rmse": 7.515277684614385,
+              "median": 3.7803919811727087
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 12.525133612439147,
+              "p95": 17.231582671898128,
+              "max": 21.81099179796052,
+              "rmse": 12.961812126805485,
+              "median": 12.891407209203539
+            }
+          },
+          "NDT_SELECTED_RAW": {
+            "translation_m": {
+              "n": 0,
+              "mean": null,
+              "p95": null,
+              "max": null,
+              "rmse": null,
+              "median": null
+            },
+            "rotation_deg": {
+              "n": 0,
+              "mean": null,
+              "p95": null,
+              "max": null,
+              "rmse": null,
+              "median": null
+            }
+          },
+          "NDT_PUBLISHED": {
+            "translation_m": {
+              "n": 0,
+              "mean": null,
+              "p95": null,
+              "max": null,
+              "rmse": null,
+              "median": null
+            },
+            "rotation_deg": {
+              "n": 0,
+              "mean": null,
+              "p95": null,
+              "max": null,
+              "rmse": null,
+              "median": null
+            }
+          },
+          "EKF_CAUSAL_OUTPUT": {
+            "translation_m": {
+              "n": 60,
+              "mean": 6.017908484582324,
+              "p95": 16.421686200718504,
+              "max": 18.755586697766333,
+              "rmse": 7.98642189306969,
+              "median": 4.190729335493826
+            },
+            "rotation_deg": {
+              "n": 60,
+              "mean": 12.72844837423537,
+              "p95": 17.16624573430163,
+              "max": 18.375466352365613,
+              "rmse": 13.05264912208735,
+              "median": 12.147986137609777
+            }
+          }
+        },
+        "nominal_ndt_attempts": 60,
+        "nominal_ndt_converged": 60,
+        "nominal_ndt_convergence_rate": 1.0,
+        "all_native_converged": 60,
+        "pre_ndt_rejected_frames": 0,
+        "pre_ndt_guard_rejections": 0,
+        "rejected_after_native_attempt_frames": 60,
+        "all_native_calls": 60,
+        "extra_full_ndt": 0,
+        "basic_quality_failures": 48,
+        "nominal_basic_quality_failure_rate": 0.8,
+        "absolute_quality_rejections_after_basic_pass": 12,
+        "quality_events": 60,
+        "all_scan_quality_events_including_pre_ndt_guard": 60,
+        "map_observations_published": 0,
+        "map_observations_rejected": 60,
+        "relative_only_admissions": 0,
+        "selected_extra_candidates": 0,
+        "imu_high_rate_propagations": 611,
+        "imu_raw_message_count": 611,
+        "imu_propagations_including_oosm_replay": 611,
+        "ndt_callbacks_into_ekf": 0,
+        "ndt_corrections_applied": 0,
+        "oosm_results": {},
+        "replayed_imu_count": 0,
+        "oosm_alignment_error_ms": {
+          "n": 0,
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "no_map_observation_frames": 60,
+        "longest_no_map_run": 60,
+        "no_map_frames_with_real_imu_state_time_advancing": 60,
+        "ekf_high_error_frames": 60,
+        "longest_high_error_run": 60,
+        "no_map_ekf_translation_m": {
+          "n": 60,
+          "mean": 6.017908484582324,
+          "p95": 16.421686200718504,
+          "max": 18.755586697766333,
+          "rmse": 7.98642189306969,
+          "median": 4.190729335493826
+        },
+        "no_map_ekf_rotation_deg": {
+          "n": 60,
+          "mean": 12.72844837423537,
+          "p95": 17.16624573430163,
+          "max": 18.375466352365613,
+          "rmse": 13.05264912208735,
+          "median": 12.147986137609777
+        },
+        "ndt_callback_wall_ms": {
+          "n": 60,
+          "mean": 110.49617131551106,
+          "p95": 179.40559387207026,
+          "max": 977.301836013794
+        },
+        "event_frame_callback_ms": {
+          "n": 60,
+          "mean": 110.49617131551106,
+          "p95": 179.40559387207026,
+          "max": 977.301836013794
+        },
+        "scan_input_to_final_ack_ms": {
+          "n": 60,
+          "mean": 135.71746746699014,
+          "p95": 214.01288509368894,
+          "max": 1011.3141536712646
+        },
+        "process_wall_seconds": 13.308354980999866,
+        "ndt_node_peak_rss_KiB": 369136,
+        "ekf_node_peak_rss_KiB": 21352,
+        "simultaneous_node_peak_rss_KiB": 389380,
+        "actual_target_hashes": [
+          "11658115094751181825"
+        ],
+        "actual_target_points": [
+          2297615
+        ],
+        "native_nominal_score": {
+          "n": 60,
+          "mean": 0.610639144534139,
+          "p95": 1.1363952269413167,
+          "max": 1.1653195213042402
+        },
+        "native_nominal_overlap": {
+          "n": 60,
+          "mean": 0.3452292922747928,
+          "p95": 0.624435261707989,
+          "max": 0.6473829201101928
+        },
+        "coverage_consistency_mean": {
+          "n": 60,
+          "mean": 0.7082473217977717,
+          "p95": 0.8641682504659955,
+          "max": 0.8696842474306307
+        },
+        "recovery_success_not_equated_to_admission": true,
+        "original_geometry_gate_rejections": 60,
+        "originally_rejected_but_attempted": 60,
+        "corrected_messages_received": 0,
+        "corrected_latest_replacements": 0,
+        "queries_using_replaced_sample": 0,
+        "corrected_rejection_reasons": {}
+      }
+    },
+    "vs_R23_C": [
+      {
+        "window": "W1",
+        "arm": "C3",
+        "mode": "G_ONLY",
+        "delta_translation_rmse_m": 0.0,
+        "delta_rotation_rmse_deg": 0.0,
+        "C0_side_effect": false,
+        "W1_C3_target_met": false
+      }
+    ],
+    "reference_time_rule": "exact or bracket gap<=150ms and nearest endpoint<=50ms; translation linear, rotation SLERP in Base then fixed T_B_L; no fitted offset/alignment",
+    "EKF_time_rule": "same-frame actual corrected current-state publication after accepted map measurement; otherwise actual high-rate watermark publication; never compared against scan-start reference",
+    "limitations": [
+      "known development windows",
+      "conditional Base reference exported by map registration, not independent mocap",
+      "Coverage Consistency Mean points participate in Full NDT",
+      "existing zero-velocity/bias anchor priors; no independent calibration or GT velocity",
+      "F only replaces exact latest corrected timestamp; actual query consumption separately measured",
+      "all native candidates precede reference evaluation; admission does not imply correctness",
+      "pre-NDT geometry guard rejections are separate from optimizer/basic/absolute quality failures; zero attempts gives unavailable convergence rate"
+    ]
+  },
+  "dog_status": "DOG_COMPARISON_BLOCKED",
+  "dog_primary_blocker": "LIDAR_IMU_EXTRINSIC_PROVENANCE_NOT_ESTABLISHED",
+  "paper": {
+    "path": "PAPER_DRAFT.md",
+    "words_whitespace_split": 4575,
+    "required_sections_complete": true,
+    "novel_mathematics_claimed": false,
+    "deployment_validation_claimed": false,
+    "reference_type": "MAP_ANCHORED_BENCHMARK_REFERENCE; CONDITIONAL_BASE",
+    "figures_formats": [
+      "PNG",
+      "PDF",
+      "SVG"
+    ],
+    "submission_ready_claim": false
+  },
+  "frozen_method": "C+G; F/D/E/Coupled excluded",
+  "next": "科研总控先审阅英文初稿与证据表，决定论文最终主张和投稿定位；机器狗部署仅在可信外参合同补齐后另行安排，不再继续离线恢复算法探索。",
+  "final_validation": {
+    "task": "P62-R25-RESULTS-TO-PAPER-CLOSURE",
+    "ablation_and_paper_artifact_checks": "PASS",
+    "dog_status": "BLOCKED_COORDINATE_CHAIN",
+    "frozen_code_binaries_input_match": true,
+    "native_output_files_sha_verified": 19,
+    "reference_after_native_seal": true,
+    "new_native_full": 60,
+    "new_extra_full": 0,
+    "new_dog_native_calls": 0,
+    "stable_snapshot_unchanged": true,
+    "stable_after": {
+      "HEAD": "41999ea700c66c4cadf0eca9e0c5d73caa2783fd",
+      "branch": "feature/quadruped-localization-interface",
+      "status_sha256": "aaeeb0ce6ba92e7423e0d5578331404f7e59b22086330da53ed2444d83932e63",
+      "index_sha256": "0d73adc5d9de6e7a63aa913d30da3c9aecde41b4882bb847e227157ac9dbb392",
+      "protected_files_sha256": {
+        "src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp": "40cdf26f9dddb9d06dc16c0bfd89fc88a9dd33e42e5bbd4e9bc3b453f1e4277c",
+        "src/dog_prior_map_localization/src/dog_prior_map_ekf_node.cpp": "e69fade2af615cff00af87dc0e8860017cb236a80a80926bf384f108666fcc58",
+        "src/dog_prior_map_localization/src/dog_prior_map_ekf_node_core.cpp": "7038444b77cac7987bfdc28acbef27eafbbd42475f6b7a5a942a7f73bf1f5d30",
+        "src/dog_prior_map_localization/src/local_map_tiles.cpp": null,
+        "src/dog_prior_map_localization/src/imu_processor.cpp": "1e6b2dd5269241f5f87d665bc8151264b015fbae8bfa29045a92cbd9513ad6eb",
+        "src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch": "bb0b3f0bdb3d009c75899511517c529f4f846db3390143bebc0279d553fb3f4f",
+        "src/dog_prior_map_localization/launch/newer_college_local_map.launch": null,
+        "src/dog_prior_map_localization/config/dog_prior_map_localization_ndt.yaml": "08c5fbf67684892dbea7b61255de2acb0ad8fdd73bb5bd5b8c5960b92ffac183"
+      }
+    },
+    "historical_archives_unchanged_against_START": true,
+    "paper_required_sections_complete": true,
+    "paper_words": 4575,
+    "new_dog_rviz": "XML/configuration only, not executed; no estimator in viewer",
+    "production_readiness_or_novelty_pass_claimed": false
+  }
+}

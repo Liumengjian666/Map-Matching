@@ -1,0 +1,69 @@
+{
+  "status": "DOG_COMPARISON_BLOCKED",
+  "primary_blocker": "LIDAR_IMU_EXTRINSIC_PROVENANCE_NOT_ESTABLISHED",
+  "coordinate_chain_verified": false,
+  "dog_baseline_new_ndt_calls": 0,
+  "dog_cg_new_ndt_calls": 0,
+  "bag": {
+    "path": "/home/jian/rosbag/loop2/raw_restore_20260914_stage0/loop2_raw.bag",
+    "bytes": 19677401800,
+    "archival_expected_sha256": "d17bee3f8697dcb01cb4b9f6ea2483aa42a1a31ae277659c8a7869d9c69f13ae",
+    "sha_recomputed_this_task": false,
+    "indexed_rosbag_info_read": true,
+    "lidar_scans": 10905,
+    "imu_messages": 218101,
+    "duration_seconds": 1090.511421
+  },
+  "map": {
+    "path": "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd",
+    "sha256": "016b7ae3ae494ad5d462a66d888a96b96dda5fe29d6058059aa2fa6bdf6b09ca",
+    "bytes": 7346648,
+    "source": "same-loop FAST-LIVO2 map, not independent cross-session map"
+  },
+  "actual_mapping_config": {
+    "path": "/media/jian/HIKVISION/Jian_FASTLIVO_Data/dogrosbag/loop2_map_match_experiment_2026_08_08_17_36_19/config/loop2_config.yaml",
+    "sha256": "1cde331d3b092629e1c2b06ebf218a9c51122fe4f8feeef3ea6e9ef2fafae76c",
+    "extrinsic_T": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "extrinsic_R": [
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ],
+    "qualification": "explicit fallback assumption, not a separately established physical calibration"
+  },
+  "stable_runtime": {
+    "config": "/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/config/dog_prior_map_localization_ndt.yaml",
+    "sha256": "08c5fbf67684892dbea7b61255de2acb0ad8fdd73bb5bd5b8c5960b92ffac183",
+    "scan_reference": "mid",
+    "deskew_enabled": false,
+    "imu_gravity_init_samples": 200,
+    "T_imu_lidar_provenance": "unavailable; same livox_frame names do not prove the transform"
+  },
+  "reference": {
+    "path": "/home/jian/rosbag/loop2/loop2mapping/pcd/lidar_poses.txt",
+    "type": "SAME_SYSTEM_MAPPING_TRAJECTORY",
+    "independent_GT": false,
+    "existing_comparison": "interpolation and first-common-position subtraction; legacy diagnostic, not R25 absolute accuracy",
+    "metrics_sha256": "7e7dfa7b2d89a7783981a8fd802ffc2eeb4096a82e626767353daeba7e61f995"
+  },
+  "source_overlay_evidence": {
+    "path": "src/dog_prior_map_localization/config/own_loop2.yaml",
+    "sha256": "76969b33fe5a8ee977074389852131100a9296ad564250c6f703b13d63237957",
+    "explicit_status": "UNAVAILABLE_NOT_PHYSICALLY_CALIBRATED"
+  },
+  "quality_scale_transfer_to_mid360_verified": false,
+  "threshold_030_generalization_claim": false,
+  "new_dataset_search": false,
+  "rosbag_play_executed": false,
+  "visualization_only_template_executed": false
+}

@@ -1,0 +1,9 @@
+stage,source,sha256,supported_scope,limitation
+P45,docs/p45_newer_college_local_map/REPORT.md,9659e4f0bde178957b9523a154986e09b4a8d657ed83a79de4c1870fcb8845f5,historical300-scan memory/accuracy tradeoff,conditional Benchmark; no live tile transition
+R19,docs/p62_r19_native_ndt_basin_stress_test/REPORT.md,e742132d3833b29e1082a79938fd5bd51f6823640981fcf916de30e1818cb55a,480 native results+6 terminal stability checks,optimizer-only causal; not strict local-minimum proof
+R20,docs/p62_r20_quality_gated_recovery/results.json,b0acb34bd63c7763bc41257d989e8d0891c7c44afe7fb48fe0e93e113344e7f2,fixed quality gate and simple multistart development,not independent validation
+R21,docs/p62_r21_relative_temporal_admission/REPORT.md,81a2be5bd2c4f312bd5c50b3ca442564ecc30f93d9909e62a8e0dc41edcbd1ad,relative-admission positive development and confirmation cost,"discontinued, not retained method"
+R22,docs/p62_r22_frozen_relative_holdout/HOLDOUT_COMPARISON.md,4ebdb50f8c3e309dfd46d1d5176d5be8daa4f344fa5975d227f53378ff9e785b,four-window frozen safety counterexample,only W1 exercises relative-only mechanism
+R23,docs/p62_r23_real_imu_closure/EVALUATION_SUMMARY.json,518eb0ea5097a76efa7eb06518899cc6182cb3f8af09c2f24fe062a99584e4a4,original IMU/EKF baseline and failed W1/C3 pre-gate,"source of A, historical not rerun"
+R24,docs/p62_r24_geometry_oosm_freshness/EVALUATION_SUMMARY.json,f48a9360bf7253d248e77ce9038dcdc91c526bd3d97e83321f8bc8fd173aeb85,C+G result and F non-consumption,"source of C, historical not rerun"
+R25,docs/p62_r25_results_to_paper_closure/EVALUATION_SUMMARY.json,7ca4204c774b45b5af39002db0f9b1bab846efd48d135adfb2757fc914271168,new independent G-only causal run,known development window; no extra alignment

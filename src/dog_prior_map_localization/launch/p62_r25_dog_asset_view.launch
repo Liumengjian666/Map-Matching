@@ -1,0 +1,16 @@
+<launch>
+  <!-- CONFIGURATION ONLY. No NDT/EKF estimator and no raw-bag player is started. -->
+  <param name="use_sim_time" value="true" />
+  <node pkg="pcl_ros" type="pcd_to_pointcloud" name="r25_dog_prior_map_view" output="screen">
+    <param name="file_name" value="/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd" />
+    <param name="frame_id" value="camera_init" />
+    <param name="interval" value="0.0" />
+    <param name="latch" value="true" />
+    <remap from="cloud_pcd" to="/dog_livo/prior_map" />
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+  <node pkg="rviz" type="rviz" name="r25_dog_asset_rviz" args="-d $(find dog_prior_map_localization)/rviz/p62_r25_dog_assets.rviz" output="screen">
+    <env name="DISABLE_ROS1_EOL_WARNINGS" value="1" />
+    <env name="LD_PRELOAD" value="/lib/x86_64-linux-gnu/libusb-1.0.so.0" />
+  </node>
+</launch>

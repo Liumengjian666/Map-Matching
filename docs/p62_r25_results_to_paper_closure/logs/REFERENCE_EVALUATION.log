@@ -1,0 +1,1 @@
+{"formal_runs": 1, "nominal": 60, "extra": 0, "vs_R23_C": [{"window": "W1", "arm": "C3", "mode": "G_ONLY", "delta_translation_rmse_m": 0.0, "delta_rotation_rmse_deg": 0.0, "C0_side_effect": false, "W1_C3_target_met": false}]}
