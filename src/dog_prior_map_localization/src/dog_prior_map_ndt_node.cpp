@@ -2423,7 +2423,24 @@ private:
           sample.publisher != "/dog_prior_map_ekf" || sample.frame_id != map_frame_ ||
           sample.child_frame_id != base_frame_ || sample.callback_accept_wall_sec > r23_query_wall_ ||
           sample.stamp_ns > timing.reference_stamp.toNSec())
+      {
+        const bool input_gap = r23_prediction_.status=="STALE_CAUSAL_EKF_SAMPLE" ||
+            r23_prediction_.status=="NO_CAUSAL_EKF_SAMPLE";
+        if (r29_enable_ && input_gap) {
+          // Full-sequence input handling only: retain the original freshness
+          // bound, refuse alignment/measurement, and let real IMU continue.
+          r23_reason_="INPUT_PREDICTION_REJECTED_"+r23_prediction_.status;
+          diagnostic_row.initial_guess_source="REJECTED_CAUSAL_PREDICTION";
+          diagnostic_row.initial_guess_reason=r23_prediction_.status;
+          r23_prediction_.map_T_lidar=Eigen::Matrix4d::Constant(NAN);
+          const double elapsed=(ros::WallTime::now()-callback_start).toSec()*1000.;
+          publishDiagnostics(timing.reference_stamp,false,0.,preprocess_ms,elapsed,
+              static_cast<int>(source->size()),target_cloud_->size(),0.,0);
+          writeDeterminismRow(diagnostic_row);
+          return;
+        }
         throw std::runtime_error("R23 illegal causal IMU-EKF prediction: " + r23_prediction_.status);
+      }
       if (r24_enable_) {
         const uint64_t latest=ekf_pose_history_.empty()?0:ekf_pose_history_.back().stamp_ns;
         r24_revision_log_ << std::setprecision(17) << "QUERY," << r23_query_wall_ << ',' << timing.reference_stamp.toNSec() << ','

@@ -1,0 +1,58 @@
+[
+  {
+    "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/interface_easy_c0_d_watermark_04",
+    "status": "PROCESS_FINISHED",
+    "input_completed": false,
+    "native_calls": 4,
+    "scope": "INTERFACE_OR_INCOMPLETE_ADAPTER_RUN_NOT_ACCURACY_EVIDENCE",
+    "reference_error_read": false
+  },
+  {
+    "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_A_full_01",
+    "status": "INTERRUPTED",
+    "input_completed": false,
+    "native_calls": 4,
+    "scope": "INTERFACE_OR_INCOMPLETE_ADAPTER_RUN_NOT_ACCURACY_EVIDENCE",
+    "reference_error_read": false
+  },
+  {
+    "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/interface_easy_c0_d_01",
+    "status": "COMPLETED_INPUT_SHUTDOWN",
+    "input_completed": true,
+    "native_calls": 3,
+    "scope": "INTERFACE_OR_INCOMPLETE_ADAPTER_RUN_NOT_ACCURACY_EVIDENCE",
+    "reference_error_read": false
+  },
+  {
+    "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/interface_easy_c0_d_gap_closed_05",
+    "status": "COMPLETED_INPUT_SHUTDOWN",
+    "input_completed": true,
+    "native_calls": 6,
+    "scope": "INTERFACE_OR_INCOMPLETE_ADAPTER_RUN_NOT_ACCURACY_EVIDENCE",
+    "reference_error_read": false
+  },
+  {
+    "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/interface_easy_c0_d_gap_03",
+    "status": "PROCESS_FINISHED",
+    "input_completed": false,
+    "native_calls": 4,
+    "scope": "INTERFACE_OR_INCOMPLETE_ADAPTER_RUN_NOT_ACCURACY_EVIDENCE",
+    "reference_error_read": false
+  },
+  {
+    "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_A",
+    "status": "INTERRUPTED",
+    "input_completed": false,
+    "native_calls": 4,
+    "scope": "INTERFACE_OR_INCOMPLETE_ADAPTER_RUN_NOT_ACCURACY_EVIDENCE",
+    "reference_error_read": false
+  },
+  {
+    "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/interface_easy_c0_d_snapshot_02",
+    "status": "COMPLETED_INPUT_SHUTDOWN",
+    "input_completed": true,
+    "native_calls": 3,
+    "scope": "INTERFACE_OR_INCOMPLETE_ADAPTER_RUN_NOT_ACCURACY_EVIDENCE",
+    "reference_error_read": false
+  }
+]

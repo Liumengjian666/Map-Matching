@@ -1,0 +1,23 @@
+{
+  "sequence": "indoor_hard_01",
+  "source_metadata": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_hard_01/indoor_hard_01/metadata.yaml",
+  "selected_message_counts": {
+    "/imu": 44398,
+    "/points2/decompressed": 2379
+  },
+  "xyz_bitwise_roundtrip": "PASS_ALL_POINTS_ALL_SCANS",
+  "imu_exact_roundtrip": "PASS_ALL_USED_VALUES",
+  "cdr_topic_sha256": {
+    "/imu": "80e30c6fc39e274d994718e986e18b2704bde05a4253d35bfe33121dff972e32",
+    "/points2/decompressed": "020497f9a97fd948c2679ec977a731dbf1f619d35156602b75e945de62926763"
+  },
+  "converted_xyz_sha256": "6cc135879229d995aff23cc69ee94af35c9b8a744493f8ca314381ef12fb57b3",
+  "imu_value_sha256": "9470674b3c0db42f231fcdf2da49137f7bdc949f0d61061a7e4c80465b42e809",
+  "imu_csv": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_hard_01_adapter/imu.csv",
+  "imu_count": 44398,
+  "imu_start_ns": 1690354429603963391,
+  "imu_end_ns": 1690354593481012582,
+  "max_imu_gap_ns": 102216553,
+  "seconds": 32.536666220999905,
+  "gt_pose_values_read": false
+}

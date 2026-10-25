@@ -96,5 +96,31 @@
         "crc": 3327546380
       }
     ]
+  },
+  {
+    "path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_hard_01.zip",
+    "bytes": 1951298635,
+    "md5": "c5eca239e8635656af1ec5c5bb6532b7",
+    "sha256": "1594df469fcaf563297dbd6639d9d54763adf4ebd586d4e553e4f7b5384af628",
+    "publisher_md5_pass": true,
+    "seconds": 938.8238672570005,
+    "uncompressed_bytes": 5090284597,
+    "members": [
+      {
+        "name": "indoor_hard_01/",
+        "bytes": 0,
+        "crc": 0
+      },
+      {
+        "name": "indoor_hard_01/metadata.yaml",
+        "bytes": 1077,
+        "crc": 18179883
+      },
+      {
+        "name": "indoor_hard_01/decompressed_03_0.db3",
+        "bytes": 5090283520,
+        "crc": 3807942698
+      }
+    ]
   }
 ]

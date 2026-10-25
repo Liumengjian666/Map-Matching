@@ -217,6 +217,14 @@ def main():
                     completed_input = True
                     if completion_seen_seconds is None:
                         completion_seen_seconds = began - start
+                if peak_ndt and (not ndt_pids or not ekf_pids) and not completed_input and stop_time is None:
+                    stop_time = began
+                    owned.signal(signal.SIGINT)
+                    escalation.append('SIGINT_LOCALIZATION_NODE_EXITED')
+                if publisher_seen and not publisher_alive and not completed_input and stop_time is None:
+                    stop_time = began
+                    owned.signal(signal.SIGINT)
+                    escalation.append('SIGINT_INPUT_PROCESS_FAILED')
                 if completed_input and not publisher_alive and stop_time is None:
                     shutdown_requested_seconds = began - start
                     stop_time = began

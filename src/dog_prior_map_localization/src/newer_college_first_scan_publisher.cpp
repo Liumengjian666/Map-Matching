@@ -583,12 +583,32 @@ void runSequencePublisher(ros::NodeHandle &nh, ros::NodeHandle &pnh,
     imu_pub.publish(makeImuMessage(bracket, imu_frame));
     ++imu_cursor;
     last_imu_consumed_ns = bracket.stamp_ns;
+    if (instantaneous_scan) {
+      const double max_dt=nh.param<double>("imu/max_dt",0.05);
+      auto valid_interval=[&](uint64_t a,uint64_t b) {
+        ros::Time left,right;left.fromNSec(a);right.fromNSec(b);
+        const double dt=right.toSec()-left.toSec();return dt>0 && dt<=max_dt;
+      };
+      // Preserve the EKF's frozen gap rejection. Advance only real messages
+      // until its raw cursor can resume; do not wait for a dropped sample.
+      bool resumed=valid_interval(previous_imu_ns,bracket.stamp_ns);
+      while (!resumed) {
+        if (imu_cursor>=imu_records.size()) throw std::runtime_error("no real IMU after dropped interval");
+        const auto& next=imu_records[imu_cursor++];
+        resumed=valid_interval(last_imu_consumed_ns,next.stamp_ns);
+        imu_pub.publish(makeImuMessage(next,imu_frame));last_imu_consumed_ns=next.stamp_ns;
+      }
+    }
     const uint64_t imu_first_ns = imu_begin < imu_cursor ? imu_records[imu_begin].stamp_ns : bracket.stamp_ns;
-    const uint64_t imu_last_ns = bracket.stamp_ns;
+    const uint64_t imu_last_ns = last_imu_consumed_ns;
 
     if (!waitFor([&]() {
-          return capture.latestEkfImuNs() >= imu_last_ns &&
+          const bool ready=capture.latestEkfImuNs() >= imu_last_ns &&
               capture.latestNdtImuNs() >= imu_last_ns && !capture.watermarkOrderError();
+          if (!ready) ROS_WARN_THROTTLE(10.0,"R29 watermark wait expected=%llu EKF=%llu NDT=%llu order_error=%d",
+              static_cast<unsigned long long>(imu_last_ns),static_cast<unsigned long long>(capture.latestEkfImuNs()),
+              static_cast<unsigned long long>(capture.latestNdtImuNs()),capture.watermarkOrderError());
+          return ready;
         }, scan_ack_timeout_sec, "waiting for EKF and NDT IMU consumer watermarks"))
       throw std::runtime_error("P44 IMU watermark handshake failed before cloud publication");
 

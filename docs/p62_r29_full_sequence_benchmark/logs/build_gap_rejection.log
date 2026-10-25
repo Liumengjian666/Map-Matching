@@ -1,0 +1,251 @@
+[  0%] Built target bond_generate_messages_lisp
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtServerStatus
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_VisualDegeneracy
+[  0%] Built target sensor_msgs_generate_messages_py
+[  0%] Built target geometry_msgs_generate_messages_py
+[  0%] Built target std_msgs_generate_messages_py
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtSessionControlAck
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_VisualRelativeMeasurement
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtSessionControl
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanRequest
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanResult
+[  0%] Built target geometry_msgs_generate_messages_nodejs
+[  0%] Built target _dog_prior_map_interfaces_generate_messages_check_deps_NdtScanAck
+[  0%] Built target sensor_msgs_generate_messages_nodejs
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  0%] Built target sensor_msgs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_lisp
+[  0%] Built target geometry_msgs_generate_messages_lisp
+[  0%] Built target sensor_msgs_generate_messages_cpp
+[  0%] Built target geometry_msgs_generate_messages_cpp
+[  0%] Built target sensor_msgs_generate_messages_eus
+[  0%] Built target geometry_msgs_generate_messages_eus
+[  0%] Built target std_msgs_generate_messages_cpp
+[  0%] Built target std_msgs_generate_messages_eus
+[  0%] Built target livox_ros_driver2_generate_messages_nodejs
+[  0%] Built target livox_ros_driver2_generate_messages_lisp
+[  0%] Built target livox_ros_driver2_generate_messages_eus
+[  0%] Built target topic_tools_generate_messages_nodejs
+[  0%] Built target livox_ros_driver2_generate_messages_cpp
+[  0%] Built target topic_tools_generate_messages_lisp
+[  0%] Built target topic_tools_generate_messages_cpp
+[  0%] Built target topic_tools_generate_messages_eus
+[  0%] Built target std_srvs_generate_messages_lisp
+[  0%] Built target std_srvs_generate_messages_eus
+[  0%] Built target std_srvs_generate_messages_cpp
+[  0%] Built target pcl_msgs_generate_messages_py
+[  0%] Built target pcl_msgs_generate_messages_nodejs
+[  0%] Built target pcl_msgs_generate_messages_lisp
+[  0%] Built target tf_generate_messages_nodejs
+[  0%] Built target pcl_msgs_generate_messages_eus
+[  0%] Built target diagnostic_msgs_generate_messages_nodejs
+[  0%] Built target nav_msgs_generate_messages_eus
+[  0%] Built target diagnostic_msgs_generate_messages_cpp
+[  0%] Built target diagnostic_msgs_generate_messages_eus
+[  0%] Built target rosgraph_msgs_generate_messages_nodejs
+[  0%] Built target actionlib_msgs_generate_messages_py
+[  0%] Built target actionlib_generate_messages_cpp
+[  0%] Built target actionlib_msgs_generate_messages_cpp
+[  0%] Built target diagnostic_msgs_generate_messages_py
+[  0%] Built target nav_msgs_generate_messages_nodejs
+[  0%] Built target rosgraph_msgs_generate_messages_lisp
+[  0%] Built target tf_generate_messages_eus
+[  0%] Built target tf2_msgs_generate_messages_eus
+[  0%] Built target roscpp_generate_messages_eus
+[  0%] Built target roscpp_generate_messages_py
+[  0%] Built target roscpp_generate_messages_nodejs
+[  0%] Built target rosgraph_msgs_generate_messages_cpp
+[  0%] Built target actionlib_generate_messages_eus
+[  0%] Built target std_srvs_generate_messages_py
+[  0%] Built target rosgraph_msgs_generate_messages_eus
+[  0%] Built target nav_msgs_generate_messages_cpp
+[  0%] Built target pcl_ros_gencfg
+[  0%] Built target tf_generate_messages_cpp
+[  0%] Built target actionlib_msgs_generate_messages_lisp
+[  0%] Built target tf_generate_messages_py
+[  0%] Built target actionlib_msgs_generate_messages_nodejs
+[  0%] Built target livox_ros_driver2_generate_messages_py
+[  0%] Built target diagnostic_msgs_generate_messages_lisp
+[  0%] Built target actionlib_generate_messages_py
+[  0%] Built target nav_msgs_generate_messages_py
+[  0%] Built target tf_generate_messages_lisp
+[  0%] Built target dynamic_reconfigure_generate_messages_cpp
+[  0%] Built target roscpp_generate_messages_lisp
+[  0%] Built target actionlib_generate_messages_lisp
+[  0%] Built target rosgraph_msgs_generate_messages_py
+[  0%] Built target topic_tools_generate_messages_py
+[  0%] Built target roscpp_generate_messages_cpp
+[  0%] Built target nav_msgs_generate_messages_lisp
+[  0%] Built target actionlib_generate_messages_nodejs
+[  0%] Built target nodelet_generate_messages_eus
+[  0%] Built target tf2_msgs_generate_messages_lisp
+[  0%] Built target tf2_msgs_generate_messages_nodejs
+[  0%] Built target bond_generate_messages_py
+[  0%] Built target dynamic_reconfigure_generate_messages_eus
+[  0%] Built target dynamic_reconfigure_gencfg
+[  0%] Built target nodelet_generate_messages_cpp
+[  0%] Built target tf2_msgs_generate_messages_cpp
+[  0%] Built target dynamic_reconfigure_generate_messages_lisp
+[  0%] Built target nodelet_topic_tools_gencfg
+[  0%] Built target pcl_msgs_generate_messages_cpp
+[  0%] Built target actionlib_msgs_generate_messages_eus
+[  0%] Built target dynamic_reconfigure_generate_messages_py
+[  0%] Built target nodelet_generate_messages_lisp
+[  0%] Built target nodelet_generate_messages_nodejs
+[  0%] Built target bond_generate_messages_nodejs
+[  0%] Built target std_srvs_generate_messages_nodejs
+[  0%] Built target nodelet_generate_messages_py
+[  0%] Built target tf2_msgs_generate_messages_py
+[  0%] Built target dynamic_reconfigure_generate_messages_nodejs
+[  0%] Built target bond_generate_messages_cpp
+[  0%] Built target bond_generate_messages_eus
+[ 18%] Built target dog_prior_map_interfaces_generate_messages_py
+[ 33%] Built target dog_prior_map_interfaces_generate_messages_nodejs
+[ 48%] Built target dog_prior_map_interfaces_generate_messages_lisp
+[ 63%] Built target dog_prior_map_interfaces_generate_messages_eus
+[ 78%] Built target dog_prior_map_interfaces_generate_messages_cpp
+Scanning dependencies of target dog_prior_map_ndt_node_cpp
+[ 78%] Building CXX object dog_prior_map_localization/CMakeFiles/dog_prior_map_ndt_node_cpp.dir/src/dog_prior_map_ndt_node.cpp.o
+In file included from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/../../p62_r11_cause_aware_recovery/tools/se3.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/coarse.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/common.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp:44:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/../../p62_r11_cause_aware_recovery/tools/../../p62_r6_dog_shadow_prototype/tools/contract.hpp: In function ‘std::vector<int> shadow::pool(const std::vector<shadow::Candidate>&)’:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/../../p62_r11_cause_aware_recovery/tools/../../p62_r6_dog_shadow_prototype/tools/contract.hpp:56:5: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   56 |     if(c[j].finite && c[j].loss_valid && c[j].duplicate_of<0)out.push_back(j);return out;
+      |     ^~
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/../../p62_r11_cause_aware_recovery/tools/../../p62_r6_dog_shadow_prototype/tools/contract.hpp:56:79: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   56 |     if(c[j].finite && c[j].loss_valid && c[j].duplicate_of<0)out.push_back(j);return out;
+      |                                                                               ^~~~~~
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/../../p62_r11_cause_aware_recovery/tools/../../p62_r6_dog_shadow_prototype/tools/contract.hpp:55:24: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+   55 |   std::vector<int> out;for(size_t j=0;j<c.size();++j)
+      |                        ^~~
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/../../p62_r11_cause_aware_recovery/tools/../../p62_r6_dog_shadow_prototype/tools/contract.hpp:56:79: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+   56 |     if(c[j].finite && c[j].loss_valid && c[j].duplicate_of<0)out.push_back(j);return out;
+      |                                                                               ^~~~~~
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/../../p62_r11_cause_aware_recovery/tools/../../p62_r6_dog_shadow_prototype/tools/contract.hpp: In function ‘shadow::Selection shadow::select(const std::vector<shadow::Candidate>&)’:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/../../p62_r11_cause_aware_recovery/tools/../../p62_r6_dog_shadow_prototype/tools/contract.hpp:64:5: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   64 |     if(j==0)continue;bool dominates=true;
+      |     ^~
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/../../p62_r11_cause_aware_recovery/tools/../../p62_r6_dog_shadow_prototype/tools/contract.hpp:64:22: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   64 |     if(j==0)continue;bool dominates=true;
+      |                      ^~~~
+In file included from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/coarse.hpp:3,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/common.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp:44:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/../../p62_r6_dog_shadow_prototype/tools/native_kernel.hpp: In function ‘pcl::PointCloud<pcl::PointXYZ>::Ptr shadow::voxel(const Ptr&, float, int)’:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/../../p62_r6_dog_shadow_prototype/tools/native_kernel.hpp:21:5: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+   21 |     for(int i=0;i<cap;++i)sampled->push_back(out->points[size_t(std::round(i*step))]);out=sampled;}
+      |     ^~~
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/../../p62_r6_dog_shadow_prototype/tools/native_kernel.hpp:21:87: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+   21 |     for(int i=0;i<cap;++i)sampled->push_back(out->points[size_t(std::round(i*step))]);out=sampled;}
+      |                                                                                       ^~~
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/../../p62_r6_dog_shadow_prototype/tools/native_kernel.hpp: In function ‘void shadow::validate(shadow::Candidate&, const shadow::Split&, pcl::KdTreeFLANN<pcl::PointXYZ, flann::L2_Simple<float> >&, const Pose&)’:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/../../p62_r6_dog_shadow_prototype/tools/native_kernel.hpp:74:3: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   74 |   if(!c.finite||!source.evaluable())return;const auto start=Clock::now();size_t all=0,hits=0;
+      |   ^~
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/../../p62_r6_dog_shadow_prototype/tools/native_kernel.hpp:74:44: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   74 |   if(!c.finite||!source.evaluable())return;const auto start=Clock::now();size_t all=0,hits=0;
+      |                                            ^~~~~
+In file included from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/common.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp:44:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/coarse.hpp: In lambda function:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/coarse.hpp:56:5: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   56 |     if(a.loss!=b.loss)return a.loss<b.loss;if(a.overlap!=b.overlap)return a.overlap>b.overlap;return a.id<b.id;});
+      |     ^~
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r13_training_guided_multihypothesis/tools/coarse.hpp:56:44: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   56 |     if(a.loss!=b.loss)return a.loss<b.loss;if(a.overlap!=b.overlap)return a.overlap>b.overlap;return a.id<b.id;});
+      |                                            ^~
+In file included from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r9_coverage_aware_recovery_v2/tools/io.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/common.hpp:3,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp:44:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp: In function ‘double coverage::paired(const Loss&, const Loss&, const coverage::Mask&)’:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp:22:3: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+   22 |   for(size_t i=0;i<full;++i)sum+=cap*d[i];if(d.size()%2)sum+=(1.-cap*full)*d[full];return sum;
+      |   ^~~
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp:22:43: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+   22 |   for(size_t i=0;i<full;++i)sum+=cap*d[i];if(d.size()%2)sum+=(1.-cap*full)*d[full];return sum;
+      |                                           ^~
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp: In function ‘shadow::Selection coverage::select(const std::vector<shadow::Candidate>&, const coverage::Mask&)’:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp:41:5: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   41 |     if(j==0||ids.size()<2)continue;bool dominates=true;for(int k:ids)if(k!=j&&!(paired(c[j].loss,c[k].loss,m)>.02))dominates=false;
+      |     ^~
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp:41:36: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   41 |     if(j==0||ids.size()<2)continue;bool dominates=true;for(int k:ids)if(k!=j&&!(paired(c[j].loss,c[k].loss,m)>.02))dominates=false;
+      |                                    ^~~~
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp: In function ‘shadow::Pose coverage::scaledSeed(const Pose&, const Vector6&, double, bool)’:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp:49:3: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   49 |   if(t>1e-12)scale=std::min(scale,1.2/t);if(r>1e-12)scale=std::min(scale,(8*PI/180)/r);require(std::isfinite(scale),"zero large direction");
+      |   ^~
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp:49:42: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   49 |   if(t>1e-12)scale=std::min(scale,1.2/t);if(r>1e-12)scale=std::min(scale,(8*PI/180)/r);require(std::isfinite(scale),"zero large direction");
+      |                                          ^~
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp:51:3: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   51 |   if(rv.norm()>0)result.block<3,3>(0,0)=Eigen::AngleAxisd(rv.norm(),rv.normalized()).toRotationMatrix()*center.block<3,3>(0,0);return result;
+      |   ^~
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp:51:128: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   51 |   if(rv.norm()>0)result.block<3,3>(0,0)=Eigen::AngleAxisd(rv.norm(),rv.normalized()).toRotationMatrix()*center.block<3,3>(0,0);return result;
+      |                                                                                                                                ^~~~~~
+In file included from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/common.hpp:3,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp:44:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r9_coverage_aware_recovery_v2/tools/io.hpp: In function ‘void coverage::coverageRow(coverage::Csv&, const Row&, const Ptr&, const shadow::Split&, const coverage::Mask&)’:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r9_coverage_aware_recovery_v2/tools/io.hpp:27:3: warning: this ‘for’ clause does not guard... [-Wmisleading-indentation]
+   27 |   for(const auto& b:s.blocks)out.stream<<','<<b->size();out.end();
+      |   ^~~
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/../../../p62_r9_coverage_aware_recovery_v2/tools/io.hpp:27:57: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+   27 |   for(const auto& b:s.blocks)out.stream<<','<<b->size();out.end();
+      |                                                         ^~~
+In file included from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp:44:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/common.hpp: In function ‘pilot::Source pilot::loadSource(const Row&)’:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/../../p62_r14b_newer_college/conditional_base_pilot/tools/common.hpp:56:83: warning: comparison of integer expressions of different signedness: ‘uint32_t’ {aka ‘unsigned int’} and ‘const value_type’ {aka ‘const int’} [-Wsign-compare]
+   56 |   for(int i=0;i<9;++i)require(blob.fields[i].name==names[i]&&blob.fields[i].offset==offsets[i]&&blob.fields[i].datatype==types[i]&&blob.fields[i].count==1,"PCL field layout changed");
+In file included from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp:44:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/policy.hpp: In function ‘void r17::advance(pilot::Predictor&, int64_t, const shadow::Candidate&, bool)’:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/policy.hpp:24:5: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   24 |     if(predictor.history.size()>2)predictor.history.erase(predictor.history.begin());predictor.hold=false;
+      |     ^~
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/../../p62_r17_consensus_admission/tools/policy.hpp:24:86: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   24 |     if(predictor.history.size()>2)predictor.history.erase(predictor.history.begin());predictor.hold=false;
+      |                                                                                      ^~~~~~~~~
+In file included from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/policy.hpp:2,
+                 from /home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp:44:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/policy.hpp: In function ‘int r20::distinctCount(const std::vector<shadow::Candidate>&)’:
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/policy.hpp:44:5: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+   44 |     if(!safeNative(candidates[i]))continue;bool same=false;
+      |     ^~
+/home/jian/livox_ws/p62_r29_full_sequence_ws/src/dog_prior_map_localization/src/../../../docs/p62_r21_relative_temporal_admission/tools/../../p62_r20_quality_gated_recovery/tools/policy.hpp:44:44: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+   44 |     if(!safeNative(candidates[i]))continue;bool same=false;
+      |                                            ^~~~
+[ 81%] Linking CXX executable /home/jian/livox_ws/p62_r29_full_sequence_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp
+[100%] Built target dog_prior_map_ndt_node_cpp
+Base path: /home/jian/livox_ws/p62_r29_full_sequence_ws
+Source space: /home/jian/livox_ws/p62_r29_full_sequence_ws/src
+Build space: /home/jian/livox_ws/p62_r29_full_sequence_ws/build
+Devel space: /home/jian/livox_ws/p62_r29_full_sequence_ws/devel
+Install space: /home/jian/livox_ws/p62_r29_full_sequence_ws/install
+####
+#### Running command: "make cmake_check_build_system" in "/home/jian/livox_ws/p62_r29_full_sequence_ws/build"
+####
+####
+#### Running command: "make -j2 dog_prior_map_ndt_node_cpp" in "/home/jian/livox_ws/p62_r29_full_sequence_ws/build"
+####
