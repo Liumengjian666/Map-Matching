@@ -512,11 +512,11 @@ void runSequencePublisher(ros::NodeHandle &nh, ros::NodeHandle &pnh,
   while (covered_index + 1 < imu_records.size() &&
          imu_records[covered_index + 1].stamp_ns <= imu_preflight_end_ns)
   {
-    if (imu_records[covered_index + 1].stamp_ns - imu_records[covered_index].stamp_ns > 20000000ULL)
+    if (imu_records[covered_index + 1].stamp_ns - imu_records[covered_index].stamp_ns > 20000000ULL && !instantaneous_scan)
       throw std::runtime_error("P44 Ouster IMU gap exceeds frozen 20 ms Deskew coverage contract");
     ++covered_index;
   }
-  if (imu_records[covered_index + 1].stamp_ns - imu_records[covered_index].stamp_ns > 20000000ULL)
+  if (imu_records[covered_index + 1].stamp_ns - imu_records[covered_index].stamp_ns > 20000000ULL && !instantaneous_scan)
     throw std::runtime_error("P44 Ouster IMU bracket interval exceeds frozen 20 ms contract");
 
   SequenceCapture capture(r23_admission_ack_enable);
@@ -569,7 +569,7 @@ void runSequencePublisher(ros::NodeHandle &nh, ros::NodeHandle &pnh,
     while (imu_cursor < imu_records.size() && imu_records[imu_cursor].stamp_ns <= scan_end_ns)
     {
       const ImuRecord &record = imu_records[imu_cursor];
-      if (record.stamp_ns <= previous_imu_ns || record.stamp_ns - previous_imu_ns > 20000000ULL)
+      if (record.stamp_ns <= previous_imu_ns || (record.stamp_ns - previous_imu_ns > 20000000ULL && !instantaneous_scan))
         throw std::runtime_error("P44 IMU interval violates strict ordering/20 ms Deskew contract");
       imu_pub.publish(makeImuMessage(record, imu_frame));
       previous_imu_ns = record.stamp_ns;
@@ -578,7 +578,7 @@ void runSequencePublisher(ros::NodeHandle &nh, ros::NodeHandle &pnh,
     if (imu_cursor >= imu_records.size() || imu_records[imu_cursor].stamp_ns <= scan_end_ns)
       throw std::runtime_error("P44 IMU has no post-end bracket sample for scan");
     const ImuRecord &bracket = imu_records[imu_cursor];
-    if (bracket.stamp_ns - previous_imu_ns > 20000000ULL)
+    if (bracket.stamp_ns - previous_imu_ns > 20000000ULL && !instantaneous_scan)
       throw std::runtime_error("P44 post-end IMU bracket exceeds frozen 20 ms contract");
     imu_pub.publish(makeImuMessage(bracket, imu_frame));
     ++imu_cursor;

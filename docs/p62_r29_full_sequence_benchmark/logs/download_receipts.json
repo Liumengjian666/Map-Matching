@@ -1,0 +1,100 @@
+[
+  {
+    "path": "/home/jian/rosbag/public_datasets/koide_p62_r29/gt.zip",
+    "bytes": 1036441,
+    "md5": "ab2a80dc1d06767b7c3ce1893f3020b0",
+    "sha256": "d5739aee9f38bb2b1bd37acee7b26251dccde32a606de908b498213c96897434",
+    "publisher_md5_pass": true,
+    "seconds": 3.0076039870036766,
+    "uncompressed_bytes": 3300842,
+    "members": [
+      {
+        "name": "gt/",
+        "bytes": 0,
+        "crc": 0
+      },
+      {
+        "name": "gt/traj_lidar_outdoor_hard_02.txt",
+        "bytes": 1043317,
+        "crc": 3658521280
+      },
+      {
+        "name": "gt/traj_lidar_indoor_kidnap_02.txt",
+        "bytes": 134194,
+        "crc": 4017568625
+      },
+      {
+        "name": "gt/traj_lidar_indoor_kidnap_01.txt",
+        "bytes": 180180,
+        "crc": 4162324744
+      },
+      {
+        "name": "gt/traj_lidar_outdoor_hard_01.txt",
+        "bytes": 1046220,
+        "crc": 501917577
+      },
+      {
+        "name": "gt/traj_lidar_indoor_hard_01.txt",
+        "bytes": 203945,
+        "crc": 1540706154
+      },
+      {
+        "name": "gt/traj_lidar_indoor_easy_02.txt",
+        "bytes": 166986,
+        "crc": 3861099841
+      },
+      {
+        "name": "gt/traj_lidar_indoor_easy_01.txt",
+        "bytes": 172254,
+        "crc": 3318187571
+      },
+      {
+        "name": "gt/traj_lidar_outdoor_kidnap.txt",
+        "bytes": 353746,
+        "crc": 645865709
+      }
+    ]
+  },
+  {
+    "path": "/home/jian/rosbag/public_datasets/koide_p62_r29/map_indoor_easy.ply",
+    "bytes": 5158965,
+    "md5": "ca12f43d9f481bc11ecb203b3661b414",
+    "sha256": "b04ec8a6d0fe71483691127a3c63c73fda13cb3d1c8dd8831df7bf540fb32860",
+    "publisher_md5_pass": true,
+    "seconds": 9.10381396500452
+  },
+  {
+    "path": "/home/jian/rosbag/public_datasets/koide_p62_r29/map_indoor_hard.ply",
+    "bytes": 6023877,
+    "md5": "0ee5c1f2adc5c1a380fbd9a44c377c68",
+    "sha256": "cf1bfd97b263868a5b0fd2dd690da35a47d411f15a6478591072365953e1a2e3",
+    "publisher_md5_pass": true,
+    "seconds": 10.263603372004582
+  },
+  {
+    "path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01.zip",
+    "bytes": 1773412014,
+    "md5": "046c1de5047a88dcbbf14e98df6874b1",
+    "sha256": "f4bcf7fc38817b84f00973d0224d8367c762b84fd6bb30da6008be1e44575aba",
+    "publisher_md5_pass": true,
+    "seconds": 548.8455338490021,
+    "uncompressed_bytes": 4394784138,
+    "members": [
+      {
+        "name": "indoor_easy_01/",
+        "bytes": 0,
+        "crc": 0
+      },
+      {
+        "name": "indoor_easy_01/decompressed_01_0.db3",
+        "bytes": 4394782720,
+        "crc": 3181675534
+      },
+      {
+        "name": "indoor_easy_01/metadata.yaml",
+        "bytes": 1418,
+        "crc": 3327546380
+      }
+    ]
+  }
+]

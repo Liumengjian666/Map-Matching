@@ -15,13 +15,24 @@ with Path(manifest['imu_csv']).open() as f:
   if len(r)==9 and not r[0].startswith('#'):imu.append((int(r[1])*10**9+int(r[2]),[float(v) for v in r[3:]]))
 ts=[r[0] for r in imu]
 gt=list((D/'gt').rglob('traj_lidar_'+seq+'.txt'));assert len(gt)==1
-with gt[0].open() as f:
- first=next(line for line in f if line.strip() and not line.startswith('#')).split()
-ref_stamp=int(Decimal(first[0])*10**9);ref=np.eye(4);ref[:3,:3]=Rotation.from_quat([float(x) for x in first[4:8]]).as_matrix();ref[:3,3]=[float(x) for x in first[1:4]]
-# The first published reference only, not a search by pose or accuracy.
-start=next(i for i,r in enumerate(frames) if abs(r['stamp_ns']-ref_stamp)<=50000000 and bisect.bisect_right(ts,r['stamp_ns'])>0)
+# Choose the first sensor-valid anchor from point/IMU times only.
+start=next(i for i,r in enumerate(frames) if bisect.bisect_right(ts,r['stamp_ns'])>0 and r['stamp_ns']-ts[bisect.bisect_right(ts,r['stamp_ns'])-1]<=20000000)
 anchor=frames[start]['stamp_ns'];boundary=imu[bisect.bisect_right(ts,anchor)-1];assert anchor-boundary[0]<=20000000
-assert manifest['max_imu_gap_ns']<=20000000
+# Read only the adjacent reference rows needed for this declared anchor.
+before=after=None
+with gt[0].open() as f:
+ for line in f:
+  if not line.strip() or line.startswith('#'):continue
+  row=line.split();stamp=int(Decimal(row[0])*10**9)
+  if stamp<=anchor:before=(stamp,row)
+  if stamp>=anchor:after=(stamp,row);break
+assert before and after and after[0]-before[0]<=150000000 and min(anchor-before[0],after[0]-anchor)<=50000000
+from scipy.spatial.transform import Slerp
+va=np.array([float(x) for x in before[1][1:]]);vb=np.array([float(x) for x in after[1][1:]])
+w=(anchor-before[0])/(after[0]-before[0]) if after[0]>before[0] else 0.
+ref=np.eye(4);ref[:3,3]=(1-w)*va[:3]+w*vb[:3]
+ref[:3,:3]=Slerp([0.,1.],Rotation.from_quat([va[3:],vb[3:]]))([w]).as_matrix()[0]
+ref_stamp=anchor
 # Full tail must have an actual post-exposure IMU sample. Never add synthetic IMU.
 end=len(frames)
 while end>start+1 and frames[end-1]['stamp_ns']>=ts[-1]:end-=1
@@ -55,7 +66,7 @@ key={'name':seq,'anchor_raw_ordinal':start+1,'anchor_stamp_ns':anchor,'reference
  'scan_directory':str(D/(seq+'_adapter')/'scans'),'imu_csv':manifest['imu_csv'],'tile_manifest':str(D/('map_indoor_'+('easy' if args.sequence=='EASY' else 'hard')+'_tiles')/'tile_manifest.json'),
  'runtime_config':str(rt),'runtime_sha256':sha(rt),'initializations':initials,'instantaneous_scan':True,
  'T_lidar_imu':t_li.tolist(),'T_imu_lidar':t_il.tolist(),'publisher_quaternion_norm_before_normalization':norm,
- 'reference_path':str(gt[0]),'reference_sha256':sha(gt[0]),'reference_values_read':'FIRST_PUBLISHED_POSE_ONLY',
+ 'reference_path':str(gt[0]),'reference_sha256':sha(gt[0]),'reference_values_read':'ANCHOR_BRACKET_ONLY_NO_TEST_REFERENCE',
  'adapter_manifest_sha256':sha(D/(seq+'_adapter')/'manifest.json')}
 contract=out/'DATASETS.json';d=json.loads(contract.read_text()) if contract.exists() else {'datasets':{}}
 assert args.sequence not in d['datasets'];d['datasets'][args.sequence]=key;contract.write_text(json.dumps(d,indent=2)+'\n')

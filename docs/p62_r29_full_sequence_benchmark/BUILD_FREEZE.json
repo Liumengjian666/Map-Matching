@@ -12,8 +12,8 @@
       "sha256": "da682381783ae8184657d08858e864e95be3125f6427300292e9d40083bcb45a"
     },
     "devel/lib/dog_prior_map_localization/newer_college_sequence_publisher": {
-      "bytes": 5306240,
-      "sha256": "9d3b17774af6b4154adb6f8d437afa70190396aaa2b4589076aa2b517ac66270"
+      "bytes": 5301608,
+      "sha256": "aea707c9ba54c8843b416d940ad8d698ccc071a5b3c4a2a6c753e59e07939016"
     }
   },
   "model_sources_unchanged": {
@@ -23,5 +23,6 @@
     "src/dog_prior_map_localization/src/core/imu_deskew.cpp": "a9763ea606898d45b2a39141050ab2913b8279af39d64c63b5c3e6c84d9bf54c",
     "src/dog_prior_map_localization/src/fusion/ndt_observation.cpp": "2274147a6ee04dc3a26e09f06b9c1a0f0e094780697c744491210d72a19b0cd3",
     "src/dog_prior_map_localization/src/local_map_tiles.cpp": "0d33ceae8b97abbed89f21e07dc0483102f9b3bf17e28ae67e432e9a617357a4"
-  }
+  },
+  "publisher_note": "Final snapshot adapter preserves raw IMU gaps; direct zero-duration depth publication; explicit terminal OOSM rejection acknowledgement, no model changes."
 }
