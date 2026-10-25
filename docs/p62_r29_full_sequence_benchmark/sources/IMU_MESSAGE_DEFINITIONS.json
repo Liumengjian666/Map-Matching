@@ -1,0 +1,42 @@
+[
+  {
+    "sequence": "indoor_easy_01",
+    "topic": "/imu",
+    "type": "sensor_msgs/msg/Imu",
+    "original_frame_id": "imu_link",
+    "stamp_ns": 1693718239113426519,
+    "bag_stamp_ns": 1693718239102350774,
+    "angular_velocity": [
+      -0.04334117844700813,
+      -0.08513155579566956,
+      0.009555155411362648
+    ],
+    "linear_acceleration": [
+      0.512230396270752,
+      0.17934013903141022,
+      -9.802607536315918
+    ],
+    "units": "ROS sensor_msgs/Imu SI: rad/s and m/s^2; no numeric scaling applied",
+    "runtime_alias": "benchmark_imu; axes unmodified"
+  },
+  {
+    "sequence": "indoor_hard_01",
+    "topic": "/imu",
+    "type": "sensor_msgs/msg/Imu",
+    "original_frame_id": "imu_link",
+    "stamp_ns": 1690354429603963391,
+    "bag_stamp_ns": 1690354429592257957,
+    "angular_velocity": [
+      0.1912878453731537,
+      -0.032102204859256744,
+      0.09296616911888123
+    ],
+    "linear_acceleration": [
+      2.4122252464294434,
+      -1.0081722736358643,
+      -9.670905113220215
+    ],
+    "units": "ROS sensor_msgs/Imu SI: rad/s and m/s^2; no numeric scaling applied",
+    "runtime_alias": "benchmark_imu; axes unmodified"
+  }
+]

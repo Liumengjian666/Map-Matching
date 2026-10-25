@@ -1,0 +1,1 @@
+{"supervisor_status": "INTERRUPTED", "process_exit_code": 0, "wall_seconds": 52.94138490900514, "ndt_peak_rss_KiB": 86424, "ekf_peak_rss_KiB": 26176, "simultaneous_ndt_ekf_peak_rss_KiB": 107172}

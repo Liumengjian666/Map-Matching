@@ -1,0 +1,17 @@
+{
+  "equal": true,
+  "rows": 2023,
+  "fields": [
+    "scan_stamp_ns",
+    "state_stamp_ns",
+    "px",
+    "py",
+    "pz",
+    "qx",
+    "qy",
+    "qz",
+    "qw",
+    "map_published",
+    "ekf_update_applied"
+  ]
+}

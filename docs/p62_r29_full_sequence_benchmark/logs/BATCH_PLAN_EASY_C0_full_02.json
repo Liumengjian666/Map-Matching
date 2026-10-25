@@ -1,0 +1,30 @@
+{
+  "code_sha": "f08e32c577ca41e9f643834336e7de525c4b5e12",
+  "runs": [
+    {
+      "dataset": "EASY",
+      "arm": "C0",
+      "mode": "A",
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_A_full_02"
+    },
+    {
+      "dataset": "EASY",
+      "arm": "C0",
+      "mode": "B",
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_B_full_02"
+    },
+    {
+      "dataset": "EASY",
+      "arm": "C0",
+      "mode": "C",
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_C_full_02"
+    },
+    {
+      "dataset": "EASY",
+      "arm": "C0",
+      "mode": "D",
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_D_full_02"
+    }
+  ],
+  "test_reference_values_read": false
+}

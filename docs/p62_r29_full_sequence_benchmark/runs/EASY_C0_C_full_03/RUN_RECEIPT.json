@@ -1,0 +1,68 @@
+{
+  "window": "EASY",
+  "arm": "C0",
+  "strategy": "C",
+  "scan_count": 2023,
+  "run_dir": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_C_full_03",
+  "command_argv": [
+    "bash",
+    "--noprofile",
+    "--norc",
+    "-c",
+    "source /opt/ros/noetic/setup.bash && source /home/jian/livox_ws/p62_r29_full_sequence_ws/devel/setup.bash && exec roslaunch dog_prior_map_localization p62_r29_full_sequence.launch initialization_config:=/home/jian/livox_ws/p62_r29_full_sequence_ws/docs/p62_r29_full_sequence_benchmark/input/EASY_C0_initialization.yaml start_stamp_ns:=1693718239204891574 imu_replay_start_stamp_ns:=1693718239138125590 expected_boundary_imu_stamp_ns:=1693718239137915519 scan_count:=2023 output_dir:=/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_C_full_03 mode:=C runtime_config:=/home/jian/livox_ws/p62_r29_full_sequence_ws/docs/p62_r29_full_sequence_benchmark/input/EASY_runtime.yaml scan_directory:=/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/scans imu_csv:=/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/imu.csv tile_manifest:=/home/jian/rosbag/public_datasets/koide_p62_r29/map_indoor_easy_tiles/tile_manifest.json instantaneous_scan:=true"
+  ],
+  "roslaunch_argv": [
+    "roslaunch",
+    "dog_prior_map_localization",
+    "p62_r29_full_sequence.launch",
+    "initialization_config:=/home/jian/livox_ws/p62_r29_full_sequence_ws/docs/p62_r29_full_sequence_benchmark/input/EASY_C0_initialization.yaml",
+    "start_stamp_ns:=1693718239204891574",
+    "imu_replay_start_stamp_ns:=1693718239138125590",
+    "expected_boundary_imu_stamp_ns:=1693718239137915519",
+    "scan_count:=2023",
+    "output_dir:=/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_C_full_03",
+    "mode:=C",
+    "runtime_config:=/home/jian/livox_ws/p62_r29_full_sequence_ws/docs/p62_r29_full_sequence_benchmark/input/EASY_runtime.yaml",
+    "scan_directory:=/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/scans",
+    "imu_csv:=/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/imu.csv",
+    "tile_manifest:=/home/jian/rosbag/public_datasets/koide_p62_r29/map_indoor_easy_tiles/tile_manifest.json",
+    "instantaneous_scan:=true"
+  ],
+  "shell_command": "source /opt/ros/noetic/setup.bash && source /home/jian/livox_ws/p62_r29_full_sequence_ws/devel/setup.bash && exec roslaunch dog_prior_map_localization p62_r29_full_sequence.launch initialization_config:=/home/jian/livox_ws/p62_r29_full_sequence_ws/docs/p62_r29_full_sequence_benchmark/input/EASY_C0_initialization.yaml start_stamp_ns:=1693718239204891574 imu_replay_start_stamp_ns:=1693718239138125590 expected_boundary_imu_stamp_ns:=1693718239137915519 scan_count:=2023 output_dir:=/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_C_full_03 mode:=C runtime_config:=/home/jian/livox_ws/p62_r29_full_sequence_ws/docs/p62_r29_full_sequence_benchmark/input/EASY_runtime.yaml scan_directory:=/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/scans imu_csv:=/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/imu.csv tile_manifest:=/home/jian/rosbag/public_datasets/koide_p62_r29/map_indoor_easy_tiles/tile_manifest.json instantaneous_scan:=true",
+  "ros_environment": {
+    "ROS_MASTER_URI": "http://127.0.0.1:11389",
+    "ROS_HOME": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_C_full_03/ros_home",
+    "ROS_LOG_DIR": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_C_full_03/ros_logs",
+    "ROS_IP": "127.0.0.1"
+  },
+  "timeout_seconds": 10115,
+  "poll_interval_seconds": 0.05,
+  "input_contract_path": "/home/jian/livox_ws/p62_r29_full_sequence_ws/docs/p62_r29_full_sequence_benchmark/input/DATASETS.json",
+  "input_contract_sha256": "976ea91d4b659c790bbf72bf4e831e82c842e0a1bb94bd4fc10c92e1379b38e4",
+  "initialization_sha256": "b7350a595536941920383b3d44179bd760c7a8cb1d0d8061bbb94dc71f60331f",
+  "binaries_sha256": {
+    "ndt": "015aee893443d99dc67f24d9051d4c398b0a6d2c0e1ea456498fac38fb23e572",
+    "ekf": "da682381783ae8184657d08858e864e95be3125f6427300292e9d40083bcb45a"
+  },
+  "git_head_at_start": "f66a55457ba3e63d55ad8d588fb2cf5b1ead169b",
+  "reference_access": "none; supervisor reads input contract and OS process accounting only",
+  "started_utc": "2026-10-25T08:41:02.830084+00:00",
+  "wall_seconds": 140.40090150399192,
+  "process_exit_code": 0,
+  "timed_out": false,
+  "interrupted": false,
+  "signal_escalation": [
+    "SIGINT_COMPLETED_INPUT_SHUTDOWN"
+  ],
+  "input_completed": true,
+  "active_completion_wall_seconds": 139.91313482099213,
+  "shutdown_requested_wall_seconds": 139.91313482099213,
+  "shutdown_duration_seconds": 0.4877685690007638,
+  "rss_samples": 2800,
+  "ndt_peak_rss_KiB": 95440,
+  "ekf_peak_rss_KiB": 17272,
+  "simultaneous_ndt_ekf_peak_rss_KiB": 112680,
+  "all_owned_tree_peak_rss_KiB": 258976,
+  "supervisor_status": "COMPLETED_INPUT_SHUTDOWN",
+  "localization_acceptance": "NOT_DECIDED_BY_SUPERVISOR; inspect real lineage/diagnostic receipts"
+}

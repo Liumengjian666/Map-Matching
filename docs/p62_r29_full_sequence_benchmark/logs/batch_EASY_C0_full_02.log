@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "docs/p62_r29_full_sequence_benchmark/tools/run_batch.py", line 17, in <module>
+    with log.open('x') as f:p=subprocess.run(command,cwd=ROOT,stdout=f,stderr=subprocess.STDOUT)
+  File "/usr/lib/python3.8/pathlib.py", line 1222, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/usr/lib/python3.8/pathlib.py", line 1078, in _opener
+    return self._accessor.open(self, flags, mode)
+FileExistsError: [Errno 17] File exists: '/home/jian/livox_ws/p62_r29_full_sequence_ws/docs/p62_r29_full_sequence_benchmark/logs/full_EASY_C0_A.log'

@@ -1,0 +1,103 @@
+{
+  "A": {
+    "rejection_reasons": {
+      "BASELINE_NATIVE": 457,
+      "INPUT_PREDICTION_REJECTED_STALE_CAUSAL_EKF_SAMPLE": 185,
+      "EXISTING_GEOMETRY_GUARD_REJECTED_BEFORE_NDT": 289,
+      "NO_NATIVE_RESULT": 1092
+    },
+    "map_update_reasons": {
+      "initial_tile_load": 1,
+      "active_cache_covers_required_tiles": 745,
+      "selection_or_tile_load_error": 1092
+    },
+    "imu_high_rate_publications": 28888,
+    "oosm_replay_complete_events": 452,
+    "quality_pass_high_reference_error_candidates": 138,
+    "selected_published_high_reference_error_candidates": 397,
+    "additional_candidates_distinct_from_nominal": 0,
+    "additional_basic_quality_passes": 0,
+    "additional_absolute_passes": 0,
+    "selected_extra": 0,
+    "first_fused_high_error_raw": 76,
+    "last_map_observation_raw": 724,
+    "missing_reference_rows": [
+      "1336"
+    ]
+  },
+  "B": {
+    "rejection_reasons": {
+      "NO_ACCEPTABLE_MAP_MEASUREMENT": 460,
+      "INPUT_PREDICTION_REJECTED_STALE_CAUSAL_EKF_SAMPLE": 185,
+      "ABSOLUTE_NOMINAL": 139,
+      "NO_NATIVE_RESULT": 1239
+    },
+    "map_update_reasons": {
+      "initial_tile_load": 1,
+      "active_cache_covers_required_tiles": 598,
+      "selection_or_tile_load_error": 1239
+    },
+    "imu_high_rate_publications": 28888,
+    "oosm_replay_complete_events": 137,
+    "quality_pass_high_reference_error_candidates": 134,
+    "selected_published_high_reference_error_candidates": 134,
+    "additional_candidates_distinct_from_nominal": 0,
+    "additional_basic_quality_passes": 0,
+    "additional_absolute_passes": 0,
+    "selected_extra": 0,
+    "first_fused_high_error_raw": 62,
+    "last_map_observation_raw": 383,
+    "missing_reference_rows": [
+      "1336"
+    ]
+  },
+  "C": {
+    "rejection_reasons": {
+      "NO_ACCEPTABLE_MAP_MEASUREMENT": 460,
+      "INPUT_PREDICTION_REJECTED_STALE_CAUSAL_EKF_SAMPLE": 185,
+      "ABSOLUTE_NOMINAL": 139,
+      "NO_NATIVE_RESULT": 1239
+    },
+    "map_update_reasons": {
+      "initial_tile_load": 1,
+      "active_cache_covers_required_tiles": 598,
+      "selection_or_tile_load_error": 1239
+    },
+    "imu_high_rate_publications": 28888,
+    "oosm_replay_complete_events": 137,
+    "quality_pass_high_reference_error_candidates": 134,
+    "selected_published_high_reference_error_candidates": 134,
+    "additional_candidates_distinct_from_nominal": 131,
+    "additional_basic_quality_passes": 0,
+    "additional_absolute_passes": 0,
+    "selected_extra": 0,
+    "first_fused_high_error_raw": 62,
+    "last_map_observation_raw": 383,
+    "missing_reference_rows": [
+      "1336"
+    ]
+  },
+  "D": {
+    "rejection_reasons": {
+      "BASELINE_NATIVE": 1838,
+      "INPUT_PREDICTION_REJECTED_STALE_CAUSAL_EKF_SAMPLE": 185
+    },
+    "map_update_reasons": {
+      "initial_tile_load": 1,
+      "active_cache_covers_required_tiles": 1837
+    },
+    "imu_high_rate_publications": 28888,
+    "oosm_replay_complete_events": 1827,
+    "quality_pass_high_reference_error_candidates": 766,
+    "selected_published_high_reference_error_candidates": 1777,
+    "additional_candidates_distinct_from_nominal": 0,
+    "additional_basic_quality_passes": 0,
+    "additional_absolute_passes": 0,
+    "selected_extra": 0,
+    "first_fused_high_error_raw": 76,
+    "last_map_observation_raw": 2027,
+    "missing_reference_rows": [
+      "1336"
+    ]
+  }
+}

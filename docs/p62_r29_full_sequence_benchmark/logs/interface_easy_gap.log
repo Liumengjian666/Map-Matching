@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "docs/p62_r29_full_sequence_benchmark/tools/run_sequence.py", line 308, in <module>
+    raise SystemExit(main())
+  File "docs/p62_r29_full_sequence_benchmark/tools/run_sequence.py", line 134, in main
+    raise RuntimeError('dedicated ROS master port11389 is already in use; no session was started')
+RuntimeError: dedicated ROS master port11389 is already in use; no session was started

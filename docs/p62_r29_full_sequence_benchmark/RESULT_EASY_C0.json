@@ -1,0 +1,454 @@
+[
+  {
+    "dataset": "EASY",
+    "arm": "C0",
+    "mode": "A",
+    "status": "COMPLETE_ADMITTED_SPAN",
+    "raw_total": 2027,
+    "anchor_raw": 4,
+    "evaluated_scans": 2023,
+    "reference_n": 2022,
+    "coverage_fraction": 0.9985192497532083,
+    "finite_estimates": 2023,
+    "translation": {
+      "n": 2022,
+      "rmse": 3995.5277893862035,
+      "mean": 2428.4099167105433,
+      "p95": 9249.74714012854,
+      "max": 10585.85167587837
+    },
+    "rotation": {
+      "n": 2022,
+      "rmse": 46.25967366983908,
+      "mean": 36.383217830526746,
+      "p95": 118.80588365007326,
+      "max": 150.0848587385869
+    },
+    "ATE_definition": "unaligned map-frame position RMSE",
+    "RPE_1s_translation": {
+      "n": 1947,
+      "rmse": 107.34370809147762,
+      "mean": 76.8268332498597,
+      "p95": 195.3263156044779,
+      "max": 227.79384961211719
+    },
+    "RPE_1s_rotation": {
+      "n": 1947,
+      "rmse": 7.886007371001609,
+      "mean": 3.308087469052603,
+      "p95": 18.05545526482288,
+      "max": 58.24662355387145
+    },
+    "raw_native_translation": {
+      "n": 457,
+      "rmse": 13.463534522927244,
+      "mean": 11.649409633935054,
+      "p95": 17.933251198270213,
+      "max": 22.131355307380993
+    },
+    "raw_native_rotation": {
+      "n": 457,
+      "rmse": 46.79031952922169,
+      "mean": 21.931367203368897,
+      "p95": 132.20907264809574,
+      "max": 156.44857043393034
+    },
+    "nominal_calls": 457,
+    "extra_calls": 0,
+    "native_calls_total": 457,
+    "native_converged_total": 457,
+    "published_map_updates": 457,
+    "rejected_map_observations": 1566,
+    "actual_ekf_updates": 452,
+    "oosm_statuses": {
+      "REPLAY_INCOMPLETE": 5,
+      "APPLIED": 452
+    },
+    "longest_no_map_frames": 1303,
+    "longest_no_map_span_sec": 90.065003965,
+    "reference_high_error_frames": 1951,
+    "sustained_reference_episodes": [
+      {
+        "first_raw": 76,
+        "last_raw": 2027,
+        "startup": false,
+        "recovery_raw": null,
+        "recovery_seconds": null
+      }
+    ],
+    "harmful_admission_proxy": 117,
+    "missed_beneficial_proxy": 0,
+    "callback_ms": {
+      "n": 2023,
+      "rmse": 17.37815282541234,
+      "mean": 13.854550891033329,
+      "p95": 42.965960502624505,
+      "max": 108.90078544616699
+    },
+    "event_callback_ms": {
+      "n": 314,
+      "rmse": 25.56531441451582,
+      "mean": 21.87816656319199,
+      "p95": 54.87606525421142,
+      "max": 108.90078544616699
+    },
+    "wall_seconds": 141.0827654189925,
+    "processing_scans_per_wall_sec": 14.339100839085656,
+    "sensor_span_sec": 139.176544447,
+    "ndt_peak_rss_KiB": 93468,
+    "ekf_peak_rss_KiB": 17312,
+    "simultaneous_ndt_ekf_peak_rss_KiB": 110780,
+    "target_points": {
+      "n": 2023,
+      "rmse": 93146.0,
+      "mean": 93146.0,
+      "p95": 93146.0,
+      "max": 93146.0
+    },
+    "target_hash_switches": 0,
+    "max_extra_in_60frame_block": 0,
+    "nominal_basic_quality_passes": 217,
+    "nominal_absolute_passes": 143,
+    "reference_coverage_fraction": 0.9995056846267919,
+    "reference_metric_scope": "2022 valid references across complete2023-scan admitted trajectory; no tracking failures removed; one200.097ms reference gap rejected"
+  },
+  {
+    "dataset": "EASY",
+    "arm": "C0",
+    "mode": "B",
+    "status": "COMPLETE_ADMITTED_SPAN",
+    "raw_total": 2027,
+    "anchor_raw": 4,
+    "evaluated_scans": 2023,
+    "reference_n": 2022,
+    "coverage_fraction": 0.9985192497532083,
+    "finite_estimates": 2023,
+    "translation": {
+      "n": 2022,
+      "rmse": 630.5069923471659,
+      "mean": 414.6242236656638,
+      "p95": 1381.6645311726827,
+      "max": 1435.9308516196477
+    },
+    "rotation": {
+      "n": 2022,
+      "rmse": 16.232952426225783,
+      "mean": 14.499191866841704,
+      "p95": 23.252397537530882,
+      "max": 33.960482083204965
+    },
+    "ATE_definition": "unaligned map-frame position RMSE",
+    "RPE_1s_translation": {
+      "n": 1947,
+      "rmse": 17.579972375943544,
+      "mean": 13.525102752479704,
+      "p95": 30.50972924190156,
+      "max": 31.80194152350401
+    },
+    "RPE_1s_rotation": {
+      "n": 1947,
+      "rmse": 2.007260777001717,
+      "mean": 1.2558045812486143,
+      "p95": 4.638794967062523,
+      "max": 13.024699142238859
+    },
+    "raw_native_translation": {
+      "n": 599,
+      "rmse": 20.44598681371086,
+      "mean": 16.715566057161055,
+      "p95": 41.93773663614726,
+      "max": 61.99902942909116
+    },
+    "raw_native_rotation": {
+      "n": 599,
+      "rmse": 12.769703992252337,
+      "mean": 8.987982582674633,
+      "p95": 18.107985933677,
+      "max": 80.24757132852041
+    },
+    "nominal_calls": 599,
+    "extra_calls": 0,
+    "native_calls_total": 599,
+    "native_converged_total": 599,
+    "published_map_updates": 139,
+    "rejected_map_observations": 1884,
+    "actual_ekf_updates": 137,
+    "oosm_statuses": {
+      "REPLAY_INCOMPLETE": 2,
+      "APPLIED": 137
+    },
+    "longest_no_map_frames": 1644,
+    "longest_no_map_span_sec": 113.47594871,
+    "reference_high_error_frames": 1965,
+    "sustained_reference_episodes": [
+      {
+        "first_raw": 62,
+        "last_raw": 2027,
+        "startup": false,
+        "recovery_raw": null,
+        "recovery_seconds": null
+      }
+    ],
+    "harmful_admission_proxy": 28,
+    "missed_beneficial_proxy": 68,
+    "callback_ms": {
+      "n": 2023,
+      "rmse": 24.575491727791427,
+      "mean": 18.785161543057452,
+      "p95": 53.416419029235826,
+      "max": 96.93598747253418
+    },
+    "event_callback_ms": {
+      "n": 460,
+      "rmse": 34.55540614816434,
+      "mean": 29.27253764608632,
+      "p95": 62.37812042236327,
+      "max": 96.93598747253418
+    },
+    "wall_seconds": 140.62294221400225,
+    "processing_scans_per_wall_sec": 14.385988290028566,
+    "sensor_span_sec": 139.176544447,
+    "ndt_peak_rss_KiB": 95652,
+    "ekf_peak_rss_KiB": 17192,
+    "simultaneous_ndt_ekf_peak_rss_KiB": 112592,
+    "target_points": {
+      "n": 2023,
+      "rmse": 93146.0,
+      "mean": 93146.0,
+      "p95": 93146.0,
+      "max": 93146.0
+    },
+    "target_hash_switches": 0,
+    "max_extra_in_60frame_block": 0,
+    "nominal_basic_quality_passes": 166,
+    "nominal_absolute_passes": 139,
+    "reference_coverage_fraction": 0.9995056846267919,
+    "reference_metric_scope": "2022 valid references across complete2023-scan admitted trajectory; no tracking failures removed; one200.097ms reference gap rejected"
+  },
+  {
+    "dataset": "EASY",
+    "arm": "C0",
+    "mode": "C",
+    "status": "COMPLETE_ADMITTED_SPAN",
+    "raw_total": 2027,
+    "anchor_raw": 4,
+    "evaluated_scans": 2023,
+    "reference_n": 2022,
+    "coverage_fraction": 0.9985192497532083,
+    "finite_estimates": 2023,
+    "translation": {
+      "n": 2022,
+      "rmse": 630.5069923471659,
+      "mean": 414.6242236656638,
+      "p95": 1381.6645311726827,
+      "max": 1435.9308516196477
+    },
+    "rotation": {
+      "n": 2022,
+      "rmse": 16.232952426225783,
+      "mean": 14.499191866841704,
+      "p95": 23.252397537530882,
+      "max": 33.960482083204965
+    },
+    "ATE_definition": "unaligned map-frame position RMSE",
+    "RPE_1s_translation": {
+      "n": 1947,
+      "rmse": 17.579972375943544,
+      "mean": 13.525102752479704,
+      "p95": 30.50972924190156,
+      "max": 31.80194152350401
+    },
+    "RPE_1s_rotation": {
+      "n": 1947,
+      "rmse": 2.007260777001717,
+      "mean": 1.2558045812486143,
+      "p95": 4.638794967062523,
+      "max": 13.024699142238859
+    },
+    "raw_native_translation": {
+      "n": 599,
+      "rmse": 20.44598681371086,
+      "mean": 16.715566057161055,
+      "p95": 41.93773663614726,
+      "max": 61.99902942909116
+    },
+    "raw_native_rotation": {
+      "n": 599,
+      "rmse": 12.769703992252337,
+      "mean": 8.987982582674633,
+      "p95": 18.107985933677,
+      "max": 80.24757132852041
+    },
+    "nominal_calls": 599,
+    "extra_calls": 132,
+    "native_calls_total": 731,
+    "native_converged_total": 731,
+    "published_map_updates": 139,
+    "rejected_map_observations": 1884,
+    "actual_ekf_updates": 137,
+    "oosm_statuses": {
+      "REPLAY_INCOMPLETE": 2,
+      "APPLIED": 137
+    },
+    "longest_no_map_frames": 1644,
+    "longest_no_map_span_sec": 113.47594871,
+    "reference_high_error_frames": 1965,
+    "sustained_reference_episodes": [
+      {
+        "first_raw": 62,
+        "last_raw": 2027,
+        "startup": false,
+        "recovery_raw": null,
+        "recovery_seconds": null
+      }
+    ],
+    "harmful_admission_proxy": 28,
+    "missed_beneficial_proxy": 87,
+    "callback_ms": {
+      "n": 2023,
+      "rmse": 20.85356991777003,
+      "mean": 15.504782823307115,
+      "p95": 48.447251319885254,
+      "max": 115.95034599304199
+    },
+    "event_callback_ms": {
+      "n": 460,
+      "rmse": 33.111793097949715,
+      "mean": 28.09830489365951,
+      "p95": 58.18363428115845,
+      "max": 115.95034599304199
+    },
+    "wall_seconds": 140.40090150399192,
+    "processing_scans_per_wall_sec": 14.408739390768666,
+    "sensor_span_sec": 139.176544447,
+    "ndt_peak_rss_KiB": 95440,
+    "ekf_peak_rss_KiB": 17272,
+    "simultaneous_ndt_ekf_peak_rss_KiB": 112680,
+    "target_points": {
+      "n": 2023,
+      "rmse": 93146.0,
+      "mean": 93146.0,
+      "p95": 93146.0,
+      "max": 93146.0
+    },
+    "target_hash_switches": 0,
+    "max_extra_in_60frame_block": 12,
+    "nominal_basic_quality_passes": 166,
+    "nominal_absolute_passes": 139,
+    "reference_coverage_fraction": 0.9995056846267919,
+    "reference_metric_scope": "2022 valid references across complete2023-scan admitted trajectory; no tracking failures removed; one200.097ms reference gap rejected"
+  },
+  {
+    "dataset": "EASY",
+    "arm": "C0",
+    "mode": "D",
+    "status": "COMPLETE_ADMITTED_SPAN",
+    "raw_total": 2027,
+    "anchor_raw": 4,
+    "evaluated_scans": 2023,
+    "reference_n": 2022,
+    "coverage_fraction": 0.9985192497532083,
+    "finite_estimates": 2023,
+    "translation": {
+      "n": 2022,
+      "rmse": 19.576786505308135,
+      "mean": 14.860866109916696,
+      "p95": 41.90972758636687,
+      "max": 45.11072808519883
+    },
+    "rotation": {
+      "n": 2022,
+      "rmse": 106.28010976332969,
+      "mean": 90.4100441670875,
+      "p95": 178.79685460065545,
+      "max": 179.99774663528686
+    },
+    "ATE_definition": "unaligned map-frame position RMSE",
+    "RPE_1s_translation": {
+      "n": 1947,
+      "rmse": 2.0996879654498772,
+      "mean": 1.5181693039471849,
+      "p95": 4.8580759798089845,
+      "max": 6.827290923496514
+    },
+    "RPE_1s_rotation": {
+      "n": 1947,
+      "rmse": 11.926299589311752,
+      "mean": 8.365763077336066,
+      "p95": 24.008153555613866,
+      "max": 68.70099477507571
+    },
+    "raw_native_translation": {
+      "n": 1837,
+      "rmse": 19.509288897100767,
+      "mean": 14.768775398268236,
+      "p95": 41.84830582575245,
+      "max": 45.09331045781383
+    },
+    "raw_native_rotation": {
+      "n": 1837,
+      "rmse": 106.85677048643032,
+      "mean": 91.09300107502878,
+      "p95": 178.978353308611,
+      "max": 179.998942276275
+    },
+    "nominal_calls": 1838,
+    "extra_calls": 0,
+    "native_calls_total": 1838,
+    "native_converged_total": 1838,
+    "published_map_updates": 1838,
+    "rejected_map_observations": 185,
+    "actual_ekf_updates": 1827,
+    "oosm_statuses": {
+      "REPLAY_INCOMPLETE": 11,
+      "APPLIED": 1827
+    },
+    "longest_no_map_frames": 4,
+    "longest_no_map_span_sec": 0.200426976,
+    "reference_high_error_frames": 1951,
+    "sustained_reference_episodes": [
+      {
+        "first_raw": 76,
+        "last_raw": 2027,
+        "startup": false,
+        "recovery_raw": null,
+        "recovery_seconds": null
+      }
+    ],
+    "harmful_admission_proxy": 732,
+    "missed_beneficial_proxy": 0,
+    "callback_ms": {
+      "n": 2023,
+      "rmse": 24.28711168614989,
+      "mean": 20.704657266591365,
+      "p95": 53.13968658447264,
+      "max": 127.06899642944336
+    },
+    "event_callback_ms": {
+      "n": 1067,
+      "rmse": 23.6140744699832,
+      "mean": 20.54386554528534,
+      "p95": 51.81648731231688,
+      "max": 96.51565551757812
+    },
+    "wall_seconds": 150.4104287950031,
+    "processing_scans_per_wall_sec": 13.449865253407266,
+    "sensor_span_sec": 139.176544447,
+    "ndt_peak_rss_KiB": 98556,
+    "ekf_peak_rss_KiB": 19628,
+    "simultaneous_ndt_ekf_peak_rss_KiB": 115156,
+    "target_points": {
+      "n": 2023,
+      "rmse": 93146.0,
+      "mean": 93146.0,
+      "p95": 93146.0,
+      "max": 93146.0
+    },
+    "target_hash_switches": 0,
+    "max_extra_in_60frame_block": 0,
+    "nominal_basic_quality_passes": 996,
+    "nominal_absolute_passes": 771,
+    "reference_coverage_fraction": 0.9995056846267919,
+    "reference_metric_scope": "2022 valid references across complete2023-scan admitted trajectory; no tracking failures removed; one200.097ms reference gap rejected"
+  }
+]

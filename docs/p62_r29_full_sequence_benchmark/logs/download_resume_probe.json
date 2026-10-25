@@ -1,0 +1,29 @@
+{
+  "url": "https://zenodo.org/records/10122133/files/indoor_easy_01.zip?download=1",
+  "status": 206,
+  "headers": {
+    "server": "nginx",
+    "date": "Sun, 25 Oct 2026 07:58:36 GMT",
+    "content-type": "application/octet-stream",
+    "content-length": "1048576",
+    "content-disposition": "attachment; filename=indoor_easy_01.zip",
+    "set-cookie": "session=18d6f296b861935e_6addb6ac.QHu7XWcAUxIiavFdOHZIq94Nix8; Expires=Fri, 30 Oct 2026 07:58:36 GMT; Secure; HttpOnly; Path=/; SameSite=Lax",
+    "content-range": "bytes 539061532-540110107/1773412014",
+    "accept-ranges": "bytes",
+    "content-security-policy": "default-src 'self' fonts.googleapis.com *.gstatic.com data: 'unsafe-inline' 'unsafe-eval' blob: zenodo-broker.web.cern.ch zenodo-broker-qa.web.cern.ch maxcdn.bootstrapcdn.com cdnjs.cloudflare.com ajax.googleapis.com webanalytics.web.cern.ch",
+    "x-content-type-options": "nosniff",
+    "x-download-options": "noopen",
+    "x-permitted-cross-domain-policies": "none",
+    "x-frame-options": "sameorigin",
+    "x-xss-protection": "1; mode=block",
+    "x-ratelimit-limit": "133",
+    "x-ratelimit-remaining": "132",
+    "x-ratelimit-reset": "1792915177",
+    "retry-after": "60",
+    "strict-transport-security": "max-age=31556926; includeSubDomains",
+    "referrer-policy": "strict-origin-when-cross-origin",
+    "x-source": "files-primary",
+    "connection": "close"
+  },
+  "read_bytes": 1048576
+}

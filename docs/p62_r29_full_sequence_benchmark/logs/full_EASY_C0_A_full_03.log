@@ -1,0 +1,1 @@
+{"supervisor_status": "COMPLETED_INPUT_SHUTDOWN", "process_exit_code": 0, "wall_seconds": 141.0827654189925, "ndt_peak_rss_KiB": 93468, "ekf_peak_rss_KiB": 17312, "simultaneous_ndt_ekf_peak_rss_KiB": 110780}

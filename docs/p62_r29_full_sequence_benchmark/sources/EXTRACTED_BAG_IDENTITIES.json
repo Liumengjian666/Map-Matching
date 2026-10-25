@@ -1,0 +1,22 @@
+[
+  {
+    "path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01/indoor_easy_01/decompressed_01_0.db3",
+    "bytes": 4394782720,
+    "sha256": "956a078cff97d1924e262b0ea20a157b050ce44a8c2957bd1e3a4b3bf0b47388"
+  },
+  {
+    "path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01/indoor_easy_01/metadata.yaml",
+    "bytes": 1418,
+    "sha256": "3969ca692a3b7694e0ef5e173e576c86d8db1f328c8d2ab71aa5273d18f9728e"
+  },
+  {
+    "path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_hard_01/indoor_hard_01/decompressed_03_0.db3",
+    "bytes": 5090283520,
+    "sha256": "46f85d5ee7a55fef40238212099eb4aedfb962109c8e27b4e8615887f8f2cef6"
+  },
+  {
+    "path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_hard_01/indoor_hard_01/metadata.yaml",
+    "bytes": 1077,
+    "sha256": "c4f5cb61afd25d982a3002282ee5064215d34d2c8025b018d452a157d148a1d9"
+  }
+]

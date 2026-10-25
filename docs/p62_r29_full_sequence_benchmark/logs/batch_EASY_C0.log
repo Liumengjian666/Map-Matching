@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "docs/p62_r29_full_sequence_benchmark/tools/run_batch.py", line 19, in <module>
+    assert receipt.exists() and json.loads(receipt.read_text())['input_completed'], 'Incomplete run; stop batch without retry: '+run['path']
+AssertionError: Incomplete run; stop batch without retry: /home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_A_full_01

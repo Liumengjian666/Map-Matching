@@ -1,0 +1,17 @@
+{
+  "status": "SAFETY_STOP_NO_ADDITIONAL_EXPERIMENTS",
+  "criterion": "C0 worsening >.03m position RMSE OR >.3degree rotation RMSE relative to original/native baseline",
+  "C_minus_D_translation_rmse_m": 610.9302058418577,
+  "C_minus_D_rotation_rmse_deg": -90.04715733710391,
+  "C_minus_A_translation_rmse_m": -3365.0207970390375,
+  "C_minus_A_rotation_rmse_deg": -30.0267212436133,
+  "tradeoff": "C has worse translation and better rotation than D; all four fail usable full-sequence tracking; D is not a successful solution",
+  "not_run": [
+    "Easy C3",
+    "Hard C0/C3",
+    "Newer College H_B/H_C complete sequences",
+    "external framework runs"
+  ],
+  "newer_college_stop_reason": "R29 safety stop, NOT the unresolved coordinate semantics alone",
+  "algorithm_parameters_changed": false
+}

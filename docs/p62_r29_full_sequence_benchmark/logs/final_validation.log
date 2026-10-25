@@ -1,0 +1,63 @@
+{
+  "online_code_sha": "f66a55457ba3e63d55ad8d588fb2cf5b1ead169b",
+  "runs": {
+    "A": {
+      "online_seal_matches": true,
+      "input_completed": true,
+      "frames": 2023,
+      "valid_reference": 2022,
+      "missing_reference_raw": 1336,
+      "max_extra_in_60frame_block": 0,
+      "extra_calls": 0,
+      "native_calls": 457,
+      "binary_identity_matches": true
+    },
+    "B": {
+      "online_seal_matches": true,
+      "input_completed": true,
+      "frames": 2023,
+      "valid_reference": 2022,
+      "missing_reference_raw": 1336,
+      "max_extra_in_60frame_block": 0,
+      "extra_calls": 0,
+      "native_calls": 599,
+      "binary_identity_matches": true
+    },
+    "C": {
+      "online_seal_matches": true,
+      "input_completed": true,
+      "frames": 2023,
+      "valid_reference": 2022,
+      "missing_reference_raw": 1336,
+      "max_extra_in_60frame_block": 12,
+      "extra_calls": 132,
+      "native_calls": 731,
+      "binary_identity_matches": true
+    },
+    "D": {
+      "online_seal_matches": true,
+      "input_completed": true,
+      "frames": 2023,
+      "valid_reference": 2022,
+      "missing_reference_raw": 1336,
+      "max_extra_in_60frame_block": 0,
+      "extra_calls": 0,
+      "native_calls": 1838,
+      "binary_identity_matches": true
+    }
+  },
+  "B_C_all_pose_time_admission_fusion_fields_equal": true,
+  "formal_calls": 3625,
+  "preparatory_calls": 28,
+  "all_new_native_calls": 3653,
+  "online_source_unchanged_since_CODE": true,
+  "EKF_IMU_Deskew_observation_map_model_sources_unchanged": true,
+  "final_binaries_match_frozen_build": true,
+  "stable_HEAD_branch_index_status_protected_files_unchanged": true,
+  "tracked_change_scope_R29_only": true,
+  "storage": {
+    "free_bytes": 36983259136,
+    "total_bytes": 502392610816,
+    "minimum_reserve_bytes": 21474836480
+  }
+}

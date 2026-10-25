@@ -1,0 +1,70 @@
+{
+  "files": [
+    {
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_A_full_03/publisher_receipts.csv",
+      "bytes": 652755,
+      "sha256": "a0c9d87918ed1b4332846d3bcbbc0f8e069d5b0bea9839f0967b53906341cc65"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_A_full_03/localization_trajectory.csv",
+      "bytes": 10261817,
+      "sha256": "11e50fb7ea9603bd4aa08784fa2c58c8a935517913cd1cb2b9dfb3cf0328652a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_A_full_03/r23_ndt_lineage.csv",
+      "bytes": 1326018,
+      "sha256": "0f06bfd1280b7122d4b053ca104852f6f14def64c95139db06960711b0e9c723"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_A_full_03/r23_admission.csv",
+      "bytes": 281530,
+      "sha256": "19ab1ff4d348983eb678677b1871e05df1596f806774a83d0c3c02e2014df83b"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_A_full_03/r23_candidates.csv",
+      "bytes": 338232,
+      "sha256": "cc5088014237df5b65af238173e7fa78ce09abe39951847c1f645bc03832d3ac"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_A_full_03/r29_schedule.csv",
+      "bytes": 67162,
+      "sha256": "e7f9d8bf6cdfa37e045a99f9d1a2bbb32c3ed6fe53169546226f64648846b9b0"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_A_full_03/oosm_statistics.csv",
+      "bytes": 53489,
+      "sha256": "3ba2c6a9aa1874a2539deb2b2708c2d598c8406f6192cb84caf865117312f03a"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_A_full_03/ekf_prediction_diagnostics.csv",
+      "bytes": 11074865,
+      "sha256": "8abd0d62eb6074c2dc56588e5de6fb0daa48814c1158086d9cb1ba147f2a0ddd"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_A_full_03/local_map_diagnostics.csv",
+      "bytes": 612572,
+      "sha256": "e12a6c59782af87ad977ccd9e94640d4f832919512405d5a2fa5f21e928a4421"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_A_full_03/ndt_diagnostics.csv",
+      "bytes": 3085852,
+      "sha256": "47dad902460c7c408d9a401b34ffd784bc8775d8837b4ea70cab5d3e8f15110f"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_A_full_03/ndt_runtime.csv",
+      "bytes": 14664,
+      "sha256": "1cea253f0946e82b59aa844b9149f34955ad3d93a4946563cbbfdb9ac4c1b9aa"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_A_full_03/RUN_RECEIPT.json",
+      "bytes": 5006,
+      "sha256": "0ef5c5703614463cc1188d92fb29e83cb67d370ea020ffd1566353233ed56347"
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_A_full_03/RUN_COMMAND.json",
+      "bytes": 4320,
+      "sha256": "dc08ea899437abac9e87989c9b6628765dc9353bf315b587684debe5395e52ca"
+    }
+  ],
+  "reference_pose_access": "NONE_DURING_SEAL"
+}

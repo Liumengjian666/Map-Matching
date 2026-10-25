@@ -1,0 +1,8 @@
+VERIFIED gt.zip 1036441 3.0076039870036766
+EXTRACTED gt.zip 3300842
+VERIFIED map_indoor_easy.ply 5158965 9.10381396500452
+VERIFIED map_indoor_hard.ply 6023877 10.263603372004582
+Traceback (most recent call last):
+  File "docs/p62_r29_full_sequence_benchmark/tools/fetch_koide.py", line 27, in <module>
+    if n!=x['size']:raise RuntimeError('incomplete download')
+RuntimeError: incomplete download
