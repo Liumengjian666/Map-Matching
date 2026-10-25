@@ -1,0 +1,44 @@
+<launch>
+  <arg name="mode" />
+  <arg name="runtime_config" />
+  <arg name="initialization_config" />
+  <arg name="scan_directory" />
+  <arg name="imu_csv" />
+  <arg name="tile_manifest" />
+  <arg name="start_stamp_ns" />
+  <arg name="imu_replay_start_stamp_ns" />
+  <arg name="expected_boundary_imu_stamp_ns" />
+  <arg name="scan_count" />
+  <arg name="output_dir" />
+  <arg name="instantaneous_scan" default="false" />
+  <include file="$(find dog_prior_map_localization)/launch/newer_college_local_map.launch">
+    <arg name="scan_directory" value="$(arg scan_directory)" />
+    <arg name="imu_csv" value="$(arg imu_csv)" />
+    <arg name="tile_manifest" value="$(arg tile_manifest)" />
+    <arg name="runtime_config" value="$(arg runtime_config)" />
+    <arg name="initialization_config" value="$(arg initialization_config)" />
+    <arg name="start_stamp_ns" value="$(arg start_stamp_ns)" />
+    <arg name="imu_replay_start_stamp_ns" value="$(arg imu_replay_start_stamp_ns)" />
+    <arg name="expected_boundary_imu_stamp_ns" value="$(arg expected_boundary_imu_stamp_ns)" />
+    <arg name="scan_count" value="$(arg scan_count)" />
+    <arg name="output_dir" value="$(arg output_dir)" />
+    <arg name="r23_admission_ack_enable" value="true" />
+    <arg name="rviz" value="false" />
+  </include>
+  <param name="frames/map_frame" value="benchmark_map" />
+  <param name="frames/base_frame" value="benchmark_lidar" />
+  <param name="deskew/expected_lidar_frame" value="benchmark_lidar" />
+  <param name="newer_college_local_map_input/lidar_frame" value="benchmark_lidar" />
+  <param name="newer_college_local_map_input/imu_frame" value="benchmark_imu" />
+  <param name="newer_college_local_map_input/instantaneous_scan" value="$(arg instantaneous_scan)" />
+  <param name="newer_college_local_map_input/r29_oosm_receipt_csv" value="$(arg output_dir)/oosm_statistics.csv" />
+  <param name="research/r23_enable" value="true" />
+  <param name="research/r23_policy" value="$(eval 'BASELINE' if arg('mode') == 'A' else 'MULTISTART_C')" />
+  <param name="research/r24_enable" value="$(eval arg('mode') != 'A')" />
+  <param name="research/r24_geometry_diagnostic_only" value="$(eval arg('mode') != 'A')" />
+  <param name="research/r24_revision_sync" value="false" />
+  <param name="research/r25_disable_search" value="$(eval arg('mode') in ['B','D'])" />
+  <param name="research/r29_full_sequence" value="true" />
+  <param name="research/r29_native_baseline" value="$(eval arg('mode') == 'D')" />
+  <param name="output/r23_lineage_csv" value="$(arg output_dir)/r23_ndt_lineage.csv" />
+</launch>

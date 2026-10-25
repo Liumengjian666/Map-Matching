@@ -1,0 +1,11 @@
+{
+  "imu_count": 153014,
+  "scan_count": 15301,
+  "first_scan_ns": 1583836591182590976,
+  "last_scan_ns": 1583838121156355584,
+  "first_imu_ns": 1583836591138818895,
+  "last_imu_ns": 1583838121268606733,
+  "max_imu_gap_ns": 10286981,
+  "gaps_above_frozen20ms": 0,
+  "reference_pose_values_read": false
+}

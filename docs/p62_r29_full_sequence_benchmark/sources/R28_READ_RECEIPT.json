@@ -1,0 +1,6 @@
+{
+  "FRAME_CONTRACT.md": "7abc2e655588292ec41958e5e323a1d955b60f28896ad9564a44b44e5ee67453",
+  "FRAME_MATRICES.json": "ef4384239acee2c25d824073665a25f2371417e5f834481dc62726655b9d34f4",
+  "sources/manifest.json": "3db0b5e50b310a9d927a8599d6b4ab7c2e32e00d3ead586fccf9bb7d7208103d",
+  "tools/check_contract.py": "443fcf0c934070db02f535e67e2ec6c1d5fed96b556ee417ccd04ead0eb178d9"
+}

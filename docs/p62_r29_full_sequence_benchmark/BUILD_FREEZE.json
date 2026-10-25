@@ -1,0 +1,27 @@
+{
+  "start_sha": "fa08c12ac965206e576643dae578b63d49719d6f",
+  "build_type": "Release",
+  "command": "source /opt/ros/noetic/setup.bash; source /home/jian/livox_ws/devel/setup.bash; catkin_make -DCMAKE_BUILD_TYPE=Release -DCATKIN_WHITELIST_PACKAGES=\"dog_prior_map_interfaces;dog_prior_map_localization\" --make-args -j2 dog_prior_map_ndt_node_cpp dog_prior_map_ekf_node_cpp newer_college_sequence_publisher",
+  "binaries": {
+    "devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp": {
+      "bytes": 159579408,
+      "sha256": "bc7588d878941227fe63ae250d7938194d33ec78dabf2881787fe6810679199a"
+    },
+    "devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp": {
+      "bytes": 191064600,
+      "sha256": "da682381783ae8184657d08858e864e95be3125f6427300292e9d40083bcb45a"
+    },
+    "devel/lib/dog_prior_map_localization/newer_college_sequence_publisher": {
+      "bytes": 5306240,
+      "sha256": "9d3b17774af6b4154adb6f8d437afa70190396aaa2b4589076aa2b517ac66270"
+    }
+  },
+  "model_sources_unchanged": {
+    "src/dog_prior_map_localization/src/dog_prior_map_ekf_node.cpp": "e69fade2af615cff00af87dc0e8860017cb236a80a80926bf384f108666fcc58",
+    "src/dog_prior_map_localization/src/dog_prior_map_ekf_node_core.cpp": "9c37d8b1aa27803d6127589e10b15af98123129044351d57aa482cfcae12b68c",
+    "src/dog_prior_map_localization/src/core/imu_propagation.cpp": "0ff8fdfb07841c3cefd24bc9fd387212cd471d5d2d70431db816b19435285895",
+    "src/dog_prior_map_localization/src/core/imu_deskew.cpp": "a9763ea606898d45b2a39141050ab2913b8279af39d64c63b5c3e6c84d9bf54c",
+    "src/dog_prior_map_localization/src/fusion/ndt_observation.cpp": "2274147a6ee04dc3a26e09f06b9c1a0f0e094780697c744491210d72a19b0cd3",
+    "src/dog_prior_map_localization/src/local_map_tiles.cpp": "0d33ceae8b97abbed89f21e07dc0483102f9b3bf17e28ae67e432e9a617357a4"
+  }
+}

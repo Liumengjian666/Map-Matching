@@ -508,6 +508,17 @@ public:
     r24_geometry_diagnostic_only_ = getParam<bool>("research/r24_geometry_diagnostic_only", false);
     r24_revision_sync_ = getParam<bool>("research/r24_revision_sync", false);
     r25_disable_search_ = getParam<bool>("research/r25_disable_search", false);
+    r29_enable_ = getParam<bool>("research/r29_full_sequence", false);
+    r29_native_baseline_ = getParam<bool>("research/r29_native_baseline", false);
+    if (r29_native_baseline_ && (!r29_enable_ || !r25_disable_search_))
+      throw std::runtime_error("R29 native baseline requires explicit sequence mode and no search");
+    if (r29_enable_) {
+      if (!r23_enable_ || r24_revision_sync_) throw std::runtime_error("R29 requires R23 logging and F off");
+      const std::string file=getParam<std::string>("output/r23_lineage_csv", "");
+      r29_schedule_.open(file.substr(0,file.find_last_of('/')+1)+"r29_schedule.csv");
+      if (!r29_schedule_) throw std::runtime_error("R29 schedule log unavailable");
+      r29_schedule_ << "scan_ns,frame_one_based,block_zero_based,block_budget_used,total_extra,native_baseline\n";
+    }
     if (r25_disable_search_ && (!r24_enable_ || !r24_geometry_diagnostic_only_ || r24_revision_sync_))
       throw std::runtime_error("R25 G-only requires G on and F off");
     if ((r24_geometry_diagnostic_only_ || r24_revision_sync_) && !r24_enable_)
@@ -1372,13 +1383,14 @@ private:
       }
     }
     int chosen=-1;
-    if(r23_policy_=="BASELINE")chosen=cs[0].finite&&cs[0].converged?0:-1;
+    if(r23_policy_=="BASELINE" || r29_native_baseline_)chosen=cs[0].finite&&cs[0].converged?0:-1;
     else chosen=r20::choose(cs,mask,tp);
     if(chosen<0&&r23_policy_=="RELATIVE_D_EXPERIMENTAL")chosen=r21::chooseRelative(cs,mask,tp);
+    if(r29_enable_)r29_total_extra_+=r23_frame_extra_;
     r23_relative_=chosen>=0&&!r20::accepted(cs[chosen],mask)&&r23_policy_=="RELATIVE_D_EXPERIMENTAL";
     r23_selected_id_=chosen>=0?cs[chosen].id:-1;
     r23_reason_=chosen<0?"NO_ACCEPTABLE_MAP_MEASUREMENT":r23_relative_?"RELATIVE_ONLY_ADMISSION":
-        r23_policy_=="BASELINE"?"BASELINE_NATIVE":chosen==0?"ABSOLUTE_NOMINAL":"ABSOLUTE_MULTISTART";
+        (r23_policy_=="BASELINE" || r29_native_baseline_)?"BASELINE_NATIVE":chosen==0?"ABSOLUTE_NOMINAL":"ABSOLUTE_MULTISTART";
     if(chosen<0){*ok=false;}else{
       *ok=true;*result=cs[chosen].pose;*fitness=cs[chosen].fitness;*iterations=cs[chosen].iterations;
       *aligned=transformCloud(source,*result);
@@ -2197,6 +2209,7 @@ private:
   {
     if (!cloud || cloud->empty()) return;
 
+    if (r29_enable_ && (r29_scan_count_++ % 60 == 0)) r23_budget_=0;
     r23_measurement_published_ = false;
     r23_attempted_=r23_nominal_converged_=r23_basic_=r23_absolute_=r23_event_=r23_relative_=false;
     r23_frame_extra_=0;r23_selected_id_=-1;r23_reason_="NO_NATIVE_RESULT";
@@ -3065,6 +3078,12 @@ private:
     status.level = converged ? diagnostic_msgs::DiagnosticStatus::OK : diagnostic_msgs::DiagnosticStatus::WARN;
     status.message = converged ? "NDT converged" : "NDT not converged";
 
+    if (r29_enable_) {
+      r29_schedule_ << stamp.toNSec() << ',' << r29_scan_count_ << ','
+        << (r29_scan_count_ ? (r29_scan_count_-1)/60 : 0) << ',' << r23_budget_ << ','
+        << r29_total_extra_ << ',' << r29_native_baseline_ << '\n';
+      r29_schedule_.flush();
+    }
     addDiagnosticValue(status, "ndt_converged", (r23_enable_?r23_nominal_converged_:converged) ? "true" : "false");
     if (r23_enable_) {
       addDiagnosticValue(status, "ndt_measurement_published", r23_measurement_published_ ? "true" : "false");
@@ -3125,6 +3144,9 @@ private:
   double r23_nominal_score_=NAN,r23_nominal_overlap_=NAN,r23_nominal_mean_=NAN;
   double r23_selected_score_=NAN,r23_selected_overlap_=NAN,r23_selected_mean_=NAN;
   std::ofstream r23_admission_,r23_candidates_;
+  bool r29_enable_=false,r29_native_baseline_=false;
+  uint64_t r29_scan_count_=0,r29_total_extra_=0;
+  std::ofstream r29_schedule_;
   bool r23_enable_ = false;
   bool r23_measurement_published_ = false;
   uint64_t r23_scan_ns_ = 0;

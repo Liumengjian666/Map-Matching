@@ -440,12 +440,16 @@ void runSequencePublisher(ros::NodeHandle &nh, ros::NodeHandle &pnh,
   std::string ndt_imu_watermark_topic, receipt_csv_path, trajectory_csv_path;
   int scan_count = 0;
   bool r23_admission_ack_enable = false;
+  bool instantaneous_scan = false;
+  std::string r29_oosm_receipt_csv;
   double readiness_timeout_sec = 180.0, scan_ack_timeout_sec = 120.0;
   pnh.param<std::string>("scan_directory", scan_directory, "");
   pnh.param<std::string>("start_stamp_ns", start_stamp_text, "");
   pnh.param<std::string>("expected_boundary_imu_stamp_ns", expected_boundary_text, "");
   pnh.param<std::string>("imu_replay_start_stamp_ns", imu_replay_start_text, "");
   pnh.param("r23_admission_ack_enable", r23_admission_ack_enable, false);
+  pnh.param("instantaneous_scan", instantaneous_scan, false);
+  pnh.param<std::string>("r29_oosm_receipt_csv", r29_oosm_receipt_csv, "");
   pnh.param("scan_count", scan_count, 0);
   pnh.param<std::string>("diagnostics_topic", diagnostic_topic, "/dog_livo/diagnostics");
   pnh.param<std::string>("ndt_odom_topic", ndt_odom_topic, "/dog_livo/ndt_odom");
@@ -494,7 +498,14 @@ void runSequencePublisher(ros::NodeHandle &nh, ros::NodeHandle &pnh,
   const ImuRecord &boundary = imu_records[boundary_index];
   if (boundary.stamp_ns != expected_boundary_ns || imu_replay_start_ns - boundary.stamp_ns > 20000000ULL)
     throw std::runtime_error("P44 first-scan IMU boundary differs from frozen P41 initialization");
-  const uint64_t imu_preflight_end_ns = scans.back().stamp_ns + 150000000ULL;
+  // R29: require the actual last scan support, rather than an unused 150ms cap.
+  pcl::PCLPointCloud2 last_cloud;
+  if (pcl::io::loadPCDFile(scans.back().path,last_cloud)!=0) throw std::runtime_error("last scan unreadable");
+  uint32_t last_offset=0;
+  makeTimedCloud(last_cloud,scans.back().stamp_ns,lidar_frame,last_offset);
+  if ((!instantaneous_scan && last_offset==0) || last_offset>150000000U)
+    throw std::runtime_error("last scan point-time range invalid");
+  const uint64_t imu_preflight_end_ns = scans.back().stamp_ns + last_offset;
   if (imu_records.back().stamp_ns <= imu_preflight_end_ns)
     throw std::runtime_error("P44 Ouster IMU does not bracket all selected scans");
   std::size_t covered_index = boundary_index;
@@ -549,7 +560,7 @@ void runSequencePublisher(ros::NodeHandle &nh, ros::NodeHandle &pnh,
     uint32_t max_offset_ns = 0;
     sensor_msgs::PointCloud2 cloud = makeTimedCloud(pcl_cloud, scan.stamp_ns,
         lidar_frame, max_offset_ns, static_cast<uint32_t>(scan_index + 1));
-    if (max_offset_ns == 0 || max_offset_ns > 150000000U)
+    if ((!instantaneous_scan && max_offset_ns == 0) || max_offset_ns > 150000000U)
       throw std::runtime_error("selected P44 PCD point-time range violates [0,150 ms]");
     const uint64_t scan_end_ns = scan.stamp_ns + max_offset_ns;
 
@@ -590,13 +601,36 @@ void runSequencePublisher(ros::NodeHandle &nh, ros::NodeHandle &pnh,
       throw std::runtime_error("P44 cloud was not acknowledged by NDT; stopping without sending later scans");
     const double ndt_ack_wall = ros::WallTime::now().toSec();
     bool correction_ack = false;
+    bool fusion_rejected = false;
     double ekf_ack_wall = std::numeric_limits<double>::quiet_NaN();
     const bool measurement_expected = r23_admission_ack_enable ?
         ndt_receipt.measurement_published : ndt_receipt.converged;
     if (measurement_expected)
     {
       if (!waitFor([&]() {
-            if (capture.correctedCount() <= corrected_before) return false;
+            if (capture.correctedCount() <= corrected_before) {
+              // R29 scheduling only: an explicit terminal OOSM rejection is a
+              // completed observation, not a missing update to wait for forever.
+              // Never treat a timeout as rejection or fabricate a correction.
+              if (!r29_oosm_receipt_csv.empty()) {
+                std::ifstream log(r29_oosm_receipt_csv.c_str(), std::ios::binary);
+                if (log) {
+                  log.seekg(0,std::ios::end); const auto end=log.tellg();
+                  if (end>std::streampos(65536)) log.seekg(end-std::streamoff(65536)); else log.seekg(0);
+                  std::string line;
+                  while (std::getline(log,line)) {
+                    const auto fields=splitCsv(line);
+                    if (fields.size()!=10 || fields[0]=="frame_index") continue;
+                    if (std::abs(std::stod(fields[1])-scan.stamp_ns*1e-9)>1e-6) continue;
+                    const auto& status=fields.back();
+                    if (status!="APPLIED" && status!="NOT_DELAYED" && status!="DISABLED") {
+                      fusion_rejected=true; return true;
+                    }
+                  }
+                }
+              }
+              return false;
+            }
             const uint64_t corrected_ns = capture.latestCorrectedNs();
             // The EKF publishes a ROS stamp derived from double seconds.
             // At Unix-scale timestamps, conversion back to integer ns can
@@ -606,7 +640,7 @@ void runSequencePublisher(ros::NodeHandle &nh, ros::NodeHandle &pnh,
                 imu_last_ns - corrected_ns <= kRosDoubleStampToleranceNs;
           }, scan_ack_timeout_sec, "waiting for OOSM-corrected EKF output at the consumed IMU watermark"))
         throw std::runtime_error("published NDT measurement was not acknowledged by EKF/OOSM");
-      correction_ack = true;
+      correction_ack = !fusion_rejected;
       ekf_ack_wall = ros::WallTime::now().toSec();
     }
     capture.writeReceipt(scan_index + 1, scan, pcl_cloud.width * pcl_cloud.height,
