@@ -31,7 +31,7 @@
   <param name="newer_college_local_map_input/lidar_frame" value="benchmark_lidar" />
   <param name="newer_college_local_map_input/imu_frame" value="benchmark_imu" />
   <param name="newer_college_local_map_input/instantaneous_scan" value="$(arg instantaneous_scan)" />
-  <param name="newer_college_local_map_input/cloud_topic" value="$(eval '/newer_college/deskewed_points' if arg('instantaneous_scan') == 'true' else '/newer_college/raw_points')" />
+  <param name="newer_college_local_map_input/cloud_topic" value="$(eval '/newer_college/deskewed_points' if arg('instantaneous_scan') else '/newer_college/raw_points')" />
   <param name="newer_college_local_map_input/r29_oosm_receipt_csv" value="$(arg output_dir)/oosm_statistics.csv" />
   <param name="research/r23_enable" value="true" />
   <param name="research/r23_policy" value="$(eval 'BASELINE' if arg('mode') == 'A' else 'MULTISTART_C')" />
