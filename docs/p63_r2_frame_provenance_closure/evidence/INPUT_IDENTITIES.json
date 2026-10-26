@@ -1,0 +1,92 @@
+{
+  "historical_mapping_config": {
+    "path": "/media/jian/HIKVISION/Jian_FASTLIVO_Data/dogrosbag/loop2_map_match_experiment_2026_08_08_17_36_19/config/loop2_config.yaml",
+    "sha256": "1cde331d3b092629e1c2b06ebf218a9c51122fe4f8feeef3ea6e9ef2fafae76c",
+    "bytes": 3268,
+    "mtime_ns": 1786181779000000000
+  },
+  "historical_launch": {
+    "path": "/media/jian/HIKVISION/Jian_FASTLIVO_Data/dogrosbag/loop2_map_match_experiment_2026_08_08_17_36_19/launch/mapping_experiment.launch",
+    "sha256": "0b03f4a6600a776de6c699d3ccb1dcf6502a96561b2359454d771d140c099ee1",
+    "bytes": 701,
+    "mtime_ns": 1786181779000000000
+  },
+  "neighbor_pose": {
+    "path": "/home/jian/rosbag/loop2/loop2mapping/pcd/lidar_poses.txt",
+    "sha256": "42d0c3060f77f83ea438916c0b305a9f7320c3ff7161148a7a475f4791022ed9",
+    "bytes": 579409,
+    "mtime_ns": 1786518889235001339
+  },
+  "neighbor_mat_pre": {
+    "path": "/home/jian/rosbag/loop2/loop2mapping/logs/mat_pre.txt",
+    "sha256": "c41732d9e469850e60226c26ac50217d774f048f0cc3ea592064295df6ebf305",
+    "bytes": 2658477,
+    "mtime_ns": 1786518889239001348
+  },
+  "neighbor_mat_out": {
+    "path": "/home/jian/rosbag/loop2/loop2mapping/logs/mat_out.txt",
+    "sha256": "b2f299d597e76a9d96c2424cae9719eed11df2ac02bb23d7ed192addb0ecfca2",
+    "bytes": 2711322,
+    "mtime_ns": 1786518889243001357
+  },
+  "neighbor_metrics": {
+    "path": "/home/jian/rosbag/loop2/loop2mapping/pcd/rebuild_loop2_metrics.json",
+    "sha256": "88dbdea6b3a8f5e45595c1542f70946237d9a2d6c0fc1362b4ac032860800907",
+    "bytes": 2117,
+    "mtime_ns": 1786518942223122680
+  },
+  "historical_mapping_log": {
+    "path": "/media/jian/HIKVISION/Jian_FASTLIVO_Data/dogrosbag/loop2_map_match_experiment_2026_08_08_17_36_19/dateset/mapping-bag/logs/fastlivo_loop2.log",
+    "sha256": "c3da78406b3696e5abb0d0dc63777f0277b34d61ef9bc158682ecc47a8b05018",
+    "bytes": 22630947,
+    "mtime_ns": 1786182382000000000
+  },
+  "FAST_IMU_source": {
+    "path": "/home/jian/FAST-LIVO2_project/FAST-LIVO2/src/IMU_Processing.cpp",
+    "sha256": "fd455b17293a05421f9bd0b3d238aa2d58bbea4e7b0fbb8d63744f74d3d4b7db",
+    "bytes": 21541,
+    "mtime_ns": 1783945227143922088
+  },
+  "FAST_mapper_source": {
+    "path": "/home/jian/FAST-LIVO2_project/FAST-LIVO2/src/LIVMapper.cpp",
+    "sha256": "433de4358a1f7ab196c758b0e14c6483c7f9029829e37cdc5012a608fdab2e45",
+    "bytes": 54408,
+    "mtime_ns": 1786176881882725130
+  },
+  "FAST_state_source": {
+    "path": "/home/jian/FAST-LIVO2_project/FAST-LIVO2/include/common_lib.h",
+    "sha256": "e89d7b8a80c9f9bb88663a6eaa7e4921c222b21a7ad7f898262158d307679796",
+    "bytes": 7086,
+    "mtime_ns": 1783945227131921918
+  },
+  "own_loop2_unavailable": {
+    "path": "/home/jian/livox_ws/p63_r2_frame_provenance_ws/src/dog_prior_map_localization/config/own_loop2.yaml",
+    "sha256": "76969b33fe5a8ee977074389852131100a9296ad564250c6f703b13d63237957",
+    "bytes": 6660,
+    "mtime_ns": 1793020564514600593
+  },
+  "R25_config_snapshot": {
+    "path": "/home/jian/livox_ws/p63_r2_frame_provenance_ws/docs/p62_r25_results_to_paper_closure/dog/ACTIVE_MAPPING_CONFIG.yaml",
+    "sha256": "1cde331d3b092629e1c2b06ebf218a9c51122fe4f8feeef3ea6e9ef2fafae76c",
+    "bytes": 3268,
+    "mtime_ns": 1793020561870565599
+  },
+  "R1_gravity_reconstruction": {
+    "path": "/home/jian/livox_ws/p63_r2_frame_provenance_ws/docs/p63_r1_mature_prior_map_baseline/evidence/INITIALIZATION_GRAVITY_DIAGNOSTIC.json",
+    "sha256": "a4bed84eb3f5e53c0480e19767dcce6386ccaf040206ce73fb1925036af9d9a0",
+    "bytes": 1591,
+    "mtime_ns": 1793020562090568510
+  },
+  "original_map": {
+    "path": "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd",
+    "sha256": "016b7ae3ae494ad5d462a66d888a96b96dda5fe29d6058059aa2fa6bdf6b09ca",
+    "bytes": 7346648,
+    "mtime_ns": 1786518902563031859
+  },
+  "driver_MID360_config": {
+    "path": "/home/jian/livox_ws/src/livox_ros_driver2/config/MID360_config.json",
+    "sha256": "695920c80b1a89a741c456bb176ce2ea6936a5c5d59f9aa8403aba3cbca2c66f",
+    "bytes": 889,
+    "mtime_ns": 1784081347212594279
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "FAST_LIVO2_current_source": {
+    "HEAD": "0d2c0346107b75b59934975adec9a6eeeb913c64",
+    "status_porcelain": "M CMakeLists.txt\n M include/LIVMapper.h\n M include/vio.h\n M src/LIVMapper.cpp\n M src/vio.cpp\n?? config/camera_ours.yaml\n?? config/ours_config.yaml\n?? launch/mapping_ours.launch\n?? launch/mapping_ours.launch.before_prior_map_alignment_20260905\n?? scripts/record_bag_from_config.py"
+  },
+  "Super_LIO": {
+    "HEAD": "60b57aaac8dc397f80c56364e7ccb008c300cc29",
+    "status_porcelain": ""
+  },
+  "R1_worktree": {
+    "HEAD": "2a2f202c01efe6a6452436bd1eff084ae1ddfc14",
+    "status_porcelain": ""
+  },
+  "FAST_symlink_resolves_to": "/home/jian/FAST-LIVO2_project/FAST-LIVO2",
+  "source_binding_to_Aug12_binary": "UNVERIFIED"
+}

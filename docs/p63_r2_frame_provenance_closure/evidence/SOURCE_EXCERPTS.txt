@@ -1,0 +1,463 @@
+## FAST_IMU_source: /home/jian/FAST-LIVO2_project/FAST-LIVO2/src/IMU_Processing.cpp
+SHA256 fd455b17293a05421f9bd0b3d238aa2d58bbea4e7b0fbb8d63744f74d3d4b7db
+
+74: void ImuProcess::set_extrinsic(const MD(4, 4) & T)
+75: {
+76:   Lid_offset_to_IMU = T.block<3, 1>(0, 3);
+77:   Lid_rot_to_IMU = T.block<3, 3>(0, 0);
+78: }
+79: 
+80: void ImuProcess::set_extrinsic(const V3D &transl)
+81: {
+82:   Lid_offset_to_IMU = transl;
+83:   Lid_rot_to_IMU.setIdentity();
+84: }
+85: 
+86: void ImuProcess::set_extrinsic(const V3D &transl, const M3D &rot)
+87: {
+88:   Lid_offset_to_IMU = transl;
+89:   Lid_rot_to_IMU = rot;
+90: }
+91: 
+104: void ImuProcess::IMU_init(const MeasureGroup &meas, StatesGroup &state_inout, int &N)
+105: {
+106:   /** 1. initializing the gravity, gyro bias, acc and gyro covariance
+107:    ** 2. normalize the acceleration measurenments to unit gravity **/
+108:   ROS_INFO("IMU Initializing: %.1f %%", double(N) / MAX_INI_COUNT * 100);
+109:   V3D cur_acc, cur_gyr;
+110: 
+111:   if (b_first_frame)
+112:   {
+113:     Reset();
+114:     N = 1;
+115:     b_first_frame = false;
+116:     const auto &imu_acc = meas.imu.front()->linear_acceleration;
+117:     const auto &gyr_acc = meas.imu.front()->angular_velocity;
+118:     mean_acc << imu_acc.x, imu_acc.y, imu_acc.z;
+119:     mean_gyr << gyr_acc.x, gyr_acc.y, gyr_acc.z;
+120:     // first_lidar_time = meas.lidar_frame_beg_time;
+121:     // cout<<"init acc norm: "<<mean_acc.norm()<<endl;
+122:   }
+123: 
+124:   for (const auto &imu : meas.imu)
+125:   {
+126:     const auto &imu_acc = imu->linear_acceleration;
+127:     const auto &gyr_acc = imu->angular_velocity;
+128:     cur_acc << imu_acc.x, imu_acc.y, imu_acc.z;
+129:     cur_gyr << gyr_acc.x, gyr_acc.y, gyr_acc.z;
+130: 
+131:     mean_acc += (cur_acc - mean_acc) / N;
+132:     mean_gyr += (cur_gyr - mean_gyr) / N;
+133: 
+134:     // cov_acc = cov_acc * (N - 1.0) / N + (cur_acc -
+135:     // mean_acc).cwiseProduct(cur_acc - mean_acc) * (N - 1.0) / (N * N); cov_gyr
+136:     // = cov_gyr * (N - 1.0) / N + (cur_gyr - mean_gyr).cwiseProduct(cur_gyr -
+137:     // mean_gyr) * (N - 1.0) / (N * N);
+138: 
+139:     // cout<<"acc norm: "<<cur_acc.norm()<<" "<<mean_acc.norm()<<endl;
+140: 
+141:     N++;
+142:   }
+143:   IMU_mean_acc_norm = mean_acc.norm();
+144:   state_inout.gravity = -mean_acc / mean_acc.norm() * G_m_s2;
+145:   state_inout.rot_end = Eye3d; // Exp(mean_acc.cross(V3D(0, 0, -1 / scale_gravity)));
+146:   state_inout.bias_g = Zero3d; // mean_gyr;
+147: 
+148:   last_imu = meas.imu.back();
+149: }
+150: 
+151: void ImuProcess::Forward_without_imu(LidarMeasureGroup &meas, StatesGroup &state_inout, PointCloudXYZI &pcl_out)
+555: 
+556:   if (imu_need_init)
+557:   {
+558:     double pcl_end_time = lidar_meas.lio_vio_flg == LIO ? meas.lio_time : meas.vio_time;
+559:     // lidar_meas.last_lio_update_time = pcl_end_time;
+560: 
+561:     if (meas.imu.empty()) { return; };
+562:     /// The very first lidar frame
+563:     IMU_init(meas, stat, init_iter_num);
+564: 
+565:     imu_need_init = true;
+566: 
+567:     last_imu = meas.imu.back();
+568: 
+569:     if (init_iter_num > MAX_INI_COUNT)
+570:     {
+571:       // cov_acc *= pow(G_m_s2 / mean_acc.norm(), 2);
+572:       imu_need_init = false;
+573:       ROS_INFO("IMU Initials: Gravity: %.4f %.4f %.4f %.4f; acc covarience: "
+574:                "%.8f %.8f %.8f; gry covarience: %.8f %.8f %.8f \n",
+575:                stat.gravity[0], stat.gravity[1], stat.gravity[2], mean_acc.norm(), cov_acc[0], cov_acc[1], cov_acc[2], cov_gyr[0], cov_gyr[1],
+576:                cov_gyr[2]);
+577:       ROS_INFO("IMU Initials: ba covarience: %.8f %.8f %.8f; bg covarience: "
+578:                "%.8f %.8f %.8f",
+579:                cov_bias_acc[0], cov_bias_acc[1], cov_bias_acc[2], cov_bias_gyr[0], cov_bias_gyr[1], cov_bias_gyr[2]);
+580:       fout_imu.open(DEBUG_FILE_DIR("imu.txt"), ios::out);
+581:     }
+582: 
+583:     return;
+584:   }
+
+## FAST_mapper_source: /home/jian/FAST-LIVO2_project/FAST-LIVO2/src/LIVMapper.cpp
+SHA256 433de4358a1f7ab196c758b0e14c6483c7f9029829e37cdc5012a608fdab2e45
+
+90:   nh.param<double>("time_offset/exposure_time_init", exposure_time_init, 0.0);
+91:   nh.param<double>("time_offset/img_time_offset", img_time_offset, 0.0);
+92:   nh.param<double>("time_offset/imu_time_offset", imu_time_offset, 0.0);
+93:   nh.param<double>("time_offset/lidar_time_offset", lidar_time_offset, 0.0);
+94:   nh.param<bool>("uav/imu_rate_odom", imu_prop_enable, false);
+95:   nh.param<bool>("uav/gravity_align_en", gravity_align_en, false);
+96: 
+97:   nh.param<string>("evo/seq_name", seq_name, "01");
+98:   nh.param<bool>("evo/pose_output_en", pose_output_en, false);
+99:   nh.param<double>("imu/gyr_cov", gyr_cov, 1.0);
+100:   nh.param<double>("imu/acc_cov", acc_cov, 1.0);
+101:   nh.param<int>("imu/imu_int_frame", imu_int_frame, 3);
+102:   nh.param<bool>("imu/imu_en", imu_en, false);
+103:   nh.param<bool>("imu/gravity_est_en", gravity_est_en, true);
+104:   nh.param<bool>("imu/ba_bg_est_en", ba_bg_est_en, true);
+105: 
+256: void LIVMapper::gravityAlignment() 
+257: {
+258:   if (!p_imu->imu_need_init && !gravity_align_finished) 
+259:   {
+260:     std::cout << "Gravity Alignment Starts" << std::endl;
+261:     V3D ez(0, 0, -1), gz(_state.gravity);
+262:     Quaterniond G_q_I0 = Quaterniond::FromTwoVectors(gz, ez);
+263:     M3D G_R_I0 = G_q_I0.toRotationMatrix();
+264: 
+265:     _state.pos_end = G_R_I0 * _state.pos_end;
+266:     _state.rot_end = G_R_I0 * _state.rot_end;
+267:     _state.vel_end = G_R_I0 * _state.vel_end;
+268:     _state.gravity = G_R_I0 * _state.gravity;
+269:     gravity_align_finished = true;
+270:     std::cout << "Gravity Alignment Finished" << std::endl;
+271:   }
+272: }
+273: 
+274: void LIVMapper::processImu() 
+275: {
+276:   // double t0 = omp_get_wtime();
+277: 
+278:   p_imu->Process2(LidarMeasures, _state, feats_undistort);
+279: 
+280:   if (gravity_align_en) gravityAlignment();
+281: 
+282:   state_propagat = _state;
+283:   voxelmap_manager->state_ = _state;
+284:   voxelmap_manager->feats_undistort_ = feats_undistort;
+285: 
+463:   PointCloudXYZI::Ptr laserCloudWorld(new PointCloudXYZI(size, 1));
+464: 
+465:   for (int i = 0; i < size; i++) 
+466:   {
+467:     RGBpointBodyToWorld(&laserCloudFullRes->points[i], &laserCloudWorld->points[i]);
+468:   }
+469:   *pcl_w_wait_pub = *laserCloudWorld;
+470: 
+471:   publish_frame_world(pubLaserCloudFullRes, vio_manager);
+472:   if (pub_effect_point_en) publish_effect_world(pubLaserCloudEffect, voxelmap_manager->ptpl_list_);
+473:   if (voxelmap_manager->config_setting_.is_pub_plane_map_) voxelmap_manager->pubVoxelMap();
+474:   publish_path(pubPath);
+475:   publish_mavros(mavros_pose_publisher);
+510: void LIVMapper::savePCD() 
+511: {
+512:   if (pcd_save_en && (pcl_wait_save->points.size() > 0 || pcl_wait_save_intensity->points.size() > 0) && pcd_save_interval < 0) 
+513:   {
+514:     std::string raw_points_dir = joinPath(pcd_save_dir, pcd_save_prefix + "_all_raw_points.pcd");
+515:     std::string downsampled_points_dir = joinPath(pcd_save_dir, pcd_save_prefix + "_all_downsampled_points.pcd");
+516:     pcl::PCDWriter pcd_writer;
+517: 
+518:     if (img_en)
+519:     {
+520:       pcl::PointCloud<pcl::PointXYZRGB>::Ptr downsampled_cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+521:       pcl::VoxelGrid<pcl::PointXYZRGB> voxel_filter;
+522:       voxel_filter.setInputCloud(pcl_wait_save);
+523:       voxel_filter.setLeafSize(filter_size_pcd, filter_size_pcd, filter_size_pcd);
+524:       voxel_filter.filter(*downsampled_cloud);
+525:   
+526:       pcd_writer.writeBinary(raw_points_dir, *pcl_wait_save); // Save the raw point cloud data
+527:       std::cout << GREEN << "Raw point cloud data saved to: " << raw_points_dir 
+528:                 << " with point count: " << pcl_wait_save->points.size() << RESET << std::endl;
+529:       
+530:       pcd_writer.writeBinary(downsampled_points_dir, *downsampled_cloud); // Save the downsampled point cloud data
+531:       std::cout << GREEN << "Downsampled point cloud data saved to: " << downsampled_points_dir 
+532:                 << " with point count after filtering: " << downsampled_cloud->points.size() << RESET << std::endl;
+533: 
+534:       if(colmap_output_en)
+535:       {
+536:         fout_points << "# 3D point list with one line of data per point\n";
+537:         fout_points << "#  POINT_ID, X, Y, Z, R, G, B, ERROR\n";
+538:         for (size_t i = 0; i < downsampled_cloud->size(); ++i) 
+681: void LIVMapper::pointBodyToWorld(const PointType &pi, PointType &po)
+682: {
+683:   V3D p_body(pi.x, pi.y, pi.z);
+684:   V3D p_global(_state.rot_end * (extR * p_body + extT) + _state.pos_end);
+685:   po.x = p_global(0);
+686:   po.y = p_global(1);
+687:   po.z = p_global(2);
+688:   po.intensity = pi.intensity;
+689: }
+690: 
+691: template <typename T> void LIVMapper::pointBodyToWorld(const Matrix<T, 3, 1> &pi, Matrix<T, 3, 1> &po)
+692: {
+693:   V3D p_body(pi[0], pi[1], pi[2]);
+694:   V3D p_global(_state.rot_end * (extR * p_body + extT) + _state.pos_end);
+695:   po[0] = p_global(0);
+696:   po[1] = p_global(1);
+697:   po[2] = p_global(2);
+698: }
+699: 
+700: template <typename T> Matrix<T, 3, 1> LIVMapper::pointBodyToWorld(const Matrix<T, 3, 1> &pi)
+701: {
+702:   V3D p(pi[0], pi[1], pi[2]);
+703:   p = (_state.rot_end * (extR * p + extT) + _state.pos_end);
+704:   Matrix<T, 3, 1> po(p[0], p[1], p[2]);
+705:   return po;
+706: }
+707: 
+708: void LIVMapper::RGBpointBodyToWorld(PointType const *const pi, PointType *const po)
+709: {
+710:   V3D p_body(pi->x, pi->y, pi->z);
+711:   V3D p_global(_state.rot_end * (extR * p_body + extT) + _state.pos_end);
+712:   po->x = p_global(0);
+713:   po->y = p_global(1);
+714:   po->z = p_global(2);
+715:   po->intensity = pi->intensity;
+716: }
+717: 
+718: void LIVMapper::RGBpointBodyLidarToIMU(PointType const *const pi, PointType *const po)
+719: {
+720:   V3D p_body_lidar(pi->x, pi->y, pi->z);
+721:   V3D p_body_imu(extR * p_body_lidar + extT);
+722: 
+723:   po->x = p_body_imu(0);
+724:   po->y = p_body_imu(1);
+725:   po->z = p_body_imu(2);
+726:   po->intensity = pi->intensity;
+727: }
+728: 
+729: void LIVMapper::standard_pcl_cbk(const sensor_msgs::PointCloud2::ConstPtr &msg)
+1229:   if (pcd_save_en)
+1230:   {
+1231:     static int scan_wait_num = 0;
+1232: 
+1233:     switch (pcd_save_type)
+1234:     {
+1235:       case 0: /** world frame **/
+1236:         if (slam_mode_ == LIVO)
+1237:         {
+1238:           *pcl_wait_save += *laserCloudWorldRGB;
+1239:         }
+1240:         else
+1241:         {
+1242:           *pcl_wait_save_intensity += *pcl_w_wait_pub;
+1243:         }
+1244:         if(LidarMeasures.lio_vio_flg == LIO || LidarMeasures.lio_vio_flg == LO) scan_wait_num++;
+1245:         break;
+1246: 
+1247:       case 1: /** body frame **/
+1248:         if (LidarMeasures.lio_vio_flg == LIO || LidarMeasures.lio_vio_flg == LO)
+1249:         {
+1250:           int size = feats_undistort->points.size();
+1251:           PointCloudXYZI::Ptr laserCloudBody(new PointCloudXYZI(size, 1));
+1252:           for (int i = 0; i < size; i++)
+1253:           {
+1254:             RGBpointBodyLidarToIMU(&feats_undistort->points[i], &laserCloudBody->points[i]);
+1255:           }
+1256:           *pcl_wait_save_intensity += *laserCloudBody;
+1257:           scan_wait_num++;
+1258:           cout << "save body frame points: " << pcl_wait_save_intensity->points.size() << endl;
+1259:         }
+1260:         pcd_save_interval = 1;
+1261:         
+1262:         break;
+1263: 
+1264:       default:
+1265:         pcd_save_interval = 1;
+1266:         scan_wait_num++;
+1287:     }
+1288:     
+1289:     if(LidarMeasures.lio_vio_flg == LIO || LidarMeasures.lio_vio_flg == LO)
+1290:     {
+1291:       Eigen::Quaterniond q(_state.rot_end);
+1292:       fout_lidar_pos << std::fixed << std::setprecision(6);
+1293:       fout_lidar_pos <<  LidarMeasures.measures.back().lio_time << " " << _state.pos_end[0] << " " << _state.pos_end[1] << " " << _state.pos_end[2] << " " << q.x() << " " << q.y() << " " << q.z()
+1294:           << " " << q.w() << " " << endl;
+1295:     }
+1296:   }
+1297:   if (img_save_en && LidarMeasures.lio_vio_flg == VIO)
+
+## FAST_state_source: /home/jian/FAST-LIVO2_project/FAST-LIVO2/include/common_lib.h
+SHA256 e89d7b8a80c9f9bb88663a6eaa7e4921c222b21a7ad7f898262158d307679796
+
+125: 
+126: struct StatesGroup
+127: {
+128:   StatesGroup()
+129:   {
+130:     this->rot_end = M3D::Identity();
+131:     this->pos_end = V3D::Zero();
+132:     this->vel_end = V3D::Zero();
+133:     this->bias_g = V3D::Zero();
+134:     this->bias_a = V3D::Zero();
+135:     this->gravity = V3D::Zero();
+136:     this->inv_expo_time = 1.0;
+137:     this->cov = MD(DIM_STATE, DIM_STATE)::Identity() * INIT_COV;
+138:     this->cov(6, 6) = 0.00001;
+139:     this->cov.block<9, 9>(10, 10) = MD(9, 9)::Identity() * 0.00001;
+
+## Super_initializer: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/src/super_lio/src/lio/super_lio_reloc.cpp
+SHA256 ef1cea375df3749011717820af2164101c8f2bef1e0272f6262f8ba05f69c5ed
+
+180:     return false;
+181:   }
+182: 
+183:   LOG(INFO) << YELLOW << " ---> INIT start... obs_data size: " << init_obs_data_->size() << " target size: " << point_map_->size() << RESET;
+184: 
+185:   V3 gravity = - mean_acce * g_gravity_norm / mean_acce.norm();
+186:   V3 ref_gravity(0, 0, - g_gravity_norm);
+187:   M3 init_rot = Quat::FromTwoVectors(gravity, ref_gravity).toRotationMatrix();
+188:   V3 n = init_rot.col(0);
+189:   double yaw = atan2(n(1), n(0));
+190: 
+191:   M3 R_yaw_inv = Eigen::AngleAxis<scalar>(-yaw, V3::UnitZ()).toRotationMatrix(); 
+192:   M3 rot = R_yaw_inv * init_rot;
+193: 
+194:   M3 init_guess_R_ = re_init_pose_.R_ * rot;
+195:   V3 init_guess_t_ = re_init_pose_.t_;
+196:   M4 init_guess_T = M4::Identity();
+197:   init_guess_T.block<3, 3>(0, 0) = init_guess_R_;
+198:   init_guess_T.block<3, 1>(0, 3) = init_guess_t_;
+199: 
+200:   pcl::PointCloud<pcl::PointXYZI>::Ptr tmp_src(new pcl::PointCloud<pcl::PointXYZI>());
+201:   pcl::transformPointCloud(*init_obs_data_, *tmp_src, g_lidar_imu.matrix().cast<float>());
+202: 
+218:   ndt.setInputSource(tmp_src);
+219:   icp.setInputSource(tmp_src);
+220: 
+221:   pcl::PointCloud<pcl::PointXYZI>::Ptr unused_result(new pcl::PointCloud<pcl::PointXYZI>());
+222:   ndt.align(*unused_result, init_guess_T.matrix().cast<float>());
+223:   icp.align(*unused_result, ndt.getFinalTransformation());
+224: 
+225:   if (icp.hasConverged() == false || icp.getFitnessScore() > 1.5)
+226:   // if (icp.hasConverged() == false)
+227:   {
+228:     /// reset init state.
+229:     imu_cout = 0;
+230:     init_frame_count = 0;
+231:     init_obs_data_->clear();
+232:     mean_gyro = V3::Zero();
+233:     mean_acce = V3::Zero();
+234:     LOG(INFO) << RED << " ---> Global ICP Converged Fail! FitnessScore: " << icp.getFitnessScore() << RESET;
+235:     return false;
+236:   } else{
+237:     init_guess_T = icp.getFinalTransformation().cast<scalar>();
+238:     LOG(INFO) << GREEN << " ---> Global ICP Converged Succeed! FitnessScore: " << icp.getFitnessScore() << RESET;
+239:   }
+240: 
+241:   LOG(INFO) << GREEN << "\n" << init_guess_T << RESET;
+242: 
+243:   ESKF::Options options;
+244:   options.gyro_var_ = g_imu_ng;
+245:   options.acce_var_ = g_imu_na;
+246:   options.bias_gyro_var_ = g_imu_nbg;
+247:   options.bias_acce_var_ = g_imu_nba;
+248:   options.num_iterations_ = g_kf_max_iterations;
+249:   options.quit_eps_ = g_kf_quit_eps;
+250: 
+251:   float imu_scale = g_gravity_norm / mean_acce.norm();
+252:   kf_->SetInitialConditions(options, mean_gyro, V3::Zero(), imu_scale, ref_gravity);
+253:   auto state = kf_->GetSysState();
+254:   /// The horizontal initial state of the imu in the robot coordinate system.
+255:   state.R = SO3(init_guess_T.block<3, 3>(0, 0));
+256:   state.p = init_guess_T.block<3, 1>(0, 3);
+257:   state.timestamp = -1.0;
+258:   kf_->SetX(state);
+259:   sys_init_pose_ = kf_->GetSE3();
+260: 
+
+## Super_ESKF: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/src/super_lio/src/lio/ESKF.cpp
+SHA256 0687eeb508d1ecb791f16a9efce80338311ec70507bbb67d38982d8764bd1438
+
+69: void ESKF::SetInitialConditions(Options options, const V3& init_bg, 
+70:                                 const V3& init_ba, const float imu_scale,
+71:                                 const V3& gravity) 
+72: {
+73:   BuildNoise(options);
+74:   options_ = options;
+75:   bg_ = init_bg;
+76:   ba_ = init_ba;
+77:   g_ = gravity;
+78:   imu_scale_ = imu_scale;
+79: 
+80:   P_ = 1e-4 * M18::Identity();
+81:   P_.template block<3, 3>(0, 0) = 0.1 * M_PI / 180.0 * M3::Identity();   // r
+210:     dt = imu.secs - last_imu_time_;
+211:   }
+212: 
+213:   V3 acc = 0.5 * (imu.acc + last_imu_.acc);
+214:   acc = imu_scale_ * acc;
+215:   acc = acc - ba_;
+216:   body_omega_ = 0.5 * (imu.gyr + last_imu_.gyr) - bg_;
+217:   M3 Jr_dt = (dt * RightJacobianSO3(body_omega_, dt)).cast<scalar>();   // J_l(-phi) = J_r(phi)
+218: 
+219:   M3 R_m3 = R_.R_;
+220:   M3 R_dt = R_m3 * dt;
+221: 
+222:   F_X f_x = F_X::Identity();
+223:   f_x.template block<3, 3>(0, 0) = SO3::Exp(-body_omega_, dt).R_;
+224:   f_x.template block<3, 3>(0, 9) = - Jr_dt;
+225:   f_x.template block<3, 3>(3, 6) = M3::Identity() * dt;
+226:   f_x.template block<3, 3>(6, 0) = - R_m3 * SO3::hat(acc) * dt;
+227:   f_x.template block<3, 3>(6, 12) = - R_dt;
+228:   f_x.template block<3, 3>(6, 15) = M3::Identity() * dt;
+229:   
+230: 
+231:   F_W f_w = F_W::Zero();
+232:   f_w.template block<3, 3>(0, 0) = - Jr_dt;
+233:   f_w.template block<3, 3>(6, 3) = - R_dt;                 // v -> na
+234:   f_w.template block<3, 3>(9, 6) = M3::Identity() * dt;    // ba
+235:   f_w.template block<3, 3>(12, 9) = M3::Identity() * dt;   // bg
+236: 
+237:   P_ = f_x * P_ * f_x.transpose() + f_w * Q_ * f_w.transpose();
+238: 
+239:   global_acc_ = R_.R() * acc + g_;
+240:   p_ = p_ + v_ * dt + 0.5 * global_acc_ * dt * dt;
+241:   v_ = v_ + global_acc_ * dt;
+242:   R_ = R_ * SO3::Exp(body_omega_, dt);
+
+## Super_ROS: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/src/super_lio/src/ros/ROSWrapper.cpp
+SHA256 c538a916c35431f2a49ee123e136ee627fe256e3d56db50432dd6216a23e3948
+
+47:   std::vector<scalar> extrinsic_lidar_imu, extrinsic_odom_robo;
+48:   nh.getParam("/lio/extrinsic/lidar_imu", extrinsic_lidar_imu);      // 3 + 9
+49:   V3 __t = V3(extrinsic_lidar_imu[0], 
+50:               extrinsic_lidar_imu[1], 
+51:               extrinsic_lidar_imu[2]);
+52:   M3 __R = M3(extrinsic_lidar_imu.data() + 3);
+53:   g_lidar_imu = SE3(__R, __t);  // lidar in imu frame·
+54:   nh.getParam("/lio/extrinsic/odom_robo", extrinsic_odom_robo);     // 3 + 3 x,y,z,r,p,y
+55:   __t = V3(extrinsic_odom_robo[0], 
+
+## driver_LDDC: /home/jian/livox_ws/src/livox_ros_driver2/src/lddc.cpp
+SHA256 37dcc252a743fafe14c7ee5341d8827f1a5298ec910502b201bd0feb3476c71e
+
+480: void Lddc::InitImuMsg(const ImuData& imu_data, ImuMsg& imu_msg, uint64_t& timestamp) {
+481:   imu_msg.header.frame_id = "livox_frame";
+482: 
+483:   timestamp = imu_data.time_stamp;
+484: #ifdef BUILDING_ROS1
+485:   imu_msg.header.stamp = ros::Time(timestamp / 1000000000.0);  // to ros time stamp
+486: #elif defined BUILDING_ROS2
+487:   imu_msg.header.stamp = rclcpp::Time(timestamp);  // to ros time stamp
+488: #endif
+489: 
+490:   imu_msg.angular_velocity.x = imu_data.gyro_x;
+491:   imu_msg.angular_velocity.y = imu_data.gyro_y;
+492:   imu_msg.angular_velocity.z = imu_data.gyro_z;
+493:   imu_msg.linear_acceleration.x = imu_data.acc_x;
+494:   imu_msg.linear_acceleration.y = imu_data.acc_y;
+495:   imu_msg.linear_acceleration.z = imu_data.acc_z;
+496: }
+

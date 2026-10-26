@@ -1,0 +1,18 @@
+{
+  "path": "/media/jian/HIKVISION/Jian_FASTLIVO_Data/dogrosbag/loop2_map_match_experiment_2026_08_08_17_36_19/dateset/mapping-bag/logs/fastlivo_loop2.log",
+  "sha256": "c3da78406b3696e5abb0d0dc63777f0277b34d61ef9bc158682ecc47a8b05018",
+  "selected": [
+    {
+      "line": 43,
+      "text": "[INFO] [1786181811.945466361, 1786179480.132815637]: IMU Initials: Gravity: 3.9234 -0.2524 -8.9878 0.9939; acc covarience: 2.00000000 2.00000000 2.00000000; gry covarience: 0.10000000 0.10000000 0.10000000"
+    },
+    {
+      "line": 303598,
+      "text": "Raw point cloud data saved to: /home/jian/rosbag/loop2_map_match_experiment_2026_08_08_17_36_19/outputs/loop2/pcd/loop2_all_raw_points.pcd with point count: 45295762"
+    },
+    {
+      "line": 303599,
+      "text": "Downsampled point cloud data saved to: /home/jian/rosbag/loop2_map_match_experiment_2026_08_08_17_36_19/outputs/loop2/pcd/loop2_all_downsampled_points.pcd with point count after filtering: 468495"
+    }
+  ]
+}

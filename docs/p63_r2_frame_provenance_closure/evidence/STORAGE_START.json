@@ -1,0 +1,7 @@
+{
+  "before_worktree_available_bytes": 27059900416,
+  "after_checkout_available_bytes": 25333026816,
+  "minimum_reserve_bytes": 21474836480,
+  "no_download": true,
+  "no_delete": true
+}
