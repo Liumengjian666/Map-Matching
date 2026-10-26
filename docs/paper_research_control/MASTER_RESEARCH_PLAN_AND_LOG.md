@@ -52,6 +52,7 @@ Koide论文来源：https://staff.aist.go.jp/k.koide/assets/pdf/icra2024_02.pdf�
 |---|---|---|---|---|---|---|---|---|
 |2026-10-26|MASTER-PLAN-v1/S0|建立永久科研台账|新增NDT=0、EKF=0|无定位实验|起点85649d2...；建账SHA以Git HEAD为准|本文件|未获授权删除|S1/R30|
 |2026-10-26|R30 SOURCE AUDIT / S1准备|源码核查、只读轨迹工具和灵活改进规则|核心NDT/EKF源文件可在GitHub访问；发现IMU丢弃大间隔、地图预测驱动选择及OOSM回放门槛等待诊断机制；**无真实新定位**|真实NDT=0，EKF=0；2个合成Python单测PASS|起点21803def...；准备commit以R30分支HEAD为准|docs/paper_research_control/R30_ADAPTIVE_SOURCE_AUDIT_AND_PLAN.md、tools/r30_trace_preflight.py|未触碰本机数据，无删除；须Codex盘点|运行S1有限诊断并分离根因|
+|2026-10-26|R30后相关工作检索/S1成果复核|阅读近期先验地图定位/退化配准论文10项，归纳技术创新/重合风险|确认R30 Grid单项修复与raw62未闭合观测身份，推荐先解决发布位姿与质量资格冲突；文献整理不证明新算法创新|新增正式NDT=0、EKF=0，未运行定位|START 6ca14d4...；文献DOC commit 23851a7...；最终以远端HEAD为准|docs/paper_research_control/RECENT_PRIOR_MAP_INNOVATIONS_R30.md|新增文档，无大型下载、删除0|观测身份最小合法闭环，再MID360资产及完整实验|
 
 ## 磁盘资产管理（未经用户逐项批准不能删除）
 |类别|示例|规则|
@@ -91,3 +92,5 @@ Koide论文来源：https://staff.aist.go.jp/k.koide/assets/pdf/icra2024_02.pdf�
 |/home/jian/livox_ws/p62_r30_foundation_ws/build|432586752 allocated bytes|本轮CODE与Release命令；devel新二进制保留|后续测试需重建|未批准|未执行|
 |/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01/indoor_easy_01/decompressed_01_0.db3|4394782720 logical bytes|保留官方ZIP、R29 CRC/MD5及展开SHA，可逐字再解压|实际删除前重验依赖/ZIP，不能删除唯一原件|未批准|未执行|
 |/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_hard_01/indoor_hard_01/decompressed_03_0.db3|5090283520 logical bytes|保留官方ZIP、R29 CRC/MD5及展开SHA，可逐字再解压|与ZIP是同一载荷的不同存储表示，不冒称字节相同|未批准|未执行|
+
+2026-10-26：R30完成后独立核查到工程修复和raw62后置限幅质量语义问题。2024–2026近期相关工作列于RECENT_PRIOR_MAP_INNOVATIONS_R30.md；本次只是文献梳理，**无新源码定位修复或实验**。长线方向可以基于实验证据调整；科研候选未被实验证明。
