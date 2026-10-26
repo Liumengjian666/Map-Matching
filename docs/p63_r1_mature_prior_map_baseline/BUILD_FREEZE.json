@@ -1,0 +1,43 @@
+{
+  "official_repository": "https://github.com/Liansheng-Wang/Super-LIO",
+  "official_branch": "ros1",
+  "official_SHA": "60b57aaac8dc397f80c56364e7ccb008c300cc29",
+  "license": "GPL-3.0",
+  "upstream_source_patch": false,
+  "build_type": "Release",
+  "local_link_environment": "LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH:-};camera SDK old libusb avoided only per process",
+  "binaries": {
+    "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/super_lio/relocation_node": {
+      "bytes": 64816,
+      "sha256": "ca6607d9e9e3f9c9436fd2c4563d2684e62cdb6c210305e1b38f03fa421951fb"
+    },
+    "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/super_lio/super_lio_node": {
+      "bytes": 59792,
+      "sha256": "da0bf86d8fb61dbe56b9f8a8277fd31840dcdf2582f81ff4666a7a70696c3a03"
+    },
+    "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/liblio.so": {
+      "bytes": 1025184,
+      "sha256": "c436f658eacf4528006917794653953564c8f444833b97bbf453039523aafcdf"
+    },
+    "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/libbasic.so": {
+      "bytes": 85368,
+      "sha256": "9a1598031ddb8cd5f8a78b46c924701aded63b93a15469eeab55ef3fd2f78c24"
+    },
+    "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/p63_super_lio_baseline/p63_map_freeze_probe": {
+      "bytes": 88880,
+      "sha256": "5e0aabc1eceb120eb7b501ae61fbecdefb717dd44e8d07b31c67da4912803472"
+    },
+    "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/p63_super_lio_baseline/p63_original_observer": {
+      "bytes": 89144,
+      "sha256": "ce69ff472b1043f5b6ceb38aa58ae723eeacf1f5a2e0c4b5c034a18e5c664070"
+    }
+  },
+  "author_source_SHA256": {
+    "src/super_lio/src/lio/super_lio_reloc.cpp": "ef1cea375df3749011717820af2164101c8f2bef1e0272f6262f8ba05f69c5ed",
+    "src/super_lio/src/lio/super_lio.cpp": "2aab241ef0686c185e266b51486f90713acde369c4cf664da8595c9988236cb3",
+    "src/super_lio/src/lio/ESKF.cpp": "0687eeb508d1ecb791f16a9efce80338311ec70507bbb67d38982d8764bd1438",
+    "src/super_lio/src/ros/ROSWrapper.cpp": "c538a916c35431f2a49ee123e136ee627fe256e3d56db50432dd6216a23e3948",
+    "src/super_lio/include/OctVoxMap/OctVoxMap.hpp": "e597422f5465c6b6071f845e1729d5561d2ccf0ea5c50db9d9baa18fccbc6d3e",
+    "LICENSE": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+  }
+}

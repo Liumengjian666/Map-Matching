@@ -1,0 +1,6 @@
+<launch>
+  <arg name="receipt" />
+  <rosparam command="load" file="$(find p63_super_lio_baseline)/config/map_probe.yaml" />
+  <param name="/p63/probe_receipt" value="$(arg receipt)" />
+  <node pkg="p63_super_lio_baseline" type="p63_map_freeze_probe" name="p63_map_freeze_probe" output="screen" required="true" />
+</launch>

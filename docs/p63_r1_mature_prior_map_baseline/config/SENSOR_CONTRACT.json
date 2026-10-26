@@ -1,0 +1,24 @@
+{
+  "status": "HISTORICAL_IDENTITY_SMOKE_ONLY",
+  "calibration_evidence": "explicit user authorization for historical-zero/I engineering smoke;NOT independently calibrated",
+  "historical_mapping_config": "/media/jian/HIKVISION/Jian_FASTLIVO_Data/dogrosbag/loop2_map_match_experiment_2026_08_08_17_36_19/config/loop2_config.yaml",
+  "historical_config_sha256": "1cde331d3b092629e1c2b06ebf218a9c51122fe4f8feeef3ea6e9ef2fafae76c",
+  "map_path": "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd",
+  "map_sha256": "016b7ae3ae494ad5d462a66d888a96b96dda5fe29d6058059aa2fa6bdf6b09ca",
+  "T_imu_lidar_translation_plus_column_major_rotation": [
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+  ],
+  "observer_binary": "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/p63_super_lio_baseline/p63_original_observer",
+  "observer_binary_sha256": "ce69ff472b1043f5b6ceb38aa58ae723eeacf1f5a2e0c4b5c034a18e5c664070"
+}

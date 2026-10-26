@@ -1,0 +1,216 @@
+-- The C compiler identification is GNU 9.4.0
+-- The CXX compiler identification is GNU 9.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Using CATKIN_DEVEL_PREFIX: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel
+-- Using CMAKE_PREFIX_PATH: /opt/ros/noetic
+-- This workspace overlays: /opt/ros/noetic
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using Debian Python package layout
+-- Found PY_em: /home/jian/.local/lib/python3.8/site-packages/em.py  
+-- Using empy: /home/jian/.local/lib/python3.8/site-packages/em.py
+-- Using CATKIN_ENABLE_TESTING: ON
+-- Call enable_testing()
+-- Using CATKIN_TEST_RESULTS_DIR: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/build/test_results
+-- Forcing gtest/gmock from source, though one was otherwise available.
+-- Found gtest sources under '/usr/src/googletest': gtests will be built
+-- Found gmock sources under '/usr/src/googletest': gmock will be built
+-- Found PythonInterp: /usr/bin/python3 (found version "3.8.10") 
+-- Found Threads: TRUE  
+-- Using Python nosetests: /usr/bin/nosetests3
+-- catkin 0.8.12
+-- BUILD_SHARED_LIBS is on
+-- BUILD_SHARED_LIBS is on
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~  traversing 2 packages in topological order:
+-- ~~  - basic
+-- ~~  - super_lio
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- +++ processing catkin package: 'basic'
+-- ==> add_subdirectory(basic)
+-- Checking for module 'eigen3'
+--   Found eigen3, version 3.3.7
+-- Found Eigen: /usr/include/eigen3 (Required is at least version "3.1") 
+-- Eigen found (include: /usr/include/eigen3, version: 3.3.7)
+-- Found Boost: /usr/include (found suitable version "1.71.0", minimum required is "1.55.0") found components: system filesystem date_time iostreams regex 
+-- Checking for module 'libusb-1.0'
+--   Found libusb-1.0, version 1.0.23
+-- Found USB_10: /usr/lib/x86_64-linux-gnu/libusb-1.0.so  
+-- Found OpenNI: /usr/lib/libOpenNI.so  
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- Found OpenNI2: /usr/lib/libOpenNI2.so  
+-- OpenNI2 found (include: /usr/include/openni2, lib: /usr/lib/libOpenNI2.so)
+** WARNING ** io features related to pcap will be disabled
+** WARNING ** io features related to png will be disabled
+-- The imported target "vtkParseOGLExt" references the file
+   "/usr/bin/vtkParseOGLExt-7.1"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtkRenderingPythonTkWidgets" references the file
+   "/usr/lib/x86_64-linux-gnu/libvtkRenderingPythonTkWidgets.so"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtk" references the file
+   "/usr/bin/vtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "pvtk" references the file
+   "/usr/bin/pvtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- Found libusb-1.0: /usr/include  
+** WARNING ** io features related to libusb-1.0 will be disabled
+-- looking for PCL_COMMON
+-- Found PCL_COMMON: /usr/lib/x86_64-linux-gnu/libpcl_common.so  
+-- looking for PCL_OCTREE
+-- Found PCL_OCTREE: /usr/lib/x86_64-linux-gnu/libpcl_octree.so  
+-- looking for PCL_IO
+-- Found PCL_IO: /usr/lib/x86_64-linux-gnu/libpcl_io.so  
+-- Found PCL: pcl_common;pcl_octree;pcl_io;/usr/lib/x86_64-linux-gnu/libboost_system.so;/usr/lib/x86_64-linux-gnu/libboost_filesystem.so;/usr/lib/x86_64-linux-gnu/libboost_date_time.so;/usr/lib/x86_64-linux-gnu/libboost_iostreams.so;/usr/lib/x86_64-linux-gnu/libboost_regex.so;/usr/lib/libOpenNI.so;/usr/lib/libOpenNI2.so;vtkChartsCore;vtkCommonColor;vtkCommonCore;vtksys;vtkCommonDataModel;vtkCommonMath;vtkCommonMisc;vtkCommonSystem;vtkCommonTransforms;vtkCommonExecutionModel;vtkFiltersGeneral;vtkCommonComputationalGeometry;vtkFiltersCore;vtkInfovisCore;vtkFiltersExtraction;vtkFiltersStatistics;vtkImagingFourier;vtkImagingCore;vtkalglib;vtkRenderingContext2D;vtkRenderingCore;vtkFiltersGeometry;vtkFiltersSources;vtkRenderingFreeType;/usr/lib/x86_64-linux-gnu/libfreetype.so;/usr/lib/x86_64-linux-gnu/libz.so;vtkFiltersModeling;vtkImagingSources;vtkInteractionStyle;vtkInteractionWidgets;vtkFiltersHybrid;vtkImagingColor;vtkImagingGeneral;vtkImagingHybrid;vtkIOImage;vtkDICOMParser;vtkmetaio;/usr/lib/x86_64-linux-gnu/libjpeg.so;/usr/lib/x86_64-linux-gnu/libpng.so;/usr/lib/x86_64-linux-gnu/libtiff.so;vtkRenderingAnnotation;vtkRenderingVolume;vtkIOXML;vtkIOCore;vtkIOXMLParser;/usr/lib/x86_64-linux-gnu/libexpat.so;vtkIOGeometry;vtkIOLegacy;vtkIOPLY;vtkRenderingLOD;vtkViewsContext2D;vtkViewsCore;vtkRenderingContextOpenGL2;vtkRenderingOpenGL2  
+-- +++ processing catkin package: 'super_lio'
+-- ==> add_subdirectory(super_lio)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Found PythonLibs: /usr/lib/x86_64-linux-gnu/libpython3.8.so (found version "3.8.10") 
+-- super_lio: 2 messages, 0 services
+CMake Warning at /opt/ros/noetic/share/catkin/cmake/catkin_package.cmake:166 (message):
+  catkin_package() DEPENDS on 'PCL' but neither 'PCL_INCLUDE_DIRS' nor
+  'PCL_LIBRARIES' is defined.
+Call Stack (most recent call first):
+  /opt/ros/noetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
+  super_lio/CMakeLists.txt:53 (catkin_package)
+
+
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/build
+Scanning dependencies of target geometry_msgs_generate_messages_nodejs
+[  0%] Built target geometry_msgs_generate_messages_nodejs
+Scanning dependencies of target basic
+Scanning dependencies of target std_msgs_generate_messages_nodejs
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  4%] Building CXX object basic/CMakeFiles/basic.dir/src/Manifold.cpp.o
+Scanning dependencies of target _super_lio_generate_messages_check_deps_CloudPose2
+[  4%] Built target _super_lio_generate_messages_check_deps_CloudPose2
+Scanning dependencies of target sensor_msgs_generate_messages_nodejs
+[  4%] Built target sensor_msgs_generate_messages_nodejs
+Scanning dependencies of target _super_lio_generate_messages_check_deps_CloudPose
+[  4%] Built target _super_lio_generate_messages_check_deps_CloudPose
+Scanning dependencies of target sensor_msgs_generate_messages_eus
+[  4%] Built target sensor_msgs_generate_messages_eus
+Scanning dependencies of target std_msgs_generate_messages_eus
+[  4%] Built target std_msgs_generate_messages_eus
+Scanning dependencies of target geometry_msgs_generate_messages_eus
+[  4%] Built target geometry_msgs_generate_messages_eus
+Scanning dependencies of target geometry_msgs_generate_messages_cpp
+[  4%] Built target geometry_msgs_generate_messages_cpp
+Scanning dependencies of target std_msgs_generate_messages_cpp
+[  4%] Built target std_msgs_generate_messages_cpp
+Scanning dependencies of target sensor_msgs_generate_messages_cpp
+[  4%] Built target sensor_msgs_generate_messages_cpp
+[  8%] Building CXX object basic/CMakeFiles/basic.dir/src/logs.cpp.o
+Scanning dependencies of target sensor_msgs_generate_messages_py
+[  8%] Built target sensor_msgs_generate_messages_py
+Scanning dependencies of target std_msgs_generate_messages_py
+[  8%] Built target std_msgs_generate_messages_py
+Scanning dependencies of target geometry_msgs_generate_messages_py
+[  8%] Built target geometry_msgs_generate_messages_py
+Scanning dependencies of target sensor_msgs_generate_messages_lisp
+[  8%] Built target sensor_msgs_generate_messages_lisp
+Scanning dependencies of target std_msgs_generate_messages_lisp
+[  8%] Built target std_msgs_generate_messages_lisp
+Scanning dependencies of target geometry_msgs_generate_messages_lisp
+[  8%] Built target geometry_msgs_generate_messages_lisp
+Scanning dependencies of target super_lio_generate_messages_nodejs
+[ 12%] Generating Javascript code from super_lio/CloudPose.msg
+[ 16%] Generating Javascript code from super_lio/CloudPose2.msg
+[ 16%] Built target super_lio_generate_messages_nodejs
+Scanning dependencies of target super_lio_generate_messages_eus
+[ 20%] Generating EusLisp code from super_lio/CloudPose.msg
+[ 24%] Generating EusLisp code from super_lio/CloudPose2.msg
+[ 28%] Generating EusLisp manifest code for super_lio
+[ 28%] Built target super_lio_generate_messages_eus
+Scanning dependencies of target super_lio_generate_messages_cpp
+[ 32%] Generating C++ code from super_lio/CloudPose.msg
+[ 36%] Generating C++ code from super_lio/CloudPose2.msg
+[ 36%] Built target super_lio_generate_messages_cpp
+Scanning dependencies of target super_lio_generate_messages_py
+[ 40%] Generating Python from MSG super_lio/CloudPose
+[ 44%] Generating Python from MSG super_lio/CloudPose2
+[ 48%] Generating Python msg __init__.py for super_lio
+[ 48%] Built target super_lio_generate_messages_py
+Scanning dependencies of target super_lio_generate_messages_lisp
+[ 52%] Generating Lisp code from super_lio/CloudPose.msg
+[ 56%] Generating Lisp code from super_lio/CloudPose2.msg
+[ 56%] Built target super_lio_generate_messages_lisp
+Scanning dependencies of target super_lio_generate_messages
+[ 56%] Built target super_lio_generate_messages
+[ 60%] Linking CXX shared library /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/libbasic.so
+[ 60%] Built target basic
+Scanning dependencies of target lio
+[ 68%] Building CXX object super_lio/CMakeFiles/lio.dir/src/lio/params.cpp.o
+[ 68%] Building CXX object super_lio/CMakeFiles/lio.dir/src/lio/ESKF.cpp.o
+[ 72%] Building CXX object super_lio/CMakeFiles/lio.dir/src/lio/super_lio.cpp.o
+[ 76%] Building CXX object super_lio/CMakeFiles/lio.dir/src/lio/super_lio_reloc.cpp.o
+[ 80%] Building CXX object super_lio/CMakeFiles/lio.dir/src/ros/ROSWrapper.cpp.o
+[ 84%] Linking CXX shared library /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/liblio.so
+[ 84%] Built target lio
+Scanning dependencies of target relocation_node
+Scanning dependencies of target super_lio_node
+[ 88%] Building CXX object super_lio/CMakeFiles/relocation_node.dir/src/apps/relocation_node.cpp.o
+[ 92%] Building CXX object super_lio/CMakeFiles/super_lio_node.dir/src/apps/super_lio_node.cpp.o
+[ 96%] Linking CXX executable /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/super_lio/super_lio_node
+[100%] Linking CXX executable /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/super_lio/relocation_node
+/usr/bin/ld: /usr/lib/x86_64-linux-gnu/libpcl_io.so: undefined reference to `libusb_set_option'
+collect2: error: ld returned 1 exit status
+make[2]: *** [super_lio/CMakeFiles/relocation_node.dir/build.make:263：/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/super_lio/relocation_node] 错误 1
+make[1]: *** [CMakeFiles/Makefile2:963：super_lio/CMakeFiles/relocation_node.dir/all] 错误 2
+make[1]: *** 正在等待未完成的任务....
+/usr/bin/ld: /usr/lib/x86_64-linux-gnu/libpcl_io.so: undefined reference to `libusb_set_option'
+collect2: error: ld returned 1 exit status
+make[2]: *** [super_lio/CMakeFiles/super_lio_node.dir/build.make:263：/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/super_lio/super_lio_node] 错误 1
+make[1]: *** [CMakeFiles/Makefile2:991：super_lio/CMakeFiles/super_lio_node.dir/all] 错误 2
+make: *** [Makefile:141：all] 错误 2
+Base path: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO
+Source space: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/src
+Build space: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/build
+Devel space: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel
+Install space: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/install
+Creating symlink "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/src/CMakeLists.txt" pointing to "/opt/ros/noetic/share/catkin/cmake/toplevel.cmake"
+####
+#### Running command: "cmake /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/src -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=/usr/bin/python3 -DCATKIN_DEVEL_PREFIX=/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel -DCMAKE_INSTALL_PREFIX=/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/install -G Unix Makefiles" in "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/build"
+####
+####
+#### Running command: "make -j2" in "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/build"
+####
+Invoking "make -j2" failed

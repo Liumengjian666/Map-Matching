@@ -1,0 +1,15 @@
+{
+  "mode": "MAP_FREEZE_ENGINEERING_ONLY",
+  "target_points": 151401,
+  "target_before_sha256": "57e4bc2d68c072123aa7e0f490b05a637389ad80dd5211d93c4a341cb50f9745",
+  "target_after_sha256": "57e4bc2d68c072123aa7e0f490b05a637389ad80dd5211d93c4a341cb50f9745",
+  "disabled_update_calls": 600,
+  "knn_queries": 1000,
+  "supported_queries": 995,
+  "map_load_ms": 51.144679,
+  "probe_ms": 4.124439,
+  "peak_RSS_KiB": 132348,
+  "actual_MID360_frames": 0,
+  "native_NDT_calls": 0,
+  "ESKF_updates": 0
+}

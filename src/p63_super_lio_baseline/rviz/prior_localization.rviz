@@ -1,0 +1,66 @@
+Panels:
+  - Class: rviz/Displays
+    Name: Displays
+Visualization Manager:
+  Class: ""
+  Global Options:
+    Background Color: 30; 30; 30
+    Fixed Frame: world
+    Frame Rate: 20
+  Displays:
+    - Class: rviz/Grid
+      Name: Grid
+      Enabled: true
+      Plane Cell Count: 30
+      Cell Size: 1
+    - Class: rviz/PointCloud2
+      Name: Frozen FAST-LIVO2 Prior
+      Enabled: true
+      Topic: /lio/global_map
+      Queue Size: 1
+      Position Transformer: XYZ
+      Color Transformer: FlatColor
+      Color: 170; 170; 170
+      Style: Points
+      Size (Pixels): 2
+    - Class: rviz/PointCloud2
+      Name: Current Native Aligned Scan
+      Enabled: true
+      Topic: /lio/cloud_world
+      Queue Size: 2
+      Position Transformer: XYZ
+      Color Transformer: FlatColor
+      Color: 50; 190; 255
+      Style: Points
+      Size (Pixels): 3
+    - Class: rviz/Path
+      Name: Native Prior-Map Path
+      Enabled: true
+      Topic: /lio/path
+      Queue Size: 10
+      Color: 30; 255; 60
+      Line Style: Lines
+      Line Width: 0.04
+    - Class: rviz/Odometry
+      Name: Native IMU Pose
+      Enabled: true
+      Topic: /lio/odom
+      Queue Size: 20
+      Keep: 10
+    - Class: rviz/TF
+      Name: Pose TF
+      Enabled: true
+      Show Names: true
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Distance: 25
+      Pitch: 0.85
+      Yaw: 0.7
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0
+Window Geometry:
+  Width: 1280
+  Height: 800

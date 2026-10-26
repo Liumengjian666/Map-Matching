@@ -1,0 +1,62 @@
+{
+  "bag_path": "/home/jian/rosbag/loop2/raw_restore_20260914_stage0/loop2_raw.bag",
+  "bag_bytes": 19677401800,
+  "bag_SHA_archival": "d17bee3f8697dcb01cb4b9f6ea2483aa42a1a31ae277659c8a7869d9c69f13ae",
+  "fresh_whole_bag_hash": false,
+  "bag_start": 1786179479.4883032,
+  "bag_end": 1786180569.9997246,
+  "topics": {
+    "/livox/imu": {
+      "type": "sensor_msgs/Imu",
+      "count": 218101,
+      "hz": 200.31061655284398
+    },
+    "/livox/lidar": {
+      "type": "livox_ros_driver2/CustomMsg",
+      "count": 10905,
+      "hz": 10.000247961470603
+    }
+  },
+  "first_samples": {
+    "/livox/lidar": {
+      "header_ns": 1786179479409757376,
+      "bag_ns": 1786179479511523113,
+      "frame_id": "livox_frame",
+      "type": "livox_ros_driver2/CustomMsg",
+      "md5": "e4d6829bdfe657cb6c21a746c86b21a6",
+      "timebase": 1786179479409757444,
+      "point_num": 20064,
+      "offset_first_ns": 0,
+      "offset_last_ns": 100039035,
+      "offset_max_ns": 100039035,
+      "offset_monotonic": false
+    },
+    "/livox/imu": {
+      "header_ns": 1786179479487937689,
+      "bag_ns": 1786179479488303177,
+      "frame_id": "livox_frame",
+      "type": "sensor_msgs/Imu",
+      "md5": "6a62c6daae103f4ff57a132d6f95cec2",
+      "gyro": [
+        -0.01545952819287777,
+        -0.006897252053022385,
+        0.0009580850601196289
+      ],
+      "accel": [
+        -0.4062889516353607,
+        0.028479373082518578,
+        0.9105649590492249
+      ]
+    }
+  },
+  "prefix_timestamp_inspection": {
+    "lidar_count": 600,
+    "imu_count": 12200,
+    "lidar_first_ns": 1786179479409757376,
+    "lidar_last_ns": 1786179539309584856,
+    "lidar_strictly_increasing": true,
+    "imu_strictly_increasing": true,
+    "imu_norm_median": 0.9937207894022283,
+    "imu_max_gap_s": 0.008149385
+  }
+}

@@ -1,0 +1,164 @@
+-- Using CATKIN_DEVEL_PREFIX: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel
+-- Using CMAKE_PREFIX_PATH: /opt/ros/noetic
+-- This workspace overlays: /opt/ros/noetic
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using Debian Python package layout
+-- Using empy: /home/jian/.local/lib/python3.8/site-packages/em.py
+-- Using CATKIN_ENABLE_TESTING: ON
+-- Call enable_testing()
+-- Using CATKIN_TEST_RESULTS_DIR: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/build/test_results
+-- Forcing gtest/gmock from source, though one was otherwise available.
+-- Found gtest sources under '/usr/src/googletest': gtests will be built
+-- Found gmock sources under '/usr/src/googletest': gmock will be built
+-- Found PythonInterp: /usr/bin/python3 (found version "3.8.10") 
+-- Using Python nosetests: /usr/bin/nosetests3
+-- catkin 0.8.12
+-- BUILD_SHARED_LIBS is on
+-- BUILD_SHARED_LIBS is on
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~  traversing 3 packages in topological order:
+-- ~~  - basic
+-- ~~  - super_lio
+-- ~~  - p63_super_lio_baseline
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- +++ processing catkin package: 'basic'
+-- ==> add_subdirectory(basic)
+-- Eigen found (include: /usr/include/eigen3, version: 3.3.7)
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- OpenNI2 found (include: /usr/include/openni2, lib: /usr/lib/libOpenNI2.so)
+** WARNING ** io features related to pcap will be disabled
+** WARNING ** io features related to png will be disabled
+-- The imported target "vtkParseOGLExt" references the file
+   "/usr/bin/vtkParseOGLExt-7.1"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtkRenderingPythonTkWidgets" references the file
+   "/usr/lib/x86_64-linux-gnu/libvtkRenderingPythonTkWidgets.so"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtk" references the file
+   "/usr/bin/vtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "pvtk" references the file
+   "/usr/bin/pvtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+** WARNING ** io features related to libusb-1.0 will be disabled
+-- looking for PCL_COMMON
+-- looking for PCL_OCTREE
+-- looking for PCL_IO
+-- +++ processing catkin package: 'super_lio'
+-- ==> add_subdirectory(super_lio)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- super_lio: 2 messages, 0 services
+CMake Warning at /opt/ros/noetic/share/catkin/cmake/catkin_package.cmake:166 (message):
+  catkin_package() DEPENDS on 'PCL' but neither 'PCL_INCLUDE_DIRS' nor
+  'PCL_LIBRARIES' is defined.
+Call Stack (most recent call first):
+  /opt/ros/noetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
+  super_lio/CMakeLists.txt:53 (catkin_package)
+
+
+-- +++ processing catkin package: 'p63_super_lio_baseline'
+-- ==> add_subdirectory(p63_super_lio_baseline)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "1.1.1f")  
+-- Eigen found (include: /usr/include/eigen3, version: 3.3.7)
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- OpenNI2 found (include: /usr/include/openni2, lib: /usr/lib/libOpenNI2.so)
+** WARNING ** io features related to pcap will be disabled
+** WARNING ** io features related to png will be disabled
+-- The imported target "vtkParseOGLExt" references the file
+   "/usr/bin/vtkParseOGLExt-7.1"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtkRenderingPythonTkWidgets" references the file
+   "/usr/lib/x86_64-linux-gnu/libvtkRenderingPythonTkWidgets.so"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtk" references the file
+   "/usr/bin/vtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "pvtk" references the file
+   "/usr/bin/pvtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+** WARNING ** io features related to libusb-1.0 will be disabled
+-- looking for PCL_COMMON
+-- looking for PCL_OCTREE
+-- looking for PCL_IO
+-- Installing devel-space wrapper /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/src/p63_super_lio_baseline/scripts/baseline_gate.py to /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/p63_super_lio_baseline
+-- Installing devel-space wrapper /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/src/p63_super_lio_baseline/scripts/pose_tf_bridge.py to /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/p63_super_lio_baseline
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/build
+[ 27%] Built target basic
+[ 81%] Built target lio
+Scanning dependencies of target p63_map_freeze_probe
+[ 90%] Building CXX object p63_super_lio_baseline/CMakeFiles/p63_map_freeze_probe.dir/src/map_freeze_probe.cpp.o
+In file included from /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/src/super_lio/include/lio/super_lio.h:21,
+                 from /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/src/super_lio/include/lio/super_lio_reloc.h:7,
+                 from /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/src/p63_super_lio_baseline/src/map_freeze_probe.cpp:2:
+/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/src/super_lio/include/OctVoxMap/OctVoxMap.hpp: In member function ‘void LI2Sup::OctVoxMap<Point, Scalar>::saveMap() const’:
+/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/src/super_lio/include/OctVoxMap/OctVoxMap.hpp:457:46: error: ‘ROOT’ was not declared in this scope
+  457 |   const std::string g_root_dir = std::string(ROOT);
+      |                                              ^~~~
+make[3]: *** [p63_super_lio_baseline/CMakeFiles/p63_map_freeze_probe.dir/build.make:63：p63_super_lio_baseline/CMakeFiles/p63_map_freeze_probe.dir/src/map_freeze_probe.cpp.o] 错误 1
+make[2]: *** [CMakeFiles/Makefile2:3413：p63_super_lio_baseline/CMakeFiles/p63_map_freeze_probe.dir/all] 错误 2
+make[1]: *** [CMakeFiles/Makefile2:3420：p63_super_lio_baseline/CMakeFiles/p63_map_freeze_probe.dir/rule] 错误 2
+make: *** [Makefile:1657：p63_map_freeze_probe] 错误 2
+Base path: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO
+Source space: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/src
+Build space: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/build
+Devel space: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel
+Install space: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/install
+####
+#### Running command: "cmake /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/src -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=/usr/bin/python3 -DCATKIN_DEVEL_PREFIX=/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel -DCMAKE_INSTALL_PREFIX=/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/install -G Unix Makefiles" in "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/build"
+####
+####
+#### Running command: "make -j2 p63_map_freeze_probe" in "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/build"
+####
+Invoking "make -j2 p63_map_freeze_probe" failed

@@ -1,0 +1,32 @@
+{
+  "roots": [
+    "/home/jian/livox_ws/dog_visual_loc_ws/src",
+    "/home/jian/rosbag/外参标定"
+  ],
+  "bounded_text_search": true,
+  "candidate_files": [],
+  "user_confirmation": "No independently validated MID360 LiDAR-IMU calibration; historical zero/I smoke explicitly authorized",
+  "additional_known_mapping_configs": [
+    {
+      "path": "/home/jian/livox_ws/src/FAST-LIVO2/config/ours_config.yaml",
+      "sha256": "7a6b04de0d90dce44fa3a27f6d495bf6d4fd6a4bafd556743658c6376edb8871",
+      "status": "historical assumption or generic example;not independent device calibration"
+    },
+    {
+      "path": "/media/jian/HIKVISION/Jian_FASTLIVO_Data/dogrosbag/loop2_map_match_experiment_2026_08_08_17_36_19/config/loop2_config.yaml",
+      "sha256": "1cde331d3b092629e1c2b06ebf218a9c51122fe4f8feeef3ea6e9ef2fafae76c",
+      "status": "historical assumption or generic example;not independent device calibration"
+    },
+    {
+      "path": "docs/p62_r25_results_to_paper_closure/dog/ACTIVE_MAPPING_CONFIG.yaml",
+      "sha256": "1cde331d3b092629e1c2b06ebf218a9c51122fe4f8feeef3ea6e9ef2fafae76c",
+      "status": "historical assumption or generic example;not independent device calibration"
+    },
+    {
+      "path": "src/dog_prior_map_localization/config/own_loop2.yaml",
+      "sha256": "76969b33fe5a8ee977074389852131100a9296ad564250c6f703b13d63237957",
+      "status": "historical assumption or generic example;not independent device calibration"
+    }
+  ],
+  "verified_transform_semantics": "FAST-LIVO2 RGBpointBodyLidarToIMU: p_I=extR*p_L+extT;Super-LIO Propagation_Undistort uses same T_I_L direction;FAST config R row-major,Super Eigen M3(data) column-major;identity unaffected."
+}

@@ -1,0 +1,40 @@
+[  0%] Built target geometry_msgs_generate_messages_nodejs
+[ 12%] Built target basic
+[ 12%] Built target std_msgs_generate_messages_nodejs
+[ 12%] Built target sensor_msgs_generate_messages_nodejs
+[ 12%] Built target _super_lio_generate_messages_check_deps_CloudPose2
+[ 12%] Built target sensor_msgs_generate_messages_eus
+[ 12%] Built target _super_lio_generate_messages_check_deps_CloudPose
+[ 12%] Built target std_msgs_generate_messages_eus
+[ 12%] Built target geometry_msgs_generate_messages_eus
+[ 12%] Built target geometry_msgs_generate_messages_cpp
+[ 12%] Built target std_msgs_generate_messages_cpp
+[ 12%] Built target sensor_msgs_generate_messages_cpp
+[ 12%] Built target sensor_msgs_generate_messages_py
+[ 12%] Built target std_msgs_generate_messages_py
+[ 12%] Built target geometry_msgs_generate_messages_py
+[ 12%] Built target sensor_msgs_generate_messages_lisp
+[ 12%] Built target std_msgs_generate_messages_lisp
+[ 12%] Built target geometry_msgs_generate_messages_lisp
+[ 20%] Built target super_lio_generate_messages_nodejs
+[ 44%] Built target lio
+[ 56%] Built target super_lio_generate_messages_eus
+[ 64%] Built target super_lio_generate_messages_cpp
+[ 76%] Built target super_lio_generate_messages_py
+[ 84%] Built target super_lio_generate_messages_lisp
+[ 88%] Linking CXX executable /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/super_lio/relocation_node
+[ 92%] Linking CXX executable /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/super_lio/super_lio_node
+[ 96%] Built target relocation_node
+[ 96%] Built target super_lio_generate_messages
+[100%] Built target super_lio_node
+Base path: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO
+Source space: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/src
+Build space: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/build
+Devel space: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel
+Install space: /home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/install
+####
+#### Running command: "make cmake_check_build_system" in "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/build"
+####
+####
+#### Running command: "make -j2" in "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/build"
+####

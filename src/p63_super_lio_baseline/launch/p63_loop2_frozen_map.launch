@@ -1,0 +1,16 @@
+<launch>
+  <arg name="sensor_contract" />
+  <arg name="output_dir" />
+  <arg name="rviz" default="true" />
+  <arg name="allow_historical_identity_smoke" default="false" />
+  <rosparam command="load" file="$(find p63_super_lio_baseline)/config/loop2_identity_smoke.yaml" />
+  <param name="/p63/output_dir" value="$(arg output_dir)" />
+  <node pkg="p63_super_lio_baseline" type="baseline_gate.py" name="p63_original_relocation" output="screen" required="true">
+    <param name="sensor_contract" value="$(arg sensor_contract)" />
+    <param name="allow_historical_identity_smoke" value="$(arg allow_historical_identity_smoke)" />
+  </node>
+  <node pkg="p63_super_lio_baseline" type="pose_tf_bridge.py" name="p63_pose_tf_bridge" output="screen" />
+  <group if="$(arg rviz)">
+    <node pkg="rviz" type="rviz" name="p63_rviz" args="-d $(find p63_super_lio_baseline)/rviz/prior_localization.rviz" />
+  </group>
+</launch>

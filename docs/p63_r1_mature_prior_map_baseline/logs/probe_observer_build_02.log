@@ -1,0 +1,79 @@
+-- The C compiler identification is GNU 9.4.0
+-- The CXX compiler identification is GNU 9.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Using CATKIN_DEVEL_PREFIX: /home/jian/livox_ws/p63_r1_super_lio_baseline_ws/devel
+-- Using CMAKE_PREFIX_PATH: /opt/ros/noetic
+-- This workspace overlays: /opt/ros/noetic
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using Debian Python package layout
+-- Found PY_em: /home/jian/.local/lib/python3.8/site-packages/em.py  
+-- Using empy: /home/jian/.local/lib/python3.8/site-packages/em.py
+-- Using CATKIN_ENABLE_TESTING: ON
+-- Call enable_testing()
+-- Using CATKIN_TEST_RESULTS_DIR: /home/jian/livox_ws/p63_r1_super_lio_baseline_ws/build/test_results
+-- Forcing gtest/gmock from source, though one was otherwise available.
+-- Found gtest sources under '/usr/src/googletest': gtests will be built
+-- Found gmock sources under '/usr/src/googletest': gmock will be built
+-- Found PythonInterp: /usr/bin/python3 (found version "3.8.10") 
+-- Found Threads: TRUE  
+-- Using Python nosetests: /usr/bin/nosetests3
+-- catkin 0.8.12
+-- BUILD_SHARED_LIBS is on
+-- BUILD_SHARED_LIBS is on
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~  traversing 4 packages in topological order:
+-- ~~  - dog_prior_map_interfaces
+-- ~~  - dog_prior_map_fastlio2_frontend_exp
+-- ~~  - p63_super_lio_baseline
+-- ~~  - dog_prior_map_localization
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- +++ processing catkin package: 'dog_prior_map_interfaces'
+-- ==> add_subdirectory(dog_prior_map_interfaces)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- dog_prior_map_interfaces: 8 messages, 0 services
+-- +++ processing catkin package: 'dog_prior_map_fastlio2_frontend_exp'
+-- ==> add_subdirectory(dog_prior_map_fastlio2_frontend_exp)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- +++ processing catkin package: 'p63_super_lio_baseline'
+-- ==> add_subdirectory(p63_super_lio_baseline)
+-- Could NOT find super_lio (missing: super_lio_DIR)
+-- Could not find the required component 'super_lio'. The following CMake error indicates that you either need to install the package with the same name or change your environment so that it can be found.
+CMake Error at /opt/ros/noetic/share/catkin/cmake/catkinConfig.cmake:83 (find_package):
+  Could not find a package configuration file provided by "super_lio" with
+  any of the following names:
+
+    super_lioConfig.cmake
+    super_lio-config.cmake
+
+  Add the installation prefix of "super_lio" to CMAKE_PREFIX_PATH or set
+  "super_lio_DIR" to a directory containing one of the above files.  If
+  "super_lio" provides a separate development package or SDK, be sure it has
+  been installed.
+Call Stack (most recent call first):
+  p63_super_lio_baseline/CMakeLists.txt:4 (find_package)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/home/jian/livox_ws/p63_r1_super_lio_baseline_ws/build/CMakeFiles/CMakeOutput.log".
+See also "/home/jian/livox_ws/p63_r1_super_lio_baseline_ws/build/CMakeFiles/CMakeError.log".
+Base path: /home/jian/livox_ws/p63_r1_super_lio_baseline_ws
+Source space: /home/jian/livox_ws/p63_r1_super_lio_baseline_ws/src
+Build space: /home/jian/livox_ws/p63_r1_super_lio_baseline_ws/build
+Devel space: /home/jian/livox_ws/p63_r1_super_lio_baseline_ws/devel
+Install space: /home/jian/livox_ws/p63_r1_super_lio_baseline_ws/install
+####
+#### Running command: "cmake /home/jian/livox_ws/p63_r1_super_lio_baseline_ws/src -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE=/usr/bin/python3 -DCATKIN_DEVEL_PREFIX=/home/jian/livox_ws/p63_r1_super_lio_baseline_ws/devel -DCMAKE_INSTALL_PREFIX=/home/jian/livox_ws/p63_r1_super_lio_baseline_ws/install -G Unix Makefiles" in "/home/jian/livox_ws/p63_r1_super_lio_baseline_ws/build"
+####
+Invoking "cmake" failed
