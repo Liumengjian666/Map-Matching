@@ -1,0 +1,11 @@
+{
+  "before_worktree_available_bytes": 27059900416,
+  "after_archive_available_bytes": 25329537024,
+  "df_net_decrease_bytes": 1730363392,
+  "reserve_bytes": 21474836480,
+  "worktree_allocated_bytes": 1720557568,
+  "new_archive_allocated_bytes": 131072,
+  "no_downloads": true,
+  "no_deletions": true,
+  "note": "worktree includes inherited archive;df delta includes concurrent filesystem activity"
+}

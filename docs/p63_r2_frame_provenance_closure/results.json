@@ -1,0 +1,94 @@
+{
+  "task": "P63-R2-FROZEN-MAP-FRAME-PROVENANCE-CLOSURE",
+  "terminal_result": "FRAME_CONTRACT_PARTIALLY_CLOSED",
+  "terminal_choice": "B",
+  "START_SHA": "2a2f202c01efe6a6452436bd1eff084ae1ddfc14",
+  "CODE_SHA": "b8339e277971c87c71d3a0be664e650120f0f722",
+  "END_SHA": "containing final archive commit;full SHA in handoff",
+  "branch": "research/p63-r2-frame-provenance-closure",
+  "push_executed": false,
+  "source_model": {
+    "FAST_initial_R_identity_and_negative_acc_gravity": {
+      "level": "CONFIRMED",
+      "scope": "checked software semantics"
+    },
+    "false_skips_extra_world_gravity_rotation": {
+      "level": "CONFIRMED",
+      "scope": "checked software semantics,not map producer certification"
+    },
+    "PCD_saved_world_coordinates_without_extra_save_rotation": {
+      "level": "CONFIRMED",
+      "scope": "checked source"
+    },
+    "specified_map_not_gravity_aligned": {
+      "level": "SUPPORTED",
+      "basis": "near-identity adjacent first pose,old config and older gravity log;runtime binding incomplete"
+    },
+    "specified_map_effective_parameters_and_binary": {
+      "level": "UNVERIFIED"
+    },
+    "old_mapping_log_is_exact_specified_map_producer": {
+      "level": "CONTRADICTED",
+      "old_points": 468495,
+      "specified_points": 459154,
+      "scope": "does not prove configurations necessarily differ"
+    },
+    "Super_final_R_set_while_gravity_remains_fixed_negative_Z": {
+      "level": "CONFIRMED",
+      "scope": "pinned software"
+    }
+  },
+  "physical_T_I_L": {
+    "level": "UNVERIFIED",
+    "recorded_assumption": "identity rotation,zero translation",
+    "new_value_fitted_or_applied": false
+  },
+  "numbers": {
+    "input_force_tilt_from_I_positive_Z_deg": 23.61776468247392,
+    "final_force_vs_Super_positive_Z_deg": 38.021059231698814,
+    "older_gravity_tilt_from_negative_Z_deg": 23.625887976237184,
+    "older_force_vs_R1_input_force_deg": 0.008784920443394597,
+    "final_force_vs_older_map_positive_force_deg_conditional": 30.645083472998078,
+    "neighbor_first_rotation_from_identity_deg": 0.21465332396301884,
+    "final_stationary_acceleration_residual_norm_mps2": 6.381023482536709
+  },
+  "numerical_relations_level": "CONFIRMED_FOR_FROZEN_NUMBERS;physical interpretation conditional on stationarity and identity",
+  "unique_failure_root_cause": {
+    "level": "UNVERIFIED",
+    "reason": "no certified map gravity/physical transform;no separate NDT intermediate log"
+  },
+  "missing": [
+    "Aug12 effective producer parameters and invocation",
+    "exact producing code/binary identity",
+    "map gravity state and any post-save transform",
+    "device-qualified physical LiDAR-IMU extrinsic"
+  ],
+  "new_NDT_calls": 0,
+  "new_ICP_calls": 0,
+  "new_ESKF_runs": 0,
+  "new_sensor_replays": 0,
+  "algorithm_parameter_changes": 0,
+  "asset_transform_writes": 0,
+  "new_dataset_downloads": 0,
+  "historical_deletions": 0,
+  "validation": {
+    "script": "tools/check_frames.py",
+    "checks": "evidence/FRAME_NUMERICS.json:algebra_checks",
+    "initial_parser_error": "one StopIteration from checking dict keys instead of excerpt text;fixed before successful calculation;no sensor or estimator execution"
+  },
+  "baseline_validated": false,
+  "400_frame_retest_authorized_by_this_result": false,
+  "unique_NEXT": "Request the exact missing producer/calibration records once;controller to decide whether to abandon this asset combination if unavailable.No angle tuning,rerun,framework switch or automatic P63-R3.",
+  "preservation_check": "evidence/FINAL_CHECKS.json",
+  "storage": {
+    "before_worktree_available_bytes": 27059900416,
+    "after_archive_available_bytes": 25329537024,
+    "df_net_decrease_bytes": 1730363392,
+    "reserve_bytes": 21474836480,
+    "worktree_allocated_bytes": 1720557568,
+    "new_archive_allocated_bytes": 131072,
+    "no_downloads": true,
+    "no_deletions": true,
+    "note": "worktree includes inherited archive;df delta includes concurrent filesystem activity"
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "task": "P63-R2-FROZEN-MAP-FRAME-PROVENANCE-CLOSURE",
+  "analysis_CODE_SHA": "b8339e277971c87c71d3a0be664e650120f0f722",
+  "inputs": "frozen R1 mean and six-digit ICP log;adjacent producer pose;explicitly older different-run gravity log",
+  "no_new_NDT_ICP_ESKF_calls": true,
+  "no_transform_applied_to_assets": true,
+  "no_rotation_fitted": true,
+  "specific_force_unit_I": [
+    -0.3998029164174456,
+    0.025778590992725968,
+    0.9162385564199613
+  ],
+  "gravity_I_Super_units": [
+    3.915909645142313,
+    -0.2524909873373538,
+    -8.974190164710954
+  ],
+  "input_force_tilt_from_I_positive_Z_deg": 23.61776468247392,
+  "R_gravity_alignment_S_I": [
+    [
+      0.9165853481862286,
+      0.005378430480638761,
+      0.3998029164174456
+    ],
+    [
+      0.005378430480638761,
+      0.9996532082337327,
+      -0.02577859099272597
+    ],
+    [
+      -0.3998029164174456,
+      0.02577859099272597,
+      0.9162385564199613
+    ]
+  ],
+  "native_yaw_removed_rad": 0.005867831906853271,
+  "T_reconstructed_pre_registration_numeric": [
+    [
+      0.9166011280944973,
+      0.011244101217123749,
+      0.3996447699691741,
+      0.0
+    ],
+    [
+      -1.6852077997267254e-19,
+      0.9996044389828652,
+      -0.028124110043718297,
+      0.0
+    ],
+    [
+      -0.3998029164174456,
+      0.02577859099272597,
+      0.9162385564199613,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "T_logged_final_ICP_M_I_rounded": [
+    [
+      0.976824,
+      -0.213127,
+      0.0198769,
+      -0.103246
+    ],
+    [
+      0.197364,
+      0.860845,
+      -0.469037,
+      0.414065
+    ],
+    [
+      0.0828536,
+      0.462091,
+      0.882955,
+      0.024467
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "T_combined_optimizer_delta_not_an_independent_map_calibration": [
+    [
+      0.9009052579178776,
+      -0.21360171539002915,
+      -0.3778192156269577,
+      -0.103246
+    ],
+    [
+      0.0031353093854657502,
+      0.8736957314787802,
+      -0.486465115420229,
+      0.414065
+    ],
+    [
+      0.43400784907034434,
+      0.43707589123037993,
+      0.7877843585585225,
+      0.024467
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "NDT_intermediate_transform": "NOT_RECORDED;cannot separate NDT contribution from ICP without a prohibited rerun",
+  "final_force_unit_M": [
+    -0.3778192413550796,
+    -0.4864651485467436,
+    0.7877844122037875
+  ],
+  "final_implied_gravity_M": [
+    3.700588341376463,
+    4.764731543955936,
+    -7.716033203771217
+  ],
+  "final_force_vs_Super_positive_Z_deg": 38.021059231698814,
+  "final_stationary_acceleration_residual_mps2": [
+    -3.700588341376463,
+    -4.764731543955936,
+    -2.0785667962287837
+  ],
+  "final_stationary_acceleration_residual_norm_mps2": 6.381023482536709,
+  "older_Aug8_logged_gravity": [
+    3.9234,
+    -0.2524,
+    -8.9878
+  ],
+  "older_gravity_tilt_from_negative_Z_deg": 23.625887976237184,
+  "older_gravity_norm_mps2": 9.810062291341477,
+  "older_force_vs_R1_input_force_deg": 0.008784920443394597,
+  "final_force_vs_older_map_positive_force_deg_conditional": 30.645083472998078,
+  "ICP_rotation_from_identity_deg_approx": 30.648367700856117,
+  "neighbor_pose_first": [
+    1786179479.946594,
+    -0.003543,
+    0.000548,
+    0.000869,
+    -0.001662,
+    -0.000611,
+    0.000611,
+    0.999998
+  ],
+  "neighbor_first_rotation_from_identity_deg": 0.21465332396301884,
+  "neighbor_first_force_tilt_if_same_stationary_IMU_deg_conditional": 23.7004613250682,
+  "algebra_checks": {
+    "Rpre_orthogonality_error": 1.7208198169694728e-16,
+    "Rpre_det": 0.9999999999999999,
+    "Rpre_specific_force_to_positive_Z_error": 1.2398563518320872e-16,
+    "Rpre_gravity_to_negative_Z_error": 3.3477659115643075e-16,
+    "logged_R_orthogonality_error_due_to_print_precision": 6.813719652601021e-06,
+    "logged_R_det": 1.0000040247402775,
+    "combined_delta_reconstructs_final_error": 1.3183898417423734e-16,
+    "combined_delta_maps_positive_Z_to_final_force_error": 2.482534153247273e-16,
+    "gravity_and_force_angles_agree_error_deg": 0.0,
+    "first_logged_pose_quaternion_norm_before_normalization": 0.9999997544449699
+  },
+  "interpretation": "23.62deg raw-frame tilt and 38.02deg final world inconsistency are distinct non-additive angles;the combined registration rotation is not an independently certified map-frame transform;all physical inferences remain conditional on quasi-stationarity and artifact identity"
+}

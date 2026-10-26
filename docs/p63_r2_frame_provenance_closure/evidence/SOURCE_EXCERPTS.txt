@@ -461,3 +461,20 @@ SHA256 37dcc252a743fafe14c7ee5341d8827f1a5298ec910502b201bd0feb3476c71e
 495:   imu_msg.linear_acceleration.z = imu_data.acc_z;
 496: }
 
+
+## Additional SetX evidence: same pinned Super-LIO source
+86: void ESKF::SetX(const SysState& x) {
+87:   last_imu_time_ = x.timestamp;      // TODO: The timestamp update is not strictly consistent.
+88:   current_time_ = last_imu_time_;
+89:   R_ = x.R;
+90:   p_ = x.p;
+91:   v_ = x.v;
+92:   bg_ = x.bg;
+93:   ba_ = x.ba;
+94:   fw_R_ = R_;
+95:   fw_p_ = p_;
+96:   fw_v_ = v_;
+97: }
+98: 
+99: 
+100: void ESKF::BuildNoise(const Options& options) {

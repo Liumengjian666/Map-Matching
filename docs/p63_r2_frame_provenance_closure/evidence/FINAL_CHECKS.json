@@ -1,0 +1,28 @@
+{
+  "selected_inputs_unchanged": {
+    "historical_mapping_config": true,
+    "historical_launch": true,
+    "neighbor_pose": true,
+    "neighbor_mat_pre": true,
+    "neighbor_mat_out": true,
+    "neighbor_metrics": true,
+    "historical_mapping_log": true,
+    "FAST_IMU_source": true,
+    "FAST_mapper_source": true,
+    "FAST_state_source": true,
+    "own_loop2_unavailable": true,
+    "R25_config_snapshot": true,
+    "R1_gravity_reconstruction": true,
+    "original_map": true,
+    "driver_MID360_config": true
+  },
+  "stable_workspace_exact_snapshot_match": true,
+  "R1_worktree_unchanged": true,
+  "FAST_existing_dirty_status_preserved": true,
+  "Super_pristine_preserved": true,
+  "analysis_AST": "PASS",
+  "new_sensor_or_optimizer_runs": 0,
+  "source_changes_only": "new R2 offline script and reports;master append",
+  "failure_preserved": "first analysis attempt StopIteration;no estimator or asset writes;fixed selector in b8339e277971c87c71d3a0be664e650120f0f722",
+  "original_excerpt_whitespace": "preserved,may be reported by global diff-check"
+}

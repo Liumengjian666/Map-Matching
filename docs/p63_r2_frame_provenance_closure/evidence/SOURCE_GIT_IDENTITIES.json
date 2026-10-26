@@ -12,5 +12,7 @@
     "status_porcelain": ""
   },
   "FAST_symlink_resolves_to": "/home/jian/FAST-LIVO2_project/FAST-LIVO2",
-  "source_binding_to_Aug12_binary": "UNVERIFIED"
+  "source_binding_to_Aug12_binary": "UNVERIFIED",
+  "FAST_IMU_file_equals_HEAD": true,
+  "FAST_state_file_equals_HEAD": true
 }

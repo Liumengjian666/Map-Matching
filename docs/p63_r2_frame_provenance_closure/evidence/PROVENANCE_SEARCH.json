@@ -1,0 +1,116 @@
+{
+  "search_type": "one bounded inventory and exact-name lookup;no broad data or model search",
+  "roots": [
+    "specified loop2/loop2mapping",
+    "user-provided Aug8 run directory",
+    "FAST-LIVO2 resolved local source",
+    "existing ROS log tree, exact map name only",
+    "shell history, exact map name only",
+    "stable src and named calibration directory"
+  ],
+  "expected_original_pre_move_directory": {
+    "path": "/home/jian/rosbag/loop2_simtime_rebuild_2026_08_12_001",
+    "exists": false
+  },
+  "calibration_directory_currently_missing": true,
+  "ROS_matches": [
+    {
+      "path": "/home/jian/.ros/log/0fa88f8e-b342-11f1-983c-6f333bcada47/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-79019.log",
+      "bytes": 32013,
+      "selected": [
+        {
+          "line": 5,
+          "text": "[roslaunch][INFO] 2026-09-18 17:19:35,779: roslaunch starting with args ['/opt/ros/noetic/bin/roslaunch', 'dog_prior_map_localization', 'dog_prior_map_localization_split.launch', 'rviz:=false', 'oosm_enable:=true', 'oosm_max_alignment_sec:=0.02', 'oosm_csv_path:=/tmp/stage1_oosm_smoke_20260918_after2.csv', 'runtime_csv_path:=/tmp/stage1_runtime_20260918_after2.csv', 'ndt_diagnostics_csv_path:=/tmp/stage1_ndt_diag_20260918_after2.csv', 'map_path:=/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd']"
+        }
+      ],
+      "role": "later map consumer;not map producer"
+    },
+    {
+      "path": "/home/jian/.ros/log/0fa88f8e-b342-11f1-983c-6f333bcada47/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-79199.log",
+      "bytes": 32013,
+      "selected": [
+        {
+          "line": 5,
+          "text": "[roslaunch][INFO] 2026-09-18 17:20:21,298: roslaunch starting with args ['/opt/ros/noetic/bin/roslaunch', 'dog_prior_map_localization', 'dog_prior_map_localization_split.launch', 'rviz:=false', 'oosm_enable:=true', 'oosm_max_alignment_sec:=0.02', 'oosm_csv_path:=/tmp/stage1_oosm_smoke_20260918_after3.csv', 'runtime_csv_path:=/tmp/stage1_runtime_20260918_after3.csv', 'ndt_diagnostics_csv_path:=/tmp/stage1_ndt_diag_20260918_after3.csv', 'map_path:=/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd']"
+        }
+      ],
+      "role": "later map consumer;not map producer"
+    },
+    {
+      "path": "/home/jian/.ros/log/79cc07f0-ad1c-11f1-8049-23a4d9536665/rosout.log",
+      "bytes": 2590962,
+      "selected": [
+        {
+          "line": 7086,
+          "text": "1789049992.714489444 INFO /dog_prior_map_ndt [/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp:163(DogPriorMapNdtNode::DogPriorMapNdtNode)] [topics: /rosout, /tf, /dog_livo/ndt_odom, /dog_livo/ndt_pose, /dog_livo/ndt_path, /dog_livo/points_aligned, /dog_livo/prior_map, /dog_livo/filtered_points, /dog_livo/diagnostics] [DogPriorMap NDT] started: map=/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd target=459154 lidar=/livox/lidar output=/dog_livo/ndt_odom"
+        }
+      ],
+      "role": "later map consumer;not map producer"
+    },
+    {
+      "path": "/home/jian/.ros/log/3bf445ba-ade3-11f1-8049-23a4d9536665/rosout.log",
+      "bytes": 24768581,
+      "selected": [
+        {
+          "line": 4062,
+          "text": "1789136527.182335550 INFO /dog_prior_map_ekf [/home/jian/livox_ws/dog_visual_loc_ws/src/dog_prior_map_localization/src/map_loader.cpp:39(DogPriorMapEkfNode::loadPriorMap)] [topics: /rosout, /tf] [DogPriorMap C++] prior map loaded: raw=459154, voxel=459154, path=/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd"
+        }
+      ],
+      "role": "later map consumer;not map producer"
+    },
+    {
+      "path": "/home/jian/.ros/log/25fa7f80-b299-11f1-983c-6f333bcada47/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-40776.log",
+      "bytes": 23400,
+      "selected": [
+        {
+          "line": 5,
+          "text": "[roslaunch][INFO] 2026-09-17 21:10:38,748: roslaunch starting with args ['/opt/ros/noetic/bin/roslaunch', 'dcreg_localization', 'dcreg_loop2.launch', 'rviz:=true', 'runtime_csv_path:=/home/jian/rosbag/loop2/dcreg_loop2_baseline_20260917_01/runtime.csv', 'map_path:=/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd']"
+        }
+      ],
+      "role": "later map consumer;not map producer"
+    }
+  ],
+  "shell_history_map_matches": "selected entries are viewing commands,not producer commands",
+  "viewer_command_excerpts": [
+    {
+      "line": 217,
+      "text": "pcl_viewer_safe /home/jian/rosbag/loop2_simtime_rebuild_2026_08_12_001/pcd/loop2_simtime_rebuild_2026_08_12_001_all_raw_points_with_red_mapping_path.pcd"
+    },
+    {
+      "line": 220,
+      "text": "pcl_viewer_safe /home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_raw_points_with_red_mapping_path.pcd"
+    },
+    {
+      "line": 260,
+      "text": "pcl_viewer_safe /home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_raw_points_with_red_mapping_path.pcd"
+    },
+    {
+      "line": 285,
+      "text": "pcl_viewer_safe /home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_raw_points_with_red_mapping_path.pcd"
+    },
+    {
+      "line": 344,
+      "text": "pcl_viewer_safe /home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_raw_points_with_red_mapping_path.pcd"
+    },
+    {
+      "line": 347,
+      "text": "pcl_viewer_safe /home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_raw_points_with_red_mapping_path.pcd"
+    },
+    {
+      "line": 1768,
+      "text": "pcl_viewer_safe /home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd"
+    },
+    {
+      "line": 1804,
+      "text": "pcl_viewer_safe /home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd"
+    }
+  ],
+  "not_found_in_scope": [
+    "Aug12 complete effective parameter dump",
+    "Aug12 producer invocation including overrides",
+    "Aug12 exact source/binary binding",
+    "Aug12 explicit saved gravity state or frame transform",
+    "device-qualified physical T_I_L record"
+  ],
+  "absence_scope_limitation": "not a claim that records do not exist anywhere;no unrestricted disk or private assistant-history search"
+}
