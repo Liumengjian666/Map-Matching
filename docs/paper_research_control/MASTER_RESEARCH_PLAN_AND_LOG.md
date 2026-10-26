@@ -13,7 +13,8 @@
 |---|---|---|---|
 |S0 台账|本文件固定位置，建立每轮记账和资产清理规范|每轮均补实验结果+Git+数据+唯一NEXT|已建立|
 |S1 R30最低基础链路|先对照真实GitHub源码与本地未提交改动；只读追溯IMU时间/预测超龄、Tile/NDT、EKF/OOSM；必要时最多8次不融合的参考初值离线NDT|给出首个可证实异常或UNKNOWN；允许发现确定性BUG后在独立分支小修复+回归，旧结果保留；0条新正式轨迹|有限诊断完成：8次不融合NDT、单项Grid修复回归；raw62观测身份合同仍开放，未批准完整轨迹|
-|S1b R31观测身份闭合|NDT原始候选过质量门却被末端限步修改的语义反例；单一显式STRICT_FAIL_CLOSED模式和raw62归因；两条Koide Azure完整因果回放＋60帧历史正例回归|工程验收：EKF实际地图观测与认证位姿同一；性能验收独立评估，负例保留；不改IMU/地图/搜索阈值；最多2条2023帧+1条60帧|**计划已冻结，未执行**|
+|S1b R31观测身份闭合|STRICT拒绝被限幅改写的位姿；Koide Azure两条2023帧及NC 60帧真实闭环|工程PASS；性能FAIL：Azure G-only=C+G RMSE 5334.892892m/26.538893°，融合各4，最长1978帧136.038s无图观测；NC W1/C3历史正例保留|**完成，负结果保留**|
+|S1c R32非改写观测测试|只新增CERTIFIED_RAW_DIAGNOSTIC研究策略：保留原生质量判据，发布同一原始位姿，不以后置限步改写/旧上一观测固定步长作拒绝；IMU/EKF运动一致性只读记录；最多2条Azure2023帧+1条NC60帧，不运行Outdoor|身份/因果工程PASS独立于性能PASS；若出现错接纳或持续失锁，报告并转MID360资产而非继续无限改Azure阈值|**预注册，尚未执行**|
 |S2 MID360输入合同|Koide Outdoor01官方Livox CustomMsg/IMU/map/GT；验证点时间、帧、单位、bag间隔、外参、初始化及基础链路|无合法因果数据/基础定位合同则不报精度；基础通用错误需先独立最小修复、标新版本|待S1|
 |S3 两条完整序列|Outdoor01完整C+G，成功且无违规再Outdoor02完整C+G；必要最少内部消融|无中途挑段/GT重置；完整误差、失败覆盖、时延P95、内存RSS及恢复次数；负例如实报告|未运行|
 |S4 经典公开比较|直接引用Koide2024 Table II HDL/FAST-LIO Localization/Koide作者方法；核实ATE统计、对齐、重启评分|协议未认证只算B级背景，禁止计算公平百分比领先|文献已完成，A级未闭合|
@@ -55,6 +56,8 @@ Koide论文来源：https://staff.aist.go.jp/k.koide/assets/pdf/icra2024_02.pdf�
 |2026-10-26|R30 SOURCE AUDIT / S1准备|源码核查、只读轨迹工具和灵活改进规则|核心NDT/EKF源文件可在GitHub访问；发现IMU丢弃大间隔、地图预测驱动选择及OOSM回放门槛等待诊断机制；**无真实新定位**|真实NDT=0，EKF=0；2个合成Python单测PASS|起点21803def...；准备commit以R30分支HEAD为准|docs/paper_research_control/R30_ADAPTIVE_SOURCE_AUDIT_AND_PLAN.md、tools/r30_trace_preflight.py|未触碰本机数据，无删除；须Codex盘点|运行S1有限诊断并分离根因|
 |2026-10-26|R30后相关工作检索/S1成果复核|阅读近期先验地图定位/退化配准论文10项，归纳技术创新/重合风险|确认R30 Grid单项修复与raw62未闭合观测身份，推荐先解决发布位姿与质量资格冲突；文献整理不证明新算法创新|新增正式NDT=0、EKF=0，未运行定位|START 6ca14d4...；文献DOC commit 23851a7...；最终以远端HEAD为准|docs/paper_research_control/RECENT_PRIOR_MAP_INNOVATIONS_R30.md|新增文档，无大型下载、删除0|观测身份最小合法闭环，再MID360资产及完整实验|
 |2026-10-26|R31预注册/S1b|raw62观测身份不一致的最小显式保护与2组完整回放、R25 60帧回归（仅计划）|GitHub代码定位applyR23Admission/limitNdtStep/publishPose真实先后次序；无新增NDT/EKF运行|NDT=0、EKF=0、完整轨迹=0；源码未改|R30 END 6ca14d4...；计划commit以R31 HEAD为准|docs/paper_research_control/R31_OBSERVATION_IDENTITY_CONTRACT.md|无大型下载、无本机删改|Codex执行R31单项闭环合同，回传是否允许Outdoor01数据准入|
+|2026-10-26|R31完成/S1b|两条Azure2023帧STRICT闭环＋NC历史60帧回归|观测身份工程PASS、性能FAIL；Azure RMSE5334.892892m/26.538893°、4/2023地图融合，1978帧最长饥饿；C额外96次NDT、0额外接纳；NC 0.209943m保持|新增4106帧，NDT932次(名义828＋额外104)，EKF65次|START edb4e913...；CODE bab26e99...；END 65ed408f...|docs/p62_r31_observation_identity/；END SHA65ed408f...|32.044GiB可用，删除0|S1c非改写原生观测受控试验|
+|2026-10-26|R32预注册/S1c|CERTIFIED_RAW_DIAGNOSTIC＋IMU/EKF只读shadow差异记录；两条Azure完整轨迹和1条NC已知60帧；独立Outdoor只读资产检查|尚未执行，不能承诺精度提升。处理原R31 STRICT观测饥饿的因果反例，不调覆盖阈值和NDT搜索。|新增实际NDT=0/EKF=0/正式轨迹=0|计划从65ed408f...建立，当前CODE=无|docs/paper_research_control/R32_NONMUTATING_RAW_ADMISSION_PLAN.md|未下载大型资产、删除0|Codex执行R32并报告是否适合直接MID360资产验收|
 
 ## 磁盘资产管理（未经用户逐项批准不能删除）
 |类别|示例|规则|
@@ -118,3 +121,5 @@ NC成功历史回归只说明新身份规则没有破坏这一已知片段；Bas
 |---|---|---|---|---|---|
 |/home/jian/livox_ws/p62_r31_observation_identity_ws/build|924938240 allocated bytes|CODE bab26e991ef7ac871057ee4f9a94c92831619a62、Release命令、devel正式二进制和日志保留|再次CTest/编译需重建；不是唯一原始输入|未批准|未执行|
 |/home/jian/livox_ws/p62_r31_observation_identity_ws/.r31_diagnostic_build|53248 allocated bytes|独立单元测试源码/命令；devel正式测试二进制另存|可重生编译物，不冒称字节相同副本|未批准|未执行|
+
+2026-10-26：R31实际结束，工程观测身份通过但严格拒绝造成严重长期地图观测饥饿；新R32允许只在离线回放做「合格原始终值不经过后置限幅而发布」受控对照，时间/IMU运动一致性先只读影子记录，不预设新统计门槛。固定比较Azure2023帧+NC60帧；不把工程修复当创新；完成后优先推进Livox MID360 Outdoor合同，不在Azure无限反复调参。计划见 R32_NONMUTATING_RAW_ADMISSION_PLAN.md。
