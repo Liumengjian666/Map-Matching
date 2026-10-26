@@ -1,0 +1,44 @@
+{
+  "bag": "/home/jian/rosbag/loop2/raw_restore_20260914_stage0/loop2_raw.bag",
+  "bag_bytes": 19677401800,
+  "archival_bag_sha256": "d17bee3f8697dcb01cb4b9f6ea2483aa42a1a31ae277659c8a7869d9c69f13ae",
+  "fresh_whole_bag_hash": false,
+  "map": "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd",
+  "map_sha256": "016b7ae3ae494ad5d462a66d888a96b96dda5fe29d6058059aa2fa6bdf6b09ca",
+  "map_bytes": 7346648,
+  "original_map_points": 459154,
+  "first_scan_start_ns": 1786179479409757376,
+  "last_scan_end_ns": 1786179519409765875,
+  "IMU_in_interval_read_only_not_used": 7985,
+  "GT_read": false,
+  "T_map_lidar_manual_initial": [
+    [
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      1
+    ]
+  ],
+  "initial_source": "stable dog NDT source defaults p_=Zero,R_=Identity,lines1145-46;manual numerical map/LiDAR initialization,not physical IMU calibration",
+  "UTM_conversion": false,
+  "IMU_prediction": false,
+  "global_localization": false
+}

@@ -1,0 +1,12 @@
+{
+  "status": "PASS_ZERO_SENSOR_NATIVE_NODELET_LOAD",
+  "loaded_nodelets": [
+    "/globalmap_server_nodelet",
+    "/hdl_localization_nodelet"
+  ],
+  "published_map_points": 424323,
+  "NDT_calls": 0,
+  "sensor_messages": 0,
+  "trace_output_created": false,
+  "note": "native ROS nodelet lazy-loading succeeds;strict ctypes RTLD_NOW check was over-strict for unused CUDA branch"
+}

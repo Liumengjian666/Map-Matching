@@ -1,0 +1,106 @@
+{
+  "START_SHA": "837721616755bc74c6bbec8896dec5f90c508a7c",
+  "upstream": {
+    "hdl_localization": {
+      "SHA": "de2dc7769aa2412876d05ae6161408d3295b6a3c",
+      "official_origin": "https://github.com/koide3/hdl_localization.git",
+      "status": "",
+      "licenses": {
+        "LICENSE": "172a504623673649686be924520b29fb8b27bcd9dec9c9805aef5a8d81f891be"
+      }
+    },
+    "ndt_omp": {
+      "SHA": "5495fd9214945afcb4b35d5a1da385e405c52bf9",
+      "official_origin": "https://github.com/koide3/ndt_omp.git",
+      "status": "",
+      "licenses": {
+        "LICENSE": "172a504623673649686be924520b29fb8b27bcd9dec9c9805aef5a8d81f891be"
+      }
+    },
+    "fast_gicp": {
+      "SHA": "0e7ec1441c99f7be453db2ea216d5de029387417",
+      "official_origin": "https://github.com/SMRT-AIST/fast_gicp.git",
+      "status": "",
+      "licenses": {
+        "LICENSE": "62091f5ee5b6cf36ea37faae5db95b8679c14e1b071911af0be7abc72c461c9c"
+      }
+    },
+    "hdl_global_localization": {
+      "SHA": "a6a6b69929ac371d9531d0dcdef3c1593fd49245",
+      "official_origin": "https://github.com/koide3/hdl_global_localization.git",
+      "status": "",
+      "licenses": {
+        "LICENSE": "0fae8183eff12d6957cd54408e87a90beffa3df15a1844065b1bd7e039e5a8cc"
+      }
+    }
+  },
+  "core_source_patches": 0,
+  "dependency_patches": 0,
+  "build": "Release;BUILD_apps=OFF;BUILD_VGICP_CUDA=OFF;native NDT_OMP params unchanged",
+  "binaries": {
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libglobalmap_server_nodelet.so": {
+      "bytes": 200376,
+      "sha256": "0bb2e7c85e00691bc10e31a6fcdc9623b407904dce65320edef63f8999581105"
+    },
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libhdl_localization_nodelet.so": {
+      "bytes": 672528,
+      "sha256": "df69cf57b87ab5b53db7560d04ade85efd2a9e21d043d5c66a6af85c1ab702b7"
+    },
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libp63_hdl_trace.so": {
+      "bytes": 44592,
+      "sha256": "4e9a5a9e38cfd3dfcf3ac9eb0de2ccbce43e6a86e20c07d0ba3efe33aaca3074"
+    },
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libfast_gicp.so": {
+      "bytes": 606520,
+      "sha256": "ce974c614a6481c335b42279c14daf5f71d4bc7df5a120fa7787d7c2a55ffc97"
+    },
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libndt_omp.so": {
+      "bytes": 906512,
+      "sha256": "e274416abe31236910b5aa588e095cd3100dd77f348163ffddd29618bb8b82ff"
+    },
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libhdl_global_localization.so": {
+      "bytes": 478776,
+      "sha256": "25d34a98f83cfe49739938888f8fc1d96f3f0f6d129140ebb831ad5935f8d2bd"
+    }
+  },
+  "source_sha256": {
+    "research/p63_hdl_candidate/package.xml": "6335c4870109d640487cfd5cd54f83aaa6cf058570012f36fdfefbce6c43c806",
+    "research/p63_hdl_candidate/CMakeLists.txt": "e70d98097e388dbbb9dd8cf862514295d233e52630c74d0ff52ba7149e161c9a",
+    "research/p63_hdl_candidate/rviz/hdl_prior.rviz": "f1c7190805a31334c9b1424a3ecd5ba5748dcd2accd7360a67ab406ea578037f",
+    "research/p63_hdl_candidate/scripts/livox_bridge.py": "691f3d1833c6a29ecc5a476247e9d426486fd35ef99e16fc915958945b5a6b91",
+    "research/p63_hdl_candidate/src/read_only_trace.cpp": "957dedc303a07116b9173ffa90da8abf29403dc1249130dfa8ddb70c1e5514b7",
+    "research/p63_hdl_candidate/launch/p63_hdl_loop2.launch": "9424a6991b44774765b42469dce27b8607f7e3e416baa6d6dc0f2dd1635aff53",
+    "docs/p63_r3_hdl_ndt_candidate/tools/run_trial.py": "83a9a2d2c2d6d7201abb1734ab4c594e84f7b9956f5c9439e301c3bdd0b56e02",
+    "docs/p63_r3_hdl_ndt_candidate/tools/freeze_inputs.py": "29c9cf088d59111ef79257f74aff1e81266763fad4bafc455c36d6d84e4c04fb"
+  },
+  "native_matcher": {
+    "reg_method": "NDT_OMP",
+    "resolution_m": 1.0,
+    "neighborhood": "DIRECT7",
+    "epsilon": 0.01,
+    "max_iterations_constructor": 35,
+    "step_size_constructor": 0.1,
+    "outlier_ratio_constructor": 0.55,
+    "source_voxel_m": 0.1,
+    "map_voxel_m": 0.1,
+    "cool_time_s": 2.0
+  },
+  "controls": {
+    "use_imu": false,
+    "use_global_localization": false,
+    "robot_odometry_prediction": false,
+    "convert_utm_to_local": false
+  },
+  "system_versions": [
+    "libeigen3-dev 3.3.7-2",
+    "libpcl-dev 1.10.0+dfsg-5ubuntu1",
+    "libusb-1.0-0 2:1.0.23-2build1",
+    "ros-noetic-roscpp 1.17.4-1focal.20250519.225343"
+  ],
+  "unused_fast_gicp_submodule_gitlinks": [
+    "160000 commit 1fd5ce1002a6f30e1169b529b291216a18be2f7e\tthirdparty/Eigen",
+    "160000 commit d63ad09177f6b99ba605d684bac7f4b8d6820f5a\tthirdparty/Sophus",
+    "160000 commit 9bb7e6363c65f65e46f21df09bef98e404250f10\tthirdparty/nvbio"
+  ],
+  "CUDA_toolkit_available": false
+}

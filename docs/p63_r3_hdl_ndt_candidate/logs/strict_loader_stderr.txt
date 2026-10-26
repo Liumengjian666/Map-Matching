@@ -1,0 +1,3 @@
+Initial ctypes RTLD_NOW zero-input probe stderr (captured from console):
+OSError: libhdl_localization_nodelet.so: undefined symbol: _ZN9fast_gicp7NDTCudaIN3pcl9PointXYZIES2_E13setResolutionEd
+Native RTLD_LAZY and real ROS nodelet loading subsequently passed with unchanged sources.

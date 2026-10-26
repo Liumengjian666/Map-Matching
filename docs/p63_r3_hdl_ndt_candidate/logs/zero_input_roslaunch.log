@@ -1,0 +1,76 @@
+Failed to find match for field 'intensity'.
+[INFO] [1793025141.085162318]: Initializing nodelet with 16 worker threads.
+[INFO] [1793025141.229602591]: create registration method for localization
+[INFO] [1793025141.231007319]: NDT_OMP is selected
+[INFO] [1793025141.231071224]: search_method DIRECT7 is selected
+[INFO] [1793025141.231083237]: create registration method for fallback during relocalization
+[INFO] [1793025141.232459050]: NDT_OMP is selected
+[INFO] [1793025141.232472809]: search_method DIRECT7 is selected
+[INFO] [1793025141.232857777]: initialize pose estimator with specified parameters!!
+[INFO] [1793025142.246488776]: globalmap received!
+... logging to /home/jian/livox_ws/p63_r3_hdl_data/interface_only_01/ros_logs/0d4f0c60-d14a-11f1-9272-7305e9ccbb49/roslaunch-jian-Lenovo-ThinkBook-14p-Gen-2-332612.log
+Checking log directory for disk usage. This may take a while.
+Press Ctrl-C to interrupt
+Done checking log file disk usage. Usage is <1GB.
+]2;/home/jian/livox_ws/p63_r3_hdl_prior_map_ws/research/p63_hdl_candidate/launch/p63_hdl_loop2.launch
+[1mstarted roslaunch server http://127.0.0.1:44471/[0m
+
+SUMMARY
+========
+
+PARAMETERS
+ * /globalmap_server_nodelet/convert_utm_to_local: False
+ * /globalmap_server_nodelet/downsample_resolution: 0.1
+ * /globalmap_server_nodelet/globalmap_pcd: /home/jian/rosbag...
+ * /hdl_localization_nodelet/cool_time_duration: 2.0
+ * /hdl_localization_nodelet/downsample_resolution: 0.1
+ * /hdl_localization_nodelet/enable_robot_odometry_prediction: False
+ * /hdl_localization_nodelet/init_ori_w: 1.0
+ * /hdl_localization_nodelet/init_ori_x: 0.0
+ * /hdl_localization_nodelet/init_ori_y: 0.0
+ * /hdl_localization_nodelet/init_ori_z: 0.0
+ * /hdl_localization_nodelet/init_pos_x: 0.0
+ * /hdl_localization_nodelet/init_pos_y: 0.0
+ * /hdl_localization_nodelet/init_pos_z: 0.0
+ * /hdl_localization_nodelet/invert_acc: False
+ * /hdl_localization_nodelet/invert_gyro: False
+ * /hdl_localization_nodelet/ndt_neighbor_search_method: DIRECT7
+ * /hdl_localization_nodelet/ndt_neighbor_search_radius: 2.0
+ * /hdl_localization_nodelet/ndt_resolution: 1.0
+ * /hdl_localization_nodelet/odom_child_frame_id: livox_frame
+ * /hdl_localization_nodelet/reg_method: NDT_OMP
+ * /hdl_localization_nodelet/robot_odom_frame_id: odom
+ * /hdl_localization_nodelet/specify_init_pose: True
+ * /hdl_localization_nodelet/use_global_localization: False
+ * /hdl_localization_nodelet/use_imu: False
+ * /p63_livox_bridge/output_dir: /home/jian/livox_...
+ * /rosdistro: noetic
+ * /rosversion: 1.17.4
+
+NODES
+  /
+    globalmap_server_nodelet (nodelet/nodelet)
+    hdl_localization_nodelet (nodelet/nodelet)
+    p63_hdl_manager (nodelet/nodelet)
+    p63_livox_bridge (p63_hdl_candidate/livox_bridge.py)
+
+auto-starting new master
+[1mprocess[master]: started with pid [332636][0m
+[1mROS_MASTER_URI=http://127.0.0.1:11632[0m
+]2;/home/jian/livox_ws/p63_r3_hdl_prior_map_ws/research/p63_hdl_candidate/launch/p63_hdl_loop2.launch http://127.0.0.1:11632
+[1msetting /run_id to 0d4f0c60-d14a-11f1-9272-7305e9ccbb49[0m
+[1mprocess[rosout-1]: started with pid [332661][0m
+started core service [/rosout]
+[1mprocess[p63_hdl_manager-2]: started with pid [332668][0m
+[1mprocess[globalmap_server_nodelet-3]: started with pid [332669][0m
+[1mprocess[hdl_localization_nodelet-4]: started with pid [332670][0m
+[1mprocess[p63_livox_bridge-5]: started with pid [332671][0m
+[p63_livox_bridge-5] killing on exit
+[hdl_localization_nodelet-4] killing on exit
+[globalmap_server_nodelet-3] killing on exit
+[p63_hdl_manager-2] killing on exit
+[rosout-1] killing on exit
+[master] killing on exit
+shutting down processing monitor...
+... shutting down processing monitor complete
+[1mdone[0m
