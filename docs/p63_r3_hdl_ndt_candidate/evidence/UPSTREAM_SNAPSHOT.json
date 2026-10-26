@@ -1,0 +1,12 @@
+{
+  "upstream_source/hdl_localization/LICENSE": "172a504623673649686be924520b29fb8b27bcd9dec9c9805aef5a8d81f891be",
+  "upstream_source/hdl_localization/README.md": "55d2a1a790114389f0cae54e0cf518642c6cbd1913fd4c39d545251d3351c9fa",
+  "upstream_source/hdl_localization/launch/hdl_localization.launch": "2200e1a065b43b8481f735981945aa3e6bd55748c6c5d335128867608b8d1dde",
+  "upstream_source/hdl_localization/apps/globalmap_server_nodelet.cpp": "81583a5086daa8a7ea14b74ddd07175844ee9ce9e35eee8477d508ca8a93f17a",
+  "upstream_source/hdl_localization/apps/hdl_localization_nodelet.cpp": "46c4aa320e2ef174dbcc7df4ac5e8c64451bddc0f9f26ba93cd261e46e306f13",
+  "upstream_source/hdl_localization/src/hdl_localization/pose_estimator.cpp": "815d4d15c293748afce410316078bfebe9d3338b3b5a9d757b8abb5bd062179e",
+  "upstream_source/hdl_localization/include/hdl_localization/pose_system.hpp": "5ee690a167c78d82fa82886490fa3d0f119b1325a109c5c57d6deb4ce6267ff0",
+  "upstream_source/ndt_omp/LICENSE": "172a504623673649686be924520b29fb8b27bcd9dec9c9805aef5a8d81f891be",
+  "upstream_source/ndt_omp/include/pclomp/ndt_omp.h": "69b62312c2c7bc5dc605c0dfd267ee0e1f1c12a69d10e673de2213427ddbc556",
+  "upstream_source/ndt_omp/include/pclomp/ndt_omp_impl.hpp": "2911cd75bf11e8674ffe72c411466abf99705204062b5f86cb71d7eb78cdb80d"
+}

@@ -1,0 +1,15 @@
+{
+  "reason": "COMPLETED_FIXED_400",
+  "published_scans": 400,
+  "completed_records": 400,
+  "valid_update_screen_count": 400,
+  "longest_invalid_run": 0,
+  "wall_s": 88.31819152401295,
+  "manager_peak_RSS_KiB_sampled": 153928,
+  "rviz_peak_RSS_KiB": 302496,
+  "whole_owned_tree_peak_RSS_KiB_including_input_recorder": 865516,
+  "RViz_capture_exit": 0,
+  "GT_read": false,
+  "IMU_published_or_used": false,
+  "formal_attempt": 1
+}

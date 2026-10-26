@@ -9,7 +9,7 @@ from livox_ros_driver2.msg import CustomMsg
 from nav_msgs.msg import Odometry,Path as RosPath
 from geometry_msgs.msg import PoseStamped
 rospy.init_node('p63_livox_bridge')
-directory=Path(rospy.get_param('~output_dir'));f=(directory/'ADAPTER.csv').open('x',newline='')
+directory=Path(rospy.get_param('~output_dir'));directory.mkdir(parents=True,exist_ok=True);f=(directory/'ADAPTER.csv').open('x',newline='')
 w=csv.writer(f,lineterminator='\n');w.writerow(['stamp_ns','scan_end_ns','points','raw_message_sha256','xyz_sha256','bridge_ms'])
 pub=rospy.Publisher('/p63/livox_points',PointCloud2,queue_size=1)
 pathpub=rospy.Publisher('/p63/path',RosPath,queue_size=1,latch=True);path=RosPath();path.header.frame_id='map'

@@ -1,0 +1,15 @@
+# LiDAR-only输入、地图及时间合同
+
+原bag：`/home/jian/rosbag/loop2/raw_restore_20260914_stage0/loop2_raw.bag`，19677401800B；归档SHA d17bee3f8697dcb01cb4b9f6ea2483aa42a1a31ae277659c8a7869d9c69f13ae。本轮未重复全bag hash，而是冻结前400份原始消息SHA和独立XYZ位模式SHA。对应7985 IMU只在区间准入读取，不发布／使用。
+
+原PCD：`/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd`，7346648B，459154点，SHA016b7ae3ae494ad5d462a66d888a96b96dda5fe29d6058059aa2fa6bdf6b09ca。原XYZRGB文件只读；作者PointXYZI读取可保留XYZ，缺intensity警告不用于几何定位得分。原生0.1m voxel后424323点，固定target XYZ SHA d4ae17e75e22b2c660df1ca08140ad3675479c79f214da6253706c239ca4325e。
+
+M定义为原文件数字坐标，只给ROS frame标签map；L为原CustomMsg livox_frame。T_A_B从B到A，本轮状态、raw NDT和滤波输出均为T_M_L。初始T_M_L=I4，是源代码可追溯的历史人工起点，不是GT。稳定机器狗源dog_prior_map_ndt_node.cpp:1145–1146明确p_=Zero/R_=Identity；初始base frame为livox_frame。本轮没有读取历史轨迹或后续GT改善初值。
+
+没有T_I_L参与计算，也没有地图重力约束，因此R2尚未认证的物理外参／gravity不能被当作本轮已解决；同样不会被本轮显式假定为零。地图过去建图的物理质量仍有限制，不能由当前几何匹配认证。
+
+作者UTM偏置逻辑只有sidecar可读且参数true时执行；本轮false，不得说默认参数无条件移动任何地图。Voxel只保留原坐标系内的原作者预处理；没有SE3变换、轴交换、地图重建或与GT拟合。地图重载请求topic隔离，私有ROS master无其他数据发布者；400次target逐点比较相同、/globalmap仅1份，源PCD收尾SHA不变。
+
+输入范围原始LiDAR消息ordinal1–400，完整身份见WINDOW_IDENTITY.json：start1786179479409757376ns，最后max-offset end1786179519409765875ns，约40.000008499s。header保持原scan start；ROS传输重写seq但不改stamp。offset_time纳秒仅做扫描跨度元数据，不推造Deskew；全部原XYZ、点顺序和数量逐帧验证一致。作者PointCloud2管线忽略点内时间，不能将整扫描称为已经校正到同一物理时刻。
+
+首次运行前提交输入、初值、参数、binary/source SHA和停止规则。回放每发一帧等待其真实回调完成，使用原时间差作UKF因果预测；不喂未来位姿、不丢弃失败区间、不人工重置。离线墙钟速度不等于传感器真实10Hz调度。

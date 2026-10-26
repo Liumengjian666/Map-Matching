@@ -1,0 +1,12 @@
+{
+  "actual_run_CODE_SHA": "eb6ff37ab791193ff1a803952d79e148b9ecea6c",
+  "post_run_only_changes": "RViz scoped EOL warning suppression;bridge output mkdir;sealed-output visualization and reports",
+  "source_sha256": {
+    "research/p63_hdl_candidate/package.xml": "6335c4870109d640487cfd5cd54f83aaa6cf058570012f36fdfefbce6c43c806",
+    "research/p63_hdl_candidate/CMakeLists.txt": "e70d98097e388dbbb9dd8cf862514295d233e52630c74d0ff52ba7149e161c9a",
+    "research/p63_hdl_candidate/rviz/hdl_prior.rviz": "f1c7190805a31334c9b1424a3ecd5ba5748dcd2accd7360a67ab406ea578037f",
+    "research/p63_hdl_candidate/scripts/livox_bridge.py": "62ebd94fd82d13cca30e824fbd9be8903134608bf17fd1bb63ffea3e19e2f37b",
+    "research/p63_hdl_candidate/src/read_only_trace.cpp": "957dedc303a07116b9173ffa90da8abf29403dc1249130dfa8ddb70c1e5514b7",
+    "research/p63_hdl_candidate/launch/p63_hdl_loop2.launch": "103077da06a7cfd6e53c45407f466edc31f292979769786ab0580ab8b61f0ad4"
+  }
+}

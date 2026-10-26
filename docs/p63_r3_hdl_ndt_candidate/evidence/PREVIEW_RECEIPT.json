@@ -1,0 +1,14 @@
+{
+  "type": "SEALED_OUTPUT_VISUALIZATION_ONLY",
+  "localizer_nodelets": [
+    "/preview_globalmap"
+  ],
+  "new_NDT_calls": 0,
+  "new_UKF_updates": 0,
+  "trajectory_poses": 400,
+  "scan_ordinal": 400,
+  "transform_source": "sealed final raw NDT pose;not a new calibration",
+  "GUI_only_fix": "DISABLE_ROS1_EOL_WARNINGS=1",
+  "original_live_capture": "Noetic modal warning,not a map view",
+  "preview_screenshot": "FROZEN_OUTPUT_PREVIEW.png"
+}

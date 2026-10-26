@@ -1,0 +1,225 @@
+{
+  "task": "P63-R3-HDL-NDT-PRIOR-MAP-CANDIDATE",
+  "verdict": "HDL_CANDIDATE_PASS",
+  "acceptance_choice": "A",
+  "START_SHA": "837721616755bc74c6bbec8896dec5f90c508a7c",
+  "CODE_SHA": "eb6ff37ab791193ff1a803952d79e148b9ecea6c",
+  "END_SHA": "containing archive commit;full SHA in handoff",
+  "branch": "research/p63-r3-hdl-ndt-prior-map",
+  "push_executed": false,
+  "upstream": {
+    "hdl_localization": {
+      "SHA": "de2dc7769aa2412876d05ae6161408d3295b6a3c",
+      "official_origin": "https://github.com/koide3/hdl_localization.git",
+      "status": "",
+      "licenses": {
+        "LICENSE": "172a504623673649686be924520b29fb8b27bcd9dec9c9805aef5a8d81f891be"
+      }
+    },
+    "ndt_omp": {
+      "SHA": "5495fd9214945afcb4b35d5a1da385e405c52bf9",
+      "official_origin": "https://github.com/koide3/ndt_omp.git",
+      "status": "",
+      "licenses": {
+        "LICENSE": "172a504623673649686be924520b29fb8b27bcd9dec9c9805aef5a8d81f891be"
+      }
+    },
+    "fast_gicp": {
+      "SHA": "0e7ec1441c99f7be453db2ea216d5de029387417",
+      "official_origin": "https://github.com/SMRT-AIST/fast_gicp.git",
+      "status": "",
+      "licenses": {
+        "LICENSE": "62091f5ee5b6cf36ea37faae5db95b8679c14e1b071911af0be7abc72c461c9c"
+      }
+    },
+    "hdl_global_localization": {
+      "SHA": "a6a6b69929ac371d9531d0dcdef3c1593fd49245",
+      "official_origin": "https://github.com/koide3/hdl_global_localization.git",
+      "status": "",
+      "licenses": {
+        "LICENSE": "0fae8183eff12d6957cd54408e87a90beffa3df15a1844065b1bd7e039e5a8cc"
+      }
+    }
+  },
+  "core_patches": 0,
+  "dependency_patches": 0,
+  "formal_trials": 1,
+  "published_scans": 400,
+  "complete_callbacks": 400,
+  "native_NDT_calls": 400,
+  "extra_align": 0,
+  "converged": 400,
+  "valid_update_screen": 400,
+  "longest_invalid_run": 0,
+  "abnormal_step_stop": false,
+  "target_original_points": 459154,
+  "target_loaded_points": 424323,
+  "target_XYZ_sha256": "d4ae17e75e22b2c660df1ca08140ad3675479c79f214da6253706c239ca4325e",
+  "map_frozen_all400": true,
+  "use_imu": false,
+  "use_global_localization": false,
+  "physical_extrinsic_used": false,
+  "UTM_conversion": false,
+  "data_deskew": false,
+  "GT_read": false,
+  "ATE_RPE": "NOT_EVALUABLE_NO_INDEPENDENT_GT",
+  "measurements": {
+    "NDT_compute_ms": {
+      "mean": 33.82790775,
+      "p95": 90.75290489999995,
+      "max": 166.655089,
+      "min": 2.071995
+    },
+    "callback_ms_including_diagnostics": {
+      "mean": 50.6596267975,
+      "p95": 105.99458454999998,
+      "max": 181.915786,
+      "min": 14.705666
+    },
+    "diagnostics_ms": {
+      "mean": 7.6944006125,
+      "p95": 11.340715649999984,
+      "max": 17.595438,
+      "min": 4.909106
+    },
+    "bridge_ms": {
+      "mean": 19.466510009515332,
+      "p95": 31.87604750419268,
+      "max": 39.346039993688464,
+      "min": 12.453410017769784
+    },
+    "all_point_NN_fitness_m2": {
+      "mean": 0.48369788371980915,
+      "p95": 0.8832520277330345,
+      "max": 1.0015576625581162,
+      "min": 0.013804381514834596
+    },
+    "native_inlier_fraction": {
+      "mean": 0.906790681630373,
+      "p95": 0.9878459274768829,
+      "max": 0.9894737005233765,
+      "min": 0.8422771692276001
+    },
+    "native_inlier_mean_squared_distance_m2": {
+      "mean": 0.006699164001038298,
+      "p95": 0.008581639733165503,
+      "max": 0.00913627166301012,
+      "min": 0.00419108010828495
+    },
+    "translation_steps_m": {
+      "mean": 0.019098373511100174,
+      "p95": 0.06874617393742707,
+      "max": 0.09492565187496603,
+      "min": 0.00028719826319565885
+    },
+    "rotation_steps_deg": {
+      "mean": 0.9080339818988941,
+      "p95": 2.4298964672894177,
+      "max": 5.347056985785292,
+      "min": 0.005018954111072941
+    },
+    "iterations": {
+      "mean": 2.0875,
+      "p95": 3.0,
+      "max": 4.0,
+      "min": 2.0
+    },
+    "first_output": {
+      "ordinal_1based": 1,
+      "stamp_ns": 1786179479409757376,
+      "finite": true,
+      "valid_update_screen": true,
+      "bad_run": 0,
+      "translation_step_m": 0.020061387724334998,
+      "rotation_step_deg": 0.8193283120533871,
+      "output_pose_xyzw": [
+        -0.017154186964035034,
+        -0.006881214212626219,
+        -0.0078001306392252445,
+        -0.006827644401189263,
+        -0.0018536461188452741,
+        -0.0010337943608683922,
+        0.9999744441820027
+      ],
+      "raw_ndt_pose_xyzw": [
+        -0.03430837392807007,
+        -0.013762428425252438,
+        -0.015600261278450489,
+        -0.006891874596476555,
+        -0.0018710840959101915,
+        -0.001043519820086658,
+        0.9999739527702332
+      ],
+      "inlier_fraction": 0.8633474707603455,
+      "native_matching_error": 0.007037984672933817
+    },
+    "last_output": {
+      "ordinal_1based": 400,
+      "stamp_ns": 1786179519309549093,
+      "finite": true,
+      "valid_update_screen": true,
+      "bad_run": 0,
+      "translation_step_m": 0.03039818500441008,
+      "rotation_step_deg": 1.3617042118168365,
+      "output_pose_xyzw": [
+        3.0908148288726807,
+        0.46893924474716187,
+        2.3606553077697754,
+        -0.0037196241677266476,
+        0.009523749151505929,
+        0.03370432373644034,
+        0.9993795466841475
+      ],
+      "raw_ndt_pose_xyzw": [
+        3.0924479961395264,
+        0.4690215289592743,
+        2.360973834991455,
+        -0.0026396506000310183,
+        0.007870090194046497,
+        0.029021961614489555,
+        0.9995443224906921
+      ],
+      "inlier_fraction": 0.9877775311470032,
+      "native_matching_error": 0.00796837080270052
+    },
+    "all_converged": true,
+    "target": {
+      "points": 424323,
+      "xyz_sha256": "d4ae17e75e22b2c660df1ca08140ad3675479c79f214da6253706c239ca4325e",
+      "frame_id": "map",
+      "xyz_min": [
+        -82.4314956665039,
+        -123.84494018554688,
+        -33.96614074707031
+      ],
+      "xyz_max": [
+        41.75116729736328,
+        29.605449676513672,
+        68.97052001953125
+      ]
+    },
+    "RSS_KiB_conservative": 153928,
+    "wall_s": 88.31819152401295,
+    "ATE_RPE": "NOT_EVALUABLE_NO_INDEPENDENT_GT",
+    "RViz_original_capture": "Noetic warning dialog;not a localization view",
+    "resource_200MiB_pass": true,
+    "callback_p95_under_100ms": false
+  },
+  "observed_process_tree_peak_KiB_including_input": 865516,
+  "screen_200MiB_pass": true,
+  "screen_callback_p95_under_100ms_pass": false,
+  "transport_seq": "all400_payloads_match_after_only_rospy_Header.seq_replacement;XYZ and stamps exact",
+  "RViz": "live capture was warning dialog;post-run frozen-output preview passed,no new align;final live GUI-only fix not rerun",
+  "unique_NEXT": "Controller decides fixed-parameter longer/full baseline validation for this candidate,with legal reference and latency limitations;no new recovery module or automatic next framework.",
+  "preservation": "evidence/FINAL_CHECKS.json",
+  "storage": {
+    "before_available_bytes": 25314861056,
+    "after_available_bytes": 25264787456,
+    "minimum_reserve_bytes": 21474836480,
+    "df_net_delta_includes_concurrent_activity": true,
+    "worktree_bytes": 2617344,
+    "catkin_tree_bytes": 34496512,
+    "trial_bytes": 966656
+  },
+  "delivery_source_manifest": "evidence/DELIVERY_SOURCE.json"
+}

@@ -1,0 +1,23 @@
+{
+  "NDT_compute_ms": {
+    "mean": 33.82790775,
+    "p95": 90.75290489999995,
+    "max": 166.655089,
+    "min": 2.071995
+  },
+  "callback_ms_including_diagnostics": {
+    "mean": 50.6596267975,
+    "p95": 105.99458454999998,
+    "max": 181.915786,
+    "min": 14.705666
+  },
+  "native_inlier_fraction": {
+    "mean": 0.906790681630373,
+    "p95": 0.9878459274768829,
+    "max": 0.9894737005233765,
+    "min": 0.8422771692276001
+  },
+  "RSS_KiB_conservative": 153928,
+  "resource_200MiB_pass": true,
+  "callback_p95_under_100ms": false
+}

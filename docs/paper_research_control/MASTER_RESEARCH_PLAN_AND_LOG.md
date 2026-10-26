@@ -177,3 +177,27 @@ NC成功历史回归只说明新身份规则没有破坏这一已知片段；Bas
 |唯一NEXT|向数据生产者／用户一次性索取准确的8月12日生产链及设备外参原件；若不能提供，由总控决定停用该组合或切换可追溯资产。不调初始化角度、不授权400帧重测、不自动P63-R3|
 
 计划变化说明：原P63希望先验地图原版基线先稳定，再做单模块创新；本轮只能解释重力／世界约定差异，无法完成指定PCD与设备的独立认证，因此继续冻结算法研发和复测，而不是通过配准误差选择“最正确”旋转。数学自洽只是证据的一层，生产和物理来源未闭合时不放行定位精度验收。历史失败和旧报告均不改写。
+
+
+## 2026-10-26 P63-R3 实际执行追加：HDL持续NDT候选400帧通过
+
+路线由科研总控正式变更：停止Super-LIO＋当前loop2适配，不继续补角度或改重力。唯一候选改为官方HDL Localization。当前任务是先证明原版链路可用，不是研发恢复创新，也不把R1/R2负结果删除或改写。
+
+|项目|实际事实|
+|---|---|
+|Git|START `837721616755bc74c6bbec8896dec5f90c508a7c`；实际RUN CODE `eb6ff37ab791193ff1a803952d79e148b9ecea6c`；分支 `research/p63-r3-hdl-ndt-prior-map`；END为本次最终归档commit，完整SHA见交接；未push|
+|工作区／归档|`/home/jian/livox_ws/p63_r3_hdl_prior_map_ws`，稀疏检出必要文档；`docs/p63_r3_hdl_ndt_candidate/`，全部400行raw NDT、UKF、计时及原始回执保存|
+|官方版本|HDL de2dc7769aa2412876d05ae6161408d3295b6a3c；ndt_omp5495fd9214945afcb4b35d5a1da385e405c52bf9；fast_gicp0e7ec1441c99f7be453db2ea216d5de029387417；hdl_global_localization a6a6b69929ac371d9531d0dcdef3c1593fd49245；作者及依赖源码补丁均0|
+|原生算法|NDT_OMP＋UKF，use_imu=false、global=false、robot odom prediction=false；resolution1m、DIRECT7、epsilon.01、构造器max35/step.1/outlier.55、scan/map voxel.1m、cool2s均为作者参数。原UKFcorrect未添加研究门；有效筛选只统计／停止，不影响反馈|
+|输入和初值|原loop2前400LiDAR，400份原始身份先提交冻结；T_map_lidar人工I4源于稳定NDT零/I起步定义，不使用未来轨迹。输入frame与odom_child均livox_frame，不采用T_I_L、不施加世界重力；原scan-start和XYZ逐点保留，不伪造Deskew|
+|地图|保护PCD SHA016b7ae3ae494ad5d462a66d888a96b96dda5fe29d6058059aa2fa6bdf6b09ca，459154点；原生0.1m处理后424323点；convert_utm_to_local=false，未变换坐标；400次target XYZ均相同，SHAd4ae17e75e22b2c660df1ca08140ad3675479c79f214da6253706c239ca4325e|
+|正式结论|**HDL_CANDIDATE_PASS（A）**：400发布／400完整回调／400实际NDT／400收敛／400通过预注册有效筛选（含原生inlier>=.50）；连续无效0，无预注册异常跳变。首次到末次滤波位置[-.017154,-.006881,-.007800]→[3.090815,.468939,2.360655]m；最大单步.094926m／5.347057°。不是真值误差|
+|几何质量|原生inlier平均.906791、最小.842277；原生inlier均方距离平均.006699m²；额外全点NN fitness均值.483698m²。原生inlier有map-origin25m范围限制，不能当独立精度或全局Overlap|
+|资源|NDT compute Mean/P95/Max33.827908/90.752905/166.655089ms；含诊断完整callback50.659627/105.994585/181.915786ms；定位manager153928KiB≈150.32MiB通过200MiB筛选；callback P95未低于100ms。完整自有实验树同时865516KiB≈845.23MiB含输入/记录器/RViz。总墙钟88.318192s对应40.000008499s源数据，离线握手，不宣称10Hz|
+|实际运行次数|正式400帧一次，无额外align；前置零传感器接口／加载检查align0；后置封存输出显示无localizer、align0／UKF更新0。没有C+G、Split、恢复或第二框架|
+|实际平台问题|严格ctypes RTLD_NOW检查发现未编译CUDA分支符号，原ROS延迟加载及实际CPU路径通过，没加stub／核心patch或安装CUDA。rospy正常重写Header.seq；400份payload在仅替换seq后完全一致，XYZ/时间/其余字段不变。无调参重跑|
+|RViz|原live截图为Noetic提示框，不能当地图验收；仅加GUI环境抑制后，用封存400pose及最后扫描／NDT终值做真实RViz预览，新增定位调用0。一键live入口已交付，GUI修改后未再跑400帧；实际截图角色明确|
+|保护／存储|稳定工程、R1/R2及四份官方源保持原状态；无大型数据下载／删除；收尾采样25264787456B≈23.53GiB，保留20GiB；新稀疏工作树约2.62MB、catkin35MB、正式回执约.97MB（采样时）|
+|唯一NEXT|总控决定是否保留HDL为候选，并批准同参数更长／完整序列基线验收，保留合法参考和延迟目标缺口；本轮不自动增加IMU、恢复模块或切换框架|
+
+科学边界：R2生产／物理外参没有被本轮认证；当前纯LiDAR配准直接估计T_map_lidar，不显式使用未验证T_imu_lidar。没有独立GT，不给ATE/RPE或SOTA排名，不把converged/几何inlier/可视一致性当真实精度。候选PASS与周期筛选FAIL同时保留，不能以均值低于100ms掩盖P95。源码新增范围仅独立适配、只读测量、调度和显示；正式RUN CODE与post-run GUI/目录创建交付修正分开。完成后停止，不自动下一轮算法研究。

@@ -1,0 +1,36 @@
+{
+  "stable_workspace_snapshot_unchanged": true,
+  "R1_R2_clean_preserved": true,
+  "four_upstream_repositories_pristine": true,
+  "release_binaries_unchanged": {
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libglobalmap_server_nodelet.so": true,
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libhdl_localization_nodelet.so": true,
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libp63_hdl_trace.so": true,
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libfast_gicp.so": true,
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libndt_omp.so": true,
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libhdl_global_localization.so": true
+  },
+  "all400_XYZ_count_and_stamp_exact": true,
+  "all400_payloads_verified_except_standard_rospy_Header_seq": true,
+  "target_unchanged_each_native_call": true,
+  "raw_archives_verified": true,
+  "Python_AST_launch_XML": "PASS",
+  "formal_align_calls": 400,
+  "interface_and_preview_align_calls": 0,
+  "reference_used": false,
+  "no_core_or_dependency_patch": true,
+  "no_new_datasets": true,
+  "no_deletions": true,
+  "11632_private_master_closed": true,
+  "11633_private_master_closed": true,
+  "11634_private_master_closed": true,
+  "storage": {
+    "before_available_bytes": 25314861056,
+    "after_available_bytes": 25264787456,
+    "minimum_reserve_bytes": 21474836480,
+    "df_net_delta_includes_concurrent_activity": true,
+    "worktree_bytes": 2617344,
+    "catkin_tree_bytes": 34496512,
+    "trial_bytes": 966656
+  }
+}
