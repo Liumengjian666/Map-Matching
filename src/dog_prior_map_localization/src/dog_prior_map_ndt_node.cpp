@@ -50,6 +50,7 @@
 #include "dog_prior_map_localization/experimental_source_capture.hpp"
 #include "dog_prior_map_localization/local_map_tiles.hpp"
 #include "dog_prior_map_localization/ndt_target_configuration.hpp"
+#include "dog_prior_map_localization/observation_identity.hpp"
 #include "dog_prior_map_localization/mature_ndt_algorithms.hpp"
 #include "dog_prior_map_localization/skf_visual_measurement.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp"
@@ -536,6 +537,21 @@ public:
       if (!r24_geometry_log_ || !r24_revision_log_) throw std::runtime_error("R24 logs unavailable");
       r24_geometry_log_ << "scan_ns,diagnostic_only,original_gate_passed,median_m,p90_m,overlap_05,median_limit,p90_limit,overlap_limit,continue_to_ndt\n";
       r24_revision_log_ << "event,wall_sec,scan_ns,message_ns,latest_history_ns,delta_message_minus_latest_ns,history_revision,sample_revision,corrected_version,sample_corrected_version,source,accepted,reason,prediction_age_ms\n";
+    }
+    r31_policy_name_ = getParam<std::string>("research/r31_observation_identity_policy", "LEGACY");
+    r31_policy_ = observationIdentityPolicy(r31_policy_name_);
+    const std::string identity_log = getParam<std::string>("output/r31_observation_identity_csv", "");
+    if (r31_policy_ == ObservationIdentityPolicy::StrictFailClosed &&
+        (!r23_enable_ || r23_policy_ != "MULTISTART_C" || !r24_geometry_diagnostic_only_ ||
+         r24_revision_sync_ || coupled_enabled_ || mature_integration_enable_ || identity_log.empty()))
+      throw std::runtime_error("R31 STRICT requires frozen C/G, identity logging and other experiments off");
+    if (!identity_log.empty()) {
+      r31_log_.open(identity_log);
+      if (!r31_log_) throw std::runtime_error("R31 identity log unavailable");
+      r31_log_ << "scan_ns,policy,certified,selected_converged,limiter_changed,previous_stamp_ns,previous_age_s,raw_to_proposed_translation_m,raw_to_proposed_rotation_deg,measurement_published,state_unchanged,publish_count_before,publish_count_after,reason";
+      for (const char *prefix : {"certified", "proposed", "sent"})
+        for (int i=0;i<4;++i) for(int j=0;j<4;++j) r31_log_ << ',' << prefix << i << j;
+      r31_log_ << '\n';
     }
     loadMap();
 
@@ -1392,6 +1408,9 @@ private:
     r23_selected_id_=chosen>=0?cs[chosen].id:-1;
     r23_reason_=chosen<0?"NO_ACCEPTABLE_MAP_MEASUREMENT":r23_relative_?"RELATIVE_ONLY_ADMISSION":
         (r23_policy_=="BASELINE" || r29_native_baseline_)?"BASELINE_NATIVE":chosen==0?"ABSOLUTE_NOMINAL":"ABSOLUTE_MULTISTART";
+    r31_certified_ = chosen>=0 && r20::accepted(cs[chosen],mask);
+    r31_selected_converged_ = chosen>=0 && cs[chosen].converged;
+    if (chosen>=0) r31_certified_pose_ = cs[chosen].pose;
     if(chosen<0){*ok=false;}else{
       *ok=true;*result=cs[chosen].pose;*fitness=cs[chosen].fitness;*iterations=cs[chosen].iterations;
       *aligned=transformCloud(source,*result);
@@ -2210,6 +2229,13 @@ private:
   {
     if (!cloud || cloud->empty()) return;
 
+    r31_certified_ = r31_selected_converged_ = r31_limiter_changed_ = false;
+    r31_certified_pose_ = r31_proposed_pose_ = r31_sent_pose_ = Eigen::Matrix4d::Constant(NAN);
+    r31_previous_before_ = previous_pose_; r31_delta_before_ = delta_pose_;
+    r31_p_before_ = p_; r31_R_before_ = R_;
+    r31_had_previous_ = has_previous_pose_; r31_had_stamp_ = has_previous_pose_reference_stamp_;
+    r31_previous_stamp_ = previous_pose_reference_stamp_.toNSec();
+    r31_publish_before_ = r31_publish_count_; r31_reason_ = "NO_CERTIFIED_CANDIDATE";
     if (r29_enable_ && (r29_scan_count_++ % 60 == 0)) r23_budget_=0;
     r23_measurement_published_ = false;
     r23_attempted_=r23_nominal_converged_=r23_basic_=r23_absolute_=r23_event_=r23_relative_=false;
@@ -2795,6 +2821,17 @@ private:
       step_limited = limitNdtStep(measurement_before_limit, used_result,
                                   diagnostic_row.translation_limited,
                                   diagnostic_row.rotation_limited);
+      r31_limiter_changed_ = step_limited;
+      r31_proposed_pose_ = used_result;
+      bool r31_may_publish = true;
+      if (r31_policy_ == ObservationIdentityPolicy::StrictFailClosed) {
+        const auto identity = decideObservationIdentity(r31_policy_, r31_certified_,
+            r31_selected_converged_, r31_certified_pose_, used_result, step_limited);
+        r31_may_publish = identity.publish; r31_reason_ = identity.reason;
+        if (identity.publish) used_result = identity.pose;
+        else { ok = false; r23_reason_ = identity.reason; }
+      } else r31_reason_ = "LEGACY";
+      if (r31_may_publish) {
       diagnostic_row.coupled_feedback_applied = feedback_candidate;
       diagnostic_row.coupled_candidate_step_limited = feedback_candidate && step_limited;
       diagnostic_row.coupled_candidate_translation_limited = feedback_candidate &&
@@ -2851,6 +2888,8 @@ private:
       {
         publishAlignedCloud(aligned, stamp);
       }
+
+      } // R31: rejected observations cannot mutate map-pose history or publish.
 
     if (!ok)
     {
@@ -2929,36 +2968,9 @@ private:
                     bool &translation_limited,
                     bool &rotation_limited) const
   {
-    translation_limited = false;
-    rotation_limited = false;
-    if (!ndt_step_limit_enable_ || !has_previous_pose_) return false;
-
-    bool limited = false;
-    const Eigen::Vector3d previous_p = previous_pose_.block<3, 1>(0, 3);
-    const Eigen::Vector3d raw_p = raw_result.block<3, 1>(0, 3);
-    const Eigen::Vector3d dp = raw_p - previous_p;
-    const double dist = dp.norm();
-
-    const Eigen::Matrix3d previous_R = previous_pose_.block<3, 3>(0, 0);
-    const Eigen::Matrix3d raw_R = raw_result.block<3, 3>(0, 0);
-    const double angle_deg = rotationAngleDeg(previous_R.transpose() * raw_R);
-
-    if (ndt_step_limit_max_translation_ > 0.0 && dist > ndt_step_limit_max_translation_)
-    {
-      used_result.block<3, 1>(0, 3) = previous_p + dp.normalized() * ndt_step_limit_max_translation_;
-      limited = true;
-      translation_limited = true;
-    }
-    if (ndt_step_limit_max_rotation_deg_ > 0.0 && angle_deg > ndt_step_limit_max_rotation_deg_)
-    {
-      const double ratio = ndt_step_limit_max_rotation_deg_ / std::max(angle_deg, 1e-6);
-      Eigen::Quaterniond q_prev(previous_R);
-      Eigen::Quaterniond q_raw(raw_R);
-      used_result.block<3, 3>(0, 0) = q_prev.normalized().slerp(ratio, q_raw.normalized()).toRotationMatrix();
-      limited = true;
-      rotation_limited = true;
-    }
-    return limited;
+    return limitObservationStep(raw_result, previous_pose_, ndt_step_limit_enable_,
+        has_previous_pose_, ndt_step_limit_max_translation_, ndt_step_limit_max_rotation_deg_,
+        used_result, translation_limited, rotation_limited);
   }
 
   // 发布 NDT 位姿、里程计、可选轨迹以及 map 到 base 的 TF。
@@ -2980,6 +2992,11 @@ private:
     odom.pose.pose.orientation.w = q.w();
     if (odom_publish_wall_sec)
       *odom_publish_wall_sec = ros::WallTime::now().toSec();
+    if (r31_log_.is_open()) {
+      ++r31_publish_count_;
+      r31_sent_pose_.setIdentity(); r31_sent_pose_.block<3,3>(0,0)=q.toRotationMatrix();
+      r31_sent_pose_.block<3,1>(0,3)=p_;
+    }
     pub_odom_.publish(odom);
 
     geometry_msgs::PoseStamped pose;
@@ -3087,6 +3104,30 @@ private:
                           int iterations,
                           bool step_limited = false)
   {
+    if (r31_log_.is_open()) {
+      const bool unchanged = has_previous_pose_ == r31_had_previous_ &&
+          has_previous_pose_reference_stamp_ == r31_had_stamp_ &&
+          previous_pose_reference_stamp_.toNSec() == r31_previous_stamp_ &&
+          (previous_pose_.array()==r31_previous_before_.array()).all() &&
+          (delta_pose_.array()==r31_delta_before_.array()).all() &&
+          (p_.array()==r31_p_before_.array()).all() && (R_.array()==r31_R_before_.array()).all();
+      if (r31_policy_ == ObservationIdentityPolicy::StrictFailClosed &&
+          !r23_measurement_published_ && (!unchanged || r31_publish_count_!=r31_publish_before_))
+        throw std::runtime_error("R31 rejected observation mutated localization output state");
+      r31_log_ << std::setprecision(17) << stamp.toNSec() << ',' << r31_policy_name_ << ','
+          << r31_certified_ << ',' << r31_selected_converged_ << ',' << r31_limiter_changed_ << ','
+          << r31_previous_stamp_ << ',' << (r31_had_stamp_ ? (stamp.toNSec()-r31_previous_stamp_)/1e9 : NAN) << ','
+          << (r31_certified_pose_.block<3,1>(0,3)-r31_proposed_pose_.block<3,1>(0,3)).norm() << ','
+          << (r31_certified_pose_.allFinite() && r31_proposed_pose_.allFinite() ?
+              rotationAngleDeg(r31_certified_pose_.block<3,3>(0,0).transpose()*r31_proposed_pose_.block<3,3>(0,0)) : NAN) << ','
+          << r23_measurement_published_ << ',' << unchanged << ',' << r31_publish_before_ << ','
+          << r31_publish_count_ << ',' << r31_reason_;
+      for (Eigen::Matrix4d pose : {r31_certified_pose_,r31_proposed_pose_,r31_sent_pose_}) {
+        if (pose.allFinite()) { Eigen::Quaterniond q(pose.block<3,3>(0,0)); pose.block<3,3>(0,0)=q.normalized().toRotationMatrix(); }
+        for (int i=0;i<4;++i) for(int j=0;j<4;++j) r31_log_ << ',' << pose(i,j);
+      }
+      r31_log_ << '\n'; r31_log_.flush();
+    }
     if (!publish_diagnostics_ || !pub_diagnostics_) return;
     diagnostic_msgs::DiagnosticArray array;
     array.header.stamp = stamp;
@@ -3162,6 +3203,16 @@ private:
   double r23_nominal_score_=NAN,r23_nominal_overlap_=NAN,r23_nominal_mean_=NAN;
   double r23_selected_score_=NAN,r23_selected_overlap_=NAN,r23_selected_mean_=NAN;
   std::ofstream r23_admission_,r23_candidates_;
+  std::string r31_policy_name_="LEGACY", r31_reason_="NO_CERTIFIED_CANDIDATE";
+  ObservationIdentityPolicy r31_policy_=ObservationIdentityPolicy::Legacy;
+  std::ofstream r31_log_;
+  bool r31_certified_=false,r31_selected_converged_=false,r31_limiter_changed_=false;
+  bool r31_had_previous_=false,r31_had_stamp_=false;
+  uint64_t r31_previous_stamp_=0,r31_publish_count_=0,r31_publish_before_=0;
+  Eigen::Matrix4d r31_certified_pose_,r31_proposed_pose_,r31_sent_pose_;
+  Eigen::Matrix4d r31_previous_before_,r31_delta_before_;
+  Eigen::Vector3d r31_p_before_;
+  Eigen::Matrix3d r31_R_before_;
   bool r29_enable_=false,r29_native_baseline_=false;
   uint64_t r29_scan_count_=0,r29_total_extra_=0;
   std::ofstream r29_schedule_;
