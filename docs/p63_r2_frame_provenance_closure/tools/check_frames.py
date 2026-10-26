@@ -36,7 +36,7 @@ Rfinal=Tfinal[:3,:3];Tdelta=Tfinal@np.linalg.inv(Tpre)
 fmap=Rfinal@u;fmap/=np.linalg.norm(fmap)
 gmap=-G*fmap;ares=G*fmap-G*z
 older=json.loads((A/'evidence/OLDER_MAPPING_LOG_EXCERPTS.json').read_text())
-gravity_line=next(x['text'] for x in older['selected'] if 'IMU Initials: Gravity:' in x)
+gravity_line=next(x['text'] for x in older['selected'] if 'IMU Initials: Gravity:' in x['text'])
 oldg=np.array([float(x) for x in gravity_line.split('IMU Initials: Gravity:',1)[1].split()[:3]])
 states=json.loads((A/'evidence/NEIGHBOR_STATE_PREFIX.json').read_text())
 p0=np.array([float(x) for x in states['pose_first10'][0].split()])
