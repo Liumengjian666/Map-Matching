@@ -1,0 +1,125 @@
+{
+  "tool_scope": "READ_ONLY_R29_DERIVED_LOGS_NOT_A_NEW_EXPERIMENT",
+  "source_archive": "/home/jian/livox_ws/p62_r30_foundation_ws/docs/p62_r29_full_sequence_benchmark",
+  "summary": {
+    "A": {
+      "input_rows": 2023,
+      "raw_first": 5,
+      "raw_last": 2027,
+      "valid_reference_rows": 2022,
+      "unavailable_reference_rows": [
+        1336
+      ],
+      "first_reference_high_error_raw": 76,
+      "first_map_observation_raw": 5,
+      "last_map_observation_raw": 724,
+      "first_ekf_fusion_raw": 5,
+      "last_ekf_fusion_raw": 724,
+      "map_observations": 457,
+      "actual_ekf_updates": 452,
+      "extra_ndt_calls": 0,
+      "first_no_native_raw": 819,
+      "first_rejected_quality_raw": null,
+      "first_stale_prediction_raw": 9
+    },
+    "B": {
+      "input_rows": 2023,
+      "raw_first": 5,
+      "raw_last": 2027,
+      "valid_reference_rows": 2022,
+      "unavailable_reference_rows": [
+        1336
+      ],
+      "first_reference_high_error_raw": 62,
+      "first_map_observation_raw": 18,
+      "last_map_observation_raw": 383,
+      "first_ekf_fusion_raw": 18,
+      "last_ekf_fusion_raw": 383,
+      "map_observations": 139,
+      "actual_ekf_updates": 137,
+      "extra_ndt_calls": 0,
+      "first_no_native_raw": 663,
+      "first_rejected_quality_raw": 5,
+      "first_stale_prediction_raw": 9
+    },
+    "C": {
+      "input_rows": 2023,
+      "raw_first": 5,
+      "raw_last": 2027,
+      "valid_reference_rows": 2022,
+      "unavailable_reference_rows": [
+        1336
+      ],
+      "first_reference_high_error_raw": 62,
+      "first_map_observation_raw": 18,
+      "last_map_observation_raw": 383,
+      "first_ekf_fusion_raw": 18,
+      "last_ekf_fusion_raw": 383,
+      "map_observations": 139,
+      "actual_ekf_updates": 137,
+      "extra_ndt_calls": 132,
+      "first_no_native_raw": 663,
+      "first_rejected_quality_raw": 5,
+      "first_stale_prediction_raw": 9
+    },
+    "D": {
+      "input_rows": 2023,
+      "raw_first": 5,
+      "raw_last": 2027,
+      "valid_reference_rows": 2022,
+      "unavailable_reference_rows": [
+        1336
+      ],
+      "first_reference_high_error_raw": 76,
+      "first_map_observation_raw": 5,
+      "last_map_observation_raw": 2027,
+      "first_ekf_fusion_raw": 5,
+      "last_ekf_fusion_raw": 2027,
+      "map_observations": 1838,
+      "actual_ekf_updates": 1827,
+      "extra_ndt_calls": 0,
+      "first_no_native_raw": null,
+      "first_rejected_quality_raw": null,
+      "first_stale_prediction_raw": 9
+    }
+  },
+  "first_state_divergence": {
+    "A_vs_B": {
+      "raw_ordinal": 5,
+      "different_state_fields": [
+        "state_stamp_ns",
+        "px",
+        "py",
+        "pz",
+        "qx",
+        "qy",
+        "qz",
+        "qw",
+        "map_published",
+        "ekf_update_applied"
+      ]
+    },
+    "B_vs_C": null,
+    "B_vs_D": {
+      "raw_ordinal": 5,
+      "different_state_fields": [
+        "state_stamp_ns",
+        "px",
+        "py",
+        "pz",
+        "qx",
+        "qy",
+        "qz",
+        "qw",
+        "map_published",
+        "ekf_update_applied"
+      ]
+    }
+  },
+  "interpretation_limits": [
+    "First output divergence is not necessarily the first causal root cause.",
+    "Reference error is a map-anchored batch-reference proxy, not independent mocap.",
+    "IMU interval gaps, local-map selection and native candidate quality need raw run logs.",
+    "This tool does not repair, replay or certify any localization method."
+  ]
+}

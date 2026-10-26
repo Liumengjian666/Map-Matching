@@ -1,0 +1,8 @@
+/home/jian/rosbag/public_datasets/koide_p62_r29/map_indoor_easy_tiles/tile_-1_-1.pcd
+/home/jian/rosbag/public_datasets/koide_p62_r29/map_indoor_easy_tiles/tile_-1_0.pcd
+/home/jian/rosbag/public_datasets/koide_p62_r29/map_indoor_easy_tiles/tile_-1_1.pcd
+/home/jian/rosbag/public_datasets/koide_p62_r29/map_indoor_easy_tiles/tile_-2_0.pcd
+/home/jian/rosbag/public_datasets/koide_p62_r29/map_indoor_easy_tiles/tile_-2_1.pcd
+/home/jian/rosbag/public_datasets/koide_p62_r29/map_indoor_easy_tiles/tile_0_-1.pcd
+/home/jian/rosbag/public_datasets/koide_p62_r29/map_indoor_easy_tiles/tile_0_0.pcd
+/home/jian/rosbag/public_datasets/koide_p62_r29/map_indoor_easy_tiles/tile_0_1.pcd

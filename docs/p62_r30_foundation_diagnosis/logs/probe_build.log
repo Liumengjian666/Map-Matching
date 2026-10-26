@@ -1,0 +1,4 @@
+docs/p62_r30_foundation_diagnosis/tools/reference_seeded_probe.cpp:2:10: fatal error: ../../../p62_r6_dog_shadow_prototype/tools/native_kernel.hpp: 没有那个文件或目录
+    2 | #include "../../../p62_r6_dog_shadow_prototype/tools/native_kernel.hpp"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.

@@ -1,0 +1,1 @@
+g++ -O3 -DNDEBUG -std=c++14 docs/p62_r30_foundation_diagnosis/tools/reference_seeded_probe.cpp -o .r30_diagnostic_build/reference_seeded_probe $(pkg-config --cflags --libs pcl_io-1.10 pcl_registration-1.10 pcl_filters-1.10 pcl_kdtree-1.10) /usr/lib/x86_64-linux-gnu/libusb-1.0.so.0

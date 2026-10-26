@@ -1,0 +1,92 @@
+{
+  "scope": "OFFLINE_REFERENCE_SEEDED_DIAGNOSTIC_NO_EKF_NO_ONLINE_RECOVERY",
+  "max_align_calls": 8,
+  "requested_raw": [
+    5,
+    18,
+    62,
+    76,
+    131,
+    383,
+    663,
+    819
+  ],
+  "selection": "fixed chronology landmarks: first, first B/C fusion, onset failures, known quality counterexample, last B/C map update, first B/C and A tile failure",
+  "requests": [
+    {
+      "raw": 5,
+      "stamp_ns": 1693718239204891574,
+      "pcd_path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/scans/cloud_1693718239_204891574.pcd",
+      "pcd_sha256": "5beb7289da78cecd90ab7b6486fd20a64b7f95f2784a9399659491b2fd39b2a8",
+      "reference_matrix": "/home/jian/livox_ws/p62_r30_foundation_ws/docs/p62_r30_foundation_diagnosis/evidence/probe_inputs/5.reference_matrix.txt",
+      "source_fnv": "dbd2524e375bed09"
+    },
+    {
+      "raw": 18,
+      "stamp_ns": 1693718240073041104,
+      "pcd_path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/scans/cloud_1693718240_073041104.pcd",
+      "pcd_sha256": "e0583effff7bf69f808762a72086fd42310c02533cb1793b38d4934eb966d1b4",
+      "reference_matrix": "/home/jian/livox_ws/p62_r30_foundation_ws/docs/p62_r30_foundation_diagnosis/evidence/probe_inputs/18.reference_matrix.txt",
+      "source_fnv": "95acf74f0ae227e7"
+    },
+    {
+      "raw": 62,
+      "stamp_ns": 1693718243077721201,
+      "pcd_path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/scans/cloud_1693718243_077721201.pcd",
+      "pcd_sha256": "a606fd88e40bbe48a4a1b06ad979bbee287706ec1e6d8b45094a59b75037bcb8",
+      "reference_matrix": "/home/jian/livox_ws/p62_r30_foundation_ws/docs/p62_r30_foundation_diagnosis/evidence/probe_inputs/62.reference_matrix.txt",
+      "source_fnv": "e1e9628bc29e4f90"
+    },
+    {
+      "raw": 76,
+      "stamp_ns": 1693718244012428838,
+      "pcd_path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/scans/cloud_1693718244_012428838.pcd",
+      "pcd_sha256": "d1fd62226c150f66b5416bfece5876fb4a007671d3587054382994a0f0fe8d48",
+      "reference_matrix": "/home/jian/livox_ws/p62_r30_foundation_ws/docs/p62_r30_foundation_diagnosis/evidence/probe_inputs/76.reference_matrix.txt",
+      "source_fnv": "799485aab2f50a24"
+    },
+    {
+      "raw": 131,
+      "stamp_ns": 1693718247751189879,
+      "pcd_path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/scans/cloud_1693718247_751189879.pcd",
+      "pcd_sha256": "f781f050391d75fddda1feb725c5bd9662d26477777a30220c2c52d5a32d1e1d",
+      "reference_matrix": "/home/jian/livox_ws/p62_r30_foundation_ws/docs/p62_r30_foundation_diagnosis/evidence/probe_inputs/131.reference_matrix.txt",
+      "source_fnv": "638106010f43a3ab"
+    },
+    {
+      "raw": 383,
+      "stamp_ns": 1693718264771974378,
+      "pcd_path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/scans/cloud_1693718264_771974378.pcd",
+      "pcd_sha256": "e2c575d0d2d83b223e9173ed7618afa144a6ff4e79551b3db0440103e6afe6c4",
+      "reference_matrix": "/home/jian/livox_ws/p62_r30_foundation_ws/docs/p62_r30_foundation_diagnosis/evidence/probe_inputs/383.reference_matrix.txt",
+      "source_fnv": "54a994557c27c0f7"
+    },
+    {
+      "raw": 663,
+      "stamp_ns": 1693718284051217096,
+      "pcd_path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/scans/cloud_1693718284_051217096.pcd",
+      "pcd_sha256": "b6220894430209a9a434e9fe7aa4f281b3ab15c627acde3a711fb59b2294f638",
+      "reference_matrix": "/home/jian/livox_ws/p62_r30_foundation_ws/docs/p62_r30_foundation_diagnosis/evidence/probe_inputs/663.reference_matrix.txt",
+      "source_fnv": "a5c722c3cd5ec7e0"
+    },
+    {
+      "raw": 819,
+      "stamp_ns": 1693718294731136973,
+      "pcd_path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/scans/cloud_1693718294_731136973.pcd",
+      "pcd_sha256": "11faffe7e9ab27efc5c328f638dcf3d72fb2cc44407347e7c2fc6e9b712ccf96",
+      "reference_matrix": "/home/jian/livox_ws/p62_r30_foundation_ws/docs/p62_r30_foundation_diagnosis/evidence/probe_inputs/819.reference_matrix.txt",
+      "source_fnv": "5c76c5bed2df0c71"
+    }
+  ],
+  "target_manifest": "/home/jian/rosbag/public_datasets/koide_p62_r29/map_indoor_easy_tiles/tile_manifest.json",
+  "target_points": 93146,
+  "target_fnv_decimal": 4624378881076069786,
+  "parameters": {
+    "resolution": 0.8,
+    "step": 0.08,
+    "epsilon": 0.001,
+    "max_iterations": 40,
+    "outlier": 0.55
+  },
+  "no_retuning_or_rerun": true
+}
