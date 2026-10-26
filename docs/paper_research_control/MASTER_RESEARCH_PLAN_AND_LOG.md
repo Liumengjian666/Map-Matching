@@ -98,3 +98,23 @@ Koide论文来源：https://staff.aist.go.jp/k.koide/assets/pdf/icra2024_02.pdf�
 2026-10-26：R30完成后独立核查到工程修复和raw62后置限幅质量语义问题。2024–2026近期相关工作列于RECENT_PRIOR_MAP_INNOVATIONS_R30.md；本次只是文献梳理，**无新源码定位修复或实验**。长线方向可以基于实验证据调整；科研候选未被实验证明。
 
 2026-10-26 R31计划变更：R30完成有界诊断，后续从长期S2之前插入S1b的单项“优化后认证与实际发布观测身份一致性”工程修复/因果回放。公开经典基线、数据集优先级不变。R31计划代码只创建任务合同，不代表实际执行。新增明确的工程不变量PASS与科研性能PASS分离；方法可据负例调整，但禁止先看测试集真值后调门限。相关预注册见docs/paper_research_control/R31_OBSERVATION_IDENTITY_CONTRACT.md。
+
+## 2026-10-26 R31 实际执行追加：观测身份闭合与性能负例
+
+|日期|任务ID/阶段|预注册范围|实际结果/负例|数据/帧/运行次数|START/CODE/END|原始证据|存储变化/待批清理|唯一NEXT|
+|---|---|---|---|---|---|---|---|---|
+|2026-10-26|P62-R31-OBSERVATION-IDENTITY-CLOSURE / S1b|只加默认LEGACY/研究STRICT_FAIL_CLOSED身份策略；raw62反事实、2条2023帧及1条60帧历史回归；冻结全部原参数与模型|ENGINEERING_CONTRACT_PASS，但LOCALIZATION_PERFORMANCE_FAIL。65次实际观测与原始认证终值匹配，4041次拒绝无地图历史/发布状态更新；raw62旧限步改变0.446248866m，新策略拒绝且EKF不更新。Indoor B/C均仅4次融合，RMSE5334.892892m/26.538893°，劣于历史630.506992m/16.232952°；最长无地图1978帧/136.038151s；B/C位姿完全相同，C额外96次无收益。NC W1/C3保持0.209942842m/2.984149397°、57次融合、8次额外、身份拒绝0|Azure indoor_easy_01 raw5–2027两组共4046帧；Ouster NC2601–2660共60帧；总4106输出，932次原生NDT=828名义+104额外，真实EKF更新65；1次零输入启动中止完整保留，不含NDT或IMU处理；8单元案例+CTest通过|START edb4e913bdbaec2a493252cd97b7c842f9e41109；生产CODE bab26e991ef7ac871057ee4f9a94c92831619a62；监督器CODE739b4873dc3f90d924595b9b6dad3657fec89836；END为包含本行的最终归档commit，完整SHA见最终交接；未push|docs/p62_r31_observation_identity/REPORT.md、R31_SCIENTIFIC_DECISION.md、完整TRAJECTORIES及raw压缩日志；原始/home/jian/livox_ws/p62_r31_observation_identity_data/|归档时可用32065257472bytes；新外部运行数据61116416bytes；新工作树约2.99GB（含继承历史和build），共享Git对象另计；build924938240bytes/独立测试53248bytes仅列待批；无孤立df前值，不伪造净差；下载0、删除0|请总控只决定是否安排基于真实时间间隔/IMU运动不确定性的观测约束有界合同，保持认证终值身份；不自动进入Outdoor完整定位或R32|
+
+### 本轮证据与责任边界
+
+原方案：经过质量认证的NDT终值可能被后置limitNdtStep改变并作为同一地图观测融合。真实raw62反例已精确复现LEGACY全4×4矩阵，新STRICT不发布限幅位姿、不改上一成功地图观测、不将拒绝计为融合。新版本保持LEGACY默认，不写入稳定机器狗配置。R30已有Grid顺序修复继承，R29的Tile路径不受该旧错误影响；R29与R31的所有Indoor过滤点云hash一致，至raw62目标hash和原生矩阵完全相同。
+
+实际证据不支持定位修复成功：最后地图融合raw49，STRICT在raw62、96拒绝后，稀疏/不合格观测与现有IMU传播使完整轨迹严重漂移，首次持续高误差raw65，至2027未恢复。全部失败输出保留，2022/2023帧参考有效（raw1336缺口不插造真值）。本轮没有修改IMU max_dt、EKF/OOSM、限步界限、0.30质量门、yaw方向、预算或Tile规则。工程合同PASS限定为观测身份与现有因果不变量，不给R30已知未积分区间背书，不产生新的SCI算法创新主张。
+
+NC成功历史回归只说明新身份规则没有破坏这一已知片段；Base参考仍有条件，不是独立动捕或未见窗口的恢复证据。Outdoor资产/传感器准入可由总控另行批准，但本轮完整定位可靠性未通过，不能据工程PASS放行正式Outdoor轨迹。当前唯一NEXT是总控基于观测饥饿决定下一项有界合同；执行AI本轮未设计或实现时间/不确定性新约束。
+
+### R31待批清理（只列清单，未删除）
+|文件绝对路径|实测空间|可重建证据及保留副本|风险|用户批准|执行回执|
+|---|---|---|---|---|---|
+|/home/jian/livox_ws/p62_r31_observation_identity_ws/build|924938240 allocated bytes|CODE bab26e991ef7ac871057ee4f9a94c92831619a62、Release命令、devel正式二进制和日志保留|再次CTest/编译需重建；不是唯一原始输入|未批准|未执行|
+|/home/jian/livox_ws/p62_r31_observation_identity_ws/.r31_diagnostic_build|53248 allocated bytes|独立单元测试源码/命令；devel正式测试二进制另存|可重生编译物，不冒称字节相同副本|未批准|未执行|

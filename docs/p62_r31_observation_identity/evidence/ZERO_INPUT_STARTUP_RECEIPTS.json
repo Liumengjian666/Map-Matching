@@ -1,0 +1,20 @@
+[
+  {
+    "path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_01/RUN_COMMAND.json",
+    "bytes": 4564,
+    "sha256": "8ef4edc14e1e096c6269ef1541878bf32c87807743e573949e1557f08eec5314",
+    "portable": "raw/EASY_C0_C_strict_01/RUN_COMMAND.json.gz"
+  },
+  {
+    "path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_01/RUN_RECEIPT.json",
+    "bytes": 5200,
+    "sha256": "903cef74dee4b3cae7f8f3546c834281656e759bc52573efdc864a690a40a9f4",
+    "portable": "raw/EASY_C0_C_strict_01/RUN_RECEIPT.json.gz"
+  },
+  {
+    "path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_01/ROSLAUNCH.log",
+    "bytes": 15089,
+    "sha256": "522f8ad1daaf4932be1e85fffc0e8ff821bc8a265c44f5ca912b6dd9fa332b19",
+    "portable": "raw/EASY_C0_C_strict_01/ROSLAUNCH.log.gz"
+  }
+]

@@ -1,0 +1,1 @@
+{"supervisor_status": "PROCESS_FINISHED", "process_exit_code": 0, "wall_seconds": 1.7508052969933487, "ndt_peak_rss_KiB": 9216, "ekf_peak_rss_KiB": 13108, "simultaneous_ndt_ekf_peak_rss_KiB": 13108}

@@ -1,0 +1,585 @@
+{
+  "task": "P62-R31-OBSERVATION-IDENTITY-CLOSURE",
+  "START_SHA": "edb4e913bdbaec2a493252cd97b7c842f9e41109",
+  "CODE_SHA": "bab26e991ef7ac871057ee4f9a94c92831619a62",
+  "supervisor_CODE_SHA": "739b4873dc3f90d924595b9b6dad3657fec89836",
+  "END_SHA": "containing final archive commit; resolve with git rev-parse HEAD",
+  "branch": "research/p62-r31-observation-identity-closure",
+  "push_executed": false,
+  "engineering_contract": "ENGINEERING_CONTRACT_PASS",
+  "localization_performance": "LOCALIZATION_PERFORMANCE_FAIL",
+  "NC_regression": "HISTORICAL_RECOVERY_PRESERVED_UNDER_CONDITIONAL_REFERENCE",
+  "new_completed_trajectories": 3,
+  "completed_input_frames": 4106,
+  "startup_abort_with_zero_input": 1,
+  "new_native_align_calls": 932,
+  "nominal_align_calls": 828,
+  "extra_align_calls": 104,
+  "actual_EKF_updates": 65,
+  "map_published": 65,
+  "identity_rejections": 4,
+  "B_C_EASY_pose_and_publication_identical": true,
+  "EASY_CG_independent_recovery_benefit": false,
+  "outdoor_full_localization_readiness": "NOT_ESTABLISHED",
+  "reference_class": "MAP_ANCHORED_BENCHMARK_REFERENCE; NC conditional Base convention",
+  "performance_scope": "Complete failed EASY runs retained; no failed interval excluded; EASY raw1336 reference gap remains unknown",
+  "runs": [
+    {
+      "run": "EASY_C0_B_strict_01",
+      "dataset": "EASY",
+      "mode": "B",
+      "arm": "C0",
+      "status": "COMPLETE",
+      "frames": 2023,
+      "valid_reference": 2022,
+      "full_evaluated_span_coverage": 1.0,
+      "translation": {
+        "n": 2022,
+        "rmse": 5334.892891815924,
+        "mean": 3611.464183834765,
+        "p95": 11472.743915289422,
+        "max": 12671.387188995612
+      },
+      "rotation": {
+        "n": 2022,
+        "rmse": 26.53889347157083,
+        "mean": 24.83113795833278,
+        "p95": 31.766398158688062,
+        "max": 42.49108659030115
+      },
+      "native_translation": {
+        "n": 384,
+        "rmse": 14.776101208193996,
+        "mean": 10.592106893064864,
+        "p95": 35.23631162785972,
+        "max": 53.261843885966364
+      },
+      "native_rotation": {
+        "n": 384,
+        "rmse": 10.34086426091812,
+        "mean": 8.963243347044235,
+        "p95": 17.732262598712182,
+        "max": 25.19213149989238
+      },
+      "map_published": 4,
+      "EKF_applied": 4,
+      "identity_rejections": 2,
+      "longest_no_map_frames": 1978,
+      "longest_no_map_span_s": 136.03815119,
+      "episodes": [
+        {
+          "first_raw": 65,
+          "last_raw": 2027,
+          "startup": false,
+          "recovery_raw": null,
+          "recovery_seconds": null
+        }
+      ],
+      "first_high_raw": 65,
+      "native_calls": 384,
+      "nominal_calls": 384,
+      "extra_calls": 0,
+      "extra_selected": 0,
+      "native_converged_calls": 384,
+      "oosm_statuses": {
+        "APPLIED": 4
+      },
+      "max_extra_in_60_input_frames": 0,
+      "callback_ms": {
+        "n": 2023,
+        "rmse": 23.321016532510193,
+        "mean": 18.1822744973862,
+        "p95": 49.288177490234375,
+        "max": 90.66104888916016
+      },
+      "full_cycle_ms": {
+        "n": 2022,
+        "rmse": 70.53582732745294,
+        "mean": 69.28105972169297,
+        "p95": 90.55635929107665,
+        "max": 121.73295021057129
+      },
+      "event_callback_ms": {
+        "n": 378,
+        "rmse": 33.08252834768939,
+        "mean": 29.268940289815266,
+        "p95": 61.66764497756956,
+        "max": 90.66104888916016
+      },
+      "wall_s": 142.52948727397597,
+      "ndt_peak_RSS_KiB": 93104,
+      "ekf_peak_RSS_KiB": 17124,
+      "pair_peak_RSS_KiB": 109016,
+      "engineering": {
+        "run": "EASY_C0_B_strict_01",
+        "checked_causal_predictions": 2023,
+        "checked_oosm_applied": 4,
+        "frames": 2023,
+        "published": 4,
+        "identity_rejections": 2,
+        "max_certified_to_actual_message_error": 4.440892098500626e-16,
+        "rejection_history_and_publish_invariant": true,
+        "engineering_contract": "PASS"
+      },
+      "first_identity_rejection_raw": 62,
+      "scan_input_to_final_ack_ms": {
+        "n": 2023,
+        "rmse": 27.905420404237244,
+        "mean": 23.902018354249012,
+        "p95": 53.52129936218261,
+        "max": 94.85745429992676
+      },
+      "event_input_to_final_ack_ms": {
+        "n": 378,
+        "rmse": 37.97724429297619,
+        "mean": 34.78713199575111,
+        "p95": 65.92496633529663,
+        "max": 94.85745429992676
+      },
+      "quality_and_identity_reasons": {
+        "NO_ACCEPTABLE_MAP_MEASUREMENT": 378,
+        "INPUT_PREDICTION_REJECTED_STALE_CAUSAL_EKF_SAMPLE": 185,
+        "ABSOLUTE_NOMINAL": 4,
+        "ALTERED_OBSERVATION_NOT_CERTIFIED": 2,
+        "NO_NATIVE_RESULT": 1454
+      },
+      "imu_events": {
+        "IMU_HIGH_RATE_PUBLISH": 28888,
+        "NDT_CALLBACK_ENTER": 4,
+        "OOSM_ROLLBACK": 4,
+        "NDT_CORRECTION_APPLIED": 4,
+        "OOSM_REPLAY_COMPLETE": 4,
+        "CORRECTED_PUBLISH": 4
+      },
+      "imu_raw_count": 28940,
+      "high_error_frames": 1962,
+      "target_points": {
+        "n": 2023,
+        "rmse": 93146.0,
+        "mean": 93146.0,
+        "p95": 93146.0,
+        "max": 93146.0
+      },
+      "target_hashes": [
+        "4624378881076069786"
+      ]
+    },
+    {
+      "run": "EASY_C0_C_strict_02",
+      "dataset": "EASY",
+      "mode": "C",
+      "arm": "C0",
+      "status": "COMPLETE",
+      "frames": 2023,
+      "valid_reference": 2022,
+      "full_evaluated_span_coverage": 1.0,
+      "translation": {
+        "n": 2022,
+        "rmse": 5334.892891815924,
+        "mean": 3611.464183834765,
+        "p95": 11472.743915289422,
+        "max": 12671.387188995612
+      },
+      "rotation": {
+        "n": 2022,
+        "rmse": 26.53889347157083,
+        "mean": 24.83113795833278,
+        "p95": 31.766398158688062,
+        "max": 42.49108659030115
+      },
+      "native_translation": {
+        "n": 384,
+        "rmse": 14.776101208193996,
+        "mean": 10.592106893064864,
+        "p95": 35.23631162785972,
+        "max": 53.261843885966364
+      },
+      "native_rotation": {
+        "n": 384,
+        "rmse": 10.34086426091812,
+        "mean": 8.963243347044235,
+        "p95": 17.732262598712182,
+        "max": 25.19213149989238
+      },
+      "map_published": 4,
+      "EKF_applied": 4,
+      "identity_rejections": 2,
+      "longest_no_map_frames": 1978,
+      "longest_no_map_span_s": 136.03815119,
+      "episodes": [
+        {
+          "first_raw": 65,
+          "last_raw": 2027,
+          "startup": false,
+          "recovery_raw": null,
+          "recovery_seconds": null
+        }
+      ],
+      "first_high_raw": 65,
+      "native_calls": 480,
+      "nominal_calls": 384,
+      "extra_calls": 96,
+      "extra_selected": 0,
+      "native_converged_calls": 480,
+      "oosm_statuses": {
+        "APPLIED": 4
+      },
+      "max_extra_in_60_input_frames": 12,
+      "callback_ms": {
+        "n": 2023,
+        "rmse": 17.99704087009889,
+        "mean": 13.937072711478821,
+        "p95": 42.95418262481689,
+        "max": 95.61991691589355
+      },
+      "full_cycle_ms": {
+        "n": 2022,
+        "rmse": 68.91323767735871,
+        "mean": 67.26958360209781,
+        "p95": 88.7092113494873,
+        "max": 156.31508827209473
+      },
+      "event_callback_ms": {
+        "n": 378,
+        "rmse": 30.711193291290275,
+        "mean": 27.096444967562558,
+        "p95": 56.39840364456176,
+        "max": 95.61991691589355
+      },
+      "wall_s": 138.47071718799998,
+      "ndt_peak_RSS_KiB": 95232,
+      "ekf_peak_RSS_KiB": 17116,
+      "pair_peak_RSS_KiB": 112168,
+      "engineering": {
+        "run": "EASY_C0_C_strict_02",
+        "checked_causal_predictions": 2023,
+        "checked_oosm_applied": 4,
+        "frames": 2023,
+        "published": 4,
+        "identity_rejections": 2,
+        "max_certified_to_actual_message_error": 4.440892098500626e-16,
+        "rejection_history_and_publish_invariant": true,
+        "engineering_contract": "PASS"
+      },
+      "first_identity_rejection_raw": 62,
+      "scan_input_to_final_ack_ms": {
+        "n": 2023,
+        "rmse": 22.497978361827066,
+        "mean": 19.231536160939058,
+        "p95": 47.332096099853516,
+        "max": 103.67822647094727
+      },
+      "event_input_to_final_ack_ms": {
+        "n": 378,
+        "rmse": 35.88984263663076,
+        "mean": 32.749006357142534,
+        "p95": 62.15450763702391,
+        "max": 103.67822647094727
+      },
+      "quality_and_identity_reasons": {
+        "NO_ACCEPTABLE_MAP_MEASUREMENT": 378,
+        "INPUT_PREDICTION_REJECTED_STALE_CAUSAL_EKF_SAMPLE": 185,
+        "ABSOLUTE_NOMINAL": 4,
+        "ALTERED_OBSERVATION_NOT_CERTIFIED": 2,
+        "NO_NATIVE_RESULT": 1454
+      },
+      "imu_events": {
+        "IMU_HIGH_RATE_PUBLISH": 28888,
+        "NDT_CALLBACK_ENTER": 4,
+        "OOSM_ROLLBACK": 4,
+        "NDT_CORRECTION_APPLIED": 4,
+        "OOSM_REPLAY_COMPLETE": 4,
+        "CORRECTED_PUBLISH": 4
+      },
+      "imu_raw_count": 28940,
+      "high_error_frames": 1962,
+      "target_points": {
+        "n": 2023,
+        "rmse": 93146.0,
+        "mean": 93146.0,
+        "p95": 93146.0,
+        "max": 93146.0
+      },
+      "target_hashes": [
+        "4624378881076069786"
+      ]
+    },
+    {
+      "run": "NC_W1_C3_C_strict_01",
+      "dataset": "NC_W1",
+      "mode": "C",
+      "arm": "C3",
+      "status": "COMPLETE",
+      "frames": 60,
+      "valid_reference": 60,
+      "full_evaluated_span_coverage": 1.0,
+      "translation": {
+        "n": 60,
+        "rmse": 0.2099428424575639,
+        "mean": 0.20034155827939307,
+        "p95": 0.3001243159696912,
+        "max": 0.4442817485815966
+      },
+      "rotation": {
+        "n": 60,
+        "rmse": 2.9841493972483293,
+        "mean": 2.4189732812118523,
+        "p95": 3.7232869598297786,
+        "max": 11.245245007295297
+      },
+      "native_translation": {
+        "n": 60,
+        "rmse": 0.22229305805917318,
+        "mean": 0.1956928943998128,
+        "p95": 0.47402919576592706,
+        "max": 0.6750108587605717
+      },
+      "native_rotation": {
+        "n": 60,
+        "rmse": 3.2116815557698417,
+        "mean": 2.462618489879352,
+        "p95": 8.549149649045134,
+        "max": 11.104584870872852
+      },
+      "map_published": 57,
+      "EKF_applied": 57,
+      "identity_rejections": 0,
+      "longest_no_map_frames": 2,
+      "longest_no_map_span_s": 0.100138496,
+      "episodes": [],
+      "first_high_raw": 2601,
+      "native_calls": 68,
+      "nominal_calls": 60,
+      "extra_calls": 8,
+      "extra_selected": 1,
+      "native_converged_calls": 68,
+      "oosm_statuses": {
+        "APPLIED": 57
+      },
+      "max_extra_in_60_input_frames": 8,
+      "callback_ms": {
+        "n": 60,
+        "rmse": 165.8861035034644,
+        "mean": 59.445484479268394,
+        "p95": 108.81876945495603,
+        "max": 1240.1494979858398
+      },
+      "full_cycle_ms": {
+        "n": 59,
+        "rmse": 110.352526638731,
+        "mean": 109.38988297672596,
+        "p95": 142.3583030700683,
+        "max": 154.67476844787598
+      },
+      "event_callback_ms": {
+        "n": 4,
+        "rmse": 628.0828735411104,
+        "mean": 396.53950929641724,
+        "p95": 1071.9999909400935,
+        "max": 1240.1494979858398
+      },
+      "wall_s": 10.371821540989913,
+      "ndt_peak_RSS_KiB": 369144,
+      "ekf_peak_RSS_KiB": 21460,
+      "pair_peak_RSS_KiB": 390220,
+      "engineering": {
+        "run": "NC_W1_C3_C_strict_01",
+        "checked_causal_predictions": 60,
+        "checked_oosm_applied": 57,
+        "frames": 60,
+        "published": 57,
+        "identity_rejections": 0,
+        "max_certified_to_actual_message_error": 8.881784197001252e-16,
+        "rejection_history_and_publish_invariant": true,
+        "engineering_contract": "PASS"
+      },
+      "first_identity_rejection_raw": null,
+      "scan_input_to_final_ack_ms": {
+        "n": 60,
+        "rmse": 176.33773558522117,
+        "mean": 83.39461088180542,
+        "p95": 135.03527641296384,
+        "max": 1267.4646377563477
+      },
+      "event_input_to_final_ack_ms": {
+        "n": 4,
+        "rmse": 645.479330207512,
+        "mean": 422.96338081359863,
+        "p95": 1099.0983724594112,
+        "max": 1267.4646377563477
+      },
+      "quality_and_identity_reasons": {
+        "NO_ACCEPTABLE_MAP_MEASUREMENT": 3,
+        "ABSOLUTE_MULTISTART": 1,
+        "ABSOLUTE_NOMINAL": 56
+      },
+      "imu_events": {
+        "IMU_HIGH_RATE_PUBLISH": 611,
+        "NDT_CALLBACK_ENTER": 57,
+        "OOSM_ROLLBACK": 57,
+        "NDT_CORRECTION_APPLIED": 57,
+        "OOSM_REPLAY_COMPLETE": 57,
+        "CORRECTED_PUBLISH": 57
+      },
+      "imu_raw_count": 611,
+      "high_error_frames": 2,
+      "target_points": {
+        "n": 60,
+        "rmse": 2297615.0,
+        "mean": 2297615.0,
+        "p95": 2297615.0,
+        "max": 2297615.0
+      },
+      "target_hashes": [
+        "11658115094751181825"
+      ]
+    }
+  ],
+  "comparison": [
+    {
+      "dataset": "EASY",
+      "arm": "C0",
+      "method": "G-only",
+      "policy": "STRICT_FAIL_CLOSED",
+      "source": "EASY_C0_B_strict_01",
+      "frames": 2023,
+      "valid_reference": 2022,
+      "translation_RMSE_m": 5334.892891815924,
+      "translation_P95_m": 11472.743915289422,
+      "translation_Max_m": 12671.387188995612,
+      "rotation_RMSE_deg": 26.53889347157083,
+      "rotation_P95_deg": 31.766398158688062,
+      "rotation_Max_deg": 42.49108659030115,
+      "maps_published": 4,
+      "EKF_applied": 4,
+      "identity_rejections": 2,
+      "longest_no_map_frames": 1978,
+      "longest_no_map_span_s": 136.03815119,
+      "first_sustained_high_raw": 65,
+      "high_error_frames": 1962,
+      "nominal_calls": 384,
+      "extra_calls": 0
+    },
+    {
+      "dataset": "EASY",
+      "arm": "C0",
+      "method": "C+G",
+      "policy": "STRICT_FAIL_CLOSED",
+      "source": "EASY_C0_C_strict_02",
+      "frames": 2023,
+      "valid_reference": 2022,
+      "translation_RMSE_m": 5334.892891815924,
+      "translation_P95_m": 11472.743915289422,
+      "translation_Max_m": 12671.387188995612,
+      "rotation_RMSE_deg": 26.53889347157083,
+      "rotation_P95_deg": 31.766398158688062,
+      "rotation_Max_deg": 42.49108659030115,
+      "maps_published": 4,
+      "EKF_applied": 4,
+      "identity_rejections": 2,
+      "longest_no_map_frames": 1978,
+      "longest_no_map_span_s": 136.03815119,
+      "first_sustained_high_raw": 65,
+      "high_error_frames": 1962,
+      "nominal_calls": 384,
+      "extra_calls": 96
+    },
+    {
+      "dataset": "NC_W1",
+      "arm": "C3",
+      "method": "C+G",
+      "policy": "STRICT_FAIL_CLOSED",
+      "source": "NC_W1_C3_C_strict_01",
+      "frames": 60,
+      "valid_reference": 60,
+      "translation_RMSE_m": 0.2099428424575639,
+      "translation_P95_m": 0.3001243159696912,
+      "translation_Max_m": 0.4442817485815966,
+      "rotation_RMSE_deg": 2.9841493972483293,
+      "rotation_P95_deg": 3.7232869598297786,
+      "rotation_Max_deg": 11.245245007295297,
+      "maps_published": 57,
+      "EKF_applied": 57,
+      "identity_rejections": 0,
+      "longest_no_map_frames": 2,
+      "longest_no_map_span_s": 0.100138496,
+      "first_sustained_high_raw": null,
+      "high_error_frames": 2,
+      "nominal_calls": 60,
+      "extra_calls": 8
+    },
+    {
+      "dataset": "EASY",
+      "arm": "C0",
+      "method": "G-only",
+      "policy": "LEGACY_HISTORICAL_R29",
+      "source": "R29/RESULT_EASY_C0.json/B",
+      "frames": 2023,
+      "valid_reference": 2022,
+      "translation_RMSE_m": 630.5069923471659,
+      "translation_P95_m": 1381.6645311726827,
+      "translation_Max_m": 1435.9308516196477,
+      "rotation_RMSE_deg": 16.232952426225783,
+      "rotation_P95_deg": 23.252397537530882,
+      "rotation_Max_deg": 33.960482083204965,
+      "maps_published": 139,
+      "EKF_applied": 137,
+      "identity_rejections": "NR_LEGACY_DID_NOT_REJECT_ALTERATION",
+      "longest_no_map_frames": 1644,
+      "longest_no_map_span_s": 113.47594871,
+      "first_sustained_high_raw": 62,
+      "high_error_frames": 1965,
+      "nominal_calls": 599,
+      "extra_calls": 0
+    },
+    {
+      "dataset": "EASY",
+      "arm": "C0",
+      "method": "C+G",
+      "policy": "LEGACY_HISTORICAL_R29",
+      "source": "R29/RESULT_EASY_C0.json/C",
+      "frames": 2023,
+      "valid_reference": 2022,
+      "translation_RMSE_m": 630.5069923471659,
+      "translation_P95_m": 1381.6645311726827,
+      "translation_Max_m": 1435.9308516196477,
+      "rotation_RMSE_deg": 16.232952426225783,
+      "rotation_P95_deg": 23.252397537530882,
+      "rotation_Max_deg": 33.960482083204965,
+      "maps_published": 139,
+      "EKF_applied": 137,
+      "identity_rejections": "NR_LEGACY_DID_NOT_REJECT_ALTERATION",
+      "longest_no_map_frames": 1644,
+      "longest_no_map_span_s": 113.47594871,
+      "first_sustained_high_raw": 62,
+      "high_error_frames": 1965,
+      "nominal_calls": 599,
+      "extra_calls": 132
+    },
+    {
+      "dataset": "NC_W1",
+      "arm": "C3",
+      "method": "C+G",
+      "policy": "LEGACY_HISTORICAL_R24_G_F_OFF",
+      "source": "R24/EVALUATION_SUMMARY.json/W1/C3/G",
+      "frames": 60,
+      "valid_reference": 60,
+      "translation_RMSE_m": 0.2099428424575639,
+      "translation_P95_m": 0.3001243159696912,
+      "translation_Max_m": 0.4442817485815966,
+      "rotation_RMSE_deg": 2.984149397247634,
+      "rotation_P95_deg": 3.723286959829232,
+      "rotation_Max_deg": 11.245245007295038,
+      "maps_published": 57,
+      "EKF_applied": 57,
+      "identity_rejections": "NR_LEGACY",
+      "longest_no_map_frames": 2,
+      "longest_no_map_span_s": "NR",
+      "first_sustained_high_raw": null,
+      "high_error_frames": 2,
+      "nominal_calls": 60,
+      "extra_calls": 8
+    }
+  ],
+  "unique_NEXT": "Controller to decide one bounded test of a timestamp- and real-IMU-uncertainty-aware observation constraint, preserving certified pose identity; do not start Outdoor full localization before that decision."
+}

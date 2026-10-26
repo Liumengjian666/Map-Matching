@@ -1,0 +1,24 @@
+{
+  "code_sha": "b8e0bc9a3105028732ab4d8eaaafd42032a931e9",
+  "runs": [
+    {
+      "dataset": "EASY",
+      "arm": "C0",
+      "mode": "B",
+      "path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01"
+    },
+    {
+      "dataset": "EASY",
+      "arm": "C0",
+      "mode": "C",
+      "path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_01"
+    },
+    {
+      "dataset": "NC_W1",
+      "arm": "C3",
+      "mode": "C",
+      "path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01"
+    }
+  ],
+  "reference_evaluation_values_read": false
+}

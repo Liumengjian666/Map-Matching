@@ -1,0 +1,22 @@
+[
+  {
+    "mode": "B",
+    "historical_run": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_B_full_03",
+    "new_run": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01",
+    "same_all_input_cloud_hashes": true,
+    "pre_divergence_through_raw62_frames": 58,
+    "max_native_matrix_difference_through_raw62": 0.0,
+    "same_target_hashes_through_raw62": true,
+    "historical_receipt_code": "f66a55457ba3e63d55ad8d588fb2cf5b1ead169b"
+  },
+  {
+    "mode": "C",
+    "historical_run": "/home/jian/livox_ws/p62_r29_full_sequence_data/EASY_C0_C_full_03",
+    "new_run": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02",
+    "same_all_input_cloud_hashes": true,
+    "pre_divergence_through_raw62_frames": 58,
+    "max_native_matrix_difference_through_raw62": 0.0,
+    "same_target_hashes_through_raw62": true,
+    "historical_receipt_code": "f66a55457ba3e63d55ad8d588fb2cf5b1ead169b"
+  }
+]

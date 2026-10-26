@@ -1,0 +1,27 @@
+{
+  "repository": "https://github.com/Liumengjian666/Map-Matching",
+  "workspace": "/home/jian/livox_ws/p62_r31_observation_identity_ws",
+  "branch": "research/p62-r31-observation-identity-closure",
+  "START_SHA": "edb4e913bdbaec2a493252cd97b7c842f9e41109",
+  "production_CODE_SHA": "bab26e991ef7ac871057ee4f9a94c92831619a62",
+  "supervisor_CODE_SHA": "739b4873dc3f90d924595b9b6dad3657fec89836",
+  "historical_R29_CODE_SHA": "f66a55457ba3e63d55ad8d588fb2cf5b1ead169b",
+  "remote_plan_HEAD_verified": "edb4e913bdbaec2a493252cd97b7c842f9e41109",
+  "execution_branch_remote_exists": false,
+  "push_executed": false,
+  "END_SHA": "final commit containing complete archive; full hash in execution handoff",
+  "changed_src_paths": [
+    "src/dog_prior_map_localization/CMakeLists.txt",
+    "src/dog_prior_map_localization/include/dog_prior_map_localization/observation_identity.hpp",
+    "src/dog_prior_map_localization/launch/p62_r31_observation_identity.launch",
+    "src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp",
+    "src/dog_prior_map_localization/tests/observation_identity_contract_test.cpp"
+  ],
+  "source_sha256": {
+    "src/dog_prior_map_localization/CMakeLists.txt": "9cdc02e43543c0bc7b9ba4aecdc3b3ac51a79e0199f54025944179f4a336ecad",
+    "src/dog_prior_map_localization/include/dog_prior_map_localization/observation_identity.hpp": "5273940f15474e43548457489e526012879f0b07af632a18e60b4e0d84e65196",
+    "src/dog_prior_map_localization/launch/p62_r31_observation_identity.launch": "8594e85fce5055ba853390537dc9476dbd3393fc22ea5b6e0394279470752761",
+    "src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp": "a30bb77540f59d87fb122ebf028a1253c6557ea67020cab114a11907910bf015",
+    "src/dog_prior_map_localization/tests/observation_identity_contract_test.cpp": "c4e934b2b9a86dd9cf2c864807b25b74d2bc96792a8f3abf66b79bb9afb96c6a"
+  }
+}

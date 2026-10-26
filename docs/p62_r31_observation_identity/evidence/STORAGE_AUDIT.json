@@ -1,0 +1,31 @@
+{
+  "captured_utc": "2026-10-26T09:58:25.655071+00:00",
+  "filesystem": "/dev/nvme0n1p2",
+  "available_bytes": 32065257472,
+  "minimum_reserve_bytes": 21474836480,
+  "allocated_bytes": {
+    "/home/jian/livox_ws/p62_r31_observation_identity_ws": 3008290816,
+    "/home/jian/livox_ws/p62_r31_observation_identity_data": 61116416,
+    "/home/jian/livox_ws/p62_r31_observation_identity_ws/build": 924938240,
+    "/home/jian/livox_ws/p62_r31_observation_identity_ws/devel": 363700224,
+    "/home/jian/livox_ws/p62_r31_observation_identity_ws/.r31_diagnostic_build": 53248,
+    "docs/p62_r31_observation_identity": 22220800
+  },
+  "deleted_files": 0,
+  "isolated_pre_R31_df_available_bytes": null,
+  "scope": "new worktree includes inherited tracked history and local build; shared Git objects excluded; no fabricated isolated df delta",
+  "proposed_only_regenerable_paths": [
+    {
+      "path": "/home/jian/livox_ws/p62_r31_observation_identity_ws/build",
+      "bytes": 924938240,
+      "regenerate": "CODE bab26... and REPORT.md Release command; devel binaries retained",
+      "approved": false
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r31_observation_identity_ws/.r31_diagnostic_build",
+      "bytes": 53248,
+      "regenerate": "standalone C++ test command in R31_UNIT_TESTS.md; original code and compiled target retained",
+      "approved": false
+    }
+  ]
+}

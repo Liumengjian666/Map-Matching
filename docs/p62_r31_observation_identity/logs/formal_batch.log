@@ -1,0 +1,5 @@
+INPUT_COMPLETE /home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01
+Traceback (most recent call last):
+  File "docs/p62_r31_observation_identity/tools/run_all.py", line 15, in <module>
+    assert r.returncode==0 and receipt.exists() and json.loads(receipt.read_text())['input_completed'],'Stop; no retry: '+run['path']
+AssertionError: Stop; no retry: /home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_01

@@ -1,0 +1,25 @@
+{
+  "runs": [
+    {
+      "dataset": "EASY",
+      "arm": "C0",
+      "mode": "B",
+      "path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01"
+    },
+    {
+      "dataset": "EASY",
+      "arm": "C0",
+      "mode": "C",
+      "path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02"
+    },
+    {
+      "dataset": "NC_W1",
+      "arm": "C3",
+      "mode": "C",
+      "path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01"
+    }
+  ],
+  "original_plan_preserved": "RUN_PLAN.json",
+  "resumed_supervisor_code": "739b4873dc3f90d924595b9b6dad3657fec89836",
+  "no_reference_evaluation": true
+}

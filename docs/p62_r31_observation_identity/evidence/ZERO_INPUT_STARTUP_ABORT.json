@@ -1,0 +1,10 @@
+{
+  "failed_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_01",
+  "input_scans": 0,
+  "native_calls": 0,
+  "IMU_propagations": 0,
+  "cause": "supervisor required both node PID sets as soon as NDT was first seen; EKF had not yet appeared",
+  "change": "wait until both components have been seen before requiring both to remain alive",
+  "localization_source_or_parameters_changed": false,
+  "completed_B_rerun": false
+}

@@ -1,0 +1,443 @@
+[
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/r29_schedule.csv",
+    "original_bytes": 67162,
+    "original_sha256": "e7f9d8bf6cdfa37e045a99f9d1a2bbb32c3ed6fe53169546226f64648846b9b0",
+    "archive_path": "raw/EASY_C0_B_strict_01/r29_schedule.csv.gz",
+    "archive_sha256": "a6d8bee795c1ed6c04f31dba46a86bf5b7d053e13ed4da0b2f328d771825f285"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/ndt_diagnostics.csv",
+    "original_bytes": 2779384,
+    "original_sha256": "da1c79070d34fb86f84c5120c6393c8e69c96009e90a50dbadb9498c8442a38e",
+    "archive_path": "raw/EASY_C0_B_strict_01/ndt_diagnostics.csv.gz",
+    "archive_sha256": "30ff432404ca9bde8881263936d03c09ac99e08332a093fd49cf02a99f4159d1"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/ekf_prediction_diagnostics.csv",
+    "original_bytes": 9937124,
+    "original_sha256": "65c70d6eeec6f23cc045ad1e6f2b1ab485c617330bbe2fb8a3072ad0432620f7",
+    "archive_path": "raw/EASY_C0_B_strict_01/ekf_prediction_diagnostics.csv.gz",
+    "archive_sha256": "c196508343d200aef5553671ca3518a14fe551ac1e5f8b68283d3d413d1ec297"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/localization_trajectory.csv",
+    "original_bytes": 9955237,
+    "original_sha256": "9713fc3498b2db76503f726a9f9d623549653a7235ac27c2a6058b1146435b5e",
+    "archive_path": "raw/EASY_C0_B_strict_01/localization_trajectory.csv.gz",
+    "archive_sha256": "4922ce6181169fb5614e9591dcd5519440764d5a0de8f876b8f715252479d5ce"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/geometry_diagnostics.csv",
+    "original_bytes": 259380,
+    "original_sha256": "cefb8d67128e22c9e8fe49289269d4e417154ca320e6b59a524c8cf9ee8a6468",
+    "archive_path": "raw/EASY_C0_B_strict_01/geometry_diagnostics.csv.gz",
+    "archive_sha256": "db497b637eb33d2d9ec542f086ed5cb0a7ff0654f6a8e58588a3b30ea7eb377e"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/local_map_diagnostics.csv",
+    "original_bytes": 578708,
+    "original_sha256": "d184671ff53bc59ca76cdfd4819878da3bfc446d4e75d84d95648549532db1fc",
+    "archive_path": "raw/EASY_C0_B_strict_01/local_map_diagnostics.csv.gz",
+    "archive_sha256": "58e45ad2cf2d74857e867483479fd19b46c572c26e8a48580c5751fd0c1c32fa"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/r23_candidates.csv",
+    "original_bytes": 251995,
+    "original_sha256": "86c9c9049e222c7400acf3cb5e83e479164fe4c19e04c2f272b1be69fc1a2723",
+    "archive_path": "raw/EASY_C0_B_strict_01/r23_candidates.csv.gz",
+    "archive_sha256": "a84dc4c8e1f6009e0c24f4434985e6683e47e7e8a32d4cbb14e8dba917d42598"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/r23_ndt_lineage.csv",
+    "original_bytes": 1223062,
+    "original_sha256": "132c0d8ac36c590926f0cb447ae772a64c42e6a0e03c212d4023e70b18accb3b",
+    "archive_path": "raw/EASY_C0_B_strict_01/r23_ndt_lineage.csv.gz",
+    "archive_sha256": "25f51478468366dd26432625e24a0be65061930ab3b6792dd92e68f510c6a870"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/r24_revision.csv",
+    "original_bytes": 318814,
+    "original_sha256": "20afb741cd07ca1ddea6d3c5b020c7669c124b694739404e90360deedc253863",
+    "archive_path": "raw/EASY_C0_B_strict_01/r24_revision.csv.gz",
+    "archive_sha256": "778f0200d51e4bb33f5fc405c6f6c15b2e48347b19a71b9f92145df7b759e54d"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/r31_observation_identity.csv",
+    "original_bytes": 637475,
+    "original_sha256": "afe02feffa516044bb36400b0056e173e9b19c63b464b69375ec3cb1fa51f893",
+    "archive_path": "raw/EASY_C0_B_strict_01/r31_observation_identity.csv.gz",
+    "archive_sha256": "17fbd5962e313da1ce6618f15aa7f86f047f447a2654c9a562fa1e70ed88c8dc"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/PROCESS_MEMORY.csv",
+    "original_bytes": 146501,
+    "original_sha256": "d54db7ac70bb9fbced41d2ad308484abd936951b648e826b140b4817e68ea5fc",
+    "archive_path": "raw/EASY_C0_B_strict_01/PROCESS_MEMORY.csv.gz",
+    "archive_sha256": "fbb6e343615e69ba3e7a77951254272c59682816f90cbb0402d47cbd315cb19a"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/oosm_statistics.csv",
+    "original_bytes": 605,
+    "original_sha256": "847e4fed6ada037dc8fd138ccd259cf3fb2f2988175ac5d3dc303e3d762b511b",
+    "archive_path": "raw/EASY_C0_B_strict_01/oosm_statistics.csv.gz",
+    "archive_sha256": "22a9aabdd1efb8e34adb3363f0b75084439a0e7c78fd67439982d295faf19b64"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/r24_geometry.csv",
+    "original_bytes": 30891,
+    "original_sha256": "a7b9f1fb1f45a0f3109f6805813acead2c7b6d28918cda77f033352b2fdbdbae",
+    "archive_path": "raw/EASY_C0_B_strict_01/r24_geometry.csv.gz",
+    "archive_sha256": "5c71fc6b490560fb7c60293bae20031cdc1b4d21a4f8b23f5b456affce57e24e"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/ndt_runtime.csv",
+    "original_bytes": 13485,
+    "original_sha256": "9354b8198af4f1a10a7d38ec400700ef8045fdf11ea045de31f302a38cf16ee8",
+    "archive_path": "raw/EASY_C0_B_strict_01/ndt_runtime.csv.gz",
+    "archive_sha256": "507e449fabfc89bd3360b8ef1f80ce4ed5a740278dcc8e104b9ca3d7480dcaa7"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/r23_admission.csv",
+    "original_bytes": 262523,
+    "original_sha256": "710c6cbca4767a29455084ed51129ccd1039e8ae892a0a3c0c2ea02a65a6db98",
+    "archive_path": "raw/EASY_C0_B_strict_01/r23_admission.csv.gz",
+    "archive_sha256": "c5bfc4ca117420329debbcb373e40d7669e42fad1ad5d85edf8e4c199eb6e344"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/deskew_diagnostics.csv",
+    "original_bytes": 503,
+    "original_sha256": "e4a137b346532bfe03ec112410094953b870c47398d4632cfa4759246aae9074",
+    "archive_path": "raw/EASY_C0_B_strict_01/deskew_diagnostics.csv.gz",
+    "archive_sha256": "5381152ec7257ad35de0aa55513d0456505141be1ef59c4dd9af9ff5c5fa34d3"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/publisher_receipts.csv",
+    "original_bytes": 643728,
+    "original_sha256": "2583ec9a10964af492c3796dcf60d2f55c94187499547319ad5011d6a87de44f",
+    "archive_path": "raw/EASY_C0_B_strict_01/publisher_receipts.csv.gz",
+    "archive_sha256": "67e078d5411225e9fdd67ca079ceb0544b7238d67fe7246685dcd1d9685d735f"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/RUN_COMMAND.json",
+    "original_bytes": 4564,
+    "original_sha256": "894b2339b51474f516ed464a8b43ded634c4bb0e49a8740618c938d318bad867",
+    "archive_path": "raw/EASY_C0_B_strict_01/RUN_COMMAND.json.gz",
+    "archive_sha256": "3440446e98b3c0cab00bf645cc12564c114f16e174e5746efdf4c80cfee41f8d"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/RUN_RECEIPT.json",
+    "original_bytes": 5251,
+    "original_sha256": "5de4e44f7785106cc606e852a57f373841a81986f36d67f24a3a04314a110887",
+    "archive_path": "raw/EASY_C0_B_strict_01/RUN_RECEIPT.json.gz",
+    "archive_sha256": "063ebf2c07e3591a5bd45a36f1211f6bb944bca075edeb17aeff3c342f4045fc"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/ONLINE_OUTPUT_SEAL.json",
+    "original_bytes": 4672,
+    "original_sha256": "6d631378b3a5dcace9a7bc48efc58eb1bad56064115ccf6ea6fdaf3b460753b6",
+    "archive_path": "raw/EASY_C0_B_strict_01/ONLINE_OUTPUT_SEAL.json.gz",
+    "archive_sha256": "9a2603c2dfa06479fdb3527c0c4770056ea623753ec21254e1ca8caa225777d9"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_B_strict_01/ROSLAUNCH.log",
+    "original_bytes": 662455,
+    "original_sha256": "adcbd601519180e151bea681cc2666abd66c1ac8f046cedf27644201eb9192d1",
+    "archive_path": "raw/EASY_C0_B_strict_01/ROSLAUNCH.log.gz",
+    "archive_sha256": "d766de502dfa911a6d59c370024613fe06916a200e0b9d249ffdc486c4250015"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/r29_schedule.csv",
+    "original_bytes": 69620,
+    "original_sha256": "6ca61112534aff9f171940a22b4160e5153de619be1e3e73baa58d2f5315365d",
+    "archive_path": "raw/EASY_C0_C_strict_02/r29_schedule.csv.gz",
+    "archive_sha256": "53fd27ed557544da79607d5fd7cca9a310cec24d6568fb6106dd3155f3044979"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/ndt_diagnostics.csv",
+    "original_bytes": 2779363,
+    "original_sha256": "456f277d02a4a7b1cee03671af56df107cbbaf9e0fe5f7e0c1a15eefc09fdbb5",
+    "archive_path": "raw/EASY_C0_C_strict_02/ndt_diagnostics.csv.gz",
+    "archive_sha256": "fd9637113a32de94785ddfea1787c778b856308b81f2943c1e14f3b02a5c55af"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/ekf_prediction_diagnostics.csv",
+    "original_bytes": 9937180,
+    "original_sha256": "48223df148e3b8789a65b65bba409cef20084d6f3040655dfebbdf5a7fe03b1d",
+    "archive_path": "raw/EASY_C0_C_strict_02/ekf_prediction_diagnostics.csv.gz",
+    "archive_sha256": "b2d07c54ed8c2369d5b916bed5af281b9b53c6da20821c22f60253bfdb7dffd7"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/localization_trajectory.csv",
+    "original_bytes": 9955187,
+    "original_sha256": "dc04f55ccf9711fb820e3e12f8200a2f00b600c1aa9bcd0779a28f4bde1f452b",
+    "archive_path": "raw/EASY_C0_C_strict_02/localization_trajectory.csv.gz",
+    "archive_sha256": "c957eab49a5a0089bfe69389f1a7cefade95a0e06b4973d3daa628a382903892"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/geometry_diagnostics.csv",
+    "original_bytes": 259244,
+    "original_sha256": "3a3aca4b22f6c838d521c445ed485441dd913acdc90ff443427f4d9753ffdd4b",
+    "archive_path": "raw/EASY_C0_C_strict_02/geometry_diagnostics.csv.gz",
+    "archive_sha256": "1c2da40d048a2f5e4c0a1765dd441a168496010a94c7b339040e7f7b2448dbbd"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/local_map_diagnostics.csv",
+    "original_bytes": 578717,
+    "original_sha256": "4c0ee24df537709a4bfa2299e4be05a105178cde59c2d0ed86d179a83db06fc9",
+    "archive_path": "raw/EASY_C0_C_strict_02/local_map_diagnostics.csv.gz",
+    "archive_sha256": "313434f7a6cdb96abe291cecf568f8ee889605f839b2d054dd2ef3c7771a712e"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/r23_candidates.csv",
+    "original_bytes": 314098,
+    "original_sha256": "456e4d22e8dd833c9481ff55d87e07bc3b11dc31489e1b87d80e9223479561e5",
+    "archive_path": "raw/EASY_C0_C_strict_02/r23_candidates.csv.gz",
+    "archive_sha256": "3bdd37cbcc5bfbc3b9c62465e29c6c89bc5640b0a4e2cb9de1b7414511431975"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/r23_ndt_lineage.csv",
+    "original_bytes": 1223078,
+    "original_sha256": "348d168a3ac4d50c5839b486580e2571a5d7b6fbe6f27c7dc631433a6e794b53",
+    "archive_path": "raw/EASY_C0_C_strict_02/r23_ndt_lineage.csv.gz",
+    "archive_sha256": "3005394aeedac6601d7259ad15392da119e34822af632c100f013e5f71243632"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/r24_revision.csv",
+    "original_bytes": 318793,
+    "original_sha256": "557130a2c3295db9d229740d04c8a0e7d780bad8f0e9ed490bbed57bd8b14947",
+    "archive_path": "raw/EASY_C0_C_strict_02/r24_revision.csv.gz",
+    "archive_sha256": "a19d283d887c0b611ab348741df1370610765829ebd117c39be64954d611bec1"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/r31_observation_identity.csv",
+    "original_bytes": 637475,
+    "original_sha256": "afe02feffa516044bb36400b0056e173e9b19c63b464b69375ec3cb1fa51f893",
+    "archive_path": "raw/EASY_C0_C_strict_02/r31_observation_identity.csv.gz",
+    "archive_sha256": "17fbd5962e313da1ce6618f15aa7f86f047f447a2654c9a562fa1e70ed88c8dc"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/PROCESS_MEMORY.csv",
+    "original_bytes": 143373,
+    "original_sha256": "3ac9f5da4253da3d26d838f95f0b8f924b68463b1d988868efdcf3f8da071d76",
+    "archive_path": "raw/EASY_C0_C_strict_02/PROCESS_MEMORY.csv.gz",
+    "archive_sha256": "c80d68b24b7eb6a58c907a9f2f95f6fa78477e105ea4251bd3780f55a53723dd"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/oosm_statistics.csv",
+    "original_bytes": 605,
+    "original_sha256": "847e4fed6ada037dc8fd138ccd259cf3fb2f2988175ac5d3dc303e3d762b511b",
+    "archive_path": "raw/EASY_C0_C_strict_02/oosm_statistics.csv.gz",
+    "archive_sha256": "22a9aabdd1efb8e34adb3363f0b75084439a0e7c78fd67439982d295faf19b64"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/r24_geometry.csv",
+    "original_bytes": 30891,
+    "original_sha256": "a7b9f1fb1f45a0f3109f6805813acead2c7b6d28918cda77f033352b2fdbdbae",
+    "archive_path": "raw/EASY_C0_C_strict_02/r24_geometry.csv.gz",
+    "archive_sha256": "5c71fc6b490560fb7c60293bae20031cdc1b4d21a4f8b23f5b456affce57e24e"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/ndt_runtime.csv",
+    "original_bytes": 13485,
+    "original_sha256": "9354b8198af4f1a10a7d38ec400700ef8045fdf11ea045de31f302a38cf16ee8",
+    "archive_path": "raw/EASY_C0_C_strict_02/ndt_runtime.csv.gz",
+    "archive_sha256": "507e449fabfc89bd3360b8ef1f80ce4ed5a740278dcc8e104b9ca3d7480dcaa7"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/r23_admission.csv",
+    "original_bytes": 262966,
+    "original_sha256": "a8ef7eac0135290fcf18f02989bde21ca00a9b6a16ebdc6c8cb680fc5506be3a",
+    "archive_path": "raw/EASY_C0_C_strict_02/r23_admission.csv.gz",
+    "archive_sha256": "0e872fd93c9494ac6f1f625a3c0990e3b8f014a5d4ede5e10b3b6b207d42a559"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/deskew_diagnostics.csv",
+    "original_bytes": 503,
+    "original_sha256": "e4a137b346532bfe03ec112410094953b870c47398d4632cfa4759246aae9074",
+    "archive_path": "raw/EASY_C0_C_strict_02/deskew_diagnostics.csv.gz",
+    "archive_sha256": "5381152ec7257ad35de0aa55513d0456505141be1ef59c4dd9af9ff5c5fa34d3"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/publisher_receipts.csv",
+    "original_bytes": 643567,
+    "original_sha256": "0280f0eeb2cdd0c37295e5a8dcf37fde4fc91d19ea0c6d1b25f3aee85f842ce0",
+    "archive_path": "raw/EASY_C0_C_strict_02/publisher_receipts.csv.gz",
+    "archive_sha256": "5f7943491813268dde0fd805eaebfca6392db1d0505c782d80286b3820336c8f"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/RUN_COMMAND.json",
+    "original_bytes": 4564,
+    "original_sha256": "51a8bc016d5a1b747f8dd85db5241041d0451d8422438c13f7eacdf418c3e9d2",
+    "archive_path": "raw/EASY_C0_C_strict_02/RUN_COMMAND.json.gz",
+    "archive_sha256": "7c49f5b23264506893a4d0899d7156e0b4954b52c199b87e828e0ed3934bbf66"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/RUN_RECEIPT.json",
+    "original_bytes": 5253,
+    "original_sha256": "37eea1b3cd13f8aebc0ac47ae73e70075a17db74b04f9b5a284f1fa475fa1bb3",
+    "archive_path": "raw/EASY_C0_C_strict_02/RUN_RECEIPT.json.gz",
+    "archive_sha256": "dab6953a28cdd4d9ad5a85bfe5d44833437b5911ecec0f2f9b966a6f38d1f31e"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/ONLINE_OUTPUT_SEAL.json",
+    "original_bytes": 4672,
+    "original_sha256": "91546b0ab3ae9e360b466c465b97c3aa6e4f8056434a2040ca1c323fbb6ff7e3",
+    "archive_path": "raw/EASY_C0_C_strict_02/ONLINE_OUTPUT_SEAL.json.gz",
+    "archive_sha256": "8566f418f27ad9b935b3601671da951b0eaa12a5f7010eee4d4c5c9a452b350a"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/EASY_C0_C_strict_02/ROSLAUNCH.log",
+    "original_bytes": 662649,
+    "original_sha256": "0d88826cdcc8d279515004bbdfa6884b5df86adcc4810225a30646eb8e6f7f3e",
+    "archive_path": "raw/EASY_C0_C_strict_02/ROSLAUNCH.log.gz",
+    "archive_sha256": "a418aef2d31d9853c69c4159744a013d215a58ab74f518b72ac5e7785eb028c5"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/r29_schedule.csv",
+    "original_bytes": 1938,
+    "original_sha256": "cf758bc7e4d174cf029ca7ed965871a07f494c8d0ced47de64887615f814655a",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/r29_schedule.csv.gz",
+    "archive_sha256": "5bfa460b9e018352377a06981c7702ea3b52b14ef087dd569c8eb3087339c08a"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/ndt_diagnostics.csv",
+    "original_bytes": 124497,
+    "original_sha256": "9eada526b9d7ef10125cc537847cd59243ff94bc3b740648168da2c61e65acd5",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/ndt_diagnostics.csv.gz",
+    "archive_sha256": "bcf35593680a70262e2de066c822325aa0575cdece707f7ada7fdd47679b4765"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/ekf_prediction_diagnostics.csv",
+    "original_bytes": 322676,
+    "original_sha256": "067eebde31203d808a08ab675f415c483206e4050e1ef91ccfc62a1fa9e5b626",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/ekf_prediction_diagnostics.csv.gz",
+    "archive_sha256": "89ceb29d9fa37c2dc2409552715160019a4d669325a0edc6a66e877da837fbc0"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/localization_trajectory.csv",
+    "original_bytes": 248040,
+    "original_sha256": "10c13b89eeff94d3d8dfff72b29061296e792536fdb2fb7f973fe5bba70f6e87",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/localization_trajectory.csv.gz",
+    "archive_sha256": "daddadf0b333d81687f2fdb57f2c8e5cd75a34f235396ad79485a8b673b6f2f6"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/geometry_diagnostics.csv",
+    "original_bytes": 22573,
+    "original_sha256": "f939f34b2a55a8ed735a9a3311a996230d6ea4a3e9f73f9e28d63bcd7c2c1a05",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/geometry_diagnostics.csv.gz",
+    "archive_sha256": "3e02fe11614336637475748322c784fb4b29fffe5ffcf12e582b1b2270fe272f"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/local_map_diagnostics.csv",
+    "original_bytes": 81829,
+    "original_sha256": "41658b1342ef18fd7d67eaa2036e8e19409eeb764b3fea490f05f567fc179df2",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/local_map_diagnostics.csv.gz",
+    "archive_sha256": "032a37222cda08402aa26595a0eafe53c24185a567a37a2fa3e0666d85f3be82"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/r23_candidates.csv",
+    "original_bytes": 56079,
+    "original_sha256": "432151b4495619c1a87c28a966e736349ec20ea308e28550fb4547ea14566f55",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/r23_candidates.csv.gz",
+    "archive_sha256": "e3c7424f18ac774ff35002b6247cf72cc6db39f62a89d7327715c25a35afb471"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/r23_ndt_lineage.csv",
+    "original_bytes": 60224,
+    "original_sha256": "b5eb85eadeac56bf9d353c66d20ab0b8151601f81c3c6f3510967603ead929c1",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/r23_ndt_lineage.csv.gz",
+    "archive_sha256": "3470cbd52b14f4e5dfbeffa611e914da9a098eaa65fb66dc16c80a02ccd2c918"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/r24_revision.csv",
+    "original_bytes": 10523,
+    "original_sha256": "02d5f04c22f99f35a73853adab4f29887a61c86912fe6021929ae1b9f6c63d9d",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/r24_revision.csv.gz",
+    "archive_sha256": "20b0740c20bd514d797eaf830e8111ab07d0325840e7ce735982221b6f3e135f"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/r31_observation_identity.csv",
+    "original_bytes": 52440,
+    "original_sha256": "6bcd589946c6e6916eb398a72bca840e7d624de9f188468c1f4297f0c50d7d64",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/r31_observation_identity.csv.gz",
+    "archive_sha256": "c1cdc825077761f84da0bfee56ef5aa93d5eb08f5d843d1cb72e7925a1cd8d3e"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/PROCESS_MEMORY.csv",
+    "original_bytes": 10013,
+    "original_sha256": "a988e88e9f85fc2eb1909026a422382cc4ac89b018caec632dda7c301219e8bb",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/PROCESS_MEMORY.csv.gz",
+    "archive_sha256": "f62abc98816ab56b9825073977c80bee83f3a546180c380282ba78ab02dececc"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/oosm_statistics.csv",
+    "original_bytes": 6787,
+    "original_sha256": "4585a5f2bc59d673e9f0756756a3035ea745c78e3d49e75c99148f985ac47d4a",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/oosm_statistics.csv.gz",
+    "archive_sha256": "272ebcd0a2940eae0c5fc69c099e9db423a3ad7fd106ade2e3cd870aa38b5210"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/r24_geometry.csv",
+    "original_bytes": 5773,
+    "original_sha256": "6883bfb00b5384be725d56d4d712031d4a4026ba8ca7b7d1c7526b42b0bc648a",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/r24_geometry.csv.gz",
+    "archive_sha256": "5376fcaf1819131ff81141264096717cfed8e2793bd51a5fdc1c4dfc65e81628"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/ndt_runtime.csv",
+    "original_bytes": 1042,
+    "original_sha256": "98f6975c1fab3fd56fceb50ab5be246fab870a996bf95e46dbb28b07d220dd1a",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/ndt_runtime.csv.gz",
+    "archive_sha256": "197c44e2e279ecb25b9db7398f201aee66da7251d365f8734c022b678df1a465"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/r23_admission.csv",
+    "original_bytes": 13435,
+    "original_sha256": "cc6b6a848baad9186536999d78944d6f206d2b703ce65b9e9ac11a94b31a9796",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/r23_admission.csv.gz",
+    "archive_sha256": "bf21b5221717b279eb6273777c68dafeae9075fd980075778c092f89b07fd109"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/deskew_diagnostics.csv",
+    "original_bytes": 23728,
+    "original_sha256": "683389bd83ba82e673dd980398b992931351873ffb92b8ee4d67634d499e7acf",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/deskew_diagnostics.csv.gz",
+    "archive_sha256": "3888540dc79345ecd4c084c0d8e19b59d74dd09658233581a29b633a87071059"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/publisher_receipts.csv",
+    "original_bytes": 24279,
+    "original_sha256": "cae6060998c0b28c81c1935c4512fa473f8838dbdf4bcce40c0bb3dee45baaca",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/publisher_receipts.csv.gz",
+    "archive_sha256": "0bf898cc7ea948514aae9fe5fdba58f49aacd6e2a5a6021923fb6c12aedb94db"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/RUN_COMMAND.json",
+    "original_bytes": 4877,
+    "original_sha256": "7ecd2a421e5baad797407b40dd47d0a7dd085585bd15e0b4ac88f63587612553",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/RUN_COMMAND.json.gz",
+    "archive_sha256": "88a4c14f64ea5cd0aa6fa0527c3474a134f510d679bc3dc5adcf4676f0a05f12"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/RUN_RECEIPT.json",
+    "original_bytes": 5565,
+    "original_sha256": "7b49d641bb9d7f071cd8ca3673a58621da6e4bd2da67eaabdc3bf6a6d7df28a3",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/RUN_RECEIPT.json.gz",
+    "archive_sha256": "445b851437d5f17c4e7d2a25c11baebd76e24f293cf4f672d4e174e2e984e638"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/ONLINE_OUTPUT_SEAL.json",
+    "original_bytes": 4678,
+    "original_sha256": "221ca86339892699f7075b556b91f0b4c84a59936a81d0206f9b17d2a6af2322",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/ONLINE_OUTPUT_SEAL.json.gz",
+    "archive_sha256": "fda9d15b0a482ec19d5cff13ee704e6c5c7623ecc358443823db6afbd2a6cb2e"
+  },
+  {
+    "original_path": "/home/jian/livox_ws/p62_r31_observation_identity_data/NC_W1_C3_C_strict_01/ROSLAUNCH.log",
+    "original_bytes": 30829,
+    "original_sha256": "7a3a51d3e0fb13ed4128756021161b6c2efcace9eccb625ec85831a697548d22",
+    "archive_path": "raw/NC_W1_C3_C_strict_01/ROSLAUNCH.log.gz",
+    "archive_sha256": "33f6d81e870cfacdfc6e88b429464a4ecf4201b4499b8124d160e2d825b7ea22"
+  }
+]
