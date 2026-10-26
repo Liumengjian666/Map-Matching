@@ -3,7 +3,7 @@
 import json,subprocess,sys,os,time,socket,signal,csv
 from pathlib import Path
 P=Path(__file__).resolve().parents[1];R=P.parents[1];U=Path('/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO');D=U.parent/'loop2_smoke_01'
-sys.path.insert(0,str(R/'docs/p62_r31_observation_identity/tools'));from run_sequence import OwnedTree
+sys.path.insert(0,str(R/'docs/p62_r31_observation_identity/tools'));from run_sequence import OwnedProcesses as OwnedTree
 D.mkdir(exist_ok=False);env=os.environ.copy();env.update(ROS_MASTER_URI='http://127.0.0.1:11631',ROS_IP='127.0.0.1',ROS_HOME=str(D/'ros_home'),ROS_LOG_DIR=str(D/'ros_logs'),DISPLAY=os.environ.get('DISPLAY',':0'),LIBGL_ALWAYS_SOFTWARE='1')
 with socket.socket() as s:assert s.connect_ex(('127.0.0.1',11631))!=0
 assert env['DISPLAY'], 'actual GUI display required for this RViz smoke'
