@@ -8,13 +8,16 @@
 优先数据集：Koide Outdoor01/Outdoor02（MID360，论文有经典公开数值）；其次SuperLoc Corridor01/02（论文有HDL/FAST-LIO异常点率）；Newer College 01_short为条件性Base/RS_C1 GT身份，不可根据误差选身份。
 现有C+G：前置几何硬门改为诊断；名义NDT失败时固定地图Yaw±5°各增加一次原生NDT；合格候选才进入原EKF/OOSM。它没有新NDT目标、全局收敛理论或新滤波数学。Newer College暴露开发60帧上A/G-only=7.986422m、13.052649°，C+G=0.209943m、2.984149°，额外8次NDT、57/60地图观测。R29 Koide Azure Kinect室内2023帧A/B/C/D全部失锁；C与G-only轨迹完全相同，C额外132次NDT、0额外候选接纳。尚无C+G完整LiDAR轨迹有效性或外部优势证据。
 
+**2026-10-26 重大改线通知：此前R32非改写观测计划已被用户提出的成熟开源框架优先路线替代，R32未收到完成报告，不再默认执行。P63-R1首选Super-LIO 2026 RA-L ros1版，将其作为完整可复用定位主干；只有当其真实先验PCD冻结+ROS1/MID360+实际正常定位验收通过后，才能选择单模块创新。旧NDT–EKF代码和全部负结果只归档，不默认作为SCI主干。详见 P63_FRAMEWORK_PIVOT_DECISION.md。**
+
 ## 分阶段科研合同
 |阶段|研究问题/交付|明确停止/验收|状态|
 |---|---|---|---|
 |S0 台账|本文件固定位置，建立每轮记账和资产清理规范|每轮均补实验结果+Git+数据+唯一NEXT|已建立|
 |S1 R30最低基础链路|先对照真实GitHub源码与本地未提交改动；只读追溯IMU时间/预测超龄、Tile/NDT、EKF/OOSM；必要时最多8次不融合的参考初值离线NDT|给出首个可证实异常或UNKNOWN；允许发现确定性BUG后在独立分支小修复+回归，旧结果保留；0条新正式轨迹|有限诊断完成：8次不融合NDT、单项Grid修复回归；raw62观测身份合同仍开放，未批准完整轨迹|
 |S1b R31观测身份闭合|STRICT拒绝被限幅改写的位姿；Koide Azure两条2023帧及NC 60帧真实闭环|工程PASS；性能FAIL：Azure G-only=C+G RMSE 5334.892892m/26.538893°，融合各4，最长1978帧136.038s无图观测；NC W1/C3历史正例保留|**完成，负结果保留**|
-|S1c R32非改写观测测试|只新增CERTIFIED_RAW_DIAGNOSTIC研究策略：保留原生质量判据，发布同一原始位姿，不以后置限步改写/旧上一观测固定步长作拒绝；IMU/EKF运动一致性只读记录；最多2条Azure2023帧+1条NC60帧，不运行Outdoor|身份/因果工程PASS独立于性能PASS；若出现错接纳或持续失锁，报告并转MID360资产而非继续无限改Azure阈值|**预注册，尚未执行**|
+|S1c R32旧自研观测测试|原计划Azure2023帧＋NC60帧，质量通过后不改写位姿|没有新回执或代码成绩；依用户2026-10-26科研改线提议暂停，不作为下一任务|**预注册，已暂停，未执行**|
+|P63-R1 成熟主干迁移|核验Super-LIO 2026 RA-L ros1/MID360、外部PCD、真正冻结地图、原版真实bag能跑；仅必要adapter/冻结地图修正，不移植自研IMU/EKF|原框架构建、实际ROS定位链路、map immutability、真实测量闭合与最少一段回放可验证；不通过就给出阻塞与下一候选|**下一唯一阶段，仅规划，未运行**|
 |S2 MID360输入合同|Koide Outdoor01官方Livox CustomMsg/IMU/map/GT；验证点时间、帧、单位、bag间隔、外参、初始化及基础链路|无合法因果数据/基础定位合同则不报精度；基础通用错误需先独立最小修复、标新版本|待S1|
 |S3 两条完整序列|Outdoor01完整C+G，成功且无违规再Outdoor02完整C+G；必要最少内部消融|无中途挑段/GT重置；完整误差、失败覆盖、时延P95、内存RSS及恢复次数；负例如实报告|未运行|
 |S4 经典公开比较|直接引用Koide2024 Table II HDL/FAST-LIO Localization/Koide作者方法；核实ATE统计、对齐、重启评分|协议未认证只算B级背景，禁止计算公平百分比领先|文献已完成，A级未闭合|
@@ -58,6 +61,7 @@ Koide论文来源：https://staff.aist.go.jp/k.koide/assets/pdf/icra2024_02.pdf�
 |2026-10-26|R31预注册/S1b|raw62观测身份不一致的最小显式保护与2组完整回放、R25 60帧回归（仅计划）|GitHub代码定位applyR23Admission/limitNdtStep/publishPose真实先后次序；无新增NDT/EKF运行|NDT=0、EKF=0、完整轨迹=0；源码未改|R30 END 6ca14d4...；计划commit以R31 HEAD为准|docs/paper_research_control/R31_OBSERVATION_IDENTITY_CONTRACT.md|无大型下载、无本机删改|Codex执行R31单项闭环合同，回传是否允许Outdoor01数据准入|
 |2026-10-26|R31完成/S1b|两条Azure2023帧STRICT闭环＋NC历史60帧回归|观测身份工程PASS、性能FAIL；Azure RMSE5334.892892m/26.538893°、4/2023地图融合，1978帧最长饥饿；C额外96次NDT、0额外接纳；NC 0.209943m保持|新增4106帧，NDT932次(名义828＋额外104)，EKF65次|START edb4e913...；CODE bab26e99...；END 65ed408f...|docs/p62_r31_observation_identity/；END SHA65ed408f...|32.044GiB可用，删除0|S1c非改写原生观测受控试验|
 |2026-10-26|R32预注册/S1c|CERTIFIED_RAW_DIAGNOSTIC＋IMU/EKF只读shadow差异记录；两条Azure完整轨迹和1条NC已知60帧；独立Outdoor只读资产检查|尚未执行，不能承诺精度提升。处理原R31 STRICT观测饥饿的因果反例，不调覆盖阈值和NDT搜索。|新增实际NDT=0/EKF=0/正式轨迹=0|计划从65ed408f...建立，当前CODE=无|docs/paper_research_control/R32_NONMUTATING_RAW_ADMISSION_PLAN.md|未下载大型资产、删除0|Codex执行R32并报告是否适合直接MID360资产验收|
+|2026-10-26|P63研究路线重大变更|不再维护自建EKF/IMU/NDT多接口作为论文主线；暂停尚未执行的R32；挑正式已发表开源ROS1先验地图定位框架|Super-LIO ros1 2026 RA-L具真实PCD load，ESKF，MID360，NDT+ICP初始化；源码默认 relocation.update_map=true，须先关闭并证明地图冻结；暂无实测新轨迹|新增NDT=0/EKF=0；未下载大型载荷/未删文件|原R31完成65ed408f...，规划HEAD以P63分支为准|docs/paper_research_control/P63_FRAMEWORK_PIVOT_DECISION.md|仍保留全部旧实验及资产，用户未授权删除|P63-R1 Super-LIO 原版源码/冻结地图/真实MID360短段验收|
 
 ## 磁盘资产管理（未经用户逐项批准不能删除）
 |类别|示例|规则|
@@ -123,3 +127,5 @@ NC成功历史回归只说明新身份规则没有破坏这一已知片段；Bas
 |/home/jian/livox_ws/p62_r31_observation_identity_ws/.r31_diagnostic_build|53248 allocated bytes|独立单元测试源码/命令；devel正式测试二进制另存|可重生编译物，不冒称字节相同副本|未批准|未执行|
 
 2026-10-26：R31实际结束，工程观测身份通过但严格拒绝造成严重长期地图观测饥饿；新R32允许只在离线回放做「合格原始终值不经过后置限幅而发布」受控对照，时间/IMU运动一致性先只读影子记录，不预设新统计门槛。固定比较Azure2023帧+NC60帧；不把工程修复当创新；完成后优先推进Livox MID360 Outdoor合同，不在Azure无限反复调参。计划见 R32_NONMUTATING_RAW_ADMISSION_PLAN.md。
+
+2026-10-26重大方向变更：用户明确提出应基于近期成熟开源先验地图定位框架继续论文，而非从零自建IMU/EKF/NDT。科研总控评估同意；旧R32仅计划未执行，改为暂停；新主干首选Super-LIO官方ROS1（RA-L2026）。其relocation.yaml默认update_map=true必须关闭并代码级证实真正冻结地图；主跟踪非持续原生NDT，因此论文主题可能需改成prior-map localization。原版框架必须先于任何新模块被单独跑通并测时延/RSS；未来原版与修改版的内部对照不可省。详见P63_FRAMEWORK_PIVOT_DECISION.md。
