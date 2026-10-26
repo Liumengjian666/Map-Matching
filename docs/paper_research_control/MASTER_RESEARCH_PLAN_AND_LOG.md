@@ -17,7 +17,8 @@
 |S1 R30最低基础链路|先对照真实GitHub源码与本地未提交改动；只读追溯IMU时间/预测超龄、Tile/NDT、EKF/OOSM；必要时最多8次不融合的参考初值离线NDT|给出首个可证实异常或UNKNOWN；允许发现确定性BUG后在独立分支小修复+回归，旧结果保留；0条新正式轨迹|有限诊断完成：8次不融合NDT、单项Grid修复回归；raw62观测身份合同仍开放，未批准完整轨迹|
 |S1b R31观测身份闭合|STRICT拒绝被限幅改写的位姿；Koide Azure两条2023帧及NC 60帧真实闭环|工程PASS；性能FAIL：Azure G-only=C+G RMSE 5334.892892m/26.538893°，融合各4，最长1978帧136.038s无图观测；NC W1/C3历史正例保留|**完成，负结果保留**|
 |S1c R32旧自研观测测试|原计划Azure2023帧＋NC60帧，质量通过后不改写位姿|没有新回执或代码成绩；依用户2026-10-26科研改线提议暂停，不作为下一任务|**预注册，已暂停，未执行**|
-|P63-R1 成熟主干迁移|核验Super-LIO 2026 RA-L ros1/MID360、外部PCD、真正冻结地图、原版真实bag能跑；仅必要adapter/冻结地图修正，不移植自研IMU/EKF|原框架构建、实际ROS定位链路、map immutability、真实测量闭合与最少一段回放可验证；不通过就给出阻塞与下一候选|**下一唯一阶段，仅规划，未运行**|
+|P63-R1 成熟主干迁移|Super-LIO原版Release，外部FAST-LIVO2 PCD，冻结先验map；一次历史T_I_L=I条件Smoke|编译/冻结地图PASS，107帧发布/95输出后20连败停止，9.4s位姿首末相距225.114m非GT，初始化重力方向差38.021°，外参/地图生产绑定未闭合；研究主干未通过|**真实实验已完成、定位失败**|
+|P63-R1B 坐标与重力来源核查|只读追溯loop2 simtime PCD生成身份、地图重力方向、T_I_L来源、初始化NDT/ICP姿态；独立证据PASS后最多允许一次400扫描原版纯坐标适配Smoke|缺少可靠源资产即BLOCKED并STOP；不从失败轨迹拟合map旋转、不调优化参数、不重写ESKF；通过仍非完整GT精度|**预注册，尚未执行**|
 |S2 MID360输入合同|Koide Outdoor01官方Livox CustomMsg/IMU/map/GT；验证点时间、帧、单位、bag间隔、外参、初始化及基础链路|无合法因果数据/基础定位合同则不报精度；基础通用错误需先独立最小修复、标新版本|待S1|
 |S3 两条完整序列|Outdoor01完整C+G，成功且无违规再Outdoor02完整C+G；必要最少内部消融|无中途挑段/GT重置；完整误差、失败覆盖、时延P95、内存RSS及恢复次数；负例如实报告|未运行|
 |S4 经典公开比较|直接引用Koide2024 Table II HDL/FAST-LIO Localization/Koide作者方法；核实ATE统计、对齐、重启评分|协议未认证只算B级背景，禁止计算公平百分比领先|文献已完成，A级未闭合|
@@ -62,6 +63,9 @@ Koide论文来源：https://staff.aist.go.jp/k.koide/assets/pdf/icra2024_02.pdf�
 |2026-10-26|R31完成/S1b|两条Azure2023帧STRICT闭环＋NC历史60帧回归|观测身份工程PASS、性能FAIL；Azure RMSE5334.892892m/26.538893°、4/2023地图融合，1978帧最长饥饿；C额外96次NDT、0额外接纳；NC 0.209943m保持|新增4106帧，NDT932次(名义828＋额外104)，EKF65次|START edb4e913...；CODE bab26e99...；END 65ed408f...|docs/p62_r31_observation_identity/；END SHA65ed408f...|32.044GiB可用，删除0|S1c非改写原生观测受控试验|
 |2026-10-26|R32预注册/S1c|CERTIFIED_RAW_DIAGNOSTIC＋IMU/EKF只读shadow差异记录；两条Azure完整轨迹和1条NC已知60帧；独立Outdoor只读资产检查|尚未执行，不能承诺精度提升。处理原R31 STRICT观测饥饿的因果反例，不调覆盖阈值和NDT搜索。|新增实际NDT=0/EKF=0/正式轨迹=0|计划从65ed408f...建立，当前CODE=无|docs/paper_research_control/R32_NONMUTATING_RAW_ADMISSION_PLAN.md|未下载大型资产、删除0|Codex执行R32并报告是否适合直接MID360资产验收|
 |2026-10-26|P63研究路线重大变更|不再维护自建EKF/IMU/NDT多接口作为论文主线；暂停尚未执行的R32；挑正式已发表开源ROS1先验地图定位框架|Super-LIO ros1 2026 RA-L具真实PCD load，ESKF，MID360，NDT+ICP初始化；源码默认 relocation.update_map=true，须先关闭并证明地图冻结；暂无实测新轨迹|新增NDT=0/EKF=0；未下载大型载荷/未删文件|原R31完成65ed408f...，规划HEAD以P63分支为准|docs/paper_research_control/P63_FRAMEWORK_PIVOT_DECISION.md|仍保留全部旧实验及资产，用户未授权删除|P63-R1 Super-LIO 原版源码/冻结地图/真实MID360短段验收|
+
+### 2026-10-26 P63-R1B 计划追加
+|2026-10-26|P63-R1B坐标来源计划|R1失败后只读核对simtime地图制造链/世界重力及设备外参；仅完全独立认证情况下准许一次400帧坐标适配Smoke|计划而非运行；R1真实地图冻结PASS/连续跟踪FAIL/约38.02°重力冲突仍无唯一归因；已核实R32确实曾独立完成失败运行|本轮新增NDT=0、ICP=0、ESKF=0、传感器回放0；R1历史NDT1+ICP1、Observe95不冒充本轮|R1 END 2a2f202c01efe6a6452436bd1eff084ae1ddfc14；本规划END以分支HEAD为准|docs/paper_research_control/P63_R1B_FRAME_PROVENANCE_PLAN.md|新增文档，无用户电脑重跑/下载/删除；根余量历史约25.22GiB|执行P63-R1B追溯并根据证据决定单次原版400帧或停止换合法数据|
 
 ## 磁盘资产管理（未经用户逐项批准不能删除）
 |类别|示例|规则|
@@ -156,3 +160,5 @@ NC成功历史回归只说明新身份规则没有破坏这一已知片段；Bas
 可视化：真实Smoke自动启动RViz并接入原map/cloud/pose/path与只读TF桥，但输出95次即失效，未达到截图条件，视觉验收未完成。收尾增加的自动输入one-click组合仅做launch解析与wrapper生成，未第二次重放；报告明确标注。源码运行身份与后续交付配置变更分开。
 
 可再生候选仅列、未删：`/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/build` 23134208B、`devel`1826816B（含实际二进制，须先批准保留方案）；误配置的研究工作树`build`737280B、`devel`221184B。全部原始bag/map和旧失败实验保留；本轮不搭建第二套FAST_LIO_Relocation、不将此次未验收输入下的失败当成该替代框架必胜的证据。
+
+2026-10-26实际R1判定与后续：R1归档branch research/p63-r1-mature-prior-map-baseline的END=2a2f202c01efe6a6452436bd1eff084ae1ddfc14已出现在真实远端。地图冻结与代码编译PASS但95跟踪输出提前失效；T_I_L=I未物理标定，所用simtime PCD未与8月8日建图配置唯一绑定，gravity方向冲突38.021°无法唯一归因；不得声称Super-LIO科学基线已验收。新增P63-R1B原始资产/重力/外参来源门；无独立地图生产身份便STOP而非反求旋转。此前归档还纠正历史“R32未执行”：原R32其实已在其他分支完成负实验END66494205f7dd48d193d08936f10784f49f653939；请保留这条证据，不以旧计划文字覆盖历史事实。
