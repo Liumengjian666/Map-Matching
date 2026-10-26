@@ -1,0 +1,1 @@
+{'reason': 'LOCALIZATION_PROCESS_EXITED', 'wall_s': 33.72071604500525, 'roslaunch_exit': 0, 'observer_peak_RSS_KiB': 190496, 'rviz_peak_RSS_KiB': 390512, 'owned_tree_peak_RSS_KiB': 712264, 'one_prefix_no_retry': True, 'reference_evaluation': 'NOT_EVALUABLE_NO_INDEPENDENT_GT', 'extrinsic_status': 'USER_AUTHORIZED_HISTORICAL_IDENTITY_SMOKE_ONLY'}

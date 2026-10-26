@@ -1,0 +1,13 @@
+{
+  "actual_R32_END": "66494205f7dd48d193d08936f10784f49f653939",
+  "archive_path": "/home/jian/livox_ws/p62_r32_nonmutating_observation_ws/docs/p62_r32_nonmutating_observation",
+  "source_sha256": "a000bc9bac310120b9995bb8324b3e957568c17307b30d93a4c035c9ab3842b7",
+  "status": "completed;not unexecuted as older planning text said",
+  "actual_metrics": {
+    "indoor_translation_rmse_m": 5440.6130295998455,
+    "indoor_rotation_rmse_deg": 27.34121035504169,
+    "native_calls": 806,
+    "actual_EKF_updates": 67
+  },
+  "original_branch_preserved": true
+}

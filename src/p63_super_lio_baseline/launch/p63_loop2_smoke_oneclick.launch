@@ -1,0 +1,15 @@
+<launch>
+  <arg name="sensor_contract" />
+  <arg name="output_dir" />
+  <arg name="bag" default="/home/jian/rosbag/loop2/raw_restore_20260914_stage0/loop2_raw.bag" />
+  <arg name="allow_historical_identity_smoke" default="false" />
+  <arg name="rviz" default="true" />
+  <include file="$(find p63_super_lio_baseline)/launch/p63_loop2_frozen_map.launch">
+    <arg name="sensor_contract" value="$(arg sensor_contract)" />
+    <arg name="output_dir" value="$(arg output_dir)" />
+    <arg name="allow_historical_identity_smoke" value="$(arg allow_historical_identity_smoke)" />
+    <arg name="rviz" value="$(arg rviz)" />
+  </include>
+  <node pkg="p63_super_lio_baseline" type="prefix_player.py" name="p63_loop2_prefix_input"
+        args="--bag $(arg bag) --output $(arg output_dir)" output="screen" />
+</launch>

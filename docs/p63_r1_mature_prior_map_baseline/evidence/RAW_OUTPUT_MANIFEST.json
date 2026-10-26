@@ -1,0 +1,93 @@
+[
+  {
+    "path": "/home/jian/livox_ws/p63_r1_super_lio_data/loop2_smoke_01/INPUT.log",
+    "sha256": "60e26203b16e10342bdafecb439f8bdf9aa25886524f1c66087239dd596195a8",
+    "bytes": 61,
+    "portable": "raw/loop2_smoke_01/INPUT.log.gz",
+    "portable_sha256": "f639234c83e6a56243be0d5ed6fad61350755915a21b79975df52d2d1eae43fb"
+  },
+  {
+    "path": "/home/jian/livox_ws/p63_r1_super_lio_data/loop2_smoke_01/ROSLAUNCH.log",
+    "sha256": "ac11b108a3ab82171f277b20190706bd680e0befc8fc09b65700523f40a61b23",
+    "bytes": 6399,
+    "portable": "raw/loop2_smoke_01/ROSLAUNCH.log.gz",
+    "portable_sha256": "5bdf3750c2efee3764cc59b91413ebed125974bc9cde7669d86f192094105cc4"
+  },
+  {
+    "path": "/home/jian/livox_ws/p63_r1_super_lio_data/loop2_smoke_01/OBSERVER_RECEIPT.json",
+    "sha256": "d2950c3bd14e2644198ee0e1750ebb66d3203d5f7d8e41982e3142048ad53a95",
+    "bytes": 313,
+    "portable": "raw/loop2_smoke_01/OBSERVER_RECEIPT.json.gz",
+    "portable_sha256": "3f549b59b2db9e3f8bc5f3bac71687cbdc7c94a0b3cac7a855dc7c956b4a5cee"
+  },
+  {
+    "path": "/home/jian/livox_ws/p63_r1_super_lio_data/loop2_smoke_01/ORIGINAL_TRAJECTORY.csv",
+    "sha256": "2e190430878ee25f4b9ebc9c1ba3393835ffc2734419729916f99f4625478938",
+    "bytes": 27109,
+    "portable": "raw/loop2_smoke_01/ORIGINAL_TRAJECTORY.csv.gz",
+    "portable_sha256": "6072ff7abcf7dab4a748cbd19d8e5eabb9a00a5e05ff0a10dea8538c87b6234c"
+  },
+  {
+    "path": "/home/jian/livox_ws/p63_r1_super_lio_data/loop2_smoke_01/RUN_COMMAND.json",
+    "sha256": "7c751d139f8ab9bbdccb7a1f8bd148a26980aee4ca582eee341399c3088782ea",
+    "bytes": 805,
+    "portable": "raw/loop2_smoke_01/RUN_COMMAND.json.gz",
+    "portable_sha256": "f10e4ad207fac0f9f72e5c7a51bb75012f1738e81785fa2b005596548e202ef1"
+  },
+  {
+    "path": "/home/jian/livox_ws/p63_r1_super_lio_data/loop2_smoke_01/INPUT_RECEIPT.json",
+    "sha256": "702a9f39e87c13d171e3b1290e3d7db850af68584ca31ffd590ae0d0a020582d",
+    "bytes": 237,
+    "portable": "raw/loop2_smoke_01/INPUT_RECEIPT.json.gz",
+    "portable_sha256": "a183ab5bd97e7eb1f8415adc8bbe1f44ab1665b2fc6154386fe8e44119cdc74f"
+  },
+  {
+    "path": "/home/jian/livox_ws/p63_r1_super_lio_data/loop2_smoke_01/RUN_RECEIPT.json",
+    "sha256": "b57b9272cfa68f9835f04b7f989e40b44a725aa8aa6870ccb383ae5282f0b19a",
+    "bytes": 367,
+    "portable": "raw/loop2_smoke_01/RUN_RECEIPT.json.gz",
+    "portable_sha256": "0de2a413cde6ef6c60da1f1d2b369b3baf8369f168b77431e477938fc040df0f"
+  },
+  {
+    "path": "/home/jian/livox_ws/p63_r1_super_lio_data/loop2_smoke_01/TARGET_BEFORE.json",
+    "sha256": "30eeb789810b7488e905c52cb6e7fcb7374c29359f8a16c2ebdc857ac2b9ed48",
+    "bytes": 94,
+    "portable": "raw/loop2_smoke_01/TARGET_BEFORE.json.gz",
+    "portable_sha256": "288c5c04eba77a9886e7689dfb3db88e2ab72c17195b26ba6ef8ca580380b6a7"
+  },
+  {
+    "path": "/home/jian/livox_ws/p63_r1_super_lio_data/loop2_smoke_01/PROCESS_MEMORY.csv",
+    "sha256": "08bf4790e9853abe529c1d6dfe05fada39150f91f69adae6ab8ac08d3ff9dc64",
+    "bytes": 13522,
+    "portable": "raw/loop2_smoke_01/PROCESS_MEMORY.csv.gz",
+    "portable_sha256": "046fde20fd0ed3d96a331a8d1a1ddc11bd34389d09d35f34f97725aaa4ec25cd"
+  },
+  {
+    "path": "/home/jian/livox_ws/p63_r1_super_lio_data/loop2_smoke_01/INPUT_LEDGER.csv",
+    "sha256": "0c9cac56b2537060ec9865bac36816fcd8bb44044d19d5474c85c4f285f8d1ce",
+    "bytes": 268411,
+    "portable": "raw/loop2_smoke_01/INPUT_LEDGER.csv.gz",
+    "portable_sha256": "7ef3fb626be943a73549366b2ecb5daa9aa72ca53cff3ba606e515d48e3cf484"
+  },
+  {
+    "path": "/home/jian/livox_ws/p63_r1_super_lio_data/map_probe_01/ROSLAUNCH.log",
+    "sha256": "27078465f5a99268f9c6a79ee36897b6b0ee2f168fa0841bb45731898d7ec435",
+    "bytes": 4699,
+    "portable": "raw/map_probe_01/ROSLAUNCH.log.gz",
+    "portable_sha256": "1eb4289c1309fb099819b0465c9e481760416e57c21f0150f29d13a9f33ef7c0"
+  },
+  {
+    "path": "/home/jian/livox_ws/p63_r1_super_lio_data/map_probe_01/COMMAND.json",
+    "sha256": "da0a2516e879ad5cb24f7ba28543cb36b6a2238f7e4336b68a4fb9d36651ec71",
+    "bytes": 381,
+    "portable": "raw/map_probe_01/COMMAND.json.gz",
+    "portable_sha256": "cf41b7ce9242a29989fd7e0786dbbee9b2bc8e79cdfb18da5f7a81d6f247273a"
+  },
+  {
+    "path": "/home/jian/livox_ws/p63_r1_super_lio_data/map_probe_01/PROBE.json",
+    "sha256": "79d2972dda37d4e36741519fce7361c3ba85f731c09b486758d1da71367e4388",
+    "bytes": 474,
+    "portable": "raw/map_probe_01/PROBE.json.gz",
+    "portable_sha256": "7dc26c90e3acfc3ecfa1d180c77125e300b310a42765f1527e4479fe022649ce"
+  }
+]

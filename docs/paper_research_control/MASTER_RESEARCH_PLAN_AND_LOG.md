@@ -129,3 +129,30 @@ NC成功历史回归只说明新身份规则没有破坏这一已知片段；Bas
 2026-10-26：R31实际结束，工程观测身份通过但严格拒绝造成严重长期地图观测饥饿；新R32允许只在离线回放做「合格原始终值不经过后置限幅而发布」受控对照，时间/IMU运动一致性先只读影子记录，不预设新统计门槛。固定比较Azure2023帧+NC60帧；不把工程修复当创新；完成后优先推进Livox MID360 Outdoor合同，不在Azure无限反复调参。计划见 R32_NONMUTATING_RAW_ADMISSION_PLAN.md。
 
 2026-10-26重大方向变更：用户明确提出应基于近期成熟开源先验地图定位框架继续论文，而非从零自建IMU/EKF/NDT。科研总控评估同意；旧R32仅计划未执行，改为暂停；新主干首选Super-LIO官方ROS1（RA-L2026）。其relocation.yaml默认update_map=true必须关闭并代码级证实真正冻结地图；主跟踪非持续原生NDT，因此论文主题可能需改成prior-map localization。原版框架必须先于任何新模块被单独跑通并测时延/RSS；未来原版与修改版的内部对照不可省。详见P63_FRAMEWORK_PIVOT_DECISION.md。
+
+
+## 2026-10-26 P63-R1 实际执行追加：原版框架可编译／地图冻结，但条件性 Smoke 失败
+
+### 先纠正旧计划事实，不改写历史记录
+
+本文件及P63原规划中的“R32仅计划／尚未执行”与本机实际归档不符。真实R32已完成，原分支 `research/p62-r32-nonmutating-map-observation` 与END `66494205f7dd48d193d08936f10784f49f653939` 均保留；原归档 `/home/jian/livox_ws/p62_r32_nonmutating_observation_ws/docs/p62_r32_nonmutating_observation`，不是本P63祖先分支内容。该轮Indoor RMSE5440.6130296m／27.341210355°，806次原生NDT、67次EKF更新，负结果继续保留。依据见本轮 `evidence/R32_ACTUAL_COMPLETION.json`（含原results文件SHA）。这里追加纠正，不删除之前的规划文字，不将旧算法重新合入新主干。
+
+### 路线、实际证据与验收
+
+原计划：Super-LIO ROS1原版、外部冻结PCD、真实MID360约300–600帧基线，之后才允许讨论单模块创新。用户随后确认无已验证物理LiDAR–IMU标定，明确批准与历史FAST-LIVO2零平移／单位旋转一致的工程Smoke；正式精度合同仍未通过。
+
+实际：在独立工作树和独立catkin clone完成原版Release编译。官方ros1 SHA `60b57aaac8dc397f80c56364e7ccb008c300cc29`、GPLv3、作者tracked-source补丁0。仅局部进程库搜索路径避开相机SDK旧libusb；不升级系统、不改稳定工程。map update=false/save=false源码派发及真实前后摘要均通过，原459154点地图以151401点OctVox固定存储；600次synthetic关闭插入probe不是600帧定位。持续跟踪为作者平面迭代ESKF，NDT＋ICP仅启动。
+
+固定首400扫描的唯一有输入Smoke实际发布107 LiDAR／2125 IMU，输出95次原生跟踪状态，75次至少4个有效平面匹配；从跟踪输出76开始连续20次不足4匹配，按预先冻结规则提前结束。初始化NDT1次＋ICP1次，ICP fitness=.10959；有限位姿不等于成功，首末估计位置相距225.114052m／9.400211s，**不是GT误差**。原版400帧稳定基线未完成，不进入新模块或完整序列。
+
+有界后验只读诊断：首10扫描58407点与实际启动计数一致，185 IMU平均比力经日志ICP旋转后，与原作者固定world +Z分歧38.021059°。地图生产版本、初始ICP分支、物理外参仍无法独立区分；未拟合变换／修改重力／调初值重跑。缺少独立GT且物理外参未验收，ATE/RPE为NOT_EVALUABLE，不能据此宣称框架或论文创新通过。
+
+|日期|任务|范围与结果|实际调用和输出|Git身份|原始证据|存储与保护|唯一NEXT|
+|---|---|---|---|---|---|---|---|
+|2026-10-26|P63-R1-ESTABLISH-MATURE-PRIOR-MAP-BASELINE|编译PASS、外部PCD导入PASS、固定目标PASS；历史零/I条件Smoke提前失效，RESEARCH_BACKBONE_NOT_YET_ACCEPTED|1次真实输入运行；NDT1＋ICP1初始化；95次原ESKF Observe输出，75受支持／20连续失配；107扫描/2125IMU已发布；1次零输入监督器导入失败另存，不计传感器试验|START `3f0d24f1a930a2365e7c918c8444afc44c039998`；实际RUN CODE `5ae6d0c600e1140b996e83a237d81cffb956969d`；branch `research/p63-r1-mature-prior-map-baseline`；END为本次最终归档commit，完整SHA见交接；未push|`docs/p63_r1_mature_prior_map_baseline/REPORT.md`、八份专题报告、raw/、results.json；原输出 `/home/jian/livox_ws/p63_r1_super_lio_data/loop2_smoke_01`|收尾采样27078369280B可用，保留20GiB；新工作树约1.72GB含继承历史，clone/build约30.4MB；同盘df净减1.806GB含并发活动；下载新数据0/删除0；稳定工程before/after一致|总控安排一次有界的外部PCD重力轴／初始化坐标与设备外参来源闭合，再决定是否坐标适配或换框架；不开发新恢复、不自动P63-R2|
+
+资源：95次process Mean/P95/Max=.973411/1.672614/5.267051ms，spin+process=1.024208/1.688971/7.807059ms；启动NDT+ICP约3.289708s，定位进程14.012953486s，监督总墙钟33.720716045s。定位进程峰值190496KiB，RViz390512KiB，自有ROS树采样同时峰值712264KiB，**不含另起输入重放进程**；不宣称10Hz或整机资源通过。
+
+可视化：真实Smoke自动启动RViz并接入原map/cloud/pose/path与只读TF桥，但输出95次即失效，未达到截图条件，视觉验收未完成。收尾增加的自动输入one-click组合仅做launch解析与wrapper生成，未第二次重放；报告明确标注。源码运行身份与后续交付配置变更分开。
+
+可再生候选仅列、未删：`/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/build` 23134208B、`devel`1826816B（含实际二进制，须先批准保留方案）；误配置的研究工作树`build`737280B、`devel`221184B。全部原始bag/map和旧失败实验保留；本轮不搭建第二套FAST_LIO_Relocation、不将此次未验收输入下的失败当成该替代框架必胜的证据。

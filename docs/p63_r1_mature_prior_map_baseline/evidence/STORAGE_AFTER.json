@@ -1,0 +1,20 @@
+{
+  "free_bytes": 27078369280,
+  "before_bytes": 28884709376,
+  "before_minus_after_bytes": 1806340096,
+  "reserve_bytes": 21474836480,
+  "allocated_directory_bytes": {
+    "/home/jian/livox_ws/p63_r1_super_lio_baseline_ws": 1721294848,
+    "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO": 30408704,
+    "/home/jian/livox_ws/p63_r1_super_lio_baseline_ws/build": 737280,
+    "/home/jian/livox_ws/p63_r1_super_lio_baseline_ws/devel": 221184,
+    "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/build": 23134208,
+    "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel": 1826816,
+    "/home/jian/livox_ws/p63_r1_super_lio_data/loop2_smoke_01": 475136,
+    "/home/jian/livox_ws/p63_r1_super_lio_data/map_probe_01": 90112
+  },
+  "nested_sizes_not_additive": true,
+  "deleted_files": 0,
+  "new_dataset_bytes": 0,
+  "note": "df net change includes concurrent filesystem activity;directory du shows task footprint;worktree contains inherited history"
+}

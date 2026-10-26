@@ -1,0 +1,25 @@
+{
+  "actual_sensor_run_CODE_SHA": "5ae6d0c600e1140b996e83a237d81cffb956969d",
+  "post_run_changes": "oneclick composition, output-overwrite guard and reports only;no author/observer C++ changes or additional input run",
+  "sha256": {
+    "src/p63_super_lio_baseline/CMakeLists.txt": "9f82ba4c690d303190c33bee24726677e81b859f19762f974dbaab34b36e3bc9",
+    "src/p63_super_lio_baseline/config/loop2_identity_smoke.yaml": "e9e836f7d38e605b030f6389c43d48de046788cbfac8b91ec7f267a3fcc702e5",
+    "src/p63_super_lio_baseline/config/map_probe.yaml": "7e81839c57e6f85cd8d6c2d0e0b89dfe6153bf65f74d480c155e9d770821ccae",
+    "src/p63_super_lio_baseline/launch/map_freeze_probe.launch": "34457f10f9492b68b5a9ae68b3d4440ae94afc14ed691e736409400f19802c20",
+    "src/p63_super_lio_baseline/launch/p63_loop2_frozen_map.launch": "2b365da10bc380c3e442134ae69b2aea3b653527c34adc223691fb951f838e35",
+    "src/p63_super_lio_baseline/launch/p63_loop2_smoke_oneclick.launch": "e6094090493e63c2a451a4b64bee48660e715f5a4896dedf0412f429430d1150",
+    "src/p63_super_lio_baseline/package.xml": "51215cea9951c036d7d2ca0880b27b95dd0922ecaf24692902da66681638f555",
+    "src/p63_super_lio_baseline/rviz/prior_localization.rviz": "ca83d57843a546428998b2606212b676c736f261c988747e9f52e3b6ad345cf2",
+    "src/p63_super_lio_baseline/scripts/baseline_gate.py": "9db49a0ed521f5b19bd58f259014eb2290b9450511301f376ec46d8103c48cd7",
+    "src/p63_super_lio_baseline/scripts/pose_tf_bridge.py": "4478629c498b6ce1c0d1c233dbed3c4f5ea782bf0d0e10ec9a200f9a54c2e49b",
+    "src/p63_super_lio_baseline/scripts/prefix_player.py": "3773a45edc0a13af2ce3a26ac3fa04aa25dbfb7a03a8b4320f41d6e0f9b67ad9",
+    "src/p63_super_lio_baseline/src/map_freeze_probe.cpp": "677213260fa4cca2497daedbf8f20c824a548e4bd54dd3d30939458ece7d5097",
+    "src/p63_super_lio_baseline/src/original_observer_node.cpp": "30db6d5237eaba76d8980446aa9f0ca69c79a68d30fade1f00ac251f3bac56da",
+    "docs/p63_r1_mature_prior_map_baseline/tools/capture_rviz.py": "adffaf36b4b925650f338e1198615ba9686b1432b2ad09f7261dfabddc179aa8",
+    "docs/p63_r1_mature_prior_map_baseline/tools/finalize.py": "f7d396a54e5ad74ab0f0fcd263f74ba5bb56f359be0bd712c095a9e1d5ae36a0",
+    "docs/p63_r1_mature_prior_map_baseline/tools/initialization_consistency.py": "d7b2e4cf657321195e87f2fd9ead3c282768a8bd7c7d41ce7393df5e9d522606",
+    "docs/p63_r1_mature_prior_map_baseline/tools/replay_prefix.py": "84465dadbaccc165a37050720439ea897047a9acea471dc552eca6fa62051c76",
+    "docs/p63_r1_mature_prior_map_baseline/tools/run_map_probe.py": "6d4c3202e265c8c611acca87f4a26a54ffd011fee196fe421bc1830c80b58e33",
+    "docs/p63_r1_mature_prior_map_baseline/tools/run_smoke.py": "0baaced2f8684749a63f287df6829267b098c9ee25508cd1b7690c82832ac430"
+  }
+}

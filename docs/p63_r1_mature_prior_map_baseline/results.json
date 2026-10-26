@@ -1,0 +1,109 @@
+{
+  "task": "P63-R1-ESTABLISH-MATURE-PRIOR-MAP-BASELINE",
+  "START_SHA": "3f0d24f1a930a2365e7c918c8444afc44c039998",
+  "author_ros1_SHA": "60b57aaac8dc397f80c56364e7ccb008c300cc29",
+  "author_tracked_patch_count": 0,
+  "run_harness_CODE_SHA": "5ae6d0c600e1140b996e83a237d81cffb956969d",
+  "END_SHA": "final containing archive commit;full SHA in handoff",
+  "branch": "research/p63-r1-mature-prior-map-baseline",
+  "push_executed": false,
+  "source_and_release": "PASS_LOCAL_ENV_ISOLATION",
+  "external_PCD_import": "PASS",
+  "frozen_prior_map": "PASS",
+  "sensor_frame_contract": "CONDITIONAL_USER_AUTHORIZED_HISTORICAL_IDENTITY",
+  "physical_calibration": "NOT_AVAILABLE",
+  "original_tracking": "SMOKE_TEST_FAILED_EARLY",
+  "research_backbone": "NOT_YET_ACCEPTED",
+  "requested_scans": 400,
+  "published_sensor_inputs": {
+    "/livox/lidar": 107,
+    "/livox/imu": 2125
+  },
+  "tracked_outputs": 95,
+  "outputs_with_at_least_4_plane_matches": 75,
+  "consecutive_unsupported_at_stop": 20,
+  "first_unsupported_tracking_output_one_based": 76,
+  "native_initialization_NDT_calls": 1,
+  "native_initialization_ICP_calls": 1,
+  "ICP_fitness": 0.10959,
+  "ICP_score_is_pose_error": false,
+  "native_iterated_ESKF_observe_calls": 95,
+  "full_tracking_duration_sensor_s": 9.400210857391357,
+  "first_pose": [
+    -0.09024179726839066,
+    0.3756464719772339,
+    0.08838913589715958
+  ],
+  "last_pose": [
+    -97.39768981933594,
+    -196.02957153320312,
+    -51.22035598754883
+  ],
+  "estimated_displacement_not_error_m": 225.114052041121,
+  "process_ms": {
+    "n": 95,
+    "mean": 0.9734112421052632,
+    "p95": 1.6726139999999996,
+    "max": 5.267051
+  },
+  "spin_plus_process_ms": {
+    "n": 95,
+    "mean": 1.0242075789473684,
+    "p95": 1.6889709999999996,
+    "max": 7.807059
+  },
+  "plane_matches": {
+    "n": 95,
+    "mean": 53.73684210526316,
+    "p95": 170.69999999999993,
+    "max": 204.0
+  },
+  "final_cached_plane_rms_m": {
+    "n": 76,
+    "mean": 0.15483980598896796,
+    "p95": 0.1998589767831209,
+    "max": 0.27573770252582336
+  },
+  "initialization_NDT_plus_ICP_log_interval_s": 3.289708,
+  "gravity_disagreement_diagnostic_deg": 38.02105923169883,
+  "observer": {
+    "map_points": 151401,
+    "map_before_sha256": "57e4bc2d68c072123aa7e0f490b05a637389ad80dd5211d93c4a341cb50f9745",
+    "map_after_sha256": "57e4bc2d68c072123aa7e0f490b05a637389ad80dd5211d93c4a341cb50f9745",
+    "map_frozen": true,
+    "tracked_outputs": 95,
+    "tracking_failure_stop": true,
+    "wall_s": 14.012953486,
+    "peak_RSS_KiB": 190496
+  },
+  "supervision": {
+    "reason": "LOCALIZATION_PROCESS_EXITED",
+    "wall_s": 33.72071604500525,
+    "roslaunch_exit": 0,
+    "observer_peak_RSS_KiB": 190496,
+    "rviz_peak_RSS_KiB": 390512,
+    "owned_tree_peak_RSS_KiB": 712264,
+    "one_prefix_no_retry": true,
+    "reference_evaluation": "NOT_EVALUABLE_NO_INDEPENDENT_GT",
+    "extrinsic_status": "USER_AUTHORIZED_HISTORICAL_IDENTITY_SMOKE_ONLY"
+  },
+  "actual_input_receipt": {
+    "counts": {
+      "/livox/lidar": 107,
+      "/livox/imu": 2125
+    },
+    "last_scan_end_ns": null,
+    "wall_s": 27.721143578994088,
+    "pose_messages_published": 0,
+    "timestamps_and_values": "original message fields, no shift or scaling"
+  },
+  "formal_ATE_RPE": "NOT_EVALUABLE_NO_INDEPENDENT_GT_UNQUALIFIED_EXTRINSIC",
+  "RViz": "STARTED_DURING_FAILED_SMOKE;NO_CAPTURE_BEFORE_EARLY_STOP;ONECLICK_COMPOSITION_PARSE_ONLY",
+  "unique_NEXT": "Controller to commission one bounded external-map gravity/initialization frame closure using independent mapping provenance;then decide a frame adapter or framework switch.No new recovery or repeated smoke in this task.",
+  "final_identity_check": "evidence/FINAL_IDENTITY_CHECK.json",
+  "storage_check": "evidence/STORAGE_AFTER.json",
+  "stable_workspace_unchanged": true,
+  "raw_archives_verified": 13,
+  "delivery_source_manifest": "evidence/DELIVERY_SOURCE_MANIFEST.json",
+  "post_run_sensor_runs": 0
+}

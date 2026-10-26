@@ -1,0 +1,66 @@
+{
+  "scope": "read-only original initializer reconstruction;not independent calibration or GT",
+  "input_scans": 10,
+  "kept_initialization_points": 58407,
+  "matches_actual_initializer_point_count": true,
+  "IMU_count": 185,
+  "mean_raw_accel": [
+    -0.39737847866238774,
+    0.025622267497552406,
+    0.9106824104850356
+  ],
+  "std_raw_accel": [
+    0.005558234698776827,
+    0.005663784569435429,
+    0.0013681985404215703
+  ],
+  "mean_gyro_radps": [
+    -0.014820369987471684,
+    -0.004536395777973372,
+    0.0007047248752536001
+  ],
+  "std_gyro_radps": [
+    0.0010402096782051928,
+    0.0010009972798237145,
+    0.0009577302554753684
+  ],
+  "logged_ICP_T_map_imu_rounded": [
+    [
+      0.976824,
+      -0.213127,
+      0.0198769,
+      -0.103246
+    ],
+    [
+      0.197364,
+      0.860845,
+      -0.469037,
+      0.414065
+    ],
+    [
+      0.0828536,
+      0.462091,
+      0.882955,
+      0.024467
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "specific_force_in_map_direction": [
+    -0.37781924135507955,
+    -0.48646514854674355,
+    0.7877844122037874
+  ],
+  "angle_to_author_positive_map_Z_deg": 38.02105923169883,
+  "predicted_stationary_acceleration_with_author_gravity_mps2": [
+    -3.7005883413764624,
+    -4.764731543955935,
+    -2.0785667962287846
+  ],
+  "log_matrix_precision": "author stdout6-digit float,diagnostic only",
+  "conclusion": "large initialization/gravity disagreement under historical identity assumption;map axes/incorrect initialization branch/physical rotation not independently disambiguated;no transform fitted or applied"
+}

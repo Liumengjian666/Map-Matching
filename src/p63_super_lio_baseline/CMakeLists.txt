@@ -10,7 +10,7 @@ include_directories(${catkin_INCLUDE_DIRS} ${PCL_INCLUDE_DIRS})
 add_executable(p63_map_freeze_probe src/map_freeze_probe.cpp)
 target_compile_definitions(p63_map_freeze_probe PRIVATE ROOT="${P63_AUTHOR_SOURCE}/")
 target_link_libraries(p63_map_freeze_probe lio basic ${catkin_LIBRARIES} ${PCL_LIBRARIES} OpenSSL::Crypto)
-catkin_install_python(PROGRAMS scripts/baseline_gate.py scripts/pose_tf_bridge.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+catkin_install_python(PROGRAMS scripts/baseline_gate.py scripts/pose_tf_bridge.py scripts/prefix_player.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 add_executable(p63_original_observer src/original_observer_node.cpp)
 target_compile_definitions(p63_original_observer PRIVATE ROOT="${P63_AUTHOR_SOURCE}/")

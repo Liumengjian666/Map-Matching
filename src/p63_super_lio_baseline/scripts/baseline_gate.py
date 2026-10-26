@@ -18,7 +18,10 @@ def main():
  ext=rospy.get_param('/lio/extrinsic/lidar_imu');assert ext==c['T_imu_lidar_translation_plus_column_major_rotation']
  if smoke:assert ext==[0.,0.,0.,1.,0.,0.,0.,1.,0.,0.,0.,1.]
  exe=Path(c['observer_binary']);assert hashlib.sha256(exe.read_bytes()).hexdigest()==c['observer_binary_sha256']
- # No new filter or predictor: replace this process with the author executable.
+ output=Path(rospy.get_param('/p63/output_dir'))
+ if (output/'ORIGINAL_TRAJECTORY.csv').exists():raise RuntimeError('preserve existing trace;use a fresh output directory')
+ output.mkdir(parents=True,exist_ok=True)
+ # Execute the read-only observer linked to the unchanged author library.
  os.execv(str(exe),[str(exe),'__name:=p63_original_relocation'])
 if __name__=='__main__':
  try:main()

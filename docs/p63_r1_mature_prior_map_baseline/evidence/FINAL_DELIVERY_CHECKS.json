@@ -1,0 +1,11 @@
+{
+  "python_AST": "PASS",
+  "launch_XML": "PASS",
+  "portable_raw_files_exact": 13,
+  "95_finite_monotonic_native_outputs": "PASS",
+  "R32_record_preserved": true,
+  "protected_map_after_sha256": "016b7ae3ae494ad5d462a66d888a96b96dda5fe29d6058059aa2fa6bdf6b09ca",
+  "protected_bag_after_bytes": 19677401800,
+  "bag_hash_policy": "archival full SHA plus prefix inspection;no fresh whole-bag hash",
+  "no_new_sensor_run": true
+}

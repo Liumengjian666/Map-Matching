@@ -1,0 +1,14 @@
+{
+  "stable_unchanged": true,
+  "binary_hash_match": {
+    "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/super_lio/relocation_node": true,
+    "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/super_lio/super_lio_node": true,
+    "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/liblio.so": true,
+    "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/libbasic.so": true,
+    "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/p63_super_lio_baseline/p63_map_freeze_probe": true,
+    "/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/devel/lib/p63_super_lio_baseline/p63_original_observer": true
+  },
+  "author_HEAD": "60b57aaac8dc397f80c56364e7ccb008c300cc29",
+  "author_status_porcelain": "",
+  "author_tracked_diff_bytes": 0
+}
