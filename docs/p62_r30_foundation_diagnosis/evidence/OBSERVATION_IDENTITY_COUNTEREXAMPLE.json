@@ -1,0 +1,40 @@
+[
+  {
+    "mode": "B",
+    "raw": 62,
+    "previous_published_raw": 49,
+    "previous_observation_age_s": 0.867962201,
+    "candidate_basic": true,
+    "candidate_absolute_pass": true,
+    "candidate_selected": true,
+    "raw_to_published_translation_m": 0.44624886575078776,
+    "translation_reproduction_error_m": 0.0,
+    "scipy_vs_eigen_rotation_matrix_difference": 2.8476586544195453e-08,
+    "verified_scope": "exact translation limiter; rotation normalization uses different libraries and is not asserted identical",
+    "raw_reference_translation_m": 0.42546977050885004,
+    "raw_reference_rotation_deg": 4.251052647995264,
+    "published_reference_translation_m": 0.7559971147083332,
+    "published_reference_rotation_deg": 2.9815278150677487,
+    "original_ekf_update_applied": true,
+    "scope": "Archived limiter transformation is causal for this pose change; not proof of all later trajectory failure, no repaired run"
+  },
+  {
+    "mode": "C",
+    "raw": 62,
+    "previous_published_raw": 49,
+    "previous_observation_age_s": 0.867962201,
+    "candidate_basic": true,
+    "candidate_absolute_pass": true,
+    "candidate_selected": true,
+    "raw_to_published_translation_m": 0.44624886575078776,
+    "translation_reproduction_error_m": 0.0,
+    "scipy_vs_eigen_rotation_matrix_difference": 2.8476586544195453e-08,
+    "verified_scope": "exact translation limiter; rotation normalization uses different libraries and is not asserted identical",
+    "raw_reference_translation_m": 0.42546977050885004,
+    "raw_reference_rotation_deg": 4.251052647995264,
+    "published_reference_translation_m": 0.7559971147083332,
+    "published_reference_rotation_deg": 2.9815278150677487,
+    "original_ekf_update_applied": true,
+    "scope": "Archived limiter transformation is causal for this pose change; not proof of all later trajectory failure, no repaired run"
+  }
+]

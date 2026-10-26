@@ -1,0 +1,123 @@
+diff --git a/src/dog_prior_map_localization/CMakeLists.txt b/src/dog_prior_map_localization/CMakeLists.txt
+index 6245b8a17..58df92f48 100644
+--- a/src/dog_prior_map_localization/CMakeLists.txt
++++ b/src/dog_prior_map_localization/CMakeLists.txt
+@@ -267,6 +267,13 @@ target_link_libraries(solid_adapter_contract_test
+ )
+ 
+ if(CATKIN_ENABLE_TESTING)
++  add_executable(ndt_target_resolution_contract_test
++    tests/ndt_target_resolution_contract_test.cpp
++  )
++  target_link_libraries(ndt_target_resolution_contract_test ${PCL_LIBRARIES})
++  add_test(NAME ndt_target_resolution_contract_test
++    COMMAND $<TARGET_FILE:ndt_target_resolution_contract_test>)
++
+   add_executable(p49_causal_trigger_contract_test
+     tests/p49_causal_trigger_contract_test.cpp
+   )
+diff --git a/src/dog_prior_map_localization/include/dog_prior_map_localization/ndt_target_configuration.hpp b/src/dog_prior_map_localization/include/dog_prior_map_localization/ndt_target_configuration.hpp
+new file mode 100644
+index 000000000..ff3dc74f2
+--- /dev/null
++++ b/src/dog_prior_map_localization/include/dog_prior_map_localization/ndt_target_configuration.hpp
+@@ -0,0 +1,14 @@
++#pragma once
++
++namespace dog_prior_map_localization
++{
++// PCL constructs its Gaussian cells in setInputTarget().  With no Source yet,
++// a later setResolution() changes the parameter but does not rebuild the cells.
++// Use the same order for the first global target and every local-map rebuild.
++template <typename Ndt, typename TargetPtr>
++void setNdtTargetAtResolution(Ndt &ndt, const TargetPtr &target, float resolution)
++{
++  ndt.setResolution(resolution);
++  ndt.setInputTarget(target);
++}
++}  // namespace dog_prior_map_localization
+diff --git a/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp b/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp
+index 1f612138e..92f788239 100644
+--- a/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp
++++ b/src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp
+@@ -49,6 +49,7 @@
+ #include "dog_prior_map_localization/visual_aided_initial_guess.hpp"
+ #include "dog_prior_map_localization/experimental_source_capture.hpp"
+ #include "dog_prior_map_localization/local_map_tiles.hpp"
++#include "dog_prior_map_localization/ndt_target_configuration.hpp"
+ #include "dog_prior_map_localization/mature_ndt_algorithms.hpp"
+ #include "dog_prior_map_localization/skf_visual_measurement.hpp"
+ #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp"
+@@ -1827,7 +1828,7 @@ private:
+       const pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud =
+           voxelDown(xyz, map_voxel_size_, map_voxel_z_size_, 0);
+       target_cloud_ = voxelDown(map_cloud, target_voxel_size_, target_voxel_z_size_, max_target_points_);
+-      ndt_.setInputTarget(target_cloud_);
++      setNdtTargetAtResolution(ndt_, target_cloud_, static_cast<float>(ndt_resolution_));
+     }
+     ndt_.setResolution(ndt_resolution_);
+     ndt_.setStepSize(ndt_step_size_);
+@@ -2492,7 +2493,7 @@ private:
+         const ros::WallTime target_rebuild_start = ros::WallTime::now();
+         map_geometry_tree_.reset();
+         target_cloud_ = local_map_update.target;
+-        ndt_.setInputTarget(target_cloud_);
++        setNdtTargetAtResolution(ndt_, target_cloud_, static_cast<float>(ndt_resolution_));
+         if (coupled_causal_record_only_enable_ || r23_enable_)
+           active_target_hash64_ = stableCloudHash(target_cloud_);
+         map_geometry_tree_.reset(new pcl::KdTreeFLANN<pcl::PointXYZ>());
+diff --git a/src/dog_prior_map_localization/tests/ndt_target_resolution_contract_test.cpp b/src/dog_prior_map_localization/tests/ndt_target_resolution_contract_test.cpp
+new file mode 100644
+index 000000000..426f1c42d
+--- /dev/null
++++ b/src/dog_prior_map_localization/tests/ndt_target_resolution_contract_test.cpp
+@@ -0,0 +1,49 @@
++#include "dog_prior_map_localization/ndt_target_configuration.hpp"
++#include <pcl/point_types.h>
++#include <pcl/registration/ndt.h>
++#include <iostream>
++
++class InspectNdt : public pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointXYZ>
++{
++public:
++  Eigen::Vector3f leaf() const { return target_cells_.getLeafSize(); }
++};
++
++int main()
++{
++  auto target = pcl::PointCloud<pcl::PointXYZ>::Ptr(new pcl::PointCloud<pcl::PointXYZ>);
++  for (int x = 0; x < 8; ++x)
++    for (int y = 0; y < 8; ++y)
++      for (int z = 0; z < 8; ++z)
++        target->push_back(pcl::PointXYZ(.03f * x, .04f * y, .05f * z));
++
++  // Verify the actual PCL failure without running align() or reading a GT pose.
++  InspectNdt legacy;
++  legacy.setInputTarget(target);
++  legacy.setResolution(.8f);
++  if (legacy.getResolution() != .8f || legacy.leaf().x() != 1.f)
++  {
++    std::cerr << "PCL premise changed; reassess target construction order\n";
++    return 1;
++  }
++
++  InspectNdt fixed;
++  dog_prior_map_localization::setNdtTargetAtResolution(fixed, target, .8f);
++  const auto valid = [&]() {
++    return fixed.getResolution() == .8f &&
++        (fixed.leaf() - Eigen::Vector3f::Constant(.8f)).norm() == 0.f;
++  };
++  if (!valid()) return 2;  // First global PCD with no Source installed.
++  fixed.setInputSource(target);
++  dog_prior_map_localization::setNdtTargetAtResolution(fixed, target, .8f);
++  if (!valid()) return 3;  // Later target replacement.
++  InspectNdt tiled;
++  tiled.setResolution(.8f);
++  dog_prior_map_localization::setNdtTargetAtResolution(tiled, target, .8f);
++  if ((tiled.leaf() - fixed.leaf()).norm() != 0.f) return 4;
++
++  std::cout << "NDT_TARGET_RESOLUTION_CONTRACT_PASS legacy_leaf="
++            << legacy.leaf().transpose() << " fixed_leaf="
++            << fixed.leaf().transpose() << " native_align_calls=0\n";
++  return 0;
++}

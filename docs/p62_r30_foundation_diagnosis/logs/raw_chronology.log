@@ -51,6 +51,14 @@
         "raw_translation_error_m": "0.5138458781319576",
         "raw_rotation_error_deg": "1.0442583709751272"
       },
+      "first_high_error_published_measurement": {
+        "raw": 76,
+        "scan_ns": 1693718244012428838,
+        "translation_m": 0.5138458781319576,
+        "rotation_deg": 1.0442583709751272,
+        "actual_ekf_applied": true,
+        "step_limited": false
+      },
       "first_tile_failure": {
         "raw": 819,
         "scan_ns": "1693718294731136973",
@@ -129,6 +137,14 @@
         "map_published": "True",
         "raw_translation_error_m": "1.95946776036144",
         "raw_rotation_error_deg": "3.64011227401805"
+      },
+      "first_high_error_published_measurement": {
+        "raw": 62,
+        "scan_ns": 1693718243077721201,
+        "translation_m": 0.7559971147083332,
+        "rotation_deg": 2.9815278150677487,
+        "actual_ekf_applied": true,
+        "step_limited": true
       },
       "first_tile_failure": {
         "raw": 663,
@@ -209,6 +225,14 @@
         "raw_translation_error_m": "1.95946776036144",
         "raw_rotation_error_deg": "3.64011227401805"
       },
+      "first_high_error_published_measurement": {
+        "raw": 62,
+        "scan_ns": 1693718243077721201,
+        "translation_m": 0.7559971147083332,
+        "rotation_deg": 2.9815278150677487,
+        "actual_ekf_applied": true,
+        "step_limited": true
+      },
       "first_tile_failure": {
         "raw": 663,
         "scan_ns": "1693718284051217096",
@@ -287,6 +311,14 @@
         "map_published": "True",
         "raw_translation_error_m": "0.5138458781319576",
         "raw_rotation_error_deg": "1.0442583709751272"
+      },
+      "first_high_error_published_measurement": {
+        "raw": 76,
+        "scan_ns": 1693718244012428838,
+        "translation_m": 0.5138458781319576,
+        "rotation_deg": 1.0442583709751272,
+        "actual_ekf_applied": true,
+        "step_limited": false
       },
       "first_tile_failure": null,
       "first_incomplete_oosm": {

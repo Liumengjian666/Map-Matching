@@ -1,0 +1,122 @@
+{
+  "start_sha": "84428ee944d5f8732caf283a45d13a3bba79f742",
+  "remote_source_sha": "84428ee944d5f8732caf283a45d13a3bba79f742",
+  "R29_online_code_sha": "f66a55457ba3e63d55ad8d588fb2cf5b1ead169b",
+  "diagnostic_probe_code_sha": "e5dffad5b23485078e9ab17fdf4987107913626f",
+  "repair_code_sha": "02490a7ee7376baa76abff8495865a3a020c7210",
+  "repair_binary_not_used_for_new_trajectory": true,
+  "binaries": {
+    "/home/jian/livox_ws/p62_r30_foundation_ws/.r30_diagnostic_build/reference_seeded_probe": {
+      "bytes": 188200,
+      "sha256": "a46213a275b82dbdc506406f08f5303d95b63fcfba1205656c65ef76db130910"
+    },
+    "/home/jian/livox_ws/p62_r30_foundation_ws/.r30_diagnostic_build/ndt_grid_order_reproducer": {
+      "bytes": 129824,
+      "sha256": "c7715a2a9613f05747cb0986e2e5a375c247d5a5a35a32f63483205e07972598"
+    },
+    "/home/jian/livox_ws/p62_r30_foundation_ws/devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp": {
+      "bytes": 159629304,
+      "sha256": "4214876202749007a0032a2761d2333498cda7fb8f90cb8ad594697377da8551"
+    },
+    "/home/jian/livox_ws/p62_r30_foundation_ws/devel/lib/dog_prior_map_localization/ndt_target_resolution_contract_test": {
+      "bytes": 21393392,
+      "sha256": "3267f84b180abbfb14992b9400e1c6e9aadc7a8198f11a4adef3fc2bf69c7d81"
+    }
+  },
+  "probe_inputs": [
+    {
+      "raw": 5,
+      "stamp_ns": 1693718239204891574,
+      "pcd_path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/scans/cloud_1693718239_204891574.pcd",
+      "pcd_sha256": "5beb7289da78cecd90ab7b6486fd20a64b7f95f2784a9399659491b2fd39b2a8",
+      "reference_matrix": "/home/jian/livox_ws/p62_r30_foundation_ws/docs/p62_r30_foundation_diagnosis/evidence/probe_inputs/5.reference_matrix.txt",
+      "source_fnv": "dbd2524e375bed09",
+      "matrix_sha256": "66ba83807ded6453d1b03c63723e225803e518e31316f9a2c594c6a66db3d0c5"
+    },
+    {
+      "raw": 18,
+      "stamp_ns": 1693718240073041104,
+      "pcd_path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/scans/cloud_1693718240_073041104.pcd",
+      "pcd_sha256": "e0583effff7bf69f808762a72086fd42310c02533cb1793b38d4934eb966d1b4",
+      "reference_matrix": "/home/jian/livox_ws/p62_r30_foundation_ws/docs/p62_r30_foundation_diagnosis/evidence/probe_inputs/18.reference_matrix.txt",
+      "source_fnv": "95acf74f0ae227e7",
+      "matrix_sha256": "468bbe1807b05915507df7b192fdd279db879cc6aea337af03127b141c656a33"
+    },
+    {
+      "raw": 62,
+      "stamp_ns": 1693718243077721201,
+      "pcd_path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/scans/cloud_1693718243_077721201.pcd",
+      "pcd_sha256": "a606fd88e40bbe48a4a1b06ad979bbee287706ec1e6d8b45094a59b75037bcb8",
+      "reference_matrix": "/home/jian/livox_ws/p62_r30_foundation_ws/docs/p62_r30_foundation_diagnosis/evidence/probe_inputs/62.reference_matrix.txt",
+      "source_fnv": "e1e9628bc29e4f90",
+      "matrix_sha256": "57bbcb8ed16c052c66ec36c7bafa642b3e48b268d3e8a84909b9ecb7d183dbe1"
+    },
+    {
+      "raw": 76,
+      "stamp_ns": 1693718244012428838,
+      "pcd_path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/scans/cloud_1693718244_012428838.pcd",
+      "pcd_sha256": "d1fd62226c150f66b5416bfece5876fb4a007671d3587054382994a0f0fe8d48",
+      "reference_matrix": "/home/jian/livox_ws/p62_r30_foundation_ws/docs/p62_r30_foundation_diagnosis/evidence/probe_inputs/76.reference_matrix.txt",
+      "source_fnv": "799485aab2f50a24",
+      "matrix_sha256": "e5ab259ab07c3042eda50b947b1e9f2a7631c9ef99992486a9380d8cefbd6828"
+    },
+    {
+      "raw": 131,
+      "stamp_ns": 1693718247751189879,
+      "pcd_path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/scans/cloud_1693718247_751189879.pcd",
+      "pcd_sha256": "f781f050391d75fddda1feb725c5bd9662d26477777a30220c2c52d5a32d1e1d",
+      "reference_matrix": "/home/jian/livox_ws/p62_r30_foundation_ws/docs/p62_r30_foundation_diagnosis/evidence/probe_inputs/131.reference_matrix.txt",
+      "source_fnv": "638106010f43a3ab",
+      "matrix_sha256": "0dae33a82d2dd57f961df8f34d2309f6f3be929fb95822d9169b29d5d6e7df18"
+    },
+    {
+      "raw": 383,
+      "stamp_ns": 1693718264771974378,
+      "pcd_path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/scans/cloud_1693718264_771974378.pcd",
+      "pcd_sha256": "e2c575d0d2d83b223e9173ed7618afa144a6ff4e79551b3db0440103e6afe6c4",
+      "reference_matrix": "/home/jian/livox_ws/p62_r30_foundation_ws/docs/p62_r30_foundation_diagnosis/evidence/probe_inputs/383.reference_matrix.txt",
+      "source_fnv": "54a994557c27c0f7",
+      "matrix_sha256": "b122baa1c2c74d88cd0f46ea20362dd7687f410866fea2f3d86c4b3e6d3099fc"
+    },
+    {
+      "raw": 663,
+      "stamp_ns": 1693718284051217096,
+      "pcd_path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/scans/cloud_1693718284_051217096.pcd",
+      "pcd_sha256": "b6220894430209a9a434e9fe7aa4f281b3ab15c627acde3a711fb59b2294f638",
+      "reference_matrix": "/home/jian/livox_ws/p62_r30_foundation_ws/docs/p62_r30_foundation_diagnosis/evidence/probe_inputs/663.reference_matrix.txt",
+      "source_fnv": "a5c722c3cd5ec7e0",
+      "matrix_sha256": "7f1aef05fea2754f272da6e47041151546a7ddb6343a075b89374479e57c8e82"
+    },
+    {
+      "raw": 819,
+      "stamp_ns": 1693718294731136973,
+      "pcd_path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01_adapter/scans/cloud_1693718294_731136973.pcd",
+      "pcd_sha256": "11faffe7e9ab27efc5c328f638dcf3d72fb2cc44407347e7c2fc6e9b712ccf96",
+      "reference_matrix": "/home/jian/livox_ws/p62_r30_foundation_ws/docs/p62_r30_foundation_diagnosis/evidence/probe_inputs/819.reference_matrix.txt",
+      "source_fnv": "5c76c5bed2df0c71",
+      "matrix_sha256": "fcde9143e20a0e2e59547346702602af7487ea544acaab32b538f6e7fb46c639"
+    }
+  ],
+  "stable_after": {
+    "HEAD": "41999ea700c66c4cadf0eca9e0c5d73caa2783fd",
+    "branch": "feature/quadruped-localization-interface",
+    "status_sha256": "aaeeb0ce6ba92e7423e0d5578331404f7e59b22086330da53ed2444d83932e63",
+    "index_sha256": "0d73adc5d9de6e7a63aa913d30da3c9aecde41b4882bb847e227157ac9dbb392",
+    "protected_files_sha256": {
+      "src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp": "40cdf26f9dddb9d06dc16c0bfd89fc88a9dd33e42e5bbd4e9bc3b453f1e4277c",
+      "src/dog_prior_map_localization/src/dog_prior_map_ekf_node.cpp": "e69fade2af615cff00af87dc0e8860017cb236a80a80926bf384f108666fcc58",
+      "src/dog_prior_map_localization/src/dog_prior_map_ekf_node_core.cpp": "7038444b77cac7987bfdc28acbef27eafbbd42475f6b7a5a942a7f73bf1f5d30",
+      "src/dog_prior_map_localization/src/local_map_tiles.cpp": null,
+      "src/dog_prior_map_localization/src/imu_processor.cpp": "1e6b2dd5269241f5f87d665bc8151264b015fbae8bfa29045a92cbd9513ad6eb",
+      "src/dog_prior_map_localization/launch/dog_prior_map_localization_split.launch": "bb0b3f0bdb3d009c75899511517c529f4f846db3390143bebc0279d553fb3f4f",
+      "src/dog_prior_map_localization/launch/newer_college_local_map.launch": null,
+      "src/dog_prior_map_localization/config/dog_prior_map_localization_ndt.yaml": "08c5fbf67684892dbea7b61255de2acb0ad8fdd73bb5bd5b8c5960b92ffac183"
+    }
+  },
+  "stable_matches_before": true,
+  "EKF_IMU_Deskew_OOSM_map_models_unchanged": true,
+  "new_native_align_calls": 8,
+  "new_formal_trajectories": 0,
+  "new_ROS_EKF_runs": 0,
+  "new_sensor_downloads": 0
+}

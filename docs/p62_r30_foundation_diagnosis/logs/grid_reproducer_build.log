@@ -1,0 +1,6 @@
+In file included from /usr/include/pcl-1.10/pcl/registration/ndt.h:43,
+                 from docs/p62_r30_foundation_diagnosis/tools/ndt_grid_order_reproducer.cpp:1:
+/usr/include/pcl-1.10/pcl/pcl_macros.h:75:10: fatal error: Eigen/Core: 没有那个文件或目录
+   75 | #include <Eigen/Core>
+      |          ^~~~~~~~~~~~
+compilation terminated.

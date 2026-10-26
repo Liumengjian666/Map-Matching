@@ -1,0 +1,31 @@
+NATIVE_ALIGN_COMPLETED raw=5 call=1
+NATIVE_ALIGN_COMPLETED raw=18 call=2
+NATIVE_ALIGN_COMPLETED raw=62 call=3
+NATIVE_ALIGN_COMPLETED raw=76 call=4
+NATIVE_ALIGN_COMPLETED raw=131 call=5
+NATIVE_ALIGN_COMPLETED raw=383 call=6
+NATIVE_ALIGN_COMPLETED raw=663 call=7
+NATIVE_ALIGN_COMPLETED raw=819 call=8
+	Command being timed: "env LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libusb-1.0.so.0 .r30_diagnostic_build/reference_seeded_probe docs/p62_r30_foundation_diagnosis/evidence/probe_inputs/targets.txt docs/p62_r30_foundation_diagnosis/evidence/probe_inputs/requests.tsv docs/p62_r30_foundation_diagnosis/evidence/REFERENCE_SEEDED_NDT.csv"
+	User time (seconds): 0.11
+	System time (seconds): 0.06
+	Percent of CPU this job got: 81%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.21
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 53604
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 400
+	Minor (reclaiming a frame) page faults: 13612
+	Voluntary context switches: 306
+	Involuntary context switches: 15
+	Swaps: 0
+	File system inputs: 64600
+	File system outputs: 16
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

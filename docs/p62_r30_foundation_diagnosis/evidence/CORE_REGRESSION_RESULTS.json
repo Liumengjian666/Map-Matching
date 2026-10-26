@@ -1,0 +1,134 @@
+[
+  {
+    "test": "ndt_target_resolution_contract_test",
+    "compile_argv": [
+      "g++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++14",
+      "-I/usr/include/eigen3",
+      "-I/home/jian/livox_ws/p62_r30_foundation_ws/src/dog_prior_map_localization/include",
+      "/home/jian/livox_ws/p62_r30_foundation_ws/src/dog_prior_map_localization/tests/ndt_target_resolution_contract_test.cpp",
+      "-o",
+      "/home/jian/livox_ws/p62_r30_foundation_ws/.r30_diagnostic_build/ndt_target_resolution_contract_test",
+      "-I/usr/include/pcl-1.10",
+      "-lpcl_registration",
+      "-lpcl_features",
+      "-lpcl_filters",
+      "-lpcl_sample_consensus",
+      "-lpcl_search",
+      "-lpcl_kdtree",
+      "-llz4",
+      "-lflann",
+      "-lflann_cpp",
+      "-lpcl_octree",
+      "-lpcl_common"
+    ],
+    "build_exit": 0,
+    "build_s": 9.577500936982688,
+    "native_align_calls": 0,
+    "run_exit": 0,
+    "output": "NDT_TARGET_RESOLUTION_CONTRACT_PASS legacy_leaf=1 1 1 fixed_leaf=0.8 0.8 0.8 native_align_calls=0"
+  },
+  {
+    "test": "frame_conversion_contract_test",
+    "compile_argv": [
+      "g++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++14",
+      "-I/usr/include/eigen3",
+      "-I/home/jian/livox_ws/p62_r30_foundation_ws/src/dog_prior_map_localization/include",
+      "/home/jian/livox_ws/p62_r30_foundation_ws/src/dog_prior_map_localization/tests/frame_conversion_contract_test.cpp",
+      "-o",
+      "/home/jian/livox_ws/p62_r30_foundation_ws/.r30_diagnostic_build/frame_conversion_contract_test"
+    ],
+    "build_exit": 0,
+    "build_s": 2.655870272021275,
+    "native_align_calls": 0,
+    "run_exit": 0,
+    "output": "contract,translation_error_m,rotation_error_rad,linear_twist_error,angular_twist_error,result\nidentity,0,0,nan,nan,PASS\npure_translation,0,0,nan,nan,PASS\npure_rotation,0,3.10317e-17,nan,nan,PASS\ncombined_rotation_translation,0,7.47342e-17,nan,nan,PASS\nninety_degree_yaw,0,0,nan,nan,PASS\nnonzero_lever_arm,0,0,nan,nan,PASS\ntwist_child_lidar,nan,nan,0,0,PASS\ngyro_imu_to_lidar,nan,nan,0,nan,PASS\nFRAME_CONVERSION_AND_TWIST_CONTRACT_PASS"
+  },
+  {
+    "test": "causal_pose_prediction_test",
+    "compile_argv": [
+      "g++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++14",
+      "-I/usr/include/eigen3",
+      "-I/home/jian/livox_ws/p62_r30_foundation_ws/src/dog_prior_map_localization/include",
+      "/home/jian/livox_ws/p62_r30_foundation_ws/src/dog_prior_map_localization/tests/causal_pose_prediction_test.cpp",
+      "-o",
+      "/home/jian/livox_ws/p62_r30_foundation_ws/.r30_diagnostic_build/causal_pose_prediction_test"
+    ],
+    "build_exit": 0,
+    "build_s": 1.643421168992063,
+    "native_align_calls": 0,
+    "run_exit": 0,
+    "output": "CAUSAL_BODY_TWIST_PREDICTION_CONTRACT_PASS"
+  },
+  {
+    "test": "imu_interval_numeric_test",
+    "compile_argv": [
+      "g++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++14",
+      "-I/usr/include/eigen3",
+      "-I/home/jian/livox_ws/p62_r30_foundation_ws/src/dog_prior_map_localization/include",
+      "/home/jian/livox_ws/p62_r30_foundation_ws/src/dog_prior_map_localization/tests/imu_interval_numeric_test.cpp",
+      "/home/jian/livox_ws/p62_r30_foundation_ws/src/dog_prior_map_localization/src/core/imu_propagation.cpp",
+      "-o",
+      "/home/jian/livox_ws/p62_r30_foundation_ws/.r30_diagnostic_build/imu_interval_numeric_test"
+    ],
+    "build_exit": 0,
+    "build_s": 7.873306785011664,
+    "native_align_calls": 0,
+    "run_exit": 0,
+    "output": "trajectory,imu_hz,lidar_hz,scan_duration_sec,orientation_error_rad,velocity_error_mps,position_error_m,deskew_point_error_m,result\nR9A_ZOH,200,10,0.1,3.43893e-18,0.000110963,5.54814e-06,1.25007e-06,MEASURED\nR9B_HEAD_TAIL_MEAN,200,10,0.1,3.43893e-18,5.54814e-05,2.77407e-06,6.24166e-07,PASS\nIMU_INTERVAL_NUMERIC_TEST_PASS"
+  },
+  {
+    "test": "imu_deskew_contract_test",
+    "compile_argv": [
+      "g++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++14",
+      "-I/usr/include/eigen3",
+      "-I/home/jian/livox_ws/p62_r30_foundation_ws/src/dog_prior_map_localization/include",
+      "/home/jian/livox_ws/p62_r30_foundation_ws/src/dog_prior_map_localization/tests/imu_deskew_contract_test.cpp",
+      "/home/jian/livox_ws/p62_r30_foundation_ws/src/dog_prior_map_localization/src/core/state_history.cpp",
+      "/home/jian/livox_ws/p62_r30_foundation_ws/src/dog_prior_map_localization/src/core/imu_propagation.cpp",
+      "/home/jian/livox_ws/p62_r30_foundation_ws/src/dog_prior_map_localization/src/core/imu_deskew.cpp",
+      "-o",
+      "/home/jian/livox_ws/p62_r30_foundation_ws/.r30_diagnostic_build/imu_deskew_contract_test"
+    ],
+    "build_exit": 0,
+    "build_s": 10.898415366013069,
+    "native_align_calls": 0,
+    "run_exit": 0,
+    "output": "IMU_DESKEW_CONTRACT_PASS"
+  },
+  {
+    "test": "oosm_replay_planner_contract_test",
+    "compile_argv": [
+      "g++",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++14",
+      "-I/usr/include/eigen3",
+      "-I/home/jian/livox_ws/p62_r30_foundation_ws/src/dog_prior_map_localization/include",
+      "/home/jian/livox_ws/p62_r30_foundation_ws/src/dog_prior_map_localization/tests/oosm_replay_planner_contract_test.cpp",
+      "/home/jian/livox_ws/p62_r30_foundation_ws/src/dog_prior_map_localization/src/core/oosm_replay_planner.cpp",
+      "/home/jian/livox_ws/p62_r30_foundation_ws/src/dog_prior_map_localization/src/core/state_history.cpp",
+      "-o",
+      "/home/jian/livox_ws/p62_r30_foundation_ws/.r30_diagnostic_build/oosm_replay_planner_contract_test"
+    ],
+    "build_exit": 0,
+    "build_s": 3.0490667640115134,
+    "native_align_calls": 0,
+    "run_exit": 0,
+    "output": "OOSM_REPLAY_PLANNER_CONTRACT_PASS"
+  }
+]

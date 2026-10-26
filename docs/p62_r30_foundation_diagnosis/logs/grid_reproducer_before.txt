@@ -1,0 +1,1 @@
+configured_resolution=0.8 actual_leaf=1 1 1

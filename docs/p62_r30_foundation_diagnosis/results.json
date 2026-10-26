@@ -1,0 +1,65 @@
+{
+  "task": "P62-R30-FOUNDATION-DIAGNOSIS-AND-CONTROLLED-REPAIR",
+  "status": "BOUNDED_DIAGNOSIS_COMPLETED_ONE_GRID_REPAIR_TESTED_FOUNDATION_NOT_FULLY_CLOSED",
+  "branch": "research/p62-r30-foundation-controlled-repair",
+  "workspace": "/home/jian/livox_ws/p62_r30_foundation_ws",
+  "START_SHA": "84428ee944d5f8732caf283a45d13a3bba79f742",
+  "R29_CODE_SHA": "f66a55457ba3e63d55ad8d588fb2cf5b1ead169b",
+  "DIAGNOSTIC_NDT_CODE_SHA": "e5dffad5b23485078e9ab17fdf4987107913626f",
+  "REPAIR_CODE_SHA": "02490a7ee7376baa76abff8495865a3a020c7210",
+  "END_SHA": "final archive HEAD; full value in final handoff",
+  "pushed": false,
+  "native_ndt_align_calls": 8,
+  "new_ekf_ros_runs": 0,
+  "new_formal_trajectories": 0,
+  "new_outdoor_runs": 0,
+  "raw_assets_changed": false,
+  "ndt_probe_finite_converged": 8,
+  "probe_translation_range_m": [
+    0.01915049142384862,
+    0.04731666765132674
+  ],
+  "probe_rotation_range_deg": [
+    0.12381959806794797,
+    0.9928501674296676
+  ],
+  "probe_align_ms_sum": 31.962676,
+  "probe_align_ms_mean": 3.9953345,
+  "probe_align_ms_max": 10.84657,
+  "probe_peak_rss_KiB": 53604,
+  "probe_is_oracle_seeded_diagnosis_not_localization_benchmark": true,
+  "python_tests_passed": 2,
+  "core_tests_passed": 6,
+  "catkin_ctest_target_passed": 1,
+  "release_native_node_build": "PASS",
+  "stable_unchanged": true,
+  "fixed_error": "PCL first-global-target construction order can leave1m Gaussian cells with.8m parameter",
+  "fixed_error_triggered_R29": false,
+  "observation_identity_contract": "OPEN: quality-certified native pose changed by post-admission limiter; exact raw62 translation counterexample retained",
+  "after_anchor_imu_dropped_intervals": 52,
+  "after_anchor_dropped_interval_sum_s": 3.1716462500000007,
+  "stale_prediction_frames_per_policy": 185,
+  "first_stale_raw": 9,
+  "first_published_high_error_raw": {
+    "A": 76,
+    "B": 62,
+    "C": 62,
+    "D": 76
+  },
+  "first_selected_raw_native_high_error": {
+    "A": 76,
+    "B": 92,
+    "C": 92,
+    "D": 76
+  },
+  "first_tile_failure_raw": {
+    "A": 819,
+    "B": 663,
+    "C": 663,
+    "D": null
+  },
+  "outdoor_asset_admission": "can be separately commissioned; raw units/time/calibration still require acceptance",
+  "outdoor_formal_localization": "NOT_APPROVED_BY_THIS_R30_RESULT",
+  "C_plus_G_generalization_benefit": "NOT_ESTABLISHED",
+  "next": "Controller freezes actual map-observation identity/quality semantics exposed by raw62 and commissions the smallest closure test before formal Outdoor accuracy experiments."
+}

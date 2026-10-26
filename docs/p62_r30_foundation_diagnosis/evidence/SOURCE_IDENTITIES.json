@@ -1,0 +1,15 @@
+{
+  "src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp": "a84efb7c8b13d99bfe851b14aa5f143d59f6d54b513676e6e38d405d03ad2d6d",
+  "src/dog_prior_map_localization/include/dog_prior_map_localization/ndt_target_configuration.hpp": "0b8f22fdf932ae4802e87ba02b466d37bc33dcc3c692484b9c12d08db66d79a3",
+  "src/dog_prior_map_localization/tests/ndt_target_resolution_contract_test.cpp": "6e94ecbe14d556cbaf5f24c361fefd35e0aaeeb5c16ee2e8caff913eee253f2a",
+  "src/dog_prior_map_localization/CMakeLists.txt": "3ac13bac548b36263ba522dc9ba7d3113aa820ca462bf9cc1e513e79798eb8fe",
+  "src/dog_prior_map_localization/src/imu_processor.cpp": "0f616421e23c78f75f04dc44e4a7a50bb5d9708a3c3656c92b5d3cb608ad4cfe",
+  "src/dog_prior_map_localization/src/core/imu_propagation.cpp": "0ff8fdfb07841c3cefd24bc9fd387212cd471d5d2d70431db816b19435285895",
+  "src/dog_prior_map_localization/src/fusion/ndt_observation.cpp": "2274147a6ee04dc3a26e09f06b9c1a0f0e094780697c744491210d72a19b0cd3",
+  "src/dog_prior_map_localization/src/ros_output.cpp": "4315e1b2b380782e3aafd21db436169004447d46d1a00d411143466b8b08dd6f",
+  "src/dog_prior_map_localization/src/local_map_tiles.cpp": "0d33ceae8b97abbed89f21e07dc0483102f9b3bf17e28ae67e432e9a617357a4",
+  "docs/p62_r6_dog_shadow_prototype/tools/native_kernel.hpp": "4dbc81a42d6fcbb6275c85cfd8bd69a2e94f8b0775d00d6b338556903905cbac",
+  "docs/p62_r9_coverage_aware_recovery_v2/tools/coverage.hpp": "727e2ed66a49f4f004f483491b4dbf748abd738b7c0b4fc576ffc813774f5af4",
+  "docs/p62_r20_quality_gated_recovery/tools/policy.hpp": "2cd244d5fa41b791bcbebb5f98682674c48b10cf67b021212ec1ab9ab4938946",
+  "docs/paper_research_control/MASTER_RESEARCH_PLAN_AND_LOG.md": "9be68f0ed78a3803bca97d9a104c6c2755e4b4d89b57b495afb7ad2e4286a9c0"
+}

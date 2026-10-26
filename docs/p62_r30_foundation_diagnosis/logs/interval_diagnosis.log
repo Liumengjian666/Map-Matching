@@ -1,0 +1,234 @@
+{
+  "A": {
+    "stale_queries": 185,
+    "stale_latest_sample_matches_dropped_interval_policy_within_1us": 185,
+    "dropped_interval_rejections": [
+      {
+        "ndt_stamp": 1693718241.3416808,
+        "rollback_stamp": 1693718241.337274,
+        "state_now": 1693718241.4200196,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      },
+      {
+        "ndt_stamp": 1693718243.2780197,
+        "rollback_stamp": 1693718243.2728057,
+        "state_now": 1693718243.323743,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      },
+      {
+        "ndt_stamp": 1693718243.4115348,
+        "rollback_stamp": 1693718243.3966627,
+        "state_now": 1693718243.4703307,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      },
+      {
+        "ndt_stamp": 1693718256.7529173,
+        "rollback_stamp": 1693718256.7501433,
+        "state_now": 1693718256.804112,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      },
+      {
+        "ndt_stamp": 1693718258.9605374,
+        "rollback_stamp": 1693718258.9571621,
+        "state_now": 1693718259.0165968,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      }
+    ],
+    "actual_high_rate_publish_count": 28888,
+    "max_high_rate_velocity_mps": 219.8353315606085
+  },
+  "B": {
+    "stale_queries": 185,
+    "stale_latest_sample_matches_dropped_interval_policy_within_1us": 185,
+    "dropped_interval_rejections": [
+      {
+        "ndt_stamp": 1693718256.7529173,
+        "rollback_stamp": 1693718256.7501433,
+        "state_now": 1693718256.804112,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      },
+      {
+        "ndt_stamp": 1693718258.9605374,
+        "rollback_stamp": 1693718258.9571621,
+        "state_now": 1693718259.0165968,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      }
+    ],
+    "actual_high_rate_publish_count": 28888,
+    "max_high_rate_velocity_mps": 29.91656433008371
+  },
+  "C": {
+    "stale_queries": 185,
+    "stale_latest_sample_matches_dropped_interval_policy_within_1us": 185,
+    "dropped_interval_rejections": [
+      {
+        "ndt_stamp": 1693718256.7529173,
+        "rollback_stamp": 1693718256.7501433,
+        "state_now": 1693718256.804112,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      },
+      {
+        "ndt_stamp": 1693718258.9605374,
+        "rollback_stamp": 1693718258.9571621,
+        "state_now": 1693718259.0165968,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      }
+    ],
+    "actual_high_rate_publish_count": 28888,
+    "max_high_rate_velocity_mps": 29.91656433008371
+  },
+  "D": {
+    "stale_queries": 185,
+    "stale_latest_sample_matches_dropped_interval_policy_within_1us": 185,
+    "dropped_interval_rejections": [
+      {
+        "ndt_stamp": 1693718241.3416808,
+        "rollback_stamp": 1693718241.337274,
+        "state_now": 1693718241.4200196,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      },
+      {
+        "ndt_stamp": 1693718243.2780197,
+        "rollback_stamp": 1693718243.2728057,
+        "state_now": 1693718243.323743,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      },
+      {
+        "ndt_stamp": 1693718243.4115348,
+        "rollback_stamp": 1693718243.3966627,
+        "state_now": 1693718243.4703307,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      },
+      {
+        "ndt_stamp": 1693718256.7529173,
+        "rollback_stamp": 1693718256.7501433,
+        "state_now": 1693718256.804112,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      },
+      {
+        "ndt_stamp": 1693718258.9605374,
+        "rollback_stamp": 1693718258.9571621,
+        "state_now": 1693718259.0165968,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      },
+      {
+        "ndt_stamp": 1693718270.3107398,
+        "rollback_stamp": 1693718270.3106248,
+        "state_now": 1693718270.393929,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      },
+      {
+        "ndt_stamp": 1693718320.8150413,
+        "rollback_stamp": 1693718320.8039668,
+        "state_now": 1693718320.8640146,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      },
+      {
+        "ndt_stamp": 1693718353.1007884,
+        "rollback_stamp": 1693718353.0885692,
+        "state_now": 1693718353.156553,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      },
+      {
+        "ndt_stamp": 1693718367.242029,
+        "rollback_stamp": 1693718367.2357028,
+        "state_now": 1693718367.2939029,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      },
+      {
+        "ndt_stamp": 1693718373.37872,
+        "rollback_stamp": 1693718373.365054,
+        "state_now": 1693718373.4342728,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      },
+      {
+        "ndt_stamp": 1693718373.9790783,
+        "rollback_stamp": 1693718373.9720125,
+        "state_now": 1693718374.030822,
+        "logged_callback_event_types": [
+          "NDT_CALLBACK_ENTER"
+        ],
+        "correction_event_present": false,
+        "replay_complete_present": false
+      }
+    ],
+    "actual_high_rate_publish_count": 28888,
+    "max_high_rate_velocity_mps": 7.575868200983829
+  }
+}

@@ -12,7 +12,7 @@
 |阶段|研究问题/交付|明确停止/验收|状态|
 |---|---|---|---|
 |S0 台账|本文件固定位置，建立每轮记账和资产清理规范|每轮均补实验结果+Git+数据+唯一NEXT|已建立|
-|S1 R30最低基础链路|先对照真实GitHub源码与本地未提交改动；只读追溯IMU时间/预测超龄、Tile/NDT、EKF/OOSM；必要时最多8次不融合的参考初值离线NDT|给出首个可证实异常或UNKNOWN；允许发现确定性BUG后在独立分支小修复+回归，旧结果保留；0条新正式轨迹|任务合同及工具已准备，真实诊断尚未执行|
+|S1 R30最低基础链路|先对照真实GitHub源码与本地未提交改动；只读追溯IMU时间/预测超龄、Tile/NDT、EKF/OOSM；必要时最多8次不融合的参考初值离线NDT|给出首个可证实异常或UNKNOWN；允许发现确定性BUG后在独立分支小修复+回归，旧结果保留；0条新正式轨迹|有限诊断完成：8次不融合NDT、单项Grid修复回归；raw62观测身份合同仍开放，未批准完整轨迹|
 |S2 MID360输入合同|Koide Outdoor01官方Livox CustomMsg/IMU/map/GT；验证点时间、帧、单位、bag间隔、外参、初始化及基础链路|无合法因果数据/基础定位合同则不报精度；基础通用错误需先独立最小修复、标新版本|待S1|
 |S3 两条完整序列|Outdoor01完整C+G，成功且无违规再Outdoor02完整C+G；必要最少内部消融|无中途挑段/GT重置；完整误差、失败覆盖、时延P95、内存RSS及恢复次数；负例如实报告|未运行|
 |S4 经典公开比较|直接引用Koide2024 Table II HDL/FAST-LIO Localization/Koide作者方法；核实ATE统计、对齐、重启评分|协议未认证只算B级背景，禁止计算公平百分比领先|文献已完成，A级未闭合|
@@ -70,3 +70,24 @@ Koide论文来源：https://staff.aist.go.jp/k.koide/assets/pdf/icra2024_02.pdf�
 
 ### 2026-10-26 滚动规划批准事项
 前一版“冻结方法/不得改算法”只约束**未经验证的任意调参**，不禁止证据充分的工程修复或研究创新调整。若需跨越原实验合同范围，先追加为何调整、修复前后输入/代码版本、何种验证可证伪及用户授权；只保留一个当前执行任务。R30原始失败必须保留，新的source-audit工具不能被写成已完成根因归因。
+
+
+## 2026-10-26 R30 实际执行追加（历史失败保留）
+
+|日期|任务ID/阶段|预注册范围|实际结果/负例|数据/帧/运行次数|START/CODE/END|原始证据|存储变化/待批清理|唯一NEXT|
+|---|---|---|---|---|---|---|---|---|
+|2026-10-26|P62-R30-FOUNDATION-DIAGNOSIS-AND-CONTROLLED-REPAIR / S1|真实R29四轨迹只读时序；固定raw5/18/62/76/131/383/663/819最多8次参考初值不融合NDT；最多一项明确工程修复|52个>50ms间隔丢弃合计3.17164625s，四组185次超龄；8/8探针有限收敛，最大0.047317m/0.992850°；原全局PCD路径实际1m网格/配置.8m错误已最小修复并回归，但未触发R29 Tile路径。另发现raw62质量通过候选被上一观测限幅移动0.446249m，实际发布位置误差.425470→.755997m且融合；该观测身份合同仍开放，不宣称R29整段修复|Koide Azure indoor_easy_01，历史4×2023帧只读；新NDT8、EKF运行0、正式轨迹0；2Python+6核心测试及定向CTest通过；无Outdoor|START84428ee944d5f8732caf283a45d13a3bba79f742；探针CODEe5dffad5b23485078e9ab17fdf4987107913626f；修复CODE02490a7ee7376baa76abff8495865a3a020c7210；END为含本行最终归档HEAD，完整SHA见执行交接；未push|docs/p62_r30_foundation_diagnosis/；R30_ROOT_CAUSE.md及evidence/OBSERVATION_IDENTITY_COUNTEREXAMPLE.json|root35244015616→32919322624bytes，实际变化含其他活动；build/重复展开db3仅列待批，删除0|总控冻结raw62实际地图观测身份/资格合同，安排最小闭合验证；Outdoor资产准入可单独批准，完整精度实验未通过|
+
+### 本轮修复与计划责任边界
+
+原方案：先只读有限基础诊断，再决定是否修复或转入MID360。实际证据：R29匹配在参考邻域8/8正常，后期Tile失败发生在已明显漂移之后；全局PCD顺序有独立可复现Grid错误，但R29使用的Tile路径未受该错影响。新版本：只实施setResolution先于setInputTarget的单项修复，CODE02490a7ee7376baa76abff8495865a3a020c7210，6核心回归/Release/CTest通过。未实施第二项观测限幅或门控语义变更，未用GT调参。
+
+后续计划不再笼统重复Azure失锁审计：先明确“通过质量判据的候选”与“送入EKF的限幅后位姿”是否必须为同一观测。当前证据能直接解释raw62观测平移被改坏，不足以证明完整失锁的唯一原因或任一修复的完整轨迹收益。论文不新增精度/创新优势主张；R29负例完整保留。S2可由总控单独安排单位、时间、外参等资产准入，不等于S3正式完整轨迹已获放行。
+
+### 本轮待批清理追加（未批准、未删除）
+|文件绝对路径|实测空间|可重建证据及保留副本|风险|用户批准|执行回执|
+|---|---|---|---|---|---|
+|/home/jian/livox_ws/p62_r29_full_sequence_ws/build|914251776 allocated bytes|原CODE和编译命令；devel原正式二进制保留|重建成本；不是逐字重复目录|未批准|未执行|
+|/home/jian/livox_ws/p62_r30_foundation_ws/build|432586752 allocated bytes|本轮CODE与Release命令；devel新二进制保留|后续测试需重建|未批准|未执行|
+|/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_easy_01/indoor_easy_01/decompressed_01_0.db3|4394782720 logical bytes|保留官方ZIP、R29 CRC/MD5及展开SHA，可逐字再解压|实际删除前重验依赖/ZIP，不能删除唯一原件|未批准|未执行|
+|/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_hard_01/indoor_hard_01/decompressed_03_0.db3|5090283520 logical bytes|保留官方ZIP、R29 CRC/MD5及展开SHA，可逐字再解压|与ZIP是同一载荷的不同存储表示，不冒称字节相同|未批准|未执行|

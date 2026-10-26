@@ -1,0 +1,44 @@
+{
+  "root_free_before_worktree_bytes": 35244015616,
+  "root_free_after_bytes": 32919322624,
+  "observed_free_delta_bytes": -2324692992,
+  "delta_includes_other_filesystem_activity": true,
+  "reserve_bytes": 21474836480,
+  "external_free_bytes": 449049264128,
+  "inventory": [
+    {
+      "path": "/home/jian/livox_ws/p62_r30_foundation_ws",
+      "allocated_bytes": 2312732672
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r30_foundation_ws/build",
+      "allocated_bytes": 432586752
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r30_foundation_ws/devel",
+      "allocated_bytes": 182067200
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r30_foundation_ws/.r30_diagnostic_build",
+      "allocated_bytes": 819200
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_ws/build",
+      "allocated_bytes": 914251776
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_ws/devel",
+      "allocated_bytes": 357072896
+    },
+    {
+      "path": "/home/jian/rosbag/public_datasets/koide_p62_r29",
+      "allocated_bytes": 24798375936
+    },
+    {
+      "path": "/home/jian/livox_ws/p62_r29_full_sequence_data",
+      "allocated_bytes": 135495680
+    }
+  ],
+  "deleted_files": 0,
+  "cleanup_approved": false
+}
