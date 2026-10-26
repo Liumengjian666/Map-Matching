@@ -161,4 +161,4 @@ NC成功历史回归只说明新身份规则没有破坏这一已知片段；Bas
 
 可再生候选仅列、未删：`/home/jian/livox_ws/p63_r1_super_lio_data/Super-LIO/build` 23134208B、`devel`1826816B（含实际二进制，须先批准保留方案）；误配置的研究工作树`build`737280B、`devel`221184B。全部原始bag/map和旧失败实验保留；本轮不搭建第二套FAST_LIO_Relocation、不将此次未验收输入下的失败当成该替代框架必胜的证据。
 
-2026-10-26实际R1判定与后续：R1归档branch research/p63-r1-mature-prior-map-baseline的END=2a2f202c01efe6a6452436bd1eff084ae1ddfc14已出现在真实远端。地图冻结与代码编译PASS但95跟踪输出提前失效；T_I_L=I未物理标定，所用simtime PCD未与8月8日建图配置唯一绑定，gravity方向冲突38.021°无法唯一归因；不得声称Super-LIO科学基线已验收。新增P63-R1B原始资产/重力/外参来源门；无独立地图生产身份便STOP而非反求旋转。此前归档还纠正历史“R32未执行”：原R32其实已在其他分支完成负实验END66494205f7dd48d193d08936f10784f49f653939；请保留这条证据，不以旧计划文字覆盖历史事实。
+2026-10-26实际R1判定与后续：R1归档branch research/p63-r1-mature-prior-map-baseline的END=2a2f202c01efe6a6452436bd1eff084ae1ddfc14已出现在真实远端。地图冻结与代码编译PASS但95跟踪输出提前失效；T_I_L=I未物理标定，所用simtime PCD未与8月8日建图配置唯一绑定，gravity方向冲突38.021°无法唯一归因；不得声称Super-LIO科学基线已验收。新增P63-R1B原始资产/重力/外参来源门；无独立地图生产身份便STOP而非反求旋转。R1本地归档声明历史R32已在另一个本地分支完成负实验，报告END 66494205f7dd48d193d08936f10784f49f653939；**当前GitHub远端未检索到该R32分支/commit**，因此只标为本地归档证据、待Codex核查并在获授权后push，不能宣称远端已验证。不能以旧计划文字覆盖这一待核查历史事实。
