@@ -267,6 +267,13 @@ target_link_libraries(solid_adapter_contract_test
 )
 
 if(CATKIN_ENABLE_TESTING)
+  add_executable(ndt_target_resolution_contract_test
+    tests/ndt_target_resolution_contract_test.cpp
+  )
+  target_link_libraries(ndt_target_resolution_contract_test ${PCL_LIBRARIES})
+  add_test(NAME ndt_target_resolution_contract_test
+    COMMAND $<TARGET_FILE:ndt_target_resolution_contract_test>)
+
   add_executable(p49_causal_trigger_contract_test
     tests/p49_causal_trigger_contract_test.cpp
   )

@@ -49,6 +49,7 @@
 #include "dog_prior_map_localization/visual_aided_initial_guess.hpp"
 #include "dog_prior_map_localization/experimental_source_capture.hpp"
 #include "dog_prior_map_localization/local_map_tiles.hpp"
+#include "dog_prior_map_localization/ndt_target_configuration.hpp"
 #include "dog_prior_map_localization/mature_ndt_algorithms.hpp"
 #include "dog_prior_map_localization/skf_visual_measurement.hpp"
 #include "dog_prior_map_fastlio2_frontend_exp/coupled_ndt_anchor.hpp"
@@ -1827,7 +1828,7 @@ private:
       const pcl::PointCloud<pcl::PointXYZ>::Ptr map_cloud =
           voxelDown(xyz, map_voxel_size_, map_voxel_z_size_, 0);
       target_cloud_ = voxelDown(map_cloud, target_voxel_size_, target_voxel_z_size_, max_target_points_);
-      ndt_.setInputTarget(target_cloud_);
+      setNdtTargetAtResolution(ndt_, target_cloud_, static_cast<float>(ndt_resolution_));
     }
     ndt_.setResolution(ndt_resolution_);
     ndt_.setStepSize(ndt_step_size_);
@@ -2492,7 +2493,7 @@ private:
         const ros::WallTime target_rebuild_start = ros::WallTime::now();
         map_geometry_tree_.reset();
         target_cloud_ = local_map_update.target;
-        ndt_.setInputTarget(target_cloud_);
+        setNdtTargetAtResolution(ndt_, target_cloud_, static_cast<float>(ndt_resolution_));
         if (coupled_causal_record_only_enable_ || r23_enable_)
           active_target_hash64_ = stableCloudHash(target_cloud_);
         map_geometry_tree_.reset(new pcl::KdTreeFLANN<pcl::PointXYZ>());
