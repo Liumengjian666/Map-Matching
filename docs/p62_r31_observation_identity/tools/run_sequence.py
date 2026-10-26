@@ -180,6 +180,7 @@ def main():
     completion_seen_seconds = None
     shutdown_requested_seconds = None
     publisher_seen = False
+    ndt_seen = ekf_seen = False
     log_position = 0
     log_tail = ""
     with (run_dir / 'ROSLAUNCH.log').open('x') as output, (run_dir / 'PROCESS_MEMORY.csv').open('x', newline='') as memory:
@@ -195,6 +196,8 @@ def main():
                 live = owned.collect()
                 ndt_rss, ndt_pids = component_rss(live, 'ndt')
                 ekf_rss, ekf_pids = component_rss(live, 'ekf')
+                ndt_seen = ndt_seen or bool(ndt_pids)
+                ekf_seen = ekf_seen or bool(ekf_pids)
                 tree_rss = sum(p['rss_KiB'] for p in live.values())
                 peak_ndt, peak_ekf = max(peak_ndt, ndt_rss), max(peak_ekf, ekf_rss)
                 peak_pair, peak_tree = max(peak_pair, ndt_rss + ekf_rss), max(peak_tree, tree_rss)
@@ -218,7 +221,7 @@ def main():
                     completed_input = True
                     if completion_seen_seconds is None:
                         completion_seen_seconds = began - start
-                if peak_ndt and (not ndt_pids or not ekf_pids) and not completed_input and stop_time is None:
+                if ndt_seen and ekf_seen and (not ndt_pids or not ekf_pids) and not completed_input and stop_time is None:
                     stop_time = began
                     owned.signal(signal.SIGINT)
                     escalation.append('SIGINT_LOCALIZATION_NODE_EXITED')
