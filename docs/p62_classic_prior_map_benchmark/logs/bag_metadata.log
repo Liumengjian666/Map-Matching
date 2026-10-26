@@ -1,0 +1,258 @@
+[
+  {
+    "archive": "outdoor_hard_01b.zip",
+    "metadata_entry": "outdoor_hard_01b/metadata.yaml",
+    "sha256": "406faf89a17887b9545632781839d208e0194dbe89c1f996b3f38469ceee5886",
+    "crc_verified": true,
+    "additional_range_bytes": 0,
+    "metadata": {
+      "version": 5,
+      "storage_identifier": "sqlite3",
+      "duration": {
+        "nanoseconds": 302380270505
+      },
+      "starting_time": {
+        "nanoseconds_since_epoch": 1694533206282463927
+      },
+      "message_count": 65039,
+      "topics_with_message_count": [
+        {
+          "topic_metadata": {
+            "name": "/livox/imu",
+            "type": "sensor_msgs/msg/Imu",
+            "serialization_format": "cdr",
+            "offered_qos_profiles": "- history: 3\n  depth: 0\n  reliability: 1\n  durability: 2\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: 1\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false"
+          },
+          "message_count": 60475
+        },
+        {
+          "topic_metadata": {
+            "name": "/livox/lidar",
+            "type": "livox_ros_driver2/msg/CustomMsg",
+            "serialization_format": "cdr",
+            "offered_qos_profiles": "- history: 3\n  depth: 0\n  reliability: 1\n  durability: 2\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: 1\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false"
+          },
+          "message_count": 2304
+        },
+        {
+          "topic_metadata": {
+            "name": "/livox/points",
+            "type": "sensor_msgs/msg/PointCloud2",
+            "serialization_format": "cdr",
+            "offered_qos_profiles": "- history: 3\n  depth: 0\n  reliability: 2\n  durability: 2\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: 1\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false"
+          },
+          "message_count": 2260
+        }
+      ],
+      "compression_format": "",
+      "compression_mode": "",
+      "relative_file_paths": [
+        "rosbag2_2023_09_13-00_40_06_0.db3"
+      ],
+      "files": [
+        {
+          "path": "rosbag2_2023_09_13-00_40_06_0.db3",
+          "starting_time": {
+            "nanoseconds_since_epoch": 1694533206282463927
+          },
+          "duration": {
+            "nanoseconds": 302380270505
+          },
+          "message_count": 65039
+        }
+      ]
+    }
+  },
+  {
+    "archive": "outdoor_hard_01a.zip",
+    "metadata_entry": "outdoor_hard_01a/metadata.yaml",
+    "sha256": "cd6ee3ed7d3b90b236448fef2fbf16df68703852c2b1e200424b31e17f124215",
+    "crc_verified": true,
+    "additional_range_bytes": 0,
+    "metadata": {
+      "version": 5,
+      "storage_identifier": "sqlite3",
+      "duration": {
+        "nanoseconds": 380387645230
+      },
+      "starting_time": {
+        "nanoseconds_since_epoch": 1694532825004913831
+      },
+      "message_count": 81755,
+      "topics_with_message_count": [
+        {
+          "topic_metadata": {
+            "name": "/livox/imu",
+            "type": "sensor_msgs/msg/Imu",
+            "serialization_format": "cdr",
+            "offered_qos_profiles": "- history: 3\n  depth: 0\n  reliability: 1\n  durability: 2\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: 1\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false"
+          },
+          "message_count": 75947
+        },
+        {
+          "topic_metadata": {
+            "name": "/livox/lidar",
+            "type": "livox_ros_driver2/msg/CustomMsg",
+            "serialization_format": "cdr",
+            "offered_qos_profiles": "- history: 3\n  depth: 0\n  reliability: 1\n  durability: 2\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: 1\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false"
+          },
+          "message_count": 2921
+        },
+        {
+          "topic_metadata": {
+            "name": "/livox/points",
+            "type": "sensor_msgs/msg/PointCloud2",
+            "serialization_format": "cdr",
+            "offered_qos_profiles": "- history: 3\n  depth: 0\n  reliability: 2\n  durability: 2\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: 1\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false"
+          },
+          "message_count": 2887
+        }
+      ],
+      "compression_format": "",
+      "compression_mode": "",
+      "relative_file_paths": [
+        "rosbag2_2023_09_13-00_33_44_0.db3"
+      ],
+      "files": [
+        {
+          "path": "rosbag2_2023_09_13-00_33_44_0.db3",
+          "starting_time": {
+            "nanoseconds_since_epoch": 1694532825004913831
+          },
+          "duration": {
+            "nanoseconds": 380387645230
+          },
+          "message_count": 81755
+        }
+      ]
+    }
+  },
+  {
+    "archive": "outdoor_hard_02b.zip",
+    "metadata_entry": "outdoor_hard_02b/metadata.yaml",
+    "sha256": "44d281c5046ecc6084403c156451875b114b1dd531c058170d7333430ba39146",
+    "crc_verified": true,
+    "additional_range_bytes": 8192,
+    "metadata": {
+      "version": 5,
+      "storage_identifier": "sqlite3",
+      "duration": {
+        "nanoseconds": 298505295612
+      },
+      "starting_time": {
+        "nanoseconds_since_epoch": 1694534018259499529
+      },
+      "message_count": 64224,
+      "topics_with_message_count": [
+        {
+          "topic_metadata": {
+            "name": "/livox/imu",
+            "type": "sensor_msgs/msg/Imu",
+            "serialization_format": "cdr",
+            "offered_qos_profiles": "- history: 3\n  depth: 0\n  reliability: 1\n  durability: 2\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: 1\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false"
+          },
+          "message_count": 59700
+        },
+        {
+          "topic_metadata": {
+            "name": "/livox/lidar",
+            "type": "livox_ros_driver2/msg/CustomMsg",
+            "serialization_format": "cdr",
+            "offered_qos_profiles": "- history: 3\n  depth: 0\n  reliability: 1\n  durability: 2\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: 1\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false"
+          },
+          "message_count": 2277
+        },
+        {
+          "topic_metadata": {
+            "name": "/livox/points",
+            "type": "sensor_msgs/msg/PointCloud2",
+            "serialization_format": "cdr",
+            "offered_qos_profiles": "- history: 3\n  depth: 0\n  reliability: 2\n  durability: 2\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: 1\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false"
+          },
+          "message_count": 2247
+        }
+      ],
+      "compression_format": "",
+      "compression_mode": "",
+      "relative_file_paths": [
+        "rosbag2_2023_09_13-00_53_37_0.db3"
+      ],
+      "files": [
+        {
+          "path": "rosbag2_2023_09_13-00_53_37_0.db3",
+          "starting_time": {
+            "nanoseconds_since_epoch": 1694534018259499529
+          },
+          "duration": {
+            "nanoseconds": 298505295612
+          },
+          "message_count": 64224
+        }
+      ]
+    }
+  },
+  {
+    "archive": "outdoor_hard_02a.zip",
+    "metadata_entry": "outdoor_hard_02a/metadata.yaml",
+    "sha256": "36bc3c253a2d1365be925f5f6e6a9de4b9a6b285fcecc3df65d716ed28216b3d",
+    "crc_verified": true,
+    "additional_range_bytes": 0,
+    "metadata": {
+      "version": 5,
+      "storage_identifier": "sqlite3",
+      "duration": {
+        "nanoseconds": 363776745775
+      },
+      "starting_time": {
+        "nanoseconds_since_epoch": 1694533653197272239
+      },
+      "message_count": 78563,
+      "topics_with_message_count": [
+        {
+          "topic_metadata": {
+            "name": "/livox/imu",
+            "type": "sensor_msgs/msg/Imu",
+            "serialization_format": "cdr",
+            "offered_qos_profiles": "- history: 3\n  depth: 0\n  reliability: 1\n  durability: 2\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: 1\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false"
+          },
+          "message_count": 72754
+        },
+        {
+          "topic_metadata": {
+            "name": "/livox/lidar",
+            "type": "livox_ros_driver2/msg/CustomMsg",
+            "serialization_format": "cdr",
+            "offered_qos_profiles": "- history: 3\n  depth: 0\n  reliability: 1\n  durability: 2\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: 1\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false"
+          },
+          "message_count": 2929
+        },
+        {
+          "topic_metadata": {
+            "name": "/livox/points",
+            "type": "sensor_msgs/msg/PointCloud2",
+            "serialization_format": "cdr",
+            "offered_qos_profiles": "- history: 3\n  depth: 0\n  reliability: 2\n  durability: 2\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: 1\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false"
+          },
+          "message_count": 2880
+        }
+      ],
+      "compression_format": "",
+      "compression_mode": "",
+      "relative_file_paths": [
+        "rosbag2_2023_09_13-00_47_33_0.db3"
+      ],
+      "files": [
+        {
+          "path": "rosbag2_2023_09_13-00_47_33_0.db3",
+          "starting_time": {
+            "nanoseconds_since_epoch": 1694533653197272239
+          },
+          "duration": {
+            "nanoseconds": 363776745775
+          },
+          "message_count": 78563
+        }
+      ]
+    }
+  }
+]

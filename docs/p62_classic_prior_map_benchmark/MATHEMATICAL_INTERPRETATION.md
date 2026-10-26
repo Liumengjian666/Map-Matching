@@ -1,0 +1,13 @@
+# Frozen mechanism, not a new mathematical theory
+
+T_map_lidar maps current cloud coordinates into the fixed prior map. Pre-optimization geometry q(TP) evaluates predicted alignment, whereas the unchanged native optimizer returns Tj=NDT(Source,Map,T_seed,j). A bad q(TP) can result from an inaccurate initial pose, so rejecting optimization solely at TP can suppress a recoverable match. It does not follow that every rejected input is recoverable.
+
+G moves the existing pre-geometry check to diagnostic status while retaining post-registration admission. Final quality q(Tj) measures a different transformed cloud. Full NDT and Coverage Consistency Mean share points, so the latter is consistency evidence, not an independent held-out test or truth. Score/Overlap/Consistency can all be acceptable at a wrong pose.
+
+C uses the fixed seed rotations R_seed=Rz(+/-5deg)*R_pred and p_seed=p_pred. This is a map-axis attitude change, not rotation of the translation about the map origin and not a body-frame yaw. Each seed invokes the same local Gaussian NDT optimizer once. Different starts may yield different terminal poses because the objective/association process is nonlinear. Different finite/converged terminal poses do not certify strict local minima, a correct branch, global optimality or recovery.
+
+Only a selected, quality-admitted native result is a map observation. When none passes, real IMU propagation continues without an invented observation. A map observation can alter the EKF historical state and the OOSM replayed current state, changing all subsequent causal initial guesses. Therefore full independent causal execution is required; offline reselection of another trajectory is not an equivalent experiment.
+
+Recovery is possible only when a searched start reaches a useful, admissible branch and the observation can be fused lawfully. It can fail when both fixed yaw starts remain wrong, map overlap vanishes, quality is unavailable/misleading, prediction/initialization is invalid or budget is exhausted. Per60-input-frame quota bounds extra calls, not worst-case CPU time or success probability. Sensor sampling and state observability remain foundational limits.
+
+These are explanations of established NDT, gating, multistart and filtering mechanisms. They do not introduce a new objective, Schur theory, uncertainty model or EKF. R23–R25 demonstrate a particular internal causal ablation; R29 shows strong failure/transfer limits. A new classic-baseline contribution still needs complete MID360 data, lawful comparison and actual recovery/resource evidence. No extra formula or threshold is proposed here to manufacture a positive result.

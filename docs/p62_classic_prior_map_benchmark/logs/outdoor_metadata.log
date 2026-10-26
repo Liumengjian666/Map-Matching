@@ -1,0 +1,139 @@
+{
+  "retrieved_utc": "2026-10-26T07:07:15Z",
+  "metadata_url": "https://zenodo.org/api/records/10122133",
+  "metadata_sha256": "8228305edd11c27617e67a46d12fb64ce2b076b6355e243218c77af3160850b9",
+  "selected_files": [
+    {
+      "name": "map_outdoor_hard.ply",
+      "bytes": 23780722,
+      "checksum": "md5:562b607124bc31bbfc4c96eaaf47bbfb",
+      "url": "https://zenodo.org/api/records/10122133/files/map_outdoor_hard.ply/content"
+    },
+    {
+      "name": "outdoor_hard_01b.zip",
+      "bytes": 1345802065,
+      "checksum": "md5:d397c28cca763d34844189cb73de8e02",
+      "url": "https://zenodo.org/api/records/10122133/files/outdoor_hard_01b.zip/content",
+      "directory_only_members": [
+        {
+          "name": "outdoor_hard_01b/",
+          "compressed_bytes": 0,
+          "uncompressed_bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "outdoor_hard_01b/rosbag2_2023_09_13-00_40_06_0.db3",
+          "compressed_bytes": 1345801111,
+          "uncompressed_bytes": 2514714624,
+          "crc32": 3405138974
+        },
+        {
+          "name": "outdoor_hard_01b/metadata.yaml",
+          "compressed_bytes": 510,
+          "uncompressed_bytes": 1996,
+          "crc32": 2301684767
+        }
+      ],
+      "uncompressed_bytes": 2514716620,
+      "range_bytes_read": 131072
+    },
+    {
+      "name": "outdoor_hard_01a.zip",
+      "bytes": 1642263643,
+      "checksum": "md5:d126024c8f310c2c48239f136d7e0ed0",
+      "url": "https://zenodo.org/api/records/10122133/files/outdoor_hard_01a.zip/content",
+      "directory_only_members": [
+        {
+          "name": "outdoor_hard_01a/",
+          "compressed_bytes": 0,
+          "uncompressed_bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "outdoor_hard_01a/rosbag2_2023_09_13-00_33_44_0.db3",
+          "compressed_bytes": 1642262687,
+          "uncompressed_bytes": 3188441088,
+          "crc32": 2481871978
+        },
+        {
+          "name": "outdoor_hard_01a/metadata.yaml",
+          "compressed_bytes": 512,
+          "uncompressed_bytes": 1996,
+          "crc32": 1219076817
+        }
+      ],
+      "uncompressed_bytes": 3188443084,
+      "range_bytes_read": 131072
+    },
+    {
+      "name": "outdoor_hard_02b.zip",
+      "bytes": 1298771600,
+      "checksum": "md5:267377a88402f825ab70a161cc48983c",
+      "url": "https://zenodo.org/api/records/10122133/files/outdoor_hard_02b.zip/content",
+      "directory_only_members": [
+        {
+          "name": "outdoor_hard_02b/",
+          "compressed_bytes": 0,
+          "uncompressed_bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "outdoor_hard_02b/metadata.yaml",
+          "compressed_bytes": 511,
+          "uncompressed_bytes": 1996,
+          "crc32": 1988367273
+        },
+        {
+          "name": "outdoor_hard_02b/rosbag2_2023_09_13-00_53_37_0.db3",
+          "compressed_bytes": 1298770645,
+          "uncompressed_bytes": 2501844992,
+          "crc32": 3193705879
+        }
+      ],
+      "uncompressed_bytes": 2501846988,
+      "range_bytes_read": 131072
+    },
+    {
+      "name": "gt.zip",
+      "bytes": 1036441,
+      "checksum": "md5:ab2a80dc1d06767b7c3ce1893f3020b0",
+      "url": "https://zenodo.org/api/records/10122133/files/gt.zip/content"
+    },
+    {
+      "name": "outdoor_hard_02a.zip",
+      "bytes": 1507761853,
+      "checksum": "md5:8f56fdfa93f4fa456e234f58e193a08c",
+      "url": "https://zenodo.org/api/records/10122133/files/outdoor_hard_02a.zip/content",
+      "directory_only_members": [
+        {
+          "name": "outdoor_hard_02a/",
+          "compressed_bytes": 0,
+          "uncompressed_bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "outdoor_hard_02a/rosbag2_2023_09_13-00_47_33_0.db3",
+          "compressed_bytes": 1507760900,
+          "uncompressed_bytes": 3039264768,
+          "crc32": 3729208929
+        },
+        {
+          "name": "outdoor_hard_02a/metadata.yaml",
+          "compressed_bytes": 509,
+          "uncompressed_bytes": 1996,
+          "crc32": 748021270
+        }
+      ],
+      "uncompressed_bytes": 3039266764,
+      "range_bytes_read": 131072
+    }
+  ],
+  "archive_total_bytes": 5819416324,
+  "storage": {
+    "root_free_bytes": 35279790080,
+    "external_free_bytes": 449049264128,
+    "reserve_bytes": 21474836480
+  },
+  "raw_sensor_payload_downloaded": false,
+  "only_metadata_and_zip_directory_tails": true
+}

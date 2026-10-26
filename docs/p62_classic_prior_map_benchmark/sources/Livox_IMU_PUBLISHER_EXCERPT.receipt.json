@@ -1,0 +1,10 @@
+{
+  "url": "https://github.com/Livox-SDK/livox_ros_driver2/blob/master/src/lddc.cpp",
+  "blob_sha": "06195df4fb616416efa980ac16997caf8daa7191",
+  "lines": [
+    480,
+    497
+  ],
+  "date": "2026-10-26",
+  "qualification": "Pass-through publishing does not certify original unit or dataset driver build; no g-to-SI factor inferred"
+}

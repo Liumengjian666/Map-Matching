@@ -1,0 +1,1 @@
+No Outdoor trajectories exist yet. No synthetic or historical-window curve is substituted for a complete Outdoor result. Figures are intentionally absent until online outputs are sealed and lawful post-hoc reference evaluation is complete.

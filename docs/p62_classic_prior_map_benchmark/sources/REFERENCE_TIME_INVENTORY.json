@@ -1,0 +1,22 @@
+[
+  {
+    "sequence": "01",
+    "path": "/home/jian/rosbag/public_datasets/koide_p62_r29/gt/gt/traj_lidar_outdoor_hard_01.txt",
+    "sha256": "c73ae39dc96a69e0951d0cd80578f7f8e172f77625e7c0677775a05433926c3d",
+    "rows": 5147,
+    "first_time_decimal_seconds": "1.694532825000705004e+09",
+    "last_time_decimal_seconds": "1.694533508499736071e+09",
+    "poses_used": false,
+    "purpose": "identity and timestamp inventory only; no candidate evaluation"
+  },
+  {
+    "sequence": "02",
+    "path": "/home/jian/rosbag/public_datasets/koide_p62_r29/gt/gt/traj_lidar_outdoor_hard_02.txt",
+    "sha256": "42d1385903ccc89b5bca076a596d2371a505e3cec3de845809663099efcee80a",
+    "rows": 5127,
+    "first_time_decimal_seconds": "1.694533653100430965e+09",
+    "last_time_decimal_seconds": "1.694534316600153923e+09",
+    "poses_used": false,
+    "purpose": "identity and timestamp inventory only; no candidate evaluation"
+  }
+]

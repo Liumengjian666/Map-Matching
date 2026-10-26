@@ -1,0 +1,18 @@
+480: void Lddc::InitImuMsg(const ImuData& imu_data, ImuMsg& imu_msg, uint64_t& timestamp) {
+481:   imu_msg.header.frame_id = "livox_frame";
+482: 
+483:   timestamp = imu_data.time_stamp;
+484: #ifdef BUILDING_ROS1
+485:   imu_msg.header.stamp = ros::Time(timestamp / 1000000000.0);  // to ros time stamp
+486: #elif defined BUILDING_ROS2
+487:   imu_msg.header.stamp = rclcpp::Time(timestamp);  // to ros time stamp
+488: #endif
+489: 
+490:   imu_msg.angular_velocity.x = imu_data.gyro_x;
+491:   imu_msg.angular_velocity.y = imu_data.gyro_y;
+492:   imu_msg.angular_velocity.z = imu_data.gyro_z;
+493:   imu_msg.linear_acceleration.x = imu_data.acc_x;
+494:   imu_msg.linear_acceleration.y = imu_data.acc_y;
+495:   imu_msg.linear_acceleration.z = imu_data.acc_z;
+496: }
+497: 

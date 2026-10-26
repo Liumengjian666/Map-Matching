@@ -1,0 +1,17 @@
+% Publication-ready context table. Not a matched RMSE ranking.
+\begin{table*}[t]
+\centering
+\caption{Published prior-map localization results on Koide Outdoor sequences. Values are transcribed ATE entries from Koide et al.~\cite{Koide2024RangeInertial}, Table II; the centre and $\pm$ statistic and exact alignment flags are not specified in the inspected paper. Corrupted methods were restarted. These are published references, not our reruns or a matched no-reset RMSE comparison.}
+\label{tab:published-classic}
+\begin{tabular}{lrrrr}
+\hline
+&\multicolumn{2}{c}{Outdoor01}&\multicolumn{2}{c}{Outdoor02}\\
+Method & ATE [m] & Corr. & ATE [m] & Corr.\\
+\hline
+HDL Localization & $5.592\pm5.252$ &5&$7.137\pm6.833$&5\\
+FAST-LIO Localization & $6.983\pm6.693$ &4&$4.849\pm4.692$&4\\
+Koide et al. & $0.959\pm0.838$ &0&$0.597\pm0.401$&0\\
+\hline
+\end{tabular}
+\end{table*}
+% Do not insert an unmeasured C+G row; add a separately labelled protocol block only after actual full runs.

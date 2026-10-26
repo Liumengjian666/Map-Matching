@@ -1,0 +1,20 @@
+{
+  "checked_date": "2026-10-26",
+  "primary_sources": [
+    "https://staff.aist.go.jp/k.koide/assets/pdf/icra2024_02.pdf",
+    "https://staff.aist.go.jp/k.koide/projects/icra2024_gl/",
+    "https://arxiv.org/html/2402.05540v1",
+    "https://zenodo.org/records/10122133"
+  ],
+  "table": "Table II, PDF page 6, Section IV-B",
+  "explicit_evo_tool": true,
+  "explicit_restart_after_corruption": true,
+  "center_statistic_definition_found": false,
+  "plusminus_statistic_definition_found": false,
+  "evo_alignment_command_found": false,
+  "numeric_corruption_criterion_found": false,
+  "outdoor_baseline_exact_initial_and_reset_poses_found": false,
+  "qualification": "NR in inspected public material, not proof that no unpublished script or information exists",
+  "author_contacted": false,
+  "additional_algorithm_downloaded_or_run": false
+}

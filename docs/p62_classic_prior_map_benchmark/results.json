@@ -1,0 +1,122 @@
+{
+  "task": "P62-CLASSIC-PRIOR-MAP-LOCALIZATION-BENCHMARK-PLAN",
+  "start_sha": "c237c1c09ca5c823eb7b1279a8742ba7762dccf9",
+  "branch": "research/p62-classic-prior-map-benchmark-plan",
+  "workspace": "/home/jian/livox_ws/p62_classic_prior_map_benchmark_ws",
+  "scope_completed": [
+    "Published Table II values and protocol audit",
+    "bounded official asset metadata/ZIP-directory inspection",
+    "prospective whole-sequence protocol and coordinate definitions"
+  ],
+  "formal_outdoor_started": false,
+  "new_native_ndt_calls": 0,
+  "algorithm_source_modified": false,
+  "minimum_chain_gate": "NOT_YET_EXECUTED_NOT_CLAIMED_PASS",
+  "r30_search_scope": [
+    "registered local Git worktrees",
+    "all local branch refs matching r30",
+    "commit subjects matching R30/r30",
+    "R29 inherited docs and local livox_ws immediate directory names"
+  ],
+  "r30_branch_or_archive_found": false,
+  "published_ATE_center_definition": "NR",
+  "published_ATE_plusminus_definition": "NR",
+  "published_evo_alignment_command": "NR",
+  "published_restart_on_corruption": true,
+  "published_corruption_numeric_threshold": "NR",
+  "published_vs_ours_comparability": "B_UNTIL_METRIC_ALIGNMENT_INITIALIZATION_AND_RESTART_PROTOCOL_MATCH",
+  "sequences": {
+    "01": {
+      "messages": {
+        "/livox/imu": 136422,
+        "/livox/lidar": 5225,
+        "/livox/points": 5147
+      },
+      "first_record_ns": 1694532825004913831,
+      "last_record_ns": 1694533508662734432,
+      "record_span_sec": 683.657820601,
+      "part_record_gap_ns": 889904866,
+      "part_record_gap_is_not_yet_a_sensor_header_gap": true,
+      "parts": [
+        "outdoor_hard_01a.zip",
+        "outdoor_hard_01b.zip"
+      ]
+    },
+    "02": {
+      "messages": {
+        "/livox/imu": 132454,
+        "/livox/lidar": 5206,
+        "/livox/points": 5127
+      },
+      "first_record_ns": 1694533653197272239,
+      "last_record_ns": 1694534316764795141,
+      "record_span_sec": 663.567522902,
+      "part_record_gap_ns": 1285481515,
+      "part_record_gap_is_not_yet_a_sensor_header_gap": true,
+      "parts": [
+        "outdoor_hard_02a.zip",
+        "outdoor_hard_02b.zip"
+      ]
+    }
+  },
+  "reference_identities": [
+    {
+      "sequence": "01",
+      "path": "/home/jian/rosbag/public_datasets/koide_p62_r29/gt/gt/traj_lidar_outdoor_hard_01.txt",
+      "sha256": "c73ae39dc96a69e0951d0cd80578f7f8e172f77625e7c0677775a05433926c3d",
+      "rows": 5147,
+      "first_time_decimal_seconds": "1.694532825000705004e+09",
+      "last_time_decimal_seconds": "1.694533508499736071e+09",
+      "poses_used": false,
+      "purpose": "identity and timestamp inventory only; no candidate evaluation"
+    },
+    {
+      "sequence": "02",
+      "path": "/home/jian/rosbag/public_datasets/koide_p62_r29/gt/gt/traj_lidar_outdoor_hard_02.txt",
+      "sha256": "42d1385903ccc89b5bca076a596d2371a505e3cec3de845809663099efcee80a",
+      "rows": 5127,
+      "first_time_decimal_seconds": "1.694533653100430965e+09",
+      "last_time_decimal_seconds": "1.694534316600153923e+09",
+      "poses_used": false,
+      "purpose": "identity and timestamp inventory only; no candidate evaluation"
+    }
+  ],
+  "source_sha256": {
+    "hdl_localization_README.md": "d83d548900e7acf28dba3015787ab9c6758ff401cb6195202d58e9d557316496",
+    "FAST_LIO_LOCALIZATION_README.md": "5faae1759ea57d4908a2e9dc1942ce0f87e57e291c20a352dae155f94b299cbc"
+  },
+  "storage_plan": {
+    "compressed_outdoor_bytes": 5794599161,
+    "expanded_outdoor_bytes": 11244273456,
+    "archive_plus_expanded_bytes": 17038872617,
+    "root_free_bytes": 35279790080,
+    "external_free_bytes": 449049264128,
+    "reserve_bytes": 21474836480,
+    "root_insufficient_for_both_raw_copies_with_reserve": true,
+    "proposed_large_asset_root": "/media/jian/HIKVISION/paper rosbag/koide_classic_prior_map/",
+    "external_asset_directory_created": false,
+    "large_asset_download_started": false
+  },
+  "r29_negative_result_preserved": true,
+  "next": "Controller separately commissions R30 minimum localization-chain acceptance; after that separately authorizes complete Outdoor01/02 frozen C+G experiments.",
+  "status": "LITERATURE_AND_INPUT_CONTRACT_PREPARATION_COMPLETED",
+  "controller_scope_clarification": "R30 not executed; current task is documentary review and bounded data-contract preparation only; formal Outdoor runs and large downloads not authorized",
+  "r30_status": "NOT_EXECUTED_CONFIRMED_BY_CONTROLLER",
+  "r30_handoff_unavailable_is_no_longer_an_open_question": true,
+  "formal_outdoor_authorized": false,
+  "deferred_outputs": [
+    "OUTDOOR01_FULL_RESULTS.csv",
+    "OUTDOOR02_FULL_RESULTS.csv",
+    "measured recovery/runtime tables",
+    "actual trajectory figures"
+  ],
+  "published_table_rows": 6,
+  "public_paper_checked_additionally": "https://arxiv.org/html/2402.05540v1",
+  "actual_sensor_message_conversion_checked_this_round": false,
+  "actual_large_sensor_files_acquired_this_round": 0,
+  "GT_row_count_matches_metadata_pointcloud2_count_only": {
+    "Outdoor01": 5147,
+    "Outdoor02": 5127
+  },
+  "dataset_recording_driver_commit_certified": false
+}
