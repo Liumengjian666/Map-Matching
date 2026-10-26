@@ -1,0 +1,27 @@
+{
+  "source_code_sha": "bab26e991ef7ac871057ee4f9a94c92831619a62",
+  "build_type": "Release",
+  "binaries": {
+    "devel/lib/dog_prior_map_localization/dog_prior_map_ndt_node_cpp": {
+      "sha256": "c6306797730229f4271b4841edb1f1a96e80e1a33574236c920a2d2bcab3cd9f",
+      "bytes": 160632136
+    },
+    "devel/lib/dog_prior_map_localization/dog_prior_map_ekf_node_cpp": {
+      "sha256": "514ded7d0a093e1bd3126a0ed0c2954ca38be39c7bcf3d56097f67d95c5eedce",
+      "bytes": 191065056
+    },
+    "devel/lib/dog_prior_map_localization/newer_college_sequence_publisher": {
+      "sha256": "6f2c8340fcc192d88ae22558927662c4582fb063c11065ae0c7d1436ec67ce89",
+      "bytes": 5347848
+    },
+    "devel/lib/dog_prior_map_localization/observation_identity_contract_test": {
+      "sha256": "dffbaa3ef04fc465199d1d07784f3caffb733c62dabb7d61da411be9f9e29440",
+      "bytes": 5608664
+    }
+  },
+  "EKF_IMU_OOSM_Deskew_map_source_unchanged": true,
+  "unit_cases_passed": 8,
+  "raw62_legacy_matrix_reproduced": true,
+  "policy_default": "LEGACY",
+  "formal_policy": "STRICT_FAIL_CLOSED"
+}
