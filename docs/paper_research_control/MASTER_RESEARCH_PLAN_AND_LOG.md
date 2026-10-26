@@ -13,6 +13,7 @@
 |---|---|---|---|
 |S0 台账|本文件固定位置，建立每轮记账和资产清理规范|每轮均补实验结果+Git+数据+唯一NEXT|已建立|
 |S1 R30最低基础链路|先对照真实GitHub源码与本地未提交改动；只读追溯IMU时间/预测超龄、Tile/NDT、EKF/OOSM；必要时最多8次不融合的参考初值离线NDT|给出首个可证实异常或UNKNOWN；允许发现确定性BUG后在独立分支小修复+回归，旧结果保留；0条新正式轨迹|有限诊断完成：8次不融合NDT、单项Grid修复回归；raw62观测身份合同仍开放，未批准完整轨迹|
+|S1b R31观测身份闭合|NDT原始候选过质量门却被末端限步修改的语义反例；单一显式STRICT_FAIL_CLOSED模式和raw62归因；两条Koide Azure完整因果回放＋60帧历史正例回归|工程验收：EKF实际地图观测与认证位姿同一；性能验收独立评估，负例保留；不改IMU/地图/搜索阈值；最多2条2023帧+1条60帧|**计划已冻结，未执行**|
 |S2 MID360输入合同|Koide Outdoor01官方Livox CustomMsg/IMU/map/GT；验证点时间、帧、单位、bag间隔、外参、初始化及基础链路|无合法因果数据/基础定位合同则不报精度；基础通用错误需先独立最小修复、标新版本|待S1|
 |S3 两条完整序列|Outdoor01完整C+G，成功且无违规再Outdoor02完整C+G；必要最少内部消融|无中途挑段/GT重置；完整误差、失败覆盖、时延P95、内存RSS及恢复次数；负例如实报告|未运行|
 |S4 经典公开比较|直接引用Koide2024 Table II HDL/FAST-LIO Localization/Koide作者方法；核实ATE统计、对齐、重启评分|协议未认证只算B级背景，禁止计算公平百分比领先|文献已完成，A级未闭合|
@@ -53,6 +54,7 @@ Koide论文来源：https://staff.aist.go.jp/k.koide/assets/pdf/icra2024_02.pdf�
 |2026-10-26|MASTER-PLAN-v1/S0|建立永久科研台账|新增NDT=0、EKF=0|无定位实验|起点85649d2...；建账SHA以Git HEAD为准|本文件|未获授权删除|S1/R30|
 |2026-10-26|R30 SOURCE AUDIT / S1准备|源码核查、只读轨迹工具和灵活改进规则|核心NDT/EKF源文件可在GitHub访问；发现IMU丢弃大间隔、地图预测驱动选择及OOSM回放门槛等待诊断机制；**无真实新定位**|真实NDT=0，EKF=0；2个合成Python单测PASS|起点21803def...；准备commit以R30分支HEAD为准|docs/paper_research_control/R30_ADAPTIVE_SOURCE_AUDIT_AND_PLAN.md、tools/r30_trace_preflight.py|未触碰本机数据，无删除；须Codex盘点|运行S1有限诊断并分离根因|
 |2026-10-26|R30后相关工作检索/S1成果复核|阅读近期先验地图定位/退化配准论文10项，归纳技术创新/重合风险|确认R30 Grid单项修复与raw62未闭合观测身份，推荐先解决发布位姿与质量资格冲突；文献整理不证明新算法创新|新增正式NDT=0、EKF=0，未运行定位|START 6ca14d4...；文献DOC commit 23851a7...；最终以远端HEAD为准|docs/paper_research_control/RECENT_PRIOR_MAP_INNOVATIONS_R30.md|新增文档，无大型下载、删除0|观测身份最小合法闭环，再MID360资产及完整实验|
+|2026-10-26|R31预注册/S1b|raw62观测身份不一致的最小显式保护与2组完整回放、R25 60帧回归（仅计划）|GitHub代码定位applyR23Admission/limitNdtStep/publishPose真实先后次序；无新增NDT/EKF运行|NDT=0、EKF=0、完整轨迹=0；源码未改|R30 END 6ca14d4...；计划commit以R31 HEAD为准|docs/paper_research_control/R31_OBSERVATION_IDENTITY_CONTRACT.md|无大型下载、无本机删改|Codex执行R31单项闭环合同，回传是否允许Outdoor01数据准入|
 
 ## 磁盘资产管理（未经用户逐项批准不能删除）
 |类别|示例|规则|
@@ -94,3 +96,5 @@ Koide论文来源：https://staff.aist.go.jp/k.koide/assets/pdf/icra2024_02.pdf�
 |/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_hard_01/indoor_hard_01/decompressed_03_0.db3|5090283520 logical bytes|保留官方ZIP、R29 CRC/MD5及展开SHA，可逐字再解压|与ZIP是同一载荷的不同存储表示，不冒称字节相同|未批准|未执行|
 
 2026-10-26：R30完成后独立核查到工程修复和raw62后置限幅质量语义问题。2024–2026近期相关工作列于RECENT_PRIOR_MAP_INNOVATIONS_R30.md；本次只是文献梳理，**无新源码定位修复或实验**。长线方向可以基于实验证据调整；科研候选未被实验证明。
+
+2026-10-26 R31计划变更：R30完成有界诊断，后续从长期S2之前插入S1b的单项“优化后认证与实际发布观测身份一致性”工程修复/因果回放。公开经典基线、数据集优先级不变。R31计划代码只创建任务合同，不代表实际执行。新增明确的工程不变量PASS与科研性能PASS分离；方法可据负例调整，但禁止先看测试集真值后调门限。相关预注册见docs/paper_research_control/R31_OBSERVATION_IDENTITY_CONTRACT.md。
