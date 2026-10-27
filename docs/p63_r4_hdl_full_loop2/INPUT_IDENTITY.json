@@ -1,0 +1,35 @@
+{
+  "status": "PASS_FRESH_ALL_LIDAR_PREFLIGHT",
+  "bag": "/home/jian/rosbag/loop2/raw_restore_20260914_stage0/loop2_raw.bag",
+  "fresh_bag_sha256": "d17bee3f8697dcb01cb4b9f6ea2483aa42a1a31ae277659c8a7869d9c69f13ae",
+  "bag_bytes": 19677401800,
+  "bag_mtime_ns": 1786180570000000000,
+  "indexed_lidar_count": 10905,
+  "verified_lidar_count": 10905,
+  "type": "livox_ros_driver2/CustomMsg",
+  "MD5": "e4d6829bdfe657cb6c21a746c86b21a6",
+  "current_bag_record_start_ns_rounded_from_rosbag_float": 1786179479488303104,
+  "current_bag_record_end_ns_rounded_from_rosbag_float": 1786180569999724544,
+  "first_lidar_header_ns": 1786179479409757376,
+  "last_lidar_header_ns": 1786180569809733391,
+  "last_lidar_max_offset_end_ns": 1786180569910019806,
+  "sensor_span_s": 1090.50026243,
+  "frame_ids": [
+    "livox_frame"
+  ],
+  "points_min": 19104,
+  "points_max": 20928,
+  "first400_exactly_match_R3": true,
+  "map": "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_downsampled_points.pcd",
+  "map_sha256": "016b7ae3ae494ad5d462a66d888a96b96dda5fe29d6058059aa2fa6bdf6b09ca",
+  "source_R3_CODE_SHA": "eb6ff37ab791193ff1a803952d79e148b9ecea6c",
+  "four_upstream_pristine_and_original_binaries_match": true,
+  "observation_origin": "first LiDAR header.stamp,not bag record start",
+  "observation_interval_rel_s": [
+    600,
+    650
+  ],
+  "frames_manifest_sha256": "68e2b53a99ef40c386b1134f10dbc7f0240bc58408d88482676dd0266a214c99",
+  "preflight_wall_s": 43.140706243983004,
+  "GT_or_old_trajectory_read": false
+}

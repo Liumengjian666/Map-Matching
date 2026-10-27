@@ -1,0 +1,12 @@
+{
+  "R3_CODE_SHA": "eb6ff37ab791193ff1a803952d79e148b9ecea6c",
+  "bridge_sha256": "691f3d1833c6a29ecc5a476247e9d426486fd35ef99e16fc915958945b5a6b91",
+  "bridge_byte_identical_to_R3_actual_code": true,
+  "all_node_parameters_identical": true,
+  "only_wiring_changes": [
+    "independent package/bridge executable path",
+    "output directory argument",
+    "GUI-only DISABLE_ROS1_EOL_WARNINGS=1"
+  ],
+  "no_native_binary_rebuild": true
+}

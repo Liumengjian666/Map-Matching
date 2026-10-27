@@ -1,0 +1,7 @@
+{
+  "R3_rows_replayed_without_optimizer": 400,
+  "validity_and_steps_match_R3": true,
+  "incremental_reader_exact": true,
+  "partial_line_preserved": true,
+  "new_align_calls": 0
+}

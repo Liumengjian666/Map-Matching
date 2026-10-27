@@ -1,0 +1,1 @@
+<package format="2"><name>p63_hdl_full_loop2</name><version>0.1.0</version><description>Frozen HDL full sequence scheduler wiring</description><maintainer email="research@example.invalid">Research operator</maintainer><license>BSD-2-Clause</license><buildtool_depend>catkin</buildtool_depend><depend>rospy</depend></package>
