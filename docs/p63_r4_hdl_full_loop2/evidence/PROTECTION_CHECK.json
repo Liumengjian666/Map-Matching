@@ -1,0 +1,11 @@
+{
+  "stable_before_after_identical": true,
+  "status_command": [
+    "git",
+    "--no-optional-locks",
+    "status",
+    "--porcelain=v1",
+    "-uall"
+  ],
+  "initial_postcheck_scope_correction": "Default status collapses untracked directories; repeating with original -uall reproduces original digest. No files/index were changed."
+}

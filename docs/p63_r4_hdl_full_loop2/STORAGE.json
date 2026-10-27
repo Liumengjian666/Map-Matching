@@ -1,0 +1,19 @@
+{
+  "sample_unix_time_s": 1793103263.4986076,
+  "filesystem_target": "/home/jian/livox_ws/p63_r4_hdl_full_loop2_data",
+  "df_available_bytes": 24607465472,
+  "df_available_GiB": 22.91748809814453,
+  "minimum_reserve_bytes": 21474836480,
+  "reserve_pass": true,
+  "before_run_available_bytes": 25255415808,
+  "df_change_bytes": -647950336,
+  "df_change_scope": "Same filesystem includes concurrent unrelated activity; not attributed to R4.",
+  "workspace_allocated_bytes_including_sparse_inherited_files": 12230656,
+  "archive_allocated_bytes": 10428416,
+  "external_run_data_allocated_bytes": 7385088,
+  "native_build_reused": "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws",
+  "new_native_build_bytes": 0,
+  "large_asset_downloads": 0,
+  "historical_deletions": 0,
+  "cleanup": "No deletion requested or performed; small raw/gzip analytical copies retained for evidence."
+}

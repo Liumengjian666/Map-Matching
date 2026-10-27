@@ -1,0 +1,18 @@
+{
+  "receipt_callback_count": true,
+  "native_callback_adapter_equal": true,
+  "published_processed_equal": true,
+  "causal_ordinals_prefix": true,
+  "causal_stamps_input_prefix": true,
+  "native_stamps_equal": true,
+  "callback_stamps_equal": true,
+  "adapter_stamps_equal": true,
+  "odom_stamps_equal": true,
+  "status_stamps_equal": true,
+  "callback_call_numbers": true,
+  "adapter_xyz_equal": true,
+  "adapter_payload_equal": true,
+  "target_constant": true,
+  "map_file_unchanged": true,
+  "bag_size_mtime_unchanged": true
+}

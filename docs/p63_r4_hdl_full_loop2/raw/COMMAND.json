@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "bash",
+    "--noprofile",
+    "--norc",
+    "-c",
+    "source /opt/ros/noetic/setup.bash && source /home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/setup.bash && export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH:-} && export ROS_PACKAGE_PATH=/home/jian/livox_ws/p63_r4_hdl_full_loop2_ws/research:${ROS_PACKAGE_PATH:-} && exec roslaunch p63_hdl_full_loop2 p63_r4_hdl_loop2.launch output_dir:=/home/jian/livox_ws/p63_r4_hdl_full_loop2_data/full_trial_01 rviz:=true"
+  ],
+  "R4_diagnostic_CODE_SHA": "27a0cc3f1d63b2cc85f598a7c5c9bfbe2ab65281",
+  "R3_native_CODE_SHA": "eb6ff37ab791193ff1a803952d79e148b9ecea6c",
+  "target_frames": 10905,
+  "GT_online": false,
+  "selected_OMP_environment": {
+    "OMP_NUM_THREADS": null,
+    "OMP_DYNAMIC": null,
+    "OMP_SCHEDULE": null
+  },
+  "no_timing_thread_override": true
+}

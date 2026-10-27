@@ -1,0 +1,12 @@
+{
+  "START_SHA": "78dfc7ce6649b4c8fb25626e55a8e3efd82ef70b",
+  "R3_native_CODE_SHA": "eb6ff37ab791193ff1a803952d79e148b9ecea6c",
+  "R4_running_diagnostic_CODE_SHA": "27a0cc3f1d63b2cc85f598a7c5c9bfbe2ab65281",
+  "postrun_analysis_CODE_SHA": "14e75e372a75cc3e3682ef9d57451bab3e2a74f0",
+  "branch": "research/p63-r4-hdl-full-loop2-frozen-baseline",
+  "repository": "https://github.com/Liumengjian666/Map-Matching",
+  "END_SHA_resolution": "The final archive commit containing this file; resolve with git rev-parse HEAD on the delivered branch. Full END_SHA is provided in the final handoff (cannot self-embed its own commit hash).",
+  "push_executed": false,
+  "core_changes": 0,
+  "native_rebuild": false
+}

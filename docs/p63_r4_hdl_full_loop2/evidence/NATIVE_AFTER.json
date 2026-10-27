@@ -1,0 +1,69 @@
+{
+  "binaries": {
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libglobalmap_server_nodelet.so": {
+      "actual_sha256": "0bb2e7c85e00691bc10e31a6fcdc9623b407904dce65320edef63f8999581105",
+      "expected_sha256": "0bb2e7c85e00691bc10e31a6fcdc9623b407904dce65320edef63f8999581105",
+      "unchanged": true
+    },
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libhdl_localization_nodelet.so": {
+      "actual_sha256": "df69cf57b87ab5b53db7560d04ade85efd2a9e21d043d5c66a6af85c1ab702b7",
+      "expected_sha256": "df69cf57b87ab5b53db7560d04ade85efd2a9e21d043d5c66a6af85c1ab702b7",
+      "unchanged": true
+    },
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libp63_hdl_trace.so": {
+      "actual_sha256": "4e9a5a9e38cfd3dfcf3ac9eb0de2ccbce43e6a86e20c07d0ba3efe33aaca3074",
+      "expected_sha256": "4e9a5a9e38cfd3dfcf3ac9eb0de2ccbce43e6a86e20c07d0ba3efe33aaca3074",
+      "unchanged": true
+    },
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libfast_gicp.so": {
+      "actual_sha256": "ce974c614a6481c335b42279c14daf5f71d4bc7df5a120fa7787d7c2a55ffc97",
+      "expected_sha256": "ce974c614a6481c335b42279c14daf5f71d4bc7df5a120fa7787d7c2a55ffc97",
+      "unchanged": true
+    },
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libndt_omp.so": {
+      "actual_sha256": "e274416abe31236910b5aa588e095cd3100dd77f348163ffddd29618bb8b82ff",
+      "expected_sha256": "e274416abe31236910b5aa588e095cd3100dd77f348163ffddd29618bb8b82ff",
+      "unchanged": true
+    },
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libhdl_global_localization.so": {
+      "actual_sha256": "25d34a98f83cfe49739938888f8fc1d96f3f0f6d129140ebb831ad5935f8d2bd",
+      "expected_sha256": "25d34a98f83cfe49739938888f8fc1d96f3f0f6d129140ebb831ad5935f8d2bd",
+      "unchanged": true
+    }
+  },
+  "upstream": {
+    "hdl_localization": {
+      "HEAD": "de2dc7769aa2412876d05ae6161408d3295b6a3c",
+      "pristine": true,
+      "same_as_frozen": true
+    },
+    "ndt_omp": {
+      "HEAD": "5495fd9214945afcb4b35d5a1da385e405c52bf9",
+      "pristine": true,
+      "same_as_frozen": true
+    },
+    "fast_gicp": {
+      "HEAD": "0e7ec1441c99f7be453db2ea216d5de029387417",
+      "pristine": true,
+      "same_as_frozen": true
+    },
+    "hdl_global_localization": {
+      "HEAD": "a6a6b69929ac371d9531d0dcdef3c1593fd49245",
+      "pristine": true,
+      "same_as_frozen": true
+    }
+  },
+  "running_sources_unchanged": {
+    "docs/p63_r4_hdl_full_loop2/tools/run_full.py": true,
+    "docs/p63_r4_hdl_full_loop2/tools/preflight.py": true,
+    "docs/p63_r4_hdl_full_loop2/tools/test_contract.py": true,
+    "docs/p63_r4_hdl_full_loop2/tools/contract.py": true,
+    "research/p63_hdl_full_loop2/package.xml": true,
+    "research/p63_hdl_full_loop2/CMakeLists.txt": true,
+    "research/p63_hdl_full_loop2/rviz/full_loop2.rviz": true,
+    "research/p63_hdl_full_loop2/scripts/livox_bridge_r3_exact.py": true,
+    "research/p63_hdl_full_loop2/launch/p63_r4_hdl_loop2.launch": true
+  },
+  "native_rebuild": false,
+  "original_core_modifications": 0
+}

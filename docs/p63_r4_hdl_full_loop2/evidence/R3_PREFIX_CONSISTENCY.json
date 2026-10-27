@@ -1,0 +1,30 @@
+{
+  "meaning": "Repeat consistency of already required R4 prefix with R3, not reference accuracy or a second trial.",
+  "prefix_frames": 400,
+  "filtered_position_difference_m": {
+    "n_total": 400,
+    "n_finite": 400,
+    "n_nonfinite": 0,
+    "Mean": 0.0,
+    "P50": 0.0,
+    "P95": 0.0,
+    "P99": 0.0,
+    "Max": 0.0,
+    "Min": 0.0
+  },
+  "filtered_rotation_difference_deg": {
+    "n_total": 400,
+    "n_finite": 400,
+    "n_nonfinite": 0,
+    "Mean": 2.1344341156289846e-08,
+    "P50": 0.0,
+    "P95": 0.0,
+    "P99": 1.7075472925031877e-06,
+    "Max": 1.7075472925031877e-06,
+    "Min": 0.0
+  },
+  "GT_read": false,
+  "new_align": 0,
+  "all_pose_components_numerically_equal": true,
+  "angular_roundoff_note": "Quaternion angle calculation can return microradian-scale roundoff even for equal stored components."
+}
