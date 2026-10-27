@@ -37,6 +37,7 @@
 |INN-012 Super-LIO适配|RETIRED|R1外部PCD及冻结通过；107扫描发布、95状态输出后连续20低支持停止；R2仅部分坐标来源闭合。|`docs/p63_r1_mature_prior_map_baseline/REPORT.md`；`docs/p63_r2_frame_provenance_closure/REPORT.md`|停止当前资产组合；不改角度/重力重跑，不贬低框架普遍能力。|
 |INN-013 HDL成熟基线|PARKED|R3 400/400通过外部筛选；已执行的完整R4在3377帧连续20低inlier停止，NDT/UKF仍有限，150.75MiB、callback P95=103.60ms。|`docs/p63_r4_hdl_full_loop2/REPORT.md`；官方`PoseEstimator::correct()`|仍是唯一成熟候选；整段工程未通过，无GT。外部筛选不等于作者UKF准入。|
 |INN-014 结构留出／稳健候选池|PARKED|P62-R1已提出；R9可评价率4%→100%，但无获支持恢复；R12/R13合法不同候选及稳健接纳仍为0。|`docs/p62_r1_novelty_benchmark_lock/LITERATURE_REVIEW.md`；`docs/p62_r9_coverage_aware_recovery_v2/REPORT.md`；`docs/p62_r12_feasibility_preserving_pool/REPORT.md`|不得重新命名为新创新；Full使用的点不能事后称独立留出。|
+|INN-015 候选对可辨识见证量程（A草案）|PROPOSED|仅设计：用地图/候选侧预测量程差确定见证，再以优化外量程验证；没有实现或实验。|`docs/p63_r4_paper_innovation_design/SELECTED_ALGORITHM.md`、`MINIMAL_EXPERIMENT_PLAN.md`|与INN-014相比只改变验证信息及见证资格；新颖性/正确性/成本均未成立，不得写为已入选核心创新。|
 
 ## 4. 追加式状态事件
 
@@ -56,6 +57,7 @@
 |2026-10-27|INN-012|RETIRED|回填R1失败与R2证据缺口，限当前组合|2a2f202c01efe6a6452436bd1eff084ae1ddfc14|
 |2026-10-27|INN-013|PARKED|完整R4已实际执行并停止，保留原400帧正例|ba612b2404bbe6cca794fa410c18227cbe4cc44c|
 |2026-10-27|INN-014|PARKED|回填R13合法不同0/稳健支持0；非新空白|fab0a2f3fbf3b3f0c4f42c5acb78932dde98749e|
+|2026-10-27|INN-015|PROPOSED|本轮A设计文本首次归档；正式NOVELTY_GAP_UNRESOLVED，不是实验通过|406adaf186026d1d91da51e6a697c06e8a927dbb|
 
 ## 5. 本轮研究记录：设计，不是算法实验
 
@@ -68,3 +70,9 @@ TASK：`P63-R4-PAPER-INNOVATION-DESIGN`，START `ba612b2404bbe6cca794fa410c18227
 数学假设：只有当不同候选预测出不同的可见几何，未参与优化的观测才可能提供区分证据；完全重复且观测等价时应输出不可辨识。该必要条件不等于正确性定理。实现内容仅文档、真实接口定位和历史证据整理；新增ROS回放、NDT、UKF更新、算法源码修改、数据下载均为0。
 
 未来每轮追加模板：日期／TASK；研究问题；参考论文；数学假设与相对旧版本差异；实施内容；实际数据和调用/指标（未执行写0）；结果和失败原因；START/CODE/END；状态事件；唯一NEXT。实验批准与SCI原创性批准分别记录。
+
+### 2026-10-27 本轮收束追加
+
+设计CODE `406adaf186026d1d91da51e6a697c06e8a927dbb`；END为包含本追加的最终归档commit，完整SHA见最终交接。正式结果`NOVELTY_GAP_UNRESOLVED`；INN-015仅PROPOSED，B不开发。原因包括旧留出/候选验证已做、RegScorer及经典可见性先例、指定AGV方法全文未取得、当前没有合格的“高质量却错误”独立参考样本。没有定位或代理评分新结果，不能借设计文档主张性能。
+
+唯一NEXT：科研总控核查真实档案与A公式后，决定是否批准R13固定5帧/15封存候选、零新增NDT的证据资格试验；它不是正确性或原创性确认。不自动进入算法开发/完整loop2/P63-R5。未push，旧R4失败及历史正负结果不变。
