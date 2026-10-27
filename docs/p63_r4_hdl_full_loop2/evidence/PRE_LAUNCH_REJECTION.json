@@ -1,0 +1,14 @@
+{
+  "CODE_SHA_rejected": "cafacfeca50812a209a94e83e47ef0fe8d799073",
+  "reason": "preflight manifest SHA computed before CSV flush",
+  "old_digest": "68e2b53a99ef40c386b1134f10dbc7f0240bc58408d88482676dd0266a214c99",
+  "complete_manifest_digest": "4577530ebab78bbfc098a802bf7d538bcbc53f80922574de407ef25675ee860e",
+  "exact_buffered_write_reproduction": true,
+  "old_and_new_manifest_payloads_identical": true,
+  "ROS_started": false,
+  "NDT_calls": 0,
+  "published_frames": 0,
+  "formal_output_directory_created": false,
+  "preserved_log": "logs/formal_full.log",
+  "repair_scope": "preflight file flush and metadata hash only;no source input/optimizer/threshold change"
+}

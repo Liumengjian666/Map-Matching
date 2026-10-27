@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "docs/p63_r4_hdl_full_loop2/tools/run_full.py", line 15, in <module>
+    assert hashlib.sha256((A/'INPUT_FRAMES.csv').read_bytes()).hexdigest()==identity['frames_manifest_sha256']
+AssertionError
