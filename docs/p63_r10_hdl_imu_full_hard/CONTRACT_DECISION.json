@@ -1,0 +1,21 @@
+{
+  "decision": "PASS_WITH_R9_FROZEN_APPROXIMATIONS",
+  "START_SHA": "6e2b67a6bffa81eb4d70667fdf6e604c56ae4959",
+  "new_align_so_far": 0,
+  "formal_trial_limit": 1,
+  "nominal_align_limit": 2375,
+  "extra_align_limit": 0,
+  "files_sha256": {
+    "INPUT_FREEZE.json": "9376f029fa6b56f8d99f4272cacebdcba7e59e9ffa8493817da04291b5a3274d",
+    "PREFLIGHT.json": "59d0b190e250ff5795309309831f67a7bf0e0523058cb88ab8203238cf87fc5c",
+    "SOURCES.csv": "771c023f80a58d77c17eb6789e4220d7ed762578ee328b712c15806d399cea2e",
+    "TARGET.json": "e86e8d3fa5bcb7c4d3713c0e894bb218d59b79a4ceeb3d86ba3b2eedc095bc46",
+    "RPE_PAIRS.csv": "243f98147d5bb1080937acc5d54cd6f8c7d7c000ff611c5b809515f58b823851",
+    "REFERENCE_TIME_COVERAGE.csv": "2550f498631a00797d50c26e31628c4cc9e22c1a73f1a8b2fad10e9e783fc09a",
+    "evidence/RAW_IMU_VERIFIED.csv": "9771c92db95a75340a27400b8e3053025853b9fb9a8d85998289d16ac23f1b2e",
+    "tools/imu_geometry.py": "19adb542534ebff22ba08ee98a84854dbc809d2295f601e049e49fe9f6570739",
+    "tools/run_full_once.py": "6e521b078eb043617c095ef9a7b34652f7697733b2ede86ad6c84bb7ca3e115f",
+    "BUILD.json": "0216351371e4e82605d12aa11b50da6acbfb2e6804d37166222041a0b58b57f3",
+    "INPUT_AND_FRAME_CONTRACT.md": "83dc5b5383b96fae84a91778f648e5478cee17746050e22df58771bc79d7115e"
+  }
+}

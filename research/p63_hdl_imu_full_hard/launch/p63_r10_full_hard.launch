@@ -1,0 +1,11 @@
+<launch>
+  <arg name="output_dir" />
+  <arg name="rviz" default="true" />
+  <!-- Exact frozen R9 nodes, native libraries, initial pose and parameters. -->
+  <include file="$(find p63_hdl_real_imu)/launch/p63_r9_indoor_hard.launch">
+    <arg name="output_dir" value="$(arg output_dir)" />
+    <arg name="rviz" value="$(arg rviz)" />
+    <arg name="autoplay" value="false" />
+  </include>
+  <!-- Input is supplied by the full IMU+cloud handshake supervisor, never the cloud-only player. -->
+</launch>

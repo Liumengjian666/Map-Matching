@@ -1,0 +1,107 @@
+RAW_CHECK 400
+RAW_CHECK 800
+RAW_CHECK 1200
+RAW_CHECK 1600
+RAW_CHECK 2000
+{
+  "stage": "ZERO_NDT_FULL_INPUT_PASS_PENDING_NATIVE_PREPROCESS",
+  "NDT_calls": 0,
+  "test_reference_pose_values_read": false,
+  "raw_count": {
+    "/imu": 44398,
+    "/points2/decompressed": 2379
+  },
+  "cdr_sha256": {
+    "/imu": "80e30c6fc39e274d994718e986e18b2704bde05a4253d35bfe33121dff972e32",
+    "/points2/decompressed": "020497f9a97fd948c2679ec977a731dbf1f619d35156602b75e945de62926763"
+  },
+  "imu_value_sha256": "9470674b3c0db42f231fcdf2da49137f7bdc949f0d61061a7e4c80465b42e809",
+  "adapter_manifest_sha256": "454066a6ec6ec430204cf67465e0bed055243efd93d38b9c0fe4e03fce8ee767",
+  "imu_csv_sha256": "80bcee627039a57c4d757083f1ddba4aced575aad9b58a115671b98ec0f36a03",
+  "raw_first_stamp_ns": 1690354429463785391,
+  "raw_last_stamp_ns": 1690354593400954808,
+  "evaluation_raw": [
+    5,
+    2379
+  ],
+  "evaluation_count": 2375,
+  "evaluation_span_s": 163.670545635,
+  "anchor_to_last_s": 163.737210859,
+  "imu_first_ns": 1690354429603963391,
+  "imu_last_ns": 1690354593481012582,
+  "scheduled_imu": 44267,
+  "model_active_predict": 41000,
+  "model_skipped_predict": 3267,
+  "imu_full_dt_ms": {
+    "n": 44397,
+    "min": 0.580494,
+    "mean": 3.6911739349730843,
+    "p95": 14.722,
+    "max": 102.216553
+  },
+  "imu_gaps_gt50ms": 47,
+  "scan_imu_age_ms": {
+    "n": 2375,
+    "min": 0.000765,
+    "mean": 6.617534998315789,
+    "p95": 22.004312,
+    "max": 83.388545
+  },
+  "zero_new_imu_raws": [
+    68,
+    1451
+  ],
+  "zero_active_predict_raws": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    68,
+    1451
+  ],
+  "causal_lever_correction_m_s2": {
+    "n": 44267,
+    "min": 7.69514161516465e-05,
+    "mean": 0.5619303566519018,
+    "p95": 1.4310544322764291,
+    "max": 23.48631370124418
+  },
+  "reference_rows": 2379,
+  "reference_time_supported": 2372,
+  "reference_coverage_fraction": 0.9987368421052631,
+  "reference_time_first_last_ns": [
+    1690354429463785000,
+    1690354593400955000
+  ],
+  "rpe_pairs": 2281,
+  "rpe_reference_time_supported": 2278,
+  "r9_adapter_sha256": "19adb542534ebff22ba08ee98a84854dbc809d2295f601e049e49fe9f6570739",
+  "map_file_sha256": "50bba09fde204a55be8261e69ea539ae69c65dd44ec7ca1eeed5b066ff8da098",
+  "free_bytes": 24482246656,
+  "elapsed_s": 31.670498087012675
+}
