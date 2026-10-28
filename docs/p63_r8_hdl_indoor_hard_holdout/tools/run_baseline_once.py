@@ -94,6 +94,7 @@ try:
     while not maps or pub.get_num_connections()<2:
         if time.monotonic()>deadline or launch.poll() is not None:raise RuntimeError('MAP_OR_SUBSCRIBER_STARTUP_FAILED')
         time.sleep(.05)
+    assert not errors and maps[0]['points']==F['target_points'] and maps[0]['xyz_sha256']==F['target_xyz_sha256']
     params={name:rospy.get_param('/'+name) for name in ('hdl_localization_nodelet','globalmap_server_nodelet')}
     p=params['hdl_localization_nodelet'];g=params['globalmap_server_nodelet']
     assert p['reg_method']=='NDT_OMP' and p['ndt_resolution']==1.0 and p['ndt_neighbor_search_method']=='DIRECT7'
