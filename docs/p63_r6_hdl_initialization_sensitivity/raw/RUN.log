@@ -1,0 +1,15 @@
+PREFLIGHT_PASS source/target identities, original defaults, omp_max_threads=16
+TARGET_GRID_BUILD_MS 4.0724
+BEFORE_ALIGN 78 call=1
+AFTER_ALIGN 78 call=1 converged=1
+BEFORE_ALIGN 79 call=2
+AFTER_ALIGN 79 call=2 converged=1
+BEFORE_ALIGN 80 call=3
+AFTER_ALIGN 80 call=3 converged=1
+BEFORE_ALIGN 81 call=4
+AFTER_ALIGN 81 call=4 converged=1
+BEFORE_ALIGN 82 call=5
+AFTER_ALIGN 82 call=5 converged=1
+BEFORE_ALIGN 83 call=6
+AFTER_ALIGN 83 call=6 converged=1
+COMPLETE align=6 UKF=0 ROS_replay=0

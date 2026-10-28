@@ -1,0 +1,17 @@
+PASS exactly six authorized calls, no nominal reruns/UKF/ROS replay
+PASS raw78..83 exact stamps and order
+PASS source geometry preserved through align
+PASS six targets remain R5 native geometry
+PASS driver source/binary match actual compiled and executed identities
+PASS all original R5 ELF libraries untouched
+PASS formal raw output seal intact
+PASS raw copies byte-exact
+PASS all six finite and converged; H1 uses all six
+PASS all comparison outputs valid SE3
+PASS MASTER_RESEARCH_PLAN_AND_LOG.md prior content append-only preserved
+PASS INNOVATION_RESEARCH_LOG.md prior content append-only preserved
+PASS hdl_localization exact R5 source remains pristine
+PASS ndt_omp exact R5 source remains pristine
+PASS original shared root uncommitted work preserved
+PASS 20 GiB reserve maintained
+{"necessary_checks": 16, "validation_align": 0, "storage": {"available_bytes": 24681074688, "worktree_allocated_bytes": 2158592, "external_R6_allocated_bytes": 724992, "deleted_bytes": 0, "downloaded_bytes": 0}}

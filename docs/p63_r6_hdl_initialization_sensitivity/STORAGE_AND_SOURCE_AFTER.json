@@ -1,0 +1,20 @@
+{
+  "upstream": {
+    "hdl_localization": {
+      "SHA": "de2dc7769aa2412876d05ae6161408d3295b6a3c",
+      "pristine": true
+    },
+    "ndt_omp": {
+      "SHA": "5495fd9214945afcb4b35d5a1da385e405c52bf9",
+      "pristine": true
+    }
+  },
+  "R5_libraries_unchanged": true,
+  "storage": {
+    "available_bytes": 24681074688,
+    "worktree_allocated_bytes": 2158592,
+    "external_R6_allocated_bytes": 724992,
+    "deleted_bytes": 0,
+    "downloaded_bytes": 0
+  }
+}

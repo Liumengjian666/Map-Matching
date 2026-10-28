@@ -1,0 +1,37 @@
+[
+  {
+    "source": "/home/jian/livox_ws/p63_r6_hdl_initialization_data/formal_01/ALIGN_STARTED",
+    "archive": "raw/ALIGN_STARTED",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r6_hdl_initialization_data/formal_01/COMMAND.json",
+    "archive": "raw/COMMAND.json",
+    "sha256": "c9ce00adda5ba8ee0b7cc34d480de046bb7a290f240ad4bc78f89a5893cb6a34"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r6_hdl_initialization_data/formal_01/ORACLE_NATIVE.csv",
+    "archive": "raw/ORACLE_NATIVE.csv",
+    "sha256": "f3afce2742dcb4df5c9b31d983ffd1d2e54e7f6b19ce61f1711373dca676e8a0"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r6_hdl_initialization_data/formal_01/OUTPUT_SEAL.json",
+    "archive": "raw/OUTPUT_SEAL.json",
+    "sha256": "af020cc72aeb8cdbe9c03ae71f7bef6d01ef8c5cfed5ba8aea941958ce373353"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r6_hdl_initialization_data/formal_01/PREPROCESS.csv",
+    "archive": "raw/PREPROCESS.csv",
+    "sha256": "94b54cc82b246d2b3c1b79136a89fea0177bca092e78c590001e093d7673af3a"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r6_hdl_initialization_data/formal_01/RUN.log",
+    "archive": "raw/RUN.log",
+    "sha256": "2257b07267d62dd6db58ec60de6109a7130426d2461f62f355b29c39eaece2ba"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r6_hdl_initialization_data/formal_01/RUN_RECEIPT.json",
+    "archive": "raw/RUN_RECEIPT.json",
+    "sha256": "9785b1e402dca2dd23f805b1617234ef0e0fefb175cfbea24f32f7b3e829d33c"
+  }
+]

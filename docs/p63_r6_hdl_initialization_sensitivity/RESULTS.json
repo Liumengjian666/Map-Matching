@@ -1,0 +1,172 @@
+{
+  "TASK": "P63-R6-HDL-INITIALIZATION-SENSITIVITY",
+  "START_SHA": "b538ba95cad58b7222101f09eb6844d55879bfab",
+  "CODE_SHA": "75fa75d3a70a0687cc3c36d836ee89cb5443ecda",
+  "verdict": "INITIALIZATION_SENSITIVITY_SUPPORTED_ON_SIX_FRAMES",
+  "H1_passed_frames": 6,
+  "oracle_reasonable_frames": 6,
+  "evaluated_frames": 6,
+  "new_align": 6,
+  "nominal_align_reruns": 0,
+  "UKF_updates": 0,
+  "online_replays": 0,
+  "run": {
+    "CODE_SHA": "75fa75d3a70a0687cc3c36d836ee89cb5443ecda",
+    "argv": [
+      "/home/jian/livox_ws/p63_r6_hdl_initialization_data/oracle_ndt",
+      "--run",
+      "/home/jian/livox_ws/p63_r6_hdl_initialization_ws/docs/p63_r6_hdl_initialization_sensitivity/INPUT.json",
+      "/home/jian/livox_ws/p63_r6_hdl_initialization_data/formal_01"
+    ],
+    "input_sha256": "087fa25ed61d84a21a07c2a054034123d0a511ad3b9361d40c95f2ba90b72762",
+    "binary_sha256": "a7950632ed78319f0143a0328e7e33b95638417db58fb7a3c75edda962a4245b",
+    "reference_access": "Offline six oracle seeds only; never injected into online history",
+    "UKF_updates": 0,
+    "ROS_replays": 0,
+    "nominal_online_align_repeats": 0,
+    "returncode": 0,
+    "wall_s": 0.3152642169734463,
+    "reason": null,
+    "completed_align_rows": 6,
+    "before_align_logged": 6,
+    "map_sha256_after": "8a3a7b0a9be71a5a76a284079766ca0c91037ba2a43b12dc93b13be14eda7707",
+    "budget_pass": true
+  },
+  "input_contract": "PASS_DETERMINISTIC_RECONSTRUCTION_WITH_DISCLOSED_R5_SOURCE_HASH_LIMITATION",
+  "source_identity_limitation": "R5 saved raw XYZ SHA and native post-filter counts, not native source SHA. Same serialized XYZ, same-frame copy, same libpcl_filters VoxelGrid and bit-exact direct-path comparison reconstruct source identity; new hashes are reconstruction evidence, not retrospective R5 measurements.",
+  "metrics": {
+    "e_online_t_m": {
+      "mean": 0.716346773879617,
+      "rmse": 0.7408079576579485,
+      "p95": 0.9895959878706597,
+      "max": 1.0080693304579333,
+      "min": 0.5185134872481888
+    },
+    "e_online_R_deg": {
+      "mean": 1.4884368392357488,
+      "rmse": 1.622742192774212,
+      "p95": 2.440162920184018,
+      "max": 2.503552396630292,
+      "min": 0.7930003152254962
+    },
+    "e_oracle_t_m": {
+      "mean": 0.031352140847268006,
+      "rmse": 0.03488496828349058,
+      "p95": 0.05047281561401566,
+      "max": 0.05127313216057712,
+      "min": 0.007176433503574258
+    },
+    "e_oracle_R_deg": {
+      "mean": 0.6604291610266,
+      "rmse": 0.6982215155969661,
+      "p95": 0.9170111768035302,
+      "max": 0.9319109480368293,
+      "min": 0.3141236669139184
+    },
+    "translation_improvement_m": {
+      "mean": 0.6849946330323489,
+      "rmse": 0.7116204603183808,
+      "p95": 0.9600204597247057,
+      "max": 0.979741948897175,
+      "min": 0.4704416212738575
+    },
+    "terminal_delta_t_m": {
+      "mean": 0.7432328107009546,
+      "rmse": 0.7661064775477326,
+      "p95": 1.0145638844658613,
+      "max": 1.0317028215875579,
+      "min": 0.5619077875691761
+    },
+    "terminal_delta_R_deg": {
+      "mean": 1.5372325102683948,
+      "rmse": 1.739244106326236,
+      "p95": 2.653895643106729,
+      "max": 2.658265200345013,
+      "min": 0.5695555501787747
+    },
+    "online_correction_t_m": {
+      "mean": 0.06225422500377847,
+      "rmse": 0.09572768363900074,
+      "p95": 0.17902074557173744,
+      "max": 0.2189361200387387,
+      "min": 0.005696312002997793
+    },
+    "online_correction_R_deg": {
+      "mean": 1.1998941789713642,
+      "rmse": 1.2203976733027415,
+      "p95": 1.5214153637843049,
+      "max": 1.5668418591742401,
+      "min": 0.8830847195530213
+    },
+    "oracle_correction_t_m": {
+      "mean": 0.0313521584280037,
+      "rmse": 0.034885040788360244,
+      "p95": 0.05047322084783792,
+      "max": 0.051273924299240436,
+      "min": 0.00717614560354631
+    },
+    "oracle_correction_R_deg": {
+      "mean": 0.6604292058137055,
+      "rmse": 0.6982215750529717,
+      "p95": 0.9170112543328186,
+      "max": 0.9319110495128728,
+      "min": 0.31412357829013754
+    },
+    "oracle_ndt_ms": {
+      "mean": 5.332442333333334,
+      "rmse": 7.410148746936529,
+      "p95": 13.06561425,
+      "max": 13.578637,
+      "min": 1.272866
+    },
+    "oracle_diagnostic_ms": {
+      "mean": 5.9950315,
+      "rmse": 5.9988815026723525,
+      "p95": 6.18761425,
+      "max": 6.198527,
+      "min": 5.545856
+    }
+  },
+  "quality_rank": {
+    "oracle_probability_higher": 6,
+    "oracle_all_nn_fitness_lower": 6,
+    "oracle_native_inlier_higher": 6,
+    "oracle_native_matching_error_lower": 6
+  },
+  "quality_changes": {
+    "native_probability_relative_change_percent": {
+      "mean": 2.122255718560299,
+      "rmse": 2.3622594848998792,
+      "p95": 3.453723557543719,
+      "max": 3.5933309162526195,
+      "min": 0.5002223751156807
+    },
+    "fitness_all_nn_m2_relative_change_percent": {
+      "mean": -40.46531472925882,
+      "rmse": 42.67819839907408,
+      "p95": -21.60504158003875,
+      "max": -18.38156173071029,
+      "min": -59.189206630934365
+    },
+    "inlier_fraction_oracle_minus_online": {
+      "mean": 0.010665963093439737,
+      "rmse": 0.011610688458199637,
+      "p95": 0.016867175698280334,
+      "max": 0.018059492111206055,
+      "min": 0.0032644271850585938
+    },
+    "native_matching_error_m2_relative_change_percent": {
+      "mean": -16.768717657202128,
+      "rmse": 18.272380846596015,
+      "p95": -8.930923850264554,
+      "max": -8.518597412743732,
+      "min": -27.86912153155602
+    }
+  },
+  "peak_RSS_KiB": 79368,
+  "reference_kind": "MAP_ANCHORED_OFFLINE_GICP_IMU_REFERENCE_NOT_MOCAP",
+  "posthoc_alignment": false,
+  "online_recovery_success_claim": false,
+  "native_core_changes": 0,
+  "NDT_parameters_changed": false
+}

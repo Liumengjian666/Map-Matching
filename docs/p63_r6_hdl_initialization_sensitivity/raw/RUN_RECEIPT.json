@@ -1,0 +1,22 @@
+{
+  "CODE_SHA": "75fa75d3a70a0687cc3c36d836ee89cb5443ecda",
+  "argv": [
+    "/home/jian/livox_ws/p63_r6_hdl_initialization_data/oracle_ndt",
+    "--run",
+    "/home/jian/livox_ws/p63_r6_hdl_initialization_ws/docs/p63_r6_hdl_initialization_sensitivity/INPUT.json",
+    "/home/jian/livox_ws/p63_r6_hdl_initialization_data/formal_01"
+  ],
+  "input_sha256": "087fa25ed61d84a21a07c2a054034123d0a511ad3b9361d40c95f2ba90b72762",
+  "binary_sha256": "a7950632ed78319f0143a0328e7e33b95638417db58fb7a3c75edda962a4245b",
+  "reference_access": "Offline six oracle seeds only; never injected into online history",
+  "UKF_updates": 0,
+  "ROS_replays": 0,
+  "nominal_online_align_repeats": 0,
+  "returncode": 0,
+  "wall_s": 0.3152642169734463,
+  "reason": null,
+  "completed_align_rows": 6,
+  "before_align_logged": 6,
+  "map_sha256_after": "8a3a7b0a9be71a5a76a284079766ca0c91037ba2a43b12dc93b13be14eda7707",
+  "budget_pass": true
+}

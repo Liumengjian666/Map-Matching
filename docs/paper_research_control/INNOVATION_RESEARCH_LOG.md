@@ -92,3 +92,20 @@ START `e1b06fa8a910ffd3d9f4299838b4b8eb7523a262`；实际在线CODE `661cc97784e
 源码改动仅独立转换/launch/监督/只读测量，原作者核心0；实际NDT160、创新模块0。manager峰值116.921875MiB，callback P95 57.628496ms但Max144.456400ms；离线握手不认证实时。证据见`docs/p63_r5_hdl_public_baseline/`，全部失败输出和两个在线RViz截图保留。
 
 唯一NEXT：由总控决定是否批准原版HDL raw78–83固定六帧的参考初值反事实诊断（不融合，最多6次额外align）。当前不执行，不自动进入恢复开发或完整序列。INN-013的FAILED是短段工程/性能资格结论，不是SCI创新成败；INN-015保持PROPOSED。
+
+
+## 7. 2026-10-28 P63-R6：初值敏感性反事实诊断，非创新成功
+
+TASK `P63-R6-HDL-INITIALIZATION-SENSITIVITY`。问题：相同六帧/目标/原生优化器，仅换到获准参考初值是否产生更好终值。资料限R5合同/封存结果和原HDL调用链，无新文献或新算法主张。
+
+START `b538ba95cad58b7222101f09eb6844d55879bfab`；实际CODE `75fa75d3a70a0687cc3c36d836ee89cb5443ecda`；评价CODE `72223468d62b894b30bad92852c0f79911846a14`；END为最终归档commit，完整值见交接。分支`research/p63-r6-hdl-initialization-sensitivity`，本地未push。
+
+实施：原版NDT_OMP直接链接R5已验库；原source/target .1m处理和NDT1m/DIRECT7/.01/max35/.1/.55不变。固定raw78–83恰好6次新增align、6收敛；原在线重跑0，UKF/ROS回放/候选搜索0。Source依原输入、同路径/库重建，披露R5无现场post-filter SHA，不伪称回溯实测。
+
+正式结果 `INITIALIZATION_SENSITIVITY_SUPPORTED_ON_SIX_FRAMES`：6/6达到冻结H1。在线NDT六帧RMSE .740808m/1.622742°，参考初值终值.034885m/.698222°；两终值位置差.562–1.032m，旋转差.570–2.658°。不是可用在线恢复，未证明严格局部极值或正式退化。
+
+质量观察：给定双终值后，Gaussian分数、全点NN fitness、原生inlier及matching_error在6/6上均将更接近参考者排得更好。这批样本不支持“原生评分完全失明”的强断言；当前未解决的是非Oracle候选是否可达，以及高质量单个终值无法自证正确。不能看本轮GT拟合新门限。inlier仍含地图原点25m裁剪，参考仍是同图锚定GICP+IMU。
+
+额外compute Mean/P95/Max=5.332442/13.065614/13.578637ms；独立进程峰值77.507813MiB，不能当在线全系统成本。证据：`docs/p63_r6_hdl_initialization_sensitivity/REPORT.md`、`SIX_FRAME_COMPARISON.csv`、`raw/`及真实C++。INN-013仍保留R5 FAILED，INN-015仍PROPOSED；不新增“SUPPORTED创新”条目。
+
+唯一NEXT：总控决定是否批准固定六帧非Oracle候选可达性最小验证，沿用原生质量排序为基线，种子与预算另行预注册；当前不执行、不自动下一轮。

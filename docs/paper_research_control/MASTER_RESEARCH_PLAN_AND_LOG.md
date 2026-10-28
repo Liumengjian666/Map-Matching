@@ -262,3 +262,24 @@ TASK `P63-R5-HDL-PUBLIC-BASELINE-QUALIFICATION`，只建立原版成熟基线，
 |科研与NEXT|HDL同样失效但严重程度/恢复不同，不支持只怪P62或把两个链路强归同一退化。唯一NEXT建议总控批准HDL raw78–83固定六帧参考初值反事实诊断，不融合、最多6次额外align；本轮未执行，不开发恢复、不跑2023帧|
 
 创新台账INN-013登记FAILED仅指本次公开短段资格，保留R3工程正例与R4旧负例；INN-015仍PROPOSED且本轮未设计/实现。当前没有将基线评价或参考相对失败登记为论文创新成功。
+
+
+## 2026-10-28 P63-R6实际执行：固定六帧原生NDT初值敏感性成立
+
+TASK `P63-R6-HDL-INITIALIZATION-SENSITIVITY`。原版HDL/R5配置不改，原在线A直接引用，不重放160帧。仅离线参考初值反事实诊断，不能称在线恢复或算法创新成功。
+
+|项目|实际事实|
+|---|---|
+|Git|START `b538ba95cad58b7222101f09eb6844d55879bfab`；实际诊断CODE `75fa75d3a70a0687cc3c36d836ee89cb5443ecda`；封存后评价CODE `72223468d62b894b30bad92852c0f79911846a14`；END为最终归档commit，完整值见交接；本地未push|
+|工作区/分支|`/home/jian/livox_ws/p63_r6_hdl_initialization_ws`；`research/p63-r6-hdl-initialization-sensitivity`|
+|输入/合同|Koide indoor_easy_01 Azure Kinect raw78–83，仅6帧。R5原PCD/XYZ/header保持，原生Source点数2757/2756/2784/2738/2784/2824一致，两序列化路径逐点一致。地图93146→89656，全部目标SHA dd839ccce78afebd3c7b055b5e9cff4b021f70a8cd0ad2d7323d899079d3c533。R5未保存post-filter Source SHA，本轮哈希是同库/同路径确定性重建证据，不冒充旧现场测量|
+|实际调用|新增6次原生NDT，6次收敛，原在线NDT重跑0、UKF0、ROS回放0。参考只作为本轮获准离线初值及封存后评价，不插入R5历史。原HDL/UKF/NDT核心修改0，无C+G/其他候选|
+|正式结果|**INITIALIZATION_SENSITIVITY_SUPPORTED_ON_SIX_FRAMES**。6/6满足oracle≤.15m/2°且位置改善≥.30m；在线原生六帧RMSE .740808m/1.622742°，oracle终值.034885m/.698222°；oracle最大.051273m/.931911°|
+|物理变化|在线与oracle终值位置差.561908–1.031703m、旋转差.569556–2.658265°；位置误差改善.470442–.979742m。完整两组初/终SE3、Delta、逐帧修正均保存，无GT拟合|
+|质量判断|6/6 oracle Gaussian分数更高、全点NN fitness更低、native inlier更高、matching_error更低。Gaussian提高.50%–3.59%，NN fitness下降18.38%–59.19%，inlier绝对增加.003264–.018059。两组均高inlier不等于质量完全不可区分；没有新增在线门限|
+|资源|六次compute Mean/P95/Max=5.332442/13.065614/13.578637ms，诊断Mean5.995032ms；Gaussian初始化4.0724ms；独立进程墙钟.315264s，峰值79368KiB=77.507813MiB。无UKF/ROS，不能作完整定位资源或实时声明|
+|工程/限制|初次链接受相机SDK旧libusb影响，保留错误日志；按R5系统库优先次序修复构建环境后才预检/正式运行，未重试align。参考为地图锚定离线GICP+IMU，非独立动捕。未证明严格局部极值、正式退化、非Oracle候选可达或在线可靠恢复|
+|保护/存储|稳定机器狗、R5/旧实验及上游均未写入；没有下载/删除。运行后采样24,683,917,312B可用，保留20GiB；实际新增工作区/外部产物体积见本轮归档收尾记录，不把df同盘变化全归因本轮|
+|归档/NEXT|`docs/p63_r6_hdl_initialization_sensitivity/`。唯一NEXT建议总控核查后决定是否批准固定六帧的非Oracle候选可达性最小验证，以原生质量排序为基线，事前另冻种子/预算；本轮不执行额外align或新算法|
+
+R5资格FAILED及INN-013状态不因本轮诊断改为创新成功，INN-015保持PROPOSED且未设计/开发。本轮只将“准确初值邻域可获得更好匹配”的有限机制证据补充完整。
