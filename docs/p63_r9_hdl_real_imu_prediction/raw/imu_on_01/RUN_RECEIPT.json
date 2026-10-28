@@ -1,0 +1,34 @@
+{
+  "reason": "COMPLETED_160",
+  "published": 160,
+  "completed": 160,
+  "target": 160,
+  "last_raw": 164,
+  "wall_s": 20.168473476020154,
+  "peaks": {
+    "manager_KiB": 116932,
+    "whole_owned_tree_KiB": 816356
+  },
+  "errors": [],
+  "captures": [
+    {
+      "tag": "LIVE_raw164",
+      "returncode": 0
+    }
+  ],
+  "maps": [
+    {
+      "points": 93223,
+      "xyz_sha256": "166c4d2a4f5d24a4c79d4c90a8a275e0fe905fcc9650d559aabb775780e81654",
+      "frame": "map"
+    }
+  ],
+  "imu_sent": 8625,
+  "imu_received": 8625,
+  "actual_predict_calls": 8625,
+  "actual_active_predict": 5358,
+  "test_GT_access": false,
+  "GT_access_online": "Previously frozen raw4 anchor only",
+  "formal_trials": 1,
+  "map_file_sha256_after": "50bba09fde204a55be8261e69ea539ae69c65dd44ec7ca1eeed5b066ff8da098"
+}

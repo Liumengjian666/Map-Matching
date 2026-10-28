@@ -1,0 +1,361 @@
+{
+  "TASK": "P63-R9-HDL-IMU-PREDICTION-CONTROLLED-COMPARISON",
+  "START_SHA": "b2e2470c4cc9e89df70db73803a8df2ad994ced6",
+  "CODE_SHA": "c03c58fc2bc2a1bf6fe4b802b76fe3b6aa673dd2",
+  "EVALUATION_CODE_SHA": "a8bf141f5c9dc07b7ce2605f56f9e1dce31dbd83",
+  "verdict": "IMU_PREDICTION_AND_LOCALIZATION_IMPROVED",
+  "contract": "PASS_WITH_EXPLICIT_NATIVE_APPROXIMATIONS_USER_ACCEPTED",
+  "run": {
+    "reason": "COMPLETED_160",
+    "published": 160,
+    "completed": 160,
+    "target": 160,
+    "last_raw": 164,
+    "wall_s": 20.168473476020154,
+    "peaks": {
+      "manager_KiB": 116932,
+      "whole_owned_tree_KiB": 816356
+    },
+    "errors": [],
+    "captures": [
+      {
+        "tag": "LIVE_raw164",
+        "returncode": 0
+      }
+    ],
+    "maps": [
+      {
+        "points": 93223,
+        "xyz_sha256": "166c4d2a4f5d24a4c79d4c90a8a275e0fe905fcc9650d559aabb775780e81654",
+        "frame": "map"
+      }
+    ],
+    "imu_sent": 8625,
+    "imu_received": 8625,
+    "actual_predict_calls": 8625,
+    "actual_active_predict": 5358,
+    "test_GT_access": false,
+    "GT_access_online": "Previously frozen raw4 anchor only",
+    "formal_trials": 1,
+    "map_file_sha256_after": "50bba09fde204a55be8261e69ea539ae69c65dd44ec7ca1eeed5b066ff8da098"
+  },
+  "native_align": 160,
+  "native_converged": 160,
+  "extra_align": 0,
+  "native_imu_received": 8625,
+  "native_predict_called": 8625,
+  "native_active_predict_called": 5358,
+  "cooltime_or_first_skipped": 3267,
+  "actual_integrated_s": 8.988582346999975,
+  "reference_coverage": 1.0,
+  "reference_kind": "MAP_ANCHORED_OFFLINE_GICP_IMU_REFERENCE_NOT_MOCAP",
+  "posthoc_alignment": false,
+  "new_algorithm": false,
+  "old_translation": {
+    "n": 160,
+    "mean": 0.4592147851736311,
+    "rmse": 0.7978611545508207,
+    "p95": 1.9654163420874795,
+    "max": 2.111676791200362
+  },
+  "old_rotation": {
+    "n": 160,
+    "mean": 10.076265262933058,
+    "rmse": 16.234717016374173,
+    "p95": 34.12655571953131,
+    "max": 43.689556658590675
+  },
+  "new_translation": {
+    "n": 160,
+    "mean": 0.07724177026141195,
+    "rmse": 0.09744042891643381,
+    "p95": 0.19021097290401082,
+    "max": 0.23075207538192727
+  },
+  "new_rotation": {
+    "n": 160,
+    "mean": 1.794840254554321,
+    "rmse": 2.016918788052274,
+    "p95": 3.7560773842779507,
+    "max": 4.694387735273447
+  },
+  "old_high_frames": 56,
+  "new_high_frames": 0,
+  "old_episodes": [
+    {
+      "first_raw": 84,
+      "last_raw": 141,
+      "startup": false,
+      "recovery_raw": 142,
+      "recovery_seconds": 3.933357014
+    }
+  ],
+  "new_episodes": [],
+  "H2_checks": {
+    "rotation_rmse_reduced_at_least_20_percent": true,
+    "translation_rmse_within_plus_0_10m": true,
+    "high_error_count_or_longest_episode_reduced": true,
+    "finite_no_reset_no_gt_leak": true
+  },
+  "H1_fixed_keys_improved_at_least_1degree": [
+    83,
+    84,
+    85,
+    105,
+    130,
+    142
+  ],
+  "fixed_key_details": [
+    {
+      "raw_ordinal": 83,
+      "stamp_ns": 1690354435063758977,
+      "r8_pred_translation_error_m": 0.04582041707951817,
+      "r9_pred_translation_error_m": 0.03801789828410696,
+      "delta_r9_minus_r8_pred_translation_error_m": -0.0078025187954112105,
+      "r8_pred_rotation_error_deg": 5.662025094692082,
+      "r9_pred_rotation_error_deg": 1.035050608571525,
+      "delta_r9_minus_r8_pred_rotation_error_deg": -4.626974486120557,
+      "r8_ndt_translation_error_m": 0.04090467516708371,
+      "r9_ndt_translation_error_m": 0.0357076045660156,
+      "delta_r9_minus_r8_ndt_translation_error_m": -0.00519707060106811,
+      "r8_ndt_rotation_error_deg": 1.1061225255791747,
+      "r9_ndt_rotation_error_deg": 1.0712460290420776,
+      "delta_r9_minus_r8_ndt_rotation_error_deg": -0.034876496537097124,
+      "r8_translation_error_m": 0.03940185621266305,
+      "r9_translation_error_m": 0.0358864827899289,
+      "delta_r9_minus_r8_translation_error_m": -0.0035153734227341554,
+      "r8_rotation_error_deg": 1.3469685138113832,
+      "r9_rotation_error_deg": 1.0489992350463508,
+      "delta_r9_minus_r8_rotation_error_deg": -0.2979692787650323,
+      "imu_consumed": "14",
+      "imu_active_predict": "14",
+      "last_imu_stamp_ns": "1690354435047728764",
+      "imu_age_ms": "16.030213",
+      "imu_integrated_s": "0.06975466400000001",
+      "prior_ukf_correction_stamp_ns": "1690354434997096812"
+    },
+    {
+      "raw_ordinal": 84,
+      "stamp_ns": 1690354435130453152,
+      "r8_pred_translation_error_m": 0.06276739797242589,
+      "r9_pred_translation_error_m": 0.05275240155105958,
+      "delta_r9_minus_r8_pred_translation_error_m": -0.010014996421366315,
+      "r8_pred_rotation_error_deg": 8.526798770641095,
+      "r9_pred_rotation_error_deg": 2.530705782051188,
+      "delta_r9_minus_r8_pred_rotation_error_deg": -5.996092988589908,
+      "r8_ndt_translation_error_m": 0.13175851351723197,
+      "r9_ndt_translation_error_m": 0.06792620738235233,
+      "delta_r9_minus_r8_ndt_translation_error_m": -0.06383230613487964,
+      "r8_ndt_rotation_error_deg": 7.3407202060380135,
+      "r9_ndt_rotation_error_deg": 1.5237388480602319,
+      "delta_r9_minus_r8_ndt_rotation_error_deg": -5.816981357977782,
+      "r8_translation_error_m": 0.11650064313801554,
+      "r9_translation_error_m": 0.06532420293373321,
+      "delta_r9_minus_r8_translation_error_m": -0.05117644020428233,
+      "r8_rotation_error_deg": 7.212113830023403,
+      "r9_rotation_error_deg": 1.522270386653632,
+      "delta_r9_minus_r8_rotation_error_deg": -5.689843443369771,
+      "imu_consumed": "22",
+      "imu_active_predict": "22",
+      "last_imu_stamp_ns": "1690354435110804861",
+      "imu_age_ms": "19.648291",
+      "imu_integrated_s": "0.06307609700000001",
+      "prior_ukf_correction_stamp_ns": "1690354435063758977"
+    },
+    {
+      "raw_ordinal": 85,
+      "stamp_ns": 1690354435197148273,
+      "r8_pred_translation_error_m": 0.11311328723129921,
+      "r9_pred_translation_error_m": 0.08998113205906763,
+      "delta_r9_minus_r8_pred_translation_error_m": -0.023132155172231578,
+      "r8_pred_rotation_error_deg": 15.791279670703489,
+      "r9_pred_rotation_error_deg": 3.288132088812421,
+      "delta_r9_minus_r8_pred_rotation_error_deg": -12.503147581891067,
+      "r8_ndt_translation_error_m": 0.13347514491928583,
+      "r9_ndt_translation_error_m": 0.07619489079644307,
+      "delta_r9_minus_r8_ndt_translation_error_m": -0.057280254122842766,
+      "r8_ndt_rotation_error_deg": 13.077254613535883,
+      "r9_ndt_rotation_error_deg": 1.5070695468862547,
+      "delta_r9_minus_r8_ndt_rotation_error_deg": -11.570185066649628,
+      "r8_translation_error_m": 0.12998297246347656,
+      "r9_translation_error_m": 0.07702874967805944,
+      "delta_r9_minus_r8_translation_error_m": -0.05295422278541713,
+      "r8_rotation_error_deg": 12.856003777548064,
+      "r9_rotation_error_deg": 1.517813524344728,
+      "delta_r9_minus_r8_rotation_error_deg": -11.338190253203337,
+      "imu_consumed": "19",
+      "imu_active_predict": "19",
+      "last_imu_stamp_ns": "1690354435194036977",
+      "imu_age_ms": "3.111296",
+      "imu_integrated_s": "0.08323211600000001",
+      "prior_ukf_correction_stamp_ns": "1690354435130453152"
+    },
+    {
+      "raw_ordinal": 105,
+      "stamp_ns": 1690354436530471932,
+      "r8_pred_translation_error_m": 0.596550427134237,
+      "r9_pred_translation_error_m": 0.09248007822221378,
+      "delta_r9_minus_r8_pred_translation_error_m": -0.5040703489120232,
+      "r8_pred_rotation_error_deg": 16.706939483374626,
+      "r9_pred_rotation_error_deg": 2.8055133137419155,
+      "delta_r9_minus_r8_pred_rotation_error_deg": -13.90142616963271,
+      "r8_ndt_translation_error_m": 0.09995621986852007,
+      "r9_ndt_translation_error_m": 0.10009444796268906,
+      "delta_r9_minus_r8_ndt_translation_error_m": 0.0001382280941689823,
+      "r8_ndt_rotation_error_deg": 2.597581067458576,
+      "r9_ndt_rotation_error_deg": 2.5696744173339767,
+      "delta_r9_minus_r8_ndt_rotation_error_deg": -0.027906650124599253,
+      "r8_translation_error_m": 0.0788073194666679,
+      "r9_translation_error_m": 0.09894331772156215,
+      "delta_r9_minus_r8_translation_error_m": 0.020135998254894247,
+      "r8_rotation_error_deg": 3.8077750265045522,
+      "r9_rotation_error_deg": 2.554945087589174,
+      "delta_r9_minus_r8_rotation_error_deg": -1.252829938915378,
+      "imu_consumed": "12",
+      "imu_active_predict": "12",
+      "last_imu_stamp_ns": "1690354436520160287",
+      "imu_age_ms": "10.311645",
+      "imu_integrated_s": "0.06242200000000001",
+      "prior_ukf_correction_stamp_ns": "1690354436463818533"
+    },
+    {
+      "raw_ordinal": 130,
+      "stamp_ns": 1690354438263782271,
+      "r8_pred_translation_error_m": 2.100090406863435,
+      "r9_pred_translation_error_m": 0.22516411640936232,
+      "delta_r9_minus_r8_pred_translation_error_m": -1.8749262904540729,
+      "r8_pred_rotation_error_deg": 39.17539088848613,
+      "r9_pred_rotation_error_deg": 1.7009402989709297,
+      "delta_r9_minus_r8_pred_rotation_error_deg": -37.4744505895152,
+      "r8_ndt_translation_error_m": 2.1041409102661155,
+      "r9_ndt_translation_error_m": 0.20464809580422788,
+      "delta_r9_minus_r8_ndt_translation_error_m": -1.8994928144618877,
+      "r8_ndt_rotation_error_deg": 40.47555614337547,
+      "r9_ndt_rotation_error_deg": 1.8866373194140142,
+      "delta_r9_minus_r8_ndt_rotation_error_deg": -38.58891882396146,
+      "r8_translation_error_m": 2.103650482914767,
+      "r9_translation_error_m": 0.2063575347675013,
+      "delta_r9_minus_r8_translation_error_m": -1.8972929481472656,
+      "r8_rotation_error_deg": 40.625131352550376,
+      "r9_rotation_error_deg": 1.9246318640494233,
+      "delta_r9_minus_r8_rotation_error_deg": -38.70049948850095,
+      "imu_consumed": "24",
+      "imu_active_predict": "24",
+      "last_imu_stamp_ns": "1690354438259406019",
+      "imu_age_ms": "4.376252",
+      "imu_integrated_s": "0.07832696100000003",
+      "prior_ukf_correction_stamp_ns": "1690354438197119667"
+    },
+    {
+      "raw_ordinal": 142,
+      "stamp_ns": 1690354439063810166,
+      "r8_pred_translation_error_m": 0.800292376313884,
+      "r9_pred_translation_error_m": 0.04850145685806247,
+      "delta_r9_minus_r8_pred_translation_error_m": -0.7517909194558214,
+      "r8_pred_rotation_error_deg": 24.09594435252049,
+      "r9_pred_rotation_error_deg": 0.936979360520014,
+      "delta_r9_minus_r8_pred_rotation_error_deg": -23.158964992000477,
+      "r8_ndt_translation_error_m": 0.06116168941872884,
+      "r9_ndt_translation_error_m": 0.06402627107544528,
+      "delta_r9_minus_r8_ndt_translation_error_m": 0.002864581656716443,
+      "r8_ndt_rotation_error_deg": 1.9470557924352883,
+      "r9_ndt_rotation_error_deg": 1.998121353243165,
+      "delta_r9_minus_r8_ndt_rotation_error_deg": 0.05106556080787672,
+      "r8_translation_error_m": 0.11616980975253684,
+      "r9_translation_error_m": 0.057831664448235044,
+      "delta_r9_minus_r8_translation_error_m": -0.05833814530430179,
+      "r8_rotation_error_deg": 4.8593560750570886,
+      "r9_rotation_error_deg": 2.127765249436663,
+      "delta_r9_minus_r8_rotation_error_deg": -2.7315908256204255,
+      "imu_consumed": "14",
+      "imu_active_predict": "14",
+      "last_imu_stamp_ns": "1690354439062654682",
+      "imu_age_ms": "1.155484",
+      "imu_integrated_s": "0.06854478100000003",
+      "prior_ukf_correction_stamp_ns": "1690354438997148003"
+    }
+  ],
+  "timing_ms": {
+    "ndt_compute_ms": {
+      "n": 160,
+      "mean": 35.651941243749995,
+      "rmse": 41.8149950342532,
+      "p95": 78.48219539999994,
+      "max": 106.336859
+    },
+    "callback_ms": {
+      "n": 160,
+      "mean": 57.40381399375,
+      "rmse": 61.744198984706,
+      "p95": 98.26517774999988,
+      "max": 121.957455
+    },
+    "diagnostic_ms": {
+      "n": 160,
+      "mean": 3.77243754375,
+      "rmse": 4.002509226366968,
+      "p95": 5.6821265499999996,
+      "max": 12.007124
+    },
+    "imu_predict_ms": {
+      "n": 160,
+      "mean": 0.38168367500000006,
+      "rmse": 0.5724507813228685,
+      "p95": 1.2352417499999964,
+      "max": 1.8523620000000007
+    },
+    "adapter_batch_ms": {
+      "n": 160,
+      "mean": 16.445352843220462,
+      "rmse": 22.340994425463602,
+      "p95": 46.24604389537123,
+      "max": 84.48868297273293
+    },
+    "input_load_convert_ms": {
+      "n": 160,
+      "mean": 10.393831450710422,
+      "rmse": 10.865845788324629,
+      "p95": 16.419687232701104,
+      "max": 19.120855955407023
+    }
+  },
+  "active_imu_predict_ms": {
+    "n": 5358,
+    "mean": 0.010584020156774917,
+    "rmse": 0.011449894805243343,
+    "p95": 0.018019,
+    "max": 0.064814
+  },
+  "imu_conversion_ms": {
+    "n": 8625,
+    "mean": 0.14712645874048272,
+    "rmse": 0.1936150240351271,
+    "p95": 0.23704301565885544,
+    "max": 5.1099020056426525
+  },
+  "total_imu_predict_ms": 61.06938800000018,
+  "total_imu_conversion_ms": 1268.9657066366635,
+  "peak_manager_MiB": 114.19140625,
+  "peak_owned_tree_MiB": 797.22265625,
+  "new_zero_imu_raws": [
+    68
+  ],
+  "sensor_span_s": 10.933446899,
+  "local_worsening": {
+    "translation_error_m": {
+      "count_delta_above_1e_minus6": 7,
+      "max_increase": 0.027980733230960207,
+      "raw": 73,
+      "r8": 0.02502050272244694,
+      "r9": 0.053001235953407146
+    },
+    "rotation_error_deg": {
+      "count_delta_above_1e_minus6": 41,
+      "max_increase": 1.1979478573829785,
+      "raw": 77,
+      "r8": 0.9576425861302975,
+      "r9": 2.155590443513276
+    }
+  },
+  "adapter_memory_scope": "In input supervisor process; no isolated adapter RSS measured. Whole process-tree RSS includes supervisor, RViz, ROS and shared-page double counting."
+}

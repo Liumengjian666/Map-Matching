@@ -1,0 +1,14 @@
+{
+  "free_bytes": 24539062272,
+  "new_archive_allocated_bytes": 7888896,
+  "new_external_data_allocated_bytes": 8159232,
+  "worktree_including_inherited_allocated_bytes": 34181120,
+  "downloaded_bytes": 0,
+  "deleted_files": 0,
+  "regenerable_preserved": [
+    "external trace.o",
+    "external libp63_r9_trace.so",
+    "raw original logs also losslessly archived"
+  ],
+  "deletion_authorized": false
+}

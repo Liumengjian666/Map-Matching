@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "bash",
+    "--noprofile",
+    "--norc",
+    "-c",
+    "source /opt/ros/noetic/setup.bash && source /home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/setup.bash && export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH:-} && export ROS_PACKAGE_PATH=/home/jian/livox_ws/p63_r9_real_imu_prediction_ws/research:${ROS_PACKAGE_PATH:-} && exec roslaunch p63_hdl_real_imu p63_r9_indoor_hard.launch output_dir:=/home/jian/livox_ws/p63_r9_real_imu_prediction_data/imu_on_01 rviz:=true autoplay:=false"
+  ],
+  "CODE_SHA": "c03c58fc2bc2a1bf6fe4b802b76fe3b6aa673dd2",
+  "input_manifest_sha256": "a10087f11c8aad4f237e0b486dce01e73b7270b91edd66c9cc59164d3da06a1d",
+  "trace_binary_sha256": "e87b8e26cc2d8eb1390291b603a81a7e015c47fc784a523cc8b1b0ee7f7a4fe6",
+  "test_GT_access": false,
+  "oracle_anchor": 4,
+  "target_raw": [
+    5,
+    164
+  ]
+}

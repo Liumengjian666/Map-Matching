@@ -1,0 +1,20 @@
+PASS pre-run contract source/binary/input seal unchanged
+PASS six frozen native ELFs unchanged
+PASS actual trace source and binary
+PASS online outputs sealed before reference evaluation
+PASS all archived raw content byte-identical
+PASS one run 160 frames and align calls, all original IDs
+PASS 8625 actual IMU receipts/consumptions and 5358 active predictions
+PASS ordered actual IMU no future input or missing receipt
+PASS actual native state/time finite and forward
+PASS all actual Source and frozen Target identities
+PASS last real IMU predictor state is actual NDT guess on 159 nonempty batches
+PASS preflight clock matches native calls including raw68 and cool-time
+PASS complete reference evaluation and unchanged H2 boundaries
+PASS local worsening retained
+PASS master and innovation ledger append only
+PASS root pre-existing staged/untracked work unchanged
+PASS four upstream source versions pristine
+PASS 20 GiB disk reserve
+PASS map input file unchanged after run
+TOTAL 19 NDT added by checks=0

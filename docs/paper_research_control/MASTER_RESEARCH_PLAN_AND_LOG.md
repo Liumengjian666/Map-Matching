@@ -330,3 +330,26 @@ TASK `P63-R8-HDL-INDOOR-HARD-HOLDOUT`。独立序列固定方法确认，不是�
 存储及必要核验收尾见本轮STORAGE_AND_SOURCE_AFTER.json和final_checks.log。R7开发正例与R8负例同时保留，不将正常4帧安全外推成恢复通过，不追加2379帧或新六帧。
 
 P63-R8收尾补记：21项必要身份/调用/封存/历史核验通过，检查新增align0。可用24,614,551,552B；稀疏工作区11,714,560B含继承文件、R8外部4,366,336B，无下载/删除，保留20GiB。原版160+候选48预算结束，未启用IMU或下一阶段。
+
+
+## 2026-10-28 P63-R9：原版真实IMU改善Hard短段
+
+TASK `P63-R9-HDL-IMU-PREDICTION-CONTROLLED-COMPARISON`。本轮是成熟基线对照，无新SCI算法、候选搜索或评分。
+
+START `b2e2470c4cc9e89df70db73803a8df2ad994ced6`；在线CODE `c03c58fc2bc2a1bf6fe4b802b76fe3b6aa673dd2`；主要评价CODE `a8bf141f5c9dc07b7ce2605f56f9e1dce31dbd83`；END为最终归档commit，完整SHA见最终交接。分支`research/p63-r9-hdl-real-imu-prediction`，工作区`/home/jian/livox_ws/p63_r9_real_imu_prediction_ws`。本地提交，未push。
+
+输入预检：官方T_L_I与原CDR、SI单位闭合，加入独立刚体旋转及杆臂输入转换（角加速度采用因果真实gyro后向差分，噪声/近似明确披露），原NDT/UKF库完全不改。HDL不自动变换外参、补齐扫描时刻或做OOSM；Hard扫描最后IMU年龄Max75.723881ms、raw68无新IMU。用户明确批准“接受原版近似并记录实际时间缺口，不修改时钟或数学”。不把这个批准解释为严格共时理论证明。
+
+唯一160帧原IMU-on运行完成：实际NDT160、全部收敛且UKF输出有限；IMU入缓存/消费8625，实际原UKF传播5358，cool-time/首条跳过3267；所有实参和调用均有原生回执。额外NDT/候选/状态重置/GT在线反馈/重跑0。Source/93223点Target身份与R8一致；封存在线输出后才读取评价参考。
+
+正式 **IMU_PREDICTION_AND_LOCALIZATION_IMPROVED**。完整UKF位置RMSE .797861→.097440m，旋转16.234717→2.016919°，高误差56→0，原raw84–141失效未再出现。H1全段预测旋转RMSE17.140902→2.056193°；固定六关键帧均明显改善，raw130预测39.175391→1.700940°。原生NDT终值RMSE .796413m/16.258573°→.097794m/1.991021°。H1与H2分别支持，不把IMU预测改善自动当定位结果。
+
+反例/限制：UKF位置7帧略差，最大raw73+.027981m；旋转41帧略差，最大raw77+1.197948°，均无新高误差。参考是同图离线GICP+IMU、非独立动捕，IMU参与参考生成；数据为已知Hard短段，非完整2379帧。不证明NDT永不失败，不把本成熟IMU路径算创新或候选恢复，R8/R7历史反例不改。
+
+成本：原NDT Mean/P95/Max35.651941/78.482195/106.336859ms；完整callback57.403814/98.265178/121.957455ms；原IMU调用总61.069388ms。输入Python转换总1268.965707ms，转换/发布/握手每扫描Mean16.445353/P9546.246044/Max84.488683ms。定位峰值114.191406MiB、完整自有树含GUI797.222656MiB；adapter与监督器共进程，独立RSS不可拆出，NR。墙钟20.168473s/传感器10.933447s，非10Hz验收。
+
+证据：`docs/p63_r9_hdl_real_imu_prediction/REPORT.md`、IMU_INPUT_CONTRACT、HDL_NATIVE_IMU_SOURCE_ANALYSIS、全160比较/轨迹、RESULTS.json、完整原生IMU/缓存/预测/NDT日志及SHA。原库、稳定工程和历史未改，无下载/删除。
+
+唯一NEXT：总控核查后决定是否批准固定本轮输入转换、原版时间近似及全部参数的Hard完整序列IMU-on基线资格实验，先验证短段收益是否持续；本轮不执行，不开发新的预测或恢复模块。
+
+R9收尾：19项必要核验通过，核验新增align0。当前可用24539062272B，R9新归档7888896B、外部构建/原始日志8159232B；可再生对象和重复封存日志列于STORAGE.json，未删除。原库/主工作区444条既有改动身份不变。本轮预算结束。

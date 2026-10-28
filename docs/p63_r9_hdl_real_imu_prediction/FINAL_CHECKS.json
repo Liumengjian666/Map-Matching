@@ -1,0 +1,26 @@
+{
+  "passed": [
+    "pre-run contract source/binary/input seal unchanged",
+    "six frozen native ELFs unchanged",
+    "actual trace source and binary",
+    "online outputs sealed before reference evaluation",
+    "all archived raw content byte-identical",
+    "one run 160 frames and align calls, all original IDs",
+    "8625 actual IMU receipts/consumptions and 5358 active predictions",
+    "ordered actual IMU no future input or missing receipt",
+    "actual native state/time finite and forward",
+    "all actual Source and frozen Target identities",
+    "last real IMU predictor state is actual NDT guess on 159 nonempty batches",
+    "preflight clock matches native calls including raw68 and cool-time",
+    "complete reference evaluation and unchanged H2 boundaries",
+    "local worsening retained",
+    "master and innovation ledger append only",
+    "root pre-existing staged/untracked work unchanged",
+    "four upstream source versions pristine",
+    "20 GiB disk reserve",
+    "map input file unchanged after run"
+  ],
+  "additional_NDT": 0,
+  "free_bytes": 24539213824,
+  "root_status_sha256": "d9ff40ea7f732beb59d0e595a8e1fd7a47d9750d0f839749eb9790d39392659b"
+}
