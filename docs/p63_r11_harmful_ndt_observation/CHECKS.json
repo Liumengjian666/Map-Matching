@@ -1,0 +1,16 @@
+{
+  "passed": [
+    "all causal features, formulas and code hashes unchanged after reference diagnosis",
+    "exactly 90 fixed frames retained in both stages",
+    "current post-fusion UKF output absent from pre-fusion feature columns",
+    "all corrections independently match raw matrices; 1/3/5 history uses only preceding frames and real ns",
+    "all 90 newly calculated reference diagnoses reproduce frozen R10 evaluation",
+    "root workspace existing changes untouched",
+    "historical R9/R10 archive bytes unchanged",
+    "90/90 valid reference samples; no zero-filled missing values",
+    "no invented covariance/NIS/statistical confidence"
+  ],
+  "additional_NDT": 0,
+  "additional_UKF": 0,
+  "ROS_replays": 0
+}

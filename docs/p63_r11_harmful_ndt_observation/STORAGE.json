@@ -1,0 +1,11 @@
+{
+  "new_archive_allocated_bytes": 991232,
+  "sparse_worktree_allocated_bytes_including_inherited": 55767040,
+  "free_bytes": 24288894976,
+  "new_data_downloads": 0,
+  "deletions": 0,
+  "regenerable_not_deleted": [
+    "docs/p63_r11_harmful_ndt_observation/tools/__pycache__",
+    "docs/p63_r11_harmful_ndt_observation/figures (source/data retained)"
+  ]
+}

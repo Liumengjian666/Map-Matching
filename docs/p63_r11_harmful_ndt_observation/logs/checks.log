@@ -1,0 +1,9 @@
+PASS all causal features, formulas and code hashes unchanged after reference diagnosis
+PASS exactly 90 fixed frames retained in both stages
+PASS current post-fusion UKF output absent from pre-fusion feature columns
+PASS all corrections independently match raw matrices; 1/3/5 history uses only preceding frames and real ns
+PASS all 90 newly calculated reference diagnoses reproduce frozen R10 evaluation
+PASS root workspace existing changes untouched
+PASS historical R9/R10 archive bytes unchanged
+PASS 90/90 valid reference samples; no zero-filled missing values
+PASS no invented covariance/NIS/statistical confidence
