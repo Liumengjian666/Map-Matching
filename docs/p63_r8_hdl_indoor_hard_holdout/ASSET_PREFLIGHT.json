@@ -1,0 +1,35 @@
+{
+  "payloads": [
+    {
+      "path": "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_hard_01.zip",
+      "bytes": 1951298635,
+      "md5": "c5eca239e8635656af1ec5c5bb6532b7",
+      "sha256": "1594df469fcaf563297dbd6639d9d54763adf4ebd586d4e553e4f7b5384af628",
+      "publisher_and_history_match": true
+    },
+    {
+      "path": "/home/jian/rosbag/public_datasets/koide_p62_r29/map_indoor_hard.ply",
+      "bytes": 6023877,
+      "md5": "0ee5c1f2adc5c1a380fbd9a44c377c68",
+      "sha256": "cf1bfd97b263868a5b0fd2dd690da35a47d411f15a6478591072365953e1a2e3",
+      "publisher_and_history_match": true
+    },
+    {
+      "path": "/home/jian/rosbag/public_datasets/koide_p62_r29/gt.zip",
+      "bytes": 1036441,
+      "md5": "ab2a80dc1d06767b7c3ce1893f3020b0",
+      "sha256": "d5739aee9f38bb2b1bd37acee7b26251dccde32a606de908b498213c96897434",
+      "publisher_and_history_match": true
+    }
+  ],
+  "adapter_manifest_sha256": "454066a6ec6ec430204cf67465e0bed055243efd93d38b9c0fe4e03fce8ee767",
+  "raw_CDR_to_PCD_bitwise_verified_range": [
+    4,
+    164
+  ],
+  "verified_clouds": 161,
+  "raw4_anchor_valid": true,
+  "evaluation_reference_poses_parsed": false,
+  "historical_formal_Hard_runs": 0,
+  "source_map_sha256": "cf1bfd97b263868a5b0fd2dd690da35a47d411f15a6478591072365953e1a2e3"
+}
