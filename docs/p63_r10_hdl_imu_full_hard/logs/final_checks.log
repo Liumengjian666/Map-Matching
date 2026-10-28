@@ -1,0 +1,24 @@
+PASS pre-run input/source/parameter/RPE contract seal unchanged
+PASS R9 physical adapter byte-identical
+PASS six frozen native runtime ELF files unchanged
+PASS R9 actual read-only trace source and binary unchanged
+PASS online output seal unchanged after reference evaluation
+PASS all raw archives are byte-identical to original run content
+PASS single continuous complete raw5-2379; 2375 actual align/callback/output rows
+PASS one run, original state instance, no extra align or GT feedback
+PASS actual 44267 IMU receipts and predict calls; 41000 active
+PASS actual ordered consumption: no future IMU or duplicated sample
+PASS observed position/velocity/quaternion states finite and propagation clock forward
+PASS all actual Source and frozen Target match preflight identities
+PASS 2373 nonempty batches: actual last IMU state feeds actual NDT guess
+PASS full preflight clock model matches native counts/time, including raw68/1451 and cool-time
+PASS 2372 valid reference rows, three missing rows retained without zero filling
+PASS frozen thresholds classify two sustained failure episodes, not success
+PASS all first 160 UKF poses reproduce R9 exactly
+PASS 1-second RPE uses only pre-run frozen pair/time rules
+PASS master and innovation records append only
+PASS root pre-existing 444 staged/untracked entries unchanged
+PASS four original upstream source versions remain pristine
+PASS at least 20 GiB storage reserve
+PASS original map file unchanged after run
+TOTAL 23 additional NDT=0

@@ -1,0 +1,14 @@
+R10_PROGRESS {"raw_ordinal": 164, "converged": "1", "inlier_fraction": 1.0, "fitness_all_nn_m2": "0.00469989445755089"}
+R10_PROGRESS {"raw_ordinal": 204, "converged": "1", "inlier_fraction": 0.9983221292495728, "fitness_all_nn_m2": "0.0062133562283064134"}
+R10_PROGRESS {"raw_ordinal": 404, "converged": "1", "inlier_fraction": 0.9902957677841187, "fitness_all_nn_m2": "0.199021420785019"}
+R10_PROGRESS {"raw_ordinal": 604, "converged": "1", "inlier_fraction": 0.932679295539856, "fitness_all_nn_m2": "0.066660013058231909"}
+R10_PROGRESS {"raw_ordinal": 804, "converged": "1", "inlier_fraction": 0.0, "fitness_all_nn_m2": "1341048.2743576018"}
+R10_PROGRESS {"raw_ordinal": 1004, "converged": "1", "inlier_fraction": 0.0, "fitness_all_nn_m2": "32602917.868149757"}
+R10_PROGRESS {"raw_ordinal": 1204, "converged": "1", "inlier_fraction": 0.0, "fitness_all_nn_m2": "190649305.59219241"}
+R10_PROGRESS {"raw_ordinal": 1404, "converged": "1", "inlier_fraction": 0.0, "fitness_all_nn_m2": "634484282.88939881"}
+R10_PROGRESS {"raw_ordinal": 1604, "converged": "1", "inlier_fraction": 0.0, "fitness_all_nn_m2": "1594075295.6074238"}
+R10_PROGRESS {"raw_ordinal": 1804, "converged": "1", "inlier_fraction": 0.0, "fitness_all_nn_m2": "3448875686.0826445"}
+R10_PROGRESS {"raw_ordinal": 2004, "converged": "1", "inlier_fraction": 0.0, "fitness_all_nn_m2": "6505318147.0767717"}
+R10_PROGRESS {"raw_ordinal": 2204, "converged": "1", "inlier_fraction": 0.0, "fitness_all_nn_m2": "11144385185.50712"}
+R10_PROGRESS {"raw_ordinal": 2379, "converged": "1", "inlier_fraction": 0.0, "fitness_all_nn_m2": "16956369933.378126"}
+R10_SEALED {"reason": "COMPLETED_2375", "published": 2375, "completed": 2375, "target": 2375, "last_raw": 2379, "wall_s": 157.42752057599137, "peaks": {"manager_KiB": 123180, "whole_owned_tree_KiB": 1126612}, "errors": [], "captures": [{"tag": "LIVE_raw164", "returncode": 0}, {"tag": "LIVE_raw1204", "returncode": 0}, {"tag": "LIVE_raw2379", "returncode": 0}], "maps": [{"points": 93223, "xyz_sha256": "166c4d2a4f5d24a4c79d4c90a8a275e0fe905fcc9650d559aabb775780e81654", "frame": "map"}], "imu_sent": 44267, "imu_received": 44267, "actual_predict_calls": 44267, "actual_active_predict": 41000, "same_ukf_instance": true, "test_GT_access": false, "GT_access_online": "Previously frozen raw4 anchor only", "formal_trials": 1, "map_file_sha256_after": "50bba09fde204a55be8261e69ea539ae69c65dd44ec7ca1eeed5b066ff8da098"}

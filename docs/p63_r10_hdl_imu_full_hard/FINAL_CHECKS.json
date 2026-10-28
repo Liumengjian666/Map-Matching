@@ -1,0 +1,30 @@
+{
+  "passed": [
+    "pre-run input/source/parameter/RPE contract seal unchanged",
+    "R9 physical adapter byte-identical",
+    "six frozen native runtime ELF files unchanged",
+    "R9 actual read-only trace source and binary unchanged",
+    "online output seal unchanged after reference evaluation",
+    "all raw archives are byte-identical to original run content",
+    "single continuous complete raw5-2379; 2375 actual align/callback/output rows",
+    "one run, original state instance, no extra align or GT feedback",
+    "actual 44267 IMU receipts and predict calls; 41000 active",
+    "actual ordered consumption: no future IMU or duplicated sample",
+    "observed position/velocity/quaternion states finite and propagation clock forward",
+    "all actual Source and frozen Target match preflight identities",
+    "2373 nonempty batches: actual last IMU state feeds actual NDT guess",
+    "full preflight clock model matches native counts/time, including raw68/1451 and cool-time",
+    "2372 valid reference rows, three missing rows retained without zero filling",
+    "frozen thresholds classify two sustained failure episodes, not success",
+    "all first 160 UKF poses reproduce R9 exactly",
+    "1-second RPE uses only pre-run frozen pair/time rules",
+    "master and innovation records append only",
+    "root pre-existing 444 staged/untracked entries unchanged",
+    "four original upstream source versions remain pristine",
+    "at least 20 GiB storage reserve",
+    "original map file unchanged after run"
+  ],
+  "additional_NDT": 0,
+  "free_bytes": 24391086080,
+  "root_status_sha256": "d9ff40ea7f732beb59d0e595a8e1fd7a47d9750d0f839749eb9790d39392659b"
+}

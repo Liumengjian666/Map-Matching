@@ -1,0 +1,3 @@
+first_raw,last_raw,startup,recovery_raw,recovery_seconds,confirmation_raw,recovery_confirmation_raw,observed_span_s,reference_valid_high_count
+309,313,False,314,0.33329322,311,316,0.33329322,5
+515,2379,False,,,517,,128.936580096,1862

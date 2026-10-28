@@ -1,0 +1,378 @@
+{
+  "TASK": "P63-R10-HDL-IMU-FULL-HARD-BASELINE",
+  "START_SHA": "6e2b67a6bffa81eb4d70667fdf6e604c56ae4959",
+  "CODE_SHA": "4d0ba895314eb80aae191c3bc63a37fa28861b1d",
+  "EVALUATION_CODE_SHA": "d8e211f00c29fb9327227051b6f5f305475bcfd7",
+  "verdict": "FULL_SEQUENCE_LOCALIZATION_FAIL",
+  "acceptance": {
+    "complete_2375": true,
+    "finite": true,
+    "reference_at_least_95pct": true,
+    "translation_rmse_le_0_30m": false,
+    "rotation_rmse_le_5deg": false,
+    "no_sustained_loss": false,
+    "no_gt_feedback_reset_or_tuning": true
+  },
+  "run": {
+    "reason": "COMPLETED_2375",
+    "published": 2375,
+    "completed": 2375,
+    "target": 2375,
+    "last_raw": 2379,
+    "wall_s": 157.42752057599137,
+    "peaks": {
+      "manager_KiB": 123180,
+      "whole_owned_tree_KiB": 1126612
+    },
+    "errors": [],
+    "captures": [
+      {
+        "tag": "LIVE_raw164",
+        "returncode": 0
+      },
+      {
+        "tag": "LIVE_raw1204",
+        "returncode": 0
+      },
+      {
+        "tag": "LIVE_raw2379",
+        "returncode": 0
+      }
+    ],
+    "maps": [
+      {
+        "points": 93223,
+        "xyz_sha256": "166c4d2a4f5d24a4c79d4c90a8a275e0fe905fcc9650d559aabb775780e81654",
+        "frame": "map"
+      }
+    ],
+    "imu_sent": 44267,
+    "imu_received": 44267,
+    "actual_predict_calls": 44267,
+    "actual_active_predict": 41000,
+    "same_ukf_instance": true,
+    "test_GT_access": false,
+    "GT_access_online": "Previously frozen raw4 anchor only",
+    "formal_trials": 1,
+    "map_file_sha256_after": "50bba09fde204a55be8261e69ea539ae69c65dd44ec7ca1eeed5b066ff8da098"
+  },
+  "native_align": 2375,
+  "native_converged": 2375,
+  "native_ukf_corrections": 2375,
+  "extra_align": 0,
+  "native_imu_received": 44267,
+  "native_predict_calls": 44267,
+  "active_predict_calls": 41000,
+  "cold_or_first_skips": 3267,
+  "actual_integrated_s": 161.73373502900856,
+  "reference_coverage": 0.9987368421052631,
+  "reference_valid": 2372,
+  "reference_invalid_raws": [
+    748,
+    1691,
+    1692
+  ],
+  "reference_kind": "MAP_ANCHORED_OFFLINE_GICP_IMU_REFERENCE_NOT_MOCAP",
+  "posthoc_alignment": false,
+  "new_algorithm": false,
+  "metrics": {
+    "prediction": {
+      "translation": {
+        "n": 2372,
+        "mean": 31920.840595675392,
+        "rmse": 50027.67979126611,
+        "p50": 13233.15438496432,
+        "p95": 113143.53514671861,
+        "p99": 126867.19741015966,
+        "max": 130218.62898443482
+      },
+      "rotation": {
+        "n": 2372,
+        "mean": 114.20831968725167,
+        "rmse": 132.40931490516135,
+        "p50": 151.97891051538414,
+        "p95": 167.34990605929173,
+        "p99": 170.79217235421714,
+        "max": 172.51169679511005
+      }
+    },
+    "ndt": {
+      "translation": {
+        "n": 2372,
+        "mean": 31920.84105821558,
+        "rmse": 50027.67979131831,
+        "p50": 13233.15438496432,
+        "p95": 113143.53514671861,
+        "p99": 126867.19741015966,
+        "max": 130218.62898443482
+      },
+      "rotation": {
+        "n": 2372,
+        "mean": 114.23397251121322,
+        "rmse": 132.43613025205042,
+        "p50": 151.9789073018298,
+        "p95": 167.34990245024852,
+        "p99": 170.79217323759727,
+        "max": 172.5116986622279
+      }
+    },
+    "ukf": {
+      "translation": {
+        "n": 2372,
+        "mean": 31920.84101823392,
+        "rmse": 50027.68038691177,
+        "p50": 13233.157697759141,
+        "p95": 113143.55539083367,
+        "p99": 126867.17590424117,
+        "max": 130218.63791164121
+      },
+      "rotation": {
+        "n": 2372,
+        "mean": 114.24858038561531,
+        "rmse": 132.4549229620734,
+        "p50": 152.01062792163492,
+        "p95": 167.36896757366742,
+        "p99": 170.7905811704092,
+        "max": 172.52612583052286
+      }
+    }
+  },
+  "high_error_frames": 1868,
+  "first_high_error_raw": 224,
+  "sustained_episodes": [
+    {
+      "first_raw": 309,
+      "last_raw": 313,
+      "startup": false,
+      "recovery_raw": 314,
+      "recovery_seconds": 0.33329322,
+      "confirmation_raw": 311,
+      "recovery_confirmation_raw": 316,
+      "observed_span_s": 0.33329322,
+      "reference_valid_high_count": 5
+    },
+    {
+      "first_raw": 515,
+      "last_raw": 2379,
+      "startup": false,
+      "recovery_raw": null,
+      "recovery_seconds": null,
+      "confirmation_raw": 517,
+      "recovery_confirmation_raw": null,
+      "observed_span_s": 128.936580096,
+      "reference_valid_high_count": 1862
+    }
+  ],
+  "longest_sustained_span_s": 128.936580096,
+  "RPE_1s": {
+    "frozen_pairs": 2281,
+    "valid_pairs": 2278,
+    "translation": {
+      "n": 2278,
+      "mean": 788.0065822005648,
+      "rmse": 1062.1280871398578,
+      "p50": 693.6269042599555,
+      "p95": 1991.7109046682788,
+      "p99": 2108.032207039312,
+      "max": 2169.538546021051
+    },
+    "rotation": {
+      "n": 2278,
+      "mean": 4.389533607891442,
+      "rmse": 11.49885080856183,
+      "p50": 2.709037854168564,
+      "p95": 9.101819548467839,
+      "p99": 39.23791425003984,
+      "max": 156.04267142441134
+    },
+    "definition": "exact t+1s; frozen bracketing, no alignment; inv(reference relative) * estimate relative"
+  },
+  "first160": {
+    "prediction": {
+      "translation": {
+        "n": 160,
+        "mean": 0.08442169051320719,
+        "rmse": 0.10408822211981217,
+        "p50": 0.0612457307843832,
+        "p95": 0.20223383131492298,
+        "p99": 0.2224145227370671,
+        "max": 0.23158828510299942
+      },
+      "rotation": {
+        "n": 160,
+        "mean": 1.8286118522444135,
+        "rmse": 2.0561926865357534,
+        "p50": 1.6802273689800602,
+        "p95": 3.6774444231064556,
+        "p99": 4.443066995155934,
+        "max": 5.44945945385433
+      }
+    },
+    "ndt": {
+      "translation": {
+        "n": 160,
+        "mean": 0.07860680654812544,
+        "rmse": 0.09779435617785934,
+        "p50": 0.053400734222689664,
+        "p95": 0.1918761928426289,
+        "p99": 0.20604995783314756,
+        "max": 0.23288459229525718
+      },
+      "rotation": {
+        "n": 160,
+        "mean": 1.7703641857204224,
+        "rmse": 1.991020991867816,
+        "p50": 1.5399270160501648,
+        "p95": 3.7666288725412786,
+        "p99": 4.319311909414971,
+        "max": 4.630500676508779
+      }
+    },
+    "ukf": {
+      "translation": {
+        "n": 160,
+        "mean": 0.07724177026141195,
+        "rmse": 0.09744042891643381,
+        "p50": 0.053347956810395704,
+        "p95": 0.19021097290401082,
+        "p99": 0.20722962366191142,
+        "max": 0.23075207538192727
+      },
+      "rotation": {
+        "n": 160,
+        "mean": 1.794840254554321,
+        "rmse": 2.016918788052274,
+        "p50": 1.621429926298446,
+        "p95": 3.7560773842779507,
+        "p99": 4.4154743270842465,
+        "max": 4.694387735273447
+      }
+    }
+  },
+  "first160_vs_R9": {
+    "position": {
+      "n": 160,
+      "mean": 0.0,
+      "rmse": 0.0,
+      "p50": 0.0,
+      "p95": 0.0,
+      "p99": 0.0,
+      "max": 0.0
+    },
+    "rotation": {
+      "n": 160,
+      "mean": 0.0,
+      "rmse": 0.0,
+      "p50": 0.0,
+      "p95": 0.0,
+      "p99": 0.0,
+      "max": 0.0
+    }
+  },
+  "timing_ms": {
+    "ndt_compute_ms": {
+      "n": 2375,
+      "mean": 11.690435680000002,
+      "rmse": 19.964403207400263,
+      "p50": 5.439696,
+      "p95": 44.98121739999998,
+      "p99": 78.04443421999943,
+      "max": 233.445676
+    },
+    "callback_ms": {
+      "n": 2375,
+      "mean": 33.76161815284211,
+      "rmse": 38.04259267530454,
+      "p50": 29.679328,
+      "p95": 66.48954749999997,
+      "p99": 102.92504305999978,
+      "max": 263.728087
+    },
+    "scan_supervisor_cycle_ms": {
+      "n": 2375,
+      "mean": 63.80344510617617,
+      "rmse": 67.54595010296228,
+      "p50": 56.95567897055298,
+      "p95": 107.47153499396515,
+      "p99": 147.46636271942407,
+      "max": 307.6521299663
+    },
+    "diagnostic_ms": {
+      "n": 2375,
+      "mean": 6.581808144842105,
+      "rmse": 8.02643884921912,
+      "p50": 4.648668,
+      "p95": 16.473485499999995,
+      "p99": 21.29344409999995,
+      "max": 27.571433
+    },
+    "imu_predict_ms": {
+      "n": 2375,
+      "mean": 0.20851981810526315,
+      "rmse": 0.26639626821192597,
+      "p50": 0.17013700000000004,
+      "p95": 0.4262790999999997,
+      "p99": 0.9905762199999989,
+      "max": 1.9517319999999987
+    },
+    "adapter_batch_ms": {
+      "n": 2375,
+      "mean": 8.625135051601223,
+      "rmse": 13.346373991040108,
+      "p50": 5.2431610529311,
+      "p95": 26.618008536752285,
+      "p99": 51.91861196188255,
+      "max": 82.70116901258007
+    },
+    "input_load_convert_ms": {
+      "n": 2375,
+      "mean": 11.39625303731545,
+      "rmse": 11.898575153866876,
+      "p50": 11.149189958814532,
+      "p95": 17.192569980397817,
+      "p99": 19.26666591432874,
+      "max": 22.99121004762128
+    }
+  },
+  "imu_predict_total_ms": 495.2345679999543,
+  "imu_conversion_ms": {
+    "n": 44267,
+    "mean": 0.1543353446962518,
+    "rmse": 0.22924402469310168,
+    "p50": 0.12641301145777106,
+    "p95": 0.2589519950561223,
+    "p99": 0.4215187905356286,
+    "max": 9.777217986993492
+  },
+  "imu_conversion_total_ms": 6831.962703668978,
+  "peak_localization_MiB": 120.9140625,
+  "peak_owned_tree_MiB": 1100.20703125,
+  "sensor_span_s": 163.670545635,
+  "scans_per_measured_wall_s": 15.086307599271189,
+  "zero_new_imu_raws": [
+    68,
+    1451
+  ],
+  "resource_scope": "Native localization nodelet process separately; whole owned RSS sums include GUI, supervisor and shared-page double counting. Offline handshake is not a real-time claim.",
+  "memory_150MiB_target": true,
+  "final_output": {
+    "raw_ordinal": 2379,
+    "stamp_ns": "1690354593400954808",
+    "px": "12763.7587890625",
+    "py": "-18973.92578125",
+    "pz": "-128197.5234375",
+    "qx": "0.2903928861617378",
+    "qy": "0.7822511552428472",
+    "qz": "0.5471036163805604",
+    "qw": "0.06657956617797504",
+    "translation_error_m": 130218.63791164121,
+    "rotation_error_deg": 151.21839551380472
+  },
+  "quality_diagnostic_counts": {
+    "inlier_nonfinite": 0,
+    "matching_error_nonfinite": 1728,
+    "inlier_zero": 1728,
+    "probability_zero": 1727,
+    "high_reference_and_inlier_ge_0_9": 91
+  }
+}

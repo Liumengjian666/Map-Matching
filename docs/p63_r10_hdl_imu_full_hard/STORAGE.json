@@ -1,0 +1,29 @@
+{
+  "measured_at": "2026-10-28T16:56:57.437080+08:00",
+  "archive_bytes_allocated": 33124352,
+  "external_build_and_raw_bytes_allocated": 43581440,
+  "sparse_worktree_bytes_allocated": 67284992,
+  "free_bytes": 24390733824,
+  "reserve_required_bytes": 21474836480,
+  "deleted_files": 0,
+  "downloaded_assets": 0,
+  "reusable_native_runtime": "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws",
+  "regenerable_not_deleted": [
+    {
+      "path": "/home/jian/livox_ws/p63_r10_imu_full_hard_data/preflight.o",
+      "reason": "zero-align preprocessing object; BUILD.json command and source retained"
+    },
+    {
+      "path": "/home/jian/livox_ws/p63_r10_imu_full_hard_data/kernel_preflight",
+      "reason": "preprocessing-only ELF; binary identity retained"
+    },
+    {
+      "path": "/home/jian/livox_ws/p63_r10_imu_full_hard_data/full_01",
+      "reason": "original raw logs also losslessly archived; original files intentionally retained, do not delete without approval"
+    },
+    {
+      "path": "/home/jian/livox_ws/p63_r10_imu_full_hard_ws/docs/p63_r10_hdl_imu_full_hard/tools/__pycache__",
+      "reason": "Python bytecode cache, not research results; retained"
+    }
+  ]
+}
