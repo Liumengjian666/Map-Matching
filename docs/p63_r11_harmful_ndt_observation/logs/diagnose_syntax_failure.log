@@ -1,0 +1,4 @@
+  File "docs/p63_r11_harmful_ndt_observation/tools/diagnose.py", line 54
+    print(json.dumps({'windows':window_summary,'keys':{k:{x:r[x] for x in ['pred_t_m','pred_R_deg','ndt_t_m','ndt_R_deg','ukf_t_m','ukf_R_deg','delta_error_t_m','delta_error_R_deg','d_t_m','d_R_deg','gaussian','native_inlier']} for k,r in keys.items()},indent=2))
+                                                                                                                                                                                                                                                                   ^
+SyntaxError: invalid syntax
