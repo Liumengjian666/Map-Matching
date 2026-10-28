@@ -126,3 +126,22 @@ START `79657c8c4cba6985af7a51ee759fe38746c24acc`；实际CODE `88daa7203b30b081d
 成本：48次compute合计668.630477ms、Mean13.929802/P95 25.353216/Max67.932710ms；事件墙钟Mean157.908364/P95 239.542689/Max267.078887ms，独立进程峰值77.289063MiB。无10Hz或在线闭环认证。证据`docs/p63_r7_nonoracle_candidate_reachability/REPORT.md`、CANDIDATES.csv、SELECTION_RESULTS.csv、raw/及真实C++。
 
 不改变INN-013/INN-015状态，不将成熟多初值基线记为创新成功。唯一NEXT：总控预注册未开发固定窗口/预算，保持搜索/原生排序作最小确认，检验可达性与排序局限的复现；当前不执行或扩大算法。
+
+
+## 9. 2026-10-28 P63-R8：Hard独立序列未确认恢复
+
+TASK `P63-R8-HDL-INDOOR-HARD-HOLDOUT`。只确认成熟R7平移多初值，不研发新算法/评分。资料继承指定R5–R7和Koide发布合同，无新大规模文献/数据准备。
+
+START `cf5a45e47819c3bbbc0834bcfc2ab132aeac6818`；基线CODE `4cdfa6bd52ad954a684e32fc13309b59040b96c9`；候选CODE `e1712fea88ede397f7c9b628c0277dbc064329a1`；评价CODE `03203e45b00873ea346f7247d988e0701b24a9bd`；END为最终归档commit，完整值见交接。分支`research/p63-r8-hdl-indoor-hard-holdout`，本地未push。
+
+原版Hard raw5–164（raw4 Oracle Start）160次原生NDT及UKF输出；无IMU。全部收敛/有限，但位置RMSE .797861m、旋转16.234717°，56高误差，84–141失效区间、142恢复。现场Source/Target SHA全记录；Hard target93223点，不沿用Easy地图身份。
+
+之后固定raw30/55/80/105/130/155新增48次原生NDT，Gaussian排序与R7相同，不用GT、不反馈UKF。候选/选择封存后评价：正常4、中间1、明显高误差1；正常4/4安全且改善，中间不变。raw130八个候选均未达目标，原生2.104141m/40.475556°→选择1.982222m/36.855576°，只部分改善。
+
+正式`HELDOUT_RECOVERY_NOT_CONFIRMED`。高误差生成0/1、选择恢复0/1，属于本固定候选池没有合格结果，不是选择错过合格者。19个≤.15m/2°新增候选来自正常帧，不算恢复。未确认Easy收益跨序列复现；一个高误差机会不足泛化，正常4/4也非全序列安全。
+
+成本：额外48次compute694.037468ms，事件墙钟Mean166.123810/P95 213.529153/Max220.000935ms，六事件均超100ms，候选峰值78.621094MiB。不支持本配置直接100ms在线部署，未实现事件调度或优化成本。大姿态预测偏差存在，但未证明IMU或旋转搜索一定解决，不能将相关性写成单根因。
+
+证据`docs/p63_r8_hdl_indoor_hard_holdout/REPORT.md`、BASELINE_TRAJECTORY.csv、CANDIDATES.csv、SELECTION_RESULTS.csv及raw/。作者NDT/UKF/评分核心改动0，无下载、删除、历史改写、额外窗口或新模块。保留全部旧成功/失败，创新状态不升级。
+
+唯一NEXT：请总控决定是否批准原版HDL真实IMU预测输入资格与有限对照合同，先确认单位/外参/时间，不扩大搜索或新评分。本轮停止，不自动执行。

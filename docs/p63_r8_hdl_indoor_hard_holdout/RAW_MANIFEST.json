@@ -1,0 +1,134 @@
+[
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/baseline_01/ONLINE_RESULTS.csv",
+    "source_sha256": "56a6eb483b415b13098afeff8a35a63fa72d19ede57578155e5ea5639a6d0ff2",
+    "archive": "raw/baseline_01/ONLINE_RESULTS.csv.gz",
+    "archive_sha256": "96731c9930b274e5b714c0044d001ea8b80faadfde2c2ed09bdf422094e9b205"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/baseline_01/NATIVE_NDT.csv",
+    "source_sha256": "0998c2ffedd48a049a49e07d806d594b8a87e7acffec230f1bc24080e9929217",
+    "archive": "raw/baseline_01/NATIVE_NDT.csv.gz",
+    "archive_sha256": "e3d1e3f260fe8176fdf3cc4cb87ba35be6ba3dc7a028957718949e678693cccf"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/baseline_01/CALLBACKS.csv",
+    "source_sha256": "52b44f5f6034605b54d820daa5d52d7e3197756e8a99d092c4ce616da3b18fc3",
+    "archive": "raw/baseline_01/CALLBACKS.csv.gz",
+    "archive_sha256": "99e70e4cc343c8926ef0d96fe191df9bfde7dbf4df77b630a8f632adc2cc5c57"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/baseline_01/ROS_RECEIPTS.jsonl",
+    "source_sha256": "a5f602c3ec853cb6e41ddd753d4637bbe152b56dc45e3434d6233f1b4efcb257",
+    "archive": "raw/baseline_01/ROS_RECEIPTS.jsonl.gz",
+    "archive_sha256": "60993b39888e9ff4dee33ea588a2302d7cc181c7a7c9563b551b4f094f33404a"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/baseline_01/MEMORY.csv",
+    "source_sha256": "48a0b5b2967c1c07eb1fd548071d2e11943148ab8f20ac9f0586a10f16a2b1d9",
+    "archive": "raw/baseline_01/MEMORY.csv.gz",
+    "archive_sha256": "84301c47672b9e513b37829abb871dff250d45816ef4484d13d0f52772ffea15"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/baseline_01/ROSLAUNCH.log",
+    "source_sha256": "70af587ca56573f6449740a4903cc55e22b2d17102838cfd099e374a1b2cc1be",
+    "archive": "raw/baseline_01/ROSLAUNCH.log.gz",
+    "archive_sha256": "2fa209bf5329e6d701927c50977c023c3c430606343d08b4ff82f833862b85c5"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/baseline_01/ONLINE_SEAL.json",
+    "source_sha256": "234c84e5c410af6d09b87d22d8924df954d12877152b088dc5426eb4fb925b2d",
+    "archive": "raw/baseline_01/ONLINE_SEAL.json",
+    "archive_sha256": "234c84e5c410af6d09b87d22d8924df954d12877152b088dc5426eb4fb925b2d"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/baseline_01/COMMAND.json",
+    "source_sha256": "5860a0c1b2adc65df7e8135cfef912487e0255c72ed58a8b7b9b48c70da01ab1",
+    "archive": "raw/baseline_01/COMMAND.json",
+    "archive_sha256": "5860a0c1b2adc65df7e8135cfef912487e0255c72ed58a8b7b9b48c70da01ab1"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/baseline_01/RUN_RECEIPT.json",
+    "source_sha256": "9397baabb1275e94cb1236e4d165ff528a5b42d26e63833d1784ee807f85b2a0",
+    "archive": "raw/baseline_01/RUN_RECEIPT.json",
+    "archive_sha256": "9397baabb1275e94cb1236e4d165ff528a5b42d26e63833d1784ee807f85b2a0"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/baseline_01/EFFECTIVE_PARAMS.json",
+    "source_sha256": "ce367332beb312fca73cd0e5a8c30c2133cd2c73735645f5007c86bb71317bfd",
+    "archive": "raw/baseline_01/EFFECTIVE_PARAMS.json",
+    "archive_sha256": "ce367332beb312fca73cd0e5a8c30c2133cd2c73735645f5007c86bb71317bfd"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/baseline_01/PUBLISHED_MAP.json",
+    "source_sha256": "99058da1ed380d2d2b49c6cd31ef5b94d6173378653e490a25f58300632bae46",
+    "archive": "raw/baseline_01/PUBLISHED_MAP.json",
+    "archive_sha256": "99058da1ed380d2d2b49c6cd31ef5b94d6173378653e490a25f58300632bae46"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/baseline_01/LIVE_raw155.png",
+    "source_sha256": "fed6b542ba7302da52c363035905a0a08004b5ffcdcaaebfc081b0d91ccc5142",
+    "archive": "raw/baseline_01/LIVE_raw155.png",
+    "archive_sha256": "fed6b542ba7302da52c363035905a0a08004b5ffcdcaaebfc081b0d91ccc5142"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/baseline_01/LIVE_raw164.png",
+    "source_sha256": "cecb362a9aa71f30ee4172728ae27a7c8031ea6a340862ddb928d6b4bacd55c6",
+    "archive": "raw/baseline_01/LIVE_raw164.png",
+    "archive_sha256": "cecb362a9aa71f30ee4172728ae27a7c8031ea6a340862ddb928d6b4bacd55c6"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/candidate_01/NATIVE_CANDIDATES.csv",
+    "source_sha256": "f97ea121402ea9c82c6e6836cf081086e7adac59fccb050d16fc2c4c8056353f",
+    "archive": "raw/candidate_01/NATIVE_CANDIDATES.csv",
+    "archive_sha256": "f97ea121402ea9c82c6e6836cf081086e7adac59fccb050d16fc2c4c8056353f"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/candidate_01/COMMAND.json",
+    "source_sha256": "9e1ba3c2aca974ef52371def93d243392da3929052db4233c186793ce5eecb56",
+    "archive": "raw/candidate_01/COMMAND.json",
+    "archive_sha256": "9e1ba3c2aca974ef52371def93d243392da3929052db4233c186793ce5eecb56"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/candidate_01/ALIGN_STARTED",
+    "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "archive": "raw/candidate_01/ALIGN_STARTED",
+    "archive_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/candidate_01/PREPROCESS.csv",
+    "source_sha256": "365d3dc083039d436af7a1a9b839b06dc7896ba2f314be6c40fa0d2478278489",
+    "archive": "raw/candidate_01/PREPROCESS.csv",
+    "archive_sha256": "365d3dc083039d436af7a1a9b839b06dc7896ba2f314be6c40fa0d2478278489"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/candidate_01/RUN_RECEIPT.json",
+    "source_sha256": "454be201ef0e0fc088b916aa46c850fe7de4bfb6bdddcef5dd5c07bccf68ac1d",
+    "archive": "raw/candidate_01/RUN_RECEIPT.json",
+    "archive_sha256": "454be201ef0e0fc088b916aa46c850fe7de4bfb6bdddcef5dd5c07bccf68ac1d"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/candidate_01/SELECTION_NATIVE.json",
+    "source_sha256": "4f5eecf8caac95e127070ec8b46000d53588d91fc4f5a2b7e2d30b3ffd9d84ce",
+    "archive": "raw/candidate_01/SELECTION_NATIVE.json",
+    "archive_sha256": "4f5eecf8caac95e127070ec8b46000d53588d91fc4f5a2b7e2d30b3ffd9d84ce"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/candidate_01/OUTPUT_SEAL.json",
+    "source_sha256": "3c79c85cd8208bb429436e14420175d67c4338327e857f6a22ccbf75380e6162",
+    "archive": "raw/candidate_01/OUTPUT_SEAL.json",
+    "archive_sha256": "3c79c85cd8208bb429436e14420175d67c4338327e857f6a22ccbf75380e6162"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/candidate_01/RUN.log",
+    "source_sha256": "1b26e23b6639332c22e7fc9b105325f283aee10308ed1604f5aef4f858ab45a7",
+    "archive": "raw/candidate_01/RUN.log",
+    "archive_sha256": "1b26e23b6639332c22e7fc9b105325f283aee10308ed1604f5aef4f858ab45a7"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/candidate_01/EVENT_TIMING.csv",
+    "source_sha256": "2dc6da21b2c2c41fa2b4a0f8069c0b3e9e2a6b7d510034986c1406b5df8e3724",
+    "archive": "raw/candidate_01/EVENT_TIMING.csv",
+    "archive_sha256": "2dc6da21b2c2c41fa2b4a0f8069c0b3e9e2a6b7d510034986c1406b5df8e3724"
+  }
+]

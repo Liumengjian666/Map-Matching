@@ -1,0 +1,121 @@
+{
+  "TASK": "P63-R8-HDL-INDOOR-HARD-HOLDOUT",
+  "CODE_SHA": "4cdfa6bd52ad954a684e32fc13309b59040b96c9",
+  "run": {
+    "reason": "COMPLETED_160",
+    "published": 160,
+    "completed": 160,
+    "target": 160,
+    "last_raw": 164,
+    "wall_s": 16.94068514998071,
+    "peaks": {
+      "manager_KiB": 120376,
+      "whole_owned_tree_KiB": 749892
+    },
+    "errors": [],
+    "captures": [
+      {
+        "tag": "LIVE_raw155",
+        "returncode": 0
+      },
+      {
+        "tag": "LIVE_raw164",
+        "returncode": 0
+      }
+    ],
+    "maps": [
+      {
+        "points": 93223,
+        "xyz_sha256": "166c4d2a4f5d24a4c79d4c90a8a275e0fe905fcc9650d559aabb775780e81654",
+        "frame": "map"
+      }
+    ],
+    "test_GT_access": false,
+    "GT_access_online": "Previously frozen raw4 anchor only",
+    "formal_trials": 1,
+    "map_file_sha256_after": "50bba09fde204a55be8261e69ea539ae69c65dd44ec7ca1eeed5b066ff8da098"
+  },
+  "frames": 160,
+  "native_calls": 160,
+  "converged": 160,
+  "reference_n": 160,
+  "reference_coverage": 1.0,
+  "translation": {
+    "n": 160,
+    "mean": 0.4592147851736311,
+    "rmse": 0.7978611545508207,
+    "p95": 1.9654163420874795,
+    "max": 2.111676791200362,
+    "min": 0.004144439446506023
+  },
+  "rotation": {
+    "n": 160,
+    "mean": 10.076265262933058,
+    "rmse": 16.234717016374173,
+    "p95": 34.12655571953131,
+    "max": 43.689556658590675,
+    "min": 0.20058147476433835
+  },
+  "raw_ndt_translation": {
+    "n": 160,
+    "mean": 0.4598541482005672,
+    "rmse": 0.7964130245019475,
+    "p95": 1.958590051247075,
+    "max": 2.1082309681521765,
+    "min": 0.008801247210252383
+  },
+  "raw_ndt_rotation": {
+    "n": 160,
+    "mean": 10.157877289649113,
+    "rmse": 16.258572973910688,
+    "p95": 33.531574543504114,
+    "max": 43.79506163994445,
+    "min": 0.3176068545628977
+  },
+  "first_high_error_raw": 84,
+  "high_error_frames": 56,
+  "sustained_episodes": [
+    {
+      "first_raw": 84,
+      "last_raw": 141,
+      "startup": false,
+      "recovery_raw": 142,
+      "recovery_seconds": 3.933357014
+    }
+  ],
+  "timing_ms": {
+    "ndt_compute_ms": {
+      "n": 160,
+      "mean": 33.15228053125,
+      "rmse": 41.552719081251716,
+      "p95": 88.66600034999998,
+      "max": 133.130909,
+      "min": 1.560474
+    },
+    "callback_ms": {
+      "n": 160,
+      "mean": 53.40506491875,
+      "rmse": 59.269461302692065,
+      "p95": 110.12084324999998,
+      "max": 157.418662,
+      "min": 15.605794
+    },
+    "diagnostic_ms": {
+      "n": 160,
+      "mean": 3.6334471749999997,
+      "rmse": 3.795169684194079,
+      "p95": 5.31372945,
+      "max": 12.562788,
+      "min": 2.36128
+    },
+    "input_load_convert_ms": {
+      "n": 160,
+      "mean": 10.50215791183291,
+      "rmse": 10.827132868285187,
+      "p95": 15.079637657618148,
+      "max": 16.548028972465545,
+      "min": 5.340659990906715
+    }
+  },
+  "reference_kind": "MAP_ANCHORED_OFFLINE_GICP_IMU_REFERENCE_NOT_MOCAP"
+}

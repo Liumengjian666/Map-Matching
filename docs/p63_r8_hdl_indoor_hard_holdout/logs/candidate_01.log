@@ -1,0 +1,25 @@
+{
+  "CODE_SHA": "e1712fea88ede397f7c9b628c0277dbc064329a1",
+  "argv": [
+    "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/candidate_ndt",
+    "--run",
+    "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_ws/docs/p63_r8_hdl_indoor_hard_holdout/CANDIDATE_INPUT.json",
+    "/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/candidate_01"
+  ],
+  "input_sha256": "f27c088511cfaec1ed4e2855b1b8920f47326e7cc0ca189b316f1f3994988f56",
+  "binary_sha256": "4a51212c87fa991e99e41549fd6f9d399a8ed1c60f1cc40434adedf132a465f8",
+  "selection_source_sha256": "ca5cee6d4b60c719d4136184b57176f29d29ea6e5e2c15cd638359e84921909e",
+  "reference_or_R6_oracle_access": false,
+  "UKF_updates": 0,
+  "ROS_replays": 0,
+  "nominal_online_align_repeats": 0,
+  "selection_ms": 6.78568595321849,
+  "returncode": 0,
+  "wall_s": 1.231532295991201,
+  "reason": null,
+  "completed_align_rows": 48,
+  "before_align_logged": 48,
+  "map_sha256_after": "50bba09fde204a55be8261e69ea539ae69c65dd44ec7ca1eeed5b066ff8da098",
+  "budget_pass": true,
+  "ranked_frames": 6
+}

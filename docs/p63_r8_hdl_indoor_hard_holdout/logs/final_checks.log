@@ -1,0 +1,22 @@
+PASS exact 160 baseline and 48 extra align budget, no baseline reruns
+PASS all baseline timestamps/call counters exact
+PASS 160 actual Source/Target identities frozen
+PASS candidate six-by-eight order and actual seed identity
+PASS all extra Sources/Target match real baseline geometry
+PASS all 208 original flags converged; all UKF outputs finite
+PASS baseline and selection seals intact after reference evaluation
+PASS archived raw copies byte-exact
+PASS trace and candidate binary/source match actual build identity
+PASS original six R5 libraries untouched
+PASS original R7 Gaussian selector byte-identical
+PASS map file and reference identity unchanged
+PASS full 160-frame translation RMSE includes high errors
+PASS normal/high/intermediate grouping and failure preserved
+PASS MASTER_RESEARCH_PLAN_AND_LOG.md prior history append-only
+PASS INNOVATION_RESEARCH_LOG.md prior history append-only
+PASS hdl_localization source original and pristine
+PASS ndt_omp source original and pristine
+PASS root unrelated uncommitted state retained
+PASS R5-R7 history not changed
+PASS 20 GiB storage reserve
+{"checks": 21, "validation_align": 0, "storage": {"available_bytes": 24614551552, "worktree_allocated_bytes": 11714560, "external_R8_allocated_bytes": 4366336, "downloaded_bytes": 0, "deleted_bytes": 0}}

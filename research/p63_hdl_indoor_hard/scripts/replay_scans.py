@@ -2,7 +2,7 @@
 """Manual future RViz replay, fixed raw5–164; same exact data adapter, no reference."""
 import json,sys,time
 from pathlib import Path
-sys.path.insert(0,str(Path(__file__).resolve().parents[3]/'docs/p63_r8_hdl_public_baseline/tools'))
+sys.path.insert(0,str(Path(__file__).resolve().parents[3]/'docs/p63_r8_hdl_indoor_hard_holdout/tools'))
 import rospy
 from sensor_msgs.msg import PointCloud2
 from nav_msgs.msg import Odometry

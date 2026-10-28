@@ -1,0 +1,20 @@
+{
+  "storage": {
+    "available_bytes": 24614551552,
+    "worktree_allocated_bytes": 11714560,
+    "external_R8_allocated_bytes": 4366336,
+    "downloaded_bytes": 0,
+    "deleted_bytes": 0
+  },
+  "upstream": {
+    "hdl_localization": {
+      "SHA": "de2dc7769aa2412876d05ae6161408d3295b6a3c",
+      "pristine": true
+    },
+    "ndt_omp": {
+      "SHA": "5495fd9214945afcb4b35d5a1da385e405c52bf9",
+      "pristine": true
+    }
+  },
+  "native_libraries_unchanged": true
+}
