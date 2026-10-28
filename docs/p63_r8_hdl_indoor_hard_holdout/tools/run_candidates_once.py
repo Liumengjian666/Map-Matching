@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+"""Exactly one 48-call trial, then reference-free ranking, then immutable seal."""
+import csv,hashlib,json,os,subprocess,time
+from pathlib import Path
+from select_candidates import select
+A=Path(__file__).resolve().parents[1];W=A.parents[1]
+D=Path('/home/jian/livox_ws/p63_r8_indoor_hard_holdout_data/candidate_01')
+sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+F=json.loads((A/'CANDIDATE_INPUT.json').read_text());B=json.loads((A/'CANDIDATE_BUILD.json').read_text())
+assert [f['raw_ordinal'] for f in F['frames']]==[30,55,80,105,130,155]
+assert sha(B['binary'])==B['binary_sha256'] and sha(A/'tools/candidate_ndt.cpp')==B['source_sha256']
+assert sha(F['map_path'])==F['map_sha256']
+for f in F['frames']:assert sha(f['path'])==f['sha256']
+for p,r in B['native_binaries'].items():assert sha(p)==r['sha256']
+assert os.statvfs(D.parent).f_bavail*os.statvfs(D.parent).f_frsize>=20*1024**3
+baseline=D.parent/'baseline_01'
+seal=json.loads((baseline/'ONLINE_SEAL.json').read_text())
+assert all(sha(baseline/p)==h for p,h in seal['files'].items())
+assert json.loads((baseline/'RUN_RECEIPT.json').read_text())['completed']==160
+D.mkdir(exist_ok=False)
+env=dict(os.environ,LD_LIBRARY_PATH='/usr/lib/x86_64-linux-gnu:'+os.environ.get('LD_LIBRARY_PATH',''))
+env.pop('LD_PRELOAD',None)
+command=[B['binary'],'--run',str(A/'CANDIDATE_INPUT.json'),str(D)]
+receipt={'CODE_SHA':subprocess.check_output(['git','rev-parse','HEAD'],cwd=W,text=True).strip(),
+         'argv':command,'input_sha256':sha(A/'CANDIDATE_INPUT.json'),'binary_sha256':sha(B['binary']),
+         'selection_source_sha256':sha(A/'tools/select_candidates.py'),
+         'reference_or_R6_oracle_access':False,'UKF_updates':0,'ROS_replays':0,'nominal_online_align_repeats':0}
+(D/'COMMAND.json').write_text(json.dumps(receipt,indent=2)+'\n')
+start=time.monotonic();reason=None;returncode=None;selection=[]
+try:
+    with (D/'RUN.log').open('x') as stream:
+        result=subprocess.run(command,env=env,stdout=stream,stderr=subprocess.STDOUT,timeout=180)
+    returncode=result.returncode
+    if returncode==0:
+        selection_start=time.monotonic()
+        selection=select(A/'CANDIDATE_INPUT.json',D/'NATIVE_CANDIDATES.csv',D/'SELECTION_NATIVE.json')
+        receipt['selection_ms']=(time.monotonic()-selection_start)*1000
+except subprocess.TimeoutExpired:reason='EXECUTION_TIMEOUT_NO_RETRY'
+except Exception as error:reason='EXECUTION_OR_SELECTION_ERROR:'+repr(error)
+finally:
+    receipt.update(returncode=returncode,wall_s=time.monotonic()-start,reason=reason)
+    records=[]
+    if (D/'NATIVE_CANDIDATES.csv').exists():
+        with (D/'NATIVE_CANDIDATES.csv').open() as stream:records=list(csv.DictReader(stream))
+    receipt['completed_align_rows']=len(records)
+    receipt['before_align_logged']=(D/'RUN.log').read_text().count('BEFORE_ALIGN')
+    receipt['map_sha256_after']=sha(F['map_path'])
+    receipt['budget_pass']=receipt['before_align_logged']<=48 and len(records)<=48
+    receipt['ranked_frames']=len(selection)
+    (D/'RUN_RECEIPT.json').write_text(json.dumps(receipt,indent=2)+'\n')
+    seal={p.name:sha(p) for p in D.iterdir() if p.is_file()}
+    (D/'OUTPUT_SEAL.json').write_text(json.dumps(seal,indent=2)+'\n')
+    print(json.dumps(receipt,indent=2))
+assert returncode==0 and reason is None and len(records)==48 and len(selection)==6
