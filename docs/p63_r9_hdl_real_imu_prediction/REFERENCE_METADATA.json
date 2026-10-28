@@ -1,0 +1,5 @@
+{
+  "reference_path": "/home/jian/rosbag/public_datasets/koide_p62_r29/gt/gt/traj_lidar_indoor_hard_01.txt",
+  "reference_sha256": "3696eddcbe884af197b13b8205952793b55c37d9093ab95b96a781ae56c6eeea",
+  "reference_kind": "MAP_ANCHORED_OFFLINE_GICP_IMU_REFERENCE_NOT_MOCAP"
+}

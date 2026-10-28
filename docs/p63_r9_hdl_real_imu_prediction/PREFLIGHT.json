@@ -1,0 +1,172 @@
+{
+  "stage": "ZERO_NDT_INPUT_PREFLIGHT",
+  "native_align_calls": 0,
+  "actual_ukf_predict_calls": 0,
+  "test_reference_read": false,
+  "source_head": "b2e2470c4cc9e89df70db73803a8df2ad994ced6",
+  "raw_imu_total": 44398,
+  "cdr_verified_count": 8723,
+  "scheduled_imu_count": 8625,
+  "anchor_stamp_ns": 1690354429663743949,
+  "first_scheduled_imu_stamp_ns": 1690354429663965819,
+  "last_scheduled_imu_stamp_ns": 1690354440652013826,
+  "last_scan_stamp_ns": 1690354440663856072,
+  "imu_dt_s": {
+    "min": 0.000585141,
+    "mean": 0.0012740474211014497,
+    "p95": 0.004289,
+    "max": 0.102216553
+  },
+  "gaps_over_50ms": [
+    {
+      "previous_stamp_ns": 1690354433988055951,
+      "stamp_ns": 1690354434090272504,
+      "dt_s": 0.102216553
+    },
+    {
+      "previous_stamp_ns": 1690354434560470030,
+      "stamp_ns": 1690354434610677354,
+      "dt_s": 0.050207324
+    },
+    {
+      "previous_stamp_ns": 1690354438103944890,
+      "stamp_ns": 1690354438156601058,
+      "dt_s": 0.052656168
+    },
+    {
+      "previous_stamp_ns": 1690354440014044269,
+      "stamp_ns": 1690354440066731236,
+      "dt_s": 0.052686967
+    }
+  ],
+  "raw_acc_norm_m_s2": {
+    "min": 7.931003899532291,
+    "mean": 9.791345143984456,
+    "p95": 10.45733027702153,
+    "max": 12.02775628242344
+  },
+  "raw_gyro_norm_rad_s": {
+    "min": 0.0015613415015903374,
+    "mean": 0.24093947189547543,
+    "p95": 0.8779498689265864,
+    "max": 3.607623938663548
+  },
+  "scan_last_imu_age_ms": {
+    "min": 0.003036,
+    "mean": 5.27279873125,
+    "p95": 19.265612949999994,
+    "max": 75.723881
+  },
+  "zero_new_imu_raws": [
+    68
+  ],
+  "zero_active_predict_raws": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    68
+  ],
+  "model_active_predict_calls": 5358,
+  "model_cooltime_or_first_skipped_calls": 3267,
+  "model_corrected_time_overlap_s": 0.815374866,
+  "anchor_only_world_force_m_s2": [
+    -0.25444260633960347,
+    -0.1553495491329803,
+    9.472262825544298
+  ],
+  "T_L_I_rotation": [
+    [
+      0.002944721319922128,
+      -0.9999950072544592,
+      -0.00114633437615147
+    ],
+    [
+      0.0988084313492496,
+      -0.0008497652910321452,
+      0.9951061108209771
+    ],
+    [
+      -0.9951021166245446,
+      -0.0030435776816286064,
+      0.09880543570192513
+    ]
+  ],
+  "p_L_I": [
+    0.003,
+    0.004,
+    -0.051
+  ],
+  "lever_arm_norm_m": 0.051244511901275824,
+  "lever_correction_m_s2": {
+    "min": 7.69514161516465e-05,
+    "mean": 0.2793369082002528,
+    "p95": 0.6708453649951701,
+    "max": 4.948109259847667
+  },
+  "source_files_sha256": {
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/src/hdl_localization/apps/hdl_localization_nodelet.cpp": "46c4aa320e2ef174dbcc7df4ac5e8c64451bddc0f9f26ba93cd261e46e306f13",
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/src/hdl_localization/src/hdl_localization/pose_estimator.cpp": "815d4d15c293748afce410316078bfebe9d3338b3b5a9d757b8abb5bd062179e",
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/src/hdl_localization/include/hdl_localization/pose_estimator.hpp": "92cf641928661198650038ef55c5629835533370d74f845079c3df3761c1cab3",
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/src/hdl_localization/include/hdl_localization/pose_system.hpp": "5ee690a167c78d82fa82886490fa3d0f119b1325a109c5c57d6deb4ce6267ff0",
+    "/home/jian/livox_ws/p63_r9_real_imu_prediction_ws/docs/p62_r29_full_sequence_benchmark/sources/zenodo_record.json": "f3778a0f351384bb650f2e6d523ff66f7fa751c751c85de862948595eabc35c3",
+    "/home/jian/livox_ws/p63_r9_real_imu_prediction_ws/docs/p62_r29_full_sequence_benchmark/sources/glim_config_sensors.jsonc": "5b8fe74971e449f64502910c046889e09af8708cf1d755c4f7ebf54f63c97fda",
+    "/opt/ros/noetic/share/sensor_msgs/msg/Imu.msg": "50f2420308c7ca63f2f8e18ff1a03166fc7c922b00c7bf33a40c203902242ed9",
+    "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_hard_01_adapter/imu.csv": "80bcee627039a57c4d757083f1ddba4aced575aad9b58a115671b98ec0f36a03",
+    "/home/jian/rosbag/public_datasets/koide_p62_r29/indoor_hard_01_adapter/manifest.json": "454066a6ec6ec430204cf67465e0bed055243efd93d38b9c0fe4e03fce8ee767",
+    "/home/jian/livox_ws/p63_r9_real_imu_prediction_ws/docs/p63_r8_hdl_indoor_hard_holdout/INPUT_FREEZE.json": "a10087f11c8aad4f237e0b486dce01e73b7270b91edd66c9cc59164d3da06a1d"
+  },
+  "native_binaries": {
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libglobalmap_server_nodelet.so": {
+      "bytes": 200376,
+      "sha256": "0bb2e7c85e00691bc10e31a6fcdc9623b407904dce65320edef63f8999581105"
+    },
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libhdl_localization_nodelet.so": {
+      "bytes": 672528,
+      "sha256": "df69cf57b87ab5b53db7560d04ade85efd2a9e21d043d5c66a6af85c1ab702b7"
+    },
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libp63_hdl_trace.so": {
+      "bytes": 44592,
+      "sha256": "4e9a5a9e38cfd3dfcf3ac9eb0de2ccbce43e6a86e20c07d0ba3efe33aaca3074"
+    },
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libfast_gicp.so": {
+      "bytes": 606520,
+      "sha256": "ce974c614a6481c335b42279c14daf5f71d4bc7df5a120fa7787d7c2a55ffc97"
+    },
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libndt_omp.so": {
+      "bytes": 906512,
+      "sha256": "e274416abe31236910b5aa588e095cd3100dd77f348163ffddd29618bb8b82ff"
+    },
+    "/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libhdl_global_localization.so": {
+      "bytes": 478776,
+      "sha256": "25d34a98f83cfe49739938888f8fc1d96f3f0f6d129140ebb831ad5935f8d2bd"
+    }
+  },
+  "free_bytes": 24579350528,
+  "timing_decision": "USER_ACCEPTED_NATIVE_APPROXIMATION_NO_CLOCK_OR_MATH_CHANGE"
+}

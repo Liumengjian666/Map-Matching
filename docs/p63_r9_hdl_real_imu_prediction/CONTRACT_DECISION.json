@@ -1,0 +1,19 @@
+{
+  "decision": "PASS_WITH_EXPLICIT_NATIVE_APPROXIMATIONS",
+  "user_time_approximation_acceptance": "接受原版近似并记录实际时间缺口，不修改时钟或数学",
+  "align_so_far": 0,
+  "formal_trial_limit": 1,
+  "nominal_align_limit": 160,
+  "extra_align_limit": 0,
+  "files_sha256": {
+    "INPUT_FREEZE.json": "a10087f11c8aad4f237e0b486dce01e73b7270b91edd66c9cc59164d3da06a1d",
+    "PREFLIGHT.json": "91cf23560876eaac50846105100f61fb1418bd4935e09700ad85dff0179571be",
+    "evidence/RAW_IMU_VERIFIED.csv": "89f097f7c6b66a75e967a65cb427b95ae1b0ab54bae2e8042a826c7d4bf5f4b3",
+    "evidence/CAUSAL_TRANSFORM_PREVIEW.csv": "205444a5770f9a5bae08ae5bdda1cad772472e088fb9f8f715dca8e870c43e4d",
+    "tools/imu_geometry.py": "19adb542534ebff22ba08ee98a84854dbc809d2295f601e049e49fe9f6570739",
+    "tools/run_imu_once.py": "bd60a0dc474c520c1ff2738b897b8d009286a72d4121fddbcd2a2da66aa7d651",
+    "tools/read_only_trace.cpp": "6e1a24a62e04a5ecd9ddb3d7a367036206672beda5bdba2b3eaafb1731d6b1cb",
+    "BUILD.json": "272d8de2783113fa7da7f671665720fa28a966744bf14334d1e105873832401b",
+    "IMU_INPUT_CONTRACT.md": "77d02559b3877cbff9a12b3e355918bd79d0eab797489b74f027ff9dd28eb3ae"
+  }
+}
