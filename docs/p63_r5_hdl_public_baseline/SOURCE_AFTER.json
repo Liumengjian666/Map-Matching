@@ -1,0 +1,22 @@
+{
+  "upstream": {
+    "hdl_localization": {
+      "SHA": "de2dc7769aa2412876d05ae6161408d3295b6a3c",
+      "pristine": true
+    },
+    "ndt_omp": {
+      "SHA": "5495fd9214945afcb4b35d5a1da385e405c52bf9",
+      "pristine": true
+    },
+    "fast_gicp": {
+      "SHA": "0e7ec1441c99f7be453db2ea216d5de029387417",
+      "pristine": true
+    },
+    "hdl_global_localization": {
+      "SHA": "a6a6b69929ac371d9531d0dcdef3c1593fd49245",
+      "pristine": true
+    }
+  },
+  "all_original_R3_ELF_unchanged": true,
+  "core_source_changes": 0
+}

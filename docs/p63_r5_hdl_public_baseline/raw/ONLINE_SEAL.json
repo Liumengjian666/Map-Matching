@@ -1,0 +1,14 @@
+{
+  "files": {
+    "ONLINE_RESULTS.csv": "e002a15b4404461459ac06d2bb1491f06cf49ae2178dc564a2f1d91a42904f8b",
+    "NATIVE_NDT.csv": "04248970a98bb0ee2839e0e6053e83c57931173cd85a4ec54c44ef49150fa2ce",
+    "CALLBACKS.csv": "78c5d04f3abea6430a3899906511fd3bde0f11a7037f286a818a0e70c1266ec2",
+    "ROS_RECEIPTS.jsonl": "70921617be4c813d8c4fd663ad64f6b47989acdd4c3585af31111d2ead6bdd56",
+    "MEMORY.csv": "df3eab9f0101161c0c2cb22e380ec28de4a82a6be782bc8ccc6b7b4d4de81fbd",
+    "PUBLISHED_MAP.json": "f92d4d4ab8dfd9f099e2726c746b9259550f7374a6aeddc2f84b8e82f03ae070",
+    "EFFECTIVE_PARAMS.json": "9fb495def7b26a98b09aa43af5680362e9378e968b496684a6a930dfeb2e024f",
+    "COMMAND.json": "dbba7dade209e32da5bfeb4da57f762d7b7f4d995f3150c047eb780d2aca637f",
+    "RUN_RECEIPT.json": "b831d2a68cdeee69b4f3b725d43d2c465d7c46c52e46dcfc8185f9c108520afc"
+  },
+  "test_reference_values_read": false
+}

@@ -35,7 +35,7 @@
 |INN-010 NDT观测身份|SUPPORTED|R30 raw62认证后位姿被限步改变；R31严格拒绝使身份闭合，但Indoor两组仅各4融合、长期饥饿，RMSE5334.892892m。工程正确性与性能分离。|`docs/p62_r31_observation_identity/REPORT.md`；`src/dog_prior_map_localization/include/dog_prior_map_localization/observation_identity.hpp`|这是基础修复，不是新SCI算法；新框架仍须使认证对象与融合对象一致。|
 |INN-011 局部地图／内存|SUPPORTED|P45固定300扫描中NDT进程VmHWM由775308降至138200KiB（82.2%）；稳态配准均值约增14%，未实测跨tile轨迹。|`docs/p45_newer_college_local_map/REPORT.md`；`src/dog_prior_map_localization/src/local_map_tiles.cpp`|只支持历史片段的NDT进程资源命题，不是整机降82.2%或10Hz通过。|
 |INN-012 Super-LIO适配|RETIRED|R1外部PCD及冻结通过；107扫描发布、95状态输出后连续20低支持停止；R2仅部分坐标来源闭合。|`docs/p63_r1_mature_prior_map_baseline/REPORT.md`；`docs/p63_r2_frame_provenance_closure/REPORT.md`|停止当前资产组合；不改角度/重力重跑，不贬低框架普遍能力。|
-|INN-013 HDL成熟基线|PARKED|R3 400/400通过外部筛选；已执行的完整R4在3377帧连续20低inlier停止，NDT/UKF仍有限，150.75MiB、callback P95=103.60ms。|`docs/p63_r4_hdl_full_loop2/REPORT.md`；官方`PoseEstimator::correct()`|仍是唯一成熟候选；整段工程未通过，无GT。外部筛选不等于作者UKF准入。|
+|INN-013 HDL成熟基线|FAILED|R3 400帧工程通过；完整R4在3377帧停止。R5 Koide固定160帧全完成，但参考RMSE=.559410m/2.684162°，持续高误差54–58和78–126，未达预注册目标；相对P62更好但不是创新成功。|`docs/p63_r4_hdl_full_loop2/REPORT.md`；`docs/p63_r5_hdl_public_baseline/REPORT.md`；官方`PoseEstimator::correct()`|FAILED限定最新公开数据短段资格，不否定旧400帧事实或框架普遍能力；不直接加入恢复模块。|
 |INN-014 结构留出／稳健候选池|PARKED|P62-R1已提出；R9可评价率4%→100%，但无获支持恢复；R12/R13合法不同候选及稳健接纳仍为0。|`docs/p62_r1_novelty_benchmark_lock/LITERATURE_REVIEW.md`；`docs/p62_r9_coverage_aware_recovery_v2/REPORT.md`；`docs/p62_r12_feasibility_preserving_pool/REPORT.md`|不得重新命名为新创新；Full使用的点不能事后称独立留出。|
 |INN-015 候选对可辨识见证量程（A草案）|PROPOSED|仅设计：用地图/候选侧预测量程差确定见证，再以优化外量程验证；没有实现或实验。|`docs/p63_r4_paper_innovation_design/SELECTED_ALGORITHM.md`、`MINIMAL_EXPERIMENT_PLAN.md`|与INN-014相比只改变验证信息及见证资格；新颖性/正确性/成本均未成立，不得写为已入选核心创新。|
 
@@ -58,6 +58,7 @@
 |2026-10-27|INN-013|PARKED|完整R4已实际执行并停止，保留原400帧正例|ba612b2404bbe6cca794fa410c18227cbe4cc44c|
 |2026-10-27|INN-014|PARKED|回填R13合法不同0/稳健支持0；非新空白|fab0a2f3fbf3b3f0c4f42c5acb78932dde98749e|
 |2026-10-27|INN-015|PROPOSED|本轮A设计文本首次归档；正式NOVELTY_GAP_UNRESOLVED，不是实验通过|406adaf186026d1d91da51e6a697c06e8a927dbb|
+|2026-10-28|INN-013|FAILED|P63-R5原版公开数据160帧资格失败；完整执行但两段参考失锁、位置RMSE>.5m。此SHA为实际在线CODE，结果见本轮END归档，不登记算法创新成功。|661cc97784edb3e387afe75f6e4f6c3e6e8179fc|
 
 ## 5. 本轮研究记录：设计，不是算法实验
 
@@ -76,3 +77,18 @@ TASK：`P63-R4-PAPER-INNOVATION-DESIGN`，START `ba612b2404bbe6cca794fa410c18227
 设计CODE `406adaf186026d1d91da51e6a697c06e8a927dbb`；END为包含本追加的最终归档commit，完整SHA见最终交接。正式结果`NOVELTY_GAP_UNRESOLVED`；INN-015仅PROPOSED，B不开发。原因包括旧留出/候选验证已做、RegScorer及经典可见性先例、指定AGV方法全文未取得、当前没有合格的“高质量却错误”独立参考样本。没有定位或代理评分新结果，不能借设计文档主张性能。
 
 唯一NEXT：科研总控核查真实档案与A公式后，决定是否批准R13固定5帧/15封存候选、零新增NDT的证据资格试验；它不是正确性或原创性确认。不自动进入算法开发/完整loop2/P63-R5。未push，旧R4失败及历史正负结果不变。
+
+
+## 6. 2026-10-28 P63-R5公开数据原版基线
+
+TASK `P63-R5-HDL-PUBLIC-BASELINE-QUALIFICATION`。研究问题为原版HDL是否复现P62同raw5–164的早期失效，不研究新数学或INN-015。参考资料仅既有Koide/R29坐标合同及指定历史报告；没有新增文献结论。
+
+START `e1b06fa8a910ffd3d9f4299838b4b8eb7523a262`；实际在线CODE `661cc97784edb3e387afe75f6e4f6c3e6e8179fc`；评价CODE `d9b0a99167fbfff94eef4b4604497db155b49c9c`；END为最终归档commit，完整值见交接。分支`research/p63-r5-hdl-public-baseline`，未push。
+
+唯一正式试验160帧全部完成、160 NDT均收敛、UKF输出有限，原始在线文件封存后才评价。Koide Azure Kinect点云、raw4 Oracle Start、无IMU的原UKF、冻结89656点target；位置RMSE .559410m、姿态2.684162°，两段持续参考高误差54–58/78–126，恢复59/127，正式BASELINE_LOCALIZATION_FAIL。原生inlier最小.932111，说明原生收敛/该质量并非正确性证明。没有额外align、调参重跑、GT在线修正、重置、下载或删除。
+
+同窗P62 D=3.537730m/4.011390°，G-only=C+G=3.794460m/3.553957°；原有单帧误差重算一致，禁止与整2023帧结果混比。HDL无IMU且预处理/NDT/滤波不同，不能只归因C+G。参考是地图锚定GICP+IMU，非独立动捕。失败链显示预测已偏离、NDT未充分拉回、UKF跟随；未证明严格局部极小值、0.01退化或同一根因。
+
+源码改动仅独立转换/launch/监督/只读测量，原作者核心0；实际NDT160、创新模块0。manager峰值116.921875MiB，callback P95 57.628496ms但Max144.456400ms；离线握手不认证实时。证据见`docs/p63_r5_hdl_public_baseline/`，全部失败输出和两个在线RViz截图保留。
+
+唯一NEXT：由总控决定是否批准原版HDL raw78–83固定六帧的参考初值反事实诊断（不融合，最多6次额外align）。当前不执行，不自动进入恢复开发或完整序列。INN-013的FAILED是短段工程/性能资格结论，不是SCI创新成败；INN-015保持PROPOSED。

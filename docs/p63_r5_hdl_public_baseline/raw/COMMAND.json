@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "bash",
+    "--noprofile",
+    "--norc",
+    "-c",
+    "source /opt/ros/noetic/setup.bash && source /home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/devel/setup.bash && export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH:-} && export ROS_PACKAGE_PATH=/home/jian/livox_ws/p63_r5_hdl_public_baseline_ws/research:${ROS_PACKAGE_PATH:-} && exec roslaunch p63_hdl_public_baseline p63_r5_indoor_easy.launch output_dir:=/home/jian/livox_ws/p63_r5_hdl_public_baseline_data/formal_01 rviz:=true autoplay:=false"
+  ],
+  "CODE_SHA": "661cc97784edb3e387afe75f6e4f6c3e6e8179fc",
+  "input_manifest_sha256": "93521c04d40579cf029630f0802f62aeba538926de68f2ec2d889d58ebd9806e",
+  "trace_binary_sha256": "6350c80ec3c43bcbe49ce1333e8cb64a9a7902ce1dcd3faf76259635e9cf474c",
+  "test_GT_access": false,
+  "oracle_anchor": 4,
+  "target_raw": [
+    5,
+    164
+  ]
+}

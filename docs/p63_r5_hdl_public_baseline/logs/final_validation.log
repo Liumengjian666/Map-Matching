@@ -1,0 +1,20 @@
+PASS 160 frames, exact raw5..164
+PASS original stamps match all five records
+PASS exactly one native align per callback, no hidden extra calls
+PASS native and UKF finite; homogeneous initial guesses valid
+PASS all 160 native targets immutable, one point count and SHA
+PASS map file remains preregistered asset
+PASS all pre-reference online seals remain exact
+PASS archived raw files decompress byte-exactly
+PASS actual compiled source and trace remain fixed
+PASS 160 converged without low-inlier stop or extra align
+PASS RMSE reflects all 160 outputs
+PASS reported native RSS maximum agrees with raw trace
+PASS P62 D uses all and only same 160 raw IDs
+PASS P62 B uses all and only same 160 raw IDs
+PASS P62 C uses all and only same 160 raw IDs
+PASS P62 recomputation matches original 480 errors exactly
+PASS MASTER old history preserved append-only
+PASS committed and current changes confined to allowed research paths
+PASS 20 GiB storage reserve
+{"checks": 19, "P62_max_recompute_delta": 0.0, "available_bytes": 24706756608, "validation_additional_align": 0, "verdict": "BASELINE_LOCALIZATION_FAIL"}

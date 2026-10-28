@@ -1,0 +1,86 @@
+[
+  {
+    "source": "/home/jian/livox_ws/p63_r5_hdl_public_baseline_data/formal_01/ONLINE_RESULTS.csv",
+    "source_bytes": 120183,
+    "source_sha256": "e002a15b4404461459ac06d2bb1491f06cf49ae2178dc564a2f1d91a42904f8b",
+    "archive": "raw/ONLINE_RESULTS.csv.gz",
+    "archive_sha256": "bfb99b435f91890109ed0f50e87e36757f210b49fe093c4f4aacbf3ef5ab80f5"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r5_hdl_public_baseline_data/formal_01/NATIVE_NDT.csv",
+    "source_bytes": 93234,
+    "source_sha256": "04248970a98bb0ee2839e0e6053e83c57931173cd85a4ec54c44ef49150fa2ce",
+    "archive": "raw/NATIVE_NDT.csv.gz",
+    "archive_sha256": "0160cab174482f64562ee49bec829827e2c427b32baba1d835ce0274220ab91f"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r5_hdl_public_baseline_data/formal_01/CALLBACKS.csv",
+    "source_bytes": 6559,
+    "source_sha256": "78c5d04f3abea6430a3899906511fd3bde0f11a7037f286a818a0e70c1266ec2",
+    "archive": "raw/CALLBACKS.csv.gz",
+    "archive_sha256": "c28657c03489f3fef198dd51201dd71b3562f383722d0ebdc236a64a0b03bcae"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r5_hdl_public_baseline_data/formal_01/ROS_RECEIPTS.jsonl",
+    "source_bytes": 59118,
+    "source_sha256": "70921617be4c813d8c4fd663ad64f6b47989acdd4c3585af31111d2ead6bdd56",
+    "archive": "raw/ROS_RECEIPTS.jsonl.gz",
+    "archive_sha256": "a85d108f9caf4a4a28e776e56f36d349ed18da1a4ffa42ea69a1855cead69a09"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r5_hdl_public_baseline_data/formal_01/MEMORY.csv",
+    "source_bytes": 6950,
+    "source_sha256": "df3eab9f0101161c0c2cb22e380ec28de4a82a6be782bc8ccc6b7b4d4de81fbd",
+    "archive": "raw/MEMORY.csv.gz",
+    "archive_sha256": "5f9f67b6b8534b839d121a0dc32d0503a6dab3e1be5514b973d3907c54e30e39"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r5_hdl_public_baseline_data/formal_01/ROSLAUNCH.log",
+    "source_bytes": 4311,
+    "source_sha256": "38d8db78995a0c68d72d32a97b64b5769d61935a37ed72110088485777a3dcdd",
+    "archive": "raw/ROSLAUNCH.log.gz",
+    "archive_sha256": "f3547291acd4716c56478ca467eb0d6872ea2299b680669e293952c1df87dc1f"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r5_hdl_public_baseline_data/formal_01/ONLINE_SEAL.json",
+    "source_sha256": "1d293515029df070e69409b3a0bcc772cc4e3fd4ccc23897f22571560af88d46",
+    "archive": "raw/ONLINE_SEAL.json",
+    "archive_sha256": "1d293515029df070e69409b3a0bcc772cc4e3fd4ccc23897f22571560af88d46"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r5_hdl_public_baseline_data/formal_01/COMMAND.json",
+    "source_sha256": "dbba7dade209e32da5bfeb4da57f762d7b7f4d995f3150c047eb780d2aca637f",
+    "archive": "raw/COMMAND.json",
+    "archive_sha256": "dbba7dade209e32da5bfeb4da57f762d7b7f4d995f3150c047eb780d2aca637f"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r5_hdl_public_baseline_data/formal_01/RUN_RECEIPT.json",
+    "source_sha256": "b831d2a68cdeee69b4f3b725d43d2c465d7c46c52e46dcfc8185f9c108520afc",
+    "archive": "raw/RUN_RECEIPT.json",
+    "archive_sha256": "b831d2a68cdeee69b4f3b725d43d2c465d7c46c52e46dcfc8185f9c108520afc"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r5_hdl_public_baseline_data/formal_01/EFFECTIVE_PARAMS.json",
+    "source_sha256": "9fb495def7b26a98b09aa43af5680362e9378e968b496684a6a930dfeb2e024f",
+    "archive": "raw/EFFECTIVE_PARAMS.json",
+    "archive_sha256": "9fb495def7b26a98b09aa43af5680362e9378e968b496684a6a930dfeb2e024f"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r5_hdl_public_baseline_data/formal_01/PUBLISHED_MAP.json",
+    "source_sha256": "f92d4d4ab8dfd9f099e2726c746b9259550f7374a6aeddc2f84b8e82f03ae070",
+    "archive": "raw/PUBLISHED_MAP.json",
+    "archive_sha256": "f92d4d4ab8dfd9f099e2726c746b9259550f7374a6aeddc2f84b8e82f03ae070"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r5_hdl_public_baseline_data/formal_01/LIVE_raw131.png",
+    "source_sha256": "06b8c4e09b55d2b1be1484fc72dee61bcc6d9c468f8233ffe4b0cfdd1e9cbd10",
+    "archive": "raw/LIVE_raw131.png",
+    "archive_sha256": "06b8c4e09b55d2b1be1484fc72dee61bcc6d9c468f8233ffe4b0cfdd1e9cbd10"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r5_hdl_public_baseline_data/formal_01/LIVE_raw164.png",
+    "source_sha256": "f83fd45eeaf5a8c0e764ad941e31c181e40f63d6b3e3d52d28062d7fc8a887da",
+    "archive": "raw/LIVE_raw164.png",
+    "archive_sha256": "f83fd45eeaf5a8c0e764ad941e31c181e40f63d6b3e3d52d28062d7fc8a887da"
+  }
+]

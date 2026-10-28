@@ -1,0 +1,5 @@
+R5_PROGRESS {"raw_ordinal": 62, "converged": "1", "inlier_fraction": 0.9993295073509216, "fitness_all_nn_m2": "0.0051523229001258072"}
+R5_PROGRESS {"raw_ordinal": 76, "converged": "1", "inlier_fraction": 0.9981765151023865, "fitness_all_nn_m2": "0.0063145209338030528"}
+R5_PROGRESS {"raw_ordinal": 131, "converged": "1", "inlier_fraction": 0.9948593974113464, "fitness_all_nn_m2": "0.014171263924630804"}
+R5_PROGRESS {"raw_ordinal": 164, "converged": "1", "inlier_fraction": 0.9985790252685547, "fitness_all_nn_m2": "0.0081234801138757567"}
+R5_SEALED {"reason": "COMPLETED_160", "published": 160, "completed": 160, "target": 160, "last_raw": 164, "wall_s": 13.59071956796106, "peaks": {"manager_KiB": 119728, "whole_owned_tree_KiB": 674144}, "errors": [], "captures": [{"tag": "LIVE_raw131", "returncode": 0}, {"tag": "LIVE_raw164", "returncode": 0}], "maps": [{"points": 89656, "xyz_sha256": "dd839ccce78afebd3c7b055b5e9cff4b021f70a8cd0ad2d7323d899079d3c533", "frame": "map"}], "test_GT_access": false, "GT_access_online": "Previously frozen raw4 anchor only", "formal_trials": 1, "map_file_sha256_after": "8a3a7b0a9be71a5a76a284079766ca0c91037ba2a43b12dc93b13be14eda7707"}
