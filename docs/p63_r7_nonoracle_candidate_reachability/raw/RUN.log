@@ -1,0 +1,99 @@
+PREFLIGHT_PASS all sources/target, 48 fixed seeds, omp_max_threads=16
+TARGET_GRID_BUILD_MS 4.15188
+BEFORE_ALIGN raw=78 id=1 call=1
+AFTER_ALIGN raw=78 id=1 call=1 converged=1
+BEFORE_ALIGN raw=78 id=2 call=2
+AFTER_ALIGN raw=78 id=2 call=2 converged=1
+BEFORE_ALIGN raw=78 id=3 call=3
+AFTER_ALIGN raw=78 id=3 call=3 converged=1
+BEFORE_ALIGN raw=78 id=4 call=4
+AFTER_ALIGN raw=78 id=4 call=4 converged=1
+BEFORE_ALIGN raw=78 id=5 call=5
+AFTER_ALIGN raw=78 id=5 call=5 converged=1
+BEFORE_ALIGN raw=78 id=6 call=6
+AFTER_ALIGN raw=78 id=6 call=6 converged=1
+BEFORE_ALIGN raw=78 id=7 call=7
+AFTER_ALIGN raw=78 id=7 call=7 converged=1
+BEFORE_ALIGN raw=78 id=8 call=8
+AFTER_ALIGN raw=78 id=8 call=8 converged=1
+BEFORE_ALIGN raw=79 id=1 call=9
+AFTER_ALIGN raw=79 id=1 call=9 converged=1
+BEFORE_ALIGN raw=79 id=2 call=10
+AFTER_ALIGN raw=79 id=2 call=10 converged=1
+BEFORE_ALIGN raw=79 id=3 call=11
+AFTER_ALIGN raw=79 id=3 call=11 converged=1
+BEFORE_ALIGN raw=79 id=4 call=12
+AFTER_ALIGN raw=79 id=4 call=12 converged=1
+BEFORE_ALIGN raw=79 id=5 call=13
+AFTER_ALIGN raw=79 id=5 call=13 converged=1
+BEFORE_ALIGN raw=79 id=6 call=14
+AFTER_ALIGN raw=79 id=6 call=14 converged=1
+BEFORE_ALIGN raw=79 id=7 call=15
+AFTER_ALIGN raw=79 id=7 call=15 converged=1
+BEFORE_ALIGN raw=79 id=8 call=16
+AFTER_ALIGN raw=79 id=8 call=16 converged=1
+BEFORE_ALIGN raw=80 id=1 call=17
+AFTER_ALIGN raw=80 id=1 call=17 converged=1
+BEFORE_ALIGN raw=80 id=2 call=18
+AFTER_ALIGN raw=80 id=2 call=18 converged=1
+BEFORE_ALIGN raw=80 id=3 call=19
+AFTER_ALIGN raw=80 id=3 call=19 converged=1
+BEFORE_ALIGN raw=80 id=4 call=20
+AFTER_ALIGN raw=80 id=4 call=20 converged=1
+BEFORE_ALIGN raw=80 id=5 call=21
+AFTER_ALIGN raw=80 id=5 call=21 converged=1
+BEFORE_ALIGN raw=80 id=6 call=22
+AFTER_ALIGN raw=80 id=6 call=22 converged=1
+BEFORE_ALIGN raw=80 id=7 call=23
+AFTER_ALIGN raw=80 id=7 call=23 converged=1
+BEFORE_ALIGN raw=80 id=8 call=24
+AFTER_ALIGN raw=80 id=8 call=24 converged=1
+BEFORE_ALIGN raw=81 id=1 call=25
+AFTER_ALIGN raw=81 id=1 call=25 converged=1
+BEFORE_ALIGN raw=81 id=2 call=26
+AFTER_ALIGN raw=81 id=2 call=26 converged=1
+BEFORE_ALIGN raw=81 id=3 call=27
+AFTER_ALIGN raw=81 id=3 call=27 converged=1
+BEFORE_ALIGN raw=81 id=4 call=28
+AFTER_ALIGN raw=81 id=4 call=28 converged=1
+BEFORE_ALIGN raw=81 id=5 call=29
+AFTER_ALIGN raw=81 id=5 call=29 converged=1
+BEFORE_ALIGN raw=81 id=6 call=30
+AFTER_ALIGN raw=81 id=6 call=30 converged=1
+BEFORE_ALIGN raw=81 id=7 call=31
+AFTER_ALIGN raw=81 id=7 call=31 converged=1
+BEFORE_ALIGN raw=81 id=8 call=32
+AFTER_ALIGN raw=81 id=8 call=32 converged=1
+BEFORE_ALIGN raw=82 id=1 call=33
+AFTER_ALIGN raw=82 id=1 call=33 converged=1
+BEFORE_ALIGN raw=82 id=2 call=34
+AFTER_ALIGN raw=82 id=2 call=34 converged=1
+BEFORE_ALIGN raw=82 id=3 call=35
+AFTER_ALIGN raw=82 id=3 call=35 converged=1
+BEFORE_ALIGN raw=82 id=4 call=36
+AFTER_ALIGN raw=82 id=4 call=36 converged=1
+BEFORE_ALIGN raw=82 id=5 call=37
+AFTER_ALIGN raw=82 id=5 call=37 converged=1
+BEFORE_ALIGN raw=82 id=6 call=38
+AFTER_ALIGN raw=82 id=6 call=38 converged=1
+BEFORE_ALIGN raw=82 id=7 call=39
+AFTER_ALIGN raw=82 id=7 call=39 converged=1
+BEFORE_ALIGN raw=82 id=8 call=40
+AFTER_ALIGN raw=82 id=8 call=40 converged=1
+BEFORE_ALIGN raw=83 id=1 call=41
+AFTER_ALIGN raw=83 id=1 call=41 converged=1
+BEFORE_ALIGN raw=83 id=2 call=42
+AFTER_ALIGN raw=83 id=2 call=42 converged=1
+BEFORE_ALIGN raw=83 id=3 call=43
+AFTER_ALIGN raw=83 id=3 call=43 converged=1
+BEFORE_ALIGN raw=83 id=4 call=44
+AFTER_ALIGN raw=83 id=4 call=44 converged=1
+BEFORE_ALIGN raw=83 id=5 call=45
+AFTER_ALIGN raw=83 id=5 call=45 converged=1
+BEFORE_ALIGN raw=83 id=6 call=46
+AFTER_ALIGN raw=83 id=6 call=46 converged=1
+BEFORE_ALIGN raw=83 id=7 call=47
+AFTER_ALIGN raw=83 id=7 call=47 converged=1
+BEFORE_ALIGN raw=83 id=8 call=48
+AFTER_ALIGN raw=83 id=8 call=48 converged=1
+COMPLETE align=48 UKF=0 ROS_replay=0

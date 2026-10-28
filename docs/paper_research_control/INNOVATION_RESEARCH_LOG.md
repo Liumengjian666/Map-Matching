@@ -109,3 +109,20 @@ START `b538ba95cad58b7222101f09eb6844d55879bfab`；实际CODE `75fa75d3a70a0687c
 额外compute Mean/P95/Max=5.332442/13.065614/13.578637ms；独立进程峰值77.507813MiB，不能当在线全系统成本。证据：`docs/p63_r6_hdl_initialization_sensitivity/REPORT.md`、`SIX_FRAME_COMPARISON.csv`、`raw/`及真实C++。INN-013仍保留R5 FAILED，INN-015仍PROPOSED；不新增“SUPPORTED创新”条目。
 
 唯一NEXT：总控决定是否批准固定六帧非Oracle候选可达性最小验证，沿用原生质量排序为基线，种子与预算另行预注册；当前不执行、不自动下一轮。
+
+
+## 8. 2026-10-28 P63-R7：非Oracle固定平移成熟基线
+
+TASK `P63-R7-NONORACLE-CANDIDATE-REACHABILITY`。问题：R5实际预测周围固定地图XY八方向/.75m平移，是否可生成并用原生Gaussian选择R6已证明存在的较好终值。不是新多初值原理、不实现INN-015，没有新文献/新评分/新在线门控。
+
+START `79657c8c4cba6985af7a51ee759fe38746c24acc`；实际CODE `88daa7203b30b081d1ef49eee2284272649d4869`；评价CODE `99973ff0d9a38947ca806e0770cc0f93d9f82298`；END为最终归档commit，完整值见交接。分支`research/p63-r7-nonoracle-candidate-reachability`，仅本地未push。
+
+只用Koide Azure Kinect raw78–83，R5/R6原输入/预处理/目标/原NDT库。新增48/48 align全部收敛，原在线重跑0，UKF/ROS0。运行INPUT不含GT或R6 Oracle，原生候选/排序SHA封存后才评价。
+
+正式`REACHABLE_AND_NATIVE_RANKING_SUPPORTED`：可达6/6，实际选中4/6，满足原定≥4；找到但误选raw78/79两帧，选中位置误差.193221/.154898m（较.15m界限分别超43.2/4.9mm），另外四帧.112339/.062644/.034750/.024409m。六帧选择RMSE .115236m/.806201°，原在线.740808m/1.622742°；全部完整报告，不将参考最佳当实际输出。
+
+选择全为原生分数最高ID1，不用GT挑+X。48个新增候选中21个合格；两个误选已有合格2/8，Gaussian仍偏向1，而NN fitness更偏向8、inlier相同。这是有限排序反例，不证明通用评分失明，也不自动构成新SCI问题或安全在线方案。r=.75m是开发尺度，六相邻帧不能算六独立场景，参考非独立动捕。
+
+成本：48次compute合计668.630477ms、Mean13.929802/P95 25.353216/Max67.932710ms；事件墙钟Mean157.908364/P95 239.542689/Max267.078887ms，独立进程峰值77.289063MiB。无10Hz或在线闭环认证。证据`docs/p63_r7_nonoracle_candidate_reachability/REPORT.md`、CANDIDATES.csv、SELECTION_RESULTS.csv、raw/及真实C++。
+
+不改变INN-013/INN-015状态，不将成熟多初值基线记为创新成功。唯一NEXT：总控预注册未开发固定窗口/预算，保持搜索/原生排序作最小确认，检验可达性与排序局限的复现；当前不执行或扩大算法。

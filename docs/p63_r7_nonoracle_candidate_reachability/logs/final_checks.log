@@ -1,0 +1,20 @@
+PASS 48 native calls, zero historical reruns/UKF/ROS
+PASS exact frozen six-by-eight ID and timestamp order
+PASS all sources/targets match R6 identities through each align
+PASS map file unchanged
+PASS 54 candidates retain 0..8 for every raw and 6 real choices
+PASS all candidate poses finite and converged
+PASS frozen native rankings and all raw outputs remain sealed
+PASS raw archive copies byte-exact
+PASS actual driver/selector/build identity fixed
+PASS all original R5 ELF libraries untouched
+PASS runtime INPUT contains no reference/oracle pose fields
+PASS formal six-frame decision counts preserve two failures
+PASS MASTER_RESEARCH_PLAN_AND_LOG.md append-only
+PASS INNOVATION_RESEARCH_LOG.md append-only
+PASS hdl_localization original and pristine
+PASS ndt_omp original and pristine
+PASS root unrelated dirty work retained
+PASS R5/R6 tracked history not changed
+PASS 20 GiB storage reserve
+{"checks": 19, "validation_align": 0, "storage": {"available_bytes": 24656527360, "worktree_allocated_bytes": 2453504, "external_R7_allocated_bytes": 811008, "downloaded_bytes": 0, "deleted_bytes": 0}}

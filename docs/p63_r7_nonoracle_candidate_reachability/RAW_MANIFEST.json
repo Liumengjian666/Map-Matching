@@ -1,0 +1,47 @@
+[
+  {
+    "source": "/home/jian/livox_ws/p63_r7_nonoracle_reachability_data/formal_01/ALIGN_STARTED",
+    "archive": "raw/ALIGN_STARTED",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r7_nonoracle_reachability_data/formal_01/COMMAND.json",
+    "archive": "raw/COMMAND.json",
+    "sha256": "8e1820b0aeca4eb839ed6f7b817c0d91c6b0543da617364af2ff32a1f7e4fe05"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r7_nonoracle_reachability_data/formal_01/EVENT_TIMING.csv",
+    "archive": "raw/EVENT_TIMING.csv",
+    "sha256": "d3a450a88c0dc4850e991e7190535400a0c0cc7550b4ec1aa71ace97c7da92bc"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r7_nonoracle_reachability_data/formal_01/NATIVE_CANDIDATES.csv",
+    "archive": "raw/NATIVE_CANDIDATES.csv",
+    "sha256": "bccd78e3e35a4d3bf2614a5cc49c9fff6db543d89e7c5e3685193093af3b686d"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r7_nonoracle_reachability_data/formal_01/OUTPUT_SEAL.json",
+    "archive": "raw/OUTPUT_SEAL.json",
+    "sha256": "0315d7022fecd5d0da5d60b5969c58a10026568c9f1bcfba5e2e62d4ecc9b46c"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r7_nonoracle_reachability_data/formal_01/PREPROCESS.csv",
+    "archive": "raw/PREPROCESS.csv",
+    "sha256": "1058a98a7a8832d31d1d78bb859ca78203de5eb877f3f9b39c6b21692caa6117"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r7_nonoracle_reachability_data/formal_01/RUN.log",
+    "archive": "raw/RUN.log",
+    "sha256": "5843aa05cc7455468a5bf64b6010968dfd35ae3422929295742d4dc096829d04"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r7_nonoracle_reachability_data/formal_01/RUN_RECEIPT.json",
+    "archive": "raw/RUN_RECEIPT.json",
+    "sha256": "f4dd98be82fcb53c74b2b4a5b8a50515428348baa305093953d9fc4967c7230f"
+  },
+  {
+    "source": "/home/jian/livox_ws/p63_r7_nonoracle_reachability_data/formal_01/SELECTION_NATIVE.json",
+    "archive": "raw/SELECTION_NATIVE.json",
+    "sha256": "fe0dcc66f003672a248203b6023e074a1390ee381962f86fea7bc6b323412719"
+  }
+]

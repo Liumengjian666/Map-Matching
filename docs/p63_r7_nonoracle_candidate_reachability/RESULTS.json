@@ -1,0 +1,150 @@
+{
+  "TASK": "P63-R7-NONORACLE-CANDIDATE-REACHABILITY",
+  "START_SHA": "79657c8c4cba6985af7a51ee759fe38746c24acc",
+  "CODE_SHA": "88daa7203b30b081d1ef49eee2284272649d4869",
+  "EVALUATION_CODE_SHA": "99973ff0d9a38947ca806e0770cc0f93d9f82298",
+  "verdict": "REACHABLE_AND_NATIVE_RANKING_SUPPORTED",
+  "frames": 6,
+  "reachable_frames": 6,
+  "native_selected_good_frames": 4,
+  "categories": {
+    "FOUND_AND_SELECTED": 4,
+    "FOUND_BUT_SELECTION_FAILED": 2,
+    "NO_QUALIFYING_CANDIDATE": 0
+  },
+  "new_native_align": 48,
+  "new_converged": 48,
+  "candidate_rows": 54,
+  "UKF_updates": 0,
+  "ROS_replay": 0,
+  "R5_nominal_reruns": 0,
+  "run": {
+    "CODE_SHA": "88daa7203b30b081d1ef49eee2284272649d4869",
+    "argv": [
+      "/home/jian/livox_ws/p63_r7_nonoracle_reachability_data/reachability_ndt",
+      "--run",
+      "/home/jian/livox_ws/p63_r7_nonoracle_reachability_ws/docs/p63_r7_nonoracle_candidate_reachability/INPUT.json",
+      "/home/jian/livox_ws/p63_r7_nonoracle_reachability_data/formal_01"
+    ],
+    "input_sha256": "6df34f7b982ea37128bb6cefc8778d94234eea7d6249b892392be906caa6496d",
+    "binary_sha256": "fc28ef297d6c030c3a52bcfeedbf0bac0516ace37888a86f5a60f5ea727231ff",
+    "selection_source_sha256": "ca5cee6d4b60c719d4136184b57176f29d29ea6e5e2c15cd638359e84921909e",
+    "reference_or_R6_oracle_access": false,
+    "UKF_updates": 0,
+    "ROS_replays": 0,
+    "nominal_online_align_repeats": 0,
+    "selection_ms": 2.8898429591208696,
+    "returncode": 0,
+    "wall_s": 1.1722521730116569,
+    "reason": null,
+    "completed_align_rows": 48,
+    "before_align_logged": 48,
+    "map_sha256_after": "8a3a7b0a9be71a5a76a284079766ca0c91037ba2a43b12dc93b13be14eda7707",
+    "budget_pass": true,
+    "ranked_frames": 6
+  },
+  "selected_translation": {
+    "n": 6,
+    "mean": 0.09704370243332196,
+    "rmse": 0.1152358048007672,
+    "p95": 0.18364057271630288,
+    "max": 0.19322135115051242,
+    "min": 0.024408657142501882
+  },
+  "selected_rotation": {
+    "n": 6,
+    "mean": 0.7813182846914621,
+    "rmse": 0.8062012090884211,
+    "p95": 0.9963299291146875,
+    "max": 1.0116220517714583,
+    "min": 0.494420553582732
+  },
+  "c0_translation": {
+    "n": 6,
+    "mean": 0.716346773879617,
+    "rmse": 0.7408079576579485,
+    "p95": 0.9895959878706597,
+    "max": 1.0080693304579333,
+    "min": 0.5185134872481888
+  },
+  "c0_rotation": {
+    "n": 6,
+    "mean": 1.4884368392357488,
+    "rmse": 1.622742192774212,
+    "p95": 2.440162920184018,
+    "max": 2.503552396630292,
+    "min": 0.7930003152254962
+  },
+  "timing_ms": {
+    "ndt_ms": {
+      "n": 48,
+      "mean": 13.929801604166665,
+      "rmse": 18.360613009648265,
+      "p95": 25.3532163,
+      "max": 67.93271,
+      "min": 2.294652
+    },
+    "scoring_ms": {
+      "n": 48,
+      "mean": 5.027677208333333,
+      "rmse": 5.041004041198948,
+      "p95": 5.5139027,
+      "max": 5.597608,
+      "min": 4.452272
+    },
+    "diagnostic_ms": {
+      "n": 48,
+      "mean": 5.748557666666668,
+      "rmse": 5.760591701887887,
+      "p95": 6.246965100000001,
+      "max": 6.351061,
+      "min": 5.108017
+    }
+  },
+  "event_timing_ms": {
+    "ndt_sum_ms": {
+      "n": 6,
+      "mean": 111.43841283333332,
+      "rmse": 122.59190003416818,
+      "p95": 193.78232924999998,
+      "max": 221.14961499999998,
+      "min": 69.860483
+    },
+    "scoring_sum_ms": {
+      "n": 6,
+      "mean": 40.22141766666667,
+      "rmse": 40.233790941523544,
+      "p95": 41.41908,
+      "max": 41.428385999999996,
+      "min": 38.995241
+    },
+    "diagnostic_sum_ms": {
+      "n": 6,
+      "mean": 45.98846133333333,
+      "rmse": 45.999419593789696,
+      "p95": 47.1426995,
+      "max": 47.161137,
+      "min": 44.76479900000001
+    },
+    "event_wall_ms": {
+      "n": 6,
+      "mean": 157.9083638333333,
+      "rmse": 165.86207017657952,
+      "p95": 239.542689,
+      "max": 267.078887,
+      "min": 117.397161
+    }
+  },
+  "ndt_total_ms": 668.630477,
+  "scoring_total_ms": 241.32850600000003,
+  "diagnostic_total_ms": 275.930768,
+  "peak_RSS_KiB": 79144,
+  "reference_kind": "MAP_ANCHORED_OFFLINE_GICP_IMU_REFERENCE_NOT_MOCAP",
+  "reference_sha256": "b36ea9378fd436a720e01e82ec7cbe7cfaf66ffc35f46cc2f5b2eafaecd50042",
+  "reference_evaluator_sha256": "d7e780bcf48a477534813eddf4279c9fd6b131adef7dc45c9fa533d50028815c",
+  "reference_used_for_generation_or_selection": false,
+  "development_radius_m": 0.75,
+  "posthoc_alignment": false,
+  "new_algorithm_innovation_claim": false,
+  "continuous_localization_recovery_claim": false
+}

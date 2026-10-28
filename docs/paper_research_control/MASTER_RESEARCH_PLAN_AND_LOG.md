@@ -283,3 +283,25 @@ TASK `P63-R6-HDL-INITIALIZATION-SENSITIVITY`。原版HDL/R5配置不改，原在
 |归档/NEXT|`docs/p63_r6_hdl_initialization_sensitivity/`。唯一NEXT建议总控核查后决定是否批准固定六帧的非Oracle候选可达性最小验证，以原生质量排序为基线，事前另冻种子/预算；本轮不执行额外align或新算法|
 
 R5资格FAILED及INN-013状态不因本轮诊断改为创新成功，INN-015保持PROPOSED且未设计/开发。本轮只将“准确初值邻域可获得更好匹配”的有限机制证据补充完整。
+
+
+## 2026-10-28 P63-R7实际执行：固定平移多初值达到探索目标，保留两帧误选
+
+TASK `P63-R7-NONORACLE-CANDIDATE-REACHABILITY`。成熟平移多初值基线，不是新算法或在线恢复。原版HDL核心/NDT参数/质量公式不改，不运行UKF/ROS/C+G/INN-015。
+
+|项目|真实执行与结论|
+|---|---|
+|Git|START `79657c8c4cba6985af7a51ee759fe38746c24acc`；实际匹配/排序CODE `88daa7203b30b081d1ef49eee2284272649d4869`；封存后评价CODE `99973ff0d9a38947ca806e0770cc0f93d9f82298`；END为最终归档commit，完整值见交接；本地未push|
+|工作区/分支|`/home/jian/livox_ws/p63_r7_nonoracle_reachability_ws`；`research/p63-r7-nonoracle-candidate-reachability`|
+|输入/隔离|Koide indoor_easy_01 Azure Kinect raw78–83。R5实际guess，地图93146→89656，target SHA dd839ccce78afebd3c7b055b5e9cff4b021f70a8cd0ad2d7323d899079d3c533；Source点数/SHA与R6重建一致。新INPUT按允许字段生成，不含GT/R6 Oracle；候选及Gaussian选择先封存，之后才读取参考评价|
+|固定方法/预算|地图XY 0/45/90/135/180/225/270/315°、r=.75m，Z/姿态不变；每帧8次，新增48/48，48收敛；原在线0号直接引用，重跑0；UKF0、ROS0。Candidate0–8仅按Gaussian降序/完全同分ID升序排序，无NN/GT选择|
+|正式结果|**REACHABLE_AND_NATIVE_RANKING_SUPPORTED**：6/6有合格非Oracle候选，实际选中4/6满足位置≤.15m/旋转≤2°/位置改善≥.30m。找到但误选2，无合格0、不可评价0；21/48新增候选合格，全部54个含历史0号完整报告|
+|实际选择|六帧均选ID1(+地图X)。位置误差依次.193221/.154898/.112339/.062644/.034750/.024409m；完整六帧位置RMSE .115236m、旋转.806201°，原在线六帧.740808m/1.622742°。这不是连续轨迹对比或独立泛化|
+|反例/质量|raw78/79已有合格2/8但选1；相对.15m仅超43.2/4.9mm，不夸大为灾难性失败。1号Gaussian比GT最佳8号高约.1305%/.1028%，NN fitness更差且inlier相同。既不能说原生评分完美，也不能抹掉4/6正式通过。未更改排序、阈值或半径|
+|终值与成本|ID贪心去重.10m/1°，各帧4/7/5/3/4/3代表，非严格极小值数。48次compute Mean/P95/Max=13.929802/25.353216/67.932710ms，合计668.630477ms；NN/inlier评分241.328506ms，全部诊断275.930768ms含评分；事件墙钟Mean/P95/Max=157.908364/239.542689/267.078887ms；进程峰值79144KiB=77.289063MiB。离线非10Hz验收|
+|边界/保护|.75m来自已暴露误差尺度；六连续帧非独立场景；参考为同图锚定GICP+IMU，非独立动捕。无额外Yaw、GT反馈、上游/历史/稳定工程写入、下载或删除。R5原生Source无现场SHA限制保留，R7与R6确定性重建SHA核对|
+|证据/NEXT|`docs/p63_r7_nonoracle_candidate_reachability/`，完整raw候选、封存选择及评价。唯一NEXT建议由总控预注册一个未开发固定窗口/预算，冻结同一搜索/原生排序做最小确认，重点检验可达性与排序局限是否重现；不立即开发新评分或扩大搜索|
+
+长期创新状态不因成熟基线通过而升级。R5资格失败、R6Oracle诊断及所有旧负例保持；本轮不宣称完整恢复、SCI原创性或跨场景可靠性。存储收尾实测见本轮STORAGE_AND_SOURCE_AFTER.json，不自动清理历史。
+
+P63-R7收尾补记：19项必要身份/调用/封存/历史保护核验通过，检查新增align0。可用24,656,527,360B；稀疏工作区2,453,504B（含继承文件）、外部R7 811,008B；保留20GiB，无删除/下载。全部原始候选和原生选择均封存，未开始下一轮。

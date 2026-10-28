@@ -1,0 +1,368 @@
+[
+  {
+    "raw_ordinal": 78,
+    "stamp_ns": 1693718244145946305,
+    "selected_id": 1,
+    "ranking": [
+      {
+        "candidate_id": 1,
+        "score": 2.656967725568404,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 2,
+        "score": 2.6542654476634033,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 8,
+        "score": 2.6535052310466014,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 0,
+        "score": 2.639831742965207,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 4,
+        "score": 2.6398274370697745,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 5,
+        "score": 2.6398273905483247,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 6,
+        "score": 2.639750514869644,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 3,
+        "score": 2.6392405451400265,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 7,
+        "score": 2.6374418701935856,
+        "converged": true,
+        "pose_finite": true
+      }
+    ]
+  },
+  {
+    "raw_ordinal": 79,
+    "stamp_ns": 1693718244212696302,
+    "selected_id": 1,
+    "ranking": [
+      {
+        "candidate_id": 1,
+        "score": 2.6492837175195256,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 2,
+        "score": 2.6472129547340715,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 8,
+        "score": 2.6465633782002826,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 0,
+        "score": 2.6138485361083355,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 4,
+        "score": 2.6137710100579894,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 5,
+        "score": 2.6137709919079644,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 3,
+        "score": 2.6125057738851734,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 7,
+        "score": 2.465260912902858,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 6,
+        "score": 1.879053896169396,
+        "converged": true,
+        "pose_finite": true
+      }
+    ]
+  },
+  {
+    "raw_ordinal": 80,
+    "stamp_ns": 1693718244279522125,
+    "selected_id": 1,
+    "ranking": [
+      {
+        "candidate_id": 1,
+        "score": 2.645591615601218,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 2,
+        "score": 2.643233417438422,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 8,
+        "score": 2.6431669743973707,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 7,
+        "score": 2.6430666703285763,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 3,
+        "score": 2.642876389901253,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 6,
+        "score": 2.596335686329263,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 5,
+        "score": 2.5963189180701662,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 0,
+        "score": 2.5912620901831427,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 4,
+        "score": 2.5084336196882404,
+        "converged": true,
+        "pose_finite": true
+      }
+    ]
+  },
+  {
+    "raw_ordinal": 81,
+    "stamp_ns": 1693718244346293460,
+    "selected_id": 1,
+    "ranking": [
+      {
+        "candidate_id": 1,
+        "score": 2.669242254830545,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 2,
+        "score": 2.6665216224717443,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 8,
+        "score": 2.666490927323084,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 7,
+        "score": 2.666151876733268,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 3,
+        "score": 2.665694590638077,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 4,
+        "score": 2.6099898913117725,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 6,
+        "score": 2.609972216752894,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 5,
+        "score": 2.6099720958573562,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 0,
+        "score": 2.605445427638639,
+        "converged": true,
+        "pose_finite": true
+      }
+    ]
+  },
+  {
+    "raw_ordinal": 82,
+    "stamp_ns": 1693718244413037584,
+    "selected_id": 1,
+    "ranking": [
+      {
+        "candidate_id": 1,
+        "score": 2.670156600729467,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 2,
+        "score": 2.669943983510325,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 3,
+        "score": 2.6698301342035795,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 7,
+        "score": 2.6697426508594106,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 5,
+        "score": 2.5918365853251646,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 4,
+        "score": 2.5917349138146712,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 0,
+        "score": 2.591439381478676,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 8,
+        "score": 2.519843686586473,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 6,
+        "score": 2.424098674186657,
+        "converged": true,
+        "pose_finite": true
+      }
+    ]
+  },
+  {
+    "raw_ordinal": 83,
+    "stamp_ns": 1693718244479806537,
+    "selected_id": 1,
+    "ranking": [
+      {
+        "candidate_id": 1,
+        "score": 2.675543849530933,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 2,
+        "score": 2.675354275542836,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 8,
+        "score": 2.6753357958678015,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 5,
+        "score": 2.582891443542135,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 7,
+        "score": 2.5828882205827695,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 0,
+        "score": 2.582829923337542,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 4,
+        "score": 2.58275277849359,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 6,
+        "score": 2.582752728384524,
+        "converged": true,
+        "pose_finite": true
+      },
+      {
+        "candidate_id": 3,
+        "score": 2.3931788499416276,
+        "converged": true,
+        "pose_finite": true
+      }
+    ]
+  }
+]

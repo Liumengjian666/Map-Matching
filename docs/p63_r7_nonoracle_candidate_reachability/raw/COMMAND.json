@@ -1,0 +1,16 @@
+{
+  "CODE_SHA": "88daa7203b30b081d1ef49eee2284272649d4869",
+  "argv": [
+    "/home/jian/livox_ws/p63_r7_nonoracle_reachability_data/reachability_ndt",
+    "--run",
+    "/home/jian/livox_ws/p63_r7_nonoracle_reachability_ws/docs/p63_r7_nonoracle_candidate_reachability/INPUT.json",
+    "/home/jian/livox_ws/p63_r7_nonoracle_reachability_data/formal_01"
+  ],
+  "input_sha256": "6df34f7b982ea37128bb6cefc8778d94234eea7d6249b892392be906caa6496d",
+  "binary_sha256": "fc28ef297d6c030c3a52bcfeedbf0bac0516ace37888a86f5a60f5ea727231ff",
+  "selection_source_sha256": "ca5cee6d4b60c719d4136184b57176f29d29ea6e5e2c15cd638359e84921909e",
+  "reference_or_R6_oracle_access": false,
+  "UKF_updates": 0,
+  "ROS_replays": 0,
+  "nominal_online_align_repeats": 0
+}
