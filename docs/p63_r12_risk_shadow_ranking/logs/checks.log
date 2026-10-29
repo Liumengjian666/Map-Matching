@@ -1,0 +1,13 @@
+PASS SHADOW_SEAL.json hashes unchanged
+PASS EVALUATION_SEAL.json hashes unchanged
+PASS all and only 120 fixed formal frames retained
+PASS no R11 formal sample enters R12
+PASS current posterior absent from causal feature columns
+PASS 120 corrections and six history ratios independently match original matrices with strictly past history
+PASS all 11 global/window ranking directions, tie rules, Top cardinality exact
+PASS post-seal reference errors agree with R10; labels independently satisfy exact inclusive boundaries
+PASS all 165 scope/group/feature cohorts retained; undefined AUROC/recall/lift not fabricated
+PASS all four beneficial observations retained for every feature and applicable cohort
+PASS root pre-existing local changes unchanged
+PASS R10 and R11 archives unchanged
+PASS preregistered coverage stop respected; no unsupported detector claim

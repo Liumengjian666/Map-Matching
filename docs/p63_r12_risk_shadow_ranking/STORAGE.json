@@ -1,0 +1,15 @@
+{
+  "measured_at_utc": "2026-10-29T07:27:56Z",
+  "available_bytes": 23532511232,
+  "available_GiB": 21.916358947753906,
+  "archive_allocated_bytes_before_final_docs": 909312,
+  "worktree_allocated_bytes": 48873472,
+  "minimum_safety_GiB": 20,
+  "deleted_files": 0,
+  "downloaded_assets": 0,
+  "reproducible_files_not_deleted": [
+    "derived SHADOW_FEATURES/SHADOW_RANKINGS (preserve formal seal)",
+    "derived reference labels/metrics/report (preserve formal outputs)"
+  ],
+  "note": "No deletion proposed for original R10/R11 inputs; no duplicate binary workspace built."
+}

@@ -1,0 +1,22 @@
+# R12源码与执行身份
+
+START 9f8b82710499e48e63efb09e74c86159846b3605
+
+FEATURE/RANK CODE 83d271e8021da738662953750d09f74d1820a68b
+
+SHADOW OUTPUT COMMIT 6d1cc0d576bc8c4aa0ca4298725bb0e1c66fa933
+
+REFERENCE EVALUATION CODE 19d23ed5ca80d3e8e23102008fb2cf0d7cc91a73
+
+END由本分支最终本地commit确定，见最终交接或git log -1；未push。
+
+R10真实运行CODE：4d0ba895314eb80aae191c3bc63a37fa28861b1d。
+HDL：de2dc7769aa2412876d05ae6161408d3295b6a3c。
+NDT_OMP：5495fd9214945afcb4b35d5a1da385e405c52bf9。
+本轮不构建运行库，不执行NDT/UKF/ROS，无新定位二进制。
+
+具体点位：tools/extract_features.py读取白名单并复用R11公式；tools/rank_and_seal.py只按固定方向排序封存；tools/evaluate_rankings.py只在封存commit验证后读取参考并计算标签/评价；tools/check_evidence.py独立复算校验；tools/write_report.py仅渲染封存结果。REUSE_IDENTITY保存R11数学代码同一性；SHADOW_SEAL保存全部特征/排名/源码/输入身份，EVALUATION_SEAL保存参考阶段输出身份。
+
+Target93223点，XYZ SHA256 166c4d2a4f5d24a4c79d4c90a8a275e0fe905fcc9650d559aabb775780e81654；原始地图与全部输入详细身份在INPUT_IDENTITY及继承R10 INPUT_FREEZE。参考SHA256 3696eddcbe884af197b13b8205952793b55c37d9093ab95b96a781ae56c6eeea，评价helper SHA256 d7e780bcf48a477534813eddf4279c9fd6b131adef7dc45c9fa533d50028815c。不据参考拟合地图/外参/时间。
+
+检查命令与实际结果见REPORT、CHECKS.json、logs/。日志与图表生成不构成新算法执行；没有修改HDL、旧实验或稳定工程。

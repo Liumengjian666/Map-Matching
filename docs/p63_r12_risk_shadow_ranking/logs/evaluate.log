@@ -1,0 +1,10 @@
+PASS inclusive labels, mixed priority, AUROC ties/missing, ceil Top10 and correlation semantics
+{
+  "verdict": "EVALUATION_INSUFFICIENT",
+  "reference_valid": 120,
+  "label_counts": {
+    "SMALL_OR_AMBIGUOUS": 116,
+    "MATERIAL_BENEFIT": 4
+  },
+  "qualifying_global_features": []
+}
