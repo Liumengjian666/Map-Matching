@@ -1,0 +1,13 @@
+{
+  "R11_source_sha256": "4ec24668fe978a343f27dc21caaca35b24660e3c3fb76cd839844726123cb056",
+  "R12_source_sha256": "37f1216724dc3d9ef79c36c53e07cb1c8853575c9dce1e0fef6a12fdf49797ba",
+  "math_helpers_byte_identical": true,
+  "main_feature_loop_byte_identical": true,
+  "changes": [
+    "START",
+    "fixed windows",
+    "expected count",
+    "output/contract name",
+    "summary text"
+  ]
+}
