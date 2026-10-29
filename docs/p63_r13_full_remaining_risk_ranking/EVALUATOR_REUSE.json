@@ -1,0 +1,12 @@
+{
+  "r12_source_sha256": "b7c5df37d831e26f99725d13968c786140cfe94a2a6ba803fcd86491b72c1d24",
+  "classification_auc_spearman_metrics_selftest_byte_identical": true,
+  "changes": [
+    "START and seal identity",
+    "2165 formal rows and eight natural segments",
+    "explicit reference missing count",
+    "R13 verdict names and fixed precedence",
+    "continuous-run descriptive output"
+  ],
+  "no_threshold_or_score_change": true
+}
