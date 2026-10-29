@@ -1,0 +1,19 @@
+{
+  "CODE_SHA": "83d271e8021da738662953750d09f74d1820a68b",
+  "files": {
+    "SHADOW_FEATURES.csv": "df650b72b65abb5531af01b3e3a2450c2c0abedbe307c60802c890cdf016d2a3",
+    "ONLINE_POSES.json": "98eb765bcb530d49a6d6075f1350c7059e70b63d36e31ea013512cc70ac1b51f",
+    "ALLOWLIST.json": "ee7a71570609dcc9d84e56f798915ec1648999aae9f99bcc93fb7c42eff873f1",
+    "INPUT_IDENTITY.json": "895face5e89effac04dcac0072800a63d036eeab17734df123a60491b5118246",
+    "PRE_REGISTERED_CONTRACT.md": "122b6c57f0634373ef0f570dbf4cc3030dd0336c5848d98997348b7b9128f1f0",
+    "tools/extract_features.py": "37f1216724dc3d9ef79c36c53e07cb1c8853575c9dce1e0fef6a12fdf49797ba"
+  },
+  "reference_pose_opened": false,
+  "analysis_frames": 120,
+  "history": [
+    1,
+    3,
+    5
+  ],
+  "current_UKF_used_as_prefusion_feature": false
+}

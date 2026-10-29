@@ -1,0 +1,70 @@
+{
+  "ONLINE_RESULTS.csv": [
+    "raw_ordinal",
+    "stamp_ns",
+    "imu_consumed",
+    "imu_active_predict",
+    "last_imu_stamp_ns",
+    "imu_age_ms",
+    "imu_integrated_s",
+    "prior_ukf_correction_stamp_ns",
+    "inlier_fraction",
+    "native_inlier_error_m2",
+    "px",
+    "py",
+    "pz",
+    "qx",
+    "qy",
+    "qz",
+    "qw"
+  ],
+  "NATIVE_NDT.csv": [
+    "stamp_ns",
+    "source_points",
+    "target_points",
+    "source_xyz_sha256",
+    "target_xyz_sha256",
+    "map_frozen",
+    "converged",
+    "probability",
+    "fitness_all_nn_m2",
+    "iterations",
+    "tx",
+    "ty",
+    "tz",
+    "qx",
+    "qy",
+    "qz",
+    "qw",
+    "guess_00",
+    "guess_01",
+    "guess_02",
+    "guess_03",
+    "guess_10",
+    "guess_11",
+    "guess_12",
+    "guess_13",
+    "guess_20",
+    "guess_21",
+    "guess_22",
+    "guess_23",
+    "guess_30",
+    "guess_31",
+    "guess_32",
+    "guess_33"
+  ],
+  "IMU_PREDICT.csv": [
+    "scan_stamp_ns",
+    "imu_stamp_ns",
+    "prev_stamp_before_ns",
+    "last_correction_ns",
+    "active_predict",
+    "dt_s"
+  ],
+  "IMU_RECEIVED.csv": [
+    "stamp_ns"
+  ],
+  "CALLBACKS.csv": [
+    "stamp_ns"
+  ]
+}
