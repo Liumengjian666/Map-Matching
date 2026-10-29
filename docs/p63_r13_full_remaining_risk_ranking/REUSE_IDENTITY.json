@@ -1,0 +1,13 @@
+{
+  "r12_extractor_sha256": "37f1216724dc3d9ef79c36c53e07cb1c8853575c9dce1e0fef6a12fdf49797ba",
+  "algebra_helper_byte_identical": true,
+  "loader_identity_checks_reused": true,
+  "loop_adaptations": [
+    "fixed set complement instead of four windows",
+    "only 11 risk features plus identity and missing diagnostics",
+    "explicit unavailable start history; no future padding",
+    "zero denominator stays missing; no epsilon"
+  ],
+  "r12_ranker_sha256": "299418ef7ddb004b0d4b98fcbb1f19fd890e620ebd812aa04df81db5d135d45e",
+  "ranking_math_unchanged": true
+}
