@@ -1,0 +1,22 @@
+# R13来源与源码身份
+
+START：b5acf73081917d5d0280818bc96ab5c729ca50b6
+
+特征/排序CODE：4e794f2bc0cd40e238e368e7814f1392fd9e4373
+
+SHADOW输出封存：3c5d31c833c901593a92f94b792b98abc252db89
+
+参考评价CODE：ab20a941925bd5bf8b117000dffd54a0ebfe8a75
+
+END为最终本地归档提交，见分支HEAD与交接；未push。
+
+分支research/p63-r13-full-remaining-risk-ranking；工作区/home/jian/livox_ws/p63_r13_full_remaining_risk_ws。
+
+输入原R10 CODE 4d0ba895314eb80aae191c3bc63a37fa28861b1d。
+HDL de2dc7769aa2412876d05ae6161408d3295b6a3c；NDT_OMP 5495fd9214945afcb4b35d5a1da385e405c52bf9，均未修改或新调用。
+原Target93223点，XYZ SHA256 166c4d2a4f5d24a4c79d4c90a8a275e0fe905fcc9650d559aabb775780e81654。
+参考SHA256 3696eddcbe884af197b13b8205952793b55c37d9093ab95b96a781ae56c6eeea；冻结参考helper SHA256 d7e780bcf48a477534813eddf4279c9fd6b131adef7dc45c9fa533d50028815c。
+
+只新增docs/p63_r13_full_remaining_risk_ranking工具/结果，追加两份长期台账。tools/extract_features.py继承R12加载与代数，补充缺历史留空；tools/rank_and_seal.py排序核心不变；tools/evaluate_rankings.py分类、AUROC、Spearman、metric、self_test与R12逐字节一致，仅变更范围/身份/输出；check_features/check_evaluation独立代数核验；render_report/plot_results只渲染封存结果。REUSE_IDENTITY与EVALUATOR_REUSE记录源文件SHA；SHADOW_SEAL/EVALUATION_SEAL保存阶段边界。
+
+不构建ROS/NDT/UKF库，无新定位二进制，所有实际命令与日志见REPORT及logs。当前UKF后验未入风险。Git工作树info目录修复仅新工作树元数据，不是算法修复。

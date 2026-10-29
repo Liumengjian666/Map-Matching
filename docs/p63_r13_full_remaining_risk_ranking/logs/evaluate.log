@@ -1,0 +1,15 @@
+PASS inclusive labels, mixed priority, AUROC ties/missing, ceil Top10 and correlation semantics
+{
+  "verdict": "FULL_REMAINING_SINGLE_FEATURE_SUPPORTED",
+  "reference_valid": 2162,
+  "label_counts": {
+    "MATERIAL_HARM": 20,
+    "MATERIAL_BENEFIT": 24,
+    "MIXED_MATERIAL": 5,
+    "SMALL_OR_AMBIGUOUS": 2113,
+    "REFERENCE_UNAVAILABLE": 3
+  },
+  "qualifying_global_features": [
+    "d_R_deg"
+  ]
+}

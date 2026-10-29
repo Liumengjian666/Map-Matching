@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-29T08:00:17Z",
+  "archive_allocated_bytes_before_final_docs": 8884224,
+  "worktree_allocated_bytes": 57651200,
+  "available_bytes": 23459926016,
+  "available_GiB": 21.848758697509766,
+  "deleted_files": 0,
+  "downloaded_assets": 0,
+  "reproducible_items_not_deleted": [
+    "Python bytecode caches",
+    "derived figure PNG/PDF",
+    "derived reports/CSV (formal sealed copies must be preserved)"
+  ],
+  "no_new_binary_workspace": true
+}

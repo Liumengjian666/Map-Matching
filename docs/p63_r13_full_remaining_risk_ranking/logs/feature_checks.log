@@ -1,0 +1,6 @@
+PASS pre-reference feature/source/input SHA seal
+PASS disjoint90+120+2165=2375 exact partition
+PASS all2165 formal rows, none excluded for missing history
+PASS independent raw SO3/translation and fixed medians; missing history and zero denominator not filled
+PASS all global/natural-segment rankings, ties, missing records and Topceil exact
+PASS current posterior and reference excluded from risk columns

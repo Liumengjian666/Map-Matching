@@ -1,0 +1,8 @@
+Review completed locally, no subagent and no merge/push.
+Correctness: R12 classify/AUROC/Spearman/metrics/self-test definitions byte-identical; 6 feature and 11 evaluation checks passed. Start-history and strict-zero missing cases retained. Formal seal commit predates reference evaluation code commit.
+Scope: only R13 archive tools/outputs and append-only research ledgers; no runtime library/build/dependency changes. Evaluation inputs authenticated by original SHA. No new online features, ranking weights, thresholds, or NDT calls.
+Interpretation: overall d_R passes frozen criteria but 75% of benefits rank high and early subgroup is underqualified. This limitation is explicit, not hidden by global Top denominator. All other features and all natural segments reported.
+Storage: bounded existing archives, no downloads/deletions; available >20GiB. Original worktree status and R9-R12 unchanged.
+Figure inspection: PNG labels, AUROC marker and two different beneficial denominators legible; PDF generated from same plot.
+Environment issue: initial sparse checkout lacked new worktree metadata/info; directory created in new worktree git metadata only. No data/algorithm repair.
+No blocking code-review findings for this fixed offline evaluation. No claim of production-readiness or gate safety.

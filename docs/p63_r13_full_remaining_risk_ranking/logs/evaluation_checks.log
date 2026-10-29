@@ -1,0 +1,11 @@
+PASS SHADOW_SEAL.json unchanged
+PASS EVALUATION_SEAL.json unchanged
+PASS 2165 rows retained; exactly2162 valid references, missing three not zero-filled
+PASS all reference values reproduce R10 after seal; exact inclusive label priority
+PASS 297 cohorts: eligibility/Top/labels/AUROC independent rank-sum/Spearman and frozen qualification pass
+PASS continuous descriptive runs cover all rows and never bridge exclusions or reference gaps
+PASS every beneficial observation retained, including non-Top cases
+PASS beneficial Top membership uses same frozen cohort ranking
+PASS root pre-existing status untouched
+PASS historical R9-R12 unchanged
+PASS only rotation correction satisfies all global frozen criteria; no reinterpretation
