@@ -1,0 +1,64 @@
+{
+  "features": [
+    {
+      "name": "gaussian",
+      "direction": -1
+    },
+    {
+      "name": "native_inlier",
+      "direction": -1
+    },
+    {
+      "name": "nn_fitness_m2",
+      "direction": 1
+    },
+    {
+      "name": "d_t_m",
+      "direction": 1
+    },
+    {
+      "name": "d_R_deg",
+      "direction": 1
+    },
+    {
+      "name": "h1_t_ratio",
+      "direction": 1
+    },
+    {
+      "name": "h1_R_ratio",
+      "direction": 1
+    },
+    {
+      "name": "h3_t_ratio",
+      "direction": 1
+    },
+    {
+      "name": "h3_R_ratio",
+      "direction": 1
+    },
+    {
+      "name": "h5_t_ratio",
+      "direction": 1
+    },
+    {
+      "name": "h5_R_ratio",
+      "direction": 1
+    }
+  ],
+  "tie": "raw ordinal ascending",
+  "top": "ceil(valid_n/10)",
+  "no_normalization": true,
+  "missing_by_feature": {
+    "gaussian": 0,
+    "native_inlier": 0,
+    "nn_fitness_m2": 0,
+    "d_t_m": 0,
+    "d_R_deg": 0,
+    "h1_t_ratio": 1727,
+    "h1_R_ratio": 1,
+    "h3_t_ratio": 1728,
+    "h3_R_ratio": 3,
+    "h5_t_ratio": 1729,
+    "h5_R_ratio": 5
+  }
+}

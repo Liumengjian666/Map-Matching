@@ -1,0 +1,40 @@
+{
+  "passed": [
+    "pre-reference feature/source/input SHA seal",
+    "disjoint90+120+2165=2375 exact partition",
+    "all2165 formal rows, none excluded for missing history",
+    "independent raw SO3/translation and fixed medians; missing history and zero denominator not filled",
+    "all global/natural-segment rankings, ties, missing records and Topceil exact",
+    "current posterior and reference excluded from risk columns"
+  ],
+  "missing_reasons": {
+    "gaussian": {},
+    "native_inlier": {},
+    "nn_fitness_m2": {},
+    "d_t_m": {},
+    "d_R_deg": {},
+    "h1_t_ratio": {
+      "HISTORY_INSUFFICIENT": 1,
+      "ZERO_DENOMINATOR": 1726
+    },
+    "h1_R_ratio": {
+      "HISTORY_INSUFFICIENT": 1
+    },
+    "h3_t_ratio": {
+      "HISTORY_INSUFFICIENT": 3,
+      "ZERO_DENOMINATOR": 1725
+    },
+    "h3_R_ratio": {
+      "HISTORY_INSUFFICIENT": 3
+    },
+    "h5_t_ratio": {
+      "HISTORY_INSUFFICIENT": 5,
+      "ZERO_DENOMINATOR": 1724
+    },
+    "h5_R_ratio": {
+      "HISTORY_INSUFFICIENT": 5
+    }
+  },
+  "reference_values_read": false,
+  "new_NDT": 0
+}

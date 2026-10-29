@@ -1,0 +1,83 @@
+{
+  "START_SHA": "b5acf73081917d5d0280818bc96ab5c729ca50b6",
+  "R10_CODE_SHA": "4d0ba895314eb80aae191c3bc63a37fa28861b1d",
+  "R10_raw_files": {
+    "docs/p63_r10_hdl_imu_full_hard/raw/full_01/ADAPTER.csv.gz": {
+      "file_sha256": "4ca132ff27c25d25aee913162d1f68483276a332ecd6d2b8016f96bb5089fe75",
+      "uncompressed_sha256": "5c6f09326b76dbdc030ff500d4fab6cb1bfb159c358957b238f4342b400c0f24"
+    },
+    "docs/p63_r10_hdl_imu_full_hard/raw/full_01/CALLBACKS.csv.gz": {
+      "file_sha256": "4141fdce47ea0fb3c6b58c140e2151c4784db72cccb48d62fc354473c73a3a05",
+      "uncompressed_sha256": "cb25cc61202b9f399bed51df92db0df963488703f7de52397e5a7a6f561ed8d3"
+    },
+    "docs/p63_r10_hdl_imu_full_hard/raw/full_01/COMMAND.json": {
+      "file_sha256": "9d6e74f3001fe9e764b57a15910e081b8ba4d3f4751870f9a756d96a4128f1da",
+      "uncompressed_sha256": "9d6e74f3001fe9e764b57a15910e081b8ba4d3f4751870f9a756d96a4128f1da"
+    },
+    "docs/p63_r10_hdl_imu_full_hard/raw/full_01/EFFECTIVE_PARAMS.json": {
+      "file_sha256": "f4fb80413d0d4db8fc56a271e00f83d1500dd66db3be62f1776dea5deeed393c",
+      "uncompressed_sha256": "f4fb80413d0d4db8fc56a271e00f83d1500dd66db3be62f1776dea5deeed393c"
+    },
+    "docs/p63_r10_hdl_imu_full_hard/raw/full_01/IMU_PREDICT.csv.gz": {
+      "file_sha256": "ced4181a20083cc67b01ea77884f83c8af25899a28e73048c987c7dbc7c70de5",
+      "uncompressed_sha256": "897f75200ec20bd85f090b513c427c2ffb64538b37f66ba4873f2d0b741ded22"
+    },
+    "docs/p63_r10_hdl_imu_full_hard/raw/full_01/IMU_RECEIVED.csv.gz": {
+      "file_sha256": "ec7018a97a85e819c2221d69290387959b4ea8cc8ee3aad8b4be5f605cf7148b",
+      "uncompressed_sha256": "dd95f83a017aa8a7caae5dd151cf5980e45d281f718f266b9ef5bad83ed40a0c"
+    },
+    "docs/p63_r10_hdl_imu_full_hard/raw/full_01/LIVE_raw1204.png": {
+      "file_sha256": "29d254edfa6891c854c936afaef25c06cc2c6ca67f25fdd6f2f0de88bd3bcc4a",
+      "uncompressed_sha256": "29d254edfa6891c854c936afaef25c06cc2c6ca67f25fdd6f2f0de88bd3bcc4a"
+    },
+    "docs/p63_r10_hdl_imu_full_hard/raw/full_01/LIVE_raw164.png": {
+      "file_sha256": "b140fa08e78dfdaba0ddae4a422ba59388fa83429be08d339b386c99db0d028c",
+      "uncompressed_sha256": "b140fa08e78dfdaba0ddae4a422ba59388fa83429be08d339b386c99db0d028c"
+    },
+    "docs/p63_r10_hdl_imu_full_hard/raw/full_01/LIVE_raw2379.png": {
+      "file_sha256": "b04e62449e1e29a5209b65a3626734f6f8283f7c1860b4f085a55116065e8cb3",
+      "uncompressed_sha256": "b04e62449e1e29a5209b65a3626734f6f8283f7c1860b4f085a55116065e8cb3"
+    },
+    "docs/p63_r10_hdl_imu_full_hard/raw/full_01/MEMORY.csv.gz": {
+      "file_sha256": "c8b8ac6a4742de0df6c82cc43e0dd8b89c786586e9fa8349cad2aa4ef17dd8eb",
+      "uncompressed_sha256": "ef1ca0b5df4258ed2b0eeee595133f2a587fb7aa5f27f70d14687a9aa925e482"
+    },
+    "docs/p63_r10_hdl_imu_full_hard/raw/full_01/NATIVE_NDT.csv.gz": {
+      "file_sha256": "1d8088a219845a21f764b2267937000edf8ab3edbedc44ad0ac7a7627ce49ca4",
+      "uncompressed_sha256": "012760b318411547aded83b9d4094eb899c0f7d8f8b138cad5d2236b549a87fe"
+    },
+    "docs/p63_r10_hdl_imu_full_hard/raw/full_01/ONLINE_RESULTS.csv.gz": {
+      "file_sha256": "cce5827d9627cdf56a9a9f25a53dc208479114387d044a1bc6969b8d39775de6",
+      "uncompressed_sha256": "d6602240e49d4894fb44801c059746712b3737be6887704857c12299f5c5ce5e"
+    },
+    "docs/p63_r10_hdl_imu_full_hard/raw/full_01/ONLINE_SEAL.json": {
+      "file_sha256": "cea56d4007d16a6a9772398b1c1972c81d704e0696740a28939bcf183801ddf6",
+      "uncompressed_sha256": "cea56d4007d16a6a9772398b1c1972c81d704e0696740a28939bcf183801ddf6"
+    },
+    "docs/p63_r10_hdl_imu_full_hard/raw/full_01/PUBLISHED_MAP.json": {
+      "file_sha256": "99058da1ed380d2d2b49c6cd31ef5b94d6173378653e490a25f58300632bae46",
+      "uncompressed_sha256": "99058da1ed380d2d2b49c6cd31ef5b94d6173378653e490a25f58300632bae46"
+    },
+    "docs/p63_r10_hdl_imu_full_hard/raw/full_01/ROSLAUNCH.log.gz": {
+      "file_sha256": "6273a622a3a4a04f25545f7a31d9b564ec07acdca0a65f02577deac9d928ffc4",
+      "uncompressed_sha256": "825591a44aad3d0debe3237997b383ea75caf36e7bb1378f15b4809139374ad5"
+    },
+    "docs/p63_r10_hdl_imu_full_hard/raw/full_01/ROS_RECEIPTS.jsonl.gz": {
+      "file_sha256": "64d36d989cf5775b83bad6be9a2a1c9059b30136874fcd78a843abebb26aade2",
+      "uncompressed_sha256": "ca0dc8b5588f4a70f15c8dc2bf63950badf7e0d862bfbaeadce4a125f789da18"
+    },
+    "docs/p63_r10_hdl_imu_full_hard/raw/full_01/RUN_RECEIPT.json": {
+      "file_sha256": "cd0e88d9c2e20107d90c9616bd5a49dc766b6f42bec5de302cea5f16d1fea1c0",
+      "uncompressed_sha256": "cd0e88d9c2e20107d90c9616bd5a49dc766b6f42bec5de302cea5f16d1fea1c0"
+    }
+  },
+  "NDT_rows": 2375,
+  "UKF_outputs": 2375,
+  "IMU_consumed": 44267,
+  "root_status_sha256": "d9ff40ea7f732beb59d0e595a8e1fd7a47d9750d0f839749eb9790d39392659b",
+  "root_status_entries": 444,
+  "reference_read_by_feature_program": false,
+  "new_NDT": 0,
+  "new_UKF": 0,
+  "new_ROS": 0
+}
