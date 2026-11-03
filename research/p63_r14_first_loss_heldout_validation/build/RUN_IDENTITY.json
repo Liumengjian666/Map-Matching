@@ -1,0 +1,119 @@
+{
+  "dataset": "Koide indoor_hard_01 raw5-raw2379",
+  "input_freeze": "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/data/INPUT_FREEZE_LOCAL.json",
+  "input_freeze_sha256": "f0ff16b5f43a7b9553e99f5e785d6e7343165496107bc4037bba496fa42e6233",
+  "raw_imu_path": "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/data/RAW_IMU_VERIFIED.csv",
+  "raw_imu_sha256": "9771c92db95a75340a27400b8e3053025853b9fb9a8d85998289d16ac23f1b2e",
+  "partition_support_csv": "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/data/preflight_output/PARTITION_SUPPORT.csv",
+  "partition_support_sha256": "79ba7bd8e6165c568cbfab95f465072c7c680d06e89093256df52db9c5a7b572",
+  "trace_binary": "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/build/libp63_r14_spatial_split_trace.so",
+  "trace_binary_sha256": "b1b1519ab9b3afe5cd00f7edea56b381b1accedecf645a9ef9ceecda9b5b1e2d",
+  "trace_source": "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/src/spatial_split_trace.cpp",
+  "trace_source_sha256": "62cb56ed1daeb33fcd9e70185d7a24b895b89e03cee53a16fa8d67db776f3918",
+  "split_header_sha256": "ecdf21a77cc23e5da12d2ada367dae824a7bf7b953521751a2cb0579fa0f203d",
+  "native_binaries": {
+    "/media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libglobalmap_server_nodelet.so": {
+      "bytes": 200376,
+      "sha256": "0bb2e7c85e00691bc10e31a6fcdc9623b407904dce65320edef63f8999581105"
+    },
+    "/media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libhdl_localization_nodelet.so": {
+      "bytes": 672528,
+      "sha256": "df69cf57b87ab5b53db7560d04ade85efd2a9e21d043d5c66a6af85c1ab702b7"
+    },
+    "/media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libp63_hdl_trace.so": {
+      "bytes": 44592,
+      "sha256": "4e9a5a9e38cfd3dfcf3ac9eb0de2ccbce43e6a86e20c07d0ba3efe33aaca3074"
+    },
+    "/media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libfast_gicp.so": {
+      "bytes": 606520,
+      "sha256": "ce974c614a6481c335b42279c14daf5f71d4bc7df5a120fa7787d7c2a55ffc97"
+    },
+    "/media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libndt_omp.so": {
+      "bytes": 906512,
+      "sha256": "e274416abe31236910b5aa588e095cd3100dd77f348163ffddd29618bb8b82ff"
+    },
+    "/media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib/libhdl_global_localization.so": {
+      "bytes": 478776,
+      "sha256": "25d34a98f83cfe49739938888f8fc1d96f3f0f6d129140ebb831ad5935f8d2bd"
+    }
+  },
+  "upstream": {
+    "hdl_localization": {
+      "SHA": "de2dc7769aa2412876d05ae6161408d3295b6a3c",
+      "official_origin": "https://github.com/koide3/hdl_localization.git",
+      "status": "",
+      "licenses": {
+        "LICENSE": "172a504623673649686be924520b29fb8b27bcd9dec9c9805aef5a8d81f891be"
+      }
+    },
+    "ndt_omp": {
+      "SHA": "5495fd9214945afcb4b35d5a1da385e405c52bf9",
+      "official_origin": "https://github.com/koide3/ndt_omp.git",
+      "status": "",
+      "licenses": {
+        "LICENSE": "172a504623673649686be924520b29fb8b27bcd9dec9c9805aef5a8d81f891be"
+      }
+    },
+    "fast_gicp": {
+      "SHA": "0e7ec1441c99f7be453db2ea216d5de029387417",
+      "official_origin": "https://github.com/SMRT-AIST/fast_gicp.git",
+      "status": "",
+      "licenses": {
+        "LICENSE": "62091f5ee5b6cf36ea37faae5db95b8679c14e1b071911af0be7abc72c461c9c"
+      }
+    },
+    "hdl_global_localization": {
+      "SHA": "a6a6b69929ac371d9531d0dcdef3c1593fd49245",
+      "official_origin": "https://github.com/koide3/hdl_global_localization.git",
+      "status": "",
+      "licenses": {
+        "LICENSE": "0fae8183eff12d6957cd54408e87a90beffa3df15a1844065b1bd7e039e5a8cc"
+      }
+    }
+  },
+  "r10_configuration": {
+    "reg_method": "NDT_OMP",
+    "resolution_m": 1.0,
+    "neighbor_search": "DIRECT7",
+    "transformation_epsilon_m": 0.01,
+    "max_iterations": 35,
+    "step_size_m": 0.1,
+    "outlier_ratio": 0.55,
+    "source_voxel_m": 0.1,
+    "map_voxel_m": 0.1,
+    "use_imu": true,
+    "imu_cool_time_s": 2.0,
+    "robot_odometry_prediction": false
+  },
+  "source_partition": {
+    "block_size_m": 0.5,
+    "seed_hex": "0x5036335231340001",
+    "registration_selector": "block_hash_low_bit_equals_0",
+    "validation_selector": "block_hash_low_bit_equals_1"
+  },
+  "validation_mode": "offline post-seal; runtime/UKF cannot access heldout residuals",
+  "source_files": {
+    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/src/spatial_split_trace.cpp": "62cb56ed1daeb33fcd9e70185d7a24b895b89e03cee53a16fa8d67db776f3918",
+    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/src/spatial_split.hpp": "ecdf21a77cc23e5da12d2ada367dae824a7bf7b953521751a2cb0579fa0f203d",
+    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/src/score_heldout.cpp": "bd53932fd17ef1f619b538bc580c40cd0cae57317f03eeb45ebeef9aee784af8",
+    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/tools/run_split_once.py": "53a4f5ca2a7a0ca288b89c85cda263796d218c5eb25c8b6a82c4b3e1723e2500",
+    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/tools/run_shadow_score.py": "fbf2f57305434dc444e6688973369dcb3fc424274209c697f2345877e77e9629",
+    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/tools/build_prototype_tools.py": "b2c4823f18be8ebc91872add166cf1fd6d43b7a51ad5acdcf644b24e5fa5b722",
+    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/tools/imu_geometry.py": "19adb542534ebff22ba08ee98a84854dbc809d2295f601e049e49fe9f6570739",
+    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/tools/data.py": "022325d20a9c7a8d150c406b6cd73b52f003f8eb4447c6cf1ecb0761fbff0a7f",
+    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/tools/contract.py": "51628065593b4fb103cebfb10e6cef365816536d99a1159a7dcc509a1c90d7ff",
+    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/data/INPUT_FREEZE_LOCAL.json": "f0ff16b5f43a7b9553e99f5e785d6e7343165496107bc4037bba496fa42e6233",
+    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/data/RAW_IMU_VERIFIED.csv": "3c0b5a780840e838cadb45dac6e55856333a96b6d77e6dbc862ae9ef6f2bbe5c",
+    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/data/preflight_output/PARTITION_SUPPORT.csv": "79ba7bd8e6165c568cbfab95f465072c7c680d06e89093256df52db9c5a7b572",
+    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/data/preflight_output/SOURCES.csv": "771c023f80a58d77c17eb6789e4220d7ed762578ee328b712c15806d399cea2e",
+    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_hdl_real_imu/package.xml": "1df8e3c250302e54b89522485b427b74b9abea917fe5d0e2038d30301e9e9a2e",
+    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_hdl_real_imu/launch/p63_r14_split_indoor_hard.launch": "cdcc827cddf2a293ce1fccc6116bf326a76b32302230571f1ddec58572ee1994"
+  },
+  "map_path": "/media/jian/HIKVISION/livox_ws/p63_r8_indoor_hard_holdout_data/r29_hard_tiles_exact_xyzi.pcd",
+  "map_sha256": "50bba09fde204a55be8261e69ea539ae69c65dd44ec7ca1eeed5b066ff8da098",
+  "raw_map_points": 96324,
+  "target_points": 93223,
+  "target_xyz_sha256": "166c4d2a4f5d24a4c79d4c90a8a275e0fe905fcc9650d559aabb775780e81654",
+  "score_binary": "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/build/score_heldout",
+  "score_binary_sha256": "9622e8eea7e5eb8ec0881475c14ffd8e73992b17b38c543e0ffb1b47c3c34f43"
+}

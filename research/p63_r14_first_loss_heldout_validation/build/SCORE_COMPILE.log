@@ -1,0 +1,3 @@
+$ /usr/bin/c++ -std=c++17 -O3 -DNDEBUG -fPIC -I/media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/src/ndt_omp/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -isystem /usr/include/vtk-7.1 -isystem /usr/include/freetype2 -isystem /usr/include/pcl-1.10 -isystem /usr/include/eigen3 -isystem /usr/include/ni -isystem /usr/include/openni2 -c /home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/src/score_heldout.cpp -o /home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/build/score_heldout.o -msse4.2 -fopenmp
+
+exit status: 0
