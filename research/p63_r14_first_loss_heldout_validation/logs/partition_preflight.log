@@ -1,0 +1,24 @@
+PASS fixed spatial split for 2375 R10 sources; registration=2888093 validation=3466260 align=0
+	Command being timed: "env LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/opt/ros/noetic/lib:/media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib /home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/build/partition_preflight /home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/data/INPUT_FREEZE_LOCAL.json /media/jian/HIKVISION/livox_ws/p63_r10_imu_full_hard_data/preflight/SOURCES.csv /home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/data/preflight_output/PARTITION_SUPPORT.csv"
+	User time (seconds): 41.40
+	System time (seconds): 16.76
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:58.27
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 63312
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 21
+	Minor (reclaiming a frame) page faults: 9968705
+	Voluntary context switches: 41
+	Involuntary context switches: 7637
+	Swaps: 0
+	File system inputs: 1496
+	File system outputs: 1352
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
