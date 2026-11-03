@@ -1,0 +1,13 @@
+Attempted command:
+
+  source /opt/ros/noetic/setup.bash
+  source /media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/devel/setup.bash
+  export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/opt/ros/noetic/lib:/media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib
+  export ROS_MASTER_URI=http://127.0.0.1:11651
+  /usr/bin/python3 /home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/tools/run_split_once.py
+
+Result: process exited before creating the run directory or starting roslaunch:
+
+  AssertionError at run_split_once.py line 19: sha(RAW_IMU_VERIFIED.csv) != RUN_IDENTITY.raw_imu_sha256
+
+Cause: the verified IMU CSV line endings were normalized from CRLF to LF, but the dedicated raw_imu_sha256 field in the ignored build identity file was not refreshed. CSV rows and values were unchanged. No ROS master/node was started, NDT align calls: 0. The builder now refreshes this field; rerun is permitted after its commit and hash verification.

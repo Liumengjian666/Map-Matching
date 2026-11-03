@@ -95,6 +95,9 @@ identity["trace_source_sha256"] = sha(trace_source)
 identity["split_header_sha256"] = sha(A / "src/spatial_split.hpp")
 identity["score_binary"] = str(score_binary)
 identity["score_binary_sha256"] = sha(score_binary)
+identity["raw_imu_sha256"] = sha(A / "data/RAW_IMU_VERIFIED.csv")
+identity["input_freeze_sha256"] = sha(A / "data/INPUT_FREEZE_LOCAL.json")
+identity["partition_support_sha256"] = sha(A / "data/preflight_output/PARTITION_SUPPORT.csv")
 identity["source_files"] = {
     str(path): sha(path) for path in [
         trace_source, A / "src/spatial_split.hpp", score_source,
