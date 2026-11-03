@@ -8,7 +8,7 @@ import subprocess
 import time
 
 A = Path(__file__).resolve().parents[1]
-run_dir = A / "data/full_split_01"
+run_dir = A / "data/full_split_02"
 output_dir = run_dir / "heldout_shadow"
 identity = json.loads((A / "build/RUN_IDENTITY.json").read_text())
 build = json.loads((A / "build/SCORE_BUILD.json").read_text())

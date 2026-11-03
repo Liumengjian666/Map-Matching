@@ -11,7 +11,7 @@ A=Path(__file__).resolve().parents[1];W=A.parents[1]
 sys.path.insert(0,str(A/'tools'))
 from contract import CsvTail
 from data import message,sha
-D=A/'data/full_split_01'
+D=A/'data/full_split_02'
 F=json.loads((A/'data/INPUT_FREEZE_LOCAL.json').read_text());B=json.loads((A/'build/RUN_IDENTITY.json').read_text())
 assert [f['raw_ordinal'] for f in F['frames']]==list(range(5,2380))
 assert sha(F['map_path'])==F['map_sha256'] and sha(B['trace_binary'])==B['trace_binary_sha256']
@@ -34,7 +34,7 @@ shutil.copyfile(A/'build/RUN_IDENTITY.json',identity_copy)
 with socket.socket() as sock:assert sock.connect_ex(('127.0.0.1',11651))!=0
 os.environ.update(ROS_MASTER_URI='http://127.0.0.1:11651',ROS_IP='127.0.0.1')
 env=os.environ.copy();env.update(ROS_HOME=str(D/'ros_home'),ROS_LOG_DIR=str(D/'ros_logs'),LIBGL_ALWAYS_SOFTWARE='1')
-setup='source /opt/ros/noetic/setup.bash && source /media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/devel/setup.bash && export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/opt/ros/noetic/lib:/media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib && export ROS_PACKAGE_PATH='+str(W/'research')+':/media/jian/HIKVISION/livox_ws/p63_r10_imu_full_hard_ws/research:${ROS_PACKAGE_PATH:-} && '
+setup='source /opt/ros/noetic/setup.bash && source /media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/devel/setup.bash && export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/opt/ros/noetic/lib:/media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/devel/lib && export ROS_PACKAGE_PATH='+str(W/'research')+':/media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/src:/media/jian/HIKVISION/livox_ws/p63_r10_imu_full_hard_ws/research:${ROS_PACKAGE_PATH:-} && '
 command=['bash','--noprofile','--norc','-c',setup+'exec roslaunch p63_hdl_real_imu p63_r14_split_indoor_hard.launch output_dir:='+str(D)+' map_path:='+F['map_path']+' trace_library:='+B['trace_binary']]
 (D/'COMMAND.json').write_text(json.dumps({'argv':command,'CODE_SHA':subprocess.check_output(['git','rev-parse','HEAD'],cwd=W,text=True).strip(),'input_manifest_sha256':sha(A/'data/INPUT_FREEZE_LOCAL.json'),'run_identity_sha256':sha(identity_copy),'trace_binary_sha256':sha(B['trace_binary']),'test_GT_access':False,'oracle_anchor':4,'target_raw':[5,2379]},indent=2)+'\n')
 start=time.monotonic();log=(D/'ROSLAUNCH.log').open('x');launch=subprocess.Popen(command,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)

@@ -1,0 +1,7 @@
+Run identity: branch research/p63-r14-first-loss-heldout-validation, input raw5-2379; no scan was published.
+
+Result: the run supervisor exited after 30.9 s with MAP_OR_SUBSCRIBER_STARTUP_FAILED. RUN_RECEIPT.json records published=0, completed=0, imu_sent=0, imu_received=0. The NDT trace CSVs were never created, and `LD_PRELOAD` recorded no align call.
+
+ROSLAUNCH.log reports that plugin class hdl_localization/GlobalmapServerNodelet and hdl_localization/HdlLocalizationNodelet were not declared. In that attempt ROS_PACKAGE_PATH inherited the stale source prefix `/home/jian/livox_ws/p63_r3_hdl_data/catkin_ws/src`; the mounted USB R3 source was omitted. `rospack find hdl_localization` consequently failed, and the nodelet manager listed no HDL plugin classes. This is an environment package-discovery failure, not an NDT or data failure.
+
+Correction: add `/media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/src` to the launch process ROS_PACKAGE_PATH. The next attempt uses a new directory `data/full_split_02`; the failed `data/full_split_01` record is preserved. No map, dataset, source code outside this research worktree, or NDT output was modified.

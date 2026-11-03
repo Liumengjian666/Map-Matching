@@ -109,6 +109,8 @@ identity["source_files"] = {
         A / "data/preflight_output/SOURCES.csv",
         A.parents[1] / "research/p63_hdl_real_imu/package.xml",
         A.parents[1] / "research/p63_hdl_real_imu/launch/p63_r14_split_indoor_hard.launch",
+        Path("/media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/src/hdl_localization/package.xml"),
+        Path("/media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/src/hdl_localization/nodelet_plugins.xml"),
     ]
 }
 identity_path.write_text(json.dumps(identity, indent=2) + "\n")

@@ -96,9 +96,9 @@
     "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/src/spatial_split_trace.cpp": "62cb56ed1daeb33fcd9e70185d7a24b895b89e03cee53a16fa8d67db776f3918",
     "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/src/spatial_split.hpp": "ecdf21a77cc23e5da12d2ada367dae824a7bf7b953521751a2cb0579fa0f203d",
     "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/src/score_heldout.cpp": "bd53932fd17ef1f619b538bc580c40cd0cae57317f03eeb45ebeef9aee784af8",
-    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/tools/run_split_once.py": "53a4f5ca2a7a0ca288b89c85cda263796d218c5eb25c8b6a82c4b3e1723e2500",
-    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/tools/run_shadow_score.py": "fbf2f57305434dc444e6688973369dcb3fc424274209c697f2345877e77e9629",
-    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/tools/build_prototype_tools.py": "ad7c9bad49c722b64107daf5a21aa15ba0e4c4626007004cf192e25331e36a71",
+    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/tools/run_split_once.py": "b28d9730f0ab86e5b883bb255319fd0f6716106d34d1ac65c92d570e4bc1b840",
+    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/tools/run_shadow_score.py": "41277de5b32fb51d82354871dba010729e2ab2a993f1186ee1b63ea5be8c66d1",
+    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/tools/build_prototype_tools.py": "af3948e0a606c5d1c591f966a319f7e9b7482c387dd1b0e6f88c07443330589d",
     "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/tools/imu_geometry.py": "19adb542534ebff22ba08ee98a84854dbc809d2295f601e049e49fe9f6570739",
     "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/tools/data.py": "022325d20a9c7a8d150c406b6cd73b52f003f8eb4447c6cf1ecb0761fbff0a7f",
     "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/tools/contract.py": "51628065593b4fb103cebfb10e6cef365816536d99a1159a7dcc509a1c90d7ff",
@@ -107,7 +107,9 @@
     "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/data/preflight_output/PARTITION_SUPPORT.csv": "79ba7bd8e6165c568cbfab95f465072c7c680d06e89093256df52db9c5a7b572",
     "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_r14_first_loss_heldout_validation/data/preflight_output/SOURCES.csv": "771c023f80a58d77c17eb6789e4220d7ed762578ee328b712c15806d399cea2e",
     "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_hdl_real_imu/package.xml": "1df8e3c250302e54b89522485b427b74b9abea917fe5d0e2038d30301e9e9a2e",
-    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_hdl_real_imu/launch/p63_r14_split_indoor_hard.launch": "cdcc827cddf2a293ce1fccc6116bf326a76b32302230571f1ddec58572ee1994"
+    "/home/jian/Map-Matching-R14-first-loss-heldout/research/p63_hdl_real_imu/launch/p63_r14_split_indoor_hard.launch": "cdcc827cddf2a293ce1fccc6116bf326a76b32302230571f1ddec58572ee1994",
+    "/media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/src/hdl_localization/package.xml": "ea379291e5bb469a93be2675ee3942987a2b5b830c91b9edaa47b0c9476647d0",
+    "/media/jian/HIKVISION/livox_ws/p63_r3_hdl_data/catkin_ws/src/hdl_localization/nodelet_plugins.xml": "d31bcc595d73c9a368e8706ff14a3a96c74f495f4ba5952b9e6cf3db5b8155f3"
   },
   "map_path": "/media/jian/HIKVISION/livox_ws/p63_r8_indoor_hard_holdout_data/r29_hard_tiles_exact_xyzi.pcd",
   "map_sha256": "50bba09fde204a55be8261e69ea539ae69c65dd44ec7ca1eeed5b066ff8da098",
