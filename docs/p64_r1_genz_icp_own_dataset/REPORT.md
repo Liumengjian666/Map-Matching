@@ -194,8 +194,8 @@ research/p64-r1-genz-icp-prior-map
 SHA 字段在提交后填写：
 
 * `START_SHA`: `c030980fba6f93e0f7f232c7ac756335ff5b727a`
-* `CODE_SHA`: report commit SHA
-* `END_SHA`: report commit SHA
+* `CODE_SHA`: `71409c0d791f17a95bd15364efbace6bf721dd46`
+* `END_SHA`: `71409c0d791f17a95bd15364efbace6bf721dd46`
 
 ## 6. 唯一下一步
 
