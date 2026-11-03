@@ -1,0 +1,2 @@
+/usr/bin/ld: /usr/lib/x86_64-linux-gnu/libpcl_io.so: undefined reference to `libusb_set_option'
+collect2: error: ld returned 1 exit status
