@@ -4,10 +4,11 @@ import argparse
 import csv
 import gzip
 import hashlib
-import importlib.util
 import json
+import runpy
 from decimal import Decimal
 from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
 from scipy.spatial.transform import Rotation, Slerp
@@ -70,10 +71,9 @@ def write_rows(path, rows):
 
 def historical_pcd_adapter():
     path = HARD / "tools/data.py"
-    spec = importlib.util.spec_from_file_location("historical_pcd_adapter", path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
+    # Running the source from a path avoids import bytecode caches in the archive.
+    symbols = runpy.run_path(str(path))
+    return SimpleNamespace(pcd_xyz=symbols["pcd_xyz"], xyzi_bytes=symbols["xyzi_bytes"])
 
 
 def write_xyzi(path, xyzi_bytes, count):

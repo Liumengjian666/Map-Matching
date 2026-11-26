@@ -1,0 +1,17 @@
+{
+  "files": {
+    "input/online.tsv": "6ae113108b817e614f1bcb76e007f19d42224ab06bf0ba6d766966f29bb8f615",
+    "official/grid.csv": "051ced59f2ad398b7aacb9180eda6de4a1e38d4a447eeda41e3a848e786c7772",
+    "official/modes.csv": "18ec37bd7494d4df612d525ca06edeed140710b3b65ff425fd9ad23b65bb30f3",
+    "official/fit.csv": "02b5723da865a958ead6a3c422ad1242acee40fba9cf14137860e79639286c71",
+    "official/fit_seeds.tsv": "274cce8b022963b51353d4cc7f9c1935eebfe35980ea016224bebf393a51d67f",
+    "fit/curvature.csv": "45aa4ef8dabb05c591c3b68b5612a81d92ca781a44583fb95752a7f9f0692912",
+    "gate/native_score_consistency.csv": "41757313046af7585c3dc65dbc7d9deed83e4d9d132e1b86e76642c6d3535b7c",
+    "gate/identity.json": "48f7f165c14aaa96d59256c9fdf4746caa139a1634a367b5e1c006eaae63f54d",
+    "gate/point_scores.csv": "cc36ed100395b414ee611408959d73eeb73aecebbd52c4be718c5749cc67ccb4",
+    "gate/voxel_contributions.csv": "e8a176ded446a832cc2ab117b5d32ff5f840f04a59f493d6b0665c998d2d1e95",
+    "fit/point_scores.csv": "6b45830c45bdb0d1fbd52523f17284a90987372c779e50cb351033bc9dfee8ea",
+    "fit/voxel_contributions.csv": "0bf0216c6c1d9045246319ffc5aa1b3811ebb60560944d9598b34ce495e7b22a"
+  },
+  "manifest_sha256": "0c77275862e417656841dcd065fe0fec6774a277d68f60f72d0a2b6c6e6b4c00"
+}

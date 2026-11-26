@@ -1,0 +1,55 @@
+{
+  "cases": 204,
+  "max_absolute": 0.0,
+  "max_relative": 0.0,
+  "source_and_target_xyz": {
+    "H224": {
+      "source": "33214b232ed10eaee3533e9399728153db2afd02d9067d530eb6dfb5fdc04d3e",
+      "target": "166c4d2a4f5d24a4c79d4c90a8a275e0fe905fcc9650d559aabb775780e81654"
+    },
+    "H307": {
+      "source": "64e63c7343cc2be4c2ac6a714480b6c0eea9fe2fb7095fd559f51fada41894c6",
+      "target": "166c4d2a4f5d24a4c79d4c90a8a275e0fe905fcc9650d559aabb775780e81654"
+    },
+    "H309": {
+      "source": "123c25b6ac47e19ea3face43d9ced118c6d8520922fb6b2ea6101c9787c21af0",
+      "target": "166c4d2a4f5d24a4c79d4c90a8a275e0fe905fcc9650d559aabb775780e81654"
+    },
+    "H310": {
+      "source": "806906b7862cbfa066942122d16a9f672a810145d4ecac63e565fc9ac7ee6e30",
+      "target": "166c4d2a4f5d24a4c79d4c90a8a275e0fe905fcc9650d559aabb775780e81654"
+    },
+    "H515": {
+      "source": "5d8452b4069fb0b2b0a9b0d9ae55bab73fe6cb09fa12dfcf7a599589b4bbb88c",
+      "target": "166c4d2a4f5d24a4c79d4c90a8a275e0fe905fcc9650d559aabb775780e81654"
+    },
+    "H2379": {
+      "source": "63761649c4268ad10f87a6a8438444b4eee2853c989f73abb73198031a263c81",
+      "target": "166c4d2a4f5d24a4c79d4c90a8a275e0fe905fcc9650d559aabb775780e81654"
+    },
+    "O164": {
+      "source": "b2c1618bbb901cfeb8fce5f52795b3a39d4c90cb443381ecb11f37fd3daab6c7",
+      "target": "a727d77c2520b9b4e4414ee3b62a564419852bfab89bf94eef1f9ce1ddef620c"
+    },
+    "O910": {
+      "source": "ab7bd1adb96dc3f825dac88cc9b39afd8e9b86abe951bf088bee8eade1bbc199",
+      "target": "a727d77c2520b9b4e4414ee3b62a564419852bfab89bf94eef1f9ce1ddef620c"
+    },
+    "O1550": {
+      "source": "201e7ae70f4657b3822b02d12a01cbab72f209dd10e3099fe0c56a41fc5d3731",
+      "target": "a727d77c2520b9b4e4414ee3b62a564419852bfab89bf94eef1f9ce1ddef620c"
+    },
+    "O2450": {
+      "source": "1ce16e8219a0a49433f665a162b9842b27d82f4297bbf8ebddc017e08fd075f1",
+      "target": "a727d77c2520b9b4e4414ee3b62a564419852bfab89bf94eef1f9ce1ddef620c"
+    },
+    "H314": {
+      "source": "2b289300f3aa9db4155def6e7ebafbe5159717035c6f88c8ca4be9c128d30548",
+      "target": "166c4d2a4f5d24a4c79d4c90a8a275e0fe905fcc9650d559aabb775780e81654"
+    },
+    "H533": {
+      "source": "28105eb97e1e03687abab2f1ca5aa8660077c75eff2314e3aaaf86c34e1fc184",
+      "target": "166c4d2a4f5d24a4c79d4c90a8a275e0fe905fcc9650d559aabb775780e81654"
+    }
+  }
+}

@@ -25,3 +25,12 @@ R1 工作区为 /home/jian/p64_r1_ws，分支 research/p64-r1-ambiguity-discrimi
 ## 参考位姿取得和隔离
 
 参考提取必须在承诺全部候选输出哈希后通过另一条命令执行。提取器首先验证封存文件及帧 ID，缺少封存时退出且无参考输出。参考文件路径没有传入评分进程。Hard 使用同历史协议的地图锚定广义迭代最近点与惯性轨迹，纳秒精确解析和插值最大间隙为 150 ms，最近端点相距不超过 50 ms。Omni 使用原光学动作捕捉包的位姿记录及 Diff 地图原点变换，采用同 GATE2-052 的规则。离线包读取仅限参考轨迹话题，未启动回放。
+
+正式封存后提取 12/12 个参考位姿，离线参考表 SHA-256 为 42e38ad14deff0e1223e65f93bf4a3239984eabc0d94e258d207ec15ce20c40c。用这 12 个位姿复算历史原生终点误差，与归档绝对误差对比，最大偏差为 4.83×10⁻¹⁶ m 和 2.41×10⁻¹³°。另外确认 12/12 帧源和目标滤波后点数与有序 XYZ 字节散列均与历史相同。点号成员表涵盖每帧全部原始点序号，且每个原始点只映射一次。
+
+从阶段文档目录生成原始资格输入与封存后评估参考的本机复现命令如下。生成命令需要此前未使用的输出目录，默认取工作区 run/input，参考默认工作区 run/reference.tsv。
+
+```bash
+/usr/bin/python3 prepare_inputs.py prepare --output ../../run/reproduced_input
+PYTHONDONTWRITEBYTECODE=1 /usr/bin/python3 prepare_inputs.py references --online-seal ../../run/online_seal.json --output ../../run/reproduced_reference.tsv
+```
