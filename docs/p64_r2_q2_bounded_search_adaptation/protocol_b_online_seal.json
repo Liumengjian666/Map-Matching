@@ -1,0 +1,38 @@
+{
+  "output": {
+    "path": "/home/jian/p64_r2_q2_ws/run/protocol_b_trajectory.csv",
+    "sha256": "8867738675d98427f64b8fdcc421d15330d01c6e2060acdae8ca321331d9f630"
+  },
+  "anchor": {
+    "path": "/home/jian/p64_r2_q2_ws/run/protocol_b_frozen/anchor.tsv",
+    "sha256": "4a65c9e734193a70cfb3b0b36724c190b7ff68e34b3eb076abcbc9d035fdcd4c"
+  },
+  "imu": {
+    "path": "/home/jian/p64_r2_q2_ws/run/protocol_b_frozen/imu.tsv",
+    "sha256": "5bdd05856858de42ea088f9919cafd13e241783dfe608040bb477d70437645d1"
+  },
+  "scans": {
+    "path": "/home/jian/p64_r2_q2_ws/run/protocol_b_frozen/scans.tsv",
+    "sha256": "c8edebb54d56bb6c48c02b7289b4a9c7c908e63f3cdcaf11b1593230676df620"
+  },
+  "input_receipt": {
+    "path": "/home/jian/p64_r2_q2_ws/run/protocol_b_frozen/BLIND_INIT_RECEIPT.json",
+    "sha256": "ef9030110d6b3f8042a1ff6af4f58834caf0d7f49d1c64e08269028792dfccbb"
+  },
+  "exe": {
+    "path": "/home/jian/p64_r2_q2_ws/run/protocol_b_window",
+    "sha256": "273da9d2ed774e63cc978dedfb707dd8103ed56827ed9b40f564b50c3460768c"
+  },
+  "preregistration": {
+    "path": "/home/jian/p64_r2_q2_ws/docs/p64_r2_q2_bounded_search_adaptation/protocol_b_preregistration.md",
+    "sha256": "7bff7dfdc3e4c494b89d05a609c4872f6a3c8abe3a37328da79a516e9703044c"
+  },
+  "build_source": {
+    "path": "/home/jian/p64_r2_q2_ws/docs/p64_r2_q2_bounded_search_adaptation/protocol_b_window.cpp",
+    "sha256": "48b0be5567b165652b2ce8d292c61b40ab20f1498917ce8f9288fbeb93f7011c"
+  },
+  "prep_source": {
+    "path": "/home/jian/p64_r2_q2_ws/docs/p64_r2_q2_bounded_search_adaptation/protocol_b_prepare.py",
+    "sha256": "4d2078a65beaf6cf61d2fb753798d5261c33ba3ae6c3a1cd7a1f4f3531aa400d"
+  }
+}

@@ -1,0 +1,252 @@
+{
+  "first_raw_lidar_stamp_ns": 1738773033358802795,
+  "scans": [
+    {
+      "stamp_ns": 1738773034359456539,
+      "lidar_seq": 932,
+      "points": 14667,
+      "file": "scan_00.pcd",
+      "sha256": "7932202435ff942437285a42ab7f5c82042b17ef164d9b28e4b9fc20e87af62d"
+    },
+    {
+      "stamp_ns": 1738773034457854509,
+      "lidar_seq": 933,
+      "points": 14734,
+      "file": "scan_01.pcd",
+      "sha256": "f3cde4cd292fe7eed1a002afb80c83245c695ed459161672d375ca6a8d0ddb03"
+    },
+    {
+      "stamp_ns": 1738773034558891535,
+      "lidar_seq": 934,
+      "points": 14901,
+      "file": "scan_02.pcd",
+      "sha256": "a7b4c2bc73dcb150c5052fd2b7070cb0231fc3388e8b145a6d78aa8b6df549c0"
+    },
+    {
+      "stamp_ns": 1738773034657958508,
+      "lidar_seq": 935,
+      "points": 14392,
+      "file": "scan_03.pcd",
+      "sha256": "e63c9edf661fd46c624c3d3b536939063749c49873c019cad52970c8d90f01dc"
+    },
+    {
+      "stamp_ns": 1738773034757229090,
+      "lidar_seq": 936,
+      "points": 14955,
+      "file": "scan_04.pcd",
+      "sha256": "f5c16b9f42f3724bd4efe42a72ca3e9ce5ec68763e087e91bdec916ce9682f13"
+    },
+    {
+      "stamp_ns": 1738773034859986544,
+      "lidar_seq": 937,
+      "points": 14722,
+      "file": "scan_05.pcd",
+      "sha256": "3ab79eec904c10cc567df937080535e54de0d2cd726cc1b736bed789a4ea82d7"
+    },
+    {
+      "stamp_ns": 1738773034957967520,
+      "lidar_seq": 938,
+      "points": 14665,
+      "file": "scan_06.pcd",
+      "sha256": "5fedcbe78022af1c846888fef7e16bedd5f88f3d6afe85c1f7d43bfc8a796eee"
+    },
+    {
+      "stamp_ns": 1738773035058918953,
+      "lidar_seq": 939,
+      "points": 14913,
+      "file": "scan_07.pcd",
+      "sha256": "1d6585f299095768a6557e502d72b3d66daaa4d9eca9f6d19ee6db40b67713e1"
+    },
+    {
+      "stamp_ns": 1738773035158820152,
+      "lidar_seq": 940,
+      "points": 14620,
+      "file": "scan_08.pcd",
+      "sha256": "1e52da1906b4c552fd4359802105c12c01c5f525b9a118122d369bd860c50968"
+    },
+    {
+      "stamp_ns": 1738773035257888079,
+      "lidar_seq": 941,
+      "points": 14660,
+      "file": "scan_09.pcd",
+      "sha256": "d0fcccf36e5ca5406097a706021261ffdd630215bfafac0366c744260bed2940"
+    },
+    {
+      "stamp_ns": 1738773035357817650,
+      "lidar_seq": 942,
+      "points": 15011,
+      "file": "scan_10.pcd",
+      "sha256": "17f80cffd69a1c9aba9380709e89a3786e9a428b57d2a23640493e38ecd19581"
+    },
+    {
+      "stamp_ns": 1738773035459329605,
+      "lidar_seq": 943,
+      "points": 14851,
+      "file": "scan_11.pcd",
+      "sha256": "0dd39c0cef5a7d30693407a95095e7f509b09dc0096ab020443a91b1369b1497"
+    },
+    {
+      "stamp_ns": 1738773035557919025,
+      "lidar_seq": 944,
+      "points": 14751,
+      "file": "scan_12.pcd",
+      "sha256": "8a13db82af538ffb722b2d9c24a24f98de471a4ff06c70f2a1fbad3626d96dcb"
+    },
+    {
+      "stamp_ns": 1738773035659486294,
+      "lidar_seq": 945,
+      "points": 14902,
+      "file": "scan_13.pcd",
+      "sha256": "d3c67ce404c1097f7ab24592ca10210b685110f280cdefd84c6cc467b8f67565"
+    },
+    {
+      "stamp_ns": 1738773035759412289,
+      "lidar_seq": 946,
+      "points": 14757,
+      "file": "scan_14.pcd",
+      "sha256": "761c1d7021d460267c85a17b2ef591bf9186184ea94bbf02afe93eae4ac1f867"
+    },
+    {
+      "stamp_ns": 1738773035859097958,
+      "lidar_seq": 947,
+      "points": 14922,
+      "file": "scan_15.pcd",
+      "sha256": "d324e491ba8d1f21d2965a803c241c6ed9eaeef62c5db049b80f8538ceab1960"
+    },
+    {
+      "stamp_ns": 1738773035958878517,
+      "lidar_seq": 948,
+      "points": 14890,
+      "file": "scan_16.pcd",
+      "sha256": "84c4e8950ee548120c78337559bbd1f4b73184dc6a31b3e840e57e8150f06dbb"
+    },
+    {
+      "stamp_ns": 1738773036058801651,
+      "lidar_seq": 949,
+      "points": 14541,
+      "file": "scan_17.pcd",
+      "sha256": "b53b73d4d345a243bd6ae9582a68922a9fcb8359271b024e5a6b448f5ffc5a07"
+    },
+    {
+      "stamp_ns": 1738773036158797026,
+      "lidar_seq": 950,
+      "points": 14292,
+      "file": "scan_18.pcd",
+      "sha256": "ef0690c75cce3fcf68a59a54e7b05b76809efe1af14972b4ce86a8e15487e030"
+    },
+    {
+      "stamp_ns": 1738773036256148338,
+      "lidar_seq": 951,
+      "points": 15236,
+      "file": "scan_19.pcd",
+      "sha256": "90643ae1e79a136a09f3bf0374af2792e7c9dc7a0193edaf9620910d5099589e"
+    },
+    {
+      "stamp_ns": 1738773036358888626,
+      "lidar_seq": 952,
+      "points": 14588,
+      "file": "scan_20.pcd",
+      "sha256": "e4724dbc90539a9b00c8e848ca563e62c4dcb2ca9bbc8111f1dab79e08447f59"
+    },
+    {
+      "stamp_ns": 1738773036458806753,
+      "lidar_seq": 953,
+      "points": 14909,
+      "file": "scan_21.pcd",
+      "sha256": "28dc0a08667eed86f8fc4fed62e202e1c0e51d5b23b1ff1c90202e904f71dfb7"
+    },
+    {
+      "stamp_ns": 1738773036558180809,
+      "lidar_seq": 954,
+      "points": 14647,
+      "file": "scan_22.pcd",
+      "sha256": "6ce7aa5c762dc1f8103ac2b6a1818f967da4db70d5b5b1dfc18c9ac51b866a3a"
+    },
+    {
+      "stamp_ns": 1738773036658828020,
+      "lidar_seq": 955,
+      "points": 14628,
+      "file": "scan_23.pcd",
+      "sha256": "b6717c168e9e1a699b139da8712767109f124e772d2928113f14fa02bdcffebd"
+    },
+    {
+      "stamp_ns": 1738773036757948875,
+      "lidar_seq": 956,
+      "points": 14926,
+      "file": "scan_24.pcd",
+      "sha256": "ab2628630e5ecf2f7adf44c86f36a3b824635f0f6e93d8fe52e713889432c97d"
+    },
+    {
+      "stamp_ns": 1738773036858891964,
+      "lidar_seq": 957,
+      "points": 14558,
+      "file": "scan_25.pcd",
+      "sha256": "2a2fdb6c4242946db51260017d24362919fedb97979d874fac25a4341950cd83"
+    },
+    {
+      "stamp_ns": 1738773036958804131,
+      "lidar_seq": 958,
+      "points": 14813,
+      "file": "scan_26.pcd",
+      "sha256": "846f89bca0f2a975cb9c9af82acd76c92a13d592b31986399cfff7d4250acc53"
+    },
+    {
+      "stamp_ns": 1738773037058800936,
+      "lidar_seq": 959,
+      "points": 14796,
+      "file": "scan_27.pcd",
+      "sha256": "d88a6f3d0dbec78fa6d4b96a43aaa02585fa81644c9364773e1a2eb4ef583d15"
+    },
+    {
+      "stamp_ns": 1738773037158070803,
+      "lidar_seq": 960,
+      "points": 15133,
+      "file": "scan_28.pcd",
+      "sha256": "85395af8e733e9f4c0be3ff81bb9f5563165b5e98c4c681c4169c01b10797036"
+    },
+    {
+      "stamp_ns": 1738773037258863449,
+      "lidar_seq": 961,
+      "points": 15636,
+      "file": "scan_29.pcd",
+      "sha256": "7b4065532fbdb60a73b8912fca7429e9c073de8e3c58b6373679c12e11a9b64a"
+    }
+  ],
+  "imu_samples": 580,
+  "initialization_kind": "blind_first_scan_map_raster_correlation",
+  "seed": {
+    "translation": [
+      0.125,
+      0.125,
+      0.6862
+    ],
+    "yaw_deg": 90,
+    "occupancy_score": 0.9408934359853414,
+    "rotated_query_cells": 589
+  },
+  "separated_rival": {
+    "translation": [
+      -13.875,
+      0.125,
+      0.6862
+    ],
+    "yaw_deg": 90,
+    "occupancy_score": 0.6750249994804817,
+    "rotated_query_cells": 589
+  },
+  "absolute_margin": 0.2658684365048597,
+  "map_floor_z_m": 0.225,
+  "occupancy_grid_shape": [
+    72,
+    254,
+    256
+  ],
+  "qualifies_initialization": true,
+  "map_file": "/home/jian/rosbag/public_datasets/IILABS3D/nav_a_diff_omni_official_v1/gate2_048_diff_map_formal_01/nav_a_diff_prior_voxel0p15.pcd",
+  "map_sha256": "c72c5d6f19b622759f421f05c01c3ee09433ed9967a4b2df0f313129c744f158",
+  "sensor_file": "/home/jian/rosbag/public_datasets/IILABS3D/nav_a_diff_omni_official_v1/benchmark/livox_mid-360/livox_nav_a_omni_2025-02-05-16-30-32.bag",
+  "sensor_sha256": "7e10c5d139bc435c2066585c2f5d27726c40b13961a26e0236920ae62a3a1fd2",
+  "start_offset_ns": 1000000000,
+  "scan_list_sha256": "c8edebb54d56bb6c48c02b7289b4a9c7c908e63f3cdcaf11b1593230676df620",
+  "imu_sha256": "5bdd05856858de42ea088f9919cafd13e241783dfe608040bb477d70437645d1"
+}

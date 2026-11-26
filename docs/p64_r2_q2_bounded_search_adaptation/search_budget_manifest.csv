@@ -1,0 +1,8 @@
+scope,method,samples,per_sample_grid_cap,grid_rows,new_grid_pose_evaluations,native_grid_score_calls,park_grid_score_calls,grid_point_cloud_transform_calls,native_direct7_lookup_requests,park_single_voxel_lookup_requests,native_align_calls,proposal_count,shared_pose_duplicates,additional_terminal_score_calls,note
+formal_Q2,S0,12,4851,58212,0,0,0,0,0,0,8,0,0,8,S0 grid reused and align_calls only new boundary diagnostics
+formal_Q2,S1,12,4851,58212,58212,58212,58212,58212,309241548,309241548,31,58212,0,31,one transformed cloud per shared pose; lookup requests per source point
+formal_Q2,S2,12,4851,55950,55950,55950,55950,55950,303023650,303023650,31,58152,2202,31,one transformed cloud per shared pose; lookup requests per source point
+formal_Q2,S3,12,4851,33707,33707,33707,33707,33707,180969497,180969497,32,35731,2024,32,one transformed cloud per shared pose; lookup requests per source point
+score_gate,final_build,12,,0,0,408,408,408,,,0,,,,204 poses each evaluated with original and instrumented scorers; initial build had the same additional 204 parity checks before parser failure
+fixed_R3_asset_diagnostic,H307_H515,2,,0,5,5,5,5,,,0,,,,additional 5 native fixed-pose oracle checks; no align
+independent_causal_short_window,Protocol_B,30,,0,0,0,0,0,,,30,,,,"4,681,728 FFT planar occupancy correlation values in independent initializer; never included in NDT grid accounting"

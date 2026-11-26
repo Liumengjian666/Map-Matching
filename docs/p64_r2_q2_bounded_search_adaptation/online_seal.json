@@ -1,0 +1,14 @@
+{
+  "files": {
+    "online.tsv": "6ae113108b817e614f1bcb76e007f19d42224ab06bf0ba6d766966f29bb8f615",
+    "official/grid.csv": "b636f72982f9e1f9e00166ea355d5520a54d2075d47eee0f88e5943d845e8223",
+    "official/retained.csv": "dc0e03ca0fd1f1d8c03210bf29503caa6be5793eed2d9161b9ca38a504074c18",
+    "official/fit.csv": "45b7b4b190fc646450101f1aa3acb07419d44ec03665d638daefa21200ccbe8e",
+    "official/runtime_breakdown.csv": "ef6c657d4f34d69acf74fb65dc45ed8933c70af5ab5027f94e6aa4bcc0749a84",
+    "official_score_parity.csv": "2b628c284d65f659f7977232751ead2dd7ddf9b4a3cbfb919ddb9fcee0c60e2e"
+  },
+  "manifest_sha256": "0c77275862e417656841dcd065fe0fec6774a277d68f60f72d0a2b6c6e6b4c00",
+  "q1_online_sha256": "6ae113108b817e614f1bcb76e007f19d42224ab06bf0ba6d766966f29bb8f615",
+  "original_s0_identical": true,
+  "before_reference": true
+}
