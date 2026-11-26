@@ -1,0 +1,128 @@
+{
+  "task": "P64-R1-AMBIGUITY-DISCRIMINATIVE-PLANNING",
+  "decision": "NEED_TARGETED_PREPARATION",
+  "collected_local_date": "2026-11-26",
+  "git": {
+    "branch": "research/p64-r1-ambiguity-discriminative-planning",
+    "start_sha": "b5bb1eb5cc0e0c44a2ebf0dfbd309519edf552ee",
+    "code_sha": null,
+    "end_sha_resolution": "git rev-parse HEAD",
+    "r14_historical_local_ref": "c030980fba6f93e0f7f232c7ac756335ff5b727a",
+    "remote": "https://github.com/Liumengjian666/Map-Matching.git",
+    "remote_push_performed": false
+  },
+  "execution": {
+    "new_ndt_aligns": 0,
+    "new_localization_builds": 0,
+    "new_rosbag_replays": 0,
+    "git_writes_in_stable_tree": 0,
+    "r2_started": false,
+    "random_seed_for_r1": null,
+    "hardware": "AMD Ryzen 7 5800H x86_64",
+    "linux": "5.15.0-139-generic",
+    "git": "2.25.1",
+    "pcl_dev": "1.10.0+dfsg-5ubuntu1",
+    "historical_audit_command": "python3 audit_history.py ~/.local/share/Trash/files/Map-Matching-R14-first-loss-heldout",
+    "loop2_info_command": "rosbag info --yaml /home/jian/rosbag/loop2/raw_restore_20260914_stage0/loop2_raw.bag",
+    "new_preprocessing_check_builds": 1,
+    "successful_preprocessing_checks": 2,
+    "preprocessing_build_first_failure": "old libusb from /opt/MVS via LD_LIBRARY_PATH; cleared for independent build"
+  },
+  "historical_verification": {
+    "rows": 2375,
+    "reference_valid": 2372,
+    "reported_converged": 2375,
+    "raw309": {
+      "stamp_ns": 1690354450530800303,
+      "relative_s": 20.867056354,
+      "iterations": 11,
+      "inlier_fraction": 0.9978347420692444,
+      "pred_translation_error_m": 0.24936125300042075,
+      "ndt_translation_error_m": 0.9803682167550752,
+      "pred_rotation_error_deg": 2.1075539859948393,
+      "ndt_rotation_error_deg": 14.017119921508282,
+      "ndt_correction_m": 0.779269253842027,
+      "ndt_correction_deg": 12.127623670339265
+    }
+  },
+  "map_and_input_sha256": {
+    "/home/jian/rosbag/public_datasets/IILABS3D/nav_a_diff_omni_official_v1/gate2_048_diff_map_formal_01/nav_a_diff_prior_voxel0p15.pcd": "c72c5d6f19b622759f421f05c01c3ee09433ed9967a4b2df0f313129c744f158",
+    "/home/jian/rosbag/public_datasets/IILABS3D/nav_a_diff_omni_official_v1/gate2_051_omni_sensor_feed/INPUT.json": "60e584e48428341196673c49c5ae72e14b483a44848c4bf9979a4c019dc63783",
+    "/home/jian/rosbag/public_datasets/IILABS3D/nav_a_diff_omni_official_v1/gate2_051_omni_sensor_feed/imu_si.csv": "ead342c9cc91e358db61d668f6bc40d01e20813b2a7d2c9629855ed3985b5576",
+    "/home/jian/rosbag/public_datasets/IILABS3D/nav_a_diff_omni_official_v1/ground-truth/benchmark/livox_mid-360/nav_a_omni/raw_data.bag": "4d2cb85d45765292f3c101d5d3ad39630138c125bc6c6536201fe803d3d49ea1",
+    "/home/jian/rosbag/public_datasets/koide_p62_r29/map_indoor_easy.ply": "b04ec8a6d0fe71483691127a3c63c73fda13cb3d1c8dd8831df7bf540fb32860",
+    "/home/jian/rosbag/public_datasets/koide_p62_r29/map_indoor_hard.ply": "cf1bfd97b263868a5b0fd2dd690da35a47d411f15a6478591072365953e1a2e3",
+    "/home/jian/rosbag/public_datasets/koide_p62_r29/gt/gt/traj_lidar_indoor_easy_01.txt": "b36ea9378fd436a720e01e82ec7cbe7cfaf66ffc35f46cc2f5b2eafaecd50042",
+    "/home/jian/rosbag/public_datasets/koide_p62_r29/gt/gt/traj_lidar_indoor_hard_01.txt": "3696eddcbe884af197b13b8205952793b55c37d9093ab95b96a781ae56c6eeea",
+    "/home/jian/rosbag/loop2/loop2mapping/pcd/loop2_simtime_rebuild_2026_08_12_001_all_raw_points.pcd": "48c557258761fb6849a253ec1440fca752c8666852d383a22a5023caad833a66",
+    "P63-R10 historical EFFECTIVE_PARAMS.json": "f4fb80413d0d4db8fc56a271e00f83d1500dd66db3be62f1776dea5deeed393c"
+  },
+  "historical_reference_map_expected_sha256": "50bba09fde204a55be8261e69ea539ae69c65dd44ec7ca1eeed5b066ff8da098",
+  "historical_filtered_target_xyz_sha256": "166c4d2a4f5d24a4c79d4c90a8a275e0fe905fcc9650d559aabb775780e81654",
+  "candidate_samples": {
+    "count": 97,
+    "unique_dataset_ordinals": 97,
+    "verified_source_hashes": 97,
+    "splits": {
+      "dev_diagnostic": 36,
+      "dev_provisional": 24,
+      "validation_provisional": 36,
+      "dev_diagnostic_only": 1
+    }
+  },
+  "literature": {
+    "matrix_rows": 20,
+    "full_text_items": 17,
+    "metadata_only": [
+      "Hunter",
+      "Javanmardi map-only NDT"
+    ],
+    "official_documentation_items": 1
+  },
+  "unresolved": [
+    "Qualify physically separate genuine multimodal blocks",
+    "Seal a non-reference online start and a fresh held-out sequence",
+    "Obtain two inaccessible papers"
+  ],
+  "hard_map_recovered": {
+    "path": "/home/jian/p64_r1_ws/.git/p64_assets/r29_hard_tiles_exact_xyzi.pcd",
+    "points": 96324,
+    "map_sha256": "50bba09fde204a55be8261e69ea539ae69c65dd44ec7ca1eeed5b066ff8da098",
+    "target_points": 93223,
+    "target_xyz_sha256": "166c4d2a4f5d24a4c79d4c90a8a275e0fe905fcc9650d559aabb775780e81654",
+    "raw309_source_points": 2771,
+    "raw309_source_xyz_sha256": "123c25b6ac47e19ea3face43d9ced118c6d8520922fb6b2ea6101c9787c21af0"
+  },
+  "historical_candidate_archive": {
+    "source_path": "/home/jian/桌面/先验地图定位创新研究工作区/实验记录/EXP-011_两探针配准歧义原型/branch_probe/CANDIDATES.csv",
+    "source_sha256": "b392edd4c225b75ecedf677a31860a8f7e78e4083e5d5162126ca194a7636aaa",
+    "candidate_rows": 24,
+    "frames": 8,
+    "new_aligns_historical": 16,
+    "export_without_reference": "historical_candidates_no_reference.csv"
+  },
+  "adaptation": {
+    "stage": "R1_DESIGN_ONLY",
+    "verification_levels": [
+      "Original",
+      "Direct Transfer",
+      "Adapted",
+      "Integrated"
+    ],
+    "modules": [
+      "A candidate search",
+      "B common and differential geometry",
+      "C stability",
+      "D weighted NDT rematching",
+      "E uncertainty and IMU fusion"
+    ],
+    "artifacts": [
+      "ADAPTATION_ANALYSIS.md",
+      "module_interface_contract.md",
+      "adaptation_matrix.csv",
+      "integration_risk_register.md",
+      "THEORY_ASSUMPTIONS.md"
+    ],
+    "executed_transfer_or_integration_runs": 0
+  }
+}

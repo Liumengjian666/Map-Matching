@@ -1,0 +1,16 @@
+asset,path_or_identity,branch,head_or_version,status,evidence_and_reuse
+stable historical path,/home/jian/livox_ws/dog_visual_loc_ws,,,ABSENT,Historical configured path absent
+stable actual,/home/jian/dog_visual_loc_ws,feature/quadruped-localization-interface,41999ea700c66c4cadf0eca9e0c5d73caa2783fd,DIRTY_75_STATUS_ROWS,"origin local missing dog_light_loc_ws; github Liumengjian666/fuxianFASTLIVO2; mapmatching Liumengjian666/Map-Matching; read-only"
+research historical path,/home/jian/livox_ws/dog_loc_paper_ws,,,ABSENT,Trash snapshot has no .git; Snap worktree metadata points to absent dog_light_loc_ws
+P63 archive repo,/home/jian/.local/share/Trash/files/Map-Matching-R13-audit,research/p63-r13-full-remaining-risk-ranking,b5bb1eb5cc0e0c44a2ebf0dfbd309519edf552ee,CLEAN_PARTIAL_REPO,origin github.com/Liumengjian666/Map-Matching; retained R14 ref
+P63 R14 worktree,/home/jian/.local/share/Trash/files/Map-Matching-R14-first-loss-heldout,research/p63-r14-first-loss-heldout-validation,c030980fba6f93e0f7f232c7ac756335ff5b727a,DETACHED_METADATA,Old gitdir path broken; recorded local ref in R13 repository gives base identity; dirty state unavailable
+P64 isolated,/home/jian/p64_r1_ws,research/p64-r1-ambiguity-discriminative-planning,b5bb1eb5cc0e0c44a2ebf0dfbd309519edf552ee,SPARSE_PARENT,START SHA shown; origin github.com/Liumengjian666/Map-Matching; historical promised blobs incomplete
+stable NDT node,src/dog_prior_map_localization/src/dog_prior_map_ndt_node.cpp,,PCL 1.10.0 local,READ_ONLY,"Line 1165 pcl::NormalDistributionsTransform; lines 435–439 map setup; 841–857 align/fitness; aggregate results"
+P63 NDT_OMP,https://github.com/koide3/ndt_omp/tree/5495fd9214945afcb4b35d5a1da385e405c52bf9,,5495fd9214945afcb4b35d5a1da385e405c52bf9,SOURCE,"DIRECT7; ndt_omp_impl.hpp 180–280 and 485–536 native cost; 933+ calculateScore is a different aggregate"
+P63 voxel Gaussian,ndt_omp/include/pclomp/voxel_grid_covariance_omp.h,,,SOURCE,"Leaf getMean/getCov/getInverseCov; target_cells_ protected; no public candidate-point dump"
+P63 IMU and UKF,https://github.com/koide3/hdl_localization/tree/de2dc7769aa2412876d05ae6161408d3295b6a3c,,de2dc7769aa2412876d05ae6161408d3295b6a3c,SOURCE,"nodelet 229–265 IMU then correction; pose_estimator.cpp 80–100 predict and 143–215 align and correct"
+P63 R10 native logs,docs/p63_r10_hdl_imu_full_hard/raw/full_01/NATIVE_NDT.csv.gz,,,VERIFIED,"guess/final pose and aggregate metrics; no independent multimodes or per-point costs"
+P63 R14 outputs,research/p63_r14_first_loss_heldout_validation/data/full_split_02,,,READABLE,"Archived RUN_RECEIPT,NATIVE_NDT,SPATIAL_SPLIT and other logs"
+P63 R3–R9 folders,/home/jian/.local/share/Trash/files/livox_ws,,,PARTIAL,"R3/R4/R5/R8/R9 archive material present; some original active homes absent; exact Hard target recovered in P64"
+P63 exact Hard restored,/home/jian/p64_r1_ws/.git/p64_assets/r29_hard_tiles_exact_xyzi.pcd,,,BYTE_EXACT,96324 raw map points and 93223 filtered target points fully verified; raw309 2771 filtered points
+PCL alternate NDT,/usr/include/pcl-1.10/pcl/registration/impl/ndt.hpp,,1.10.0+dfsg-5ubuntu1,SOURCE,Existing native scorer reference and build environment

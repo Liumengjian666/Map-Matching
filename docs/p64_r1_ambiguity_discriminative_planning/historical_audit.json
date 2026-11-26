@@ -1,0 +1,33 @@
+{
+  "rows": 2375,
+  "reference_valid": 2372,
+  "reported_converged": 2375,
+  "last_reference_valid_frame": {
+    "raw_ordinal": 2379.0,
+    "translation_error_m": 130218.63791164121,
+    "rotation_error_deg": 151.21839551380472,
+    "ndt_translation_error_m": 130218.62898443482,
+    "ndt_rotation_error_deg": 151.161867124168,
+    "pred_translation_error_m": 130218.62898443482,
+    "pred_rotation_error_deg": 151.16185919682934,
+    "inlier_fraction": 0.0,
+    "iterations": 0.0
+  },
+  "raw309": {
+    "stamp_ns": 1690354450530800303,
+    "relative_s": 20.867056354,
+    "iterations": 11,
+    "inlier_fraction": 0.9978347420692444,
+    "pred_translation_error_m": 0.24936125300042075,
+    "ndt_translation_error_m": 0.9803682167550752,
+    "pred_rotation_error_deg": 2.1075539859948393,
+    "ndt_rotation_error_deg": 14.017119921508282,
+    "ndt_correction_m": 0.779269253842027,
+    "ndt_correction_deg": 12.127623670339265
+  },
+  "sha256": {
+    "docs/p63_r10_hdl_imu_full_hard/FULL_TRAJECTORY.csv": "f6f823129b6332dd87dcdc4a77c67ebb27b22c3805739b9b826f619b29a26927",
+    "docs/p63_r10_hdl_imu_full_hard/raw/full_01/NATIVE_NDT.csv.gz": "1d8088a219845a21f764b2267937000edf8ab3edbedc44ad0ac7a7627ce49ca4",
+    "docs/p63_r11_harmful_ndt_observation/REFERENCE_DIAGNOSIS.csv": "40679a59ae40794a03355795c4e2eaea20b67d0d687de6cdec7744386d3493d2"
+  }
+}

@@ -1,0 +1,60 @@
+# 原文精读与查重依据
+
+缓存 PDF 位于独立工作区的 .git/p64_sources，见 [来源清单](source_manifest.csv)。本文页码优先用期刊印刷页，arXiv 使用文内章节和公式编号。原文结果只说明各论文的实验条件。本轮做了有边界的查重，检索词覆盖多峰定位、候选重排、预期几何差异、可见性、稳定选点及同帧主动消歧。矩阵中 UNKNOWN 表示原文证据不足。
+
+## Park 与 Chung（2024）
+
+**Uncertainty-aware LiDAR-based Localization for Outdoor Mobile Robots**，Geonhyeok Park、Woojin Chung，Journal of Field Robotics 41(8), 2790–2804。已阅读出版社 PDF §§2–5。作者给出对照方法链接和补充视频，未定位到论文自身正式代码。 [出版社全文](https://onlinelibrary.wiley.com/doi/10.1002/rob.22392)
+
+- pp.2792–2793 §2.1，公式 (1)–(2) 用样本平均和无偏协方差描述各地图体素。公式 (3)–(5) 将单点 (z_i) 变换成 (q_i=Rz_i+t)，在对应体素匹配 (p_i=c_1\exp[-(q_i-\mu)^T\Sigma^{-1}(q_i-\mu)/2]+c_2p_0)，各点乘积给定帧扫描似然。Newton（牛顿局部二阶优化）求原始 NDT 位姿。§2 未提供可直接移植的常数数值与空体素策略，不能将原生 NDT_OMP 的累加奖励当成论文似然。
+- pp.2793–2794 §2.2，公式 (6) 和 Algorithm 1：以 NDT 解为中心，横轴沿估计朝向，均匀先验，逐格计算固定姿态上的观测似然。只改变 x/y/yaw。权重为后验的 α 次幂。公式 (7) 将 K=Σw_k x_k x_kᵀ、u=Σw_k x_k、s=Σw_k 代入 K/s−uuᵀ/s²。归一化权重等价 w_k/s。工程上可用对数域减最大值再求指数，避免似然乘积下溢。未搜索维度用 σ_z²=η₁(σ_x²+σ_y²)，σ_roll²=σ_pitch²=η₂σ_yaw²。
+- pp.2796–2798 §4.2–4.3：x/y 各 ±2 m、步长 0.2 m，yaw ±5°、1°，端点包含时算得 4,851 次固定姿态评分。VLP-16 用 α=0.001、η₁=0.05、η₂=1。采样对照才是在相同区间均匀采 1,000 个初值，分别完整优化并以参考误差估方差。Fig. 6–8 用分布及椭圆显示退化，未见独立模式提取、竞争位姿切换或用地图差反向选当前扫描点的流程。多峰能被网格表达，单协方差仍会混合多个峰及宽单峰。
+- pp.2794–2795 §3.1–3.3：LiDAR 惯性里程计 LIO-SAM（滑窗融合的雷达惯性里程计）给 NDT 初值和相邻因子。若 σ_x²+σ_y²>σ_th²，排除该 NDT 因子。其余以协方差赋权。GNSS（全球卫星导航系统）先转换到地图系，再用与当前估计的距离过滤；阈值 1.0 m，σ_th=1.5 m。因子图（以约束残差连接状态的图优化）中 NDT 0.5 Hz、GNSS 0.1 Hz，局部里程计与不确定性计算并行。
+- pp.2796、2800–2802 §4.1–4.6，Fig.4、Tables 1–3：高丽大学室外三个跨时间场景；VLP-16、Xsens IMU、Emlid GNSS，NovAtel RTK 辅助建图与参考。对照 LIO-SAM+GNSS、HDL Localization、FAST-LIO Localization；比较段声明部分失锁对照超过 5 m 时用真值重初始化。论文报告三个场景平面 RMSE（均方根误差）0.127/0.154/0.129 m，最大值 0.318/0.426/0.432 m。Ryzen 7 4800H、16 GB 上不确定性平均 0.86 s，LIO 单帧平均 0.068 s。原文未给单独网格循环耗时和完整串行逐帧尾部延迟；并行周期运行和 10 Hz 逐帧作全搜索的预算不同。长时雷达缺测后，GNSS 门控可能拒收恢复所需的测量。
+- P64 直接借用离散似然和不确定性基线。独立峰提取、候选视图差异、共享选点与位姿恢复重新设计。无 GNSS、使用 HDL 传播的实验是改编版。
+
+## DeCOD（2026）
+
+**Degeneracy-Orthogonal Geometric Constraints for LiDAR SLAM**，Minseo Kim、Yina Kim、Jinhwa Hwang、Alex Junho Lee。arXiv:2609.36753v1，2026-09-29。作者预印本 PDF 已获得，期刊会议发表及官方源码未找到直接证据。 [arXiv 记录与原文](https://arxiv.org/abs/2609.36753)
+
+- §III 与 Algorithm 1：沿弱轴提取管壁截面边界。在轴向局部坐标中提取轮廓，以各扫描点到参考轮廓的有符号法向偏差作为描述量，再在轴向与周向展开成局部字段。Eq. (2) 的 (f(z,p)=α(p)+γ(z)+z[β_1n_1(p)+β_2n_2(p)]) 用于解耦轮廓误差、轴向公共项与倾斜干扰。描述比较处理逆向遍历和共享观测区域。匹配候选由几何一致内点数再排，Eq. (3)–(4) 将位置与轴对齐约束入后端图，输出修正轨迹。
+- §IV Tables I–IV：GEODE Shield 与 Tunneling 及实际管道。传感器包含 Velodyne、Ouster、Livox Avia 等配置。Shield 的 2.4 m 容差下，未验真精确率 11.7%，15 内点门槛时 95.6%、召回 31.3%，接受 68 个；STD、BTC、HOTFLoc++ 为对照。Table III 中 S7-Beta 位置 RMSE 45.227→4.527 m。没有可直接用于 Mid-360 10 Hz 预算的独立计时。几何前提是可提取跨弱向截面，普通走廊直墙和间歇门框能否形成稳定轮廓仍需验证。
+- 直接重合在“用微小几何区分重复结构”和二次几何验真。其地标描述与闭环图优化提供强对照。已读流程未出现由当前固定先验地图的多个 NDT 峰生成共享点掩码，因此 P64 仍须直接证明该机制的增益。
+
+## M3C2、M3C2-EP 和八叉树
+
+- **Accurate 3D Comparison of Complex Topography with Terrestrial Laser Scanner: Application to the Rangitikei Canyon (N-Z)**，Dimitri Lague、Nicolas Brodu、Jérôme Leroux，ISPRS JPRS 82, 10–26，2013。作者 PDF。§3 与 Eq. (1) 先多尺度估计法向，再用核心点处圆柱内两云沿法向的均值差；显著性界为 1.96[√(σ₁²/n₁+σ₂²/n₂)+reg]，σ 是局部粗糙度，reg 是配准误差。少点数需小样本处理，遮挡缺支持保留空值。§§4–6 对新西兰峡谷的高密度地面激光扫描与最近点距离作比较，论文报告在合适条件下检测水平可达约 6 mm，不能移植为 Mid-360 门槛。原项目连到 Canupo 源码。借用法向距离和控制实验，重新设计射线可见、稀疏及同图相关处理。 [作者原文](https://nicolas.brodu.net/common/recherche/publications/M3C2.pdf) · [作者实现](https://nicolas.brodu.net/recherche/m3c2/index.html)
+- **M3C2-EP: Pushing the Limits of 3D Topographic Point Cloud Change Detection by Error Propagation**，Lukas Winiwarter、Katharina Anders、Bernhard Höfle，ISPRS JPRS 178, 240–258，2021。阅读作者公开正式版正文。§2.2 Eq. (3)–(5) 用均值差向量和协方差逆求 Wald（参数差显著性检验）统计量，按卡方阈值求法向最小可检测差异；独立两期的 C_Δ=C₁+C₂。§§2.3–2.4 Eq. (8)–(10) 传播扫描距离、角度、配准参数误差，块结构保留同一位姿引起的点相关；用局部加权几何中心计算距离。§§3–4 以真实岩石冰川重复地面扫描与标准 M3C2 对照，显著区域范围受量测与配准分量影响。计时无可直接迁移 R3 的数字。作者参与的 py4dgeo 代码有 M3C2EP、局部均值及半径搜索。P64 不直接套独立两期假设，优先校准同地图候选的相关误差，重采样控制用低成本法向投影。 [DOI](https://doi.org/10.1016/j.isprsjprs.2021.06.011) · [作者上传正文](https://www.researchgate.net/publication/352816371_M3C2-EP_Pushing_the_limits_of_3D_topographic_point_cloud_change_detection_by_error_propagation) · [实现](https://github.com/3dgeo-heidelberg/py4dgeo/blob/main/src/py4dgeo/m3c2ep.py)
+- **PCL Spatial change detection on unorganized point cloud data**，Point Cloud Library（点云库）官方教程与 1.10.0 头文件。OctreePointCloudChangeDetector 先填 A 并交换缓存，再填 B，getPointIndicesFromNewVoxels 输出 B 中新增体素的点号。没有噪声模型、视线证据或公开轨迹精度。交换输入后取双向，仍需自建共可见掩码及控制原点敏感性。 [教程与程序](https://pcl.readthedocs.io/en/pcl-1.11.1/octree_change.html) · [源码](https://github.com/PointCloudLibrary/pcl/blob/pcl-1.10.0/octree/include/pcl/octree/octree_pointcloud_changedetector.h)
+
+## 稳定性与单模式信息性选点
+
+| 原文身份与获取 | 输入、数学与流程 | 实验、局限及 P64 复用 |
+|---|---|---|
+| Jiaxin Li、Gim Hee Lee，**USIP: Unsupervised Stable Interest Point Detection From 3D Point Clouds**，ICCV 2019。作者 PDF、官方代码入口已核实。[原文](https://openaccess.thecvf.com/content_ICCV_2019/papers/Li_USIP_Unsupervised_Stable_Interest_Point_Detection_From_3D_Point_Clouds_ICCV_2019_paper.pdf) · [源码](https://github.com/lijx10/USIP) | §3 由原云与随机变换对应云训练特征提议网络，概率化 Chamfer（双向最近距离）损失由关键点预测位置与不确定性加权，额外点到点云损失约束关键点贴近表面。输出关键点和不确定性。网络会退化到质心等平凡解，作者限制感受野并处理该问题。 | §4 及 Tables 1–5，Oxford RobotCar、KITTI、Redwood、ModelNet40，对比随机点、Harris-3D、ISS 等，分别评估重复率、配准及计时。几何重复性可作稳定性定义。跨月动态稳定、假设间可区分性和稀疏 Mid-360 不由此保证。R3 先用无训练跨帧重复统计。 |
+| Ibrahim Hroob、Benedikt Mersch、Cyrill Stachniss、Marc Hanheide，**Generalizable Stable Points Segmentation for 3D LiDAR Scan-to-Map Long-Term Localization**，IEEE RA-L 9(4), 3546–3553，2024。作者接收版；作者列出 SPS 实现。 [DOI](https://doi.org/10.1109/LRA.2024.3368236) · [源码](https://github.com/ibrahimhroob/SPS) [原文](https://www.ipb.uni-bonn.de/wp-content/papercite-data/pdf/hroob2024ral.pdf) | §III-B–D 由项 (P(T_t\mid S_t,M)) 表达定位，先以当前单一位姿将扫描与子地图放在联合稀疏 4D（含扫描/地图来源轴）体素栅格中，再卷积分类长期稳定点，利用其约束扫描到图配准。标签含人员、变动泊车和植被等。 | §IV Tables I–IV，BLT、NCLT 等，与 Raw、4DMOS、LTS-Net 对照。Table V 报告 NCLT 32 线在 GTX 1080Ti 上 0.036 s 的 Ours 延时量级。先用单个位姿对齐再选点是与 P64 最近的子机制之一。已有本文充分覆盖地图引导的稳定点筛选。须验证多候选共用掩码及候选间差异才带来额外收益。 |
+| Jiaping Chen、Kebin Jia、Zhihao Wei，**Small but Mighty: A Lightweight Feature Enhancement Strategy for LiDAR Odometry in Challenging Environments**，Remote Sensing 17(15), 2656，2025。出版社 PDF，未定位官方源码。[原文](https://www.mdpi.com/2072-4292/17/15/2656) | §§3.5–3.7。通过空间几何统计与时间邻域筛选非地面稳定特征，局部拟合地面平面。以特征贡献权重联合点线、点面和地面残差，输出里程计估计。 | §4 Tables 1–5，KITTI 与 M2DGR，比 LeGO-LOAM、LOAM、F-LOAM、E-LOAM 等，Table 5 前端 6.818 ms、总计 8.800 ms。§5.3 讨论可用边界。可借跨帧选点，仍需候选之间共享权重并区分稳定与有判别力。 |
+| Natasha Gelfand、Leslie Ikemoto、Szymon Rusinkiewicz、Marc Levoy，**Geometrically Stable Sampling for the ICP Algorithm**，3DIM 2003。作者 PDF，官方完整代码未定位。[原文](https://pixl.cs.princeton.edu/pubs/Gelfand_2003_GSS/stabicp.pdf) | §§2–4，将点面残差线性化为六维约束。点的平移作用 n，旋转作用 p×n；构建对称二阶矩，沿弱特征方向补充具有约束的点，输出采样对用于 ICP。 | §5 以真实扫描和采样对照比较稳定性与收敛，观察只取几何同类点的错误。收益依赖局部对应及初值。可据此构造 R4 G3，无法单靠局部曲率辨别独立峰。 |
+| Jianhao Jiao、Yilong Zhu、Haoyang Ye、Huaiyang Huang、Peng Yun、Linxin Jiang、Lujia Wang、Ming Liu，**Greedy-Based Feature Selection for Efficient LiDAR SLAM**，ICRA 2021。原文与作者项目索引已核。[原文](https://arxiv.org/abs/2103.13090) · [作者论文](https://ram-lab.com/papers/2021/jiao2021greedy.pdf) | §§III–V，以特征雅可比构造信息矩阵项 Λ_i，算法 1 随机贪心选点提升 log det 信息体积，依据退化调整特征预算，再优化位姿。 | §VI，比完整及随机 M-LOAM、A-LOAM 等。Intel NUC（小型电脑）映射平均总时延 RHD 115.48 vs 全量 128.32 ms，OR 149.25 vs 230.35 ms，随机可更快但病态段可能漂移。借用等预算信息选点。它关注同一局部线性化。 |
+| Wei Li、Yu Hu、Yinhe Han、Xiaowei Li，**KFS-LIO: Key-Feature Selection for Lightweight Lidar Inertial Odometry**，ICRA 2021。作者原文，官方代码未定位。[DOI](https://doi.org/10.1109/ICRA48506.2021.9561324) · [作者原文](https://meridiancas.github.io/publications/pdffiles/2021_ICRA_KFS-LIO.pdf) | §III，预积分同步去畸变、特征残差组装列明，Algorithm 1 在 E(r)≤λE(r_full) 的上界内随机次序删减约束，输出选点约束供 LIO 优化。 | §IV 车载实验与 LOAM、LIO-SAM、随机删点比较。KFS 模块平均 5.66 ms，原 LOAM 里程计约 39 ms。借用预算及信息保持对照，P64 需在候选间共享而非仅一个状态上控制条件数。 |
+
+## 候选重排、降退化、固定地图及主动定位
+
+| 原文身份与获取 | 输入、数学与流程 | 实验、局限及 P64 复用 |
+|---|---|---|
+| Ying Liu、Junyi Tao、Bin He、Yu Zhang、Weichen Dai，**Error Analysis-Based Map Compression for Efficient 3-D Lidar Localization**（EAMC，误差分析式地图压缩），IEEE TIE 70(10), 10323–10332，2023。正式 PDF。官方实现未定位。[DOI](https://doi.org/10.1109/TIE.2022.3219077) | §III pp.10325–10328，固定图与可行位姿区间进入虚拟扫描采样，统计点的局部误差敏感度并以平面/线冗余压缩输出先验地图。核心为单个位姿线性化的误差传播与特征压缩；多位姿用于离线可行区采样。 | §IV Tables I–IV，室内外机器人场景，原图、抽稀及多个压缩消融比较点数、定位性能及时间。可复用可行区域及虚拟束采样。运行时已有图压缩与 P64 在线候选共享点重排是待证明的差异。 |
+| Xiaochen Yang、Haiping Wang、Yuan Liu、Bisheng Yang、Zhen Dong，**RegScorer: Learning to Select the Best Transformation of Point Cloud Registration**，ISPRS JPRS 233, 266–277，2026。出版社 PDF、作者代码入口。[正式原文](https://doi.org/10.1016/j.isprsjprs.2026.01.034) · [源码](https://github.com/WHU-USI3DV/RegScorer) | §3.1–3.4：输入源/目标点云及外部候选刚体变换，建立点关系和几何/特征一致性，以预测误差进行候选排序，可用于多视图图边赋权。关键数学在 §3 的空间和特征一致性及误差回归损失。候选共享评分模型，但论文流程以每一候选的配准图作输入。 | §4 Tables 1–5，3DMatch、3DLoMatch 和重复结构数据，对比内点率、均方误差和 Chamfer。Table 3 的 Top-1 相对旋转和位移指标有改善，文中以 3.2°/4.0 cm 概述相对部分传统指标的差值。判别重排属既有机制，P64 需证明候选之间的预计地图差与共享当前点带来独立收益。 |
+| Runzhao Yao、Shaoyi Du、Wenting Cui、Aixue Ye、Feng Wen、Hongbo Zhang、Zhiqiang Tian、Yue Gao，**Hunter: Exploring High-Order Consistency for Point Cloud Registration With Severe Outliers**，IEEE TPAMI 45(12), 14760–14776，2023。作者页及出版元数据可证，全文与官方源码未取得。[出版入口](https://ieeexplore.ieee.org/document/10246849/) | 摘要提到高阶对应一致性，公式、候选验证步骤和运算预算须从全文复核。 | 矩阵保留 UNKNOWN，暂停据此做创新排除。 |
+| Turcan Tuna、Julian Nubert、Yoshua Nava、Shehryar Khattak、Marco Hutter，**X-ICP: Localizability-Aware LiDAR Registration for Robust Localization in Extreme Environments**，IEEE T-RO 40，2024，作者接收版。公开实现可从 libpointmatcher 方向退化与约束配准模块追索，论文所用整套在线代码未在本轮复现。[原文](https://arxiv.org/abs/2211.16335) · [实现仓库](https://github.com/leggedrobotics/libpointmatcher) | §§IV–VI Eq. (6)–(7) 将各对应的局部约束投到旋转/平移主方向分析可定位性，随后以约束 ICP 求姿态。输入当前扫描、局部目标云和预测，输出各方向标签与约束解。 | §VII 地下环境与极端几何，和不同 ICP 及退化方法、INS 对照。Table XI 的 i7-9750H 均值 32.19 ms。可借局部方向分类及有界恢复对照。未见候选间地图差驱动的选点。 |
+| Xiangcheng Hu、Xieyuanli Chen、Mingkai Jia、Jin Wu、Ping Tan、Steven L. Waslander，**DCReg: Decoupled Characterization for Efficient Degenerate LiDAR Registration**，arXiv:2509.06285v3，2026-09-10，作者稿。期刊正式版待核。代码入口及本地参考库已定位。[原文](https://arxiv.org/abs/2509.06285) · [源码](https://github.com/JokerJohn/DCReg) | §§4–6 使用 Schur 补（消去耦合变量得到等效矩阵）将 Hessian 的旋转和平移解耦，校准特征基方向，再用选择性梯度和预条件共轭梯度稳定求解。输出弱方向与估计位姿。 | §7 Table 2、后续配准与长程里程计实验，Pandar32 等室内外多种退化场景，包含 X-ICP、无约束及其他方法。供 R6 解释方向耦合。对称异地的多个盆地仍需 R2 搜索。 |
+| Ehsan Javanmardi、Mahdi Javanmardi、Yanlei Gu、Shunsuke Kamijo，**Pre-Estimating Self-Localization Error of NDT-Based Map-Matching From Map Only**，IEEE T-ITS 22(12), 7652–7666，2021（在线 2020）。出版身份可证，全文及源码待补。[DOI](https://doi.org/10.1109/TITS.2020.3006854) | 题名及出版入口支持“地图到定位误差预估”的研究对象。正式公式和候选使用仍为 UNKNOWN。 | 属地图先验可定位性强相关工作，待正文复核后才能确认对比条件。 |
+| Wolfram Burgard、Dieter Fox、Sebastian Thrun，**Active Mobile Robot Localization**，IJCAI 1997。作者原文。[原文](https://publications.ri.cmu.edu/storage/publications/pub_files/pub1/burgard_w_1997_1/burgard_w_1997_1.pdf) | §§2–4 在离散位姿分布和地图预测测量下估算期望后验熵（分布不确定程度），通过移动与选择传感方向获取新观测。 | 真实及模拟室内定位的主动、被动比较。可借候选可区分信息概念。P64 仅重新组织已有数据，不替换运动控制。 |
+| Ohad Shelly、Vadim Indelman，**Hypotheses Disambiguation in Retrospective**，IEEE RA-L 7(2), 2321 起，2022。作者 PDF。[原文](https://indelman.github.io/ANPL-Website/Publications/Shelly22ral.pdf) | §§II–IV 历史关联假设混合分布，利用后来累计观测更新既有分支概率并剪枝。 | §V 极端混淆场景仿真。可用于设计跨帧验真与假设存活，本轮仍只冻结当前扫描候选。 |
+
+### 本机近邻负结果
+
+P63-R14 空间互斥留点验证，以及桌面研究档案 EXP-011 两探针配准歧义诊断的反例均应作为 P64 的前置对照。前者验证“其他源点能否独立支持一个已优化位姿”，结果受空间划分后主配准本身劣化影响。EXP-011 的 8 帧对照在固定 0.5% 分差带下标记 1/3 有害、0/3 有益、1/2 正常。原始候选表显示 raw309 存在更接近参考但仍超正确容差的候选，其分数比最高峰低 2.51%，0.5% 规则漏排。P64 还需要证明用候选地图的差异定义共享选点后，能够改善同一候选集合的排序。查重结果仅支持将该差别投入可证伪实验，不能据此确认新颖性成立。
+
+### 额外近邻 · L3-Net
+
+Weixin Lu、Yao Zhou、Guowei Wan、Shenhua Hou、Shiyu Song，**L3-Net: Towards Learning Based LiDAR Localization for Autonomous Driving**，CVPR 2019，DOI 10.1109/CVPR.2019.00655。正式会议原文，论文专用官方代码未定位。§4.1 先按当前扫描的邻域密度、三维结构张量线性度与散射性、空间间隔固定一组关键点。§§4.2–4.4 通过局部描述符为每个同一关键点建立 x/y/yaw 代价体，使用三维卷积规则化并按点累加，再转为概率体并融合时序。Eq. (1) 是平面扰动，Fig. 3 明示单关键点由于几何不唯一而难以判别。§6 Tables 3–5 在 SouthBay 数据和两种成熟定位对照上评价，报告一例整链平均 121.3 ms。该工作直接覆盖“共享当前点 × 各候选姿态”的匹配组织和概率体正则化。其取点阶段发生在候选地图差计算之前，P64 剩余待验证点进一步收窄到**竞争几何反馈重选同一帧点号**及其对原生 NDT 的增益。 [CVPR 原文](https://openaccess.thecvf.com/content_CVPR_2019/papers/Lu_L3-Net_Towards_Learning_Based_LiDAR_Localization_for_Autonomous_Driving_CVPR_2019_paper.pdf)
