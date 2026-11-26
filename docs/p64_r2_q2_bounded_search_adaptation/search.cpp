@@ -339,19 +339,31 @@ std::map<std::string,std::vector<Trial>> loadS0(const fs::path& path) {
   std::ifstream in(path);
   need(in.good(),"cannot read frozen S0");
   std::string line;
-  std::getline(in,line);
+  need(bool(std::getline(in,line)),"missing S0 header");
+  const auto header=fields(line);
+  auto column=[&](const std::string& name) {
+    const auto it=std::find(header.begin(),header.end(),name);
+    need(it!=header.end(),"missing S0 column "+name);
+    return std::size_t(it-header.begin());
+  };
+  const auto id=column("sample_id"), ordinal=column("index"), ix=column("ix"),
+      iy=column("iy"), ia=column("ia"), dx=column("dx"), dy=column("dy"), da=column("dyaw"),
+      native=column("native"), park=column("park"), totalColumn=column("total"),
+      associated=column("associated"), parkAssociated=column("park_associated"), pose=column("T00");
   std::map<std::string,std::vector<Trial>> result;
   while (std::getline(in,line)) {
     auto row=fields(line);
-    const int index=std::stoi(row.at(1));
-    const int x=std::stoi(row.at(2)),y=std::stoi(row.at(3)),a=std::stoi(row.at(4));
-    const auto total=std::stoul(row.at(12));
-    Score score{std::stod(row.at(9))*total,std::stod(row.at(10)),std::stoul(row.at(11)),
-                std::stoul(row.at(30)),total};
-    auto& trials=result[row.at(0)];
-    need(std::size_t(index)==trials.size(),"frozen S0 indices invalid");
-    trials.push_back({csvPose(row,14),{std::stod(row.at(5)),std::stod(row.at(6)),0,0,0,std::stod(row.at(7))},
-                      "ndt","reused",x==0||x==20||y==0||y==20||a==0||a==10,score,{},std::stod(row.at(9))});
+    need(row.size()==header.size(),"invalid S0 row width");
+    const int index=std::stoi(row.at(ordinal));
+    const int x=std::stoi(row.at(ix)),y=std::stoi(row.at(iy)),a=std::stoi(row.at(ia));
+    const auto total=std::stoul(row.at(totalColumn));
+    const double reward=std::stod(row.at(native));
+    Score score{reward*total,std::stod(row.at(park)),std::stoul(row.at(associated)),
+                std::stoul(row.at(parkAssociated)),total};
+    auto& trials=result[row.at(id)];
+    need(std::size_t(index)==trials.size() && total>0,"invalid S0 row");
+    trials.push_back({csvPose(row,pose),{std::stod(row.at(dx)),std::stod(row.at(dy)),0,0,0,std::stod(row.at(da))},
+                      "ndt","reused",x==0||x==20||y==0||y==20||a==0||a==10,score,{},reward});
     for (int d: {x>0?231:0, y>0?11:0, a>0?1:0}) if (d) {
       trials[index].adjacent.push_back(index-d);
       trials[index-d].adjacent.push_back(index);
@@ -568,7 +580,8 @@ int main(int argc,char** argv) {
     need(argc>=5,"usage: search gate/search online.tsv q1.csv fresh_output [q1_fit.csv]");
     const auto input=frames(argv[2]);
     const std::string mode=argv[1];
-    if (mode=="gate" && argc==5) gate(input,argv[3],argv[4]);
+    if (mode=="validate" && argc==5) { const auto data=loadS0(argv[3]); std::cout<<data.size()*4851<<" sealed S0 records validated\n"; }
+    else if (mode=="gate" && argc==5) gate(input,argv[3],argv[4]);
     else if (mode=="search" && argc==6) search(input,argv[3],argv[4],argv[5]);
     else throw std::runtime_error("unknown mode");
     return 0;
