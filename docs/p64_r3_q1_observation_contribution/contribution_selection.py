@@ -180,7 +180,7 @@ def read_frame(files, manifests):
     ):
         raise ValueError(f"incompatible frozen frame arrays: {files['score']}")
     expected = np.asarray([[float(row[f"T{i}{j}"]) for i in range(4) for j in range(4)] for row in manifests])
-    if not np.allclose(expected.reshape(k, 4, 4), data["nominal"], rtol=0, atol=1e-7):
+    if not np.array_equal(expected.astype(data["nominal"].dtype).reshape(k, 4, 4), data["nominal"]):
         raise ValueError("score arrays have different hypotheses or order from frozen manifest")
     if not np.array_equal(data["score"][:, 0], data["score"][:, 13]):
         raise ValueError("nominal scorer identity differs between perturbation scales")
