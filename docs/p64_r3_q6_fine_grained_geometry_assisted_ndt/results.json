@@ -1,0 +1,52 @@
+{
+  "task": "P64-R3-Q6-FINE-GRAINED-GEOMETRY-ASSISTED-NDT + DIRECTIONAL-REDUNDANCY",
+  "start_sha": "558a768cc82472ccb65fd9fcbf24da9aaeffefb0",
+  "engineering_fix_sha": "16119184f5fb0e155c8cde6449547e92710a76a6",
+  "branch": "research/p64-r3-q6-fine-grained-geometry-assisted-ndt",
+  "worktree": "/home/jian/p64_r3_q6_ws",
+  "judgment": "NEED_GEOMETRY_REPRESENTATION_ADAPTATION",
+  "frames": 740,
+  "geometry_substitutions": 0,
+  "duplicates": 0,
+  "direction_ndt_optimizations": 29,
+  "diagnostic_refinements": 7,
+  "official_lf_tests_passed": 5,
+  "independent_truth_used_online": false,
+  "stable_tree_changed": false,
+  "git_readback_record": "run/FINAL_GIT_RECEIPT.json",
+  "baseline": [
+    {
+      "window": "omni",
+      "A_updates": "30",
+      "E_old_updates": "30",
+      "E_old_max_pose_component_delta_vs_A": "0.0",
+      "frames": "30",
+      "max_matrix_abs": "0.0",
+      "max_covariance_abs": "0.0",
+      "updates": "30",
+      "duplicate": "0"
+    },
+    {
+      "window": "w2",
+      "A_updates": "72",
+      "E_old_updates": "29",
+      "E_old_max_pose_component_delta_vs_A": "2.1035786271095276",
+      "frames": "72",
+      "max_matrix_abs": "0.0",
+      "max_covariance_abs": "0.0",
+      "updates": "72",
+      "duplicate": "0"
+    },
+    {
+      "window": "dog",
+      "A_updates": "50",
+      "E_old_updates": "11",
+      "E_old_max_pose_component_delta_vs_A": "8.962937474250793",
+      "frames": "50",
+      "max_matrix_abs": "0.0",
+      "max_covariance_abs": "0.0",
+      "updates": "50",
+      "duplicate": "0"
+    }
+  ]
+}

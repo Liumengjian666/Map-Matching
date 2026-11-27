@@ -1,0 +1,4 @@
+window,A_updates,E_old_updates,E_old_max_pose_component_delta_vs_A,frames,max_matrix_abs,max_covariance_abs,updates,duplicate
+omni,30,30,0.0,30,0.0,0.0,30,0
+w2,72,29,2.1035786271095276,72,0.0,0.0,72,0
+dog,50,11,8.962937474250793,50,0.0,0.0,50,0

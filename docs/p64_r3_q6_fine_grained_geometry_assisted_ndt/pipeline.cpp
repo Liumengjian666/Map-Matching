@@ -2,6 +2,7 @@
 #include <functional>
 #include <cstdlib>
 #include <numeric>
+#include <deque>
 #include <pcl/kdtree/kdtree_flann.h>
 
 #define main archived_q2_search_main
@@ -62,16 +63,20 @@ std::string quote(const fs::path& path) {
 
 struct Geometry {
   std::vector<int> ids;
-  int blocks=0,common=0,unknown=0,supported=0;
+  int blocks=0,common=0,unknown=0,supported=0,fine_candidate=-1, fine_inliers=0;
+  float axial=0;
+  Eigen::Vector3f axis=Eigen::Vector3f::Zero();
   std::string status="NOT_RUN";
 };
 
 Geometry geometry(const fs::path& out,const fs::path& helper,const fs::path& map,const Cloud& source,
-                  const std::vector<Candidate>& candidates,double available) {
+                  const std::vector<Candidate>& candidates,double available,
+                  const std::string& policy,const Cloud& fine) {
   Geometry result;
   if(available<=0){result.status="DEADLINE";return result;}
   fs::create_directory(out);
   pcl::io::savePCDFileBinary((out/"source.pcd").string(),source);
+  if(policy!="E1")pcl::io::savePCDFileBinary((out/"fine_source.pcd").string(),fine);
   {
     std::ofstream file(out/"poses.tsv");
     file<<std::setprecision(10);
@@ -80,10 +85,12 @@ Geometry geometry(const fs::path& out,const fs::path& helper,const fs::path& map
       file<<'\n';
     }
   }
-  const double limit=std::min(4.,available);
+  const double limit=std::min(policy=="E1"?4.:8.,available);
   const std::string command="OPENBLAS_NUM_THREADS=1 timeout "+std::to_string(limit)+
-    " /usr/bin/python3 "+quote(helper)+" "+quote(out)+" "+quote(map)+" > "+quote(out/"geometry.log")+" 2>&1";
+    " /usr/bin/python3 "+quote(helper)+" "+quote(out)+" "+quote(map)+" "+policy+" > "+quote(out/"geometry.log")+" 2>&1";
   if(std::system(command.c_str())!=0) {result.status="MODEL_OR_TIMEOUT";return result;}
+  std::ifstream choice(out/"fine_result.tsv");
+  if(choice && !(choice>>result.fine_candidate>>result.axial>>result.axis.x()>>result.axis.y()>>result.axis.z()>>result.fine_inliers))result.fine_candidate=-1;
   std::ifstream in(out/"mask.tsv");
   in>>result.status>>result.common>>result.unknown>>result.blocks>>result.supported;
   int i;
@@ -96,13 +103,54 @@ Geometry geometry(const fs::path& out,const fs::path& helper,const fs::path& map
   return result;
 }
 
+int refine_frozen(int argc,char** argv) {
+  need(argc==7,"refine SOURCE MAP SEED_TSV POOL_TSV OUTPUT_TSV");
+  const auto cloud=downsample(load(argv[2]));
+  InstrumentedScorer scorer(downsample(load(argv[3])));
+  auto read_pose=[](std::istream& stream,Pose& t){
+    for(int i=0;i<4;++i)for(int j=0;j<4;++j)if(!(stream>>t(i,j)))return false;
+    return t.allFinite();
+  };
+  std::ifstream seed_file(argv[4]),pool_file(argv[5]);Pose seed,mode,candidate;
+  need(read_pose(seed_file,seed)&&read_pose(seed_file,mode),"invalid seed pose");
+  std::vector<Pose> pool;
+  while(read_pose(pool_file,candidate))pool.push_back(candidate);
+  scorer.setInputSource(cloud);
+  const auto start=Clock::now();
+  Cloud moved_cloud;
+  scorer.align(moved_cloud,seed);
+  const auto end=scorer.getFinalTransformation();
+  const bool numeric=end.allFinite();
+  const auto score_before=scorer.fixed(*cloud,seed);
+  const auto score_after=numeric?scorer.fixed(*cloud,end):Score{};
+  const auto moved=numeric?distance(end,seed):std::numeric_limits<double>::infinity();
+  const auto angled=numeric?angle(end,seed):std::numeric_limits<double>::infinity();
+  bool escape=moved>.25||angled>2;
+  for(const auto& other:pool)if(!close(other,mode)&&numeric&&close(end,other))escape=true;
+  const bool valid=numeric&&scorer.hasConverged()&&scorer.getFinalNumIteration()>0&&
+    score_after.associated*2>=cloud->size();
+  const Pose checked=valid&&!escape?end:seed;
+  auto out=file(argv[6],"converged,iterations,moved_m,moved_deg,mode_escape,accepted_r2,before_reward,after_reward,seconds,r0,r1,r2");
+  out<<scorer.hasConverged()<<','<<scorer.getFinalNumIteration()<<','<<moved<<','<<angled<<','<<escape<<','
+     <<(valid&&!escape)<<','<<score_before.native<<','<<score_after.native<<','<<elapsed(start)<<',';
+  list(out,seed);out<<',';list(out,end);out<<',';list(out,checked);out<<'\n';
+  return 0;
+}
+
+#ifndef P64_DIRECTIONAL_TOOL
 int main(int argc,char** argv) {
   try {
+    if(argc>1&&std::string(argv[1])=="refine")return refine_frozen(argc,argv);
     if(argc!=9) throw std::runtime_error("v1 INPUT MAP NEW_OUTPUT MODE FORCE_INDEX DEADLINE_S STYLE GEOMETRY_SCRIPT");
     const fs::path dir=argv[1],map=fs::absolute(argv[2]),out=fs::absolute(argv[3]),helper=fs::absolute(argv[8]);
     const std::string mode=argv[4],style=argv[7];
     const int force=std::stoi(argv[5]); const double limit=std::stod(argv[6]);
-    need(mode=="A"||mode=="OFF"||mode=="B"||mode=="C"||mode=="SHADOW"||mode=="ACTIVE"||mode=="FIXED","bad mode");
+    need(mode=="A"||mode=="OFF"||mode=="B"||mode=="C"||mode=="SHADOW"||mode=="ACTIVE"||mode=="FIXED"||mode=="E2_SHADOW"||mode=="E2_ACTIVE"||mode=="E3_SHADOW"||mode=="LOCAL_SHADOW","bad mode");
+    const bool local_only=mode=="LOCAL_SHADOW";
+    const bool fine_enabled=local_only||mode.find("E2_")==0||mode.find("E3_")==0;
+    const std::string geometry_policy=local_only?"E2":fine_enabled?mode.substr(0,2):"E1";
+    const bool active=mode=="ACTIVE"||mode=="E2_ACTIVE";
+    std::deque<std::pair<Cloud::Ptr,Pose>> history;
     need(style=="S0"||style=="S3","bad search");
     need(fs::create_directory(out),"output already exists");
     std::ifstream anchor(dir/"anchor.tsv"),scans(dir/"scans.tsv"),imu(dir/"imu.tsv");
@@ -139,7 +187,8 @@ int main(int argc,char** argv) {
         ros::Time t; t.fromNSec(imu_ns);
         tracker.predict(t,acc,gyro); last_imu=imu_ns; ++imu_n;has_imu=read_imu();
       }
-      const auto scan=downsample(load(dir/scan_file)); ros::Time stamp;stamp.fromNSec(ns);
+      const auto raw=load(dir/scan_file);
+      const auto scan=downsample(raw); ros::Time stamp;stamp.fromNSec(ns);
       Pose pred=tracker.matrix(),base=pred;
       int iter=0,co=0; double probability=0,normal_s=0;
       bool converged=false,weak=false,risk=false;std::string trigger="NONE",proposal="NATIVE",actual="NATIVE";
@@ -167,7 +216,25 @@ int main(int argc,char** argv) {
           if(frame==force)trigger="FORCED";
           else if(risk)trigger="NATIVE_RISK";
           else if(weak)trigger="LOCAL_WEAK";
-          if(trigger!="NONE"&&mode!="B"&&searches<3){
+          auto assemble_fine=[&](){
+            Cloud fine=*raw;
+            for(const auto& prior:history){
+              Cloud aligned;
+              const Pose relative=base.inverse()*prior.second;
+              pcl::transformPointCloud(*prior.first,aligned,relative);
+              fine+=aligned;
+            }
+            return fine;
+          };
+          if(local_only&&(weak||frame==force)){
+            ++searches;
+            const auto gv=Clock::now();
+            const std::vector<Candidate> sole{{pred,base,false,base_score,iter}};
+            geo=geometry(out/("event_"+std::to_string(frame)),helper,map,*scan,sole,limit-elapsed(begun),
+                         geometry_policy,assemble_fine());
+            view_s=elapsed(gv);
+          }
+          if(!local_only&&trigger!="NONE"&&mode!="B"&&searches<3){
             ++searches;const auto tick=Clock::now();
             try {
               Grid grid(searcher,*scan,timings);grid.budget=within;
@@ -202,7 +269,8 @@ int main(int argc,char** argv) {
               if(pool.size()<2)geo.status="NO_INDEPENDENT_CANDIDATE";
               else if(mode!="C"){
                 const auto gv=Clock::now();
-                geo=geometry(out/("event_"+std::to_string(frame)),helper,map,*scan,pool,limit-elapsed(begun));
+                const Cloud fine=fine_enabled?assemble_fine():Cloud{};
+                geo=geometry(out/("event_"+std::to_string(frame)),helper,map,*scan,pool,limit-elapsed(begun),geometry_policy,fine);
                 view_s=elapsed(gv);
               }
               std::vector<double> total,first,second;
@@ -222,33 +290,39 @@ int main(int argc,char** argv) {
                    <<','<<pool[k].score.native<<','<<max_sum<<','<<mean_sum<<','<<pool[k].score.park<<','<<sub<<','<<geo.ids.size()<<','<<ha<<','<<hb<<',';
                 list(candidates,pool[k].start);candidates<<',';list(candidates,pool[k].end);candidates<<'\n';
               }
-              const auto winner=std::max_element(total.begin(),total.end())-total.begin();
+              auto winner=std::max_element(total.begin(),total.end())-total.begin();
               const auto full=std::max_element(pool.begin(),pool.end(),[](const auto& a,const auto& b){return a.score.native<b.score.native;})-pool.begin();
               ranking<<frame<<','<<ns<<','<<full<<','<<winner<<','<<geo.ids.size()<<'\n';
               auto unique_lead=[&](const std::vector<double>& v){
                 for(std::size_t j=0;j<v.size();++j)if(j!=static_cast<std::size_t>(winner)&&v[winner]<=v[j]+1e-9)return false;
                 return true;
               };
-              const bool reliable=pool.size()>1&&geo.ids.size()>=64&&geo.blocks>=5&&
-                 unique_lead(total)&&unique_lead(first)&&unique_lead(second)&&!pool[winner].boundary;
+              const bool fine_valid=fine_enabled&&geo.fine_candidate>=0&&
+                static_cast<std::size_t>(geo.fine_candidate)<pool.size()&&std::isfinite(geo.axial)&&
+                std::abs(geo.axial)<=.45&&geo.axis.allFinite()&&std::abs(geo.axis.norm()-1)<1e-4;
+              if(fine_valid)winner=geo.fine_candidate;
+              const bool reliable=fine_valid||(!fine_enabled&&pool.size()>1&&geo.ids.size()>=64&&geo.blocks>=5&&
+                 unique_lead(total)&&unique_lead(first)&&unique_lead(second)&&!pool[winner].boundary);
+              Pose seed=pool[winner].end;
+              if(fine_valid)seed.topRightCorner<3,1>()+=seed.topLeftCorner<3,3>()*geo.axis*geo.axial;
               if(reliable&&within()) {
                 const auto begin_ref=Clock::now();
-                Cloud refined;searcher.align(refined,pool[winner].end);
+                Cloud refined;searcher.align(refined,seed);
                 const Pose terminal=searcher.getFinalTransformation();
-                const auto moved=distance(terminal,pool[winner].end),ang=angle(terminal,pool[winner].end);
+                const auto moved=distance(terminal,seed),ang=angle(terminal,seed);
                 bool escape=moved>.25||ang>2;
                 for(std::size_t j=0;j<pool.size();++j)if(j!=static_cast<std::size_t>(winner)&&close(terminal,pool[j].end))escape=true;
-                const auto rr=searcher.fixed(*scan,terminal);
+                const auto rr=terminal.allFinite()?searcher.fixed(*scan,terminal):Score{};
                 const bool accepted=within()&&terminal.allFinite()&&searcher.hasConverged()&&searcher.getFinalNumIteration()>0&&
                     rr.associated*2>=scan->size()&&!escape;
                 refinement=accepted?"PASSED":"REJECTED";
                 refining<<frame<<','<<ns<<','<<winner<<','<<searcher.hasConverged()<<','<<searcher.getFinalNumIteration()<<','
                         <<moved<<','<<ang<<','<<escape<<','<<pool[winner].score.native<<','<<rr.native<<',';
-                list(refining,pool[winner].end);refining<<',';list(refining,terminal);refining<<',';
-                list(refining,accepted?terminal:pool[winner].end);refining<<'\n';
+                list(refining,seed);refining<<',';list(refining,terminal);refining<<',';
+                list(refining,accepted?terminal:seed);refining<<'\n';
                 if(within()){
                   proposal=accepted?"REFINED":"CANDIDATE";
-                  if(mode=="ACTIVE") update=accepted?terminal:pool[winner].end;
+                  if(active) update=accepted?terminal:seed;
                 }
                 refine_s=elapsed(begin_ref);
               } else if(geo.status=="OK")geo.status=geo.ids.size()<64?"LOW_SUPPORT":"REVIEW_DISAGREEMENT";
@@ -259,7 +333,7 @@ int main(int argc,char** argv) {
               else if(reason!="no valid mode")throw;
             }
           }
-          if(mode=="ACTIVE")actual=proposal;
+          if(active)actual=proposal;
         }
         decision_s=elapsed(begun);
         return actual!="PROPAGATE";
@@ -274,6 +348,10 @@ int main(int argc,char** argv) {
       const auto updates=tracker.map_updates-before;
       need(updates<=1,"duplicate physical UKF correction");
       need((updates==0)==(actual=="PROPAGATE"),"UKF commit disagrees with policy");
+      if(fine_enabled&&base.allFinite()){
+        history.emplace_back(raw,base);
+        if(history.size()>19)history.pop_front();
+      }
       const Pose post=tracker.matrix(); const auto cov_after=tracker.covariance();
       poses<<frame<<','<<ns<<','<<last_imu<<','<<imu_n<<','<<iter<<','<<converged<<','<<probability<<','<<scan->size()<<','<<base_score.associated
            <<','<<updates<<','<<tracker.last_correction_time().toNSec()<<','<<base_score.native<<','<<normal_s<<','<<elapsed(total_begin);
@@ -291,3 +369,5 @@ int main(int argc,char** argv) {
     need(frame>=1&&!has_imu&&imu.eof()&&scans.eof(),"incomplete causal window");
   } catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 1;}
 }
+
+#endif

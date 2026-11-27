@@ -1,0 +1,11 @@
+group,condition,status,observed_result
+A,Native three historical windows,RUN,30+72+50 native updates
+B,Native plus Q5 detector,RUN,Omni diagnostic only
+C,Native plus archived Park search,RUN,Omni real causal shadow
+D,Independent continuous DeCOD,NOT_RUN,independent fixed single-mode A5 tested with no verified replacement
+E1,Detector plus Park plus native M3C2,RUN_DIAGNOSTIC,three FIXED windows zero qualified difference
+E2,Detector plus Park plus DeCOD,RUN_SHADOW_AND_ACTIVE_FALLBACK,three shadow windows and 30-frame active fallback
+E3,Detector plus Park plus M3C2 mask and DeCOD,RUN_SHADOW,W2 actual no replacement
+ModeA,Single native pose plus DeCOD,RUN_FORCED_SHADOW,W2 11 matches zero grid scores no map substitution
+A6,Directional selection plus DeCOD,RUN_FIXED_BOTH_ORDERS,real local and nonlocal input no verified substitute
+A7,Direction weighted NDT then DeCOD,RUN_FIXED,integer weights used throughout native optimizer no verified substitute
