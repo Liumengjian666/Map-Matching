@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "mode": "archived fixtures and shadow submit tokens only",
+  "score_names_kept_distinct": [
+    "DIRECT7_SUM",
+    "DIRECT7_MAX",
+    "DIRECT7_MEAN"
+  ],
+  "checks": [
+    {
+      "frame": "B25",
+      "support": 34,
+      "proposed_reorder": true,
+      "chosen": "B25_seed2425",
+      "submit_tokens": 1
+    },
+    {
+      "frame": "W2_32",
+      "support": 11,
+      "proposed_reorder": false,
+      "chosen": "W2_32_causal",
+      "submit_tokens": 1
+    }
+  ],
+  "input_sha256": {
+    "real_lidar_candidate_results.csv": "496878a0584ecf09f382cfd07e622b816642ed81544e7cab8cb3ac8b90f65c72",
+    "real_fixed_manifest.csv": "f7d54d027fd56de89b3205a375e37ea3c76ce98e6725e6ca71e8e7aaa1954b80",
+    "causal_event_manifest.csv": "3fd5905908118649f66901480b6ed846ea9a5a4a11e7cd19b575c992cb907e97",
+    "reward_selection_factorial.csv": "23961d7c13be38910abd14cc1b984f62c429b176211c3d278f33de5ff1460b84"
+  }
+}
