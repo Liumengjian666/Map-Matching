@@ -1,0 +1,55 @@
+{
+  "task": "P64-R3-Q2-MULTI-HYPOTHESIS-GEOMETRIC-DISCRIMINATION",
+  "judgment": "NEED_MID360_COMPETITIVE_DATA",
+  "start_sha": "6f9ebb6255dc677fd8ed93a4c952051661aa57da",
+  "code_sha": "b6e2957f4becafcc28a919d4708b7b389c05abd0",
+  "end_sha_receipt": "/home/jian/p64_r3_q2_ws/run/FINAL_GIT_RECEIPT.json",
+  "worktree": "/home/jian/p64_r3_q2_ws",
+  "branch": "research/p64-r3-q2-multi-hypothesis-geometry",
+  "remote_q2": "891bb16dcc08c062010bbaa98eb81edaf9ddb57f",
+  "remote_r3_q1": "6f9ebb6255dc677fd8ed93a4c952051661aa57da",
+  "remote_this": null,
+  "hard_nominal_fixed_scores": 6,
+  "hard_native_audits": 6,
+  "mid_frames_sealed": 30,
+  "triggered_frames": 3,
+  "mid_grid_score_calls": 14553,
+  "mid_candidate_only_local_optimizations": 4,
+  "second_pass_local_optimizations": 0,
+  "mid_weak_competitive_frames": 1,
+  "mid_strong_competitive_frames": 0,
+  "full_rank_50": {
+    "H307": [
+      2,
+      3,
+      2,
+      2,
+      2,
+      2
+    ],
+    "H515": [
+      3,
+      3,
+      2,
+      2,
+      2,
+      2
+    ],
+    "H309": [
+      2,
+      2,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "rank_order": [
+    "M0",
+    "M2",
+    "M3",
+    "M4",
+    "M5",
+    "M6"
+  ]
+}

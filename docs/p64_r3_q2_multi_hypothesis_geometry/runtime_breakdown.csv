@@ -1,0 +1,15 @@
+stage,frame,wall_s,user_s,system_s,max_rss_kib,evaluations
+density_and_visibility,H307,0.9275364890345372,,,,
+uncertainty_components,H307,0.6878029149957001,,,,
+density_and_visibility,H515,0.6997794600320049,,,,
+uncertainty_components,H515,0.3871885080006905,,,,
+density_and_visibility,H309,0.9197928479989059,,,,
+uncertainty_components,H309,0.4564707530080341,,,,
+density_and_visibility,O164,1.9880165999638848,,,,
+uncertainty_components,O164,1.2345705470070243,,,,
+shared_selection_and_cached_score,H307,1.0364381119725294,,,,
+shared_selection_and_cached_score,H515,1.4179708290030248,,,,
+shared_selection_and_cached_score,H309,0.24512738804332912,,,,
+shared_selection_and_cached_score,O164,1.8634662889526226,,,,
+mid_grid,B05/B15/B25,42.89,42.84,0.02,40768,14553
+mid_fit,B05/B15/B25,0.98,0.92,0.05,46836,4
