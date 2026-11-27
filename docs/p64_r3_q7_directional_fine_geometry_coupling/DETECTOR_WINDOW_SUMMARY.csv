@@ -1,0 +1,5 @@
+window,ndt_path,frames,duration_s,native_degenerate_frames,native_duration_s,lf_transfer_degenerate_frames,lf_transfer_duration_s,direct_frames,xicp_translation_flags,dcreg_flags,dcreg_translation_flags
+W1,W1_stress,72,7.199616195000001,0,0.0,0,0.0,9,0,0,0
+W2,W2_natural,72,7.199916601,0,0.0,0,0.0,9,0,0,0
+W3,W3_stress,72,7.198030949,0,0.0,0,0.0,9,0,0,0
+DOG,DOG_natural,50,4.999757527000002,0,0.0,0,0.0,8,8,8,8

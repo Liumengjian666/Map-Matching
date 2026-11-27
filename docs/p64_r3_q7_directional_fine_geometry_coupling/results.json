@@ -1,0 +1,34 @@
+{
+  "task": "P64-R3-Q7-DIRECTIONAL-REDUNDANCY-AND-FINE-GEOMETRY-COUPLING",
+  "start_sha": "28966a1c3c1730b12e649bb80d7d01078e51b345",
+  "branch": "research/p64-r3-q7-directional-fine-geometry-coupling",
+  "worktree": "/home/jian/p64_r3_q7_ws",
+  "status": "NEED_REAL_GEOMETRY_REPRESENTATION_AND_INDEPENDENT_DEGENERATE_WINDOWS",
+  "total_real_continuous_frames": 726,
+  "duplicate_map_updates": 0,
+  "actual_forced_directional_updates": 12,
+  "actual_dcreg_natural_updates": 49,
+  "real_fixed_direction_trials": 159,
+  "qualified_known_geometry_original": 3,
+  "qualified_real_geometry_trials": 0,
+  "online_fine_geometry_updates": 0,
+  "raw_reference_opened_after_seal": true,
+  "stable_engineering_modified": false,
+  "parity": [
+    {
+      "frames": 72,
+      "max_matrix_abs": 0.0,
+      "max_covariance_abs": 0.0,
+      "updates": 72,
+      "duplicate": 0
+    },
+    {
+      "frames": 50,
+      "max_matrix_abs": 0.0,
+      "max_covariance_abs": 0.0,
+      "updates": 50,
+      "duplicate": 0
+    }
+  ],
+  "delivery_receipt": "run/FINAL_GIT_RECEIPT.json"
+}
