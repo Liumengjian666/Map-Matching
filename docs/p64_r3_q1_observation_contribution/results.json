@@ -1,0 +1,54 @@
+{
+  "task": "P64-R3-Q1-HYPOTHESIS-AWARE-OBSERVATION-CONTRIBUTION",
+  "decision": "NEED_GEOMETRY_DIFFERENCE_ADAPTATION",
+  "start_sha": "891bb16dcc08c062010bbaa98eb81edaf9ddb57f",
+  "code_sha": "4ef8568889ddf3814389714a42cd518876387c38",
+  "native_code_sha": "7dfd1c0548fb72b9d7c15cc686f5551a544aa6a1",
+  "end_sha_source": "Git archive commit containing this file; absolute run/FINAL_GIT_RECEIPT.json",
+  "branch": "research/p64-r3-q1-observation-contribution",
+  "worktree": "/home/jian/p64_r3_q1_ws",
+  "remote": {
+    "q1_head": "aacc2dadcf6785b64cf3e45d573c4bec25144ac1",
+    "q2_head": null,
+    "r3_head": null
+  },
+  "frame_count": 4,
+  "candidate_count": 10,
+  "frozen_pairs": 6,
+  "shared_masks": 480,
+  "full_pose_scorer_calls_formal": 250,
+  "native_oracle_checks_formal": 10,
+  "full_pose_evaluation_including_reproduction_and_audit": 520,
+  "full_pose_evaluation_limit": 600,
+  "ndt_optimizations": 0,
+  "ros_replays": 0,
+  "additional_search": 0,
+  "verification": {
+    "numeric_csvs_byte_equal_on_reproduction": 9,
+    "shared_mask_arrays_byte_equal": true,
+    "blind_sha256": "ce271b2a019144b3f363a0d214f21b087b702607430839fa326f60249a833d42"
+  },
+  "key_results": {
+    "h307_full_delta": -30.562945,
+    "h307_geo0_50_delta": 132.970337,
+    "h307_geo0_50_paired_wins": [
+      12,
+      12
+    ],
+    "h307_geo0_50_cross_wins": [
+      144,
+      144
+    ],
+    "h307_geo0_50_all_candidate_rank": 2,
+    "h307_normal_diff_count": 66,
+    "h307_robust_normal_diff_count": 0,
+    "h515_geo0_50_pair_delta": 6.104786,
+    "h515_geo0_50_rank_with_postfit": 2,
+    "h309_geo0_50_pair_delta": 77.562875,
+    "mid360_short_window_planar_support": 0.413,
+    "mid360_signal_abs_q90_cm": [
+      1.87,
+      2.22
+    ]
+  }
+}

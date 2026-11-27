@@ -1,0 +1,86 @@
+{
+  "omni_scan_feed": "/home/jian/rosbag/public_datasets/IILABS3D/nav_a_diff_omni_official_v1/gate2_051_omni_sensor_feed/scans_xyzi.bin",
+  "formal_A_trace": "/home/jian/\u684c\u9762/\u5148\u9a8c\u5730\u56fe\u5b9a\u4f4d\u521b\u65b0\u7814\u7a76\u5de5\u4f5c\u533a/\u5b9e\u9a8c\u8bb0\u5f55/EXP-116_Omni\u5168\u5e8f\u5217\u590d\u7528\u5bf9\u7167/docs/paper_research_control/exp_116_full_omni/FORMAL_A/ONLINE_RESULTS.csv",
+  "formal_A_trace_sha256": "f6fcfa5256674552606e53085191d71c294093cfbbf97d08db07b4b00ad4def4",
+  "q1_online_sha256": "6ae113108b817e614f1bcb76e007f19d42224ab06bf0ba6d766966f29bb8f615",
+  "map": "/home/jian/rosbag/public_datasets/IILABS3D/nav_a_diff_omni_official_v1/gate2_048_diff_map_formal_01/nav_a_diff_prior_voxel0p15.pcd",
+  "map_sha256": "c72c5d6f19b622759f421f05c01c3ee09433ed9967a4b2df0f313129c744f158",
+  "radial_crop_m": 12.0,
+  "map_cropped_points": 64328,
+  "artificial_control_yaw_degrees_map_axis": 5.0,
+  "used_reference_values": false,
+  "new_optimizations": 0,
+  "trajectory_replays": 0,
+  "acquisitions": {
+    "O160": {
+      "raw": 160,
+      "stamp_ns": 1738773049257965088,
+      "offset": 42297584,
+      "points": 18961,
+      "xyz_sha256": "1e7242e1712f2cb75f4f669625d194fa140257e9f61d74c4c1bd62fd88499b34",
+      "xyzi_sha256": "baa202e8e714786b685b31d567903b08c5a309e595323dfdf9f01a3db5c072b3",
+      "last_imu_stamp_ns": 1738773049256143570,
+      "prior_ukf_correction_stamp_ns": 1738773049157259941,
+      "shift_m": 0.11357576123055299,
+      "relative_rotation_deg": 4.593348651480137
+    },
+    "O161": {
+      "raw": 161,
+      "stamp_ns": 1738773049358085155,
+      "offset": 42600960,
+      "points": 18509,
+      "xyz_sha256": "dc839a1128a40f0dd8e58b9e025945d8f1403eb6484f16b970a181811a3c36c6",
+      "xyzi_sha256": "27d3a6c613d1fb158c927b3cc439997b59d94aed7874005ef8b81f4774d37d09",
+      "last_imu_stamp_ns": 1738773049356065512,
+      "prior_ukf_correction_stamp_ns": 1738773049257965088,
+      "shift_m": 0.08821537427104523,
+      "relative_rotation_deg": 3.4644689217426055
+    },
+    "O162": {
+      "raw": 162,
+      "stamp_ns": 1738773049457955837,
+      "offset": 42897104,
+      "points": 18710,
+      "xyz_sha256": "2eceb1925e1609b3c85751de2a21d9d7596ba429024e97f25c72fa9d9fe32208",
+      "xyzi_sha256": "578bcd585f89ece98ccdb66beaa44b73d4880d78a766d518506376eb6a2654bc",
+      "last_imu_stamp_ns": 1738773049455960035,
+      "prior_ukf_correction_stamp_ns": 1738773049358085155,
+      "shift_m": 0.06254498702441166,
+      "relative_rotation_deg": 2.350504358957273
+    },
+    "O163": {
+      "raw": 163,
+      "stamp_ns": 1738773049557923317,
+      "offset": 43196464,
+      "points": 18676,
+      "xyz_sha256": "09f695788c04baff0687f9c2cf8c5f7a27f973eaf4663965f63ae5469f7a11eb",
+      "xyzi_sha256": "dea53a749985d8b84120d4ebe5ace679e84e06a21f754f984ffe90323c3b9a55",
+      "last_imu_stamp_ns": 1738773049556173325,
+      "prior_ukf_correction_stamp_ns": 1738773049457955837,
+      "shift_m": 0.0250123555679536,
+      "relative_rotation_deg": 1.0902897316378601
+    },
+    "O164": {
+      "raw": 164,
+      "stamp_ns": 1738773049658055782,
+      "offset": 43495280,
+      "points": 18447,
+      "xyz_sha256": "502fac23cfebb0cd3672618ff95b221e8341c53c964da9f84c4c6b86aa24f8cd",
+      "xyzi_sha256": "b959283a963730b8748c3aa03bacaabeb630982487ba6bfa9f83bd0feb5b35a5",
+      "last_imu_stamp_ns": 1738773049656079054,
+      "prior_ukf_correction_stamp_ns": 1738773049557923317,
+      "shift_m": 0.0,
+      "relative_rotation_deg": 0.0
+    }
+  },
+  "outputs": {
+    "aligned_O160.pcd": "fbd56ccda4eb1faf7197d46f317f7a40d59350be887eec387ed27994f24e7c20",
+    "aligned_O161.pcd": "7bc5e609530ab096531c066a7e95b52e5d49e2443cc2e1d530ea502ce91fdeb1",
+    "aligned_O162.pcd": "7e6735566f6555267514da8e70627bf512721c6a4432a56051110d2b653c7bbc",
+    "aligned_O163.pcd": "0e97174cce6c6b8bea3a9889e9bbcb879285cf833ee2d274bdc62076b5d89e46",
+    "aligned_O164.pcd": "d0b2d64b0a8116592a28f17b346690c81d356e9a43a9a0c679d944cf84af33f4",
+    "map_local_control.pcd": "f901b34d19ab15fd3ba2417eb8700ce1542a3452d1d80125fb9878c7d5170f04",
+    "map_local_nominal.pcd": "12d27d0fb550e6ce3a0bfc3cd3f7a90b4edc1a6187f0392006071c489dad5ff2",
+    "omni_observations.npz": "578083580d84a5c89698292b65f1b722f392dacc07d7169e349f271947e264a5"
+  }
+}

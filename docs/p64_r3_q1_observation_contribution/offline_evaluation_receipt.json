@@ -1,0 +1,10 @@
+{
+  "mask_count": 480,
+  "blind_seal_sha256": "ce271b2a019144b3f363a0d214f21b087b702607430839fa326f60249a833d42",
+  "archive_labels_sha256": "27facf7b5eeba3212c9a61feb6dd5a6bf28336bd987abc2a2556b3733dca365e",
+  "reference_threshold": {
+    "translation_m": 0.15,
+    "rotation_deg": 2
+  },
+  "n_hypotheses": 10
+}

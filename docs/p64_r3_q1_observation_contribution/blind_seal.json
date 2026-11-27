@@ -1,0 +1,30 @@
+{
+  "notice": "Reference labels were not opened and were not available to the selection function.",
+  "files": {
+    "/home/jian/p64_r3_q1_ws/run/blind/shared_masks.npz": "a21807e1bab4e27a5f888201ea3ac355a92f984db28027285a57594269c094c1",
+    "/home/jian/p64_r3_q1_ws/run/blind/blind_candidate_scores.csv": "fbdf591ec99530b9316ce7cee623d005c57763a62796abbed294567c4505689b",
+    "/home/jian/p64_r3_q1_ws/run/blind/blind_information.csv": "b559a46df6db51acca72bcb14dc12fa8ab7a3239a8c2f855eb66c7e7b65676ec",
+    "/home/jian/p64_r3_q1_ws/run/blind/blind_point_evidence.npz": "b028961ddb023b799cf3f1542444615813388424a9334637e68954d0cdb044a9",
+    "/home/jian/p64_r3_q1_ws/run/blind/blind_pair_ranking.csv": "c1a0774ce1f69f18f8b7767bfe41e31059a2b5754997d7a5173a0a09d994715c",
+    "/home/jian/p64_r3_q1_ws/run/blind/blind_runtime.csv": "f5f12a6f7f815e29ce267e849137211ab8b24b1139e5cb4b5b16876befde5fc0",
+    "/home/jian/p64_r3_q1_ws/docs/p64_r3_q1_observation_contribution/fixed_hypothesis_manifest.csv": "bd7176c4345ab0ff32be99bc150673101cfe991b5ee413e712a97a8186a37391",
+    "/home/jian/p64_r3_q1_ws/docs/p64_r3_q1_observation_contribution/contribution_selection.py": "7f423cc6661facfb9e64fa356aab85221a8dcd68d7f5a98fb20e7ca6c3311c9d",
+    "/home/jian/p64_r3_q1_ws/docs/p64_r3_q1_observation_contribution/freeze.py": "293f5e6b3cce92e0fc9376a3d3bd1c5aa9be2d699e81cc8623b28b49a30ff398",
+    "/home/jian/p64_r3_q1_ws/run/H307.npz": "f158dacb154c1184b37285001a2acfe2c548d4908cce15dac97cb5be49830024",
+    "/home/jian/p64_r3_q1_ws/run/observation_H307.npz": "d89dab1deec6330d93b93ff255fb7db50fcd89bc2e4def4165ab901be1598301",
+    "/home/jian/p64_r3_q1_ws/run/geometry/geometry_H307.npz": "353605763a0aed3c23dc80c783f967b307583b6fa60e2d461acf6d7a5591254e",
+    "/home/jian/p64_r3_q1_ws/run/H515.npz": "766ce999bc79bdf29bbc066e21cfcf9a07018d16d3c6c4443c9d430daea4d2c4",
+    "/home/jian/p64_r3_q1_ws/run/observation_H515.npz": "1bd1a540900c0503796bcd5f3f2bbe312e9f83b46dbffddcbc3549b6877d96b2",
+    "/home/jian/p64_r3_q1_ws/run/geometry/geometry_H515.npz": "923ebe0a378acfd5eb91aa29f6ef9a4bf9805926a05a83a45ba960e63fa8e91e",
+    "/home/jian/p64_r3_q1_ws/run/H309.npz": "f61741a7d971523c0e9e41125430ac021726d00ac2d8eb7e2b5c1bcef8962505",
+    "/home/jian/p64_r3_q1_ws/run/observation_H309.npz": "e58a929bfd66bfabe27ba71160a883a92ab32637da129ebdf55a7d360fcff9af",
+    "/home/jian/p64_r3_q1_ws/run/geometry/geometry_H309.npz": "bc38774164b5c3700626e2f14b9a0e8a1a53284daf6152e36b96bbe864078fff",
+    "/home/jian/p64_r3_q1_ws/run/O164.npz": "9c536465854e0499d6316ad318bc4d6e75a9a55f31c856fb5f98c0acf62e939e",
+    "/home/jian/p64_r3_q1_ws/run/observation_O164.npz": "72f0c370da4cedc53b5c82fc0061b2efc329907a9c8ada41f12d85c68c92beec",
+    "/home/jian/p64_r3_q1_ws/run/geometry/geometry_O164.npz": "53de0115bf25f100ba12bdd59a9c59af5943d951766481469781091456e9485c"
+  },
+  "mask_count": 480,
+  "score_rows": 1280,
+  "pair_order_rows": 480,
+  "candidate_information_rows": 1280
+}
