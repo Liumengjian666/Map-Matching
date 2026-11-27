@@ -37,7 +37,7 @@ for src,dst in files.items():
     dst.write_text(s)
 q2=Path(__file__).resolve().parent.parent/'p64_r2_q2_bounded_search_adaptation'
 artifact=Path('/home/jian/p64_r2_q2_ws/run/build_final/scoring_profile.hpp')
-expected='3'
+assert hashlib.sha256(artifact.read_bytes()).hexdigest()=='565b91adcbde61ced37b656e707b969c79a92ff1f0ff657380c060698613435f'
 profile=artifact.read_text()
 assert 'parkMap()' in profile
 (out/'scoring_profile.hpp').write_text(profile)
