@@ -1,0 +1,19 @@
+{
+  "bag": "/home/jian/rosbag/dog/mapping_20261031_160829/rect_record_2026-10-31-16-08-29.bag",
+  "trace": "/home/jian/rosbag/dog/mapping_20261031_160829/dog_ndt_long_corridor_rootcause_20261102/replay_20261102_192829/ndt_per_frame.csv",
+  "clip": "historical frames 5949 through 5998",
+  "clock": "point timebase + half min/max nanosecond offset",
+  "causal_seed_frame": 5948,
+  "causal_seed_previous_header": "1793434704.5913448",
+  "first_stamp_ns": 1793434704738571862,
+  "last_stamp_ns": 1793434709637928655,
+  "scan_count": 50,
+  "reference": "NONE; engineering only",
+  "seed_quat_xyzw": [
+    -0.0249110259321131,
+    0.4098335397604139,
+    0.09837906703085575,
+    0.9064973632860701
+  ],
+  "deskew": false
+}

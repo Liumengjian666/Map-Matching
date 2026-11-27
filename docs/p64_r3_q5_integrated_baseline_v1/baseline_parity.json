@@ -1,0 +1,51 @@
+{
+  "omni_OFF": {
+    "frames": 30,
+    "max_matrix_abs": 0.0,
+    "max_covariance_abs": 0.0,
+    "updates": 30,
+    "duplicate": 0
+  },
+  "omni_B": {
+    "frames": 30,
+    "max_matrix_abs": 0.0,
+    "max_covariance_abs": 0.0,
+    "updates": 30,
+    "duplicate": 0
+  },
+  "omni_C": {
+    "frames": 30,
+    "max_matrix_abs": 0.0,
+    "max_covariance_abs": 0.0,
+    "updates": 30,
+    "duplicate": 0
+  },
+  "omni_SHADOW": {
+    "frames": 30,
+    "max_matrix_abs": 0.0,
+    "max_covariance_abs": 0.0,
+    "updates": 30,
+    "duplicate": 0
+  },
+  "omni_TIMEOUT": {
+    "frames": 30,
+    "max_matrix_abs": 0.0,
+    "max_covariance_abs": 0.0,
+    "updates": 30,
+    "duplicate": 0
+  },
+  "w2_SHADOW": {
+    "frames": 72,
+    "max_matrix_abs": 0.0,
+    "max_covariance_abs": 0.0,
+    "updates": 72,
+    "duplicate": 0
+  },
+  "dog_SHADOW": {
+    "frames": 50,
+    "max_matrix_abs": 0.0,
+    "max_covariance_abs": 0.0,
+    "updates": 50,
+    "duplicate": 0
+  }
+}
