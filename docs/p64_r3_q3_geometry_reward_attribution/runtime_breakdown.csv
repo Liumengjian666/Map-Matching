@@ -1,0 +1,9 @@
+stage,wall_s,user_s,system_s,max_rss_kib
+mid_fit.wall,2.55,2.44,0.10,48160
+mid_fixed.wall,0.60,0.56,0.04,43112
+mid_grid.wall,71.72,71.66,0.01,40852
+mid_rescore.wall,3.20,2.95,0.24,140756
+window_prepare.wall,4.91,3.21,1.58,299880
+W1/window.wall,7.11,7.07,0.02,44416
+W2/window.wall,7.52,7.48,0.03,44800
+W3/window.wall,6.17,6.13,0.02,44056

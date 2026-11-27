@@ -1,0 +1,17 @@
+control,geometry,selected_control,false_positive,false_positive_fraction
+C0_real_same,sphere_center_nn,160,0,0.0
+C0_real_same,local_plane_intersection,137,0,0.0
+C0_template_same,sphere_center_nn,225,0,0.0
+C0_template_same,local_plane_intersection,225,0,0.0
+C1_half,sphere_center_nn,221,101,0.45701357466063347
+C1_half,local_plane_intersection,221,0,0.0
+C2_grid_phase,sphere_center_nn,225,0,0.0
+C2_grid_phase,local_plane_intersection,225,0,0.0
+C3_offset_2cm,sphere_center_nn,125,0,0.0
+C3_offset_2cm,local_plane_intersection,125,0,0.0
+C3_offset_5cm,sphere_center_nn,125,0,0.0
+C3_offset_5cm,local_plane_intersection,125,0,0.0
+C3_offset_10cm,sphere_center_nn,125,0,0.0
+C3_offset_10cm,local_plane_intersection,125,0,0.0
+C4_pose,sphere_center_nn,225,0,0.0
+C4_pose,local_plane_intersection,225,0,0.0

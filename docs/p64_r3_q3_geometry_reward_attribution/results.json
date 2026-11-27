@@ -1,0 +1,23 @@
+{
+  "task": "P64-R3-Q3-GEOMETRY-REWARD-ATTRIBUTION-AND-REAL-LIDAR",
+  "decision": "NEED_MID360_COMPETITIVE_DATA",
+  "start_sha": "ba433fb171e14a2d57fb859ab7bc61525cc7c5e7",
+  "code_sha": "a94bc38b528d961549e142e9055a6abbfe10041b",
+  "end_sha_receipt": "/home/jian/p64_r3_q3_ws/run/FINAL_GIT_RECEIPT.json",
+  "branch": "research/p64-r3-q3-geometry-reward-attribution",
+  "worktree": "/home/jian/p64_r3_q3_ws",
+  "hard_frozen_candidates": 10,
+  "historical_per_voxel_reused": 6,
+  "historical_missing_fixed_exports": 4,
+  "real_lidar_causal_windows": 3,
+  "real_lidar_causal_frames": 216,
+  "real_lidar_search_triggers": 3,
+  "real_lidar_grid_evaluations": 14553,
+  "real_lidar_candidate_fit_calls": 7,
+  "real_lidar_nominal_exports": 6,
+  "real_lidar_strong_events": 0,
+  "real_lidar_new_weak_dual_events": 1,
+  "proposed_local_refinements": 0,
+  "production_modifications": 0,
+  "new_search_methods": 0
+}
