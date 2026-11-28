@@ -4,6 +4,9 @@ import json
 from pathlib import Path
 import sys
 
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 import numpy as np
 from scipy.spatial.transform import Rotation
 
@@ -45,6 +48,18 @@ def build(points, audit, reference, output):
     pcd(output/"overview.pcd",overview)
     np.savetxt(output/"overview_xyz.tsv",overview[::4],fmt="%.5f")
     trace = np.loadtxt(reference)
+    fig, panels = plt.subplots(1, 2, figsize=(11, 5))
+    for ax, axis, label in zip(panels, (1,2), ("Y","Z")):
+        ax.scatter(overview[::2,0],overview[::2,axis],s=.8,c=".55",label="Full official scan")
+        ax.plot(trace[:,1],trace[:,axis+1],c="tab:blue",label="Published dense IMU")
+        ax.scatter(trace[0,1],trace[0,axis+1],c="tab:orange",label="First IMU")
+        ax.set_aspect("equal")
+        ax.set(xlabel="World X (m)",ylabel=f"World {label} (m)")
+        ax.legend(fontsize=7)
+    fig.suptitle("Released frames overlaid without fitted transform")
+    fig.tight_layout()
+    fig.savefig(output/"global_map_at_release_frames.png",dpi=120)
+    plt.close(fig)
     center = trace[0,1:4]
     with (output/"local.xyzf").open("wb") as out:
         for j in range(0,len(world),1_000_000):
