@@ -5,7 +5,7 @@ root=$(realpath "$d/../..")
 cd "$root"
 mapdir=$(realpath run/r1/full_map/products)
 source_dir=$(realpath run/r1/full_bag/input)
-receipts=run/r1/full_map/qualification/INITIAL_MAP_OVERLAP.csv
+receipts="${1:-run/r1/full_map/qualification/INITIAL_MAP_OVERLAP.csv}"
 source /opt/ros/noetic/setup.bash
 export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1
 export LD_PRELOAD=/lib/x86_64-linux-gnu/libusb-1.0.so.0
@@ -39,6 +39,7 @@ pair=run/r1/qualified/replay_full
 /usr/bin/python3 "$d/prepare_subset.py" "$source_dir" "$mapdir/map.pcd" "$input" "$count"
 bash "$d/replay_pair.sh" run/r1/equiv_build "$input" "$pair" 11743 FULL_E57_EXP18_FULL
 /usr/bin/python3 "$old/evaluate_exp18.py" "$input" "$mapdir" "$pair/b" "$dense" "$sparse" run/r1/qualified/metrics --scope FULL_E57_IDENTITY_GEOMETRY_PASSED
-/usr/bin/python3 "$d/reference_checks.py" "$dense" "$sparse" run/r1/qualified/metrics/trajectory_imu.txt run/r1/qualified/metrics
+/usr/bin/python3 "$d/export_imu_poses.py" "$pair/b/trajectory.csv" "$input/input_summary.json" run/r1/qualified/metrics/trajectory_imu_exact_ns.txt
+/usr/bin/python3 "$d/reference_checks.py" "$dense" "$sparse" run/r1/qualified/metrics/trajectory_imu_exact_ns.txt run/r1/qualified/metrics
 /usr/bin/python3 "$d/official_hilti_evaluation.py" run/hilti_official/evaluation-2022/evaluation.py run/r1/qualified/metrics/trajectory_imu.txt "$dense" "$sparse" run/r1/qualified/official_aligned
 /usr/bin/python3 "$d/degeneracy_diagnostics.py" "$input" "$mapdir/map.pcd" run/r1/qualified/metrics "$pair/b" run/r1/qualified/detectors

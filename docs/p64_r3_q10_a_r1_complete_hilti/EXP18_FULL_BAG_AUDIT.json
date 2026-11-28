@@ -1,0 +1,32 @@
+{
+  "bag_bytes": 8657654860,
+  "indexed_messages": {
+    "/hesai/pandar": 1094,
+    "/alphasense/imu": 43656,
+    "/Point_name": 3
+  },
+  "lidar_records_decoded": 1094,
+  "lidar_first_ns": 1649856227623466000,
+  "lidar_last_ns": 1649856336918471000,
+  "raw_first_scan_available": true,
+  "last_scan_final_point_ns": 1649856337018444202,
+  "imu_last_ns": 1649856337028370317,
+  "record_start_s": 1649856227.6426337,
+  "record_end_s": 1649856337.010822,
+  "scans_after_anchor": 1093,
+  "survey_events": [
+    {
+      "name": "P30",
+      "stamp_ns": 1649856228914359853
+    },
+    {
+      "name": "P7",
+      "stamp_ns": 1649856287062065272
+    },
+    {
+      "name": "P36",
+      "stamp_ns": 1649856335680430234
+    }
+  ],
+  "causally_deskewable_after_anchor": 1093
+}

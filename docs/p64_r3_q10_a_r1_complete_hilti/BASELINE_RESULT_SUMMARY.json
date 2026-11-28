@@ -1,0 +1,14 @@
+{
+  "first_reference_error_above_1m": 62,
+  "supported_weak_onset": 235,
+  "persistent_loss_first_frame": 255,
+  "zero_association_frames": 839,
+  "weak_with_associations": 17,
+  "weak_without_associations": 839,
+  "observed_persistent_loss_lower_bound_s": 83.697951,
+  "dense_matched": 789,
+  "frames": 1093,
+  "max_a_b_position_delta_m": 0.0,
+  "max_a_b_rotation_delta_deg": 2.8822850690059996e-05,
+  "research_one_update": 1093
+}

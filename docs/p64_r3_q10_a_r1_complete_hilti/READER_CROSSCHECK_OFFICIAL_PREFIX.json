@@ -1,0 +1,12 @@
+{
+  "scope": "OFFICIAL_E57_PREFIX_ONLY",
+  "records": 1000000,
+  "world_points": 1000000,
+  "max_coordinate_delta_m": 0.0,
+  "declared_full_records": 285455240,
+  "position_m": [
+    112.229971,
+    21.414423,
+    0.0
+  ]
+}

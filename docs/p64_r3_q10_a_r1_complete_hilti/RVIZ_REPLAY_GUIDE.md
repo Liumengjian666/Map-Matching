@@ -12,3 +12,5 @@ cd /home/jian/p64_r3_q10_ws && source /opt/ros/noetic/setup.bash && rosbag play 
 ```
 
 无显示环境可加 rviz:=false。现有预检使用 run/map_prefix/map.pcd、run/input_prefix10/anchor.tsv、run/r1/rviz_sensor10.bag。
+
+使用完整 E57 的冻结 0.15 m 先验与完整 Exp18 的派生包再次执行 headless roslaunch + rosbag。已实测接收 map → base_link TF 及多条轨迹更新。RViz 文件随分支提供，当前回归未打开图形窗口。 [完整数据 TF](ROS1_FULL_MAP_TF.yaml) [实际路径消息](ROS1_FULL_MAP_PATH.yaml)

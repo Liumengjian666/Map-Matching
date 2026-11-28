@@ -12,3 +12,5 @@ Level 2 不跨越大于 0.15 s 的稠密参考间隔。10 帧预检只用于计�
 作者论文第 V-C 节描述稠密参考来自基于逐点 ICP 的地图配准与 VILENS/IMU，不是 Q10 报告中所写逐点面 ICP。官方脚本按后缀应用零杆臂或测针杆臂，随后进行至多 2 s 的时间关联和无尺度 Umeyama SE(3) 对齐。官方对齐结果单列，不纳入 Level 3 或 4 的固定地图绝对误差。 [官方论文](https://arxiv.org/pdf/2208.09825) [官方评价源码](https://github.com/Hilti-Research/Hilti-SLAM-Challenge-2022/blob/e4aacf7c111ab832a0bdffe3f069255454068540/evaluation-2022/evaluation.py#L183)
 
 前两个共时实测点相距 **5.646954 m**，稠密姿态加官方测针杆臂后相距 **5.705504 m**，差 **0.058550 m**。不加杆臂的稠密 IMU 点间距为 5.742722 m，仅用于诊断。此长度差无法通过固定刚体变换消除，不能以三点拟合认证此测试的 Level 4。 [数值收据](SPARSE_REFERENCE_DISTANCE_AUDIT.csv)
+
+R1 已取得 Level 1、2、3，正式导出 TUM 轨迹保留原始整数纳秒。全段相对指标包括失锁结果，100 帧、持续失锁前数据及各自稠密覆盖单列。Level 4 的无拟合独立坐标证据仍缺失。所有稀疏官方自由对齐指标单列。 [全段与分段指标](FULL_SEQUENCE_BASELINE_RESULTS.csv) [官方对齐输出](OFFICIAL_ALIGNED_RESULTS.json)

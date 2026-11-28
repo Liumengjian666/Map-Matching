@@ -1,0 +1,8 @@
+{
+  "scope": "FULL_AUTHENTICATED_E57_RAW",
+  "prior_points": 279026050,
+  "scan_points": 473,
+  "median_m": 0.07532406615307025,
+  "p90_m": 0.20984923528382124,
+  "within_0p30": 471
+}
