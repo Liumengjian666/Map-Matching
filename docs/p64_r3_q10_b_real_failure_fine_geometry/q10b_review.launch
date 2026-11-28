@@ -1,0 +1,11 @@
+<launch>
+  <arg name="map"/>
+  <arg name="anchor"/>
+  <arg name="rviz" default="true"/>
+  <include file="$(find p64_hilti_replay)/hilti_exp18.launch">
+    <arg name="map" value="$(arg map)"/>
+    <arg name="anchor" value="$(arg anchor)"/>
+    <arg name="rviz" value="false"/>
+  </include>
+  <node if="$(arg rviz)" pkg="rviz" type="rviz" name="q10b_review" args="-d $(dirname)/q10b_review.rviz"/>
+</launch>

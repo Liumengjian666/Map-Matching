@@ -26,6 +26,41 @@ edit('research_pipeline.cpp','      const Pose post=tracker.matrix(); const auto
       states<<frame<<','<<ns<<','<<prev_ns<<','<<first_imu<<','<<last_imu<<',';
       list(states,previous); states<<','; list(states,predicted); states<<',';
       list(states,tracker.logged_mean()); states<<'\\n';''')
+edit('research_pipeline.cpp','||mode=="LOCAL_SHADOW","bad mode"','||mode=="LOCAL_SHADOW"||mode=="Q10B_ICP_CONTROL","bad mode"')
+edit('research_pipeline.cpp','    auto states=file', '''    auto interventions=file(out/"interventions.csv","frame,stamp_ns,native_angle_deg,result,support,steps,wall_s");
+    auto states=file''')
+edit('research_pipeline.cpp','          auto assemble_fine=[&](){','''          if(mode=="Q10B_ICP_CONTROL") {
+            const double jump=angle(initial,update);
+            if(jump>15.) {
+              trigger="ROTATION_JUMP_DIAGNOSTIC";
+              const auto event=out/("pointplane_"+std::to_string(frame));
+              fs::create_directory(event);
+              const auto seedfile=event/"seed.txt", resultfile=event/"result.txt";
+              std::ofstream s(seedfile);
+              s<<std::setprecision(17)<<tracker_state_previous<<'\\n';s.close();
+              const auto command="OPENBLAS_NUM_THREADS=1 timeout 4s /usr/bin/python3 "+quote(helper)+" "+
+                quote(fs::absolute(dir/scan_file))+" "+quote(seedfile)+" "+quote(resultfile)+
+                " > "+quote(event/"job.log")+" 2>&1";
+              const auto start=Clock::now();
+              int support=0,steps=0;
+              if(std::system(command.c_str())==0) {
+                Pose candidate;
+                std::ifstream result(resultfile);
+                bool ok=bool(result>>support>>steps);
+                for(int a=0;a<4;++a)for(int c=0;c<4;++c)ok=ok&&bool(result>>candidate(a,c));
+                if(ok&&support>=30&&candidate.allFinite()){
+                  update=candidate;proposal="ICP_CONTROL";actual=proposal;
+                }
+              }
+              interventions<<frame<<','<<ns<<','<<jump<<','<<actual<<','<<support<<','<<steps<<','<<elapsed(start)<<'\\n';
+            }
+            decision_s=elapsed(begun);
+            return true;
+          }
+          auto assemble_fine=[&](){''')
+edit('research_pipeline.cpp','      const auto previous=tracker.logged_mean();', '''      const auto previous=tracker.logged_mean();
+      const auto tracker_state_previous=tracker.matrix();''')
+
 PY
 c=(-std=c++17 -O2 -DNDEBUG -fopenmp -I"$b" -I"$d/../p64_r3_q10_a_r1_complete_hilti" -I"$d/../p64_r2_q1_candidate_search" -I"$s/src/hdl_localization/include" -I"$s/src/ndt_omp/include" -I/usr/include/pcl-1.10 -I/usr/include/eigen3 -I/opt/ros/noetic/include)
 env -u LD_LIBRARY_PATH g++ "${c[@]}" -c "$b/pose_estimator.cpp" -o "$b/tracker.o"
