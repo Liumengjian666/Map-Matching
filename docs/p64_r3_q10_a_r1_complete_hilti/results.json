@@ -1,0 +1,239 @@
+{
+  "task": "P64-R3-Q10-A-R1-COMPLETE-HILTI-BENCHMARK",
+  "judgment": "PUBLIC_BENCHMARK_READY_WITH_LIMITED_REFERENCE",
+  "benchmark": "Hilti-Oxford Exp18 Known Initial Pose",
+  "start_sha": "c103ad754729e1c1bf92741fd892d24f69b89279",
+  "code_sha": "b8e9ce0be1c53838ad542c86213d4d6bdcbb21b7",
+  "worktree": "/home/jian/p64_r3_q10_ws",
+  "branch": "research/p64-r3-q10-a-r1-complete-hilti",
+  "assets": {
+    "verified": true,
+    "map_bytes": 5447128064,
+    "bag_bytes": 8657654860,
+    "audit": {
+      "bag_bytes": 8657654860,
+      "indexed_messages": {
+        "/hesai/pandar": 1094,
+        "/alphasense/imu": 43656,
+        "/Point_name": 3
+      },
+      "lidar_records_decoded": 1094,
+      "lidar_first_ns": 1649856227623466000,
+      "lidar_last_ns": 1649856336918471000,
+      "raw_first_scan_available": true,
+      "last_scan_final_point_ns": 1649856337018444202,
+      "imu_last_ns": 1649856337028370317,
+      "record_start_s": 1649856227.6426337,
+      "record_end_s": 1649856337.010822,
+      "scans_after_anchor": 1093,
+      "survey_events": [
+        {
+          "name": "P30",
+          "stamp_ns": 1649856228914359853
+        },
+        {
+          "name": "P7",
+          "stamp_ns": 1649856287062065272
+        },
+        {
+          "name": "P36",
+          "stamp_ns": 1649856335680430234
+        }
+      ],
+      "causally_deskewable_after_anchor": 1093
+    }
+  },
+  "map_qualification": "PASS_COMPLETE_E57_FIXED_ANCHOR",
+  "map_summary": {
+    "points": 285455240,
+    "scans": 1,
+    "audit_sample_count": 286,
+    "independent_rotation_error_m": 2.842170943040401e-14,
+    "overview_points": 106744,
+    "overview_bbox_m": [
+      [
+        -162.53660583496094,
+        -252.58599853515625,
+        -69.37488555908203
+      ],
+      [
+        411.0054931640625,
+        323.50494384765625,
+        79.80884552001953
+      ]
+    ],
+    "reference_bbox_m": [
+      [
+        101.4923419,
+        27.54824233,
+        -0.4557262667
+      ],
+      [
+        122.641094,
+        34.34964624,
+        2.601814679
+      ]
+    ]
+  },
+  "initial_overlap": [
+    {
+      "scan": "ROTATION_DESKEW",
+      "map": "RAW_FULL_E57_LOCAL_CROP",
+      "query_points": "473",
+      "prior_points": "279026050",
+      "nn_median_m": "0.07532406615307025",
+      "nn_p90_m": "0.20984923528382124",
+      "within_0p30": "471",
+      "angular_visible_proxy_points": "344",
+      "reverse_proxy_median_m": "0.23885642844054278",
+      "reverse_proxy_within_0p30": "192",
+      "reverse_proxy_cloud": "0P055_GEOMETRY"
+    },
+    {
+      "scan": "ROTATION_DESKEW",
+      "map": "0P15_NDT",
+      "query_points": "473",
+      "prior_points": "638213",
+      "nn_median_m": "0.10610137926878492",
+      "nn_p90_m": "0.23532923597055966",
+      "within_0p30": "464",
+      "angular_visible_proxy_points": "327",
+      "reverse_proxy_median_m": "0.2981812880002434",
+      "reverse_proxy_within_0p30": "166",
+      "reverse_proxy_cloud": "0P15_NDT"
+    },
+    {
+      "scan": "ROTATION_DESKEW",
+      "map": "0P055_GEOMETRY",
+      "query_points": "473",
+      "prior_points": "4109103",
+      "nn_median_m": "0.08224729628957626",
+      "nn_p90_m": "0.2184416629077162",
+      "within_0p30": "469",
+      "angular_visible_proxy_points": "344",
+      "reverse_proxy_median_m": "0.23885642844054278",
+      "reverse_proxy_within_0p30": "192",
+      "reverse_proxy_cloud": "0P055_GEOMETRY"
+    },
+    {
+      "scan": "RAW",
+      "map": "RAW_FULL_E57_LOCAL_CROP",
+      "query_points": "473",
+      "prior_points": "279026050",
+      "nn_median_m": "0.07536111349741781",
+      "nn_p90_m": "0.20992840751213554",
+      "within_0p30": "471",
+      "angular_visible_proxy_points": "344",
+      "reverse_proxy_median_m": "0.2388125034575339",
+      "reverse_proxy_within_0p30": "192",
+      "reverse_proxy_cloud": "0P055_GEOMETRY"
+    },
+    {
+      "scan": "RAW",
+      "map": "0P15_NDT",
+      "query_points": "473",
+      "prior_points": "638213",
+      "nn_median_m": "0.10607860079689553",
+      "nn_p90_m": "0.23524525827631373",
+      "within_0p30": "464",
+      "angular_visible_proxy_points": "327",
+      "reverse_proxy_median_m": "0.29824580305041754",
+      "reverse_proxy_within_0p30": "166",
+      "reverse_proxy_cloud": "0P15_NDT"
+    },
+    {
+      "scan": "RAW",
+      "map": "0P055_GEOMETRY",
+      "query_points": "473",
+      "prior_points": "4109103",
+      "nn_median_m": "0.08224925638488935",
+      "nn_p90_m": "0.21850513672548272",
+      "within_0p30": "469",
+      "angular_visible_proxy_points": "344",
+      "reverse_proxy_median_m": "0.2388125034575339",
+      "reverse_proxy_within_0p30": "192",
+      "reverse_proxy_cloud": "0P055_GEOMETRY"
+    }
+  ],
+  "baseline": {
+    "first_reference_error_above_1m": 62,
+    "supported_weak_onset": 235,
+    "persistent_loss_first_frame": 255,
+    "zero_association_frames": 839,
+    "weak_with_associations": 17,
+    "weak_without_associations": 839,
+    "observed_persistent_loss_lower_bound_s": 83.697951,
+    "dense_matched": 789,
+    "frames": 1093,
+    "max_a_b_position_delta_m": 0.0,
+    "max_a_b_rotation_delta_deg": 2.8822850690059996e-05,
+    "research_one_update": 1093
+  },
+  "separated_metrics": [
+    {
+      "scope": "FULL_BASELINE_INCLUDING_LOSS",
+      "frames": "1093",
+      "dense_coverage": "789",
+      "associated_frames": "254",
+      "zero_association_frames": "839",
+      "fixed_dense_rmse_m": "11278.23759480623",
+      "fixed_dense_p95_m": "26169.401329448425",
+      "fixed_dense_max_m": "29850.516522556136",
+      "fixed_dense_rotation_rmse_deg": "95.94932754932907",
+      "sparse_map_frame": "NOT_EVALUABLE_NO_INDEPENDENT_WORLD_TIE",
+      "rpe_1s_pairs": "721",
+      "rpe_1s_m": "455.6241948947488",
+      "rpe_1s_deg": "15.784911882220356",
+      "rpe_5s_pairs": "677",
+      "rpe_5s_m": "2193.0199899192457",
+      "rpe_5s_deg": "33.39701380188589"
+    },
+    {
+      "scope": "FROZEN_100_FRAME_WINDOW",
+      "frames": "100",
+      "dense_coverage": "94",
+      "associated_frames": "100",
+      "zero_association_frames": "0",
+      "fixed_dense_rmse_m": "1.0901066248346651",
+      "fixed_dense_p95_m": "2.000409451235205",
+      "fixed_dense_max_m": "2.1036017561061646",
+      "fixed_dense_rotation_rmse_deg": "30.220749686072946",
+      "sparse_map_frame": "NOT_EVALUABLE_NO_INDEPENDENT_WORLD_TIE",
+      "rpe_1s_pairs": "78",
+      "rpe_1s_m": "0.669213622268972",
+      "rpe_1s_deg": "19.989033623720044",
+      "rpe_5s_pairs": "44",
+      "rpe_5s_m": "1.6417374743044575",
+      "rpe_5s_deg": "41.452874772696305"
+    },
+    {
+      "scope": "DENSE_DIAGNOSTIC_BEFORE_PERSISTENT_LOSS",
+      "frames": "255",
+      "dense_coverage": "249",
+      "associated_frames": "254",
+      "zero_association_frames": "1",
+      "fixed_dense_rmse_m": "5.735067627026373",
+      "fixed_dense_p95_m": "9.653246943468295",
+      "fixed_dense_max_m": "37.03917559805382",
+      "fixed_dense_rotation_rmse_deg": "42.66393482956577",
+      "sparse_map_frame": "NOT_EVALUABLE_NO_INDEPENDENT_WORLD_TIE",
+      "rpe_1s_pairs": "233",
+      "rpe_1s_m": "4.499151608958016",
+      "rpe_1s_deg": "27.411346680759515",
+      "rpe_5s_pairs": "193",
+      "rpe_5s_m": "6.581219635049791",
+      "rpe_5s_deg": "48.88880544718216"
+    }
+  ],
+  "level_1": "PASS_COMPLETE_MAP_FIXED_INIT",
+  "level_2": "PASS_FIXED_IMU_ORIGIN_WORLD_INVARIANT",
+  "level_3": "PASS_FIXED_MAP_DENSE_ICP_VILENS_REFERENCE",
+  "level_4": "NOT_EVALUABLE_WORLD_TIE_UNCONFIRMED",
+  "fixed_frame_calibration_experiment": "NOT_RUN_IDENTITY_GEOMETRY_PASSED",
+  "ros1": "PASS_HEADLESS_FULL_MAP_AND_BAG_TF_PATH",
+  "rviz_graphic_window": "NOT_RUN",
+  "fine_structure_hilti": "NOT_RUN_R1_SCOPE",
+  "history": "preserved",
+  "careful_interpretation": "Natural supported wrong matching and persistent map-association loss confirmed. Persistent physical weak-axis degeneracy not yet established. Q10-B not authorized in this R1.",
+  "remote_readback": "Final Git receipt is stored after final commit outside the committed tree"
+}

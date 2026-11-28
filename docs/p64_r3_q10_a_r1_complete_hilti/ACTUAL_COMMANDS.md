@@ -22,3 +22,11 @@ cd /home/jian/p64_r3_q10_ws && bash docs/p64_r3_q10_a_r1_complete_hilti/run_qual
 ```
 
 默认完整流程在各固定产物目录已存在时拒绝覆盖。重复运行要使用新的工件目录。界面命令和正确输入见 [ROS1 指南](RVIZ_REPLAY_GUIDE.md)。预检原版节点源码 de2dc7769aa2412876d05ae6161408d3295b6a3c，官方 Hilti 评价源码 e4aacf7c111ab832a0bdffe3f069255454068540，地图主读取器 e74d8b0b5ca69a135fb96c23ce9fff2f390dc196，第二读取器 pye57 v0.4.15（5ea1c0dece0bbd22fed6c54baeea6b31fb98a802）使用固定 libE57Format 1914b8ea972251d3bb49a33828497dde683205d9。地图/点云和录包衍生产物来自 Hilti Research 和 Zhang 等及其 CC BY-NC-SA 3.0 数据发布。
+
+本轮基线在完整原始地图、0.15 m 目标及两读取器通过后启动，0.055 m 对照独立继续生成。实际执行时提供了先生成的同一 0.15 m 资格收据，完整正反向表到齐后可直接用默认命令。以下查看共享工作区上的完整概览、完整首帧邻域和真实扫描。
+
+```bash
+pcl_viewer /home/jian/p64_r3_q10_ws/run/r1/full_map/products/overview.pcd /home/jian/p64_r3_q10_ws/run/r1/full_map/qualification/map_first_overlap.pcd /home/jian/p64_r3_q10_ws/run/r1/full_map/qualification/init_scan_world.pcd
+```
+
+仓库 PCD 显示样本取自同一完整官方图，分别为 1.0 m 全场景和 0.35 m 首帧邻域。它们只用于查看。实际 NDT 和 0.055 m 对照的二进制文件保留在 run/r1/full_map/products。
