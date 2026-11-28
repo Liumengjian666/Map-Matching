@@ -1,0 +1,62 @@
+{
+  "frames": 270,
+  "median_normal_ms": 43.6326685,
+  "p95_normal_ms": 93.05850479999997,
+  "max_normal_ms": 162.897601,
+  "reconstructed_n": 97092,
+  "map_outlier_fraction": 0.7034565154698637,
+  "LF_true": 24,
+  "native_weak_count": 28,
+  "stopped_at": "PRESERVED_INTERVAL_END",
+  "input": {
+    "raw": "/home/jian/p64_r3_q9_ws/run/corridor_prefix_95s.bag",
+    "lidar_count": 270,
+    "anchor_ns": 1517157286055073023,
+    "lidar_initial_header": 1517157219088119030,
+    "bag_first_lidar_record_ns": 1690254112846817511,
+    "initial_hypotheses": {
+      "direct": {
+        "median_m": 0.8985012044015163,
+        "p90_m": 4.028959594850038,
+        "fraction_below_0p5m": 0.3639257294429708
+      },
+      "inverse": {
+        "median_m": 3.3448004537248077,
+        "p90_m": 6.1399080054069906,
+        "fraction_below_0p5m": 0.129973474801061
+      }
+    },
+    "imu_frame": "epson",
+    "lidar_frame": "cmu_rc2_velodyne",
+    "imu_max_gap_ns": 10000000,
+    "imu_records": 5563,
+    "reference_loaded": false,
+    "t_i_l": [
+      [
+        0.9999918596624136,
+        -0.0005160746180838606,
+        0.0040017840891938454,
+        0.08
+      ],
+      [
+        0.0005195607419503049,
+        0.9999994864461366,
+        -0.0008701517675891124,
+        0.029
+      ],
+      [
+        -0.004001332970821032,
+        0.0008722238541704791,
+        0.999991614244842,
+        0.03
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "anchor_label": "OFFICIAL_Y_HYPOTHESIS_NOT_AUTHORITATIVE"
+  }
+}

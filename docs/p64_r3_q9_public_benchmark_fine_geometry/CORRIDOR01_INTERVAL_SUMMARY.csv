@@ -1,0 +1,4 @@
+interval,role,n,duration_s,ndt_weak_frames,ndt_weak_duration_s,lf_frames,lf_duration_s,both_frames,x_icp_samples,x_icp_nonfull_translation_count,dc_reg_samples,dc_reg_translation_cn_gt10,median_map_nn_outliers_0p1,pose_eval
+1,DEVELOPMENT_DIAGNOSTIC,90,9.076852083,0,0.0,0,0.0,0,9,0,9,0,0.6903313049357674,NOT_EVALUABLE
+2,DEVELOPMENT_DIAGNOSTIC,90,9.076849937000002,0,0.0,0,0.0,0,9,5,9,5,0.4773349558868269,NOT_EVALUABLE
+3,PRESERVED,90,9.076850892000001,28,2.823896885,24,2.420517922,10,9,9,9,9,0.7853391684901532,NOT_EVALUABLE
