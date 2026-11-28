@@ -1,0 +1,8 @@
+arm,measurement,status,frames,mean_ms,p95_ms,peak_rss_kib
+A,"ROS replay wall from publication loop, includes transport wait",PREFLIGHT_ONLY,10,41.82164741214365,41.983984466060065,
+B,Pipeline normal path timer,PREFLIGHT_ONLY,10,7.295319999999999,12.675969949999997,
+B,Whole process 0.14 s via GNU time,PREFLIGHT_ONLY,10,,,40372
+Q10-B,Offline normals persistence,NOT_RUN,0,,,
+Q10-B,Online first cache miss,NOT_RUN,0,,,
+Q10-B,Online hot cache,NOT_RUN,0,,,
+Q10-B,Actual deadline,NOT_RUN,0,,,

@@ -1,0 +1,5 @@
+method,status,reason,frames
+grid_1cm,NOT_RUN,Q10-A map and reference gate unpassed,0
+subcentimeter_probe,NOT_RUN,Q10-A map and reference gate unpassed,0
+normal_least_squares,NOT_RUN,Q10-A map and reference gate unpassed,0
+exact_truncated_square,NOT_RUN,Q10-A map and reference gate unpassed,0

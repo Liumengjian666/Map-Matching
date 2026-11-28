@@ -1,0 +1,6 @@
+method,status,reason,frames
+native_fixed_original_pairs,NOT_RUN,Q10-A map and reference gate unpassed,0
+directional_reassociate,NOT_RUN,Q10-A map and reference gate unpassed,0
+directional_fixed_recompute,NOT_RUN,Q10-A map and reference gate unpassed,0
+weak_delta,NOT_RUN,Q10-A map and reference gate unpassed,0
+strong_delta,NOT_RUN,Q10-A map and reference gate unpassed,0

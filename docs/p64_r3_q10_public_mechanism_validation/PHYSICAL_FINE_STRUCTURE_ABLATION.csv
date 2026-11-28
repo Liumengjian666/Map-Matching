@@ -1,0 +1,5 @@
+method,status,reason,frames
+full,NOT_RUN,Q10-A map and reference gate unpassed,0
+omit_verified_detail,NOT_RUN,Q10-A map and reference gate unpassed,0
+detail_only,NOT_RUN,Q10-A map and reference gate unpassed,0
+equal_spatial_quota,NOT_RUN,Q10-A map and reference gate unpassed,0

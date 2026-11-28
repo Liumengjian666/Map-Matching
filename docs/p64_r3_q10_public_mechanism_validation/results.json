@@ -1,0 +1,69 @@
+{
+  "task": "P64-R3-Q10-PUBLIC-BENCHMARK-CLOSURE-AND-MECHANISM-VALIDATION",
+  "judgment": "NEED_PUBLIC_BENCHMARK_ASSETS",
+  "q10_a": "PREFLIGHT_EXECUTED_NOT_QUALIFIED",
+  "q10_b": "NOT_RUN",
+  "start_sha": "4c0a04c6e0287e2648337736d732a1250b09008c",
+  "code_sha": "0f9513197a41cbe70caf38f6522e962997c1fb42",
+  "release_verification": "END_SHA and remote readback recorded in the external post-commit receipt",
+  "working_dir": "/home/jian/p64_r3_q10_ws",
+  "branch": "research/p64-r3-q10-public-mechanism-validation",
+  "research_preflight_metrics": {
+    "scope": "PREFIX_MAP_10_FRAME_QUALIFICATION",
+    "frames": 10,
+    "reference_frames": 10,
+    "covered_sparse_tip": 0,
+    "sparse_tip_rmse_m": null,
+    "dense_ate_rmse_m": 0.6221772329131311,
+    "dense_max_m": 0.7855992032209338,
+    "dense_p95_m": 0.768396649021754,
+    "dense_rotation_rmse_deg": 4.363013568805369,
+    "rpe_10frame_rmse_m": null,
+    "weak_frames": 10,
+    "lf_frames": 0,
+    "frames_one_update": 10,
+    "normal_mean_ms": 7.295319999999999,
+    "normal_p95_ms": 12.675969949999997,
+    "whole_reference_alignment_fit": false,
+    "read_only_reference": true
+  },
+  "official_preflight_metrics": {
+    "method": "A_OFFICIAL_HDL",
+    "scope": "EXP18_10_FRAME_PARTIAL_MAP",
+    "status": "EXECUTED_PREFLIGHT_GATE_FAILED",
+    "frames": 10,
+    "outputs": 10,
+    "dense_timed_frames": 10,
+    "sparse_timed_points": 0,
+    "dense_delta_rmse_m": 0.11380640021333993,
+    "dense_delta_p95_m": 0.14327713100218575,
+    "dense_delta_max_m": 0.1590628530496147,
+    "dense_delta_rotation_rmse_deg": 8.51537863013663,
+    "rpe_1sec_rmse_m": "",
+    "mean_measured_ms": 41.82164741214365,
+    "p95_measured_ms": 41.983984466060065,
+    "max_measured_ms": 41.99815902393311
+  },
+  "a_b_pose_difference": {
+    "max_m": 0.6570975003740631,
+    "max_deg": 6.534217581458821
+  },
+  "map_integrity_full": "UNVERIFIED_PARTIAL",
+  "map_preflight_maximum_decoded_records": 28137844,
+  "map_preflight_max_scope_seed_median_m": 2.203761353119228,
+  "map_preflight_max_scope_seed_within_0p30": 0.0,
+  "sparse_vs_dense_with_tip_m": [
+    0.595301,
+    0.286632
+  ],
+  "independently_certified_survey_world_to_map": false,
+  "qualified_natural_degeneracy_events": 0,
+  "full_runs": 0,
+  "user_owned_dog_data_used": false,
+  "transfer_bytes": {
+    "bag_resumable": 937750528,
+    "bag_remaining": 7719904332,
+    "map_resumable": 758530048,
+    "map_remaining": 4688598016
+  }
+}
