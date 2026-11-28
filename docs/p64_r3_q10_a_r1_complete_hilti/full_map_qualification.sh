@@ -14,6 +14,6 @@ dense=run/assets/exp18_corridor_lower_gallery_2_imu.txt
 export OPENBLAS_NUM_THREADS=1
 /usr/bin/python3 "$d/prepare_full_map.py" run/r1/full_map/world.xyzf run/r1/full_map/scan_audit.tsv "$dense" run/r1/full_map/products
 /usr/bin/python3 "$d/qualify_full_overlap.py" run/r1/full_map/products run/input_prefix10 run/r1/raw_scan_0000_prefix.pcd "$dense" run/r1/full_map/qualification
-if [ -d run/r1/pye57/pye57 ]; then
-  PYTHONPATH="$root/run/r1/pye57:$PYTHONPATH" /usr/bin/python3 "$d/validate_map_source.py" "$asset" run/r1/full_map/scan_audit.tsv run/r1/full_map/secondary_reader.json
+if [ -d run/r1/pye57_source/pye57 ]; then
+  PYTHONPATH="$root/run/r1/pye57_source:${PYTHONPATH:-}" /usr/bin/python3 "$d/validate_map_source.py" "$asset" run/r1/full_map/scan_audit.tsv run/r1/full_map/secondary_reader.json
 fi

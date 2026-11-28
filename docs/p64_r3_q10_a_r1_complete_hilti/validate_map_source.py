@@ -23,7 +23,7 @@ def audit(e57_path, csv_path, output):
             for line in csv_path.read_text().splitlines():
                 tag,s,n,*v=line.split()
                 if tag=="SAMPLE" and int(s)==scan:
-                    refs[int(n)-1]=np.array(v[1:],dtype=float)
+                    refs[int(n)]=np.array(v[1:],dtype=float)
             # Read first raw block via E57Foundation's compressed-vector buffers.
             # After the decoder checksum test, the first million values yield a sampled
             # raw record independently of the SimpleReader and Eigen transforms.
