@@ -1,0 +1,70 @@
+{
+  "metrics": {
+    "HDL_ORIGINAL_IMU": {
+      "reference_frames": 94,
+      "translation_rmse_m": 1.0907225710488706,
+      "rotation_rmse_deg": 30.220749577405247
+    },
+    "HDL_EXISTING_LIDAR_ONLY_BRANCH": {
+      "reference_frames": 94,
+      "translation_rmse_m": 0.35882974064566636,
+      "rotation_rmse_deg": 40.670316046869985
+    },
+    "TRIGGERED_ICP_FULL_GEOMETRY_CONTROL": {
+      "reference_frames": 94,
+      "translation_rmse_m": 0.17937651580891942,
+      "rotation_rmse_deg": 6.658199523442687
+    }
+  },
+  "frame55": [
+    {
+      "frame": "55",
+      "method": "HDL_ORIGINAL_IMU",
+      "scope": "CAUSAL_100_FRAME_DIAGNOSTIC",
+      "map_update_max_per_scan": "1",
+      "pose": "-0.658335804939;0.60059607029;0.453737914562;106.989784241;-0.752506732941;-0.539621353149;-0.377547651529;33.8824577332;0.0180930495262;-0.589994013309;0.807204842567;-0.595962464809;0;0;0;1",
+      "full_translation_m": "0.11743180012091232",
+      "rotation_deg": "42.575696357235955",
+      "weak_translation_m": "nan",
+      "strong_translation_m": "0.11743180012091232",
+      "weak_rotation_deg": "nan",
+      "within_15cm_5deg": "False",
+      "wrong_mode_proxy": "True",
+      "substitute": ""
+    },
+    {
+      "frame": "55",
+      "method": "HDL_EXISTING_LIDAR_ONLY_BRANCH",
+      "scope": "CAUSAL_100_FRAME_DIAGNOSTIC",
+      "map_update_max_per_scan": "1",
+      "pose": "-0.626048185906;0.533209643133;0.568991340351;106.984634399;-0.776151030756;-0.49644828317;-0.388752722941;33.8908233643;0.0751880733896;-0.685001152267;0.724651761201;-0.586159050465;0;0;0;1",
+      "full_translation_m": "0.10639601001729936",
+      "rotation_deg": "49.82268872784178",
+      "weak_translation_m": "nan",
+      "strong_translation_m": "0.10639601001729936",
+      "weak_rotation_deg": "nan",
+      "within_15cm_5deg": "False",
+      "wrong_mode_proxy": "True",
+      "substitute": ""
+    },
+    {
+      "frame": 55,
+      "method": "TRIGGERED_ICP_FULL_GEOMETRY_CONTROL",
+      "scope": "CAUSAL_DEVELOPMENT_100",
+      "map_update_max_per_scan": 1,
+      "substitute": 1,
+      "pose": "-0.85696041584;0.515173256397;0.0146782798693;107.009750366;-0.515253007412;-0.85703587532;-0.00200528884307;33.8902511597;0.0115467393771;-0.00928148068488;0.999890267849;-0.333019345999;0;0;0;1",
+      "full_translation_m": 0.15426891836557,
+      "rotation_deg": 4.344613056626793,
+      "weak_translation_m": null,
+      "strong_translation_m": 0.15426891836557,
+      "weak_rotation_deg": null,
+      "within_15cm_5deg": false,
+      "wrong_mode_proxy": false
+    }
+  ],
+  "interventions": 2,
+  "substitutions": 2,
+  "native_optimization_count": 100,
+  "map_corrections": 100
+}

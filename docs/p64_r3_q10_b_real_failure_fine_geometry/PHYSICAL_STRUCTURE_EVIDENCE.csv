@@ -1,0 +1,2 @@
+frame,target_index,world_xyz,normal_xyz,source_observations_n,signed_relief_m,same_plane_neighbor_points,local_patch_extent_pca_m,repeated_same_region_within8cm,distinct_viewpoints_within8cm,status
+225,585726,101.184265137;29.9789352417;0.754162549973,0.947269797808;-0.320425783059;-0.00269215750916,6,0.060097580358394326,1,0;0;0,,,GEOMETRY_RELIEF_HYPOTHESIS_ONLY

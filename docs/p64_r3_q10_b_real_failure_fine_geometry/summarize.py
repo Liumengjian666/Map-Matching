@@ -74,7 +74,7 @@ def run():
         stat[m]=dict(reference_frames=len(samples),translation_rmse_m=rms(x["full_translation_m"] for x in samples),
             rotation_rmse_deg=rms(x["rotation_deg"] for x in samples))
     frame55=[x for x in active if str(x.get("frame"))=="55" and x.get("pose")]
-    (D/"CAUSAL_WINDOW_SUMMARY.json").write_text(json.dumps(dict(metrics=stat,frame55=frame55,
+    (D/"CAUSAL_WINDOW_SUMMARY.json").write_text(json.dumps(dict(metrics=stat,frame55=json.loads(json.dumps(frame55),parse_constant=lambda _:None),
         interventions=len(interventions),substitutions=sum(x["result"]=="ICP_CONTROL" for x in interventions),
         native_optimization_count=100,map_corrections=100),indent=2)+"\n")
 
