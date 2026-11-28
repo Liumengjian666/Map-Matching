@@ -1,0 +1,43 @@
+Visualization Manager:
+  Global Options:
+    Fixed Frame: map
+    Frame Rate: 30
+  Displays:
+    - Class: rviz/PointCloud2
+      Name: Independent map
+      Topic: /globalmap
+      Color Transformer: FlatColor
+      Color: 150; 150; 150
+      Style: Points
+      Size (Pixels): 2
+      Enabled: true
+      Use Fixed Frame: true
+    - Class: rviz/PointCloud2
+      Name: Deskewed Hilti scan
+      Topic: /velodyne_points
+      Color Transformer: FlatColor
+      Color: 253; 115; 40
+      Style: Points
+      Size (Pixels): 3
+      Enabled: true
+      Use Fixed Frame: true
+    - Class: rviz/Path
+      Name: NDT IMU UKF estimate
+      Topic: /hilti/trajectory
+      Color: 80; 200; 240
+      Line Style: Lines
+      Enabled: true
+    - Class: rviz/TF
+      Name: Sensor transform
+      Enabled: true
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Distance: 14
+      Pitch: 0.8
+      Yaw: 1.1
+      Target Frame: base_link
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0

@@ -1,0 +1,23 @@
+<launch>
+  <arg name="map"/>
+  <arg name="anchor"/>
+  <arg name="rviz" default="true"/>
+  <param name="/use_sim_time" value="true"/>
+  <env name="OMP_NUM_THREADS" value="1"/>
+  <env name="OPENBLAS_NUM_THREADS" value="1"/>
+  <node pkg="nodelet" type="nodelet" name="hilti_hdl" args="standalone hdl_localization/HdlLocalizationNodelet" output="screen">
+    <param name="use_global_localization" value="false"/>
+    <param name="use_imu" value="true"/>
+    <param name="cool_time_duration" value="2.0"/>
+    <param name="specify_init_pose" value="false"/>
+    <param name="enable_robot_odometry_prediction" value="false"/>
+    <param name="ndt_resolution" value="1.0"/>
+    <param name="ndt_neighbor_search_method" value="DIRECT7"/>
+    <param name="downsample_resolution" value="0.1"/>
+  </node>
+  <node pkg="p64_hilti_replay" type="rviz_map_path.py" name="hilti_prior_map" output="screen" required="true">
+    <param name="map" value="$(arg map)"/>
+    <param name="anchor" value="$(arg anchor)"/>
+  </node>
+  <node if="$(arg rviz)" pkg="rviz" type="rviz" name="hilti_rviz" args="-d $(find p64_hilti_replay)/hilti_exp18.rviz"/>
+</launch>
