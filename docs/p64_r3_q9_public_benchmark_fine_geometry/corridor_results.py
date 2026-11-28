@@ -94,7 +94,7 @@ def main(input_,replay,out):
         median_normal_ms=np.median(performance)*1000,p95_normal_ms=np.percentile(performance,95)*1000,
         max_normal_ms=performance.max()*1000,
         reconstructed_n=len(final_cloud), map_outlier_fraction=float((errors>.1).mean()),
-        LF_true=sum(x["lf_transfer_gate"] for x in events),native_weak_count=sum(x["ndt_weak"]=="1" for x in events),
+        LF_true=int(sum(x["lf_transfer_gate"] for x in events)),native_weak_count=sum(x["ndt_weak"]=="1" for x in events),
         stopped_at="PRESERVED_INTERVAL_END", input=json.loads((input_/"input.json").read_text())),indent=2))
     ctr=path.mean(0)
     local=old[np.linalg.norm(old-ctr,axis=1)<35]

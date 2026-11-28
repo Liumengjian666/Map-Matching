@@ -30,4 +30,11 @@ rosparam set /hdl_q9/specify_init_pose false
 rosparam set /hdl_q9/enable_robot_odometry_prediction false
 rosrun nodelet nodelet standalone hdl_localization/HdlLocalizationNodelet __name:=hdl_q9 >"$result/nodelet.log" 2>&1 &
 pnode=$!
+for _ in {1..30}; do
+    if awk -v library="$package/lib/libhdl_localization_nodelet.so" '$NF==library {print $NF}' /proc/"$pnode"/maps 2>/dev/null | sort -u | grep . >"$result/loaded_library.txt"; then
+        break
+    fi
+    sleep .15
+done
+test -s "$result/loaded_library.txt"
 /usr/bin/python3 "$here/stream_hdl.py" "$inputs" "$result/trajectory.csv"

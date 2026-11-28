@@ -35,7 +35,7 @@ def fetch(directory, lo, hi):
     raise RuntimeError(f"Incomplete interval {target}")
 
 
-def main(directory, prefix_size):
+def main(directory, prefix_size, workers):
     initial=directory/(FILENAME+".part")
     assert initial.stat().st_size==prefix_size
     plan=directory/"range_plan.tsv"
@@ -43,7 +43,7 @@ def main(directory, prefix_size):
     ranges=[(i,min(i+size,TOTAL)-1) for i in range(prefix_size,TOTAL,size)]
     plan.write_text("".join(f"{a}\t{b}\n" for a,b in ranges))
     jobs=[]
-    with ThreadPoolExecutor(max_workers=7) as pool:
+    with ThreadPoolExecutor(max_workers=workers) as pool:
         jobs=[pool.submit(fetch,directory,a,b) for a,b in ranges]
         parts=[j.result() for j in jobs]
     joined=directory/(FILENAME+".joined")
@@ -64,5 +64,6 @@ if __name__=="__main__":
     parser=argparse.ArgumentParser()
     parser.add_argument("directory", type=Path)
     parser.add_argument("prefix_size", type=int)
+    parser.add_argument("--workers",type=int,default=7,choices=range(1,13))
     args=parser.parse_args()
-    main(args.directory,args.prefix_size)
+    main(args.directory,args.prefix_size,args.workers)
