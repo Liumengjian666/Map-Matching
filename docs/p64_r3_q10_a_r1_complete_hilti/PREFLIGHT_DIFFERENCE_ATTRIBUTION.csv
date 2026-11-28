@@ -1,0 +1,3 @@
+test,frames,max_m,max_deg
+A_threads4_vs_A_threads1_target_equal,10,0.0,1.651977133557384e-15
+B_historical_extra_voxel_vs_direct_target,10,0.6570975003740631,6.5342175814588215
