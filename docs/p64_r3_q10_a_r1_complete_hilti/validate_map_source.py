@@ -24,9 +24,7 @@ def audit(e57_path, csv_path, output):
                 tag,s,n,*v=line.split()
                 if tag=="SAMPLE" and int(s)==scan:
                     refs[int(n)]=np.array(v[1:],dtype=float)
-            # Read first raw block via E57Foundation's compressed-vector buffers.
-            # After the decoder checksum test, the first million values yield a sampled
-            # raw record independently of the SimpleReader and Eigen transforms.
+            # Stream the exact same raw-record indices through the separate Foundation API.
             n=min(header.point_count,1_000_000)
             if not n:
                 continue
@@ -35,18 +33,23 @@ def audit(e57_path, csv_path, output):
             for name,array in zip(("cartesianX","cartesianY","cartesianZ"),arrays):
                 buffers.append(libe57.SourceDestBuffer(data.image_file,name,array,n,True,True))
             read=header.points.reader(buffers)
-            count=read.read()
+            ordered=iter(sorted(refs.items()))
+            sample=next(ordered,None)
+            offset=0
+            while sample is not None:
+                count=read.read()
+                if count<=0:
+                    raise ValueError("sampled record beyond compressed vector")
+                while sample is not None and sample[0]<offset+count:
+                    index,v=sample
+                    raw=np.array([x[index-offset] for x in arrays])
+                    p=header.rotation_matrix@raw+header.translation
+                    record["samples_validated"]+=1
+                    record["max_raw_coordinate_error_m"]=max(record["max_raw_coordinate_error_m"],np.max(abs(raw-v[:3])))
+                    record["max_world_coordinate_error_m"]=max(record["max_world_coordinate_error_m"],np.max(abs(p-v[3:])))
+                    sample=next(ordered,None)
+                offset+=count
             read.close()
-            if count!=n:
-                raise ValueError("unexpected count from secondary E57 reader")
-            for index,v in refs.items():
-                if index>=count:
-                    continue
-                raw=np.array([x[index] for x in arrays])
-                p=header.rotation_matrix@raw+header.translation
-                record["samples_validated"]+=1
-                record["max_raw_coordinate_error_m"]=max(record["max_raw_coordinate_error_m"],np.max(abs(raw-v[:3])))
-                record["max_world_coordinate_error_m"]=max(record["max_world_coordinate_error_m"],np.max(abs(p-v[3:])))
             if not record["samples_validated"] or record["max_world_coordinate_error_m"]>1e-8:
                 raise ValueError(f"E57 secondary crosscheck failed: {record}")
             results.append(record)
