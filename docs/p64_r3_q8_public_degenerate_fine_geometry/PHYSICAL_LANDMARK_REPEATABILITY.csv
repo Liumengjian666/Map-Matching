@@ -1,0 +1,7 @@
+case,mode,repeated_surface_candidates,target_half01_and_half02,match_distance_median_m,meaning
+G1,QUERY_TO_FROZEN_MAP_AT_CAUSAL_NDT,35,True,0.02838961451857292,estimated correspondence; not manually independently verified
+G2,QUERY_TO_FROZEN_MAP_AT_CAUSAL_NDT,21,True,0.024724237830618213,estimated correspondence; not manually independently verified
+G3,QUERY_TO_FROZEN_MAP_AT_CAUSAL_NDT,13,True,0.02917352229243158,estimated correspondence; not manually independently verified
+W1,QUERY_TO_FROZEN_MAP_AT_CAUSAL_NDT,815,False,0.027030012781519334,estimated correspondence; not manually independently verified
+W2,QUERY_TO_FROZEN_MAP_AT_CAUSAL_NDT,1918,False,0.02358161917864337,estimated correspondence; not manually independently verified
+W3,QUERY_TO_FROZEN_MAP_AT_CAUSAL_NDT,761,False,0.03005580423565762,estimated correspondence; not manually independently verified
