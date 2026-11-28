@@ -14,9 +14,11 @@ def run(module, trajectory, references, output):
     output.mkdir()
     results={}
     for label,reference in zip(("dense","sparse"),references):
-        metrics,is_dense,aligned,ref=evaluator.evaluate(str(trajectory),str(reference),str(output)+"/")
+        target=output/label
+        target.mkdir()
+        metrics,_,_,ref=evaluator.evaluate(str(trajectory),str(reference),str(target))
         results[label]=dict(scope="OFFICIAL_UMEYAMA_ALIGNED_NOT_FIXED_MAP",
-                poses=ref.num_poses,statistics={str(k.value):float(v) for k,v in metrics.items()})
+                poses=ref.num_poses,statistics={str(k):float(v) for k,v in metrics.items()})
     (output/"official_aligned.json").write_text(json.dumps(results,indent=2)+"\n")
 
 
